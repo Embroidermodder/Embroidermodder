@@ -19,9 +19,12 @@
 
 #include "embroidermodder.h"
 
+#include <iostream>
 #include <fstream>
 
 MainWindow* _mainWin = 0;
+std::vector<Action> action_table;
+QStringList action_labels;
 
 /**
  * @brief mainWin
@@ -248,6 +251,68 @@ MainWindow::~MainWindow()
 }
 
 /**
+ * @brief MainWindow::createAllActions
+ *
+ * \todo Set What's This Context Help to statusTip for now so there is some infos there.
+ * Make custom whats this context help popup with more descriptive help than just
+ * the status bar/tip one liner(short but not real long) with a hyperlink in the custom popup
+ * at the bottom to open full help file description. Ex: like wxPython AGW's SuperToolTip.
+ACTION->setWhatsThis(statusTip);
+ * \todo Finish All Commands ... <.<
+ */
+void
+MainWindow::createAllActions()
+{
+    qDebug("Creating All Actions...");
+
+    QString appDir = qApp->applicationDirPath();
+    QSettings settings(appDir + "/actions.ini", QSettings::IniFormat);
+
+    QString str_list = settings.value("actions").toString();
+    action_labels = str_list.split(" ");
+
+    for (int i=0; i<action_labels.size(); i++) {
+        Action action;
+        QString label = "ACTION_" + action_labels[i];
+        action.hash = settings.value(label + "/index").toInt();
+        action.icon = settings.value(label + "/icon").toString().toStdString();
+        action.tooltip = settings.value(label + "/tooltip").toString().toStdString();
+        action.statustip = settings.value(label + "/statustip").toString().toStdString();
+        action.shortcut = settings.value(label + "/shortcut").toString().toStdString();
+        action_table.push_back(action);
+    }
+
+    for (int i=0; i<action_table.size(); i++) {
+        Action action = action_table[i];
+
+        QIcon icon(appDir + "/icons/" + settings_general_icon_theme + "/" + QString::fromStdString(action.icon) + ".png");
+        QAction *ACTION = new QAction(icon, QString::fromStdString(action.tooltip), this);
+        ACTION->setStatusTip(QString::fromStdString(action.statustip));
+        ACTION->setObjectName(action.icon);
+        if (action.shortcut != "") {
+            ACTION->setShortcut(
+                QKeySequence(QString::fromStdString(action.shortcut))
+            );
+        }
+
+        if (   (action.icon == "textbold")
+            || (action.icon == "textitalic")
+            || (action.icon == "textunderline")
+            || (action.icon == "textstrikeout")
+            || (action.icon == "textoverline")) {
+            ACTION->setCheckable(true);
+        }
+
+        auto f = [=](){ this->actuator(action.icon); };
+        connect(ACTION, &QAction::triggered, this, f);
+        actionHash[action.hash] = ACTION;
+    }
+
+    actionHash[ACTION_windowclose]->setEnabled(numOfDocs > 0);
+    actionHash[ACTION_designdetails]->setEnabled(numOfDocs > 0);
+}
+
+/**
  * @brief MainWindow::run_script_file
  * @param fname The path of the script to run.
  */
@@ -312,6 +377,10 @@ MainWindow::actuator(std::string command)
         return "";
     }
     if (command == "day") {
+        dayVision();
+        return "";
+    }
+    if (command == "donothing") {
         dayVision();
         return "";
     }

@@ -12,7 +12,11 @@ project(embroidermodder VERSION 2.0.0 LANGUAGES C CXX)
 include(config.cmake)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets PrintSupport)
+
+if(LINUX)
+else(LINUX)
 qt_standard_project_setup()
+endif(LINUX)
 
 set(CMAKE_AUTOMOC ON)
 
@@ -64,7 +68,6 @@ add_executable(embroidermodder2
     ${SRC_DIR}/utility.cpp
     ${SRC_DIR}/imagewidget.cpp
     ${SRC_DIR}/layer-manager.cpp
-    ${SRC_DIR}/mainwindow-actions.cpp
     ${SRC_DIR}/mainwindow-commands.cpp
     ${SRC_DIR}/mainwindow-menus.cpp
     ${SRC_DIR}/mainwindow-settings.cpp

@@ -2009,7 +2009,6 @@ protected:
     QStringList listTipOfTheDay;
 
     void createAllActions();
-    QAction* createAction(const QString icon, const QString toolTip, const QString statusTip, QString shortcut="", bool scripted = false);
 
     //Toolbars
     //====================================================
@@ -3703,13 +3702,27 @@ private:
  */
 typedef struct Action__ {
     int hash;
-    const char *icon;
-    const char *tooltip;
-    const char *statustip;
+        /*< Index in the actionHash array. */
+    std::string icon;
+        /*< The stub used for the icon and the basic command. */
+    std::string tooltip;
+        /*< The label in the menus and the message that appears when
+            you hover over an icon. */
+    std::string statustip;
+        /*< The message that appears at the bottom of the . */
+    std::string shortcut;
+        /*< The keyboard shortcut for this action. */
+    std::vector<std::string> aliases;
+        /*< A list of all alternative commands, if empty only
+            the icon sttring will be . */
+    std::vector<std::string> script;
+        /*< If this is a compound action this will be a
+            list of commands or it can allow for command line
+            style command aliases. For example: icon16 would become
+            the string list {"iconResize 16"}. */
 } Action;
 
 /* */
 extern std::vector<Action> action_table;
-extern int n_actions;
 
 #endif

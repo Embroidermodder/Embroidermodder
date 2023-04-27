@@ -1,4 +1,4 @@
-/**
+/*
  *  Embroidermodder 2.
  *
  *  ------------------------------------------------------------
@@ -19,8 +19,6 @@
 
 #include "embroidermodder.h"
 
-namespace {
-
 // Note: on Unix we include the trailing separator. For Windows compatibility we omit it.
 QString SettingsDir()
 {
@@ -37,8 +35,6 @@ QString SettingsPath()
   QString settingsPath = SettingsDir() + "settings.ini";
   return settingsPath;
 }
-
-} // end anonymous namespace
 
 /**
  * @brief MainWindow::readSettings
