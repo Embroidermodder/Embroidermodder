@@ -2,7 +2,12 @@
 \label{class_cmd_prompt}\index{CmdPrompt@{CmdPrompt}}
 
 
-{\ttfamily \#include $<$cmdprompt.\+h$>$}
+ 
+
+
+
+
+{\ttfamily \#include $<$embroidermodder.\+h$>$}
 
 \doxysubsubsection*{Public Slots}
 \begin{DoxyCompactItemize}
@@ -136,13 +141,10 @@ void \mbox{\hyperlink{class_cmd_prompt_a35bb9de8cb458ad631a618b3c9a03615}{histor
 \mbox{\hyperlink{class_cmd_prompt_ab139069fa119aa0218d8f3effe8a453b}{Cmd\+Prompt}} (QWidget $\ast$parent=0)
 \item 
 \mbox{\hyperlink{class_cmd_prompt_a407730564b90015caaf7b03173068207}{$\sim$\+Cmd\+Prompt}} ()
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Private Member Functions}
-\begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{class_cmd_prompt_a4e399094a33a34f9e7ed1747c7bc99de}{update\+Style}} ()
 \end{DoxyCompactItemize}
-\doxysubsubsection*{Private Attributes}
+\doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{class_cmd_prompt_input}{Cmd\+Prompt\+Input}} $\ast$ \mbox{\hyperlink{class_cmd_prompt_a54fbf493494bfa1146affd4a08dcd62a}{prompt\+Input}}
@@ -161,6 +163,9 @@ QTimer $\ast$ \mbox{\hyperlink{class_cmd_prompt_a94d2a27a19e9c0e06e1318b6bc25de6
 \item 
 bool \mbox{\hyperlink{class_cmd_prompt_a08dbc8fa8eee6ad95aa230b9a5d10d25}{blink\+State}}
 \end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
 
 
 \doxysubsubsection{Constructor \& Destructor Documentation}
@@ -537,7 +542,7 @@ bool \mbox{\hyperlink{class_cmd_prompt_a08dbc8fa8eee6ad95aa230b9a5d10d25}{blink\
 \index{CmdPrompt@{CmdPrompt}!updateStyle@{updateStyle}}
 \index{updateStyle@{updateStyle}!CmdPrompt@{CmdPrompt}}
 \doxyparagraph{\texorpdfstring{updateStyle()}{updateStyle()}}
-{\footnotesize\ttfamily void update\+Style (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily void update\+Style (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_cmd_prompt_a3ac8ff7536eaff8c48297effe38dd49b}\label{class_cmd_prompt_a3ac8ff7536eaff8c48297effe38dd49b}} 
 \index{CmdPrompt@{CmdPrompt}!upPressed@{upPressed}}
@@ -552,53 +557,53 @@ bool \mbox{\hyperlink{class_cmd_prompt_a08dbc8fa8eee6ad95aa230b9a5d10d25}{blink\
 \index{CmdPrompt@{CmdPrompt}!blinkState@{blinkState}}
 \index{blinkState@{blinkState}!CmdPrompt@{CmdPrompt}}
 \doxyparagraph{\texorpdfstring{blinkState}{blinkState}}
-{\footnotesize\ttfamily bool blink\+State\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool blink\+State}
 
 \mbox{\Hypertarget{class_cmd_prompt_a94d2a27a19e9c0e06e1318b6bc25de61}\label{class_cmd_prompt_a94d2a27a19e9c0e06e1318b6bc25de61}} 
 \index{CmdPrompt@{CmdPrompt}!blinkTimer@{blinkTimer}}
 \index{blinkTimer@{blinkTimer}!CmdPrompt@{CmdPrompt}}
 \doxyparagraph{\texorpdfstring{blinkTimer}{blinkTimer}}
-{\footnotesize\ttfamily QTimer$\ast$ blink\+Timer\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QTimer$\ast$ blink\+Timer}
 
 \mbox{\Hypertarget{class_cmd_prompt_a4f3db319db8a18848e4c699ca9603279}\label{class_cmd_prompt_a4f3db319db8a18848e4c699ca9603279}} 
 \index{CmdPrompt@{CmdPrompt}!promptDivider@{promptDivider}}
 \index{promptDivider@{promptDivider}!CmdPrompt@{CmdPrompt}}
 \doxyparagraph{\texorpdfstring{promptDivider}{promptDivider}}
-{\footnotesize\ttfamily QFrame$\ast$ prompt\+Divider\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QFrame$\ast$ prompt\+Divider}
 
 \mbox{\Hypertarget{class_cmd_prompt_a1bc51288795007a2358237c303b13b5e}\label{class_cmd_prompt_a1bc51288795007a2358237c303b13b5e}} 
 \index{CmdPrompt@{CmdPrompt}!promptHistory@{promptHistory}}
 \index{promptHistory@{promptHistory}!CmdPrompt@{CmdPrompt}}
 \doxyparagraph{\texorpdfstring{promptHistory}{promptHistory}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_cmd_prompt_history}{Cmd\+Prompt\+History}}$\ast$ prompt\+History\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_cmd_prompt_history}{Cmd\+Prompt\+History}}$\ast$ prompt\+History}
 
 \mbox{\Hypertarget{class_cmd_prompt_a54fbf493494bfa1146affd4a08dcd62a}\label{class_cmd_prompt_a54fbf493494bfa1146affd4a08dcd62a}} 
 \index{CmdPrompt@{CmdPrompt}!promptInput@{promptInput}}
 \index{promptInput@{promptInput}!CmdPrompt@{CmdPrompt}}
 \doxyparagraph{\texorpdfstring{promptInput}{promptInput}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_cmd_prompt_input}{Cmd\+Prompt\+Input}}$\ast$ prompt\+Input\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_cmd_prompt_input}{Cmd\+Prompt\+Input}}$\ast$ prompt\+Input}
 
 \mbox{\Hypertarget{class_cmd_prompt_a8a704b838837bac0812271fa7c7a99a9}\label{class_cmd_prompt_a8a704b838837bac0812271fa7c7a99a9}} 
 \index{CmdPrompt@{CmdPrompt}!promptSplitter@{promptSplitter}}
 \index{promptSplitter@{promptSplitter}!CmdPrompt@{CmdPrompt}}
 \doxyparagraph{\texorpdfstring{promptSplitter}{promptSplitter}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_cmd_prompt_splitter}{Cmd\+Prompt\+Splitter}}$\ast$ prompt\+Splitter\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_cmd_prompt_splitter}{Cmd\+Prompt\+Splitter}}$\ast$ prompt\+Splitter}
 
 \mbox{\Hypertarget{class_cmd_prompt_a0bb2b1dc43bcfbf9d3c94f3753c0005e}\label{class_cmd_prompt_a0bb2b1dc43bcfbf9d3c94f3753c0005e}} 
 \index{CmdPrompt@{CmdPrompt}!promptVBoxLayout@{promptVBoxLayout}}
 \index{promptVBoxLayout@{promptVBoxLayout}!CmdPrompt@{CmdPrompt}}
 \doxyparagraph{\texorpdfstring{promptVBoxLayout}{promptVBoxLayout}}
-{\footnotesize\ttfamily QVBox\+Layout$\ast$ prompt\+VBox\+Layout\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QVBox\+Layout$\ast$ prompt\+VBox\+Layout}
 
 \mbox{\Hypertarget{class_cmd_prompt_a6025e86dd29f4bd8b56f39acef31bc3d}\label{class_cmd_prompt_a6025e86dd29f4bd8b56f39acef31bc3d}} 
 \index{CmdPrompt@{CmdPrompt}!styleHash@{styleHash}}
 \index{styleHash@{styleHash}!CmdPrompt@{CmdPrompt}}
 \doxyparagraph{\texorpdfstring{styleHash}{styleHash}}
-{\footnotesize\ttfamily QHash$<$QString, QString$>$$\ast$ style\+Hash\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QHash$<$QString, QString$>$$\ast$ style\+Hash}
 
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-embroidermodder2/\mbox{\hyperlink{cmdprompt_8h}{cmdprompt.\+h}}\item 
+embroidermodder2/\mbox{\hyperlink{embroidermodder_8h}{embroidermodder.\+h}}\item 
 embroidermodder2/\mbox{\hyperlink{cmdprompt_8cpp}{cmdprompt.\+cpp}}\end{DoxyCompactItemize}

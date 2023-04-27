@@ -2233,29 +2233,7 @@ public:
 
     void nativeMessageBox(const QString& type, const QString& title, const QString& text);
 
-    void nativeUndo();
-    void nativeRedo();
-
-    void nativeIcon16();
-    void nativeIcon24();
-    void nativeIcon32();
-    void nativeIcon48();
-    void nativeIcon64();
-    void nativeIcon128();
-
-    void nativePanLeft();
-    void nativePanRight();
-    void nativePanUp();
-    void nativePanDown();
-
-    void nativeZoomIn();
-    void nativeZoomOut();
-    void nativeZoomExtents();
-
     void nativePrintArea(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
-
-    void nativeDayVision();
-    void nativeNightVision();
 
     void nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b);
     void nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b);
@@ -2269,15 +2247,6 @@ public:
     bool nativeTextUnderline();
     bool nativeTextStrikeOut();
     bool nativeTextOverline();
-
-    void nativeSetTextFont(const QString& str);
-    void nativeSetTextSize(EmbReal num);
-    void nativeSetTextAngle(EmbReal num);
-    void nativeSetTextBold(bool val);
-    void nativeSetTextItalic(bool val);
-    void nativeSetTextUnderline(bool val);
-    void nativeSetTextStrikeOut(bool val);
-    void nativeSetTextOverline(bool val);
 
     void nativePreviewOn(int clone, int mode, EmbReal x, EmbReal y, EmbReal data);
     void nativePreviewOff();

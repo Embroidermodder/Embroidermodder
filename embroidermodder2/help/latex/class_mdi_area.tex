@@ -2,7 +2,7 @@
 \label{class_mdi_area}\index{MdiArea@{MdiArea}}
 
 
-{\ttfamily \#include $<$mdiarea.\+h$>$}
+{\ttfamily \#include $<$embroidermodder.\+h$>$}
 
 \doxysubsubsection*{Public Slots}
 \begin{DoxyCompactItemize}
@@ -14,6 +14,10 @@ void \mbox{\hyperlink{class_mdi_area_adf450a9a061d173710964aa7b86598b1}{tile}} (
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
+void \mbox{\hyperlink{class_mdi_area_ac28cb9239c066bb293ac849fa0c8d284}{zoom\+Extents\+All\+Sub\+Windows}} ()
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_mdi_area_ac28cb9239c066bb293ac849fa0c8d284}{Mdi\+Area\+::zoom\+Extents\+All\+Sub\+Windows}}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_mdi_area_adf24d9bfdd91fce7679ab5e45c915406}{force\+Repaint}} ()
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_mdi_area_adf24d9bfdd91fce7679ab5e45c915406}{Mdi\+Area\+::force\+Repaint}}. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{class_mdi_area_a20434b7ffe649fa9f34a7229ab841fe1}{Mdi\+Area}} (\mbox{\hyperlink{class_main_window}{Main\+Window}} $\ast$mw, QWidget $\ast$parent=0)
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_mdi_area_a20434b7ffe649fa9f34a7229ab841fe1}{Mdi\+Area\+::\+Mdi\+Area}}. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{class_mdi_area_abb5e0393bfc3d407f074330da1e548d5}{$\sim$\+Mdi\+Area}} ()
@@ -30,21 +34,7 @@ void \mbox{\hyperlink{class_mdi_area_a16b27111c3952c10671bdf60eeaac481}{set\+Bac
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_mdi_area_a16b27111c3952c10671bdf60eeaac481}{Mdi\+Area\+::set\+Background\+Texture}}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_mdi_area_a70d4e21190fdc47edd88f078dd2037cb}{set\+Background\+Color}} (const QColor \&color)
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_mdi_area_a70d4e21190fdc47edd88f078dd2037cb}{Mdi\+Area\+::set\+Background\+Color}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Protected Member Functions}
-\begin{DoxyCompactItemize}
-\item 
-virtual void \mbox{\hyperlink{class_mdi_area_a91ecdca9f19ec37f982d2032c6b2aae4}{mouse\+Double\+Click\+Event}} (QMouse\+Event $\ast$e)
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_mdi_area_a91ecdca9f19ec37f982d2032c6b2aae4}{Mdi\+Area\+::mouse\+Double\+Click\+Event}}. \end{DoxyCompactList}\item 
-virtual void \mbox{\hyperlink{class_mdi_area_a4c44746ee6abcfabac1581977a1b5c02}{paint\+Event}} (QPaint\+Event $\ast$e)
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_mdi_area_a4c44746ee6abcfabac1581977a1b5c02}{Mdi\+Area\+::paint\+Event}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Private Member Functions}
-\begin{DoxyCompactItemize}
-\item 
-void \mbox{\hyperlink{class_mdi_area_ac28cb9239c066bb293ac849fa0c8d284}{zoom\+Extents\+All\+Sub\+Windows}} ()
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_mdi_area_ac28cb9239c066bb293ac849fa0c8d284}{Mdi\+Area\+::zoom\+Extents\+All\+Sub\+Windows}}. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_mdi_area_adf24d9bfdd91fce7679ab5e45c915406}{force\+Repaint}} ()
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_mdi_area_adf24d9bfdd91fce7679ab5e45c915406}{Mdi\+Area\+::force\+Repaint}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Private Attributes}
+\doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{class_main_window}{Main\+Window}} $\ast$ \mbox{\hyperlink{class_mdi_area_a8a28ac6f98797eb7aa5972c3f9f9ffdd}{main\+Win}}
@@ -61,6 +51,13 @@ QPixmap \mbox{\hyperlink{class_mdi_area_a6df916272a52c37dcef1bd667d7d02a9}{bg\+T
 \item 
 QColor \mbox{\hyperlink{class_mdi_area_a283e84c661c43ef1417c9c75eb1370bc}{bg\+Color}}
 \end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_mdi_area_a91ecdca9f19ec37f982d2032c6b2aae4}{mouse\+Double\+Click\+Event}} (QMouse\+Event $\ast$e)
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_mdi_area_a91ecdca9f19ec37f982d2032c6b2aae4}{Mdi\+Area\+::mouse\+Double\+Click\+Event}}. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_mdi_area_a4c44746ee6abcfabac1581977a1b5c02}{paint\+Event}} (QPaint\+Event $\ast$e)
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_mdi_area_a4c44746ee6abcfabac1581977a1b5c02}{Mdi\+Area\+::paint\+Event}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsubsection{Constructor \& Destructor Documentation}
@@ -108,7 +105,7 @@ QColor \mbox{\hyperlink{class_mdi_area_a283e84c661c43ef1417c9c75eb1370bc}{bg\+Co
 \index{MdiArea@{MdiArea}!forceRepaint@{forceRepaint}}
 \index{forceRepaint@{forceRepaint}!MdiArea@{MdiArea}}
 \doxyparagraph{\texorpdfstring{forceRepaint()}{forceRepaint()}}
-{\footnotesize\ttfamily void force\+Repaint (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily void force\+Repaint (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 
 
@@ -229,7 +226,7 @@ QColor \mbox{\hyperlink{class_mdi_area_a283e84c661c43ef1417c9c75eb1370bc}{bg\+Co
 \index{MdiArea@{MdiArea}!zoomExtentsAllSubWindows@{zoomExtentsAllSubWindows}}
 \index{zoomExtentsAllSubWindows@{zoomExtentsAllSubWindows}!MdiArea@{MdiArea}}
 \doxyparagraph{\texorpdfstring{zoomExtentsAllSubWindows()}{zoomExtentsAllSubWindows()}}
-{\footnotesize\ttfamily void zoom\+Extents\+All\+Sub\+Windows (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily void zoom\+Extents\+All\+Sub\+Windows (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 
 
@@ -242,47 +239,47 @@ QColor \mbox{\hyperlink{class_mdi_area_a283e84c661c43ef1417c9c75eb1370bc}{bg\+Co
 \index{MdiArea@{MdiArea}!bgColor@{bgColor}}
 \index{bgColor@{bgColor}!MdiArea@{MdiArea}}
 \doxyparagraph{\texorpdfstring{bgColor}{bgColor}}
-{\footnotesize\ttfamily QColor bg\+Color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QColor bg\+Color}
 
 \mbox{\Hypertarget{class_mdi_area_a4e06d5f0fb8d3641ef02e610581ba8ef}\label{class_mdi_area_a4e06d5f0fb8d3641ef02e610581ba8ef}} 
 \index{MdiArea@{MdiArea}!bgLogo@{bgLogo}}
 \index{bgLogo@{bgLogo}!MdiArea@{MdiArea}}
 \doxyparagraph{\texorpdfstring{bgLogo}{bgLogo}}
-{\footnotesize\ttfamily QPixmap bg\+Logo\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QPixmap bg\+Logo}
 
 \mbox{\Hypertarget{class_mdi_area_a6df916272a52c37dcef1bd667d7d02a9}\label{class_mdi_area_a6df916272a52c37dcef1bd667d7d02a9}} 
 \index{MdiArea@{MdiArea}!bgTexture@{bgTexture}}
 \index{bgTexture@{bgTexture}!MdiArea@{MdiArea}}
 \doxyparagraph{\texorpdfstring{bgTexture}{bgTexture}}
-{\footnotesize\ttfamily QPixmap bg\+Texture\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QPixmap bg\+Texture}
 
 \mbox{\Hypertarget{class_mdi_area_a8a28ac6f98797eb7aa5972c3f9f9ffdd}\label{class_mdi_area_a8a28ac6f98797eb7aa5972c3f9f9ffdd}} 
 \index{MdiArea@{MdiArea}!mainWin@{mainWin}}
 \index{mainWin@{mainWin}!MdiArea@{MdiArea}}
 \doxyparagraph{\texorpdfstring{mainWin}{mainWin}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_main_window}{Main\+Window}}$\ast$ main\+Win\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_main_window}{Main\+Window}}$\ast$ main\+Win}
 
 \mbox{\Hypertarget{class_mdi_area_ac55b37fcf3cf11f65b73843dccb6a638}\label{class_mdi_area_ac55b37fcf3cf11f65b73843dccb6a638}} 
 \index{MdiArea@{MdiArea}!useColor@{useColor}}
 \index{useColor@{useColor}!MdiArea@{MdiArea}}
 \doxyparagraph{\texorpdfstring{useColor}{useColor}}
-{\footnotesize\ttfamily bool use\+Color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool use\+Color}
 
 \mbox{\Hypertarget{class_mdi_area_a479a40d62ea1d8c7b4f85cc9e0c32220}\label{class_mdi_area_a479a40d62ea1d8c7b4f85cc9e0c32220}} 
 \index{MdiArea@{MdiArea}!useLogo@{useLogo}}
 \index{useLogo@{useLogo}!MdiArea@{MdiArea}}
 \doxyparagraph{\texorpdfstring{useLogo}{useLogo}}
-{\footnotesize\ttfamily bool use\+Logo\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool use\+Logo}
 
 \mbox{\Hypertarget{class_mdi_area_a0d6975377ce943fe0e3639db200728a9}\label{class_mdi_area_a0d6975377ce943fe0e3639db200728a9}} 
 \index{MdiArea@{MdiArea}!useTexture@{useTexture}}
 \index{useTexture@{useTexture}!MdiArea@{MdiArea}}
 \doxyparagraph{\texorpdfstring{useTexture}{useTexture}}
-{\footnotesize\ttfamily bool use\+Texture\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool use\+Texture}
 
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-embroidermodder2/\mbox{\hyperlink{mdiarea_8h}{mdiarea.\+h}}\item 
+embroidermodder2/\mbox{\hyperlink{embroidermodder_8h}{embroidermodder.\+h}}\item 
 embroidermodder2/\mbox{\hyperlink{mdiarea_8cpp}{mdiarea.\+cpp}}\end{DoxyCompactItemize}

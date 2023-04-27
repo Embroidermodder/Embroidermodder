@@ -1,7 +1,7 @@
 var searchData=
 [
   ['z102_5fisacord_5fpolyester_0',['Z102_Isacord_Polyester',['../embroidery_8h.html#a9a2bac219517e78ae335d9ce7cd9bcec',1,'embroidery.h']]],
-  ['zoom_5faction_1',['zoom_action',['../embroidermodder_8h.html#a5781d1a9b03dbd654bf14b433acfad15',1,'embroidermodder.h']]],
+  ['zoom_5ftoolbar_1',['zoom_toolbar',['../class_main_window.html#a71060385708e4422cda409c16b2eb59a',1,'MainWindow']]],
   ['zoomall_2',['zoomAll',['../class_main_window.html#a9195bda6648adc336a085e2d74472f15',1,'MainWindow']]],
   ['zoomcenter_3',['zoomCenter',['../class_main_window.html#a0ac8893c559166e21505dc46f86f21ae',1,'MainWindow']]],
   ['zoomdynamic_4',['zoomDynamic',['../class_main_window.html#ad0c6edaf60596b1a9c58bf80ff8854d3',1,'MainWindow']]],

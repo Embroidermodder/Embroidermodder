@@ -2,7 +2,7 @@
 \label{class_save_object}\index{SaveObject@{SaveObject}}
 
 
-{\ttfamily \#include $<$object-\/save.\+h$>$}
+{\ttfamily \#include $<$embroidermodder.\+h$>$}
 
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
@@ -68,13 +68,10 @@ void \mbox{\hyperlink{class_save_object_a45d832addcf71af4b78d3f5485af6639}{add\+
 void \mbox{\hyperlink{class_save_object_abb60fb25003294b1e94abb30e64c3c5b}{add\+Text\+Multi}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$pattern, QGraphics\+Item $\ast$item)
 \item 
 void \mbox{\hyperlink{class_save_object_afb37e4cd771449c65d3023d2e51bf40a}{add\+Text\+Single}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$pattern, QGraphics\+Item $\ast$item)
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Private Member Functions}
-\begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{class_save_object_aaa28ee2579ab1b54602812d652889737}{to\+Polyline}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$pattern, const QPointF \&obj\+Pos, const QPainter\+Path \&obj\+Path, const QString \&layer, const QColor \&color, const QString \&line\+Type, const QString \&line\+Weight)
 \end{DoxyCompactItemize}
-\doxysubsubsection*{Private Attributes}
+\doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 QGraphics\+Scene $\ast$ \mbox{\hyperlink{class_save_object_a54342adb25110a7823aaf91cc53ea522}{gscene}}
@@ -369,7 +366,7 @@ Returns whether the save to file process was successful.
 \index{SaveObject@{SaveObject}!toPolyline@{toPolyline}}
 \index{toPolyline@{toPolyline}!SaveObject@{SaveObject}}
 \doxyparagraph{\texorpdfstring{toPolyline()}{toPolyline()}}
-{\footnotesize\ttfamily void to\+Polyline (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{const QPointF \&}]{obj\+Pos,  }\item[{const QPainter\+Path \&}]{obj\+Path,  }\item[{const QString \&}]{layer,  }\item[{const QColor \&}]{color,  }\item[{const QString \&}]{line\+Type,  }\item[{const QString \&}]{line\+Weight }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily void to\+Polyline (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{const QPointF \&}]{obj\+Pos,  }\item[{const QPainter\+Path \&}]{obj\+Path,  }\item[{const QString \&}]{layer,  }\item[{const QColor \&}]{color,  }\item[{const QString \&}]{line\+Type,  }\item[{const QString \&}]{line\+Weight }\end{DoxyParamCaption})}
 
 \begin{DoxyRefDesc}{Todo}
 \item[\mbox{\hyperlink{todo__todo000011}{Todo}}]FIX Emb\+Polyline$\ast$ poly\+Object = emb\+Polyline\+\_\+init(point\+List, color\+\_\+out, 1); //\+TODO\+: proper line\+Type emb\+Pattern\+\_\+add\+Polyline\+Abs(pattern, poly\+Object); \end{DoxyRefDesc}
@@ -380,17 +377,17 @@ Returns whether the save to file process was successful.
 \index{SaveObject@{SaveObject}!formatType@{formatType}}
 \index{formatType@{formatType}!SaveObject@{SaveObject}}
 \doxyparagraph{\texorpdfstring{formatType}{formatType}}
-{\footnotesize\ttfamily int format\+Type\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily int format\+Type}
 
 \mbox{\Hypertarget{class_save_object_a54342adb25110a7823aaf91cc53ea522}\label{class_save_object_a54342adb25110a7823aaf91cc53ea522}} 
 \index{SaveObject@{SaveObject}!gscene@{gscene}}
 \index{gscene@{gscene}!SaveObject@{SaveObject}}
 \doxyparagraph{\texorpdfstring{gscene}{gscene}}
-{\footnotesize\ttfamily QGraphics\+Scene$\ast$ gscene\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QGraphics\+Scene$\ast$ gscene}
 
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-embroidermodder2/\mbox{\hyperlink{object-save_8h}{object-\/save.\+h}}\item 
+embroidermodder2/\mbox{\hyperlink{embroidermodder_8h}{embroidermodder.\+h}}\item 
 embroidermodder2/\mbox{\hyperlink{object-save_8cpp}{object-\/save.\+cpp}}\end{DoxyCompactItemize}

@@ -2,7 +2,7 @@
 \label{class_settings___dialog}\index{Settings\_Dialog@{Settings\_Dialog}}
 
 
-{\ttfamily \#include $<$settings-\/dialog.\+h$>$}
+{\ttfamily \#include $<$embroidermodder.\+h$>$}
 
 \doxysubsubsection*{Signals}
 \begin{DoxyCompactItemize}
@@ -21,6 +21,301 @@ void \mbox{\hyperlink{class_settings___dialog_ad9b6a3a8281e77559e56a592ff8fe660}
 \mbox{\hyperlink{class_settings___dialog_a5d05a28a2087c57efd54e551d7cf6e61}{Settings\+\_\+\+Dialog}} (\mbox{\hyperlink{class_main_window}{Main\+Window}} $\ast$mw, const QString \&show\+Tab=QString(), QWidget $\ast$parent=0)
 \item 
 \mbox{\hyperlink{class_settings___dialog_a32337008601663a108e4411fe796cfeb}{$\sim$\+Settings\+\_\+\+Dialog}} ()
+\item 
+QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_ae734030f38b8aed1b4b45ecd00a3b9e1}{create\+Tab\+General}} ()
+\item 
+QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_a5840f747f2ab02381fc32e3254ec26f0}{create\+Tab\+Files\+Paths}} ()
+\item 
+QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_a9c1f3304d277b49170eb64dbced194b1}{create\+Tab\+Display}} ()
+\item 
+QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_a2a53291533f1f5dd7b7d8b00420ddea8}{create\+Tab\+Prompt}} ()
+\item 
+QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_abcb43f3a9f40d10ab5eb100e564fd035}{create\+Tab\+Open\+Save}} ()
+\item 
+QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_a4a424ba35c45f14fc9bfd55c7e2d4f2c}{create\+Tab\+Printing}} ()
+\item 
+QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_a3231d8474f52f9d87c996add2ca75076}{create\+Tab\+Snap}} ()
+\item 
+QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_acda8d8a65ece4d8132c1d93eab0f4f72}{create\+Tab\+Grid\+Ruler}} ()
+\item 
+QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_a84fbf3423358745508495d990cc9017d}{create\+Tab\+Ortho\+Polar}} ()
+\item 
+QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_a14cd7a7414407021d248baff69fa738c}{create\+Tab\+Quick\+Snap}} ()
+\item 
+QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_a286f49fdfad851df69dbeac2d4f3045e}{create\+Tab\+Quick\+Track}} ()
+\item 
+QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_ab93f00c8b4b291a0ada7f8eba3414466}{create\+Tab\+Line\+Weight}} ()
+\item 
+QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_a45b7f1a9a5cfafa47ef5b939114d1509}{create\+Tab\+Selection}} ()
+\item 
+void \mbox{\hyperlink{class_settings___dialog_af2554a94a4b21a4ed81dde695e281707}{add\+Colors\+To\+Combo\+Box}} (QCombo\+Box $\ast$combo\+Box)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_main_window}{Main\+Window}} $\ast$ \mbox{\hyperlink{class_settings___dialog_a8a28ac6f98797eb7aa5972c3f9f9ffdd}{main\+Win}}
+\item 
+QTab\+Widget $\ast$ \mbox{\hyperlink{class_settings___dialog_a39c8d5a067962a58503190d74207588e}{tab\+Widget}}
+\item 
+QDialog\+Button\+Box $\ast$ \mbox{\hyperlink{class_settings___dialog_a4d76db11c020d3d895f14dcecf268a95}{button\+Box}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a8f6423b071e7ff1bd0d50d9084763a01}{preview\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+logo}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a7fc06fdda4027f35fbaf944f4c400fd1}{preview\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+texture}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a2aba23516c27d852d3d1dd4af3e69cb0}{preview\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+color}}
+\item 
+QString \mbox{\hyperlink{class_settings___dialog_acb4118ded4bf01d5c90d7bd66e534a96}{accept\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+logo}}
+\item 
+QString \mbox{\hyperlink{class_settings___dialog_a0412e51e900f6193161251d6d95fe164}{accept\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+texture}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_aedcc3458893e9f25926180a1b9b861b1}{preview\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+color}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_ad34cf3bf017efc33419ec1862201aa6e}{accept\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+color}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a7d42559a3048e3d22c8615a51d18ff64}{preview\+\_\+display\+\_\+show\+\_\+scrollbars}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_a24aed225df6ac07fa9fd4349a8d1c04b}{preview\+\_\+display\+\_\+crosshair\+\_\+color}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_a8650ac2fe1bbd555a414bf65dd3b1f42}{accept\+\_\+display\+\_\+crosshair\+\_\+color}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_abd82057d69bd647d012324d2481795c1}{preview\+\_\+display\+\_\+bg\+\_\+color}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_ab6a73487f796c0d83ca008d07da192b3}{accept\+\_\+display\+\_\+bg\+\_\+color}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_a2b4f3fb4cd823c327879b10789d33d6b}{preview\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+color}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_a43bceeec0df2ebc55888355b31968970}{accept\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+color}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_aa4c4326ae7f1668e3635b27f8a993bca}{preview\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+fill}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_aa1a8c05128a40696c71a48288f07fcf0}{accept\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+fill}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_a5c6a11130f559964d4f152e9952c9eee}{preview\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+color}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_a2d7943bfab661574ab277d4f143ea069}{accept\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+color}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_ae203fb6a3e234825e8645cbf6923e90a}{preview\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+fill}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_a97ecce73276683c0c7067078bb17406b}{accept\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+fill}}
+\item 
+quint8 \mbox{\hyperlink{class_settings___dialog_a2db3195effa4d7a348a149b01e2d90c3}{preview\+\_\+display\+\_\+selectbox\+\_\+alpha}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_a9a453cb0f5e0960ef49a2d414b2badc1}{preview\+\_\+prompt\+\_\+text\+\_\+color}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_a256ce54aed272cd187c6f3c00d080be6}{accept\+\_\+prompt\+\_\+text\+\_\+color}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_a447f8fbbfbc92a50ee594dcaba5ede46}{preview\+\_\+prompt\+\_\+bg\+\_\+color}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_ab9654e2a32a99be19980c4582d0d04ec}{accept\+\_\+prompt\+\_\+bg\+\_\+color}}
+\item 
+QString \mbox{\hyperlink{class_settings___dialog_a6734ee3a8cd50bc2112f770180e37b4e}{preview\+\_\+prompt\+\_\+font\+\_\+family}}
+\item 
+QString \mbox{\hyperlink{class_settings___dialog_a1aa6b2a8a7f472fab2edd1e1915fb4df}{preview\+\_\+prompt\+\_\+font\+\_\+style}}
+\item 
+quint8 \mbox{\hyperlink{class_settings___dialog_a9e7941fe49efabc22d69fcd1a98063d7}{preview\+\_\+prompt\+\_\+font\+\_\+size}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_a38fb1c364601a852815685fd404b594e}{preview\+\_\+grid\+\_\+color}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_aef221503ee9080914f90b5fe4ce5f416}{accept\+\_\+grid\+\_\+color}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_a71a538f3b775fc006d351707c8e32011}{preview\+\_\+ruler\+\_\+color}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_af9e836b8fd75f54c64599c9d573c4625}{accept\+\_\+ruler\+\_\+color}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a54741095244e28ade1fad6e296050a53}{preview\+\_\+lwt\+\_\+show\+\_\+lwt}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a368bc7478daf70ef6b3f3c51ab411d07}{preview\+\_\+lwt\+\_\+real\+\_\+render}}
+\item 
+QString \mbox{\hyperlink{class_settings___dialog_a7f7e698b8e70a6a9931af69204528742}{dialog\+\_\+general\+\_\+language}}
+\item 
+QString \mbox{\hyperlink{class_settings___dialog_af8455a50620f5f811c4d56b4d906e646}{dialog\+\_\+general\+\_\+icon\+\_\+theme}}
+\item 
+int \mbox{\hyperlink{class_settings___dialog_a58e7c8f1b3a351447e5bed4c3d6849e6}{dialog\+\_\+general\+\_\+icon\+\_\+size}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a4ada02f0a3290f0c50cefefc1f8abba4}{dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+logo}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_ae60b5f685971fd62c0a260c4a6524663}{dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+texture}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_adc349ff664667e4fbddfdab49a168b9f}{dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+color}}
+\item 
+QString \mbox{\hyperlink{class_settings___dialog_a3a5c669038d65cc17865c51a8634f185}{dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+logo}}
+\item 
+QString \mbox{\hyperlink{class_settings___dialog_a0e028e14e25d75584a855dc10e133e2a}{dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+texture}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_a68053d064f500b076a1b07dca63e30fb}{dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+color}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a76cfcfa5e63321c1b2fbf845f80d215b}{dialog\+\_\+general\+\_\+tip\+\_\+of\+\_\+the\+\_\+day}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a70650711229cc5dd34a579bfbadaa05d}{dialog\+\_\+general\+\_\+system\+\_\+help\+\_\+browser}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a8c7204773edaeeee39694c84d29b5cc8}{dialog\+\_\+display\+\_\+use\+\_\+opengl}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a1aefb3c6b7697b1db79633aee5e12402}{dialog\+\_\+display\+\_\+renderhint\+\_\+aa}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a48b0da9e1144c31d331da5856aa17e10}{dialog\+\_\+display\+\_\+renderhint\+\_\+text\+\_\+aa}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_aeb4bda8bc3fd9998044046f33a87e4a4}{dialog\+\_\+display\+\_\+renderhint\+\_\+smooth\+\_\+pix}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a61f64b9a874b2bccffb8ad00360be231}{dialog\+\_\+display\+\_\+renderhint\+\_\+high\+\_\+aa}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_af9018c0951da30b786452ebbbee85521}{dialog\+\_\+display\+\_\+renderhint\+\_\+noncosmetic}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a9d63e1c53629c8fcce30c2281fc198ca}{dialog\+\_\+display\+\_\+show\+\_\+scrollbars}}
+\item 
+int \mbox{\hyperlink{class_settings___dialog_a10a03ea7eba75c4944239ce6932cebba}{dialog\+\_\+display\+\_\+scrollbar\+\_\+widget\+\_\+num}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_abb5c31de89ac0b691a50baa0efbc4963}{dialog\+\_\+display\+\_\+crosshair\+\_\+color}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_ad76d94e9889ab7b72417dfda1db0affc}{dialog\+\_\+display\+\_\+bg\+\_\+color}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_aaa8e6dcfb1c7fcacfca66fb33bd24527}{dialog\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+color}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_a29777233f9dfd5a76bed9c9cfa8fcc85}{dialog\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+fill}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_a75ec3f074492516d0447cc151cc5ba33}{dialog\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+color}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_a687e1191cd18e4b9950eaae0e1914838}{dialog\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+fill}}
+\item 
+quint8 \mbox{\hyperlink{class_settings___dialog_a5c0cc1b2b47236747df226589214ff6c}{dialog\+\_\+display\+\_\+selectbox\+\_\+alpha}}
+\item 
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_settings___dialog_a6a2a80b03a2c62031ea08a5aa4450076}{dialog\+\_\+display\+\_\+zoomscale\+\_\+in}}
+\item 
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_settings___dialog_ae0c7c014c7c1589d36af222281b3b441}{dialog\+\_\+display\+\_\+zoomscale\+\_\+out}}
+\item 
+quint8 \mbox{\hyperlink{class_settings___dialog_a2c3f13d163a91d4a20dc174cd0e4f8f1}{dialog\+\_\+display\+\_\+crosshair\+\_\+percent}}
+\item 
+QString \mbox{\hyperlink{class_settings___dialog_a9530002d5355110888b094739ec7fc5d}{dialog\+\_\+display\+\_\+units}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_ad9a0f1a1f6331338b2db645febb22d54}{dialog\+\_\+prompt\+\_\+text\+\_\+color}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_a764f1537b467185f8d799e161a6a2090}{dialog\+\_\+prompt\+\_\+bg\+\_\+color}}
+\item 
+QString \mbox{\hyperlink{class_settings___dialog_a88d78f257baebea3709d1448b3d1d49c}{dialog\+\_\+prompt\+\_\+font\+\_\+family}}
+\item 
+QString \mbox{\hyperlink{class_settings___dialog_a2513f2c1dc67a1c22dd5ee329597b592}{dialog\+\_\+prompt\+\_\+font\+\_\+style}}
+\item 
+quint8 \mbox{\hyperlink{class_settings___dialog_abba0a8e7c9aacd2441d733677795a0a9}{dialog\+\_\+prompt\+\_\+font\+\_\+size}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a000eac3d3f518c6fd4b04e7fd974ea02}{dialog\+\_\+prompt\+\_\+save\+\_\+history}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a3435f451637328d5580a485f9963c40f}{dialog\+\_\+prompt\+\_\+save\+\_\+history\+\_\+as\+\_\+html}}
+\item 
+QString \mbox{\hyperlink{class_settings___dialog_ae56221fa815c55849d1c4222f20fcad5}{dialog\+\_\+prompt\+\_\+save\+\_\+history\+\_\+filename}}
+\item 
+QString \mbox{\hyperlink{class_settings___dialog_a99739aee8975053496883ff2166052ff}{dialog\+\_\+opensave\+\_\+custom\+\_\+filter}}
+\item 
+QString \mbox{\hyperlink{class_settings___dialog_a1fdf63fe0fd2dda28f34d83aa9038e32}{dialog\+\_\+opensave\+\_\+open\+\_\+format}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a27b2483e2d416b0d1e8ea52bedac3b41}{dialog\+\_\+opensave\+\_\+open\+\_\+thumbnail}}
+\item 
+QString \mbox{\hyperlink{class_settings___dialog_a4665a0892c80df1fb6b563ec95b804c6}{dialog\+\_\+opensave\+\_\+save\+\_\+format}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_afc9badfb47e616507c25e076087561e5}{dialog\+\_\+opensave\+\_\+save\+\_\+thumbnail}}
+\item 
+quint8 \mbox{\hyperlink{class_settings___dialog_a9eb0d0a77301feb84f7265eb58c17663}{dialog\+\_\+opensave\+\_\+recent\+\_\+max\+\_\+files}}
+\item 
+quint8 \mbox{\hyperlink{class_settings___dialog_a829c7d1af468e058721acd7f8e12ce7d}{dialog\+\_\+opensave\+\_\+trim\+\_\+dst\+\_\+num\+\_\+jumps}}
+\item 
+QString \mbox{\hyperlink{class_settings___dialog_a936d1dd6667c0267ef34b2cd854f2672}{dialog\+\_\+printing\+\_\+default\+\_\+device}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a9d253ce2096cc9030ad6613e516393b0}{dialog\+\_\+printing\+\_\+use\+\_\+last\+\_\+device}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a445a6e24404ee1f10cc1dda9ef2640c6}{dialog\+\_\+printing\+\_\+disable\+\_\+bg}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_acffe6046f5762532128c4c69b7245f86}{dialog\+\_\+grid\+\_\+show\+\_\+on\+\_\+load}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a092c6f5410fd13727515ebd2dbaefa11}{dialog\+\_\+grid\+\_\+show\+\_\+origin}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a859e82990c6d1c79b0c08c22e2afc9a8}{dialog\+\_\+grid\+\_\+color\+\_\+match\+\_\+crosshair}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_a65e03df4163fe99caaf5dd2aebedf1ab}{dialog\+\_\+grid\+\_\+color}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_aea90e5be206f68d21aa7e32ffef83c84}{dialog\+\_\+grid\+\_\+load\+\_\+from\+\_\+file}}
+\item 
+QString \mbox{\hyperlink{class_settings___dialog_a82c4ed1850a3cfa8b21c940dd2d1e31b}{dialog\+\_\+grid\+\_\+type}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a166234f9317f8288c752d21756a01db2}{dialog\+\_\+grid\+\_\+center\+\_\+on\+\_\+origin}}
+\item 
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_settings___dialog_a18bc351c12318fe9c0a80814384b3190}{dialog\+\_\+grid\+\_\+center\+\_\+x}}
+\item 
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_settings___dialog_a9656e20d39f4c99b93f8fbe5d7267b7c}{dialog\+\_\+grid\+\_\+center\+\_\+y}}
+\item 
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_settings___dialog_af76baa8bc5ce840644356971e97dff54}{dialog\+\_\+grid\+\_\+size\+\_\+x}}
+\item 
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_settings___dialog_a75243a4d1df1c55d7ece7c619afc5190}{dialog\+\_\+grid\+\_\+size\+\_\+y}}
+\item 
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_settings___dialog_ac2e1b7e312bfaf84b3d7601cf49cc8cb}{dialog\+\_\+grid\+\_\+spacing\+\_\+x}}
+\item 
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_settings___dialog_aebf4736d37cc8f7462742a811a53709c}{dialog\+\_\+grid\+\_\+spacing\+\_\+y}}
+\item 
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_settings___dialog_a193ff430e3c01683225c0a201fd0ae5b}{dialog\+\_\+grid\+\_\+size\+\_\+radius}}
+\item 
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_settings___dialog_a379cc6247115fcf601c8926d72afd27e}{dialog\+\_\+grid\+\_\+spacing\+\_\+radius}}
+\item 
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_settings___dialog_a570eec614741626ddb2b518f8db548ad}{dialog\+\_\+grid\+\_\+spacing\+\_\+angle}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a62451ed2e6650272c780abd793622002}{dialog\+\_\+ruler\+\_\+show\+\_\+on\+\_\+load}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a00b34d7ead29754b1d9ac7bf2912dbe0}{dialog\+\_\+ruler\+\_\+metric}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_a7acf143d7c9aca259fc6eb4188030266}{dialog\+\_\+ruler\+\_\+color}}
+\item 
+quint8 \mbox{\hyperlink{class_settings___dialog_ac14a5854e4498d8281f0aec97e9b0d49}{dialog\+\_\+ruler\+\_\+pixel\+\_\+size}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_ae2f5e5f7db9de68f9b46c06f79aca175}{dialog\+\_\+qsnap\+\_\+enabled}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_a9a89241174bb7326bda62b70026e8f60}{dialog\+\_\+qsnap\+\_\+locator\+\_\+color}}
+\item 
+quint8 \mbox{\hyperlink{class_settings___dialog_acfa6e87927b6e133926c30cf9363f7b7}{dialog\+\_\+qsnap\+\_\+locator\+\_\+size}}
+\item 
+quint8 \mbox{\hyperlink{class_settings___dialog_aa8f853295595ad25ed91369b2158ea9a}{dialog\+\_\+qsnap\+\_\+aperture\+\_\+size}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a5026d0f076a4808228c40fb6a2a6eb35}{dialog\+\_\+qsnap\+\_\+endpoint}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a0956b50a1481bf01171c0509a73c04d1}{dialog\+\_\+qsnap\+\_\+midpoint}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a39d22f96d93a029def3113846e54f574}{dialog\+\_\+qsnap\+\_\+center}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_afda37a1450408625c0510dfa5b1ba26d}{dialog\+\_\+qsnap\+\_\+node}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a156fde53a455bacca87ab5a99efeb902}{dialog\+\_\+qsnap\+\_\+quadrant}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a8e5d5e422f2a233c278030ad4cd2c152}{dialog\+\_\+qsnap\+\_\+intersection}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_aa3b8f977ae61d60db739f9f4da3fc765}{dialog\+\_\+qsnap\+\_\+extension}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_aa7e9d0cb06383959982835cab09217b4}{dialog\+\_\+qsnap\+\_\+insertion}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a0e75c495669dc61f01b65819170d7d93}{dialog\+\_\+qsnap\+\_\+perpendicular}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_ac6a8cdd07997891afaeeb8ca510e18b5}{dialog\+\_\+qsnap\+\_\+tangent}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_aa210e461551cc6836a234058db277aab}{dialog\+\_\+qsnap\+\_\+nearest}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_aaa83d9dc545ac4d081c8d8d77acf56e3}{dialog\+\_\+qsnap\+\_\+apparent}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a94ca1cd8dd8cb3d97ca0b0536b56e8d2}{dialog\+\_\+qsnap\+\_\+parallel}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a2250597e2e44bbdce5bba90d28ae6023}{dialog\+\_\+lwt\+\_\+show\+\_\+lwt}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a4b4a2a75270b00bbc306fbb2a40d446c}{dialog\+\_\+lwt\+\_\+real\+\_\+render}}
+\item 
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_settings___dialog_ac8edbd6e2984d8a3c6a8e55d64b3e437}{dialog\+\_\+lwt\+\_\+default\+\_\+lwt}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a8eb36c0a1c3d6989f1b9ecbf42d219f5}{dialog\+\_\+selection\+\_\+mode\+\_\+pickfirst}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a4dd27953612107632146b58e6efc69e3}{dialog\+\_\+selection\+\_\+mode\+\_\+pickadd}}
+\item 
+bool \mbox{\hyperlink{class_settings___dialog_a94d26fa3f78d21595767df4c4b61cbb0}{dialog\+\_\+selection\+\_\+mode\+\_\+pickdrag}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_a61a2fd3421af96e6ffbe1dc603ad5472}{dialog\+\_\+selection\+\_\+coolgrip\+\_\+color}}
+\item 
+QRgb \mbox{\hyperlink{class_settings___dialog_ad93f2377c578bd1abbe47d62be7684c0}{dialog\+\_\+selection\+\_\+hotgrip\+\_\+color}}
+\item 
+quint8 \mbox{\hyperlink{class_settings___dialog_af5b4686d4a52a5599f2074653df48293}{dialog\+\_\+selection\+\_\+grip\+\_\+size}}
+\item 
+quint8 \mbox{\hyperlink{class_settings___dialog_a6f0ac4cc77079cd5a266aea92d920bce}{dialog\+\_\+selection\+\_\+pickbox\+\_\+size}}
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Private Slots}
 \begin{DoxyCompactItemize}
@@ -225,304 +520,6 @@ void \mbox{\hyperlink{class_settings___dialog_a053475ba94117386a0a20baf882d7b04}
 \item 
 void \mbox{\hyperlink{class_settings___dialog_a81f9dd1f930d9fbfae2a59a29052f280}{reject\+Changes}} ()
 \end{DoxyCompactItemize}
-\doxysubsubsection*{Private Member Functions}
-\begin{DoxyCompactItemize}
-\item 
-QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_ae734030f38b8aed1b4b45ecd00a3b9e1}{create\+Tab\+General}} ()
-\item 
-QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_a5840f747f2ab02381fc32e3254ec26f0}{create\+Tab\+Files\+Paths}} ()
-\item 
-QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_a9c1f3304d277b49170eb64dbced194b1}{create\+Tab\+Display}} ()
-\item 
-QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_a2a53291533f1f5dd7b7d8b00420ddea8}{create\+Tab\+Prompt}} ()
-\item 
-QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_abcb43f3a9f40d10ab5eb100e564fd035}{create\+Tab\+Open\+Save}} ()
-\item 
-QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_a4a424ba35c45f14fc9bfd55c7e2d4f2c}{create\+Tab\+Printing}} ()
-\item 
-QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_a3231d8474f52f9d87c996add2ca75076}{create\+Tab\+Snap}} ()
-\item 
-QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_acda8d8a65ece4d8132c1d93eab0f4f72}{create\+Tab\+Grid\+Ruler}} ()
-\item 
-QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_a84fbf3423358745508495d990cc9017d}{create\+Tab\+Ortho\+Polar}} ()
-\item 
-QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_a14cd7a7414407021d248baff69fa738c}{create\+Tab\+Quick\+Snap}} ()
-\item 
-QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_a286f49fdfad851df69dbeac2d4f3045e}{create\+Tab\+Quick\+Track}} ()
-\item 
-QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_ab93f00c8b4b291a0ada7f8eba3414466}{create\+Tab\+Line\+Weight}} ()
-\item 
-QWidget $\ast$ \mbox{\hyperlink{class_settings___dialog_a45b7f1a9a5cfafa47ef5b939114d1509}{create\+Tab\+Selection}} ()
-\item 
-void \mbox{\hyperlink{class_settings___dialog_af2554a94a4b21a4ed81dde695e281707}{add\+Colors\+To\+Combo\+Box}} (QCombo\+Box $\ast$combo\+Box)
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Private Attributes}
-\begin{DoxyCompactItemize}
-\item 
-\mbox{\hyperlink{class_main_window}{Main\+Window}} $\ast$ \mbox{\hyperlink{class_settings___dialog_a8a28ac6f98797eb7aa5972c3f9f9ffdd}{main\+Win}}
-\item 
-QTab\+Widget $\ast$ \mbox{\hyperlink{class_settings___dialog_a39c8d5a067962a58503190d74207588e}{tab\+Widget}}
-\item 
-QDialog\+Button\+Box $\ast$ \mbox{\hyperlink{class_settings___dialog_a4d76db11c020d3d895f14dcecf268a95}{button\+Box}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a8f6423b071e7ff1bd0d50d9084763a01}{preview\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+logo}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a7fc06fdda4027f35fbaf944f4c400fd1}{preview\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+texture}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a2aba23516c27d852d3d1dd4af3e69cb0}{preview\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+color}}
-\item 
-QString \mbox{\hyperlink{class_settings___dialog_acb4118ded4bf01d5c90d7bd66e534a96}{accept\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+logo}}
-\item 
-QString \mbox{\hyperlink{class_settings___dialog_a0412e51e900f6193161251d6d95fe164}{accept\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+texture}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_aedcc3458893e9f25926180a1b9b861b1}{preview\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+color}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_ad34cf3bf017efc33419ec1862201aa6e}{accept\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+color}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a7d42559a3048e3d22c8615a51d18ff64}{preview\+\_\+display\+\_\+show\+\_\+scrollbars}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_a24aed225df6ac07fa9fd4349a8d1c04b}{preview\+\_\+display\+\_\+crosshair\+\_\+color}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_a8650ac2fe1bbd555a414bf65dd3b1f42}{accept\+\_\+display\+\_\+crosshair\+\_\+color}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_abd82057d69bd647d012324d2481795c1}{preview\+\_\+display\+\_\+bg\+\_\+color}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_ab6a73487f796c0d83ca008d07da192b3}{accept\+\_\+display\+\_\+bg\+\_\+color}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_a2b4f3fb4cd823c327879b10789d33d6b}{preview\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+color}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_a43bceeec0df2ebc55888355b31968970}{accept\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+color}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_aa4c4326ae7f1668e3635b27f8a993bca}{preview\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+fill}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_aa1a8c05128a40696c71a48288f07fcf0}{accept\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+fill}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_a5c6a11130f559964d4f152e9952c9eee}{preview\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+color}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_a2d7943bfab661574ab277d4f143ea069}{accept\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+color}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_ae203fb6a3e234825e8645cbf6923e90a}{preview\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+fill}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_a97ecce73276683c0c7067078bb17406b}{accept\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+fill}}
-\item 
-quint8 \mbox{\hyperlink{class_settings___dialog_a2db3195effa4d7a348a149b01e2d90c3}{preview\+\_\+display\+\_\+selectbox\+\_\+alpha}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_a9a453cb0f5e0960ef49a2d414b2badc1}{preview\+\_\+prompt\+\_\+text\+\_\+color}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_a256ce54aed272cd187c6f3c00d080be6}{accept\+\_\+prompt\+\_\+text\+\_\+color}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_a447f8fbbfbc92a50ee594dcaba5ede46}{preview\+\_\+prompt\+\_\+bg\+\_\+color}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_ab9654e2a32a99be19980c4582d0d04ec}{accept\+\_\+prompt\+\_\+bg\+\_\+color}}
-\item 
-QString \mbox{\hyperlink{class_settings___dialog_a6734ee3a8cd50bc2112f770180e37b4e}{preview\+\_\+prompt\+\_\+font\+\_\+family}}
-\item 
-QString \mbox{\hyperlink{class_settings___dialog_a1aa6b2a8a7f472fab2edd1e1915fb4df}{preview\+\_\+prompt\+\_\+font\+\_\+style}}
-\item 
-quint8 \mbox{\hyperlink{class_settings___dialog_a9e7941fe49efabc22d69fcd1a98063d7}{preview\+\_\+prompt\+\_\+font\+\_\+size}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_a38fb1c364601a852815685fd404b594e}{preview\+\_\+grid\+\_\+color}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_aef221503ee9080914f90b5fe4ce5f416}{accept\+\_\+grid\+\_\+color}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_a71a538f3b775fc006d351707c8e32011}{preview\+\_\+ruler\+\_\+color}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_af9e836b8fd75f54c64599c9d573c4625}{accept\+\_\+ruler\+\_\+color}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a54741095244e28ade1fad6e296050a53}{preview\+\_\+lwt\+\_\+show\+\_\+lwt}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a368bc7478daf70ef6b3f3c51ab411d07}{preview\+\_\+lwt\+\_\+real\+\_\+render}}
-\item 
-QString \mbox{\hyperlink{class_settings___dialog_a7f7e698b8e70a6a9931af69204528742}{dialog\+\_\+general\+\_\+language}}
-\item 
-QString \mbox{\hyperlink{class_settings___dialog_af8455a50620f5f811c4d56b4d906e646}{dialog\+\_\+general\+\_\+icon\+\_\+theme}}
-\item 
-int \mbox{\hyperlink{class_settings___dialog_a58e7c8f1b3a351447e5bed4c3d6849e6}{dialog\+\_\+general\+\_\+icon\+\_\+size}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a4ada02f0a3290f0c50cefefc1f8abba4}{dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+logo}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_ae60b5f685971fd62c0a260c4a6524663}{dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+texture}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_adc349ff664667e4fbddfdab49a168b9f}{dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+color}}
-\item 
-QString \mbox{\hyperlink{class_settings___dialog_a3a5c669038d65cc17865c51a8634f185}{dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+logo}}
-\item 
-QString \mbox{\hyperlink{class_settings___dialog_a0e028e14e25d75584a855dc10e133e2a}{dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+texture}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_a68053d064f500b076a1b07dca63e30fb}{dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+color}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a76cfcfa5e63321c1b2fbf845f80d215b}{dialog\+\_\+general\+\_\+tip\+\_\+of\+\_\+the\+\_\+day}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a70650711229cc5dd34a579bfbadaa05d}{dialog\+\_\+general\+\_\+system\+\_\+help\+\_\+browser}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a8c7204773edaeeee39694c84d29b5cc8}{dialog\+\_\+display\+\_\+use\+\_\+opengl}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a1aefb3c6b7697b1db79633aee5e12402}{dialog\+\_\+display\+\_\+renderhint\+\_\+aa}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a48b0da9e1144c31d331da5856aa17e10}{dialog\+\_\+display\+\_\+renderhint\+\_\+text\+\_\+aa}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_aeb4bda8bc3fd9998044046f33a87e4a4}{dialog\+\_\+display\+\_\+renderhint\+\_\+smooth\+\_\+pix}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a61f64b9a874b2bccffb8ad00360be231}{dialog\+\_\+display\+\_\+renderhint\+\_\+high\+\_\+aa}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_af9018c0951da30b786452ebbbee85521}{dialog\+\_\+display\+\_\+renderhint\+\_\+noncosmetic}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a9d63e1c53629c8fcce30c2281fc198ca}{dialog\+\_\+display\+\_\+show\+\_\+scrollbars}}
-\item 
-int \mbox{\hyperlink{class_settings___dialog_a10a03ea7eba75c4944239ce6932cebba}{dialog\+\_\+display\+\_\+scrollbar\+\_\+widget\+\_\+num}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_abb5c31de89ac0b691a50baa0efbc4963}{dialog\+\_\+display\+\_\+crosshair\+\_\+color}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_ad76d94e9889ab7b72417dfda1db0affc}{dialog\+\_\+display\+\_\+bg\+\_\+color}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_aaa8e6dcfb1c7fcacfca66fb33bd24527}{dialog\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+color}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_a29777233f9dfd5a76bed9c9cfa8fcc85}{dialog\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+fill}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_a75ec3f074492516d0447cc151cc5ba33}{dialog\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+color}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_a687e1191cd18e4b9950eaae0e1914838}{dialog\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+fill}}
-\item 
-quint8 \mbox{\hyperlink{class_settings___dialog_a5c0cc1b2b47236747df226589214ff6c}{dialog\+\_\+display\+\_\+selectbox\+\_\+alpha}}
-\item 
-qreal \mbox{\hyperlink{class_settings___dialog_ad78870af16bfbdeb0a4c02a4d1f7e662}{dialog\+\_\+display\+\_\+zoomscale\+\_\+in}}
-\item 
-qreal \mbox{\hyperlink{class_settings___dialog_a426cbad5d46127874c3608ec5e45230f}{dialog\+\_\+display\+\_\+zoomscale\+\_\+out}}
-\item 
-quint8 \mbox{\hyperlink{class_settings___dialog_a2c3f13d163a91d4a20dc174cd0e4f8f1}{dialog\+\_\+display\+\_\+crosshair\+\_\+percent}}
-\item 
-QString \mbox{\hyperlink{class_settings___dialog_a9530002d5355110888b094739ec7fc5d}{dialog\+\_\+display\+\_\+units}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_ad9a0f1a1f6331338b2db645febb22d54}{dialog\+\_\+prompt\+\_\+text\+\_\+color}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_a764f1537b467185f8d799e161a6a2090}{dialog\+\_\+prompt\+\_\+bg\+\_\+color}}
-\item 
-QString \mbox{\hyperlink{class_settings___dialog_a88d78f257baebea3709d1448b3d1d49c}{dialog\+\_\+prompt\+\_\+font\+\_\+family}}
-\item 
-QString \mbox{\hyperlink{class_settings___dialog_a2513f2c1dc67a1c22dd5ee329597b592}{dialog\+\_\+prompt\+\_\+font\+\_\+style}}
-\item 
-quint8 \mbox{\hyperlink{class_settings___dialog_abba0a8e7c9aacd2441d733677795a0a9}{dialog\+\_\+prompt\+\_\+font\+\_\+size}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a000eac3d3f518c6fd4b04e7fd974ea02}{dialog\+\_\+prompt\+\_\+save\+\_\+history}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a3435f451637328d5580a485f9963c40f}{dialog\+\_\+prompt\+\_\+save\+\_\+history\+\_\+as\+\_\+html}}
-\item 
-QString \mbox{\hyperlink{class_settings___dialog_ae56221fa815c55849d1c4222f20fcad5}{dialog\+\_\+prompt\+\_\+save\+\_\+history\+\_\+filename}}
-\item 
-QString \mbox{\hyperlink{class_settings___dialog_a99739aee8975053496883ff2166052ff}{dialog\+\_\+opensave\+\_\+custom\+\_\+filter}}
-\item 
-QString \mbox{\hyperlink{class_settings___dialog_a1fdf63fe0fd2dda28f34d83aa9038e32}{dialog\+\_\+opensave\+\_\+open\+\_\+format}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a27b2483e2d416b0d1e8ea52bedac3b41}{dialog\+\_\+opensave\+\_\+open\+\_\+thumbnail}}
-\item 
-QString \mbox{\hyperlink{class_settings___dialog_a4665a0892c80df1fb6b563ec95b804c6}{dialog\+\_\+opensave\+\_\+save\+\_\+format}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_afc9badfb47e616507c25e076087561e5}{dialog\+\_\+opensave\+\_\+save\+\_\+thumbnail}}
-\item 
-quint8 \mbox{\hyperlink{class_settings___dialog_a9eb0d0a77301feb84f7265eb58c17663}{dialog\+\_\+opensave\+\_\+recent\+\_\+max\+\_\+files}}
-\item 
-quint8 \mbox{\hyperlink{class_settings___dialog_a829c7d1af468e058721acd7f8e12ce7d}{dialog\+\_\+opensave\+\_\+trim\+\_\+dst\+\_\+num\+\_\+jumps}}
-\item 
-QString \mbox{\hyperlink{class_settings___dialog_a936d1dd6667c0267ef34b2cd854f2672}{dialog\+\_\+printing\+\_\+default\+\_\+device}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a9d253ce2096cc9030ad6613e516393b0}{dialog\+\_\+printing\+\_\+use\+\_\+last\+\_\+device}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a445a6e24404ee1f10cc1dda9ef2640c6}{dialog\+\_\+printing\+\_\+disable\+\_\+bg}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_acffe6046f5762532128c4c69b7245f86}{dialog\+\_\+grid\+\_\+show\+\_\+on\+\_\+load}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a092c6f5410fd13727515ebd2dbaefa11}{dialog\+\_\+grid\+\_\+show\+\_\+origin}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a859e82990c6d1c79b0c08c22e2afc9a8}{dialog\+\_\+grid\+\_\+color\+\_\+match\+\_\+crosshair}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_a65e03df4163fe99caaf5dd2aebedf1ab}{dialog\+\_\+grid\+\_\+color}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_aea90e5be206f68d21aa7e32ffef83c84}{dialog\+\_\+grid\+\_\+load\+\_\+from\+\_\+file}}
-\item 
-QString \mbox{\hyperlink{class_settings___dialog_a82c4ed1850a3cfa8b21c940dd2d1e31b}{dialog\+\_\+grid\+\_\+type}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a166234f9317f8288c752d21756a01db2}{dialog\+\_\+grid\+\_\+center\+\_\+on\+\_\+origin}}
-\item 
-qreal \mbox{\hyperlink{class_settings___dialog_a9c0cdfe7a045a579797d44cb4b169550}{dialog\+\_\+grid\+\_\+center\+\_\+x}}
-\item 
-qreal \mbox{\hyperlink{class_settings___dialog_a7863cf5b76333396efdc382b2fc7ef17}{dialog\+\_\+grid\+\_\+center\+\_\+y}}
-\item 
-qreal \mbox{\hyperlink{class_settings___dialog_ae83805fcf10f75644c87195a7f9254b1}{dialog\+\_\+grid\+\_\+size\+\_\+x}}
-\item 
-qreal \mbox{\hyperlink{class_settings___dialog_a0ff3fed261494cc386e3e07dc4019dfe}{dialog\+\_\+grid\+\_\+size\+\_\+y}}
-\item 
-qreal \mbox{\hyperlink{class_settings___dialog_a1a233d9925c416398bd973700d01232a}{dialog\+\_\+grid\+\_\+spacing\+\_\+x}}
-\item 
-qreal \mbox{\hyperlink{class_settings___dialog_aafc1e8fe369a5b64afc87010b31de199}{dialog\+\_\+grid\+\_\+spacing\+\_\+y}}
-\item 
-qreal \mbox{\hyperlink{class_settings___dialog_a55ce6bd14b47b26d76bb9ec49e3960f8}{dialog\+\_\+grid\+\_\+size\+\_\+radius}}
-\item 
-qreal \mbox{\hyperlink{class_settings___dialog_af493d5870108e90eb8dbc3f05cff62b0}{dialog\+\_\+grid\+\_\+spacing\+\_\+radius}}
-\item 
-qreal \mbox{\hyperlink{class_settings___dialog_ae318fb60f73cfed4cf32c5f04911f108}{dialog\+\_\+grid\+\_\+spacing\+\_\+angle}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a62451ed2e6650272c780abd793622002}{dialog\+\_\+ruler\+\_\+show\+\_\+on\+\_\+load}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a00b34d7ead29754b1d9ac7bf2912dbe0}{dialog\+\_\+ruler\+\_\+metric}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_a7acf143d7c9aca259fc6eb4188030266}{dialog\+\_\+ruler\+\_\+color}}
-\item 
-quint8 \mbox{\hyperlink{class_settings___dialog_ac14a5854e4498d8281f0aec97e9b0d49}{dialog\+\_\+ruler\+\_\+pixel\+\_\+size}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_ae2f5e5f7db9de68f9b46c06f79aca175}{dialog\+\_\+qsnap\+\_\+enabled}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_a9a89241174bb7326bda62b70026e8f60}{dialog\+\_\+qsnap\+\_\+locator\+\_\+color}}
-\item 
-quint8 \mbox{\hyperlink{class_settings___dialog_acfa6e87927b6e133926c30cf9363f7b7}{dialog\+\_\+qsnap\+\_\+locator\+\_\+size}}
-\item 
-quint8 \mbox{\hyperlink{class_settings___dialog_aa8f853295595ad25ed91369b2158ea9a}{dialog\+\_\+qsnap\+\_\+aperture\+\_\+size}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a5026d0f076a4808228c40fb6a2a6eb35}{dialog\+\_\+qsnap\+\_\+endpoint}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a0956b50a1481bf01171c0509a73c04d1}{dialog\+\_\+qsnap\+\_\+midpoint}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a39d22f96d93a029def3113846e54f574}{dialog\+\_\+qsnap\+\_\+center}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_afda37a1450408625c0510dfa5b1ba26d}{dialog\+\_\+qsnap\+\_\+node}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a156fde53a455bacca87ab5a99efeb902}{dialog\+\_\+qsnap\+\_\+quadrant}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a8e5d5e422f2a233c278030ad4cd2c152}{dialog\+\_\+qsnap\+\_\+intersection}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_aa3b8f977ae61d60db739f9f4da3fc765}{dialog\+\_\+qsnap\+\_\+extension}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_aa7e9d0cb06383959982835cab09217b4}{dialog\+\_\+qsnap\+\_\+insertion}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a0e75c495669dc61f01b65819170d7d93}{dialog\+\_\+qsnap\+\_\+perpendicular}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_ac6a8cdd07997891afaeeb8ca510e18b5}{dialog\+\_\+qsnap\+\_\+tangent}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_aa210e461551cc6836a234058db277aab}{dialog\+\_\+qsnap\+\_\+nearest}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_aaa83d9dc545ac4d081c8d8d77acf56e3}{dialog\+\_\+qsnap\+\_\+apparent}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a94ca1cd8dd8cb3d97ca0b0536b56e8d2}{dialog\+\_\+qsnap\+\_\+parallel}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a2250597e2e44bbdce5bba90d28ae6023}{dialog\+\_\+lwt\+\_\+show\+\_\+lwt}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a4b4a2a75270b00bbc306fbb2a40d446c}{dialog\+\_\+lwt\+\_\+real\+\_\+render}}
-\item 
-qreal \mbox{\hyperlink{class_settings___dialog_a0a17463d954613dd7c5b6cb224055da0}{dialog\+\_\+lwt\+\_\+default\+\_\+lwt}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a8eb36c0a1c3d6989f1b9ecbf42d219f5}{dialog\+\_\+selection\+\_\+mode\+\_\+pickfirst}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a4dd27953612107632146b58e6efc69e3}{dialog\+\_\+selection\+\_\+mode\+\_\+pickadd}}
-\item 
-bool \mbox{\hyperlink{class_settings___dialog_a94d26fa3f78d21595767df4c4b61cbb0}{dialog\+\_\+selection\+\_\+mode\+\_\+pickdrag}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_a61a2fd3421af96e6ffbe1dc603ad5472}{dialog\+\_\+selection\+\_\+coolgrip\+\_\+color}}
-\item 
-QRgb \mbox{\hyperlink{class_settings___dialog_ad93f2377c578bd1abbe47d62be7684c0}{dialog\+\_\+selection\+\_\+hotgrip\+\_\+color}}
-\item 
-quint8 \mbox{\hyperlink{class_settings___dialog_af5b4686d4a52a5599f2074653df48293}{dialog\+\_\+selection\+\_\+grip\+\_\+size}}
-\item 
-quint8 \mbox{\hyperlink{class_settings___dialog_a6f0ac4cc77079cd5a266aea92d920bce}{dialog\+\_\+selection\+\_\+pickbox\+\_\+size}}
-\end{DoxyCompactItemize}
 
 
 \doxysubsubsection{Constructor \& Destructor Documentation}
@@ -532,7 +529,17 @@ quint8 \mbox{\hyperlink{class_settings___dialog_a6f0ac4cc77079cd5a266aea92d920bc
 \doxyparagraph{\texorpdfstring{Settings\_Dialog()}{Settings\_Dialog()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{class_settings___dialog}{Settings\+\_\+\+Dialog}} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_main_window}{Main\+Window}} $\ast$}]{mw,  }\item[{const QString \&}]{show\+Tab = {\ttfamily QString()},  }\item[{QWidget $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{class_settings___dialog_a32337008601663a108e4411fe796cfeb}\label{class_settings___dialog_a32337008601663a108e4411fe796cfeb}} 
+Embroidermodder 2.
+
+\DoxyHorRuler{0}
+
+
+Copyright 2013-\/2022 The Embroidermodder Team Embroidermodder 2 is Open Source Software. See LICENSE for licensing terms.
+
+\DoxyHorRuler{0}
+
+
+Use Python\textquotesingle{}s PEP7 style guide. \href{https://peps.python.org/pep-0007/}{\texttt{ https\+://peps.\+python.\+org/pep-\/0007/}} \mbox{\Hypertarget{class_settings___dialog_a32337008601663a108e4411fe796cfeb}\label{class_settings___dialog_a32337008601663a108e4411fe796cfeb}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!````~Settings\_Dialog@{$\sim$Settings\_Dialog}}
 \index{````~Settings\_Dialog@{$\sim$Settings\_Dialog}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{$\sim$Settings\_Dialog()}{~Settings\_Dialog()}}
@@ -551,7 +558,7 @@ quint8 \mbox{\hyperlink{class_settings___dialog_a6f0ac4cc77079cd5a266aea92d920bc
 \index{Settings\_Dialog@{Settings\_Dialog}!addColorsToComboBox@{addColorsToComboBox}}
 \index{addColorsToComboBox@{addColorsToComboBox}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{addColorsToComboBox()}{addColorsToComboBox()}}
-{\footnotesize\ttfamily void add\+Colors\+To\+Combo\+Box (\begin{DoxyParamCaption}\item[{QCombo\+Box $\ast$}]{combo\+Box }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily void add\+Colors\+To\+Combo\+Box (\begin{DoxyParamCaption}\item[{QCombo\+Box $\ast$}]{combo\+Box }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_settings___dialog_a2ecb15498c85fddb26a6b02e995c7823}\label{class_settings___dialog_a2ecb15498c85fddb26a6b02e995c7823}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!buttonCustomFilterClearAll@{buttonCustomFilterClearAll}}
@@ -983,79 +990,79 @@ quint8 \mbox{\hyperlink{class_settings___dialog_a6f0ac4cc77079cd5a266aea92d920bc
 \index{Settings\_Dialog@{Settings\_Dialog}!createTabDisplay@{createTabDisplay}}
 \index{createTabDisplay@{createTabDisplay}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{createTabDisplay()}{createTabDisplay()}}
-{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Display (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Display (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_settings___dialog_a5840f747f2ab02381fc32e3254ec26f0}\label{class_settings___dialog_a5840f747f2ab02381fc32e3254ec26f0}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!createTabFilesPaths@{createTabFilesPaths}}
 \index{createTabFilesPaths@{createTabFilesPaths}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{createTabFilesPaths()}{createTabFilesPaths()}}
-{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Files\+Paths (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Files\+Paths (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_settings___dialog_ae734030f38b8aed1b4b45ecd00a3b9e1}\label{class_settings___dialog_ae734030f38b8aed1b4b45ecd00a3b9e1}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!createTabGeneral@{createTabGeneral}}
 \index{createTabGeneral@{createTabGeneral}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{createTabGeneral()}{createTabGeneral()}}
-{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+General (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+General (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_settings___dialog_acda8d8a65ece4d8132c1d93eab0f4f72}\label{class_settings___dialog_acda8d8a65ece4d8132c1d93eab0f4f72}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!createTabGridRuler@{createTabGridRuler}}
 \index{createTabGridRuler@{createTabGridRuler}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{createTabGridRuler()}{createTabGridRuler()}}
-{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Grid\+Ruler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Grid\+Ruler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_settings___dialog_ab93f00c8b4b291a0ada7f8eba3414466}\label{class_settings___dialog_ab93f00c8b4b291a0ada7f8eba3414466}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!createTabLineWeight@{createTabLineWeight}}
 \index{createTabLineWeight@{createTabLineWeight}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{createTabLineWeight()}{createTabLineWeight()}}
-{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Line\+Weight (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Line\+Weight (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_settings___dialog_abcb43f3a9f40d10ab5eb100e564fd035}\label{class_settings___dialog_abcb43f3a9f40d10ab5eb100e564fd035}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!createTabOpenSave@{createTabOpenSave}}
 \index{createTabOpenSave@{createTabOpenSave}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{createTabOpenSave()}{createTabOpenSave()}}
-{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Open\+Save (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Open\+Save (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_settings___dialog_a84fbf3423358745508495d990cc9017d}\label{class_settings___dialog_a84fbf3423358745508495d990cc9017d}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!createTabOrthoPolar@{createTabOrthoPolar}}
 \index{createTabOrthoPolar@{createTabOrthoPolar}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{createTabOrthoPolar()}{createTabOrthoPolar()}}
-{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Ortho\+Polar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Ortho\+Polar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_settings___dialog_a4a424ba35c45f14fc9bfd55c7e2d4f2c}\label{class_settings___dialog_a4a424ba35c45f14fc9bfd55c7e2d4f2c}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!createTabPrinting@{createTabPrinting}}
 \index{createTabPrinting@{createTabPrinting}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{createTabPrinting()}{createTabPrinting()}}
-{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Printing (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Printing (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_settings___dialog_a2a53291533f1f5dd7b7d8b00420ddea8}\label{class_settings___dialog_a2a53291533f1f5dd7b7d8b00420ddea8}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!createTabPrompt@{createTabPrompt}}
 \index{createTabPrompt@{createTabPrompt}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{createTabPrompt()}{createTabPrompt()}}
-{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Prompt (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Prompt (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_settings___dialog_a14cd7a7414407021d248baff69fa738c}\label{class_settings___dialog_a14cd7a7414407021d248baff69fa738c}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!createTabQuickSnap@{createTabQuickSnap}}
 \index{createTabQuickSnap@{createTabQuickSnap}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{createTabQuickSnap()}{createTabQuickSnap()}}
-{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Quick\+Snap (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Quick\+Snap (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_settings___dialog_a286f49fdfad851df69dbeac2d4f3045e}\label{class_settings___dialog_a286f49fdfad851df69dbeac2d4f3045e}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!createTabQuickTrack@{createTabQuickTrack}}
 \index{createTabQuickTrack@{createTabQuickTrack}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{createTabQuickTrack()}{createTabQuickTrack()}}
-{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Quick\+Track (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Quick\+Track (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_settings___dialog_a45b7f1a9a5cfafa47ef5b939114d1509}\label{class_settings___dialog_a45b7f1a9a5cfafa47ef5b939114d1509}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!createTabSelection@{createTabSelection}}
 \index{createTabSelection@{createTabSelection}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{createTabSelection()}{createTabSelection()}}
-{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Selection (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Selection (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_settings___dialog_a3231d8474f52f9d87c996add2ca75076}\label{class_settings___dialog_a3231d8474f52f9d87c996add2ca75076}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!createTabSnap@{createTabSnap}}
 \index{createTabSnap@{createTabSnap}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{createTabSnap()}{createTabSnap()}}
-{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Snap (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QWidget $\ast$ create\+Tab\+Snap (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_settings___dialog_af1aef19d52844bece491d6c0d50d3b26}\label{class_settings___dialog_af1aef19d52844bece491d6c0d50d3b26}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!currentDisplayBackgroundColorChanged@{currentDisplayBackgroundColorChanged}}
@@ -1256,797 +1263,797 @@ quint8 \mbox{\hyperlink{class_settings___dialog_a6f0ac4cc77079cd5a266aea92d920bc
 \index{Settings\_Dialog@{Settings\_Dialog}!accept\_display\_bg\_color@{accept\_display\_bg\_color}}
 \index{accept\_display\_bg\_color@{accept\_display\_bg\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{accept\_display\_bg\_color}{accept\_display\_bg\_color}}
-{\footnotesize\ttfamily QRgb accept\+\_\+display\+\_\+bg\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb accept\+\_\+display\+\_\+bg\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_a8650ac2fe1bbd555a414bf65dd3b1f42}\label{class_settings___dialog_a8650ac2fe1bbd555a414bf65dd3b1f42}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!accept\_display\_crosshair\_color@{accept\_display\_crosshair\_color}}
 \index{accept\_display\_crosshair\_color@{accept\_display\_crosshair\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{accept\_display\_crosshair\_color}{accept\_display\_crosshair\_color}}
-{\footnotesize\ttfamily QRgb accept\+\_\+display\+\_\+crosshair\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb accept\+\_\+display\+\_\+crosshair\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_a43bceeec0df2ebc55888355b31968970}\label{class_settings___dialog_a43bceeec0df2ebc55888355b31968970}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!accept\_display\_selectbox\_left\_color@{accept\_display\_selectbox\_left\_color}}
 \index{accept\_display\_selectbox\_left\_color@{accept\_display\_selectbox\_left\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{accept\_display\_selectbox\_left\_color}{accept\_display\_selectbox\_left\_color}}
-{\footnotesize\ttfamily QRgb accept\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb accept\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_aa1a8c05128a40696c71a48288f07fcf0}\label{class_settings___dialog_aa1a8c05128a40696c71a48288f07fcf0}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!accept\_display\_selectbox\_left\_fill@{accept\_display\_selectbox\_left\_fill}}
 \index{accept\_display\_selectbox\_left\_fill@{accept\_display\_selectbox\_left\_fill}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{accept\_display\_selectbox\_left\_fill}{accept\_display\_selectbox\_left\_fill}}
-{\footnotesize\ttfamily QRgb accept\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+fill\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb accept\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+fill}
 
 \mbox{\Hypertarget{class_settings___dialog_a2d7943bfab661574ab277d4f143ea069}\label{class_settings___dialog_a2d7943bfab661574ab277d4f143ea069}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!accept\_display\_selectbox\_right\_color@{accept\_display\_selectbox\_right\_color}}
 \index{accept\_display\_selectbox\_right\_color@{accept\_display\_selectbox\_right\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{accept\_display\_selectbox\_right\_color}{accept\_display\_selectbox\_right\_color}}
-{\footnotesize\ttfamily QRgb accept\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb accept\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_a97ecce73276683c0c7067078bb17406b}\label{class_settings___dialog_a97ecce73276683c0c7067078bb17406b}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!accept\_display\_selectbox\_right\_fill@{accept\_display\_selectbox\_right\_fill}}
 \index{accept\_display\_selectbox\_right\_fill@{accept\_display\_selectbox\_right\_fill}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{accept\_display\_selectbox\_right\_fill}{accept\_display\_selectbox\_right\_fill}}
-{\footnotesize\ttfamily QRgb accept\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+fill\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb accept\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+fill}
 
 \mbox{\Hypertarget{class_settings___dialog_ad34cf3bf017efc33419ec1862201aa6e}\label{class_settings___dialog_ad34cf3bf017efc33419ec1862201aa6e}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!accept\_general\_mdi\_bg\_color@{accept\_general\_mdi\_bg\_color}}
 \index{accept\_general\_mdi\_bg\_color@{accept\_general\_mdi\_bg\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{accept\_general\_mdi\_bg\_color}{accept\_general\_mdi\_bg\_color}}
-{\footnotesize\ttfamily QRgb accept\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb accept\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_acb4118ded4bf01d5c90d7bd66e534a96}\label{class_settings___dialog_acb4118ded4bf01d5c90d7bd66e534a96}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!accept\_general\_mdi\_bg\_logo@{accept\_general\_mdi\_bg\_logo}}
 \index{accept\_general\_mdi\_bg\_logo@{accept\_general\_mdi\_bg\_logo}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{accept\_general\_mdi\_bg\_logo}{accept\_general\_mdi\_bg\_logo}}
-{\footnotesize\ttfamily QString accept\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+logo\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QString accept\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+logo}
 
 \mbox{\Hypertarget{class_settings___dialog_a0412e51e900f6193161251d6d95fe164}\label{class_settings___dialog_a0412e51e900f6193161251d6d95fe164}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!accept\_general\_mdi\_bg\_texture@{accept\_general\_mdi\_bg\_texture}}
 \index{accept\_general\_mdi\_bg\_texture@{accept\_general\_mdi\_bg\_texture}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{accept\_general\_mdi\_bg\_texture}{accept\_general\_mdi\_bg\_texture}}
-{\footnotesize\ttfamily QString accept\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+texture\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QString accept\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+texture}
 
 \mbox{\Hypertarget{class_settings___dialog_aef221503ee9080914f90b5fe4ce5f416}\label{class_settings___dialog_aef221503ee9080914f90b5fe4ce5f416}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!accept\_grid\_color@{accept\_grid\_color}}
 \index{accept\_grid\_color@{accept\_grid\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{accept\_grid\_color}{accept\_grid\_color}}
-{\footnotesize\ttfamily QRgb accept\+\_\+grid\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb accept\+\_\+grid\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_ab9654e2a32a99be19980c4582d0d04ec}\label{class_settings___dialog_ab9654e2a32a99be19980c4582d0d04ec}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!accept\_prompt\_bg\_color@{accept\_prompt\_bg\_color}}
 \index{accept\_prompt\_bg\_color@{accept\_prompt\_bg\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{accept\_prompt\_bg\_color}{accept\_prompt\_bg\_color}}
-{\footnotesize\ttfamily QRgb accept\+\_\+prompt\+\_\+bg\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb accept\+\_\+prompt\+\_\+bg\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_a256ce54aed272cd187c6f3c00d080be6}\label{class_settings___dialog_a256ce54aed272cd187c6f3c00d080be6}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!accept\_prompt\_text\_color@{accept\_prompt\_text\_color}}
 \index{accept\_prompt\_text\_color@{accept\_prompt\_text\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{accept\_prompt\_text\_color}{accept\_prompt\_text\_color}}
-{\footnotesize\ttfamily QRgb accept\+\_\+prompt\+\_\+text\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb accept\+\_\+prompt\+\_\+text\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_af9e836b8fd75f54c64599c9d573c4625}\label{class_settings___dialog_af9e836b8fd75f54c64599c9d573c4625}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!accept\_ruler\_color@{accept\_ruler\_color}}
 \index{accept\_ruler\_color@{accept\_ruler\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{accept\_ruler\_color}{accept\_ruler\_color}}
-{\footnotesize\ttfamily QRgb accept\+\_\+ruler\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb accept\+\_\+ruler\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_a4d76db11c020d3d895f14dcecf268a95}\label{class_settings___dialog_a4d76db11c020d3d895f14dcecf268a95}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!buttonBox@{buttonBox}}
 \index{buttonBox@{buttonBox}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{buttonBox}{buttonBox}}
-{\footnotesize\ttfamily QDialog\+Button\+Box$\ast$ button\+Box\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QDialog\+Button\+Box$\ast$ button\+Box}
 
 \mbox{\Hypertarget{class_settings___dialog_ad76d94e9889ab7b72417dfda1db0affc}\label{class_settings___dialog_ad76d94e9889ab7b72417dfda1db0affc}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_display\_bg\_color@{dialog\_display\_bg\_color}}
 \index{dialog\_display\_bg\_color@{dialog\_display\_bg\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_display\_bg\_color}{dialog\_display\_bg\_color}}
-{\footnotesize\ttfamily QRgb dialog\+\_\+display\+\_\+bg\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb dialog\+\_\+display\+\_\+bg\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_abb5c31de89ac0b691a50baa0efbc4963}\label{class_settings___dialog_abb5c31de89ac0b691a50baa0efbc4963}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_display\_crosshair\_color@{dialog\_display\_crosshair\_color}}
 \index{dialog\_display\_crosshair\_color@{dialog\_display\_crosshair\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_display\_crosshair\_color}{dialog\_display\_crosshair\_color}}
-{\footnotesize\ttfamily QRgb dialog\+\_\+display\+\_\+crosshair\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb dialog\+\_\+display\+\_\+crosshair\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_a2c3f13d163a91d4a20dc174cd0e4f8f1}\label{class_settings___dialog_a2c3f13d163a91d4a20dc174cd0e4f8f1}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_display\_crosshair\_percent@{dialog\_display\_crosshair\_percent}}
 \index{dialog\_display\_crosshair\_percent@{dialog\_display\_crosshair\_percent}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_display\_crosshair\_percent}{dialog\_display\_crosshair\_percent}}
-{\footnotesize\ttfamily quint8 dialog\+\_\+display\+\_\+crosshair\+\_\+percent\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily quint8 dialog\+\_\+display\+\_\+crosshair\+\_\+percent}
 
 \mbox{\Hypertarget{class_settings___dialog_a1aefb3c6b7697b1db79633aee5e12402}\label{class_settings___dialog_a1aefb3c6b7697b1db79633aee5e12402}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_display\_renderhint\_aa@{dialog\_display\_renderhint\_aa}}
 \index{dialog\_display\_renderhint\_aa@{dialog\_display\_renderhint\_aa}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_display\_renderhint\_aa}{dialog\_display\_renderhint\_aa}}
-{\footnotesize\ttfamily bool dialog\+\_\+display\+\_\+renderhint\+\_\+aa\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+display\+\_\+renderhint\+\_\+aa}
 
 \mbox{\Hypertarget{class_settings___dialog_a61f64b9a874b2bccffb8ad00360be231}\label{class_settings___dialog_a61f64b9a874b2bccffb8ad00360be231}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_display\_renderhint\_high\_aa@{dialog\_display\_renderhint\_high\_aa}}
 \index{dialog\_display\_renderhint\_high\_aa@{dialog\_display\_renderhint\_high\_aa}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_display\_renderhint\_high\_aa}{dialog\_display\_renderhint\_high\_aa}}
-{\footnotesize\ttfamily bool dialog\+\_\+display\+\_\+renderhint\+\_\+high\+\_\+aa\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+display\+\_\+renderhint\+\_\+high\+\_\+aa}
 
 \mbox{\Hypertarget{class_settings___dialog_af9018c0951da30b786452ebbbee85521}\label{class_settings___dialog_af9018c0951da30b786452ebbbee85521}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_display\_renderhint\_noncosmetic@{dialog\_display\_renderhint\_noncosmetic}}
 \index{dialog\_display\_renderhint\_noncosmetic@{dialog\_display\_renderhint\_noncosmetic}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_display\_renderhint\_noncosmetic}{dialog\_display\_renderhint\_noncosmetic}}
-{\footnotesize\ttfamily bool dialog\+\_\+display\+\_\+renderhint\+\_\+noncosmetic\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+display\+\_\+renderhint\+\_\+noncosmetic}
 
 \mbox{\Hypertarget{class_settings___dialog_aeb4bda8bc3fd9998044046f33a87e4a4}\label{class_settings___dialog_aeb4bda8bc3fd9998044046f33a87e4a4}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_display\_renderhint\_smooth\_pix@{dialog\_display\_renderhint\_smooth\_pix}}
 \index{dialog\_display\_renderhint\_smooth\_pix@{dialog\_display\_renderhint\_smooth\_pix}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_display\_renderhint\_smooth\_pix}{dialog\_display\_renderhint\_smooth\_pix}}
-{\footnotesize\ttfamily bool dialog\+\_\+display\+\_\+renderhint\+\_\+smooth\+\_\+pix\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+display\+\_\+renderhint\+\_\+smooth\+\_\+pix}
 
 \mbox{\Hypertarget{class_settings___dialog_a48b0da9e1144c31d331da5856aa17e10}\label{class_settings___dialog_a48b0da9e1144c31d331da5856aa17e10}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_display\_renderhint\_text\_aa@{dialog\_display\_renderhint\_text\_aa}}
 \index{dialog\_display\_renderhint\_text\_aa@{dialog\_display\_renderhint\_text\_aa}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_display\_renderhint\_text\_aa}{dialog\_display\_renderhint\_text\_aa}}
-{\footnotesize\ttfamily bool dialog\+\_\+display\+\_\+renderhint\+\_\+text\+\_\+aa\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+display\+\_\+renderhint\+\_\+text\+\_\+aa}
 
 \mbox{\Hypertarget{class_settings___dialog_a10a03ea7eba75c4944239ce6932cebba}\label{class_settings___dialog_a10a03ea7eba75c4944239ce6932cebba}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_display\_scrollbar\_widget\_num@{dialog\_display\_scrollbar\_widget\_num}}
 \index{dialog\_display\_scrollbar\_widget\_num@{dialog\_display\_scrollbar\_widget\_num}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_display\_scrollbar\_widget\_num}{dialog\_display\_scrollbar\_widget\_num}}
-{\footnotesize\ttfamily int dialog\+\_\+display\+\_\+scrollbar\+\_\+widget\+\_\+num\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily int dialog\+\_\+display\+\_\+scrollbar\+\_\+widget\+\_\+num}
 
 \mbox{\Hypertarget{class_settings___dialog_a5c0cc1b2b47236747df226589214ff6c}\label{class_settings___dialog_a5c0cc1b2b47236747df226589214ff6c}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_display\_selectbox\_alpha@{dialog\_display\_selectbox\_alpha}}
 \index{dialog\_display\_selectbox\_alpha@{dialog\_display\_selectbox\_alpha}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_display\_selectbox\_alpha}{dialog\_display\_selectbox\_alpha}}
-{\footnotesize\ttfamily quint8 dialog\+\_\+display\+\_\+selectbox\+\_\+alpha\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily quint8 dialog\+\_\+display\+\_\+selectbox\+\_\+alpha}
 
 \mbox{\Hypertarget{class_settings___dialog_aaa8e6dcfb1c7fcacfca66fb33bd24527}\label{class_settings___dialog_aaa8e6dcfb1c7fcacfca66fb33bd24527}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_display\_selectbox\_left\_color@{dialog\_display\_selectbox\_left\_color}}
 \index{dialog\_display\_selectbox\_left\_color@{dialog\_display\_selectbox\_left\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_display\_selectbox\_left\_color}{dialog\_display\_selectbox\_left\_color}}
-{\footnotesize\ttfamily QRgb dialog\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb dialog\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_a29777233f9dfd5a76bed9c9cfa8fcc85}\label{class_settings___dialog_a29777233f9dfd5a76bed9c9cfa8fcc85}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_display\_selectbox\_left\_fill@{dialog\_display\_selectbox\_left\_fill}}
 \index{dialog\_display\_selectbox\_left\_fill@{dialog\_display\_selectbox\_left\_fill}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_display\_selectbox\_left\_fill}{dialog\_display\_selectbox\_left\_fill}}
-{\footnotesize\ttfamily QRgb dialog\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+fill\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb dialog\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+fill}
 
 \mbox{\Hypertarget{class_settings___dialog_a75ec3f074492516d0447cc151cc5ba33}\label{class_settings___dialog_a75ec3f074492516d0447cc151cc5ba33}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_display\_selectbox\_right\_color@{dialog\_display\_selectbox\_right\_color}}
 \index{dialog\_display\_selectbox\_right\_color@{dialog\_display\_selectbox\_right\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_display\_selectbox\_right\_color}{dialog\_display\_selectbox\_right\_color}}
-{\footnotesize\ttfamily QRgb dialog\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb dialog\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_a687e1191cd18e4b9950eaae0e1914838}\label{class_settings___dialog_a687e1191cd18e4b9950eaae0e1914838}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_display\_selectbox\_right\_fill@{dialog\_display\_selectbox\_right\_fill}}
 \index{dialog\_display\_selectbox\_right\_fill@{dialog\_display\_selectbox\_right\_fill}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_display\_selectbox\_right\_fill}{dialog\_display\_selectbox\_right\_fill}}
-{\footnotesize\ttfamily QRgb dialog\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+fill\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb dialog\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+fill}
 
 \mbox{\Hypertarget{class_settings___dialog_a9d63e1c53629c8fcce30c2281fc198ca}\label{class_settings___dialog_a9d63e1c53629c8fcce30c2281fc198ca}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_display\_show\_scrollbars@{dialog\_display\_show\_scrollbars}}
 \index{dialog\_display\_show\_scrollbars@{dialog\_display\_show\_scrollbars}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_display\_show\_scrollbars}{dialog\_display\_show\_scrollbars}}
-{\footnotesize\ttfamily bool dialog\+\_\+display\+\_\+show\+\_\+scrollbars\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+display\+\_\+show\+\_\+scrollbars}
 
 \mbox{\Hypertarget{class_settings___dialog_a9530002d5355110888b094739ec7fc5d}\label{class_settings___dialog_a9530002d5355110888b094739ec7fc5d}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_display\_units@{dialog\_display\_units}}
 \index{dialog\_display\_units@{dialog\_display\_units}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_display\_units}{dialog\_display\_units}}
-{\footnotesize\ttfamily QString dialog\+\_\+display\+\_\+units\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QString dialog\+\_\+display\+\_\+units}
 
 \mbox{\Hypertarget{class_settings___dialog_a8c7204773edaeeee39694c84d29b5cc8}\label{class_settings___dialog_a8c7204773edaeeee39694c84d29b5cc8}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_display\_use\_opengl@{dialog\_display\_use\_opengl}}
 \index{dialog\_display\_use\_opengl@{dialog\_display\_use\_opengl}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_display\_use\_opengl}{dialog\_display\_use\_opengl}}
-{\footnotesize\ttfamily bool dialog\+\_\+display\+\_\+use\+\_\+opengl\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+display\+\_\+use\+\_\+opengl}
 
-\mbox{\Hypertarget{class_settings___dialog_ad78870af16bfbdeb0a4c02a4d1f7e662}\label{class_settings___dialog_ad78870af16bfbdeb0a4c02a4d1f7e662}} 
+\mbox{\Hypertarget{class_settings___dialog_a6a2a80b03a2c62031ea08a5aa4450076}\label{class_settings___dialog_a6a2a80b03a2c62031ea08a5aa4450076}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_display\_zoomscale\_in@{dialog\_display\_zoomscale\_in}}
 \index{dialog\_display\_zoomscale\_in@{dialog\_display\_zoomscale\_in}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_display\_zoomscale\_in}{dialog\_display\_zoomscale\_in}}
-{\footnotesize\ttfamily qreal dialog\+\_\+display\+\_\+zoomscale\+\_\+in\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} dialog\+\_\+display\+\_\+zoomscale\+\_\+in}
 
-\mbox{\Hypertarget{class_settings___dialog_a426cbad5d46127874c3608ec5e45230f}\label{class_settings___dialog_a426cbad5d46127874c3608ec5e45230f}} 
+\mbox{\Hypertarget{class_settings___dialog_ae0c7c014c7c1589d36af222281b3b441}\label{class_settings___dialog_ae0c7c014c7c1589d36af222281b3b441}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_display\_zoomscale\_out@{dialog\_display\_zoomscale\_out}}
 \index{dialog\_display\_zoomscale\_out@{dialog\_display\_zoomscale\_out}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_display\_zoomscale\_out}{dialog\_display\_zoomscale\_out}}
-{\footnotesize\ttfamily qreal dialog\+\_\+display\+\_\+zoomscale\+\_\+out\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} dialog\+\_\+display\+\_\+zoomscale\+\_\+out}
 
 \mbox{\Hypertarget{class_settings___dialog_a58e7c8f1b3a351447e5bed4c3d6849e6}\label{class_settings___dialog_a58e7c8f1b3a351447e5bed4c3d6849e6}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_general\_icon\_size@{dialog\_general\_icon\_size}}
 \index{dialog\_general\_icon\_size@{dialog\_general\_icon\_size}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_general\_icon\_size}{dialog\_general\_icon\_size}}
-{\footnotesize\ttfamily int dialog\+\_\+general\+\_\+icon\+\_\+size\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily int dialog\+\_\+general\+\_\+icon\+\_\+size}
 
 \mbox{\Hypertarget{class_settings___dialog_af8455a50620f5f811c4d56b4d906e646}\label{class_settings___dialog_af8455a50620f5f811c4d56b4d906e646}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_general\_icon\_theme@{dialog\_general\_icon\_theme}}
 \index{dialog\_general\_icon\_theme@{dialog\_general\_icon\_theme}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_general\_icon\_theme}{dialog\_general\_icon\_theme}}
-{\footnotesize\ttfamily QString dialog\+\_\+general\+\_\+icon\+\_\+theme\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QString dialog\+\_\+general\+\_\+icon\+\_\+theme}
 
 \mbox{\Hypertarget{class_settings___dialog_a7f7e698b8e70a6a9931af69204528742}\label{class_settings___dialog_a7f7e698b8e70a6a9931af69204528742}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_general\_language@{dialog\_general\_language}}
 \index{dialog\_general\_language@{dialog\_general\_language}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_general\_language}{dialog\_general\_language}}
-{\footnotesize\ttfamily QString dialog\+\_\+general\+\_\+language\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QString dialog\+\_\+general\+\_\+language}
 
 \mbox{\Hypertarget{class_settings___dialog_a68053d064f500b076a1b07dca63e30fb}\label{class_settings___dialog_a68053d064f500b076a1b07dca63e30fb}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_general\_mdi\_bg\_color@{dialog\_general\_mdi\_bg\_color}}
 \index{dialog\_general\_mdi\_bg\_color@{dialog\_general\_mdi\_bg\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_general\_mdi\_bg\_color}{dialog\_general\_mdi\_bg\_color}}
-{\footnotesize\ttfamily QRgb dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_a3a5c669038d65cc17865c51a8634f185}\label{class_settings___dialog_a3a5c669038d65cc17865c51a8634f185}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_general\_mdi\_bg\_logo@{dialog\_general\_mdi\_bg\_logo}}
 \index{dialog\_general\_mdi\_bg\_logo@{dialog\_general\_mdi\_bg\_logo}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_general\_mdi\_bg\_logo}{dialog\_general\_mdi\_bg\_logo}}
-{\footnotesize\ttfamily QString dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+logo\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QString dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+logo}
 
 \mbox{\Hypertarget{class_settings___dialog_a0e028e14e25d75584a855dc10e133e2a}\label{class_settings___dialog_a0e028e14e25d75584a855dc10e133e2a}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_general\_mdi\_bg\_texture@{dialog\_general\_mdi\_bg\_texture}}
 \index{dialog\_general\_mdi\_bg\_texture@{dialog\_general\_mdi\_bg\_texture}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_general\_mdi\_bg\_texture}{dialog\_general\_mdi\_bg\_texture}}
-{\footnotesize\ttfamily QString dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+texture\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QString dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+texture}
 
 \mbox{\Hypertarget{class_settings___dialog_adc349ff664667e4fbddfdab49a168b9f}\label{class_settings___dialog_adc349ff664667e4fbddfdab49a168b9f}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_general\_mdi\_bg\_use\_color@{dialog\_general\_mdi\_bg\_use\_color}}
 \index{dialog\_general\_mdi\_bg\_use\_color@{dialog\_general\_mdi\_bg\_use\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_general\_mdi\_bg\_use\_color}{dialog\_general\_mdi\_bg\_use\_color}}
-{\footnotesize\ttfamily bool dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_a4ada02f0a3290f0c50cefefc1f8abba4}\label{class_settings___dialog_a4ada02f0a3290f0c50cefefc1f8abba4}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_general\_mdi\_bg\_use\_logo@{dialog\_general\_mdi\_bg\_use\_logo}}
 \index{dialog\_general\_mdi\_bg\_use\_logo@{dialog\_general\_mdi\_bg\_use\_logo}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_general\_mdi\_bg\_use\_logo}{dialog\_general\_mdi\_bg\_use\_logo}}
-{\footnotesize\ttfamily bool dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+logo\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+logo}
 
 \mbox{\Hypertarget{class_settings___dialog_ae60b5f685971fd62c0a260c4a6524663}\label{class_settings___dialog_ae60b5f685971fd62c0a260c4a6524663}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_general\_mdi\_bg\_use\_texture@{dialog\_general\_mdi\_bg\_use\_texture}}
 \index{dialog\_general\_mdi\_bg\_use\_texture@{dialog\_general\_mdi\_bg\_use\_texture}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_general\_mdi\_bg\_use\_texture}{dialog\_general\_mdi\_bg\_use\_texture}}
-{\footnotesize\ttfamily bool dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+texture\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+texture}
 
 \mbox{\Hypertarget{class_settings___dialog_a70650711229cc5dd34a579bfbadaa05d}\label{class_settings___dialog_a70650711229cc5dd34a579bfbadaa05d}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_general\_system\_help\_browser@{dialog\_general\_system\_help\_browser}}
 \index{dialog\_general\_system\_help\_browser@{dialog\_general\_system\_help\_browser}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_general\_system\_help\_browser}{dialog\_general\_system\_help\_browser}}
-{\footnotesize\ttfamily bool dialog\+\_\+general\+\_\+system\+\_\+help\+\_\+browser\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+general\+\_\+system\+\_\+help\+\_\+browser}
 
 \mbox{\Hypertarget{class_settings___dialog_a76cfcfa5e63321c1b2fbf845f80d215b}\label{class_settings___dialog_a76cfcfa5e63321c1b2fbf845f80d215b}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_general\_tip\_of\_the\_day@{dialog\_general\_tip\_of\_the\_day}}
 \index{dialog\_general\_tip\_of\_the\_day@{dialog\_general\_tip\_of\_the\_day}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_general\_tip\_of\_the\_day}{dialog\_general\_tip\_of\_the\_day}}
-{\footnotesize\ttfamily bool dialog\+\_\+general\+\_\+tip\+\_\+of\+\_\+the\+\_\+day\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+general\+\_\+tip\+\_\+of\+\_\+the\+\_\+day}
 
 \mbox{\Hypertarget{class_settings___dialog_a166234f9317f8288c752d21756a01db2}\label{class_settings___dialog_a166234f9317f8288c752d21756a01db2}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_grid\_center\_on\_origin@{dialog\_grid\_center\_on\_origin}}
 \index{dialog\_grid\_center\_on\_origin@{dialog\_grid\_center\_on\_origin}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_grid\_center\_on\_origin}{dialog\_grid\_center\_on\_origin}}
-{\footnotesize\ttfamily bool dialog\+\_\+grid\+\_\+center\+\_\+on\+\_\+origin\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+grid\+\_\+center\+\_\+on\+\_\+origin}
 
-\mbox{\Hypertarget{class_settings___dialog_a9c0cdfe7a045a579797d44cb4b169550}\label{class_settings___dialog_a9c0cdfe7a045a579797d44cb4b169550}} 
+\mbox{\Hypertarget{class_settings___dialog_a18bc351c12318fe9c0a80814384b3190}\label{class_settings___dialog_a18bc351c12318fe9c0a80814384b3190}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_grid\_center\_x@{dialog\_grid\_center\_x}}
 \index{dialog\_grid\_center\_x@{dialog\_grid\_center\_x}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_grid\_center\_x}{dialog\_grid\_center\_x}}
-{\footnotesize\ttfamily qreal dialog\+\_\+grid\+\_\+center\+\_\+x\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} dialog\+\_\+grid\+\_\+center\+\_\+x}
 
-\mbox{\Hypertarget{class_settings___dialog_a7863cf5b76333396efdc382b2fc7ef17}\label{class_settings___dialog_a7863cf5b76333396efdc382b2fc7ef17}} 
+\mbox{\Hypertarget{class_settings___dialog_a9656e20d39f4c99b93f8fbe5d7267b7c}\label{class_settings___dialog_a9656e20d39f4c99b93f8fbe5d7267b7c}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_grid\_center\_y@{dialog\_grid\_center\_y}}
 \index{dialog\_grid\_center\_y@{dialog\_grid\_center\_y}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_grid\_center\_y}{dialog\_grid\_center\_y}}
-{\footnotesize\ttfamily qreal dialog\+\_\+grid\+\_\+center\+\_\+y\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} dialog\+\_\+grid\+\_\+center\+\_\+y}
 
 \mbox{\Hypertarget{class_settings___dialog_a65e03df4163fe99caaf5dd2aebedf1ab}\label{class_settings___dialog_a65e03df4163fe99caaf5dd2aebedf1ab}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_grid\_color@{dialog\_grid\_color}}
 \index{dialog\_grid\_color@{dialog\_grid\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_grid\_color}{dialog\_grid\_color}}
-{\footnotesize\ttfamily QRgb dialog\+\_\+grid\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb dialog\+\_\+grid\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_a859e82990c6d1c79b0c08c22e2afc9a8}\label{class_settings___dialog_a859e82990c6d1c79b0c08c22e2afc9a8}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_grid\_color\_match\_crosshair@{dialog\_grid\_color\_match\_crosshair}}
 \index{dialog\_grid\_color\_match\_crosshair@{dialog\_grid\_color\_match\_crosshair}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_grid\_color\_match\_crosshair}{dialog\_grid\_color\_match\_crosshair}}
-{\footnotesize\ttfamily bool dialog\+\_\+grid\+\_\+color\+\_\+match\+\_\+crosshair\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+grid\+\_\+color\+\_\+match\+\_\+crosshair}
 
 \mbox{\Hypertarget{class_settings___dialog_aea90e5be206f68d21aa7e32ffef83c84}\label{class_settings___dialog_aea90e5be206f68d21aa7e32ffef83c84}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_grid\_load\_from\_file@{dialog\_grid\_load\_from\_file}}
 \index{dialog\_grid\_load\_from\_file@{dialog\_grid\_load\_from\_file}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_grid\_load\_from\_file}{dialog\_grid\_load\_from\_file}}
-{\footnotesize\ttfamily bool dialog\+\_\+grid\+\_\+load\+\_\+from\+\_\+file\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+grid\+\_\+load\+\_\+from\+\_\+file}
 
 \mbox{\Hypertarget{class_settings___dialog_acffe6046f5762532128c4c69b7245f86}\label{class_settings___dialog_acffe6046f5762532128c4c69b7245f86}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_grid\_show\_on\_load@{dialog\_grid\_show\_on\_load}}
 \index{dialog\_grid\_show\_on\_load@{dialog\_grid\_show\_on\_load}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_grid\_show\_on\_load}{dialog\_grid\_show\_on\_load}}
-{\footnotesize\ttfamily bool dialog\+\_\+grid\+\_\+show\+\_\+on\+\_\+load\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+grid\+\_\+show\+\_\+on\+\_\+load}
 
 \mbox{\Hypertarget{class_settings___dialog_a092c6f5410fd13727515ebd2dbaefa11}\label{class_settings___dialog_a092c6f5410fd13727515ebd2dbaefa11}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_grid\_show\_origin@{dialog\_grid\_show\_origin}}
 \index{dialog\_grid\_show\_origin@{dialog\_grid\_show\_origin}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_grid\_show\_origin}{dialog\_grid\_show\_origin}}
-{\footnotesize\ttfamily bool dialog\+\_\+grid\+\_\+show\+\_\+origin\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+grid\+\_\+show\+\_\+origin}
 
-\mbox{\Hypertarget{class_settings___dialog_a55ce6bd14b47b26d76bb9ec49e3960f8}\label{class_settings___dialog_a55ce6bd14b47b26d76bb9ec49e3960f8}} 
+\mbox{\Hypertarget{class_settings___dialog_a193ff430e3c01683225c0a201fd0ae5b}\label{class_settings___dialog_a193ff430e3c01683225c0a201fd0ae5b}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_grid\_size\_radius@{dialog\_grid\_size\_radius}}
 \index{dialog\_grid\_size\_radius@{dialog\_grid\_size\_radius}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_grid\_size\_radius}{dialog\_grid\_size\_radius}}
-{\footnotesize\ttfamily qreal dialog\+\_\+grid\+\_\+size\+\_\+radius\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} dialog\+\_\+grid\+\_\+size\+\_\+radius}
 
-\mbox{\Hypertarget{class_settings___dialog_ae83805fcf10f75644c87195a7f9254b1}\label{class_settings___dialog_ae83805fcf10f75644c87195a7f9254b1}} 
+\mbox{\Hypertarget{class_settings___dialog_af76baa8bc5ce840644356971e97dff54}\label{class_settings___dialog_af76baa8bc5ce840644356971e97dff54}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_grid\_size\_x@{dialog\_grid\_size\_x}}
 \index{dialog\_grid\_size\_x@{dialog\_grid\_size\_x}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_grid\_size\_x}{dialog\_grid\_size\_x}}
-{\footnotesize\ttfamily qreal dialog\+\_\+grid\+\_\+size\+\_\+x\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} dialog\+\_\+grid\+\_\+size\+\_\+x}
 
-\mbox{\Hypertarget{class_settings___dialog_a0ff3fed261494cc386e3e07dc4019dfe}\label{class_settings___dialog_a0ff3fed261494cc386e3e07dc4019dfe}} 
+\mbox{\Hypertarget{class_settings___dialog_a75243a4d1df1c55d7ece7c619afc5190}\label{class_settings___dialog_a75243a4d1df1c55d7ece7c619afc5190}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_grid\_size\_y@{dialog\_grid\_size\_y}}
 \index{dialog\_grid\_size\_y@{dialog\_grid\_size\_y}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_grid\_size\_y}{dialog\_grid\_size\_y}}
-{\footnotesize\ttfamily qreal dialog\+\_\+grid\+\_\+size\+\_\+y\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} dialog\+\_\+grid\+\_\+size\+\_\+y}
 
-\mbox{\Hypertarget{class_settings___dialog_ae318fb60f73cfed4cf32c5f04911f108}\label{class_settings___dialog_ae318fb60f73cfed4cf32c5f04911f108}} 
+\mbox{\Hypertarget{class_settings___dialog_a570eec614741626ddb2b518f8db548ad}\label{class_settings___dialog_a570eec614741626ddb2b518f8db548ad}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_grid\_spacing\_angle@{dialog\_grid\_spacing\_angle}}
 \index{dialog\_grid\_spacing\_angle@{dialog\_grid\_spacing\_angle}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_grid\_spacing\_angle}{dialog\_grid\_spacing\_angle}}
-{\footnotesize\ttfamily qreal dialog\+\_\+grid\+\_\+spacing\+\_\+angle\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} dialog\+\_\+grid\+\_\+spacing\+\_\+angle}
 
-\mbox{\Hypertarget{class_settings___dialog_af493d5870108e90eb8dbc3f05cff62b0}\label{class_settings___dialog_af493d5870108e90eb8dbc3f05cff62b0}} 
+\mbox{\Hypertarget{class_settings___dialog_a379cc6247115fcf601c8926d72afd27e}\label{class_settings___dialog_a379cc6247115fcf601c8926d72afd27e}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_grid\_spacing\_radius@{dialog\_grid\_spacing\_radius}}
 \index{dialog\_grid\_spacing\_radius@{dialog\_grid\_spacing\_radius}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_grid\_spacing\_radius}{dialog\_grid\_spacing\_radius}}
-{\footnotesize\ttfamily qreal dialog\+\_\+grid\+\_\+spacing\+\_\+radius\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} dialog\+\_\+grid\+\_\+spacing\+\_\+radius}
 
-\mbox{\Hypertarget{class_settings___dialog_a1a233d9925c416398bd973700d01232a}\label{class_settings___dialog_a1a233d9925c416398bd973700d01232a}} 
+\mbox{\Hypertarget{class_settings___dialog_ac2e1b7e312bfaf84b3d7601cf49cc8cb}\label{class_settings___dialog_ac2e1b7e312bfaf84b3d7601cf49cc8cb}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_grid\_spacing\_x@{dialog\_grid\_spacing\_x}}
 \index{dialog\_grid\_spacing\_x@{dialog\_grid\_spacing\_x}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_grid\_spacing\_x}{dialog\_grid\_spacing\_x}}
-{\footnotesize\ttfamily qreal dialog\+\_\+grid\+\_\+spacing\+\_\+x\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} dialog\+\_\+grid\+\_\+spacing\+\_\+x}
 
-\mbox{\Hypertarget{class_settings___dialog_aafc1e8fe369a5b64afc87010b31de199}\label{class_settings___dialog_aafc1e8fe369a5b64afc87010b31de199}} 
+\mbox{\Hypertarget{class_settings___dialog_aebf4736d37cc8f7462742a811a53709c}\label{class_settings___dialog_aebf4736d37cc8f7462742a811a53709c}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_grid\_spacing\_y@{dialog\_grid\_spacing\_y}}
 \index{dialog\_grid\_spacing\_y@{dialog\_grid\_spacing\_y}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_grid\_spacing\_y}{dialog\_grid\_spacing\_y}}
-{\footnotesize\ttfamily qreal dialog\+\_\+grid\+\_\+spacing\+\_\+y\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} dialog\+\_\+grid\+\_\+spacing\+\_\+y}
 
 \mbox{\Hypertarget{class_settings___dialog_a82c4ed1850a3cfa8b21c940dd2d1e31b}\label{class_settings___dialog_a82c4ed1850a3cfa8b21c940dd2d1e31b}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_grid\_type@{dialog\_grid\_type}}
 \index{dialog\_grid\_type@{dialog\_grid\_type}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_grid\_type}{dialog\_grid\_type}}
-{\footnotesize\ttfamily QString dialog\+\_\+grid\+\_\+type\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QString dialog\+\_\+grid\+\_\+type}
 
-\mbox{\Hypertarget{class_settings___dialog_a0a17463d954613dd7c5b6cb224055da0}\label{class_settings___dialog_a0a17463d954613dd7c5b6cb224055da0}} 
+\mbox{\Hypertarget{class_settings___dialog_ac8edbd6e2984d8a3c6a8e55d64b3e437}\label{class_settings___dialog_ac8edbd6e2984d8a3c6a8e55d64b3e437}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_lwt\_default\_lwt@{dialog\_lwt\_default\_lwt}}
 \index{dialog\_lwt\_default\_lwt@{dialog\_lwt\_default\_lwt}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_lwt\_default\_lwt}{dialog\_lwt\_default\_lwt}}
-{\footnotesize\ttfamily qreal dialog\+\_\+lwt\+\_\+default\+\_\+lwt\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} dialog\+\_\+lwt\+\_\+default\+\_\+lwt}
 
 \mbox{\Hypertarget{class_settings___dialog_a4b4a2a75270b00bbc306fbb2a40d446c}\label{class_settings___dialog_a4b4a2a75270b00bbc306fbb2a40d446c}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_lwt\_real\_render@{dialog\_lwt\_real\_render}}
 \index{dialog\_lwt\_real\_render@{dialog\_lwt\_real\_render}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_lwt\_real\_render}{dialog\_lwt\_real\_render}}
-{\footnotesize\ttfamily bool dialog\+\_\+lwt\+\_\+real\+\_\+render\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+lwt\+\_\+real\+\_\+render}
 
 \mbox{\Hypertarget{class_settings___dialog_a2250597e2e44bbdce5bba90d28ae6023}\label{class_settings___dialog_a2250597e2e44bbdce5bba90d28ae6023}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_lwt\_show\_lwt@{dialog\_lwt\_show\_lwt}}
 \index{dialog\_lwt\_show\_lwt@{dialog\_lwt\_show\_lwt}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_lwt\_show\_lwt}{dialog\_lwt\_show\_lwt}}
-{\footnotesize\ttfamily bool dialog\+\_\+lwt\+\_\+show\+\_\+lwt\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+lwt\+\_\+show\+\_\+lwt}
 
 \mbox{\Hypertarget{class_settings___dialog_a99739aee8975053496883ff2166052ff}\label{class_settings___dialog_a99739aee8975053496883ff2166052ff}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_opensave\_custom\_filter@{dialog\_opensave\_custom\_filter}}
 \index{dialog\_opensave\_custom\_filter@{dialog\_opensave\_custom\_filter}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_opensave\_custom\_filter}{dialog\_opensave\_custom\_filter}}
-{\footnotesize\ttfamily QString dialog\+\_\+opensave\+\_\+custom\+\_\+filter\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QString dialog\+\_\+opensave\+\_\+custom\+\_\+filter}
 
 \mbox{\Hypertarget{class_settings___dialog_a1fdf63fe0fd2dda28f34d83aa9038e32}\label{class_settings___dialog_a1fdf63fe0fd2dda28f34d83aa9038e32}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_opensave\_open\_format@{dialog\_opensave\_open\_format}}
 \index{dialog\_opensave\_open\_format@{dialog\_opensave\_open\_format}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_opensave\_open\_format}{dialog\_opensave\_open\_format}}
-{\footnotesize\ttfamily QString dialog\+\_\+opensave\+\_\+open\+\_\+format\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QString dialog\+\_\+opensave\+\_\+open\+\_\+format}
 
 \mbox{\Hypertarget{class_settings___dialog_a27b2483e2d416b0d1e8ea52bedac3b41}\label{class_settings___dialog_a27b2483e2d416b0d1e8ea52bedac3b41}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_opensave\_open\_thumbnail@{dialog\_opensave\_open\_thumbnail}}
 \index{dialog\_opensave\_open\_thumbnail@{dialog\_opensave\_open\_thumbnail}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_opensave\_open\_thumbnail}{dialog\_opensave\_open\_thumbnail}}
-{\footnotesize\ttfamily bool dialog\+\_\+opensave\+\_\+open\+\_\+thumbnail\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+opensave\+\_\+open\+\_\+thumbnail}
 
 \mbox{\Hypertarget{class_settings___dialog_a9eb0d0a77301feb84f7265eb58c17663}\label{class_settings___dialog_a9eb0d0a77301feb84f7265eb58c17663}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_opensave\_recent\_max\_files@{dialog\_opensave\_recent\_max\_files}}
 \index{dialog\_opensave\_recent\_max\_files@{dialog\_opensave\_recent\_max\_files}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_opensave\_recent\_max\_files}{dialog\_opensave\_recent\_max\_files}}
-{\footnotesize\ttfamily quint8 dialog\+\_\+opensave\+\_\+recent\+\_\+max\+\_\+files\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily quint8 dialog\+\_\+opensave\+\_\+recent\+\_\+max\+\_\+files}
 
 \mbox{\Hypertarget{class_settings___dialog_a4665a0892c80df1fb6b563ec95b804c6}\label{class_settings___dialog_a4665a0892c80df1fb6b563ec95b804c6}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_opensave\_save\_format@{dialog\_opensave\_save\_format}}
 \index{dialog\_opensave\_save\_format@{dialog\_opensave\_save\_format}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_opensave\_save\_format}{dialog\_opensave\_save\_format}}
-{\footnotesize\ttfamily QString dialog\+\_\+opensave\+\_\+save\+\_\+format\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QString dialog\+\_\+opensave\+\_\+save\+\_\+format}
 
 \mbox{\Hypertarget{class_settings___dialog_afc9badfb47e616507c25e076087561e5}\label{class_settings___dialog_afc9badfb47e616507c25e076087561e5}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_opensave\_save\_thumbnail@{dialog\_opensave\_save\_thumbnail}}
 \index{dialog\_opensave\_save\_thumbnail@{dialog\_opensave\_save\_thumbnail}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_opensave\_save\_thumbnail}{dialog\_opensave\_save\_thumbnail}}
-{\footnotesize\ttfamily bool dialog\+\_\+opensave\+\_\+save\+\_\+thumbnail\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+opensave\+\_\+save\+\_\+thumbnail}
 
 \mbox{\Hypertarget{class_settings___dialog_a829c7d1af468e058721acd7f8e12ce7d}\label{class_settings___dialog_a829c7d1af468e058721acd7f8e12ce7d}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_opensave\_trim\_dst\_num\_jumps@{dialog\_opensave\_trim\_dst\_num\_jumps}}
 \index{dialog\_opensave\_trim\_dst\_num\_jumps@{dialog\_opensave\_trim\_dst\_num\_jumps}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_opensave\_trim\_dst\_num\_jumps}{dialog\_opensave\_trim\_dst\_num\_jumps}}
-{\footnotesize\ttfamily quint8 dialog\+\_\+opensave\+\_\+trim\+\_\+dst\+\_\+num\+\_\+jumps\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily quint8 dialog\+\_\+opensave\+\_\+trim\+\_\+dst\+\_\+num\+\_\+jumps}
 
 \mbox{\Hypertarget{class_settings___dialog_a936d1dd6667c0267ef34b2cd854f2672}\label{class_settings___dialog_a936d1dd6667c0267ef34b2cd854f2672}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_printing\_default\_device@{dialog\_printing\_default\_device}}
 \index{dialog\_printing\_default\_device@{dialog\_printing\_default\_device}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_printing\_default\_device}{dialog\_printing\_default\_device}}
-{\footnotesize\ttfamily QString dialog\+\_\+printing\+\_\+default\+\_\+device\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QString dialog\+\_\+printing\+\_\+default\+\_\+device}
 
 \mbox{\Hypertarget{class_settings___dialog_a445a6e24404ee1f10cc1dda9ef2640c6}\label{class_settings___dialog_a445a6e24404ee1f10cc1dda9ef2640c6}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_printing\_disable\_bg@{dialog\_printing\_disable\_bg}}
 \index{dialog\_printing\_disable\_bg@{dialog\_printing\_disable\_bg}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_printing\_disable\_bg}{dialog\_printing\_disable\_bg}}
-{\footnotesize\ttfamily bool dialog\+\_\+printing\+\_\+disable\+\_\+bg\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+printing\+\_\+disable\+\_\+bg}
 
 \mbox{\Hypertarget{class_settings___dialog_a9d253ce2096cc9030ad6613e516393b0}\label{class_settings___dialog_a9d253ce2096cc9030ad6613e516393b0}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_printing\_use\_last\_device@{dialog\_printing\_use\_last\_device}}
 \index{dialog\_printing\_use\_last\_device@{dialog\_printing\_use\_last\_device}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_printing\_use\_last\_device}{dialog\_printing\_use\_last\_device}}
-{\footnotesize\ttfamily bool dialog\+\_\+printing\+\_\+use\+\_\+last\+\_\+device\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+printing\+\_\+use\+\_\+last\+\_\+device}
 
 \mbox{\Hypertarget{class_settings___dialog_a764f1537b467185f8d799e161a6a2090}\label{class_settings___dialog_a764f1537b467185f8d799e161a6a2090}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_prompt\_bg\_color@{dialog\_prompt\_bg\_color}}
 \index{dialog\_prompt\_bg\_color@{dialog\_prompt\_bg\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_prompt\_bg\_color}{dialog\_prompt\_bg\_color}}
-{\footnotesize\ttfamily QRgb dialog\+\_\+prompt\+\_\+bg\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb dialog\+\_\+prompt\+\_\+bg\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_a88d78f257baebea3709d1448b3d1d49c}\label{class_settings___dialog_a88d78f257baebea3709d1448b3d1d49c}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_prompt\_font\_family@{dialog\_prompt\_font\_family}}
 \index{dialog\_prompt\_font\_family@{dialog\_prompt\_font\_family}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_prompt\_font\_family}{dialog\_prompt\_font\_family}}
-{\footnotesize\ttfamily QString dialog\+\_\+prompt\+\_\+font\+\_\+family\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QString dialog\+\_\+prompt\+\_\+font\+\_\+family}
 
 \mbox{\Hypertarget{class_settings___dialog_abba0a8e7c9aacd2441d733677795a0a9}\label{class_settings___dialog_abba0a8e7c9aacd2441d733677795a0a9}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_prompt\_font\_size@{dialog\_prompt\_font\_size}}
 \index{dialog\_prompt\_font\_size@{dialog\_prompt\_font\_size}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_prompt\_font\_size}{dialog\_prompt\_font\_size}}
-{\footnotesize\ttfamily quint8 dialog\+\_\+prompt\+\_\+font\+\_\+size\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily quint8 dialog\+\_\+prompt\+\_\+font\+\_\+size}
 
 \mbox{\Hypertarget{class_settings___dialog_a2513f2c1dc67a1c22dd5ee329597b592}\label{class_settings___dialog_a2513f2c1dc67a1c22dd5ee329597b592}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_prompt\_font\_style@{dialog\_prompt\_font\_style}}
 \index{dialog\_prompt\_font\_style@{dialog\_prompt\_font\_style}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_prompt\_font\_style}{dialog\_prompt\_font\_style}}
-{\footnotesize\ttfamily QString dialog\+\_\+prompt\+\_\+font\+\_\+style\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QString dialog\+\_\+prompt\+\_\+font\+\_\+style}
 
 \mbox{\Hypertarget{class_settings___dialog_a000eac3d3f518c6fd4b04e7fd974ea02}\label{class_settings___dialog_a000eac3d3f518c6fd4b04e7fd974ea02}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_prompt\_save\_history@{dialog\_prompt\_save\_history}}
 \index{dialog\_prompt\_save\_history@{dialog\_prompt\_save\_history}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_prompt\_save\_history}{dialog\_prompt\_save\_history}}
-{\footnotesize\ttfamily bool dialog\+\_\+prompt\+\_\+save\+\_\+history\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+prompt\+\_\+save\+\_\+history}
 
 \mbox{\Hypertarget{class_settings___dialog_a3435f451637328d5580a485f9963c40f}\label{class_settings___dialog_a3435f451637328d5580a485f9963c40f}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_prompt\_save\_history\_as\_html@{dialog\_prompt\_save\_history\_as\_html}}
 \index{dialog\_prompt\_save\_history\_as\_html@{dialog\_prompt\_save\_history\_as\_html}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_prompt\_save\_history\_as\_html}{dialog\_prompt\_save\_history\_as\_html}}
-{\footnotesize\ttfamily bool dialog\+\_\+prompt\+\_\+save\+\_\+history\+\_\+as\+\_\+html\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+prompt\+\_\+save\+\_\+history\+\_\+as\+\_\+html}
 
 \mbox{\Hypertarget{class_settings___dialog_ae56221fa815c55849d1c4222f20fcad5}\label{class_settings___dialog_ae56221fa815c55849d1c4222f20fcad5}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_prompt\_save\_history\_filename@{dialog\_prompt\_save\_history\_filename}}
 \index{dialog\_prompt\_save\_history\_filename@{dialog\_prompt\_save\_history\_filename}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_prompt\_save\_history\_filename}{dialog\_prompt\_save\_history\_filename}}
-{\footnotesize\ttfamily QString dialog\+\_\+prompt\+\_\+save\+\_\+history\+\_\+filename\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QString dialog\+\_\+prompt\+\_\+save\+\_\+history\+\_\+filename}
 
 \mbox{\Hypertarget{class_settings___dialog_ad9a0f1a1f6331338b2db645febb22d54}\label{class_settings___dialog_ad9a0f1a1f6331338b2db645febb22d54}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_prompt\_text\_color@{dialog\_prompt\_text\_color}}
 \index{dialog\_prompt\_text\_color@{dialog\_prompt\_text\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_prompt\_text\_color}{dialog\_prompt\_text\_color}}
-{\footnotesize\ttfamily QRgb dialog\+\_\+prompt\+\_\+text\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb dialog\+\_\+prompt\+\_\+text\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_aa8f853295595ad25ed91369b2158ea9a}\label{class_settings___dialog_aa8f853295595ad25ed91369b2158ea9a}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_qsnap\_aperture\_size@{dialog\_qsnap\_aperture\_size}}
 \index{dialog\_qsnap\_aperture\_size@{dialog\_qsnap\_aperture\_size}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_qsnap\_aperture\_size}{dialog\_qsnap\_aperture\_size}}
-{\footnotesize\ttfamily quint8 dialog\+\_\+qsnap\+\_\+aperture\+\_\+size\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily quint8 dialog\+\_\+qsnap\+\_\+aperture\+\_\+size}
 
 \mbox{\Hypertarget{class_settings___dialog_aaa83d9dc545ac4d081c8d8d77acf56e3}\label{class_settings___dialog_aaa83d9dc545ac4d081c8d8d77acf56e3}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_qsnap\_apparent@{dialog\_qsnap\_apparent}}
 \index{dialog\_qsnap\_apparent@{dialog\_qsnap\_apparent}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_qsnap\_apparent}{dialog\_qsnap\_apparent}}
-{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+apparent\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+apparent}
 
 \mbox{\Hypertarget{class_settings___dialog_a39d22f96d93a029def3113846e54f574}\label{class_settings___dialog_a39d22f96d93a029def3113846e54f574}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_qsnap\_center@{dialog\_qsnap\_center}}
 \index{dialog\_qsnap\_center@{dialog\_qsnap\_center}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_qsnap\_center}{dialog\_qsnap\_center}}
-{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+center\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+center}
 
 \mbox{\Hypertarget{class_settings___dialog_ae2f5e5f7db9de68f9b46c06f79aca175}\label{class_settings___dialog_ae2f5e5f7db9de68f9b46c06f79aca175}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_qsnap\_enabled@{dialog\_qsnap\_enabled}}
 \index{dialog\_qsnap\_enabled@{dialog\_qsnap\_enabled}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_qsnap\_enabled}{dialog\_qsnap\_enabled}}
-{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+enabled\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+enabled}
 
 \mbox{\Hypertarget{class_settings___dialog_a5026d0f076a4808228c40fb6a2a6eb35}\label{class_settings___dialog_a5026d0f076a4808228c40fb6a2a6eb35}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_qsnap\_endpoint@{dialog\_qsnap\_endpoint}}
 \index{dialog\_qsnap\_endpoint@{dialog\_qsnap\_endpoint}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_qsnap\_endpoint}{dialog\_qsnap\_endpoint}}
-{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+endpoint\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+endpoint}
 
 \mbox{\Hypertarget{class_settings___dialog_aa3b8f977ae61d60db739f9f4da3fc765}\label{class_settings___dialog_aa3b8f977ae61d60db739f9f4da3fc765}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_qsnap\_extension@{dialog\_qsnap\_extension}}
 \index{dialog\_qsnap\_extension@{dialog\_qsnap\_extension}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_qsnap\_extension}{dialog\_qsnap\_extension}}
-{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+extension\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+extension}
 
 \mbox{\Hypertarget{class_settings___dialog_aa7e9d0cb06383959982835cab09217b4}\label{class_settings___dialog_aa7e9d0cb06383959982835cab09217b4}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_qsnap\_insertion@{dialog\_qsnap\_insertion}}
 \index{dialog\_qsnap\_insertion@{dialog\_qsnap\_insertion}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_qsnap\_insertion}{dialog\_qsnap\_insertion}}
-{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+insertion\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+insertion}
 
 \mbox{\Hypertarget{class_settings___dialog_a8e5d5e422f2a233c278030ad4cd2c152}\label{class_settings___dialog_a8e5d5e422f2a233c278030ad4cd2c152}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_qsnap\_intersection@{dialog\_qsnap\_intersection}}
 \index{dialog\_qsnap\_intersection@{dialog\_qsnap\_intersection}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_qsnap\_intersection}{dialog\_qsnap\_intersection}}
-{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+intersection\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+intersection}
 
 \mbox{\Hypertarget{class_settings___dialog_a9a89241174bb7326bda62b70026e8f60}\label{class_settings___dialog_a9a89241174bb7326bda62b70026e8f60}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_qsnap\_locator\_color@{dialog\_qsnap\_locator\_color}}
 \index{dialog\_qsnap\_locator\_color@{dialog\_qsnap\_locator\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_qsnap\_locator\_color}{dialog\_qsnap\_locator\_color}}
-{\footnotesize\ttfamily QRgb dialog\+\_\+qsnap\+\_\+locator\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb dialog\+\_\+qsnap\+\_\+locator\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_acfa6e87927b6e133926c30cf9363f7b7}\label{class_settings___dialog_acfa6e87927b6e133926c30cf9363f7b7}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_qsnap\_locator\_size@{dialog\_qsnap\_locator\_size}}
 \index{dialog\_qsnap\_locator\_size@{dialog\_qsnap\_locator\_size}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_qsnap\_locator\_size}{dialog\_qsnap\_locator\_size}}
-{\footnotesize\ttfamily quint8 dialog\+\_\+qsnap\+\_\+locator\+\_\+size\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily quint8 dialog\+\_\+qsnap\+\_\+locator\+\_\+size}
 
 \mbox{\Hypertarget{class_settings___dialog_a0956b50a1481bf01171c0509a73c04d1}\label{class_settings___dialog_a0956b50a1481bf01171c0509a73c04d1}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_qsnap\_midpoint@{dialog\_qsnap\_midpoint}}
 \index{dialog\_qsnap\_midpoint@{dialog\_qsnap\_midpoint}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_qsnap\_midpoint}{dialog\_qsnap\_midpoint}}
-{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+midpoint\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+midpoint}
 
 \mbox{\Hypertarget{class_settings___dialog_aa210e461551cc6836a234058db277aab}\label{class_settings___dialog_aa210e461551cc6836a234058db277aab}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_qsnap\_nearest@{dialog\_qsnap\_nearest}}
 \index{dialog\_qsnap\_nearest@{dialog\_qsnap\_nearest}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_qsnap\_nearest}{dialog\_qsnap\_nearest}}
-{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+nearest\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+nearest}
 
 \mbox{\Hypertarget{class_settings___dialog_afda37a1450408625c0510dfa5b1ba26d}\label{class_settings___dialog_afda37a1450408625c0510dfa5b1ba26d}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_qsnap\_node@{dialog\_qsnap\_node}}
 \index{dialog\_qsnap\_node@{dialog\_qsnap\_node}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_qsnap\_node}{dialog\_qsnap\_node}}
-{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+node\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+node}
 
 \mbox{\Hypertarget{class_settings___dialog_a94ca1cd8dd8cb3d97ca0b0536b56e8d2}\label{class_settings___dialog_a94ca1cd8dd8cb3d97ca0b0536b56e8d2}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_qsnap\_parallel@{dialog\_qsnap\_parallel}}
 \index{dialog\_qsnap\_parallel@{dialog\_qsnap\_parallel}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_qsnap\_parallel}{dialog\_qsnap\_parallel}}
-{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+parallel\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+parallel}
 
 \mbox{\Hypertarget{class_settings___dialog_a0e75c495669dc61f01b65819170d7d93}\label{class_settings___dialog_a0e75c495669dc61f01b65819170d7d93}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_qsnap\_perpendicular@{dialog\_qsnap\_perpendicular}}
 \index{dialog\_qsnap\_perpendicular@{dialog\_qsnap\_perpendicular}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_qsnap\_perpendicular}{dialog\_qsnap\_perpendicular}}
-{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+perpendicular\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+perpendicular}
 
 \mbox{\Hypertarget{class_settings___dialog_a156fde53a455bacca87ab5a99efeb902}\label{class_settings___dialog_a156fde53a455bacca87ab5a99efeb902}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_qsnap\_quadrant@{dialog\_qsnap\_quadrant}}
 \index{dialog\_qsnap\_quadrant@{dialog\_qsnap\_quadrant}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_qsnap\_quadrant}{dialog\_qsnap\_quadrant}}
-{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+quadrant\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+quadrant}
 
 \mbox{\Hypertarget{class_settings___dialog_ac6a8cdd07997891afaeeb8ca510e18b5}\label{class_settings___dialog_ac6a8cdd07997891afaeeb8ca510e18b5}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_qsnap\_tangent@{dialog\_qsnap\_tangent}}
 \index{dialog\_qsnap\_tangent@{dialog\_qsnap\_tangent}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_qsnap\_tangent}{dialog\_qsnap\_tangent}}
-{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+tangent\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+qsnap\+\_\+tangent}
 
 \mbox{\Hypertarget{class_settings___dialog_a7acf143d7c9aca259fc6eb4188030266}\label{class_settings___dialog_a7acf143d7c9aca259fc6eb4188030266}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_ruler\_color@{dialog\_ruler\_color}}
 \index{dialog\_ruler\_color@{dialog\_ruler\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_ruler\_color}{dialog\_ruler\_color}}
-{\footnotesize\ttfamily QRgb dialog\+\_\+ruler\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb dialog\+\_\+ruler\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_a00b34d7ead29754b1d9ac7bf2912dbe0}\label{class_settings___dialog_a00b34d7ead29754b1d9ac7bf2912dbe0}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_ruler\_metric@{dialog\_ruler\_metric}}
 \index{dialog\_ruler\_metric@{dialog\_ruler\_metric}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_ruler\_metric}{dialog\_ruler\_metric}}
-{\footnotesize\ttfamily bool dialog\+\_\+ruler\+\_\+metric\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+ruler\+\_\+metric}
 
 \mbox{\Hypertarget{class_settings___dialog_ac14a5854e4498d8281f0aec97e9b0d49}\label{class_settings___dialog_ac14a5854e4498d8281f0aec97e9b0d49}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_ruler\_pixel\_size@{dialog\_ruler\_pixel\_size}}
 \index{dialog\_ruler\_pixel\_size@{dialog\_ruler\_pixel\_size}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_ruler\_pixel\_size}{dialog\_ruler\_pixel\_size}}
-{\footnotesize\ttfamily quint8 dialog\+\_\+ruler\+\_\+pixel\+\_\+size\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily quint8 dialog\+\_\+ruler\+\_\+pixel\+\_\+size}
 
 \mbox{\Hypertarget{class_settings___dialog_a62451ed2e6650272c780abd793622002}\label{class_settings___dialog_a62451ed2e6650272c780abd793622002}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_ruler\_show\_on\_load@{dialog\_ruler\_show\_on\_load}}
 \index{dialog\_ruler\_show\_on\_load@{dialog\_ruler\_show\_on\_load}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_ruler\_show\_on\_load}{dialog\_ruler\_show\_on\_load}}
-{\footnotesize\ttfamily bool dialog\+\_\+ruler\+\_\+show\+\_\+on\+\_\+load\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+ruler\+\_\+show\+\_\+on\+\_\+load}
 
 \mbox{\Hypertarget{class_settings___dialog_a61a2fd3421af96e6ffbe1dc603ad5472}\label{class_settings___dialog_a61a2fd3421af96e6ffbe1dc603ad5472}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_selection\_coolgrip\_color@{dialog\_selection\_coolgrip\_color}}
 \index{dialog\_selection\_coolgrip\_color@{dialog\_selection\_coolgrip\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_selection\_coolgrip\_color}{dialog\_selection\_coolgrip\_color}}
-{\footnotesize\ttfamily QRgb dialog\+\_\+selection\+\_\+coolgrip\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb dialog\+\_\+selection\+\_\+coolgrip\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_af5b4686d4a52a5599f2074653df48293}\label{class_settings___dialog_af5b4686d4a52a5599f2074653df48293}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_selection\_grip\_size@{dialog\_selection\_grip\_size}}
 \index{dialog\_selection\_grip\_size@{dialog\_selection\_grip\_size}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_selection\_grip\_size}{dialog\_selection\_grip\_size}}
-{\footnotesize\ttfamily quint8 dialog\+\_\+selection\+\_\+grip\+\_\+size\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily quint8 dialog\+\_\+selection\+\_\+grip\+\_\+size}
 
 \mbox{\Hypertarget{class_settings___dialog_ad93f2377c578bd1abbe47d62be7684c0}\label{class_settings___dialog_ad93f2377c578bd1abbe47d62be7684c0}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_selection\_hotgrip\_color@{dialog\_selection\_hotgrip\_color}}
 \index{dialog\_selection\_hotgrip\_color@{dialog\_selection\_hotgrip\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_selection\_hotgrip\_color}{dialog\_selection\_hotgrip\_color}}
-{\footnotesize\ttfamily QRgb dialog\+\_\+selection\+\_\+hotgrip\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb dialog\+\_\+selection\+\_\+hotgrip\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_a4dd27953612107632146b58e6efc69e3}\label{class_settings___dialog_a4dd27953612107632146b58e6efc69e3}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_selection\_mode\_pickadd@{dialog\_selection\_mode\_pickadd}}
 \index{dialog\_selection\_mode\_pickadd@{dialog\_selection\_mode\_pickadd}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_selection\_mode\_pickadd}{dialog\_selection\_mode\_pickadd}}
-{\footnotesize\ttfamily bool dialog\+\_\+selection\+\_\+mode\+\_\+pickadd\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+selection\+\_\+mode\+\_\+pickadd}
 
 \mbox{\Hypertarget{class_settings___dialog_a94d26fa3f78d21595767df4c4b61cbb0}\label{class_settings___dialog_a94d26fa3f78d21595767df4c4b61cbb0}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_selection\_mode\_pickdrag@{dialog\_selection\_mode\_pickdrag}}
 \index{dialog\_selection\_mode\_pickdrag@{dialog\_selection\_mode\_pickdrag}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_selection\_mode\_pickdrag}{dialog\_selection\_mode\_pickdrag}}
-{\footnotesize\ttfamily bool dialog\+\_\+selection\+\_\+mode\+\_\+pickdrag\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+selection\+\_\+mode\+\_\+pickdrag}
 
 \mbox{\Hypertarget{class_settings___dialog_a8eb36c0a1c3d6989f1b9ecbf42d219f5}\label{class_settings___dialog_a8eb36c0a1c3d6989f1b9ecbf42d219f5}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_selection\_mode\_pickfirst@{dialog\_selection\_mode\_pickfirst}}
 \index{dialog\_selection\_mode\_pickfirst@{dialog\_selection\_mode\_pickfirst}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_selection\_mode\_pickfirst}{dialog\_selection\_mode\_pickfirst}}
-{\footnotesize\ttfamily bool dialog\+\_\+selection\+\_\+mode\+\_\+pickfirst\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool dialog\+\_\+selection\+\_\+mode\+\_\+pickfirst}
 
 \mbox{\Hypertarget{class_settings___dialog_a6f0ac4cc77079cd5a266aea92d920bce}\label{class_settings___dialog_a6f0ac4cc77079cd5a266aea92d920bce}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!dialog\_selection\_pickbox\_size@{dialog\_selection\_pickbox\_size}}
 \index{dialog\_selection\_pickbox\_size@{dialog\_selection\_pickbox\_size}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{dialog\_selection\_pickbox\_size}{dialog\_selection\_pickbox\_size}}
-{\footnotesize\ttfamily quint8 dialog\+\_\+selection\+\_\+pickbox\+\_\+size\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily quint8 dialog\+\_\+selection\+\_\+pickbox\+\_\+size}
 
 \mbox{\Hypertarget{class_settings___dialog_a8a28ac6f98797eb7aa5972c3f9f9ffdd}\label{class_settings___dialog_a8a28ac6f98797eb7aa5972c3f9f9ffdd}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!mainWin@{mainWin}}
 \index{mainWin@{mainWin}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{mainWin}{mainWin}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_main_window}{Main\+Window}}$\ast$ main\+Win\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_main_window}{Main\+Window}}$\ast$ main\+Win}
 
 \mbox{\Hypertarget{class_settings___dialog_abd82057d69bd647d012324d2481795c1}\label{class_settings___dialog_abd82057d69bd647d012324d2481795c1}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!preview\_display\_bg\_color@{preview\_display\_bg\_color}}
 \index{preview\_display\_bg\_color@{preview\_display\_bg\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{preview\_display\_bg\_color}{preview\_display\_bg\_color}}
-{\footnotesize\ttfamily QRgb preview\+\_\+display\+\_\+bg\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb preview\+\_\+display\+\_\+bg\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_a24aed225df6ac07fa9fd4349a8d1c04b}\label{class_settings___dialog_a24aed225df6ac07fa9fd4349a8d1c04b}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!preview\_display\_crosshair\_color@{preview\_display\_crosshair\_color}}
 \index{preview\_display\_crosshair\_color@{preview\_display\_crosshair\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{preview\_display\_crosshair\_color}{preview\_display\_crosshair\_color}}
-{\footnotesize\ttfamily QRgb preview\+\_\+display\+\_\+crosshair\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb preview\+\_\+display\+\_\+crosshair\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_a2db3195effa4d7a348a149b01e2d90c3}\label{class_settings___dialog_a2db3195effa4d7a348a149b01e2d90c3}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!preview\_display\_selectbox\_alpha@{preview\_display\_selectbox\_alpha}}
 \index{preview\_display\_selectbox\_alpha@{preview\_display\_selectbox\_alpha}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{preview\_display\_selectbox\_alpha}{preview\_display\_selectbox\_alpha}}
-{\footnotesize\ttfamily quint8 preview\+\_\+display\+\_\+selectbox\+\_\+alpha\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily quint8 preview\+\_\+display\+\_\+selectbox\+\_\+alpha}
 
 \mbox{\Hypertarget{class_settings___dialog_a2b4f3fb4cd823c327879b10789d33d6b}\label{class_settings___dialog_a2b4f3fb4cd823c327879b10789d33d6b}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!preview\_display\_selectbox\_left\_color@{preview\_display\_selectbox\_left\_color}}
 \index{preview\_display\_selectbox\_left\_color@{preview\_display\_selectbox\_left\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{preview\_display\_selectbox\_left\_color}{preview\_display\_selectbox\_left\_color}}
-{\footnotesize\ttfamily QRgb preview\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb preview\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_aa4c4326ae7f1668e3635b27f8a993bca}\label{class_settings___dialog_aa4c4326ae7f1668e3635b27f8a993bca}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!preview\_display\_selectbox\_left\_fill@{preview\_display\_selectbox\_left\_fill}}
 \index{preview\_display\_selectbox\_left\_fill@{preview\_display\_selectbox\_left\_fill}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{preview\_display\_selectbox\_left\_fill}{preview\_display\_selectbox\_left\_fill}}
-{\footnotesize\ttfamily QRgb preview\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+fill\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb preview\+\_\+display\+\_\+selectbox\+\_\+left\+\_\+fill}
 
 \mbox{\Hypertarget{class_settings___dialog_a5c6a11130f559964d4f152e9952c9eee}\label{class_settings___dialog_a5c6a11130f559964d4f152e9952c9eee}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!preview\_display\_selectbox\_right\_color@{preview\_display\_selectbox\_right\_color}}
 \index{preview\_display\_selectbox\_right\_color@{preview\_display\_selectbox\_right\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{preview\_display\_selectbox\_right\_color}{preview\_display\_selectbox\_right\_color}}
-{\footnotesize\ttfamily QRgb preview\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb preview\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_ae203fb6a3e234825e8645cbf6923e90a}\label{class_settings___dialog_ae203fb6a3e234825e8645cbf6923e90a}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!preview\_display\_selectbox\_right\_fill@{preview\_display\_selectbox\_right\_fill}}
 \index{preview\_display\_selectbox\_right\_fill@{preview\_display\_selectbox\_right\_fill}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{preview\_display\_selectbox\_right\_fill}{preview\_display\_selectbox\_right\_fill}}
-{\footnotesize\ttfamily QRgb preview\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+fill\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb preview\+\_\+display\+\_\+selectbox\+\_\+right\+\_\+fill}
 
 \mbox{\Hypertarget{class_settings___dialog_a7d42559a3048e3d22c8615a51d18ff64}\label{class_settings___dialog_a7d42559a3048e3d22c8615a51d18ff64}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!preview\_display\_show\_scrollbars@{preview\_display\_show\_scrollbars}}
 \index{preview\_display\_show\_scrollbars@{preview\_display\_show\_scrollbars}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{preview\_display\_show\_scrollbars}{preview\_display\_show\_scrollbars}}
-{\footnotesize\ttfamily bool preview\+\_\+display\+\_\+show\+\_\+scrollbars\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool preview\+\_\+display\+\_\+show\+\_\+scrollbars}
 
 \mbox{\Hypertarget{class_settings___dialog_aedcc3458893e9f25926180a1b9b861b1}\label{class_settings___dialog_aedcc3458893e9f25926180a1b9b861b1}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!preview\_general\_mdi\_bg\_color@{preview\_general\_mdi\_bg\_color}}
 \index{preview\_general\_mdi\_bg\_color@{preview\_general\_mdi\_bg\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{preview\_general\_mdi\_bg\_color}{preview\_general\_mdi\_bg\_color}}
-{\footnotesize\ttfamily QRgb preview\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb preview\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_a2aba23516c27d852d3d1dd4af3e69cb0}\label{class_settings___dialog_a2aba23516c27d852d3d1dd4af3e69cb0}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!preview\_general\_mdi\_bg\_use\_color@{preview\_general\_mdi\_bg\_use\_color}}
 \index{preview\_general\_mdi\_bg\_use\_color@{preview\_general\_mdi\_bg\_use\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{preview\_general\_mdi\_bg\_use\_color}{preview\_general\_mdi\_bg\_use\_color}}
-{\footnotesize\ttfamily bool preview\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool preview\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_a8f6423b071e7ff1bd0d50d9084763a01}\label{class_settings___dialog_a8f6423b071e7ff1bd0d50d9084763a01}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!preview\_general\_mdi\_bg\_use\_logo@{preview\_general\_mdi\_bg\_use\_logo}}
 \index{preview\_general\_mdi\_bg\_use\_logo@{preview\_general\_mdi\_bg\_use\_logo}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{preview\_general\_mdi\_bg\_use\_logo}{preview\_general\_mdi\_bg\_use\_logo}}
-{\footnotesize\ttfamily bool preview\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+logo\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool preview\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+logo}
 
 \mbox{\Hypertarget{class_settings___dialog_a7fc06fdda4027f35fbaf944f4c400fd1}\label{class_settings___dialog_a7fc06fdda4027f35fbaf944f4c400fd1}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!preview\_general\_mdi\_bg\_use\_texture@{preview\_general\_mdi\_bg\_use\_texture}}
 \index{preview\_general\_mdi\_bg\_use\_texture@{preview\_general\_mdi\_bg\_use\_texture}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{preview\_general\_mdi\_bg\_use\_texture}{preview\_general\_mdi\_bg\_use\_texture}}
-{\footnotesize\ttfamily bool preview\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+texture\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool preview\+\_\+general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+texture}
 
 \mbox{\Hypertarget{class_settings___dialog_a38fb1c364601a852815685fd404b594e}\label{class_settings___dialog_a38fb1c364601a852815685fd404b594e}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!preview\_grid\_color@{preview\_grid\_color}}
 \index{preview\_grid\_color@{preview\_grid\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{preview\_grid\_color}{preview\_grid\_color}}
-{\footnotesize\ttfamily QRgb preview\+\_\+grid\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb preview\+\_\+grid\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_a368bc7478daf70ef6b3f3c51ab411d07}\label{class_settings___dialog_a368bc7478daf70ef6b3f3c51ab411d07}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!preview\_lwt\_real\_render@{preview\_lwt\_real\_render}}
 \index{preview\_lwt\_real\_render@{preview\_lwt\_real\_render}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{preview\_lwt\_real\_render}{preview\_lwt\_real\_render}}
-{\footnotesize\ttfamily bool preview\+\_\+lwt\+\_\+real\+\_\+render\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool preview\+\_\+lwt\+\_\+real\+\_\+render}
 
 \mbox{\Hypertarget{class_settings___dialog_a54741095244e28ade1fad6e296050a53}\label{class_settings___dialog_a54741095244e28ade1fad6e296050a53}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!preview\_lwt\_show\_lwt@{preview\_lwt\_show\_lwt}}
 \index{preview\_lwt\_show\_lwt@{preview\_lwt\_show\_lwt}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{preview\_lwt\_show\_lwt}{preview\_lwt\_show\_lwt}}
-{\footnotesize\ttfamily bool preview\+\_\+lwt\+\_\+show\+\_\+lwt\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool preview\+\_\+lwt\+\_\+show\+\_\+lwt}
 
 \mbox{\Hypertarget{class_settings___dialog_a447f8fbbfbc92a50ee594dcaba5ede46}\label{class_settings___dialog_a447f8fbbfbc92a50ee594dcaba5ede46}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!preview\_prompt\_bg\_color@{preview\_prompt\_bg\_color}}
 \index{preview\_prompt\_bg\_color@{preview\_prompt\_bg\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{preview\_prompt\_bg\_color}{preview\_prompt\_bg\_color}}
-{\footnotesize\ttfamily QRgb preview\+\_\+prompt\+\_\+bg\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb preview\+\_\+prompt\+\_\+bg\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_a6734ee3a8cd50bc2112f770180e37b4e}\label{class_settings___dialog_a6734ee3a8cd50bc2112f770180e37b4e}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!preview\_prompt\_font\_family@{preview\_prompt\_font\_family}}
 \index{preview\_prompt\_font\_family@{preview\_prompt\_font\_family}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{preview\_prompt\_font\_family}{preview\_prompt\_font\_family}}
-{\footnotesize\ttfamily QString preview\+\_\+prompt\+\_\+font\+\_\+family\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QString preview\+\_\+prompt\+\_\+font\+\_\+family}
 
 \mbox{\Hypertarget{class_settings___dialog_a9e7941fe49efabc22d69fcd1a98063d7}\label{class_settings___dialog_a9e7941fe49efabc22d69fcd1a98063d7}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!preview\_prompt\_font\_size@{preview\_prompt\_font\_size}}
 \index{preview\_prompt\_font\_size@{preview\_prompt\_font\_size}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{preview\_prompt\_font\_size}{preview\_prompt\_font\_size}}
-{\footnotesize\ttfamily quint8 preview\+\_\+prompt\+\_\+font\+\_\+size\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily quint8 preview\+\_\+prompt\+\_\+font\+\_\+size}
 
 \mbox{\Hypertarget{class_settings___dialog_a1aa6b2a8a7f472fab2edd1e1915fb4df}\label{class_settings___dialog_a1aa6b2a8a7f472fab2edd1e1915fb4df}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!preview\_prompt\_font\_style@{preview\_prompt\_font\_style}}
 \index{preview\_prompt\_font\_style@{preview\_prompt\_font\_style}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{preview\_prompt\_font\_style}{preview\_prompt\_font\_style}}
-{\footnotesize\ttfamily QString preview\+\_\+prompt\+\_\+font\+\_\+style\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QString preview\+\_\+prompt\+\_\+font\+\_\+style}
 
 \mbox{\Hypertarget{class_settings___dialog_a9a453cb0f5e0960ef49a2d414b2badc1}\label{class_settings___dialog_a9a453cb0f5e0960ef49a2d414b2badc1}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!preview\_prompt\_text\_color@{preview\_prompt\_text\_color}}
 \index{preview\_prompt\_text\_color@{preview\_prompt\_text\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{preview\_prompt\_text\_color}{preview\_prompt\_text\_color}}
-{\footnotesize\ttfamily QRgb preview\+\_\+prompt\+\_\+text\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb preview\+\_\+prompt\+\_\+text\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_a71a538f3b775fc006d351707c8e32011}\label{class_settings___dialog_a71a538f3b775fc006d351707c8e32011}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!preview\_ruler\_color@{preview\_ruler\_color}}
 \index{preview\_ruler\_color@{preview\_ruler\_color}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{preview\_ruler\_color}{preview\_ruler\_color}}
-{\footnotesize\ttfamily QRgb preview\+\_\+ruler\+\_\+color\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QRgb preview\+\_\+ruler\+\_\+color}
 
 \mbox{\Hypertarget{class_settings___dialog_a39c8d5a067962a58503190d74207588e}\label{class_settings___dialog_a39c8d5a067962a58503190d74207588e}} 
 \index{Settings\_Dialog@{Settings\_Dialog}!tabWidget@{tabWidget}}
 \index{tabWidget@{tabWidget}!Settings\_Dialog@{Settings\_Dialog}}
 \doxyparagraph{\texorpdfstring{tabWidget}{tabWidget}}
-{\footnotesize\ttfamily QTab\+Widget$\ast$ tab\+Widget\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QTab\+Widget$\ast$ tab\+Widget}
 
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-embroidermodder2/\mbox{\hyperlink{settings-dialog_8h}{settings-\/dialog.\+h}}\item 
+embroidermodder2/\mbox{\hyperlink{embroidermodder_8h}{embroidermodder.\+h}}\item 
 embroidermodder2/\mbox{\hyperlink{settings-dialog_8cpp}{settings-\/dialog.\+cpp}}\end{DoxyCompactItemize}

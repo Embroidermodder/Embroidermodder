@@ -1230,92 +1230,6 @@ MainWindow::nativeMessageBox(const QString& type, const QString& title, const QS
     else                              { QMessageBox::critical   (this, tr("Native MessageBox Error"), tr("Incorrect use of the native messageBox function.")); }
 }
 
-void MainWindow::nativeUndo()
-{
-    undo();
-}
-
-void MainWindow::nativeRedo()
-{
-    redo();
-}
-
-void MainWindow::nativeIcon16()
-{
-    icon16();
-}
-
-void MainWindow::nativeIcon24()
-{
-    icon24();
-}
-
-void MainWindow::nativeIcon32()
-{
-    icon32();
-}
-
-void MainWindow::nativeIcon48()
-{
-    icon48();
-}
-
-void MainWindow::nativeIcon64()
-{
-    icon64();
-}
-
-void MainWindow::nativeIcon128()
-{
-    icon128();
-}
-
-void MainWindow::nativePanLeft()
-{
-    panLeft();
-}
-
-void MainWindow::nativePanRight()
-{
-    panRight();
-}
-
-void MainWindow::nativePanUp()
-{
-    panUp();
-}
-
-void MainWindow::nativePanDown()
-{
-    panDown();
-}
-
-/**
- * @brief MainWindow::nativeZoomIn
- */
-void MainWindow::nativeZoomIn()
-{
-    zoomIn();
-}
-
-/**
- * @brief MainWindow::nativeZoomOut
- */
-void
-MainWindow::nativeZoomOut()
-{
-    zoomOut();
-}
-
-/**
- * @brief MainWindow::nativeZoomExtents
- */
-void
-MainWindow::nativeZoomExtents()
-{
-    zoomExtents();
-}
-
 /**
  * @brief MainWindow::nativePrintArea
  * @param x
@@ -1328,16 +1242,6 @@ void MainWindow::nativePrintArea(EmbReal x, EmbReal y, EmbReal w, EmbReal h)
     qDebug("nativePrintArea(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
     //TODO: Print Setup Stuff
     print();
-}
-
-void MainWindow::nativeDayVision()
-{
-    dayVision();
-}
-
-void MainWindow::nativeNightVision()
-{
-    nightVision();
 }
 
 void MainWindow::nativeSetBackgroundColor(quint8 r, quint8 g, quint8 b)
@@ -1396,46 +1300,6 @@ bool MainWindow::nativeTextStrikeOut()
 bool MainWindow::nativeTextOverline()
 {
     return textOverline();
-}
-
-void MainWindow::nativeSetTextFont(const QString& str)
-{
-    setTextFont(str);
-}
-
-void MainWindow::nativeSetTextSize(EmbReal num)
-{
-    setTextSize(num);
-}
-
-void MainWindow::nativeSetTextAngle(EmbReal num)
-{
-    setTextAngle(num);
-}
-
-void MainWindow::nativeSetTextBold(bool val)
-{
-    setTextBold(val);
-}
-
-void MainWindow::nativeSetTextItalic(bool val)
-{
-    setTextItalic(val);
-}
-
-void MainWindow::nativeSetTextUnderline(bool val)
-{
-    setTextUnderline(val);
-}
-
-void MainWindow::nativeSetTextStrikeOut(bool val)
-{
-    setTextStrikeOut(val);
-}
-
-void MainWindow::nativeSetTextOverline(bool val)
-{
-    setTextOverline(val);
 }
 
 void MainWindow::nativePreviewOn(int clone, int mode, EmbReal x, EmbReal y, EmbReal data)

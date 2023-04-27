@@ -2,7 +2,7 @@
 \label{class_property_editor}\index{PropertyEditor@{PropertyEditor}}
 
 
-{\ttfamily \#include $<$property-\/editor.\+h$>$}
+{\ttfamily \#include $<$embroidermodder.\+h$>$}
 
 \doxysubsubsection*{Public Slots}
 \begin{DoxyCompactItemize}
@@ -56,7 +56,7 @@ QFont\+Combo\+Box $\ast$ \mbox{\hyperlink{class_property_editor_a7a1337f44c4a3e2
 \item 
 void \mbox{\hyperlink{class_property_editor_af09f2b45f2192ff22f3176e8e5b3e47c}{update\+Line\+Edit\+Str\+If\+Varies}} (QLine\+Edit $\ast$line\+Edit, const QString \&str)
 \item 
-void \mbox{\hyperlink{class_property_editor_ab96426c38a6f51e57b8aec6187a6ecc9}{update\+Line\+Edit\+Num\+If\+Varies}} (QLine\+Edit $\ast$line\+Edit, qreal num, bool use\+Angle\+Precision)
+void \mbox{\hyperlink{class_property_editor_a4bae2ff6e83289bdb8b04a345b3dd8f3}{update\+Line\+Edit\+Num\+If\+Varies}} (QLine\+Edit $\ast$line\+Edit, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} num, bool use\+Angle\+Precision)
 \item 
 void \mbox{\hyperlink{class_property_editor_a4658a7fe1a5ac2422b18a2be24588f72}{update\+Font\+Combo\+Box\+Str\+If\+Varies}} (QFont\+Combo\+Box $\ast$font\+Combo\+Box, const QString \&str)
 \item 
@@ -698,7 +698,17 @@ QCombo\+Box $\ast$ \mbox{\hyperlink{class_property_editor_a08687e5b17d6eae1b6260
 \doxyparagraph{\texorpdfstring{PropertyEditor()}{PropertyEditor()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{class_property_editor}{Property\+Editor}} (\begin{DoxyParamCaption}\item[{const QString \&}]{icon\+Directory = {\ttfamily QString()},  }\item[{bool}]{pick\+Add\+Mode = {\ttfamily true},  }\item[{QWidget $\ast$}]{widget\+To\+Focus = {\ttfamily 0},  }\item[{QWidget $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{class_property_editor_a4bca2abc45a97402b7135f7b8407d125}\label{class_property_editor_a4bca2abc45a97402b7135f7b8407d125}} 
+Embroidermodder 2.
+
+\DoxyHorRuler{0}
+
+
+Copyright 2013-\/2022 The Embroidermodder Team Embroidermodder 2 is Open Source Software. See LICENSE for licensing terms.
+
+\DoxyHorRuler{0}
+
+
+Use Python\textquotesingle{}s PEP7 style guide. \href{https://peps.python.org/pep-0007/}{\texttt{ https\+://peps.\+python.\+org/pep-\/0007/}} \mbox{\Hypertarget{class_property_editor_a4bca2abc45a97402b7135f7b8407d125}\label{class_property_editor_a4bca2abc45a97402b7135f7b8407d125}} 
 \index{PropertyEditor@{PropertyEditor}!````~PropertyEditor@{$\sim$PropertyEditor}}
 \index{````~PropertyEditor@{$\sim$PropertyEditor}!PropertyEditor@{PropertyEditor}}
 \doxyparagraph{\texorpdfstring{$\sim$PropertyEditor()}{~PropertyEditor()}}
@@ -1007,11 +1017,11 @@ QCombo\+Box $\ast$ \mbox{\hyperlink{class_property_editor_a08687e5b17d6eae1b6260
 \doxyparagraph{\texorpdfstring{updateFontComboBoxStrIfVaries()}{updateFontComboBoxStrIfVaries()}}
 {\footnotesize\ttfamily void update\+Font\+Combo\+Box\+Str\+If\+Varies (\begin{DoxyParamCaption}\item[{QFont\+Combo\+Box $\ast$}]{font\+Combo\+Box,  }\item[{const QString \&}]{str }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
-\mbox{\Hypertarget{class_property_editor_ab96426c38a6f51e57b8aec6187a6ecc9}\label{class_property_editor_ab96426c38a6f51e57b8aec6187a6ecc9}} 
+\mbox{\Hypertarget{class_property_editor_a4bae2ff6e83289bdb8b04a345b3dd8f3}\label{class_property_editor_a4bae2ff6e83289bdb8b04a345b3dd8f3}} 
 \index{PropertyEditor@{PropertyEditor}!updateLineEditNumIfVaries@{updateLineEditNumIfVaries}}
 \index{updateLineEditNumIfVaries@{updateLineEditNumIfVaries}!PropertyEditor@{PropertyEditor}}
 \doxyparagraph{\texorpdfstring{updateLineEditNumIfVaries()}{updateLineEditNumIfVaries()}}
-{\footnotesize\ttfamily void update\+Line\+Edit\+Num\+If\+Varies (\begin{DoxyParamCaption}\item[{QLine\+Edit $\ast$}]{line\+Edit,  }\item[{qreal}]{num,  }\item[{bool}]{use\+Angle\+Precision }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily void update\+Line\+Edit\+Num\+If\+Varies (\begin{DoxyParamCaption}\item[{QLine\+Edit $\ast$}]{line\+Edit,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{num,  }\item[{bool}]{use\+Angle\+Precision }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
 \mbox{\Hypertarget{class_property_editor_af09f2b45f2192ff22f3176e8e5b3e47c}\label{class_property_editor_af09f2b45f2192ff22f3176e8e5b3e47c}} 
 \index{PropertyEditor@{PropertyEditor}!updateLineEditStrIfVaries@{updateLineEditStrIfVaries}}
@@ -2694,5 +2704,5 @@ QCombo\+Box $\ast$ \mbox{\hyperlink{class_property_editor_a08687e5b17d6eae1b6260
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-embroidermodder2/\mbox{\hyperlink{property-editor_8h}{property-\/editor.\+h}}\item 
+embroidermodder2/\mbox{\hyperlink{embroidermodder_8h}{embroidermodder.\+h}}\item 
 embroidermodder2/\mbox{\hyperlink{property-editor_8cpp}{property-\/editor.\+cpp}}\end{DoxyCompactItemize}

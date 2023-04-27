@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['scale_5fmode_5fnormal_0',['SCALE_MODE_NORMAL',['../embroidermodder_8h.html#a0fabba118156df3b22a9129bc614a6d7adf2761dc6a9db6aa5c2d49cc1cf9eea1',1,'embroidermodder.h']]],
+  ['scale_5fmode_5freference_1',['SCALE_MODE_REFERENCE',['../embroidermodder_8h.html#a0fabba118156df3b22a9129bc614a6d7a582f0dcd0555393d57510b571d989bf3',1,'embroidermodder.h']]],
+  ['single_5fline_5ftext_5fmode_5fjustify_2',['SINGLE_LINE_TEXT_MODE_JUSTIFY',['../embroidermodder_8h.html#a0fabba118156df3b22a9129bc614a6d7ae4ee1dc7cdadaeb55fd8080a73cceff3',1,'embroidermodder.h']]],
+  ['single_5fline_5ftext_5fmode_5frapid_3',['SINGLE_LINE_TEXT_MODE_RAPID',['../embroidermodder_8h.html#a0fabba118156df3b22a9129bc614a6d7aab9ff9c1703714dec8f3aa28b8833bf3',1,'embroidermodder.h']]],
+  ['single_5fline_5ftext_5fmode_5fsetfont_4',['SINGLE_LINE_TEXT_MODE_SETFONT',['../embroidermodder_8h.html#a0fabba118156df3b22a9129bc614a6d7ae41018addd1a942bb908a0aef6800d8c',1,'embroidermodder.h']]],
+  ['single_5fline_5ftext_5fmode_5fsetgeom_5',['SINGLE_LINE_TEXT_MODE_SETGEOM',['../embroidermodder_8h.html#a0fabba118156df3b22a9129bc614a6d7a61f39fb1e244830c50856c10acaa0d2a',1,'embroidermodder.h']]],
+  ['snowflake_5fmode_5fnum_5fpoints_6',['SNOWFLAKE_MODE_NUM_POINTS',['../embroidermodder_8h.html#a0fabba118156df3b22a9129bc614a6d7ae1b0a2fd8a0594cc15b8b8a29d13c5c4',1,'embroidermodder.h']]],
+  ['snowflake_5fmode_5fxscale_7',['SNOWFLAKE_MODE_XSCALE',['../embroidermodder_8h.html#a0fabba118156df3b22a9129bc614a6d7acd227e4434eca416d80a7d728eb04613',1,'embroidermodder.h']]],
+  ['snowflake_5fmode_5fyscale_8',['SNOWFLAKE_MODE_YSCALE',['../embroidermodder_8h.html#a0fabba118156df3b22a9129bc614a6d7ad8086191a937fde6e609048cb8fe6b3e',1,'embroidermodder.h']]],
+  ['spare_5frubber_5foff_9',['SPARE_RUBBER_OFF',['../embroidermodder_8h.html#ad8a5c79b7189c3d4a67cf30b1fc487b7a0a9297c6bc1effe457a30548154c5579',1,'embroidermodder.h']]],
+  ['spare_5frubber_5fpath_10',['SPARE_RUBBER_PATH',['../embroidermodder_8h.html#ad8a5c79b7189c3d4a67cf30b1fc487b7a02b055646d419151ae0474592ab4b43e',1,'embroidermodder.h']]],
+  ['spare_5frubber_5fpolygon_11',['SPARE_RUBBER_POLYGON',['../embroidermodder_8h.html#ad8a5c79b7189c3d4a67cf30b1fc487b7ae255dc382125b6ee89f4b070972c5277',1,'embroidermodder.h']]],
+  ['spare_5frubber_5fpolyline_12',['SPARE_RUBBER_POLYLINE',['../embroidermodder_8h.html#ad8a5c79b7189c3d4a67cf30b1fc487b7a7f8a615965c2736a0f22cede1d7d9ddb',1,'embroidermodder.h']]],
+  ['star_5fmode_5fcenter_5fpt_13',['STAR_MODE_CENTER_PT',['../embroidermodder_8h.html#a0fabba118156df3b22a9129bc614a6d7a1e644c8a39f3f52302f79bd0802b5292',1,'embroidermodder.h']]],
+  ['star_5fmode_5fnum_5fpoints_14',['STAR_MODE_NUM_POINTS',['../embroidermodder_8h.html#a0fabba118156df3b22a9129bc614a6d7a3be05c1e5345b113f0cd8dcbf395202c',1,'embroidermodder.h']]],
+  ['star_5fmode_5frad_5finner_15',['STAR_MODE_RAD_INNER',['../embroidermodder_8h.html#a0fabba118156df3b22a9129bc614a6d7a8de53eb5ac9a16ae7d003f76447adc08',1,'embroidermodder.h']]],
+  ['star_5fmode_5frad_5fouter_16',['STAR_MODE_RAD_OUTER',['../embroidermodder_8h.html#a0fabba118156df3b22a9129bc614a6d7a2b187bb398858f2ecba34b86966bc182',1,'embroidermodder.h']]]
+];

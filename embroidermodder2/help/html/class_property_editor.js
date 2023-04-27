@@ -52,7 +52,7 @@ var class_property_editor =
     [ "updateComboBoxBoolIfVaries", "class_property_editor.html#a7c782c237fdeb80dd92cad765ae1cf63", null ],
     [ "updateComboBoxStrIfVaries", "class_property_editor.html#a68635b8dcaa0aae6b99d78d8eee54ee7", null ],
     [ "updateFontComboBoxStrIfVaries", "class_property_editor.html#a4658a7fe1a5ac2422b18a2be24588f72", null ],
-    [ "updateLineEditNumIfVaries", "class_property_editor.html#ab96426c38a6f51e57b8aec6187a6ecc9", null ],
+    [ "updateLineEditNumIfVaries", "class_property_editor.html#a4bae2ff6e83289bdb8b04a345b3dd8f3", null ],
     [ "updateLineEditStrIfVaries", "class_property_editor.html#af09f2b45f2192ff22f3176e8e5b3e47c", null ],
     [ "updatePickAddModeButton", "class_property_editor.html#a8337c0887ee7e0d0fca75314d513016d", null ],
     [ "comboBoxArcClockwise", "class_property_editor.html#a741a5034b8beefcf397c4f8f24be6b60", null ],

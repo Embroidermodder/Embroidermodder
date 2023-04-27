@@ -2,7 +2,7 @@
 \label{class_view}\index{View@{View}}
 
 
-{\ttfamily \#include $<$view.\+h$>$}
+{\ttfamily \#include $<$embroidermodder.\+h$>$}
 
 \doxysubsubsection*{Public Slots}
 \begin{DoxyCompactItemize}
@@ -37,7 +37,7 @@ void \mbox{\hyperlink{class_view_abd07e172ccec6823a88289c21124a367}{clear\+Selec
 \item 
 void \mbox{\hyperlink{class_view_adc2fdeeaaaa3dde25a46a15a8815c3ac}{delete\+Selected}} ()
 \item 
-void \mbox{\hyperlink{class_view_ac51e16242e7caa854922c3d00e84cbe2}{move\+Selected}} (qreal dx, qreal dy)
+void \mbox{\hyperlink{class_view_a623adffaf74d096aeb1896327e3e20e8}{move\+Selected}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} dx, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} dy)
 \item 
 void \mbox{\hyperlink{class_view_ada01f65675afbbc0b8006d58df5acb81}{cut}} ()
 \item 
@@ -51,13 +51,13 @@ void \mbox{\hyperlink{class_view_a08439dd91239f4e45fc585a9c6f2988a}{move\+Action
 \item 
 void \mbox{\hyperlink{class_view_ad0a1d907f075c38a1d34cf976a9527d8}{scale\+Action}} ()
 \item 
-void \mbox{\hyperlink{class_view_ae8656e711caf4f6d627411ba87f5507c}{scale\+Selected}} (qreal x, qreal y, qreal factor)
+void \mbox{\hyperlink{class_view_a2bbeb3f32ac3ea741a41a4858544d435}{scale\+Selected}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} factor)
 \item 
 void \mbox{\hyperlink{class_view_a99afe6ecc9412bcf50b8a8ba1836177f}{rotate\+Action}} ()
 \item 
-void \mbox{\hyperlink{class_view_a2eb33ba1e11c6e53493564917b3ae4fa}{rotate\+Selected}} (qreal x, qreal y, qreal rot)
+void \mbox{\hyperlink{class_view_ace9d0d298fb5fa83d16c0f79a3c38bc0}{rotate\+Selected}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} rot)
 \item 
-void \mbox{\hyperlink{class_view_a0d24c4e6576ba8a921fdccb9d89db887}{mirror\+Selected}} (qreal x1, qreal y1, qreal x2, qreal y2)
+void \mbox{\hyperlink{class_view_a9ed050774ee011e27ca9115201f9cd74}{mirror\+Selected}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x1, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y1, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x2, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y2)
 \item 
 int \mbox{\hyperlink{class_view_a50f2a887aea481c21501f0ba17f1ec27}{num\+Selected}} ()
 \item 
@@ -107,7 +107,7 @@ void \mbox{\hyperlink{class_view_a935fdfc805caa4ece4930fff01b7aa39}{create\+Grid
 \item 
 void \mbox{\hyperlink{class_view_ade2a3a088253cd83dd64a0bd3fbb12bb}{set\+Ruler\+Color}} (QRgb color)
 \item 
-void \mbox{\hyperlink{class_view_a2aaf2120aae14d65a869325c2b3e6179}{preview\+On}} (int clone, int mode, qreal x, qreal y, qreal data)
+void \mbox{\hyperlink{class_view_a9c902dbc194fbd5c9a1187d59ade661f}{preview\+On}} (int clone, int mode, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} data)
 \item 
 void \mbox{\hyperlink{class_view_a70844daf87c63fdfb93c78436fb83215}{preview\+Off}} ()
 \item 
@@ -213,10 +213,6 @@ void \mbox{\hyperlink{class_view_a41ea944c60817f18a0c57a8d0c21ffd5}{update\+Mous
 void \mbox{\hyperlink{class_view_a5a270ccf83609fc8228ca4ee29f1aa41}{pan\+Start}} (const QPoint \&point)
 \item 
 void \mbox{\hyperlink{class_view_a30a3749bd2cba03a1231b83459ce5635}{align\+Scene\+Point\+With\+View\+Point}} (const QPointF \&scene\+Point, const QPoint \&view\+Point)
-\item 
-qreal \mbox{\hyperlink{class_view_a198c35d0f4b77c21af2adcc0d28b3abb}{pi}} ()
-\item 
-qreal \mbox{\hyperlink{class_view_ac59979622741dac009ccdbeac2503662}{radians}} (qreal \mbox{\hyperlink{embroidery_8h_aaccc2423db2913edc508bd03bbdbde71}{degrees}})
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
@@ -243,7 +239,7 @@ QGraphics\+Item\+Group $\ast$ \mbox{\hyperlink{class_view_a05641accfd52893b28e83
 \item 
 QPointF \mbox{\hyperlink{class_view_a885148211b08f1a59af7e5a7c62f02c5}{preview\+Point}}
 \item 
-qreal \mbox{\hyperlink{class_view_a87ad130358843fcce769bff7051fb04f}{preview\+Data}}
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_view_a642276143e269508f379180b31319302}{preview\+Data}}
 \item 
 int \mbox{\hyperlink{class_view_a194662792e409503604b400fe7d2abe8}{preview\+Mode}}
 \item 
@@ -561,11 +557,11 @@ int \mbox{\hyperlink{class_view_ae8d25dfb73d42c4a5395fcecaaabe399}{pan\+StartY}}
 \doxyparagraph{\texorpdfstring{loadRulerSettings()}{loadRulerSettings()}}
 {\footnotesize\ttfamily void load\+Ruler\+Settings (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
-\mbox{\Hypertarget{class_view_a0d24c4e6576ba8a921fdccb9d89db887}\label{class_view_a0d24c4e6576ba8a921fdccb9d89db887}} 
+\mbox{\Hypertarget{class_view_a9ed050774ee011e27ca9115201f9cd74}\label{class_view_a9ed050774ee011e27ca9115201f9cd74}} 
 \index{View@{View}!mirrorSelected@{mirrorSelected}}
 \index{mirrorSelected@{mirrorSelected}!View@{View}}
 \doxyparagraph{\texorpdfstring{mirrorSelected}{mirrorSelected}}
-{\footnotesize\ttfamily void mirror\+Selected (\begin{DoxyParamCaption}\item[{qreal}]{x1,  }\item[{qreal}]{y1,  }\item[{qreal}]{x2,  }\item[{qreal}]{y2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+{\footnotesize\ttfamily void mirror\+Selected (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x1,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y1,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x2,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
 \mbox{\Hypertarget{class_view_ae04da8b5cfdee7755734bf7b4822aa58}\label{class_view_ae04da8b5cfdee7755734bf7b4822aa58}} 
 \index{View@{View}!mouseDoubleClickEvent@{mouseDoubleClickEvent}}
@@ -597,11 +593,11 @@ int \mbox{\hyperlink{class_view_ae8d25dfb73d42c4a5395fcecaaabe399}{pan\+StartY}}
 \doxyparagraph{\texorpdfstring{moveAction}{moveAction}}
 {\footnotesize\ttfamily void move\+Action (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
-\mbox{\Hypertarget{class_view_ac51e16242e7caa854922c3d00e84cbe2}\label{class_view_ac51e16242e7caa854922c3d00e84cbe2}} 
+\mbox{\Hypertarget{class_view_a623adffaf74d096aeb1896327e3e20e8}\label{class_view_a623adffaf74d096aeb1896327e3e20e8}} 
 \index{View@{View}!moveSelected@{moveSelected}}
 \index{moveSelected@{moveSelected}!View@{View}}
 \doxyparagraph{\texorpdfstring{moveSelected}{moveSelected}}
-{\footnotesize\ttfamily void move\+Selected (\begin{DoxyParamCaption}\item[{qreal}]{dx,  }\item[{qreal}]{dy }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+{\footnotesize\ttfamily void move\+Selected (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{dx,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{dy }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
 \mbox{\Hypertarget{class_view_a50f2a887aea481c21501f0ba17f1ec27}\label{class_view_a50f2a887aea481c21501f0ba17f1ec27}} 
 \index{View@{View}!numSelected@{numSelected}}
@@ -657,29 +653,17 @@ int \mbox{\hyperlink{class_view_ae8d25dfb73d42c4a5395fcecaaabe399}{pan\+StartY}}
 \doxyparagraph{\texorpdfstring{paste}{paste}}
 {\footnotesize\ttfamily void paste (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
-\mbox{\Hypertarget{class_view_a198c35d0f4b77c21af2adcc0d28b3abb}\label{class_view_a198c35d0f4b77c21af2adcc0d28b3abb}} 
-\index{View@{View}!pi@{pi}}
-\index{pi@{pi}!View@{View}}
-\doxyparagraph{\texorpdfstring{pi()}{pi()}}
-{\footnotesize\ttfamily qreal pi (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
-
 \mbox{\Hypertarget{class_view_a70844daf87c63fdfb93c78436fb83215}\label{class_view_a70844daf87c63fdfb93c78436fb83215}} 
 \index{View@{View}!previewOff@{previewOff}}
 \index{previewOff@{previewOff}!View@{View}}
 \doxyparagraph{\texorpdfstring{previewOff}{previewOff}}
 {\footnotesize\ttfamily void preview\+Off (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
-\mbox{\Hypertarget{class_view_a2aaf2120aae14d65a869325c2b3e6179}\label{class_view_a2aaf2120aae14d65a869325c2b3e6179}} 
+\mbox{\Hypertarget{class_view_a9c902dbc194fbd5c9a1187d59ade661f}\label{class_view_a9c902dbc194fbd5c9a1187d59ade661f}} 
 \index{View@{View}!previewOn@{previewOn}}
 \index{previewOn@{previewOn}!View@{View}}
 \doxyparagraph{\texorpdfstring{previewOn}{previewOn}}
-{\footnotesize\ttfamily void preview\+On (\begin{DoxyParamCaption}\item[{int}]{clone,  }\item[{int}]{mode,  }\item[{qreal}]{x,  }\item[{qreal}]{y,  }\item[{qreal}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
-
-\mbox{\Hypertarget{class_view_ac59979622741dac009ccdbeac2503662}\label{class_view_ac59979622741dac009ccdbeac2503662}} 
-\index{View@{View}!radians@{radians}}
-\index{radians@{radians}!View@{View}}
-\doxyparagraph{\texorpdfstring{radians()}{radians()}}
-{\footnotesize\ttfamily qreal radians (\begin{DoxyParamCaption}\item[{qreal}]{degrees }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+{\footnotesize\ttfamily void preview\+On (\begin{DoxyParamCaption}\item[{int}]{clone,  }\item[{int}]{mode,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
 \mbox{\Hypertarget{class_view_ac6217db074fb196b438586032cce55e2}\label{class_view_ac6217db074fb196b438586032cce55e2}} 
 \index{View@{View}!recalculateLimits@{recalculateLimits}}
@@ -699,11 +683,11 @@ int \mbox{\hyperlink{class_view_ae8d25dfb73d42c4a5395fcecaaabe399}{pan\+StartY}}
 \doxyparagraph{\texorpdfstring{rotateAction}{rotateAction}}
 {\footnotesize\ttfamily void rotate\+Action (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
-\mbox{\Hypertarget{class_view_a2eb33ba1e11c6e53493564917b3ae4fa}\label{class_view_a2eb33ba1e11c6e53493564917b3ae4fa}} 
+\mbox{\Hypertarget{class_view_ace9d0d298fb5fa83d16c0f79a3c38bc0}\label{class_view_ace9d0d298fb5fa83d16c0f79a3c38bc0}} 
 \index{View@{View}!rotateSelected@{rotateSelected}}
 \index{rotateSelected@{rotateSelected}!View@{View}}
 \doxyparagraph{\texorpdfstring{rotateSelected}{rotateSelected}}
-{\footnotesize\ttfamily void rotate\+Selected (\begin{DoxyParamCaption}\item[{qreal}]{x,  }\item[{qreal}]{y,  }\item[{qreal}]{rot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+{\footnotesize\ttfamily void rotate\+Selected (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{rot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
 \mbox{\Hypertarget{class_view_aff2e842454cfe5eda3cc35acdb9f8ff6}\label{class_view_aff2e842454cfe5eda3cc35acdb9f8ff6}} 
 \index{View@{View}!roundToMultiple@{roundToMultiple}}
@@ -717,11 +701,11 @@ int \mbox{\hyperlink{class_view_ae8d25dfb73d42c4a5395fcecaaabe399}{pan\+StartY}}
 \doxyparagraph{\texorpdfstring{scaleAction}{scaleAction}}
 {\footnotesize\ttfamily void scale\+Action (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
-\mbox{\Hypertarget{class_view_ae8656e711caf4f6d627411ba87f5507c}\label{class_view_ae8656e711caf4f6d627411ba87f5507c}} 
+\mbox{\Hypertarget{class_view_a2bbeb3f32ac3ea741a41a4858544d435}\label{class_view_a2bbeb3f32ac3ea741a41a4858544d435}} 
 \index{View@{View}!scaleSelected@{scaleSelected}}
 \index{scaleSelected@{scaleSelected}!View@{View}}
 \doxyparagraph{\texorpdfstring{scaleSelected}{scaleSelected}}
-{\footnotesize\ttfamily void scale\+Selected (\begin{DoxyParamCaption}\item[{qreal}]{x,  }\item[{qreal}]{y,  }\item[{qreal}]{factor }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+{\footnotesize\ttfamily void scale\+Selected (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{factor }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
 \mbox{\Hypertarget{class_view_ab6658ed404200bd7aaca5629db064645}\label{class_view_ab6658ed404200bd7aaca5629db064645}} 
 \index{View@{View}!selectAll@{selectAll}}
@@ -1116,11 +1100,11 @@ int \mbox{\hyperlink{class_view_ae8d25dfb73d42c4a5395fcecaaabe399}{pan\+StartY}}
 \doxyparagraph{\texorpdfstring{previewActive}{previewActive}}
 {\footnotesize\ttfamily bool preview\+Active\hspace{0.3cm}{\ttfamily [private]}}
 
-\mbox{\Hypertarget{class_view_a87ad130358843fcce769bff7051fb04f}\label{class_view_a87ad130358843fcce769bff7051fb04f}} 
+\mbox{\Hypertarget{class_view_a642276143e269508f379180b31319302}\label{class_view_a642276143e269508f379180b31319302}} 
 \index{View@{View}!previewData@{previewData}}
 \index{previewData@{previewData}!View@{View}}
 \doxyparagraph{\texorpdfstring{previewData}{previewData}}
-{\footnotesize\ttfamily qreal preview\+Data\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} preview\+Data\hspace{0.3cm}{\ttfamily [private]}}
 
 \mbox{\Hypertarget{class_view_a194662792e409503604b400fe7d2abe8}\label{class_view_a194662792e409503604b400fe7d2abe8}} 
 \index{View@{View}!previewMode@{previewMode}}
@@ -1288,5 +1272,5 @@ int \mbox{\hyperlink{class_view_ae8d25dfb73d42c4a5395fcecaaabe399}{pan\+StartY}}
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-embroidermodder2/\mbox{\hyperlink{view_8h}{view.\+h}}\item 
+embroidermodder2/\mbox{\hyperlink{embroidermodder_8h}{embroidermodder.\+h}}\item 
 embroidermodder2/\mbox{\hyperlink{view_8cpp}{view.\+cpp}}\end{DoxyCompactItemize}

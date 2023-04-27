@@ -8,9 +8,6 @@ var hierarchy =
     [ "_bcf_file_header", "struct__bcf__file__header.html", null ],
     [ "_vp3Hoop", "struct__vp3_hoop.html", null ],
     [ "Compress", "struct_compress.html", null ],
-    [ "Dictionary_", "struct_dictionary__.html", null ],
-    [ "DictionaryEntry_", "struct_dictionary_entry__.html", null ],
-    [ "EmbAction_", "struct_emb_action__.html", null ],
     [ "EmbAlignedDim_", "struct_emb_aligned_dim__.html", null ],
     [ "EmbAngularDim_", "struct_emb_angular_dim__.html", null ],
     [ "EmbArc_", "struct_emb_arc__.html", null ],
@@ -23,7 +20,6 @@ var hierarchy =
     [ "EmbDiameterDim_", "struct_emb_diameter_dim__.html", null ],
     [ "EmbEllipse_", "struct_emb_ellipse__.html", null ],
     [ "EmbFormatList_", "struct_emb_format_list__.html", null ],
-    [ "EmbFunction_", "struct_emb_function__.html", null ],
     [ "EmbGeometry_", "struct_emb_geometry__.html", null ],
     [ "EmbImage_", "struct_emb_image__.html", null ],
     [ "EmbInfiniteLine_", "struct_emb_infinite_line__.html", null ],
@@ -39,7 +35,6 @@ var hierarchy =
     [ "EmbRay_", "struct_emb_ray__.html", null ],
     [ "EmbRect_", "struct_emb_rect__.html", null ],
     [ "EmbSatinOutline_", "struct_emb_satin_outline__.html", null ],
-    [ "EmbScriptContext_", "struct_emb_script_context__.html", null ],
     [ "EmbSpline_", "struct_emb_spline__.html", null ],
     [ "EmbStitch_", "struct_emb_stitch__.html", null ],
     [ "EmbTextMulti_", "struct_emb_text_multi__.html", null ],
@@ -50,8 +45,6 @@ var hierarchy =
     [ "EmbView_", "struct_emb_view__.html", null ],
     [ "hoop_padding", "structhoop__padding.html", null ],
     [ "Huffman", "struct_huffman.html", null ],
-    [ "Index_", "struct_index__.html", null ],
-    [ "IndexEntry_", "struct_index_entry__.html", null ],
     [ "LSYSTEM", "struct_l_s_y_s_t_e_m.html", null ],
     [ "QApplication", null, [
       [ "Application", "class_application.html", null ]
@@ -135,7 +128,6 @@ var hierarchy =
       [ "ImageWidget", "class_image_widget.html", null ]
     ] ],
     [ "Settings_", "struct_settings__.html", null ],
-    [ "string_", "structstd_1_1string__.html", null ],
     [ "StxThread_", "struct_stx_thread__.html", null ],
     [ "SubDescriptor_", "struct_sub_descriptor__.html", null ],
     [ "SvgAttribute_", "struct_svg_attribute__.html", null ],
