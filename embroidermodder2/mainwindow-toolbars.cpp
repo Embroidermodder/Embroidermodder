@@ -27,18 +27,18 @@ void MainWindow::createFileToolbar()
     qDebug("MainWindow createFileToolbar()");
 
     toolbarFile->setObjectName("toolbarFile");
-    toolbarFile->addAction(actionHash.value(ACTION_new));
-    toolbarFile->addAction(actionHash.value(ACTION_open));
-    toolbarFile->addAction(actionHash.value(ACTION_save));
-    toolbarFile->addAction(actionHash.value(ACTION_saveas));
-    toolbarFile->addAction(actionHash.value(ACTION_print));
-    toolbarFile->addAction(actionHash.value(ACTION_designdetails));
+    toolbarFile->addAction(actionHash[ACTION_new]);
+    toolbarFile->addAction(actionHash[ACTION_open]);
+    toolbarFile->addAction(actionHash[ACTION_save]);
+    toolbarFile->addAction(actionHash[ACTION_saveas]);
+    toolbarFile->addAction(actionHash[ACTION_print]);
+    toolbarFile->addAction(actionHash[ACTION_designdetails]);
 
     toolbarFile->addSeparator();
-    toolbarFile->addAction(actionHash.value(ACTION_undo));
-    toolbarFile->addAction(actionHash.value(ACTION_redo));
+    toolbarFile->addAction(actionHash[ACTION_undo]);
+    toolbarFile->addAction(actionHash[ACTION_redo]);
     toolbarFile->addSeparator();
-    toolbarFile->addAction(actionHash.value(ACTION_help));
+    toolbarFile->addAction(actionHash[ACTION_help]);
 
     connect(toolbarFile, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
@@ -51,9 +51,9 @@ void MainWindow::createEditToolbar()
     qDebug("MainWindow createEditToolbar()");
 
     toolbarEdit->setObjectName("toolbarEdit");
-    toolbarEdit->addAction(actionHash.value(ACTION_cut));
-    toolbarEdit->addAction(actionHash.value(ACTION_copy));
-    toolbarEdit->addAction(actionHash.value(ACTION_paste));
+    toolbarEdit->addAction(actionHash[ACTION_cut]);
+    toolbarEdit->addAction(actionHash[ACTION_copy]);
+    toolbarEdit->addAction(actionHash[ACTION_paste]);
 
     connect(toolbarEdit, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
@@ -63,8 +63,8 @@ void MainWindow::createViewToolbar()
     qDebug("MainWindow createViewToolbar()");
 
     toolbarView->setObjectName("toolbarView");
-    toolbarView->addAction(actionHash.value(ACTION_day));
-    toolbarView->addAction(actionHash.value(ACTION_night));
+    toolbarView->addAction(actionHash[ACTION_day]);
+    toolbarView->addAction(actionHash[ACTION_night]);
 
     connect(toolbarView, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
@@ -74,17 +74,17 @@ void MainWindow::createZoomToolbar()
     qDebug("MainWindow createZoomToolbar()");
 
     toolbarZoom->setObjectName("toolbarZoom");
-    toolbarZoom->addAction(actionHash.value(ACTION_zoomwindow));
-    toolbarZoom->addAction(actionHash.value(ACTION_zoomdynamic));
-    toolbarZoom->addAction(actionHash.value(ACTION_zoomscale));
+    toolbarZoom->addAction(actionHash[ACTION_zoomwindow]);
+    toolbarZoom->addAction(actionHash[ACTION_zoomdynamic]);
+    toolbarZoom->addAction(actionHash[ACTION_zoomscale]);
     toolbarZoom->addSeparator();
-    toolbarZoom->addAction(actionHash.value(ACTION_zoomcenter));
-    toolbarZoom->addAction(actionHash.value(ACTION_zoomin));
-    toolbarZoom->addAction(actionHash.value(ACTION_zoomout));
+    toolbarZoom->addAction(actionHash[ACTION_zoomcenter]);
+    toolbarZoom->addAction(actionHash[ACTION_zoomin]);
+    toolbarZoom->addAction(actionHash[ACTION_zoomout]);
     toolbarZoom->addSeparator();
-    toolbarZoom->addAction(actionHash.value(ACTION_zoomselected));
-    toolbarZoom->addAction(actionHash.value(ACTION_zoomall));
-    toolbarZoom->addAction(actionHash.value(ACTION_zoomextents));
+    toolbarZoom->addAction(actionHash[ACTION_zoomselected]);
+    toolbarZoom->addAction(actionHash[ACTION_zoomall]);
+    toolbarZoom->addAction(actionHash[ACTION_zoomextents]);
 
     connect(toolbarZoom, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
@@ -97,13 +97,13 @@ void MainWindow::createPanToolbar()
     qDebug("MainWindow createPanToolbar()");
 
     toolbarPan->setObjectName("toolbarPan");
-    toolbarPan->addAction(actionHash.value(ACTION_panrealtime));
-    toolbarPan->addAction(actionHash.value(ACTION_panpoint));
+    toolbarPan->addAction(actionHash[ACTION_panrealtime]);
+    toolbarPan->addAction(actionHash[ACTION_panpoint]);
     toolbarPan->addSeparator();
-    toolbarPan->addAction(actionHash.value(ACTION_panleft));
-    toolbarPan->addAction(actionHash.value(ACTION_panright));
-    toolbarPan->addAction(actionHash.value(ACTION_panup));
-    toolbarPan->addAction(actionHash.value(ACTION_pandown));
+    toolbarPan->addAction(actionHash[ACTION_panleft]);
+    toolbarPan->addAction(actionHash[ACTION_panright]);
+    toolbarPan->addAction(actionHash[ACTION_panup]);
+    toolbarPan->addAction(actionHash[ACTION_pandown]);
 
     connect(toolbarPan, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
@@ -116,12 +116,12 @@ void MainWindow::createIconToolbar()
     qDebug("MainWindow createIconToolbar()");
 
     toolbarIcon->setObjectName("toolbarIcon");
-    toolbarIcon->addAction(actionHash.value(ACTION_icon16));
-    toolbarIcon->addAction(actionHash.value(ACTION_icon24));
-    toolbarIcon->addAction(actionHash.value(ACTION_icon32));
-    toolbarIcon->addAction(actionHash.value(ACTION_icon48));
-    toolbarIcon->addAction(actionHash.value(ACTION_icon64));
-    toolbarIcon->addAction(actionHash.value(ACTION_icon128));
+    toolbarIcon->addAction(actionHash[ACTION_icon16]);
+    toolbarIcon->addAction(actionHash[ACTION_icon24]);
+    toolbarIcon->addAction(actionHash[ACTION_icon32]);
+    toolbarIcon->addAction(actionHash[ACTION_icon48]);
+    toolbarIcon->addAction(actionHash[ACTION_icon64]);
+    toolbarIcon->addAction(actionHash[ACTION_icon128]);
 
     connect(toolbarIcon, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
@@ -134,13 +134,13 @@ void MainWindow::createHelpToolbar()
     qDebug("MainWindow createHelpToolbar()");
 
     toolbarHelp->setObjectName("toolbarHelp");
-    toolbarHelp->addAction(actionHash.value(ACTION_help));
+    toolbarHelp->addAction(actionHash[ACTION_help]);
     toolbarHelp->addSeparator();
-    toolbarHelp->addAction(actionHash.value(ACTION_changelog));
+    toolbarHelp->addAction(actionHash[ACTION_changelog]);
     toolbarHelp->addSeparator();
-    toolbarHelp->addAction(actionHash.value(ACTION_about));
+    toolbarHelp->addAction(actionHash[ACTION_about]);
     toolbarHelp->addSeparator();
-    toolbarHelp->addAction(actionHash.value(ACTION_whatsthis));
+    toolbarHelp->addAction(actionHash[ACTION_whatsthis]);
 
     connect(toolbarHelp, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
@@ -153,8 +153,8 @@ void MainWindow::createLayerToolbar()
     qDebug("MainWindow createLayerToolbar()");
 
     toolbarLayer->setObjectName("toolbarLayer");
-    toolbarLayer->addAction(actionHash.value(ACTION_makelayercurrent));
-    toolbarLayer->addAction(actionHash.value(ACTION_layers));
+    toolbarLayer->addAction(actionHash[ACTION_makelayercurrent]);
+    toolbarLayer->addAction(actionHash[ACTION_layers]);
 
     QString appDir = qApp->applicationDirPath();
     QString icontheme = settings_general_icon_theme;
@@ -175,7 +175,7 @@ void MainWindow::createLayerToolbar()
     toolbarLayer->addWidget(layerSelector);
     connect(layerSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(layerSelectorIndexChanged(int)));
 
-    toolbarLayer->addAction(actionHash.value(ACTION_layerprevious));
+    toolbarLayer->addAction(actionHash[ACTION_layerprevious]);
 
     connect(toolbarLayer, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
@@ -271,16 +271,16 @@ MainWindow::createTextToolbar()
     textFontSelector->setCurrentFont(QFont(settings_text_font));
     connect(textFontSelector, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(textFontSelectorCurrentFontChanged(const QFont&)));
 
-    toolbarText->addAction(actionHash.value(ACTION_textbold));
-    actionHash.value(ACTION_textbold)->setChecked(settings_text_style_bold);
-    toolbarText->addAction(actionHash.value(ACTION_textitalic));
-    actionHash.value(ACTION_textitalic)->setChecked(settings_text_style_italic);
-    toolbarText->addAction(actionHash.value(ACTION_textunderline));
-    actionHash.value(ACTION_textunderline)->setChecked(settings_text_style_underline);
-    toolbarText->addAction(actionHash.value(ACTION_textstrikeout));
-    actionHash.value(ACTION_textstrikeout)->setChecked(settings_text_style_strikeout);
-    toolbarText->addAction(actionHash.value(ACTION_textoverline));
-    actionHash.value(ACTION_textoverline)->setChecked(settings_text_style_overline);
+    toolbarText->addAction(actionHash[ACTION_textbold]);
+    actionHash[ACTION_textbold]->setChecked(settings_text_style_bold);
+    toolbarText->addAction(actionHash[ACTION_textitalic]);
+    actionHash[ACTION_textitalic]->setChecked(settings_text_style_italic);
+    toolbarText->addAction(actionHash[ACTION_textunderline]);
+    actionHash[ACTION_textunderline]->setChecked(settings_text_style_underline);
+    toolbarText->addAction(actionHash[ACTION_textstrikeout]);
+    actionHash[ACTION_textstrikeout]->setChecked(settings_text_style_strikeout);
+    toolbarText->addAction(actionHash[ACTION_textoverline]);
+    actionHash[ACTION_textoverline]->setChecked(settings_text_style_overline);
 
     textSizeSelector->setFocusProxy(prompt);
     textSizeSelector->addItem("6 pt",   6);
