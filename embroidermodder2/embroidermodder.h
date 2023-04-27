@@ -2009,7 +2009,7 @@ protected:
     QStringList listTipOfTheDay;
 
     void createAllActions();
-    QAction* createAction(const QString icon, const QString toolTip, const QString statusTip, bool scripted = false);
+    QAction* createAction(const QString icon, const QString toolTip, const QString statusTip, QString shortcut="", bool scripted = false);
 
     //Toolbars
     //====================================================
