@@ -3,7 +3,7 @@
  *
  *  ------------------------------------------------------------
  *
- *  Copyright 2013-2022 The Embroidermodder Team
+ *  Copyright 2013-2023 The Embroidermodder Team
  *  Embroidermodder 2 is Open Source Software.
  *  See LICENSE for licensing terms.
  *
@@ -19,12 +19,168 @@
 
 #include "embroidermodder.h"
 
+#include <cerrno>
 #include <iostream>
 #include <fstream>
+
+typedef struct Parameter_ {
+    std::string s_value;
+    EmbReal r_value;
+    int i_value;
+} Parameter;
+
+static const int CIRCLE_MODE_1P_RAD_ = 0;
+static const int CIRCLE_MODE_1P_DIA_ = 1;
+static const int CIRCLE_MODE_2P_     = 2;
+static const int CIRCLE_MODE_3P_     = 3;
+static const int CIRCLE_MODE_TTR_    = 4;
+
+static const int DOLPHIN_MODE_NUM_POINTS_ = 0;
+static const int DOLPHIN_MODE_XSCALE_     = 1;
+static const int DOLPHIN_MODE_YSCALE_     = 2;
+
+static const int SINGLE_LINE_TEXT_MODE_JUSTIFY_ = 0;
+static const int SINGLE_LINE_TEXT_MODE_SETFONT_ = 1;
+static const int SINGLE_LINE_TEXT_MODE_SETGEOM_ = 2;
+static const int SINGLE_LINE_TEXT_MODE_RAPID_   = 3;
+
+static const int STAR_MODE_NUM_POINTS_ = 0;
+static const int STAR_MODE_CENTER_PT_  = 1;
+static const int STAR_MODE_RAD_OUTER_  = 2;
+static const int STAR_MODE_RAD_INNER_  = 3;
 
 MainWindow* _mainWin = 0;
 std::vector<Action> action_table;
 QStringList action_labels;
+
+/**
+ * The actuator changes the program state via these global variables.
+ */
+Settings settings;
+
+Index *menu_layout; /*< */
+Index *toolbar_layout;  /*< */
+EmbView views[50]; /*< */
+int n_views = 0; /*< */
+
+/**
+ * These copies of the settings struct are for restoring the state if
+ * the user doesn't want to accept their changes in the settings dialog.
+ */
+Settings dialog, preview;
+
+Dictionary *translation_table;
+
+/**
+ * The view focussed (that is the last view to have a click or keypress sent):
+ * this has to be manually set whenever it changes including being set to NULL when
+ * all views are closed.
+ */
+EmbView *active_view = NULL;
+
+/**
+ * .
+ */
+void
+c_split(char input[200], int *argc, char argv[10][200])
+{
+    *argc = 0;
+    char buffer[200];
+    strcpy(buffer, input);
+    char *p = strtok(buffer, " ");
+    for (int i=0; i<10; i++) {
+        strcpy(argv[*argc], p);
+        (*argc)++;
+        p = strtok(NULL, " ");
+        if (p == NULL) {
+            break;
+        }
+    }
+}
+
+/**
+ * @brief Simplifies a path by removing the .. and . symbols in place.
+ *
+ * \a path The character array to operate on.
+ */
+void
+simplify_path(char *path)
+{
+    char storage[200];
+    strcpy(storage, path);
+    char *separator = "/";
+#if _WIN32
+    separator = "\\";
+#endif
+    char tokens_to_use[30][100];
+    int n_tokens = 0;
+    char *token = strtok(storage, separator);
+    while (token != NULL) {
+        if (!strcmp(token, "..")) {
+            n_tokens--;
+        }
+        if (strcmp(token, "..") && strcmp(token, ".") && strcmp(token, "")) {
+            strcpy(tokens_to_use[n_tokens], token);
+            n_tokens++;
+        }
+        token = strtok(NULL, separator);
+    }
+
+#if _WIN32
+    strcpy(path, "");
+#else
+    strcpy(path, "/");
+#endif
+
+    for (int i=0; i<n_tokens; i++) {
+        strcat(path, tokens_to_use[i]);
+        if (i < n_tokens-1) {
+            strcat(path, separator);
+        }
+    }
+}
+
+/**
+ * \brief Read the settings from file which aren't editable by the user.
+ * These files need to be placed in the install folder.
+ */
+int
+read_settings(const char *settings_file)
+{
+    char error_buffer[200];
+    FILE *f;
+    f = fopen(settings_file, "r");
+    if (!f) {
+        puts("ERROR: Failed to open settings file:");
+        printf("%s", settings_file);
+        return 0;
+    }
+    toml_table_t *setting_toml = toml_parse_file(f, error_buffer, sizeof(error_buffer));
+    fclose(f);
+
+    if (!setting_toml) {
+        puts("ERROR: failed to parse settings.toml, continuing with defaults.");
+        return 0;
+    }
+
+    return 1;
+}
+
+/**
+ * @brief .
+ */
+bool
+validRGB(int r, int g, int b)
+{
+    return !(
+          std::isnan(r)
+        | std::isnan(b)
+        | std::isnan(g)
+        | (r < 0 || r > 255)
+        | (g < 0 || g > 255)
+        | (b < 0 || b > 255)
+    );
+}
 
 /**
  * @brief mainWin
@@ -372,6 +528,7 @@ MainWindow::run_script(std::vector<std::string> script)
 std::string
 MainWindow::actuator(std::string command)
 {
+    Parameter result[10];
     if (command == "about") {
         about();
         return "";
@@ -558,10 +715,21 @@ MainWindow::actuator(std::string command)
         return nativeTextOverline();
     }
     if (command == "set text font") {
-        output = ""; setTextFont(args[0]);
+        std::string error = convert_args_to_type("SetTextSize()", args, "s", result);
+        if (error != "") {
+            return error;
+        }
+
+        setTextFont(results[0].s_value);
         return "";
     }
-    if (command == "set text size", output = ""; setTextSize(atoi(args[0]));}
+    if (command == "set text size") {
+        std::string error = convert_args_to_type("SetTextSize()", args, "i", result);
+        if (error != "") {
+            return error;
+        }
+
+        mainWin()->setTextSize(result[0].r_value);
         return "";
     }
     if (command == "set text angle",  output = ""; setTextAngle(args[0]);}
@@ -570,16 +738,20 @@ MainWindow::actuator(std::string command)
     if (command == "set text bold", output = ""; nativeTextBold(args[0]);}
         return "";
     }
-    if (command == "set text italic", output = ""; nativeTextItalic(args[0]);}
+    if (command == "set text italic") {
+        nativeTextItalic(args[0]);
         return "";
     }
-    if (command == "set text underline", output = ""; nativeTextUnderline(args[0]);}
+    if (command == "set text underline") {
+        nativeTextUnderline(args[0]);}
         return "";
     }
-    if (command == "set text strikeout", output = ""; nativeTextStrikeOut(args[0]);}
+    if (command == "set text strikeout") {
+        nativeTextStrikeOut(args[0]);}
         return "";
     }
-    if (command == "set text overline", output = ""; nativeTextOverline(args[0]);}
+    if (command == "set text overline") {
+        nativeTextOverline(args[0]);}
         return "";
     }
 
@@ -587,10 +759,12 @@ MainWindow::actuator(std::string command)
         output = nativeNumSelected();
         return "";
     }
-    if (command == "select all") { nativeSelectAll();
+    if (command == "select all") {
+        nativeSelectAll();
         return "";
     }
-    if (command == "add to selection") { AddToSelection();}
+    if (command == "add to selection") {
+        AddToSelection();
         return "";
     }
     if (command == "clear selection") { nativeClearSelection();}
@@ -866,7 +1040,8 @@ MainWindow::actuator(std::string command)
 }
 
 /*
-void MainWindow::LoadCommand(QString cmdName)
+void
+MainWindow::LoadCommand(QString cmdName)
 {
     qDebug("LoadCommand(%s)", qPrintable(cmdName));
     //NOTE: Every QScriptProgram must have a unique function name to call. If every function was called main(), then
@@ -1012,11 +1187,65 @@ void MainWindow::LoadCommand(QString cmdName)
 }
 */
 
+/**
+ * @brief Inspired by PyArg_ParseTupleAndKeywords allowing
+ * a uniform argument parsing framework.
+ * @param label The caller's name.
+ * @param args The list of strings passed from the user.
+ * @param args_template The string of characters describing the types of the output.
+ * @param result The fixed length array of results.
+ * @return An error message if an error occured or an empty string if it passes.
+ */
+std::string
+convert_args_to_type(
+    std::string label,
+    std::vector<std::string> args,
+    const char *args_template,
+    Parameter result[10])
+{
+    int n_args = (int)args.size();
+    int required_args = strlen(args_template);
+    if (n_args < required_args) {
+        std::string required = std::to_string(required_args);
+        return "ERROR: " + label + "requires" + required + "arguments";
+    }
+    int n_results = std::min(10, n_args);
+    for (int i=0; i<n_results; i++) {
+        switch (args_template[i]) {
+        case 'i':
+            result[i].i_value = stoi(args[i]);
+            if (errno == EINVAL) {
+                return "TYPE ERROR: failed to convert argument " + std::to_string(i) + " to int.";
+            }
+            if (errno == ERANGE) {
+                return "RANGE ERROR: argument " + std::to_string(i) + " out of range.";
+            }
+            break;
+        case 'r':
+            result[i].r_value = stof(args[i]);
+            if (errno == EINVAL) {
+                return "TYPE ERROR: failed to convert argument " + std::to_string(i) + " to floating point.";
+            }
+            if (std::isnan(result[i].r_value)) {
+                return "NaN ERROR: argument " + std::to_string(i) + " is not a number.";
+            }
+            break;
+        case 's':
+            result[i].s_value = args[i];
+            break;
+        default:
+            break;
+        }
+    }
+    /* Empty string meaning "passes". */
+    return "";
+}
+
 /*
 std::string
 Include(std::vector<std::string> args, QScriptEngine* engine)
 {
-    EmbString fileName = args(0).toString();
+    EmbString fileName = result[0].s_value;
     QFile scriptFile("commands/" + fileName);
 
     if (!scriptFile.open(QIODevice::ReadOnly))
@@ -1041,24 +1270,15 @@ Include(std::vector<std::string> args, QScriptEngine* engine)
     */
 
 /**
- * "debug": qDebug("%s", qPrintable(args(0).toString()));
+ * "debug": qDebug("%s", qPrintable(result[0].s_value));
  */
 std::string
-Error(std::vector<std::string> args)
+Error(Parameter args[10])
 {
     /*
-    if (args.size() != 2) {
-        return "ERROR: error() requires two arguments");
-    }
-    if (!args(0).isString()) {
-        return "TYPE ERROR: error(): first argument is not a string");
-    }
-    if (!args(1).isString()) {
-        return "TYPE ERROR: error(): second argument is not a string");
-    }
 
-    EmbString strCmd = args(0).toString();
-    EmbString strErr = args(1).toString();
+    EmbString strCmd = result[0].s_value;
+    EmbString strErr = result[1].s_value;
 
     mainWin()->setPromptPrefix("ERROR: (" + strCmd + ") " + strErr);
     mainWin()->nativeAppendPromptHistory(QString());
@@ -1068,18 +1288,11 @@ Error(std::vector<std::string> args)
 }
 
 std::string
-Todo(std::vector<std::string> args)
+Todo(Parameter result[10])
 {
     /*
-    if (args.size() != 2)
-        return "ERROR: todo() requires two arguments");
-    if (!args(0).isString())
-        return "TYPE ERROR: todo(): first argument is not a string");
-    if (!args(1).isString())
-        return "TYPE ERROR: todo(): second argument is not a string");
-
-    EmbString strCmd  = args(0).toString();
-    EmbString strTodo = args(1).toString();
+    EmbString strCmd  = result[0].s_value;
+    EmbString strTodo = result[1].s_value;
 
     mainWin()->nativeAlert("TODO: (" + strCmd + ") " + strTodo);
     mainWin()->nativeEndCommand();
@@ -1090,7 +1303,7 @@ Todo(std::vector<std::string> args)
 #if 0
 
 std::string
-AppendPromptHistory(std::vector<std::string> args)
+AppendPromptHistory(Parameter result[10])
 {
     int args = args.size();
     if (args == 0)
@@ -1099,7 +1312,7 @@ AppendPromptHistory(std::vector<std::string> args)
     }
     else if (args == 1)
     {
-        mainWin()->nativeAppendPromptHistory(args(0).toString());
+        mainWin()->nativeAppendPromptHistory(result[0].s_value);
     }
     else
     {
@@ -1108,19 +1321,16 @@ AppendPromptHistory(std::vector<std::string> args)
     return "";
 }
 
-
+/**
+ * argument string "sss"
+ */
 std::string
-MessageBox(std::vector<std::string> args)
+MessageBox(Parameter result[10])
 {
     /*
-    if (args.size() != 3)    return "ERROR: messageBox() requires three arguments");
-    if (!args(0).isString()) return "TYPE ERROR: messageBox(): first argument is not a string");
-    if (!args(1).isString()) return "TYPE ERROR: messageBox(): second argument is not a string");
-    if (!args(2).isString()) return "TYPE ERROR: messageBox(): third argument is not a string");
-
-    EmbString type  = args(0).toString().toLower();
-    EmbString title = args(1).toString();
-    EmbString text  = args(2).toString();
+    EmbString type  = result[0].s_value.toLower();
+    EmbString title = result[1].s_value;
+    EmbString text  = result[2].s_value;
 
     if (type != "critical" && type != "information" && type != "question" && type != "warning")
         return context->throwError(QScriptContext::UnknownError, "messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
@@ -1130,62 +1340,44 @@ MessageBox(std::vector<std::string> args)
     return "";
 }
 
+/**
+ * argument string "i"
+ */
 std::string
-IsInt(std::vector<std::string> args)
+IsInt(Parameter result[10])
 {
-    if (args.size() != 1)    return "ERROR: isInt() requires one argument");
-    if (!args(0).isNumber()) return "TYPE ERROR: isInt(): first argument is not a number");
+    std::string error = convert_args_to_type("IsInt()", args, "i", result);
+    if (error != "") {
+        return std::string(false);
+    }
 
-    EmbReal num = args(0).toNumber();
-
-    //isNaN check
-    if (std::isnan(num)) return "TYPE ERROR: isInt(): first argument failed isNaN check. There is an error in your code.");
-
-    if (fmod(num, 1) == 0)
-        return std::string(true);
-    return std::string(false);
+    return std::string(true);
 }
 
+/**
+ * argument string "rrrr"
+ */
 std::string
-PrintArea(std::vector<std::string> args)
+PrintArea(Parameter result[10])
 {
-    if (args.size() != 4)    return "ERROR: printArea() requires four arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: printArea(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: printArea(): second argument is not a number");
-    if (!args(2).isNumber()) return "TYPE ERROR: printArea(): third argument is not a number");
-    if (!args(3).isNumber()) return "TYPE ERROR: printArea(): fourth argument is not a number");
-
-    EmbReal x = args(0).toNumber();
-    EmbReal y = args(1).toNumber();
-    EmbReal w = args(2).toNumber();
-    EmbReal h = args(3).toNumber();
-
-    //isNaN check
-    if (std::isnan(x)) return "TYPE ERROR: printArea(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y)) return "TYPE ERROR: printArea(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(w)) return "TYPE ERROR: printArea(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(h)) return "TYPE ERROR: printArea(): fourth argument failed isNaN check. There is an error in your code.");
+    EmbReal x = result[0].r_value;
+    EmbReal y = result[1].r_value;
+    EmbReal w = result[2].r_value;
+    EmbReal h = result[3].r_value;
 
     mainWin()->nativePrintArea(x, y, w, h);
     return "";
 }
 
+/**
+ *
+ */
 std::string
-SetBackgroundColor(std::vector<std::string> args)
+SetBackgroundColor(Parameter result[10])
 {
-    if (args.size() != 3)    return "ERROR: setBackgroundColor() requires three arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: setBackgroundColor(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: setBackgroundColor(): second argument is not a number");
-    if (!args(2).isNumber()) return "TYPE ERROR: setBackgroundColor(): third argument is not a number");
-
-    EmbReal r = args(0).toNumber();
-    EmbReal g = args(1).toNumber();
-    EmbReal b = args(2).toNumber();
-
-    //isNaN check
-    if (std::isnan(r)) return "TYPE ERROR: setBackgroundColor(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(g)) return "TYPE ERROR: setBackgroundColor(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(b)) return "TYPE ERROR: setBackgroundColor(): third argument failed isNaN check. There is an error in your code.");
+    EmbReal r = result[0].r_value;
+    EmbReal g = result[1].r_value;
+    EmbReal b = result[2].r_value;
 
     if (r < 0 || r > 255) { return context->throwError(QScriptContext::UnknownError, "setBackgroundColor(): r value must be in range 0-255"); }
     if (g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setBackgroundColor(): g value must be in range 0-255"); }
@@ -1195,142 +1387,127 @@ SetBackgroundColor(std::vector<std::string> args)
     return "";
 }
 
+/**
+ * .
+ */
 std::string
-SetCrossHairColor(std::vector<std::string> args)
+SetCrossHairColor(Parameter result[10])
 {
-    if (args.size() != 3)    return "ERROR: setCrossHairColor() requires three arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: setCrossHairColor(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: setCrossHairColor(): second argument is not a number");
-    if (!args(2).isNumber()) return "TYPE ERROR: setCrossHairColor(): third argument is not a number");
-
-    int r = args[0].toNumber();
-    int g = args[1].toNumber();
-    int b = args[2].toNumber();
+    int r = args[0].r_value;
+    int g = args[1].r_value;
+    int b = args[2].r_value;
 
     if (!validRGB(r, g, b)) {
     }
 
-    //isNaN check
-    if (std::isnan(r)) return "TYPE ERROR: setCrossHairColor(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(g)) return "TYPE ERROR: setCrossHairColor(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(b)) return "TYPE ERROR: setCrossHairColor(): third argument failed isNaN check. There is an error in your code.");
-
-    if (r < 0 || r > 255) { return context->throwError(QScriptContext::UnknownError, "setCrossHairColor(): r value must be in range 0-255"); }
-    if (g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setCrossHairColor(): g value must be in range 0-255"); }
-    if (b < 0 || b > 255) { return context->throwError(QScriptContext::UnknownError, "setCrossHairColor(): b value must be in range 0-255"); }
+    if (r < 0 || r > 255) {
+        return "ERROR setCrossHairColor(): r value must be in range 0-255";
+    }
+    if (g < 0 || g > 255) {
+        return "ERROR setCrossHairColor(): g value must be in range 0-255";
+    }
+    if (b < 0 || b > 255) {
+        return "ERROR setCrossHairColor(): b value must be in range 0-255";
+    }
 
     mainWin()->setCrossHairColor(r, g, b);
     return "";
 }
 
 std::string
-SetGridColor(std::vector<std::string> args)
+SetGridColor(Parameter result[10])
 {
-    if (args.size() != 3)    return "ERROR: setGridColor() requires three arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: setGridColor(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: setGridColor(): second argument is not a number");
-    if (!args(2).isNumber()) return "TYPE ERROR: setGridColor(): third argument is not a number");
+    int r = result[0].r_value;
+    int g = result[1].r_value;
+    int b = result[2].r_value;
 
-    EmbReal r = args(0).toNumber();
-    EmbReal g = args(1).toNumber();
-    EmbReal b = args(2).toNumber();
-
-    //isNaN check
-    if (std::isnan(r)) return "TYPE ERROR: setGridColor(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(g)) return "TYPE ERROR: setGridColor(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(b)) return "TYPE ERROR: setGridColor(): third argument failed isNaN check. There is an error in your code.");
-
-    if (r < 0 || r > 255) { return context->throwError(QScriptContext::UnknownError, "setGridColor(): r value must be in range 0-255"); }
-    if (g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setGridColor(): g value must be in range 0-255"); }
-    if (b < 0 || b > 255) { return context->throwError(QScriptContext::UnknownError, "setGridColor(): b value must be in range 0-255"); }
+    if (r < 0 || r > 255) {
+        return "ERROR setGridColor(): r value must be in range 0-255";
+    }
+    if (g < 0 || g > 255) {
+        return "ERROR setGridColor(): g value must be in range 0-255";
+    }
+    if (b < 0 || b > 255) {
+        return "ERROR setGridColor(): b value must be in range 0-255";
+    }
 
     mainWin()->setGridColor(r, g, b);
     return "";
 }
 
-SetTextSize(std::vector<std::string> args)
-    if (args.size() != 1)    return "ERROR: setTextSize() requires one argument");
-    if (!args(0).isNumber()) return "TYPE ERROR: setTextSize(): first argument is not a number");
-
-    EmbReal num = args(0).toNumber();
-
-    //isNaN check
-    if (std::isnan(num)) {
-        return "TYPE ERROR: setTextSize(): first argument failed isNaN check. There is an error in your code.");
+std::string
+SetTextAngle(Parameter result[10])
+{
+    std::string error = convert_args_to_type("PrintArea()", args, "r", result);
+    if (error != "") {
+        return error;
     }
 
-    mainWin()->setTextSize(num);
+    mainWin()->setTextAngle(result[0].r_value);
+    return "";
+}
 
-SetTextAngle(std::vector<std::string> args)
-    if (args.size() != 1)    return "ERROR: setTextAngle() requires one argument");
-    if (!args(0).isNumber()) return "TYPE ERROR: setTextAngle(): first argument is not a number");
+/**
+ * .
+ */
+std::string
+SetTextBold(Parameter result[10])
+{
+    mainWin()->setTextBold(result[0].b_value);
+    return "";
+}
 
-    EmbReal num = args(0).toNumber();
+/**
+ * .
+ */
+std::string
+SetTextItalic(Parameter result[10])
+{
+    mainWin()->setTextItalic(result[0].b_value);
+    return "";
+}
 
-    //isNaN check
-    if (std::isnan(num))
-        return "TYPE ERROR: setTextAngle(): first argument failed isNaN check. There is an error in your code.");
+/**
+ * .
+ */
+std::string
+SetTextUnderline(Parameter result[10])
+{
+    mainWin()->setTextUnderline(result[0].toBool());
+    return "";
+}
 
-    mainWin()->setTextAngle(num);
-
-SetTextBold(std::vector<std::string> args)
-    if (args.size() != 1) {
-        return "ERROR: setTextBold() requires one argument");
-    }
-    if (!args(0).isBool()) return "TYPE ERROR: setTextBold(): first argument is not a bool");
-
-    mainWin()->setTextBold(args(0).toBool());
-
-SetTextItalic(std::vector<std::string> args)
-    if (args.size() != 1)
-        return "ERROR: setTextItalic() requires one argument");
-    if (!args(0).isBool())
-        return "TYPE ERROR: setTextItalic(): first argument is not a bool");
-
-    mainWin()->setTextItalic(args[0].toBool());
-
-SetTextUnderline(std::vector<std::string> args)
-    if (args.size() != 1)
-        return "ERROR: setTextUnderline() requires one argument");
-    if (!args(0).isBool())
-        return "TYPE ERROR: setTextUnderline(): first argument is not a bool");
-
-    mainWin()->setTextUnderline(args(0).toBool());
-
-SetTextStrikeOut(std::vector<std::string> args)
-    if (args.size() != 1)    return "ERROR: setTextStrikeOut() requires one argument");
-    if (!args(0).isBool()) return "TYPE ERROR: setTextStrikeOut(): first argument is not a bool");
-
-    mainWin()->setTextStrikeOut(args(0).toBool());
+/**
+ * .
+ */
+std::string
+SetTextStrikeOut(Parameter result[10])
+{
+    mainWin()->setTextStrikeOut(result[0].toBool());
+    return "";
+}
 
 /**
  * \brief
  */
 std::string
-SetTextOverline(std::vector<std::string> args)
+SetTextOverline(Parameter result[10])
 {
-    if (args.size() != 1)    return "ERROR: setTextOverline() requires one argument");
-    if (!args(0).isBool()) return "TYPE ERROR: setTextOverline(): first argument is not a bool");
-
-    mainWin()->setTextOverline(args(0).toBool());
+    mainWin()->setTextOverline(result[0].toBool());
     return "";
 }
 
+/**
+ * .
+ */
 std::string
-PreviewOn(std::vector<std::string> args)
+PreviewOn(Parameter result[10])
 {
-    if (args.size() != 5)    return "ERROR: previewOn() requires five arguments");
-    if (!args(0).isString()) return "TYPE ERROR: previewOn(): first argument is not a string");
-    if (!args(1).isString()) return "TYPE ERROR: previewOn(): second argument is not a string");
-    if (!args(2).isNumber()) return "TYPE ERROR: previewOn(): third argument is not a number");
-    if (!args(3).isNumber()) return "TYPE ERROR: previewOn(): fourth argument is not a number");
-    if (!args(4).isNumber()) return "TYPE ERROR: previewOn(): fifth argument is not a number");
-
-    EmbString cloneStr = args(0).toString().toUpper();
-    EmbString modeStr  = args(1).toString().toUpper();
-    EmbReal x          = args(2).toNumber();
-    EmbReal y          = args(3).toNumber();
-    EmbReal data       = args(4).toNumber();
+    EmbString cloneStr = result[0].s_value.toUpper();
+    EmbString modeStr  = result[1].s_value.toUpper();
+    EmbReal x          = result[2].r_value;
+    EmbReal y          = args(3).r_value;
+    EmbReal data       = args(4).r_value;
 
     int clone = PREVIEW_CLONE_NULL;
     int mode = PREVIEW_MODE_NULL;
@@ -1343,16 +1520,6 @@ PreviewOn(std::vector<std::string> args)
     else if (modeStr == "SCALE") { mode = PREVIEW_MODE_SCALE;  }
     else                         { return context->throwError(QScriptContext::UnknownError, "previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\"."); }
 
-    // isNaN check
-    if (std::isnan(x))
-        return "TYPE ERROR: previewOn(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y))
-        return "TYPE ERROR: previewOn(): fourth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(data)) {
-        return context->throwError(QScriptContext::TypeError,
-            "previewOn(): fifth argument failed isNaN check. There is an error in your code.");
-    }
-
     mainWin()->nativePreviewOn(clone, mode, x, y, data);
     return "";
 }
@@ -1362,12 +1529,9 @@ PreviewOn(std::vector<std::string> args)
 "allow rubber", nativeAllowRubber();
 
 std::string
-SetRubberMode(std::vector<std::string> args)
+SetRubberMode(Parameter result[10])
 {
-    if (args.size() != 1)    return "ERROR: setRubberMode() requires one argument");
-    if (!args(0).isString()) return "TYPE ERROR: setRubberMode(): first argument is not a string");
-
-    EmbString mode = args(0).toString().toUpper();
+    EmbString mode = result[0].s_value.toUpper();
 
     if (mode == "CIRCLE_1P_RAD") {
         mainWin()->setRubberMode(OBJ_RUBBER_CIRCLE_1P_RAD);
@@ -1406,32 +1570,11 @@ SetRubberMode(std::vector<std::string> args)
  * \brief
  */
 std::string
-SetRubberPoint(std::vector<std::string> args)
+SetRubberPoint(Parameter result[10])
 {
-    if (args.size() != 3) {
-        return "ERROR: setRubberPoint() requires three arguments");
-    }
-    if (!args(0).isString()) {
-        return "TYPE ERROR: setRubberPoint(): first argument is not a string");
-    }
-    if (!args(1).isNumber()) {
-        return "TYPE ERROR: setRubberPoint(): second argument is not a number");
-    }
-    if (!args(2).isNumber()) {
-        return "TYPE ERROR: setRubberPoint(): third argument is not a number");
-    }
-
-    EmbString key = args(0).toString().toUpper();
-    EmbReal x = args(1).toNumber();
-    EmbReal y = args(2).toNumber();
-
-    //isNaN check
-    if (std::isnan(x)) {
-        return "TYPE ERROR: setRubberPoint(): second argument failed isNaN check. There is an error in your code.");
-    }
-    if (std::isnan(y)) {
-        return "TYPE ERROR: setRubberPoint(): third argument failed isNaN check. There is an error in your code.");
-    }
+    EmbString key = result[0].s_value.toUpper();
+    EmbReal x = result[1].r_value;
+    EmbReal y = result[2].r_value;
 
     mainWin()->setRubberPoint(key, x, y);
     return "";
@@ -1441,26 +1584,19 @@ SetRubberPoint(std::vector<std::string> args)
  * \brief
  */
 std::string
-SetRubberText(std::vector<std::string> args)
+SetRubberText(Parameter result[10])
 {
-    if (args.size() != 2)    return "ERROR: setRubberText() requires two arguments");
-    if (!args(0).isString()) return "TYPE ERROR: setRubberText(): first argument is not a string");
-    if (!args(1).isString()) return "TYPE ERROR: setRubberText(): second argument is not a string");
-
-    EmbString key = args(0).toString().toUpper();
-    EmbString txt = args(1).toString();
+    EmbString key = result[0].s_value.toUpper();
+    EmbString txt = result[1].s_value;
 
     mainWin()->setRubberText(key, txt);
     return "";
 }
 
 std::string
-AddRubber(std::vector<std::string> args)
+AddRubber(Parameter result[10])
 {
-    if (args.size() != 1)    return "ERROR: addRubber() requires one argument");
-    if (!args(0).isString()) return "TYPE ERROR: addRubber(): first argument is not a string");
-
-    EmbString objType = args(0).toString().toUpper();
+    EmbString objType = result[0].s_value.toUpper();
 
     if (!mainWin()->nativeAllowRubber())
         return context->throwError(QScriptContext::UnknownError, "addRubber(): You must use vulcanize() before you can add another rubber object.");
@@ -1501,12 +1637,9 @@ AddRubber(std::vector<std::string> args)
 "clear rubber", nativeClearRubber();
 
 std::string
-SpareRubber(std::vector<std::string> args)
+SpareRubber(Parameter result[10])
 {
-    if (args.size() != 1)    return "ERROR: spareRubber() requires one argument");
-    if (!args(0).isString()) return "TYPE ERROR: spareRubber(): first argument is not a string");
-
-    EmbString objID = args(0).toString().toUpper();
+    EmbString objID = result[0].s_value.toUpper();
 
     if     (objID == "PATH") { mainWin()->nativeSpareRubber(SPARE_RUBBER_PATH);     }
     else if (objID == "POLYGON") { mainWin()->nativeSpareRubber(SPARE_RUBBER_POLYGON);  }
@@ -1526,50 +1659,26 @@ SpareRubber(std::vector<std::string> args)
  * \brief
  */
 std::string
-AddTextMulti(std::vector<std::string> args)
+AddTextMulti(Parameter result[10])
 {
-    if (args.size() != 5)    return "ERROR: addTextMulti() requires five arguments");
-    if (!args(0).isString()) return "TYPE ERROR: addTextMulti(): first argument is not a string");
-    if (!args(1).isNumber()) return "TYPE ERROR: addTextMulti(): second argument is not a number");
-    if (!args(2).isNumber()) return "TYPE ERROR: addTextMulti(): third argument is not a number");
-    if (!args(3).isNumber()) return "TYPE ERROR: addTextMulti(): fourth argument is not a number");
-    if (!args(4).isBool())   return "TYPE ERROR: addTextMulti(): fifth argument is not a bool");
-
-    EmbString str   = args(0).toString();
-    EmbReal   x     = args(1).toNumber();
-    EmbReal   y     = args(2).toNumber();
-    EmbReal   rot   = args(3).toNumber();
+    EmbString str   = result[0].s_value;
+    EmbReal   x     = result[1].r_value;
+    EmbReal   y     = result[2].r_value;
+    EmbReal   rot   = args(3).r_value;
     bool    fill  = args(4).toBool();
-
-    //isNaN check
-    if (std::isnan(x))   return "TYPE ERROR: addTextMulti(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y))   return "TYPE ERROR: addTextMulti(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(rot)) return "TYPE ERROR: addTextMulti(): fourth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddTextMulti(str, x, y, rot, fill, OBJ_RUBBER_OFF);
     return "";
 }
 
 std::string
-AddTextSingle(std::vector<std::string> args)
+AddTextSingle(Parameter result[10])
 {
-    if (args.size() != 5)    return "ERROR: addTextSingle() requires five arguments");
-    if (!args(0).isString()) return "TYPE ERROR: addTextSingle(): first argument is not a string");
-    if (!args(1).isNumber()) return "TYPE ERROR: addTextSingle(): second argument is not a number");
-    if (!args(2).isNumber()) return "TYPE ERROR: addTextSingle(): third argument is not a number");
-    if (!args(3).isNumber()) return "TYPE ERROR: addTextSingle(): fourth argument is not a number");
-    if (!args(4).isBool())   return "TYPE ERROR: addTextSingle(): fifth argument is not a bool");
-
     EmbString str = args[0];
-    EmbReal x = args(1).toNumber();
-    EmbReal y = args(2).toNumber();
-    EmbReal rot = args(3).toNumber();
+    EmbReal x = result[1].r_value;
+    EmbReal y = result[2].r_value;
+    EmbReal rot = args(3).r_value;
     bool fill  = args(4).toBool();
-
-    //isNaN check
-    if (std::isnan(x))   return "TYPE ERROR: addTextSingle(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y))   return "TYPE ERROR: addTextSingle(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(rot)) return "TYPE ERROR: addTextSingle(): fourth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddTextSingle(str, x, y, rot, fill, OBJ_RUBBER_OFF);
     return "";
@@ -1579,7 +1688,7 @@ AddTextSingle(std::vector<std::string> args)
  * \brief
  */
 std::string
-AddInfiniteLine(std::vector<std::string> args)
+AddInfiniteLine(Parameter result[10])
 {
     //TODO: parameter error checking
     qDebug("TODO: finish addInfiniteLine command");
@@ -1590,7 +1699,7 @@ AddInfiniteLine(std::vector<std::string> args)
  * \brief
  */
 std::string
-AddRay(std::vector<std::string> args)
+AddRay(Parameter result[10])
 {
     //TODO: parameter error checking
     qDebug("TODO: finish addRay command");
@@ -1601,27 +1710,13 @@ AddRay(std::vector<std::string> args)
  * \brief
  */
 std::string
-AddLine(std::vector<std::string> args)
+AddLine(Parameter result[10])
 {
-    if (args.size() != 5)    return "ERROR: addLine() requires five arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: addLine(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: addLine(): second argument is not a number");
-    if (!args(2).isNumber()) return "TYPE ERROR: addLine(): third argument is not a number");
-    if (!args(3).isNumber()) return "TYPE ERROR: addLine(): fourth argument is not a number");
-    if (!args(4).isNumber()) return "TYPE ERROR: addLine(): fifth argument is not a number");
-
-    EmbReal x1  = args(0).toNumber();
-    EmbReal y1  = args(1).toNumber();
-    EmbReal x2  = args(2).toNumber();
-    EmbReal y2  = args(3).toNumber();
-    EmbReal rot = args(4).toNumber();
-
-    //isNaN check
-    if (std::isnan(x1))  return "TYPE ERROR: addLine(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y1))  return "TYPE ERROR: addLine(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(x2))  return "TYPE ERROR: addLine(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y2))  return "TYPE ERROR: addLine(): fourth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(rot)) return "TYPE ERROR: addLine(): fifth argument failed isNaN check. There is an error in your code.");
+    EmbReal x1  = result[0].r_value;
+    EmbReal y1  = result[1].r_value;
+    EmbReal x2  = result[2].r_value;
+    EmbReal y2  = args(3).r_value;
+    EmbReal rot = args(4).r_value;
 
     mainWin()->nativeAddLine(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
     return "";
@@ -1631,35 +1726,16 @@ AddLine(std::vector<std::string> args)
  * \brief
  */
 std::string
-AddTriangle(std::vector<std::string> args)
+AddTriangle(Parameter result[10])
 {
-    if (args.size() != 8)    return "ERROR: addTriangle() requires eight arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: addTriangle(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: addTriangle(): second argument is not a number");
-    if (!args(2).isNumber()) return "TYPE ERROR: addTriangle(): third argument is not a number");
-    if (!args(3).isNumber()) return "TYPE ERROR: addTriangle(): fourth argument is not a number");
-    if (!args(4).isNumber()) return "TYPE ERROR: addTriangle(): fifth argument is not a number");
-    if (!args(5).isNumber()) return "TYPE ERROR: addTriangle(): sixth argument is not a number");
-    if (!args(6).isNumber()) return "TYPE ERROR: addTriangle(): seventh argument is not a number");
-    if (!args(7).isBool())   return "TYPE ERROR: addTriangle(): eighth argument is not a bool");
-
-    EmbReal x1     = args(0).toNumber();
-    EmbReal y1     = args(1).toNumber();
-    EmbReal x2     = args(2).toNumber();
-    EmbReal y2     = args(3).toNumber();
-    EmbReal x3     = args(4).toNumber();
-    EmbReal y3     = args(5).toNumber();
-    EmbReal rot    = args(6).toNumber();
+    EmbReal x1     = result[0].r_value;
+    EmbReal y1     = result[1].r_value;
+    EmbReal x2     = result[2].r_value;
+    EmbReal y2     = args(3).r_value;
+    EmbReal x3     = args(4).r_value;
+    EmbReal y3     = args(5).r_value;
+    EmbReal rot    = args(6).r_value;
     bool  fill   = args(7).toBool();
-
-    //isNaN check
-    if (std::isnan(x1))  return "TYPE ERROR: addTriangle(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y1))  return "TYPE ERROR: addTriangle(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(x2))  return "TYPE ERROR: addTriangle(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y2))  return "TYPE ERROR: addTriangle(): fourth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(x3))  return "TYPE ERROR: addTriangle(): fifth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y3))  return "TYPE ERROR: addTriangle(): sixth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(rot)) return "TYPE ERROR: addTriangle(): seventh argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddTriangle(x1, y1, x2, y2, x3, y3, rot, fill);
     return "";
@@ -1669,29 +1745,14 @@ AddTriangle(std::vector<std::string> args)
  * \brief
  */
 std::string
-AddRectangle(std::vector<std::string> args)
+AddRectangle(Parameter result[10])
 {
-    if (args.size() != 6)    return "ERROR: addRectangle() requires six arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: addRectangle(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: addRectangle(): second argument is not a number");
-    if (!args(2).isNumber()) return "TYPE ERROR: addRectangle(): third argument is not a number");
-    if (!args(3).isNumber()) return "TYPE ERROR: addRectangle(): fourth argument is not a number");
-    if (!args(4).isNumber()) return "TYPE ERROR: addRectangle(): fifth argument is not a number");
-    if (!args(5).isBool())   return "TYPE ERROR: addRectangle(): sixth argument is not a bool");
-
-    EmbReal x    = args(0).toNumber();
-    EmbReal y    = args(1).toNumber();
-    EmbReal w    = args(2).toNumber();
-    EmbReal h    = args(3).toNumber();
-    EmbReal rot  = args(4).toNumber();
+    EmbReal x    = result[0].r_value;
+    EmbReal y    = result[1].r_value;
+    EmbReal w    = result[2].r_value;
+    EmbReal h    = args(3).r_value;
+    EmbReal rot  = args(4).r_value;
     bool  fill = args(5).toBool();
-
-    //isNaN check
-    if (std::isnan(x))   return "TYPE ERROR: addRectangle(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y))   return "TYPE ERROR: addRectangle(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(w))   return "TYPE ERROR: addRectangle(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(h))   return "TYPE ERROR: addRectangle(): fourth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(rot)) return "TYPE ERROR: addRectangle(): fifth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
     return "";
@@ -1701,32 +1762,15 @@ AddRectangle(std::vector<std::string> args)
  * \brief
  */
 std::string
-AddRoundedRectangle(std::vector<std::string> args)
+AddRoundedRectangle(Parameter result[10])
 {
-    if (args.size() != 7)    return "ERROR: addRoundedRectangle() requires seven arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: addRoundedRectangle(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: addRoundedRectangle(): second argument is not a number");
-    if (!args(2).isNumber()) return "TYPE ERROR: addRoundedRectangle(): third argument is not a number");
-    if (!args(3).isNumber()) return "TYPE ERROR: addRoundedRectangle(): fourth argument is not a number");
-    if (!args(4).isNumber()) return "TYPE ERROR: addRoundedRectangle(): fifth argument is not a number");
-    if (!args(5).isNumber()) return "TYPE ERROR: addRoundedRectangle(): sixth argument is not a number");
-    if (!args(6).isBool())   return "TYPE ERROR: addRoundedRectangle(): seventh argument is not a bool");
-
-    EmbReal x    = args(0).toNumber();
-    EmbReal y    = args(1).toNumber();
-    EmbReal w    = args(2).toNumber();
-    EmbReal h    = args(3).toNumber();
-    EmbReal rad  = args(4).toNumber();
-    EmbReal rot  = args(5).toNumber();
+    EmbReal x    = result[0].r_value;
+    EmbReal y    = result[1].r_value;
+    EmbReal w    = result[2].r_value;
+    EmbReal h    = args(3).r_value;
+    EmbReal rad  = args(4).r_value;
+    EmbReal rot  = args(5).r_value;
     bool  fill = args(6).toBool();
-
-    //isNaN check
-    if (std::isnan(x))   return "TYPE ERROR: addRoundedRectangle(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y))   return "TYPE ERROR: addRoundedRectangle(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(w))   return "TYPE ERROR: addRoundedRectangle(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(h))   return "TYPE ERROR: addRoundedRectangle(): fourth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(rad)) return "TYPE ERROR: addRoundedRectangle(): fifth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(rot)) return "TYPE ERROR: addRoundedRectangle(): sixth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddRoundedRectangle(x, y, w, h, rad, rot, fill);
     return "";
@@ -1736,30 +1780,14 @@ AddRoundedRectangle(std::vector<std::string> args)
  * \brief
  */
 std::string
-AddArc(std::vector<std::string> args)
+AddArc(Parameter result[10])
 {
-    if (args.size() != 6)    return "ERROR: addArc() requires six arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: addArc(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: addArc(): second argument is not a number");
-    if (!args(2).isNumber()) return "TYPE ERROR: addArc(): third argument is not a number");
-    if (!args(3).isNumber()) return "TYPE ERROR: addArc(): fourth argument is not a number");
-    if (!args(4).isNumber()) return "TYPE ERROR: addArc(): fifth argument is not a number");
-    if (!args(5).isNumber()) return "TYPE ERROR: addArc(): sixth argument is not a number");
-
-    EmbReal startX = args(0).toNumber();
-    EmbReal startY = args(1).toNumber();
-    EmbReal midX   = args(2).toNumber();
-    EmbReal midY   = args(3).toNumber();
-    EmbReal endX   = args(4).toNumber();
-    EmbReal endY   = args(5).toNumber();
-
-    //isNaN check
-    if (std::isnan(startX)) return "TYPE ERROR: addArc(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(startY)) return "TYPE ERROR: addArc(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(midX))   return "TYPE ERROR: addArc(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(midY))   return "TYPE ERROR: addArc(): fourth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(endX))   return "TYPE ERROR: addArc(): fifth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(endY))   return "TYPE ERROR: addArc(): sixth argument failed isNaN check. There is an error in your code.");
+    EmbReal startX = result[0].r_value;
+    EmbReal startY = result[1].r_value;
+    EmbReal midX   = result[2].r_value;
+    EmbReal midY   = args(3).r_value;
+    EmbReal endX   = args(4).r_value;
+    EmbReal endY   = args(5).r_value;
 
     mainWin()->nativeAddArc(startX, startY, midX, midY, endX, endY, OBJ_RUBBER_OFF);
     return "";
@@ -1769,23 +1797,12 @@ AddArc(std::vector<std::string> args)
  * \brief
  */
 std::string
-AddCircle(std::vector<std::string> args)
+AddCircle(Parameter result[10])
 {
-    if (args.size() != 4)    return "ERROR: addCircle() requires four arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: addCircle(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: addCircle(): second argument is not a number");
-    if (!args(2).isNumber()) return "TYPE ERROR: addCircle(): third argument is not a number");
-    if (!args(3).isBool())   return "TYPE ERROR: addCircle(): fourth argument is not a bool");
-
-    EmbReal centerX = args(0).toNumber();
-    EmbReal centerY = args(1).toNumber();
-    EmbReal radius  = args(2).toNumber();
+    EmbReal centerX = result[0].r_value;
+    EmbReal centerY = result[1].r_value;
+    EmbReal radius  = result[2].r_value;
     bool  fill    = args(3).toBool();
-
-    //isNaN check
-    if (std::isnan(centerX)) return "TYPE ERROR: addCircle(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(centerY)) return "TYPE ERROR: addCircle(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(radius))  return "TYPE ERROR: addCircle(): third argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddCircle(centerX, centerY, radius, fill, OBJ_RUBBER_OFF);
     return "";
@@ -1795,96 +1812,65 @@ AddCircle(std::vector<std::string> args)
  * \brief
  */
 std::string
-AddSlot(std::vector<std::string> args)
+AddSlot(Parameter result[10])
 {
-    if (args.size() != 6)    return "ERROR: addSlot() requires six arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: addSlot(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: addSlot(): second argument is not a number");
-    if (!args(2).isNumber()) return "TYPE ERROR: addSlot(): third argument is not a number");
-    if (!args(3).isNumber()) return "TYPE ERROR: addSlot(): fourth argument is not a number");
-    if (!args(4).isNumber()) return "TYPE ERROR: addSlot(): fifth argument is not a number");
-    if (!args(5).isBool())   return "TYPE ERROR: addSlot(): sixth argument is not a bool");
-
-    EmbReal centerX  = args(0).toNumber();
-    EmbReal centerY  = args(1).toNumber();
-    EmbReal diameter = args(2).toNumber();
-    EmbReal length   = args(3).toNumber();
-    EmbReal rot      = args(4).toNumber();
+    EmbReal centerX  = result[0].r_value;
+    EmbReal centerY  = result[1].r_value;
+    EmbReal diameter = result[2].r_value;
+    EmbReal length   = args(3).r_value;
+    EmbReal rot      = args(4).r_value;
     bool  fill     = args(5).toBool();
-
-    //isNaN check
-    if (std::isnan(centerX))  return "TYPE ERROR: addSlot(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(centerY))  return "TYPE ERROR: addSlot(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(diameter)) return "TYPE ERROR: addSlot(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(length))   return "TYPE ERROR: addSlot(): fourth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(rot))      return "TYPE ERROR: addSlot(): fifth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddSlot(centerX, centerY, diameter, length, rot, fill, OBJ_RUBBER_OFF);
     return "";
 }
 
+
 std::string
-AddEllipse(std::vector<std::string> args)
+AddEllipse(Parameter result[10])
 {
-    if (args.size() != 6)    return "ERROR: addEllipse() requires six arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: addEllipse(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: addEllipse(): second argument is not a number");
-    if (!args(2).isNumber()) return "TYPE ERROR: addEllipse(): third argument is not a number");
-    if (!args(3).isNumber()) return "TYPE ERROR: addEllipse(): fourth argument is not a number");
-    if (!args(4).isNumber()) return "TYPE ERROR: addEllipse(): fifth argument is not a number");
-    if (!args(5).isBool())   return "TYPE ERROR: addEllipse(): sixth argument is not a bool");
-
-    EmbReal centerX = args(0).toNumber();
-    EmbReal centerY = args(1).toNumber();
-    EmbReal radX    = args(2).toNumber();
-    EmbReal radY    = args(3).toNumber();
-    EmbReal rot     = args(4).toNumber();
+    EmbReal centerX = result[0].r_value;
+    EmbReal centerY = result[1].r_value;
+    EmbReal radX    = result[2].r_value;
+    EmbReal radY    = args(3).r_value;
+    EmbReal rot     = args(4).r_value;
     bool  fill    = args(5).toBool();
-
-    //isNaN check
-    if (std::isnan(centerX)) return "TYPE ERROR: addEllipse(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(centerY)) return "TYPE ERROR: addEllipse(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(radX))    return "TYPE ERROR: addEllipse(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(radY))    return "TYPE ERROR: addEllipse(): fourth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(rot))     return "TYPE ERROR: addEllipse(): fifth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddEllipse(centerX, centerY, radX, radY, rot, fill, OBJ_RUBBER_OFF);
     return "";
 }
 
+/**
+ * .
+ */
 std::string
-AddPoint(std::vector<std::string> args)
+AddPoint(Parameter result[10])
 {
-    if (args.size() != 2)    return "ERROR: addPoint() requires two arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: addPoint(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: addPoint(): second argument is not a number");
-
-    EmbReal x = args(0).toNumber();
-    EmbReal y = args(1).toNumber();
-
-    //isNaN check
-    if (std::isnan(x)) return "TYPE ERROR: addPoint(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y)) return "TYPE ERROR: addPoint(): second argument failed isNaN check. There is an error in your code.");
+    EmbReal x = result[0].r_value;
+    EmbReal y = result[1].r_value;
 
     mainWin()->nativeAddPoint(x,y);
     return "";
 }
 
+/**
+ * .
+ */
 std::string
-AddRegularPolygon(std::vector<std::string> args)
+AddRegularPolygon(Parameter result[10])
 {
     //TODO: parameter error checking
     qDebug("TODO: finish addRegularPolygon command");
     return "";
 }
 
+/**
+ * .
+ */
 std::string
-AddPolygon(std::vector<std::string> args)
+AddPolygon(Parameter result[10])
 {
-    if (args.size() != 1)   return "ERROR: addPolygon() requires one argument");
-    if (!args(0).isArray()) return "TYPE ERROR: addPolygon(): first argument is not an array");
-
-    QVariantList varList = args(0).toVariant().toList();
+    QVariantList varList = result[0].toVariant().toList();
     int varSize = varList.size();
     if (varSize < 2) return "TYPE ERROR: addPolygon(): array must contain at least two elements");
     if (varSize % 2) return "TYPE ERROR: addPolygon(): array cannot contain an odd number of elements");
@@ -1896,17 +1882,13 @@ AddPolygon(std::vector<std::string> args)
     EmbReal startX = 0;
     EmbReal startY = 0;
     QPainterPath path;
-    foreach(QVariant var, varList)
-    {
-        if (var.canConvert(QVariant::Double))
-        {
-            if (xCoord)
-            {
+    foreach(QVariant var, varList) {
+        if (var.canConvert(QVariant::Double)) {
+            if (xCoord) {
                 xCoord = false;
                 x = var.toReal();
             }
-            else
-            {
+            else {
                 xCoord = true;
                 y = -var.toReal();
 
@@ -1914,8 +1896,9 @@ AddPolygon(std::vector<std::string> args)
                 else       { path.moveTo(x,y); lineTo = true; startX = x; startY = y; }
             }
         }
-        else
+        else {
             return "TYPE ERROR: addPolygon(): array contains one or more invalid elements");
+        }
     }
 
     //Close the polygon
@@ -1927,13 +1910,13 @@ AddPolygon(std::vector<std::string> args)
     return "";
 }
 
+/**
+ * .
+ */
 std::string
-AddPolyline(std::vector<std::string> args)
+AddPolyline(Parameter result[10])
 {
-    if (args.size() != 1)   return "ERROR: addPolyline() requires one argument");
-    if (!args(0).isArray()) return "TYPE ERROR: addPolyline(): first argument is not an array");
-
-    QVariantList varList = args(0).toVariant().toList();
+    QVariantList varList = result[0].toVariant().toList();
     int varSize = varList.size();
     if (varSize < 2) return "TYPE ERROR: addPolyline(): array must contain at least two elements");
     if (varSize % 2) return "TYPE ERROR: addPolyline(): array cannot contain an odd number of elements");
@@ -1969,19 +1952,34 @@ AddPolyline(std::vector<std::string> args)
     return "";
 }
 
-AddPath(std::vector<std::string> args)
+/**
+ * .
+ */
+std::string
+AddPath(Parameter result[10])
+{
     //TODO: parameter error checking
     qDebug("TODO: finish addPath command");
+}
 
-AddHorizontalDimension(std::vector<std::string> args)
+/**
+ * .
+ */
+AddHorizontalDimension(Parameter result[10])
     //TODO: parameter error checking
     qDebug("TODO: finish addHorizontalDimension command");
 
-AddVerticalDimension(std::vector<std::string> args)
+/**
+ * .
+ */
+AddVerticalDimension(Parameter result[10])
     //TODO: parameter error checking
     qDebug("TODO: finish addVerticalDimension command");
 
-AddImage(std::vector<std::string> args)
+/**
+ * .
+ */
+AddImage(Parameter result[10])
     //TODO: parameter error checking
     qDebug("TODO: finish addImage command");
 
@@ -1989,27 +1987,13 @@ AddImage(std::vector<std::string> args)
  *
  */
 std::string
-AddDimLeader(std::vector<std::string> args)
+AddDimLeader(Parameter result[10])
 {
-    if (args.size() != 5)    return "ERROR: addDimLeader() requires five arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: addDimLeader(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: addDimLeader(): second argument is not a number");
-    if (!args(2).isNumber()) return "TYPE ERROR: addDimLeader(): third argument is not a number");
-    if (!args(3).isNumber()) return "TYPE ERROR: addDimLeader(): fourth argument is not a number");
-    if (!args(4).isNumber()) return "TYPE ERROR: addDimLeader(): fifth argument is not a number");
-
-    EmbReal x1  = args(0).toNumber();
-    EmbReal y1  = args(1).toNumber();
-    EmbReal x2  = args(2).toNumber();
-    EmbReal y2  = args(3).toNumber();
-    EmbReal rot = args(4).toNumber();
-
-    //isNaN check
-    if (std::isnan(x1))  return "TYPE ERROR: addDimLeader(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y1))  return "TYPE ERROR: addDimLeader(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(x2))  return "TYPE ERROR: addDimLeader(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y2))  return "TYPE ERROR: addDimLeader(): fourth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(rot)) return "TYPE ERROR: addDimLeader(): fifth argument failed isNaN check. There is an error in your code.");
+    EmbReal x1  = result[0].r_value;
+    EmbReal y1  = result[1].r_value;
+    EmbReal x2  = result[2].r_value;
+    EmbReal y2  = args(3).r_value;
+    EmbReal rot = args(4).r_value;
 
     mainWin()->nativeAddDimLeader(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
     return "";
@@ -2019,12 +2003,9 @@ AddDimLeader(std::vector<std::string> args)
  *
  */
 std::string
-SetCursorShape(std::vector<std::string> args)
+SetCursorShape(Parameter result[10])
 {
-    if (args.size() != 1)    return "ERROR: setCursorShape() requires one argument");
-    if (!args(0).isString()) return "TYPE ERROR: setCursorShape(): first argument is not a string");
-
-    EmbString shape = args(0).toString();
+    EmbString shape = result[0].s_value;
     mainWin()->setCursorShape(shape);
     return "";
 }
@@ -2033,24 +2014,12 @@ SetCursorShape(std::vector<std::string> args)
  *
  */
 std::string
-CalculateAngle(std::vector<std::string> args)
+CalculateAngle(Parameter result[10])
 {
-    if (args.size() != 4)    return "ERROR: calculateAngle() requires four arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: calculateAngle(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: calculateAngle(): second argument is not a number");
-    if (!args(2).isNumber()) return "TYPE ERROR: calculateAngle(): third argument is not a number");
-    if (!args(3).isNumber()) return "TYPE ERROR: calculateAngle(): fourth argument is not a number");
-
-    EmbReal x1 = args(0).toNumber();
-    EmbReal y1 = args(1).toNumber();
-    EmbReal x2 = args(2).toNumber();
-    EmbReal y2 = args(3).toNumber();
-
-    //isNaN check
-    if (std::isnan(x1))  return "TYPE ERROR: calculateAngle(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y1))  return "TYPE ERROR: calculateAngle(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(x2))  return "TYPE ERROR: calculateAngle(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y2))  return "TYPE ERROR: calculateAngle(): fourth argument failed isNaN check. There is an error in your code.");
+    EmbReal x1 = result[0].r_value;
+    EmbReal y1 = result[1].r_value;
+    EmbReal x2 = result[2].r_value;
+    EmbReal y2 = args(3).r_value;
 
     return std::string(mainWin()->nativeCalculateAngle(x1, y1, x2, y2));
 }
@@ -2059,24 +2028,12 @@ CalculateAngle(std::vector<std::string> args)
  *
  */
 std::string
-CalculateDistance(std::vector<std::string> args)
+CalculateDistance(Parameter result[10])
 {
-    if (args.size() != 4)    return "ERROR: calculateDistance() requires four arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: calculateDistance(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: calculateDistance(): second argument is not a number");
-    if (!args(2).isNumber()) return "TYPE ERROR: calculateDistance(): third argument is not a number");
-    if (!args(3).isNumber()) return "TYPE ERROR: calculateDistance(): fourth argument is not a number");
-
-    EmbReal x1 = args(0).toNumber();
-    EmbReal y1 = args(1).toNumber();
-    EmbReal x2 = args(2).toNumber();
-    EmbReal y2 = args(3).toNumber();
-
-    //isNaN check
-    if (std::isnan(x1))  return "TYPE ERROR: calculateDistance(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y1))  return "TYPE ERROR: calculateDistance(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(x2))  return "TYPE ERROR: calculateDistance(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y2))  return "TYPE ERROR: calculateDistance(): fourth argument failed isNaN check. There is an error in your code.");
+    EmbReal x1 = result[0].r_value;
+    EmbReal y1 = result[1].r_value;
+    EmbReal x2 = result[2].r_value;
+    EmbReal y2 = args(3).r_value;
 
     return std::string(mainWin()->nativeCalculateDistance(x1, y1, x2, y2));
 }
@@ -2085,30 +2042,14 @@ CalculateDistance(std::vector<std::string> args)
  *
  */
 std::string
-PerpendicularDistance(std::vector<std::string> args)
+PerpendicularDistance(Parameter result[10])
 {
-    if (args.size() != 6)    return "ERROR: perpendicularDistance() requires six arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: perpendicularDistance(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: perpendicularDistance(): second argument is not a number");
-    if (!args(2).isNumber()) return "TYPE ERROR: perpendicularDistance(): third argument is not a number");
-    if (!args(3).isNumber()) return "TYPE ERROR: perpendicularDistance(): fourth argument is not a number");
-    if (!args(4).isNumber()) return "TYPE ERROR: perpendicularDistance(): fifth argument is not a number");
-    if (!args(5).isNumber()) return "TYPE ERROR: perpendicularDistance(): sixth argument is not a number");
-
-    EmbReal px = args(0).toNumber();
-    EmbReal py = args(1).toNumber();
-    EmbReal x1 = args(2).toNumber();
-    EmbReal y1 = args(3).toNumber();
-    EmbReal x2 = args(4).toNumber();
-    EmbReal y2 = args(5).toNumber();
-
-    //isNaN check
-    if (std::isnan(px))  return "TYPE ERROR: perpendicularDistance(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(py))  return "TYPE ERROR: perpendicularDistance(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(x1))  return "TYPE ERROR: perpendicularDistance(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y1))  return "TYPE ERROR: perpendicularDistance(): fourth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(x2))  return "TYPE ERROR: perpendicularDistance(): fifth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y2))  return "TYPE ERROR: perpendicularDistance(): sixth argument failed isNaN check. There is an error in your code.");
+    EmbReal px = result[0].r_value;
+    EmbReal py = result[1].r_value;
+    EmbReal x1 = result[2].r_value;
+    EmbReal y1 = args(3).r_value;
+    EmbReal x2 = args(4).r_value;
+    EmbReal y2 = args(5).r_value;
 
     return std::string(mainWin()->nativePerpendicularDistance(px, py, x1, y1, x2, y2));
 }
@@ -2117,18 +2058,10 @@ PerpendicularDistance(std::vector<std::string> args)
  *
  */
 std::string
-CutSelected(std::vector<std::string> args)
+CutSelected(Parameter result[10])
 {
-    if (args.size() != 2)    return "ERROR: cutSelected() requires two arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: cutSelected(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: cutSelected(): second argument is not a number");
-
-    EmbReal x = args(0).toNumber();
-    EmbReal y = args(1).toNumber();
-
-    //isNaN check
-    if (std::isnan(x)) return "TYPE ERROR: cutSelected(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y)) return "TYPE ERROR: cutSelected(): second argument failed isNaN check. There is an error in your code.");
+    EmbReal x = result[0].r_value;
+    EmbReal y = result[1].r_value;
 
     mainWin()->nativeCutSelected(x, y);
     return "";
@@ -2138,18 +2071,10 @@ CutSelected(std::vector<std::string> args)
  *
  */
 std::string
-CopySelected(std::vector<std::string> args)
+CopySelected(Parameter result[10])
 {
-    if (args.size() != 2)    return "ERROR: copySelected() requires two arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: copySelected(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: copySelected(): second argument is not a number");
-
-    EmbReal x = args(0).toNumber();
-    EmbReal y = args(1).toNumber();
-
-    //isNaN check
-    if (std::isnan(x)) return "TYPE ERROR: copySelected(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y)) return "TYPE ERROR: copySelected(): second argument failed isNaN check. There is an error in your code.");
+    EmbReal x = result[0].r_value;
+    EmbReal y = result[1].r_value;
 
     mainWin()->nativeCopySelected(x, y);
     return "";
@@ -2159,18 +2084,10 @@ CopySelected(std::vector<std::string> args)
  *
  */
 std::string
-PasteSelected(std::vector<std::string> args)
+PasteSelected(Parameter result[10])
 {
-    if (args.size() != 2)    return "ERROR: pasteSelected() requires two arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: pasteSelected(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: pasteSelected(): second argument is not a number");
-
-    EmbReal x = args(0).toNumber();
-    EmbReal y = args(1).toNumber();
-
-    //isNaN check
-    if (std::isnan(x)) return "TYPE ERROR: pasteSelected(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y)) return "TYPE ERROR: pasteSelected(): second argument failed isNaN check. There is an error in your code.");
+    EmbReal x = result[0].r_value;
+    EmbReal y = result[1].r_value;
 
     mainWin()->nativePasteSelected(x, y);
     return "";
@@ -2180,18 +2097,10 @@ PasteSelected(std::vector<std::string> args)
  *
  */
 std::string
-MoveSelected(std::vector<std::string> args)
+MoveSelected(Parameter result[10])
 {
-    if (args.size() != 2)    return "ERROR: moveSelected() requires two arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: moveSelected(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: moveSelected(): second argument is not a number");
-
-    EmbReal dx = args(0).toNumber();
-    EmbReal dy = args(1).toNumber();
-
-    //isNaN check
-    if (std::isnan(dx)) return "TYPE ERROR: moveSelected(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(dy)) return "TYPE ERROR: moveSelected(): second argument failed isNaN check. There is an error in your code.");
+    EmbReal dx = result[0].r_value;
+    EmbReal dy = result[1].r_value;
 
     mainWin()->nativeMoveSelected(dx, dy);
     return "";
@@ -2201,44 +2110,26 @@ MoveSelected(std::vector<std::string> args)
  *
  */
 std::string
-ScaleSelected(std::vector<std::string> args)
+ScaleSelected(Parameter result[10])
 {
-    if (args.size() != 3)    return "ERROR: scaleSelected() requires three arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: scaleSelected(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: scaleSelected(): second argument is not a number");
-    if (!args(2).isNumber()) return "TYPE ERROR: scaleSelected(): third argument is not a number");
+    EmbReal x      = result[0].r_value;
+    EmbReal y      = result[1].r_value;
+    EmbReal factor = result[2].r_value;
 
-    EmbReal x      = args(0).toNumber();
-    EmbReal y      = args(1).toNumber();
-    EmbReal factor = args(2).toNumber();
-
-    //isNaN check
-    if (std::isnan(x))      return "TYPE ERROR: scaleSelected(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y))      return "TYPE ERROR: scaleSelected(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(factor)) return "TYPE ERROR: scaleSelected(): third argument failed isNaN check. There is an error in your code.");
-
-    if (factor <= 0.0) return context->throwError(QScriptContext::UnknownError, "scaleSelected(): scale factor must be greater than zero");
+    if (factor <= 0.0) {
+        return "ERROR scaleSelected(): scale factor must be greater than zero";
+    }
 
     mainWin()->nativeScaleSelected(x, y, factor);
     return "";
 }
 
 std::string
-RotateSelected(std::vector<std::string> args)
+RotateSelected(Parameter result[10])
 {
-    if (args.size() != 3)    return "ERROR: rotateSelected() requires three arguments");
-    if (!args(0).isNumber()) return "TYPE ERROR: rotateSelected(): first argument is not a number");
-    if (!args(1).isNumber()) return "TYPE ERROR: rotateSelected(): second argument is not a number");
-    if (!args(2).isNumber()) return "TYPE ERROR: rotateSelected(): third argument is not a number");
-
-    EmbReal x   = args(0).toNumber();
-    EmbReal y   = args(1).toNumber();
-    EmbReal rot = args(2).toNumber();
-
-    //isNaN check
-    if (std::isnan(x))   return "TYPE ERROR: rotateSelected(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y))   return "TYPE ERROR: rotateSelected(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(rot)) return "TYPE ERROR: rotateSelected(): third argument failed isNaN check. There is an error in your code.");
+    EmbReal x   = result[0].r_value;
+    EmbReal y   = result[1].r_value;
+    EmbReal rot = result[2].r_value;
 
     mainWin()->nativeRotateSelected(x, y, rot);
     return "";
@@ -2248,33 +2139,12 @@ RotateSelected(std::vector<std::string> args)
  * \brief
  */
 std::string
-MirrorSelected(std::vector<std::string> args)
+MirrorSelected(Parameter result[10])
 {
-    if (args.size() != 4)
-        return "ERROR: mirrorSelected() requires four arguments";
-    if (!args(0).isNumber())
-        return "TYPE ERROR: mirrorSelected(): first argument is not a number";
-    if (!args(1).isNumber())
-        return "TYPE ERROR: mirrorSelected(): second argument is not a number";
-    if (!args(2).isNumber())
-        return "TYPE ERROR: mirrorSelected(): third argument is not a number";
-    if (!args(3).isNumber())
-        return "TYPE ERROR: mirrorSelected(): fourth argument is not a number";
-
-    EmbReal x1 = args(0).toNumber();
-    EmbReal y1 = args(1).toNumber();
-    EmbReal x2 = args(2).toNumber();
-    EmbReal y2 = args(3).toNumber();
-
-    //isNaN check
-    if (std::isnan(x1))
-        return "TYPE ERROR: mirrorSelected(): first argument failed isNaN check. There is an error in your code.";
-    if (std::isnan(y1))
-        return "TYPE ERROR: mirrorSelected(): second argument failed isNaN check. There is an error in your code.";
-    if (std::isnan(x2))
-        return "TYPE ERROR: mirrorSelected(): third argument failed isNaN check. There is an error in your code.";
-    if (std::isnan(y2))
-        return "TYPE ERROR: mirrorSelected(): fourth argument failed isNaN check. There is an error in your code.";
+    EmbReal x1 = result[0].r_value;
+    EmbReal y1 = result[1].r_value;
+    EmbReal x2 = result[2].r_value;
+    EmbReal y2 = args(3).r_value;
 
     mainWin()->nativeMirrorSelected(x1, y1, x2, y2);
     return "";
@@ -2349,7 +2219,7 @@ MainWindow::windowMenuAboutToShow()
 
     windowMenu->addSeparator();
     QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
-    for(int i = 0; i < windows.count(); ++i)
+    for (int i = 0; i < windows.count(); ++i)
     {
         QAction* aAction = new QAction(windows.at(i)->windowTitle(), this);
         aAction->setCheckable(true);
@@ -2594,7 +2464,8 @@ QMdiSubWindow* MainWindow::findMdiWindow(const QString& fileName)
  * @brief MainWindow::closeEvent
  * @param event
  */
-void MainWindow::closeEvent(QCloseEvent* event)
+void
+MainWindow::closeEvent(QCloseEvent* event)
 {
     mdiArea->closeAllSubWindows();
     writeSettings();
@@ -2604,7 +2475,8 @@ void MainWindow::closeEvent(QCloseEvent* event)
 /**
  * @brief MainWindow::onCloseWindow
  */
-void MainWindow::onCloseWindow()
+void
+MainWindow::onCloseWindow()
 {
     qDebug("MainWindow::onCloseWindow()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
@@ -2656,7 +2528,8 @@ MainWindow::onWindowActivated(QMdiSubWindow* w)
  * @brief MainWindow::resizeEvent
  * @param e
  */
-void MainWindow::resizeEvent(QResizeEvent* e)
+void
+MainWindow::resizeEvent(QResizeEvent* e)
 {
     qDebug("MainWindow::resizeEvent()");
     QMainWindow::resizeEvent(e);
@@ -2791,10 +2664,15 @@ MainWindow::hideUnimplemented()
  * @brief MainWindow::validFileFormat
  * @param fileName
  * @return
+ *
+ * \todo check the file exists on the system, rename to validFile?
  */
 bool
 MainWindow::validFileFormat(const QString& fileName)
 {
+    if (fileName == "") {
+        return false;
+    }
     if (emb_identify_format(qPrintable(fileName)) >= 0) {
         return true;
     }
@@ -2911,7 +2789,7 @@ MainWindow::floatingChangedToolBar(bool isFloating)
         }
         else {
             QList<QAction*> actList = tb->actions();
-            for(int i = 0; i < actList.size(); ++i)
+            for (int i = 0; i < actList.size(); ++i)
             {
                 QAction* ACTION = actList.value(i);
                 if (ACTION->objectName() == "toolbarclose")
@@ -2930,24 +2808,13 @@ MainWindow::floatingChangedToolBar(bool isFloating)
 //Command: Circle
 
 var global = {}; //Required
-global.x1;
-global.y1;
-global.x2;
-global.y2;
-global.x3;
-global.y3;
-global.rad;
-global.dia;
-global.cx;
-global.cy;
-global.mode;
-
-//enums
-global.mode_1P_RAD = 0;
-global.mode_1P_DIA = 1;
-global.mode_2P     = 2;
-global.mode_3P     = 3;
-global.mode_TTR    = 4;
+EmbVector point1;
+EmbVector point2;
+EmbVector point3;
+EmbReal rad;
+EmbReal dia;
+EmbVector center;
+int mode;
 
 /**
  *
@@ -2970,7 +2837,8 @@ circle_main(void)
 /**
  * .
  */
-void circle_click(float x, float y)
+void
+circle_click(float x, float y)
 {
     if (global.mode == global.mode_1P_RAD) {
         if (std::isnan(global.x1)) {
@@ -3294,7 +3162,8 @@ global.y1;
 global.x2;
 global.y2;
 
-void distance_main()
+void
+distance_main()
 {
     initCommand();
     clearSelection();
@@ -3306,7 +3175,8 @@ void distance_main()
 }
 
 
-void distance_click(x, y)
+void
+distance_click(x, y)
 {
     if (std::isnan(global.x1)) {
         global.x1 = x;
@@ -3326,12 +3196,14 @@ void distance_click(x, y)
     }
 }
 
-void distance_context(str)
+void
+distance_context(str)
 {
     todo("DISTANCE", "context()");
 }
 
-void prompt(str)
+void
+prompt(str)
 {
     var strList = str.split(",");
     if (std::isnan(global.x1)) {
@@ -3373,7 +3245,8 @@ void prompt(str)
  *              270
  *              (-)
  */
-void reportDistance()
+void
+reportDistance()
 {
     var dx = global.x2 - global.x1;
     var dy = global.y2 - global.y1;
@@ -3398,10 +3271,6 @@ global.sy = 0.04; //Default
 global.numPoints;
 global.mode;
 
-//enums
-global.mode_NUM_POINTS = 0;
-global.mode_XSCALE     = 1;
-global.mode_YSCALE     = 2;
 
 /**
  *
@@ -3428,17 +3297,15 @@ dolphin_main(void)
 void
 updateDolphin(int numPts, EmbReal xScale, EmbReal yScale)
 {
-    var i;
     var t;
     var xx = NaN;
     var yy = NaN;
     var two_pi = 2*PI;
 
-    for(i = 0; i <= numPts; i++)
-    {
-        t = two_pi/numPts*i; 
+    for (int i = 0; i <= numPts; i++) {
+        EmbReal t = two_pi/numPts*i;
 
-        xx = 4/23*sin(62/33-58*t)+
+        EmbReal xx = 4/23*sin(62/33-58*t)+
         8/11*sin(10/9-56*t)+
         17/24*sin(38/35-55*t)+
         30/89*sin(81/23-54*t)+
@@ -3582,9 +3449,9 @@ global.rot;
 global.mode;
 
 //enums
-global.mode_MAJORDIAMETER_MINORRADIUS = 0;
-global.mode_MAJORRADIUS_MINORRADIUS   = 1;
-global.mode_ELLIPSE_ROTATION          = 2;
+static const int MODE_MAJORDIAMETER_MINORRADIUS = 0;
+static const int MODE_MAJORRADIUS_MINORRADIUS   = 1;
+static const int MODE_ELLIPSE_ROTATION          = 2;
 
 /**
  * .
@@ -3605,7 +3472,8 @@ ellipse_main(void)
 }
 
 
-void click(x, y)
+void
+click(x, y)
 {
     if (global.mode == global.mode_MAJORDIAMETER_MINORRADIUS)
     {
@@ -3715,12 +3583,14 @@ void click(x, y)
     }
 }
 
-void context(str)
+void
+context(str)
 {
     todo("ELLIPSE", "context()");
 }
 
-void prompt(str)
+void
+prompt(str)
 {
     if (global.mode == global.mode_MAJORDIAMETER_MINORRADIUS)
     {
@@ -3903,7 +3773,8 @@ void prompt(str)
 
 //Command: Erase/Delete
 
-void main()
+void
+main()
 {
     initCommand();
 
@@ -3931,12 +3802,13 @@ global.numPoints;
 global.mode;
 
 //enums
-global.mode_NUM_POINTS = 0;
-global.mode_STYLE      = 1;
-global.mode_XSCALE     = 2;
-global.mode_YSCALE     = 3;
+static const int MODE_NUM_POINTS = 0;
+static const int MODE_STYLE      = 1;
+static const int MODE_XSCALE     = 2;
+static const int MODE_YSCALE     = 3;
 
-void main()
+void
+main()
 {
     initCommand();
     clearSelection();
@@ -3954,25 +3826,21 @@ void main()
     endCommand();
 }
 
-void updateHeart(style, numPts, xScale, yScale)
+/**
+ * .
+ */
+void
+updateHeart(style, numPts, xScale, yScale)
 {
-    var i;
-    var t;
-    var xx = NaN;
-    var yy = NaN;
-    var two_pi = 2*PI;
+    for (int i = 0; i <= numPts; i++) {
+        EmbReal xx, yy;
+        EmbReal t = (2.0*emb_constant_pi)/numPts*i;
 
-    for(i = 0; i <= numPts; i++)
-    {
-        t = two_pi/numPts*i; 
-
-        if (style == "HEART4")
-        {
+        if (style == "HEART4") {
             xx = cos(t)*((sin(t)*sqrt(abs(cos(t))))/(sin(t)+7/5) - 2*sin(t) + 2);
             yy = sin(t)*((sin(t)*sqrt(abs(cos(t))))/(sin(t)+7/5) - 2*sin(t) + 2);
         }
-        else if (style == "HEART5")
-        {
+        else if (style == "HEART5") {
             xx = 16*pow(sin(t), 3);
             yy = 13*cos(t) - 5*cos(2*t) - 2*cos(3*t) - cos(4*t);
         }
@@ -3987,29 +3855,26 @@ void updateHeart(style, numPts, xScale, yScale)
 //Command: Line
 
 var global = {}; //Required
-global.firstRun;
-global.firstX;
-global.firstY;
-global.prevX;
-global.prevY;
+bool firstRun;
+EmbVector first;
+EmbVector prev;
 
-void main()
+void
+main()
 {
     initCommand();
     clearSelection();
     global.firstRun = true;
-    global.firstX = NaN;
-    global.firstY = NaN;
-    global.prevX = NaN;
-    global.prevY = NaN;
+    global.first = {NaN, NaN};
+    global.prev = {NaN, NaN};
     setPromptPrefix(qsTr("Specify first point: "));
 }
 
 
-void click(x, y)
+void
+click(x, y)
 {
-    if (global.firstRun)
-    {
+    if (global.firstRun) {
         global.firstRun = false;
         global.firstX = x;
         global.firstY = y;
@@ -4021,8 +3886,7 @@ void click(x, y)
         appendPromptHistory();
         setPromptPrefix(qsTr("Specify next point or [Undo]: "));
     }
-    else
-    {
+    else {
         setRubberPoint("LINE_END", x, y);
         vulcanize();
         addRubber("LINE");
@@ -4034,23 +3898,22 @@ void click(x, y)
     }
 }
 
-void context(str)
+void
+context(str)
 {
     todo("LINE", "context()");
 }
 
-void prompt(str)
+void
+prompt(str)
 {
-    if (global.firstRun)
-    {
+    if (global.firstRun) {
         var strList = str.split(",");
-        if (std::isnan(strList[0]) || isNaN(strList[1]))
-        {
+        if (std::isnan(strList[0]) || isNaN(strList[1])) {
             alert(qsTr("Invalid point."));
             setPromptPrefix(qsTr("Specify first point: "));
         }
-        else
-        {
+        else {
             global.firstRun = false;
             global.firstX = Number(strList[0]);
             global.firstY = Number(strList[1]);
@@ -4062,22 +3925,17 @@ void prompt(str)
             setPromptPrefix(qsTr("Specify next point or [Undo]: "));
         }
     }
-    else
-    {
-        if (str == "U" || str == "UNDO") //TODO: Probably should add additional qsTr calls here.
-        {
+    else {
+        if (str == "U" || str == "UNDO") {
             todo("LINE", "prompt() for UNDO");
         }
-        else
-        {
+        else {
             var strList = str.split(",");
-            if (std::isnan(strList[0]) || isNaN(strList[1]))
-            {
+            if (std::isnan(strList[0]) || isNaN(strList[1])) {
                 alert(qsTr("Point or option keyword required."));
                 setPromptPrefix(qsTr("Specify next point or [Undo]: "));
             }
-            else
-            {
+            else {
                 var x = Number(strList[0]);
                 var y = Number(strList[1]);
                 setRubberPoint("LINE_END", x, y);
@@ -4095,7 +3953,8 @@ void prompt(str)
 
 //Command: Locate Point
 
-void main()
+void
+main()
 {
     initCommand();
     clearSelection();
@@ -4103,31 +3962,32 @@ void main()
 }
 
 
-void click(x, y)
+void
+click(x, y)
 {
     appendPromptHistory();
-    setPromptPrefix("X = " + x.toString() + ", Y = " + y.toString());
+    setPromptPrefix("X = " + x.s_value + ", Y = " + y.s_value);
     appendPromptHistory();
     endCommand();
 }
 
-void context(str)
+void
+context(str)
 {
     todo("LOCATEPOINT", "context()");
 }
 
-void prompt(str)
+void
+prompt(str)
 {
     var strList = str.split(",");
-    if (std::isnan(strList[0]) || isNaN(strList[1]))
-    {
+    if (std::isnan(strList[0]) || isNaN(strList[1])) {
         alert(qsTr("Invalid point."));
         setPromptPrefix(qsTr("Specify point: "));
     }
-    else
-    {
+    else {
         appendPromptHistory();
-        setPromptPrefix("X = " + strList[0].toString() + ", Y = " + strList[1].toString());
+        setPromptPrefix("X = " + strList[0].s_value + ", Y = " + strList[1].toString());
         appendPromptHistory();
         endCommand();
     }
@@ -4144,7 +4004,11 @@ global.destY;
 global.deltaX;
 global.deltaY;
 
-void main()
+/**
+ * .
+ */
+void
+move_main()
 {
     initCommand();
     global.firstRun = true;
@@ -4155,24 +4019,24 @@ void main()
     global.deltaX = NaN;
     global.deltaY = NaN;
 
-    if (numSelected() <= 0)
-    {
+    if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
         alert(qsTr("Preselect objects before invoking the move command."));
         endCommand();
         messageBox("information", qsTr("Move Preselect"), qsTr("Preselect objects before invoking the move command."));
     }
-    else
-    {
+    else {
         setPromptPrefix(qsTr("Specify base point: "));
     }
 }
 
-
-void click(x, y)
+/**
+ * .
+ */
+void
+click(x, y)
 {
-    if (global.firstRun)
-    {
+    if (global.firstRun) {
         global.firstRun = false;
         global.baseX = x;
         global.baseY = y;
@@ -4183,8 +4047,7 @@ void click(x, y)
         appendPromptHistory();
         setPromptPrefix(qsTr("Specify destination point: "));
     }
-    else
-    {
+    else {
         global.destX = x;
         global.destY = y;
         global.deltaX = global.destX - global.baseX;
@@ -4195,12 +4058,20 @@ void click(x, y)
     }
 }
 
-void context(str)
+/**
+ * .
+ */
+void
+context(str)
 {
     todo("MOVE", "context()");
 }
 
-void prompt(str)
+/**
+ * .
+ */
+void
+prompt(str)
 {
     if (global.firstRun)
     {
@@ -4254,7 +4125,8 @@ global.firstY;
 global.prevX;
 global.prevY;
 
-void main()
+void
+main()
 {
     initCommand();
     clearSelection();
@@ -4267,7 +4139,8 @@ void main()
 }
 
 
-void click(x, y)
+void
+click(x, y)
 {
     if (global.firstRun)
     {
@@ -4289,12 +4162,14 @@ void click(x, y)
     }
 }
 
-void context(str)
+void
+context(str)
 {
     todo("PATH", "context()");
 }
 
-void prompt(str)
+void
+prompt(str)
 {
     if (str == "A" || str == "ARC")//TODO: Probably should add additional qsTr calls here.
     {
@@ -4342,7 +4217,8 @@ void prompt(str)
 var global = {}; //Required
 global.firstRun;
 
-void point_main()
+void
+point_main()
 {
     initCommand();
     clearSelection();
@@ -4353,7 +4229,8 @@ void point_main()
 }
 
 
-void point_click(x, y)
+void
+point_click(x, y)
 {
     if (global.firstRun) {
         global.firstRun = false;
@@ -4367,12 +4244,14 @@ void point_click(x, y)
     }
 }
 
-void context(str)
+void
+context(str)
 {
     todo("POINT", "context()");
 }
 
-void prompt(str)
+void
+prompt(str)
 {
     if (global.firstRun) {
         if (str == "M" || str == "MODE") //TODO: Probably should add additional qsTr calls here.
@@ -4432,15 +4311,16 @@ global.numSides = 4;           //Default
 global.mode;
 
 //enums
-global.mode_NUM_SIDES    = 0;
-global.mode_CENTER_PT    = 1;
-global.mode_POLYTYPE     = 2;
-global.mode_INSCRIBE     = 3;
-global.mode_CIRCUMSCRIBE = 4;
-global.mode_DISTANCE     = 5;
-global.mode_SIDE_LEN     = 6;
+static const int MODE_NUM_SIDES    = 0;
+static const int MODE_CENTER_PT    = 1;
+static const int MODE_POLYTYPE     = 2;
+static const int MODE_INSCRIBE     = 3;
+static const int MODE_CIRCUMSCRIBE = 4;
+static const int MODE_DISTANCE     = 5;
+static const int MODE_SIDE_LEN     = 6;
 
-void main()
+void
+main()
 {
     initCommand();
     clearSelection();
@@ -4459,7 +4339,8 @@ void main()
 }
 
 
-void click(x, y)
+void
+click(x, y)
 {
     if (global.mode == global.mode_NUM_SIDES)
     {
@@ -4505,53 +4386,45 @@ void click(x, y)
     }
 }
 
-void context(str)
+void
+context(str)
 {
     todo("POLYGON", "context()");
 }
 
-void prompt(str)
+void
+prompt(str)
 {
-    if (global.mode == global.mode_NUM_SIDES)
-    {
-        if (str == "" && global.numSides >= 3 && global.numSides <= 1024)
-        {
+    if (global.mode == global.mode_NUM_SIDES) {
+        if (str == "" && global.numSides >= 3 && global.numSides <= 1024) {
             setPromptPrefix(qsTr("Specify center point or [Sidelength]: "));
             global.mode = global.mode_CENTER_PT;
         }
-        else
-        {
+        else {
             var tmp = Number(str);
-            if (std::isnan(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024)
-            {
+            if (std::isnan(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024) {
                 alert(qsTr("Requires an integer between 3 and 1024."));
                 setPromptPrefix(qsTr("Enter number of sides") + " {" + global.numSides.toString() + "}: ");
             }
-            else
-            {
+            else {
                 global.numSides = tmp;
                 setPromptPrefix(qsTr("Specify center point or [Sidelength]: "));
                 global.mode = global.mode_CENTER_PT;
             }
         }
     }
-    else if (global.mode == global.mode_CENTER_PT)
-    {
-        if (str == "S" || str == "SIDELENGTH") //TODO: Probably should add additional qsTr calls here.
-        {
+    else if (global.mode == global.mode_CENTER_PT) {
+        if (str == "S" || str == "SIDELENGTH") {
             global.mode = global.mode_SIDE_LEN;
             setPromptPrefix(qsTr("Specify start point: "));
         }
-        else
-        {
+        else {
             var strList = str.split(",");
-            if (std::isnan(strList[0]) || isNaN(strList[1]))
-            {
+            if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(qsTr("Point or option keyword required."));
                 setPromptPrefix(qsTr("Specify center point or [Sidelength]: "));
             }
-            else
-            {
+            else {
                 global.centerX = Number(strList[0]);
                 global.centerY = Number(strList[1]);
                 global.mode = global.mode_POLYTYPE;
@@ -4559,8 +4432,7 @@ void prompt(str)
             }
         }
     }
-    else if (global.mode == global.mode_POLYTYPE)
-    {
+    else if (global.mode == global.mode_POLYTYPE) {
         if (str == "I"        ||
            str == "IN"       ||
            str == "INS"      ||
@@ -4569,8 +4441,7 @@ void prompt(str)
            str == "INSCRI"   ||
            str == "INSCRIB"  ||
            str == "INSCRIBE" ||
-           str == "INSCRIBED") //TODO: Probably should add additional qsTr calls here.
-        {
+           str == "INSCRIBED") {
             global.mode = global.mode_INSCRIBE;
             global.polyType = "Inscribed";
             setPromptPrefix(qsTr("Specify polygon corner point or [Distance]: "));
@@ -4591,8 +4462,7 @@ void prompt(str)
                 str == "CIRCUMSCRI"   ||
                 str == "CIRCUMSCRIB"  ||
                 str == "CIRCUMSCRIBE" ||
-                str == "CIRCUMSCRIBED") //TODO: Probably should add additional qsTr calls here.
-        {
+                str == "CIRCUMSCRIBED") {
             global.mode = global.mode_CIRCUMSCRIBE;
             global.polyType = "Circumscribed";
             setPromptPrefix(qsTr("Specify polygon side point or [Distance]: "));
@@ -4601,10 +4471,8 @@ void prompt(str)
             setRubberPoint("POLYGON_CENTER", global.centerX, global.centerY);
             setRubberPoint("POLYGON_NUM_SIDES", global.numSides, 0);
         }
-        else if (str == "")
-        {
-            if (global.polyType == "Inscribed")
-            {
+        else if (str == "") {
+            if (global.polyType == "Inscribed") {
                 global.mode = global.mode_INSCRIBE;
                 setPromptPrefix(qsTr("Specify polygon corner point or [Distance]: "));
                 addRubber("POLYGON");
@@ -4612,8 +4480,7 @@ void prompt(str)
                 setRubberPoint("POLYGON_CENTER", global.centerX, global.centerY);
                 setRubberPoint("POLYGON_NUM_SIDES", global.numSides, 0);
             }
-            else if (global.polyType == "Circumscribed")
-            {
+            else if (global.polyType == "Circumscribed") {
                 global.mode = global.mode_CIRCUMSCRIBE;
                 setPromptPrefix(qsTr("Specify polygon side point or [Distance]: "));
                 addRubber("POLYGON");
@@ -4621,34 +4488,27 @@ void prompt(str)
                 setRubberPoint("POLYGON_CENTER", global.centerX, global.centerY);
                 setRubberPoint("POLYGON_NUM_SIDES", global.numSides, 0);
             }
-            else
-            {
+            else {
                 error("POLYGON", qsTr("Polygon type is not Inscribed or Circumscribed."));
             }
         }
-        else
-        {
+        else {
             alert(qsTr("Invalid option keyword."));
             setPromptPrefix(qsTr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
         }
     }
-    else if (global.mode == global.mode_INSCRIBE)
-    {
-        if (str == "D" || str == "DISTANCE") //TODO: Probably should add additional qsTr calls here.
-        {
+    else if (global.mode == global.mode_INSCRIBE) {
+        if (str == "D" || str == "DISTANCE") {
             global.mode = global.mode_DISTANCE;
             setPromptPrefix(qsTr("Specify distance: "));
         }
-        else
-        {
+        else {
             var strList = str.split(",");
-            if (std::isnan(strList[0]) || isNaN(strList[1]))
-            {
+            if (std::isnan(strList[0]) || isNaN(strList[1])) {
                 alert(qsTr("Point or option keyword required."));
                 setPromptPrefix(qsTr("Specify polygon corner point or [Distance]: "));
             }
-            else
-            {
+            else {
                 global.pointIX = Number(strList[0]);
                 global.pointIY = Number(strList[1]);
                 setRubberPoint("POLYGON_INSCRIBE_POINT", global.pointIX, global.pointIY);
@@ -4657,23 +4517,18 @@ void prompt(str)
             }
         }
     }
-    else if (global.mode == global.mode_CIRCUMSCRIBE)
-    {
-        if (str == "D" || str == "DISTANCE") //TODO: Probably should add additional qsTr calls here.
-        {
+    else if (global.mode == global.mode_CIRCUMSCRIBE) {
+        if (str == "D" || str == "DISTANCE") {
             global.mode = global.mode_DISTANCE;
             setPromptPrefix(qsTr("Specify distance: "));
         }
-        else
-        {
+        else {
             var strList = str.split(",");
-            if (std::isnan(strList[0]) || isNaN(strList[1]))
-            {
+            if (std::isnan(strList[0]) || isNaN(strList[1])) {
                 alert(qsTr("Point or option keyword required."));
                 setPromptPrefix(qsTr("Specify polygon side point or [Distance]: "));
             }
-            else
-            {
+            else {
                 global.pointCX = Number(strList[0]);
                 global.pointCY = Number(strList[1]);
                 setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", global.pointCX, global.pointCY);
@@ -4682,25 +4537,20 @@ void prompt(str)
             }
         }
     }
-    else if (global.mode == global.mode_DISTANCE)
-    {
-        if (std::isnan(str))
-        {
+    else if (global.mode == global.mode_DISTANCE) {
+        if (std::isnan(str)) {
             alert(qsTr("Requires valid numeric distance."));
             setPromptPrefix(qsTr("Specify distance: "));
         }
-        else
-        {
-            if (global.polyType == "Inscribed")
-            {
+        else {
+            if (global.polyType == "Inscribed") {
                 global.pointIX = global.centerX;
                 global.pointIY = global.centerY + Number(str);
                 setRubberPoint("POLYGON_INSCRIBE_POINT", global.pointIX, global.pointIY);
                 vulcanize();
                 endCommand();
             }
-            else if (global.polyType == "Circumscribed")
-            {
+            else if (global.polyType == "Circumscribed") {
                 global.pointCX = global.centerX;
                 global.pointCY = global.centerY + Number(str);
                 setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", global.pointCX, global.pointCY);
@@ -4729,7 +4579,8 @@ global.prevX;
 global.prevY;
 global.num;
 
-void main()
+void
+main()
 {
     initCommand();
     clearSelection();
@@ -4742,11 +4593,13 @@ void main()
     setPromptPrefix(qsTr("Specify first point: "));
 }
 
-
-void click(x, y)
+/**
+ * .
+ */
+void
+click(x, y)
 {
-    if (global.firstRun)
-    {
+    if (global.firstRun) {
         global.firstRun = false;
         global.firstX = x;
         global.firstY = y;
@@ -4758,8 +4611,7 @@ void click(x, y)
         appendPromptHistory();
         setPromptPrefix(qsTr("Specify next point or [Undo]: "));
     }
-    else
-    {
+    else {
         global.num++;
         setRubberPoint("POLYLINE_POINT_" + global.num.toString(), x, y);
         setRubberText("POLYLINE_NUM_POINTS", global.num.toString());
@@ -4770,12 +4622,17 @@ void click(x, y)
     }
 }
 
-void context(str)
+/**
+ * .
+ */
+void
+context(str)
 {
     todo("POLYLINE", "context()");
 }
 
-void prompt(str)
+void
+prompt(str)
 {
     if (global.firstRun)
     {
@@ -4838,7 +4695,8 @@ global.y2;
 
 //TODO: Adding the text is not complete yet.
 
-void main()
+void
+main()
 {
     initCommand();
     clearSelection();
@@ -4850,7 +4708,8 @@ void main()
 }
 
 
-void click(x, y)
+void
+click(x, y)
 {
     if (std::isnan(global.x1))
     {
@@ -4872,12 +4731,14 @@ void click(x, y)
     }
 }
 
-void context(str)
+void
+context(str)
 {
     todo("QUICKLEADER", "context()");
 }
 
-void prompt(str)
+void
+prompt(str)
 {
     var strList = str.split(",");
     if (std::isnan(global.x1)) {
@@ -4918,7 +4779,8 @@ global.y1;
 global.x2;
 global.y2;
 
-void main()
+void
+main()
 {
     initCommand();
     clearSelection();
@@ -4931,7 +4793,8 @@ void main()
 }
 
 
-void click(x, y)
+void
+click(x, y)
 {
     if (global.newRect)
     {
@@ -4954,12 +4817,14 @@ void click(x, y)
     }
 }
 
-void context(str)
+void
+context(str)
 {
     todo("RECTANGLE", "context()");
 }
 
-void prompt(str)
+void
+prompt(str)
 {
     if (str == "C" || str == "CHAMFER") //TODO: Probably should add additional qsTr calls here.
     {
@@ -5014,11 +4879,12 @@ var global = {}; //Required
 global.mode;
 
 //enums
-global.mode_BACKGROUND = 0;
-global.mode_CROSSHAIR  = 1;
-global.mode_GRID       = 2;
+static const int MODE_BACKGROUND = 0;
+static const int MODE_CROSSHAIR  = 1;
+static const int MODE_GRID       = 2;
 
-void main()
+void
+main()
 {
     initCommand();
     clearSelection();
@@ -5027,17 +4893,20 @@ void main()
 }
 
 
-void click(x, y)
+void
+click(x, y)
 {
     //Do Nothing, prompt only command.
 }
 
-void context(str)
+void
+context(str)
 {
     todo("RGB", "context()");
 }
 
-void prompt(str)
+void
+prompt(str)
 {
     if (global.mode == global.mode_BACKGROUND)
     {
@@ -5125,10 +4994,11 @@ global.angleNew;
 global.mode;
 
 //enums
-global.mode_NORMAL    = 0;
-global.mode_REFERENCE = 1;
+static const int MODE_NORMAL    = 0;
+static const int MODE_REFERENCE = 1;
 
-void main()
+void
+main()
 {
     initCommand();
     global.mode = global.mode_NORMAL;
@@ -5160,7 +5030,8 @@ void main()
 }
 
 
-void click(x, y)
+void
+click(x, y)
 {
     if (global.mode == global.mode_NORMAL)
     {
@@ -5219,12 +5090,14 @@ void click(x, y)
     }
 }
 
-void context(str)
+void
+context(str)
 {
     todo("ROTATE", "context()");
 }
 
-void prompt(str)
+void
+prompt(str)
 {
     if (global.mode == global.mode_NORMAL) {
         if (global.firstRun) {
@@ -5357,24 +5230,25 @@ var global = {}; //Required
 global.test1;
 global.test2;
 
-void main()
+void
+main()
 {
     initCommand();
-    
+
     //Report number of pre-selected objects
     setPromptPrefix("Number of Objects Selected: " + numSelected().toString());
     appendPromptHistory();
-    
+
     mirrorSelected(0,0,0,1);
-    
+
     //selectAll();
     //rotateSelected(0,0,90);
-    
+
     //Polyline & Polygon Testing
-    
+
     var offsetX = 0.0;
     var offsetY = 0.0;
-    
+
     var polylineArray = [];
     polylineArray.push(1.0 + offsetX);
     polylineArray.push(1.0 + offsetY);
@@ -5393,10 +5267,10 @@ void main()
     polylineArray.push(4.0 + offsetX);
     polylineArray.push(1.0 + offsetY);
     addPolyline(polylineArray);
-    
+
     offsetX = 5.0;
     offsetY = 0.0;
-    
+
     var polygonArray = [];
     polygonArray.push(1.0 + offsetX);
     polygonArray.push(1.0 + offsetY);
@@ -5415,7 +5289,7 @@ void main()
     polygonArray.push(4.0 + offsetX);
     polygonArray.push(1.0 + offsetY);
     addPolygon(polygonArray);
-    
+
 
     endCommand();
 }
@@ -5441,10 +5315,11 @@ global.factorNew;
 global.mode;
 
 //enums
-global.mode_NORMAL    = 0;
-global.mode_REFERENCE = 1;
+static const int MODE_NORMAL    = 0;
+static const int MODE_REFERENCE = 1;
 
-void main()
+void
+main()
 {
     initCommand();
     global.mode = global.mode_NORMAL;
@@ -5474,7 +5349,8 @@ void main()
 }
 
 
-void click(x, y)
+void
+click(x, y)
 {
     if (global.mode == global.mode_NORMAL) {
         if (global.firstRun) {
@@ -5498,10 +5374,8 @@ void click(x, y)
             endCommand();
         }
     }
-    else if (global.mode == global.mode_REFERENCE)
-    {
-        if (std::isnan(global.baseRX))
-        {
+    else if (global.mode == global.mode_REFERENCE) {
+        if (std::isnan(global.baseRX)) {
             global.baseRX = x;
             global.baseRY = y;
             appendPromptHistory();
@@ -5510,21 +5384,18 @@ void click(x, y)
             setRubberPoint("LINE_START", global.baseRX, global.baseRY);
             setPromptPrefix(qsTr("Specify second point: "));
         }
-        else if (std::isnan(global.destRX))
-        {
+        else if (std::isnan(global.destRX)) {
             global.destRX = x;
             global.destRY = y;
             global.factorRef = calculateDistance(global.baseRX, global.baseRY, global.destRX, global.destRY);
-            if (global.factorRef <= 0.0)
-            {
+            if (global.factorRef <= 0.0) {
                 global.destRX    = NaN;
                 global.destRY    = NaN;
                 global.factorRef = NaN;
                 alert(qsTr("Value must be positive and nonzero."));
                 setPromptPrefix(qsTr("Specify second point: "));
             }
-            else
-            {
+            else {
                 appendPromptHistory();
                 setRubberPoint("LINE_START", global.baseX, global.baseY);
                 previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
@@ -5551,12 +5422,14 @@ void click(x, y)
     }
 }
 
-void context(str)
+void
+context(str)
 {
     todo("SCALE", "context()");
 }
 
-void prompt(str)
+void
+prompt(str)
 {
     if (global.mode == global.mode_NORMAL) {
         if (global.firstRun) {
@@ -5653,10 +5526,8 @@ void prompt(str)
                 }
             }
         }
-        else if (std::isnan(global.destRX))
-        {
-            if (std::isnan(str))
-            {
+        else if (std::isnan(global.destRX)) {
+            if (std::isnan(str)) {
                 var strList = str.split(",");
                 if (std::isnan(strList[0]) || isNaN(strList[1]))
                 {
@@ -5771,13 +5642,8 @@ global.textHeight;
 global.textRotation;
 global.mode;
 
-//enums
-global.mode_JUSTIFY = 0;
-global.mode_SETFONT = 1;
-global.mode_SETGEOM = 2;
-global.mode_RAPID   = 3;
-
-void main()
+void
+main()
 {
     initCommand();
     clearSelection();
@@ -5795,12 +5661,11 @@ void main()
 }
 
 
-void click(x, y)
+void
+click(x, y)
 {
-    if (global.mode == global.mode_SETGEOM)
-    {
-        if (std::isnan(global.textX))
-        {
+    if (global.mode == global.mode_SETGEOM) {
+        if (std::isnan(global.textX)) {
             global.textX = x;
             global.textY = y;
             addRubber("LINE");
@@ -5809,15 +5674,13 @@ void click(x, y)
             appendPromptHistory();
             setPromptPrefix(qsTr("Specify text height") + " {" + textSize() + "}: ");
         }
-        else if (std::isnan(global.textHeight))
-        {
+        else if (std::isnan(global.textHeight)) {
             global.textHeight = calculateDistance(global.textX, global.textY, x, y);
             setTextSize(global.textHeight);
             appendPromptHistory();
             setPromptPrefix(qsTr("Specify text angle") + " {" + textAngle() + "}: ");
         }
-        else if (std::isnan(global.textRotation))
-        {
+        else if (std::isnan(global.textRotation)) {
             global.textRotation = calculateAngle(global.textX, global.textY, x, y);
             setTextAngle(global.textRotation);
             appendPromptHistory();
@@ -5833,19 +5696,20 @@ void click(x, y)
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             setRubberText("TEXT_RAPID", global.text);
         }
-        else
-        {
+        else {
             //Do nothing, as we are in rapidFire mode now.
         }
     }
 }
 
-void context(str)
+void
+context(str)
 {
     todo("SINGLELINETEXT", "context()");
 }
 
-void prompt(str)
+void
+prompt(str)
 {
     if (global.mode == global.mode_JUSTIFY)
     {
@@ -6061,11 +5925,12 @@ global.numPoints;
 global.mode;
 
 //enums
-global.mode_NUM_POINTS = 0;
-global.mode_XSCALE     = 1;
-global.mode_YSCALE     = 2;
+static const int MODE_NUM_POINTS = 0;
+static const int MODE_XSCALE     = 1;
+static const int MODE_YSCALE     = 2;
 
-void main()
+void
+main()
 {
     initCommand();
     clearSelection();
@@ -6080,21 +5945,18 @@ void main()
     endCommand();
 }
 
-void updateSnowflake(numPts, xScale, yScale)
+/**
+ *
+ */
+void
+updateSnowflake(int numPts, EmbReal xScale, EmbReal yScale)
 {
-    var i;
-    var t;
-    var xx = NaN;
-    var yy = NaN;
-    var two_pi = 2*PI;
-
-    for(i = 0; i <= numPts; i++)
-    {
-        t = two_pi/numPts*i; 
+    for (int i = 0; i <= numPts; i++) {
+        EmbReal t = (2.0*emb_constant_pi)/numPts*i;
 
 //Snowflake Curve with t [0,2pi]
 
-xx = 4/7*sin(20/11-318*t)+
+        EmbReal xx = 4/7*sin(20/11-318*t)+
 3/13*sin(19/11-317*t)+
 3/5*sin(21/16-316*t)+
 1/6*sin(17/5-315*t)+
@@ -6740,23 +6602,16 @@ sin(263*t+2/7)-
 
 //Command: Star
 
-var global = {}; //Required
-global.numPoints = 5; //Default
-global.cx;
-global.cy;
-global.x1;
-global.y1;
-global.x2;
-global.y2;
-global.mode;
+typedef struct StarUi_ {
+    int numPoints = 5; //Default
+    EmbVector center;
+    EmbVector point1;
+    EmbVector point2;
+    int mode;
+} StarUi;
 
-//enums
-global.mode_NUM_POINTS = 0;
-global.mode_CENTER_PT  = 1;
-global.mode_RAD_OUTER  = 2;
-global.mode_RAD_INNER  = 3;
-
-void main()
+void
+main()
 {
     initCommand();
     clearSelection();
@@ -6771,7 +6626,8 @@ void main()
 }
 
 
-void click(x, y)
+void
+click(x, y)
 {
     if (global.mode == global.mode_NUM_POINTS)
     {
@@ -6807,7 +6663,8 @@ void click(x, y)
     }
 }
 
-void move(x, y)
+void
+move(x, y)
 {
     if (global.mode == global.mode_NUM_POINTS)
     {
@@ -6827,25 +6684,23 @@ void move(x, y)
     }
 }
 
-void context(str)
+void
+context(str)
 {
     todo("STAR", "context()");
 }
 
-void prompt(str)
+void
+prompt(str)
 {
-    if (global.mode == global.mode_NUM_POINTS)
-    {
-        if (str == "" && global.numPoints >= 3 && global.numPoints <= 1024)
-        {
+    if (global.mode == global.mode_NUM_POINTS) {
+        if (str == "" && global.numPoints >= 3 && global.numPoints <= 1024) {
             setPromptPrefix(qsTr("Specify center point: "));
             global.mode = global.mode_CENTER_PT;
         }
-        else
-        {
+        else {
             var tmp = Number(str);
-            if (std::isnan(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024)
-            {
+            if (std::isnan(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024) {
                 alert(qsTr("Requires an integer between 3 and 1024."));
                 setPromptPrefix(qsTr("Enter number of star points") + " {" + global.numPoints.toString() + "}: ");
             }
@@ -6857,16 +6712,13 @@ void prompt(str)
             }
         }
     }
-    else if (global.mode == global.mode_CENTER_PT)
-    {
+    else if (global.mode == global.mode_CENTER_PT) {
         var strList = str.split(",");
-        if (std::isnan(strList[0]) || isNaN(strList[1]))
-        {
+        if (std::isnan(strList[0]) || isNaN(strList[1])) {
             alert(qsTr("Invalid point."));
             setPromptPrefix(qsTr("Specify center point: "));
         }
-        else
-        {
+        else {
             global.cx = Number(strList[0]);
             global.cy = Number(strList[1]);
             global.mode = global.mode_RAD_OUTER;
@@ -6937,17 +6789,14 @@ updateStar(x, y)
     //Calculate the Star Points
     var angInc = 360.0/(global.numPoints*2);
     var odd = true;
-    for(var i = 0; i < global.numPoints*2; i++)
-    {
+    for (var i = 0; i < global.numPoints*2; i++) {
         var xx;
         var yy;
-        if (odd)
-        {
+        if (odd) {
             xx = distOuter*cos((angOuter+(angInc*i))*PI/180.0);
             yy = distOuter*sin((angOuter+(angInc*i))*PI/180.0);
         }
-        else
-        {
+        else {
             xx = distInner*cos((angOuter+(angInc*i))*PI/180.0);
             yy = distInner*sin((angOuter+(angInc*i))*PI/180.0);
         }

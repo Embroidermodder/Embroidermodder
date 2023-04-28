@@ -817,15 +817,15 @@ void PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
             TextSingleObject* obj = static_cast<TextSingleObject*>(item);
             if(obj)
             {
-                updateLineEditStrIfVaries(lineEditTextSingleContents,    obj->objectText());
-                updateFontComboBoxStrIfVaries(comboBoxTextSingleFont,    obj->objectTextFont());
-                updateComboBoxStrIfVaries(comboBoxTextSingleJustify,     obj->objectTextJustify(), obj->objectTextJustifyList());
-                updateLineEditNumIfVaries(lineEditTextSingleHeight,      obj->objectTextSize(),      false);
+                updateLineEditStrIfVaries(lineEditTextSingleContents,    obj->objText);
+                updateFontComboBoxStrIfVaries(comboBoxTextSingleFont,    obj->objTextFont);
+                updateComboBoxStrIfVaries(comboBoxTextSingleJustify,     obj->objTextJustify, obj->objectTextJustifyList());
+                updateLineEditNumIfVaries(lineEditTextSingleHeight,      obj->objTextSize,      false);
                 updateLineEditNumIfVaries(lineEditTextSingleRotation,   -obj->rotation(),             true);
                 updateLineEditNumIfVaries(lineEditTextSingleX,           obj->objectX(),             false);
                 updateLineEditNumIfVaries(lineEditTextSingleY,          -obj->objectY(),             false);
-                updateComboBoxBoolIfVaries(comboBoxTextSingleBackward,   obj->objectTextBackward(),   true);
-                updateComboBoxBoolIfVaries(comboBoxTextSingleUpsideDown, obj->objectTextUpsideDown(), true);
+                updateComboBoxBoolIfVaries(comboBoxTextSingleBackward,   obj->objTextBackward,   true);
+                updateComboBoxBoolIfVaries(comboBoxTextSingleUpsideDown, obj->objTextUpsideDown, true);
             }
         }
     }

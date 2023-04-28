@@ -26,13 +26,13 @@ TextSingleObject::TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent)
     qDebug("TextSingleObject Constructor()");
     if (obj)
     {
-        setObjectTextFont(obj->objectTextFont());
-        setObjectTextSize(obj->objectTextSize());
+        setObjectTextFont(obj->objTextFont);
+        setObjectTextSize(obj->objTextSize);
         setRotation(obj->rotation());
-        setObjectTextBackward(obj->objectTextBackward());
-        setObjectTextUpsideDown(obj->objectTextUpsideDown());
-        setObjectTextStyle(obj->objectTextBold(), obj->objectTextItalic(), obj->objectTextUnderline(), obj->objectTextStrikeOut(), obj->objectTextOverline());
-        init(obj->objectText(), obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        setObjectTextBackward(obj->objTextBackward);
+        setObjectTextUpsideDown(obj->objTextUpsideDown);
+        setObjectTextStyle(obj->objTextBold, obj->objTextItalic, obj->objTextUnderline, obj->objTextStrikeOut, obj->objTextOverline);
+        init(obj->objText, obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setScale(obj->scale());
     }
 }

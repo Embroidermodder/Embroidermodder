@@ -1307,17 +1307,6 @@ public:
     QList<QPainterPath> objectSavePathList() const { return subPathList(); }
     QList<QPainterPath> subPathList() const;
 
-    QString objectText() const { return objText; }
-    QString objectTextFont() const { return objTextFont; }
-    QString objectTextJustify() const { return objTextJustify; }
-    EmbReal objectTextSize() const { return objTextSize; }
-    bool objectTextBold() const { return objTextBold; }
-    bool objectTextItalic() const { return objTextItalic; }
-    bool objectTextUnderline() const { return objTextUnderline; }
-    bool objectTextStrikeOut() const { return objTextStrikeOut; }
-    bool objectTextOverline() const { return objTextOverline; }
-    bool objectTextBackward() const { return objTextBackward; }
-    bool objectTextUpsideDown() const { return objTextUpsideDown; }
     QPointF objectPos() const { return scenePos(); }
     EmbReal objectX()   const { return scenePos().x(); }
     EmbReal objectY()   const { return scenePos().y(); }
@@ -1708,8 +1697,6 @@ class MainWindow: public QMainWindow
 public:
     MainWindow();
     ~MainWindow();
-
-    Settings settings;
 
     QString settings_general_language;
     QString settings_general_icon_theme;
@@ -3269,6 +3256,8 @@ typedef struct Action__ {
 int get_action_index(std::string cmd);
 
 /* */
+extern Settings settings;
+extern Settings dialog;
 extern std::vector<Action> action_table;
 extern std::vector<std::string> file_toolbar;
 extern std::vector<std::string> edit_toolbar;
