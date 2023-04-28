@@ -19,130 +19,123 @@
 
 #include "embroidermodder.h"
 
-/**
- * @brief MainWindow::createFileToolbar
- */
-void MainWindow::createFileToolbar()
-{
-    qDebug("MainWindow createFileToolbar()");
+std::vector<std::string>
+file_toolbar = {
+    "new",
+    "open",
+    "save",
+    "saveas",
+    "print",
+    "designdetails",
+    "---",
+    "undo",
+    "redo",
+    "---",
+    "help"
+};
 
-    toolbarFile->setObjectName("toolbarFile");
-    toolbarFile->addAction(actionHash[ACTION_new]);
-    toolbarFile->addAction(actionHash[ACTION_open]);
-    toolbarFile->addAction(actionHash[ACTION_save]);
-    toolbarFile->addAction(actionHash[ACTION_saveas]);
-    toolbarFile->addAction(actionHash[ACTION_print]);
-    toolbarFile->addAction(actionHash[ACTION_designdetails]);
+std::vector<std::string>
+edit_toolbar = {
+    "cut",
+    "copy",
+    "paste"
+};
 
-    toolbarFile->addSeparator();
-    toolbarFile->addAction(actionHash[ACTION_undo]);
-    toolbarFile->addAction(actionHash[ACTION_redo]);
-    toolbarFile->addSeparator();
-    toolbarFile->addAction(actionHash[ACTION_help]);
+std::vector<std::string>
+view_toolbar = {
+    "day",
+    "night"
+};
 
-    connect(toolbarFile, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
-}
+std::vector<std::string>
+zoom_toolbar = {
+    "zoomwindow",
+    "zoomdynamic",
+    "zoomscale",
+    "---",
+    "zoomcenter",
+    "zoomin",
+    "zoomout",
+    "---",
+    "zoomselected",
+    "zoomall",
+    "zoomextents"
+};
 
-/**
- * @brief MainWindow::createEditToolbar
- */
-void MainWindow::createEditToolbar()
-{
-    qDebug("MainWindow createEditToolbar()");
+std::vector<std::string>
+pan_toolbar = {
+    "panrealtime",
+    "panpoint",
+    "---",
+    "panleft",
+    "panright",
+    "panup",
+    "pandown"
+};
 
-    toolbarEdit->setObjectName("toolbarEdit");
-    toolbarEdit->addAction(actionHash[ACTION_cut]);
-    toolbarEdit->addAction(actionHash[ACTION_copy]);
-    toolbarEdit->addAction(actionHash[ACTION_paste]);
+std::vector<std::string>
+icon_toolbar = {
+    "icon16",
+    "icon24",
+    "icon32",
+    "icon48",
+    "icon64",
+    "icon128"
+};
 
-    connect(toolbarEdit, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
-}
-
-void MainWindow::createViewToolbar()
-{
-    qDebug("MainWindow createViewToolbar()");
-
-    toolbarView->setObjectName("toolbarView");
-    toolbarView->addAction(actionHash[ACTION_day]);
-    toolbarView->addAction(actionHash[ACTION_night]);
-
-    connect(toolbarView, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
-}
-
-void MainWindow::createZoomToolbar()
-{
-    qDebug("MainWindow createZoomToolbar()");
-
-    toolbarZoom->setObjectName("toolbarZoom");
-    toolbarZoom->addAction(actionHash[ACTION_zoomwindow]);
-    toolbarZoom->addAction(actionHash[ACTION_zoomdynamic]);
-    toolbarZoom->addAction(actionHash[ACTION_zoomscale]);
-    toolbarZoom->addSeparator();
-    toolbarZoom->addAction(actionHash[ACTION_zoomcenter]);
-    toolbarZoom->addAction(actionHash[ACTION_zoomin]);
-    toolbarZoom->addAction(actionHash[ACTION_zoomout]);
-    toolbarZoom->addSeparator();
-    toolbarZoom->addAction(actionHash[ACTION_zoomselected]);
-    toolbarZoom->addAction(actionHash[ACTION_zoomall]);
-    toolbarZoom->addAction(actionHash[ACTION_zoomextents]);
-
-    connect(toolbarZoom, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
-}
-
-/**
- * @brief MainWindow::createPanToolbar
- */
-void MainWindow::createPanToolbar()
-{
-    qDebug("MainWindow createPanToolbar()");
-
-    toolbarPan->setObjectName("toolbarPan");
-    toolbarPan->addAction(actionHash[ACTION_panrealtime]);
-    toolbarPan->addAction(actionHash[ACTION_panpoint]);
-    toolbarPan->addSeparator();
-    toolbarPan->addAction(actionHash[ACTION_panleft]);
-    toolbarPan->addAction(actionHash[ACTION_panright]);
-    toolbarPan->addAction(actionHash[ACTION_panup]);
-    toolbarPan->addAction(actionHash[ACTION_pandown]);
-
-    connect(toolbarPan, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
-}
+std::vector<std::string>
+help_toolbar = {
+    "help",
+    "---",
+    "changelog",
+    "---",
+    "about",
+    "---",
+    "whatsthis"
+};
 
 /**
- * @brief MainWindow::createIconToolbar
+ * .
  */
-void MainWindow::createIconToolbar()
+int
+get_action_index(std::string cmd)
 {
-    qDebug("MainWindow createIconToolbar()");
-
-    toolbarIcon->setObjectName("toolbarIcon");
-    toolbarIcon->addAction(actionHash[ACTION_icon16]);
-    toolbarIcon->addAction(actionHash[ACTION_icon24]);
-    toolbarIcon->addAction(actionHash[ACTION_icon32]);
-    toolbarIcon->addAction(actionHash[ACTION_icon48]);
-    toolbarIcon->addAction(actionHash[ACTION_icon64]);
-    toolbarIcon->addAction(actionHash[ACTION_icon128]);
-
-    connect(toolbarIcon, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+    for (int i=0; i<action_table.size(); i++) {
+        if (cmd == action_table[i].icon) {
+            return i;
+        }
+    }
+    return 0;
 }
 
 /**
- * @brief MainWindow::createHelpToolbar
+ * .
  */
-void MainWindow::createHelpToolbar()
+void
+MainWindow::create_toolbar(QToolBar* toolbar, std::string label, std::vector<std::string> entries)
 {
-    qDebug("MainWindow createHelpToolbar()");
+    toolbar->setObjectName(label);
+    for (int i=0; i<entries.size(); i++) {
+        if (entries[i] == "---") {
+            toolbar->addSeparator();
+        }
+        else {
+            int index = get_action_index(entries[i]);
+            toolbar->addAction(actionHash[index]);
+        }
+    }
+    connect(toolbar, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+}
 
-    toolbarHelp->setObjectName("toolbarHelp");
-    toolbarHelp->addAction(actionHash[ACTION_help]);
-    toolbarHelp->addSeparator();
-    toolbarHelp->addAction(actionHash[ACTION_changelog]);
-    toolbarHelp->addSeparator();
-    toolbarHelp->addAction(actionHash[ACTION_about]);
-    toolbarHelp->addSeparator();
-    toolbarHelp->addAction(actionHash[ACTION_whatsthis]);
-
-    connect(toolbarHelp, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+/**
+ * .
+ */
+QIcon
+MainWindow::create_icon(QString stub)
+{
+    QString appDir = qApp->applicationDirPath();
+    QString icontheme = settings_general_icon_theme;
+    return QIcon(appDir + "/icons/" + icontheme + "/" + stub + ".png");
 }
 
 /**
@@ -153,29 +146,25 @@ void MainWindow::createLayerToolbar()
     qDebug("MainWindow createLayerToolbar()");
 
     toolbarLayer->setObjectName("toolbarLayer");
-    toolbarLayer->addAction(actionHash[ACTION_makelayercurrent]);
-    toolbarLayer->addAction(actionHash[ACTION_layers]);
-
-    QString appDir = qApp->applicationDirPath();
-    QString icontheme = settings_general_icon_theme;
+    toolbarLayer->addAction(actionHash[get_action_index("makelayercurrent")]);
+    toolbarLayer->addAction(actionHash[get_action_index("layers")]);
 
     layerSelector->setFocusProxy(prompt);
-    //NOTE: Qt4.7 wont load icons without an extension...
     //TODO: Create layer pixmaps by concatenating several icons
-    layerSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebylayer" + ".png"), "0");
-    layerSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebylayer" + ".png"), "1");
-    layerSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebylayer" + ".png"), "2");
-    layerSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebylayer" + ".png"), "3");
-    layerSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebylayer" + ".png"), "4");
-    layerSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebylayer" + ".png"), "5");
-    layerSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebylayer" + ".png"), "6");
-    layerSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebylayer" + ".png"), "7");
-    layerSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebylayer" + ".png"), "8");
-    layerSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebylayer" + ".png"), "9");
+    layerSelector->addItem(create_icon("linetypebylayer"), "0");
+    layerSelector->addItem(create_icon("linetypebylayer"), "1");
+    layerSelector->addItem(create_icon("linetypebylayer"), "2");
+    layerSelector->addItem(create_icon("linetypebylayer"), "3");
+    layerSelector->addItem(create_icon("linetypebylayer"), "4");
+    layerSelector->addItem(create_icon("linetypebylayer"), "5");
+    layerSelector->addItem(create_icon("linetypebylayer"), "6");
+    layerSelector->addItem(create_icon("linetypebylayer"), "7");
+    layerSelector->addItem(create_icon("linetypebylayer"), "8");
+    layerSelector->addItem(create_icon("linetypebylayer"), "9");
     toolbarLayer->addWidget(layerSelector);
     connect(layerSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(layerSelectorIndexChanged(int)));
 
-    toolbarLayer->addAction(actionHash[ACTION_layerprevious]);
+    toolbarLayer->addAction(actionHash[get_action_index("layerprevious")]);
 
     connect(toolbarLayer, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
@@ -189,67 +178,64 @@ void MainWindow::createPropertiesToolbar()
 
     toolbarProperties->setObjectName("toolbarProperties");
 
-    QString appDir = qApp->applicationDirPath();
-    QString icontheme = settings_general_icon_theme;
-
     colorSelector->setFocusProxy(prompt);
     //NOTE: Qt4.7 wont load icons without an extension...
-    colorSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "colorbylayer" + ".png"), "ByLayer");
-    colorSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "colorbyblock" + ".png"), "ByBlock");
-    colorSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "colorred"     + ".png"), tr("Red"),     qRgb(255,  0,  0));
-    colorSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "coloryellow"  + ".png"), tr("Yellow"),  qRgb(255,255,  0));
-    colorSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "colorgreen"   + ".png"), tr("Green"),   qRgb(  0,255,  0));
-    colorSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "colorcyan"    + ".png"), tr("Cyan"),    qRgb(  0,255,255));
-    colorSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "colorblue"    + ".png"), tr("Blue"),    qRgb(  0,  0,255));
-    colorSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "colormagenta" + ".png"), tr("Magenta"), qRgb(255,  0,255));
-    colorSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "colorwhite"   + ".png"), tr("White"),   qRgb(255,255,255));
-    colorSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "colorother"   + ".png"), tr("Other..."));
+    colorSelector->addItem(create_icon("colorbylayer"), "ByLayer");
+    colorSelector->addItem(create_icon("colorbyblock"), "ByBlock");
+    colorSelector->addItem(create_icon("colorred"), tr("Red"),     qRgb(255,  0,  0));
+    colorSelector->addItem(create_icon("coloryellow"), tr("Yellow"),  qRgb(255,255,  0));
+    colorSelector->addItem(create_icon("colorgreen"), tr("Green"),   qRgb(  0,255,  0));
+    colorSelector->addItem(create_icon("colorcyan"), tr("Cyan"),    qRgb(  0,255,255));
+    colorSelector->addItem(create_icon("colorblue"), tr("Blue"),    qRgb(  0,  0,255));
+    colorSelector->addItem(create_icon("colormagenta"), tr("Magenta"), qRgb(255,  0,255));
+    colorSelector->addItem(create_icon("colorwhite"), tr("White"),   qRgb(255,255,255));
+    colorSelector->addItem(create_icon("colorother"), tr("Other..."));
     toolbarProperties->addWidget(colorSelector);
     connect(colorSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(colorSelectorIndexChanged(int)));
 
     toolbarProperties->addSeparator();
     linetypeSelector->setFocusProxy(prompt);
     //NOTE: Qt4.7 wont load icons without an extension...
-    linetypeSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebylayer"    + ".png"), "ByLayer");
-    linetypeSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypebyblock"    + ".png"), "ByBlock");
-    linetypeSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypecontinuous" + ".png"), "Continuous");
-    linetypeSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypehidden"     + ".png"), "Hidden");
-    linetypeSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypecenter"     + ".png"), "Center");
-    linetypeSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "linetypeother"      + ".png"), "Other...");
+    linetypeSelector->addItem(create_icon("linetypebylayer"), "ByLayer");
+    linetypeSelector->addItem(create_icon("linetypebyblock"), "ByBlock");
+    linetypeSelector->addItem(create_icon("linetypecontinuous"), "Continuous");
+    linetypeSelector->addItem(create_icon("linetypehidden"), "Hidden");
+    linetypeSelector->addItem(create_icon("linetypecenter"), "Center");
+    linetypeSelector->addItem(create_icon("linetypeother"), "Other...");
     toolbarProperties->addWidget(linetypeSelector);
     connect(linetypeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(linetypeSelectorIndexChanged(int)));
 
     toolbarProperties->addSeparator();
     lineweightSelector->setFocusProxy(prompt);
     //NOTE: Qt4.7 wont load icons without an extension...
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweightbylayer" + ".png"), "ByLayer", -2.00);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweightbyblock" + ".png"), "ByBlock", -1.00);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweightdefault" + ".png"), "Default",  0.00);
+    lineweightSelector->addItem(create_icon( "lineweightbylayer"), "ByLayer", -2.00);
+    lineweightSelector->addItem(create_icon( "lineweightbyblock"), "ByBlock", -1.00);
+    lineweightSelector->addItem(create_icon( "lineweightdefault"), "Default",  0.00);
     //TODO: Thread weight is weird. See http://en.wikipedia.org/wiki/Thread_(yarn)#Weight
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight01" + ".png"), "0.00 mm", 0.00);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight02" + ".png"), "0.05 mm", 0.05);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight03" + ".png"), "0.15 mm", 0.15);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight04" + ".png"), "0.20 mm", 0.20);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight05" + ".png"), "0.25 mm", 0.25);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight06" + ".png"), "0.30 mm", 0.30);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight07" + ".png"), "0.35 mm", 0.35);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight08" + ".png"), "0.40 mm", 0.40);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight09" + ".png"), "0.45 mm", 0.45);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight10" + ".png"), "0.50 mm", 0.50);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight11" + ".png"), "0.55 mm", 0.55);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight12" + ".png"), "0.60 mm", 0.60);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight13" + ".png"), "0.65 mm", 0.65);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight14" + ".png"), "0.70 mm", 0.70);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight15" + ".png"), "0.75 mm", 0.75);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight16" + ".png"), "0.80 mm", 0.80);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight17" + ".png"), "0.85 mm", 0.85);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight18" + ".png"), "0.90 mm", 0.90);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight19" + ".png"), "0.95 mm", 0.95);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight20" + ".png"), "1.00 mm", 1.00);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight21" + ".png"), "1.05 mm", 1.05);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight22" + ".png"), "1.10 mm", 1.10);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight23" + ".png"), "1.15 mm", 1.15);
-    lineweightSelector->addItem(QIcon(appDir + "/icons/" + icontheme + "/" + "lineweight24" + ".png"), "1.20 mm", 1.20);
+    lineweightSelector->addItem(create_icon( "lineweight01"), "0.00 mm", 0.00);
+    lineweightSelector->addItem(create_icon( "lineweight02"), "0.05 mm", 0.05);
+    lineweightSelector->addItem(create_icon( "lineweight03"), "0.15 mm", 0.15);
+    lineweightSelector->addItem(create_icon( "lineweight04"), "0.20 mm", 0.20);
+    lineweightSelector->addItem(create_icon( "lineweight05"), "0.25 mm", 0.25);
+    lineweightSelector->addItem(create_icon( "lineweight06"), "0.30 mm", 0.30);
+    lineweightSelector->addItem(create_icon( "lineweight07"), "0.35 mm", 0.35);
+    lineweightSelector->addItem(create_icon( "lineweight08"), "0.40 mm", 0.40);
+    lineweightSelector->addItem(create_icon( "lineweight09"), "0.45 mm", 0.45);
+    lineweightSelector->addItem(create_icon( "lineweight10"), "0.50 mm", 0.50);
+    lineweightSelector->addItem(create_icon( "lineweight11"), "0.55 mm", 0.55);
+    lineweightSelector->addItem(create_icon( "lineweight12"), "0.60 mm", 0.60);
+    lineweightSelector->addItem(create_icon( "lineweight13"), "0.65 mm", 0.65);
+    lineweightSelector->addItem(create_icon( "lineweight14"), "0.70 mm", 0.70);
+    lineweightSelector->addItem(create_icon( "lineweight15"), "0.75 mm", 0.75);
+    lineweightSelector->addItem(create_icon( "lineweight16"), "0.80 mm", 0.80);
+    lineweightSelector->addItem(create_icon( "lineweight17"), "0.85 mm", 0.85);
+    lineweightSelector->addItem(create_icon( "lineweight18"), "0.90 mm", 0.90);
+    lineweightSelector->addItem(create_icon( "lineweight19"), "0.95 mm", 0.95);
+    lineweightSelector->addItem(create_icon("lineweight20"), "1.00 mm", 1.00);
+    lineweightSelector->addItem(create_icon("lineweight21"), "1.05 mm", 1.05);
+    lineweightSelector->addItem(create_icon("lineweight22"), "1.10 mm", 1.10);
+    lineweightSelector->addItem(create_icon("lineweight23"), "1.15 mm", 1.15);
+    lineweightSelector->addItem(create_icon("lineweight24"), "1.20 mm", 1.20);
     lineweightSelector->setMinimumContentsLength(8); // Prevent dropdown text readability being squish...d.
     toolbarProperties->addWidget(lineweightSelector);
     connect(lineweightSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(lineweightSelectorIndexChanged(int)));
@@ -271,16 +257,25 @@ MainWindow::createTextToolbar()
     textFontSelector->setCurrentFont(QFont(settings_text_font));
     connect(textFontSelector, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(textFontSelectorCurrentFontChanged(const QFont&)));
 
-    toolbarText->addAction(actionHash[ACTION_textbold]);
-    actionHash[ACTION_textbold]->setChecked(settings_text_style_bold);
-    toolbarText->addAction(actionHash[ACTION_textitalic]);
-    actionHash[ACTION_textitalic]->setChecked(settings_text_style_italic);
-    toolbarText->addAction(actionHash[ACTION_textunderline]);
-    actionHash[ACTION_textunderline]->setChecked(settings_text_style_underline);
-    toolbarText->addAction(actionHash[ACTION_textstrikeout]);
-    actionHash[ACTION_textstrikeout]->setChecked(settings_text_style_strikeout);
-    toolbarText->addAction(actionHash[ACTION_textoverline]);
-    actionHash[ACTION_textoverline]->setChecked(settings_text_style_overline);
+    int textbold_index = get_action_index("textbold");
+    toolbarText->addAction(actionHash[textbold_index]);
+    actionHash[textbold_index]->setChecked(settings_text_style_bold);
+
+    int textitalic_index = get_action_index("textitalic");
+    toolbarText->addAction(actionHash[textitalic_index]);
+    actionHash[get_action_index("textitalic")]->setChecked(settings_text_style_italic);
+
+    int textunderline_index = get_action_index("textunderline");
+    toolbarText->addAction(actionHash[textunderline_index]);
+    actionHash[textunderline_index]->setChecked(settings_text_style_underline);
+
+    int textstrikeout_index = get_action_index("textstrikeout");
+    toolbarText->addAction(actionHash[textstrikeout_index]);
+    actionHash[textstrikeout_index]->setChecked(settings_text_style_strikeout);
+
+    int textoverline_index = get_action_index("textoverline");
+    toolbarText->addAction(actionHash[textoverline_index]);
+    actionHash[textoverline_index]->setChecked(settings_text_style_overline);
 
     textSizeSelector->setFocusProxy(prompt);
     textSizeSelector->addItem("6 pt",   6);
@@ -326,13 +321,14 @@ MainWindow::createAllToolbars()
 {
     qDebug("MainWindow createAllToolbars()");
 
-    createFileToolbar();
-    createEditToolbar();
-    createViewToolbar();
-    createZoomToolbar();
-    createPanToolbar();
-    createIconToolbar();
-    createHelpToolbar();
+    create_toolbar(toolbarFile, "toolbarFile", file_toolbar);
+    create_toolbar(toolbarEdit, "toolbarEdit", edit_toolbar);
+    create_toolbar(toolbarView, "toolbarView", view_toolbar);
+    create_toolbar(toolbarZoom, "toolbarZoom", zoom_toolbar);
+    create_toolbar(toolbarPan, "toolbarPan", pan_toolbar);
+    create_toolbar(toolbarIcon, "toolbarIcon", icon_toolbar);
+    create_toolbar(toolbarHelp, "toolbarHelp", help_toolbar);
+
     createLayerToolbar();
     createPropertiesToolbar();
     createTextToolbar();
@@ -345,6 +341,7 @@ MainWindow::createAllToolbars()
     toolbarProperties->setOrientation(Qt::Horizontal);
     toolbarText->setOrientation(Qt::Horizontal);
     toolbarPrompt->setOrientation(Qt::Horizontal);
+
     // Top
     addToolBarBreak(Qt::TopToolBarArea);
     addToolBar(Qt::TopToolBarArea, toolbarFile);
@@ -360,6 +357,7 @@ MainWindow::createAllToolbars()
     addToolBar(Qt::TopToolBarArea, toolbarProperties);
     addToolBarBreak(Qt::TopToolBarArea);
     addToolBar(Qt::TopToolBarArea, toolbarText);
+
     // Bottom
     addToolBar(Qt::BottomToolBarArea, toolbarPrompt);
 

@@ -1801,9 +1801,9 @@ void View::contextMenuEvent(QContextMenuEvent* event)
     }
 
     menu.addSeparator();
-    menu.addAction(mainWin->actionHash[ACTION_cut]);
-    menu.addAction(mainWin->actionHash[ACTION_copy]);
-    menu.addAction(mainWin->actionHash[ACTION_paste]);
+    menu.addAction(mainWin->actionHash[get_action_index("cut")]);
+    menu.addAction(mainWin->actionHash[get_action_index("copy")]);
+    menu.addAction(mainWin->actionHash[get_action_index("paste")]);
     menu.addSeparator();
 
     if (!selectionEmpty)
