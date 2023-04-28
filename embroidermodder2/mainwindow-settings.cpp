@@ -19,21 +19,53 @@
 
 #include "embroidermodder.h"
 
-// Note: on Unix we include the trailing separator. For Windows compatibility we omit it.
+/**
+ * .
+ * Note: on Unix we include the trailing separator.
+ * For Windows compatibility we omit it.
+ */
 QString SettingsDir()
 {
 #if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
-  QString homePath = QDir::homePath();
-  return homePath + "/.embroidermodder2/";
+    QString homePath = QDir::homePath();
+    return homePath + "/.embroidermodder2/";
 #else
-  return "";
+    return "";
 #endif
 }
 
+/**
+ * .
+ */
 QString SettingsPath()
 {
-  QString settingsPath = SettingsDir() + "settings.ini";
-  return settingsPath;
+    QString settingsPath = SettingsDir() + "settings.ini";
+    return settingsPath;
+}
+
+/**
+ * .
+ */
+std::vector<std::string>
+to_string_vector(QStringList list)
+{
+    std::vector<std::string> a;
+    for (QString s: list) {
+        a.push_back(s.toStdString());
+    }
+    return a;
+}
+
+/**
+ * .
+ */
+void
+read_configuration()
+{
+    QString appDir = qApp->applicationDirPath();
+    QSettings settings(appDir + "/config.ini", QSettings::IniFormat);
+    QString file_toolbar_str = settings.value("file_toolbar", "").toString();
+    file_toolbar = to_string_vector(file_toolbar_str.split(" "));
 }
 
 /**

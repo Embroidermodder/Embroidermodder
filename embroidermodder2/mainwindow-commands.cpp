@@ -436,42 +436,6 @@ void MainWindow::iconResize(int iconSize)
     settings_general_icon_size = iconSize;
 }
 
-void MainWindow::icon16()
-{
-    qDebug("icon16()");
-    iconResize(16);
-}
-
-void MainWindow::icon24()
-{
-    qDebug("icon24()");
-    iconResize(24);
-}
-
-void MainWindow::icon32()
-{
-    qDebug("icon32()");
-    iconResize(32);
-}
-
-void MainWindow::icon48()
-{
-    qDebug("icon48()");
-    iconResize(48);
-}
-
-void MainWindow::icon64()
-{
-    qDebug("icon64()");
-    iconResize(64);;
-}
-
-void MainWindow::icon128()
-{
-    qDebug("icon128()");
-    iconResize(128);
-}
-
 MdiWindow* MainWindow::activeMdiWindow()
 {
     qDebug("activeMdiWindow()");
@@ -628,7 +592,9 @@ void MainWindow::zoomWindow()
 {
     qDebug("zoomWindow()");
     View* gview = activeView();
-    if(gview) { gview->zoomWindow(); }
+    if (gview) {
+        gview->zoomWindow();
+    }
 }
 
 void MainWindow::zoomDynamic()

@@ -170,15 +170,15 @@ typedef struct UiObject_ {
     EmbVector scale; /*< The scale of the object: note that the default
                          may not be (1.0, 1.0). */
     EmbReal rotation; /*< \todo document this */
-    unsigned int mode; /*< The mode argument records what kind of design we are
+    uint32_t mode; /*< The mode argument records what kind of design we are
                            using and how to interact with it. */
     char path_desc[1000]; /*< The SVG style path spec. */
     char text[200]; /*< The text to be rendered to the scene. */
     int textJustify; /*< One of the JUSTIFY_* constants representing what kind
                          of alignment to use. */
     char textFont[200]; /*< The file name of the font to use. */
-    float textHeight; /*< The text height. */
-    float textRotation; /*< The rotation of the text in the scene. */
+    EmbReal textHeight; /*< The text height. */
+    EmbReal textRotation; /*< The rotation of the text in the scene. */
     //GLuint texture_id; /*< Pointer to a texture that may be rendered to the object. */
     char id[200]; /*< \todo document this */
     int pattern_index; /*< \todo document this */
@@ -198,7 +198,7 @@ typedef struct UiObject_ {
 typedef struct EmbView_ {
     EmbPattern *pattern; /*< \todo document this */
     EmbVector origin; /*< \todo document this */
-    float scale; /*< \todo document this */
+    EmbReal scale; /*< \todo document this */
     char grid_type[200]; /*< \todo document this */
     int ui_mode; /*< \todo document this */
     bool snap_mode; /*< \todo document this */
@@ -214,8 +214,8 @@ typedef struct EmbView_ {
     bool simulate; /*< \todo document this */
     clock_t simulation_start; /*< \todo document this */
     char text_font[200]; /*< \todo document this */
-    float text_size; /*< \todo document this */
-    float text_angle; /*< \todo document this */
+    EmbReal text_size; /*< \todo document this */
+    EmbReal text_angle; /*< \todo document this */
     bool text_style_bold; /*< \todo document this */
     bool text_style_italic; /*< \todo document this */
     bool text_style_underline; /*< \todo document this */
@@ -259,9 +259,9 @@ typedef struct Settings_ {
     bool mdi_bg_use_color; /*< \todo document this */
     char general_mdi_bg_logo[200]; /*< \todo document this */
     char general_mdi_bg_texture[200]; /*< \todo document this */
-    unsigned int general_mdi_bg_color; /*< \todo document this */
+    uint32_t general_mdi_bg_color; /*< \todo document this */
     bool tip_of_the_day; /*< \todo document this */
-    unsigned int general_current_tip; /*< \todo document this */
+    uint32_t general_current_tip; /*< \todo document this */
     bool general_system_help_browser; /*< \todo document this */
     bool general_check_for_updates; /*< \todo document this */
     bool display_use_opengl; /*< \todo document this */
@@ -272,52 +272,50 @@ typedef struct Settings_ {
     bool display_renderhint_noncosmetic; /*< \todo document this */
     bool display_show_scrollbars; /*< \todo document this */
     int display_scrollbar_widget_num; /*< \todo document this */
-    unsigned int display_crosshair_color; /*< \todo document this */
-    unsigned int display_bg_color; /*< \todo document this */
-    unsigned int display_selectbox_left_color; /*< \todo document this */
-    unsigned int display_selectbox_left_fill; /*< \todo document this */
-    unsigned int display_selectbox_right_color; /*< \todo document this */
-    unsigned int display_selectbox_right_fill; /*< \todo document this */
-    unsigned char display_selectbox_alpha; /*< \todo document this */
-    float display_zoomscale_in; /*< \todo document this */
-    float display_zoomscale_out; /*< \todo document this */
-    unsigned char  display_crosshair_percent; /*< \todo document this */
-    char display_units[200]; /*< \todo document this */
-    char opensave_custom_filter[200]; /*< \todo document this */
-    char opensave_open_format[200]; /*< \todo document this */
+    uint32_t display_crosshair_color; /*< \todo document this */
+    uint32_t display_bg_color; /*< \todo document this */
+    uint32_t display_selectbox_left_color; /*< \todo document this */
+    uint32_t display_selectbox_left_fill; /*< \todo document this */
+    uint32_t display_selectbox_right_color; /*< \todo document this */
+    uint32_t display_selectbox_right_fill; /*< \todo document this */
+    uint8_t display_selectbox_alpha; /*< \todo document this */
+    EmbReal display_zoomscale_in; /*< \todo document this */
+    EmbReal display_zoomscale_out; /*< \todo document this */
+    uint8_t display_crosshair_percent; /*< \todo document this */
+    std::string display_units; /*< \todo document this */
+    std::string opensave_custom_filter; /*< \todo document this */
+    std::string opensave_open_format; /*< \todo document this */
     bool opensave_open_thumbnail; /*< \todo document this */
-    char opensave_save_format[200]; /*< \todo document this */
+    std::string opensave_save_format; /*< \todo document this */
     bool opensave_save_thumbnail; /*< \todo document this */
-    unsigned char  opensave_recent_max_files; /*< \todo document this */
-    char opensave_recent_list_of_files[20][200]; /*< \todo document this */
-    char opensave_recent_directory[200]; /*< \todo document this */
-    unsigned char  opensave_trim_dst_num_jumps; /*< \todo document this */
-    char printing_default_device[200]; /*< \todo document this */
+    uint8_t opensave_recent_max_files; /*< \todo document this */
+    std::vector<std::string> opensave_recent_list_of_files; /*< \todo document this */
+    std::string opensave_recent_directory; /*< \todo document this */
+    uint8_t opensave_trim_dst_num_jumps; /*< \todo document this */
+    std::string printing_default_device; /*< \todo document this */
     bool printing_use_last_device; /*< \todo document this */
     bool printing_disable_bg; /*< \todo document this */
     bool grid_show_on_load; /*< \todo document this */
     bool grid_show_origin; /*< \todo document this */
     bool grid_color_match_crosshair; /*< \todo document this */
-    unsigned int grid_color; /*< \todo document this */
+    uint32_t grid_color; /*< \todo document this */
     bool grid_load_from_file; /*< \todo document this */
-    char grid_type[200]; /*< \todo document this */
+    std::string grid_type; /*< \todo document this */
     bool grid_center_on_origin; /*< \todo document this */
     EmbVector grid_center; /*< \todo document this */
-    float grid_size_x; /*< \todo document this */
-    float grid_size_y; /*< \todo document this */
-    float grid_spacing_x; /*< \todo document this */
-    float grid_spacing_y; /*< \todo document this */
-    float grid_size_radius; /*< \todo document this */
-    float grid_spacing_radius; /*< \todo document this */
-    float grid_spacing_angle; /*< \todo document this */
+    EmbVector grid_size; /*< \todo document this */
+    EmbVector grid_spacing; /*< \todo document this */
+    EmbReal grid_size_radius; /*< \todo document this */
+    EmbReal grid_spacing_radius; /*< \todo document this */
+    EmbReal grid_spacing_angle; /*< \todo document this */
     bool ruler_show_on_load; /*< \todo document this */
     bool ruler_metric; /*< \todo document this */
-    unsigned int ruler_color; /*< \todo document this */
-    unsigned char ruler_pixel_size; /*< \todo document this */
+    uint32_t ruler_color; /*< \todo document this */
+    uint8_t ruler_pixel_size; /*< \todo document this */
     bool qsnap_enabled; /*< \todo document this */
-    unsigned int qsnap_locator_color; /*< \todo document this */
-    unsigned char qsnap_locator_size; /*< \todo document this */
-    unsigned char qsnap_aperture_size; /*< \todo document this */
+    uint32_t qsnap_locator_color; /*< \todo document this */
+    uint8_t qsnap_locator_size; /*< \todo document this */
+    uint8_t qsnap_aperture_size; /*< \todo document this */
     bool qsnap_endpoint; /*< \todo document this */
     bool qsnap_midpoint; /*< \todo document this */
     bool qsnap_center; /*< \todo document this */
@@ -334,129 +332,36 @@ typedef struct Settings_ {
     bool lwt_show_lwt; /*< \todo document this */
     bool lwt_real_render; /*< \todo document this */
     bool shift_held; /*< \todo document this */
-    float lwt_default_lwt; /*< \todo document this */
+    EmbReal lwt_default_lwt; /*< \todo document this */
     bool selection_mode_pickfirst; /*< \todo document this */
     bool selection_mode_pickadd; /*< \todo document this */
     bool selection_mode_pickdrag; /*< \todo document this */
-    unsigned int selection_coolgrip_color; /*< \todo document this */
-    unsigned int selection_hotgrip_color; /*< \todo document this */
-    unsigned char selection_grip_size; /*< \todo document this */
-    unsigned char selection_pickbox_size; /*< \todo document this */
+    uint32_t selection_coolgrip_color; /*< \todo document this */
+    uint32_t selection_hotgrip_color; /*< \todo document this */
+    uint8_t selection_grip_size; /*< \todo document this */
+    uint8_t selection_pickbox_size; /*< \todo document this */
     char text_font[200]; /*< \todo document this */
-    float text_size; /*< \todo document this */
-    float text_angle; /*< \todo document this */
+    EmbReal text_size; /*< \todo document this */
+    EmbReal text_angle; /*< \todo document this */
     bool text_style_bold; /*< \todo document this */
     bool text_style_italic; /*< \todo document this */
     bool text_style_underline; /*< \todo document this */
     bool text_style_overline; /*< \todo document this */
     bool text_style_strikeout; /*< \todo document this */
     Dictionary *texture_list; /*< \todo document this */
-    unsigned int ticks_color; /*< \todo document this */
-    unsigned int shine_color; /*< \todo document this */
+    uint32_t ticks_color; /*< \todo document this */
+    uint32_t shine_color; /*< \todo document this */
     char to_open[200]; /*< \todo document this */
     char menu_action[200]; /*< \todo document this */
     char current_directory[200]; /*< \todo document this */
     EmbReal zoomInLimit; /*< */
     EmbReal zoomOutLimit; /*< */
-    EmbVector grid_spacing; /*< */
-    float ruler_width; /*< */
-    float tick_depth; /*< */
-    float major_tick_seperation; /*< */
-    float needle_speed; /*< */
-    float stitch_time; /*< */
+    EmbReal ruler_width; /*< */
+    EmbReal tick_depth; /*< */
+    EmbReal major_tick_seperation; /*< */
+    EmbReal needle_speed; /*< */
+    EmbReal stitch_time; /*< */
 } Settings;
-
-static const int ACTION_donothing = 0;
-
-static const int ACTION_new = 1;
-static const int ACTION_open = 2;
-static const int ACTION_save = 3;
-static const int ACTION_saveas = 4;
-static const int ACTION_print = 5;
-static const int ACTION_designdetails = 6;
-static const int ACTION_exit = 7;
-static const int ACTION_cut = 8;
-static const int ACTION_copy = 9;
-static const int ACTION_paste = 10;
-
-static const int ACTION_undo = 11;
-static const int ACTION_redo = 12;
-
-// Window Menu
-static const int ACTION_windowclose = 13;
-static const int ACTION_windowcloseall = 14;
-static const int ACTION_windowcascade = 15;
-static const int ACTION_windowtile = 16;
-static const int ACTION_windownext = 17;
-static const int ACTION_windowprevious = 18;
-
-// Help Menu
-static const int ACTION_help = 19;
-static const int ACTION_changelog = 20;
-static const int ACTION_tipoftheday = 21;
-static const int ACTION_about = 22;
-static const int ACTION_whatsthis = 23;
-
-// Icons
-static const int ACTION_icon16 = 24;
-static const int ACTION_icon24 = 25;
-static const int ACTION_icon32 = 26;
-static const int ACTION_icon48 = 27;
-static const int ACTION_icon64 = 28;
-static const int ACTION_icon128 = 29;
-
-static const int ACTION_settingsdialog = 30;
-
-// Layer ToolBar
-static const int ACTION_makelayercurrent = 31;
-static const int ACTION_layers = 32;
-static const int ACTION_layerselector = 33;
-static const int ACTION_layerprevious = 34;
-static const int ACTION_colorselector = 35;
-static const int ACTION_linetypeselector = 36;
-static const int ACTION_lineweightselector = 37;
-static const int ACTION_hidealllayers = 38;
-static const int ACTION_showalllayers = 39;
-static const int ACTION_freezealllayers = 40;
-static const int ACTION_thawalllayers = 41;
-static const int ACTION_lockalllayers = 42;
-static const int ACTION_unlockalllayers = 43;
-
-// Text ToolBar
-static const int ACTION_textbold = 44;
-static const int ACTION_textitalic = 45;
-static const int ACTION_textunderline = 46;
-static const int ACTION_textstrikeout = 47;
-static const int ACTION_textoverline = 48;
-
-// Zoom ToolBar
-static const int ACTION_zoomrealtime = 49;
-static const int ACTION_zoomprevious = 50;
-static const int ACTION_zoomwindow = 51;
-static const int ACTION_zoomdynamic = 52;
-static const int ACTION_zoomscale = 53;
-static const int ACTION_zoomcenter = 54;
-static const int ACTION_zoomin = 55;
-static const int ACTION_zoomout = 56;
-static const int ACTION_zoomselected = 57;
-static const int ACTION_zoomall = 58;
-static const int ACTION_zoomextents = 59;
-
-// Pan SubMenu
-static const int ACTION_panrealtime = 60;
-static const int ACTION_panpoint = 61;
-static const int ACTION_panleft = 62;
-static const int ACTION_panright = 63;
-static const int ACTION_panup = 64;
-static const int ACTION_pandown = 65;
-
-static const int ACTION_day = 66;
-static const int ACTION_night = 67;
-
-//TODO: ACTION_spellcheck = 33;
-//TODO: ACTION_quickselect = 33;
-
-static const int ACTION_null = 68;
 
 enum UiMode {
     DEFAULT_MODE,
@@ -1804,6 +1709,8 @@ public:
     MainWindow();
     ~MainWindow();
 
+    Settings settings;
+
     QString settings_general_language;
     QString settings_general_icon_theme;
     int settings_general_icon_size;
@@ -1945,6 +1852,8 @@ public:
 
     bool isCommandActive() { return prompt->isCommandActive(); }
     QString activeCommand() { return prompt->activeCommand(); }
+    QIcon create_icon(QString stub);
+    void create_toolbar(QToolBar* toolbar, std::string label, std::vector<std::string> entries);
 
     QString platformString();
 
@@ -2013,10 +1922,6 @@ protected:
     //Toolbars
     //====================================================
     void createAllToolbars();
-    void createFileToolbar();
-    void createEditToolbar();
-    void createViewToolbar();
-    void createZoomToolbar();
     void createPanToolbar();
     void createIconToolbar();
     void createHelpToolbar();
@@ -2024,11 +1929,6 @@ protected:
     void createPropertiesToolbar();
     void createTextToolbar();
     void createPromptToolbar();
-
-    const int file_toolbar = 0;
-    const int edit_toolbar = 1;
-    const int view_toolbar = 2;
-    const int zoom_toolbar = 3;
 
     QToolBar* toolbarFile;
     QToolBar* toolbarEdit;
@@ -2128,12 +2028,6 @@ public slots:
 
     // Icons
     void iconResize(int iconSize);
-    void icon16();
-    void icon24();
-    void icon32();
-    void icon48();
-    void icon64();
-    void icon128();
 
     //Selectors
     void layerSelectorIndexChanged(int index);
@@ -2520,9 +2414,9 @@ private:
     TextSingleObject*   tempTextSingleObj;
 
     //Helper functions
-    QToolButton*   createToolButton(const QString& iconName, const QString& txt);
-    QLineEdit*     createLineEdit(const QString& validatorType = QString(), bool readOnly = false);
-    QComboBox*     createComboBox(bool disable = false);
+    QToolButton* createToolButton(const QString& iconName, const QString& txt);
+    QLineEdit* createLineEdit(const QString& validatorType = QString(), bool readOnly = false);
+    QComboBox* createComboBox(bool disable = false);
     QFontComboBox* createFontComboBox(bool disable = false);
 
     int precisionAngle;
@@ -2559,387 +2453,37 @@ private:
 
     //TODO: Alphabetic/Categorized TabWidget
 
-    //====================
-    //General
-    //====================
-    QGroupBox*   createGroupBoxGeneral();
-    QGroupBox*   groupBoxGeneral;
-
-    QToolButton* toolButtonGeneralLayer;
-    QToolButton* toolButtonGeneralColor;
-    QToolButton* toolButtonGeneralLineType;
-    QToolButton* toolButtonGeneralLineWeight;
-
-    QComboBox*   comboBoxGeneralLayer;
-    QComboBox*   comboBoxGeneralColor;
-    QComboBox*   comboBoxGeneralLineType;
-    QComboBox*   comboBoxGeneralLineWeight;
-
-    //====================
-    //Geometry
-    //====================
-
-    //Arc
-    QGroupBox*   createGroupBoxGeometryArc();
-    QGroupBox*   groupBoxGeometryArc;
-
-    QToolButton* toolButtonArcCenterX;
-    QToolButton* toolButtonArcCenterY;
-    QToolButton* toolButtonArcRadius;
-    QToolButton* toolButtonArcStartAngle;
-    QToolButton* toolButtonArcEndAngle;
-    QToolButton* toolButtonArcStartX;
-    QToolButton* toolButtonArcStartY;
-    QToolButton* toolButtonArcEndX;
-    QToolButton* toolButtonArcEndY;
-    QToolButton* toolButtonArcArea;
-    QToolButton* toolButtonArcLength;
-    QToolButton* toolButtonArcChord;
-    QToolButton* toolButtonArcIncAngle;
-
-    QLineEdit*   lineEditArcCenterX;
-    QLineEdit*   lineEditArcCenterY;
-    QLineEdit*   lineEditArcRadius;
-    QLineEdit*   lineEditArcStartAngle;
-    QLineEdit*   lineEditArcEndAngle;
-    QLineEdit*   lineEditArcStartX;
-    QLineEdit*   lineEditArcStartY;
-    QLineEdit*   lineEditArcEndX;
-    QLineEdit*   lineEditArcEndY;
-    QLineEdit*   lineEditArcArea;
-    QLineEdit*   lineEditArcLength;
-    QLineEdit*   lineEditArcChord;
-    QLineEdit*   lineEditArcIncAngle;
-
-    QGroupBox*   createGroupBoxMiscArc();
-    QGroupBox*   groupBoxMiscArc;
-
-    QToolButton* toolButtonArcClockwise;
-
-    QComboBox*   comboBoxArcClockwise;
-
-    //Block
-    QGroupBox*   createGroupBoxGeometryBlock();
-    QGroupBox*   groupBoxGeometryBlock;
-
-    QToolButton* toolButtonBlockX;
-    QToolButton* toolButtonBlockY;
-
-    QLineEdit*   lineEditBlockX;
-    QLineEdit*   lineEditBlockY;
-
-    //Circle
-    QGroupBox*   createGroupBoxGeometryCircle();
-    QGroupBox*   groupBoxGeometryCircle;
-
-    QToolButton* toolButtonCircleCenterX;
-    QToolButton* toolButtonCircleCenterY;
-    QToolButton* toolButtonCircleRadius;
-    QToolButton* toolButtonCircleDiameter;
-    QToolButton* toolButtonCircleArea;
-    QToolButton* toolButtonCircleCircumference;
-
-    QLineEdit*   lineEditCircleCenterX;
-    QLineEdit*   lineEditCircleCenterY;
-    QLineEdit*   lineEditCircleRadius;
-    QLineEdit*   lineEditCircleDiameter;
-    QLineEdit*   lineEditCircleArea;
-    QLineEdit*   lineEditCircleCircumference;
-
-    //DimAligned
-    QGroupBox*   createGroupBoxGeometryDimAligned();
-    QGroupBox*   groupBoxGeometryDimAligned;
-
-    //TODO: toolButtons and lineEdits for DimAligned
-
-    //DimAngular
-    QGroupBox*   createGroupBoxGeometryDimAngular();
-    QGroupBox*   groupBoxGeometryDimAngular;
-
-    //TODO: toolButtons and lineEdits for DimAngular
-
-    //DimArcLength
-    QGroupBox*   createGroupBoxGeometryDimArcLength();
-    QGroupBox*   groupBoxGeometryDimArcLength;
-
-    //TODO: toolButtons and lineEdits for DimArcLength
-
-    //DimDiameter
-    QGroupBox*   createGroupBoxGeometryDimDiameter();
-    QGroupBox*   groupBoxGeometryDimDiameter;
-
-    //TODO: toolButtons and lineEdits for DimDiameter
-
-    //DimLeader
-    QGroupBox*   createGroupBoxGeometryDimLeader();
-    QGroupBox*   groupBoxGeometryDimLeader;
-
-    //TODO: toolButtons and lineEdits for DimLeader
-
-    //DimLinear
-    QGroupBox*   createGroupBoxGeometryDimLinear();
-    QGroupBox*   groupBoxGeometryDimLinear;
-
-    //TODO: toolButtons and lineEdits for DimLinear
-
-    //DimOrdinate
-    QGroupBox*   createGroupBoxGeometryDimOrdinate();
-    QGroupBox*   groupBoxGeometryDimOrdinate;
-
-    //TODO: toolButtons and lineEdits for DimOrdinate
-
-    //DimRadius
-    QGroupBox*   createGroupBoxGeometryDimRadius();
-    QGroupBox*   groupBoxGeometryDimRadius;
-
-    //TODO: toolButtons and lineEdits for DimRadius
-
-    //Ellipse
-    QGroupBox*   createGroupBoxGeometryEllipse();
-    QGroupBox*   groupBoxGeometryEllipse;
-
-    QToolButton* toolButtonEllipseCenterX;
-    QToolButton* toolButtonEllipseCenterY;
-    QToolButton* toolButtonEllipseRadiusMajor;
-    QToolButton* toolButtonEllipseRadiusMinor;
-    QToolButton* toolButtonEllipseDiameterMajor;
-    QToolButton* toolButtonEllipseDiameterMinor;
-
-    QLineEdit*   lineEditEllipseCenterX;
-    QLineEdit*   lineEditEllipseCenterY;
-    QLineEdit*   lineEditEllipseRadiusMajor;
-    QLineEdit*   lineEditEllipseRadiusMinor;
-    QLineEdit*   lineEditEllipseDiameterMajor;
-    QLineEdit*   lineEditEllipseDiameterMinor;
-
-    //Image
-    QGroupBox*   createGroupBoxGeometryImage();
-    QGroupBox*   groupBoxGeometryImage;
-
-    QToolButton* toolButtonImageX;
-    QToolButton* toolButtonImageY;
-    QToolButton* toolButtonImageWidth;
-    QToolButton* toolButtonImageHeight;
-
-    QLineEdit*   lineEditImageX;
-    QLineEdit*   lineEditImageY;
-    QLineEdit*   lineEditImageWidth;
-    QLineEdit*   lineEditImageHeight;
-
-    QGroupBox*   createGroupBoxMiscImage();
-    QGroupBox*   groupBoxMiscImage;
-
-    QToolButton* toolButtonImageName;
-    QToolButton* toolButtonImagePath;
-
-    QLineEdit*   lineEditImageName;
-    QLineEdit*   lineEditImagePath;
-
-    //Infinite Line
-    QGroupBox*   createGroupBoxGeometryInfiniteLine();
-    QGroupBox*   groupBoxGeometryInfiniteLine;
-
-    QToolButton* toolButtonInfiniteLineX1;
-    QToolButton* toolButtonInfiniteLineY1;
-    QToolButton* toolButtonInfiniteLineX2;
-    QToolButton* toolButtonInfiniteLineY2;
-    QToolButton* toolButtonInfiniteLineVectorX;
-    QToolButton* toolButtonInfiniteLineVectorY;
-
-    QLineEdit*   lineEditInfiniteLineX1;
-    QLineEdit*   lineEditInfiniteLineY1;
-    QLineEdit*   lineEditInfiniteLineX2;
-    QLineEdit*   lineEditInfiniteLineY2;
-    QLineEdit*   lineEditInfiniteLineVectorX;
-    QLineEdit*   lineEditInfiniteLineVectorY;
-
-    //Line
-    QGroupBox*   createGroupBoxGeometryLine();
-    QGroupBox*   groupBoxGeometryLine;
-
-    QToolButton* toolButtonLineStartX;
-    QToolButton* toolButtonLineStartY;
-    QToolButton* toolButtonLineEndX;
-    QToolButton* toolButtonLineEndY;
-    QToolButton* toolButtonLineDeltaX;
-    QToolButton* toolButtonLineDeltaY;
-    QToolButton* toolButtonLineAngle;
-    QToolButton* toolButtonLineLength;
-
-    QLineEdit*   lineEditLineStartX;
-    QLineEdit*   lineEditLineStartY;
-    QLineEdit*   lineEditLineEndX;
-    QLineEdit*   lineEditLineEndY;
-    QLineEdit*   lineEditLineDeltaX;
-    QLineEdit*   lineEditLineDeltaY;
-    QLineEdit*   lineEditLineAngle;
-    QLineEdit*   lineEditLineLength;
-
-    //Path
-    QGroupBox*   createGroupBoxGeometryPath();
-    QGroupBox*   groupBoxGeometryPath;
-
-    QToolButton* toolButtonPathVertexNum;
-    QToolButton* toolButtonPathVertexX;
-    QToolButton* toolButtonPathVertexY;
-    QToolButton* toolButtonPathArea;
-    QToolButton* toolButtonPathLength;
-
-    QComboBox*   comboBoxPathVertexNum;
-    QLineEdit*   lineEditPathVertexX;
-    QLineEdit*   lineEditPathVertexY;
-    QLineEdit*   lineEditPathArea;
-    QLineEdit*   lineEditPathLength;
-
-    QGroupBox*   createGroupBoxMiscPath();
-    QGroupBox*   groupBoxMiscPath;
-
-    QToolButton* toolButtonPathClosed;
-
-    QComboBox*   comboBoxPathClosed;
-
-    //Point
-    QGroupBox*   createGroupBoxGeometryPoint();
-    QGroupBox*   groupBoxGeometryPoint;
-
-    QToolButton* toolButtonPointX;
-    QToolButton* toolButtonPointY;
-
-    QLineEdit*   lineEditPointX;
-    QLineEdit*   lineEditPointY;
-
-    //Polygon
-    QGroupBox*   createGroupBoxGeometryPolygon();
-    QGroupBox*   groupBoxGeometryPolygon;
-
-    QToolButton* toolButtonPolygonCenterX;
-    QToolButton* toolButtonPolygonCenterY;
-    QToolButton* toolButtonPolygonRadiusVertex;
-    QToolButton* toolButtonPolygonRadiusSide;
-    QToolButton* toolButtonPolygonDiameterVertex;
-    QToolButton* toolButtonPolygonDiameterSide;
-    QToolButton* toolButtonPolygonInteriorAngle;
-
-    QLineEdit*   lineEditPolygonCenterX;
-    QLineEdit*   lineEditPolygonCenterY;
-    QLineEdit*   lineEditPolygonRadiusVertex;
-    QLineEdit*   lineEditPolygonRadiusSide;
-    QLineEdit*   lineEditPolygonDiameterVertex;
-    QLineEdit*   lineEditPolygonDiameterSide;
-    QLineEdit*   lineEditPolygonInteriorAngle;
-
-    //Polyline
-    QGroupBox*   createGroupBoxGeometryPolyline();
-    QGroupBox*   groupBoxGeometryPolyline;
-
-    QToolButton* toolButtonPolylineVertexNum;
-    QToolButton* toolButtonPolylineVertexX;
-    QToolButton* toolButtonPolylineVertexY;
-    QToolButton* toolButtonPolylineArea;
-    QToolButton* toolButtonPolylineLength;
-
-    QComboBox*   comboBoxPolylineVertexNum;
-    QLineEdit*   lineEditPolylineVertexX;
-    QLineEdit*   lineEditPolylineVertexY;
-    QLineEdit*   lineEditPolylineArea;
-    QLineEdit*   lineEditPolylineLength;
-
-    QGroupBox*   createGroupBoxMiscPolyline();
-    QGroupBox*   groupBoxMiscPolyline;
-
-    QToolButton* toolButtonPolylineClosed;
-
-    QComboBox*   comboBoxPolylineClosed;
-
-    //Ray
-    QGroupBox*   createGroupBoxGeometryRay();
-    QGroupBox*   groupBoxGeometryRay;
-
-    QToolButton* toolButtonRayX1;
-    QToolButton* toolButtonRayY1;
-    QToolButton* toolButtonRayX2;
-    QToolButton* toolButtonRayY2;
-    QToolButton* toolButtonRayVectorX;
-    QToolButton* toolButtonRayVectorY;
-
-    QLineEdit*   lineEditRayX1;
-    QLineEdit*   lineEditRayY1;
-    QLineEdit*   lineEditRayX2;
-    QLineEdit*   lineEditRayY2;
-    QLineEdit*   lineEditRayVectorX;
-    QLineEdit*   lineEditRayVectorY;
-
-    //Rectangle
-    QGroupBox*   createGroupBoxGeometryRectangle();
-    QGroupBox*   groupBoxGeometryRectangle;
-
-    QToolButton* toolButtonRectangleCorner1X;
-    QToolButton* toolButtonRectangleCorner1Y;
-    QToolButton* toolButtonRectangleCorner2X;
-    QToolButton* toolButtonRectangleCorner2Y;
-    QToolButton* toolButtonRectangleCorner3X;
-    QToolButton* toolButtonRectangleCorner3Y;
-    QToolButton* toolButtonRectangleCorner4X;
-    QToolButton* toolButtonRectangleCorner4Y;
-    QToolButton* toolButtonRectangleWidth;
-    QToolButton* toolButtonRectangleHeight;
-    QToolButton* toolButtonRectangleArea;
-
-    QLineEdit*   lineEditRectangleCorner1X;
-    QLineEdit*   lineEditRectangleCorner1Y;
-    QLineEdit*   lineEditRectangleCorner2X;
-    QLineEdit*   lineEditRectangleCorner2Y;
-    QLineEdit*   lineEditRectangleCorner3X;
-    QLineEdit*   lineEditRectangleCorner3Y;
-    QLineEdit*   lineEditRectangleCorner4X;
-    QLineEdit*   lineEditRectangleCorner4Y;
-    QLineEdit*   lineEditRectangleWidth;
-    QLineEdit*   lineEditRectangleHeight;
-    QLineEdit*   lineEditRectangleArea;
-
-    //Text Multi
-    QGroupBox*   createGroupBoxGeometryTextMulti();
-    QGroupBox*   groupBoxGeometryTextMulti;
-
-    QToolButton* toolButtonTextMultiX;
-    QToolButton* toolButtonTextMultiY;
-
-    QLineEdit*   lineEditTextMultiX;
-    QLineEdit*   lineEditTextMultiY;
-
-    //Text Single
-    QGroupBox*   createGroupBoxTextTextSingle();
-    QGroupBox*   groupBoxTextTextSingle;
-
-    QToolButton* toolButtonTextSingleContents;
-    QToolButton* toolButtonTextSingleFont;
-    QToolButton* toolButtonTextSingleJustify;
-    QToolButton* toolButtonTextSingleHeight;
-    QToolButton* toolButtonTextSingleRotation;
-
-    QLineEdit*     lineEditTextSingleContents;
-    QFontComboBox* comboBoxTextSingleFont;
-    QComboBox*     comboBoxTextSingleJustify;
-    QLineEdit*     lineEditTextSingleHeight;
-    QLineEdit*     lineEditTextSingleRotation;
-
-    QGroupBox*   createGroupBoxGeometryTextSingle();
-    QGroupBox*   groupBoxGeometryTextSingle;
-
-    QToolButton* toolButtonTextSingleX;
-    QToolButton* toolButtonTextSingleY;
-
-    QLineEdit*   lineEditTextSingleX;
-    QLineEdit*   lineEditTextSingleY;
-
-    QGroupBox*   createGroupBoxMiscTextSingle();
-    QGroupBox*   groupBoxMiscTextSingle;
-
-    QToolButton* toolButtonTextSingleBackward;
-    QToolButton* toolButtonTextSingleUpsideDown;
-
-    QComboBox*   comboBoxTextSingleBackward;
-    QComboBox*   comboBoxTextSingleUpsideDown;
+    QGroupBox* createGroupBoxGeneral();
+
+    QGroupBox* createGroupBoxGeometryArc();
+    QGroupBox* createGroupBoxMiscArc();
+    QGroupBox* createGroupBoxGeometryBlock();
+    QGroupBox* createGroupBoxGeometryCircle();
+    QGroupBox* createGroupBoxGeometryDimAligned();
+    QGroupBox* createGroupBoxGeometryDimAngular();
+    QGroupBox* createGroupBoxGeometryDimArcLength();
+    QGroupBox* createGroupBoxGeometryDimDiameter();
+    QGroupBox* createGroupBoxGeometryDimLeader();
+    QGroupBox* createGroupBoxGeometryDimLinear();
+    QGroupBox* createGroupBoxGeometryDimOrdinate();
+    QGroupBox* createGroupBoxGeometryDimRadius();
+    QGroupBox* createGroupBoxGeometryEllipse();
+    QGroupBox* createGroupBoxGeometryImage();
+    QGroupBox* createGroupBoxMiscImage();
+    QGroupBox* createGroupBoxGeometryInfiniteLine();
+    QGroupBox* createGroupBoxGeometryLine();
+    QGroupBox* createGroupBoxGeometryPath();
+    QGroupBox* createGroupBoxMiscPath();
+    QGroupBox* createGroupBoxGeometryPoint();
+    QGroupBox* createGroupBoxGeometryPolygon();
+    QGroupBox* createGroupBoxGeometryPolyline();
+    QGroupBox* createGroupBoxMiscPolyline();
+    QGroupBox* createGroupBoxGeometryRay();
+    QGroupBox* createGroupBoxGeometryRectangle();
+    QGroupBox* createGroupBoxGeometryTextMulti();
+    QGroupBox* createGroupBoxTextTextSingle();
+    QGroupBox* createGroupBoxGeometryTextSingle();
+    QGroupBox* createGroupBoxMiscTextSingle();
 };
 
 
@@ -3627,7 +3171,7 @@ private:
     bool willUnderflowInt32(qint64 a, qint64 b);
     bool willOverflowInt32(qint64 a, qint64 b);
     int roundToMultiple(bool roundUp, int numToRound, int multiple);
-    QPainterPath createRulerTextPath(float x, float y, QString str, float height);
+    QPainterPath createRulerTextPath(float x, EmbReal y, QString str, EmbReal height);
 
     QList<QGraphicsItem*> previewObjectList;
     QGraphicsItemGroup* previewObjectItemGroup;
@@ -3722,7 +3266,13 @@ typedef struct Action__ {
             the string list {"iconResize 16"}. */
 } Action;
 
+int get_action_index(std::string cmd);
+
 /* */
 extern std::vector<Action> action_table;
+extern std::vector<std::string> file_toolbar;
+extern std::vector<std::string> edit_toolbar;
+extern std::vector<std::string> view_toolbar;
+extern std::vector<std::string> zoom_toolbar;
 
 #endif

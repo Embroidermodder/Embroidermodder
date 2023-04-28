@@ -308,8 +308,8 @@ MainWindow::createAllActions()
         actionHash[action.hash] = ACTION;
     }
 
-    actionHash[ACTION_windowclose]->setEnabled(numOfDocs > 0);
-    actionHash[ACTION_designdetails]->setEnabled(numOfDocs > 0);
+    actionHash[get_action_index("windowclose")]->setEnabled(numOfDocs > 0);
+    actionHash[get_action_index("designdetails")]->setEnabled(numOfDocs > 0);
 }
 
 /**
@@ -374,6 +374,10 @@ MainWindow::actuator(std::string command)
 {
     if (command == "about") {
         about();
+        return "";
+    }
+    if (command.substr(0,5) == "alert") {
+        prompt->alert(QString::fromStdString(command.substr(5)));
         return "";
     }
     if (command == "day") {
@@ -472,27 +476,33 @@ MainWindow::actuator(std::string command)
         return "";
     }
     if (command == "icon16") {
-        icon16();
+        qDebug("icon16()");
+        iconResize(16);
         return "";
     }
     if (command == "icon24") {
-        icon24();
+        qDebug("icon24()");
+        iconResize(24);
         return "";
     }
     if (command == "icon32") {
-        icon32();
+        qDebug("icon32()");
+        iconResize(32);
         return "";
     }
     if (command == "icon48") {
-        icon48();
+        qDebug("icon48()");
+        iconResize(48);
         return "";
     }
     if (command == "icon64") {
-        icon64();
+        qDebug("icon64()");
+        iconResize(64);
         return "";
     }
     if (command == "icon128") {
-        icon128();
+        qDebug("icon128()");
+        iconResize(128);
         return "";
     }
     if (command == "pan left") {
@@ -669,11 +679,17 @@ MainWindow::actuator(std::string command)
     }
     if (command == "icon48") { Icon48(); }
     if (command == "icon64") { Icon64(); }
-    if (command == "icon128") { Icon128(); }
-    if (command == "panLeft") { PanLeft(); }
-    if (command == "panRight") { PanRight(); }
-    if (command == "panUp") { PanUp(); }
-    if (command == "panDown") { PanDown(); }
+    if (command == "icon128") { Icon128();
+        return "";
+    }
+    if (command == "panLeft") { PanLeft();
+    }
+    if (command == "panRight") { PanRight();
+    }
+    if (command == "panUp") { PanUp();
+    }
+    if (command == "panDown") { PanDown();
+    }
     if (command == "zoomIn") { ZoomIn(); }
     if (command == "zoomOut") { ZoomOut(); }
     if (command == "zoomExtents") { ZoomExtents(); }
@@ -725,19 +741,41 @@ MainWindow::actuator(std::string command)
     }
     if (command == "addLine") {
         AddLine();
+        return "";
     }
-    if (command == "addTriangle") { AddTriangle();
+    if (command == "addTriangle") {
+        AddTriangle();
+        return "";
     }
-    if (command == "addRectangle") { AddRectangle();
+    if (command == "addRectangle") {
+        AddRectangle();
+        return "";
     }
-    if (command == "addRoundedRectangle") { AddRoundedRectangle(); }
-    if (command == "addArc") { AddArc(); }
-    if (command == "addCircle") { AddCircle(); }
-    if (command == "addEllipse") { AddEllipse(); }
-    if (command == "addPoint") { AddPoint(); }
-    if (command == "addRegularPolygon") { AddRegularPolygon(); }
-    if (command == "addPolygon") { AddPolygon(); }
-    if (command == "addPolyline") { AddPolyline(); }
+    if (command == "addRoundedRectangle") {
+        AddRoundedRectangle();
+        return "";
+    }
+    if (command == "addArc") { AddArc();
+        return "";
+    }
+    if (command == "addCircle") { AddCircle();
+        return "";
+    }
+    if (command == "addEllipse") { AddEllipse();
+        return "";
+    }
+    if (command == "addPoint") { AddPoint();
+        return "";
+    }
+    if (command == "addRegularPolygon") { AddRegularPolygon();
+        return "";
+    }
+    if (command == "addPolygon") { AddPolygon();
+        return "";
+    }
+    if (command == "addPolyline") { AddPolyline();
+        return "";
+    }
     if (command == "addPath") { AddPath(); }
     if (command == "addHorizontalDimension") { AddHorizontalDimension(); }
     if (command == "addVerticalDimension") { AddVerticalDimension(); }
@@ -2300,14 +2338,14 @@ MainWindow::windowMenuAboutToShow()
 {
     qDebug("MainWindow::windowMenuAboutToShow()");
     windowMenu->clear();
-    windowMenu->addAction(actionHash[ACTION_windowclose]);
-    windowMenu->addAction(actionHash[ACTION_windowcloseall]);
+    windowMenu->addAction(actionHash[get_action_index("windowclose")]);
+    windowMenu->addAction(actionHash[get_action_index("windowcloseall")]);
     windowMenu->addSeparator();
-    windowMenu->addAction(actionHash[ACTION_windowcascade]);
-    windowMenu->addAction(actionHash[ACTION_windowtile]);
+    windowMenu->addAction(actionHash[get_action_index("windowcascade")]);
+    windowMenu->addAction(actionHash[get_action_index("windowtile")]);
     windowMenu->addSeparator();
-    windowMenu->addAction(actionHash[ACTION_windownext]);
-    windowMenu->addAction(actionHash[ACTION_windowprevious]);
+    windowMenu->addAction(actionHash[get_action_index("windownext")]);
+    windowMenu->addAction(actionHash[get_action_index("windowprevious")]);
 
     windowMenu->addSeparator();
     QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
@@ -2644,9 +2682,9 @@ MainWindow::updateMenuToolbarStatusbar()
 {
     qDebug("MainWindow::updateMenuToolbarStatusbar()");
 
-    actionHash[ACTION_print]->setEnabled(numOfDocs > 0);
-    actionHash[ACTION_windowclose]->setEnabled(numOfDocs > 0);
-    actionHash[ACTION_designdetails]->setEnabled(numOfDocs > 0);
+    actionHash[get_action_index("print")]->setEnabled(numOfDocs > 0);
+    actionHash[get_action_index("windowclose")]->setEnabled(numOfDocs > 0);
+    actionHash[get_action_index("designdetails")]->setEnabled(numOfDocs > 0);
 
     if (numOfDocs) {
         //Toolbars
