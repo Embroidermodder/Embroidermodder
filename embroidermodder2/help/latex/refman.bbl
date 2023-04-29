@@ -1,3 +1,19 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{1}
+
+\bibitem{acatina}
+acatina.
+\newblock Technical info.
+
+\bibitem{kde_tajima}
+KDE Community.
+\newblock Projects/liberty/file formats/tajima ternary - kde community wiki.
+
+\bibitem{google_java}
+Google et~al.
+\newblock Google java style guide.
+
+\bibitem{pep7}
+G.~van Rossum and B.~Warsaw.
+\newblock Python pep 7.
 
 \end{thebibliography}

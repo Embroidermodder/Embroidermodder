@@ -22,7 +22,7 @@ var class_view =
     [ "createGridRect", "class_view.html#a4052ef7d4cfd204855e97bccc04aad59", null ],
     [ "createObjectList", "class_view.html#aa99439d0a75f3a8a80cad06b5b2dd031", null ],
     [ "createOrigin", "class_view.html#a8b14e9cc75c9017c58ab7e99ed3e50bb", null ],
-    [ "createRulerTextPath", "class_view.html#a4113abc94d3b741d68f038895eab232b", null ],
+    [ "createRulerTextPath", "class_view.html#ab36e5b39d5c1c97d8ca238f2ae83f2fc", null ],
     [ "cut", "class_view.html#ada01f65675afbbc0b8006d58df5acb81", null ],
     [ "deleteObject", "class_view.html#a2cb8abcb40747af7daa5221c538eacd9", null ],
     [ "deletePressed", "class_view.html#a74af558a825ac72754085696d893671d", null ],

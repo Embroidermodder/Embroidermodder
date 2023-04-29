@@ -15,6 +15,9 @@
 
 #include "embroidermodder.h"
 
+/**
+ *
+ */
 Settings_Dialog::Settings_Dialog(MainWindow* mw, const QString& showTab, QWidget* parent) : QDialog(parent)
 {
     mainWin = mw;
@@ -172,9 +175,9 @@ QWidget* Settings_Dialog::createTabGeneral()
 
     QPushButton* buttonMdiBGColor = new QPushButton(tr("Choose"), groupBoxMdiBG);
     buttonMdiBGColor->setEnabled(dialog_general_mdi_bg_use_color);
-    dialog_general_mdi_bg_color  = mainWin->settings_general_mdi_bg_color;
+    dialog_general_mdi_bg_color = mainWin->settings_general_mdi_bg_color;
     preview_general_mdi_bg_color = dialog_general_mdi_bg_color;
-    accept_general_mdi_bg_color  = dialog_general_mdi_bg_color;
+    accept_general_mdi_bg_color = dialog_general_mdi_bg_color;
     QPixmap mdiBGPix(16,16);
     mdiBGPix.fill(QColor(preview_general_mdi_bg_color));
     buttonMdiBGColor->setIcon(QIcon(mdiBGPix));

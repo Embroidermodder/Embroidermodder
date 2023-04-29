@@ -13,6 +13,11 @@ float \mbox{\hyperlink{image_8c_ac932a13030ae86a36da67dde06da0917}{image\+\_\+di
 \end{DoxyCompactItemize}
 
 
+\doxysubsubsection{Detailed Description}
+This backends to the stb libraries and nanosvg library.
+
+Use Python PEP7 for coding style. 
+
 \doxysubsubsection{Function Documentation}
 \mbox{\Hypertarget{image_8c_ac932a13030ae86a36da67dde06da0917}\label{image_8c_ac932a13030ae86a36da67dde06da0917}} 
 \index{image.c@{image.c}!image\_diff@{image\_diff}}
@@ -20,29 +25,10 @@ float \mbox{\hyperlink{image_8c_ac932a13030ae86a36da67dde06da0917}{image\+\_\+di
 \doxyparagraph{\texorpdfstring{image\_diff()}{image\_diff()}}
 {\footnotesize\ttfamily float image\+\_\+diff (\begin{DoxyParamCaption}\item[{unsigned char $\ast$}]{a,  }\item[{unsigned char $\ast$}]{b,  }\item[{int}]{size }\end{DoxyParamCaption})}
 
-
-\begin{DoxyParams}{Parameters}
-{\em a} & \\
-\hline
-{\em b} & \\
-\hline
-{\em size} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-float 
-\end{DoxyReturn}
-\mbox{\Hypertarget{image_8c_acf5d4a6e72ad546b2502069adbf45c3b}\label{image_8c_acf5d4a6e72ad546b2502069adbf45c3b}} 
+The distance between the arrays {\itshape a} and {\itshape b} of length {\itshape size}. \mbox{\Hypertarget{image_8c_acf5d4a6e72ad546b2502069adbf45c3b}\label{image_8c_acf5d4a6e72ad546b2502069adbf45c3b}} 
 \index{image.c@{image.c}!writeImage@{writeImage}}
 \index{writeImage@{writeImage}!image.c@{image.c}}
 \doxyparagraph{\texorpdfstring{writeImage()}{writeImage()}}
 {\footnotesize\ttfamily void write\+Image (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{file,  }\item[{unsigned char}]{image\mbox{[}$\,$\mbox{]}\mbox{[}48\mbox{]} }\end{DoxyParamCaption})}
 
-
-\begin{DoxyParams}{Parameters}
-{\em file} & \\
-\hline
-{\em image} & \\
-\hline
-\end{DoxyParams}
-for the PES embedded 
+Write a PES embedded {\itshape image} to the given {\itshape file} pointer. 

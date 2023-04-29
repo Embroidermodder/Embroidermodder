@@ -16,20 +16,33 @@
 {\ttfamily \#include $<$QAction$>$}\newline
 {\ttfamily \#include $<$QApplication$>$}\newline
 {\ttfamily \#include $<$QCombo\+Box$>$}\newline
+{\ttfamily \#include $<$QContext\+Menu\+Event$>$}\newline
+{\ttfamily \#include $<$QClipboard$>$}\newline
+{\ttfamily \#include $<$QDate\+Time$>$}\newline
+{\ttfamily \#include $<$QDebug$>$}\newline
 {\ttfamily \#include $<$QDialog\+Button\+Box$>$}\newline
+{\ttfamily \#include $<$QFile$>$}\newline
+{\ttfamily \#include $<$QFrame$>$}\newline
 {\ttfamily \#include $<$QGraphics\+Scene$>$}\newline
 {\ttfamily \#include $<$QGraphics\+Path\+Item$>$}\newline
+{\ttfamily \#include $<$QGrid\+Layout$>$}\newline
 {\ttfamily \#include $<$QGroup\+Box$>$}\newline
+{\ttfamily \#include $<$QLabel$>$}\newline
 {\ttfamily \#include $<$QLine\+Edit$>$}\newline
 {\ttfamily \#include $<$QList$>$}\newline
 {\ttfamily \#include $<$QMain\+Window$>$}\newline
 {\ttfamily \#include $<$QMdi\+Area$>$}\newline
-{\ttfamily \#include $<$QMessage\+Box$>$}\newline
+{\ttfamily \#include $<$QMenu$>$}\newline
 {\ttfamily \#include $<$QMeta\+Object$>$}\newline
+{\ttfamily \#include $<$QMessage\+Box$>$}\newline
 {\ttfamily \#include $<$QObject$>$}\newline
-{\ttfamily \#include $<$QText\+Layout$>$}\newline
-{\ttfamily \#include $<$QTool\+Bar$>$}\newline
+{\ttfamily \#include $<$QPainter$>$}\newline
 {\ttfamily \#include $<$QSplitter$>$}\newline
+{\ttfamily \#include $<$QText\+Layout$>$}\newline
+{\ttfamily \#include $<$QText\+Stream$>$}\newline
+{\ttfamily \#include $<$QTimer$>$}\newline
+{\ttfamily \#include $<$QTool\+Bar$>$}\newline
+{\ttfamily \#include $<$QScroll\+Area$>$}\newline
 {\ttfamily \#include $<$QUndo\+Stack$>$}\newline
 {\ttfamily \#include $<$QVBox\+Layout$>$}\newline
 {\ttfamily \#include $<$Qt\+Print\+Support$>$}\newline
@@ -127,6 +140,8 @@ class \mbox{\hyperlink{class_undoable_grip_edit_command}{Undoable\+Grip\+Edit\+C
 class \mbox{\hyperlink{class_undoable_mirror_command}{Undoable\+Mirror\+Command}}
 \item 
 class \mbox{\hyperlink{class_view}{View}}
+\item 
+struct \mbox{\hyperlink{struct_action____}{Action\+\_\+\+\_\+}}
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Typedefs}
 \begin{DoxyCompactItemize}
@@ -142,98 +157,11 @@ typedef struct \mbox{\hyperlink{struct_ui_object__}{Ui\+Object\+\_\+}} \mbox{\hy
 typedef struct \mbox{\hyperlink{struct_emb_view__}{Emb\+View\+\_\+}} \mbox{\hyperlink{embroidermodder_8h_aa5d35c075d47a1a4196817dd4cac166f}{Emb\+View}}
 \item 
 typedef struct \mbox{\hyperlink{struct_settings__}{Settings\+\_\+}} \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}}
-\begin{DoxyCompactList}\small\item\em Settings System. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Settings System. \end{DoxyCompactList}\item 
+typedef struct \mbox{\hyperlink{struct_action____}{Action\+\_\+\+\_\+}} \mbox{\hyperlink{embroidermodder_8h_aff6f4ac1e39a61ea59b275d373a14db1}{Action}}
+\end{DoxyCompactItemize}
 \doxysubsubsection*{Enumerations}
 \begin{DoxyCompactItemize}
-\item 
-enum \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fc}{COMMAND\+\_\+\+ACTIONS}} \{ \newline
-\mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca15d090b7d24a57f86ababa6db3a9204f}{ACTION\+\_\+donothing}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcacb2da4cdfeb397e732f994fad63ab942}{ACTION\+\_\+new}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcade0b3b59fcad2b4b7b156154ff9f94ff}{ACTION\+\_\+open}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca430bdbedb85eb3dcfec72b6ead638754}{ACTION\+\_\+save}}
-, \newline
-\mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca556f60fb8daadb84f9ada6c8506e557b}{ACTION\+\_\+saveas}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcac86eb9bcc79759d13c34dfd81216db94}{ACTION\+\_\+print}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca4c7beb9e84f92596e4db8b7977192e54}{ACTION\+\_\+designdetails}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca2b626ae3e9176cfc878a2411e27b708c}{ACTION\+\_\+exit}}
-, \newline
-\mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca52afe49d8e6f4c88054d260ee970fafe}{ACTION\+\_\+cut}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaca93d90e3e32f904b31ffffdb54fbe3c}{ACTION\+\_\+copy}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcafc522f5ec2f40c9f772873a1c3992552}{ACTION\+\_\+paste}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca5022df9896de87a368de8fd336c31cb1}{ACTION\+\_\+undo}}
-, \newline
-\mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca58fdd6c905ccf8c47e95c4b193142eea}{ACTION\+\_\+redo}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcafb667804a1eccff3677bae0d056b62ed}{ACTION\+\_\+windowclose}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca208373333309d3abf119f0d06d610b45}{ACTION\+\_\+windowcloseall}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca600eae75160b3ae8290a72d8ddc5cec3}{ACTION\+\_\+windowcascade}}
-, \newline
-\mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0ceac5c9a6fc1c34c2aa590abc424675}{ACTION\+\_\+windowtile}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca2428793a68ce0a47d5f93f8af1d29de0}{ACTION\+\_\+windownext}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca454c6f2182b849ef732d1b261bb1e992}{ACTION\+\_\+windowprevious}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca36905f2da38a5838600e0e627248b42f}{ACTION\+\_\+help}}
-, \newline
-\mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0c5e7b093f656c5546c68eda1d53dca8}{ACTION\+\_\+changelog}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca7ba76ac73667f38a73d1deb09b816d13}{ACTION\+\_\+tipoftheday}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca37aab16936775ab5dc5b9505aabd0729}{ACTION\+\_\+about}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca9af65589ea79fe08dddfd3f7e2b9e0bc}{ACTION\+\_\+whatsthis}}
-, \newline
-\mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcab64eb6f06b24e3dbf5bd8a3c6bc59baf}{ACTION\+\_\+icon16}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca7603187439a7af716a69743c88ffe83e}{ACTION\+\_\+icon24}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0ec3117d0f4bbc6973ceb5796bc82512}{ACTION\+\_\+icon32}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaf6a61b52fc09260d40ee7a8e9e2ab709}{ACTION\+\_\+icon48}}
-, \newline
-\mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca66bbf281904eb9463ccb93092c19a05c}{ACTION\+\_\+icon64}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0cd20308ac42398452524455a62968f7}{ACTION\+\_\+icon128}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca4cd540a02c6b64a329cae7dda6e73b91}{ACTION\+\_\+settingsdialog}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcab1889bac3e53c46a8c0f7f23ee73fa1d}{ACTION\+\_\+makelayercurrent}}
-, \newline
-\mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcae7c877df894de31a0dff585a54336688}{ACTION\+\_\+layers}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0fd27e8d67b2a647836328bc9a3f739b}{ACTION\+\_\+layerselector}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca4a5a7be7b038965c3d6579367ac2e2f4}{ACTION\+\_\+layerprevious}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcae0616bbd5f50225df5ced30a5cb6da8e}{ACTION\+\_\+colorselector}}
-, \newline
-\mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca52ae163e6ff982579d8e8b969f542ff7}{ACTION\+\_\+linetypeselector}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcae01936ec7db3660164e4413c7a40cbed}{ACTION\+\_\+lineweightselector}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcabfed6814a6aebc0980e4f71a52ab7060}{ACTION\+\_\+hidealllayers}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca75f6c3aa1f268ff7ad79c9a2aad8707b}{ACTION\+\_\+showalllayers}}
-, \newline
-\mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca3dd8a01f475281c1f47587ad216ffb14}{ACTION\+\_\+freezealllayers}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca16f581048c1811d73eddde80e012d9e8}{ACTION\+\_\+thawalllayers}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca306aadeca5a7742a88d1688626d59343}{ACTION\+\_\+lockalllayers}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca715c72cd4758d2741a0eb5e31ee60daf}{ACTION\+\_\+unlockalllayers}}
-, \newline
-\mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca25027a5dbdbf8990c0336322817cd577}{ACTION\+\_\+textbold}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcab430c5dd10d9735e1958965cb8bb7ba9}{ACTION\+\_\+textitalic}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca4a0b5a8f50474565680b448a50cf7862}{ACTION\+\_\+textunderline}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca628eff0e5c070ec93aa30dd41b7dcb49}{ACTION\+\_\+textstrikeout}}
-, \newline
-\mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca6014061654033a1dfeaa729fbd690e4f}{ACTION\+\_\+textoverline}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcae4754789e1213f158ec4325ec476d6d4}{ACTION\+\_\+zoomrealtime}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaf710dc46c9302b5911aae568ca5023fd}{ACTION\+\_\+zoomprevious}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca20ad3c49d1709a42907f6d7f93b326e5}{ACTION\+\_\+zoomwindow}}
-, \newline
-\mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaaf9e0709998469f1adcb1435641c8f07}{ACTION\+\_\+zoomdynamic}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca2b976385f59b0a1bbd7f5602cdaa7016}{ACTION\+\_\+zoomscale}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcabe9bf51f0a59aac29a933ced4c52ad88}{ACTION\+\_\+zoomcenter}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaf3d35153f13b01147b801c2e63fe4026}{ACTION\+\_\+zoomin}}
-, \newline
-\mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcad801d0a5fc8e631bd089b06fc47e0212}{ACTION\+\_\+zoomout}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca16abb899231ae1c330fbb8a43be61a4a}{ACTION\+\_\+zoomselected}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca9b1f4eeb2a8bbf418e627d03280a4659}{ACTION\+\_\+zoomall}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca9042f7bafc6661507f777636cdab4cae}{ACTION\+\_\+zoomextents}}
-, \newline
-\mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcab9757c634c299cfc92dde1b39f500f19}{ACTION\+\_\+panrealtime}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaa55cf7437564e98f664af5beed45fc3f}{ACTION\+\_\+panpoint}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca3193769fd709b04909e493e57e6b117e}{ACTION\+\_\+panleft}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcac3c40b2fa87b1136fdbe8bf337c3606f}{ACTION\+\_\+panright}}
-, \newline
-\mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca88f2c014326529783342b8a3361c9e3d}{ACTION\+\_\+panup}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcae42b7d8134942d3d7c63a099242d2fbb}{ACTION\+\_\+pandown}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca1768fb32e41df33c8556fa810a2ef32f}{ACTION\+\_\+day}}
-, \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0de25f3dd0ea6cd01e3f783530529630}{ACTION\+\_\+night}}
-, \newline
-\mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaaa41192e225b09f65723e9c7bec5f9df}{ACTION\+\_\+null}}
- \}
 \item 
 enum \mbox{\hyperlink{embroidermodder_8h_a0fabba118156df3b22a9129bc614a6d7}{Ui\+Mode}} \{ \newline
 \mbox{\hyperlink{embroidermodder_8h_a0fabba118156df3b22a9129bc614a6d7a922bb852c903d318ee70b2d4045c7687}{DEFAULT\+\_\+\+MODE}}
@@ -448,7 +376,7 @@ enum \mbox{\hyperlink{embroidermodder_8h_a142ce63dd47580d3d23de0a7147c0e2a}{PREV
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-int \mbox{\hyperlink{embroidermodder_8h_a6fcdc8ef9d8e516770d265c3c6f6e3c8}{read\+\_\+settings}} (const char $\ast$\mbox{\hyperlink{utility_8cpp_a89d83c58510cbfa074c2f541751b57fd}{settings\+\_\+file}})
+int \mbox{\hyperlink{embroidermodder_8h_a6fcdc8ef9d8e516770d265c3c6f6e3c8}{read\+\_\+settings}} (const char $\ast$settings\+\_\+file)
 \begin{DoxyCompactList}\small\item\em Read the settings from file which aren\textquotesingle{}t editable by the user. These files need to be placed in the install folder. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidermodder_8h_a987d88e146471d89e51da7f02a61cf57}{write\+\_\+settings}} (const char $\ast$fname)
 \item 
@@ -465,30 +393,40 @@ QPointF \mbox{\hyperlink{embroidermodder_8h_a58d530175261044460f54127530d5363}{t
 \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{embroidermodder_8h_adcca277c330aa3d7c85b93894c16eb9a}{degrees}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} radian)
 \item 
 \mbox{\hyperlink{class_main_window}{Main\+Window}} $\ast$ \mbox{\hyperlink{embroidermodder_8h_a0f36a84e7a582fc0c4da7b9f6bc47119}{main\+Win}} ()
-\begin{DoxyCompactList}\small\item\em main\+Win \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em main\+Win \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{embroidermodder_8h_ab737782f7ffcf7b04b8e29bff1177afe}{get\+\_\+action\+\_\+index}} (std\+::string cmd)
+\end{DoxyCompactItemize}
 \doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
 static const \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{embroidermodder_8h_a6c0943a9b40fc0928358ffe567a9e49f}{emb\+\_\+constant\+\_\+pi}} = 3.\+14159265358979323846
+\item 
+\mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} \mbox{\hyperlink{embroidermodder_8h_a19276c778f3034b94881cf1f8614dbb2}{settings}}
+\item 
+\mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} \mbox{\hyperlink{embroidermodder_8h_a1c6510838c31a5cc8eeadcdfceda753e}{dialog}}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{embroidermodder_8h_aff6f4ac1e39a61ea59b275d373a14db1}{Action}} $>$ \mbox{\hyperlink{embroidermodder_8h_a54518bd972055aee6bd70b6cd1e1a452}{action\+\_\+table}}
+\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{embroidermodder_8h_af34a15b6caf832a270e48f4951c2abaa}{file\+\_\+toolbar}}
+\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{embroidermodder_8h_a08ec5d8f75d1026a3e54d30fcaa51ee7}{edit\+\_\+toolbar}}
+\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{embroidermodder_8h_ab30a5c7efd315ac60982b02c20278efe}{view\+\_\+toolbar}}
+\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{embroidermodder_8h_a2237f79e0d8d9c857b1c9a594f0c7680}{zoom\+\_\+toolbar}}
 \end{DoxyCompactItemize}
 
 
 \doxysubsubsection{Detailed Description}
-Embroidermodder 2.
-
-\DoxyHorRuler{0}
-
-
-Copyright 2013-\/2023 The Embroidermodder Team Embroidermodder 2 is Open Source Software. See LICENSE for licensing terms.
-
-\DoxyHorRuler{0}
-
-
-Use Python\textquotesingle{}s PEP7 style guide. \href{https://peps.python.org/pep-0007/}{\texttt{ https\+://peps.\+python.\+org/pep-\/0007/}}
-
 The only header for the GUI part\+: a good overview of this source code. 
 
 \doxysubsubsection{Typedef Documentation}
+\mbox{\Hypertarget{embroidermodder_8h_aff6f4ac1e39a61ea59b275d373a14db1}\label{embroidermodder_8h_aff6f4ac1e39a61ea59b275d373a14db1}} 
+\index{embroidermodder.h@{embroidermodder.h}!Action@{Action}}
+\index{Action@{Action}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{Action}{Action}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{struct_action____}{Action\+\_\+\+\_\+}} \mbox{\hyperlink{embroidermodder_8h_aff6f4ac1e39a61ea59b275d373a14db1}{Action}}}
+
 \mbox{\Hypertarget{embroidermodder_8h_a65f6a13c9f5a038f42c86bdd5bb2410f}\label{embroidermodder_8h_a65f6a13c9f5a038f42c86bdd5bb2410f}} 
 \index{embroidermodder.h@{embroidermodder.h}!Dictionary@{Dictionary}}
 \index{Dictionary@{Dictionary}!embroidermodder.h@{embroidermodder.h}}
@@ -501,7 +439,7 @@ The only header for the GUI part\+: a good overview of this source code.
 \doxyparagraph{\texorpdfstring{EmbView}{EmbView}}
 {\footnotesize\ttfamily typedef struct \mbox{\hyperlink{struct_emb_view__}{Emb\+View\+\_\+}} \mbox{\hyperlink{embroidermodder_8h_aa5d35c075d47a1a4196817dd4cac166f}{Emb\+View}}}
 
-\hypertarget{embroidermodder_8h_autotoc_md9}{}\doxysubsubsection{Emb\+Views}\label{embroidermodder_8h_autotoc_md9}
+\hypertarget{embroidermodder_8h_autotoc_md5}{}\doxysubsubsection{Emb\+Views}\label{embroidermodder_8h_autotoc_md5}
 The Emb\+View describes how the render is displayed. \mbox{\Hypertarget{embroidermodder_8h_a59b98c3061d780d55cc048bcce8b47d0}\label{embroidermodder_8h_a59b98c3061d780d55cc048bcce8b47d0}} 
 \index{embroidermodder.h@{embroidermodder.h}!Index@{Index}}
 \index{Index@{Index}!embroidermodder.h@{embroidermodder.h}}
@@ -540,7 +478,7 @@ Do angles need special storage? angle\+Ref, angle\+New
 
 This chapter details how the source code achieves the design detailed in the previous chapter. For the low-\/level details, read the later chapters.
 
-Dear Im\+Gui (CITATION NEEDED)\hypertarget{embroidermodder_8h_autotoc_md8}{}\doxyparagraph{Geometry Objects}\label{embroidermodder_8h_autotoc_md8}
+Dear Im\+Gui (CITATION NEEDED)\hypertarget{embroidermodder_8h_autotoc_md4}{}\doxyparagraph{Geometry Objects}\label{embroidermodder_8h_autotoc_md4}
 At all times the Emb\+Pattern has all of the information about the pattern however, editing information like the rubber text labels needs to be stored during runtime. Also editing ghosts like when a rotate command is half executed.
 
 To deal with this we have a generic object that can act as any other object that updates the associated pattern struct as changes as made.
@@ -558,290 +496,6 @@ Selecting is done via this interface. \mbox{\Hypertarget{embroidermodder_8h_a459
 
 
 \doxysubsubsection{Enumeration Type Documentation}
-\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fc}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fc}} 
-\index{embroidermodder.h@{embroidermodder.h}!COMMAND\_ACTIONS@{COMMAND\_ACTIONS}}
-\index{COMMAND\_ACTIONS@{COMMAND\_ACTIONS}!embroidermodder.h@{embroidermodder.h}}
-\doxyparagraph{\texorpdfstring{COMMAND\_ACTIONS}{COMMAND\_ACTIONS}}
-{\footnotesize\ttfamily enum \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fc}{COMMAND\+\_\+\+ACTIONS}}}
-
-\begin{DoxyEnumFields}{Enumerator}
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_donothing@{ACTION\_donothing}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_donothing@{ACTION\_donothing}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca15d090b7d24a57f86ababa6db3a9204f}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca15d090b7d24a57f86ababa6db3a9204f}} 
-ACTION\+\_\+donothing&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_new@{ACTION\_new}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_new@{ACTION\_new}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcacb2da4cdfeb397e732f994fad63ab942}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcacb2da4cdfeb397e732f994fad63ab942}} 
-ACTION\+\_\+new&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_open@{ACTION\_open}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_open@{ACTION\_open}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcade0b3b59fcad2b4b7b156154ff9f94ff}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcade0b3b59fcad2b4b7b156154ff9f94ff}} 
-ACTION\+\_\+open&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_save@{ACTION\_save}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_save@{ACTION\_save}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca430bdbedb85eb3dcfec72b6ead638754}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca430bdbedb85eb3dcfec72b6ead638754}} 
-ACTION\+\_\+save&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_saveas@{ACTION\_saveas}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_saveas@{ACTION\_saveas}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca556f60fb8daadb84f9ada6c8506e557b}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca556f60fb8daadb84f9ada6c8506e557b}} 
-ACTION\+\_\+saveas&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_print@{ACTION\_print}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_print@{ACTION\_print}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcac86eb9bcc79759d13c34dfd81216db94}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcac86eb9bcc79759d13c34dfd81216db94}} 
-ACTION\+\_\+print&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_designdetails@{ACTION\_designdetails}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_designdetails@{ACTION\_designdetails}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca4c7beb9e84f92596e4db8b7977192e54}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca4c7beb9e84f92596e4db8b7977192e54}} 
-ACTION\+\_\+designdetails&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_exit@{ACTION\_exit}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_exit@{ACTION\_exit}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca2b626ae3e9176cfc878a2411e27b708c}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca2b626ae3e9176cfc878a2411e27b708c}} 
-ACTION\+\_\+exit&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_cut@{ACTION\_cut}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_cut@{ACTION\_cut}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca52afe49d8e6f4c88054d260ee970fafe}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca52afe49d8e6f4c88054d260ee970fafe}} 
-ACTION\+\_\+cut&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_copy@{ACTION\_copy}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_copy@{ACTION\_copy}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaca93d90e3e32f904b31ffffdb54fbe3c}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaca93d90e3e32f904b31ffffdb54fbe3c}} 
-ACTION\+\_\+copy&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_paste@{ACTION\_paste}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_paste@{ACTION\_paste}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcafc522f5ec2f40c9f772873a1c3992552}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcafc522f5ec2f40c9f772873a1c3992552}} 
-ACTION\+\_\+paste&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_undo@{ACTION\_undo}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_undo@{ACTION\_undo}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca5022df9896de87a368de8fd336c31cb1}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca5022df9896de87a368de8fd336c31cb1}} 
-ACTION\+\_\+undo&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_redo@{ACTION\_redo}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_redo@{ACTION\_redo}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca58fdd6c905ccf8c47e95c4b193142eea}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca58fdd6c905ccf8c47e95c4b193142eea}} 
-ACTION\+\_\+redo&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_windowclose@{ACTION\_windowclose}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_windowclose@{ACTION\_windowclose}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcafb667804a1eccff3677bae0d056b62ed}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcafb667804a1eccff3677bae0d056b62ed}} 
-ACTION\+\_\+windowclose&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_windowcloseall@{ACTION\_windowcloseall}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_windowcloseall@{ACTION\_windowcloseall}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca208373333309d3abf119f0d06d610b45}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca208373333309d3abf119f0d06d610b45}} 
-ACTION\+\_\+windowcloseall&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_windowcascade@{ACTION\_windowcascade}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_windowcascade@{ACTION\_windowcascade}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca600eae75160b3ae8290a72d8ddc5cec3}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca600eae75160b3ae8290a72d8ddc5cec3}} 
-ACTION\+\_\+windowcascade&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_windowtile@{ACTION\_windowtile}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_windowtile@{ACTION\_windowtile}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0ceac5c9a6fc1c34c2aa590abc424675}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0ceac5c9a6fc1c34c2aa590abc424675}} 
-ACTION\+\_\+windowtile&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_windownext@{ACTION\_windownext}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_windownext@{ACTION\_windownext}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca2428793a68ce0a47d5f93f8af1d29de0}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca2428793a68ce0a47d5f93f8af1d29de0}} 
-ACTION\+\_\+windownext&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_windowprevious@{ACTION\_windowprevious}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_windowprevious@{ACTION\_windowprevious}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca454c6f2182b849ef732d1b261bb1e992}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca454c6f2182b849ef732d1b261bb1e992}} 
-ACTION\+\_\+windowprevious&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_help@{ACTION\_help}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_help@{ACTION\_help}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca36905f2da38a5838600e0e627248b42f}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca36905f2da38a5838600e0e627248b42f}} 
-ACTION\+\_\+help&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_changelog@{ACTION\_changelog}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_changelog@{ACTION\_changelog}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0c5e7b093f656c5546c68eda1d53dca8}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0c5e7b093f656c5546c68eda1d53dca8}} 
-ACTION\+\_\+changelog&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_tipoftheday@{ACTION\_tipoftheday}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_tipoftheday@{ACTION\_tipoftheday}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca7ba76ac73667f38a73d1deb09b816d13}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca7ba76ac73667f38a73d1deb09b816d13}} 
-ACTION\+\_\+tipoftheday&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_about@{ACTION\_about}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_about@{ACTION\_about}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca37aab16936775ab5dc5b9505aabd0729}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca37aab16936775ab5dc5b9505aabd0729}} 
-ACTION\+\_\+about&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_whatsthis@{ACTION\_whatsthis}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_whatsthis@{ACTION\_whatsthis}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca9af65589ea79fe08dddfd3f7e2b9e0bc}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca9af65589ea79fe08dddfd3f7e2b9e0bc}} 
-ACTION\+\_\+whatsthis&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_icon16@{ACTION\_icon16}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_icon16@{ACTION\_icon16}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcab64eb6f06b24e3dbf5bd8a3c6bc59baf}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcab64eb6f06b24e3dbf5bd8a3c6bc59baf}} 
-ACTION\+\_\+icon16&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_icon24@{ACTION\_icon24}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_icon24@{ACTION\_icon24}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca7603187439a7af716a69743c88ffe83e}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca7603187439a7af716a69743c88ffe83e}} 
-ACTION\+\_\+icon24&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_icon32@{ACTION\_icon32}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_icon32@{ACTION\_icon32}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0ec3117d0f4bbc6973ceb5796bc82512}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0ec3117d0f4bbc6973ceb5796bc82512}} 
-ACTION\+\_\+icon32&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_icon48@{ACTION\_icon48}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_icon48@{ACTION\_icon48}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaf6a61b52fc09260d40ee7a8e9e2ab709}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaf6a61b52fc09260d40ee7a8e9e2ab709}} 
-ACTION\+\_\+icon48&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_icon64@{ACTION\_icon64}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_icon64@{ACTION\_icon64}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca66bbf281904eb9463ccb93092c19a05c}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca66bbf281904eb9463ccb93092c19a05c}} 
-ACTION\+\_\+icon64&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_icon128@{ACTION\_icon128}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_icon128@{ACTION\_icon128}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0cd20308ac42398452524455a62968f7}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0cd20308ac42398452524455a62968f7}} 
-ACTION\+\_\+icon128&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_settingsdialog@{ACTION\_settingsdialog}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_settingsdialog@{ACTION\_settingsdialog}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca4cd540a02c6b64a329cae7dda6e73b91}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca4cd540a02c6b64a329cae7dda6e73b91}} 
-ACTION\+\_\+settingsdialog&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_makelayercurrent@{ACTION\_makelayercurrent}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_makelayercurrent@{ACTION\_makelayercurrent}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcab1889bac3e53c46a8c0f7f23ee73fa1d}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcab1889bac3e53c46a8c0f7f23ee73fa1d}} 
-ACTION\+\_\+makelayercurrent&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_layers@{ACTION\_layers}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_layers@{ACTION\_layers}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcae7c877df894de31a0dff585a54336688}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcae7c877df894de31a0dff585a54336688}} 
-ACTION\+\_\+layers&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_layerselector@{ACTION\_layerselector}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_layerselector@{ACTION\_layerselector}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0fd27e8d67b2a647836328bc9a3f739b}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0fd27e8d67b2a647836328bc9a3f739b}} 
-ACTION\+\_\+layerselector&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_layerprevious@{ACTION\_layerprevious}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_layerprevious@{ACTION\_layerprevious}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca4a5a7be7b038965c3d6579367ac2e2f4}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca4a5a7be7b038965c3d6579367ac2e2f4}} 
-ACTION\+\_\+layerprevious&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_colorselector@{ACTION\_colorselector}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_colorselector@{ACTION\_colorselector}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcae0616bbd5f50225df5ced30a5cb6da8e}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcae0616bbd5f50225df5ced30a5cb6da8e}} 
-ACTION\+\_\+colorselector&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_linetypeselector@{ACTION\_linetypeselector}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_linetypeselector@{ACTION\_linetypeselector}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca52ae163e6ff982579d8e8b969f542ff7}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca52ae163e6ff982579d8e8b969f542ff7}} 
-ACTION\+\_\+linetypeselector&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_lineweightselector@{ACTION\_lineweightselector}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_lineweightselector@{ACTION\_lineweightselector}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcae01936ec7db3660164e4413c7a40cbed}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcae01936ec7db3660164e4413c7a40cbed}} 
-ACTION\+\_\+lineweightselector&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_hidealllayers@{ACTION\_hidealllayers}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_hidealllayers@{ACTION\_hidealllayers}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcabfed6814a6aebc0980e4f71a52ab7060}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcabfed6814a6aebc0980e4f71a52ab7060}} 
-ACTION\+\_\+hidealllayers&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_showalllayers@{ACTION\_showalllayers}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_showalllayers@{ACTION\_showalllayers}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca75f6c3aa1f268ff7ad79c9a2aad8707b}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca75f6c3aa1f268ff7ad79c9a2aad8707b}} 
-ACTION\+\_\+showalllayers&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_freezealllayers@{ACTION\_freezealllayers}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_freezealllayers@{ACTION\_freezealllayers}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca3dd8a01f475281c1f47587ad216ffb14}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca3dd8a01f475281c1f47587ad216ffb14}} 
-ACTION\+\_\+freezealllayers&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_thawalllayers@{ACTION\_thawalllayers}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_thawalllayers@{ACTION\_thawalllayers}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca16f581048c1811d73eddde80e012d9e8}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca16f581048c1811d73eddde80e012d9e8}} 
-ACTION\+\_\+thawalllayers&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_lockalllayers@{ACTION\_lockalllayers}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_lockalllayers@{ACTION\_lockalllayers}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca306aadeca5a7742a88d1688626d59343}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca306aadeca5a7742a88d1688626d59343}} 
-ACTION\+\_\+lockalllayers&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_unlockalllayers@{ACTION\_unlockalllayers}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_unlockalllayers@{ACTION\_unlockalllayers}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca715c72cd4758d2741a0eb5e31ee60daf}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca715c72cd4758d2741a0eb5e31ee60daf}} 
-ACTION\+\_\+unlockalllayers&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_textbold@{ACTION\_textbold}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_textbold@{ACTION\_textbold}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca25027a5dbdbf8990c0336322817cd577}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca25027a5dbdbf8990c0336322817cd577}} 
-ACTION\+\_\+textbold&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_textitalic@{ACTION\_textitalic}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_textitalic@{ACTION\_textitalic}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcab430c5dd10d9735e1958965cb8bb7ba9}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcab430c5dd10d9735e1958965cb8bb7ba9}} 
-ACTION\+\_\+textitalic&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_textunderline@{ACTION\_textunderline}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_textunderline@{ACTION\_textunderline}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca4a0b5a8f50474565680b448a50cf7862}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca4a0b5a8f50474565680b448a50cf7862}} 
-ACTION\+\_\+textunderline&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_textstrikeout@{ACTION\_textstrikeout}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_textstrikeout@{ACTION\_textstrikeout}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca628eff0e5c070ec93aa30dd41b7dcb49}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca628eff0e5c070ec93aa30dd41b7dcb49}} 
-ACTION\+\_\+textstrikeout&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_textoverline@{ACTION\_textoverline}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_textoverline@{ACTION\_textoverline}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca6014061654033a1dfeaa729fbd690e4f}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca6014061654033a1dfeaa729fbd690e4f}} 
-ACTION\+\_\+textoverline&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_zoomrealtime@{ACTION\_zoomrealtime}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_zoomrealtime@{ACTION\_zoomrealtime}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcae4754789e1213f158ec4325ec476d6d4}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcae4754789e1213f158ec4325ec476d6d4}} 
-ACTION\+\_\+zoomrealtime&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_zoomprevious@{ACTION\_zoomprevious}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_zoomprevious@{ACTION\_zoomprevious}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaf710dc46c9302b5911aae568ca5023fd}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaf710dc46c9302b5911aae568ca5023fd}} 
-ACTION\+\_\+zoomprevious&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_zoomwindow@{ACTION\_zoomwindow}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_zoomwindow@{ACTION\_zoomwindow}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca20ad3c49d1709a42907f6d7f93b326e5}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca20ad3c49d1709a42907f6d7f93b326e5}} 
-ACTION\+\_\+zoomwindow&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_zoomdynamic@{ACTION\_zoomdynamic}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_zoomdynamic@{ACTION\_zoomdynamic}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaaf9e0709998469f1adcb1435641c8f07}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaaf9e0709998469f1adcb1435641c8f07}} 
-ACTION\+\_\+zoomdynamic&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_zoomscale@{ACTION\_zoomscale}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_zoomscale@{ACTION\_zoomscale}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca2b976385f59b0a1bbd7f5602cdaa7016}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca2b976385f59b0a1bbd7f5602cdaa7016}} 
-ACTION\+\_\+zoomscale&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_zoomcenter@{ACTION\_zoomcenter}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_zoomcenter@{ACTION\_zoomcenter}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcabe9bf51f0a59aac29a933ced4c52ad88}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcabe9bf51f0a59aac29a933ced4c52ad88}} 
-ACTION\+\_\+zoomcenter&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_zoomin@{ACTION\_zoomin}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_zoomin@{ACTION\_zoomin}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaf3d35153f13b01147b801c2e63fe4026}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaf3d35153f13b01147b801c2e63fe4026}} 
-ACTION\+\_\+zoomin&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_zoomout@{ACTION\_zoomout}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_zoomout@{ACTION\_zoomout}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcad801d0a5fc8e631bd089b06fc47e0212}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcad801d0a5fc8e631bd089b06fc47e0212}} 
-ACTION\+\_\+zoomout&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_zoomselected@{ACTION\_zoomselected}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_zoomselected@{ACTION\_zoomselected}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca16abb899231ae1c330fbb8a43be61a4a}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca16abb899231ae1c330fbb8a43be61a4a}} 
-ACTION\+\_\+zoomselected&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_zoomall@{ACTION\_zoomall}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_zoomall@{ACTION\_zoomall}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca9b1f4eeb2a8bbf418e627d03280a4659}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca9b1f4eeb2a8bbf418e627d03280a4659}} 
-ACTION\+\_\+zoomall&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_zoomextents@{ACTION\_zoomextents}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_zoomextents@{ACTION\_zoomextents}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca9042f7bafc6661507f777636cdab4cae}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca9042f7bafc6661507f777636cdab4cae}} 
-ACTION\+\_\+zoomextents&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_panrealtime@{ACTION\_panrealtime}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_panrealtime@{ACTION\_panrealtime}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcab9757c634c299cfc92dde1b39f500f19}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcab9757c634c299cfc92dde1b39f500f19}} 
-ACTION\+\_\+panrealtime&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_panpoint@{ACTION\_panpoint}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_panpoint@{ACTION\_panpoint}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaa55cf7437564e98f664af5beed45fc3f}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaa55cf7437564e98f664af5beed45fc3f}} 
-ACTION\+\_\+panpoint&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_panleft@{ACTION\_panleft}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_panleft@{ACTION\_panleft}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca3193769fd709b04909e493e57e6b117e}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca3193769fd709b04909e493e57e6b117e}} 
-ACTION\+\_\+panleft&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_panright@{ACTION\_panright}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_panright@{ACTION\_panright}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcac3c40b2fa87b1136fdbe8bf337c3606f}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcac3c40b2fa87b1136fdbe8bf337c3606f}} 
-ACTION\+\_\+panright&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_panup@{ACTION\_panup}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_panup@{ACTION\_panup}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca88f2c014326529783342b8a3361c9e3d}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca88f2c014326529783342b8a3361c9e3d}} 
-ACTION\+\_\+panup&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_pandown@{ACTION\_pandown}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_pandown@{ACTION\_pandown}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcae42b7d8134942d3d7c63a099242d2fbb}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcae42b7d8134942d3d7c63a099242d2fbb}} 
-ACTION\+\_\+pandown&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_day@{ACTION\_day}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_day@{ACTION\_day}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca1768fb32e41df33c8556fa810a2ef32f}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca1768fb32e41df33c8556fa810a2ef32f}} 
-ACTION\+\_\+day&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_night@{ACTION\_night}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_night@{ACTION\_night}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0de25f3dd0ea6cd01e3f783530529630}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0de25f3dd0ea6cd01e3f783530529630}} 
-ACTION\+\_\+night&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTION\_null@{ACTION\_null}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!ACTION\_null@{ACTION\_null}}}\mbox{\Hypertarget{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaaa41192e225b09f65723e9c7bec5f9df}\label{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaaa41192e225b09f65723e9c7bec5f9df}} 
-ACTION\+\_\+null&\\
-\hline
-
-\end{DoxyEnumFields}
 \mbox{\Hypertarget{embroidermodder_8h_a29bcbce98e36705fa9c1577a227d53c0}\label{embroidermodder_8h_a29bcbce98e36705fa9c1577a227d53c0}} 
 \index{embroidermodder.h@{embroidermodder.h}!OBJ\_KEYS@{OBJ\_KEYS}}
 \index{OBJ\_KEYS@{OBJ\_KEYS}!embroidermodder.h@{embroidermodder.h}}
@@ -1539,6 +1193,12 @@ SNOWFLAKE\+\_\+\+MODE\+\_\+\+YSCALE&\\
 \doxyparagraph{\texorpdfstring{degrees()}{degrees()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} degrees (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{radian }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
+\mbox{\Hypertarget{embroidermodder_8h_ab737782f7ffcf7b04b8e29bff1177afe}\label{embroidermodder_8h_ab737782f7ffcf7b04b8e29bff1177afe}} 
+\index{embroidermodder.h@{embroidermodder.h}!get\_action\_index@{get\_action\_index}}
+\index{get\_action\_index@{get\_action\_index}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{get\_action\_index()}{get\_action\_index()}}
+{\footnotesize\ttfamily int get\+\_\+action\+\_\+index (\begin{DoxyParamCaption}\item[{std\+::string}]{cmd }\end{DoxyParamCaption})}
+
 \mbox{\Hypertarget{embroidermodder_8h_a0f36a84e7a582fc0c4da7b9f6bc47119}\label{embroidermodder_8h_a0f36a84e7a582fc0c4da7b9f6bc47119}} 
 \index{embroidermodder.h@{embroidermodder.h}!mainWin@{mainWin}}
 \index{mainWin@{mainWin}!embroidermodder.h@{embroidermodder.h}}
@@ -1601,9 +1261,51 @@ Read the settings from file which aren\textquotesingle{}t editable by the user. 
 
 
 \doxysubsubsection{Variable Documentation}
+\mbox{\Hypertarget{embroidermodder_8h_a54518bd972055aee6bd70b6cd1e1a452}\label{embroidermodder_8h_a54518bd972055aee6bd70b6cd1e1a452}} 
+\index{embroidermodder.h@{embroidermodder.h}!action\_table@{action\_table}}
+\index{action\_table@{action\_table}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{action\_table}{action\_table}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{embroidermodder_8h_aff6f4ac1e39a61ea59b275d373a14db1}{Action}}$>$ action\+\_\+table\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{embroidermodder_8h_a1c6510838c31a5cc8eeadcdfceda753e}\label{embroidermodder_8h_a1c6510838c31a5cc8eeadcdfceda753e}} 
+\index{embroidermodder.h@{embroidermodder.h}!dialog@{dialog}}
+\index{dialog@{dialog}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{dialog}{dialog}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} dialog\hspace{0.3cm}{\ttfamily [extern]}}
+
+These copies of the settings struct are for restoring the state if the user doesn\textquotesingle{}t want to accept their changes in the settings dialog. \mbox{\Hypertarget{embroidermodder_8h_a08ec5d8f75d1026a3e54d30fcaa51ee7}\label{embroidermodder_8h_a08ec5d8f75d1026a3e54d30fcaa51ee7}} 
+\index{embroidermodder.h@{embroidermodder.h}!edit\_toolbar@{edit\_toolbar}}
+\index{edit\_toolbar@{edit\_toolbar}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{edit\_toolbar}{edit\_toolbar}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::string$>$ edit\+\_\+toolbar\hspace{0.3cm}{\ttfamily [extern]}}
+
 \mbox{\Hypertarget{embroidermodder_8h_a6c0943a9b40fc0928358ffe567a9e49f}\label{embroidermodder_8h_a6c0943a9b40fc0928358ffe567a9e49f}} 
 \index{embroidermodder.h@{embroidermodder.h}!emb\_constant\_pi@{emb\_constant\_pi}}
 \index{emb\_constant\_pi@{emb\_constant\_pi}!embroidermodder.h@{embroidermodder.h}}
 \doxyparagraph{\texorpdfstring{emb\_constant\_pi}{emb\_constant\_pi}}
 {\footnotesize\ttfamily const \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} emb\+\_\+constant\+\_\+pi = 3.\+14159265358979323846\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{embroidermodder_8h_af34a15b6caf832a270e48f4951c2abaa}\label{embroidermodder_8h_af34a15b6caf832a270e48f4951c2abaa}} 
+\index{embroidermodder.h@{embroidermodder.h}!file\_toolbar@{file\_toolbar}}
+\index{file\_toolbar@{file\_toolbar}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{file\_toolbar}{file\_toolbar}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::string$>$ file\+\_\+toolbar\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{embroidermodder_8h_a19276c778f3034b94881cf1f8614dbb2}\label{embroidermodder_8h_a19276c778f3034b94881cf1f8614dbb2}} 
+\index{embroidermodder.h@{embroidermodder.h}!settings@{settings}}
+\index{settings@{settings}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{settings}{settings}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} settings\hspace{0.3cm}{\ttfamily [extern]}}
+
+The actuator changes the program state via these global variables. \mbox{\Hypertarget{embroidermodder_8h_ab30a5c7efd315ac60982b02c20278efe}\label{embroidermodder_8h_ab30a5c7efd315ac60982b02c20278efe}} 
+\index{embroidermodder.h@{embroidermodder.h}!view\_toolbar@{view\_toolbar}}
+\index{view\_toolbar@{view\_toolbar}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{view\_toolbar}{view\_toolbar}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::string$>$ view\+\_\+toolbar\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{embroidermodder_8h_a2237f79e0d8d9c857b1c9a594f0c7680}\label{embroidermodder_8h_a2237f79e0d8d9c857b1c9a594f0c7680}} 
+\index{embroidermodder.h@{embroidermodder.h}!zoom\_toolbar@{zoom\_toolbar}}
+\index{zoom\_toolbar@{zoom\_toolbar}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{zoom\_toolbar}{zoom\_toolbar}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::string$>$ zoom\+\_\+toolbar\hspace{0.3cm}{\ttfamily [extern]}}
 

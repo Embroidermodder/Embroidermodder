@@ -17,12 +17,6 @@
  * \file object-rect.cpp
  */
 
-#include <QGridLayout>
-#include <QLabel>
-#include <QDialogButtonBox>
-#include <QScrollArea>
-#include <QGroupBox>
-
 #include "embroidermodder.h"
 
 EmbDetailsDialog::EmbDetailsDialog(QGraphicsScene* theScene, QWidget* parent) : QDialog(parent)

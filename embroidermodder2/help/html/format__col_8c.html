@@ -117,7 +117,22 @@ Functions</h2></td></tr>
 <tr class="memitem:ada015df275bd9197080a7c5eb2a776f4"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="format__col_8c.html#ada015df275bd9197080a7c5eb2a776f4">writeCol</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *pattern, FILE *file)</td></tr>
 <tr class="separator:ada015df275bd9197080a7c5eb2a776f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>The Embroidery Thread Color Format (.col) <a id="a67_col" name="a67_col"></a></p>
+<p>An external color file format for formats that do not record their own colors.</p>
+<p>It is a human-readable format that has a header that is a single line containing only the number of threads in decimal followed by the windows line break `\textbackslash{}r\textbackslash{}n}.</p>
+<p>Then the rest of the file is a comma seperated value list of all threads with 4 values per line: the index of the thread then the red, green and blue channels of the color in that order.</p>
+<h3><a class="anchor" id="col-example"></a>
+Example</h3>
+<p>If we had a pattern called "example" with four colors: black, red, magenta and cyan in that order then the file is (with the white space written out):</p>
+<p>example.col</p>
+<p>4\r<br  />
+ 0,0,0,0\r<br  />
+ 1,255,0,0\r<br  />
+ 2,0,255,0\r<br  />
+ 3,0,0,255\r<br  />
+</p>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a id="ae816f75c7dff738a16368f1d8a6c15f3" name="ae816f75c7dff738a16368f1d8a6c15f3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae816f75c7dff738a16368f1d8a6c15f3">&#9670;&#160;</a></span>readCol()</h2>
 

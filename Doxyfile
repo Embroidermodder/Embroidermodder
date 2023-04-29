@@ -806,7 +806,7 @@ LAYOUT_FILE            =
 # LATEX_BIB_STYLE. To use this feature you need bibtex and perl available in the
 # search path. See also \cite for info how to create references.
 
-CITE_BIB_FILES         = embroidermodder2/help/embroidermodder.bib
+CITE_BIB_FILES         = embroidermodder2/embroidermodder.bib
 
 #---------------------------------------------------------------------------
 # Configuration options related to warning and progress messages
@@ -918,7 +918,6 @@ WARN_LOGFILE           =
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = ./embroidermodder2 \
-                         ./embroidermodder2/docs \
                          ./extern/libembroidery/src \
                          ./extern/libembroidery/src/geometry \
                          ./extern/libembroidery/src/formats \

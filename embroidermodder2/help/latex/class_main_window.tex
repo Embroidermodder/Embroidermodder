@@ -140,18 +140,6 @@ void \mbox{\hyperlink{class_main_window_a1fe73b9637f883f7b08f4952a123183d}{toggl
 \item 
 void \mbox{\hyperlink{class_main_window_a471e9cc1bc5ed7d431363e74962aede5}{icon\+Resize}} (int icon\+Size)
 \item 
-void \mbox{\hyperlink{class_main_window_a45799ff77198fcb8d49329b247c64855}{icon16}} ()
-\item 
-void \mbox{\hyperlink{class_main_window_a4776b90d9b76400e356006003cbab8a1}{icon24}} ()
-\item 
-void \mbox{\hyperlink{class_main_window_a840f2c8da2adc1c17d21460c8b19259b}{icon32}} ()
-\item 
-void \mbox{\hyperlink{class_main_window_a6021724b1bc888d62d75917ddda2ff8a}{icon48}} ()
-\item 
-void \mbox{\hyperlink{class_main_window_a1efbfd913dcfaffd3c972dad67336db7}{icon64}} ()
-\item 
-void \mbox{\hyperlink{class_main_window_a4f774f8ef656d120fe25c59786a669c6}{icon128}} ()
-\item 
 void \mbox{\hyperlink{class_main_window_a0a02e05509c46ef95f00f581a640bea4}{layer\+Selector\+Index\+Changed}} (int index)
 \item 
 void \mbox{\hyperlink{class_main_window_a2b30e702ce4e73eef1b444e002c53405}{color\+Selector\+Index\+Changed}} (int index)
@@ -296,6 +284,10 @@ std\+::string \mbox{\hyperlink{class_main_window_a2d78554d8abd71140884b5bdf8f9c2
 bool \mbox{\hyperlink{class_main_window_a0e87e82e601411410bf336144df49cb8}{is\+Command\+Active}} ()
 \item 
 QString \mbox{\hyperlink{class_main_window_afe5f5e39faa0282c02cd55531a39e7cf}{active\+Command}} ()
+\item 
+QIcon \mbox{\hyperlink{class_main_window_a1c3bf9e577d94dadcff6ec920bc7293f}{create\+\_\+icon}} (QString stub)
+\item 
+void \mbox{\hyperlink{class_main_window_ae4deb4d1c6b0e843df3df608cf6d269a}{create\+\_\+toolbar}} (QTool\+Bar $\ast$toolbar, std\+::string label, std\+::vector$<$ std\+::string $>$ entries)
 \item 
 QString \mbox{\hyperlink{class_main_window_a64b5023d6ed0274b81cd69aca2baaaa8}{platform\+String}} ()
 \item 
@@ -696,7 +688,7 @@ bool \mbox{\hyperlink{class_main_window_ac735d35e6608d788b01c3ae35537f4dd}{setti
 \item 
 QList$<$ QGraphics\+Item $\ast$ $>$ \mbox{\hyperlink{class_main_window_a276dcd5c212e859718950f79d05c0bba}{cut\+Copy\+Object\+List}}
 \item 
-QHash$<$ int, QAction $\ast$ $>$ \mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{action\+Hash}}
+QAction $\ast$ \mbox{\hyperlink{class_main_window_a58e4ce80363ad069b2724be586c0af2c}{action\+Hash}} \mbox{[}200\mbox{]}
 \item 
 QHash$<$ QString, QTool\+Bar $\ast$ $>$ \mbox{\hyperlink{class_main_window_a76ea9ee344c2545133538313c7f78652}{toolbar\+Hash}}
 \item 
@@ -721,24 +713,14 @@ QMdi\+Sub\+Window $\ast$ \mbox{\hyperlink{class_main_window_ab64854b1170746b0a70
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_ab64854b1170746b0a707f50dd9c2b60a}{Main\+Window\+::find\+Mdi\+Window}}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_main_window_a5de9bc12f363ba45fb8082f262d24deb}{create\+All\+Actions}} ()
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a5de9bc12f363ba45fb8082f262d24deb}{Main\+Window\+::create\+All\+Actions}}. \end{DoxyCompactList}\item 
-QAction $\ast$ \mbox{\hyperlink{class_main_window_a1ad7acff7d24e40c7855672bf7d8f400}{create\+Action}} (const QString icon, const QString tool\+Tip, const QString status\+Tip, bool scripted=false)
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a1ad7acff7d24e40c7855672bf7d8f400}{Main\+Window\+::create\+Action}}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_main_window_acea3ae90cae9fd38af957742d8f2750f}{create\+All\+Toolbars}} ()
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_acea3ae90cae9fd38af957742d8f2750f}{Main\+Window\+::create\+All\+Toolbars}}. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_main_window_a57bfabc7eecf078c655cc1138e6b479a}{create\+File\+Toolbar}} ()
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a57bfabc7eecf078c655cc1138e6b479a}{Main\+Window\+::create\+File\+Toolbar}}. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_main_window_a6571255cc3df7e2f7faae6ca17ef6fff}{create\+Edit\+Toolbar}} ()
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a6571255cc3df7e2f7faae6ca17ef6fff}{Main\+Window\+::create\+Edit\+Toolbar}}. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_main_window_a0033a6a408a274d8d13640c8f243db74}{create\+View\+Toolbar}} ()
-\item 
-void \mbox{\hyperlink{class_main_window_a67a1952ad8101606f38353f2c000168f}{create\+Zoom\+Toolbar}} ()
-\item 
 void \mbox{\hyperlink{class_main_window_a863e340d0b9e5f4595740b6894077ef9}{create\+Pan\+Toolbar}} ()
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a863e340d0b9e5f4595740b6894077ef9}{Main\+Window\+::create\+Pan\+Toolbar}}. \end{DoxyCompactList}\item 
+\item 
 void \mbox{\hyperlink{class_main_window_a8deb25313eea533d0c420f0eb16259e8}{create\+Icon\+Toolbar}} ()
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a8deb25313eea533d0c420f0eb16259e8}{Main\+Window\+::create\+Icon\+Toolbar}}. \end{DoxyCompactList}\item 
+\item 
 void \mbox{\hyperlink{class_main_window_a5699527991aebdce74bd2fe7e951b88a}{create\+Help\+Toolbar}} ()
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a5699527991aebdce74bd2fe7e951b88a}{Main\+Window\+::create\+Help\+Toolbar}}. \end{DoxyCompactList}\item 
+\item 
 void \mbox{\hyperlink{class_main_window_a12cd97f2e946ae6cbbf77fae71fcb474}{create\+Layer\+Toolbar}} ()
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a12cd97f2e946ae6cbbf77fae71fcb474}{Main\+Window\+::create\+Layer\+Toolbar}}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_main_window_aef4c51d5b587d59f807f8351adfe6659}{create\+Properties\+Toolbar}} ()
@@ -785,14 +767,6 @@ QLabel $\ast$ \mbox{\hyperlink{class_main_window_abdfd85b441c74976311b9acd3b6744
 QCheck\+Box $\ast$ \mbox{\hyperlink{class_main_window_a62359f022a87ee2600051b142dd30603}{check\+Box\+Tip\+Of\+The\+Day}}
 \item 
 QString\+List \mbox{\hyperlink{class_main_window_afb9a4aec72cd4e2bad348185bb82837d}{list\+Tip\+Of\+The\+Day}}
-\item 
-const int \mbox{\hyperlink{class_main_window_ac74e82b21069ba3de55b4fbc74e1a0fb}{file\+\_\+toolbar}} = 0
-\item 
-const int \mbox{\hyperlink{class_main_window_ad70fe261589d9c94c684446870f19a3c}{edit\+\_\+toolbar}} = 1
-\item 
-const int \mbox{\hyperlink{class_main_window_a16acce1ecf99ab0251a1d127610710e3}{view\+\_\+toolbar}} = 2
-\item 
-const int \mbox{\hyperlink{class_main_window_a71060385708e4422cda409c16b2eb59a}{zoom\+\_\+toolbar}} = 3
 \item 
 QTool\+Bar $\ast$ \mbox{\hyperlink{class_main_window_a8f95344a142090b2145b237768497c2d}{toolbar\+File}}
 \item 
@@ -997,30 +971,18 @@ The \mbox{\hyperlink{class_main_window}{Main\+Window}} class.
 \doxyparagraph{\texorpdfstring{copy}{copy}}
 {\footnotesize\ttfamily void copy (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
-\mbox{\Hypertarget{class_main_window_a1ad7acff7d24e40c7855672bf7d8f400}\label{class_main_window_a1ad7acff7d24e40c7855672bf7d8f400}} 
-\index{MainWindow@{MainWindow}!createAction@{createAction}}
-\index{createAction@{createAction}!MainWindow@{MainWindow}}
-\doxyparagraph{\texorpdfstring{createAction()}{createAction()}}
-{\footnotesize\ttfamily QAction $\ast$ create\+Action (\begin{DoxyParamCaption}\item[{const QString}]{icon,  }\item[{const QString}]{tool\+Tip,  }\item[{const QString}]{status\+Tip,  }\item[{bool}]{scripted = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+\mbox{\Hypertarget{class_main_window_a1c3bf9e577d94dadcff6ec920bc7293f}\label{class_main_window_a1c3bf9e577d94dadcff6ec920bc7293f}} 
+\index{MainWindow@{MainWindow}!create\_icon@{create\_icon}}
+\index{create\_icon@{create\_icon}!MainWindow@{MainWindow}}
+\doxyparagraph{\texorpdfstring{create\_icon()}{create\_icon()}}
+{\footnotesize\ttfamily QIcon create\+\_\+icon (\begin{DoxyParamCaption}\item[{QString}]{stub }\end{DoxyParamCaption})}
 
+\mbox{\Hypertarget{class_main_window_ae4deb4d1c6b0e843df3df608cf6d269a}\label{class_main_window_ae4deb4d1c6b0e843df3df608cf6d269a}} 
+\index{MainWindow@{MainWindow}!create\_toolbar@{create\_toolbar}}
+\index{create\_toolbar@{create\_toolbar}!MainWindow@{MainWindow}}
+\doxyparagraph{\texorpdfstring{create\_toolbar()}{create\_toolbar()}}
+{\footnotesize\ttfamily void create\+\_\+toolbar (\begin{DoxyParamCaption}\item[{QTool\+Bar $\ast$}]{toolbar,  }\item[{std\+::string}]{label,  }\item[{std\+::vector$<$ std\+::string $>$}]{entries }\end{DoxyParamCaption})}
 
-
-\mbox{\hyperlink{class_main_window_a1ad7acff7d24e40c7855672bf7d8f400}{Main\+Window\+::create\+Action}}. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em icon} & \\
-\hline
-{\em tool\+Tip} & \\
-\hline
-{\em status\+Tip} & \\
-\hline
-{\em scripted} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-
-\end{DoxyReturn}
 \mbox{\Hypertarget{class_main_window_a5de9bc12f363ba45fb8082f262d24deb}\label{class_main_window_a5de9bc12f363ba45fb8082f262d24deb}} 
 \index{MainWindow@{MainWindow}!createAllActions@{createAllActions}}
 \index{createAllActions@{createAllActions}!MainWindow@{MainWindow}}
@@ -1031,6 +993,10 @@ The \mbox{\hyperlink{class_main_window}{Main\+Window}} class.
 
 \mbox{\hyperlink{class_main_window_a5de9bc12f363ba45fb8082f262d24deb}{Main\+Window\+::create\+All\+Actions}}. 
 
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000003}{Todo}}]Set What\textquotesingle{}s This Context Help to status\+Tip for now so there is some infos there. Make custom whats this context help popup with more descriptive help than just the status bar/tip one liner(short but not real long) with a hyperlink in the custom popup at the bottom to open full help file description. Ex\+: like wx\+Python AGW\textquotesingle{}s Super\+Tool\+Tip. ACTION-\/\texorpdfstring{$>$}{>}set\+Whats\+This(status\+Tip); 
+
+Finish All Commands ... \texorpdfstring{$<$}{<}.\texorpdfstring{$<$}{<}\end{DoxyRefDesc}
 \mbox{\Hypertarget{class_main_window_a0041162b4cbd38f4051c1164601748db}\label{class_main_window_a0041162b4cbd38f4051c1164601748db}} 
 \index{MainWindow@{MainWindow}!createAllMenus@{createAllMenus}}
 \index{createAllMenus@{createAllMenus}!MainWindow@{MainWindow}}
@@ -1053,16 +1019,6 @@ The \mbox{\hyperlink{class_main_window}{Main\+Window}} class.
 \doxyparagraph{\texorpdfstring{createEditMenu()}{createEditMenu()}}
 {\footnotesize\ttfamily void create\+Edit\+Menu (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
 
-\mbox{\Hypertarget{class_main_window_a6571255cc3df7e2f7faae6ca17ef6fff}\label{class_main_window_a6571255cc3df7e2f7faae6ca17ef6fff}} 
-\index{MainWindow@{MainWindow}!createEditToolbar@{createEditToolbar}}
-\index{createEditToolbar@{createEditToolbar}!MainWindow@{MainWindow}}
-\doxyparagraph{\texorpdfstring{createEditToolbar()}{createEditToolbar()}}
-{\footnotesize\ttfamily void create\+Edit\+Toolbar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
-
-
-
-\mbox{\hyperlink{class_main_window_a6571255cc3df7e2f7faae6ca17ef6fff}{Main\+Window\+::create\+Edit\+Toolbar}}. 
-
 \mbox{\Hypertarget{class_main_window_a9d11332dde51577bb635156b0219f040}\label{class_main_window_a9d11332dde51577bb635156b0219f040}} 
 \index{MainWindow@{MainWindow}!createFileMenu@{createFileMenu}}
 \index{createFileMenu@{createFileMenu}!MainWindow@{MainWindow}}
@@ -1072,16 +1028,6 @@ The \mbox{\hyperlink{class_main_window}{Main\+Window}} class.
 
 
 \mbox{\hyperlink{class_main_window_a9d11332dde51577bb635156b0219f040}{Main\+Window\+::create\+File\+Menu}}. 
-
-\mbox{\Hypertarget{class_main_window_a57bfabc7eecf078c655cc1138e6b479a}\label{class_main_window_a57bfabc7eecf078c655cc1138e6b479a}} 
-\index{MainWindow@{MainWindow}!createFileToolbar@{createFileToolbar}}
-\index{createFileToolbar@{createFileToolbar}!MainWindow@{MainWindow}}
-\doxyparagraph{\texorpdfstring{createFileToolbar()}{createFileToolbar()}}
-{\footnotesize\ttfamily void create\+File\+Toolbar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
-
-
-
-\mbox{\hyperlink{class_main_window_a57bfabc7eecf078c655cc1138e6b479a}{Main\+Window\+::create\+File\+Toolbar}}. 
 
 \mbox{\Hypertarget{class_main_window_a5fafc67c2613c8333c38f24fb2ef2ec6}\label{class_main_window_a5fafc67c2613c8333c38f24fb2ef2ec6}} 
 \index{MainWindow@{MainWindow}!createHelpMenu@{createHelpMenu}}
@@ -1095,19 +1041,11 @@ The \mbox{\hyperlink{class_main_window}{Main\+Window}} class.
 \doxyparagraph{\texorpdfstring{createHelpToolbar()}{createHelpToolbar()}}
 {\footnotesize\ttfamily void create\+Help\+Toolbar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
 
-
-
-\mbox{\hyperlink{class_main_window_a5699527991aebdce74bd2fe7e951b88a}{Main\+Window\+::create\+Help\+Toolbar}}. 
-
 \mbox{\Hypertarget{class_main_window_a8deb25313eea533d0c420f0eb16259e8}\label{class_main_window_a8deb25313eea533d0c420f0eb16259e8}} 
 \index{MainWindow@{MainWindow}!createIconToolbar@{createIconToolbar}}
 \index{createIconToolbar@{createIconToolbar}!MainWindow@{MainWindow}}
 \doxyparagraph{\texorpdfstring{createIconToolbar()}{createIconToolbar()}}
 {\footnotesize\ttfamily void create\+Icon\+Toolbar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
-
-
-
-\mbox{\hyperlink{class_main_window_a8deb25313eea533d0c420f0eb16259e8}{Main\+Window\+::create\+Icon\+Toolbar}}. 
 
 \mbox{\Hypertarget{class_main_window_a12cd97f2e946ae6cbbf77fae71fcb474}\label{class_main_window_a12cd97f2e946ae6cbbf77fae71fcb474}} 
 \index{MainWindow@{MainWindow}!createLayerToolbar@{createLayerToolbar}}
@@ -1124,10 +1062,6 @@ The \mbox{\hyperlink{class_main_window}{Main\+Window}} class.
 \index{createPanToolbar@{createPanToolbar}!MainWindow@{MainWindow}}
 \doxyparagraph{\texorpdfstring{createPanToolbar()}{createPanToolbar()}}
 {\footnotesize\ttfamily void create\+Pan\+Toolbar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
-
-
-
-\mbox{\hyperlink{class_main_window_a863e340d0b9e5f4595740b6894077ef9}{Main\+Window\+::create\+Pan\+Toolbar}}. 
 
 \mbox{\Hypertarget{class_main_window_a4e7e670fbeb496cef76d36c8f95faaf7}\label{class_main_window_a4e7e670fbeb496cef76d36c8f95faaf7}} 
 \index{MainWindow@{MainWindow}!createPromptToolbar@{createPromptToolbar}}
@@ -1171,23 +1105,11 @@ The \mbox{\hyperlink{class_main_window}{Main\+Window}} class.
 \doxyparagraph{\texorpdfstring{createViewMenu()}{createViewMenu()}}
 {\footnotesize\ttfamily void create\+View\+Menu (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
 
-\mbox{\Hypertarget{class_main_window_a0033a6a408a274d8d13640c8f243db74}\label{class_main_window_a0033a6a408a274d8d13640c8f243db74}} 
-\index{MainWindow@{MainWindow}!createViewToolbar@{createViewToolbar}}
-\index{createViewToolbar@{createViewToolbar}!MainWindow@{MainWindow}}
-\doxyparagraph{\texorpdfstring{createViewToolbar()}{createViewToolbar()}}
-{\footnotesize\ttfamily void create\+View\+Toolbar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
-
 \mbox{\Hypertarget{class_main_window_a5cbea7783df0d329f036717df0b6e39a}\label{class_main_window_a5cbea7783df0d329f036717df0b6e39a}} 
 \index{MainWindow@{MainWindow}!createWindowMenu@{createWindowMenu}}
 \index{createWindowMenu@{createWindowMenu}!MainWindow@{MainWindow}}
 \doxyparagraph{\texorpdfstring{createWindowMenu()}{createWindowMenu()}}
 {\footnotesize\ttfamily void create\+Window\+Menu (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
-
-\mbox{\Hypertarget{class_main_window_a67a1952ad8101606f38353f2c000168f}\label{class_main_window_a67a1952ad8101606f38353f2c000168f}} 
-\index{MainWindow@{MainWindow}!createZoomToolbar@{createZoomToolbar}}
-\index{createZoomToolbar@{createZoomToolbar}!MainWindow@{MainWindow}}
-\doxyparagraph{\texorpdfstring{createZoomToolbar()}{createZoomToolbar()}}
-{\footnotesize\ttfamily void create\+Zoom\+Toolbar (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
 
 \mbox{\Hypertarget{class_main_window_ada01f65675afbbc0b8006d58df5acb81}\label{class_main_window_ada01f65675afbbc0b8006d58df5acb81}} 
 \index{MainWindow@{MainWindow}!cut@{cut}}
@@ -1392,42 +1314,6 @@ The \mbox{\hyperlink{class_main_window}{Main\+Window}} class.
 
 
 \mbox{\hyperlink{class_main_window_ae626d4519d9c10fd0feb5344d4e41ad6}{Main\+Window\+::hide\+Unimplemented}}. 
-
-\mbox{\Hypertarget{class_main_window_a4f774f8ef656d120fe25c59786a669c6}\label{class_main_window_a4f774f8ef656d120fe25c59786a669c6}} 
-\index{MainWindow@{MainWindow}!icon128@{icon128}}
-\index{icon128@{icon128}!MainWindow@{MainWindow}}
-\doxyparagraph{\texorpdfstring{icon128}{icon128}}
-{\footnotesize\ttfamily void icon128 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
-
-\mbox{\Hypertarget{class_main_window_a45799ff77198fcb8d49329b247c64855}\label{class_main_window_a45799ff77198fcb8d49329b247c64855}} 
-\index{MainWindow@{MainWindow}!icon16@{icon16}}
-\index{icon16@{icon16}!MainWindow@{MainWindow}}
-\doxyparagraph{\texorpdfstring{icon16}{icon16}}
-{\footnotesize\ttfamily void icon16 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
-
-\mbox{\Hypertarget{class_main_window_a4776b90d9b76400e356006003cbab8a1}\label{class_main_window_a4776b90d9b76400e356006003cbab8a1}} 
-\index{MainWindow@{MainWindow}!icon24@{icon24}}
-\index{icon24@{icon24}!MainWindow@{MainWindow}}
-\doxyparagraph{\texorpdfstring{icon24}{icon24}}
-{\footnotesize\ttfamily void icon24 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
-
-\mbox{\Hypertarget{class_main_window_a840f2c8da2adc1c17d21460c8b19259b}\label{class_main_window_a840f2c8da2adc1c17d21460c8b19259b}} 
-\index{MainWindow@{MainWindow}!icon32@{icon32}}
-\index{icon32@{icon32}!MainWindow@{MainWindow}}
-\doxyparagraph{\texorpdfstring{icon32}{icon32}}
-{\footnotesize\ttfamily void icon32 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
-
-\mbox{\Hypertarget{class_main_window_a6021724b1bc888d62d75917ddda2ff8a}\label{class_main_window_a6021724b1bc888d62d75917ddda2ff8a}} 
-\index{MainWindow@{MainWindow}!icon48@{icon48}}
-\index{icon48@{icon48}!MainWindow@{MainWindow}}
-\doxyparagraph{\texorpdfstring{icon48}{icon48}}
-{\footnotesize\ttfamily void icon48 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
-
-\mbox{\Hypertarget{class_main_window_a1efbfd913dcfaffd3c972dad67336db7}\label{class_main_window_a1efbfd913dcfaffd3c972dad67336db7}} 
-\index{MainWindow@{MainWindow}!icon64@{icon64}}
-\index{icon64@{icon64}!MainWindow@{MainWindow}}
-\doxyparagraph{\texorpdfstring{icon64}{icon64}}
-{\footnotesize\ttfamily void icon64 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
 \mbox{\Hypertarget{class_main_window_a471e9cc1bc5ed7d431363e74962aede5}\label{class_main_window_a471e9cc1bc5ed7d431363e74962aede5}} 
 \index{MainWindow@{MainWindow}!iconResize@{iconResize}}
@@ -2745,6 +2631,8 @@ donut 20 40 20 black
 \begin{DoxyReturn}{Returns}
 
 \end{DoxyReturn}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000004}{Todo}}]check the file exists on the system, rename to valid\+File? \end{DoxyRefDesc}
 \mbox{\Hypertarget{class_main_window_a133c463541d37bcc2fcba5155b850516}\label{class_main_window_a133c463541d37bcc2fcba5155b850516}} 
 \index{MainWindow@{MainWindow}!whatsThisContextHelp@{whatsThisContextHelp}}
 \index{whatsThisContextHelp@{whatsThisContextHelp}!MainWindow@{MainWindow}}
@@ -2855,11 +2743,11 @@ donut 20 40 20 black
 
 
 \doxysubsubsection{Member Data Documentation}
-\mbox{\Hypertarget{class_main_window_ad15a4e6012537a86835b5148b5a547aa}\label{class_main_window_ad15a4e6012537a86835b5148b5a547aa}} 
+\mbox{\Hypertarget{class_main_window_a58e4ce80363ad069b2724be586c0af2c}\label{class_main_window_a58e4ce80363ad069b2724be586c0af2c}} 
 \index{MainWindow@{MainWindow}!actionHash@{actionHash}}
 \index{actionHash@{actionHash}!MainWindow@{MainWindow}}
 \doxyparagraph{\texorpdfstring{actionHash}{actionHash}}
-{\footnotesize\ttfamily QHash$<$int, QAction$\ast$$>$ action\+Hash}
+{\footnotesize\ttfamily QAction$\ast$ action\+Hash\mbox{[}200\mbox{]}}
 
 \mbox{\Hypertarget{class_main_window_a62359f022a87ee2600051b142dd30603}\label{class_main_window_a62359f022a87ee2600051b142dd30603}} 
 \index{MainWindow@{MainWindow}!checkBoxTipOfTheDay@{checkBoxTipOfTheDay}}
@@ -2897,23 +2785,11 @@ donut 20 40 20 black
 \doxyparagraph{\texorpdfstring{dockUndoEdit}{dockUndoEdit}}
 {\footnotesize\ttfamily \mbox{\hyperlink{class_undo_editor}{Undo\+Editor}}$\ast$ dock\+Undo\+Edit}
 
-\mbox{\Hypertarget{class_main_window_ad70fe261589d9c94c684446870f19a3c}\label{class_main_window_ad70fe261589d9c94c684446870f19a3c}} 
-\index{MainWindow@{MainWindow}!edit\_toolbar@{edit\_toolbar}}
-\index{edit\_toolbar@{edit\_toolbar}!MainWindow@{MainWindow}}
-\doxyparagraph{\texorpdfstring{edit\_toolbar}{edit\_toolbar}}
-{\footnotesize\ttfamily const int edit\+\_\+toolbar = 1\hspace{0.3cm}{\ttfamily [protected]}}
-
 \mbox{\Hypertarget{class_main_window_a9e8db3d72fc35f6cf3d059da359ab62c}\label{class_main_window_a9e8db3d72fc35f6cf3d059da359ab62c}} 
 \index{MainWindow@{MainWindow}!editMenu@{editMenu}}
 \index{editMenu@{editMenu}!MainWindow@{MainWindow}}
 \doxyparagraph{\texorpdfstring{editMenu}{editMenu}}
 {\footnotesize\ttfamily QMenu$\ast$ edit\+Menu\hspace{0.3cm}{\ttfamily [protected]}}
-
-\mbox{\Hypertarget{class_main_window_ac74e82b21069ba3de55b4fbc74e1a0fb}\label{class_main_window_ac74e82b21069ba3de55b4fbc74e1a0fb}} 
-\index{MainWindow@{MainWindow}!file\_toolbar@{file\_toolbar}}
-\index{file\_toolbar@{file\_toolbar}!MainWindow@{MainWindow}}
-\doxyparagraph{\texorpdfstring{file\_toolbar}{file\_toolbar}}
-{\footnotesize\ttfamily const int file\+\_\+toolbar = 0\hspace{0.3cm}{\ttfamily [protected]}}
 
 \mbox{\Hypertarget{class_main_window_adb1ab65d1aecac73e58f48557c143b2e}\label{class_main_window_adb1ab65d1aecac73e58f48557c143b2e}} 
 \index{MainWindow@{MainWindow}!fileMenu@{fileMenu}}
@@ -3779,12 +3655,6 @@ donut 20 40 20 black
 \doxyparagraph{\texorpdfstring{toolbarZoom}{toolbarZoom}}
 {\footnotesize\ttfamily QTool\+Bar$\ast$ toolbar\+Zoom\hspace{0.3cm}{\ttfamily [protected]}}
 
-\mbox{\Hypertarget{class_main_window_a16acce1ecf99ab0251a1d127610710e3}\label{class_main_window_a16acce1ecf99ab0251a1d127610710e3}} 
-\index{MainWindow@{MainWindow}!view\_toolbar@{view\_toolbar}}
-\index{view\_toolbar@{view\_toolbar}!MainWindow@{MainWindow}}
-\doxyparagraph{\texorpdfstring{view\_toolbar}{view\_toolbar}}
-{\footnotesize\ttfamily const int view\+\_\+toolbar = 2\hspace{0.3cm}{\ttfamily [protected]}}
-
 \mbox{\Hypertarget{class_main_window_acc57acfba4d61ab23729d7dea1821414}\label{class_main_window_acc57acfba4d61ab23729d7dea1821414}} 
 \index{MainWindow@{MainWindow}!viewMenu@{viewMenu}}
 \index{viewMenu@{viewMenu}!MainWindow@{MainWindow}}
@@ -3803,12 +3673,6 @@ donut 20 40 20 black
 \doxyparagraph{\texorpdfstring{wizardTipOfTheDay}{wizardTipOfTheDay}}
 {\footnotesize\ttfamily QWizard$\ast$ wizard\+Tip\+Of\+The\+Day\hspace{0.3cm}{\ttfamily [protected]}}
 
-\mbox{\Hypertarget{class_main_window_a71060385708e4422cda409c16b2eb59a}\label{class_main_window_a71060385708e4422cda409c16b2eb59a}} 
-\index{MainWindow@{MainWindow}!zoom\_toolbar@{zoom\_toolbar}}
-\index{zoom\_toolbar@{zoom\_toolbar}!MainWindow@{MainWindow}}
-\doxyparagraph{\texorpdfstring{zoom\_toolbar}{zoom\_toolbar}}
-{\footnotesize\ttfamily const int zoom\+\_\+toolbar = 3\hspace{0.3cm}{\ttfamily [protected]}}
-
 \mbox{\Hypertarget{class_main_window_a66a1fa14ff2b8b7de65166e398f7be2c}\label{class_main_window_a66a1fa14ff2b8b7de65166e398f7be2c}} 
 \index{MainWindow@{MainWindow}!zoomMenu@{zoomMenu}}
 \index{zoomMenu@{zoomMenu}!MainWindow@{MainWindow}}
@@ -3820,7 +3684,6 @@ donut 20 40 20 black
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
 embroidermodder2/\mbox{\hyperlink{embroidermodder_8h}{embroidermodder.\+h}}\item 
-embroidermodder2/\mbox{\hyperlink{mainwindow-actions_8cpp}{mainwindow-\/actions.\+cpp}}\item 
 embroidermodder2/\mbox{\hyperlink{mainwindow-commands_8cpp}{mainwindow-\/commands.\+cpp}}\item 
 embroidermodder2/\mbox{\hyperlink{mainwindow-menus_8cpp}{mainwindow-\/menus.\+cpp}}\item 
 embroidermodder2/\mbox{\hyperlink{mainwindow-settings_8cpp}{mainwindow-\/settings.\+cpp}}\item 

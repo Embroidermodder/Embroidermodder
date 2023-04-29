@@ -171,6 +171,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a814830f38fd2c36b3f96252ee65d7617"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ellipse_object.html#a814830f38fd2c36b3f96252ee65d7617">vulcanize</a> ()</td></tr>
 <tr class="separator:a814830f38fd2c36b3f96252ee65d7617"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a71dcd474d5a8c0e5fdc137b48da18a0c"><td class="memItemLeft" align="right" valign="top">virtual QPointF&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ellipse_object.html#a71dcd474d5a8c0e5fdc137b48da18a0c">mouseSnapPoint</a> (const QPointF &amp;mousePoint)</td></tr>
+<tr class="memdesc:a71dcd474d5a8c0e5fdc137b48da18a0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the closest snap point to the mouse point.  <br /></td></tr>
 <tr class="separator:a71dcd474d5a8c0e5fdc137b48da18a0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfde9da59c0bbaaab7decdc222aa38a3"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; QPointF &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ellipse_object.html#acfde9da59c0bbaaab7decdc222aa38a3">allGripPoints</a> ()</td></tr>
 <tr class="separator:acfde9da59c0bbaaab7decdc222aa38a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -473,6 +474,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p></p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000011">Todo:</a></b></dt><dd><a class="el" href="class_ellipse_object.html#af377b9b2e3594940757c25610899c02b">gripEdit()</a> for <a class="el" href="class_ellipse_object.html">EllipseObject</a> </dd></dl>
 
 <p>Implements <a class="el" href="class_base_object.html#a1c46a0045853e83ae92ff1128ec0c6aa">BaseObject</a>.</p>
 
@@ -529,6 +531,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p></p>
+<dl class="section warning"><dt>Warning</dt><dd>DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled, and the item is double clicked, the scene will erratically move the item while zooming. All movement has to be handled explicitly by us, not by the scene.</dd></dl>
 
 </div>
 </div>
@@ -556,7 +559,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p></p>
+<p>Returns the closest snap point to the mouse point. </p>
 
 <p>Implements <a class="el" href="class_base_object.html#a80af764c683465a8777c85754f619d28">BaseObject</a>.</p>
 

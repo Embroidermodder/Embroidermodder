@@ -113,7 +113,6 @@ $(document).ready(function(){initNavTree('pattern_8c.html',''); initResizable();
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a7454ecbf98b46d74f1138772b6c9244f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pattern_8c.html#a7454ecbf98b46d74f1138772b6c9244f">embPattern_create</a> (void)</td></tr>
-<tr class="memdesc:a7454ecbf98b46d74f1138772b6c9244f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pointer to an EmbPattern. It is created on the heap. The caller is responsible for freeing the allocated memory with <a class="el" href="pattern_8c.html#a644e83f2c9bcb606bc0b252a6fe443ed">embPattern_free()</a>.  <br /></td></tr>
 <tr class="separator:a7454ecbf98b46d74f1138772b6c9244f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bb50be01adbf928259862522b20a7ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pattern_8c.html#a5bb50be01adbf928259862522b20a7ef">embPattern_hideStitchesOverLength</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *p, int length)</td></tr>
 <tr class="separator:a5bb50be01adbf928259862522b20a7ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -122,7 +121,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a07b42ab1ae4028608bf4462d4a5abbcc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pattern_8c.html#a07b42ab1ae4028608bf4462d4a5abbcc">embPattern_fixColorCount</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *p)</td></tr>
 <tr class="separator:a07b42ab1ae4028608bf4462d4a5abbcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a007fd0ac881d6ac89ef4d42b280df25c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pattern_8c.html#a007fd0ac881d6ac89ef4d42b280df25c">embPattern_copystitch_listToPolylines</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *p)</td></tr>
-<tr class="memdesc:a007fd0ac881d6ac89ef4d42b280df25c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies all of the Embstitch_list data to EmbPolylineObjectList data for pattern (<em>p</em>).  <br /></td></tr>
 <tr class="separator:a007fd0ac881d6ac89ef4d42b280df25c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54aee02ff890052e686ee3833530810e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pattern_8c.html#a54aee02ff890052e686ee3833530810e">embPattern_copyPolylinesTostitch_list</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *p)</td></tr>
 <tr class="separator:a54aee02ff890052e686ee3833530810e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -195,7 +193,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ae860b71c8945cf638dd7963d9fc6962c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pattern_8c.html#ae860b71c8945cf638dd7963d9fc6962c">embPattern_trimStitches</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *pattern)</td></tr>
 <tr class="separator:ae860b71c8945cf638dd7963d9fc6962c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>The file is for the management of the main struct: EmbPattern. </p>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a id="aa4de8d6ce23118cc49a67c745b171b44" name="aa4de8d6ce23118cc49a67c745b171b44"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa4de8d6ce23118cc49a67c745b171b44">&#9670;&#160;</a></span>convert()</h2>
 
@@ -572,14 +572,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">pattern</td><td></td></tr>
-    <tr><td class="paramname">thread</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+<p><em>pattern</em> <em>thread</em> </p><dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
 
 </div>
 </div>
@@ -617,6 +610,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Center the pattern <em>p</em>. </p>
 
 </div>
 </div>
@@ -645,13 +639,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p</td><td></td></tr>
-    <tr><td class="paramname">index</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Change the currentColorIndex of pattern <em>p</em> to <em>index</em>. </p>
 
 </div>
 </div>
@@ -698,6 +686,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p><em>p</em> </p>
 
 </div>
 </div>
@@ -735,14 +724,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
 <p>Copies all of the Embstitch_list data to EmbPolylineObjectList data for pattern (<em>p</em>). </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>
@@ -777,6 +759,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000229">Todo:</a></b></dt><dd>The params determine the max XY movement rather than the length. They need renamed or clarified further. </dd></dl>
 
 </div>
 </div>
@@ -795,8 +778,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Returns a pointer to an EmbPattern. It is created on the heap. The caller is responsible for freeing the allocated memory with <a class="el" href="pattern_8c.html#a644e83f2c9bcb606bc0b252a6fe443ed">embPattern_free()</a>. </p>
+<p>Returns a pointer to an EmbPattern. It is created on the heap. The caller is responsible for freeing the allocated memory with <a class="el" href="pattern_8c.html#a644e83f2c9bcb606bc0b252a6fe443ed">embPattern_free()</a>.</p>
 <dl class="section return"><dt>Returns</dt><dd>EmbPattern* </dd></dl>
 
 </div>
@@ -852,12 +834,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
+<p><em>p</em> </p>
 
 </div>
 </div>
@@ -978,13 +955,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p</td><td></td></tr>
-    <tr><td class="paramname">length</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
+<p><em>p</em> <em>length</em> </p>
 
 </div>
 </div>
@@ -1065,6 +1036,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>TODO: Description needed. </p>
 
 </div>
 </div>
@@ -1185,6 +1157,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Very simple scaling of the x and y axis for every point. Doesn't insert or delete stitches to preserve density. </p>
 
 </div>
 </div>
@@ -1203,13 +1176,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">pattern</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>float </dd></dl>
+<p><em>pattern</em> </p><dl class="section return"><dt>Returns</dt><dd>float </dd></dl>
 
 </div>
 </div>

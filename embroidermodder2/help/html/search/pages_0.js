@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['bibliography_0',['Bibliography',['../citelist.html',1,'']]]
+  ['about_0',['About',['../about.html',1,'']]]
 ];

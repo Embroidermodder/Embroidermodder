@@ -145,13 +145,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Calculate the bounding box of geometry <em>obj</em> based on what kind of geometric object it is. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">obj</td><td>A pointer to the geometry memory. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>EmbRect The bounding box in the same scale as the input geometry.</dd></dl>
+<p><em>obj</em> A pointer to the geometry memory. </p><dl class="section return"><dt>Returns</dt><dd>EmbRect The bounding box in the same scale as the input geometry.</dd></dl>
 <p>In the case of a failure the bounding box returned is always the unit square with top left corner at (0, 0). </p>
 
 </div>
@@ -173,12 +167,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Free the memory occupied by a non-stitch geometry object. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">obj</td><td>Pointer to geometry memory. </td></tr>
-  </table>
-  </dd>
-</dl>
+<p><em>obj</em> Pointer to geometry memory. </p>
 
 </div>
 </div>
@@ -199,13 +188,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Our generic object interface backends to each individual type. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">type_in</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>EmbGeometry* </dd></dl>
+<p><em>type_in</em> </p><dl class="section return"><dt>Returns</dt><dd>EmbGeometry* </dd></dl>
 
 </div>
 </div>
@@ -236,13 +219,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Translate <em>obj</em> by the vector <em>delta</em>. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">obj</td><td>A pointer to the geometry memory. </td></tr>
-    <tr><td class="paramname">delta</td><td>A vector in the 0.1mm scale to offset the geometry by. </td></tr>
-  </table>
-  </dd>
-</dl>
+<p><em>obj</em> A pointer to the geometry memory. <em>delta</em> A vector in the 0.1mm scale to offset the geometry by. </p>
 
 </div>
 </div>
@@ -263,13 +240,8 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Toggle the rubber mode of the object. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">obj</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000203">Todo:</a></b></dt><dd>Review. This could be controlled by a simple flag. </dd></dl>
+<p><em>obj</em> </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000226">Todo:</a></b></dt><dd>Review. This could be controlled by a simple flag. </dd></dl>
 
 </div>
 </div>

@@ -68,7 +68,7 @@ void \mbox{\hyperlink{class_ellipse_object_add4e11623be9bc6e02557c67674564ed}{up
 virtual void \mbox{\hyperlink{class_ellipse_object_a814830f38fd2c36b3f96252ee65d7617}{vulcanize}} ()
 \item 
 virtual QPointF \mbox{\hyperlink{class_ellipse_object_a71dcd474d5a8c0e5fdc137b48da18a0c}{mouse\+Snap\+Point}} (const QPointF \&mouse\+Point)
-\item 
+\begin{DoxyCompactList}\small\item\em Returns the closest snap point to the mouse point. \end{DoxyCompactList}\item 
 virtual QList$<$ QPointF $>$ \mbox{\hyperlink{class_ellipse_object_acfde9da59c0bbaaab7decdc222aa38a3}{all\+Grip\+Points}} ()
 \item 
 virtual void \mbox{\hyperlink{class_ellipse_object_af377b9b2e3594940757c25610899c02b}{grip\+Edit}} (const QPointF \&before, const QPointF \&after)
@@ -259,6 +259,8 @@ Implements \mbox{\hyperlink{class_base_object_ac4ee17e41d5451c0e2efaeb88521eadc}
 
 
 
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000011}{Todo}}]\mbox{\hyperlink{class_ellipse_object_af377b9b2e3594940757c25610899c02b}{grip\+Edit()}} for \mbox{\hyperlink{class_ellipse_object}{Ellipse\+Object}} \end{DoxyRefDesc}
 
 
 Implements \mbox{\hyperlink{class_base_object_a1c46a0045853e83ae92ff1128ec0c6aa}{Base\+Object}}.
@@ -273,6 +275,9 @@ Implements \mbox{\hyperlink{class_base_object_a1c46a0045853e83ae92ff1128ec0c6aa}
 
 
 
+\begin{DoxyWarning}{Warning}
+DO NOT enable QGraphics\+Item\+::\+Item\+Is\+Movable. If it is enabled, and the item is double clicked, the scene will erratically move the item while zooming. All movement has to be handled explicitly by us, not by the scene.
+\end{DoxyWarning}
 \mbox{\Hypertarget{class_ellipse_object_a71dcd474d5a8c0e5fdc137b48da18a0c}\label{class_ellipse_object_a71dcd474d5a8c0e5fdc137b48da18a0c}} 
 \index{EllipseObject@{EllipseObject}!mouseSnapPoint@{mouseSnapPoint}}
 \index{mouseSnapPoint@{mouseSnapPoint}!EllipseObject@{EllipseObject}}
@@ -281,7 +286,7 @@ Implements \mbox{\hyperlink{class_base_object_a1c46a0045853e83ae92ff1128ec0c6aa}
 
 
 
-
+Returns the closest snap point to the mouse point. 
 
 
 

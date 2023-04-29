@@ -140,7 +140,6 @@ Functions</h2></td></tr>
 <tr class="memitem:aa629adadc7956aab2bfd8b0de7ccdd54"><td class="memItemLeft" align="right" valign="top"><a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fill_8c.html#aa629adadc7956aab2bfd8b0de7ccdd54">embPattern_combine</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *p1, <a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *p2)</td></tr>
 <tr class="separator:aa629adadc7956aab2bfd8b0de7ccdd54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e048d8296a5178c1188ca70ee2256e7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fill_8c.html#a8e048d8296a5178c1188ca70ee2256e7">embPattern_stitchArc</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *p, <a class="el" href="embroidery_8h.html#a09945e6e919629c5787e61582c712ba1">EmbArc</a> arc, int thread_index, int style)</td></tr>
-<tr class="memdesc:a8e048d8296a5178c1188ca70ee2256e7"><td class="mdescLeft">&#160;</td><td class="mdescRight"><em>p</em> <em>arc</em> <em>thread_index</em> <em>style</em>  <br /></td></tr>
 <tr class="separator:a8e048d8296a5178c1188ca70ee2256e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4927287166f2a0abbc7b482ff4054a5e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fill_8c.html#a4927287166f2a0abbc7b482ff4054a5e">embPattern_stitchCircle</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *p, <a class="el" href="embroidery_8h.html#a87fc13ccd4dbaa7de7c85efde17bba0e">EmbCircle</a> circle, int thread_index, int style)</td></tr>
 <tr class="separator:a4927287166f2a0abbc7b482ff4054a5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -182,13 +181,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">iterations</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+<p>Create the dragon curve for <em>iterations</em>.</p>
+<p>Returns 0 if the number of iterations is greater than 10 and 1 otherwise. </p>
 
 </div>
 </div>
@@ -217,14 +211,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p1</td><td></td></tr>
-    <tr><td class="paramname">p2</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>EmbPattern* </dd></dl>
+<p><em>p1</em> <em>p2</em> </p><dl class="section return"><dt>Returns</dt><dd>EmbPattern* </dd></dl>
 
 </div>
 </div>
@@ -243,12 +230,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
+<p><em>p</em> </p>
 
 </div>
 </div>
@@ -283,14 +265,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">pattern</td><td></td></tr>
-    <tr><td class="paramname">image</td><td></td></tr>
-    <tr><td class="paramname">threshhold</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
+<p><em>pattern</em> <em>image</em> <em>threshhold</em> </p>
 <p>Uses a threshhold method to determine where to put crosses in the fill.</p>
 <p>To improve this, we can remove the vertical stitches when two crosses neighbour. Currently the simple way to do this is to chain crosses that are neighbours exactly one ahead. </p>
 
@@ -327,14 +302,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">pattern</td><td></td></tr>
-    <tr><td class="paramname">image</td><td></td></tr>
-    <tr><td class="paramname">threshhold</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
+<p><em>pattern</em> <em>image</em> <em>threshhold</em> </p>
 <p>Uses a threshhold method to determine where to put lines in the fill.</p>
 <p>Needs to pass a "donut test", i.e. an image with black pixels where: 10 &lt; x*x + y*y &lt; 20 over the area (-30, 30) x (-30, 30).</p>
 <p>Use render then image difference to see how well it passes. </p>
@@ -378,7 +346,6 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
 <p><em>p</em> <em>arc</em> <em>thread_index</em> <em>style</em> </p>
 
 </div>
@@ -420,13 +387,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p</td><td></td></tr>
-    <tr><td class="paramname">circle</td><td><em>thread_index</em> <em>style</em> </td></tr>
-  </table>
-  </dd>
-</dl>
+<p><em>p</em> <em>circle</em> <em>thread_index</em> <em>style</em> </p>
 <p>style determines: stitch density fill pattern outline or fill</p>
 <p>For now it's a straight fill of 1000 stitches of the whole object by default.</p>
 <p>Consider the intersection of a line in direction "d" that passes through the disc with center "c", radius "r". The start and end points are: </p><pre class="fragment">$(c-r(d/|d|), c + r(d/|d|))$
@@ -473,16 +434,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p</td><td></td></tr>
-    <tr><td class="paramname">ellipse</td><td></td></tr>
-    <tr><td class="paramname">thread_index</td><td></td></tr>
-    <tr><td class="paramname">style</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000189">Todo:</a></b></dt><dd>finish stitchEllipse </dd></dl>
+<p><em>p</em> <em>ellipse</em> <em>thread_index</em> <em>style</em> </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000212">Todo:</a></b></dt><dd>finish stitchEllipse </dd></dl>
 
 </div>
 </div>
@@ -523,16 +476,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p</td><td></td></tr>
-    <tr><td class="paramname">rect</td><td></td></tr>
-    <tr><td class="paramname">thread_index</td><td></td></tr>
-    <tr><td class="paramname">style</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000190">Todo:</a></b></dt><dd>finish stitch path </dd></dl>
+<p><em>p</em> <em>rect</em> <em>thread_index</em> <em>style</em> </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000213">Todo:</a></b></dt><dd>finish stitch path </dd></dl>
 
 </div>
 </div>
@@ -573,16 +518,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p</td><td></td></tr>
-    <tr><td class="paramname">rect</td><td></td></tr>
-    <tr><td class="paramname">thread_index</td><td></td></tr>
-    <tr><td class="paramname">style</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000191">Todo:</a></b></dt><dd>finish stitch polygon </dd></dl>
+<p><em>p</em> <em>rect</em> <em>thread_index</em> <em>style</em> </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000214">Todo:</a></b></dt><dd>finish stitch polygon </dd></dl>
 
 </div>
 </div>
@@ -623,16 +560,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p</td><td></td></tr>
-    <tr><td class="paramname">rect</td><td></td></tr>
-    <tr><td class="paramname">thread_index</td><td></td></tr>
-    <tr><td class="paramname">style</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000192">Todo:</a></b></dt><dd>finish stitch polyline </dd></dl>
+<p><em>p</em> <em>rect</em> <em>thread_index</em> <em>style</em> </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000215">Todo:</a></b></dt><dd>finish stitch polyline </dd></dl>
 
 </div>
 </div>
@@ -673,15 +602,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p</td><td></td></tr>
-    <tr><td class="paramname">rect</td><td></td></tr>
-    <tr><td class="paramname">thread_index</td><td></td></tr>
-    <tr><td class="paramname">style</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
+<p><em>p</em> <em>rect</em> <em>thread_index</em> <em>style</em> </p>
 <p>Here we just stitch the rectangle in the direction of it's longer side. </p>
 
 </div>
@@ -723,15 +644,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p</td><td></td></tr>
-    <tr><td class="paramname">rect</td><td></td></tr>
-    <tr><td class="paramname">thread_index</td><td></td></tr>
-    <tr><td class="paramname">style</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
+<p><em>p</em> <em>rect</em> <em>thread_index</em> <em>style</em> </p>
 
 </div>
 </div>
@@ -766,14 +679,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">vertices</td><td></td></tr>
-    <tr><td class="paramname">simplified</td><td></td></tr>
-    <tr><td class="paramname">distance</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
+<p><em>vertices</em> <em>simplified</em> <em>distance</em> </p>
 <p>Reduces the polygon by distance.</p>
 <p>This is a non-destructive function, so the caller is responsible for freeing "vertices" if they choose to keep "simplified". </p>
 
@@ -810,14 +716,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">vertices</td><td></td></tr>
-    <tr><td class="paramname">out</td><td></td></tr>
-    <tr><td class="paramname">nth</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
+<p><em>vertices</em> <em>out</em> <em>nth</em> </p>
 <p>Reduces the polygon by removing the Nth vertex in the vertices list. This is a non-destructive function, so the caller is responsible for freeing vertices if they choose to keep out. </p>
 
 </div>
@@ -847,14 +746,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">state</td><td></td></tr>
-    <tr><td class="paramname">iterations</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<p>using the "paper folding" method </p><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000188">Todo:</a></b></dt><dd>find citation for paper folding method </dd></dl>
+<p><em>state</em> <em>iterations</em> </p>
+<p>using the "paper folding" method </p><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000211">Todo:</a></b></dt><dd>find citation for paper folding method </dd></dl>
 
 </div>
 </div>
@@ -903,16 +796,8 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">points</td><td></td></tr>
-    <tr><td class="paramname">n_points</td><td></td></tr>
-    <tr><td class="paramname">width</td><td></td></tr>
-    <tr><td class="paramname">bias</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<h2><a class="anchor" id="autotoc_md92"></a>
+<p><em>points</em> <em>n_points</em> <em>width</em> <em>bias</em> </p>
+<h2><a class="anchor" id="autotoc_md40"></a>
 Greedy Algorithm</h2>
 <p>For each point in the list find the shortest distance to any possible neighbour, then perform a swap to make that neighbour the next item in the list.</p>
 <p>To make the stitches lie more on one axis than the other bias the distance operator to prefer horizontal direction. </p>
@@ -944,14 +829,7 @@ Greedy Algorithm</h2>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">pattern</td><td></td></tr>
-    <tr><td class="paramname">iterations</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>int</dd></dl>
+<p><em>pattern</em> <em>iterations</em> </p>
 <p><a href="https://en.wikipedia.org/wiki/Hilbert_curve">https://en.wikipedia.org/wiki/Hilbert_curve</a></p>
 <p>Using the Lindenmayer System, so we can save work across different functions. </p>
 
@@ -1002,15 +880,7 @@ Greedy Algorithm</h2>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">points</td><td></td></tr>
-    <tr><td class="paramname">n_points</td><td></td></tr>
-    <tr><td class="paramname">width</td><td></td></tr>
-    <tr><td class="paramname">tolerence</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
+<p><em>points</em> <em>n_points</em> <em>width</em> <em>tolerence</em> </p>
 <p>Remove points that lie in the middle of two short stitches that could be one longer stitch. Repeat until none are found. </p>
 
 </div>
@@ -1052,16 +922,7 @@ Greedy Algorithm</h2>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">L</td><td></td></tr>
-    <tr><td class="paramname">state</td><td></td></tr>
-    <tr><td class="paramname">iterations</td><td></td></tr>
-    <tr><td class="paramname">complete</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>int</dd></dl>
+<p><em>L</em> <em>state</em> <em>iterations</em> <em>complete</em> </p><dl class="section return"><dt>Returns</dt><dd>int</dd></dl>
 <p>This is a slow generation algorithm. </p>
 
 </div>
@@ -1123,17 +984,7 @@ Greedy Algorithm</h2>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">pattern</td><td></td></tr>
-    <tr><td class="paramname">points</td><td></td></tr>
-    <tr><td class="paramname">n_points</td><td></td></tr>
-    <tr><td class="paramname">scale</td><td></td></tr>
-    <tr><td class="paramname">width</td><td></td></tr>
-    <tr><td class="paramname">height</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
+<p><em>pattern</em> <em>points</em> <em>n_points</em> <em>scale</em> <em>width</em> <em>height</em> </p>
 
 </div>
 </div>
@@ -1188,17 +1039,7 @@ Greedy Algorithm</h2>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">image</td><td></td></tr>
-    <tr><td class="paramname">n_points</td><td></td></tr>
-    <tr><td class="paramname">subsample_width</td><td></td></tr>
-    <tr><td class="paramname">subsample_height</td><td></td></tr>
-    <tr><td class="paramname">threshold</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>int*</dd></dl>
+<p><em>image</em> <em>n_points</em> <em>subsample_width</em> <em>subsample_height</em> <em>threshold</em> </p><dl class="section return"><dt>Returns</dt><dd>int*</dd></dl>
 <p>Identify darker pixels to put stitches in. </p>
 
 </div>

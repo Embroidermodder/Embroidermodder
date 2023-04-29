@@ -128,7 +128,66 @@ Functions</h2></td></tr>
 <tr class="memitem:a5b971603eb8cc707cfd0167659fd8aab"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="format__dst_8c.html#a5b971603eb8cc707cfd0167659fd8aab">writeDst</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *pattern, FILE *file)</td></tr>
 <tr class="separator:a5b971603eb8cc707cfd0167659fd8aab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>.DST (Tajima) embroidery file read/write routines Format comments are thanks to <a href="#" onclick="location.href='mai'+'lto:'+'tsp'+'il'+'man'+'@d'+'alc'+'oa'+'thl'+'et'+'ic.'+'co'+'m'; return false;">tspil<span class="obfuscator">.nosp@m.</span>man@<span class="obfuscator">.nosp@m.</span>dalco<span class="obfuscator">.nosp@m.</span>athl<span class="obfuscator">.nosp@m.</span>etic.<span class="obfuscator">.nosp@m.</span>com</a> who's notes appeared at <a href="http://www.wotsit.org">http://www.wotsit.org</a> under Tajima Format.</p>
+<h2><a class="anchor" id="tajima-dst-format"></a>
+Tajima Embroidery Format (.dst)</h2>
+<p><a id="a76_dst" name="a76_dst"></a> <a id="a77_Tajima" name="a77_Tajima"></a></p>
+<p>Stitch Only Format. [X] Basic Read Support [X] Basic Write Support [ ] Well Tested Read [ ] Well Tested Write</p>
+<p>.DST (Tajima) embroidery file read/write routines Format comments are thanks to <a href="tspilman@dalcoathletic.com">tspilman@dalcoathletic.com</a> who's notes appeared at <a href="http://www.wotsit.org">http://www.wotsit.org</a> under Tajima Format.</p>
+<p>Other references: <a class="el" href="citelist.html#CITEREF_kde_tajima">[2]</a> , <a class="el" href="citelist.html#CITEREF_acatina">[1]</a> .</p>
+<h3><a class="anchor" id="dst-header"></a>
+Header</h3>
+<p>The header contains general information about the design. It is in lines of ASCII, so if you open a DST file as a text file, it's the only part that's easy to read. The line ending symbol is `0x0D}. The header is necessary for the file to be read by most softwares and hardwares.</p>
+<p>The header is 125 bytes of data followed by padding spaces to make it 512 bytes in total.</p>
+<p>The lines are as follows.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><em>Label</em>   </th><th class="markdownTableHeadNone"><em>Size</em>   </th><th class="markdownTableHeadNone"><em>Description</em>   </th><th class="markdownTableHeadNone"><em>Example</em>    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>LA:</code>   </td><td class="markdownTableBodyNone">17   </td><td class="markdownTableBodyNone">The design name with no path or extension. The space reserved is 16 characters, but the name must not be longer than 8 and be padded to 16 with spaces (0x20).   </td><td class="markdownTableBodyNone"><code>"LA:Star            "</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>ST:</code>   </td><td class="markdownTableBodyNone">8   </td><td class="markdownTableBodyNone">The stitch count. An integer in the format <code>%07d</code>, that is: a 7 digit number padded by leading zeros. This is the total accross all possible stitch flags.   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>CO:</code>   </td><td class="markdownTableBodyNone">4   </td><td class="markdownTableBodyNone">The number of color changes (not to be confused with thread count, an all black design we would have the record \textbf{000}). An integer in the format <code>%03d</code>, that is: a 3 digit number padded by leading zeros.   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>+X:</code>   </td><td class="markdownTableBodyNone">6   </td><td class="markdownTableBodyNone">The extent of the pattern in the postitive x direction in millimeters. An integer in the format <code>%05d</code>, that is: a 5 digit number padded by leading zeros.   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>-X:</code>   </td><td class="markdownTableBodyNone">6   </td><td class="markdownTableBodyNone">The extent of the pattern in the negative x direction in millimeters. An integer in the format <code>%05d</code>, that is: a 5 digit integer padded by leading zeros.   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>+Y:</code>   </td><td class="markdownTableBodyNone">6   </td><td class="markdownTableBodyNone">The extent of the pattern in the postitive y direction in millimeters. An integer in the format <code>%05d</code>, that is: a 5 digit integer padded by leading zeros.   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>-Y:</code>   </td><td class="markdownTableBodyNone">6   </td><td class="markdownTableBodyNone">The extent of the pattern in the negative y direction in millimeters. An integer in the format <code>%05d</code>, that is: a 5 digit integer padded by leading zeros.   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>AX:</code>   </td><td class="markdownTableBodyNone">7   </td><td class="markdownTableBodyNone">The difference of the end from the start in the x direction in 0.1mm, the first char should be the sign, followed by an integer in the format <code>%05d</code>, that is: a 5 digit integer padded by leading zeros.   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>AY:</code>   </td><td class="markdownTableBodyNone">7   </td><td class="markdownTableBodyNone">The difference of the end from the start in the y direction in 0.1mm, the first char should be the sign, followed by an integer in the format <code>%05d</code>, that is: a 5 digit integer padded by leading zeros.   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>MX:</code>   </td><td class="markdownTableBodyNone">7   </td><td class="markdownTableBodyNone">The x co-ordinate of the last point in the previous file should the design span multiple files. Like AX, it is the sign, followed by a 5 digit integer. If we have a one file design set it to zero.   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>MY:</code>   </td><td class="markdownTableBodyNone">7   </td><td class="markdownTableBodyNone">The y co-ordinate of the last point in the previous file should the design span multiple files. Like AY, it is the sign, followed by a 5 digit integer. If we have a one file design set it to zero.   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>PD:</code>   </td><td class="markdownTableBodyNone">10   </td><td class="markdownTableBodyNone">Information about multivolume designs.   </td><td class="markdownTableBodyNone"></td></tr>
+</table>
+<h3><a class="anchor" id="dst-stitch-data"></a>
+Stitch Data</h3>
+<p>Uses 3 byte per stitch encoding with the format as follows:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><em>Bit</em>   </th><th class="markdownTableHeadNone"><em>7</em>   </th><th class="markdownTableHeadNone"><em>6</em>   </th><th class="markdownTableHeadNone"><em>5</em>   </th><th class="markdownTableHeadNone"><em>4</em>   </th><th class="markdownTableHeadNone"><em>3</em>   </th><th class="markdownTableHeadNone"><em>2</em>   </th><th class="markdownTableHeadNone"><em>1</em>   </th><th class="markdownTableHeadNone"><em>0</em>    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Byte 0   </td><td class="markdownTableBodyNone">y+1   </td><td class="markdownTableBodyNone">y-1   </td><td class="markdownTableBodyNone">y+9   </td><td class="markdownTableBodyNone">y-9   </td><td class="markdownTableBodyNone">x-9   </td><td class="markdownTableBodyNone">x+9   </td><td class="markdownTableBodyNone">x-1   </td><td class="markdownTableBodyNone">x+1    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Byte 1   </td><td class="markdownTableBodyNone">y+3   </td><td class="markdownTableBodyNone">y-3   </td><td class="markdownTableBodyNone">y+27   </td><td class="markdownTableBodyNone">y-27   </td><td class="markdownTableBodyNone">x-27   </td><td class="markdownTableBodyNone">x+27   </td><td class="markdownTableBodyNone">x-3   </td><td class="markdownTableBodyNone">x+3    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Byte 2   </td><td class="markdownTableBodyNone">jump   </td><td class="markdownTableBodyNone">color change   </td><td class="markdownTableBodyNone">y+81   </td><td class="markdownTableBodyNone">y-81   </td><td class="markdownTableBodyNone">x-81   </td><td class="markdownTableBodyNone">x+81   </td><td class="markdownTableBodyNone">set   </td><td class="markdownTableBodyNone">set   </td></tr>
+</table>
+<p>T01 and Tap appear to use Tajima Ternary.</p>
+<p>Where the stitch type is determined as:</p>
+<p>Normal Stitch <code>0b00000011 0x03</code> Jump Stitch <code>0b10000011 0x83</code> Stop/Change Color <code>0b11000011 0xC3</code> End Design <code>0b11110011 0xF3</code></p>
+<p>Inclusive or'ed with the last byte.</p>
+<p>Note that the max stitch length is the largest sum of $1+3+9+27+81=121$ where the unit length is 0.1mm so 12.1mm. The coordinate system is right handed. </p>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a3a8b58c49032f7403303dd1bdabd8ead" name="a3a8b58c49032f7403303dd1bdabd8ead"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3a8b58c49032f7403303dd1bdabd8ead">&#9670;&#160;</a></span>cci</h2>
 

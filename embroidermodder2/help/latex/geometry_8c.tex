@@ -30,12 +30,7 @@ void \mbox{\hyperlink{geometry_8c_ae6461f57f08ce5992c70fa9897988644}{emb\+Geomet
 
 Calculate the bounding box of geometry {\itshape obj} based on what kind of geometric object it is. 
 
-
-\begin{DoxyParams}{Parameters}
-{\em obj} & A pointer to the geometry memory. \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
+{\itshape obj} A pointer to the geometry memory. \begin{DoxyReturn}{Returns}
 Emb\+Rect The bounding box in the same scale as the input geometry.
 \end{DoxyReturn}
 In the case of a failure the bounding box returned is always the unit square with top left corner at (0, 0). \mbox{\Hypertarget{geometry_8c_a9946219466f0f6a7b5a506703bc34e9d}\label{geometry_8c_a9946219466f0f6a7b5a506703bc34e9d}} 
@@ -48,12 +43,7 @@ In the case of a failure the bounding box returned is always the unit square wit
 
 Free the memory occupied by a non-\/stitch geometry object. 
 
-
-\begin{DoxyParams}{Parameters}
-{\em obj} & Pointer to geometry memory. \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{geometry_8c_a85a825da7fbe0f04460724b80cc5844c}\label{geometry_8c_a85a825da7fbe0f04460724b80cc5844c}} 
+{\itshape obj} Pointer to geometry memory. \mbox{\Hypertarget{geometry_8c_a85a825da7fbe0f04460724b80cc5844c}\label{geometry_8c_a85a825da7fbe0f04460724b80cc5844c}} 
 \index{geometry.c@{geometry.c}!embGeometry\_init@{embGeometry\_init}}
 \index{embGeometry\_init@{embGeometry\_init}!geometry.c@{geometry.c}}
 \doxyparagraph{\texorpdfstring{embGeometry\_init()}{embGeometry\_init()}}
@@ -63,12 +53,7 @@ Free the memory occupied by a non-\/stitch geometry object.
 
 Our generic object interface backends to each individual type. 
 
-
-\begin{DoxyParams}{Parameters}
-{\em type\+\_\+in} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
+{\itshape type\+\_\+in} \begin{DoxyReturn}{Returns}
 Emb\+Geometry$\ast$ 
 \end{DoxyReturn}
 \mbox{\Hypertarget{geometry_8c_a289ed9ab03a956588e081281ec112f4d}\label{geometry_8c_a289ed9ab03a956588e081281ec112f4d}} 
@@ -81,14 +66,7 @@ Emb\+Geometry$\ast$
 
 Translate {\itshape obj} by the vector {\itshape delta}. 
 
-
-\begin{DoxyParams}{Parameters}
-{\em obj} & A pointer to the geometry memory. \\
-\hline
-{\em delta} & A vector in the 0.\+1mm scale to offset the geometry by. \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{geometry_8c_ae6461f57f08ce5992c70fa9897988644}\label{geometry_8c_ae6461f57f08ce5992c70fa9897988644}} 
+{\itshape obj} A pointer to the geometry memory. {\itshape delta} A vector in the 0.\+1mm scale to offset the geometry by. \mbox{\Hypertarget{geometry_8c_ae6461f57f08ce5992c70fa9897988644}\label{geometry_8c_ae6461f57f08ce5992c70fa9897988644}} 
 \index{geometry.c@{geometry.c}!embGeometry\_vulcanize@{embGeometry\_vulcanize}}
 \index{embGeometry\_vulcanize@{embGeometry\_vulcanize}!geometry.c@{geometry.c}}
 \doxyparagraph{\texorpdfstring{embGeometry\_vulcanize()}{embGeometry\_vulcanize()}}
@@ -98,10 +76,7 @@ Translate {\itshape obj} by the vector {\itshape delta}.
 
 Toggle the rubber mode of the object. 
 
+{\itshape obj} 
 
-\begin{DoxyParams}{Parameters}
-{\em obj} & \\
-\hline
-\end{DoxyParams}
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000203}{Todo}}]Review. This could be controlled by a simple flag. \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000226}{Todo}}]Review. This could be controlled by a simple flag. \end{DoxyRefDesc}

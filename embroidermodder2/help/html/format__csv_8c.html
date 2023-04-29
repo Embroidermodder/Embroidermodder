@@ -121,7 +121,17 @@ Functions</h2></td></tr>
 <tr class="memitem:af19e960a6be43cc3e6b92f76a6372d36"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="format__csv_8c.html#af19e960a6be43cc3e6b92f76a6372d36">writeCsv</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *pattern, FILE *file)</td></tr>
 <tr class="separator:af19e960a6be43cc3e6b92f76a6372d36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Comma Separated Values (.csv) <a id="a70_csv" name="a70_csv"></a></p>
+<p>Comma Seperated Values files aren't a universal system, here we aim to offer a broad support. The dialect is detected based on the opening lines, as each manufacturer should label their CSV files there.</p>
+<h3><a class="anchor" id="emb-2-csv-dialect"></a>
+Embroidermodder 2.0 CSV Dialect</h3>
+<p>Our own version has the identifier comment line:</p>
+<p>| Control Symbol | Type | Description | |&mdash;|&mdash;| | <code>#</code> | <code>COMMENT</code> | | | <code>&gt;</code> | <code>VARIABLE</code> | To store records of a pattern's width, height etc. This means that data stored in the header of say a .dst file is preserved. | | <code>$</code> | <code>THREAD</code> | | | <code>*</code> | <code>STITCH</code> | | | <code>*</code> | <code>JUMP</code> | | | <code>*</code> | <code>COLOR</code> | To change a color: used for trim as well | | <code>*</code> | <code>END</code> | To end a pattern. | | <code>*</code> | <code>UNKNOWN</code> | For any feature that we can't identify.</p>
+<h3><a class="anchor" id="embird-csv-dialect"></a>
+EmBird CSV Dialect</h3>
+<p><a id="a71_Embird" name="a71_Embird"></a> </p>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a id="a016bdfecd3196adcb2a361a7588f0a58" name="a016bdfecd3196adcb2a361a7588f0a58"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a016bdfecd3196adcb2a361a7588f0a58">&#9670;&#160;</a></span>csvStitchFlagToStr()</h2>
 

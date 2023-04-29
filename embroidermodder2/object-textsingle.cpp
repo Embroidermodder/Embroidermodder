@@ -1,4 +1,4 @@
-/**
+/*
  *  Embroidermodder 2.
  *
  *  ------------------------------------------------------------
@@ -15,12 +15,18 @@
 
 #include "embroidermodder.h"
 
+/**
+ *
+ */
 TextSingleObject::TextSingleObject(const QString& str, EmbReal x, EmbReal y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("TextSingleObject Constructor()");
     init(str, x, y, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
+/**
+ *
+ */
 TextSingleObject::TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("TextSingleObject Constructor()");
@@ -37,12 +43,19 @@ TextSingleObject::TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent)
     }
 }
 
+/**
+ *
+ */
 TextSingleObject::~TextSingleObject()
 {
     qDebug("TextSingleObject Destructor()");
 }
 
-void TextSingleObject::init(const QString& str, EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType)
+/**
+ *
+ */
+void
+TextSingleObject::init(const QString& str, EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, OBJ_TYPE_TEXTSINGLE);
     setData(OBJ_NAME, "Single Line Text");
@@ -62,7 +75,11 @@ void TextSingleObject::init(const QString& str, EmbReal x, EmbReal y, QRgb rgb, 
     setPen(objectPen());
 }
 
-QStringList TextSingleObject::objectTextJustifyList() const
+/**
+ *
+ */
+QStringList
+TextSingleObject::objectTextJustifyList() const
 {
     QStringList justifyList;
     justifyList << "Left" << "Center" << "Right" /* TODO: << "Aligned" */ << "Middle" /* TODO: << "Fit" */ ;
@@ -72,6 +89,9 @@ QStringList TextSingleObject::objectTextJustifyList() const
     return justifyList;
 }
 
+/**
+ *
+ */
 void TextSingleObject::setObjectText(const QString& str)
 {
     objText = str;
@@ -153,13 +173,21 @@ void TextSingleObject::setObjectText(const QString& str)
     setObjectPath(gripPath);
 }
 
-void TextSingleObject::setObjectTextFont(const QString& font)
+/**
+ *
+ */
+void
+TextSingleObject::setObjectTextFont(const QString& font)
 {
     objTextFont = font;
     setObjectText(objText);
 }
 
-void TextSingleObject::setObjectTextJustify(const QString& justify)
+/**
+ *
+ */
+void
+TextSingleObject::setObjectTextJustify(const QString& justify)
 {
     //Verify the string is a valid option
     if     (justify == "Left")          { objTextJustify = justify; }
@@ -181,13 +209,21 @@ void TextSingleObject::setObjectTextJustify(const QString& justify)
     setObjectText(objText);
 }
 
-void TextSingleObject::setObjectTextSize(EmbReal size)
+/**
+ *
+ */
+void
+TextSingleObject::setObjectTextSize(EmbReal size)
 {
     objTextSize = size;
     setObjectText(objText);
 }
 
-void TextSingleObject::setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bool over)
+/**
+ *
+ */
+void
+TextSingleObject::setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bool over)
 {
     objTextBold = bold;
     objTextItalic = italic;
@@ -197,49 +233,81 @@ void TextSingleObject::setObjectTextStyle(bool bold, bool italic, bool under, bo
     setObjectText(objText);
 }
 
-void TextSingleObject::setObjectTextBold(bool val)
+/**
+ *
+ */
+void
+TextSingleObject::setObjectTextBold(bool val)
 {
     objTextBold = val;
     setObjectText(objText);
 }
 
-void TextSingleObject::setObjectTextItalic(bool val)
+/**
+ *
+ */
+void
+TextSingleObject::setObjectTextItalic(bool val)
 {
     objTextItalic = val;
     setObjectText(objText);
 }
 
-void TextSingleObject::setObjectTextUnderline(bool val)
+/**
+ *
+ */
+void
+TextSingleObject::setObjectTextUnderline(bool val)
 {
     objTextUnderline = val;
     setObjectText(objText);
 }
 
-void TextSingleObject::setObjectTextStrikeOut(bool val)
+/**
+ *
+ */
+void
+TextSingleObject::setObjectTextStrikeOut(bool val)
 {
     objTextStrikeOut = val;
     setObjectText(objText);
 }
 
-void TextSingleObject::setObjectTextOverline(bool val)
+/**
+ *
+ */
+void
+TextSingleObject::setObjectTextOverline(bool val)
 {
     objTextOverline = val;
     setObjectText(objText);
 }
 
-void TextSingleObject::setObjectTextBackward(bool val)
+/**
+ *
+ */
+void
+TextSingleObject::setObjectTextBackward(bool val)
 {
     objTextBackward = val;
     setObjectText(objText);
 }
 
-void TextSingleObject::setObjectTextUpsideDown(bool val)
+/**
+ *
+ */
+void
+TextSingleObject::setObjectTextUpsideDown(bool val)
 {
     objTextUpsideDown = val;
     setObjectText(objText);
 }
 
-void TextSingleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+/**
+ *
+ */
+void
+TextSingleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
     if (!objScene) return;
@@ -254,7 +322,11 @@ void TextSingleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     painter->drawPath(objTextPath);
 }
 
-void TextSingleObject::updateRubber(QPainter* painter)
+/**
+ *
+ */
+void
+TextSingleObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
     if (rubberMode == OBJ_RUBBER_TEXTSINGLE)
@@ -283,7 +355,11 @@ void TextSingleObject::updateRubber(QPainter* painter)
     }
 }
 
-void TextSingleObject::vulcanize()
+/**
+ *
+ */
+void
+TextSingleObject::vulcanize()
 {
     qDebug("TextSingleObject vulcanize()");
     updateRubber();
@@ -291,25 +367,40 @@ void TextSingleObject::vulcanize()
     setObjectRubberMode(OBJ_RUBBER_OFF);
 }
 
-// Returns the closest snap point to the mouse point
+/**
+ *
+ * Returns the closest snap point to the mouse point
+ */
 QPointF TextSingleObject::mouseSnapPoint(const QPointF& mousePoint)
 {
     return scenePos();
 }
 
-QList<QPointF> TextSingleObject::allGripPoints()
+/**
+ *
+ */
+QList<QPointF>
+TextSingleObject::allGripPoints()
 {
     QList<QPointF> gripPoints;
     gripPoints << scenePos();
     return gripPoints;
 }
 
-void TextSingleObject::gripEdit(const QPointF& before, const QPointF& after)
+/**
+ *
+ */
+void
+TextSingleObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     if (before == scenePos()) { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
 }
 
-QList<QPainterPath> TextSingleObject::subPathList() const
+/**
+ *
+ */
+QList<QPainterPath>
+TextSingleObject::subPathList() const
 {
     EmbReal s = scale();
     QTransform trans;
@@ -362,5 +453,3 @@ QList<QPainterPath> TextSingleObject::subPathList() const
 
     return pathList;
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

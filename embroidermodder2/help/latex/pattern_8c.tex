@@ -9,7 +9,7 @@
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$ \mbox{\hyperlink{pattern_8c_a7454ecbf98b46d74f1138772b6c9244f}{emb\+Pattern\+\_\+create}} (void)
-\begin{DoxyCompactList}\small\item\em Returns a pointer to an Emb\+Pattern. It is created on the heap. The caller is responsible for freeing the allocated memory with \mbox{\hyperlink{pattern_8c_a644e83f2c9bcb606bc0b252a6fe443ed}{emb\+Pattern\+\_\+free()}}. \end{DoxyCompactList}\item 
+\item 
 void \mbox{\hyperlink{pattern_8c_a5bb50be01adbf928259862522b20a7ef}{emb\+Pattern\+\_\+hide\+Stitches\+Over\+Length}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$p, int length)
 \item 
 int \mbox{\hyperlink{pattern_8c_a47939925c2c6e7a4c48f3341d5646cac}{emb\+Pattern\+\_\+add\+Thread}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$pattern, \mbox{\hyperlink{embroidery_8h_ab3faffce89b1a5043f8b4e3a001a70bd}{Emb\+Thread}} thread)
@@ -17,7 +17,7 @@ int \mbox{\hyperlink{pattern_8c_a47939925c2c6e7a4c48f3341d5646cac}{emb\+Pattern\
 void \mbox{\hyperlink{pattern_8c_a07b42ab1ae4028608bf4462d4a5abbcc}{emb\+Pattern\+\_\+fix\+Color\+Count}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$p)
 \item 
 void \mbox{\hyperlink{pattern_8c_a007fd0ac881d6ac89ef4d42b280df25c}{emb\+Pattern\+\_\+copystitch\+\_\+list\+To\+Polylines}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$p)
-\begin{DoxyCompactList}\small\item\em Copies all of the Embstitch\+\_\+list data to Emb\+Polyline\+Object\+List data for pattern ({\itshape p}). \end{DoxyCompactList}\item 
+\item 
 void \mbox{\hyperlink{pattern_8c_a54aee02ff890052e686ee3833530810e}{emb\+Pattern\+\_\+copy\+Polylines\+Tostitch\+\_\+list}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$p)
 \item 
 void \mbox{\hyperlink{pattern_8c_a53eb1589455d6b26f039bc896896c318}{emb\+Pattern\+\_\+movestitch\+\_\+list\+To\+Polylines}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$p)
@@ -89,6 +89,9 @@ int \mbox{\hyperlink{pattern_8c_a168de5926ad183a253aae19374949575}{emb\+Pattern\
 int \mbox{\hyperlink{pattern_8c_ae860b71c8945cf638dd7963d9fc6962c}{emb\+Pattern\+\_\+trim\+Stitches}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$pattern)
 \end{DoxyCompactItemize}
 
+
+\doxysubsubsection{Detailed Description}
+The file is for the management of the main struct\+: Emb\+Pattern. 
 
 \doxysubsubsection{Function Documentation}
 \mbox{\Hypertarget{pattern_8c_aa4de8d6ce23118cc49a67c745b171b44}\label{pattern_8c_aa4de8d6ce23118cc49a67c745b171b44}} 
@@ -163,14 +166,7 @@ Adds a stitch to the pattern ({\itshape p}) at the relative position ({\itshape 
 \doxyparagraph{\texorpdfstring{embPattern\_addThread()}{embPattern\_addThread()}}
 {\footnotesize\ttfamily int emb\+Pattern\+\_\+add\+Thread (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{\mbox{\hyperlink{embroidery_8h_ab3faffce89b1a5043f8b4e3a001a70bd}{Emb\+Thread}}}]{thread }\end{DoxyParamCaption})}
 
-
-\begin{DoxyParams}{Parameters}
-{\em pattern} & \\
-\hline
-{\em thread} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
+{\itshape pattern} {\itshape thread} \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
 \mbox{\Hypertarget{pattern_8c_ac7b08c708386bb4559bc697aba059606}\label{pattern_8c_ac7b08c708386bb4559bc697aba059606}} 
@@ -185,20 +181,13 @@ Returns an Emb\+Rect that encapsulates all stitches and objects in the pattern (
 \doxyparagraph{\texorpdfstring{embPattern\_center()}{embPattern\_center()}}
 {\footnotesize\ttfamily void emb\+Pattern\+\_\+center (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{pattern_8c_a3eeb95756c08038c1c34f7684eb89fbb}\label{pattern_8c_a3eeb95756c08038c1c34f7684eb89fbb}} 
+Center the pattern {\itshape p}. \mbox{\Hypertarget{pattern_8c_a3eeb95756c08038c1c34f7684eb89fbb}\label{pattern_8c_a3eeb95756c08038c1c34f7684eb89fbb}} 
 \index{pattern.c@{pattern.c}!embPattern\_changeColor@{embPattern\_changeColor}}
 \index{embPattern\_changeColor@{embPattern\_changeColor}!pattern.c@{pattern.c}}
 \doxyparagraph{\texorpdfstring{embPattern\_changeColor()}{embPattern\_changeColor()}}
 {\footnotesize\ttfamily void emb\+Pattern\+\_\+change\+Color (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p,  }\item[{int}]{index }\end{DoxyParamCaption})}
 
-
-\begin{DoxyParams}{Parameters}
-{\em p} & \\
-\hline
-{\em index} & \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{pattern_8c_a2e5add3887b4238d28ebc9d510f5bff7}\label{pattern_8c_a2e5add3887b4238d28ebc9d510f5bff7}} 
+Change the current\+Color\+Index of pattern {\itshape p} to {\itshape index}. \mbox{\Hypertarget{pattern_8c_a2e5add3887b4238d28ebc9d510f5bff7}\label{pattern_8c_a2e5add3887b4238d28ebc9d510f5bff7}} 
 \index{pattern.c@{pattern.c}!embPattern\_color\_count@{embPattern\_color\_count}}
 \index{embPattern\_color\_count@{embPattern\_color\_count}!pattern.c@{pattern.c}}
 \doxyparagraph{\texorpdfstring{embPattern\_color\_count()}{embPattern\_color\_count()}}
@@ -210,7 +199,7 @@ Returns an Emb\+Rect that encapsulates all stitches and objects in the pattern (
 \doxyparagraph{\texorpdfstring{embPattern\_combineJumpStitches()}{embPattern\_combineJumpStitches()}}
 {\footnotesize\ttfamily void emb\+Pattern\+\_\+combine\+Jump\+Stitches (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{pattern_8c_a54aee02ff890052e686ee3833530810e}\label{pattern_8c_a54aee02ff890052e686ee3833530810e}} 
+{\itshape p} \mbox{\Hypertarget{pattern_8c_a54aee02ff890052e686ee3833530810e}\label{pattern_8c_a54aee02ff890052e686ee3833530810e}} 
 \index{pattern.c@{pattern.c}!embPattern\_copyPolylinesTostitch\_list@{embPattern\_copyPolylinesTostitch\_list}}
 \index{embPattern\_copyPolylinesTostitch\_list@{embPattern\_copyPolylinesTostitch\_list}!pattern.c@{pattern.c}}
 \doxyparagraph{\texorpdfstring{embPattern\_copyPolylinesTostitch\_list()}{embPattern\_copyPolylinesTostitch\_list()}}
@@ -222,30 +211,21 @@ Copies all of the Emb\+Polyline\+Object\+List data to Embstitch\+\_\+list data f
 \doxyparagraph{\texorpdfstring{embPattern\_copystitch\_listToPolylines()}{embPattern\_copystitch\_listToPolylines()}}
 {\footnotesize\ttfamily void emb\+Pattern\+\_\+copystitch\+\_\+list\+To\+Polylines (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p }\end{DoxyParamCaption})}
 
-
-
-Copies all of the Embstitch\+\_\+list data to Emb\+Polyline\+Object\+List data for pattern ({\itshape p}). 
-
-
-\begin{DoxyParams}{Parameters}
-{\em p} & \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{pattern_8c_a6d1fde93564a15d1ec24399fc613d1ac}\label{pattern_8c_a6d1fde93564a15d1ec24399fc613d1ac}} 
+Copies all of the Embstitch\+\_\+list data to Emb\+Polyline\+Object\+List data for pattern ({\itshape p}). \mbox{\Hypertarget{pattern_8c_a6d1fde93564a15d1ec24399fc613d1ac}\label{pattern_8c_a6d1fde93564a15d1ec24399fc613d1ac}} 
 \index{pattern.c@{pattern.c}!embPattern\_correctForMaxStitchLength@{embPattern\_correctForMaxStitchLength}}
 \index{embPattern\_correctForMaxStitchLength@{embPattern\_correctForMaxStitchLength}!pattern.c@{pattern.c}}
 \doxyparagraph{\texorpdfstring{embPattern\_correctForMaxStitchLength()}{embPattern\_correctForMaxStitchLength()}}
 {\footnotesize\ttfamily void emb\+Pattern\+\_\+correct\+For\+Max\+Stitch\+Length (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{max\+Stitch\+Length,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{max\+Jump\+Length }\end{DoxyParamCaption})}
 
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000229}{Todo}}]The params determine the max XY movement rather than the length. They need renamed or clarified further. \end{DoxyRefDesc}
 \mbox{\Hypertarget{pattern_8c_a7454ecbf98b46d74f1138772b6c9244f}\label{pattern_8c_a7454ecbf98b46d74f1138772b6c9244f}} 
 \index{pattern.c@{pattern.c}!embPattern\_create@{embPattern\_create}}
 \index{embPattern\_create@{embPattern\_create}!pattern.c@{pattern.c}}
 \doxyparagraph{\texorpdfstring{embPattern\_create()}{embPattern\_create()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$ emb\+Pattern\+\_\+create (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
 
-
-
-Returns a pointer to an Emb\+Pattern. It is created on the heap. The caller is responsible for freeing the allocated memory with \mbox{\hyperlink{pattern_8c_a644e83f2c9bcb606bc0b252a6fe443ed}{emb\+Pattern\+\_\+free()}}. 
+Returns a pointer to an Emb\+Pattern. It is created on the heap. The caller is responsible for freeing the allocated memory with \mbox{\hyperlink{pattern_8c_a644e83f2c9bcb606bc0b252a6fe443ed}{emb\+Pattern\+\_\+free()}}.
 
 \begin{DoxyReturn}{Returns}
 Emb\+Pattern$\ast$ 
@@ -268,12 +248,7 @@ Emb\+Pattern$\ast$
 \doxyparagraph{\texorpdfstring{embPattern\_fixColorCount()}{embPattern\_fixColorCount()}}
 {\footnotesize\ttfamily void emb\+Pattern\+\_\+fix\+Color\+Count (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p }\end{DoxyParamCaption})}
 
-
-\begin{DoxyParams}{Parameters}
-{\em p} & \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{pattern_8c_abc02ab8185e23b961cfaf0146959fc9b}\label{pattern_8c_abc02ab8185e23b961cfaf0146959fc9b}} 
+{\itshape p} \mbox{\Hypertarget{pattern_8c_abc02ab8185e23b961cfaf0146959fc9b}\label{pattern_8c_abc02ab8185e23b961cfaf0146959fc9b}} 
 \index{pattern.c@{pattern.c}!embPattern\_flip@{embPattern\_flip}}
 \index{embPattern\_flip@{embPattern\_flip}!pattern.c@{pattern.c}}
 \doxyparagraph{\texorpdfstring{embPattern\_flip()}{embPattern\_flip()}}
@@ -303,14 +278,7 @@ Frees all memory allocated in the pattern ({\itshape p}). \mbox{\Hypertarget{pat
 \doxyparagraph{\texorpdfstring{embPattern\_hideStitchesOverLength()}{embPattern\_hideStitchesOverLength()}}
 {\footnotesize\ttfamily void emb\+Pattern\+\_\+hide\+Stitches\+Over\+Length (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p,  }\item[{int}]{length }\end{DoxyParamCaption})}
 
-
-\begin{DoxyParams}{Parameters}
-{\em p} & \\
-\hline
-{\em length} & \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{pattern_8c_a168de5926ad183a253aae19374949575}\label{pattern_8c_a168de5926ad183a253aae19374949575}} 
+{\itshape p} {\itshape length} \mbox{\Hypertarget{pattern_8c_a168de5926ad183a253aae19374949575}\label{pattern_8c_a168de5926ad183a253aae19374949575}} 
 \index{pattern.c@{pattern.c}!embPattern\_jumpStitches@{embPattern\_jumpStitches}}
 \index{embPattern\_jumpStitches@{embPattern\_jumpStitches}!pattern.c@{pattern.c}}
 \doxyparagraph{\texorpdfstring{embPattern\_jumpStitches()}{embPattern\_jumpStitches()}}
@@ -328,7 +296,7 @@ Frees all memory allocated in the pattern ({\itshape p}). \mbox{\Hypertarget{pat
 \doxyparagraph{\texorpdfstring{embPattern\_loadExternalColorFile()}{embPattern\_loadExternalColorFile()}}
 {\footnotesize\ttfamily void emb\+Pattern\+\_\+load\+External\+Color\+File (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p,  }\item[{const char $\ast$}]{file\+Name }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{pattern_8c_aee58368f0eeb39fd45542ed541d8b2c0}\label{pattern_8c_aee58368f0eeb39fd45542ed541d8b2c0}} 
+TODO\+: Description needed. \mbox{\Hypertarget{pattern_8c_aee58368f0eeb39fd45542ed541d8b2c0}\label{pattern_8c_aee58368f0eeb39fd45542ed541d8b2c0}} 
 \index{pattern.c@{pattern.c}!embPattern\_maximumStitchLength@{embPattern\_maximumStitchLength}}
 \index{embPattern\_maximumStitchLength@{embPattern\_maximumStitchLength}!pattern.c@{pattern.c}}
 \doxyparagraph{\texorpdfstring{embPattern\_maximumStitchLength()}{embPattern\_maximumStitchLength()}}
@@ -364,18 +332,13 @@ Moves all of the Embstitch\+\_\+list data to Emb\+Polyline\+Object\+List data fo
 \doxyparagraph{\texorpdfstring{embPattern\_scale()}{embPattern\_scale()}}
 {\footnotesize\ttfamily void emb\+Pattern\+\_\+scale (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{scale }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{pattern_8c_ae440b4131b1d73ad8a1bc12e728c8d06}\label{pattern_8c_ae440b4131b1d73ad8a1bc12e728c8d06}} 
+Very simple scaling of the x and y axis for every point. Doesn\textquotesingle{}t insert or delete stitches to preserve density. \mbox{\Hypertarget{pattern_8c_ae440b4131b1d73ad8a1bc12e728c8d06}\label{pattern_8c_ae440b4131b1d73ad8a1bc12e728c8d06}} 
 \index{pattern.c@{pattern.c}!embPattern\_totalStitchLength@{embPattern\_totalStitchLength}}
 \index{embPattern\_totalStitchLength@{embPattern\_totalStitchLength}!pattern.c@{pattern.c}}
 \doxyparagraph{\texorpdfstring{embPattern\_totalStitchLength()}{embPattern\_totalStitchLength()}}
 {\footnotesize\ttfamily float emb\+Pattern\+\_\+total\+Stitch\+Length (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern }\end{DoxyParamCaption})}
 
-
-\begin{DoxyParams}{Parameters}
-{\em pattern} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
+{\itshape pattern} \begin{DoxyReturn}{Returns}
 float 
 \end{DoxyReturn}
 \mbox{\Hypertarget{pattern_8c_ae860b71c8945cf638dd7963d9fc6962c}\label{pattern_8c_ae860b71c8945cf638dd7963d9fc6962c}} 

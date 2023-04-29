@@ -19,12 +19,6 @@
 
 #include "embroidermodder.h"
 
-#include <QDebug>
-#include <QGraphicsScene>
-#include <QMessageBox>
-#include <QDateTime>
-#include <QPainter>
-
 BaseObject::BaseObject(QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
     qDebug("BaseObject Constructor()");

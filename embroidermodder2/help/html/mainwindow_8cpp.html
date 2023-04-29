@@ -100,38 +100,214 @@ $(document).ready(function(){initNavTree('mainwindow_8cpp.html',''); initResizab
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">mainwindow.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="embroidermodder_8h_source.html">embroidermodder.h</a>&quot;</code><br />
+<code>#include &lt;cerrno&gt;</code><br />
+<code>#include &lt;iostream&gt;</code><br />
 <code>#include &lt;fstream&gt;</code><br />
 </div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_parameter__.html">Parameter_</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:ac47ac57f7125db3d44451410e0ffc792"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="struct_parameter__.html">Parameter_</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#ac47ac57f7125db3d44451410e0ffc792">Parameter</a></td></tr>
+<tr class="separator:ac47ac57f7125db3d44451410e0ffc792"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:ae3f080af9ed5a4d74da64730178ad366"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#ae3f080af9ed5a4d74da64730178ad366">c_split</a> (char input[200], int *argc, char argv[10][200])</td></tr>
+<tr class="separator:ae3f080af9ed5a4d74da64730178ad366"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ba40f28df8964130a55aac5472ea6d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a6ba40f28df8964130a55aac5472ea6d8">simplify_path</a> (char *path)</td></tr>
+<tr class="memdesc:a6ba40f28df8964130a55aac5472ea6d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simplifies a path by removing the .. and . symbols in place.  <br /></td></tr>
+<tr class="separator:a6ba40f28df8964130a55aac5472ea6d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6fcdc8ef9d8e516770d265c3c6f6e3c8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a6fcdc8ef9d8e516770d265c3c6f6e3c8">read_settings</a> (const char *settings_file)</td></tr>
+<tr class="memdesc:a6fcdc8ef9d8e516770d265c3c6f6e3c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the settings from file which aren't editable by the user. These files need to be placed in the install folder.  <br /></td></tr>
+<tr class="separator:a6fcdc8ef9d8e516770d265c3c6f6e3c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a676090199811da7c58ccc15c8e25c308"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a676090199811da7c58ccc15c8e25c308">validRGB</a> (int r, int g, int b)</td></tr>
+<tr class="separator:a676090199811da7c58ccc15c8e25c308"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f36a84e7a582fc0c4da7b9f6bc47119"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_main_window.html">MainWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a0f36a84e7a582fc0c4da7b9f6bc47119">mainWin</a> ()</td></tr>
 <tr class="memdesc:a0f36a84e7a582fc0c4da7b9f6bc47119"><td class="mdescLeft">&#160;</td><td class="mdescRight">mainWin  <br /></td></tr>
 <tr class="separator:a0f36a84e7a582fc0c4da7b9f6bc47119"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e862f61400289055e079d4ef22e9b3f"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a8e862f61400289055e079d4ef22e9b3f">Error</a> (std::vector&lt; std::string &gt; args)</td></tr>
-<tr class="separator:a8e862f61400289055e079d4ef22e9b3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed33f9e9aa46dca7820a82db05c8c2b7"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#aed33f9e9aa46dca7820a82db05c8c2b7">Todo</a> (std::vector&lt; std::string &gt; args)</td></tr>
-<tr class="separator:aed33f9e9aa46dca7820a82db05c8c2b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b26863eb2da044012b709a1b3690e71"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a7b26863eb2da044012b709a1b3690e71">convert_args_to_type</a> (std::string label, std::vector&lt; std::string &gt; args, const char *args_template, <a class="el" href="mainwindow_8cpp.html#ac47ac57f7125db3d44451410e0ffc792">Parameter</a> result[10])</td></tr>
+<tr class="memdesc:a7b26863eb2da044012b709a1b3690e71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inspired by PyArg_ParseTupleAndKeywords allowing a uniform argument parsing framework.  <br /></td></tr>
+<tr class="separator:a7b26863eb2da044012b709a1b3690e71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa85a24e4a0638cd7dfa8871c8bb1d6e1"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#aa85a24e4a0638cd7dfa8871c8bb1d6e1">Error</a> (<a class="el" href="mainwindow_8cpp.html#ac47ac57f7125db3d44451410e0ffc792">Parameter</a> args[10])</td></tr>
+<tr class="separator:aa85a24e4a0638cd7dfa8871c8bb1d6e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcef16acc9986cf155dc2554af26df9c"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#afcef16acc9986cf155dc2554af26df9c">Todo</a> (<a class="el" href="mainwindow_8cpp.html#ac47ac57f7125db3d44451410e0ffc792">Parameter</a> result[10])</td></tr>
+<tr class="separator:afcef16acc9986cf155dc2554af26df9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
+<tr class="memitem:ad69b70a9739e0cc3b6b544a2a8a2b6ac"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#ad69b70a9739e0cc3b6b544a2a8a2b6ac">CIRCLE_MODE_1P_RAD_</a> = 0</td></tr>
+<tr class="separator:ad69b70a9739e0cc3b6b544a2a8a2b6ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42e3ad620063b5c1f11151f32fd7b4a8"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a42e3ad620063b5c1f11151f32fd7b4a8">CIRCLE_MODE_1P_DIA_</a> = 1</td></tr>
+<tr class="separator:a42e3ad620063b5c1f11151f32fd7b4a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6058e59bb5d7063d050f94dcaf69b20a"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a6058e59bb5d7063d050f94dcaf69b20a">CIRCLE_MODE_2P_</a> = 2</td></tr>
+<tr class="separator:a6058e59bb5d7063d050f94dcaf69b20a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44e74cc9644a4d9612bbdfc2baeda8a3"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a44e74cc9644a4d9612bbdfc2baeda8a3">CIRCLE_MODE_3P_</a> = 3</td></tr>
+<tr class="separator:a44e74cc9644a4d9612bbdfc2baeda8a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2b4c7f1e88135eb5004a2bb05d9a0f4"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#ac2b4c7f1e88135eb5004a2bb05d9a0f4">CIRCLE_MODE_TTR_</a> = 4</td></tr>
+<tr class="separator:ac2b4c7f1e88135eb5004a2bb05d9a0f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95ba7b98de34385fb2f2011371e19708"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a95ba7b98de34385fb2f2011371e19708">DOLPHIN_MODE_NUM_POINTS_</a> = 0</td></tr>
+<tr class="separator:a95ba7b98de34385fb2f2011371e19708"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab77f29566b75a5bab404429415e66155"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#ab77f29566b75a5bab404429415e66155">DOLPHIN_MODE_XSCALE_</a> = 1</td></tr>
+<tr class="separator:ab77f29566b75a5bab404429415e66155"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a851363482cc21f92a9e0131eeb487c71"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a851363482cc21f92a9e0131eeb487c71">DOLPHIN_MODE_YSCALE_</a> = 2</td></tr>
+<tr class="separator:a851363482cc21f92a9e0131eeb487c71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec45d57aad40c44fcf10769a6d9f091f"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#aec45d57aad40c44fcf10769a6d9f091f">SINGLE_LINE_TEXT_MODE_JUSTIFY_</a> = 0</td></tr>
+<tr class="separator:aec45d57aad40c44fcf10769a6d9f091f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6b17704101e3fc80fc995f2005930cc"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#ab6b17704101e3fc80fc995f2005930cc">SINGLE_LINE_TEXT_MODE_SETFONT_</a> = 1</td></tr>
+<tr class="separator:ab6b17704101e3fc80fc995f2005930cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6060f7e1578c0f77a35c0267285ca05b"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a6060f7e1578c0f77a35c0267285ca05b">SINGLE_LINE_TEXT_MODE_SETGEOM_</a> = 2</td></tr>
+<tr class="separator:a6060f7e1578c0f77a35c0267285ca05b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa111f94c2a33e1fb749323d05639f896"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#aa111f94c2a33e1fb749323d05639f896">SINGLE_LINE_TEXT_MODE_RAPID_</a> = 3</td></tr>
+<tr class="separator:aa111f94c2a33e1fb749323d05639f896"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6db4bd3598a6bdcc4681e928e74a486"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#ad6db4bd3598a6bdcc4681e928e74a486">STAR_MODE_NUM_POINTS_</a> = 0</td></tr>
+<tr class="separator:ad6db4bd3598a6bdcc4681e928e74a486"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79178186f78df6e2d94e81a6457af526"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a79178186f78df6e2d94e81a6457af526">STAR_MODE_CENTER_PT_</a> = 1</td></tr>
+<tr class="separator:a79178186f78df6e2d94e81a6457af526"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a785d17f359ec479582f2406f9b99f0f4"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a785d17f359ec479582f2406f9b99f0f4">STAR_MODE_RAD_OUTER_</a> = 2</td></tr>
+<tr class="separator:a785d17f359ec479582f2406f9b99f0f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69d5b706d2ad7825d9db0e4523563997"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a69d5b706d2ad7825d9db0e4523563997">STAR_MODE_RAD_INNER_</a> = 3</td></tr>
+<tr class="separator:a69d5b706d2ad7825d9db0e4523563997"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13c21041ff7e5b6de6cedd66bd347f52"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_main_window.html">MainWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a13c21041ff7e5b6de6cedd66bd347f52">_mainWin</a> = 0</td></tr>
 <tr class="separator:a13c21041ff7e5b6de6cedd66bd347f52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54518bd972055aee6bd70b6cd1e1a452"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="embroidermodder_8h.html#aff6f4ac1e39a61ea59b275d373a14db1">Action</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a54518bd972055aee6bd70b6cd1e1a452">action_table</a></td></tr>
+<tr class="separator:a54518bd972055aee6bd70b6cd1e1a452"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65ef28a90fbc8aa7123bad86ad4171f2"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a65ef28a90fbc8aa7123bad86ad4171f2">action_labels</a></td></tr>
+<tr class="separator:a65ef28a90fbc8aa7123bad86ad4171f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19276c778f3034b94881cf1f8614dbb2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="embroidermodder_8h.html#ab057e1afb884d1e29ecc02ebc883a8f1">Settings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a19276c778f3034b94881cf1f8614dbb2">settings</a></td></tr>
+<tr class="separator:a19276c778f3034b94881cf1f8614dbb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a249fb28889d6d477f958c07135703999"><td class="memItemLeft" align="right" valign="top"><a class="el" href="embroidermodder_8h.html#a59b98c3061d780d55cc048bcce8b47d0">Index</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a249fb28889d6d477f958c07135703999">menu_layout</a></td></tr>
+<tr class="separator:a249fb28889d6d477f958c07135703999"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45f3c24488cf835c1a2273f73f23d192"><td class="memItemLeft" align="right" valign="top"><a class="el" href="embroidermodder_8h.html#a59b98c3061d780d55cc048bcce8b47d0">Index</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a45f3c24488cf835c1a2273f73f23d192">toolbar_layout</a></td></tr>
+<tr class="separator:a45f3c24488cf835c1a2273f73f23d192"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada4ed7c67c6b8fd122b08b3b1f0ddf36"><td class="memItemLeft" align="right" valign="top"><a class="el" href="embroidermodder_8h.html#aa5d35c075d47a1a4196817dd4cac166f">EmbView</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#ada4ed7c67c6b8fd122b08b3b1f0ddf36">views</a> [50]</td></tr>
+<tr class="separator:ada4ed7c67c6b8fd122b08b3b1f0ddf36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13436802d05b83f14d262a678d87ff5f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a13436802d05b83f14d262a678d87ff5f">n_views</a> = 0</td></tr>
+<tr class="separator:a13436802d05b83f14d262a678d87ff5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c6510838c31a5cc8eeadcdfceda753e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="embroidermodder_8h.html#ab057e1afb884d1e29ecc02ebc883a8f1">Settings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a1c6510838c31a5cc8eeadcdfceda753e">dialog</a></td></tr>
+<tr class="separator:a1c6510838c31a5cc8eeadcdfceda753e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed18c7e89ec05d27fb61a14029f748f4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="embroidermodder_8h.html#ab057e1afb884d1e29ecc02ebc883a8f1">Settings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#aed18c7e89ec05d27fb61a14029f748f4">preview</a></td></tr>
+<tr class="separator:aed18c7e89ec05d27fb61a14029f748f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fd87cd97dc9a686025693c4145fe352"><td class="memItemLeft" align="right" valign="top"><a class="el" href="embroidermodder_8h.html#a65f6a13c9f5a038f42c86bdd5bb2410f">Dictionary</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a1fd87cd97dc9a686025693c4145fe352">translation_table</a></td></tr>
+<tr class="separator:a1fd87cd97dc9a686025693c4145fe352"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab02931290454a2e1456d354fd9bc734d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="embroidermodder_8h.html#aa5d35c075d47a1a4196817dd4cac166f">EmbView</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#ab02931290454a2e1456d354fd9bc734d">active_view</a> = NULL</td></tr>
+<tr class="separator:ab02931290454a2e1456d354fd9bc734d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Embroidermodder 2.</p>
-<hr  />
-<p>Copyright 2013-2022 The Embroidermodder Team Embroidermodder 2 is Open Source Software. See LICENSE for licensing terms.</p>
-<hr  />
-<p>Use Python's PEP7 style guide. <a href="https://peps.python.org/pep-0007/">https://peps.python.org/pep-0007/</a> </p>
-</div><h2 class="groupheader">Function Documentation</h2>
-<a id="a8e862f61400289055e079d4ef22e9b3f" name="a8e862f61400289055e079d4ef22e9b3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8e862f61400289055e079d4ef22e9b3f">&#9670;&#160;</a></span>Error()</h2>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a id="ac47ac57f7125db3d44451410e0ffc792" name="ac47ac57f7125db3d44451410e0ffc792"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac47ac57f7125db3d44451410e0ffc792">&#9670;&#160;</a></span>Parameter</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef struct <a class="el" href="struct_parameter__.html">Parameter_</a> <a class="el" href="mainwindow_8cpp.html#ac47ac57f7125db3d44451410e0ffc792">Parameter</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="ae3f080af9ed5a4d74da64730178ad366" name="ae3f080af9ed5a4d74da64730178ad366"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3f080af9ed5a4d74da64730178ad366">&#9670;&#160;</a></span>c_split()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void c_split </td>
+          <td>(</td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>input</em>[200], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>argc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>argv</em>[10][200]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7b26863eb2da044012b709a1b3690e71" name="a7b26863eb2da044012b709a1b3690e71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b26863eb2da044012b709a1b3690e71">&#9670;&#160;</a></span>convert_args_to_type()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string convert_args_to_type </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>label</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>args_template</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="mainwindow_8cpp.html#ac47ac57f7125db3d44451410e0ffc792">Parameter</a>&#160;</td>
+          <td class="paramname"><em>result</em>[10]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inspired by PyArg_ParseTupleAndKeywords allowing a uniform argument parsing framework. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">label</td><td>The caller's name. </td></tr>
+    <tr><td class="paramname">args</td><td>The list of strings passed from the user. </td></tr>
+    <tr><td class="paramname">args_template</td><td>The string of characters describing the types of the output. </td></tr>
+    <tr><td class="paramname">result</td><td>The fixed length array of results. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An error message if an error occured or an empty string if it passes. </dd></dl>
+
+</div>
+</div>
+<a id="aa85a24e4a0638cd7dfa8871c8bb1d6e1" name="aa85a24e4a0638cd7dfa8871c8bb1d6e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa85a24e4a0638cd7dfa8871c8bb1d6e1">&#9670;&#160;</a></span>Error()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -139,13 +315,13 @@ Variables</h2></td></tr>
         <tr>
           <td class="memname">std::string Error </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
-          <td class="paramname"><em>args</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="mainwindow_8cpp.html#ac47ac57f7125db3d44451410e0ffc792">Parameter</a>&#160;</td>
+          <td class="paramname"><em>args</em>[10]</td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>"debug": qDebug("%s", qPrintable(args(0).toString())); </p>
+<p>"debug": qDebug("%s", qPrintable(result[0].s_value)); </p>
 
 </div>
 </div>
@@ -169,8 +345,49 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="aed33f9e9aa46dca7820a82db05c8c2b7" name="aed33f9e9aa46dca7820a82db05c8c2b7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aed33f9e9aa46dca7820a82db05c8c2b7">&#9670;&#160;</a></span>Todo()</h2>
+<a id="a6fcdc8ef9d8e516770d265c3c6f6e3c8" name="a6fcdc8ef9d8e516770d265c3c6f6e3c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6fcdc8ef9d8e516770d265c3c6f6e3c8">&#9670;&#160;</a></span>read_settings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int read_settings </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>settings_file</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Read the settings from file which aren't editable by the user. These files need to be placed in the install folder. </p>
+
+</div>
+</div>
+<a id="a6ba40f28df8964130a55aac5472ea6d8" name="a6ba40f28df8964130a55aac5472ea6d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ba40f28df8964130a55aac5472ea6d8">&#9670;&#160;</a></span>simplify_path()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void simplify_path </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Simplifies a path by removing the .. and . symbols in place. </p>
+<p><em>path</em> The character array to operate on. </p>
+
+</div>
+</div>
+<a id="afcef16acc9986cf155dc2554af26df9c" name="afcef16acc9986cf155dc2554af26df9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcef16acc9986cf155dc2554af26df9c">&#9670;&#160;</a></span>Todo()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -178,12 +395,48 @@ Variables</h2></td></tr>
         <tr>
           <td class="memname">std::string Todo </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; std::string &gt;&#160;</td>
-          <td class="paramname"><em>args</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="mainwindow_8cpp.html#ac47ac57f7125db3d44451410e0ffc792">Parameter</a>&#160;</td>
+          <td class="paramname"><em>result</em>[10]</td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a676090199811da7c58ccc15c8e25c308" name="a676090199811da7c58ccc15c8e25c308"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a676090199811da7c58ccc15c8e25c308">&#9670;&#160;</a></span>validRGB()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool validRGB </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p></p>
 
 </div>
 </div>
@@ -196,6 +449,515 @@ Variables</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="class_main_window.html">MainWindow</a>* _mainWin = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a65ef28a90fbc8aa7123bad86ad4171f2" name="a65ef28a90fbc8aa7123bad86ad4171f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65ef28a90fbc8aa7123bad86ad4171f2">&#9670;&#160;</a></span>action_labels</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList action_labels</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a54518bd972055aee6bd70b6cd1e1a452" name="a54518bd972055aee6bd70b6cd1e1a452"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54518bd972055aee6bd70b6cd1e1a452">&#9670;&#160;</a></span>action_table</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="embroidermodder_8h.html#aff6f4ac1e39a61ea59b275d373a14db1">Action</a>&gt; action_table</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab02931290454a2e1456d354fd9bc734d" name="ab02931290454a2e1456d354fd9bc734d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab02931290454a2e1456d354fd9bc734d">&#9670;&#160;</a></span>active_view</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="embroidermodder_8h.html#aa5d35c075d47a1a4196817dd4cac166f">EmbView</a>* active_view = NULL</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The view focussed (that is the last view to have a click or keypress sent): this has to be manually set whenever it changes including being set to NULL when all views are closed. </p>
+
+</div>
+</div>
+<a id="a42e3ad620063b5c1f11151f32fd7b4a8" name="a42e3ad620063b5c1f11151f32fd7b4a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42e3ad620063b5c1f11151f32fd7b4a8">&#9670;&#160;</a></span>CIRCLE_MODE_1P_DIA_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int CIRCLE_MODE_1P_DIA_ = 1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad69b70a9739e0cc3b6b544a2a8a2b6ac" name="ad69b70a9739e0cc3b6b544a2a8a2b6ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad69b70a9739e0cc3b6b544a2a8a2b6ac">&#9670;&#160;</a></span>CIRCLE_MODE_1P_RAD_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int CIRCLE_MODE_1P_RAD_ = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6058e59bb5d7063d050f94dcaf69b20a" name="a6058e59bb5d7063d050f94dcaf69b20a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6058e59bb5d7063d050f94dcaf69b20a">&#9670;&#160;</a></span>CIRCLE_MODE_2P_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int CIRCLE_MODE_2P_ = 2</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a44e74cc9644a4d9612bbdfc2baeda8a3" name="a44e74cc9644a4d9612bbdfc2baeda8a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44e74cc9644a4d9612bbdfc2baeda8a3">&#9670;&#160;</a></span>CIRCLE_MODE_3P_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int CIRCLE_MODE_3P_ = 3</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac2b4c7f1e88135eb5004a2bb05d9a0f4" name="ac2b4c7f1e88135eb5004a2bb05d9a0f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2b4c7f1e88135eb5004a2bb05d9a0f4">&#9670;&#160;</a></span>CIRCLE_MODE_TTR_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int CIRCLE_MODE_TTR_ = 4</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1c6510838c31a5cc8eeadcdfceda753e" name="a1c6510838c31a5cc8eeadcdfceda753e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c6510838c31a5cc8eeadcdfceda753e">&#9670;&#160;</a></span>dialog</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="embroidermodder_8h.html#ab057e1afb884d1e29ecc02ebc883a8f1">Settings</a> dialog</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>These copies of the settings struct are for restoring the state if the user doesn't want to accept their changes in the settings dialog. </p>
+
+</div>
+</div>
+<a id="a95ba7b98de34385fb2f2011371e19708" name="a95ba7b98de34385fb2f2011371e19708"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95ba7b98de34385fb2f2011371e19708">&#9670;&#160;</a></span>DOLPHIN_MODE_NUM_POINTS_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int DOLPHIN_MODE_NUM_POINTS_ = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab77f29566b75a5bab404429415e66155" name="ab77f29566b75a5bab404429415e66155"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab77f29566b75a5bab404429415e66155">&#9670;&#160;</a></span>DOLPHIN_MODE_XSCALE_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int DOLPHIN_MODE_XSCALE_ = 1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a851363482cc21f92a9e0131eeb487c71" name="a851363482cc21f92a9e0131eeb487c71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a851363482cc21f92a9e0131eeb487c71">&#9670;&#160;</a></span>DOLPHIN_MODE_YSCALE_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int DOLPHIN_MODE_YSCALE_ = 2</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a249fb28889d6d477f958c07135703999" name="a249fb28889d6d477f958c07135703999"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a249fb28889d6d477f958c07135703999">&#9670;&#160;</a></span>menu_layout</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="embroidermodder_8h.html#a59b98c3061d780d55cc048bcce8b47d0">Index</a>* menu_layout</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a13436802d05b83f14d262a678d87ff5f" name="a13436802d05b83f14d262a678d87ff5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13436802d05b83f14d262a678d87ff5f">&#9670;&#160;</a></span>n_views</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int n_views = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aed18c7e89ec05d27fb61a14029f748f4" name="aed18c7e89ec05d27fb61a14029f748f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed18c7e89ec05d27fb61a14029f748f4">&#9670;&#160;</a></span>preview</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="embroidermodder_8h.html#ab057e1afb884d1e29ecc02ebc883a8f1">Settings</a> preview</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a19276c778f3034b94881cf1f8614dbb2" name="a19276c778f3034b94881cf1f8614dbb2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19276c778f3034b94881cf1f8614dbb2">&#9670;&#160;</a></span>settings</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="embroidermodder_8h.html#ab057e1afb884d1e29ecc02ebc883a8f1">Settings</a> settings</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The actuator changes the program state via these global variables. </p>
+
+</div>
+</div>
+<a id="aec45d57aad40c44fcf10769a6d9f091f" name="aec45d57aad40c44fcf10769a6d9f091f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec45d57aad40c44fcf10769a6d9f091f">&#9670;&#160;</a></span>SINGLE_LINE_TEXT_MODE_JUSTIFY_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int SINGLE_LINE_TEXT_MODE_JUSTIFY_ = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa111f94c2a33e1fb749323d05639f896" name="aa111f94c2a33e1fb749323d05639f896"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa111f94c2a33e1fb749323d05639f896">&#9670;&#160;</a></span>SINGLE_LINE_TEXT_MODE_RAPID_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int SINGLE_LINE_TEXT_MODE_RAPID_ = 3</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab6b17704101e3fc80fc995f2005930cc" name="ab6b17704101e3fc80fc995f2005930cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6b17704101e3fc80fc995f2005930cc">&#9670;&#160;</a></span>SINGLE_LINE_TEXT_MODE_SETFONT_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int SINGLE_LINE_TEXT_MODE_SETFONT_ = 1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6060f7e1578c0f77a35c0267285ca05b" name="a6060f7e1578c0f77a35c0267285ca05b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6060f7e1578c0f77a35c0267285ca05b">&#9670;&#160;</a></span>SINGLE_LINE_TEXT_MODE_SETGEOM_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int SINGLE_LINE_TEXT_MODE_SETGEOM_ = 2</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a79178186f78df6e2d94e81a6457af526" name="a79178186f78df6e2d94e81a6457af526"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79178186f78df6e2d94e81a6457af526">&#9670;&#160;</a></span>STAR_MODE_CENTER_PT_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int STAR_MODE_CENTER_PT_ = 1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad6db4bd3598a6bdcc4681e928e74a486" name="ad6db4bd3598a6bdcc4681e928e74a486"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6db4bd3598a6bdcc4681e928e74a486">&#9670;&#160;</a></span>STAR_MODE_NUM_POINTS_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int STAR_MODE_NUM_POINTS_ = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a69d5b706d2ad7825d9db0e4523563997" name="a69d5b706d2ad7825d9db0e4523563997"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69d5b706d2ad7825d9db0e4523563997">&#9670;&#160;</a></span>STAR_MODE_RAD_INNER_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int STAR_MODE_RAD_INNER_ = 3</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a785d17f359ec479582f2406f9b99f0f4" name="a785d17f359ec479582f2406f9b99f0f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a785d17f359ec479582f2406f9b99f0f4">&#9670;&#160;</a></span>STAR_MODE_RAD_OUTER_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int STAR_MODE_RAD_OUTER_ = 2</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a45f3c24488cf835c1a2273f73f23d192" name="a45f3c24488cf835c1a2273f73f23d192"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45f3c24488cf835c1a2273f73f23d192">&#9670;&#160;</a></span>toolbar_layout</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="embroidermodder_8h.html#a59b98c3061d780d55cc048bcce8b47d0">Index</a>* toolbar_layout</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1fd87cd97dc9a686025693c4145fe352" name="a1fd87cd97dc9a686025693c4145fe352"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fd87cd97dc9a686025693c4145fe352">&#9670;&#160;</a></span>translation_table</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="embroidermodder_8h.html#a65f6a13c9f5a038f42c86bdd5bb2410f">Dictionary</a>* translation_table</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ada4ed7c67c6b8fd122b08b3b1f0ddf36" name="ada4ed7c67c6b8fd122b08b3b1f0ddf36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada4ed7c67c6b8fd122b08b3b1f0ddf36">&#9670;&#160;</a></span>views</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="embroidermodder_8h.html#aa5d35c075d47a1a4196817dd4cac166f">EmbView</a> views[50]</td>
         </tr>
       </table>
 </div><div class="memdoc">

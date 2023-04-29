@@ -36,7 +36,7 @@ int \mbox{\hyperlink{struct_ui_object___ad6efdfb1c13924cbdcd908582b4be446}{max\+
 \item 
 \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{struct_ui_object___ae8eb4a411f5cc41f7ed32d8c62540136}{rotation}}
 \item 
-unsigned int \mbox{\hyperlink{struct_ui_object___ac1b4d694fc07a39e06900e82872aac7f}{mode}}
+uint32\+\_\+t \mbox{\hyperlink{struct_ui_object___a6b29e4f37f4482274af785ad5ffe96a7}{mode}}
 \item 
 char \mbox{\hyperlink{struct_ui_object___a25a3f80fabd63fada17a8a40b9d8c774}{path\+\_\+desc}} \mbox{[}1000\mbox{]}
 \item 
@@ -46,9 +46,9 @@ int \mbox{\hyperlink{struct_ui_object___a33af7956829993c9a6e515c50a39e6ff}{text\
 \item 
 char \mbox{\hyperlink{struct_ui_object___a8abb50dd6d871ebbb4956b3f99f54536}{text\+Font}} \mbox{[}200\mbox{]}
 \item 
-float \mbox{\hyperlink{struct_ui_object___af2083d6aee31e64205fd5c037e90390b}{text\+Height}}
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{struct_ui_object___a7aaf3276a53745ff90c123c095ffd101}{text\+Height}}
 \item 
-float \mbox{\hyperlink{struct_ui_object___ac52fe42f6c748f8527c22231a12b2c26}{text\+Rotation}}
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{struct_ui_object___af071a7a13061a2722bef2d13367ac717}{text\+Rotation}}
 \item 
 char \mbox{\hyperlink{struct_ui_object___a4f071f39e69a703ee35a2dc313b928f0}{id}} \mbox{[}200\mbox{]}
 \item 
@@ -75,7 +75,7 @@ Do angles need special storage? angle\+Ref, angle\+New
 
 This chapter details how the source code achieves the design detailed in the previous chapter. For the low-\/level details, read the later chapters.
 
-Dear Im\+Gui (CITATION NEEDED)\hypertarget{embroidermodder_8h_autotoc_md8}{}\doxyparagraph{Geometry Objects}\label{embroidermodder_8h_autotoc_md8}
+Dear Im\+Gui (CITATION NEEDED)\hypertarget{embroidermodder_8h_autotoc_md4}{}\doxyparagraph{Geometry Objects}\label{embroidermodder_8h_autotoc_md4}
 At all times the Emb\+Pattern has all of the information about the pattern however, editing information like the rubber text labels needs to be stored during runtime. Also editing ghosts like when a rotate command is half executed.
 
 To deal with this we have a generic object that can act as any other object that updates the associated pattern struct as changes as made.
@@ -145,11 +145,11 @@ Selecting is done via this interface.
 \doxyparagraph{\texorpdfstring{minPoints}{minPoints}}
 {\footnotesize\ttfamily int min\+Points}
 
-\mbox{\Hypertarget{struct_ui_object___ac1b4d694fc07a39e06900e82872aac7f}\label{struct_ui_object___ac1b4d694fc07a39e06900e82872aac7f}} 
+\mbox{\Hypertarget{struct_ui_object___a6b29e4f37f4482274af785ad5ffe96a7}\label{struct_ui_object___a6b29e4f37f4482274af785ad5ffe96a7}} 
 \index{UiObject\_@{UiObject\_}!mode@{mode}}
 \index{mode@{mode}!UiObject\_@{UiObject\_}}
 \doxyparagraph{\texorpdfstring{mode}{mode}}
-{\footnotesize\ttfamily unsigned int mode}
+{\footnotesize\ttfamily uint32\+\_\+t mode}
 
 \mbox{\Hypertarget{struct_ui_object___a8dbaa8affffc43357c6a974112149f42}\label{struct_ui_object___a8dbaa8affffc43357c6a974112149f42}} 
 \index{UiObject\_@{UiObject\_}!n\_controlPoints@{n\_controlPoints}}
@@ -211,11 +211,11 @@ Selecting is done via this interface.
 \doxyparagraph{\texorpdfstring{textFont}{textFont}}
 {\footnotesize\ttfamily char text\+Font\mbox{[}200\mbox{]}}
 
-\mbox{\Hypertarget{struct_ui_object___af2083d6aee31e64205fd5c037e90390b}\label{struct_ui_object___af2083d6aee31e64205fd5c037e90390b}} 
+\mbox{\Hypertarget{struct_ui_object___a7aaf3276a53745ff90c123c095ffd101}\label{struct_ui_object___a7aaf3276a53745ff90c123c095ffd101}} 
 \index{UiObject\_@{UiObject\_}!textHeight@{textHeight}}
 \index{textHeight@{textHeight}!UiObject\_@{UiObject\_}}
 \doxyparagraph{\texorpdfstring{textHeight}{textHeight}}
-{\footnotesize\ttfamily float text\+Height}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} text\+Height}
 
 \mbox{\Hypertarget{struct_ui_object___a33af7956829993c9a6e515c50a39e6ff}\label{struct_ui_object___a33af7956829993c9a6e515c50a39e6ff}} 
 \index{UiObject\_@{UiObject\_}!textJustify@{textJustify}}
@@ -223,11 +223,11 @@ Selecting is done via this interface.
 \doxyparagraph{\texorpdfstring{textJustify}{textJustify}}
 {\footnotesize\ttfamily int text\+Justify}
 
-\mbox{\Hypertarget{struct_ui_object___ac52fe42f6c748f8527c22231a12b2c26}\label{struct_ui_object___ac52fe42f6c748f8527c22231a12b2c26}} 
+\mbox{\Hypertarget{struct_ui_object___af071a7a13061a2722bef2d13367ac717}\label{struct_ui_object___af071a7a13061a2722bef2d13367ac717}} 
 \index{UiObject\_@{UiObject\_}!textRotation@{textRotation}}
 \index{textRotation@{textRotation}!UiObject\_@{UiObject\_}}
 \doxyparagraph{\texorpdfstring{textRotation}{textRotation}}
-{\footnotesize\ttfamily float text\+Rotation}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} text\+Rotation}
 
 \mbox{\Hypertarget{struct_ui_object___a551374301513fdb71d8977304106af2c}\label{struct_ui_object___a551374301513fdb71d8977304106af2c}} 
 \index{UiObject\_@{UiObject\_}!type@{type}}

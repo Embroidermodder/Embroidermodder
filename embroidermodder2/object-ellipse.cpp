@@ -1,4 +1,4 @@
-/**
+/*
  *  Embroidermodder 2.
  *
  *  ------------------------------------------------------------
@@ -18,10 +18,6 @@
  */
 
 #include "embroidermodder.h"
-
-#include <QPainter>
-#include <QStyleOption>
-#include <QGraphicsScene>
 
 /**
  * \brief .
@@ -67,9 +63,11 @@ EllipseObject::init(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal hei
     setData(OBJ_TYPE, OBJ_TYPE_ELLIPSE);
     setData(OBJ_NAME, "Ellipse");
 
-    //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
-    //WARNING: All movement has to be handled explicitly by us, not by the scene.
+    /**
+     * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+     * and the item is double clicked, the scene will erratically move the item while zooming.
+     * All movement has to be handled explicitly by us, not by the scene.
+     */
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
     setObjectSize(width, height);
@@ -329,9 +327,8 @@ EllipseObject::vulcanize()
     setObjectRubberMode(OBJ_RUBBER_OFF);
 }
 
-// Returns the closest snap point to the mouse point
 /**
- * \brief .
+ * \brief Returns the closest snap point to the mouse point.
  */
 QPointF
 EllipseObject::mouseSnapPoint(const QPointF& mousePoint)
@@ -372,10 +369,11 @@ EllipseObject::allGripPoints()
 
 /**
  * \brief .
+ * \todo gripEdit() for EllipseObject
  */
-void EllipseObject::gripEdit(const QPointF& before, const QPointF& after)
+void
+EllipseObject::gripEdit(const QPointF& before, const QPointF& after)
 {
-    //TODO: gripEdit() for EllipseObject
 }
 
 /**

@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['vipheader_0',['VipHeader',['../embroidery__internal_8h.html#ab60f498bdfbba423c7b5a06a14989d21',1,'embroidery_internal.h']]],
-  ['vp3hoop_1',['vp3Hoop',['../embroidery__internal_8h.html#a55d00fff4877c566ac1751797d541df8',1,'embroidery_internal.h']]]
+  ['thread_5fcolor_0',['thread_color',['../embroidery_8h.html#a8801dbd0fc60662648650d4658b7b7d0',1,'embroidery.h']]],
+  ['thredextension_1',['ThredExtension',['../embroidery__internal_8h.html#a8a32550d224735a27b060293a10657d0',1,'embroidery_internal.h']]],
+  ['thredheader_2',['ThredHeader',['../embroidery__internal_8h.html#a5cd5f2fa50871cf645004255f31a1e97',1,'embroidery_internal.h']]]
 ];

@@ -1,4 +1,4 @@
-/**
+/*
  *  Embroidermodder 2.
  *
  *  ------------------------------------------------------------
@@ -64,7 +64,12 @@ MdiArea::useBackgroundTexture(bool use)
     forceRepaint();
 }
 
-void MdiArea::useBackgroundColor(bool use)
+/**
+ * @brief 
+ * @param use
+ */
+void
+MdiArea::useBackgroundColor(bool use)
 {
     useColor = use;
     forceRepaint();

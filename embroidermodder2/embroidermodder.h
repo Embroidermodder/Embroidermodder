@@ -1,4 +1,4 @@
-/**
+/*
  *  Embroidermodder 2.
  *
  *  ------------------------------------------------------------
@@ -40,20 +40,33 @@
 #include <QAction>
 #include <QApplication>
 #include <QComboBox>
+#include <QContextMenuEvent>
+#include <QClipboard>
+#include <QDateTime>
+#include <QDebug>
 #include <QDialogButtonBox>
+#include <QFile>
+#include <QFrame>
 #include <QGraphicsScene>
 #include <QGraphicsPathItem>
+#include <QGridLayout>
 #include <QGroupBox>
+#include <QLabel>
 #include <QLineEdit>
 #include <QList>
 #include <QMainWindow>
 #include <QMdiArea>
-#include <QMessageBox>
+#include <QMenu>
 #include <QMetaObject>
+#include <QMessageBox>
 #include <QObject>
-#include <QTextLayout>
-#include <QToolBar>
+#include <QPainter>
 #include <QSplitter>
+#include <QTextLayout>
+#include <QTextStream>
+#include <QTimer>
+#include <QToolBar>
+#include <QScrollArea>
 #include <QUndoStack>
 #include <QVBoxLayout>
 

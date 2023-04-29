@@ -19,19 +19,6 @@
 
 #include "embroidermodder.h"
 
-#include <QApplication>
-#include <QClipboard>
-#include <QString>
-#include <QAction>
-#include <QMenu>
-#include <QFile>
-#include <QFrame>
-#include <QVBoxLayout>
-#include <QContextMenuEvent>
-#include <QSplitter>
-#include <QTextStream>
-#include <QTimer>
-
 CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
 {
     qDebug("CmdPrompt Constructor");

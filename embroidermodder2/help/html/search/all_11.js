@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['qsnap_5faperture_5fsize_0',['qsnap_aperture_size',['../struct_settings__.html#af2b40c7a38f8186ead52e743de65456a',1,'Settings_']]],
+  ['qsnap_5faperture_5fsize_0',['qsnap_aperture_size',['../struct_settings__.html#aee92f76b6b8b352a2970e53ba5fc705e',1,'Settings_']]],
   ['qsnap_5fapparent_1',['qsnap_apparent',['../struct_settings__.html#a95f0da4e237c11f048dd77641390baa3',1,'Settings_']]],
   ['qsnap_5fcenter_2',['qsnap_center',['../struct_settings__.html#a99203fb64a25c538eb1a0bf893092388',1,'Settings_']]],
   ['qsnap_5fenabled_3',['qsnap_enabled',['../struct_settings__.html#ad56654b53ad84517e2c639ad55c828a1',1,'Settings_']]],
@@ -8,8 +8,8 @@ var searchData=
   ['qsnap_5fextension_5',['qsnap_extension',['../struct_settings__.html#aa2e69459ac2429fd1292cc83fe489caa',1,'Settings_']]],
   ['qsnap_5finsertion_6',['qsnap_insertion',['../struct_settings__.html#a8bf3751d40b0ccfd30435b6555de4da3',1,'Settings_']]],
   ['qsnap_5fintersection_7',['qsnap_intersection',['../struct_settings__.html#abd2cb3da9d3f27dccf5697cf420e6bdc',1,'Settings_']]],
-  ['qsnap_5flocator_5fcolor_8',['qsnap_locator_color',['../struct_settings__.html#a8703fda97a9761d28cd6380d9899b3de',1,'Settings_']]],
-  ['qsnap_5flocator_5fsize_9',['qsnap_locator_size',['../struct_settings__.html#a5a66d2d1a8ef177576b7ede7d713c2c6',1,'Settings_']]],
+  ['qsnap_5flocator_5fcolor_8',['qsnap_locator_color',['../struct_settings__.html#a2d5632623f70cb230be221454abc24bc',1,'Settings_']]],
+  ['qsnap_5flocator_5fsize_9',['qsnap_locator_size',['../struct_settings__.html#a15066fb73e8d8051ef26098471d30158',1,'Settings_']]],
   ['qsnap_5fmidpoint_10',['qsnap_midpoint',['../struct_settings__.html#adcf597596d14d26a89d84cfabb11b18a',1,'Settings_']]],
   ['qsnap_5fmode_11',['qsnap_mode',['../struct_emb_view__.html#a0bc1be17a2582942a81ae80cfb57cec3',1,'EmbView_']]],
   ['qsnap_5fnearest_12',['qsnap_nearest',['../struct_settings__.html#a415a7fd8c81a74a10ec9baa8437bd819',1,'Settings_']]],

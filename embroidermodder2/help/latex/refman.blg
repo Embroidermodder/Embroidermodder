@@ -3,53 +3,52 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: refman.aux
 Reallocating 'name_of_file' (item size: 1) to 6 items.
 The style file: plain.bst
-Reallocating 'name_of_file' (item size: 1) to 1 items.
-I couldn't open database file .bib
----line 10085 of file refman.aux
- : \bibdata{
- :          }
-I'm skipping whatever remains of this command
-I found no \citation commands---while reading file refman.aux
-I found no database files---while reading file refman.aux
-You've used 0 entries,
+Reallocating 'name_of_file' (item size: 1) to 13 items.
+Database file #1: bibTmpFile_1.bib
+I was expecting a `,' or a `}'---line 131 of file bibTmpFile_1.bib
+ :     
+ :     accessed={.}
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+You've used 4 entries,
             2118 wiz_defined-function locations,
-            496 strings with 3985 characters,
-and the built_in function-call counts, 18 in all, are:
-= -- 0
-> -- 0
+            508 strings with 4196 characters,
+and the built_in function-call counts, 828 in all, are:
+= -- 67
+> -- 34
 < -- 0
-+ -- 0
-- -- 0
-* -- 2
-:= -- 7
-add.period$ -- 0
-call.type$ -- 0
-change.case$ -- 0
++ -- 14
+- -- 10
+* -- 26
+:= -- 139
+add.period$ -- 8
+call.type$ -- 4
+change.case$ -- 17
 chr.to.int$ -- 0
-cite$ -- 0
-duplicate$ -- 0
-empty$ -- 1
-format.name$ -- 0
-if$ -- 1
+cite$ -- 4
+duplicate$ -- 28
+empty$ -- 89
+format.name$ -- 10
+if$ -- 176
 int.to.chr$ -- 0
-int.to.str$ -- 0
+int.to.str$ -- 4
 missing$ -- 0
-newline$ -- 3
-num.names$ -- 0
-pop$ -- 0
+newline$ -- 19
+num.names$ -- 8
+pop$ -- 33
 preamble$ -- 1
-purify$ -- 0
+purify$ -- 13
 quote$ -- 0
-skip$ -- 1
+skip$ -- 41
 stack$ -- 0
-substring$ -- 0
-swap$ -- 0
+substring$ -- 20
+swap$ -- 4
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 0
+type$ -- 16
 warning$ -- 0
-while$ -- 0
-width$ -- 0
-write$ -- 2
-(There were 3 error messages)
+while$ -- 8
+width$ -- 5
+write$ -- 30
+(There was 1 error message)

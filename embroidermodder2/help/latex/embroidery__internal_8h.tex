@@ -361,7 +361,7 @@ enum \mbox{\hyperlink{embroidery__internal_8h_a020564db949c20532e2343fe819d79dd}
 \begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{embroidery__internal_8h_a7e5d1d3488d7124ab020287e2606f89d}{huffman\+\_\+build\+\_\+table}} (\mbox{\hyperlink{embroidery__internal_8h_a8ad0df962f28b81981b3b0b7f04ebb17}{huffman}} $\ast$h)
-\begin{DoxyCompactList}\small\item\em These next 2 functions represent the \mbox{\hyperlink{struct_huffman}{Huffman}} class in tartarize\textquotesingle{}s code. \end{DoxyCompactList}\item 
+\item 
 int $\ast$ \mbox{\hyperlink{embroidery__internal_8h_a3d72cdc692a832cc82a23a5067cbf2ba}{huffman\+\_\+table\+\_\+lookup}} (\mbox{\hyperlink{embroidery__internal_8h_a8ad0df962f28b81981b3b0b7f04ebb17}{huffman}} $\ast$h, int byte\+\_\+lookup, int $\ast$lengths)
 \item 
 int \mbox{\hyperlink{embroidery__internal_8h_aed62fb2531905dbb3a075afb3912c50e}{compress\+\_\+get\+\_\+bits}} (\mbox{\hyperlink{embroidery__internal_8h_a0a1ded23c1c333067bcfb59d5b83ce2a}{compress}} $\ast$c, int length)
@@ -387,15 +387,15 @@ void \mbox{\hyperlink{embroidery__internal_8h_ab4e327e66e701633f888a6d2cc855126}
 void \mbox{\hyperlink{embroidery__internal_8h_a00b19aaefbca1efbe3ad60462467dc4e}{write\+Pec\+Stitches}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$pattern, FILE $\ast$file, const char $\ast$filename)
 \item 
 int \mbox{\hyperlink{embroidery__internal_8h_a1fe39861516c14e3142add13ce9929b1}{decode\+New\+Stitch}} (unsigned char value)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape value} \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidery__internal_8h_a0179795cc6a84ec60c6d23c5ebfd9d66}{pfaff\+Encode}} (FILE $\ast$file, int x, int y, int flags)
 \item 
 \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{embroidery__internal_8h_a43cfefba2fb750ffa5eca5b7749b53f9}{pfaff\+Decode}} (unsigned char a1, unsigned char a2, unsigned char a3)
 \item 
 unsigned char \mbox{\hyperlink{embroidery__internal_8h_a558c902db31be6221139e394313e4a0c}{mit\+Encode\+Stitch}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} value)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape value} \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{embroidery__internal_8h_a896703c85b788f1c46053d826cdd3524}{mit\+Decode\+Stitch}} (unsigned char value)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape value} \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{embroidery__internal_8h_a6f2eb7f943597426ecce56ce45c92896}{encode\+\_\+tajima\+\_\+ternary}} (unsigned char b\mbox{[}3\mbox{]}, int x, int y)
 \item 
 void \mbox{\hyperlink{embroidery__internal_8h_aeead1c7cae8d2d87aa74a32f0eeae808}{decode\+\_\+tajima\+\_\+ternary}} (unsigned char b\mbox{[}3\mbox{]}, int $\ast$x, int $\ast$y)
@@ -435,77 +435,77 @@ void \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}
 void \mbox{\hyperlink{embroidery__internal_8h_a6afc577513abd5034e24efdcbdd7f9f5}{emb\+Int\+\_\+write}} (FILE $\ast$f, char $\ast$label, void $\ast$b, int mode)
 \item 
 int \mbox{\hyperlink{embroidery__internal_8h_a7859b94e89cd2848d4116c7e8d662a14}{emb\+\_\+readline}} (FILE $\ast$file, char $\ast$line, int max\+Length)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape file} {\itshape line} {\itshape max\+Length} \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{embroidery__internal_8h_a4acd18062065ffbee8f6cd9b00965cc2}{bcf\+File\+\_\+read}} (FILE $\ast$file, \mbox{\hyperlink{embroidery__internal_8h_a59bc2d371cf6c478fdea78305c2a9748}{bcf\+\_\+file}} $\ast$bcf\+File)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape file} {\itshape bcf\+File} \end{DoxyCompactList}\item 
 FILE $\ast$ \mbox{\hyperlink{embroidery__internal_8h_a3f3c7530acd7b40f4ce2dc9069fb794a}{Get\+File}} (\mbox{\hyperlink{embroidery__internal_8h_a59bc2d371cf6c478fdea78305c2a9748}{bcf\+\_\+file}} $\ast$bcf\+File, FILE $\ast$file, char $\ast$file\+To\+Find)
 \begin{DoxyCompactList}\small\item\em Get the File object. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidery__internal_8h_a491e7bc54a29532020548d6dcad3e57f}{bcf\+\_\+file\+\_\+free}} (\mbox{\hyperlink{embroidery__internal_8h_a59bc2d371cf6c478fdea78305c2a9748}{bcf\+\_\+file}} $\ast$bcf\+File)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape bcf\+File} \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidery__internal_8h_a0312900273cfed05bf6d7ed748940cdb}{binary\+Read\+String}} (FILE $\ast$file, char $\ast$buffer, int max\+Length)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape file} {\itshape buffer} {\itshape max\+Length} \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidery__internal_8h_a33105f462fbb9892aebb284f35606c57}{binary\+Read\+Unicode\+String}} (FILE $\ast$file, char $\ast$buffer, const int string\+Length)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape file} {\itshape buffer} {\itshape string\+Length} \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{embroidery__internal_8h_aa08223cd2dd75ce77baf8d5e7f139e1a}{string\+In\+Array}} (const char $\ast$s, const char $\ast$$\ast$array)
 \item 
 void \mbox{\hyperlink{embroidery__internal_8h_a72e798e33c5912c4a540cc09d4dbed42}{fpad}} (FILE $\ast$f, char c, int n)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape f} \end{DoxyCompactList}\item 
 char $\ast$ \mbox{\hyperlink{embroidery__internal_8h_a5d7bf5f964ae87921bab916b871ea2dd}{copy\+\_\+trim}} (char const $\ast$s)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape s} \end{DoxyCompactList}\item 
 char $\ast$ \mbox{\hyperlink{embroidery__internal_8h_a3f13f5d30ef64bf1f316f1cc5174b28b}{emb\+\_\+opt\+Out}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} num, char $\ast$str)
 \begin{DoxyCompactList}\small\item\em Optimizes the number ({\itshape num}) for output to a text file and returns it as a string ({\itshape str}). \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidery__internal_8h_a05863b88d4cb505762fa5c5ec4191224}{write\+\_\+24bit}} (FILE $\ast$file, int)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape file} {\itshape x} \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{embroidery__internal_8h_ad6d5aaabb6637d271cec955c2dd42ded}{check\+\_\+header\+\_\+present}} (FILE $\ast$file, int minimum\+\_\+header\+\_\+length)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape file} {\itshape minimum\+\_\+header\+\_\+length} \end{DoxyCompactList}\item 
 unsigned short \mbox{\hyperlink{embroidery__internal_8h_ac97a207bfe58bd024305af6bb7242f96}{fread\+\_\+uint16}} (FILE $\ast$file)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape f} \end{DoxyCompactList}\item 
 short \mbox{\hyperlink{embroidery__internal_8h_a15c50a3a26d0d120fe31f54313984185}{fread\+\_\+int16}} (FILE $\ast$f)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape f} \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{embroidery__internal_8h_a05fb50e7292226bc2947dd2b4da7a9bd}{fread\+\_\+int32\+\_\+be}} (FILE $\ast$f)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape f} \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\+\_\+free}} (void $\ast$data)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape data} \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidery__internal_8h_a152fc4262fce475f30786312da68fad6}{binary\+Write\+UInt\+BE}} (FILE $\ast$f, unsigned int data)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape f} {\itshape data} \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}{binary\+Write\+UInt}} (FILE $\ast$f, unsigned int data)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape f} {\itshape data} \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidery__internal_8h_ad608ccee7fa2036aeba8500061ea0824}{binary\+Write\+Int\+BE}} (FILE $\ast$f, int data)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape f} {\itshape data} \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidery__internal_8h_acaa069d2e820245be0f711415e2c297d}{binary\+Write\+Int}} (FILE $\ast$f, int data)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape f} {\itshape data} \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidery__internal_8h_a760e806c16c1612a6b5ca5a26bc736d1}{binary\+Write\+UShort}} (FILE $\ast$f, unsigned short data)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape f} {\itshape data} \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidery__internal_8h_ac93ea02c7dfc79fb81e7e7cc5acea14a}{binary\+Write\+UShort\+BE}} (FILE $\ast$f, unsigned short data)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape f} {\itshape data} \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidery__internal_8h_ab2256826c6ea8d2374fc94df46a7616f}{binary\+Write\+Short}} (FILE $\ast$f, short data)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape f} {\itshape data} \end{DoxyCompactList}\item 
 \mbox{\hyperlink{embroidery__internal_8h_a04a761d12d7ad0f1f0c7566dda49f354}{bcf\+\_\+file\+\_\+difat}} $\ast$ \mbox{\hyperlink{embroidery__internal_8h_a8277b359861dbbfe6c3244f28c894632}{bcf\+\_\+difat\+\_\+create}} (FILE $\ast$file, unsigned int fat\+Sectors, const unsigned int \mbox{\hyperlink{main_8c_a5da0013e5c2fb1d49c92d85fd8028109}{sector\+Size}})
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape file} {\itshape fat\+Sectors} {\itshape sector\+Size} \end{DoxyCompactList}\item 
 unsigned int \mbox{\hyperlink{embroidery__internal_8h_acc7b07d624b22e55803b750ab5ba4f7b}{read\+Full\+Sector}} (FILE $\ast$file, \mbox{\hyperlink{embroidery__internal_8h_a04a761d12d7ad0f1f0c7566dda49f354}{bcf\+\_\+file\+\_\+difat}} $\ast$bcf\+File, unsigned int $\ast$number\+Of\+Difat\+Entries\+Still\+To\+Read)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape file} {\itshape bcf\+File} {\itshape difat\+Entries\+To\+Read} \end{DoxyCompactList}\item 
 unsigned int \mbox{\hyperlink{embroidery__internal_8h_a247b154ac32964b249e4ffcec435a442}{number\+Of\+Entries\+In\+Difat\+Sector}} (\mbox{\hyperlink{embroidery__internal_8h_a04a761d12d7ad0f1f0c7566dda49f354}{bcf\+\_\+file\+\_\+difat}} $\ast$fat)
 \item 
 void \mbox{\hyperlink{embroidery__internal_8h_aeecbd20f351d4a81983306492a44189a}{bcf\+\_\+file\+\_\+difat\+\_\+free}} (\mbox{\hyperlink{embroidery__internal_8h_a04a761d12d7ad0f1f0c7566dda49f354}{bcf\+\_\+file\+\_\+difat}} $\ast$difat)
 \item 
 unsigned int \mbox{\hyperlink{embroidery__internal_8h_a5462a9cf780abd252021ca031a1f59af}{entries\+In\+Difat\+Sector}} (\mbox{\hyperlink{embroidery__internal_8h_a04a761d12d7ad0f1f0c7566dda49f354}{bcf\+\_\+file\+\_\+difat}} $\ast$fat)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape fat} \end{DoxyCompactList}\item 
 \mbox{\hyperlink{embroidery__internal_8h_a9a00b74e77254af1f7af14c6e12007d7}{bcf\+\_\+file\+\_\+fat}} $\ast$ \mbox{\hyperlink{embroidery__internal_8h_a4e7377ff59e275ae4dc1d80ede4837e9}{bcf\+File\+Fat\+\_\+create}} (const unsigned int \mbox{\hyperlink{main_8c_a5da0013e5c2fb1d49c92d85fd8028109}{sector\+Size}})
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape sector\+Size} \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidery__internal_8h_a71a5f4111bd3daa574148e2f45d4c893}{load\+Fat\+From\+Sector}} (\mbox{\hyperlink{embroidery__internal_8h_a9a00b74e77254af1f7af14c6e12007d7}{bcf\+\_\+file\+\_\+fat}} $\ast$fat, FILE $\ast$file)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape fat} {\itshape file} \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidery__internal_8h_a28ce06b3383a49572e431f359e393f1f}{bcf\+\_\+file\+\_\+fat\+\_\+free}} (\mbox{\hyperlink{embroidery__internal_8h_a9a00b74e77254af1f7af14c6e12007d7}{bcf\+\_\+file\+\_\+fat}} $\ast$$\ast$fat)
 \item 
 \mbox{\hyperlink{embroidery__internal_8h_abb451c97faf6366fb733ff7b29054c19}{bcf\+\_\+directory\+\_\+entry}} $\ast$ \mbox{\hyperlink{embroidery__internal_8h_a3b7a815d54672417e902a05a3d7f7b3f}{Compound\+File\+Directory\+Entry}} (FILE $\ast$file)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape file} \end{DoxyCompactList}\item 
 \mbox{\hyperlink{embroidery__internal_8h_a5e0de54ec0ef10b88a4e499bbe94f869}{bcf\+\_\+directory}} $\ast$ \mbox{\hyperlink{embroidery__internal_8h_a66c717936143bb39229e9c5880dacaa1}{Compound\+File\+Directory}} (const unsigned int max\+Number\+Of\+Directory\+Entries)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape max\+Number\+Of\+Directory\+Entries} \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidery__internal_8h_a7a74138f5ffaa71deb934c3c407a6289}{read\+Next\+Sector}} (FILE $\ast$file, \mbox{\hyperlink{embroidery__internal_8h_a5e0de54ec0ef10b88a4e499bbe94f869}{bcf\+\_\+directory}} $\ast$dir)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape file} {\itshape dir} \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidery__internal_8h_a994645555ce8f1021b9efc280bffd6a9}{bcf\+\_\+directory\+\_\+free}} (\mbox{\hyperlink{embroidery__internal_8h_a5e0de54ec0ef10b88a4e499bbe94f869}{bcf\+\_\+directory}} $\ast$$\ast$dir)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape dir} \end{DoxyCompactList}\item 
 \mbox{\hyperlink{embroidery__internal_8h_a5226ee18f1045aa203f53da9b74d6963}{bcf\+\_\+file\+\_\+header}} \mbox{\hyperlink{embroidery__internal_8h_a6faf1e4138b3dba5948cb6da199babce}{bcf\+File\+Header\+\_\+read}} (FILE $\ast$file)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape file} \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{embroidery__internal_8h_a881951514705cf56858b42c3f67c7243}{bcf\+File\+Header\+\_\+is\+Valid}} (\mbox{\hyperlink{embroidery__internal_8h_a5226ee18f1045aa203f53da9b74d6963}{bcf\+\_\+file\+\_\+header}} header)
 \item 
 int \mbox{\hyperlink{embroidery__internal_8h_acc6ad43e9cf396ef9fc41b57a2cab32f}{hus\+\_\+compress}} (char $\ast$input, int size, char $\ast$output, int $\ast$out\+\_\+size)
@@ -533,9 +533,9 @@ int \mbox{\hyperlink{embroidery__internal_8h_a18adf565ffc768e3726b2c223b5950b8}{
 int \mbox{\hyperlink{embroidery__internal_8h_a0b9a8fe7ac5355c07e7721f9f05bc007}{test\+Emb\+Format}} (void)
 \item 
 void \mbox{\hyperlink{embroidery__internal_8h_a7f539183b901a4c1d25adcb71c6fbdc9}{emb\+Color\+\_\+read}} (FILE $\ast$f, \mbox{\hyperlink{embroidery_8h_acde9d757854564332fd795a084ec88b3}{Emb\+Color}} $\ast$c, int to\+Read)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape f} {\itshape c} {\itshape to\+Read} \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidery__internal_8h_a14b8ac9c1dba4c2978c3db27a8c16689}{emb\+Color\+\_\+write}} (FILE $\ast$f, \mbox{\hyperlink{embroidery_8h_acde9d757854564332fd795a084ec88b3}{Emb\+Color}} c, int to\+Write)
-\item 
+\begin{DoxyCompactList}\small\item\em {\itshape f} {\itshape c} {\itshape to\+Write} \end{DoxyCompactList}\item 
 char \mbox{\hyperlink{embroidery__internal_8h_a10eda0b35e892bed2280bd39c0bec018}{read100}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$pattern, FILE $\ast$file)
 \item 
 char \mbox{\hyperlink{embroidery__internal_8h_a3244c1b6dce5f924143103b2cdc66827}{write100}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$pattern, FILE $\ast$file)
@@ -1606,7 +1606,7 @@ Type of directory object Probably unallocated ~\newline
 {\footnotesize\ttfamily typedef struct \mbox{\hyperlink{struct__bcf__directory}{\+\_\+bcf\+\_\+directory}} \mbox{\hyperlink{embroidery__internal_8h_a5e0de54ec0ef10b88a4e499bbe94f869}{bcf\+\_\+directory}}}
 
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000183}{Todo}}]possibly add a directory tree in the future. \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000205}{Todo}}]possibly add a directory tree in the future. \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery__internal_8h_abb451c97faf6366fb733ff7b29054c19}\label{embroidery__internal_8h_abb451c97faf6366fb733ff7b29054c19}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!bcf\_directory\_entry@{bcf\_directory\_entry}}
 \index{bcf\_directory\_entry@{bcf\_directory\_entry}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -1638,7 +1638,7 @@ Type of directory object Probably unallocated ~\newline
 {\footnotesize\ttfamily typedef struct \mbox{\hyperlink{struct__bcf__file__header}{\+\_\+bcf\+\_\+file\+\_\+header}} \mbox{\hyperlink{embroidery__internal_8h_a5226ee18f1045aa203f53da9b74d6963}{bcf\+\_\+file\+\_\+header}}}
 
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000184}{Todo}}]CLSID should be a separate type. \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000206}{Todo}}]CLSID should be a separate type. \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery__internal_8h_a0a1ded23c1c333067bcfb59d5b83ce2a}\label{embroidery__internal_8h_a0a1ded23c1c333067bcfb59d5b83ce2a}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!compress@{compress}}
 \index{compress@{compress}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -1758,14 +1758,9 @@ CSV\+\_\+\+MODE\+\_\+\+STITCH&\\
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery__internal_8h_a04a761d12d7ad0f1f0c7566dda49f354}{bcf\+\_\+file\+\_\+difat}} $\ast$ bcf\+\_\+difat\+\_\+create (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{file,  }\item[{unsigned int}]{fat\+Sectors,  }\item[{const unsigned int}]{sector\+Size }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em file} & \\
-\hline
-{\em fat\+Sectors} & \\
-\hline
-{\em sector\+Size} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape file} {\itshape fat\+Sectors} {\itshape sector\+Size} 
+
 \begin{DoxyReturn}{Returns}
 bcf\+\_\+file\+\_\+difat$\ast$ 
 \end{DoxyReturn}
@@ -1776,10 +1771,9 @@ bcf\+\_\+file\+\_\+difat$\ast$
 {\footnotesize\ttfamily void bcf\+\_\+directory\+\_\+free (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery__internal_8h_a5e0de54ec0ef10b88a4e499bbe94f869}{bcf\+\_\+directory}} $\ast$$\ast$}]{dir }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em dir} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape dir} 
+
 \mbox{\Hypertarget{embroidery__internal_8h_aeecbd20f351d4a81983306492a44189a}\label{embroidery__internal_8h_aeecbd20f351d4a81983306492a44189a}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!bcf\_file\_difat\_free@{bcf\_file\_difat\_free}}
 \index{bcf\_file\_difat\_free@{bcf\_file\_difat\_free}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -1799,10 +1793,9 @@ bcf\+\_\+file\+\_\+difat$\ast$
 {\footnotesize\ttfamily void bcf\+\_\+file\+\_\+free (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery__internal_8h_a59bc2d371cf6c478fdea78305c2a9748}{bcf\+\_\+file}} $\ast$}]{bcf\+File }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em bcf\+File} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape bcf\+File} 
+
 \mbox{\Hypertarget{embroidery__internal_8h_a4acd18062065ffbee8f6cd9b00965cc2}\label{embroidery__internal_8h_a4acd18062065ffbee8f6cd9b00965cc2}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!bcfFile\_read@{bcfFile\_read}}
 \index{bcfFile\_read@{bcfFile\_read}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -1810,12 +1803,9 @@ bcf\+\_\+file\+\_\+difat$\ast$
 {\footnotesize\ttfamily int bcf\+File\+\_\+read (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{file,  }\item[{\mbox{\hyperlink{embroidery__internal_8h_a59bc2d371cf6c478fdea78305c2a9748}{bcf\+\_\+file}} $\ast$}]{bcf\+File }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em file} & \\
-\hline
-{\em bcf\+File} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape file} {\itshape bcf\+File} 
+
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
@@ -1826,10 +1816,9 @@ int
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery__internal_8h_a9a00b74e77254af1f7af14c6e12007d7}{bcf\+\_\+file\+\_\+fat}} $\ast$ bcf\+File\+Fat\+\_\+create (\begin{DoxyParamCaption}\item[{const unsigned int}]{sector\+Size }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em sector\+Size} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape sector\+Size} 
+
 \begin{DoxyReturn}{Returns}
 bcf\+\_\+file\+\_\+fat$\ast$ 
 \end{DoxyReturn}
@@ -1846,10 +1835,9 @@ bcf\+\_\+file\+\_\+fat$\ast$
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery__internal_8h_a5226ee18f1045aa203f53da9b74d6963}{bcf\+\_\+file\+\_\+header}} bcf\+File\+Header\+\_\+read (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em file} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape file} 
+
 \begin{DoxyReturn}{Returns}
 bcf\+\_\+file\+\_\+header 
 \end{DoxyReturn}
@@ -1860,14 +1848,9 @@ bcf\+\_\+file\+\_\+header
 {\footnotesize\ttfamily void binary\+Read\+String (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{file,  }\item[{char $\ast$}]{buffer,  }\item[{int}]{max\+Length }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em file} & \\
-\hline
-{\em buffer} & \\
-\hline
-{\em max\+Length} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape file} {\itshape buffer} {\itshape max\+Length} 
+
 \mbox{\Hypertarget{embroidery__internal_8h_a33105f462fbb9892aebb284f35606c57}\label{embroidery__internal_8h_a33105f462fbb9892aebb284f35606c57}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!binaryReadUnicodeString@{binaryReadUnicodeString}}
 \index{binaryReadUnicodeString@{binaryReadUnicodeString}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -1875,14 +1858,9 @@ bcf\+\_\+file\+\_\+header
 {\footnotesize\ttfamily void binary\+Read\+Unicode\+String (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{file,  }\item[{char $\ast$}]{buffer,  }\item[{const int}]{string\+Length }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em file} & \\
-\hline
-{\em buffer} & \\
-\hline
-{\em string\+Length} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape file} {\itshape buffer} {\itshape string\+Length} 
+
 \mbox{\Hypertarget{embroidery__internal_8h_acaa069d2e820245be0f711415e2c297d}\label{embroidery__internal_8h_acaa069d2e820245be0f711415e2c297d}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!binaryWriteInt@{binaryWriteInt}}
 \index{binaryWriteInt@{binaryWriteInt}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -1890,14 +1868,11 @@ bcf\+\_\+file\+\_\+header
 {\footnotesize\ttfamily void binary\+Write\+Int (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{int}]{data }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em f} & \\
-\hline
-{\em data} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape f} {\itshape data} 
+
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000199}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000222}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery__internal_8h_ad608ccee7fa2036aeba8500061ea0824}\label{embroidery__internal_8h_ad608ccee7fa2036aeba8500061ea0824}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!binaryWriteIntBE@{binaryWriteIntBE}}
 \index{binaryWriteIntBE@{binaryWriteIntBE}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -1905,14 +1880,11 @@ bcf\+\_\+file\+\_\+header
 {\footnotesize\ttfamily void binary\+Write\+Int\+BE (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{int}]{data }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em f} & \\
-\hline
-{\em data} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape f} {\itshape data} 
+
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000200}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000223}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery__internal_8h_ab2256826c6ea8d2374fc94df46a7616f}\label{embroidery__internal_8h_ab2256826c6ea8d2374fc94df46a7616f}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!binaryWriteShort@{binaryWriteShort}}
 \index{binaryWriteShort@{binaryWriteShort}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -1920,14 +1892,11 @@ bcf\+\_\+file\+\_\+header
 {\footnotesize\ttfamily void binary\+Write\+Short (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{short}]{data }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em f} & \\
-\hline
-{\em data} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape f} {\itshape data} 
+
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000196}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000219}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}\label{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!binaryWriteUInt@{binaryWriteUInt}}
 \index{binaryWriteUInt@{binaryWriteUInt}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -1935,14 +1904,11 @@ bcf\+\_\+file\+\_\+header
 {\footnotesize\ttfamily void binary\+Write\+UInt (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{unsigned int}]{data }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em f} & \\
-\hline
-{\em data} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape f} {\itshape data} 
+
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000201}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000224}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery__internal_8h_a152fc4262fce475f30786312da68fad6}\label{embroidery__internal_8h_a152fc4262fce475f30786312da68fad6}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!binaryWriteUIntBE@{binaryWriteUIntBE}}
 \index{binaryWriteUIntBE@{binaryWriteUIntBE}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -1950,14 +1916,11 @@ bcf\+\_\+file\+\_\+header
 {\footnotesize\ttfamily void binary\+Write\+UInt\+BE (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{unsigned int}]{data }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em f} & \\
-\hline
-{\em data} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape f} {\itshape data} 
+
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000202}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000225}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery__internal_8h_a760e806c16c1612a6b5ca5a26bc736d1}\label{embroidery__internal_8h_a760e806c16c1612a6b5ca5a26bc736d1}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!binaryWriteUShort@{binaryWriteUShort}}
 \index{binaryWriteUShort@{binaryWriteUShort}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -1965,14 +1928,11 @@ bcf\+\_\+file\+\_\+header
 {\footnotesize\ttfamily void binary\+Write\+UShort (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{unsigned short}]{data }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em f} & \\
-\hline
-{\em data} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape f} {\itshape data} 
+
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000197}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000220}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery__internal_8h_ac93ea02c7dfc79fb81e7e7cc5acea14a}\label{embroidery__internal_8h_ac93ea02c7dfc79fb81e7e7cc5acea14a}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!binaryWriteUShortBE@{binaryWriteUShortBE}}
 \index{binaryWriteUShortBE@{binaryWriteUShortBE}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -1980,14 +1940,11 @@ bcf\+\_\+file\+\_\+header
 {\footnotesize\ttfamily void binary\+Write\+UShort\+BE (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{unsigned short}]{data }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em f} & \\
-\hline
-{\em data} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape f} {\itshape data} 
+
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000198}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000221}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery__internal_8h_ad6d5aaabb6637d271cec955c2dd42ded}\label{embroidery__internal_8h_ad6d5aaabb6637d271cec955c2dd42ded}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!check\_header\_present@{check\_header\_present}}
 \index{check\_header\_present@{check\_header\_present}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -1995,12 +1952,9 @@ bcf\+\_\+file\+\_\+header
 {\footnotesize\ttfamily int check\+\_\+header\+\_\+present (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{file,  }\item[{int}]{minimum\+\_\+header\+\_\+length }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em file} & \\
-\hline
-{\em minimum\+\_\+header\+\_\+length} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape file} {\itshape minimum\+\_\+header\+\_\+length} 
+
 \begin{DoxyReturn}{Returns}
 int
 \end{DoxyReturn}
@@ -2013,10 +1967,9 @@ Returns 0 if there aren\textquotesingle{}t enough, or the length of the file if 
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery__internal_8h_a5e0de54ec0ef10b88a4e499bbe94f869}{bcf\+\_\+directory}} $\ast$ Compound\+File\+Directory (\begin{DoxyParamCaption}\item[{const unsigned int}]{max\+Number\+Of\+Directory\+Entries }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em max\+Number\+Of\+Directory\+Entries} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape max\+Number\+Of\+Directory\+Entries} 
+
 \begin{DoxyReturn}{Returns}
 bcf\+\_\+directory$\ast$ 
 \end{DoxyReturn}
@@ -2027,10 +1980,9 @@ bcf\+\_\+directory$\ast$
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery__internal_8h_abb451c97faf6366fb733ff7b29054c19}{bcf\+\_\+directory\+\_\+entry}} $\ast$ Compound\+File\+Directory\+Entry (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em file} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape file} 
+
 \begin{DoxyReturn}{Returns}
 bcf\+\_\+directory\+\_\+entry$\ast$ 
 \end{DoxyReturn}
@@ -2040,134 +1992,69 @@ bcf\+\_\+directory\+\_\+entry$\ast$
 \doxyparagraph{\texorpdfstring{compress\_get\_bits()}{compress\_get\_bits()}}
 {\footnotesize\ttfamily int compress\+\_\+get\+\_\+bits (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery__internal_8h_a0a1ded23c1c333067bcfb59d5b83ce2a}{compress}} $\ast$}]{c,  }\item[{int}]{length }\end{DoxyParamCaption})}
 
-
-\begin{DoxyParams}{Parameters}
-{\em c} & \\
-\hline
-{\em length} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-int 
-\end{DoxyReturn}
-\mbox{\Hypertarget{embroidery__internal_8h_a61b95342f1dbd1e438079d87b3837da6}\label{embroidery__internal_8h_a61b95342f1dbd1e438079d87b3837da6}} 
+{\itshape c} {\itshape length} Returns . \mbox{\Hypertarget{embroidery__internal_8h_a61b95342f1dbd1e438079d87b3837da6}\label{embroidery__internal_8h_a61b95342f1dbd1e438079d87b3837da6}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!compress\_get\_position@{compress\_get\_position}}
 \index{compress\_get\_position@{compress\_get\_position}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{compress\_get\_position()}{compress\_get\_position()}}
 {\footnotesize\ttfamily int compress\+\_\+get\+\_\+position (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery__internal_8h_a0a1ded23c1c333067bcfb59d5b83ce2a}{compress}} $\ast$}]{c }\end{DoxyParamCaption})}
 
-
-\begin{DoxyParams}{Parameters}
-{\em c} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-int 
-\end{DoxyReturn}
-\mbox{\Hypertarget{embroidery__internal_8h_a8a9394d4a8d2bd617070539667405633}\label{embroidery__internal_8h_a8a9394d4a8d2bd617070539667405633}} 
+{\itshape c} . Returns the position as an int. \mbox{\Hypertarget{embroidery__internal_8h_a8a9394d4a8d2bd617070539667405633}\label{embroidery__internal_8h_a8a9394d4a8d2bd617070539667405633}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!compress\_get\_token@{compress\_get\_token}}
 \index{compress\_get\_token@{compress\_get\_token}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{compress\_get\_token()}{compress\_get\_token()}}
 {\footnotesize\ttfamily int compress\+\_\+get\+\_\+token (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery__internal_8h_a0a1ded23c1c333067bcfb59d5b83ce2a}{compress}} $\ast$}]{c }\end{DoxyParamCaption})}
 
-
-\begin{DoxyParams}{Parameters}
-{\em c} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-int 
-\end{DoxyReturn}
-\mbox{\Hypertarget{embroidery__internal_8h_a58b1553ebfc0984e0d9ef74bcbb14c0c}\label{embroidery__internal_8h_a58b1553ebfc0984e0d9ef74bcbb14c0c}} 
+{\itshape c} . Returns the token as an int. \mbox{\Hypertarget{embroidery__internal_8h_a58b1553ebfc0984e0d9ef74bcbb14c0c}\label{embroidery__internal_8h_a58b1553ebfc0984e0d9ef74bcbb14c0c}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!compress\_load\_block@{compress\_load\_block}}
 \index{compress\_load\_block@{compress\_load\_block}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{compress\_load\_block()}{compress\_load\_block()}}
 {\footnotesize\ttfamily void compress\+\_\+load\+\_\+block (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery__internal_8h_a0a1ded23c1c333067bcfb59d5b83ce2a}{compress}} $\ast$}]{c }\end{DoxyParamCaption})}
 
-
-\begin{DoxyParams}{Parameters}
-{\em c} & \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{embroidery__internal_8h_a39e722c76e45536e81a47b35c349eb79}\label{embroidery__internal_8h_a39e722c76e45536e81a47b35c349eb79}} 
+{\itshape c} . Returns nothing. \mbox{\Hypertarget{embroidery__internal_8h_a39e722c76e45536e81a47b35c349eb79}\label{embroidery__internal_8h_a39e722c76e45536e81a47b35c349eb79}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!compress\_load\_character\_huffman@{compress\_load\_character\_huffman}}
 \index{compress\_load\_character\_huffman@{compress\_load\_character\_huffman}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{compress\_load\_character\_huffman()}{compress\_load\_character\_huffman()}}
 {\footnotesize\ttfamily void compress\+\_\+load\+\_\+character\+\_\+huffman (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery__internal_8h_a0a1ded23c1c333067bcfb59d5b83ce2a}{compress}} $\ast$}]{c }\end{DoxyParamCaption})}
 
-
-\begin{DoxyParams}{Parameters}
-{\em c} & \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{embroidery__internal_8h_aa237ee1cf527ebb720fccf48495179e1}\label{embroidery__internal_8h_aa237ee1cf527ebb720fccf48495179e1}} 
+Load character table to compress struct {\itshape c}. Returns nothing. \mbox{\Hypertarget{embroidery__internal_8h_aa237ee1cf527ebb720fccf48495179e1}\label{embroidery__internal_8h_aa237ee1cf527ebb720fccf48495179e1}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!compress\_load\_character\_length\_huffman@{compress\_load\_character\_length\_huffman}}
 \index{compress\_load\_character\_length\_huffman@{compress\_load\_character\_length\_huffman}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{compress\_load\_character\_length\_huffman()}{compress\_load\_character\_length\_huffman()}}
 {\footnotesize\ttfamily void compress\+\_\+load\+\_\+character\+\_\+length\+\_\+huffman (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery__internal_8h_a0a1ded23c1c333067bcfb59d5b83ce2a}{compress}} $\ast$}]{c }\end{DoxyParamCaption})}
 
-
-\begin{DoxyParams}{Parameters}
-{\em c} & \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{embroidery__internal_8h_a7830b6991ed529226a1a7252d29b401e}\label{embroidery__internal_8h_a7830b6991ed529226a1a7252d29b401e}} 
+{\itshape c} . Returns. \mbox{\Hypertarget{embroidery__internal_8h_a7830b6991ed529226a1a7252d29b401e}\label{embroidery__internal_8h_a7830b6991ed529226a1a7252d29b401e}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!compress\_load\_distance\_huffman@{compress\_load\_distance\_huffman}}
 \index{compress\_load\_distance\_huffman@{compress\_load\_distance\_huffman}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{compress\_load\_distance\_huffman()}{compress\_load\_distance\_huffman()}}
 {\footnotesize\ttfamily void compress\+\_\+load\+\_\+distance\+\_\+huffman (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery__internal_8h_a0a1ded23c1c333067bcfb59d5b83ce2a}{compress}} $\ast$}]{c }\end{DoxyParamCaption})}
 
-
-\begin{DoxyParams}{Parameters}
-{\em c} & \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{embroidery__internal_8h_af511532a8a7f9f6646379e8fbb472331}\label{embroidery__internal_8h_af511532a8a7f9f6646379e8fbb472331}} 
+{\itshape c} . Returns nothing. \mbox{\Hypertarget{embroidery__internal_8h_af511532a8a7f9f6646379e8fbb472331}\label{embroidery__internal_8h_af511532a8a7f9f6646379e8fbb472331}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!compress\_pop@{compress\_pop}}
 \index{compress\_pop@{compress\_pop}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{compress\_pop()}{compress\_pop()}}
 {\footnotesize\ttfamily int compress\+\_\+pop (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery__internal_8h_a0a1ded23c1c333067bcfb59d5b83ce2a}{compress}} $\ast$}]{c,  }\item[{int}]{bit\+\_\+count }\end{DoxyParamCaption})}
 
-
-\begin{DoxyParams}{Parameters}
-{\em c} & \\
-\hline
-{\em bit\+\_\+count} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-int 
-\end{DoxyReturn}
-\mbox{\Hypertarget{embroidery__internal_8h_afb74b97766d1968313b6e637032e9686}\label{embroidery__internal_8h_afb74b97766d1968313b6e637032e9686}} 
+{\itshape c} {\itshape bit\+\_\+count} . Returns. \mbox{\Hypertarget{embroidery__internal_8h_afb74b97766d1968313b6e637032e9686}\label{embroidery__internal_8h_afb74b97766d1968313b6e637032e9686}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!compress\_read\_variable\_length@{compress\_read\_variable\_length}}
 \index{compress\_read\_variable\_length@{compress\_read\_variable\_length}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{compress\_read\_variable\_length()}{compress\_read\_variable\_length()}}
 {\footnotesize\ttfamily int compress\+\_\+read\+\_\+variable\+\_\+length (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery__internal_8h_a0a1ded23c1c333067bcfb59d5b83ce2a}{compress}} $\ast$}]{c }\end{DoxyParamCaption})}
 
-
-\begin{DoxyParams}{Parameters}
-{\em c} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-int 
-\end{DoxyReturn}
-\mbox{\Hypertarget{embroidery__internal_8h_a5d7bf5f964ae87921bab916b871ea2dd}\label{embroidery__internal_8h_a5d7bf5f964ae87921bab916b871ea2dd}} 
+{\itshape c}. Returns. \mbox{\Hypertarget{embroidery__internal_8h_a5d7bf5f964ae87921bab916b871ea2dd}\label{embroidery__internal_8h_a5d7bf5f964ae87921bab916b871ea2dd}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!copy\_trim@{copy\_trim}}
 \index{copy\_trim@{copy\_trim}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{copy\_trim()}{copy\_trim()}}
 {\footnotesize\ttfamily char $\ast$ copy\+\_\+trim (\begin{DoxyParamCaption}\item[{char const $\ast$}]{s }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em s} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape s} 
+
 \begin{DoxyReturn}{Returns}
 char$\ast$
 \end{DoxyReturn}
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000205}{Todo}}]decription \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000228}{Todo}}]decription \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery__internal_8h_a2e49bf0deb2392bc15e5545a03b71bd3}\label{embroidery__internal_8h_a2e49bf0deb2392bc15e5545a03b71bd3}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!create\_test\_file\_1@{create\_test\_file\_1}}
 \index{create\_test\_file\_1@{create\_test\_file\_1}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -2192,46 +2079,28 @@ char$\ast$
 \doxyparagraph{\texorpdfstring{decode\_t01\_record()}{decode\_t01\_record()}}
 {\footnotesize\ttfamily int decode\+\_\+t01\+\_\+record (\begin{DoxyParamCaption}\item[{unsigned char}]{b\mbox{[}3\mbox{]},  }\item[{int $\ast$}]{x,  }\item[{int $\ast$}]{y,  }\item[{int $\ast$}]{flags }\end{DoxyParamCaption})}
 
+{\itshape b} {\itshape x} {\itshape y} {\itshape flags} .
 
-\begin{DoxyParams}{Parameters}
-{\em b} & \\
-\hline
-{\em x} & \\
-\hline
-{\em y} & \\
-\hline
-{\em flags} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-int 
-\end{DoxyReturn}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000210}{Todo}}]remove the unused return argument. \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery__internal_8h_aeead1c7cae8d2d87aa74a32f0eeae808}\label{embroidery__internal_8h_aeead1c7cae8d2d87aa74a32f0eeae808}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!decode\_tajima\_ternary@{decode\_tajima\_ternary}}
 \index{decode\_tajima\_ternary@{decode\_tajima\_ternary}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{decode\_tajima\_ternary()}{decode\_tajima\_ternary()}}
 {\footnotesize\ttfamily void decode\+\_\+tajima\+\_\+ternary (\begin{DoxyParamCaption}\item[{unsigned char}]{b\mbox{[}3\mbox{]},  }\item[{int $\ast$}]{x,  }\item[{int $\ast$}]{y }\end{DoxyParamCaption})}
 
+Decode the signed ternary of the tajima format from {\itshape b} to the position values {\itshape x} and {\itshape y}.
 
-\begin{DoxyParams}{Parameters}
-{\em b} & \\
-\hline
-{\em x} & \\
-\hline
-{\em y} & \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{embroidery__internal_8h_a1fe39861516c14e3142add13ce9929b1}\label{embroidery__internal_8h_a1fe39861516c14e3142add13ce9929b1}} 
+There is no return argument. \mbox{\Hypertarget{embroidery__internal_8h_a1fe39861516c14e3142add13ce9929b1}\label{embroidery__internal_8h_a1fe39861516c14e3142add13ce9929b1}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!decodeNewStitch@{decodeNewStitch}}
 \index{decodeNewStitch@{decodeNewStitch}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{decodeNewStitch()}{decodeNewStitch()}}
 {\footnotesize\ttfamily int decode\+New\+Stitch (\begin{DoxyParamCaption}\item[{unsigned char}]{value }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em value} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape value} 
+
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
@@ -2245,14 +2114,7 @@ int
 
 Optimizes the number ({\itshape num}) for output to a text file and returns it as a string ({\itshape str}). 
 
-
-\begin{DoxyParams}{Parameters}
-{\em num} & \\
-\hline
-{\em str} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
+{\itshape num} {\itshape str} \begin{DoxyReturn}{Returns}
 char$\ast$ 
 \end{DoxyReturn}
 \mbox{\Hypertarget{embroidery__internal_8h_a7859b94e89cd2848d4116c7e8d662a14}\label{embroidery__internal_8h_a7859b94e89cd2848d4116c7e8d662a14}} 
@@ -2262,14 +2124,9 @@ char$\ast$
 {\footnotesize\ttfamily int emb\+\_\+readline (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{file,  }\item[{char $\ast$}]{line,  }\item[{int}]{max\+Length }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em file} & \\
-\hline
-{\em line} & \\
-\hline
-{\em max\+Length} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape file} {\itshape line} {\itshape max\+Length} 
+
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
@@ -2280,14 +2137,9 @@ int
 {\footnotesize\ttfamily void emb\+Color\+\_\+read (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{\mbox{\hyperlink{embroidery_8h_acde9d757854564332fd795a084ec88b3}{Emb\+Color}} $\ast$}]{c,  }\item[{int}]{to\+Read }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em f} & \\
-\hline
-{\em c} & \\
-\hline
-{\em to\+Read} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape f} {\itshape c} {\itshape to\+Read} 
+
 \mbox{\Hypertarget{embroidery__internal_8h_a14b8ac9c1dba4c2978c3db27a8c16689}\label{embroidery__internal_8h_a14b8ac9c1dba4c2978c3db27a8c16689}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!embColor\_write@{embColor\_write}}
 \index{embColor\_write@{embColor\_write}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -2295,31 +2147,17 @@ int
 {\footnotesize\ttfamily void emb\+Color\+\_\+write (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{\mbox{\hyperlink{embroidery_8h_acde9d757854564332fd795a084ec88b3}{Emb\+Color}}}]{c,  }\item[{int}]{to\+Write }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em f} & \\
-\hline
-{\em c} & \\
-\hline
-{\em to\+Write} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape f} {\itshape c} {\itshape to\+Write} 
+
 \mbox{\Hypertarget{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}\label{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!embInt\_read@{embInt\_read}}
 \index{embInt\_read@{embInt\_read}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{embInt\_read()}{embInt\_read()}}
 {\footnotesize\ttfamily void emb\+Int\+\_\+read (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{char $\ast$}]{label,  }\item[{void $\ast$}]{b,  }\item[{int}]{mode }\end{DoxyParamCaption})}
 
+{\itshape f} {\itshape label} {\itshape b} {\itshape mode} 
 
-\begin{DoxyParams}{Parameters}
-{\em f} & \\
-\hline
-{\em label} & \\
-\hline
-{\em b} & \\
-\hline
-{\em mode} & \\
-\hline
-\end{DoxyParams}
 Read and write system for multiple byte types.
 
 The caller passes the function to read/write from, the memory location as a void pointer and a mode identifier that describes the type. This way we can abstract out the endianness of the system running the library and don\textquotesingle{}t have to maintain many functions, just two. \mbox{\Hypertarget{embroidery__internal_8h_a6afc577513abd5034e24efdcbdd7f9f5}\label{embroidery__internal_8h_a6afc577513abd5034e24efdcbdd7f9f5}} 
@@ -2328,63 +2166,30 @@ The caller passes the function to read/write from, the memory location as a void
 \doxyparagraph{\texorpdfstring{embInt\_write()}{embInt\_write()}}
 {\footnotesize\ttfamily void emb\+Int\+\_\+write (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{char $\ast$}]{label,  }\item[{void $\ast$}]{b,  }\item[{int}]{mode }\end{DoxyParamCaption})}
 
-
-\begin{DoxyParams}{Parameters}
-{\em f} & \\
-\hline
-{\em label} & \\
-\hline
-{\em b} & \\
-\hline
-{\em mode} & \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{embroidery__internal_8h_a185446b8993b1f6a16bca08cc0032cba}\label{embroidery__internal_8h_a185446b8993b1f6a16bca08cc0032cba}} 
+{\itshape f} {\itshape label} {\itshape b} {\itshape mode} \mbox{\Hypertarget{embroidery__internal_8h_a185446b8993b1f6a16bca08cc0032cba}\label{embroidery__internal_8h_a185446b8993b1f6a16bca08cc0032cba}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!encode\_t01\_record@{encode\_t01\_record}}
 \index{encode\_t01\_record@{encode\_t01\_record}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{encode\_t01\_record()}{encode\_t01\_record()}}
 {\footnotesize\ttfamily void encode\+\_\+t01\+\_\+record (\begin{DoxyParamCaption}\item[{unsigned char}]{b\mbox{[}3\mbox{]},  }\item[{int}]{x,  }\item[{int}]{y,  }\item[{int}]{flags }\end{DoxyParamCaption})}
 
-
-\begin{DoxyParams}{Parameters}
-{\em b} & \\
-\hline
-{\em x} & \\
-\hline
-{\em y} & \\
-\hline
-{\em flags} & \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{embroidery__internal_8h_a6f2eb7f943597426ecce56ce45c92896}\label{embroidery__internal_8h_a6f2eb7f943597426ecce56ce45c92896}} 
+Encode into bytes {\itshape b} the values of the x-\/position {\itshape x}, y-\/position {\itshape y} and the {\itshape flags}. \mbox{\Hypertarget{embroidery__internal_8h_a6f2eb7f943597426ecce56ce45c92896}\label{embroidery__internal_8h_a6f2eb7f943597426ecce56ce45c92896}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!encode\_tajima\_ternary@{encode\_tajima\_ternary}}
 \index{encode\_tajima\_ternary@{encode\_tajima\_ternary}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{encode\_tajima\_ternary()}{encode\_tajima\_ternary()}}
 {\footnotesize\ttfamily int encode\+\_\+tajima\+\_\+ternary (\begin{DoxyParamCaption}\item[{unsigned char}]{b\mbox{[}3\mbox{]},  }\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})}
 
+Encode the signed ternary of the tajima format into {\itshape b} the position values {\itshape x} and {\itshape y}.
 
-\begin{DoxyParams}{Parameters}
-{\em b} & \\
-\hline
-{\em x} & \\
-\hline
-{\em y} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-int 
-\end{DoxyReturn}
-\mbox{\Hypertarget{embroidery__internal_8h_a5462a9cf780abd252021ca031a1f59af}\label{embroidery__internal_8h_a5462a9cf780abd252021ca031a1f59af}} 
+If the values of {\itshape x} or {\itshape y} fall outside of the valid range of -\/121 and +121 then it returns 0 and 1. \mbox{\Hypertarget{embroidery__internal_8h_a5462a9cf780abd252021ca031a1f59af}\label{embroidery__internal_8h_a5462a9cf780abd252021ca031a1f59af}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!entriesInDifatSector@{entriesInDifatSector}}
 \index{entriesInDifatSector@{entriesInDifatSector}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{entriesInDifatSector()}{entriesInDifatSector()}}
 {\footnotesize\ttfamily unsigned int entries\+In\+Difat\+Sector (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery__internal_8h_a04a761d12d7ad0f1f0c7566dda49f354}{bcf\+\_\+file\+\_\+difat}} $\ast$}]{fat }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em fat} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape fat} 
+
 \begin{DoxyReturn}{Returns}
 unsigned int 
 \end{DoxyReturn}
@@ -2395,10 +2200,9 @@ unsigned int
 {\footnotesize\ttfamily void fpad (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{file,  }\item[{char}]{c,  }\item[{int}]{n }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em f} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape f} 
+
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
@@ -2409,10 +2213,9 @@ int
 {\footnotesize\ttfamily short fread\+\_\+int16 (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em f} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape f} 
+
 \begin{DoxyReturn}{Returns}
 short 
 \end{DoxyReturn}
@@ -2423,15 +2226,14 @@ short
 {\footnotesize\ttfamily int fread\+\_\+int32\+\_\+be (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em f} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape f} 
+
 \begin{DoxyReturn}{Returns}
 int
 \end{DoxyReturn}
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000195}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000218}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery__internal_8h_ac97a207bfe58bd024305af6bb7242f96}\label{embroidery__internal_8h_ac97a207bfe58bd024305af6bb7242f96}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!fread\_uint16@{fread\_uint16}}
 \index{fread\_uint16@{fread\_uint16}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -2439,15 +2241,14 @@ int
 {\footnotesize\ttfamily unsigned short fread\+\_\+uint16 (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em f} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape f} 
+
 \begin{DoxyReturn}{Returns}
 unsigned short
 \end{DoxyReturn}
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000194}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000217}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery__internal_8h_a3f3c7530acd7b40f4ce2dc9069fb794a}\label{embroidery__internal_8h_a3f3c7530acd7b40f4ce2dc9069fb794a}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!GetFile@{GetFile}}
 \index{GetFile@{GetFile}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -2458,16 +2259,7 @@ unsigned short
 
 Get the File object. 
 
-
-\begin{DoxyParams}{Parameters}
-{\em bcf\+File} & \\
-\hline
-{\em file} & \\
-\hline
-{\em file\+To\+Find} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
+{\itshape bcf\+File} {\itshape file} {\itshape file\+To\+Find} \begin{DoxyReturn}{Returns}
 FILE$\ast$ 
 \end{DoxyReturn}
 \mbox{\Hypertarget{embroidery__internal_8h_a7e5d1d3488d7124ab020287e2606f89d}\label{embroidery__internal_8h_a7e5d1d3488d7124ab020287e2606f89d}} 
@@ -2476,16 +2268,7 @@ FILE$\ast$
 \doxyparagraph{\texorpdfstring{huffman\_build\_table()}{huffman\_build\_table()}}
 {\footnotesize\ttfamily void huffman\+\_\+build\+\_\+table (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery__internal_8h_a8ad0df962f28b81981b3b0b7f04ebb17}{huffman}} $\ast$}]{h }\end{DoxyParamCaption})}
 
-
-
-These next 2 functions represent the \mbox{\hyperlink{struct_huffman}{Huffman}} class in tartarize\textquotesingle{}s code. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em h} & \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{embroidery__internal_8h_a3d72cdc692a832cc82a23a5067cbf2ba}\label{embroidery__internal_8h_a3d72cdc692a832cc82a23a5067cbf2ba}} 
+These next 2 functions represent the \mbox{\hyperlink{struct_huffman}{Huffman}} class in tartarize\textquotesingle{}s code. {\itshape h} \mbox{\Hypertarget{embroidery__internal_8h_a3d72cdc692a832cc82a23a5067cbf2ba}\label{embroidery__internal_8h_a3d72cdc692a832cc82a23a5067cbf2ba}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!huffman\_table\_lookup@{huffman\_table\_lookup}}
 \index{huffman\_table\_lookup@{huffman\_table\_lookup}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{huffman\_table\_lookup()}{huffman\_table\_lookup()}}
@@ -2497,71 +2280,24 @@ These next 2 functions represent the \mbox{\hyperlink{struct_huffman}{Huffman}} 
 \doxyparagraph{\texorpdfstring{hus\_compress()}{hus\_compress()}}
 {\footnotesize\ttfamily int hus\+\_\+compress (\begin{DoxyParamCaption}\item[{char $\ast$}]{data,  }\item[{int}]{length,  }\item[{char $\ast$}]{output,  }\item[{int $\ast$}]{output\+\_\+length }\end{DoxyParamCaption})}
 
-This file is part of libembroidery.
+{\itshape data} {\itshape length} {\itshape output} {\itshape output\+\_\+length} . Returns whether it was successful as an int.
 
-Copyright 2018-\/2022 The Embroidermodder Team Licensed under the terms of the zlib license.
-
-This file contains all the read and write functions for the library.
-
-Thanks to Jason Weiler for describing the binary formats of the HUS and VIP formats at\+:
-
-\href{http://www.jasonweiler.com/HUSandVIPFileFormatInfo.html}{\texttt{ http\+://www.\+jasonweiler.\+com/\+HUSand\+VIPFile\+Format\+Info.\+html}}
-
-Further thanks to github user tatarize for solving the mystery of the compression in\+:
-
-\href{https://github.com/EmbroidePy/pyembroidery}{\texttt{ https\+://github.\+com/\+Embroide\+Py/pyembroidery}}
-
-with a description of that work here\+:
-
-\href{https://stackoverflow.com/questions/7852670/greenleaf-archive-library}{\texttt{ https\+://stackoverflow.\+com/questions/7852670/greenleaf-\/archive-\/library}}
-
-This is based on their work. 
-\begin{DoxyParams}{Parameters}
-{\em data} & \\
-\hline
-{\em length} & \\
-\hline
-{\em output} & \\
-\hline
-{\em output\+\_\+length} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-int
-\end{DoxyReturn}
 This avoids the now unnecessary compression by placing a minimal header of 6 bytes and using only literals in the huffman compressed part (see the sources above). \mbox{\Hypertarget{embroidery__internal_8h_a5347d0ea95cdde07f817a4388f5c0ef9}\label{embroidery__internal_8h_a5347d0ea95cdde07f817a4388f5c0ef9}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!hus\_decompress@{hus\_decompress}}
 \index{hus\_decompress@{hus\_decompress}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{hus\_decompress()}{hus\_decompress()}}
 {\footnotesize\ttfamily int hus\+\_\+decompress (\begin{DoxyParamCaption}\item[{char $\ast$}]{data,  }\item[{int}]{length,  }\item[{char $\ast$}]{output,  }\item[{int $\ast$}]{output\+\_\+length }\end{DoxyParamCaption})}
 
-
-\begin{DoxyParams}{Parameters}
-{\em data} & \\
-\hline
-{\em length} & \\
-\hline
-{\em output} & \\
-\hline
-{\em output\+\_\+length} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-int 
-\end{DoxyReturn}
-\mbox{\Hypertarget{embroidery__internal_8h_a71a5f4111bd3daa574148e2f45d4c893}\label{embroidery__internal_8h_a71a5f4111bd3daa574148e2f45d4c893}} 
+{\itshape data} {\itshape length} {\itshape output} {\itshape output\+\_\+length} . Returns whether the decompression was successful. \mbox{\Hypertarget{embroidery__internal_8h_a71a5f4111bd3daa574148e2f45d4c893}\label{embroidery__internal_8h_a71a5f4111bd3daa574148e2f45d4c893}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!loadFatFromSector@{loadFatFromSector}}
 \index{loadFatFromSector@{loadFatFromSector}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{loadFatFromSector()}{loadFatFromSector()}}
 {\footnotesize\ttfamily void load\+Fat\+From\+Sector (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery__internal_8h_a9a00b74e77254af1f7af14c6e12007d7}{bcf\+\_\+file\+\_\+fat}} $\ast$}]{fat,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em fat} & \\
-\hline
-{\em file} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape fat} {\itshape file} 
+
 \mbox{\Hypertarget{embroidery__internal_8h_a896703c85b788f1c46053d826cdd3524}\label{embroidery__internal_8h_a896703c85b788f1c46053d826cdd3524}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!mitDecodeStitch@{mitDecodeStitch}}
 \index{mitDecodeStitch@{mitDecodeStitch}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -2569,10 +2305,9 @@ int
 {\footnotesize\ttfamily int mit\+Decode\+Stitch (\begin{DoxyParamCaption}\item[{unsigned char}]{value }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em value} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape value} 
+
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
@@ -2583,10 +2318,9 @@ int
 {\footnotesize\ttfamily unsigned char mit\+Encode\+Stitch (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{value }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em value} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape value} 
+
 \begin{DoxyReturn}{Returns}
 unsigned char 
 \end{DoxyReturn}
@@ -2602,36 +2336,13 @@ unsigned char
 \doxyparagraph{\texorpdfstring{pfaffDecode()}{pfaffDecode()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} pfaff\+Decode (\begin{DoxyParamCaption}\item[{unsigned char}]{a1,  }\item[{unsigned char}]{a2,  }\item[{unsigned char}]{a3 }\end{DoxyParamCaption})}
 
-
-\begin{DoxyParams}{Parameters}
-{\em a1} & \\
-\hline
-{\em a2} & \\
-\hline
-{\em a3} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-Emb\+Real 
-\end{DoxyReturn}
-\mbox{\Hypertarget{embroidery__internal_8h_a0179795cc6a84ec60c6d23c5ebfd9d66}\label{embroidery__internal_8h_a0179795cc6a84ec60c6d23c5ebfd9d66}} 
+Decode the bytes {\itshape a1}, {\itshape a2} and {\itshape a3} . Returns the Emb\+Real floating-\/point value. \mbox{\Hypertarget{embroidery__internal_8h_a0179795cc6a84ec60c6d23c5ebfd9d66}\label{embroidery__internal_8h_a0179795cc6a84ec60c6d23c5ebfd9d66}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!pfaffEncode@{pfaffEncode}}
 \index{pfaffEncode@{pfaffEncode}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{pfaffEncode()}{pfaffEncode()}}
 {\footnotesize\ttfamily void pfaff\+Encode (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{file,  }\item[{int}]{dx,  }\item[{int}]{dy,  }\item[{int}]{flags }\end{DoxyParamCaption})}
 
-
-\begin{DoxyParams}{Parameters}
-{\em file} & \\
-\hline
-{\em dx} & \\
-\hline
-{\em dy} & \\
-\hline
-{\em flags} & \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{embroidery__internal_8h_a7dbe0a9236a451fb553372113d247e97}\label{embroidery__internal_8h_a7dbe0a9236a451fb553372113d247e97}} 
+{\itshape file} {\itshape dx} {\itshape dy} {\itshape flags} \mbox{\Hypertarget{embroidery__internal_8h_a7dbe0a9236a451fb553372113d247e97}\label{embroidery__internal_8h_a7dbe0a9236a451fb553372113d247e97}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!printArcResults@{printArcResults}}
 \index{printArcResults@{printArcResults}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{printArcResults()}{printArcResults()}}
@@ -2727,7 +2438,10 @@ Emb\+Real
 \doxyparagraph{\texorpdfstring{readDsz()}{readDsz()}}
 {\footnotesize\ttfamily char read\+Dsz (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_a78401eda12707709f8edd25f9688d765}\label{embroidery__internal_8h_a78401eda12707709f8edd25f9688d765}} 
+\hypertarget{format__dsz_8c_zsk-dsz-format}{}\doxyparagraph{ZSK USA Embroidery Format (.\+dsz)}\label{format__dsz_8c_zsk-dsz-format}
+\index{dsz@{dsz}} \index{ZSK USA@{ZSK USA}}
+
+The ZSK USA dsz format is stitch-\/only. \mbox{\Hypertarget{embroidery__internal_8h_a78401eda12707709f8edd25f9688d765}\label{embroidery__internal_8h_a78401eda12707709f8edd25f9688d765}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readDxf@{readDxf}}
 \index{readDxf@{readDxf}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readDxf()}{readDxf()}}
@@ -2739,7 +2453,10 @@ Emb\+Real
 \doxyparagraph{\texorpdfstring{readEdr()}{readEdr()}}
 {\footnotesize\ttfamily char read\+Edr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_af1b32ee820833549705cb80979fa788a}\label{embroidery__internal_8h_af1b32ee820833549705cb80979fa788a}} 
+\hypertarget{format__edr_8c_embird-edr-format}{}\doxyparagraph{Embird Embroidery Format (.\+edr)}\label{format__edr_8c_embird-edr-format}
+\index{edr@{edr}} \index{Embird@{Embird}}
+
+Stitch Only Format \mbox{\Hypertarget{embroidery__internal_8h_af1b32ee820833549705cb80979fa788a}\label{embroidery__internal_8h_af1b32ee820833549705cb80979fa788a}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readEmd@{readEmd}}
 \index{readEmd@{readEmd}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readEmd()}{readEmd()}}
@@ -2763,7 +2480,12 @@ Emb\+Real
 \doxyparagraph{\texorpdfstring{readEys()}{readEys()}}
 {\footnotesize\ttfamily char read\+Eys (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_ae3a86c067644ce5f2e59c80ebae6f62e}\label{embroidery__internal_8h_ae3a86c067644ce5f2e59c80ebae6f62e}} 
+\hypertarget{format__eys_8c_sierra-eys-format}{}\doxyparagraph{Sierra Expanded Embroidery Format (.\+eys)}\label{format__eys_8c_sierra-eys-format}
+\index{eys@{eys}} \index{Sierra Expanded@{Sierra Expanded}}
+
+Stitch Only Format.
+
+Smoothie G-\/\+Code Embroidery Format (.fxy)? \mbox{\Hypertarget{embroidery__internal_8h_ae3a86c067644ce5f2e59c80ebae6f62e}\label{embroidery__internal_8h_ae3a86c067644ce5f2e59c80ebae6f62e}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readFeatherPatterns@{readFeatherPatterns}}
 \index{readFeatherPatterns@{readFeatherPatterns}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readFeatherPatterns()}{readFeatherPatterns()}}
@@ -2776,14 +2498,9 @@ Emb\+Real
 {\footnotesize\ttfamily unsigned int read\+Full\+Sector (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{file,  }\item[{\mbox{\hyperlink{embroidery__internal_8h_a04a761d12d7ad0f1f0c7566dda49f354}{bcf\+\_\+file\+\_\+difat}} $\ast$}]{bcf\+File,  }\item[{unsigned int $\ast$}]{difat\+Entries\+To\+Read }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em file} & \\
-\hline
-{\em bcf\+File} & \\
-\hline
-{\em difat\+Entries\+To\+Read} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape file} {\itshape bcf\+File} {\itshape difat\+Entries\+To\+Read} 
+
 \begin{DoxyReturn}{Returns}
 unsigned int 
 \end{DoxyReturn}
@@ -2793,25 +2510,36 @@ unsigned int
 \doxyparagraph{\texorpdfstring{readFxy()}{readFxy()}}
 {\footnotesize\ttfamily char read\+Fxy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_ae203b3932fa10a5da0fb787f435a33c6}\label{embroidery__internal_8h_ae203b3932fa10a5da0fb787f435a33c6}} 
+\hypertarget{format__fxy_8c_Fortron}{}\doxyparagraph{Embroidery Format (.\+fxy)}\label{format__fxy_8c_Fortron}
+\index{fxy@{fxy}} \index{Fortron@{Fortron}}
+
+Stitch Only Format. \mbox{\Hypertarget{embroidery__internal_8h_ae203b3932fa10a5da0fb787f435a33c6}\label{embroidery__internal_8h_ae203b3932fa10a5da0fb787f435a33c6}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readGc@{readGc}}
 \index{readGc@{readGc}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readGc()}{readGc()}}
 {\footnotesize\ttfamily char read\+Gc (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_a0e5c2ad9e78a431b98617d6ada1141e3}\label{embroidery__internal_8h_a0e5c2ad9e78a431b98617d6ada1141e3}} 
+Smoothie G-\/\+Code
+
+Main Reference\+: Machinery\textquotesingle{}s Handbook Guide A Guide to Tables, Formulas, \& More in the 31st Edition by John Milton Amiss, Franklin D. Jones and Henry Ryffel \mbox{\Hypertarget{embroidery__internal_8h_a0e5c2ad9e78a431b98617d6ada1141e3}\label{embroidery__internal_8h_a0e5c2ad9e78a431b98617d6ada1141e3}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readGnc@{readGnc}}
 \index{readGnc@{readGnc}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readGnc()}{readGnc()}}
 {\footnotesize\ttfamily char read\+Gnc (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_aa9033ad4081f8675f03d07af284918a1}\label{embroidery__internal_8h_aa9033ad4081f8675f03d07af284918a1}} 
+\hypertarget{format__gnc_8c_great-gnc-format}{}\doxyparagraph{Great Notions Embroidery Format (.\+gnc)}\label{format__gnc_8c_great-gnc-format}
+\index{gnc@{gnc}} \index{Great Notions@{Great Notions}}
+
+Stitch Only Format. \mbox{\Hypertarget{embroidery__internal_8h_aa9033ad4081f8675f03d07af284918a1}\label{embroidery__internal_8h_aa9033ad4081f8675f03d07af284918a1}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readGt@{readGt}}
 \index{readGt@{readGt}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readGt()}{readGt()}}
 {\footnotesize\ttfamily char read\+Gt (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_ad8002a7b6d42d6d116f31943ea1f8d37}\label{embroidery__internal_8h_ad8002a7b6d42d6d116f31943ea1f8d37}} 
+\hypertarget{format__gt_8c_gold-gt-format}{}\doxyparagraph{Gold Thread Embroidery Format (.\+gt)}\label{format__gt_8c_gold-gt-format}
+\index{gt@{gt}} \index{Gold Thread@{Gold Thread}}
+
+Stitch Only Format. \mbox{\Hypertarget{embroidery__internal_8h_ad8002a7b6d42d6d116f31943ea1f8d37}\label{embroidery__internal_8h_ad8002a7b6d42d6d116f31943ea1f8d37}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readHoopName@{readHoopName}}
 \index{readHoopName@{readHoopName}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readHoopName()}{readHoopName()}}
@@ -2835,13 +2563,19 @@ unsigned int
 \doxyparagraph{\texorpdfstring{readInb()}{readInb()}}
 {\footnotesize\ttfamily char read\+Inb (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_a4f8e1fe00b6af083e611f0b77ec309e5}\label{embroidery__internal_8h_a4f8e1fe00b6af083e611f0b77ec309e5}} 
+\hypertarget{format__inb_8c_inbro-inb-format}{}\doxyparagraph{Inbro Embroidery Format (.\+inb)}\label{format__inb_8c_inbro-inb-format}
+\index{inb@{inb}} \index{Inbro@{Inbro}}
+
+Stitch Only Format. \mbox{\Hypertarget{embroidery__internal_8h_a4f8e1fe00b6af083e611f0b77ec309e5}\label{embroidery__internal_8h_a4f8e1fe00b6af083e611f0b77ec309e5}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readInf@{readInf}}
 \index{readInf@{readInf}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readInf()}{readInf()}}
 {\footnotesize\ttfamily char read\+Inf (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_aacabd0b28cfa6d3763a48eefd781f26b}\label{embroidery__internal_8h_aacabd0b28cfa6d3763a48eefd781f26b}} 
+\hypertarget{format__inf_8c_embroidery-inf-format}{}\doxyparagraph{Embroidery Color Format (.\+inf)}\label{format__inf_8c_embroidery-inf-format}
+\index{inf@{inf}}
+
+Stitch Only Format. \mbox{\Hypertarget{embroidery__internal_8h_aacabd0b28cfa6d3763a48eefd781f26b}\label{embroidery__internal_8h_aacabd0b28cfa6d3763a48eefd781f26b}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readJef@{readJef}}
 \index{readJef@{readJef}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readJef()}{readJef()}}
@@ -2865,7 +2599,10 @@ unsigned int
 \doxyparagraph{\texorpdfstring{readMit()}{readMit()}}
 {\footnotesize\ttfamily char read\+Mit (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_a84e2f3d90de6e0d818201914aa1eea0d}\label{embroidery__internal_8h_a84e2f3d90de6e0d818201914aa1eea0d}} 
+\hypertarget{format__mit_8c_mitsubishi-mit-format}{}\doxyparagraph{Mitsubishi Embroidery Format (.\+mit)}\label{format__mit_8c_mitsubishi-mit-format}
+\index{mit@{mit}} \index{Mitsubishi@{Mitsubishi}}
+
+Stitch Only Format. \mbox{\Hypertarget{embroidery__internal_8h_a84e2f3d90de6e0d818201914aa1eea0d}\label{embroidery__internal_8h_a84e2f3d90de6e0d818201914aa1eea0d}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readMotifPatterns@{readMotifPatterns}}
 \index{readMotifPatterns@{readMotifPatterns}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readMotifPatterns()}{readMotifPatterns()}}
@@ -2877,19 +2614,19 @@ unsigned int
 \doxyparagraph{\texorpdfstring{readNew()}{readNew()}}
 {\footnotesize\ttfamily char read\+New (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_a7a74138f5ffaa71deb934c3c407a6289}\label{embroidery__internal_8h_a7a74138f5ffaa71deb934c3c407a6289}} 
+\hypertarget{format__new_8c_ameco-new-format}{}\doxyparagraph{Ameco Embroidery Format (.\+new)}\label{format__new_8c_ameco-new-format}
+\index{new@{new}} \index{Ameco@{Ameco}}
+
+Stitch Only Format. \mbox{\Hypertarget{embroidery__internal_8h_a7a74138f5ffaa71deb934c3c407a6289}\label{embroidery__internal_8h_a7a74138f5ffaa71deb934c3c407a6289}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readNextSector@{readNextSector}}
 \index{readNextSector@{readNextSector}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readNextSector()}{readNextSector()}}
 {\footnotesize\ttfamily void read\+Next\+Sector (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{file,  }\item[{\mbox{\hyperlink{embroidery__internal_8h_a5e0de54ec0ef10b88a4e499bbe94f869}{bcf\+\_\+directory}} $\ast$}]{dir }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em file} & \\
-\hline
-{\em dir} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape file} {\itshape dir} 
+
 \mbox{\Hypertarget{embroidery__internal_8h_ac2fee81b7f6864d67c43ff860b505704}\label{embroidery__internal_8h_ac2fee81b7f6864d67c43ff860b505704}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readOfm@{readOfm}}
 \index{readOfm@{readOfm}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -2902,25 +2639,43 @@ unsigned int
 \doxyparagraph{\texorpdfstring{readPcd()}{readPcd()}}
 {\footnotesize\ttfamily char read\+Pcd (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{const char $\ast$}]{file\+Name,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_aa281eddba209c498c68bcc590d66590c}\label{embroidery__internal_8h_aa281eddba209c498c68bcc590d66590c}} 
+\hypertarget{format__pcd_8c_pfaff-pcd-format}{}\doxyparagraph{Pfaff PCD File Format (.\+pcd)}\label{format__pcd_8c_pfaff-pcd-format}
+\index{pcd@{pcd}} \index{Pfaff@{Pfaff}}
+
+Stitch Only Format.
+
+The format uses a signed 3 byte-\/length number type.
+
+See the description here (\mbox{[}5\mbox{]}(5)) for the overview of the format.
+
+For an example of the format see (\mbox{[}11\mbox{]}(11)). \mbox{\Hypertarget{embroidery__internal_8h_aa281eddba209c498c68bcc590d66590c}\label{embroidery__internal_8h_aa281eddba209c498c68bcc590d66590c}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readPcm@{readPcm}}
 \index{readPcm@{readPcm}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readPcm()}{readPcm()}}
 {\footnotesize\ttfamily char read\+Pcm (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_aad7cd54fc10be3e319f9128375c0ea3a}\label{embroidery__internal_8h_aad7cd54fc10be3e319f9128375c0ea3a}} 
+\hypertarget{format__pcm_8c_pfaff-pcm-format}{}\doxyparagraph{Pfaff Embroidery Format (.\+pcm)}\label{format__pcm_8c_pfaff-pcm-format}
+\index{pcm@{pcm}} \index{Pfaff@{Pfaff}}
+
+The Pfaff pcm format is stitch-\/only. \mbox{\Hypertarget{embroidery__internal_8h_aad7cd54fc10be3e319f9128375c0ea3a}\label{embroidery__internal_8h_aad7cd54fc10be3e319f9128375c0ea3a}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readPcq@{readPcq}}
 \index{readPcq@{readPcq}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readPcq()}{readPcq()}}
 {\footnotesize\ttfamily char read\+Pcq (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{const char $\ast$}]{file\+Name,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_a706d3a4d414c7e853deaeeec376627a2}\label{embroidery__internal_8h_a706d3a4d414c7e853deaeeec376627a2}} 
+\hypertarget{format__vp3_8c_Pfaff}{}\doxyparagraph{Embroidery Format (.\+pcq)}\label{format__vp3_8c_Pfaff}
+\index{pcq@{pcq}} \index{Pfaff@{Pfaff}}
+
+The Pfaff pcq format is stitch-\/only. \mbox{\Hypertarget{embroidery__internal_8h_a706d3a4d414c7e853deaeeec376627a2}\label{embroidery__internal_8h_a706d3a4d414c7e853deaeeec376627a2}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readPcs@{readPcs}}
 \index{readPcs@{readPcs}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readPcs()}{readPcs()}}
 {\footnotesize\ttfamily char read\+Pcs (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{const char $\ast$}]{file\+Name,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_a8c5068feff7e317eff62044069b3579f}\label{embroidery__internal_8h_a8c5068feff7e317eff62044069b3579f}} 
+\hypertarget{format__vp3_8c_Pfaff}{}\doxyparagraph{Embroidery Format (.\+pcq)}\label{format__vp3_8c_Pfaff}
+\index{pcs@{pcs}} \index{Pfaff@{Pfaff}}
+
+The Pfaff pcs format is stitch-\/only. \mbox{\Hypertarget{embroidery__internal_8h_a8c5068feff7e317eff62044069b3579f}\label{embroidery__internal_8h_a8c5068feff7e317eff62044069b3579f}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readPec@{readPec}}
 \index{readPec@{readPec}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readPec()}{readPec()}}
@@ -2932,19 +2687,28 @@ unsigned int
 \doxyparagraph{\texorpdfstring{readPecStitches()}{readPecStitches()}}
 {\footnotesize\ttfamily void read\+Pec\+Stitches (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_a3979d981419fab84724db2d7b65778d8}\label{embroidery__internal_8h_a3979d981419fab84724db2d7b65778d8}} 
+\hypertarget{format__phc_8c_Brother}{}\doxyparagraph{Embroidery Format (.\+pec)}\label{format__phc_8c_Brother}
+\index{pec@{pec}} \index{Brother@{Brother}}
+
+The Brother pec format is stitch-\/only. \mbox{\Hypertarget{embroidery__internal_8h_a3979d981419fab84724db2d7b65778d8}\label{embroidery__internal_8h_a3979d981419fab84724db2d7b65778d8}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readPel@{readPel}}
 \index{readPel@{readPel}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readPel()}{readPel()}}
 {\footnotesize\ttfamily char read\+Pel (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_a9734476fee6ccdf9b104b333ba0529f5}\label{embroidery__internal_8h_a9734476fee6ccdf9b104b333ba0529f5}} 
+\hypertarget{format__phc_8c_Brother}{}\doxyparagraph{Embroidery Format (.\+pec)}\label{format__phc_8c_Brother}
+\index{pel@{pel}} \index{Brother@{Brother}}
+
+The Brother pel format is stitch-\/only. \mbox{\Hypertarget{embroidery__internal_8h_a9734476fee6ccdf9b104b333ba0529f5}\label{embroidery__internal_8h_a9734476fee6ccdf9b104b333ba0529f5}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readPem@{readPem}}
 \index{readPem@{readPem}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readPem()}{readPem()}}
 {\footnotesize\ttfamily char read\+Pem (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_a21aba667fce5f4492d9ed1f418141a4f}\label{embroidery__internal_8h_a21aba667fce5f4492d9ed1f418141a4f}} 
+\hypertarget{format__phc_8c_Brother}{}\doxyparagraph{Embroidery Format (.\+pec)}\label{format__phc_8c_Brother}
+\index{pem@{pem}} \index{Brother@{Brother}}
+
+The Brother pem format is stitch-\/only. \mbox{\Hypertarget{embroidery__internal_8h_a21aba667fce5f4492d9ed1f418141a4f}\label{embroidery__internal_8h_a21aba667fce5f4492d9ed1f418141a4f}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readPes@{readPes}}
 \index{readPes@{readPes}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readPes()}{readPes()}}
@@ -2992,19 +2756,28 @@ unsigned int
 \doxyparagraph{\texorpdfstring{readPhb()}{readPhb()}}
 {\footnotesize\ttfamily char read\+Phb (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_a4c98ff79f5a2aa3b1d388c687268c6f3}\label{embroidery__internal_8h_a4c98ff79f5a2aa3b1d388c687268c6f3}} 
+\hypertarget{format__phc_8c_Brother}{}\doxyparagraph{Embroidery Format (.\+pec)}\label{format__phc_8c_Brother}
+\index{phb@{phb}} \index{Brother@{Brother}}
+
+The Brother phb format is stitch-\/only. \mbox{\Hypertarget{embroidery__internal_8h_a4c98ff79f5a2aa3b1d388c687268c6f3}\label{embroidery__internal_8h_a4c98ff79f5a2aa3b1d388c687268c6f3}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readPhc@{readPhc}}
 \index{readPhc@{readPhc}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readPhc()}{readPhc()}}
 {\footnotesize\ttfamily char read\+Phc (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_af155ba77e59140dd758f2bec8d997221}\label{embroidery__internal_8h_af155ba77e59140dd758f2bec8d997221}} 
+\hypertarget{format__phc_8c_Brother}{}\doxyparagraph{Embroidery Format (.\+pec)}\label{format__phc_8c_Brother}
+\index{phc@{phc}} \index{Brother@{Brother}}
+
+The Brother phc format is stitch-\/only. \mbox{\Hypertarget{embroidery__internal_8h_af155ba77e59140dd758f2bec8d997221}\label{embroidery__internal_8h_af155ba77e59140dd758f2bec8d997221}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readPlt@{readPlt}}
 \index{readPlt@{readPlt}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readPlt()}{readPlt()}}
 {\footnotesize\ttfamily char read\+Plt (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_ab8d3fdac005d8603f800739d21fc20c6}\label{embroidery__internal_8h_ab8d3fdac005d8603f800739d21fc20c6}} 
+\hypertarget{format__plt_8c_AutoCAD}{}\doxyparagraph{Embroidery Format (.\+plt)}\label{format__plt_8c_AutoCAD}
+\index{plt@{plt}} \index{AutoCAD@{AutoCAD}}
+
+The Auto\+CAD plt format is stitch-\/only. \mbox{\Hypertarget{embroidery__internal_8h_ab8d3fdac005d8603f800739d21fc20c6}\label{embroidery__internal_8h_ab8d3fdac005d8603f800739d21fc20c6}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readProgrammableFills@{readProgrammableFills}}
 \index{readProgrammableFills@{readProgrammableFills}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readProgrammableFills()}{readProgrammableFills()}}
@@ -3016,7 +2789,10 @@ unsigned int
 \doxyparagraph{\texorpdfstring{readRgb()}{readRgb()}}
 {\footnotesize\ttfamily char read\+Rgb (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_ab9a9d10e6d39212013940c702e67ef32}\label{embroidery__internal_8h_ab9a9d10e6d39212013940c702e67ef32}} 
+\hypertarget{format__rgb_8c_RGB}{}\doxyparagraph{Color File (.\+rgb)}\label{format__rgb_8c_RGB}
+\index{rgb@{rgb}}
+
+The RGB format is a color-\/only format to act as an external color file for other formats. \mbox{\Hypertarget{embroidery__internal_8h_ab9a9d10e6d39212013940c702e67ef32}\label{embroidery__internal_8h_ab9a9d10e6d39212013940c702e67ef32}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readSew@{readSew}}
 \index{readSew@{readSew}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readSew()}{readSew()}}
@@ -3034,7 +2810,10 @@ unsigned int
 \doxyparagraph{\texorpdfstring{readSst()}{readSst()}}
 {\footnotesize\ttfamily char read\+Sst (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_a306c767827e6efa1e4f79272532d010d}\label{embroidery__internal_8h_a306c767827e6efa1e4f79272532d010d}} 
+\hypertarget{format__sst_8c_Sunstar}{}\doxyparagraph{Embroidery Format (.\+sst)}\label{format__sst_8c_Sunstar}
+\index{sst@{sst}} \index{Sunstar@{Sunstar}}
+
+The Sunstar sst format is stitch-\/only. \mbox{\Hypertarget{embroidery__internal_8h_a306c767827e6efa1e4f79272532d010d}\label{embroidery__internal_8h_a306c767827e6efa1e4f79272532d010d}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readStx@{readStx}}
 \index{readStx@{readStx}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readStx()}{readStx()}}
@@ -3052,13 +2831,19 @@ unsigned int
 \doxyparagraph{\texorpdfstring{readT01()}{readT01()}}
 {\footnotesize\ttfamily char read\+T01 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_aa29ea5ab472bd0ac3320c55f46ee5202}\label{embroidery__internal_8h_aa29ea5ab472bd0ac3320c55f46ee5202}} 
+\hypertarget{format__vp3_8c_Pfaff}{}\doxyparagraph{Embroidery Format (.\+pcq)}\label{format__vp3_8c_Pfaff}
+\index{t01@{t01}} \index{Pfaff@{Pfaff}}
+
+The Pfaff t01 format is stitch-\/only. \mbox{\Hypertarget{embroidery__internal_8h_aa29ea5ab472bd0ac3320c55f46ee5202}\label{embroidery__internal_8h_aa29ea5ab472bd0ac3320c55f46ee5202}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readT09@{readT09}}
 \index{readT09@{readT09}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readT09()}{readT09()}}
 {\footnotesize\ttfamily char read\+T09 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_ad9e733d8ec10ca7a0a54ac3a07c59176}\label{embroidery__internal_8h_ad9e733d8ec10ca7a0a54ac3a07c59176}} 
+\hypertarget{format__vp3_8c_Pfaff}{}\doxysubparagraph{Embroidery Format (.\+pcq)}\label{format__vp3_8c_Pfaff}
+\index{t09@{t09}} \index{Pfaff@{Pfaff}}
+
+The Pfaff t09 format is stitch-\/only. \mbox{\Hypertarget{embroidery__internal_8h_ad9e733d8ec10ca7a0a54ac3a07c59176}\label{embroidery__internal_8h_ad9e733d8ec10ca7a0a54ac3a07c59176}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readTap@{readTap}}
 \index{readTap@{readTap}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readTap()}{readTap()}}
@@ -3070,7 +2855,10 @@ unsigned int
 \doxyparagraph{\texorpdfstring{readThr()}{readThr()}}
 {\footnotesize\ttfamily char read\+Thr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_a364fddf45e198a6aa8333e5867af3cc8}\label{embroidery__internal_8h_a364fddf45e198a6aa8333e5867af3cc8}} 
+\hypertarget{format__thr_8c_ThredWorks}{}\doxyparagraph{Embroidery Format (.\+thr)}\label{format__thr_8c_ThredWorks}
+\index{thr@{thr}} \index{ThreadWorks@{ThreadWorks}}
+
+The Thread\+Works thr format is stitch-\/only. \mbox{\Hypertarget{embroidery__internal_8h_a364fddf45e198a6aa8333e5867af3cc8}\label{embroidery__internal_8h_a364fddf45e198a6aa8333e5867af3cc8}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readThreads@{readThreads}}
 \index{readThreads@{readThreads}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readThreads()}{readThreads()}}
@@ -3082,19 +2870,28 @@ unsigned int
 \doxyparagraph{\texorpdfstring{readTxt()}{readTxt()}}
 {\footnotesize\ttfamily char read\+Txt (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_a8214503aa802682543a8e5a1cf869c6d}\label{embroidery__internal_8h_a8214503aa802682543a8e5a1cf869c6d}} 
+\hypertarget{format__txt_8c_Text}{}\doxyparagraph{File (.\+txt)}\label{format__txt_8c_Text}
+\index{txt@{txt}}
+
+The txt format is stitch-\/only and isn\textquotesingle{}t associated with a specific company. \mbox{\Hypertarget{embroidery__internal_8h_a8214503aa802682543a8e5a1cf869c6d}\label{embroidery__internal_8h_a8214503aa802682543a8e5a1cf869c6d}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readU00@{readU00}}
 \index{readU00@{readU00}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readU00()}{readU00()}}
 {\footnotesize\ttfamily char read\+U00 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_ac747f7b2e3c38cdfa219cf2e1179633c}\label{embroidery__internal_8h_ac747f7b2e3c38cdfa219cf2e1179633c}} 
+\hypertarget{format__u01_8c_Barudan}{}\doxyparagraph{Embroidery Format (.\+u00)}\label{format__u01_8c_Barudan}
+\index{u00@{u00}} \index{Barudan@{Barudan}}
+
+The Barudan u00 format is stitch-\/only. \mbox{\Hypertarget{embroidery__internal_8h_ac747f7b2e3c38cdfa219cf2e1179633c}\label{embroidery__internal_8h_ac747f7b2e3c38cdfa219cf2e1179633c}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readU01@{readU01}}
 \index{readU01@{readU01}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readU01()}{readU01()}}
 {\footnotesize\ttfamily char read\+U01 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery__internal_8h_a9dbe86a0803845f5995106d20deabc38}\label{embroidery__internal_8h_a9dbe86a0803845f5995106d20deabc38}} 
+\hypertarget{format__u01_8c_Barudan}{}\doxyparagraph{Embroidery Format (.\+u00)}\label{format__u01_8c_Barudan}
+\index{u01@{u01}} \index{Barudan@{Barudan}}
+
+The Barudan u01 format is stitch-\/only. \mbox{\Hypertarget{embroidery__internal_8h_a9dbe86a0803845f5995106d20deabc38}\label{embroidery__internal_8h_a9dbe86a0803845f5995106d20deabc38}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readVip@{readVip}}
 \index{readVip@{readVip}!embroidery\_internal.h@{embroidery\_internal.h}}
 \doxyparagraph{\texorpdfstring{readVip()}{readVip()}}
@@ -3125,10 +2922,9 @@ unsigned int
 {\footnotesize\ttfamily void safe\+\_\+free (\begin{DoxyParamCaption}\item[{void $\ast$}]{data }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em data} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape data} 
+
 \mbox{\Hypertarget{embroidery__internal_8h_aa08223cd2dd75ce77baf8d5e7f139e1a}\label{embroidery__internal_8h_aa08223cd2dd75ce77baf8d5e7f139e1a}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!stringInArray@{stringInArray}}
 \index{stringInArray@{stringInArray}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -3197,12 +2993,9 @@ The end of the array is marked by an empty string.
 {\footnotesize\ttfamily void write\+\_\+24bit (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{file,  }\item[{int}]{x }\end{DoxyParamCaption})}
 
 
-\begin{DoxyParams}{Parameters}
-{\em file} & \\
-\hline
-{\em x} & \\
-\hline
-\end{DoxyParams}
+
+{\itshape file} {\itshape x} 
+
 \mbox{\Hypertarget{embroidery__internal_8h_ab1f6a20dd5ef0db6a0e6483deba90711}\label{embroidery__internal_8h_ab1f6a20dd5ef0db6a0e6483deba90711}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!writeArt@{writeArt}}
 \index{writeArt@{writeArt}!embroidery\_internal.h@{embroidery\_internal.h}}

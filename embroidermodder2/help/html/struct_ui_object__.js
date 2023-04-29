@@ -10,7 +10,7 @@ var struct_ui_object__ =
     [ "id", "struct_ui_object__.html#a4f071f39e69a703ee35a2dc313b928f0", null ],
     [ "maxPoints", "struct_ui_object__.html#ad6efdfb1c13924cbdcd908582b4be446", null ],
     [ "minPoints", "struct_ui_object__.html#a22e07bd217a8c33abb20a0bae57278b5", null ],
-    [ "mode", "struct_ui_object__.html#ac1b4d694fc07a39e06900e82872aac7f", null ],
+    [ "mode", "struct_ui_object__.html#a6b29e4f37f4482274af785ad5ffe96a7", null ],
     [ "n_controlPoints", "struct_ui_object__.html#a8dbaa8affffc43357c6a974112149f42", null ],
     [ "numPoints", "struct_ui_object__.html#a876743604f1c17f0d9f7137274b1a7fd", null ],
     [ "object_index", "struct_ui_object__.html#a8e14df78c97bad47c11f5d964634f1ad", null ],
@@ -21,8 +21,8 @@ var struct_ui_object__ =
     [ "selectable", "struct_ui_object__.html#a7a81b7e8dfdc640c03d8b7b1771ec773", null ],
     [ "text", "struct_ui_object__.html#a50cee21aace972bab778fcf9df69a4ae", null ],
     [ "textFont", "struct_ui_object__.html#a8abb50dd6d871ebbb4956b3f99f54536", null ],
-    [ "textHeight", "struct_ui_object__.html#af2083d6aee31e64205fd5c037e90390b", null ],
+    [ "textHeight", "struct_ui_object__.html#a7aaf3276a53745ff90c123c095ffd101", null ],
     [ "textJustify", "struct_ui_object__.html#a33af7956829993c9a6e515c50a39e6ff", null ],
-    [ "textRotation", "struct_ui_object__.html#ac52fe42f6c748f8527c22231a12b2c26", null ],
+    [ "textRotation", "struct_ui_object__.html#af071a7a13061a2722bef2d13367ac717", null ],
     [ "type", "struct_ui_object__.html#a551374301513fdb71d8977304106af2c", null ]
 ];

@@ -1,4 +1,4 @@
-/**
+/*
  *  Embroidermodder 2.
  *
  *  ------------------------------------------------------------
@@ -105,8 +105,8 @@ RectObject::objectTopLeft() const
 QPointF RectObject::objectTopRight() const
 {
     EmbReal rot = radians(rotation());
-    EmbReal cosRot = qCos(rot);
-    EmbReal sinRot = qSin(rot);
+    EmbReal cosRot = std::cos(rot);
+    EmbReal sinRot = std::sin(rot);
 
     QPointF tr = rect().topRight();
     EmbReal ptrX = tr.x()*scale();
@@ -123,8 +123,8 @@ QPointF RectObject::objectTopRight() const
 QPointF RectObject::objectBottomLeft() const
 {
     EmbReal rot = radians(rotation());
-    EmbReal cosRot = qCos(rot);
-    EmbReal sinRot = qSin(rot);
+    EmbReal cosRot = std::cos(rot);
+    EmbReal sinRot = std::sin(rot);
 
     QPointF bl = rect().bottomLeft();
     EmbReal pblX = bl.x()*scale();
@@ -141,8 +141,8 @@ QPointF RectObject::objectBottomLeft() const
 QPointF RectObject::objectBottomRight() const
 {
     EmbReal rot = radians(rotation());
-    EmbReal cosRot = qCos(rot);
-    EmbReal sinRot = qSin(rot);
+    EmbReal cosRot = std::cos(rot);
+    EmbReal sinRot = std::sin(rot);
 
     QPointF br = rect().bottomRight();
     EmbReal pbrX = br.x()*scale();
@@ -184,8 +184,12 @@ void RectObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected) {
+        paintPen.setStyle(Qt::DashLine);
+    }
+    if (objScene->property("ENABLE_LWT").toBool()) {
+        paintPen = lineWeightPen();
+    }
     painter->setPen(paintPen);
 
     painter->drawRect(rect());
@@ -197,8 +201,7 @@ void RectObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
 void RectObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if (rubberMode == OBJ_RUBBER_RECTANGLE)
-    {
+    if (rubberMode == OBJ_RUBBER_RECTANGLE) {
         QPointF sceneStartPoint = objectRubberPoint("RECTANGLE_START");
         QPointF sceneEndPoint = objectRubberPoint("RECTANGLE_END");
         EmbReal x = sceneStartPoint.x();
@@ -208,10 +211,8 @@ void RectObject::updateRubber(QPainter* painter)
         setObjectRect(x,y,w,h);
         updatePath();
     }
-    else if (rubberMode == OBJ_RUBBER_GRIP)
-    {
-        if (painter)
-        {
+    else if (rubberMode == OBJ_RUBBER_GRIP) {
+        if (painter) {
             //TODO: Make this work with rotation & scaling
             /*
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
@@ -292,10 +293,18 @@ QList<QPointF> RectObject::allGripPoints()
 void RectObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     QPointF delta = after-before;
-    if     (before == objectTopLeft())     { setObjectRect(after.x(), after.y(), objectWidth()-delta.x(), objectHeight()-delta.y()); }
-    else if (before == objectTopRight())    { setObjectRect(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y()); }
-    else if (before == objectBottomLeft())  { setObjectRect(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y()); }
-    else if (before == objectBottomRight()) { setObjectRect(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()); }
+    if (before == objectTopLeft()) {
+        setObjectRect(after.x(), after.y(), objectWidth()-delta.x(), objectHeight()-delta.y());
+    }
+    else if (before == objectTopRight()) {
+        setObjectRect(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y());
+    }
+    else if (before == objectBottomLeft()) {
+        setObjectRect(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y());
+    }
+    else if (before == objectBottomRight()) {
+        setObjectRect(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y());
+    }
 }
 
 /**

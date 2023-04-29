@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['dictionary_0',['Dictionary',['../embroidermodder_8h.html#a65f6a13c9f5a038f42c86bdd5bb2410f',1,'embroidermodder.h']]]
+  ['compress_0',['compress',['../embroidery__internal_8h.html#a0a1ded23c1c333067bcfb59d5b83ce2a',1,'embroidery_internal.h']]]
 ];

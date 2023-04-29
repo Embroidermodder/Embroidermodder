@@ -7,6 +7,7 @@ var hierarchy =
     [ "_bcf_file_fat", "struct__bcf__file__fat.html", null ],
     [ "_bcf_file_header", "struct__bcf__file__header.html", null ],
     [ "_vp3Hoop", "struct__vp3_hoop.html", null ],
+    [ "Action__", "struct_action____.html", null ],
     [ "Compress", "struct_compress.html", null ],
     [ "EmbAlignedDim_", "struct_emb_aligned_dim__.html", null ],
     [ "EmbAngularDim_", "struct_emb_angular_dim__.html", null ],
@@ -46,6 +47,7 @@ var hierarchy =
     [ "hoop_padding", "structhoop__padding.html", null ],
     [ "Huffman", "struct_huffman.html", null ],
     [ "LSYSTEM", "struct_l_s_y_s_t_e_m.html", null ],
+    [ "Parameter_", "struct_parameter__.html", null ],
     [ "QApplication", null, [
       [ "Application", "class_application.html", null ]
     ] ],

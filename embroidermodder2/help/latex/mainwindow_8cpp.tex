@@ -1,44 +1,146 @@
 \hypertarget{mainwindow_8cpp}{}\doxysubsection{embroidermodder2/mainwindow.cpp File Reference}
 \label{mainwindow_8cpp}\index{embroidermodder2/mainwindow.cpp@{embroidermodder2/mainwindow.cpp}}
 {\ttfamily \#include \char`\"{}embroidermodder.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$cerrno$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
 {\ttfamily \#include $<$fstream$>$}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_parameter__}{Parameter\+\_\+}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \mbox{\hyperlink{struct_parameter__}{Parameter\+\_\+}} \mbox{\hyperlink{mainwindow_8cpp_ac47ac57f7125db3d44451410e0ffc792}{Parameter}}
+\end{DoxyCompactItemize}
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
+void \mbox{\hyperlink{mainwindow_8cpp_ae3f080af9ed5a4d74da64730178ad366}{c\+\_\+split}} (char input\mbox{[}200\mbox{]}, int $\ast$argc, char argv\mbox{[}10\mbox{]}\mbox{[}200\mbox{]})
+\item 
+void \mbox{\hyperlink{mainwindow_8cpp_a6ba40f28df8964130a55aac5472ea6d8}{simplify\+\_\+path}} (char $\ast$path)
+\begin{DoxyCompactList}\small\item\em Simplifies a path by removing the .. and . symbols in place. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{mainwindow_8cpp_a6fcdc8ef9d8e516770d265c3c6f6e3c8}{read\+\_\+settings}} (const char $\ast$settings\+\_\+file)
+\begin{DoxyCompactList}\small\item\em Read the settings from file which aren\textquotesingle{}t editable by the user. These files need to be placed in the install folder. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{mainwindow_8cpp_a676090199811da7c58ccc15c8e25c308}{valid\+RGB}} (int r, int g, int b)
+\item 
 \mbox{\hyperlink{class_main_window}{Main\+Window}} $\ast$ \mbox{\hyperlink{mainwindow_8cpp_a0f36a84e7a582fc0c4da7b9f6bc47119}{main\+Win}} ()
 \begin{DoxyCompactList}\small\item\em main\+Win \end{DoxyCompactList}\item 
-std\+::string \mbox{\hyperlink{mainwindow_8cpp_a8e862f61400289055e079d4ef22e9b3f}{Error}} (std\+::vector$<$ std\+::string $>$ args)
+std\+::string \mbox{\hyperlink{mainwindow_8cpp_a7b26863eb2da044012b709a1b3690e71}{convert\+\_\+args\+\_\+to\+\_\+type}} (std\+::string label, std\+::vector$<$ std\+::string $>$ args, const char $\ast$args\+\_\+template, \mbox{\hyperlink{mainwindow_8cpp_ac47ac57f7125db3d44451410e0ffc792}{Parameter}} result\mbox{[}10\mbox{]})
+\begin{DoxyCompactList}\small\item\em Inspired by Py\+Arg\+\_\+\+Parse\+Tuple\+And\+Keywords allowing a uniform argument parsing framework. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{mainwindow_8cpp_aa85a24e4a0638cd7dfa8871c8bb1d6e1}{Error}} (\mbox{\hyperlink{mainwindow_8cpp_ac47ac57f7125db3d44451410e0ffc792}{Parameter}} args\mbox{[}10\mbox{]})
 \item 
-std\+::string \mbox{\hyperlink{mainwindow_8cpp_aed33f9e9aa46dca7820a82db05c8c2b7}{Todo}} (std\+::vector$<$ std\+::string $>$ args)
+std\+::string \mbox{\hyperlink{mainwindow_8cpp_afcef16acc9986cf155dc2554af26df9c}{Todo}} (\mbox{\hyperlink{mainwindow_8cpp_ac47ac57f7125db3d44451410e0ffc792}{Parameter}} result\mbox{[}10\mbox{]})
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
+static const int \mbox{\hyperlink{mainwindow_8cpp_ad69b70a9739e0cc3b6b544a2a8a2b6ac}{CIRCLE\+\_\+\+MODE\+\_\+1\+P\+\_\+\+RAD\+\_\+}} = 0
+\item 
+static const int \mbox{\hyperlink{mainwindow_8cpp_a42e3ad620063b5c1f11151f32fd7b4a8}{CIRCLE\+\_\+\+MODE\+\_\+1\+P\+\_\+\+DIA\+\_\+}} = 1
+\item 
+static const int \mbox{\hyperlink{mainwindow_8cpp_a6058e59bb5d7063d050f94dcaf69b20a}{CIRCLE\+\_\+\+MODE\+\_\+2\+P\+\_\+}} = 2
+\item 
+static const int \mbox{\hyperlink{mainwindow_8cpp_a44e74cc9644a4d9612bbdfc2baeda8a3}{CIRCLE\+\_\+\+MODE\+\_\+3\+P\+\_\+}} = 3
+\item 
+static const int \mbox{\hyperlink{mainwindow_8cpp_ac2b4c7f1e88135eb5004a2bb05d9a0f4}{CIRCLE\+\_\+\+MODE\+\_\+\+TTR\+\_\+}} = 4
+\item 
+static const int \mbox{\hyperlink{mainwindow_8cpp_a95ba7b98de34385fb2f2011371e19708}{DOLPHIN\+\_\+\+MODE\+\_\+\+NUM\+\_\+\+POINTS\+\_\+}} = 0
+\item 
+static const int \mbox{\hyperlink{mainwindow_8cpp_ab77f29566b75a5bab404429415e66155}{DOLPHIN\+\_\+\+MODE\+\_\+\+XSCALE\+\_\+}} = 1
+\item 
+static const int \mbox{\hyperlink{mainwindow_8cpp_a851363482cc21f92a9e0131eeb487c71}{DOLPHIN\+\_\+\+MODE\+\_\+\+YSCALE\+\_\+}} = 2
+\item 
+static const int \mbox{\hyperlink{mainwindow_8cpp_aec45d57aad40c44fcf10769a6d9f091f}{SINGLE\+\_\+\+LINE\+\_\+\+TEXT\+\_\+\+MODE\+\_\+\+JUSTIFY\+\_\+}} = 0
+\item 
+static const int \mbox{\hyperlink{mainwindow_8cpp_ab6b17704101e3fc80fc995f2005930cc}{SINGLE\+\_\+\+LINE\+\_\+\+TEXT\+\_\+\+MODE\+\_\+\+SETFONT\+\_\+}} = 1
+\item 
+static const int \mbox{\hyperlink{mainwindow_8cpp_a6060f7e1578c0f77a35c0267285ca05b}{SINGLE\+\_\+\+LINE\+\_\+\+TEXT\+\_\+\+MODE\+\_\+\+SETGEOM\+\_\+}} = 2
+\item 
+static const int \mbox{\hyperlink{mainwindow_8cpp_aa111f94c2a33e1fb749323d05639f896}{SINGLE\+\_\+\+LINE\+\_\+\+TEXT\+\_\+\+MODE\+\_\+\+RAPID\+\_\+}} = 3
+\item 
+static const int \mbox{\hyperlink{mainwindow_8cpp_ad6db4bd3598a6bdcc4681e928e74a486}{STAR\+\_\+\+MODE\+\_\+\+NUM\+\_\+\+POINTS\+\_\+}} = 0
+\item 
+static const int \mbox{\hyperlink{mainwindow_8cpp_a79178186f78df6e2d94e81a6457af526}{STAR\+\_\+\+MODE\+\_\+\+CENTER\+\_\+\+PT\+\_\+}} = 1
+\item 
+static const int \mbox{\hyperlink{mainwindow_8cpp_a785d17f359ec479582f2406f9b99f0f4}{STAR\+\_\+\+MODE\+\_\+\+RAD\+\_\+\+OUTER\+\_\+}} = 2
+\item 
+static const int \mbox{\hyperlink{mainwindow_8cpp_a69d5b706d2ad7825d9db0e4523563997}{STAR\+\_\+\+MODE\+\_\+\+RAD\+\_\+\+INNER\+\_\+}} = 3
+\item 
 \mbox{\hyperlink{class_main_window}{Main\+Window}} $\ast$ \mbox{\hyperlink{mainwindow_8cpp_a13c21041ff7e5b6de6cedd66bd347f52}{\+\_\+main\+Win}} = 0
+\item 
+std\+::vector$<$ \mbox{\hyperlink{embroidermodder_8h_aff6f4ac1e39a61ea59b275d373a14db1}{Action}} $>$ \mbox{\hyperlink{mainwindow_8cpp_a54518bd972055aee6bd70b6cd1e1a452}{action\+\_\+table}}
+\item 
+QString\+List \mbox{\hyperlink{mainwindow_8cpp_a65ef28a90fbc8aa7123bad86ad4171f2}{action\+\_\+labels}}
+\item 
+\mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} \mbox{\hyperlink{mainwindow_8cpp_a19276c778f3034b94881cf1f8614dbb2}{settings}}
+\item 
+\mbox{\hyperlink{embroidermodder_8h_a59b98c3061d780d55cc048bcce8b47d0}{Index}} $\ast$ \mbox{\hyperlink{mainwindow_8cpp_a249fb28889d6d477f958c07135703999}{menu\+\_\+layout}}
+\item 
+\mbox{\hyperlink{embroidermodder_8h_a59b98c3061d780d55cc048bcce8b47d0}{Index}} $\ast$ \mbox{\hyperlink{mainwindow_8cpp_a45f3c24488cf835c1a2273f73f23d192}{toolbar\+\_\+layout}}
+\item 
+\mbox{\hyperlink{embroidermodder_8h_aa5d35c075d47a1a4196817dd4cac166f}{Emb\+View}} \mbox{\hyperlink{mainwindow_8cpp_ada4ed7c67c6b8fd122b08b3b1f0ddf36}{views}} \mbox{[}50\mbox{]}
+\item 
+int \mbox{\hyperlink{mainwindow_8cpp_a13436802d05b83f14d262a678d87ff5f}{n\+\_\+views}} = 0
+\item 
+\mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} \mbox{\hyperlink{mainwindow_8cpp_a1c6510838c31a5cc8eeadcdfceda753e}{dialog}}
+\item 
+\mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} \mbox{\hyperlink{mainwindow_8cpp_aed18c7e89ec05d27fb61a14029f748f4}{preview}}
+\item 
+\mbox{\hyperlink{embroidermodder_8h_a65f6a13c9f5a038f42c86bdd5bb2410f}{Dictionary}} $\ast$ \mbox{\hyperlink{mainwindow_8cpp_a1fd87cd97dc9a686025693c4145fe352}{translation\+\_\+table}}
+\item 
+\mbox{\hyperlink{embroidermodder_8h_aa5d35c075d47a1a4196817dd4cac166f}{Emb\+View}} $\ast$ \mbox{\hyperlink{mainwindow_8cpp_ab02931290454a2e1456d354fd9bc734d}{active\+\_\+view}} = NULL
 \end{DoxyCompactItemize}
 
 
-\doxysubsubsection{Detailed Description}
-Embroidermodder 2.
-
-\DoxyHorRuler{0}
-
-
-Copyright 2013-\/2022 The Embroidermodder Team Embroidermodder 2 is Open Source Software. See LICENSE for licensing terms.
-
-\DoxyHorRuler{0}
+\doxysubsubsection{Typedef Documentation}
+\mbox{\Hypertarget{mainwindow_8cpp_ac47ac57f7125db3d44451410e0ffc792}\label{mainwindow_8cpp_ac47ac57f7125db3d44451410e0ffc792}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!Parameter@{Parameter}}
+\index{Parameter@{Parameter}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{Parameter}{Parameter}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{struct_parameter__}{Parameter\+\_\+}} \mbox{\hyperlink{mainwindow_8cpp_ac47ac57f7125db3d44451410e0ffc792}{Parameter}}}
 
 
-Use Python\textquotesingle{}s PEP7 style guide. \href{https://peps.python.org/pep-0007/}{\texttt{ https\+://peps.\+python.\+org/pep-\/0007/}} 
 
 \doxysubsubsection{Function Documentation}
-\mbox{\Hypertarget{mainwindow_8cpp_a8e862f61400289055e079d4ef22e9b3f}\label{mainwindow_8cpp_a8e862f61400289055e079d4ef22e9b3f}} 
+\mbox{\Hypertarget{mainwindow_8cpp_ae3f080af9ed5a4d74da64730178ad366}\label{mainwindow_8cpp_ae3f080af9ed5a4d74da64730178ad366}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!c\_split@{c\_split}}
+\index{c\_split@{c\_split}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{c\_split()}{c\_split()}}
+{\footnotesize\ttfamily void c\+\_\+split (\begin{DoxyParamCaption}\item[{char}]{input\mbox{[}200\mbox{]},  }\item[{int $\ast$}]{argc,  }\item[{char}]{argv\mbox{[}10\mbox{]}\mbox{[}200\mbox{]} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{mainwindow_8cpp_a7b26863eb2da044012b709a1b3690e71}\label{mainwindow_8cpp_a7b26863eb2da044012b709a1b3690e71}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!convert\_args\_to\_type@{convert\_args\_to\_type}}
+\index{convert\_args\_to\_type@{convert\_args\_to\_type}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{convert\_args\_to\_type()}{convert\_args\_to\_type()}}
+{\footnotesize\ttfamily std\+::string convert\+\_\+args\+\_\+to\+\_\+type (\begin{DoxyParamCaption}\item[{std\+::string}]{label,  }\item[{std\+::vector$<$ std\+::string $>$}]{args,  }\item[{const char $\ast$}]{args\+\_\+template,  }\item[{\mbox{\hyperlink{mainwindow_8cpp_ac47ac57f7125db3d44451410e0ffc792}{Parameter}}}]{result\mbox{[}10\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Inspired by Py\+Arg\+\_\+\+Parse\+Tuple\+And\+Keywords allowing a uniform argument parsing framework. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em label} & The caller\textquotesingle{}s name. \\
+\hline
+{\em args} & The list of strings passed from the user. \\
+\hline
+{\em args\+\_\+template} & The string of characters describing the types of the output. \\
+\hline
+{\em result} & The fixed length array of results. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An error message if an error occured or an empty string if it passes. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{mainwindow_8cpp_aa85a24e4a0638cd7dfa8871c8bb1d6e1}\label{mainwindow_8cpp_aa85a24e4a0638cd7dfa8871c8bb1d6e1}} 
 \index{mainwindow.cpp@{mainwindow.cpp}!Error@{Error}}
 \index{Error@{Error}!mainwindow.cpp@{mainwindow.cpp}}
 \doxyparagraph{\texorpdfstring{Error()}{Error()}}
-{\footnotesize\ttfamily std\+::string Error (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::string $>$}]{args }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily std\+::string Error (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{mainwindow_8cpp_ac47ac57f7125db3d44451410e0ffc792}{Parameter}}}]{args\mbox{[}10\mbox{]} }\end{DoxyParamCaption})}
 
-\char`\"{}debug\char`\"{}\+: q\+Debug(\char`\"{}\%s\char`\"{}, q\+Printable(args(0).to\+String())); \mbox{\Hypertarget{mainwindow_8cpp_a0f36a84e7a582fc0c4da7b9f6bc47119}\label{mainwindow_8cpp_a0f36a84e7a582fc0c4da7b9f6bc47119}} 
+\char`\"{}debug\char`\"{}\+: q\+Debug(\char`\"{}\%s\char`\"{}, q\+Printable(result\mbox{[}0\mbox{]}.s\+\_\+value)); \mbox{\Hypertarget{mainwindow_8cpp_a0f36a84e7a582fc0c4da7b9f6bc47119}\label{mainwindow_8cpp_a0f36a84e7a582fc0c4da7b9f6bc47119}} 
 \index{mainwindow.cpp@{mainwindow.cpp}!mainWin@{mainWin}}
 \index{mainWin@{mainWin}!mainwindow.cpp@{mainwindow.cpp}}
 \doxyparagraph{\texorpdfstring{mainWin()}{mainWin()}}
@@ -51,11 +153,41 @@ main\+Win
 \begin{DoxyReturn}{Returns}
 
 \end{DoxyReturn}
-\mbox{\Hypertarget{mainwindow_8cpp_aed33f9e9aa46dca7820a82db05c8c2b7}\label{mainwindow_8cpp_aed33f9e9aa46dca7820a82db05c8c2b7}} 
+\mbox{\Hypertarget{mainwindow_8cpp_a6fcdc8ef9d8e516770d265c3c6f6e3c8}\label{mainwindow_8cpp_a6fcdc8ef9d8e516770d265c3c6f6e3c8}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!read\_settings@{read\_settings}}
+\index{read\_settings@{read\_settings}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{read\_settings()}{read\_settings()}}
+{\footnotesize\ttfamily int read\+\_\+settings (\begin{DoxyParamCaption}\item[{const char $\ast$}]{settings\+\_\+file }\end{DoxyParamCaption})}
+
+
+
+Read the settings from file which aren\textquotesingle{}t editable by the user. These files need to be placed in the install folder. 
+
+\mbox{\Hypertarget{mainwindow_8cpp_a6ba40f28df8964130a55aac5472ea6d8}\label{mainwindow_8cpp_a6ba40f28df8964130a55aac5472ea6d8}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!simplify\_path@{simplify\_path}}
+\index{simplify\_path@{simplify\_path}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{simplify\_path()}{simplify\_path()}}
+{\footnotesize\ttfamily void simplify\+\_\+path (\begin{DoxyParamCaption}\item[{char $\ast$}]{path }\end{DoxyParamCaption})}
+
+
+
+Simplifies a path by removing the .. and . symbols in place. 
+
+{\itshape path} The character array to operate on. \mbox{\Hypertarget{mainwindow_8cpp_afcef16acc9986cf155dc2554af26df9c}\label{mainwindow_8cpp_afcef16acc9986cf155dc2554af26df9c}} 
 \index{mainwindow.cpp@{mainwindow.cpp}!Todo@{Todo}}
 \index{Todo@{Todo}!mainwindow.cpp@{mainwindow.cpp}}
 \doxyparagraph{\texorpdfstring{Todo()}{Todo()}}
-{\footnotesize\ttfamily std\+::string Todo (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::string $>$}]{args }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily std\+::string Todo (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{mainwindow_8cpp_ac47ac57f7125db3d44451410e0ffc792}{Parameter}}}]{result\mbox{[}10\mbox{]} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{mainwindow_8cpp_a676090199811da7c58ccc15c8e25c308}\label{mainwindow_8cpp_a676090199811da7c58ccc15c8e25c308}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!validRGB@{validRGB}}
+\index{validRGB@{validRGB}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{validRGB()}{validRGB()}}
+{\footnotesize\ttfamily bool valid\+RGB (\begin{DoxyParamCaption}\item[{int}]{r,  }\item[{int}]{g,  }\item[{int}]{b }\end{DoxyParamCaption})}
+
+
+
+
 
 
 
@@ -65,4 +197,166 @@ main\+Win
 \index{\_mainWin@{\_mainWin}!mainwindow.cpp@{mainwindow.cpp}}
 \doxyparagraph{\texorpdfstring{\_mainWin}{\_mainWin}}
 {\footnotesize\ttfamily \mbox{\hyperlink{class_main_window}{Main\+Window}}$\ast$ \+\_\+main\+Win = 0}
+
+\mbox{\Hypertarget{mainwindow_8cpp_a65ef28a90fbc8aa7123bad86ad4171f2}\label{mainwindow_8cpp_a65ef28a90fbc8aa7123bad86ad4171f2}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!action\_labels@{action\_labels}}
+\index{action\_labels@{action\_labels}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{action\_labels}{action\_labels}}
+{\footnotesize\ttfamily QString\+List action\+\_\+labels}
+
+\mbox{\Hypertarget{mainwindow_8cpp_a54518bd972055aee6bd70b6cd1e1a452}\label{mainwindow_8cpp_a54518bd972055aee6bd70b6cd1e1a452}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!action\_table@{action\_table}}
+\index{action\_table@{action\_table}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{action\_table}{action\_table}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{embroidermodder_8h_aff6f4ac1e39a61ea59b275d373a14db1}{Action}}$>$ action\+\_\+table}
+
+\mbox{\Hypertarget{mainwindow_8cpp_ab02931290454a2e1456d354fd9bc734d}\label{mainwindow_8cpp_ab02931290454a2e1456d354fd9bc734d}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!active\_view@{active\_view}}
+\index{active\_view@{active\_view}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{active\_view}{active\_view}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_aa5d35c075d47a1a4196817dd4cac166f}{Emb\+View}}$\ast$ active\+\_\+view = NULL}
+
+The view focussed (that is the last view to have a click or keypress sent)\+: this has to be manually set whenever it changes including being set to NULL when all views are closed. \mbox{\Hypertarget{mainwindow_8cpp_a42e3ad620063b5c1f11151f32fd7b4a8}\label{mainwindow_8cpp_a42e3ad620063b5c1f11151f32fd7b4a8}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!CIRCLE\_MODE\_1P\_DIA\_@{CIRCLE\_MODE\_1P\_DIA\_}}
+\index{CIRCLE\_MODE\_1P\_DIA\_@{CIRCLE\_MODE\_1P\_DIA\_}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{CIRCLE\_MODE\_1P\_DIA\_}{CIRCLE\_MODE\_1P\_DIA\_}}
+{\footnotesize\ttfamily const int CIRCLE\+\_\+\+MODE\+\_\+1\+P\+\_\+\+DIA\+\_\+ = 1\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{mainwindow_8cpp_ad69b70a9739e0cc3b6b544a2a8a2b6ac}\label{mainwindow_8cpp_ad69b70a9739e0cc3b6b544a2a8a2b6ac}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!CIRCLE\_MODE\_1P\_RAD\_@{CIRCLE\_MODE\_1P\_RAD\_}}
+\index{CIRCLE\_MODE\_1P\_RAD\_@{CIRCLE\_MODE\_1P\_RAD\_}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{CIRCLE\_MODE\_1P\_RAD\_}{CIRCLE\_MODE\_1P\_RAD\_}}
+{\footnotesize\ttfamily const int CIRCLE\+\_\+\+MODE\+\_\+1\+P\+\_\+\+RAD\+\_\+ = 0\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{mainwindow_8cpp_a6058e59bb5d7063d050f94dcaf69b20a}\label{mainwindow_8cpp_a6058e59bb5d7063d050f94dcaf69b20a}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!CIRCLE\_MODE\_2P\_@{CIRCLE\_MODE\_2P\_}}
+\index{CIRCLE\_MODE\_2P\_@{CIRCLE\_MODE\_2P\_}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{CIRCLE\_MODE\_2P\_}{CIRCLE\_MODE\_2P\_}}
+{\footnotesize\ttfamily const int CIRCLE\+\_\+\+MODE\+\_\+2\+P\+\_\+ = 2\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{mainwindow_8cpp_a44e74cc9644a4d9612bbdfc2baeda8a3}\label{mainwindow_8cpp_a44e74cc9644a4d9612bbdfc2baeda8a3}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!CIRCLE\_MODE\_3P\_@{CIRCLE\_MODE\_3P\_}}
+\index{CIRCLE\_MODE\_3P\_@{CIRCLE\_MODE\_3P\_}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{CIRCLE\_MODE\_3P\_}{CIRCLE\_MODE\_3P\_}}
+{\footnotesize\ttfamily const int CIRCLE\+\_\+\+MODE\+\_\+3\+P\+\_\+ = 3\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{mainwindow_8cpp_ac2b4c7f1e88135eb5004a2bb05d9a0f4}\label{mainwindow_8cpp_ac2b4c7f1e88135eb5004a2bb05d9a0f4}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!CIRCLE\_MODE\_TTR\_@{CIRCLE\_MODE\_TTR\_}}
+\index{CIRCLE\_MODE\_TTR\_@{CIRCLE\_MODE\_TTR\_}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{CIRCLE\_MODE\_TTR\_}{CIRCLE\_MODE\_TTR\_}}
+{\footnotesize\ttfamily const int CIRCLE\+\_\+\+MODE\+\_\+\+TTR\+\_\+ = 4\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{mainwindow_8cpp_a1c6510838c31a5cc8eeadcdfceda753e}\label{mainwindow_8cpp_a1c6510838c31a5cc8eeadcdfceda753e}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!dialog@{dialog}}
+\index{dialog@{dialog}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{dialog}{dialog}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} dialog}
+
+These copies of the settings struct are for restoring the state if the user doesn\textquotesingle{}t want to accept their changes in the settings dialog. \mbox{\Hypertarget{mainwindow_8cpp_a95ba7b98de34385fb2f2011371e19708}\label{mainwindow_8cpp_a95ba7b98de34385fb2f2011371e19708}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!DOLPHIN\_MODE\_NUM\_POINTS\_@{DOLPHIN\_MODE\_NUM\_POINTS\_}}
+\index{DOLPHIN\_MODE\_NUM\_POINTS\_@{DOLPHIN\_MODE\_NUM\_POINTS\_}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{DOLPHIN\_MODE\_NUM\_POINTS\_}{DOLPHIN\_MODE\_NUM\_POINTS\_}}
+{\footnotesize\ttfamily const int DOLPHIN\+\_\+\+MODE\+\_\+\+NUM\+\_\+\+POINTS\+\_\+ = 0\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{mainwindow_8cpp_ab77f29566b75a5bab404429415e66155}\label{mainwindow_8cpp_ab77f29566b75a5bab404429415e66155}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!DOLPHIN\_MODE\_XSCALE\_@{DOLPHIN\_MODE\_XSCALE\_}}
+\index{DOLPHIN\_MODE\_XSCALE\_@{DOLPHIN\_MODE\_XSCALE\_}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{DOLPHIN\_MODE\_XSCALE\_}{DOLPHIN\_MODE\_XSCALE\_}}
+{\footnotesize\ttfamily const int DOLPHIN\+\_\+\+MODE\+\_\+\+XSCALE\+\_\+ = 1\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{mainwindow_8cpp_a851363482cc21f92a9e0131eeb487c71}\label{mainwindow_8cpp_a851363482cc21f92a9e0131eeb487c71}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!DOLPHIN\_MODE\_YSCALE\_@{DOLPHIN\_MODE\_YSCALE\_}}
+\index{DOLPHIN\_MODE\_YSCALE\_@{DOLPHIN\_MODE\_YSCALE\_}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{DOLPHIN\_MODE\_YSCALE\_}{DOLPHIN\_MODE\_YSCALE\_}}
+{\footnotesize\ttfamily const int DOLPHIN\+\_\+\+MODE\+\_\+\+YSCALE\+\_\+ = 2\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{mainwindow_8cpp_a249fb28889d6d477f958c07135703999}\label{mainwindow_8cpp_a249fb28889d6d477f958c07135703999}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!menu\_layout@{menu\_layout}}
+\index{menu\_layout@{menu\_layout}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{menu\_layout}{menu\_layout}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a59b98c3061d780d55cc048bcce8b47d0}{Index}}$\ast$ menu\+\_\+layout}
+
+\mbox{\Hypertarget{mainwindow_8cpp_a13436802d05b83f14d262a678d87ff5f}\label{mainwindow_8cpp_a13436802d05b83f14d262a678d87ff5f}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!n\_views@{n\_views}}
+\index{n\_views@{n\_views}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{n\_views}{n\_views}}
+{\footnotesize\ttfamily int n\+\_\+views = 0}
+
+\mbox{\Hypertarget{mainwindow_8cpp_aed18c7e89ec05d27fb61a14029f748f4}\label{mainwindow_8cpp_aed18c7e89ec05d27fb61a14029f748f4}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!preview@{preview}}
+\index{preview@{preview}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{preview}{preview}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} preview}
+
+\mbox{\Hypertarget{mainwindow_8cpp_a19276c778f3034b94881cf1f8614dbb2}\label{mainwindow_8cpp_a19276c778f3034b94881cf1f8614dbb2}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!settings@{settings}}
+\index{settings@{settings}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{settings}{settings}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} settings}
+
+The actuator changes the program state via these global variables. \mbox{\Hypertarget{mainwindow_8cpp_aec45d57aad40c44fcf10769a6d9f091f}\label{mainwindow_8cpp_aec45d57aad40c44fcf10769a6d9f091f}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!SINGLE\_LINE\_TEXT\_MODE\_JUSTIFY\_@{SINGLE\_LINE\_TEXT\_MODE\_JUSTIFY\_}}
+\index{SINGLE\_LINE\_TEXT\_MODE\_JUSTIFY\_@{SINGLE\_LINE\_TEXT\_MODE\_JUSTIFY\_}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{SINGLE\_LINE\_TEXT\_MODE\_JUSTIFY\_}{SINGLE\_LINE\_TEXT\_MODE\_JUSTIFY\_}}
+{\footnotesize\ttfamily const int SINGLE\+\_\+\+LINE\+\_\+\+TEXT\+\_\+\+MODE\+\_\+\+JUSTIFY\+\_\+ = 0\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{mainwindow_8cpp_aa111f94c2a33e1fb749323d05639f896}\label{mainwindow_8cpp_aa111f94c2a33e1fb749323d05639f896}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!SINGLE\_LINE\_TEXT\_MODE\_RAPID\_@{SINGLE\_LINE\_TEXT\_MODE\_RAPID\_}}
+\index{SINGLE\_LINE\_TEXT\_MODE\_RAPID\_@{SINGLE\_LINE\_TEXT\_MODE\_RAPID\_}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{SINGLE\_LINE\_TEXT\_MODE\_RAPID\_}{SINGLE\_LINE\_TEXT\_MODE\_RAPID\_}}
+{\footnotesize\ttfamily const int SINGLE\+\_\+\+LINE\+\_\+\+TEXT\+\_\+\+MODE\+\_\+\+RAPID\+\_\+ = 3\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{mainwindow_8cpp_ab6b17704101e3fc80fc995f2005930cc}\label{mainwindow_8cpp_ab6b17704101e3fc80fc995f2005930cc}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!SINGLE\_LINE\_TEXT\_MODE\_SETFONT\_@{SINGLE\_LINE\_TEXT\_MODE\_SETFONT\_}}
+\index{SINGLE\_LINE\_TEXT\_MODE\_SETFONT\_@{SINGLE\_LINE\_TEXT\_MODE\_SETFONT\_}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{SINGLE\_LINE\_TEXT\_MODE\_SETFONT\_}{SINGLE\_LINE\_TEXT\_MODE\_SETFONT\_}}
+{\footnotesize\ttfamily const int SINGLE\+\_\+\+LINE\+\_\+\+TEXT\+\_\+\+MODE\+\_\+\+SETFONT\+\_\+ = 1\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{mainwindow_8cpp_a6060f7e1578c0f77a35c0267285ca05b}\label{mainwindow_8cpp_a6060f7e1578c0f77a35c0267285ca05b}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!SINGLE\_LINE\_TEXT\_MODE\_SETGEOM\_@{SINGLE\_LINE\_TEXT\_MODE\_SETGEOM\_}}
+\index{SINGLE\_LINE\_TEXT\_MODE\_SETGEOM\_@{SINGLE\_LINE\_TEXT\_MODE\_SETGEOM\_}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{SINGLE\_LINE\_TEXT\_MODE\_SETGEOM\_}{SINGLE\_LINE\_TEXT\_MODE\_SETGEOM\_}}
+{\footnotesize\ttfamily const int SINGLE\+\_\+\+LINE\+\_\+\+TEXT\+\_\+\+MODE\+\_\+\+SETGEOM\+\_\+ = 2\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{mainwindow_8cpp_a79178186f78df6e2d94e81a6457af526}\label{mainwindow_8cpp_a79178186f78df6e2d94e81a6457af526}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!STAR\_MODE\_CENTER\_PT\_@{STAR\_MODE\_CENTER\_PT\_}}
+\index{STAR\_MODE\_CENTER\_PT\_@{STAR\_MODE\_CENTER\_PT\_}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{STAR\_MODE\_CENTER\_PT\_}{STAR\_MODE\_CENTER\_PT\_}}
+{\footnotesize\ttfamily const int STAR\+\_\+\+MODE\+\_\+\+CENTER\+\_\+\+PT\+\_\+ = 1\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{mainwindow_8cpp_ad6db4bd3598a6bdcc4681e928e74a486}\label{mainwindow_8cpp_ad6db4bd3598a6bdcc4681e928e74a486}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!STAR\_MODE\_NUM\_POINTS\_@{STAR\_MODE\_NUM\_POINTS\_}}
+\index{STAR\_MODE\_NUM\_POINTS\_@{STAR\_MODE\_NUM\_POINTS\_}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{STAR\_MODE\_NUM\_POINTS\_}{STAR\_MODE\_NUM\_POINTS\_}}
+{\footnotesize\ttfamily const int STAR\+\_\+\+MODE\+\_\+\+NUM\+\_\+\+POINTS\+\_\+ = 0\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{mainwindow_8cpp_a69d5b706d2ad7825d9db0e4523563997}\label{mainwindow_8cpp_a69d5b706d2ad7825d9db0e4523563997}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!STAR\_MODE\_RAD\_INNER\_@{STAR\_MODE\_RAD\_INNER\_}}
+\index{STAR\_MODE\_RAD\_INNER\_@{STAR\_MODE\_RAD\_INNER\_}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{STAR\_MODE\_RAD\_INNER\_}{STAR\_MODE\_RAD\_INNER\_}}
+{\footnotesize\ttfamily const int STAR\+\_\+\+MODE\+\_\+\+RAD\+\_\+\+INNER\+\_\+ = 3\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{mainwindow_8cpp_a785d17f359ec479582f2406f9b99f0f4}\label{mainwindow_8cpp_a785d17f359ec479582f2406f9b99f0f4}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!STAR\_MODE\_RAD\_OUTER\_@{STAR\_MODE\_RAD\_OUTER\_}}
+\index{STAR\_MODE\_RAD\_OUTER\_@{STAR\_MODE\_RAD\_OUTER\_}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{STAR\_MODE\_RAD\_OUTER\_}{STAR\_MODE\_RAD\_OUTER\_}}
+{\footnotesize\ttfamily const int STAR\+\_\+\+MODE\+\_\+\+RAD\+\_\+\+OUTER\+\_\+ = 2\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{mainwindow_8cpp_a45f3c24488cf835c1a2273f73f23d192}\label{mainwindow_8cpp_a45f3c24488cf835c1a2273f73f23d192}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!toolbar\_layout@{toolbar\_layout}}
+\index{toolbar\_layout@{toolbar\_layout}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{toolbar\_layout}{toolbar\_layout}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a59b98c3061d780d55cc048bcce8b47d0}{Index}}$\ast$ toolbar\+\_\+layout}
+
+\mbox{\Hypertarget{mainwindow_8cpp_a1fd87cd97dc9a686025693c4145fe352}\label{mainwindow_8cpp_a1fd87cd97dc9a686025693c4145fe352}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!translation\_table@{translation\_table}}
+\index{translation\_table@{translation\_table}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{translation\_table}{translation\_table}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a65f6a13c9f5a038f42c86bdd5bb2410f}{Dictionary}}$\ast$ translation\+\_\+table}
+
+\mbox{\Hypertarget{mainwindow_8cpp_ada4ed7c67c6b8fd122b08b3b1f0ddf36}\label{mainwindow_8cpp_ada4ed7c67c6b8fd122b08b3b1f0ddf36}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!views@{views}}
+\index{views@{views}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{views}{views}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_aa5d35c075d47a1a4196817dd4cac166f}{Emb\+View}} views\mbox{[}50\mbox{]}}
 

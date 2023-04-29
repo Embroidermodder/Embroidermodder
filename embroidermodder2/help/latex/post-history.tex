@@ -1,0 +1,221 @@
+\textbackslash{}seciton open-\/collective Open Collective and New Plan (2021-\/12-\/19)
+
+Hi, welcome to our first update after switching to Open Collective.
+
+I hope that we can get people excited about open software and hardware for embroidery again. Clearly there was some real talent and effort from Jonathon, Mark and other contributors in making this happen. Hopefully, Josh and I can make these programs a standard fixture of garage workshops by making them easy to install, modify, build and distribute.
+
+I\textquotesingle{}ve sketched out a timetable for the development of Embroidermodder, I feel I should share it with everyone\+:
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape Date}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape Event}    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape Date}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape Event}    }\\\cline{1-2}
+\endhead
+{\itshape Dec 2021 -\/ Jan 2022}   &libembroidery 1.\+0 features, particularly the basic file format support and fills Bugfixing, Testing, QA for libembroidery    \\\cline{1-2}
+{\itshape 31st of Jan 2022}   &libembroidery 1.\+0 will be released, then updates will slow down and the Embroidermodder 2 development version will be fixed to the API of this version.    \\\cline{1-2}
+{\itshape Feb 2022}   &An overview of what has changed will be written up for the website as a news update Better documentation of libembroidery.    \\\cline{1-2}
+{\itshape Feb-\/\+April 2022}   &Finish the conversion to new GUI toolkit    \\\cline{1-2}
+{\itshape April-\/\+May 2022}   &Finish all the targets in the Design, or assign them to 2.\+1.    \\\cline{1-2}
+{\itshape May-\/\+June 2022}   &Stop pushing new features. Bugfixing, Testing, QA for Embroidermodder 2    \\\cline{1-2}
+{\itshape Summer Solstice (21st of June) 2022}   &Embroidermodder 2 is officially released. Distribute NSIS installer, debian package, fedora package, mac bundle and source archives    \\\cline{1-2}
+{\itshape July 2022}   &News and Documentation work for Embroidermodder 2   \\\cline{1-2}
+\end{longtabu}
+
+
+{\itshape Embroidermodder 2} is a zlib licensed software and we endevour to keep it free and well documented. Check out our \href{https://github.com/Embroidermodder/Embroidermodder}{\texttt{ main github page}} to see.
+
+Cheers,
+
+Robin\hypertarget{post-history_fast-forward}{}\doxysubsection{Fast Forward (2014-\/02-\/13)}\label{post-history_fast-forward}
+There have been some changes that happened over the past several months\+:
+
+The launch of the Kickstarter campaign was delayed but is still going to happen. Unless there are other unforeseen setbacks, the revised plan is to launch our campaign on March 17.
+
+We have started setup of a nightly build/continuous integration system using Travis-\/\+CI. This is important as it will allow quicker bug fixes and increased stability long term. Currently this is only available for 64-\/bit Linux builds but will eventually include OSX, Windows and Arduino.
+
+We have also improved the stability and improved the API of our backend library\+: libembroidery. The API is still changing but we now can produce standalone static and shared versions of libembroidery. Another notable change is that there are now experimental Delphi and Lazarus(\+Free\+Pascal) bindings in the works for libembroidery, contributed by \href{https://github.com/x2nie}{\texttt{ x2nie}}.
+
+Last but not least, I have a demonstration of our libembroidery code embedded on an Arduino. The video below simulates the stitching by drawing it to a 2.\+8\char`\"{} TFT display (v1) made by $<$a href=\char`\"{}\href{https://adafruit.com}{\texttt{ https\+://adafruit.\+com}}\char`\"{}$>$\+Adafruit$<$/a$>$. It\textquotesingle{}s really fast so I slowed it down for the video. \+Instead of drawing, we could change it to control motors and other hardware to create an open source embroidery machine. \+This is what the brain of an embroidery machine looks like and it just needs a heart and body. Enjoy the $<$a href=\char`\"{}\href{https://www.youtube.com/watch?v=KqiKfn4lxBk}{\texttt{ https\+://www.\+youtube.\+com/watch?v=\+Kqi\+Kfn4lx\+Bk}}\char`\"{}$>$video$<$/a$>$! $<$div class=\char`\"{}video\char`\"{}$>$$<$iframe src=\char`\"{}\href{https://www.youtube.com/embed/KqiKfn4lxBk}{\texttt{ https\+://www.\+youtube.\+com/embed/\+Kqi\+Kfn4lx\+Bk}}\char`\"{} frameborder=\char`\"{}0\char`\"{} allowfullscreen$>$$<$/iframe$>$$<$/div$>$  --\+Jonathan  $<$a href=\char`\"{}news0.\+html\+::demo\char`\"{} $>$\+Permanent link to this article$<$/a$>$  @section jan22news January 2022 Development Notes For Embroidermodder 2 (2022-\/01-\/31)  \+Hi backers,  since the last update development has been focused on mostly not user-\/facing aspects of the program. This is what we planned in the timetable, aiming to release the libembroidery library for the end of the month.  \+The idea being that if we can fix an API for libembroidery early, it will focus development into a program that remains more consistent by the height of the Summer.  \+Unfortunately, this was too ambitious. But we can discuss what has changed, and why a later date is better than focusing on hitting this milestone.  @subsection broad-\/development-\/goals Broad Development Goals  \+We want\+:   $\ast$ A small codebase.  $\ast$ A separation of code and data in procedural style.  $\ast$ A separation of basic library functions from GUI code.  $\ast$ A build system without non-\/standard dependencies (i.\+e. not including windows.\+h, X11, GL).  $\ast$ A software that runs without installation  $\ast$ A software that can keep records of its state that can be loaded on reboot  \+To meet these goals we are making a C/\+Free\+GLUT application\+:   $\ast$ Runs on more systems because it has less (and less high level) dependencies.  $\ast$ Requires less specialist knowledge from our potential new developers of Qt, C++ and the build system.  $\ast$ Compiles with less faff since the only dependencies are the graphics libraries of the host system (meeting broad development goal 4).  \+Other decisions made to meet these goals are detailed below.  @subsection new-\/settings-\/system The New Settings System  \+In the attempt to convert the mostly C++ codebase to C, we developed a basic system for storing the data of Embroidermodder (including all the icons) as a single JSON file weighing in at about 6\+Mb.  \+This allows the second broad development goal to be met.  @subsection reducing-\/reliance-\/on-\/qt5 Reducing Reliance on Qt5  \+The Free\+GLUT variant of the code (in gui.\+c) will eventually be the software.  \+The broad development goals should make that very complex change a sequence of smaller, less complex changes. For example\+: breaking apart highly object-\/oriented code that relies on high level Qt function calls into data and code and then seperating out the code parts into C and C++ functions.  @subsection color-\/palettes Color Palettes  \+Using a custom script we converted all the icons into xpm, then using another reduced their palettes down to 16 colors + transparency.  \+This hasn\textquotesingle{}t affected their appearance significantly, and makes making a global GUI palette feasible. With a global GUI palette we can make icon themes be a simple remap of the palette.  @subsection conclusion Conclusion  \+Overall, the software is easier to understand. But not easy enough for it to be worth committing to extensive documentation that will likely have to change. This also makes deciding on a API difficult.  \+Based on this, a short term aim can be writing more high level documentation like this update to clarify (even just to the team) why we made the decisions we have.  \+Cheers,  \+Robin Swift  \+The Embroidermodder Team  @section June 2022 Backer Update (2022-\/06-\/22)  \+Hi backers,  since it\textquotesingle{}s mainly me developing as a hobbyist at the moment successes are rare so I thought it would be good to share these with you.  @subsection working-\/fill-\/algorithm Working Fill Algorithms  \+I\textquotesingle{}ve managed to get two fills working from the command line using the commands\+:  @icode  \$ embroider -\/-\/fill input\+\_\+image.\+ppm 130 output.\+dst \$ embroider -\/-\/cross-\/stitch input\+\_\+image.\+ppm 130 output.\+dst @endicode  \+So given this version of the banner logo\+:  $<$img src=\char`\"{}images/logo.\+png\char`\"{} alt=\char`\"{}banner logo\char`\"{}/$>$  \+It is cross-\/stitched like this\+:  $<$img src=\char`\"{}images/crossstitch\+\_\+logo.\+png\char`\"{} alt=\char`\"{}banner logo\char`\"{}/$>$  \+There are major limitations, it requires an input that has depth 8 and is 1000x1000 pixels and it only takes in ppm format images. Your other format images could be converted to this format using\+:  @icode  \$ convert input.\+png -\/depth 8 -\/geometry 1000x1000 output.\+ppm @endicode  \+A command like this will be embedded into the software to allow more image types but it would require the user to install imagemagick first.  \+Here\textquotesingle{}s another example using the imagemagick wizard\+:  $<$img src=\char`\"{}images/wizard\+\_\+stitched.\+png\char`\"{} alt=\char`\"{}stitching applied to imagemagick wizard\char`\"{}/$>$  @subsection working-\/render-\/algorithm Working Render Algorithm  \+The renders shown above were also made by the program using the commands\+:  @icode  \$ embroider -\/-\/render input.\+dst output.\+ppm \$ convert output.\+ppm output.\+png @endicode  @subsection timetable Timetable  \+As for the timetable, obviously that was too ambitious given the lack of a large team and the slow growth of interest. A tentative timetable is on the README, but that\textquotesingle{}s uncertain as long as the major rewrite to C/\+SDL2 is underway, hopefully it\textquotesingle{}ll still be a 2.\+0 release this year.  \+I\textquotesingle{}ll try and share some more examples next month!  \+Cheers,  \+Robin  @subpage kickstarter-\/live Our Kickstarter Crowdfunding Campaign is LIVE!  (2014-\/03-\/17) \textbackslash{}author Jonathan and Josh  $<$a href=\char`\"{}\href{https://www.kickstarter.com/projects/redteam316/embroidermodder-2-for-windows-mac-linux-pi-and-ard}{\texttt{ https\+://www.\+kickstarter.\+com/projects/redteam316/embroidermodder-\/2-\/for-\/windows-\/mac-\/linux-\/pi-\/and-\/ard}}\char`\"{} $>$link$<$/a$>$ $<$img src=\char`\"{}images/kickstarter/embroidermodder-\/kickstarter-\/launch-\/1280x720.\+png\char`\"{} alt=\char`\"{}Embroidermodder 2 Kickstarter Campaign\char`\"{}/$>$  \+We have launched our crowdfunding campaign on Kickstarter! It will be running until Sunday, April 20th. The way Kickstarter operates is that we need to reach our funding goal to receive any funds. There are downloads available for Windows (32-\/bit), Linux (32 and 64-\/bit), Mac OS X (64-\/bit) and Raspberry Pi (\+Raspbian) on the Kickstarter page. There has been a ton of work done to get to this point and to ensure a timely and stable delivery, this campaign needs to succeed. We really want to shake up the embroidery world and we hope you agree. The link to our campaign is\+: $<$a href=\char`\"{}\href{https://www.kickstarter.com/projects/redteam316/embroidermodder-2-for-windows-mac-linux-pi-and-ard}{\texttt{ https\+://www.\+kickstarter.\+com/projects/redteam316/embroidermodder-\/2-\/for-\/windows-\/mac-\/linux-\/pi-\/and-\/ard}}\char`\"{} $>$https\+://www.\+kickstarter.\+com/projects/redteam316/embroidermodder-\/2-\/for-\/windows-\/mac-\/linux-\/pi-\/and-\/ard$<$/a$>$.  ... also check out our shamrockin\textquotesingle{} embroidery design created with Embroidermodder 2 using work-\/in-\/progress manual satin command!  \+Lucky you! $<$a href=\char`\"{}\href{https://github.com/Embroidermodder/Embroidermodder/raw/master/embroidermodder2/samples/shamrockin.dst}{\texttt{ https\+://github.\+com/\+Embroidermodder/\+Embroidermodder/raw/master/embroidermodder2/samples/shamrockin.\+dst}}\char`\"{} $>$\+Download Here.$<$/a$>$  $<$img src=\char`\"{}\href{https://github.com/Embroidermodder/Embroidermodder/raw/master/embroidermodder2/samples/shamrockin.dst}{\texttt{ https\+://github.\+com/\+Embroidermodder/\+Embroidermodder/raw/master/embroidermodder2/samples/shamrockin.\+dst}}\char`\"{} alt=\char`\"{}\href{https://github.com/Embroidermodder/Embroidermodder/raw/master/embroidermodder2/samples/shamrockin.dst}{\texttt{ https\+://github.\+com/\+Embroidermodder/\+Embroidermodder/raw/master/embroidermodder2/samples/shamrockin.\+dst}}\char`\"{}/$>$ $<$img src=\char`\"{}images/satin-\/shamrock.\+png\char`\"{} alt=\char`\"{}A Shamrockin Embroidery Design\char`\"{}/$>$  --\+Jonathan and Josh  $<$a href=\char`\"{}news0.\+html\+::kickstarter-\/launched\char`\"{} $>$\+Permanent link to this article$<$/a$>$  @subpage new-\/website New Website! (2013-\/09-\/09) \textbackslash{}author Jonathan  \+The Embroidermodder website now has a fresh new look. The content has been updated to reflect the upcoming version, Embroidermodder 2. \+Check out our $<$a href=\char`\"{}features.\+html\char`\"{}$>$features page$<$/a$>$ for a summary of what to expect with Embroidermodder 2.  \+The background is a tiled image of an actual design that was stitched out during the pre-\/alpha stage. \+It was created by Nina Paley and Theodore Gray using Mathematica in conjunction with our software. \+They have graciously allowed us to use it for the project in whichever way we wish. We thought it looked so good, that it has become the new theme for Embroidermodder 2. \+To check out some of the more interesting embroidery projects they are working on, $<$a href=\char`\"{}\href{http://blog.ninapaley.com/}{\texttt{ http\+://blog.\+ninapaley.\+com/}}\char`\"{} $>$look here$<$/a$>$.  \+The old website which was for Embroidermodder 1 has been preserved and can be found $<$a href=\char`\"{}\href{http://embroidermodder.sourceforge.net/embroidermodder1.html}{\texttt{ http\+://embroidermodder.\+sourceforge.\+net/embroidermodder1.\+html}}\char`\"{} $>$here$<$/a$>$ for anyone interested.  --\+Jonathan  $<$a href=\char`\"{}news0.\+html\+::new-\/website\char`\"{} $>$\+Permanent link to this article$<$/a$>$  @subpage crowdfunding-\/1 Crowdfunding Campaign Coming Soon! \textbackslash{}author Jonathan  $<$a href=\char`\"{}\href{http://www.kickstarter.com/projects/redteam316/369640335?token=57f7685e}{\texttt{ http\+://www.\+kickstarter.\+com/projects/redteam316/369640335?token=57f7685e}}\char`\"{} $>$link$<$/a$>$ $<$img src=\char`\"{}images/kickstarter/kickstarter-\/logo-\/dark.\+png\char`\"{} alt=\char`\"{}Kickstarter Logo\char`\"{}/$>$  \+There has been a considerable amount of development time put into Embroidermodder 2 over the past several months. \+To be able to keep up this momentum, there needs to be at least one full time developer working on it. \+We are planning on launching a Kickstarter campaign in early October if everything goes according to plan. \+We also plan to release an alpha version during this timeframe, so there are many good things on the horizon! \+Successful funding will have a major impact on how soon the final version will be released.  \+The preview link to our campaign is $<$a href=\char`\"{}\href{http://www.kickstarter.com/projects/redteam316/369640335?token=57f7685e}{\texttt{ http\+://www.\+kickstarter.\+com/projects/redteam316/369640335?token=57f7685e}}\char`\"{} $>$here$<$/a$>$, feel free to leave feedback and spread the word via Twitter, Facebook, email, or word of mouth. Keep an eye out, because it\textquotesingle{}s coming!  --\+Jonathan (2013-\/09-\/09)  @ref crowdfunding-\/1 \char`\"{}Permanent link to this article\char`\"{}  @section open-\/collective Open Collective and New Plan (2021-\/12-\/19)  \+Hi, welcome to our first update after switching to Open Collective.  \+I hope that we can get people excited about open software and hardware for embroidery again. Clearly there was some real talent and effort from Jonathon, Mark  and other contributors in making this happen. Hopefully, Josh and I can make these programs a standard fixture of garage workshops by making them easy to install, modify, build and distribute.  \+I\textquotesingle{}ve sketched out a timetable for the development of Embroidermodder, I feel I should share it with everyone\+:  $<$table class=\char`\"{}markdown\+Table\char`\"{}$>$   $<$tr class=\char`\"{}markdown\+Table\+Head\char`\"{}$>$    $<$th class=\char`\"{}markdown\+Table\+Head\+None"{}\texorpdfstring{$>$}{>} {\itshape Date}   
+
+{\itshape Event}    
+
+{\itshape Dec 2021 -\/ Jan 2022}   
+
+libembroidery 1.\+0 features, particularly the basic file format support and fills Bugfixing, Testing, QA for libembroidery    
+
+{\itshape 31st of Jan 2022}   
+
+libembroidery 1.\+0 will be released, then updates will slow down and the Embroidermodder 2 development version will be fixed to the API of this version.    
+
+{\itshape Feb 2022}   
+
+An overview of what has changed will be written up for the website as a news update Better documentation of libembroidery.    
+
+{\itshape Feb-\/\+April 2022}   
+
+Finish the conversion to new GUI toolkit    
+
+{\itshape April-\/\+May 2022}   
+
+Finish all the targets in the Design, or assign them to 2.\+1.    
+
+{\itshape May-\/\+June 2022}   
+
+Stop pushing new features. Bugfixing, Testing, QA for Embroidermodder 2    
+
+{\itshape Summer Solstice (21st of June) 2022}   
+
+Embroidermodder 2 is officially released. Distribute NSIS installer, debian package, fedora package, mac bundle and source archives    
+
+{\itshape July 2022}   
+
+News and Documentation work for Embroidermodder 2   
+
+{\itshape Embroidermodder 2} is a zlib licensed software and we endevour to keep it free and well documented. Check out our \href{https://github.com/Embroidermodder/Embroidermodder}{\texttt{ main github page}} to see.
+
+Cheers,
+
+Robin\hypertarget{post-history_jan22news}{}\doxysubsection{January 2022 Development Notes For Embroidermodder 2 (2022-\/01-\/31)}\label{post-history_jan22news}
+Hi backers,
+
+since the last update development has been focused on mostly not user-\/facing aspects of the program. This is what we planned in the timetable, aiming to release the libembroidery library for the end of the month.
+
+The idea being that if we can fix an API for libembroidery early, it will focus development into a program that remains more consistent by the height of the Summer.
+
+Unfortunately, this was too ambitious. But we can discuss what has changed, and why a later date is better than focusing on hitting this milestone.\hypertarget{post-history_broad-development-goals}{}\doxysubsubsection{Broad Development Goals}\label{post-history_broad-development-goals}
+We want\+:
+
+
+\begin{DoxyItemize}
+\item A small codebase.
+\item A separation of code and data in procedural style.
+\item A separation of basic library functions from GUI code.
+\item A build system without non-\/standard dependencies (i.\+e. not including windows.\+h, X11, GL).
+\item A software that runs without installation
+\item A software that can keep records of its state that can be loaded on reboot
+\end{DoxyItemize}
+
+To meet these goals we are making a C/\+Free\+GLUT application\+:
+
+
+\begin{DoxyItemize}
+\item Runs on more systems because it has less (and less high level) dependencies.
+\item Requires less specialist knowledge from our potential new developers of Qt, C++ and the build system.
+\item Compiles with less faff since the only dependencies are the graphics libraries of the host system (meeting broad development goal 4).
+\end{DoxyItemize}
+
+Other decisions made to meet these goals are detailed below.\hypertarget{post-history_the-new-settings-system}{}\doxysubsubsection{The New Settings System}\label{post-history_the-new-settings-system}
+In the attempt to convert the mostly C++ codebase to C, we developed a basic system for storing the data of Embroidermodder (including all the icons) as a single JSON file weighing in at about 6Mb.
+
+This allows the second broad development goal to be met.\hypertarget{post-history_reducing-reliance-on-qt5}{}\doxysubsubsection{Reducing Reliance on Qt5}\label{post-history_reducing-reliance-on-qt5}
+The Free\+GLUT variant of the code (in gui.\+c) will eventually be the software.
+
+The broad development goals should make that very complex change a sequence of smaller, less complex changes. For example\+: breaking apart highly object-\/oriented code that relies on high level Qt function calls into data and code and then seperating out the code parts into C and C++ functions.\hypertarget{post-history_Color}{}\doxysubsubsection{Palettes}\label{post-history_Color}
+Using a custom script we converted all the icons into xpm, then using another reduced their palettes down to 16 colors + transparency.
+
+This hasn\textquotesingle{}t affected their appearance significantly, and makes making a global GUI palette feasible. With a global GUI palette we can make icon themes be a simple remap of the palette.\hypertarget{post-history_Conclusion}{}\doxysubsubsection{Conclusion}\label{post-history_Conclusion}
+Overall, the software is easier to understand. But not easy enough for it to be worth committing to extensive documentation that will likely have to change. This also makes deciding on a API difficult.
+
+Based on this, a short term aim can be writing more high level documentation like this update to clarify (even just to the team) why we made the decisions we have.
+
+Cheers,
+
+Robin Swift
+
+The Embroidermodder Team\hypertarget{post-history_jun22news}{}\doxysubsection{June 2022 Backer Update (2022-\/06-\/22)}\label{post-history_jun22news}
+Hi backers,
+
+since it\textquotesingle{}s mainly me developing as a hobbyist at the moment successes are rare so I thought it would be good to share these with you.\hypertarget{post-history_Working}{}\doxysubsubsection{Fill Algorithms}\label{post-history_Working}
+I\textquotesingle{}ve managed to get two fills working from the command line using the commands\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\$\ embroider\ -\/-\/fill\ input\_image.ppm\ 130\ output.dst}
+\DoxyCodeLine{\$\ embroider\ -\/-\/cross-\/stitch\ input\_image.ppm\ 130\ output.dst}
+
+\end{DoxyCode}
+
+
+So given this version of the banner logo\+:
+
+
+
+It is cross-\/stitched like this\+:
+
+
+
+There are major limitations, it requires an input that has depth 8 and is 1000x1000 pixels and it only takes in ppm format images. Your other format images could be converted to this format using\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\$\ convert\ input.png\ -\/depth\ 8\ -\/geometry\ 1000x1000\ output.ppm}
+
+\end{DoxyCode}
+
+
+A command like this will be embedded into the software to allow more image types but it would require the user to install imagemagick first.
+
+Here\textquotesingle{}s another example using the imagemagick wizard\+:
+
+\hypertarget{post-history_working-render-algorithm}{}\doxysubsubsection{Working Render Algorithm}\label{post-history_working-render-algorithm}
+The renders shown above were also made by the program using the commands\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\$\ embroider\ -\/-\/render\ input.dst\ output.ppm}
+\DoxyCodeLine{\$\ convert\ output.ppm\ output.png}
+
+\end{DoxyCode}
+\hypertarget{post-history_timetable}{}\doxysubsubsection{Timetable}\label{post-history_timetable}
+As for the timetable, obviously that was too ambitious given the lack of a large team and the slow growth of interest. A tentative timetable is on the README, but that\textquotesingle{}s uncertain as long as the major rewrite to C/\+SDL2 is underway, hopefully it\textquotesingle{}ll still be a 2.\+0 release this year.
+
+I\textquotesingle{}ll try and share some more examples next month!
+
+Cheers,
+
+Robin\hypertarget{post-history_new-website}{}\doxysubsection{New Website! (2013-\/09-\/09)}\label{post-history_new-website}
+The Embroidermodder website now has a fresh new look. The content has been updated to reflect the upcoming version, Embroidermodder 2. Check out our \href{features.html}{\texttt{ features page}} for a summary of what to expect with Embroidermodder 2.
+
+The background is a tiled image of an actual design that was stitched out during the pre-\/alpha stage. It was created by Nina Paley and Theodore Gray using Mathematica in conjunction with our software. They have graciously allowed us to use it for the project in whichever way we wish. We thought it looked so good, that it has become the new theme for Embroidermodder 2. To check out some of the more interesting embroidery projects they are working on, \href{http://blog.ninapaley.com/}{\texttt{ look here}}.
+
+The old website which was for Embroidermodder 1 has been preserved and can be found \href{http://embroidermodder.sourceforge.net/embroidermodder1.html}{\texttt{ here}} for anyone interested.
+
+--Jonathan
+
+\href{news0.html\#new-website}{\texttt{ Permanent link to this article}}\hypertarget{post-history_kickstarter}{}\doxysubsection{Crowdfunding Campaign Coming Soon! (2013-\/09-\/09)}\label{post-history_kickstarter}
+ \href{http://www.kickstarter.com/projects/redteam316/369640335?token=57f7685e}{\texttt{ link}}
+
+There has been a considerable amount of development time put into Embroidermodder 2 over the past several months. To be able to keep up this momentum, there needs to be at least one full time developer working on it. We are planning on launching a Kickstarter campaign in early October if everything goes according to plan. We also plan to release an alpha version during this timeframe, so there are many good things on the horizon! Successful funding will have a major impact on how soon the final version will be released.
+
+The preview link to our campaign is \href{http://www.kickstarter.com/projects/redteam316/369640335?token=57f7685e}{\texttt{ here}}, feel free to leave feedback and spread the word via Twitter, Facebook, email, or word of mouth. Keep an eye out, because it\textquotesingle{}s coming!
+
+--Jonathan
+
+\href{news0.html\#kickstarter}{\texttt{ Permanent link to this article}}\hypertarget{post-history_kickstarter-launched}{}\doxysubsection{Our Kickstarter Crowdfunding Campaign is LIVE! (2014-\/03-\/17)}\label{post-history_kickstarter-launched}
+ \href{https://www.kickstarter.com/projects/redteam316/embroidermodder-2-for-windows-mac-linux-pi-and-ard}{\texttt{ link}}
+
+We have launched our crowdfunding campaign on Kickstarter! It will be running until Sunday, April 20th. The way Kickstarter operates is that we need to reach our funding goal to receive any funds. There are downloads available for Windows (32-\/bit), Linux (32 and 64-\/bit), Mac OS X (64-\/bit) and Raspberry Pi (Raspbian) on the Kickstarter page. There has been a ton of work done to get to this point and to ensure a timely and stable delivery, this campaign needs to succeed. We really want to shake up the embroidery world and we hope you agree. The link to our campaign is\+: \href{https://www.kickstarter.com/projects/redteam316/embroidermodder-2-for-windows-mac-linux-pi-and-ard}{\texttt{ https\+://www.\+kickstarter.\+com/projects/redteam316/embroidermodder-\/2-\/for-\/windows-\/mac-\/linux-\/pi-\/and-\/ard}}
+
+... also check out our shamrockin\textquotesingle{} embroidery design created with Embroidermodder 2 using work-\/in-\/progress manual satin command!
+
+Lucky you! \href{https://github.com/Embroidermodder/Embroidermodder/raw/master/embroidermodder2/samples/shamrockin.dst}{\texttt{ Download Here.}}
+
+\href{https://github.com/Embroidermodder/Embroidermodder/raw/master/embroidermodder2/samples/shamrockin.dst}{\texttt{ }}
+
+--Jonathan and Josh
+
+\href{news0.html\#kickstarter-launched}{\texttt{ Permanent link to this article}}\hypertarget{post-history_fast-forward}{}\doxysubsection{Fast Forward (2014-\/02-\/13)}\label{post-history_fast-forward}
+There have been some changes that happened over the past several months\+:
+
+The launch of the Kickstarter campaign was delayed but is still going to happen. Unless there are other unforeseen setbacks, the revised plan is to launch our campaign on March 17.
+
+We have started setup of a nightly build/continuous integration system using Travis-\/\+CI. This is important as it will allow quicker bug fixes and increased stability long term. Currently this is only available for 64-\/bit Linux builds but will eventually include OSX, Windows and Arduino.
+
+We have also improved the stability and improved the API of our backend library\+: libembroidery. The API is still changing but we now can produce standalone static and shared versions of libembroidery. Another notable change is that there are now experimental Delphi and Lazarus(\+Free\+Pascal) bindings in the works for libembroidery, contributed by \href{https://github.com/x2nie}{\texttt{ x2nie}}.
+
+Last but not least, I have a demonstration of our libembroidery code embedded on an Arduino. The video below simulates the stitching by drawing it to a 2.\+8\char`\"{} TFT display (v1) made by $<$a href=\char`\"{}\href{https://adafruit.com}{\texttt{ https\+://adafruit.\+com}}\char`\"{}$>$\+Adafruit$<$/a$>$. It\textquotesingle{}s really fast so I slowed it down for the video. \+Instead of drawing, we could change it to control motors and other hardware to create an open source embroidery machine. \+This is what the brain of an embroidery machine looks like and it just needs a heart and body. Enjoy the $<$a href=\char`\"{}\href{https://www.youtube.com/watch?v=KqiKfn4lxBk}{\texttt{ https\+://www.\+youtube.\+com/watch?v=\+Kqi\+Kfn4lx\+Bk}}\char`\"{}$>$video$<$/a$>$! $<$div class=\char`\"{}video\char`\"{}$>$$<$iframe src=\char`\"{}\href{https://www.youtube.com/embed/KqiKfn4lxBk}{\texttt{ https\+://www.\+youtube.\+com/embed/\+Kqi\+Kfn4lx\+Bk}}\char`\"{} frameborder=\char`\"{}0\char`\"{} allowfullscreen$>$$<$/iframe$>$$<$/div$>$  --\+Jonathan  $<$a href=\char`\"{}news0.\+html\+::fast-\/forward"{} \texorpdfstring{$>$}{>}Permanent link to this article. 
