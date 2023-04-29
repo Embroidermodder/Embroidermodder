@@ -1,9 +1,10 @@
 name: build
 
 on:
-  push:
-    branches:
-      - master
+  schedule:
+    - cron: '17 2 7 * *'
+
+  workflow_dispatch:
 
 jobs:
   build_windows:
