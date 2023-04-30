@@ -58,86 +58,19 @@ QStringList action_labels;
  */
 Settings settings;
 
-Index *menu_layout; /*< */
-Index *toolbar_layout;  /*< */
-EmbView views[50]; /*< */
-int n_views = 0; /*< */
-
 /**
  * These copies of the settings struct are for restoring the state if
  * the user doesn't want to accept their changes in the settings dialog.
  */
 Settings dialog, preview;
 
-Dictionary *translation_table;
-
-/**
- * The view focussed (that is the last view to have a click or keypress sent):
- * this has to be manually set whenever it changes including being set to NULL when
- * all views are closed.
- */
-EmbView *active_view = NULL;
-
-/**
- * .
- */
-void
-c_split(char input[200], int *argc, char argv[10][200])
+std::string
+read_string_setting(toml_table_t *table, const char *key)
 {
-    *argc = 0;
-    char buffer[200];
-    strcpy(buffer, input);
-    char *p = strtok(buffer, " ");
-    for (int i=0; i<10; i++) {
-        strcpy(argv[*argc], p);
-        (*argc)++;
-        p = strtok(NULL, " ");
-        if (p == NULL) {
-            break;
-        }
-    }
-}
-
-/**
- * @brief Simplifies a path by removing the .. and . symbols in place.
- *
- * \a path The character array to operate on.
- */
-void
-simplify_path(char *path)
-{
-    char storage[200];
-    strcpy(storage, path);
-    char *separator = "/";
-#if _WIN32
-    separator = "\\";
-#endif
-    char tokens_to_use[30][100];
-    int n_tokens = 0;
-    char *token = strtok(storage, separator);
-    while (token != NULL) {
-        if (!strcmp(token, "..")) {
-            n_tokens--;
-        }
-        if (strcmp(token, "..") && strcmp(token, ".") && strcmp(token, "")) {
-            strcpy(tokens_to_use[n_tokens], token);
-            n_tokens++;
-        }
-        token = strtok(NULL, separator);
-    }
-
-#if _WIN32
-    strcpy(path, "");
-#else
-    strcpy(path, "/");
-#endif
-
-    for (int i=0; i<n_tokens; i++) {
-        strcat(path, tokens_to_use[i]);
-        if (i < n_tokens-1) {
-            strcat(path, separator);
-        }
-    }
+    toml_datum_t str = toml_string_in(table, key);
+    std::string s(str.u.s);
+    free(str.u.s);
+    return s;
 }
 
 /**
@@ -148,20 +81,28 @@ int
 read_settings(const char *settings_file)
 {
     char error_buffer[200];
-    FILE *f;
-    f = fopen(settings_file, "r");
+    FILE *f = fopen(settings_file, "r");
     if (!f) {
         puts("ERROR: Failed to open settings file:");
         printf("%s", settings_file);
         return 0;
     }
-    toml_table_t *setting_toml = toml_parse_file(f, error_buffer, sizeof(error_buffer));
+    toml_table_t *settings_toml = toml_parse_file(f, error_buffer, sizeof(error_buffer));
     fclose(f);
 
-    if (!setting_toml) {
-        puts("ERROR: failed to parse settings.toml, continuing with defaults.");
+    if (!settings_toml) {
+        puts("ERROR: failed to parse config.ini, continuing with defaults.");
         return 0;
     }
+
+    std::string token;
+    std::string actions_ = read_string_setting(settings_toml, "actions");
+    std::stringstream input_stringstream(actions_);
+    while (std::getline(input_stringstream, token, ' ')) {
+        action_labels << QString::fromStdString(token);
+    }
+    
+    toml_free(settings_toml);
 
     return 1;
 }
@@ -196,9 +137,11 @@ MainWindow* mainWin()
  */
 MainWindow::MainWindow() : QMainWindow(0)
 {
+    QString appDir = qApp->applicationDirPath();
+    QString fname_ = appDir + "/config.ini";
+    read_settings(fname_.toStdString().c_str());
     readSettings();
 
-    QString appDir = qApp->applicationDirPath();
     //Verify that files/directories needed are actually present.
     QFileInfo check = QFileInfo(appDir + "/help");
     if (!check.exists())
@@ -423,9 +366,6 @@ MainWindow::createAllActions()
 
     QString appDir = qApp->applicationDirPath();
     QSettings settings(appDir + "/config.ini", QSettings::IniFormat);
-
-    QString str_list = settings.value("actions").toString();
-    action_labels = str_list.split(" ");
 
     for (int i=0; i<action_labels.size(); i++) {
         Action action;
