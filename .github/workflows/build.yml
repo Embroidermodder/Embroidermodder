@@ -2,7 +2,7 @@ name: build
 
 on:
   schedule:
-    - cron: '17 2 7 * *'
+    - cron: '17 2 * * *'
 
   workflow_dispatch:
 
@@ -54,33 +54,3 @@ jobs:
         name: GNU Linux Archive
         path: embroidermodder_2.0.0-alpha_linux.tar
 
-  daily:
-    name: Update latest release
-    runs-on: ubuntu-latest
-    needs: [build_windows, build_linux, build_macos]
-    steps:
-    - name: Get Windows MSI
-      uses: actions/download-artifact@v2
-      with:
-        name: Windows Installer
-
-    - name: Get MacOS Archive
-      uses: actions/download-artifact@v2
-      with:
-        name: MacOS Archive
-
-    - name: Get GNU Linux Archive
-      uses: actions/download-artifact@v2
-      with:
-        name: GNU Linux Archive
-
-    - name: daily
-      uses: "marvinpinto/action-automatic-releases@latest"
-      with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "latest"
-        prerelease: true
-        title: "Development Build"
-        files: |
-          *.tar
-          *.zip
