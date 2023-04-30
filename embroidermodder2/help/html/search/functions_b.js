@@ -12,9 +12,10 @@ var searchData=
   ['lineweightpen_9',['lineWeightPen',['../class_base_object.html#a7ac621b0affe3fbfc373d8dbc1ea0fd2',1,'BaseObject']]],
   ['lineweightselectorindexchanged_10',['lineweightSelectorIndexChanged',['../class_main_window.html#a91e6a3ba0189ac692be6257a4893a9d9',1,'MainWindow']]],
   ['load_11',['load',['../class_image_widget.html#a1faac0b745a9246fe8143620261f1bb0',1,'ImageWidget']]],
-  ['loadfatfromsector_12',['loadFatFromSector',['../embroidery__internal_8h.html#a71a5f4111bd3daa574148e2f45d4c893',1,'loadFatFromSector(bcf_file_fat *fat, FILE *file):&#160;main.c'],['../main_8c.html#a71a5f4111bd3daa574148e2f45d4c893',1,'loadFatFromSector(bcf_file_fat *fat, FILE *file):&#160;main.c']]],
-  ['loadfile_13',['loadFile',['../class_mdi_window.html#a8437f8fd71bcf6da5de2a49cbd0b105b',1,'MdiWindow']]],
-  ['loadformats_14',['loadFormats',['../class_main_window.html#a6aa1c7938d00887e99affda74e8d2f7e',1,'MainWindow']]],
-  ['loadrulersettings_15',['loadRulerSettings',['../class_view.html#a28eb960741d42e7cbe1b8c2b0f9bb213',1,'View']]],
-  ['logpromptinput_16',['logPromptInput',['../class_main_window.html#a296e76dd335d1cd0981a002e1342a2aa',1,'MainWindow::logPromptInput()'],['../class_mdi_window.html#a296e76dd335d1cd0981a002e1342a2aa',1,'MdiWindow::logPromptInput()']]]
+  ['loadcommand_12',['LoadCommand',['../class_main_window.html#a422a58c78736f14f646f7e633c42e8cf',1,'MainWindow']]],
+  ['loadfatfromsector_13',['loadFatFromSector',['../embroidery__internal_8h.html#a71a5f4111bd3daa574148e2f45d4c893',1,'loadFatFromSector(bcf_file_fat *fat, FILE *file):&#160;main.c'],['../main_8c.html#a71a5f4111bd3daa574148e2f45d4c893',1,'loadFatFromSector(bcf_file_fat *fat, FILE *file):&#160;main.c']]],
+  ['loadfile_14',['loadFile',['../class_mdi_window.html#a8437f8fd71bcf6da5de2a49cbd0b105b',1,'MdiWindow']]],
+  ['loadformats_15',['loadFormats',['../class_main_window.html#a6aa1c7938d00887e99affda74e8d2f7e',1,'MainWindow']]],
+  ['loadrulersettings_16',['loadRulerSettings',['../class_view.html#a28eb960741d42e7cbe1b8c2b0f9bb213',1,'View']]],
+  ['logpromptinput_17',['logPromptInput',['../class_main_window.html#a296e76dd335d1cd0981a002e1342a2aa',1,'MainWindow::logPromptInput()'],['../class_mdi_window.html#a296e76dd335d1cd0981a002e1342a2aa',1,'MdiWindow::logPromptInput()']]]
 ];

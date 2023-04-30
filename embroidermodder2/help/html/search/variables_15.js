@@ -6,6 +6,5 @@ var searchData=
   ['view_5ftoolbar_3',['view_toolbar',['../embroidermodder_8h.html#ab30a5c7efd315ac60982b02c20278efe',1,'view_toolbar():&#160;mainwindow-toolbars.cpp'],['../mainwindow-toolbars_8cpp.html#ab30a5c7efd315ac60982b02c20278efe',1,'view_toolbar():&#160;mainwindow-toolbars.cpp']]],
   ['viewmenu_4',['viewMenu',['../class_main_window.html#acc57acfba4d61ab23729d7dea1821414',1,'MainWindow']]],
   ['viewmousepoint_5',['viewMousePoint',['../class_view.html#a047299c034d3c740ce12e3b7c8945bff',1,'View']]],
-  ['views_6',['views',['../mainwindow_8cpp.html#ada4ed7c67c6b8fd122b08b3b1f0ddf36',1,'mainwindow.cpp']]],
-  ['vipdecodingtable_7',['vipDecodingTable',['../embroidery_8h.html#af343b92924aeba034403b37c3fcb8142',1,'vipDecodingTable():&#160;format_vip.c'],['../format__vip_8c.html#af343b92924aeba034403b37c3fcb8142',1,'vipDecodingTable():&#160;format_vip.c']]]
+  ['vipdecodingtable_6',['vipDecodingTable',['../embroidery_8h.html#af343b92924aeba034403b37c3fcb8142',1,'vipDecodingTable():&#160;format_vip.c'],['../format__vip_8c.html#af343b92924aeba034403b37c3fcb8142',1,'vipDecodingTable():&#160;format_vip.c']]]
 ];

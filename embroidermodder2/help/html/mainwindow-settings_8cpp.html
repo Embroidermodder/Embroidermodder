@@ -105,6 +105,9 @@ $(document).ready(function(){initNavTree('mainwindow-settings_8cpp.html',''); in
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="embroidermodder_8h_source.html">embroidermodder.h</a>&quot;</code><br />
+<code>#include &lt;string&gt;</code><br />
+<code>#include &lt;iostream&gt;</code><br />
+<code>#include &lt;fstream&gt;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -116,6 +119,16 @@ Functions</h2></td></tr>
 <tr class="separator:a079457db03bb2ec7fbcae391c19be60e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7115da2fa844da13b6bd31bf8a206f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow-settings_8cpp.html#af7115da2fa844da13b6bd31bf8a206f1">read_configuration</a> ()</td></tr>
 <tr class="separator:af7115da2fa844da13b6bd31bf8a206f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc7f7ed646629bbec38d5b59227d2a22"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow-settings_8cpp.html#acc7f7ed646629bbec38d5b59227d2a22">write_setting</a> (std::string label, int a)</td></tr>
+<tr class="separator:acc7f7ed646629bbec38d5b59227d2a22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed8af24ab8df98c9f31f2484e3f8f7d5"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow-settings_8cpp.html#aed8af24ab8df98c9f31f2484e3f8f7d5">write_setting</a> (std::string label, QRgb a)</td></tr>
+<tr class="separator:aed8af24ab8df98c9f31f2484e3f8f7d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adee333886b3ec8e9a9d9f5295a857e74"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow-settings_8cpp.html#adee333886b3ec8e9a9d9f5295a857e74">write_setting</a> (std::string label, QString a)</td></tr>
+<tr class="separator:adee333886b3ec8e9a9d9f5295a857e74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a308ac821b971fcfd851779195bdc201f"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow-settings_8cpp.html#a308ac821b971fcfd851779195bdc201f">write_setting</a> (std::string label, float a)</td></tr>
+<tr class="separator:a308ac821b971fcfd851779195bdc201f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1e8f8428664e2f49de21a8acdecf99b"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow-settings_8cpp.html#ae1e8f8428664e2f49de21a8acdecf99b">write_setting</a> (std::string label, bool a)</td></tr>
+<tr class="separator:ae1e8f8428664e2f49de21a8acdecf99b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="af7115da2fa844da13b6bd31bf8a206f1" name="af7115da2fa844da13b6bd31bf8a206f1"></a>
@@ -182,6 +195,146 @@ Functions</h2></td></tr>
           <td class="paramtype">QStringList&#160;</td>
           <td class="paramname"><em>list</em></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae1e8f8428664e2f49de21a8acdecf99b" name="ae1e8f8428664e2f49de21a8acdecf99b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1e8f8428664e2f49de21a8acdecf99b">&#9670;&#160;</a></span>write_setting() <span class="overload">[1/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string write_setting </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>label</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>a</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a308ac821b971fcfd851779195bdc201f" name="a308ac821b971fcfd851779195bdc201f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a308ac821b971fcfd851779195bdc201f">&#9670;&#160;</a></span>write_setting() <span class="overload">[2/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string write_setting </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>label</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>a</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acc7f7ed646629bbec38d5b59227d2a22" name="acc7f7ed646629bbec38d5b59227d2a22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc7f7ed646629bbec38d5b59227d2a22">&#9670;&#160;</a></span>write_setting() <span class="overload">[3/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string write_setting </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>label</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>a</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aed8af24ab8df98c9f31f2484e3f8f7d5" name="aed8af24ab8df98c9f31f2484e3f8f7d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed8af24ab8df98c9f31f2484e3f8f7d5">&#9670;&#160;</a></span>write_setting() <span class="overload">[4/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string write_setting </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>label</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QRgb&#160;</td>
+          <td class="paramname"><em>a</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adee333886b3ec8e9a9d9f5295a857e74" name="adee333886b3ec8e9a9d9f5295a857e74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adee333886b3ec8e9a9d9f5295a857e74">&#9670;&#160;</a></span>write_setting() <span class="overload">[5/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string write_setting </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>label</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>a</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

@@ -17,10 +17,8 @@ typedef struct \mbox{\hyperlink{struct_parameter__}{Parameter\+\_\+}} \mbox{\hyp
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-void \mbox{\hyperlink{mainwindow_8cpp_ae3f080af9ed5a4d74da64730178ad366}{c\+\_\+split}} (char input\mbox{[}200\mbox{]}, int $\ast$argc, char argv\mbox{[}10\mbox{]}\mbox{[}200\mbox{]})
+std\+::string \mbox{\hyperlink{mainwindow_8cpp_abb17f86d77cb0b4ccc01a341bd333ad3}{read\+\_\+string\+\_\+setting}} (toml\+\_\+table\+\_\+t $\ast$table, const char $\ast$key)
 \item 
-void \mbox{\hyperlink{mainwindow_8cpp_a6ba40f28df8964130a55aac5472ea6d8}{simplify\+\_\+path}} (char $\ast$path)
-\begin{DoxyCompactList}\small\item\em Simplifies a path by removing the .. and . symbols in place. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{mainwindow_8cpp_a6fcdc8ef9d8e516770d265c3c6f6e3c8}{read\+\_\+settings}} (const char $\ast$settings\+\_\+file)
 \begin{DoxyCompactList}\small\item\em Read the settings from file which aren\textquotesingle{}t editable by the user. These files need to be placed in the install folder. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{mainwindow_8cpp_a676090199811da7c58ccc15c8e25c308}{valid\+RGB}} (int r, int g, int b)
@@ -76,21 +74,9 @@ QString\+List \mbox{\hyperlink{mainwindow_8cpp_a65ef28a90fbc8aa7123bad86ad4171f2
 \item 
 \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} \mbox{\hyperlink{mainwindow_8cpp_a19276c778f3034b94881cf1f8614dbb2}{settings}}
 \item 
-\mbox{\hyperlink{embroidermodder_8h_a59b98c3061d780d55cc048bcce8b47d0}{Index}} $\ast$ \mbox{\hyperlink{mainwindow_8cpp_a249fb28889d6d477f958c07135703999}{menu\+\_\+layout}}
-\item 
-\mbox{\hyperlink{embroidermodder_8h_a59b98c3061d780d55cc048bcce8b47d0}{Index}} $\ast$ \mbox{\hyperlink{mainwindow_8cpp_a45f3c24488cf835c1a2273f73f23d192}{toolbar\+\_\+layout}}
-\item 
-\mbox{\hyperlink{embroidermodder_8h_aa5d35c075d47a1a4196817dd4cac166f}{Emb\+View}} \mbox{\hyperlink{mainwindow_8cpp_ada4ed7c67c6b8fd122b08b3b1f0ddf36}{views}} \mbox{[}50\mbox{]}
-\item 
-int \mbox{\hyperlink{mainwindow_8cpp_a13436802d05b83f14d262a678d87ff5f}{n\+\_\+views}} = 0
-\item 
 \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} \mbox{\hyperlink{mainwindow_8cpp_a1c6510838c31a5cc8eeadcdfceda753e}{dialog}}
 \item 
 \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} \mbox{\hyperlink{mainwindow_8cpp_aed18c7e89ec05d27fb61a14029f748f4}{preview}}
-\item 
-\mbox{\hyperlink{embroidermodder_8h_a65f6a13c9f5a038f42c86bdd5bb2410f}{Dictionary}} $\ast$ \mbox{\hyperlink{mainwindow_8cpp_a1fd87cd97dc9a686025693c4145fe352}{translation\+\_\+table}}
-\item 
-\mbox{\hyperlink{embroidermodder_8h_aa5d35c075d47a1a4196817dd4cac166f}{Emb\+View}} $\ast$ \mbox{\hyperlink{mainwindow_8cpp_ab02931290454a2e1456d354fd9bc734d}{active\+\_\+view}} = NULL
 \end{DoxyCompactItemize}
 
 
@@ -104,12 +90,6 @@ int \mbox{\hyperlink{mainwindow_8cpp_a13436802d05b83f14d262a678d87ff5f}{n\+\_\+v
 
 
 \doxysubsubsection{Function Documentation}
-\mbox{\Hypertarget{mainwindow_8cpp_ae3f080af9ed5a4d74da64730178ad366}\label{mainwindow_8cpp_ae3f080af9ed5a4d74da64730178ad366}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!c\_split@{c\_split}}
-\index{c\_split@{c\_split}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{c\_split()}{c\_split()}}
-{\footnotesize\ttfamily void c\+\_\+split (\begin{DoxyParamCaption}\item[{char}]{input\mbox{[}200\mbox{]},  }\item[{int $\ast$}]{argc,  }\item[{char}]{argv\mbox{[}10\mbox{]}\mbox{[}200\mbox{]} }\end{DoxyParamCaption})}
-
 \mbox{\Hypertarget{mainwindow_8cpp_a7b26863eb2da044012b709a1b3690e71}\label{mainwindow_8cpp_a7b26863eb2da044012b709a1b3690e71}} 
 \index{mainwindow.cpp@{mainwindow.cpp}!convert\_args\_to\_type@{convert\_args\_to\_type}}
 \index{convert\_args\_to\_type@{convert\_args\_to\_type}!mainwindow.cpp@{mainwindow.cpp}}
@@ -163,17 +143,13 @@ main\+Win
 
 Read the settings from file which aren\textquotesingle{}t editable by the user. These files need to be placed in the install folder. 
 
-\mbox{\Hypertarget{mainwindow_8cpp_a6ba40f28df8964130a55aac5472ea6d8}\label{mainwindow_8cpp_a6ba40f28df8964130a55aac5472ea6d8}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!simplify\_path@{simplify\_path}}
-\index{simplify\_path@{simplify\_path}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{simplify\_path()}{simplify\_path()}}
-{\footnotesize\ttfamily void simplify\+\_\+path (\begin{DoxyParamCaption}\item[{char $\ast$}]{path }\end{DoxyParamCaption})}
+\mbox{\Hypertarget{mainwindow_8cpp_abb17f86d77cb0b4ccc01a341bd333ad3}\label{mainwindow_8cpp_abb17f86d77cb0b4ccc01a341bd333ad3}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!read\_string\_setting@{read\_string\_setting}}
+\index{read\_string\_setting@{read\_string\_setting}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{read\_string\_setting()}{read\_string\_setting()}}
+{\footnotesize\ttfamily std\+::string read\+\_\+string\+\_\+setting (\begin{DoxyParamCaption}\item[{toml\+\_\+table\+\_\+t $\ast$}]{table,  }\item[{const char $\ast$}]{key }\end{DoxyParamCaption})}
 
-
-
-Simplifies a path by removing the .. and . symbols in place. 
-
-{\itshape path} The character array to operate on. \mbox{\Hypertarget{mainwindow_8cpp_afcef16acc9986cf155dc2554af26df9c}\label{mainwindow_8cpp_afcef16acc9986cf155dc2554af26df9c}} 
+\mbox{\Hypertarget{mainwindow_8cpp_afcef16acc9986cf155dc2554af26df9c}\label{mainwindow_8cpp_afcef16acc9986cf155dc2554af26df9c}} 
 \index{mainwindow.cpp@{mainwindow.cpp}!Todo@{Todo}}
 \index{Todo@{Todo}!mainwindow.cpp@{mainwindow.cpp}}
 \doxyparagraph{\texorpdfstring{Todo()}{Todo()}}
@@ -210,13 +186,7 @@ Simplifies a path by removing the .. and . symbols in place.
 \doxyparagraph{\texorpdfstring{action\_table}{action\_table}}
 {\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{embroidermodder_8h_aff6f4ac1e39a61ea59b275d373a14db1}{Action}}$>$ action\+\_\+table}
 
-\mbox{\Hypertarget{mainwindow_8cpp_ab02931290454a2e1456d354fd9bc734d}\label{mainwindow_8cpp_ab02931290454a2e1456d354fd9bc734d}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!active\_view@{active\_view}}
-\index{active\_view@{active\_view}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{active\_view}{active\_view}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_aa5d35c075d47a1a4196817dd4cac166f}{Emb\+View}}$\ast$ active\+\_\+view = NULL}
-
-The view focussed (that is the last view to have a click or keypress sent)\+: this has to be manually set whenever it changes including being set to NULL when all views are closed. \mbox{\Hypertarget{mainwindow_8cpp_a42e3ad620063b5c1f11151f32fd7b4a8}\label{mainwindow_8cpp_a42e3ad620063b5c1f11151f32fd7b4a8}} 
+\mbox{\Hypertarget{mainwindow_8cpp_a42e3ad620063b5c1f11151f32fd7b4a8}\label{mainwindow_8cpp_a42e3ad620063b5c1f11151f32fd7b4a8}} 
 \index{mainwindow.cpp@{mainwindow.cpp}!CIRCLE\_MODE\_1P\_DIA\_@{CIRCLE\_MODE\_1P\_DIA\_}}
 \index{CIRCLE\_MODE\_1P\_DIA\_@{CIRCLE\_MODE\_1P\_DIA\_}!mainwindow.cpp@{mainwindow.cpp}}
 \doxyparagraph{\texorpdfstring{CIRCLE\_MODE\_1P\_DIA\_}{CIRCLE\_MODE\_1P\_DIA\_}}
@@ -269,18 +239,6 @@ These copies of the settings struct are for restoring the state if the user does
 \index{DOLPHIN\_MODE\_YSCALE\_@{DOLPHIN\_MODE\_YSCALE\_}!mainwindow.cpp@{mainwindow.cpp}}
 \doxyparagraph{\texorpdfstring{DOLPHIN\_MODE\_YSCALE\_}{DOLPHIN\_MODE\_YSCALE\_}}
 {\footnotesize\ttfamily const int DOLPHIN\+\_\+\+MODE\+\_\+\+YSCALE\+\_\+ = 2\hspace{0.3cm}{\ttfamily [static]}}
-
-\mbox{\Hypertarget{mainwindow_8cpp_a249fb28889d6d477f958c07135703999}\label{mainwindow_8cpp_a249fb28889d6d477f958c07135703999}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!menu\_layout@{menu\_layout}}
-\index{menu\_layout@{menu\_layout}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{menu\_layout}{menu\_layout}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a59b98c3061d780d55cc048bcce8b47d0}{Index}}$\ast$ menu\+\_\+layout}
-
-\mbox{\Hypertarget{mainwindow_8cpp_a13436802d05b83f14d262a678d87ff5f}\label{mainwindow_8cpp_a13436802d05b83f14d262a678d87ff5f}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!n\_views@{n\_views}}
-\index{n\_views@{n\_views}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{n\_views}{n\_views}}
-{\footnotesize\ttfamily int n\+\_\+views = 0}
 
 \mbox{\Hypertarget{mainwindow_8cpp_aed18c7e89ec05d27fb61a14029f748f4}\label{mainwindow_8cpp_aed18c7e89ec05d27fb61a14029f748f4}} 
 \index{mainwindow.cpp@{mainwindow.cpp}!preview@{preview}}
@@ -341,22 +299,4 @@ The actuator changes the program state via these global variables. \mbox{\Hypert
 \index{STAR\_MODE\_RAD\_OUTER\_@{STAR\_MODE\_RAD\_OUTER\_}!mainwindow.cpp@{mainwindow.cpp}}
 \doxyparagraph{\texorpdfstring{STAR\_MODE\_RAD\_OUTER\_}{STAR\_MODE\_RAD\_OUTER\_}}
 {\footnotesize\ttfamily const int STAR\+\_\+\+MODE\+\_\+\+RAD\+\_\+\+OUTER\+\_\+ = 2\hspace{0.3cm}{\ttfamily [static]}}
-
-\mbox{\Hypertarget{mainwindow_8cpp_a45f3c24488cf835c1a2273f73f23d192}\label{mainwindow_8cpp_a45f3c24488cf835c1a2273f73f23d192}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!toolbar\_layout@{toolbar\_layout}}
-\index{toolbar\_layout@{toolbar\_layout}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{toolbar\_layout}{toolbar\_layout}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a59b98c3061d780d55cc048bcce8b47d0}{Index}}$\ast$ toolbar\+\_\+layout}
-
-\mbox{\Hypertarget{mainwindow_8cpp_a1fd87cd97dc9a686025693c4145fe352}\label{mainwindow_8cpp_a1fd87cd97dc9a686025693c4145fe352}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!translation\_table@{translation\_table}}
-\index{translation\_table@{translation\_table}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{translation\_table}{translation\_table}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a65f6a13c9f5a038f42c86bdd5bb2410f}{Dictionary}}$\ast$ translation\+\_\+table}
-
-\mbox{\Hypertarget{mainwindow_8cpp_ada4ed7c67c6b8fd122b08b3b1f0ddf36}\label{mainwindow_8cpp_ada4ed7c67c6b8fd122b08b3b1f0ddf36}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!views@{views}}
-\index{views@{views}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{views}{views}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_aa5d35c075d47a1a4196817dd4cac166f}{Emb\+View}} views\mbox{[}50\mbox{]}}
 

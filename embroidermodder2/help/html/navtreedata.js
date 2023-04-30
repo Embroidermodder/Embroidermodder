@@ -42,21 +42,17 @@ var NAVTREE =
         ] ],
         [ "\"Build and Install\"", "about.html#build-and-install", [
           [ "Install on Desktop", "about.html#install-desktop", null ]
-        ] ]
-      ] ],
-      [ "\"About\"", "about.html#about", [
+        ] ],
         [ "History", "about.html#history", null ]
       ] ],
-      [ "Contact us", "about.html#contact", null ]
+      [ "Contact us", "about.html#contact-us", null ]
     ] ],
     [ "Downloads", "downloads.html", [
       [ "Alpha Build", "downloads.html#alpha-build", null ]
     ] ],
     [ "Tutorials", "tutorials.html", [
-      [ "Basic Features", "tutorials.html#basic-features", [
-        [ "Move a single stitch in an existing pattern", "tutorials.html#move-single-stitch", null ]
-      ] ],
       [ "Altering a Single Stitch (2022-09-19)", "tutorials.html#altering-a-single-stitch", [
+        [ "Move a single stitch in an existing pattern", "tutorials.html#move-single-stitch", null ],
         [ "Convert one pattern to another format", "tutorials.html#convert-patterns", null ]
       ] ],
       [ "Advanced Features", "tutorials.html#advanced-features", null ]
@@ -97,8 +93,7 @@ var NAVTREE =
           [ "Overall Support", "formats.html#overall-support", null ]
         ] ],
         [ "Table of Format Support Levels", "formats.html#table-of-formats", null ],
-        [ "Support", "formats.html#Format", null ],
-        [ "libembroidery C formats", "formats.html#libembroidery-c-formats", null ]
+        [ "Format Support", "formats.html#format-support", null ]
       ] ]
     ] ],
     [ "Geometry and Algorithms", "geometry-and-algorithms.html", [
@@ -112,16 +107,10 @@ var NAVTREE =
         [ "Embroidermodder Project Coding Standards", "geometry-and-algorithms.html#embroidermodder-project-coding-standards", [
           [ "Where Code Goes", "geometry-and-algorithms.html#where-code-goes", null ],
           [ "Non-compiled Files Go", "geometry-and-algorithms.html#Where", null ],
-          [ "in which we break style on purpose", "geometry-and-algorithms.html#Ways", null ],
-          [ "Conventions", "geometry-and-algorithms.html#Naming", null ],
-          [ "Code Style", "geometry-and-algorithms.html#code-style", null ],
-          [ "Braces", "geometry-and-algorithms.html#Braces", null ]
+          [ "in which we break style on purpose", "geometry-and-algorithms.html#Ways", null ]
         ] ],
-        [ "Donations", "geometry-and-algorithms.html#Donations", [
-          [ "Format Support", "geometry-and-algorithms.html#format-support", null ]
-        ] ],
-        [ "Project Coding Standards", "geometry-and-algorithms.html#Embroidermodder", [
-          [ "Naming Conventions", "geometry-and-algorithms.html#naming-conventions", null ],
+        [ "Donations", "geometry-and-algorithms.html#Donations", null ],
+        [ "Embroidermodder Project Coding Standards", "geometry-and-algorithms.html#embroidermodder-project", [
           [ "Comments", "geometry-and-algorithms.html#comments", null ]
         ] ],
         [ "Ideas", "geometry-and-algorithms.html#ideas", [
@@ -133,10 +122,10 @@ var NAVTREE =
           [ "Image Fitting", "geometry-and-algorithms.html#image-fitting", null ],
           [ "To Place", "geometry-and-algorithms.html#to-place", null ],
           [ "To Do", "geometry-and-algorithms.html#development-to-do", null ],
-          [ "features", "geometry-and-algorithms.html#Basic", null ],
-          [ "GUI", "geometry-and-algorithms.html#GUI", null ]
+          [ "Code quality and user friendliness", "geometry-and-algorithms.html#code-quality-and-user-friendliness", null ],
+          [ "GUI", "geometry-and-algorithms.html#gui", null ]
         ] ],
-        [ "development", "geometry-and-algorithms.html#Electronics", null ],
+        [ "Electronics development", "geometry-and-algorithms.html#electronics-development", null ],
         [ "Development", "geometry-and-algorithms.html#Development", [
           [ "Contributing", "geometry-and-algorithms.html#Contributing", null ],
           [ "Debug", "geometry-and-algorithms.html#debug", null ],
@@ -152,25 +141,25 @@ var NAVTREE =
         [ "Special Notes", "geometry-and-algorithms.html#special-notes", null ],
         [ "The Assembly Split", "geometry-and-algorithms.html#the-assembly-split", null ]
       ] ],
-      [ "The <tt>embroider</tt> Command Line Program", "geometry-and-algorithms.html#embroider", [
+      [ "The Embroider Command Line Program", "geometry-and-algorithms.html#embroider", [
         [ "Embroider pipeline", "geometry-and-algorithms.html#pipeline", null ],
         [ "embroider CLI", "geometry-and-algorithms.html#cli", null ]
       ] ]
     ] ],
     [ "GNU Free Documentation License", "docs-license.html", null ],
     [ "Contributor Covenant Code of Conduct", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html", [
-      [ "Our Pledge", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md42", null ],
-      [ "Our Standards", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md43", null ],
-      [ "Enforcement Responsibilities", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md44", null ],
-      [ "Scope", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md45", null ],
-      [ "Enforcement", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md46", null ],
-      [ "Enforcement Guidelines", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md47", [
-        [ "1. Correction", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md48", null ],
-        [ "2. Warning", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md49", null ],
-        [ "3. Temporary Ban", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md50", null ],
-        [ "4. Permanent Ban", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md51", null ]
+      [ "Our Pledge", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md39", null ],
+      [ "Our Standards", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md40", null ],
+      [ "Enforcement Responsibilities", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md41", null ],
+      [ "Scope", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md42", null ],
+      [ "Enforcement", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md43", null ],
+      [ "Enforcement Guidelines", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md44", [
+        [ "1. Correction", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md45", null ],
+        [ "2. Warning", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md46", null ],
+        [ "3. Temporary Ban", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md47", null ],
+        [ "4. Permanent Ban", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md48", null ]
       ] ],
-      [ "Attribution", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md52", null ]
+      [ "Attribution", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md49", null ]
     ] ],
     [ "Privacy Policy for Embroidery Viewer", "md_privacy_policy.html", null ],
     [ "Todo List", "todo.html", null ],
@@ -205,8 +194,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_changelog.html",
-"class_cmd_prompt.html#a908c22768132973965aa4b787f9ddaf8",
-"class_line_object.html#a2ab9d9ac7926d9d0dbfdebbf28cd457b",
+"class_cmd_prompt.html#a94d2a27a19e9c0e06e1318b6bc25de61",
+"class_line_object.html#a4980af51eaf26a5ffcb325656d70d1ba",
 "class_main_window.html#a9ce4242325ae4de74c11acd6dcd8caec",
 "class_mdi_window.html#ae499df12c7dad4ae678b3bb2b32b03dc",
 "class_save_object.html#a9edb45dec277f6c3bd31eb9bed71ab61",
@@ -217,11 +206,11 @@ var NAVTREEINDEX =
 "embroidery__internal_8h.html#a364fddf45e198a6aa8333e5867af3cc8",
 "embroidery__internal_8h.html#adf5a6371ed3ee9d649f92592139ac6a1",
 "format__pes_8c.html#a21aba667fce5f4492d9ed1f418141a4f",
-"geometry-and-algorithms.html#ideas",
-"mainwindow_8cpp.html#a54518bd972055aee6bd70b6cd1e1a452",
-"property-editor_8cpp.html#a92be664836ab8920cb30b751c6021a74",
-"struct_emb_image__.html#a25bd5c63f03c95436b7af8a173a05fa3",
-"struct_settings__.html#aff4b88f61bd38d239f0784aa51937556"
+"geometry-and-algorithms.html#progress-chart",
+"mainwindow_8cpp.html#a69d5b706d2ad7825d9db0e4523563997",
+"property-editor_8cpp.html#a9f8d385021825f9670dadac4c0e8ac44",
+"struct_emb_image__.html#aeb4c22e0a04cbf53fa8706f36b33befb",
+"struct_stx_thread__.html#a7dadb8f2b7c0ffb34931b35b5af02e99"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

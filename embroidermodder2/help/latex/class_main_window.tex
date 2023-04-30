@@ -61,7 +61,7 @@ void \mbox{\hyperlink{class_main_window_a82ee1fab763ad7e0f0898aff8a7f0735}{write
 static bool \mbox{\hyperlink{class_main_window_af95b9b8dba27d822373f4424074bfde7}{valid\+File\+Format}} (const QString \&file\+Name)
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_af95b9b8dba27d822373f4424074bfde7}{Main\+Window\+::valid\+File\+Format}}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_main_window_a1412068ed81c27f1854d348129dbabf7}{stub\+\_\+implement}} (QString txt)
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a1412068ed81c27f1854d348129dbabf7}{Main\+Window\+::stub\+\_\+implement}}. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a1412068ed81c27f1854d348129dbabf7}{Main\+Window\+::stub\+\_\+implement}} {\itshape txt}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_main_window_a31fa08ff8d482c392bf3523eb284e4ed}{stub\+\_\+testing}} ()
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a31fa08ff8d482c392bf3523eb284e4ed}{Main\+Window\+::stub\+\_\+testing}}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_main_window_a19bdabe257073caa0f70f6cb617e6211}{prompt\+History\+Appended}} (const QString \&txt)
@@ -281,6 +281,8 @@ std\+::string \mbox{\hyperlink{class_main_window_af66693aee19097be352ab323f8e703
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_af66693aee19097be352ab323f8e703f5}{Main\+Window\+::run\+\_\+script\+\_\+file}}. \end{DoxyCompactList}\item 
 std\+::string \mbox{\hyperlink{class_main_window_a2d78554d8abd71140884b5bdf8f9c2da}{run\+\_\+script}} (std\+::vector$<$ std\+::string $>$ script)
 \begin{DoxyCompactList}\small\item\em A basic line-\/by-\/line script processor to allow for extensions to the program. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_main_window_a422a58c78736f14f646f7e633c42e8cf}{Load\+Command}} (QString cmd\+Name)
+\item 
 bool \mbox{\hyperlink{class_main_window_a0e87e82e601411410bf336144df49cb8}{is\+Command\+Active}} ()
 \item 
 QString \mbox{\hyperlink{class_main_window_afe5f5e39faa0282c02cd55531a39e7cf}{active\+Command}} ()
@@ -332,9 +334,9 @@ void \mbox{\hyperlink{class_main_window_a7c4c3e1b03e59c9a6e0add2dc83fb363}{nativ
 void \mbox{\hyperlink{class_main_window_a7750827689984bd24fe07c0b5ec9a593}{native\+Window\+Previous}} ()
 \item 
 void \mbox{\hyperlink{class_main_window_a4631b4b96d3f56afadc97e5341153b89}{native\+Message\+Box}} (const QString \&type, const QString \&title, const QString \&text)
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a4631b4b96d3f56afadc97e5341153b89}{Main\+Window\+::native\+Message\+Box}}. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a4631b4b96d3f56afadc97e5341153b89}{Main\+Window\+::native\+Message\+Box}} {\itshape type} {\itshape title} {\itshape text}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_main_window_a1a690c83958e2104f0e749626b91b293}{native\+Print\+Area}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} w, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} h)
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a1a690c83958e2104f0e749626b91b293}{Main\+Window\+::native\+Print\+Area}}. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a1a690c83958e2104f0e749626b91b293}{Main\+Window\+::native\+Print\+Area}} {\itshape x} {\itshape y} {\itshape w} {\itshape h}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_main_window_afd0c6f1998276723d1e98fba5d046a48}{native\+Set\+Background\+Color}} (uint8\+\_\+t r, uint8\+\_\+t g, uint8\+\_\+t b)
 \item 
 void \mbox{\hyperlink{class_main_window_ade621cd429d15fa9e20a3ec8d41b048d}{native\+Set\+Cross\+Hair\+Color}} (uint8\+\_\+t r, uint8\+\_\+t g, uint8\+\_\+t b)
@@ -436,19 +438,19 @@ void \mbox{\hyperlink{class_main_window_a6b69616aca1ef619c8d3cd312bb23ffa}{nativ
 void \mbox{\hyperlink{class_main_window_ad365384c36c31b4bb0fd1d4bd4926855}{native\+Delete\+Selected}} ()
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_ad365384c36c31b4bb0fd1d4bd4926855}{Main\+Window\+::native\+Delete\+Selected}}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_main_window_a983cbe21cb00e87bf907f87731ca30ca}{native\+Cut\+Selected}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y)
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a983cbe21cb00e87bf907f87731ca30ca}{Main\+Window\+::native\+Cut\+Selected}}. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a983cbe21cb00e87bf907f87731ca30ca}{Main\+Window\+::native\+Cut\+Selected}} {\itshape x} {\itshape y}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_main_window_a2c46e9c4bff47d54de81a124954870f7}{native\+Copy\+Selected}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y)
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a2c46e9c4bff47d54de81a124954870f7}{Main\+Window\+::native\+Copy\+Selected}}. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a2c46e9c4bff47d54de81a124954870f7}{Main\+Window\+::native\+Copy\+Selected}} {\itshape x} {\itshape y}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_main_window_a45d1389b8f9cc97559445e8bcf043960}{native\+Paste\+Selected}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y)
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a45d1389b8f9cc97559445e8bcf043960}{Main\+Window\+::native\+Paste\+Selected}}. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a45d1389b8f9cc97559445e8bcf043960}{Main\+Window\+::native\+Paste\+Selected}} {\itshape x} {\itshape y}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_main_window_a25079a0d8bcc5011cbf7cc53156a9acd}{native\+Move\+Selected}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} dx, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} dy)
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a25079a0d8bcc5011cbf7cc53156a9acd}{Main\+Window\+::native\+Move\+Selected}}. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a25079a0d8bcc5011cbf7cc53156a9acd}{Main\+Window\+::native\+Move\+Selected}} {\itshape dx} {\itshape dy}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_main_window_a522592b0e89c3ef4a6a6fd81b4e1c6e7}{native\+Scale\+Selected}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} factor)
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a522592b0e89c3ef4a6a6fd81b4e1c6e7}{Main\+Window\+::native\+Scale\+Selected}}. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a522592b0e89c3ef4a6a6fd81b4e1c6e7}{Main\+Window\+::native\+Scale\+Selected}} {\itshape x} {\itshape y} {\itshape factor}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_main_window_a4aca98c18cc9440021a1ed546d5b736a}{native\+Rotate\+Selected}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} rot)
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a4aca98c18cc9440021a1ed546d5b736a}{Main\+Window\+::native\+Rotate\+Selected}}. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a4aca98c18cc9440021a1ed546d5b736a}{Main\+Window\+::native\+Rotate\+Selected}} {\itshape x} {\itshape y} {\itshape rot}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_main_window_a9e79e503131f304ef145a2e206697f8b}{native\+Mirror\+Selected}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x1, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y1, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x2, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y2)
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a9e79e503131f304ef145a2e206697f8b}{Main\+Window\+::native\+Mirror\+Selected}}. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_a9e79e503131f304ef145a2e206697f8b}{Main\+Window\+::native\+Mirror\+Selected}} {\itshape x1} {\itshape y1} {\itshape x2} {\itshape y2}. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_main_window_acb5a20382f5f2ba4a3cdaedae1966495}{native\+QSnapX}} ()
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_main_window_acb5a20382f5f2ba4a3cdaedae1966495}{Main\+Window\+::native\+QSnapX}}. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_main_window_adcb15a2dcef5f3047e68af799951481f}{native\+QSnapY}} ()
@@ -1363,7 +1365,13 @@ Finish All Commands ... \texorpdfstring{$<$}{<}.\texorpdfstring{$<$}{<}\end{Doxy
 \doxyparagraph{\texorpdfstring{lineweightSelectorIndexChanged}{lineweightSelectorIndexChanged}}
 {\footnotesize\ttfamily void lineweight\+Selector\+Index\+Changed (\begin{DoxyParamCaption}\item[{int}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
-\mbox{\Hypertarget{class_main_window_a6aa1c7938d00887e99affda74e8d2f7e}\label{class_main_window_a6aa1c7938d00887e99affda74e8d2f7e}} 
+\mbox{\Hypertarget{class_main_window_a422a58c78736f14f646f7e633c42e8cf}\label{class_main_window_a422a58c78736f14f646f7e633c42e8cf}} 
+\index{MainWindow@{MainWindow}!LoadCommand@{LoadCommand}}
+\index{LoadCommand@{LoadCommand}!MainWindow@{MainWindow}}
+\doxyparagraph{\texorpdfstring{LoadCommand()}{LoadCommand()}}
+{\footnotesize\ttfamily void Load\+Command (\begin{DoxyParamCaption}\item[{QString}]{cmd\+Name }\end{DoxyParamCaption})}
+
+NOTE\+: Every QScript\+Program must have a unique function name to call. If every function was called \mbox{\hyperlink{embroidermodder_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{main()}}, then the QScript\+Engine would only call the last script evaluated (which happens to be \mbox{\hyperlink{embroidermodder_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{main()}} in another script). Thus, by adding the cmd\+Name before \mbox{\hyperlink{embroidermodder_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{main()}}, it becomes line\+\_\+main(), circle\+\_\+main(), etc... Do not change this code unless you really know what you are doing. I mean it. \mbox{\Hypertarget{class_main_window_a6aa1c7938d00887e99affda74e8d2f7e}\label{class_main_window_a6aa1c7938d00887e99affda74e8d2f7e}} 
 \index{MainWindow@{MainWindow}!loadFormats@{loadFormats}}
 \index{loadFormats@{loadFormats}!MainWindow@{MainWindow}}
 \doxyparagraph{\texorpdfstring{loadFormats()}{loadFormats()}}
@@ -1573,15 +1581,8 @@ Finish All Commands ... \texorpdfstring{$<$}{<}.\texorpdfstring{$<$}{<}\end{Doxy
 
 
 
-\mbox{\hyperlink{class_main_window_a2c46e9c4bff47d54de81a124954870f7}{Main\+Window\+::native\+Copy\+Selected}}. 
+\mbox{\hyperlink{class_main_window_a2c46e9c4bff47d54de81a124954870f7}{Main\+Window\+::native\+Copy\+Selected}} {\itshape x} {\itshape y}. 
 
-
-\begin{DoxyParams}{Parameters}
-{\em x} & \\
-\hline
-{\em y} & \\
-\hline
-\end{DoxyParams}
 \mbox{\Hypertarget{class_main_window_a983cbe21cb00e87bf907f87731ca30ca}\label{class_main_window_a983cbe21cb00e87bf907f87731ca30ca}} 
 \index{MainWindow@{MainWindow}!nativeCutSelected@{nativeCutSelected}}
 \index{nativeCutSelected@{nativeCutSelected}!MainWindow@{MainWindow}}
@@ -1590,15 +1591,8 @@ Finish All Commands ... \texorpdfstring{$<$}{<}.\texorpdfstring{$<$}{<}\end{Doxy
 
 
 
-\mbox{\hyperlink{class_main_window_a983cbe21cb00e87bf907f87731ca30ca}{Main\+Window\+::native\+Cut\+Selected}}. 
+\mbox{\hyperlink{class_main_window_a983cbe21cb00e87bf907f87731ca30ca}{Main\+Window\+::native\+Cut\+Selected}} {\itshape x} {\itshape y}. 
 
-
-\begin{DoxyParams}{Parameters}
-{\em x} & \\
-\hline
-{\em y} & \\
-\hline
-\end{DoxyParams}
 \mbox{\Hypertarget{class_main_window_ad365384c36c31b4bb0fd1d4bd4926855}\label{class_main_window_ad365384c36c31b4bb0fd1d4bd4926855}} 
 \index{MainWindow@{MainWindow}!nativeDeleteSelected@{nativeDeleteSelected}}
 \index{nativeDeleteSelected@{nativeDeleteSelected}!MainWindow@{MainWindow}}
@@ -1659,17 +1653,8 @@ Finish All Commands ... \texorpdfstring{$<$}{<}.\texorpdfstring{$<$}{<}\end{Doxy
 
 
 
-\mbox{\hyperlink{class_main_window_a4631b4b96d3f56afadc97e5341153b89}{Main\+Window\+::native\+Message\+Box}}. 
+\mbox{\hyperlink{class_main_window_a4631b4b96d3f56afadc97e5341153b89}{Main\+Window\+::native\+Message\+Box}} {\itshape type} {\itshape title} {\itshape text}. 
 
-
-\begin{DoxyParams}{Parameters}
-{\em type} & \\
-\hline
-{\em title} & \\
-\hline
-{\em text} & \\
-\hline
-\end{DoxyParams}
 \mbox{\Hypertarget{class_main_window_a9e79e503131f304ef145a2e206697f8b}\label{class_main_window_a9e79e503131f304ef145a2e206697f8b}} 
 \index{MainWindow@{MainWindow}!nativeMirrorSelected@{nativeMirrorSelected}}
 \index{nativeMirrorSelected@{nativeMirrorSelected}!MainWindow@{MainWindow}}
@@ -1678,19 +1663,8 @@ Finish All Commands ... \texorpdfstring{$<$}{<}.\texorpdfstring{$<$}{<}\end{Doxy
 
 
 
-\mbox{\hyperlink{class_main_window_a9e79e503131f304ef145a2e206697f8b}{Main\+Window\+::native\+Mirror\+Selected}}. 
+\mbox{\hyperlink{class_main_window_a9e79e503131f304ef145a2e206697f8b}{Main\+Window\+::native\+Mirror\+Selected}} {\itshape x1} {\itshape y1} {\itshape x2} {\itshape y2}. 
 
-
-\begin{DoxyParams}{Parameters}
-{\em x1} & \\
-\hline
-{\em y1} & \\
-\hline
-{\em x2} & \\
-\hline
-{\em y2} & \\
-\hline
-\end{DoxyParams}
 \mbox{\Hypertarget{class_main_window_ad3415d119b3d2142e040d8b78931d105}\label{class_main_window_ad3415d119b3d2142e040d8b78931d105}} 
 \index{MainWindow@{MainWindow}!nativeMouseX@{nativeMouseX}}
 \index{nativeMouseX@{nativeMouseX}!MainWindow@{MainWindow}}
@@ -1725,15 +1699,8 @@ Finish All Commands ... \texorpdfstring{$<$}{<}.\texorpdfstring{$<$}{<}\end{Doxy
 
 
 
-\mbox{\hyperlink{class_main_window_a25079a0d8bcc5011cbf7cc53156a9acd}{Main\+Window\+::native\+Move\+Selected}}. 
+\mbox{\hyperlink{class_main_window_a25079a0d8bcc5011cbf7cc53156a9acd}{Main\+Window\+::native\+Move\+Selected}} {\itshape dx} {\itshape dy}. 
 
-
-\begin{DoxyParams}{Parameters}
-{\em dx} & \\
-\hline
-{\em dy} & \\
-\hline
-\end{DoxyParams}
 \mbox{\Hypertarget{class_main_window_ad5ab4b89985bdcdfc4a6eb033aa1349a}\label{class_main_window_ad5ab4b89985bdcdfc4a6eb033aa1349a}} 
 \index{MainWindow@{MainWindow}!nativeNewFile@{nativeNewFile}}
 \index{nativeNewFile@{nativeNewFile}!MainWindow@{MainWindow}}
@@ -1760,15 +1727,8 @@ Finish All Commands ... \texorpdfstring{$<$}{<}.\texorpdfstring{$<$}{<}\end{Doxy
 
 
 
-\mbox{\hyperlink{class_main_window_a45d1389b8f9cc97559445e8bcf043960}{Main\+Window\+::native\+Paste\+Selected}}. 
+\mbox{\hyperlink{class_main_window_a45d1389b8f9cc97559445e8bcf043960}{Main\+Window\+::native\+Paste\+Selected}} {\itshape x} {\itshape y}. 
 
-
-\begin{DoxyParams}{Parameters}
-{\em x} & \\
-\hline
-{\em y} & \\
-\hline
-\end{DoxyParams}
 \mbox{\Hypertarget{class_main_window_a0d133c9788977f9a6bf1a0dd66053aeb}\label{class_main_window_a0d133c9788977f9a6bf1a0dd66053aeb}} 
 \index{MainWindow@{MainWindow}!nativePerpendicularDistance@{nativePerpendicularDistance}}
 \index{nativePerpendicularDistance@{nativePerpendicularDistance}!MainWindow@{MainWindow}}
@@ -1795,19 +1755,8 @@ Finish All Commands ... \texorpdfstring{$<$}{<}.\texorpdfstring{$<$}{<}\end{Doxy
 
 
 
-\mbox{\hyperlink{class_main_window_a1a690c83958e2104f0e749626b91b293}{Main\+Window\+::native\+Print\+Area}}. 
+\mbox{\hyperlink{class_main_window_a1a690c83958e2104f0e749626b91b293}{Main\+Window\+::native\+Print\+Area}} {\itshape x} {\itshape y} {\itshape w} {\itshape h}. 
 
-
-\begin{DoxyParams}{Parameters}
-{\em x} & \\
-\hline
-{\em y} & \\
-\hline
-{\em w} & \\
-\hline
-{\em h} & \\
-\hline
-\end{DoxyParams}
 \mbox{\Hypertarget{class_main_window_acb5a20382f5f2ba4a3cdaedae1966495}\label{class_main_window_acb5a20382f5f2ba4a3cdaedae1966495}} 
 \index{MainWindow@{MainWindow}!nativeQSnapX@{nativeQSnapX}}
 \index{nativeQSnapX@{nativeQSnapX}!MainWindow@{MainWindow}}
@@ -1842,17 +1791,8 @@ Finish All Commands ... \texorpdfstring{$<$}{<}.\texorpdfstring{$<$}{<}\end{Doxy
 
 
 
-\mbox{\hyperlink{class_main_window_a4aca98c18cc9440021a1ed546d5b736a}{Main\+Window\+::native\+Rotate\+Selected}}. 
+\mbox{\hyperlink{class_main_window_a4aca98c18cc9440021a1ed546d5b736a}{Main\+Window\+::native\+Rotate\+Selected}} {\itshape x} {\itshape y} {\itshape rot}. 
 
-
-\begin{DoxyParams}{Parameters}
-{\em x} & \\
-\hline
-{\em y} & \\
-\hline
-{\em rot} & \\
-\hline
-\end{DoxyParams}
 \mbox{\Hypertarget{class_main_window_a522592b0e89c3ef4a6a6fd81b4e1c6e7}\label{class_main_window_a522592b0e89c3ef4a6a6fd81b4e1c6e7}} 
 \index{MainWindow@{MainWindow}!nativeScaleSelected@{nativeScaleSelected}}
 \index{nativeScaleSelected@{nativeScaleSelected}!MainWindow@{MainWindow}}
@@ -1861,17 +1801,8 @@ Finish All Commands ... \texorpdfstring{$<$}{<}.\texorpdfstring{$<$}{<}\end{Doxy
 
 
 
-\mbox{\hyperlink{class_main_window_a522592b0e89c3ef4a6a6fd81b4e1c6e7}{Main\+Window\+::native\+Scale\+Selected}}. 
+\mbox{\hyperlink{class_main_window_a522592b0e89c3ef4a6a6fd81b4e1c6e7}{Main\+Window\+::native\+Scale\+Selected}} {\itshape x} {\itshape y} {\itshape factor}. 
 
-
-\begin{DoxyParams}{Parameters}
-{\em x} & \\
-\hline
-{\em y} & \\
-\hline
-{\em factor} & \\
-\hline
-\end{DoxyParams}
 \mbox{\Hypertarget{class_main_window_a1175abb5403c5809d39ab639cf45431d}\label{class_main_window_a1175abb5403c5809d39ab639cf45431d}} 
 \index{MainWindow@{MainWindow}!nativeSelectAll@{nativeSelectAll}}
 \index{nativeSelectAll@{nativeSelectAll}!MainWindow@{MainWindow}}
@@ -2454,13 +2385,8 @@ donut 20 40 20 black
 
 
 
-\mbox{\hyperlink{class_main_window_a1412068ed81c27f1854d348129dbabf7}{Main\+Window\+::stub\+\_\+implement}}. 
+\mbox{\hyperlink{class_main_window_a1412068ed81c27f1854d348129dbabf7}{Main\+Window\+::stub\+\_\+implement}} {\itshape txt}. 
 
-
-\begin{DoxyParams}{Parameters}
-{\em txt} & \\
-\hline
-\end{DoxyParams}
 \mbox{\Hypertarget{class_main_window_a31fa08ff8d482c392bf3523eb284e4ed}\label{class_main_window_a31fa08ff8d482c392bf3523eb284e4ed}} 
 \index{MainWindow@{MainWindow}!stub\_testing@{stub\_testing}}
 \index{stub\_testing@{stub\_testing}!MainWindow@{MainWindow}}
@@ -2674,7 +2600,7 @@ donut 20 40 20 black
 
 \mbox{\hyperlink{class_main_window_a82ee1fab763ad7e0f0898aff8a7f0735}{Main\+Window\+::write\+Settings}}. 
 
-\mbox{\Hypertarget{class_main_window_a9195bda6648adc336a085e2d74472f15}\label{class_main_window_a9195bda6648adc336a085e2d74472f15}} 
+This file needs to be read from the users home directory to ensure it is writable \mbox{\Hypertarget{class_main_window_a9195bda6648adc336a085e2d74472f15}\label{class_main_window_a9195bda6648adc336a085e2d74472f15}} 
 \index{MainWindow@{MainWindow}!zoomAll@{zoomAll}}
 \index{zoomAll@{zoomAll}!MainWindow@{MainWindow}}
 \doxyparagraph{\texorpdfstring{zoomAll}{zoomAll}}

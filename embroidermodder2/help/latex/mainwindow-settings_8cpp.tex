@@ -1,6 +1,9 @@
 \hypertarget{mainwindow-settings_8cpp}{}\doxysubsection{embroidermodder2/mainwindow-\/settings.cpp File Reference}
 \label{mainwindow-settings_8cpp}\index{embroidermodder2/mainwindow-\/settings.cpp@{embroidermodder2/mainwindow-\/settings.cpp}}
 {\ttfamily \#include \char`\"{}embroidermodder.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -11,6 +14,16 @@ QString \mbox{\hyperlink{mainwindow-settings_8cpp_aab62fc203baa98973095e37c7bfad
 std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{mainwindow-settings_8cpp_a079457db03bb2ec7fbcae391c19be60e}{to\+\_\+string\+\_\+vector}} (QString\+List list)
 \item 
 void \mbox{\hyperlink{mainwindow-settings_8cpp_af7115da2fa844da13b6bd31bf8a206f1}{read\+\_\+configuration}} ()
+\item 
+std\+::string \mbox{\hyperlink{mainwindow-settings_8cpp_acc7f7ed646629bbec38d5b59227d2a22}{write\+\_\+setting}} (std\+::string label, int a)
+\item 
+std\+::string \mbox{\hyperlink{mainwindow-settings_8cpp_aed8af24ab8df98c9f31f2484e3f8f7d5}{write\+\_\+setting}} (std\+::string label, QRgb a)
+\item 
+std\+::string \mbox{\hyperlink{mainwindow-settings_8cpp_adee333886b3ec8e9a9d9f5295a857e74}{write\+\_\+setting}} (std\+::string label, QString a)
+\item 
+std\+::string \mbox{\hyperlink{mainwindow-settings_8cpp_a308ac821b971fcfd851779195bdc201f}{write\+\_\+setting}} (std\+::string label, float a)
+\item 
+std\+::string \mbox{\hyperlink{mainwindow-settings_8cpp_ae1e8f8428664e2f49de21a8acdecf99b}{write\+\_\+setting}} (std\+::string label, bool a)
 \end{DoxyCompactItemize}
 
 
@@ -38,4 +51,34 @@ Note\+: on Unix we include the trailing separator. For Windows compatibility we 
 \index{to\_string\_vector@{to\_string\_vector}!mainwindow-\/settings.cpp@{mainwindow-\/settings.cpp}}
 \doxyparagraph{\texorpdfstring{to\_string\_vector()}{to\_string\_vector()}}
 {\footnotesize\ttfamily std\+::vector$<$ std\+::string $>$ to\+\_\+string\+\_\+vector (\begin{DoxyParamCaption}\item[{QString\+List}]{list }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{mainwindow-settings_8cpp_ae1e8f8428664e2f49de21a8acdecf99b}\label{mainwindow-settings_8cpp_ae1e8f8428664e2f49de21a8acdecf99b}} 
+\index{mainwindow-\/settings.cpp@{mainwindow-\/settings.cpp}!write\_setting@{write\_setting}}
+\index{write\_setting@{write\_setting}!mainwindow-\/settings.cpp@{mainwindow-\/settings.cpp}}
+\doxyparagraph{\texorpdfstring{write\_setting()}{write\_setting()}\hspace{0.1cm}{\footnotesize\ttfamily [1/5]}}
+{\footnotesize\ttfamily std\+::string write\+\_\+setting (\begin{DoxyParamCaption}\item[{std\+::string}]{label,  }\item[{bool}]{a }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{mainwindow-settings_8cpp_a308ac821b971fcfd851779195bdc201f}\label{mainwindow-settings_8cpp_a308ac821b971fcfd851779195bdc201f}} 
+\index{mainwindow-\/settings.cpp@{mainwindow-\/settings.cpp}!write\_setting@{write\_setting}}
+\index{write\_setting@{write\_setting}!mainwindow-\/settings.cpp@{mainwindow-\/settings.cpp}}
+\doxyparagraph{\texorpdfstring{write\_setting()}{write\_setting()}\hspace{0.1cm}{\footnotesize\ttfamily [2/5]}}
+{\footnotesize\ttfamily std\+::string write\+\_\+setting (\begin{DoxyParamCaption}\item[{std\+::string}]{label,  }\item[{float}]{a }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{mainwindow-settings_8cpp_acc7f7ed646629bbec38d5b59227d2a22}\label{mainwindow-settings_8cpp_acc7f7ed646629bbec38d5b59227d2a22}} 
+\index{mainwindow-\/settings.cpp@{mainwindow-\/settings.cpp}!write\_setting@{write\_setting}}
+\index{write\_setting@{write\_setting}!mainwindow-\/settings.cpp@{mainwindow-\/settings.cpp}}
+\doxyparagraph{\texorpdfstring{write\_setting()}{write\_setting()}\hspace{0.1cm}{\footnotesize\ttfamily [3/5]}}
+{\footnotesize\ttfamily std\+::string write\+\_\+setting (\begin{DoxyParamCaption}\item[{std\+::string}]{label,  }\item[{int}]{a }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{mainwindow-settings_8cpp_aed8af24ab8df98c9f31f2484e3f8f7d5}\label{mainwindow-settings_8cpp_aed8af24ab8df98c9f31f2484e3f8f7d5}} 
+\index{mainwindow-\/settings.cpp@{mainwindow-\/settings.cpp}!write\_setting@{write\_setting}}
+\index{write\_setting@{write\_setting}!mainwindow-\/settings.cpp@{mainwindow-\/settings.cpp}}
+\doxyparagraph{\texorpdfstring{write\_setting()}{write\_setting()}\hspace{0.1cm}{\footnotesize\ttfamily [4/5]}}
+{\footnotesize\ttfamily std\+::string write\+\_\+setting (\begin{DoxyParamCaption}\item[{std\+::string}]{label,  }\item[{QRgb}]{a }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{mainwindow-settings_8cpp_adee333886b3ec8e9a9d9f5295a857e74}\label{mainwindow-settings_8cpp_adee333886b3ec8e9a9d9f5295a857e74}} 
+\index{mainwindow-\/settings.cpp@{mainwindow-\/settings.cpp}!write\_setting@{write\_setting}}
+\index{write\_setting@{write\_setting}!mainwindow-\/settings.cpp@{mainwindow-\/settings.cpp}}
+\doxyparagraph{\texorpdfstring{write\_setting()}{write\_setting()}\hspace{0.1cm}{\footnotesize\ttfamily [5/5]}}
+{\footnotesize\ttfamily std\+::string write\+\_\+setting (\begin{DoxyParamCaption}\item[{std\+::string}]{label,  }\item[{QString}]{a }\end{DoxyParamCaption})}
 

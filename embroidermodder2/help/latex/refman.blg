@@ -10,45 +10,45 @@ I was expecting a `,' or a `}'---line 131 of file bibTmpFile_1.bib
  :     accessed={.}
 (Error may have been on previous line)
 I'm skipping whatever remains of this entry
-You've used 4 entries,
+You've used 3 entries,
             2118 wiz_defined-function locations,
-            508 strings with 4196 characters,
-and the built_in function-call counts, 828 in all, are:
-= -- 67
-> -- 34
+            505 strings with 4149 characters,
+and the built_in function-call counts, 635 in all, are:
+= -- 51
+> -- 27
 < -- 0
-+ -- 14
-- -- 10
-* -- 26
-:= -- 139
-add.period$ -- 8
-call.type$ -- 4
-change.case$ -- 17
++ -- 11
+- -- 8
+* -- 21
+:= -- 108
+add.period$ -- 6
+call.type$ -- 3
+change.case$ -- 13
 chr.to.int$ -- 0
-cite$ -- 4
-duplicate$ -- 28
-empty$ -- 89
-format.name$ -- 10
-if$ -- 176
+cite$ -- 3
+duplicate$ -- 21
+empty$ -- 67
+format.name$ -- 8
+if$ -- 134
 int.to.chr$ -- 0
-int.to.str$ -- 4
+int.to.str$ -- 3
 missing$ -- 0
-newline$ -- 19
-num.names$ -- 8
-pop$ -- 33
+newline$ -- 15
+num.names$ -- 6
+pop$ -- 25
 preamble$ -- 1
-purify$ -- 13
+purify$ -- 10
 quote$ -- 0
-skip$ -- 41
+skip$ -- 31
 stack$ -- 0
-substring$ -- 20
-swap$ -- 4
+substring$ -- 15
+swap$ -- 3
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 16
+type$ -- 12
 warning$ -- 0
-while$ -- 8
-width$ -- 5
-write$ -- 30
+while$ -- 6
+width$ -- 4
+write$ -- 23
 (There was 1 error message)

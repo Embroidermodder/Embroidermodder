@@ -66,6 +66,7 @@ var class_main_window =
     [ "layerSelectorIndexChanged", "class_main_window.html#a0a02e05509c46ef95f00f581a640bea4", null ],
     [ "linetypeSelectorIndexChanged", "class_main_window.html#a7f4206a7def3ad569e2d6885cef0f53c", null ],
     [ "lineweightSelectorIndexChanged", "class_main_window.html#a91e6a3ba0189ac692be6257a4893a9d9", null ],
+    [ "LoadCommand", "class_main_window.html#a422a58c78736f14f646f7e633c42e8cf", null ],
     [ "loadFormats", "class_main_window.html#a6aa1c7938d00887e99affda74e8d2f7e", null ],
     [ "logPromptInput", "class_main_window.html#a296e76dd335d1cd0981a002e1342a2aa", null ],
     [ "makeLayerActive", "class_main_window.html#ae03dd5abbfc1517bfb0dfc62289ae48a", null ],

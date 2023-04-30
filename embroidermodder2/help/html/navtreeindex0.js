@@ -4,16 +4,15 @@ var NAVTREEINDEX0 =
 "_ideas.html":[6],
 "about.html":[1],
 "about.html#Credits":[1,1],
-"about.html#about":[1,2],
 "about.html#add-text-to-any-design":[1,1,1,2],
 "about.html#batch-conversion":[1,1,1,4],
 "about.html#build-and-install":[1,1,2],
-"about.html#contact":[1,3],
+"about.html#contact-us":[1,2],
 "about.html#core-development-team":[1,0,0],
 "about.html#cross-platform":[1,1,1,0],
 "about.html#embroidermodder-1":[1,1,0],
 "about.html#features":[1,1,1],
-"about.html#history":[1,2,0],
+"about.html#history":[1,1,3],
 "about.html#install-desktop":[1,1,2,0],
 "about.html#scripting-api":[1,1,1,5],
 "about.html#section":[1,1,1,1],
@@ -249,5 +248,6 @@ var NAVTREEINDEX0 =
 "class_cmd_prompt.html#a82d2c8e6d18f2b014a2f650ff52c0a66":[14,0,12,3],
 "class_cmd_prompt.html#a8a704b838837bac0812271fa7c7a99a9":[14,0,12,68],
 "class_cmd_prompt.html#a8c1995c536a85dfb8f66ecf9dcc0dc13":[14,0,12,42],
-"class_cmd_prompt.html#a8e758fd51c296a9286b7b969ba0d503a":[14,0,12,45]
+"class_cmd_prompt.html#a8e758fd51c296a9286b7b969ba0d503a":[14,0,12,45],
+"class_cmd_prompt.html#a908c22768132973965aa4b787f9ddaf8":[14,0,12,28]
 };
