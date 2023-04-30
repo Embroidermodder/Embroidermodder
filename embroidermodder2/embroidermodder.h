@@ -1842,6 +1842,7 @@ public:
     std::string actuator(std::string command);
     std::string run_script_file(std::string fname);
     std::string run_script(std::vector<std::string> script);
+    void LoadCommand(QString cmdName);
 
     QAction* actionHash[200];
     QHash<QString, QToolBar*> toolbarHash;
@@ -3264,6 +3265,14 @@ typedef struct Action__ {
             list of commands or it can allow for command line
             style command aliases. For example: icon16 would become
             the string list {"iconResize 16"}. */
+    std::string menu_name;
+        /*< */
+    int menu_position;
+        /*< */
+    std::string toolbar_name;
+        /*< */
+    int toolbar_position;
+        /*< */
 } Action;
 
 int get_action_index(std::string cmd);

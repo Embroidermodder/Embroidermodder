@@ -422,7 +422,7 @@ MainWindow::createAllActions()
     qDebug("Creating All Actions...");
 
     QString appDir = qApp->applicationDirPath();
-    QSettings settings(appDir + "/actions.ini", QSettings::IniFormat);
+    QSettings settings(appDir + "/config.ini", QSettings::IniFormat);
 
     QString str_list = settings.value("actions").toString();
     action_labels = str_list.split(" ");
@@ -435,6 +435,10 @@ MainWindow::createAllActions()
         action.tooltip = settings.value(label + "/tooltip").toString().toStdString();
         action.statustip = settings.value(label + "/statustip").toString().toStdString();
         action.shortcut = settings.value(label + "/shortcut").toString().toStdString();
+        action.menu_name = settings.value(label + "/menu_name").toString().toStdString();
+        action.menu_position = settings.value(label + "/menu_position").toInt();
+        action.toolbar_name = settings.value(label + "/toolbar_name").toString().toStdString();
+        action.toolbar_position = settings.value(label + "/toolbar_position").toInt();
         action_table.push_back(action);
     }
 
@@ -1039,17 +1043,22 @@ MainWindow::actuator(std::string command)
         + "\". Press F1 for help.</font>";
 }
 
-/*
+/**
+ *
+ * NOTE: Every QScriptProgram must have a unique function name to call.
+ * If every function was called main(), then the QScriptEngine would
+ * only call the last script evaluated (which happens to be main()
+ * in another script). Thus, by adding the cmdName before main(),
+ * it becomes line_main(), circle_main(), etc... Do not change this
+ * code unless you really know what you are doing. I mean it.
+ */
 void
 MainWindow::LoadCommand(QString cmdName)
 {
     qDebug("LoadCommand(%s)", qPrintable(cmdName));
-    //NOTE: Every QScriptProgram must have a unique function name to call. If every function was called main(), then
-    //      the QScriptEngine would only call the last script evaluated (which happens to be main() in another script).
-    //      Thus, by adding the cmdName before main(), it becomes line_main(), circle_main(), etc...
-    //      Do not change this code unless you really know what you are doing. I mean it.
 
-    EmbString appDir = qApp->applicationDirPath();
+    QString appDir = qApp->applicationDirPath();
+    /*
     QFile file(appDir + "/commands/" + cmdName + "/" + cmdName + ".js");
     file.open(QIODevice::ReadOnly);
     EmbString script(file.readAll());
@@ -1087,6 +1096,7 @@ MainWindow::LoadCommand(QString cmdName)
             }
         }
     }
+    */
 
     QList<QChar> validBeforeChars;
     validBeforeChars << '\t' << '\n' << '\v' << '\f' << '\r' << ' ' << ';' << '(' << ')'
@@ -1094,7 +1104,8 @@ MainWindow::LoadCommand(QString cmdName)
                << '<' << '>' << '&' << '|' << '?' << ':' << '^' << '~';
     QList<QChar> validAfterChars;
     validAfterChars << '\t' << '\n' << '\v' << '\f' << '\r' << ' ' << '(';
-    foreach (EmbString functionName, funcList) {
+    /*
+    foreach (QString functionName, funcList) {
         findFunc = functionName;
         funcName = cmdName + "_" + functionName;
 
@@ -1114,14 +1125,12 @@ MainWindow::LoadCommand(QString cmdName)
             }
             else {
                 QChar charBefore = script.at(index - 1);
-                if (validBeforeChars.contains(charBefore))
-                {
+                if (validBeforeChars.contains(charBefore)) {
                     int i = 0;
                     QChar charAfter;
                     do {
                         charAfter = script.at(index + i + findFunc.size());
-                        if (charAfter == '(')
-                        {
+                        if (charAfter == '(') {
                             found++;
                             script.replace(index, findFunc.size(), funcName);
                         }
@@ -1135,23 +1144,28 @@ MainWindow::LoadCommand(QString cmdName)
         }
         qDebug("%s found: %d", qPrintable(findFunc), found);
     }
-    //TODO: low priority caveat: If a function name is within a string, it is still replaced.
+    */
+    // TODO: low priority caveat: If a function name is within a string, it is still replaced.
 
+    /*
     script.replace("var global = {};", "var " + cmdName + "_global = {};");
     script.replace("global.", cmdName + "_global.");
 
     engine->evaluate(script);
+    */
 
-    QSettings settings(appDir + "/commands/" + cmdName + "/" + cmdName + ".ini", QSettings::IniFormat);
-    EmbString menuName = settings.value("Menu/Name", "Lost & Found").toString();
-    int menuPos = settings.value("Menu/Position", 0).toInt();
-    EmbString toolbarName = settings.value("ToolBar/Name", "Lost & Found").toString();
-    int toolbarPos  = settings.value("ToolBar/Position", 0).toInt();
-    EmbString toolTip = settings.value("Tips/ToolTip", "").toString();
-    EmbString statusTip = settings.value("Tips/StatusTip", "").toString();
-    QStringList aliases = settings.value("Prompt/Alias").toStringList();
+    QSettings settings_file(appDir + "/commands.ini", QSettings::IniFormat);
+    QString menuName = settings_file.value("Menu/Name", "Lost & Found").toString();
+    int menuPos = settings_file.value("Menu/Position", 0).toInt();
+    QString toolbarName = settings_file.value("ToolBar/Name", "Lost & Found").toString();
+    int toolbarPos  = settings_file.value("ToolBar/Position", 0).toInt();
+    QString toolTip = settings_file.value("Tips/ToolTip", "").toString();
+    QString statusTip = settings_file.value("Tips/StatusTip", "").toString();
+    QStringList aliases = settings_file.value("Prompt/Alias").toStringList();
 
+    /*
     QAction* ACTION = createAction(cmdName, toolTip, statusTip, true);
+    */
 
     if (toolbarName.toUpper() != "NONE") {
         //If the toolbar doesn't exist, create it.
@@ -1165,27 +1179,28 @@ MainWindow::LoadCommand(QString cmdName)
         }
 
         //TODO: order actions position in toolbar based on .ini setting
-        toolbarHash.value(toolbarName)->addAction(ACTION);
+        /* toolbarHash.value(toolbarName)->addAction(ACTION); */
     }
 
     if (menuName.toUpper() != "NONE") {
         //If the menu doesn't exist, create it.
         if (!menuHash.value(menuName)) {
             QMenu* menu = new QMenu(menuName, this);
-            menu->setTearOffEnabled(true);
+            menu->setTearOffEnabled(false);
             menuBar()->addMenu(menu);
             menuHash.insert(menuName, menu);
         }
 
         //TODO: order actions position in menu based on .ini setting
-        menuHash.value(menuName)->addAction(ACTION);
+        /* menuHash.value(menuName)->addAction(ACTION); */
     }
 
+    /*
     foreach(EmbString alias, aliases) {
         prompt->addCommand(alias, cmdName);
     }
+    */
 }
-*/
 
 /**
  * @brief Inspired by PyArg_ParseTupleAndKeywords allowing
