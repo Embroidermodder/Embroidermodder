@@ -68,6 +68,9 @@ std::string
 read_string_setting(toml_table_t *table, const char *key)
 {
     toml_datum_t str = toml_string_in(table, key);
+    if (!str.ok) {
+        return "";
+    }
     std::string s(str.u.s);
     free(str.u.s);
     return s;
@@ -101,7 +104,32 @@ read_settings(const char *settings_file)
     while (std::getline(input_stringstream, token, ' ')) {
         action_labels << QString::fromStdString(token);
     }
-    
+
+    for (int i=0; i<action_labels.size(); i++) {
+        Action action;
+        std::string label = ("ACTION_" + action_labels[i]).toStdString();
+        toml_table_t *table = toml_table_in(settings_toml, label.c_str());
+
+        toml_datum_t index = toml_int_in(table, "index");
+        action.hash = index.u.i;
+
+        action.icon = read_string_setting(table, "icon");
+        action.tooltip = read_string_setting(table, "tooltip");
+        action.statustip = read_string_setting(table, "statustip");
+        action.shortcut = read_string_setting(table, "shortcut");
+        action.menu_name = read_string_setting(table, "menu_name");
+
+        toml_datum_t menu_position = toml_int_in(table, "menu_position");
+        action.menu_position = menu_position.u.i;
+
+        action.toolbar_name = read_string_setting(table, "toolbar_name");
+
+        toml_datum_t toolbar_position = toml_int_in(table, "toolbar_position");
+        action.toolbar_position = toolbar_position.u.i;
+
+        action_table.push_back(action);
+    }
+
     toml_free(settings_toml);
 
     return 1;
@@ -364,28 +392,10 @@ MainWindow::createAllActions()
 {
     qDebug("Creating All Actions...");
 
-    QString appDir = qApp->applicationDirPath();
-    QSettings settings(appDir + "/config.ini", QSettings::IniFormat);
-
-    for (int i=0; i<action_labels.size(); i++) {
-        Action action;
-        QString label = "ACTION_" + action_labels[i];
-        action.hash = settings.value(label + "/index").toInt();
-        action.icon = settings.value(label + "/icon").toString().toStdString();
-        action.tooltip = settings.value(label + "/tooltip").toString().toStdString();
-        action.statustip = settings.value(label + "/statustip").toString().toStdString();
-        action.shortcut = settings.value(label + "/shortcut").toString().toStdString();
-        action.menu_name = settings.value(label + "/menu_name").toString().toStdString();
-        action.menu_position = settings.value(label + "/menu_position").toInt();
-        action.toolbar_name = settings.value(label + "/toolbar_name").toString().toStdString();
-        action.toolbar_position = settings.value(label + "/toolbar_position").toInt();
-        action_table.push_back(action);
-    }
-
     for (int i=0; i<action_table.size(); i++) {
         Action action = action_table[i];
 
-        QIcon icon(appDir + "/icons/" + settings_general_icon_theme + "/" + QString::fromStdString(action.icon) + ".png");
+        QIcon icon = create_icon(QString::fromStdString(action.icon));
         QAction *ACTION = new QAction(icon, QString::fromStdString(action.tooltip), this);
         ACTION->setStatusTip(QString::fromStdString(action.statustip));
         ACTION->setObjectName(action.icon);
