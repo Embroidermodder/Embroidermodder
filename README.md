@@ -14,7 +14,7 @@ The newest version, Embroidermodder 2 can:
 For more in-depth information, see [our website](http://www.libembroidery.org).
 
 To try out the software in alpha see our current
-[alpha pre-release](https://github.com/Embroidermodder/Embroidermodder/releases/tag/alpha).
+[alpha pre-release](https://github.com/Embroidermodder/Embroidermodder/releases).
 
 Various sample embroidery design files can be found in
 the embroidermodder2/samples folder.
