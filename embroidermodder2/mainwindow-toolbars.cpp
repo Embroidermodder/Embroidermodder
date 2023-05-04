@@ -134,7 +134,7 @@ QIcon
 MainWindow::create_icon(QString stub)
 {
     QString appDir = qApp->applicationDirPath();
-    QString icontheme = settings_general_icon_theme;
+    QString icontheme = settings.general_icon_theme;
     return QIcon(appDir + "/icons/" + icontheme + "/" + stub + ".png");
 }
 
@@ -254,28 +254,28 @@ MainWindow::createTextToolbar()
     toolbarText->setObjectName("toolbarText");
 
     toolbarText->addWidget(textFontSelector);
-    textFontSelector->setCurrentFont(QFont(settings_text_font));
+    textFontSelector->setCurrentFont(QFont(settings.text_font));
     connect(textFontSelector, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(textFontSelectorCurrentFontChanged(const QFont&)));
 
     int textbold_index = get_action_index("textbold");
     toolbarText->addAction(actionHash[textbold_index]);
-    actionHash[textbold_index]->setChecked(settings_text_style_bold);
+    actionHash[textbold_index]->setChecked(settings.text_style_bold);
 
     int textitalic_index = get_action_index("textitalic");
     toolbarText->addAction(actionHash[textitalic_index]);
-    actionHash[get_action_index("textitalic")]->setChecked(settings_text_style_italic);
+    actionHash[get_action_index("textitalic")]->setChecked(settings.text_style_italic);
 
     int textunderline_index = get_action_index("textunderline");
     toolbarText->addAction(actionHash[textunderline_index]);
-    actionHash[textunderline_index]->setChecked(settings_text_style_underline);
+    actionHash[textunderline_index]->setChecked(settings.text_style_underline);
 
     int textstrikeout_index = get_action_index("textstrikeout");
     toolbarText->addAction(actionHash[textstrikeout_index]);
-    actionHash[textstrikeout_index]->setChecked(settings_text_style_strikeout);
+    actionHash[textstrikeout_index]->setChecked(settings.text_style_strikeout);
 
     int textoverline_index = get_action_index("textoverline");
     toolbarText->addAction(actionHash[textoverline_index]);
-    actionHash[textoverline_index]->setChecked(settings_text_style_overline);
+    actionHash[textoverline_index]->setChecked(settings.text_style_overline);
 
     textSizeSelector->setFocusProxy(prompt);
     textSizeSelector->addItem("6 pt",   6);
@@ -292,7 +292,7 @@ MainWindow::createTextToolbar()
     textSizeSelector->addItem("48 pt", 48);
     textSizeSelector->addItem("60 pt", 60);
     textSizeSelector->addItem("72 pt", 72);
-    setTextSize(settings_text_size);
+    setTextSize(settings.text_size);
     toolbarText->addWidget(textSizeSelector);
     connect(textSizeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(textSizeSelectorIndexChanged(int)));
 

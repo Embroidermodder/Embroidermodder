@@ -29,40 +29,9 @@ typedef struct Parameter_ {
     int i_value;
 } Parameter;
 
-static const int CIRCLE_MODE_1P_RAD_ = 0;
-static const int CIRCLE_MODE_1P_DIA_ = 1;
-static const int CIRCLE_MODE_2P_     = 2;
-static const int CIRCLE_MODE_3P_     = 3;
-static const int CIRCLE_MODE_TTR_    = 4;
-
-static const int DOLPHIN_MODE_NUM_POINTS_ = 0;
-static const int DOLPHIN_MODE_XSCALE_     = 1;
-static const int DOLPHIN_MODE_YSCALE_     = 2;
-
-static const int SINGLE_LINE_TEXT_MODE_JUSTIFY_ = 0;
-static const int SINGLE_LINE_TEXT_MODE_SETFONT_ = 1;
-static const int SINGLE_LINE_TEXT_MODE_SETGEOM_ = 2;
-static const int SINGLE_LINE_TEXT_MODE_RAPID_   = 3;
-
-static const int STAR_MODE_NUM_POINTS_ = 0;
-static const int STAR_MODE_CENTER_PT_  = 1;
-static const int STAR_MODE_RAD_OUTER_  = 2;
-static const int STAR_MODE_RAD_INNER_  = 3;
-
 MainWindow* _mainWin = 0;
 std::vector<Action> action_table;
 QStringList action_labels;
-
-/**
- * The actuator changes the program state via these global variables.
- */
-Settings settings;
-
-/**
- * These copies of the settings struct are for restoring the state if
- * the user doesn't want to accept their changes in the settings dialog.
- */
-Settings dialog, preview;
 
 std::string
 read_string_setting(toml_table_t *table, const char *key)
@@ -187,7 +156,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
 
-    QString lang = settings_general_language;
+    QString lang = settings.general_language;
     qDebug("language: %s", qPrintable(lang));
     if (lang == "system")
         lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
@@ -245,7 +214,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     shiftKeyPressedState = false;
 
-    setWindowIcon(QIcon(appDir + "/icons/" + settings_general_icon_theme + "/" + "app" + ".png"));
+    setWindowIcon(create_icon("app"));
     setMinimumSize(800, 480); //Require Minimum WVGA
 
     loadFormats();
@@ -256,12 +225,12 @@ MainWindow::MainWindow() : QMainWindow(0)
     //layout->setMargin(0);
     vbox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     mdiArea = new MdiArea(this, vbox);
-    mdiArea->useBackgroundLogo(settings_general_mdi_bg_use_logo);
-    mdiArea->useBackgroundTexture(settings_general_mdi_bg_use_texture);
-    mdiArea->useBackgroundColor(settings_general_mdi_bg_use_color);
-    mdiArea->setBackgroundLogo(settings_general_mdi_bg_logo);
-    mdiArea->setBackgroundTexture(settings_general_mdi_bg_texture);
-    mdiArea->setBackgroundColor(QColor(settings_general_mdi_bg_color));
+    mdiArea->useBackgroundLogo(settings.general_mdi_bg_use_logo);
+    mdiArea->useBackgroundTexture(settings.general_mdi_bg_use_texture);
+    mdiArea->useBackgroundColor(settings.general_mdi_bg_use_color);
+    mdiArea->setBackgroundLogo(settings.general_mdi_bg_logo);
+    mdiArea->setBackgroundTexture(settings.general_mdi_bg_texture);
+    mdiArea->setBackgroundColor(QColor(settings.general_mdi_bg_color));
     mdiArea->setViewMode(QMdiArea::TabbedView);
     mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -275,52 +244,52 @@ MainWindow::MainWindow() : QMainWindow(0)
     this->setFocusProxy(prompt);
     mdiArea->setFocusProxy(prompt);
 
-    prompt->setPromptTextColor(QColor(settings_prompt_text_color));
-    prompt->setPromptBackgroundColor(QColor(settings_prompt_bg_color));
+    prompt->setPromptTextColor(QColor(settings.prompt_text_color));
+    prompt->setPromptBackgroundColor(QColor(settings.prompt_bg_color));
 
     connect(prompt, SIGNAL(startCommand(const QString&)), this, SLOT(logPromptInput(const QString&)));
 
     connect(prompt, SIGNAL(startCommand(const QString&)), this, SLOT(runCommandMain(const QString&)));
     connect(prompt, SIGNAL(runCommand(const QString&, const QString&)), this, SLOT(runCommandPrompt(const QString&, const QString&)));
 
-            connect(prompt, SIGNAL(deletePressed()),    this, SLOT(deletePressed()));
-    //TODO: connect(prompt, SIGNAL(tabPressed()),       this, SLOT(someUnknownSlot()));
-            connect(prompt, SIGNAL(escapePressed()),    this, SLOT(escapePressed()));
-            connect(prompt, SIGNAL(upPressed()),        this, SLOT(promptInputPrevious()));
-            connect(prompt, SIGNAL(downPressed()),      this, SLOT(promptInputNext()));
-            connect(prompt, SIGNAL(F1Pressed()),        this, SLOT(help()));
-    //TODO: connect(prompt, SIGNAL(F2Pressed()),        this, SLOT(floatHistory()));
-    //TODO: connect(prompt, SIGNAL(F3Pressed()),        this, SLOT(toggleQSNAP()));
-            connect(prompt, SIGNAL(F4Pressed()),        this, SLOT(toggleLwt())); //TODO: typically this is toggleTablet(), make F-Keys customizable thru settings
-    //TODO: connect(prompt, SIGNAL(F5Pressed()),        this, SLOT(toggleISO()));
-    //TODO: connect(prompt, SIGNAL(F6Pressed()),        this, SLOT(toggleCoords()));
-            connect(prompt, SIGNAL(F7Pressed()),        this, SLOT(toggleGrid()));
-    //TODO: connect(prompt, SIGNAL(F8Pressed()),        this, SLOT(toggleORTHO()));
-    //TODO: connect(prompt, SIGNAL(F9Pressed()),        this, SLOT(toggleSNAP()));
-    //TODO: connect(prompt, SIGNAL(F10Pressed()),       this, SLOT(togglePOLAR()));
-    //TODO: connect(prompt, SIGNAL(F11Pressed()),       this, SLOT(toggleQTRACK()));
-            connect(prompt, SIGNAL(F12Pressed()),       this, SLOT(toggleRuler()));
-            connect(prompt, SIGNAL(cutPressed()),       this, SLOT(cut()));
-            connect(prompt, SIGNAL(copyPressed()),      this, SLOT(copy()));
-            connect(prompt, SIGNAL(pastePressed()),     this, SLOT(paste()));
-            connect(prompt, SIGNAL(selectAllPressed()), this, SLOT(selectAll()));
-            connect(prompt, SIGNAL(undoPressed()),      this, SLOT(undo()));
-            connect(prompt, SIGNAL(redoPressed()),      this, SLOT(redo()));
+    connect(prompt, SIGNAL(deletePressed()), this, SLOT(deletePressed()));
+    //TODO: connect(prompt, SIGNAL(tabPressed()), this, SLOT(someUnknownSlot()));
+    connect(prompt, SIGNAL(escapePressed()), this, SLOT(escapePressed()));
+    connect(prompt, SIGNAL(upPressed()), this, SLOT(promptInputPrevious()));
+    connect(prompt, SIGNAL(downPressed()), this, SLOT(promptInputNext()));
+    connect(prompt, SIGNAL(F1Pressed()), this, SLOT(help()));
+    //TODO: connect(prompt, SIGNAL(F2Pressed()), this, SLOT(floatHistory()));
+    //TODO: connect(prompt, SIGNAL(F3Pressed()), this, SLOT(toggleQSNAP()));
+    connect(prompt, SIGNAL(F4Pressed()), this, SLOT(toggleLwt())); //TODO: typically this is toggleTablet(), make F-Keys customizable thru settings
+    //TODO: connect(prompt, SIGNAL(F5Pressed()), this, SLOT(toggleISO()));
+    //TODO: connect(prompt, SIGNAL(F6Pressed()), this, SLOT(toggleCoords()));
+    connect(prompt, SIGNAL(F7Pressed()), this, SLOT(toggleGrid()));
+    //TODO: connect(prompt, SIGNAL(F8Pressed()), this, SLOT(toggleORTHO()));
+    //TODO: connect(prompt, SIGNAL(F9Pressed()), this, SLOT(toggleSNAP()));
+    //TODO: connect(prompt, SIGNAL(F10Pressed()), this, SLOT(togglePOLAR()));
+    //TODO: connect(prompt, SIGNAL(F11Pressed()), this, SLOT(toggleQTRACK()));
+    connect(prompt, SIGNAL(F12Pressed()),       this, SLOT(toggleRuler()));
+    connect(prompt, SIGNAL(cutPressed()),       this, SLOT(cut()));
+    connect(prompt, SIGNAL(copyPressed()),      this, SLOT(copy()));
+    connect(prompt, SIGNAL(pastePressed()),     this, SLOT(paste()));
+    connect(prompt, SIGNAL(selectAllPressed()), this, SLOT(selectAll()));
+    connect(prompt, SIGNAL(undoPressed()),      this, SLOT(undo()));
+    connect(prompt, SIGNAL(redoPressed()),      this, SLOT(redo()));
 
-            connect(prompt, SIGNAL(shiftPressed()),     this, SLOT(setShiftPressed()));
-            connect(prompt, SIGNAL(shiftReleased()),    this, SLOT(setShiftReleased()));
+    connect(prompt, SIGNAL(shiftPressed()),     this, SLOT(setShiftPressed()));
+    connect(prompt, SIGNAL(shiftReleased()),    this, SLOT(setShiftReleased()));
 
-            connect(prompt, SIGNAL(showSettings()),     this, SLOT(settingsPrompt()));
+    connect(prompt, SIGNAL(showSettings()),     this, SLOT(settingsPrompt()));
 
-            connect(prompt, SIGNAL(historyAppended(const QString&)), this, SLOT(promptHistoryAppended(const QString&)));
+    connect(prompt, SIGNAL(historyAppended(const QString&)), this, SLOT(promptHistoryAppended(const QString&)));
 
     //create the Object Property Editor
-    dockPropEdit = new PropertyEditor(appDir + "/icons/" + settings_general_icon_theme, settings_selection_mode_pickadd, prompt, this);
+    dockPropEdit = new PropertyEditor(appDir + "/icons/" + settings.general_icon_theme, settings.selection_mode_pickadd, prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockPropEdit);
     connect(dockPropEdit, SIGNAL(pickAddModeToggled()), this, SLOT(pickAddModeToggled()));
 
     //create the Command History Undo Editor
-    dockUndoEdit = new UndoEditor(appDir + "/icons/" + settings_general_icon_theme, prompt, this);
+    dockUndoEdit = new UndoEditor(appDir + "/icons/" + settings.general_icon_theme, prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockUndoEdit);
 
     //setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); //TODO: Load these from settings
@@ -336,7 +305,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     createAllMenus();
     createAllToolbars();
 
-    iconResize(settings_general_icon_size);
+    iconResize(settings.general_icon_size);
     updateMenuToolbarStatusbar();
 
     //Show date in statusbar after it has been updated
@@ -360,7 +329,7 @@ MainWindow::MainWindow() : QMainWindow(0)
         }
         while(!tipLine.isNull());
     }
-    if (settings_general_tip_of_the_day) {
+    if (settings.general_tip_of_the_day) {
         tipOfTheDay();
     }
 }
@@ -2139,10 +2108,10 @@ MainWindow::recentMenuAboutToShow()
 
     QFileInfo recentFileInfo;
     QString recentValue;
-    for (int i = 0; i < settings_opensave_recent_list_of_files.size(); ++i) {
+    for (int i = 0; i < settings.opensave_recent_list_of_files.size(); ++i) {
         //If less than the max amount of entries add to menu
-        if (i < settings_opensave_recent_max_files) {
-            recentFileInfo = QFileInfo(settings_opensave_recent_list_of_files.at(i));
+        if (i < settings.opensave_recent_max_files) {
+            recentFileInfo = QFileInfo(settings.opensave_recent_list_of_files.at(i));
             if (recentFileInfo.exists() && validFileFormat(recentFileInfo.fileName())) {
                 recentValue.setNum(i+1);
                 QAction* rAction;
@@ -2153,15 +2122,15 @@ MainWindow::recentMenuAboutToShow()
                 else
                     rAction = new QAction(recentValue + " " + recentFileInfo.fileName(), this);
                 rAction->setCheckable(false);
-                rAction->setData(settings_opensave_recent_list_of_files.at(i));
+                rAction->setData(settings.opensave_recent_list_of_files.at(i));
                 recentMenu->addAction(rAction);
                 connect(rAction, SIGNAL(triggered()), this, SLOT(openrecentfile()));
             }
         }
     }
     //Ensure the list only has max amount of entries
-    while (settings_opensave_recent_list_of_files.size() > settings_opensave_recent_max_files) {
-        settings_opensave_recent_list_of_files.removeLast();
+    while (settings.opensave_recent_list_of_files.size() > settings.opensave_recent_max_files) {
+        settings.opensave_recent_list_of_files.removeLast();
     }
 }
 
@@ -2269,8 +2238,8 @@ MainWindow::openFile(bool recent, const QString& recentFile)
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
     QStringList files;
-    bool preview = settings_opensave_open_thumbnail;
-    openFilesPath = settings_opensave_recent_directory;
+    bool preview = settings.opensave_open_thumbnail;
+    openFilesPath = settings.opensave_recent_directory;
 
     //Check to see if this from the recent files list
     if (recent) {
@@ -2279,13 +2248,13 @@ MainWindow::openFile(bool recent, const QString& recentFile)
     }
     else {
         if (!preview) {
-            //TODO: set getOpenFileNames' selectedFilter parameter from settings_opensave_open_format
+            //TODO: set getOpenFileNames' selectedFilter parameter from settings.opensave_open_format
             files = QFileDialog::getOpenFileNames(this, tr("Open"), openFilesPath, formatFilterOpen);
             openFilesSelected(files);
         }
         else {
             PreviewDialog* openDialog = new PreviewDialog(this, tr("Open w/Preview"), openFilesPath, formatFilterOpen);
-            //TODO: set openDialog->selectNameFilter(const QString& filter) from settings_opensave_open_format
+            //TODO: set openDialog->selectNameFilter(const QString& filter) from settings.opensave_open_format
             connect(openDialog, SIGNAL(filesSelected(const QStringList&)), this, SLOT(openFilesSelected(const QStringList&)));
             openDialog->exec();
         }
@@ -2329,17 +2298,17 @@ MainWindow::openFilesSelected(const QStringList& filesToOpen)
                 mdiWin->show();
                 mdiWin->showMaximized();
                 //Prevent duplicate entries in the recent files list
-                if (!settings_opensave_recent_list_of_files.contains(filesToOpen.at(i), Qt::CaseInsensitive))
+                if (!settings.opensave_recent_list_of_files.contains(filesToOpen.at(i), Qt::CaseInsensitive))
                 {
-                    settings_opensave_recent_list_of_files.prepend(filesToOpen.at(i));
+                    settings.opensave_recent_list_of_files.prepend(filesToOpen.at(i));
                 }
                 //Move the recent file to the top of the list
                 else
                 {
-                    settings_opensave_recent_list_of_files.removeAll(filesToOpen.at(i));
-                    settings_opensave_recent_list_of_files.prepend(filesToOpen.at(i));
+                    settings.opensave_recent_list_of_files.removeAll(filesToOpen.at(i));
+                    settings.opensave_recent_list_of_files.prepend(filesToOpen.at(i));
                 }
-                settings_opensave_recent_directory = QFileInfo(filesToOpen.at(i)).absolutePath();
+                settings.opensave_recent_directory = QFileInfo(filesToOpen.at(i)).absolutePath();
 
                 View* v = mdiWin->getView();
                 if (v)
@@ -2395,7 +2364,7 @@ MainWindow::saveasfile()
         return;
 
     QString file;
-    openFilesPath = settings_opensave_recent_directory;
+    openFilesPath = settings.opensave_recent_directory;
     file = QFileDialog::getSaveFileName(this, tr("Save As"), openFilesPath, formatFilterSave);
 
     mdiWin->saveFile(file);
@@ -2702,7 +2671,7 @@ MainWindow::loadFormats()
 
     //TODO: Fixup custom filter
     /*
-    QString custom = settings_custom_filter;
+    QString custom = settings.custom_filter;
     if (custom.contains("supported", Qt::CaseInsensitive))
         custom = ""; //This will hide it
     else if (!custom.contains("*", Qt::CaseInsensitive))
@@ -6734,12 +6703,11 @@ prompt(str)
 void
 updateStar(x, y)
 {
-    var distOuter;
-    var distInner;
-    var angOuter;
+    EmbReal distOuter;
+    EmbReal distInner;
+    EmbReal angOuter;
 
-    if (global.mode == global.mode_RAD_OUTER)
-    {
+    if (global.mode == global.mode_RAD_OUTER) {
         angOuter = calculateAngle(global.cx, global.cy, x, y);
         distOuter = calculateDistance(global.cx, global.cy, x, y);
         distInner = distOuter/2.0;
@@ -6751,9 +6719,9 @@ updateStar(x, y)
         distInner = calculateDistance(global.cx, global.cy, x, y);
     }
 
-    //Calculate the Star Points
-    var angInc = 360.0/(global.numPoints*2);
-    var odd = true;
+    // Calculate the Star Points
+    EmbReal angInc = 360.0/(global.numPoints*2);
+    bool odd = true;
     for (var i = 0; i < global.numPoints*2; i++) {
         var xx;
         var yy;

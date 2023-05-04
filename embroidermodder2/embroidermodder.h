@@ -113,55 +113,13 @@ class TextMultiObject;
 class TextSingleObject;
 
 /**
- * @brief 
- * 
- */
-typedef std::unordered_map<std::string, std::string> Dictionary;
-
-/**
- * @brief \todo document this.
- */
-typedef struct UndoHistory_ {
-    std::vector<std::string> data; /*< \todo document this */
-    int position; /*< \todo document this */
-} UndoHistory;
-
-/**
- * @brief \todo document this.
- */
-typedef std::unordered_map<std::string, Dictionary> Index;
-
-/**
  * @brief This covers the inbuilt designs: Dolphin, Snowflake and Heart.
  * Covers Rotate, Scale and Point UI events.
  *
- * scale is how radii are stored if the object is a circle, or the
- * semi-major and semi-minor axes if the object is an ellipse.
- *
- * center perhaps should be the "anchor" instead which is the center
- * for some objects and top left for rectangular objects.
- *
- * Do angles need special storage? angleRef, angleNew
- *
- * This chapter details how the source code achieves the design detailed in
- * the previous chapter. For the low-level details, read the later chapters.
- *
- * Dear ImGui (CITATION NEEDED)
- *
- * ## Geometry Objects
- *
- * At all times the EmbPattern has all of the information about the pattern
- * however, editing information like the rubber text labels needs to be stored
- * during runtime. Also editing ghosts like when a rotate command is half
- * executed.
- *
- * To deal with this we have a generic object that can act as any other object
- * that updates the associated pattern struct as changes as made.
- *
- * Note that the editor state is seperate from this since that is per view, not
- * per object.
- *
- * Selecting is done via this interface.
+ * This was an idea for storing the current command state: could be
+ * combined with EmbView since you can't have more than one active command.
+ * If a command calls a sub command it will store the position in the
+ * parents.
  */
 typedef struct UiObject_ {
     char fname[200]; /*< \todo document this */
@@ -212,7 +170,7 @@ typedef struct EmbView_ {
     EmbPattern *pattern; /*< \todo document this */
     EmbVector origin; /*< \todo document this */
     EmbReal scale; /*< \todo document this */
-    char grid_type[200]; /*< \todo document this */
+    QString grid_type; /*< \todo document this */
     int ui_mode; /*< \todo document this */
     bool snap_mode; /*< \todo document this */
     bool grid_mode; /*< \todo document this */
@@ -226,7 +184,7 @@ typedef struct EmbView_ {
     bool metric; /*< \todo document this */
     bool simulate; /*< \todo document this */
     clock_t simulation_start; /*< \todo document this */
-    char text_font[200]; /*< \todo document this */
+    QString text_font; /*< \todo document this */
     EmbReal text_size; /*< \todo document this */
     EmbReal text_angle; /*< \todo document this */
     bool text_style_bold; /*< \todo document this */
@@ -234,8 +192,8 @@ typedef struct EmbView_ {
     bool text_style_underline; /*< \todo document this */
     bool text_style_overline; /*< \todo document this */
     bool text_style_strikeout; /*< \todo document this */
-    char filename[200]; /*< \todo document this */
-    UndoHistory undo_history; /*< \todo document this */
+    QString filename; /*< \todo document this */
+    QStringList undo_history; /*< \todo document this */
     int selected[100]; /*< \todo document this */
     int n_selected; /*< \todo document this */
     int rubber_mode; /*< . */
@@ -252,7 +210,10 @@ typedef struct EmbView_ {
  * Like all of our structs, it's C99 compliant.
  */
 typedef struct Settings_ {
-    char version[200]; /*< \todo document this */
+    QString general_language; /*< \todo document this */
+    QString general_icon_theme; /*< \todo document this */
+    int general_icon_size; /*< \todo document this */
+    QString version; /*< \todo document this */
     bool running; /*< \todo document this */
     bool testing; /*< \todo document this */
     int debug_mode; /*< \todo document this */
@@ -261,19 +222,16 @@ typedef struct Settings_ {
     bool show_editor; /*< \todo document this */
     bool show_details_dialog; /*< \todo document this */
     bool show_open_file_dialog; /*< \todo document this */
-    int icon_size; /*< \todo document this */
-    char icon_theme[200]; /*< \todo document this */
     int pattern_index; /*< \todo document this */
-    char assets_dir[200]; /*< \todo document this */
+    QString assets_dir; /*< \todo document this */
     bool use_translation; /*< \todo document this */
-    char language[200]; /*< \todo document this */
-    bool mdi_bg_use_logo; /*< \todo document this */
-    bool mdi_bg_use_texture; /*< \todo document this */
-    bool mdi_bg_use_color; /*< \todo document this */
-    char general_mdi_bg_logo[200]; /*< \todo document this */
-    char general_mdi_bg_texture[200]; /*< \todo document this */
-    uint32_t general_mdi_bg_color; /*< \todo document this */
-    bool tip_of_the_day; /*< \todo document this */
+    bool general_mdi_bg_use_logo; /*< \todo document this */
+    bool general_mdi_bg_use_texture; /*< \todo document this */
+    bool general_mdi_bg_use_color; /*< \todo document this */
+    QString general_mdi_bg_logo; /*< \todo document this */
+    QString general_mdi_bg_texture; /*< \todo document this */
+    QRgb general_mdi_bg_color; /*< \todo document this */
+    bool general_tip_of_the_day; /*< \todo document this */
     uint32_t general_current_tip; /*< \todo document this */
     bool general_system_help_browser; /*< \todo document this */
     bool general_check_for_updates; /*< \todo document this */
@@ -295,17 +253,17 @@ typedef struct Settings_ {
     EmbReal display_zoomscale_in; /*< \todo document this */
     EmbReal display_zoomscale_out; /*< \todo document this */
     uint8_t display_crosshair_percent; /*< \todo document this */
-    std::string display_units; /*< \todo document this */
-    std::string opensave_custom_filter; /*< \todo document this */
-    std::string opensave_open_format; /*< \todo document this */
+    QString display_units; /*< \todo document this */
+    QString opensave_custom_filter; /*< \todo document this */
+    QString opensave_open_format; /*< \todo document this */
     bool opensave_open_thumbnail; /*< \todo document this */
-    std::string opensave_save_format; /*< \todo document this */
+    QString opensave_save_format; /*< \todo document this */
     bool opensave_save_thumbnail; /*< \todo document this */
     uint8_t opensave_recent_max_files; /*< \todo document this */
-    std::vector<std::string> opensave_recent_list_of_files; /*< \todo document this */
-    std::string opensave_recent_directory; /*< \todo document this */
+    QStringList opensave_recent_list_of_files; /*< \todo document this */
+    QString opensave_recent_directory; /*< \todo document this */
     uint8_t opensave_trim_dst_num_jumps; /*< \todo document this */
-    std::string printing_default_device; /*< \todo document this */
+    QString printing_default_device; /*< \todo document this */
     bool printing_use_last_device; /*< \todo document this */
     bool printing_disable_bg; /*< \todo document this */
     bool grid_show_on_load; /*< \todo document this */
@@ -313,7 +271,7 @@ typedef struct Settings_ {
     bool grid_color_match_crosshair; /*< \todo document this */
     uint32_t grid_color; /*< \todo document this */
     bool grid_load_from_file; /*< \todo document this */
-    std::string grid_type; /*< \todo document this */
+    QString grid_type; /*< \todo document this */
     bool grid_center_on_origin; /*< \todo document this */
     EmbVector grid_center; /*< \todo document this */
     EmbVector grid_size; /*< \todo document this */
@@ -353,7 +311,7 @@ typedef struct Settings_ {
     uint32_t selection_hotgrip_color; /*< \todo document this */
     uint8_t selection_grip_size; /*< \todo document this */
     uint8_t selection_pickbox_size; /*< \todo document this */
-    char text_font[200]; /*< \todo document this */
+    QString text_font; /*< \todo document this */
     EmbReal text_size; /*< \todo document this */
     EmbReal text_angle; /*< \todo document this */
     bool text_style_bold; /*< \todo document this */
@@ -361,19 +319,36 @@ typedef struct Settings_ {
     bool text_style_underline; /*< \todo document this */
     bool text_style_overline; /*< \todo document this */
     bool text_style_strikeout; /*< \todo document this */
-    Dictionary *texture_list; /*< \todo document this */
     uint32_t ticks_color; /*< \todo document this */
     uint32_t shine_color; /*< \todo document this */
-    char to_open[200]; /*< \todo document this */
-    char menu_action[200]; /*< \todo document this */
-    char current_directory[200]; /*< \todo document this */
+    QString to_open; /*< \todo document this */
+    QString current_directory; /*< \todo document this */
     EmbReal zoomInLimit; /*< */
     EmbReal zoomOutLimit; /*< */
     EmbReal ruler_width; /*< */
     EmbReal tick_depth; /*< */
-    EmbReal major_tick_seperation; /*< */
-    EmbReal needle_speed; /*< */
-    EmbReal stitch_time; /*< */
+    EmbReal major_tick_seperation;
+        /*< \todo document this */
+    EmbReal needle_speed;
+        /*< \todo document this */
+    EmbReal stitch_time;
+        /*< \todo document this */
+    QRgb prompt_text_color;
+        /*< \todo document this */
+    QRgb prompt_bg_color;
+        /*< \todo document this */
+    QString prompt_font_family;
+        /*< \todo document this */
+    QString prompt_font_style;
+        /*< \todo document this */
+    uint8_t prompt_font_size;
+        /*< \todo document this */
+    bool prompt_save_history;
+        /*< \todo document this */
+    bool prompt_save_history_as_html;
+        /*< \todo document this */
+    QString prompt_save_history_filename;
+        /*< \todo document this */
 } Settings;
 
 enum UiMode {
@@ -608,7 +583,7 @@ PREVIEW_MODE_ROTATE,
 PREVIEW_MODE_SCALE
 };
 
-int read_settings(const char *settings_file);
+int read_settings(const char *file);
 void write_settings(const char *fname);
 
 static const EmbReal emb_constant_pi = 3.14159265358979323846;
@@ -2107,11 +2082,11 @@ public:
     MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags);
     ~MdiWindow();
 
-    virtual QSize              sizeHint() const;
+    virtual QSize sizeHint() const;
     QString getCurrentFile() { return curFile; }
     QString getShortCurrentFile();
-    View*                      getView() { return gview; }
-    QGraphicsScene*            getScene() { return gscene; }
+    View* getView() { return gview; }
+    QGraphicsScene* getScene() { return gscene; }
     QString getCurrentLayer() { return curLayer; }
     QRgb getCurrentColor() { return curColor; }
     QString getCurrentLineType() { return curLineType; }
@@ -2157,10 +2132,10 @@ public slots:
 protected:
 
 private:
-    MainWindow*                mainWin;
-    QMdiArea*                  mdiArea;
-    QGraphicsScene*            gscene;
-    View*                      gview;
+    MainWindow* mainWin;
+    QMdiArea* mdiArea;
+    QGraphicsScene* gscene;
+    View* gview;
 
     bool fileWasLoaded;
 
@@ -2379,7 +2354,7 @@ public:
     QColor rightBrushColor;
     QColor leftPenColor;
     QColor rightPenColor;
-    quint8 alpha;
+    uint8_t alpha;
 
     QBrush dirBrush;
     QBrush leftBrush;
@@ -2792,6 +2767,8 @@ class View : public QGraphicsView
 public:
     View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent);
     ~View();
+    
+    EmbView view_state;
 
     bool allowZoomIn();
     bool allowZoomOut();
@@ -2843,7 +2820,7 @@ public slots:
     void showScrollBars(bool val);
     void setCornerButton();
     void setCrossHairColor(QRgb color);
-    void setCrossHairSize(quint8 percent);
+    void setCrossHairSize(uint8_t percent);
     void setBackgroundColor(QRgb color);
     void setSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
     void toggleSnap(bool on);
@@ -2903,7 +2880,7 @@ private:
 
     bool rulerMetric;
     QColor rulerColor;
-    quint8 rulerPixelSize;
+    uint8_t rulerPixelSize;
     void loadRulerSettings();
 
     bool willUnderflowInt32(qint64 a, qint64 b);
@@ -2962,12 +2939,12 @@ private:
     QPoint viewMousePoint;
     QPointF sceneMousePoint;
     QRgb qsnapLocatorColor;
-    quint8 qsnapLocatorSize;
-    quint8 qsnapApertureSize;
+    uint8_t qsnapLocatorSize;
+    uint8_t qsnapApertureSize;
     QRgb gripColorCool;
     QRgb gripColorHot;
-    quint8 gripSize;
-    quint8 pickBoxSize;
+    uint8_t gripSize;
+    uint8_t pickBoxSize;
     QRgb crosshairColor;
     quint32 crosshairSize;
 
@@ -3035,256 +3012,5 @@ extern GroupBoxData group_box_ellipse_geometry[];
 extern const int group_box_ellipse_geometry_entries;
 
 extern std::unordered_map<std::string, GroupBoxData*> group_box_data;
-
-extern QString settings_general_language;
-extern QString settings_general_icon_theme;
-extern int settings_general_icon_size;
-extern bool settings_general_mdi_bg_use_logo;
-extern bool settings_general_mdi_bg_use_texture;
-extern bool settings_general_mdi_bg_use_color;
-extern QString settings_general_mdi_bg_logo;
-extern QString settings_general_mdi_bg_texture;
-extern QRgb settings_general_mdi_bg_color;
-extern bool settings_general_tip_of_the_day;
-extern quint16 settings_general_current_tip;
-extern bool settings_general_system_help_browser;
-extern bool settings_general_check_for_updates;
-extern bool settings_display_use_opengl;
-extern bool settings_display_renderhint_aa;
-extern bool settings_display_renderhint_text_aa;
-extern bool settings_display_renderhint_smooth_pix;
-extern bool settings_display_renderhint_high_aa;
-extern bool settings_display_renderhint_noncosmetic;
-extern bool settings_display_show_scrollbars;
-extern int settings_display_scrollbar_widget_num;
-extern QRgb settings_display_crosshair_color;
-extern QRgb settings_display_bg_color;
-extern QRgb settings_display_selectbox_left_color;
-extern QRgb settings_display_selectbox_left_fill;
-extern QRgb settings_display_selectbox_right_color;
-extern QRgb settings_display_selectbox_right_fill;
-extern uint8_t settings_display_selectbox_alpha;
-extern EmbReal settings_display_zoomscale_in;
-extern EmbReal settings_display_zoomscale_out;
-extern uint8_t settings_display_crosshair_percent;
-extern QString settings_display_units;
-extern QRgb settings_prompt_text_color;
-extern QRgb settings_prompt_bg_color;
-extern QString settings_prompt_font_family;
-extern QString settings_prompt_font_style;
-extern uint8_t settings_prompt_font_size;
-extern bool settings_prompt_save_history;
-extern bool settings_prompt_save_history_as_html;
-extern QString settings_prompt_save_history_filename;
-extern QString settings_opensave_custom_filter;
-extern QString settings_opensave_open_format;
-extern bool settings_opensave_open_thumbnail;
-extern QString settings_opensave_save_format;
-extern bool settings_opensave_save_thumbnail;
-extern uint8_t settings_opensave_recent_max_files;
-extern QStringList settings_opensave_recent_list_of_files;
-extern QString settings_opensave_recent_directory;
-extern uint8_t settings_opensave_trim_dst_num_jumps;
-extern QString settings_printing_default_device;
-extern bool settings_printing_use_last_device;
-extern bool settings_printing_disable_bg;
-extern bool settings_grid_show_on_load;
-extern bool settings_grid_show_origin;
-extern bool settings_grid_color_match_crosshair;
-extern QRgb settings_grid_color;
-extern bool settings_grid_load_from_file;
-extern QString settings_grid_type;
-extern bool settings_grid_center_on_origin;
-extern EmbReal settings_grid_center_x;
-extern EmbReal settings_grid_center_y;
-extern EmbReal settings_grid_size_x;
-extern EmbReal settings_grid_size_y;
-extern EmbReal settings_grid_spacing_x;
-extern EmbReal settings_grid_spacing_y;
-extern EmbReal settings_grid_size_radius;
-extern EmbReal settings_grid_spacing_radius;
-extern EmbReal settings_grid_spacing_angle;
-extern bool settings_ruler_show_on_load;
-extern bool settings_ruler_metric;
-extern QRgb settings_ruler_color;
-extern uint8_t settings_ruler_pixel_size;
-extern bool settings_qsnap_enabled;
-extern QRgb settings_qsnap_locator_color;
-extern uint8_t settings_qsnap_locator_size;
-extern uint8_t settings_qsnap_aperture_size;
-extern bool settings_qsnap_endpoint;
-extern bool settings_qsnap_midpoint;
-extern bool settings_qsnap_center;
-extern bool settings_qsnap_node;
-extern bool settings_qsnap_quadrant;
-extern bool settings_qsnap_intersection;
-extern bool settings_qsnap_extension;
-extern bool settings_qsnap_insertion;
-extern bool settings_qsnap_perpendicular;
-extern bool settings_qsnap_tangent;
-extern bool settings_qsnap_nearest;
-extern bool settings_qsnap_apparent;
-extern bool settings_qsnap_parallel;
-extern bool settings_lwt_show_lwt;
-extern bool settings_lwt_real_render;
-extern EmbReal settings_lwt_default_lwt;
-extern bool settings_selection_mode_pickfirst;
-extern bool settings_selection_mode_pickadd;
-extern bool settings_selection_mode_pickdrag;
-extern QRgb settings_selection_coolgrip_color;
-extern QRgb settings_selection_hotgrip_color;
-extern uint8_t settings_selection_grip_size;
-extern uint8_t settings_selection_pickbox_size;
-extern QString settings_text_font;
-extern EmbReal settings_text_size;
-extern EmbReal settings_text_angle;
-extern bool settings_text_style_bold;
-extern bool settings_text_style_italic;
-extern bool settings_text_style_underline;
-extern bool settings_text_style_overline;
-extern bool settings_text_style_strikeout;
-
-//Temporary for instant preview
-extern bool preview_general_mdi_bg_use_logo;
-extern bool preview_general_mdi_bg_use_texture;
-extern bool preview_general_mdi_bg_use_color;
-
-extern QString accept_general_mdi_bg_logo;
-extern QString accept_general_mdi_bg_texture;
-extern QRgb preview_general_mdi_bg_color;
-extern QRgb accept_general_mdi_bg_color;
-
-extern bool preview_display_show_scrollbars;
-
-extern QRgb preview_display_crosshair_color;
-extern QRgb accept_display_crosshair_color;
-extern QRgb preview_display_bg_color;
-extern QRgb accept_display_bg_color;
-
-extern QRgb preview_display_selectbox_left_color;
-extern QRgb accept_display_selectbox_left_color;
-extern QRgb preview_display_selectbox_left_fill;
-extern QRgb accept_display_selectbox_left_fill;
-extern QRgb preview_display_selectbox_right_color;
-extern QRgb accept_display_selectbox_right_color;
-extern QRgb preview_display_selectbox_right_fill;
-extern QRgb accept_display_selectbox_right_fill;
-extern quint8  preview_display_selectbox_alpha;
-
-extern QRgb preview_prompt_text_color;
-extern QRgb accept_prompt_text_color;
-
-extern QRgb preview_prompt_bg_color;
-extern QRgb accept_prompt_bg_color;
-
-extern QString preview_prompt_font_family;
-extern QString preview_prompt_font_style;
-extern quint8  preview_prompt_font_size;
-
-extern QRgb preview_grid_color;
-extern QRgb accept_grid_color;
-
-extern QRgb preview_ruler_color;
-extern QRgb accept_ruler_color;
-
-extern bool preview_lwt_show_lwt;
-extern bool preview_lwt_real_render;
-
-//Temporary until changes are accepted
-extern QString dialog_general_language;
-extern QString dialog_general_icon_theme;
-extern int dialog_general_icon_size;
-extern bool dialog_general_mdi_bg_use_logo;
-extern bool dialog_general_mdi_bg_use_texture;
-extern bool dialog_general_mdi_bg_use_color;
-extern QString dialog_general_mdi_bg_logo;
-extern QString dialog_general_mdi_bg_texture;
-extern QRgb dialog_general_mdi_bg_color;
-extern bool dialog_general_tip_of_the_day;
-extern bool dialog_general_system_help_browser;
-extern bool dialog_display_use_opengl;
-extern bool dialog_display_renderhint_aa;
-extern bool dialog_display_renderhint_text_aa;
-extern bool dialog_display_renderhint_smooth_pix;
-extern bool dialog_display_renderhint_high_aa;
-extern bool dialog_display_renderhint_noncosmetic;
-extern bool dialog_display_show_scrollbars;
-extern int dialog_display_scrollbar_widget_num;
-extern QRgb dialog_display_crosshair_color;
-extern QRgb dialog_display_bg_color;
-extern QRgb dialog_display_selectbox_left_color;
-extern QRgb dialog_display_selectbox_left_fill;
-extern QRgb dialog_display_selectbox_right_color;
-extern QRgb dialog_display_selectbox_right_fill;
-extern quint8  dialog_display_selectbox_alpha;
-extern EmbReal dialog_display_zoomscale_in;
-extern EmbReal dialog_display_zoomscale_out;
-extern quint8  dialog_display_crosshair_percent;
-extern QString dialog_display_units;
-extern QRgb dialog_prompt_text_color;
-extern QRgb dialog_prompt_bg_color;
-extern QString dialog_prompt_font_family;
-extern QString dialog_prompt_font_style;
-extern quint8  dialog_prompt_font_size;
-extern bool dialog_prompt_save_history;
-extern bool dialog_prompt_save_history_as_html;
-extern QString dialog_prompt_save_history_filename;
-extern QString dialog_opensave_custom_filter;
-extern QString dialog_opensave_open_format;
-extern bool dialog_opensave_open_thumbnail;
-extern QString dialog_opensave_save_format;
-extern bool dialog_opensave_save_thumbnail;
-extern quint8  dialog_opensave_recent_max_files;
-extern quint8  dialog_opensave_trim_dst_num_jumps;
-extern QString dialog_printing_default_device;
-extern bool dialog_printing_use_last_device;
-extern bool dialog_printing_disable_bg;
-extern bool dialog_grid_show_on_load;
-extern bool dialog_grid_show_origin;
-extern bool dialog_grid_color_match_crosshair;
-extern QRgb dialog_grid_color;
-extern bool dialog_grid_load_from_file;
-extern QString dialog_grid_type;
-extern bool dialog_grid_center_on_origin;
-extern EmbReal dialog_grid_center_x;
-extern EmbReal dialog_grid_center_y;
-extern EmbReal dialog_grid_size_x;
-extern EmbReal dialog_grid_size_y;
-extern EmbReal dialog_grid_spacing_x;
-extern EmbReal dialog_grid_spacing_y;
-extern EmbReal dialog_grid_size_radius;
-extern EmbReal dialog_grid_spacing_radius;
-extern EmbReal dialog_grid_spacing_angle;
-extern bool dialog_ruler_show_on_load;
-extern bool dialog_ruler_metric;
-extern QRgb dialog_ruler_color;
-extern quint8  dialog_ruler_pixel_size;
-extern bool dialog_qsnap_enabled;
-extern QRgb dialog_qsnap_locator_color;
-extern quint8  dialog_qsnap_locator_size;
-extern quint8  dialog_qsnap_aperture_size;
-extern bool dialog_qsnap_endpoint;
-extern bool dialog_qsnap_midpoint;
-extern bool dialog_qsnap_center;
-extern bool dialog_qsnap_node;
-extern bool dialog_qsnap_quadrant;
-extern bool dialog_qsnap_intersection;
-extern bool dialog_qsnap_extension;
-extern bool dialog_qsnap_insertion;
-extern bool dialog_qsnap_perpendicular;
-extern bool dialog_qsnap_tangent;
-extern bool dialog_qsnap_nearest;
-extern bool dialog_qsnap_apparent;
-extern bool dialog_qsnap_parallel;
-extern bool dialog_lwt_show_lwt;
-extern bool dialog_lwt_real_render;
-extern EmbReal dialog_lwt_default_lwt;
-extern bool dialog_selection_mode_pickfirst;
-extern bool dialog_selection_mode_pickadd;
-extern bool dialog_selection_mode_pickdrag;
-extern QRgb dialog_selection_coolgrip_color;
-extern QRgb dialog_selection_hotgrip_color;
-extern quint8  dialog_selection_grip_size;
-extern quint8  dialog_selection_pickbox_size;
 
 #endif

@@ -30,18 +30,18 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
 
     //NOTE: This has to be done before setting mouse tracking.
     //TODO: Review OpenGL for Qt5 later
-    //if (settings_display_use_opengl)
+    //if (settings.display_use_opengl)
     //{
     //    qDebug("Using OpenGL...");
     //    setViewport(new QGLWidget(QGLFormat(QGL::DoubleBuffer)));
     //}
 
     //TODO: Review RenderHints later
-    //setRenderHint(QPainter::Antialiasing,            settings_display_render_hint_aa);
-    //setRenderHint(QPainter::TextAntialiasing,        settings_display_renderhint_text_aa);
-    //setRenderHint(QPainter::SmoothPixmapTransform,   settings_displayRenderHintSmoothPix());
-    //setRenderHint(QPainter::HighQualityAntialiasing, settings_display_render_hint_high_aa);
-    //setRenderHint(QPainter::NonCosmeticDefaultPen,   settings_display_render_hint_non_cosmetic);
+    //setRenderHint(QPainter::Antialiasing,            settings.display_render_hint_aa);
+    //setRenderHint(QPainter::TextAntialiasing,        settings.display_renderhint_text_aa);
+    //setRenderHint(QPainter::SmoothPixmapTransform,   settings.displayRenderHintSmoothPix());
+    //setRenderHint(QPainter::HighQualityAntialiasing, settings.display_render_hint_high_aa);
+    //setRenderHint(QPainter::NonCosmeticDefaultPen,   settings.display_render_hint_non_cosmetic);
 
     //NOTE: FullViewportUpdate MUST be used for both the GL and Qt renderers.
     //NOTE: Qt renderer will not draw the foreground properly if it isnt set.
@@ -52,25 +52,25 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     setCursor(Qt::BlankCursor);
     horizontalScrollBar()->setCursor(Qt::ArrowCursor);
     verticalScrollBar()->setCursor(Qt::ArrowCursor);
-    qsnapLocatorColor = settings_qsnap_locator_color;
-    qsnapLocatorSize = settings_qsnap_locator_size;
-    qsnapApertureSize = settings_qsnap_aperture_size;
-    gripColorCool = settings_selection_coolgrip_color;
-    gripColorHot = settings_selection_hotgrip_color;
-    gripSize = settings_selection_grip_size;
-    pickBoxSize = settings_selection_pickbox_size;
-    setCrossHairColor(settings_display_crosshair_color);
-    setCrossHairSize(settings_display_crosshair_percent);
-    setGridColor(settings_grid_color);
+    qsnapLocatorColor = settings.qsnap_locator_color;
+    qsnapLocatorSize = settings.qsnap_locator_size;
+    qsnapApertureSize = settings.qsnap_aperture_size;
+    gripColorCool = settings.selection_coolgrip_color;
+    gripColorHot = settings.selection_hotgrip_color;
+    gripSize = settings.selection_grip_size;
+    pickBoxSize = settings.selection_pickbox_size;
+    setCrossHairColor(settings.display_crosshair_color);
+    setCrossHairSize(settings.display_crosshair_percent);
+    setGridColor(settings.grid_color);
 
-    if (settings_grid_show_on_load) {
-        createGrid(settings_grid_type);
+    if (settings.grid_show_on_load) {
+        createGrid(settings.grid_type);
     }
     else {
         createGrid("");
     }
 
-    toggleRuler(settings_ruler_show_on_load);
+    toggleRuler(settings.ruler_show_on_load);
     toggleReal(true); //TODO: load this from file, else settings with default being true
 
     grippingActive = false;
@@ -98,13 +98,13 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     tempBaseObj = 0;
 
     selectBox = new SelectBox(QRubberBand::Rectangle, this);
-    selectBox->setColors(QColor(settings_display_selectbox_left_color),
-                         QColor(settings_display_selectbox_left_fill),
-                         QColor(settings_display_selectbox_right_color),
-                         QColor(settings_display_selectbox_right_fill),
-                         settings_display_selectbox_alpha);
+    selectBox->setColors(QColor(settings.display_selectbox_left_color),
+                         QColor(settings.display_selectbox_left_fill),
+                         QColor(settings.display_selectbox_right_color),
+                         QColor(settings.display_selectbox_right_fill),
+                         settings.display_selectbox_alpha);
 
-    showScrollBars(settings_display_show_scrollbars);
+    showScrollBars(settings.display_show_scrollbars);
     setCornerButton();
 
     undoStack = new QUndoStack(this);
@@ -113,7 +113,7 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     installEventFilter(this);
 
     setMouseTracking(true);
-    setBackgroundColor(settings_display_bg_color);
+    setBackgroundColor(settings.display_bg_color);
     //TODO: wrap this with a setBackgroundPixmap() function: setBackgroundBrush(QPixmap("images/canvas.png"));
 
     connect(gscene, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
@@ -361,7 +361,7 @@ void View::createOrigin() //TODO: Make Origin Customizable
 {
     originPath = QPainterPath();
 
-    if (settings_grid_show_origin) {
+    if (settings.grid_show_origin) {
         //originPath.addEllipse(QPointF(0,0), 0.5, 0.5); //TODO: Make Origin Customizable
         EmbReal rad = 0.5;
         originPath.moveTo(0.0, rad);
@@ -375,24 +375,25 @@ void View::createOrigin() //TODO: Make Origin Customizable
     }
 }
 
+/**
+ * .
+ */
 void View::createGridRect()
 {
-    EmbReal xSpacing = settings_grid_spacing_x;
-    EmbReal ySpacing = settings_grid_spacing_y;
+    EmbReal xSpacing = settings.grid_spacing.x;
+    EmbReal ySpacing = settings.grid_spacing.y;
 
-    QRectF gr(0, 0, settings_grid_size_x, -settings_grid_size_y);
-    //Ensure the loop will work correctly with negative numbers
-    EmbReal x1 = qMin(gr.left(), gr.right());
-    EmbReal y1 = qMin(gr.top(), gr.bottom());
-    EmbReal x2 = qMax(gr.left(), gr.right());
-    EmbReal y2 = qMax(gr.top(), gr.bottom());
+    QRectF gr(0, 0, settings.grid_size.x, -settings.grid_size.y);
+    // Ensure the loop will work correctly with negative numbers
+    EmbReal x1 = std::min(gr.left(), gr.right());
+    EmbReal y1 = std::min(gr.top(), gr.bottom());
+    EmbReal x2 = std::max(gr.left(), gr.right());
+    EmbReal y2 = std::max(gr.top(), gr.bottom());
 
     gridPath = QPainterPath();
     gridPath.addRect(gr);
-    for(EmbReal gx = x1; gx < x2; gx += xSpacing)
-    {
-        for(EmbReal gy = y1; gy < y2; gy += ySpacing)
-        {
+    for (EmbReal gx = x1; gx < x2; gx += xSpacing) {
+        for (EmbReal gy = y1; gy < y2; gy += ySpacing) {
             gridPath.moveTo(x1,gy);
             gridPath.lineTo(x2,gy);
             gridPath.moveTo(gx,y1);
@@ -404,12 +405,12 @@ void View::createGridRect()
     QRectF gridRect = gridPath.boundingRect();
     EmbReal bx = gridRect.width()/2.0;
     EmbReal by = -gridRect.height()/2.0;
-    EmbReal cx = settings_grid_center_x;
-    EmbReal cy = -settings_grid_center_y;
+    EmbReal cx = settings.grid_center.x;
+    EmbReal cy = -settings.grid_center.y;
     EmbReal dx = cx - bx;
     EmbReal dy = cy - by;
 
-    if (settings_grid_center_on_origin) {
+    if (settings.grid_center_on_origin) {
         gridPath.translate(-bx, -by);
     }
     else {
@@ -419,39 +420,37 @@ void View::createGridRect()
 
 void View::createGridPolar()
 {
-    EmbReal radSpacing = settings_grid_spacing_radius;
-    EmbReal angSpacing = settings_grid_spacing_angle;
+    EmbReal radSpacing = settings.grid_spacing_radius;
+    EmbReal angSpacing = settings.grid_spacing_angle;
 
-    EmbReal rad = settings_grid_size_radius;
+    EmbReal rad = settings.grid_size_radius;
 
     gridPath = QPainterPath();
     gridPath.addEllipse(QPointF(0,0), rad, rad);
-    for(EmbReal r = 0; r < rad; r += radSpacing)
-    {
+    for (EmbReal r = 0; r < rad; r += radSpacing) {
         gridPath.addEllipse(QPointF(0,0), r, r);
     }
-    for(EmbReal ang = 0; ang < 360; ang += angSpacing)
-    {
+    for (EmbReal ang = 0; ang < 360; ang += angSpacing) {
         gridPath.moveTo(0,0);
         gridPath.lineTo(QLineF::fromPolar(rad, ang).p2());
     }
 
-    EmbReal cx = settings_grid_center_x;
-    EmbReal cy = settings_grid_center_y;
+    EmbReal cx = settings.grid_center.x;
+    EmbReal cy = settings.grid_center.y;
 
-    if (!settings_grid_center_on_origin) {
+    if (!settings.grid_center_on_origin) {
         gridPath.translate(cx, -cy);
     }
 }
 
 void View::createGridIso()
 {
-    EmbReal xSpacing = settings_grid_spacing_x;
-    EmbReal ySpacing = settings_grid_spacing_y;
+    EmbReal xSpacing = settings.grid_spacing.x;
+    EmbReal ySpacing = settings.grid_spacing.y;
 
     //Ensure the loop will work correctly with negative numbers
-    EmbReal isoW = qAbs(settings_grid_size_x);
-    EmbReal isoH = qAbs(settings_grid_size_y);
+    EmbReal isoW = std::fabs(settings.grid_size.x);
+    EmbReal isoH = std::fabs(settings.grid_size.y);
 
     QPointF p1 = QPointF(0,0);
     QPointF p2 = QLineF::fromPolar(isoW,  30).p2();
@@ -465,10 +464,8 @@ void View::createGridIso()
     gridPath.lineTo(p3);
     gridPath.lineTo(p1);
 
-    for(EmbReal x = 0; x < isoW; x += xSpacing)
-    {
-        for(EmbReal y = 0; y < isoH; y += ySpacing)
-        {
+    for (EmbReal x = 0; x < isoW; x += xSpacing) {
+        for (EmbReal y = 0; y < isoH; y += ySpacing) {
             QPointF px = QLineF::fromPolar(x,  30).p2();
             QPointF py = QLineF::fromPolar(y, 150).p2();
 
@@ -484,10 +481,10 @@ void View::createGridIso()
     QRectF gridRect = gridPath.boundingRect();
     // bx is unused
     EmbReal by = -gridRect.height()/2.0;
-    EmbReal cx = settings_grid_center_y;
-    EmbReal cy = -settings_grid_center_y;
+    EmbReal cx = settings.grid_center.x;
+    EmbReal cy = -settings.grid_center.y;
 
-    if (settings_grid_center_on_origin) {
+    if (settings.grid_center_on_origin) {
         gridPath.translate(0, -by);
     }
     else
@@ -512,7 +509,7 @@ void View::toggleGrid(bool on)
     qDebug("View toggleGrid()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     if (on) {
-        createGrid(settings_grid_type);
+        createGrid(settings.grid_type);
     }
     else {
         createGrid("");
@@ -525,9 +522,9 @@ void View::toggleRuler(bool on)
     qDebug("View toggleRuler()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     gscene->setProperty("ENABLE_RULER", on);
-    rulerMetric = settings_ruler_metric;
-    rulerColor = QColor(settings_ruler_color);
-    rulerPixelSize = settings_ruler_pixel_size;
+    rulerMetric = settings.ruler_metric;
+    rulerColor = QColor(settings.ruler_color);
+    rulerPixelSize = settings.ruler_pixel_size;
     gscene->update();
     QApplication::restoreOverrideCursor();
 }
@@ -1140,7 +1137,7 @@ void View::setCrossHairSize(quint8 percent)
 
 void View::setCornerButton()
 {
-    int num = settings_display_scrollbar_widget_num;
+    int num = settings.display_scrollbar_widget_num;
     if (num) {
         QPushButton* cornerButton = new QPushButton(this);
         cornerButton->setFlat(true);
@@ -1165,7 +1162,7 @@ void View::setCornerButton()
 void View::cornerButtonClicked()
 {
     qDebug("Corner Button Clicked.");
-    mainWin->actionHash[settings_display_scrollbar_widget_num]->trigger();
+    mainWin->actionHash[settings.display_scrollbar_widget_num]->trigger();
 }
 
 void View::zoomIn()
@@ -1174,7 +1171,7 @@ void View::zoomIn()
     if (!allowZoomIn()) { return; }
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QPointF cntr = mapToScene(QPoint(width()/2,height()/2));
-    EmbReal s = settings_display_zoomscale_in;
+    EmbReal s = settings.display_zoomscale_in;
     scale(s, s);
 
     centerOn(cntr);
@@ -1187,7 +1184,7 @@ void View::zoomOut()
     if (!allowZoomOut()) { return; }
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QPointF cntr = mapToScene(QPoint(width()/2,height()/2));
-    EmbReal s = settings_display_zoomscale_out;
+    EmbReal s = settings.display_zoomscale_out;
     scale(s, s);
 
     centerOn(cntr);
@@ -1225,8 +1222,8 @@ void View::zoomExtents()
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QRectF extents = gscene->itemsBoundingRect();
     if (extents.isNull()) {
-        extents.setWidth(settings_grid_size_x);
-        extents.setHeight(settings_grid_size_y);
+        extents.setWidth(settings.grid_size.x);
+        extents.setHeight(settings.grid_size.y);
         extents.moveCenter(QPointF(0,0));
     }
     fitInView(extents, Qt::KeepAspectRatio);
@@ -1375,7 +1372,7 @@ void View::mousePressEvent(QMouseEvent* event)
             //Start SelectBox Code
             path.addPolygon(mapToScene(selectBox->geometry()));
             if (sceneReleasePoint.x() > scenePressPoint.x()) {
-                if (settings_selection_mode_pickadd) {
+                if (settings.selection_mode_pickadd) {
                     if (mainWin->isShiftPressed()) {
                         QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
                         foreach(QGraphicsItem* item, itemList)
@@ -1408,7 +1405,7 @@ void View::mousePressEvent(QMouseEvent* event)
                 }
             }
             else {
-                if (settings_selection_mode_pickadd) {
+                if (settings.selection_mode_pickadd) {
                     if (mainWin->isShiftPressed()) {
                         QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
                         foreach(QGraphicsItem* item, itemList)
@@ -1682,7 +1679,7 @@ bool View::allowZoomIn()
     EmbReal maxHeight = corner.y() - origin.y();
 
     EmbReal zoomInLimit = 0.0000000001;
-    if (qMin(maxWidth, maxHeight) < zoomInLimit)
+    if (std::min(maxWidth, maxHeight) < zoomInLimit)
     {
         qDebug("ZoomIn limit reached. (limit=%.10f)", zoomInLimit);
         return false;
@@ -1699,7 +1696,7 @@ bool View::allowZoomOut()
     EmbReal maxHeight = corner.y() - origin.y();
 
     EmbReal zoomOutLimit = 10000000000000.0;
-    if (qMax(maxWidth, maxHeight) > zoomOutLimit)
+    if (std::max(maxWidth, maxHeight) > zoomOutLimit)
     {
         qDebug("ZoomOut limit reached. (limit=%.1f)", zoomOutLimit);
         return false;
@@ -1738,13 +1735,13 @@ void View::zoomToPoint(const QPoint& mousePoint, int zoomDir)
         if (!allowZoomIn()) {
             return;
         }
-        s = settings_display_zoomscale_in;
+        s = settings.display_zoomscale_in;
     }
     else {
         if (!allowZoomOut()) {
             return;
         }
-        s = settings_display_zoomscale_out;
+        s = settings.display_zoomscale_out;
     }
 
     scale(s, s);
@@ -1765,7 +1762,7 @@ void View::zoomToPoint(const QPoint& mousePoint, int zoomDir)
 
 void View::contextMenuEvent(QContextMenuEvent* event)
 {
-    QString iconTheme = settings_general_icon_theme;
+    QString iconTheme = settings.general_icon_theme;
 
     QMenu menu;
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
@@ -2283,21 +2280,26 @@ void View::showScrollBars(bool val)
     }
 }
 
-void View::setCrossHairColor(QRgb color)
+void
+View::setCrossHairColor(QRgb color)
 {
     crosshairColor = color;
     gscene->setProperty("VIEW_COLOR_CROSSHAIR", color);
-    if (gscene) gscene->update();
+    if (gscene)
+        gscene->update();
 }
 
-void View::setBackgroundColor(QRgb color)
+void
+View::setBackgroundColor(QRgb color)
 {
     setBackgroundBrush(QColor(color));
     gscene->setProperty("VIEW_COLOR_BACKGROUND", color);
-    if (gscene) gscene->update();
+    if (gscene)
+        gscene->update();
 }
 
-void View::setSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
+void
+View::setSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
 {
     selectBox->setColors(QColor(colorL), QColor(fillL), QColor(colorR), QColor(fillR), alpha);
 }
