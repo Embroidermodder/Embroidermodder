@@ -1711,114 +1711,6 @@ public:
     MainWindow();
     ~MainWindow();
 
-    QString settings_general_language;
-    QString settings_general_icon_theme;
-    int settings_general_icon_size;
-    bool settings_general_mdi_bg_use_logo;
-    bool settings_general_mdi_bg_use_texture;
-    bool settings_general_mdi_bg_use_color;
-    QString settings_general_mdi_bg_logo;
-    QString settings_general_mdi_bg_texture;
-    QRgb settings_general_mdi_bg_color;
-    bool settings_general_tip_of_the_day;
-    quint16 settings_general_current_tip;
-    bool settings_general_system_help_browser;
-    bool settings_general_check_for_updates;
-    bool settings_display_use_opengl;
-    bool settings_display_renderhint_aa;
-    bool settings_display_renderhint_text_aa;
-    bool settings_display_renderhint_smooth_pix;
-    bool settings_display_renderhint_high_aa;
-    bool settings_display_renderhint_noncosmetic;
-    bool settings_display_show_scrollbars;
-    int settings_display_scrollbar_widget_num;
-    QRgb settings_display_crosshair_color;
-    QRgb settings_display_bg_color;
-    QRgb settings_display_selectbox_left_color;
-    QRgb settings_display_selectbox_left_fill;
-    QRgb settings_display_selectbox_right_color;
-    QRgb settings_display_selectbox_right_fill;
-    uint8_t settings_display_selectbox_alpha;
-    EmbReal settings_display_zoomscale_in;
-    EmbReal settings_display_zoomscale_out;
-    uint8_t settings_display_crosshair_percent;
-    QString settings_display_units;
-    QRgb settings_prompt_text_color;
-    QRgb settings_prompt_bg_color;
-    QString settings_prompt_font_family;
-    QString settings_prompt_font_style;
-    uint8_t settings_prompt_font_size;
-    bool settings_prompt_save_history;
-    bool settings_prompt_save_history_as_html;
-    QString settings_prompt_save_history_filename;
-    QString settings_opensave_custom_filter;
-    QString settings_opensave_open_format;
-    bool settings_opensave_open_thumbnail;
-    QString settings_opensave_save_format;
-    bool settings_opensave_save_thumbnail;
-    uint8_t settings_opensave_recent_max_files;
-    QStringList settings_opensave_recent_list_of_files;
-    QString settings_opensave_recent_directory;
-    uint8_t settings_opensave_trim_dst_num_jumps;
-    QString settings_printing_default_device;
-    bool settings_printing_use_last_device;
-    bool settings_printing_disable_bg;
-    bool settings_grid_show_on_load;
-    bool settings_grid_show_origin;
-    bool settings_grid_color_match_crosshair;
-    QRgb settings_grid_color;
-    bool settings_grid_load_from_file;
-    QString settings_grid_type;
-    bool settings_grid_center_on_origin;
-    EmbReal settings_grid_center_x;
-    EmbReal settings_grid_center_y;
-    EmbReal settings_grid_size_x;
-    EmbReal settings_grid_size_y;
-    EmbReal settings_grid_spacing_x;
-    EmbReal settings_grid_spacing_y;
-    EmbReal settings_grid_size_radius;
-    EmbReal settings_grid_spacing_radius;
-    EmbReal settings_grid_spacing_angle;
-    bool settings_ruler_show_on_load;
-    bool settings_ruler_metric;
-    QRgb settings_ruler_color;
-    uint8_t settings_ruler_pixel_size;
-    bool settings_qsnap_enabled;
-    QRgb settings_qsnap_locator_color;
-    uint8_t settings_qsnap_locator_size;
-    uint8_t settings_qsnap_aperture_size;
-    bool settings_qsnap_endpoint;
-    bool settings_qsnap_midpoint;
-    bool settings_qsnap_center;
-    bool settings_qsnap_node;
-    bool settings_qsnap_quadrant;
-    bool settings_qsnap_intersection;
-    bool settings_qsnap_extension;
-    bool settings_qsnap_insertion;
-    bool settings_qsnap_perpendicular;
-    bool settings_qsnap_tangent;
-    bool settings_qsnap_nearest;
-    bool settings_qsnap_apparent;
-    bool settings_qsnap_parallel;
-    bool settings_lwt_show_lwt;
-    bool settings_lwt_real_render;
-    EmbReal settings_lwt_default_lwt;
-    bool settings_selection_mode_pickfirst;
-    bool settings_selection_mode_pickadd;
-    bool settings_selection_mode_pickdrag;
-    QRgb settings_selection_coolgrip_color;
-    QRgb settings_selection_hotgrip_color;
-    uint8_t settings_selection_grip_size;
-    uint8_t settings_selection_pickbox_size;
-    QString settings_text_font;
-    EmbReal settings_text_size;
-    EmbReal settings_text_angle;
-    bool settings_text_style_bold;
-    bool settings_text_style_italic;
-    bool settings_text_style_underline;
-    bool settings_text_style_overline;
-    bool settings_text_style_strikeout;
-
     MdiArea* getMdiArea();
     MainWindow* getApplication();
     MdiWindow* activeMdiWindow();
@@ -2332,6 +2224,15 @@ protected:
     virtual void paintEvent(QPaintEvent* e);
 };
 
+typedef struct GroupBoxData_ {
+    int object;
+    char key[200];
+    char icon_name[200];
+    char label[200];
+    char type[200];
+    char map_signal[200];
+} GroupBoxData;
+
 /**
  *
  */
@@ -2387,33 +2288,6 @@ private:
 
     QList<QGraphicsItem*> selectedItemList;
 
-    ArcObject*          tempArcObj;
-    BlockObject*        tempBlockObj;
-    CircleObject*       tempCircleObj;
-    DimAlignedObject*   tempDimAlignedObj;
-    DimAngularObject*   tempDimAngularObj;
-    DimArcLengthObject* tempDimArcLenObj;
-    DimDiameterObject*  tempDimDiamObj;
-    DimLeaderObject*    tempDimLeaderObj;
-    DimLinearObject*    tempDimLinearObj;
-    DimOrdinateObject*  tempDimOrdObj;
-    DimRadiusObject*    tempDimRadiusObj;
-    EllipseObject*      tempEllipseObj;
-    EllipseArcObject*   tempEllipseArcObj;
-    HatchObject*        tempHatchObj;
-    ImageObject*        tempImageObj;
-    InfiniteLineObject* tempInfLineObj;
-    LineObject*         tempLineObj;
-    PathObject*         tempPathObj;
-    PointObject*        tempPointObj;
-    PolygonObject*      tempPolygonObj;
-    PolylineObject*     tempPolylineObj;
-    RayObject*          tempRayObj;
-    RectObject*         tempRectObj;
-    SplineObject*       tempSplineObj;
-    TextMultiObject*    tempTextMultiObj;
-    TextSingleObject*   tempTextSingleObj;
-
     //Helper functions
     QToolButton* createToolButton(const QString& iconName, const QString& txt);
     QLineEdit* createLineEdit(const QString& validatorType = QString(), bool readOnly = false);
@@ -2453,6 +2327,12 @@ private:
     QToolButton* toolButtonPickAdd;
 
     //TODO: Alphabetic/Categorized TabWidget
+
+    void createGroupBox(
+        std::string group_box_key,
+        const char *title,
+        GroupBoxData data[],
+        int lines);
 
     QGroupBox* createGroupBoxGeneral();
 
@@ -2553,149 +2433,6 @@ public:
     QDialogButtonBox* buttonBox;
 
     void addColorsToComboBox(QComboBox* comboBox);
-
-    //Temporary for instant preview
-    bool preview_general_mdi_bg_use_logo;
-    bool preview_general_mdi_bg_use_texture;
-    bool preview_general_mdi_bg_use_color;
-
-    QString accept_general_mdi_bg_logo;
-    QString accept_general_mdi_bg_texture;
-    QRgb preview_general_mdi_bg_color;
-    QRgb accept_general_mdi_bg_color;
-
-    bool preview_display_show_scrollbars;
-
-    QRgb preview_display_crosshair_color;
-    QRgb accept_display_crosshair_color;
-    QRgb preview_display_bg_color;
-    QRgb accept_display_bg_color;
-
-    QRgb preview_display_selectbox_left_color;
-    QRgb accept_display_selectbox_left_color;
-    QRgb preview_display_selectbox_left_fill;
-    QRgb accept_display_selectbox_left_fill;
-    QRgb preview_display_selectbox_right_color;
-    QRgb accept_display_selectbox_right_color;
-    QRgb preview_display_selectbox_right_fill;
-    QRgb accept_display_selectbox_right_fill;
-    quint8  preview_display_selectbox_alpha;
-
-    QRgb preview_prompt_text_color;
-    QRgb accept_prompt_text_color;
-
-    QRgb preview_prompt_bg_color;
-    QRgb accept_prompt_bg_color;
-
-    QString preview_prompt_font_family;
-    QString preview_prompt_font_style;
-    quint8  preview_prompt_font_size;
-
-    QRgb preview_grid_color;
-    QRgb accept_grid_color;
-
-    QRgb preview_ruler_color;
-    QRgb accept_ruler_color;
-
-    bool preview_lwt_show_lwt;
-    bool preview_lwt_real_render;
-
-    //Temporary until changes are accepted
-    QString dialog_general_language;
-    QString dialog_general_icon_theme;
-    int dialog_general_icon_size;
-    bool dialog_general_mdi_bg_use_logo;
-    bool dialog_general_mdi_bg_use_texture;
-    bool dialog_general_mdi_bg_use_color;
-    QString dialog_general_mdi_bg_logo;
-    QString dialog_general_mdi_bg_texture;
-    QRgb dialog_general_mdi_bg_color;
-    bool dialog_general_tip_of_the_day;
-    bool dialog_general_system_help_browser;
-    bool dialog_display_use_opengl;
-    bool dialog_display_renderhint_aa;
-    bool dialog_display_renderhint_text_aa;
-    bool dialog_display_renderhint_smooth_pix;
-    bool dialog_display_renderhint_high_aa;
-    bool dialog_display_renderhint_noncosmetic;
-    bool dialog_display_show_scrollbars;
-    int dialog_display_scrollbar_widget_num;
-    QRgb dialog_display_crosshair_color;
-    QRgb dialog_display_bg_color;
-    QRgb dialog_display_selectbox_left_color;
-    QRgb dialog_display_selectbox_left_fill;
-    QRgb dialog_display_selectbox_right_color;
-    QRgb dialog_display_selectbox_right_fill;
-    quint8  dialog_display_selectbox_alpha;
-    EmbReal dialog_display_zoomscale_in;
-    EmbReal dialog_display_zoomscale_out;
-    quint8  dialog_display_crosshair_percent;
-    QString dialog_display_units;
-    QRgb dialog_prompt_text_color;
-    QRgb dialog_prompt_bg_color;
-    QString dialog_prompt_font_family;
-    QString dialog_prompt_font_style;
-    quint8  dialog_prompt_font_size;
-    bool dialog_prompt_save_history;
-    bool dialog_prompt_save_history_as_html;
-    QString dialog_prompt_save_history_filename;
-    QString dialog_opensave_custom_filter;
-    QString dialog_opensave_open_format;
-    bool dialog_opensave_open_thumbnail;
-    QString dialog_opensave_save_format;
-    bool dialog_opensave_save_thumbnail;
-    quint8  dialog_opensave_recent_max_files;
-    quint8  dialog_opensave_trim_dst_num_jumps;
-    QString dialog_printing_default_device;
-    bool dialog_printing_use_last_device;
-    bool dialog_printing_disable_bg;
-    bool dialog_grid_show_on_load;
-    bool dialog_grid_show_origin;
-    bool dialog_grid_color_match_crosshair;
-    QRgb dialog_grid_color;
-    bool dialog_grid_load_from_file;
-    QString dialog_grid_type;
-    bool dialog_grid_center_on_origin;
-    EmbReal dialog_grid_center_x;
-    EmbReal dialog_grid_center_y;
-    EmbReal dialog_grid_size_x;
-    EmbReal dialog_grid_size_y;
-    EmbReal dialog_grid_spacing_x;
-    EmbReal dialog_grid_spacing_y;
-    EmbReal dialog_grid_size_radius;
-    EmbReal dialog_grid_spacing_radius;
-    EmbReal dialog_grid_spacing_angle;
-    bool dialog_ruler_show_on_load;
-    bool dialog_ruler_metric;
-    QRgb dialog_ruler_color;
-    quint8  dialog_ruler_pixel_size;
-    bool dialog_qsnap_enabled;
-    QRgb dialog_qsnap_locator_color;
-    quint8  dialog_qsnap_locator_size;
-    quint8  dialog_qsnap_aperture_size;
-    bool dialog_qsnap_endpoint;
-    bool dialog_qsnap_midpoint;
-    bool dialog_qsnap_center;
-    bool dialog_qsnap_node;
-    bool dialog_qsnap_quadrant;
-    bool dialog_qsnap_intersection;
-    bool dialog_qsnap_extension;
-    bool dialog_qsnap_insertion;
-    bool dialog_qsnap_perpendicular;
-    bool dialog_qsnap_tangent;
-    bool dialog_qsnap_nearest;
-    bool dialog_qsnap_apparent;
-    bool dialog_qsnap_parallel;
-    bool dialog_lwt_show_lwt;
-    bool dialog_lwt_real_render;
-    EmbReal dialog_lwt_default_lwt;
-    bool dialog_selection_mode_pickfirst;
-    bool dialog_selection_mode_pickadd;
-    bool dialog_selection_mode_pickdrag;
-    QRgb dialog_selection_coolgrip_color;
-    QRgb dialog_selection_hotgrip_color;
-    quint8  dialog_selection_grip_size;
-    quint8  dialog_selection_pickbox_size;
 
 private slots:
     void comboBoxLanguageCurrentIndexChanged(const QString&);
@@ -3285,5 +3022,269 @@ extern std::vector<std::string> file_toolbar;
 extern std::vector<std::string> edit_toolbar;
 extern std::vector<std::string> view_toolbar;
 extern std::vector<std::string> zoom_toolbar;
+
+extern std::unordered_map<std::string, QGroupBox *> groupBoxes;
+extern std::unordered_map<std::string, QComboBox *> comboBoxes;
+extern std::unordered_map<std::string, QLineEdit *> lineEdits;
+extern std::unordered_map<std::string, QToolButton *> toolButtons;
+extern QFontComboBox* comboBoxTextSingleFont;
+extern std::vector<std::string> group_box_list;
+extern GroupBoxData group_box_arc_geometry[];
+extern const int group_box_arc_geometry_entries;
+extern GroupBoxData group_box_ellipse_geometry[];
+extern const int group_box_ellipse_geometry_entries;
+
+extern std::unordered_map<std::string, GroupBoxData*> group_box_data;
+
+extern QString settings_general_language;
+extern QString settings_general_icon_theme;
+extern int settings_general_icon_size;
+extern bool settings_general_mdi_bg_use_logo;
+extern bool settings_general_mdi_bg_use_texture;
+extern bool settings_general_mdi_bg_use_color;
+extern QString settings_general_mdi_bg_logo;
+extern QString settings_general_mdi_bg_texture;
+extern QRgb settings_general_mdi_bg_color;
+extern bool settings_general_tip_of_the_day;
+extern quint16 settings_general_current_tip;
+extern bool settings_general_system_help_browser;
+extern bool settings_general_check_for_updates;
+extern bool settings_display_use_opengl;
+extern bool settings_display_renderhint_aa;
+extern bool settings_display_renderhint_text_aa;
+extern bool settings_display_renderhint_smooth_pix;
+extern bool settings_display_renderhint_high_aa;
+extern bool settings_display_renderhint_noncosmetic;
+extern bool settings_display_show_scrollbars;
+extern int settings_display_scrollbar_widget_num;
+extern QRgb settings_display_crosshair_color;
+extern QRgb settings_display_bg_color;
+extern QRgb settings_display_selectbox_left_color;
+extern QRgb settings_display_selectbox_left_fill;
+extern QRgb settings_display_selectbox_right_color;
+extern QRgb settings_display_selectbox_right_fill;
+extern uint8_t settings_display_selectbox_alpha;
+extern EmbReal settings_display_zoomscale_in;
+extern EmbReal settings_display_zoomscale_out;
+extern uint8_t settings_display_crosshair_percent;
+extern QString settings_display_units;
+extern QRgb settings_prompt_text_color;
+extern QRgb settings_prompt_bg_color;
+extern QString settings_prompt_font_family;
+extern QString settings_prompt_font_style;
+extern uint8_t settings_prompt_font_size;
+extern bool settings_prompt_save_history;
+extern bool settings_prompt_save_history_as_html;
+extern QString settings_prompt_save_history_filename;
+extern QString settings_opensave_custom_filter;
+extern QString settings_opensave_open_format;
+extern bool settings_opensave_open_thumbnail;
+extern QString settings_opensave_save_format;
+extern bool settings_opensave_save_thumbnail;
+extern uint8_t settings_opensave_recent_max_files;
+extern QStringList settings_opensave_recent_list_of_files;
+extern QString settings_opensave_recent_directory;
+extern uint8_t settings_opensave_trim_dst_num_jumps;
+extern QString settings_printing_default_device;
+extern bool settings_printing_use_last_device;
+extern bool settings_printing_disable_bg;
+extern bool settings_grid_show_on_load;
+extern bool settings_grid_show_origin;
+extern bool settings_grid_color_match_crosshair;
+extern QRgb settings_grid_color;
+extern bool settings_grid_load_from_file;
+extern QString settings_grid_type;
+extern bool settings_grid_center_on_origin;
+extern EmbReal settings_grid_center_x;
+extern EmbReal settings_grid_center_y;
+extern EmbReal settings_grid_size_x;
+extern EmbReal settings_grid_size_y;
+extern EmbReal settings_grid_spacing_x;
+extern EmbReal settings_grid_spacing_y;
+extern EmbReal settings_grid_size_radius;
+extern EmbReal settings_grid_spacing_radius;
+extern EmbReal settings_grid_spacing_angle;
+extern bool settings_ruler_show_on_load;
+extern bool settings_ruler_metric;
+extern QRgb settings_ruler_color;
+extern uint8_t settings_ruler_pixel_size;
+extern bool settings_qsnap_enabled;
+extern QRgb settings_qsnap_locator_color;
+extern uint8_t settings_qsnap_locator_size;
+extern uint8_t settings_qsnap_aperture_size;
+extern bool settings_qsnap_endpoint;
+extern bool settings_qsnap_midpoint;
+extern bool settings_qsnap_center;
+extern bool settings_qsnap_node;
+extern bool settings_qsnap_quadrant;
+extern bool settings_qsnap_intersection;
+extern bool settings_qsnap_extension;
+extern bool settings_qsnap_insertion;
+extern bool settings_qsnap_perpendicular;
+extern bool settings_qsnap_tangent;
+extern bool settings_qsnap_nearest;
+extern bool settings_qsnap_apparent;
+extern bool settings_qsnap_parallel;
+extern bool settings_lwt_show_lwt;
+extern bool settings_lwt_real_render;
+extern EmbReal settings_lwt_default_lwt;
+extern bool settings_selection_mode_pickfirst;
+extern bool settings_selection_mode_pickadd;
+extern bool settings_selection_mode_pickdrag;
+extern QRgb settings_selection_coolgrip_color;
+extern QRgb settings_selection_hotgrip_color;
+extern uint8_t settings_selection_grip_size;
+extern uint8_t settings_selection_pickbox_size;
+extern QString settings_text_font;
+extern EmbReal settings_text_size;
+extern EmbReal settings_text_angle;
+extern bool settings_text_style_bold;
+extern bool settings_text_style_italic;
+extern bool settings_text_style_underline;
+extern bool settings_text_style_overline;
+extern bool settings_text_style_strikeout;
+
+//Temporary for instant preview
+extern bool preview_general_mdi_bg_use_logo;
+extern bool preview_general_mdi_bg_use_texture;
+extern bool preview_general_mdi_bg_use_color;
+
+extern QString accept_general_mdi_bg_logo;
+extern QString accept_general_mdi_bg_texture;
+extern QRgb preview_general_mdi_bg_color;
+extern QRgb accept_general_mdi_bg_color;
+
+extern bool preview_display_show_scrollbars;
+
+extern QRgb preview_display_crosshair_color;
+extern QRgb accept_display_crosshair_color;
+extern QRgb preview_display_bg_color;
+extern QRgb accept_display_bg_color;
+
+extern QRgb preview_display_selectbox_left_color;
+extern QRgb accept_display_selectbox_left_color;
+extern QRgb preview_display_selectbox_left_fill;
+extern QRgb accept_display_selectbox_left_fill;
+extern QRgb preview_display_selectbox_right_color;
+extern QRgb accept_display_selectbox_right_color;
+extern QRgb preview_display_selectbox_right_fill;
+extern QRgb accept_display_selectbox_right_fill;
+extern quint8  preview_display_selectbox_alpha;
+
+extern QRgb preview_prompt_text_color;
+extern QRgb accept_prompt_text_color;
+
+extern QRgb preview_prompt_bg_color;
+extern QRgb accept_prompt_bg_color;
+
+extern QString preview_prompt_font_family;
+extern QString preview_prompt_font_style;
+extern quint8  preview_prompt_font_size;
+
+extern QRgb preview_grid_color;
+extern QRgb accept_grid_color;
+
+extern QRgb preview_ruler_color;
+extern QRgb accept_ruler_color;
+
+extern bool preview_lwt_show_lwt;
+extern bool preview_lwt_real_render;
+
+//Temporary until changes are accepted
+extern QString dialog_general_language;
+extern QString dialog_general_icon_theme;
+extern int dialog_general_icon_size;
+extern bool dialog_general_mdi_bg_use_logo;
+extern bool dialog_general_mdi_bg_use_texture;
+extern bool dialog_general_mdi_bg_use_color;
+extern QString dialog_general_mdi_bg_logo;
+extern QString dialog_general_mdi_bg_texture;
+extern QRgb dialog_general_mdi_bg_color;
+extern bool dialog_general_tip_of_the_day;
+extern bool dialog_general_system_help_browser;
+extern bool dialog_display_use_opengl;
+extern bool dialog_display_renderhint_aa;
+extern bool dialog_display_renderhint_text_aa;
+extern bool dialog_display_renderhint_smooth_pix;
+extern bool dialog_display_renderhint_high_aa;
+extern bool dialog_display_renderhint_noncosmetic;
+extern bool dialog_display_show_scrollbars;
+extern int dialog_display_scrollbar_widget_num;
+extern QRgb dialog_display_crosshair_color;
+extern QRgb dialog_display_bg_color;
+extern QRgb dialog_display_selectbox_left_color;
+extern QRgb dialog_display_selectbox_left_fill;
+extern QRgb dialog_display_selectbox_right_color;
+extern QRgb dialog_display_selectbox_right_fill;
+extern quint8  dialog_display_selectbox_alpha;
+extern EmbReal dialog_display_zoomscale_in;
+extern EmbReal dialog_display_zoomscale_out;
+extern quint8  dialog_display_crosshair_percent;
+extern QString dialog_display_units;
+extern QRgb dialog_prompt_text_color;
+extern QRgb dialog_prompt_bg_color;
+extern QString dialog_prompt_font_family;
+extern QString dialog_prompt_font_style;
+extern quint8  dialog_prompt_font_size;
+extern bool dialog_prompt_save_history;
+extern bool dialog_prompt_save_history_as_html;
+extern QString dialog_prompt_save_history_filename;
+extern QString dialog_opensave_custom_filter;
+extern QString dialog_opensave_open_format;
+extern bool dialog_opensave_open_thumbnail;
+extern QString dialog_opensave_save_format;
+extern bool dialog_opensave_save_thumbnail;
+extern quint8  dialog_opensave_recent_max_files;
+extern quint8  dialog_opensave_trim_dst_num_jumps;
+extern QString dialog_printing_default_device;
+extern bool dialog_printing_use_last_device;
+extern bool dialog_printing_disable_bg;
+extern bool dialog_grid_show_on_load;
+extern bool dialog_grid_show_origin;
+extern bool dialog_grid_color_match_crosshair;
+extern QRgb dialog_grid_color;
+extern bool dialog_grid_load_from_file;
+extern QString dialog_grid_type;
+extern bool dialog_grid_center_on_origin;
+extern EmbReal dialog_grid_center_x;
+extern EmbReal dialog_grid_center_y;
+extern EmbReal dialog_grid_size_x;
+extern EmbReal dialog_grid_size_y;
+extern EmbReal dialog_grid_spacing_x;
+extern EmbReal dialog_grid_spacing_y;
+extern EmbReal dialog_grid_size_radius;
+extern EmbReal dialog_grid_spacing_radius;
+extern EmbReal dialog_grid_spacing_angle;
+extern bool dialog_ruler_show_on_load;
+extern bool dialog_ruler_metric;
+extern QRgb dialog_ruler_color;
+extern quint8  dialog_ruler_pixel_size;
+extern bool dialog_qsnap_enabled;
+extern QRgb dialog_qsnap_locator_color;
+extern quint8  dialog_qsnap_locator_size;
+extern quint8  dialog_qsnap_aperture_size;
+extern bool dialog_qsnap_endpoint;
+extern bool dialog_qsnap_midpoint;
+extern bool dialog_qsnap_center;
+extern bool dialog_qsnap_node;
+extern bool dialog_qsnap_quadrant;
+extern bool dialog_qsnap_intersection;
+extern bool dialog_qsnap_extension;
+extern bool dialog_qsnap_insertion;
+extern bool dialog_qsnap_perpendicular;
+extern bool dialog_qsnap_tangent;
+extern bool dialog_qsnap_nearest;
+extern bool dialog_qsnap_apparent;
+extern bool dialog_qsnap_parallel;
+extern bool dialog_lwt_show_lwt;
+extern bool dialog_lwt_real_render;
+extern EmbReal dialog_lwt_default_lwt;
+extern bool dialog_selection_mode_pickfirst;
+extern bool dialog_selection_mode_pickadd;
+extern bool dialog_selection_mode_pickdrag;
+extern QRgb dialog_selection_coolgrip_color;
+extern QRgb dialog_selection_hotgrip_color;
+extern quint8  dialog_selection_grip_size;
+extern quint8  dialog_selection_pickbox_size;
 
 #endif
