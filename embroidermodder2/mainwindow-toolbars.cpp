@@ -114,7 +114,7 @@ get_action_index(std::string cmd)
 void
 MainWindow::create_toolbar(QToolBar* toolbar, std::string label, std::vector<std::string> entries)
 {
-    toolbar->setObjectName(label);
+    toolbar->setObjectName(QString::fromStdString(label));
     for (int i=0; i<entries.size(); i++) {
         if (entries[i] == "---") {
             toolbar->addSeparator();

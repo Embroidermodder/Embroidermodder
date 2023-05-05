@@ -585,6 +585,10 @@ MainWindow::actuator(std::string command)
         iconResize(128);
         return "";
     }
+    if (command == "settingsdialog") {
+        settingsDialog();
+        return "";
+    }
     if (command == "pan left") {
         panLeft();
         return "";

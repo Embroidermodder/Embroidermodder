@@ -2409,6 +2409,19 @@ public:
 
     void addColorsToComboBox(QComboBox* comboBox);
 
+    void create_float_spinbox(
+        QGroupBox *gb,
+        QGridLayout* gridLayout,
+        const char *label_in,
+        EmbReal single_step,
+        EmbReal lower,
+        EmbReal upper,
+        EmbReal *ptr,
+        int row);
+    QCheckBox* create_checkbox(QGroupBox *groupbox, std::string label);
+    void set_label_visibility(QObject *parent, const char *name, bool visibility);
+    void set_spinbox_visibility(QObject *parent, const char *name, bool visibility);
+
 private slots:
     void comboBoxLanguageCurrentIndexChanged(const QString&);
     void comboBoxIconThemeCurrentIndexChanged(const QString&);
@@ -2467,33 +2480,11 @@ private slots:
     void checkBoxGridLoadFromFileStateChanged(int);
     void comboBoxGridTypeCurrentIndexChanged(const QString&);
     void checkBoxGridCenterOnOriginStateChanged(int);
-    void spinBoxGridCenterXValueChanged(double);
-    void spinBoxGridCenterYValueChanged(double);
-    void spinBoxGridSizeXValueChanged(double);
-    void spinBoxGridSizeYValueChanged(double);
-    void spinBoxGridSpacingXValueChanged(double);
-    void spinBoxGridSpacingYValueChanged(double);
-    void spinBoxGridSizeRadiusValueChanged(double);
-    void spinBoxGridSpacingRadiusValueChanged(double);
-    void spinBoxGridSpacingAngleValueChanged(double);
     void checkBoxRulerShowOnLoadStateChanged(int);
     void comboBoxRulerMetricCurrentIndexChanged(int);
     void chooseRulerColor();
     void currentRulerColorChanged(const QColor&);
     void spinBoxRulerPixelSizeValueChanged(double);
-    void checkBoxQSnapEndPointStateChanged(int);
-    void checkBoxQSnapMidPointStateChanged(int);
-    void checkBoxQSnapCenterStateChanged(int);
-    void checkBoxQSnapNodeStateChanged(int);
-    void checkBoxQSnapQuadrantStateChanged(int);
-    void checkBoxQSnapIntersectionStateChanged(int);
-    void checkBoxQSnapExtensionStateChanged(int);
-    void checkBoxQSnapInsertionStateChanged(int);
-    void checkBoxQSnapPerpendicularStateChanged(int);
-    void checkBoxQSnapTangentStateChanged(int);
-    void checkBoxQSnapNearestStateChanged(int);
-    void checkBoxQSnapApparentStateChanged(int);
-    void checkBoxQSnapParallelStateChanged(int);
     void buttonQSnapSelectAllClicked();
     void buttonQSnapClearAllClicked();
     void comboBoxQSnapLocatorColorCurrentIndexChanged(int);
