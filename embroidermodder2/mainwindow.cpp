@@ -33,6 +33,24 @@ MainWindow* _mainWin = 0;
 std::vector<Action> action_table;
 QStringList action_labels;
 
+/**
+ * .
+ */
+std::vector<std::string>
+tokenize(std::string str, const char delim)
+{
+    std::vector<std::string> list;
+    std::stringstream str_stream(str);
+    std::string s;
+    while (std::getline(str_stream, s, delim)) {
+        list.push_back(s);
+    }
+    return list;
+}
+
+/**
+ * .
+ */
 std::string
 read_string_setting(toml_table_t *table, const char *key)
 {
@@ -83,6 +101,7 @@ read_settings(const char *settings_file)
         action.hash = index.u.i;
 
         action.icon = read_string_setting(table, "icon");
+        action.command = read_string_setting(table, "command");
         action.tooltip = read_string_setting(table, "tooltip");
         action.statustip = read_string_setting(table, "statustip");
         action.shortcut = read_string_setting(table, "shortcut");
@@ -382,7 +401,7 @@ MainWindow::createAllActions()
             ACTION->setCheckable(true);
         }
 
-        auto f = [=](){ this->actuator(action.icon); };
+        auto f = [=](){ this->actuator(action.command); };
         connect(ACTION, &QAction::triggered, this, f);
         actionHash[action.hash] = ACTION;
     }
@@ -447,11 +466,50 @@ MainWindow::run_script(std::vector<std::string> script)
 /**
  * @brief MainWindow::actuator
  * @param command
+ *
+ *
+ * RUN COMMAND
+ * -----------
+ * QAction* act = qobject_cast<QAction*>(sender());
+ * if (act) {
+ *     qDebug("runCommand(%s)", qPrintable(act->objectName()));
+ *     prompt->endCommand();
+ *     prompt->setCurrentText(act->objectName());
+ *     prompt->processInput();
+ * }
+ *
+ * INIT
+ * ----
+ * qDebug("runCommandMain(%s)", qPrintable(cmd));
+ * QString fileName = "commands/" + cmd + "/" + cmd + ".js";
+ * if (!getSettingsSelectionModePickFirst()) { nativeClearSelection(); }
+ * TODO: Uncomment this line when post-selection is available
+ * engine->evaluate(cmd + "_main()", fileName);
+ *
+ * PROMPT
+ * ------
+ * qDebug("runCommandPrompt(%s, %s)", qPrintable(cmd), qPrintable(str));
+ * QString fileName = "commands/" + cmd + "/" + cmd + ".js";
+ * NOTE: Replace any special characters that will cause a syntax error
+ * QString safeStr = str;
+ * safeStr.replace("\\", "\\\\");
+ * safeStr.replace("\'", "\\\'");
+ *
+ * if (prompt->isRapidFireEnabled()) {
+ *     engine->evaluate(cmd + "_prompt('" + safeStr + "')", fileName);
+ * }
+ * else {
+ *     engine->evaluate(cmd + "_prompt('" + safeStr.toUpper() + "')", fileName);
+ * }
  */
 std::string
-MainWindow::actuator(std::string command)
+MainWindow::actuator(std::string line)
 {
     Parameter result[10];
+    std::vector<std::string> list = tokenize(line, ' ');
+    std::string command = list[0];
+    list.erase(list.begin());
+    
     if (command == "about") {
         about();
         return "";
@@ -496,7 +554,11 @@ MainWindow::actuator(std::string command)
         return "<br/>2.0.0-alpha";
     }
     if (command == "selectall") {
-        selectAll();
+        qDebug("selectAll()");
+        View* gview = activeView();
+        if (gview) {
+            gview->selectAll();
+        }
         return "";
     }
     if (command == "tipoftheday") {
@@ -512,27 +574,27 @@ MainWindow::actuator(std::string command)
         return "";
     }
     if (command == "windowcascade") {
-        nativeWindowCascade();
+        mdiArea->cascade();
         return "";
     }
     if (command == "windowclose") {
-        nativeWindowClose();
+        onCloseWindow();
         return "";
     }
     if (command == "windowcloseall") {
-        nativeWindowCloseAll();
+        mdiArea->closeAllSubWindows();
         return "";
     }
     if (command == "windowtile") {
-        nativeWindowTile();
+        mdiArea->tile();
         return "";
     }
     if (command == "windownext") {
-        nativeWindowNext();
+        mdiArea->activateNextSubWindow();
         return "";
     }
     if (command == "windowprevious") {
-        nativeWindowPrevious();
+        mdiArea->activatePreviousSubWindow();
         return "";
     }
     if (command == "zoomextents") {
@@ -548,7 +610,7 @@ MainWindow::actuator(std::string command)
         return "";
     }
     if (command == "open") {
-        nativeOpenFile();
+        openFile();
         return "";
     }
     if (command == "exit") {
@@ -585,103 +647,174 @@ MainWindow::actuator(std::string command)
         iconResize(128);
         return "";
     }
+
     if (command == "settingsdialog") {
         settingsDialog();
         return "";
     }
-    if (command == "pan left") {
-        panLeft();
-        return "";
-    }
-    if (command == "pan right") {
-        panRight();
-        return "";
-    }
-    if (command == "pan up") {
-        panUp();
-        return "";
-    }
-    if (command == "pan down") {
-        panDown();
-        return "";
-    }
-    if (command == "day") {
-        dayVision();
-        return "";
-    }
-    if (command == "night") {
-        nightVision();
-        return "";
-    }
-/*
-    if (command == "text font") {
-        output = nativeTextFont();
-        return "";
-    }
-    if (command == "text size") {
-        output = nativeTextSize();
-        return "";
-    }
-    if (command == "text angle") {
-        return nativeTextAngle();
-    }
-    if (command == "text bold") {
-        output = nativeTextBold();
-        return "";
-    }
-    if (command == "text italic") {
-        return nativeTextItalic();
-    }
-    if (command == "text underline") {
-        return nativeTextUnderline();
-    }
-    if (command == "text strikeout") {
-        return nativeTextStrikeOut();
-    }
-    if (command == "text overline") {
-        return nativeTextOverline();
-    }
-    if (command == "set text font") {
-        std::string error = convert_args_to_type("SetTextSize()", args, "s", result);
-        if (error != "") {
-            return error;
+
+    if (command == "pan") {
+        if (list.size() < 1) {
+            return "pan requires an argument.";
         }
-
-        setTextFont(results[0].s_value);
-        return "";
-    }
-    if (command == "set text size") {
-        std::string error = convert_args_to_type("SetTextSize()", args, "i", result);
-        if (error != "") {
-            return error;
+        command = list[0];
+        if (command == "left") {
+            panLeft();
+            return "";
         }
-
-        mainWin()->setTextSize(result[0].r_value);
-        return "";
-    }
-    if (command == "set text angle",  output = ""; setTextAngle(args[0]);}
-        return "";
-    }
-    if (command == "set text bold", output = ""; nativeTextBold(args[0]);}
-        return "";
-    }
-    if (command == "set text italic") {
-        nativeTextItalic(args[0]);
-        return "";
-    }
-    if (command == "set text underline") {
-        nativeTextUnderline(args[0]);}
-        return "";
-    }
-    if (command == "set text strikeout") {
-        nativeTextStrikeOut(args[0]);}
-        return "";
-    }
-    if (command == "set text overline") {
-        nativeTextOverline(args[0]);}
-        return "";
+        if (command == "right") {
+            panRight();
+            return "";
+        }
+        if (command == "up") {
+            panUp();
+            return "";
+        }
+        if (command == "down") {
+            panDown();
+            return "";
+        }
     }
 
+    if (command == "text") {
+        if (list.size() < 1) {
+            return "text requires an argument.";
+        }
+        command = list[0];
+        if (command == "font") {
+            return settings.text_font.toStdString();
+        }
+        if (command == "size") {
+            return std::to_string(settings.text_size);
+        }
+        if (command == "angle") { 
+            return std::to_string(settings.text_angle);
+        }
+        if (command == "bold") {
+            return std::to_string(settings.text_style_bold);
+        }
+        if (command == "italic") {
+            return std::to_string(settings.text_style_italic);
+        }
+        if (command == "underline") {
+            return std::to_string(settings.text_style_underline);
+        }
+        if (command == "strikeout") {
+            return std::to_string(settings.text_style_strikeout);
+        }
+        if (command == "overline") {
+            return std::to_string(settings.text_style_overline);
+        }
+    }
+
+    if (command == "set") {
+        if (list.size() < 2) {
+            return "The command 'set' requires 2 arguments.";
+        }
+        bool value = (
+               list[1] == "true"
+            || list[1] == "True"
+            || list[1] == "TRUE"
+            || list[1] == "on"
+            || list[1] == "ON"
+            || list[1] == "T"
+            || list[1] == "t"
+            || list[1] == "1"
+        );
+        if (list[0] == "text_font") {
+            settings.text_font = QString::fromStdString(list[1]);
+            return "";
+        }
+        if (list[0] == "text_size") {
+            settings.text_size = std::stof(list[1]);
+            return "";
+        }
+        if (command == "text_angle") {
+            settings.text_angle = value;
+            return "";
+        }
+        if (command == "text_style_bold") {
+            settings.text_style_bold = value;
+            return "";
+        }
+        if (command == "text_style_italic") {
+            settings.text_style_italic = value;
+            return "";
+        }
+        if (command == "text_style_underline") {
+            settings.text_style_underline = value;
+            return "";
+        }
+        if (command == "text_style_strikeout") {
+            settings.text_style_strikeout = value;
+            return "";
+        }
+        if (command == "text_style_overline") {
+            settings.text_style_overline = value;
+            return "";
+        }
+    }
+
+    if (command == "enable") {
+        if (list.size() < 1) {
+            return "The command 'enable' requires an argument.";
+        }
+        if (command == "text_angle") {
+            settings.text_angle = true;
+            return "";
+        }
+        if (command == "text_style_bold") {
+            settings.text_style_bold = true;
+            return "";
+        }
+        if (command == "text_style_italic") {
+            settings.text_style_italic = true;
+            return "";
+        }
+        if (command == "text_style_underline") {
+            settings.text_style_underline = true;
+            return "";
+        }
+        if (command == "text_style_strikeout") {
+            settings.text_style_strikeout = true;
+            return "";
+        }
+        if (command == "text_style_overline") {
+            settings.text_style_overline = true;
+            return "";
+        }
+    }
+
+    if (command == "disable") {
+        if (list.size() < 1) {
+            return "The command 'disable' requires an argument.";
+        }
+        if (command == "text_angle") {
+            settings.text_angle = false;
+            return "";
+        }
+        if (command == "text_style_bold") {
+            settings.text_style_bold = false;
+            return "";
+        }
+        if (command == "text_style_italic") {
+            settings.text_style_italic = false;
+            return "";
+        }
+        if (command == "text_style_underline") {
+            settings.text_style_underline = false;
+            return "";
+        }
+        if (command == "text_style_strikeout") {
+            settings.text_style_strikeout = false;
+            return "";
+        }
+        if (command == "text_style_overline") {
+            settings.text_style_overline = false;
+            return "";
+        }
+    }
+    /*
     if (command == "num selected") {
         output = nativeNumSelected();
         return "";
@@ -694,13 +827,14 @@ MainWindow::actuator(std::string command)
         AddToSelection();
         return "";
     }
-    if (command == "clear selection") { nativeClearSelection();}
+    if (command == "clear selection") {
+        nativeClearSelection();
         return "";
     }
-    if (command == "delete selection") { nativeDeleteSelected(); }
+    if (command == "delete selection") {
+        nativeDeleteSelected();
         return "";
     }
-
     if (command == "qsnapx") {
         return nativeQSnapX();
     }
@@ -713,7 +847,6 @@ MainWindow::actuator(std::string command)
     if (command == "mousey") {
         return nativeMouseY();
     }
-
     if (command == "debug") {
         scriptValDebug();
         return "";
@@ -727,118 +860,259 @@ MainWindow::actuator(std::string command)
         return "";
     }
     if (command == "alert") {
-        output = "";
         Alert();
+        return "";
     }
     if (command == "blinkPrompt") {
         BlinkPrompt();
+        return "";
     }
     if (command == "setPromptPrefix") {
-        SetPromptPrefix(); }
+        SetPromptPrefix();
+        return "";
+    }
     if (command == "appendPromptHistory") {
-        AppendPromptHistory(); }
-    if (command == "enablePromptRapidFire") { EnablePromptRapidFire(); }
-    if (command == "disablePromptRapidFire") { DisablePromptRapidFire(); }
-    if (command == "enableMoveRapidFire") { EnableMoveRapidFire(); }
-    if (command == "disableMoveRapidFire") { DisableMoveRapidFire(); }
-    if (command == "initCommand") { InitCommand(); }
-    if (command == "endCommand") { EndCommand(); }
-    if (command == "newFile") { NewFile(); }
-    if (command == "openFile") { OpenFile(); }
-    if (command == "exit") { Exit(); }
-    if (command == "help") { Help(); }
-    if (command == "about") { About(); }
-    if (command == "tipOfTheDay") { TipOfTheDay(); }
-    if (command == "windowCascade") { WindowCascade(); }
-    if (command == "windowTile") { WindowTile(); }
-    if (command == "windowClose") { WindowClose(); }
-    if (command == "windowCloseAll") { WindowCloseAll(); }
+        AppendPromptHistory();
+        return "";
+    }
+    if (command == "enablePromptRapidFire") {
+        EnablePromptRapidFire();
+        return "";
+    }
+    if (command == "disablePromptRapidFire") {
+        DisablePromptRapidFire();
+        return "";
+    }
+    if (command == "enableMoveRapidFire") {
+        EnableMoveRapidFire();
+        return "";
+    }
+    if (command == "disableMoveRapidFire") {
+        DisableMoveRapidFire();
+        return "";
+    }
+    if (command == "initCommand") {
+        InitCommand();
+        return "";
+    }
+    if (command == "endCommand") {
+        EndCommand();
+        return "";
+    }
+    if (command == "newFile") {
+        NewFile();
+        return "";
+    }
+    if (command == "openFile") {
+        OpenFile();
+        return "";
+    }
+    if (command == "exit") {
+        Exit();
+        return "";
+    }
+    if (command == "help") {
+        Help();
+        return "";
+    }
+    if (command == "about") {
+        About();
+        return "";
+    }
+    if (command == "tipOfTheDay") {
+        TipOfTheDay();
+        return "";
+    }
+    if (command == "windowCascade") {
+        WindowCascade();
+        return "";
+    }
+    if (command == "windowTile") {
+        WindowTile();
+        return "";
+    }
+    if (command == "windowClose") {
+        WindowClose();
+        return "";
+    }
+    if (command == "windowCloseAll") {
+        WindowCloseAll();
+        return "";
+    }
     if (command == "windowNext") {
-        WindowNext(); }
+        WindowNext();
+        return "";
+    }
     if (command == "windowPrevious") {
-        WindowPrevious(); }
+        WindowPrevious();
+        return "";
+    }
     if (command == "platformString") {
-        PlatformString(); }
+        PlatformString();
+        return "";
+    }
     if (command == "messageBox") {
-        MessageBox(); }
+        MessageBox();
+        return "";
+    }
     if (command == "isInt") {
-        IsInt(); }
+        IsInt();
+        return "";
+    }
     if (command == "undo") {
         undo();
+        return "";
     }
     if (command == "redo") {
         Redo();
+        return "";
     }
     if (command == "icon16") {
         icon16();
+        return "";
     }
     if (command == "icon24") {
         icon24();
+        return "";
     }
     if (command == "icon32") {
         icon32();
-    }
-    if (command == "icon48") { Icon48(); }
-    if (command == "icon64") { Icon64(); }
-    if (command == "icon128") { Icon128();
         return "";
     }
-    if (command == "panLeft") { PanLeft();
+    if (command == "icon48") {
+        Icon48();
+        return "";
     }
-    if (command == "panRight") { PanRight();
+    if (command == "icon64") {
+        Icon64();
+        return "";
     }
-    if (command == "panUp") { PanUp();
+    if (command == "icon128") {
+        Icon128();
+        return "";
     }
-    if (command == "panDown") { PanDown();
+    */
+    /*
+    if (command == "zoomIn") {
+        ZoomIn();
     }
-    if (command == "zoomIn") { ZoomIn(); }
-    if (command == "zoomOut") { ZoomOut(); }
-    if (command == "zoomExtents") { ZoomExtents(); }
-    if (command == "printArea") { PrintArea(); }
-    if (command == "dayVision") { DayVision(); }
-    if (command == "nightVision") { NightVision(); }
-    if (command == "setBackgroundColor") { SetBackgroundColor(); }
-    if (command == "setCrossHairColor") { SetCrossHairColor(); }
-    if (command == "setGridColor") { SetGridColor(); }
-    if (command == "textFont") { TextFont(); }
-    if (command == "textSize") { TextSize(); }
-    if (command == "textAngle") { TextAngle(); }
-    if (command == "textBold") { TextBold(); }
-    if (command == "textItalic") { TextItalic(); }
-    if (command == "textUnderline") { TextUnderline(); }
-    if (command == "textStrikeOut") { TextStrikeOut(); }
-    if (command == "textOverline") { TextOverline(); }
-    if (command == "setTextFont") { SetTextFont(); }
-    if (command == "setTextSize") { SetTextSize(); }
-    if (command == "setTextAngle") { SetTextAngle(); }
-    if (command == "setTextBold") { SetTextBold(); }
-    if (command == "setTextItalic") { SetTextItalic(); }
-    if (command == "setTextUnderline") { SetTextUnderline(); }
-    if (command == "setTextStrikeOut") { SetTextStrikeOut(); }
-    if (command == "setTextOverline") { SetTextOverline(); }
-    if (command == "previewOn") { PreviewOn(); }
-    if (command == "previewOff") { PreviewOff(); }
-    if (command == "vulcanize") { Vulcanize(); }
-    if (command == "allowRubber") { AllowRubber(); }
-    if (command == "setRubberMode") { SetRubberMode(); }
-    if (command == "setRubberPoint") { SetRubberPoint(); }
-    if (command == "setRubberText") { SetRubberText(); }
-    if (command == "addRubber") { AddRubber(); }
-    if (command == "clearRubber") { ClearRubber(); }
+    if (command == "zoomOut") {
+        ZoomOut();
+    }
+    if (command == "zoomExtents") {
+        ZoomExtents();
+    }
+    if (command == "printArea") {
+        PrintArea();
+        return "";
+    }
+    if (command == "dayVision") {
+        DayVision();
+        return "";
+    }
+    if (command == "nightVision") {
+        NightVision();
+        return "";
+    }
+    if (command == "setBackgroundColor") {
+        SetBackgroundColor();
+        return "";
+    }
+    if (command == "setCrossHairColor") {
+        SetCrossHairColor();
+        return "";
+    }
+    if (command == "setGridColor") {
+        SetGridColor();
+        return "";
+    }
+    if (command == "setTextFont") {
+        SetTextFont();
+        return "";
+    }
+    if (command == "setTextSize") {
+        SetTextSize();
+        return "";
+    }
+    if (command == "setTextAngle") {
+        SetTextAngle();
+        return "";
+    }
+    if (command == "setTextBold") {
+        SetTextBold();
+        return "";
+    }
+    if (command == "setTextItalic") {
+        SetTextItalic();
+        return "";
+    }
+    if (command == "setTextUnderline") {
+        SetTextUnderline();
+        return "";
+    }
+    if (command == "setTextStrikeOut") {
+        SetTextStrikeOut();
+        return "";
+    }
+    if (command == "setTextOverline") {
+        SetTextOverline();
+        return "";
+    }
+    if (command == "previewOn") {
+        PreviewOn();
+        return "";
+    }
+    if (command == "previewOff") 
+        PreviewOff();
+        return "";
+    }
+    if (command == "vulcanize") {
+        Vulcanize();
+        return "";
+    }
+    if (command == "allowRubber") {
+        AllowRubber();
+        return "";
+    }
+    if (command == "setRubberMode") {
+        SetRubberMode();
+        return "";
+    }
+    if (command == "setRubberPoint") {
+        SetRubberPoint();
+        return "";
+    }
+    if (command == "setRubberText") {
+        SetRubberText();
+        return "";
+    }
+    if (command == "addRubber") {
+        AddRubber();
+        return "";
+    }
+    if (command == "clearRubber") {
+        ClearRubber();
+        return "";
+    }
     if (command == "spareRubber") {
         SpareRubber();
+        return "";
     }
     if (command == "addTextMulti") {
         AddTextMulti();
+        return "";
     }
     if (command == "addTextSingle") {
         AddTextSingle();
+        return "";
     }
     if (command == "addInfiniteLine") {
         AddInfiniteLine();
+        return "";
     }
     if (command == "addRay") {
         AddRay();
+        return "";
     }
     if (command == "addLine") {
         AddLine();
@@ -856,70 +1130,121 @@ MainWindow::actuator(std::string command)
         AddRoundedRectangle();
         return "";
     }
-    if (command == "addArc") { AddArc();
+    if (command == "addArc") {
+        AddArc();
         return "";
     }
-    if (command == "addCircle") { AddCircle();
+    if (command == "addCircle") {
+        AddCircle();
         return "";
     }
-    if (command == "addEllipse") { AddEllipse();
+    if (command == "addEllipse") {
+        AddEllipse();
         return "";
     }
-    if (command == "addPoint") { AddPoint();
+    if (command == "addPoint") {
+        AddPoint();
         return "";
     }
-    if (command == "addRegularPolygon") { AddRegularPolygon();
+    if (command == "addRegularPolygon") {
+        AddRegularPolygon();
         return "";
     }
-    if (command == "addPolygon") { AddPolygon();
+    if (command == "addPolygon") {
+        AddPolygon();
         return "";
     }
-    if (command == "addPolyline") { AddPolyline();
+    if (command == "addPolyline") {
+        AddPolyline();
         return "";
     }
-    if (command == "addPath") { AddPath(); }
-    if (command == "addHorizontalDimension") { AddHorizontalDimension(); }
-    if (command == "addVerticalDimension") { AddVerticalDimension(); }
-    if (command == "addImage") { AddImage(); }
-    if (command == "addDimLeader") { AddDimLeader(); }
-    if (command == "setCursorShape") { SetCursorShape(); }
-    if (command == "calculateAngle") { CalculateAngle(); }
-    if (command == "calculateDistance") { CalculateDistance(); }
-    if (command == "perpendicularDistance") { PerpendicularDistance((); }
-    if (command == "numSelected") { NumSelected(); }
-    if (command == "selectAll") { SelectAll(); }
+    if (command == "addPath") {
+        AddPath();
+        return "";
+    }
+    if (command == "addHorizontalDimension") {
+        AddHorizontalDimension();
+        return "";
+    }
+    if (command == "addVerticalDimension") {
+        AddVerticalDimension();
+        return "";
+    }
+    if (command == "addImage") {
+        AddImage();
+        return "";
+    }
+    if (command == "addDimLeader") {
+        AddDimLeader();
+        return "";
+    }
+    if (command == "setCursorShape") {
+        SetCursorShape();
+        return "";
+    }
+    if (command == "calculateAngle") {
+        CalculateAngle();
+        return "";
+    }
+    if (command == "calculateDistance") {
+        CalculateDistance();
+        return "";
+    }
+    if (command == "perpendicularDistance") {
+        PerpendicularDistance();
+        return "";
+    }
+    if (command == "numSelected") {
+        NumSelected();
+        return "";
+    }
+    if (command == "selectAll") {
+        SelectAll();
+        return "";
+    }
     if (command == "addToSelection") {
         scriptValAddToSelection();
+        return "";
     }
     if (command == "clearSelection") {
         scriptValClearSelection();
+        return "";
     }
     if (command == "deleteSelected") {
         scriptValDeleteSelected();
+        return "";
     }
     if (command == "cutSelected") {
         scriptValCutSelected);
+        return "";
     }
     if (command == "copySelected") {
         scriptValCopySelected);
+        return "";
     }
     if (command == "pasteSelected") {
         scriptValPasteSelected();
+        return "";
     }
     if (command == "moveSelected") {
         scriptValMoveSelected();
+        return "";
     }
     if (command == "scaleSelected") {
         scriptValScaleSelected();
+        return "";
     }
     if (command == "rotateSelected") {
         scriptValRotateSelected();
+        return "";
     }
     if (command == "mirrorSelected") {
         scriptValMirrorSelected();
+        return "";
     }
     if (command == "qsnapX") {
         scriptValQSnapX();
+        return "";
     }
     if (command == "qsnapY") {
         scriptValQSnapY();
@@ -949,16 +1274,20 @@ MainWindow::actuator(std::string command)
         setPromptPrefix(args[0]);
         return "";
     }
-    if (command == "EnablePromptRapidFire", nativeEnablePromptRapidFire();
+    if (command == "EnablePromptRapidFire" {
+        nativeEnablePromptRapidFire();
         return "";
     }
-    if (command == "DisablePromptRapidFire", nativeDisablePromptRapidFire();
+    if (command == "DisablePromptRapidFire" {
+        nativeDisablePromptRapidFire();
         return "";
     }
-    if (command == "EnableMoveRapidFire", nativeEnableMoveRapidFire();
+    if (command == "EnableMoveRapidFire") {
+        nativeEnableMoveRapidFire();
         return "";
     }
-    if (command == "DisableMoveRapidFire", nativeDisableMoveRapidFire();
+    if (command == "DisableMoveRapidFire" {
+        nativeDisableMoveRapidFire();
         return "";
     }
     */

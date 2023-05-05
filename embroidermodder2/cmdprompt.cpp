@@ -457,7 +457,9 @@ void CmdPromptInput::processInput()
 
     QString cmdtxt(curText);
     cmdtxt.replace(0, prefix.length(), "");
-    if(!rapidFireEnabled) cmdtxt = cmdtxt.toLower();
+    if (!rapidFireEnabled) {
+        cmdtxt = cmdtxt.toLower();
+    }
 
     if (cmdActive) {
         if (rapidFireEnabled) {
@@ -738,7 +740,6 @@ bool CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
         switch (key) {
             case Qt::Key_Enter:
             case Qt::Key_Return:
-            case Qt::Key_Space:
                 pressedKey->accept();
                 processInput();
                 return true;

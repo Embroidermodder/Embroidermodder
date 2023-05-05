@@ -80,7 +80,7 @@ MainWindow::cut()
 {
     qDebug("cut()");
     View* gview = activeView();
-    if(gview) { gview->cut(); }
+    if (gview) { gview->cut(); }
 }
 
 /**
@@ -104,18 +104,7 @@ MainWindow::paste()
 {
     qDebug("paste()");
     View* gview = activeView();
-    if(gview) { gview->paste(); }
-}
-
-/**
- *
- */
-void
-MainWindow::selectAll()
-{
-    qDebug("selectAll()");
-    View* gview = activeView();
-    if(gview) { gview->selectAll(); }
+    if (gview) { gview->paste(); }
 }
 
 QString MainWindow::platformString()
@@ -191,7 +180,7 @@ void
 MainWindow::designDetails()
 {
     QGraphicsScene* scene = activeScene();
-    if(scene)
+    if (scene)
     {
         EmbDetailsDialog dialog(scene, this);
         dialog.exec();
@@ -260,7 +249,7 @@ MainWindow::print()
 {
     qDebug("print()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin) { mdiWin->print(); }
+    if (mdiWin) { mdiWin->print(); }
 }
 
 void
@@ -279,7 +268,7 @@ MainWindow::tipOfTheDay()
 
     ImageWidget* imgBanner = new ImageWidget(appDir + "/images/did-you-know.png", wizardTipOfTheDay);
 
-    if(settings.general_current_tip >= listTipOfTheDay.size())
+    if (settings.general_current_tip >= listTipOfTheDay.size())
         settings.general_current_tip = 0;
     labelTipOfTheDay = new QLabel(listTipOfTheDay.value(settings.general_current_tip), wizardTipOfTheDay);
     labelTipOfTheDay->setWordWrap(true);
@@ -327,22 +316,22 @@ void
 MainWindow::buttonTipOfTheDayClicked(int button)
 {
     qDebug("buttonTipOfTheDayClicked(%d)", button);
-    if(button == QWizard::CustomButton1)
+    if (button == QWizard::CustomButton1)
     {
-        if(settings.general_current_tip > 0)
+        if (settings.general_current_tip > 0)
             settings.general_current_tip--;
         else
             settings.general_current_tip = listTipOfTheDay.size()-1;
         labelTipOfTheDay->setText(listTipOfTheDay.value(settings.general_current_tip));
     }
-    else if(button == QWizard::CustomButton2)
+    else if (button == QWizard::CustomButton2)
     {
         settings.general_current_tip++;
-        if(settings.general_current_tip >= listTipOfTheDay.size())
+        if (settings.general_current_tip >= listTipOfTheDay.size())
             settings.general_current_tip = 0;
         labelTipOfTheDay->setText(listTipOfTheDay.value(settings.general_current_tip));
     }
-    else if(button == QWizard::CustomButton3)
+    else if (button == QWizard::CustomButton3)
     {
         wizardTipOfTheDay->close();
     }
@@ -380,7 +369,7 @@ MainWindow::undo()
 {
     qDebug("undo()");
     QString prefix = prompt->getPrefix();
-    if(dockUndoEdit->canUndo())
+    if (dockUndoEdit->canUndo())
     {
         prompt->setPrefix("Undo " + dockUndoEdit->undoText());
         prompt->appendHistory(QString());
@@ -399,7 +388,7 @@ MainWindow::redo()
 {
     qDebug("redo()");
     QString prefix = prompt->getPrefix();
-    if(dockUndoEdit->canRedo())
+    if (dockUndoEdit->canRedo())
     {
         prompt->setPrefix("Redo " + dockUndoEdit->redoText());
         prompt->appendHistory(QString());
@@ -461,7 +450,7 @@ View* MainWindow::activeView()
 {
     qDebug("activeView()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin)
+    if (mdiWin)
     {
         View* v = mdiWin->getView();
         return v;
@@ -473,7 +462,7 @@ QGraphicsScene* MainWindow::activeScene()
 {
     qDebug("activeScene()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin)
+    if (mdiWin)
     {
         QGraphicsScene* s = mdiWin->getScene();
         return s;
@@ -485,7 +474,7 @@ QUndoStack* MainWindow::activeUndoStack()
 {
     qDebug("activeUndoStack()");
     View* v = activeView();
-    if(v)
+    if (v)
     {
         QUndoStack* u = v->getUndoStack();
         return u;
@@ -506,7 +495,7 @@ MainWindow::updateAllViewScrollBars(bool val)
     for(int i = 0; i < windowList.count(); ++i)
     {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if(mdiWin) { mdiWin->showViewScrollBars(val); }
+        if (mdiWin) { mdiWin->showViewScrollBars(val); }
     }
 }
 
@@ -517,7 +506,7 @@ MainWindow::updateAllViewCrossHairColors(QRgb color)
     for(int i = 0; i < windowList.count(); ++i)
     {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if(mdiWin) { mdiWin->setViewCrossHairColor(color); }
+        if (mdiWin) { mdiWin->setViewCrossHairColor(color); }
     }
 }
 
@@ -528,7 +517,7 @@ MainWindow::updateAllViewBackgroundColors(QRgb color)
     for(int i = 0; i < windowList.count(); ++i)
     {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if(mdiWin) { mdiWin->setViewBackgroundColor(color); }
+        if (mdiWin) { mdiWin->setViewBackgroundColor(color); }
     }
 }
 
@@ -539,7 +528,7 @@ MainWindow::updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, Q
     for(int i = 0; i < windowList.count(); ++i)
     {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if(mdiWin) { mdiWin->setViewSelectBoxColors(colorL, fillL, colorR, fillR, alpha); }
+        if (mdiWin) { mdiWin->setViewSelectBoxColors(colorL, fillL, colorR, fillR, alpha); }
     }
 }
 
@@ -550,7 +539,7 @@ MainWindow::updateAllViewGridColors(QRgb color)
     for(int i = 0; i < windowList.count(); ++i)
     {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if(mdiWin) { mdiWin->setViewGridColor(color); }
+        if (mdiWin) { mdiWin->setViewGridColor(color); }
     }
 }
 
@@ -560,7 +549,7 @@ MainWindow::updateAllViewRulerColors(QRgb color)
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if(mdiWin) { mdiWin->setViewRulerColor(color); }
+        if (mdiWin) { mdiWin->setViewRulerColor(color); }
     }
 }
 
@@ -652,7 +641,7 @@ MainWindow::zoomIn()
 {
     qDebug("zoomIn()");
     View* gview = activeView();
-    if(gview) { gview->zoomIn(); }
+    if (gview) { gview->zoomIn(); }
 }
 
 void
@@ -660,7 +649,7 @@ MainWindow::zoomOut()
 {
     qDebug("zoomOut()");
     View* gview = activeView();
-    if(gview) { gview->zoomOut(); }
+    if (gview) { gview->zoomOut(); }
 }
 
 void
@@ -669,7 +658,7 @@ MainWindow::zoomSelected()
     qDebug("zoomSelected()");
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
-    if(gview && stack)
+    if (gview && stack)
     {
         UndoableNavCommand* cmd = new UndoableNavCommand("ZoomSelected", gview, 0);
         stack->push(cmd);
@@ -689,7 +678,7 @@ MainWindow::zoomExtents()
     qDebug("zoomExtents()");
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
-    if(gview && stack)
+    if (gview && stack)
     {
         UndoableNavCommand* cmd = new UndoableNavCommand("ZoomExtents", gview, 0);
         stack->push(cmd);
@@ -701,7 +690,7 @@ MainWindow::panrealtime()
 {
     qDebug("panrealtime()");
     View* gview = activeView();
-    if(gview) { gview->panRealTime(); }
+    if (gview) { gview->panRealTime(); }
 }
 
 void
@@ -709,7 +698,7 @@ MainWindow::panpoint()
 {
     qDebug("panpoint()");
     View* gview = activeView();
-    if(gview) { gview->panPoint(); }
+    if (gview) { gview->panPoint(); }
 }
 
 void
@@ -718,7 +707,7 @@ MainWindow::panLeft()
     qDebug("panLeft()");
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
-    if(gview && stack)
+    if (gview && stack)
     {
         UndoableNavCommand* cmd = new UndoableNavCommand("PanLeft", gview, 0);
         stack->push(cmd);
@@ -731,7 +720,7 @@ MainWindow::panRight()
     qDebug("panRight()");
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
-    if(gview && stack)
+    if (gview && stack)
     {
         UndoableNavCommand* cmd = new UndoableNavCommand("PanRight", gview, 0);
         stack->push(cmd);
@@ -744,7 +733,7 @@ MainWindow::panUp()
     qDebug("panUp()");
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
-    if(gview && stack)
+    if (gview && stack)
     {
         UndoableNavCommand* cmd = new UndoableNavCommand("PanUp", gview, 0);
         stack->push(cmd);
@@ -760,7 +749,7 @@ MainWindow::panDown()
     qDebug("panDown()");
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
-    if(gview && stack)
+    if (gview && stack)
     {
         UndoableNavCommand* cmd = new UndoableNavCommand("PanDown", gview, 0);
         stack->push(cmd);
@@ -774,7 +763,7 @@ void
 MainWindow::dayVision()
 {
     View* gview = activeView();
-    if(gview)
+    if (gview)
     {
         gview->setBackgroundColor(qRgb(255,255,255)); //TODO: Make day vision color settings.
         gview->setCrossHairColor(qRgb(0,0,0));        //TODO: Make day vision color settings.
@@ -789,7 +778,7 @@ void
 MainWindow::nightVision()
 {
     View* gview = activeView();
-    if(gview)
+    if (gview)
     {
         gview->setBackgroundColor(qRgb(0,0,0));      //TODO: Make night vision color settings.
         gview->setCrossHairColor(qRgb(255,255,255)); //TODO: Make night vision color settings.
@@ -817,19 +806,19 @@ MainWindow::colorSelectorIndexChanged(int index)
 
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
     QRgb newColor;
-    if(comboBox)
+    if (comboBox)
     {
         bool ok = 0;
         //TODO: Handle ByLayer and ByBlock and Other...
         newColor = comboBox->itemData(index).toUInt(&ok);
-        if(!ok)
+        if (!ok)
             QMessageBox::warning(this, tr("Color Selector Conversion Error"), tr("<b>An error has occured while changing colors.</b>"));
     }
     else
         QMessageBox::warning(this, tr("Color Selector Pointer Error"), tr("<b>An error has occured while changing colors.</b>"));
 
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin) { mdiWin->currentColorChanged(newColor); }
+    if (mdiWin) { mdiWin->currentColorChanged(newColor); }
 }
 
 void
@@ -856,46 +845,6 @@ MainWindow::textSizeSelectorIndexChanged(int index)
 {
     qDebug("textSizeSelectorIndexChanged(%d)", index);
     settings.text_size = fabs(textSizeSelector->itemData(index).toReal()); //TODO: check that the toReal() conversion is ok
-}
-
-QString MainWindow::textFont()
-{
-    return settings.text_font;
-}
-
-EmbReal MainWindow::textSize()
-{
-    return settings.text_size;
-}
-
-EmbReal MainWindow::textAngle()
-{
-    return settings.text_angle;
-}
-
-bool MainWindow::textBold()
-{
-    return settings.text_style_bold;
-}
-
-bool MainWindow::textItalic()
-{
-    return settings.text_style_italic;
-}
-
-bool MainWindow::textUnderline()
-{
-    return settings.text_style_underline;
-}
-
-bool MainWindow::textStrikeOut()
-{
-    return settings.text_style_strikeout;
-}
-
-bool MainWindow::textOverline()
-{
-    return settings.text_style_overline;
 }
 
 void
@@ -977,14 +926,14 @@ QRgb MainWindow::getCurrentColor()
 QString MainWindow::getCurrentLineType()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin) { return mdiWin->getCurrentLineType(); }
+    if (mdiWin) { return mdiWin->getCurrentLineType(); }
     return "ByLayer";
 }
 
 QString MainWindow::getCurrentLineWeight()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin) { return mdiWin->getCurrentLineWeight(); }
+    if (mdiWin) { return mdiWin->getCurrentLineWeight(); }
     return "ByLayer";
 }
 
@@ -994,7 +943,7 @@ MainWindow::deletePressed()
     qDebug("deletePressed()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin) { mdiWin->deletePressed(); }
+    if (mdiWin) { mdiWin->deletePressed(); }
     QApplication::restoreOverrideCursor();
 }
 
@@ -1004,7 +953,7 @@ MainWindow::escapePressed()
     qDebug("escapePressed()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin) { mdiWin->escapePressed(); }
+    if (mdiWin) { mdiWin->escapePressed(); }
     QApplication::restoreOverrideCursor();
 
     nativeEndCommand();
@@ -1047,104 +996,44 @@ void
 MainWindow::enableMoveRapidFire()
 {
     View* gview = activeView();
-    if(gview) gview->enableMoveRapidFire();
+    if (gview) gview->enableMoveRapidFire();
 }
 
 void
 MainWindow::disableMoveRapidFire()
 {
     View* gview = activeView();
-    if(gview) gview->disableMoveRapidFire();
+    if (gview) gview->disableMoveRapidFire();
 }
 
 void
 MainWindow::promptHistoryAppended(const QString& txt)
 {
     MdiWindow* mdiWin = activeMdiWindow();
-    if(mdiWin) mdiWin->promptHistoryAppended(txt);
+    if (mdiWin) mdiWin->promptHistoryAppended(txt);
 }
 
 void
 MainWindow::logPromptInput(const QString& txt)
 {
     MdiWindow* mdiWin = activeMdiWindow();
-    if(mdiWin) mdiWin->logPromptInput(txt);
+    if (mdiWin) mdiWin->logPromptInput(txt);
 }
 
 void
 MainWindow::promptInputPrevious()
 {
     MdiWindow* mdiWin = activeMdiWindow();
-    if(mdiWin) mdiWin->promptInputPrevious();
+    if (mdiWin) mdiWin->promptInputPrevious();
 }
 
 void
 MainWindow::promptInputNext()
 {
     MdiWindow* mdiWin = activeMdiWindow();
-    if(mdiWin) mdiWin->promptInputNext();
-}
-
-void
-MainWindow::runCommand()
-{
-    QAction* act = qobject_cast<QAction*>(sender());
-    if (act) {
-        qDebug("runCommand(%s)", qPrintable(act->objectName()));
-        prompt->endCommand();
-        prompt->setCurrentText(act->objectName());
-        prompt->processInput();
+    if (mdiWin) {
+        mdiWin->promptInputNext();
     }
-}
-
-void
-MainWindow::runCommandMain(const QString& cmd)
-{
-    qDebug("runCommandMain(%s)", qPrintable(cmd));
-    QString fileName = "commands/" + cmd + "/" + cmd + ".js";
-    //if(!getSettingsSelectionModePickFirst()) { nativeClearSelection(); } //TODO: Uncomment this line when post-selection is available
-    //engine->evaluate(cmd + "_main()", fileName);
-}
-
-void
-MainWindow::runCommandClick(const QString& cmd, EmbReal x, EmbReal y)
-{
-    qDebug("runCommandClick(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
-    QString fileName = "commands/" + cmd + "/" + cmd + ".js";
-    //engine->evaluate(cmd + "_click(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName);
-}
-
-void
-MainWindow::runCommandMove(const QString& cmd, EmbReal x, EmbReal y)
-{
-    qDebug("runCommandMove(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
-    QString fileName = "commands/" + cmd + "/" + cmd + ".js";
-    //engine->evaluate(cmd + "_move(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName);
-}
-
-void
-MainWindow::runCommandContext(const QString& cmd, const QString& str)
-{
-    qDebug("runCommandContext(%s, %s)", qPrintable(cmd), qPrintable(str));
-    QString fileName = "commands/" + cmd + "/" + cmd + ".js";
-    //engine->evaluate(cmd + "_context('" + str.toUpper() + "')", fileName);
-}
-
-void
-MainWindow::runCommandPrompt(const QString& cmd, const QString& str)
-{
-    qDebug("runCommandPrompt(%s, %s)", qPrintable(cmd), qPrintable(str));
-    QString fileName = "commands/" + cmd + "/" + cmd + ".js";
-    //NOTE: Replace any special characters that will cause a syntax error
-    QString safeStr = str;
-    safeStr.replace("\\", "\\\\");
-    safeStr.replace("\'", "\\\'");
-    /*
-    if (prompt->isRapidFireEnabled()) {
-        engine->evaluate(cmd + "_prompt('" + safeStr + "')", fileName);
-    }
-    else                             { engine->evaluate(cmd + "_prompt('" + safeStr.toUpper() + "')", fileName); }
-    */
 }
 
 void
@@ -1199,32 +1088,19 @@ void
 MainWindow::nativeInitCommand()
 {
     View* gview = activeView();
-    if(gview) gview->clearRubberRoom();
+    if (gview) gview->clearRubberRoom();
 }
 
 void
 MainWindow::nativeEndCommand()
 {
     View* gview = activeView();
-    if(gview)
-    {
+    if (gview) {
         gview->clearRubberRoom();
         gview->previewOff();
         gview->disableMoveRapidFire();
     }
     prompt->endCommand();
-}
-
-void
-MainWindow::nativeNewFile()
-{
-    newFile();
-}
-
-void
-MainWindow::nativeOpenFile()
-{
-    openFile();
 }
 
 void
@@ -1239,42 +1115,6 @@ MainWindow::nativeTipOfTheDay()
     tipOfTheDay();
 }
 
-void
-MainWindow::nativeWindowCascade()
-{
-    mdiArea->cascade();
-}
-
-void
-MainWindow::nativeWindowTile()
-{
-    mdiArea->tile();
-}
-
-void
-MainWindow::nativeWindowClose()
-{
-    onCloseWindow();
-}
-
-void
-MainWindow::nativeWindowCloseAll()
-{
-    mdiArea->closeAllSubWindows();
-}
-
-void
-MainWindow::nativeWindowNext()
-{
-    mdiArea->activateNextSubWindow();
-}
-
-void
-MainWindow::nativeWindowPrevious()
-{
-    mdiArea->activatePreviousSubWindow();
-}
-
 /**
  * @brief MainWindow::nativeMessageBox
  * \a type
@@ -1285,11 +1125,21 @@ void
 MainWindow::nativeMessageBox(const QString& type, const QString& title, const QString& text)
 {
     QString msgType = type.toLower();
-    if     (msgType == "critical")    { QMessageBox::critical   (this, tr(qPrintable(title)), tr(qPrintable(text))); }
-    else if(msgType == "information") { QMessageBox::information(this, tr(qPrintable(title)), tr(qPrintable(text))); }
-    else if(msgType == "question")    { QMessageBox::question   (this, tr(qPrintable(title)), tr(qPrintable(text))); }
-    else if(msgType == "warning")     { QMessageBox::warning    (this, tr(qPrintable(title)), tr(qPrintable(text))); }
-    else                              { QMessageBox::critical   (this, tr("Native MessageBox Error"), tr("Incorrect use of the native messageBox function.")); }
+    if (msgType == "critical") {
+        QMessageBox::critical(this, tr(qPrintable(title)), tr(qPrintable(text)));
+    }
+    else if (msgType == "information") {
+        QMessageBox::information(this, tr(qPrintable(title)), tr(qPrintable(text)));
+    }
+    else if (msgType == "question") {
+        QMessageBox::question(this, tr(qPrintable(title)), tr(qPrintable(text)));
+    }
+    else if (msgType == "warning") {
+        QMessageBox::warning(this, tr(qPrintable(title)), tr(qPrintable(text)));
+    }
+    else {
+        QMessageBox::critical(this, tr("Native MessageBox Error"), tr("Incorrect use of the native messageBox function."));
+    }
 }
 
 /**
@@ -1328,78 +1178,38 @@ MainWindow::nativeSetGridColor(quint8 r, quint8 g, quint8 b)
     updateAllViewGridColors(qRgb(r,g,b));
 }
 
-QString MainWindow::nativeTextFont()
-{
-    return textFont();
-}
-
-EmbReal MainWindow::nativeTextSize()
-{
-    return textSize();
-}
-
-EmbReal MainWindow::nativeTextAngle()
-{
-    return textAngle();
-}
-
-bool MainWindow::nativeTextBold()
-{
-    return textBold();
-}
-
-bool MainWindow::nativeTextItalic()
-{
-    return textItalic();
-}
-
-bool MainWindow::nativeTextUnderline()
-{
-    return textUnderline();
-}
-
-bool MainWindow::nativeTextStrikeOut()
-{
-    return textStrikeOut();
-}
-
-bool MainWindow::nativeTextOverline()
-{
-    return textOverline();
-}
-
 void
 MainWindow::nativePreviewOn(int clone, int mode, EmbReal x, EmbReal y, EmbReal data)
 {
     View* gview = activeView();
-    if(gview) gview->previewOn(clone, mode, x, -y, data);
+    if (gview) gview->previewOn(clone, mode, x, -y, data);
 }
 
 void
 MainWindow::nativePreviewOff()
 {
     View* gview = activeView();
-    if(gview) gview->previewOff();
+    if (gview) gview->previewOff();
 }
 
 void
 MainWindow::nativeVulcanize()
 {
     View* gview = activeView();
-    if(gview) gview->vulcanizeRubberRoom();
+    if (gview) gview->vulcanizeRubberRoom();
 }
 
 void
 MainWindow::nativeClearRubber()
 {
     View* gview = activeView();
-    if(gview) gview->clearRubberRoom();
+    if (gview) gview->clearRubberRoom();
 }
 
 bool MainWindow::nativeAllowRubber()
 {
     View* gview = activeView();
-    if(gview) return gview->allowRubber();
+    if (gview) return gview->allowRubber();
     return false;
 }
 
@@ -1407,28 +1217,30 @@ void
 MainWindow::nativeSpareRubber(qint64 id)
 {
     View* gview = activeView();
-    if(gview) gview->spareRubber(id);
+    if (gview)
+        gview->spareRubber(id);
 }
 
 void
 MainWindow::nativeSetRubberMode(int mode)
 {
     View* gview = activeView();
-    if(gview) gview->setRubberMode(mode);
+    if (gview)
+        gview->setRubberMode(mode);
 }
 
 void
 MainWindow::nativeSetRubberPoint(const QString& key, EmbReal x, EmbReal y)
 {
     View* gview = activeView();
-    if(gview) gview->setRubberPoint(key, QPointF(x, -y));
+    if (gview) gview->setRubberPoint(key, QPointF(x, -y));
 }
 
 void
 MainWindow::nativeSetRubberText(const QString& key, const QString& txt)
 {
     View* gview = activeView();
-    if(gview) gview->setRubberText(key, txt);
+    if (gview) gview->setRubberText(key, txt);
 }
 
 void
@@ -1442,7 +1254,7 @@ MainWindow::nativeAddTextSingle(const QString& str, EmbReal x, EmbReal y, EmbRea
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
-    if(gview && gscene && stack)
+    if (gview && gscene && stack)
     {
         TextSingleObject* obj = new TextSingleObject(str, x, -y, getCurrentColor());
         obj->setObjectTextFont(settings.text_font);
@@ -1457,7 +1269,7 @@ MainWindow::nativeAddTextSingle(const QString& str, EmbReal x, EmbReal y, EmbRea
         obj->setRotation(-rot);
         //TODO: single line text fill
         obj->setObjectRubberMode(rubberMode);
-        if(rubberMode)
+        if (rubberMode)
         {
             gview->addToRubberRoom(obj);
             gscene->addItem(obj);
@@ -1487,12 +1299,12 @@ MainWindow::nativeAddLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbRea
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
-    if(gview && gscene && stack)
+    if (gview && gscene && stack)
     {
         LineObject* obj = new LineObject(x1, -y1, x2, -y2, getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
-        if(rubberMode)
+        if (rubberMode)
         {
             gview->addToRubberRoom(obj);
             gscene->addItem(obj);
@@ -1517,13 +1329,13 @@ MainWindow::nativeAddRectangle(EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbRe
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
-    if(gview && gscene && stack)
+    if (gview && gscene && stack)
     {
         RectObject* obj = new RectObject(x, -y, w, -h, getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
         //TODO: rect fill
-        if(rubberMode)
+        if (rubberMode)
         {
             gview->addToRubberRoom(obj);
             gscene->addItem(obj);
@@ -1547,11 +1359,11 @@ MainWindow::nativeAddArc(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal m
 {
     View* gview = activeView();
     QGraphicsScene* scene = activeScene();
-    if(gview && scene)
+    if (gview && scene)
     {
         ArcObject* arcObj = new ArcObject(startX, -startY, midX, -midY, endX, -endY, getCurrentColor());
         arcObj->setObjectRubberMode(rubberMode);
-        if(rubberMode) gview->addToRubberRoom(arcObj);
+        if (rubberMode) gview->addToRubberRoom(arcObj);
         scene->addItem(arcObj);
         scene->update();
     }
@@ -1563,12 +1375,12 @@ MainWindow::nativeAddCircle(EmbReal centerX, EmbReal centerY, EmbReal radius, bo
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
-    if(gview && gscene && stack)
+    if (gview && gscene && stack)
     {
         CircleObject* obj = new CircleObject(centerX, -centerY, radius, getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
         //TODO: circle fill
-        if(rubberMode)
+        if (rubberMode)
         {
             gview->addToRubberRoom(obj);
             gscene->addItem(obj);
@@ -1590,7 +1402,7 @@ MainWindow::nativeAddSlot(EmbReal centerX, EmbReal centerY, EmbReal diameter, Em
     SlotObject* slotObj = new SlotObject(centerX, -centerY, diameter, length, getCurrentColor());
     slotObj->setRotation(-rot);
     slotObj->setObjectRubberMode(rubberMode);
-    if(rubberMode) gview->addToRubberRoom(slotObj);
+    if (rubberMode) gview->addToRubberRoom(slotObj);
     scene->addItem(slotObj);
     //TODO: slot fill
     scene->update();
@@ -1603,13 +1415,13 @@ MainWindow::nativeAddEllipse(EmbReal centerX, EmbReal centerY, EmbReal width, Em
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
-    if(gview && gscene && stack)
+    if (gview && gscene && stack)
     {
         EllipseObject* obj = new EllipseObject(centerX, -centerY, width, height, getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
         //TODO: ellipse fill
-        if(rubberMode)
+        if (rubberMode)
         {
             gview->addToRubberRoom(obj);
             gscene->addItem(obj);
@@ -1628,7 +1440,7 @@ MainWindow::nativeAddPoint(EmbReal x, EmbReal y)
 {
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
-    if(gview && stack)
+    if (gview && stack)
     {
         PointObject* obj = new PointObject(x, -y, getCurrentColor());
         UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
@@ -1648,11 +1460,11 @@ MainWindow::nativeAddPolygon(EmbReal startX, EmbReal startY, const QPainterPath&
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
-    if(gview && gscene && stack)
+    if (gview && gscene && stack)
     {
         PolygonObject* obj = new PolygonObject(startX, startY, p, getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
-        if(rubberMode)
+        if (rubberMode)
         {
             gview->addToRubberRoom(obj);
             gscene->addItem(obj);
@@ -1673,18 +1485,15 @@ MainWindow::nativeAddPolyline(EmbReal startX, EmbReal startY, const QPainterPath
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
-    if(gview && gscene && stack)
-    {
+    if (gview && gscene && stack) {
         PolylineObject* obj = new PolylineObject(startX, startY, p, getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
-        if(rubberMode)
-        {
+        if (rubberMode) {
             gview->addToRubberRoom(obj);
             gscene->addItem(obj);
             gscene->update();
         }
-        else
-        {
+        else {
             UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
@@ -1718,19 +1527,16 @@ MainWindow::nativeAddDimLeader(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, E
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
-    if(gview && gscene && stack)
-    {
+    if (gview && gscene && stack) {
         DimLeaderObject* obj = new DimLeaderObject(x1, -y1, x2, -y2, getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
-        if(rubberMode)
-        {
+        if (rubberMode) {
             gview->addToRubberRoom(obj);
             gscene->addItem(obj);
             gscene->update();
         }
-        else
-        {
+        else {
             UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
@@ -1741,34 +1547,46 @@ void
 MainWindow::nativeSetCursorShape(const QString& str)
 {
     View* gview = activeView();
-    if(gview)
-    {
+    if (gview) {
         QString shape = str.toLower();
-        if     (shape == "arrow")           gview->setCursor(QCursor(Qt::ArrowCursor));
-        else if(shape == "uparrow")         gview->setCursor(QCursor(Qt::UpArrowCursor));
-        else if(shape == "cross")           gview->setCursor(QCursor(Qt::CrossCursor));
-        else if(shape == "wait")            gview->setCursor(QCursor(Qt::WaitCursor));
-        else if(shape == "ibeam")           gview->setCursor(QCursor(Qt::IBeamCursor));
-        else if(shape == "resizevert")      gview->setCursor(QCursor(Qt::SizeVerCursor));
-        else if(shape == "resizehoriz")     gview->setCursor(QCursor(Qt::SizeHorCursor));
-        else if(shape == "resizediagleft")  gview->setCursor(QCursor(Qt::SizeBDiagCursor));
-        else if(shape == "resizediagright") gview->setCursor(QCursor(Qt::SizeFDiagCursor));
-        else if(shape == "move")            gview->setCursor(QCursor(Qt::SizeAllCursor));
-        else if(shape == "blank")           gview->setCursor(QCursor(Qt::BlankCursor));
-        else if(shape == "splitvert")       gview->setCursor(QCursor(Qt::SplitVCursor));
-        else if(shape == "splithoriz")      gview->setCursor(QCursor(Qt::SplitHCursor));
-        else if(shape == "handpointing")    gview->setCursor(QCursor(Qt::PointingHandCursor));
-        else if(shape == "forbidden")       gview->setCursor(QCursor(Qt::ForbiddenCursor));
-        else if(shape == "handopen")        gview->setCursor(QCursor(Qt::OpenHandCursor));
-        else if(shape == "handclosed")      gview->setCursor(QCursor(Qt::ClosedHandCursor));
-        else if(shape == "whatsthis")       gview->setCursor(QCursor(Qt::WhatsThisCursor));
-        else if(shape == "busy")            gview->setCursor(QCursor(Qt::BusyCursor));
-        #if QT_VERSION >= 0x040700
-        else if(shape == "dragmove")        gview->setCursor(QCursor(Qt::DragMoveCursor));
-        else if(shape == "dragcopy")        gview->setCursor(QCursor(Qt::DragCopyCursor));
-        else if(shape == "draglink")        gview->setCursor(QCursor(Qt::DragLinkCursor));
-        #endif
-
+        if (shape == "arrow")
+            gview->setCursor(QCursor(Qt::ArrowCursor));
+        else if (shape == "uparrow")
+            gview->setCursor(QCursor(Qt::UpArrowCursor));
+        else if (shape == "cross")
+            gview->setCursor(QCursor(Qt::CrossCursor));
+        else if (shape == "wait")
+            gview->setCursor(QCursor(Qt::WaitCursor));
+        else if (shape == "ibeam")
+            gview->setCursor(QCursor(Qt::IBeamCursor));
+        else if (shape == "resizevert")
+            gview->setCursor(QCursor(Qt::SizeVerCursor));
+        else if (shape == "resizehoriz")
+            gview->setCursor(QCursor(Qt::SizeHorCursor));
+        else if (shape == "resizediagleft")
+            gview->setCursor(QCursor(Qt::SizeBDiagCursor));
+        else if (shape == "resizediagright")
+            gview->setCursor(QCursor(Qt::SizeFDiagCursor));
+        else if (shape == "move")
+            gview->setCursor(QCursor(Qt::SizeAllCursor));
+        else if (shape == "blank")
+            gview->setCursor(QCursor(Qt::BlankCursor));
+        else if (shape == "splitvert")
+            gview->setCursor(QCursor(Qt::SplitVCursor));
+        else if (shape == "splithoriz")
+            gview->setCursor(QCursor(Qt::SplitHCursor));
+        else if (shape == "handpointing")
+            gview->setCursor(QCursor(Qt::PointingHandCursor));
+        else if (shape == "forbidden")
+            gview->setCursor(QCursor(Qt::ForbiddenCursor));
+        else if (shape == "handopen")
+            gview->setCursor(QCursor(Qt::OpenHandCursor));
+        else if (shape == "handclosed")      gview->setCursor(QCursor(Qt::ClosedHandCursor));
+        else if (shape == "whatsthis")       gview->setCursor(QCursor(Qt::WhatsThisCursor));
+        else if (shape == "busy")            gview->setCursor(QCursor(Qt::BusyCursor));
+        else if (shape == "dragmove")        gview->setCursor(QCursor(Qt::DragMoveCursor));
+        else if (shape == "dragcopy")        gview->setCursor(QCursor(Qt::DragCopyCursor));
+        else if (shape == "draglink")        gview->setCursor(QCursor(Qt::DragLinkCursor));
     }
 }
 
@@ -1797,15 +1615,10 @@ EmbReal MainWindow::nativePerpendicularDistance(EmbReal px, EmbReal py, EmbReal 
 int MainWindow::nativeNumSelected()
 {
     View* gview = activeView();
-    if(gview) { return gview->numSelected(); }
+    if (gview) {
+        return gview->numSelected();
+    }
     return 0;
-}
-
-void
-MainWindow::nativeSelectAll()
-{
-    View* gview = activeView();
-    if(gview) { gview->selectAll(); }
 }
 
 void
@@ -1817,7 +1630,9 @@ void
 MainWindow::nativeClearSelection()
 {
     View* gview = activeView();
-    if(gview) { gview->clearSelection(); }
+    if (gview) {
+        gview->clearSelection();
+    }
 }
 
 /**
@@ -1827,7 +1642,9 @@ void
 MainWindow::nativeDeleteSelected()
 {
     View* gview = activeView();
-    if(gview) { gview->deleteSelected(); }
+    if (gview) {
+        gview->deleteSelected();
+    }
 }
 
 /**
@@ -1869,7 +1686,7 @@ void
 MainWindow::nativeMoveSelected(EmbReal dx, EmbReal dy)
 {
     View* gview = activeView();
-    if(gview) { gview->moveSelected(dx, -dy); }
+    if (gview) { gview->moveSelected(dx, -dy); }
 }
 
 /**
@@ -1882,13 +1699,16 @@ void
 MainWindow::nativeScaleSelected(EmbReal x, EmbReal y, EmbReal factor)
 {
     if (factor <= 0.0) {
-        QMessageBox::critical(this, tr("ScaleFactor Error"),
-                                tr("Hi there. If you are not a developer, report this as a bug. "
-                                "If you are a developer, your code needs examined, and possibly your head too."));
+        QMessageBox::critical(this,
+            tr("ScaleFactor Error"),
+            tr("Hi there. If you are not a developer, report this as a bug. "
+            "If you are a developer, your code needs examined, and possibly your head too."));
     }
 
     View* gview = activeView();
-    if(gview) { gview->scaleSelected(x, -y, factor); }
+    if (gview) {
+        gview->scaleSelected(x, -y, factor);
+    }
 }
 
 /**

@@ -808,10 +808,7 @@ Settings_Dialog::create_float_spinbox(
     label->setEnabled(!dialog.grid_load_from_file);
     spinBox->setEnabled(!dialog.grid_load_from_file);
 
-    bool visibility = false;
-    if (dialog.grid_type == "Circular") {
-        visibility = true;
-    }
+    bool visibility = (dialog.grid_type == "Circular");
     label->setVisible(!visibility);
     spinBox->setVisible(!visibility);
 

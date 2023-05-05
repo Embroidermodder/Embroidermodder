@@ -1303,7 +1303,8 @@ void View::mousePressEvent(QMouseEvent* event)
         if (mainWin->isCommandActive())
         {
             QPointF cmdPoint = mapToScene(event->pos());
-            mainWin->runCommandClick(mainWin->activeCommand(), cmdPoint.x(), cmdPoint.y());
+            /* TODO: make this into an actuator call. */
+            //mainWin->runCommandClick(mainWin->activeCommand(), cmdPoint.x(), cmdPoint.y());
             return;
         }
         QPainterPath path;
@@ -1538,7 +1539,10 @@ void View::mouseMoveEvent(QMouseEvent* event)
 
     if (mainWin->isCommandActive()) {
         if (rapidMoveActive) {
-            mainWin->runCommandMove(mainWin->activeCommand(), sceneMovePoint.x(), sceneMovePoint.y());
+            /**
+             * \todo turn move into an actuator call.
+             */
+            //mainWin->runCommandMove(mainWin->activeCommand(), sceneMovePoint.x(), sceneMovePoint.y());
         }
     }
     if (previewActive) {

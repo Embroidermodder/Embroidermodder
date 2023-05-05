@@ -1787,8 +1787,7 @@ protected:
 
     void createAllActions();
 
-    //Toolbars
-    //====================================================
+    // Toolbars
     void createAllToolbars();
     void createPanToolbar();
     void createIconToolbar();
@@ -1810,17 +1809,15 @@ protected:
     QToolBar* toolbarProperties;
     QToolBar* toolbarPrompt;
 
-    //Selectors
-    //====================================================
-    QComboBox*     layerSelector;
-    QComboBox*     colorSelector;
-    QComboBox*     linetypeSelector;
-    QComboBox*     lineweightSelector;
+    // Selectors
+    QComboBox* layerSelector;
+    QComboBox* colorSelector;
+    QComboBox* linetypeSelector;
+    QComboBox* lineweightSelector;
     QFontComboBox* textFontSelector;
-    QComboBox*     textSizeSelector;
+    QComboBox* textSizeSelector;
 
-    //Menus
-    //====================================================
+    // Menus
     void createAllMenus();
     void createFileMenu();
     void createEditMenu();
@@ -1836,8 +1833,7 @@ protected:
     QMenu* windowMenu;
     QMenu* helpMenu;
 
-    //SubMenus
-    //====================================================
+    // SubMenus
     QMenu* recentMenu;
     QMenu* zoomMenu;
     QMenu* panMenu;
@@ -1854,13 +1850,6 @@ public slots:
     void logPromptInput(const QString& txt);
     void promptInputPrevious();
     void promptInputNext();
-
-    void runCommand();
-    void runCommandMain(const QString& cmd);
-    void runCommandClick(const QString& cmd,  EmbReal x, EmbReal y);
-    void runCommandMove(const QString& cmd,  EmbReal x, EmbReal y);
-    void runCommandContext(const QString& cmd, const QString& str);
-    void runCommandPrompt(const QString& cmd, const QString& str);
 
     void newFile();
     void openFile(bool recent = false, const QString& recentFile = "");
@@ -1885,7 +1874,6 @@ public slots:
     void cut();
     void copy();
     void paste();
-    void selectAll();
 
     void closeToolBar(QAction*);
     void floatingChangedToolBar(bool);
@@ -1904,15 +1892,6 @@ public slots:
     void lineweightSelectorIndexChanged(int index);
     void textFontSelectorCurrentFontChanged(const QFont& font);
     void textSizeSelectorIndexChanged(int index);
-
-    QString textFont();
-    EmbReal textSize();
-    EmbReal textAngle();
-    bool textBold();
-    bool textItalic();
-    bool textUnderline();
-    bool textStrikeOut();
-    bool textOverline();
 
     void setTextFont(const QString& str);
     void setTextSize(EmbReal num);
@@ -1969,7 +1948,6 @@ public slots:
     void doNothing();
 
 public:
-    //Natives
     void nativeAlert(const QString& txt);
     void nativeBlinkPrompt();
     void nativeSetPromptPrefix(const QString& txt);
@@ -1982,17 +1960,8 @@ public:
     void nativeEnableMoveRapidFire();
     void nativeDisableMoveRapidFire();
 
-    void nativeNewFile();
-    void nativeOpenFile();
-
     void nativeExit();
     void nativeTipOfTheDay();
-    void nativeWindowCascade();
-    void nativeWindowTile();
-    void nativeWindowClose();
-    void nativeWindowCloseAll();
-    void nativeWindowNext();
-    void nativeWindowPrevious();
 
     void nativeMessageBox(const QString& type, const QString& title, const QString& text);
 
@@ -2002,15 +1971,6 @@ public:
     void nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b);
     void nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b);
 
-    QString nativeTextFont();
-    EmbReal nativeTextSize();
-    EmbReal nativeTextAngle();
-    bool nativeTextBold();
-    bool nativeTextItalic();
-    bool nativeTextUnderline();
-    bool nativeTextStrikeOut();
-    bool nativeTextOverline();
-
     void nativePreviewOn(int clone, int mode, EmbReal x, EmbReal y, EmbReal data);
     void nativePreviewOff();
 
@@ -2018,7 +1978,8 @@ public:
     void nativeClearRubber();
     bool nativeAllowRubber();
     void nativeSpareRubber(qint64 id);
-    //TODO: void nativeSetRubberFilter(qint64 id); //TODO: This is so more than 1 rubber object can exist at one time without updating all rubber objects at once
+    // \todo void nativeSetRubberFilter(qint64 id);
+    // \todo This is so more than 1 rubber object can exist at one time without updating all rubber objects at once
     void nativeSetRubberMode(int mode);
     void nativeSetRubberPoint(const QString& key, EmbReal x, EmbReal y);
     void nativeSetRubberText(const QString& key, const QString& txt);
@@ -2053,7 +2014,6 @@ public:
     EmbReal nativePerpendicularDistance(EmbReal px, EmbReal py, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
 
     int nativeNumSelected();
-    void nativeSelectAll();
     void nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
     void nativeClearSelection();
     void nativeDeleteSelected();
@@ -2955,6 +2915,8 @@ typedef struct Action__ {
         /*< Index in the actionHash array. */
     std::string icon;
         /*< The stub used for the icon and the basic command. */
+    std::string command;
+        /*< . */
     std::string tooltip;
         /*< The label in the menus and the message that appears when
             you hover over an icon. */
@@ -2971,13 +2933,13 @@ typedef struct Action__ {
             style command aliases. For example: icon16 would become
             the string list {"iconResize 16"}. */
     std::string menu_name;
-        /*< */
+        /*< . */
     int menu_position;
-        /*< */
+        /*< . */
     std::string toolbar_name;
-        /*< */
+        /*< . */
     int toolbar_position;
-        /*< */
+        /*< . */
 } Action;
 
 int get_action_index(std::string cmd);
