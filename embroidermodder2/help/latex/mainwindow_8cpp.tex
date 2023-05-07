@@ -17,6 +17,8 @@ typedef struct \mbox{\hyperlink{struct_parameter__}{Parameter\+\_\+}} \mbox{\hyp
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{mainwindow_8cpp_adb464fb86d6bebc2eedd185175921552}{tokenize}} (std\+::string str, const char delim)
+\item 
 std\+::string \mbox{\hyperlink{mainwindow_8cpp_abb17f86d77cb0b4ccc01a341bd333ad3}{read\+\_\+string\+\_\+setting}} (toml\+\_\+table\+\_\+t $\ast$table, const char $\ast$key)
 \item 
 int \mbox{\hyperlink{mainwindow_8cpp_a6fcdc8ef9d8e516770d265c3c6f6e3c8}{read\+\_\+settings}} (const char $\ast$settings\+\_\+file)
@@ -34,49 +36,11 @@ std\+::string \mbox{\hyperlink{mainwindow_8cpp_afcef16acc9986cf155dc2554af26df9c
 \doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
-static const int \mbox{\hyperlink{mainwindow_8cpp_ad69b70a9739e0cc3b6b544a2a8a2b6ac}{CIRCLE\+\_\+\+MODE\+\_\+1\+P\+\_\+\+RAD\+\_\+}} = 0
-\item 
-static const int \mbox{\hyperlink{mainwindow_8cpp_a42e3ad620063b5c1f11151f32fd7b4a8}{CIRCLE\+\_\+\+MODE\+\_\+1\+P\+\_\+\+DIA\+\_\+}} = 1
-\item 
-static const int \mbox{\hyperlink{mainwindow_8cpp_a6058e59bb5d7063d050f94dcaf69b20a}{CIRCLE\+\_\+\+MODE\+\_\+2\+P\+\_\+}} = 2
-\item 
-static const int \mbox{\hyperlink{mainwindow_8cpp_a44e74cc9644a4d9612bbdfc2baeda8a3}{CIRCLE\+\_\+\+MODE\+\_\+3\+P\+\_\+}} = 3
-\item 
-static const int \mbox{\hyperlink{mainwindow_8cpp_ac2b4c7f1e88135eb5004a2bb05d9a0f4}{CIRCLE\+\_\+\+MODE\+\_\+\+TTR\+\_\+}} = 4
-\item 
-static const int \mbox{\hyperlink{mainwindow_8cpp_a95ba7b98de34385fb2f2011371e19708}{DOLPHIN\+\_\+\+MODE\+\_\+\+NUM\+\_\+\+POINTS\+\_\+}} = 0
-\item 
-static const int \mbox{\hyperlink{mainwindow_8cpp_ab77f29566b75a5bab404429415e66155}{DOLPHIN\+\_\+\+MODE\+\_\+\+XSCALE\+\_\+}} = 1
-\item 
-static const int \mbox{\hyperlink{mainwindow_8cpp_a851363482cc21f92a9e0131eeb487c71}{DOLPHIN\+\_\+\+MODE\+\_\+\+YSCALE\+\_\+}} = 2
-\item 
-static const int \mbox{\hyperlink{mainwindow_8cpp_aec45d57aad40c44fcf10769a6d9f091f}{SINGLE\+\_\+\+LINE\+\_\+\+TEXT\+\_\+\+MODE\+\_\+\+JUSTIFY\+\_\+}} = 0
-\item 
-static const int \mbox{\hyperlink{mainwindow_8cpp_ab6b17704101e3fc80fc995f2005930cc}{SINGLE\+\_\+\+LINE\+\_\+\+TEXT\+\_\+\+MODE\+\_\+\+SETFONT\+\_\+}} = 1
-\item 
-static const int \mbox{\hyperlink{mainwindow_8cpp_a6060f7e1578c0f77a35c0267285ca05b}{SINGLE\+\_\+\+LINE\+\_\+\+TEXT\+\_\+\+MODE\+\_\+\+SETGEOM\+\_\+}} = 2
-\item 
-static const int \mbox{\hyperlink{mainwindow_8cpp_aa111f94c2a33e1fb749323d05639f896}{SINGLE\+\_\+\+LINE\+\_\+\+TEXT\+\_\+\+MODE\+\_\+\+RAPID\+\_\+}} = 3
-\item 
-static const int \mbox{\hyperlink{mainwindow_8cpp_ad6db4bd3598a6bdcc4681e928e74a486}{STAR\+\_\+\+MODE\+\_\+\+NUM\+\_\+\+POINTS\+\_\+}} = 0
-\item 
-static const int \mbox{\hyperlink{mainwindow_8cpp_a79178186f78df6e2d94e81a6457af526}{STAR\+\_\+\+MODE\+\_\+\+CENTER\+\_\+\+PT\+\_\+}} = 1
-\item 
-static const int \mbox{\hyperlink{mainwindow_8cpp_a785d17f359ec479582f2406f9b99f0f4}{STAR\+\_\+\+MODE\+\_\+\+RAD\+\_\+\+OUTER\+\_\+}} = 2
-\item 
-static const int \mbox{\hyperlink{mainwindow_8cpp_a69d5b706d2ad7825d9db0e4523563997}{STAR\+\_\+\+MODE\+\_\+\+RAD\+\_\+\+INNER\+\_\+}} = 3
-\item 
 \mbox{\hyperlink{class_main_window}{Main\+Window}} $\ast$ \mbox{\hyperlink{mainwindow_8cpp_a13c21041ff7e5b6de6cedd66bd347f52}{\+\_\+main\+Win}} = 0
 \item 
 std\+::vector$<$ \mbox{\hyperlink{embroidermodder_8h_aff6f4ac1e39a61ea59b275d373a14db1}{Action}} $>$ \mbox{\hyperlink{mainwindow_8cpp_a54518bd972055aee6bd70b6cd1e1a452}{action\+\_\+table}}
 \item 
-QString\+List \mbox{\hyperlink{mainwindow_8cpp_a65ef28a90fbc8aa7123bad86ad4171f2}{action\+\_\+labels}}
-\item 
-\mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} \mbox{\hyperlink{mainwindow_8cpp_a19276c778f3034b94881cf1f8614dbb2}{settings}}
-\item 
-\mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} \mbox{\hyperlink{mainwindow_8cpp_a1c6510838c31a5cc8eeadcdfceda753e}{dialog}}
-\item 
-\mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} \mbox{\hyperlink{mainwindow_8cpp_aed18c7e89ec05d27fb61a14029f748f4}{preview}}
+std\+::unordered\+\_\+map$<$ std\+::string, std\+::string $>$ \mbox{\hyperlink{mainwindow_8cpp_a739f3f2805e96b2bb95f9dbf08fb985c}{config}}
 \end{DoxyCompactItemize}
 
 
@@ -155,6 +119,12 @@ Read the settings from file which aren\textquotesingle{}t editable by the user. 
 \doxyparagraph{\texorpdfstring{Todo()}{Todo()}}
 {\footnotesize\ttfamily std\+::string Todo (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{mainwindow_8cpp_ac47ac57f7125db3d44451410e0ffc792}{Parameter}}}]{result\mbox{[}10\mbox{]} }\end{DoxyParamCaption})}
 
+\mbox{\Hypertarget{mainwindow_8cpp_adb464fb86d6bebc2eedd185175921552}\label{mainwindow_8cpp_adb464fb86d6bebc2eedd185175921552}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!tokenize@{tokenize}}
+\index{tokenize@{tokenize}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{tokenize()}{tokenize()}}
+{\footnotesize\ttfamily std\+::vector$<$ std\+::string $>$ tokenize (\begin{DoxyParamCaption}\item[{std\+::string}]{str,  }\item[{const char}]{delim }\end{DoxyParamCaption})}
+
 \mbox{\Hypertarget{mainwindow_8cpp_a676090199811da7c58ccc15c8e25c308}\label{mainwindow_8cpp_a676090199811da7c58ccc15c8e25c308}} 
 \index{mainwindow.cpp@{mainwindow.cpp}!validRGB@{validRGB}}
 \index{validRGB@{validRGB}!mainwindow.cpp@{mainwindow.cpp}}
@@ -174,129 +144,15 @@ Read the settings from file which aren\textquotesingle{}t editable by the user. 
 \doxyparagraph{\texorpdfstring{\_mainWin}{\_mainWin}}
 {\footnotesize\ttfamily \mbox{\hyperlink{class_main_window}{Main\+Window}}$\ast$ \+\_\+main\+Win = 0}
 
-\mbox{\Hypertarget{mainwindow_8cpp_a65ef28a90fbc8aa7123bad86ad4171f2}\label{mainwindow_8cpp_a65ef28a90fbc8aa7123bad86ad4171f2}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!action\_labels@{action\_labels}}
-\index{action\_labels@{action\_labels}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{action\_labels}{action\_labels}}
-{\footnotesize\ttfamily QString\+List action\+\_\+labels}
-
 \mbox{\Hypertarget{mainwindow_8cpp_a54518bd972055aee6bd70b6cd1e1a452}\label{mainwindow_8cpp_a54518bd972055aee6bd70b6cd1e1a452}} 
 \index{mainwindow.cpp@{mainwindow.cpp}!action\_table@{action\_table}}
 \index{action\_table@{action\_table}!mainwindow.cpp@{mainwindow.cpp}}
 \doxyparagraph{\texorpdfstring{action\_table}{action\_table}}
 {\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{embroidermodder_8h_aff6f4ac1e39a61ea59b275d373a14db1}{Action}}$>$ action\+\_\+table}
 
-\mbox{\Hypertarget{mainwindow_8cpp_a42e3ad620063b5c1f11151f32fd7b4a8}\label{mainwindow_8cpp_a42e3ad620063b5c1f11151f32fd7b4a8}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!CIRCLE\_MODE\_1P\_DIA\_@{CIRCLE\_MODE\_1P\_DIA\_}}
-\index{CIRCLE\_MODE\_1P\_DIA\_@{CIRCLE\_MODE\_1P\_DIA\_}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{CIRCLE\_MODE\_1P\_DIA\_}{CIRCLE\_MODE\_1P\_DIA\_}}
-{\footnotesize\ttfamily const int CIRCLE\+\_\+\+MODE\+\_\+1\+P\+\_\+\+DIA\+\_\+ = 1\hspace{0.3cm}{\ttfamily [static]}}
-
-\mbox{\Hypertarget{mainwindow_8cpp_ad69b70a9739e0cc3b6b544a2a8a2b6ac}\label{mainwindow_8cpp_ad69b70a9739e0cc3b6b544a2a8a2b6ac}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!CIRCLE\_MODE\_1P\_RAD\_@{CIRCLE\_MODE\_1P\_RAD\_}}
-\index{CIRCLE\_MODE\_1P\_RAD\_@{CIRCLE\_MODE\_1P\_RAD\_}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{CIRCLE\_MODE\_1P\_RAD\_}{CIRCLE\_MODE\_1P\_RAD\_}}
-{\footnotesize\ttfamily const int CIRCLE\+\_\+\+MODE\+\_\+1\+P\+\_\+\+RAD\+\_\+ = 0\hspace{0.3cm}{\ttfamily [static]}}
-
-\mbox{\Hypertarget{mainwindow_8cpp_a6058e59bb5d7063d050f94dcaf69b20a}\label{mainwindow_8cpp_a6058e59bb5d7063d050f94dcaf69b20a}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!CIRCLE\_MODE\_2P\_@{CIRCLE\_MODE\_2P\_}}
-\index{CIRCLE\_MODE\_2P\_@{CIRCLE\_MODE\_2P\_}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{CIRCLE\_MODE\_2P\_}{CIRCLE\_MODE\_2P\_}}
-{\footnotesize\ttfamily const int CIRCLE\+\_\+\+MODE\+\_\+2\+P\+\_\+ = 2\hspace{0.3cm}{\ttfamily [static]}}
-
-\mbox{\Hypertarget{mainwindow_8cpp_a44e74cc9644a4d9612bbdfc2baeda8a3}\label{mainwindow_8cpp_a44e74cc9644a4d9612bbdfc2baeda8a3}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!CIRCLE\_MODE\_3P\_@{CIRCLE\_MODE\_3P\_}}
-\index{CIRCLE\_MODE\_3P\_@{CIRCLE\_MODE\_3P\_}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{CIRCLE\_MODE\_3P\_}{CIRCLE\_MODE\_3P\_}}
-{\footnotesize\ttfamily const int CIRCLE\+\_\+\+MODE\+\_\+3\+P\+\_\+ = 3\hspace{0.3cm}{\ttfamily [static]}}
-
-\mbox{\Hypertarget{mainwindow_8cpp_ac2b4c7f1e88135eb5004a2bb05d9a0f4}\label{mainwindow_8cpp_ac2b4c7f1e88135eb5004a2bb05d9a0f4}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!CIRCLE\_MODE\_TTR\_@{CIRCLE\_MODE\_TTR\_}}
-\index{CIRCLE\_MODE\_TTR\_@{CIRCLE\_MODE\_TTR\_}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{CIRCLE\_MODE\_TTR\_}{CIRCLE\_MODE\_TTR\_}}
-{\footnotesize\ttfamily const int CIRCLE\+\_\+\+MODE\+\_\+\+TTR\+\_\+ = 4\hspace{0.3cm}{\ttfamily [static]}}
-
-\mbox{\Hypertarget{mainwindow_8cpp_a1c6510838c31a5cc8eeadcdfceda753e}\label{mainwindow_8cpp_a1c6510838c31a5cc8eeadcdfceda753e}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!dialog@{dialog}}
-\index{dialog@{dialog}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{dialog}{dialog}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} dialog}
-
-These copies of the settings struct are for restoring the state if the user doesn\textquotesingle{}t want to accept their changes in the settings dialog. \mbox{\Hypertarget{mainwindow_8cpp_a95ba7b98de34385fb2f2011371e19708}\label{mainwindow_8cpp_a95ba7b98de34385fb2f2011371e19708}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!DOLPHIN\_MODE\_NUM\_POINTS\_@{DOLPHIN\_MODE\_NUM\_POINTS\_}}
-\index{DOLPHIN\_MODE\_NUM\_POINTS\_@{DOLPHIN\_MODE\_NUM\_POINTS\_}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{DOLPHIN\_MODE\_NUM\_POINTS\_}{DOLPHIN\_MODE\_NUM\_POINTS\_}}
-{\footnotesize\ttfamily const int DOLPHIN\+\_\+\+MODE\+\_\+\+NUM\+\_\+\+POINTS\+\_\+ = 0\hspace{0.3cm}{\ttfamily [static]}}
-
-\mbox{\Hypertarget{mainwindow_8cpp_ab77f29566b75a5bab404429415e66155}\label{mainwindow_8cpp_ab77f29566b75a5bab404429415e66155}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!DOLPHIN\_MODE\_XSCALE\_@{DOLPHIN\_MODE\_XSCALE\_}}
-\index{DOLPHIN\_MODE\_XSCALE\_@{DOLPHIN\_MODE\_XSCALE\_}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{DOLPHIN\_MODE\_XSCALE\_}{DOLPHIN\_MODE\_XSCALE\_}}
-{\footnotesize\ttfamily const int DOLPHIN\+\_\+\+MODE\+\_\+\+XSCALE\+\_\+ = 1\hspace{0.3cm}{\ttfamily [static]}}
-
-\mbox{\Hypertarget{mainwindow_8cpp_a851363482cc21f92a9e0131eeb487c71}\label{mainwindow_8cpp_a851363482cc21f92a9e0131eeb487c71}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!DOLPHIN\_MODE\_YSCALE\_@{DOLPHIN\_MODE\_YSCALE\_}}
-\index{DOLPHIN\_MODE\_YSCALE\_@{DOLPHIN\_MODE\_YSCALE\_}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{DOLPHIN\_MODE\_YSCALE\_}{DOLPHIN\_MODE\_YSCALE\_}}
-{\footnotesize\ttfamily const int DOLPHIN\+\_\+\+MODE\+\_\+\+YSCALE\+\_\+ = 2\hspace{0.3cm}{\ttfamily [static]}}
-
-\mbox{\Hypertarget{mainwindow_8cpp_aed18c7e89ec05d27fb61a14029f748f4}\label{mainwindow_8cpp_aed18c7e89ec05d27fb61a14029f748f4}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!preview@{preview}}
-\index{preview@{preview}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{preview}{preview}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} preview}
-
-\mbox{\Hypertarget{mainwindow_8cpp_a19276c778f3034b94881cf1f8614dbb2}\label{mainwindow_8cpp_a19276c778f3034b94881cf1f8614dbb2}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!settings@{settings}}
-\index{settings@{settings}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{settings}{settings}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} settings}
-
-The actuator changes the program state via these global variables. \mbox{\Hypertarget{mainwindow_8cpp_aec45d57aad40c44fcf10769a6d9f091f}\label{mainwindow_8cpp_aec45d57aad40c44fcf10769a6d9f091f}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!SINGLE\_LINE\_TEXT\_MODE\_JUSTIFY\_@{SINGLE\_LINE\_TEXT\_MODE\_JUSTIFY\_}}
-\index{SINGLE\_LINE\_TEXT\_MODE\_JUSTIFY\_@{SINGLE\_LINE\_TEXT\_MODE\_JUSTIFY\_}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{SINGLE\_LINE\_TEXT\_MODE\_JUSTIFY\_}{SINGLE\_LINE\_TEXT\_MODE\_JUSTIFY\_}}
-{\footnotesize\ttfamily const int SINGLE\+\_\+\+LINE\+\_\+\+TEXT\+\_\+\+MODE\+\_\+\+JUSTIFY\+\_\+ = 0\hspace{0.3cm}{\ttfamily [static]}}
-
-\mbox{\Hypertarget{mainwindow_8cpp_aa111f94c2a33e1fb749323d05639f896}\label{mainwindow_8cpp_aa111f94c2a33e1fb749323d05639f896}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!SINGLE\_LINE\_TEXT\_MODE\_RAPID\_@{SINGLE\_LINE\_TEXT\_MODE\_RAPID\_}}
-\index{SINGLE\_LINE\_TEXT\_MODE\_RAPID\_@{SINGLE\_LINE\_TEXT\_MODE\_RAPID\_}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{SINGLE\_LINE\_TEXT\_MODE\_RAPID\_}{SINGLE\_LINE\_TEXT\_MODE\_RAPID\_}}
-{\footnotesize\ttfamily const int SINGLE\+\_\+\+LINE\+\_\+\+TEXT\+\_\+\+MODE\+\_\+\+RAPID\+\_\+ = 3\hspace{0.3cm}{\ttfamily [static]}}
-
-\mbox{\Hypertarget{mainwindow_8cpp_ab6b17704101e3fc80fc995f2005930cc}\label{mainwindow_8cpp_ab6b17704101e3fc80fc995f2005930cc}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!SINGLE\_LINE\_TEXT\_MODE\_SETFONT\_@{SINGLE\_LINE\_TEXT\_MODE\_SETFONT\_}}
-\index{SINGLE\_LINE\_TEXT\_MODE\_SETFONT\_@{SINGLE\_LINE\_TEXT\_MODE\_SETFONT\_}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{SINGLE\_LINE\_TEXT\_MODE\_SETFONT\_}{SINGLE\_LINE\_TEXT\_MODE\_SETFONT\_}}
-{\footnotesize\ttfamily const int SINGLE\+\_\+\+LINE\+\_\+\+TEXT\+\_\+\+MODE\+\_\+\+SETFONT\+\_\+ = 1\hspace{0.3cm}{\ttfamily [static]}}
-
-\mbox{\Hypertarget{mainwindow_8cpp_a6060f7e1578c0f77a35c0267285ca05b}\label{mainwindow_8cpp_a6060f7e1578c0f77a35c0267285ca05b}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!SINGLE\_LINE\_TEXT\_MODE\_SETGEOM\_@{SINGLE\_LINE\_TEXT\_MODE\_SETGEOM\_}}
-\index{SINGLE\_LINE\_TEXT\_MODE\_SETGEOM\_@{SINGLE\_LINE\_TEXT\_MODE\_SETGEOM\_}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{SINGLE\_LINE\_TEXT\_MODE\_SETGEOM\_}{SINGLE\_LINE\_TEXT\_MODE\_SETGEOM\_}}
-{\footnotesize\ttfamily const int SINGLE\+\_\+\+LINE\+\_\+\+TEXT\+\_\+\+MODE\+\_\+\+SETGEOM\+\_\+ = 2\hspace{0.3cm}{\ttfamily [static]}}
-
-\mbox{\Hypertarget{mainwindow_8cpp_a79178186f78df6e2d94e81a6457af526}\label{mainwindow_8cpp_a79178186f78df6e2d94e81a6457af526}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!STAR\_MODE\_CENTER\_PT\_@{STAR\_MODE\_CENTER\_PT\_}}
-\index{STAR\_MODE\_CENTER\_PT\_@{STAR\_MODE\_CENTER\_PT\_}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{STAR\_MODE\_CENTER\_PT\_}{STAR\_MODE\_CENTER\_PT\_}}
-{\footnotesize\ttfamily const int STAR\+\_\+\+MODE\+\_\+\+CENTER\+\_\+\+PT\+\_\+ = 1\hspace{0.3cm}{\ttfamily [static]}}
-
-\mbox{\Hypertarget{mainwindow_8cpp_ad6db4bd3598a6bdcc4681e928e74a486}\label{mainwindow_8cpp_ad6db4bd3598a6bdcc4681e928e74a486}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!STAR\_MODE\_NUM\_POINTS\_@{STAR\_MODE\_NUM\_POINTS\_}}
-\index{STAR\_MODE\_NUM\_POINTS\_@{STAR\_MODE\_NUM\_POINTS\_}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{STAR\_MODE\_NUM\_POINTS\_}{STAR\_MODE\_NUM\_POINTS\_}}
-{\footnotesize\ttfamily const int STAR\+\_\+\+MODE\+\_\+\+NUM\+\_\+\+POINTS\+\_\+ = 0\hspace{0.3cm}{\ttfamily [static]}}
-
-\mbox{\Hypertarget{mainwindow_8cpp_a69d5b706d2ad7825d9db0e4523563997}\label{mainwindow_8cpp_a69d5b706d2ad7825d9db0e4523563997}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!STAR\_MODE\_RAD\_INNER\_@{STAR\_MODE\_RAD\_INNER\_}}
-\index{STAR\_MODE\_RAD\_INNER\_@{STAR\_MODE\_RAD\_INNER\_}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{STAR\_MODE\_RAD\_INNER\_}{STAR\_MODE\_RAD\_INNER\_}}
-{\footnotesize\ttfamily const int STAR\+\_\+\+MODE\+\_\+\+RAD\+\_\+\+INNER\+\_\+ = 3\hspace{0.3cm}{\ttfamily [static]}}
-
-\mbox{\Hypertarget{mainwindow_8cpp_a785d17f359ec479582f2406f9b99f0f4}\label{mainwindow_8cpp_a785d17f359ec479582f2406f9b99f0f4}} 
-\index{mainwindow.cpp@{mainwindow.cpp}!STAR\_MODE\_RAD\_OUTER\_@{STAR\_MODE\_RAD\_OUTER\_}}
-\index{STAR\_MODE\_RAD\_OUTER\_@{STAR\_MODE\_RAD\_OUTER\_}!mainwindow.cpp@{mainwindow.cpp}}
-\doxyparagraph{\texorpdfstring{STAR\_MODE\_RAD\_OUTER\_}{STAR\_MODE\_RAD\_OUTER\_}}
-{\footnotesize\ttfamily const int STAR\+\_\+\+MODE\+\_\+\+RAD\+\_\+\+OUTER\+\_\+ = 2\hspace{0.3cm}{\ttfamily [static]}}
+\mbox{\Hypertarget{mainwindow_8cpp_a739f3f2805e96b2bb95f9dbf08fb985c}\label{mainwindow_8cpp_a739f3f2805e96b2bb95f9dbf08fb985c}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!config@{config}}
+\index{config@{config}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{config}{config}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$std\+::string, std\+::string$>$ config}
 

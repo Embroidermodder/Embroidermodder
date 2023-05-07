@@ -1,8 +1,8 @@
 var searchData=
 [
   ['lastcommand_0',['lastCommand',['../class_cmd_prompt.html#a70ab361f69e9d270d0524571bef8c7ca',1,'CmdPrompt']]],
-  ['layermanager_1',['LayerManager',['../class_layer_manager.html#a1aea298cad7debe54aaa28dcbf98a976',1,'LayerManager']]],
-  ['layermanager_2',['layerManager',['../class_main_window.html#aa0b8532b0e5f648af9addd13e76cce50',1,'MainWindow']]],
+  ['layermanager_1',['layerManager',['../class_main_window.html#aa0b8532b0e5f648af9addd13e76cce50',1,'MainWindow']]],
+  ['layermanager_2',['LayerManager',['../class_layer_manager.html#a1aea298cad7debe54aaa28dcbf98a976',1,'LayerManager']]],
   ['layerprevious_3',['layerPrevious',['../class_main_window.html#af37df0f8a1370432aa00fed31983dfb8',1,'MainWindow']]],
   ['layerselectorindexchanged_4',['layerSelectorIndexChanged',['../class_main_window.html#a0a02e05509c46ef95f00f581a640bea4',1,'MainWindow']]],
   ['lindenmayer_5fsystem_5',['lindenmayer_system',['../embroidery_8h.html#a37ecaa3f785f905f33e2f22a3e925907',1,'lindenmayer_system(L_system L, char *state, int iteration, int complete):&#160;fill.c'],['../fill_8c.html#af27a83a237ef6302cbfb5af534229e10',1,'lindenmayer_system(L_system L, char *state, int iterations, int complete):&#160;fill.c']]],

@@ -24,7 +24,7 @@
  */
 EllipseObject::EllipseObject(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("EllipseObject Constructor()");
+    debug_message("EllipseObject Constructor()");
     init(centerX, centerY, width, height, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
@@ -33,7 +33,7 @@ EllipseObject::EllipseObject(EmbReal centerX, EmbReal centerY, EmbReal width, Em
  */
 EllipseObject::EllipseObject(EllipseObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("EllipseObject Constructor()");
+    debug_message("EllipseObject Constructor()");
     if (obj) {
         init(
             obj->objectCenterX(),
@@ -51,7 +51,7 @@ EllipseObject::EllipseObject(EllipseObject* obj, QGraphicsItem* parent) : BaseOb
  */
 EllipseObject::~EllipseObject()
 {
-    qDebug("EllipseObject Destructor()");
+    debug_message("EllipseObject Destructor()");
 }
 
 /**
@@ -149,8 +149,8 @@ EllipseObject::objectQuadrant0() const
 {
     EmbReal halfW = objectWidth()/2.0;
     EmbReal rot = radians(rotation());
-    EmbReal x = halfW*qCos(rot);
-    EmbReal y = halfW*qSin(rot);
+    EmbReal x = halfW * std::cos(rot);
+    EmbReal y = halfW * std::sin(rot);
     return objectCenter() + QPointF(x,y);
 }
 
@@ -162,8 +162,8 @@ EllipseObject::objectQuadrant90() const
 {
     EmbReal halfH = objectHeight()/2.0;
     EmbReal rot = radians(rotation()+90.0);
-    EmbReal x = halfH*qCos(rot);
-    EmbReal y = halfH*qSin(rot);
+    EmbReal x = halfH * std::cos(rot);
+    EmbReal y = halfH * std::sin(rot);
     return objectCenter() + QPointF(x,y);
 }
 
@@ -175,8 +175,8 @@ EllipseObject::objectQuadrant180() const
 {
     EmbReal halfW = objectWidth()/2.0;
     EmbReal rot = radians(rotation()+180.0);
-    EmbReal x = halfW*qCos(rot);
-    EmbReal y = halfW*qSin(rot);
+    EmbReal x = halfW*std::cos(rot);
+    EmbReal y = halfW*std::sin(rot);
     return objectCenter() + QPointF(x,y);
 }
 
@@ -188,8 +188,8 @@ EllipseObject::objectQuadrant270() const
 {
     EmbReal halfH = objectHeight()/2.0;
     EmbReal rot = radians(rotation()+270.0);
-    EmbReal x = halfH*qCos(rot);
-    EmbReal y = halfH*qSin(rot);
+    EmbReal x = halfH*std::cos(rot);
+    EmbReal y = halfH*std::sin(rot);
     return objectCenter() + QPointF(x,y);
 }
 
@@ -321,7 +321,7 @@ EllipseObject::updateRubber(QPainter* painter)
 void
 EllipseObject::vulcanize()
 {
-    qDebug("EllipseObject vulcanize()");
+    debug_message("EllipseObject vulcanize()");
     updateRubber();
 
     setObjectRubberMode(OBJ_RUBBER_OFF);

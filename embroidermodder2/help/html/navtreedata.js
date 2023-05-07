@@ -148,18 +148,18 @@ var NAVTREE =
     ] ],
     [ "GNU Free Documentation License", "docs-license.html", null ],
     [ "Contributor Covenant Code of Conduct", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html", [
-      [ "Our Pledge", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md39", null ],
-      [ "Our Standards", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md40", null ],
-      [ "Enforcement Responsibilities", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md41", null ],
-      [ "Scope", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md42", null ],
-      [ "Enforcement", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md43", null ],
-      [ "Enforcement Guidelines", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md44", [
-        [ "1. Correction", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md45", null ],
-        [ "2. Warning", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md46", null ],
-        [ "3. Temporary Ban", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md47", null ],
-        [ "4. Permanent Ban", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md48", null ]
+      [ "Our Pledge", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md41", null ],
+      [ "Our Standards", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md42", null ],
+      [ "Enforcement Responsibilities", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md43", null ],
+      [ "Scope", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md44", null ],
+      [ "Enforcement", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md45", null ],
+      [ "Enforcement Guidelines", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md46", [
+        [ "1. Correction", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md47", null ],
+        [ "2. Warning", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md48", null ],
+        [ "3. Temporary Ban", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md49", null ],
+        [ "4. Permanent Ban", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md50", null ]
       ] ],
-      [ "Attribution", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md49", null ]
+      [ "Attribution", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md51", null ]
     ] ],
     [ "Privacy Policy for Embroidery Viewer", "md_privacy_policy.html", null ],
     [ "Todo List", "todo.html", null ],
@@ -196,21 +196,20 @@ var NAVTREEINDEX =
 "_changelog.html",
 "class_cmd_prompt.html#a94d2a27a19e9c0e06e1318b6bc25de61",
 "class_line_object.html#a4980af51eaf26a5ffcb325656d70d1ba",
-"class_main_window.html#a9ce4242325ae4de74c11acd6dcd8caec",
-"class_mdi_window.html#ae499df12c7dad4ae678b3bb2b32b03dc",
-"class_save_object.html#a9edb45dec277f6c3bd31eb9bed71ab61",
-"class_settings___dialog.html#ad9a0f1a1f6331338b2db645febb22d54",
-"class_view.html#a619649963ef9ad898fe74cddbd1ad878",
-"embroidermodder_8h.html#a29bcbce98e36705fa9c1577a227d53c0a86bc3d3fc4b067f049c3c6efd029727b",
-"embroidery_8h.html#a839ce036c00f725c91667a33538b3c11",
-"embroidery__internal_8h.html#a364fddf45e198a6aa8333e5867af3cc8",
-"embroidery__internal_8h.html#adf5a6371ed3ee9d649f92592139ac6a1",
-"format__pes_8c.html#a21aba667fce5f4492d9ed1f418141a4f",
-"geometry-and-algorithms.html#progress-chart",
-"mainwindow_8cpp.html#a69d5b706d2ad7825d9db0e4523563997",
-"property-editor_8cpp.html#a9f8d385021825f9670dadac4c0e8ac44",
-"struct_emb_image__.html#aeb4c22e0a04cbf53fa8706f36b33befb",
-"struct_stx_thread__.html#a7dadb8f2b7c0ffb34931b35b5af02e99"
+"class_main_window.html#ae03dd5abbfc1517bfb0dfc62289ae48a",
+"class_property_editor.html#a6e903f301e6b9cddd3e33f622c58d096",
+"class_status_bar_button.html#a8c94cc2deff164da9600fff8b97f16d9",
+"class_view.html#ab890b2af643867855a5619068b9095df",
+"embroidermodder_8h.html#ab737782f7ffcf7b04b8e29bff1177afe",
+"embroidery_8h.html#a998fc646741524f4f3fffb9454f304f8",
+"embroidery__internal_8h.html#a4c14130d2f17b639d0bbd26357a047cc",
+"embroidery__internal_8h.html#af9f9798107f2ed098bd59c98467bdb63",
+"format__shv_8c.html#a2b7ac11373a51859a56c8b4bbfbd232c",
+"globals_defs_h.html",
+"object-save_8cpp.html",
+"struct__bcf__file.html#ade108e4dbaaf848bb151970e612624d7",
+"struct_emb_view__.html#ac73ebb96d8421e4c0c9fe2627b668a9a",
+"thread-color_8c.html#a0ddaecc4fc077a3db30ea5ffd20ac823"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

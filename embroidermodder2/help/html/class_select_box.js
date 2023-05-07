@@ -5,7 +5,7 @@ var class_select_box =
     [ "paintEvent", "class_select_box.html#ad06d035e601c42cc2a3b9d1229c73d36", null ],
     [ "setColors", "class_select_box.html#a340d927ba62648c3649048b0fa670427", null ],
     [ "setDirection", "class_select_box.html#a418e29947b0a8e46496b999cae4f3bdb", null ],
-    [ "alpha", "class_select_box.html#a0c8ebcb450e5237c286698fa7b3598e2", null ],
+    [ "alpha", "class_select_box.html#acf5bb76caa419c0fa231dbd66c881084", null ],
     [ "boxDir", "class_select_box.html#a3d6024e9a39bf026a8a6c26a21d5eb08", null ],
     [ "dirBrush", "class_select_box.html#ab2699f42ba40a5ededd08a4896d6df59", null ],
     [ "dirPen", "class_select_box.html#ad4fc0a789bf892949ffd7424c94a8568", null ],

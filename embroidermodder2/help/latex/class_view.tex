@@ -73,7 +73,7 @@ void \mbox{\hyperlink{class_view_a42a33d19fc5d46b5c07b108f166b014e}{set\+Corner\
 \item 
 void \mbox{\hyperlink{class_view_ac7ddf091a5138a99250ac0bde26191de}{set\+Cross\+Hair\+Color}} (QRgb color)
 \item 
-void \mbox{\hyperlink{class_view_a0da696c28b4956fc3b3e048a3e9a3d04}{set\+Cross\+Hair\+Size}} (quint8 percent)
+void \mbox{\hyperlink{class_view_a56c81a232c524c7cd630eaacf9e2f449}{set\+Cross\+Hair\+Size}} (uint8\+\_\+t percent)
 \item 
 void \mbox{\hyperlink{class_view_a0611092d52a93bb9ccb3cdcb09adaa55}{set\+Background\+Color}} (QRgb color)
 \item 
@@ -158,6 +158,11 @@ void \mbox{\hyperlink{class_view_a2cb8abcb40747af7daa5221c538eacd9}{delete\+Obje
 \item 
 void \mbox{\hyperlink{class_view_a94df1b6af4e568bfe42441ec033a27b6}{vulcanize\+Object}} (\mbox{\hyperlink{class_base_object}{Base\+Object}} $\ast$obj)
 \end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{embroidermodder_8h_aa5d35c075d47a1a4196817dd4cac166f}{Emb\+View}} \mbox{\hyperlink{class_view_abf649ec964d96f102ed1bab246dd3462}{view\+\_\+state}}
+\end{DoxyCompactItemize}
 \doxysubsubsection*{Protected Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -231,7 +236,7 @@ bool \mbox{\hyperlink{class_view_adabbbf11c81babe4c96ef75a3a7ebbcb}{ruler\+Metri
 \item 
 QColor \mbox{\hyperlink{class_view_abb4b107101c3c16a38a0d4d9e1c6dcae}{ruler\+Color}}
 \item 
-quint8 \mbox{\hyperlink{class_view_ab3a159a01303ae7c7b593fec654fb253}{ruler\+Pixel\+Size}}
+uint8\+\_\+t \mbox{\hyperlink{class_view_a454708471686048c217229f16b8f6e5f}{ruler\+Pixel\+Size}}
 \item 
 QList$<$ QGraphics\+Item $\ast$ $>$ \mbox{\hyperlink{class_view_aa686117ec9854b0746804321d66924ed}{preview\+Object\+List}}
 \item 
@@ -307,17 +312,17 @@ QPointF \mbox{\hyperlink{class_view_aa06d37c9b05773927199b5e78446bc24}{scene\+Mo
 \item 
 QRgb \mbox{\hyperlink{class_view_a75f72855bbcbbeb072006d662bb3a1dd}{qsnap\+Locator\+Color}}
 \item 
-quint8 \mbox{\hyperlink{class_view_ae2dfdc2818141b74596c96d9039e7274}{qsnap\+Locator\+Size}}
+uint8\+\_\+t \mbox{\hyperlink{class_view_ac0325fd95b5834c14bfd5a6070840497}{qsnap\+Locator\+Size}}
 \item 
-quint8 \mbox{\hyperlink{class_view_a7effedd971ebccaeb39df82fb11aebb6}{qsnap\+Aperture\+Size}}
+uint8\+\_\+t \mbox{\hyperlink{class_view_a117cdf31f7ec5aee34918bbabb9001b0}{qsnap\+Aperture\+Size}}
 \item 
 QRgb \mbox{\hyperlink{class_view_aba35d38974ee7dc04b47788458dd031f}{grip\+Color\+Cool}}
 \item 
 QRgb \mbox{\hyperlink{class_view_a3728f0677b6e3792ba71b0cc132c705b}{grip\+Color\+Hot}}
 \item 
-quint8 \mbox{\hyperlink{class_view_ac9f8e345eaf75e627d1bb0fe81be1406}{grip\+Size}}
+uint8\+\_\+t \mbox{\hyperlink{class_view_a555ab4473588b247db322d20acc56f53}{grip\+Size}}
 \item 
-quint8 \mbox{\hyperlink{class_view_abda10fd23d040bade0c06c0e5325d173}{pick\+Box\+Size}}
+uint8\+\_\+t \mbox{\hyperlink{class_view_a48014a321481a806cd86fc45a7dbcb1b}{pick\+Box\+Size}}
 \item 
 QRgb \mbox{\hyperlink{class_view_a1646dd2492d48237730a88914819566f}{crosshair\+Color}}
 \item 
@@ -575,6 +580,8 @@ int \mbox{\hyperlink{class_view_ae8d25dfb73d42c4a5395fcecaaabe399}{pan\+StartY}}
 \doxyparagraph{\texorpdfstring{mouseMoveEvent()}{mouseMoveEvent()}}
 {\footnotesize\ttfamily void mouse\+Move\+Event (\begin{DoxyParamCaption}\item[{QMouse\+Event $\ast$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
 
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000229}{Todo}}]turn move into an actuator call. \end{DoxyRefDesc}
 \mbox{\Hypertarget{class_view_ad2272e344e46519f026cd02f419884f1}\label{class_view_ad2272e344e46519f026cd02f419884f1}} 
 \index{View@{View}!mousePressEvent@{mousePressEvent}}
 \index{mousePressEvent@{mousePressEvent}!View@{View}}
@@ -737,11 +744,11 @@ int \mbox{\hyperlink{class_view_ae8d25dfb73d42c4a5395fcecaaabe399}{pan\+StartY}}
 \doxyparagraph{\texorpdfstring{setCrossHairColor}{setCrossHairColor}}
 {\footnotesize\ttfamily void set\+Cross\+Hair\+Color (\begin{DoxyParamCaption}\item[{QRgb}]{color }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
-\mbox{\Hypertarget{class_view_a0da696c28b4956fc3b3e048a3e9a3d04}\label{class_view_a0da696c28b4956fc3b3e048a3e9a3d04}} 
+\mbox{\Hypertarget{class_view_a56c81a232c524c7cd630eaacf9e2f449}\label{class_view_a56c81a232c524c7cd630eaacf9e2f449}} 
 \index{View@{View}!setCrossHairSize@{setCrossHairSize}}
 \index{setCrossHairSize@{setCrossHairSize}!View@{View}}
 \doxyparagraph{\texorpdfstring{setCrossHairSize}{setCrossHairSize}}
-{\footnotesize\ttfamily void set\+Cross\+Hair\+Size (\begin{DoxyParamCaption}\item[{quint8}]{percent }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+{\footnotesize\ttfamily void set\+Cross\+Hair\+Size (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{percent }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
 \mbox{\Hypertarget{class_view_a51b34485435f5af679bc62ebf5492c44}\label{class_view_a51b34485435f5af679bc62ebf5492c44}} 
 \index{View@{View}!setGridColor@{setGridColor}}
@@ -986,11 +993,11 @@ int \mbox{\hyperlink{class_view_ae8d25dfb73d42c4a5395fcecaaabe399}{pan\+StartY}}
 \doxyparagraph{\texorpdfstring{grippingActive}{grippingActive}}
 {\footnotesize\ttfamily bool gripping\+Active\hspace{0.3cm}{\ttfamily [private]}}
 
-\mbox{\Hypertarget{class_view_ac9f8e345eaf75e627d1bb0fe81be1406}\label{class_view_ac9f8e345eaf75e627d1bb0fe81be1406}} 
+\mbox{\Hypertarget{class_view_a555ab4473588b247db322d20acc56f53}\label{class_view_a555ab4473588b247db322d20acc56f53}} 
 \index{View@{View}!gripSize@{gripSize}}
 \index{gripSize@{gripSize}!View@{View}}
 \doxyparagraph{\texorpdfstring{gripSize}{gripSize}}
-{\footnotesize\ttfamily quint8 grip\+Size\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily uint8\+\_\+t grip\+Size\hspace{0.3cm}{\ttfamily [private]}}
 
 \mbox{\Hypertarget{class_view_a54342adb25110a7823aaf91cc53ea522}\label{class_view_a54342adb25110a7823aaf91cc53ea522}} 
 \index{View@{View}!gscene@{gscene}}
@@ -1082,11 +1089,11 @@ int \mbox{\hyperlink{class_view_ae8d25dfb73d42c4a5395fcecaaabe399}{pan\+StartY}}
 \doxyparagraph{\texorpdfstring{pastingActive}{pastingActive}}
 {\footnotesize\ttfamily bool pasting\+Active\hspace{0.3cm}{\ttfamily [private]}}
 
-\mbox{\Hypertarget{class_view_abda10fd23d040bade0c06c0e5325d173}\label{class_view_abda10fd23d040bade0c06c0e5325d173}} 
+\mbox{\Hypertarget{class_view_a48014a321481a806cd86fc45a7dbcb1b}\label{class_view_a48014a321481a806cd86fc45a7dbcb1b}} 
 \index{View@{View}!pickBoxSize@{pickBoxSize}}
 \index{pickBoxSize@{pickBoxSize}!View@{View}}
 \doxyparagraph{\texorpdfstring{pickBoxSize}{pickBoxSize}}
-{\footnotesize\ttfamily quint8 pick\+Box\+Size\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily uint8\+\_\+t pick\+Box\+Size\hspace{0.3cm}{\ttfamily [private]}}
 
 \mbox{\Hypertarget{class_view_a2e6f3473000f9d9c6ef73dbcc56f41bb}\label{class_view_a2e6f3473000f9d9c6ef73dbcc56f41bb}} 
 \index{View@{View}!pressPoint@{pressPoint}}
@@ -1136,11 +1143,11 @@ int \mbox{\hyperlink{class_view_ae8d25dfb73d42c4a5395fcecaaabe399}{pan\+StartY}}
 \doxyparagraph{\texorpdfstring{qSnapActive}{qSnapActive}}
 {\footnotesize\ttfamily bool q\+Snap\+Active\hspace{0.3cm}{\ttfamily [private]}}
 
-\mbox{\Hypertarget{class_view_a7effedd971ebccaeb39df82fb11aebb6}\label{class_view_a7effedd971ebccaeb39df82fb11aebb6}} 
+\mbox{\Hypertarget{class_view_a117cdf31f7ec5aee34918bbabb9001b0}\label{class_view_a117cdf31f7ec5aee34918bbabb9001b0}} 
 \index{View@{View}!qsnapApertureSize@{qsnapApertureSize}}
 \index{qsnapApertureSize@{qsnapApertureSize}!View@{View}}
 \doxyparagraph{\texorpdfstring{qsnapApertureSize}{qsnapApertureSize}}
-{\footnotesize\ttfamily quint8 qsnap\+Aperture\+Size\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily uint8\+\_\+t qsnap\+Aperture\+Size\hspace{0.3cm}{\ttfamily [private]}}
 
 \mbox{\Hypertarget{class_view_a75f72855bbcbbeb072006d662bb3a1dd}\label{class_view_a75f72855bbcbbeb072006d662bb3a1dd}} 
 \index{View@{View}!qsnapLocatorColor@{qsnapLocatorColor}}
@@ -1148,11 +1155,11 @@ int \mbox{\hyperlink{class_view_ae8d25dfb73d42c4a5395fcecaaabe399}{pan\+StartY}}
 \doxyparagraph{\texorpdfstring{qsnapLocatorColor}{qsnapLocatorColor}}
 {\footnotesize\ttfamily QRgb qsnap\+Locator\+Color\hspace{0.3cm}{\ttfamily [private]}}
 
-\mbox{\Hypertarget{class_view_ae2dfdc2818141b74596c96d9039e7274}\label{class_view_ae2dfdc2818141b74596c96d9039e7274}} 
+\mbox{\Hypertarget{class_view_ac0325fd95b5834c14bfd5a6070840497}\label{class_view_ac0325fd95b5834c14bfd5a6070840497}} 
 \index{View@{View}!qsnapLocatorSize@{qsnapLocatorSize}}
 \index{qsnapLocatorSize@{qsnapLocatorSize}!View@{View}}
 \doxyparagraph{\texorpdfstring{qsnapLocatorSize}{qsnapLocatorSize}}
-{\footnotesize\ttfamily quint8 qsnap\+Locator\+Size\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily uint8\+\_\+t qsnap\+Locator\+Size\hspace{0.3cm}{\ttfamily [private]}}
 
 \mbox{\Hypertarget{class_view_a8c6f84b32094a0b2a0387e2ae5eec659}\label{class_view_a8c6f84b32094a0b2a0387e2ae5eec659}} 
 \index{View@{View}!qSnapToggle@{qSnapToggle}}
@@ -1190,11 +1197,11 @@ int \mbox{\hyperlink{class_view_ae8d25dfb73d42c4a5395fcecaaabe399}{pan\+StartY}}
 \doxyparagraph{\texorpdfstring{rulerMetric}{rulerMetric}}
 {\footnotesize\ttfamily bool ruler\+Metric\hspace{0.3cm}{\ttfamily [private]}}
 
-\mbox{\Hypertarget{class_view_ab3a159a01303ae7c7b593fec654fb253}\label{class_view_ab3a159a01303ae7c7b593fec654fb253}} 
+\mbox{\Hypertarget{class_view_a454708471686048c217229f16b8f6e5f}\label{class_view_a454708471686048c217229f16b8f6e5f}} 
 \index{View@{View}!rulerPixelSize@{rulerPixelSize}}
 \index{rulerPixelSize@{rulerPixelSize}!View@{View}}
 \doxyparagraph{\texorpdfstring{rulerPixelSize}{rulerPixelSize}}
-{\footnotesize\ttfamily quint8 ruler\+Pixel\+Size\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily uint8\+\_\+t ruler\+Pixel\+Size\hspace{0.3cm}{\ttfamily [private]}}
 
 \mbox{\Hypertarget{class_view_aa8e70dc35c9154abe9a82813088d584d}\label{class_view_aa8e70dc35c9154abe9a82813088d584d}} 
 \index{View@{View}!sceneGripPoint@{sceneGripPoint}}
@@ -1255,6 +1262,12 @@ int \mbox{\hyperlink{class_view_ae8d25dfb73d42c4a5395fcecaaabe399}{pan\+StartY}}
 \index{undoStack@{undoStack}!View@{View}}
 \doxyparagraph{\texorpdfstring{undoStack}{undoStack}}
 {\footnotesize\ttfamily QUndo\+Stack$\ast$ undo\+Stack\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_view_abf649ec964d96f102ed1bab246dd3462}\label{class_view_abf649ec964d96f102ed1bab246dd3462}} 
+\index{View@{View}!view\_state@{view\_state}}
+\index{view\_state@{view\_state}!View@{View}}
+\doxyparagraph{\texorpdfstring{view\_state}{view\_state}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_aa5d35c075d47a1a4196817dd4cac166f}{Emb\+View}} view\+\_\+state}
 
 \mbox{\Hypertarget{class_view_a047299c034d3c740ce12e3b7c8945bff}\label{class_view_a047299c034d3c740ce12e3b7c8945bff}} 
 \index{View@{View}!viewMousePoint@{viewMousePoint}}

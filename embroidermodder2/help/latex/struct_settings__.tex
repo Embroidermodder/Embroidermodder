@@ -12,7 +12,13 @@ Settings System.
 \doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-char \mbox{\hyperlink{struct_settings___acace48245648357b6966d493727f9370}{version}} \mbox{[}200\mbox{]}
+QString \mbox{\hyperlink{struct_settings___ad07d3393ae027a932f56cbc7b2dd0f7a}{general\+\_\+language}}
+\item 
+QString \mbox{\hyperlink{struct_settings___a7f4bdb671dd23b8a876998aa32f01ce7}{general\+\_\+icon\+\_\+theme}}
+\item 
+int \mbox{\hyperlink{struct_settings___a45f8c9c5892fa9782e40c729d78b3f38}{general\+\_\+icon\+\_\+size}}
+\item 
+QString \mbox{\hyperlink{struct_settings___accb344ff518c8d35f4e2a0df6fe3a6d1}{version}}
 \item 
 bool \mbox{\hyperlink{struct_settings___a36f7b6be7108281af77939ceaec42fd6}{running}}
 \item 
@@ -30,31 +36,25 @@ bool \mbox{\hyperlink{struct_settings___a2ee2208983519f35f541408757da8a23}{show\
 \item 
 bool \mbox{\hyperlink{struct_settings___a1cff51715c91cac3963fafd4af5f5b4c}{show\+\_\+open\+\_\+file\+\_\+dialog}}
 \item 
-int \mbox{\hyperlink{struct_settings___aaaf21a61dc90e2ca7736cfd769817f46}{icon\+\_\+size}}
-\item 
-char \mbox{\hyperlink{struct_settings___af5ae0063dd0322540c6de6d3025545f7}{icon\+\_\+theme}} \mbox{[}200\mbox{]}
-\item 
 int \mbox{\hyperlink{struct_settings___a554cb215e0c2be49aa91aa9a283d37c6}{pattern\+\_\+index}}
 \item 
-char \mbox{\hyperlink{struct_settings___a24972aa9801bf9474935eddc0d162796}{assets\+\_\+dir}} \mbox{[}200\mbox{]}
+QString \mbox{\hyperlink{struct_settings___a96723e4fa0b4378aab24e69d277aca1f}{assets\+\_\+dir}}
 \item 
 bool \mbox{\hyperlink{struct_settings___a05fb0994f59a541f66dc725bc2715bcf}{use\+\_\+translation}}
 \item 
-char \mbox{\hyperlink{struct_settings___ac720832b7e86f959a9e692be69f817d3}{language}} \mbox{[}200\mbox{]}
+bool \mbox{\hyperlink{struct_settings___af6dc027d7cc28bb306a413d225ecd875}{general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+logo}}
 \item 
-bool \mbox{\hyperlink{struct_settings___a47845c8ac48b3f1173dd9806ee5c056d}{mdi\+\_\+bg\+\_\+use\+\_\+logo}}
+bool \mbox{\hyperlink{struct_settings___a3b06a5d02d0cd37e762c736cfbffc07b}{general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+texture}}
 \item 
-bool \mbox{\hyperlink{struct_settings___ae30a9b4bc66b7a9b28d9b090c788f211}{mdi\+\_\+bg\+\_\+use\+\_\+texture}}
+bool \mbox{\hyperlink{struct_settings___ae3a69934d96f24c40f42156d3531311b}{general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+color}}
 \item 
-bool \mbox{\hyperlink{struct_settings___a8eb79bd0a599cb4a8b63855ece840001}{mdi\+\_\+bg\+\_\+use\+\_\+color}}
+QString \mbox{\hyperlink{struct_settings___a75333181e9c70c107a255c22285b3b74}{general\+\_\+mdi\+\_\+bg\+\_\+logo}}
 \item 
-char \mbox{\hyperlink{struct_settings___a9c814e9ec64de3aa36d54daa6ed6e1fa}{general\+\_\+mdi\+\_\+bg\+\_\+logo}} \mbox{[}200\mbox{]}
+QString \mbox{\hyperlink{struct_settings___a3ad74a0f5117b9b8d2e2438044c97cd6}{general\+\_\+mdi\+\_\+bg\+\_\+texture}}
 \item 
-char \mbox{\hyperlink{struct_settings___a88ec628f1df5913ebfb145192baf1b33}{general\+\_\+mdi\+\_\+bg\+\_\+texture}} \mbox{[}200\mbox{]}
+QRgb \mbox{\hyperlink{struct_settings___a43b345b62b264faaed712a9b44b7e5fe}{general\+\_\+mdi\+\_\+bg\+\_\+color}}
 \item 
-uint32\+\_\+t \mbox{\hyperlink{struct_settings___ae3ebda5cd49069bb3eceb441d2913be6}{general\+\_\+mdi\+\_\+bg\+\_\+color}}
-\item 
-bool \mbox{\hyperlink{struct_settings___ac3391ef17574e096e85df24dd478af13}{tip\+\_\+of\+\_\+the\+\_\+day}}
+bool \mbox{\hyperlink{struct_settings___a3e9b8efcd33b9dd0f2bf94c379bfa902}{general\+\_\+tip\+\_\+of\+\_\+the\+\_\+day}}
 \item 
 uint32\+\_\+t \mbox{\hyperlink{struct_settings___abe4e2b5819fd25b6316db81e5cede54e}{general\+\_\+current\+\_\+tip}}
 \item 
@@ -98,27 +98,27 @@ uint8\+\_\+t \mbox{\hyperlink{struct_settings___a8bd23abab3ba8b65254d3aac2b75709
 \item 
 uint8\+\_\+t \mbox{\hyperlink{struct_settings___a02d0a499f215a0f964c79e689713de34}{display\+\_\+crosshair\+\_\+percent}}
 \item 
-std\+::string \mbox{\hyperlink{struct_settings___a1d8237bb4f886ecfae0f8d692b03aec0}{display\+\_\+units}}
+QString \mbox{\hyperlink{struct_settings___a200141ef1a232b2afc1a90aa160a4091}{display\+\_\+units}}
 \item 
-std\+::string \mbox{\hyperlink{struct_settings___a5cfc1004c5531e3e3673a61e17c9e406}{opensave\+\_\+custom\+\_\+filter}}
+QString \mbox{\hyperlink{struct_settings___a52242b8a84683db19cf140e60704207f}{opensave\+\_\+custom\+\_\+filter}}
 \item 
-std\+::string \mbox{\hyperlink{struct_settings___ab1b164df629a08d148da362c3b349618}{opensave\+\_\+open\+\_\+format}}
+QString \mbox{\hyperlink{struct_settings___ad00a68edcc967bc4932c49aac246c759}{opensave\+\_\+open\+\_\+format}}
 \item 
 bool \mbox{\hyperlink{struct_settings___a63d79c1dcf2ac36f1696b94f82daa2c6}{opensave\+\_\+open\+\_\+thumbnail}}
 \item 
-std\+::string \mbox{\hyperlink{struct_settings___aff4b88f61bd38d239f0784aa51937556}{opensave\+\_\+save\+\_\+format}}
+QString \mbox{\hyperlink{struct_settings___a304c26a4b0e1c827d6c4d75988787851}{opensave\+\_\+save\+\_\+format}}
 \item 
 bool \mbox{\hyperlink{struct_settings___a730d6fef0713495f9701dd1f0ebb980d}{opensave\+\_\+save\+\_\+thumbnail}}
 \item 
 uint8\+\_\+t \mbox{\hyperlink{struct_settings___aac46906640a4c56f08417a85813fd72b}{opensave\+\_\+recent\+\_\+max\+\_\+files}}
 \item 
-std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{struct_settings___a32038a940a3e4c98a456b41751114f4c}{opensave\+\_\+recent\+\_\+list\+\_\+of\+\_\+files}}
+QString\+List \mbox{\hyperlink{struct_settings___a96cb4e5bb051b1ef1d78238c4665e010}{opensave\+\_\+recent\+\_\+list\+\_\+of\+\_\+files}}
 \item 
-std\+::string \mbox{\hyperlink{struct_settings___a999085723d975d874d99ef7bc065e902}{opensave\+\_\+recent\+\_\+directory}}
+QString \mbox{\hyperlink{struct_settings___a759e85743e7107ae460f09813fec6fc2}{opensave\+\_\+recent\+\_\+directory}}
 \item 
 uint8\+\_\+t \mbox{\hyperlink{struct_settings___a1958ddec90c7c516aa8f4d41966b3440}{opensave\+\_\+trim\+\_\+dst\+\_\+num\+\_\+jumps}}
 \item 
-std\+::string \mbox{\hyperlink{struct_settings___a8613174c2ac34c7026d04e9a963cd843}{printing\+\_\+default\+\_\+device}}
+QString \mbox{\hyperlink{struct_settings___a2869efa820d2f3572936783f5fb41ae4}{printing\+\_\+default\+\_\+device}}
 \item 
 bool \mbox{\hyperlink{struct_settings___aed83ed1c4323f94dfcf9731eba09f878}{printing\+\_\+use\+\_\+last\+\_\+device}}
 \item 
@@ -134,7 +134,7 @@ uint32\+\_\+t \mbox{\hyperlink{struct_settings___a458a661ab184b22eb34c56f3ee8565
 \item 
 bool \mbox{\hyperlink{struct_settings___ad38c3ebd32ebbbbe07730b4ae9af9b26}{grid\+\_\+load\+\_\+from\+\_\+file}}
 \item 
-std\+::string \mbox{\hyperlink{struct_settings___aa120ad22eefa8e1a8c58c60c842f9605}{grid\+\_\+type}}
+QString \mbox{\hyperlink{struct_settings___a9f4e4aa7e0ab33955ac723f8d0aa6dfa}{grid\+\_\+type}}
 \item 
 bool \mbox{\hyperlink{struct_settings___a55c7faa0c99439fcd4e04da1b69fe299}{grid\+\_\+center\+\_\+on\+\_\+origin}}
 \item 
@@ -214,7 +214,7 @@ uint8\+\_\+t \mbox{\hyperlink{struct_settings___a8b55e6c3be77f301bcbf38503473f29
 \item 
 uint8\+\_\+t \mbox{\hyperlink{struct_settings___a0637935781c7a51e52b43c279d4d2488}{selection\+\_\+pickbox\+\_\+size}}
 \item 
-char \mbox{\hyperlink{struct_settings___a80bbdc55f4ddc408a0194bff38330ffa}{text\+\_\+font}} \mbox{[}200\mbox{]}
+QString \mbox{\hyperlink{struct_settings___a2ba15ac73c786ba097fe0a44534e6643}{text\+\_\+font}}
 \item 
 \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{struct_settings___ac6c9bc5d28f097f5ebee247583fcf355}{text\+\_\+size}}
 \item 
@@ -230,17 +230,13 @@ bool \mbox{\hyperlink{struct_settings___a0f1cc2cfa2811a2292f8e9b8ce4579ac}{text\
 \item 
 bool \mbox{\hyperlink{struct_settings___aeb1b3d94e2c11f40c8ba63327335d87e}{text\+\_\+style\+\_\+strikeout}}
 \item 
-\mbox{\hyperlink{embroidermodder_8h_a65f6a13c9f5a038f42c86bdd5bb2410f}{Dictionary}} $\ast$ \mbox{\hyperlink{struct_settings___abaa02ce5ca22ae71574cc8b481dec6f6}{texture\+\_\+list}}
-\item 
 uint32\+\_\+t \mbox{\hyperlink{struct_settings___a7feeb7c54b8ef79de195af5c03ddca74}{ticks\+\_\+color}}
 \item 
 uint32\+\_\+t \mbox{\hyperlink{struct_settings___a867a8888036bf4bd8e60fa26d5941165}{shine\+\_\+color}}
 \item 
-char \mbox{\hyperlink{struct_settings___aff66b44112febf69b06f35108babd373}{to\+\_\+open}} \mbox{[}200\mbox{]}
+QString \mbox{\hyperlink{struct_settings___a27c1533c582597dcb729c4d00e7671f8}{to\+\_\+open}}
 \item 
-char \mbox{\hyperlink{struct_settings___a4e0667d44e799b5ed1a167ef9ba07fde}{menu\+\_\+action}} \mbox{[}200\mbox{]}
-\item 
-char \mbox{\hyperlink{struct_settings___a6873db41f8221dc7603b44d6e4cd8b41}{current\+\_\+directory}} \mbox{[}200\mbox{]}
+QString \mbox{\hyperlink{struct_settings___ae6cf7219d6b44589af2f3fe9024ab420}{current\+\_\+directory}}
 \item 
 \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{struct_settings___a107d0243902802ec4f9b273734f6a614}{zoom\+In\+Limit}}
 \item 
@@ -255,28 +251,42 @@ char \mbox{\hyperlink{struct_settings___a6873db41f8221dc7603b44d6e4cd8b41}{curre
 \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{struct_settings___a6cb2bb03294badfd7600248cbdb2a3fe}{needle\+\_\+speed}}
 \item 
 \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{struct_settings___a23bfa9ac84e5f6d3de8f69f503b0147d}{stitch\+\_\+time}}
+\item 
+QRgb \mbox{\hyperlink{struct_settings___a5161837c910a1b0639c029bb07be7af9}{prompt\+\_\+text\+\_\+color}}
+\item 
+QRgb \mbox{\hyperlink{struct_settings___abd86ab778666ca42e3bc7685cb3cc91c}{prompt\+\_\+bg\+\_\+color}}
+\item 
+QString \mbox{\hyperlink{struct_settings___ad990f670fcd1e3298ef0698fc6c718a9}{prompt\+\_\+font\+\_\+family}}
+\item 
+QString \mbox{\hyperlink{struct_settings___aabe0ab420607962f5476d66acdd0039e}{prompt\+\_\+font\+\_\+style}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{struct_settings___a6ceb561c001f80c0ee5fd394716f46ca}{prompt\+\_\+font\+\_\+size}}
+\item 
+bool \mbox{\hyperlink{struct_settings___a9216ff25130cd98d414c8190326d87ae}{prompt\+\_\+save\+\_\+history}}
+\item 
+bool \mbox{\hyperlink{struct_settings___a1ce9605eb7fe41ca84cd07738d6b3787}{prompt\+\_\+save\+\_\+history\+\_\+as\+\_\+html}}
+\item 
+QString \mbox{\hyperlink{struct_settings___a1491649f86b49579fbf43ec48584baf7}{prompt\+\_\+save\+\_\+history\+\_\+filename}}
 \end{DoxyCompactItemize}
 
 
 \doxysubsubsection{Detailed Description}
 Settings System. 
 
-Rather than pollute the global namespace, we collect together all the global settings into a structure that stores them. This also allows us to create a complete copy of the settings for the purpose of restoring them if the user cancels out of the Settings Dialog.
-
-Like all of our structs, it\textquotesingle{}s C99 compliant. 
+Rather than pollute the global namespace, we collect together all the global settings into a structure that stores them. This also allows us to create a complete copy of the settings for the purpose of restoring them if the user cancels out of the Settings Dialog. 
 
 \doxysubsubsection{Member Data Documentation}
-\mbox{\Hypertarget{struct_settings___a24972aa9801bf9474935eddc0d162796}\label{struct_settings___a24972aa9801bf9474935eddc0d162796}} 
+\mbox{\Hypertarget{struct_settings___a96723e4fa0b4378aab24e69d277aca1f}\label{struct_settings___a96723e4fa0b4378aab24e69d277aca1f}} 
 \index{Settings\_@{Settings\_}!assets\_dir@{assets\_dir}}
 \index{assets\_dir@{assets\_dir}!Settings\_@{Settings\_}}
 \doxyparagraph{\texorpdfstring{assets\_dir}{assets\_dir}}
-{\footnotesize\ttfamily char assets\+\_\+dir\mbox{[}200\mbox{]}}
+{\footnotesize\ttfamily QString assets\+\_\+dir}
 
-\mbox{\Hypertarget{struct_settings___a6873db41f8221dc7603b44d6e4cd8b41}\label{struct_settings___a6873db41f8221dc7603b44d6e4cd8b41}} 
+\mbox{\Hypertarget{struct_settings___ae6cf7219d6b44589af2f3fe9024ab420}\label{struct_settings___ae6cf7219d6b44589af2f3fe9024ab420}} 
 \index{Settings\_@{Settings\_}!current\_directory@{current\_directory}}
 \index{current\_directory@{current\_directory}!Settings\_@{Settings\_}}
 \doxyparagraph{\texorpdfstring{current\_directory}{current\_directory}}
-{\footnotesize\ttfamily char current\+\_\+directory\mbox{[}200\mbox{]}}
+{\footnotesize\ttfamily QString current\+\_\+directory}
 
 \mbox{\Hypertarget{struct_settings___a4f7caf3ead45aac3963d1e354e820017}\label{struct_settings___a4f7caf3ead45aac3963d1e354e820017}} 
 \index{Settings\_@{Settings\_}!debug\_mode@{debug\_mode}}
@@ -374,11 +384,11 @@ Like all of our structs, it\textquotesingle{}s C99 compliant.
 \doxyparagraph{\texorpdfstring{display\_show\_scrollbars}{display\_show\_scrollbars}}
 {\footnotesize\ttfamily bool display\+\_\+show\+\_\+scrollbars}
 
-\mbox{\Hypertarget{struct_settings___a1d8237bb4f886ecfae0f8d692b03aec0}\label{struct_settings___a1d8237bb4f886ecfae0f8d692b03aec0}} 
+\mbox{\Hypertarget{struct_settings___a200141ef1a232b2afc1a90aa160a4091}\label{struct_settings___a200141ef1a232b2afc1a90aa160a4091}} 
 \index{Settings\_@{Settings\_}!display\_units@{display\_units}}
 \index{display\_units@{display\_units}!Settings\_@{Settings\_}}
 \doxyparagraph{\texorpdfstring{display\_units}{display\_units}}
-{\footnotesize\ttfamily std\+::string display\+\_\+units}
+{\footnotesize\ttfamily QString display\+\_\+units}
 
 \mbox{\Hypertarget{struct_settings___ae01d8fd5b8017ea792ded5cdc7d1da96}\label{struct_settings___ae01d8fd5b8017ea792ded5cdc7d1da96}} 
 \index{Settings\_@{Settings\_}!display\_use\_opengl@{display\_use\_opengl}}
@@ -410,29 +420,71 @@ Like all of our structs, it\textquotesingle{}s C99 compliant.
 \doxyparagraph{\texorpdfstring{general\_current\_tip}{general\_current\_tip}}
 {\footnotesize\ttfamily uint32\+\_\+t general\+\_\+current\+\_\+tip}
 
-\mbox{\Hypertarget{struct_settings___ae3ebda5cd49069bb3eceb441d2913be6}\label{struct_settings___ae3ebda5cd49069bb3eceb441d2913be6}} 
+\mbox{\Hypertarget{struct_settings___a45f8c9c5892fa9782e40c729d78b3f38}\label{struct_settings___a45f8c9c5892fa9782e40c729d78b3f38}} 
+\index{Settings\_@{Settings\_}!general\_icon\_size@{general\_icon\_size}}
+\index{general\_icon\_size@{general\_icon\_size}!Settings\_@{Settings\_}}
+\doxyparagraph{\texorpdfstring{general\_icon\_size}{general\_icon\_size}}
+{\footnotesize\ttfamily int general\+\_\+icon\+\_\+size}
+
+\mbox{\Hypertarget{struct_settings___a7f4bdb671dd23b8a876998aa32f01ce7}\label{struct_settings___a7f4bdb671dd23b8a876998aa32f01ce7}} 
+\index{Settings\_@{Settings\_}!general\_icon\_theme@{general\_icon\_theme}}
+\index{general\_icon\_theme@{general\_icon\_theme}!Settings\_@{Settings\_}}
+\doxyparagraph{\texorpdfstring{general\_icon\_theme}{general\_icon\_theme}}
+{\footnotesize\ttfamily QString general\+\_\+icon\+\_\+theme}
+
+\mbox{\Hypertarget{struct_settings___ad07d3393ae027a932f56cbc7b2dd0f7a}\label{struct_settings___ad07d3393ae027a932f56cbc7b2dd0f7a}} 
+\index{Settings\_@{Settings\_}!general\_language@{general\_language}}
+\index{general\_language@{general\_language}!Settings\_@{Settings\_}}
+\doxyparagraph{\texorpdfstring{general\_language}{general\_language}}
+{\footnotesize\ttfamily QString general\+\_\+language}
+
+\mbox{\Hypertarget{struct_settings___a43b345b62b264faaed712a9b44b7e5fe}\label{struct_settings___a43b345b62b264faaed712a9b44b7e5fe}} 
 \index{Settings\_@{Settings\_}!general\_mdi\_bg\_color@{general\_mdi\_bg\_color}}
 \index{general\_mdi\_bg\_color@{general\_mdi\_bg\_color}!Settings\_@{Settings\_}}
 \doxyparagraph{\texorpdfstring{general\_mdi\_bg\_color}{general\_mdi\_bg\_color}}
-{\footnotesize\ttfamily uint32\+\_\+t general\+\_\+mdi\+\_\+bg\+\_\+color}
+{\footnotesize\ttfamily QRgb general\+\_\+mdi\+\_\+bg\+\_\+color}
 
-\mbox{\Hypertarget{struct_settings___a9c814e9ec64de3aa36d54daa6ed6e1fa}\label{struct_settings___a9c814e9ec64de3aa36d54daa6ed6e1fa}} 
+\mbox{\Hypertarget{struct_settings___a75333181e9c70c107a255c22285b3b74}\label{struct_settings___a75333181e9c70c107a255c22285b3b74}} 
 \index{Settings\_@{Settings\_}!general\_mdi\_bg\_logo@{general\_mdi\_bg\_logo}}
 \index{general\_mdi\_bg\_logo@{general\_mdi\_bg\_logo}!Settings\_@{Settings\_}}
 \doxyparagraph{\texorpdfstring{general\_mdi\_bg\_logo}{general\_mdi\_bg\_logo}}
-{\footnotesize\ttfamily char general\+\_\+mdi\+\_\+bg\+\_\+logo\mbox{[}200\mbox{]}}
+{\footnotesize\ttfamily QString general\+\_\+mdi\+\_\+bg\+\_\+logo}
 
-\mbox{\Hypertarget{struct_settings___a88ec628f1df5913ebfb145192baf1b33}\label{struct_settings___a88ec628f1df5913ebfb145192baf1b33}} 
+\mbox{\Hypertarget{struct_settings___a3ad74a0f5117b9b8d2e2438044c97cd6}\label{struct_settings___a3ad74a0f5117b9b8d2e2438044c97cd6}} 
 \index{Settings\_@{Settings\_}!general\_mdi\_bg\_texture@{general\_mdi\_bg\_texture}}
 \index{general\_mdi\_bg\_texture@{general\_mdi\_bg\_texture}!Settings\_@{Settings\_}}
 \doxyparagraph{\texorpdfstring{general\_mdi\_bg\_texture}{general\_mdi\_bg\_texture}}
-{\footnotesize\ttfamily char general\+\_\+mdi\+\_\+bg\+\_\+texture\mbox{[}200\mbox{]}}
+{\footnotesize\ttfamily QString general\+\_\+mdi\+\_\+bg\+\_\+texture}
+
+\mbox{\Hypertarget{struct_settings___ae3a69934d96f24c40f42156d3531311b}\label{struct_settings___ae3a69934d96f24c40f42156d3531311b}} 
+\index{Settings\_@{Settings\_}!general\_mdi\_bg\_use\_color@{general\_mdi\_bg\_use\_color}}
+\index{general\_mdi\_bg\_use\_color@{general\_mdi\_bg\_use\_color}!Settings\_@{Settings\_}}
+\doxyparagraph{\texorpdfstring{general\_mdi\_bg\_use\_color}{general\_mdi\_bg\_use\_color}}
+{\footnotesize\ttfamily bool general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+color}
+
+\mbox{\Hypertarget{struct_settings___af6dc027d7cc28bb306a413d225ecd875}\label{struct_settings___af6dc027d7cc28bb306a413d225ecd875}} 
+\index{Settings\_@{Settings\_}!general\_mdi\_bg\_use\_logo@{general\_mdi\_bg\_use\_logo}}
+\index{general\_mdi\_bg\_use\_logo@{general\_mdi\_bg\_use\_logo}!Settings\_@{Settings\_}}
+\doxyparagraph{\texorpdfstring{general\_mdi\_bg\_use\_logo}{general\_mdi\_bg\_use\_logo}}
+{\footnotesize\ttfamily bool general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+logo}
+
+\mbox{\Hypertarget{struct_settings___a3b06a5d02d0cd37e762c736cfbffc07b}\label{struct_settings___a3b06a5d02d0cd37e762c736cfbffc07b}} 
+\index{Settings\_@{Settings\_}!general\_mdi\_bg\_use\_texture@{general\_mdi\_bg\_use\_texture}}
+\index{general\_mdi\_bg\_use\_texture@{general\_mdi\_bg\_use\_texture}!Settings\_@{Settings\_}}
+\doxyparagraph{\texorpdfstring{general\_mdi\_bg\_use\_texture}{general\_mdi\_bg\_use\_texture}}
+{\footnotesize\ttfamily bool general\+\_\+mdi\+\_\+bg\+\_\+use\+\_\+texture}
 
 \mbox{\Hypertarget{struct_settings___abe29d90072cde2e7298e2a5ad66fe5b8}\label{struct_settings___abe29d90072cde2e7298e2a5ad66fe5b8}} 
 \index{Settings\_@{Settings\_}!general\_system\_help\_browser@{general\_system\_help\_browser}}
 \index{general\_system\_help\_browser@{general\_system\_help\_browser}!Settings\_@{Settings\_}}
 \doxyparagraph{\texorpdfstring{general\_system\_help\_browser}{general\_system\_help\_browser}}
 {\footnotesize\ttfamily bool general\+\_\+system\+\_\+help\+\_\+browser}
+
+\mbox{\Hypertarget{struct_settings___a3e9b8efcd33b9dd0f2bf94c379bfa902}\label{struct_settings___a3e9b8efcd33b9dd0f2bf94c379bfa902}} 
+\index{Settings\_@{Settings\_}!general\_tip\_of\_the\_day@{general\_tip\_of\_the\_day}}
+\index{general\_tip\_of\_the\_day@{general\_tip\_of\_the\_day}!Settings\_@{Settings\_}}
+\doxyparagraph{\texorpdfstring{general\_tip\_of\_the\_day}{general\_tip\_of\_the\_day}}
+{\footnotesize\ttfamily bool general\+\_\+tip\+\_\+of\+\_\+the\+\_\+day}
 
 \mbox{\Hypertarget{struct_settings___a3d8a5e343fe07b3b6ae190467bf6443b}\label{struct_settings___a3d8a5e343fe07b3b6ae190467bf6443b}} 
 \index{Settings\_@{Settings\_}!grid\_center@{grid\_center}}
@@ -506,29 +558,11 @@ Like all of our structs, it\textquotesingle{}s C99 compliant.
 \doxyparagraph{\texorpdfstring{grid\_spacing\_radius}{grid\_spacing\_radius}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} grid\+\_\+spacing\+\_\+radius}
 
-\mbox{\Hypertarget{struct_settings___aa120ad22eefa8e1a8c58c60c842f9605}\label{struct_settings___aa120ad22eefa8e1a8c58c60c842f9605}} 
+\mbox{\Hypertarget{struct_settings___a9f4e4aa7e0ab33955ac723f8d0aa6dfa}\label{struct_settings___a9f4e4aa7e0ab33955ac723f8d0aa6dfa}} 
 \index{Settings\_@{Settings\_}!grid\_type@{grid\_type}}
 \index{grid\_type@{grid\_type}!Settings\_@{Settings\_}}
 \doxyparagraph{\texorpdfstring{grid\_type}{grid\_type}}
-{\footnotesize\ttfamily std\+::string grid\+\_\+type}
-
-\mbox{\Hypertarget{struct_settings___aaaf21a61dc90e2ca7736cfd769817f46}\label{struct_settings___aaaf21a61dc90e2ca7736cfd769817f46}} 
-\index{Settings\_@{Settings\_}!icon\_size@{icon\_size}}
-\index{icon\_size@{icon\_size}!Settings\_@{Settings\_}}
-\doxyparagraph{\texorpdfstring{icon\_size}{icon\_size}}
-{\footnotesize\ttfamily int icon\+\_\+size}
-
-\mbox{\Hypertarget{struct_settings___af5ae0063dd0322540c6de6d3025545f7}\label{struct_settings___af5ae0063dd0322540c6de6d3025545f7}} 
-\index{Settings\_@{Settings\_}!icon\_theme@{icon\_theme}}
-\index{icon\_theme@{icon\_theme}!Settings\_@{Settings\_}}
-\doxyparagraph{\texorpdfstring{icon\_theme}{icon\_theme}}
-{\footnotesize\ttfamily char icon\+\_\+theme\mbox{[}200\mbox{]}}
-
-\mbox{\Hypertarget{struct_settings___ac720832b7e86f959a9e692be69f817d3}\label{struct_settings___ac720832b7e86f959a9e692be69f817d3}} 
-\index{Settings\_@{Settings\_}!language@{language}}
-\index{language@{language}!Settings\_@{Settings\_}}
-\doxyparagraph{\texorpdfstring{language}{language}}
-{\footnotesize\ttfamily char language\mbox{[}200\mbox{]}}
+{\footnotesize\ttfamily QString grid\+\_\+type}
 
 \mbox{\Hypertarget{struct_settings___a7a44a5ae1205d9db64063d07d5b62f18}\label{struct_settings___a7a44a5ae1205d9db64063d07d5b62f18}} 
 \index{Settings\_@{Settings\_}!lwt\_default\_lwt@{lwt\_default\_lwt}}
@@ -554,47 +588,23 @@ Like all of our structs, it\textquotesingle{}s C99 compliant.
 \doxyparagraph{\texorpdfstring{major\_tick\_seperation}{major\_tick\_seperation}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} major\+\_\+tick\+\_\+seperation}
 
-\mbox{\Hypertarget{struct_settings___a8eb79bd0a599cb4a8b63855ece840001}\label{struct_settings___a8eb79bd0a599cb4a8b63855ece840001}} 
-\index{Settings\_@{Settings\_}!mdi\_bg\_use\_color@{mdi\_bg\_use\_color}}
-\index{mdi\_bg\_use\_color@{mdi\_bg\_use\_color}!Settings\_@{Settings\_}}
-\doxyparagraph{\texorpdfstring{mdi\_bg\_use\_color}{mdi\_bg\_use\_color}}
-{\footnotesize\ttfamily bool mdi\+\_\+bg\+\_\+use\+\_\+color}
-
-\mbox{\Hypertarget{struct_settings___a47845c8ac48b3f1173dd9806ee5c056d}\label{struct_settings___a47845c8ac48b3f1173dd9806ee5c056d}} 
-\index{Settings\_@{Settings\_}!mdi\_bg\_use\_logo@{mdi\_bg\_use\_logo}}
-\index{mdi\_bg\_use\_logo@{mdi\_bg\_use\_logo}!Settings\_@{Settings\_}}
-\doxyparagraph{\texorpdfstring{mdi\_bg\_use\_logo}{mdi\_bg\_use\_logo}}
-{\footnotesize\ttfamily bool mdi\+\_\+bg\+\_\+use\+\_\+logo}
-
-\mbox{\Hypertarget{struct_settings___ae30a9b4bc66b7a9b28d9b090c788f211}\label{struct_settings___ae30a9b4bc66b7a9b28d9b090c788f211}} 
-\index{Settings\_@{Settings\_}!mdi\_bg\_use\_texture@{mdi\_bg\_use\_texture}}
-\index{mdi\_bg\_use\_texture@{mdi\_bg\_use\_texture}!Settings\_@{Settings\_}}
-\doxyparagraph{\texorpdfstring{mdi\_bg\_use\_texture}{mdi\_bg\_use\_texture}}
-{\footnotesize\ttfamily bool mdi\+\_\+bg\+\_\+use\+\_\+texture}
-
-\mbox{\Hypertarget{struct_settings___a4e0667d44e799b5ed1a167ef9ba07fde}\label{struct_settings___a4e0667d44e799b5ed1a167ef9ba07fde}} 
-\index{Settings\_@{Settings\_}!menu\_action@{menu\_action}}
-\index{menu\_action@{menu\_action}!Settings\_@{Settings\_}}
-\doxyparagraph{\texorpdfstring{menu\_action}{menu\_action}}
-{\footnotesize\ttfamily char menu\+\_\+action\mbox{[}200\mbox{]}}
-
 \mbox{\Hypertarget{struct_settings___a6cb2bb03294badfd7600248cbdb2a3fe}\label{struct_settings___a6cb2bb03294badfd7600248cbdb2a3fe}} 
 \index{Settings\_@{Settings\_}!needle\_speed@{needle\_speed}}
 \index{needle\_speed@{needle\_speed}!Settings\_@{Settings\_}}
 \doxyparagraph{\texorpdfstring{needle\_speed}{needle\_speed}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} needle\+\_\+speed}
 
-\mbox{\Hypertarget{struct_settings___a5cfc1004c5531e3e3673a61e17c9e406}\label{struct_settings___a5cfc1004c5531e3e3673a61e17c9e406}} 
+\mbox{\Hypertarget{struct_settings___a52242b8a84683db19cf140e60704207f}\label{struct_settings___a52242b8a84683db19cf140e60704207f}} 
 \index{Settings\_@{Settings\_}!opensave\_custom\_filter@{opensave\_custom\_filter}}
 \index{opensave\_custom\_filter@{opensave\_custom\_filter}!Settings\_@{Settings\_}}
 \doxyparagraph{\texorpdfstring{opensave\_custom\_filter}{opensave\_custom\_filter}}
-{\footnotesize\ttfamily std\+::string opensave\+\_\+custom\+\_\+filter}
+{\footnotesize\ttfamily QString opensave\+\_\+custom\+\_\+filter}
 
-\mbox{\Hypertarget{struct_settings___ab1b164df629a08d148da362c3b349618}\label{struct_settings___ab1b164df629a08d148da362c3b349618}} 
+\mbox{\Hypertarget{struct_settings___ad00a68edcc967bc4932c49aac246c759}\label{struct_settings___ad00a68edcc967bc4932c49aac246c759}} 
 \index{Settings\_@{Settings\_}!opensave\_open\_format@{opensave\_open\_format}}
 \index{opensave\_open\_format@{opensave\_open\_format}!Settings\_@{Settings\_}}
 \doxyparagraph{\texorpdfstring{opensave\_open\_format}{opensave\_open\_format}}
-{\footnotesize\ttfamily std\+::string opensave\+\_\+open\+\_\+format}
+{\footnotesize\ttfamily QString opensave\+\_\+open\+\_\+format}
 
 \mbox{\Hypertarget{struct_settings___a63d79c1dcf2ac36f1696b94f82daa2c6}\label{struct_settings___a63d79c1dcf2ac36f1696b94f82daa2c6}} 
 \index{Settings\_@{Settings\_}!opensave\_open\_thumbnail@{opensave\_open\_thumbnail}}
@@ -602,17 +612,17 @@ Like all of our structs, it\textquotesingle{}s C99 compliant.
 \doxyparagraph{\texorpdfstring{opensave\_open\_thumbnail}{opensave\_open\_thumbnail}}
 {\footnotesize\ttfamily bool opensave\+\_\+open\+\_\+thumbnail}
 
-\mbox{\Hypertarget{struct_settings___a999085723d975d874d99ef7bc065e902}\label{struct_settings___a999085723d975d874d99ef7bc065e902}} 
+\mbox{\Hypertarget{struct_settings___a759e85743e7107ae460f09813fec6fc2}\label{struct_settings___a759e85743e7107ae460f09813fec6fc2}} 
 \index{Settings\_@{Settings\_}!opensave\_recent\_directory@{opensave\_recent\_directory}}
 \index{opensave\_recent\_directory@{opensave\_recent\_directory}!Settings\_@{Settings\_}}
 \doxyparagraph{\texorpdfstring{opensave\_recent\_directory}{opensave\_recent\_directory}}
-{\footnotesize\ttfamily std\+::string opensave\+\_\+recent\+\_\+directory}
+{\footnotesize\ttfamily QString opensave\+\_\+recent\+\_\+directory}
 
-\mbox{\Hypertarget{struct_settings___a32038a940a3e4c98a456b41751114f4c}\label{struct_settings___a32038a940a3e4c98a456b41751114f4c}} 
+\mbox{\Hypertarget{struct_settings___a96cb4e5bb051b1ef1d78238c4665e010}\label{struct_settings___a96cb4e5bb051b1ef1d78238c4665e010}} 
 \index{Settings\_@{Settings\_}!opensave\_recent\_list\_of\_files@{opensave\_recent\_list\_of\_files}}
 \index{opensave\_recent\_list\_of\_files@{opensave\_recent\_list\_of\_files}!Settings\_@{Settings\_}}
 \doxyparagraph{\texorpdfstring{opensave\_recent\_list\_of\_files}{opensave\_recent\_list\_of\_files}}
-{\footnotesize\ttfamily std\+::vector$<$std\+::string$>$ opensave\+\_\+recent\+\_\+list\+\_\+of\+\_\+files}
+{\footnotesize\ttfamily QString\+List opensave\+\_\+recent\+\_\+list\+\_\+of\+\_\+files}
 
 \mbox{\Hypertarget{struct_settings___aac46906640a4c56f08417a85813fd72b}\label{struct_settings___aac46906640a4c56f08417a85813fd72b}} 
 \index{Settings\_@{Settings\_}!opensave\_recent\_max\_files@{opensave\_recent\_max\_files}}
@@ -620,11 +630,11 @@ Like all of our structs, it\textquotesingle{}s C99 compliant.
 \doxyparagraph{\texorpdfstring{opensave\_recent\_max\_files}{opensave\_recent\_max\_files}}
 {\footnotesize\ttfamily uint8\+\_\+t opensave\+\_\+recent\+\_\+max\+\_\+files}
 
-\mbox{\Hypertarget{struct_settings___aff4b88f61bd38d239f0784aa51937556}\label{struct_settings___aff4b88f61bd38d239f0784aa51937556}} 
+\mbox{\Hypertarget{struct_settings___a304c26a4b0e1c827d6c4d75988787851}\label{struct_settings___a304c26a4b0e1c827d6c4d75988787851}} 
 \index{Settings\_@{Settings\_}!opensave\_save\_format@{opensave\_save\_format}}
 \index{opensave\_save\_format@{opensave\_save\_format}!Settings\_@{Settings\_}}
 \doxyparagraph{\texorpdfstring{opensave\_save\_format}{opensave\_save\_format}}
-{\footnotesize\ttfamily std\+::string opensave\+\_\+save\+\_\+format}
+{\footnotesize\ttfamily QString opensave\+\_\+save\+\_\+format}
 
 \mbox{\Hypertarget{struct_settings___a730d6fef0713495f9701dd1f0ebb980d}\label{struct_settings___a730d6fef0713495f9701dd1f0ebb980d}} 
 \index{Settings\_@{Settings\_}!opensave\_save\_thumbnail@{opensave\_save\_thumbnail}}
@@ -644,11 +654,11 @@ Like all of our structs, it\textquotesingle{}s C99 compliant.
 \doxyparagraph{\texorpdfstring{pattern\_index}{pattern\_index}}
 {\footnotesize\ttfamily int pattern\+\_\+index}
 
-\mbox{\Hypertarget{struct_settings___a8613174c2ac34c7026d04e9a963cd843}\label{struct_settings___a8613174c2ac34c7026d04e9a963cd843}} 
+\mbox{\Hypertarget{struct_settings___a2869efa820d2f3572936783f5fb41ae4}\label{struct_settings___a2869efa820d2f3572936783f5fb41ae4}} 
 \index{Settings\_@{Settings\_}!printing\_default\_device@{printing\_default\_device}}
 \index{printing\_default\_device@{printing\_default\_device}!Settings\_@{Settings\_}}
 \doxyparagraph{\texorpdfstring{printing\_default\_device}{printing\_default\_device}}
-{\footnotesize\ttfamily std\+::string printing\+\_\+default\+\_\+device}
+{\footnotesize\ttfamily QString printing\+\_\+default\+\_\+device}
 
 \mbox{\Hypertarget{struct_settings___a9101a09c1112f08a59eb810df61d4de9}\label{struct_settings___a9101a09c1112f08a59eb810df61d4de9}} 
 \index{Settings\_@{Settings\_}!printing\_disable\_bg@{printing\_disable\_bg}}
@@ -661,6 +671,54 @@ Like all of our structs, it\textquotesingle{}s C99 compliant.
 \index{printing\_use\_last\_device@{printing\_use\_last\_device}!Settings\_@{Settings\_}}
 \doxyparagraph{\texorpdfstring{printing\_use\_last\_device}{printing\_use\_last\_device}}
 {\footnotesize\ttfamily bool printing\+\_\+use\+\_\+last\+\_\+device}
+
+\mbox{\Hypertarget{struct_settings___abd86ab778666ca42e3bc7685cb3cc91c}\label{struct_settings___abd86ab778666ca42e3bc7685cb3cc91c}} 
+\index{Settings\_@{Settings\_}!prompt\_bg\_color@{prompt\_bg\_color}}
+\index{prompt\_bg\_color@{prompt\_bg\_color}!Settings\_@{Settings\_}}
+\doxyparagraph{\texorpdfstring{prompt\_bg\_color}{prompt\_bg\_color}}
+{\footnotesize\ttfamily QRgb prompt\+\_\+bg\+\_\+color}
+
+\mbox{\Hypertarget{struct_settings___ad990f670fcd1e3298ef0698fc6c718a9}\label{struct_settings___ad990f670fcd1e3298ef0698fc6c718a9}} 
+\index{Settings\_@{Settings\_}!prompt\_font\_family@{prompt\_font\_family}}
+\index{prompt\_font\_family@{prompt\_font\_family}!Settings\_@{Settings\_}}
+\doxyparagraph{\texorpdfstring{prompt\_font\_family}{prompt\_font\_family}}
+{\footnotesize\ttfamily QString prompt\+\_\+font\+\_\+family}
+
+\mbox{\Hypertarget{struct_settings___a6ceb561c001f80c0ee5fd394716f46ca}\label{struct_settings___a6ceb561c001f80c0ee5fd394716f46ca}} 
+\index{Settings\_@{Settings\_}!prompt\_font\_size@{prompt\_font\_size}}
+\index{prompt\_font\_size@{prompt\_font\_size}!Settings\_@{Settings\_}}
+\doxyparagraph{\texorpdfstring{prompt\_font\_size}{prompt\_font\_size}}
+{\footnotesize\ttfamily uint8\+\_\+t prompt\+\_\+font\+\_\+size}
+
+\mbox{\Hypertarget{struct_settings___aabe0ab420607962f5476d66acdd0039e}\label{struct_settings___aabe0ab420607962f5476d66acdd0039e}} 
+\index{Settings\_@{Settings\_}!prompt\_font\_style@{prompt\_font\_style}}
+\index{prompt\_font\_style@{prompt\_font\_style}!Settings\_@{Settings\_}}
+\doxyparagraph{\texorpdfstring{prompt\_font\_style}{prompt\_font\_style}}
+{\footnotesize\ttfamily QString prompt\+\_\+font\+\_\+style}
+
+\mbox{\Hypertarget{struct_settings___a9216ff25130cd98d414c8190326d87ae}\label{struct_settings___a9216ff25130cd98d414c8190326d87ae}} 
+\index{Settings\_@{Settings\_}!prompt\_save\_history@{prompt\_save\_history}}
+\index{prompt\_save\_history@{prompt\_save\_history}!Settings\_@{Settings\_}}
+\doxyparagraph{\texorpdfstring{prompt\_save\_history}{prompt\_save\_history}}
+{\footnotesize\ttfamily bool prompt\+\_\+save\+\_\+history}
+
+\mbox{\Hypertarget{struct_settings___a1ce9605eb7fe41ca84cd07738d6b3787}\label{struct_settings___a1ce9605eb7fe41ca84cd07738d6b3787}} 
+\index{Settings\_@{Settings\_}!prompt\_save\_history\_as\_html@{prompt\_save\_history\_as\_html}}
+\index{prompt\_save\_history\_as\_html@{prompt\_save\_history\_as\_html}!Settings\_@{Settings\_}}
+\doxyparagraph{\texorpdfstring{prompt\_save\_history\_as\_html}{prompt\_save\_history\_as\_html}}
+{\footnotesize\ttfamily bool prompt\+\_\+save\+\_\+history\+\_\+as\+\_\+html}
+
+\mbox{\Hypertarget{struct_settings___a1491649f86b49579fbf43ec48584baf7}\label{struct_settings___a1491649f86b49579fbf43ec48584baf7}} 
+\index{Settings\_@{Settings\_}!prompt\_save\_history\_filename@{prompt\_save\_history\_filename}}
+\index{prompt\_save\_history\_filename@{prompt\_save\_history\_filename}!Settings\_@{Settings\_}}
+\doxyparagraph{\texorpdfstring{prompt\_save\_history\_filename}{prompt\_save\_history\_filename}}
+{\footnotesize\ttfamily QString prompt\+\_\+save\+\_\+history\+\_\+filename}
+
+\mbox{\Hypertarget{struct_settings___a5161837c910a1b0639c029bb07be7af9}\label{struct_settings___a5161837c910a1b0639c029bb07be7af9}} 
+\index{Settings\_@{Settings\_}!prompt\_text\_color@{prompt\_text\_color}}
+\index{prompt\_text\_color@{prompt\_text\_color}!Settings\_@{Settings\_}}
+\doxyparagraph{\texorpdfstring{prompt\_text\_color}{prompt\_text\_color}}
+{\footnotesize\ttfamily QRgb prompt\+\_\+text\+\_\+color}
 
 \mbox{\Hypertarget{struct_settings___aee92f76b6b8b352a2970e53ba5fc705e}\label{struct_settings___aee92f76b6b8b352a2970e53ba5fc705e}} 
 \index{Settings\_@{Settings\_}!qsnap\_aperture\_size@{qsnap\_aperture\_size}}
@@ -902,11 +960,11 @@ Like all of our structs, it\textquotesingle{}s C99 compliant.
 \doxyparagraph{\texorpdfstring{text\_angle}{text\_angle}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} text\+\_\+angle}
 
-\mbox{\Hypertarget{struct_settings___a80bbdc55f4ddc408a0194bff38330ffa}\label{struct_settings___a80bbdc55f4ddc408a0194bff38330ffa}} 
+\mbox{\Hypertarget{struct_settings___a2ba15ac73c786ba097fe0a44534e6643}\label{struct_settings___a2ba15ac73c786ba097fe0a44534e6643}} 
 \index{Settings\_@{Settings\_}!text\_font@{text\_font}}
 \index{text\_font@{text\_font}!Settings\_@{Settings\_}}
 \doxyparagraph{\texorpdfstring{text\_font}{text\_font}}
-{\footnotesize\ttfamily char text\+\_\+font\mbox{[}200\mbox{]}}
+{\footnotesize\ttfamily QString text\+\_\+font}
 
 \mbox{\Hypertarget{struct_settings___ac6c9bc5d28f097f5ebee247583fcf355}\label{struct_settings___ac6c9bc5d28f097f5ebee247583fcf355}} 
 \index{Settings\_@{Settings\_}!text\_size@{text\_size}}
@@ -944,12 +1002,6 @@ Like all of our structs, it\textquotesingle{}s C99 compliant.
 \doxyparagraph{\texorpdfstring{text\_style\_underline}{text\_style\_underline}}
 {\footnotesize\ttfamily bool text\+\_\+style\+\_\+underline}
 
-\mbox{\Hypertarget{struct_settings___abaa02ce5ca22ae71574cc8b481dec6f6}\label{struct_settings___abaa02ce5ca22ae71574cc8b481dec6f6}} 
-\index{Settings\_@{Settings\_}!texture\_list@{texture\_list}}
-\index{texture\_list@{texture\_list}!Settings\_@{Settings\_}}
-\doxyparagraph{\texorpdfstring{texture\_list}{texture\_list}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a65f6a13c9f5a038f42c86bdd5bb2410f}{Dictionary}}$\ast$ texture\+\_\+list}
-
 \mbox{\Hypertarget{struct_settings___a02f02879e6e0c82e57d56d4200c18406}\label{struct_settings___a02f02879e6e0c82e57d56d4200c18406}} 
 \index{Settings\_@{Settings\_}!tick\_depth@{tick\_depth}}
 \index{tick\_depth@{tick\_depth}!Settings\_@{Settings\_}}
@@ -962,17 +1014,11 @@ Like all of our structs, it\textquotesingle{}s C99 compliant.
 \doxyparagraph{\texorpdfstring{ticks\_color}{ticks\_color}}
 {\footnotesize\ttfamily uint32\+\_\+t ticks\+\_\+color}
 
-\mbox{\Hypertarget{struct_settings___ac3391ef17574e096e85df24dd478af13}\label{struct_settings___ac3391ef17574e096e85df24dd478af13}} 
-\index{Settings\_@{Settings\_}!tip\_of\_the\_day@{tip\_of\_the\_day}}
-\index{tip\_of\_the\_day@{tip\_of\_the\_day}!Settings\_@{Settings\_}}
-\doxyparagraph{\texorpdfstring{tip\_of\_the\_day}{tip\_of\_the\_day}}
-{\footnotesize\ttfamily bool tip\+\_\+of\+\_\+the\+\_\+day}
-
-\mbox{\Hypertarget{struct_settings___aff66b44112febf69b06f35108babd373}\label{struct_settings___aff66b44112febf69b06f35108babd373}} 
+\mbox{\Hypertarget{struct_settings___a27c1533c582597dcb729c4d00e7671f8}\label{struct_settings___a27c1533c582597dcb729c4d00e7671f8}} 
 \index{Settings\_@{Settings\_}!to\_open@{to\_open}}
 \index{to\_open@{to\_open}!Settings\_@{Settings\_}}
 \doxyparagraph{\texorpdfstring{to\_open}{to\_open}}
-{\footnotesize\ttfamily char to\+\_\+open\mbox{[}200\mbox{]}}
+{\footnotesize\ttfamily QString to\+\_\+open}
 
 \mbox{\Hypertarget{struct_settings___a05fb0994f59a541f66dc725bc2715bcf}\label{struct_settings___a05fb0994f59a541f66dc725bc2715bcf}} 
 \index{Settings\_@{Settings\_}!use\_translation@{use\_translation}}
@@ -980,11 +1026,11 @@ Like all of our structs, it\textquotesingle{}s C99 compliant.
 \doxyparagraph{\texorpdfstring{use\_translation}{use\_translation}}
 {\footnotesize\ttfamily bool use\+\_\+translation}
 
-\mbox{\Hypertarget{struct_settings___acace48245648357b6966d493727f9370}\label{struct_settings___acace48245648357b6966d493727f9370}} 
+\mbox{\Hypertarget{struct_settings___accb344ff518c8d35f4e2a0df6fe3a6d1}\label{struct_settings___accb344ff518c8d35f4e2a0df6fe3a6d1}} 
 \index{Settings\_@{Settings\_}!version@{version}}
 \index{version@{version}!Settings\_@{Settings\_}}
 \doxyparagraph{\texorpdfstring{version}{version}}
-{\footnotesize\ttfamily char version\mbox{[}200\mbox{]}}
+{\footnotesize\ttfamily QString version}
 
 \mbox{\Hypertarget{struct_settings___a107d0243902802ec4f9b273734f6a614}\label{struct_settings___a107d0243902802ec4f9b273734f6a614}} 
 \index{Settings\_@{Settings\_}!zoomInLimit@{zoomInLimit}}

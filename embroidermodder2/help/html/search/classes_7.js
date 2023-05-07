@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['imageobject_0',['ImageObject',['../class_image_object.html',1,'']]],
-  ['imagewidget_1',['ImageWidget',['../class_image_widget.html',1,'']]]
+  ['hoop_5fpadding_0',['hoop_padding',['../structhoop__padding.html',1,'']]],
+  ['huffman_1',['Huffman',['../struct_huffman.html',1,'']]]
 ];

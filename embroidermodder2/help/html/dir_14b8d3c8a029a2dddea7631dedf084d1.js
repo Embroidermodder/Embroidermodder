@@ -1,10 +1,12 @@
 var dir_14b8d3c8a029a2dddea7631dedf084d1 =
 [
     [ "cmdprompt.cpp", "cmdprompt_8cpp.html", null ],
+    [ "data.cpp", "data_8cpp.html", "data_8cpp" ],
     [ "embdetails-dialog.cpp", "embdetails-dialog_8cpp.html", null ],
     [ "embroidermodder.cpp", "embroidermodder_8cpp.html", "embroidermodder_8cpp" ],
     [ "embroidermodder.h", "embroidermodder_8h.html", "embroidermodder_8h" ],
     [ "imagewidget.cpp", "imagewidget_8cpp.html", null ],
+    [ "interface.cpp", "interface_8cpp.html", "interface_8cpp" ],
     [ "layer-manager.cpp", "layer-manager_8cpp.html", null ],
     [ "mainwindow-commands.cpp", "mainwindow-commands_8cpp.html", null ],
     [ "mainwindow-menus.cpp", "mainwindow-menus_8cpp.html", null ],
@@ -30,7 +32,7 @@ var dir_14b8d3c8a029a2dddea7631dedf084d1 =
     [ "preview-dialog.cpp", "preview-dialog_8cpp.html", null ],
     [ "property-editor.cpp", "property-editor_8cpp.html", "property-editor_8cpp" ],
     [ "selectbox.cpp", "selectbox_8cpp.html", null ],
-    [ "settings-dialog.cpp", "settings-dialog_8cpp.html", null ],
+    [ "settings-dialog.cpp", "settings-dialog_8cpp.html", "settings-dialog_8cpp" ],
     [ "statusbar-button.cpp", "statusbar-button_8cpp.html", null ],
     [ "statusbar.cpp", "statusbar_8cpp.html", null ],
     [ "undo-commands.cpp", "undo-commands_8cpp.html", null ],

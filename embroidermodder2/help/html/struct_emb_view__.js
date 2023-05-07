@@ -1,8 +1,8 @@
 var struct_emb_view__ =
 [
-    [ "filename", "struct_emb_view__.html#a7b91ecb1f593bdecbfb953ede1a4fde9", null ],
+    [ "filename", "struct_emb_view__.html#aac274af37f5fbaaa2c47d19145cfd856", null ],
     [ "grid_mode", "struct_emb_view__.html#a7b9309a8010bf2383ac32e7ee71673f1", null ],
-    [ "grid_type", "struct_emb_view__.html#ae57616b4d70c48c75cc90798d3360d69", null ],
+    [ "grid_type", "struct_emb_view__.html#a9f4e4aa7e0ab33955ac723f8d0aa6dfa", null ],
     [ "lwt_mode", "struct_emb_view__.html#a9ccb0c72197900cb5bd488f0a5d991f3", null ],
     [ "metric", "struct_emb_view__.html#a2e477d6bab1c45f23850ac1a890abf4b", null ],
     [ "n_selected", "struct_emb_view__.html#a040a11de8dccec11a917a7387ab0a2f8", null ],
@@ -21,7 +21,7 @@ var struct_emb_view__ =
     [ "simulation_start", "struct_emb_view__.html#ab0b389f512ac97f99fc1c843aca3165c", null ],
     [ "snap_mode", "struct_emb_view__.html#ace6519f113367c62c4298f1546d89ae3", null ],
     [ "text_angle", "struct_emb_view__.html#aa5190be7871b8e2f96dc72b4af2a3c8e", null ],
-    [ "text_font", "struct_emb_view__.html#a80bbdc55f4ddc408a0194bff38330ffa", null ],
+    [ "text_font", "struct_emb_view__.html#a2ba15ac73c786ba097fe0a44534e6643", null ],
     [ "text_size", "struct_emb_view__.html#ac6c9bc5d28f097f5ebee247583fcf355", null ],
     [ "text_style_bold", "struct_emb_view__.html#a829f775ead3885a4aed3d4296d0acfd5", null ],
     [ "text_style_italic", "struct_emb_view__.html#a7b7e93e4933f97f58b1a8efa0a4d3ee3", null ],
@@ -29,5 +29,5 @@ var struct_emb_view__ =
     [ "text_style_strikeout", "struct_emb_view__.html#aeb1b3d94e2c11f40c8ba63327335d87e", null ],
     [ "text_style_underline", "struct_emb_view__.html#a58763bd3c0c574857c49d405dae02504", null ],
     [ "ui_mode", "struct_emb_view__.html#a58b88594ab95157f9a4e4b655ba7a639", null ],
-    [ "undo_history", "struct_emb_view__.html#a910be9b9781d5fcbfd76cdcb713e3b52", null ]
+    [ "undo_history", "struct_emb_view__.html#ac73ebb96d8421e4c0c9fe2627b668a9a", null ]
 ];

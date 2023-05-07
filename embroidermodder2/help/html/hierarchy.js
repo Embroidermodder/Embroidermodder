@@ -44,6 +44,7 @@ var hierarchy =
     [ "EmbTime_", "struct_emb_time__.html", null ],
     [ "EmbVector_", "struct_emb_vector__.html", null ],
     [ "EmbView_", "struct_emb_view__.html", null ],
+    [ "GroupBoxData_", "struct_group_box_data__.html", null ],
     [ "hoop_padding", "structhoop__padding.html", null ],
     [ "Huffman", "struct_huffman.html", null ],
     [ "LSYSTEM", "struct_l_s_y_s_t_e_m.html", null ],
@@ -137,6 +138,5 @@ var hierarchy =
     [ "ThredExtension_", "struct_thred_extension__.html", null ],
     [ "ThredHeader_", "struct_thred_header__.html", null ],
     [ "UiObject_", "struct_ui_object__.html", null ],
-    [ "UndoHistory_", "struct_undo_history__.html", null ],
     [ "VipHeader_", "struct_vip_header__.html", null ]
 ];

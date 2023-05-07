@@ -56,6 +56,7 @@ var annotated_dup =
     [ "EmbTime_", "struct_emb_time__.html", "struct_emb_time__" ],
     [ "EmbVector_", "struct_emb_vector__.html", "struct_emb_vector__" ],
     [ "EmbView_", "struct_emb_view__.html", "struct_emb_view__" ],
+    [ "GroupBoxData_", "struct_group_box_data__.html", "struct_group_box_data__" ],
     [ "hoop_padding", "structhoop__padding.html", "structhoop__padding" ],
     [ "Huffman", "struct_huffman.html", "struct_huffman" ],
     [ "ImageObject", "class_image_object.html", "class_image_object" ],
@@ -97,7 +98,6 @@ var annotated_dup =
     [ "UndoableRotateCommand", "class_undoable_rotate_command.html", "class_undoable_rotate_command" ],
     [ "UndoableScaleCommand", "class_undoable_scale_command.html", "class_undoable_scale_command" ],
     [ "UndoEditor", "class_undo_editor.html", "class_undo_editor" ],
-    [ "UndoHistory_", "struct_undo_history__.html", "struct_undo_history__" ],
     [ "View", "class_view.html", "class_view" ],
     [ "VipHeader_", "struct_vip_header__.html", "struct_vip_header__" ]
 ];

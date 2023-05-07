@@ -12,17 +12,15 @@ This covers the inbuilt designs\+: Dolphin, Snowflake and Heart. Covers Rotate, 
 \doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-char \mbox{\hyperlink{struct_ui_object___ab52ef4455f9b2b7c2b3b59d6e01f085f}{fname}} \mbox{[}200\mbox{]}
+std\+::string \mbox{\hyperlink{struct_ui_object___a743e93a25d8ce8b513e74ca768364f6b}{fname}}
 \item 
-char \mbox{\hyperlink{struct_ui_object___a1f9d39a794f62bdd21ee43c13719f87a}{command}} \mbox{[}200\mbox{]}
+std\+::string \mbox{\hyperlink{struct_ui_object___ae59b6e754570ebc0c6d2edd75c3ea894}{command}}
 \item 
 bool \mbox{\hyperlink{struct_ui_object___a714f1ca4d0b766c27006639b8cad4b70}{first\+Run}}
 \item 
-\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} \mbox{\hyperlink{struct_ui_object___a8995a2cf258c3f0b30d03dbe2923959f}{control\+Points}} \mbox{[}10\mbox{]}
+std\+::vector$<$ \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} $>$ \mbox{\hyperlink{struct_ui_object___a0d06356a1bfc0f74fb4975c13e8d2102}{control\+Points}}
 \item 
-char \mbox{\hyperlink{struct_ui_object___a8ca044138dd197845aefc0fe8c493219}{control\+Point\+Labels}} \mbox{[}10\mbox{]}\mbox{[}200\mbox{]}
-\item 
-int \mbox{\hyperlink{struct_ui_object___a8dbaa8affffc43357c6a974112149f42}{n\+\_\+control\+Points}}
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{struct_ui_object___abc9d008e05ad67808683ed068e3c7f00}{control\+Point\+Labels}}
 \item 
 int \mbox{\hyperlink{struct_ui_object___a876743604f1c17f0d9f7137274b1a7fd}{num\+Points}}
 \item 
@@ -38,19 +36,19 @@ int \mbox{\hyperlink{struct_ui_object___ad6efdfb1c13924cbdcd908582b4be446}{max\+
 \item 
 uint32\+\_\+t \mbox{\hyperlink{struct_ui_object___a6b29e4f37f4482274af785ad5ffe96a7}{mode}}
 \item 
-char \mbox{\hyperlink{struct_ui_object___a25a3f80fabd63fada17a8a40b9d8c774}{path\+\_\+desc}} \mbox{[}1000\mbox{]}
+std\+::string \mbox{\hyperlink{struct_ui_object___a522540b697cb53808e222e2ebb0025cb}{path\+\_\+desc}}
 \item 
-char \mbox{\hyperlink{struct_ui_object___a50cee21aace972bab778fcf9df69a4ae}{text}} \mbox{[}200\mbox{]}
+std\+::string \mbox{\hyperlink{struct_ui_object___a23c058547fbc73b5659191844a9f258c}{text}}
 \item 
 int \mbox{\hyperlink{struct_ui_object___a33af7956829993c9a6e515c50a39e6ff}{text\+Justify}}
 \item 
-char \mbox{\hyperlink{struct_ui_object___a8abb50dd6d871ebbb4956b3f99f54536}{text\+Font}} \mbox{[}200\mbox{]}
+std\+::string \mbox{\hyperlink{struct_ui_object___abfe9b187ed8d16929f6bd9e60082fea8}{text\+Font}}
 \item 
 \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{struct_ui_object___a7aaf3276a53745ff90c123c095ffd101}{text\+Height}}
 \item 
 \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{struct_ui_object___af071a7a13061a2722bef2d13367ac717}{text\+Rotation}}
 \item 
-char \mbox{\hyperlink{struct_ui_object___a4f071f39e69a703ee35a2dc313b928f0}{id}} \mbox{[}200\mbox{]}
+std\+::string \mbox{\hyperlink{struct_ui_object___afd0d68c6d31ff249f3ae8662162663c3}{id}}
 \item 
 int \mbox{\hyperlink{struct_ui_object___a554cb215e0c2be49aa91aa9a283d37c6}{pattern\+\_\+index}}
 \item 
@@ -67,22 +65,7 @@ bool \mbox{\hyperlink{struct_ui_object___a7a81b7e8dfdc640c03d8b7b1771ec773}{sele
 \doxysubsubsection{Detailed Description}
 This covers the inbuilt designs\+: Dolphin, Snowflake and Heart. Covers Rotate, Scale and Point UI events. 
 
-scale is how radii are stored if the object is a circle, or the semi-\/major and semi-\/minor axes if the object is an ellipse.
-
-center perhaps should be the \char`\"{}anchor\char`\"{} instead which is the center for some objects and top left for rectangular objects.
-
-Do angles need special storage? angle\+Ref, angle\+New
-
-This chapter details how the source code achieves the design detailed in the previous chapter. For the low-\/level details, read the later chapters.
-
-Dear Im\+Gui (CITATION NEEDED)\hypertarget{embroidermodder_8h_autotoc_md4}{}\doxyparagraph{Geometry Objects}\label{embroidermodder_8h_autotoc_md4}
-At all times the Emb\+Pattern has all of the information about the pattern however, editing information like the rubber text labels needs to be stored during runtime. Also editing ghosts like when a rotate command is half executed.
-
-To deal with this we have a generic object that can act as any other object that updates the associated pattern struct as changes as made.
-
-Note that the editor state is seperate from this since that is per view, not per object.
-
-Selecting is done via this interface. 
+This was an idea for storing the current command state\+: could be combined with Emb\+View since you can\textquotesingle{}t have more than one active command. If a command calls a sub command it will store the position in the parents. 
 
 \doxysubsubsection{Member Data Documentation}
 \mbox{\Hypertarget{struct_ui_object___a68e2bdfeb187d1c5a46afffe5129aabf}\label{struct_ui_object___a68e2bdfeb187d1c5a46afffe5129aabf}} 
@@ -97,23 +80,23 @@ Selecting is done via this interface.
 \doxyparagraph{\texorpdfstring{color}{color}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_acde9d757854564332fd795a084ec88b3}{Emb\+Color}} color}
 
-\mbox{\Hypertarget{struct_ui_object___a1f9d39a794f62bdd21ee43c13719f87a}\label{struct_ui_object___a1f9d39a794f62bdd21ee43c13719f87a}} 
+\mbox{\Hypertarget{struct_ui_object___ae59b6e754570ebc0c6d2edd75c3ea894}\label{struct_ui_object___ae59b6e754570ebc0c6d2edd75c3ea894}} 
 \index{UiObject\_@{UiObject\_}!command@{command}}
 \index{command@{command}!UiObject\_@{UiObject\_}}
 \doxyparagraph{\texorpdfstring{command}{command}}
-{\footnotesize\ttfamily char command\mbox{[}200\mbox{]}}
+{\footnotesize\ttfamily std\+::string command}
 
-\mbox{\Hypertarget{struct_ui_object___a8ca044138dd197845aefc0fe8c493219}\label{struct_ui_object___a8ca044138dd197845aefc0fe8c493219}} 
+\mbox{\Hypertarget{struct_ui_object___abc9d008e05ad67808683ed068e3c7f00}\label{struct_ui_object___abc9d008e05ad67808683ed068e3c7f00}} 
 \index{UiObject\_@{UiObject\_}!controlPointLabels@{controlPointLabels}}
 \index{controlPointLabels@{controlPointLabels}!UiObject\_@{UiObject\_}}
 \doxyparagraph{\texorpdfstring{controlPointLabels}{controlPointLabels}}
-{\footnotesize\ttfamily char control\+Point\+Labels\mbox{[}10\mbox{]}\mbox{[}200\mbox{]}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::string$>$ control\+Point\+Labels}
 
-\mbox{\Hypertarget{struct_ui_object___a8995a2cf258c3f0b30d03dbe2923959f}\label{struct_ui_object___a8995a2cf258c3f0b30d03dbe2923959f}} 
+\mbox{\Hypertarget{struct_ui_object___a0d06356a1bfc0f74fb4975c13e8d2102}\label{struct_ui_object___a0d06356a1bfc0f74fb4975c13e8d2102}} 
 \index{UiObject\_@{UiObject\_}!controlPoints@{controlPoints}}
 \index{controlPoints@{controlPoints}!UiObject\_@{UiObject\_}}
 \doxyparagraph{\texorpdfstring{controlPoints}{controlPoints}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} control\+Points\mbox{[}10\mbox{]}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}$>$ control\+Points}
 
 \mbox{\Hypertarget{struct_ui_object___a714f1ca4d0b766c27006639b8cad4b70}\label{struct_ui_object___a714f1ca4d0b766c27006639b8cad4b70}} 
 \index{UiObject\_@{UiObject\_}!firstRun@{firstRun}}
@@ -121,17 +104,17 @@ Selecting is done via this interface.
 \doxyparagraph{\texorpdfstring{firstRun}{firstRun}}
 {\footnotesize\ttfamily bool first\+Run}
 
-\mbox{\Hypertarget{struct_ui_object___ab52ef4455f9b2b7c2b3b59d6e01f085f}\label{struct_ui_object___ab52ef4455f9b2b7c2b3b59d6e01f085f}} 
+\mbox{\Hypertarget{struct_ui_object___a743e93a25d8ce8b513e74ca768364f6b}\label{struct_ui_object___a743e93a25d8ce8b513e74ca768364f6b}} 
 \index{UiObject\_@{UiObject\_}!fname@{fname}}
 \index{fname@{fname}!UiObject\_@{UiObject\_}}
 \doxyparagraph{\texorpdfstring{fname}{fname}}
-{\footnotesize\ttfamily char fname\mbox{[}200\mbox{]}}
+{\footnotesize\ttfamily std\+::string fname}
 
-\mbox{\Hypertarget{struct_ui_object___a4f071f39e69a703ee35a2dc313b928f0}\label{struct_ui_object___a4f071f39e69a703ee35a2dc313b928f0}} 
+\mbox{\Hypertarget{struct_ui_object___afd0d68c6d31ff249f3ae8662162663c3}\label{struct_ui_object___afd0d68c6d31ff249f3ae8662162663c3}} 
 \index{UiObject\_@{UiObject\_}!id@{id}}
 \index{id@{id}!UiObject\_@{UiObject\_}}
 \doxyparagraph{\texorpdfstring{id}{id}}
-{\footnotesize\ttfamily char id\mbox{[}200\mbox{]}}
+{\footnotesize\ttfamily std\+::string id}
 
 \mbox{\Hypertarget{struct_ui_object___ad6efdfb1c13924cbdcd908582b4be446}\label{struct_ui_object___ad6efdfb1c13924cbdcd908582b4be446}} 
 \index{UiObject\_@{UiObject\_}!maxPoints@{maxPoints}}
@@ -151,12 +134,6 @@ Selecting is done via this interface.
 \doxyparagraph{\texorpdfstring{mode}{mode}}
 {\footnotesize\ttfamily uint32\+\_\+t mode}
 
-\mbox{\Hypertarget{struct_ui_object___a8dbaa8affffc43357c6a974112149f42}\label{struct_ui_object___a8dbaa8affffc43357c6a974112149f42}} 
-\index{UiObject\_@{UiObject\_}!n\_controlPoints@{n\_controlPoints}}
-\index{n\_controlPoints@{n\_controlPoints}!UiObject\_@{UiObject\_}}
-\doxyparagraph{\texorpdfstring{n\_controlPoints}{n\_controlPoints}}
-{\footnotesize\ttfamily int n\+\_\+control\+Points}
-
 \mbox{\Hypertarget{struct_ui_object___a876743604f1c17f0d9f7137274b1a7fd}\label{struct_ui_object___a876743604f1c17f0d9f7137274b1a7fd}} 
 \index{UiObject\_@{UiObject\_}!numPoints@{numPoints}}
 \index{numPoints@{numPoints}!UiObject\_@{UiObject\_}}
@@ -169,11 +146,11 @@ Selecting is done via this interface.
 \doxyparagraph{\texorpdfstring{object\_index}{object\_index}}
 {\footnotesize\ttfamily int object\+\_\+index}
 
-\mbox{\Hypertarget{struct_ui_object___a25a3f80fabd63fada17a8a40b9d8c774}\label{struct_ui_object___a25a3f80fabd63fada17a8a40b9d8c774}} 
+\mbox{\Hypertarget{struct_ui_object___a522540b697cb53808e222e2ebb0025cb}\label{struct_ui_object___a522540b697cb53808e222e2ebb0025cb}} 
 \index{UiObject\_@{UiObject\_}!path\_desc@{path\_desc}}
 \index{path\_desc@{path\_desc}!UiObject\_@{UiObject\_}}
 \doxyparagraph{\texorpdfstring{path\_desc}{path\_desc}}
-{\footnotesize\ttfamily char path\+\_\+desc\mbox{[}1000\mbox{]}}
+{\footnotesize\ttfamily std\+::string path\+\_\+desc}
 
 \mbox{\Hypertarget{struct_ui_object___a554cb215e0c2be49aa91aa9a283d37c6}\label{struct_ui_object___a554cb215e0c2be49aa91aa9a283d37c6}} 
 \index{UiObject\_@{UiObject\_}!pattern\_index@{pattern\_index}}
@@ -199,17 +176,17 @@ Selecting is done via this interface.
 \doxyparagraph{\texorpdfstring{selectable}{selectable}}
 {\footnotesize\ttfamily bool selectable}
 
-\mbox{\Hypertarget{struct_ui_object___a50cee21aace972bab778fcf9df69a4ae}\label{struct_ui_object___a50cee21aace972bab778fcf9df69a4ae}} 
+\mbox{\Hypertarget{struct_ui_object___a23c058547fbc73b5659191844a9f258c}\label{struct_ui_object___a23c058547fbc73b5659191844a9f258c}} 
 \index{UiObject\_@{UiObject\_}!text@{text}}
 \index{text@{text}!UiObject\_@{UiObject\_}}
 \doxyparagraph{\texorpdfstring{text}{text}}
-{\footnotesize\ttfamily char text\mbox{[}200\mbox{]}}
+{\footnotesize\ttfamily std\+::string text}
 
-\mbox{\Hypertarget{struct_ui_object___a8abb50dd6d871ebbb4956b3f99f54536}\label{struct_ui_object___a8abb50dd6d871ebbb4956b3f99f54536}} 
+\mbox{\Hypertarget{struct_ui_object___abfe9b187ed8d16929f6bd9e60082fea8}\label{struct_ui_object___abfe9b187ed8d16929f6bd9e60082fea8}} 
 \index{UiObject\_@{UiObject\_}!textFont@{textFont}}
 \index{textFont@{textFont}!UiObject\_@{UiObject\_}}
 \doxyparagraph{\texorpdfstring{textFont}{textFont}}
-{\footnotesize\ttfamily char text\+Font\mbox{[}200\mbox{]}}
+{\footnotesize\ttfamily std\+::string text\+Font}
 
 \mbox{\Hypertarget{struct_ui_object___a7aaf3276a53745ff90c123c095ffd101}\label{struct_ui_object___a7aaf3276a53745ff90c123c095ffd101}} 
 \index{UiObject\_@{UiObject\_}!textHeight@{textHeight}}

@@ -9,5 +9,6 @@ var searchData=
   ['embconstantpi_6',['embConstantPi',['../embroidery_8h.html#a052bcc45c7207b189a9fe6925ec76c99',1,'embConstantPi():&#160;main.c'],['../main_8c.html#a052bcc45c7207b189a9fe6925ec76c99',1,'embConstantPi():&#160;main.c']]],
   ['end_7',['end',['../struct_emb_line__.html#ac19242fe9e53942be61574685fbd49ed',1,'EmbLine_::end()'],['../struct_emb_arc__.html#ac19242fe9e53942be61574685fbd49ed',1,'EmbArc_::end()'],['../struct_emb_bezier__.html#ac19242fe9e53942be61574685fbd49ed',1,'EmbBezier_::end()']]],
   ['exitapp_8',['exitApp',['../embroidermodder_8cpp.html#a5a42421b0311e4b603861e5b1e809ea5',1,'embroidermodder.cpp']]],
-  ['extension_9',['extension',['../struct_emb_format_list__.html#ad4e3afa5796088c8223396fa0140dde1',1,'EmbFormatList_']]]
+  ['extension_9',['extension',['../struct_emb_format_list__.html#ad4e3afa5796088c8223396fa0140dde1',1,'EmbFormatList_']]],
+  ['extensions_10',['extensions',['../settings-dialog_8cpp.html#a5041b3225978e5130dbc43a9c074ddb6',1,'settings-dialog.cpp']]]
 ];

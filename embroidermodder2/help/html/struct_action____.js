@@ -1,6 +1,7 @@
 var struct_action____ =
 [
     [ "aliases", "struct_action____.html#add89ca5bb404381318e126331e7c511a", null ],
+    [ "command", "struct_action____.html#ae59b6e754570ebc0c6d2edd75c3ea894", null ],
     [ "hash", "struct_action____.html#a6656561117ec1ab686401179004f53ba", null ],
     [ "icon", "struct_action____.html#aa101b5036fe941887517343150f4a9c0", null ],
     [ "menu_name", "struct_action____.html#a3e2b83d638149786403e4de67f8f7651", null ],

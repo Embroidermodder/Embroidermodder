@@ -67,6 +67,7 @@ add_executable(embroidermodder2
     ${SRC_DIR}/embdetails-dialog.cpp
     ${SRC_DIR}/embroidermodder.cpp
     ${SRC_DIR}/imagewidget.cpp
+    ${SRC_DIR}/interface.cpp
     ${SRC_DIR}/layer-manager.cpp
     ${SRC_DIR}/mainwindow-commands.cpp
     ${SRC_DIR}/mainwindow-menus.cpp

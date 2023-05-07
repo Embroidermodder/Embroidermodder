@@ -32,7 +32,7 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     //TODO: Review OpenGL for Qt5 later
     //if (settings.display_use_opengl)
     //{
-    //    qDebug("Using OpenGL...");
+    //    debug_message("Using OpenGL...");
     //    setViewport(new QGLWidget(QGLFormat(QGL::DoubleBuffer)));
     //}
 
@@ -130,20 +130,23 @@ View::~View()
     previewObjectList.clear();
 }
 
-void View::enterEvent(QEvent* /*event*/)
+void
+View::enterEvent(QEvent* /*event*/)
 {
     QMdiSubWindow* mdiWin = qobject_cast<QMdiSubWindow*>(parent());
     if (mdiWin) mainWin->getMdiArea()->setActiveSubWindow(mdiWin);
 }
 
-void View::addObject(BaseObject* obj)
+void
+View::addObject(BaseObject* obj)
 {
     gscene->addItem(obj);
     gscene->update();
     hashDeletedObjects.remove(obj->objectID());
 }
 
-void View::deleteObject(BaseObject* obj)
+void
+View::deleteObject(BaseObject* obj)
 {
     //NOTE: We really just remove the objects from the scene. deletion actually occurs in the destructor.
     obj->setSelected(false);
@@ -152,9 +155,10 @@ void View::deleteObject(BaseObject* obj)
     hashDeletedObjects.insert(obj->objectID(), obj);
 }
 
-void View::previewOn(int clone, int mode, EmbReal x, EmbReal y, EmbReal data)
+void
+View::previewOn(int clone, int mode, EmbReal x, EmbReal y, EmbReal data)
 {
-    qDebug("View previewOn()");
+    debug_message("View previewOn()");
     previewOff(); //Free the old objects before creating new ones
 
     previewMode = mode;
@@ -184,7 +188,8 @@ void View::previewOn(int clone, int mode, EmbReal x, EmbReal y, EmbReal data)
     gscene->update();
 }
 
-void View::previewOff()
+void
+View::previewOff()
 {
     //Prevent memory leaks by deleting any unused instances
     qDeleteAll(previewObjectList.begin(), previewObjectList.end());
@@ -202,12 +207,14 @@ void View::previewOff()
     gscene->update();
 }
 
-void View::enableMoveRapidFire()
+void
+View::enableMoveRapidFire()
 {
     rapidMoveActive = true;
 }
 
-void View::disableMoveRapidFire()
+void
+View::disableMoveRapidFire()
 {
     rapidMoveActive = false;
 }
@@ -219,14 +226,16 @@ bool View::allowRubber()
     return false;
 }
 
-void View::addToRubberRoom(QGraphicsItem* item)
+void
+View::addToRubberRoom(QGraphicsItem* item)
 {
     rubberRoomList.append(item);
     item->show();
     gscene->update();
 }
 
-void View::vulcanizeRubberRoom()
+void
+View::vulcanizeRubberRoom()
 {
     foreach(QGraphicsItem* item, rubberRoomList)
     {
@@ -237,7 +246,8 @@ void View::vulcanizeRubberRoom()
     gscene->update();
 }
 
-void View::vulcanizeObject(BaseObject* obj)
+void
+View::vulcanizeObject(BaseObject* obj)
 {
     if (!obj) return;
     gscene->removeItem(obj); //Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene
@@ -247,7 +257,8 @@ void View::vulcanizeObject(BaseObject* obj)
     if (cmd) undoStack->push(cmd);
 }
 
-void View::clearRubberRoom()
+void
+View::clearRubberRoom()
 {
     foreach(QGraphicsItem* item, rubberRoomList)
     {
@@ -285,12 +296,20 @@ void View::clearRubberRoom()
     gscene->update();
 }
 
-void View::spareRubber(qint64 id)
+/**
+ * .
+ */
+void
+View::spareRubber(qint64 id)
 {
     spareRubberList.append(id);
 }
 
-void View::setRubberMode(int mode)
+/**
+ * .
+ */
+void
+View::setRubberMode(int mode)
 {
     foreach(QGraphicsItem* item, rubberRoomList)
     {
@@ -300,7 +319,11 @@ void View::setRubberMode(int mode)
     gscene->update();
 }
 
-void View::setRubberPoint(const QString& key, const QPointF& point)
+/**
+ * .
+ */
+void
+View::setRubberPoint(const QString& key, const QPointF& point)
 {
     foreach(QGraphicsItem* item, rubberRoomList)
     {
@@ -310,7 +333,11 @@ void View::setRubberPoint(const QString& key, const QPointF& point)
     gscene->update();
 }
 
-void View::setRubberText(const QString& key, const QString& txt)
+/**
+ * .
+ */
+void
+View::setRubberText(const QString& key, const QString& txt)
 {
     foreach(QGraphicsItem* item, rubberRoomList)
     {
@@ -320,20 +347,29 @@ void View::setRubberText(const QString& key, const QString& txt)
     gscene->update();
 }
 
-void View::setGridColor(QRgb color)
+/**
+ * .
+ */
+void
+View::setGridColor(QRgb color)
 {
     gridColor = QColor(color);
     gscene->setProperty("VIEW_COLOR_GRID", color);
     if (gscene) gscene->update();
 }
 
-void View::setRulerColor(QRgb color)
+/**
+ * .
+ */
+void
+View::setRulerColor(QRgb color)
 {
     rulerColor = QColor(color);
     gscene->update();
 }
 
-void View::createGrid(const QString& gridType)
+void
+View::createGrid(const QString& gridType)
 {
     if (gridType == "Rectangular") {
         createGridRect();
@@ -357,7 +393,8 @@ void View::createGrid(const QString& gridType)
     gscene->update();
 }
 
-void View::createOrigin() //TODO: Make Origin Customizable
+void
+View::createOrigin() //TODO: Make Origin Customizable
 {
     originPath = QPainterPath();
 
@@ -378,7 +415,8 @@ void View::createOrigin() //TODO: Make Origin Customizable
 /**
  * .
  */
-void View::createGridRect()
+void
+View::createGridRect()
 {
     EmbReal xSpacing = settings.grid_spacing.x;
     EmbReal ySpacing = settings.grid_spacing.y;
@@ -418,7 +456,8 @@ void View::createGridRect()
     }
 }
 
-void View::createGridPolar()
+void
+View::createGridPolar()
 {
     EmbReal radSpacing = settings.grid_spacing_radius;
     EmbReal angSpacing = settings.grid_spacing_angle;
@@ -443,7 +482,8 @@ void View::createGridPolar()
     }
 }
 
-void View::createGridIso()
+void
+View::createGridIso()
 {
     EmbReal xSpacing = settings.grid_spacing.x;
     EmbReal ySpacing = settings.grid_spacing.y;
@@ -494,9 +534,10 @@ void View::createGridIso()
     }
 }
 
-void View::toggleSnap(bool on)
+void
+View::toggleSnap(bool on)
 {
-    qDebug("View toggleSnap()");
+    debug_message("View toggleSnap()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     //TODO: finish this
     gscene->setProperty("ENABLE_SNAP", on);
@@ -504,9 +545,10 @@ void View::toggleSnap(bool on)
     QApplication::restoreOverrideCursor();
 }
 
-void View::toggleGrid(bool on)
+void
+View::toggleGrid(bool on)
 {
-    qDebug("View toggleGrid()");
+    debug_message("View toggleGrid()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     if (on) {
         createGrid(settings.grid_type);
@@ -517,9 +559,10 @@ void View::toggleGrid(bool on)
     QApplication::restoreOverrideCursor();
 }
 
-void View::toggleRuler(bool on)
+void
+View::toggleRuler(bool on)
 {
-    qDebug("View toggleRuler()");
+    debug_message("View toggleRuler()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     gscene->setProperty("ENABLE_RULER", on);
     rulerMetric = settings.ruler_metric;
@@ -529,9 +572,10 @@ void View::toggleRuler(bool on)
     QApplication::restoreOverrideCursor();
 }
 
-void View::toggleOrtho(bool on)
+void
+View::toggleOrtho(bool on)
 {
-    qDebug("View toggleOrtho()");
+    debug_message("View toggleOrtho()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     //TODO: finish this
     gscene->setProperty("ENABLE_ORTHO", on);
@@ -539,9 +583,10 @@ void View::toggleOrtho(bool on)
     QApplication::restoreOverrideCursor();
 }
 
-void View::togglePolar(bool on)
+void
+View::togglePolar(bool on)
 {
-    qDebug("View togglePolar()");
+    debug_message("View togglePolar()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     //TODO: finish this
     gscene->setProperty("ENABLE_POLAR", on);
@@ -549,9 +594,10 @@ void View::togglePolar(bool on)
     QApplication::restoreOverrideCursor();
 }
 
-void View::toggleQSnap(bool on)
+void
+View::toggleQSnap(bool on)
 {
-    qDebug("View toggleQSnap()");
+    debug_message("View toggleQSnap()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     qSnapToggle = on;
     gscene->setProperty("ENABLE_QSNAP", on);
@@ -562,9 +608,10 @@ void View::toggleQSnap(bool on)
 /**
  *
  */
-void View::toggleQTrack(bool on)
+void
+View::toggleQTrack(bool on)
 {
-    qDebug("View toggleQTrack()");
+    debug_message("View toggleQTrack()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     //TODO: finish this
     gscene->setProperty("ENABLE_QTRACK", on);
@@ -575,9 +622,10 @@ void View::toggleQTrack(bool on)
 /**
  *
  */
-void View::toggleLwt(bool on)
+void
+View::toggleLwt(bool on)
 {
-    qDebug("View toggleLwt()");
+    debug_message("View toggleLwt()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     gscene->setProperty("ENABLE_LWT", on);
     gscene->update();
@@ -587,9 +635,10 @@ void View::toggleLwt(bool on)
 /**
  *
  */
-void View::toggleReal(bool on)
+void
+View::toggleReal(bool on)
 {
-    qDebug("View toggleReal()");
+    debug_message("View toggleReal()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     gscene->setProperty("ENABLE_REAL", on);
     gscene->update();
@@ -612,7 +661,8 @@ bool View::isRealEnabled()
     return gscene->property("ENABLE_REAL").toBool();
 }
 
-void View::drawBackground(QPainter* painter, const QRectF& rect)
+void
+View::drawBackground(QPainter* painter, const QRectF& rect)
 {
     painter->fillRect(rect, backgroundBrush());
 
@@ -628,7 +678,8 @@ void View::drawBackground(QPainter* painter, const QRectF& rect)
     }
 }
 
-void View::drawForeground(QPainter* painter, const QRectF& rect)
+void
+View::drawForeground(QPainter* painter, const QRectF& rect)
 {
     //==================================================
     //Draw grip points for all selected objects
@@ -1111,7 +1162,8 @@ int View::roundToMultiple(bool roundUp, int numToRound, int multiple)
     return numToRound - remainder;
 }
 
-void View::updateMouseCoords(int x, int y)
+void
+View::updateMouseCoords(int x, int y)
 {
     viewMousePoint = QPoint(x, y);
     sceneMousePoint = mapToScene(viewMousePoint);
@@ -1121,7 +1173,8 @@ void View::updateMouseCoords(int x, int y)
     mainWin->statusbar->setMouseCoord(sceneMousePoint.x(), -sceneMousePoint.y());
 }
 
-void View::setCrossHairSize(quint8 percent)
+void
+View::setCrossHairSize(quint8 percent)
 {
     QSize size = qApp->screens()[0]->size();
     //NOTE: crosshairSize is in pixels and is a percentage of your screen width
@@ -1135,7 +1188,8 @@ void View::setCrossHairSize(quint8 percent)
     }
 }
 
-void View::setCornerButton()
+void
+View::setCornerButton()
 {
     int num = settings.display_scrollbar_widget_num;
     if (num) {
@@ -1159,15 +1213,17 @@ void View::setCornerButton()
     }
 }
 
-void View::cornerButtonClicked()
+void
+View::cornerButtonClicked()
 {
-    qDebug("Corner Button Clicked.");
+    debug_message("Corner Button Clicked.");
     mainWin->actionHash[settings.display_scrollbar_widget_num]->trigger();
 }
 
-void View::zoomIn()
+void
+View::zoomIn()
 {
-    qDebug("View zoomIn()");
+    debug_message("View zoomIn()");
     if (!allowZoomIn()) { return; }
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QPointF cntr = mapToScene(QPoint(width()/2,height()/2));
@@ -1178,9 +1234,10 @@ void View::zoomIn()
     QApplication::restoreOverrideCursor();
 }
 
-void View::zoomOut()
+void
+View::zoomOut()
 {
-    qDebug("View zoomOut()");
+    debug_message("View zoomOut()");
     if (!allowZoomOut()) { return; }
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QPointF cntr = mapToScene(QPoint(width()/2,height()/2));
@@ -1191,14 +1248,16 @@ void View::zoomOut()
     QApplication::restoreOverrideCursor();
 }
 
-void View::zoomWindow()
+void
+View::zoomWindow()
 {
     zoomWindowActive = true;
     selectingActive = false;
     clearSelection();
 }
 
-void View::zoomSelected()
+void
+View::zoomSelected()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
@@ -1217,7 +1276,8 @@ void View::zoomSelected()
     QApplication::restoreOverrideCursor();
 }
 
-void View::zoomExtents()
+void
+View::zoomExtents()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QRectF extents = gscene->itemsBoundingRect();
@@ -1230,52 +1290,60 @@ void View::zoomExtents()
     QApplication::restoreOverrideCursor();
 }
 
-void View::panRealTime()
+void
+View::panRealTime()
 {
     panningRealTimeActive = true;
 }
 
-void View::panPoint()
+void
+View::panPoint()
 {
     panningPointActive = true;
 }
 
-void View::panLeft()
+void
+View::panLeft()
 {
     horizontalScrollBar()->setValue(horizontalScrollBar()->value() + panDistance);
     updateMouseCoords(viewMousePoint.x(), viewMousePoint.y());
     gscene->update();
 }
 
-void View::panRight()
+void
+View::panRight()
 {
     horizontalScrollBar()->setValue(horizontalScrollBar()->value() - panDistance);
     updateMouseCoords(viewMousePoint.x(), viewMousePoint.y());
     gscene->update();
 }
 
-void View::panUp()
+void
+View::panUp()
 {
     verticalScrollBar()->setValue(verticalScrollBar()->value() + panDistance);
     updateMouseCoords(viewMousePoint.x(), viewMousePoint.y());
     gscene->update();
 }
 
-void View::panDown()
+void
+View::panDown()
 {
     verticalScrollBar()->setValue(verticalScrollBar()->value() - panDistance);
     updateMouseCoords(viewMousePoint.x(), viewMousePoint.y());
     gscene->update();
 }
 
-void View::selectAll()
+void
+View::selectAll()
 {
     QPainterPath allPath;
     allPath.addRect(gscene->sceneRect());
     // gscene->setSelectionArea(allPath, Qt::IntersectsItemShape, this->transform());
 }
 
-void View::selectionChanged()
+void
+View::selectionChanged()
 {
     if (mainWin->dockPropEdit->isVisible())
     {
@@ -1283,7 +1351,8 @@ void View::selectionChanged()
     }
 }
 
-void View::mouseDoubleClickEvent(QMouseEvent* event)
+void
+View::mouseDoubleClickEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)
     {
@@ -1295,7 +1364,8 @@ void View::mouseDoubleClickEvent(QMouseEvent* event)
     }
 }
 
-void View::mousePressEvent(QMouseEvent* event)
+void
+View::mousePressEvent(QMouseEvent* event)
 {
     updateMouseCoords(event->position().x(), event->position().y());
     if (event->button() == Qt::LeftButton)
@@ -1481,7 +1551,8 @@ void View::mousePressEvent(QMouseEvent* event)
     gscene->update();
 }
 
-void View::panStart(const QPoint& point)
+void
+View::panStart(const QPoint& point)
 {
     recalculateLimits();
 
@@ -1492,7 +1563,8 @@ void View::panStart(const QPoint& point)
     panStartY = point.y();
 }
 
-void View::recalculateLimits()
+void
+View::recalculateLimits()
 {
     //NOTE: Increase the sceneRect limits if the point we want to go to lies outside of sceneRect's limits
     //      If the sceneRect limits aren't increased, you cannot pan past its limits
@@ -1508,7 +1580,8 @@ void View::recalculateLimits()
     }
 }
 
-void View::centerAt(const QPointF& centerPoint)
+void
+View::centerAt(const QPointF& centerPoint)
 {
     //centerOn also updates the scrollbars, which shifts things out of wack o_O
     centerOn(centerPoint);
@@ -1518,7 +1591,8 @@ void View::centerAt(const QPointF& centerPoint)
     centerOn(newCenter);
 }
 
-void View::alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& viewPoint)
+void
+View::alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& viewPoint)
 {
     QPointF viewCenter = center();
     QPointF pointBefore = scenePoint;
@@ -1531,7 +1605,8 @@ void View::alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint&
     centerOn(newCenter);
 }
 
-void View::mouseMoveEvent(QMouseEvent* event)
+void
+View::mouseMoveEvent(QMouseEvent* event)
 {
     updateMouseCoords(event->position().x(), event->position().y());
     movePoint = event->pos();
@@ -1636,7 +1711,8 @@ void View::mouseMoveEvent(QMouseEvent* event)
     gscene->update();
 }
 
-void View::mouseReleaseEvent(QMouseEvent* event)
+void
+View::mouseReleaseEvent(QMouseEvent* event)
 {
     updateMouseCoords(event->position().x(), event->position().y());
     if (event->button() == Qt::LeftButton)
@@ -1662,13 +1738,13 @@ void View::mouseReleaseEvent(QMouseEvent* event)
     }
     if (event->button() == Qt::XButton1)
     {
-        qDebug("XButton1");
+        debug_message("XButton1");
         mainWin->undo(); //TODO: Make this customizable
         event->accept();
     }
     if (event->button() == Qt::XButton2)
     {
-        qDebug("XButton2");
+        debug_message("XButton2");
         mainWin->redo(); //TODO: Make this customizable
         event->accept();
     }
@@ -1683,9 +1759,8 @@ bool View::allowZoomIn()
     EmbReal maxHeight = corner.y() - origin.y();
 
     EmbReal zoomInLimit = 0.0000000001;
-    if (std::min(maxWidth, maxHeight) < zoomInLimit)
-    {
-        qDebug("ZoomIn limit reached. (limit=%.10f)", zoomInLimit);
+    if (std::min(maxWidth, maxHeight) < zoomInLimit) {
+        debug_message("ZoomIn limit reached. (limit=" + std::to_string(zoomInLimit) + ")");
         return false;
     }
 
@@ -1700,16 +1775,16 @@ bool View::allowZoomOut()
     EmbReal maxHeight = corner.y() - origin.y();
 
     EmbReal zoomOutLimit = 10000000000000.0;
-    if (std::max(maxWidth, maxHeight) > zoomOutLimit)
-    {
-        qDebug("ZoomOut limit reached. (limit=%.1f)", zoomOutLimit);
+    if (std::max(maxWidth, maxHeight) > zoomOutLimit) {
+        debug_message("ZoomOut limit reached. (limit" + std::to_string(zoomOutLimit) + ")");
         return false;
     }
 
     return true;
 }
 
-void View::wheelEvent(QWheelEvent* event)
+void
+View::wheelEvent(QWheelEvent* event)
 {
     /*
     int zoomDir = event->delta();
@@ -1729,7 +1804,8 @@ void View::wheelEvent(QWheelEvent* event)
     */
 }
 
-void View::zoomToPoint(const QPoint& mousePoint, int zoomDir)
+void
+View::zoomToPoint(const QPoint& mousePoint, int zoomDir)
 {
     QPointF pointBeforeScale(mapToScene(mousePoint));
 
@@ -1764,7 +1840,8 @@ void View::zoomToPoint(const QPoint& mousePoint, int zoomDir)
     gscene->update();
 }
 
-void View::contextMenuEvent(QContextMenuEvent* event)
+void
+View::contextMenuEvent(QContextMenuEvent* event)
 {
     QString iconTheme = settings.general_icon_theme;
 
@@ -1840,9 +1917,10 @@ void View::contextMenuEvent(QContextMenuEvent* event)
     menu.exec(event->globalPos());
 }
 
-void View::deletePressed()
+void
+View::deletePressed()
 {
-    qDebug("View deletePressed()");
+    debug_message("View deletePressed()");
     if (pastingActive)
     {
         gscene->removeItem(pasteObjectItemGroup);
@@ -1856,9 +1934,10 @@ void View::deletePressed()
     deleteSelected();
 }
 
-void View::escapePressed()
+void
+View::escapePressed()
 {
-    qDebug("View escapePressed()");
+    debug_message("View escapePressed()");
     if (pastingActive)
     {
         gscene->removeItem(pasteObjectItemGroup);
@@ -1872,7 +1951,8 @@ void View::escapePressed()
     else clearSelection();
 }
 
-void View::startGripping(BaseObject* obj)
+void
+View::startGripping(BaseObject* obj)
 {
     if (!obj) return;
     grippingActive = true;
@@ -1882,7 +1962,8 @@ void View::startGripping(BaseObject* obj)
     gripBaseObj->setObjectRubberMode(OBJ_RUBBER_GRIP);
 }
 
-void View::stopGripping(bool accept)
+void
+View::stopGripping(bool accept)
 {
     grippingActive = false;
     if (gripBaseObj)
@@ -1900,12 +1981,17 @@ void View::stopGripping(bool accept)
     sceneGripPoint = sceneRect().topLeft();
 }
 
-void View::clearSelection()
+void
+View::clearSelection()
 {
     gscene->clearSelection();
 }
 
-void View::deleteSelected()
+/**
+ * .
+ */
+void
+View::deleteSelected()
 {
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
@@ -1928,7 +2014,11 @@ void View::deleteSelected()
         undoStack->endMacro();
 }
 
-void View::cut()
+/**
+ * .
+ */
+void
+View::cut()
 {
     if (gscene->selectedItems().isEmpty())
     {
@@ -1942,7 +2032,11 @@ void View::cut()
     undoStack->endMacro();
 }
 
-void View::copy()
+/**
+ * .
+ */
+void
+View::copy()
 {
     if (gscene->selectedItems().isEmpty())
     {
@@ -1954,7 +2048,11 @@ void View::copy()
     clearSelection();
 }
 
-void View::copySelected()
+/**
+ * .
+ */
+void
+View::copySelected()
 {
     QList<QGraphicsItem*> selectedList = gscene->selectedItems();
 
@@ -1968,7 +2066,11 @@ void View::copySelected()
     mainWin->cutCopyObjectList = createObjectList(selectedList);
 }
 
-void View::paste()
+/**
+ * .
+ */
+void
+View::paste()
 {
     if (pastingActive)
     {
@@ -1985,20 +2087,22 @@ void View::paste()
     mainWin->cutCopyObjectList = createObjectList(mainWin->cutCopyObjectList);
 }
 
-QList<QGraphicsItem*> View::createObjectList(QList<QGraphicsItem*> list)
+/**
+ * .
+ */
+QList<QGraphicsItem*>
+View::createObjectList(QList<QGraphicsItem*> list)
 {
     QList<QGraphicsItem*> copyList;
 
-    for(int i = 0; i < list.size(); i++)
-    {
+    for (int i = 0; i < list.size(); i++) {
         QGraphicsItem* item = list.at(i);
         if (!item)
             continue;
 
         int objType = item->data(OBJ_TYPE).toInt();
 
-        if (objType == OBJ_TYPE_ARC)
-        {
+        if (objType == OBJ_TYPE_ARC) {
             ArcObject* arcObj = static_cast<ArcObject*>(item);
             if (arcObj)
             {
@@ -2006,12 +2110,10 @@ QList<QGraphicsItem*> View::createObjectList(QList<QGraphicsItem*> list)
                 copyList.append(copyArcObj);
             }
         }
-        else if (objType == OBJ_TYPE_BLOCK)
-        {
+        else if (objType == OBJ_TYPE_BLOCK) {
             //TODO: cut/copy blocks
         }
-        else if (objType == OBJ_TYPE_CIRCLE)
-        {
+        else if (objType == OBJ_TYPE_CIRCLE) {
             CircleObject* circObj = static_cast<CircleObject*>(item);
             if (circObj)
             {
@@ -2019,12 +2121,10 @@ QList<QGraphicsItem*> View::createObjectList(QList<QGraphicsItem*> list)
                 copyList.append(copyCircObj);
             }
         }
-        else if (objType == OBJ_TYPE_DIMALIGNED)
-        {
+        else if (objType == OBJ_TYPE_DIMALIGNED) {
             //TODO: cut/copy aligned dimensions
         }
-        else if (objType == OBJ_TYPE_DIMANGULAR)
-        {
+        else if (objType == OBJ_TYPE_DIMANGULAR) {
             //TODO: cut/copy angular dimensions
         }
         else if (objType == OBJ_TYPE_DIMARCLENGTH)
@@ -2149,21 +2249,24 @@ QList<QGraphicsItem*> View::createObjectList(QList<QGraphicsItem*> list)
     return copyList;
 }
 
-void View::repeatAction()
+void
+View::repeatAction()
 {
     mainWin->prompt->endCommand();
     mainWin->prompt->setCurrentText(mainWin->prompt->lastCommand());
     mainWin->prompt->processInput();
 }
 
-void View::moveAction()
+void
+View::moveAction()
 {
     mainWin->prompt->endCommand();
     mainWin->prompt->setCurrentText("move");
     mainWin->prompt->processInput();
 }
 
-void View::moveSelected(EmbReal dx, EmbReal dy)
+void
+View::moveSelected(EmbReal dx, EmbReal dy)
 {
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
@@ -2185,14 +2288,16 @@ void View::moveSelected(EmbReal dx, EmbReal dy)
     gscene->clearSelection();
 }
 
-void View::rotateAction()
+void
+View::rotateAction()
 {
     mainWin->prompt->endCommand();
     mainWin->prompt->setCurrentText("rotate");
     mainWin->prompt->processInput();
 }
 
-void View::rotateSelected(EmbReal x, EmbReal y, EmbReal rot)
+void
+View::rotateSelected(EmbReal x, EmbReal y, EmbReal rot)
 {
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
@@ -2214,7 +2319,8 @@ void View::rotateSelected(EmbReal x, EmbReal y, EmbReal rot)
     gscene->clearSelection();
 }
 
-void View::mirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
+void
+View::mirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 {
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
@@ -2236,14 +2342,16 @@ void View::mirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
     gscene->clearSelection();
 }
 
-void View::scaleAction()
+void
+View::scaleAction()
 {
     mainWin->prompt->endCommand();
     mainWin->prompt->setCurrentText("scale");
     mainWin->prompt->processInput();
 }
 
-void View::scaleSelected(EmbReal x, EmbReal y, EmbReal factor)
+void
+View::scaleSelected(EmbReal x, EmbReal y, EmbReal factor)
 {
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
@@ -2270,7 +2378,8 @@ int View::numSelected()
     return gscene->selectedItems().size();
 }
 
-void View::showScrollBars(bool val)
+void
+View::showScrollBars(bool val)
 {
     if (val)
     {

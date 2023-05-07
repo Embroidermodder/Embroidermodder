@@ -31,7 +31,7 @@ typedef struct Parameter_ {
 
 MainWindow* _mainWin = 0;
 std::vector<Action> action_table;
-QStringList action_labels;
+std::unordered_map<std::string, std::string> config;
 
 /**
  * .
@@ -64,6 +64,26 @@ read_string_setting(toml_table_t *table, const char *key)
 }
 
 /**
+ * .
+ */
+std::vector<std::string>
+read_string_list_setting(toml_table_t *table, const char *key)
+{
+    std::vector<std::string> str_list;
+    toml_array_t* array = toml_array_in(table, key);
+    for (int i=0; ; i++) {
+        toml_datum_t str = toml_string_at(array, i);
+        if (!str.ok) {
+            break;
+        }
+        std::string s(str.u.s);
+        str_list.push_back(s);
+        free(str.u.s);
+    }
+    return str_list;
+}
+
+/**
  * \brief Read the settings from file which aren't editable by the user.
  * These files need to be placed in the install folder.
  */
@@ -85,16 +105,21 @@ read_settings(const char *settings_file)
         return 0;
     }
 
+    std::vector<std::string> action_labels;
     std::string token;
     std::string actions_ = read_string_setting(settings_toml, "actions");
     std::stringstream input_stringstream(actions_);
     while (std::getline(input_stringstream, token, ' ')) {
-        action_labels << QString::fromStdString(token);
+        action_labels.push_back(token);
     }
+    /*
+    std::vector<std::string> action_labels =
+        read_string_list_setting(settings_toml, "actions");
+    */
 
     for (int i=0; i<action_labels.size(); i++) {
         Action action;
-        std::string label = ("ACTION_" + action_labels[i]).toStdString();
+        std::string label = "ACTION_" + action_labels[i];
         toml_table_t *table = toml_table_in(settings_toml, label.c_str());
 
         toml_datum_t index = toml_int_in(table, "index");
@@ -154,7 +179,7 @@ MainWindow* mainWin()
 MainWindow::MainWindow() : QMainWindow(0)
 {
     QString appDir = qApp->applicationDirPath();
-    QString fname_ = appDir + "/config.ini";
+    QString fname_ = appDir + "/config.toml";
     read_settings(fname_.toStdString().c_str());
     readSettings();
 
@@ -358,7 +383,7 @@ MainWindow::MainWindow() : QMainWindow(0)
  */
 MainWindow::~MainWindow()
 {
-    qDebug("MainWindow::Destructor()");
+    debug_message("MainWindow::Destructor()");
 
     //Prevent memory leaks by deleting any unpasted objects
     qDeleteAll(cutCopyObjectList.begin(), cutCopyObjectList.end());
@@ -386,7 +411,7 @@ MainWindow::createAllActions()
         QIcon icon = create_icon(QString::fromStdString(action.icon));
         QAction *ACTION = new QAction(icon, QString::fromStdString(action.tooltip), this);
         ACTION->setStatusTip(QString::fromStdString(action.statustip));
-        ACTION->setObjectName(action.icon);
+        ACTION->setObjectName(QString::fromStdString(action.icon));
         if (action.shortcut != "") {
             ACTION->setShortcut(
                 QKeySequence(QString::fromStdString(action.shortcut))
@@ -514,45 +539,147 @@ MainWindow::actuator(std::string line)
         about();
         return "";
     }
-    if (command.substr(0,5) == "alert") {
-        prompt->alert(QString::fromStdString(command.substr(5)));
+
+    if (command == "add") {
+        /*
+        if (command == "arc") {
+            AddArc();
+            return "";
+        }
+        if (command == "circle") {
+            AddCircle();
+            return "";
+        }
+        if (command == "ellipse") {
+            AddEllipse();
+            return "";
+        }
+        if (command == "point") {
+            AddPoint();
+            return "";
+        }
+        if (command == "regular-polygon") {
+            AddRegularPolygon();
+            return "";
+        }
+        if (command == "polygon") {
+            AddPolygon();
+            return "";
+        }
+        if (command == "polyline") {
+            AddPolyline();
+            return "";
+        }
+        if (command == "path") {
+            AddPath();
+            return "";
+        }
+        if (command == "horizontal-dimension") {
+            AddHorizontalDimension();
+            return "";
+        }
+        if (command == "vertical-dimension") {
+            AddVerticalDimension();
+            return "";
+        }
+        if (command == "image") {
+            AddImage();
+            return "";
+        }
+        if (command == "dim-leader") {
+            AddDimLeader();
+            return "";
+        }
+        if (command == "text-multi") {
+            AddTextMulti();
+            return "";
+        }
+        if (command == "text-single") {
+            AddTextSingle();
+            return "";
+        }
+        if (command == "infinite-line") {
+            AddInfiniteLine();
+            return "";
+        }
+        if (command == "ray") {
+            AddRay();
+            return "";
+        }
+        if (command == "line") {
+            AddLine();
+            return "";
+        }
+        if (command == "triangle") {
+            AddTriangle();
+            return "";
+        }
+        if (command == "rectangle") {
+            AddRectangle();
+            return "";
+        }
+        if (command == "rounded-rectangle") {
+            AddRoundedRectangle();
+            return "";
+        }
+        */
         return "";
     }
+
+    if (command == "alert") {
+        prompt->alert(QString::fromStdString(line.substr(5)));
+        return "";
+    }
+
     if (command == "day") {
         dayVision();
         return "";
     }
+
     if (command == "donothing") {
-        dayVision();
         return "";
     }
+
     if (command == "end") {
         nativeEndCommand();
         return "";
     }
+
+    if (command == "exit") {
+        nativeExit();
+        return "";
+    }
+
     if (command == "help") {
         help();
         return "";
     }
+
     if (command == "init") {
         nativeInitCommand();
         return "";
     }
+
     if (command == "new") {
         nativeClearSelection();
         newFile();
         return "";
     }
+
     if (command == "night") {
         nightVision();
         return "";
     }
+
     if (command == "platform") {
         return "<br/>" + platformString().toStdString();
     }
-    if (command == "version") {
-        return "<br/>2.0.0-alpha";
+
+    if (command == "redo") {
+        redo();
+        return "";
     }
+
     if (command == "selectall") {
         qDebug("selectAll()");
         View* gview = activeView();
@@ -561,90 +688,110 @@ MainWindow::actuator(std::string line)
         }
         return "";
     }
+
     if (command == "tipoftheday") {
         tipOfTheDay();
         return "";
     }
-    if (command == "redo") {
-        redo();
-        return "";
-    }
+
+
     if (command == "undo") {
         undo();
         return "";
     }
-    if (command == "windowcascade") {
-        mdiArea->cascade();
-        return "";
+
+    if (command == "window") {
+        if (list.size() < 1) {
+            return "</br>window requires an argument.";
+        }
+        command = list[0];
+        if (command == "cascade") {
+            mdiArea->cascade();
+            return "";
+        }
+        if (command == "close") {
+            onCloseWindow();
+            return "";
+        }
+        if (command == "closeall") {
+            mdiArea->closeAllSubWindows();
+            return "";
+        }
+        if (command == "tile") {
+            mdiArea->tile();
+            return "";
+        }
+        if (command == "next") {
+            mdiArea->activateNextSubWindow();
+            return "";
+        }
+        if (command == "previous") {
+            mdiArea->activatePreviousSubWindow();
+            return "";
+        }
+        return "</br>window argument not recognised.";
     }
-    if (command == "windowclose") {
-        onCloseWindow();
-        return "";
+
+    if (command == "zoom") {
+        if (list.size() < 1) {
+            return "</br>zoom requires an argument.";
+        }
+        command = list[0];
+        if (command == "extents") {
+            zoomExtents();
+            return "";
+        }
+        if (command == "in") {
+            zoomIn();
+            return "";
+        }
+        if (command == "out") {
+            zoomOut();
+            return "";
+        }
+        return "</br>zoom argument not recognised.";
     }
-    if (command == "windowcloseall") {
-        mdiArea->closeAllSubWindows();
-        return "";
-    }
-    if (command == "windowtile") {
-        mdiArea->tile();
-        return "";
-    }
-    if (command == "windownext") {
-        mdiArea->activateNextSubWindow();
-        return "";
-    }
-    if (command == "windowprevious") {
-        mdiArea->activatePreviousSubWindow();
-        return "";
-    }
-    if (command == "zoomextents") {
-        zoomExtents();
-        return "";
-    }
-    if (command == "zoomin") {
-        zoomIn();
-        return "";
-    }
-    if (command == "zoomout") {
-        zoomOut();
-        return "";
-    }
+
     if (command == "open") {
         openFile();
         return "";
     }
-    if (command == "exit") {
-        nativeExit();
-        return "";
-    }
-    if (command == "icon16") {
-        qDebug("icon16()");
-        iconResize(16);
-        return "";
-    }
-    if (command == "icon24") {
-        qDebug("icon24()");
-        iconResize(24);
-        return "";
-    }
-    if (command == "icon32") {
-        qDebug("icon32()");
-        iconResize(32);
-        return "";
-    }
-    if (command == "icon48") {
-        qDebug("icon48()");
-        iconResize(48);
-        return "";
-    }
-    if (command == "icon64") {
-        qDebug("icon64()");
-        iconResize(64);
-        return "";
-    }
-    if (command == "icon128") {
-        qDebug("icon128()");
-        iconResize(128);
+
+    if (command == "icon") {
+        if (list.size() < 1) {
+            return "icon requires an argument.";
+        }
+        command = list[0];
+        if (command == "16") {
+            qDebug("icon16()");
+            iconResize(16);
+            return "";
+        }
+        if (command == "24") {
+            qDebug("icon24()");
+            iconResize(24);
+            return "";
+        }
+        if (command == "32") {
+            qDebug("icon32()");
+            iconResize(32);
+            return "";
+        }
+        if (command == "48") {
+            qDebug("icon48()");
+            iconResize(48);
+            return "";
+        }
+        if (command == "64") {
+            qDebug("icon64()");
+            iconResize(64);
+            return "";
+        }
+        if (command == "128") {
+            qDebug("icon128()");
+            iconResize(128);
+            return "";
+        }
         return "";
     }
 
@@ -783,6 +930,17 @@ MainWindow::actuator(std::string line)
             settings.text_style_overline = true;
             return "";
         }
+        /*
+        if (command == "PromptRapidFire") {
+            nativeEnablePromptRapidFire();
+            return "";
+        }
+        if (command == "EnableMoveRapidFire") {
+            nativeEnableMoveRapidFire();
+            return "";
+        }
+        */
+        return "";
     }
 
     if (command == "disable") {
@@ -813,271 +971,193 @@ MainWindow::actuator(std::string line)
             settings.text_style_overline = false;
             return "";
         }
+        /*
+        if (command == "PromptRapidFire") {
+            nativeDisablePromptRapidFire();
+            return "";
+        }
+        if (command == "MoveRapidFire" {
+            nativeDisableMoveRapidFire();
+            return "";
+        }
+        */
+        return "";
     }
+
+    if (command == "version") {
+        return "<br/>2.0.0-alpha";
+    }
+
     /*
-    if (command == "num selected") {
-        output = nativeNumSelected();
+    if (command == "numselected") {
+        return itos(NumSelected());
+    }
+
+    if (command == "selectall") {
+        SelectAll();
         return "";
     }
-    if (command == "select all") {
-        nativeSelectAll();
-        return "";
-    }
+
     if (command == "add to selection") {
         AddToSelection();
         return "";
     }
+
     if (command == "clear selection") {
         nativeClearSelection();
         return "";
     }
+
     if (command == "delete selection") {
         nativeDeleteSelected();
         return "";
     }
+
     if (command == "qsnapx") {
         return nativeQSnapX();
     }
-    if (command == "qsnapY") {
+
+    if (command == "qsnapy") {
         return nativeQSnapY();
     }
+
     if (command == "mousex") {
         return nativeMouseX();
     }
+
     if (command == "mousey") {
         return nativeMouseY();
     }
+
     if (command == "debug") {
         scriptValDebug();
         return "";
     }
+
     if (command == "error") {
         scriptValError();
         return "";
     }
+
     if (command == "todo") {
         Todo();
         return "";
     }
+
     if (command == "alert") {
         Alert();
         return "";
     }
+
     if (command == "blinkPrompt") {
         BlinkPrompt();
         return "";
     }
+
     if (command == "setPromptPrefix") {
         SetPromptPrefix();
         return "";
     }
+
     if (command == "appendPromptHistory") {
         AppendPromptHistory();
         return "";
     }
-    if (command == "enablePromptRapidFire") {
-        EnablePromptRapidFire();
-        return "";
-    }
-    if (command == "disablePromptRapidFire") {
-        DisablePromptRapidFire();
-        return "";
-    }
-    if (command == "enableMoveRapidFire") {
-        EnableMoveRapidFire();
-        return "";
-    }
-    if (command == "disableMoveRapidFire") {
-        DisableMoveRapidFire();
-        return "";
-    }
+
     if (command == "initCommand") {
         InitCommand();
         return "";
     }
+
     if (command == "endCommand") {
         EndCommand();
         return "";
     }
+
     if (command == "newFile") {
         NewFile();
         return "";
     }
+
     if (command == "openFile") {
         OpenFile();
         return "";
     }
+
     if (command == "exit") {
         Exit();
         return "";
     }
+
     if (command == "help") {
         Help();
         return "";
     }
+
     if (command == "about") {
         About();
         return "";
     }
-    if (command == "tipOfTheDay") {
-        TipOfTheDay();
-        return "";
-    }
-    if (command == "windowCascade") {
-        WindowCascade();
-        return "";
-    }
-    if (command == "windowTile") {
-        WindowTile();
-        return "";
-    }
-    if (command == "windowClose") {
-        WindowClose();
-        return "";
-    }
-    if (command == "windowCloseAll") {
-        WindowCloseAll();
-        return "";
-    }
-    if (command == "windowNext") {
-        WindowNext();
-        return "";
-    }
-    if (command == "windowPrevious") {
-        WindowPrevious();
-        return "";
-    }
+
     if (command == "platformString") {
         PlatformString();
         return "";
     }
+
     if (command == "messageBox") {
         MessageBox();
         return "";
     }
+
     if (command == "isInt") {
         IsInt();
         return "";
     }
-    if (command == "undo") {
-        undo();
-        return "";
-    }
-    if (command == "redo") {
-        Redo();
-        return "";
-    }
-    if (command == "icon16") {
-        icon16();
-        return "";
-    }
-    if (command == "icon24") {
-        icon24();
-        return "";
-    }
-    if (command == "icon32") {
-        icon32();
-        return "";
-    }
-    if (command == "icon48") {
-        Icon48();
-        return "";
-    }
-    if (command == "icon64") {
-        Icon64();
-        return "";
-    }
-    if (command == "icon128") {
-        Icon128();
-        return "";
-    }
-    */
-    /*
-    if (command == "zoomIn") {
-        ZoomIn();
-    }
-    if (command == "zoomOut") {
-        ZoomOut();
-    }
-    if (command == "zoomExtents") {
-        ZoomExtents();
-    }
+
     if (command == "printArea") {
         PrintArea();
-        return "";
-    }
-    if (command == "dayVision") {
-        DayVision();
-        return "";
-    }
-    if (command == "nightVision") {
-        NightVision();
         return "";
     }
     if (command == "setBackgroundColor") {
         SetBackgroundColor();
         return "";
     }
+
     if (command == "setCrossHairColor") {
         SetCrossHairColor();
         return "";
     }
+
     if (command == "setGridColor") {
         SetGridColor();
         return "";
     }
-    if (command == "setTextFont") {
-        SetTextFont();
-        return "";
-    }
-    if (command == "setTextSize") {
-        SetTextSize();
-        return "";
-    }
-    if (command == "setTextAngle") {
-        SetTextAngle();
-        return "";
-    }
-    if (command == "setTextBold") {
-        SetTextBold();
-        return "";
-    }
-    if (command == "setTextItalic") {
-        SetTextItalic();
-        return "";
-    }
-    if (command == "setTextUnderline") {
-        SetTextUnderline();
-        return "";
-    }
-    if (command == "setTextStrikeOut") {
-        SetTextStrikeOut();
-        return "";
-    }
-    if (command == "setTextOverline") {
-        SetTextOverline();
-        return "";
-    }
+
     if (command == "previewOn") {
         PreviewOn();
         return "";
     }
+
     if (command == "previewOff") 
         PreviewOff();
         return "";
     }
+
     if (command == "vulcanize") {
         Vulcanize();
         return "";
     }
+
     if (command == "allowRubber") {
         AllowRubber();
         return "";
     }
+
     if (command == "setRubberMode") {
         SetRubberMode();
         return "";
     }
+
     if (command == "setRubberPoint") {
         SetRubberPoint();
         return "";
@@ -1098,196 +1178,89 @@ MainWindow::actuator(std::string line)
         SpareRubber();
         return "";
     }
-    if (command == "addTextMulti") {
-        AddTextMulti();
-        return "";
-    }
-    if (command == "addTextSingle") {
-        AddTextSingle();
-        return "";
-    }
-    if (command == "addInfiniteLine") {
-        AddInfiniteLine();
-        return "";
-    }
-    if (command == "addRay") {
-        AddRay();
-        return "";
-    }
-    if (command == "addLine") {
-        AddLine();
-        return "";
-    }
-    if (command == "addTriangle") {
-        AddTriangle();
-        return "";
-    }
-    if (command == "addRectangle") {
-        AddRectangle();
-        return "";
-    }
-    if (command == "addRoundedRectangle") {
-        AddRoundedRectangle();
-        return "";
-    }
-    if (command == "addArc") {
-        AddArc();
-        return "";
-    }
-    if (command == "addCircle") {
-        AddCircle();
-        return "";
-    }
-    if (command == "addEllipse") {
-        AddEllipse();
-        return "";
-    }
-    if (command == "addPoint") {
-        AddPoint();
-        return "";
-    }
-    if (command == "addRegularPolygon") {
-        AddRegularPolygon();
-        return "";
-    }
-    if (command == "addPolygon") {
-        AddPolygon();
-        return "";
-    }
-    if (command == "addPolyline") {
-        AddPolyline();
-        return "";
-    }
-    if (command == "addPath") {
-        AddPath();
-        return "";
-    }
-    if (command == "addHorizontalDimension") {
-        AddHorizontalDimension();
-        return "";
-    }
-    if (command == "addVerticalDimension") {
-        AddVerticalDimension();
-        return "";
-    }
-    if (command == "addImage") {
-        AddImage();
-        return "";
-    }
-    if (command == "addDimLeader") {
-        AddDimLeader();
-        return "";
-    }
+    
     if (command == "setCursorShape") {
         SetCursorShape();
         return "";
     }
+
     if (command == "calculateAngle") {
         CalculateAngle();
         return "";
     }
+
     if (command == "calculateDistance") {
         CalculateDistance();
         return "";
     }
+
     if (command == "perpendicularDistance") {
         PerpendicularDistance();
         return "";
     }
-    if (command == "numSelected") {
-        NumSelected();
-        return "";
-    }
-    if (command == "selectAll") {
-        SelectAll();
-        return "";
-    }
+
     if (command == "addToSelection") {
         scriptValAddToSelection();
         return "";
     }
+
     if (command == "clearSelection") {
         scriptValClearSelection();
         return "";
     }
+
     if (command == "deleteSelected") {
         scriptValDeleteSelected();
         return "";
     }
+
     if (command == "cutSelected") {
         scriptValCutSelected);
         return "";
     }
+
     if (command == "copySelected") {
         scriptValCopySelected);
         return "";
     }
+
     if (command == "pasteSelected") {
         scriptValPasteSelected();
         return "";
     }
+
     if (command == "moveSelected") {
         scriptValMoveSelected();
         return "";
     }
+
     if (command == "scaleSelected") {
         scriptValScaleSelected();
         return "";
     }
+
     if (command == "rotateSelected") {
         scriptValRotateSelected();
         return "";
     }
+
     if (command == "mirrorSelected") {
         scriptValMirrorSelected();
         return "";
     }
-    if (command == "qsnapX") {
-        scriptValQSnapX();
-        return "";
-    }
-    if (command == "qsnapY") {
-        scriptValQSnapY();
-        return "";
-    }
-    if (command == "mouseX") {
-        scriptValMouseX();
-        return "";
-    }
-    if (command == "mouseY") {
-        scriptValMouseY();
-        return "";
-    }
+
     if (command == "include") {
         Include();
         return "";
     }
-    if (command == "Alert") {
-        nativeAlert(args[0]);
-        return "";
-    }
+
     if (command == "BlinkPrompt") {
         nativeBlinkPrompt();
         return "";
     }
+
     if (command == "SetPromptPrefix") {
         setPromptPrefix(args[0]);
-        return "";
-    }
-    if (command == "EnablePromptRapidFire" {
-        nativeEnablePromptRapidFire();
-        return "";
-    }
-    if (command == "DisablePromptRapidFire" {
-        nativeDisablePromptRapidFire();
-        return "";
-    }
-    if (command == "EnableMoveRapidFire") {
-        nativeEnableMoveRapidFire();
-        return "";
-    }
-    if (command == "DisableMoveRapidFire" {
-        nativeDisableMoveRapidFire();
         return "";
     }
     */
@@ -3098,7 +3071,7 @@ circle_main(void)
     global.y2 = NaN;
     global.x3 = NaN;
     global.y3 = NaN;
-    setPromptPrefix(qsTr("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
+    setPromptPrefix(tr("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
 }
 
 /**
@@ -3117,7 +3090,7 @@ circle_click(float x, float y)
             setRubberMode("CIRCLE_1P_RAD");
             setRubberPoint("CIRCLE_CENTER", global.cx, global.cy);
             appendPromptHistory();
-            setPromptPrefix(qsTr("Specify radius of circle or [Diameter]: "));
+            setPromptPrefix(tr("Specify radius of circle or [Diameter]: "));
         }
         else {
             global.x2 = x;
@@ -3130,7 +3103,7 @@ circle_click(float x, float y)
     }
     else if (global.mode == global.mode_1P_DIA) {
         if (std::isnan(global.x1)) {
-            error("CIRCLE", qsTr("This should never happen."));
+            error("CIRCLE", tr("This should never happen."));
         }
         else {
             global.x2 = x;
@@ -3149,7 +3122,7 @@ circle_click(float x, float y)
             setRubberMode("CIRCLE_2P");
             setRubberPoint("CIRCLE_TAN1", global.x1, global.y1);
             appendPromptHistory();
-            setPromptPrefix(qsTr("Specify second end point of circle's diameter: "));
+            setPromptPrefix(tr("Specify second end point of circle's diameter: "));
         }
         else if (std::isnan(global.x2)) {
             global.x2 = x;
@@ -3161,7 +3134,7 @@ circle_click(float x, float y)
         }
         else
         {
-            error("CIRCLE", qsTr("This should never happen."));
+            error("CIRCLE", tr("This should never happen."));
         }
     }
     else if (global.mode == global.mode_3P)
@@ -3171,7 +3144,7 @@ circle_click(float x, float y)
             global.x1 = x;
             global.y1 = y;
             appendPromptHistory();
-            setPromptPrefix(qsTr("Specify second point on circle: "));
+            setPromptPrefix(tr("Specify second point on circle: "));
         }
         else if (std::isnan(global.x2))
         {
@@ -3182,7 +3155,7 @@ circle_click(float x, float y)
             setRubberPoint("CIRCLE_TAN1", global.x1, global.y1);
             setRubberPoint("CIRCLE_TAN2", global.x2, global.y2);
             appendPromptHistory();
-            setPromptPrefix(qsTr("Specify third point on circle: "));
+            setPromptPrefix(tr("Specify third point on circle: "));
         }
         else if (std::isnan(global.x3))
         {
@@ -3195,7 +3168,7 @@ circle_click(float x, float y)
         }
         else
         {
-            error("CIRCLE", qsTr("This should never happen."));
+            error("CIRCLE", tr("This should never happen."));
         }
     }
     else if (global.mode == global.mode_TTR)
@@ -3205,21 +3178,21 @@ circle_click(float x, float y)
             global.x1 = x;
             global.y1 = y;
             appendPromptHistory();
-            setPromptPrefix(qsTr("Specify point on object for second tangent of circle: "));
+            setPromptPrefix(tr("Specify point on object for second tangent of circle: "));
         }
         else if (std::isnan(global.x2))
         {
             global.x2 = x;
             global.y2 = y;
             appendPromptHistory();
-            setPromptPrefix(qsTr("Specify radius of circle: "));
+            setPromptPrefix(tr("Specify radius of circle: "));
         }
         else if (std::isnan(global.x3))
         {
             global.x3 = x;
             global.y3 = y;
             appendPromptHistory();
-            setPromptPrefix(qsTr("Specify second point: "));
+            setPromptPrefix(tr("Specify second point: "));
         }
         else
         {
@@ -3246,27 +3219,27 @@ circle_prompt(std::string str)
     if (global.mode == global.mode_1P_RAD) {
         if (std::isnan(global.x1)) {
             if (str == "2P") {
-                // TODO: Probably should add additional qsTr calls here.
+                // TODO: Probably should add additional tr calls here.
                 global.mode = global.mode_2P;
-                setPromptPrefix(qsTr("Specify first end point of circle's diameter: "));
+                setPromptPrefix(tr("Specify first end point of circle's diameter: "));
             }
             else if (str == "3P") {
-                //TODO: Probably should add additional qsTr calls here.
+                //TODO: Probably should add additional tr calls here.
                 global.mode = global.mode_3P;
-                setPromptPrefix(qsTr("Specify first point of circle: "));
+                setPromptPrefix(tr("Specify first point of circle: "));
             }
-            else if (str == "T" || str == "TTR") //TODO: Probably should add additional qsTr calls here.
+            else if (str == "T" || str == "TTR") //TODO: Probably should add additional tr calls here.
             {
                 global.mode = global.mode_TTR;
-                setPromptPrefix(qsTr("Specify point on object for first tangent of circle: "));
+                setPromptPrefix(tr("Specify point on object for first tangent of circle: "));
             }
             else
             {
                 var strList = str.split(",");
                 if (std::isnan(strList[0]) || isNaN(strList[1]))
                 {
-                    alert(qsTr("Point or option keyword required."));
-                    setPromptPrefix(qsTr("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
+                    alert(tr("Point or option keyword required."));
+                    setPromptPrefix(tr("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
                 }
                 else
                 {
@@ -3277,23 +3250,23 @@ circle_prompt(std::string str)
                     addRubber("CIRCLE");
                     setRubberMode("CIRCLE_1P_RAD");
                     setRubberPoint("CIRCLE_CENTER", global.cx, global.cy);
-                    setPromptPrefix(qsTr("Specify radius of circle or [Diameter]: "));
+                    setPromptPrefix(tr("Specify radius of circle or [Diameter]: "));
                 }
             }
         }
         else
         {
-            if (str == "D" || str == "DIAMETER") //TODO: Probably should add additional qsTr calls here.
+            if (str == "D" || str == "DIAMETER") //TODO: Probably should add additional tr calls here.
             {
                 global.mode = global.mode_1P_DIA;
                 setRubberMode("CIRCLE_1P_DIA");
-                setPromptPrefix(qsTr("Specify diameter of circle: "));
+                setPromptPrefix(tr("Specify diameter of circle: "));
             }
             else {
                 var num = Number(str);
                 if (std::isnan(num)) {
-                    alert(qsTr("Requires numeric radius, point on circumference, or \"D\"."));
-                    setPromptPrefix(qsTr("Specify radius of circle or [Diameter]: "));
+                    alert(tr("Requires numeric radius, point on circumference, or \"D\"."));
+                    setPromptPrefix(tr("Specify radius of circle or [Diameter]: "));
                 }
                 else {
                     global.rad = num;
@@ -3309,13 +3282,13 @@ circle_prompt(std::string str)
     else if (global.mode == global.mode_1P_DIA)
     {
         if (std::isnan(global.x1)) {
-            error("CIRCLE", qsTr("This should never happen."));
+            error("CIRCLE", tr("This should never happen."));
         }
         if (std::isnan(global.x2)) {
             var num = Number(str);
             if (std::isnan(num)) {
-                alert(qsTr("Requires numeric distance or second point."));
-                setPromptPrefix(qsTr("Specify diameter of circle: "));
+                alert(tr("Requires numeric distance or second point."));
+                setPromptPrefix(tr("Specify diameter of circle: "));
             }
             else {
                 global.dia = num;
@@ -3327,7 +3300,7 @@ circle_prompt(std::string str)
             }
         }
         else {
-            error("CIRCLE", qsTr("This should never happen."));
+            error("CIRCLE", tr("This should never happen."));
         }
     }
     else if (global.mode == global.mode_2P) {
@@ -3336,8 +3309,8 @@ circle_prompt(std::string str)
             var strList = str.split(",");
             if (std::isnan(strList[0]) || isNaN(strList[1]))
             {
-                alert(qsTr("Invalid point."));
-                setPromptPrefix(qsTr("Specify first end point of circle's diameter: "));
+                alert(tr("Invalid point."));
+                setPromptPrefix(tr("Specify first end point of circle's diameter: "));
             }
             else
             {
@@ -3346,14 +3319,14 @@ circle_prompt(std::string str)
                 addRubber("CIRCLE");
                 setRubberMode("CIRCLE_2P");
                 setRubberPoint("CIRCLE_TAN1", global.x1, global.y1);
-                setPromptPrefix(qsTr("Specify second end point of circle's diameter: "));
+                setPromptPrefix(tr("Specify second end point of circle's diameter: "));
             }
         }
         else if (std::isnan(global.x2)) {
             var strList = str.split(",");
             if (std::isnan(strList[0]) || isNaN(strList[1])) {
-                alert(qsTr("Invalid point."));
-                setPromptPrefix(qsTr("Specify second end point of circle's diameter: "));
+                alert(tr("Invalid point."));
+                setPromptPrefix(tr("Specify second end point of circle's diameter: "));
             }
             else {
                 global.x2 = Number(strList[0]);
@@ -3364,7 +3337,7 @@ circle_prompt(std::string str)
             }
         }
         else {
-            error("CIRCLE", qsTr("This should never happen."));
+            error("CIRCLE", tr("This should never happen."));
         }
     }
     else if (global.mode == global.mode_3P) {
@@ -3372,21 +3345,21 @@ circle_prompt(std::string str)
             var strList = str.split(",");
             if (std::isnan(strList[0]) || isNaN(strList[1]))
             {
-                alert(qsTr("Invalid point."));
-                setPromptPrefix(qsTr("Specify first point of circle: "));
+                alert(tr("Invalid point."));
+                setPromptPrefix(tr("Specify first point of circle: "));
             }
             else
             {
                 global.x1 = Number(strList[0]);
                 global.y1 = Number(strList[1]);
-                setPromptPrefix(qsTr("Specify second point of circle: "));
+                setPromptPrefix(tr("Specify second point of circle: "));
             }
         }
         else if (std::isnan(global.x2)) {
             var strList = str.split(",");
             if (std::isnan(strList[0]) || isNaN(strList[1])) {
-                alert(qsTr("Invalid point."));
-                setPromptPrefix(qsTr("Specify second point of circle: "));
+                alert(tr("Invalid point."));
+                setPromptPrefix(tr("Specify second point of circle: "));
             }
             else {
                 global.x2 = Number(strList[0]);
@@ -3395,14 +3368,14 @@ circle_prompt(std::string str)
                 setRubberMode("CIRCLE_3P");
                 setRubberPoint("CIRCLE_TAN1", global.x1, global.y1);
                 setRubberPoint("CIRCLE_TAN2", global.x2, global.y2);
-                setPromptPrefix(qsTr("Specify third point of circle: "));
+                setPromptPrefix(tr("Specify third point of circle: "));
             }
         }
         else if (std::isnan(global.x3)) {
             var strList = str.split(",");
             if (std::isnan(strList[0]) || isNaN(strList[1])) {
-                alert(qsTr("Invalid point."));
-                setPromptPrefix(qsTr("Specify third point of circle: "));
+                alert(tr("Invalid point."));
+                setPromptPrefix(tr("Specify third point of circle: "));
             }
             else {
                 global.x3 = Number(strList[0]);
@@ -3413,7 +3386,7 @@ circle_prompt(std::string str)
             }
         }
         else {
-            error("CIRCLE", qsTr("This should never happen."));
+            error("CIRCLE", tr("This should never happen."));
         }
     }
     else if (global.mode == global.mode_TTR) {
@@ -3438,7 +3411,7 @@ distance_main()
     global.y1 = NaN;
     global.x2 = NaN;
     global.y2 = NaN;
-    setPromptPrefix(qsTr("Specify first point: "));
+    setPromptPrefix(tr("Specify first point: "));
 }
 
 
@@ -3452,7 +3425,7 @@ distance_click(x, y)
         setRubberMode("LINE");
         setRubberPoint("LINE_START", global.x1, global.y1);
         appendPromptHistory();
-        setPromptPrefix(qsTr("Specify second point: "));
+        setPromptPrefix(tr("Specify second point: "));
     }
     else {
         appendPromptHistory();
@@ -3475,8 +3448,8 @@ prompt(str)
     var strList = str.split(",");
     if (std::isnan(global.x1)) {
         if (std::isnan(strList[0]) || isNaN(strList[1])) {
-            alert(qsTr("Requires numeric distance or two points."));
-            setPromptPrefix(qsTr("Specify first point: "));
+            alert(tr("Requires numeric distance or two points."));
+            setPromptPrefix(tr("Specify first point: "));
         }
         else {
             global.x1 = Number(strList[0]);
@@ -3484,13 +3457,13 @@ prompt(str)
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.x1, global.y1);
-            setPromptPrefix(qsTr("Specify second point: "));
+            setPromptPrefix(tr("Specify second point: "));
         }
     }
     else {
         if (std::isnan(strList[0]) || isNaN(strList[1])) {
-            alert(qsTr("Requires numeric distance or two points."));
-            setPromptPrefix(qsTr("Specify second point: "));
+            alert(tr("Requires numeric distance or two points."));
+            setPromptPrefix(tr("Specify second point: "));
         }
         else {
             global.x2 = Number(strList[0]);
@@ -3521,9 +3494,9 @@ reportDistance()
     var dist = calculateDistance(global.x1,global.y1,global.x2, global.y2);
     var angle = calculateAngle(global.x1,global.y1,global.x2, global.y2);
 
-    setPromptPrefix(qsTr("Distance") + " = " + dist.toString() + ", " + qsTr("Angle") + " = " + angle.toString());
+    setPromptPrefix(tr("Distance") + " = " + dist.toString() + ", " + tr("Angle") + " = " + angle.toString());
     appendPromptHistory();
-    setPromptPrefix(qsTr("Delta X") + " = " + dx.toString() + ", " + qsTr("Delta Y") + " = " + dy.toString());
+    setPromptPrefix(tr("Delta X") + " = " + dx.toString() + ", " + tr("Delta Y") + " = " + dy.toString());
     appendPromptHistory();
 }
 
@@ -3735,7 +3708,7 @@ ellipse_main(void)
     global.y2      = NaN;
     global.x3      = NaN;
     global.y3      = NaN;
-    setPromptPrefix(qsTr("Specify first axis start point or [Center]: "));
+    setPromptPrefix(tr("Specify first axis start point or [Center]: "));
 }
 
 
@@ -3752,7 +3725,7 @@ click(x, y)
             setRubberMode("ELLIPSE_LINE");
             setRubberPoint("ELLIPSE_LINE_POINT1", global.x1, global.y1);
             appendPromptHistory();
-            setPromptPrefix(qsTr("Specify first axis end point: "));
+            setPromptPrefix(tr("Specify first axis end point: "));
         }
         else if (std::isnan(global.x2))
         {
@@ -3769,7 +3742,7 @@ click(x, y)
             setRubberPoint("ELLIPSE_WIDTH", global.width, 0);
             setRubberPoint("ELLIPSE_ROT", global.rot, 0);
             appendPromptHistory();
-            setPromptPrefix(qsTr("Specify second axis end point or [Rotation]: "));
+            setPromptPrefix(tr("Specify second axis end point or [Rotation]: "));
         }
         else if (std::isnan(global.x3))
         {
@@ -3783,7 +3756,7 @@ click(x, y)
         }
         else
         {
-            error("ELLIPSE", qsTr("This should never happen."));
+            error("ELLIPSE", tr("This should never happen."));
         }
     }
     else if (global.mode == global.mode_MAJORRADIUS_MINORRADIUS)
@@ -3799,7 +3772,7 @@ click(x, y)
             setRubberPoint("ELLIPSE_LINE_POINT1", global.x1, global.y1);
             setRubberPoint("ELLIPSE_CENTER", global.cx, global.cy);
             appendPromptHistory();
-            setPromptPrefix(qsTr("Specify first axis end point: "));
+            setPromptPrefix(tr("Specify first axis end point: "));
         }
         else if (std::isnan(global.x2))
         {
@@ -3812,7 +3785,7 @@ click(x, y)
             setRubberPoint("ELLIPSE_WIDTH", global.width, 0);
             setRubberPoint("ELLIPSE_ROT", global.rot, 0);
             appendPromptHistory();
-            setPromptPrefix(qsTr("Specify second axis end point or [Rotation]: "));
+            setPromptPrefix(tr("Specify second axis end point or [Rotation]: "));
         }
         else if (std::isnan(global.x3))
         {
@@ -3826,18 +3799,18 @@ click(x, y)
         }
         else
         {
-            error("ELLIPSE", qsTr("This should never happen."));
+            error("ELLIPSE", tr("This should never happen."));
         }
     }
     else if (global.mode == global.mode_ELLIPSE_ROTATION)
     {
         if (std::isnan(global.x1))
         {
-            error("ELLIPSE", qsTr("This should never happen."));
+            error("ELLIPSE", tr("This should never happen."));
         }
         else if (std::isnan(global.x2))
         {
-            error("ELLIPSE", qsTr("This should never happen."));
+            error("ELLIPSE", tr("This should never happen."));
         }
         else if (std::isnan(global.x3))
         {
@@ -3863,18 +3836,18 @@ prompt(str)
     {
         if (std::isnan(global.x1))
         {
-            if (str == "C" || str == "CENTER") //TODO: Probably should add additional qsTr calls here.
+            if (str == "C" || str == "CENTER") //TODO: Probably should add additional tr calls here.
             {
                 global.mode = global.mode_MAJORRADIUS_MINORRADIUS;
-                setPromptPrefix(qsTr("Specify center point: "));
+                setPromptPrefix(tr("Specify center point: "));
             }
             else
             {
                 var strList = str.split(",");
                 if (std::isnan(strList[0]) || isNaN(strList[1]))
                 {
-                    alert(qsTr("Point or option keyword required."));
-                    setPromptPrefix(qsTr("Specify first axis start point or [Center]: "));
+                    alert(tr("Point or option keyword required."));
+                    setPromptPrefix(tr("Specify first axis start point or [Center]: "));
                 }
                 else
                 {
@@ -3883,7 +3856,7 @@ prompt(str)
                     addRubber("ELLIPSE");
                     setRubberMode("ELLIPSE_LINE");
                     setRubberPoint("ELLIPSE_LINE_POINT1", global.x1, global.y1);
-                    setPromptPrefix(qsTr("Specify first axis end point: "));
+                    setPromptPrefix(tr("Specify first axis end point: "));
                 }
             }
         }
@@ -3892,8 +3865,8 @@ prompt(str)
             var strList = str.split(",");
             if (std::isnan(strList[0]) || isNaN(strList[1]))
             {
-                alert(qsTr("Invalid point."));
-                setPromptPrefix(qsTr("Specify first axis end point: "));
+                alert(tr("Invalid point."));
+                setPromptPrefix(tr("Specify first axis end point: "));
             }
             else
             {
@@ -3909,23 +3882,23 @@ prompt(str)
                 setRubberPoint("ELLIPSE_CENTER", global.cx, global.cy);
                 setRubberPoint("ELLIPSE_WIDTH", global.width, 0);
                 setRubberPoint("ELLIPSE_ROT", global.rot, 0);
-                setPromptPrefix(qsTr("Specify second axis end point or [Rotation]: "));
+                setPromptPrefix(tr("Specify second axis end point or [Rotation]: "));
             }
         }
         else if (std::isnan(global.x3))
         {
-            if (str == "R" || str == "ROTATION") //TODO: Probably should add additional qsTr calls here.
+            if (str == "R" || str == "ROTATION") //TODO: Probably should add additional tr calls here.
             {
                 global.mode = global.mode_ELLIPSE_ROTATION;
-                setPromptPrefix(qsTr("Specify rotation: "));
+                setPromptPrefix(tr("Specify rotation: "));
             }
             else
             {
                 var strList = str.split(",");
                 if (std::isnan(strList[0]) || isNaN(strList[1]))
                 {
-                    alert(qsTr("Point or option keyword required."));
-                    setPromptPrefix(qsTr("Specify second axis end point or [Rotation]: "));
+                    alert(tr("Point or option keyword required."));
+                    setPromptPrefix(tr("Specify second axis end point or [Rotation]: "));
                 }
                 else
                 {
@@ -3946,8 +3919,8 @@ prompt(str)
             var strList = str.split(",");
             if (std::isnan(strList[0]) || isNaN(strList[1]))
             {
-                alert(qsTr("Invalid point."));
-                setPromptPrefix(qsTr("Specify center point: "));
+                alert(tr("Invalid point."));
+                setPromptPrefix(tr("Specify center point: "));
             }
             else
             {
@@ -3959,7 +3932,7 @@ prompt(str)
                 setRubberMode("ELLIPSE_LINE");
                 setRubberPoint("ELLIPSE_LINE_POINT1", global.x1, global.y1);
                 setRubberPoint("ELLIPSE_CENTER", global.cx, global.cy);
-                setPromptPrefix(qsTr("Specify first axis end point: "));
+                setPromptPrefix(tr("Specify first axis end point: "));
             }
         }
         else if (std::isnan(global.x2))
@@ -3967,8 +3940,8 @@ prompt(str)
             var strList = str.split(",");
             if (std::isnan(strList[0]) || isNaN(strList[1]))
             {
-                alert(qsTr("Invalid point."));
-                setPromptPrefix(qsTr("Specify first axis end point: "));
+                alert(tr("Invalid point."));
+                setPromptPrefix(tr("Specify first axis end point: "));
             }
             else
             {
@@ -3980,23 +3953,23 @@ prompt(str)
                 setRubberPoint("ELLIPSE_AXIS1_POINT2", global.x2, global.y2);
                 setRubberPoint("ELLIPSE_WIDTH", global.width, 0);
                 setRubberPoint("ELLIPSE_ROT", global.rot, 0);
-                setPromptPrefix(qsTr("Specify second axis end point or [Rotation]: "));
+                setPromptPrefix(tr("Specify second axis end point or [Rotation]: "));
             }
         }
         else if (std::isnan(global.x3))
         {
-            if (str == "R" || str == "ROTATION") //TODO: Probably should add additional qsTr calls here.
+            if (str == "R" || str == "ROTATION") //TODO: Probably should add additional tr calls here.
             {
                 global.mode = global.mode_ELLIPSE_ROTATION;
-                setPromptPrefix(qsTr("Specify ellipse rotation: "));
+                setPromptPrefix(tr("Specify ellipse rotation: "));
             }
             else
             {
                 var strList = str.split(",");
                 if (std::isnan(strList[0]) || isNaN(strList[1]))
                 {
-                    alert(qsTr("Point or option keyword required."));
-                    setPromptPrefix(qsTr("Specify second axis end point or [Rotation]: "));
+                    alert(tr("Point or option keyword required."));
+                    setPromptPrefix(tr("Specify second axis end point or [Rotation]: "));
                 }
                 else
                 {
@@ -4014,18 +3987,18 @@ prompt(str)
     {
         if (std::isnan(global.x1))
         {
-            error("ELLIPSE", qsTr("This should never happen."));
+            error("ELLIPSE", tr("This should never happen."));
         }
         else if (std::isnan(global.x2))
         {
-            error("ELLIPSE", qsTr("This should never happen."));
+            error("ELLIPSE", tr("This should never happen."));
         }
         else if (std::isnan(global.x3))
         {
             if (std::isnan(str))
             {
-                alert(qsTr("Invalid angle. Input a numeric angle or pick a point."));
-                setPromptPrefix(qsTr("Specify rotation: "));
+                alert(tr("Invalid angle. Input a numeric angle or pick a point."));
+                setPromptPrefix(tr("Specify rotation: "));
             }
             else
             {
@@ -4047,9 +4020,9 @@ main()
 
     if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
-        alert(qsTr("Preselect objects before invoking the delete command."));
+        alert(tr("Preselect objects before invoking the delete command."));
         endCommand();
-        messageBox("information", qsTr("Delete Preselect"), qsTr("Preselect objects before invoking the delete command."));
+        messageBox("information", tr("Delete Preselect"), tr("Preselect objects before invoking the delete command."));
     }
     else {
         deleteSelected();
@@ -4134,7 +4107,7 @@ main()
     global.firstRun = true;
     global.first = {NaN, NaN};
     global.prev = {NaN, NaN};
-    setPromptPrefix(qsTr("Specify first point: "));
+    setPromptPrefix(tr("Specify first point: "));
 }
 
 
@@ -4151,7 +4124,7 @@ click(x, y)
         setRubberMode("LINE");
         setRubberPoint("LINE_START", global.firstX, global.firstY);
         appendPromptHistory();
-        setPromptPrefix(qsTr("Specify next point or [Undo]: "));
+        setPromptPrefix(tr("Specify next point or [Undo]: "));
     }
     else {
         setRubberPoint("LINE_END", x, y);
@@ -4177,8 +4150,8 @@ prompt(str)
     if (global.firstRun) {
         var strList = str.split(",");
         if (std::isnan(strList[0]) || isNaN(strList[1])) {
-            alert(qsTr("Invalid point."));
-            setPromptPrefix(qsTr("Specify first point: "));
+            alert(tr("Invalid point."));
+            setPromptPrefix(tr("Specify first point: "));
         }
         else {
             global.firstRun = false;
@@ -4189,7 +4162,7 @@ prompt(str)
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.firstX, global.firstY);
-            setPromptPrefix(qsTr("Specify next point or [Undo]: "));
+            setPromptPrefix(tr("Specify next point or [Undo]: "));
         }
     }
     else {
@@ -4199,8 +4172,8 @@ prompt(str)
         else {
             var strList = str.split(",");
             if (std::isnan(strList[0]) || isNaN(strList[1])) {
-                alert(qsTr("Point or option keyword required."));
-                setPromptPrefix(qsTr("Specify next point or [Undo]: "));
+                alert(tr("Point or option keyword required."));
+                setPromptPrefix(tr("Specify next point or [Undo]: "));
             }
             else {
                 var x = Number(strList[0]);
@@ -4212,7 +4185,7 @@ prompt(str)
                 setRubberPoint("LINE_START", x, y);
                 global.prevX = x;
                 global.prevY = y;
-                setPromptPrefix(qsTr("Specify next point or [Undo]: "));
+                setPromptPrefix(tr("Specify next point or [Undo]: "));
             }
         }
     }
@@ -4225,7 +4198,7 @@ main()
 {
     initCommand();
     clearSelection();
-    setPromptPrefix(qsTr("Specify point: "));
+    setPromptPrefix(tr("Specify point: "));
 }
 
 
@@ -4249,8 +4222,8 @@ prompt(str)
 {
     var strList = str.split(",");
     if (std::isnan(strList[0]) || isNaN(strList[1])) {
-        alert(qsTr("Invalid point."));
-        setPromptPrefix(qsTr("Specify point: "));
+        alert(tr("Invalid point."));
+        setPromptPrefix(tr("Specify point: "));
     }
     else {
         appendPromptHistory();
@@ -4288,12 +4261,12 @@ move_main()
 
     if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
-        alert(qsTr("Preselect objects before invoking the move command."));
+        alert(tr("Preselect objects before invoking the move command."));
         endCommand();
-        messageBox("information", qsTr("Move Preselect"), qsTr("Preselect objects before invoking the move command."));
+        messageBox("information", tr("Move Preselect"), tr("Preselect objects before invoking the move command."));
     }
     else {
-        setPromptPrefix(qsTr("Specify base point: "));
+        setPromptPrefix(tr("Specify base point: "));
     }
 }
 
@@ -4312,7 +4285,7 @@ click(x, y)
         setRubberPoint("LINE_START", global.baseX, global.baseY);
         previewOn("SELECTED", "MOVE", global.baseX, global.baseY, 0);
         appendPromptHistory();
-        setPromptPrefix(qsTr("Specify destination point: "));
+        setPromptPrefix(tr("Specify destination point: "));
     }
     else {
         global.destX = x;
@@ -4345,8 +4318,8 @@ prompt(str)
         var strList = str.split(",");
         if (std::isnan(strList[0]) || isNaN(strList[1]))
         {
-            alert(qsTr("Invalid point."));
-            setPromptPrefix(qsTr("Specify base point: "));
+            alert(tr("Invalid point."));
+            setPromptPrefix(tr("Specify base point: "));
         }
         else
         {
@@ -4357,7 +4330,7 @@ prompt(str)
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.baseX, global.baseY);
             previewOn("SELECTED", "MOVE", global.baseX, global.baseY, 0);
-            setPromptPrefix(qsTr("Specify destination point: "));
+            setPromptPrefix(tr("Specify destination point: "));
         }
     }
     else
@@ -4365,8 +4338,8 @@ prompt(str)
         var strList = str.split(",");
         if (std::isnan(strList[0]) || isNaN(strList[1]))
         {
-            alert(qsTr("Invalid point."));
-            setPromptPrefix(qsTr("Specify destination point: "));
+            alert(tr("Invalid point."));
+            setPromptPrefix(tr("Specify destination point: "));
         }
         else
         {
@@ -4402,7 +4375,7 @@ main()
     global.firstY = NaN;
     global.prevX = NaN;
     global.prevY = NaN;
-    setPromptPrefix(qsTr("Specify start point: "));
+    setPromptPrefix(tr("Specify start point: "));
 }
 
 
@@ -4418,7 +4391,7 @@ click(x, y)
         global.prevY = y;
         addPath(x,y);
         appendPromptHistory();
-        setPromptPrefix(qsTr("Specify next point or [Arc/Undo]: "));
+        setPromptPrefix(tr("Specify next point or [Arc/Undo]: "));
     }
     else
     {
@@ -4438,11 +4411,11 @@ context(str)
 void
 prompt(str)
 {
-    if (str == "A" || str == "ARC")//TODO: Probably should add additional qsTr calls here.
+    if (str == "A" || str == "ARC")//TODO: Probably should add additional tr calls here.
     {
         todo("PATH", "prompt() for ARC");
     }
-    else if (str == "U" || str == "UNDO") //TODO: Probably should add additional qsTr calls here.
+    else if (str == "U" || str == "UNDO") //TODO: Probably should add additional tr calls here.
     {
         todo("PATH", "prompt() for UNDO");
     }
@@ -4451,8 +4424,8 @@ prompt(str)
         var strList = str.split(",");
         if (std::isnan(strList[0]) || isNaN(strList[1]))
         {
-            alert(qsTr("Point or option keyword required."));
-            setPromptPrefix(qsTr("Specify next point or [Arc/Undo]: "));
+            alert(tr("Point or option keyword required."));
+            setPromptPrefix(tr("Specify next point or [Arc/Undo]: "));
         }
         else
         {
@@ -4466,7 +4439,7 @@ prompt(str)
                 global.prevX = x;
                 global.prevY = y;
                 addPath(x,y);
-                setPromptPrefix(qsTr("Specify next point or [Arc/Undo]: "));
+                setPromptPrefix(tr("Specify next point or [Arc/Undo]: "));
             }
             else
             {
@@ -4490,9 +4463,9 @@ point_main()
     initCommand();
     clearSelection();
     global.firstRun = true;
-    setPromptPrefix("TODO: Current point settings: PDMODE=?  PDSIZE=?"); //TODO: qsTr needed here when complete
+    setPromptPrefix("TODO: Current point settings: PDMODE=?  PDSIZE=?"); //TODO: tr needed here when complete
     appendPromptHistory();
-    setPromptPrefix(qsTr("Specify first point: "));
+    setPromptPrefix(tr("Specify first point: "));
 }
 
 
@@ -4502,7 +4475,7 @@ point_click(x, y)
     if (global.firstRun) {
         global.firstRun = false;
         appendPromptHistory();
-        setPromptPrefix(qsTr("Specify next point: "));
+        setPromptPrefix(tr("Specify next point: "));
         addPoint(x,y);
     }
     else {
@@ -4521,25 +4494,25 @@ void
 prompt(str)
 {
     if (global.firstRun) {
-        if (str == "M" || str == "MODE") //TODO: Probably should add additional qsTr calls here.
+        if (str == "M" || str == "MODE") //TODO: Probably should add additional tr calls here.
         {
             todo("POINT", "prompt() for PDMODE");
         }
-        else if (str == "S" || str == "SIZE") //TODO: Probably should add additional qsTr calls here.
+        else if (str == "S" || str == "SIZE") //TODO: Probably should add additional tr calls here.
         {
             todo("POINT", "prompt() for PDSIZE");
         }
         var strList = str.split(",");
         if (std::isnan(strList[0]) || isNaN(strList[1]))
         {
-            alert(qsTr("Invalid point."));
-            setPromptPrefix(qsTr("Specify first point: "));
+            alert(tr("Invalid point."));
+            setPromptPrefix(tr("Specify first point: "));
         }
         else {
             global.firstRun = false;
             var x = Number(strList[0]);
             var y = Number(strList[1]);
-            setPromptPrefix(qsTr("Specify next point: "));
+            setPromptPrefix(tr("Specify next point: "));
             addPoint(x,y);
         }
     }
@@ -4547,14 +4520,14 @@ prompt(str)
         var strList = str.split(",");
         if (std::isnan(strList[0]) || isNaN(strList[1]))
         {
-            alert(qsTr("Invalid point."));
-            setPromptPrefix(qsTr("Specify next point: "));
+            alert(tr("Invalid point."));
+            setPromptPrefix(tr("Specify next point: "));
         }
         else
         {
             var x = Number(strList[0]);
             var y = Number(strList[1]);
-            setPromptPrefix(qsTr("Specify next point: "));
+            setPromptPrefix(tr("Specify next point: "));
             addPoint(x,y);
         }
     }
@@ -4602,7 +4575,7 @@ main()
     global.pointCX = NaN;
     global.pointCY = NaN;
     global.mode = global.mode_NUM_SIDES;
-    setPromptPrefix(qsTr("Enter number of sides") + " {" + global.numSides.toString() + "}: ");
+    setPromptPrefix(tr("Enter number of sides") + " {" + global.numSides.toString() + "}: ");
 }
 
 
@@ -4619,7 +4592,7 @@ click(x, y)
         global.centerY = y;
         global.mode = global.mode_POLYTYPE;
         appendPromptHistory();
-        setPromptPrefix(qsTr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
+        setPromptPrefix(tr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
     }
     else if (global.mode == global.mode_POLYTYPE)
     {
@@ -4664,18 +4637,18 @@ prompt(str)
 {
     if (global.mode == global.mode_NUM_SIDES) {
         if (str == "" && global.numSides >= 3 && global.numSides <= 1024) {
-            setPromptPrefix(qsTr("Specify center point or [Sidelength]: "));
+            setPromptPrefix(tr("Specify center point or [Sidelength]: "));
             global.mode = global.mode_CENTER_PT;
         }
         else {
             var tmp = Number(str);
             if (std::isnan(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024) {
-                alert(qsTr("Requires an integer between 3 and 1024."));
-                setPromptPrefix(qsTr("Enter number of sides") + " {" + global.numSides.toString() + "}: ");
+                alert(tr("Requires an integer between 3 and 1024."));
+                setPromptPrefix(tr("Enter number of sides") + " {" + global.numSides.toString() + "}: ");
             }
             else {
                 global.numSides = tmp;
-                setPromptPrefix(qsTr("Specify center point or [Sidelength]: "));
+                setPromptPrefix(tr("Specify center point or [Sidelength]: "));
                 global.mode = global.mode_CENTER_PT;
             }
         }
@@ -4683,19 +4656,19 @@ prompt(str)
     else if (global.mode == global.mode_CENTER_PT) {
         if (str == "S" || str == "SIDELENGTH") {
             global.mode = global.mode_SIDE_LEN;
-            setPromptPrefix(qsTr("Specify start point: "));
+            setPromptPrefix(tr("Specify start point: "));
         }
         else {
             var strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
-                alert(qsTr("Point or option keyword required."));
-                setPromptPrefix(qsTr("Specify center point or [Sidelength]: "));
+                alert(tr("Point or option keyword required."));
+                setPromptPrefix(tr("Specify center point or [Sidelength]: "));
             }
             else {
                 global.centerX = Number(strList[0]);
                 global.centerY = Number(strList[1]);
                 global.mode = global.mode_POLYTYPE;
-                setPromptPrefix(qsTr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
+                setPromptPrefix(tr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
             }
         }
     }
@@ -4711,7 +4684,7 @@ prompt(str)
            str == "INSCRIBED") {
             global.mode = global.mode_INSCRIBE;
             global.polyType = "Inscribed";
-            setPromptPrefix(qsTr("Specify polygon corner point or [Distance]: "));
+            setPromptPrefix(tr("Specify polygon corner point or [Distance]: "));
             addRubber("POLYGON");
             setRubberMode("POLYGON_INSCRIBE");
             setRubberPoint("POLYGON_CENTER", global.centerX, global.centerY);
@@ -4732,7 +4705,7 @@ prompt(str)
                 str == "CIRCUMSCRIBED") {
             global.mode = global.mode_CIRCUMSCRIBE;
             global.polyType = "Circumscribed";
-            setPromptPrefix(qsTr("Specify polygon side point or [Distance]: "));
+            setPromptPrefix(tr("Specify polygon side point or [Distance]: "));
             addRubber("POLYGON");
             setRubberMode("POLYGON_CIRCUMSCRIBE");
             setRubberPoint("POLYGON_CENTER", global.centerX, global.centerY);
@@ -4741,7 +4714,7 @@ prompt(str)
         else if (str == "") {
             if (global.polyType == "Inscribed") {
                 global.mode = global.mode_INSCRIBE;
-                setPromptPrefix(qsTr("Specify polygon corner point or [Distance]: "));
+                setPromptPrefix(tr("Specify polygon corner point or [Distance]: "));
                 addRubber("POLYGON");
                 setRubberMode("POLYGON_INSCRIBE");
                 setRubberPoint("POLYGON_CENTER", global.centerX, global.centerY);
@@ -4749,31 +4722,31 @@ prompt(str)
             }
             else if (global.polyType == "Circumscribed") {
                 global.mode = global.mode_CIRCUMSCRIBE;
-                setPromptPrefix(qsTr("Specify polygon side point or [Distance]: "));
+                setPromptPrefix(tr("Specify polygon side point or [Distance]: "));
                 addRubber("POLYGON");
                 setRubberMode("POLYGON_CIRCUMSCRIBE");
                 setRubberPoint("POLYGON_CENTER", global.centerX, global.centerY);
                 setRubberPoint("POLYGON_NUM_SIDES", global.numSides, 0);
             }
             else {
-                error("POLYGON", qsTr("Polygon type is not Inscribed or Circumscribed."));
+                error("POLYGON", tr("Polygon type is not Inscribed or Circumscribed."));
             }
         }
         else {
-            alert(qsTr("Invalid option keyword."));
-            setPromptPrefix(qsTr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
+            alert(tr("Invalid option keyword."));
+            setPromptPrefix(tr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
         }
     }
     else if (global.mode == global.mode_INSCRIBE) {
         if (str == "D" || str == "DISTANCE") {
             global.mode = global.mode_DISTANCE;
-            setPromptPrefix(qsTr("Specify distance: "));
+            setPromptPrefix(tr("Specify distance: "));
         }
         else {
             var strList = str.split(",");
             if (std::isnan(strList[0]) || isNaN(strList[1])) {
-                alert(qsTr("Point or option keyword required."));
-                setPromptPrefix(qsTr("Specify polygon corner point or [Distance]: "));
+                alert(tr("Point or option keyword required."));
+                setPromptPrefix(tr("Specify polygon corner point or [Distance]: "));
             }
             else {
                 global.pointIX = Number(strList[0]);
@@ -4787,13 +4760,13 @@ prompt(str)
     else if (global.mode == global.mode_CIRCUMSCRIBE) {
         if (str == "D" || str == "DISTANCE") {
             global.mode = global.mode_DISTANCE;
-            setPromptPrefix(qsTr("Specify distance: "));
+            setPromptPrefix(tr("Specify distance: "));
         }
         else {
             var strList = str.split(",");
             if (std::isnan(strList[0]) || isNaN(strList[1])) {
-                alert(qsTr("Point or option keyword required."));
-                setPromptPrefix(qsTr("Specify polygon side point or [Distance]: "));
+                alert(tr("Point or option keyword required."));
+                setPromptPrefix(tr("Specify polygon side point or [Distance]: "));
             }
             else {
                 global.pointCX = Number(strList[0]);
@@ -4806,8 +4779,8 @@ prompt(str)
     }
     else if (global.mode == global.mode_DISTANCE) {
         if (std::isnan(str)) {
-            alert(qsTr("Requires valid numeric distance."));
-            setPromptPrefix(qsTr("Specify distance: "));
+            alert(tr("Requires valid numeric distance."));
+            setPromptPrefix(tr("Specify distance: "));
         }
         else {
             if (global.polyType == "Inscribed") {
@@ -4826,7 +4799,7 @@ prompt(str)
             }
             else
             {
-                error("POLYGON", qsTr("Polygon type is not Inscribed or Circumscribed."));
+                error("POLYGON", tr("Polygon type is not Inscribed or Circumscribed."));
             }
         }
     }
@@ -4857,7 +4830,7 @@ main()
     global.prevX = NaN;
     global.prevY = NaN;
     global.num = 0;
-    setPromptPrefix(qsTr("Specify first point: "));
+    setPromptPrefix(tr("Specify first point: "));
 }
 
 /**
@@ -4876,7 +4849,7 @@ click(x, y)
         setRubberMode("POLYLINE");
         setRubberPoint("POLYLINE_POINT_0", global.firstX, global.firstY);
         appendPromptHistory();
-        setPromptPrefix(qsTr("Specify next point or [Undo]: "));
+        setPromptPrefix(tr("Specify next point or [Undo]: "));
     }
     else {
         global.num++;
@@ -4906,8 +4879,8 @@ prompt(str)
         var strList = str.split(",");
         if (std::isnan(strList[0]) || isNaN(strList[1]))
         {
-            alert(qsTr("Invalid point."));
-            setPromptPrefix(qsTr("Specify first point: "));
+            alert(tr("Invalid point."));
+            setPromptPrefix(tr("Specify first point: "));
         }
         else
         {
@@ -4919,12 +4892,12 @@ prompt(str)
             addRubber("POLYLINE");
             setRubberMode("POLYLINE");
             setRubberPoint("POLYLINE_POINT_0", global.firstX, global.firstY);
-            setPromptPrefix(qsTr("Specify next point or [Undo]: "));
+            setPromptPrefix(tr("Specify next point or [Undo]: "));
         }
     }
     else
     {
-        if (str == "U" || str == "UNDO") //TODO: Probably should add additional qsTr calls here.
+        if (str == "U" || str == "UNDO") //TODO: Probably should add additional tr calls here.
         {
             todo("POLYLINE", "prompt() for UNDO");
         }
@@ -4933,8 +4906,8 @@ prompt(str)
             var strList = str.split(",");
             if (std::isnan(strList[0]) || isNaN(strList[1]))
             {
-                alert(qsTr("Point or option keyword required."));
-                setPromptPrefix(qsTr("Specify next point or [Undo]: "));
+                alert(tr("Point or option keyword required."));
+                setPromptPrefix(tr("Specify next point or [Undo]: "));
             }
             else
             {
@@ -4946,7 +4919,7 @@ prompt(str)
                 spareRubber("POLYLINE");
                 global.prevX = x;
                 global.prevY = y;
-                setPromptPrefix(qsTr("Specify next point or [Undo]: "));
+                setPromptPrefix(tr("Specify next point or [Undo]: "));
             }
         }
     }
@@ -4971,7 +4944,7 @@ main()
     global.y1 = NaN;
     global.x2 = NaN;
     global.y2 = NaN;
-    setPromptPrefix(qsTr("Specify first point: "));
+    setPromptPrefix(tr("Specify first point: "));
 }
 
 
@@ -4986,7 +4959,7 @@ click(x, y)
         setRubberMode("DIMLEADER_LINE");
         setRubberPoint("DIMLEADER_LINE_START", global.x1, global.y1);
         appendPromptHistory();
-        setPromptPrefix(qsTr("Specify second point: "));
+        setPromptPrefix(tr("Specify second point: "));
     }
     else {
         global.x2 = x;
@@ -5010,8 +4983,8 @@ prompt(str)
     var strList = str.split(",");
     if (std::isnan(global.x1)) {
         if (std::isnan(strList[0]) || isNaN(strList[1])) {
-            alert(qsTr("Requires two points."));
-            setPromptPrefix(qsTr("Specify first point: "));
+            alert(tr("Requires two points."));
+            setPromptPrefix(tr("Specify first point: "));
         }
         else {
             global.x1 = Number(strList[0]);
@@ -5019,13 +4992,13 @@ prompt(str)
             addRubber("DIMLEADER");
             setRubberMode("DIMLEADER_LINE");
             setRubberPoint("DIMLEADER_LINE_START", global.x1, global.y1);
-            setPromptPrefix(qsTr("Specify second point: "));
+            setPromptPrefix(tr("Specify second point: "));
         }
     }
     else {
         if (std::isnan(strList[0]) || isNaN(strList[1])) {
-            alert(qsTr("Requires two points."));
-            setPromptPrefix(qsTr("Specify second point: "));
+            alert(tr("Requires two points."));
+            setPromptPrefix(tr("Specify second point: "));
         }
         else {
             global.x2 = Number(strList[0]);
@@ -5056,7 +5029,7 @@ main()
     global.y1 = NaN;
     global.x2 = NaN;
     global.y2 = NaN;
-    setPromptPrefix(qsTr("Specify first corner point or [Chamfer/Fillet]: "));
+    setPromptPrefix(tr("Specify first corner point or [Chamfer/Fillet]: "));
 }
 
 
@@ -5071,7 +5044,7 @@ click(x, y)
         addRubber("RECTANGLE");
         setRubberMode("RECTANGLE");
         setRubberPoint("RECTANGLE_START", x, y);
-        setPromptPrefix(qsTr("Specify other corner point or [Dimensions]: "));
+        setPromptPrefix(tr("Specify other corner point or [Dimensions]: "));
     }
     else
     {
@@ -5093,15 +5066,15 @@ context(str)
 void
 prompt(str)
 {
-    if (str == "C" || str == "CHAMFER") //TODO: Probably should add additional qsTr calls here.
+    if (str == "C" || str == "CHAMFER") //TODO: Probably should add additional tr calls here.
     {
         todo("RECTANGLE", "prompt() for CHAMFER");
     }
-    else if (str == "D" || str == "DIMENSIONS") //TODO: Probably should add additional qsTr calls here.
+    else if (str == "D" || str == "DIMENSIONS") //TODO: Probably should add additional tr calls here.
     {
         todo("RECTANGLE", "prompt() for DIMENSIONS");
     }
-    else if (str == "F" || str == "FILLET") //TODO: Probably should add additional qsTr calls here.
+    else if (str == "F" || str == "FILLET") //TODO: Probably should add additional tr calls here.
     {
         todo("RECTANGLE", "prompt() for FILLET");
     }
@@ -5110,8 +5083,8 @@ prompt(str)
         var strList = str.split(",");
         if (std::isnan(strList[0]) || isNaN(strList[1]))
         {
-            alert(qsTr("Invalid point."));
-            setPromptPrefix(qsTr("Specify first point: "));
+            alert(tr("Invalid point."));
+            setPromptPrefix(tr("Specify first point: "));
         }
         else
         {
@@ -5125,7 +5098,7 @@ prompt(str)
                 addRubber("RECTANGLE");
                 setRubberMode("RECTANGLE");
                 setRubberPoint("RECTANGLE_START", x, y);
-                setPromptPrefix(qsTr("Specify other corner point or [Dimensions]: "));
+                setPromptPrefix(tr("Specify other corner point or [Dimensions]: "));
             }
             else
             {
@@ -5156,7 +5129,7 @@ main()
     initCommand();
     clearSelection();
     global.mode = global.mode_BACKGROUND;
-    setPromptPrefix(qsTr("Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: "));
+    setPromptPrefix(tr("Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: "));
 }
 
 
@@ -5177,15 +5150,15 @@ prompt(str)
 {
     if (global.mode == global.mode_BACKGROUND)
     {
-        if (str == "C" || str == "CROSSHAIR") //TODO: Probably should add additional qsTr calls here.
+        if (str == "C" || str == "CROSSHAIR") //TODO: Probably should add additional tr calls here.
         {
             global.mode = global.mode_CROSSHAIR;
-            setPromptPrefix(qsTr("Specify crosshair color: "));
+            setPromptPrefix(tr("Specify crosshair color: "));
         }
-        else if (str == "G" || str == "GRID") //TODO: Probably should add additional qsTr calls here.
+        else if (str == "G" || str == "GRID") //TODO: Probably should add additional tr calls here.
         {
             global.mode = global.mode_GRID;
-            setPromptPrefix(qsTr("Specify grid color: "));
+            setPromptPrefix(tr("Specify grid color: "));
         }
         else
         {
@@ -5195,8 +5168,8 @@ prompt(str)
             var b = Number(strList[2]);
             if (!validRGB(r,g,b))
             {
-                alert(qsTr("Invalid color. R,G,B values must be in the range of 0-255."));
-                setPromptPrefix(qsTr("Specify background color: "));
+                alert(tr("Invalid color. R,G,B values must be in the range of 0-255."));
+                setPromptPrefix(tr("Specify background color: "));
             }
             else
             {
@@ -5213,8 +5186,8 @@ prompt(str)
         var b = Number(strList[2]);
         if (!validRGB(r,g,b))
         {
-            alert(qsTr("Invalid color. R,G,B values must be in the range of 0-255."));
-            setPromptPrefix(qsTr("Specify crosshair color: "));
+            alert(tr("Invalid color. R,G,B values must be in the range of 0-255."));
+            setPromptPrefix(tr("Specify crosshair color: "));
         }
         else
         {
@@ -5230,8 +5203,8 @@ prompt(str)
         var b = Number(strList[2]);
         if (!validRGB(r,g,b))
         {
-            alert(qsTr("Invalid color. R,G,B values must be in the range of 0-255."));
-            setPromptPrefix(qsTr("Specify grid color: "));
+            alert(tr("Invalid color. R,G,B values must be in the range of 0-255."));
+            setPromptPrefix(tr("Specify grid color: "));
         }
         else
         {
@@ -5286,13 +5259,13 @@ main()
     if (numSelected() <= 0)
     {
         //TODO: Prompt to select objects if nothing is preselected
-        alert(qsTr("Preselect objects before invoking the rotate command."));
+        alert(tr("Preselect objects before invoking the rotate command."));
         endCommand();
-        messageBox("information", qsTr("Rotate Preselect"), qsTr("Preselect objects before invoking the rotate command."));
+        messageBox("information", tr("Rotate Preselect"), tr("Preselect objects before invoking the rotate command."));
     }
     else
     {
-        setPromptPrefix(qsTr("Specify base point: "));
+        setPromptPrefix(tr("Specify base point: "));
     }
 }
 
@@ -5312,7 +5285,7 @@ click(x, y)
             setRubberPoint("LINE_START", global.baseX, global.baseY);
             previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, 0);
             appendPromptHistory();
-            setPromptPrefix(qsTr("Specify rotation angle or [Reference]: "));
+            setPromptPrefix(tr("Specify rotation angle or [Reference]: "));
         }
         else
         {
@@ -5335,7 +5308,7 @@ click(x, y)
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.baseRX, global.baseRY);
-            setPromptPrefix(qsTr("Specify second point: "));
+            setPromptPrefix(tr("Specify second point: "));
         }
         else if (std::isnan(global.destRX))
         {
@@ -5345,7 +5318,7 @@ click(x, y)
             setRubberPoint("LINE_START", global.baseX, global.baseY);
             previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
             appendPromptHistory();
-            setPromptPrefix(qsTr("Specify the new angle: "));
+            setPromptPrefix(tr("Specify the new angle: "));
         }
         else if (std::isnan(global.angleNew))
         {
@@ -5370,8 +5343,8 @@ prompt(str)
         if (global.firstRun) {
             var strList = str.split(",");
             if (std::isnan(strList[0]) || isNaN(strList[1])) {
-                alert(qsTr("Invalid point."));
-                setPromptPrefix(qsTr("Specify base point: "));
+                alert(tr("Invalid point."));
+                setPromptPrefix(tr("Specify base point: "));
             }
             else {
                 global.firstRun = false;
@@ -5381,20 +5354,20 @@ prompt(str)
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", global.baseX, global.baseY);
                 previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, 0);
-                setPromptPrefix(qsTr("Specify rotation angle or [Reference]: "));
+                setPromptPrefix(tr("Specify rotation angle or [Reference]: "));
             }
         }
         else {
             if (str == "R" || str == "REFERENCE") {
                 global.mode = global.mode_REFERENCE;
-                setPromptPrefix(qsTr("Specify the reference angle") + " {0.00}: ");
+                setPromptPrefix(tr("Specify the reference angle") + " {0.00}: ");
                 clearRubber();
                 previewOff();
             }
             else {
                 if (std::isnan(str)) {
-                    alert(qsTr("Requires valid numeric angle, second point, or option keyword."));
-                    setPromptPrefix(qsTr("Specify rotation angle or [Reference]: "));
+                    alert(tr("Requires valid numeric angle, second point, or option keyword."));
+                    setPromptPrefix(tr("Specify rotation angle or [Reference]: "));
                 }
                 else {
                     global.angle = Number(str);
@@ -5410,8 +5383,8 @@ prompt(str)
             if (std::isnan(str)) {
                 var strList = str.split(",");
                 if (std::isnan(strList[0]) || isNaN(strList[1])) {
-                    alert(qsTr("Requires valid numeric angle or two points."));
-                    setPromptPrefix(qsTr("Specify the reference angle") + " {0.00}: ");
+                    alert(tr("Requires valid numeric angle or two points."));
+                    setPromptPrefix(tr("Specify the reference angle") + " {0.00}: ");
                 }
                 else {
                     global.baseRX = Number(strList[0]);
@@ -5419,7 +5392,7 @@ prompt(str)
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", global.baseRX, global.baseRY);
-                    setPromptPrefix(qsTr("Specify second point: "));
+                    setPromptPrefix(tr("Specify second point: "));
                 }
             }
             else {
@@ -5434,15 +5407,15 @@ prompt(str)
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", global.baseX, global.baseY);
                 previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
-                setPromptPrefix(qsTr("Specify the new angle: "));
+                setPromptPrefix(tr("Specify the new angle: "));
             }
         }
         else if (std::isnan(global.destRX)) {
             if (std::isnan(str)) {
                 var strList = str.split(",");
                 if (std::isnan(strList[0]) || isNaN(strList[1])) {
-                    alert(qsTr("Requires valid numeric angle or two points."));
-                    setPromptPrefix(qsTr("Specify second point: "));
+                    alert(tr("Requires valid numeric angle or two points."));
+                    setPromptPrefix(tr("Specify second point: "));
                 }
                 else {
                     global.destRX = Number(strList[0]);
@@ -5450,7 +5423,7 @@ prompt(str)
                     global.angleRef = calculateAngle(global.baseRX, global.baseRY, global.destRX, global.destRY);
                     previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
                     setRubberPoint("LINE_START", global.baseX, global.baseY);
-                    setPromptPrefix(qsTr("Specify the new angle: "));
+                    setPromptPrefix(tr("Specify the new angle: "));
                 }
             }
             else {
@@ -5462,15 +5435,15 @@ prompt(str)
                 //The reference angle is what we will use later.
                 global.angleRef = Number(str);
                 previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
-                setPromptPrefix(qsTr("Specify the new angle: "));
+                setPromptPrefix(tr("Specify the new angle: "));
             }
         }
         else if (std::isnan(global.angleNew)) {
             if (std::isnan(str)) {
                 var strList = str.split(",");
                 if (std::isnan(strList[0]) || isNaN(strList[1])) {
-                    alert(qsTr("Requires valid numeric angle or second point."));
-                    setPromptPrefix(qsTr("Specify the new angle: "));
+                    alert(tr("Requires valid numeric angle or second point."));
+                    setPromptPrefix(tr("Specify the new angle: "));
                 }
                 else {
                     var x = Number(strList[0]);
@@ -5606,12 +5579,12 @@ main()
 
     if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
-        alert(qsTr("Preselect objects before invoking the scale command."));
+        alert(tr("Preselect objects before invoking the scale command."));
         endCommand();
-        messageBox("information", qsTr("Scale Preselect"), qsTr("Preselect objects before invoking the scale command."));
+        messageBox("information", tr("Scale Preselect"), tr("Preselect objects before invoking the scale command."));
     }
     else {
-        setPromptPrefix(qsTr("Specify base point: "));
+        setPromptPrefix(tr("Specify base point: "));
     }
 }
 
@@ -5629,7 +5602,7 @@ click(x, y)
             setRubberPoint("LINE_START", global.baseX, global.baseY);
             previewOn("SELECTED", "SCALE", global.baseX, global.baseY, 1);
             appendPromptHistory();
-            setPromptPrefix(qsTr("Specify scale factor or [Reference]: "));
+            setPromptPrefix(tr("Specify scale factor or [Reference]: "));
         }
         else {
             global.destX = x;
@@ -5649,7 +5622,7 @@ click(x, y)
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.baseRX, global.baseRY);
-            setPromptPrefix(qsTr("Specify second point: "));
+            setPromptPrefix(tr("Specify second point: "));
         }
         else if (std::isnan(global.destRX)) {
             global.destRX = x;
@@ -5659,14 +5632,14 @@ click(x, y)
                 global.destRX    = NaN;
                 global.destRY    = NaN;
                 global.factorRef = NaN;
-                alert(qsTr("Value must be positive and nonzero."));
-                setPromptPrefix(qsTr("Specify second point: "));
+                alert(tr("Value must be positive and nonzero."));
+                setPromptPrefix(tr("Specify second point: "));
             }
             else {
                 appendPromptHistory();
                 setRubberPoint("LINE_START", global.baseX, global.baseY);
                 previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
-                setPromptPrefix(qsTr("Specify new length: "));
+                setPromptPrefix(tr("Specify new length: "));
             }
         }
         else if (std::isnan(global.factorNew))
@@ -5675,8 +5648,8 @@ click(x, y)
             if (global.factorNew <= 0.0)
             {
                 global.factorNew = NaN;
-                alert(qsTr("Value must be positive and nonzero."));
-                setPromptPrefix(qsTr("Specify new length: "));
+                alert(tr("Value must be positive and nonzero."));
+                setPromptPrefix(tr("Specify new length: "));
             }
             else
             {
@@ -5702,8 +5675,8 @@ prompt(str)
         if (global.firstRun) {
             var strList = str.split(",");
             if (std::isnan(strList[0]) || isNaN(strList[1])) {
-                alert(qsTr("Invalid point."));
-                setPromptPrefix(qsTr("Specify base point: "));
+                alert(tr("Invalid point."));
+                setPromptPrefix(tr("Specify base point: "));
             }
             else {
                 global.firstRun = false;
@@ -5713,15 +5686,15 @@ prompt(str)
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", global.baseX, global.baseY);
                 previewOn("SELECTED", "SCALE", global.baseX, global.baseY, 1);
-                setPromptPrefix(qsTr("Specify scale factor or [Reference]: "));
+                setPromptPrefix(tr("Specify scale factor or [Reference]: "));
             }
         }
         else
         {
-            if (str == "R" || str == "REFERENCE") //TODO: Probably should add additional qsTr calls here.
+            if (str == "R" || str == "REFERENCE") //TODO: Probably should add additional tr calls here.
             {
                 global.mode = global.mode_REFERENCE;
-                setPromptPrefix(qsTr("Specify reference length") + " {1}: ");
+                setPromptPrefix(tr("Specify reference length") + " {1}: ");
                 clearRubber();
                 previewOff();
             }
@@ -5729,8 +5702,8 @@ prompt(str)
             {
                 if (std::isnan(str))
                 {
-                    alert(qsTr("Requires valid numeric distance, second point, or option keyword."));
-                    setPromptPrefix(qsTr("Specify scale factor or [Reference]: "));
+                    alert(tr("Requires valid numeric distance, second point, or option keyword."));
+                    setPromptPrefix(tr("Specify scale factor or [Reference]: "));
                 }
                 else
                 {
@@ -5751,8 +5724,8 @@ prompt(str)
                 var strList = str.split(",");
                 if (std::isnan(strList[0]) || isNaN(strList[1]))
                 {
-                    alert(qsTr("Requires valid numeric distance or two points."));
-                    setPromptPrefix(qsTr("Specify reference length") + " {1}: ");
+                    alert(tr("Requires valid numeric distance or two points."));
+                    setPromptPrefix(tr("Specify reference length") + " {1}: ");
                 }
                 else
                 {
@@ -5761,7 +5734,7 @@ prompt(str)
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", global.baseRX, global.baseRY);
-                    setPromptPrefix(qsTr("Specify second point: "));
+                    setPromptPrefix(tr("Specify second point: "));
                 }
             }
             else
@@ -5780,8 +5753,8 @@ prompt(str)
                     global.destRX    = NaN;
                     global.destRY    = NaN;
                     global.factorRef = NaN;
-                    alert(qsTr("Value must be positive and nonzero."));
-                    setPromptPrefix(qsTr("Specify reference length") + " {1}: ");
+                    alert(tr("Value must be positive and nonzero."));
+                    setPromptPrefix(tr("Specify reference length") + " {1}: ");
                 }
                 else
                 {
@@ -5789,7 +5762,7 @@ prompt(str)
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", global.baseX, global.baseY);
                     previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
-                    setPromptPrefix(qsTr("Specify new length: "));
+                    setPromptPrefix(tr("Specify new length: "));
                 }
             }
         }
@@ -5798,8 +5771,8 @@ prompt(str)
                 var strList = str.split(",");
                 if (std::isnan(strList[0]) || isNaN(strList[1]))
                 {
-                    alert(qsTr("Requires valid numeric distance or two points."));
-                    setPromptPrefix(qsTr("Specify second point: "));
+                    alert(tr("Requires valid numeric distance or two points."));
+                    setPromptPrefix(tr("Specify second point: "));
                 }
                 else
                 {
@@ -5811,14 +5784,14 @@ prompt(str)
                         global.destRX    = NaN;
                         global.destRY    = NaN;
                         global.factorRef = NaN;
-                        alert(qsTr("Value must be positive and nonzero."));
-                        setPromptPrefix(qsTr("Specify second point: "));
+                        alert(tr("Value must be positive and nonzero."));
+                        setPromptPrefix(tr("Specify second point: "));
                     }
                     else
                     {
                         setRubberPoint("LINE_START", global.baseX, global.baseY);
                         previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
-                        setPromptPrefix(qsTr("Specify new length: "));
+                        setPromptPrefix(tr("Specify new length: "));
                     }
                 }
             }
@@ -5836,14 +5809,14 @@ prompt(str)
                     global.destRX    = NaN;
                     global.destRY    = NaN;
                     global.factorRef = NaN;
-                    alert(qsTr("Value must be positive and nonzero."));
-                    setPromptPrefix(qsTr("Specify second point: "));
+                    alert(tr("Value must be positive and nonzero."));
+                    setPromptPrefix(tr("Specify second point: "));
                 }
                 else
                 {
                     setRubberPoint("LINE_START", global.baseX, global.baseY);
                     previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
-                    setPromptPrefix(qsTr("Specify new length: "));
+                    setPromptPrefix(tr("Specify new length: "));
                 }
             }
         }
@@ -5854,8 +5827,8 @@ prompt(str)
                 var strList = str.split(",");
                 if (std::isnan(strList[0]) || isNaN(strList[1]))
                 {
-                    alert(qsTr("Requires valid numeric distance or second point."));
-                    setPromptPrefix(qsTr("Specify new length: "));
+                    alert(tr("Requires valid numeric distance or second point."));
+                    setPromptPrefix(tr("Specify new length: "));
                 }
                 else
                 {
@@ -5865,8 +5838,8 @@ prompt(str)
                     if (global.factorNew <= 0.0)
                     {
                         global.factorNew = NaN;
-                        alert(qsTr("Value must be positive and nonzero."));
-                        setPromptPrefix(qsTr("Specify new length: "));
+                        alert(tr("Value must be positive and nonzero."));
+                        setPromptPrefix(tr("Specify new length: "));
                     }
                     else
                     {
@@ -5882,8 +5855,8 @@ prompt(str)
                 if (global.factorNew <= 0.0)
                 {
                     global.factorNew = NaN;
-                    alert(qsTr("Value must be positive and nonzero."));
-                    setPromptPrefix(qsTr("Specify new length: "));
+                    alert(tr("Value must be positive and nonzero."));
+                    setPromptPrefix(tr("Specify new length: "));
                 }
                 else
                 {
@@ -5922,9 +5895,9 @@ main()
     global.textHeight = NaN;
     global.textRotation = NaN;
     global.mode = global.mode_SETGEOM;
-    setPromptPrefix(qsTr("Current font: ") + "{" + global.textFont + "} " + qsTr("Text height: ") + "{" +  textSize() + "}");
+    setPromptPrefix(tr("Current font: ") + "{" + global.textFont + "} " + tr("Text height: ") + "{" +  textSize() + "}");
     appendPromptHistory();
-    setPromptPrefix(qsTr("Specify start point of text or [Justify/Setfont]: "));
+    setPromptPrefix(tr("Specify start point of text or [Justify/Setfont]: "));
 }
 
 
@@ -5939,19 +5912,19 @@ click(x, y)
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.textX, global.textY);
             appendPromptHistory();
-            setPromptPrefix(qsTr("Specify text height") + " {" + textSize() + "}: ");
+            setPromptPrefix(tr("Specify text height") + " {" + textSize() + "}: ");
         }
         else if (std::isnan(global.textHeight)) {
             global.textHeight = calculateDistance(global.textX, global.textY, x, y);
             setTextSize(global.textHeight);
             appendPromptHistory();
-            setPromptPrefix(qsTr("Specify text angle") + " {" + textAngle() + "}: ");
+            setPromptPrefix(tr("Specify text angle") + " {" + textAngle() + "}: ");
         }
         else if (std::isnan(global.textRotation)) {
             global.textRotation = calculateAngle(global.textX, global.textY, x, y);
             setTextAngle(global.textRotation);
             appendPromptHistory();
-            setPromptPrefix(qsTr("Enter text: "));
+            setPromptPrefix(tr("Enter text: "));
             global.mode = global.mode_RAPID;
             enablePromptRapidFire();
             clearRubber();
@@ -5984,90 +5957,90 @@ prompt(str)
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Center";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify center point of text or [Justify/Setfont]: "));
+            setPromptPrefix(tr("Specify center point of text or [Justify/Setfont]: "));
         }
         else if (str == "R" || str == "RIGHT") {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Right";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify right-end point of text or [Justify/Setfont]: "));
+            setPromptPrefix(tr("Specify right-end point of text or [Justify/Setfont]: "));
         }
         else if (str == "A" || str == "ALIGN") {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Aligned";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify start point of text or [Justify/Setfont]: "));
+            setPromptPrefix(tr("Specify start point of text or [Justify/Setfont]: "));
         }
         else if (str == "M" || str == "MIDDLE") {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Middle";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify middle point of text or [Justify/Setfont]: "));
+            setPromptPrefix(tr("Specify middle point of text or [Justify/Setfont]: "));
         }
         else if (str == "F" || str == "FIT") {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Fit";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify start point of text or [Justify/Setfont]: "));
+            setPromptPrefix(tr("Specify start point of text or [Justify/Setfont]: "));
         }
         else if (str == "TL" || str == "TOPLEFT") {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Top Left";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify top-left point of text or [Justify/Setfont]: "));
+            setPromptPrefix(tr("Specify top-left point of text or [Justify/Setfont]: "));
         }
         else if (str == "TC" || str == "TOPCENTER") {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Top Center";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify top-center point of text or [Justify/Setfont]: "));
+            setPromptPrefix(tr("Specify top-center point of text or [Justify/Setfont]: "));
         }
         else if (str == "TR" || str == "TOPRIGHT") {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Top Right";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify top-right point of text or [Justify/Setfont]: "));
+            setPromptPrefix(tr("Specify top-right point of text or [Justify/Setfont]: "));
         }
         else if (str == "ML" || str == "MIDDLELEFT") {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Middle Left";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify middle-left point of text or [Justify/Setfont]: "));
+            setPromptPrefix(tr("Specify middle-left point of text or [Justify/Setfont]: "));
         }
         else if (str == "MC" || str == "MIDDLECENTER") {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Middle Center";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify middle-center point of text or [Justify/Setfont]: "));
+            setPromptPrefix(tr("Specify middle-center point of text or [Justify/Setfont]: "));
         }
         else if (str == "MR" || str == "MIDDLERIGHT") {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Middle Right";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify middle-right point of text or [Justify/Setfont]: "));
+            setPromptPrefix(tr("Specify middle-right point of text or [Justify/Setfont]: "));
         }
         else if (str == "BL" || str == "BOTTOMLEFT") {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Bottom Left";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify bottom-left point of text or [Justify/Setfont]: "));
+            setPromptPrefix(tr("Specify bottom-left point of text or [Justify/Setfont]: "));
         }
         else if (str == "BC" || str == "BOTTOMCENTER") {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Bottom Center";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify bottom-center point of text or [Justify/Setfont]: "));
+            setPromptPrefix(tr("Specify bottom-center point of text or [Justify/Setfont]: "));
         }
         else if (str == "BR" || str == "BOTTOMRIGHT") {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Bottom Right";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify bottom-right point of text or [Justify/Setfont]: "));
+            setPromptPrefix(tr("Specify bottom-right point of text or [Justify/Setfont]: "));
         }
         else
         {
-            alert(qsTr("Invalid option keyword."));
-            setPromptPrefix(qsTr("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "));
+            alert(tr("Invalid option keyword."));
+            setPromptPrefix(tr("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "));
         }
     }
     else if (global.mode == global.mode_SETFONT) {
@@ -6075,24 +6048,24 @@ prompt(str)
         global.textFont = str;
         setRubberText("TEXT_FONT", global.textFont);
         setTextFont(global.textFont);
-        setPromptPrefix(qsTr("Specify start point of text or [Justify/Setfont]: "));
+        setPromptPrefix(tr("Specify start point of text or [Justify/Setfont]: "));
     }
     else if (global.mode == global.mode_SETGEOM) {
         if (std::isnan(global.textX)) {
             if (str == "J" || str == "JUSTIFY") {
                 global.mode = global.mode_JUSTIFY;
-                setPromptPrefix(qsTr("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "));
+                setPromptPrefix(tr("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "));
             }
             else if (str == "S" || str == "SETFONT") {
                 global.mode = global.mode_SETFONT;
-                setPromptPrefix(qsTr("Specify font name: "));
+                setPromptPrefix(tr("Specify font name: "));
             }
             else {
                 var strList = str.split(",");
                 if (std::isnan(strList[0]) || isNaN(strList[1]))
                 {
-                    alert(qsTr("Point or option keyword required."));
-                    setPromptPrefix(qsTr("Specify start point of text or [Justify/Setfont]: "));
+                    alert(tr("Point or option keyword required."));
+                    setPromptPrefix(tr("Specify start point of text or [Justify/Setfont]: "));
                 }
                 else
                 {
@@ -6101,23 +6074,23 @@ prompt(str)
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", global.textX, global.textY);
-                    setPromptPrefix(qsTr("Specify text height") + " {" + textSize() + "}: ");
+                    setPromptPrefix(tr("Specify text height") + " {" + textSize() + "}: ");
                 }
             }
         }
         else if (std::isnan(global.textHeight)) {
             if (str == "") {
                 global.textHeight = textSize();
-                setPromptPrefix(qsTr("Specify text angle") + " {" + textAngle() + "}: ");
+                setPromptPrefix(tr("Specify text angle") + " {" + textAngle() + "}: ");
             }
             else if (std::isnan(str)) {
-                alert(qsTr("Requires valid numeric distance or second point."));
-                setPromptPrefix(qsTr("Specify text height") + " {" + textSize() + "}: ");
+                alert(tr("Requires valid numeric distance or second point."));
+                setPromptPrefix(tr("Specify text height") + " {" + textSize() + "}: ");
             }
             else {
                 global.textHeight = Number(str);
                 setTextSize(global.textHeight);
-                setPromptPrefix(qsTr("Specify text angle") + " {" + textAngle() + "}: ");
+                setPromptPrefix(tr("Specify text angle") + " {" + textAngle() + "}: ");
             }
         }
         else if (std::isnan(global.textRotation))
@@ -6125,7 +6098,7 @@ prompt(str)
             if (str == "")
             {
                 global.textRotation = textAngle();
-                setPromptPrefix(qsTr("Enter text: "));
+                setPromptPrefix(tr("Enter text: "));
                 global.mode = global.mode_RAPID;
                 enablePromptRapidFire();
                 clearRubber();
@@ -6139,14 +6112,14 @@ prompt(str)
             }
             else if (std::isnan(str))
             {
-                alert(qsTr("Requires valid numeric angle or second point."));
-                setPromptPrefix(qsTr("Specify text angle") + " {" + textAngle() + "}: ");
+                alert(tr("Requires valid numeric angle or second point."));
+                setPromptPrefix(tr("Specify text angle") + " {" + textAngle() + "}: ");
             }
             else
             {
                 global.textRotation = Number(str);
                 setTextAngle(global.textRotation);
-                setPromptPrefix(qsTr("Enter text: "));
+                setPromptPrefix(tr("Enter text: "));
                 global.mode = global.mode_RAPID;
                 enablePromptRapidFire();
                 clearRubber();
@@ -6889,7 +6862,7 @@ main()
     global.x2       = NaN;
     global.y2       = NaN;
     global.mode = global.mode_NUM_POINTS;
-    setPromptPrefix(qsTr("Enter number of star points") + " {" + global.numPoints.toString() + "}: ");
+    setPromptPrefix(tr("Enter number of star points") + " {" + global.numPoints.toString() + "}: ");
 }
 
 
@@ -6905,7 +6878,7 @@ click(x, y)
         global.cx = x;
         global.cy = y;
         global.mode = global.mode_RAD_OUTER;
-        setPromptPrefix(qsTr("Specify outer radius of star: "));
+        setPromptPrefix(tr("Specify outer radius of star: "));
         addRubber("POLYGON");
         setRubberMode("POLYGON");
         updateStar(global.cx, global.cy);
@@ -6916,7 +6889,7 @@ click(x, y)
         global.x1 = x;
         global.y1 = y;
         global.mode = global.mode_RAD_INNER;
-        setPromptPrefix(qsTr("Specify inner radius of star: "));
+        setPromptPrefix(tr("Specify inner radius of star: "));
         updateStar(global.x1, global.y1);
     }
     else if (global.mode == global.mode_RAD_INNER)
@@ -6962,19 +6935,19 @@ prompt(str)
 {
     if (global.mode == global.mode_NUM_POINTS) {
         if (str == "" && global.numPoints >= 3 && global.numPoints <= 1024) {
-            setPromptPrefix(qsTr("Specify center point: "));
+            setPromptPrefix(tr("Specify center point: "));
             global.mode = global.mode_CENTER_PT;
         }
         else {
             var tmp = Number(str);
             if (std::isnan(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024) {
-                alert(qsTr("Requires an integer between 3 and 1024."));
-                setPromptPrefix(qsTr("Enter number of star points") + " {" + global.numPoints.toString() + "}: ");
+                alert(tr("Requires an integer between 3 and 1024."));
+                setPromptPrefix(tr("Enter number of star points") + " {" + global.numPoints.toString() + "}: ");
             }
             else
             {
                 global.numPoints = tmp;
-                setPromptPrefix(qsTr("Specify center point: "));
+                setPromptPrefix(tr("Specify center point: "));
                 global.mode = global.mode_CENTER_PT;
             }
         }
@@ -6982,14 +6955,14 @@ prompt(str)
     else if (global.mode == global.mode_CENTER_PT) {
         var strList = str.split(",");
         if (std::isnan(strList[0]) || isNaN(strList[1])) {
-            alert(qsTr("Invalid point."));
-            setPromptPrefix(qsTr("Specify center point: "));
+            alert(tr("Invalid point."));
+            setPromptPrefix(tr("Specify center point: "));
         }
         else {
             global.cx = Number(strList[0]);
             global.cy = Number(strList[1]);
             global.mode = global.mode_RAD_OUTER;
-            setPromptPrefix(qsTr("Specify outer radius of star: "));
+            setPromptPrefix(tr("Specify outer radius of star: "));
             addRubber("POLYGON");
             setRubberMode("POLYGON");
             updateStar(qsnapX(), qsnapY());
@@ -7001,15 +6974,15 @@ prompt(str)
         var strList = str.split(",");
         if (std::isnan(strList[0]) || isNaN(strList[1]))
         {
-            alert(qsTr("Invalid point."));
-            setPromptPrefix(qsTr("Specify outer radius of star: "));
+            alert(tr("Invalid point."));
+            setPromptPrefix(tr("Specify outer radius of star: "));
         }
         else
         {
             global.x1 = Number(strList[0]);
             global.y1 = Number(strList[1]);
             global.mode = global.mode_RAD_INNER;
-            setPromptPrefix(qsTr("Specify inner radius of star: "));
+            setPromptPrefix(tr("Specify inner radius of star: "));
             updateStar(qsnapX(), qsnapY());
         }
     }
@@ -7018,8 +6991,8 @@ prompt(str)
         var strList = str.split(",");
         if (std::isnan(strList[0]) || isNaN(strList[1]))
         {
-            alert(qsTr("Invalid point."));
-            setPromptPrefix(qsTr("Specify inner radius of star: "));
+            alert(tr("Invalid point."));
+            setPromptPrefix(tr("Specify inner radius of star: "));
         }
         else
         {
@@ -7077,7 +7050,7 @@ syswindows_main(void)
 {
     initCommand();
     clearSelection();
-    setPromptPrefix(qsTr("Enter an option [Cascade/Tile]: "));
+    setPromptPrefix(tr("Enter an option [Cascade/Tile]: "));
 }
 
 void
@@ -7092,8 +7065,8 @@ syswindows_prompt(std::string str)
         endCommand();
     }
     else {
-        alert(qsTr("Invalid option keyword."));
-        setPromptPrefix(qsTr("Enter an option [Cascade/Tile]: "));
+        alert(tr("Invalid option keyword."));
+        setPromptPrefix(tr("Enter an option [Cascade/Tile]: "));
     }
 }
 

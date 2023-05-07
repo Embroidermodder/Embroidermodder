@@ -13,7 +13,7 @@
 \item 
 \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{struct_emb_view___a5a419de28c2e32380610f3c150a044ca}{scale}}
 \item 
-char \mbox{\hyperlink{struct_emb_view___ae57616b4d70c48c75cc90798d3360d69}{grid\+\_\+type}} \mbox{[}200\mbox{]}
+QString \mbox{\hyperlink{struct_emb_view___a9f4e4aa7e0ab33955ac723f8d0aa6dfa}{grid\+\_\+type}}
 \item 
 int \mbox{\hyperlink{struct_emb_view___a58b88594ab95157f9a4e4b655ba7a639}{ui\+\_\+mode}}
 \item 
@@ -41,7 +41,7 @@ bool \mbox{\hyperlink{struct_emb_view___a9232eb3d6544d0af9bc953cc62bc3b45}{simul
 \item 
 clock\+\_\+t \mbox{\hyperlink{struct_emb_view___ab0b389f512ac97f99fc1c843aca3165c}{simulation\+\_\+start}}
 \item 
-char \mbox{\hyperlink{struct_emb_view___a80bbdc55f4ddc408a0194bff38330ffa}{text\+\_\+font}} \mbox{[}200\mbox{]}
+QString \mbox{\hyperlink{struct_emb_view___a2ba15ac73c786ba097fe0a44534e6643}{text\+\_\+font}}
 \item 
 \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{struct_emb_view___ac6c9bc5d28f097f5ebee247583fcf355}{text\+\_\+size}}
 \item 
@@ -57,9 +57,9 @@ bool \mbox{\hyperlink{struct_emb_view___a0f1cc2cfa2811a2292f8e9b8ce4579ac}{text\
 \item 
 bool \mbox{\hyperlink{struct_emb_view___aeb1b3d94e2c11f40c8ba63327335d87e}{text\+\_\+style\+\_\+strikeout}}
 \item 
-char \mbox{\hyperlink{struct_emb_view___a7b91ecb1f593bdecbfb953ede1a4fde9}{filename}} \mbox{[}200\mbox{]}
+QString \mbox{\hyperlink{struct_emb_view___aac274af37f5fbaaa2c47d19145cfd856}{filename}}
 \item 
-\mbox{\hyperlink{embroidermodder_8h_a459ace9a6c614fe41b7f08ba91bc6dd4}{Undo\+History}} \mbox{\hyperlink{struct_emb_view___a910be9b9781d5fcbfd76cdcb713e3b52}{undo\+\_\+history}}
+QString\+List \mbox{\hyperlink{struct_emb_view___ac73ebb96d8421e4c0c9fe2627b668a9a}{undo\+\_\+history}}
 \item 
 int \mbox{\hyperlink{struct_emb_view___ae394570258768b888bfbdfbf4c1ac419}{selected}} \mbox{[}100\mbox{]}
 \item 
@@ -70,15 +70,15 @@ int \mbox{\hyperlink{struct_emb_view___a717c93116831dd05a41708e3a4ee2213}{rubber
 
 
 \doxysubsubsection{Detailed Description}
-\hypertarget{embroidermodder_8h_autotoc_md5}{}\doxysubsubsection{Emb\+Views}\label{embroidermodder_8h_autotoc_md5}
+\hypertarget{embroidermodder_8h_autotoc_md4}{}\doxysubsubsection{Emb\+Views}\label{embroidermodder_8h_autotoc_md4}
 The Emb\+View describes how the render is displayed. 
 
 \doxysubsubsection{Member Data Documentation}
-\mbox{\Hypertarget{struct_emb_view___a7b91ecb1f593bdecbfb953ede1a4fde9}\label{struct_emb_view___a7b91ecb1f593bdecbfb953ede1a4fde9}} 
+\mbox{\Hypertarget{struct_emb_view___aac274af37f5fbaaa2c47d19145cfd856}\label{struct_emb_view___aac274af37f5fbaaa2c47d19145cfd856}} 
 \index{EmbView\_@{EmbView\_}!filename@{filename}}
 \index{filename@{filename}!EmbView\_@{EmbView\_}}
 \doxyparagraph{\texorpdfstring{filename}{filename}}
-{\footnotesize\ttfamily char filename\mbox{[}200\mbox{]}}
+{\footnotesize\ttfamily QString filename}
 
 \mbox{\Hypertarget{struct_emb_view___a7b9309a8010bf2383ac32e7ee71673f1}\label{struct_emb_view___a7b9309a8010bf2383ac32e7ee71673f1}} 
 \index{EmbView\_@{EmbView\_}!grid\_mode@{grid\_mode}}
@@ -86,11 +86,11 @@ The Emb\+View describes how the render is displayed.
 \doxyparagraph{\texorpdfstring{grid\_mode}{grid\_mode}}
 {\footnotesize\ttfamily bool grid\+\_\+mode}
 
-\mbox{\Hypertarget{struct_emb_view___ae57616b4d70c48c75cc90798d3360d69}\label{struct_emb_view___ae57616b4d70c48c75cc90798d3360d69}} 
+\mbox{\Hypertarget{struct_emb_view___a9f4e4aa7e0ab33955ac723f8d0aa6dfa}\label{struct_emb_view___a9f4e4aa7e0ab33955ac723f8d0aa6dfa}} 
 \index{EmbView\_@{EmbView\_}!grid\_type@{grid\_type}}
 \index{grid\_type@{grid\_type}!EmbView\_@{EmbView\_}}
 \doxyparagraph{\texorpdfstring{grid\_type}{grid\_type}}
-{\footnotesize\ttfamily char grid\+\_\+type\mbox{[}200\mbox{]}}
+{\footnotesize\ttfamily QString grid\+\_\+type}
 
 \mbox{\Hypertarget{struct_emb_view___a9ccb0c72197900cb5bd488f0a5d991f3}\label{struct_emb_view___a9ccb0c72197900cb5bd488f0a5d991f3}} 
 \index{EmbView\_@{EmbView\_}!lwt\_mode@{lwt\_mode}}
@@ -200,11 +200,11 @@ The Emb\+View describes how the render is displayed.
 \doxyparagraph{\texorpdfstring{text\_angle}{text\_angle}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} text\+\_\+angle}
 
-\mbox{\Hypertarget{struct_emb_view___a80bbdc55f4ddc408a0194bff38330ffa}\label{struct_emb_view___a80bbdc55f4ddc408a0194bff38330ffa}} 
+\mbox{\Hypertarget{struct_emb_view___a2ba15ac73c786ba097fe0a44534e6643}\label{struct_emb_view___a2ba15ac73c786ba097fe0a44534e6643}} 
 \index{EmbView\_@{EmbView\_}!text\_font@{text\_font}}
 \index{text\_font@{text\_font}!EmbView\_@{EmbView\_}}
 \doxyparagraph{\texorpdfstring{text\_font}{text\_font}}
-{\footnotesize\ttfamily char text\+\_\+font\mbox{[}200\mbox{]}}
+{\footnotesize\ttfamily QString text\+\_\+font}
 
 \mbox{\Hypertarget{struct_emb_view___ac6c9bc5d28f097f5ebee247583fcf355}\label{struct_emb_view___ac6c9bc5d28f097f5ebee247583fcf355}} 
 \index{EmbView\_@{EmbView\_}!text\_size@{text\_size}}
@@ -248,11 +248,11 @@ The Emb\+View describes how the render is displayed.
 \doxyparagraph{\texorpdfstring{ui\_mode}{ui\_mode}}
 {\footnotesize\ttfamily int ui\+\_\+mode}
 
-\mbox{\Hypertarget{struct_emb_view___a910be9b9781d5fcbfd76cdcb713e3b52}\label{struct_emb_view___a910be9b9781d5fcbfd76cdcb713e3b52}} 
+\mbox{\Hypertarget{struct_emb_view___ac73ebb96d8421e4c0c9fe2627b668a9a}\label{struct_emb_view___ac73ebb96d8421e4c0c9fe2627b668a9a}} 
 \index{EmbView\_@{EmbView\_}!undo\_history@{undo\_history}}
 \index{undo\_history@{undo\_history}!EmbView\_@{EmbView\_}}
 \doxyparagraph{\texorpdfstring{undo\_history}{undo\_history}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a459ace9a6c614fe41b7f08ba91bc6dd4}{Undo\+History}} undo\+\_\+history}
+{\footnotesize\ttfamily QString\+List undo\+\_\+history}
 
 
 

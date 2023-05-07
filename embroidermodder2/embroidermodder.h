@@ -21,22 +21,27 @@
 #ifndef __EMBROIDERMODDER_UTILITY_H__
 #define __EMBROIDERMODDER_UTILITY_H__
 
+/*
+ * C/C++ Standard Libraries.
+ */
 #include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <cstdint>
 #include <cmath>
 #include <ctime>
 #include <cinttypes>
-
 #include <vector>
 #include <unordered_map>
 #include <string>
 #include <filesystem>
 
+/*
+ * Libraries included in "extern/".
+ */
 #include "embroidery.h"
 #include "toml.h"
 
+/*
+ * Qt 6.0+ libraries.
+ */
 #include <QAction>
 #include <QApplication>
 #include <QComboBox>
@@ -122,41 +127,63 @@ class TextSingleObject;
  * parents.
  */
 typedef struct UiObject_ {
-    char fname[200]; /*< \todo document this */
-    char command[200]; /*< \todo document this */
-    bool firstRun; /*< If this UiObject has been put through the
-                       user interaction processor. */
-    EmbVector controlPoints[10]; /*< Storage for however many Rubber Points the
-                                     design needs. */
-    char controlPointLabels[10][200]; /*< Storage for the labels for the Rubber Points
-                                          using the same indexing. */
-    int n_controlPoints; /*< The number of entries in the controlPoints
-                             and controlPointsLabels. */
-    int numPoints; /*< The number of points if we consider the object as a Polygon. */
-    int minPoints; /*< The minimum number of points needed to make the
-                       polygon look somewhat like the design. */
-    int maxPoints; /*< The maximum number of points before adding more will
-                       do nothing but slow down the program. */
-    EmbVector center; /*< Where the polygon is centered. */
+    std::string fname;
+        /*< \todo document this */
+    std::string command;
+        /*< \todo document this */
+    bool firstRun;
+        /*< If this UiObject has been put through the
+            user interaction processor. */
+    std::vector<EmbVector> controlPoints;
+        /*< Storage for however many Rubber Points the
+            design needs. */
+    std::vector<std::string> controlPointLabels;
+        /*< Storage for the labels for the Rubber Points
+            using the same indexing. */
+    int numPoints;
+        /*< The number of points if we consider the object as a Polygon. */
+    int minPoints;
+        /*< The minimum number of points needed to make the
+            polygon look somewhat like the design. */
+    int maxPoints;
+        /*< The maximum number of points before adding more will
+            do nothing but slow down the program. */
+    EmbVector center;
+        /*< Where the polygon is centered. */
     EmbVector scale; /*< The scale of the object: note that the default
                          may not be (1.0, 1.0). */
-    EmbReal rotation; /*< \todo document this */
-    uint32_t mode; /*< The mode argument records what kind of design we are
-                           using and how to interact with it. */
-    char path_desc[1000]; /*< The SVG style path spec. */
-    char text[200]; /*< The text to be rendered to the scene. */
-    int textJustify; /*< One of the JUSTIFY_* constants representing what kind
-                         of alignment to use. */
-    char textFont[200]; /*< The file name of the font to use. */
-    EmbReal textHeight; /*< The text height. */
-    EmbReal textRotation; /*< The rotation of the text in the scene. */
-    //GLuint texture_id; /*< Pointer to a texture that may be rendered to the object. */
-    char id[200]; /*< \todo document this */
-    int pattern_index; /*< \todo document this */
-    char type[200]; /*< \todo document this */
-    int object_index; /*< \todo document this */
-    bool selectable; /*< \todo document this */
-    EmbColor color; /*< \todo document this */
+    EmbReal rotation;
+        /*< \todo document this */
+    uint32_t mode;
+        /*< The mode argument records what kind of design we are
+            using and how to interact with it. */
+    std::string path_desc;
+        /*< The SVG style path spec. */
+    std::string text;
+        /*< The text to be rendered to the scene. */
+    int textJustify;
+        /*< One of the JUSTIFY_* constants representing what kind
+            of alignment to use. */
+    std::string textFont;
+        /*< The file name of the font to use. */
+    EmbReal textHeight;
+        /*< The text height. */
+    EmbReal textRotation;
+        /*< The rotation of the text in the scene. */
+    //GLuint texture_id;
+        /*< Pointer to a texture that may be rendered to the object. */
+    std::string id;
+        /*< \todo document this */
+    int pattern_index;
+        /*< \todo document this */
+    char type[200];
+        /*< \todo document this */
+    int object_index;
+        /*< \todo document this */
+    bool selectable;
+        /*< \todo document this */
+    EmbColor color;
+        /*< \todo document this */
 } UiObject;
 
 /**
@@ -206,13 +233,14 @@ typedef struct EmbView_ {
  * settings into a structure that stores them. This also allows us to create a
  * complete copy of the settings for the purpose of restoring them if the user
  * cancels out of the Settings Dialog.
- *
- * Like all of our structs, it's C99 compliant.
  */
 typedef struct Settings_ {
-    QString general_language; /*< \todo document this */
-    QString general_icon_theme; /*< \todo document this */
-    int general_icon_size; /*< \todo document this */
+    QString general_language;
+        /*< \todo document this */
+    QString general_icon_theme;
+        /*< \todo document this */
+    int general_icon_size;
+        /*< \todo document this */
     QString version; /*< \todo document this */
     bool running; /*< \todo document this */
     bool testing; /*< \todo document this */
@@ -394,197 +422,204 @@ enum UiMode {
     SNOWFLAKE_MODE_YSCALE
 };
 
-//Custom Data used in QGraphicsItems
-
-//                   (     int, const QVariant)
-//I.E. object.setData(OBJ_TYPE, OBJ_TYPE_LINE);
-//I.E. object.setData(OBJ_LAYER, "OUTLINE");
-//I.E. object.setData(OBJ_COLOR, 123);
-//I.E. object.setData(OBJ_LTYPE, OBJ_LTYPE_CONT);
-
-//Keys
+/**
+ * Custom Data used in QGraphicsItems
+ *
+ *                    (     int, const QVariant)
+ * I.E. object.setData(OBJ_TYPE, OBJ_TYPE_LINE);
+ * I.E. object.setData(OBJ_LAYER, "OUTLINE");
+ * I.E. object.setData(OBJ_COLOR, 123);
+ * I.E. object.setData(OBJ_LTYPE, OBJ_LTYPE_CONT);
+ * 
+ * Keys
+ */
 enum OBJ_KEYS {
-OBJ_TYPE = 0, //value type - int: See OBJ_TYPE_VALUES
-OBJ_NAME = 1, //value type - str: See OBJ_NAME_VALUES
-OBJ_LAYER = 2, //value type - str: "USER", "DEFINED", "STRINGS", etc...
-OBJ_COLOR = 3, //value type - int: 0-255 //TODO: Use color chart in formats/format-dxf.h for this
-OBJ_LTYPE = 4, //value type - int: See OBJ_LTYPE_VALUES
-OBJ_LWT = 5, //value type - int: 0-27
-OBJ_RUBBER = 6  //value type - int: See OBJ_RUBBER_VALUES
+    OBJ_TYPE = 0,
+        /*< value type - int: See OBJ_TYPE_VALUES */
+    OBJ_NAME = 1,
+        /*< value type - str: See OBJ_NAME_VALUES */
+    OBJ_LAYER = 2,
+        /*< value type - str: "USER", "DEFINED", "STRINGS", etc... */
+    OBJ_COLOR = 3,
+        /**
+         * value type - int: 0-255
+         * \todo Use color chart in formats/format-dxf.h for this
+         */
+    OBJ_LTYPE = 4,
+        /*< value type - int: See OBJ_LTYPE_VALUES */
+    OBJ_LWT = 5, //value type - int: 0-27
+    OBJ_RUBBER = 6  //value type - int: See OBJ_RUBBER_VALUES
 };
 
 //Values
 enum OBJ_TYPE_VALUES {
-OBJ_TYPE_NULL =      0,
-    /*< NOTE: Allow this enum to evaluate false */
-OBJ_TYPE_BASE = 100000,
-    /*< NOTE: Values >= 65536 ensure compatibility with qgraphicsitem_cast() */
-OBJ_TYPE_ARC = 100001,
-OBJ_TYPE_BLOCK = 100002,
-    /*< For the block type, that has to exist for SVG. */
-OBJ_TYPE_CIRCLE = 100003,
-OBJ_TYPE_DIMALIGNED = 100004,
-    /*< For the Aligned Dimension, that has to exist for DXF drawings. */
-OBJ_TYPE_DIMANGULAR = 100005,
-    /*< For the Angular Dimension, that has to exist for DXF drawings. */
-OBJ_TYPE_DIMARCLENGTH = 100006,
-    /*< For the Arc Length Dimension, that has to exist for DXF drawings. */
-OBJ_TYPE_DIMDIAMETER = 100007,
-OBJ_TYPE_DIMLEADER = 100008,
-OBJ_TYPE_DIMLINEAR = 100009,
-    /*< For the Linear Dimension, that has to exist for DXF drawings. */
-OBJ_TYPE_DIMORDINATE = 100010,
-    /*< For the Ordinate Dimension, that has to exist for DXF drawings. */
-OBJ_TYPE_DIMRADIUS = 100011,
-    /*< For the Radial Dimension, that has to exist for DXF drawings. */
-OBJ_TYPE_ELLIPSE = 100012,
-OBJ_TYPE_ELLIPSEARC = 100013,
-OBJ_TYPE_RUBBER = 100014,
-OBJ_TYPE_GRID = 100015,
-OBJ_TYPE_HATCH = 100016,
-OBJ_TYPE_IMAGE = 100017,
-OBJ_TYPE_INFINITELINE = 100018,
-    /*< For the Infinite Line object. Which should be removed from output as it exists
-        for drafting reasons. */
-OBJ_TYPE_LINE = 100019,
-OBJ_TYPE_PATH = 100020,
-OBJ_TYPE_POINT = 100021,
-OBJ_TYPE_POLYGON = 100022,
-OBJ_TYPE_POLYLINE = 100023,
-OBJ_TYPE_RAY = 100024,
-    /*< For the Ray object. */
-OBJ_TYPE_RECTANGLE = 100025,
-OBJ_TYPE_SLOT = 100026,
-OBJ_TYPE_SPLINE = 100027,
-OBJ_TYPE_TEXTMULTI = 100028,
-OBJ_TYPE_TEXTSINGLE = 100029
+    OBJ_TYPE_NULL =      0,
+        /*< NOTE: Allow this enum to evaluate false */
+    OBJ_TYPE_BASE = 100000,
+        /*< NOTE: Values >= 65536 ensure compatibility with qgraphicsitem_cast() */
+    OBJ_TYPE_ARC = 100001,
+    OBJ_TYPE_BLOCK = 100002,
+        /*< For the block type, that has to exist for SVG. */
+    OBJ_TYPE_CIRCLE = 100003,
+    OBJ_TYPE_DIMALIGNED = 100004,
+        /*< For the Aligned Dimension, that has to exist for DXF drawings. */
+    OBJ_TYPE_DIMANGULAR = 100005,
+        /*< For the Angular Dimension, that has to exist for DXF drawings. */
+    OBJ_TYPE_DIMARCLENGTH = 100006,
+        /*< For the Arc Length Dimension, that has to exist for DXF drawings. */
+    OBJ_TYPE_DIMDIAMETER = 100007,
+    OBJ_TYPE_DIMLEADER = 100008,
+    OBJ_TYPE_DIMLINEAR = 100009,
+        /*< For the Linear Dimension, that has to exist for DXF drawings. */
+    OBJ_TYPE_DIMORDINATE = 100010,
+        /*< For the Ordinate Dimension, that has to exist for DXF drawings. */
+    OBJ_TYPE_DIMRADIUS = 100011,
+        /*< For the Radial Dimension, that has to exist for DXF drawings. */
+    OBJ_TYPE_ELLIPSE = 100012,
+    OBJ_TYPE_ELLIPSEARC = 100013,
+    OBJ_TYPE_RUBBER = 100014,
+    OBJ_TYPE_GRID = 100015,
+    OBJ_TYPE_HATCH = 100016,
+    OBJ_TYPE_IMAGE = 100017,
+    OBJ_TYPE_INFINITELINE = 100018,
+        /*< For the Infinite Line object. Which should be removed from output as it exists
+            for drafting reasons. */
+    OBJ_TYPE_LINE = 100019,
+    OBJ_TYPE_PATH = 100020,
+    OBJ_TYPE_POINT = 100021,
+    OBJ_TYPE_POLYGON = 100022,
+    OBJ_TYPE_POLYLINE = 100023,
+    OBJ_TYPE_RAY = 100024,
+        /*< For the Ray object. */
+    OBJ_TYPE_RECTANGLE = 100025,
+    OBJ_TYPE_SLOT = 100026,
+    OBJ_TYPE_SPLINE = 100027,
+    OBJ_TYPE_TEXTMULTI = 100028,
+    OBJ_TYPE_TEXTSINGLE = 100029
 };
 
 enum OBJ_LTYPE_VALUES {
-//CAD Linetypes
-OBJ_LTYPE_CONT = 0,
-OBJ_LTYPE_CENTER = 1,
-OBJ_LTYPE_DOT = 2,
-OBJ_LTYPE_HIDDEN = 3,
-OBJ_LTYPE_PHANTOM = 4,
-OBJ_LTYPE_ZIGZAG = 5,
-//Embroidery Stitchtypes
-OBJ_LTYPE_RUNNING = 6, // __________
-OBJ_LTYPE_SATIN = 7, // vvvvvvvvvv
-OBJ_LTYPE_FISHBONE = 8, // >>>>>>>>>>
+    //CAD Linetypes
+    OBJ_LTYPE_CONT = 0,
+    OBJ_LTYPE_CENTER = 1,
+    OBJ_LTYPE_DOT = 2,
+    OBJ_LTYPE_HIDDEN = 3,
+    OBJ_LTYPE_PHANTOM = 4,
+    OBJ_LTYPE_ZIGZAG = 5,
+    //Embroidery Stitchtypes
+    OBJ_LTYPE_RUNNING = 6, // __________
+    OBJ_LTYPE_SATIN = 7, // vvvvvvvvvv
+    OBJ_LTYPE_FISHBONE = 8, // >>>>>>>>>>
 };
 
 enum OBJ_LWT_VALUES {
-OBJ_LWT_BYLAYER = -2,
-OBJ_LWT_BYBLOCK = -1,
-OBJ_LWT_DEFAULT =  0,
-OBJ_LWT_01 =  1,
-OBJ_LWT_02 =  2,
-OBJ_LWT_03 =  3,
-OBJ_LWT_04 =  4,
-OBJ_LWT_05 =  5,
-OBJ_LWT_06 =  6,
-OBJ_LWT_07 =  7,
-OBJ_LWT_08 =  8,
-OBJ_LWT_09 =  9,
-OBJ_LWT_10 = 10,
-OBJ_LWT_11 = 11,
-OBJ_LWT_12 = 12,
-OBJ_LWT_13 = 13,
-OBJ_LWT_14 = 14,
-OBJ_LWT_15 = 15,
-OBJ_LWT_16 = 16,
-OBJ_LWT_17 = 17,
-OBJ_LWT_18 = 18,
-OBJ_LWT_19 = 19,
-OBJ_LWT_20 = 20,
-OBJ_LWT_21 = 21,
-OBJ_LWT_22 = 22,
-OBJ_LWT_23 = 23,
-OBJ_LWT_24 = 24
+    OBJ_LWT_BYLAYER = -2,
+    OBJ_LWT_BYBLOCK = -1,
+    OBJ_LWT_DEFAULT =  0,
+    OBJ_LWT_01 =  1,
+    OBJ_LWT_02 =  2,
+    OBJ_LWT_03 =  3,
+    OBJ_LWT_04 =  4,
+    OBJ_LWT_05 =  5,
+    OBJ_LWT_06 =  6,
+    OBJ_LWT_07 =  7,
+    OBJ_LWT_08 =  8,
+    OBJ_LWT_09 =  9,
+    OBJ_LWT_10 = 10,
+    OBJ_LWT_11 = 11,
+    OBJ_LWT_12 = 12,
+    OBJ_LWT_13 = 13,
+    OBJ_LWT_14 = 14,
+    OBJ_LWT_15 = 15,
+    OBJ_LWT_16 = 16,
+    OBJ_LWT_17 = 17,
+    OBJ_LWT_18 = 18,
+    OBJ_LWT_19 = 19,
+    OBJ_LWT_20 = 20,
+    OBJ_LWT_21 = 21,
+    OBJ_LWT_22 = 22,
+    OBJ_LWT_23 = 23,
+    OBJ_LWT_24 = 24
 };
 
 enum OBJ_SNAP_VALUES {
-OBJ_SNAP_NULL =  0, //NOTE: Allow this enum to evaluate false
-OBJ_SNAP_ENDPOINT =  1,
-OBJ_SNAP_MIDPOINT =  2,
-OBJ_SNAP_CENTER =  3,
-OBJ_SNAP_NODE =  4,
-OBJ_SNAP_QUADRANT =  5,
-OBJ_SNAP_INTERSECTION =  6,
-OBJ_SNAP_EXTENSION =  7,
-OBJ_SNAP_INSERTION =  8,
-OBJ_SNAP_PERPENDICULAR =  9,
-OBJ_SNAP_TANGENT = 10,
-OBJ_SNAP_NEAREST = 11,
-OBJ_SNAP_APPINTERSECTION = 12,
-OBJ_SNAP_PARALLEL = 13
+    OBJ_SNAP_NULL =  0, //NOTE: Allow this enum to evaluate false
+    OBJ_SNAP_ENDPOINT =  1,
+    OBJ_SNAP_MIDPOINT =  2,
+    OBJ_SNAP_CENTER =  3,
+    OBJ_SNAP_NODE =  4,
+    OBJ_SNAP_QUADRANT =  5,
+    OBJ_SNAP_INTERSECTION =  6,
+    OBJ_SNAP_EXTENSION =  7,
+    OBJ_SNAP_INSERTION =  8,
+    OBJ_SNAP_PERPENDICULAR =  9,
+    OBJ_SNAP_TANGENT = 10,
+    OBJ_SNAP_NEAREST = 11,
+    OBJ_SNAP_APPINTERSECTION = 12,
+    OBJ_SNAP_PARALLEL = 13
 };
 
 enum OBJ_RUBBER_VALUES {
-OBJ_RUBBER_OFF = 0,  //NOTE: Allow this enum to evaluate false
-OBJ_RUBBER_ON = 1,  //NOTE: Allow this enum to evaluate true
+    OBJ_RUBBER_OFF = 0,  //NOTE: Allow this enum to evaluate false
+    OBJ_RUBBER_ON = 1,  //NOTE: Allow this enum to evaluate true
 
-OBJ_RUBBER_CIRCLE_1P_RAD,
-    /*!< For the circle object currently focussed, show two rubber points:
-        one for the centre (the anchor) and the other at some point on the
-        radius to adjust the radius. */
-OBJ_RUBBER_CIRCLE_1P_DIA,
-    /*!< For the curcle object currently focussed, show two rubber points:
-        one for the left of the diameter and one for the right.
-        These rubber points can be moved around the circle, but they always
-        oppose one another. */
-OBJ_RUBBER_CIRCLE_2P,
-OBJ_RUBBER_CIRCLE_3P,
-OBJ_RUBBER_CIRCLE_TTR,
-OBJ_RUBBER_CIRCLE_TTT,
+    OBJ_RUBBER_CIRCLE_1P_RAD,
+        /*!< For the circle object currently focussed, show two rubber points:
+            one for the centre (the anchor) and the other at some point on the
+            radius to adjust the radius. */
+    OBJ_RUBBER_CIRCLE_1P_DIA,
+        /*!< For the curcle object currently focussed, show two rubber points:
+            one for the left of the diameter and one for the right.
+            These rubber points can be moved around the circle, but they always
+            oppose one another. */
+    OBJ_RUBBER_CIRCLE_2P,
+    OBJ_RUBBER_CIRCLE_3P,
+    OBJ_RUBBER_CIRCLE_TTR,
+    OBJ_RUBBER_CIRCLE_TTT,
 
-OBJ_RUBBER_DIMLEADER_LINE,
+    OBJ_RUBBER_DIMLEADER_LINE,
 
-OBJ_RUBBER_ELLIPSE_LINE,
-OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS,
-OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS,
-OBJ_RUBBER_ELLIPSE_ROTATION,
+    OBJ_RUBBER_ELLIPSE_LINE,
+    OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS,
+    OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS,
+    OBJ_RUBBER_ELLIPSE_ROTATION,
 
-OBJ_RUBBER_GRIP,
+    OBJ_RUBBER_GRIP,
 
-OBJ_RUBBER_LINE,
+    OBJ_RUBBER_LINE,
 
-OBJ_RUBBER_POLYGON,
-OBJ_RUBBER_POLYGON_INSCRIBE,
-OBJ_RUBBER_POLYGON_CIRCUMSCRIBE,
+    OBJ_RUBBER_POLYGON,
+    OBJ_RUBBER_POLYGON_INSCRIBE,
+    OBJ_RUBBER_POLYGON_CIRCUMSCRIBE,
 
-OBJ_RUBBER_POLYLINE,
+    OBJ_RUBBER_POLYLINE,
 
-OBJ_RUBBER_IMAGE,
+    OBJ_RUBBER_IMAGE,
 
-OBJ_RUBBER_RECTANGLE,
+    OBJ_RUBBER_RECTANGLE,
 
-OBJ_RUBBER_TEXTSINGLE
+    OBJ_RUBBER_TEXTSINGLE
 };
 
 enum SPARE_RUBBER_VALUES {
-SPARE_RUBBER_OFF = 0,  //NOTE: Allow this enum to evaluate false
-SPARE_RUBBER_PATH,
-SPARE_RUBBER_POLYGON,
-SPARE_RUBBER_POLYLINE
+    SPARE_RUBBER_OFF = 0,  //NOTE: Allow this enum to evaluate false
+    SPARE_RUBBER_PATH,
+    SPARE_RUBBER_POLYGON,
+    SPARE_RUBBER_POLYLINE
 };
 
 enum PREVIEW_CLONE_VALUES {
-PREVIEW_CLONE_NULL = 0, //NOTE: Allow this enum to evaluate false
-PREVIEW_CLONE_SELECTED,
-PREVIEW_CLONE_RUBBER
+    PREVIEW_CLONE_NULL = 0, //NOTE: Allow this enum to evaluate false
+    PREVIEW_CLONE_SELECTED,
+    PREVIEW_CLONE_RUBBER
 };
 
 enum PREVIEW_MODE_VALUES {
-PREVIEW_MODE_NULL = 0, //NOTE: Allow this enum to evaluate false
-PREVIEW_MODE_MOVE,
-PREVIEW_MODE_ROTATE,
-PREVIEW_MODE_SCALE
+    PREVIEW_MODE_NULL = 0, //NOTE: Allow this enum to evaluate false
+    PREVIEW_MODE_MOVE,
+    PREVIEW_MODE_ROTATE,
+    PREVIEW_MODE_SCALE
 };
-
-int read_settings(const char *file);
-void write_settings(const char *fname);
 
 static const EmbReal emb_constant_pi = 3.14159265358979323846;
 
@@ -841,8 +876,7 @@ public:
     EmbReal lineStyleAngle;
     EmbReal lineStyleLength;
 
-    enum ArrowStyle
- {
+    enum ArrowStyle {
         NoArrow, //NOTE: Allow this enum to evaluate false
         Open,
         Closed,
@@ -851,8 +885,7 @@ public:
         Tick
     };
 
-    enum lineStyle
- {
+    enum lineStyle {
         NoLine, //NOTE: Allow this enum to evaluate false
         Flared,
         Fletching
@@ -2942,9 +2975,17 @@ typedef struct Action__ {
         /*< . */
 } Action;
 
+/* Functions in the global namespace
+ * ---------------------------------
+ */
 int get_action_index(std::string cmd);
+void debug_message(std::string msg);
+int read_settings(const char *file);
+void write_settings(const char *fname);
 
-/* */
+/* Global data
+ * -----------
+ */
 extern Settings settings;
 extern Settings dialog;
 extern std::vector<Action> action_table;
@@ -2964,6 +3005,7 @@ extern const int group_box_arc_geometry_entries;
 extern GroupBoxData group_box_ellipse_geometry[];
 extern const int group_box_ellipse_geometry_entries;
 
+extern std::unordered_map<std::string, std::string> config;
 extern std::unordered_map<std::string, GroupBoxData*> group_box_data;
 
 #endif

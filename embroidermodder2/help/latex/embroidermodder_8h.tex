@@ -1,9 +1,6 @@
 \hypertarget{embroidermodder_8h}{}\doxysubsection{embroidermodder2/embroidermodder.h File Reference}
 \label{embroidermodder_8h}\index{embroidermodder2/embroidermodder.h@{embroidermodder2/embroidermodder.h}}
 {\ttfamily \#include $<$cstdio$>$}\newline
-{\ttfamily \#include $<$cstdlib$>$}\newline
-{\ttfamily \#include $<$cstring$>$}\newline
-{\ttfamily \#include $<$cstdint$>$}\newline
 {\ttfamily \#include $<$cmath$>$}\newline
 {\ttfamily \#include $<$ctime$>$}\newline
 {\ttfamily \#include $<$cinttypes$>$}\newline
@@ -48,8 +45,6 @@
 {\ttfamily \#include $<$Qt\+Print\+Support$>$}\newline
 \doxysubsubsection*{Classes}
 \begin{DoxyCompactItemize}
-\item 
-struct \mbox{\hyperlink{struct_undo_history__}{Undo\+History\+\_\+}}
 \item 
 struct \mbox{\hyperlink{struct_ui_object__}{Ui\+Object\+\_\+}}
 \begin{DoxyCompactList}\small\item\em This covers the inbuilt designs\+: Dolphin, Snowflake and Heart. Covers Rotate, Scale and Point UI events. \end{DoxyCompactList}\item 
@@ -109,6 +104,8 @@ class \mbox{\hyperlink{class_mdi_window}{Mdi\+Window}}
 \item 
 class \mbox{\hyperlink{class_mdi_area}{Mdi\+Area}}
 \item 
+struct \mbox{\hyperlink{struct_group_box_data__}{Group\+Box\+Data\+\_\+}}
+\item 
 class \mbox{\hyperlink{class_preview_dialog}{Preview\+Dialog}}
 \item 
 class \mbox{\hyperlink{class_property_editor}{Property\+Editor}}
@@ -146,18 +143,14 @@ struct \mbox{\hyperlink{struct_action____}{Action\+\_\+\+\_\+}}
 \doxysubsubsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
-typedef std\+::unordered\+\_\+map$<$ std\+::string, std\+::string $>$ \mbox{\hyperlink{embroidermodder_8h_a65f6a13c9f5a038f42c86bdd5bb2410f}{Dictionary}}
-\item 
-typedef struct \mbox{\hyperlink{struct_undo_history__}{Undo\+History\+\_\+}} \mbox{\hyperlink{embroidermodder_8h_a459ace9a6c614fe41b7f08ba91bc6dd4}{Undo\+History}}
-\item 
-typedef std\+::unordered\+\_\+map$<$ std\+::string, \mbox{\hyperlink{embroidermodder_8h_a65f6a13c9f5a038f42c86bdd5bb2410f}{Dictionary}} $>$ \mbox{\hyperlink{embroidermodder_8h_a59b98c3061d780d55cc048bcce8b47d0}{Index}}
-\item 
 typedef struct \mbox{\hyperlink{struct_ui_object__}{Ui\+Object\+\_\+}} \mbox{\hyperlink{embroidermodder_8h_ac5795a0e93d9740c0f6a44ea312402bc}{Ui\+Object}}
 \begin{DoxyCompactList}\small\item\em This covers the inbuilt designs\+: Dolphin, Snowflake and Heart. Covers Rotate, Scale and Point UI events. \end{DoxyCompactList}\item 
 typedef struct \mbox{\hyperlink{struct_emb_view__}{Emb\+View\+\_\+}} \mbox{\hyperlink{embroidermodder_8h_aa5d35c075d47a1a4196817dd4cac166f}{Emb\+View}}
 \item 
 typedef struct \mbox{\hyperlink{struct_settings__}{Settings\+\_\+}} \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}}
 \begin{DoxyCompactList}\small\item\em Settings System. \end{DoxyCompactList}\item 
+typedef struct \mbox{\hyperlink{struct_group_box_data__}{Group\+Box\+Data\+\_\+}} \mbox{\hyperlink{embroidermodder_8h_a5c417f81e566a0a81c7477a9fde2ea9b}{Group\+Box\+Data}}
+\item 
 typedef struct \mbox{\hyperlink{struct_action____}{Action\+\_\+\+\_\+}} \mbox{\hyperlink{embroidermodder_8h_aff6f4ac1e39a61ea59b275d373a14db1}{Action}}
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Enumerations}
@@ -376,10 +369,6 @@ enum \mbox{\hyperlink{embroidermodder_8h_a142ce63dd47580d3d23de0a7147c0e2a}{PREV
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-int \mbox{\hyperlink{embroidermodder_8h_a6fcdc8ef9d8e516770d265c3c6f6e3c8}{read\+\_\+settings}} (const char $\ast$settings\+\_\+file)
-\begin{DoxyCompactList}\small\item\em Read the settings from file which aren\textquotesingle{}t editable by the user. These files need to be placed in the install folder. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{embroidermodder_8h_a987d88e146471d89e51da7f02a61cf57}{write\+\_\+settings}} (const char $\ast$fname)
-\item 
 QPointF \mbox{\hyperlink{embroidermodder_8h_a58d530175261044460f54127530d5363}{to\+\_\+\+QPointF}} (\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} a)
 \item 
 \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} \mbox{\hyperlink{embroidermodder_8h_ad318219f41e0a4a05136b4fdcc479461}{to\+\_\+\+Emb\+Vector}} (QPointF a)
@@ -395,6 +384,12 @@ QPointF \mbox{\hyperlink{embroidermodder_8h_a58d530175261044460f54127530d5363}{t
 \mbox{\hyperlink{class_main_window}{Main\+Window}} $\ast$ \mbox{\hyperlink{embroidermodder_8h_a0f36a84e7a582fc0c4da7b9f6bc47119}{main\+Win}} ()
 \begin{DoxyCompactList}\small\item\em main\+Win \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{embroidermodder_8h_ab737782f7ffcf7b04b8e29bff1177afe}{get\+\_\+action\+\_\+index}} (std\+::string cmd)
+\item 
+void \mbox{\hyperlink{embroidermodder_8h_af5311e8e9f305814265bfe24fec654e9}{debug\+\_\+message}} (std\+::string msg)
+\item 
+int \mbox{\hyperlink{embroidermodder_8h_ac7f17e92295a66758420d9a3fb6f3dd9}{read\+\_\+settings}} (const char $\ast$file)
+\begin{DoxyCompactList}\small\item\em Read the settings from file which aren\textquotesingle{}t editable by the user. These files need to be placed in the install folder. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{embroidermodder_8h_a987d88e146471d89e51da7f02a61cf57}{write\+\_\+settings}} (const char $\ast$fname)
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
@@ -414,6 +409,30 @@ std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{embroidermodder_8h_a08ec5d8f
 std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{embroidermodder_8h_ab30a5c7efd315ac60982b02c20278efe}{view\+\_\+toolbar}}
 \item 
 std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{embroidermodder_8h_a2237f79e0d8d9c857b1c9a594f0c7680}{zoom\+\_\+toolbar}}
+\item 
+std\+::unordered\+\_\+map$<$ std\+::string, QGroup\+Box $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_a5bcaa838cc51db6646147a2a8dfe22fe}{group\+Boxes}}
+\item 
+std\+::unordered\+\_\+map$<$ std\+::string, QCombo\+Box $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_ac76000df9f7dd1897707f6125c11e7f6}{combo\+Boxes}}
+\item 
+std\+::unordered\+\_\+map$<$ std\+::string, QLine\+Edit $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_a4ce9e3d6d96635677ccedd5ab514518f}{line\+Edits}}
+\item 
+std\+::unordered\+\_\+map$<$ std\+::string, QTool\+Button $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_ae2d67cb30789657c614d5ee3b601e228}{tool\+Buttons}}
+\item 
+QFont\+Combo\+Box $\ast$ \mbox{\hyperlink{embroidermodder_8h_a3aa139608b4816f4f70595814a31760d}{combo\+Box\+Text\+Single\+Font}}
+\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{embroidermodder_8h_a9213a60cbfb6635e08a53a82bd994243}{group\+\_\+box\+\_\+list}}
+\item 
+\mbox{\hyperlink{embroidermodder_8h_a5c417f81e566a0a81c7477a9fde2ea9b}{Group\+Box\+Data}} \mbox{\hyperlink{embroidermodder_8h_ac233417bcc7fd90703be103dad879bb9}{group\+\_\+box\+\_\+arc\+\_\+geometry}} \mbox{[}$\,$\mbox{]}
+\item 
+const int \mbox{\hyperlink{embroidermodder_8h_a2d4ff66def016cf57f5758340be442b5}{group\+\_\+box\+\_\+arc\+\_\+geometry\+\_\+entries}}
+\item 
+\mbox{\hyperlink{embroidermodder_8h_a5c417f81e566a0a81c7477a9fde2ea9b}{Group\+Box\+Data}} \mbox{\hyperlink{embroidermodder_8h_a9e5c49167bfdbfabad312eb36ffbebd7}{group\+\_\+box\+\_\+ellipse\+\_\+geometry}} \mbox{[}$\,$\mbox{]}
+\item 
+const int \mbox{\hyperlink{embroidermodder_8h_ae7b4a6f04c5065d40e4d96559d76cc01}{group\+\_\+box\+\_\+ellipse\+\_\+geometry\+\_\+entries}}
+\item 
+std\+::unordered\+\_\+map$<$ std\+::string, std\+::string $>$ \mbox{\hyperlink{embroidermodder_8h_a739f3f2805e96b2bb95f9dbf08fb985c}{config}}
+\item 
+std\+::unordered\+\_\+map$<$ std\+::string, \mbox{\hyperlink{embroidermodder_8h_a5c417f81e566a0a81c7477a9fde2ea9b}{Group\+Box\+Data}} $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_a0a7df12657193416b45b72d80ab11c21}{group\+\_\+box\+\_\+data}}
 \end{DoxyCompactItemize}
 
 
@@ -427,27 +446,19 @@ The only header for the GUI part\+: a good overview of this source code.
 \doxyparagraph{\texorpdfstring{Action}{Action}}
 {\footnotesize\ttfamily typedef struct \mbox{\hyperlink{struct_action____}{Action\+\_\+\+\_\+}} \mbox{\hyperlink{embroidermodder_8h_aff6f4ac1e39a61ea59b275d373a14db1}{Action}}}
 
-\mbox{\Hypertarget{embroidermodder_8h_a65f6a13c9f5a038f42c86bdd5bb2410f}\label{embroidermodder_8h_a65f6a13c9f5a038f42c86bdd5bb2410f}} 
-\index{embroidermodder.h@{embroidermodder.h}!Dictionary@{Dictionary}}
-\index{Dictionary@{Dictionary}!embroidermodder.h@{embroidermodder.h}}
-\doxyparagraph{\texorpdfstring{Dictionary}{Dictionary}}
-{\footnotesize\ttfamily typedef std\+::unordered\+\_\+map$<$std\+::string, std\+::string$>$ \mbox{\hyperlink{embroidermodder_8h_a65f6a13c9f5a038f42c86bdd5bb2410f}{Dictionary}}}
-
 \mbox{\Hypertarget{embroidermodder_8h_aa5d35c075d47a1a4196817dd4cac166f}\label{embroidermodder_8h_aa5d35c075d47a1a4196817dd4cac166f}} 
 \index{embroidermodder.h@{embroidermodder.h}!EmbView@{EmbView}}
 \index{EmbView@{EmbView}!embroidermodder.h@{embroidermodder.h}}
 \doxyparagraph{\texorpdfstring{EmbView}{EmbView}}
 {\footnotesize\ttfamily typedef struct \mbox{\hyperlink{struct_emb_view__}{Emb\+View\+\_\+}} \mbox{\hyperlink{embroidermodder_8h_aa5d35c075d47a1a4196817dd4cac166f}{Emb\+View}}}
 
-\hypertarget{embroidermodder_8h_autotoc_md5}{}\doxysubsubsection{Emb\+Views}\label{embroidermodder_8h_autotoc_md5}
-The Emb\+View describes how the render is displayed. \mbox{\Hypertarget{embroidermodder_8h_a59b98c3061d780d55cc048bcce8b47d0}\label{embroidermodder_8h_a59b98c3061d780d55cc048bcce8b47d0}} 
-\index{embroidermodder.h@{embroidermodder.h}!Index@{Index}}
-\index{Index@{Index}!embroidermodder.h@{embroidermodder.h}}
-\doxyparagraph{\texorpdfstring{Index}{Index}}
-{\footnotesize\ttfamily typedef std\+::unordered\+\_\+map$<$std\+::string, \mbox{\hyperlink{embroidermodder_8h_a65f6a13c9f5a038f42c86bdd5bb2410f}{Dictionary}}$>$ \mbox{\hyperlink{embroidermodder_8h_a59b98c3061d780d55cc048bcce8b47d0}{Index}}}
+\hypertarget{embroidermodder_8h_autotoc_md4}{}\doxysubsubsection{Emb\+Views}\label{embroidermodder_8h_autotoc_md4}
+The Emb\+View describes how the render is displayed. \mbox{\Hypertarget{embroidermodder_8h_a5c417f81e566a0a81c7477a9fde2ea9b}\label{embroidermodder_8h_a5c417f81e566a0a81c7477a9fde2ea9b}} 
+\index{embroidermodder.h@{embroidermodder.h}!GroupBoxData@{GroupBoxData}}
+\index{GroupBoxData@{GroupBoxData}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{GroupBoxData}{GroupBoxData}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{struct_group_box_data__}{Group\+Box\+Data\+\_\+}} \mbox{\hyperlink{embroidermodder_8h_a5c417f81e566a0a81c7477a9fde2ea9b}{Group\+Box\+Data}}}
 
-\begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000002}{Todo}}]document this. \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}\label{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}} 
 \index{embroidermodder.h@{embroidermodder.h}!Settings@{Settings}}
 \index{Settings@{Settings}!embroidermodder.h@{embroidermodder.h}}
@@ -458,9 +469,7 @@ The Emb\+View describes how the render is displayed. \mbox{\Hypertarget{embroide
 
 Settings System. 
 
-Rather than pollute the global namespace, we collect together all the global settings into a structure that stores them. This also allows us to create a complete copy of the settings for the purpose of restoring them if the user cancels out of the Settings Dialog.
-
-Like all of our structs, it\textquotesingle{}s C99 compliant. \mbox{\Hypertarget{embroidermodder_8h_ac5795a0e93d9740c0f6a44ea312402bc}\label{embroidermodder_8h_ac5795a0e93d9740c0f6a44ea312402bc}} 
+Rather than pollute the global namespace, we collect together all the global settings into a structure that stores them. This also allows us to create a complete copy of the settings for the purpose of restoring them if the user cancels out of the Settings Dialog. \mbox{\Hypertarget{embroidermodder_8h_ac5795a0e93d9740c0f6a44ea312402bc}\label{embroidermodder_8h_ac5795a0e93d9740c0f6a44ea312402bc}} 
 \index{embroidermodder.h@{embroidermodder.h}!UiObject@{UiObject}}
 \index{UiObject@{UiObject}!embroidermodder.h@{embroidermodder.h}}
 \doxyparagraph{\texorpdfstring{UiObject}{UiObject}}
@@ -470,30 +479,7 @@ Like all of our structs, it\textquotesingle{}s C99 compliant. \mbox{\Hypertarget
 
 This covers the inbuilt designs\+: Dolphin, Snowflake and Heart. Covers Rotate, Scale and Point UI events. 
 
-scale is how radii are stored if the object is a circle, or the semi-\/major and semi-\/minor axes if the object is an ellipse.
-
-center perhaps should be the \char`\"{}anchor\char`\"{} instead which is the center for some objects and top left for rectangular objects.
-
-Do angles need special storage? angle\+Ref, angle\+New
-
-This chapter details how the source code achieves the design detailed in the previous chapter. For the low-\/level details, read the later chapters.
-
-Dear Im\+Gui (CITATION NEEDED)\hypertarget{embroidermodder_8h_autotoc_md4}{}\doxyparagraph{Geometry Objects}\label{embroidermodder_8h_autotoc_md4}
-At all times the Emb\+Pattern has all of the information about the pattern however, editing information like the rubber text labels needs to be stored during runtime. Also editing ghosts like when a rotate command is half executed.
-
-To deal with this we have a generic object that can act as any other object that updates the associated pattern struct as changes as made.
-
-Note that the editor state is seperate from this since that is per view, not per object.
-
-Selecting is done via this interface. \mbox{\Hypertarget{embroidermodder_8h_a459ace9a6c614fe41b7f08ba91bc6dd4}\label{embroidermodder_8h_a459ace9a6c614fe41b7f08ba91bc6dd4}} 
-\index{embroidermodder.h@{embroidermodder.h}!UndoHistory@{UndoHistory}}
-\index{UndoHistory@{UndoHistory}!embroidermodder.h@{embroidermodder.h}}
-\doxyparagraph{\texorpdfstring{UndoHistory}{UndoHistory}}
-{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{struct_undo_history__}{Undo\+History\+\_\+}} \mbox{\hyperlink{embroidermodder_8h_a459ace9a6c614fe41b7f08ba91bc6dd4}{Undo\+History}}}
-
-\begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000001}{Todo}}]document this. \end{DoxyRefDesc}
-
+This was an idea for storing the current command state\+: could be combined with Emb\+View since you can\textquotesingle{}t have more than one active command. If a command calls a sub command it will store the position in the parents. 
 
 \doxysubsubsection{Enumeration Type Documentation}
 \mbox{\Hypertarget{embroidermodder_8h_a29bcbce98e36705fa9c1577a227d53c0}\label{embroidermodder_8h_a29bcbce98e36705fa9c1577a227d53c0}} 
@@ -502,7 +488,11 @@ Selecting is done via this interface. \mbox{\Hypertarget{embroidermodder_8h_a459
 \doxyparagraph{\texorpdfstring{OBJ\_KEYS}{OBJ\_KEYS}}
 {\footnotesize\ttfamily enum \mbox{\hyperlink{embroidermodder_8h_a29bcbce98e36705fa9c1577a227d53c0}{OBJ\+\_\+\+KEYS}}}
 
-\begin{DoxyEnumFields}{Enumerator}
+Custom Data used in QGraphics\+Items \begin{DoxyVerb}               (     int, const QVariant)
+\end{DoxyVerb}
+ I.\+E. object.\+set\+Data(\+OBJ\+\_\+\+TYPE, OBJ\+\_\+\+TYPE\+\_\+\+LINE); I.\+E. object.\+set\+Data(OBJ\+\_\+\+LAYER, \char`\"{}\+OUTLINE\char`\"{}); I.\+E. object.\+set\+Data(\+OBJ\+\_\+\+COLOR, 123); I.\+E. object.\+set\+Data(\+OBJ\+\_\+\+LTYPE, OBJ\+\_\+\+LTYPE\+\_\+\+CONT);
+
+Keys \begin{DoxyEnumFields}{Enumerator}
 \raisebox{\heightof{T}}[0pt][0pt]{\index{OBJ\_TYPE@{OBJ\_TYPE}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!OBJ\_TYPE@{OBJ\_TYPE}}}\mbox{\Hypertarget{embroidermodder_8h_a29bcbce98e36705fa9c1577a227d53c0ad29edd5d5816dc9b15f9d9f88898764f}\label{embroidermodder_8h_a29bcbce98e36705fa9c1577a227d53c0ad29edd5d5816dc9b15f9d9f88898764f}} 
 OBJ\+\_\+\+TYPE&\\
 \hline
@@ -520,7 +510,9 @@ OBJ\+\_\+\+COLOR&\\
 \hline
 
 \raisebox{\heightof{T}}[0pt][0pt]{\index{OBJ\_LTYPE@{OBJ\_LTYPE}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!OBJ\_LTYPE@{OBJ\_LTYPE}}}\mbox{\Hypertarget{embroidermodder_8h_a29bcbce98e36705fa9c1577a227d53c0a21cbc22cd57ac906315fac3d245a25b9}\label{embroidermodder_8h_a29bcbce98e36705fa9c1577a227d53c0a21cbc22cd57ac906315fac3d245a25b9}} 
-OBJ\+\_\+\+LTYPE&\\
+OBJ\+\_\+\+LTYPE&value type -\/ int\+: 0-\/255 \begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000002}{Todo}}]Use color chart in formats/format-\/dxf.\+h for this \end{DoxyRefDesc}
+\\
 \hline
 
 \raisebox{\heightof{T}}[0pt][0pt]{\index{OBJ\_LWT@{OBJ\_LWT}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!OBJ\_LWT@{OBJ\_LWT}}}\mbox{\Hypertarget{embroidermodder_8h_a29bcbce98e36705fa9c1577a227d53c0a23e240f9a493316b344299cecd26dc91}\label{embroidermodder_8h_a29bcbce98e36705fa9c1577a227d53c0a23e240f9a493316b344299cecd26dc91}} 
@@ -1187,6 +1179,12 @@ SNOWFLAKE\+\_\+\+MODE\+\_\+\+YSCALE&\\
 
 
 \doxysubsubsection{Function Documentation}
+\mbox{\Hypertarget{embroidermodder_8h_af5311e8e9f305814265bfe24fec654e9}\label{embroidermodder_8h_af5311e8e9f305814265bfe24fec654e9}} 
+\index{embroidermodder.h@{embroidermodder.h}!debug\_message@{debug\_message}}
+\index{debug\_message@{debug\_message}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{debug\_message()}{debug\_message()}}
+{\footnotesize\ttfamily void debug\+\_\+message (\begin{DoxyParamCaption}\item[{std\+::string}]{msg }\end{DoxyParamCaption})}
+
 \mbox{\Hypertarget{embroidermodder_8h_adcca277c330aa3d7c85b93894c16eb9a}\label{embroidermodder_8h_adcca277c330aa3d7c85b93894c16eb9a}} 
 \index{embroidermodder.h@{embroidermodder.h}!degrees@{degrees}}
 \index{degrees@{degrees}!embroidermodder.h@{embroidermodder.h}}
@@ -1230,11 +1228,11 @@ main\+Win
 \doxyparagraph{\texorpdfstring{radians()}{radians()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} radians (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{degrees }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
-\mbox{\Hypertarget{embroidermodder_8h_a6fcdc8ef9d8e516770d265c3c6f6e3c8}\label{embroidermodder_8h_a6fcdc8ef9d8e516770d265c3c6f6e3c8}} 
+\mbox{\Hypertarget{embroidermodder_8h_ac7f17e92295a66758420d9a3fb6f3dd9}\label{embroidermodder_8h_ac7f17e92295a66758420d9a3fb6f3dd9}} 
 \index{embroidermodder.h@{embroidermodder.h}!read\_settings@{read\_settings}}
 \index{read\_settings@{read\_settings}!embroidermodder.h@{embroidermodder.h}}
 \doxyparagraph{\texorpdfstring{read\_settings()}{read\_settings()}}
-{\footnotesize\ttfamily int read\+\_\+settings (\begin{DoxyParamCaption}\item[{const char $\ast$}]{settings\+\_\+file }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily int read\+\_\+settings (\begin{DoxyParamCaption}\item[{const char $\ast$}]{file }\end{DoxyParamCaption})}
 
 
 
@@ -1267,6 +1265,24 @@ Read the settings from file which aren\textquotesingle{}t editable by the user. 
 \doxyparagraph{\texorpdfstring{action\_table}{action\_table}}
 {\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{embroidermodder_8h_aff6f4ac1e39a61ea59b275d373a14db1}{Action}}$>$ action\+\_\+table\hspace{0.3cm}{\ttfamily [extern]}}
 
+\mbox{\Hypertarget{embroidermodder_8h_ac76000df9f7dd1897707f6125c11e7f6}\label{embroidermodder_8h_ac76000df9f7dd1897707f6125c11e7f6}} 
+\index{embroidermodder.h@{embroidermodder.h}!comboBoxes@{comboBoxes}}
+\index{comboBoxes@{comboBoxes}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{comboBoxes}{comboBoxes}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$std\+::string, QCombo\+Box $\ast$$>$ combo\+Boxes\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{embroidermodder_8h_a3aa139608b4816f4f70595814a31760d}\label{embroidermodder_8h_a3aa139608b4816f4f70595814a31760d}} 
+\index{embroidermodder.h@{embroidermodder.h}!comboBoxTextSingleFont@{comboBoxTextSingleFont}}
+\index{comboBoxTextSingleFont@{comboBoxTextSingleFont}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{comboBoxTextSingleFont}{comboBoxTextSingleFont}}
+{\footnotesize\ttfamily QFont\+Combo\+Box$\ast$ combo\+Box\+Text\+Single\+Font\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{embroidermodder_8h_a739f3f2805e96b2bb95f9dbf08fb985c}\label{embroidermodder_8h_a739f3f2805e96b2bb95f9dbf08fb985c}} 
+\index{embroidermodder.h@{embroidermodder.h}!config@{config}}
+\index{config@{config}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{config}{config}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$std\+::string, std\+::string$>$ config\hspace{0.3cm}{\ttfamily [extern]}}
+
 \mbox{\Hypertarget{embroidermodder_8h_a1c6510838c31a5cc8eeadcdfceda753e}\label{embroidermodder_8h_a1c6510838c31a5cc8eeadcdfceda753e}} 
 \index{embroidermodder.h@{embroidermodder.h}!dialog@{dialog}}
 \index{dialog@{dialog}!embroidermodder.h@{embroidermodder.h}}
@@ -1291,13 +1307,79 @@ These copies of the settings struct are for restoring the state if the user does
 \doxyparagraph{\texorpdfstring{file\_toolbar}{file\_toolbar}}
 {\footnotesize\ttfamily std\+::vector$<$std\+::string$>$ file\+\_\+toolbar\hspace{0.3cm}{\ttfamily [extern]}}
 
+\mbox{\Hypertarget{embroidermodder_8h_ac233417bcc7fd90703be103dad879bb9}\label{embroidermodder_8h_ac233417bcc7fd90703be103dad879bb9}} 
+\index{embroidermodder.h@{embroidermodder.h}!group\_box\_arc\_geometry@{group\_box\_arc\_geometry}}
+\index{group\_box\_arc\_geometry@{group\_box\_arc\_geometry}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{group\_box\_arc\_geometry}{group\_box\_arc\_geometry}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a5c417f81e566a0a81c7477a9fde2ea9b}{Group\+Box\+Data}} group\+\_\+box\+\_\+arc\+\_\+geometry\mbox{[}$\,$\mbox{]}\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{embroidermodder_8h_a2d4ff66def016cf57f5758340be442b5}\label{embroidermodder_8h_a2d4ff66def016cf57f5758340be442b5}} 
+\index{embroidermodder.h@{embroidermodder.h}!group\_box\_arc\_geometry\_entries@{group\_box\_arc\_geometry\_entries}}
+\index{group\_box\_arc\_geometry\_entries@{group\_box\_arc\_geometry\_entries}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{group\_box\_arc\_geometry\_entries}{group\_box\_arc\_geometry\_entries}}
+{\footnotesize\ttfamily const int group\+\_\+box\+\_\+arc\+\_\+geometry\+\_\+entries\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{embroidermodder_8h_a0a7df12657193416b45b72d80ab11c21}\label{embroidermodder_8h_a0a7df12657193416b45b72d80ab11c21}} 
+\index{embroidermodder.h@{embroidermodder.h}!group\_box\_data@{group\_box\_data}}
+\index{group\_box\_data@{group\_box\_data}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{group\_box\_data}{group\_box\_data}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$std\+::string, \mbox{\hyperlink{embroidermodder_8h_a5c417f81e566a0a81c7477a9fde2ea9b}{Group\+Box\+Data}}$\ast$$>$ group\+\_\+box\+\_\+data\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{embroidermodder_8h_a9e5c49167bfdbfabad312eb36ffbebd7}\label{embroidermodder_8h_a9e5c49167bfdbfabad312eb36ffbebd7}} 
+\index{embroidermodder.h@{embroidermodder.h}!group\_box\_ellipse\_geometry@{group\_box\_ellipse\_geometry}}
+\index{group\_box\_ellipse\_geometry@{group\_box\_ellipse\_geometry}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{group\_box\_ellipse\_geometry}{group\_box\_ellipse\_geometry}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a5c417f81e566a0a81c7477a9fde2ea9b}{Group\+Box\+Data}} group\+\_\+box\+\_\+ellipse\+\_\+geometry\mbox{[}$\,$\mbox{]}\hspace{0.3cm}{\ttfamily [extern]}}
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000001}{Todo}}]use proper icons for tool\+Buttons \end{DoxyRefDesc}
+\mbox{\Hypertarget{embroidermodder_8h_ae7b4a6f04c5065d40e4d96559d76cc01}\label{embroidermodder_8h_ae7b4a6f04c5065d40e4d96559d76cc01}} 
+\index{embroidermodder.h@{embroidermodder.h}!group\_box\_ellipse\_geometry\_entries@{group\_box\_ellipse\_geometry\_entries}}
+\index{group\_box\_ellipse\_geometry\_entries@{group\_box\_ellipse\_geometry\_entries}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{group\_box\_ellipse\_geometry\_entries}{group\_box\_ellipse\_geometry\_entries}}
+{\footnotesize\ttfamily const int group\+\_\+box\+\_\+ellipse\+\_\+geometry\+\_\+entries\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{embroidermodder_8h_a9213a60cbfb6635e08a53a82bd994243}\label{embroidermodder_8h_a9213a60cbfb6635e08a53a82bd994243}} 
+\index{embroidermodder.h@{embroidermodder.h}!group\_box\_list@{group\_box\_list}}
+\index{group\_box\_list@{group\_box\_list}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{group\_box\_list}{group\_box\_list}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::string$>$ group\+\_\+box\+\_\+list\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{embroidermodder_8h_a5bcaa838cc51db6646147a2a8dfe22fe}\label{embroidermodder_8h_a5bcaa838cc51db6646147a2a8dfe22fe}} 
+\index{embroidermodder.h@{embroidermodder.h}!groupBoxes@{groupBoxes}}
+\index{groupBoxes@{groupBoxes}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{groupBoxes}{groupBoxes}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$std\+::string, QGroup\+Box $\ast$$>$ group\+Boxes\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{embroidermodder_8h_a4ce9e3d6d96635677ccedd5ab514518f}\label{embroidermodder_8h_a4ce9e3d6d96635677ccedd5ab514518f}} 
+\index{embroidermodder.h@{embroidermodder.h}!lineEdits@{lineEdits}}
+\index{lineEdits@{lineEdits}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{lineEdits}{lineEdits}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$std\+::string, QLine\+Edit $\ast$$>$ line\+Edits\hspace{0.3cm}{\ttfamily [extern]}}
+
 \mbox{\Hypertarget{embroidermodder_8h_a19276c778f3034b94881cf1f8614dbb2}\label{embroidermodder_8h_a19276c778f3034b94881cf1f8614dbb2}} 
 \index{embroidermodder.h@{embroidermodder.h}!settings@{settings}}
 \index{settings@{settings}!embroidermodder.h@{embroidermodder.h}}
 \doxyparagraph{\texorpdfstring{settings}{settings}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} settings\hspace{0.3cm}{\ttfamily [extern]}}
 
-The actuator changes the program state via these global variables. \mbox{\Hypertarget{embroidermodder_8h_ab30a5c7efd315ac60982b02c20278efe}\label{embroidermodder_8h_ab30a5c7efd315ac60982b02c20278efe}} 
+Embroidermodder 2.
+
+\DoxyHorRuler{0}
+
+
+Copyright 2013-\/2022 The Embroidermodder Team Embroidermodder 2 is Open Source Software. See LICENSE for licensing terms.
+
+\DoxyHorRuler{0}
+
+
+Use Python\textquotesingle{}s PEP7 style guide. \href{https://peps.python.org/pep-0007/}{\texttt{ https\+://peps.\+python.\+org/pep-\/0007/}} The actuator changes the program state via these global variables. \mbox{\Hypertarget{embroidermodder_8h_ae2d67cb30789657c614d5ee3b601e228}\label{embroidermodder_8h_ae2d67cb30789657c614d5ee3b601e228}} 
+\index{embroidermodder.h@{embroidermodder.h}!toolButtons@{toolButtons}}
+\index{toolButtons@{toolButtons}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{toolButtons}{toolButtons}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$std\+::string, QTool\+Button $\ast$$>$ tool\+Buttons\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{embroidermodder_8h_ab30a5c7efd315ac60982b02c20278efe}\label{embroidermodder_8h_ab30a5c7efd315ac60982b02c20278efe}} 
 \index{embroidermodder.h@{embroidermodder.h}!view\_toolbar@{view\_toolbar}}
 \index{view\_toolbar@{view\_toolbar}!embroidermodder.h@{embroidermodder.h}}
 \doxyparagraph{\texorpdfstring{view\_toolbar}{view\_toolbar}}
