@@ -122,10 +122,10 @@ read_settings(const char *settings_file)
         std::string label = "ACTION_" + action_labels[i];
         toml_table_t *table = toml_table_in(settings_toml, label.c_str());
 
-        toml_datum_t index = toml_int_in(table, "index");
-        action.hash = index.u.i;
+        action.hash = i;
 
         action.icon = read_string_setting(table, "icon");
+
         action.command = read_string_setting(table, "command");
         action.tooltip = read_string_setting(table, "tooltip");
         action.statustip = read_string_setting(table, "statustip");
@@ -427,6 +427,36 @@ MainWindow::createAllActions()
         auto f = [=](){ this->actuator(action.command); };
         connect(ACTION, &QAction::triggered, this, f);
         actionHash[action.hash] = ACTION;
+
+        QString toolbar_name = QString::fromStdString(action.toolbar_name);
+        if (toolbar_name.toUpper() != "NONE") {
+            //If the toolbar doesn't exist, create it.
+            if (!toolbarHash.value(toolbar_name)) {
+                QToolBar* tb = new QToolBar(toolbar_name, this);
+                tb->setObjectName("toolbar" + toolbar_name);
+                connect(tb, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+                addToolBar(Qt::LeftToolBarArea, tb);
+                addToolBarBreak(Qt::LeftToolBarArea);
+                toolbarHash.insert(toolbar_name, tb);
+            }
+
+            //TODO: order actions position in toolbar based on .ini setting
+            toolbarHash.value(toolbar_name)->addAction(actionHash[action.hash]);
+        }
+
+        QString menu_name = QString::fromStdString(action.menu_name);
+        if (menu_name.toUpper() != "NONE") {
+            //If the menu doesn't exist, create it.
+            if (!menuHash.value(menu_name)) {
+                QMenu* menu = new QMenu(menu_name, this);
+                menu->setTearOffEnabled(false);
+                menuBar()->addMenu(menu);
+                menuHash.insert(menu_name, menu);
+            }
+
+            //TODO: order actions position in menu based on .ini setting
+            menuHash.value(menu_name)->addAction(actionHash[action.hash]);
+        }
     }
 
     actionHash[get_action_index("windowclose")]->setEnabled(numOfDocs > 0);
@@ -539,89 +569,91 @@ MainWindow::actuator(std::string line)
     }
 
     if (command == "add") {
-        /*
+        if (list.size() < 1) {
+            return "</br>The add command requires an argument.";
+        }
+        command = list[0];
         if (command == "arc") {
-            AddArc();
+//            AddArc();
             return "";
         }
         if (command == "circle") {
-            AddCircle();
+//            AddCircle();
             return "";
         }
         if (command == "ellipse") {
-            AddEllipse();
+//           AddEllipse();
             return "";
         }
         if (command == "point") {
-            AddPoint();
+//            AddPoint();
             return "";
         }
         if (command == "regular-polygon") {
-            AddRegularPolygon();
+//            AddRegularPolygon();
             return "";
         }
         if (command == "polygon") {
-            AddPolygon();
+//            AddPolygon();
             return "";
         }
         if (command == "polyline") {
-            AddPolyline();
+//            AddPolyline();
             return "";
         }
         if (command == "path") {
-            AddPath();
+//            AddPath();
             return "";
         }
         if (command == "horizontal-dimension") {
-            AddHorizontalDimension();
+//            AddHorizontalDimension();
             return "";
         }
         if (command == "vertical-dimension") {
-            AddVerticalDimension();
+//            AddVerticalDimension();
             return "";
         }
         if (command == "image") {
-            AddImage();
+//            AddImage();
             return "";
         }
         if (command == "dim-leader") {
-            AddDimLeader();
+//            AddDimLeader();
             return "";
         }
         if (command == "text-multi") {
-            AddTextMulti();
+//            AddTextMulti();
             return "";
         }
         if (command == "text-single") {
-            AddTextSingle();
+//            AddTextSingle();
             return "";
         }
         if (command == "infinite-line") {
-            AddInfiniteLine();
+ //           AddInfiniteLine();
             return "";
         }
         if (command == "ray") {
-            AddRay();
+//            AddRay();
             return "";
         }
         if (command == "line") {
-            AddLine();
+//            AddLine();
             return "";
         }
         if (command == "triangle") {
-            AddTriangle();
+//            AddTriangle();
             return "";
         }
         if (command == "rectangle") {
-            AddRectangle();
+//            AddRectangle();
             return "";
         }
         if (command == "rounded-rectangle") {
-            AddRoundedRectangle();
+//            AddRoundedRectangle();
             return "";
         }
-        */
-        return "";
+        return "</br>The add subcommand is not recognised.";
     }
 
     if (command == "alert") {
@@ -1264,164 +1296,6 @@ MainWindow::actuator(std::string line)
     */
     return "<br/><font color=\"red\">Unknown command \"" + command
         + "\". Press F1 for help.</font>";
-}
-
-/**
- *
- * NOTE: Every QScriptProgram must have a unique function name to call.
- * If every function was called main(), then the QScriptEngine would
- * only call the last script evaluated (which happens to be main()
- * in another script). Thus, by adding the cmdName before main(),
- * it becomes line_main(), circle_main(), etc... Do not change this
- * code unless you really know what you are doing. I mean it.
- */
-void
-MainWindow::LoadCommand(QString cmdName)
-{
-    qDebug("LoadCommand(%s)", qPrintable(cmdName));
-
-    QString appDir = qApp->applicationDirPath();
-    /*
-    QFile file(appDir + "/commands/" + cmdName + "/" + cmdName + ".js");
-    file.open(QIODevice::ReadOnly);
-    EmbString script(file.readAll());
-    file.close();
-
-    bool done = false;
-    bool findNextIndex = true;
-    EmbString findFunc = "function";
-    EmbString funcName = "";
-    QStringList funcList;
-    int index = 0;
-    while (!done) {
-        if (findNextIndex) {
-            index = script.indexOf(findFunc, index);
-            if (index == -1) {
-                done = true;
-            }
-            else {
-                index += findFunc.size();
-                findNextIndex = false;
-            }
-        }
-        else {
-            QChar ch = script.at(index);
-            if (ch == '(') {
-                funcName = funcName.simplified();
-                funcList.append(funcName);
-                funcName.clear();
-                findNextIndex = true;
-            }
-            else {
-                funcName.append(ch);
-                index++;
-            }
-        }
-    }
-    */
-
-    QList<QChar> validBeforeChars;
-    validBeforeChars << '\t' << '\n' << '\v' << '\f' << '\r' << ' ' << ';' << '(' << ')'
-               << '{' << '}' << '!' << '=' << '+' << '-' << '/' << '*' << '%'
-               << '<' << '>' << '&' << '|' << '?' << ':' << '^' << '~';
-    QList<QChar> validAfterChars;
-    validAfterChars << '\t' << '\n' << '\v' << '\f' << '\r' << ' ' << '(';
-    /*
-    foreach (QString functionName, funcList) {
-        findFunc = functionName;
-        funcName = cmdName + "_" + functionName;
-
-        int found = 0;
-        done = false;
-        index = 0;
-        findNextIndex = true;
-        while (!done) {
-            if (findNextIndex) {
-                index = script.indexOf(findFunc, index);
-                if (index == -1) {
-                    done = true;
-                }
-                else {
-                    findNextIndex = false;
-                }
-            }
-            else {
-                QChar charBefore = script.at(index - 1);
-                if (validBeforeChars.contains(charBefore)) {
-                    int i = 0;
-                    QChar charAfter;
-                    do {
-                        charAfter = script.at(index + i + findFunc.size());
-                        if (charAfter == '(') {
-                            found++;
-                            script.replace(index, findFunc.size(), funcName);
-                        }
-                        i++;
-                    }
-                    while(validAfterChars.contains(charAfter));
-                }
-                index += findFunc.size();
-                findNextIndex = true;
-            }
-        }
-        qDebug("%s found: %d", qPrintable(findFunc), found);
-    }
-    */
-    // TODO: low priority caveat: If a function name is within a string, it is still replaced.
-
-    /*
-    script.replace("var global = {};", "var " + cmdName + "_global = {};");
-    script.replace("global.", cmdName + "_global.");
-
-    engine->evaluate(script);
-    */
-
-    QSettings settings_file(appDir + "/commands.ini", QSettings::IniFormat);
-    QString menuName = settings_file.value("Menu/Name", "Lost & Found").toString();
-    int menuPos = settings_file.value("Menu/Position", 0).toInt();
-    QString toolbarName = settings_file.value("ToolBar/Name", "Lost & Found").toString();
-    int toolbarPos  = settings_file.value("ToolBar/Position", 0).toInt();
-    QString toolTip = settings_file.value("Tips/ToolTip", "").toString();
-    QString statusTip = settings_file.value("Tips/StatusTip", "").toString();
-    QStringList aliases = settings_file.value("Prompt/Alias").toStringList();
-
-    /*
-    QAction* ACTION = createAction(cmdName, toolTip, statusTip, true);
-    */
-
-    if (toolbarName.toUpper() != "NONE") {
-        //If the toolbar doesn't exist, create it.
-        if (!toolbarHash.value(toolbarName)) {
-            QToolBar* tb = new QToolBar(toolbarName, this);
-            tb->setObjectName("toolbar" + toolbarName);
-            connect(tb, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
-            addToolBar(Qt::LeftToolBarArea, tb);
-            addToolBarBreak(Qt::LeftToolBarArea);
-            toolbarHash.insert(toolbarName, tb);
-        }
-
-        //TODO: order actions position in toolbar based on .ini setting
-        /* toolbarHash.value(toolbarName)->addAction(ACTION); */
-    }
-
-    if (menuName.toUpper() != "NONE") {
-        //If the menu doesn't exist, create it.
-        if (!menuHash.value(menuName)) {
-            QMenu* menu = new QMenu(menuName, this);
-            menu->setTearOffEnabled(false);
-            menuBar()->addMenu(menu);
-            menuHash.insert(menuName, menu);
-        }
-
-        //TODO: order actions position in menu based on .ini setting
-        /* menuHash.value(menuName)->addAction(ACTION); */
-    }
-
-    /*
-    foreach(EmbString alias, aliases) {
-        prompt->addCommand(alias, cmdName);
-    }
-    */
 }
 
 /**
