@@ -1045,38 +1045,32 @@ QPainterPath View::createRulerTextPath(float x, float y, QString str, float heig
     EmbReal yScale = height;
 
     int len = str.length();
-    for(int i = 0; i < len; ++i)
-    {
-        if (str[i] == QChar('1'))
-        {
+    for (int i = 0; i < len; ++i) {
+        if (str[i] == QChar('1')) {
             path.moveTo(x+0.05*xScale, y-0.00*yScale);
             path.lineTo(x+0.45*xScale, y-0.00*yScale);
             path.moveTo(x+0.00*xScale, y-0.75*yScale);
             path.lineTo(x+0.25*xScale, y-1.00*yScale);
             path.lineTo(x+0.25*xScale, y-0.00*yScale);
         }
-        else if (str[i] == QChar('2'))
-        {
+        else if (str[i] == QChar('2')) {
             path.moveTo(x+0.00*xScale, y-0.75*yScale);
             path.arcTo(x+0.00*xScale, y-1.00*yScale, 0.50*xScale, 0.50*yScale, 180.00, -216.87);
             path.lineTo(x+0.00*xScale, y-0.00*yScale);
             path.lineTo(x+0.50*xScale, y-0.00*yScale);
         }
-        else if (str[i] == QChar('3'))
-        {
+        else if (str[i] == QChar('3')) {
             path.arcMoveTo(x+0.00*xScale, y-0.50*yScale, 0.50*xScale, 0.50*yScale, 195.00);
             path.arcTo(x+0.00*xScale, y-0.50*yScale, 0.50*xScale, 0.50*yScale, 195.00, 255.00);
             path.arcTo(x+0.00*xScale, y-1.00*yScale, 0.50*xScale, 0.50*yScale, 270.00, 255.00);
         }
-        else if (str[i] == QChar('4'))
-        {
+        else if (str[i] == QChar('4')) {
             path.moveTo(x+0.50*xScale, y-0.00*yScale);
             path.lineTo(x+0.50*xScale, y-1.00*yScale);
             path.lineTo(x+0.00*xScale, y-0.50*yScale);
             path.lineTo(x+0.50*xScale, y-0.50*yScale);
         }
-        else if (str[i] == QChar('5'))
-        {
+        else if (str[i] == QChar('5')) {
             path.moveTo(x+0.50*xScale, y-1.00*yScale);
             path.lineTo(x+0.00*xScale, y-1.00*yScale);
             path.lineTo(x+0.00*xScale, y-0.50*yScale);
@@ -1084,34 +1078,29 @@ QPainterPath View::createRulerTextPath(float x, float y, QString str, float heig
             path.arcTo(x+0.00*xScale, y-0.50*yScale, 0.50*xScale, 0.50*yScale, 90.00, -180.00);
             path.lineTo(x+0.00*xScale, y-0.00*yScale);
         }
-        else if (str[i] == QChar('6'))
-        {
+        else if (str[i] == QChar('6')) {
             path.addEllipse(QPointF(x+0.25*xScale, y-0.25*yScale), 0.25*xScale, 0.25*yScale);
             path.moveTo(x+0.00*xScale, y-0.25*yScale);
             path.lineTo(x+0.00*xScale, y-0.75*yScale);
             path.arcTo(x+0.00*xScale, y-1.00*yScale, 0.50*xScale, 0.50*yScale, 180.00, -140.00);
         }
-        else if (str[i] == QChar('7'))
-        {
+        else if (str[i] == QChar('7')) {
             path.moveTo(x+0.00*xScale, y-1.00*yScale);
             path.lineTo(x+0.50*xScale, y-1.00*yScale);
             path.lineTo(x+0.25*xScale, y-0.25*yScale);
             path.lineTo(x+0.25*xScale, y-0.00*yScale);
         }
-        else if (str[i] == QChar('8'))
-        {
+        else if (str[i] == QChar('8')) {
             path.addEllipse(QPointF(x+0.25*xScale, y-0.25*yScale), 0.25*xScale, 0.25*yScale);
             path.addEllipse(QPointF(x+0.25*xScale, y-0.75*yScale), 0.25*xScale, 0.25*yScale);
         }
-        else if (str[i] == QChar('9'))
-        {
+        else if (str[i] == QChar('9')) {
             path.addEllipse(QPointF(x+0.25*xScale, y-0.75*yScale), 0.25*xScale, 0.25*yScale);
             path.moveTo(x+0.50*xScale, y-0.75*yScale);
             path.lineTo(x+0.50*xScale, y-0.25*yScale);
             path.arcTo(x+0.00*xScale, y-0.50*yScale, 0.50*xScale, 0.50*yScale, 0.00, -140.00);
         }
-        else if (str[i] == QChar('0'))
-        {
+        else if (str[i] == QChar('0')) {
             //path.addEllipse(QPointF(x+0.25*xScale, y-0.50*yScale), 0.25*xScale, 0.50*yScale);
 
             path.moveTo(x+0.00*xScale, y-0.75*yScale);
@@ -1120,18 +1109,15 @@ QPainterPath View::createRulerTextPath(float x, float y, QString str, float heig
             path.lineTo(x+0.50*xScale, y-0.75*yScale);
             path.arcTo(x+0.00*xScale, y-1.00*yScale, 0.50*xScale, 0.50*yScale,   0.00, 180.00);
         }
-        else if (str[i] == QChar('-'))
-        {
+        else if (str[i] == QChar('-')) {
             path.moveTo(x+0.00*xScale, y-0.50*yScale);
             path.lineTo(x+0.50*xScale, y-0.50*yScale);
         }
-        else if (str[i] == QChar('\''))
-        {
+        else if (str[i] == QChar('\'')) {
             path.moveTo(x+0.25*xScale, y-1.00*yScale);
             path.lineTo(x+0.25*xScale, y-0.75*yScale);
         }
-        else if (str[i] == QChar('\"'))
-        {
+        else if (str[i] == QChar('\"')) {
             path.moveTo(x+0.10*xScale, y-1.00*yScale);
             path.lineTo(x+0.10*xScale, y-0.75*yScale);
             path.moveTo(x+0.40*xScale, y-1.00*yScale);

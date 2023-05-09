@@ -150,8 +150,9 @@ typedef struct UiObject_ {
             do nothing but slow down the program. */
     EmbVector center;
         /*< Where the polygon is centered. */
-    EmbVector scale; /*< The scale of the object: note that the default
-                         may not be (1.0, 1.0). */
+    EmbVector scale;
+        /*< The scale of the object: note that the default
+            is unique to each object type. */
     EmbReal rotation;
         /*< \todo document this */
     uint32_t mode;
@@ -183,6 +184,10 @@ typedef struct UiObject_ {
     bool selectable;
         /*< \todo document this */
     EmbColor color;
+        /*< \todo document this */
+    EmbVector point1;
+        /*< \todo document this */
+    EmbVector point2;
         /*< \todo document this */
 } UiObject;
 
@@ -400,6 +405,18 @@ enum UiMode {
     HEART_MODE_STYLE,
     HEART_MODE_XSCALE,
     HEART_MODE_YSCALE,
+
+    POLYGON_MODE_NUM_SIDES,
+    POLYGON_MODE_CENTER_PT,
+    POLYGON_MODE_POLYTYPE,
+    POLYGON_MODE_INSCRIBE,
+    POLYGON_MODE_CIRCUMSCRIBE,
+    POLYGON_MODE_DISTANCE,
+    POLYGON_MODE_SIDE_LEN,
+
+    RGB_MODE_BACKGROUND,
+    RGB_MODE_CROSSHAIR,
+    RGB_MODE_GRID,
 
     ROTATE_MODE_NORMAL,
     ROTATE_MODE_REFERENCE,
