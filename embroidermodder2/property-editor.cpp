@@ -20,6 +20,175 @@
 
 #include "embroidermodder.h"
 
+std::vector<GroupBoxData> group_box_general = {
+    
+};
+
+std::vector<GroupBoxData> group_box_arc_geometry = {
+    {
+        .object = OBJ_TYPE_ARC,
+        .key = "arc_center_x",
+        .icon_name = "blank",
+        .label = "Center X",
+        .type = "double",
+        .map_signal = "lineEditArcCenterX"
+    },
+    {
+        .object = OBJ_TYPE_ARC,
+        .key = "arc_center_y",
+        .icon_name = "blank",
+        .label = "Center Y",
+        .type = "double",
+        .map_signal = "lineEditArcCenterY"
+    },
+    {
+        .object = OBJ_TYPE_ARC,
+        .key = "arc_radius",
+        .icon_name = "blank",
+        .label = "Radius",
+        .type = "double",
+        .map_signal = "lineEditArcRadius"
+    },
+    {
+        .object = OBJ_TYPE_ARC,
+        .key = "arc_start_angle",
+        .icon_name = "blank",
+        .label = "Start Angle",
+        .type = "double",
+        .map_signal = "lineEditArcStartAngle"
+    },
+    {
+        .object = OBJ_TYPE_ARC,
+        .key = "arc_end_angle",
+        .icon_name = "blank",
+        .label = "End Angle",
+        .type = "double",
+        .map_signal = "lineEditArcEndAngle"
+    },
+    {
+        .object = OBJ_TYPE_ARC,
+        .key = "arc_start_x",
+        .icon_name = "blank",
+        .label = "Start X",
+        .type = "double",
+        .map_signal = ""
+    },
+    {
+        .object = OBJ_TYPE_ARC,
+        .key = "arc_start_y",
+        .icon_name = "blank",
+        .label = "Start Y",
+        .type = "double",
+        .map_signal = ""
+    },
+    {
+        .object = OBJ_TYPE_ARC,
+        .key = "arc_end_x",
+        .icon_name = "blank",
+        .label = "End X",
+        .type = "double",
+        .map_signal = ""
+    },
+    {
+        .object = OBJ_TYPE_ARC,
+        .key = "arc_end_y",
+        .icon_name = "blank",
+        .label = "End Y",
+        .type = "double",
+        .map_signal = ""
+    },
+    {
+        .object = OBJ_TYPE_ARC,
+        .key = "arc_area",
+        .icon_name = "blank",
+        .label = "Area",
+        .type = "double",
+        .map_signal = ""
+    },
+    {
+        .object = OBJ_TYPE_ARC,
+        .key = "arc_length",
+        .icon_name = "blank",
+        .label = "Arc Length",
+        .type = "double",
+        .map_signal = ""
+    },
+    {
+        .object = OBJ_TYPE_ARC,
+        .key = "arc_chord",
+        .icon_name = "blank",
+        .label = "Chord",
+        .type = "double",
+        .map_signal = ""
+    },
+    {
+        .object = OBJ_TYPE_ARC,
+        .key = "arc_inc_angle",
+        .icon_name = "blank",
+        .label = "Included Angle",
+        .type = "double",
+        .map_signal = ""
+    }
+};
+
+std::vector<GroupBoxData> group_box_arc_misc = {
+    
+};
+
+/**
+ * \todo use proper icons for toolButtons
+ */
+std::vector<GroupBoxData> group_box_ellipse_geometry = {
+    {
+        .object = OBJ_TYPE_ELLIPSE,
+        .key = "ellipse_center_x",
+        .icon_name = "blank",
+        .label = "Center X",
+        .type = "double",
+        .map_signal = "lineEditEllipseCenterX"
+    },
+    {
+        .object = OBJ_TYPE_ELLIPSE,
+        .key = "ellipse_center_y",
+        .icon_name = "blank",
+        .label = "Center Y",
+        .type = "double",
+        .map_signal = "lineEditEllipseCenterY"
+    },
+    {
+        .object = OBJ_TYPE_ELLIPSE,
+        .key = "ellipse_semi_major_axis",
+        .icon_name = "blank",
+        .label = "Semi-Major Axis",
+        .type = "double",
+        .map_signal = "lineEditEllipseSemiMajorAxis"
+    },
+    {
+        .object = OBJ_TYPE_ELLIPSE,
+        .key = "ellipse_semi_minor_axis",
+        .icon_name = "blank",
+        .label = "Semi-Minor Axis",
+        .type = "double",
+        .map_signal = "lineEditEllipseSemiMinorAxis"
+    },
+    {
+        .object = OBJ_TYPE_ELLIPSE,
+        .key = "ellipse_major_axis",
+        .icon_name = "blank",
+        .label = "Major Axis",
+        .type = "double",
+        .map_signal = "lineEditEllipseMajorAxis"
+    },
+    {
+        .object = OBJ_TYPE_ELLIPSE,
+        .key = "ellipse_minor_axis",
+        .icon_name = "blank",
+        .label = "Minor Axis",
+        .type = "double",
+        .map_signal = "lineEditEllipseMinorAxis"
+    }
+};
+
 ArcObject* tempArcObj;
 BlockObject* tempBlockObj;
 CircleObject* tempCircleObj;
@@ -1080,14 +1249,13 @@ void
 PropertyEditor::createGroupBox(
     std::string group_box_key,
     const char *title,
-    GroupBoxData data[],
-    int lines
+    std::vector<GroupBoxData> data
 )
 {
     groupBoxes[group_box_key] = new QGroupBox(tr(title), this);
 
     QFormLayout* formLayout = new QFormLayout(this);
-    for (int i=0; i<lines; i++) {
+    for (int i=0; i<data.size(); i++) {
         GroupBoxData gbd = data[i];
         std::string key(gbd.key);
         toolButtons[key] = createToolButton(gbd.icon_name, tr(gbd.label));
@@ -1109,8 +1277,7 @@ PropertyEditor::createGroupBox(
 QGroupBox*
 PropertyEditor::createGroupBoxGeometryArc()
 {
-    createGroupBox("geometry_arc", "Geometry",
-        group_box_arc_geometry, group_box_arc_geometry_entries);
+    createGroupBox("geometry_arc", "Geometry", group_box_arc_geometry);
 
     return groupBoxes["geometry_arc"];
 }
@@ -1289,10 +1456,7 @@ QGroupBox* PropertyEditor::createGroupBoxGeometryDimRadius()
 QGroupBox*
 PropertyEditor::createGroupBoxGeometryEllipse()
 {
-    createGroupBox("geometry_ellipse",
-        "Geometry",
-        group_box_ellipse_geometry,
-        group_box_ellipse_geometry_entries);
+    createGroupBox("geometry_ellipse", "Geometry", group_box_ellipse_geometry);
 
     return groupBoxes["geometry_ellipse"];
 }

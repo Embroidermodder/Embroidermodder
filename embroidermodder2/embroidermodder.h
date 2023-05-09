@@ -118,6 +118,15 @@ class TextMultiObject;
 class TextSingleObject;
 
 /**
+ * .
+ */
+typedef struct Parameter_ {
+    std::string s_value;
+    EmbReal r_value;
+    int i_value;
+} Parameter;
+
+/**
  * @brief This covers the inbuilt designs: Dolphin, Snowflake and Heart.
  * Covers Rotate, Scale and Point UI events.
  *
@@ -246,13 +255,20 @@ typedef struct Settings_ {
         /*< \todo document this */
     int general_icon_size;
         /*< \todo document this */
-    QString version; /*< \todo document this */
-    bool running; /*< \todo document this */
-    bool testing; /*< \todo document this */
-    int debug_mode; /*< \todo document this */
-    bool show_about_dialog; /*< \todo document this */
-    bool show_settings_editor; /*< \todo document this */
-    bool show_editor; /*< \todo document this */
+    QString version;
+        /*< \todo document this */
+    bool running;
+        /*< \todo document this */
+    bool testing;
+        /*< \todo document this */
+    int debug_mode;
+        /*< \todo document this */
+    bool show_about_dialog;
+        /*< \todo document this */
+    bool show_settings_editor;
+        /*< \todo document this */
+    bool show_editor;
+        /*< \todo document this */
     bool show_details_dialog; /*< \todo document this */
     bool show_open_file_dialog; /*< \todo document this */
     int pattern_index; /*< \todo document this */
@@ -2313,11 +2329,8 @@ private:
 
     //TODO: Alphabetic/Categorized TabWidget
 
-    void createGroupBox(
-        std::string group_box_key,
-        const char *title,
-        GroupBoxData data[],
-        int lines);
+    void createGroupBox(std::string group_box_key,
+        const char *title, std::vector<GroupBoxData> data);
 
     QGroupBox* createGroupBoxGeneral();
 
@@ -3010,19 +3023,15 @@ extern std::vector<std::string> file_toolbar;
 extern std::vector<std::string> edit_toolbar;
 extern std::vector<std::string> view_toolbar;
 extern std::vector<std::string> zoom_toolbar;
-
 extern std::unordered_map<std::string, QGroupBox *> groupBoxes;
 extern std::unordered_map<std::string, QComboBox *> comboBoxes;
 extern std::unordered_map<std::string, QLineEdit *> lineEdits;
 extern std::unordered_map<std::string, QToolButton *> toolButtons;
 extern QFontComboBox* comboBoxTextSingleFont;
 extern std::vector<std::string> group_box_list;
-extern GroupBoxData group_box_arc_geometry[];
-extern const int group_box_arc_geometry_entries;
-extern GroupBoxData group_box_ellipse_geometry[];
-extern const int group_box_ellipse_geometry_entries;
-
+extern std::vector<GroupBoxData> group_box_arc_geometry;
+extern std::vector<GroupBoxData> group_box_ellipse_geometry;
 extern std::unordered_map<std::string, std::string> config;
-extern std::unordered_map<std::string, GroupBoxData*> group_box_data;
+extern std::unordered_map<std::string, GroupBoxData> group_box_data;
 
 #endif

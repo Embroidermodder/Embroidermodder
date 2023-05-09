@@ -63,7 +63,6 @@ set(SRC_DIR ${CMAKE_SOURCE_DIR}/embroidermodder2)
 
 add_executable(embroidermodder2
     ${SRC_DIR}/cmdprompt.cpp
-    ${SRC_DIR}/data.cpp
     ${SRC_DIR}/embdetails-dialog.cpp
     ${SRC_DIR}/embroidermodder.cpp
     ${SRC_DIR}/imagewidget.cpp
