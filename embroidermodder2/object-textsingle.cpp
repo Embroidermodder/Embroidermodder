@@ -72,7 +72,7 @@ TextSingleObject::init(const QString& str, EmbReal x, EmbReal y, QRgb rgb, Qt::P
     setObjectColor(rgb);
     setObjectLineType(lineType);
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
-    setPen(objectPen());
+    setPen(objPen);
 }
 
 /**
@@ -328,9 +328,8 @@ TextSingleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
 void
 TextSingleObject::updateRubber(QPainter* painter)
 {
-    int rubberMode = objectRubberMode();
-    if (rubberMode == OBJ_RUBBER_TEXTSINGLE)
-    {
+    int rubberMode = objRubberMode;
+    if (rubberMode == OBJ_RUBBER_TEXTSINGLE) {
         setObjectTextFont(objectRubberText("TEXT_FONT"));
         setObjectTextJustify(objectRubberText("TEXT_JUSTIFY"));
         setObjectPos(objectRubberPoint("TEXT_POINT"));
@@ -339,14 +338,11 @@ TextSingleObject::updateRubber(QPainter* painter)
         setRotation(hr.y());
         setObjectText(objectRubberText("TEXT_RAPID"));
     }
-    else if (rubberMode == OBJ_RUBBER_GRIP)
-    {
-        if (painter)
-        {
+    else if (rubberMode == OBJ_RUBBER_GRIP) {
+        if (painter) {
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if (gripPoint == scenePos())
-            {
-                painter->drawPath(objectPath().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
+            if (gripPoint == scenePos()) {
+                painter->drawPath(path().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
             }
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));

@@ -740,8 +740,6 @@ public:
     QRgb objectColorRGB() const { return objPen.color().rgb(); }
     Qt::PenStyle objectLineType() const { return objPen.style(); }
     EmbReal objectLineWeight() const { return lwtPen.widthF(); }
-    QPainterPath objectPath() const { return path(); }
-    int objectRubberMode() const { return objRubberMode; }
     QPointF objectRubberPoint(const QString& key) const;
     QString objectRubberText(const QString& key) const;
 
@@ -1687,12 +1685,12 @@ public:
 
     QDialogButtonBox* buttonBox;
 
-    quint32 stitchesTotal;
-    quint32 stitchesReal;
-    quint32 stitchesJump;
-    quint32 stitchesTrim;
-    quint32 colorTotal;
-    quint32 colorChanges;
+    uint32_t stitchesTotal;
+    uint32_t stitchesReal;
+    uint32_t stitchesJump;
+    uint32_t stitchesTrim;
+    uint32_t colorTotal;
+    uint32_t colorChanges;
 
     QRectF boundingRect;
 };
@@ -2097,9 +2095,6 @@ public:
     EmbReal nativeMouseY();
 };
 
-MainWindow* mainWin();
-
-
 class MdiWindow: public QMdiSubWindow
 {
     Q_OBJECT
@@ -2108,15 +2103,35 @@ public:
     MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags);
     ~MdiWindow();
 
+    MainWindow* mainWin;
+    QMdiArea* mdiArea;
+    QGraphicsScene* gscene;
+    View* gview;
+
+    bool fileWasLoaded;
+
+    QString promptHistory;
+    QList<QString> promptInputList;
+    int promptInputNum;
+
+    QPrinter printer;
+
+    QString curFile;
+    void setCurrentFile(const QString& fileName);
+    QString fileExtension(const QString& fileName);
+
+    int myIndex;
+
+    QString curLayer;
+    QRgb curColor;
+    QString curLineType;
+    QString curLineWeight;
+
+    void promptInputPrevNext(bool prev);
+
     virtual QSize sizeHint() const;
     QString getCurrentFile() { return curFile; }
     QString getShortCurrentFile();
-    View* getView() { return gview; }
-    QGraphicsScene* getScene() { return gscene; }
-    QString getCurrentLayer() { return curLayer; }
-    QRgb getCurrentColor() { return curColor; }
-    QString getCurrentLineType() { return curLineType; }
-    QString getCurrentLineWeight() { return curLineWeight; }
     void setCurrentLayer(const QString& layer) { curLayer = layer; }
     void setCurrentColor(const QRgb& color) { curColor = color; }
     void setCurrentLineType(const QString& lineType) { curLineType = lineType; }
@@ -2154,35 +2169,6 @@ public slots:
     void logPromptInput(const QString& txt);
     void promptInputPrevious();
     void promptInputNext();
-
-protected:
-
-private:
-    MainWindow* mainWin;
-    QMdiArea* mdiArea;
-    QGraphicsScene* gscene;
-    View* gview;
-
-    bool fileWasLoaded;
-
-    QString promptHistory;
-    QList<QString> promptInputList;
-    int promptInputNum;
-
-    QPrinter                   printer;
-
-    QString curFile;
-    void setCurrentFile(const QString& fileName);
-    QString fileExtension(const QString& fileName);
-
-    int myIndex;
-
-    QString curLayer;
-    QRgb curColor;
-    QString curLineType;
-    QString curLineWeight;
-
-    void promptInputPrevNext(bool prev);
 };
 
 /**
@@ -2960,7 +2946,7 @@ private:
     uint8_t gripSize;
     uint8_t pickBoxSize;
     QRgb crosshairColor;
-    quint32 crosshairSize;
+    uint32_t crosshairSize;
 
     void panStart(const QPoint& point);
     int panDistance;
@@ -3016,6 +3002,7 @@ void write_settings(const char *fname);
 /* Global data
  * -----------
  */
+extern MainWindow* _mainWin;
 extern Settings settings;
 extern Settings dialog;
 extern std::vector<Action> action_table;

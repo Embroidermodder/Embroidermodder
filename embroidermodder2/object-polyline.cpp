@@ -87,7 +87,7 @@ void PolylineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 
 void PolylineObject::updateRubber(QPainter* painter)
 {
-    int rubberMode = objectRubberMode();
+    int rubberMode = objRubberMode;
     if (rubberMode == OBJ_RUBBER_POLYLINE)
     {
         setObjectPos(objectRubberPoint("POLYLINE_POINT_0"));

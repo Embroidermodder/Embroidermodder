@@ -271,8 +271,7 @@ View::clearRubberRoom()
                (type == OBJ_TYPE_POLYLINE && spareRubberList.contains(SPARE_RUBBER_POLYLINE)) ||
                (spareRubberList.contains(base->objectID())))
             {
-                if (!base->objectPath().elementCount())
-                {
+                if (!base->path().elementCount()) {
                     QMessageBox::critical(this, tr("Empty Rubber Object Error"),
                                           tr("The rubber object added contains no points. "
                                           "The command that created this object has flawed logic. "

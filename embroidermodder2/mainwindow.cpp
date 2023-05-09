@@ -163,15 +163,6 @@ validRGB(int r, int g, int b)
 }
 
 /**
- * @brief mainWin
- * @return
- */
-MainWindow* mainWin()
-{
-    return _mainWin;
-}
-
-/**
  * @brief MainWindow::MainWindow
  */
 MainWindow::MainWindow() : QMainWindow(0)
@@ -219,7 +210,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     qApp->installTranslator(&translatorQt);
 
     //Init
-    mainWin = this;
+    _mainWin = this;
     //Menus
     fileMenu     = new QMenu(tr("&File"),     this);
     editMenu     = new QMenu(tr("&Edit"),     this);
@@ -336,9 +327,6 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     //setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); //TODO: Load these from settings
     //tabifyDockWidget(dockPropEdit, dockUndoEdit); //TODO: load this from settings
-
-    //script
-    _mainWin = this;
 
     statusbar = new StatusBar(this, this);
     this->setStatusBar(statusbar);
@@ -1388,9 +1376,9 @@ Error(Parameter args[10])
     EmbString strCmd = result[0].s_value;
     EmbString strErr = result[1].s_value;
 
-    mainWin()->setPromptPrefix("ERROR: (" + strCmd + ") " + strErr);
-    mainWin()->nativeAppendPromptHistory(QString());
-    mainWin()->nativeEndCommand();
+    _mainWin->setPromptPrefix("ERROR: (" + strCmd + ") " + strErr);
+    _mainWin->nativeAppendPromptHistory(QString());
+    _mainWin->nativeEndCommand();
     */
     return "";
 }
@@ -1402,8 +1390,8 @@ Todo(Parameter result[10])
     EmbString strCmd  = result[0].s_value;
     EmbString strTodo = result[1].s_value;
 
-    mainWin()->nativeAlert("TODO: (" + strCmd + ") " + strTodo);
-    mainWin()->nativeEndCommand();
+    _mainWin->nativeAlert("TODO: (" + strCmd + ") " + strTodo);
+    _mainWin->nativeEndCommand();
     */
     return "";
 }
@@ -1415,10 +1403,10 @@ AppendPromptHistory(Parameter result[10])
 {
     int args = args.size();
     if (args == 0) {
-        mainWin()->nativeAppendPromptHistory(QString());
+        _mainWin->nativeAppendPromptHistory(QString());
     }
     else if (args == 1) {
-        mainWin()->nativeAppendPromptHistory(result[0].s_value);
+        _mainWin->nativeAppendPromptHistory(result[0].s_value);
     }
     else {
         return "ERROR: appendPromptHistory() requires one or zero arguments");
@@ -1440,7 +1428,7 @@ MessageBox(Parameter result[10])
     if (type != "critical" && type != "information" && type != "question" && type != "warning")
         return context->throwError(QScriptContext::UnknownError, "messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
 
-    mainWin()->nativeMessageBox(type, title, text);
+    _mainWin->nativeMessageBox(type, title, text);
     */
     return "";
 }
@@ -1470,7 +1458,7 @@ PrintArea(Parameter result[10])
     EmbReal w = result[2].r_value;
     EmbReal h = result[3].r_value;
 
-    mainWin()->nativePrintArea(x, y, w, h);
+    _mainWin->nativePrintArea(x, y, w, h);
     return "";
 }
 
@@ -1488,7 +1476,7 @@ SetBackgroundColor(Parameter result[10])
     if (g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setBackgroundColor(): g value must be in range 0-255"); }
     if (b < 0 || b > 255) { return context->throwError(QScriptContext::UnknownError, "setBackgroundColor(): b value must be in range 0-255"); }
 
-    mainWin()->setBackgroundColor(r, g, b);
+    _mainWin->setBackgroundColor(r, g, b);
     return "";
 }
 
@@ -1515,7 +1503,7 @@ SetCrossHairColor(Parameter result[10])
         return "ERROR setCrossHairColor(): b value must be in range 0-255";
     }
 
-    mainWin()->setCrossHairColor(r, g, b);
+    _mainWin->setCrossHairColor(r, g, b);
     return "";
 }
 
@@ -1536,7 +1524,7 @@ SetGridColor(Parameter result[10])
         return "ERROR setGridColor(): b value must be in range 0-255";
     }
 
-    mainWin()->setGridColor(r, g, b);
+    _mainWin->setGridColor(r, g, b);
     return "";
 }
 
@@ -1548,7 +1536,7 @@ SetTextAngle(Parameter result[10])
         return error;
     }
 
-    mainWin()->setTextAngle(result[0].r_value);
+    _mainWin->setTextAngle(result[0].r_value);
     return "";
 }
 
@@ -1558,7 +1546,7 @@ SetTextAngle(Parameter result[10])
 std::string
 SetTextBold(Parameter result[10])
 {
-    mainWin()->setTextBold(result[0].b_value);
+    _mainWin->setTextBold(result[0].b_value);
     return "";
 }
 
@@ -1568,7 +1556,7 @@ SetTextBold(Parameter result[10])
 std::string
 SetTextItalic(Parameter result[10])
 {
-    mainWin()->setTextItalic(result[0].b_value);
+    _mainWin->setTextItalic(result[0].b_value);
     return "";
 }
 
@@ -1578,7 +1566,7 @@ SetTextItalic(Parameter result[10])
 std::string
 SetTextUnderline(Parameter result[10])
 {
-    mainWin()->setTextUnderline(result[0].toBool());
+    _mainWin->setTextUnderline(result[0].toBool());
     return "";
 }
 
@@ -1588,7 +1576,7 @@ SetTextUnderline(Parameter result[10])
 std::string
 SetTextStrikeOut(Parameter result[10])
 {
-    mainWin()->setTextStrikeOut(result[0].toBool());
+    _mainWin->setTextStrikeOut(result[0].toBool());
     return "";
 }
 
@@ -1598,7 +1586,7 @@ SetTextStrikeOut(Parameter result[10])
 std::string
 SetTextOverline(Parameter result[10])
 {
-    mainWin()->setTextOverline(result[0].toBool());
+    _mainWin->setTextOverline(result[0].toBool());
     return "";
 }
 
@@ -1625,7 +1613,7 @@ PreviewOn(Parameter result[10])
     else if (modeStr == "SCALE") { mode = PREVIEW_MODE_SCALE;  }
     else { return context->throwError(QScriptContext::UnknownError, "previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\"."); }
 
-    mainWin()->nativePreviewOn(clone, mode, x, y, data);
+    _mainWin->nativePreviewOn(clone, mode, x, y, data);
     return "";
 }
 
@@ -1639,32 +1627,32 @@ SetRubberMode(Parameter result[10])
     EmbString mode = result[0].s_value.toUpper();
 
     if (mode == "CIRCLE_1P_RAD") {
-        mainWin()->setRubberMode(OBJ_RUBBER_CIRCLE_1P_RAD);
+        _mainWin->setRubberMode(OBJ_RUBBER_CIRCLE_1P_RAD);
     }
-    else if (mode == "CIRCLE_1P_DIA") { mainWin()->setRubberMode(OBJ_RUBBER_CIRCLE_1P_DIA); }
-    else if (mode == "CIRCLE_2P") { mainWin()->setRubberMode(OBJ_RUBBER_CIRCLE_2P); }
-    else if (mode == "CIRCLE_3P") { mainWin()->setRubberMode(OBJ_RUBBER_CIRCLE_3P); }
-    else if (mode == "CIRCLE_TTR") { mainWin()->setRubberMode(OBJ_RUBBER_CIRCLE_TTR); }
-    else if (mode == "CIRCLE_TTR") { mainWin()->setRubberMode(OBJ_RUBBER_CIRCLE_TTT); }
+    else if (mode == "CIRCLE_1P_DIA") { _mainWin->setRubberMode(OBJ_RUBBER_CIRCLE_1P_DIA); }
+    else if (mode == "CIRCLE_2P") { _mainWin->setRubberMode(OBJ_RUBBER_CIRCLE_2P); }
+    else if (mode == "CIRCLE_3P") { _mainWin->setRubberMode(OBJ_RUBBER_CIRCLE_3P); }
+    else if (mode == "CIRCLE_TTR") { _mainWin->setRubberMode(OBJ_RUBBER_CIRCLE_TTR); }
+    else if (mode == "CIRCLE_TTR") { _mainWin->setRubberMode(OBJ_RUBBER_CIRCLE_TTT); }
 
-    else if (mode == "DIMLEADER_LINE") { mainWin()->setRubberMode(OBJ_RUBBER_DIMLEADER_LINE); }
+    else if (mode == "DIMLEADER_LINE") { _mainWin->setRubberMode(OBJ_RUBBER_DIMLEADER_LINE); }
 
-    else if (mode == "ELLIPSE_LINE") { mainWin()->setRubberMode(OBJ_RUBBER_ELLIPSE_LINE); }
-    else if (mode == "ELLIPSE_MAJORDIAMETER_MINORRADIUS") { mainWin()->setRubberMode(OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS); }
-    else if (mode == "ELLIPSE_MAJORRADIUS_MINORRADIUS") { mainWin()->setRubberMode(OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS); }
-    else if (mode == "ELLIPSE_ROTATION") { mainWin()->setRubberMode(OBJ_RUBBER_ELLIPSE_ROTATION); }
+    else if (mode == "ELLIPSE_LINE") { _mainWin->setRubberMode(OBJ_RUBBER_ELLIPSE_LINE); }
+    else if (mode == "ELLIPSE_MAJORDIAMETER_MINORRADIUS") { _mainWin->setRubberMode(OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS); }
+    else if (mode == "ELLIPSE_MAJORRADIUS_MINORRADIUS") { _mainWin->setRubberMode(OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS); }
+    else if (mode == "ELLIPSE_ROTATION") { _mainWin->setRubberMode(OBJ_RUBBER_ELLIPSE_ROTATION); }
 
-    else if (mode == "LINE") { mainWin()->setRubberMode(OBJ_RUBBER_LINE); }
+    else if (mode == "LINE") { _mainWin->setRubberMode(OBJ_RUBBER_LINE); }
 
-    else if (mode == "POLYGON") { mainWin()->setRubberMode(OBJ_RUBBER_POLYGON); }
-    else if (mode == "POLYGON_INSCRIBE") { mainWin()->setRubberMode(OBJ_RUBBER_POLYGON_INSCRIBE); }
-    else if (mode == "POLYGON_CIRCUMSCRIBE") { mainWin()->setRubberMode(OBJ_RUBBER_POLYGON_CIRCUMSCRIBE); }
+    else if (mode == "POLYGON") { _mainWin->setRubberMode(OBJ_RUBBER_POLYGON); }
+    else if (mode == "POLYGON_INSCRIBE") { _mainWin->setRubberMode(OBJ_RUBBER_POLYGON_INSCRIBE); }
+    else if (mode == "POLYGON_CIRCUMSCRIBE") { _mainWin->setRubberMode(OBJ_RUBBER_POLYGON_CIRCUMSCRIBE); }
 
-    else if (mode == "POLYLINE") { mainWin()->setRubberMode(OBJ_RUBBER_POLYLINE); }
+    else if (mode == "POLYLINE") { _mainWin->setRubberMode(OBJ_RUBBER_POLYLINE); }
 
-    else if (mode == "RECTANGLE") { mainWin()->setRubberMode(OBJ_RUBBER_RECTANGLE); }
+    else if (mode == "RECTANGLE") { _mainWin->setRubberMode(OBJ_RUBBER_RECTANGLE); }
 
-    else if (mode == "TEXTSINGLE") { mainWin()->setRubberMode(OBJ_RUBBER_TEXTSINGLE); }
+    else if (mode == "TEXTSINGLE") { _mainWin->setRubberMode(OBJ_RUBBER_TEXTSINGLE); }
 
     else { return context->throwError(QScriptContext::UnknownError, "setRubberMode(): unknown rubberMode value"); }
 
@@ -1681,7 +1669,7 @@ SetRubberPoint(Parameter result[10])
     EmbReal x = result[1].r_value;
     EmbReal y = result[2].r_value;
 
-    mainWin()->setRubberPoint(key, x, y);
+    _mainWin->setRubberPoint(key, x, y);
     return "";
 }
 
@@ -1694,7 +1682,7 @@ SetRubberText(Parameter result[10])
     EmbString key = result[0].s_value.toUpper();
     EmbString txt = result[1].s_value;
 
-    mainWin()->setRubberText(key, txt);
+    _mainWin->setRubberText(key, txt);
     return "";
 }
 
@@ -1703,11 +1691,11 @@ AddRubber(Parameter result[10])
 {
     EmbString objType = result[0].s_value.toUpper();
 
-    if (!mainWin()->nativeAllowRubber())
+    if (!_mainWin->nativeAllowRubber())
         return context->throwError(QScriptContext::UnknownError, "addRubber(): You must use vulcanize() before you can add another rubber object.");
 
-    EmbReal mx = mainWin()->nativeMouseX();
-    EmbReal my = mainWin()->nativeMouseY();
+    EmbReal mx = _mainWin->nativeMouseX();
+    EmbReal my = _mainWin->nativeMouseY();
 
     if (objType == "ARC") {
          //TODO: handle this type
@@ -1716,7 +1704,7 @@ AddRubber(Parameter result[10])
 
     } //TODO: handle this type
     else if (objType == "CIRCLE") {
-        mainWin()->nativeAddCircle(mx, my, 0, false, OBJ_RUBBER_ON);
+        _mainWin->nativeAddCircle(mx, my, 0, false, OBJ_RUBBER_ON);
     }
     else if (objType == "DIMALIGNED") {
 
@@ -1730,25 +1718,25 @@ AddRubber(Parameter result[10])
     else if (objType == "DIMDIAMETER") {
 
     } //TODO: handle this type
-    else if (objType == "DIMLEADER") { mainWin()->nativeAddDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
+    else if (objType == "DIMLEADER") { _mainWin->nativeAddDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
     else if (objType == "DIMLINEAR") {} //TODO: handle this type
     else if (objType == "DIMORDINATE") {} //TODO: handle this type
     else if (objType == "DIMRADIUS") {} //TODO: handle this type
-    else if (objType == "ELLIPSE") { mainWin()->nativeAddEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON); }
+    else if (objType == "ELLIPSE") { _mainWin->nativeAddEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON); }
     else if (objType == "ELLIPSEARC") {} //TODO: handle this type
     else if (objType == "HATCH") {} //TODO: handle this type
     else if (objType == "IMAGE") {} //TODO: handle this type
     else if (objType == "INFINITELINE") {} //TODO: handle this type
-    else if (objType == "LINE") { mainWin()->nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
+    else if (objType == "LINE") { _mainWin->nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
     else if (objType == "PATH") {} //TODO: handle this type
     else if (objType == "POINT") {} //TODO: handle this type
-    else if (objType == "POLYGON") { mainWin()->nativeAddPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
-    else if (objType == "POLYLINE") { mainWin()->nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
+    else if (objType == "POLYGON") { _mainWin->nativeAddPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
+    else if (objType == "POLYLINE") { _mainWin->nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
     else if (objType == "RAY") {} //TODO: handle this type
-    else if (objType == "RECTANGLE") { mainWin()->nativeAddRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }
+    else if (objType == "RECTANGLE") { _mainWin->nativeAddRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }
     else if (objType == "SPLINE") {} //TODO: handle this type
     else if (objType == "TEXTMULTI") {} //TODO: handle this type
-    else if (objType == "TEXTSINGLE") { mainWin()->nativeAddTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON); }
+    else if (objType == "TEXTSINGLE") { _mainWin->nativeAddTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON); }
 
     return "";
 }
@@ -1760,14 +1748,14 @@ SpareRubber(Parameter result[10])
 {
     EmbString objID = result[0].s_value.toUpper();
 
-    if     (objID == "PATH") { mainWin()->nativeSpareRubber(SPARE_RUBBER_PATH);     }
-    else if (objID == "POLYGON") { mainWin()->nativeSpareRubber(SPARE_RUBBER_POLYGON);  }
-    else if (objID == "POLYLINE") { mainWin()->nativeSpareRubber(SPARE_RUBBER_POLYLINE); }
+    if     (objID == "PATH") { _mainWin->nativeSpareRubber(SPARE_RUBBER_PATH);     }
+    else if (objID == "POLYGON") { _mainWin->nativeSpareRubber(SPARE_RUBBER_POLYGON);  }
+    else if (objID == "POLYLINE") { _mainWin->nativeSpareRubber(SPARE_RUBBER_POLYLINE); }
     else {
         bool ok = false;
         qint64 id = objID.toLongLong(&ok);
         if (!ok) return "TYPE ERROR: spareRubber(): error converting object ID into an int64");
-        mainWin()->nativeSpareRubber(id);
+        _mainWin->nativeSpareRubber(id);
     }
 
     return "";
@@ -1785,7 +1773,7 @@ AddTextMulti(Parameter result[10])
     EmbReal   rot   = args(3).r_value;
     bool    fill  = args(4).toBool();
 
-    mainWin()->nativeAddTextMulti(str, x, y, rot, fill, OBJ_RUBBER_OFF);
+    _mainWin->nativeAddTextMulti(str, x, y, rot, fill, OBJ_RUBBER_OFF);
     return "";
 }
 
@@ -1798,7 +1786,7 @@ AddTextSingle(Parameter result[10])
     EmbReal rot = args(3).r_value;
     bool fill  = args(4).toBool();
 
-    mainWin()->nativeAddTextSingle(str, x, y, rot, fill, OBJ_RUBBER_OFF);
+    _mainWin->nativeAddTextSingle(str, x, y, rot, fill, OBJ_RUBBER_OFF);
     return "";
 }
 
@@ -1836,7 +1824,7 @@ AddLine(Parameter result[10])
     EmbReal y2  = args(3).r_value;
     EmbReal rot = args(4).r_value;
 
-    mainWin()->nativeAddLine(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
+    _mainWin->nativeAddLine(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
     return "";
 }
 
@@ -1855,7 +1843,7 @@ AddTriangle(Parameter result[10])
     EmbReal rot    = args(6).r_value;
     bool  fill   = args(7).toBool();
 
-    mainWin()->nativeAddTriangle(x1, y1, x2, y2, x3, y3, rot, fill);
+    _mainWin->nativeAddTriangle(x1, y1, x2, y2, x3, y3, rot, fill);
     return "";
 }
 
@@ -1872,7 +1860,7 @@ AddRectangle(Parameter result[10])
     EmbReal rot  = args(4).r_value;
     bool  fill = args(5).toBool();
 
-    mainWin()->nativeAddRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
+    _mainWin->nativeAddRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
     return "";
 }
 
@@ -1890,7 +1878,7 @@ AddRoundedRectangle(Parameter result[10])
     EmbReal rot  = args(5).r_value;
     bool  fill = args(6).toBool();
 
-    mainWin()->nativeAddRoundedRectangle(x, y, w, h, rad, rot, fill);
+    _mainWin->nativeAddRoundedRectangle(x, y, w, h, rad, rot, fill);
     return "";
 }
 
@@ -1907,7 +1895,7 @@ AddArc(Parameter result[10])
     EmbReal endX   = args(4).r_value;
     EmbReal endY   = args(5).r_value;
 
-    mainWin()->nativeAddArc(startX, startY, midX, midY, endX, endY, OBJ_RUBBER_OFF);
+    _mainWin->nativeAddArc(startX, startY, midX, midY, endX, endY, OBJ_RUBBER_OFF);
     return "";
 }
 
@@ -1922,7 +1910,7 @@ AddCircle(Parameter result[10])
     EmbReal radius  = result[2].r_value;
     bool  fill    = args(3).toBool();
 
-    mainWin()->nativeAddCircle(centerX, centerY, radius, fill, OBJ_RUBBER_OFF);
+    _mainWin->nativeAddCircle(centerX, centerY, radius, fill, OBJ_RUBBER_OFF);
     return "";
 }
 
@@ -1939,7 +1927,7 @@ AddSlot(Parameter result[10])
     EmbReal rot      = args(4).r_value;
     bool  fill     = args(5).toBool();
 
-    mainWin()->nativeAddSlot(centerX, centerY, diameter, length, rot, fill, OBJ_RUBBER_OFF);
+    _mainWin->nativeAddSlot(centerX, centerY, diameter, length, rot, fill, OBJ_RUBBER_OFF);
     return "";
 }
 
@@ -1954,7 +1942,7 @@ AddEllipse(Parameter result[10])
     EmbReal rot     = args(4).r_value;
     bool  fill    = args(5).toBool();
 
-    mainWin()->nativeAddEllipse(centerX, centerY, radX, radY, rot, fill, OBJ_RUBBER_OFF);
+    _mainWin->nativeAddEllipse(centerX, centerY, radX, radY, rot, fill, OBJ_RUBBER_OFF);
     return "";
 }
 
@@ -1967,7 +1955,7 @@ AddPoint(Parameter result[10])
     EmbReal x = result[0].r_value;
     EmbReal y = result[1].r_value;
 
-    mainWin()->nativeAddPoint(x,y);
+    _mainWin->nativeAddPoint(x,y);
     return "";
 }
 
@@ -2028,7 +2016,7 @@ AddPolygon(Parameter result[10])
 
     path.translate(-startX, -startY);
 
-    mainWin()->nativeAddPolygon(startX, startY, path, OBJ_RUBBER_OFF);
+    _mainWin->nativeAddPolygon(startX, startY, path, OBJ_RUBBER_OFF);
     return "";
 }
 
@@ -2082,7 +2070,7 @@ AddPolyline(Parameter result[10])
 
     path.translate(-startX, -startY);
 
-    mainWin()->nativeAddPolyline(startX, startY, path, OBJ_RUBBER_OFF);
+    _mainWin->nativeAddPolyline(startX, startY, path, OBJ_RUBBER_OFF);
     return "";
 }
 
@@ -2129,7 +2117,7 @@ AddDimLeader(Parameter result[10])
     EmbReal y2  = args(3).r_value;
     EmbReal rot = args(4).r_value;
 
-    mainWin()->nativeAddDimLeader(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
+    _mainWin->nativeAddDimLeader(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
     return "";
 }
 
@@ -2140,7 +2128,7 @@ std::string
 SetCursorShape(Parameter result[10])
 {
     EmbString shape = result[0].s_value;
-    mainWin()->setCursorShape(shape);
+    _mainWin->setCursorShape(shape);
     return "";
 }
 
@@ -2155,7 +2143,7 @@ CalculateAngle(Parameter result[10])
     EmbReal x2 = result[2].r_value;
     EmbReal y2 = args(3).r_value;
 
-    return std::string(mainWin()->nativeCalculateAngle(x1, y1, x2, y2));
+    return std::string(_mainWin->nativeCalculateAngle(x1, y1, x2, y2));
 }
 
 /**
@@ -2169,7 +2157,7 @@ CalculateDistance(Parameter result[10])
     EmbReal x2 = result[2].r_value;
     EmbReal y2 = args(3).r_value;
 
-    return std::string(mainWin()->nativeCalculateDistance(x1, y1, x2, y2));
+    return std::string(_mainWin->nativeCalculateDistance(x1, y1, x2, y2));
 }
 
 /**
@@ -2185,7 +2173,7 @@ PerpendicularDistance(Parameter result[10])
     EmbReal x2 = args(4).r_value;
     EmbReal y2 = args(5).r_value;
 
-    return std::string(mainWin()->nativePerpendicularDistance(px, py, x1, y1, x2, y2));
+    return std::string(_mainWin->nativePerpendicularDistance(px, py, x1, y1, x2, y2));
 }
 
 /**
@@ -2197,7 +2185,7 @@ CutSelected(Parameter result[10])
     EmbReal x = result[0].r_value;
     EmbReal y = result[1].r_value;
 
-    mainWin()->nativeCutSelected(x, y);
+    _mainWin->nativeCutSelected(x, y);
     return "";
 }
 
@@ -2210,7 +2198,7 @@ CopySelected(Parameter result[10])
     EmbReal x = result[0].r_value;
     EmbReal y = result[1].r_value;
 
-    mainWin()->nativeCopySelected(x, y);
+    _mainWin->nativeCopySelected(x, y);
     return "";
 }
 
@@ -2223,7 +2211,7 @@ PasteSelected(Parameter result[10])
     EmbReal x = result[0].r_value;
     EmbReal y = result[1].r_value;
 
-    mainWin()->nativePasteSelected(x, y);
+    _mainWin->nativePasteSelected(x, y);
     return "";
 }
 
@@ -2236,7 +2224,7 @@ MoveSelected(Parameter result[10])
     EmbReal dx = result[0].r_value;
     EmbReal dy = result[1].r_value;
 
-    mainWin()->nativeMoveSelected(dx, dy);
+    _mainWin->nativeMoveSelected(dx, dy);
     return "";
 }
 
@@ -2254,7 +2242,7 @@ ScaleSelected(Parameter result[10])
         return "ERROR scaleSelected(): scale factor must be greater than zero";
     }
 
-    mainWin()->nativeScaleSelected(x, y, factor);
+    _mainWin->nativeScaleSelected(x, y, factor);
     return "";
 }
 
@@ -2265,7 +2253,7 @@ RotateSelected(Parameter result[10])
     EmbReal y   = result[1].r_value;
     EmbReal rot = result[2].r_value;
 
-    mainWin()->nativeRotateSelected(x, y, rot);
+    _mainWin->nativeRotateSelected(x, y, rot);
     return "";
 }
 
@@ -2280,7 +2268,7 @@ MirrorSelected(Parameter result[10])
     EmbReal x2 = result[2].r_value;
     EmbReal y2 = args(3).r_value;
 
-    mainWin()->nativeMirrorSelected(x1, y1, x2, y2);
+    _mainWin->nativeMirrorSelected(x1, y1, x2, y2);
     return "";
 }
 
@@ -2417,10 +2405,9 @@ MainWindow::newFile()
     updateMenuToolbarStatusbar();
     windowMenuAboutToShow();
 
-    View* v = mdiWin->getView();
-    if (v) {
-        v->recalculateLimits();
-        v->zoomExtents();
+    if (mdiWin->gview) {
+        mdiWin->gview->recalculateLimits();
+        mdiWin->gview->zoomExtents();
     }
 }
 
@@ -2506,10 +2493,9 @@ MainWindow::openFilesSelected(const QStringList& filesToOpen)
                 }
                 settings.opensave_recent_directory = QFileInfo(filesToOpen.at(i)).absolutePath();
 
-                View* v = mdiWin->getView();
-                if (v) {
-                    v->recalculateLimits();
-                    v->zoomExtents();
+                if (mdiWin->gview) {
+                    mdiWin->gview->recalculateLimits();
+                    mdiWin->gview->zoomExtents();
                 }
             }
             else {
@@ -6060,13 +6046,13 @@ void
 syswindows_prompt(std::string str)
 {
     if (str == "C" || str == "CASCADE") {
-        mainWin()->actuator("window cascade");
+        _mainWin->actuator("window cascade");
         /*
         endCommand();
         */
     }
     else if (str == "T" || str == "TILE") {
-        mainWin()->actuator("window tile");
+        _mainWin->actuator("window tile");
         /*
         endCommand();
         */

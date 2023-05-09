@@ -75,14 +75,10 @@ void PointObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
 
 void PointObject::updateRubber(QPainter* painter)
 {
-    int rubberMode = objectRubberMode();
-    if(rubberMode == OBJ_RUBBER_GRIP)
-    {
-        if(painter)
-        {
+    if (objRubberMode == OBJ_RUBBER_GRIP) {
+        if (painter) {
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if(gripPoint == scenePos())
-            {
+            if (gripPoint == scenePos()) {
                 QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
                 drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
             }
@@ -95,7 +91,7 @@ void PointObject::vulcanize()
     qDebug("PointObject vulcanize()");
     updateRubber();
 
-    setObjectRubberMode(OBJ_RUBBER_OFF);
+    objRubberMode = OBJ_RUBBER_OFF;
 }
 
 // Returns the closest snap point to the mouse point

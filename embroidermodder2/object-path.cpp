@@ -70,16 +70,21 @@ void PathObject::updatePath(const QPainterPath& p)
 void PathObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene)
+        return;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
+    if(option->state & QStyle::State_Selected) {
+        paintPen.setStyle(Qt::DashLine);
+    }
+    if(objScene->property("ENABLE_LWT").toBool()) {
+        paintPen = lineWeightPen();
+    }
     painter->setPen(paintPen);
 
-    painter->drawPath(objectPath());
+    painter->drawPath(path());
 }
 
 void PathObject::updateRubber(QPainter* painter)

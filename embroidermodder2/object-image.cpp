@@ -203,7 +203,7 @@ ImageObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QW
 void
 ImageObject::updateRubber(QPainter* painter)
 {
-    int rubberMode = objectRubberMode();
+    int rubberMode = objRubberMode;
     if(rubberMode == OBJ_RUBBER_IMAGE)
     {
         QPointF sceneStartPoint = objectRubberPoint("IMAGE_START");
@@ -230,7 +230,7 @@ ImageObject::vulcanize()
     qDebug("ImageObject vulcanize()");
     updateRubber();
 
-    setObjectRubberMode(OBJ_RUBBER_OFF);
+    objRubberMode = OBJ_RUBBER_OFF;
 }
 
 // Returns the closest snap point to the mouse point

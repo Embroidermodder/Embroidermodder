@@ -258,7 +258,7 @@ void DimLeaderObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
 
 void DimLeaderObject::updateRubber(QPainter* painter)
 {
-    int rubberMode = objectRubberMode();
+    int rubberMode = objRubberMode;
     if (rubberMode == OBJ_RUBBER_DIMLEADER_LINE) {
         QPointF sceneStartPoint = objectRubberPoint("DIMLEADER_LINE_START");
         QPointF sceneQSnapPoint = objectRubberPoint("DIMLEADER_LINE_END");

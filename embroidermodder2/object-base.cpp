@@ -101,18 +101,21 @@ QString BaseObject::objectRubberText(const QString& key) const
     return QString();
 }
 
-QRectF BaseObject::boundingRect() const
+/**
+ * If gripped, force this object to be drawn even if it is offscreen.
+ */
+QRectF
+BaseObject::boundingRect() const
 {
-    //If gripped, force this object to be drawn even if it is offscreen
-    if(objectRubberMode() == OBJ_RUBBER_GRIP)
+    if (objRubberMode == OBJ_RUBBER_GRIP) {
         return scene()->sceneRect();
+    }
     return path().boundingRect();
 }
 
 void BaseObject::drawRubberLine(const QLineF& rubLine, QPainter* painter, const char* colorFromScene)
 {
-    if(painter)
-    {
+    if (painter) {
         QGraphicsScene* objScene = scene();
         if(!objScene) return;
         QPen colorPen = objPen;

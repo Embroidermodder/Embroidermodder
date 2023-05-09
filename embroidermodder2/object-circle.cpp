@@ -56,7 +56,7 @@ void CircleObject::init(EmbReal centerX, EmbReal centerY, EmbReal radius, QRgb r
     setObjectColor(rgb);
     setObjectLineType(lineType);
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
-    setPen(objectPen());
+    setPen(objPen);
     updatePath();
 }
 
@@ -118,9 +118,7 @@ void CircleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* opti
 
 void CircleObject::updateRubber(QPainter* painter)
 {
-    int rubberMode = objectRubberMode();
-    if(rubberMode == OBJ_RUBBER_CIRCLE_1P_RAD)
-    {
+    if (objRubberMode == OBJ_RUBBER_CIRCLE_1P_RAD) {
         QPointF sceneCenterPoint = objectRubberPoint("CIRCLE_CENTER");
         QPointF sceneQSnapPoint = objectRubberPoint("CIRCLE_RADIUS");
         QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
@@ -133,8 +131,7 @@ void CircleObject::updateRubber(QPainter* painter)
         if(painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         updatePath();
     }
-    else if(rubberMode == OBJ_RUBBER_CIRCLE_1P_DIA)
-    {
+    else if (objRubberMode == OBJ_RUBBER_CIRCLE_1P_DIA) {
         QPointF sceneCenterPoint = objectRubberPoint("CIRCLE_CENTER");
         QPointF sceneQSnapPoint = objectRubberPoint("CIRCLE_DIAMETER");
         QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
@@ -147,8 +144,7 @@ void CircleObject::updateRubber(QPainter* painter)
         if(painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         updatePath();
     }
-    else if(rubberMode == OBJ_RUBBER_CIRCLE_2P)
-    {
+    else if (objRubberMode == OBJ_RUBBER_CIRCLE_2P) {
         QPointF sceneTan1Point = objectRubberPoint("CIRCLE_TAN1");
         QPointF sceneQSnapPoint = objectRubberPoint("CIRCLE_TAN2");
         QLineF sceneLine(sceneTan1Point, sceneQSnapPoint);
@@ -157,8 +153,7 @@ void CircleObject::updateRubber(QPainter* painter)
         setObjectDiameter(diameter);
         updatePath();
     }
-    else if(rubberMode == OBJ_RUBBER_CIRCLE_3P)
-    {
+    else if (objRubberMode == OBJ_RUBBER_CIRCLE_3P) {
         QPointF sceneTan1Point = objectRubberPoint("CIRCLE_TAN1");
         QPointF sceneTan2Point = objectRubberPoint("CIRCLE_TAN2");
         QPointF sceneTan3Point = objectRubberPoint("CIRCLE_TAN3");
@@ -179,10 +174,8 @@ void CircleObject::updateRubber(QPainter* painter)
         setObjectRadius(radius);
         updatePath();
     }
-    else if(rubberMode == OBJ_RUBBER_GRIP)
-    {
-        if(painter)
-        {
+    else if (objRubberMode == OBJ_RUBBER_GRIP) {
+        if (painter) {
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
             if(gripPoint == objectCenter())
             {

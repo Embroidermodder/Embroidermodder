@@ -76,7 +76,7 @@ EllipseObject::init(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal hei
     setObjectColor(rgb);
     setObjectLineType(lineType);
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
-    setPen(objectPen());
+    setPen(objPen);
     updatePath();
 }
 
@@ -233,7 +233,7 @@ EllipseObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
 void
 EllipseObject::updateRubber(QPainter* painter)
 {
-    int rubberMode = objectRubberMode();
+    int rubberMode = objRubberMode;
     if(rubberMode == OBJ_RUBBER_ELLIPSE_LINE)
     {
         QPointF sceneLinePoint1 = objectRubberPoint("ELLIPSE_LINE_POINT1");

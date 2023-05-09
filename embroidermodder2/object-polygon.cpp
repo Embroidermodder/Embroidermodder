@@ -57,7 +57,7 @@ void PolygonObject::init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, 
     setObjectColor(rgb);
     setObjectLineType(lineType);
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
-    setPen(objectPen());
+    setPen(objPen);
 }
 
 void PolygonObject::updatePath(const QPainterPath& p)
@@ -93,9 +93,8 @@ void PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
 
 void PolygonObject::updateRubber(QPainter* painter)
 {
-    int rubberMode = objectRubberMode();
-    if(rubberMode == OBJ_RUBBER_POLYGON)
-    {
+    int rubberMode = objRubberMode;
+    if(rubberMode == OBJ_RUBBER_POLYGON) {
         setObjectPos(objectRubberPoint("POLYGON_POINT_0"));
 
         bool ok = false;

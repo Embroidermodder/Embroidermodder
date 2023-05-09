@@ -103,7 +103,7 @@ MdiWindow::loadFile(const QString &fileName)
 {
     qDebug("MdiWindow loadFile()");
 
-    QRgb tmpColor = getCurrentColor();
+    QRgb tmpColor = curColor;
 
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {

@@ -450,10 +450,8 @@ View* MainWindow::activeView()
 {
     qDebug("activeView()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin)
-    {
-        View* v = mdiWin->getView();
-        return v;
+    if (mdiWin) {
+        return mdiWin->gview;
     }
     return 0;
 }
@@ -462,10 +460,8 @@ QGraphicsScene* MainWindow::activeScene()
 {
     qDebug("activeScene()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin)
-    {
-        QGraphicsScene* s = mdiWin->getScene();
-        return s;
+    if (mdiWin) {
+        return mdiWin->gscene;
     }
     return 0;
 }
@@ -909,7 +905,7 @@ QString MainWindow::getCurrentLayer()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
-        return mdiWin->getCurrentLayer();
+        return mdiWin->curLayer;
     }
     return "0";
 }
@@ -918,7 +914,7 @@ QRgb MainWindow::getCurrentColor()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
-        return mdiWin->getCurrentColor();
+        return mdiWin->curColor;
     }
     return 0; //TODO: return color ByLayer
 }
@@ -926,14 +922,18 @@ QRgb MainWindow::getCurrentColor()
 QString MainWindow::getCurrentLineType()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) { return mdiWin->getCurrentLineType(); }
+    if (mdiWin) {
+        return mdiWin->curLineType;
+    }
     return "ByLayer";
 }
 
 QString MainWindow::getCurrentLineWeight()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) { return mdiWin->getCurrentLineWeight(); }
+    if (mdiWin) {
+        return mdiWin->curLineWeight;
+    }
     return "ByLayer";
 }
 
@@ -943,7 +943,9 @@ MainWindow::deletePressed()
     qDebug("deletePressed()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) { mdiWin->deletePressed(); }
+    if (mdiWin) {
+        mdiWin->deletePressed();
+    }
     QApplication::restoreOverrideCursor();
 }
 
@@ -953,7 +955,9 @@ MainWindow::escapePressed()
     qDebug("escapePressed()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) { mdiWin->escapePressed(); }
+    if (mdiWin) {
+        mdiWin->escapePressed();
+    }
     QApplication::restoreOverrideCursor();
 
     nativeEndCommand();
