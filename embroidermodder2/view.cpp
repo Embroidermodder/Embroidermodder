@@ -260,30 +260,27 @@ View::vulcanizeObject(BaseObject* obj)
 void
 View::clearRubberRoom()
 {
-    foreach(QGraphicsItem* item, rubberRoomList)
-    {
+    foreach(QGraphicsItem* item, rubberRoomList) {
         BaseObject* base = static_cast<BaseObject*>(item);
-        if (base)
-        {
+        if (base) {
             int type = base->type();
-            if ((type == OBJ_TYPE_PATH     && spareRubberList.contains(SPARE_RUBBER_PATH))     ||
-               (type == OBJ_TYPE_POLYGON  && spareRubberList.contains(SPARE_RUBBER_POLYGON))  ||
+            if ((type == OBJ_TYPE_PATH && spareRubberList.contains(SPARE_RUBBER_PATH)) ||
+               (type == OBJ_TYPE_POLYGON  && spareRubberList.contains(SPARE_RUBBER_POLYGON)) ||
                (type == OBJ_TYPE_POLYLINE && spareRubberList.contains(SPARE_RUBBER_POLYLINE)) ||
-               (spareRubberList.contains(base->objectID())))
-            {
+               (spareRubberList.contains(base->objectID()))) {
                 if (!base->path().elementCount()) {
-                    QMessageBox::critical(this, tr("Empty Rubber Object Error"),
-                                          tr("The rubber object added contains no points. "
-                                          "The command that created this object has flawed logic. "
-                                          "The object will be deleted."));
+                    QMessageBox::critical(this,
+                        tr("Empty Rubber Object Error"),
+                        tr("The rubber object added contains no points. "
+                        "The command that created this object has flawed logic. "
+                        "The object will be deleted."));
                     gscene->removeItem(item);
                     delete item;
                 }
                 else
                     vulcanizeObject(base);
             }
-            else
-            {
+            else {
                 gscene->removeItem(item);
                 delete item;
             }
@@ -299,7 +296,7 @@ View::clearRubberRoom()
  * .
  */
 void
-View::spareRubber(qint64 id)
+View::spareRubber(int64_t id)
 {
     spareRubberList.append(id);
 }
@@ -997,18 +994,18 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
         }
     }
 
-    //==================================================
-    //Draw the crosshair
-    //==================================================
+    // Draw the crosshair
+    // ==================================================
 
-    if (!selectingActive)
-    {
+    if (!selectingActive) {
         //painter->setBrush(Qt::NoBrush);
         QPen crosshairPen(QColor::fromRgb(crosshairColor));
         crosshairPen.setCosmetic(true);
         painter->setPen(crosshairPen);
-        painter->drawLine(QLineF(mapToScene(viewMousePoint.x(), viewMousePoint.y()-crosshairSize),
-                                 mapToScene(viewMousePoint.x(), viewMousePoint.y()+crosshairSize)));
+        painter->drawLine(
+            QLineF(
+                mapToScene(viewMousePoint.x(), viewMousePoint.y()-crosshairSize),
+                mapToScene(viewMousePoint.x(), viewMousePoint.y()+crosshairSize)));
         painter->drawLine(QLineF(mapToScene(viewMousePoint.x()-crosshairSize, viewMousePoint.y()),
                                  mapToScene(viewMousePoint.x()+crosshairSize, viewMousePoint.y())));
         painter->drawRect(QRectF(mapToScene(viewMousePoint.x()-pickBoxSize, viewMousePoint.y()-pickBoxSize),
@@ -1016,21 +1013,21 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
     }
 }
 
-bool View::willUnderflowInt32(qint64 a, qint64 b)
+bool View::willUnderflowInt32(int64_t a, int64_t b)
 {
-    qint64 c;
+    int64_t c;
     Q_ASSERT(LLONG_MAX>INT_MAX);
-    c = (qint64)a-b;
+    c = (int64_t)a-b;
     if (c < INT_MIN || c > INT_MAX)
         return true;
     return false;
 }
 
-bool View::willOverflowInt32(qint64 a, qint64 b)
+bool View::willOverflowInt32(int64_t a, int64_t b)
 {
-    qint64 c;
+    int64_t c;
     Q_ASSERT(LLONG_MAX>INT_MAX);
-    c = (qint64)a+b;
+    c = (int64_t)a+b;
     if (c < INT_MIN || c > INT_MAX)
         return true;
     return false;
@@ -1576,6 +1573,9 @@ View::centerAt(const QPointF& centerPoint)
     centerOn(newCenter);
 }
 
+/**
+ * .
+ */
 void
 View::alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& viewPoint)
 {
@@ -1590,6 +1590,9 @@ View::alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& view
     centerOn(newCenter);
 }
 
+/**
+ * .
+ */
 void
 View::mouseMoveEvent(QMouseEvent* event)
 {
@@ -1696,6 +1699,9 @@ View::mouseMoveEvent(QMouseEvent* event)
     gscene->update();
 }
 
+/**
+ * .
+ */
 void
 View::mouseReleaseEvent(QMouseEvent* event)
 {
@@ -1736,7 +1742,11 @@ View::mouseReleaseEvent(QMouseEvent* event)
     gscene->update();
 }
 
-bool View::allowZoomIn()
+/**
+ * .
+ */
+bool
+View::allowZoomIn()
 {
     QPointF origin  = mapToScene(0,0);
     QPointF corner  = mapToScene(width(), height());
@@ -1752,11 +1762,15 @@ bool View::allowZoomIn()
     return true;
 }
 
-bool View::allowZoomOut()
+/**
+ * .
+ */
+bool
+View::allowZoomOut()
 {
-    QPointF origin  = mapToScene(0,0);
-    QPointF corner  = mapToScene(width(), height());
-    EmbReal maxWidth  = corner.x() - origin.x();
+    QPointF origin = mapToScene(0,0);
+    QPointF corner = mapToScene(width(), height());
+    EmbReal maxWidth = corner.x() - origin.x();
     EmbReal maxHeight = corner.y() - origin.y();
 
     EmbReal zoomOutLimit = 10000000000000.0;
@@ -1768,6 +1782,9 @@ bool View::allowZoomOut()
     return true;
 }
 
+/**
+ * .
+ */
 void
 View::wheelEvent(QWheelEvent* event)
 {
@@ -1776,13 +1793,11 @@ View::wheelEvent(QWheelEvent* event)
     QPoint mousePoint = event->position();
 
     updateMouseCoords(mousePoint.x(), mousePoint.y());
-    if (zoomDir > 0)
-    {
+    if (zoomDir > 0) {
         UndoableNavCommand* cmd = new UndoableNavCommand("ZoomInToPoint", this, 0);
         undoStack->push(cmd);
     }
-    else
-    {
+    else {
         UndoableNavCommand* cmd = new UndoableNavCommand("ZoomOutToPoint", this, 0);
         undoStack->push(cmd);
     }
@@ -1834,29 +1849,24 @@ View::contextMenuEvent(QContextMenuEvent* event)
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
     bool selectionEmpty = itemList.isEmpty();
 
-    for(int i = 0; i < itemList.size(); i++)
-    {
-        if (itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL)
-        {
+    for (int i = 0; i < itemList.size(); i++) {
+        if (itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL) {
             selectionEmpty = false;
             break;
         }
     }
 
-    if (pastingActive)
-    {
+    if (pastingActive) {
         return;
     }
-    if (!mainWin->prompt->isCommandActive())
-    {
+    if (!mainWin->prompt->isCommandActive()) {
         QString lastCmd = mainWin->prompt->lastCommand();
-        QAction* repeatAction = new QAction(QIcon("icons/" + iconTheme + "/" + lastCmd + ".png"), "Repeat " + lastCmd, this);
+        QAction* repeatAction = new QAction(_mainWin->create_icon(lastCmd), "Repeat " + lastCmd, this);
         repeatAction->setStatusTip("Repeats the previously issued command.");
         connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()));
         menu.addAction(repeatAction);
     }
-    if (zoomWindowActive)
-    {
+    if (zoomWindowActive) {
         QAction* cancelZoomWinAction = new QAction("&Cancel (ZoomWindow)", this);
         cancelZoomWinAction->setStatusTip("Cancels the ZoomWindow Command.");
         connect(cancelZoomWinAction, SIGNAL(triggered()), this, SLOT(escapePressed()));
@@ -1869,24 +1879,23 @@ View::contextMenuEvent(QContextMenuEvent* event)
     menu.addAction(mainWin->actionHash[get_action_index("paste")]);
     menu.addSeparator();
 
-    if (!selectionEmpty)
-    {
-        QAction* deleteAction = new QAction(QIcon("icons/" + iconTheme + "/" + "erase" + ".png"), "D&elete", this);
+    if (!selectionEmpty) {
+        QAction* deleteAction = new QAction(_mainWin->create_icon("erase"), "D&elete", this);
         deleteAction->setStatusTip("Removes objects from a drawing.");
         connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteSelected()));
         menu.addAction(deleteAction);
 
-        QAction* moveAction = new QAction(QIcon("icons/" + iconTheme + "/" + "move" + ".png"), "&Move", this);
+        QAction* moveAction = new QAction(_mainWin->create_icon("move"), "&Move", this);
         moveAction->setStatusTip("Displaces objects a specified distance in a specified direction.");
         connect(moveAction, SIGNAL(triggered()), this, SLOT(moveAction()));
         menu.addAction(moveAction);
 
-        QAction* scaleAction = new QAction(QIcon("icons/" + iconTheme + "/" + "scale" + ".png"), "Sca&le", this);
+        QAction* scaleAction = new QAction(_mainWin->create_icon("scale"), "Sca&le", this);
         scaleAction->setStatusTip("Enlarges or reduces objects proportionally in the X, Y, and Z directions.");
         connect(scaleAction, SIGNAL(triggered()), this, SLOT(scaleAction()));
         menu.addAction(scaleAction);
 
-        QAction* rotateAction = new QAction(QIcon("icons/" + iconTheme + "/" + "rotate" + ".png"), "R&otate", this);
+        QAction* rotateAction = new QAction(_mainWin->create_icon("rotate"), "R&otate", this);
         rotateAction->setStatusTip("Rotates objects about a base point.");
         connect(rotateAction, SIGNAL(triggered()), this, SLOT(rotateAction()));
         menu.addAction(rotateAction);
@@ -2358,11 +2367,18 @@ View::scaleSelected(EmbReal x, EmbReal y, EmbReal factor)
     gscene->clearSelection();
 }
 
-int View::numSelected()
+/**
+ * .
+ */
+int
+View::numSelected()
 {
     return gscene->selectedItems().size();
 }
 
+/**
+ * .
+ */
 void
 View::showScrollBars(bool val)
 {
@@ -2378,6 +2394,9 @@ View::showScrollBars(bool val)
     }
 }
 
+/**
+ * .
+ */
 void
 View::setCrossHairColor(QRgb color)
 {
@@ -2387,6 +2406,9 @@ View::setCrossHairColor(QRgb color)
         gscene->update();
 }
 
+/**
+ * .
+ */
 void
 View::setBackgroundColor(QRgb color)
 {
@@ -2396,6 +2418,9 @@ View::setBackgroundColor(QRgb color)
         gscene->update();
 }
 
+/**
+ * .
+ */
 void
 View::setSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
 {

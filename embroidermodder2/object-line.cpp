@@ -21,13 +21,13 @@
 
 LineObject::LineObject(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("LineObject Constructor()");
+    debug_message("LineObject Constructor()");
     init(x1, y1, x2, y2, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
 LineObject::LineObject(LineObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("LineObject Constructor()");
+    debug_message("LineObject Constructor()");
     if (obj)
     {
         init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
@@ -36,7 +36,7 @@ LineObject::LineObject(LineObject* obj, QGraphicsItem* parent) : BaseObject(pare
 
 LineObject::~LineObject()
 {
-    qDebug("LineObject Destructor()");
+    debug_message("LineObject Destructor()");
 }
 
 void LineObject::init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, Qt::PenStyle lineType)
@@ -97,14 +97,12 @@ QPointF LineObject::objectEndPoint2() const
 {
     QLineF lyne = line();
     EmbReal rot = radians(rotation());
-    EmbReal cosRot = qCos(rot);
-    EmbReal sinRot = qSin(rot);
-    EmbReal x2 = lyne.x2()*scale();
-    EmbReal y2 = lyne.y2()*scale();
-    EmbReal rotEnd2X = x2*cosRot - y2*sinRot;
-    EmbReal rotEnd2Y = x2*sinRot + y2*cosRot;
+    EmbVector v;
+    v.x = lyne.x2()*scale();
+    v.y = lyne.y2()*scale();
+    EmbVector rotEnd = rotate_vector(v, rot);
 
-    return (scenePos() + QPointF(rotEnd2X, rotEnd2Y));
+    return (scenePos() + QPointF(rotEnd.x, rotEnd.y));
 }
 
 QPointF LineObject::objectMidPoint() const
@@ -112,22 +110,18 @@ QPointF LineObject::objectMidPoint() const
     QLineF lyne = line();
     QPointF mp = lyne.pointAt(0.5);
     EmbReal rot = radians(rotation());
-    EmbReal cosRot = qCos(rot);
-    EmbReal sinRot = qSin(rot);
-    EmbReal mx = mp.x()*scale();
-    EmbReal my = mp.y()*scale();
-    EmbReal rotMidX = mx*cosRot - my*sinRot;
-    EmbReal rotMidY = mx*sinRot + my*cosRot;
+    EmbVector m;
+    m.x = mp.x()*scale();
+    m.y = mp.y()*scale();
+    EmbVector rotMid = rotate_vector(m, rot);
 
-    return (scenePos() + QPointF(rotMidX, rotMidY));
+    return (scenePos() + QPointF(rotMid.x, rotMid.y));
 }
 
 EmbReal LineObject::objectAngle() const
 {
     EmbReal angle = line().angle() - rotation();
-    while(angle >= 360.0) { angle -= 360.0; }
-    while(angle < 0.0)    { angle += 360.0; }
-    return angle;
+    return std::fmod(angle, 360.0);
 }
 
 void LineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
@@ -142,17 +136,20 @@ void LineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
-    if (objRubberMode != OBJ_RUBBER_LINE)
+    if (objRubberMode != OBJ_RUBBER_LINE) {
         painter->drawLine(line());
+    }
 
-    if (objScene->property("ENABLE_LWT").toBool() && objScene->property("ENABLE_REAL").toBool()) { realRender(painter, path()); }
+    if (objScene->property("ENABLE_LWT").toBool()
+        && objScene->property("ENABLE_REAL").toBool()) {
+        realRender(painter, path());
+    }
 }
 
 void LineObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objRubberMode;
-    if (rubberMode == OBJ_RUBBER_LINE)
-    {
+    if (rubberMode == OBJ_RUBBER_LINE) {
         QPointF sceneStartPoint = objectRubberPoint("LINE_START");
         QPointF sceneQSnapPoint = objectRubberPoint("LINE_END");
 
@@ -161,14 +158,17 @@ void LineObject::updateRubber(QPainter* painter)
 
         drawRubberLine(line(), painter, "VIEW_COLOR_CROSSHAIR");
     }
-    else if (rubberMode == OBJ_RUBBER_GRIP)
-    {
-        if (painter)
-        {
+    else if (rubberMode == OBJ_RUBBER_GRIP) {
+        if (painter) {
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if     (gripPoint == objectEndPoint1()) painter->drawLine(line().p2(), mapFromScene(objectRubberPoint(QString())));
-            else if (gripPoint == objectEndPoint2()) painter->drawLine(line().p1(), mapFromScene(objectRubberPoint(QString())));
-            else if (gripPoint == objectMidPoint())  painter->drawLine(line().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
+            if (gripPoint == objectEndPoint1()) {
+                painter->drawLine(line().p2(), mapFromScene(objectRubberPoint(QString())));
+            }
+            else if (gripPoint == objectEndPoint2()) {
+                painter->drawLine(line().p1(), mapFromScene(objectRubberPoint(QString())));
+            }
+            else if (gripPoint == objectMidPoint())
+                painter->drawLine(line().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
             drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
@@ -178,7 +178,7 @@ void LineObject::updateRubber(QPainter* painter)
 
 void LineObject::vulcanize()
 {
-    qDebug("LineObject vulcanize()");
+    debug_message("LineObject vulcanize()");
     updateRubber();
 
     objRubberMode = OBJ_RUBBER_OFF;

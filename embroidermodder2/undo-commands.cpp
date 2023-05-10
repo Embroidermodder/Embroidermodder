@@ -142,19 +142,17 @@ void
 UndoableRotateCommand::rotate(EmbReal x, EmbReal y, EmbReal rot)
 {
     EmbReal rad = radians(rot);
-    EmbReal cosRot = qCos(rad);
-    EmbReal sinRot = qSin(rad);
-    EmbReal px = object->scenePos().x();
-    EmbReal py = object->scenePos().y();
-    px -= x;
-    py -= y;
-    EmbReal rotX = px*cosRot - py*sinRot;
-    EmbReal rotY = px*sinRot + py*cosRot;
-    rotX += x;
-    rotY += y;
+    EmbVector p;
+    p.x = object->scenePos().x();
+    p.y = object->scenePos().y();
+    p.x -= x;
+    p.y -= y;
+    EmbVector rotv = rotate_vector(p, rad);
+    rotv.x += x;
+    rotv.y += y;
 
-    object->setPos(rotX, rotY);
-    object->setRotation(object->rotation()+rot);
+    object->setPos(rotv.x, rotv.y);
+    object->setRotation(object->rotation() + rot);
 }
 
 /**
@@ -167,17 +165,16 @@ UndoableScaleCommand::UndoableScaleCommand(EmbReal x, EmbReal y, EmbReal scaleFa
     setText(text);
 
     //Prevent division by zero and other wacky behavior
-    if (scaleFactor <= 0.0)
-    {
+    if (scaleFactor <= 0.0) {
         dx = 0.0;
         dy = 0.0;
         factor = 1.0;
-        QMessageBox::critical(0, QObject::tr("ScaleFactor Error"),
-                              QObject::tr("Hi there. If you are not a developer, report this as a bug. "
-                              "If you are a developer, your code needs examined, and possibly your head too."));
+        QMessageBox::critical(0,
+            QObject::tr("ScaleFactor Error"),
+            QObject::tr("Hi there. If you are not a developer, report this as a bug. "
+            "If you are a developer, your code needs examined, and possibly your head too."));
     }
-    else
-    {
+    else {
         //Calculate the offset
         EmbReal oldX = object->x();
         EmbReal oldY = object->y();
@@ -263,7 +260,6 @@ UndoableNavCommand::undo()
 void
 UndoableNavCommand::redo()
 {
-
     if (!done) {
         if (navType == "ZoomInToPoint")  {
             gview->zoomToPoint(gview->scene()->property("VIEW_MOUSE_POINT").toPoint(), +1);
@@ -271,14 +267,30 @@ UndoableNavCommand::redo()
         else if (navType == "ZoomOutToPoint") {
             gview->zoomToPoint(gview->scene()->property("VIEW_MOUSE_POINT").toPoint(), -1);
         }
-        else if (navType == "ZoomExtents")    { gview->zoomExtents(); }
-        else if (navType == "ZoomSelected")   { gview->zoomSelected(); }
-        else if (navType == "PanStart")       { /* Do Nothing. We are just recording the spot where the pan started. */  }
-        else if (navType == "PanStop")        { /* Do Nothing. We are just recording the spot where the pan stopped. */  }
-        else if (navType == "PanLeft")        { gview->panLeft();  }
-        else if (navType == "PanRight")       { gview->panRight(); }
-        else if (navType == "PanUp")          { gview->panUp();    }
-        else if (navType == "PanDown")        { gview->panDown();  }
+        else if (navType == "ZoomExtents") {
+            gview->zoomExtents();
+        }
+        else if (navType == "ZoomSelected") {
+            gview->zoomSelected();
+        }
+        else if (navType == "PanStart") {
+            /* Do Nothing. We are just recording the spot where the pan started. */
+        }
+        else if (navType == "PanStop") {
+            /* Do Nothing. We are just recording the spot where the pan stopped. */
+        }
+        else if (navType == "PanLeft") {
+            gview->panLeft();
+        }
+        else if (navType == "PanRight") {
+            gview->panRight();
+        }
+        else if (navType == "PanUp") {
+            gview->panUp();
+        }
+        else if (navType == "PanDown") {
+            gview->panDown();
+        }
         toTransform = gview->transform();
         toCenter = gview->center();
     }

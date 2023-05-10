@@ -24,7 +24,7 @@
  */
 RectObject::RectObject(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("RectObject Constructor()");
+    debug_message("RectObject Constructor()");
     init(x, y, w, h, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
@@ -33,7 +33,7 @@ RectObject::RectObject(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, QGr
  */
 RectObject::RectObject(RectObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("RectObject Constructor()");
+    debug_message("RectObject Constructor()");
     if (obj) {
         QPointF ptl = obj->objectTopLeft();
         init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
@@ -46,7 +46,7 @@ RectObject::RectObject(RectObject* obj, QGraphicsItem* parent) : BaseObject(pare
  */
 RectObject::~RectObject()
 {
-    qDebug("RectObject Destructor()");
+    debug_message("RectObject Destructor()");
 }
 
 /**
@@ -242,7 +242,7 @@ void RectObject::updateRubber(QPainter* painter)
  */
 void RectObject::vulcanize()
 {
-    qDebug("RectObject vulcanize()");
+    debug_message("RectObject vulcanize()");
     updateRubber();
 
     setObjectRubberMode(OBJ_RUBBER_OFF);

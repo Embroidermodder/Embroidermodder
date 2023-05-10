@@ -151,7 +151,7 @@ MdiWindow::loadFile(const QString &fileName)
 
         for (int i=0; i<p->geometry->count; i++) {
             EmbGeometry g = p->geometry->geometry[i];
-            setCurrentColor(qRgb(g.color.r, g.color.g, g.color.b));
+            curColor = qRgb(g.color.r, g.color.g, g.color.b);
             if (g.type == EMB_CIRCLE) {
                 EmbCircle c = g.object.circle;
                 // NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
@@ -272,10 +272,10 @@ MdiWindow::loadFile(const QString &fileName)
     }
     embPattern_free(p);
 
-    //Clear the undo stack so it is not possible to undo past this point.
+    // Clear the undo stack so it is not possible to undo past this point.
     gview->getUndoStack()->clear();
 
-    setCurrentColor(tmpColor);
+    curColor = tmpColor;
 
     fileWasLoaded = true;
     mainWin->setUndoCleanIcon(fileWasLoaded);

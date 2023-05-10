@@ -2563,7 +2563,7 @@ QMdiSubWindow* MainWindow::findMdiWindow(const QString& fileName)
     foreach(QMdiSubWindow* subWindow, mdiArea->subWindowList()) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(subWindow);
         if (mdiWin) {
-            if (mdiWin->getCurrentFile() == canonicalFilePath) {
+            if (mdiWin->curFile == canonicalFilePath) {
                 return subWindow;
             }
         }
@@ -2617,7 +2617,9 @@ MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
 
     if (keepMaximized) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-        if (mdiWin) { mdiWin->showMaximized(); }
+        if (mdiWin) {
+            mdiWin->showMaximized();
+        }
     }
 }
 
@@ -2911,26 +2913,24 @@ MainWindow::floatingChangedToolBar(bool isFloating)
 
 #if 0
 
-//Command: Circle
-
-var global = {}; //Required
-EmbVector point1;
-EmbVector point2;
-EmbVector point3;
-EmbReal rad;
-EmbReal dia;
-EmbVector center;
-int mode;
-
 /**
  *
  */
-void
+UiObject
 circle_main(void)
 {
+    UiObject global;
+    global.mode = CIRCLE_MODE_1P_RAD;
+    /*
+    EmbVector point1;
+    EmbVector point2;
+    EmbVector point3;
+    EmbReal rad;
+    EmbReal dia;
+    EmbVector center;
+    int mode;
     initCommand();
     clearSelection();
-    global.mode = MODE_1P_RAD;
     global.x1 = NaN;
     global.y1 = NaN;
     global.x2 = NaN;
@@ -2938,6 +2938,8 @@ circle_main(void)
     global.x3 = NaN;
     global.y3 = NaN;
     setPromptPrefix(tr("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
+    */
+    return global;
 }
 
 /**

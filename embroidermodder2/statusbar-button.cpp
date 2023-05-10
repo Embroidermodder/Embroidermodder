@@ -15,6 +15,9 @@
 
 #include "embroidermodder.h"
 
+/**
+ * .
+ */
 StatusBarButton::StatusBarButton(QString buttonText, MainWindow* mw, StatusBar* statbar, QWidget *parent) : QToolButton(parent)
 {
     mainWin = mw;
@@ -26,79 +29,90 @@ StatusBarButton::StatusBarButton(QString buttonText, MainWindow* mw, StatusBar* 
     this->setAutoRaise(true);
     this->setCheckable(true);
 
-    if     (objectName() == "StatusBarButtonSNAP")   { connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleSnap(bool))); }
-    else if(objectName() == "StatusBarButtonGRID")   { connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleGrid(bool))); }
-    else if(objectName() == "StatusBarButtonRULER")  { connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleRuler(bool))); }
-    else if(objectName() == "StatusBarButtonORTHO")  { connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleOrtho(bool))); }
-    else if(objectName() == "StatusBarButtonPOLAR")  { connect(this, SIGNAL(toggled(bool)), this, SLOT(togglePolar(bool))); }
-    else if(objectName() == "StatusBarButtonQSNAP")  { connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleQSnap(bool))); }
-    else if(objectName() == "StatusBarButtonQTRACK") { connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleQTrack(bool))); }
-    else if(objectName() == "StatusBarButtonLWT")    { connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleLwt(bool))); }
+    if (objectName() == "StatusBarButtonSNAP") {
+        connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleSnap(bool))); 
+    }
+    else if (objectName() == "StatusBarButtonGRID") {
+        connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleGrid(bool)));
+    }
+    else if (objectName() == "StatusBarButtonRULER") {
+        connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleRuler(bool)));
+    }
+    else if (objectName() == "StatusBarButtonORTHO") {
+        connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleOrtho(bool)));
+    }
+    else if (objectName() == "StatusBarButtonPOLAR") {
+        connect(this, SIGNAL(toggled(bool)), this, SLOT(togglePolar(bool)));
+    }
+    else if (objectName() == "StatusBarButtonQSNAP") {
+        connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleQSnap(bool)));
+    }
+    else if (objectName() == "StatusBarButtonQTRACK") {
+        connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleQTrack(bool)));
+    }
+    else if (objectName() == "StatusBarButtonLWT") {
+        connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleLwt(bool)));
+    }
 }
 
-void StatusBarButton::contextMenuEvent(QContextMenuEvent *event)
+/**
+ * .
+ */
+void
+StatusBarButton::contextMenuEvent(QContextMenuEvent *event)
 {
     QApplication::setOverrideCursor(Qt::ArrowCursor);
     QMenu menu(this);
-    if(objectName() == "StatusBarButtonSNAP")
-    {
-        QAction* settingsSnapAction = new QAction(QIcon("icons/" + settings.general_icon_theme + "/" + "gridsnapsettings" + ".png"), "&Settings...", &menu);
+    if (objectName() == "StatusBarButtonSNAP") {
+        QAction* settingsSnapAction = new QAction(mainWin->create_icon("gridsnapsettings"), "&Settings...", &menu);
         connect(settingsSnapAction, SIGNAL(triggered()), this, SLOT(settingsSnap()));
         menu.addAction(settingsSnapAction);
     }
-    else if(objectName() == "StatusBarButtonGRID")
-    {
-        QAction* settingsGridAction = new QAction(QIcon("icons/" + settings.general_icon_theme + "/" + "gridsettings" + ".png"), "&Settings...", &menu);
+    else if(objectName() == "StatusBarButtonGRID") {
+        QAction* settingsGridAction = new QAction(mainWin->create_icon("gridsettings"), "&Settings...", &menu);
         connect(settingsGridAction, SIGNAL(triggered()), this, SLOT(settingsGrid()));
         menu.addAction(settingsGridAction);
     }
-    else if(objectName() == "StatusBarButtonRULER")
-    {
-        QAction* settingsRulerAction = new QAction(QIcon("icons/" + settings.general_icon_theme + "/" + "rulersettings" + ".png"), "&Settings...", &menu);
+    else if(objectName() == "StatusBarButtonRULER") {
+        QAction* settingsRulerAction = new QAction(mainWin->create_icon("rulersettings"), "&Settings...", &menu);
         connect(settingsRulerAction, SIGNAL(triggered()), this, SLOT(settingsRuler()));
         menu.addAction(settingsRulerAction);
     }
-    else if(objectName() == "StatusBarButtonORTHO")
-    {
-        QAction* settingsOrthoAction = new QAction(QIcon("icons/" + settings.general_icon_theme + "/" + "orthosettings" + ".png"), "&Settings...", &menu);
+    else if(objectName() == "StatusBarButtonORTHO") {
+        QAction* settingsOrthoAction = new QAction(mainWin->create_icon("orthosettings"), "&Settings...", &menu);
         connect(settingsOrthoAction, SIGNAL(triggered()), this, SLOT(settingsOrtho()));
         menu.addAction(settingsOrthoAction);
     }
-    else if(objectName() == "StatusBarButtonPOLAR")
-    {
-        QAction* settingsPolarAction = new QAction(QIcon("icons/" + settings.general_icon_theme + "/" + "polarsettings" + ".png"), "&Settings...", &menu);
+    else if(objectName() == "StatusBarButtonPOLAR") {
+        QAction* settingsPolarAction = new QAction(mainWin->create_icon("polarsettings"), "&Settings...", &menu);
         connect(settingsPolarAction, SIGNAL(triggered()), this, SLOT(settingsPolar()));
         menu.addAction(settingsPolarAction);
     }
-    else if(objectName() == "StatusBarButtonQSNAP")
-    {
-        QAction* settingsQSnapAction = new QAction(QIcon("icons/" + settings.general_icon_theme + "/" + "qsnapsettings" + ".png"), "&Settings...", &menu);
+    else if(objectName() == "StatusBarButtonQSNAP") {
+        QAction* settingsQSnapAction = new QAction(mainWin->create_icon("qsnapsettings"), "&Settings...", &menu);
         connect(settingsQSnapAction, SIGNAL(triggered()), this, SLOT(settingsQSnap()));
         menu.addAction(settingsQSnapAction);
     }
-    else if(objectName() == "StatusBarButtonQTRACK")
-    {
-        QAction* settingsQTrackAction = new QAction(QIcon("icons/" + settings.general_icon_theme + "/" + "qtracksettings" + ".png"), "&Settings...", &menu);
+    else if(objectName() == "StatusBarButtonQTRACK") {
+        QAction* settingsQTrackAction = new QAction(mainWin->create_icon("qtracksettings"), "&Settings...", &menu);
         connect(settingsQTrackAction, SIGNAL(triggered()), this, SLOT(settingsQTrack()));
         menu.addAction(settingsQTrackAction);
     }
-    else if(objectName() == "StatusBarButtonLWT")
-    {
+    else if(objectName() == "StatusBarButtonLWT") {
         View* gview = mainWin->activeView();
-        if(gview)
-        {
-            QAction* enableRealAction = new QAction(QIcon("icons/" + settings.general_icon_theme + "/" + "realrender" + ".png"), "&RealRender On", &menu);
+        if (gview) {
+            QAction* enableRealAction = new QAction(mainWin->create_icon("realrender"), "&RealRender On", &menu);
             enableRealAction->setEnabled(!gview->isRealEnabled());
             connect(enableRealAction, SIGNAL(triggered()), this, SLOT(enableReal()));
             menu.addAction(enableRealAction);
 
-            QAction* disableRealAction = new QAction(QIcon("icons/" + settings.general_icon_theme + "/" + "realrender" + ".png"), "&RealRender Off", &menu);
+            QAction* disableRealAction = new QAction(mainWin->create_icon("realrender"), "&RealRender Off", &menu);
             disableRealAction->setEnabled(gview->isRealEnabled());
             connect(disableRealAction, SIGNAL(triggered()), this, SLOT(disableReal()));
             menu.addAction(disableRealAction);
         }
 
-        QAction* settingsLwtAction = new QAction(QIcon("icons/" + settings.general_icon_theme + "/" + "lineweightsettings" + ".png"), "&Settings...", &menu);
+        QAction* settingsLwtAction = new QAction(mainWin->create_icon("lineweightsettings"), "&Settings...", &menu);
         connect(settingsLwtAction, SIGNAL(triggered()), this, SLOT(settingsLwt()));
         menu.addAction(settingsLwtAction);
     }
@@ -149,92 +163,98 @@ void StatusBarButton::settingsLwt()
 
 void StatusBarButton::toggleSnap(bool on)
 {
-    qDebug("StatusBarButton toggleSnap()");
+    debug_message("StatusBarButton toggleSnap()");
     View* gview = mainWin->activeView();
     if(gview) { gview->toggleSnap(on); }
 }
 
 void StatusBarButton::toggleGrid(bool on)
 {
-    qDebug("StatusBarButton toggleGrid()");
+    debug_message("StatusBarButton toggleGrid()");
     View* gview = mainWin->activeView();
     if(gview) { gview->toggleGrid(on); }
 }
 
 void StatusBarButton::toggleRuler(bool on)
 {
-    qDebug("StatusBarButton toggleRuler()");
+    debug_message("StatusBarButton toggleRuler()");
     View* gview = mainWin->activeView();
     if(gview) { gview->toggleRuler(on); }
 }
 
 void StatusBarButton::toggleOrtho(bool on)
 {
-    qDebug("StatusBarButton toggleOrtho()");
+    debug_message("StatusBarButton toggleOrtho()");
     View* gview = mainWin->activeView();
     if(gview) { gview->toggleOrtho(on); }
 }
 
 void StatusBarButton::togglePolar(bool on)
 {
-    qDebug("StatusBarButton togglePolar()");
+    debug_message("StatusBarButton togglePolar()");
     View* gview = mainWin->activeView();
     if(gview) { gview->togglePolar(on); }
 }
 
 void StatusBarButton::toggleQSnap(bool on)
 {
-    qDebug("StatusBarButton toggleQSnap()");
+    debug_message("StatusBarButton toggleQSnap()");
     View* gview = mainWin->activeView();
-    if(gview) { gview->toggleQSnap(on); }
+    if (gview) {
+        gview->toggleQSnap(on);
+    }
 }
 
 void StatusBarButton::toggleQTrack(bool on)
 {
-    qDebug("StatusBarButton toggleQTrack()");
+    debug_message("StatusBarButton toggleQTrack()");
     View* gview = mainWin->activeView();
-    if(gview) { gview->toggleQTrack(on); }
+    if (gview) {
+        gview->toggleQTrack(on);
+    }
 }
 
 void StatusBarButton::toggleLwt(bool on)
 {
-    qDebug("StatusBarButton toggleLwt()");
+    debug_message("StatusBarButton toggleLwt()");
     View* gview = mainWin->activeView();
-    if(gview) { gview->toggleLwt(on); }
+    if (gview) {
+        gview->toggleLwt(on);
+    }
 }
 
 void StatusBarButton::enableLwt()
 {
-    qDebug("StatusBarButton enableLwt()");
+    debug_message("StatusBarButton enableLwt()");
     View* gview = mainWin->activeView();
-    if(gview)
-    {
-        if(!gview->isLwtEnabled())
-            gview->toggleLwt(true);
+    if (gview) {
+        gview->toggleLwt(true);
     }
 }
 
 void StatusBarButton::disableLwt()
 {
-    qDebug("StatusBarButton disableLwt()");
+    debug_message("StatusBarButton disableLwt()");
     View* gview = mainWin->activeView();
-    if(gview)
-    {
-        if(gview->isLwtEnabled())
-            gview->toggleLwt(false);
+    if (gview) {
+        gview->toggleLwt(false);
     }
 }
 
 void StatusBarButton::enableReal()
 {
-    qDebug("StatusBarButton enableReal()");
+    debug_message("StatusBarButton enableReal()");
     View* gview = mainWin->activeView();
-    if(gview) { gview->toggleReal(true); }
+    if (gview) {
+        gview->toggleReal(true);
+    }
 }
 
 void StatusBarButton::disableReal()
 {
-    qDebug("StatusBarButton disableReal()");
+    debug_message("StatusBarButton disableReal()");
     View* gview = mainWin->activeView();
-    if(gview) { gview->toggleReal(false); }
+    if (gview) {
+        gview->toggleReal(false);
+    }
 }

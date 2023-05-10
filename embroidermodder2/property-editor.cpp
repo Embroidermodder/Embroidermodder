@@ -839,7 +839,7 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
             if (obj) {
                 updateLineEditStrIfVaries(lineEditTextSingleContents,    obj->objText);
                 updateFontComboBoxStrIfVaries(comboBoxTextSingleFont,    obj->objTextFont);
-                updateComboBoxStrIfVaries(comboBoxTextSingleJustify,     obj->objTextJustify, obj->objectTextJustifyList());
+                updateComboBoxStrIfVaries(comboBoxTextSingleJustify,     obj->objTextJustify, justify_options);
                 updateLineEditNumIfVaries(lineEditTextSingleHeight,      obj->objTextSize,      false);
                 updateLineEditNumIfVaries(lineEditTextSingleRotation,   -obj->rotation(),             true);
                 updateLineEditNumIfVaries(lineEdits["text_single_x"],           obj->objectX(),             false);

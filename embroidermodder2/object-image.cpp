@@ -67,7 +67,7 @@ void ImageObject::init(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, Qt:
     setObjectColor(rgb);
     setObjectLineType(lineType);
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
-    setPen(objectPen());
+    setPen(objPen);
 }
 
 /**
@@ -88,16 +88,13 @@ QPointF
 ImageObject::objectTopLeft() const
 {
     EmbReal rot = radians(rotation());
-    EmbReal cosRot = qCos(rot);
-    EmbReal sinRot = qSin(rot);
-
     QPointF tl = rect().topLeft();
-    EmbReal ptlX = tl.x()*scale();
-    EmbReal ptlY = tl.y()*scale();
-    EmbReal ptlXrot = ptlX*cosRot - ptlY*sinRot;
-    EmbReal ptlYrot = ptlX*sinRot + ptlY*cosRot;
+    EmbVector ptl;
+    ptl.x = tl.x()*scale();
+    ptl.y = tl.y()*scale();
+    EmbVector ptlRot = rotate_vector(ptl, rot);
 
-    return (scenePos() + QPointF(ptlXrot, ptlYrot));
+    return (scenePos() + QPointF(ptlRot.x, ptlRot.y));
 }
 
 /**
@@ -107,16 +104,13 @@ QPointF
 ImageObject::objectTopRight() const
 {
     EmbReal rot = radians(rotation());
-    EmbReal cosRot = qCos(rot);
-    EmbReal sinRot = qSin(rot);
-
     QPointF tr = rect().topRight();
-    EmbReal ptrX = tr.x()*scale();
-    EmbReal ptrY = tr.y()*scale();
-    EmbReal ptrXrot = ptrX*cosRot - ptrY*sinRot;
-    EmbReal ptrYrot = ptrX*sinRot + ptrY*cosRot;
+    EmbVector ptr;
+    ptr.x = tr.x()*scale();
+    ptr.y = tr.y()*scale();
+    EmbVector ptrRot = rotate_vector(ptr, rot);
 
-    return (scenePos() + QPointF(ptrXrot, ptrYrot));
+    return (scenePos() + QPointF(ptrRot.x, ptrRot.y));
 }
 
 /**
@@ -126,16 +120,13 @@ QPointF
 ImageObject::objectBottomLeft() const
 {
     EmbReal rot = radians(rotation());
-    EmbReal cosRot = qCos(rot);
-    EmbReal sinRot = qSin(rot);
-
     QPointF bl = rect().bottomLeft();
-    EmbReal pblX = bl.x()*scale();
-    EmbReal pblY = bl.y()*scale();
-    EmbReal pblXrot = pblX*cosRot - pblY*sinRot;
-    EmbReal pblYrot = pblX*sinRot + pblY*cosRot;
+    EmbVector pbl;
+    pbl.x = bl.x()*scale();
+    pbl.y = bl.y()*scale();
+    EmbVector pblRot = rotate_vector(pbl, rot);
 
-    return (scenePos() + QPointF(pblXrot, pblYrot));
+    return scenePos() + QPointF(pblRot.x, pblRot.y);
 }
 
 /**
@@ -145,16 +136,13 @@ QPointF
 ImageObject::objectBottomRight() const
 {
     EmbReal rot = radians(rotation());
-    EmbReal cosRot = qCos(rot);
-    EmbReal sinRot = qSin(rot);
-
     QPointF br = rect().bottomRight();
-    EmbReal pbrX = br.x()*scale();
-    EmbReal pbrY = br.y()*scale();
-    EmbReal pbrXrot = pbrX*cosRot - pbrY*sinRot;
-    EmbReal pbrYrot = pbrX*sinRot + pbrY*cosRot;
+    EmbVector pbr;
+    pbr.x = br.x()*scale();
+    pbr.y = br.y()*scale();
+    EmbVector pbrRot = rotate_vector(pbr, rot);
 
-    return (scenePos() + QPointF(pbrXrot, pbrYrot));
+    return scenePos() + QPointF(pbrRot.x, pbrRot.y);
 }
 
 /**
@@ -190,8 +178,12 @@ ImageObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QW
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
+    if(option->state & QStyle::State_Selected) {
+        paintPen.setStyle(Qt::DashLine);
+    }
+    if(objScene->property("ENABLE_LWT").toBool()) {
+        paintPen = lineWeightPen();
+    }
     painter->setPen(paintPen);
 
     painter->drawRect(rect());

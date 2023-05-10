@@ -19,15 +19,21 @@
 
 #include "embroidermodder.h"
 
+/**
+ * .
+ */
 PointObject::PointObject(EmbReal x, EmbReal y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("PointObject Constructor()");
+    debug_message("PointObject Constructor()");
     init(x, y, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
+/**
+ * .
+ */
 PointObject::PointObject(PointObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("PointObject Constructor()");
+    debug_message("PointObject Constructor()");
     if(obj)
     {
         init(obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
@@ -35,11 +41,17 @@ PointObject::PointObject(PointObject* obj, QGraphicsItem* parent) : BaseObject(p
     }
 }
 
+/**
+ * .
+ */
 PointObject::~PointObject()
 {
-    qDebug("PointObject Destructor()");
+    debug_message("PointObject Destructor()");
 }
 
+/**
+ * .
+ */
 void PointObject::init(EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, OBJ_TYPE_POINT);
@@ -55,10 +67,14 @@ void PointObject::init(EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType)
     setObjectColor(rgb);
     setObjectLineType(lineType);
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
-    setPen(objectPen());
+    setPen(objPen);
 }
 
-void PointObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+/**
+ * .
+ */
+void
+PointObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
     if(!objScene) return;
@@ -73,7 +89,11 @@ void PointObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
     painter->drawPoint(0,0);
 }
 
-void PointObject::updateRubber(QPainter* painter)
+/**
+ * .
+ */
+void
+PointObject::updateRubber(QPainter* painter)
 {
     if (objRubberMode == OBJ_RUBBER_GRIP) {
         if (painter) {
@@ -86,33 +106,55 @@ void PointObject::updateRubber(QPainter* painter)
     }
 }
 
-void PointObject::vulcanize()
+/**
+ * .
+ */
+void
+PointObject::vulcanize()
 {
-    qDebug("PointObject vulcanize()");
+    debug_message("PointObject vulcanize()");
     updateRubber();
 
     objRubberMode = OBJ_RUBBER_OFF;
 }
 
-// Returns the closest snap point to the mouse point
+/**
+ * Returns the closest snap point to the mouse point
+ * .
+ */
 QPointF PointObject::mouseSnapPoint(const QPointF& mousePoint)
 {
     return scenePos();
 }
 
-QList<QPointF> PointObject::allGripPoints()
+/**
+ * .
+ */
+QList<QPointF>
+PointObject::allGripPoints()
 {
     QList<QPointF> gripPoints;
     gripPoints << scenePos();
     return gripPoints;
 }
 
-void PointObject::gripEdit(const QPointF& before, const QPointF& after)
+/**
+ * .
+ */
+void
+PointObject::gripEdit(const QPointF& before, const QPointF& after)
 {
-    if(before == scenePos()) { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
+    if (before == scenePos()) {
+        QPointF delta = after-before;
+        moveBy(delta.x(), delta.y());
+    }
 }
 
-QPainterPath PointObject::objectSavePath() const
+/**
+ * .
+ */
+QPainterPath
+PointObject::objectSavePath() const
 {
     QPainterPath path;
     path.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);

@@ -21,7 +21,7 @@
 
 CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
 {
-    qDebug("CmdPrompt Constructor");
+    debug_message("CmdPrompt Constructor");
     setObjectName("Command Prompt");
 
     promptInput = new CmdPromptInput(this);
@@ -118,7 +118,7 @@ void CmdPrompt::floatingChanged(bool isFloating)
 
 void CmdPrompt::saveHistory(const QString& fileName, bool html)
 {
-    qDebug("CmdPrompt saveHistory");
+    debug_message("CmdPrompt saveHistory");
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
         return;
@@ -153,11 +153,11 @@ void CmdPrompt::blink()
     blinkState = !blinkState;
     if(blinkState)
     {
-        qDebug("CmdPrompt blink1");
+        debug_message("CmdPrompt blink1");
     }
     else
     {
-        qDebug("CmdPrompt blink0");
+        debug_message("CmdPrompt blink0");
     }
 }
 
@@ -215,7 +215,7 @@ void CmdPrompt::appendHistory(const QString& txt)
         emit appendTheHistory(promptInput->curText, promptInput->prefix.length());
         return;
     }
-    qDebug("CmdPrompt - appendHistory()");
+    debug_message("CmdPrompt - appendHistory()");
     emit appendTheHistory(txt, promptInput->prefix.length());
 }
 
@@ -230,7 +230,7 @@ void CmdPrompt::setPrefix(const QString& txt)
 
 CmdPromptSplitter::CmdPromptSplitter(QWidget* parent) : QSplitter(parent)
 {
-    qDebug("CmdPromptSplitter Constructor");
+    debug_message("CmdPromptSplitter Constructor");
     setObjectName("Command Prompt Splitter");
 
     setOrientation(Qt::Vertical);
@@ -255,7 +255,7 @@ QSplitterHandle* CmdPromptSplitter::createHandle()
 
 CmdPromptHandle::CmdPromptHandle(Qt::Orientation orientation, QSplitter* parent) : QSplitterHandle(orientation, parent)
 {
-    qDebug("CmdPromptHandle Constructor");
+    debug_message("CmdPromptHandle Constructor");
     setObjectName("Command Prompt Handle");
 
     connect(this, SIGNAL(handlePressed(int)),  parent, SIGNAL(pressResizeHistory(int)));
@@ -290,7 +290,7 @@ void CmdPromptHandle::mouseMoveEvent(QMouseEvent* e)
 
 CmdPromptHistory::CmdPromptHistory(QWidget* parent) : QTextBrowser(parent)
 {
-    qDebug("CmdPromptHistory Constructor");
+    debug_message("CmdPromptHistory Constructor");
     setObjectName("Command Prompt History");
 
     int initHeight = 57; // 19*3 (approximately three lines of text)
@@ -392,7 +392,7 @@ void CmdPromptHistory::contextMenuEvent(QContextMenuEvent* event)
 //============================================================================================================
 CmdPromptInput::CmdPromptInput(QWidget* parent) : QLineEdit(parent)
 {
-    qDebug("CmdPromptInput Constructor");
+    debug_message("CmdPromptInput Constructor");
     setObjectName("Command Prompt Input");
 
     defaultPrefix = tr("Command: ");
@@ -439,7 +439,7 @@ void CmdPromptInput::addCommand(const QString& alias, const QString& cmd)
 
 void CmdPromptInput::endCommand()
 {
-    qDebug("CmdPromptInput endCommand");
+    debug_message("CmdPromptInput endCommand");
     lastCmd = curCmd;
     cmdActive = false;
     rapidFireEnabled = false;
@@ -451,7 +451,7 @@ void CmdPromptInput::endCommand()
 
 void CmdPromptInput::processInput()
 {
-    qDebug("CmdPromptInput::processInput");
+    debug_message("CmdPromptInput::processInput");
 
     updateCurrentText(curText);
 
@@ -503,7 +503,7 @@ void CmdPromptInput::processInput()
 
 void CmdPromptInput::checkSelection()
 {
-    //qDebug("CmdPromptInput::checkSelection");
+    //debug_message("CmdPromptInput::checkSelection");
     if (this->hasSelectedText()) {
         this->deselect();
     }

@@ -423,8 +423,9 @@ bool ArcObject::objectClockwise() const
     arc.mid.y = -objectMidY();
     arc.end.x = objectEndX();
     arc.end.y = -objectEndY();
-    if (embArc_clockwise(arc))
+    if (embArc_clockwise(arc)) {
         return true;
+    }
     return false;
 }
 

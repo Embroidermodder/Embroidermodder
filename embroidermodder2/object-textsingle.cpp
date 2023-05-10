@@ -75,19 +75,26 @@ TextSingleObject::init(const QString& str, EmbReal x, EmbReal y, QRgb rgb, Qt::P
     setPen(objPen);
 }
 
-/**
- *
+QStringList justify_options = {
+    "Left",
+    "Center",
+    "Right",
+    "Aligned",
+    "Middle",
+    "Fit",
+    "Top Left",
+    "Top Center",
+    "Top Right",
+    "Middle Left",
+    "Middle Center",
+    "Middle Right",
+    "Bottom Left",
+    "Bottom Center",
+    "Bottom Right"
+/* \todo "Aligned"
+ * \todo "Fit"
  */
-QStringList
-TextSingleObject::objectTextJustifyList() const
-{
-    QStringList justifyList;
-    justifyList << "Left" << "Center" << "Right" /* TODO: << "Aligned" */ << "Middle" /* TODO: << "Fit" */ ;
-    justifyList << "Top Left" << "Top Center" << "Top Right";
-    justifyList << "Middle Left" << "Middle Center" << "Middle Right";
-    justifyList << "Bottom Left" << "Bottom Center" << "Bottom Right";
-    return justifyList;
-}
+};
 
 /**
  *
@@ -108,8 +115,12 @@ void TextSingleObject::setObjectText(const QString& str)
 
     //Translate the path based on the justification
     QRectF jRect = textPath.boundingRect();
-    if     (objTextJustify == "Left")          { textPath.translate(-jRect.left(), 0); }
-    else if (objTextJustify == "Center")        { textPath.translate(-jRect.center().x(), 0); }
+    if (objTextJustify == "Left") {
+        textPath.translate(-jRect.left(), 0);
+    }
+    else if (objTextJustify == "Center") {
+        textPath.translate(-jRect.center().x(), 0);
+    }
     else if (objTextJustify == "Right")         { textPath.translate(-jRect.right(), 0); }
     else if (objTextJustify == "Aligned")       { } //TODO: TextSingleObject Aligned Justification
     else if (objTextJustify == "Middle")        { textPath.translate(-jRect.center()); }
@@ -125,8 +136,7 @@ void TextSingleObject::setObjectText(const QString& str)
     else if (objTextJustify == "Bottom Right")  { textPath.translate(-jRect.bottomRight()); }
 
     //Backward or Upside Down
-    if (objTextBackward || objTextUpsideDown)
-    {
+    if (objTextBackward || objTextUpsideDown) {
         EmbReal horiz = 1.0;
         EmbReal vert = 1.0;
         if (objTextBackward) horiz = -1.0;
@@ -138,19 +148,15 @@ void TextSingleObject::setObjectText(const QString& str)
         QPainterPath::Element P2;
         QPainterPath::Element P3;
         QPainterPath::Element P4;
-        for(int i = 0; i < textPath.elementCount(); ++i)
-        {
+        for(int i = 0; i < textPath.elementCount(); ++i) {
             element = textPath.elementAt(i);
-            if (element.isMoveTo())
-            {
+            if (element.isMoveTo()) {
                 flippedPath.moveTo(horiz * element.x, vert * element.y);
             }
-            else if (element.isLineTo())
-            {
+            else if (element.isLineTo()) {
                 flippedPath.lineTo(horiz * element.x, vert * element.y);
             }
-            else if (element.isCurveTo())
-            {
+            else if (element.isCurveTo()) {
                                               // start point P1 is not needed
                 P2 = textPath.elementAt(i);   // control point
                 P3 = textPath.elementAt(i+1); // control point
@@ -163,8 +169,9 @@ void TextSingleObject::setObjectText(const QString& str)
         }
         objTextPath = flippedPath;
     }
-    else
+    else {
         objTextPath = textPath;
+    }
 
     //Add the grip point to the shape path
     QPainterPath gripPath = objTextPath;
@@ -184,28 +191,17 @@ TextSingleObject::setObjectTextFont(const QString& font)
 }
 
 /**
- *
+ * Verify the string is a valid option, otherwise default to "Left".
  */
 void
 TextSingleObject::setObjectTextJustify(const QString& justify)
 {
-    //Verify the string is a valid option
-    if     (justify == "Left")          { objTextJustify = justify; }
-    else if (justify == "Center")        { objTextJustify = justify; }
-    else if (justify == "Right")         { objTextJustify = justify; }
-    else if (justify == "Aligned")       { objTextJustify = justify; }
-    else if (justify == "Middle")        { objTextJustify = justify; }
-    else if (justify == "Fit")           { objTextJustify = justify; }
-    else if (justify == "Top Left")      { objTextJustify = justify; }
-    else if (justify == "Top Center")    { objTextJustify = justify; }
-    else if (justify == "Top Right")     { objTextJustify = justify; }
-    else if (justify == "Middle Left")   { objTextJustify = justify; }
-    else if (justify == "Middle Center") { objTextJustify = justify; }
-    else if (justify == "Middle Right")  { objTextJustify = justify; }
-    else if (justify == "Bottom Left")   { objTextJustify = justify; }
-    else if (justify == "Bottom Center") { objTextJustify = justify; }
-    else if (justify == "Bottom Right")  { objTextJustify = justify; }
-    else                                { objTextJustify = "Left";  } //Default
+    objTextJustify = "Left";
+    for (int i=0; i<justify_options.size(); i++) {
+        if (justify == justify_options[i]) {
+            objTextJustify = justify;
+        }
+    }
     setObjectText(objText);
 }
 
@@ -315,8 +311,12 @@ TextSingleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected) {
+        paintPen.setStyle(Qt::DashLine);
+    }
+    if (objScene->property("ENABLE_LWT").toBool()) {
+        paintPen = lineWeightPen();
+    }
     painter->setPen(paintPen);
 
     painter->drawPath(objTextPath);
@@ -360,7 +360,7 @@ TextSingleObject::vulcanize()
     qDebug("TextSingleObject vulcanize()");
     updateRubber();
 
-    setObjectRubberMode(OBJ_RUBBER_OFF);
+    objRubberMode = OBJ_RUBBER_OFF;
 }
 
 /**
@@ -389,7 +389,10 @@ TextSingleObject::allGripPoints()
 void
 TextSingleObject::gripEdit(const QPointF& before, const QPointF& after)
 {
-    if (before == scenePos()) { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
+    if (before == scenePos()) {
+        QPointF delta = after-before;
+        moveBy(delta.x(), delta.y());
+    }
 }
 
 /**
@@ -411,11 +414,9 @@ TextSingleObject::subPathList() const
     QList<int> pathMoves;
     int numMoves = 0;
 
-    for(int i = 0; i < path.elementCount(); i++)
-    {
+    for (int i = 0; i < path.elementCount(); i++) {
         element = path.elementAt(i);
-        if (element.isMoveTo())
-        {
+        if (element.isMoveTo()) {
             pathMoves << i;
             numMoves++;
         }
@@ -423,22 +424,17 @@ TextSingleObject::subPathList() const
 
     pathMoves << path.elementCount();
 
-    for(int p = 0; p < pathMoves.size()-1 && p < numMoves; p++)
-    {
+    for (int p = 0; p < pathMoves.size()-1 && p < numMoves; p++) {
         QPainterPath subPath;
-        for(int i = pathMoves.value(p); i < pathMoves.value(p+1); i++)
-        {
+        for (int i = pathMoves.value(p); i < pathMoves.value(p+1); i++) {
             element = path.elementAt(i);
-            if (element.isMoveTo())
-            {
+            if (element.isMoveTo()) {
                 subPath.moveTo(element.x, element.y);
             }
-            else if (element.isLineTo())
-            {
+            else if (element.isLineTo()) {
                 subPath.lineTo(element.x, element.y);
             }
-            else if (element.isCurveTo())
-            {
+            else if (element.isCurveTo()) {
                 subPath.cubicTo(path.elementAt(i  ).x, path.elementAt(i  ).y,  //control point 1
                                 path.elementAt(i+1).x, path.elementAt(i+1).y,  //control point 2
                                 path.elementAt(i+2).x, path.elementAt(i+2).y); //end point

@@ -120,6 +120,53 @@ class TextSingleObject;
 /**
  * .
  */
+typedef struct Action__ {
+    int hash;
+        /*< Index in the actionHash array. */
+    std::string icon;
+        /*< The stub used for the icon and the basic command. */
+    std::string command;
+        /*< . */
+    std::string tooltip;
+        /*< The label in the menus and the message that appears when
+            you hover over an icon. */
+    std::string statustip;
+        /*< The message that appears at the bottom of the . */
+    std::string shortcut;
+        /*< The keyboard shortcut for this action. */
+    std::vector<std::string> aliases;
+        /*< A list of all alternative commands, if empty only
+            the icon sttring will be . */
+    std::vector<std::string> script;
+        /*< If this is a compound action this will be a
+            list of commands or it can allow for command line
+            style command aliases. For example: icon16 would become
+            the string list {"iconResize 16"}. */
+    std::string menu_name;
+        /*< . */
+    int menu_position;
+        /*< . */
+    std::string toolbar_name;
+        /*< . */
+    int toolbar_position;
+        /*< . */
+} Action;
+
+/**
+ * .
+ */
+typedef struct GroupBoxData_ {
+    int object;
+    char key[200];
+    char icon_name[200];
+    char label[200];
+    char type[200];
+    char map_signal[200];
+} GroupBoxData;
+
+/**
+ * .
+ */
 typedef struct Parameter_ {
     std::string s_value;
     EmbReal r_value;
@@ -732,9 +779,9 @@ public:
     int objRubberMode;
     QHash<QString, QPointF> objRubberPoints;
     QHash<QString, QString> objRubberTexts;
-    qint64 objID;
+    int64_t objID;
 
-    qint64 objectID() const { return objID; }
+    int64_t objectID() const { return objID; }
     QPen objectPen() const { return objPen; }
     QColor objectColor() const { return objPen.color(); }
     QRgb objectColorRGB() const { return objPen.color().rgb(); }
@@ -974,10 +1021,10 @@ public:
 
     QPainterPath objectSavePath() const;
 
-    EmbReal objectRadiusMajor() const { return qMax(rect().width(), rect().height())/2.0*scale(); }
-    EmbReal objectRadiusMinor() const { return qMin(rect().width(), rect().height())/2.0*scale(); }
-    EmbReal objectDiameterMajor() const { return qMax(rect().width(), rect().height())*scale(); }
-    EmbReal objectDiameterMinor() const { return qMin(rect().width(), rect().height())*scale(); }
+    EmbReal objectRadiusMajor() const { return std::max(rect().width(), rect().height())/2.0*scale(); }
+    EmbReal objectRadiusMinor() const { return std::min(rect().width(), rect().height())/2.0*scale(); }
+    EmbReal objectDiameterMajor() const { return std::max(rect().width(), rect().height())*scale(); }
+    EmbReal objectDiameterMinor() const { return std::min(rect().width(), rect().height())*scale(); }
     EmbReal objectWidth() const { return rect().width()*scale(); }
     EmbReal objectHeight() const { return rect().height()*scale(); }
     QPointF objectQuadrant0() const;
@@ -1267,7 +1314,7 @@ public:
     QPointF objectBottomRight() const;
     EmbReal objectWidth() const { return rect().width()*scale(); }
     EmbReal objectHeight() const { return rect().height()*scale(); }
-    EmbReal objectArea() const { return qAbs(objectWidth()*objectHeight()); }
+    EmbReal objectArea() const { return std::fabs(objectWidth()*objectHeight()); }
 
     void setObjectRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
 
@@ -1293,34 +1340,34 @@ public:
 
     bool save(const QString &fileName);
 
-    void addArc          (EmbPattern* pattern, QGraphicsItem* item);
-    void addBlock        (EmbPattern* pattern, QGraphicsItem* item);
-    void addCircle       (EmbPattern* pattern, QGraphicsItem* item);
-    void addDimAligned   (EmbPattern* pattern, QGraphicsItem* item);
-    void addDimAngular   (EmbPattern* pattern, QGraphicsItem* item);
-    void addDimArcLength (EmbPattern* pattern, QGraphicsItem* item);
-    void addDimDiameter  (EmbPattern* pattern, QGraphicsItem* item);
-    void addDimLeader    (EmbPattern* pattern, QGraphicsItem* item);
-    void addDimLinear    (EmbPattern* pattern, QGraphicsItem* item);
-    void addDimOrdinate  (EmbPattern* pattern, QGraphicsItem* item);
-    void addDimRadius    (EmbPattern* pattern, QGraphicsItem* item);
-    void addEllipse      (EmbPattern* pattern, QGraphicsItem* item);
-    void addEllipseArc   (EmbPattern* pattern, QGraphicsItem* item);
-    void addGrid         (EmbPattern* pattern, QGraphicsItem* item);
-    void addHatch        (EmbPattern* pattern, QGraphicsItem* item);
-    void addImage        (EmbPattern* pattern, QGraphicsItem* item);
-    void addInfiniteLine (EmbPattern* pattern, QGraphicsItem* item);
-    void addLine         (EmbPattern* pattern, QGraphicsItem* item);
-    void addPath         (EmbPattern* pattern, QGraphicsItem* item);
-    void addPoint (EmbPattern* pattern, QGraphicsItem* item);
-    void addPolygon      (EmbPattern* pattern, QGraphicsItem* item);
-    void addPolyline     (EmbPattern* pattern, QGraphicsItem* item);
-    void addRay          (EmbPattern* pattern, QGraphicsItem* item);
-    void addRectangle    (EmbPattern* pattern, QGraphicsItem* item);
-    void addSlot         (EmbPattern* pattern, QGraphicsItem* item);
-    void addSpline       (EmbPattern* pattern, QGraphicsItem* item);
-    void addTextMulti    (EmbPattern* pattern, QGraphicsItem* item);
-    void addTextSingle   (EmbPattern* pattern, QGraphicsItem* item);
+    void addArc(EmbPattern* pattern, QGraphicsItem* item);
+    void addBlock(EmbPattern* pattern, QGraphicsItem* item);
+    void addCircle(EmbPattern* pattern, QGraphicsItem* item);
+    void addDimAligned(EmbPattern* pattern, QGraphicsItem* item);
+    void addDimAngular(EmbPattern* pattern, QGraphicsItem* item);
+    void addDimArcLength(EmbPattern* pattern, QGraphicsItem* item);
+    void addDimDiameter(EmbPattern* pattern, QGraphicsItem* item);
+    void addDimLeader(EmbPattern* pattern, QGraphicsItem* item);
+    void addDimLinear(EmbPattern* pattern, QGraphicsItem* item);
+    void addDimOrdinate(EmbPattern* pattern, QGraphicsItem* item);
+    void addDimRadius(EmbPattern* pattern, QGraphicsItem* item);
+    void addEllipse(EmbPattern* pattern, QGraphicsItem* item);
+    void addEllipseArc(EmbPattern* pattern, QGraphicsItem* item);
+    void addGrid(EmbPattern* pattern, QGraphicsItem* item);
+    void addHatch(EmbPattern* pattern, QGraphicsItem* item);
+    void addImage(EmbPattern* pattern, QGraphicsItem* item);
+    void addInfiniteLine(EmbPattern* pattern, QGraphicsItem* item);
+    void addLine(EmbPattern* pattern, QGraphicsItem* item);
+    void addPath(EmbPattern* pattern, QGraphicsItem* item);
+    void addPoint(EmbPattern* pattern, QGraphicsItem* item);
+    void addPolygon(EmbPattern* pattern, QGraphicsItem* item);
+    void addPolyline(EmbPattern* pattern, QGraphicsItem* item);
+    void addRay(EmbPattern* pattern, QGraphicsItem* item);
+    void addRectangle(EmbPattern* pattern, QGraphicsItem* item);
+    void addSlot(EmbPattern* pattern, QGraphicsItem* item);
+    void addSpline(EmbPattern* pattern, QGraphicsItem* item);
+    void addTextMulti(EmbPattern* pattern, QGraphicsItem* item);
+    void addTextSingle(EmbPattern* pattern, QGraphicsItem* item);
 
     QGraphicsScene* gscene;
     int formatType;
@@ -1362,8 +1409,6 @@ public:
     QPointF objectPos() const { return scenePos(); }
     EmbReal objectX()   const { return scenePos().x(); }
     EmbReal objectY()   const { return scenePos().y(); }
-
-    QStringList objectTextJustifyList() const;
 
     void setObjectText(const QString& str);
     void setObjectTextFont(const QString& font);
@@ -1430,7 +1475,7 @@ public:
     bool rapidFireEnabled;
     bool isBlinking;
 
-    QHash<QString, QString>*  aliasHash;
+    QHash<QString, QString>* aliasHash;
 
     void changeFormatting(const QList<QTextLayout::FormatRange>& formats);
     void clearFormatting();
@@ -1587,8 +1632,6 @@ public:
     QTimer* blinkTimer;
     bool blinkState;
 
-protected:
-
 public slots:
     QString getHistory() { return promptHistory->toHtml(); }
     QString getPrefix() { return promptInput->prefix; }
@@ -1625,8 +1668,6 @@ public slots:
     void floatingChanged(bool);
 
     void saveHistory(const QString& fileName, bool html);
-
-private slots:
 
 signals:
     void appendTheHistory(const QString& txt, int prefixLength);
@@ -1773,7 +1814,6 @@ public:
     std::string actuator(std::string command);
     std::string run_script_file(std::string fname);
     std::string run_script(std::vector<std::string> script);
-    void LoadCommand(QString cmdName);
 
     QAction* actionHash[200];
     QHash<QString, QToolBar*> toolbarHash;
@@ -2041,8 +2081,8 @@ public:
     void nativeVulcanize();
     void nativeClearRubber();
     bool nativeAllowRubber();
-    void nativeSpareRubber(qint64 id);
-    // \todo void nativeSetRubberFilter(qint64 id);
+    void nativeSpareRubber(int64_t id);
+    // \todo void nativeSetRubberFilter(int64_t id);
     // \todo This is so more than 1 rubber object can exist at one time without updating all rubber objects at once
     void nativeSetRubberMode(int mode);
     void nativeSetRubberPoint(const QString& key, EmbReal x, EmbReal y);
@@ -2130,12 +2170,7 @@ public:
     void promptInputPrevNext(bool prev);
 
     virtual QSize sizeHint() const;
-    QString getCurrentFile() { return curFile; }
     QString getShortCurrentFile();
-    void setCurrentLayer(const QString& layer) { curLayer = layer; }
-    void setCurrentColor(const QRgb& color) { curColor = color; }
-    void setCurrentLineType(const QString& lineType) { curLineType = lineType; }
-    void setCurrentLineWeight(const QString& lineWeight) { curLineWeight = lineWeight; }
     void designDetails();
     bool loadFile(const QString &fileName);
     bool saveFile(const QString &fileName);
@@ -2210,15 +2245,6 @@ protected:
     virtual void mouseDoubleClickEvent(QMouseEvent* e);
     virtual void paintEvent(QPaintEvent* e);
 };
-
-typedef struct GroupBoxData_ {
-    int object;
-    char key[200];
-    char icon_name[200];
-    char label[200];
-    char type[200];
-    char map_signal[200];
-} GroupBoxData;
 
 /**
  *
@@ -2719,7 +2745,7 @@ public:
     QPointF fromCenter;
     QPointF toCenter;
     bool done;
-    View*   gview;
+    View* gview;
 };
 
 /**
@@ -2734,9 +2760,9 @@ public:
     void redo();
 
     BaseObject* object;
-    View*       gview;
-    QPointF     before;
-    QPointF     after;
+    View* gview;
+    QPointF before;
+    QPointF after;
 };
 
 /**
@@ -2772,6 +2798,55 @@ public:
 
     bool allowZoomIn();
     bool allowZoomOut();
+
+    QColor gridColor;
+    QPainterPath gridPath;
+    QPainterPath originPath;
+    bool rulerMetric;
+    QColor rulerColor;
+    uint8_t rulerPixelSize;
+
+    bool grippingActive;
+    bool rapidMoveActive;
+    bool previewActive;
+    bool pastingActive;
+    bool movingActive;
+    bool selectingActive;
+    bool zoomWindowActive;
+    bool panningRealTimeActive;
+    bool panningPointActive;
+    bool panningActive;
+    bool qSnapActive;
+    bool qSnapToggle;
+
+    BaseObject* gripBaseObj;
+    BaseObject* tempBaseObj;
+
+    MainWindow* mainWin;
+    QGraphicsScene* gscene;
+    QUndoStack* undoStack;
+
+    SelectBox* selectBox;
+    QPointF scenePressPoint;
+    QPoint pressPoint;
+    QPointF sceneMovePoint;
+    QPoint movePoint;
+    QPointF sceneReleasePoint;
+    QPoint releasePoint;
+    QPointF sceneGripPoint;
+
+    void updateMouseCoords(int x, int y);
+    QPoint viewMousePoint;
+    QPointF sceneMousePoint;
+    QRgb qsnapLocatorColor;
+    uint8_t qsnapLocatorSize;
+    uint8_t qsnapApertureSize;
+    QRgb gripColorCool;
+    QRgb gripColorHot;
+    uint8_t gripSize;
+    uint8_t pickBoxSize;
+    QRgb crosshairColor;
+    uint32_t crosshairSize;
 
     void recalculateLimits();
     void zoomToPoint(const QPoint& mousePoint, int zoomDir);
@@ -2849,7 +2924,7 @@ public slots:
     void addToRubberRoom(QGraphicsItem* item);
     void vulcanizeRubberRoom();
     void clearRubberRoom();
-    void spareRubber(qint64 id);
+    void spareRubber(int64_t id);
     void setRubberMode(int mode);
     void setRubberPoint(const QString& key, const QPointF& point);
     void setRubberText(const QString& key, const QString& txt);
@@ -2866,25 +2941,19 @@ protected:
     void enterEvent(QEvent* event);
 
 private:
-    QHash<qint64, QGraphicsItem*> hashDeletedObjects;
+    QHash<int64_t, QGraphicsItem*> hashDeletedObjects;
 
-    QList<qint64> spareRubberList;
+    QList<int64_t> spareRubberList;
 
-    QColor gridColor;
-    QPainterPath gridPath;
     void createGridRect();
     void createGridPolar();
     void createGridIso();
-    QPainterPath originPath;
     void createOrigin();
 
-    bool rulerMetric;
-    QColor rulerColor;
-    uint8_t rulerPixelSize;
     void loadRulerSettings();
 
-    bool willUnderflowInt32(qint64 a, qint64 b);
-    bool willOverflowInt32(qint64 a, qint64 b);
+    bool willUnderflowInt32(int64_t a, int64_t b);
+    bool willOverflowInt32(int64_t a, int64_t b);
     int roundToMultiple(bool roundUp, int numToRound, int multiple);
     QPainterPath createRulerTextPath(float x, EmbReal y, QString str, EmbReal height);
 
@@ -2903,50 +2972,8 @@ private:
 
     void copySelected();
 
-    bool grippingActive;
-    bool rapidMoveActive;
-    bool previewActive;
-    bool pastingActive;
-    bool movingActive;
-    bool selectingActive;
-    bool zoomWindowActive;
-    bool panningRealTimeActive;
-    bool panningPointActive;
-    bool panningActive;
-    bool qSnapActive;
-    bool qSnapToggle;
-
     void startGripping(BaseObject* obj);
     void stopGripping(bool accept = false);
-
-    BaseObject* gripBaseObj;
-    BaseObject* tempBaseObj;
-
-    MainWindow* mainWin;
-    QGraphicsScene* gscene;
-    QUndoStack* undoStack;
-
-    SelectBox* selectBox;
-    QPointF scenePressPoint;
-    QPoint pressPoint;
-    QPointF sceneMovePoint;
-    QPoint movePoint;
-    QPointF sceneReleasePoint;
-    QPoint releasePoint;
-    QPointF sceneGripPoint;
-
-    void updateMouseCoords(int x, int y);
-    QPoint viewMousePoint;
-    QPointF sceneMousePoint;
-    QRgb qsnapLocatorColor;
-    uint8_t qsnapLocatorSize;
-    uint8_t qsnapApertureSize;
-    QRgb gripColorCool;
-    QRgb gripColorHot;
-    uint8_t gripSize;
-    uint8_t pickBoxSize;
-    QRgb crosshairColor;
-    uint32_t crosshairSize;
 
     void panStart(const QPoint& point);
     int panDistance;
@@ -2956,41 +2983,6 @@ private:
     void alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& viewPoint);
 };
 
-/**
- * .
- */
-typedef struct Action__ {
-    int hash;
-        /*< Index in the actionHash array. */
-    std::string icon;
-        /*< The stub used for the icon and the basic command. */
-    std::string command;
-        /*< . */
-    std::string tooltip;
-        /*< The label in the menus and the message that appears when
-            you hover over an icon. */
-    std::string statustip;
-        /*< The message that appears at the bottom of the . */
-    std::string shortcut;
-        /*< The keyboard shortcut for this action. */
-    std::vector<std::string> aliases;
-        /*< A list of all alternative commands, if empty only
-            the icon sttring will be . */
-    std::vector<std::string> script;
-        /*< If this is a compound action this will be a
-            list of commands or it can allow for command line
-            style command aliases. For example: icon16 would become
-            the string list {"iconResize 16"}. */
-    std::string menu_name;
-        /*< . */
-    int menu_position;
-        /*< . */
-    std::string toolbar_name;
-        /*< . */
-    int toolbar_position;
-        /*< . */
-} Action;
-
 /* Functions in the global namespace
  * ---------------------------------
  */
@@ -2998,6 +2990,7 @@ int get_action_index(std::string cmd);
 void debug_message(std::string msg);
 int read_settings(const char *file);
 void write_settings(const char *fname);
+EmbVector rotate_vector(EmbVector v, EmbReal alpha);
 
 /* Global data
  * -----------
@@ -3020,5 +3013,6 @@ extern std::vector<GroupBoxData> group_box_arc_geometry;
 extern std::vector<GroupBoxData> group_box_ellipse_geometry;
 extern std::unordered_map<std::string, std::string> config;
 extern std::unordered_map<std::string, GroupBoxData> group_box_data;
+extern QStringList justify_options;
 
 #endif
