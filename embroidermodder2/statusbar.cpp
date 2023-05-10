@@ -1,4 +1,4 @@
-/**
+/*
  *  Embroidermodder 2.
  *
  *  ------------------------------------------------------------
@@ -15,19 +15,19 @@
 
 #include "embroidermodder.h"
 
-StatusBar::StatusBar(MainWindow* mw, QWidget *parent) : QStatusBar(parent)
+StatusBar::StatusBar(QWidget *parent) : QStatusBar(parent)
 {
     this->setObjectName("StatusBar");
 
-    statusBarSnapButton   = new StatusBarButton("SNAP", mw, this, this);
-    statusBarGridButton   = new StatusBarButton("GRID", mw, this, this);
-    statusBarRulerButton  = new StatusBarButton("RULER", mw, this, this);
-    statusBarOrthoButton  = new StatusBarButton("ORTHO", mw, this, this);
-    statusBarPolarButton  = new StatusBarButton("POLAR", mw, this, this);
-    statusBarQSnapButton  = new StatusBarButton("QSNAP", mw, this, this);
-    statusBarQTrackButton = new StatusBarButton("QTRACK", mw, this, this);
-    statusBarLwtButton    = new StatusBarButton("LWT", mw, this, this);
-    statusBarMouseCoord   = new QLabel(this);
+    statusBarSnapButton = new StatusBarButton("SNAP", this, this);
+    statusBarGridButton = new StatusBarButton("GRID", this, this);
+    statusBarRulerButton = new StatusBarButton("RULER", this, this);
+    statusBarOrthoButton = new StatusBarButton("ORTHO", this, this);
+    statusBarPolarButton = new StatusBarButton("POLAR", this, this);
+    statusBarQSnapButton = new StatusBarButton("QSNAP", this, this);
+    statusBarQTrackButton = new StatusBarButton("QTRACK", this, this);
+    statusBarLwtButton = new StatusBarButton("LWT", this, this);
+    statusBarMouseCoord = new QLabel(this);
 
     statusBarMouseCoord->setMinimumWidth(300); // Must fit this text always
     statusBarMouseCoord->setMaximumWidth(300); // "+1.2345E+99, +1.2345E+99, +1.2345E+99"

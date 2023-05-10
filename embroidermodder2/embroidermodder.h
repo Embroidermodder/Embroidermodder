@@ -761,6 +761,17 @@ degrees(EmbReal radian)
     return (radian*180.0/emb_constant_pi);
 }
 
+
+extern MainWindow* _mainWin;
+extern CmdPrompt* prompt;
+extern PropertyEditor* dockPropEdit;
+extern UndoEditor* dockUndoEdit;
+extern StatusBar* statusbar;
+
+extern QAction* actionHash[200];
+extern QHash<QString, QToolBar*> toolbarHash;
+extern QHash<QString, QMenu*> menuHash;
+
 /**
  *
  */
@@ -1446,8 +1457,8 @@ class Application : public QApplication
     Q_OBJECT
 public:
     Application(int argc, char **argv);
-    void setMainWin(MainWindow* mainWin) { _mainWin = mainWin; }
-    MainWindow* _mainWin;
+    void setMainWin(MainWindow* mainWin) { __mainWin = _mainWin; }
+    MainWindow* __mainWin;
 protected:
     virtual bool event(QEvent *e);
 };
@@ -1767,7 +1778,7 @@ public:
     QSortFilterProxyModel* layerModelSorted;
     QTreeView*             treeView;
 
-    LayerManager(MainWindow* mw, QWidget *parent = 0);
+    LayerManager(QWidget *parent = 0);
     ~LayerManager();
 
     void addLayer(const QString& name,
@@ -1791,8 +1802,6 @@ public:
     MainWindow();
     ~MainWindow();
 
-    MdiArea* getMdiArea();
-    MainWindow* getApplication();
     MdiWindow* activeMdiWindow();
     View* activeView();
     QGraphicsScene* activeScene();
@@ -1802,22 +1811,11 @@ public:
 
     virtual void updateMenuToolbarStatusbar();
 
-    MainWindow* mainWin;
-    MdiArea* mdiArea;
-    CmdPrompt* prompt;
-    PropertyEditor* dockPropEdit;
-    UndoEditor* dockUndoEdit;
-    StatusBar* statusbar;
-
     QList<QGraphicsItem*> cutCopyObjectList;
 
     std::string actuator(std::string command);
     std::string run_script_file(std::string fname);
     std::string run_script(std::vector<std::string> script);
-
-    QAction* actionHash[200];
-    QHash<QString, QToolBar*> toolbarHash;
-    QHash<QString, QMenu*> menuHash;
 
     QString formatFilterOpen;
     QString formatFilterSave;
@@ -2140,10 +2138,9 @@ class MdiWindow: public QMdiSubWindow
     Q_OBJECT
 
 public:
-    MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags);
+    MdiWindow(const int theIndex, QMdiArea* parent, Qt::WindowFlags wflags);
     ~MdiWindow();
 
-    MainWindow* mainWin;
     QMdiArea* mdiArea;
     QGraphicsScene* gscene;
     View* gview;
@@ -2214,8 +2211,6 @@ class MdiArea : public QMdiArea
     Q_OBJECT
 
 public:
-    MainWindow* mainWin;
-
     bool useLogo;
     bool useTexture;
     bool useColor;
@@ -2227,7 +2222,7 @@ public:
     void zoomExtentsAllSubWindows();
     void forceRepaint();
 
-    MdiArea(MainWindow* mw, QWidget* parent = 0);
+    MdiArea(QWidget* parent = 0);
     ~MdiArea();
 
     void useBackgroundLogo(bool use);
@@ -2419,12 +2414,12 @@ class Settings_Dialog : public QDialog
     Q_OBJECT
 
 public:
-    Settings_Dialog(MainWindow* mw, const QString& showTab = QString(), QWidget *parent = 0);
+    Settings_Dialog(const QString& showTab = QString(), QWidget *parent = 0);
     ~Settings_Dialog();
 
-    MainWindow* mainWin;
-
     QTabWidget* tabWidget;
+
+    void make_checkbox(QCheckBox *cb, bool *ptr);
 
     QWidget* createTabGeneral();
     QWidget* createTabFilesPaths();
@@ -2468,13 +2463,6 @@ private slots:
     void checkBoxGeneralMdiBGUseColorStateChanged(int);
     void chooseGeneralMdiBackgroundColor();
     void currentGeneralMdiBackgroundColorChanged(const QColor&);
-    void checkBoxTipOfTheDayStateChanged(int);
-    void checkBoxUseOpenGLStateChanged(int);
-    void checkBoxRenderHintAAStateChanged(int);
-    void checkBoxRenderHintTextAAStateChanged(int);
-    void checkBoxRenderHintSmoothPixStateChanged(int);
-    void checkBoxRenderHintHighAAStateChanged(int);
-    void checkBoxRenderHintNonCosmeticStateChanged(int);
     void checkBoxShowScrollBarsStateChanged(int);
     void comboBoxScrollBarWidgetCurrentIndexChanged(int);
     void spinBoxZoomScaleInValueChanged(double);
@@ -2492,6 +2480,8 @@ private slots:
     void currentDisplaySelectBoxRightColorChanged(const QColor&);
     void chooseDisplaySelectBoxRightFill();
     void currentDisplaySelectBoxRightFillChanged(const QColor&);
+    void comboBoxSelectionCoolGripColorCurrentIndexChanged(int index);
+    void comboBoxSelectionHotGripColorCurrentIndexChanged(int index);
     void spinBoxDisplaySelectBoxAlphaValueChanged(int);
     void choosePromptTextColor();
     void currentPromptTextColorChanged(const QColor&);
@@ -2523,17 +2513,8 @@ private slots:
     void buttonQSnapSelectAllClicked();
     void buttonQSnapClearAllClicked();
     void comboBoxQSnapLocatorColorCurrentIndexChanged(int);
-    void sliderQSnapLocatorSizeValueChanged(int);
-    void sliderQSnapApertureSizeValueChanged(int);
     void checkBoxLwtShowLwtStateChanged(int);
     void checkBoxLwtRealRenderStateChanged(int);
-    void checkBoxSelectionModePickFirstStateChanged(int);
-    void checkBoxSelectionModePickAddStateChanged(int);
-    void checkBoxSelectionModePickDragStateChanged(int);
-    void comboBoxSelectionCoolGripColorCurrentIndexChanged(int);
-    void comboBoxSelectionHotGripColorCurrentIndexChanged(int);
-    void sliderSelectionGripSizeValueChanged(int);
-    void sliderSelectionPickBoxSizeValueChanged(int);
 
     void acceptChanges();
     void rejectChanges();
@@ -2551,7 +2532,7 @@ class StatusBar : public QStatusBar
     Q_OBJECT
 
 public:
-    StatusBar(MainWindow* mw, QWidget* parent = 0);
+    StatusBar(QWidget* parent = 0);
 
     StatusBarButton* statusBarSnapButton;
     StatusBarButton* statusBarGridButton;
@@ -2574,9 +2555,8 @@ class StatusBarButton : public QToolButton
     Q_OBJECT
 
 public:
-    StatusBarButton(QString buttonText, MainWindow* mw, StatusBar* statbar, QWidget *parent = 0);
+    StatusBarButton(QString buttonText, StatusBar* statbar, QWidget *parent = 0);
 
-    MainWindow* mainWin;
     StatusBar*  statusbar;
 
 protected:
@@ -2791,7 +2771,7 @@ class View : public QGraphicsView
     Q_OBJECT
 
 public:
-    View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent);
+    View(QGraphicsScene* theScene, QWidget* parent);
     ~View();
     
     EmbView view_state;
@@ -2822,7 +2802,6 @@ public:
     BaseObject* gripBaseObj;
     BaseObject* tempBaseObj;
 
-    MainWindow* mainWin;
     QGraphicsScene* gscene;
     QUndoStack* undoStack;
 
@@ -2987,15 +2966,16 @@ private:
  * ---------------------------------
  */
 int get_action_index(std::string cmd);
-void debug_message(std::string msg);
 int read_settings(const char *file);
 void write_settings(const char *fname);
 EmbVector rotate_vector(EmbVector v, EmbReal alpha);
 
+void debug_message(std::string msg);
+
 /* Global data
  * -----------
  */
-extern MainWindow* _mainWin;
+extern MdiArea* mdiArea;
 extern Settings settings;
 extern Settings dialog;
 extern std::vector<Action> action_table;

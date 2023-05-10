@@ -19,8 +19,7 @@
 
 #include "embroidermodder.h"
 
-static const char* _appName_ = "Embroidermodder";
-static const char* _appVer_  = "v2.0 alpha";
+static const char* _appVer_  = "v2.0.0-alpha3";
 static bool exitApp = false;
 
 /**
@@ -28,7 +27,7 @@ static bool exitApp = false;
  * @param argc
  * @param argv
  */
-Application::Application(int argc, char **argv) : QApplication(argc, argv), _mainWin(NULL)
+Application::Application(int argc, char **argv) : QApplication(argc, argv), __mainWin(NULL)
 {
 }
 
@@ -82,7 +81,7 @@ static void usage(void)
  */
 static void version()
 {
-    fprintf(stdout, "%s %s\n", _appName_, _appVer_);
+    fprintf(stdout, "Embroidermodder %s\n", _appVer_);
     exitApp = true;
 }
 
@@ -99,7 +98,7 @@ int main(int argc, char* argv[])
 #else
     QApplication app(argc, argv);
 #endif
-    app.setApplicationName(_appName_);
+    app.setApplicationName("Embroidermodder");
     app.setApplicationVersion(_appVer_);
 
     QStringList filesToOpen;

@@ -22,9 +22,8 @@
 /**
  *
  */
-MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags) : QMdiSubWindow(parent, wflags)
+MdiWindow::MdiWindow(const int theIndex, QMdiArea* parent, Qt::WindowFlags wflags) : QMdiSubWindow(parent, wflags)
 {
-    mainWin = mw;
     mdiArea = parent;
 
     myIndex = theIndex;
@@ -40,19 +39,19 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     this->setWindowIcon(QIcon("icons/" + settings.general_icon_theme + "/" + "app" + ".png"));
 
     gscene = new QGraphicsScene(0,0,0,0, this);
-    gview = new View(mainWin, gscene, this);
+    gview = new View(gscene, this);
 
     setWidget(gview);
 
     //WARNING: DO NOT SET THE QMDISUBWINDOW (this) FOCUSPROXY TO THE PROMPT
     //WARNING: AS IT WILL CAUSE THE WINDOW MENU TO NOT SWITCH WINDOWS PROPERLY!
     //WARNING: ALTHOUGH IT SEEMS THAT SETTING INTERNAL WIDGETS FOCUSPROXY IS OK.
-    gview->setFocusProxy(mainWin->prompt);
+    gview->setFocusProxy(prompt);
 
     resize(sizeHint());
 
     promptHistory = "Welcome to Embroidermodder 2!<br/>Open some of our sample files. Many formats are supported.<br/>For help, press F1.";
-    mainWin->prompt->setHistory(promptHistory);
+    prompt->setHistory(promptHistory);
     promptInputList << "";
     promptInputNum = 0;
 
@@ -78,7 +77,7 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
  */
 MdiWindow::~MdiWindow()
 {
-    qDebug("MdiWindow Destructor()");
+    debug_message("MdiWindow Destructor()");
 }
 
 /**
@@ -155,17 +154,17 @@ MdiWindow::loadFile(const QString &fileName)
             if (g.type == EMB_CIRCLE) {
                 EmbCircle c = g.object.circle;
                 // NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                mainWin->nativeAddCircle(c.center.x, c.center.y, c.radius, false, OBJ_RUBBER_OFF); //TODO: fill
+                _mainWin->nativeAddCircle(c.center.x, c.center.y, c.radius, false, OBJ_RUBBER_OFF); //TODO: fill
             }
             if (g.type == EMB_ELLIPSE) {
                 EmbEllipse e = g.object.ellipse;
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                mainWin->nativeAddEllipse(e.center.x, e.center.y, embEllipse_width(e), embEllipse_height(e), 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
+                _mainWin->nativeAddEllipse(e.center.x, e.center.y, embEllipse_width(e), embEllipse_height(e), 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
             }
             if (g.type == EMB_LINE) {
                 EmbLine li = g.object.line;
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                mainWin->nativeAddLine(li.start.x, li.start.y, li.end.x, li.end.y, 0, OBJ_RUBBER_OFF); //TODO: rotation
+                _mainWin->nativeAddLine(li.start.x, li.start.y, li.end.x, li.end.y, 0, OBJ_RUBBER_OFF); //TODO: rotation
             }
             if (g.type == EMB_PATH) {
                 // TODO: This is unfinished. It needs more work
@@ -191,7 +190,7 @@ MdiWindow::loadFile(const QString &fileName)
             if (p->geometry->geometry[i].type == EMB_POINT) {
                 EmbPoint po = g.object.point;
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                mainWin->nativeAddPoint(po.position.x, po.position.y);
+                _mainWin->nativeAddPoint(po.position.x, po.position.y);
             }
             if (p->geometry->geometry[i].type == EMB_POLYGON) {
                 EmbPolygon polygon = g.object.polygon;
@@ -218,7 +217,7 @@ MdiWindow::loadFile(const QString &fileName)
                 }
 
                 polygonPath.translate(-startX, -startY);
-                mainWin->nativeAddPolygon(startX, startY, polygonPath, OBJ_RUBBER_OFF);
+                _mainWin->nativeAddPolygon(startX, startY, polygonPath, OBJ_RUBBER_OFF);
             }
             /* NOTE: Polylines should only contain NORMAL stitches. */
             if (p->geometry->geometry[i].type == EMB_POLYLINE) {
@@ -245,17 +244,17 @@ MdiWindow::loadFile(const QString &fileName)
                 }
 
                 polylinePath.translate(-start.x, -start.y);
-                mainWin->nativeAddPolyline(start.x, start.y, polylinePath, OBJ_RUBBER_OFF);
+                _mainWin->nativeAddPolyline(start.x, start.y, polylinePath, OBJ_RUBBER_OFF);
             }
             if (g.type == EMB_RECT) {
                 EmbRect r = g.object.rect;
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                mainWin->nativeAddRectangle(r.left, r.top, r.right - r.left, r.bottom - r.top, 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
+                _mainWin->nativeAddRectangle(r.left, r.top, r.right - r.left, r.bottom - r.top, 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
             }
         }
 
         setCurrentFile(fileName);
-        mainWin->statusbar->showMessage("File loaded.");
+        statusbar->showMessage("File loaded.");
         QString stitches;
         stitches.setNum(stitchCount);
 
@@ -278,7 +277,7 @@ MdiWindow::loadFile(const QString &fileName)
     curColor = tmpColor;
 
     fileWasLoaded = true;
-    mainWin->setUndoCleanIcon(fileWasLoaded);
+    _mainWin->setUndoCleanIcon(fileWasLoaded);
     return fileWasLoaded;
 }
 
@@ -393,16 +392,16 @@ MdiWindow::onWindowActivated()
 {
     qDebug("MdiWindow onWindowActivated()");
     gview->getUndoStack()->setActive(true);
-    mainWin->setUndoCleanIcon(fileWasLoaded);
-    mainWin->statusbar->statusBarSnapButton->setChecked(gscene->property("ENABLE_SNAP").toBool());
-    mainWin->statusbar->statusBarGridButton->setChecked(gscene->property("ENABLE_GRID").toBool());
-    mainWin->statusbar->statusBarRulerButton->setChecked(gscene->property("ENABLE_RULER").toBool());
-    mainWin->statusbar->statusBarOrthoButton->setChecked(gscene->property("ENABLE_ORTHO").toBool());
-    mainWin->statusbar->statusBarPolarButton->setChecked(gscene->property("ENABLE_POLAR").toBool());
-    mainWin->statusbar->statusBarQSnapButton->setChecked(gscene->property("ENABLE_QSNAP").toBool());
-    mainWin->statusbar->statusBarQTrackButton->setChecked(gscene->property("ENABLE_QTRACK").toBool());
-    mainWin->statusbar->statusBarLwtButton->setChecked(gscene->property("ENABLE_LWT").toBool());
-    mainWin->prompt->setHistory(promptHistory);
+    _mainWin->setUndoCleanIcon(fileWasLoaded);
+    statusbar->statusBarSnapButton->setChecked(gscene->property("ENABLE_SNAP").toBool());
+    statusbar->statusBarGridButton->setChecked(gscene->property("ENABLE_GRID").toBool());
+    statusbar->statusBarRulerButton->setChecked(gscene->property("ENABLE_RULER").toBool());
+    statusbar->statusBarOrthoButton->setChecked(gscene->property("ENABLE_ORTHO").toBool());
+    statusbar->statusBarPolarButton->setChecked(gscene->property("ENABLE_POLAR").toBool());
+    statusbar->statusBarQSnapButton->setChecked(gscene->property("ENABLE_QSNAP").toBool());
+    statusbar->statusBarQTrackButton->setChecked(gscene->property("ENABLE_QTRACK").toBool());
+    statusbar->statusBarLwtButton->setChecked(gscene->property("ENABLE_LWT").toBool());
+    prompt->setHistory(promptHistory);
 }
 
 /**
@@ -545,14 +544,14 @@ MdiWindow::promptInputPrevNext(bool prev)
         int maxNum = promptInputList.size();
         if (promptInputNum < 0) {
             promptInputNum = 0;
-            mainWin->prompt->setCurrentText("");
+            prompt->setCurrentText("");
         }
         else if (promptInputNum >= maxNum) {
             promptInputNum = maxNum;
-            mainWin->prompt->setCurrentText("");
+            prompt->setCurrentText("");
         }
         else {
-            mainWin->prompt->setCurrentText(promptInputList.at(promptInputNum));
+            prompt->setCurrentText(promptInputList.at(promptInputNum));
         }
     }
 }

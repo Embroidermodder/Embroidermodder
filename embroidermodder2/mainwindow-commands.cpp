@@ -44,7 +44,7 @@ MainWindow::stub_testing()
 void
 MainWindow::exit()
 {
-    qDebug("exit()");
+    debug_message("exit()");
     if (settings.prompt_save_history) {
         prompt->saveHistory("prompt.log", settings.prompt_save_history_as_html); //TODO: get filename from settings
     }
@@ -58,7 +58,7 @@ MainWindow::exit()
 void
 MainWindow::quit()
 {
-    qDebug("quit()");
+    debug_message("quit()");
     exit();
 }
 
@@ -68,7 +68,7 @@ MainWindow::quit()
 void
 MainWindow::checkForUpdates()
 {
-    qDebug("checkForUpdates()");
+    debug_message("checkForUpdates()");
     //TODO: Check website for new versions, commands, etc...
 }
 
@@ -78,7 +78,7 @@ MainWindow::checkForUpdates()
 void
 MainWindow::cut()
 {
-    qDebug("cut()");
+    debug_message("cut()");
     View* gview = activeView();
     if (gview) { gview->cut(); }
 }
@@ -89,7 +89,7 @@ MainWindow::cut()
 void
 MainWindow::copy()
 {
-    qDebug("copy()");
+    debug_message("copy()");
     View* gview = activeView();
     if (gview) {
         gview->copy();
@@ -102,7 +102,7 @@ MainWindow::copy()
 void
 MainWindow::paste()
 {
-    qDebug("paste()");
+    debug_message("paste()");
     View* gview = activeView();
     if (gview) { gview->paste(); }
 }
@@ -192,7 +192,7 @@ MainWindow::about()
 {
     //TODO: QTabWidget for about dialog
     QApplication::setOverrideCursor(Qt::ArrowCursor);
-    qDebug("about()");
+    debug_message("about()");
     QString appDir = qApp->applicationDirPath();
     QString appName = QApplication::applicationName();
     QString title = "About " + appName;
@@ -240,14 +240,14 @@ MainWindow::about()
 void
 MainWindow::whatsThisContextHelp()
 {
-    qDebug("whatsThisContextHelp()");
+    debug_message("whatsThisContextHelp()");
     QWhatsThis::enterWhatsThisMode();
 }
 
 void
 MainWindow::print()
 {
-    qDebug("print()");
+    debug_message("print()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) { mdiWin->print(); }
 }
@@ -255,7 +255,7 @@ MainWindow::print()
 void
 MainWindow::tipOfTheDay()
 {
-    qDebug("tipOfTheDay()");
+    debug_message("tipOfTheDay()");
 
     QString appDir = qApp->applicationDirPath();
 
@@ -340,7 +340,7 @@ MainWindow::buttonTipOfTheDayClicked(int button)
 void
 MainWindow::help()
 {
-    qDebug("help()");
+    debug_message("help()");
 
     // Open the HTML Help in the default browser
     QUrl helpURL("file:///" + qApp->applicationDirPath() + "/help/doc-index.html");
@@ -357,7 +357,7 @@ MainWindow::help()
 void
 MainWindow::changelog()
 {
-    qDebug("changelog()");
+    debug_message("changelog()");
 
     QUrl changelogURL("help/changelog.html");
     QDesktopServices::openUrl(changelogURL);
@@ -367,7 +367,7 @@ MainWindow::changelog()
 void
 MainWindow::undo()
 {
-    qDebug("undo()");
+    debug_message("undo()");
     QString prefix = prompt->getPrefix();
     if (dockUndoEdit->canUndo())
     {
@@ -386,7 +386,7 @@ MainWindow::undo()
 void
 MainWindow::redo()
 {
-    qDebug("redo()");
+    debug_message("redo()");
     QString prefix = prompt->getPrefix();
     if (dockUndoEdit->canRedo())
     {
@@ -441,14 +441,14 @@ MainWindow::iconResize(int iconSize)
 
 MdiWindow* MainWindow::activeMdiWindow()
 {
-    qDebug("activeMdiWindow()");
+    debug_message("activeMdiWindow()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     return mdiWin;
 }
 
 View* MainWindow::activeView()
 {
-    qDebug("activeView()");
+    debug_message("activeView()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
         return mdiWin->gview;
@@ -458,7 +458,7 @@ View* MainWindow::activeView()
 
 QGraphicsScene* MainWindow::activeScene()
 {
-    qDebug("activeScene()");
+    debug_message("activeScene()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
         return mdiWin->gscene;
@@ -468,7 +468,7 @@ QGraphicsScene* MainWindow::activeScene()
 
 QUndoStack* MainWindow::activeUndoStack()
 {
-    qDebug("activeUndoStack()");
+    debug_message("activeUndoStack()");
     View* v = activeView();
     if (v)
     {
@@ -566,23 +566,23 @@ MainWindow::pickAddModeToggled()
 void
 MainWindow::makeLayerActive()
 {
-    qDebug("makeLayerActive()");
+    debug_message("makeLayerActive()");
     stub_implement("Implement makeLayerActive.");
 }
 
 void
 MainWindow::layerManager()
 {
-    qDebug("layerManager()");
+    debug_message("layerManager()");
     stub_implement("Implement layerManager.");
-    LayerManager layman(this, this);
+    LayerManager layman(this);
     layman.exec();
 }
 
 void
 MainWindow::layerPrevious()
 {
-    qDebug("layerPrevious()");
+    debug_message("layerPrevious()");
     stub_implement("Implement layerPrevious.");
 }
 
@@ -590,21 +590,21 @@ MainWindow::layerPrevious()
 void
 MainWindow::zoomRealtime()
 {
-    qDebug("zoomRealtime()");
+    debug_message("zoomRealtime()");
     stub_implement("Implement zoomRealtime.");
 }
 
 void
 MainWindow::zoomPrevious()
 {
-    qDebug("zoomPrevious()");
+    debug_message("zoomPrevious()");
     stub_implement("Implement zoomPrevious.");
 }
 
 void
 MainWindow::zoomWindow()
 {
-    qDebug("zoomWindow()");
+    debug_message("zoomWindow()");
     View* gview = activeView();
     if (gview) {
         gview->zoomWindow();
@@ -614,28 +614,28 @@ MainWindow::zoomWindow()
 void
 MainWindow::zoomDynamic()
 {
-    qDebug("zoomDynamic()");
+    debug_message("zoomDynamic()");
     stub_implement("Implement zoomDynamic.");
 }
 
 void
 MainWindow::zoomScale()
 {
-    qDebug("zoomScale()");
+    debug_message("zoomScale()");
     stub_implement("Implement zoomScale.");
 }
 
 void
 MainWindow::zoomCenter()
 {
-    qDebug("zoomCenter()");
+    debug_message("zoomCenter()");
     stub_implement("Implement zoomCenter.");
 }
 
 void
 MainWindow::zoomIn()
 {
-    qDebug("zoomIn()");
+    debug_message("zoomIn()");
     View* gview = activeView();
     if (gview) { gview->zoomIn(); }
 }
@@ -643,7 +643,7 @@ MainWindow::zoomIn()
 void
 MainWindow::zoomOut()
 {
-    qDebug("zoomOut()");
+    debug_message("zoomOut()");
     View* gview = activeView();
     if (gview) { gview->zoomOut(); }
 }
@@ -651,7 +651,7 @@ MainWindow::zoomOut()
 void
 MainWindow::zoomSelected()
 {
-    qDebug("zoomSelected()");
+    debug_message("zoomSelected()");
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack)
@@ -664,14 +664,14 @@ MainWindow::zoomSelected()
 void
 MainWindow::zoomAll()
 {
-    qDebug("zoomAll()");
+    debug_message("zoomAll()");
     stub_implement("Implement zoomAll.");
 }
 
 void
 MainWindow::zoomExtents()
 {
-    qDebug("zoomExtents()");
+    debug_message("zoomExtents()");
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack)
@@ -684,7 +684,7 @@ MainWindow::zoomExtents()
 void
 MainWindow::panrealtime()
 {
-    qDebug("panrealtime()");
+    debug_message("panrealtime()");
     View* gview = activeView();
     if (gview) { gview->panRealTime(); }
 }
@@ -692,7 +692,7 @@ MainWindow::panrealtime()
 void
 MainWindow::panpoint()
 {
-    qDebug("panpoint()");
+    debug_message("panpoint()");
     View* gview = activeView();
     if (gview) { gview->panPoint(); }
 }
@@ -700,7 +700,7 @@ MainWindow::panpoint()
 void
 MainWindow::panLeft()
 {
-    qDebug("panLeft()");
+    debug_message("panLeft()");
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack)
@@ -713,7 +713,7 @@ MainWindow::panLeft()
 void
 MainWindow::panRight()
 {
-    qDebug("panRight()");
+    debug_message("panRight()");
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack)
@@ -726,7 +726,7 @@ MainWindow::panRight()
 void
 MainWindow::panUp()
 {
-    qDebug("panUp()");
+    debug_message("panUp()");
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack)
@@ -742,7 +742,7 @@ MainWindow::panUp()
 void
 MainWindow::panDown()
 {
-    qDebug("panDown()");
+    debug_message("panDown()");
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack)
@@ -786,7 +786,7 @@ void
 MainWindow::doNothing()
 {
     //This function intentionally does nothing.
-    qDebug("doNothing()");
+    debug_message("doNothing()");
 }
 
 void
@@ -832,7 +832,7 @@ MainWindow::lineweightSelectorIndexChanged(int index)
 void
 MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
 {
-    qDebug("textFontSelectorCurrentFontChanged()");
+    debug_message("textFontSelectorCurrentFontChanged()");
     settings.text_font = font.family();
 }
 
@@ -940,7 +940,7 @@ QString MainWindow::getCurrentLineWeight()
 void
 MainWindow::deletePressed()
 {
-    qDebug("deletePressed()");
+    debug_message("deletePressed()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
@@ -952,7 +952,7 @@ MainWindow::deletePressed()
 void
 MainWindow::escapePressed()
 {
-    qDebug("escapePressed()");
+    debug_message("escapePressed()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
@@ -966,21 +966,21 @@ MainWindow::escapePressed()
 void
 MainWindow::toggleGrid()
 {
-    qDebug("toggleGrid()");
+    debug_message("toggleGrid()");
     statusbar->statusBarGridButton->toggle();
 }
 
 void
 MainWindow::toggleRuler()
 {
-    qDebug("toggleRuler()");
+    debug_message("toggleRuler()");
     statusbar->statusBarRulerButton->toggle();
 }
 
 void
 MainWindow::toggleLwt()
 {
-    qDebug("toggleLwt()");
+    debug_message("toggleLwt()");
     statusbar->statusBarLwtButton->toggle();
 }
 

@@ -431,6 +431,6 @@ void MainWindow::settingsPrompt()
 
 void MainWindow::settingsDialog(const QString& showTab)
 {
-    Settings_Dialog dialog(this, showTab, this);
+    Settings_Dialog dialog(showTab);
     dialog.exec();
 }

@@ -21,10 +21,10 @@
 
 /**
  * @brief LayerManager::LayerManager
- * @param mw
- * @param parent
+ * \a mw
+ * \a parent
  */
-LayerManager::LayerManager(MainWindow* mw, QWidget* parent) : QDialog(parent)
+LayerManager::LayerManager(QWidget* parent) : QDialog(parent)
 {
     layerModel = new QStandardItemModel(0, 8, this);
 

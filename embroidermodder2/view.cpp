@@ -21,9 +21,8 @@
 
 //#include <QOpenGLWidget>
 
-View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
+View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
 {
-    mainWin = mw;
     gscene = theScene;
 
     setFrameShape(QFrame::NoFrame);
@@ -108,7 +107,7 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     setCornerButton();
 
     undoStack = new QUndoStack(this);
-    mainWin->dockUndoEdit->addStack(undoStack);
+    dockUndoEdit->addStack(undoStack);
 
     installEventFilter(this);
 
@@ -134,7 +133,9 @@ void
 View::enterEvent(QEvent* /*event*/)
 {
     QMdiSubWindow* mdiWin = qobject_cast<QMdiSubWindow*>(parent());
-    if (mdiWin) mainWin->getMdiArea()->setActiveSubWindow(mdiWin);
+    if (mdiWin) {
+        mdiArea->setActiveSubWindow(mdiWin);
+    }
 }
 
 void
@@ -1152,7 +1153,7 @@ View::updateMouseCoords(int x, int y)
     gscene->setProperty("SCENE_QSNAP_POINT", sceneMousePoint); //TODO: if qsnap functionality is enabled, use it rather than the mouse point
     gscene->setProperty("SCENE_MOUSE_POINT", sceneMousePoint);
     gscene->setProperty("VIEW_MOUSE_POINT", viewMousePoint);
-    mainWin->statusbar->setMouseCoord(sceneMousePoint.x(), -sceneMousePoint.y());
+    statusbar->setMouseCoord(sceneMousePoint.x(), -sceneMousePoint.y());
 }
 
 void
@@ -1177,7 +1178,7 @@ View::setCornerButton()
     if (num) {
         QPushButton* cornerButton = new QPushButton(this);
         cornerButton->setFlat(true);
-        QAction* act = mainWin->actionHash[num];
+        QAction* act = actionHash[num];
         //NOTE: Prevent crashing if the action is NULL.
         if (!act) {
             QMessageBox::information(this, tr("Corner Widget Error"), tr("There are unused enum values in COMMAND_ACTIONS. Please report this as a bug."));
@@ -1199,7 +1200,7 @@ void
 View::cornerButtonClicked()
 {
     debug_message("Corner Button Clicked.");
-    mainWin->actionHash[settings.display_scrollbar_widget_num]->trigger();
+    actionHash[settings.display_scrollbar_widget_num]->trigger();
 }
 
 void
@@ -1327,21 +1328,18 @@ View::selectAll()
 void
 View::selectionChanged()
 {
-    if (mainWin->dockPropEdit->isVisible())
-    {
-        mainWin->dockPropEdit->setSelectedItems(gscene->selectedItems());
+    if (dockPropEdit->isVisible()) {
+        dockPropEdit->setSelectedItems(gscene->selectedItems());
     }
 }
 
 void
 View::mouseDoubleClickEvent(QMouseEvent* event)
 {
-    if (event->button() == Qt::LeftButton)
-    {
+    if (event->button() == Qt::LeftButton) {
         QGraphicsItem* item = gscene->itemAt(mapToScene(event->pos()), QTransform());
-        if (item)
-        {
-            mainWin->dockPropEdit->show();
+        if (item) {
+            dockPropEdit->show();
         }
     }
 }
@@ -1350,29 +1348,26 @@ void
 View::mousePressEvent(QMouseEvent* event)
 {
     updateMouseCoords(event->position().x(), event->position().y());
-    if (event->button() == Qt::LeftButton)
-    {
-        if (mainWin->isCommandActive())
-        {
+    if (event->button() == Qt::LeftButton) {
+        if (_mainWin->isCommandActive()) {
             QPointF cmdPoint = mapToScene(event->pos());
             /* TODO: make this into an actuator call. */
-            //mainWin->runCommandClick(mainWin->activeCommand(), cmdPoint.x(), cmdPoint.y());
+            //mainWin->runCommandClick(_mainWin->activeCommand(), cmdPoint.x(), cmdPoint.y());
             return;
         }
         QPainterPath path;
-        QList<QGraphicsItem*> pickList = gscene->items(QRectF(mapToScene(viewMousePoint.x()-pickBoxSize, viewMousePoint.y()-pickBoxSize),
-                                                              mapToScene(viewMousePoint.x()+pickBoxSize, viewMousePoint.y()+pickBoxSize)));
+        QList<QGraphicsItem*> pickList = gscene->items(
+            QRectF(
+                mapToScene(viewMousePoint.x()-pickBoxSize, viewMousePoint.y()-pickBoxSize),
+                mapToScene(viewMousePoint.x()+pickBoxSize, viewMousePoint.y()+pickBoxSize)));
 
         bool itemsInPickBox = pickList.size();
-        if (itemsInPickBox && !selectingActive && !grippingActive)
-        {
+        if (itemsInPickBox && !selectingActive && !grippingActive) {
             bool itemsAlreadySelected = pickList.at(0)->isSelected();
-            if (!itemsAlreadySelected)
-            {
+            if (!itemsAlreadySelected) {
                 pickList.at(0)->setSelected(true);
             }
-            else
-            {
+            else {
                 bool foundGrip = false;
                 BaseObject* base = static_cast<BaseObject*>(pickList.at(0)); //TODO: Allow multiple objects to be gripped at once
                 if (!base) return;
@@ -1382,14 +1377,15 @@ View::mousePressEvent(QMouseEvent* event)
                 QPoint p1 = mapFromScene(gripPoint) - qsnapOffset;
                 QPoint q1 = mapFromScene(gripPoint) + qsnapOffset;
                 QRectF gripRect = QRectF(mapToScene(p1), mapToScene(q1));
-                QRectF pickRect = QRectF(mapToScene(viewMousePoint.x()-pickBoxSize, viewMousePoint.y()-pickBoxSize),
-                                        mapToScene(viewMousePoint.x()+pickBoxSize, viewMousePoint.y()+pickBoxSize));
-                if (gripRect.intersects(pickRect))
+                QRectF pickRect = QRectF(
+                    mapToScene(viewMousePoint.x()-pickBoxSize, viewMousePoint.y()-pickBoxSize),
+                    mapToScene(viewMousePoint.x()+pickBoxSize, viewMousePoint.y()+pickBoxSize));
+                if (gripRect.intersects(pickRect)) {
                     foundGrip = true;
+                }
 
                 //If the pick point is within the item's grip box, start gripping
-                if (foundGrip)
-                {
+                if (foundGrip) {
                     startGripping(base);
                 }
                 else //start moving
@@ -1400,12 +1396,10 @@ View::mousePressEvent(QMouseEvent* event)
                 }
             }
         }
-        else if (grippingActive)
-        {
+        else if (grippingActive) {
             stopGripping(true);
         }
-        else if (!selectingActive)
-        {
+        else if (!selectingActive) {
             selectingActive = true;
             pressPoint = event->pos();
             scenePressPoint = mapToScene(pressPoint);
@@ -1415,8 +1409,7 @@ View::mousePressEvent(QMouseEvent* event)
             selectBox->setGeometry(QRect(pressPoint, pressPoint));
             selectBox->show();
         }
-        else
-        {
+        else {
             selectingActive = false;
             selectBox->hide();
             releasePoint = event->pos();
@@ -1426,7 +1419,7 @@ View::mousePressEvent(QMouseEvent* event)
             path.addPolygon(mapToScene(selectBox->geometry()));
             if (sceneReleasePoint.x() > scenePressPoint.x()) {
                 if (settings.selection_mode_pickadd) {
-                    if (mainWin->isShiftPressed()) {
+                    if (_mainWin->isShiftPressed()) {
                         QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(false);
@@ -1438,7 +1431,7 @@ View::mousePressEvent(QMouseEvent* event)
                     }
                 }
                 else {
-                    if (mainWin->isShiftPressed()) {
+                    if (_mainWin->isShiftPressed()) {
                         QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
                         if (!itemList.size())
                             clearSelection();
@@ -1459,7 +1452,7 @@ View::mousePressEvent(QMouseEvent* event)
             }
             else {
                 if (settings.selection_mode_pickadd) {
-                    if (mainWin->isShiftPressed()) {
+                    if (_mainWin->isShiftPressed()) {
                         QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(false);
@@ -1471,7 +1464,7 @@ View::mousePressEvent(QMouseEvent* event)
                     }
                 }
                 else {
-                    if (mainWin->isShiftPressed()) {
+                    if (_mainWin->isShiftPressed()) {
                         QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
                         if (!itemList.size())
                             clearSelection();
@@ -1600,12 +1593,12 @@ View::mouseMoveEvent(QMouseEvent* event)
     movePoint = event->pos();
     sceneMovePoint = mapToScene(movePoint);
 
-    if (mainWin->isCommandActive()) {
+    if (_mainWin->isCommandActive()) {
         if (rapidMoveActive) {
             /**
              * \todo turn move into an actuator call.
              */
-            //mainWin->runCommandMove(mainWin->activeCommand(), sceneMovePoint.x(), sceneMovePoint.y());
+            //mainWin->runCommandMove(_mainWin->activeCommand(), sceneMovePoint.x(), sceneMovePoint.y());
         }
     }
     if (previewActive) {
@@ -1730,13 +1723,13 @@ View::mouseReleaseEvent(QMouseEvent* event)
     if (event->button() == Qt::XButton1)
     {
         debug_message("XButton1");
-        mainWin->undo(); //TODO: Make this customizable
+        _mainWin->undo(); //TODO: Make this customizable
         event->accept();
     }
     if (event->button() == Qt::XButton2)
     {
         debug_message("XButton2");
-        mainWin->redo(); //TODO: Make this customizable
+        _mainWin->redo(); //TODO: Make this customizable
         event->accept();
     }
     gscene->update();
@@ -1859,8 +1852,8 @@ View::contextMenuEvent(QContextMenuEvent* event)
     if (pastingActive) {
         return;
     }
-    if (!mainWin->prompt->isCommandActive()) {
-        QString lastCmd = mainWin->prompt->lastCommand();
+    if (!prompt->isCommandActive()) {
+        QString lastCmd = prompt->lastCommand();
         QAction* repeatAction = new QAction(_mainWin->create_icon(lastCmd), "Repeat " + lastCmd, this);
         repeatAction->setStatusTip("Repeats the previously issued command.");
         connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()));
@@ -1874,9 +1867,9 @@ View::contextMenuEvent(QContextMenuEvent* event)
     }
 
     menu.addSeparator();
-    menu.addAction(mainWin->actionHash[get_action_index("cut")]);
-    menu.addAction(mainWin->actionHash[get_action_index("copy")]);
-    menu.addAction(mainWin->actionHash[get_action_index("paste")]);
+    menu.addAction(actionHash[get_action_index("cut")]);
+    menu.addAction(actionHash[get_action_index("copy")]);
+    menu.addAction(actionHash[get_action_index("paste")]);
     menu.addSeparator();
 
     if (!selectionEmpty) {
@@ -2051,13 +2044,13 @@ View::copySelected()
     QList<QGraphicsItem*> selectedList = gscene->selectedItems();
 
     //Prevent memory leaks by deleting any unpasted instances
-    qDeleteAll(mainWin->cutCopyObjectList.begin(), mainWin->cutCopyObjectList.end());
-    mainWin->cutCopyObjectList.clear();
+    qDeleteAll(_mainWin->cutCopyObjectList.begin(), _mainWin->cutCopyObjectList.end());
+    _mainWin->cutCopyObjectList.clear();
 
     //Create new objects but do not add them to the scene just yet.
     //By creating them now, ensures that pasting will still work
     //if the original objects are deleted before the paste occurs.
-    mainWin->cutCopyObjectList = createObjectList(selectedList);
+    _mainWin->cutCopyObjectList = createObjectList(selectedList);
 }
 
 /**
@@ -2072,13 +2065,13 @@ View::paste()
         delete pasteObjectItemGroup;
     }
 
-    pasteObjectItemGroup = gscene->createItemGroup(mainWin->cutCopyObjectList);
+    pasteObjectItemGroup = gscene->createItemGroup(_mainWin->cutCopyObjectList);
     pasteDelta = pasteObjectItemGroup->boundingRect().bottomLeft();
     pasteObjectItemGroup->setPos(sceneMousePoint - pasteDelta);
     pastingActive = true;
 
     //Re-create the list in case of multiple pastes
-    mainWin->cutCopyObjectList = createObjectList(mainWin->cutCopyObjectList);
+    _mainWin->cutCopyObjectList = createObjectList(_mainWin->cutCopyObjectList);
 }
 
 /**
@@ -2246,17 +2239,17 @@ View::createObjectList(QList<QGraphicsItem*> list)
 void
 View::repeatAction()
 {
-    mainWin->prompt->endCommand();
-    mainWin->prompt->setCurrentText(mainWin->prompt->lastCommand());
-    mainWin->prompt->processInput();
+    prompt->endCommand();
+    prompt->setCurrentText(prompt->lastCommand());
+    prompt->processInput();
 }
 
 void
 View::moveAction()
 {
-    mainWin->prompt->endCommand();
-    mainWin->prompt->setCurrentText("move");
-    mainWin->prompt->processInput();
+    prompt->endCommand();
+    prompt->setCurrentText("move");
+    prompt->processInput();
 }
 
 void
@@ -2285,9 +2278,9 @@ View::moveSelected(EmbReal dx, EmbReal dy)
 void
 View::rotateAction()
 {
-    mainWin->prompt->endCommand();
-    mainWin->prompt->setCurrentText("rotate");
-    mainWin->prompt->processInput();
+    prompt->endCommand();
+    prompt->setCurrentText("rotate");
+    prompt->processInput();
 }
 
 void
@@ -2339,9 +2332,9 @@ View::mirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 void
 View::scaleAction()
 {
-    mainWin->prompt->endCommand();
-    mainWin->prompt->setCurrentText("scale");
-    mainWin->prompt->processInput();
+    prompt->endCommand();
+    prompt->setCurrentText("scale");
+    prompt->processInput();
 }
 
 void
@@ -2351,11 +2344,9 @@ View::scaleSelected(EmbReal x, EmbReal y, EmbReal factor)
     int numSelected = itemList.size();
     if (numSelected > 1)
         undoStack->beginMacro("Scale " + QString().setNum(itemList.size()));
-    foreach(QGraphicsItem* item, itemList)
-    {
+    foreach(QGraphicsItem* item, itemList) {
         BaseObject* base = static_cast<BaseObject*>(item);
-        if (base)
-        {
+        if (base) {
             UndoableScaleCommand* cmd = new UndoableScaleCommand(x, y, factor, tr("Scale 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
             if (cmd) undoStack->push(cmd);
         }

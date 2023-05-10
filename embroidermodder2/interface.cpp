@@ -31,9 +31,3 @@ debug_message(std::string msg)
 {
     qDebug(msg.c_str());
 }
-
-/**
- * .
- */
-
-

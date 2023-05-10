@@ -24,7 +24,7 @@
  * @param mw
  * @param parent
  */
-MdiArea::MdiArea(MainWindow* mw, QWidget *parent) : QMdiArea(parent), mainWin(mw)
+MdiArea::MdiArea(QWidget *parent) : QMdiArea(parent)
 {
     #if QT_VERSION >= 0x040800
         setTabsClosable(true);
@@ -103,10 +103,12 @@ void MdiArea::setBackgroundTexture(const QString& fileName)
  */
 void MdiArea::setBackgroundColor(const QColor& color)
 {
-    if(!color.isValid())
+    if (!color.isValid()) {
         bgColor = background().color();
-    else
+    }
+    else {
         bgColor = color;
+    }
 
     forceRepaint();
 }
@@ -117,7 +119,7 @@ void MdiArea::setBackgroundColor(const QColor& color)
 void
 MdiArea::mouseDoubleClickEvent(QMouseEvent* /*e*/)
 {
-    mainWin->openFile();
+    _mainWin->openFile();
 }
 
 /**
@@ -133,19 +135,21 @@ MdiArea::paintEvent(QPaintEvent* /*e*/)
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
 
     //Always fill with a solid color first
-    if(useColor) painter.fillRect(rect, bgColor);
-    else         painter.fillRect(rect, background());
+    if (useColor) {
+        painter.fillRect(rect, bgColor);
+    }
+    else {
+        painter.fillRect(rect, background());
+    }
 
     //Then overlay the texture
-    if(useTexture)
-    {
+    if (useTexture) {
         QBrush bgBrush(bgTexture);
         painter.fillRect(rect, bgBrush);
     }
 
     //Overlay the logo last
-    if(useLogo)
-    {
+    if (useLogo) {
         //Center the pixmap
         int dx = (rect.width()-bgLogo.width())/2;
         int dy = (rect.height()-bgLogo.height())/2;

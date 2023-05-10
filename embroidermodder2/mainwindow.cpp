@@ -24,6 +24,16 @@
 #include <fstream>
 
 MainWindow* _mainWin = 0;
+MdiArea* mdiArea = 0;
+CmdPrompt* prompt = 0;
+PropertyEditor* dockPropEdit = 0;
+UndoEditor* dockUndoEdit = 0;
+StatusBar* statusbar = 0;
+
+QAction* actionHash[200];
+QHash<QString, QToolBar*> toolbarHash;
+QHash<QString, QMenu*> menuHash;
+
 std::vector<Action> action_table;
 std::unordered_map<std::string, QGroupBox *> groupBoxes;
 std::unordered_map<std::string, QComboBox *> comboBoxes;
@@ -257,7 +267,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     QVBoxLayout* layout = new QVBoxLayout(vbox);
     //layout->setMargin(0);
     vbox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-    mdiArea = new MdiArea(this, vbox);
+    mdiArea = new MdiArea(vbox);
     mdiArea->useBackgroundLogo(settings.general_mdi_bg_use_logo);
     mdiArea->useBackgroundTexture(settings.general_mdi_bg_use_texture);
     mdiArea->useBackgroundColor(settings.general_mdi_bg_use_color);
@@ -272,7 +282,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     setCentralWidget(vbox);
 
     //create the Command Prompt
-    prompt = new CmdPrompt(this);
+    prompt = new CmdPrompt();
     prompt->setFocus(Qt::OtherFocusReason);
     this->setFocusProxy(prompt);
     mdiArea->setFocusProxy(prompt);
@@ -328,7 +338,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     //setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); //TODO: Load these from settings
     //tabifyDockWidget(dockPropEdit, dockUndoEdit); //TODO: load this from settings
 
-    statusbar = new StatusBar(this, this);
+    statusbar = new StatusBar(this);
     this->setStatusBar(statusbar);
 
     createAllActions();
@@ -2368,28 +2378,6 @@ MainWindow::windowMenuActivated(bool checked)
 }
 
 /**
- * @brief MainWindow::getMdiArea
- * @return
- */
-MdiArea*
-MainWindow::getMdiArea()
-{
-    qDebug("MainWindow::getMdiArea()");
-    return mdiArea;
-}
-
-/**
- * @brief MainWindow::getApplication
- * @return
- */
-MainWindow*
-MainWindow::getApplication()
-{
-    qDebug("MainWindow::getApplication()");
-    return mainWin;
-}
-
-/**
  * @brief MainWindow::newFile
  */
 void
@@ -2398,7 +2386,7 @@ MainWindow::newFile()
     qDebug("MainWindow::newFile()");
     docIndex++;
     numOfDocs++;
-    MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
+    MdiWindow* mdiWin = new MdiWindow(docIndex, mdiArea, Qt::SubWindow);
     connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
     connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
 
@@ -2471,7 +2459,7 @@ MainWindow::openFilesSelected(const QStringList& filesToOpen)
 
             //The docIndex doesn't need increased as it is only used for unnamed files
             numOfDocs++;
-            MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
+            MdiWindow* mdiWin = new MdiWindow(docIndex, mdiArea, Qt::SubWindow);
             connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
             connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
 
