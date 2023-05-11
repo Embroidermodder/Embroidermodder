@@ -88,7 +88,7 @@ void
 MainWindow::cut()
 {
     debug_message("cut()");
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) { gview->cut(); }
 }
 
@@ -99,7 +99,7 @@ void
 MainWindow::copy()
 {
     debug_message("copy()");
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) {
         gview->copy();
     }
@@ -112,7 +112,7 @@ void
 MainWindow::paste()
 {
     debug_message("paste()");
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) { gview->paste(); }
 }
 
@@ -454,7 +454,7 @@ MdiWindow* MainWindow::activeMdiWindow()
 
 View* MainWindow::activeView()
 {
-    debug_message("activeView()");
+    debug_message("_mainWin->activeView()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
         return mdiWin->gview;
@@ -475,7 +475,7 @@ QGraphicsScene* MainWindow::activeScene()
 QUndoStack* MainWindow::activeUndoStack()
 {
     debug_message("activeUndoStack()");
-    View* v = activeView();
+    View* v = _mainWin->activeView();
     if (v)
     {
         QUndoStack* u = v->getUndoStack();
@@ -626,7 +626,7 @@ void
 MainWindow::zoomWindow()
 {
     debug_message("zoomWindow()");
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) {
         gview->zoomWindow();
     }
@@ -669,7 +669,7 @@ void
 MainWindow::zoomIn()
 {
     debug_message("zoomIn()");
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) { gview->zoomIn(); }
 }
 
@@ -680,7 +680,7 @@ void
 MainWindow::zoomOut()
 {
     debug_message("zoomOut()");
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) { gview->zoomOut(); }
 }
 
@@ -691,7 +691,7 @@ void
 MainWindow::zoomSelected()
 {
     debug_message("zoomSelected()");
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack)
     {
@@ -717,7 +717,7 @@ void
 MainWindow::zoomExtents()
 {
     debug_message("zoomExtents()");
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack)
     {
@@ -733,7 +733,7 @@ void
 MainWindow::panrealtime()
 {
     debug_message("panrealtime()");
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) { gview->panRealTime(); }
 }
 
@@ -744,7 +744,7 @@ void
 MainWindow::panpoint()
 {
     debug_message("panpoint()");
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) { gview->panPoint(); }
 }
 
@@ -755,7 +755,7 @@ void
 MainWindow::panLeft()
 {
     debug_message("panLeft()");
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack)
     {
@@ -771,7 +771,7 @@ void
 MainWindow::panRight()
 {
     debug_message("panRight()");
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack)
     {
@@ -787,7 +787,7 @@ void
 MainWindow::panUp()
 {
     debug_message("panUp()");
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack)
     {
@@ -803,7 +803,7 @@ void
 MainWindow::panDown()
 {
     debug_message("panDown()");
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack)
     {
@@ -819,7 +819,7 @@ MainWindow::panDown()
 void
 MainWindow::dayVision()
 {
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) {
         gview->setBackgroundColor(qRgb(255,255,255));
         gview->setCrossHairColor(qRgb(0,0,0));
@@ -834,7 +834,7 @@ MainWindow::dayVision()
 void
 MainWindow::nightVision()
 {
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) {
         gview->setBackgroundColor(qRgb(0,0,0));
         gview->setCrossHairColor(qRgb(255,255,255));
@@ -1187,7 +1187,7 @@ MainWindow::nativeSetGridColor(quint8 r, quint8 g, quint8 b)
 void
 MainWindow::nativePreviewOn(int clone, int mode, EmbReal x, EmbReal y, EmbReal data)
 {
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) gview->previewOn(clone, mode, x, -y, data);
 }
 
@@ -1197,7 +1197,7 @@ MainWindow::nativePreviewOn(int clone, int mode, EmbReal x, EmbReal y, EmbReal d
 void
 MainWindow::nativePreviewOff()
 {
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) gview->previewOff();
 }
 
@@ -1207,7 +1207,7 @@ MainWindow::nativePreviewOff()
 void
 MainWindow::nativeClearRubber()
 {
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) gview->clearRubberRoom();
 }
 
@@ -1216,7 +1216,7 @@ MainWindow::nativeClearRubber()
  */
 bool MainWindow::nativeAllowRubber()
 {
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) return gview->allowRubber();
     return false;
 }
@@ -1227,7 +1227,7 @@ bool MainWindow::nativeAllowRubber()
 void
 MainWindow::nativeSpareRubber(qint64 id)
 {
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview)
         gview->spareRubber(id);
 }
@@ -1240,7 +1240,7 @@ MainWindow::nativeSetRubberMode(std::vector<Parameter> a)
 {
     std::string mode = QString::fromStdString(a[0].s).toUpper().toStdString();
 
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) {
         if (mode == "CIRCLE_1P_RAD") {
             gview->setRubberMode(OBJ_RUBBER_CIRCLE_1P_RAD);
@@ -1313,7 +1313,7 @@ MainWindow::nativeSetRubberPoint(const QString& key, EmbReal x, EmbReal y)
     /*
     _mainWin->setRubberPoint(a[0].s.toUpper(), a[1].r, a[2].r);
     */
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) {
         gview->setRubberPoint(key, QPointF(x, -y));
     }
@@ -1325,7 +1325,7 @@ MainWindow::nativeSetRubberPoint(const QString& key, EmbReal x, EmbReal y)
 void
 MainWindow::nativeSetRubberText(const QString& key, const QString& txt)
 {
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) {
         gview->setRubberText(key, txt);
     }
@@ -1339,7 +1339,7 @@ MainWindow::nativeAddTextMulti(const QString& str, EmbReal x, EmbReal y, EmbReal
 void
 MainWindow::nativeAddTextSingle(const QString& str, EmbReal x, EmbReal y, EmbReal rot, bool fill, int rubberMode)
 {
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack)
@@ -1384,7 +1384,7 @@ MainWindow::nativeAddRay(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal
 void
 MainWindow::nativeAddLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, int rubberMode)
 {
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack)
@@ -1414,7 +1414,7 @@ MainWindow::nativeAddTriangle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, Em
 void
 MainWindow::nativeAddRectangle(EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot, bool fill, int rubberMode)
 {
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack)
@@ -1445,7 +1445,7 @@ MainWindow::nativeAddRoundedRectangle(EmbReal x, EmbReal y, EmbReal w, EmbReal h
 void
 MainWindow::nativeAddArc(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, int rubberMode)
 {
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     QGraphicsScene* scene = activeScene();
     if (gview && scene)
     {
@@ -1460,7 +1460,7 @@ MainWindow::nativeAddArc(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal m
 void
 MainWindow::nativeAddCircle(EmbReal centerX, EmbReal centerY, EmbReal radius, bool fill, int rubberMode)
 {
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack)
@@ -1500,7 +1500,7 @@ MainWindow::nativeAddSlot(EmbReal centerX, EmbReal centerY, EmbReal diameter, Em
 void
 MainWindow::nativeAddEllipse(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, EmbReal rot, bool fill, int rubberMode)
 {
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack)
@@ -1526,7 +1526,7 @@ MainWindow::nativeAddEllipse(EmbReal centerX, EmbReal centerY, EmbReal width, Em
 void
 MainWindow::nativeAddPoint(EmbReal x, EmbReal y)
 {
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack)
     {
@@ -1545,7 +1545,7 @@ MainWindow::nativeAddRegularPolygon(EmbReal centerX, EmbReal centerY, quint16 si
 void
 MainWindow::nativeAddPolygon(EmbReal startX, EmbReal startY, const QPainterPath& p, int rubberMode)
 {
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack)
@@ -1570,7 +1570,7 @@ MainWindow::nativeAddPolygon(EmbReal startX, EmbReal startY, const QPainterPath&
 void
 MainWindow::nativeAddPolyline(EmbReal startX, EmbReal startY, const QPainterPath& p, int rubberMode)
 {
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
@@ -1628,7 +1628,7 @@ MainWindow::nativeAddImage(const QString& img, EmbReal x, EmbReal y, EmbReal w, 
 void
 MainWindow::nativeAddDimLeader(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, int rubberMode)
 {
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
@@ -1653,7 +1653,7 @@ MainWindow::nativeAddDimLeader(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, E
 void
 MainWindow::nativeSetCursorShape(const QString& str)
 {
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) {
         QString shape = str.toLower();
         if (shape == "arrow")
@@ -1741,7 +1741,7 @@ MainWindow::nativePerpendicularDistance(EmbReal px, EmbReal py, EmbReal x1, EmbR
 
 int MainWindow::nativeNumSelected()
 {
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) {
         return gview->numSelected();
     }
@@ -1759,7 +1759,7 @@ MainWindow::nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode 
 void
 MainWindow::nativeDeleteSelected()
 {
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) {
         gview->deleteSelected();
     }
@@ -1815,7 +1815,7 @@ MainWindow::nativeMoveSelected(EmbReal dx, EmbReal dy)
     /*
     _mainWin->nativeMoveSelected(a[0].r, a[1].r);
     */
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) { gview->moveSelected(dx, -dy); }
 }
 
@@ -1842,7 +1842,7 @@ MainWindow::nativeScaleSelected(EmbReal x, EmbReal y, EmbReal factor)
             "If you are a developer, your code needs examined, and possibly your head too."));
     }
 
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) {
         gview->scaleSelected(x, -y, factor);
     }
@@ -1860,7 +1860,7 @@ MainWindow::nativeRotateSelected(EmbReal x, EmbReal y, EmbReal rot)
     /*
     _mainWin->nativeRotateSelected(a[0].r, a[1].r, a[2].r);
     */
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) {
         gview->rotateSelected(x, -y, -rot);
     }
@@ -1879,7 +1879,7 @@ MainWindow::nativeMirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
     /*
     _mainWin->nativeMirrorSelected(a[0].r, a[1].r, a[2].r, a[3].r);
     */
-    View* gview = activeView();
+    View* gview = _mainWin->activeView();
     if (gview) {
         gview->mirrorSelected(x1, -y1, x2, -y2);
     }
@@ -2315,7 +2315,7 @@ MainWindow::createAllActions()
             ACTION->setCheckable(true);
         }
 
-        auto f = [=](){ this->actuator(action.command); };
+        auto f = [=](){ actuator(action.command); };
         connect(ACTION, &QAction::triggered, this, f);
         actionHash[action.hash] = ACTION;
 
@@ -2359,7 +2359,7 @@ MainWindow::createAllActions()
  * @param fname The path of the script to run.
  */
 std::string
-MainWindow::run_script_file(std::string fname)
+run_script_file(std::string fname)
 {
     std::string output = "", line;
     std::ifstream file(fname);
@@ -2398,7 +2398,7 @@ MainWindow::run_script_file(std::string fname)
  *     ------------------------------------------------------------------
  */
 std::string
-MainWindow::run_script(std::vector<std::string> script)
+run_script(std::vector<std::string> script)
 {
     std::string output = "";
     for (std::string s : script) {
@@ -2444,7 +2444,7 @@ MainWindow::run_script(std::vector<std::string> script)
  * }
  */
 std::string
-MainWindow::actuator(std::string line)
+actuator(std::string line)
 {
     Parameter a[10];
     std::vector<std::string> list = tokenize(line, ' ');
@@ -2452,7 +2452,7 @@ MainWindow::actuator(std::string line)
     list.erase(list.begin());
 
     if (command == "about") {
-        about();
+        _mainWin->about();
         return "";
     }
 
@@ -2462,83 +2462,83 @@ MainWindow::actuator(std::string line)
         }
         command = list[0];
         if (command == "arc") {
-//            AddArc();
+//            _mainWin->AddArc();
             return "";
         }
         if (command == "circle") {
-//            AddCircle();
+//            _mainWin->AddCircle();
             return "";
         }
         if (command == "ellipse") {
-//           AddEllipse();
+//           _mainWin->AddEllipse();
             return "";
         }
         if (command == "point") {
-//            AddPoint();
+//            _mainWin->AddPoint();
             return "";
         }
         if (command == "regular-polygon") {
-//            AddRegularPolygon();
+//            _mainWin->AddRegularPolygon();
             return "";
         }
         if (command == "polygon") {
-//            AddPolygon();
+//            _mainWin->AddPolygon();
             return "";
         }
         if (command == "polyline") {
-//            AddPolyline();
+//            _mainWin->AddPolyline();
             return "";
         }
         if (command == "path") {
-//            AddPath();
+//            _mainWin->AddPath();
             return "";
         }
         if (command == "horizontal-dimension") {
-//            AddHorizontalDimension();
+//            _mainWin->AddHorizontalDimension();
             return "";
         }
         if (command == "vertical-dimension") {
-//            AddVerticalDimension();
+//            _mainWin->AddVerticalDimension();
             return "";
         }
         if (command == "image") {
-//            AddImage();
+//            _mainWin->AddImage();
             return "";
         }
         if (command == "dim-leader") {
-//            AddDimLeader();
+//            _mainWin->AddDimLeader();
             return "";
         }
         if (command == "text-multi") {
-//            AddTextMulti();
+//            _mainWin->AddTextMulti();
             return "";
         }
         if (command == "text-single") {
-//            AddTextSingle();
+//            _mainWin->AddTextSingle();
             return "";
         }
         if (command == "infinite-line") {
- //           AddInfiniteLine();
+ //           _mainWin->AddInfiniteLine();
             return "";
         }
         if (command == "ray") {
-//            AddRay();
+//            _mainWin->AddRay();
             return "";
         }
         if (command == "line") {
-//            AddLine();
+//            _mainWin->AddLine();
             return "";
         }
         if (command == "triangle") {
-//            AddTriangle();
+//            _mainWin->AddTriangle();
             return "";
         }
         if (command == "rectangle") {
-//            AddRectangle();
+//            _mainWin->AddRectangle();
             return "";
         }
         if (command == "rounded-rectangle") {
-//            AddRoundedRectangle();
+//            _mainWin->AddRoundedRectangle();
             return "";
         }
         return "</br>The add subcommand is not recognised.";
@@ -2550,7 +2550,7 @@ MainWindow::actuator(std::string line)
     }
 
     if (command == "day") {
-        dayVision();
+        _mainWin->dayVision();
         return "";
     }
 
@@ -2559,7 +2559,7 @@ MainWindow::actuator(std::string line)
     }
 
     if (command == "end") {
-        View* gview = activeView();
+        View* gview = _mainWin->activeView();
         if (gview) {
             gview->clearRubberRoom();
             gview->previewOff();
@@ -2570,17 +2570,17 @@ MainWindow::actuator(std::string line)
     }
 
     if ((command == "exit") || (command == "quit")) {
-        quit();
+        _mainWin->quit();
         return "";
     }
 
     if (command == "help") {
-        help();
+        _mainWin->help();
         return "";
     }
 
     if (command == "init") {            
-        View* gview = activeView();
+        View* gview = _mainWin->activeView();
         if (gview) {
             gview->clearRubberRoom();
         }
@@ -2589,27 +2589,27 @@ MainWindow::actuator(std::string line)
 
     if (command == "new") {
         actuator("clear-selection");
-        newFile();
+        _mainWin->newFile();
         return "";
     }
 
     if (command == "night") {
-        nightVision();
+        _mainWin->nightVision();
         return "";
     }
 
     if (command == "platform") {
-        return "<br/>" + platformString().toStdString();
+        return "<br/>" + _mainWin->platformString().toStdString();
     }
 
     if (command == "redo") {
-        redo();
+        _mainWin->redo();
         return "";
     }
 
     if (command == "selectall") {
         debug_message("selectAll()");
-        View* gview = activeView();
+        View* gview = _mainWin->activeView();
         if (gview) {
             gview->selectAll();
         }
@@ -2622,12 +2622,12 @@ MainWindow::actuator(std::string line)
     }
 
     if (command == "tipoftheday") {
-        tipOfTheDay();
+        _mainWin->tipOfTheDay();
         return "";
     }
 
     if (command == "undo") {
-        undo();
+        _mainWin->undo();
         return "";
     }
 
@@ -2641,7 +2641,7 @@ MainWindow::actuator(std::string line)
             return "";
         }
         if (command == "close") {
-            onCloseWindow();
+            _mainWin->onCloseWindow();
             return "";
         }
         if (command == "closeall") {
@@ -2669,22 +2669,22 @@ MainWindow::actuator(std::string line)
         }
         command = list[0];
         if (command == "extents") {
-            zoomExtents();
+            _mainWin->zoomExtents();
             return "";
         }
         if (command == "in") {
-            zoomIn();
+            _mainWin->zoomIn();
             return "";
         }
         if (command == "out") {
-            zoomOut();
+            _mainWin->zoomOut();
             return "";
         }
         return "</br>zoom argument not recognised.";
     }
 
     if (command == "open") {
-        openFile();
+        _mainWin->openFile();
         return "";
     }
 
@@ -2695,39 +2695,39 @@ MainWindow::actuator(std::string line)
         command = list[0];
         if (command == "16") {
             debug_message("icon16()");
-            iconResize(16);
+            _mainWin->iconResize(16);
             return "";
         }
         if (command == "24") {
             debug_message("icon24()");
-            iconResize(24);
+            _mainWin->iconResize(24);
             return "";
         }
         if (command == "32") {
             debug_message("icon32()");
-            iconResize(32);
+            _mainWin->iconResize(32);
             return "";
         }
         if (command == "48") {
             debug_message("icon48()");
-            iconResize(48);
+            _mainWin->iconResize(48);
             return "";
         }
         if (command == "64") {
             debug_message("icon64()");
-            iconResize(64);
+            _mainWin->iconResize(64);
             return "";
         }
         if (command == "128") {
             debug_message("icon128()");
-            iconResize(128);
+            _mainWin->iconResize(128);
             return "";
         }
         return "";
     }
 
     if (command == "settingsdialog") {
-        settingsDialog();
+        _mainWin->settingsDialog();
         return "";
     }
 
@@ -2737,21 +2737,22 @@ MainWindow::actuator(std::string line)
         }
         command = list[0];
         if (command == "left") {
-            panLeft();
+            _mainWin->panLeft();
             return "";
         }
         if (command == "right") {
-            panRight();
+            _mainWin->panRight();
             return "";
         }
         if (command == "up") {
-            panUp();
+            _mainWin->panUp();
             return "";
         }
         if (command == "down") {
-            panDown();
+            _mainWin->panDown();
             return "";
         }
+        return "";
     }
 
     if (command == "text") {
@@ -2866,7 +2867,7 @@ MainWindow::actuator(std::string line)
             return "";
         }
         if (command == "move-rapid-fire") {            
-            View* gview = activeView();
+            View* gview = _mainWin->activeView();
             if (gview) {
                 gview->enableMoveRapidFire();
             }
@@ -2908,7 +2909,7 @@ MainWindow::actuator(std::string line)
             return "";
         }
         if (command == "move-rapid-fire") {            
-            View* gview = activeView();
+            View* gview = _mainWin->activeView();
             if (gview) {
                 gview->disableMoveRapidFire();
             }
@@ -2942,7 +2943,7 @@ MainWindow::actuator(std::string line)
     */
 
     if (command == "clear-selection") {
-        View* gview = activeView();
+        View* gview = _mainWin->activeView();
         if (gview) {
             gview->clearSelection();
         }
@@ -3047,7 +3048,7 @@ MainWindow::actuator(std::string line)
     */
 
     if (command == "vulcanize") {
-        View* gview = activeView();
+        View* gview = _mainWin->activeView();
         if (gview) {
             gview->vulcanizeRubberRoom();
         }
@@ -3292,8 +3293,7 @@ Todo(std::vector<Parameter> a)
     return "";
 }
 
-#if 0
-
+/*
 std::string
 AppendPromptHistory(std::vector<Parameter> a)
 {
@@ -3309,6 +3309,7 @@ AppendPromptHistory(std::vector<Parameter> a)
     }
     return "";
 }
+*/
 
 /**
  * argument string "sss"
@@ -3333,6 +3334,7 @@ MessageBox(std::vector<Parameter> a)
 /**
  * argument string "i"
  */
+ /*
 std::string
 IsInt(std::vector<Parameter> a)
 {
@@ -3343,21 +3345,25 @@ IsInt(std::vector<Parameter> a)
 
     return std::string(true);
 }
+*/
 
 /**
  * argument string "rrrr"
  */
+ /*
 std::string
 PrintArea(std::vector<Parameter> a)
 {
     _mainWin->nativePrintArea(a[0].r, a[1].r, a[2].r, a[3].r);
     return "";
 }
+*/
 
 /**
  *
  * argument string "iii"
  */
+ /*
 std::string
 SetBackgroundColor(std::vector<Parameter> a)
 {
@@ -3372,11 +3378,13 @@ SetBackgroundColor(std::vector<Parameter> a)
     _mainWin->setBackgroundColor(r, g, b);
     return "";
 }
+*/
 
 /**
  * .
  * argument string "iii"
  */
+ /*
 std::string
 SetCrossHairColor(std::vector<Parameter> a)
 {
@@ -3400,11 +3408,13 @@ SetCrossHairColor(std::vector<Parameter> a)
     _mainWin->setCrossHairColor(r, g, b);
     return "";
 }
+*/
 
 /**
  * .
  * argument string "iii"
  */
+ /*
 std::string
 SetGridColor(std::vector<Parameter> a)
 {
@@ -3432,60 +3442,12 @@ SetTextAngle(std::vector<Parameter> a)
     _mainWin->setTextAngle(a[0].r);
     return "";
 }
+*/
 
 /**
  * .
  */
-std::string
-SetTextBold(std::vector<Parameter> a)
-{
-    _mainWin->setTextBold(a[0].b);
-    return "";
-}
-
-/**
- * .
- */
-std::string
-SetTextItalic(std::vector<Parameter> a)
-{
-    _mainWin->setTextItalic(a[0].b);
-    return "";
-}
-
-/**
- * .
- */
-std::string
-SetTextUnderline(std::vector<Parameter> a)
-{
-    _mainWin->setTextUnderline(a[0].b);
-    return "";
-}
-
-/**
- * .
- */
-std::string
-SetTextStrikeOut(std::vector<Parameter> a)
-{
-    _mainWin->setTextStrikeOut(a[0].b);
-    return "";
-}
-
-/**
- * \brief
- */
-std::string
-SetTextOverline(std::vector<Parameter> a)
-{
-    _mainWin->setTextOverline(a[0].b);
-    return "";
-}
-
-/**
- * .
- */
+ /*
 std::string
 PreviewOn(std::vector<Parameter> a)
 {
@@ -3512,10 +3474,12 @@ PreviewOn(std::vector<Parameter> a)
 
 "preview off", nativePreviewOff();
 "allow rubber", nativeAllowRubber();
+*/
 
 /**
  * \brief
  */
+ /*
 std::string
 SetRubberText(std::vector<Parameter> a)
 {
@@ -3617,10 +3581,12 @@ SpareRubber(std::vector<Parameter> a)
 
     return "";
 }
+*/
 
 /**
  * \brief
  */
+ /*
 std::string
 AddTextMulti(std::vector<Parameter> a)
 {
@@ -3634,10 +3600,12 @@ AddTextSingle(std::vector<Parameter> a)
     _mainWin->nativeAddTextSingle(a[0].s, a[1].r, a[2].r, a[3].r, a[4].b, OBJ_RUBBER_OFF);
     return "";
 }
+*/
 
 /**
  * \brief
  */
+ /*
 std::string
 AddInfiniteLine(std::vector<Parameter> a)
 {
@@ -3645,10 +3613,12 @@ AddInfiniteLine(std::vector<Parameter> a)
     debug_message("TODO: finish addInfiniteLine command");
     return "";
 }
+*/
 
 /**
  * \brief
  */
+ /*
 std::string
 AddRay(std::vector<Parameter> a)
 {
@@ -3840,8 +3810,7 @@ PerpendicularDistance(std::vector<Parameter> a)
     EmbReal result = _mainWin->nativePerpendicularDistance(
         a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r);
     return std::string(result);
-
-#endif
+*/
 
 /**
  * @brief MainWindow::getAction
@@ -4458,8 +4427,6 @@ MainWindow::floatingChangedToolBar(bool isFloating)
     }
 }
 
-#if 0
-
 /**
  *
  */
@@ -4493,8 +4460,9 @@ circle_main(void)
  * .
  */
 void
-circle_click(float x, float y)
+circle_click(UiObject *global, EmbVector v)
 {
+    /*
     if (global->mode == MODE_1P_RAD) {
         if (std::isnan(global.x1)) {
             global.x1 = x;
@@ -4513,7 +4481,7 @@ circle_click(float x, float y)
             setRubberPoint("CIRCLE_RADIUS", global.x2, global.y2);
             actuator("vulcanize");
             appendPromptHistory();
-            //endCommand();
+            actuator("end");
         }
     }
     else if (global->mode == MODE_1P_DIA) {
@@ -4526,7 +4494,7 @@ circle_click(float x, float y)
             setRubberPoint("CIRCLE_DIAMETER", global.x2, global.y2);
             actuator("vulcanize");
             appendPromptHistory();
-            //endCommand();
+            actuator("end");
         }
     }
     else if (global->mode == MODE_2P) {
@@ -4545,7 +4513,7 @@ circle_click(float x, float y)
             setRubberPoint("CIRCLE_TAN2", global.x2, global.y2);
             actuator("vulcanize");
             appendPromptHistory();
-            //endCommand();
+            actuator("end");
         }
         else {
             error("CIRCLE", tr("This should never happen."));
@@ -4574,7 +4542,7 @@ circle_click(float x, float y)
             setRubberPoint("CIRCLE_TAN3", global.x3, global.y3);
             actuator("vulcanize");
             appendPromptHistory();
-            //endCommand();
+            actuator("end");
         }
         else {
             error("CIRCLE", tr("This should never happen."));
@@ -4603,6 +4571,7 @@ circle_click(float x, float y)
             todo("CIRCLE", "click() for TTR");
         }
     }
+    */
 }
 
 /**
@@ -4611,7 +4580,7 @@ circle_click(float x, float y)
 void
 circle_context(std::string str)
 {
-    todo("CIRCLE", "context()");
+    //todo("CIRCLE", "context()");
 }
 
 /**
@@ -4620,6 +4589,7 @@ circle_context(std::string str)
 std::string
 circle_prompt(std::string str)
 {
+    /*
     if (global->mode == MODE_1P_RAD) {
         if (std::isnan(global.x1)) {
             if (str == "2P") {
@@ -4670,7 +4640,7 @@ circle_prompt(std::string str)
                     global.y2 = global.y1;
                     setRubberPoint("CIRCLE_RADIUS", global.x2, global.y2);
                     actuator("vulcanize");
-                    //endCommand();
+                    actuator("end");
                 }
             }
         }
@@ -4691,7 +4661,7 @@ circle_prompt(std::string str)
                 global.y2 = global.y1;
                 setRubberPoint("CIRCLE_DIAMETER", global.x2, global.y2);
                 actuator("vulcanize");
-                //endCommand();
+                actuator("end");
             }
         }
         else {
@@ -4725,7 +4695,7 @@ circle_prompt(std::string str)
                 global.y2 = Number(strList[1]);
                 setRubberPoint("CIRCLE_TAN2", global.x2, global.y2);
                 actuator("vulcanize");
-                //endCommand();
+                actuator("end");
             }
         }
         else {
@@ -4772,7 +4742,7 @@ circle_prompt(std::string str)
                 global.y3 = Number(strList[1]);
                 setRubberPoint("CIRCLE_TAN3", global.x3, global.y3);
                 actuator("vulcanize");
-                //endCommand();
+                actuator("end");
             }
         }
         else {
@@ -4782,19 +4752,22 @@ circle_prompt(std::string str)
     else if (global->mode == MODE_TTR) {
         todo("CIRCLE", "prompt() for TTR");
     }
+    */
 }
 
-//Command: Distance
-
-var global = {}; //Required
-global.x1;
-global.y1;
-global.x2;
-global.y2;
-
+/**
+ * .
+ */
 void
 distance_main()
 {
+    /*
+    var global = {}; //Required
+    global.x1;
+    global.y1;
+    global.x2;
+    global.y2;
+
     initCommand();
     clearSelection();
     global.x1 = NaN;
@@ -4802,12 +4775,16 @@ distance_main()
     global.x2 = NaN;
     global.y2 = NaN;
     setPromptPrefix(tr("Specify first point: "));
+    */
 }
 
-
+/**
+ * .
+ */
 void
-distance_click(x, y)
+distance_click(UiObject *global, EmbVector v)
 {
+    /*
     if (std::isnan(global.x1)) {
         global.x1 = x;
         global.y1 = y;
@@ -4822,18 +4799,23 @@ distance_click(x, y)
         global.x2 = x;
         global.y2 = y;
         reportDistance();
-        //endCommand();
+        actuator("end");
     }
+    */
 }
 
+/**
+ * .
+ */
 void
-distance_context(str)
+distance_context(std::string str)
 {
-    todo("DISTANCE", "context()");
+    //todo("DISTANCE", "context()");
 }
 
+/*
 void
-prompt(str)
+distance_prompt(std::string str)
 {
     EmbReal strList = str.split(",");
     if (std::isnan(global.x1)) {
@@ -4859,10 +4841,11 @@ prompt(str)
             global.x2 = Number(strList[0]);
             global.y2 = Number(strList[1]);
             reportDistance();
-            //endCommand();
+            actuator("end");
         }
     }
 }
+*/
 
 /**
  * Cartesian Coordinate System reported:
@@ -4875,6 +4858,7 @@ prompt(str)
  *              270
  *              (-)
  */
+ /*
 void
 reportDistance()
 {
@@ -4889,25 +4873,24 @@ reportDistance()
     setPromptPrefix(tr("Delta X") + " = " + dx.toString() + ", " + tr("Delta Y") + " = " + dy.toString());
     appendPromptHistory();
 }
-
-//Command: Dolphin
-
-var global = {}; //Required
-global.numPoints = 512; //Default //TODO: min:64 max:8192
-global->center.x;
-global->center.y;
-global.sx = 0.04; //Default
-global.sy = 0.04; //Default
-global.numPoints;
-global.mode;
-
+*/
 
 /**
  *
  */
+ /*
 void
 dolphin_main(void)
 {
+    var global = {}; //Required
+    global.numPoints = 512; //Default //TODO: min:64 max:8192
+    global->center.x;
+    global->center.y;
+    global.sx = 0.04; //Default
+    global.sy = 0.04; //Default
+    global.numPoints;
+    global.mode;
+
     initCommand();
     clearSelection();
     global->center.x = NaN;
@@ -4918,12 +4901,14 @@ dolphin_main(void)
     setRubberMode("POLYGON");
     updateDolphin(global.numPoints, global.sx, global.sy);
     spareRubber("POLYGON");
-    //endCommand();
+    actuator("end");
 }
+*/
 
 /**
  * .
  */
+ /*
 void
 updateDolphin(int numPoints, EmbReal xScale, EmbReal yScale)
 {
@@ -4938,22 +4923,20 @@ updateDolphin(int numPoints, EmbReal xScale, EmbReal yScale)
 
     setRubberText("POLYGON_NUM_POINTS", numPoints.toString());
 }
-
-
-//Command: Ellipse
-
-var global = {}; //Required
-global.width;
-global.height;
-global.rot;
-global.mode;
+*/
 
 /**
  * .
  */
+ /*
 UiObject
 ellipse_main(void)
 {
+    var global = {}; //Required
+    global.width;
+    global.height;
+    global.rot;
+    global.mode;
     initCommand();
     clearSelection();
     global.mode = MODE_MAJORDIAMETER_MINORRADIUS;
@@ -4964,10 +4947,14 @@ ellipse_main(void)
     setPromptPrefix(tr("Specify first axis start point or [Center]: "));
     return global;
 }
+*/
 
-
+/**
+ * .
+ */
+ /*
 void
-click(x, y)
+ellipse_click(x, y)
 {
     if (global->mode == MODE_MAJORDIAMETER_MINORRADIUS) {
         if (std::isnan(global.x1)) {
@@ -5002,7 +4989,7 @@ click(x, y)
             setRubberPoint("ELLIPSE_AXIS2_POINT2", global.x3, global.y3);
             actuator("vulcanize");
             appendPromptHistory();
-            //endCommand();
+            actuator("end");
         }
         else {
             error("ELLIPSE", tr("This should never happen."));
@@ -5040,7 +5027,7 @@ click(x, y)
             setRubberPoint("ELLIPSE_AXIS2_POINT2", global.x3, global.y3);
             actuator("vulcanize");
             appendPromptHistory();
-            //endCommand();
+            actuator("end");
         }
         else {
             error("ELLIPSE", tr("This should never happen."));
@@ -5058,19 +5045,29 @@ click(x, y)
             global.height = cos(angle*PI/180.0)*global.width;
             addEllipse(global->center.x, global->center.y, global.width, global.height, global.rot, false);
             appendPromptHistory();
-            //endCommand();
+            actuator("end");
         }
     }
 }
+*/
 
+/**
+ * .
+ */
+ /*
 void
-context(str)
+ellipse_context(str)
 {
     todo("ELLIPSE", "context()");
 }
+*/
 
+/**
+ * .
+ */
+ /*
 void
-prompt(str)
+ellipse_prompt(str)
 {
     if (global->mode == MODE_MAJORDIAMETER_MINORRADIUS) {
         if (std::isnan(global.x1)) {
@@ -5133,7 +5130,7 @@ prompt(str)
                     global.height = perpendicularDistance(global.x3, global.y3, global.x1, global.y1, global.x2, global.y2)*2.0;
                     setRubberPoint("ELLIPSE_AXIS2_POINT2", global.x3, global.y3);
                     actuator("vulcanize");
-                    //endCommand();
+                    actuator("end");
                 }
             }
         }
@@ -5192,7 +5189,7 @@ prompt(str)
                     global.height = perpendicularDistance(global.x3, global.y3, global.x1, global.y1, global.x2, global.y2)*2.0;
                     setRubberPoint("ELLIPSE_AXIS2_POINT2", global.x3, global.y3);
                     actuator("vulcanize");
-                    //endCommand();
+                    actuator("end");
                 }
             }
         }
@@ -5213,28 +5210,26 @@ prompt(str)
                 EmbReal angle = Number(str);
                 global.height = cos(angle*PI/180.0)*global.width;
                 addEllipse(global->center.x, global->center.y, global.width, global.height, global.rot, false);
-                //endCommand();
+                actuator("end");
             }
         }
     }
 }
 
-//Command: Erase/Delete
-
 void
-main()
+erase_main()
 {
     initCommand();
 
     if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
         alert(tr("Preselect objects before invoking the delete command."));
-        //endCommand();
+        actuator("end");
         messageBox("information", tr("Delete Preselect"), tr("Preselect objects before invoking the delete command."));
     }
     else {
         deleteSelected();
-        //endCommand();
+        actuator("end");
     }
 }
 
@@ -5250,7 +5245,7 @@ global.numPoints;
 global.mode;
 
 void
-main()
+heart_main()
 {
     initCommand();
     clearSelection();
@@ -5265,12 +5260,14 @@ main()
     setRubberMode("POLYGON");
     updateHeart("HEART5", global.numPoints, global.sx, global.sy);
     spareRubber("POLYGON");
-    //endCommand();
+    actuator("end");
 }
+*/
 
 /**
  * .
  */
+ /*
 void
 updateHeart(style, numPoints, xScale, yScale)
 {
@@ -5293,17 +5290,10 @@ updateHeart(style, numPoints, xScale, yScale)
     setRubberText("POLYGON_NUM_POINTS", numPoints.toString());
 }
 
-
-//Command: Line
-
-var global = {}; //Required
-bool firstRun;
-EmbVector first;
-EmbVector prev;
-
 void
-main()
+line_main()
 {
+    var global = {}; //Required
     initCommand();
     clearSelection();
     global.firstRun = true;
@@ -5314,7 +5304,7 @@ main()
 
 
 void
-click(x, y)
+line_click(x, y)
 {
     if (global.firstRun) {
         global.firstRun = false;
@@ -5341,13 +5331,13 @@ click(x, y)
 }
 
 void
-context(str)
+line_context(std::string str)
 {
     todo("LINE", "context()");
 }
 
 void
-prompt(str)
+line_prompt(str)
 {
     if (global.firstRun) {
         EmbReal strList = str.split(",");
@@ -5396,7 +5386,7 @@ prompt(str)
 //Command: Locate Point
 
 void
-main()
+locate_point_main()
 {
     initCommand();
     clearSelection();
@@ -5405,22 +5395,22 @@ main()
 
 
 void
-click(x, y)
+locate_point_click(x, y)
 {
     appendPromptHistory();
     setPromptPrefix("X = " + x.s + ", Y = " + y.s);
     appendPromptHistory();
-    //endCommand();
+    actuator("end");
 }
 
 void
-context(str)
+locate_point_context(std::string str)
 {
     todo("LOCATEPOINT", "context()");
 }
 
 void
-prompt(str)
+locate_point_prompt(str)
 {
     EmbReal strList = str.split(",");
     if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -5431,7 +5421,7 @@ prompt(str)
         appendPromptHistory();
         setPromptPrefix("X = " + strList[0].s + ", Y = " + strList[1].toString());
         appendPromptHistory();
-        //endCommand();
+        actuator("end");
     }
 }
 
@@ -5445,10 +5435,12 @@ global.destX;
 global.destY;
 global.deltaX;
 global.deltaY;
+*/
 
 /**
  * .
  */
+ /*
 void
 move_main()
 {
@@ -5464,19 +5456,21 @@ move_main()
     if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
         alert(tr("Preselect objects before invoking the move command."));
-        //endCommand();
+        actuator("end");
         messageBox("information", tr("Move Preselect"), tr("Preselect objects before invoking the move command."));
     }
     else {
         setPromptPrefix(tr("Specify base point: "));
     }
 }
+*/
 
 /**
  * .
  */
+ /*
 void
-click(x, y)
+move_click(x, y)
 {
     if (global.firstRun) {
         global.firstRun = false;
@@ -5496,25 +5490,27 @@ click(x, y)
         global.deltaY = global.destY - global.baseY;
         moveSelected(global.deltaX, global.deltaY);
         previewOff();
-        //endCommand();
+        actuator("end");
     }
 }
+*/
 
 /**
  * .
  */
 void
-context(str)
+move_context(std::string str)
 {
-    todo("MOVE", "context()");
+    // todo("MOVE", "context()");
 }
 
 /**
  * .
  */
 void
-prompt(str)
+move_prompt(std::string str)
 {
+    /*
     if (global.firstRun) {
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -5545,13 +5541,15 @@ prompt(str)
             global.deltaY = global.destY - global.baseY;
             moveSelected(global.deltaX, global.deltaY);
             previewOff();
-            //endCommand();
+            actuator("end");
         }
     }
+    */
 }
 
 //Command: Path
 
+/*
 //TODO: The path command is currently broken
 
 var global = {}; //Required
@@ -5562,7 +5560,7 @@ global.prevX;
 global.prevY;
 
 void
-main()
+path_main()
 {
     initCommand();
     clearSelection();
@@ -5576,7 +5574,7 @@ main()
 
 
 void
-click(x, y)
+path_click(x, y)
 {
     if (global.firstRun) {
         global.firstRun = false;
@@ -5597,13 +5595,13 @@ click(x, y)
 }
 
 void
-context(str)
+path_context(std::string str)
 {
     todo("PATH", "context()");
 }
 
 void
-prompt(str)
+path_prompt(str)
 {
     if (str == "A" || str == "ARC") {
         todo("PATH", "prompt() for ARC");
@@ -5638,20 +5636,22 @@ prompt(str)
     }
 }
 
-void
+UiObject
 point_main()
 {
+    UiObject global;
     initCommand();
     clearSelection();
     global.firstRun = true;
     setPromptPrefix("TODO: Current point settings: PDMODE=?  PDSIZE=?"); //TODO: tr needed here when complete
     appendPromptHistory();
     setPromptPrefix(tr("Specify first point: "));
+    return global;
 }
 
 
 void
-point_click(x, y)
+point_click(UiObject *global, EmbVector v)
 {
     if (global.firstRun) {
         global.firstRun = false;
@@ -5666,13 +5666,13 @@ point_click(x, y)
 }
 
 void
-point_context(str)
+point_context(std::string str)
 {
     todo("POINT", "context()");
 }
 
 void
-point_prompt(str)
+point_prompt(std::string str)
 {
     if (global.firstRun) {
         if (str == "M" || str == "MODE") {
@@ -5712,8 +5712,7 @@ point_prompt(str)
 //Command: Polygon
 
 var global = {}; //Required
-global->centerX;
-global->centerY;
+global->center;
 global.sideX1;
 global.sideY1;
 global.sideX2;
@@ -5725,10 +5724,12 @@ global.pointCY;
 global.polyType = "Inscribed"; //Default
 global.numSides = 4;           //Default
 global.mode;
+*/
 
 /**
  * .
  */
+ /*
 void
 polygon_main()
 {
@@ -5747,13 +5748,15 @@ polygon_main()
     global.mode = MODE_NUM_SIDES;
     setPromptPrefix(tr("Enter number of sides") + " {" + global.numSides.toString() + "}: ");
 }
+*/
 
 /**
  * .
  */
 void
-polygon_click(x, y)
+polygon_click(UiObject *global, EmbVector v)
 {
+    /*
     if (global->mode == MODE_NUM_SIDES) {
         //Do nothing, the prompt controls this.
     }
@@ -5773,7 +5776,7 @@ polygon_click(x, y)
         setRubberPoint("POLYGON_INSCRIBE_POINT", global.pointIX, global.pointIY);
         actuator("vulcanize");
         appendPromptHistory();
-        //endCommand();
+        actuator("end");
     }
     else if (global->mode == MODE_CIRCUMSCRIBE) {
         global.pointCX = x;
@@ -5781,7 +5784,7 @@ polygon_click(x, y)
         setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", global.pointCX, global.pointCY);
         actuator("vulcanize");
         appendPromptHistory();
-        //endCommand();
+        actuator("end");
     }
     else if (global->mode == MODE_DISTANCE) {
         //Do nothing, the prompt controls this.
@@ -5789,23 +5792,25 @@ polygon_click(x, y)
     else if (global->mode == MODE_SIDE_LEN) {
         todo("POLYGON", "Sidelength mode");
     }
+    */
 }
 
 /**
  * .
  */
 void
-polygon_context(str)
+polygon_context(std::string str)
 {
-    todo("POLYGON", "context()");
+    //todo("POLYGON", "context()");
 }
 
 /**
  * .
  */
 void
-polygon_prompt(str)
+polygon_prompt(std::string str)
 {
+    /*
     if (global->mode == MODE_NUM_SIDES) {
         if (str == "" && global.numSides >= 3 && global.numSides <= 1024) {
             setPromptPrefix(tr("Specify center point or [Sidelength]: "));
@@ -5904,7 +5909,7 @@ polygon_prompt(str)
                 global.pointIY = Number(strList[1]);
                 setRubberPoint("POLYGON_INSCRIBE_POINT", global.pointIX, global.pointIY);
                 actuator("vulcanize");
-                //endCommand();
+                actuator("end");
             }
         }
     }
@@ -5924,7 +5929,7 @@ polygon_prompt(str)
                 global.pointCY = Number(strList[1]);
                 setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", global.pointCX, global.pointCY);
                 actuator("vulcanize");
-                //endCommand();
+                actuator("end");
             }
         }
     }
@@ -5939,14 +5944,14 @@ polygon_prompt(str)
                 global.pointIY = global->centerY + Number(str);
                 setRubberPoint("POLYGON_INSCRIBE_POINT", global.pointIX, global.pointIY);
                 actuator("vulcanize");
-                //endCommand();
+                actuator("end");
             }
             else if (global.polyType == "Circumscribed") {
                 global.pointCX = global->centerX;
                 global.pointCY = global->centerY + Number(str);
                 setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", global.pointCX, global.pointCY);
                 actuator("vulcanize");
-                //endCommand();
+                actuator("end");
             }
             else {
                 error("POLYGON", tr("Polygon type is not Inscribed or Circumscribed."));
@@ -5956,10 +5961,11 @@ polygon_prompt(str)
     else if (global->mode == MODE_SIDE_LEN) {
         todo("POLYGON", "Sidelength mode");
     }
+    */
 }
 
 //Command: Polyline
-
+/*
 var global = {}; //Required
 global.firstRun;
 global.firstX;
@@ -5967,6 +5973,7 @@ global.firstY;
 global.prevX;
 global.prevY;
 global.num;
+*/
 
 /**
  * .
@@ -5974,6 +5981,7 @@ global.num;
 void
 polyline_main()
 {
+    /*
     initCommand();
     clearSelection();
     global.firstRun = true;
@@ -5983,14 +5991,16 @@ polyline_main()
     global.prevY = NaN;
     global.num = 0;
     setPromptPrefix(tr("Specify first point: "));
+    */
 }
 
 /**
  * .
  */
 void
-polyline_click(x, y)
+polyline_click(UiObject *global, EmbVector v)
 {
+    /*
     if (global.firstRun) {
         global.firstRun = false;
         global.firstX = x;
@@ -6012,23 +6022,25 @@ polyline_click(x, y)
         global.prevX = x;
         global.prevY = y;
     }
+    */
 }
 
 /**
  * .
  */
 void
-polyline_context(str)
+polyline_context(std::string str)
 {
-    todo("POLYLINE", "context()");
+    //todo("POLYLINE", "context()");
 }
 
 /**
  * .
  */
 void
-polyline_prompt(str)
+polyline_prompt(std::string str)
 {
+    /*
     if (global.firstRun) {
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -6070,15 +6082,18 @@ polyline_prompt(str)
             }
         }
     }
+    */
 }
 
 //Command: QuickLeader
 
+/*
 var global = {}; //Required
 global.x1;
 global.y1;
 global.x2;
 global.y2;
+*/
 
 //TODO: Adding the text is not complete yet.
 
@@ -6088,6 +6103,7 @@ global.y2;
 void
 quickleader_main()
 {
+    /*
     initCommand();
     clearSelection();
     global.x1 = NaN;
@@ -6095,14 +6111,16 @@ quickleader_main()
     global.x2 = NaN;
     global.y2 = NaN;
     setPromptPrefix(tr("Specify first point: "));
+    */
 }
 
 /**
  * .
  */
 void
-quickleader_click(x, y)
+quickleader_click(UiObject *global, EmbVector v)
 {
+    /*
     if (std::isnan(global.x1)) {
         global.x1 = x;
         global.y1 = y;
@@ -6118,25 +6136,27 @@ quickleader_click(x, y)
         setRubberPoint("DIMLEADER_LINE_END", global.x2, global.y2);
         actuator("vulcanize");
         appendPromptHistory();
-        //endCommand();
+        actuator("end");
     }
+    */
 }
 
 /**
  * .
  */
 void
-quickleader_context(str)
+quickleader_context(std::string str)
 {
-    todo("QUICKLEADER", "context()");
+    //todo("QUICKLEADER", "context()");
 }
 
 /**
  * .
  */
 void
-quickleader_prompt(str)
+quickleader_prompt(std::string str)
 {
+    /*
     EmbReal strList = str.split(",");
     if (std::isnan(global.x1)) {
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -6162,19 +6182,22 @@ quickleader_prompt(str)
             global.y2 = Number(strList[1]);
             setRubberPoint("DIMLEADER_LINE_END", global.x2, global.y2);
             actuator("vulcanize");
-            //endCommand();
+            actuator("end");
         }
     }
+    */
 }
 
 //Command: Rectangle
 
+/*
 var global = {}; //Required
 global.newRect;
 global.x1;
 global.y1;
 global.x2;
 global.y2;
+*/
 
 /**
  * .
@@ -6182,6 +6205,7 @@ global.y2;
 void
 rectangle_main()
 {
+    /*
     initCommand();
     clearSelection();
     global.newRect = true;
@@ -6190,14 +6214,16 @@ rectangle_main()
     global.x2 = NaN;
     global.y2 = NaN;
     setPromptPrefix(tr("Specify first corner point or [Chamfer/Fillet]: "));
+    */
 }
 
 /**
  * .
  */
 void
-rectangle_click(x, y)
+rectangle_click(UiObject *global, EmbVector v)
 {
+    /*
     if (global.newRect) {
         global.newRect = false;
         global.x1 = x;
@@ -6213,25 +6239,27 @@ rectangle_click(x, y)
         global.y2 = y;
         setRubberPoint("RECTANGLE_END", x, y);
         actuator("vulcanize");
-        //endCommand();
+        actuator("end");
     }
+    */
 }
 
 /**
  * .
  */
 void
-rectangle_context(str)
+rectangle_context(std::string str)
 {
-    todo("RECTANGLE", "context()");
+    //todo("RECTANGLE", "context()");
 }
 
 /**
  * .
  */
 void
-rectangle_prompt(str)
+rectangle_prompt(std::string str)
 {
+    /*
     if (str == "C" || str == "CHAMFER") {
         todo("RECTANGLE", "prompt() for CHAMFER");
     }
@@ -6265,16 +6293,17 @@ rectangle_prompt(str)
                 global.y2 = y;
                 setRubberPoint("RECTANGLE_END", x, y);
                 actuator("vulcanize");
-                //endCommand();
+                actuator("end");
             }
         }
     }
+    */
 }
 
 //Command: RGB
 
-var global = {}; //Required
-global.mode;
+//var global = {}; //Required
+//global.mode;
 
 /**
  * .
@@ -6282,17 +6311,19 @@ global.mode;
 void
 rgb_main()
 {
+    /*
     initCommand();
     clearSelection();
     global.mode = RGB_MODE_BACKGROUND;
     setPromptPrefix(tr("Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: "));
+    */
 }
 
 /**
  * .
  */
 void
-rgb_click(x, y)
+rgb_click(UiObject *global, EmbVector v)
 {
     //Do Nothing, prompt only command.
 }
@@ -6301,17 +6332,18 @@ rgb_click(x, y)
  * .
  */
 void
-rgb_context(str)
+rgb_context(std::string str)
 {
-    todo("RGB", "context()");
+    //todo("RGB", "context()");
 }
 
 /**
  * .
  */
 void
-rgb_prompt(str)
+rgb_prompt(std::string str)
 {
+    /*
     if (global->mode == RGB_MODE_BACKGROUND) {
         if (str == "C" || str == "CROSSHAIR") {
             global.mode = RGB_MODE_CROSSHAIR;
@@ -6332,7 +6364,7 @@ rgb_prompt(str)
             }
             else {
                 setBackgroundColor(r,g,b);
-                //endCommand();
+                actuator("end");
             }
         }
     }
@@ -6347,7 +6379,7 @@ rgb_prompt(str)
         }
         else {
             setCrossHairColor(r,g,b);
-            //endCommand();
+            actuator("end");
         }
     }
     else if (global->mode == RGB_MODE_GRID) {
@@ -6361,13 +6393,14 @@ rgb_prompt(str)
         }
         else {
             setGridColor(r,g,b);
-            //endCommand();
+            actuator("end");
         }
     }
+    */
 }
 
 //Command: Rotate
-
+/*
 var global = {}; //Required
 global.firstRun;
 global.baseX;
@@ -6384,6 +6417,7 @@ global.angleRef;
 global.angleNew;
 
 global.mode;
+*/
 
 /**
  * .
@@ -6391,6 +6425,7 @@ global.mode;
 void
 rotate_main()
 {
+    /*
     initCommand();
     global.mode = MODE_NORMAL;
     global.firstRun = true;
@@ -6410,20 +6445,22 @@ rotate_main()
     if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
         alert(tr("Preselect objects before invoking the rotate command."));
-        //endCommand();
+        actuator("end");
         messageBox("information", tr("Rotate Preselect"), tr("Preselect objects before invoking the rotate command."));
     }
     else {
         setPromptPrefix(tr("Specify base point: "));
     }
+    */
 }
 
 /**
  * .
  */
 void
-rotate_click(x, y)
+rotate_click(UiObject *global, EmbVector v)
 {
+    /*
     if (global->mode == ROTATE_MODE_NORMAL) {
         if (global.firstRun) {
             global.firstRun = false;
@@ -6443,7 +6480,7 @@ rotate_click(x, y)
             appendPromptHistory();
             rotateSelected(global.baseX, global.baseY, global.angle);
             previewOff();
-            //endCommand();
+            actuator("end");
         }
     }
     else if (global->mode == ROTATE_MODE_REFERENCE) {
@@ -6469,26 +6506,28 @@ rotate_click(x, y)
             global.angleNew = calculateAngle(global.baseX, global.baseY, x, y);
             rotateSelected(global.baseX, global.baseY, global.angleNew - global.angleRef);
             previewOff();
-            //endCommand();
+            actuator("end");
         }
     }
+    */
 }
 
 /**
  * .
  */
 void
-rotate_context(str)
+rotate_context(std::string str)
 {
-    todo("ROTATE", "context()");
+    //todo("ROTATE", "context()");
 }
 
 /**
  * .
  */
 void
-rotate_prompt(str)
+rotate_prompt(std::string str)
 {
+    /*
     if (global->mode == ROTATE_MODE_NORMAL) {
         if (global.firstRun) {
             EmbReal strList = str.split(",");
@@ -6523,7 +6562,7 @@ rotate_prompt(str)
                     global.angle = Number(str);
                     rotateSelected(global.baseX, global.baseY, global.angle);
                     previewOff();
-                    //endCommand();
+                    actuator("end");
                 }
             }
         }
@@ -6601,24 +6640,26 @@ rotate_prompt(str)
                     global.angleNew = calculateAngle(global.baseX, global.baseY, x, y);
                     rotateSelected(global.baseX, global.baseY, global.angleNew - global.angleRef);
                     previewOff();
-                    //endCommand();
+                    actuator("end");
                 }
             }
             else {
                 global.angleNew = Number(str);
                 rotateSelected(global.baseX, global.baseY, global.angleNew - global.angleRef);
                 previewOff();
-                //endCommand();
+                actuator("end");
             }
         }
     }
+    */
 }
 
 //Command: Sandbox
 
-var global = {}; //Required
+/*var global = {}; //Required
 global.test1;
 global.test2;
+*/
 
 /**
  * .
@@ -6626,6 +6667,7 @@ global.test2;
 void
 sandbox_main()
 {
+    /*
     initCommand();
 
     //Report number of pre-selected objects
@@ -6683,12 +6725,13 @@ sandbox_main()
     polygonArray.push(1.0 + offsetY);
     addPolygon(polygonArray);
 
-
-    //endCommand();
+    actuator("end");
+    */
 }
 
 //Command: Scale
 
+/*
 var global = {}; //Required
 global.firstRun;
 global.baseX;
@@ -6705,6 +6748,7 @@ global.factorRef;
 global.factorNew;
 
 global.mode;
+*/
 
 /**
  * .
@@ -6712,6 +6756,7 @@ global.mode;
 void
 scale_main()
 {
+    /*
     initCommand();
     global.mode = MODE_NORMAL;
     global.firstRun = true;
@@ -6731,20 +6776,22 @@ scale_main()
     if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
         alert(tr("Preselect objects before invoking the scale command."));
-        //endCommand();
+        actuator("end");
         messageBox("information", tr("Scale Preselect"), tr("Preselect objects before invoking the scale command."));
     }
     else {
         setPromptPrefix(tr("Specify base point: "));
     }
+    */
 }
 
 /**
  * .
  */
 void
-scale_click(x, y)
+scale_click(UiObject *global, EmbVector v)
 {
+    /*
     if (global->mode == MODE_NORMAL) {
         if (global.firstRun) {
             global.firstRun = false;
@@ -6764,7 +6811,7 @@ scale_click(x, y)
             appendPromptHistory();
             scaleSelected(global.baseX, global.baseY, global.factor);
             previewOff();
-            //endCommand();
+            actuator("end");
         }
     }
     else if (global->mode == MODE_REFERENCE) {
@@ -6806,27 +6853,29 @@ scale_click(x, y)
                 appendPromptHistory();
                 scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
                 previewOff();
-                //endCommand();
+                actuator("end");
             }
         }
     }
+    */
 }
 
 /**
  * .
  */
 void
-scale_context(str)
+scale_context(std::string str)
 {
-    todo("SCALE", "context()");
+    //todo("SCALE", "context()");
 }
 
 /**
  * .
  */
 void
-scale_prompt(str)
+scale_prompt(std::string str)
 {
+    /*
     if (global->mode == MODE_NORMAL) {
         if (global.firstRun) {
             EmbReal strList = str.split(",");
@@ -6861,7 +6910,7 @@ scale_prompt(str)
                     global.factor = Number(str);
                     scaleSelected(global.baseX, global.baseY, global.factor);
                     previewOff();
-                    //endCommand();
+                    actuator("end");
                 }
             }
         }
@@ -6975,7 +7024,7 @@ scale_prompt(str)
                     else {
                         scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
                         previewOff();
-                        //endCommand();
+                        actuator("end");
                     }
                 }
             }
@@ -6989,16 +7038,17 @@ scale_prompt(str)
                 else {
                     scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
                     previewOff();
-                    //endCommand();
+                    actuator("end");
                 }
             }
         }
     }
+    */
 }
 
 
 //Command: Single Line Text
-
+/*
 var global = {}; //Required
 global.text;
 global.textX;
@@ -7008,6 +7058,7 @@ global.textFont;
 global.textHeight;
 global.textRotation;
 global.mode;
+*/
 
 /**
  * .
@@ -7015,6 +7066,7 @@ global.mode;
 void
 text_single_main()
 {
+    /*
     initCommand();
     clearSelection();
     global.text = "";
@@ -7028,14 +7080,16 @@ text_single_main()
     setPromptPrefix(tr("Current font: ") + "{" + global.textFont + "} " + tr("Text height: ") + "{" +  textSize() + "}");
     appendPromptHistory();
     setPromptPrefix(tr("Specify start point of text or [Justify/Setfont]: "));
+    */
 }
 
 /**
  * .
  */
 void
-text_single_click(x, y)
+text_single_click(UiObject *global, EmbVector v)
 {
+    /*
     if (global->mode == MODE_SETGEOM) {
         if (std::isnan(global.textX)) {
             global.textX = x;
@@ -7072,23 +7126,25 @@ text_single_click(x, y)
             //Do nothing, as we are in rapidFire mode now.
         }
     }
+    */
 }
 
 /**
  * .
  */
 void
-text_single_context(str)
+text_single_context(std::string str)
 {
-    todo("SINGLELINETEXT", "context()");
+    //todo("SINGLELINETEXT", "context()");
 }
 
 /**
  * .
  */
 void
-text_single_prompt(str)
+text_single_prompt(std::string str)
 {
+    /*
     if (global->mode == MODE_JUSTIFY) {
         if (str == "C" || str == "CENTER") {
             global.mode = MODE_SETGEOM;
@@ -7269,11 +7325,11 @@ text_single_prompt(str)
     else if (global->mode == MODE_RAPID) {
         if (str == "RAPID_ENTER") {
             if (global.text == "") {
-                //endCommand();
+                actuator("end");
             }
             else {
                 actuator("vulcanize");
-                //endCommand();
+                actuator("end");
                 //TODO: Rather than ending the command, calculate where the next line would be and modify the x/y to the new point
             }
         }
@@ -7282,9 +7338,8 @@ text_single_prompt(str)
             setRubberText("TEXT_RAPID", global.text);
         }
     }
+    */
 }
-
-#endif
 
 UiObject snowflake_main(void);
 void updateSnowflake(UiObject *global, EmbVector scale);
@@ -7317,7 +7372,7 @@ snowflake_main()
     //setRubberMode("POLYGON");
     updateSnowflake(&global, global.scale);
     //spareRubber("POLYGON");
-    //endCommand();
+    actuator("end");
     return global;
 }
 
@@ -7412,7 +7467,7 @@ star_click(UiObject *global, EmbReal mouse)
         actuator("disable move-rapid-fire");
         updateStar(global.point2);
         spareRubber("POLYGON");
-        ////endCommand();
+        //actuator("end");
     }
     */
 }
@@ -7514,7 +7569,7 @@ star_prompt(std::string str)
             actuator("disable move-rapid-fire");
             updateStar(global.x2, global.y2);
             spareRubber("POLYGON");
-            ////endCommand();
+            //actuator("end");
         }
     }
     */
@@ -7595,16 +7650,12 @@ void
 syswindows_prompt(std::string str)
 {
     if (str == "C" || str == "CASCADE") {
-        _mainWin->actuator("window cascade");
-        /*
-        endCommand();
-        */
+        actuator("window cascade");
+        actuator("end");
     }
     else if (str == "T" || str == "TILE") {
-        _mainWin->actuator("window tile");
-        /*
-        endCommand();
-        */
+        actuator("window tile");
+        actuator("end");
     }
     else {
         /*

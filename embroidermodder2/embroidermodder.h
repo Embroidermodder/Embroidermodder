@@ -1814,10 +1814,6 @@ public:
 
     QList<QGraphicsItem*> cutCopyObjectList;
 
-    std::string actuator(std::string command);
-    std::string run_script_file(std::string fname);
-    std::string run_script(std::vector<std::string> script);
-
     QString formatFilterOpen;
     QString formatFilterSave;
 
@@ -2945,6 +2941,10 @@ void set_label_enabled(QObject* parent, const char *key, bool enabled);
 void set_combobox_enabled(QObject *parent, const char *key, bool enabled);
 void set_label_visibility(QObject *parent, const char *name, bool visibility);
 void set_spinbox_visibility(QObject *parent, const char *name, bool visibility);
+
+std::string actuator(std::string line);
+std::string run_script_file(std::string fname);
+std::string run_script(std::vector<std::string> script);
 
 /* Global data
  * -----------

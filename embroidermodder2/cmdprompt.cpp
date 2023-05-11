@@ -492,7 +492,7 @@ void CmdPromptInput::processInput()
         }
     }
     else {
-        QString output = QString::fromStdString(_mainWin->actuator(cmdtxt.toStdString()));
+        QString output = QString::fromStdString(actuator(cmdtxt.toStdString()));
         emit appendHistory(curText + output, prefix.length());
     }
 
