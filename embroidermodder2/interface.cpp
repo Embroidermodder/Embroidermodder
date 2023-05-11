@@ -31,3 +31,51 @@ debug_message(std::string msg)
 {
     qDebug(msg.c_str());
 }
+
+/**
+ * .
+ */
+void
+set_label_enabled(QObject* parent, const char *key, bool enabled)
+{
+    QLabel* label = parent->findChild<QLabel*>(key);
+    if (label) {
+        label->setEnabled(enabled);
+    }
+}
+
+/**
+ * .
+ */
+void
+set_combobox_enabled(QObject *parent, const char *key, bool enabled)
+{
+    QComboBox* comboBox = parent->findChild<QComboBox*>(key);
+    if (comboBox) {
+        comboBox->setEnabled(enabled);    
+    }
+}
+
+/**
+ * \todo error reporting.
+ */
+void
+set_label_visibility(QObject* parent, const char *name, bool visibility)
+{
+    QLabel* label = parent->findChild<QLabel*>(name);
+    if (label) {
+        label->setVisible(visibility);
+    }
+}
+
+/**
+ * \todo error reporting.
+ */
+void
+set_spinbox_visibility(QObject* parent, const char *name, bool visibility)
+{
+    QDoubleSpinBox* spinbox = parent->findChild<QDoubleSpinBox*>(name);
+    if (spinbox) {
+        spinbox->setVisible(visibility);
+    }
+}

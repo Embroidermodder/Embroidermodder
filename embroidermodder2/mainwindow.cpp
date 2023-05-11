@@ -4725,7 +4725,7 @@ rgb_main()
 {
     initCommand();
     clearSelection();
-    global.mode = MODE_BACKGROUND;
+    global.mode = RGB_MODE_BACKGROUND;
     setPromptPrefix(tr("Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: "));
 }
 
@@ -4753,13 +4753,13 @@ rgb_context(str)
 void
 rgb_prompt(str)
 {
-    if (global->mode == MODE_BACKGROUND) {
+    if (global->mode == RGB_MODE_BACKGROUND) {
         if (str == "C" || str == "CROSSHAIR") {
-            global.mode = MODE_CROSSHAIR;
+            global.mode = RGB_MODE_CROSSHAIR;
             setPromptPrefix(tr("Specify crosshair color: "));
         }
         else if (str == "G" || str == "GRID") {
-            global.mode = MODE_GRID;
+            global.mode = RGB_MODE_GRID;
             setPromptPrefix(tr("Specify grid color: "));
         }
         else {
@@ -4777,7 +4777,7 @@ rgb_prompt(str)
             }
         }
     }
-    else if (global->mode == MODE_CROSSHAIR) {
+    else if (global->mode == RGB_MODE_CROSSHAIR) {
         EmbReal strList = str.split(",");
         EmbReal r = Number(strList[0]);
         EmbReal g = Number(strList[1]);
@@ -4791,7 +4791,7 @@ rgb_prompt(str)
             //endCommand();
         }
     }
-    else if (global->mode == MODE_GRID) {
+    else if (global->mode == RGB_MODE_GRID) {
         EmbReal strList = str.split(",");
         EmbReal r = Number(strList[0]);
         EmbReal g = Number(strList[1]);
@@ -4865,7 +4865,7 @@ rotate_main()
 void
 rotate_click(x, y)
 {
-    if (global->mode == MODE_NORMAL) {
+    if (global->mode == ROTATE_MODE_NORMAL) {
         if (global.firstRun) {
             global.firstRun = false;
             global.baseX = x;
@@ -4887,7 +4887,7 @@ rotate_click(x, y)
             //endCommand();
         }
     }
-    else if (global->mode == MODE_REFERENCE) {
+    else if (global->mode == ROTATE_MODE_REFERENCE) {
         if (std::isnan(global.baseRX)) {
             global.baseRX = x;
             global.baseRY = y;
@@ -4930,7 +4930,7 @@ rotate_context(str)
 void
 rotate_prompt(str)
 {
-    if (global->mode == MODE_NORMAL) {
+    if (global->mode == ROTATE_MODE_NORMAL) {
         if (global.firstRun) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {

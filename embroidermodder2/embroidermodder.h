@@ -2419,7 +2419,7 @@ public:
 
     QTabWidget* tabWidget;
 
-    void make_checkbox(QCheckBox *cb, bool *ptr);
+    QCheckBox * make_checkbox(QGroupBox *gb, const char *label, const char *icon, bool *ptr);
 
     QWidget* createTabGeneral();
     QWidget* createTabFilesPaths();
@@ -2449,8 +2449,6 @@ public:
         EmbReal *ptr,
         int row);
     QCheckBox* create_checkbox(QGroupBox *groupbox, std::string label);
-    void set_label_visibility(QObject *parent, const char *name, bool visibility);
-    void set_spinbox_visibility(QObject *parent, const char *name, bool visibility);
 
 private slots:
     void comboBoxLanguageCurrentIndexChanged(const QString&);
@@ -2971,6 +2969,10 @@ void write_settings(const char *fname);
 EmbVector rotate_vector(EmbVector v, EmbReal alpha);
 
 void debug_message(std::string msg);
+void set_label_enabled(QObject* parent, const char *key, bool enabled);
+void set_combobox_enabled(QObject *parent, const char *key, bool enabled);
+void set_label_visibility(QObject *parent, const char *name, bool visibility);
+void set_spinbox_visibility(QObject *parent, const char *name, bool visibility);
 
 /* Global data
  * -----------
