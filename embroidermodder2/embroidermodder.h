@@ -1829,12 +1829,6 @@ public:
 
 public slots:
 
-    void enablePromptRapidFire();
-    void disablePromptRapidFire();
-
-    void enableMoveRapidFire();
-    void disableMoveRapidFire();
-
     void onCloseWindow();
     virtual void onCloseMdiWin(MdiWindow*);
 
@@ -1944,8 +1938,6 @@ private slots:
     void hideUnimplemented();
 
 public slots:
-
-    void stub_implement(QString txt);
     void stub_testing();
 
     void promptHistoryAppended(const QString& txt);
@@ -1961,7 +1953,6 @@ public slots:
     void saveasfile();
     void print();
     void designDetails();
-    void exit();
     void quit();
     void checkForUpdates();
     // Help Menu
@@ -1998,11 +1989,6 @@ public slots:
     void setTextFont(const QString& str);
     void setTextSize(EmbReal num);
     void setTextAngle(EmbReal num);
-    void setTextBold(bool val);
-    void setTextItalic(bool val);
-    void setTextUnderline(bool val);
-    void setTextStrikeOut(bool val);
-    void setTextOverline(bool val);
 
     QString getCurrentLayer();
     QRgb getCurrentColor();
@@ -2051,19 +2037,6 @@ public slots:
 
 public:
     void nativeAlert(const QString& txt);
-    void nativeBlinkPrompt();
-    void nativeSetPromptPrefix(const QString& txt);
-    void nativeAppendPromptHistory(const QString& txt);
-    void nativeEnablePromptRapidFire();
-    void nativeDisablePromptRapidFire();
-    void nativeInitCommand();
-    void nativeEndCommand();
-
-    void nativeEnableMoveRapidFire();
-    void nativeDisableMoveRapidFire();
-
-    void nativeExit();
-    void nativeTipOfTheDay();
 
     void nativeMessageBox(const QString& type, const QString& title, const QString& text);
 
@@ -2076,7 +2049,6 @@ public:
     void nativePreviewOn(int clone, int mode, EmbReal x, EmbReal y, EmbReal data);
     void nativePreviewOff();
 
-    void nativeVulcanize();
     void nativeClearRubber();
     bool nativeAllowRubber();
     void nativeSpareRubber(int64_t id);
@@ -2117,7 +2089,6 @@ public:
 
     int nativeNumSelected();
     void nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
-    void nativeClearSelection();
     void nativeDeleteSelected();
     void nativeCutSelected(EmbReal x, EmbReal y);
     void nativeCopySelected(EmbReal x, EmbReal y);
