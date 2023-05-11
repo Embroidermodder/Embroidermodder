@@ -181,7 +181,7 @@ QString MainWindow::platformString()
     #elif defined(Q_OS_WINCE)
     os = "Windows CE";
     #endif
-    qDebug("Platform: %s", qPrintable(os));
+    debug_message("Platform: " + os.toStdString());
     return os;
 }
 
@@ -324,24 +324,21 @@ MainWindow::checkBoxTipOfTheDayStateChanged(int checked)
 void
 MainWindow::buttonTipOfTheDayClicked(int button)
 {
-    qDebug("buttonTipOfTheDayClicked(%d)", button);
-    if (button == QWizard::CustomButton1)
-    {
+    debug_message("buttonTipOfTheDayClicked(%d)" + std::to_string(button));
+    if (button == QWizard::CustomButton1) {
         if (settings.general_current_tip > 0)
             settings.general_current_tip--;
         else
             settings.general_current_tip = listTipOfTheDay.size()-1;
         labelTipOfTheDay->setText(listTipOfTheDay.value(settings.general_current_tip));
     }
-    else if (button == QWizard::CustomButton2)
-    {
+    else if (button == QWizard::CustomButton2) {
         settings.general_current_tip++;
         if (settings.general_current_tip >= listTipOfTheDay.size())
             settings.general_current_tip = 0;
         labelTipOfTheDay->setText(listTipOfTheDay.value(settings.general_current_tip));
     }
-    else if (button == QWizard::CustomButton3)
-    {
+    else if (button == QWizard::CustomButton3) {
         wizardTipOfTheDay->close();
     }
 }
@@ -579,6 +576,9 @@ MainWindow::makeLayerActive()
     debug_message("TODO: Implement makeLayerActive.");
 }
 
+/**
+ * .
+ */
 void
 MainWindow::layerManager()
 {
@@ -588,6 +588,9 @@ MainWindow::layerManager()
     layman.exec();
 }
 
+/**
+ * .
+ */
 void
 MainWindow::layerPrevious()
 {
@@ -595,7 +598,10 @@ MainWindow::layerPrevious()
     debug_message("TODO: Implement layerPrevious.");
 }
 
-// Zoom ToolBar
+
+/**
+ * .
+ */
 void
 MainWindow::zoomRealtime()
 {
@@ -603,6 +609,9 @@ MainWindow::zoomRealtime()
     debug_message("TODO: Implement zoomRealtime.");
 }
 
+/**
+ * .
+ */
 void
 MainWindow::zoomPrevious()
 {
@@ -610,6 +619,9 @@ MainWindow::zoomPrevious()
     debug_message("TODO: Implement zoomPrevious.");
 }
 
+/**
+ * .
+ */
 void
 MainWindow::zoomWindow()
 {
@@ -620,6 +632,9 @@ MainWindow::zoomWindow()
     }
 }
 
+/**
+ * .
+ */
 void
 MainWindow::zoomDynamic()
 {
@@ -627,6 +642,9 @@ MainWindow::zoomDynamic()
     debug_message("TODO: Implement zoomDynamic.");
 }
 
+/**
+ * .
+ */
 void
 MainWindow::zoomScale()
 {
@@ -634,6 +652,9 @@ MainWindow::zoomScale()
     debug_message("TODO: Implement zoomScale.");
 }
 
+/**
+ * .
+ */
 void
 MainWindow::zoomCenter()
 {
@@ -641,6 +662,9 @@ MainWindow::zoomCenter()
     debug_message("TODO: Implement zoomCenter.");
 }
 
+/**
+ * .
+ */
 void
 MainWindow::zoomIn()
 {
@@ -649,6 +673,9 @@ MainWindow::zoomIn()
     if (gview) { gview->zoomIn(); }
 }
 
+/**
+ * .
+ */
 void
 MainWindow::zoomOut()
 {
@@ -657,6 +684,9 @@ MainWindow::zoomOut()
     if (gview) { gview->zoomOut(); }
 }
 
+/**
+ * .
+ */
 void
 MainWindow::zoomSelected()
 {
@@ -670,6 +700,9 @@ MainWindow::zoomSelected()
     }
 }
 
+/**
+ * .
+ */
 void
 MainWindow::zoomAll()
 {
@@ -677,6 +710,9 @@ MainWindow::zoomAll()
     debug_message("TODO: Implement zoomAll.");
 }
 
+/**
+ * .
+ */
 void
 MainWindow::zoomExtents()
 {
@@ -689,7 +725,10 @@ MainWindow::zoomExtents()
         stack->push(cmd);
     }
 }
-// Pan SubMenu
+
+/**
+ * .
+ */
 void
 MainWindow::panrealtime()
 {
@@ -698,6 +737,9 @@ MainWindow::panrealtime()
     if (gview) { gview->panRealTime(); }
 }
 
+/**
+ * .
+ */
 void
 MainWindow::panpoint()
 {
@@ -706,6 +748,9 @@ MainWindow::panpoint()
     if (gview) { gview->panPoint(); }
 }
 
+/**
+ * .
+ */
 void
 MainWindow::panLeft()
 {
@@ -719,6 +764,9 @@ MainWindow::panLeft()
     }
 }
 
+/**
+ * .
+ */
 void
 MainWindow::panRight()
 {
@@ -732,6 +780,9 @@ MainWindow::panRight()
     }
 }
 
+/**
+ * .
+ */
 void
 MainWindow::panUp()
 {
@@ -763,31 +814,31 @@ MainWindow::panDown()
 
 /**
  * @brief MainWindow::dayVision
+ *  \todo Make day vision color settings.
  */
 void
 MainWindow::dayVision()
 {
     View* gview = activeView();
-    if (gview)
-    {
-        gview->setBackgroundColor(qRgb(255,255,255)); //TODO: Make day vision color settings.
-        gview->setCrossHairColor(qRgb(0,0,0));        //TODO: Make day vision color settings.
-        gview->setGridColor(qRgb(0,0,0));             //TODO: Make day vision color settings.
+    if (gview) {
+        gview->setBackgroundColor(qRgb(255,255,255));
+        gview->setCrossHairColor(qRgb(0,0,0));
+        gview->setGridColor(qRgb(0,0,0));
     }
 }
 
 /**
  * @brief MainWindow::nightVision
+ * \todo Make night vision color settings.
  */
 void
 MainWindow::nightVision()
 {
     View* gview = activeView();
-    if (gview)
-    {
-        gview->setBackgroundColor(qRgb(0,0,0));      //TODO: Make night vision color settings.
-        gview->setCrossHairColor(qRgb(255,255,255)); //TODO: Make night vision color settings.
-        gview->setGridColor(qRgb(255,255,255));      //TODO: Make night vision color settings.
+    if (gview) {
+        gview->setBackgroundColor(qRgb(0,0,0));
+        gview->setCrossHairColor(qRgb(255,255,255));
+        gview->setGridColor(qRgb(255,255,255));
     }
 }
 
@@ -801,18 +852,17 @@ MainWindow::doNothing()
 void
 MainWindow::layerSelectorIndexChanged(int index)
 {
-    qDebug("layerSelectorIndexChanged(%d)", index);
+    debug_message("layerSelectorIndexChanged(%d)" + std::to_string(index));
 }
 
 void
 MainWindow::colorSelectorIndexChanged(int index)
 {
-    qDebug("colorSelectorIndexChanged(%d)", index);
+    debug_message("colorSelectorIndexChanged(%d)" + std::to_string(index));
 
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
     QRgb newColor;
-    if (comboBox)
-    {
+    if (comboBox) {
         bool ok = 0;
         //TODO: Handle ByLayer and ByBlock and Other...
         newColor = comboBox->itemData(index).toUInt(&ok);
@@ -826,18 +876,27 @@ MainWindow::colorSelectorIndexChanged(int index)
     if (mdiWin) { mdiWin->currentColorChanged(newColor); }
 }
 
+/**
+ * .
+ */
 void
 MainWindow::linetypeSelectorIndexChanged(int index)
 {
-    qDebug("linetypeSelectorIndexChanged(%d)", index);
+    debug_message("linetypeSelectorIndexChanged(%d)" + std::to_string(index));
 }
 
+/**
+ * .
+ */
 void
 MainWindow::lineweightSelectorIndexChanged(int index)
 {
-    qDebug("lineweightSelectorIndexChanged(%d)", index);
+    debug_message("lineweightSelectorIndexChanged(%d)" + std::to_string(index));
 }
 
+/**
+ * .
+ */
 void
 MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
 {
@@ -845,13 +904,19 @@ MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
     settings.text_font = font.family();
 }
 
+/**
+ * .
+ */
 void
 MainWindow::textSizeSelectorIndexChanged(int index)
 {
-    qDebug("textSizeSelectorIndexChanged(%d)", index);
+    debug_message("textSizeSelectorIndexChanged(%d)" + std::to_string(index));
     settings.text_size = fabs(textSizeSelector->itemData(index).toReal()); //TODO: check that the toReal() conversion is ok
 }
 
+/**
+ * .
+ */
 void
 MainWindow::setTextFont(const QString& str)
 {
@@ -859,6 +924,9 @@ MainWindow::setTextFont(const QString& str)
     settings.text_font = str;
 }
 
+/**
+ * .
+ */
 void
 MainWindow::setTextSize(EmbReal num)
 {
@@ -874,12 +942,18 @@ MainWindow::setTextSize(EmbReal num)
     }
 }
 
+/**
+ * .
+ */
 void
 MainWindow::setTextAngle(EmbReal num)
 {
     settings.text_angle = num;
 }
 
+/**
+ * .
+ */
 QString MainWindow::getCurrentLayer()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
@@ -889,6 +963,9 @@ QString MainWindow::getCurrentLayer()
     return "0";
 }
 
+/**
+ * .
+ */
 QRgb MainWindow::getCurrentColor()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
@@ -898,6 +975,9 @@ QRgb MainWindow::getCurrentColor()
     return 0; //TODO: return color ByLayer
 }
 
+/**
+ * .
+ */
 QString MainWindow::getCurrentLineType()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
@@ -907,6 +987,9 @@ QString MainWindow::getCurrentLineType()
     return "ByLayer";
 }
 
+/**
+ * .
+ */
 QString MainWindow::getCurrentLineWeight()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
@@ -916,6 +999,9 @@ QString MainWindow::getCurrentLineWeight()
     return "ByLayer";
 }
 
+/**
+ * .
+ */
 void
 MainWindow::deletePressed()
 {
@@ -928,6 +1014,9 @@ MainWindow::deletePressed()
     QApplication::restoreOverrideCursor();
 }
 
+/**
+ * .
+ */
 void
 MainWindow::escapePressed()
 {
@@ -942,6 +1031,9 @@ MainWindow::escapePressed()
     actuator("end");
 }
 
+/**
+ * .
+ */
 void
 MainWindow::toggleGrid()
 {
@@ -949,6 +1041,9 @@ MainWindow::toggleGrid()
     statusbar->statusBarGridButton->toggle();
 }
 
+/**
+ * .
+ */
 void
 MainWindow::toggleRuler()
 {
@@ -956,6 +1051,9 @@ MainWindow::toggleRuler()
     statusbar->statusBarRulerButton->toggle();
 }
 
+/**
+ * .
+ */
 void
 MainWindow::toggleLwt()
 {
@@ -963,6 +1061,9 @@ MainWindow::toggleLwt()
     statusbar->statusBarLwtButton->toggle();
 }
 
+/**
+ * .
+ */
 void
 MainWindow::promptHistoryAppended(const QString& txt)
 {
@@ -970,6 +1071,9 @@ MainWindow::promptHistoryAppended(const QString& txt)
     if (mdiWin) mdiWin->promptHistoryAppended(txt);
 }
 
+/**
+ * .
+ */
 void
 MainWindow::logPromptInput(const QString& txt)
 {
@@ -977,6 +1081,9 @@ MainWindow::logPromptInput(const QString& txt)
     if (mdiWin) mdiWin->logPromptInput(txt);
 }
 
+/**
+ * .
+ */
 void
 MainWindow::promptInputPrevious()
 {
@@ -984,6 +1091,9 @@ MainWindow::promptInputPrevious()
     if (mdiWin) mdiWin->promptInputPrevious();
 }
 
+/**
+ * .
+ */
 void
 MainWindow::promptInputNext()
 {
@@ -993,6 +1103,9 @@ MainWindow::promptInputNext()
     }
 }
 
+/**
+ * .
+ */
 void
 MainWindow::nativeAlert(const QString& txt)
 {
@@ -1028,10 +1141,7 @@ MainWindow::nativeMessageBox(const QString& type, const QString& title, const QS
 
 /**
  * @brief MainWindow::nativePrintArea
- * \a x
- * \a y
- * \a w
- * \a h
+ * \a x \a y \a w \a h
  */
 void
 MainWindow::nativePrintArea(EmbReal x, EmbReal y, EmbReal w, EmbReal h)
@@ -1041,6 +1151,9 @@ MainWindow::nativePrintArea(EmbReal x, EmbReal y, EmbReal w, EmbReal h)
     print();
 }
 
+/**
+ * .
+ */
 void
 MainWindow::nativeSetBackgroundColor(quint8 r, quint8 g, quint8 b)
 {
@@ -1048,6 +1161,9 @@ MainWindow::nativeSetBackgroundColor(quint8 r, quint8 g, quint8 b)
     updateAllViewBackgroundColors(qRgb(r,g,b));
 }
 
+/**
+ * .
+ */
 void
 MainWindow::nativeSetCrossHairColor(quint8 r, quint8 g, quint8 b)
 {
@@ -1055,6 +1171,9 @@ MainWindow::nativeSetCrossHairColor(quint8 r, quint8 g, quint8 b)
     updateAllViewCrossHairColors(qRgb(r,g,b));
 }
 
+/**
+ * .
+ */
 void
 MainWindow::nativeSetGridColor(quint8 r, quint8 g, quint8 b)
 {
@@ -1062,6 +1181,9 @@ MainWindow::nativeSetGridColor(quint8 r, quint8 g, quint8 b)
     updateAllViewGridColors(qRgb(r,g,b));
 }
 
+/**
+ * .
+ */
 void
 MainWindow::nativePreviewOn(int clone, int mode, EmbReal x, EmbReal y, EmbReal data)
 {
@@ -1069,6 +1191,9 @@ MainWindow::nativePreviewOn(int clone, int mode, EmbReal x, EmbReal y, EmbReal d
     if (gview) gview->previewOn(clone, mode, x, -y, data);
 }
 
+/**
+ * .
+ */
 void
 MainWindow::nativePreviewOff()
 {
@@ -1076,6 +1201,9 @@ MainWindow::nativePreviewOff()
     if (gview) gview->previewOff();
 }
 
+/**
+ * .
+ */
 void
 MainWindow::nativeClearRubber()
 {
@@ -1083,6 +1211,9 @@ MainWindow::nativeClearRubber()
     if (gview) gview->clearRubberRoom();
 }
 
+/**
+ * .
+ */
 bool MainWindow::nativeAllowRubber()
 {
     View* gview = activeView();
@@ -1090,6 +1221,9 @@ bool MainWindow::nativeAllowRubber()
     return false;
 }
 
+/**
+ * .
+ */
 void
 MainWindow::nativeSpareRubber(qint64 id)
 {
@@ -1098,26 +1232,103 @@ MainWindow::nativeSpareRubber(qint64 id)
         gview->spareRubber(id);
 }
 
-void
-MainWindow::nativeSetRubberMode(int mode)
+/**
+ * .
+ */
+std::string
+MainWindow::nativeSetRubberMode(std::vector<Parameter> a)
 {
+    std::string mode = QString::fromStdString(a[0].s).toUpper().toStdString();
+
     View* gview = activeView();
-    if (gview)
-        gview->setRubberMode(mode);
+    if (gview) {
+        if (mode == "CIRCLE_1P_RAD") {
+            gview->setRubberMode(OBJ_RUBBER_CIRCLE_1P_RAD);
+        }
+        else if (mode == "CIRCLE_1P_DIA") {
+            gview->setRubberMode(OBJ_RUBBER_CIRCLE_1P_DIA);
+        }
+        else if (mode == "CIRCLE_2P") {
+            gview->setRubberMode(OBJ_RUBBER_CIRCLE_2P);
+        }
+        else if (mode == "CIRCLE_3P") {
+            gview->setRubberMode(OBJ_RUBBER_CIRCLE_3P);
+        }
+        else if (mode == "CIRCLE_TTR") {
+            gview->setRubberMode(OBJ_RUBBER_CIRCLE_TTR);
+        }
+        else if (mode == "CIRCLE_TTR") {
+            gview->setRubberMode(OBJ_RUBBER_CIRCLE_TTT);
+        }
+        else if (mode == "DIMLEADER_LINE") {
+            gview->setRubberMode(OBJ_RUBBER_DIMLEADER_LINE);
+        }
+        else if (mode == "ELLIPSE_LINE") {
+            gview->setRubberMode(OBJ_RUBBER_ELLIPSE_LINE);
+        }
+        else if (mode == "ELLIPSE_MAJORDIAMETER_MINORRADIUS") {
+            gview->setRubberMode(OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS);
+        }
+        else if (mode == "ELLIPSE_MAJORRADIUS_MINORRADIUS") {
+            gview->setRubberMode(OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS);
+        }
+        else if (mode == "ELLIPSE_ROTATION") {
+            gview->setRubberMode(OBJ_RUBBER_ELLIPSE_ROTATION);
+        }
+        else if (mode == "LINE") {
+            gview->setRubberMode(OBJ_RUBBER_LINE);
+        }
+        else if (mode == "POLYGON") {
+            gview->setRubberMode(OBJ_RUBBER_POLYGON);
+        }
+        else if (mode == "POLYGON_INSCRIBE") {
+            gview->setRubberMode(OBJ_RUBBER_POLYGON_INSCRIBE);
+        }
+        else if (mode == "POLYGON_CIRCUMSCRIBE") {
+            gview->setRubberMode(OBJ_RUBBER_POLYGON_CIRCUMSCRIBE);
+        }
+        else if (mode == "POLYLINE") {
+            gview->setRubberMode(OBJ_RUBBER_POLYLINE);
+        }
+        else if (mode == "RECTANGLE") {
+            gview->setRubberMode(OBJ_RUBBER_RECTANGLE);
+        }
+        else if (mode == "TEXTSINGLE") {
+            gview->setRubberMode(OBJ_RUBBER_TEXTSINGLE);
+        }
+        else {
+            return "ERROR: setRubberMode(): unknown rubberMode value";
+            //return context->throwError(QScriptContext::UnknownError, "setRubberMode(): unknown rubberMode value");
+        }
+    }
+    return "";
 }
 
+/**
+ * .
+ */
 void
 MainWindow::nativeSetRubberPoint(const QString& key, EmbReal x, EmbReal y)
 {
+    /*
+    _mainWin->setRubberPoint(a[0].s.toUpper(), a[1].r, a[2].r);
+    */
     View* gview = activeView();
-    if (gview) gview->setRubberPoint(key, QPointF(x, -y));
+    if (gview) {
+        gview->setRubberPoint(key, QPointF(x, -y));
+    }
 }
 
+/**
+ * .
+ */
 void
 MainWindow::nativeSetRubberText(const QString& key, const QString& txt)
 {
     View* gview = activeView();
-    if (gview) gview->setRubberText(key, txt);
+    if (gview) {
+        gview->setRubberText(key, txt);
+    }
 }
 
 void
@@ -1377,27 +1588,43 @@ MainWindow::nativeAddPolyline(EmbReal startX, EmbReal startY, const QPainterPath
     }
 }
 
-//NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
+/**
+ * .
+ * \note This native is different than the rest in that
+ * the Y+ is down (scripters need not worry about this).
+ */
 void
 MainWindow::nativeAddPath(EmbReal startX, EmbReal startY, const QPainterPath& p, int rubberMode)
 {
 }
 
+/**
+ * .
+ */
 void
 MainWindow::nativeAddHorizontalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight)
 {
 }
 
+/**
+ * .
+ */
 void
 MainWindow::nativeAddVerticalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight)
 {
 }
 
+/**
+ * .
+ */
 void
 MainWindow::nativeAddImage(const QString& img, EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot)
 {
 }
 
+/**
+ * .
+ */
 void
 MainWindow::nativeAddDimLeader(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, int rubberMode)
 {
@@ -1420,6 +1647,9 @@ MainWindow::nativeAddDimLeader(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, E
     }
 }
 
+/**
+ * .
+ */
 void
 MainWindow::nativeSetCursorShape(const QString& str)
 {
@@ -1458,26 +1688,46 @@ MainWindow::nativeSetCursorShape(const QString& str)
             gview->setCursor(QCursor(Qt::ForbiddenCursor));
         else if (shape == "handopen")
             gview->setCursor(QCursor(Qt::OpenHandCursor));
-        else if (shape == "handclosed")      gview->setCursor(QCursor(Qt::ClosedHandCursor));
-        else if (shape == "whatsthis")       gview->setCursor(QCursor(Qt::WhatsThisCursor));
-        else if (shape == "busy")            gview->setCursor(QCursor(Qt::BusyCursor));
-        else if (shape == "dragmove")        gview->setCursor(QCursor(Qt::DragMoveCursor));
-        else if (shape == "dragcopy")        gview->setCursor(QCursor(Qt::DragCopyCursor));
-        else if (shape == "draglink")        gview->setCursor(QCursor(Qt::DragLinkCursor));
+        else if (shape == "handclosed")
+            gview->setCursor(QCursor(Qt::ClosedHandCursor));
+        else if (shape == "whatsthis")
+            gview->setCursor(QCursor(Qt::WhatsThisCursor));
+        else if (shape == "busy")
+            gview->setCursor(QCursor(Qt::BusyCursor));
+        else if (shape == "dragmove")
+            gview->setCursor(QCursor(Qt::DragMoveCursor));
+        else if (shape == "dragcopy")
+            gview->setCursor(QCursor(Qt::DragCopyCursor));
+        else if (shape == "draglink")
+            gview->setCursor(QCursor(Qt::DragLinkCursor));
     }
 }
 
-EmbReal MainWindow::nativeCalculateAngle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
+/**
+ * .
+ */
+EmbReal
+MainWindow::nativeCalculateAngle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 {
     return QLineF(x1, -y1, x2, -y2).angle();
 }
 
-EmbReal MainWindow::nativeCalculateDistance(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
+/**
+ * CalculateDistance(std::vector<Parameter> a)
+ *     EmbReal result = _mainWin->nativeCalculateDistance(a[0].r, a[1].r, a[2].r, a[3].r);
+ *     return std::string(result);
+ */
+EmbReal
+MainWindow::nativeCalculateDistance(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 {
     return QLineF(x1, y1, x2, y2).length();
 }
 
-EmbReal MainWindow::nativePerpendicularDistance(EmbReal px, EmbReal py, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
+/**
+ * .
+ */
+EmbReal
+MainWindow::nativePerpendicularDistance(EmbReal px, EmbReal py, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 {
     QLineF line(x1, y1, x2, y2);
     QLineF norm = line.normalVector();
@@ -1523,6 +1773,9 @@ MainWindow::nativeDeleteSelected()
 void
 MainWindow::nativeCutSelected(EmbReal x, EmbReal y)
 {
+    /*
+    _mainWin->nativeCutSelected(a[0].r, a[1].r);
+    */
 }
 
 /**
@@ -1533,6 +1786,9 @@ MainWindow::nativeCutSelected(EmbReal x, EmbReal y)
 void
 MainWindow::nativeCopySelected(EmbReal x, EmbReal y)
 {
+    /*
+    _mainWin->nativeCopySelected(a[0].r, a[1].r);
+    */
 }
 
 /**
@@ -1543,6 +1799,9 @@ MainWindow::nativeCopySelected(EmbReal x, EmbReal y)
 void
 MainWindow::nativePasteSelected(EmbReal x, EmbReal y)
 {
+    /*
+    _mainWin->nativePasteSelected(a[0].r, a[1].r);
+    */
 }
 
 /**
@@ -1553,6 +1812,9 @@ MainWindow::nativePasteSelected(EmbReal x, EmbReal y)
 void
 MainWindow::nativeMoveSelected(EmbReal dx, EmbReal dy)
 {
+    /*
+    _mainWin->nativeMoveSelected(a[0].r, a[1].r);
+    */
     View* gview = activeView();
     if (gview) { gview->moveSelected(dx, -dy); }
 }
@@ -1566,6 +1828,13 @@ MainWindow::nativeMoveSelected(EmbReal dx, EmbReal dy)
 void
 MainWindow::nativeScaleSelected(EmbReal x, EmbReal y, EmbReal factor)
 {
+    /*
+    if (a[2].r <= 0.0) {
+        return "ERROR scaleSelected(): scale factor must be greater than zero";
+    }
+
+    _mainWin->nativeScaleSelected(a[0].r, a[1].r, a[2].r);
+    */
     if (factor <= 0.0) {
         QMessageBox::critical(this,
             tr("ScaleFactor Error"),
@@ -1588,6 +1857,9 @@ MainWindow::nativeScaleSelected(EmbReal x, EmbReal y, EmbReal factor)
 void
 MainWindow::nativeRotateSelected(EmbReal x, EmbReal y, EmbReal rot)
 {
+    /*
+    _mainWin->nativeRotateSelected(a[0].r, a[1].r, a[2].r);
+    */
     View* gview = activeView();
     if (gview) {
         gview->rotateSelected(x, -y, -rot);
@@ -1604,6 +1876,9 @@ MainWindow::nativeRotateSelected(EmbReal x, EmbReal y, EmbReal rot)
 void
 MainWindow::nativeMirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 {
+    /*
+    _mainWin->nativeMirrorSelected(a[0].r, a[1].r, a[2].r, a[3].r);
+    */
     View* gview = activeView();
     if (gview) {
         gview->mirrorSelected(x1, -y1, x2, -y2);
@@ -1783,12 +2058,12 @@ bool
 validRGB(int r, int g, int b)
 {
     return !(
-          std::isnan(r)
-        | std::isnan(b)
-        | std::isnan(g)
-        | (r < 0 || r > 255)
-        | (g < 0 || g > 255)
-        | (b < 0 || b > 255)
+           std::isnan(r)
+        || std::isnan(b)
+        || std::isnan(g)
+        || (r < 0 || r > 255)
+        || (g < 0 || g > 255)
+        || (b < 0 || b > 255)
     );
 }
 
@@ -1820,7 +2095,7 @@ MainWindow::MainWindow() : QMainWindow(0)
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
 
     QString lang = settings.general_language;
-    qDebug("language: %s", qPrintable(lang));
+    debug_message("language: " + lang.toStdString());
     if (lang == "system")
         lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
 
@@ -2017,7 +2292,7 @@ ACTION->setWhatsThis(statusTip);
 void
 MainWindow::createAllActions()
 {
-    qDebug("Creating All Actions...");
+    debug_message("Creating All Actions...");
 
     for (int i=0; i<action_table.size(); i++) {
         Action action = action_table[i];
@@ -2141,15 +2416,13 @@ MainWindow::run_script(std::vector<std::string> script)
  * -----------
  * QAction* act = qobject_cast<QAction*>(sender());
  * if (act) {
- *     qDebug("runCommand(%s)", qPrintable(act->objectName()));
- *     prompt->//endCommand();
+ *     prompt->endCommand();
  *     prompt->setCurrentText(act->objectName());
  *     prompt->processInput();
  * }
  *
  * INIT
  * ----
- * qDebug("runCommandMain(%s)", qPrintable(cmd));
  * QString fileName = "commands/" + cmd + "/" + cmd + ".js";
  * if (!getSettingsSelectionModePickFirst()) { actuator("clear-selection"); }
  * TODO: Uncomment this line when post-selection is available
@@ -2157,7 +2430,6 @@ MainWindow::run_script(std::vector<std::string> script)
  *
  * PROMPT
  * ------
- * qDebug("runCommandPrompt(%s, %s)", qPrintable(cmd), qPrintable(str));
  * QString fileName = "commands/" + cmd + "/" + cmd + ".js";
  * NOTE: Replace any special characters that will cause a syntax error
  * QString safeStr = str;
@@ -2174,7 +2446,7 @@ MainWindow::run_script(std::vector<std::string> script)
 std::string
 MainWindow::actuator(std::string line)
 {
-    Parameter result[10];
+    Parameter a[10];
     std::vector<std::string> list = tokenize(line, ' ');
     std::string command = list[0];
     list.erase(list.begin());
@@ -2336,7 +2608,7 @@ MainWindow::actuator(std::string line)
     }
 
     if (command == "selectall") {
-        qDebug("selectAll()");
+        debug_message("selectAll()");
         View* gview = activeView();
         if (gview) {
             gview->selectAll();
@@ -2923,7 +3195,7 @@ convert_args_to_type(
     std::string label,
     std::vector<std::string> args,
     const char *args_template,
-    Parameter result[10])
+    std::vector<Parameter> a)
 {
     int n_args = (int)args.size();
     int required_args = strlen(args_template);
@@ -2931,11 +3203,12 @@ convert_args_to_type(
         std::string required = std::to_string(required_args);
         return "ERROR: " + label + "requires" + required + "arguments";
     }
-    int n_results = std::min(10, n_args);
-    for (int i=0; i<n_results; i++) {
+    for (int i=0; i<n_args; i++) {
         switch (args_template[i]) {
-        case 'i':
-            result[i].i_value = stoi(args[i]);
+        case 'i': {
+            Parameter entry;
+            entry.i = stoi(args[i]);
+            a.push_back(entry);
             if (errno == EINVAL) {
                 return "TYPE ERROR: failed to convert argument " + std::to_string(i) + " to int.";
             }
@@ -2943,18 +3216,25 @@ convert_args_to_type(
                 return "RANGE ERROR: argument " + std::to_string(i) + " out of range.";
             }
             break;
-        case 'r':
-            result[i].r_value = stof(args[i]);
+        }
+        case 'r': {
+            Parameter entry;
+            entry.r = stof(args[i]);
+            a.push_back(entry);
             if (errno == EINVAL) {
                 return "TYPE ERROR: failed to convert argument " + std::to_string(i) + " to floating point.";
             }
-            if (std::isnan(result[i].r_value)) {
+            if (std::isnan(a[i].r)) {
                 return "NaN ERROR: argument " + std::to_string(i) + " is not a number.";
             }
             break;
-        case 's':
-            result[i].s_value = args[i];
+        }
+        case 's': {
+            Parameter entry;
+            entry.s = args[i];
+            a.push_back(entry);
             break;
+        }
         default:
             break;
         }
@@ -2963,20 +3243,21 @@ convert_args_to_type(
     return "";
 }
 
-/*
 std::string
-Include(std::vector<std::string> args, QScriptEngine* engine)
+Include(std::vector<Parameter> a)
 {
-    EmbString fileName = result[0].s_value;
-    QFile scriptFile("commands/" + fileName);
+    QString fileName = QString::fromStdString(a[0].s);
+    QFile scriptFile(("commands/" + a[0].s).c_str());
 
-    if (!scriptFile.open(QIODevice::ReadOnly))
-        return -1;
+    if (!scriptFile.open(QIODevice::ReadOnly)) {
+        return "ERROR: Failed to read script file.";
+    }
 
     QTextStream stream(&scriptFile);
-    EmbString s=stream.readAll();
+    QString s = stream.readAll();
     scriptFile.close();
 
+    /*
     QScriptContext* parent=context->parentContext();
 
     if (parent!=0) {
@@ -2985,23 +3266,16 @@ Include(std::vector<std::string> args, QScriptEngine* engine)
     }
 
     std::string result = engine->evaluate(s);
+    */
 
     return "";
 }
-    */
 
-/**
- * "debug": qDebug("%s", qPrintable(result[0].s_value));
- */
 std::string
-Error(Parameter args[10])
+Error(std::vector<Parameter> a)
 {
     /*
-
-    EmbString strCmd = result[0].s_value;
-    EmbString strErr = result[1].s_value;
-
-    _mainWin->setPromptPrefix("ERROR: (" + strCmd + ") " + strErr);
+    _mainWin->setPromptPrefix("ERROR: (" + a[0].s + ") " + a[1].s);
     _mainWin->nativeAppendPromptHistory(QString());
     actuator("end");
     */
@@ -3009,13 +3283,10 @@ Error(Parameter args[10])
 }
 
 std::string
-Todo(Parameter result[10])
+Todo(std::vector<Parameter> a)
 {
     /*
-    EmbString strCmd  = result[0].s_value;
-    EmbString strTodo = result[1].s_value;
-
-    _mainWin->nativeAlert("TODO: (" + strCmd + ") " + strTodo);
+    _mainWin->nativeAlert("TODO: (" + a[0].s + ") " + a[1].s);
     actuator("end");
     */
     return "";
@@ -3024,14 +3295,14 @@ Todo(Parameter result[10])
 #if 0
 
 std::string
-AppendPromptHistory(Parameter result[10])
+AppendPromptHistory(std::vector<Parameter> a)
 {
     int args = args.size();
     if (args == 0) {
         _mainWin->nativeAppendPromptHistory(QString());
     }
     else if (args == 1) {
-        _mainWin->nativeAppendPromptHistory(result[0].s_value);
+        _mainWin->nativeAppendPromptHistory(a[0].s);
     }
     else {
         return "ERROR: appendPromptHistory() requires one or zero arguments");
@@ -3043,15 +3314,16 @@ AppendPromptHistory(Parameter result[10])
  * argument string "sss"
  */
 std::string
-MessageBox(Parameter result[10])
+MessageBox(std::vector<Parameter> a)
 {
     /*
-    EmbString type  = result[0].s_value.toLower();
-    EmbString title = result[1].s_value;
-    EmbString text  = result[2].s_value;
+    QString type  = a[0].s.toLower();
+    QString title = a[1].s;
+    QString text  = a[2].s;
 
-    if (type != "critical" && type != "information" && type != "question" && type != "warning")
+    if (type != "critical" && type != "information" && type != "question" && type != "warning") {
         return context->throwError(QScriptContext::UnknownError, "messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
+    }
 
     _mainWin->nativeMessageBox(type, title, text);
     */
@@ -3062,7 +3334,7 @@ MessageBox(Parameter result[10])
  * argument string "i"
  */
 std::string
-IsInt(Parameter result[10])
+IsInt(std::vector<Parameter> a)
 {
     std::string error = convert_args_to_type("IsInt()", args, "i", result);
     if (error != "") {
@@ -3076,26 +3348,22 @@ IsInt(Parameter result[10])
  * argument string "rrrr"
  */
 std::string
-PrintArea(Parameter result[10])
+PrintArea(std::vector<Parameter> a)
 {
-    EmbReal x = result[0].r_value;
-    EmbReal y = result[1].r_value;
-    EmbReal w = result[2].r_value;
-    EmbReal h = result[3].r_value;
-
-    _mainWin->nativePrintArea(x, y, w, h);
+    _mainWin->nativePrintArea(a[0].r, a[1].r, a[2].r, a[3].r);
     return "";
 }
 
 /**
  *
+ * argument string "iii"
  */
 std::string
-SetBackgroundColor(Parameter result[10])
+SetBackgroundColor(std::vector<Parameter> a)
 {
-    EmbReal r = result[0].r_value;
-    EmbReal g = result[1].r_value;
-    EmbReal b = result[2].r_value;
+    EmbReal r = a[0].r;
+    EmbReal g = a[1].r;
+    EmbReal b = a[2].r;
 
     if (r < 0 || r > 255) { return context->throwError(QScriptContext::UnknownError, "setBackgroundColor(): r value must be in range 0-255"); }
     if (g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setBackgroundColor(): g value must be in range 0-255"); }
@@ -3107,13 +3375,14 @@ SetBackgroundColor(Parameter result[10])
 
 /**
  * .
+ * argument string "iii"
  */
 std::string
-SetCrossHairColor(Parameter result[10])
+SetCrossHairColor(std::vector<Parameter> a)
 {
-    int r = args[0].r_value;
-    int g = args[1].r_value;
-    int b = args[2].r_value;
+    int r = args[0].r;
+    int g = args[1].r;
+    int b = args[2].r;
 
     if (!validRGB(r, g, b)) {
     }
@@ -3132,12 +3401,16 @@ SetCrossHairColor(Parameter result[10])
     return "";
 }
 
+/**
+ * .
+ * argument string "iii"
+ */
 std::string
-SetGridColor(Parameter result[10])
+SetGridColor(std::vector<Parameter> a)
 {
-    int r = result[0].r_value;
-    int g = result[1].r_value;
-    int b = result[2].r_value;
+    int r = a[0].r;
+    int g = a[1].r;
+    int b = a[2].r;
 
     if (r < 0 || r > 255) {
         return "ERROR setGridColor(): r value must be in range 0-255";
@@ -3154,14 +3427,9 @@ SetGridColor(Parameter result[10])
 }
 
 std::string
-SetTextAngle(Parameter result[10])
+SetTextAngle(std::vector<Parameter> a)
 {
-    std::string error = convert_args_to_type("PrintArea()", args, "r", result);
-    if (error != "") {
-        return error;
-    }
-
-    _mainWin->setTextAngle(result[0].r_value);
+    _mainWin->setTextAngle(a[0].r);
     return "";
 }
 
@@ -3169,9 +3437,9 @@ SetTextAngle(Parameter result[10])
  * .
  */
 std::string
-SetTextBold(Parameter result[10])
+SetTextBold(std::vector<Parameter> a)
 {
-    _mainWin->setTextBold(result[0].b_value);
+    _mainWin->setTextBold(a[0].b);
     return "";
 }
 
@@ -3179,9 +3447,9 @@ SetTextBold(Parameter result[10])
  * .
  */
 std::string
-SetTextItalic(Parameter result[10])
+SetTextItalic(std::vector<Parameter> a)
 {
-    _mainWin->setTextItalic(result[0].b_value);
+    _mainWin->setTextItalic(a[0].b);
     return "";
 }
 
@@ -3189,9 +3457,9 @@ SetTextItalic(Parameter result[10])
  * .
  */
 std::string
-SetTextUnderline(Parameter result[10])
+SetTextUnderline(std::vector<Parameter> a)
 {
-    _mainWin->setTextUnderline(result[0].toBool());
+    _mainWin->setTextUnderline(a[0].b);
     return "";
 }
 
@@ -3199,9 +3467,9 @@ SetTextUnderline(Parameter result[10])
  * .
  */
 std::string
-SetTextStrikeOut(Parameter result[10])
+SetTextStrikeOut(std::vector<Parameter> a)
 {
-    _mainWin->setTextStrikeOut(result[0].toBool());
+    _mainWin->setTextStrikeOut(a[0].b);
     return "";
 }
 
@@ -3209,9 +3477,9 @@ SetTextStrikeOut(Parameter result[10])
  * \brief
  */
 std::string
-SetTextOverline(Parameter result[10])
+SetTextOverline(std::vector<Parameter> a)
 {
-    _mainWin->setTextOverline(result[0].toBool());
+    _mainWin->setTextOverline(a[0].b);
     return "";
 }
 
@@ -3219,13 +3487,13 @@ SetTextOverline(Parameter result[10])
  * .
  */
 std::string
-PreviewOn(Parameter result[10])
+PreviewOn(std::vector<Parameter> a)
 {
-    EmbString cloneStr = result[0].s_value.toUpper();
-    EmbString modeStr  = result[1].s_value.toUpper();
-    EmbReal x          = result[2].r_value;
-    EmbReal y          = args(3).r_value;
-    EmbReal data       = args(4).r_value;
+    QString cloneStr = QString::toStdString(a[0].s).toUpper();
+    QString modeStr  = QString::toStdString(a[1].s).toUpper();
+    EmbReal x = a[2].r;
+    EmbReal y = a[3].r;
+    EmbReal data = a[4].r;
 
     int clone = PREVIEW_CLONE_NULL;
     int mode = PREVIEW_MODE_NULL;
@@ -3245,75 +3513,22 @@ PreviewOn(Parameter result[10])
 "preview off", nativePreviewOff();
 "allow rubber", nativeAllowRubber();
 
-std::string
-SetRubberMode(Parameter result[10])
-{
-    EmbString mode = result[0].s_value.toUpper();
-
-    if (mode == "CIRCLE_1P_RAD") {
-        _mainWin->setRubberMode(OBJ_RUBBER_CIRCLE_1P_RAD);
-    }
-    else if (mode == "CIRCLE_1P_DIA") { _mainWin->setRubberMode(OBJ_RUBBER_CIRCLE_1P_DIA); }
-    else if (mode == "CIRCLE_2P") { _mainWin->setRubberMode(OBJ_RUBBER_CIRCLE_2P); }
-    else if (mode == "CIRCLE_3P") { _mainWin->setRubberMode(OBJ_RUBBER_CIRCLE_3P); }
-    else if (mode == "CIRCLE_TTR") { _mainWin->setRubberMode(OBJ_RUBBER_CIRCLE_TTR); }
-    else if (mode == "CIRCLE_TTR") { _mainWin->setRubberMode(OBJ_RUBBER_CIRCLE_TTT); }
-
-    else if (mode == "DIMLEADER_LINE") { _mainWin->setRubberMode(OBJ_RUBBER_DIMLEADER_LINE); }
-
-    else if (mode == "ELLIPSE_LINE") { _mainWin->setRubberMode(OBJ_RUBBER_ELLIPSE_LINE); }
-    else if (mode == "ELLIPSE_MAJORDIAMETER_MINORRADIUS") { _mainWin->setRubberMode(OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS); }
-    else if (mode == "ELLIPSE_MAJORRADIUS_MINORRADIUS") { _mainWin->setRubberMode(OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS); }
-    else if (mode == "ELLIPSE_ROTATION") { _mainWin->setRubberMode(OBJ_RUBBER_ELLIPSE_ROTATION); }
-
-    else if (mode == "LINE") { _mainWin->setRubberMode(OBJ_RUBBER_LINE); }
-
-    else if (mode == "POLYGON") { _mainWin->setRubberMode(OBJ_RUBBER_POLYGON); }
-    else if (mode == "POLYGON_INSCRIBE") { _mainWin->setRubberMode(OBJ_RUBBER_POLYGON_INSCRIBE); }
-    else if (mode == "POLYGON_CIRCUMSCRIBE") { _mainWin->setRubberMode(OBJ_RUBBER_POLYGON_CIRCUMSCRIBE); }
-
-    else if (mode == "POLYLINE") { _mainWin->setRubberMode(OBJ_RUBBER_POLYLINE); }
-
-    else if (mode == "RECTANGLE") { _mainWin->setRubberMode(OBJ_RUBBER_RECTANGLE); }
-
-    else if (mode == "TEXTSINGLE") { _mainWin->setRubberMode(OBJ_RUBBER_TEXTSINGLE); }
-
-    else { return context->throwError(QScriptContext::UnknownError, "setRubberMode(): unknown rubberMode value"); }
-
-    return "";
-}
-
 /**
  * \brief
  */
 std::string
-SetRubberPoint(Parameter result[10])
+SetRubberText(std::vector<Parameter> a)
 {
-    EmbString key = result[0].s_value.toUpper();
-    EmbReal x = result[1].r_value;
-    EmbReal y = result[2].r_value;
+    QString key = QString::toStdString(a[0].s).toUpper();
 
-    _mainWin->setRubberPoint(key, x, y);
-    return "";
-}
-
-/**
- * \brief
- */
-std::string
-SetRubberText(Parameter result[10])
-{
-    EmbString key = result[0].s_value.toUpper();
-    EmbString txt = result[1].s_value;
-
-    _mainWin->setRubberText(key, txt);
+    _mainWin->setRubberText(key, a[1].s);
     return "";
 }
 
 std::string
-AddRubber(Parameter result[10])
+AddRubber(std::vector<Parameter> a)
 {
-    EmbString objType = result[0].s_value.toUpper();
+    QString objType = QString::toStdString(a[0].s).toUpper();
 
     if (!_mainWin->nativeAllowRubber())
         return context->throwError(QScriptContext::UnknownError, "addRubber(): You must use actuator("vulcanize") before you can add another rubber object.");
@@ -3342,12 +3557,24 @@ AddRubber(Parameter result[10])
     else if (objType == "DIMDIAMETER") {
 
     } //TODO: handle this type
-    else if (objType == "DIMLEADER") { _mainWin->nativeAddDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
-    else if (objType == "DIMLINEAR") {} //TODO: handle this type
-    else if (objType == "DIMORDINATE") {} //TODO: handle this type
-    else if (objType == "DIMRADIUS") {} //TODO: handle this type
-    else if (objType == "ELLIPSE") { _mainWin->nativeAddEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON); }
-    else if (objType == "ELLIPSEARC") {} //TODO: handle this type
+    else if (objType == "DIMLEADER") {
+        _mainWin->nativeAddDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON);
+    }
+    else if (objType == "DIMLINEAR") {
+        
+    } //TODO: handle this type
+    else if (objType == "DIMORDINATE") {
+        
+    } //TODO: handle this type
+    else if (objType == "DIMRADIUS") {
+        
+    } //TODO: handle this type
+    else if (objType == "ELLIPSE") {
+        _mainWin->nativeAddEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON);
+    }
+    else if (objType == "ELLIPSEARC") {
+        
+    } //TODO: handle this type
     else if (objType == "HATCH") {} //TODO: handle this type
     else if (objType == "IMAGE") {} //TODO: handle this type
     else if (objType == "INFINITELINE") {} //TODO: handle this type
@@ -3368,13 +3595,19 @@ AddRubber(Parameter result[10])
 "clear rubber", nativeClearRubber();
 
 std::string
-SpareRubber(Parameter result[10])
+SpareRubber(std::vector<Parameter> a)
 {
-    EmbString objID = result[0].s_value.toUpper();
+    QString objID = QString::toStdString(a[0].s).toUpper();
 
-    if     (objID == "PATH") { _mainWin->nativeSpareRubber(SPARE_RUBBER_PATH);     }
-    else if (objID == "POLYGON") { _mainWin->nativeSpareRubber(SPARE_RUBBER_POLYGON);  }
-    else if (objID == "POLYLINE") { _mainWin->nativeSpareRubber(SPARE_RUBBER_POLYLINE); }
+    if (objID == "PATH") {
+        _mainWin->nativeSpareRubber(SPARE_RUBBER_PATH);
+    }
+    else if (objID == "POLYGON") {
+        _mainWin->nativeSpareRubber(SPARE_RUBBER_POLYGON);
+    }
+    else if (objID == "POLYLINE") {
+        _mainWin->nativeSpareRubber(SPARE_RUBBER_POLYLINE);
+    }
     else {
         bool ok = false;
         qint64 id = objID.toLongLong(&ok);
@@ -3389,28 +3622,16 @@ SpareRubber(Parameter result[10])
  * \brief
  */
 std::string
-AddTextMulti(Parameter result[10])
+AddTextMulti(std::vector<Parameter> a)
 {
-    EmbString str   = result[0].s_value;
-    EmbReal   x     = result[1].r_value;
-    EmbReal   y     = result[2].r_value;
-    EmbReal   rot   = args(3).r_value;
-    bool    fill  = args(4).toBool();
-
-    _mainWin->nativeAddTextMulti(str, x, y, rot, fill, OBJ_RUBBER_OFF);
+    _mainWin->nativeAddTextMulti(a[0].s, a[1].r, a[2].r, a[3].r, a[4].b, OBJ_RUBBER_OFF);
     return "";
 }
 
 std::string
-AddTextSingle(Parameter result[10])
+AddTextSingle(std::vector<Parameter> a)
 {
-    EmbString str = args[0];
-    EmbReal x = result[1].r_value;
-    EmbReal y = result[2].r_value;
-    EmbReal rot = args(3).r_value;
-    bool fill  = args(4).toBool();
-
-    _mainWin->nativeAddTextSingle(str, x, y, rot, fill, OBJ_RUBBER_OFF);
+    _mainWin->nativeAddTextSingle(a[0].s, a[1].r, a[2].r, a[3].r, a[4].b, OBJ_RUBBER_OFF);
     return "";
 }
 
@@ -3418,10 +3639,10 @@ AddTextSingle(Parameter result[10])
  * \brief
  */
 std::string
-AddInfiniteLine(Parameter result[10])
+AddInfiniteLine(std::vector<Parameter> a)
 {
     //TODO: parameter error checking
-    qDebug("TODO: finish addInfiniteLine command");
+    debug_message("TODO: finish addInfiniteLine command");
     return "";
 }
 
@@ -3429,178 +3650,71 @@ AddInfiniteLine(Parameter result[10])
  * \brief
  */
 std::string
-AddRay(Parameter result[10])
+AddRay(std::vector<Parameter> a)
 {
     //TODO: parameter error checking
-    qDebug("TODO: finish addRay command");
+    debug_message("TODO: finish addRay command");
     return "";
 }
 
-/**
- * \brief
- */
 std::string
-AddLine(Parameter result[10])
+AddLine(std::vector<Parameter> a)
 {
-    EmbReal x1  = result[0].r_value;
-    EmbReal y1  = result[1].r_value;
-    EmbReal x2  = result[2].r_value;
-    EmbReal y2  = args(3).r_value;
-    EmbReal rot = args(4).r_value;
-
-    _mainWin->nativeAddLine(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
+    _mainWin->nativeAddLine(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, OBJ_RUBBER_OFF);
     return "";
 }
 
-/**
- * \brief
- */
-std::string
-AddTriangle(Parameter result[10])
-{
-    EmbReal x1     = result[0].r_value;
-    EmbReal y1     = result[1].r_value;
-    EmbReal x2     = result[2].r_value;
-    EmbReal y2     = args(3).r_value;
-    EmbReal x3     = args(4).r_value;
-    EmbReal y3     = args(5).r_value;
-    EmbReal rot    = args(6).r_value;
-    bool  fill   = args(7).toBool();
+AddTriangle(std::vector<Parameter> a)
+    _mainWin->nativeAddTriangle(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, a[6].r, a[7].b);
 
-    _mainWin->nativeAddTriangle(x1, y1, x2, y2, x3, y3, rot, fill);
-    return "";
-}
-
-/**
- * \brief
- */
-std::string
-AddRectangle(Parameter result[10])
-{
-    EmbReal x    = result[0].r_value;
-    EmbReal y    = result[1].r_value;
-    EmbReal w    = result[2].r_value;
-    EmbReal h    = args(3).r_value;
-    EmbReal rot  = args(4).r_value;
-    bool  fill = args(5).toBool();
+AddRectangle(std::vector<Parameter> a)
+    EmbReal x    = a[0].r;
+    EmbReal y    = a[1].r;
+    EmbReal w    = a[2].r;
+    EmbReal h    = a[3].r;
+    EmbReal rot  = a[4].r;
+    bool  fill = a[5].toBool();
 
     _mainWin->nativeAddRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
-    return "";
-}
 
-/**
- * \brief
- */
 std::string
-AddRoundedRectangle(Parameter result[10])
+AddRoundedRectangle(std::vector<Parameter> a)
 {
-    EmbReal x    = result[0].r_value;
-    EmbReal y    = result[1].r_value;
-    EmbReal w    = result[2].r_value;
-    EmbReal h    = args(3).r_value;
-    EmbReal rad  = args(4).r_value;
-    EmbReal rot  = args(5).r_value;
-    bool  fill = args(6).toBool();
+    EmbReal x    = a[0].r;
+    EmbReal y    = a[1].r;
+    EmbReal w    = a[2].r;
+    EmbReal h    = a[3].r;
+    EmbReal rad  = a[4].r;
+    EmbReal rot  = a[5].r;
+    bool  fill = a[6].toBool();
 
     _mainWin->nativeAddRoundedRectangle(x, y, w, h, rad, rot, fill);
     return "";
 }
 
-/**
- * \brief
- */
-std::string
-AddArc(Parameter result[10])
-{
-    EmbReal startX = result[0].r_value;
-    EmbReal startY = result[1].r_value;
-    EmbReal midX   = result[2].r_value;
-    EmbReal midY   = args(3).r_value;
-    EmbReal endX   = args(4).r_value;
-    EmbReal endY   = args(5).r_value;
+AddArc(std::vector<Parameter> a)
+    _mainWin->nativeAddArc(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, OBJ_RUBBER_OFF);
 
-    _mainWin->nativeAddArc(startX, startY, midX, midY, endX, endY, OBJ_RUBBER_OFF);
-    return "";
-}
+AddCircle(std::vector<Parameter> a)
+    _mainWin->nativeAddCircle(a[0].r, a[1].r, a[2].r, a[3].b, OBJ_RUBBER_OFF);
 
-/**
- * \brief
- */
-std::string
-AddCircle(Parameter result[10])
-{
-    EmbReal centerX = result[0].r_value;
-    EmbReal centerY = result[1].r_value;
-    EmbReal radius  = result[2].r_value;
-    bool  fill    = args(3).toBool();
+AddSlot(std::vector<Parameter> a)
+    _mainWin->nativeAddSlot(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].b, OBJ_RUBBER_OFF);
 
-    _mainWin->nativeAddCircle(centerX, centerY, radius, fill, OBJ_RUBBER_OFF);
-    return "";
-}
+AddEllipse(std::vector<Parameter> a)
+    _mainWin->nativeAddEllipse(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].b, OBJ_RUBBER_OFF);
 
-/**
- * \brief
- */
-std::string
-AddSlot(Parameter result[10])
-{
-    EmbReal centerX  = result[0].r_value;
-    EmbReal centerY  = result[1].r_value;
-    EmbReal diameter = result[2].r_value;
-    EmbReal length   = args(3).r_value;
-    EmbReal rot      = args(4).r_value;
-    bool  fill     = args(5).toBool();
+AddPoint(std::vector<Parameter> a)
+    _mainWin->nativeAddPoint(a[0].r, a[1].r);
 
-    _mainWin->nativeAddSlot(centerX, centerY, diameter, length, rot, fill, OBJ_RUBBER_OFF);
-    return "";
-}
-
-
-std::string
-AddEllipse(Parameter result[10])
-{
-    EmbReal centerX = result[0].r_value;
-    EmbReal centerY = result[1].r_value;
-    EmbReal radX    = result[2].r_value;
-    EmbReal radY    = args(3).r_value;
-    EmbReal rot     = args(4).r_value;
-    bool  fill    = args(5).toBool();
-
-    _mainWin->nativeAddEllipse(centerX, centerY, radX, radY, rot, fill, OBJ_RUBBER_OFF);
-    return "";
-}
-
-/**
- * .
- */
-std::string
-AddPoint(Parameter result[10])
-{
-    EmbReal x = result[0].r_value;
-    EmbReal y = result[1].r_value;
-
-    _mainWin->nativeAddPoint(x,y);
-    return "";
-}
-
-/**
- * .
- */
-std::string
-AddRegularPolygon(Parameter result[10])
-{
+AddRegularPolygon(std::vector<Parameter> a)
     //TODO: parameter error checking
-    qDebug("TODO: finish addRegularPolygon command");
-    return "";
-}
+    debug_message("TODO: finish addRegularPolygon command");
 
-/**
- * .
- */
 std::string
-AddPolygon(Parameter result[10])
+AddPolygon(std::vector<Parameter> a)
 {
-    QVariantList varList = result[0].toVariant().toList();
+    QVariantList varList = a[0].toVariant().toList();
     int varSize = varList.size();
     if (varSize < 2) {
         return "TYPE ERROR: addPolygon(): array must contain at least two elements";
@@ -3644,13 +3758,10 @@ AddPolygon(Parameter result[10])
     return "";
 }
 
-/**
- * .
- */
 std::string
-AddPolyline(Parameter result[10])
+AddPolyline(std::vector<Parameter> a)
 {
-    QVariantList varList = result[0].toVariant().toList();
+    QVariantList varList = a[0].toVariant().toList();
     int varSize = varList.size();
     if (varSize < 2) {
         return "TYPE ERROR: addPolyline(): array must contain at least two elements";
@@ -3698,203 +3809,37 @@ AddPolyline(Parameter result[10])
     return "";
 }
 
-/**
- * .
- */
-std::string
-AddPath(Parameter result[10])
-{
+AddPath(std::vector<Parameter> a)
     //TODO: parameter error checking
-    qDebug("TODO: finish addPath command");
-}
+    debug_message("TODO: finish addPath command");
 
-/**
- * .
- */
-AddHorizontalDimension(Parameter result[10])
+AddHorizontalDimension(std::vector<Parameter> a)
     //TODO: parameter error checking
-    qDebug("TODO: finish addHorizontalDimension command");
+    debug_message("TODO: finish addHorizontalDimension command");
 
-/**
- * .
- */
-AddVerticalDimension(Parameter result[10])
+AddVerticalDimension(std::vector<Parameter> a)
     //TODO: parameter error checking
-    qDebug("TODO: finish addVerticalDimension command");
+    debug_message("TODO: finish addVerticalDimension command");
 
-/**
- * .
- */
-AddImage(Parameter result[10])
+AddImage(std::vector<Parameter> a)
     //TODO: parameter error checking
-    qDebug("TODO: finish addImage command");
+    debug_message("TODO: finish addImage command");
 
-/**
- *
- */
-std::string
-AddDimLeader(Parameter result[10])
-{
-    EmbReal x1  = result[0].r_value;
-    EmbReal y1  = result[1].r_value;
-    EmbReal x2  = result[2].r_value;
-    EmbReal y2  = args(3).r_value;
-    EmbReal rot = args(4).r_value;
+AddDimLeader(std::vector<Parameter> a)
+    _mainWin->nativeAddDimLeader(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, OBJ_RUBBER_OFF);
 
-    _mainWin->nativeAddDimLeader(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
-    return "";
-}
+SetCursorShape(std::vector<Parameter> a)
+    _mainWin->setCursorShape(a[0].s);
 
-/**
- *
- */
-std::string
-SetCursorShape(Parameter result[10])
-{
-    EmbString shape = result[0].s_value;
-    _mainWin->setCursorShape(shape);
-    return "";
-}
+CalculateAngle(std::vector<Parameter> a)
+    EmbReal result = _mainWin->nativeCalculateAngle(a[0].r, a[1].r, a[2].r, a[3].r);
+    return std::string(result);
 
-/**
- *
- */
-std::string
-CalculateAngle(Parameter result[10])
-{
-    EmbReal x1 = result[0].r_value;
-    EmbReal y1 = result[1].r_value;
-    EmbReal x2 = result[2].r_value;
-    EmbReal y2 = args(3).r_value;
 
-    return std::string(_mainWin->nativeCalculateAngle(x1, y1, x2, y2));
-}
-
-/**
- *
- */
-std::string
-CalculateDistance(Parameter result[10])
-{
-    EmbReal x1 = result[0].r_value;
-    EmbReal y1 = result[1].r_value;
-    EmbReal x2 = result[2].r_value;
-    EmbReal y2 = args(3).r_value;
-
-    return std::string(_mainWin->nativeCalculateDistance(x1, y1, x2, y2));
-}
-
-/**
- *
- */
-std::string
-PerpendicularDistance(Parameter result[10])
-{
-    EmbReal px = result[0].r_value;
-    EmbReal py = result[1].r_value;
-    EmbReal x1 = result[2].r_value;
-    EmbReal y1 = args(3).r_value;
-    EmbReal x2 = args(4).r_value;
-    EmbReal y2 = args(5).r_value;
-
-    return std::string(_mainWin->nativePerpendicularDistance(px, py, x1, y1, x2, y2));
-}
-
-/**
- *
- */
-std::string
-CutSelected(Parameter result[10])
-{
-    EmbReal x = result[0].r_value;
-    EmbReal y = result[1].r_value;
-
-    _mainWin->nativeCutSelected(x, y);
-    return "";
-}
-
-/**
- *
- */
-std::string
-CopySelected(Parameter result[10])
-{
-    EmbReal x = result[0].r_value;
-    EmbReal y = result[1].r_value;
-
-    _mainWin->nativeCopySelected(x, y);
-    return "";
-}
-
-/**
- *
- */
-std::string
-PasteSelected(Parameter result[10])
-{
-    EmbReal x = result[0].r_value;
-    EmbReal y = result[1].r_value;
-
-    _mainWin->nativePasteSelected(x, y);
-    return "";
-}
-
-/**
- *
- */
-std::string
-MoveSelected(Parameter result[10])
-{
-    EmbReal dx = result[0].r_value;
-    EmbReal dy = result[1].r_value;
-
-    _mainWin->nativeMoveSelected(dx, dy);
-    return "";
-}
-
-/**
- *
- */
-std::string
-ScaleSelected(Parameter result[10])
-{
-    EmbReal x      = result[0].r_value;
-    EmbReal y      = result[1].r_value;
-    EmbReal factor = result[2].r_value;
-
-    if (factor <= 0.0) {
-        return "ERROR scaleSelected(): scale factor must be greater than zero";
-    }
-
-    _mainWin->nativeScaleSelected(x, y, factor);
-    return "";
-}
-
-std::string
-RotateSelected(Parameter result[10])
-{
-    EmbReal x   = result[0].r_value;
-    EmbReal y   = result[1].r_value;
-    EmbReal rot = result[2].r_value;
-
-    _mainWin->nativeRotateSelected(x, y, rot);
-    return "";
-}
-
-/**
- * \brief
- */
-std::string
-MirrorSelected(Parameter result[10])
-{
-    EmbReal x1 = result[0].r_value;
-    EmbReal y1 = result[1].r_value;
-    EmbReal x2 = result[2].r_value;
-    EmbReal y2 = args(3).r_value;
-
-    _mainWin->nativeMirrorSelected(x1, y1, x2, y2);
-    return "";
-}
+PerpendicularDistance(std::vector<Parameter> a)
+    EmbReal result = _mainWin->nativePerpendicularDistance(
+        a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r);
+    return std::string(result);
 
 #endif
 
@@ -3915,7 +3860,7 @@ MainWindow::getAction(int actionEnum)
 void
 MainWindow::recentMenuAboutToShow()
 {
-    qDebug("MainWindow::recentMenuAboutToShow()");
+    debug_message("MainWindow::recentMenuAboutToShow()");
     recentMenu->clear();
 
     QFileInfo recentFileInfo;
@@ -3952,7 +3897,7 @@ MainWindow::recentMenuAboutToShow()
 void
 MainWindow::windowMenuAboutToShow()
 {
-    qDebug("MainWindow::windowMenuAboutToShow()");
+    debug_message("MainWindow::windowMenuAboutToShow()");
     windowMenu->clear();
     windowMenu->addAction(actionHash[get_action_index("windowclose")]);
     windowMenu->addAction(actionHash[get_action_index("windowcloseall")]);
@@ -3982,7 +3927,7 @@ MainWindow::windowMenuAboutToShow()
 void
 MainWindow::windowMenuActivated(bool checked)
 {
-    qDebug("MainWindow::windowMenuActivated()");
+    debug_message("MainWindow::windowMenuActivated()");
     QAction* aSender = qobject_cast<QAction*>(sender());
     if (!aSender)
         return;
@@ -3997,7 +3942,7 @@ MainWindow::windowMenuActivated(bool checked)
 void
 MainWindow::newFile()
 {
-    qDebug("MainWindow::newFile()");
+    debug_message("MainWindow::newFile()");
     docIndex++;
     numOfDocs++;
     MdiWindow* mdiWin = new MdiWindow(docIndex, mdiArea, Qt::SubWindow);
@@ -4021,7 +3966,7 @@ MainWindow::newFile()
 void
 MainWindow::openFile(bool recent, const QString& recentFile)
 {
-    qDebug("MainWindow::openFile()");
+    debug_message("MainWindow::openFile()");
 
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
@@ -4115,7 +4060,7 @@ MainWindow::openFilesSelected(const QStringList& filesToOpen)
 void
 MainWindow::openrecentfile()
 {
-    qDebug("MainWindow::openrecentfile()");
+    debug_message("MainWindow::openrecentfile()");
 
     //Check to see if this from the recent files list
     QAction* recentSender = qobject_cast<QAction*>(sender());
@@ -4130,7 +4075,7 @@ MainWindow::openrecentfile()
 void
 MainWindow::savefile()
 {
-    qDebug("MainWindow::savefile()");
+    debug_message("MainWindow::savefile()");
 }
 
 /**
@@ -4139,7 +4084,7 @@ MainWindow::savefile()
 void
 MainWindow::saveasfile()
 {
-    qDebug("MainWindow::saveasfile()");
+    debug_message("MainWindow::saveasfile()");
     // need to find the activeSubWindow before it loses focus to the FileDialog
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (!mdiWin)
@@ -4159,7 +4104,7 @@ MainWindow::saveasfile()
  */
 QMdiSubWindow* MainWindow::findMdiWindow(const QString& fileName)
 {
-    qDebug("MainWindow::findMdiWindow(%s)", qPrintable(fileName));
+    debug_message("MainWindow::findMdiWindow(%s)" + fileName.toStdString());
     QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
 
     foreach(QMdiSubWindow* subWindow, mdiArea->subWindowList()) {
@@ -4191,7 +4136,7 @@ MainWindow::closeEvent(QCloseEvent* event)
 void
 MainWindow::onCloseWindow()
 {
-    qDebug("MainWindow::onCloseWindow()");
+    debug_message("MainWindow::onCloseWindow()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
         onCloseMdiWin(mdiWin);
@@ -4205,7 +4150,7 @@ MainWindow::onCloseWindow()
 void
 MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
 {
-    qDebug("MainWindow::onCloseMdiWin()");
+    debug_message("MainWindow::onCloseMdiWin()");
     numOfDocs--;
 
     bool keepMaximized;
@@ -4232,7 +4177,7 @@ MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
 void
 MainWindow::onWindowActivated(QMdiSubWindow* w)
 {
-    qDebug("MainWindow::onWindowActivated()");
+    debug_message("MainWindow::onWindowActivated()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(w);
     if (mdiWin) {
         mdiWin->onWindowActivated();
@@ -4246,7 +4191,7 @@ MainWindow::onWindowActivated(QMdiSubWindow* w)
 void
 MainWindow::resizeEvent(QResizeEvent* e)
 {
-    qDebug("MainWindow::resizeEvent()");
+    debug_message("MainWindow::resizeEvent()");
     QMainWindow::resizeEvent(e);
     statusBar()->setSizeGripEnabled(!isMaximized());
 }
@@ -4258,7 +4203,7 @@ MainWindow::resizeEvent(QResizeEvent* e)
 QAction*
 MainWindow::getFileSeparator()
 {
-    qDebug("MainWindow::getFileSeparator()");
+    debug_message("MainWindow::getFileSeparator()");
     return myFileSeparator;
 }
 
@@ -4268,7 +4213,7 @@ MainWindow::getFileSeparator()
 void
 MainWindow::updateMenuToolbarStatusbar()
 {
-    qDebug("MainWindow::updateMenuToolbarStatusbar()");
+    debug_message("MainWindow::updateMenuToolbarStatusbar()");
 
     actionHash[get_action_index("print")]->setEnabled(numOfDocs > 0);
     actionHash[get_action_index("windowclose")]->setEnabled(numOfDocs > 0);
@@ -4372,7 +4317,7 @@ MainWindow::updateMenuToolbarStatusbar()
 void
 MainWindow::hideUnimplemented()
 {
-    qDebug("MainWindow::hideUnimplemented()");
+    debug_message("MainWindow::hideUnimplemented()");
 }
 
 /**
@@ -4471,7 +4416,7 @@ MainWindow::closeToolBar(QAction* action)
     if (action->objectName() == "toolbarclose") {
         QToolBar* tb = qobject_cast<QToolBar*>(sender());
         if (tb) {
-            qDebug("%s closed.", qPrintable(tb->objectName()));
+            debug_message(tb->objectName().toStdString() + "%s closed.");
             tb->hide();
         }
     }
@@ -5463,7 +5408,7 @@ void
 click(x, y)
 {
     appendPromptHistory();
-    setPromptPrefix("X = " + x.s_value + ", Y = " + y.s_value);
+    setPromptPrefix("X = " + x.s + ", Y = " + y.s);
     appendPromptHistory();
     //endCommand();
 }
@@ -5484,7 +5429,7 @@ prompt(str)
     }
     else {
         appendPromptHistory();
-        setPromptPrefix("X = " + strList[0].s_value + ", Y = " + strList[1].toString());
+        setPromptPrefix("X = " + strList[0].s + ", Y = " + strList[1].toString());
         appendPromptHistory();
         //endCommand();
     }

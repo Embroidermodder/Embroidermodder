@@ -168,9 +168,10 @@ typedef struct GroupBoxData_ {
  * .
  */
 typedef struct Parameter_ {
-    std::string s_value;
-    EmbReal r_value;
-    int i_value;
+    std::string s;
+    EmbReal r;
+    int i;
+    bool b;
 } Parameter;
 
 /**
@@ -2054,7 +2055,7 @@ public:
     void nativeSpareRubber(int64_t id);
     // \todo void nativeSetRubberFilter(int64_t id);
     // \todo This is so more than 1 rubber object can exist at one time without updating all rubber objects at once
-    void nativeSetRubberMode(int mode);
+    std::string nativeSetRubberMode(std::vector<Parameter> args);
     void nativeSetRubberPoint(const QString& key, EmbReal x, EmbReal y);
     void nativeSetRubberText(const QString& key, const QString& txt);
 
