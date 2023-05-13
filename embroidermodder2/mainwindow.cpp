@@ -35,13 +35,6 @@ QHash<QString, QToolBar*> toolbarHash;
 QHash<QString, QMenu*> menuHash;
 
 std::vector<Action> action_table;
-std::unordered_map<std::string, QGroupBox *> groupBoxes;
-std::unordered_map<std::string, QComboBox *> comboBoxes;
-std::unordered_map<std::string, QLineEdit *> lineEdits;
-std::unordered_map<std::string, QToolButton *> toolButtons;
-QFontComboBox* comboBoxTextSingleFont;
-std::vector<std::string> group_box_list;
-std::unordered_map<std::string, GroupBoxData> group_box_data;
 
 std::vector<EmbReal> snowflake_x;
 std::vector<EmbReal> snowflake_y;
@@ -2019,6 +2012,7 @@ read_settings(const char *settings_file)
     std::vector<std::string> action_labels =
         read_string_list_setting(settings_toml, "actions_");
     group_box_list = read_string_list_setting(settings_toml, "group_box_list");
+    all_line_editors = read_string_list_setting(settings_toml, "all_line_editors");
 
     for (int i=0; i<action_labels.size(); i++) {
         Action action;

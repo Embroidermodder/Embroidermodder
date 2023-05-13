@@ -156,7 +156,6 @@ typedef struct Action__ {
  * .
  */
 typedef struct GroupBoxData_ {
-    int object;
     char key[200];
     char icon_name[200];
     char label[200];
@@ -2957,6 +2956,7 @@ extern std::vector<std::string> file_toolbar;
 extern std::vector<std::string> edit_toolbar;
 extern std::vector<std::string> view_toolbar;
 extern std::vector<std::string> zoom_toolbar;
+extern std::vector<std::string> all_line_editors;
 extern std::unordered_map<std::string, QGroupBox *> groupBoxes;
 extern std::unordered_map<std::string, QComboBox *> comboBoxes;
 extern std::unordered_map<std::string, QLineEdit *> lineEdits;
