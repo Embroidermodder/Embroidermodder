@@ -36,23 +36,35 @@ debug_message(std::string msg)
  * .
  */
 void
-set_label_enabled(QObject* parent, const char *key, bool enabled)
+set_enabled(QObject* parent, const char *key, bool enabled)
 {
-    QLabel* label = parent->findChild<QLabel*>(key);
-    if (label) {
-        label->setEnabled(enabled);
+    if (!strncmp(key, "lineEdit", 8)) {
+        QLabel* label = parent->findChild<QLabel*>(key);
+        if (label) {
+            label->setEnabled(enabled);
+        }
+        return;
     }
-}
-
-/**
- * .
- */
-void
-set_combobox_enabled(QObject *parent, const char *key, bool enabled)
-{
-    QComboBox* comboBox = parent->findChild<QComboBox*>(key);
-    if (comboBox) {
-        comboBox->setEnabled(enabled);    
+    if (!strncmp(key, "comboBox", 8)) {
+        QComboBox* comboBox = parent->findChild<QComboBox*>(key);
+        if (comboBox) {
+            comboBox->setEnabled(enabled);    
+        }
+        return;
+    }
+    if (!strncmp(key, "checkBox", 8)) {
+        QCheckBox* checkBox = parent->findChild<QCheckBox*>(key);
+        if (checkBox) {
+            checkBox->setEnabled(enabled);
+        }
+        return;
+    }
+    if (!strncmp(key, "button", 6)) {
+        QPushButton* button = parent->findChild<QPushButton*>(key);
+        if (button) {
+            button->setEnabled(enabled);
+        }
+        return;
     }
 }
 
@@ -60,22 +72,20 @@ set_combobox_enabled(QObject *parent, const char *key, bool enabled)
  * \todo error reporting.
  */
 void
-set_label_visibility(QObject* parent, const char *name, bool visibility)
+set_visibility(QObject* parent, const char *key, bool visibility)
 {
-    QLabel* label = parent->findChild<QLabel*>(name);
-    if (label) {
-        label->setVisible(visibility);
+    if (!strncmp(key, "lineEdit", 8)) {
+        QLabel* label = parent->findChild<QLabel*>(key);
+        if (label) {
+            label->setVisible(visibility);
+        }
+        return;
     }
-}
-
-/**
- * \todo error reporting.
- */
-void
-set_spinbox_visibility(QObject* parent, const char *name, bool visibility)
-{
-    QDoubleSpinBox* spinbox = parent->findChild<QDoubleSpinBox*>(name);
-    if (spinbox) {
-        spinbox->setVisible(visibility);
+    if (!strncmp(key, "spinBox", 7)) {
+        QDoubleSpinBox* spinbox = parent->findChild<QDoubleSpinBox*>(key);
+        if (spinbox) {
+            spinbox->setVisible(visibility);
+        }
+        return;
     }
 }

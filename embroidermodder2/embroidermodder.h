@@ -1985,7 +1985,6 @@ public slots:
 
     void setTextFont(const QString& str);
     void setTextSize(EmbReal num);
-    void setTextAngle(EmbReal num);
 
     QString getCurrentLayer();
     QRgb getCurrentColor();
@@ -2007,30 +2006,12 @@ public slots:
     void makeLayerActive();
     void layerManager();
     void layerPrevious();
-    // Zoom Toolbar
-    void zoomRealtime();
-    void zoomPrevious();
-    void zoomWindow();
-    void zoomDynamic();
-    void zoomScale();
-    void zoomCenter();
-    void zoomIn();
-    void zoomOut();
-    void zoomSelected();
-    void zoomAll();
-    void zoomExtents();
-    // Pan SubMenu
-    void panrealtime();
-    void panpoint();
-    void panLeft();
-    void panRight();
-    void panUp();
-    void panDown();
+
+    std::string zoom(std::string mode);
+    std::string pan(std::string mode);
 
     void dayVision();
     void nightVision();
-
-    void doNothing();
 
 public:
     void nativeAlert(const QString& txt);
@@ -2890,10 +2871,8 @@ void write_settings(const char *fname);
 EmbVector rotate_vector(EmbVector v, EmbReal alpha);
 
 void debug_message(std::string msg);
-void set_label_enabled(QObject* parent, const char *key, bool enabled);
-void set_combobox_enabled(QObject *parent, const char *key, bool enabled);
-void set_label_visibility(QObject *parent, const char *name, bool visibility);
-void set_spinbox_visibility(QObject *parent, const char *name, bool visibility);
+void set_enabled(QObject *parent, const char *key, bool enabled);
+void set_visibility(QObject *parent, const char *name, bool visibility);
 
 std::string actuator(std::string line);
 std::string run_script_file(std::string fname);

@@ -41,6 +41,27 @@ std::vector<EmbReal> snowflake_y;
 std::vector<EmbReal> dolphin_x;
 std::vector<EmbReal> dolphin_y;
 
+std::unordered_map<std::string, int> rubber_mode_hash = {
+    {"CIRCLE_1P_RAD", OBJ_RUBBER_CIRCLE_1P_RAD},
+    {"CIRCLE_1P_DIA", OBJ_RUBBER_CIRCLE_1P_DIA},
+    {"CIRCLE_2P", OBJ_RUBBER_CIRCLE_2P},
+    {"CIRCLE_3P", OBJ_RUBBER_CIRCLE_3P},
+    {"CIRCLE_TTR", OBJ_RUBBER_CIRCLE_TTR},
+    {"CIRCLE_TTT", OBJ_RUBBER_CIRCLE_TTT},
+    {"DIMLEADER_LINE", OBJ_RUBBER_DIMLEADER_LINE},
+    {"ELLIPSE_LINE", OBJ_RUBBER_ELLIPSE_LINE},
+    {"ELLIPSE_MAJORDIAMETER_MINORRADIUS", OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS},
+    {"ELLIPSE_MAJORRADIUS_MINORRADIUS", OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS},
+    {"ELLIPSE_ROTATION", OBJ_RUBBER_ELLIPSE_ROTATION},
+    {"LINE", OBJ_RUBBER_LINE},
+    {"POLYGON", OBJ_RUBBER_POLYGON},
+    {"POLYGON_INSCRIBE", OBJ_RUBBER_POLYGON_INSCRIBE},
+    {"POLYGON_CIRCUMSCRIBE", OBJ_RUBBER_POLYGON_CIRCUMSCRIBE},
+    {"POLYLINE", OBJ_RUBBER_POLYLINE},
+    {"RECTANGLE", OBJ_RUBBER_RECTANGLE},
+    {"TEXTSINGLE", OBJ_RUBBER_TEXTSINGLE}
+};
+
 /**
  * @brief MainWindow::stub_testing
  */
@@ -82,7 +103,9 @@ MainWindow::cut()
 {
     debug_message("cut()");
     View* gview = _mainWin->activeView();
-    if (gview) { gview->cut(); }
+    if (gview) {
+        gview->cut();
+    }
 }
 
 /**
@@ -106,10 +129,16 @@ MainWindow::paste()
 {
     debug_message("paste()");
     View* gview = _mainWin->activeView();
-    if (gview) { gview->paste(); }
+    if (gview) {
+        gview->paste();
+    }
 }
 
-QString MainWindow::platformString()
+/**
+ * .
+ */
+QString
+MainWindow::platformString()
 {
     //TODO: Append QSysInfo to string where applicable.
     QString os;
@@ -178,17 +207,22 @@ QString MainWindow::platformString()
     return os;
 }
 
+/**
+ * .
+ */
 void
 MainWindow::designDetails()
 {
     QGraphicsScene* scene = activeScene();
-    if (scene)
-    {
+    if (scene) {
         EmbDetailsDialog dialog(scene, this);
         dialog.exec();
     }
 }
 
+/**
+ * .
+ */
 void
 MainWindow::about()
 {
@@ -239,6 +273,9 @@ MainWindow::about()
     QApplication::restoreOverrideCursor();
 }
 
+/**
+ * .
+ */
 void
 MainWindow::whatsThisContextHelp()
 {
@@ -246,14 +283,22 @@ MainWindow::whatsThisContextHelp()
     QWhatsThis::enterWhatsThisMode();
 }
 
+/**
+ * .
+ */
 void
 MainWindow::print()
 {
     debug_message("print()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) { mdiWin->print(); }
+    if (mdiWin) {
+        mdiWin->print();
+    }
 }
 
+/**
+ * .
+ */
 void
 MainWindow::tipOfTheDay()
 {
@@ -308,27 +353,36 @@ MainWindow::tipOfTheDay()
     wizardTipOfTheDay->exec();
 }
 
+/**
+ * .
+ */
 void
 MainWindow::checkBoxTipOfTheDayStateChanged(int checked)
 {
     settings.general_tip_of_the_day = checked;
 }
 
+/**
+ * .
+ */
 void
 MainWindow::buttonTipOfTheDayClicked(int button)
 {
     debug_message("buttonTipOfTheDayClicked(%d)" + std::to_string(button));
     if (button == QWizard::CustomButton1) {
-        if (settings.general_current_tip > 0)
+        if (settings.general_current_tip > 0) {
             settings.general_current_tip--;
-        else
+        }
+        else {
             settings.general_current_tip = listTipOfTheDay.size()-1;
+        }
         labelTipOfTheDay->setText(listTipOfTheDay.value(settings.general_current_tip));
     }
     else if (button == QWizard::CustomButton2) {
         settings.general_current_tip++;
-        if (settings.general_current_tip >= listTipOfTheDay.size())
+        if (settings.general_current_tip >= listTipOfTheDay.size()) {
             settings.general_current_tip = 0;
+        }
         labelTipOfTheDay->setText(listTipOfTheDay.value(settings.general_current_tip));
     }
     else if (button == QWizard::CustomButton3) {
@@ -336,6 +390,9 @@ MainWindow::buttonTipOfTheDayClicked(int button)
     }
 }
 
+/**
+ * .
+ */
 void
 MainWindow::help()
 {
@@ -469,8 +526,7 @@ QUndoStack* MainWindow::activeUndoStack()
 {
     debug_message("activeUndoStack()");
     View* v = _mainWin->activeView();
-    if (v)
-    {
+    if (v) {
         QUndoStack* u = v->getUndoStack();
         return u;
     }
@@ -487,10 +543,11 @@ void
 MainWindow::updateAllViewScrollBars(bool val)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
-    for(int i = 0; i < windowList.count(); ++i)
-    {
+    for (int i = 0; i < windowList.count(); ++i) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if (mdiWin) { mdiWin->showViewScrollBars(val); }
+        if (mdiWin) {
+            mdiWin->showViewScrollBars(val);
+        }
     }
 }
 
@@ -512,7 +569,9 @@ MainWindow::updateAllViewBackgroundColors(QRgb color)
     for(int i = 0; i < windowList.count(); ++i)
     {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if (mdiWin) { mdiWin->setViewBackgroundColor(color); }
+        if (mdiWin) {
+            mdiWin->setViewBackgroundColor(color);
+        }
     }
 }
 
@@ -520,10 +579,11 @@ void
 MainWindow::updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
-    for(int i = 0; i < windowList.count(); ++i)
-    {
+    for (int i = 0; i < windowList.count(); ++i) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if (mdiWin) { mdiWin->setViewSelectBoxColors(colorL, fillL, colorR, fillR, alpha); }
+        if (mdiWin) {
+            mdiWin->setViewSelectBoxColors(colorL, fillL, colorR, fillR, alpha);
+        }
     }
 }
 
@@ -531,10 +591,11 @@ void
 MainWindow::updateAllViewGridColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
-    for(int i = 0; i < windowList.count(); ++i)
-    {
+    for (int i = 0; i < windowList.count(); ++i) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if (mdiWin) { mdiWin->setViewGridColor(color); }
+        if (mdiWin) {
+            mdiWin->setViewGridColor(color);
+        }
     }
 }
 
@@ -544,7 +605,9 @@ MainWindow::updateAllViewRulerColors(QRgb color)
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if (mdiWin) { mdiWin->setViewRulerColor(color); }
+        if (mdiWin) {
+            mdiWin->setViewRulerColor(color);
+        }
     }
 }
 
@@ -591,218 +654,118 @@ MainWindow::layerPrevious()
     debug_message("TODO: Implement layerPrevious.");
 }
 
-
 /**
  * .
  */
-void
-MainWindow::zoomRealtime()
+std::string
+MainWindow::pan(std::string mode)
 {
-    debug_message("zoomRealtime()");
-    debug_message("TODO: Implement zoomRealtime.");
-}
-
-/**
- * .
- */
-void
-MainWindow::zoomPrevious()
-{
-    debug_message("zoomPrevious()");
-    debug_message("TODO: Implement zoomPrevious.");
-}
-
-/**
- * .
- */
-void
-MainWindow::zoomWindow()
-{
-    debug_message("zoomWindow()");
-    View* gview = _mainWin->activeView();
-    if (gview) {
-        gview->zoomWindow();
-    }
-}
-
-/**
- * .
- */
-void
-MainWindow::zoomDynamic()
-{
-    debug_message("zoomDynamic()");
-    debug_message("TODO: Implement zoomDynamic.");
-}
-
-/**
- * .
- */
-void
-MainWindow::zoomScale()
-{
-    debug_message("zoomScale()");
-    debug_message("TODO: Implement zoomScale.");
-}
-
-/**
- * .
- */
-void
-MainWindow::zoomCenter()
-{
-    debug_message("zoomCenter()");
-    debug_message("TODO: Implement zoomCenter.");
-}
-
-/**
- * .
- */
-void
-MainWindow::zoomIn()
-{
-    debug_message("zoomIn()");
-    View* gview = _mainWin->activeView();
-    if (gview) { gview->zoomIn(); }
-}
-
-/**
- * .
- */
-void
-MainWindow::zoomOut()
-{
-    debug_message("zoomOut()");
-    View* gview = _mainWin->activeView();
-    if (gview) { gview->zoomOut(); }
-}
-
-/**
- * .
- */
-void
-MainWindow::zoomSelected()
-{
-    debug_message("zoomSelected()");
     View* gview = _mainWin->activeView();
     QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack)
-    {
-        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomSelected", gview, 0);
-        stack->push(cmd);
+    if (gview && stack) {
+        if (mode == "realtime") {
+            debug_message("panrealtime()");
+            gview->panRealTime();
+            return "";
+        }
+        if (mode == "point") {
+            debug_message("panpoint()");
+            gview->panPoint();
+            return "";
+        }
+        if (mode == "left") {
+            debug_message("panLeft()");
+            UndoableNavCommand* cmd = new UndoableNavCommand("PanLeft", gview, 0);
+            stack->push(cmd);
+            return "";
+        }
+        if (mode == "right") {
+            debug_message("panRight()");
+            UndoableNavCommand* cmd = new UndoableNavCommand("PanRight", gview, 0);
+            stack->push(cmd);
+            return "";
+        }
+        if (mode == "up") {
+            debug_message("panUp()");
+            UndoableNavCommand* cmd = new UndoableNavCommand("PanUp", gview, 0);
+            stack->push(cmd);
+            return "";
+        }
+        if (mode == "down") {
+            debug_message("panDown()");
+            UndoableNavCommand* cmd = new UndoableNavCommand("PanDown", gview, 0);
+            stack->push(cmd);
+            return "";
+        }
     }
+    return "ERROR: pan subcommand not recognised.";
 }
 
-/**
- * .
- */
-void
-MainWindow::zoomAll()
+std::string
+MainWindow::zoom(std::string mode)
 {
-    debug_message("zoomAll()");
-    debug_message("TODO: Implement zoomAll.");
-}
-
-/**
- * .
- */
-void
-MainWindow::zoomExtents()
-{
-    debug_message("zoomExtents()");
     View* gview = _mainWin->activeView();
     QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack)
-    {
-        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomExtents", gview, 0);
-        stack->push(cmd);
+    if (gview && stack) {
+        if (mode == "realtime") {
+            debug_message("zoomRealtime()");
+            debug_message("TODO: Implement zoomRealtime.");
+            return "";
+        }
+        if (mode == "previous") {
+            debug_message("zoomPrevious()");
+            debug_message("TODO: Implement zoomPrevious.");
+            return "";
+        }
+        if (mode == "window") {
+            debug_message("zoomWindow()");
+            gview->zoomWindow();
+            return "";
+        }
+        if (mode == "dynamic") {
+            debug_message("zoomDynamic()");
+            debug_message("TODO: Implement zoomDynamic.");
+            return "";
+        }
+        if (mode == "scale") {
+            debug_message("zoomScale()");
+            debug_message("TODO: Implement zoomScale.");
+            return "";
+        }
+        if (mode == "center") {
+            debug_message("zoomCenter()");
+            debug_message("TODO: Implement zoomCenter.");
+            return "";
+        }
+        if (mode == "in") {
+            debug_message("zoomIn()");
+            gview->zoomIn();
+            return "";
+        }
+        if (mode == "out") {
+            debug_message("zoomOut()");
+            gview->zoomOut();
+            return "";
+        }
+        if (mode == "selected") {
+            debug_message("zoomSelected()");
+            UndoableNavCommand* cmd = new UndoableNavCommand("ZoomSelected", gview, 0);
+            stack->push(cmd);
+            return "";
+        }
+        if (mode == "all") {
+            debug_message("zoomAll()");
+            debug_message("TODO: Implement zoomAll.");
+            return "";
+        }
+        if (mode == "extents") {
+            debug_message("zoomExtents()");
+            UndoableNavCommand* cmd = new UndoableNavCommand("ZoomExtents", gview, 0);
+            stack->push(cmd);
+            return "";
+        }
     }
-}
-
-/**
- * .
- */
-void
-MainWindow::panrealtime()
-{
-    debug_message("panrealtime()");
-    View* gview = _mainWin->activeView();
-    if (gview) { gview->panRealTime(); }
-}
-
-/**
- * .
- */
-void
-MainWindow::panpoint()
-{
-    debug_message("panpoint()");
-    View* gview = _mainWin->activeView();
-    if (gview) { gview->panPoint(); }
-}
-
-/**
- * .
- */
-void
-MainWindow::panLeft()
-{
-    debug_message("panLeft()");
-    View* gview = _mainWin->activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack)
-    {
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanLeft", gview, 0);
-        stack->push(cmd);
-    }
-}
-
-/**
- * .
- */
-void
-MainWindow::panRight()
-{
-    debug_message("panRight()");
-    View* gview = _mainWin->activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack)
-    {
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanRight", gview, 0);
-        stack->push(cmd);
-    }
-}
-
-/**
- * .
- */
-void
-MainWindow::panUp()
-{
-    debug_message("panUp()");
-    View* gview = _mainWin->activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack)
-    {
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanUp", gview, 0);
-        stack->push(cmd);
-    }
-}
-
-/**
- * @brief MainWindow::panDown
- */
-void
-MainWindow::panDown()
-{
-    debug_message("panDown()");
-    View* gview = _mainWin->activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack)
-    {
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanDown", gview, 0);
-        stack->push(cmd);
-    }
+    return "ERROR: zoom subcommand not recognised.";
 }
 
 /**
@@ -833,13 +796,6 @@ MainWindow::nightVision()
         gview->setCrossHairColor(qRgb(255,255,255));
         gview->setGridColor(qRgb(255,255,255));
     }
-}
-
-void
-MainWindow::doNothing()
-{
-    //This function intentionally does nothing.
-    debug_message("doNothing()");
 }
 
 void
@@ -933,15 +889,6 @@ MainWindow::setTextSize(EmbReal num)
     if (index != -1) {
         textSizeSelector->setCurrentIndex(index);
     }
-}
-
-/**
- * .
- */
-void
-MainWindow::setTextAngle(EmbReal num)
-{
-    settings.text_angle = num;
 }
 
 /**
@@ -1327,16 +1274,21 @@ MainWindow::nativeSetRubberText(const QString& key, const QString& txt)
 void
 MainWindow::nativeAddTextMulti(const QString& str, EmbReal x, EmbReal y, EmbReal rot, bool fill, int rubberMode)
 {
+    /*
+    _mainWin->nativeAddTextMulti(a[0].s, a[1].r, a[2].r, a[3].r, a[4].b, OBJ_RUBBER_OFF);
+    */
 }
 
 void
 MainWindow::nativeAddTextSingle(const QString& str, EmbReal x, EmbReal y, EmbReal rot, bool fill, int rubberMode)
 {
+    /*
+    _mainWin->nativeAddTextSingle(a[0].s, a[1].r, a[2].r, a[3].r, a[4].b, OBJ_RUBBER_OFF);
+    */
     View* gview = _mainWin->activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
-    if (gview && gscene && stack)
-    {
+    if (gview && gscene && stack) {
         TextSingleObject* obj = new TextSingleObject(str, x, -y, getCurrentColor());
         obj->setObjectTextFont(settings.text_font);
         obj->setObjectTextSize(settings.text_size);
@@ -1350,33 +1302,51 @@ MainWindow::nativeAddTextSingle(const QString& str, EmbReal x, EmbReal y, EmbRea
         obj->setRotation(-rot);
         //TODO: single line text fill
         obj->setObjectRubberMode(rubberMode);
-        if (rubberMode)
-        {
+        if (rubberMode) {
             gview->addToRubberRoom(obj);
             gscene->addItem(obj);
             gscene->update();
         }
-        else
-        {
+        else {
             UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
     }
 }
 
+/**
+ * .
+ */
 void
 MainWindow::nativeAddInfiniteLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot)
 {
+    /*
+    //TODO: parameter error checking
+    debug_message("TODO: finish addInfiniteLine command");
+    */
 }
 
+/**
+ * .
+ */
 void
 MainWindow::nativeAddRay(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot)
 {
+    /*
+    //TODO: parameter error checking
+    debug_message("TODO: finish addRay command");
+    */
 }
 
+/**
+ * .
+ */
 void
 MainWindow::nativeAddLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, int rubberMode)
 {
+    /*
+    _mainWin->nativeAddLine(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, OBJ_RUBBER_OFF);
+    */
     View* gview = _mainWin->activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
@@ -1402,28 +1372,40 @@ MainWindow::nativeAddLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbRea
 void
 MainWindow::nativeAddTriangle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal x3, EmbReal y3, EmbReal rot, bool fill)
 {
+    /*
+    AddTriangle(std::vector<Parameter> a)
+    _mainWin->nativeAddTriangle(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, a[6].r, a[7].b);
+    */
 }
 
 void
 MainWindow::nativeAddRectangle(EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot, bool fill, int rubberMode)
 {
+    /*
+    AddRectangle(std::vector<Parameter> a)
+    EmbReal x    = a[0].r;
+    EmbReal y    = a[1].r;
+    EmbReal w    = a[2].r;
+    EmbReal h    = a[3].r;
+    EmbReal rot  = a[4].r;
+    bool  fill = a[5].toBool();
+
+    _mainWin->nativeAddRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
+    */
     View* gview = _mainWin->activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
-    if (gview && gscene && stack)
-    {
+    if (gview && gscene && stack) {
         RectObject* obj = new RectObject(x, -y, w, -h, getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
         //TODO: rect fill
-        if (rubberMode)
-        {
+        if (rubberMode) {
             gview->addToRubberRoom(obj);
             gscene->addItem(obj);
             gscene->update();
         }
-        else
-        {
+        else {
             UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
@@ -1456,19 +1438,16 @@ MainWindow::nativeAddCircle(EmbReal centerX, EmbReal centerY, EmbReal radius, bo
     View* gview = _mainWin->activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
-    if (gview && gscene && stack)
-    {
+    if (gview && gscene && stack) {
         CircleObject* obj = new CircleObject(centerX, -centerY, radius, getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
         //TODO: circle fill
-        if (rubberMode)
-        {
+        if (rubberMode) {
             gview->addToRubberRoom(obj);
             gscene->addItem(obj);
             gscene->update();
         }
-        else
-        {
+        else {
             UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
@@ -1563,6 +1542,53 @@ MainWindow::nativeAddPolygon(EmbReal startX, EmbReal startY, const QPainterPath&
 void
 MainWindow::nativeAddPolyline(EmbReal startX, EmbReal startY, const QPainterPath& p, int rubberMode)
 {
+    /*
+    QVariantList varList = a[0].toVariant().toList();
+    int varSize = varList.size();
+    if (varSize < 2) {
+        return "TYPE ERROR: addPolyline(): array must contain at least two elements";
+    }
+    if (varSize % 2) {
+        return "TYPE ERROR: addPolyline(): array cannot contain an odd number of elements";
+    }
+
+    bool lineTo = false;
+    bool xCoord = true;
+    EmbReal x = 0;
+    EmbReal y = 0;
+    EmbReal startX = 0;
+    EmbReal startY = 0;
+    QPainterPath path;
+    foreach (QVariant var, varList) {
+        if (var.canConvert(QVariant::Double)) {
+            if (xCoord) {
+                xCoord = false;
+                x = var.toReal();
+            }
+            else {
+                xCoord = true;
+                y = -var.toReal();
+
+                if (lineTo) {
+                    path.lineTo(x,y);
+                }
+                else {
+                    path.moveTo(x,y);
+                    lineTo = true;
+                    startX = x;
+                    startY = y;
+                }
+            }
+        }
+        else {
+            return "TYPE ERROR: addPolyline(): array contains one or more invalid elements";
+        }
+    }
+
+    path.translate(-startX, -startY);
+
+    _mainWin->nativeAddPolyline(startX, startY, path, OBJ_RUBBER_OFF);
+    */
     View* gview = _mainWin->activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
@@ -1589,6 +1615,11 @@ MainWindow::nativeAddPolyline(EmbReal startX, EmbReal startY, const QPainterPath
 void
 MainWindow::nativeAddPath(EmbReal startX, EmbReal startY, const QPainterPath& p, int rubberMode)
 {
+    /*
+    AddPath(std::vector<Parameter> a)
+    // TODO: parameter error checking
+    debug_message("TODO: finish addPath command");
+    */
 }
 
 /**
@@ -1597,6 +1628,11 @@ MainWindow::nativeAddPath(EmbReal startX, EmbReal startY, const QPainterPath& p,
 void
 MainWindow::nativeAddHorizontalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight)
 {
+    /*
+    AddHorizontalDimension(std::vector<Parameter> a)
+    //TODO: parameter error checking
+    debug_message("TODO: finish addHorizontalDimension command");
+    */
 }
 
 /**
@@ -1605,6 +1641,11 @@ MainWindow::nativeAddHorizontalDimension(EmbReal x1, EmbReal y1, EmbReal x2, Emb
 void
 MainWindow::nativeAddVerticalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight)
 {
+    /*
+    AddVerticalDimension(std::vector<Parameter> a)
+    //TODO: parameter error checking
+    debug_message("TODO: finish addVerticalDimension command");
+    */
 }
 
 /**
@@ -1613,6 +1654,11 @@ MainWindow::nativeAddVerticalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbRe
 void
 MainWindow::nativeAddImage(const QString& img, EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot)
 {
+    /*
+    AddImage(std::vector<Parameter> a)
+    //TODO: parameter error checking
+    debug_message("TODO: finish addImage command");
+    */
 }
 
 /**
@@ -1621,6 +1667,10 @@ MainWindow::nativeAddImage(const QString& img, EmbReal x, EmbReal y, EmbReal w, 
 void
 MainWindow::nativeAddDimLeader(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, int rubberMode)
 {
+    /*
+    AddDimLeader(std::vector<Parameter> a)
+    _mainWin->nativeAddDimLeader(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, OBJ_RUBBER_OFF);
+    */
     View* gview = _mainWin->activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
@@ -2575,6 +2625,8 @@ actuator(std::string line)
     }
 
     if (command == "donothing") {
+        //This function intentionally does nothing.
+        debug_message("doNothing()");
         return "";
     }
 
@@ -2687,20 +2739,7 @@ actuator(std::string line)
         if (list.size() < 1) {
             return "</br>zoom requires an argument.";
         }
-        command = list[0];
-        if (command == "extents") {
-            _mainWin->zoomExtents();
-            return "";
-        }
-        if (command == "in") {
-            _mainWin->zoomIn();
-            return "";
-        }
-        if (command == "out") {
-            _mainWin->zoomOut();
-            return "";
-        }
-        return "</br>zoom argument not recognised.";
+        return _mainWin->zoom(list[0]);
     }
 
     if (command == "open") {
@@ -2755,24 +2794,7 @@ actuator(std::string line)
         if (list.size() < 1) {
             return "pan requires an argument.";
         }
-        command = list[0];
-        if (command == "left") {
-            _mainWin->panLeft();
-            return "";
-        }
-        if (command == "right") {
-            _mainWin->panRight();
-            return "";
-        }
-        if (command == "up") {
-            _mainWin->panUp();
-            return "";
-        }
-        if (command == "down") {
-            _mainWin->panDown();
-            return "";
-        }
-        return "";
+        return _mainWin->pan(list[0]);
     }
 
     if (command == "text") {
@@ -3601,71 +3623,6 @@ SpareRubber(std::vector<Parameter> a)
 
     return "";
 }
-*/
-
-/**
- * \brief
- */
- /*
-std::string
-AddTextMulti(std::vector<Parameter> a)
-{
-    _mainWin->nativeAddTextMulti(a[0].s, a[1].r, a[2].r, a[3].r, a[4].b, OBJ_RUBBER_OFF);
-    return "";
-}
-
-std::string
-AddTextSingle(std::vector<Parameter> a)
-{
-    _mainWin->nativeAddTextSingle(a[0].s, a[1].r, a[2].r, a[3].r, a[4].b, OBJ_RUBBER_OFF);
-    return "";
-}
-*/
-
-/**
- * \brief
- */
- /*
-std::string
-AddInfiniteLine(std::vector<Parameter> a)
-{
-    //TODO: parameter error checking
-    debug_message("TODO: finish addInfiniteLine command");
-    return "";
-}
-*/
-
-/**
- * \brief
- */
- /*
-std::string
-AddRay(std::vector<Parameter> a)
-{
-    //TODO: parameter error checking
-    debug_message("TODO: finish addRay command");
-    return "";
-}
-
-std::string
-AddLine(std::vector<Parameter> a)
-{
-    _mainWin->nativeAddLine(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, OBJ_RUBBER_OFF);
-    return "";
-}
-
-AddTriangle(std::vector<Parameter> a)
-    _mainWin->nativeAddTriangle(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, a[6].r, a[7].b);
-
-AddRectangle(std::vector<Parameter> a)
-    EmbReal x    = a[0].r;
-    EmbReal y    = a[1].r;
-    EmbReal w    = a[2].r;
-    EmbReal h    = a[3].r;
-    EmbReal rot  = a[4].r;
-    bool  fill = a[5].toBool();
-
-    _mainWin->nativeAddRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
 
 std::string
 AddRoundedRectangle(std::vector<Parameter> a)
@@ -3747,76 +3704,6 @@ AddPolygon(std::vector<Parameter> a)
     _mainWin->nativeAddPolygon(startX, startY, path, OBJ_RUBBER_OFF);
     return "";
 }
-
-std::string
-AddPolyline(std::vector<Parameter> a)
-{
-    QVariantList varList = a[0].toVariant().toList();
-    int varSize = varList.size();
-    if (varSize < 2) {
-        return "TYPE ERROR: addPolyline(): array must contain at least two elements";
-    }
-    if (varSize % 2) {
-        return "TYPE ERROR: addPolyline(): array cannot contain an odd number of elements";
-    }
-
-    bool lineTo = false;
-    bool xCoord = true;
-    EmbReal x = 0;
-    EmbReal y = 0;
-    EmbReal startX = 0;
-    EmbReal startY = 0;
-    QPainterPath path;
-    foreach (QVariant var, varList) {
-        if (var.canConvert(QVariant::Double)) {
-            if (xCoord) {
-                xCoord = false;
-                x = var.toReal();
-            }
-            else {
-                xCoord = true;
-                y = -var.toReal();
-
-                if (lineTo) {
-                    path.lineTo(x,y);
-                }
-                else {
-                    path.moveTo(x,y);
-                    lineTo = true;
-                    startX = x;
-                    startY = y;
-                }
-            }
-        }
-        else {
-            return "TYPE ERROR: addPolyline(): array contains one or more invalid elements";
-        }
-    }
-
-    path.translate(-startX, -startY);
-
-    _mainWin->nativeAddPolyline(startX, startY, path, OBJ_RUBBER_OFF);
-    return "";
-}
-
-AddPath(std::vector<Parameter> a)
-    //TODO: parameter error checking
-    debug_message("TODO: finish addPath command");
-
-AddHorizontalDimension(std::vector<Parameter> a)
-    //TODO: parameter error checking
-    debug_message("TODO: finish addHorizontalDimension command");
-
-AddVerticalDimension(std::vector<Parameter> a)
-    //TODO: parameter error checking
-    debug_message("TODO: finish addVerticalDimension command");
-
-AddImage(std::vector<Parameter> a)
-    //TODO: parameter error checking
-    debug_message("TODO: finish addImage command");
-
-AddDimLeader(std::vector<Parameter> a)
-    _mainWin->nativeAddDimLeader(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, OBJ_RUBBER_OFF);
 
 SetCursorShape(std::vector<Parameter> a)
     _mainWin->setCursorShape(a[0].s);

@@ -1819,9 +1819,8 @@ void Settings_Dialog::checkBoxGridColorMatchCrossHairStateChanged(int checked)
     if (senderObj) {
         QObject* parent = senderObj->parent();
         if (parent) {
-            set_label_enabled(parent, "labelGridColor", !dialog.grid_color_match_crosshair);
-            QPushButton* buttonGridColor = parent->findChild<QPushButton*>("buttonGridColor");
-            if (buttonGridColor) buttonGridColor->setEnabled(!dialog.grid_color_match_crosshair);
+            set_enabled(parent, "labelGridColor", !dialog.grid_color_match_crosshair);
+            set_enabled(parent, "buttonGridColor", !dialog.grid_color_match_crosshair);
         }
     }
 }
@@ -1870,58 +1869,40 @@ void Settings_Dialog::checkBoxGridLoadFromFileStateChanged(int checked)
         return;
     }
 
-    set_label_enabled(parent, "labelGridType", !dialog.grid_load_from_file);
-    set_combobox_enabled(parent, "comboBoxGridType", !dialog.grid_load_from_file);
+    set_enabled(parent, "labelGridType", !dialog.grid_load_from_file);
+    set_enabled(parent, "comboBoxGridType", !dialog.grid_load_from_file);
+    set_enabled(parent, "checkBoxGridCenterOnOrigin", !dialog.grid_load_from_file);
 
-    QCheckBox* checkBoxGridCenterOnOrigin = parent->findChild<QCheckBox*>("checkBoxGridCenterOnOrigin");
-    if (checkBoxGridCenterOnOrigin) checkBoxGridCenterOnOrigin->setEnabled(!dialog.grid_load_from_file);
-
-    set_label_enabled(parent, "labelGridCenterX",
+    set_enabled(parent, "labelGridCenterX",
+        !dialog.grid_load_from_file && !dialog.grid_center_on_origin);
+    set_enabled(parent, "spinBoxGridCenterX",
         !dialog.grid_load_from_file && !dialog.grid_center_on_origin);
 
-    QDoubleSpinBox* spinBoxGridCenterX = parent->findChild<QDoubleSpinBox*>("spinBoxGridCenterX");
-    if (spinBoxGridCenterX) spinBoxGridCenterX->setEnabled(!dialog.grid_load_from_file && !dialog.grid_center_on_origin);
-
-    set_label_enabled(parent, "labelGridCenterY",
+    set_enabled(parent, "labelGridCenterY",
+        !dialog.grid_load_from_file && !dialog.grid_center_on_origin);
+    set_enabled(parent, "spinBoxGridCenterY",
         !dialog.grid_load_from_file && !dialog.grid_center_on_origin);
 
-    QDoubleSpinBox* spinBoxGridCenterY = parent->findChild<QDoubleSpinBox*>("spinBoxGridCenterY");
-    if (spinBoxGridCenterY) spinBoxGridCenterY->setEnabled(!dialog.grid_load_from_file && !dialog.grid_center_on_origin);
+    set_enabled(parent, "labelGridSizeX", !dialog.grid_load_from_file);
+    set_enabled(parent, "spinBoxGridSizeX", !dialog.grid_load_from_file);
 
-    set_label_enabled(parent, "labelGridSizeX", !dialog.grid_load_from_file);
+    set_enabled(parent, "labelGridSizeY", !dialog.grid_load_from_file);
+    set_enabled(parent, "spinBoxGridSizeY", !dialog.grid_load_from_file);
 
-    QDoubleSpinBox* spinBoxGridSizeX = parent->findChild<QDoubleSpinBox*>("spinBoxGridSizeX");
-    if (spinBoxGridSizeX) spinBoxGridSizeX->setEnabled(!dialog.grid_load_from_file);
+    set_enabled(parent, "labelGridSpacingX", !dialog.grid_load_from_file);
+    set_enabled(parent, "spinBoxGridSpacingX", !dialog.grid_load_from_file);
 
-    set_label_enabled(parent, "labelGridSizeY", !dialog.grid_load_from_file);
+    set_enabled(parent, "labelGridSpacingY", !dialog.grid_load_from_file);
+    set_enabled(parent, "spinBoxGridSpacingY", !dialog.grid_load_from_file);
 
-    QDoubleSpinBox* spinBoxGridSizeY = parent->findChild<QDoubleSpinBox*>("spinBoxGridSizeY");
-    if (spinBoxGridSizeY) spinBoxGridSizeY->setEnabled(!dialog.grid_load_from_file);
+    set_enabled(parent, "labelGridSizeRadius", !dialog.grid_load_from_file);
+    set_enabled(parent, "spinBoxGridSizeRadius", !dialog.grid_load_from_file);
 
-    set_label_enabled(parent, "labelGridSpacingX", !dialog.grid_load_from_file);
+    set_enabled(parent, "labelGridSpacingRadius", !dialog.grid_load_from_file);
+    set_enabled(parent, "spinBoxGridSpacingRadius", !dialog.grid_load_from_file);
 
-    QDoubleSpinBox* spinBoxGridSpacingX = parent->findChild<QDoubleSpinBox*>("spinBoxGridSpacingX");
-    if (spinBoxGridSpacingX) spinBoxGridSpacingX->setEnabled(!dialog.grid_load_from_file);
-
-    set_label_enabled(parent, "labelGridSpacingY", !dialog.grid_load_from_file);
-
-    QDoubleSpinBox* spinBoxGridSpacingY = parent->findChild<QDoubleSpinBox*>("spinBoxGridSpacingY");
-    if (spinBoxGridSpacingY) spinBoxGridSpacingY->setEnabled(!dialog.grid_load_from_file);
-
-    set_label_enabled(parent, "labelGridSizeRadius", !dialog.grid_load_from_file);
-
-    QDoubleSpinBox* spinBoxGridSizeRadius = parent->findChild<QDoubleSpinBox*>("spinBoxGridSizeRadius");
-    if (spinBoxGridSizeRadius) spinBoxGridSizeRadius->setEnabled(!dialog.grid_load_from_file);
-
-    set_label_enabled(parent, "labelGridSpacingRadius", !dialog.grid_load_from_file);
-
-    QDoubleSpinBox* spinBoxGridSpacingRadius = parent->findChild<QDoubleSpinBox*>("spinBoxGridSpacingRadius");
-    if (spinBoxGridSpacingRadius) spinBoxGridSpacingRadius->setEnabled(!dialog.grid_load_from_file);
-
-    set_label_enabled(parent, "labelGridSpacingAngle", !dialog.grid_load_from_file);
-
-    QDoubleSpinBox* spinBoxGridSpacingAngle = parent->findChild<QDoubleSpinBox*>("spinBoxGridSpacingAngle");
-    if (spinBoxGridSpacingAngle) spinBoxGridSpacingAngle->setEnabled(!dialog.grid_load_from_file);
+    set_enabled(parent, "labelGridSpacingAngle", !dialog.grid_load_from_file);
+    set_enabled(parent, "spinBoxGridSpacingAngle", !dialog.grid_load_from_file);
 }
 
 /**
@@ -1941,26 +1922,26 @@ void Settings_Dialog::comboBoxGridTypeCurrentIndexChanged(const QString& type)
     }
     bool visibility = (type == "Circular");
 
-    set_label_visibility(parent, "labelGridSizeX", !visibility);
-    set_spinbox_visibility(parent, "spinBoxGridSizeX", !visibility);
+    set_visibility(parent, "labelGridSizeX", !visibility);
+    set_visibility(parent, "spinBoxGridSizeX", !visibility);
 
-    set_label_visibility(parent, "labelGridSizeY", !visibility);
-    set_spinbox_visibility(parent, "spinBoxGridSizeY", !visibility);
+    set_visibility(parent, "labelGridSizeY", !visibility);
+    set_visibility(parent, "spinBoxGridSizeY", !visibility);
 
-    set_label_visibility(parent, "labelGridSpacingX", !visibility);
-    set_spinbox_visibility(parent, "spinBoxGridSpacingX", !visibility);
+    set_visibility(parent, "labelGridSpacingX", !visibility);
+    set_visibility(parent, "spinBoxGridSpacingX", !visibility);
 
-    set_label_visibility(parent, "labelGridSpacingY", !visibility);
-    set_spinbox_visibility(parent, "spinBoxGridSpacingY", !visibility);
+    set_visibility(parent, "labelGridSpacingY", !visibility);
+    set_visibility(parent, "spinBoxGridSpacingY", !visibility);
 
-    set_label_visibility(parent, "labelGridSizeRadius", visibility);
-    set_spinbox_visibility(parent, "spinBoxGridSizeRadius", visibility);
+    set_visibility(parent, "labelGridSizeRadius", visibility);
+    set_visibility(parent, "spinBoxGridSizeRadius", visibility);
 
-    set_label_visibility(parent, "labelGridSpacingRadius", visibility);
-    set_spinbox_visibility(parent, "spinBoxGridSpacingRadius", visibility);
+    set_visibility(parent, "labelGridSpacingRadius", visibility);
+    set_visibility(parent, "spinBoxGridSpacingRadius", visibility);
 
-    set_label_visibility(parent, "labelGridSpacingAngle", visibility);
-    set_spinbox_visibility(parent, "spinBoxGridSpacingAngle", visibility);
+    set_visibility(parent, "labelGridSpacingAngle", visibility);
+    set_visibility(parent, "spinBoxGridSpacingAngle", visibility);
 }
 
 void Settings_Dialog::checkBoxGridCenterOnOriginStateChanged(int checked)
@@ -1977,13 +1958,11 @@ void Settings_Dialog::checkBoxGridCenterOnOriginStateChanged(int checked)
         return;
     }
 
-    set_label_enabled(parent, "labelGridCenterX", !dialog.grid_center_on_origin);
-    QDoubleSpinBox* spinBoxGridCenterX = parent->findChild<QDoubleSpinBox*>("spinBoxGridCenterX");
-    if (spinBoxGridCenterX) spinBoxGridCenterX->setEnabled(!dialog.grid_center_on_origin);
+    set_enabled(parent, "labelGridCenterX", !dialog.grid_center_on_origin);
+    set_enabled(parent, "spinBoxGridCenterX", !dialog.grid_center_on_origin);
 
-    set_label_enabled(parent, "labelGridCenterY", !dialog.grid_center_on_origin);
-    QDoubleSpinBox* spinBoxGridCenterY = parent->findChild<QDoubleSpinBox*>("spinBoxGridCenterY");
-    if (spinBoxGridCenterY) spinBoxGridCenterY->setEnabled(!dialog.grid_center_on_origin);
+    set_enabled(parent, "labelGridCenterY", !dialog.grid_center_on_origin);
+    set_enabled(parent, "spinBoxGridCenterY", !dialog.grid_center_on_origin);
 }
 
 void Settings_Dialog::checkBoxRulerShowOnLoadStateChanged(int checked)
