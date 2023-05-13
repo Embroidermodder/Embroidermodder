@@ -575,7 +575,8 @@ enum OBJ_TYPE_VALUES {
     OBJ_TYPE_SLOT = 100026,
     OBJ_TYPE_SPLINE = 100027,
     OBJ_TYPE_TEXTMULTI = 100028,
-    OBJ_TYPE_TEXTSINGLE = 100029
+    OBJ_TYPE_TEXTSINGLE = 100029,
+    OBJ_TYPE_UNKNOWN = 100030
 };
 
 enum OBJ_LTYPE_VALUES {
@@ -2234,6 +2235,45 @@ public:
     PropertyEditor(const QString& iconDirectory = QString(), bool pickAddMode = true, QWidget* widgetToFocus = 0, QWidget* parent = 0); //, Qt::WindowFlags flags = 0);
     ~PropertyEditor();
 
+    QWidget* focusWidget;
+
+    QString iconDir;
+    int iconSize;
+    Qt::ToolButtonStyle propertyEditorButtonStyle;
+
+    bool pickAdd;
+
+    QList<QGraphicsItem*> selectedItemList;
+
+    QToolButton* createToolButton(const QString& iconName, const QString& txt);
+    QLineEdit* createLineEdit(const QString& validatorType = QString(), bool readOnly = false);
+
+    int precisionAngle;
+    int precisionLength;
+
+    void updateLineEditStrIfVaries(QLineEdit* lineEdit, const QString& str);
+    void updateLineEditNumIfVaries(QLineEdit* lineEdit, EmbReal num, bool useAnglePrecision);
+    void updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, const QString& str);
+    void updateComboBoxStrIfVaries(QComboBox* comboBox, const QString& str, const QStringList& strList);
+    void updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, bool yesOrNoText);
+
+    QSignalMapper* signalMapper;
+    void mapSignal(QObject* fieldObj, const QString& name, QVariant value);
+
+    // Selection
+    // ====================
+    QComboBox*   createComboBoxSelected();
+    QToolButton* createToolButtonQSelect();
+    QToolButton* createToolButtonPickAdd();
+
+    QComboBox*   comboBoxSelected;
+    QToolButton* toolButtonQSelect;
+    QToolButton* toolButtonPickAdd;
+
+    //TODO: Alphabetic/Categorized TabWidget
+
+    void createGroupBox(std::string group_box_key, const char *title);
+
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
 
@@ -2251,92 +2291,6 @@ private slots:
     void hideAllGroups();
     void clearAllFields();
     void togglePickAddMode();
-
-private:
-    QWidget* focusWidget;
-
-    QString iconDir;
-    int iconSize;
-    Qt::ToolButtonStyle propertyEditorButtonStyle;
-
-    bool pickAdd;
-
-    QList<QGraphicsItem*> selectedItemList;
-
-    //Helper functions
-    QToolButton* createToolButton(const QString& iconName, const QString& txt);
-    QLineEdit* createLineEdit(const QString& validatorType = QString(), bool readOnly = false);
-    QComboBox* createComboBox(bool disable = false);
-    QFontComboBox* createFontComboBox(bool disable = false);
-
-    int precisionAngle;
-    int precisionLength;
-
-    //Used when checking if fields vary
-    QString fieldOldText;
-    QString fieldNewText;
-    QString fieldVariesText;
-    QString fieldYesText;
-    QString fieldNoText;
-    QString fieldOnText;
-    QString fieldOffText;
-
-    void updateLineEditStrIfVaries(QLineEdit* lineEdit, const QString& str);
-    void updateLineEditNumIfVaries(QLineEdit* lineEdit, EmbReal num, bool useAnglePrecision);
-    void updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, const QString& str);
-    void updateComboBoxStrIfVaries(QComboBox* comboBox, const QString& str, const QStringList& strList);
-    void updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, bool yesOrNoText);
-
-    QSignalMapper* signalMapper;
-    void mapSignal(QObject* fieldObj, const QString& name, QVariant value);
-
-    //====================
-    //Selection
-    //====================
-    QComboBox*   createComboBoxSelected();
-    QToolButton* createToolButtonQSelect();
-    QToolButton* createToolButtonPickAdd();
-
-    QComboBox*   comboBoxSelected;
-    QToolButton* toolButtonQSelect;
-    QToolButton* toolButtonPickAdd;
-
-    //TODO: Alphabetic/Categorized TabWidget
-
-    void createGroupBox(std::string group_box_key,
-        const char *title, std::vector<GroupBoxData> data);
-
-    QGroupBox* createGroupBoxGeneral();
-
-    QGroupBox* createGroupBoxGeometryArc();
-    QGroupBox* createGroupBoxMiscArc();
-    QGroupBox* createGroupBoxGeometryBlock();
-    QGroupBox* createGroupBoxGeometryCircle();
-    QGroupBox* createGroupBoxGeometryDimAligned();
-    QGroupBox* createGroupBoxGeometryDimAngular();
-    QGroupBox* createGroupBoxGeometryDimArcLength();
-    QGroupBox* createGroupBoxGeometryDimDiameter();
-    QGroupBox* createGroupBoxGeometryDimLeader();
-    QGroupBox* createGroupBoxGeometryDimLinear();
-    QGroupBox* createGroupBoxGeometryDimOrdinate();
-    QGroupBox* createGroupBoxGeometryDimRadius();
-    QGroupBox* createGroupBoxGeometryEllipse();
-    QGroupBox* createGroupBoxGeometryImage();
-    QGroupBox* createGroupBoxMiscImage();
-    QGroupBox* createGroupBoxGeometryInfiniteLine();
-    QGroupBox* createGroupBoxGeometryLine();
-    QGroupBox* createGroupBoxGeometryPath();
-    QGroupBox* createGroupBoxMiscPath();
-    QGroupBox* createGroupBoxGeometryPoint();
-    QGroupBox* createGroupBoxGeometryPolygon();
-    QGroupBox* createGroupBoxGeometryPolyline();
-    QGroupBox* createGroupBoxMiscPolyline();
-    QGroupBox* createGroupBoxGeometryRay();
-    QGroupBox* createGroupBoxGeometryRectangle();
-    QGroupBox* createGroupBoxGeometryTextMulti();
-    QGroupBox* createGroupBoxTextTextSingle();
-    QGroupBox* createGroupBoxGeometryTextSingle();
-    QGroupBox* createGroupBoxMiscTextSingle();
 };
 
 

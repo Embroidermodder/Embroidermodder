@@ -96,69 +96,6 @@ actions_ = [
     "heart"
 ]
 
-group_box_list = [
-    "general",
-    "geometry_arc",
-    "misc_arc",
-    "geometry_block",
-    "geometry_circle",
-    "geometry_dim_aligned",
-    "geometry_dim_angular",
-    "geometry_dim_arc_length",
-    "geometry_dim_diameter",
-    "geometry_dim_leader",
-    "geometry_dim_linear",
-    "geometry_dim_ordinate",
-    "geometry_dim_radius",
-    "geometry_ellipse",
-    "geometry_image",
-    "misc_image",
-    "geometry_infinite_line",
-    "geometry_line",
-    "geometry_path",
-    "misc_path",
-    "geometry_point",
-    "geometry_polygon",
-    "geometry_polyline",
-    "misc_polyline",
-    "geometry_ray",
-    "geometry_rectangle",
-    "geometry_text_multi",
-    "text_text_single",
-    "geometry_text_single",
-    "misc_text_single"
-]
-
-all_line_editors = [
-    "arc-geometry", "arc_center_x", "blank", "Center X", "double", "lineEditArcCenterX",
-    "arc-geometry", "arc_center_y", "blank", "Center Y", "double", "lineEditArcCenterY",
-    "arc-geometry", "arc_radius", "blank", "Radius", "double", "lineEditArcRadius",
-    "arc-geometry", "arc_start_angle", "blank", "Start Angle", "double", "lineEditArcStartAngle",
-    "arc-geometry", "arc_end_angle", "blank", "End Angle", "double", "lineEditArcEndAngle",
-    "arc-geometry", "arc_start_x", "blank", "Start X", "double", "",
-    "arc-geometry", "arc_start_y", "blank", "Start Y", "double", "",
-    "arc-geometry", "arc_end_x", "blank", "End X", "double", "",
-    "arc-geometry", "arc_end_y", "blank", "End Y", "double", "",
-    "arc-geometry", "arc_area", "blank", "Area", "double", "",
-    "arc-geometry", "arc_length", "blank", "Arc Length", "double", "",
-    "arc-geometry", "arc_chord", "blank", "Chord", "double", "",
-    "arc-geometry", "arc_inc_angle", "blank", "Included Angle", "double",  "",
-    "block-geometry", "block-x", "blank", "Position X", "double", "",
-    "block-geometry", "block-y", "blank", "Position Y", "double", "",
-    "circle-geometry", "circle_center_x", "blank", "Center X", "double", "lineEditCircleCenterX",
-    "circle-geometry", "circle_center_y", "blank", "Center Y", "double", "lineEditCircleCenterY",
-    "circle-geometry", "circle_radius", "blank", "Radius", "double", "lineEditCircleRadius",
-    "circle-geometry", "circle_diameter", "blank", "Diameter", "double", "lineEditCircleDiameter",
-    "circle-geometry", "circle_area", "blank", "Area", "double", "lineEditCircleArea",
-    "circle-geometry", "circle_circumference", "blank", "Circumference", "double", "lineEditCircleCircumference",
-    "ellipse-geometry", "ellipse_center_x", "blank", "Center X", "double", "lineEditEllipseCenterX",
-    "ellipse-geometry", "ellipse_center_y", "blank", "Center Y", "double", "lineEditEllipseCenterY",
-    "ellipse-geometry", "ellipse_semi_major_axis", "blank", "Semi-Major Axis", "double", "lineEditEllipseSemiMajorAxis",
-    "ellipse-geometry", "ellipse_semi_minor_axis", "blank", "Semi-Minor Axis", "double", "lineEditEllipseSemiMinorAxis",
-    "ellipse-geometry", "ellipse_major_axis", "blank", "Major Axis", "double", "lineEditEllipseMajorAxis",
-    "ellipse-geometry", "ellipse_minor_axis", "blank", "Minor Axis", "double", "lineEditEllipseMinorAxis"
-]
-
 [ACTION_donothing]
 type="action"
 icon="donothing"

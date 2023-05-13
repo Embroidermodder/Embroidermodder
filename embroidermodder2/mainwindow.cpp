@@ -1992,27 +1992,26 @@ read_string_list_setting(toml_table_t *table, const char *key)
  * These files need to be placed in the install folder.
  */
 int
-read_settings(const char *settings_file)
+read_settings(void)
 {
+    std::string fname = qApp->applicationDirPath().toStdString() + "/config.toml";
     char error_buffer[200];
-    FILE *f = fopen(settings_file, "r");
+    FILE *f = fopen(fname.c_str(), "r");
     if (!f) {
         puts("ERROR: Failed to open settings file:");
-        printf("%s", settings_file);
+        printf("%s", fname.c_str());
         return 0;
     }
     toml_table_t *settings_toml = toml_parse_file(f, error_buffer, sizeof(error_buffer));
     fclose(f);
 
     if (!settings_toml) {
-        puts("ERROR: failed to parse config.ini, continuing with defaults.");
+        puts("ERROR: failed to parse config.toml, continuing with defaults.");
         return 0;
     }
 
     std::vector<std::string> action_labels =
         read_string_list_setting(settings_toml, "actions_");
-    group_box_list = read_string_list_setting(settings_toml, "group_box_list");
-    all_line_editors = read_string_list_setting(settings_toml, "all_line_editors");
 
     for (int i=0; i<action_labels.size(); i++) {
         Action action;
@@ -2045,6 +2044,33 @@ read_settings(const char *settings_file)
     return 1;
 }
 
+int
+read_ui_settings(void)
+{
+    std::string fname = qApp->applicationDirPath().toStdString() + "/ui.toml";
+    char error_buffer[200];
+    FILE *f = fopen(fname.c_str(), "r");
+    if (!f) {
+        puts("ERROR: Failed to open settings file:");
+        printf("%s", fname.c_str());
+        return 0;
+    }
+    toml_table_t *settings_toml = toml_parse_file(f, error_buffer, sizeof(error_buffer));
+    fclose(f);
+
+    if (!settings_toml) {
+        puts("ERROR: failed to parse ui.toml, continuing with defaults.");
+        return 0;
+    }
+
+    group_box_list = read_string_list_setting(settings_toml, "group_box_list");
+    all_line_editors = read_string_list_setting(settings_toml, "all_line_editors");
+
+    toml_free(settings_toml);
+
+    return 1;
+}
+
 /**
  * @brief .
  */
@@ -2067,8 +2093,8 @@ validRGB(int r, int g, int b)
 MainWindow::MainWindow() : QMainWindow(0)
 {
     QString appDir = qApp->applicationDirPath();
-    QString fname_ = appDir + "/config.toml";
-    read_settings(fname_.toStdString().c_str());
+    read_settings();
+    read_ui_settings();
     readSettings();
 
     //Verify that files/directories needed are actually present.
