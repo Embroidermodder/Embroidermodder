@@ -24,7 +24,8 @@
 #include "embroidermodder.h"
 
 /**
- * .
+ * @brief debug_message
+ * @param msg
  */
 void
 debug_message(std::string msg)
@@ -33,7 +34,12 @@ debug_message(std::string msg)
 }
 
 /**
- * .
+ * @brief set_enabled
+ * @param parent
+ * @param key
+ * @param enabled
+ *
+ * \todo error reporting.
  */
 void
 set_enabled(QObject* parent, const char *key, bool enabled)
@@ -69,6 +75,11 @@ set_enabled(QObject* parent, const char *key, bool enabled)
 }
 
 /**
+ * @brief set_visibility
+ * @param parent
+ * @param key
+ * @param visibility
+ *
  * \todo error reporting.
  */
 void

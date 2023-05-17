@@ -66,42 +66,42 @@ CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
     this->show();
 
     connect(promptInput, SIGNAL(stopBlinking()), this, SLOT(stopBlinking()));
-    connect(promptInput, SIGNAL(appendHistory(const QString&, int)), promptHistory, SLOT(appendHistory(const QString&, int)));
-    connect(this, SIGNAL(appendTheHistory(const QString&, int)), promptHistory, SLOT(appendHistory(const QString&, int)));
+    connect(promptInput, SIGNAL(appendHistory(QString,int)), promptHistory, SLOT(appendHistory(QString,int)));
+    connect(this, SIGNAL(appendTheHistory(QString,int)), promptHistory, SLOT(appendHistory(QString,int)));
 
     //For use outside of command prompt
-    connect(promptInput, SIGNAL(startCommand(const QString&)), this, SIGNAL(startCommand(const QString&)));
-    connect(promptInput, SIGNAL(runCommand(const QString&, const QString&)), this, SIGNAL(runCommand(const QString&, const QString&)));
-    connect(promptInput, SIGNAL(deletePressed()),    this, SIGNAL(deletePressed()));
-    connect(promptInput, SIGNAL(tabPressed()),       this, SIGNAL(tabPressed()));
-    connect(promptInput, SIGNAL(escapePressed()),    this, SIGNAL(escapePressed()));
-    connect(promptInput, SIGNAL(upPressed()),        this, SIGNAL(upPressed()));
-    connect(promptInput, SIGNAL(downPressed()),      this, SIGNAL(downPressed()));
-    connect(promptInput, SIGNAL(F1Pressed()),        this, SIGNAL(F1Pressed()));
-    connect(promptInput, SIGNAL(F2Pressed()),        this, SIGNAL(F2Pressed()));
-    connect(promptInput, SIGNAL(F3Pressed()),        this, SIGNAL(F3Pressed()));
-    connect(promptInput, SIGNAL(F4Pressed()),        this, SIGNAL(F4Pressed()));
-    connect(promptInput, SIGNAL(F5Pressed()),        this, SIGNAL(F5Pressed()));
-    connect(promptInput, SIGNAL(F6Pressed()),        this, SIGNAL(F6Pressed()));
-    connect(promptInput, SIGNAL(F7Pressed()),        this, SIGNAL(F7Pressed()));
-    connect(promptInput, SIGNAL(F8Pressed()),        this, SIGNAL(F8Pressed()));
-    connect(promptInput, SIGNAL(F9Pressed()),        this, SIGNAL(F9Pressed()));
-    connect(promptInput, SIGNAL(F10Pressed()),       this, SIGNAL(F10Pressed()));
-    connect(promptInput, SIGNAL(F11Pressed()),       this, SIGNAL(F11Pressed()));
-    connect(promptInput, SIGNAL(F12Pressed()),       this, SIGNAL(F12Pressed()));
-    connect(promptInput, SIGNAL(cutPressed()),       this, SIGNAL(cutPressed()));
-    connect(promptInput, SIGNAL(copyPressed()),      this, SIGNAL(copyPressed()));
-    connect(promptInput, SIGNAL(pastePressed()),     this, SIGNAL(pastePressed()));
+    connect(promptInput, SIGNAL(startCommand(QString)), this, SIGNAL(startCommand(QString)));
+    connect(promptInput, SIGNAL(runCommand(QString,QString)), this, SIGNAL(runCommand(QString,QString)));
+    connect(promptInput, SIGNAL(deletePressed()), this, SIGNAL(deletePressed()));
+    connect(promptInput, SIGNAL(tabPressed()), this, SIGNAL(tabPressed()));
+    connect(promptInput, SIGNAL(escapePressed()), this, SIGNAL(escapePressed()));
+    connect(promptInput, SIGNAL(upPressed()), this, SIGNAL(upPressed()));
+    connect(promptInput, SIGNAL(downPressed()), this, SIGNAL(downPressed()));
+    connect(promptInput, SIGNAL(F1Pressed()), this, SIGNAL(F1Pressed()));
+    connect(promptInput, SIGNAL(F2Pressed()), this, SIGNAL(F2Pressed()));
+    connect(promptInput, SIGNAL(F3Pressed()), this, SIGNAL(F3Pressed()));
+    connect(promptInput, SIGNAL(F4Pressed()), this, SIGNAL(F4Pressed()));
+    connect(promptInput, SIGNAL(F5Pressed()), this, SIGNAL(F5Pressed()));
+    connect(promptInput, SIGNAL(F6Pressed()), this, SIGNAL(F6Pressed()));
+    connect(promptInput, SIGNAL(F7Pressed()), this, SIGNAL(F7Pressed()));
+    connect(promptInput, SIGNAL(F8Pressed()), this, SIGNAL(F8Pressed()));
+    connect(promptInput, SIGNAL(F9Pressed()), this, SIGNAL(F9Pressed()));
+    connect(promptInput, SIGNAL(F10Pressed()), this, SIGNAL(F10Pressed()));
+    connect(promptInput, SIGNAL(F11Pressed()), this, SIGNAL(F11Pressed()));
+    connect(promptInput, SIGNAL(F12Pressed()), this, SIGNAL(F12Pressed()));
+    connect(promptInput, SIGNAL(cutPressed()), this, SIGNAL(cutPressed()));
+    connect(promptInput, SIGNAL(copyPressed()), this, SIGNAL(copyPressed()));
+    connect(promptInput, SIGNAL(pastePressed()), this, SIGNAL(pastePressed()));
     connect(promptInput, SIGNAL(selectAllPressed()), this, SIGNAL(selectAllPressed()));
-    connect(promptInput, SIGNAL(undoPressed()),      this, SIGNAL(undoPressed()));
-    connect(promptInput, SIGNAL(redoPressed()),      this, SIGNAL(redoPressed()));
+    connect(promptInput, SIGNAL(undoPressed()), this, SIGNAL(undoPressed()));
+    connect(promptInput, SIGNAL(redoPressed()), this, SIGNAL(redoPressed()));
 
-    connect(promptInput, SIGNAL(shiftPressed()),     this, SIGNAL(shiftPressed()));
-    connect(promptInput, SIGNAL(shiftReleased()),    this, SIGNAL(shiftReleased()));
+    connect(promptInput, SIGNAL(shiftPressed()), this, SIGNAL(shiftPressed()));
+    connect(promptInput, SIGNAL(shiftReleased()), this, SIGNAL(shiftReleased()));
 
-    connect(promptInput, SIGNAL(showSettings()),     this, SIGNAL(showSettings()));
+    connect(promptInput, SIGNAL(showSettings()), this, SIGNAL(showSettings()));
 
-    connect(promptHistory, SIGNAL(historyAppended(const QString&)), this, SIGNAL(historyAppended(const QString&)));
+    connect(promptHistory, SIGNAL(historyAppended(QString)), this, SIGNAL(historyAppended(QString)));
 }
 
 CmdPrompt::~CmdPrompt()
@@ -263,31 +263,51 @@ CmdPromptHandle::CmdPromptHandle(Qt::Orientation orientation, QSplitter* parent)
     connect(this, SIGNAL(handleMoved(int)),    parent, SIGNAL(moveResizeHistory(int)));
 }
 
+/**
+ * @brief CmdPromptHandle::~CmdPromptHandle
+ */
 CmdPromptHandle::~CmdPromptHandle()
 {
 }
 
-void CmdPromptHandle::mousePressEvent(QMouseEvent* e)
+/**
+ * @brief CmdPromptHandle::mousePressEvent
+ * @param e
+ */
+void
+CmdPromptHandle::mousePressEvent(QMouseEvent* e)
 {
-    pressY = e->globalY();
+    pressY = e->globalPosition().y();
     emit handlePressed(pressY);
 }
 
-void CmdPromptHandle::mouseReleaseEvent(QMouseEvent* e)
+/**
+ * @brief CmdPromptHandle::mouseReleaseEvent
+ * @param e The mouse event.
+ */
+void
+CmdPromptHandle::mouseReleaseEvent(QMouseEvent* e)
 {
-    releaseY = e->globalY();
+    releaseY = e->globalPosition().y();
     emit handleReleased(releaseY);
 }
 
-void CmdPromptHandle::mouseMoveEvent(QMouseEvent* e)
+/**
+ * @brief CmdPromptHandle::mouseMoveEvent
+ * @param e The mouse event.
+ */
+void
+CmdPromptHandle::mouseMoveEvent(QMouseEvent* e)
 {
-    moveY = e->globalY();
+    moveY = e->globalPosition().y();
     int dY = moveY - pressY;
     emit handleMoved(dY);
 }
 
-//============================================================================================================
-
+/**
+ * @brief CmdPromptHistory::CmdPromptHistory
+ * @param parent The QWidget that it sits in.
+ */
 CmdPromptHistory::CmdPromptHistory(QWidget* parent) : QTextBrowser(parent)
 {
     debug_message("CmdPromptHistory Constructor");
@@ -302,10 +322,19 @@ CmdPromptHistory::CmdPromptHistory(QWidget* parent) : QTextBrowser(parent)
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 }
 
+/**
+ * @brief CmdPromptHistory::~CmdPromptHistory
+ */
 CmdPromptHistory::~CmdPromptHistory()
 {
 }
 
+/**
+ * @brief CmdPromptHistory::applyFormatting
+ * @param txt
+ * @param prefixLength
+ * @return
+ */
 QString CmdPromptHistory::applyFormatting(const QString& txt, int prefixLength)
 {
     QString prefix = txt.left(prefixLength);
@@ -354,7 +383,13 @@ QString CmdPromptHistory::applyFormatting(const QString& txt, int prefixLength)
     return prefix + usrtxt;
 }
 
-void CmdPromptHistory::appendHistory(const QString& txt, int prefixLength)
+/**
+ * @brief CmdPromptHistory::appendHistory
+ * @param txt
+ * @param prefixLength
+ */
+void
+CmdPromptHistory::appendHistory(const QString& txt, int prefixLength)
 {
     QString formatStr = applyFormatting(txt, prefixLength);
     this->append(formatStr);
@@ -362,7 +397,11 @@ void CmdPromptHistory::appendHistory(const QString& txt, int prefixLength)
     this->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
 }
 
-void CmdPromptHistory::startResizeHistory(int /*y*/)
+/**
+ * @brief CmdPromptHistory::startResizeHistory
+ */
+void
+CmdPromptHistory::startResizeHistory(int /*y*/)
 {
     tmpHeight = height();
 }
@@ -413,9 +452,9 @@ CmdPromptInput::CmdPromptInput(QWidget* parent) : QLineEdit(parent)
     this->setMaximumSize(5000, 25);
     this->setDragEnabled(false);
 
-    connect(this, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(checkCursorPosition(int, int)));
-    connect(this, SIGNAL(textEdited(const QString&)), this, SLOT(checkEditedText(const QString&)));
-    connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(checkChangedText(const QString&)));
+    connect(this, SIGNAL(cursorPositionChanged(int,int)), this, SLOT(checkCursorPosition(int,int)));
+    connect(this, SIGNAL(textEdited(QString)), this, SLOT(checkEditedText(QString)));
+    connect(this, SIGNAL(textChanged(QString)), this, SLOT(checkChangedText(QString)));
     connect(this, SIGNAL(selectionChanged()), this, SLOT(checkSelection()));
 
     aliasHash = new QHash<QString, QString>;
@@ -559,16 +598,14 @@ void CmdPromptInput::applyFormatting()
     //Keywords
     start = prefix.indexOf('[');
     stop = prefix.lastIndexOf(']');
-    if(start != -1 && stop != -1 && start < stop)
-    {
+    if (start != -1 && stop != -1 && start < stop) {
         QTextCharFormat formatKeyword;
         formatKeyword.setFontWeight(QFont::Bold);
-        formatKeyword.setForeground(QColor("#0095FF"));
+        formatKeyword.setForeground(QColor::fromRgb(0x00, 0x95, 0xFF));
 
         int rangeStart = -1;
         int rangeStop = -1;
-        for(int i = stop; i >= start; i--)
-        {
+        for (int i = stop; i >= start; i--) {
             if(prefix.at(i) == ']')
             {
                 rangeStop = i;

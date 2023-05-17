@@ -149,7 +149,8 @@ void ArcObject::calculateArcData(EmbReal startX, EmbReal startY, EmbReal midX, E
  * @brief ArcObject::updateArcRect
  * @param radius
  */
-void ArcObject::updateArcRect(EmbReal radius)
+void
+ArcObject::updateArcRect(EmbReal radius)
 {
     QRectF arcRect;
     arcRect.setWidth(radius*2.0);
@@ -158,7 +159,12 @@ void ArcObject::updateArcRect(EmbReal radius)
     setRect(arcRect);
 }
 
-void ArcObject::setObjectRadius(EmbReal radius)
+/**
+ * @brief ArcObject::setObjectRadius
+ * @param radius
+ */
+void
+ArcObject::setObjectRadius(EmbReal radius)
 {
     EmbReal rad;
     if (radius <= 0)
@@ -182,17 +188,32 @@ void ArcObject::setObjectRadius(EmbReal radius)
     calculateArcData(arcStartPoint.x(), arcStartPoint.y(), arcMidPoint.x(), arcMidPoint.y(), arcEndPoint.x(), arcEndPoint.y());
 }
 
-void ArcObject::setObjectStartAngle(EmbReal angle)
+/**
+ * @brief ArcObject::setObjectStartAngle
+ * @param angle
+ */
+void
+ArcObject::setObjectStartAngle(EmbReal angle)
 {
     //TODO: ArcObject setObjectStartAngle
 }
 
-void ArcObject::setObjectEndAngle(EmbReal angle)
+/**
+ * @brief ArcObject::setObjectEndAngle
+ * @param angle
+ */
+void
+ArcObject::setObjectEndAngle(EmbReal angle)
 {
     //TODO: ArcObject setObjectEndAngle
 }
 
-void ArcObject::setObjectStartPoint(const QPointF& point)
+/**
+ * @brief ArcObject::setObjectStartPoint
+ * @param point
+ */
+void
+ArcObject::setObjectStartPoint(const QPointF& point)
 {
     setObjectStartPoint(point.x(), point.y());
 }

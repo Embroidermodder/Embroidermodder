@@ -100,7 +100,7 @@ help_toolbar = {
 int
 get_action_index(std::string cmd)
 {
-    for (int i=0; i<action_table.size(); i++) {
+    for (int i=0; i<(int)action_table.size(); i++) {
         if (cmd == action_table[i].icon) {
             return i;
         }
@@ -115,7 +115,7 @@ void
 MainWindow::create_toolbar(QToolBar* toolbar, std::string label, std::vector<std::string> entries)
 {
     toolbar->setObjectName(QString::fromStdString(label));
-    for (int i=0; i<entries.size(); i++) {
+    for (int i=0; i<(int)entries.size(); i++) {
         if (entries[i] == "---") {
             toolbar->addSeparator();
         }
@@ -255,7 +255,7 @@ MainWindow::createTextToolbar()
 
     toolbarText->addWidget(textFontSelector);
     textFontSelector->setCurrentFont(QFont(settings.text_font));
-    connect(textFontSelector, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(textFontSelectorCurrentFontChanged(const QFont&)));
+    connect(textFontSelector, SIGNAL(currentFontChanged(QFont)), this, SLOT(textFontSelectorCurrentFontChanged(QFont)));
 
     int textbold_index = get_action_index("textbold");
     toolbarText->addAction(actionHash[textbold_index]);

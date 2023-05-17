@@ -19,6 +19,11 @@
 
 #include "embroidermodder.h"
 
+/**
+ * @brief EmbDetailsDialog::EmbDetailsDialog
+ * @param theScene
+ * @param parent
+ */
 EmbDetailsDialog::EmbDetailsDialog(QGraphicsScene* theScene, QWidget* parent) : QDialog(parent)
 {
     setMinimumSize(750,550);
@@ -39,12 +44,19 @@ EmbDetailsDialog::EmbDetailsDialog(QGraphicsScene* theScene, QWidget* parent) : 
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
+/**
+ * @brief EmbDetailsDialog::~EmbDetailsDialog
+ */
 EmbDetailsDialog::~EmbDetailsDialog()
 {
     QApplication::restoreOverrideCursor();
 }
 
-void EmbDetailsDialog::getInfo()
+/**
+ * @brief EmbDetailsDialog::getInfo
+ */
+void
+EmbDetailsDialog::getInfo()
 {
     //TODO: generate a temporary pattern from the scene data.
 
@@ -59,7 +71,12 @@ void EmbDetailsDialog::getInfo()
     boundingRect.setRect(0, 0, 50, 100); //TODO: embPattern_calcBoundingBox(pattern);
 }
 
-QWidget* EmbDetailsDialog::createMainWidget()
+/**
+ * @brief EmbDetailsDialog::createMainWidget
+ * @return
+ */
+QWidget*
+EmbDetailsDialog::createMainWidget()
 {
     QWidget* widget = new QWidget(this);
 
@@ -140,8 +157,11 @@ QWidget* EmbDetailsDialog::createMainWidget()
     return scrollArea;
 }
 
-//TODO: Move majority of this code into libembroidery
-/*
+/**
+ * @brief MainWindow::designDetails
+ *
+ * \todo Move majority of this code into libembroidery
+
 void MainWindow::designDetails()
 {
     QApplication::setOverrideCursor(Qt::ArrowCursor);
@@ -164,23 +184,18 @@ void MainWindow::designDetails()
 
     readSuccessful = 0;
     reader = embReaderWriter_getByFileName(qPrintable(tmpFileName));
-    if(!reader)
-    {
+    if (!reader) {
         readSuccessful = 0;
         printf("Unsupported read file type\n");
     }
-    else
-    {
+    else {
         readSuccessful = reader->reader(pattern, qPrintable(tmpFileName));
-        if(!readSuccessful) printf("Reading file was unsuccessful\n");
+        if (!readSuccessful) printf("Reading file was unsuccessful\n");
     }
     free(reader);
-    if(!readSuccessful)
-    {
+    if (!readSuccessful) {
         embPattern_free(pattern);
     }
-    //======================================================
-
 
     EmbRect bounds = embPattern_calcBoundingBox(pattern);
 

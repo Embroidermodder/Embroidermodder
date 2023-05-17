@@ -52,7 +52,8 @@ Settings_Dialog::make_checkbox(QGroupBox *gb, const char *label, const char *ico
     QCheckBox *checkBox = new QCheckBox(tr(label), gb);
     checkBox->setChecked(*ptr);
     checkBox->setIcon(_mainWin->create_icon(icon));
-    connect(gb, SIGNAL(stateChanged(int)), this, SLOT( [=](int x) { *ptr = (x != 0); }));
+    auto f = [=](int x) { *ptr = (x != 0); };
+    connect(gb, SIGNAL(stateChanged(int)), this, SLOT(f));
     return checkBox;
 }
 
@@ -137,7 +138,7 @@ QWidget* Settings_Dialog::createTabGeneral()
     QString current = dialog.general_language;
     current[0] = current[0].toUpper();
     comboBoxLanguage->setCurrentIndex(comboBoxLanguage->findText(current));
-    connect(comboBoxLanguage, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboBoxLanguageCurrentIndexChanged(const QString&)));
+    connect(comboBoxLanguage, SIGNAL(currentIndexChanged(QString)), this, SLOT(comboBoxLanguageCurrentIndexChanged(QString)));
 
     QVBoxLayout* vboxLayoutLanguage = new QVBoxLayout(groupBoxLanguage);
     vboxLayoutLanguage->addWidget(labelLanguage);
@@ -156,7 +157,7 @@ QWidget* Settings_Dialog::createTabGeneral()
         comboBoxIconTheme->addItem(QIcon("icons/" + dirName + "/" + "theme" + ".png"), dirName);
     }
     comboBoxIconTheme->setCurrentIndex(comboBoxIconTheme->findText(dialog.general_icon_theme));
-    connect(comboBoxIconTheme, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboBoxIconThemeCurrentIndexChanged(const QString&)));
+    connect(comboBoxIconTheme, SIGNAL(currentIndexChanged(QString)), this, SLOT(comboBoxIconThemeCurrentIndexChanged(QString)));
 
     QLabel* labelIconSize = new QLabel(tr("Icon Size"), groupBoxIcon);
     QComboBox* comboBoxIconSize = new QComboBox(groupBoxIcon);
@@ -328,7 +329,7 @@ QWidget* Settings_Dialog::createTabDisplay()
     QLabel* labelScrollBarWidget = new QLabel(tr("Perform action when clicking corner widget"), groupBoxScrollBars);
     QComboBox* comboBoxScrollBarWidget = new QComboBox(groupBoxScrollBars);
     dialog.display_scrollbar_widget_num = settings.display_scrollbar_widget_num;
-    for (int i = 0; i < action_table.size(); i++) {
+    for (int i = 0; i < (int)action_table.size(); i++) {
         QAction* action = actionHash[i];
         if (action) {
             comboBoxScrollBarWidget->addItem(action->icon(), action->text().replace("&", ""));
@@ -516,13 +517,13 @@ QWidget* Settings_Dialog::createTabPrompt()
     dialog.prompt_font_family = settings.prompt_font_family;
     preview.prompt_font_family = dialog.prompt_font_family;
     comboBoxFontFamily->setCurrentFont(QFont(preview.prompt_font_family));
-    connect(comboBoxFontFamily, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboBoxPromptFontFamilyCurrentIndexChanged(const QString&)));
+    connect(comboBoxFontFamily, SIGNAL(currentIndexChanged(QString)), this, SLOT(comboBoxPromptFontFamilyCurrentIndexChanged(QString)));
     QLabel* labelFontStyle = new QLabel(tr("Font Style"), groupBoxFont);
     QComboBox* comboBoxFontStyle = new QComboBox(groupBoxFont);
     comboBoxFontStyle->addItem("Normal");
     comboBoxFontStyle->addItem("Italic");
     comboBoxFontStyle->setEditText(preview.prompt_font_style);
-    connect(comboBoxFontStyle, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboBoxPromptFontStyleCurrentIndexChanged(const QString&)));
+    connect(comboBoxFontStyle, SIGNAL(currentIndexChanged(QString)), this, SLOT(comboBoxPromptFontStyleCurrentIndexChanged(QString)));
     QLabel* labelFontSize = new QLabel(tr("Font Size"), groupBoxFont);
     QSpinBox* spinBoxFontSize = new QSpinBox(groupBoxFont);
     spinBoxFontSize->setRange(4, 64);
@@ -795,9 +796,8 @@ Settings_Dialog::create_float_spinbox(
     spinBox->setSingleStep(single_step);
     spinBox->setRange(lower, upper);
     spinBox->setValue(*ptr);
-    connect(spinBox, SIGNAL(valueChanged(double)), this, SLOT(
-        [=](EmbReal x){ *ptr = x; }
-    ));
+    auto f = [=](EmbReal x){ *ptr = x; };
+    connect(spinBox, SIGNAL(valueChanged(double)), this, SLOT(f));
 
     label->setEnabled(!dialog.grid_load_from_file);
     spinBox->setEnabled(!dialog.grid_load_from_file);
@@ -886,7 +886,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     comboBoxGridType->addItem("Circular");
     comboBoxGridType->addItem("Isometric");
     comboBoxGridType->setCurrentIndex(comboBoxGridType->findText(dialog.grid_type));
-    connect(comboBoxGridType, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboBoxGridTypeCurrentIndexChanged(const QString&)));
+    connect(comboBoxGridType, SIGNAL(currentIndexChanged(QString)), this, SLOT(comboBoxGridTypeCurrentIndexChanged(QString)));
 
     QCheckBox* checkBoxGridCenterOnOrigin = new QCheckBox(tr("Center the grid on the origin"), groupBoxGridGeom);
     checkBoxGridCenterOnOrigin->setObjectName("checkBoxGridCenterOnOrigin");
@@ -1015,8 +1015,6 @@ QWidget* Settings_Dialog::createTabQuickSnap()
 {
     QWidget* widget = new QWidget(this);
 
-    QString iconTheme = settings.general_icon_theme;
-
     //QSnap Locators
     QGroupBox* groupBoxQSnapLoc = new QGroupBox(tr("Locators Used"), widget);
 
@@ -1087,8 +1085,8 @@ QWidget* Settings_Dialog::createTabQuickSnap()
     sliderQSnapLocSize->setRange(1,20);
     dialog.qsnap_locator_size = settings.qsnap_locator_size;
     sliderQSnapLocSize->setValue(dialog.qsnap_locator_size);
-    connect(sliderQSnapLocSize, SIGNAL(valueChanged(int)), this,
-        SLOT([=](int x) { dialog.qsnap_locator_size = x; } ));
+    auto f = [=](int x) { dialog.qsnap_locator_size = x; };
+    connect(sliderQSnapLocSize, SIGNAL(valueChanged(int)), this, SLOT(f));
 
     QVBoxLayout* vboxLayoutQSnapVisual = new QVBoxLayout(groupBoxQSnapVisual);
     vboxLayoutQSnapVisual->addWidget(labelQSnapLocColor);
@@ -1709,7 +1707,7 @@ void Settings_Dialog::choosePromptBackgroundColor()
     QPushButton* button = qobject_cast<QPushButton*>(sender());
     if (button) {
         QColorDialog* colorDialog = new QColorDialog(QColor(accept_.prompt_bg_color), this);
-        connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentPromptBackgroundColorChanged(const QColor&)));
+        connect(colorDialog, SIGNAL(currentColorChanged(QColor)), this, SLOT(currentPromptBackgroundColorChanged(QColor)));
         colorDialog->exec();
 
         if (colorDialog->result() == QDialog::Accepted) {
@@ -1987,7 +1985,7 @@ void Settings_Dialog::chooseRulerColor()
     QPushButton* button = qobject_cast<QPushButton*>(sender());
     if (button) {
         QColorDialog* colorDialog = new QColorDialog(QColor(accept_.ruler_color), this);
-        connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentRulerColorChanged(const QColor&)));
+        connect(colorDialog, SIGNAL(currentColorChanged(QColor)), this, SLOT(currentRulerColorChanged(QColor)));
         colorDialog->exec();
 
         if (colorDialog->result() == QDialog::Accepted) {

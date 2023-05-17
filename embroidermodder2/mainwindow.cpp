@@ -2063,12 +2063,10 @@ read_settings(void)
     std::vector<std::string> action_labels =
         read_string_list_setting(settings_toml, "actions_");
 
-    for (int i=0; i<action_labels.size(); i++) {
+    for (int i=0; i<(int)action_labels.size(); i++) {
         Action action;
         std::string label = "ACTION_" + action_labels[i];
         toml_table_t *table = toml_table_in(settings_toml, label.c_str());
-
-        action.hash = i;
 
         action.icon = read_string_setting(table, "icon");
 
@@ -2255,10 +2253,10 @@ MainWindow::MainWindow() : QMainWindow(0)
     prompt->setPromptTextColor(QColor(settings.prompt_text_color));
     prompt->setPromptBackgroundColor(QColor(settings.prompt_bg_color));
 
-    connect(prompt, SIGNAL(startCommand(const QString&)), this, SLOT(logPromptInput(const QString&)));
+    connect(prompt, SIGNAL(startCommand(QString)), this, SLOT(logPromptInput(QString)));
 
-    connect(prompt, SIGNAL(startCommand(const QString&)), this, SLOT(runCommandMain(const QString&)));
-    connect(prompt, SIGNAL(runCommand(const QString&, const QString&)), this, SLOT(runCommandPrompt(const QString&, const QString&)));
+    connect(prompt, SIGNAL(startCommand(QString)), this, SLOT(runCommandMain(QString)));
+    connect(prompt, SIGNAL(runCommand(QString,QString)), this, SLOT(runCommandPrompt(QString,QString)));
 
     connect(prompt, SIGNAL(deletePressed()), this, SLOT(deletePressed()));
     //TODO: connect(prompt, SIGNAL(tabPressed()), this, SLOT(someUnknownSlot()));
@@ -2289,7 +2287,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     connect(prompt, SIGNAL(showSettings()),     this, SLOT(settingsPrompt()));
 
-    connect(prompt, SIGNAL(historyAppended(const QString&)), this, SLOT(promptHistoryAppended(const QString&)));
+    connect(prompt, SIGNAL(historyAppended(QString)), this, SLOT(promptHistoryAppended(QString)));
 
     //create the Object Property Editor
     dockPropEdit = new PropertyEditor(appDir + "/icons/" + settings.general_icon_theme, settings.selection_mode_pickadd, prompt, this);
@@ -2387,7 +2385,7 @@ MainWindow::createAllActions()
 
         auto f = [=](){ actuator(action.command); };
         connect(ACTION, &QAction::triggered, this, f);
-        actionHash[action.hash] = ACTION;
+        actionHash[i] = ACTION;
 
         QString toolbar_name = QString::fromStdString(action.toolbar_name);
         if (toolbar_name.toUpper() != "NONE") {
@@ -2402,7 +2400,7 @@ MainWindow::createAllActions()
             }
 
             //TODO: order actions position in toolbar based on .ini setting
-            toolbarHash.value(toolbar_name)->addAction(actionHash[action.hash]);
+            toolbarHash.value(toolbar_name)->addAction(actionHash[i]);
         }
 
         QString menu_name = QString::fromStdString(action.menu_name);
@@ -2416,7 +2414,7 @@ MainWindow::createAllActions()
             }
 
             //TODO: order actions position in menu based on .ini setting
-            menuHash.value(menu_name)->addAction(actionHash[action.hash]);
+            menuHash.value(menu_name)->addAction(actionHash[i]);
         }
     }
 
@@ -2471,8 +2469,8 @@ std::string
 run_script(std::vector<std::string> script)
 {
     std::string output = "";
-    for (std::string s : script) {
-        output += actuator(s);
+    for (int i=0; i<(int)script.size(); i++) {
+        output += actuator(script[i]);
     }
     return output;
 }
@@ -3289,29 +3287,7 @@ convert_args_to_type(
 std::string
 Include(std::vector<Parameter> a)
 {
-    QString fileName = QString::fromStdString(a[0].s);
-    QFile scriptFile(("commands/" + a[0].s).c_str());
-
-    if (!scriptFile.open(QIODevice::ReadOnly)) {
-        return "ERROR: Failed to read script file.";
-    }
-
-    QTextStream stream(&scriptFile);
-    QString s = stream.readAll();
-    scriptFile.close();
-
-    /*
-    QScriptContext* parent=context->parentContext();
-
-    if (parent!=0) {
-        context->setActivationObject(context->parentContext()->activationObject());
-        context->setThisObject(context->parentContext()->thisObject());
-    }
-
-    std::string result = engine->evaluate(s);
-    */
-
-    return "";
+    return run_script_file("commands/" + a[0].s);
 }
 
 std::string
@@ -3864,7 +3840,7 @@ MainWindow::openFile(bool recent, const QString& recentFile)
         else {
             PreviewDialog* openDialog = new PreviewDialog(this, tr("Open w/Preview"), openFilesPath, formatFilterOpen);
             //TODO: set openDialog->selectNameFilter(const QString& filter) from settings.opensave_open_format
-            connect(openDialog, SIGNAL(filesSelected(const QStringList&)), this, SLOT(openFilesSelected(const QStringList&)));
+            connect(openDialog, SIGNAL(filesSelected(QStringList)), this, SLOT(openFilesSelected(QStringList)));
             openDialog->exec();
         }
     }
@@ -4660,6 +4636,7 @@ circle_prompt(std::string str)
         todo("CIRCLE", "prompt() for TTR");
     }
     */
+    return "";
 }
 
 /**
@@ -7290,7 +7267,7 @@ EmbReal
 fourier_series(EmbReal arg, std::vector<EmbReal> terms)
 {
     EmbReal x = 0.0f;
-    for (int i=0; i<terms.size()/3; i++) {
+    for (int i=0; i<(int)(terms.size()/3); i++) {
         x += terms[3*i+0] * sin(terms[3*i+1] + terms[3*i+2] * arg);
     }
     return x;

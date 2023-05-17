@@ -121,8 +121,6 @@ class TextSingleObject;
  * .
  */
 typedef struct Action__ {
-    int hash;
-        /*< Index in the actionHash array. */
     std::string icon;
         /*< The stub used for the icon and the basic command. */
     std::string command;
@@ -296,13 +294,75 @@ typedef struct EmbView_ {
  * cancels out of the Settings Dialog.
  */
 typedef struct Settings_ {
+    QString version;
+        /*< \todo document this */
+    QString assets_dir;
+        /*< \todo document this */
     QString general_language;
         /*< \todo document this */
     QString general_icon_theme;
         /*< \todo document this */
-    int general_icon_size;
+    QString general_mdi_bg_logo;
         /*< \todo document this */
-    QString version;
+    QString general_mdi_bg_texture;
+        /*< \todo document this */
+    QString display_units;
+        /*< \todo document this */
+    QString opensave_custom_filter;
+        /*< \todo document this */
+    QString opensave_open_format;
+        /*< \todo document this */
+    QString opensave_save_format;
+        /*< \todo document this */
+    QStringList opensave_recent_list_of_files;
+        /*< \todo document this */
+    QString opensave_recent_directory;
+        /*< \todo document this */
+    QString printing_default_device;
+        /*< \todo document this */
+    QString grid_type;
+        /*< \todo document this */
+    QString text_font;
+        /*< \todo document this */
+    QString to_open;
+        /*< \todo document this */
+    QString current_directory;
+        /*< \todo document this */
+    QString prompt_font_family;
+        /*< \todo document this */
+    QString prompt_font_style;
+        /*< \todo document this */
+    QString prompt_save_history_filename;
+        /*< \todo document this */
+    QRgb general_mdi_bg_color;
+        /*< \todo document this */
+    QRgb prompt_text_color;
+        /*< \todo document this */
+    QRgb prompt_bg_color;
+        /*< \todo document this */
+    uint32_t general_current_tip;
+        /*< \todo document this */
+    uint32_t display_crosshair_color;
+        /*< \todo document this */
+    uint32_t display_bg_color;
+        /*< \todo document this */
+    uint32_t display_selectbox_left_color;
+        /*< \todo document this */
+    uint32_t display_selectbox_left_fill;
+        /*< \todo document this */
+    uint32_t display_selectbox_right_color;
+        /*< \todo document this */
+    uint32_t display_selectbox_right_fill;
+        /*< \todo document this */
+    uint32_t selection_coolgrip_color;
+        /*< \todo document this */
+    uint32_t selection_hotgrip_color;
+        /*< \todo document this */
+    uint32_t ticks_color;
+        /*< \todo document this */
+    uint32_t shine_color;
+        /*< \todo document this */
+    int general_icon_size;
         /*< \todo document this */
     bool running;
         /*< \todo document this */
@@ -316,50 +376,44 @@ typedef struct Settings_ {
         /*< \todo document this */
     bool show_editor;
         /*< \todo document this */
-    bool show_details_dialog; /*< \todo document this */
-    bool show_open_file_dialog; /*< \todo document this */
-    int pattern_index; /*< \todo document this */
-    QString assets_dir; /*< \todo document this */
-    bool use_translation; /*< \todo document this */
-    bool general_mdi_bg_use_logo; /*< \todo document this */
-    bool general_mdi_bg_use_texture; /*< \todo document this */
-    bool general_mdi_bg_use_color; /*< \todo document this */
-    QString general_mdi_bg_logo; /*< \todo document this */
-    QString general_mdi_bg_texture; /*< \todo document this */
-    QRgb general_mdi_bg_color; /*< \todo document this */
-    bool general_tip_of_the_day; /*< \todo document this */
-    uint32_t general_current_tip; /*< \todo document this */
-    bool general_system_help_browser; /*< \todo document this */
-    bool general_check_for_updates; /*< \todo document this */
-    bool display_use_opengl; /*< \todo document this */
-    bool display_renderhint_aa; /*< \todo document this */
+    bool show_details_dialog;
+        /*< \todo document this */
+    bool show_open_file_dialog;
+        /*< \todo document this */
+    int pattern_index;
+        /*< \todo document this */
+    bool use_translation;
+        /*< \todo document this */
+    bool general_mdi_bg_use_logo;
+        /*< \todo document this */
+    bool general_mdi_bg_use_texture;
+        /*< \todo document this */
+    bool general_mdi_bg_use_color;
+        /*< \todo document this */
+    bool general_tip_of_the_day;
+        /*< \todo document this */
+    bool general_system_help_browser;
+        /*< \todo document this */
+    bool general_check_for_updates;
+        /*< \todo document this */
+    bool display_use_opengl;
+        /*< \todo document this */
+    bool display_renderhint_aa;
+        /*< \todo document this */
     bool display_renderhint_text_aa; /*< \todo document this */
     bool display_renderhint_smooth_pix; /*< \todo document this */
     bool display_renderhint_high_aa; /*< \todo document this */
     bool display_renderhint_noncosmetic; /*< \todo document this */
     bool display_show_scrollbars; /*< \todo document this */
     int display_scrollbar_widget_num; /*< \todo document this */
-    uint32_t display_crosshair_color; /*< \todo document this */
-    uint32_t display_bg_color; /*< \todo document this */
-    uint32_t display_selectbox_left_color; /*< \todo document this */
-    uint32_t display_selectbox_left_fill; /*< \todo document this */
-    uint32_t display_selectbox_right_color; /*< \todo document this */
-    uint32_t display_selectbox_right_fill; /*< \todo document this */
     uint8_t display_selectbox_alpha; /*< \todo document this */
     EmbReal display_zoomscale_in; /*< \todo document this */
     EmbReal display_zoomscale_out; /*< \todo document this */
     uint8_t display_crosshair_percent; /*< \todo document this */
-    QString display_units; /*< \todo document this */
-    QString opensave_custom_filter; /*< \todo document this */
-    QString opensave_open_format; /*< \todo document this */
     bool opensave_open_thumbnail; /*< \todo document this */
-    QString opensave_save_format; /*< \todo document this */
     bool opensave_save_thumbnail; /*< \todo document this */
     uint8_t opensave_recent_max_files; /*< \todo document this */
-    QStringList opensave_recent_list_of_files; /*< \todo document this */
-    QString opensave_recent_directory; /*< \todo document this */
     uint8_t opensave_trim_dst_num_jumps; /*< \todo document this */
-    QString printing_default_device; /*< \todo document this */
     bool printing_use_last_device; /*< \todo document this */
     bool printing_disable_bg; /*< \todo document this */
     bool grid_show_on_load; /*< \todo document this */
@@ -367,7 +421,6 @@ typedef struct Settings_ {
     bool grid_color_match_crosshair; /*< \todo document this */
     uint32_t grid_color; /*< \todo document this */
     bool grid_load_from_file; /*< \todo document this */
-    QString grid_type; /*< \todo document this */
     bool grid_center_on_origin; /*< \todo document this */
     EmbVector grid_center; /*< \todo document this */
     EmbVector grid_size; /*< \todo document this */
@@ -403,11 +456,8 @@ typedef struct Settings_ {
     bool selection_mode_pickfirst; /*< \todo document this */
     bool selection_mode_pickadd; /*< \todo document this */
     bool selection_mode_pickdrag; /*< \todo document this */
-    uint32_t selection_coolgrip_color; /*< \todo document this */
-    uint32_t selection_hotgrip_color; /*< \todo document this */
     uint8_t selection_grip_size; /*< \todo document this */
     uint8_t selection_pickbox_size; /*< \todo document this */
-    QString text_font; /*< \todo document this */
     EmbReal text_size; /*< \todo document this */
     EmbReal text_angle; /*< \todo document this */
     bool text_style_bold; /*< \todo document this */
@@ -415,35 +465,25 @@ typedef struct Settings_ {
     bool text_style_underline; /*< \todo document this */
     bool text_style_overline; /*< \todo document this */
     bool text_style_strikeout; /*< \todo document this */
-    uint32_t ticks_color; /*< \todo document this */
-    uint32_t shine_color; /*< \todo document this */
-    QString to_open; /*< \todo document this */
-    QString current_directory; /*< \todo document this */
-    EmbReal zoomInLimit; /*< */
-    EmbReal zoomOutLimit; /*< */
-    EmbReal ruler_width; /*< */
-    EmbReal tick_depth; /*< */
+    EmbReal zoomInLimit;
+        /*< */
+    EmbReal zoomOutLimit;
+        /*< */
+    EmbReal ruler_width;
+        /*< */
+    EmbReal tick_depth;
+        /*< */
     EmbReal major_tick_seperation;
         /*< \todo document this */
     EmbReal needle_speed;
         /*< \todo document this */
     EmbReal stitch_time;
         /*< \todo document this */
-    QRgb prompt_text_color;
-        /*< \todo document this */
-    QRgb prompt_bg_color;
-        /*< \todo document this */
-    QString prompt_font_family;
-        /*< \todo document this */
-    QString prompt_font_style;
-        /*< \todo document this */
     uint8_t prompt_font_size;
         /*< \todo document this */
     bool prompt_save_history;
         /*< \todo document this */
     bool prompt_save_history_as_html;
-        /*< \todo document this */
-    QString prompt_save_history_filename;
         /*< \todo document this */
 } Settings;
 
@@ -748,7 +788,7 @@ operator-(EmbVector a, EmbVector b)
  * .
  */
 inline EmbReal
-radians(EmbReal degrees)
+radians__(EmbReal degrees)
 {
     return (degrees*emb_constant_pi/180.0);
 }
@@ -757,7 +797,7 @@ radians(EmbReal degrees)
  *
  */
 inline EmbReal
-degrees(EmbReal radian)
+degrees__(EmbReal radian)
 {
     return (radian*180.0/emb_constant_pi);
 }

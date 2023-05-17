@@ -428,12 +428,12 @@ View::createGridRect()
     gridPath = QPainterPath();
     gridPath.addRect(gr);
     for (EmbReal gx = x1; gx < x2; gx += xSpacing) {
-        for (EmbReal gy = y1; gy < y2; gy += ySpacing) {
-            gridPath.moveTo(x1,gy);
-            gridPath.lineTo(x2,gy);
-            gridPath.moveTo(gx,y1);
-            gridPath.lineTo(gx,y2);
-        }
+        gridPath.moveTo(gx, y1);
+        gridPath.lineTo(gx, y2);
+    }
+    for (EmbReal gy = y1; gy < y2; gy += ySpacing) {
+        gridPath.moveTo(x1, gy);
+        gridPath.lineTo(x2, gy);
     }
 
     //Center the Grid
@@ -502,15 +502,14 @@ View::createGridIso()
     gridPath.lineTo(p1);
 
     for (EmbReal x = 0; x < isoW; x += xSpacing) {
-        for (EmbReal y = 0; y < isoH; y += ySpacing) {
-            QPointF px = QLineF::fromPolar(x,  30).p2();
-            QPointF py = QLineF::fromPolar(y, 150).p2();
-
-            gridPath.moveTo(px);
-            gridPath.lineTo(px+p3);
-            gridPath.moveTo(py);
-            gridPath.lineTo(py+p2);
-        }
+        QPointF px = QLineF::fromPolar(x, 30).p2();
+        gridPath.moveTo(px);
+        gridPath.lineTo(px+p3);
+    }
+    for (EmbReal y = 0; y < isoH; y += ySpacing) {
+        QPointF py = QLineF::fromPolar(y, 150).p2();
+        gridPath.moveTo(py);
+        gridPath.lineTo(py+p2);
     }
 
     //Center the Grid
@@ -851,30 +850,42 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                 painter->fillRect(QRectF(ox, oy, rvw, rvh), rulerColor);
 
                 int xFlow;
-                if (willUnderflowInt32(ox, unit)) { proceed = false; }
-                else                             { xFlow = roundToMultiple(false, ox, unit); }
                 int xStart;
-                if (willUnderflowInt32(xFlow, unit)) { proceed = false; }
-                else                             { xStart = xFlow - unit; }
                 int yFlow;
-                if (willUnderflowInt32(oy, unit)) { proceed = false; }
-                else                             { yFlow = roundToMultiple(false, oy, unit); }
                 int yStart;
-                if (willUnderflowInt32(yFlow, unit)) { proceed = false; }
-                else                             { yStart = yFlow - unit; }
+                if (willUnderflowInt32(ox, unit)) {
+                    proceed = false;
+                }
+                else {
+                    xFlow = roundToMultiple(false, ox, unit);
+                }
+                if (willUnderflowInt32(xFlow, unit)) {
+                    proceed = false;
+                }
+                else {
+                    xStart = xFlow - unit;
+                }
+                if (willUnderflowInt32(oy, unit)) {
+                    proceed = false;
+                }
+                else {
+                    yFlow = roundToMultiple(false, oy, unit);
+                }
+                if (willUnderflowInt32(yFlow, unit)) {
+                    proceed = false;
+                }
+                else {
+                    yStart = yFlow - unit;
+                }
 
-                if (proceed)
-                {
-                    for(int x = xStart; x < rhx; x += unit)
-                    {
+                if (proceed) {
+                    for (int x = xStart; x < rhx; x += unit) {
                         transform.translate(x+rhTextOffset, rhy-rhh/2);
                         QPainterPath rulerTextPath;
-                        if (rulerMetric)
-                        {
+                        if (rulerMetric) {
                             rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(x), textHeight));
                         }
-                        else
-                        {
+                        else {
                             if (feet)
                                 rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(x/12).append('\''), textHeight));
                             else
@@ -1836,8 +1847,6 @@ View::zoomToPoint(const QPoint& mousePoint, int zoomDir)
 void
 View::contextMenuEvent(QContextMenuEvent* event)
 {
-    QString iconTheme = settings.general_icon_theme;
-
     QMenu menu;
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
     bool selectionEmpty = itemList.isEmpty();

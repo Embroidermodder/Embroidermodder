@@ -697,7 +697,7 @@ PropertyEditor::hideAllGroups()
  */
 void PropertyEditor::clearAllFields()
 {
-    for (int i=0; i<all_line_editors.size(); i++) {
+    for (int i=0; i<(int)(all_line_editors.size()); i++) {
         if (all_line_editors[6*i+4] == "double") {
             lineEdits[all_line_editors[6*i+1]]->clear();
         }
@@ -804,7 +804,7 @@ void PropertyEditor::mapSignal(QObject* fieldObj, const QString& name, QVariant 
         connect(fieldObj, SIGNAL(editingFinished()), signalMapper, SLOT(map()));
     }
     else if (name.startsWith("comboBox")) {
-        connect(fieldObj, SIGNAL(activated(const QString&)), signalMapper, SLOT(map()));
+        connect(fieldObj, SIGNAL(activated(QString)), signalMapper, SLOT(map()));
     }
 
     signalMapper->setMapping(fieldObj, fieldObj);

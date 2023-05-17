@@ -19,29 +19,53 @@
 
 #include "embroidermodder.h"
 
+/**
+ * @brief PolylineObject::PolylineObject
+ * @param x
+ * @param y
+ * @param p
+ * @param rgb
+ * @param parent
+ */
 PolylineObject::PolylineObject(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("PolylineObject Constructor()");
+    debug_message("PolylineObject Constructor()");
     init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
+/**
+ * @brief PolylineObject::PolylineObject
+ * @param obj
+ * @param parent
+ */
 PolylineObject::PolylineObject(PolylineObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("PolylineObject Constructor()");
-    if (obj)
-    {
+    if (obj) {
         init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
         setScale(obj->scale());
     }
 }
 
+/**
+ * @brief PolylineObject::~PolylineObject
+ */
 PolylineObject::~PolylineObject()
 {
-    qDebug("PolylineObject Destructor()");
+    debug_message("PolylineObject Destructor()");
 }
 
-void PolylineObject::init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
+/**
+ * @brief PolylineObject::init
+ * @param x
+ * @param y
+ * @param p
+ * @param rgb
+ * @param lineType
+ */
+void
+PolylineObject::init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, OBJ_TYPE_POLYLINE);
     setData(OBJ_NAME, "Polyline");
@@ -60,7 +84,12 @@ void PolylineObject::init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb,
     setPen(objectPen());
 }
 
-void PolylineObject::updatePath(const QPainterPath& p)
+/**
+ * @brief PolylineObject::updatePath
+ * @param p
+ */
+void
+PolylineObject::updatePath(const QPainterPath& p)
 {
     normalPath = p;
     QPainterPath reversePath = normalPath.toReversed();
@@ -68,7 +97,13 @@ void PolylineObject::updatePath(const QPainterPath& p)
     setObjectPath(reversePath);
 }
 
-void PolylineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+/**
+ * @brief PolylineObject::paint
+ * @param painter
+ * @param option
+ */
+void
+PolylineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
     if (!objScene) return;
@@ -85,11 +120,15 @@ void PolylineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
     if (objScene->property("ENABLE_LWT").toBool() && objScene->property("ENABLE_REAL").toBool()) { realRender(painter, normalPath); }
 }
 
-void PolylineObject::updateRubber(QPainter* painter)
+/**
+ * @brief PolylineObject::updateRubber
+ * @param painter
+ */
+void
+PolylineObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objRubberMode;
-    if (rubberMode == OBJ_RUBBER_POLYLINE)
-    {
+    if (rubberMode == OBJ_RUBBER_POLYLINE) {
         setObjectPos(objectRubberPoint("POLYLINE_POINT_0"));
 
         QLineF rubberLine(normalPath.currentPosition(), mapFromScene(objectRubberPoint(QString())));
@@ -103,8 +142,7 @@ void PolylineObject::updateRubber(QPainter* painter)
 
         QString appendStr;
         QPainterPath rubberPath;
-        for(int i = 1; i <= num; i++)
-        {
+        for (int i = 1; i <= num; i++) {
             appendStr = "POLYLINE_POINT_" + QString().setNum(i);
             QPointF appendPoint = mapFromScene(objectRubberPoint(appendStr));
             rubberPath.lineTo(appendPoint);
@@ -114,10 +152,8 @@ void PolylineObject::updateRubber(QPainter* painter)
         //Ensure the path isn't updated until the number of points is changed again
         setObjectRubberText("POLYLINE_NUM_POINTS", QString());
     }
-    else if (rubberMode == OBJ_RUBBER_GRIP)
-    {
-        if (painter)
-        {
+    else if (rubberMode == OBJ_RUBBER_GRIP) {
+        if (painter) {
             int elemCount = normalPath.elementCount();
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
             if (gripIndex == -1) gripIndex = findIndex(gripPoint);
@@ -151,9 +187,13 @@ void PolylineObject::updateRubber(QPainter* painter)
     }
 }
 
-void PolylineObject::vulcanize()
+/**
+ * @brief PolylineObject::vulcanize
+ */
+void
+PolylineObject::vulcanize()
 {
-    qDebug("PolylineObject vulcanize()");
+    debug_message("PolylineObject vulcanize()");
     updateRubber();
 
     setObjectRubberMode(OBJ_RUBBER_OFF);
@@ -162,20 +202,25 @@ void PolylineObject::vulcanize()
         QMessageBox::critical(0, QObject::tr("Empty Polyline Error"), QObject::tr("The polyline added contains no points. The command that created this object has flawed logic."));
 }
 
-// Returns the closest snap point to the mouse point
-QPointF PolylineObject::mouseSnapPoint(const QPointF& mousePoint)
+/**
+ * @brief PolylineObject::mouseSnapPoint
+ * @param mousePoint
+ * @return The closest snap point to the mouse point.
+ *
+ * \todo use a genericized version.
+ */
+QPointF
+PolylineObject::mouseSnapPoint(const QPointF& mousePoint)
 {
     QPainterPath::Element element = normalPath.elementAt(0);
     QPointF closestPoint = mapToScene(QPointF(element.x, element.y));
     EmbReal closestDist = QLineF(mousePoint, closestPoint).length();
     int elemCount = normalPath.elementCount();
-    for(int i = 0; i < elemCount; ++i)
-    {
+    for (int i = 0; i < elemCount; ++i) {
         element = normalPath.elementAt(i);
         QPointF elemPoint = mapToScene(element.x, element.y);
         EmbReal elemDist = QLineF(mousePoint, elemPoint).length();
-        if (elemDist < closestDist)
-        {
+        if (elemDist < closestDist) {
             closestPoint = elemPoint;
             closestDist = elemDist;
         }
@@ -183,7 +228,12 @@ QPointF PolylineObject::mouseSnapPoint(const QPointF& mousePoint)
     return closestPoint;
 }
 
-QList<QPointF> PolylineObject::allGripPoints()
+/**
+ * @brief PolylineObject::allGripPoints
+ * @return
+ */
+QList<QPointF>
+PolylineObject::allGripPoints()
 {
     QList<QPointF> gripPoints;
     QPainterPath::Element element;
@@ -195,7 +245,13 @@ QList<QPointF> PolylineObject::allGripPoints()
     return gripPoints;
 }
 
-int PolylineObject::findIndex(const QPointF& point)
+/**
+ * @brief PolylineObject::findIndex
+ * @param point
+ * @return
+ */
+int
+PolylineObject::findIndex(const QPointF& point)
 {
     int elemCount = normalPath.elementCount();
     //NOTE: Points here are in item coordinates
@@ -209,7 +265,13 @@ int PolylineObject::findIndex(const QPointF& point)
     return -1;
 }
 
-void PolylineObject::gripEdit(const QPointF& before, const QPointF& after)
+/**
+ * @brief PolylineObject::gripEdit
+ * @param before
+ * @param after
+ */
+void
+PolylineObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     gripIndex = findIndex(before);
     if (gripIndex == -1) return;
@@ -219,12 +281,22 @@ void PolylineObject::gripEdit(const QPointF& before, const QPointF& after)
     gripIndex = -1;
 }
 
-QPainterPath PolylineObject::objectCopyPath() const
+/**
+ * @brief PolylineObject::objectCopyPath
+ * @return
+ */
+QPainterPath
+PolylineObject::objectCopyPath() const
 {
     return normalPath;
 }
 
-QPainterPath PolylineObject::objectSavePath() const
+/**
+ * @brief PolylineObject::objectSavePath
+ * @return
+ */
+QPainterPath
+PolylineObject::objectSavePath() const
 {
     EmbReal s = scale();
     QTransform trans;

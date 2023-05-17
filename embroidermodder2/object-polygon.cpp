@@ -19,29 +19,53 @@
 
 #include "embroidermodder.h"
 
+/**
+ * @brief PolygonObject::PolygonObject
+ * @param x
+ * @param y
+ * @param p
+ * @param rgb
+ * @param parent
+ */
 PolygonObject::PolygonObject(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("PolygonObject Constructor()");
+    debug_message("PolygonObject Constructor()");
     init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
+/**
+ * @brief PolygonObject::PolygonObject
+ * @param obj
+ * @param parent
+ */
 PolygonObject::PolygonObject(PolygonObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("PolygonObject Constructor()");
-    if(obj)
-    {
+    debug_message("PolygonObject Constructor()");
+    if (obj) {
         init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
         setScale(obj->scale());
     }
 }
 
+/**
+ * @brief PolygonObject::~PolygonObject
+ */
 PolygonObject::~PolygonObject()
 {
-    qDebug("PolygonObject Destructor()");
+    debug_message("PolygonObject Destructor()");
 }
 
-void PolygonObject::init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
+/**
+ * @brief PolygonObject::init
+ * @param x
+ * @param y
+ * @param p
+ * @param rgb
+ * @param lineType
+ */
+void
+PolygonObject::init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, OBJ_TYPE_POLYGON);
     setData(OBJ_NAME, "Polygon");
@@ -60,7 +84,12 @@ void PolygonObject::init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, 
     setPen(objPen);
 }
 
-void PolygonObject::updatePath(const QPainterPath& p)
+/**
+ * @brief PolygonObject::updatePath
+ * @param p
+ */
+void
+PolygonObject::updatePath(const QPainterPath& p)
 {
     normalPath = p;
     QPainterPath closedPath = normalPath;
@@ -70,20 +99,25 @@ void PolygonObject::updatePath(const QPainterPath& p)
     setObjectPath(reversePath);
 }
 
-void PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+/**
+ * @brief PolygonObject::paint
+ * @param painter
+ * @param option
+ */
+void
+PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) return;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
+    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
-    if(normalPath.elementCount())
-    {
+    if (normalPath.elementCount()) {
         painter->drawPath(normalPath);
         QPainterPath::Element zero = normalPath.elementAt(0);
         QPainterPath::Element last = normalPath.elementAt(normalPath.elementCount()-1);
@@ -91,17 +125,22 @@ void PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     }
 }
 
-void PolygonObject::updateRubber(QPainter* painter)
+/**
+ * @brief PolygonObject::updateRubber
+ * @param painter
+ */
+void
+PolygonObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objRubberMode;
-    if(rubberMode == OBJ_RUBBER_POLYGON) {
+    if (rubberMode == OBJ_RUBBER_POLYGON) {
         setObjectPos(objectRubberPoint("POLYGON_POINT_0"));
 
         bool ok = false;
         QString numStr = objectRubberText("POLYGON_NUM_POINTS");
-        if(numStr.isNull()) return;
+        if (numStr.isNull()) return;
         int num = numStr.toInt(&ok);
-        if(!ok) return;
+        if (!ok) return;
 
         QString appendStr;
         QPainterPath rubberPath;
@@ -118,7 +157,7 @@ void PolygonObject::updateRubber(QPainter* painter)
         //Ensure the path isn't updated until the number of points is changed again
         setObjectRubberText("POLYGON_NUM_POINTS", QString());
     }
-    else if(rubberMode == OBJ_RUBBER_POLYGON_INSCRIBE)
+    else if (rubberMode == OBJ_RUBBER_POLYGON_INSCRIBE)
     {
         setObjectPos(objectRubberPoint("POLYGON_CENTER"));
 
@@ -129,7 +168,7 @@ void PolygonObject::updateRubber(QPainter* painter)
         EmbReal inscribeAngle = inscribeLine.angle();
         EmbReal inscribeInc = 360.0/numSides;
 
-        if(painter) drawRubberLine(inscribeLine, painter, "VIEW_COLOR_CROSSHAIR");
+        if (painter) drawRubberLine(inscribeLine, painter, "VIEW_COLOR_CROSSHAIR");
 
         QPainterPath inscribePath;
         //First Point
@@ -142,7 +181,7 @@ void PolygonObject::updateRubber(QPainter* painter)
         }
         updatePath(inscribePath);
     }
-    else if(rubberMode == OBJ_RUBBER_POLYGON_CIRCUMSCRIBE)
+    else if (rubberMode == OBJ_RUBBER_POLYGON_CIRCUMSCRIBE)
     {
         setObjectPos(objectRubberPoint("POLYGON_CENTER"));
 
@@ -153,7 +192,7 @@ void PolygonObject::updateRubber(QPainter* painter)
         EmbReal circumscribeAngle = circumscribeLine.angle();
         EmbReal circumscribeInc = 360.0/numSides;
 
-        if(painter) drawRubberLine(circumscribeLine, painter, "VIEW_COLOR_CROSSHAIR");
+        if (painter) drawRubberLine(circumscribeLine, painter, "VIEW_COLOR_CROSSHAIR");
 
         QPainterPath circumscribePath;
         //First Point
@@ -177,20 +216,18 @@ void PolygonObject::updateRubber(QPainter* painter)
         }
         updatePath(circumscribePath);
     }
-    else if(rubberMode == OBJ_RUBBER_GRIP)
-    {
-        if(painter)
-        {
+    else if (rubberMode == OBJ_RUBBER_GRIP) {
+        if (painter) {
             int elemCount = normalPath.elementCount();
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if(gripIndex == -1) gripIndex = findIndex(gripPoint);
-            if(gripIndex == -1) return;
+            if (gripIndex == -1) gripIndex = findIndex(gripPoint);
+            if (gripIndex == -1) return;
 
             int m = 0;
             int n = 0;
 
-            if(!gripIndex)                    { m = elemCount-1; n = 1; }
-            else if(gripIndex == elemCount-1) { m = elemCount-2; n = 0; }
+            if (!gripIndex)                    { m = elemCount-1; n = 1; }
+            else if (gripIndex == elemCount-1) { m = elemCount-2; n = 0; }
             else                              { m = gripIndex-1; n = gripIndex+1; }
             QPainterPath::Element em = normalPath.elementAt(m);
             QPainterPath::Element en = normalPath.elementAt(n);
@@ -205,31 +242,38 @@ void PolygonObject::updateRubber(QPainter* painter)
     }
 }
 
-void PolygonObject::vulcanize()
+/**
+ * @brief PolygonObject::vulcanize
+ */
+void
+PolygonObject::vulcanize()
 {
-    qDebug("PolygonObject vulcanize()");
+    debug_message("PolygonObject vulcanize()");
     updateRubber();
 
     setObjectRubberMode(OBJ_RUBBER_OFF);
 
-    if(!normalPath.elementCount())
+    if (!normalPath.elementCount())
         QMessageBox::critical(0, QObject::tr("Empty Polygon Error"), QObject::tr("The polygon added contains no points. The command that created this object has flawed logic."));
 }
 
-// Returns the closest snap point to the mouse point
-QPointF PolygonObject::mouseSnapPoint(const QPointF& mousePoint)
+/**
+ * @brief PolygonObject::mouseSnapPoint
+ * @param mousePoint
+ * @return The closest snap point to the mouse point
+ */
+QPointF
+PolygonObject::mouseSnapPoint(const QPointF& mousePoint)
 {
     QPainterPath::Element element = normalPath.elementAt(0);
     QPointF closestPoint = mapToScene(QPointF(element.x, element.y));
     EmbReal closestDist = QLineF(mousePoint, closestPoint).length();
     int elemCount = normalPath.elementCount();
-    for(int i = 0; i < elemCount; ++i)
-    {
+    for (int i = 0; i < elemCount; ++i) {
         element = normalPath.elementAt(i);
         QPointF elemPoint = mapToScene(element.x, element.y);
         EmbReal elemDist = QLineF(mousePoint, elemPoint).length();
-        if(elemDist < closestDist)
-        {
+        if (elemDist < closestDist) {
             closestPoint = elemPoint;
             closestDist = elemDist;
         }
@@ -237,7 +281,12 @@ QPointF PolygonObject::mouseSnapPoint(const QPointF& mousePoint)
     return closestPoint;
 }
 
-QList<QPointF> PolygonObject::allGripPoints()
+/**
+ * @brief PolygonObject::allGripPoints
+ * @return
+ */
+QList<QPointF>
+PolygonObject::allGripPoints()
 {
     QList<QPointF> gripPoints;
     QPainterPath::Element element;
@@ -249,7 +298,13 @@ QList<QPointF> PolygonObject::allGripPoints()
     return gripPoints;
 }
 
-int PolygonObject::findIndex(const QPointF& point)
+/**
+ * @brief PolygonObject::findIndex
+ * @param point
+ * @return
+ */
+int
+PolygonObject::findIndex(const QPointF& point)
 {
     int i = 0;
     int elemCount = normalPath.elementCount();
@@ -259,27 +314,44 @@ int PolygonObject::findIndex(const QPointF& point)
     {
         QPainterPath::Element e = normalPath.elementAt(i);
         QPointF elemPoint = QPointF(e.x, e.y);
-        if(itemPoint == elemPoint) return i;
+        if (itemPoint == elemPoint) return i;
     }
     return -1;
 }
 
-void PolygonObject::gripEdit(const QPointF& before, const QPointF& after)
+/**
+ * @brief PolygonObject::gripEdit
+ * @param before
+ * @param after
+ */
+void
+PolygonObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     gripIndex = findIndex(before);
-    if(gripIndex == -1) return;
+    if (gripIndex == -1)
+        return;
     QPointF a = mapFromScene(after);
     normalPath.setElementPositionAt(gripIndex, a.x(), a.y());
     updatePath(normalPath);
     gripIndex = -1;
 }
 
-QPainterPath PolygonObject::objectCopyPath() const
+/**
+ * @brief PolygonObject::objectCopyPath
+ * @return
+ */
+QPainterPath
+PolygonObject::objectCopyPath() const
 {
     return normalPath;
 }
 
-QPainterPath PolygonObject::objectSavePath() const
+/**
+ * @brief PolygonObject::objectSavePath
+ * @return
+ */
+QPainterPath
+PolygonObject::objectSavePath() const
 {
     QPainterPath closedPath = normalPath;
     closedPath.closeSubpath();

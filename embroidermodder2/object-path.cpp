@@ -19,29 +19,53 @@
 
 #include "embroidermodder.h"
 
+/**
+ * @brief PathObject::PathObject
+ * @param x
+ * @param y
+ * @param p
+ * @param rgb
+ * @param parent
+ */
 PathObject::PathObject(EmbReal x, EmbReal y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("PathObject Constructor()");
     init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
+/**
+ * @brief PathObject::PathObject
+ * @param obj
+ * @param parent
+ */
 PathObject::PathObject(PathObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("PathObject Constructor()");
-    if(obj)
-    {
+    debug_message("PathObject Constructor()");
+    if (obj) {
         init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
         setScale(obj->scale());
     }
 }
 
+/**
+ * @brief PathObject::~PathObject
+ */
 PathObject::~PathObject()
 {
-    qDebug("PathObject Destructor()");
+    debug_message("PathObject Destructor()");
 }
 
-void PathObject::init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
+/**
+ * @brief PathObject::init
+ * @param x
+ * @param y
+ * @param p
+ * @param rgb
+ * @param lineType
+ */
+void
+PathObject::init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, OBJ_TYPE_PATH);
     setData(OBJ_NAME, "Path");

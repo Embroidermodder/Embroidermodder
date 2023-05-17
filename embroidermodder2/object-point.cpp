@@ -20,7 +20,11 @@
 #include "embroidermodder.h"
 
 /**
- * .
+ * @brief PointObject::PointObject
+ * @param x
+ * @param y
+ * @param rgb
+ * @param parent
  */
 PointObject::PointObject(EmbReal x, EmbReal y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -29,20 +33,21 @@ PointObject::PointObject(EmbReal x, EmbReal y, QRgb rgb, QGraphicsItem* parent) 
 }
 
 /**
- * .
+ * @brief PointObject::PointObject
+ * @param obj
+ * @param parent
  */
 PointObject::PointObject(PointObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     debug_message("PointObject Constructor()");
-    if(obj)
-    {
+    if (obj) {
         init(obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
     }
 }
 
 /**
- * .
+ * @brief PointObject::~PointObject
  */
 PointObject::~PointObject()
 {
@@ -50,9 +55,14 @@ PointObject::~PointObject()
 }
 
 /**
- * .
+ * @brief PointObject::init
+ * @param x
+ * @param y
+ * @param rgb
+ * @param lineType
  */
-void PointObject::init(EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType)
+void
+PointObject::init(EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, OBJ_TYPE_POINT);
     setData(OBJ_NAME, "Point");
@@ -71,13 +81,16 @@ void PointObject::init(EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType)
 }
 
 /**
- * .
+ * @brief PointObject::paint
+ * @param painter
+ * @param option
  */
 void
 PointObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene)
+        return;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
@@ -90,7 +103,8 @@ PointObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QW
 }
 
 /**
- * .
+ * @brief PointObject::updateRubber
+ * @param painter
  */
 void
 PointObject::updateRubber(QPainter* painter)
@@ -107,7 +121,7 @@ PointObject::updateRubber(QPainter* painter)
 }
 
 /**
- * .
+ * @brief PointObject::vulcanize
  */
 void
 PointObject::vulcanize()
@@ -119,8 +133,9 @@ PointObject::vulcanize()
 }
 
 /**
- * Returns the closest snap point to the mouse point
- * .
+ * @brief PointObject::mouseSnapPoint
+ * @param mousePoint
+ * @return The closest snap point to the mouse point
  */
 QPointF PointObject::mouseSnapPoint(const QPointF& mousePoint)
 {
@@ -128,7 +143,8 @@ QPointF PointObject::mouseSnapPoint(const QPointF& mousePoint)
 }
 
 /**
- * .
+ * @brief PointObject::allGripPoints
+ * @return
  */
 QList<QPointF>
 PointObject::allGripPoints()
@@ -139,7 +155,9 @@ PointObject::allGripPoints()
 }
 
 /**
- * .
+ * @brief PointObject::gripEdit
+ * @param before
+ * @param after
  */
 void
 PointObject::gripEdit(const QPointF& before, const QPointF& after)
@@ -151,7 +169,8 @@ PointObject::gripEdit(const QPointF& before, const QPointF& after)
 }
 
 /**
- * .
+ * @brief PointObject::objectSavePath
+ * @return
  */
 QPainterPath
 PointObject::objectSavePath() const

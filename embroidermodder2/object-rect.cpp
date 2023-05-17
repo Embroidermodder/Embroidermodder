@@ -201,7 +201,7 @@ void RectObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
 void RectObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objRubberMode;
-    if (rubberMode == OBJ_RUBBER_RECTANGLE) {
+    if (objRubberMode == OBJ_RUBBER_RECTANGLE) {
         QPointF sceneStartPoint = objectRubberPoint("RECTANGLE_START");
         QPointF sceneEndPoint = objectRubberPoint("RECTANGLE_END");
         EmbReal x = sceneStartPoint.x();

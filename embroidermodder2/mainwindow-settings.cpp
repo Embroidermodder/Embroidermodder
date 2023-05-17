@@ -54,8 +54,8 @@ std::vector<std::string>
 to_string_vector(QStringList list)
 {
     std::vector<std::string> a;
-    for (QString s: list) {
-        a.push_back(s.toStdString());
+    for (int i=0; i<(int)list.size(); i++) {
+        a.push_back(list[i].toStdString());
     }
     return a;
 }

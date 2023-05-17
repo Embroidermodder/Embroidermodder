@@ -106,10 +106,9 @@ MdiWindow::loadFile(const QString &fileName)
 
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        QMessageBox::warning(this, tr("Error reading file"),
-                             tr("Cannot read file %1:\n%2.")
-                             .arg(fileName)
-                             .arg(file.errorString()));
+        QString error = tr("Cannot read file")
+            + fileName + ": " + file.errorString();
+        QMessageBox::warning(this, tr("Error reading file"), error);
         return false;
     }
 
@@ -146,7 +145,6 @@ MdiWindow::loadFile(const QString &fileName)
         embPattern_moveStitchListToPolylines(p); //TODO: Test more
         */
         int stitchCount = p->stitch_list->count;
-        QPainterPath path;
 
         for (int i=0; i<p->geometry->count; i++) {
             EmbGeometry g = p->geometry->geometry[i];
