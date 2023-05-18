@@ -51,9 +51,12 @@ MainWindow::createFileMenu()
     fileMenu->setTearOffEnabled(false);
 }
 
+/**
+ * @brief MainWindow::createEditMenu
+ */
 void MainWindow::createEditMenu()
 {
-    qDebug("MainWindow createEditMenu()");
+    debug_message("MainWindow createEditMenu()");
     menuBar()->addMenu(editMenu);
     editMenu->addAction(actionHash[get_action_index("undo")]);
     editMenu->addAction(actionHash[get_action_index("redo")]);
@@ -65,9 +68,13 @@ void MainWindow::createEditMenu()
     editMenu->setTearOffEnabled(true);
 }
 
-void MainWindow::createViewMenu()
+/**
+ * @brief MainWindow::createViewMenu
+ */
+void
+MainWindow::createViewMenu()
 {
-    qDebug("MainWindow createViewMenu()");
+    debug_message("MainWindow createViewMenu()");
 
     menuBar()->addMenu(viewMenu);
     viewMenu->addSeparator();
@@ -106,18 +113,26 @@ void MainWindow::createViewMenu()
     panMenu->setTearOffEnabled(true);
 }
 
-void MainWindow::createSettingsMenu()
+/**
+ * @brief MainWindow::createSettingsMenu
+ */
+void
+MainWindow::createSettingsMenu()
 {
-    qDebug("MainWindow createSettingsMenu()");
+    debug_message("MainWindow createSettingsMenu()");
     menuBar()->addMenu(settingsMenu);
     settingsMenu->addAction(actionHash[get_action_index("settingsdialog")]);
     settingsMenu->addSeparator();
     settingsMenu->setTearOffEnabled(true);
 }
 
-void MainWindow::createWindowMenu()
+/**
+ * @brief MainWindow::createWindowMenu
+ */
+void
+MainWindow::createWindowMenu()
 {
-    qDebug("MainWindow createWindowMenu()");
+    debug_message("MainWindow createWindowMenu()");
     menuBar()->addMenu(windowMenu);
     connect(windowMenu, SIGNAL(aboutToShow()), this, SLOT(windowMenuAboutToShow()));
     //Do not allow the Window Menu to be torn off. It's a pain in the ass to maintain.
@@ -125,9 +140,13 @@ void MainWindow::createWindowMenu()
 
 }
 
-void MainWindow::createHelpMenu()
+/**
+ * @brief MainWindow::createHelpMenu
+ */
+void
+MainWindow::createHelpMenu()
 {
-    qDebug("MainWindow createHelpMenu()");
+    debug_message("MainWindow createHelpMenu()");
     menuBar()->addMenu(helpMenu);
     helpMenu->addAction(actionHash[get_action_index("help")]);
     helpMenu->addSeparator();
@@ -141,14 +160,17 @@ void MainWindow::createHelpMenu()
     helpMenu->setTearOffEnabled(true);
 }
 
-void MainWindow::createAllMenus()
+/**
+ * @brief MainWindow::createAllMenus
+ */
+void
+MainWindow::createAllMenus()
 {
-    qDebug("MainWindow createAllMenus()");
+    debug_message("MainWindow createAllMenus()");
     createFileMenu();
     createEditMenu();
     createViewMenu();
     createSettingsMenu();
     createWindowMenu();
     createHelpMenu();
-
 }

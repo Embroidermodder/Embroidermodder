@@ -29,9 +29,9 @@ QString fieldNoText;
 QString fieldOnText;
 QString fieldOffText;
 
-std::vector<std::string> all_line_editors;
+StringList all_line_editors;
 
-std::vector<std::string> object_names = {
+StringList object_names = {
     "Base",
     "Arc",
     "Block",
@@ -97,7 +97,7 @@ std::unordered_map<std::string, QComboBox *> comboBoxes;
 std::unordered_map<std::string, QLineEdit *> lineEdits;
 std::unordered_map<std::string, QToolButton *> toolButtons;
 QFontComboBox* comboBoxTextSingleFont;
-std::vector<std::string> group_box_list;
+StringList group_box_list;
 std::unordered_map<std::string, GroupBoxData> group_box_data;
 
 /**
@@ -107,10 +107,10 @@ std::vector<GroupBoxData>
 load_group_box_data_from_table(std::string key)
 {
     std::vector<GroupBoxData> group_box;
-    for (int i=0; i<all_line_editors.size()/6; i++) {
+    for (int i=0; i<(int)(all_line_editors.size()/6); i++) {
         if (all_line_editors[6*i] == key) {
             GroupBoxData data;
-            strcpy(data.key, all_line_editors[6*i+1].c_str());
+            data.key = all_line_editors[6*i+1];
             strcpy(data.icon_name, all_line_editors[6*i+2].c_str());
             strcpy(data.label, all_line_editors[6*i+3].c_str());
             strcpy(data.type, all_line_editors[6*i+4].c_str());
@@ -565,7 +565,7 @@ void PropertyEditor::updateLineEditNumIfVaries(QLineEdit* lineEdit, EmbReal num,
 
     //Prevent negative zero :D
     QString negativeZero = "-0.";
-    for(int i = 0; i < precision; ++i)
+    for (int i = 0; i < precision; ++i)
         negativeZero.append('0');
     if (fieldNewText == negativeZero)
         fieldNewText = negativeZero.replace("-", "");

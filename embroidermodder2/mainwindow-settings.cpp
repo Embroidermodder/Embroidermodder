@@ -39,7 +39,8 @@ QString SettingsDir()
 }
 
 /**
- * .
+ * @brief SettingsPath
+ * @return
  */
 QString SettingsPath()
 {
@@ -48,7 +49,9 @@ QString SettingsPath()
 }
 
 /**
- * .
+ * @brief to_string_vector
+ * @param list
+ * @return
  */
 std::vector<std::string>
 to_string_vector(QStringList list)
@@ -61,7 +64,7 @@ to_string_vector(QStringList list)
 }
 
 /**
- * .
+ * @brief read_configuration
  */
 void
 read_configuration()
@@ -88,7 +91,7 @@ MainWindow::readSettings()
     QSize size = settings_file.value("Window/Size", QSize(800, 600)).toSize();
 
     layoutState = settings_file.value("LayoutState").toByteArray();
-    if(!restoreState(layoutState))
+    if (!restoreState(layoutState))
     {
         qDebug("LayoutState NOT restored! Setting Default Layout...");
         //someToolBar->setVisible(true);
@@ -218,6 +221,12 @@ MainWindow::readSettings()
     resize(size);
 }
 
+/**
+ * @brief write_setting
+ * @param label
+ * @param a
+ * @return
+ */
 std::string
 write_setting(std::string label, int a)
 {
@@ -227,6 +236,12 @@ write_setting(std::string label, int a)
     return str;
 }
 
+/**
+ * @brief write_setting
+ * @param label
+ * @param a
+ * @return
+ */
 std::string
 write_setting(std::string label, QRgb a)
 {
@@ -236,12 +251,24 @@ write_setting(std::string label, QRgb a)
     return str;
 }
 
+/**
+ * @brief write_setting
+ * @param label
+ * @param a
+ * @return
+ */
 std::string
 write_setting(std::string label, QString a)
 {
     return label + "=" + a.toStdString() + "\n";
 }
 
+/**
+ * @brief write_setting
+ * @param label
+ * @param a
+ * @return
+ */
 std::string
 write_setting(std::string label, float a)
 {
@@ -251,6 +278,12 @@ write_setting(std::string label, float a)
     return str;
 }
 
+/**
+ * @brief write_setting
+ * @param label
+ * @param a
+ * @return
+ */
 std::string
 write_setting(std::string label, bool a)
 {
@@ -424,12 +457,21 @@ void MainWindow::writeSettings()
     settings_file.close();
 }
 
-void MainWindow::settingsPrompt()
+/**
+ * @brief MainWindow::settingsPrompt
+ */
+void
+MainWindow::settingsPrompt()
 {
     settingsDialog("Prompt");
 }
 
-void MainWindow::settingsDialog(const QString& showTab)
+/**
+ * @brief MainWindow::settingsDialog
+ * @param showTab
+ */
+void
+MainWindow::settingsDialog(const QString& showTab)
 {
     Settings_Dialog dialog(showTab);
     dialog.exec();

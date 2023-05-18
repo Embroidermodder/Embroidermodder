@@ -31,7 +31,7 @@ PreviewDialog::PreviewDialog(QWidget* parent,
     imgWidget = new ImageWidget("icons/default/nopreview.png", this);
 
     QLayout* lay = layout();
-    if(qobject_cast<QGridLayout*>(lay))
+    if (qobject_cast<QGridLayout*>(lay))
     {
         QGridLayout* grid = qobject_cast<QGridLayout*>(lay);
         grid->addWidget(imgWidget, 0, grid->columnCount(), grid->rowCount(), 1);

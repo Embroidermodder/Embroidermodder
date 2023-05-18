@@ -19,12 +19,26 @@
 
 #include "embroidermodder.h"
 
+/**
+ * @brief LineObject::LineObject
+ * @param x1
+ * @param y1
+ * @param x2
+ * @param y2
+ * @param rgb
+ * @param parent
+ */
 LineObject::LineObject(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     debug_message("LineObject Constructor()");
     init(x1, y1, x2, y2, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
+/**
+ * @brief LineObject::LineObject
+ * @param obj
+ * @param parent
+ */
 LineObject::LineObject(LineObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     debug_message("LineObject Constructor()");
@@ -34,12 +48,25 @@ LineObject::LineObject(LineObject* obj, QGraphicsItem* parent) : BaseObject(pare
     }
 }
 
+/**
+ * @brief LineObject::~LineObject
+ */
 LineObject::~LineObject()
 {
     debug_message("LineObject Destructor()");
 }
 
-void LineObject::init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, Qt::PenStyle lineType)
+/**
+ * @brief LineObject::init
+ * @param x1
+ * @param y1
+ * @param x2
+ * @param y2
+ * @param rgb
+ * @param lineType
+ */
+void
+LineObject::init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, OBJ_TYPE_LINE);
     setData(OBJ_NAME, "Line");
@@ -57,12 +84,23 @@ void LineObject::init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, 
     setPen(objPen);
 }
 
-void LineObject::setObjectEndPoint1(const QPointF& endPt1)
+/**
+ * @brief LineObject::setObjectEndPoint1
+ * @param endPt1
+ */
+void
+LineObject::setObjectEndPoint1(const QPointF& endPt1)
 {
     setObjectEndPoint1(endPt1.x(), endPt1.y());
 }
 
-void LineObject::setObjectEndPoint1(EmbReal x1, EmbReal y1)
+/**
+ * @brief LineObject::setObjectEndPoint1
+ * @param x1
+ * @param y1
+ */
+void
+LineObject::setObjectEndPoint1(EmbReal x1, EmbReal y1)
 {
     QPointF endPt2 = objectEndPoint2();
     EmbReal x2 = endPt2.x();
@@ -75,12 +113,23 @@ void LineObject::setObjectEndPoint1(EmbReal x1, EmbReal y1)
     setPos(x1, y1);
 }
 
-void LineObject::setObjectEndPoint2(const QPointF& endPt2)
+/**
+ * @brief LineObject::setObjectEndPoint2
+ * @param endPt2
+ */
+void
+LineObject::setObjectEndPoint2(const QPointF& endPt2)
 {
     setObjectEndPoint2(endPt2.x(), endPt2.y());
 }
 
-void LineObject::setObjectEndPoint2(EmbReal x2, EmbReal y2)
+/**
+ * @brief LineObject::setObjectEndPoint2
+ * @param x2
+ * @param y2
+ */
+void
+LineObject::setObjectEndPoint2(EmbReal x2, EmbReal y2)
 {
     QPointF endPt1 = scenePos();
     EmbReal x1 = endPt1.x();
@@ -93,7 +142,12 @@ void LineObject::setObjectEndPoint2(EmbReal x2, EmbReal y2)
     setPos(x1, y1);
 }
 
-QPointF LineObject::objectEndPoint2() const
+/**
+ * @brief LineObject::objectEndPoint2
+ * @return
+ */
+QPointF
+LineObject::objectEndPoint2() const
 {
     QLineF lyne = line();
     EmbReal rot = radians(rotation());
@@ -105,7 +159,12 @@ QPointF LineObject::objectEndPoint2() const
     return (scenePos() + QPointF(rotEnd.x, rotEnd.y));
 }
 
-QPointF LineObject::objectMidPoint() const
+/**
+ * @brief LineObject::objectMidPoint
+ * @return
+ */
+QPointF
+LineObject::objectMidPoint() const
 {
     QLineF lyne = line();
     QPointF mp = lyne.pointAt(0.5);
@@ -118,13 +177,24 @@ QPointF LineObject::objectMidPoint() const
     return (scenePos() + QPointF(rotMid.x, rotMid.y));
 }
 
-EmbReal LineObject::objectAngle() const
+/**
+ * @brief LineObject::objectAngle
+ * @return
+ */
+EmbReal
+LineObject::objectAngle() const
 {
     EmbReal angle = line().angle() - rotation();
     return std::fmod(angle, 360.0);
 }
 
-void LineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+/**
+ * @brief LineObject::paint
+ * @param painter
+ * @param option
+ */
+void
+LineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
     if (!objScene) return;
@@ -146,7 +216,12 @@ void LineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     }
 }
 
-void LineObject::updateRubber(QPainter* painter)
+/**
+ * @brief LineObject::updateRubber
+ * @param painter
+ */
+void
+LineObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objRubberMode;
     if (rubberMode == OBJ_RUBBER_LINE) {
@@ -176,7 +251,11 @@ void LineObject::updateRubber(QPainter* painter)
     }
 }
 
-void LineObject::vulcanize()
+/**
+ * @brief LineObject::vulcanize
+ */
+void
+LineObject::vulcanize()
 {
     debug_message("LineObject vulcanize()");
     updateRubber();
@@ -184,7 +263,11 @@ void LineObject::vulcanize()
     objRubberMode = OBJ_RUBBER_OFF;
 }
 
-// Returns the closest snap point to the mouse point
+/**
+ * @brief LineObject::mouseSnapPoint
+ * @param mousePoint
+ * @return The closest snap point to the mouse point.
+ */
 QPointF LineObject::mouseSnapPoint(const QPointF& mousePoint)
 {
     QPointF endPoint1 = objectEndPoint1();
@@ -204,21 +287,44 @@ QPointF LineObject::mouseSnapPoint(const QPointF& mousePoint)
     return scenePos();
 }
 
-QList<QPointF> LineObject::allGripPoints()
+/**
+ * @brief LineObject::allGripPoints
+ * @return
+ */
+QList<QPointF>
+LineObject::allGripPoints()
 {
     QList<QPointF> gripPoints;
     gripPoints << objectEndPoint1() << objectEndPoint2() << objectMidPoint();
     return gripPoints;
 }
 
-void LineObject::gripEdit(const QPointF& before, const QPointF& after)
+/**
+ * @brief LineObject::gripEdit
+ * @param before
+ * @param after
+ */
+void
+LineObject::gripEdit(const QPointF& before, const QPointF& after)
 {
-    if     (before == objectEndPoint1()) { setObjectEndPoint1(after); }
-    else if (before == objectEndPoint2()) { setObjectEndPoint2(after); }
-    else if (before == objectMidPoint())  { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
+    if (before == objectEndPoint1()) {
+        setObjectEndPoint1(after);
+    }
+    else if (before == objectEndPoint2()) {
+        setObjectEndPoint2(after);
+    }
+    else if (before == objectMidPoint()) {
+        QPointF delta = after-before;
+        moveBy(delta.x(), delta.y());
+    }
 }
 
-QPainterPath LineObject::objectSavePath() const
+/**
+ * @brief LineObject::objectSavePath
+ * @return
+ */
+QPainterPath
+LineObject::objectSavePath() const
 {
     QPainterPath path;
     path.lineTo(objectDeltaX(), objectDeltaY());

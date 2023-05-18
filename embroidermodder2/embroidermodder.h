@@ -117,6 +117,9 @@ class SplineObject;
 class TextMultiObject;
 class TextSingleObject;
 
+typedef struct std::vector<std::string> StringList;
+typedef struct std::unordered_map<std::string, std::string> Dictionary;
+
 /**
  * .
  */
@@ -132,10 +135,10 @@ typedef struct Action__ {
         /*< The message that appears at the bottom of the . */
     std::string shortcut;
         /*< The keyboard shortcut for this action. */
-    std::vector<std::string> aliases;
+    StringList aliases;
         /*< A list of all alternative commands, if empty only
             the icon sttring will be . */
-    std::vector<std::string> script;
+    StringList script;
         /*< If this is a compound action this will be a
             list of commands or it can allow for command line
             style command aliases. For example: icon16 would become
@@ -154,7 +157,7 @@ typedef struct Action__ {
  * .
  */
 typedef struct GroupBoxData_ {
-    char key[200];
+    std::string key;
     char icon_name[200];
     char label[200];
     char type[200];
@@ -191,7 +194,7 @@ typedef struct UiObject_ {
     std::vector<EmbVector> controlPoints;
         /*< Storage for however many Rubber Points the
             design needs. */
-    std::vector<std::string> controlPointLabels;
+    StringList controlPointLabels;
         /*< Storage for the labels for the Rubber Points
             using the same indexing. */
     int numPoints;
@@ -1860,7 +1863,7 @@ public:
     bool isCommandActive() { return prompt->isCommandActive(); }
     QString activeCommand() { return prompt->activeCommand(); }
     QIcon create_icon(QString stub);
-    void create_toolbar(QToolBar* toolbar, std::string label, std::vector<std::string> entries);
+    void create_toolbar(QToolBar* toolbar, std::string label, StringList entries);
 
     QString platformString();
 
@@ -2916,7 +2919,7 @@ void set_visibility(QObject *parent, const char *name, bool visibility);
 
 std::string actuator(std::string line);
 std::string run_script_file(std::string fname);
-std::string run_script(std::vector<std::string> script);
+std::string run_script(StringList script);
 
 /* Global data
  * -----------
@@ -2925,20 +2928,20 @@ extern MdiArea* mdiArea;
 extern Settings settings;
 extern Settings dialog;
 extern std::vector<Action> action_table;
-extern std::vector<std::string> file_toolbar;
-extern std::vector<std::string> edit_toolbar;
-extern std::vector<std::string> view_toolbar;
-extern std::vector<std::string> zoom_toolbar;
-extern std::vector<std::string> all_line_editors;
+extern StringList file_toolbar;
+extern StringList edit_toolbar;
+extern StringList view_toolbar;
+extern StringList zoom_toolbar;
+extern StringList all_line_editors;
 extern std::unordered_map<std::string, QGroupBox *> groupBoxes;
 extern std::unordered_map<std::string, QComboBox *> comboBoxes;
 extern std::unordered_map<std::string, QLineEdit *> lineEdits;
 extern std::unordered_map<std::string, QToolButton *> toolButtons;
 extern QFontComboBox* comboBoxTextSingleFont;
-extern std::vector<std::string> group_box_list;
+extern StringList group_box_list;
 extern std::vector<GroupBoxData> group_box_arc_geometry;
 extern std::vector<GroupBoxData> group_box_ellipse_geometry;
-extern std::unordered_map<std::string, std::string> config;
+extern Dictionary config;
 extern std::unordered_map<std::string, GroupBoxData> group_box_data;
 extern QStringList justify_options;
 

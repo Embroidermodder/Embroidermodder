@@ -19,28 +19,52 @@
 
 #include "embroidermodder.h"
 
+/**
+ * @brief CircleObject::CircleObject
+ * @param centerX
+ * @param centerY
+ * @param radius
+ * @param rgb
+ * @param parent
+ */
 CircleObject::CircleObject(EmbReal centerX, EmbReal centerY, EmbReal radius, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("CircleObject Constructor()");
+    debug_message("CircleObject Constructor()");
     init(centerX, centerY, radius, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
+/**
+ * @brief CircleObject::CircleObject
+ * @param obj
+ * @param parent
+ */
 CircleObject::CircleObject(CircleObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("CircleObject Constructor()");
-    if(obj)
-    {
+    debug_message("CircleObject Constructor()");
+    if (obj) {
         init(obj->objectCenterX(), obj->objectCenterY(), obj->objectRadius(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
     }
 }
 
+/**
+ * @brief CircleObject::~CircleObject
+ */
 CircleObject::~CircleObject()
 {
-    qDebug("CircleObject Destructor()");
+    debug_message("CircleObject Destructor()");
 }
 
-void CircleObject::init(EmbReal centerX, EmbReal centerY, EmbReal radius, QRgb rgb, Qt::PenStyle lineType)
+/**
+ * @brief CircleObject::init
+ * @param centerX
+ * @param centerY
+ * @param radius
+ * @param rgb
+ * @param lineType
+ */
+void
+CircleObject::init(EmbReal centerX, EmbReal centerY, EmbReal radius, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, OBJ_TYPE_CIRCLE);
     setData(OBJ_NAME, "Circle");
@@ -60,12 +84,22 @@ void CircleObject::init(EmbReal centerX, EmbReal centerY, EmbReal radius, QRgb r
     updatePath();
 }
 
-void CircleObject::setObjectRadius(EmbReal radius)
+/**
+ * @brief CircleObject::setObjectRadius
+ * @param radius
+ */
+void
+CircleObject::setObjectRadius(EmbReal radius)
 {
     setObjectDiameter(radius*2.0);
 }
 
-void CircleObject::setObjectDiameter(EmbReal diameter)
+/**
+ * @brief CircleObject::setObjectDiameter
+ * @param diameter
+ */
+void
+CircleObject::setObjectDiameter(EmbReal diameter)
 {
     QRectF circRect;
     circRect.setWidth(diameter);
@@ -75,19 +109,33 @@ void CircleObject::setObjectDiameter(EmbReal diameter)
     updatePath();
 }
 
-void CircleObject::setObjectArea(EmbReal area)
+/**
+ * @brief CircleObject::setObjectArea
+ * @param area
+ */
+void
+CircleObject::setObjectArea(EmbReal area)
 {
     EmbReal radius = std::sqrt(area/emb_constant_pi);
     setObjectRadius(radius);
 }
 
-void CircleObject::setObjectCircumference(EmbReal circumference)
+/**
+ * @brief CircleObject::setObjectCircumference
+ * @param circumference
+ */
+void
+CircleObject::setObjectCircumference(EmbReal circumference)
 {
     EmbReal diameter = circumference/emb_constant_pi;
     setObjectDiameter(diameter);
 }
 
-void CircleObject::updatePath()
+/**
+ * @brief CircleObject::updatePath
+ */
+void
+CircleObject::updatePath()
 {
     QPainterPath path;
     QRectF r = rect();
@@ -101,22 +149,33 @@ void CircleObject::updatePath()
     setObjectPath(path);
 }
 
-void CircleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+/**
+ * @brief CircleObject::paint
+ * @param painter
+ * @param option
+ */
+void
+CircleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) return;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
+    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
     painter->drawEllipse(rect());
 }
 
-void CircleObject::updateRubber(QPainter* painter)
+/**
+ * @brief CircleObject::updateRubber
+ * @param painter
+ */
+void
+CircleObject::updateRubber(QPainter* painter)
 {
     if (objRubberMode == OBJ_RUBBER_CIRCLE_1P_RAD) {
         QPointF sceneCenterPoint = objectRubberPoint("CIRCLE_CENTER");
@@ -128,7 +187,7 @@ void CircleObject::updateRubber(QPainter* painter)
         QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
         EmbReal radius = sceneLine.length();
         setObjectRadius(radius);
-        if(painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
+        if (painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         updatePath();
     }
     else if (objRubberMode == OBJ_RUBBER_CIRCLE_1P_DIA) {
@@ -141,7 +200,7 @@ void CircleObject::updateRubber(QPainter* painter)
         QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
         EmbReal diameter = sceneLine.length();
         setObjectDiameter(diameter);
-        if(painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
+        if (painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         updatePath();
     }
     else if (objRubberMode == OBJ_RUBBER_CIRCLE_2P) {
@@ -177,7 +236,7 @@ void CircleObject::updateRubber(QPainter* painter)
     else if (objRubberMode == OBJ_RUBBER_GRIP) {
         if (painter) {
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if(gripPoint == objectCenter())
+            if (gripPoint == objectCenter())
             {
                 painter->drawEllipse(rect().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
             }
@@ -193,16 +252,25 @@ void CircleObject::updateRubber(QPainter* painter)
     }
 }
 
-void CircleObject::vulcanize()
+/**
+ * @brief CircleObject::vulcanize
+ */
+void
+CircleObject::vulcanize()
 {
-    qDebug("CircleObject vulcanize()");
+    debug_message("CircleObject vulcanize()");
     updateRubber();
 
     setObjectRubberMode(OBJ_RUBBER_OFF);
 }
 
-// Returns the closest snap point to the mouse point
-QPointF CircleObject::mouseSnapPoint(const QPointF& mousePoint)
+/**
+ * @brief CircleObject::mouseSnapPoint
+ * @param mousePoint
+ * @return the closest snap point to the mouse point.
+ */
+QPointF
+CircleObject::mouseSnapPoint(const QPointF& mousePoint)
 {
     QPointF center  = objectCenter();
     QPointF quad0   = objectQuadrant0();
@@ -219,28 +287,44 @@ QPointF CircleObject::mouseSnapPoint(const QPointF& mousePoint)
     EmbReal minDist = qMin(qMin(qMin(q0Dist, q90Dist), qMin(q180Dist, q270Dist)), cntrDist);
 
     if     (minDist == cntrDist) return center;
-    else if(minDist == q0Dist)   return quad0;
-    else if(minDist == q90Dist)  return quad90;
-    else if(minDist == q180Dist) return quad180;
-    else if(minDist == q270Dist) return quad270;
+    else if (minDist == q0Dist)   return quad0;
+    else if (minDist == q90Dist)  return quad90;
+    else if (minDist == q180Dist) return quad180;
+    else if (minDist == q270Dist) return quad270;
 
     return scenePos();
 }
 
-QList<QPointF> CircleObject::allGripPoints()
+/**
+ * @brief CircleObject::allGripPoints
+ * @return
+ */
+QList<QPointF>
+CircleObject::allGripPoints()
 {
     QList<QPointF> gripPoints;
     gripPoints << objectCenter() << objectQuadrant0() << objectQuadrant90() << objectQuadrant180() << objectQuadrant270();
     return gripPoints;
 }
 
-void CircleObject::gripEdit(const QPointF& before, const QPointF& after)
+/**
+ * @brief CircleObject::gripEdit
+ * @param before
+ * @param after
+ */
+void
+CircleObject::gripEdit(const QPointF& before, const QPointF& after)
 {
-    if(before == objectCenter()) { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
+    if (before == objectCenter()) { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
     else                         { setObjectRadius(QLineF(objectCenter(), after).length()); }
 }
 
-QPainterPath CircleObject::objectSavePath() const
+/**
+ * @brief CircleObject::objectSavePath
+ * @return
+ */
+QPainterPath
+CircleObject::objectSavePath() const
 {
     QPainterPath path;
     QRectF r = rect();

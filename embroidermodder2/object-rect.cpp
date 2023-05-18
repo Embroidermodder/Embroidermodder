@@ -310,7 +310,8 @@ void RectObject::gripEdit(const QPointF& before, const QPointF& after)
 /**
  * \brief .
  */
-QPainterPath RectObject::objectSavePath() const
+QPainterPath
+RectObject::objectSavePath() const
 {
     QPainterPath path;
     QRectF r = rect();

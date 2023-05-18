@@ -145,7 +145,7 @@ PolygonObject::updateRubber(QPainter* painter)
         QString appendStr;
         QPainterPath rubberPath;
         rubberPath.moveTo(mapFromScene(objectRubberPoint("POLYGON_POINT_0")));
-        for(int i = 1; i <= num; i++)
+        for (int i = 1; i <= num; i++)
         {
             appendStr = "POLYGON_POINT_" + QString().setNum(i);
             QPointF appendPoint = mapFromScene(objectRubberPoint(appendStr));
@@ -174,7 +174,7 @@ PolygonObject::updateRubber(QPainter* painter)
         //First Point
         inscribePath.moveTo(inscribePoint);
         //Remaining Points
-        for(int i = 1; i < numSides; i++)
+        for (int i = 1; i < numSides; i++)
         {
             inscribeLine.setAngle(inscribeAngle + inscribeInc*i);
             inscribePath.lineTo(inscribeLine.p2());
@@ -205,7 +205,7 @@ PolygonObject::updateRubber(QPainter* painter)
         perp.intersects(prev, &iPoint);
         circumscribePath.moveTo(iPoint);
         //Remaining Points
-        for(int i = 2; i <= numSides; i++)
+        for (int i = 2; i <= numSides; i++)
         {
             prev = perp;
             circumscribeLine.setAngle(circumscribeAngle + circumscribeInc*i);
@@ -290,7 +290,7 @@ PolygonObject::allGripPoints()
 {
     QList<QPointF> gripPoints;
     QPainterPath::Element element;
-    for(int i = 0; i < normalPath.elementCount(); ++i)
+    for (int i = 0; i < normalPath.elementCount(); ++i)
     {
         element = normalPath.elementAt(i);
         gripPoints << mapToScene(element.x, element.y);
@@ -310,7 +310,7 @@ PolygonObject::findIndex(const QPointF& point)
     int elemCount = normalPath.elementCount();
     //NOTE: Points here are in item coordinates
     QPointF itemPoint = mapFromScene(point);
-    for(i = 0; i < elemCount; i++)
+    for (i = 0; i < elemCount; i++)
     {
         QPainterPath::Element e = normalPath.elementAt(i);
         QPointF elemPoint = QPointF(e.x, e.y);

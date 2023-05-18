@@ -799,7 +799,7 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                 }
 
                 distStr.replace(0, 1, QString().setNum(msd));
-                for(int i = 1; i < distStrSize; ++i)
+                for (int i = 1; i < distStrSize; ++i)
                 {
                     distStr.replace(i, 1, '0');
                 }
@@ -912,7 +912,7 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                         {
                             if (feet)
                             {
-                                for(int i = 0; i < 12; ++i)
+                                for (int i = 0; i < 12; ++i)
                                 {
                                     lines.append(QLineF(x+fraction*i, rhy, x+fraction*i, rhy-rhh*medium));
                                 }
@@ -937,7 +937,7 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                             }
                         }
                     }
-                    for(int y = yStart; y < rvy; y += unit)
+                    for (int y = yStart; y < rvy; y += unit)
                     {
                         transform.translate(rvx-rvw/2, y-rvTextOffset);
                         transform.rotate(-90);
@@ -973,7 +973,7 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                         {
                             if (feet)
                             {
-                                for(int i = 0; i < 12; ++i)
+                                for (int i = 0; i < 12; ++i)
                                 {
                                     lines.append(QLineF(rvx, y+fraction*i, rvx-rvw*medium, y+fraction*i));
                                 }
@@ -1993,7 +1993,7 @@ View::deleteSelected()
     int numSelected = itemList.size();
     if (numSelected > 1)
         undoStack->beginMacro("Delete " + QString().setNum(itemList.size()));
-    for(int i = 0; i < itemList.size(); i++)
+    for (int i = 0; i < itemList.size(); i++)
     {
         if (itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL)
         {

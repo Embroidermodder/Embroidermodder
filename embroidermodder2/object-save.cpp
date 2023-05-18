@@ -372,7 +372,7 @@ SaveObject::addPath(EmbPattern* pattern, QGraphicsItem* item)
         QPainterPath::Element P3;
         QPainterPath::Element P4;
 
-        for(int i = 0; i < path.elementCount()-1; ++i)
+        for (int i = 0; i < path.elementCount()-1; ++i)
         {
             element = path.elementAt(i);
             if (element.isMoveTo())

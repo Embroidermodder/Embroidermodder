@@ -66,7 +66,7 @@ LayerManager::LayerManager(QWidget* parent) : QDialog(parent)
     addLayer("8", true, false, 8.0, qRgb(0,0,0), "Continuous", "Default", true);
     addLayer("9", true, false, 9.0, qRgb(0,0,0), "Continuous", "Default", true);
 
-    for(int i = 0; i < layerModel->columnCount(); ++i)
+    for (int i = 0; i < layerModel->columnCount(); ++i)
         treeView->resizeColumnToContents(i);
 
     QApplication::setOverrideCursor(Qt::ArrowCursor);

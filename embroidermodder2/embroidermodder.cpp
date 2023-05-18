@@ -103,12 +103,12 @@ int main(int argc, char* argv[])
 
     QStringList filesToOpen;
 
-    for(int i = 1; i < argc; i++)
+    for (int i = 1; i < argc; i++)
     {
         if     (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--debug")  ) {  }
-        else if(!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")   ) { usage(); }
-        else if(!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) { version(); }
-        else if(QFile::exists(argv[i]) && MainWindow::validFileFormat(argv[i]))
+        else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")   ) { usage(); }
+        else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) { version(); }
+        else if (QFile::exists(argv[i]) && MainWindow::validFileFormat(argv[i]))
         {
             filesToOpen << argv[i];
         }
@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    if(exitApp)
+    if (exitApp)
         return 1;
 
     MainWindow* mainWin = new MainWindow();
@@ -132,7 +132,7 @@ int main(int argc, char* argv[])
     mainWin->show();
 
     //NOTE: If openFilesSelected() is called from within the mainWin constructor, slot commands wont work and the window menu will be screwed
-    if(!filesToOpen.isEmpty())
+    if (!filesToOpen.isEmpty())
         mainWin->openFilesSelected(filesToOpen);
 
     return app.exec();

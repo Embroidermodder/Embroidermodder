@@ -27,7 +27,7 @@
  */
 ArcObject::ArcObject(EmbArc arc, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("ArcObject Constructor()");
+    debug_message("ArcObject Constructor()");
     init(
         arc.start.x, arc.start.y,
         arc.mid.x, arc.mid.y,
@@ -48,7 +48,7 @@ ArcObject::ArcObject(EmbArc arc, QRgb rgb, QGraphicsItem* parent) : BaseObject(p
  */
 ArcObject::ArcObject(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("ArcObject Constructor()");
+    debug_message("ArcObject Constructor()");
     init(startX, startY, midX, midY, endX, endY, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
@@ -59,7 +59,7 @@ ArcObject::ArcObject(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY,
  */
 ArcObject::ArcObject(ArcObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("ArcObject Constructor()");
+    debug_message("ArcObject Constructor()");
     if (obj) {
         init(
             obj->objectStartX(),
@@ -79,7 +79,7 @@ ArcObject::ArcObject(ArcObject* obj, QGraphicsItem* parent) : BaseObject(parent)
  */
 ArcObject::~ArcObject()
 {
-    qDebug("ArcObject Destructor()");
+    debug_message("ArcObject Destructor()");
 }
 
 /**
@@ -218,17 +218,34 @@ ArcObject::setObjectStartPoint(const QPointF& point)
     setObjectStartPoint(point.x(), point.y());
 }
 
-void ArcObject::setObjectStartPoint(EmbReal pointX, EmbReal pointY)
+/**
+ * @brief ArcObject::setObjectStartPoint
+ * @param pointX
+ * @param pointY
+ */
+void
+ArcObject::setObjectStartPoint(EmbReal pointX, EmbReal pointY)
 {
     calculateArcData(pointX, pointY, arcMidPoint.x(), arcMidPoint.y(), arcEndPoint.x(), arcEndPoint.y());
 }
 
-void ArcObject::setObjectMidPoint(const QPointF& point)
+/**
+ * @brief ArcObject::setObjectMidPoint
+ * @param point
+ */
+void
+ArcObject::setObjectMidPoint(const QPointF& point)
 {
     setObjectMidPoint(point.x(), point.y());
 }
 
-void ArcObject::setObjectMidPoint(EmbReal pointX, EmbReal pointY)
+/**
+ * @brief ArcObject::setObjectMidPoint
+ * @param pointX
+ * @param pointY
+ */
+void
+ArcObject::setObjectMidPoint(EmbReal pointX, EmbReal pointY)
 {
     calculateArcData(arcStartPoint.x(), arcStartPoint.y(), pointX, pointY, arcEndPoint.x(), arcEndPoint.y());
 }
@@ -237,7 +254,8 @@ void ArcObject::setObjectMidPoint(EmbReal pointX, EmbReal pointY)
  * @brief ArcObject::setObjectEndPoint
  * @param point
  */
-void ArcObject::setObjectEndPoint(const QPointF& point)
+void
+ArcObject::setObjectEndPoint(const QPointF& point)
 {
     setObjectEndPoint(point.x(), point.y());
 }
@@ -247,7 +265,8 @@ void ArcObject::setObjectEndPoint(const QPointF& point)
  * @param pointX
  * @param pointY
  */
-void ArcObject::setObjectEndPoint(EmbReal pointX, EmbReal pointY)
+void
+ArcObject::setObjectEndPoint(EmbReal pointX, EmbReal pointY)
 {
     calculateArcData(arcStartPoint.x(), arcStartPoint.y(), arcMidPoint.x(), arcMidPoint.y(), pointX, pointY);
 }
@@ -524,7 +543,7 @@ ArcObject::updateRubber(QPainter* painter)
 void
 ArcObject::vulcanize()
 {
-    qDebug("ArcObject vulcanize()");
+    debug_message("ArcObject vulcanize()");
     updateRubber();
 
     setObjectRubberMode(OBJ_RUBBER_OFF);

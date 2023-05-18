@@ -555,7 +555,7 @@ void
 MainWindow::updateAllViewCrossHairColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
-    for(int i = 0; i < windowList.count(); ++i)
+    for (int i = 0; i < windowList.count(); ++i)
     {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
         if (mdiWin) { mdiWin->setViewCrossHairColor(color); }
@@ -566,7 +566,7 @@ void
 MainWindow::updateAllViewBackgroundColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
-    for(int i = 0; i < windowList.count(); ++i)
+    for (int i = 0; i < windowList.count(); ++i)
     {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
         if (mdiWin) {

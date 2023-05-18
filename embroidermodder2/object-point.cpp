@@ -95,8 +95,8 @@ PointObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QW
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
+    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
     painter->drawPoint(0,0);
@@ -137,7 +137,8 @@ PointObject::vulcanize()
  * @param mousePoint
  * @return The closest snap point to the mouse point
  */
-QPointF PointObject::mouseSnapPoint(const QPointF& mousePoint)
+QPointF
+PointObject::mouseSnapPoint(const QPointF& mousePoint)
 {
     return scenePos();
 }

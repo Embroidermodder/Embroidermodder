@@ -29,7 +29,7 @@
  */
 PathObject::PathObject(EmbReal x, EmbReal y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("PathObject Constructor()");
+    debug_message("PathObject Constructor()");
     init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
@@ -83,7 +83,12 @@ PathObject::init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenS
     setPen(objectPen());
 }
 
-void PathObject::updatePath(const QPainterPath& p)
+/**
+ * @brief PathObject::updatePath
+ * @param p
+ */
+void
+PathObject::updatePath(const QPainterPath& p)
 {
     normalPath = p;
     QPainterPath reversePath = normalPath.toReversed();
@@ -91,7 +96,13 @@ void PathObject::updatePath(const QPainterPath& p)
     setObjectPath(reversePath);
 }
 
-void PathObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+/**
+ * @brief PathObject::paint
+ * @param painter
+ * @param option
+ */
+void
+PathObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
     if (!objScene)
@@ -100,10 +111,10 @@ void PathObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected) {
+    if (option->state & QStyle::State_Selected) {
         paintPen.setStyle(Qt::DashLine);
     }
-    if(objScene->property("ENABLE_LWT").toBool()) {
+    if (objScene->property("ENABLE_LWT").toBool()) {
         paintPen = lineWeightPen();
     }
     painter->setPen(paintPen);
@@ -111,7 +122,12 @@ void PathObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     painter->drawPath(path());
 }
 
-void PathObject::updateRubber(QPainter* painter)
+/**
+ * @brief PathObject::updateRubber
+ * @param painter
+ */
+void
+PathObject::updateRubber(QPainter* painter)
 {
     //TODO: Path Rubber Modes
 
@@ -119,41 +135,71 @@ void PathObject::updateRubber(QPainter* painter)
 
 }
 
-void PathObject::vulcanize()
+/**
+ * @brief PathObject::vulcanize
+ */
+void
+PathObject::vulcanize()
 {
-    qDebug("PathObject vulcanize()");
+    debug_message("PathObject vulcanize()");
     updateRubber();
 
     setObjectRubberMode(OBJ_RUBBER_OFF);
 
-    if(!normalPath.elementCount())
+    if (!normalPath.elementCount())
         QMessageBox::critical(0, QObject::tr("Empty Path Error"), QObject::tr("The path added contains no points. The command that created this object has flawed logic."));
 }
 
-// Returns the closest snap point to the mouse point
-QPointF PathObject::mouseSnapPoint(const QPointF& mousePoint)
+/**
+ * @brief PathObject::mouseSnapPoint
+ * @param mousePoint
+ * @return The closest snap point to the mouse point.
+ */
+QPointF
+PathObject::mouseSnapPoint(const QPointF& mousePoint)
 {
     return scenePos();
 }
 
-QList<QPointF> PathObject::allGripPoints()
+/**
+ * @brief PathObject::allGripPoints
+ * @return
+ */
+QList<QPointF>
+PathObject::allGripPoints()
 {
     QList<QPointF> gripPoints;
     gripPoints << scenePos(); //TODO: loop thru all path Elements and return their points
     return gripPoints;
 }
 
-void PathObject::gripEdit(const QPointF& before, const QPointF& after)
+/**
+ * @brief PathObject::gripEdit
+ * @param before
+ * @param after
+ */
+void
+PathObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     //TODO: gripEdit() for PathObject
 }
 
-QPainterPath PathObject::objectCopyPath() const
+/**
+ * @brief PathObject::objectCopyPath
+ * @return
+ */
+QPainterPath
+PathObject::objectCopyPath() const
 {
     return normalPath;
 }
 
-QPainterPath PathObject::objectSavePath() const
+/**
+ * @brief PathObject::objectSavePath
+ * @return
+ */
+QPainterPath
+PathObject::objectSavePath() const
 {
     EmbReal s = scale();
     QTransform trans;

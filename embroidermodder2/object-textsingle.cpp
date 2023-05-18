@@ -20,7 +20,7 @@
  */
 TextSingleObject::TextSingleObject(const QString& str, EmbReal x, EmbReal y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("TextSingleObject Constructor()");
+    debug_message("TextSingleObject Constructor()");
     init(str, x, y, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
@@ -29,7 +29,7 @@ TextSingleObject::TextSingleObject(const QString& str, EmbReal x, EmbReal y, QRg
  */
 TextSingleObject::TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("TextSingleObject Constructor()");
+    debug_message("TextSingleObject Constructor()");
     if (obj)
     {
         setObjectTextFont(obj->objTextFont);
@@ -48,7 +48,7 @@ TextSingleObject::TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent)
  */
 TextSingleObject::~TextSingleObject()
 {
-    qDebug("TextSingleObject Destructor()");
+    debug_message("TextSingleObject Destructor()");
 }
 
 /**
@@ -148,7 +148,7 @@ void TextSingleObject::setObjectText(const QString& str)
         QPainterPath::Element P2;
         QPainterPath::Element P3;
         QPainterPath::Element P4;
-        for(int i = 0; i < textPath.elementCount(); ++i) {
+        for (int i = 0; i < textPath.elementCount(); ++i) {
             element = textPath.elementAt(i);
             if (element.isMoveTo()) {
                 flippedPath.moveTo(horiz * element.x, vert * element.y);
@@ -357,7 +357,7 @@ TextSingleObject::updateRubber(QPainter* painter)
 void
 TextSingleObject::vulcanize()
 {
-    qDebug("TextSingleObject vulcanize()");
+    debug_message("TextSingleObject vulcanize()");
     updateRubber();
 
     objRubberMode = OBJ_RUBBER_OFF;

@@ -40,7 +40,7 @@ PolylineObject::PolylineObject(EmbReal x, EmbReal y, const QPainterPath& p, QRgb
  */
 PolylineObject::PolylineObject(PolylineObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("PolylineObject Constructor()");
+    debug_message("PolylineObject Constructor()");
     if (obj) {
         init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
@@ -237,7 +237,7 @@ PolylineObject::allGripPoints()
 {
     QList<QPointF> gripPoints;
     QPainterPath::Element element;
-    for(int i = 0; i < normalPath.elementCount(); ++i)
+    for (int i = 0; i < normalPath.elementCount(); ++i)
     {
         element = normalPath.elementAt(i);
         gripPoints << mapToScene(element.x, element.y);
@@ -256,7 +256,7 @@ PolylineObject::findIndex(const QPointF& point)
     int elemCount = normalPath.elementCount();
     //NOTE: Points here are in item coordinates
     QPointF itemPoint = mapFromScene(point);
-    for(int i = 0; i < elemCount; i++)
+    for (int i = 0; i < elemCount; i++)
     {
         QPainterPath::Element e = normalPath.elementAt(i);
         QPointF elemPoint = QPointF(e.x, e.y);

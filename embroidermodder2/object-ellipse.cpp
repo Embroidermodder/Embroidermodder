@@ -118,7 +118,7 @@ void
 EllipseObject::setObjectDiameterMajor(EmbReal diameter)
 {
     QRectF elRect = rect();
-    if(elRect.width() > elRect.height())
+    if (elRect.width() > elRect.height())
         elRect.setWidth(diameter);
     else
         elRect.setHeight(diameter);
@@ -133,7 +133,7 @@ void
 EllipseObject::setObjectDiameterMinor(EmbReal diameter)
 {
     QRectF elRect = rect();
-    if(elRect.width() < elRect.height())
+    if (elRect.width() < elRect.height())
         elRect.setWidth(diameter);
     else
         elRect.setHeight(diameter);
@@ -215,13 +215,13 @@ void
 EllipseObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) return;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
+    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
     painter->drawEllipse(rect());
@@ -234,8 +234,7 @@ void
 EllipseObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objRubberMode;
-    if(rubberMode == OBJ_RUBBER_ELLIPSE_LINE)
-    {
+    if (rubberMode == OBJ_RUBBER_ELLIPSE_LINE) {
         QPointF sceneLinePoint1 = objectRubberPoint("ELLIPSE_LINE_POINT1");
         QPointF sceneLinePoint2 = objectRubberPoint("ELLIPSE_LINE_POINT2");
         QPointF itemLinePoint1  = mapFromScene(sceneLinePoint1);
@@ -244,8 +243,7 @@ EllipseObject::updateRubber(QPainter* painter)
         if (painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         updatePath();
     }
-    else if(rubberMode == OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS)
-    {
+    else if (rubberMode == OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS) {
         QPointF sceneAxis1Point1 = objectRubberPoint("ELLIPSE_AXIS1_POINT1");
         QPointF sceneAxis1Point2 = objectRubberPoint("ELLIPSE_AXIS1_POINT2");
         QPointF sceneCenterPoint = objectRubberPoint("ELLIPSE_CENTER");
@@ -274,10 +272,10 @@ EllipseObject::updateRubber(QPainter* painter)
         QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
         QPointF itemAxis2Point2 = mapFromScene(sceneAxis2Point2);
         QLineF itemLine(itemCenterPoint, itemAxis2Point2);
-        if(painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
+        if (painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         updatePath();
     }
-    else if(rubberMode == OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS)
+    else if (rubberMode == OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS)
     {
         QPointF sceneAxis1Point2 = objectRubberPoint("ELLIPSE_AXIS1_POINT2");
         QPointF sceneCenterPoint = objectRubberPoint("ELLIPSE_CENTER");
@@ -306,10 +304,10 @@ EllipseObject::updateRubber(QPainter* painter)
         QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
         QPointF itemAxis2Point2 = mapFromScene(sceneAxis2Point2);
         QLineF itemLine(itemCenterPoint, itemAxis2Point2);
-        if(painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
+        if (painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         updatePath();
     }
-    else if(rubberMode == OBJ_RUBBER_GRIP)
+    else if (rubberMode == OBJ_RUBBER_GRIP)
     {
         //TODO: updateRubber() gripping for EllipseObject
     }
@@ -348,10 +346,10 @@ EllipseObject::mouseSnapPoint(const QPointF& mousePoint)
     EmbReal minDist = std::min({q0Dist, q90Dist, q180Dist, q270Dist, cntrDist});
 
     if     (minDist == cntrDist) return center;
-    else if(minDist == q0Dist)   return quad0;
-    else if(minDist == q90Dist)  return quad90;
-    else if(minDist == q180Dist) return quad180;
-    else if(minDist == q270Dist) return quad270;
+    else if (minDist == q0Dist)   return quad0;
+    else if (minDist == q90Dist)  return quad90;
+    else if (minDist == q180Dist) return quad180;
+    else if (minDist == q270Dist) return quad270;
 
     return scenePos();
 }

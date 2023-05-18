@@ -24,7 +24,7 @@
  */
 ImageObject::ImageObject(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("ImageObject Constructor()");
+    debug_message("ImageObject Constructor()");
     init(x, y, w, h, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
@@ -33,8 +33,8 @@ ImageObject::ImageObject(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, Q
  */
 ImageObject::ImageObject(ImageObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
-    qDebug("ImageObject Constructor()");
-    if(obj)
+    debug_message("ImageObject Constructor()");
+    if (obj)
     {
         QPointF ptl = obj->objectTopLeft();
         init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
@@ -47,7 +47,7 @@ ImageObject::ImageObject(ImageObject* obj, QGraphicsItem* parent) : BaseObject(p
  */
 ImageObject::~ImageObject()
 {
-    qDebug("ImageObject Destructor()");
+    debug_message("ImageObject Destructor()");
 }
 
 /**
@@ -173,15 +173,17 @@ void
 ImageObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) {
+        return;
+    }
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected) {
+    if (option->state & QStyle::State_Selected) {
         paintPen.setStyle(Qt::DashLine);
     }
-    if(objScene->property("ENABLE_LWT").toBool()) {
+    if (objScene->property("ENABLE_LWT").toBool()) {
         paintPen = lineWeightPen();
     }
     painter->setPen(paintPen);
@@ -195,9 +197,7 @@ ImageObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QW
 void
 ImageObject::updateRubber(QPainter* painter)
 {
-    int rubberMode = objRubberMode;
-    if(rubberMode == OBJ_RUBBER_IMAGE)
-    {
+    if (objRubberMode == OBJ_RUBBER_IMAGE) {
         QPointF sceneStartPoint = objectRubberPoint("IMAGE_START");
         QPointF sceneEndPoint = objectRubberPoint("IMAGE_END");
         EmbReal x = sceneStartPoint.x();
@@ -207,8 +207,7 @@ ImageObject::updateRubber(QPainter* painter)
         setObjectRect(x,y,w,h);
         updatePath();
     }
-    else if(rubberMode == OBJ_RUBBER_GRIP)
-    {
+    else if (objRubberMode == OBJ_RUBBER_GRIP) {
         //TODO: updateRubber() gripping for ImageObject
     }
 }
@@ -219,7 +218,7 @@ ImageObject::updateRubber(QPainter* painter)
 void
 ImageObject::vulcanize()
 {
-    qDebug("ImageObject vulcanize()");
+    debug_message("ImageObject vulcanize()");
     updateRubber();
 
     objRubberMode = OBJ_RUBBER_OFF;
@@ -245,9 +244,9 @@ ImageObject::mouseSnapPoint(const QPointF& mousePoint)
     EmbReal minDist = qMin(qMin(ptlDist, ptrDist), qMin(pblDist, pbrDist));
 
     if     (minDist == ptlDist) return ptl;
-    else if(minDist == ptrDist) return ptr;
-    else if(minDist == pblDist) return pbl;
-    else if(minDist == pbrDist) return pbr;
+    else if (minDist == ptrDist) return ptr;
+    else if (minDist == pblDist) return pbl;
+    else if (minDist == pbrDist) return pbr;
 
     return scenePos();
 }

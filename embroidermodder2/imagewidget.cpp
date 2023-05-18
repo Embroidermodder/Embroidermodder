@@ -26,7 +26,7 @@
  */
 ImageWidget::ImageWidget(const QString &filename, QWidget* parent) : QWidget(parent)
 {
-    qDebug("ImageWidget Constructor");
+    debug_message("ImageWidget Constructor");
 
     img.load(filename);
 
@@ -67,7 +67,7 @@ ImageWidget::save(const QString &fileName)
  */
 ImageWidget::~ImageWidget()
 {
-    qDebug("ImageWidget Destructor");
+    debug_message("ImageWidget Destructor");
 }
 
 /**

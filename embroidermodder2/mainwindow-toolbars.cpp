@@ -19,7 +19,7 @@
 
 #include "embroidermodder.h"
 
-std::vector<std::string>
+StringList
 file_toolbar = {
     "new",
     "open",
@@ -34,20 +34,20 @@ file_toolbar = {
     "help"
 };
 
-std::vector<std::string>
+StringList
 edit_toolbar = {
     "cut",
     "copy",
     "paste"
 };
 
-std::vector<std::string>
+StringList
 view_toolbar = {
     "day",
     "night"
 };
 
-std::vector<std::string>
+StringList
 zoom_toolbar = {
     "zoomwindow",
     "zoomdynamic",
@@ -62,7 +62,7 @@ zoom_toolbar = {
     "zoomextents"
 };
 
-std::vector<std::string>
+StringList
 pan_toolbar = {
     "panrealtime",
     "panpoint",
@@ -73,7 +73,7 @@ pan_toolbar = {
     "pandown"
 };
 
-std::vector<std::string>
+StringList
 icon_toolbar = {
     "icon16",
     "icon24",
@@ -83,7 +83,7 @@ icon_toolbar = {
     "icon128"
 };
 
-std::vector<std::string>
+StringList
 help_toolbar = {
     "help",
     "---",
@@ -95,7 +95,9 @@ help_toolbar = {
 };
 
 /**
- * .
+ * @brief get_action_index
+ * @param cmd
+ * @return
  */
 int
 get_action_index(std::string cmd)
@@ -109,10 +111,13 @@ get_action_index(std::string cmd)
 }
 
 /**
- * .
+ * @brief MainWindow::create_toolbar
+ * @param toolbar
+ * @param label
+ * @param entries
  */
 void
-MainWindow::create_toolbar(QToolBar* toolbar, std::string label, std::vector<std::string> entries)
+MainWindow::create_toolbar(QToolBar* toolbar, std::string label, StringList entries)
 {
     toolbar->setObjectName(QString::fromStdString(label));
     for (int i=0; i<(int)entries.size(); i++) {
@@ -128,7 +133,9 @@ MainWindow::create_toolbar(QToolBar* toolbar, std::string label, std::vector<std
 }
 
 /**
- * .
+ * @brief MainWindow::create_icon
+ * @param stub
+ * @return
  */
 QIcon
 MainWindow::create_icon(QString stub)
@@ -141,9 +148,10 @@ MainWindow::create_icon(QString stub)
 /**
  * @brief MainWindow::createLayerToolbar
  */
-void MainWindow::createLayerToolbar()
+void
+MainWindow::createLayerToolbar()
 {
-    qDebug("MainWindow createLayerToolbar()");
+    debug_message("MainWindow createLayerToolbar()");
 
     toolbarLayer->setObjectName("toolbarLayer");
     toolbarLayer->addAction(actionHash[get_action_index("makelayercurrent")]);
@@ -172,9 +180,10 @@ void MainWindow::createLayerToolbar()
 /**
  * @brief MainWindow::createPropertiesToolbar
  */
-void MainWindow::createPropertiesToolbar()
+void
+MainWindow::createPropertiesToolbar()
 {
-    qDebug("MainWindow createPropertiesToolbar()");
+    debug_message("MainWindow createPropertiesToolbar()");
 
     toolbarProperties->setObjectName("toolbarProperties");
 
@@ -249,7 +258,7 @@ void MainWindow::createPropertiesToolbar()
 void
 MainWindow::createTextToolbar()
 {
-    qDebug("MainWindow createTextToolbar()");
+    debug_message("MainWindow createTextToolbar()");
 
     toolbarText->setObjectName("toolbarText");
 
@@ -305,7 +314,7 @@ MainWindow::createTextToolbar()
 void
 MainWindow::createPromptToolbar()
 {
-    qDebug("MainWindow createPromptToolbar()");
+    debug_message("MainWindow createPromptToolbar()");
 
     toolbarPrompt->setObjectName("toolbarPrompt");
     toolbarPrompt->addWidget(prompt);
@@ -319,7 +328,7 @@ MainWindow::createPromptToolbar()
 void
 MainWindow::createAllToolbars()
 {
-    qDebug("MainWindow createAllToolbars()");
+    debug_message("MainWindow createAllToolbars()");
 
     create_toolbar(toolbarFile, "toolbarFile", file_toolbar);
     create_toolbar(toolbarEdit, "toolbarEdit", edit_toolbar);

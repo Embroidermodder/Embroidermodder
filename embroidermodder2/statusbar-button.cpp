@@ -67,37 +67,37 @@ StatusBarButton::contextMenuEvent(QContextMenuEvent *event)
         connect(settingsSnapAction, SIGNAL(triggered()), this, SLOT(settingsSnap()));
         menu.addAction(settingsSnapAction);
     }
-    else if(objectName() == "StatusBarButtonGRID") {
+    else if (objectName() == "StatusBarButtonGRID") {
         QAction* settingsGridAction = new QAction(_mainWin->create_icon("gridsettings"), "&Settings...", &menu);
         connect(settingsGridAction, SIGNAL(triggered()), this, SLOT(settingsGrid()));
         menu.addAction(settingsGridAction);
     }
-    else if(objectName() == "StatusBarButtonRULER") {
+    else if (objectName() == "StatusBarButtonRULER") {
         QAction* settingsRulerAction = new QAction(_mainWin->create_icon("rulersettings"), "&Settings...", &menu);
         connect(settingsRulerAction, SIGNAL(triggered()), this, SLOT(settingsRuler()));
         menu.addAction(settingsRulerAction);
     }
-    else if(objectName() == "StatusBarButtonORTHO") {
+    else if (objectName() == "StatusBarButtonORTHO") {
         QAction* settingsOrthoAction = new QAction(_mainWin->create_icon("orthosettings"), "&Settings...", &menu);
         connect(settingsOrthoAction, SIGNAL(triggered()), this, SLOT(settingsOrtho()));
         menu.addAction(settingsOrthoAction);
     }
-    else if(objectName() == "StatusBarButtonPOLAR") {
+    else if (objectName() == "StatusBarButtonPOLAR") {
         QAction* settingsPolarAction = new QAction(_mainWin->create_icon("polarsettings"), "&Settings...", &menu);
         connect(settingsPolarAction, SIGNAL(triggered()), this, SLOT(settingsPolar()));
         menu.addAction(settingsPolarAction);
     }
-    else if(objectName() == "StatusBarButtonQSNAP") {
+    else if (objectName() == "StatusBarButtonQSNAP") {
         QAction* settingsQSnapAction = new QAction(_mainWin->create_icon("qsnapsettings"), "&Settings...", &menu);
         connect(settingsQSnapAction, SIGNAL(triggered()), this, SLOT(settingsQSnap()));
         menu.addAction(settingsQSnapAction);
     }
-    else if(objectName() == "StatusBarButtonQTRACK") {
+    else if (objectName() == "StatusBarButtonQTRACK") {
         QAction* settingsQTrackAction = new QAction(_mainWin->create_icon("qtracksettings"), "&Settings...", &menu);
         connect(settingsQTrackAction, SIGNAL(triggered()), this, SLOT(settingsQTrack()));
         menu.addAction(settingsQTrackAction);
     }
-    else if(objectName() == "StatusBarButtonLWT") {
+    else if (objectName() == "StatusBarButtonLWT") {
         View* gview = _mainWin->activeView();
         if (gview) {
             QAction* enableRealAction = new QAction(_mainWin->create_icon("realrender"), "&RealRender On", &menu);

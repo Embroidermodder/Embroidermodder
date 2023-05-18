@@ -19,9 +19,13 @@
 
 #include "embroidermodder.h"
 
+/**
+ * @brief BaseObject::BaseObject
+ * @param parent
+ */
 BaseObject::BaseObject(QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
-    qDebug("BaseObject Constructor()");
+    debug_message("BaseObject Constructor()");
 
     objPen.setCapStyle(Qt::RoundCap);
     objPen.setJoinStyle(Qt::RoundJoin);
@@ -31,72 +35,102 @@ BaseObject::BaseObject(QGraphicsItem* parent) : QGraphicsPathItem(parent)
     objID = QDateTime::currentMSecsSinceEpoch();
 }
 
+/**
+ * @brief BaseObject::~BaseObject
+ */
 BaseObject::~BaseObject()
 {
-    qDebug("BaseObject Destructor()");
+    debug_message("BaseObject Destructor()");
 }
 
-void BaseObject::setObjectColor(const QColor& color)
+/**
+ * @brief BaseObject::setObjectColor
+ * @param color
+ */
+void
+BaseObject::setObjectColor(const QColor& color)
 {
     objPen.setColor(color);
     lwtPen.setColor(color);
 }
 
-void BaseObject::setObjectColorRGB(QRgb rgb)
+/**
+ * @brief BaseObject::setObjectColorRGB
+ * @param rgb
+ */
+void
+BaseObject::setObjectColorRGB(QRgb rgb)
 {
     objPen.setColor(QColor(rgb));
     lwtPen.setColor(QColor(rgb));
 }
 
-void BaseObject::setObjectLineType(Qt::PenStyle lineType)
+/**
+ * @brief BaseObject::setObjectLineType
+ * @param lineType
+ */
+void
+BaseObject::setObjectLineType(Qt::PenStyle lineType)
 {
     objPen.setStyle(lineType);
     lwtPen.setStyle(lineType);
 }
 
-void BaseObject::setObjectLineWeight(EmbReal lineWeight)
+/**
+ * @brief BaseObject::setObjectLineWeight
+ * @param lineWeight
+ */
+void
+BaseObject::setObjectLineWeight(EmbReal lineWeight)
 {
     objPen.setWidthF(0); //NOTE: The objPen will always be cosmetic
 
-    if(lineWeight < 0)
-    {
-        if(lineWeight == OBJ_LWT_BYLAYER)
-        {
+    if (lineWeight < 0) {
+        if (lineWeight == OBJ_LWT_BYLAYER) {
             lwtPen.setWidthF(0.35); //TODO: getLayerLineWeight
         }
-        else if(lineWeight == OBJ_LWT_BYBLOCK)
-        {
+        else if (lineWeight == OBJ_LWT_BYBLOCK) {
             lwtPen.setWidthF(0.35); //TODO: getBlockLineWeight
         }
-        else
-        {
+        else {
             QMessageBox::warning(0, QObject::tr("Error - Negative Lineweight"),
                                     QObject::tr("Lineweight: %1")
                                     .arg(QString().setNum(lineWeight)));
-            qDebug("Lineweight cannot be negative! Inverting sign.");
+            debug_message("Lineweight cannot be negative! Inverting sign.");
             lwtPen.setWidthF(-lineWeight);
         }
     }
-    else
-    {
+    else {
         lwtPen.setWidthF(lineWeight);
     }
 }
 
-QPointF BaseObject::objectRubberPoint(const QString& key) const
+/**
+ * @brief BaseObject::objectRubberPoint
+ * @param key
+ * @return
+ */
+QPointF
+BaseObject::objectRubberPoint(const QString& key) const
 {
-    if(objRubberPoints.contains(key))
+    if (objRubberPoints.contains(key))
         return objRubberPoints.value(key);
 
     QGraphicsScene* gscene = scene();
-    if(gscene)
+    if (gscene)
         return scene()->property("SCENE_QSNAP_POINT").toPointF();
     return QPointF();
 }
 
-QString BaseObject::objectRubberText(const QString& key) const
+/**
+ * @brief BaseObject::objectRubberText
+ * @param key
+ * @return
+ */
+QString
+BaseObject::objectRubberText(const QString& key) const
 {
-    if(objRubberTexts.contains(key))
+    if (objRubberTexts.contains(key))
         return objRubberTexts.value(key);
     return QString();
 }
@@ -113,11 +147,18 @@ BaseObject::boundingRect() const
     return path().boundingRect();
 }
 
-void BaseObject::drawRubberLine(const QLineF& rubLine, QPainter* painter, const char* colorFromScene)
+/**
+ * @brief BaseObject::drawRubberLine
+ * @param rubLine
+ * @param painter
+ * @param colorFromScene
+ */
+void
+BaseObject::drawRubberLine(const QLineF& rubLine, QPainter* painter, const char* colorFromScene)
 {
     if (painter) {
         QGraphicsScene* objScene = scene();
-        if(!objScene) return;
+        if (!objScene) return;
         QPen colorPen = objPen;
         colorPen.setColor(QColor(objScene->property(colorFromScene).toUInt()));
         painter->setPen(colorPen);
@@ -126,7 +167,13 @@ void BaseObject::drawRubberLine(const QLineF& rubLine, QPainter* painter, const 
     }
 }
 
-void BaseObject::realRender(QPainter* painter, const QPainterPath& renderPath)
+/**
+ * @brief BaseObject::realRender
+ * @param painter
+ * @param renderPath
+ */
+void
+BaseObject::realRender(QPainter* painter, const QPainterPath& renderPath)
 {
     QColor color1 = objectColor();       //lighter color
     QColor color2  = color1.darker(150); //darker color
@@ -134,20 +181,23 @@ void BaseObject::realRender(QPainter* painter, const QPainterPath& renderPath)
     //If we have a dark color, lighten it
     int darkness = color1.lightness();
     int threshold = 32; //TODO: This number may need adjusted or maybe just add it to settings.
-    if(darkness < threshold)
-    {
+    if (darkness < threshold) {
         color2 = color1;
-        if(!darkness) { color1 = QColor(threshold, threshold, threshold); } //lighter() does not affect pure black
-        else          { color1 = color2.lighter(100 + threshold); }
+        if (!darkness) {
+            color1 = QColor(threshold, threshold, threshold);
+            // lighter() does not affect pure black
+        }
+        else {
+            color1 = color2.lighter(100 + threshold);
+        }
     }
 
     int count = renderPath.elementCount();
-    for(int i = 0; i < count-1; ++i)
-    {
+    for (int i = 0; i < count-1; ++i) {
         QPainterPath::Element elem = renderPath.elementAt(i);
         QPainterPath::Element next = renderPath.elementAt(i+1);
 
-        if(next.isMoveTo()) continue;
+        if (next.isMoveTo()) continue;
 
         QPainterPath elemPath;
         elemPath.moveTo(elem.x, elem.y);

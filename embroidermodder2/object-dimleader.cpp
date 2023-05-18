@@ -20,7 +20,13 @@
 #include "embroidermodder.h"
 
 /**
- * \brief .
+ * @brief DimLeaderObject::DimLeaderObject
+ * @param x1
+ * @param y1
+ * @param x2
+ * @param y2
+ * @param rgb
+ * @param parent
  */
 DimLeaderObject::DimLeaderObject(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -29,7 +35,9 @@ DimLeaderObject::DimLeaderObject(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2,
 }
 
 /**
- * \brief .
+ * @brief DimLeaderObject::DimLeaderObject
+ * @param obj
+ * @param parent
  */
 DimLeaderObject::DimLeaderObject(DimLeaderObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -41,7 +49,7 @@ DimLeaderObject::DimLeaderObject(DimLeaderObject* obj, QGraphicsItem* parent) : 
 }
 
 /**
- * \brief .
+ * @brief DimLeaderObject::~DimLeaderObject
  */
 DimLeaderObject::~DimLeaderObject()
 {
@@ -49,9 +57,16 @@ DimLeaderObject::~DimLeaderObject()
 }
 
 /**
- * \brief .
+ * @brief DimLeaderObject::init
+ * @param x1
+ * @param y1
+ * @param x2
+ * @param y2
+ * @param rgb
+ * @param lineType
  */
-void DimLeaderObject::init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, Qt::PenStyle lineType)
+void
+DimLeaderObject::init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, OBJ_TYPE_DIMLEADER);
     setData(OBJ_NAME, "Dimension Leader");
@@ -71,12 +86,23 @@ void DimLeaderObject::init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb 
     setPen(objectPen());
 }
 
-void DimLeaderObject::setObjectEndPoint1(const QPointF& endPt1)
+/**
+ * @brief DimLeaderObject::setObjectEndPoint1
+ * @param endPt1
+ */
+void
+DimLeaderObject::setObjectEndPoint1(const QPointF& endPt1)
 {
     setObjectEndPoint1(endPt1.x(), endPt1.y());
 }
 
-void DimLeaderObject::setObjectEndPoint1(EmbReal x1, EmbReal y1)
+/**
+ * @brief DimLeaderObject::setObjectEndPoint1
+ * @param x1
+ * @param y1
+ */
+void
+DimLeaderObject::setObjectEndPoint1(EmbReal x1, EmbReal y1)
 {
     QPointF endPt2 = objectEndPoint2();
     EmbReal x2 = endPt2.x();
@@ -89,12 +115,23 @@ void DimLeaderObject::setObjectEndPoint1(EmbReal x1, EmbReal y1)
     updateLeader();
 }
 
-void DimLeaderObject::setObjectEndPoint2(const QPointF& endPt2)
+/**
+ * @brief DimLeaderObject::setObjectEndPoint2
+ * @param endPt2
+ */
+void
+DimLeaderObject::setObjectEndPoint2(const QPointF& endPt2)
 {
     setObjectEndPoint2(endPt2.x(), endPt2.y());
 }
 
-void DimLeaderObject::setObjectEndPoint2(EmbReal x2, EmbReal y2)
+/**
+ * @brief DimLeaderObject::setObjectEndPoint2
+ * @param x2
+ * @param y2
+ */
+void
+DimLeaderObject::setObjectEndPoint2(EmbReal x2, EmbReal y2)
 {
     QPointF endPt1 = scenePos();
     EmbReal x1 = endPt1.x();
@@ -107,12 +144,22 @@ void DimLeaderObject::setObjectEndPoint2(EmbReal x2, EmbReal y2)
     updateLeader();
 }
 
-QPointF DimLeaderObject::objectEndPoint1() const
+/**
+ * @brief DimLeaderObject::objectEndPoint1
+ * @return
+ */
+QPointF
+DimLeaderObject::objectEndPoint1() const
 {
     return scenePos();
 }
 
-QPointF DimLeaderObject::objectEndPoint2() const
+/**
+ * @brief DimLeaderObject::objectEndPoint2
+ * @return
+ */
+QPointF
+DimLeaderObject::objectEndPoint2() const
 {
     QLineF lyne = line();
     EmbReal rot = radians(rotation());
@@ -126,7 +173,12 @@ QPointF DimLeaderObject::objectEndPoint2() const
     return (scenePos() + QPointF(rotEnd2X, rotEnd2Y));
 }
 
-QPointF DimLeaderObject::objectMidPoint() const
+/**
+ * @brief DimLeaderObject::objectMidPoint
+ * @return
+ */
+QPointF
+DimLeaderObject::objectMidPoint() const
 {
     QLineF lyne = line();
     QPointF mp = lyne.pointAt(0.5);
@@ -141,15 +193,22 @@ QPointF DimLeaderObject::objectMidPoint() const
     return (scenePos() + QPointF(rotMidX, rotMidY));
 }
 
-EmbReal DimLeaderObject::objectAngle() const
+/**
+ * @brief DimLeaderObject::objectAngle
+ * @return
+ */
+EmbReal
+DimLeaderObject::objectAngle() const
 {
     EmbReal angle = line().angle() - rotation();
-    while(angle >= 360.0) { angle -= 360.0; }
-    while(angle < 0.0)    { angle += 360.0; }
-    return angle;
+    return std::fmod(angle, 360.0);
 }
 
-void DimLeaderObject::updateLeader()
+/**
+ * @brief DimLeaderObject::updateLeader
+ */
+void
+DimLeaderObject::updateLeader()
 {
     int arrowStyle = Closed; //TODO: Make this customizable
     EmbReal arrowStyleAngle = 15.0; //TODO: Make this customizable
@@ -198,8 +257,7 @@ void DimLeaderObject::updateLeader()
     //                \|                         \|
     //                 .(ap2)                     .(lp2)
 
-    if (arrowStyle == Open)
-    {
+    if (arrowStyle == Open) {
         arrowStylePath = QPainterPath();
         arrowStylePath.moveTo(ap1);
         arrowStylePath.lineTo(ap0);
@@ -207,29 +265,25 @@ void DimLeaderObject::updateLeader()
         arrowStylePath.lineTo(ap0);
         arrowStylePath.lineTo(ap1);
     }
-    else if (arrowStyle == Closed)
-    {
+    else if (arrowStyle == Closed) {
         arrowStylePath = QPainterPath();
         arrowStylePath.moveTo(ap1);
         arrowStylePath.lineTo(ap0);
         arrowStylePath.lineTo(ap2);
         arrowStylePath.lineTo(ap1);
     }
-    else if (arrowStyle == Dot)
-    {
+    else if (arrowStyle == Dot) {
         arrowStylePath = QPainterPath();
         arrowStylePath.addEllipse(ap0, arrowStyleLength, arrowStyleLength);
     }
-    else if (arrowStyle == Box)
-    {
+    else if (arrowStyle == Box) {
         arrowStylePath = QPainterPath();
         EmbReal side = QLineF(ap1, ap2).length();
         QRectF ar0(0, 0, side, side);
         ar0.moveCenter(ap0);
         arrowStylePath.addRect(ar0);
     }
-    else if (arrowStyle == Tick)
-    {
+    else if (arrowStyle == Tick) {
     }
 
     lineStylePath = QPainterPath();
@@ -237,7 +291,13 @@ void DimLeaderObject::updateLeader()
     lineStylePath.lineTo(lp0);
 }
 
-void DimLeaderObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+/**
+ * @brief DimLeaderObject::paint
+ * @param painter
+ * @param option
+ */
+void
+DimLeaderObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
     if (!objScene) return;
@@ -255,8 +315,12 @@ void DimLeaderObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
     if (filled)
         painter->fillPath(arrowStylePath, objectColor());
 }
-
-void DimLeaderObject::updateRubber(QPainter* painter)
+/**
+ * @brief DimLeaderObject::updateRubber
+ * @param painter
+ */
+void
+DimLeaderObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objRubberMode;
     if (rubberMode == OBJ_RUBBER_DIMLEADER_LINE) {
@@ -282,7 +346,11 @@ void DimLeaderObject::updateRubber(QPainter* painter)
     }
 }
 
-void DimLeaderObject::vulcanize()
+/**
+ * @brief DimLeaderObject::vulcanize
+ */
+void
+DimLeaderObject::vulcanize()
 {
     debug_message("DimLeaderObject vulcanize()");
     updateRubber();
@@ -318,7 +386,12 @@ QPointF DimLeaderObject::mouseSnapPoint(const QPointF& mousePoint)
     return scenePos();
 }
 
-QList<QPointF> DimLeaderObject::allGripPoints()
+/**
+ * @brief DimLeaderObject::allGripPoints
+ * @return
+ */
+QList<QPointF>
+DimLeaderObject::allGripPoints()
 {
     QList<QPointF> gripPoints;
     gripPoints << objectEndPoint1() << objectEndPoint2();
@@ -327,9 +400,22 @@ QList<QPointF> DimLeaderObject::allGripPoints()
     return gripPoints;
 }
 
-void DimLeaderObject::gripEdit(const QPointF& before, const QPointF& after)
+/**
+ * @brief DimLeaderObject::gripEdit
+ * @param before
+ * @param after
+ */
+void
+DimLeaderObject::gripEdit(const QPointF& before, const QPointF& after)
 {
-    if     (before == objectEndPoint1()) { setObjectEndPoint1(after); }
-    else if (before == objectEndPoint2()) { setObjectEndPoint2(after); }
-    else if (before == objectMidPoint())  { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
+    if (before == objectEndPoint1()) {
+        setObjectEndPoint1(after);
+    }
+    else if (before == objectEndPoint2()) {
+        setObjectEndPoint2(after);
+    }
+    else if (before == objectMidPoint()) {
+        QPointF delta = after-before;
+        moveBy(delta.x(), delta.y());
+    }
 }
