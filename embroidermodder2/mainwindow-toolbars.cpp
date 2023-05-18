@@ -141,7 +141,7 @@ QIcon
 MainWindow::create_icon(QString stub)
 {
     QString appDir = qApp->applicationDirPath();
-    QString icontheme = settings.general_icon_theme;
+    QString icontheme = QString::fromStdString(settings.general_icon_theme);
     return QIcon(appDir + "/icons/" + icontheme + "/" + stub + ".png");
 }
 
@@ -263,7 +263,7 @@ MainWindow::createTextToolbar()
     toolbarText->setObjectName("toolbarText");
 
     toolbarText->addWidget(textFontSelector);
-    textFontSelector->setCurrentFont(QFont(settings.text_font));
+    textFontSelector->setCurrentFont(QFont(QString::fromStdString(settings.text_font)));
     connect(textFontSelector, SIGNAL(currentFontChanged(QFont)), this, SLOT(textFontSelectorCurrentFontChanged(QFont)));
 
     int textbold_index = get_action_index("textbold");

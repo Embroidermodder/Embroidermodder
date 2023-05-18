@@ -850,7 +850,7 @@ void
 MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
 {
     debug_message("textFontSelectorCurrentFontChanged()");
-    settings.text_font = font.family();
+    settings.text_font = font.family().toStdString();
 }
 
 /**
@@ -870,7 +870,7 @@ void
 MainWindow::setTextFont(const QString& str)
 {
     textFontSelector->setCurrentFont(QFont(str));
-    settings.text_font = str;
+    settings.text_font = str.toStdString();
 }
 
 /**
@@ -1290,7 +1290,7 @@ MainWindow::nativeAddTextSingle(const QString& str, EmbReal x, EmbReal y, EmbRea
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
         TextSingleObject* obj = new TextSingleObject(str, x, -y, getCurrentColor());
-        obj->setObjectTextFont(settings.text_font);
+        obj->setObjectTextFont(QString::fromStdString(settings.text_font));
         obj->setObjectTextSize(settings.text_size);
         obj->setObjectTextStyle(settings.text_style_bold,
                                 settings.text_style_italic,
@@ -2162,7 +2162,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
 
-    QString lang = settings.general_language;
+    QString lang = QString::fromStdString(settings.general_language);
     debug_message("language: " + lang.toStdString());
     if (lang == "system")
         lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
@@ -2234,8 +2234,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     mdiArea->useBackgroundLogo(settings.general_mdi_bg_use_logo);
     mdiArea->useBackgroundTexture(settings.general_mdi_bg_use_texture);
     mdiArea->useBackgroundColor(settings.general_mdi_bg_use_color);
-    mdiArea->setBackgroundLogo(settings.general_mdi_bg_logo);
-    mdiArea->setBackgroundTexture(settings.general_mdi_bg_texture);
+    mdiArea->setBackgroundLogo(QString::fromStdString(settings.general_mdi_bg_logo));
+    mdiArea->setBackgroundTexture(QString::fromStdString(settings.general_mdi_bg_texture));
     mdiArea->setBackgroundColor(QColor(settings.general_mdi_bg_color));
     mdiArea->setViewMode(QMdiArea::TabbedView);
     mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -2290,12 +2290,12 @@ MainWindow::MainWindow() : QMainWindow(0)
     connect(prompt, SIGNAL(historyAppended(QString)), this, SLOT(promptHistoryAppended(QString)));
 
     //create the Object Property Editor
-    dockPropEdit = new PropertyEditor(appDir + "/icons/" + settings.general_icon_theme, settings.selection_mode_pickadd, prompt, this);
+    dockPropEdit = new PropertyEditor(appDir + "/icons/" + QString::fromStdString(settings.general_icon_theme), settings.selection_mode_pickadd, prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockPropEdit);
     connect(dockPropEdit, SIGNAL(pickAddModeToggled()), this, SLOT(pickAddModeToggled()));
 
     //create the Command History Undo Editor
-    dockUndoEdit = new UndoEditor(appDir + "/icons/" + settings.general_icon_theme, prompt, this);
+    dockUndoEdit = new UndoEditor(appDir + "/icons/" + QString::fromStdString(settings.general_icon_theme), prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockUndoEdit);
 
     //setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); //TODO: Load these from settings
@@ -2801,7 +2801,7 @@ actuator(std::string line)
         }
         command = list[0];
         if (command == "font") {
-            return settings.text_font.toStdString();
+            return settings.text_font;
         }
         if (command == "size") {
             return std::to_string(settings.text_size);
@@ -2841,7 +2841,7 @@ actuator(std::string line)
             || list[1] == "1"
         );
         if (list[0] == "text_font") {
-            settings.text_font = QString::fromStdString(list[1]);
+            settings.text_font = list[1];
             return "";
         }
         if (list[0] == "text_size") {
@@ -3824,7 +3824,7 @@ MainWindow::openFile(bool recent, const QString& recentFile)
 
     QStringList files;
     bool preview = settings.opensave_open_thumbnail;
-    openFilesPath = settings.opensave_recent_directory;
+    openFilesPath = QString::fromStdString(settings.opensave_recent_directory);
 
     //Check to see if this from the recent files list
     if (recent) {
@@ -3890,7 +3890,7 @@ MainWindow::openFilesSelected(const QStringList& filesToOpen)
                     settings.opensave_recent_list_of_files.removeAll(filesToOpen.at(i));
                     settings.opensave_recent_list_of_files.prepend(filesToOpen.at(i));
                 }
-                settings.opensave_recent_directory = QFileInfo(filesToOpen.at(i)).absolutePath();
+                settings.opensave_recent_directory = QFileInfo(filesToOpen.at(i)).absolutePath().toStdString();
 
                 if (mdiWin->gview) {
                     mdiWin->gview->recalculateLimits();
@@ -3943,7 +3943,7 @@ MainWindow::saveasfile()
         return;
 
     QString file;
-    openFilesPath = settings.opensave_recent_directory;
+    openFilesPath = QString::fromStdString(settings.opensave_recent_directory);
     file = QFileDialog::getSaveFileName(this, tr("Save As"), openFilesPath, formatFilterSave);
 
     mdiWin->saveFile(file);

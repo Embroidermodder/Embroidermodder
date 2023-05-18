@@ -63,7 +63,7 @@ View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, 
     setGridColor(settings.grid_color);
 
     if (settings.grid_show_on_load) {
-        createGrid(settings.grid_type);
+        createGrid(QString::fromStdString(settings.grid_type));
     }
     else {
         createGrid("");
@@ -547,7 +547,7 @@ View::toggleGrid(bool on)
     debug_message("View toggleGrid()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     if (on) {
-        createGrid(settings.grid_type);
+        createGrid(QString::fromStdString(settings.grid_type));
     }
     else {
         createGrid("");

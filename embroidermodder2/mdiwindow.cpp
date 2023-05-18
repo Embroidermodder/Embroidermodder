@@ -36,7 +36,7 @@ MdiWindow::MdiWindow(const int theIndex, QMdiArea* parent, Qt::WindowFlags wflag
     curFile = aName.asprintf("Untitled%d.dst", myIndex);
     this->setWindowTitle(curFile);
 
-    this->setWindowIcon(QIcon("icons/" + settings.general_icon_theme + "/" + "app" + ".png"));
+    this->setWindowIcon(_mainWin->create_icon("app"));
 
     gscene = new QGraphicsScene(0,0,0,0, this);
     gview = new View(gscene, this);

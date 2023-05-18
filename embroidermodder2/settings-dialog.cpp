@@ -124,7 +124,7 @@ QWidget* Settings_Dialog::createTabGeneral()
 
     QLabel* labelLanguage = new QLabel(tr("Language (Requires Restart)"), groupBoxLanguage);
     QComboBox* comboBoxLanguage = new QComboBox(groupBoxLanguage);
-    dialog.general_language = settings.general_language.toLower();
+    dialog.general_language = QString::fromStdString(settings.general_language).toLower().toStdString();
     comboBoxLanguage->addItem("Default");
     comboBoxLanguage->addItem("System");
     comboBoxLanguage->insertSeparator(2);
@@ -135,7 +135,7 @@ QWidget* Settings_Dialog::createTabGeneral()
         dirName[0] = dirName[0].toUpper();
         comboBoxLanguage->addItem(dirName);
     }
-    QString current = dialog.general_language;
+    QString current = QString::fromStdString(dialog.general_language);
     current[0] = current[0].toUpper();
     comboBoxLanguage->setCurrentIndex(comboBoxLanguage->findText(current));
     connect(comboBoxLanguage, SIGNAL(currentIndexChanged(QString)), this, SLOT(comboBoxLanguageCurrentIndexChanged(QString)));
@@ -156,17 +156,17 @@ QWidget* Settings_Dialog::createTabGeneral()
     foreach(QString dirName, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
         comboBoxIconTheme->addItem(QIcon("icons/" + dirName + "/" + "theme" + ".png"), dirName);
     }
-    comboBoxIconTheme->setCurrentIndex(comboBoxIconTheme->findText(dialog.general_icon_theme));
+    comboBoxIconTheme->setCurrentIndex(comboBoxIconTheme->findText(QString::fromStdString(dialog.general_icon_theme)));
     connect(comboBoxIconTheme, SIGNAL(currentIndexChanged(QString)), this, SLOT(comboBoxIconThemeCurrentIndexChanged(QString)));
 
     QLabel* labelIconSize = new QLabel(tr("Icon Size"), groupBoxIcon);
     QComboBox* comboBoxIconSize = new QComboBox(groupBoxIcon);
-    comboBoxIconSize->addItem(QIcon("icons/" + dialog.general_icon_theme + "/" + "icon16"  + ".png"), "Very Small", 16);
-    comboBoxIconSize->addItem(QIcon("icons/" + dialog.general_icon_theme + "/" + "icon24"  + ".png"), "Small", 24);
-    comboBoxIconSize->addItem(QIcon("icons/" + dialog.general_icon_theme + "/" + "icon32"  + ".png"), "Medium", 32);
-    comboBoxIconSize->addItem(QIcon("icons/" + dialog.general_icon_theme + "/" + "icon48"  + ".png"), "Large", 48);
-    comboBoxIconSize->addItem(QIcon("icons/" + dialog.general_icon_theme + "/" + "icon64"  + ".png"), "Very Large", 64);
-    comboBoxIconSize->addItem(QIcon("icons/" + dialog.general_icon_theme + "/" + "icon128" + ".png"), "I'm Blind", 128);
+    comboBoxIconSize->addItem(QIcon("icons/" + QString::fromStdString(dialog.general_icon_theme) + "/" + "icon16"  + ".png"), "Very Small", 16);
+    comboBoxIconSize->addItem(QIcon("icons/" + QString::fromStdString(dialog.general_icon_theme) + "/" + "icon24"  + ".png"), "Small", 24);
+    comboBoxIconSize->addItem(QIcon("icons/" + QString::fromStdString(dialog.general_icon_theme) + "/" + "icon32"  + ".png"), "Medium", 32);
+    comboBoxIconSize->addItem(QIcon("icons/" + QString::fromStdString(dialog.general_icon_theme) + "/" + "icon48"  + ".png"), "Large", 48);
+    comboBoxIconSize->addItem(QIcon("icons/" + QString::fromStdString(dialog.general_icon_theme) + "/" + "icon64"  + ".png"), "Very Large", 64);
+    comboBoxIconSize->addItem(QIcon("icons/" + QString::fromStdString(dialog.general_icon_theme) + "/" + "icon128" + ".png"), "I'm Blind", 128);
     dialog.general_icon_size = settings.general_icon_size;
     comboBoxIconSize->setCurrentIndex(comboBoxIconSize->findData(dialog.general_icon_size));
     connect(comboBoxIconSize, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxIconSizeCurrentIndexChanged(int)));
@@ -516,13 +516,13 @@ QWidget* Settings_Dialog::createTabPrompt()
     QFontComboBox* comboBoxFontFamily = new QFontComboBox(groupBoxFont);
     dialog.prompt_font_family = settings.prompt_font_family;
     preview.prompt_font_family = dialog.prompt_font_family;
-    comboBoxFontFamily->setCurrentFont(QFont(preview.prompt_font_family));
+    comboBoxFontFamily->setCurrentFont(QFont(QString::fromStdString(preview.prompt_font_family)));
     connect(comboBoxFontFamily, SIGNAL(currentIndexChanged(QString)), this, SLOT(comboBoxPromptFontFamilyCurrentIndexChanged(QString)));
     QLabel* labelFontStyle = new QLabel(tr("Font Style"), groupBoxFont);
     QComboBox* comboBoxFontStyle = new QComboBox(groupBoxFont);
     comboBoxFontStyle->addItem("Normal");
     comboBoxFontStyle->addItem("Italic");
-    comboBoxFontStyle->setEditText(preview.prompt_font_style);
+    comboBoxFontStyle->setEditText(QString::fromStdString(preview.prompt_font_style));
     connect(comboBoxFontStyle, SIGNAL(currentIndexChanged(QString)), this, SLOT(comboBoxPromptFontStyleCurrentIndexChanged(QString)));
     QLabel* labelFontSize = new QLabel(tr("Font Size"), groupBoxFont);
     QSpinBox* spinBoxFontSize = new QSpinBox(groupBoxFont);
@@ -728,7 +728,7 @@ QWidget* Settings_Dialog::createTabPrinting()
     QComboBox* comboBoxDefaultDevice = new QComboBox(groupBoxDefaultPrinter);
     QList<QPrinterInfo> listAvailPrinters = QPrinterInfo::availablePrinters();
     foreach (QPrinterInfo info, listAvailPrinters) {
-        comboBoxDefaultDevice->addItem(QIcon("icons/" + settings.general_icon_theme + "/" + "print" + ".png"), info.printerName());
+        comboBoxDefaultDevice->addItem(_mainWin->create_icon("print"), info.printerName());
     }
 
     QVBoxLayout* vboxLayoutDefaultPrinter = new QVBoxLayout(groupBoxDefaultPrinter);
@@ -885,7 +885,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     comboBoxGridType->addItem("Rectangular");
     comboBoxGridType->addItem("Circular");
     comboBoxGridType->addItem("Isometric");
-    comboBoxGridType->setCurrentIndex(comboBoxGridType->findText(dialog.grid_type));
+    comboBoxGridType->setCurrentIndex(comboBoxGridType->findText(QString::fromStdString(dialog.grid_type)));
     connect(comboBoxGridType, SIGNAL(currentIndexChanged(QString)), this, SLOT(comboBoxGridTypeCurrentIndexChanged(QString)));
 
     QCheckBox* checkBoxGridCenterOnOrigin = new QCheckBox(tr("Center the grid on the origin"), groupBoxGridGeom);
@@ -1307,21 +1307,35 @@ void Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
     //TODO: Add Other... so the user can select custom colors
 }
 
-void Settings_Dialog::comboBoxLanguageCurrentIndexChanged(const QString& lang)
+/**
+ * @brief Settings_Dialog::comboBoxLanguageCurrentIndexChanged
+ * @param lang
+ */
+void
+Settings_Dialog::comboBoxLanguageCurrentIndexChanged(const QString& lang)
 {
-    dialog.general_language = lang.toLower();
+    dialog.general_language = lang.toLower().toStdString();
 }
 
-void Settings_Dialog::comboBoxIconThemeCurrentIndexChanged(const QString& theme)
+/**
+ * @brief Settings_Dialog::comboBoxIconThemeCurrentIndexChanged
+ * @param theme
+ */
+void
+Settings_Dialog::comboBoxIconThemeCurrentIndexChanged(const QString& theme)
 {
-    dialog.general_icon_theme = theme;
+    dialog.general_icon_theme = theme.toStdString();
 }
 
-void Settings_Dialog::comboBoxIconSizeCurrentIndexChanged(int index)
+/**
+ * @brief Settings_Dialog::comboBoxIconSizeCurrentIndexChanged
+ * @param index
+ */
+void
+Settings_Dialog::comboBoxIconSizeCurrentIndexChanged(int index)
 {
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
-    if (comboBox)
-    {
+    if (comboBox) {
         bool ok = 0;
         dialog.general_icon_size = comboBox->itemData(index).toUInt(&ok);
         if (!ok)
@@ -1340,22 +1354,26 @@ void Settings_Dialog::checkBoxGeneralMdiBGUseLogoStateChanged(int checked)
 void Settings_Dialog::chooseGeneralMdiBackgroundLogo()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
-    if (button)
-    {
+    if (button) {
         QString selectedImage;
         selectedImage = QFileDialog::getOpenFileName(this, tr("Open File"),
                         QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
                         tr("Images (*.bmp *.png *.jpg)"));
 
         if (!selectedImage.isNull())
-            accept_.general_mdi_bg_logo = selectedImage;
+            accept_.general_mdi_bg_logo = selectedImage.toStdString();
 
         //Update immediately so it can be previewed
-        mdiArea->setBackgroundLogo(accept_.general_mdi_bg_logo);
+        mdiArea->setBackgroundLogo(QString::fromStdString(accept_.general_mdi_bg_logo));
     }
 }
 
-void Settings_Dialog::checkBoxGeneralMdiBGUseTextureStateChanged(int checked)
+/**
+ * @brief Settings_Dialog::checkBoxGeneralMdiBGUseTextureStateChanged
+ * @param checked
+ */
+void
+Settings_Dialog::checkBoxGeneralMdiBGUseTextureStateChanged(int checked)
 {
     preview.general_mdi_bg_use_texture = checked;
     mdiArea->useBackgroundTexture(checked);
@@ -1371,11 +1389,11 @@ void Settings_Dialog::chooseGeneralMdiBackgroundTexture()
                         tr("Images (*.bmp *.png *.jpg)"));
 
         if (!selectedImage.isNull()) {
-            accept_.general_mdi_bg_texture = selectedImage;
+            accept_.general_mdi_bg_texture = selectedImage.toStdString();
         }
 
         //Update immediately so it can be previewed
-        mdiArea->setBackgroundTexture(accept_.general_mdi_bg_texture);
+        mdiArea->setBackgroundTexture(QString::fromStdString(accept_.general_mdi_bg_texture));
     }
 }
 
@@ -1731,14 +1749,14 @@ void Settings_Dialog::currentPromptBackgroundColorChanged(const QColor& color)
 
 void Settings_Dialog::comboBoxPromptFontFamilyCurrentIndexChanged(const QString& family)
 {
-    preview.prompt_font_family = family;
-    prompt->setPromptFontFamily(preview.prompt_font_family);
+    preview.prompt_font_family = family.toStdString();
+    prompt->setPromptFontFamily(QString::fromStdString(preview.prompt_font_family));
 }
 
 void Settings_Dialog::comboBoxPromptFontStyleCurrentIndexChanged(const QString& style)
 {
-    preview.prompt_font_style = style;
-    prompt->setPromptFontStyle(preview.prompt_font_style);
+    preview.prompt_font_style = style.toStdString();
+    prompt->setPromptFontStyle(QString::fromStdString(preview.prompt_font_style));
 }
 
 void Settings_Dialog::spinBoxPromptFontSizeValueChanged(int value)
@@ -1904,11 +1922,12 @@ void Settings_Dialog::checkBoxGridLoadFromFileStateChanged(int checked)
 }
 
 /**
- * .
+ * @brief Settings_Dialog::comboBoxGridTypeCurrentIndexChanged
+ * @param type
  */
 void Settings_Dialog::comboBoxGridTypeCurrentIndexChanged(const QString& type)
 {
-    dialog.grid_type = type;
+    dialog.grid_type = type.toStdString();
 
     QObject* senderObj = sender();
     if (!senderObj) {
@@ -2162,8 +2181,8 @@ void Settings_Dialog::acceptChanges()
     mdiArea->useBackgroundLogo(dialog.general_mdi_bg_use_logo);
     mdiArea->useBackgroundTexture(dialog.general_mdi_bg_use_texture);
     mdiArea->useBackgroundColor(dialog.general_mdi_bg_use_color);
-    mdiArea->setBackgroundLogo(dialog.general_mdi_bg_logo);
-    mdiArea->setBackgroundTexture(dialog.general_mdi_bg_texture);
+    mdiArea->setBackgroundLogo(QString::fromStdString(dialog.general_mdi_bg_logo));
+    mdiArea->setBackgroundTexture(QString::fromStdString(dialog.general_mdi_bg_texture));
     mdiArea->setBackgroundColor(dialog.general_mdi_bg_color);
     _mainWin->iconResize(dialog.general_icon_size);
     _mainWin->updateAllViewScrollBars(dialog.display_show_scrollbars);
@@ -2177,8 +2196,8 @@ void Settings_Dialog::acceptChanges()
         dialog.display_selectbox_alpha);
     prompt->setPromptTextColor(QColor(dialog.prompt_text_color));
     prompt->setPromptBackgroundColor(QColor(dialog.prompt_bg_color));
-    prompt->setPromptFontFamily(dialog.prompt_font_family);
-    prompt->setPromptFontStyle(dialog.prompt_font_style);
+    prompt->setPromptFontFamily(QString::fromStdString(dialog.prompt_font_family));
+    prompt->setPromptFontStyle(QString::fromStdString(dialog.prompt_font_style));
     prompt->setPromptFontSize(dialog.prompt_font_size);
     _mainWin->updateAllViewGridColors(dialog.grid_color);
     _mainWin->updateAllViewRulerColors(dialog.ruler_color);
@@ -2200,7 +2219,11 @@ void Settings_Dialog::acceptChanges()
     accept();
 }
 
-void Settings_Dialog::rejectChanges()
+/**
+ * @brief Settings_Dialog::rejectChanges
+ */
+void
+Settings_Dialog::rejectChanges()
 {
     //TODO: inform the user if they have changed settings
 
@@ -2208,8 +2231,8 @@ void Settings_Dialog::rejectChanges()
     mdiArea->useBackgroundLogo(dialog.general_mdi_bg_use_logo);
     mdiArea->useBackgroundTexture(dialog.general_mdi_bg_use_texture);
     mdiArea->useBackgroundColor(dialog.general_mdi_bg_use_color);
-    mdiArea->setBackgroundLogo(dialog.general_mdi_bg_logo);
-    mdiArea->setBackgroundTexture(dialog.general_mdi_bg_texture);
+    mdiArea->setBackgroundLogo(QString::fromStdString(dialog.general_mdi_bg_logo));
+    mdiArea->setBackgroundTexture(QString::fromStdString(dialog.general_mdi_bg_texture));
     mdiArea->setBackgroundColor(dialog.general_mdi_bg_color);
     _mainWin->updateAllViewScrollBars(dialog.display_show_scrollbars);
     _mainWin->updateAllViewCrossHairColors(dialog.display_crosshair_color);
@@ -2222,8 +2245,8 @@ void Settings_Dialog::rejectChanges()
         dialog.display_selectbox_alpha);
     prompt->setPromptTextColor(QColor(dialog.prompt_text_color));
     prompt->setPromptBackgroundColor(QColor(dialog.prompt_bg_color));
-    prompt->setPromptFontFamily(dialog.prompt_font_family);
-    prompt->setPromptFontStyle(dialog.prompt_font_style);
+    prompt->setPromptFontFamily(QString::fromStdString(dialog.prompt_font_family));
+    prompt->setPromptFontStyle(QString::fromStdString(dialog.prompt_font_style));
     prompt->setPromptFontSize(dialog.prompt_font_size);
     _mainWin->updateAllViewGridColors(dialog.grid_color);
     _mainWin->updateAllViewRulerColors(dialog.ruler_color);

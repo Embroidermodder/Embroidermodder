@@ -158,10 +158,10 @@ typedef struct Action__ {
  */
 typedef struct GroupBoxData_ {
     std::string key;
-    char icon_name[200];
-    char label[200];
-    char type[200];
-    char map_signal[200];
+    std::string icon_name;
+    std::string label;
+    std::string type;
+    std::string map_signal;
 } GroupBoxData;
 
 /**
@@ -259,7 +259,7 @@ typedef struct EmbView_ {
     EmbPattern *pattern; /*< \todo document this */
     EmbVector origin; /*< \todo document this */
     EmbReal scale; /*< \todo document this */
-    QString grid_type; /*< \todo document this */
+    std::string grid_type; /*< \todo document this */
     int ui_mode; /*< \todo document this */
     bool snap_mode; /*< \todo document this */
     bool grid_mode; /*< \todo document this */
@@ -273,7 +273,7 @@ typedef struct EmbView_ {
     bool metric; /*< \todo document this */
     bool simulate; /*< \todo document this */
     clock_t simulation_start; /*< \todo document this */
-    QString text_font; /*< \todo document this */
+    std::string text_font; /*< \todo document this */
     EmbReal text_size; /*< \todo document this */
     EmbReal text_angle; /*< \todo document this */
     bool text_style_bold; /*< \todo document this */
@@ -281,8 +281,8 @@ typedef struct EmbView_ {
     bool text_style_underline; /*< \todo document this */
     bool text_style_overline; /*< \todo document this */
     bool text_style_strikeout; /*< \todo document this */
-    QString filename; /*< \todo document this */
-    QStringList undo_history; /*< \todo document this */
+    std::string filename; /*< \todo document this */
+    StringList undo_history; /*< \todo document this */
     int selected[100]; /*< \todo document this */
     int n_selected; /*< \todo document this */
     int rubber_mode; /*< . */
@@ -297,45 +297,45 @@ typedef struct EmbView_ {
  * cancels out of the Settings Dialog.
  */
 typedef struct Settings_ {
-    QString version;
+    std::string version;
         /*< \todo document this */
-    QString assets_dir;
+    std::string assets_dir;
         /*< \todo document this */
-    QString general_language;
+    std::string general_language;
         /*< \todo document this */
-    QString general_icon_theme;
+    std::string general_icon_theme;
         /*< \todo document this */
-    QString general_mdi_bg_logo;
+    std::string general_mdi_bg_logo;
         /*< \todo document this */
-    QString general_mdi_bg_texture;
+    std::string general_mdi_bg_texture;
         /*< \todo document this */
-    QString display_units;
+    std::string display_units;
         /*< \todo document this */
     QString opensave_custom_filter;
         /*< \todo document this */
-    QString opensave_open_format;
+    std::string opensave_open_format;
         /*< \todo document this */
-    QString opensave_save_format;
+    std::string opensave_save_format;
         /*< \todo document this */
     QStringList opensave_recent_list_of_files;
         /*< \todo document this */
-    QString opensave_recent_directory;
+    std::string opensave_recent_directory;
         /*< \todo document this */
-    QString printing_default_device;
+    std::string printing_default_device;
         /*< \todo document this */
-    QString grid_type;
+    std::string grid_type;
         /*< \todo document this */
-    QString text_font;
+    std::string text_font;
         /*< \todo document this */
-    QString to_open;
+    std::string to_open;
         /*< \todo document this */
-    QString current_directory;
+    std::string current_directory;
         /*< \todo document this */
-    QString prompt_font_family;
+    std::string prompt_font_family;
         /*< \todo document this */
-    QString prompt_font_style;
+    std::string prompt_font_style;
         /*< \todo document this */
-    QString prompt_save_history_filename;
+    std::string prompt_save_history_filename;
         /*< \todo document this */
     QRgb general_mdi_bg_color;
         /*< \todo document this */
@@ -454,20 +454,34 @@ typedef struct Settings_ {
     bool qsnap_parallel; /*< \todo document this */
     bool lwt_show_lwt; /*< \todo document this */
     bool lwt_real_render; /*< \todo document this */
-    bool shift_held; /*< \todo document this */
-    EmbReal lwt_default_lwt; /*< \todo document this */
-    bool selection_mode_pickfirst; /*< \todo document this */
-    bool selection_mode_pickadd; /*< \todo document this */
-    bool selection_mode_pickdrag; /*< \todo document this */
-    uint8_t selection_grip_size; /*< \todo document this */
-    uint8_t selection_pickbox_size; /*< \todo document this */
-    EmbReal text_size; /*< \todo document this */
-    EmbReal text_angle; /*< \todo document this */
-    bool text_style_bold; /*< \todo document this */
-    bool text_style_italic; /*< \todo document this */
-    bool text_style_underline; /*< \todo document this */
-    bool text_style_overline; /*< \todo document this */
-    bool text_style_strikeout; /*< \todo document this */
+    bool shift_held;
+        /*< \todo document this */
+    EmbReal lwt_default_lwt;
+        /*< \todo document this */
+    bool selection_mode_pickfirst;
+        /*< \todo document this */
+    bool selection_mode_pickadd;
+        /*< \todo document this */
+    bool selection_mode_pickdrag;
+        /*< \todo document this */
+    uint8_t selection_grip_size;
+        /*< \todo document this */
+    uint8_t selection_pickbox_size;
+        /*< \todo document this */
+    EmbReal text_size;
+        /*< \todo document this */
+    EmbReal text_angle;
+        /*< \todo document this */
+    bool text_style_bold;
+        /*< \todo document this */
+    bool text_style_italic;
+        /*< \todo document this */
+    bool text_style_underline;
+        /*< \todo document this */
+    bool text_style_overline;
+        /*< \todo document this */
+    bool text_style_strikeout;
+        /*< \todo document this */
     EmbReal zoomInLimit;
         /*< */
     EmbReal zoomOutLimit;

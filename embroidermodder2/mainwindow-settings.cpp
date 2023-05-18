@@ -98,18 +98,19 @@ MainWindow::readSettings()
     }
 
     //General
-    settings.general_language = settings_file.value("Language", "default").toString();
-    settings.general_icon_theme = settings_file.value("IconTheme", "default").toString();
+    settings.general_language = settings_file.value("Language", "default").toString().toStdString();
+    settings.general_icon_theme = settings_file.value("IconTheme", "default").toString().toStdString();
     settings.general_icon_size = settings_file.value("IconSize", 16).toInt();
     settings.general_mdi_bg_use_logo = settings_file.value("MdiBGUseLogo", true).toBool();
     settings.general_mdi_bg_use_texture = settings_file.value("MdiBGUseTexture", true).toBool();
     settings.general_mdi_bg_use_color = settings_file.value("MdiBGUseColor", true).toBool();
-    settings.general_mdi_bg_logo = settings_file.value("MdiBGLogo", appDir + "/images/logo-spirals.png").toString();
-    settings.general_mdi_bg_texture = settings_file.value("MdiBGTexture", appDir + "/images/texture-spirals.png").toString();
+    settings.general_mdi_bg_logo = settings_file.value("MdiBGLogo", appDir + "/images/logo-spirals.png").toString().toStdString();
+    settings.general_mdi_bg_texture = settings_file.value("MdiBGTexture", appDir + "/images/texture-spirals.png").toString().toStdString();
     settings.general_mdi_bg_color = settings_file.value("MdiBGColor", qRgb(192,192,192)).toInt();
     settings.general_tip_of_the_day = settings_file.value("TipOfTheDay", true).toBool();
     settings.general_current_tip = settings_file.value("CurrentTip", 0).toInt();
     settings.general_system_help_browser = settings_file.value("SystemHelpBrowser", true).toBool();
+
     //Display
     settings.display_use_opengl = settings_file.value("Display/UseOpenGL", false).toBool();
     settings.display_renderhint_aa = settings_file.value("Display/RenderHintAntiAlias", false).toBool();
@@ -129,39 +130,45 @@ MainWindow::readSettings()
     settings.display_zoomscale_in = settings_file.value("Display/ZoomScaleIn", 2.0).toFloat();
     settings.display_zoomscale_out = settings_file.value("Display/ZoomScaleOut", 0.5).toFloat();
     settings.display_crosshair_percent = settings_file.value("Display/CrossHairPercent", 5).toInt();
-    settings.display_units = settings_file.value("Display/Units", "mm").toString();
+    settings.display_units = settings_file.value("Display/Units", "mm").toString().toStdString();
+
     //Prompt
     settings.prompt_text_color = settings_file.value("Prompt/TextColor", qRgb(  0, 0, 0)).toInt();
     settings.prompt_bg_color = settings_file.value("Prompt/BackgroundColor", qRgb(255,255,255)).toInt();
-    settings.prompt_font_family = settings_file.value("Prompt/FontFamily", "Monospace").toString();
-    settings.prompt_font_style = settings_file.value("Prompt/FontStyle", "normal").toString();
+    settings.prompt_font_family = settings_file.value("Prompt/FontFamily", "Monospace").toString().toStdString();
+    settings.prompt_font_style = settings_file.value("Prompt/FontStyle", "normal").toString().toStdString();
     settings.prompt_font_size = settings_file.value("Prompt/FontSize", 12).toInt();
     settings.prompt_save_history = settings_file.value("Prompt/SaveHistory", true).toBool();
     settings.prompt_save_history_as_html = settings_file.value("Prompt/SaveHistoryAsHtml", false).toBool();
-    settings.prompt_save_history_filename = settings_file.value("Prompt/SaveHistoryFilename", settingsDir + "prompt.log").toString();
+    settings.prompt_save_history_filename = settings_file.value("Prompt/SaveHistoryFilename", settingsDir + "prompt.log").toString().toStdString();
+
     //OpenSave
     settings.opensave_custom_filter = settings_file.value("OpenSave/CustomFilter", "supported").toString();
-    settings.opensave_open_format = settings_file.value("OpenSave/OpenFormat", "*.*").toString();
+    settings.opensave_open_format = settings_file.value("OpenSave/OpenFormat", "*.*").toString().toStdString();
     settings.opensave_open_thumbnail = settings_file.value("OpenSave/OpenThumbnail", false).toBool();
-    settings.opensave_save_format = settings_file.value("OpenSave/SaveFormat", "*.*").toString();
+    settings.opensave_save_format = settings_file.value("OpenSave/SaveFormat", "*.*").toString().toStdString();
     settings.opensave_save_thumbnail = settings_file.value("OpenSave/SaveThumbnail", false).toBool();
+
     //Recent
     settings.opensave_recent_max_files = settings_file.value("OpenSave/RecentMax", 10).toInt();
-    settings.opensave_recent_list_of_files = settings_file.value("OpenSave/RecentFiles")                                .toStringList();
-    settings.opensave_recent_directory = settings_file.value("OpenSave/RecentDirectory", appDir + "/samples").toString();
+    settings.opensave_recent_list_of_files = settings_file.value("OpenSave/RecentFiles").toStringList();
+    settings.opensave_recent_directory = settings_file.value("OpenSave/RecentDirectory", appDir + "/samples").toString().toStdString();
+
     //Trimming
     settings.opensave_trim_dst_num_jumps = settings_file.value("OpenSave/TrimDstNumJumps", 5).toInt();
+
     //Printing
-    settings.printing_default_device = settings_file.value("Printing/DefaultDevice", "").toString();
+    settings.printing_default_device = settings_file.value("Printing/DefaultDevice", "").toString().toStdString();
     settings.printing_use_last_device = settings_file.value("Printing/UseLastDevice", false).toBool();
     settings.printing_disable_bg = settings_file.value("Printing/DisableBG", true).toBool();
+
     //Grid
     settings.grid_show_on_load = settings_file.value("Grid/ShowOnLoad", true).toBool();
     settings.grid_show_origin = settings_file.value("Grid/ShowOrigin", true).toBool();
     settings.grid_color_match_crosshair = settings_file.value("Grid/ColorMatchCrossHair", true).toBool();
     settings.grid_color = settings_file.value("Grid/Color", qRgb(  0, 0, 0)).toInt();
     settings.grid_load_from_file = settings_file.value("Grid/LoadFromFile", true).toBool();
-    settings.grid_type = settings_file.value("Grid/Type", "Rectangular").toString();
+    settings.grid_type = settings_file.value("Grid/Type", "Rectangular").toString().toStdString();
     settings.grid_center_on_origin = settings_file.value("Grid/CenterOnOrigin", true).toBool();
     settings.grid_center.x = settings_file.value("Grid/CenterX", 0.0).toFloat();
     settings.grid_center.y = settings_file.value("Grid/CenterY", 0.0).toFloat();
@@ -172,11 +179,13 @@ MainWindow::readSettings()
     settings.grid_size_radius = settings_file.value("Grid/SizeRadius", 50.0).toFloat();
     settings.grid_spacing_radius = settings_file.value("Grid/SpacingRadius", 25.0).toFloat();
     settings.grid_spacing_angle = settings_file.value("Grid/SpacingAngle", 45.0).toFloat();
+
     //Ruler
     settings.ruler_show_on_load = settings_file.value("Ruler/ShowOnLoad", true).toBool();
     settings.ruler_metric = settings_file.value("Ruler/Metric", true).toBool();
     settings.ruler_color = settings_file.value("Ruler/Color", qRgb(210,210, 50)).toInt();
     settings.ruler_pixel_size = settings_file.value("Ruler/PixelSize", 20).toInt();
+
     //Quick Snap
     settings.qsnap_enabled = settings_file.value("QuickSnap/Enabled", true).toBool();
     settings.qsnap_locator_color = settings_file.value("QuickSnap/LocatorColor", qRgb(255,255, 0)).toInt();
@@ -195,10 +204,12 @@ MainWindow::readSettings()
     settings.qsnap_nearest = settings_file.value("QuickSnap/Nearest", false).toBool();
     settings.qsnap_apparent = settings_file.value("QuickSnap/Apparent", false).toBool();
     settings.qsnap_parallel = settings_file.value("QuickSnap/Parallel", false).toBool();
+
     //LineWeight
     settings.lwt_show_lwt = settings_file.value("LineWeight/ShowLineWeight", false).toBool();
     settings.lwt_real_render = settings_file.value("LineWeight/RealRender", true).toBool();
     settings.lwt_default_lwt = settings_file.value("LineWeight/DefaultLineWeight", 0).toReal();
+
     //Selection
     settings.selection_mode_pickfirst = settings_file.value("Selection/PickFirst", true).toBool();
     settings.selection_mode_pickadd = settings_file.value("Selection/PickAdd", true).toBool();
@@ -207,8 +218,9 @@ MainWindow::readSettings()
     settings.selection_hotgrip_color = settings_file.value("Selection/HotGripColor", qRgb(255, 0, 0)).toInt();
     settings.selection_grip_size = settings_file.value("Selection/GripSize", 4).toInt();
     settings.selection_pickbox_size = settings_file.value("Selection/PickBoxSize", 4).toInt();
+
     //Text
-    settings.text_font = settings_file.value("Text/Font", "Arial").toString();
+    settings.text_font = settings_file.value("Text/Font", "Arial").toString().toStdString();
     settings.text_size = settings_file.value("Text/Size", 12).toReal();
     settings.text_angle = settings_file.value("Text/Angle", 0).toReal();
     settings.text_style_bold = settings_file.value("Text/StyleBold", false).toBool();
@@ -307,14 +319,14 @@ void MainWindow::writeSettings()
 
     settings_file << "[General]" << std::endl;
     //settings_file << "LayoutState=" << layoutState;
-    settings_file << write_setting("Language", settings.general_language);
-    settings_file << write_setting("IconTheme", settings.general_icon_theme);
+    settings_file << "Language=" << settings.general_language << std::endl;
+    settings_file << "IconTheme=" << settings.general_icon_theme << std::endl;
     settings_file << write_setting("IconSize", settings.general_icon_size);
     settings_file << write_setting("MdiBGUseLogo", settings.general_mdi_bg_use_logo);
     settings_file << write_setting("MdiBGUseTexture", settings.general_mdi_bg_use_texture);
     settings_file << write_setting("MdiBGUseColor", settings.general_mdi_bg_use_color);
-    settings_file << write_setting("MdiBGLogo", settings.general_mdi_bg_logo);
-    settings_file << write_setting("MdiBGTexture", settings.general_mdi_bg_texture);
+    settings_file << "MdiBGLogo=" << settings.general_mdi_bg_logo << std::endl;
+    settings_file << "MdiBGTexture=" << settings.general_mdi_bg_texture << std::endl;
     settings_file << write_setting("MdiBGColor", settings.general_mdi_bg_color);
     settings_file << write_setting("TipOfTheDay", settings.general_tip_of_the_day);
     settings_file << write_setting("CurrentTip", settings.general_current_tip + 1);
@@ -349,34 +361,34 @@ void MainWindow::writeSettings()
     settings_file << write_setting("ZoomScaleIn", settings.display_zoomscale_in);
     settings_file << write_setting("ZoomScaleOut", settings.display_zoomscale_out);
     settings_file << write_setting("CrossHairPercent", settings.display_crosshair_percent);
-    settings_file << write_setting("Units", settings.display_units);
+    settings_file << "Units=" << settings.display_units << std::endl;
     settings_file << std::endl;
 
     settings_file << "[Prompt]" << std::endl;
     settings_file << write_setting("TextColor", settings.prompt_text_color);
     settings_file << write_setting("BackgroundColor", settings.prompt_bg_color);
-    settings_file << write_setting("FontFamily", settings.prompt_font_family);
-    settings_file << write_setting("FontStyle", settings.prompt_font_style);
+    settings_file << "FontFamily=" << settings.prompt_font_family << std::endl;
+    settings_file << "FontStyle=" << settings.prompt_font_style << std::endl;
     settings_file << write_setting("FontSize", settings.prompt_font_size);
     settings_file << write_setting("SaveHistory", settings.prompt_save_history);
     settings_file << write_setting("SaveHistoryAsHtml", settings.prompt_save_history_as_html);
-    settings_file << write_setting("SaveHistoryFilename", settings.prompt_save_history_filename);
+    settings_file << "SaveHistoryFilename=" << settings.prompt_save_history_filename  << std::endl;
     settings_file << std::endl;
 
     settings_file << "[OpenSave]" << std::endl;
     settings_file << write_setting("CustomFilter", settings.opensave_custom_filter);
-    settings_file << write_setting("OpenFormat", settings.opensave_open_format);
+    settings_file << "OpenFormat=" << settings.opensave_open_format << std::endl;
     settings_file << write_setting("OpenThumbnail", settings.opensave_open_thumbnail);
-    settings_file << write_setting("SaveFormat", settings.opensave_save_format);
+    settings_file << "SaveFormat=" << settings.opensave_save_format << std::endl;
     settings_file << write_setting("SaveThumbnail", settings.opensave_save_thumbnail);
     settings_file << write_setting("RecentMax", settings.opensave_recent_max_files);
     // settings_file << write_setting("RecentFiles", settings.opensave_recent_list_of_files);
-    settings_file << write_setting("RecentDirectory", settings.opensave_recent_directory);
+    settings_file << "RecentDirectory=" << settings.opensave_recent_directory << std::endl;
     settings_file << write_setting("TrimDstNumJumps", settings.opensave_trim_dst_num_jumps);
     settings_file << std::endl;
 
     settings_file << "[Printing]" << std::endl;
-    settings_file << write_setting("DefaultDevice", settings.printing_default_device);
+    settings_file << "DefaultDevice=" << settings.printing_default_device << std::endl;
     settings_file << write_setting("UseLastDevice", settings.printing_use_last_device);
     settings_file << write_setting("DisableBG", settings.printing_disable_bg);
     settings_file << std::endl;
@@ -387,7 +399,7 @@ void MainWindow::writeSettings()
     settings_file << write_setting("ColorMatchCrossHair", settings.grid_color_match_crosshair);
     settings_file << write_setting("Color", settings.grid_color);
     settings_file << write_setting("LoadFromFile", settings.grid_load_from_file);
-    settings_file << write_setting("Type", settings.grid_type);
+    settings_file << "Type=" << settings.grid_type << std::endl;;
     settings_file << write_setting("CenterOnOrigin", settings.grid_center_on_origin);
     settings_file << write_setting("CenterX", settings.grid_center.x);
     settings_file << write_setting("CenterY", settings.grid_center.y);
@@ -444,7 +456,7 @@ void MainWindow::writeSettings()
     settings_file << std::endl;
 
     settings_file << "[Text]" << std::endl;
-    settings_file << write_setting("Font", settings.text_font);
+    settings_file << "Font=" << settings.text_font << std::endl;
     settings_file << write_setting("Size", settings.text_size);
     settings_file << write_setting("Angle", settings.text_angle);
     settings_file << write_setting("StyleBold", settings.text_style_bold);

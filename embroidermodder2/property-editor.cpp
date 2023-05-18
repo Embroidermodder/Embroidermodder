@@ -111,10 +111,10 @@ load_group_box_data_from_table(std::string key)
         if (all_line_editors[6*i] == key) {
             GroupBoxData data;
             data.key = all_line_editors[6*i+1];
-            strcpy(data.icon_name, all_line_editors[6*i+2].c_str());
-            strcpy(data.label, all_line_editors[6*i+3].c_str());
-            strcpy(data.type, all_line_editors[6*i+4].c_str());
-            strcpy(data.map_signal, all_line_editors[6*i+5].c_str());
+            data.icon_name = all_line_editors[6*i+2];
+            data.label = all_line_editors[6*i+3];
+            data.type = all_line_editors[6*i+4];
+            data.map_signal = all_line_editors[6*i+5];
             group_box.push_back(data);
         }
     }
@@ -733,20 +733,20 @@ PropertyEditor::createGroupBox(std::string group_box_key, const char *title)
     for (int i=0; i<data.size(); i++) {
         GroupBoxData gbd = data[i];
         std::string key(gbd.key);
-        toolButtons[key] = createToolButton(gbd.icon_name, tr(gbd.label));
-        if (!strcmp(gbd.type, "double")) {
-            if (strlen(gbd.map_signal) == 0) {
-                lineEdits[key] = createLineEdit(gbd.type, false);
+        toolButtons[key] = createToolButton(gbd.icon_name.c_str(), tr(gbd.label.c_str()));
+        if (gbd.type == "double") {
+            if (gbd.map_signal.size() == 0) {
+                lineEdits[key] = createLineEdit(gbd.type.c_str(), false);
             }
             else {
-                lineEdits[key] = createLineEdit(gbd.type, true);
-                mapSignal(lineEdits[key], gbd.map_signal, group_box_type);
+                lineEdits[key] = createLineEdit(gbd.type.c_str(), true);
+                mapSignal(lineEdits[key], gbd.map_signal.c_str(), group_box_type);
             }
             formLayout->addRow(toolButtons[key], lineEdits[key]);
         }
-        if (!strcmp(gbd.type, "combobox")) {
+        if (gbd.type == "combobox") {
             comboBoxes[key] = new QComboBox(this);
-            if (!strcmp(gbd.map_signal, "true")) {
+            if (gbd.map_signal == "true") {
                 comboBoxes[key]->setDisabled(true);
             }
             else {
@@ -754,7 +754,7 @@ PropertyEditor::createGroupBox(std::string group_box_key, const char *title)
             }
             formLayout->addRow(toolButtons[key], comboBoxes[key]);
         }
-        if (!strcmp(gbd.type, "fontcombobox")) {
+        if (gbd.type == "fontcombobox") {
             comboBoxTextSingleFont = new QFontComboBox(this);
             comboBoxTextSingleFont->setDisabled(false);
             formLayout->addRow(toolButtons[key], comboBoxTextSingleFont);
@@ -795,7 +795,14 @@ PropertyEditor::createLineEdit(const QString& validatorType, bool readOnly)
     return le;
 }
 
-void PropertyEditor::mapSignal(QObject* fieldObj, const QString& name, QVariant value)
+/**
+ * @brief PropertyEditor::mapSignal
+ * @param fieldObj
+ * @param name
+ * @param value
+ */
+void
+PropertyEditor::mapSignal(QObject* fieldObj, const QString& name, QVariant value)
 {
     fieldObj->setObjectName(name);
     fieldObj->setProperty(qPrintable(name), value);
