@@ -1350,19 +1350,21 @@ MainWindow::nativeAddLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbRea
     View* gview = _mainWin->activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
-    if (gview && gscene && stack)
-    {
-        LineObject* obj = new LineObject(x1, -y1, x2, -y2, getCurrentColor());
+    if (gview && gscene && stack) {
+        EmbLine line;
+        line.start.x = x1;
+        line.start.y = -y1;
+        line.end.x = x2;
+        line.end.y = -y2;
+        LineObject* obj = new LineObject(line, getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
-        if (rubberMode)
-        {
+        if (rubberMode) {
             gview->addToRubberRoom(obj);
             gscene->addItem(obj);
             gscene->update();
         }
-        else
-        {
+        else {
             UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
@@ -1422,11 +1424,19 @@ MainWindow::nativeAddArc(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal m
 {
     View* gview = _mainWin->activeView();
     QGraphicsScene* scene = activeScene();
-    if (gview && scene)
-    {
-        ArcObject* arcObj = new ArcObject(startX, -startY, midX, -midY, endX, -endY, getCurrentColor());
+    if (gview && scene) {
+        EmbArc arc;
+        arc.start.x = startX;
+        arc.start.x = -startY;
+        arc.mid.x = midX;
+        arc.mid.x = -midY;
+        arc.end.x = endX;
+        arc.end.x = -endY;
+        ArcObject* arcObj = new ArcObject(arc, getCurrentColor());
         arcObj->setObjectRubberMode(rubberMode);
-        if (rubberMode) gview->addToRubberRoom(arcObj);
+        if (rubberMode) {
+            gview->addToRubberRoom(arcObj);
+        }
         scene->addItem(arcObj);
         scene->update();
     }

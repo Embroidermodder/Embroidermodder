@@ -399,10 +399,10 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
                 updateLineEditNumIfVaries(lineEdits["arc_radius"], obj->objectRadius(), false);
                 updateLineEditNumIfVaries(lineEdits["arc_start_angle"], obj->objectStartAngle(), true);
                 updateLineEditNumIfVaries(lineEdits["arc_end_angle"], obj->objectEndAngle(), true);
-                updateLineEditNumIfVaries(lineEdits["arc_start_x"], obj->objectStartX(), false);
-                updateLineEditNumIfVaries(lineEdits["arc_start_y"], -obj->objectStartY(), false);
-                updateLineEditNumIfVaries(lineEdits["arc_end_x"], obj->objectEndX(), false);
-                updateLineEditNumIfVaries(lineEdits["arc_end_y"], -obj->objectEndY(), false);
+                updateLineEditNumIfVaries(lineEdits["arc_start_x"], obj->objectStartPoint().x(), false);
+                updateLineEditNumIfVaries(lineEdits["arc_start_y"], -obj->objectStartPoint().y(), false);
+                updateLineEditNumIfVaries(lineEdits["arc_end_x"], obj->objectEndPoint().x(), false);
+                updateLineEditNumIfVaries(lineEdits["arc_end_y"], -obj->objectEndPoint().y(), false);
                 updateLineEditNumIfVaries(lineEdits["arc_area"], obj->objectArea(), false);
                 updateLineEditNumIfVaries(lineEdits["arc_length"], obj->objectArcLength(), false);
                 updateLineEditNumIfVaries(lineEdits["arc_chord"], obj->objectChord(), false);
@@ -468,12 +468,12 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
         else if (objType == OBJ_TYPE_LINE) {
             LineObject* obj = static_cast<LineObject*>(item);
             if (obj) {
-                updateLineEditNumIfVaries(lineEdits["line-start-x"], obj->objectX1(), false);
-                updateLineEditNumIfVaries(lineEdits["line-start-y"], -obj->objectY1(), false);
-                updateLineEditNumIfVaries(lineEdits["line-end-x"], obj->objectX2(), false);
-                updateLineEditNumIfVaries(lineEdits["line-end-y"], -obj->objectY2(), false);
-                updateLineEditNumIfVaries(lineEdits["line-delta-x"], obj->objectDeltaX(), false);
-                updateLineEditNumIfVaries(lineEdits["line-delta-y"], -obj->objectDeltaY(), false);
+                updateLineEditNumIfVaries(lineEdits["line-start-x"], obj->objectEndPoint1().x(), false);
+                updateLineEditNumIfVaries(lineEdits["line-start-y"], -obj->objectEndPoint1().y(), false);
+                updateLineEditNumIfVaries(lineEdits["line-end-x"], obj->objectEndPoint2().x(), false);
+                updateLineEditNumIfVaries(lineEdits["line-end-y"], -obj->objectEndPoint2().y(), false);
+                updateLineEditNumIfVaries(lineEdits["line-delta-x"], obj->objectDelta().x(), false);
+                updateLineEditNumIfVaries(lineEdits["line-delta-y"], -obj->objectDelta().y(), false);
                 updateLineEditNumIfVaries(lineEdits["line-angle"], obj->objectAngle(), true);
                 updateLineEditNumIfVaries(lineEdits["line-length"], obj->objectLength(), false);
             }

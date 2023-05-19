@@ -28,10 +28,10 @@
  * @param rgb
  * @param parent
  */
-LineObject::LineObject(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+LineObject::LineObject(EmbLine line, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     debug_message("LineObject Constructor()");
-    init(x1, y1, x2, y2, rgb, Qt::SolidLine); //TODO: getCurrentLineType
+    init(line, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
 /**
@@ -42,9 +42,11 @@ LineObject::LineObject(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb,
 LineObject::LineObject(LineObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     debug_message("LineObject Constructor()");
-    if (obj)
-    {
-        init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+    if (obj) {
+        EmbLine line;
+        line.start = to_EmbVector(obj->objectEndPoint1());
+        line.end = to_EmbVector(obj->objectEndPoint2());
+        init(line, obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
     }
 }
 
@@ -66,7 +68,7 @@ LineObject::~LineObject()
  * @param lineType
  */
 void
-LineObject::init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, Qt::PenStyle lineType)
+LineObject::init(EmbLine line, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, OBJ_TYPE_LINE);
     setData(OBJ_NAME, "Line");
@@ -76,8 +78,8 @@ LineObject::init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, Qt::P
     //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
-    setObjectEndPoint1(x1, y1);
-    setObjectEndPoint2(x2, y2);
+    setObjectEndPoint1(line.start.x, line.start.y);
+    setObjectEndPoint2(line.end.x, line.end.y);
     setObjectColor(rgb);
     setObjectLineType(lineType);
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
@@ -327,6 +329,8 @@ QPainterPath
 LineObject::objectSavePath() const
 {
     QPainterPath path;
-    path.lineTo(objectDeltaX(), objectDeltaY());
+    /* \todo discards qualifiers error. */
+    // QPointF delta = objectDelta();
+    // path.lineTo(delta.x(), delta.y());
     return path;
 }

@@ -21,39 +21,6 @@
 
 /**
  * @brief ArcObject::ArcObject
- * @param arc
- * @param rgb
- * @param parent
- */
-ArcObject::ArcObject(EmbArc arc, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("ArcObject Constructor()");
-    init(
-        arc.start.x, arc.start.y,
-        arc.mid.x, arc.mid.y,
-        arc.end.x, arc.end.y,
-        rgb, Qt::SolidLine); //TODO: getCurrentLineType
-}
-
-/**
- * @brief ArcObject::ArcObject
- * @param startX
- * @param startY
- * @param midX
- * @param midY
- * @param endX
- * @param endY
- * @param rgb
- * @param parent
- */
-ArcObject::ArcObject(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("ArcObject Constructor()");
-    init(startX, startY, midX, midY, endX, endY, rgb, Qt::SolidLine); //TODO: getCurrentLineType
-}
-
-/**
- * @brief ArcObject::ArcObject
  * @param obj
  * @param parent
  */
@@ -61,15 +28,11 @@ ArcObject::ArcObject(ArcObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     debug_message("ArcObject Constructor()");
     if (obj) {
-        init(
-            obj->objectStartX(),
-            obj->objectStartY(),
-            obj->objectMidX(),
-            obj->objectMidY(),
-            obj->objectEndX(),
-            obj->objectEndY(),
-            obj->objectColorRGB(),
-            Qt::SolidLine); //TODO: getCurrentLineType
+        EmbArc arc;
+        arc.start = to_EmbVector(obj->objectStartPoint());
+        arc.mid = to_EmbVector(obj->objectMidPoint());
+        arc.end = to_EmbVector(obj->objectEndPoint());
+        init(arc, obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
     }
 }
@@ -84,16 +47,11 @@ ArcObject::~ArcObject()
 
 /**
  * @brief ArcObject::init
- * @param startX
- * @param startY
- * @param midX
- * @param midY
- * @param endX
- * @param endY
+ * @param arc
  * @param rgb
  * @param lineType
  */
-void ArcObject::init(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, QRgb rgb, Qt::PenStyle lineType)
+void ArcObject::init(EmbArc arc, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, OBJ_TYPE_ARC);
     setData(OBJ_NAME, "Arc");
@@ -103,7 +61,7 @@ void ArcObject::init(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY,
     //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
-    calculateArcData(startX, startY, midX, midY, endX, endY);
+    calculateArcData(arc);
 
     setObjectColor(rgb);
     setObjectLineType(lineType);
@@ -113,32 +71,20 @@ void ArcObject::init(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY,
 
 /**
  * @brief ArcObject::calculateArcData
- * @param startX
- * @param startY
- * @param midX
- * @param midY
- * @param endX
- * @param endY
+ * @param arc
  */
-void ArcObject::calculateArcData(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY)
+void ArcObject::calculateArcData(EmbArc arc)
 {
     EmbVector center;
-    EmbArc arc;
-    arc.start.x = startX;
-    arc.start.x = startY;
-    arc.mid.x = midX;
-    arc.mid.x = midY;
-    arc.end.x = endX;
-    arc.end.x = endY;
     getArcCenter(arc, &center);
 
-    arcStartPoint = QPointF(startX - center.x, startY - center.y);
-    arcMidPoint   = QPointF(midX   - center.x, midY   - center.y);
-    arcEndPoint   = QPointF(endX   - center.x, endY   - center.y);
+    arcStartPoint = QPointF(arc.start.x - center.x, arc.start.y - center.y);
+    arcMidPoint   = QPointF(arc.mid.x   - center.x, arc.mid.y   - center.y);
+    arcEndPoint   = QPointF(arc.end.x   - center.x, arc.end.y   - center.y);
 
     setPos(center.x, center.y);
 
-    EmbReal radius = QLineF(center.x, center.y, midX, midY).length();
+    EmbReal radius = QLineF(center.x, center.y, arc.mid.x, arc.mid.y).length();
     updateArcRect(radius);
     updatePath();
     setRotation(0);
@@ -166,13 +112,7 @@ ArcObject::updateArcRect(EmbReal radius)
 void
 ArcObject::setObjectRadius(EmbReal radius)
 {
-    EmbReal rad;
-    if (radius <= 0)
-    {
-        rad = 0.0000001;
-    }
-    else
-        rad = radius;
+    EmbReal rad = std::max(radius, 0.0000001f);
 
     QPointF center = scenePos();
     QLineF startLine = QLineF(center, objectStartPoint());
@@ -184,8 +124,12 @@ ArcObject::setObjectRadius(EmbReal radius)
     arcStartPoint = startLine.p2();
     arcMidPoint = midLine.p2();
     arcEndPoint = endLine.p2();
+    EmbArc arc;
+    arc.start = to_EmbVector(arcStartPoint);
+    arc.mid = to_EmbVector(arcMidPoint);
+    arc.end = to_EmbVector(arcEndPoint);
 
-    calculateArcData(arcStartPoint.x(), arcStartPoint.y(), arcMidPoint.x(), arcMidPoint.y(), arcEndPoint.x(), arcEndPoint.y());
+    calculateArcData(arc);
 }
 
 /**
@@ -213,20 +157,13 @@ ArcObject::setObjectEndAngle(EmbReal angle)
  * @param point
  */
 void
-ArcObject::setObjectStartPoint(const QPointF& point)
+ArcObject::setObjectStartPoint(EmbVector point)
 {
-    setObjectStartPoint(point.x(), point.y());
-}
-
-/**
- * @brief ArcObject::setObjectStartPoint
- * @param pointX
- * @param pointY
- */
-void
-ArcObject::setObjectStartPoint(EmbReal pointX, EmbReal pointY)
-{
-    calculateArcData(pointX, pointY, arcMidPoint.x(), arcMidPoint.y(), arcEndPoint.x(), arcEndPoint.y());
+    EmbArc arc;
+    arc.start = point;
+    arc.mid = to_EmbVector(objectMidPoint());
+    arc.mid = to_EmbVector(objectEndPoint());
+    calculateArcData(arc);
 }
 
 /**
@@ -234,20 +171,13 @@ ArcObject::setObjectStartPoint(EmbReal pointX, EmbReal pointY)
  * @param point
  */
 void
-ArcObject::setObjectMidPoint(const QPointF& point)
+ArcObject::setObjectMidPoint(EmbVector point)
 {
-    setObjectMidPoint(point.x(), point.y());
-}
-
-/**
- * @brief ArcObject::setObjectMidPoint
- * @param pointX
- * @param pointY
- */
-void
-ArcObject::setObjectMidPoint(EmbReal pointX, EmbReal pointY)
-{
-    calculateArcData(arcStartPoint.x(), arcStartPoint.y(), pointX, pointY, arcEndPoint.x(), arcEndPoint.y());
+    EmbArc arc;
+    arc.start = to_EmbVector(objectStartPoint());
+    arc.mid = point;
+    arc.end = to_EmbVector(objectEndPoint());
+    calculateArcData(arc);
 }
 
 /**
@@ -255,20 +185,13 @@ ArcObject::setObjectMidPoint(EmbReal pointX, EmbReal pointY)
  * @param point
  */
 void
-ArcObject::setObjectEndPoint(const QPointF& point)
+ArcObject::setObjectEndPoint(EmbVector point)
 {
-    setObjectEndPoint(point.x(), point.y());
-}
-
-/**
- * @brief ArcObject::setObjectEndPoint
- * @param pointX
- * @param pointY
- */
-void
-ArcObject::setObjectEndPoint(EmbReal pointX, EmbReal pointY)
-{
-    calculateArcData(arcStartPoint.x(), arcStartPoint.y(), arcMidPoint.x(), arcMidPoint.y(), pointX, pointY);
+    EmbArc arc;
+    arc.start = to_EmbVector(objectStartPoint());
+    arc.mid = to_EmbVector(objectMidPoint());
+    arc.end = point;
+    calculateArcData(arc);
 }
 
 /**
@@ -320,24 +243,6 @@ QPointF ArcObject::objectStartPoint() const
 }
 
 /**
- * @brief ArcObject::objectStartX
- * @return
- */
-EmbReal ArcObject::objectStartX() const
-{
-    return objectStartPoint().x();
-}
-
-/**
- * @brief ArcObject::objectStartY
- * @return
- */
-EmbReal ArcObject::objectStartY() const
-{
-    return objectStartPoint().y();
-}
-
-/**
  * @brief ArcObject::objectMidPoint
  * @return
  */
@@ -352,24 +257,6 @@ QPointF ArcObject::objectMidPoint() const
 }
 
 /**
- * @brief ArcObject::objectMidX
- * @return
- */
-EmbReal ArcObject::objectMidX() const
-{
-    return objectMidPoint().x();
-}
-
-/**
- * @brief ArcObject::objectMidY
- * @return
- */
-EmbReal ArcObject::objectMidY() const
-{
-    return objectMidPoint().y();
-}
-
-/**
  * @brief ArcObject::objectEndPoint
  * @return
  */
@@ -381,24 +268,6 @@ QPointF ArcObject::objectEndPoint() const
     EmbVector rotv = rotate_vector(v, rot);
 
     return scenePos() + to_QPointF(rotv);
-}
-
-/**
- * @brief ArcObject::objectEndX
- * @return
- */
-EmbReal ArcObject::objectEndX() const
-{
-    return objectEndPoint().x();
-}
-
-/**
- * @brief ArcObject::objectEndY
- * @return
- */
-EmbReal ArcObject::objectEndY() const
-{
-    return objectEndPoint().y();
 }
 
 /**
@@ -428,7 +297,11 @@ EmbReal ArcObject::objectArcLength() const
  */
 EmbReal ArcObject::objectChord() const
 {
-    return QLineF(objectStartX(), objectStartY(), objectEndX(), objectEndY()).length();
+    return QLineF(
+        objectStartPoint().x(),
+        objectStartPoint().y(),
+        objectEndPoint().x(),
+        objectEndPoint().y()).length();
 }
 
 /**
@@ -457,12 +330,12 @@ bool ArcObject::objectClockwise() const
 {
     //NOTE: Y values are inverted here on purpose
     EmbArc arc;
-    arc.start.x = objectStartX();
-    arc.start.y = -objectStartY();
-    arc.mid.x = objectMidX();
-    arc.mid.y = -objectMidY();
-    arc.end.x = objectEndX();
-    arc.end.y = -objectEndY();
+    arc.start.x = objectStartPoint().x();
+    arc.start.y = -objectStartPoint().y();
+    arc.mid.x = objectMidPoint().x();
+    arc.mid.y = -objectMidPoint().y();
+    arc.end.x = objectEndPoint().x();
+    arc.end.y = -objectEndPoint().y();
     if (embArc_clockwise(arc)) {
         return true;
     }

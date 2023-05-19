@@ -338,10 +338,8 @@ SaveObject::addLine(EmbPattern* pattern, QGraphicsItem* item)
         }
         else {
             EmbLine line;
-            line.start.x = (double)obj->objectX1();
-            line.start.y = (double)obj->objectY1();
-            line.end.x = (double)obj->objectX2();
-            line.end.y = (double)obj->objectY2();
+            line.start = to_EmbVector(obj->objectEndPoint1());
+            line.end = to_EmbVector(obj->objectEndPoint2());
             embPattern_addLineAbs(pattern, line);
         }
     }

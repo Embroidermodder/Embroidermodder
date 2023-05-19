@@ -830,6 +830,22 @@ extern QAction* actionHash[200];
 extern QHash<QString, QToolBar*> toolbarHash;
 extern QHash<QString, QMenu*> menuHash;
 
+/* Functions in the global namespace
+ * ---------------------------------
+ */
+int get_action_index(std::string cmd);
+int read_settings(const char *file);
+void write_settings(const char *fname);
+EmbVector rotate_vector(EmbVector v, EmbReal alpha);
+
+void debug_message(std::string msg);
+void set_enabled(QObject *parent, const char *key, bool enabled);
+void set_visibility(QObject *parent, const char *name, bool visibility);
+
+std::string actuator(std::string line);
+std::string run_script_file(std::string fname);
+std::string run_script(StringList script);
+
 /**
  *
  */
@@ -911,32 +927,36 @@ public:
     QPointF arcMidPoint;
     QPointF arcEndPoint;
 
-    ArcObject(EmbArc arc, QRgb rgb, QGraphicsItem* parent = 0);
-    ArcObject(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, QRgb rgb, QGraphicsItem* parent = 0);
+    /**
+     * @brief ArcObject
+     * @param arc
+     * @param rgb
+     * @param parent
+     */
+    ArcObject(EmbArc arc, QRgb rgb, QGraphicsItem* parent = 0)
+    {
+        debug_message("ArcObject Constructor()");
+        init(arc, rgb, Qt::SolidLine); //TODO: getCurrentLineType
+    }
+
     ArcObject(ArcObject* obj, QGraphicsItem* parent = 0);
     ~ArcObject();
 
     enum { Type = OBJ_TYPE_ARC };
     virtual int type() const { return Type; }
 
-    void init(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, QRgb rgb, Qt::PenStyle lineType);
+    void init(EmbArc arc, QRgb rgb, Qt::PenStyle lineType);
     void updatePath();
 
-    void calculateArcData(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY);
+    void calculateArcData(EmbArc arc);
     void updateArcRect(EmbReal radius);
 
     EmbReal objectRadius() const { return rect().width()/2.0*scale(); }
     EmbReal objectStartAngle() const;
     EmbReal objectEndAngle() const;
     QPointF objectStartPoint() const;
-    EmbReal objectStartX() const;
-    EmbReal objectStartY() const;
     QPointF objectMidPoint() const;
-    EmbReal objectMidX() const;
-    EmbReal objectMidY() const;
     QPointF objectEndPoint() const;
-    EmbReal objectEndX() const;
-    EmbReal objectEndY() const;
     EmbReal objectArea() const;
     EmbReal objectArcLength() const;
     EmbReal objectChord() const;
@@ -946,12 +966,9 @@ public:
     void setObjectRadius(EmbReal radius);
     void setObjectStartAngle(EmbReal angle);
     void setObjectEndAngle(EmbReal angle);
-    void setObjectStartPoint(const QPointF& point);
-    void setObjectStartPoint(EmbReal pointX, EmbReal pointY);
-    void setObjectMidPoint(const QPointF& point);
-    void setObjectMidPoint(EmbReal pointX, EmbReal pointY);
-    void setObjectEndPoint(const QPointF& point);
-    void setObjectEndPoint(EmbReal pointX, EmbReal pointY);
+    void setObjectStartPoint(EmbVector point);
+    void setObjectMidPoint(EmbVector point);
+    void setObjectEndPoint(EmbVector point);
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
@@ -1159,37 +1176,32 @@ protected:
 class LineObject : public BaseObject
 {
 public:
-    LineObject(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, QGraphicsItem* parent = 0);
+    LineObject(EmbLine line, QRgb rgb, QGraphicsItem* parent = 0);
     LineObject(LineObject* obj, QGraphicsItem* parent = 0);
     ~LineObject();
 
-    void init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, Qt::PenStyle lineType);
+    void init(EmbLine line, QRgb rgb, Qt::PenStyle lineType);
 
     enum { Type = OBJ_TYPE_LINE };
     virtual int type() const { return Type; }
 
     QPainterPath objectSavePath() const;
 
-    QPointF objectEndPoint1() const { return scenePos(); }
+    QPointF objectEndPoint1() { return scenePos(); }
     QPointF objectEndPoint2() const;
     QPointF objectMidPoint() const;
-    EmbReal objectX1() const { return objectEndPoint1().x(); }
-    EmbReal objectY1() const { return objectEndPoint1().y(); }
-    EmbReal objectX2() const { return objectEndPoint2().x(); }
-    EmbReal objectY2() const { return objectEndPoint2().y(); }
-    EmbReal objectDeltaX() const { return (objectX2() - objectX1()); }
-    EmbReal objectDeltaY() const { return (objectY2() - objectY1()); }
+    QPointF objectDelta() { return objectEndPoint2() - objectEndPoint1(); }
     EmbReal objectAngle() const;
-    EmbReal objectLength() const { return line().length()*scale(); }
+    EmbReal objectLength() { return line().length()*scale(); }
 
     void setObjectEndPoint1(const QPointF& endPt1);
     void setObjectEndPoint1(EmbReal x1, EmbReal y1);
     void setObjectEndPoint2(const QPointF& endPt2);
     void setObjectEndPoint2(EmbReal x2, EmbReal y2);
-    void setObjectX1(EmbReal x) { setObjectEndPoint1(x, objectY1()); }
-    void setObjectY1(EmbReal y) { setObjectEndPoint1(objectX1(), y); }
-    void setObjectX2(EmbReal x) { setObjectEndPoint2(x, objectY2()); }
-    void setObjectY2(EmbReal y) { setObjectEndPoint2(objectX2(), y); }
+    void setObjectX1(EmbReal x) { setObjectEndPoint1(x, objectEndPoint1().y()); }
+    void setObjectY1(EmbReal y) { setObjectEndPoint1(objectEndPoint1().x(), y); }
+    void setObjectX2(EmbReal x) { setObjectEndPoint2(x, objectEndPoint1().y()); }
+    void setObjectY2(EmbReal y) { setObjectEndPoint2(objectEndPoint1().x(), y); }
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
@@ -2918,22 +2930,6 @@ private:
 
     void alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& viewPoint);
 };
-
-/* Functions in the global namespace
- * ---------------------------------
- */
-int get_action_index(std::string cmd);
-int read_settings(const char *file);
-void write_settings(const char *fname);
-EmbVector rotate_vector(EmbVector v, EmbReal alpha);
-
-void debug_message(std::string msg);
-void set_enabled(QObject *parent, const char *key, bool enabled);
-void set_visibility(QObject *parent, const char *name, bool visibility);
-
-std::string actuator(std::string line);
-std::string run_script_file(std::string fname);
-std::string run_script(StringList script);
 
 /* Global data
  * -----------
