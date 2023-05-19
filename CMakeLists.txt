@@ -74,20 +74,7 @@ add_executable(embroidermodder2
     ${SRC_DIR}/mainwindow.cpp
     ${SRC_DIR}/mdiarea.cpp
     ${SRC_DIR}/mdiwindow.cpp
-    ${SRC_DIR}/object-arc.cpp
-    ${SRC_DIR}/object-base.cpp
-    ${SRC_DIR}/object-circle.cpp
-    ${SRC_DIR}/object-dimleader.cpp
-    ${SRC_DIR}/object-ellipse.cpp
-    ${SRC_DIR}/object-image.cpp
-    ${SRC_DIR}/object-line.cpp
-    ${SRC_DIR}/object-path.cpp
-    ${SRC_DIR}/object-point.cpp
-    ${SRC_DIR}/object-polygon.cpp
-    ${SRC_DIR}/object-polyline.cpp
-    ${SRC_DIR}/object-rect.cpp
-    ${SRC_DIR}/object-save.cpp
-    ${SRC_DIR}/object-textsingle.cpp
+    ${SRC_DIR}/objects.cpp
     ${SRC_DIR}/preview-dialog.cpp
     ${SRC_DIR}/property-editor.cpp
     ${SRC_DIR}/selectbox.cpp

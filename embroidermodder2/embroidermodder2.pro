@@ -153,6 +153,7 @@ SOURCES += \
     mainwindow-toolbars.cpp \
     mdiarea.cpp \
     mdiwindow.cpp \
+    objects.cpp \
     view.cpp \
     cmdprompt.cpp \
     embdetails-dialog.cpp \
@@ -174,7 +175,6 @@ SOURCES += \
     object-ellipse.cpp \
     object-image.cpp \
     object-line.cpp \
-    object-path.cpp \
     object-point.cpp \
     object-polygon.cpp \
     object-polyline.cpp \
