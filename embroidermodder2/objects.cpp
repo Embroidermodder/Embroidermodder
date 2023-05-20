@@ -20,6 +20,25 @@
 #include "embroidermodder.h"
 
 /**
+ * @brief mouse_snap_point
+ * @param points
+ * @return
+ */
+QPointF
+closest_point(QPointF position, std::vector<QPointF> points)
+{
+    QPointF result = points[0];
+    EmbReal closest = QLineF(position, points[0]).length();
+    for (int i=1; i<(int)(points.size()); i++) {
+        if (QLineF(position, points[i]).length() < closest) {
+            closest = QLineF(position, points[i]).length();
+            result = points[i];
+        }
+    }
+    return result;
+}
+
+/**
  * @brief ArcObject::ArcObject
  * @param obj
  * @param parent
@@ -430,24 +449,11 @@ ArcObject::vulcanize()
 QPointF
 ArcObject::mouseSnapPoint(const QPointF& mousePoint)
 {
-    QPointF center = objectCenter();
-    QPointF start  = objectStartPoint();
-    QPointF mid    = objectMidPoint();
-    QPointF end    = objectEndPoint();
+    std::vector<QPointF> points = {
+        objectCenter(), objectStartPoint(), objectMidPoint(), objectEndPoint()
+    };
 
-    EmbReal cntrDist  = QLineF(mousePoint, center).length();
-    EmbReal startDist = QLineF(mousePoint, start).length();
-    EmbReal midDist   = QLineF(mousePoint, mid).length();
-    EmbReal endDist   = QLineF(mousePoint, end).length();
-
-    EmbReal minDist = qMin(qMin(cntrDist, startDist), qMin(midDist, endDist));
-
-    if     (minDist == cntrDist)  return center;
-    else if (minDist == startDist) return start;
-    else if (minDist == midDist)   return mid;
-    else if (minDist == endDist)   return end;
-
-    return scenePos();
+    return closest_point(mousePoint, points);
 }
 
 /**
@@ -930,27 +936,15 @@ CircleObject::vulcanize()
 QPointF
 CircleObject::mouseSnapPoint(const QPointF& mousePoint)
 {
-    QPointF center  = objectCenter();
-    QPointF quad0   = objectQuadrant0();
-    QPointF quad90  = objectQuadrant90();
-    QPointF quad180 = objectQuadrant180();
-    QPointF quad270 = objectQuadrant270();
+    std::vector<QPointF> points = {
+        objectCenter(),
+        objectQuadrant0(),
+        objectQuadrant90(),
+        objectQuadrant180(),
+        objectQuadrant270()
+    };
 
-    EmbReal cntrDist = QLineF(mousePoint, center).length();
-    EmbReal q0Dist   = QLineF(mousePoint, quad0).length();
-    EmbReal q90Dist  = QLineF(mousePoint, quad90).length();
-    EmbReal q180Dist = QLineF(mousePoint, quad180).length();
-    EmbReal q270Dist = QLineF(mousePoint, quad270).length();
-
-    EmbReal minDist = qMin(qMin(qMin(q0Dist, q90Dist), qMin(q180Dist, q270Dist)), cntrDist);
-
-    if     (minDist == cntrDist) return center;
-    else if (minDist == q0Dist)   return quad0;
-    else if (minDist == q90Dist)  return quad90;
-    else if (minDist == q180Dist) return quad180;
-    else if (minDist == q270Dist) return quad270;
-
-    return scenePos();
+    return closest_point(mousePoint, points);
 }
 
 /**
@@ -1081,13 +1075,12 @@ DimLeaderObject::setObjectEndPoint1(const QPointF& endPt1)
 void
 DimLeaderObject::setObjectEndPoint1(EmbReal x1, EmbReal y1)
 {
-    QPointF endPt2 = objectEndPoint2();
-    EmbReal x2 = endPt2.x();
-    EmbReal y2 = endPt2.y();
-    EmbReal dx = x2 - x1;
-    EmbReal dy = y2 - y1;
+    EmbVector delta;
+    EmbVector endPt2 = to_EmbVector(objectEndPoint2());
+    delta.x = endPt2.x - x1;
+    delta.y = endPt2.y - y1;
     setRotation(0);
-    setLine(0, 0, dx, dy);
+    setLine(0, 0, delta.x, delta.y);
     setPos(x1, y1);
     updateLeader();
 }
@@ -1110,14 +1103,13 @@ DimLeaderObject::setObjectEndPoint2(const QPointF& endPt2)
 void
 DimLeaderObject::setObjectEndPoint2(EmbReal x2, EmbReal y2)
 {
-    QPointF endPt1 = scenePos();
-    EmbReal x1 = endPt1.x();
-    EmbReal y1 = endPt1.y();
-    EmbReal dx = x2 - x1;
-    EmbReal dy = y2 - y1;
+    EmbVector delta;
+    EmbVector endPt1 = to_EmbVector(scenePos());
+    delta.x = x2 - endPt1.x;
+    delta.y = y2 - endPt1.y;
     setRotation(0);
-    setLine(0, 0, dx, dy);
-    setPos(x1, y1);
+    setLine(0, 0, delta.x, delta.y);
+    setPos(endPt1.x, endPt1.y);
     updateLeader();
 }
 
@@ -1138,16 +1130,14 @@ DimLeaderObject::objectEndPoint1() const
 QPointF
 DimLeaderObject::objectEndPoint2() const
 {
+    EmbVector v;
     QLineF lyne = line();
     EmbReal rot = radians(rotation());
-    EmbReal cosRot = qCos(rot);
-    EmbReal sinRot = qSin(rot);
-    EmbReal x2 = lyne.x2()*scale();
-    EmbReal y2 = lyne.y2()*scale();
-    EmbReal rotEnd2X = x2*cosRot - y2*sinRot;
-    EmbReal rotEnd2Y = x2*sinRot + y2*cosRot;
+    v.x = lyne.x2()*scale();
+    v.y = lyne.y2()*scale();
+    QPointF rotEnd = to_QPointF(rotate_vector(v, rot));
 
-    return (scenePos() + QPointF(rotEnd2X, rotEnd2Y));
+    return scenePos() + rotEnd;
 }
 
 /**
@@ -1157,17 +1147,15 @@ DimLeaderObject::objectEndPoint2() const
 QPointF
 DimLeaderObject::objectMidPoint() const
 {
+    EmbVector m;
     QLineF lyne = line();
     QPointF mp = lyne.pointAt(0.5);
     EmbReal rot = radians(rotation());
-    EmbReal cosRot = qCos(rot);
-    EmbReal sinRot = qSin(rot);
-    EmbReal mx = mp.x()*scale();
-    EmbReal my = mp.y()*scale();
-    EmbReal rotMidX = mx*cosRot - my*sinRot;
-    EmbReal rotMidY = mx*sinRot + my*cosRot;
+    m.x = mp.x()*scale();
+    m.y = mp.y()*scale();
+    QPointF rotMid = to_QPointF(rotate_vector(m, rot));
 
-    return (scenePos() + QPointF(rotMidX, rotMidY));
+    return scenePos() + rotMid;
 }
 
 /**
@@ -1342,25 +1330,16 @@ DimLeaderObject::vulcanize()
  */
 QPointF DimLeaderObject::mouseSnapPoint(const QPointF& mousePoint)
 {
-    QPointF endPoint1 = objectEndPoint1();
-    QPointF endPoint2 = objectEndPoint2();
-    QPointF midPoint  = objectMidPoint();
-
-    EmbReal end1Dist = QLineF(mousePoint, endPoint1).length();
-    EmbReal end2Dist = QLineF(mousePoint, endPoint2).length();
-    EmbReal midDist  = QLineF(mousePoint, midPoint).length();
-
-    EmbReal minDist = std::min(end1Dist, end2Dist);
+    std::vector<QPointF> points = {
+        objectEndPoint1(),
+        objectEndPoint2()
+    };
 
     if (curved) {
-        minDist = std::min(minDist, midDist);
+        points.push_back(objectMidPoint());
     }
 
-    if     (minDist == end1Dist) return endPoint1;
-    else if (minDist == end2Dist) return endPoint2;
-    else if (minDist == midDist)  return midPoint;
-
-    return scenePos();
+    return closest_point(mousePoint, points);
 }
 
 /**
@@ -1709,27 +1688,15 @@ EllipseObject::vulcanize()
 QPointF
 EllipseObject::mouseSnapPoint(const QPointF& mousePoint)
 {
-    QPointF center  = objectCenter();
-    QPointF quad0   = objectQuadrant0();
-    QPointF quad90  = objectQuadrant90();
-    QPointF quad180 = objectQuadrant180();
-    QPointF quad270 = objectQuadrant270();
+    std::vector<QPointF> points = {
+        objectCenter(),
+        objectQuadrant0(),
+        objectQuadrant90(),
+        objectQuadrant180(),
+        objectQuadrant270()
+    };
 
-    EmbReal cntrDist = QLineF(mousePoint, center).length();
-    EmbReal q0Dist   = QLineF(mousePoint, quad0).length();
-    EmbReal q90Dist  = QLineF(mousePoint, quad90).length();
-    EmbReal q180Dist = QLineF(mousePoint, quad180).length();
-    EmbReal q270Dist = QLineF(mousePoint, quad270).length();
-
-    EmbReal minDist = std::min({q0Dist, q90Dist, q180Dist, q270Dist, cntrDist});
-
-    if     (minDist == cntrDist) return center;
-    else if (minDist == q0Dist)   return quad0;
-    else if (minDist == q90Dist)  return quad90;
-    else if (minDist == q180Dist) return quad180;
-    else if (minDist == q270Dist) return quad270;
-
-    return scenePos();
+    return closest_point(mousePoint, points);
 }
 
 /**
@@ -1981,24 +1948,14 @@ ImageObject::vulcanize()
 QPointF
 ImageObject::mouseSnapPoint(const QPointF& mousePoint)
 {
-    QPointF ptl = objectTopLeft();     //Top Left Corner QSnap
-    QPointF ptr = objectTopRight();    //Top Right Corner QSnap
-    QPointF pbl = objectBottomLeft();  //Bottom Left Corner QSnap
-    QPointF pbr = objectBottomRight(); //Bottom Right Corner QSnap
+    std::vector<QPointF> points = {
+        objectTopLeft(),     //Top Left Corner QSnap
+        objectTopRight(),    //Top Right Corner QSnap
+        objectBottomLeft(),  //Bottom Left Corner QSnap
+        objectBottomRight()  //Bottom Right Corner QSnap
+    };
 
-    EmbReal ptlDist = QLineF(mousePoint, ptl).length();
-    EmbReal ptrDist = QLineF(mousePoint, ptr).length();
-    EmbReal pblDist = QLineF(mousePoint, pbl).length();
-    EmbReal pbrDist = QLineF(mousePoint, pbr).length();
-
-    EmbReal minDist = qMin(qMin(ptlDist, ptrDist), qMin(pblDist, pbrDist));
-
-    if     (minDist == ptlDist) return ptl;
-    else if (minDist == ptrDist) return ptr;
-    else if (minDist == pblDist) return pbl;
-    else if (minDist == pbrDist) return pbr;
-
-    return scenePos();
+    return closest_point(mousePoint, points);
 }
 
 /**
@@ -2274,21 +2231,13 @@ LineObject::vulcanize()
  */
 QPointF LineObject::mouseSnapPoint(const QPointF& mousePoint)
 {
-    QPointF endPoint1 = objectEndPoint1();
-    QPointF endPoint2 = objectEndPoint2();
-    QPointF midPoint  = objectMidPoint();
+    std::vector<QPointF> points = {
+        objectEndPoint1(),
+        objectEndPoint2(),
+        objectMidPoint()
+    };
 
-    EmbReal end1Dist = QLineF(mousePoint, endPoint1).length();
-    EmbReal end2Dist = QLineF(mousePoint, endPoint2).length();
-    EmbReal midDist  = QLineF(mousePoint, midPoint).length();
-
-    EmbReal minDist = qMin(qMin(end1Dist, end2Dist), midDist);
-
-    if     (minDist == end1Dist) return endPoint1;
-    else if (minDist == end2Dist) return endPoint2;
-    else if (minDist == midDist)  return midPoint;
-
-    return scenePos();
+    return closest_point(mousePoint, points);
 }
 
 /**
@@ -3553,24 +3502,14 @@ void RectObject::vulcanize()
  */
 QPointF RectObject::mouseSnapPoint(const QPointF& mousePoint)
 {
-    QPointF ptl = objectTopLeft();     //Top Left Corner QSnap
-    QPointF ptr = objectTopRight();    //Top Right Corner QSnap
-    QPointF pbl = objectBottomLeft();  //Bottom Left Corner QSnap
-    QPointF pbr = objectBottomRight(); //Bottom Right Corner QSnap
+    std::vector<QPointF> points = {
+        objectTopLeft(),     //Top Left Corner QSnap
+        objectTopRight(),    //Top Right Corner QSnap
+        objectBottomLeft(),  //Bottom Left Corner QSnap
+        objectBottomRight()  //Bottom Right Corner QSnap
+    };
 
-    EmbReal ptlDist = QLineF(mousePoint, ptl).length();
-    EmbReal ptrDist = QLineF(mousePoint, ptr).length();
-    EmbReal pblDist = QLineF(mousePoint, pbl).length();
-    EmbReal pbrDist = QLineF(mousePoint, pbr).length();
-
-    EmbReal minDist = qMin(qMin(ptlDist, ptrDist), qMin(pblDist, pbrDist));
-
-    if     (minDist == ptlDist) return ptl;
-    else if (minDist == ptrDist) return ptr;
-    else if (minDist == pblDist) return pbl;
-    else if (minDist == pbrDist) return pbr;
-
-    return scenePos();
+    return closest_point(mousePoint, points);
 }
 
 /**

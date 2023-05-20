@@ -167,19 +167,6 @@ SOURCES += \
     property-editor.cpp \
     undo-editor.cpp \
     undo-commands.cpp \
-    object-save.cpp \
-    object-base.cpp \
-    object-arc.cpp \
-    object-circle.cpp \
-    object-dimleader.cpp \
-    object-ellipse.cpp \
-    object-image.cpp \
-    object-line.cpp \
-    object-point.cpp \
-    object-polygon.cpp \
-    object-polyline.cpp \
-    object-rect.cpp \
-    object-textsingle.cpp
 
 HEADERS += \
     ../extern/libembroidery/src/embroidery.h \
