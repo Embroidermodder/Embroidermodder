@@ -69,7 +69,6 @@ add_executable(embroidermodder2
     ${SRC_DIR}/interface.cpp
     ${SRC_DIR}/layer-manager.cpp
     ${SRC_DIR}/mainwindow-menus.cpp
-    ${SRC_DIR}/mainwindow-settings.cpp
     ${SRC_DIR}/mainwindow-toolbars.cpp
     ${SRC_DIR}/mainwindow.cpp
     ${SRC_DIR}/mdiarea.cpp
