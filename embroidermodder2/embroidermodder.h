@@ -2883,10 +2883,27 @@ extern MdiArea* mdiArea;
 extern Settings settings;
 extern Settings dialog;
 extern std::vector<Action> action_table;
+
 extern StringList file_toolbar;
 extern StringList edit_toolbar;
 extern StringList view_toolbar;
 extern StringList zoom_toolbar;
+extern StringList pan_toolbar;
+extern StringList icon_toolbar;
+extern StringList help_toolbar;
+extern StringList top_toolbar_layout;
+extern StringList bottom_toolbar_layout;
+
+extern StringList file_menu;
+extern StringList edit_menu;
+extern StringList pan_menu;
+extern StringList zoom_menu;
+extern StringList view_menu;
+extern StringList settings_menu;
+extern StringList window_menu;
+extern StringList help_menu;
+extern StringList menubar_order;
+
 extern StringList all_line_editors;
 extern std::unordered_map<std::string, QGroupBox *> groupBoxes;
 extern std::unordered_map<std::string, QComboBox *> comboBoxes;

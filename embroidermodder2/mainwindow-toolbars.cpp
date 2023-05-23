@@ -19,101 +19,15 @@
 
 #include "embroidermodder.h"
 
-StringList
-file_toolbar = {
-    "new",
-    "open",
-    "save",
-    "saveas",
-    "print",
-    "designdetails",
-    "---",
-    "undo",
-    "redo",
-    "---",
-    "help"
-};
-
-StringList
-edit_toolbar = {
-    "cut",
-    "copy",
-    "paste"
-};
-
-StringList
-view_toolbar = {
-    "day",
-    "night"
-};
-
-StringList
-zoom_toolbar = {
-    "zoomwindow",
-    "zoomdynamic",
-    "zoomscale",
-    "---",
-    "zoomcenter",
-    "zoomin",
-    "zoomout",
-    "---",
-    "zoomselected",
-    "zoomall",
-    "zoomextents"
-};
-
-StringList
-pan_toolbar = {
-    "panrealtime",
-    "panpoint",
-    "---",
-    "panleft",
-    "panright",
-    "panup",
-    "pandown"
-};
-
-StringList
-icon_toolbar = {
-    "icon16",
-    "icon24",
-    "icon32",
-    "icon48",
-    "icon64",
-    "icon128"
-};
-
-StringList
-help_toolbar = {
-    "help",
-    "---",
-    "changelog",
-    "---",
-    "about",
-    "---",
-    "whatsthis"
-};
-
-StringList top_toolbar_layout = {
-    "---",
-    "file",
-    "edit",
-    "help",
-    "icon",
-    "---",
-    "zoom",
-    "pan",
-    "view",
-    "---",
-    "layer",
-    "properties",
-    "---",
-    "text"
-};
-
-StringList bottom_toolbar_layout = {
-    "prompt"
-};
+StringList file_toolbar;
+StringList edit_toolbar;
+StringList view_toolbar;
+StringList zoom_toolbar;
+StringList pan_toolbar;
+StringList icon_toolbar;
+StringList help_toolbar;
+StringList top_toolbar_layout;
+StringList bottom_toolbar_layout;
 
 /**
  * @brief get_action_index

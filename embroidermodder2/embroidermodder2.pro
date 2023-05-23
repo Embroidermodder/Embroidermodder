@@ -2921,5 +2921,4 @@ DISTFILES += \
     translations/turkish.toml \
     translations/turkish/commands_turkish.qm \
     translations/turkish/commands_turkish.ts \
-    translations/turkish/embroidermodder2_turkish.qm \
-    ui.toml
+    translations/turkish/embroidermodder2_turkish.qm

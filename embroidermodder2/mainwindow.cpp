@@ -2516,37 +2516,34 @@ read_configuration(void)
         action_table.push_back(action);
     }
 
-    toml_free(settings_toml);
-
-    return 1;
-}
-
-int
-read_ui_configuration(void)
-{
-    std::string fname = qApp->applicationDirPath().toStdString() + "/ui.toml";
-    char error_buffer[200];
-    FILE *f = fopen(fname.c_str(), "r");
-    if (!f) {
-        puts("ERROR: Failed to open settings file:");
-        printf("%s", fname.c_str());
-        return 0;
-    }
-    toml_table_t *settings_toml = toml_parse_file(f, error_buffer, sizeof(error_buffer));
-    fclose(f);
-
-    if (!settings_toml) {
-        puts("ERROR: failed to parse ui.toml, continuing with defaults.");
-        return 0;
-    }
-
     group_box_list = read_string_list_setting(settings_toml, "group_box_list");
     all_line_editors = read_string_list_setting(settings_toml, "all_line_editors");
 
+    file_toolbar = read_string_list_setting(settings_toml, "file_toolbar");
+    edit_toolbar = read_string_list_setting(settings_toml, "edit_toolbar");
+    view_toolbar = read_string_list_setting(settings_toml, "view_toolbar");
+    zoom_toolbar = read_string_list_setting(settings_toml, "zoom_toolbar");
+    pan_toolbar = read_string_list_setting(settings_toml, "pan_toolbar");
+    icon_toolbar = read_string_list_setting(settings_toml, "icon_toolbar");
+    help_toolbar = read_string_list_setting(settings_toml, "help_toolbar");
+    top_toolbar_layout = read_string_list_setting(settings_toml, "top_toolbar_layout");
+    bottom_toolbar_layout = read_string_list_setting(settings_toml, "bottom_toolbar_layout");
+
+    file_menu = read_string_list_setting(settings_toml, "file_menu");
+    edit_menu = read_string_list_setting(settings_toml, "edit_menu");
+    pan_menu = read_string_list_setting(settings_toml, "pan_menu");
+    zoom_menu = read_string_list_setting(settings_toml, "zoom_menu");
+    view_menu = read_string_list_setting(settings_toml, "view_menu");
+    settings_menu = read_string_list_setting(settings_toml, "settings_menu");
+    window_menu = read_string_list_setting(settings_toml, "window_menu");
+    help_menu = read_string_list_setting(settings_toml, "help_menu");
+
     toml_free(settings_toml);
 
     return 1;
 }
+
+int read_ui_configuration(void) { return 1; }
 
 /**
  * @brief .
@@ -2849,6 +2846,7 @@ MainWindow::createAllActions()
                 menu->setTearOffEnabled(false);
                 menuBar()->addMenu(menu);
                 menuHash.insert(menu_name, menu);
+                menubar_order.push_back(menu_name.toStdString());
             }
 
             //TODO: order actions position in menu based on .ini setting
@@ -4186,7 +4184,7 @@ void
 MainWindow::recentMenuAboutToShow()
 {
     debug_message("MainWindow::recentMenuAboutToShow()");
-    menuHash["recent"]->clear();
+    subMenuHash["recent"]->clear();
 
     QFileInfo recentFileInfo;
     QString recentValue;
@@ -4205,7 +4203,7 @@ MainWindow::recentMenuAboutToShow()
                     rAction = new QAction(recentValue + " " + recentFileInfo.fileName(), this);
                 rAction->setCheckable(false);
                 rAction->setData(settings.opensave_recent_list_of_files.at(i));
-                menuHash["recent"]->addAction(rAction);
+                subMenuHash["recent"]->addAction(rAction);
                 connect(rAction, SIGNAL(triggered()), this, SLOT(openrecentfile()));
             }
         }
@@ -4555,8 +4553,9 @@ MainWindow::updateMenuToolbarStatusbar()
 
         //Menus
         menuBar()->clear();
-        foreach (QMenu* menu, menuHash) {
-            menuBar()->addMenu(menu);
+        for (int i=0; i<(int)menubar_order.size(); i++) {
+            QString menu_name = QString::fromStdString(menubar_order[i]);
+            menuBar()->addMenu(menuHash[menu_name]);
         }
 
         menuHash["window"]->setEnabled(true);
