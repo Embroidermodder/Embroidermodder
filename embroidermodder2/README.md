@@ -286,7 +286,7 @@ To request a new feature [open an issue on the main Embroidermodder GitHub repos
 This is a highly experimental build: we recommend users wait for the beta release when the basic features
 are functional.
 
-Visit our [GitHub Releases page](https://github.com/Embroidermodder/Embroidermodder/releases/tag/alpha)
+Visit our [GitHub Releases page](https://github.com/Embroidermodder/Embroidermodder/releases)
 for the current build. Unfortunately, earlier builds went down with the Sourceforge page we hosted them on.
 
 \page . .
