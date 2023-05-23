@@ -42,6 +42,9 @@ std::vector<EmbReal> snowflake_y;
 std::vector<EmbReal> dolphin_x;
 std::vector<EmbReal> dolphin_y;
 
+std::string convert_args_to_type(std::string label, StringList args,
+    const char *args_template, std::vector<Parameter> a);
+
 std::unordered_map<std::string, int> rubber_mode_hash = {
     {"CIRCLE_1P_RAD", OBJ_RUBBER_CIRCLE_1P_RAD},
     {"CIRCLE_1P_DIA", OBJ_RUBBER_CIRCLE_1P_DIA},
@@ -461,10 +464,12 @@ MainWindow::quit()
 {
     debug_message("quit()");
     if (settings.prompt_save_history) {
-        prompt->saveHistory("prompt.log", settings.prompt_save_history_as_html); //TODO: get filename from settings
+        prompt->saveHistory("prompt.log", settings.prompt_save_history_as_html);
+        //TODO: get filename from settings
     }
     qApp->closeAllWindows();
-    this->deleteLater(); //Force the MainWindow destructor to run before exiting. Makes Valgrind "still reachable" happy :)
+    this->deleteLater();
+    // Force the MainWindow destructor to run before exiting. Makes Valgrind "still reachable" happy :)
 }
 
 /**
@@ -1389,7 +1394,8 @@ void
 MainWindow::promptHistoryAppended(const QString& txt)
 {
     MdiWindow* mdiWin = activeMdiWindow();
-    if (mdiWin) mdiWin->promptHistoryAppended(txt);
+    if (mdiWin)
+        mdiWin->promptHistoryAppended(txt);
 }
 
 /**
@@ -1399,7 +1405,8 @@ void
 MainWindow::logPromptInput(const QString& txt)
 {
     MdiWindow* mdiWin = activeMdiWindow();
-    if (mdiWin) mdiWin->logPromptInput(txt);
+    if (mdiWin)
+        mdiWin->logPromptInput(txt);
 }
 
 /**
@@ -1409,7 +1416,8 @@ void
 MainWindow::promptInputPrevious()
 {
     MdiWindow* mdiWin = activeMdiWindow();
-    if (mdiWin) mdiWin->promptInputPrevious();
+    if (mdiWin)
+        mdiWin->promptInputPrevious();
 }
 
 /**
@@ -1762,19 +1770,16 @@ MainWindow::nativeAddTriangle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, Em
 }
 
 void
-MainWindow::nativeAddRectangle(EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot, bool fill, int rubberMode)
+MainWindow::nativeAddRectangle(std::vector<Parameter> a)
 {
-    /*
-    AddRectangle(std::vector<Parameter> a)
-    EmbReal x    = a[0].r;
-    EmbReal y    = a[1].r;
-    EmbReal w    = a[2].r;
-    EmbReal h    = a[3].r;
-    EmbReal rot  = a[4].r;
-    bool  fill = a[5].toBool();
+    EmbReal x = a[0].r;
+    EmbReal y = a[1].r;
+    EmbReal w = a[2].r;
+    EmbReal h = a[3].r;
+    EmbReal rot = a[4].r;
+    bool fill = a[5].b;
+    int rubberMode = a[6].i;
 
-    _mainWin->nativeAddRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
-    */
     View* gview = _mainWin->activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
@@ -2516,14 +2521,13 @@ read_ui_configuration(void)
 bool
 validRGB(int r, int g, int b)
 {
-    return !(
-           std::isnan(r)
-        || std::isnan(b)
-        || std::isnan(g)
-        || (r < 0 || r > 255)
-        || (g < 0 || g > 255)
-        || (b < 0 || b > 255)
-    );
+    bool result = (r>=0);
+    result &= (r<256);
+    result &= (g>=0);
+    result &= (g<256);
+    result &= (b>=0);
+    result &= (b<256);
+    return result;
 }
 
 /**
@@ -2912,7 +2916,7 @@ run_script(std::vector<std::string> script)
 std::string
 actuator(std::string line)
 {
-    Parameter a[10];
+    std::vector<Parameter> a;
     std::vector<std::string> list = tokenize(line, ' ');
     std::string command = list[0];
     list.erase(list.begin());
@@ -2952,23 +2956,23 @@ actuator(std::string line)
             return "";
         }
         if (command == "polyline") {
-//            _mainWin->AddPolyline();
+//            _mainWin->nativeAddPolyline();
             return "";
         }
         if (command == "path") {
-//            _mainWin->AddPath();
+//            _mainWin->nativeAddPath();
             return "";
         }
         if (command == "horizontal-dimension") {
-//            _mainWin->AddHorizontalDimension();
+//            _mainWin->nativeAddHorizontalDimension();
             return "";
         }
         if (command == "vertical-dimension") {
-//            _mainWin->AddVerticalDimension();
+//            _mainWin->nativeAddVerticalDimension();
             return "";
         }
         if (command == "image") {
-//            _mainWin->AddImage();
+//            _mainWin->nativeAddImage();
             return "";
         }
         if (command == "dim-leader") {
@@ -2992,18 +2996,34 @@ actuator(std::string line)
             return "";
         }
         if (command == "line") {
+            std::string error = convert_args_to_type("add rectangle", list, "rrrrrbi", a);
+            if (error != "") {
+                return error;
+            }
 //            _mainWin->AddLine();
             return "";
         }
         if (command == "triangle") {
+            std::string error = convert_args_to_type("add rectangle", list, "rrrrrbi", a);
+            if (error != "") {
+                return error;
+            }
 //            _mainWin->AddTriangle();
             return "";
         }
         if (command == "rectangle") {
-//            _mainWin->AddRectangle();
+            std::string error = convert_args_to_type("add rectangle", list, "rrrrrbi", a);
+            if (error != "") {
+                return error;
+            }
+            _mainWin->nativeAddRectangle(a);
             return "";
         }
         if (command == "rounded-rectangle") {
+            std::string error = convert_args_to_type("add rectangle", list, "rrrrrbi", a);
+            if (error != "") {
+                return error;
+            }
 //            _mainWin->AddRoundedRectangle();
             return "";
         }
@@ -3830,10 +3850,10 @@ SetCrossHairColor(std::vector<Parameter> a)
  * .
  * argument string "iii"
  */
- /*
 std::string
 SetGridColor(std::vector<Parameter> a)
 {
+    /*
     int r = a[0].r;
     int g = a[1].r;
     int b = a[2].r;
@@ -3849,24 +3869,26 @@ SetGridColor(std::vector<Parameter> a)
     }
 
     _mainWin->setGridColor(r, g, b);
+    */
     return "";
 }
 
 std::string
 SetTextAngle(std::vector<Parameter> a)
 {
+    /*
     _mainWin->setTextAngle(a[0].r);
+    */
     return "";
 }
-*/
 
 /**
  * .
  */
- /*
 std::string
 PreviewOn(std::vector<Parameter> a)
 {
+    /*
     QString cloneStr = QString::toStdString(a[0].s).toUpper();
     QString modeStr  = QString::toStdString(a[1].s).toUpper();
     EmbReal x = a[2].r;
@@ -3885,9 +3907,11 @@ PreviewOn(std::vector<Parameter> a)
     else { return context->throwError(QScriptContext::UnknownError, "previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\"."); }
 
     _mainWin->nativePreviewOn(clone, mode, x, y, data);
+    */
     return "";
 }
 
+/*
 "preview off", nativePreviewOff();
 "allow rubber", nativeAllowRubber();
 */
@@ -3895,21 +3919,20 @@ PreviewOn(std::vector<Parameter> a)
 /**
  * \brief
  */
- /*
 std::string
 SetRubberText(std::vector<Parameter> a)
 {
-    QString key = QString::toStdString(a[0].s).toUpper();
-
-    _mainWin->setRubberText(key, a[1].s);
+    QString key = QString::fromStdString(a[0].s).toUpper();
+    //_mainWin->setRubberText(key, a[1].s);
     return "";
 }
 
 std::string
 AddRubber(std::vector<Parameter> a)
 {
-    QString objType = QString::toStdString(a[0].s).toUpper();
+    QString objType = QString::fromStdString(a[0].s).toUpper();
 
+    /*
     if (!_mainWin->nativeAllowRubber())
         return context->throwError(QScriptContext::UnknownError, "addRubber(): You must use actuator("vulcanize") before you can add another rubber object.");
 
@@ -3955,11 +3978,17 @@ AddRubber(std::vector<Parameter> a)
     else if (objType == "ELLIPSEARC") {
         
     } //TODO: handle this type
-    else if (objType == "HATCH") {} //TODO: handle this type
-    else if (objType == "IMAGE") {} //TODO: handle this type
-    else if (objType == "INFINITELINE") {} //TODO: handle this type
-    else if (objType == "LINE") { _mainWin->nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
-    else if (objType == "PATH") {} //TODO: handle this type
+    else if (objType == "HATCH") {
+    } //TODO: handle this type
+    else if (objType == "IMAGE") {
+    } //TODO: handle this type
+    else if (objType == "INFINITELINE") {
+    } //TODO: handle this type
+    else if (objType == "LINE") {
+        _mainWin->nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON);
+    }
+    else if (objType == "PATH") {
+    } //TODO: handle this type
     else if (objType == "POINT") {} //TODO: handle this type
     else if (objType == "POLYGON") { _mainWin->nativeAddPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
     else if (objType == "POLYLINE") { _mainWin->nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
@@ -3968,17 +3997,20 @@ AddRubber(std::vector<Parameter> a)
     else if (objType == "SPLINE") {} //TODO: handle this type
     else if (objType == "TEXTMULTI") {} //TODO: handle this type
     else if (objType == "TEXTSINGLE") { _mainWin->nativeAddTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON); }
-
+    */
     return "";
 }
 
+/*
 "clear rubber", nativeClearRubber();
+*/
 
 std::string
 SpareRubber(std::vector<Parameter> a)
 {
-    QString objID = QString::toStdString(a[0].s).toUpper();
+    QString objID = QString::fromStdString(a[0].s).toUpper();
 
+    /*
     if (objID == "PATH") {
         _mainWin->nativeSpareRubber(SPARE_RUBBER_PATH);
     }
@@ -3994,44 +4026,62 @@ SpareRubber(std::vector<Parameter> a)
         if (!ok) return "TYPE ERROR: spareRubber(): error converting object ID into an int64");
         _mainWin->nativeSpareRubber(id);
     }
-
+    */
     return "";
 }
 
 std::string
 AddRoundedRectangle(std::vector<Parameter> a)
 {
-    EmbReal x    = a[0].r;
-    EmbReal y    = a[1].r;
-    EmbReal w    = a[2].r;
-    EmbReal h    = a[3].r;
-    EmbReal rad  = a[4].r;
-    EmbReal rot  = a[5].r;
-    bool  fill = a[6].toBool();
-
-    _mainWin->nativeAddRoundedRectangle(x, y, w, h, rad, rot, fill);
+    _mainWin->nativeAddRoundedRectangle(
+        a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, a[6].b);
     return "";
 }
 
+std::string
 AddArc(std::vector<Parameter> a)
+{
     _mainWin->nativeAddArc(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, OBJ_RUBBER_OFF);
+    return "";
+}
 
+std::string
 AddCircle(std::vector<Parameter> a)
+{
     _mainWin->nativeAddCircle(a[0].r, a[1].r, a[2].r, a[3].b, OBJ_RUBBER_OFF);
+    return "";
+}
 
+std::string
 AddSlot(std::vector<Parameter> a)
+{
     _mainWin->nativeAddSlot(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].b, OBJ_RUBBER_OFF);
+    return "";
+}
 
+std::string
 AddEllipse(std::vector<Parameter> a)
+{
     _mainWin->nativeAddEllipse(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].b, OBJ_RUBBER_OFF);
+    return "";
+}
 
+std::string
 AddPoint(std::vector<Parameter> a)
+{
     _mainWin->nativeAddPoint(a[0].r, a[1].r);
+    return "";
+}
 
+std::string
 AddRegularPolygon(std::vector<Parameter> a)
+{
     //TODO: parameter error checking
     debug_message("TODO: finish addRegularPolygon command");
+    return "";
+}
 
+/*
 std::string
 AddPolygon(std::vector<Parameter> a)
 {
@@ -4704,8 +4754,6 @@ UiObject
 circle_main(void)
 {
     UiObject global;
-    global.mode = CIRCLE_MODE_1P_RAD;
-    /*
     EmbVector point1;
     EmbVector point2;
     EmbVector point3;
@@ -4713,6 +4761,10 @@ circle_main(void)
     EmbReal dia;
     EmbVector center;
     int mode;
+    global.mode = CIRCLE_MODE_1P_RAD;
+    /*
+    initCommand();
+    clearSelection();
     initCommand();
     clearSelection();
     global.x1 = NaN;

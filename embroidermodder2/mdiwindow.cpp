@@ -19,6 +19,30 @@
 
 #include "embroidermodder.h"
 
+std::string
+construct_command(std::string command, const char *fmt, ...)
+{
+    va_list args;
+    va_start(args, fmt);
+    for (int i=0; i<(int)strlen(fmt); i++) {
+        if (fmt[i] == 's') {
+            std::string s(va_arg(args, char*));
+            command += s;
+        }
+        if (fmt[i] == 'i') {
+            command += std::to_string(va_arg(args, int));
+        }
+        if (fmt[i] == 'b') {
+            command += std::to_string(va_arg(args, bool));
+        }
+        if (fmt[i] == 'f') {
+            command += std::to_string(va_arg(args, EmbReal));
+        }
+    }
+    va_end(args);
+    return command;
+}
+
 /**
  *
  */
@@ -247,7 +271,10 @@ MdiWindow::loadFile(const QString &fileName)
             if (g.type == EMB_RECT) {
                 EmbRect r = g.object.rect;
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                _mainWin->nativeAddRectangle(r.left, r.top, r.right - r.left, r.bottom - r.top, 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
+                std::string command = construct_command("add rectangle ", "rrrrribi",
+                    r.left, r.top,
+                    r.right - r.left, r.bottom - r.top, 0, false, OBJ_RUBBER_OFF);
+                actuator(command);
             }
         }
 

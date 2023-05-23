@@ -28,6 +28,7 @@
 #include <cmath>
 #include <ctime>
 #include <cinttypes>
+#include <cstdarg>
 #include <vector>
 #include <unordered_map>
 #include <string>
@@ -44,36 +45,6 @@
  */
 #include <QAction>
 #include <QApplication>
-#include <QComboBox>
-#include <QContextMenuEvent>
-#include <QClipboard>
-#include <QDateTime>
-#include <QDebug>
-#include <QDialogButtonBox>
-#include <QFile>
-#include <QFrame>
-#include <QGraphicsScene>
-#include <QGraphicsPathItem>
-#include <QGridLayout>
-#include <QGroupBox>
-#include <QLabel>
-#include <QLineEdit>
-#include <QList>
-#include <QMainWindow>
-#include <QMdiArea>
-#include <QMenu>
-#include <QMetaObject>
-#include <QMessageBox>
-#include <QObject>
-#include <QPainter>
-#include <QSplitter>
-#include <QTextLayout>
-#include <QTextStream>
-#include <QTimer>
-#include <QToolBar>
-#include <QScrollArea>
-#include <QUndoStack>
-#include <QVBoxLayout>
 
 #include <QtPrintSupport>
 
@@ -256,36 +227,66 @@ typedef struct UiObject_ {
  * The EmbView describes how the render is displayed.
  */
 typedef struct EmbView_ {
-    EmbPattern *pattern; /*< \todo document this */
-    EmbVector origin; /*< \todo document this */
-    EmbReal scale; /*< \todo document this */
-    std::string grid_type; /*< \todo document this */
-    int ui_mode; /*< \todo document this */
-    bool snap_mode; /*< \todo document this */
-    bool grid_mode; /*< \todo document this */
-    bool ruler_mode; /*< \todo document this */
-    bool ortho_mode; /*< \todo document this */
-    bool polar_mode; /*< \todo document this */
-    bool qsnap_mode; /*< \todo document this */
-    bool qtrack_mode; /*< \todo document this */
-    bool lwt_mode; /*< \todo document this */
-    bool real_render; /*< \todo document this */
-    bool metric; /*< \todo document this */
-    bool simulate; /*< \todo document this */
-    clock_t simulation_start; /*< \todo document this */
-    std::string text_font; /*< \todo document this */
-    EmbReal text_size; /*< \todo document this */
-    EmbReal text_angle; /*< \todo document this */
-    bool text_style_bold; /*< \todo document this */
-    bool text_style_italic; /*< \todo document this */
-    bool text_style_underline; /*< \todo document this */
-    bool text_style_overline; /*< \todo document this */
-    bool text_style_strikeout; /*< \todo document this */
-    std::string filename; /*< \todo document this */
-    StringList undo_history; /*< \todo document this */
-    int selected[100]; /*< \todo document this */
-    int n_selected; /*< \todo document this */
-    int rubber_mode; /*< . */
+    EmbPattern *pattern;
+        /*< \todo document this */
+    EmbVector origin;
+        /*< \todo document this */
+    EmbReal scale;
+        /*< \todo document this */
+    std::string grid_type;
+        /*< \todo document this */
+    int ui_mode;
+        /*< \todo document this */
+    bool snap_mode;
+        /*< \todo document this */
+    bool grid_mode;
+        /*< \todo document this */
+    bool ruler_mode;
+        /*< \todo document this */
+    bool ortho_mode;
+        /*< \todo document this */
+    bool polar_mode;
+        /*< \todo document this */
+    bool qsnap_mode;
+        /*< \todo document this */
+    bool qtrack_mode;
+        /*< \todo document this */
+    bool lwt_mode;
+        /*< \todo document this */
+    bool real_render;
+        /*< \todo document this */
+    bool metric;
+        /*< \todo document this */
+    bool simulate;
+        /*< \todo document this */
+    clock_t simulation_start;
+        /*< \todo document this */
+    std::string text_font;
+        /*< \todo document this */
+    EmbReal text_size;
+        /*< \todo document this */
+    EmbReal text_angle;
+        /*< \todo document this */
+    bool text_style_bold;
+        /*< \todo document this */
+    bool text_style_italic;
+        /*< \todo document this */
+    bool text_style_underline;
+        /*< \todo document this */
+    bool text_style_overline;
+        /*< \todo document this */
+    bool text_style_strikeout;
+        /*< \todo document this */
+    std::string filename;
+        /*< \todo document this */
+    StringList undo_history;
+        /*< \todo document this */
+    int selected[100];
+        /*< \todo document this */
+    int n_selected;
+        /*< \todo document this */
+    int rubber_mode;
+        /*< . */
 } EmbView;
 
 /**
@@ -366,9 +367,13 @@ typedef struct Settings_ {
     uint32_t shine_color;
         /*< \todo document this */
     int position_x;
+        /*< \todo document this */
     int position_y;
+        /*< \todo document this */
     int size_x;
+        /*< \todo document this */
     int size_y;
+        /*< \todo document this */
     int general_icon_size;
         /*< \todo document this */
     bool running;
@@ -407,35 +412,64 @@ typedef struct Settings_ {
         /*< \todo document this */
     bool display_renderhint_aa;
         /*< \todo document this */
-    bool display_renderhint_text_aa; /*< \todo document this */
-    bool display_renderhint_smooth_pix; /*< \todo document this */
-    bool display_renderhint_high_aa; /*< \todo document this */
-    bool display_renderhint_noncosmetic; /*< \todo document this */
-    bool display_show_scrollbars; /*< \todo document this */
-    int display_scrollbar_widget_num; /*< \todo document this */
-    uint8_t display_selectbox_alpha; /*< \todo document this */
-    EmbReal display_zoomscale_in; /*< \todo document this */
-    EmbReal display_zoomscale_out; /*< \todo document this */
-    uint8_t display_crosshair_percent; /*< \todo document this */
-    bool opensave_open_thumbnail; /*< \todo document this */
-    bool opensave_save_thumbnail; /*< \todo document this */
-    uint8_t opensave_recent_max_files; /*< \todo document this */
-    uint8_t opensave_trim_dst_num_jumps; /*< \todo document this */
-    bool printing_use_last_device; /*< \todo document this */
-    bool printing_disable_bg; /*< \todo document this */
-    bool grid_show_on_load; /*< \todo document this */
-    bool grid_show_origin; /*< \todo document this */
-    bool grid_color_match_crosshair; /*< \todo document this */
-    uint32_t grid_color; /*< \todo document this */
-    bool grid_load_from_file; /*< \todo document this */
-    bool grid_center_on_origin; /*< \todo document this */
-    EmbVector grid_center; /*< \todo document this */
-    EmbVector grid_size; /*< \todo document this */
-    EmbVector grid_spacing; /*< \todo document this */
-    EmbReal grid_size_radius; /*< \todo document this */
-    EmbReal grid_spacing_radius; /*< \todo document this */
-    EmbReal grid_spacing_angle; /*< \todo document this */
-    bool ruler_show_on_load; /*< \todo document this */
+    bool display_renderhint_text_aa;
+        /*< \todo document this */
+    bool display_renderhint_smooth_pix;
+        /*< \todo document this */
+    bool display_renderhint_high_aa;
+        /*< \todo document this */
+    bool display_renderhint_noncosmetic;
+        /*< \todo document this */
+    bool display_show_scrollbars;
+        /*< \todo document this */
+    int display_scrollbar_widget_num;
+        /*< \todo document this */
+    uint8_t display_selectbox_alpha;
+        /*< \todo document this */
+    EmbReal display_zoomscale_in;
+        /*< \todo document this */
+    EmbReal display_zoomscale_out;
+        /*< \todo document this */
+    uint8_t display_crosshair_percent;
+        /*< \todo document this */
+    bool opensave_open_thumbnail;
+        /*< \todo document this */
+    bool opensave_save_thumbnail;
+        /*< \todo document this */
+    uint8_t opensave_recent_max_files;
+        /*< \todo document this */
+    uint8_t opensave_trim_dst_num_jumps;
+        /*< \todo document this */
+    bool printing_use_last_device;
+        /*< \todo document this */
+    bool printing_disable_bg;
+        /*< \todo document this */
+    bool grid_show_on_load;
+        /*< \todo document this */
+    bool grid_show_origin;
+        /*< \todo document this */
+    bool grid_color_match_crosshair;
+        /*< \todo document this */
+    uint32_t grid_color;
+        /*< \todo document this */
+    bool grid_load_from_file;
+        /*< \todo document this */
+    bool grid_center_on_origin;
+        /*< \todo document this */
+    EmbVector grid_center;
+        /*< \todo document this */
+    EmbVector grid_size;
+        /*< \todo document this */
+    EmbVector grid_spacing;
+        /*< \todo document this */
+    EmbReal grid_size_radius;
+        /*< \todo document this */
+    EmbReal grid_spacing_radius;
+        /*< \todo document this */
+    EmbReal grid_spacing_angle;
+        /*< \todo document this */
+    bool ruler_show_on_load;
+        /*< \todo document this */
     bool ruler_metric; /*< \todo document this */
     uint32_t ruler_color; /*< \todo document this */
     uint8_t ruler_pixel_size; /*< \todo document this */
@@ -791,6 +825,7 @@ void set_visibility(QObject *parent, const char *name, bool visibility);
 std::string actuator(std::string line);
 std::string run_script_file(std::string fname);
 std::string run_script(StringList script);
+std::string construct_command(std::string command, const char *fmt, ...);
 
 QPointF to_QPointF(EmbVector a);
 EmbVector to_EmbVector(QPointF a);
@@ -2062,7 +2097,7 @@ public:
     void nativeAddRay(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot);
     void nativeAddLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, int rubberMode);
     void nativeAddTriangle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal x3, EmbReal y3, EmbReal rot, bool fill);
-    void nativeAddRectangle(EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot, bool fill, int rubberMode);
+    void nativeAddRectangle(std::vector<Parameter> a);
     void nativeAddRoundedRectangle(EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rad, EmbReal rot, bool fill);
     void nativeAddArc(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, int rubberMode);
     void nativeAddCircle(EmbReal centerX, EmbReal centerY, EmbReal radius, bool fill, int rubberMode);
