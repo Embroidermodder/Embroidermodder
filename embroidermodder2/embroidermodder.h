@@ -365,6 +365,10 @@ typedef struct Settings_ {
         /*< \todo document this */
     uint32_t shine_color;
         /*< \todo document this */
+    int position_x;
+    int position_y;
+    int size_x;
+    int size_y;
     int general_icon_size;
         /*< \todo document this */
     bool running;
@@ -761,65 +765,6 @@ enum PREVIEW_MODE_VALUES {
 
 static const EmbReal emb_constant_pi = 3.14159265358979323846;
 
-/*
- * \brief Convert \a a to a QPointF.
- */
-inline QPointF
-to_QPointF(EmbVector a)
-{
-    QPointF result(a.x, a.y);
-    return result;
-}
-
-/*
- * \brief Convert \a a to an EmbVector.
- */
-inline EmbVector
-to_EmbVector(QPointF a)
-{
-    EmbVector v;
-    v.x = a.x();
-    v.y = a.y();
-    return v;
-}
-
-/*
- * \brief Wrapper for embVector_add to use the syntax \a a + \a b.
- */
-inline EmbVector
-operator+(EmbVector a, EmbVector b)
-{
-    return embVector_add(a, b);
-}
-
-/*
- * \brief Wrapper for embVector_subtract to use the syntax \a a - \a b.
- */
-inline EmbVector
-operator-(EmbVector a, EmbVector b)
-{
-    return embVector_subtract(a, b);
-}
-
-/**
- * .
- */
-inline EmbReal
-radians__(EmbReal degrees)
-{
-    return (degrees*emb_constant_pi/180.0);
-}
-
-/**
- *
- */
-inline EmbReal
-degrees__(EmbReal radian)
-{
-    return (radian*180.0/emb_constant_pi);
-}
-
-
 extern MainWindow* _mainWin;
 extern CmdPrompt* prompt;
 extern PropertyEditor* dockPropEdit;
@@ -834,8 +779,9 @@ extern QHash<QString, QMenu*> menuHash;
  * ---------------------------------
  */
 int get_action_index(std::string cmd);
-int read_settings(const char *file);
-void write_settings(const char *fname);
+int read_configuration(const char *file);
+void read_settings(void);
+void write_settings(void);
 EmbVector rotate_vector(EmbVector v, EmbReal alpha);
 
 void debug_message(std::string msg);
@@ -845,6 +791,13 @@ void set_visibility(QObject *parent, const char *name, bool visibility);
 std::string actuator(std::string line);
 std::string run_script_file(std::string fname);
 std::string run_script(StringList script);
+
+QPointF to_QPointF(EmbVector a);
+EmbVector to_EmbVector(QPointF a);
+EmbVector operator+(EmbVector a, EmbVector b);
+EmbVector operator-(EmbVector a, EmbVector b);
+EmbReal radians__(EmbReal degrees);
+EmbReal degrees__(EmbReal radian);
 
 /**
  *
@@ -1903,7 +1856,6 @@ public slots:
     void onWindowActivated(QMdiSubWindow* w);
     void windowMenuAboutToShow();
     void windowMenuActivated( bool checked/*int id*/ );
-    QAction*                        getAction(int actionEnum);
 
     void updateAllViewScrollBars(bool val);
     void updateAllViewCrossHairColors(QRgb color);
@@ -1918,8 +1870,6 @@ public slots:
     void settingsPrompt();
 
     void settingsDialog(const QString& showTab = QString());
-    void readSettings();
-    void writeSettings();
 
     static bool validFileFormat(const QString &fileName);
 

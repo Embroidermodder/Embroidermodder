@@ -148,7 +148,6 @@ SOURCES += \
     embroidermodder.cpp \
     interface.cpp \
     mainwindow.cpp \
-    mainwindow-settings.cpp \
     mainwindow-menus.cpp \
     mainwindow-toolbars.cpp \
     mdiarea.cpp \

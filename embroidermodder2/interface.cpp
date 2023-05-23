@@ -23,6 +23,70 @@
 
 #include "embroidermodder.h"
 
+/*
+ * \brief Convert \a a to a QPointF.
+ */
+QPointF
+to_QPointF(EmbVector a)
+{
+    QPointF result(a.x, a.y);
+    return result;
+}
+
+/*
+ * \brief Convert \a a to an EmbVector.
+ */
+EmbVector
+to_EmbVector(QPointF a)
+{
+    EmbVector v;
+    v.x = a.x();
+    v.y = a.y();
+    return v;
+}
+
+/**
+ * @brief operator +
+ *     Wrapper for embVector_add to use the syntax \a a + \a b.
+ */
+EmbVector
+operator+(EmbVector a, EmbVector b)
+{
+    return embVector_add(a, b);
+}
+
+/**
+ * @brief operator -
+ *     Wrapper for embVector_subtract to use the syntax \a a - \a b.
+ */
+EmbVector
+operator-(EmbVector a, EmbVector b)
+{
+    return embVector_subtract(a, b);
+}
+
+/**
+ * @brief radians__
+ * @param degrees
+ * @return
+ */
+EmbReal
+radians__(EmbReal degrees)
+{
+    return (degrees*emb_constant_pi/180.0);
+}
+
+/**
+ * @brief degrees__
+ * @param radian
+ * @return
+ */
+EmbReal
+degrees__(EmbReal radian)
+{
+    return (radian*180.0/emb_constant_pi);
+}
+
 /**
  * @brief debug_message
  * @param msg

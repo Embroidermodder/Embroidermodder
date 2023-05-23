@@ -2215,7 +2215,7 @@ void Settings_Dialog::acceptChanges()
     }
     _mainWin->updatePickAddMode(dialog.selection_mode_pickadd);
 
-    _mainWin->writeSettings();
+    write_settings();
     accept();
 }
 
