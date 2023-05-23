@@ -28,14 +28,23 @@ StringList settings_menu;
 StringList window_menu;
 StringList help_menu;
 
+StringList menubar_order = {
+    "file",
+    "edit",
+    "view",
+    "settings",
+    "window",
+    "help"
+};
+
 /**
  * @brief create_menu
  * @param menu
  * @param def
  * @param topLevel
  */
-static void
-create_menu(QString menu, StringList def, bool topLevel)
+void
+create_menu(std::string menu, StringList def, bool topLevel)
 {
     if (topLevel) {
         _mainWin->menuBar()->addMenu(menuHash[menu]);
@@ -52,7 +61,7 @@ create_menu(QString menu, StringList def, bool topLevel)
         else if (!strncmp(def[i].c_str(), "submenu", 7)) {
             const char *submenu_name = def[i].c_str() + 8;
             std::string submenu(submenu_name);
-            menuHash[menu]->addMenu(subMenuHash[QString::fromStdString(submenu)]);
+            menuHash[menu]->addMenu(subMenuHash[submenu]);
         }
         else if (!strncmp(def[i].c_str(), "icon", 4)) {
             QString icon_fname(def[i].c_str() + 5);
@@ -64,25 +73,15 @@ create_menu(QString menu, StringList def, bool topLevel)
             }
         }
         else {
-            int action = get_action_index(def[i]);
             if (topLevel) {
-                menuHash[menu]->addAction(actionHash[action]);
+                menuHash[menu]->addAction(actionHash[def[i]]);
             }
             else {
-                subMenuHash[menu]->addAction(actionHash[action]);
+                subMenuHash[menu]->addAction(actionHash[def[i]]);
             }
         }
     }
 }
-
-StringList menubar_order = {
-    "file",
-    "edit",
-    "view",
-    "settings",
-    "window",
-    "help"
-};
 
 /**
  * @brief MainWindow::createAllMenus
@@ -109,10 +108,10 @@ MainWindow::createAllMenus()
     connect(menuHash["window"], SIGNAL(aboutToShow()), this, SLOT(windowMenuAboutToShow()));
 
     /* Do not allow the Menus to be torn off. It's a pain in the ass to maintain. */
-    foreach (QMenu *menu , subMenuHash) {
-        menu->setTearOffEnabled(false);
+    for (auto iter=menuHash.begin(); iter!=menuHash.end(); iter++) {
+        iter->second->setTearOffEnabled(false);
     }
-    foreach (QMenu *menu , menuHash) {
-        menu->setTearOffEnabled(false);
+    for (auto iter=subMenuHash.begin(); iter!=subMenuHash.end(); iter++) {
+        iter->second->setTearOffEnabled(false);
     }
 }

@@ -799,16 +799,57 @@ enum PREVIEW_MODE_VALUES {
 
 static const EmbReal emb_constant_pi = 3.14159265358979323846;
 
+/* Global variables
+ * ----------------
+ */
+extern MdiArea* mdiArea;
+extern Settings settings;
+extern Settings dialog;
+extern std::vector<Action> action_table;
+
+extern StringList file_toolbar;
+extern StringList edit_toolbar;
+extern StringList view_toolbar;
+extern StringList zoom_toolbar;
+extern StringList pan_toolbar;
+extern StringList icon_toolbar;
+extern StringList help_toolbar;
+extern StringList top_toolbar_layout;
+extern StringList bottom_toolbar_layout;
+
+extern StringList file_menu;
+extern StringList edit_menu;
+extern StringList pan_menu;
+extern StringList zoom_menu;
+extern StringList view_menu;
+extern StringList settings_menu;
+extern StringList window_menu;
+extern StringList help_menu;
+extern StringList menubar_order;
+
+extern StringList all_line_editors;
+extern QFontComboBox* comboBoxTextSingleFont;
+extern StringList group_box_list;
+extern std::vector<GroupBoxData> group_box_arc_geometry;
+extern std::vector<GroupBoxData> group_box_ellipse_geometry;
+extern Dictionary config;
+extern QStringList justify_options;
+
 extern MainWindow* _mainWin;
 extern CmdPrompt* prompt;
 extern PropertyEditor* dockPropEdit;
 extern UndoEditor* dockUndoEdit;
 extern StatusBar* statusbar;
 
-extern QAction* actionHash[200];
-extern QHash<QString, QToolBar*> toolbarHash;
-extern QHash<QString, QMenu*> menuHash;
-extern QHash<QString, QMenu*> subMenuHash;
+extern std::unordered_map<std::string, QGroupBox *> groupBoxes;
+extern std::unordered_map<std::string, QComboBox *> comboBoxes;
+extern std::unordered_map<std::string, QLineEdit *> lineEdits;
+extern std::unordered_map<std::string, QToolButton *> toolButtons;
+extern std::unordered_map<std::string, GroupBoxData> group_box_data;
+extern std::unordered_map<std::string, QAction*> actionHash;
+extern std::unordered_map<std::string, QToolBar*> toolbarHash;
+extern std::unordered_map<std::string, QMenu*> menuHash;
+extern std::unordered_map<std::string, QMenu*> subMenuHash;
 
 /* Functions in the global namespace
  * ---------------------------------
@@ -827,6 +868,8 @@ std::string actuator(std::string line);
 std::string run_script_file(std::string fname);
 std::string run_script(StringList script);
 std::string construct_command(std::string command, const char *fmt, ...);
+
+void create_menu(std::string menu, StringList def, bool topLevel);
 
 QPointF to_QPointF(EmbVector a);
 EmbVector to_EmbVector(QPointF a);
@@ -2875,46 +2918,5 @@ private:
 
     void alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& viewPoint);
 };
-
-/* Global data
- * -----------
- */
-extern MdiArea* mdiArea;
-extern Settings settings;
-extern Settings dialog;
-extern std::vector<Action> action_table;
-
-extern StringList file_toolbar;
-extern StringList edit_toolbar;
-extern StringList view_toolbar;
-extern StringList zoom_toolbar;
-extern StringList pan_toolbar;
-extern StringList icon_toolbar;
-extern StringList help_toolbar;
-extern StringList top_toolbar_layout;
-extern StringList bottom_toolbar_layout;
-
-extern StringList file_menu;
-extern StringList edit_menu;
-extern StringList pan_menu;
-extern StringList zoom_menu;
-extern StringList view_menu;
-extern StringList settings_menu;
-extern StringList window_menu;
-extern StringList help_menu;
-extern StringList menubar_order;
-
-extern StringList all_line_editors;
-extern std::unordered_map<std::string, QGroupBox *> groupBoxes;
-extern std::unordered_map<std::string, QComboBox *> comboBoxes;
-extern std::unordered_map<std::string, QLineEdit *> lineEdits;
-extern std::unordered_map<std::string, QToolButton *> toolButtons;
-extern QFontComboBox* comboBoxTextSingleFont;
-extern StringList group_box_list;
-extern std::vector<GroupBoxData> group_box_arc_geometry;
-extern std::vector<GroupBoxData> group_box_ellipse_geometry;
-extern Dictionary config;
-extern std::unordered_map<std::string, GroupBoxData> group_box_data;
-extern QStringList justify_options;
 
 #endif

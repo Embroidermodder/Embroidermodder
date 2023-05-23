@@ -31,10 +31,10 @@ PropertyEditor* dockPropEdit = 0;
 UndoEditor* dockUndoEdit = 0;
 StatusBar* statusbar = 0;
 
-QAction* actionHash[200];
-QHash<QString, QToolBar*> toolbarHash;
-QHash<QString, QMenu*> menuHash;
-QHash<QString, QMenu*> subMenuHash;
+std::unordered_map<std::string, QAction*> actionHash;
+std::unordered_map<std::string, QToolBar*> toolbarHash;
+std::unordered_map<std::string, QMenu*> menuHash;
+std::unordered_map<std::string, QMenu*> subMenuHash;
 
 std::vector<Action> action_table;
 
@@ -2820,42 +2820,44 @@ MainWindow::createAllActions()
 
         auto f = [=](){ actuator(action.command); };
         connect(ACTION, &QAction::triggered, this, f);
-        actionHash[i] = ACTION;
+        actionHash[action.icon] = ACTION;
 
-        QString toolbar_name = QString::fromStdString(action.toolbar_name);
-        if (toolbar_name.toUpper() != "NONE") {
+        if (action.toolbar_name != "None") {
+            auto search = toolbarHash.find(action.toolbar_name);
             //If the toolbar doesn't exist, create it.
-            if (!toolbarHash.value(toolbar_name)) {
-                QToolBar* tb = new QToolBar(toolbar_name, this);
-                tb->setObjectName("toolbar" + toolbar_name);
+            if (search == toolbarHash.end()) {
+                QToolBar* tb = new QToolBar(
+                    QString::fromStdString(action.toolbar_name), this);
+                tb->setObjectName("toolbar" + action.toolbar_name);
                 connect(tb, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
                 addToolBar(Qt::LeftToolBarArea, tb);
                 addToolBarBreak(Qt::LeftToolBarArea);
-                toolbarHash.insert(toolbar_name, tb);
+                toolbarHash[action.toolbar_name] = tb;
             }
 
             //TODO: order actions position in toolbar based on .ini setting
-            toolbarHash.value(toolbar_name)->addAction(actionHash[i]);
+            toolbarHash[action.toolbar_name]->addAction(actionHash[action.icon]);
         }
 
-        QString menu_name = QString::fromStdString(action.menu_name);
-        if (menu_name.toUpper() != "NONE") {
+        if (action.menu_name != "None") {
+            auto search = menuHash.find(action.menu_name);
             //If the menu doesn't exist, create it.
-            if (!menuHash.value(menu_name)) {
-                QMenu* menu = new QMenu(menu_name, this);
+            if (search == menuHash.end()) {
+                QMenu* menu = new QMenu(
+                    QString::fromStdString(action.menu_name), this);
                 menu->setTearOffEnabled(false);
                 menuBar()->addMenu(menu);
-                menuHash.insert(menu_name, menu);
-                menubar_order.push_back(menu_name.toStdString());
+                menuHash[action.menu_name] = menu;
+                menubar_order.push_back(action.menu_name);
             }
 
             //TODO: order actions position in menu based on .ini setting
-            menuHash.value(menu_name)->addAction(actionHash[i]);
+            menuHash[action.menu_name]->addAction(actionHash[action.icon]);
         }
     }
 
-    actionHash[get_action_index("windowclose")]->setEnabled(numOfDocs > 0);
-    actionHash[get_action_index("designdetails")]->setEnabled(numOfDocs > 0);
+    actionHash["windowclose"]->setEnabled(numOfDocs > 0);
+    actionHash["designdetails"]->setEnabled(numOfDocs > 0);
 }
 
 /**
@@ -4222,14 +4224,14 @@ MainWindow::windowMenuAboutToShow()
 {
     debug_message("MainWindow::windowMenuAboutToShow()");
     menuHash["window"]->clear();
-    menuHash["window"]->addAction(actionHash[get_action_index("windowclose")]);
-    menuHash["window"]->addAction(actionHash[get_action_index("windowcloseall")]);
+    menuHash["window"]->addAction(actionHash["windowclose"]);
+    menuHash["window"]->addAction(actionHash["windowcloseall"]);
     menuHash["window"]->addSeparator();
-    menuHash["window"]->addAction(actionHash[get_action_index("windowcascade")]);
-    menuHash["window"]->addAction(actionHash[get_action_index("windowtile")]);
+    menuHash["window"]->addAction(actionHash["windowcascade"]);
+    menuHash["window"]->addAction(actionHash["windowtile"]);
     menuHash["window"]->addSeparator();
-    menuHash["window"]->addAction(actionHash[get_action_index("windownext")]);
-    menuHash["window"]->addAction(actionHash[get_action_index("windowprevious")]);
+    menuHash["window"]->addAction(actionHash["windownext"]);
+    menuHash["window"]->addAction(actionHash["windowprevious"]);
 
     menuHash["window"]->addSeparator();
     QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
@@ -4538,13 +4540,13 @@ MainWindow::updateMenuToolbarStatusbar()
 {
     debug_message("MainWindow::updateMenuToolbarStatusbar()");
 
-    actionHash[get_action_index("print")]->setEnabled(numOfDocs > 0);
-    actionHash[get_action_index("windowclose")]->setEnabled(numOfDocs > 0);
-    actionHash[get_action_index("designdetails")]->setEnabled(numOfDocs > 0);
+    actionHash["print"]->setEnabled(numOfDocs > 0);
+    actionHash["windowclose"]->setEnabled(numOfDocs > 0);
+    actionHash["designdetails"]->setEnabled(numOfDocs > 0);
 
     if (numOfDocs) {
-        foreach (QToolBar* tb, toolbarHash) {
-            tb->show();
+        for (auto iter=toolbarHash.begin(); iter != toolbarHash.end(); iter++) {
+            iter->second->show();
         }
 
         //DockWidgets
@@ -4554,8 +4556,7 @@ MainWindow::updateMenuToolbarStatusbar()
         //Menus
         menuBar()->clear();
         for (int i=0; i<(int)menubar_order.size(); i++) {
-            QString menu_name = QString::fromStdString(menubar_order[i]);
-            menuBar()->addMenu(menuHash[menu_name]);
+            menuBar()->addMenu(menuHash[menubar_order[i]]);
         }
 
         menuHash["window"]->setEnabled(true);
@@ -4573,8 +4574,8 @@ MainWindow::updateMenuToolbarStatusbar()
         statusbar->statusBarLwtButton->show();
     }
     else {
-        foreach (QToolBar* tb, toolbarHash) {
-            tb->hide();
+        for (auto iter=toolbarHash.begin(); iter != toolbarHash.end(); iter++) {
+            iter->second->hide();
         }
 
         toolbarHash["file"]->show();

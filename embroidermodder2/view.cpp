@@ -1185,6 +1185,7 @@ View::setCrossHairSize(quint8 percent)
 void
 View::setCornerButton()
 {
+    /*
     int num = settings.display_scrollbar_widget_num;
     if (num) {
         QPushButton* cornerButton = new QPushButton(this);
@@ -1205,20 +1206,23 @@ View::setCornerButton()
     else {
         setCornerWidget(0);
     }
+    */
 }
 
 void
 View::cornerButtonClicked()
 {
     debug_message("Corner Button Clicked.");
-    actionHash[settings.display_scrollbar_widget_num]->trigger();
+    //actionHash[settings.display_scrollbar_widget_num]->trigger();
 }
 
 void
 View::zoomIn()
 {
     debug_message("View zoomIn()");
-    if (!allowZoomIn()) { return; }
+    if (!allowZoomIn()) {
+        return;
+    }
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QPointF cntr = mapToScene(QPoint(width()/2,height()/2));
     EmbReal s = settings.display_zoomscale_in;
@@ -1876,9 +1880,9 @@ View::contextMenuEvent(QContextMenuEvent* event)
     }
 
     menu.addSeparator();
-    menu.addAction(actionHash[get_action_index("cut")]);
-    menu.addAction(actionHash[get_action_index("copy")]);
-    menu.addAction(actionHash[get_action_index("paste")]);
+    menu.addAction(actionHash["cut"]);
+    menu.addAction(actionHash["copy"]);
+    menu.addAction(actionHash["paste"]);
     menu.addSeparator();
 
     if (!selectionEmpty) {

@@ -330,7 +330,7 @@ QWidget* Settings_Dialog::createTabDisplay()
     QComboBox* comboBoxScrollBarWidget = new QComboBox(groupBoxScrollBars);
     dialog.display_scrollbar_widget_num = settings.display_scrollbar_widget_num;
     for (int i = 0; i < (int)action_table.size(); i++) {
-        QAction* action = actionHash[i];
+        QAction* action = actionHash[action_table[i].icon];
         if (action) {
             comboBoxScrollBarWidget->addItem(action->icon(), action->text().replace("&", ""));
         }

@@ -54,18 +54,16 @@ get_action_index(std::string cmd)
 void
 MainWindow::create_toolbar(std::string toolbar, std::string label, StringList entries)
 {
-    QString qtoolbar = QString::fromStdString(toolbar);
-    toolbarHash[qtoolbar]->setObjectName(QString::fromStdString(label));
+    toolbarHash[toolbar]->setObjectName(QString::fromStdString(label));
     for (int i=0; i<(int)entries.size(); i++) {
         if (entries[i] == "---") {
-            toolbarHash[qtoolbar]->addSeparator();
+            toolbarHash[toolbar]->addSeparator();
         }
         else {
-            int index = get_action_index(entries[i]);
-            toolbarHash[qtoolbar]->addAction(actionHash[index]);
+            toolbarHash[toolbar]->addAction(actionHash[entries[i]]);
         }
     }
-    connect(toolbarHash[qtoolbar],
+    connect(toolbarHash[toolbar],
         SIGNAL(topLevelChanged(bool)),
         this,
         SLOT(floatingChangedToolBar(bool)));
@@ -103,8 +101,8 @@ MainWindow::createAllToolbars()
     debug_message("MainWindow createLayerToolbar()");
 
     toolbarHash["layer"]->setObjectName("toolbarLayer");
-    toolbarHash["layer"]->addAction(actionHash[get_action_index("makelayercurrent")]);
-    toolbarHash["layer"]->addAction(actionHash[get_action_index("layers")]);
+    toolbarHash["layer"]->addAction(actionHash["makelayercurrent"]);
+    toolbarHash["layer"]->addAction(actionHash["layers"]);
 
     layerSelector->setFocusProxy(prompt);
     //TODO: Create layer pixmaps by concatenating several icons
@@ -121,7 +119,7 @@ MainWindow::createAllToolbars()
     toolbarHash["layer"]->addWidget(layerSelector);
     connect(layerSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(layerSelectorIndexChanged(int)));
 
-    toolbarHash["layer"]->addAction(actionHash[get_action_index("layerprevious")]);
+    toolbarHash["layer"]->addAction(actionHash["layerprevious"]);
 
     connect(toolbarHash["layer"], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 
@@ -201,25 +199,20 @@ MainWindow::createAllToolbars()
     textFontSelector->setCurrentFont(QFont(QString::fromStdString(settings.text_font)));
     connect(textFontSelector, SIGNAL(currentFontChanged(QFont)), this, SLOT(textFontSelectorCurrentFontChanged(QFont)));
 
-    int textbold_index = get_action_index("textbold");
-    toolbarHash["text"]->addAction(actionHash[textbold_index]);
-    actionHash[textbold_index]->setChecked(settings.text_style_bold);
+    toolbarHash["text"]->addAction(actionHash["textbold"]);
+    actionHash["textbold"]->setChecked(settings.text_style_bold);
 
-    int textitalic_index = get_action_index("textitalic");
-    toolbarHash["text"]->addAction(actionHash[textitalic_index]);
-    actionHash[get_action_index("textitalic")]->setChecked(settings.text_style_italic);
+    toolbarHash["text"]->addAction(actionHash["textitalic"]);
+    actionHash["textitalic"]->setChecked(settings.text_style_italic);
 
-    int textunderline_index = get_action_index("textunderline");
-    toolbarHash["text"]->addAction(actionHash[textunderline_index]);
-    actionHash[textunderline_index]->setChecked(settings.text_style_underline);
+    toolbarHash["text"]->addAction(actionHash["textunderline"]);
+    actionHash["textunderline"]->setChecked(settings.text_style_underline);
 
-    int textstrikeout_index = get_action_index("textstrikeout");
-    toolbarHash["text"]->addAction(actionHash[textstrikeout_index]);
-    actionHash[textstrikeout_index]->setChecked(settings.text_style_strikeout);
+    toolbarHash["text"]->addAction(actionHash["textstrikeout"]);
+    actionHash["textstrikeout"]->setChecked(settings.text_style_strikeout);
 
-    int textoverline_index = get_action_index("textoverline");
-    toolbarHash["text"]->addAction(actionHash[textoverline_index]);
-    actionHash[textoverline_index]->setChecked(settings.text_style_overline);
+    toolbarHash["text"]->addAction(actionHash["textoverline"]);
+    actionHash["textoverline"]->setChecked(settings.text_style_overline);
 
     textSizeSelector->setFocusProxy(prompt);
     textSizeSelector->addItem("6 pt",   6);
@@ -262,8 +255,7 @@ MainWindow::createAllToolbars()
             addToolBarBreak(Qt::TopToolBarArea);
         }
         else {
-            addToolBar(Qt::TopToolBarArea,
-                       toolbarHash[QString::fromStdString(top_toolbar_layout[i])]);
+            addToolBar(Qt::TopToolBarArea, toolbarHash[top_toolbar_layout[i]]);
         }
     }
 
@@ -272,8 +264,7 @@ MainWindow::createAllToolbars()
             addToolBarBreak(Qt::BottomToolBarArea);
         }
         else {
-            addToolBar(Qt::BottomToolBarArea,
-                       toolbarHash[QString::fromStdString(bottom_toolbar_layout[i])]);
+            addToolBar(Qt::BottomToolBarArea, toolbarHash[bottom_toolbar_layout[i]]);
         }
     }
 
