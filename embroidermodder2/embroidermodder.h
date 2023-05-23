@@ -808,6 +808,7 @@ extern StatusBar* statusbar;
 extern QAction* actionHash[200];
 extern QHash<QString, QToolBar*> toolbarHash;
 extern QHash<QString, QMenu*> menuHash;
+extern QHash<QString, QMenu*> subMenuHash;
 
 /* Functions in the global namespace
  * ---------------------------------
@@ -1877,7 +1878,7 @@ public:
     bool isCommandActive() { return prompt->isCommandActive(); }
     QString activeCommand() { return prompt->activeCommand(); }
     QIcon create_icon(QString stub);
-    void create_toolbar(QToolBar* toolbar, std::string label, StringList entries);
+    void create_toolbar(std::string toolbar, std::string label, StringList entries);
 
     QString platformString();
 
@@ -1933,28 +1934,8 @@ protected:
     QStringList listTipOfTheDay;
 
     void createAllActions();
-
-    // Toolbars
+    void createAllMenus();
     void createAllToolbars();
-    void createPanToolbar();
-    void createIconToolbar();
-    void createHelpToolbar();
-    void createLayerToolbar();
-    void createPropertiesToolbar();
-    void createTextToolbar();
-    void createPromptToolbar();
-
-    QToolBar* toolbarFile;
-    QToolBar* toolbarEdit;
-    QToolBar* toolbarView;
-    QToolBar* toolbarZoom;
-    QToolBar* toolbarPan;
-    QToolBar* toolbarIcon;
-    QToolBar* toolbarHelp;
-    QToolBar* toolbarLayer;
-    QToolBar* toolbarText;
-    QToolBar* toolbarProperties;
-    QToolBar* toolbarPrompt;
 
     // Selectors
     QComboBox* layerSelector;
@@ -1963,27 +1944,6 @@ protected:
     QComboBox* lineweightSelector;
     QFontComboBox* textFontSelector;
     QComboBox* textSizeSelector;
-
-    // Menus
-    void createAllMenus();
-    void createFileMenu();
-    void createEditMenu();
-    void createViewMenu();
-    void createSettingsMenu();
-    void createWindowMenu();
-    void createHelpMenu();
-
-    QMenu* fileMenu;
-    QMenu* editMenu;
-    QMenu* viewMenu;
-    QMenu* settingsMenu;
-    QMenu* windowMenu;
-    QMenu* helpMenu;
-
-    // SubMenus
-    QMenu* recentMenu;
-    QMenu* zoomMenu;
-    QMenu* panMenu;
 
 private slots:
     void hideUnimplemented();

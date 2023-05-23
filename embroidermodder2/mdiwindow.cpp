@@ -19,30 +19,6 @@
 
 #include "embroidermodder.h"
 
-std::string
-construct_command(std::string command, const char *fmt, ...)
-{
-    va_list args;
-    va_start(args, fmt);
-    for (int i=0; i<(int)strlen(fmt); i++) {
-        if (fmt[i] == 's') {
-            std::string s(va_arg(args, char*));
-            command += s;
-        }
-        if (fmt[i] == 'i') {
-            command += std::to_string(va_arg(args, int));
-        }
-        if (fmt[i] == 'b') {
-            command += std::to_string(va_arg(args, bool));
-        }
-        if (fmt[i] == 'f') {
-            command += std::to_string(va_arg(args, EmbReal));
-        }
-    }
-    va_end(args);
-    return command;
-}
-
 /**
  *
  */
