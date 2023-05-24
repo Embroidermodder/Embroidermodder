@@ -31,10 +31,10 @@ PropertyEditor* dockPropEdit = 0;
 UndoEditor* dockUndoEdit = 0;
 StatusBar* statusbar = 0;
 
-std::unordered_map<std::string, QAction*> actionHash;
-std::unordered_map<std::string, QToolBar*> toolbarHash;
-std::unordered_map<std::string, QMenu*> menuHash;
-std::unordered_map<std::string, QMenu*> subMenuHash;
+std::unordered_map<String, QAction*> actionHash;
+std::unordered_map<String, QToolBar*> toolbarHash;
+std::unordered_map<String, QMenu*> menuHash;
+std::unordered_map<String, QMenu*> subMenuHash;
 
 std::vector<Action> action_table;
 
@@ -43,10 +43,23 @@ std::vector<EmbReal> snowflake_y;
 std::vector<EmbReal> dolphin_x;
 std::vector<EmbReal> dolphin_y;
 
-std::string convert_args_to_type(std::string label, StringList args,
-    const char *args_template, std::vector<Parameter> a);
+StringList tokenize(String str, const char delim);
+String convert_args_to_type(String label, StringList args,
+    const char *args_template, ParameterList a);
 
-std::unordered_map<std::string, int> rubber_mode_hash = {
+typedef String (*Command)(String);
+
+std::unordered_map<String, Command> command_map = {
+    {"add-arc", add_arc_action},
+    {"add-circle", add_circle_action},
+    {"add-rubber", add_rubber_action},
+    {"add-slot", add_slot_action},
+    {"cut", cut_action},
+    {"set-rubber-text", set_rubber_text_action},
+    {"spare-rubber", spare_rubber_action}
+};
+
+std::unordered_map<String, int> rubber_mode_hash = {
     {"CIRCLE_1P_RAD", OBJ_RUBBER_CIRCLE_1P_RAD},
     {"CIRCLE_1P_DIA", OBJ_RUBBER_CIRCLE_1P_DIA},
     {"CIRCLE_2P", OBJ_RUBBER_CIRCLE_2P},
@@ -97,336 +110,14 @@ QString SettingsPath()
  * @param list
  * @return
  */
-std::vector<std::string>
+std::vector<String>
 to_string_vector(QStringList list)
 {
-    std::vector<std::string> a;
+    std::vector<String> a;
     for (int i=0; i<(int)list.size(); i++) {
         a.push_back(list[i].toStdString());
     }
     return a;
-}
-
-/**
- * @brief read_settings
- *
- * This file needs to be read from the users home directory to ensure it is writable.
- */
-void
-read_settings(void)
-{
-    debug_message("Reading Settings...");
-    QString settingsPath = SettingsPath();
-    QString settingsDir = SettingsDir();
-    QString appDir = qApp->applicationDirPath();
-    QSettings settings_file(settingsPath, QSettings::IniFormat);
-    settings.position_x = settings_file.value("Window/PositionX", 0).toInt();
-    settings.position_y = settings_file.value("Window/PositionY", 0).toInt();
-    settings.size_x = settings_file.value("Window/SizeX", 800).toInt();
-    settings.size_y = settings_file.value("Window/SizeY", 600).toInt();
-
-    /*
-    layoutState = settings_file.value("LayoutState").toByteArray();
-    if (!restoreState(layoutState)) {
-        debug_message("LayoutState NOT restored! Setting Default Layout...");
-        //someToolBar->setVisible(true);
-    }
-    */
-
-    //General
-    settings.general_language = settings_file.value("Language", "default").toString().toStdString();
-    settings.general_icon_theme = settings_file.value("IconTheme", "default").toString().toStdString();
-    settings.general_icon_size = settings_file.value("IconSize", 16).toInt();
-    settings.general_mdi_bg_use_logo = settings_file.value("MdiBGUseLogo", true).toBool();
-    settings.general_mdi_bg_use_texture = settings_file.value("MdiBGUseTexture", true).toBool();
-    settings.general_mdi_bg_use_color = settings_file.value("MdiBGUseColor", true).toBool();
-    settings.general_mdi_bg_logo = settings_file.value("MdiBGLogo", appDir + "/images/logo-spirals.png").toString().toStdString();
-    settings.general_mdi_bg_texture = settings_file.value("MdiBGTexture", appDir + "/images/texture-spirals.png").toString().toStdString();
-    settings.general_mdi_bg_color = settings_file.value("MdiBGColor", qRgb(192,192,192)).toInt();
-    settings.general_tip_of_the_day = settings_file.value("TipOfTheDay", true).toBool();
-    settings.general_current_tip = settings_file.value("CurrentTip", 0).toInt();
-    settings.general_system_help_browser = settings_file.value("SystemHelpBrowser", true).toBool();
-
-    //Display
-    settings.display_use_opengl = settings_file.value("Display/UseOpenGL", false).toBool();
-    settings.display_renderhint_aa = settings_file.value("Display/RenderHintAntiAlias", false).toBool();
-    settings.display_renderhint_text_aa = settings_file.value("Display/RenderHintTextAntiAlias", false).toBool();
-    settings.display_renderhint_smooth_pix = settings_file.value("Display/RenderHintSmoothPixmap", false).toBool();
-    settings.display_renderhint_high_aa = settings_file.value("Display/RenderHintHighQualityAntiAlias", false).toBool();
-    settings.display_renderhint_noncosmetic = settings_file.value("Display/RenderHintNonCosmetic", false).toBool();
-    settings.display_show_scrollbars = settings_file.value("Display/ShowScrollBars", true).toBool();
-    settings.display_scrollbar_widget_num = settings_file.value("Display/ScrollBarWidgetNum", 0).toInt();
-    settings.display_crosshair_color = settings_file.value("Display/CrossHairColor", qRgb(  0, 0, 0)).toInt();
-    settings.display_bg_color = settings_file.value("Display/BackgroundColor", qRgb(235,235,235)).toInt();
-    settings.display_selectbox_left_color = settings_file.value("Display/SelectBoxLeftColor", qRgb(  0,128, 0)).toInt();
-    settings.display_selectbox_left_fill = settings_file.value("Display/SelectBoxLeftFill", qRgb(  0,255, 0)).toInt();
-    settings.display_selectbox_right_color = settings_file.value("Display/SelectBoxRightColor", qRgb(  0, 0,128)).toInt();
-    settings.display_selectbox_right_fill = settings_file.value("Display/SelectBoxRightFill", qRgb(  0, 0,255)).toInt();
-    settings.display_selectbox_alpha = settings_file.value("Display/SelectBoxAlpha", 32).toInt();
-    settings.display_zoomscale_in = settings_file.value("Display/ZoomScaleIn", 2.0).toFloat();
-    settings.display_zoomscale_out = settings_file.value("Display/ZoomScaleOut", 0.5).toFloat();
-    settings.display_crosshair_percent = settings_file.value("Display/CrossHairPercent", 5).toInt();
-    settings.display_units = settings_file.value("Display/Units", "mm").toString().toStdString();
-
-    //Prompt
-    settings.prompt_text_color = settings_file.value("Prompt/TextColor", qRgb(  0, 0, 0)).toInt();
-    settings.prompt_bg_color = settings_file.value("Prompt/BackgroundColor", qRgb(255,255,255)).toInt();
-    settings.prompt_font_family = settings_file.value("Prompt/FontFamily", "Monospace").toString().toStdString();
-    settings.prompt_font_style = settings_file.value("Prompt/FontStyle", "normal").toString().toStdString();
-    settings.prompt_font_size = settings_file.value("Prompt/FontSize", 12).toInt();
-    settings.prompt_save_history = settings_file.value("Prompt/SaveHistory", true).toBool();
-    settings.prompt_save_history_as_html = settings_file.value("Prompt/SaveHistoryAsHtml", false).toBool();
-    settings.prompt_save_history_filename = settings_file.value("Prompt/SaveHistoryFilename", settingsDir + "prompt.log").toString().toStdString();
-
-    //OpenSave
-    settings.opensave_custom_filter = settings_file.value("OpenSave/CustomFilter", "supported").toString();
-    settings.opensave_open_format = settings_file.value("OpenSave/OpenFormat", "*.*").toString().toStdString();
-    settings.opensave_open_thumbnail = settings_file.value("OpenSave/OpenThumbnail", false).toBool();
-    settings.opensave_save_format = settings_file.value("OpenSave/SaveFormat", "*.*").toString().toStdString();
-    settings.opensave_save_thumbnail = settings_file.value("OpenSave/SaveThumbnail", false).toBool();
-
-    //Recent
-    settings.opensave_recent_max_files = settings_file.value("OpenSave/RecentMax", 10).toInt();
-    settings.opensave_recent_list_of_files = settings_file.value("OpenSave/RecentFiles").toStringList();
-    settings.opensave_recent_directory = settings_file.value("OpenSave/RecentDirectory", appDir + "/samples").toString().toStdString();
-
-    //Trimming
-    settings.opensave_trim_dst_num_jumps = settings_file.value("OpenSave/TrimDstNumJumps", 5).toInt();
-
-    //Printing
-    settings.printing_default_device = settings_file.value("Printing/DefaultDevice", "").toString().toStdString();
-    settings.printing_use_last_device = settings_file.value("Printing/UseLastDevice", false).toBool();
-    settings.printing_disable_bg = settings_file.value("Printing/DisableBG", true).toBool();
-
-    //Grid
-    settings.grid_show_on_load = settings_file.value("Grid/ShowOnLoad", true).toBool();
-    settings.grid_show_origin = settings_file.value("Grid/ShowOrigin", true).toBool();
-    settings.grid_color_match_crosshair = settings_file.value("Grid/ColorMatchCrossHair", true).toBool();
-    settings.grid_color = settings_file.value("Grid/Color", qRgb(  0, 0, 0)).toInt();
-    settings.grid_load_from_file = settings_file.value("Grid/LoadFromFile", true).toBool();
-    settings.grid_type = settings_file.value("Grid/Type", "Rectangular").toString().toStdString();
-    settings.grid_center_on_origin = settings_file.value("Grid/CenterOnOrigin", true).toBool();
-    settings.grid_center.x = settings_file.value("Grid/CenterX", 0.0).toFloat();
-    settings.grid_center.y = settings_file.value("Grid/CenterY", 0.0).toFloat();
-    settings.grid_size.x = settings_file.value("Grid/SizeX", 100.0).toFloat();
-    settings.grid_size.y = settings_file.value("Grid/SizeY", 100.0).toFloat();
-    settings.grid_spacing.x = settings_file.value("Grid/SpacingX", 25.0).toFloat();
-    settings.grid_spacing.y = settings_file.value("Grid/SpacingY", 25.0).toFloat();
-    settings.grid_size_radius = settings_file.value("Grid/SizeRadius", 50.0).toFloat();
-    settings.grid_spacing_radius = settings_file.value("Grid/SpacingRadius", 25.0).toFloat();
-    settings.grid_spacing_angle = settings_file.value("Grid/SpacingAngle", 45.0).toFloat();
-
-    //Ruler
-    settings.ruler_show_on_load = settings_file.value("Ruler/ShowOnLoad", true).toBool();
-    settings.ruler_metric = settings_file.value("Ruler/Metric", true).toBool();
-    settings.ruler_color = settings_file.value("Ruler/Color", qRgb(210,210, 50)).toInt();
-    settings.ruler_pixel_size = settings_file.value("Ruler/PixelSize", 20).toInt();
-
-    //Quick Snap
-    settings.qsnap_enabled = settings_file.value("QuickSnap/Enabled", true).toBool();
-    settings.qsnap_locator_color = settings_file.value("QuickSnap/LocatorColor", qRgb(255,255, 0)).toInt();
-    settings.qsnap_locator_size = settings_file.value("QuickSnap/LocatorSize", 4).toInt();
-    settings.qsnap_aperture_size = settings_file.value("QuickSnap/ApertureSize", 10).toInt();
-    settings.qsnap_endpoint = settings_file.value("QuickSnap/EndPoint", true).toBool();
-    settings.qsnap_midpoint = settings_file.value("QuickSnap/MidPoint", true).toBool();
-    settings.qsnap_center = settings_file.value("QuickSnap/Center", true).toBool();
-    settings.qsnap_node = settings_file.value("QuickSnap/Node", true).toBool();
-    settings.qsnap_quadrant = settings_file.value("QuickSnap/Quadrant", true).toBool();
-    settings.qsnap_intersection = settings_file.value("QuickSnap/Intersection", true).toBool();
-    settings.qsnap_extension = settings_file.value("QuickSnap/Extension", true).toBool();
-    settings.qsnap_insertion = settings_file.value("QuickSnap/Insertion", false).toBool();
-    settings.qsnap_perpendicular = settings_file.value("QuickSnap/Perpendicular", true).toBool();
-    settings.qsnap_tangent = settings_file.value("QuickSnap/Tangent", true).toBool();
-    settings.qsnap_nearest = settings_file.value("QuickSnap/Nearest", false).toBool();
-    settings.qsnap_apparent = settings_file.value("QuickSnap/Apparent", false).toBool();
-    settings.qsnap_parallel = settings_file.value("QuickSnap/Parallel", false).toBool();
-
-    //LineWeight
-    settings.lwt_show_lwt = settings_file.value("LineWeight/ShowLineWeight", false).toBool();
-    settings.lwt_real_render = settings_file.value("LineWeight/RealRender", true).toBool();
-    settings.lwt_default_lwt = settings_file.value("LineWeight/DefaultLineWeight", 0).toReal();
-
-    //Selection
-    settings.selection_mode_pickfirst = settings_file.value("Selection/PickFirst", true).toBool();
-    settings.selection_mode_pickadd = settings_file.value("Selection/PickAdd", true).toBool();
-    settings.selection_mode_pickdrag = settings_file.value("Selection/PickDrag", false).toBool();
-    settings.selection_coolgrip_color = settings_file.value("Selection/CoolGripColor", qRgb(  0, 0,255)).toInt();
-    settings.selection_hotgrip_color = settings_file.value("Selection/HotGripColor", qRgb(255, 0, 0)).toInt();
-    settings.selection_grip_size = settings_file.value("Selection/GripSize", 4).toInt();
-    settings.selection_pickbox_size = settings_file.value("Selection/PickBoxSize", 4).toInt();
-
-    //Text
-    settings.text_font = settings_file.value("Text/Font", "Arial").toString().toStdString();
-    settings.text_size = settings_file.value("Text/Size", 12).toReal();
-    settings.text_angle = settings_file.value("Text/Angle", 0).toReal();
-    settings.text_style_bold = settings_file.value("Text/StyleBold", false).toBool();
-    settings.text_style_italic = settings_file.value("Text/StyleItalic", false).toBool();
-    settings.text_style_underline = settings_file.value("Text/StyleUnderline", false).toBool();
-    settings.text_style_strikeout = settings_file.value("Text/StyleStrikeOut", false).toBool();
-    settings.text_style_overline = settings_file.value("Text/StyleOverline", false).toBool();
-}
-
-/**
- * @brief MainWindow::writeSettings
- *
- * This file needs to be read from the users home directory to ensure it is writable
- */
-void
-write_settings(void)
-{
-    debug_message("Writing Settings...");
-    QString settingsPath = SettingsPath();
-    std::ofstream settings_file;
-    settings_file.open(settingsPath.toStdString());
-
-    settings_file << "[General]" << std::endl;
-    //settings_file << "LayoutState=" << layoutState << std::endl;
-    settings_file << "Language=" << settings.general_language << std::endl;
-    settings_file << "IconTheme=" << settings.general_icon_theme << std::endl;
-    settings_file << "IconSize=" << settings.general_icon_size << std::endl;
-    settings_file << "MdiBGUseLogo=" << settings.general_mdi_bg_use_logo << std::endl;
-    settings_file << "MdiBGUseTexture=" << settings.general_mdi_bg_use_texture << std::endl;
-    settings_file << "MdiBGUseColor=" << settings.general_mdi_bg_use_color << std::endl;
-    settings_file << "MdiBGLogo=" << settings.general_mdi_bg_logo << std::endl;
-    settings_file << "MdiBGTexture=" << settings.general_mdi_bg_texture << std::endl;
-    settings_file << "MdiBGColor=" << settings.general_mdi_bg_color << std::endl;
-    settings_file << "TipOfTheDay=" << settings.general_tip_of_the_day << std::endl;
-    settings_file << "CurrentTip=" << settings.general_current_tip + 1 << std::endl;
-    settings_file << "SystemHelpBrowser=" << settings.general_system_help_browser << std::endl;
-    settings_file << std::endl;
-
-    settings_file << "[Window]" << std::endl;
-    settings_file << "PositionX=" << _mainWin->pos().x() << std::endl;
-    settings_file << "PositionY=" << _mainWin->pos().y() << std::endl;
-    settings_file << "SizeX=" << _mainWin->size().width() << std::endl;
-    settings_file << "SizeY=" << _mainWin->size().height() << std::endl;
-    settings_file << std::endl;
-
-    settings_file << "[Display]" << std::endl;
-    settings_file << "UseOpenGL=" << settings.display_use_opengl << std::endl;
-    settings_file << "RenderHintAntiAlias=" << settings.display_renderhint_aa << std::endl;
-    settings_file << "RenderHintTextAntiAlias=" << settings.display_renderhint_text_aa << std::endl;
-    settings_file << "RenderHintSmoothPixmap=" << settings.display_renderhint_smooth_pix << std::endl;
-    settings_file << "RenderHintHighQualityAntiAlias=" << settings.display_renderhint_high_aa << std::endl;
-    settings_file << "RenderHintNonCosmetic=" << settings.display_renderhint_noncosmetic << std::endl;
-    settings_file << "ShowScrollBars=" << settings.display_show_scrollbars << std::endl;
-    settings_file << "ScrollBarWidgetNum=" << settings.display_scrollbar_widget_num << std::endl;
-    settings_file << "CrossHairColor=" << settings.display_crosshair_color << std::endl;
-    settings_file << "BackgroundColor=" << settings.display_bg_color << std::endl;
-    settings_file << "SelectBoxLeftColor=" << settings.display_selectbox_left_color << std::endl;
-    settings_file << "SelectBoxLeftFill=" << settings.display_selectbox_left_fill << std::endl;
-    settings_file << "SelectBoxRightColor=" << settings.display_selectbox_right_color << std::endl;
-    settings_file << "SelectBoxRightFill=" << settings.display_selectbox_right_fill << std::endl;
-    settings_file << "SelectBoxAlpha=" << settings.display_selectbox_alpha << std::endl;
-    settings_file << "ZoomScaleIn=" << settings.display_zoomscale_in << std::endl;
-    settings_file << "ZoomScaleOut=" << settings.display_zoomscale_out << std::endl;
-    settings_file << "CrossHairPercent=" << settings.display_crosshair_percent << std::endl;
-    settings_file << "Units=" << settings.display_units << std::endl;
-    settings_file << std::endl;
-
-    settings_file << "[Prompt]" << std::endl;
-    settings_file << "TextColor=" << settings.prompt_text_color << std::endl;
-    settings_file << "BackgroundColor=" << (unsigned int)settings.prompt_bg_color << std::endl;
-    settings_file << "FontFamily=" << settings.prompt_font_family << std::endl;
-    settings_file << "FontStyle=" << settings.prompt_font_style << std::endl;
-    settings_file << "FontSize=" << settings.prompt_font_size << std::endl;
-    settings_file << "SaveHistory=" << settings.prompt_save_history << std::endl;
-    settings_file << "SaveHistoryAsHtml=" << settings.prompt_save_history_as_html << std::endl;
-    settings_file << "SaveHistoryFilename=" << settings.prompt_save_history_filename  << std::endl;
-    settings_file << std::endl;
-
-    settings_file << "[OpenSave]" << std::endl;
-    settings_file << "CustomFilter=" << settings.opensave_custom_filter.toStdString() << std::endl;
-    settings_file << "OpenFormat=" << settings.opensave_open_format << std::endl;
-    settings_file << "OpenThumbnail=" << settings.opensave_open_thumbnail << std::endl;
-    settings_file << "SaveFormat=" << settings.opensave_save_format << std::endl;
-    settings_file << "SaveThumbnail=" << settings.opensave_save_thumbnail << std::endl;
-    settings_file << "RecentMax=" << settings.opensave_recent_max_files << std::endl;
-    // settings_file << "RecentFiles=" << settings.opensave_recent_list_of_files << std::endl;
-    settings_file << "RecentDirectory=" << settings.opensave_recent_directory << std::endl;
-    settings_file << "TrimDstNumJumps=" << settings.opensave_trim_dst_num_jumps << std::endl;
-    settings_file << std::endl;
-
-    settings_file << "[Printing]" << std::endl;
-    settings_file << "DefaultDevice=" << settings.printing_default_device << std::endl;
-    settings_file << "UseLastDevice=" << settings.printing_use_last_device << std::endl;
-    settings_file << "DisableBG=" << settings.printing_disable_bg << std::endl;
-    settings_file << std::endl;
-
-    settings_file << "[Grid]" << std::endl;
-    settings_file << "ShowOnLoad=" << settings.grid_show_on_load << std::endl;
-    settings_file << "ShowOrigin=" << settings.grid_show_origin << std::endl;
-    settings_file << "ColorMatchCrossHair=" << settings.grid_color_match_crosshair << std::endl;
-    settings_file << "Color=" << settings.grid_color << std::endl;
-    settings_file << "LoadFromFile=" << settings.grid_load_from_file << std::endl;
-    settings_file << "Type=" << settings.grid_type << std::endl;;
-    settings_file << "CenterOnOrigin=" << settings.grid_center_on_origin << std::endl;
-    settings_file << "CenterX=" << settings.grid_center.x << std::endl;
-    settings_file << "CenterY=" << settings.grid_center.y << std::endl;
-    settings_file << "SizeX=" << settings.grid_size.x << std::endl;
-    settings_file << "SizeY=" << settings.grid_size.y << std::endl;
-    settings_file << "SpacingX=" << settings.grid_spacing.x << std::endl;
-    settings_file << "SpacingY=" << settings.grid_spacing.y << std::endl;
-    settings_file << "SizeRadius=" << settings.grid_size_radius << std::endl;
-    settings_file << "SpacingRadius=" << settings.grid_spacing_radius << std::endl;
-    settings_file << "SpacingAngle=" << settings.grid_spacing_angle << std::endl;
-    settings_file << std::endl;
-
-    settings_file << "[Ruler]" << std::endl;
-    settings_file << "ShowOnLoad=" << settings.ruler_show_on_load << std::endl;
-    settings_file << "Metric=" << settings.ruler_metric << std::endl;
-    settings_file << "Color=" << (unsigned int)settings.ruler_color << std::endl;
-    settings_file << "PixelSize=" << settings.ruler_pixel_size << std::endl;
-    settings_file << std::endl;
-
-    settings_file << "[QuickSnap]" << std::endl;
-    settings_file << "Enabled=" << settings.qsnap_enabled << std::endl;
-    settings_file << "LocatorColor=" << settings.qsnap_locator_color << std::endl;
-    settings_file << "LocatorSize=" << settings.qsnap_locator_size << std::endl;
-    settings_file << "ApertureSize=" << settings.qsnap_aperture_size << std::endl;
-    settings_file << "EndPoint=" << settings.qsnap_endpoint << std::endl;
-    settings_file << "MidPoint=" << settings.qsnap_midpoint << std::endl;
-    settings_file << "Center=" << settings.qsnap_center << std::endl;
-    settings_file << "Node=" << settings.qsnap_node << std::endl;
-    settings_file << "Quadrant=" << settings.qsnap_quadrant << std::endl;
-    settings_file << "Intersection=" << settings.qsnap_intersection << std::endl;
-    settings_file << "Extension=" << settings.qsnap_extension << std::endl;
-    settings_file << "Insertion=" << settings.qsnap_insertion << std::endl;
-    settings_file << "Perpendicular=" << settings.qsnap_perpendicular << std::endl;
-    settings_file << "Tangent=" << settings.qsnap_tangent << std::endl;
-    settings_file << "Nearest=" << settings.qsnap_nearest << std::endl;
-    settings_file << "Apparent=" << settings.qsnap_apparent << std::endl;
-    settings_file << "Parallel=" << settings.qsnap_parallel << std::endl;
-    settings_file << std::endl;
-
-    settings_file << "[LineWeight]" << std::endl;
-    settings_file << "ShowLineWeight=" << settings.lwt_show_lwt << std::endl;
-    settings_file << "RealRender=" << settings.lwt_real_render << std::endl;
-    settings_file << "DefaultLineWeight=" << settings.lwt_default_lwt << std::endl;
-    settings_file << std::endl;
-
-    settings_file << "[Selection]" << std::endl;
-    settings_file << "PickFirst=" << settings.selection_mode_pickfirst << std::endl;
-    settings_file << "PickAdd=" << settings.selection_mode_pickadd << std::endl;
-    settings_file << "PickDrag=" << settings.selection_mode_pickdrag << std::endl;
-    settings_file << "CoolGripColor=" << settings.selection_coolgrip_color << std::endl;
-    settings_file << "HotGripColor=" << settings.selection_hotgrip_color << std::endl;
-    settings_file << "GripSize=" << settings.selection_grip_size << std::endl;
-    settings_file << "PickBoxSize=" << settings.selection_pickbox_size << std::endl;
-    settings_file << std::endl;
-
-    settings_file << "[Text]" << std::endl;
-    settings_file << "Font=" << settings.text_font << std::endl;
-    settings_file << "Size=" << settings.text_size << std::endl;
-    settings_file << "Angle=" << settings.text_angle << std::endl;
-    settings_file << "StyleBold=" << settings.text_style_bold << std::endl;
-    settings_file << "StyleItalic=" << settings.text_style_italic << std::endl;
-    settings_file << "StyleUnderline=" << settings.text_style_underline << std::endl;
-    settings_file << "StyleStrikeOut=" << settings.text_style_strikeout << std::endl;
-    settings_file << "StyleOverline=" << settings.text_style_overline << std::endl;
-    settings_file << std::endl;
-
-    settings_file.close();
 }
 
 /**
@@ -486,14 +177,18 @@ MainWindow::checkForUpdates()
 /**
  *
  */
-void
-MainWindow::cut()
+String
+cut_action(String args)
 {
     debug_message("cut()");
+    if (args != "") {
+        debug_message("cut_action was passed an argument that was ignored");
+    }
     View* gview = _mainWin->activeView();
     if (gview) {
         gview->cut();
     }
+    return "";
 }
 
 /**
@@ -1044,8 +739,8 @@ MainWindow::layerPrevious()
 /**
  * .
  */
-std::string
-MainWindow::pan(std::string mode)
+String
+MainWindow::pan(String mode)
 {
     View* gview = _mainWin->activeView();
     QUndoStack* stack = gview->getUndoStack();
@@ -1088,8 +783,8 @@ MainWindow::pan(std::string mode)
     return "ERROR: pan subcommand not recognised.";
 }
 
-std::string
-MainWindow::zoom(std::string mode)
+String
+MainWindow::zoom(String mode)
 {
     View* gview = _mainWin->activeView();
     QUndoStack* stack = gview->getUndoStack();
@@ -1565,10 +1260,10 @@ MainWindow::nativeSpareRubber(qint64 id)
 /**
  * .
  */
-std::string
-MainWindow::nativeSetRubberMode(std::vector<Parameter> a)
+String
+MainWindow::nativeSetRubberMode(ParameterList a)
 {
-    std::string mode = QString::fromStdString(a[0].s).toUpper().toStdString();
+    String mode = QString::fromStdString(a[0].s).toUpper().toStdString();
 
     View* gview = _mainWin->activeView();
     if (gview) {
@@ -1765,13 +1460,13 @@ void
 MainWindow::nativeAddTriangle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal x3, EmbReal y3, EmbReal rot, bool fill)
 {
     /*
-    AddTriangle(std::vector<Parameter> a)
+    AddTriangle(ParameterList a)
     _mainWin->nativeAddTriangle(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, a[6].r, a[7].b);
     */
 }
 
 void
-MainWindow::nativeAddRectangle(std::vector<Parameter> a)
+MainWindow::nativeAddRectangle(ParameterList a)
 {
     EmbReal x = a[0].r;
     EmbReal y = a[1].r;
@@ -1804,6 +1499,15 @@ MainWindow::nativeAddRectangle(std::vector<Parameter> a)
 void
 MainWindow::nativeAddRoundedRectangle(EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rad, EmbReal rot, bool fill)
 {
+    /*
+    String
+    AddRoundedRectangle(ParameterList a)
+    {
+        _mainWin->nativeAddRoundedRectangle(
+            a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, a[6].b);
+        return "";
+    }
+    */
 }
 
 void
@@ -2013,7 +1717,7 @@ void
 MainWindow::nativeAddPath(EmbReal startX, EmbReal startY, const QPainterPath& p, int rubberMode)
 {
     /*
-    AddPath(std::vector<Parameter> a)
+    AddPath(ParameterList a)
     // TODO: parameter error checking
     debug_message("TODO: finish addPath command");
     */
@@ -2026,7 +1730,7 @@ void
 MainWindow::nativeAddHorizontalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight)
 {
     /*
-    AddHorizontalDimension(std::vector<Parameter> a)
+    AddHorizontalDimension(ParameterList a)
     //TODO: parameter error checking
     debug_message("TODO: finish addHorizontalDimension command");
     */
@@ -2039,7 +1743,7 @@ void
 MainWindow::nativeAddVerticalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight)
 {
     /*
-    AddVerticalDimension(std::vector<Parameter> a)
+    AddVerticalDimension(ParameterList a)
     //TODO: parameter error checking
     debug_message("TODO: finish addVerticalDimension command");
     */
@@ -2052,7 +1756,7 @@ void
 MainWindow::nativeAddImage(const QString& img, EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot)
 {
     /*
-    AddImage(std::vector<Parameter> a)
+    AddImage(ParameterList a)
     //TODO: parameter error checking
     debug_message("TODO: finish addImage command");
     */
@@ -2065,7 +1769,7 @@ void
 MainWindow::nativeAddDimLeader(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, int rubberMode)
 {
     /*
-    AddDimLeader(std::vector<Parameter> a)
+    AddDimLeader(ParameterList a)
     _mainWin->nativeAddDimLeader(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, OBJ_RUBBER_OFF);
     */
     View* gview = _mainWin->activeView();
@@ -2153,9 +1857,9 @@ MainWindow::nativeCalculateAngle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 }
 
 /**
- * CalculateDistance(std::vector<Parameter> a)
+ * CalculateDistance(ParameterList a)
  *     EmbReal result = _mainWin->nativeCalculateDistance(a[0].r, a[1].r, a[2].r, a[3].r);
- *     return std::string(result);
+ *     return String(result);
  */
 EmbReal
 MainWindow::nativeCalculateDistance(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
@@ -2389,14 +2093,14 @@ MainWindow::nativeMouseY()
  * @param fmt
  * @return
  */
-std::string
-construct_command(std::string command, const char *fmt, ...)
+String
+construct_command(String command, const char *fmt, ...)
 {
     va_list args;
     va_start(args, fmt);
     for (int i=0; i<(int)strlen(fmt); i++) {
         if (fmt[i] == 's') {
-            std::string s(va_arg(args, char*));
+            String s(va_arg(args, char*));
             command += s;
         }
         if (fmt[i] == 'i') {
@@ -2420,11 +2124,11 @@ construct_command(std::string command, const char *fmt, ...)
  * @return
  */
 StringList
-tokenize(std::string str, const char delim)
+tokenize(String str, const char delim)
 {
     StringList list;
     std::stringstream str_stream(str);
-    std::string s;
+    String s;
     while (std::getline(str_stream, s, delim)) {
         list.push_back(s);
     }
@@ -2434,14 +2138,14 @@ tokenize(std::string str, const char delim)
 /**
  * .
  */
-std::string
+String
 read_string_setting(toml_table_t *table, const char *key)
 {
     toml_datum_t str = toml_string_in(table, key);
     if (!str.ok) {
         return "";
     }
-    std::string s(str.u.s);
+    String s(str.u.s);
     free(str.u.s);
     return s;
 }
@@ -2449,17 +2153,17 @@ read_string_setting(toml_table_t *table, const char *key)
 /**
  * .
  */
-std::vector<std::string>
+std::vector<String>
 read_string_list_setting(toml_table_t *table, const char *key)
 {
-    std::vector<std::string> str_list;
+    std::vector<String> str_list;
     toml_array_t* array = toml_array_in(table, key);
     for (int i=0; ; i++) {
         toml_datum_t str = toml_string_at(array, i);
         if (!str.ok) {
             break;
         }
-        std::string s(str.u.s);
+        String s(str.u.s);
         str_list.push_back(s);
         free(str.u.s);
     }
@@ -2473,7 +2177,7 @@ read_string_list_setting(toml_table_t *table, const char *key)
 int
 read_configuration(void)
 {
-    std::string fname = qApp->applicationDirPath().toStdString() + "/config.toml";
+    String fname = qApp->applicationDirPath().toStdString() + "/config.toml";
     char error_buffer[200];
     FILE *f = fopen(fname.c_str(), "r");
     if (!f) {
@@ -2489,12 +2193,12 @@ read_configuration(void)
         return 0;
     }
 
-    std::vector<std::string> action_labels =
+    std::vector<String> action_labels =
         read_string_list_setting(settings_toml, "actions_");
 
     for (int i=0; i<(int)action_labels.size(); i++) {
         Action action;
-        std::string label = "ACTION_" + action_labels[i];
+        String label = "ACTION_" + action_labels[i];
         toml_table_t *table = toml_table_in(settings_toml, label.c_str());
 
         action.icon = read_string_setting(table, "icon");
@@ -2864,10 +2568,10 @@ MainWindow::createAllActions()
  * @brief MainWindow::run_script_file
  * @param fname The path of the script to run.
  */
-std::string
-run_script_file(std::string fname)
+String
+run_script_file(String fname)
 {
-    std::string output = "", line;
+    String output = "", line;
     std::ifstream file(fname);
     while (std::getline(file, line)) {
         output += actuator(line);
@@ -2903,10 +2607,10 @@ run_script_file(std::string fname)
  *     donut 20 40 20 black
  *     ------------------------------------------------------------------
  */
-std::string
-run_script(std::vector<std::string> script)
+String
+run_script(std::vector<String> script)
 {
-    std::string output = "";
+    String output = "";
     for (int i=0; i<(int)script.size(); i++) {
         output += actuator(script[i]);
     }
@@ -2949,13 +2653,19 @@ run_script(std::vector<std::string> script)
  *     engine->evaluate(cmd + "_prompt('" + safeStr.toUpper() + "')", fileName);
  * }
  */
-std::string
-actuator(std::string line)
+String
+actuator(String line)
 {
-    std::vector<Parameter> a;
-    std::vector<std::string> list = tokenize(line, ' ');
-    std::string command = list[0];
+    ParameterList a;
+    std::vector<String> list = tokenize(line, ' ');
+    String command = list[0];
     list.erase(list.begin());
+
+    auto iter = command_map.find(command);
+    if (iter != command_map.end()) {
+        String args = line.substr(command.size() + 1);
+        return iter->second(args);
+    }
 
     if (command == "about") {
         _mainWin->about();
@@ -3032,7 +2742,7 @@ actuator(std::string line)
             return "";
         }
         if (command == "line") {
-            std::string error = convert_args_to_type("add rectangle", list, "rrrrrbi", a);
+            String error = convert_args_to_type("add rectangle", list, "rrrrrbi", a);
             if (error != "") {
                 return error;
             }
@@ -3040,7 +2750,7 @@ actuator(std::string line)
             return "";
         }
         if (command == "triangle") {
-            std::string error = convert_args_to_type("add rectangle", list, "rrrrrbi", a);
+            String error = convert_args_to_type("add rectangle", list, "rrrrrbi", a);
             if (error != "") {
                 return error;
             }
@@ -3048,7 +2758,7 @@ actuator(std::string line)
             return "";
         }
         if (command == "rectangle") {
-            std::string error = convert_args_to_type("add rectangle", list, "rrrrrbi", a);
+            String error = convert_args_to_type("add rectangle", list, "rrrrrbi", a);
             if (error != "") {
                 return error;
             }
@@ -3056,7 +2766,7 @@ actuator(std::string line)
             return "";
         }
         if (command == "rounded-rectangle") {
-            std::string error = convert_args_to_type("add rectangle", list, "rrrrrbi", a);
+            String error = convert_args_to_type("add rectangle", list, "rrrrrbi", a);
             if (error != "") {
                 return error;
             }
@@ -3685,17 +3395,17 @@ actuator(std::string line)
  * @param result The fixed length array of results.
  * @return An error message if an error occured or an empty string if it passes.
  */
-std::string
+String
 convert_args_to_type(
-    std::string label,
-    std::vector<std::string> args,
+    String label,
+    std::vector<String> args,
     const char *args_template,
-    std::vector<Parameter> a)
+    ParameterList a)
 {
     int n_args = (int)args.size();
     int required_args = strlen(args_template);
     if (n_args < required_args) {
-        std::string required = std::to_string(required_args);
+        String required = std::to_string(required_args);
         return "ERROR: " + label + "requires" + required + "arguments";
     }
     for (int i=0; i<n_args; i++) {
@@ -3738,14 +3448,24 @@ convert_args_to_type(
     return "";
 }
 
-std::string
-Include(std::vector<Parameter> a)
+/**
+ * @brief Include
+ * @param a
+ * @return
+ */
+String
+Include(ParameterList a)
 {
     return run_script_file("commands/" + a[0].s);
 }
 
-std::string
-Error(std::vector<Parameter> a)
+/**
+ * @brief Error
+ * @param a
+ * @return
+ */
+String
+Error(ParameterList a)
 {
     /*
     _mainWin->setPromptPrefix("ERROR: (" + a[0].s + ") " + a[1].s);
@@ -3755,8 +3475,13 @@ Error(std::vector<Parameter> a)
     return "";
 }
 
-std::string
-Todo(std::vector<Parameter> a)
+/**
+ * @brief Todo
+ * @param a
+ * @return
+ */
+String
+Todo(ParameterList a)
 {
     /*
     _mainWin->nativeAlert("TODO: (" + a[0].s + ") " + a[1].s);
@@ -3765,10 +3490,15 @@ Todo(std::vector<Parameter> a)
     return "";
 }
 
-/*
-std::string
-AppendPromptHistory(std::vector<Parameter> a)
+/**
+ * @brief AppendPromptHistory
+ * @param a
+ * @return
+ */
+String
+AppendPromptHistory(ParameterList a)
 {
+    /*
     int args = args.size();
     if (args == 0) {
         _mainWin->nativeAppendPromptHistory(QString());
@@ -3779,15 +3509,18 @@ AppendPromptHistory(std::vector<Parameter> a)
     else {
         return "ERROR: appendPromptHistory() requires one or zero arguments");
     }
+    */
     return "";
 }
-*/
 
 /**
+ * @brief MessageBoxW
+ * @param a
+ * @return
  * argument string "sss"
  */
-std::string
-MessageBox(std::vector<Parameter> a)
+String
+MessageBox(ParameterList a)
 {
     /*
     QString type  = a[0].s.toLower();
@@ -3806,25 +3539,25 @@ MessageBox(std::vector<Parameter> a)
 /**
  * argument string "i"
  */
- /*
-std::string
-IsInt(std::vector<Parameter> a)
+String
+IsInt(String args)
 {
-    std::string error = convert_args_to_type("IsInt()", args, "i", result);
+    ParameterList result;
+    StringList a = tokenize(args, ' ');
+    String error = convert_args_to_type("IsInt()", a, "i", result);
     if (error != "") {
-        return std::string(false);
+        return "false";
     }
 
-    return std::string(true);
+    return "true";
 }
-*/
 
 /**
  * argument string "rrrr"
  */
  /*
-std::string
-PrintArea(std::vector<Parameter> a)
+String
+PrintArea(ParameterList a)
 {
     _mainWin->nativePrintArea(a[0].r, a[1].r, a[2].r, a[3].r);
     return "";
@@ -3836,8 +3569,8 @@ PrintArea(std::vector<Parameter> a)
  * argument string "iii"
  */
  /*
-std::string
-SetBackgroundColor(std::vector<Parameter> a)
+String
+SetBackgroundColor(ParameterList a)
 {
     EmbReal r = a[0].r;
     EmbReal g = a[1].r;
@@ -3856,10 +3589,10 @@ SetBackgroundColor(std::vector<Parameter> a)
  * .
  * argument string "iii"
  */
- /*
-std::string
-SetCrossHairColor(std::vector<Parameter> a)
+String
+SetCrossHairColor(ParameterList a)
 {
+    /*
     int r = args[0].r;
     int g = args[1].r;
     int b = args[2].r;
@@ -3878,16 +3611,16 @@ SetCrossHairColor(std::vector<Parameter> a)
     }
 
     _mainWin->setCrossHairColor(r, g, b);
+    */
     return "";
 }
-*/
 
 /**
  * .
  * argument string "iii"
  */
-std::string
-SetGridColor(std::vector<Parameter> a)
+String
+SetGridColor(ParameterList a)
 {
     /*
     int r = a[0].r;
@@ -3909,8 +3642,8 @@ SetGridColor(std::vector<Parameter> a)
     return "";
 }
 
-std::string
-SetTextAngle(std::vector<Parameter> a)
+String
+SetTextAngle(ParameterList a)
 {
     /*
     _mainWin->setTextAngle(a[0].r);
@@ -3921,8 +3654,8 @@ SetTextAngle(std::vector<Parameter> a)
 /**
  * .
  */
-std::string
-PreviewOn(std::vector<Parameter> a)
+String
+PreviewOn(ParameterList a)
 {
     /*
     QString cloneStr = QString::toStdString(a[0].s).toUpper();
@@ -3953,20 +3686,27 @@ PreviewOn(std::vector<Parameter> a)
 */
 
 /**
- * \brief
+ * @brief set_rubber_text_action
+ * @param args
+ * @return
  */
-std::string
-SetRubberText(std::vector<Parameter> a)
+String
+set_rubber_text_action(String args)
 {
-    QString key = QString::fromStdString(a[0].s).toUpper();
+    //QString key = QString::fromStdString(a[0].s).toUpper();
     //_mainWin->setRubberText(key, a[1].s);
     return "";
 }
 
-std::string
-AddRubber(std::vector<Parameter> a)
+/**
+ * @brief add_rubber_action
+ * @param args
+ * @return
+ */
+String
+add_rubber_action(String args)
 {
-    QString objType = QString::fromStdString(a[0].s).toUpper();
+    //QString objType = QString::fromStdString(a[0].s).toUpper();
 
     /*
     if (!_mainWin->nativeAllowRubber())
@@ -4041,10 +3781,15 @@ AddRubber(std::vector<Parameter> a)
 "clear rubber", nativeClearRubber();
 */
 
-std::string
-SpareRubber(std::vector<Parameter> a)
+/**
+ * @brief spare_rubber_action
+ * @param args
+ * @return
+ */
+String
+spare_rubber_action(String args)
 {
-    QString objID = QString::fromStdString(a[0].s).toUpper();
+    //QString objID = QString::fromStdString(a[0].s).toUpper();
 
     /*
     if (objID == "PATH") {
@@ -4066,51 +3811,53 @@ SpareRubber(std::vector<Parameter> a)
     return "";
 }
 
-std::string
-AddRoundedRectangle(std::vector<Parameter> a)
+/**
+ * @brief add_arc_action
+ * @param args
+ * @return
+ */
+String
+add_arc_action(String args)
 {
-    _mainWin->nativeAddRoundedRectangle(
-        a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, a[6].b);
+    //_mainWin->nativeAddArc(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, OBJ_RUBBER_OFF);
     return "";
 }
 
-std::string
-AddArc(std::vector<Parameter> a)
+/**
+ * @brief add_circle_action
+ * @param args
+ * @return
+ */
+String
+add_circle_action(String args)
 {
-    _mainWin->nativeAddArc(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, OBJ_RUBBER_OFF);
+    //_mainWin->nativeAddCircle(a[0].r, a[1].r, a[2].r, a[3].b, OBJ_RUBBER_OFF);
     return "";
 }
 
-std::string
-AddCircle(std::vector<Parameter> a)
+String
+add_slot_action(String a)
 {
-    _mainWin->nativeAddCircle(a[0].r, a[1].r, a[2].r, a[3].b, OBJ_RUBBER_OFF);
+    //_mainWin->nativeAddSlot(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].b, OBJ_RUBBER_OFF);
     return "";
 }
 
-std::string
-AddSlot(std::vector<Parameter> a)
-{
-    _mainWin->nativeAddSlot(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].b, OBJ_RUBBER_OFF);
-    return "";
-}
-
-std::string
-AddEllipse(std::vector<Parameter> a)
+String
+AddEllipse(ParameterList a)
 {
     _mainWin->nativeAddEllipse(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].b, OBJ_RUBBER_OFF);
     return "";
 }
 
-std::string
-AddPoint(std::vector<Parameter> a)
+String
+AddPoint(ParameterList a)
 {
     _mainWin->nativeAddPoint(a[0].r, a[1].r);
     return "";
 }
 
-std::string
-AddRegularPolygon(std::vector<Parameter> a)
+String
+AddRegularPolygon(ParameterList a)
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addRegularPolygon command");
@@ -4118,8 +3865,8 @@ AddRegularPolygon(std::vector<Parameter> a)
 }
 
 /*
-std::string
-AddPolygon(std::vector<Parameter> a)
+String
+AddPolygon(ParameterList a)
 {
     QVariantList varList = a[0].toVariant().toList();
     int varSize = varList.size();
@@ -4165,18 +3912,18 @@ AddPolygon(std::vector<Parameter> a)
     return "";
 }
 
-SetCursorShape(std::vector<Parameter> a)
+SetCursorShape(ParameterList a)
     _mainWin->setCursorShape(a[0].s);
 
-CalculateAngle(std::vector<Parameter> a)
+CalculateAngle(ParameterList a)
     EmbReal result = _mainWin->nativeCalculateAngle(a[0].r, a[1].r, a[2].r, a[3].r);
-    return std::string(result);
+    return String(result);
 
 
-PerpendicularDistance(std::vector<Parameter> a)
+PerpendicularDistance(ParameterList a)
     EmbReal result = _mainWin->nativePerpendicularDistance(
         a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r);
-    return std::string(result);
+    return String(result);
 */
 
 /**
@@ -4910,7 +4657,7 @@ circle_click(UiObject *global, EmbVector v)
  * .
  */
 void
-circle_context(std::string str)
+circle_context(String str)
 {
     //todo("CIRCLE", "context()");
 }
@@ -4918,8 +4665,8 @@ circle_context(std::string str)
 /**
  * .
  */
-std::string
-circle_prompt(std::string str)
+String
+circle_prompt(String str)
 {
     /*
     if (global->mode == MODE_1P_RAD) {
@@ -5141,14 +4888,14 @@ distance_click(UiObject *global, EmbVector v)
  * .
  */
 void
-distance_context(std::string str)
+distance_context(String str)
 {
     //todo("DISTANCE", "context()");
 }
 
 /*
 void
-distance_prompt(std::string str)
+distance_prompt(String str)
 {
     EmbReal strList = str.split(",");
     if (std::isnan(global.x1)) {
@@ -5664,7 +5411,7 @@ line_click(x, y)
 }
 
 void
-line_context(std::string str)
+line_context(String str)
 {
     todo("LINE", "context()");
 }
@@ -5737,7 +5484,7 @@ locate_point_click(x, y)
 }
 
 void
-locate_point_context(std::string str)
+locate_point_context(String str)
 {
     todo("LOCATEPOINT", "context()");
 }
@@ -5832,7 +5579,7 @@ move_click(x, y)
  * .
  */
 void
-move_context(std::string str)
+move_context(String str)
 {
     // todo("MOVE", "context()");
 }
@@ -5841,7 +5588,7 @@ move_context(std::string str)
  * .
  */
 void
-move_prompt(std::string str)
+move_prompt(String str)
 {
     /*
     if (global.firstRun) {
@@ -5928,7 +5675,7 @@ path_click(x, y)
 }
 
 void
-path_context(std::string str)
+path_context(String str)
 {
     todo("PATH", "context()");
 }
@@ -5999,13 +5746,13 @@ point_click(UiObject *global, EmbVector v)
 }
 
 void
-point_context(std::string str)
+point_context(String str)
 {
     todo("POINT", "context()");
 }
 
 void
-point_prompt(std::string str)
+point_prompt(String str)
 {
     if (global.firstRun) {
         if (str == "M" || str == "MODE") {
@@ -6132,7 +5879,7 @@ polygon_click(UiObject *global, EmbVector v)
  * .
  */
 void
-polygon_context(std::string str)
+polygon_context(String str)
 {
     //todo("POLYGON", "context()");
 }
@@ -6141,7 +5888,7 @@ polygon_context(std::string str)
  * .
  */
 void
-polygon_prompt(std::string str)
+polygon_prompt(String str)
 {
     /*
     if (global->mode == MODE_NUM_SIDES) {
@@ -6362,7 +6109,7 @@ polyline_click(UiObject *global, EmbVector v)
  * .
  */
 void
-polyline_context(std::string str)
+polyline_context(String str)
 {
     //todo("POLYLINE", "context()");
 }
@@ -6371,7 +6118,7 @@ polyline_context(std::string str)
  * .
  */
 void
-polyline_prompt(std::string str)
+polyline_prompt(String str)
 {
     /*
     if (global.firstRun) {
@@ -6478,7 +6225,7 @@ quickleader_click(UiObject *global, EmbVector v)
  * .
  */
 void
-quickleader_context(std::string str)
+quickleader_context(String str)
 {
     //todo("QUICKLEADER", "context()");
 }
@@ -6487,7 +6234,7 @@ quickleader_context(std::string str)
  * .
  */
 void
-quickleader_prompt(std::string str)
+quickleader_prompt(String str)
 {
     /*
     EmbReal strList = str.split(",");
@@ -6581,7 +6328,7 @@ rectangle_click(UiObject *global, EmbVector v)
  * .
  */
 void
-rectangle_context(std::string str)
+rectangle_context(String str)
 {
     //todo("RECTANGLE", "context()");
 }
@@ -6590,7 +6337,7 @@ rectangle_context(std::string str)
  * .
  */
 void
-rectangle_prompt(std::string str)
+rectangle_prompt(String str)
 {
     /*
     if (str == "C" || str == "CHAMFER") {
@@ -6665,7 +6412,7 @@ rgb_click(UiObject *global, EmbVector v)
  * .
  */
 void
-rgb_context(std::string str)
+rgb_context(String str)
 {
     //todo("RGB", "context()");
 }
@@ -6674,7 +6421,7 @@ rgb_context(std::string str)
  * .
  */
 void
-rgb_prompt(std::string str)
+rgb_prompt(String str)
 {
     /*
     if (global->mode == RGB_MODE_BACKGROUND) {
@@ -6849,7 +6596,7 @@ rotate_click(UiObject *global, EmbVector v)
  * .
  */
 void
-rotate_context(std::string str)
+rotate_context(String str)
 {
     //todo("ROTATE", "context()");
 }
@@ -6858,7 +6605,7 @@ rotate_context(std::string str)
  * .
  */
 void
-rotate_prompt(std::string str)
+rotate_prompt(String str)
 {
     /*
     if (global->mode == ROTATE_MODE_NORMAL) {
@@ -7197,7 +6944,7 @@ scale_click(UiObject *global, EmbVector v)
  * .
  */
 void
-scale_context(std::string str)
+scale_context(String str)
 {
     //todo("SCALE", "context()");
 }
@@ -7206,7 +6953,7 @@ scale_context(std::string str)
  * .
  */
 void
-scale_prompt(std::string str)
+scale_prompt(String str)
 {
     /*
     if (global->mode == MODE_NORMAL) {
@@ -7466,7 +7213,7 @@ text_single_click(UiObject *global, EmbVector v)
  * .
  */
 void
-text_single_context(std::string str)
+text_single_context(String str)
 {
     //todo("SINGLELINETEXT", "context()");
 }
@@ -7475,7 +7222,7 @@ text_single_context(std::string str)
  * .
  */
 void
-text_single_prompt(std::string str)
+text_single_prompt(String str)
 {
     /*
     if (global->mode == MODE_JUSTIFY) {
@@ -7678,12 +7425,12 @@ UiObject snowflake_main(void);
 void updateSnowflake(UiObject *global, EmbVector scale);
 UiObject star_main(void);
 void star_move(UiObject *global, EmbVector v);
-void star_prompt(std::string str);
-void star_context(std::string str);
-void star_prompt(std::string str);
+void star_prompt(String str);
+void star_context(String str);
+void star_prompt(String str);
 void updateStar(UiObject *global, EmbVector mouse);
 void syswindows_main(void);
-void syswindows_prompt(std::string str);
+void syswindows_prompt(String str);
 
 /**
  * .
@@ -7829,7 +7576,7 @@ star_move(UiObject *global, EmbVector v)
  * .
  */
 void
-star_context(std::string str)
+star_context(String str)
 {
     //todo("STAR", "context()");
 }
@@ -7838,7 +7585,7 @@ star_context(std::string str)
  * .
  */
 void
-star_prompt(std::string str)
+star_prompt(String str)
 {
     /*
     if (global->mode == STAR_MODE_NUM_POINTS) {
@@ -7980,7 +7727,7 @@ syswindows_main(void)
  * .
  */
 void
-syswindows_prompt(std::string str)
+syswindows_prompt(String str)
 {
     if (str == "C" || str == "CASCADE") {
         actuator("window cascade");

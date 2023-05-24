@@ -88,23 +88,36 @@ class SplineObject;
 class TextMultiObject;
 class TextSingleObject;
 
-typedef struct std::vector<std::string> StringList;
-typedef struct std::unordered_map<std::string, std::string> Dictionary;
+typedef std::string String;
+typedef std::vector<String> StringList;
+typedef std::unordered_map<String, String> Dictionary;
+
+/**
+ * .
+ */
+typedef struct Parameter_ {
+    String s;
+    EmbReal r;
+    int i;
+    bool b;
+} Parameter;
+
+typedef std::vector<Parameter> ParameterList;
 
 /**
  * .
  */
 typedef struct Action__ {
-    std::string icon;
+    String icon;
         /*< The stub used for the icon and the basic command. */
-    std::string command;
+    String command;
         /*< . */
-    std::string tooltip;
+    String tooltip;
         /*< The label in the menus and the message that appears when
             you hover over an icon. */
-    std::string statustip;
+    String statustip;
         /*< The message that appears at the bottom of the . */
-    std::string shortcut;
+    String shortcut;
         /*< The keyboard shortcut for this action. */
     StringList aliases;
         /*< A list of all alternative commands, if empty only
@@ -114,11 +127,11 @@ typedef struct Action__ {
             list of commands or it can allow for command line
             style command aliases. For example: icon16 would become
             the string list {"iconResize 16"}. */
-    std::string menu_name;
+    String menu_name;
         /*< . */
     int menu_position;
         /*< . */
-    std::string toolbar_name;
+    String toolbar_name;
         /*< . */
     int toolbar_position;
         /*< . */
@@ -128,22 +141,13 @@ typedef struct Action__ {
  * .
  */
 typedef struct GroupBoxData_ {
-    std::string key;
-    std::string icon_name;
-    std::string label;
-    std::string type;
-    std::string map_signal;
+    String key;
+    String icon_name;
+    String label;
+    String type;
+    String map_signal;
 } GroupBoxData;
 
-/**
- * .
- */
-typedef struct Parameter_ {
-    std::string s;
-    EmbReal r;
-    int i;
-    bool b;
-} Parameter;
 
 /**
  * @brief This covers the inbuilt designs: Dolphin, Snowflake and Heart.
@@ -155,9 +159,9 @@ typedef struct Parameter_ {
  * parents.
  */
 typedef struct UiObject_ {
-    std::string fname;
+    String fname;
         /*< \todo document this */
-    std::string command;
+    String command;
         /*< \todo document this */
     bool firstRun;
         /*< If this UiObject has been put through the
@@ -186,14 +190,14 @@ typedef struct UiObject_ {
     uint32_t mode;
         /*< The mode argument records what kind of design we are
             using and how to interact with it. */
-    std::string path_desc;
+    String path_desc;
         /*< The SVG style path spec. */
-    std::string text;
+    String text;
         /*< The text to be rendered to the scene. */
     int textJustify;
         /*< One of the JUSTIFY_* constants representing what kind
             of alignment to use. */
-    std::string textFont;
+    String textFont;
         /*< The file name of the font to use. */
     EmbReal textHeight;
         /*< The text height. */
@@ -201,7 +205,7 @@ typedef struct UiObject_ {
         /*< The rotation of the text in the scene. */
     //GLuint texture_id;
         /*< Pointer to a texture that may be rendered to the object. */
-    std::string id;
+    String id;
         /*< \todo document this */
     int pattern_index;
         /*< \todo document this */
@@ -233,7 +237,7 @@ typedef struct EmbView_ {
         /*< \todo document this */
     EmbReal scale;
         /*< \todo document this */
-    std::string grid_type;
+    String grid_type;
         /*< \todo document this */
     int ui_mode;
         /*< \todo document this */
@@ -261,7 +265,7 @@ typedef struct EmbView_ {
         /*< \todo document this */
     clock_t simulation_start;
         /*< \todo document this */
-    std::string text_font;
+    String text_font;
         /*< \todo document this */
     EmbReal text_size;
         /*< \todo document this */
@@ -277,7 +281,7 @@ typedef struct EmbView_ {
         /*< \todo document this */
     bool text_style_strikeout;
         /*< \todo document this */
-    std::string filename;
+    String filename;
         /*< \todo document this */
     StringList undo_history;
         /*< \todo document this */
@@ -298,45 +302,45 @@ typedef struct EmbView_ {
  * cancels out of the Settings Dialog.
  */
 typedef struct Settings_ {
-    std::string version;
+    String version;
         /*< \todo document this */
-    std::string assets_dir;
+    String assets_dir;
         /*< \todo document this */
-    std::string general_language;
+    String general_language;
         /*< \todo document this */
-    std::string general_icon_theme;
+    String general_icon_theme;
         /*< \todo document this */
-    std::string general_mdi_bg_logo;
+    String general_mdi_bg_logo;
         /*< \todo document this */
-    std::string general_mdi_bg_texture;
+    String general_mdi_bg_texture;
         /*< \todo document this */
-    std::string display_units;
+    String display_units;
         /*< \todo document this */
     QString opensave_custom_filter;
         /*< \todo document this */
-    std::string opensave_open_format;
+    String opensave_open_format;
         /*< \todo document this */
-    std::string opensave_save_format;
+    String opensave_save_format;
         /*< \todo document this */
     QStringList opensave_recent_list_of_files;
         /*< \todo document this */
-    std::string opensave_recent_directory;
+    String opensave_recent_directory;
         /*< \todo document this */
-    std::string printing_default_device;
+    String printing_default_device;
         /*< \todo document this */
-    std::string grid_type;
+    String grid_type;
         /*< \todo document this */
-    std::string text_font;
+    String text_font;
         /*< \todo document this */
-    std::string to_open;
+    String to_open;
         /*< \todo document this */
-    std::string current_directory;
+    String current_directory;
         /*< \todo document this */
-    std::string prompt_font_family;
+    String prompt_font_family;
         /*< \todo document this */
-    std::string prompt_font_style;
+    String prompt_font_style;
         /*< \todo document this */
-    std::string prompt_save_history_filename;
+    String prompt_save_history_filename;
         /*< \todo document this */
     QRgb general_mdi_bg_color;
         /*< \todo document this */
@@ -841,35 +845,35 @@ extern PropertyEditor* dockPropEdit;
 extern UndoEditor* dockUndoEdit;
 extern StatusBar* statusbar;
 
-extern std::unordered_map<std::string, QGroupBox *> groupBoxes;
-extern std::unordered_map<std::string, QComboBox *> comboBoxes;
-extern std::unordered_map<std::string, QLineEdit *> lineEdits;
-extern std::unordered_map<std::string, QToolButton *> toolButtons;
-extern std::unordered_map<std::string, GroupBoxData> group_box_data;
-extern std::unordered_map<std::string, QAction*> actionHash;
-extern std::unordered_map<std::string, QToolBar*> toolbarHash;
-extern std::unordered_map<std::string, QMenu*> menuHash;
-extern std::unordered_map<std::string, QMenu*> subMenuHash;
+extern std::unordered_map<String, QGroupBox *> groupBoxes;
+extern std::unordered_map<String, QComboBox *> comboBoxes;
+extern std::unordered_map<String, QLineEdit *> lineEdits;
+extern std::unordered_map<String, QToolButton *> toolButtons;
+extern std::unordered_map<String, GroupBoxData> group_box_data;
+extern std::unordered_map<String, QAction*> actionHash;
+extern std::unordered_map<String, QToolBar*> toolbarHash;
+extern std::unordered_map<String, QMenu*> menuHash;
+extern std::unordered_map<String, QMenu*> subMenuHash;
 
 /* Functions in the global namespace
  * ---------------------------------
  */
-int get_action_index(std::string cmd);
+int get_action_index(String cmd);
 int read_configuration(const char *file);
 void read_settings(void);
 void write_settings(void);
 EmbVector rotate_vector(EmbVector v, EmbReal alpha);
 
-void debug_message(std::string msg);
+void debug_message(String msg);
 void set_enabled(QObject *parent, const char *key, bool enabled);
 void set_visibility(QObject *parent, const char *name, bool visibility);
 
-std::string actuator(std::string line);
-std::string run_script_file(std::string fname);
-std::string run_script(StringList script);
-std::string construct_command(std::string command, const char *fmt, ...);
+String actuator(String line);
+String run_script_file(String fname);
+String run_script(StringList script);
+String construct_command(String command, const char *fmt, ...);
 
-void create_menu(std::string menu, StringList def, bool topLevel);
+void create_menu(String menu, StringList def, bool topLevel);
 
 QPointF to_QPointF(EmbVector a);
 EmbVector to_EmbVector(QPointF a);
@@ -1921,7 +1925,7 @@ public:
     bool isCommandActive() { return prompt->isCommandActive(); }
     QString activeCommand() { return prompt->activeCommand(); }
     QIcon create_icon(QString stub);
-    void create_toolbar(std::string toolbar, std::string label, StringList entries);
+    void create_toolbar(String toolbar, String label, StringList entries);
 
     QString platformString();
 
@@ -2018,7 +2022,6 @@ public slots:
     void about();
     void whatsThisContextHelp();
 
-    void cut();
     void copy();
     void paste();
 
@@ -2064,8 +2067,8 @@ public slots:
     void layerManager();
     void layerPrevious();
 
-    std::string zoom(std::string mode);
-    std::string pan(std::string mode);
+    String zoom(String mode);
+    String pan(String mode);
 
     void dayVision();
     void nightVision();
@@ -2089,7 +2092,7 @@ public:
     void nativeSpareRubber(int64_t id);
     // \todo void nativeSetRubberFilter(int64_t id);
     // \todo This is so more than 1 rubber object can exist at one time without updating all rubber objects at once
-    std::string nativeSetRubberMode(std::vector<Parameter> args);
+    String nativeSetRubberMode(std::vector<Parameter> args);
     void nativeSetRubberPoint(const QString& key, EmbReal x, EmbReal y);
     void nativeSetRubberText(const QString& key, const QString& txt);
 
@@ -2310,7 +2313,7 @@ public:
 
     //TODO: Alphabetic/Categorized TabWidget
 
-    void createGroupBox(std::string group_box_key, const char *title);
+    void createGroupBox(String group_box_key, const char *title);
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
@@ -2407,7 +2410,7 @@ public:
         EmbReal upper,
         EmbReal *ptr,
         int row);
-    QCheckBox* create_checkbox(QGroupBox *groupbox, std::string label);
+    QCheckBox* create_checkbox(QGroupBox *groupbox, String label);
 
 private slots:
     void comboBoxLanguageCurrentIndexChanged(const QString&);
@@ -2918,5 +2921,17 @@ private:
 
     void alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& viewPoint);
 };
+
+QString SettingsPath();
+QString SettingsDir();
+
+/* ACTIONS */
+String add_arc_action(String args);
+String add_circle_action(String args);
+String add_rubber_action(String args);
+String add_slot_action(String args);
+String cut_action(String args);
+String set_rubber_text_action(String args);
+String spare_rubber_action(String args);
 
 #endif
