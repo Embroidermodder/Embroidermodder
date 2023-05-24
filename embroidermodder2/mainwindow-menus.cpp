@@ -19,24 +19,6 @@
 
 #include "embroidermodder.h"
 
-StringList file_menu;
-StringList edit_menu;
-StringList pan_menu;
-StringList zoom_menu;
-StringList view_menu;
-StringList settings_menu;
-StringList window_menu;
-StringList help_menu;
-
-StringList menubar_order = {
-    "file",
-    "edit",
-    "view",
-    "settings",
-    "window",
-    "help"
-};
-
 /**
  * @brief create_menu
  * @param menu
@@ -92,16 +74,17 @@ MainWindow::createAllMenus()
     debug_message("MainWindow createAllMenus()");
 
     /* Populate menus. */
-    create_menu("file", file_menu, true);
-    create_menu("edit", edit_menu, true);
-    create_menu("view", view_menu, true);
-    create_menu("settings", settings_menu, true);
-    create_menu("window", window_menu, true);
-    create_menu("help", help_menu, true);
+    create_menu("file", string_lists["file_menu"], true);
+    create_menu("edit", string_lists["edit_menu"], true);
+    create_menu("view", string_lists["view_menu"], true);
+    create_menu("settings", string_lists["settings_menu"], true);
+    create_menu("window", string_lists["window_menu"], true);
+    create_menu("help", string_lists["help_menu"], true);
+    create_menu("draw", string_lists["draw_menu"], true);
 
     /* Populate submenus. */
-    create_menu("zoom", zoom_menu, false);
-    create_menu("pan", pan_menu, false);
+    create_menu("zoom", string_lists["zoom_menu"], false);
+    create_menu("pan", string_lists["pan_menu"], false);
 
     /* Connect dynamic menus. */
     connect(subMenuHash["recent"], SIGNAL(aboutToShow()), this, SLOT(recentMenuAboutToShow()));

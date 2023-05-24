@@ -96,6 +96,42 @@ actions_ = [
     "heart"
 ]
 
+string_lists = [
+    "group_box_list",
+    "all_line_editors",
+    "file_toolbar",
+    "edit_toolbar",
+    "view_toolbar",
+    "zoom_toolbar",
+    "pan_toolbar",
+    "icon_toolbar",
+    "help_toolbar",
+    "draw_toolbar",
+    "top_toolbar_layout",
+    "bottom_toolbar_layout",
+    "side_toolbar_layout",
+    "file_menu",
+    "edit_menu",
+    "pan_menu",
+    "zoom_menu",
+    "view_menu",
+    "settings_menu",
+    "window_menu",
+    "help_menu",
+    "draw_menu",
+    "menubar_order"
+]
+
+menubar_order = [
+    "file",
+    "edit",
+    "view",
+    "draw",
+    "settings",
+    "window",
+    "help"
+]
+
 file_toolbar = [
     "new",
     "open",
@@ -164,6 +200,16 @@ help_toolbar = [
     "whatsthis"
 ]
 
+draw_toolbar = [
+    "circle",
+    "path",
+    "polygon",
+    "polyline",
+    "point",
+    "heart",
+    "single-line-text"
+]
+
 top_toolbar_layout = [
     "---",
     "file",
@@ -183,6 +229,10 @@ top_toolbar_layout = [
 
 bottom_toolbar_layout = [
     "prompt"
+]
+
+side_toolbar_layout = [
+    "draw"
 ]
 
 file_menu = [
@@ -271,6 +321,16 @@ help_menu = [
     "about",
     "---",
     "whatsthis"
+]
+
+draw_menu = [
+    "circle",
+    "path",
+    "polygon",
+    "polyline",
+    "point",
+    "heart",
+    "single-line-text"
 ]
 
 group_box_list = [
@@ -454,10 +514,6 @@ command="donothing"
 tooltip="&Do Nothing"
 statustip="Does Nothing"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_new]
 type="action"
@@ -466,10 +522,6 @@ command="new"
 tooltip="&New"
 statustip="Create a new file."
 shortcut="Ctrl+N"
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_open]
 type="action"
@@ -478,10 +530,6 @@ command="open"
 tooltip="&Open"
 statustip="Open an existing file."
 shortcut="Ctrl+O"
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_save]
 type="action"
@@ -490,10 +538,6 @@ command="save"
 tooltip="&Save"
 statustip="Save the design to disk."
 shortcut="Ctrl+S"
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_saveas]
 type="action"
@@ -502,10 +546,6 @@ command="saveas"
 tooltip="Save &As"
 statustip="Save the design under a new name."
 shortcut="Ctrl+Shift+S"
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_print]
 type="action"
@@ -514,10 +554,6 @@ command="print"
 tooltip="&Print"
 statustip="Print the design."
 shortcut="Ctrl+P"
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_designdetails]
 type="action"
@@ -526,10 +562,6 @@ command="designdetails"
 tooltip="&Details"
 statustip="Details of the current design."
 shortcut="Ctrl+D"
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_exit]
 type="action"
@@ -538,10 +570,6 @@ command="exit"
 tooltip="E&xit"
 statustip="Exit the application."
 shortcut="Ctrl+Q"
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_cut]
 type="action"
@@ -550,10 +578,6 @@ command="cut"
 tooltip="Cu&t"
 statustip="Cut the current selection's contents to the clipboard."
 shortcut="Ctrl+X"
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_copy]
 type="action"
@@ -562,10 +586,6 @@ command="copy"
 tooltip="&Copy"
 statustip="Copy the current selection's contents to the clipboard."
 shortcut="Ctrl+C"
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_paste]
 type="action"
@@ -574,10 +594,6 @@ command="paste"
 tooltip="&Paste"
 statustip="Paste the clipboard's contents into the current selection."
 shortcut="Ctrl+V"
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_undo]
 type="action"
@@ -586,10 +602,6 @@ command="undo"
 tooltip="&Undo"
 statustip="Reverses the most recent action."
 shortcut="Ctrl+Z"
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_redo]
 type="action"
@@ -598,10 +610,6 @@ command="redo"
 tooltip="&Redo"
 statustip="Reverses the effects of the previous undo action."
 shortcut="Ctrl+Shift+Z"
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 # Window Menu
 # ----------------
@@ -613,10 +621,6 @@ command="window close"
 tooltip="Cl&ose"
 statustip="Close the active window."
 shortcut="Ctrl+W"
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_windowcloseall]
 type="action"
@@ -625,10 +629,6 @@ command="window closeall"
 tooltip="Close &All"
 statustip="Close all the windows."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_windowcascade]
 type="action"
@@ -637,10 +637,6 @@ command="window cascade"
 tooltip="&Cascade"
 statustip="Cascade the windows."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_windowtile]
 type="action"
@@ -649,10 +645,6 @@ command="window tile"
 tooltip="&Tile"
 statustip="Tile the windows."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_windownext]
 type="action"
@@ -661,10 +653,6 @@ command="window next"
 tooltip="Ne&xt"
 statustip="Move the focus to the next window."
 shortcut="Ctrl+Tab"
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_windowprevious]
 type="action"
@@ -673,10 +661,6 @@ command="window previous"
 tooltip="Pre&vious"
 statustip="Move the focus to the previous window."
 shortcut="Ctrl+Shift+Tab"
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 # Help Menu
 # --------------
@@ -688,10 +672,6 @@ command="help"
 tooltip="&Help"
 statustip="Displays help."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_changelog]
 type="action"
@@ -700,10 +680,6 @@ command="changelog"
 tooltip="&Changelog"
 statustip="Describes new features in this product."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_tipoftheday]
 type="action"
@@ -712,10 +688,6 @@ command="tipoftheday"
 tooltip="&Tip Of The Day"
 statustip="Displays a dialog with useful tips"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_about]
 type="action"
@@ -724,10 +696,6 @@ command="about"
 tooltip="&About Embroidermodder"
 statustip="Displays information about this product."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_whatsthis]
 type="action"
@@ -736,10 +704,6 @@ command="whatsthis"
 tooltip="&What's This?"
 statustip="What's This? Context Help!"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 # Icons
 # --------------
@@ -751,10 +715,6 @@ command="icon 16"
 tooltip="Icon&16"
 statustip="Sets the toolbar icon size to 16x16."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_icon24]
 type="action"
@@ -763,10 +723,6 @@ command="icon 24"
 tooltip="Icon&24"
 statustip="Sets the toolbar icon size to 24x24."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_icon32]
 type="action"
@@ -775,10 +731,6 @@ command="icon 32"
 tooltip="Icon&32"
 statustip="Sets the toolbar icon size to 32x32."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_icon48]
 type="action"
@@ -787,10 +739,6 @@ command="icon 48"
 tooltip="Icon&48"
 statustip="Sets the toolbar icon size to 48x48."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_icon64]
 type="action"
@@ -799,10 +747,6 @@ command="icon 64"
 tooltip="Icon&64"
 statustip="Sets the toolbar icon size to 64x64."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_icon128]
 type="action"
@@ -811,10 +755,6 @@ command="icon 128"
 tooltip="Icon12&8"
 statustip="Sets the toolbar icon size to 128x128."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_settingsdialog]
 type="action"
@@ -823,10 +763,6 @@ command="settingsdialog"
 tooltip="&Settings"
 statustip="Configure settings specific to this product."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 # Layer ToolBar
 # --------------
@@ -838,10 +774,6 @@ command="makelayercurrent"
 tooltip="&Make Layer Active"
 statustip="Makes the layer of a selected object the active layer"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_layers]
 type="action"
@@ -850,10 +782,6 @@ command="layers"
 tooltip="&Layers"
 statustip="Manages layers and layer properties:  LAYER"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_layerselector]
 type="action"
@@ -862,10 +790,6 @@ command="layerselector"
 tooltip="&Layer Selector"
 statustip="Dropdown selector for changing the current layer"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_layerprevious]
 type="action"
@@ -874,10 +798,6 @@ command="layerprevious"
 tooltip="&Layer Previous"
 statustip="Restores the previous layer settings:  LAYERP"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_colorselector]
 type="action"
@@ -886,10 +806,6 @@ command="colorselector"
 tooltip="&Color Selector"
 statustip="Dropdown selector for changing the current thread color"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_linetypeselector]
 type="action"
@@ -898,10 +814,6 @@ command="linetypeselector"
 tooltip="&Stitchtype Selector"
 statustip="Dropdown selector for changing the current stitch type"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_lineweightselector]
 type="action"
@@ -910,10 +822,6 @@ command="lineweightselector"
 tooltip="&Threadweight Selector"
 statustip="Dropdown selector for changing the current thread weight"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_hidealllayers]
 type="action"
@@ -922,10 +830,6 @@ command="hidealllayers"
 tooltip="&Hide All Layers"
 statustip="Turns the visibility off for all layers in the current drawing:  HIDEALL"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_showalllayers]
 type="action"
@@ -934,10 +838,6 @@ command="showalllayers"
 tooltip="&Show All Layers"
 statustip="Turns the visibility on for all layers in the current drawing:  SHOWALL"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_freezealllayers]
 type="action"
@@ -946,10 +846,6 @@ command="freezealllayers"
 tooltip="&Freeze All Layers"
 statustip="Freezes all layers in the current drawing:  FREEZEALL"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_thawalllayers]
 type="action"
@@ -958,10 +854,6 @@ command="thawalllayers"
 tooltip="&Thaw All Layers"
 statustip="Thaws all layers in the current drawing:  THAWALL"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_lockalllayers]
 type="action"
@@ -970,10 +862,6 @@ command="lockalllayers"
 tooltip="&Lock All Layers"
 statustip="Locks all layers in the current drawing:  LOCKALL"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_unlockalllayers]
 type="action"
@@ -982,10 +870,6 @@ command="unlockalllayers"
 tooltip="&Unlock All Layers"
 statustip="Unlocks all layers in the current drawing:  UNLOCKALL"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 # Text ToolBar
 # --------------
@@ -997,10 +881,6 @@ command="set text_style_bold true"
 tooltip="&Bold Text"
 statustip="Sets text to be bold."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_textitalic]
 type="action"
@@ -1009,10 +889,6 @@ command="set text_style_italic true"
 tooltip="&Italic Text"
 statustip="Sets text to be italic."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_textunderline]
 type="action"
@@ -1021,10 +897,6 @@ command="set text_style_underline true"
 tooltip="&Underline Text"
 statustip="Sets text to be underlined."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_textstrikeout]
 type="action"
@@ -1033,10 +905,6 @@ command="set text_style_strikeout true"
 tooltip="&StrikeOut Text"
 statustip="Sets text to be striked out."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_textoverline]
 type="action"
@@ -1045,10 +913,6 @@ command="set text_style_overline true"
 tooltip="&Overline Text"
 statustip="Sets text to be overlined."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 # Zoom ToolBar
 # --------------
@@ -1060,10 +924,6 @@ command="zoom realtime"
 tooltip="Zoom &Realtime"
 statustip="Zooms to increase or decrease the apparent size of objects in the current viewport."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_zoomprevious]
 type="action"
@@ -1072,10 +932,6 @@ command="zoom previous"
 tooltip="Zoom &Previous"
 statustip="Zooms to display the previous view."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_zoomwindow]
 type="action"
@@ -1084,10 +940,6 @@ command="zoom window"
 tooltip="Zoom &Window"
 statustip="Zooms to display an area specified by a rectangular window."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_zoomdynamic]
 type="action"
@@ -1096,10 +948,6 @@ command="zoom dynamic"
 tooltip="Zoom &Dynamic"
 statustip="Zooms to display the generated portion of the drawing."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_zoomscale]
 type="action"
@@ -1108,10 +956,6 @@ command="zoom scale"
 tooltip="Zoom &Scale"
 statustip="Zooms the display using a specified scale factor."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_zoomcenter]
 type="action"
@@ -1120,34 +964,24 @@ command="zoom center"
 tooltip="Zoom &Center"
 statustip="Zooms to display a view specified by a center point and magnification or height."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_zoomin]
 type="action"
 icon="zoomin"
 command="zoom in"
 tooltip="Zoom &In"
-statustip="Zooms to increase the apparent size of objects."
+statustip="Zooms to increase the apparent size of objects: ZOOMIN"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
+alias=["ZOOMIN"]
 
 [ACTION_zoomout]
 type="action"
 icon="zoomout"
 command="zoom out"
 tooltip="Zoom &Out"
-statustip="Zooms to decrease the apparent size of objects."
+statustip="Zooms to decrease the apparent size of objects: ZOOMOUT"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
+alias=["ZOOMOUT"]
 
 [ACTION_zoomselected]
 type="action"
@@ -1156,10 +990,6 @@ command="zoom selected"
 tooltip="Zoom Selec&ted"
 statustip="Zooms to display the selected objects."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_zoomall]
 type="action"
@@ -1168,22 +998,15 @@ command="zoom all"
 tooltip="Zoom &All"
 statustip="Zooms to display the drawing extents or the grid limits."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_zoomextents]
 type="action"
 icon="zoomextents"
 command="zoom extents"
 tooltip="Zoom &Extents"
-statustip="Zooms to display the drawing extents."
+statustip="Zooms to display the drawing extents: ZOOMEXTENTS"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
+alias=["ZOOMEXTENTS"]
 
 # Pan SubMenu
 # --------------
@@ -1195,10 +1018,6 @@ command="pan realtime"
 tooltip="&Pan Realtime"
 statustip="Moves the view in the current viewport."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_panpoint]
 type="action"
@@ -1207,58 +1026,42 @@ command="pan point"
 tooltip="&Pan Point"
 statustip="Moves the view by the specified distance."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_panleft]
 type="action"
 icon="panleft"
 command="pan left"
 tooltip="&Pan Left"
-statustip="Moves the view to the left."
+statustip="Moves the view to the left: PANLEFT"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
+alias=["PANLEFT"]
 
 [ACTION_panright]
 type="action"
 icon="panright"
 command="pan right"
 tooltip="&Pan Right"
-statustip="Moves the view to the right."
+statustip="Moves the view to the right: PANRIGHT"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
+alias=["PANRIGHT"]
 
 [ACTION_panup]
 type="action"
 icon="panup"
 command="pan up"
 tooltip="&Pan Up"
-statustip="Moves the view up."
+statustip="Moves the view up: PANUP"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
+alias=["PANUP"]
 
 [ACTION_pandown]
 type="action"
 icon="pandown"
 command="pan down"
 tooltip="&Pan Down"
-statustip="Moves the view down."
+statustip="Moves the view down: PANDOWN"
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
+alias=["PANDOWN"]
 
 [ACTION_day]
 type="action"
@@ -1267,10 +1070,6 @@ command="day"
 tooltip="&Day"
 statustip="Updates the current view using day vision settings."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_night]
 type="action"
@@ -1279,10 +1078,6 @@ command="night"
 tooltip="&Night"
 statustip="Updates the current view using night vision settings."
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_null]
 type="action"
@@ -1291,10 +1086,6 @@ command=""
 tooltip=""
 statustip=""
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 # todo
 # --------------
@@ -1306,10 +1097,6 @@ command=""
 tooltip=""
 statustip=""
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_quickselect]
 type="action"
@@ -1318,19 +1105,11 @@ command=""
 tooltip=""
 statustip=""
 shortcut=""
-menu_name="None"
-menu_position=0
-toolbar_name="None"
-toolbar_position=0
 
 [ACTION_circle]
 type="action"
 icon="circle"
 command="circle"
-menu_name="Draw"
-menu_position=8
-toolbar_name="Draw"
-toolbar_position=8
 tooltip="Circle"
 statustip="Creates a circle: CIRCLE"
 shortcut=""
@@ -1340,90 +1119,40 @@ alias=["C", "CIRCLE"]
 type="action"
 icon="heart"
 command="heart"
-menu_name="Draw"
-menu_position=100
-toolbar_name="Draw"
-toolbar_position=100
 tooltip="&Heart"
 statustip="Creates a heart: HEART"
 alias=["HEART"]
 
-# [about]
-#type="action"
-# tooltip="&About"
+# [ACTION_about]
+# type="action"
+# command="about"
+# tooltip="&About Embroidermodder 2"
 # statustip="Displays information about this product: ABOUT"
 # shortcut=""
 # alias=["ABOUT"]
-# menu_name="None"
-# menu_position=0
-# toolbar_name="None"
-# toolbar_position=0
 
-# [day]
-#type="action"
+# [ACTION_day]
+# type="action"
 # tooltip="&Day"
 # statustip="Updates the current view using day vision settings: DAY"
 # shortcut=""
 # alias=["DAY"]
-# menu_name="None"
-# menu_position=0
-# toolbar_name="None"
-# toolbar_position=0
 
-# [new_file]
-#type="action"
+# [ACTION_new_file]
+# type="action"
 # tooltip="&New"
 # statustip="Create a new file: NEW"
 # shortcut=""
 # alias=["NEW"]
-# menu_name="None"
-# menu_position=0
-# toolbar_name="None"
-# toolbar_position=0
 
 # [window_tile]
-#type="action"
-# menu_name="None"
-# menu_position=0
-# toolbar_name="None"
-# toolbar_position=0
+# type="action"
 # tooltip="&Tile"
 # statustip="Tile the windows: TILE"
 # alias=["TILE", "WINDOWTILE"]
 
-
-# [zoom_extents]
-#type="action"
-# menu_name="None"
-# menu_position=0
-# toolbar_name="None"
-# toolbar_position=0
-# tooltip="Zoom &Extents"
-# statustip="Zooms to display the drawing extents: ZOOMEXTENTS"
-# alias=["ZOOMEXTENTS"]
-
-# [zoom_in]
-#type="action"
-# menu_name="None"
-# menu_position=0
-# toolbar_name="None"
-# toolbar_position=0
-# tooltip="Zoom &In"
-# statustip="Zooms to increase the apparent size of objects: ZOOMIN"
-# alias=["ZOOMIN"]
-
-# [zoom_out]
-#type="action"
-# menu_name="None"
-# menu_position=0
-# toolbar_name="None"
-# toolbar_position=0
-# tooltip="Zoom &Out"
-# statustip="Zooms to decrease the apparent size of objects: ZOOMOUT"
-# alias=["ZOOMOUT"]
-
 # [distance]
-#type="action"
+# type="action"
 # menu_name="Tools"
 # menu_position=7
 # toolbar_name="Inquiry"
@@ -1433,17 +1162,15 @@ alias=["HEART"]
 # alias=["DI", "DIST", "DISTANCE"]
 
 # [dolphin]
-#type="action"
+# type="action"
 # menu_name="Draw"
-# Position=100
 # toolbar_name="Draw"
-# Position=100
 # tooltip="&Dolphin"
 # statustip="Creates a dolphin: DOLPHIN"
 # alias=["DOLPHIN"]
 
 # [ellipse]
-#type="action"
+# type="action"
 # menu_name="Draw"
 # menu_position=8
 # toolbar_name="Draw"
@@ -1453,7 +1180,7 @@ alias=["HEART"]
 # alias=["EL", "ELLIPSE"]
 
 # [delete]
-#type="action"
+# type="action"
 # menu_name="Modify"
 # menu_position=5
 # toolbar_name="Modify"
@@ -1463,81 +1190,49 @@ alias=["HEART"]
 # alias=["E", "ERASE", "DEL", "DELETE"]
 
 # [exit]
-#type="action"
-# menu_name="None"
-# Position=0
-# toolbar_name="None"
-# toolbar_position=0
+# type="action"
 # tooltip="E&xit"
 # statustip="Exit the application: EXIT"
 # alias=["EXIT", "QUIT"]
 
 # [help]
-#type="action"
-# menu_name="None"
-# menu_position=0
-# toolbar_name="None"
-# toolbar_position=0
+# type="action"
 # tooltip="&Help"
 # statustip="Displays the help file: HELP"
 # alias=["?", "HELP"]
 
 # [icon128]
-#type="action"
-# menu_name="None"
-# menu_position=0
-# toolbar_name="None"
-# toolbar_position=0
+# type="action"
 # tooltip=Icon12&8
 # statustip=Sets the toolbar icon size to 128x128: ICON128
 # alias=ICON128
 
 # [icon16]
 # type="action"
-# menu_name="None"
-# menu_position=0
-# toolbar_name="None"
-# toolbar_position=0
 # tooltip=Icon&16
 # statustip=Sets the toolbar icon size to 16x16: ICON16
 # alias=ICON16
 
 # [icon24]
 # type="action"
-# menu_name="None"
-# menu_position=0
-# toolbar_name="None"
-# toolbar_position=0
 # tooltip=Icon&24
 # statustip=Sets the toolbar icon size to 24x24: ICON24
 # alias=ICON24
 
 # [icon32]
 # type="action"
-# menu_name="None"
-# Position=0
-# toolbar_name="None"
-# Position=0
 # tooltip=Icon&32
 # statustip=Sets the toolbar icon size to 32x32: ICON32
 # alias=ICON32
 
 # [icon48]
 # type="action"
-# menu_name="None"
-# Position=0
-# toolbar_name="None"
-# Position=0
 # tooltip=Icon&48
 # statustip=Sets the toolbar icon size to 48x48: ICON48
 # alias=ICON48
 
 # [icon64]
 # type="action"
-# menu_name="None"
-# Position=0
-# toolbar_name="None"
-# Position=0
 # tooltip=Icon&64
 # statustip=Sets the toolbar icon size to 64x64: ICON64
 # alias=ICON64
@@ -1574,66 +1269,19 @@ alias=["HEART"]
 
 # [night]
 # type="action"
-# menu_name="None"
-# menu_position=0
-# toolbar_name="None"
-# toolbar_position=0
 # tooltip="&Night"
 # statustip="Updates the current view using night vision settings: NIGHT"
 # alias=["NIGHT"]
 
 # [open]
-#type="action"
-# menu_name="None"
-# Position=0
-# toolbar_name="None"
-# Position=0
+# type="action"
 # tooltip=&Open
 # statustip=Open an existing file: OPEN
 # alias=OPEN
 
-# [pan_down]
-#type="action"
-# menu_name="None"
-# Position=0
-# toolbar_name="None"
-# Position=0
-# tooltip=&Pan Down
-# statustip=Moves the view down: PANDOWN
-# alias=PANDOWN
-
-# [pan_left]
-#type="action"
-# menu_name="None"
-# Position=0
-# toolbar_name="None"
-# Position=0
-# tooltip=&Pan Left
-# statustip=Moves the view to the left: PANLEFT
-# alias=PANLEFT
-
-# [pan_right]
-#type="action"
-# menu_name="None"
-# Position=0
-# toolbar_name="None"
-# Position=0
-# tooltip=&Pan Right
-# statustip=Moves the view to the right: PANRIGHT
-# alias=PANRIGHT
-
-# [pan_up]
-#type="action"
-# menu_name="None"
-# Position=0
-# toolbar_name="None"
-# Position=0
-# tooltip=&Pan Up
-# statustip=Moves the view up: PANUP
-# alias=PANUP
 
 # [path]
-#type="action"
+# type="action"
 # menu_name=Draw
 # Position=4
 # toolbar_name=Draw
@@ -1643,47 +1291,37 @@ alias=["HEART"]
 # alias=PA, PATH
 
 # [platform]
-#type="action"
-# menu_name="None"
-# Position=0
-# toolbar_name="None"
-# Position=0
+# type="action"
 # tooltip=&Platform
 # statustip=List which platform is in use: PLATFORM
 # alias=PLATFORM
 
 # [point]
-#type="action"
+# type="action"
 # menu_name=Draw
-# Position=10
 # toolbar_name=Draw
-# Position=10
 # tooltip=&Point
 # statustip=Creates multiple points: POINT
 # alias=PO, POINT
 
 # [polygon]
-#type="action"
+# type="action"
 # menu_name=Draw
-# Position=4
 # toolbar_name=Draw
-# Position=4
 # tooltip=Pol&ygon
 # statustip=Creates a regular polygon: POLYGON
 # alias=POL, POLYGON
 
 # [polyline]
-#type="action"
-# menu_name=Draw
-# Position=4
-# toolbar_name=Draw
-# Position=4
+# type="action"
+# menu_name="Draw"
+# toolbar_name="Draw"
 # tooltip=&Polyline
 # statustip=Creates a 2D polyline: PLINE
 # alias=PL, PLINE, POLYLINE
 
 # [quickleader]
-#type="action"
+# type="action"
 # menu_name=Dimension
 # Position=12
 # toolbar_name=Dimension
@@ -1693,7 +1331,7 @@ alias=["HEART"]
 # alias=LE, LEADER, QLEADER, QUICKLEADER
 
 # [rectangle]
-#type="action"
+# type="action"
 # menu_name=Draw
 # Position=6
 # toolbar_name=Draw
@@ -1703,17 +1341,13 @@ alias=["HEART"]
 # alias=REC, RECT, RECTANG, RECTANGLE
 
 # [redo]
-#type="action"
-# menu_name="None"
-# Position=0
-# toolbar_name="None"
-# Position=0
+# type="action"
 # tooltip=&Redo
 # statustip=Reverses the effects of the previous undo action: REDO
 # alias=REDO
 
 # [rgb]
-#type="action"
+# type="action"
 # tooltip=&RGB
 # statustip=Updates the current view colors: RGB
 # alias=RGB
@@ -1723,7 +1357,7 @@ alias=["HEART"]
 # toolbar_position=3
 
 # [rotate]
-#type="action"
+# type="action"
 # tooltip=&Rotate
 # statustip=Rotates objects about a base point: ROTATE
 # alias=["RO", "ROTATE"]
@@ -1733,7 +1367,7 @@ alias=["HEART"]
 # toolbar_position=6
 
 # [sandbox]
-#type="action"
+# type="action"
 # tooltip="Sandbox"
 # statustip="A sandbox to play in: SANDBOX"
 # alias=["SAND", "SANDBOX"]
@@ -1743,7 +1377,7 @@ alias=["HEART"]
 # toolbar_position=100
 
 # [scale]
-#type="action"
+# type="action"
 # tooltip="Sca&le"
 # statustip="Enlarges or reduces objects proportionally in the X, Y, and Z directions: SCALE"
 # alias=["SC", "SCALE"]
@@ -1753,17 +1387,13 @@ alias=["HEART"]
 # Position=7
 
 # [SelectAll]
-#type="action"
-# menu_name="None"
-# Position=0
-# toolbar_name="None"
-# Position=0
+# type="action"
 # tooltip=&Select All
 # statustip=Selects all objects: SELECTALL
 # alias=AI_SELALL, SELALL, SELECTALL
 
 # [single_line_text]
-#type="action"
+# type="action"
 # menu_name=Draw
 # Position=18
 # toolbar_name=Draw
@@ -1773,7 +1403,7 @@ alias=["HEART"]
 # alias=DT, DTEXT, TEXT, SINGLELINETEXT
 
 # [snowflake]
-#type="action"
+# type="action"
 # tooltip="&Snowflake"
 # statustip="Creates a snowflake: SNOWFLAKE"
 # alias="SNOWFLAKE"
@@ -1783,7 +1413,7 @@ alias=["HEART"]
 # toolbar_position=100
 
 # [star]
-#type="action"
+# type="action"
 # tooltip="&Star"
 # statustip="Creates a star: STAR"
 # alias=["*", "STAR"]
@@ -1793,541 +1423,501 @@ alias=["HEART"]
 # menu_position=100
 
 # [syswindows]
-#type="action"
+# type="action"
 # tooltip="&SysWindows"
 # statustip="Arrange the windows: SYSWINDOWS"
 # alias=WINDOWS, SYSWINDOWS
-# menu_name="None"
-# menu_position=0
-# toolbar_name="None"
-# toolbar_position=0
 
 # [ACTION_TipOfTheDay]
-#type="action"
+# type="action"
 # tooltip="&Tip Of The Day"
 # statustip="Displays a dialog with useful tips: TIPS"
 # shortcut=""
 # alias=["TIPS", "TIPOFTHEDAY"]
-# menu_name="None"
-# Position=0
-# toolbar_name="None"
-# Position=0
 
 # [ACTION_Undo]
-#type="action"
+# type="action"
 # tooltip="&Undo"
 # statustip="Reverses the most recent action: UNDO"
 # shortcut=""
 # alias=["U", "UNDO"]
-# menu_name="None"
-# Position=0
-# toolbar_name="None"
-# Position=0
 
 # [ACTION_WindowCascade]
-#type="action"
+# type="action"
 # tooltip="&Cascade"
 # statustip="Cascade the windows: CASCADE"
 # shortcut=""
 # alias=["CASCADE", "WINDOWCASCADE"]
-# menu_name="None"
-# menu_position=0
-# toolbar_name="None"
-# toolbar_position=0
 
 # [ACTION_window_close]
-#type="action"
+# type="action"
 # tooltip="Cl&ose"
 # statustip="Close the active window: CLOSE"
 # shortcut=""
 # alias=["CLOSE", "WINDOWCLOSE"]
-# menu_name="None"
-# menu_position=0
-# toolbar_name="None"
-# toolbar_position=0
 
 # [ACTION_window_close_all]
-#type="action"
+# type="action"
 # tooltip="Close &All"
 # statustip="Close all the windows: CLOSEALL"
 # shortcut=""
 # alias=["CLOSEALL", "WINDOWCLOSEALL"]
-# menu_name="None"
-# menu_position=0
-# toolbar_name="None"
-# Position=0
 
 # [ACTION_window_next]
-#type="action"
+# type="action"
 # tooltip="Ne&xt"
 # statustip="Move the focus to the next window: NEXT"
 # shortcut=""
 # alias=["NEXT", "WINDOWNEXT"]
-# menu_name="None"
-# menu_position=0
-# toolbar_name="None"
-# toolbar_position=0
 
 # [ACTION_window_previous]
-#type="action"
+# type="action"
 # tooltip="Pre&vious"
 # statustip="Move the focus to the previous window: PREVIOUS"
 # shortcut=""
 # alias=["PREV", "PREVIOUS", "WINDOWPREVIOUS"]
-# menu_name="None"
-# menu_position=0
-# toolbar_name="None"
-# toolbar_position=0
 
-#[ACTION_window-cascade]
-#type="action"
+# [ACTION_window-cascade]
+# type="action"
 #command = "windowcascade"
 #label = "&Cascade"
 #tooltip = "Cascade the windows."
 
-#[ACTION_window-tile]
-#type="action"
+# [ACTION_window-tile]
+# type="action"
 #command = "windowtile"
 #label = "&Tile"
 #tooltip = "Tile the windows."
 
-#[ACTION_window-close]
-#type="action"
+# [ACTION_window-close]
+# type="action"
 #command = "windowclose"
 #label = "Cl&ose"
 #tooltip = "Close the active window."
 
-#[window-close-all]
-#type="action"
+# [window-close-all]
+# type="action"
 #command = "windowcloseall"
 #label = "Close &All"
 #tooltip = "Close all the windows."
 
-
-
-#[window-next]
-#type="action"
+# [window-next]
+# type="action"
 #"windownext"
 #label = "Ne&xt"
 #tooltip = "Move the focus to the next window."
 
-#[window-next]
-#type="action"
+# [window-next]
+# type="action"
 #"windowprevious"
 #label = "Pre&vious"
 #tooltip = "Move the focus to the previous window."
 
-#[window-next]
-#type="action"
+# [window-next]
+# type="action"
 #"new"
 #label = "&New"
 #tooltip = "Create a new file."
 
-#[window-next]
-#type="action"
+# [window-next]
+# type="action"
 #"open"
 #label = "&Open"
 #tooltip = "Open an existing file."
 
-#[window-next]
-#type="action"
+# [window-next]
+# type="action"
 #"save"
 #label = "&Save"
 #tooltip = "Save the design to disk."
 
-#[window-next]
-#type="action"
+# [window-next]
+# type="action"
 #command = "saveas"
 #label = "Save &As"
 #tooltip = "Save the design under a new name."
 
-#[window-next]
-#type="action"
+# [window-next]
+# type="action"
 #command = "print"
 #label = "&Print"
 #tooltip = "Print the design."
 
-#[window-next]
-#type="action"
+# [window-next]
+# type="action"
 #command = "designdetails"
 #label = "&Details"
 #tooltip = "Details of the current design."
 
-#[window-next]
-#type="action"
+# [window-next]
+# type="action"
 #command = "exit"
 #label = "E&xit"
 #tooltip = "Exit the application."
 
-#[window-next]
-#type="action"
+# [window-next]
+# type="action"
 #command = "cut"
 #label = "Cu&t"
 #tooltip = "Cut the current selection's contents to the clipboard."
 
-#[window-next]
-#type="action"
+# [window-next]
+# type="action"
 #command = "copy"
 #label = "&Copy"
 #tooltip = "Copy the current selection's contents to the clipboard."
 
-#[window-next]
-#type="action"
+# [window-next]
+# type="action"
 #command = "paste"
 #label = "&Paste"
 #tooltip = "Paste the clipboard's contents into the current selection."
 
-#[help]
-#type="action"
+# [help]
+# type="action"
 #command = "help"
 #label = "&Help"
 #tooltip = "Displays help."
 
-#[changelog]
-#type="action"
+# [changelog]
+# type="action"
 #command = "changelog"
 #label = "&Changelog"
 #tooltip = "Describes new features in this product."
 
-#[tip-of-the-day]
-#type="action"
+# [tip-of-the-day]
+# type="action"
 #command = "tipoftheday"
 #label = "&Tip Of The Day"
 #tooltip = "Displays a dialog with useful tips"
 
-#[about]
-#type="action"
-#command = "about"
-#label = "&About Embroidermodder 2"
-#tooltip = "Displays information about this product."
-
-#[window-next]
-#type="action"
+# [window-next]
+# type="action"
 #command = "whatsthis"
 #"&What's This?"
 #tooltip = "What's This? Context Help!"
 
-#[window-next]
-#type="action"
+# [window-next]
+# type="action"
 #command = "undo"
 #"&Undo"
 #tooltip = "Reverses the most recent action."
 
-#[window-next]
-#type="action"
+# [window-next]
+# type="action"
 #command = "redo"
 #"&Redo"
 #tooltip = "Reverses the effects of the previous undo action."
 
-#[]
-#type="action"
+# []
+# type="action"
 #"icon16"
 #"Icon&16"
 #tooltip = "Sets the toolbar icon size to 16x16."
 
-#[]
-#type="action"
+# []
+# type="action"
 #"icon24"
 #"Icon&24"
 #tooltip = "Sets the toolbar icon size to 24x24."
 
-#[]
-#type="action"
+# []
+# type="action"
 #"icon32"
 #"Icon&32"
 #tooltip = "Sets the toolbar icon size to 32x32."
 
-#[icon-48]
-#type="action"
+# [icon-48]
+# type="action"
 #"icon48"
 #"Icon&48"
 #tooltip = "Sets the toolbar icon size to 48x48."
 
-#[icon-64]
-#type="action"
+# [icon-64]
+# type="action"
 #"icon64"
 #"Icon&64"
 #tooltip = "Sets the toolbar icon size to 64x64."
 
-#[icon-128]
-#type="action"
+# [icon-128]
+# type="action"
 #"icon128"
 #"Icon12&8"
 #tooltip = "Sets the toolbar icon size to 128x128."
 
-#[settings-dialog]
-#type="action"
+# [settings-dialog]
+# type="action"
 #command = "settingsdialog"
 #label = "&Settings"
 #tooltip = "Configure settings specific to this product."
 
-#[make-layer-current]
-#type="action"
+# [make-layer-current]
+# type="action"
 #command = "makelayercurrent"
 #label = "&Make Layer Active"
 #tooltip = "Makes the layer of a selected object the active layer"
 
-#[layers]
-#type="action"
+# [layers]
+# type="action"
 #command = "layers"
 #label = "&Layers"
 #tooltip = "Manages layers and layer properties: LAYER"
 
-#[layer-selector]
-#type="action"
+# [layer-selector]
+# type="action"
 #command = "layerselector"
 #label = "&Layer Selector"
 #tooltip = "Dropdown selector for changing the current layer"
 
-#[layer-previous]
-#type="action"
+# [layer-previous]
+# type="action"
 #command = "layerprevious"
 #label = "&Layer Previous"
 #tooltip = "Restores the previous layer settings: LAYERP"
 
-#[color-selector]
-#type="action"
+# [color-selector]
+# type="action"
 #command = "colorselector"
 #label = "&Color Selector"
 #tooltip = "Dropdown selector for changing the current thread color"
 
-#[line-type-selector]
-#type="action"
+# [line-type-selector]
+# type="action"
 #command = "linetypeselector"
 #label = "&Stitchtype Selector"
 #tooltip = "Dropdown selector for changing the current stitch type"
 
-#[settings-dialog]
-#type="action"
+# [settings-dialog]
+# type="action"
 #"lineweightselector"
 #label = "&Threadweight Selector"
 #"Dropdown selector for changing the current thread weight"
 
-#[settings-dialog]
-#type="action"
+# [settings-dialog]
+# type="action"
 #"hidealllayers"
 #label = "&Hide All Layers"
 #"Turns the visibility off for all layers in the current drawing: HIDEALL"
 
-#[settings-dialog]
-#type="action"
+# [settings-dialog]
+# type="action"
 #"showalllayers"
 #label = "&Show All Layers"
 #"Turns the visibility on for all layers in the current drawing: SHOWALL"
 
-#[settings-dialog]
-#type="action"
+# [settings-dialog]
+# type="action"
 #"freezealllayers"
 #label = "&Freeze All Layers"
 #"Freezes all layers in the current drawing: FREEZEALL"
 
-#[settings-dialog]
-#type="action"
+# [settings-dialog]
+# type="action"
 #"thawalllayers"
 #label = "&Thaw All Layers"
 #"Thaws all layers in the current drawing: THAWALL"
 
-#[settings-dialog]
-#type="action"
+# [settings-dialog]
+# type="action"
 #"lockalllayers"
 #label = "&Lock All Layers"
 #"Locks all layers in the current drawing: LOCKALL"
 
-#[settings-dialog]
-#type="action"
+# [settings-dialog]
+# type="action"
 #"unlockalllayers"
 #label = "&Unlock All Layers"
 #"Unlocks all layers in the current drawing: UNLOCKALL"
 
-#[settings-dialog]
-#type="action"
+# [settings-dialog]
+# type="action"
 #"textbold"
 #label = "&Bold Text"
 #"Sets text to be bold."
 
-#[settings-dialog]
-#type="action"
+# [settings-dialog]
+# type="action"
 #"textitalic"
 #label = "&Italic Text"
 #"Sets text to be italic."
 
-#[settings-dialog]
-#type="action"
+# [settings-dialog]
+# type="action"
 #"textunderline"
 #label = "&Underline Text"
 #"Sets text to be underlined."
 
-#[settings-dialog]
-#type="action"
+# [settings-dialog]
+# type="action"
 #"textstrikeout"
 #label = "&StrikeOut Text"
 #"Sets text to be striked out."
 
-#[settings-dialog]
-#type="action"
+# [settings-dialog]
+# type="action"
 #"textoverline"
 #label = "&Overline Text"
 #"Sets text to be overlined."
 
-#[settings-dialog]
-#type="action"
+# [settings-dialog]
+# type="action"
 #"zoomrealtime"
 #label = "Zoom &Realtime"
 #"Zooms to increase or decrease the apparent size of objects in the current viewport."
 
-#[settings-dialog]
-#type="action"
+# [settings-dialog]
+# type="action"
 #"zoomprevious"
 #"Zoom &Previous"
 #"Zooms to display the previous view."
 
-#[settings-dialog]
-#type="action"
+# [settings-dialog]
+# type="action"
 #"zoomwindow"
 #"Zoom &Window"
 #"Zooms to display an area specified by a rectangular window."
 
-#[settings-dialog]
-#type="action"
+# [settings-dialog]
+# type="action"
 #"zoomdynamic"
 #"Zoom &Dynamic"
 #"Zooms to display the generated portion of the drawing."
 
-#[settings-dialog]
-#type="action"
+# [settings-dialog]
+# type="action"
 #"zoomscale"
 #"Zoom &Scale"
 #"Zooms the display using a specified scale factor."
 
-#[settings-dialog]
-#type="action"
+# [settings-dialog]
+# type="action"
 #"zoomcenter"
 #"Zoom &Center"
 #"Zooms to display a view specified by a center point and magnification or height."
 
-#[zoom-in]
+# [zoom-in]
 
-#type="action"
+# type="action"
 #"zoomin"
 #"Zoom &In"
 #"Zooms to increase the apparent size of objects."
 
-#[zoom-in]
-#type="action"
+# [zoom-in]
+# type="action"
 #"zoomout"
 #"Zoom &Out"
 #"Zooms to decrease the apparent size of objects."
 
-#[zoom-in]
-#type="action"
+# [zoom-in]
+# type="action"
 #"zoomselected"
 #"Zoom Selec&ted"
 #"Zooms to display the selected objects."
 
-#[zoom-in]
-#type="action"
+# [zoom-in]
+# type="action"
 #"zoomall"
 #"Zoom &All"
 #"Zooms to display the drawing extents or the grid limits."
 
-#[zoom-in]
-#type="action"
+# [zoom-in]
+# type="action"
 #"zoomextents"
 #"Zoom &Extents"
 #"Zooms to display the drawing extents."
 
-#[zoom-in]
-#type="action"
+# [zoom-in]
+# type="action"
 #"distance"
 #"_Distance"
 #"Measures the distance and angle between two points: DIST"
 
-#[zoom-in]
-#type="action"
+# [zoom-in]
+# type="action"
 #"dolphin"
 #"Dolp&hin"
 #"Adds a dolphin design to the vector layer."
 
-#[zoom-in]
-#type="action"
+# [zoom-in]
+# type="action"
 #"trebleclef"
 #"Treble Clef"
 #"Adds a treble clef design to the vector layer."
 
-#[zoom-in]
-#type="action"
+# [zoom-in]
+# type="action"
 #"panrealtime"
 #"&Pan Realtime"
 #"Moves the view in the current viewport."
 
-#[zoom-in]
-#type="action"
+# [zoom-in]
+# type="action"
 #"panpoint"
 #"&Pan Point"
 #"Moves the view by the specified distance."
 
-#[zoom-in]
-#type="action"
+# [zoom-in]
+# type="action"
 #"panleft"
 #"&Pan Left"
 #"Moves the view to the left."
 
-#[zoom-in]
-#type="action"
+# [zoom-in]
+# type="action"
 #"panright"
 #"&Pan Right"
 #tooltip = "Moves the view to the right."
 
-#[pan-up]
-#type="action"
+# [pan-up]
+# type="action"
 #command = "panup"
 #label = "&Pan Up"
 #tooltip = "Moves the view up."
 
-#[pan-down]
-#type="action"
+# [pan-down]
+# type="action"
 #command = "pandown"
 #label = "&Pan Down"
 #tooltip = "Moves the view down."
 
-#[day]
-#type="action"
+# [day]
+# type="action"
 #command = "day"
 #label = "&Day"
 #tooltip = "Updates the current view using day vision settings."
 
-#[night]
-#type="action"
+# [night]
+# type="action"
 #command = "night"
 #label = "&Night"
 #tooltip = "Updates the current view using night vision settings."
 
-#[delete]
-#type="action"
+# [delete]
+# type="action"
 #menu = "Modify"
 #toolbar = "Modify"
 #tooltip = "D&elete"
 #statustip = "Removes objects from a drawing: DELETE"
 #alias = ["E" "ERASE" "DEL" "DELETE"]
 
-#[quit]
-#type="action"
+# [quit]
+# type="action"
 #menu = "None"
 #toolbar = "None"
 #tooltip = "E&xit"
 #statustip = "Exit the application: EXIT"
 #alias = "EXIT, QUIT"
 
-#[help]
-#type="action"
+# [help]
+# type="action"
 #menu = "None"
 #toolbar = "None"
 #tooltip = "&Help"
 #statustip = "Displays the help file: HELP"
 #alias = "?, HELP"
 
-#[move]
-#type="action"
+# [move]
+# type="action"
 #menu = "Modify"
 #toolbar = "Modify"
 #tooltip = "&Move"
@@ -2335,7 +1925,7 @@ alias=["HEART"]
 #alias = "M, MOVE"
 
 [locate-point]
-#type="action"
+# type="action"
 #menu = "Tools"
 #toolbar = "Inquiry"
 #tooltip = "&Locate Point"
@@ -2343,7 +1933,7 @@ alias=["HEART"]
 #alias = "ID, LOCATEPOINT"
 
 [heart]
-#type="action"
+# type="action"
 #menu = "Draw"
 #toolbar = "Draw"
 #tooltip = "&Heart"
@@ -2351,7 +1941,7 @@ alias=["HEART"]
 #alias = "HEART"
 
 [path]
-#type="action"
+# type="action"
 #menu = "Draw"
 #toolbar = "Draw"
 #tooltip = "&Path"
@@ -2359,7 +1949,7 @@ alias=["HEART"]
 #alias = "PA, PATH"
 
 [platform]
-#type="action"
+# type="action"
 #menu = "None"
 #toolbar = "None"
 #tooltip = "&Platform"
@@ -2367,7 +1957,7 @@ alias=["HEART"]
 #alias = "PLATFORM"
 
 [point]
-#type="action"
+# type="action"
 #menu = "Draw"
 #toolbar = "Draw"
 #tooltip = "&Point"
@@ -2375,7 +1965,7 @@ alias=["HEART"]
 #alias = "PO, POINT"
 
 [polygon]
-#type="action"
+# type="action"
 #menu = "Draw"
 #toolbar = "Draw"
 #tooltip = "Pol&ygon"
@@ -2383,7 +1973,7 @@ alias=["HEART"]
 #alias = ["POL", "POLYGON"]
 
 [polyline]
-#type="action"
+# type="action"
 #menu = "Draw"
 #toolbar = "Draw"
 #tooltip = "&Polyline"
@@ -2391,7 +1981,7 @@ alias=["HEART"]
 #alias = ["PL" "PLINE" "POLYLINE"]
 
 [dimension]
-#type="action"
+# type="action"
 #menu = "Dimension"
 #toolbar = "Dimension"
 #tooltip = "&QuickLeader"
@@ -2399,7 +1989,7 @@ alias=["HEART"]
 #alias = ["LE" "LEADER" "QLEADER" "QUICKLEADER"]
 
 [rectangle]
-#type="action"
+# type="action"
 #command = "rectangle"
 #menu = "Draw"
 #toolbar = "Draw"
@@ -2407,8 +1997,8 @@ alias=["HEART"]
 #statustip = "Creates a rectangular polyline: RECTANGLE"
 #alias = ["REC" "RECT" "RECTANG" "RECTANGLE"]
 
-#[redo]
-#type="action"
+# [redo]
+# type="action"
 #menu = "None"
 #toolbar = "None"
 #tooltip = "&Redo"
@@ -2416,7 +2006,7 @@ alias=["HEART"]
 #alias = ["REDO"]
 
 [rgb]
-#type="action"
+# type="action"
 #menu = "Sandbox"
 #toolbar = "Sandbox"
 #tooltip = "&RGB"
@@ -2424,7 +2014,7 @@ alias=["HEART"]
 #alias = ["RGB"]
 
 [rotate]
-#type="action"
+# type="action"
 #menu = "Modify"
 #toolbar = "Modify"
 #tooltip = "&Rotate"
@@ -2432,7 +2022,7 @@ alias=["HEART"]
 #alias = ["RO" "ROTATE"]
 
 [sandbox]
-#type="action"
+# type="action"
 #menu = "Sandbox"
 #toolbar = "Sandbox"
 #tooltip = "Sandbox"
@@ -2440,7 +2030,7 @@ alias=["HEART"]
 #alias = ["SAND" "SANDBOX"]
 
 [scale]
-#type="action"
+# type="action"
 #command = "scale"
 #menu = "Modify"
 #toolbar = "Modify"

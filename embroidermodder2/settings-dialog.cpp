@@ -17,6 +17,8 @@
 
 #include <fstream>
 
+Dictionary config;
+
 /**
  * The actuator changes the program state via these global variables.
  */
@@ -31,7 +33,7 @@ Settings dialog, preview, accept_;
 /**
  * .
  */
-std::vector<std::string> extensions = {
+StringList extensions = {
     "100", "10o", "ART", "BMC", "BRO",
     "CND", "COL", "CSD", "CSV", "DAT",
     "DEM", "DSB", "DST", "DSZ", "DXF",

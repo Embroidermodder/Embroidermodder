@@ -19,16 +19,6 @@
 
 #include "embroidermodder.h"
 
-StringList file_toolbar;
-StringList edit_toolbar;
-StringList view_toolbar;
-StringList zoom_toolbar;
-StringList pan_toolbar;
-StringList icon_toolbar;
-StringList help_toolbar;
-StringList top_toolbar_layout;
-StringList bottom_toolbar_layout;
-
 /**
  * @brief get_action_index
  * @param cmd
@@ -90,13 +80,14 @@ MainWindow::createAllToolbars()
 {
     debug_message("MainWindow createAllToolbars()");
 
-    create_toolbar("file", "toolbarFile", file_toolbar);
-    create_toolbar("edit", "toolbarEdit", edit_toolbar);
-    create_toolbar("view", "toolbarView", view_toolbar);
-    create_toolbar("zoom", "toolbarZoom", zoom_toolbar);
-    create_toolbar("pan", "toolbarPan", pan_toolbar);
-    create_toolbar("icon", "toolbarIcon", icon_toolbar);
-    create_toolbar("help", "toolbarHelp", help_toolbar);
+    create_toolbar("file", "toolbarFile", string_lists["file_toolbar"]);
+    create_toolbar("edit", "toolbarEdit", string_lists["edit_toolbar"]);
+    create_toolbar("view", "toolbarView", string_lists["view_toolbar"]);
+    create_toolbar("zoom", "toolbarZoom", string_lists["zoom_toolbar"]);
+    create_toolbar("pan", "toolbarPan", string_lists["pan_toolbar"]);
+    create_toolbar("icon", "toolbarIcon", string_lists["icon_toolbar"]);
+    create_toolbar("help", "toolbarHelp", string_lists["help_toolbar"]);
+    create_toolbar("draw", "toolbarHelp", string_lists["draw_toolbar"]);
 
     debug_message("MainWindow createLayerToolbar()");
 
@@ -249,22 +240,27 @@ MainWindow::createAllToolbars()
     toolbarHash["properties"]->setOrientation(Qt::Horizontal);
     toolbarHash["text"]->setOrientation(Qt::Horizontal);
     toolbarHash["prompt"]->setOrientation(Qt::Horizontal);
+    toolbarHash["draw"]->setOrientation(Qt::Vertical);
 
-    for (int i=0; i<(int)top_toolbar_layout.size(); i++) {
-        if (top_toolbar_layout[i] == "---") {
+    for (int i=0; i<(int)string_lists["top_toolbar_layout"].size(); i++) {
+        String entry = string_lists["top_toolbar_layout"][i];
+        if (entry == "---") {
             addToolBarBreak(Qt::TopToolBarArea);
         }
         else {
-            addToolBar(Qt::TopToolBarArea, toolbarHash[top_toolbar_layout[i]]);
+            addToolBar(Qt::TopToolBarArea, toolbarHash[entry]);
         }
     }
 
-    for (int i=0; i<(int)bottom_toolbar_layout.size(); i++) {
-        if (bottom_toolbar_layout[i] == "---") {
+    addToolBar(Qt::TopToolBarArea, toolbarHash["draw"]);
+
+    for (int i=0; i<(int)string_lists["bottom_toolbar_layout"].size(); i++) {
+        String entry = string_lists["bottom_toolbar_layout"][i];
+        if (entry == "---") {
             addToolBarBreak(Qt::BottomToolBarArea);
         }
         else {
-            addToolBar(Qt::BottomToolBarArea, toolbarHash[bottom_toolbar_layout[i]]);
+            addToolBar(Qt::BottomToolBarArea, toolbarHash[entry]);
         }
     }
 

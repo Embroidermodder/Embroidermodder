@@ -90,7 +90,13 @@ class TextSingleObject;
 
 typedef std::string String;
 typedef std::vector<String> StringList;
-typedef std::unordered_map<String, String> Dictionary;
+
+#define STRING_TYPE  0
+#define REAL_TYPE    1
+#define INT_TYPE     2
+#define BOOL_TYPE    3
+#define COLOR_TYPE   4
+#define UNKNOWN_TYPE 5
 
 /**
  * .
@@ -100,9 +106,12 @@ typedef struct Parameter_ {
     EmbReal r;
     int i;
     bool b;
+    EmbColor c;
+    int type;
 } Parameter;
 
 typedef std::vector<Parameter> ParameterList;
+typedef std::unordered_map<String, Parameter> Dictionary;
 
 /**
  * .
@@ -127,14 +136,6 @@ typedef struct Action__ {
             list of commands or it can allow for command line
             style command aliases. For example: icon16 would become
             the string list {"iconResize 16"}. */
-    String menu_name;
-        /*< . */
-    int menu_position;
-        /*< . */
-    String toolbar_name;
-        /*< . */
-    int toolbar_position;
-        /*< . */
 } Action;
 
 /**
@@ -811,29 +812,9 @@ extern Settings settings;
 extern Settings dialog;
 extern std::vector<Action> action_table;
 
-extern StringList file_toolbar;
-extern StringList edit_toolbar;
-extern StringList view_toolbar;
-extern StringList zoom_toolbar;
-extern StringList pan_toolbar;
-extern StringList icon_toolbar;
-extern StringList help_toolbar;
-extern StringList top_toolbar_layout;
-extern StringList bottom_toolbar_layout;
+extern std::unordered_map<String, StringList> string_lists;
 
-extern StringList file_menu;
-extern StringList edit_menu;
-extern StringList pan_menu;
-extern StringList zoom_menu;
-extern StringList view_menu;
-extern StringList settings_menu;
-extern StringList window_menu;
-extern StringList help_menu;
-extern StringList menubar_order;
-
-extern StringList all_line_editors;
 extern QFontComboBox* comboBoxTextSingleFont;
-extern StringList group_box_list;
 extern std::vector<GroupBoxData> group_box_arc_geometry;
 extern std::vector<GroupBoxData> group_box_ellipse_geometry;
 extern Dictionary config;
@@ -2022,9 +2003,6 @@ public slots:
     void about();
     void whatsThisContextHelp();
 
-    void copy();
-    void paste();
-
     void closeToolBar(QAction*);
     void floatingChangedToolBar(bool);
 
@@ -2066,12 +2044,6 @@ public slots:
     void makeLayerActive();
     void layerManager();
     void layerPrevious();
-
-    String zoom(String mode);
-    String pan(String mode);
-
-    void dayVision();
-    void nightVision();
 
 public:
     void nativeAlert(const QString& txt);
@@ -2924,14 +2896,5 @@ private:
 
 QString SettingsPath();
 QString SettingsDir();
-
-/* ACTIONS */
-String add_arc_action(String args);
-String add_circle_action(String args);
-String add_rubber_action(String args);
-String add_slot_action(String args);
-String cut_action(String args);
-String set_rubber_text_action(String args);
-String spare_rubber_action(String args);
 
 #endif

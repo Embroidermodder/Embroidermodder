@@ -31,6 +31,8 @@ PropertyEditor* dockPropEdit = 0;
 UndoEditor* dockUndoEdit = 0;
 StatusBar* statusbar = 0;
 
+std::unordered_map<String, StringList> string_lists;
+
 std::unordered_map<String, QAction*> actionHash;
 std::unordered_map<String, QToolBar*> toolbarHash;
 std::unordered_map<String, QMenu*> menuHash;
@@ -49,14 +51,47 @@ String convert_args_to_type(String label, StringList args,
 
 typedef String (*Command)(String);
 
+/**
+ * ACTIONS
+ * \todo these should all be static, since other files
+ * use the actuator to call them.
+ */
+String add_arc_action(String args);
+String add_circle_action(String args);
+String add_rubber_action(String args);
+String add_slot_action(String args);
+String append_prompt_history_action(String args);
+String copy_action(String args);
+String cut_action(String args);
+String day_vision_action(String args);
+String do_nothing_action(String args);
+String error_action(String args);
+String night_vision_action(String args);
+String pan_action(String args);
+String paste_action(String args);
+String set_rubber_text_action(String args);
+String spare_rubber_action(String args);
+String todo_action(String args);
+String zoom_action(String args);
+
 std::unordered_map<String, Command> command_map = {
     {"add-arc", add_arc_action},
     {"add-circle", add_circle_action},
     {"add-rubber", add_rubber_action},
     {"add-slot", add_slot_action},
+    {"append-history", append_prompt_history_action},
+    {"copy", copy_action},
     {"cut", cut_action},
+    {"day", day_vision_action},
+    {"donothing", do_nothing_action},
+    {"error", error_action},
+    {"night", night_vision_action},
+    {"pan", pan_action},
+    {"paste", paste_action},
     {"set-rubber-text", set_rubber_text_action},
-    {"spare-rubber", spare_rubber_action}
+    {"spare-rubber", spare_rubber_action},
+    {"todo", todo_action},
+    {"zoom", zoom_action}
 };
 
 std::unordered_map<String, int> rubber_mode_hash = {
@@ -174,16 +209,22 @@ MainWindow::checkForUpdates()
     //TODO: Check website for new versions, commands, etc...
 }
 
+void
+no_argument_debug(String function_name, String args)
+{
+    debug_message(function_name);
+    if (args != "") {
+        debug_message(function_name + " was passed an argument that was ignored");
+    }
+}
+
 /**
  *
  */
 String
 cut_action(String args)
 {
-    debug_message("cut()");
-    if (args != "") {
-        debug_message("cut_action was passed an argument that was ignored");
-    }
+    no_argument_debug("cut_action()", args);
     View* gview = _mainWin->activeView();
     if (gview) {
         gview->cut();
@@ -194,37 +235,52 @@ cut_action(String args)
 /**
  *
  */
-void
-MainWindow::copy()
+String
+copy_action(String args)
 {
-    debug_message("copy()");
+    no_argument_debug("copy_action()", args);
     View* gview = _mainWin->activeView();
     if (gview) {
         gview->copy();
     }
+    return "";
 }
 
 /**
  *
  */
-void
-MainWindow::paste()
+String
+paste_action(String args)
 {
-    debug_message("paste()");
+    no_argument_debug("paste_action()", args);
     View* gview = _mainWin->activeView();
     if (gview) {
         gview->paste();
     }
+    return "";
 }
 
 /**
- * .
+ * @brief do_nothing_action This action intensionally does nothing.
+ * @param args This is ignored, it's present to make it a Command.
+ * @return An empty string.
  */
-QString
-MainWindow::platformString()
+String
+do_nothing_action(String args)
+{
+    no_argument_debug("do_nothing_action()", args);
+    return "";
+}
+
+/**
+ * @brief platformString
+ * @return
+ */
+String
+platformString(void)
 {
     //TODO: Append QSysInfo to string where applicable.
-    QString os;
+    String os;
     #if   defined(Q_OS_AIX)
     os = "AIX";
     #elif defined(Q_OS_BSD4)
@@ -286,7 +342,7 @@ MainWindow::platformString()
     #elif defined(Q_OS_WINCE)
     os = "Windows CE";
     #endif
-    debug_message("Platform: " + os.toStdString());
+    debug_message("Platform: " + os);
     return os;
 }
 
@@ -740,7 +796,7 @@ MainWindow::layerPrevious()
  * .
  */
 String
-MainWindow::pan(String mode)
+pan_action(String mode)
 {
     View* gview = _mainWin->activeView();
     QUndoStack* stack = gview->getUndoStack();
@@ -780,11 +836,16 @@ MainWindow::pan(String mode)
             return "";
         }
     }
-    return "ERROR: pan subcommand not recognised.";
+    return "</br>ERROR: pan subcommand not recognised.";
 }
 
+/**
+ * @brief zoom_action
+ * @param mode
+ * @return
+ */
 String
-MainWindow::zoom(String mode)
+zoom_action(String mode)
 {
     View* gview = _mainWin->activeView();
     QUndoStack* stack = gview->getUndoStack();
@@ -847,37 +908,41 @@ MainWindow::zoom(String mode)
             return "";
         }
     }
-    return "ERROR: zoom subcommand not recognised.";
+    return "</br>ERROR: zoom subcommand not recognised.";
 }
 
 /**
  * @brief MainWindow::dayVision
  *  \todo Make day vision color settings.
  */
-void
-MainWindow::dayVision()
+String
+day_vision_action(String args)
 {
+    no_argument_debug("day_vision_action()", args);
     View* gview = _mainWin->activeView();
     if (gview) {
         gview->setBackgroundColor(qRgb(255,255,255));
         gview->setCrossHairColor(qRgb(0,0,0));
         gview->setGridColor(qRgb(0,0,0));
     }
+    return "";
 }
 
 /**
  * @brief MainWindow::nightVision
  * \todo Make night vision color settings.
  */
-void
-MainWindow::nightVision()
+String
+night_vision_action(String args)
 {
+    no_argument_debug("night_vision_action()", args);
     View* gview = _mainWin->activeView();
     if (gview) {
         gview->setBackgroundColor(qRgb(0,0,0));
         gview->setCrossHairColor(qRgb(255,255,255));
         gview->setGridColor(qRgb(255,255,255));
     }
+    return "";
 }
 
 void
@@ -2207,47 +2272,20 @@ read_configuration(void)
         action.tooltip = read_string_setting(table, "tooltip");
         action.statustip = read_string_setting(table, "statustip");
         action.shortcut = read_string_setting(table, "shortcut");
-        action.menu_name = read_string_setting(table, "menu_name");
-
-        toml_datum_t menu_position = toml_int_in(table, "menu_position");
-        action.menu_position = menu_position.u.i;
-
-        action.toolbar_name = read_string_setting(table, "toolbar_name");
-
-        toml_datum_t toolbar_position = toml_int_in(table, "toolbar_position");
-        action.toolbar_position = toolbar_position.u.i;
 
         action_table.push_back(action);
     }
 
-    group_box_list = read_string_list_setting(settings_toml, "group_box_list");
-    all_line_editors = read_string_list_setting(settings_toml, "all_line_editors");
-
-    file_toolbar = read_string_list_setting(settings_toml, "file_toolbar");
-    edit_toolbar = read_string_list_setting(settings_toml, "edit_toolbar");
-    view_toolbar = read_string_list_setting(settings_toml, "view_toolbar");
-    zoom_toolbar = read_string_list_setting(settings_toml, "zoom_toolbar");
-    pan_toolbar = read_string_list_setting(settings_toml, "pan_toolbar");
-    icon_toolbar = read_string_list_setting(settings_toml, "icon_toolbar");
-    help_toolbar = read_string_list_setting(settings_toml, "help_toolbar");
-    top_toolbar_layout = read_string_list_setting(settings_toml, "top_toolbar_layout");
-    bottom_toolbar_layout = read_string_list_setting(settings_toml, "bottom_toolbar_layout");
-
-    file_menu = read_string_list_setting(settings_toml, "file_menu");
-    edit_menu = read_string_list_setting(settings_toml, "edit_menu");
-    pan_menu = read_string_list_setting(settings_toml, "pan_menu");
-    zoom_menu = read_string_list_setting(settings_toml, "zoom_menu");
-    view_menu = read_string_list_setting(settings_toml, "view_menu");
-    settings_menu = read_string_list_setting(settings_toml, "settings_menu");
-    window_menu = read_string_list_setting(settings_toml, "window_menu");
-    help_menu = read_string_list_setting(settings_toml, "help_menu");
+    StringList string_lists_list = read_string_list_setting(settings_toml, "string_lists");
+    for (int i=0; i<(int)string_lists_list.size(); i++) {
+        String key = string_lists_list[i];
+        string_lists[key] = read_string_list_setting(settings_toml, key.c_str());
+    }
 
     toml_free(settings_toml);
 
     return 1;
 }
-
-int read_ui_configuration(void) { return 1; }
 
 /**
  * @brief .
@@ -2271,7 +2309,6 @@ MainWindow::MainWindow() : QMainWindow(0)
 {
     QString appDir = qApp->applicationDirPath();
     read_configuration();
-    read_ui_configuration();
     read_settings();
 
     //Verify that files/directories needed are actually present.
@@ -2327,6 +2364,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     menuHash["settings"] = new QMenu(tr("&Settings"), this);
     menuHash["window"] = new QMenu(tr("&Window"), this);
     menuHash["help"] = new QMenu(tr("&Help"), this);
+    menuHash["draw"] = new QMenu(tr("&Draw"), this);
 
     //SubMenus
     subMenuHash["recent"] = new QMenu(tr("Open &Recent"), this);
@@ -2345,6 +2383,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     toolbarHash["properties"] = addToolBar(tr("Properties"));
     toolbarHash["text"] = addToolBar(tr("Text"));
     toolbarHash["prompt"] = addToolBar(tr("Command Prompt"));
+    toolbarHash["draw"] = addToolBar(tr("Draw"));
 
     //Selectors
     layerSelector = new QComboBox(this);
@@ -2413,16 +2452,16 @@ MainWindow::MainWindow() : QMainWindow(0)
     //TODO: connect(prompt, SIGNAL(F9Pressed()), this, SLOT(toggleSNAP()));
     //TODO: connect(prompt, SIGNAL(F10Pressed()), this, SLOT(togglePOLAR()));
     //TODO: connect(prompt, SIGNAL(F11Pressed()), this, SLOT(toggleQTRACK()));
-    connect(prompt, SIGNAL(F12Pressed()),       this, SLOT(toggleRuler()));
-    connect(prompt, SIGNAL(cutPressed()),       this, SLOT(cut()));
-    connect(prompt, SIGNAL(copyPressed()),      this, SLOT(copy()));
-    connect(prompt, SIGNAL(pastePressed()),     this, SLOT(paste()));
+    connect(prompt, SIGNAL(F12Pressed()), this, SLOT(toggleRuler()));
+    connect(prompt, SIGNAL(cutPressed()), this, SLOT(cut_action()));
+    connect(prompt, SIGNAL(copyPressed()), this, SLOT(copy_action()));
+    connect(prompt, SIGNAL(pastePressed()), this, SLOT(paste_action()));
     connect(prompt, SIGNAL(selectAllPressed()), this, SLOT(selectAll()));
-    connect(prompt, SIGNAL(undoPressed()),      this, SLOT(undo()));
-    connect(prompt, SIGNAL(redoPressed()),      this, SLOT(redo()));
+    connect(prompt, SIGNAL(undoPressed()), this, SLOT(undo()));
+    connect(prompt, SIGNAL(redoPressed()), this, SLOT(redo()));
 
-    connect(prompt, SIGNAL(shiftPressed()),     this, SLOT(setShiftPressed()));
-    connect(prompt, SIGNAL(shiftReleased()),    this, SLOT(setShiftReleased()));
+    connect(prompt, SIGNAL(shiftPressed()), this, SLOT(setShiftPressed()));
+    connect(prompt, SIGNAL(shiftReleased()), this, SLOT(setShiftReleased()));
 
     connect(prompt, SIGNAL(showSettings()),     this, SLOT(settingsPrompt()));
 
@@ -2525,39 +2564,6 @@ MainWindow::createAllActions()
         auto f = [=](){ actuator(action.command); };
         connect(ACTION, &QAction::triggered, this, f);
         actionHash[action.icon] = ACTION;
-
-        if (action.toolbar_name != "None") {
-            auto search = toolbarHash.find(action.toolbar_name);
-            //If the toolbar doesn't exist, create it.
-            if (search == toolbarHash.end()) {
-                QToolBar* tb = new QToolBar(
-                    QString::fromStdString(action.toolbar_name), this);
-                tb->setObjectName("toolbar" + action.toolbar_name);
-                connect(tb, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
-                addToolBar(Qt::LeftToolBarArea, tb);
-                addToolBarBreak(Qt::LeftToolBarArea);
-                toolbarHash[action.toolbar_name] = tb;
-            }
-
-            //TODO: order actions position in toolbar based on .ini setting
-            toolbarHash[action.toolbar_name]->addAction(actionHash[action.icon]);
-        }
-
-        if (action.menu_name != "None") {
-            auto search = menuHash.find(action.menu_name);
-            //If the menu doesn't exist, create it.
-            if (search == menuHash.end()) {
-                QMenu* menu = new QMenu(
-                    QString::fromStdString(action.menu_name), this);
-                menu->setTearOffEnabled(false);
-                menuBar()->addMenu(menu);
-                menuHash[action.menu_name] = menu;
-                menubar_order.push_back(action.menu_name);
-            }
-
-            //TODO: order actions position in menu based on .ini setting
-            menuHash[action.menu_name]->addAction(actionHash[action.icon]);
-        }
     }
 
     actionHash["windowclose"]->setEnabled(numOfDocs > 0);
@@ -2663,7 +2669,8 @@ actuator(String line)
 
     auto iter = command_map.find(command);
     if (iter != command_map.end()) {
-        String args = line.substr(command.size() + 1);
+        int from = std::min(line.size(), command.size() + 1);
+        String args = line.substr(from);
         return iter->second(args);
     }
 
@@ -2781,17 +2788,6 @@ actuator(String line)
         return "";
     }
 
-    if (command == "day") {
-        _mainWin->dayVision();
-        return "";
-    }
-
-    if (command == "donothing") {
-        //This function intentionally does nothing.
-        debug_message("doNothing()");
-        return "";
-    }
-
     if (command == "end") {
         View* gview = _mainWin->activeView();
         if (gview) {
@@ -2827,13 +2823,8 @@ actuator(String line)
         return "";
     }
 
-    if (command == "night") {
-        _mainWin->nightVision();
-        return "";
-    }
-
     if (command == "platform") {
-        return "<br/>" + _mainWin->platformString().toStdString();
+        return "<br/>" + platformString();
     }
 
     if (command == "redo") {
@@ -2897,13 +2888,6 @@ actuator(String line)
         return "</br>window argument not recognised.";
     }
 
-    if (command == "zoom") {
-        if (list.size() < 1) {
-            return "</br>zoom requires an argument.";
-        }
-        return _mainWin->zoom(list[0]);
-    }
-
     if (command == "open") {
         _mainWin->openFile();
         return "";
@@ -2950,13 +2934,6 @@ actuator(String line)
     if (command == "settingsdialog") {
         _mainWin->settingsDialog();
         return "";
-    }
-
-    if (command == "pan") {
-        if (list.size() < 1) {
-            return "pan requires an argument.";
-        }
-        return _mainWin->pan(list[0]);
     }
 
     if (command == "text") {
@@ -3454,7 +3431,7 @@ convert_args_to_type(
  * @return
  */
 String
-Include(ParameterList a)
+Include_action(ParameterList a)
 {
     return run_script_file("commands/" + a[0].s);
 }
@@ -3465,7 +3442,7 @@ Include(ParameterList a)
  * @return
  */
 String
-Error(ParameterList a)
+error_action(String args)
 {
     /*
     _mainWin->setPromptPrefix("ERROR: (" + a[0].s + ") " + a[1].s);
@@ -3481,7 +3458,7 @@ Error(ParameterList a)
  * @return
  */
 String
-Todo(ParameterList a)
+todo_action(String args)
 {
     /*
     _mainWin->nativeAlert("TODO: (" + a[0].s + ") " + a[1].s);
@@ -3496,7 +3473,7 @@ Todo(ParameterList a)
  * @return
  */
 String
-AppendPromptHistory(ParameterList a)
+append_prompt_history_action(String args)
 {
     /*
     int args = args.size();
@@ -3520,7 +3497,7 @@ AppendPromptHistory(ParameterList a)
  * argument string "sss"
  */
 String
-MessageBox(ParameterList a)
+messagebox_action(String args)
 {
     /*
     QString type  = a[0].s.toLower();
@@ -3540,7 +3517,7 @@ MessageBox(ParameterList a)
  * argument string "i"
  */
 String
-IsInt(String args)
+is_int_action(String args)
 {
     ParameterList result;
     StringList a = tokenize(args, ' ');
@@ -3555,23 +3532,23 @@ IsInt(String args)
 /**
  * argument string "rrrr"
  */
- /*
 String
-PrintArea(ParameterList a)
+PrintArea(String args)
 {
+    /*
     _mainWin->nativePrintArea(a[0].r, a[1].r, a[2].r, a[3].r);
+    */
     return "";
 }
-*/
 
 /**
  *
  * argument string "iii"
  */
- /*
 String
-SetBackgroundColor(ParameterList a)
+set_background_color_action(String args)
 {
+    /*
     EmbReal r = a[0].r;
     EmbReal g = a[1].r;
     EmbReal b = a[2].r;
@@ -3581,16 +3558,16 @@ SetBackgroundColor(ParameterList a)
     if (b < 0 || b > 255) { return context->throwError(QScriptContext::UnknownError, "setBackgroundColor(): b value must be in range 0-255"); }
 
     _mainWin->setBackgroundColor(r, g, b);
+    */
     return "";
 }
-*/
 
 /**
  * .
  * argument string "iii"
  */
 String
-SetCrossHairColor(ParameterList a)
+set_crosshair_color_action(String args)
 {
     /*
     int r = args[0].r;
@@ -3620,7 +3597,7 @@ SetCrossHairColor(ParameterList a)
  * argument string "iii"
  */
 String
-SetGridColor(ParameterList a)
+SetGridColor_action(String args)
 {
     /*
     int r = a[0].r;
@@ -3643,7 +3620,7 @@ SetGridColor(ParameterList a)
 }
 
 String
-SetTextAngle(ParameterList a)
+SetTextAngle_action(String args)
 {
     /*
     _mainWin->setTextAngle(a[0].r);
@@ -3652,10 +3629,12 @@ SetTextAngle(ParameterList a)
 }
 
 /**
- * .
+ * @brief preview_on_action
+ * @param args
+ * @return
  */
 String
-PreviewOn(ParameterList a)
+preview_on_action(String args)
 {
     /*
     QString cloneStr = QString::toStdString(a[0].s).toUpper();
@@ -3843,31 +3822,31 @@ add_slot_action(String a)
 }
 
 String
-AddEllipse(ParameterList a)
+add_ellipse_action(String args)
 {
-    _mainWin->nativeAddEllipse(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].b, OBJ_RUBBER_OFF);
+    //_mainWin->nativeAddEllipse(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].b, OBJ_RUBBER_OFF);
     return "";
 }
 
 String
-AddPoint(ParameterList a)
+add_point_action(String args)
 {
-    _mainWin->nativeAddPoint(a[0].r, a[1].r);
+    //_mainWin->nativeAddPoint(a[0].r, a[1].r);
     return "";
 }
 
 String
-AddRegularPolygon(ParameterList a)
+add_regular_polygon_action(String args)
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addRegularPolygon command");
     return "";
 }
 
-/*
 String
-AddPolygon(ParameterList a)
+AddPolygon(String args)
 {
+    /*
     QVariantList varList = a[0].toVariant().toList();
     int varSize = varList.size();
     if (varSize < 2) {
@@ -3909,18 +3888,20 @@ AddPolygon(ParameterList a)
     path.translate(-startX, -startY);
 
     _mainWin->nativeAddPolygon(startX, startY, path, OBJ_RUBBER_OFF);
+    */
     return "";
 }
 
-SetCursorShape(ParameterList a)
+/*
+SetCursorShape(String args)
     _mainWin->setCursorShape(a[0].s);
 
-CalculateAngle(ParameterList a)
+CalculateAngle(String args)
     EmbReal result = _mainWin->nativeCalculateAngle(a[0].r, a[1].r, a[2].r, a[3].r);
     return String(result);
 
 
-PerpendicularDistance(ParameterList a)
+PerpendicularDistance(String args)
     EmbReal result = _mainWin->nativePerpendicularDistance(
         a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r);
     return String(result);
@@ -4302,8 +4283,8 @@ MainWindow::updateMenuToolbarStatusbar()
 
         //Menus
         menuBar()->clear();
-        for (int i=0; i<(int)menubar_order.size(); i++) {
-            menuBar()->addMenu(menuHash[menubar_order[i]]);
+        for (int i=0; i<(int)string_lists["menubar_order"].size(); i++) {
+            menuBar()->addMenu(menuHash[string_lists["menubar_order"][i]]);
         }
 
         menuHash["window"]->setEnabled(true);
@@ -4885,18 +4866,26 @@ distance_click(UiObject *global, EmbVector v)
 }
 
 /**
- * .
+ * @brief distance_context
+ * @param args
+ * @return
  */
-void
-distance_context(String str)
+String
+distance_context(String args)
 {
     //todo("DISTANCE", "context()");
+    return "";
 }
 
-/*
-void
-distance_prompt(String str)
+/**
+ * @brief distance_prompt
+ * @param args
+ * @return
+ */
+String
+distance_prompt(String args)
 {
+    /*
     EmbReal strList = str.split(",");
     if (std::isnan(global.x1)) {
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -4924,8 +4913,9 @@ distance_prompt(String str)
             actuator("end");
         }
     }
+    */
+    return "";
 }
-*/
 
 /**
  * Cartesian Coordinate System reported:
@@ -4958,10 +4948,10 @@ reportDistance()
 /**
  *
  */
- /*
-void
-dolphin_main(void)
+String
+dolphin_main(String args)
 {
+    /*
     var global = {}; //Required
     global.numPoints = 512; //Default //TODO: min:64 max:8192
     global->center.x;
@@ -4982,8 +4972,9 @@ dolphin_main(void)
     updateDolphin(global.numPoints, global.sx, global.sy);
     spareRubber("POLYGON");
     actuator("end");
+    */
+    return "";
 }
-*/
 
 /**
  * .
@@ -5134,20 +5125,20 @@ ellipse_click(x, y)
 /**
  * .
  */
- /*
 void
-ellipse_context(str)
+ellipse_context(String args)
 {
+    /*
     todo("ELLIPSE", "context()");
+    */
 }
-*/
 
 /**
  * .
  */
  /*
 void
-ellipse_prompt(str)
+ellipse_prompt(String args)
 {
     if (global->mode == MODE_MAJORDIAMETER_MINORRADIUS) {
         if (std::isnan(global.x1)) {
@@ -5417,7 +5408,7 @@ line_context(String str)
 }
 
 void
-line_prompt(str)
+line_prompt(String args)
 {
     if (global.firstRun) {
         EmbReal strList = str.split(",");
@@ -5490,7 +5481,7 @@ locate_point_context(String str)
 }
 
 void
-locate_point_prompt(str)
+locate_point_prompt(String args)
 {
     EmbReal strList = str.split(",");
     if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -5681,7 +5672,7 @@ path_context(String str)
 }
 
 void
-path_prompt(str)
+path_prompt(String args)
 {
     if (str == "A" || str == "ARC") {
         todo("PATH", "prompt() for ARC");
@@ -6479,46 +6470,36 @@ rgb_prompt(String str)
     */
 }
 
-//Command: Rotate
-/*
-var global = {}; //Required
-global.firstRun;
-global.baseX;
-global.baseY;
-global.destX;
-global.destY;
-global.angle;
-
-global.baseRX;
-global.baseRY;
-global.destRX;
-global.destRY;
-global.angleRef;
-global.angleNew;
-
-global.mode;
-*/
-
 /**
  * .
+ * Command: Rotate
+ *
+ * var global = {}; //Required
+ * bool firstRun;
+ * EmbVector base;
+ * EmbVector dest;
+ * EmbReal angle;
+ *
+ * EmbVector baseR;
+ * EmbVector destR;
+ * EmbReal angleRef;
+ * EmbReal angleNew;
+ *
+ * int mode;
  */
-void
-rotate_main()
+String
+rotate_main(String args)
 {
     /*
     initCommand();
-    global.mode = MODE_NORMAL;
+    global.mode = ROTATE_MODE_NORMAL;
     global.firstRun = true;
-    global.baseX = NaN;
-    global.baseY = NaN;
-    global.destX = NaN;
-    global.destY = NaN;
+    global.base = {NaN, NaN};
+    global.dest = {NaN, NaN};
     global.angle = NaN;
 
-    global.baseRX   = NaN;
-    global.baseRY   = NaN;
-    global.destRX   = NaN;
-    global.destRY   = NaN;
+    global.baseR = {NaN, NaN};
+    global.destR = {NaN, NaN};
     global.angleRef = NaN;
     global.angleNew = NaN;
 
@@ -6532,6 +6513,7 @@ rotate_main()
         setPromptPrefix(tr("Specify base point: "));
     }
     */
+    return "";
 }
 
 /**
@@ -6544,8 +6526,7 @@ rotate_click(UiObject *global, EmbVector v)
     if (global->mode == ROTATE_MODE_NORMAL) {
         if (global.firstRun) {
             global.firstRun = false;
-            global.baseX = x;
-            global.baseY = y;
+            global.base = v;
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.baseX, global.baseY);
@@ -6554,8 +6535,7 @@ rotate_click(UiObject *global, EmbVector v)
             setPromptPrefix(tr("Specify rotation angle or [Reference]: "));
         }
         else {
-            global.destX = x;
-            global.destY = y;
+            global.dest = v;
             global.angle = calculateAngle(global.baseX, global.baseY, global.destX, global.destY);
             appendPromptHistory();
             rotateSelected(global.baseX, global.baseY, global.angle);
@@ -6565,8 +6545,7 @@ rotate_click(UiObject *global, EmbVector v)
     }
     else if (global->mode == ROTATE_MODE_REFERENCE) {
         if (std::isnan(global.baseRX)) {
-            global.baseRX = x;
-            global.baseRY = y;
+            global.baseR = v;
             appendPromptHistory();
             addRubber("LINE");
             setRubberMode("LINE");
@@ -6574,8 +6553,7 @@ rotate_click(UiObject *global, EmbVector v)
             setPromptPrefix(tr("Specify second point: "));
         }
         else if (std::isnan(global.destRX)) {
-            global.destRX = x;
-            global.destRY = y;
+            global.destR = v;
             global.angleRef = calculateAngle(global.baseRX, global.baseRY, global.destRX, global.destRY);
             setRubberPoint("LINE_START", global.baseX, global.baseY);
             previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
@@ -6744,8 +6722,8 @@ global.test2;
 /**
  * .
  */
-void
-sandbox_main()
+String
+sandbox_main(String str)
 {
     /*
     initCommand();
@@ -6807,31 +6785,29 @@ sandbox_main()
 
     actuator("end");
     */
+    return "";
 }
-
-//Command: Scale
-
-/*
-var global = {}; //Required
-global.firstRun;
-global.baseX;
-global.baseY;
-global.destX;
-global.destY;
-global.factor;
-
-global.baseRX;
-global.baseRY;
-global.destRX;
-global.destRY;
-global.factorRef;
-global.factorNew;
-
-global.mode;
-*/
 
 /**
  * .
+ * Command: Scale
+ *
+ * var global = {}; //Required
+ * global.firstRun;
+ * global.baseX;
+ * global.baseY;
+ * global.destX;
+ * global.destY;
+ * global.factor;
+ *
+ * global.baseRX;
+ * global.baseRY;
+ * global.destRX;
+ * global.destRY;
+ * global.factorRef;
+ * global.factorNew;
+ *
+ * global.mode;
  */
 void
 scale_main()
@@ -6875,8 +6851,7 @@ scale_click(UiObject *global, EmbVector v)
     if (global->mode == MODE_NORMAL) {
         if (global.firstRun) {
             global.firstRun = false;
-            global.baseX = x;
-            global.baseY = y;
+            global.base = v;
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.baseX, global.baseY);
@@ -6885,9 +6860,8 @@ scale_click(UiObject *global, EmbVector v)
             setPromptPrefix(tr("Specify scale factor or [Reference]: "));
         }
         else {
-            global.destX = x;
-            global.destY = y;
-            global.factor = calculateDistance(global.baseX, global.baseY, global.destX, global.destY);
+            global.dest = v;
+            global.factor = calculateDistance(global.base, global.dest);
             appendPromptHistory();
             scaleSelected(global.baseX, global.baseY, global.factor);
             previewOff();
@@ -6896,17 +6870,15 @@ scale_click(UiObject *global, EmbVector v)
     }
     else if (global->mode == MODE_REFERENCE) {
         if (std::isnan(global.baseRX)) {
-            global.baseRX = x;
-            global.baseRY = y;
+            global.baseR = v;
             appendPromptHistory();
             addRubber("LINE");
             setRubberMode("LINE");
-            setRubberPoint("LINE_START", global.baseRX, global.baseRY);
+            setRubberPoint("LINE_START", global.baseR);
             setPromptPrefix(tr("Specify second point: "));
         }
         else if (std::isnan(global.destRX)) {
-            global.destRX = x;
-            global.destRY = y;
+            global.destR = v;
             global.factorRef = calculateDistance(global.baseRX, global.baseRY, global.destRX, global.destRY);
             if (global.factorRef <= 0.0) {
                 global.destRX    = NaN;
