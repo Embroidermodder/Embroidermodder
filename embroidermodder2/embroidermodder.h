@@ -48,6 +48,15 @@
 
 #include <QtPrintSupport>
 
+#define STRING_TYPE          0
+#define STRING_LIST_TYPE     1
+#define REAL_TYPE            2
+#define INT_TYPE             3
+#define BOOL_TYPE            4
+#define FUNCTION_TYPE        5
+#define SYMBOL_TYPE          6
+#define UNKNOWN_TYPE         7
+
 class ImageWidget;
 class MdiArea;
 class MdiWindow;
@@ -90,28 +99,27 @@ class TextSingleObject;
 
 typedef std::string String;
 typedef std::vector<String> StringList;
+typedef String (*Command)(String);
 
-#define STRING_TYPE  0
-#define REAL_TYPE    1
-#define INT_TYPE     2
-#define BOOL_TYPE    3
-#define COLOR_TYPE   4
-#define UNKNOWN_TYPE 5
-
-/**
- * .
- */
-typedef struct Parameter_ {
+struct Node_ {
     String s;
     EmbReal r;
     int i;
     bool b;
-    EmbColor c;
+    Command f;
+    StringList sl;
     int type;
-} Parameter;
+};
 
-typedef std::vector<Parameter> ParameterList;
-typedef std::unordered_map<String, Parameter> Dictionary;
+typedef struct Node_ Node;
+
+typedef struct Lisp_ {
+    Node T;
+    Node F;
+} Lisp;
+
+typedef std::unordered_map<String, Node> Dictionary;
+typedef std::vector<Node> NodeList;
 
 /**
  * .
@@ -812,12 +820,11 @@ extern Settings settings;
 extern Settings dialog;
 extern std::vector<Action> action_table;
 
-extern std::unordered_map<String, StringList> string_lists;
+extern Dictionary config;
 
 extern QFontComboBox* comboBoxTextSingleFont;
 extern std::vector<GroupBoxData> group_box_arc_geometry;
 extern std::vector<GroupBoxData> group_box_ellipse_geometry;
-extern Dictionary config;
 extern QStringList justify_options;
 
 extern MainWindow* _mainWin;
@@ -862,6 +869,15 @@ EmbVector operator+(EmbVector a, EmbVector b);
 EmbVector operator-(EmbVector a, EmbVector b);
 EmbReal radians__(EmbReal degrees);
 EmbReal degrees__(EmbReal radian);
+
+Node node(bool value);
+Node node(int value);
+Node node(EmbReal value);
+Node node(String value);
+Node node(StringList value);
+StringList get_sl(String key);
+
+Lisp lisp(void);
 
 /**
  *
@@ -2064,7 +2080,7 @@ public:
     void nativeSpareRubber(int64_t id);
     // \todo void nativeSetRubberFilter(int64_t id);
     // \todo This is so more than 1 rubber object can exist at one time without updating all rubber objects at once
-    String nativeSetRubberMode(std::vector<Parameter> args);
+    String nativeSetRubberMode(std::vector<Node> args);
     void nativeSetRubberPoint(const QString& key, EmbReal x, EmbReal y);
     void nativeSetRubberText(const QString& key, const QString& txt);
 
@@ -2075,7 +2091,7 @@ public:
     void nativeAddRay(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot);
     void nativeAddLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, int rubberMode);
     void nativeAddTriangle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal x3, EmbReal y3, EmbReal rot, bool fill);
-    void nativeAddRectangle(std::vector<Parameter> a);
+    void nativeAddRectangle(std::vector<Node> a);
     void nativeAddRoundedRectangle(EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rad, EmbReal rot, bool fill);
     void nativeAddArc(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, int rubberMode);
     void nativeAddCircle(EmbReal centerX, EmbReal centerY, EmbReal radius, bool fill, int rubberMode);

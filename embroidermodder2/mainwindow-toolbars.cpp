@@ -80,14 +80,14 @@ MainWindow::createAllToolbars()
 {
     debug_message("MainWindow createAllToolbars()");
 
-    create_toolbar("file", "toolbarFile", string_lists["file_toolbar"]);
-    create_toolbar("edit", "toolbarEdit", string_lists["edit_toolbar"]);
-    create_toolbar("view", "toolbarView", string_lists["view_toolbar"]);
-    create_toolbar("zoom", "toolbarZoom", string_lists["zoom_toolbar"]);
-    create_toolbar("pan", "toolbarPan", string_lists["pan_toolbar"]);
-    create_toolbar("icon", "toolbarIcon", string_lists["icon_toolbar"]);
-    create_toolbar("help", "toolbarHelp", string_lists["help_toolbar"]);
-    create_toolbar("draw", "toolbarHelp", string_lists["draw_toolbar"]);
+    create_toolbar("file", "toolbarFile", get_sl("file_toolbar"));
+    create_toolbar("edit", "toolbarEdit", get_sl("edit_toolbar"));
+    create_toolbar("view", "toolbarView", get_sl("view_toolbar"));
+    create_toolbar("zoom", "toolbarZoom", get_sl("zoom_toolbar"));
+    create_toolbar("pan", "toolbarPan", get_sl("pan_toolbar"));
+    create_toolbar("icon", "toolbarIcon", get_sl("icon_toolbar"));
+    create_toolbar("help", "toolbarHelp", get_sl("help_toolbar"));
+    create_toolbar("draw", "toolbarHelp", get_sl("draw_toolbar"));
 
     debug_message("MainWindow createLayerToolbar()");
 
@@ -242,8 +242,8 @@ MainWindow::createAllToolbars()
     toolbarHash["prompt"]->setOrientation(Qt::Horizontal);
     toolbarHash["draw"]->setOrientation(Qt::Vertical);
 
-    for (int i=0; i<(int)string_lists["top_toolbar_layout"].size(); i++) {
-        String entry = string_lists["top_toolbar_layout"][i];
+    for (int i=0; i<(int)get_sl("top_toolbar_layout").size(); i++) {
+        String entry = get_sl("top_toolbar_layout")[i];
         if (entry == "---") {
             addToolBarBreak(Qt::TopToolBarArea);
         }
@@ -254,8 +254,8 @@ MainWindow::createAllToolbars()
 
     addToolBar(Qt::TopToolBarArea, toolbarHash["draw"]);
 
-    for (int i=0; i<(int)string_lists["bottom_toolbar_layout"].size(); i++) {
-        String entry = string_lists["bottom_toolbar_layout"][i];
+    for (int i=0; i<(int)get_sl("bottom_toolbar_layout").size(); i++) {
+        String entry = get_sl("bottom_toolbar_layout")[i];
         if (entry == "---") {
             addToolBarBreak(Qt::BottomToolBarArea);
         }

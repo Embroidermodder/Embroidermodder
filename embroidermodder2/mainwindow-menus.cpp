@@ -74,17 +74,17 @@ MainWindow::createAllMenus()
     debug_message("MainWindow createAllMenus()");
 
     /* Populate menus. */
-    create_menu("file", string_lists["file_menu"], true);
-    create_menu("edit", string_lists["edit_menu"], true);
-    create_menu("view", string_lists["view_menu"], true);
-    create_menu("settings", string_lists["settings_menu"], true);
-    create_menu("window", string_lists["window_menu"], true);
-    create_menu("help", string_lists["help_menu"], true);
-    create_menu("draw", string_lists["draw_menu"], true);
+    create_menu("file", get_sl("file_menu"), true);
+    create_menu("edit", get_sl("edit_menu"), true);
+    create_menu("view", get_sl("view_menu"), true);
+    create_menu("settings", get_sl("settings_menu"), true);
+    create_menu("window", get_sl("window_menu"), true);
+    create_menu("help", get_sl("help_menu"), true);
+    create_menu("draw", get_sl("draw_menu"), true);
 
     /* Populate submenus. */
-    create_menu("zoom", string_lists["zoom_menu"], false);
-    create_menu("pan", string_lists["pan_menu"], false);
+    create_menu("zoom", get_sl("zoom_menu"), false);
+    create_menu("pan", get_sl("pan_menu"), false);
 
     /* Connect dynamic menus. */
     connect(subMenuHash["recent"], SIGNAL(aboutToShow()), this, SLOT(recentMenuAboutToShow()));

@@ -17,8 +17,6 @@
 
 #include <fstream>
 
-Dictionary config;
-
 /**
  * The actuator changes the program state via these global variables.
  */

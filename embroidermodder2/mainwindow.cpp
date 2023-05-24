@@ -31,7 +31,7 @@ PropertyEditor* dockPropEdit = 0;
 UndoEditor* dockUndoEdit = 0;
 StatusBar* statusbar = 0;
 
-std::unordered_map<String, StringList> string_lists;
+Dictionary config;
 
 std::unordered_map<String, QAction*> actionHash;
 std::unordered_map<String, QToolBar*> toolbarHash;
@@ -47,9 +47,7 @@ std::vector<EmbReal> dolphin_y;
 
 StringList tokenize(String str, const char delim);
 String convert_args_to_type(String label, StringList args,
-    const char *args_template, ParameterList a);
-
-typedef String (*Command)(String);
+    const char *args_template, NodeList a);
 
 /**
  * ACTIONS
@@ -114,6 +112,102 @@ std::unordered_map<String, int> rubber_mode_hash = {
     {"RECTANGLE", OBJ_RUBBER_RECTANGLE},
     {"TEXTSINGLE", OBJ_RUBBER_TEXTSINGLE}
 };
+
+/**
+ * @brief create_lisp
+ * @return
+ */
+Lisp
+lisp(void)
+{
+    Lisp l;
+    l.T.s = "T";
+    l.T.type = SYMBOL_TYPE;
+    l.F.s = "F";
+    l.F.type = SYMBOL_TYPE;
+    return l;
+}
+
+/**
+ * @brief set_node
+ * @param node
+ * @param value
+ */
+Node
+node(bool value)
+{
+    Node node;
+    node.type = BOOL_TYPE;
+    node.b = value;
+    return node;
+}
+
+/**
+ * @brief create_node
+ * @param mode
+ * @return
+ */
+Node
+node(int value)
+{
+    Node node;
+    node.type = INT_TYPE;
+    node.i = value;
+    return node;
+}
+
+/**
+ * @brief set_node
+ * @param node
+ * @param value
+ */
+Node
+node(EmbReal value)
+{
+    Node node;
+    node.type = REAL_TYPE;
+    node.r = value;
+    return node;
+}
+
+/**
+ * @brief set_node
+ * @param node
+ * @param value
+ */
+Node
+node(String value)
+{
+    Node node;
+    node.type = STRING_TYPE;
+    node.s = value;
+    return node;
+}
+
+/**
+ * @brief set_node
+ * @param node
+ * @param value
+ */
+Node
+node(StringList value)
+{
+    Node node;
+    node.type = STRING_LIST_TYPE;
+    node.sl = value;
+    return node;
+}
+
+/**
+ * @brief get_sl
+ * @param key
+ * @return
+ */
+StringList
+get_sl(String key)
+{
+    return config[key].sl;
+}
 
 /**
  * .
@@ -1326,7 +1420,7 @@ MainWindow::nativeSpareRubber(qint64 id)
  * .
  */
 String
-MainWindow::nativeSetRubberMode(ParameterList a)
+MainWindow::nativeSetRubberMode(NodeList a)
 {
     String mode = QString::fromStdString(a[0].s).toUpper().toStdString();
 
@@ -1471,7 +1565,7 @@ void
 MainWindow::nativeAddInfiniteLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot)
 {
     /*
-    //TODO: parameter error checking
+    //TODO: Node error checking
     debug_message("TODO: finish addInfiniteLine command");
     */
 }
@@ -1483,7 +1577,7 @@ void
 MainWindow::nativeAddRay(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot)
 {
     /*
-    //TODO: parameter error checking
+    //TODO: Node error checking
     debug_message("TODO: finish addRay command");
     */
 }
@@ -1525,13 +1619,13 @@ void
 MainWindow::nativeAddTriangle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal x3, EmbReal y3, EmbReal rot, bool fill)
 {
     /*
-    AddTriangle(ParameterList a)
+    AddTriangle(NodeList a)
     _mainWin->nativeAddTriangle(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, a[6].r, a[7].b);
     */
 }
 
 void
-MainWindow::nativeAddRectangle(ParameterList a)
+MainWindow::nativeAddRectangle(NodeList a)
 {
     EmbReal x = a[0].r;
     EmbReal y = a[1].r;
@@ -1566,7 +1660,7 @@ MainWindow::nativeAddRoundedRectangle(EmbReal x, EmbReal y, EmbReal w, EmbReal h
 {
     /*
     String
-    AddRoundedRectangle(ParameterList a)
+    AddRoundedRectangle(NodeList a)
     {
         _mainWin->nativeAddRoundedRectangle(
             a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, a[6].b);
@@ -1782,8 +1876,8 @@ void
 MainWindow::nativeAddPath(EmbReal startX, EmbReal startY, const QPainterPath& p, int rubberMode)
 {
     /*
-    AddPath(ParameterList a)
-    // TODO: parameter error checking
+    AddPath(NodeList a)
+    // TODO: Node error checking
     debug_message("TODO: finish addPath command");
     */
 }
@@ -1795,8 +1889,8 @@ void
 MainWindow::nativeAddHorizontalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight)
 {
     /*
-    AddHorizontalDimension(ParameterList a)
-    //TODO: parameter error checking
+    AddHorizontalDimension(NodeList a)
+    //TODO: Node error checking
     debug_message("TODO: finish addHorizontalDimension command");
     */
 }
@@ -1808,8 +1902,8 @@ void
 MainWindow::nativeAddVerticalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight)
 {
     /*
-    AddVerticalDimension(ParameterList a)
-    //TODO: parameter error checking
+    AddVerticalDimension(NodeList a)
+    //TODO: Node error checking
     debug_message("TODO: finish addVerticalDimension command");
     */
 }
@@ -1821,8 +1915,8 @@ void
 MainWindow::nativeAddImage(const QString& img, EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot)
 {
     /*
-    AddImage(ParameterList a)
-    //TODO: parameter error checking
+    AddImage(NodeList a)
+    //TODO: Node error checking
     debug_message("TODO: finish addImage command");
     */
 }
@@ -1834,7 +1928,7 @@ void
 MainWindow::nativeAddDimLeader(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, int rubberMode)
 {
     /*
-    AddDimLeader(ParameterList a)
+    AddDimLeader(NodeList a)
     _mainWin->nativeAddDimLeader(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, OBJ_RUBBER_OFF);
     */
     View* gview = _mainWin->activeView();
@@ -1922,7 +2016,7 @@ MainWindow::nativeCalculateAngle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 }
 
 /**
- * CalculateDistance(ParameterList a)
+ * CalculateDistance(NodeList a)
  *     EmbReal result = _mainWin->nativeCalculateDistance(a[0].r, a[1].r, a[2].r, a[3].r);
  *     return String(result);
  */
@@ -2279,7 +2373,7 @@ read_configuration(void)
     StringList string_lists_list = read_string_list_setting(settings_toml, "string_lists");
     for (int i=0; i<(int)string_lists_list.size(); i++) {
         String key = string_lists_list[i];
-        string_lists[key] = read_string_list_setting(settings_toml, key.c_str());
+        config[key] = node(read_string_list_setting(settings_toml, key.c_str()));
     }
 
     toml_free(settings_toml);
@@ -2662,7 +2756,7 @@ run_script(std::vector<String> script)
 String
 actuator(String line)
 {
-    ParameterList a;
+    NodeList a;
     std::vector<String> list = tokenize(line, ' ');
     String command = list[0];
     list.erase(list.begin());
@@ -3377,7 +3471,7 @@ convert_args_to_type(
     String label,
     std::vector<String> args,
     const char *args_template,
-    ParameterList a)
+    NodeList a)
 {
     int n_args = (int)args.size();
     int required_args = strlen(args_template);
@@ -3388,7 +3482,7 @@ convert_args_to_type(
     for (int i=0; i<n_args; i++) {
         switch (args_template[i]) {
         case 'i': {
-            Parameter entry;
+            Node entry;
             entry.i = stoi(args[i]);
             a.push_back(entry);
             if (errno == EINVAL) {
@@ -3400,7 +3494,7 @@ convert_args_to_type(
             break;
         }
         case 'r': {
-            Parameter entry;
+            Node entry;
             entry.r = stof(args[i]);
             a.push_back(entry);
             if (errno == EINVAL) {
@@ -3412,7 +3506,7 @@ convert_args_to_type(
             break;
         }
         case 's': {
-            Parameter entry;
+            Node entry;
             entry.s = args[i];
             a.push_back(entry);
             break;
@@ -3431,7 +3525,7 @@ convert_args_to_type(
  * @return
  */
 String
-Include_action(ParameterList a)
+include_action(NodeList a)
 {
     return run_script_file("commands/" + a[0].s);
 }
@@ -3519,7 +3613,7 @@ messagebox_action(String args)
 String
 is_int_action(String args)
 {
-    ParameterList result;
+    NodeList result;
     StringList a = tokenize(args, ' ');
     String error = convert_args_to_type("IsInt()", a, "i", result);
     if (error != "") {
@@ -3838,7 +3932,7 @@ add_point_action(String args)
 String
 add_regular_polygon_action(String args)
 {
-    //TODO: parameter error checking
+    //TODO: Node error checking
     debug_message("TODO: finish addRegularPolygon command");
     return "";
 }
@@ -4034,7 +4128,7 @@ MainWindow::openFile(bool recent, const QString& recentFile)
     }
     else {
         if (!preview) {
-            //TODO: set getOpenFileNames' selectedFilter parameter from settings.opensave_open_format
+            //TODO: set getOpenFileNames' selectedFilter Node from settings.opensave_open_format
             files = QFileDialog::getOpenFileNames(this, tr("Open"), openFilesPath, formatFilterOpen);
             openFilesSelected(files);
         }
@@ -4283,8 +4377,8 @@ MainWindow::updateMenuToolbarStatusbar()
 
         //Menus
         menuBar()->clear();
-        for (int i=0; i<(int)string_lists["menubar_order"].size(); i++) {
-            menuBar()->addMenu(menuHash[string_lists["menubar_order"][i]]);
+        for (int i=0; i<(int)get_sl("menubar_order").size(); i++) {
+            menuBar()->addMenu(menuHash[get_sl("menubar_order")[i]]);
         }
 
         menuHash["window"]->setEnabled(true);

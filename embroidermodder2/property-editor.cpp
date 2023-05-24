@@ -29,8 +29,6 @@ QString fieldNoText;
 QString fieldOnText;
 QString fieldOffText;
 
-StringList all_line_editors;
-
 StringList object_names = {
     "Base",
     "Arc",
@@ -59,7 +57,7 @@ StringList object_names = {
     "Unknown"
 };
 
-std::vector<std::pair<std::string, int>> group_box_types = {
+std::vector<std::pair<String, int>> group_box_types = {
     {"general", OBJ_TYPE_NULL},
     {"geometry_arc", OBJ_TYPE_ARC},
     {"misc_arc", OBJ_TYPE_ARC},
@@ -92,29 +90,28 @@ std::vector<std::pair<std::string, int>> group_box_types = {
     {"misc_text_single", OBJ_TYPE_TEXTSINGLE}
 };
 
-std::unordered_map<std::string, QGroupBox *> groupBoxes;
-std::unordered_map<std::string, QComboBox *> comboBoxes;
-std::unordered_map<std::string, QLineEdit *> lineEdits;
-std::unordered_map<std::string, QToolButton *> toolButtons;
+std::unordered_map<String, QGroupBox *> groupBoxes;
+std::unordered_map<String, QComboBox *> comboBoxes;
+std::unordered_map<String, QLineEdit *> lineEdits;
+std::unordered_map<String, QToolButton *> toolButtons;
 QFontComboBox* comboBoxTextSingleFont;
-StringList group_box_list;
-std::unordered_map<std::string, GroupBoxData> group_box_data;
+std::unordered_map<String, GroupBoxData> group_box_data;
 
 /**
  * .
  */
 std::vector<GroupBoxData>
-load_group_box_data_from_table(std::string key)
+load_group_box_data_from_table(String key)
 {
     std::vector<GroupBoxData> group_box;
-    for (int i=0; i<(int)(all_line_editors.size()/6); i++) {
-        if (all_line_editors[6*i] == key) {
+    for (int i=0; i<(int)(get_sl("all_line_editors").size()/6); i++) {
+        if (get_sl("all_line_editors")[6*i] == key) {
             GroupBoxData data;
-            data.key = all_line_editors[6*i+1];
-            data.icon_name = all_line_editors[6*i+2];
-            data.label = all_line_editors[6*i+3];
-            data.type = all_line_editors[6*i+4];
-            data.map_signal = all_line_editors[6*i+5];
+            data.key = get_sl("all_line_editors")[6*i+1];
+            data.icon_name = get_sl("all_line_editors")[6*i+2];
+            data.label = get_sl("all_line_editors")[6*i+3];
+            data.type = get_sl("all_line_editors")[6*i+4];
+            data.map_signal = get_sl("all_line_editors")[6*i+5];
             group_box.push_back(data);
         }
     }
@@ -191,8 +188,8 @@ PropertyEditor::PropertyEditor(const QString& iconDirectory, bool pickAddMode, Q
     QScrollArea* scrollProperties = new QScrollArea(this);
     QWidget* widgetProperties = new QWidget(this);
     QVBoxLayout* vboxLayoutProperties = new QVBoxLayout(this);
-    for (int i=0; i<(int)group_box_list.size(); i++) {
-        vboxLayoutProperties->addWidget(groupBoxes[group_box_list[i]]);
+    for (int i=0; i<(int)get_sl("group_box_list").size(); i++) {
+        vboxLayoutProperties->addWidget(groupBoxes[get_sl("group_box_list")[i]]);
     }
     vboxLayoutProperties->addStretch(1);
     widgetProperties->setLayout(vboxLayoutProperties);
@@ -676,10 +673,10 @@ void PropertyEditor::showOneType(int index)
 void
 PropertyEditor::hideAllGroups()
 {
-    int n_groupboxes = (int)group_box_list.size();
+    int n_groupboxes = (int)get_sl("group_box_list").size();
     for (int i=0; i<n_groupboxes; i++) {
-        if (group_box_list[i] != "general") {
-            groupBoxes[group_box_list[i]]->hide();
+        if (get_sl("group_box_list")[i] != "general") {
+            groupBoxes[get_sl("group_box_list")[i]]->hide();
         }
     }
 }
@@ -697,14 +694,14 @@ PropertyEditor::hideAllGroups()
  */
 void PropertyEditor::clearAllFields()
 {
-    for (int i=0; i<(int)(all_line_editors.size()); i++) {
-        if (all_line_editors[6*i+4] == "double") {
-            lineEdits[all_line_editors[6*i+1]]->clear();
+    for (int i=0; i<(int)(get_sl("all_line_editors").size()); i++) {
+        if (get_sl("all_line_editors")[6*i+4] == "double") {
+            lineEdits[get_sl("all_line_editors")[6*i+1]]->clear();
         }
-        if (all_line_editors[6*i+4] == "combobox") {
-            comboBoxes[all_line_editors[6*i+1]]->clear();
+        if (get_sl("all_line_editors")[6*i+4] == "combobox") {
+            comboBoxes[get_sl("all_line_editors")[6*i+1]]->clear();
         }
-        if (all_line_editors[6*i+4] == "fontcombobox") {
+        if (get_sl("all_line_editors")[6*i+4] == "fontcombobox") {
             comboBoxTextSingleFont->removeItem(comboBoxTextSingleFont->findText(fieldVariesText)); //NOTE: Do not clear comboBoxTextSingleFont
             comboBoxTextSingleFont->setProperty("FontFamily", "");
         }
@@ -715,7 +712,7 @@ void PropertyEditor::clearAllFields()
  * .
  */
 void
-PropertyEditor::createGroupBox(std::string group_box_key, const char *title)
+PropertyEditor::createGroupBox(String group_box_key, const char *title)
 {
     std::vector<GroupBoxData> data = load_group_box_data_from_table(group_box_key);
 
@@ -732,7 +729,7 @@ PropertyEditor::createGroupBox(std::string group_box_key, const char *title)
     QFormLayout* formLayout = new QFormLayout(this);
     for (int i=0; i<data.size(); i++) {
         GroupBoxData gbd = data[i];
-        std::string key(gbd.key);
+        String key(gbd.key);
         toolButtons[key] = createToolButton(gbd.icon_name.c_str(), tr(gbd.label.c_str()));
         if (gbd.type == "double") {
             if (gbd.map_signal.size() == 0) {
