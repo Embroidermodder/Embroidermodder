@@ -158,81 +158,6 @@ typedef struct GroupBoxData_ {
     String map_signal;
 } GroupBoxData;
 
-
-/**
- * @brief This covers the inbuilt designs: Dolphin, Snowflake and Heart.
- * Covers Rotate, Scale and Point UI events.
- *
- * This was an idea for storing the current command state: could be
- * combined with EmbView since you can't have more than one active command.
- * If a command calls a sub command it will store the position in the
- * parents.
- */
-typedef struct UiObject_ {
-    String fname;
-        /*< \todo document this */
-    String command;
-        /*< \todo document this */
-    bool firstRun;
-        /*< If this UiObject has been put through the
-            user interaction processor. */
-    std::vector<EmbVector> controlPoints;
-        /*< Storage for however many Rubber Points the
-            design needs. */
-    StringList controlPointLabels;
-        /*< Storage for the labels for the Rubber Points
-            using the same indexing. */
-    int numPoints;
-        /*< The number of points if we consider the object as a Polygon. */
-    int minPoints;
-        /*< The minimum number of points needed to make the
-            polygon look somewhat like the design. */
-    int maxPoints;
-        /*< The maximum number of points before adding more will
-            do nothing but slow down the program. */
-    EmbVector center;
-        /*< Where the polygon is centered. */
-    EmbVector scale;
-        /*< The scale of the object: note that the default
-            is unique to each object type. */
-    EmbReal rotation;
-        /*< \todo document this */
-    uint32_t mode;
-        /*< The mode argument records what kind of design we are
-            using and how to interact with it. */
-    String path_desc;
-        /*< The SVG style path spec. */
-    String text;
-        /*< The text to be rendered to the scene. */
-    int textJustify;
-        /*< One of the JUSTIFY_* constants representing what kind
-            of alignment to use. */
-    String textFont;
-        /*< The file name of the font to use. */
-    EmbReal textHeight;
-        /*< The text height. */
-    EmbReal textRotation;
-        /*< The rotation of the text in the scene. */
-    //GLuint texture_id;
-        /*< Pointer to a texture that may be rendered to the object. */
-    String id;
-        /*< \todo document this */
-    int pattern_index;
-        /*< \todo document this */
-    char type[200];
-        /*< \todo document this */
-    int object_index;
-        /*< \todo document this */
-    bool selectable;
-        /*< \todo document this */
-    EmbColor color;
-        /*< \todo document this */
-    EmbVector point1;
-        /*< \todo document this */
-    EmbVector point2;
-        /*< \todo document this */
-} UiObject;
-
 /**
  * @brief
  *
@@ -868,6 +793,7 @@ QPointF to_QPointF(EmbVector a);
 EmbVector to_EmbVector(QPointF a);
 EmbVector operator+(EmbVector a, EmbVector b);
 EmbVector operator-(EmbVector a, EmbVector b);
+EmbVector operator*(EmbVector v, EmbReal s);
 EmbReal radians__(EmbReal degrees);
 EmbReal degrees__(EmbReal radian);
 
@@ -884,7 +810,7 @@ StringList get_sl(String key);
 Lisp lisp(void);
 
 /**
- *
+ * @brief The BaseObject class
  */
 class BaseObject : public QGraphicsPathItem
 {
@@ -896,6 +822,64 @@ public:
     virtual int type() const { return Type; }
 
     Dictionary properties;
+    /*<
+     * This covers the inbuilt designs: Dolphin, Snowflake and Heart.
+     * Covers Rotate, Scale and Point UI events.
+     *
+     * This was an idea for storing the current command state: could be
+     * combined with EmbView since you can't have more than one active command.
+     * If a command calls a sub command it will store the position in the
+     * parents.
+     *
+     * Possible properties
+        String fname;
+        String command;
+        bool firstRun;
+            If this UiObject has been put through the user interaction processor.
+        std::vector<EmbVector> controlPoints;
+            Storage for however many Rubber Points the design needs.
+        StringList controlPointLabels;
+            Storage for the labels for the Rubber Points using the same indexing.
+        int numPoints;
+            The number of points if we consider the object as a Polygon.
+        int minPoints;
+            The minimum number of points needed to make the polygon look somewhat like the design.
+        int maxPoints;
+            The maximum number of points before adding more will
+            do nothing but slow down the program.
+        EmbVector center;
+            Where the polygon is centered.
+        EmbVector scale;
+            The scale of the object: note that the default
+            is unique to each object type.
+        EmbReal rotation;
+        uint32_t mode;
+            The mode argument records what kind of design we are
+            using and how to interact with it.
+        String path_desc;
+            The SVG style path spec.
+        String text;
+            The text to be rendered to the scene.
+        int textJustify;
+            One of the JUSTIFY_* constants representing what kind
+            of alignment to use.
+        String textFont;
+            The file name of the font to use.
+        EmbReal textHeight;
+            The text height.
+        EmbReal textRotation;
+            The rotation of the text in the scene.
+        GLuint texture_id;
+            Pointer to a texture that may be rendered to the object.
+        String id;
+        int pattern_index;
+        char type[200];
+        int object_index;
+        bool selectable;
+        EmbColor color;
+        EmbVector point1;
+        EmbVector point2;
+    */
 
     QPen objPen;
     QPen lwtPen;
@@ -905,6 +889,7 @@ public:
     QHash<QString, QString> objRubberTexts;
     int64_t objID;
 
+    QLineF line() const { return objLine; }
     QColor objectColor() const { return objPen.color(); }
     QRgb objectColorRGB() const { return objPen.color().rgb(); }
     Qt::PenStyle objectLineType() const { return objPen.style(); }
@@ -920,15 +905,47 @@ public:
     {
         setPos(center.x, center.y);
     }
-    void setObjectCenterX(EmbReal centerX) { setX(centerX); }
-    void setObjectCenterY(EmbReal centerY) { setY(centerY); }
+    void setObjectCenterX(EmbReal centerX)
+    {
+        setX(centerX);
+    }
+    void setObjectCenterY(EmbReal centerY)
+    {
+        setY(centerY);
+    }
 
-    QRectF rect() const { return path().boundingRect(); }
-    void setRect(const QRectF& r) { QPainterPath p; p.addRect(r); setPath(p); }
-    void setRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h) { QPainterPath p; p.addRect(x,y,w,h); setPath(p); }
-    QLineF line() const { return objLine; }
-    void setLine(const QLineF& li) { QPainterPath p; p.moveTo(li.p1()); p.lineTo(li.p2()); setPath(p); objLine = li; }
-    void setLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2) { QPainterPath p; p.moveTo(x1,y1); p.lineTo(x2,y2); setPath(p); objLine.setLine(x1,y1,x2,y2); }
+    QRectF rect() const
+    {
+        return path().boundingRect();
+    }
+    void setRect(const QRectF& r)
+    {
+        QPainterPath p;
+        p.addRect(r);
+        setPath(p);
+    }
+    void setRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h)
+    {
+        QPainterPath p;
+        p.addRect(x,y,w,h);
+        setPath(p);
+    }
+    void setLine(const QLineF& li)
+    {
+        QPainterPath p;
+        p.moveTo(li.p1());
+        p.lineTo(li.p2());
+        setPath(p);
+        objLine = li;
+    }
+    void setLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
+    {
+        QPainterPath p;
+        p.moveTo(x1,y1);
+        p.lineTo(x2,y2);
+        setPath(p);
+        objLine.setLine(x1,y1,x2,y2);
+    }
 
     void setObjectColor(const QColor& color);
     void setObjectColorRGB(QRgb rgb);

@@ -20,20 +20,6 @@
 #include "embroidermodder.h"
 
 /**
- * @brief operator *
- * @param v
- * @param s
- * @return
- */
-EmbVector
-operator*(EmbVector v, EmbReal s)
-{
-    EmbVector result;
-    embVector_multiply(v, s, &result);
-    return result;
-}
-
-/**
  * @brief mouse_snap_point
  * @param points
  * @return

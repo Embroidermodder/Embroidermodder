@@ -2407,6 +2407,26 @@ read_string_list_setting(toml_table_t *table, const char *key)
 /**
  * \brief Read the settings from file which aren't editable by the user.
  * These files need to be placed in the install folder.
+ *
+ * Expected Keys for actions
+ * String icon;
+ *      The stub used for the icon and the basic command.
+ * String command;
+ * String tooltip;
+ *      The label in the menus and the message that appears when
+ *      you hover over an icon.
+ * String statustip;
+ *       The message that appears at the bottom of the .
+ * String shortcut;
+ *       The keyboard shortcut for this action.
+ * StringList aliases;
+ *       A list of all alternative commands, if empty only
+ *       the icon sttring will be .
+ * StringList script;
+ *      If this is a compound action this will be a
+ *      list of commands or it can allow for command line
+ *      style command aliases. For example: icon16 would become
+ *      the string list {"iconResize 16"}.
  */
 int
 read_configuration(void)
@@ -2434,14 +2454,11 @@ read_configuration(void)
         Action action;
         String label = "ACTION_" + action_labels[i];
         toml_table_t *table = toml_table_in(settings_toml, label.c_str());
-
         action.icon = read_string_setting(table, "icon");
-
         action.command = read_string_setting(table, "command");
+        action.shortcut = read_string_setting(table, "shortcut");
         action.tooltip = read_string_setting(table, "tooltip");
         action.statustip = read_string_setting(table, "statustip");
-        action.shortcut = read_string_setting(table, "shortcut");
-
         action_table.push_back(action);
     }
 
@@ -2730,7 +2747,8 @@ MainWindow::createAllActions()
             ACTION->setCheckable(true);
         }
 
-        auto f = [=](){ actuator(action.command); };
+        std::string command = action.command;
+        auto f = [=](){ actuator(command); };
         connect(ACTION, &QAction::triggered, this, f);
         actionHash[action.icon] = ACTION;
     }
@@ -2783,7 +2801,7 @@ run_script_file(String fname)
  *     ------------------------------------------------------------------
  */
 String
-run_script(std::vector<String> script)
+run_script(StringList script)
 {
     String output = "";
     for (int i=0; i<(int)script.size(); i++) {
@@ -2976,7 +2994,7 @@ actuator(String line)
         return help_action("");
     }
 
-    if (command == "init") {            
+    if (command == "init") {
         View* gview = _mainWin->activeView();
         if (gview) {
             gview->clearRubberRoom();
@@ -3211,7 +3229,7 @@ actuator(String line)
             prompt->enableRapidFire();
             return "";
         }
-        if (command == "move-rapid-fire") {            
+        if (command == "move-rapid-fire") {
             View* gview = _mainWin->activeView();
             if (gview) {
                 gview->enableMoveRapidFire();
@@ -3253,7 +3271,7 @@ actuator(String line)
             prompt->disableRapidFire();
             return "";
         }
-        if (command == "move-rapid-fire") {            
+        if (command == "move-rapid-fire") {
             View* gview = _mainWin->activeView();
             if (gview) {
                 gview->disableMoveRapidFire();
@@ -3883,19 +3901,19 @@ add_rubber_action(String args)
         _mainWin->nativeAddDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON);
     }
     else if (objType == "DIMLINEAR") {
-        
+
     } //TODO: handle this type
     else if (objType == "DIMORDINATE") {
-        
+
     } //TODO: handle this type
     else if (objType == "DIMRADIUS") {
-        
+
     } //TODO: handle this type
     else if (objType == "ELLIPSE") {
         _mainWin->nativeAddEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON);
     }
     else if (objType == "ELLIPSEARC") {
-        
+
     } //TODO: handle this type
     else if (objType == "HATCH") {
     } //TODO: handle this type
@@ -4652,10 +4670,10 @@ MainWindow::floatingChangedToolBar(bool isFloating)
 /**
  *
  */
-UiObject
+Dictionary
 circle_main(void)
 {
-    UiObject global;
+    Dictionary global;
     EmbVector point1;
     EmbVector point2;
     EmbVector point3;
@@ -4663,7 +4681,7 @@ circle_main(void)
     EmbReal dia;
     EmbVector center;
     int mode;
-    global.mode = CIRCLE_MODE_1P_RAD;
+    global["mode"] = node(CIRCLE_MODE_1P_RAD);
     /*
     initCommand();
     clearSelection();
@@ -4684,10 +4702,10 @@ circle_main(void)
  * .
  */
 void
-circle_click(UiObject *global, EmbVector v)
+circle_click(Dictionary global, EmbVector v)
 {
     /*
-    if (global->mode == MODE_1P_RAD) {
+    if (global["mode"].i == MODE_1P_RAD) {
         if (std::isnan(global.x1)) {
             global.x1 = x;
             global.y1 = y;
@@ -4708,7 +4726,7 @@ circle_click(UiObject *global, EmbVector v)
             actuator("end");
         }
     }
-    else if (global->mode == MODE_1P_DIA) {
+    else if (global["mode"].i == MODE_1P_DIA) {
         if (std::isnan(global.x1)) {
             error("CIRCLE", tr("This should never happen."));
         }
@@ -4721,7 +4739,7 @@ circle_click(UiObject *global, EmbVector v)
             actuator("end");
         }
     }
-    else if (global->mode == MODE_2P) {
+    else if (global["mode"].i == MODE_2P) {
         if (std::isnan(global.x1)) {
             global.x1 = x;
             global.y1 = y;
@@ -4743,7 +4761,7 @@ circle_click(UiObject *global, EmbVector v)
             error("CIRCLE", tr("This should never happen."));
         }
     }
-    else if (global->mode == MODE_3P) {
+    else if (global["mode"].i == MODE_3P) {
         if (std::isnan(global.x1)) {
             global.x1 = x;
             global.y1 = y;
@@ -4772,7 +4790,7 @@ circle_click(UiObject *global, EmbVector v)
             error("CIRCLE", tr("This should never happen."));
         }
     }
-    else if (global->mode == MODE_TTR) {
+    else if (global["mode"].i == MODE_TTR) {
         if (std::isnan(global.x1)) {
             global.x1 = x;
             global.y1 = y;
@@ -4814,7 +4832,7 @@ String
 circle_prompt(String str)
 {
     /*
-    if (global->mode == MODE_1P_RAD) {
+    if (global["mode"].i == MODE_1P_RAD) {
         if (std::isnan(global.x1)) {
             if (str == "2P") {
                 global.mode = MODE_2P;
@@ -4869,7 +4887,7 @@ circle_prompt(String str)
             }
         }
     }
-    else if (global->mode == MODE_1P_DIA) {
+    else if (global["mode"].i == MODE_1P_DIA) {
         if (std::isnan(global.x1)) {
             error("CIRCLE", tr("This should never happen."));
         }
@@ -4892,7 +4910,7 @@ circle_prompt(String str)
             error("CIRCLE", tr("This should never happen."));
         }
     }
-    else if (global->mode == MODE_2P) {
+    else if (global["mode"].i == MODE_2P) {
         if (std::isnan(global.x1)) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -4926,7 +4944,7 @@ circle_prompt(String str)
             error("CIRCLE", tr("This should never happen."));
         }
     }
-    else if (global->mode == MODE_3P) {
+    else if (global["mode"].i == MODE_3P) {
         if (std::isnan(global.x1)) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -4973,7 +4991,7 @@ circle_prompt(String str)
             error("CIRCLE", tr("This should never happen."));
         }
     }
-    else if (global->mode == MODE_TTR) {
+    else if (global["mode"].i == MODE_TTR) {
         todo("CIRCLE", "prompt() for TTR");
     }
     */
@@ -5007,7 +5025,7 @@ distance_main()
  * .
  */
 void
-distance_click(UiObject *global, EmbVector v)
+distance_click(Dictionary global, EmbVector v)
 {
     /*
     if (std::isnan(global.x1)) {
@@ -5164,7 +5182,7 @@ updateDolphin(int numPoints, EmbReal xScale, EmbReal yScale)
  * .
  */
  /*
-UiObject
+Dictionary
 ellipse_main(void)
 {
     var global = {}; //Required
@@ -5191,7 +5209,7 @@ ellipse_main(void)
 void
 ellipse_click(x, y)
 {
-    if (global->mode == MODE_MAJORDIAMETER_MINORRADIUS) {
+    if (global["mode"].i == MODE_MAJORDIAMETER_MINORRADIUS) {
         if (std::isnan(global.x1)) {
             global.x1 = x;
             global.y1 = y;
@@ -5230,7 +5248,7 @@ ellipse_click(x, y)
             error("ELLIPSE", tr("This should never happen."));
         }
     }
-    else if (global->mode == MODE_MAJORRADIUS_MINORRADIUS) {
+    else if (global["mode"].i == MODE_MAJORRADIUS_MINORRADIUS) {
         if (std::isnan(global.x1)) {
             global.x1 = x;
             global.y1 = y;
@@ -5268,7 +5286,7 @@ ellipse_click(x, y)
             error("ELLIPSE", tr("This should never happen."));
         }
     }
-    else if (global->mode == MODE_ELLIPSE_ROTATION) {
+    else if (global["mode"].i == MODE_ELLIPSE_ROTATION) {
         if (std::isnan(global.x1)) {
             error("ELLIPSE", tr("This should never happen."));
         }
@@ -5304,7 +5322,7 @@ ellipse_context(String args)
 void
 ellipse_prompt(String args)
 {
-    if (global->mode == MODE_MAJORDIAMETER_MINORRADIUS) {
+    if (global["mode"].i == MODE_MAJORDIAMETER_MINORRADIUS) {
         if (std::isnan(global.x1)) {
             if (str == "C" || str == "CENTER") {
                 global.mode = MODE_MAJORRADIUS_MINORRADIUS;
@@ -5370,7 +5388,7 @@ ellipse_prompt(String args)
             }
         }
     }
-    else if (global->mode == MODE_MAJORRADIUS_MINORRADIUS) {
+    else if (global["mode"].i == MODE_MAJORRADIUS_MINORRADIUS) {
         if (std::isnan(global.x1)) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -5429,7 +5447,7 @@ ellipse_prompt(String args)
             }
         }
     }
-    else if (global->mode == MODE_ELLIPSE_ROTATION) {
+    else if (global["mode"].i == MODE_ELLIPSE_ROTATION) {
         if (std::isnan(global.x1)) {
             error("ELLIPSE", tr("This should never happen."));
         }
@@ -5871,10 +5889,10 @@ path_prompt(String args)
     }
 }
 
-UiObject
+Dictionary
 point_main()
 {
-    UiObject global;
+    Dictionary global;
     initCommand();
     clearSelection();
     global.firstRun = true;
@@ -5886,7 +5904,7 @@ point_main()
 
 
 void
-point_click(UiObject *global, EmbVector v)
+point_click(Dictionary global, EmbVector v)
 {
     if (global.firstRun) {
         global.firstRun = false;
@@ -5989,23 +6007,23 @@ polygon_main()
  * .
  */
 void
-polygon_click(UiObject *global, EmbVector v)
+polygon_click(Dictionary global, EmbVector v)
 {
     /*
-    if (global->mode == MODE_NUM_SIDES) {
+    if (global["mode"].i == MODE_NUM_SIDES) {
         //Do nothing, the prompt controls this.
     }
-    else if (global->mode == MODE_CENTER_PT) {
+    else if (global["mode"].i == MODE_CENTER_PT) {
         global->centerX = x;
         global->centerY = y;
         global.mode = MODE_POLYTYPE;
         appendPromptHistory();
         setPromptPrefix(tr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
     }
-    else if (global->mode == MODE_POLYTYPE) {
+    else if (global["mode"].i == MODE_POLYTYPE) {
         //Do nothing, the prompt controls this.
     }
-    else if (global->mode == MODE_INSCRIBE) {
+    else if (global["mode"].i == MODE_INSCRIBE) {
         global.pointIX = x;
         global.pointIY = y;
         setRubberPoint("POLYGON_INSCRIBE_POINT", global.pointIX, global.pointIY);
@@ -6013,7 +6031,7 @@ polygon_click(UiObject *global, EmbVector v)
         appendPromptHistory();
         actuator("end");
     }
-    else if (global->mode == MODE_CIRCUMSCRIBE) {
+    else if (global["mode"].i == MODE_CIRCUMSCRIBE) {
         global.pointCX = x;
         global.pointCY = y;
         setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", global.pointCX, global.pointCY);
@@ -6021,10 +6039,10 @@ polygon_click(UiObject *global, EmbVector v)
         appendPromptHistory();
         actuator("end");
     }
-    else if (global->mode == MODE_DISTANCE) {
+    else if (global["mode"].i == MODE_DISTANCE) {
         //Do nothing, the prompt controls this.
     }
-    else if (global->mode == MODE_SIDE_LEN) {
+    else if (global["mode"].i == MODE_SIDE_LEN) {
         todo("POLYGON", "Sidelength mode");
     }
     */
@@ -6046,7 +6064,7 @@ void
 polygon_prompt(String str)
 {
     /*
-    if (global->mode == MODE_NUM_SIDES) {
+    if (global["mode"].i == MODE_NUM_SIDES) {
         if (str == "" && global.numSides >= 3 && global.numSides <= 1024) {
             setPromptPrefix(tr("Specify center point or [Sidelength]: "));
             global.mode = MODE_CENTER_PT;
@@ -6064,7 +6082,7 @@ polygon_prompt(String str)
             }
         }
     }
-    else if (global->mode == MODE_CENTER_PT) {
+    else if (global["mode"].i == MODE_CENTER_PT) {
         if (str == "S" || str == "SIDELENGTH") {
             global.mode = MODE_SIDE_LEN;
             setPromptPrefix(tr("Specify start point: "));
@@ -6083,7 +6101,7 @@ polygon_prompt(String str)
             }
         }
     }
-    else if (global->mode == MODE_POLYTYPE) {
+    else if (global["mode"].i == MODE_POLYTYPE) {
         if (str == "INSCRIBED") {
             global.mode = MODE_INSCRIBE;
             global.polyType = "Inscribed";
@@ -6128,7 +6146,7 @@ polygon_prompt(String str)
             setPromptPrefix(tr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
         }
     }
-    else if (global->mode == MODE_INSCRIBE) {
+    else if (global["mode"].i == MODE_INSCRIBE) {
         if (str == "D" || str == "DISTANCE") {
             global.mode = MODE_DISTANCE;
             setPromptPrefix(tr("Specify distance: "));
@@ -6148,7 +6166,7 @@ polygon_prompt(String str)
             }
         }
     }
-    else if (global->mode == MODE_CIRCUMSCRIBE) {
+    else if (global["mode"].i == MODE_CIRCUMSCRIBE) {
         if (str == "D" || str == "DISTANCE") {
             global.mode = MODE_DISTANCE;
             setPromptPrefix(tr("Specify distance: "));
@@ -6168,7 +6186,7 @@ polygon_prompt(String str)
             }
         }
     }
-    else if (global->mode == MODE_DISTANCE) {
+    else if (global["mode"].i == MODE_DISTANCE) {
         if (std::isnan(str)) {
             alert(tr("Requires valid numeric distance."));
             setPromptPrefix(tr("Specify distance: "));
@@ -6193,7 +6211,7 @@ polygon_prompt(String str)
             }
         }
     }
-    else if (global->mode == MODE_SIDE_LEN) {
+    else if (global["mode"].i == MODE_SIDE_LEN) {
         todo("POLYGON", "Sidelength mode");
     }
     */
@@ -6233,7 +6251,7 @@ polyline_main()
  * .
  */
 void
-polyline_click(UiObject *global, EmbVector v)
+polyline_click(Dictionary global, EmbVector v)
 {
     /*
     if (global.firstRun) {
@@ -6353,7 +6371,7 @@ quickleader_main()
  * .
  */
 void
-quickleader_click(UiObject *global, EmbVector v)
+quickleader_click(Dictionary global, EmbVector v)
 {
     /*
     if (std::isnan(global.x1)) {
@@ -6456,7 +6474,7 @@ rectangle_main()
  * .
  */
 void
-rectangle_click(UiObject *global, EmbVector v)
+rectangle_click(Dictionary global, EmbVector v)
 {
     /*
     if (global.newRect) {
@@ -6558,7 +6576,7 @@ rgb_main()
  * .
  */
 void
-rgb_click(UiObject *global, EmbVector v)
+rgb_click(Dictionary global, EmbVector v)
 {
     //Do Nothing, prompt only command.
 }
@@ -6579,7 +6597,7 @@ void
 rgb_prompt(String str)
 {
     /*
-    if (global->mode == RGB_MODE_BACKGROUND) {
+    if (global["mode"].i == RGB_MODE_BACKGROUND) {
         if (str == "C" || str == "CROSSHAIR") {
             global.mode = RGB_MODE_CROSSHAIR;
             setPromptPrefix(tr("Specify crosshair color: "));
@@ -6603,7 +6621,7 @@ rgb_prompt(String str)
             }
         }
     }
-    else if (global->mode == RGB_MODE_CROSSHAIR) {
+    else if (global["mode"].i == RGB_MODE_CROSSHAIR) {
         EmbReal strList = str.split(",");
         EmbReal r = Number(strList[0]);
         EmbReal g = Number(strList[1]);
@@ -6617,7 +6635,7 @@ rgb_prompt(String str)
             actuator("end");
         }
     }
-    else if (global->mode == RGB_MODE_GRID) {
+    else if (global["mode"].i == RGB_MODE_GRID) {
         EmbReal strList = str.split(",");
         EmbReal r = Number(strList[0]);
         EmbReal g = Number(strList[1]);
@@ -6684,10 +6702,10 @@ rotate_main(String args)
  * .
  */
 void
-rotate_click(UiObject *global, EmbVector v)
+rotate_click(Dictionary global, EmbVector v)
 {
     /*
-    if (global->mode == ROTATE_MODE_NORMAL) {
+    if (global["mode"].i == ROTATE_MODE_NORMAL) {
         if (global.firstRun) {
             global.firstRun = false;
             global.base = v;
@@ -6707,7 +6725,7 @@ rotate_click(UiObject *global, EmbVector v)
             actuator("end");
         }
     }
-    else if (global->mode == ROTATE_MODE_REFERENCE) {
+    else if (global["mode"].i == ROTATE_MODE_REFERENCE) {
         if (std::isnan(global.baseRX)) {
             global.baseR = v;
             appendPromptHistory();
@@ -6750,7 +6768,7 @@ void
 rotate_prompt(String str)
 {
     /*
-    if (global->mode == ROTATE_MODE_NORMAL) {
+    if (global["mode"].i == ROTATE_MODE_NORMAL) {
         if (global.firstRun) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -6789,7 +6807,7 @@ rotate_prompt(String str)
             }
         }
     }
-    else if (global->mode == MODE_REFERENCE) {
+    else if (global["mode"].i == MODE_REFERENCE) {
         if (std::isnan(global.baseRX)) {
             if (std::isnan(str)) {
                 EmbReal strList = str.split(",");
@@ -7009,10 +7027,10 @@ scale_main()
  * .
  */
 void
-scale_click(UiObject *global, EmbVector v)
+scale_click(Dictionary global, EmbVector v)
 {
     /*
-    if (global->mode == MODE_NORMAL) {
+    if (global["mode"].i == MODE_NORMAL) {
         if (global.firstRun) {
             global.firstRun = false;
             global.base = v;
@@ -7032,7 +7050,7 @@ scale_click(UiObject *global, EmbVector v)
             actuator("end");
         }
     }
-    else if (global->mode == MODE_REFERENCE) {
+    else if (global["mode"].i == MODE_REFERENCE) {
         if (std::isnan(global.baseRX)) {
             global.baseR = v;
             appendPromptHistory();
@@ -7092,7 +7110,7 @@ void
 scale_prompt(String str)
 {
     /*
-    if (global->mode == MODE_NORMAL) {
+    if (global["mode"].i == MODE_NORMAL) {
         if (global.firstRun) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -7131,7 +7149,7 @@ scale_prompt(String str)
             }
         }
     }
-    else if (global->mode == MODE_REFERENCE) {
+    else if (global["mode"].i == MODE_REFERENCE) {
         if (std::isnan(global.baseRX)) {
             if (std::isnan(str)) {
                 EmbReal strList = str.split(",");
@@ -7303,10 +7321,10 @@ text_single_main()
  * .
  */
 void
-text_single_click(UiObject *global, EmbVector v)
+text_single_click(Dictionary global, EmbVector v)
 {
     /*
-    if (global->mode == MODE_SETGEOM) {
+    if (global["mode"].i == MODE_SETGEOM) {
         if (std::isnan(global.textX)) {
             global.textX = x;
             global.textY = y;
@@ -7361,7 +7379,7 @@ void
 text_single_prompt(String str)
 {
     /*
-    if (global->mode == MODE_JUSTIFY) {
+    if (global["mode"].i == MODE_JUSTIFY) {
         if (str == "C" || str == "CENTER") {
             global.mode = MODE_SETGEOM;
             global.textJustify = "Center";
@@ -7451,14 +7469,14 @@ text_single_prompt(String str)
             setPromptPrefix(tr("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "));
         }
     }
-    else if (global->mode == MODE_SETFONT) {
+    else if (global["mode"].i == MODE_SETFONT) {
         global.mode = MODE_SETGEOM;
         global.textFont = str;
         setRubberText("TEXT_FONT", global.textFont);
         setTextFont(global.textFont);
         setPromptPrefix(tr("Specify start point of text or [Justify/Setfont]: "));
     }
-    else if (global->mode == MODE_SETGEOM) {
+    else if (global["mode"].i == MODE_SETGEOM) {
         if (std::isnan(global.textX)) {
             if (str == "J" || str == "JUSTIFY") {
                 global.mode = MODE_JUSTIFY;
@@ -7538,7 +7556,7 @@ text_single_prompt(String str)
             //Do nothing, as we are in rapidFire mode now.
         }
     }
-    else if (global->mode == MODE_RAPID) {
+    else if (global["mode"].i == MODE_RAPID) {
         if (str == "RAPID_ENTER") {
             if (global.text == "") {
                 actuator("end");
@@ -7557,36 +7575,40 @@ text_single_prompt(String str)
     */
 }
 
-UiObject snowflake_main(void);
-void updateSnowflake(UiObject *global, EmbVector scale);
-UiObject star_main(void);
-void star_move(UiObject *global, EmbVector v);
-void star_prompt(String str);
-void star_context(String str);
-void star_prompt(String str);
-void updateStar(UiObject *global, EmbVector mouse);
-void syswindows_main(void);
-void syswindows_prompt(String str);
+Dictionary snowflake_main(void);
+Dictionary updateSnowflake(Dictionary global, EmbVector scale);
+
+Dictionary star_main(void);
+Dictionary star_move(Dictionary global, EmbVector v);
+Dictionary star_prompt(Dictionary global);
+Dictionary star_context(Dictionary global);
+Dictionary star_prompt(Dictionary global);
+Dictionary updateStar(Dictionary global, EmbVector mouse);
+
+Dictionary syswindows_main(void);
+Dictionary syswindows_prompt(Dictionary global);
 
 /**
  * .
  */
-UiObject
+Dictionary
 snowflake_main()
 {
-    UiObject global;
+    Dictionary global;
     //initCommand();
     //clearSelection();
-    global.numPoints = 2048; //Default //TODO: min:64 max:8192
-    global.center.x = 0.0;
-    global.center.y = 0.0;
-    global.scale.x = 0.04;
-    global.scale.y = 0.04;
-    global.mode = SNOWFLAKE_MODE_NUM_POINTS;
+    global["numPoints"] = node(2048); //Default //TODO: min:64 max:8192
+    global["center.x"] = node(0.0f);
+    global["center.y"] = node(0.0f);
+    global["scale.x"] = node(0.04f);
+    global["scale.y"] = node(0.04f);
+    global["mode"] = node(SNOWFLAKE_MODE_NUM_POINTS);
 
     //addRubber("POLYGON");
     //setRubberMode("POLYGON");
-    updateSnowflake(&global, global.scale);
+    EmbVector v;
+    v.x = 0.04f; v.y = 0.04f;
+    global = updateSnowflake(global, v);
     //spareRubber("POLYGON");
     actuator("end");
     return global;
@@ -7608,11 +7630,11 @@ fourier_series(EmbReal arg, std::vector<EmbReal> terms)
 /**
  * Snowflake Curve with t [0,2pi]
  */
-void
-updateSnowflake(UiObject *global, EmbVector scale)
+Dictionary
+updateSnowflake(Dictionary global, EmbVector scale)
 {
-    for (int i = 0; i <= global->numPoints; i++) {
-        EmbReal t = (2.0*emb_constant_pi) / global->numPoints*i;
+    for (int i = 0; i <= global["numPoints"].i; i++) {
+        EmbReal t = (2.0*emb_constant_pi) / global["numPoints"].i*i;
         EmbVector v;
         v.x = fourier_series(t, snowflake_x);
         v.y = fourier_series(t, snowflake_y);
@@ -7631,39 +7653,43 @@ updateSnowflake(UiObject *global, EmbVector scale)
 /**
  * .
  */
-UiObject
+Dictionary
 star_main(void)
 {
-    UiObject global;
+    Dictionary global;
     /*
     initCommand();
     clearSelection();
-    */
     global.numPoints = 5;
-    global.center.x = 0.0;
-    global.center.y = 0.0;
-    global.point1.x = 1.0;
-    global.point1.y = 1.0;
-    global.point2.x = 2.0;
-    global.point2.y = 2.0;
+    EmbVector center;
+    EmbVector point1;
+    EmbVector point2;
+    center.x = 0.0;
+    center.y = 0.0;
+    point1.x = 1.0;
+    point1.y = 1.0;
+    point2.x = 2.0;
+    point2.y = 2.0;
+    global["center"] = node(center);
+    global["point1"] = node(point1);
+    global["point2"] = node(point2);
     global.mode = STAR_MODE_NUM_POINTS;
-    /*
     setPromptPrefix(tr("Enter number of star points {5}: "));
     */
     return global;
 }
 
 /**
- * .
+ * @brief star_click
  */
-void
-star_click(UiObject *global, EmbReal mouse)
+Dictionary
+star_click(Dictionary global, EmbReal mouse)
 {
     /*
-    if (global->mode == MODE_NUM_POINTS) {
+    if (global["mode"].i == MODE_NUM_POINTS) {
         //Do nothing, the prompt controls this.
     }
-    else if (global->mode == MODE_CENTER_PT) {
+    else if (global["mode"].i == MODE_CENTER_PT) {
         global->center = mouse;
         global.mode = MODE_RAD_OUTER;
         setPromptPrefix(tr("Specify outer radius of star: "));
@@ -7672,13 +7698,13 @@ star_click(UiObject *global, EmbReal mouse)
         updateStar(global, global->center);
         actuator("enable move-rapid-fire");
     }
-    else if (global->mode == MODE_RAD_OUTER) {
+    else if (global["mode"].i == MODE_RAD_OUTER) {
         global->point1 = mouse;
-        global->mode = MODE_RAD_INNER;
+        global["mode"].i = MODE_RAD_INNER;
         setPromptPrefix(tr("Specify inner radius of star: "));
         updateStar(global.point1);
     }
-    else if (global->mode == MODE_RAD_INNER) {
+    else if (global["mode"].i == MODE_RAD_INNER) {
         global->point2 = mouse;
         actuator("disable move-rapid-fire");
         updateStar(global.point2);
@@ -7686,45 +7712,47 @@ star_click(UiObject *global, EmbReal mouse)
         //actuator("end");
     }
     */
+    return global;
 }
 
 /**
- * .
+ * @brief star_move
  */
-void
-star_move(UiObject *global, EmbVector v)
+Dictionary
+star_move(Dictionary global, EmbVector v)
 {
-    if (global->mode == STAR_MODE_NUM_POINTS) {
+    if (global["mode"].i == STAR_MODE_NUM_POINTS) {
         //Do nothing, the prompt controls this.
     }
-    else if (global->mode == STAR_MODE_CENTER_PT) {
+    else if (global["mode"].i == STAR_MODE_CENTER_PT) {
         //Do nothing, prompt and click controls this.
     }
-    else if (global->mode == STAR_MODE_RAD_OUTER) {
+    else if (global["mode"].i == STAR_MODE_RAD_OUTER) {
         updateStar(global, v);
     }
-    else if (global->mode == STAR_MODE_RAD_INNER) {
+    else if (global["mode"].i == STAR_MODE_RAD_INNER) {
         updateStar(global, v);
     }
+    return global;
 }
 
 /**
- * .
+ * @brief star_context
  */
-void
-star_context(String str)
+Dictionary
+star_context(Dictionary global, String str)
 {
     //todo("STAR", "context()");
 }
 
 /**
- * .
+ * @brief star_prompt
  */
-void
-star_prompt(String str)
+Dictionary
+star_prompt(Dictionary global, String str)
 {
     /*
-    if (global->mode == STAR_MODE_NUM_POINTS) {
+    if (global["mode"].i == STAR_MODE_NUM_POINTS) {
         if (str == "" && global.numPoints >= 3 && global.numPoints <= 1024) {
             setPromptPrefix(tr("Specify center point: "));
             global.mode = STAR_MODE_CENTER_PT;
@@ -7742,7 +7770,7 @@ star_prompt(String str)
             }
         }
     }
-    else if (global->mode == STAR_MODE_CENTER_PT) {
+    else if (global["mode"].i == STAR_MODE_CENTER_PT) {
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
@@ -7759,7 +7787,7 @@ star_prompt(String str)
             actuator("enable move-rapid-fire");
         }
     }
-    else if (global->mode == STAR_MODE_RAD_OUTER) {
+    else if (global["mode"].i == STAR_MODE_RAD_OUTER) {
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
@@ -7773,7 +7801,7 @@ star_prompt(String str)
             updateStar(qsnapX(), qsnapY());
         }
     }
-    else if (global->mode == STAR_MODE_RAD_INNER) {
+    else if (global["mode"].i == STAR_MODE_RAD_INNER) {
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
@@ -7792,46 +7820,38 @@ star_prompt(String str)
 }
 
 /**
- * .
+ * @brief updateStar
  */
-void
-updateStar(UiObject *global, EmbVector mouse)
+Dictionary
+updateStar(Dictionary global, EmbVector mouse)
 {
     EmbReal distOuter;
     EmbReal distInner;
     EmbReal angOuter;
 
-    if (global->mode == STAR_MODE_RAD_OUTER) {
-        EmbLine line;
-        line.start = global->center;
-        line.end = mouse;
-        EmbVector v = embVector_subtract(line.end, line.start);
+    if (global["mode"].i == STAR_MODE_RAD_OUTER) {
+        EmbVector v = mouse - global["center"].v;
         angOuter = embVector_angle(v);
-        distOuter = embVector_distance(global->center, mouse);
+        distOuter = embVector_length(v);
         distInner = distOuter/2.0;
     }
-    else if (global->mode == STAR_MODE_RAD_INNER) {
-        EmbLine line;
-        line.start = global->center;
-        line.end = global->point1;
-        EmbVector v = embVector_subtract(line.end, line.start);
+    else if (global["mode"].i == STAR_MODE_RAD_INNER) {
+        EmbVector v = global["point1"].v - global["center"].v;
         angOuter = embVector_angle(v);
-        distOuter = embVector_distance(global->center, global->point1);
-        distInner = embVector_distance(global->center, mouse);
+        distOuter = embVector_length(v);
+        distInner = embVector_distance(global["center"].v, mouse);
     }
 
     // Calculate the Star Points
-    EmbReal angInc = 360.0/(global->numPoints*2);
-    for (int i = 0; i < global->numPoints*2; i++) {
+    EmbReal angInc = 360.0/(global["numPoints"].i*2);
+    for (int i = 0; i < global["numPoints"].i*2; i++) {
         EmbReal angle = (angOuter + (angInc*i)) * emb_constant_pi / 180.0;
-        EmbVector v;
+        EmbVector v = embVector_unit(angle);
         if (i%2 == 0) {
-            v.x = distOuter*cos(angle);
-            v.y = distOuter*sin(angle);
+            v = v * distOuter;
         }
         else {
-            v.x = distInner*cos(angle);
-            v.y = distInner*sin(angle);
+            v = v * distInner;
         }
         /*
         setRubberPoint(
@@ -7844,13 +7864,14 @@ updateStar(UiObject *global, EmbVector mouse)
     setRubberText("POLYGON_NUM_POINTS",
         (global.numPoints*2 - 1).toString());
     */
+    return global;
 }
 
 /**
  * .
  */
-void
-syswindows_main(void)
+Dictionary
+syswindows_main(Dictionary global)
 {
     /*
     initCommand();
@@ -7862,8 +7883,8 @@ syswindows_main(void)
 /**
  * .
  */
-void
-syswindows_prompt(String str)
+Dictionary
+syswindows_prompt(Dictionary global, String str)
 {
     if (str == "C" || str == "CASCADE") {
         actuator("window cascade");

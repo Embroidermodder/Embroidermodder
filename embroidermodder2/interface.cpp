@@ -66,6 +66,21 @@ operator-(EmbVector a, EmbVector b)
 }
 
 /**
+ * @brief operator *
+ * @param v
+ * @param s
+ * @return
+ */
+EmbVector
+operator*(EmbVector v, EmbReal s)
+{
+    EmbVector result;
+    embVector_multiply(v, s, &result);
+    return result;
+}
+
+
+/**
  * @brief radians__
  * @param degrees
  * @return
