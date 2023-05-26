@@ -74,7 +74,7 @@ View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, 
 
     grippingActive = false;
     rapidMoveActive = false;
-    previewMode = PREVIEW_MODE_NULL;
+    previewMode = "PREVIEW_MODE_NULL";
     previewData = 0;
     previewObjectItemGroup = 0;
     pasteObjectItemGroup = 0;
@@ -157,7 +157,7 @@ View::deleteObject(BaseObject* obj)
 }
 
 void
-View::previewOn(int clone, int mode, EmbReal x, EmbReal y, EmbReal data)
+View::previewOn(String clone, String mode, EmbReal x, EmbReal y, EmbReal data)
 {
     debug_message("View previewOn()");
     previewOff(); //Free the old objects before creating new ones
@@ -165,10 +165,10 @@ View::previewOn(int clone, int mode, EmbReal x, EmbReal y, EmbReal data)
     previewMode = mode;
 
     //Create new objects and add them to the scene in an item group.
-    if (clone == PREVIEW_CLONE_SELECTED) {
+    if (clone == "PREVIEW_CLONE_SELECTED") {
         previewObjectList = to_qlist(createObjectList(selected_items()));
     }
-    else if (clone == PREVIEW_CLONE_RUBBER) {
+    else if (clone == "PREVIEW_CLONE_RUBBER") {
         previewObjectList = to_qlist(createObjectList(rubberRoomList));
     }
     else {
@@ -176,9 +176,9 @@ View::previewOn(int clone, int mode, EmbReal x, EmbReal y, EmbReal data)
     }
     previewObjectItemGroup = gscene->createItemGroup(previewObjectList);
 
-    if (previewMode == PREVIEW_MODE_MOVE   ||
-       previewMode == PREVIEW_MODE_ROTATE ||
-       previewMode == PREVIEW_MODE_SCALE)
+    if (previewMode == "PREVIEW_MODE_MOVE"   ||
+       previewMode == "PREVIEW_MODE_ROTATE" ||
+       previewMode == "PREVIEW_MODE_SCALE")
     {
         previewPoint = QPointF(x, y); //NOTE: Move: basePt; Rotate: basePt;   Scale: basePt;
         previewData = data;           //NOTE: Move: unused; Rotate: refAngle; Scale: refFactor;
@@ -186,7 +186,7 @@ View::previewOn(int clone, int mode, EmbReal x, EmbReal y, EmbReal data)
     }
     else
     {
-        previewMode = PREVIEW_MODE_NULL;
+        previewMode = "PREVIEW_MODE_NULL";
         previewPoint = QPointF();
         previewData = 0;
         previewActive = false;
@@ -265,7 +265,7 @@ View::vulcanizeObject(BaseObject* obj)
 }
 
 bool
-contains(std::vector<long long int> list, long long int entry)
+contains(StringList list, String entry)
 {
     return std::count(list.begin(), list.end(), entry) != 0;
 }
@@ -276,11 +276,11 @@ View::clearRubberRoom()
     foreach(QGraphicsItem* item, rubberRoomList) {
         BaseObject* base = static_cast<BaseObject*>(item);
         if (base) {
-            int type = base->type();
-            if ((type == OBJ_TYPE_PATH && contains(spareRubberList, SPARE_RUBBER_PATH)) ||
-               (type == OBJ_TYPE_POLYGON  && contains(spareRubberList, SPARE_RUBBER_POLYGON)) ||
-               (type == OBJ_TYPE_POLYLINE && contains(spareRubberList, SPARE_RUBBER_POLYLINE)) ||
-               (contains(spareRubberList, base->objID))) {
+            String type = std::to_string(base->type());
+            if ((type == "OBJ_TYPE_PATH" && contains(spareRubberList, "SPARE_RUBBER_PATH")) ||
+               (type == "OBJ_TYPE_POLYGON"  && contains(spareRubberList, "SPARE_RUBBER_POLYGON")) ||
+               (type == "OBJ_TYPE_POLYLINE" && contains(spareRubberList, "SPARE_RUBBER_POLYLINE")) ||
+                (contains(spareRubberList, std::to_string(base->objID)))) {
                 if (!base->path().elementCount()) {
                     QMessageBox::critical(this,
                         tr("Empty Rubber Object Error"),
@@ -311,19 +311,20 @@ View::clearRubberRoom()
 void
 View::spareRubber(int64_t id)
 {
-    spareRubberList.push_back(id);
+    spareRubberList.push_back(std::to_string(id));
 }
 
 /**
  * .
  */
 void
-View::setRubberMode(int mode)
+View::setRubberMode(String mode)
 {
-    foreach(QGraphicsItem* item, rubberRoomList)
-    {
+    foreach(QGraphicsItem* item, rubberRoomList) {
         BaseObject* base = static_cast<BaseObject*>(item);
-        if (base) { base->setObjectRubberMode(mode); }
+        if (base) {
+            base->setObjectRubberMode(mode);
+        }
     }
     gscene->update();
 }
@@ -1637,12 +1638,10 @@ View::mouseMoveEvent(QMouseEvent* event)
         }
     }
     if (previewActive) {
-        if (previewMode == PREVIEW_MODE_MOVE)
-        {
+        if (previewMode == "PREVIEW_MODE_MOVE") {
             previewObjectItemGroup->setPos(sceneMousePoint - previewPoint);
         }
-        else if (previewMode == PREVIEW_MODE_ROTATE)
-        {
+        else if (previewMode == "PREVIEW_MODE_ROTATE") {
             EmbReal x = previewPoint.x();
             EmbReal y = previewPoint.y();
             EmbReal rot = previewData;
@@ -1664,8 +1663,7 @@ View::mouseMoveEvent(QMouseEvent* event)
             previewObjectItemGroup->setPos(rotX, rotY);
             previewObjectItemGroup->setRotation(rot-mouseAngle);
         }
-        else if (previewMode == PREVIEW_MODE_SCALE)
-        {
+        else if (previewMode == "PREVIEW_MODE_SCALE") {
             EmbReal x = previewPoint.x();
             EmbReal y = previewPoint.y();
             EmbReal scaleFactor = previewData;
@@ -1675,14 +1673,12 @@ View::mouseMoveEvent(QMouseEvent* event)
             previewObjectItemGroup->setScale(1);
             previewObjectItemGroup->setPos(0,0);
 
-            if (scaleFactor <= 0.0)
-            {
+            if (scaleFactor <= 0.0) {
                 QMessageBox::critical(this, QObject::tr("ScaleFactor Error"),
                                     QObject::tr("Hi there. If you are not a developer, report this as a bug. "
                                     "If you are a developer, your code needs examined, and possibly your head too."));
             }
-            else
-            {
+            else {
                 //Calculate the offset
                 EmbReal oldX = 0;
                 EmbReal oldY = 0;
@@ -1707,7 +1703,7 @@ View::mouseMoveEvent(QMouseEvent* event)
     {
         //Ensure that the preview is only shown if the mouse has moved.
         if (!previewActive)
-            previewOn(PREVIEW_CLONE_SELECTED, PREVIEW_MODE_MOVE, scenePressPoint.x(), scenePressPoint.y(), 0);
+            previewOn("PREVIEW_CLONE_SELECTED", "PREVIEW_MODE_MOVE", scenePressPoint.x(), scenePressPoint.y(), 0);
     }
     if (selectingActive)
     {
@@ -1979,7 +1975,7 @@ View::startGripping(BaseObject* obj)
     gripBaseObj = obj;
     sceneGripPoint = gripBaseObj->mouseSnapPoint(sceneMousePoint);
     gripBaseObj->setObjectRubberPoint("GRIP_POINT", sceneGripPoint);
-    gripBaseObj->setObjectRubberMode(OBJ_RUBBER_GRIP);
+    gripBaseObj->setObjectRubberMode("OBJ_RUBBER_GRIP");
 }
 
 void

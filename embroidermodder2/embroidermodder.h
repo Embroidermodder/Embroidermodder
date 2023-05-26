@@ -125,31 +125,6 @@ typedef std::vector<Node> NodeList;
 /**
  * .
  */
-typedef struct Action__ {
-    String icon;
-        /*< The stub used for the icon and the basic command. */
-    String command;
-        /*< . */
-    String tooltip;
-        /*< The label in the menus and the message that appears when
-            you hover over an icon. */
-    String statustip;
-        /*< The message that appears at the bottom of the . */
-    String shortcut;
-        /*< The keyboard shortcut for this action. */
-    StringList aliases;
-        /*< A list of all alternative commands, if empty only
-            the icon sttring will be . */
-    StringList script;
-        /*< If this is a compound action this will be a
-            list of commands or it can allow for command line
-            style command aliases. For example: icon16 would become
-            the string list {"iconResize 16"}. */
-} Action;
-
-/**
- * .
- */
 typedef struct GroupBoxData_ {
     String key;
     String icon_name;
@@ -481,59 +456,52 @@ typedef struct Settings_ {
         /*< \todo document this */
 } Settings;
 
-enum UiMode {
-    DEFAULT_MODE,
-
-    CIRCLE_MODE_1P_RAD,
-    CIRCLE_MODE_1P_DIA,
-    CIRCLE_MODE_2P,
-    CIRCLE_MODE_3P,
-    CIRCLE_MODE_TTR,
-
-    ELLIPSE_MODE_MAJORDIAMETER_MINORRADIUS,
-    ELLIPSE_MODE_MAJORRADIUS_MINORRADIUS,
-    ELLIPSE_MODE_ELLIPSE_ROTATION,
-
-    DOLPHIN_MODE_NUM_POINTS,
-    DOLPHIN_MODE_XSCALE,
-    DOLPHIN_MODE_YSCALE,
-
-    HEART_MODE_NUM_POINTS,
-    HEART_MODE_STYLE,
-    HEART_MODE_XSCALE,
-    HEART_MODE_YSCALE,
-
-    POLYGON_MODE_NUM_SIDES,
-    POLYGON_MODE_CENTER_PT,
-    POLYGON_MODE_POLYTYPE,
-    POLYGON_MODE_INSCRIBE,
-    POLYGON_MODE_CIRCUMSCRIBE,
-    POLYGON_MODE_DISTANCE,
-    POLYGON_MODE_SIDE_LEN,
-
-    RGB_MODE_BACKGROUND,
-    RGB_MODE_CROSSHAIR,
-    RGB_MODE_GRID,
-
-    ROTATE_MODE_NORMAL,
-    ROTATE_MODE_REFERENCE,
-
-    SCALE_MODE_NORMAL,
-    SCALE_MODE_REFERENCE,
-
-    SINGLE_LINE_TEXT_MODE_JUSTIFY,
-    SINGLE_LINE_TEXT_MODE_SETFONT,
-    SINGLE_LINE_TEXT_MODE_SETGEOM,
-    SINGLE_LINE_TEXT_MODE_RAPID,
-
-    STAR_MODE_NUM_POINTS,
-    STAR_MODE_CENTER_PT,
-    STAR_MODE_RAD_OUTER,
-    STAR_MODE_RAD_INNER,
-
-    SNOWFLAKE_MODE_NUM_POINTS,
-    SNOWFLAKE_MODE_XSCALE,
-    SNOWFLAKE_MODE_YSCALE
+//Values
+enum OBJ_TYPE_VALUES {
+    OBJ_TYPE_NULL =      0,
+    /*< NOTE: Allow this enum to evaluate false */
+    OBJ_TYPE_BASE = 100000,
+    /*< NOTE: Values >= 65536 ensure compatibility with qgraphicsitem_cast() */
+    OBJ_TYPE_ARC = 100001,
+    OBJ_TYPE_BLOCK = 100002,
+    /*< For the block type, that has to exist for SVG. */
+    OBJ_TYPE_CIRCLE = 100003,
+    OBJ_TYPE_DIMALIGNED = 100004,
+    /*< For the Aligned Dimension, that has to exist for DXF drawings. */
+    OBJ_TYPE_DIMANGULAR = 100005,
+    /*< For the Angular Dimension, that has to exist for DXF drawings. */
+    OBJ_TYPE_DIMARCLENGTH = 100006,
+    /*< For the Arc Length Dimension, that has to exist for DXF drawings. */
+    OBJ_TYPE_DIMDIAMETER = 100007,
+    OBJ_TYPE_DIMLEADER = 100008,
+    OBJ_TYPE_DIMLINEAR = 100009,
+    /*< For the Linear Dimension, that has to exist for DXF drawings. */
+    OBJ_TYPE_DIMORDINATE = 100010,
+    /*< For the Ordinate Dimension, that has to exist for DXF drawings. */
+    OBJ_TYPE_DIMRADIUS = 100011,
+    /*< For the Radial Dimension, that has to exist for DXF drawings. */
+    OBJ_TYPE_ELLIPSE = 100012,
+    OBJ_TYPE_ELLIPSEARC = 100013,
+    OBJ_TYPE_RUBBER = 100014,
+    OBJ_TYPE_GRID = 100015,
+    OBJ_TYPE_HATCH = 100016,
+    OBJ_TYPE_IMAGE = 100017,
+    OBJ_TYPE_INFINITELINE = 100018,
+    /*< For the Infinite Line object. Which should be removed from output as it exists
+            for drafting reasons. */
+    OBJ_TYPE_LINE = 100019,
+    OBJ_TYPE_PATH = 100020,
+    OBJ_TYPE_POINT = 100021,
+    OBJ_TYPE_POLYGON = 100022,
+    OBJ_TYPE_POLYLINE = 100023,
+    OBJ_TYPE_RAY = 100024,
+    /*< For the Ray object. */
+    OBJ_TYPE_RECTANGLE = 100025,
+    OBJ_TYPE_SLOT = 100026,
+    OBJ_TYPE_SPLINE = 100027,
+    OBJ_TYPE_TEXTMULTI = 100028,
+    OBJ_TYPE_TEXTSINGLE = 100029,
+    OBJ_TYPE_UNKNOWN = 100030
 };
 
 /**
@@ -544,196 +512,25 @@ enum UiMode {
  * I.E. object.setData(OBJ_LAYER, "OUTLINE");
  * I.E. object.setData(OBJ_COLOR, 123);
  * I.E. object.setData(OBJ_LTYPE, OBJ_LTYPE_CONT);
- * 
+ *
  * Keys
  */
 enum OBJ_KEYS {
     OBJ_TYPE = 0,
-        /*< value type - int: See OBJ_TYPE_VALUES */
+    /*< value type - int: See OBJ_TYPE_VALUES */
     OBJ_NAME = 1,
-        /*< value type - str: See OBJ_NAME_VALUES */
+    /*< value type - str: See OBJ_NAME_VALUES */
     OBJ_LAYER = 2,
-        /*< value type - str: "USER", "DEFINED", "STRINGS", etc... */
+    /*< value type - str: "USER", "DEFINED", "STRINGS", etc... */
     OBJ_COLOR = 3,
-        /**
-         * value type - int: 0-255
-         * \todo Use color chart in formats/format-dxf.h for this
-         */
+    /**
+     * value type - int: 0-255
+     * \todo Use color chart in formats/format-dxf.h for this
+     */
     OBJ_LTYPE = 4,
-        /*< value type - int: See OBJ_LTYPE_VALUES */
+    /*< value type - int: See OBJ_LTYPE_VALUES */
     OBJ_LWT = 5, //value type - int: 0-27
     OBJ_RUBBER = 6  //value type - int: See OBJ_RUBBER_VALUES
-};
-
-//Values
-enum OBJ_TYPE_VALUES {
-    OBJ_TYPE_NULL =      0,
-        /*< NOTE: Allow this enum to evaluate false */
-    OBJ_TYPE_BASE = 100000,
-        /*< NOTE: Values >= 65536 ensure compatibility with qgraphicsitem_cast() */
-    OBJ_TYPE_ARC = 100001,
-    OBJ_TYPE_BLOCK = 100002,
-        /*< For the block type, that has to exist for SVG. */
-    OBJ_TYPE_CIRCLE = 100003,
-    OBJ_TYPE_DIMALIGNED = 100004,
-        /*< For the Aligned Dimension, that has to exist for DXF drawings. */
-    OBJ_TYPE_DIMANGULAR = 100005,
-        /*< For the Angular Dimension, that has to exist for DXF drawings. */
-    OBJ_TYPE_DIMARCLENGTH = 100006,
-        /*< For the Arc Length Dimension, that has to exist for DXF drawings. */
-    OBJ_TYPE_DIMDIAMETER = 100007,
-    OBJ_TYPE_DIMLEADER = 100008,
-    OBJ_TYPE_DIMLINEAR = 100009,
-        /*< For the Linear Dimension, that has to exist for DXF drawings. */
-    OBJ_TYPE_DIMORDINATE = 100010,
-        /*< For the Ordinate Dimension, that has to exist for DXF drawings. */
-    OBJ_TYPE_DIMRADIUS = 100011,
-        /*< For the Radial Dimension, that has to exist for DXF drawings. */
-    OBJ_TYPE_ELLIPSE = 100012,
-    OBJ_TYPE_ELLIPSEARC = 100013,
-    OBJ_TYPE_RUBBER = 100014,
-    OBJ_TYPE_GRID = 100015,
-    OBJ_TYPE_HATCH = 100016,
-    OBJ_TYPE_IMAGE = 100017,
-    OBJ_TYPE_INFINITELINE = 100018,
-        /*< For the Infinite Line object. Which should be removed from output as it exists
-            for drafting reasons. */
-    OBJ_TYPE_LINE = 100019,
-    OBJ_TYPE_PATH = 100020,
-    OBJ_TYPE_POINT = 100021,
-    OBJ_TYPE_POLYGON = 100022,
-    OBJ_TYPE_POLYLINE = 100023,
-    OBJ_TYPE_RAY = 100024,
-        /*< For the Ray object. */
-    OBJ_TYPE_RECTANGLE = 100025,
-    OBJ_TYPE_SLOT = 100026,
-    OBJ_TYPE_SPLINE = 100027,
-    OBJ_TYPE_TEXTMULTI = 100028,
-    OBJ_TYPE_TEXTSINGLE = 100029,
-    OBJ_TYPE_UNKNOWN = 100030
-};
-
-enum OBJ_LTYPE_VALUES {
-    //CAD Linetypes
-    OBJ_LTYPE_CONT = 0,
-    OBJ_LTYPE_CENTER = 1,
-    OBJ_LTYPE_DOT = 2,
-    OBJ_LTYPE_HIDDEN = 3,
-    OBJ_LTYPE_PHANTOM = 4,
-    OBJ_LTYPE_ZIGZAG = 5,
-    //Embroidery Stitchtypes
-    OBJ_LTYPE_RUNNING = 6, // __________
-    OBJ_LTYPE_SATIN = 7, // vvvvvvvvvv
-    OBJ_LTYPE_FISHBONE = 8, // >>>>>>>>>>
-};
-
-enum OBJ_LWT_VALUES {
-    OBJ_LWT_BYLAYER = -2,
-    OBJ_LWT_BYBLOCK = -1,
-    OBJ_LWT_DEFAULT =  0,
-    OBJ_LWT_01 =  1,
-    OBJ_LWT_02 =  2,
-    OBJ_LWT_03 =  3,
-    OBJ_LWT_04 =  4,
-    OBJ_LWT_05 =  5,
-    OBJ_LWT_06 =  6,
-    OBJ_LWT_07 =  7,
-    OBJ_LWT_08 =  8,
-    OBJ_LWT_09 =  9,
-    OBJ_LWT_10 = 10,
-    OBJ_LWT_11 = 11,
-    OBJ_LWT_12 = 12,
-    OBJ_LWT_13 = 13,
-    OBJ_LWT_14 = 14,
-    OBJ_LWT_15 = 15,
-    OBJ_LWT_16 = 16,
-    OBJ_LWT_17 = 17,
-    OBJ_LWT_18 = 18,
-    OBJ_LWT_19 = 19,
-    OBJ_LWT_20 = 20,
-    OBJ_LWT_21 = 21,
-    OBJ_LWT_22 = 22,
-    OBJ_LWT_23 = 23,
-    OBJ_LWT_24 = 24
-};
-
-enum OBJ_SNAP_VALUES {
-    OBJ_SNAP_NULL =  0, //NOTE: Allow this enum to evaluate false
-    OBJ_SNAP_ENDPOINT =  1,
-    OBJ_SNAP_MIDPOINT =  2,
-    OBJ_SNAP_CENTER =  3,
-    OBJ_SNAP_NODE =  4,
-    OBJ_SNAP_QUADRANT =  5,
-    OBJ_SNAP_INTERSECTION =  6,
-    OBJ_SNAP_EXTENSION =  7,
-    OBJ_SNAP_INSERTION =  8,
-    OBJ_SNAP_PERPENDICULAR =  9,
-    OBJ_SNAP_TANGENT = 10,
-    OBJ_SNAP_NEAREST = 11,
-    OBJ_SNAP_APPINTERSECTION = 12,
-    OBJ_SNAP_PARALLEL = 13
-};
-
-enum OBJ_RUBBER_VALUES {
-    OBJ_RUBBER_OFF = 0,  //NOTE: Allow this enum to evaluate false
-    OBJ_RUBBER_ON = 1,  //NOTE: Allow this enum to evaluate true
-
-    OBJ_RUBBER_CIRCLE_1P_RAD,
-        /*!< For the circle object currently focussed, show two rubber points:
-            one for the centre (the anchor) and the other at some point on the
-            radius to adjust the radius. */
-    OBJ_RUBBER_CIRCLE_1P_DIA,
-        /*!< For the curcle object currently focussed, show two rubber points:
-            one for the left of the diameter and one for the right.
-            These rubber points can be moved around the circle, but they always
-            oppose one another. */
-    OBJ_RUBBER_CIRCLE_2P,
-    OBJ_RUBBER_CIRCLE_3P,
-    OBJ_RUBBER_CIRCLE_TTR,
-    OBJ_RUBBER_CIRCLE_TTT,
-
-    OBJ_RUBBER_DIMLEADER_LINE,
-
-    OBJ_RUBBER_ELLIPSE_LINE,
-    OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS,
-    OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS,
-    OBJ_RUBBER_ELLIPSE_ROTATION,
-
-    OBJ_RUBBER_GRIP,
-
-    OBJ_RUBBER_LINE,
-
-    OBJ_RUBBER_POLYGON,
-    OBJ_RUBBER_POLYGON_INSCRIBE,
-    OBJ_RUBBER_POLYGON_CIRCUMSCRIBE,
-
-    OBJ_RUBBER_POLYLINE,
-
-    OBJ_RUBBER_IMAGE,
-
-    OBJ_RUBBER_RECTANGLE,
-
-    OBJ_RUBBER_TEXTSINGLE
-};
-
-enum SPARE_RUBBER_VALUES {
-    SPARE_RUBBER_OFF = 0,  //NOTE: Allow this enum to evaluate false
-    SPARE_RUBBER_PATH,
-    SPARE_RUBBER_POLYGON,
-    SPARE_RUBBER_POLYLINE
-};
-
-enum PREVIEW_CLONE_VALUES {
-    PREVIEW_CLONE_NULL = 0, //NOTE: Allow this enum to evaluate false
-    PREVIEW_CLONE_SELECTED,
-    PREVIEW_CLONE_RUBBER
-};
-
-enum PREVIEW_MODE_VALUES {
-    PREVIEW_MODE_NULL = 0, //NOTE: Allow this enum to evaluate false
-    PREVIEW_MODE_MOVE,
-    PREVIEW_MODE_ROTATE,
-    PREVIEW_MODE_SCALE
 };
 
 static const EmbReal emb_constant_pi = 3.14159265358979323846;
@@ -744,7 +541,6 @@ static const EmbReal emb_constant_pi = 3.14159265358979323846;
 extern MdiArea* mdiArea;
 extern Settings settings;
 extern Settings dialog;
-extern std::vector<Action> action_table;
 
 extern Dictionary config;
 
@@ -777,6 +573,8 @@ int read_configuration(const char *file);
 void read_settings(void);
 void write_settings(void);
 EmbVector rotate_vector(EmbVector v, EmbReal alpha);
+
+bool contains(StringList, String);
 
 void debug_message(String msg);
 void set_enabled(QObject *parent, const char *key, bool enabled);
@@ -822,69 +620,11 @@ public:
     virtual int type() const { return Type; }
 
     Dictionary properties;
-    /*<
-     * This covers the inbuilt designs: Dolphin, Snowflake and Heart.
-     * Covers Rotate, Scale and Point UI events.
-     *
-     * This was an idea for storing the current command state: could be
-     * combined with EmbView since you can't have more than one active command.
-     * If a command calls a sub command it will store the position in the
-     * parents.
-     *
-     * Possible properties
-        String fname;
-        String command;
-        bool firstRun;
-            If this UiObject has been put through the user interaction processor.
-        std::vector<EmbVector> controlPoints;
-            Storage for however many Rubber Points the design needs.
-        StringList controlPointLabels;
-            Storage for the labels for the Rubber Points using the same indexing.
-        int numPoints;
-            The number of points if we consider the object as a Polygon.
-        int minPoints;
-            The minimum number of points needed to make the polygon look somewhat like the design.
-        int maxPoints;
-            The maximum number of points before adding more will
-            do nothing but slow down the program.
-        EmbVector center;
-            Where the polygon is centered.
-        EmbVector scale;
-            The scale of the object: note that the default
-            is unique to each object type.
-        EmbReal rotation;
-        uint32_t mode;
-            The mode argument records what kind of design we are
-            using and how to interact with it.
-        String path_desc;
-            The SVG style path spec.
-        String text;
-            The text to be rendered to the scene.
-        int textJustify;
-            One of the JUSTIFY_* constants representing what kind
-            of alignment to use.
-        String textFont;
-            The file name of the font to use.
-        EmbReal textHeight;
-            The text height.
-        EmbReal textRotation;
-            The rotation of the text in the scene.
-        GLuint texture_id;
-            Pointer to a texture that may be rendered to the object.
-        String id;
-        int pattern_index;
-        char type[200];
-        int object_index;
-        bool selectable;
-        EmbColor color;
-        EmbVector point1;
-        EmbVector point2;
-    */
 
     QPen objPen;
     QPen lwtPen;
     QLineF objLine;
-    int objRubberMode;
+    String objRubberMode = "OBJ_RUBBER_OFF";
     QHash<QString, QPointF> objRubberPoints;
     QHash<QString, QString> objRubberTexts;
     int64_t objID;
@@ -950,9 +690,9 @@ public:
     void setObjectColor(const QColor& color);
     void setObjectColorRGB(QRgb rgb);
     void setObjectLineType(Qt::PenStyle lineType);
-    void setObjectLineWeight(EmbReal lineWeight);
+    void setObjectLineWeight(String lineWeight);
     void setObjectPath(const QPainterPath& p) { setPath(p); }
-    void setObjectRubberMode(int mode) { objRubberMode = mode; }
+    void setObjectRubberMode(String mode) { objRubberMode = mode; }
     void setObjectRubberPoint(const QString& key, const QPointF& point) { objRubberPoints.insert(key, point); }
     void setObjectRubberText(const QString& key, const QString& txt) { objRubberTexts.insert(key, txt); }
 
@@ -2112,7 +1852,7 @@ public:
     void nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b);
     void nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b);
 
-    void nativePreviewOn(int clone, int mode, EmbReal x, EmbReal y, EmbReal data);
+    void nativePreviewOn(String clone, String mode, EmbReal x, EmbReal y, EmbReal data);
     void nativePreviewOff();
 
     void nativeClearRubber();
@@ -2124,29 +1864,29 @@ public:
     void nativeSetRubberPoint(const QString& key, EmbReal x, EmbReal y);
     void nativeSetRubberText(const QString& key, const QString& txt);
 
-    void nativeAddTextMulti(const QString& str, EmbReal x, EmbReal y, EmbReal rot, bool fill, int rubberMode);
-    void nativeAddTextSingle(const QString& str, EmbReal x, EmbReal y, EmbReal rot, bool fill, int rubberMode);
+    void nativeAddTextMulti(const QString& str, EmbReal x, EmbReal y, EmbReal rot, bool fill, String rubberMode);
+    void nativeAddTextSingle(const QString& str, EmbReal x, EmbReal y, EmbReal rot, bool fill, String rubberMode);
 
     void nativeAddInfiniteLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot);
     void nativeAddRay(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot);
-    void nativeAddLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, int rubberMode);
+    void nativeAddLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String rubberMode);
     void nativeAddTriangle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal x3, EmbReal y3, EmbReal rot, bool fill);
     void nativeAddRectangle(std::vector<Node> a);
     void nativeAddRoundedRectangle(EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rad, EmbReal rot, bool fill);
-    void nativeAddArc(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, int rubberMode);
-    void nativeAddCircle(EmbReal centerX, EmbReal centerY, EmbReal radius, bool fill, int rubberMode);
-    void nativeAddSlot(EmbReal centerX, EmbReal centerY, EmbReal diameter, EmbReal length, EmbReal rot, bool fill, int rubberMode);
-    void nativeAddEllipse(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, EmbReal rot, bool fill, int rubberMode);
+    void nativeAddArc(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, String rubberMode);
+    void nativeAddCircle(EmbReal centerX, EmbReal centerY, EmbReal radius, bool fill, String rubberMode);
+    void nativeAddSlot(EmbReal centerX, EmbReal centerY, EmbReal diameter, EmbReal length, EmbReal rot, bool fill, String rubberMode);
+    void nativeAddEllipse(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, EmbReal rot, bool fill, String rubberMode);
     void nativeAddPoint(EmbReal x, EmbReal y);
     void nativeAddRegularPolygon(EmbReal centerX, EmbReal centerY, quint16 sides, uint8_t mode, EmbReal rad, EmbReal rot, bool fill);
-    void nativeAddPolygon(EmbReal startX, EmbReal startY, const QPainterPath& p, int rubberMode);
-    void nativeAddPolyline(EmbReal startX, EmbReal startY, const QPainterPath& p, int rubberMode);
-    void nativeAddPath(EmbReal startX, EmbReal startY, const QPainterPath& p, int rubberMode);
+    void nativeAddPolygon(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode);
+    void nativeAddPolyline(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode);
+    void nativeAddPath(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode);
     void nativeAddHorizontalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight);
     void nativeAddVerticalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight);
     void nativeAddImage(const QString& img, EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot);
 
-    void nativeAddDimLeader(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, int rubberMode);
+    void nativeAddDimLeader(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String rubberMode);
 
     void nativeSetCursorShape(const QString& str);
     EmbReal nativeCalculateAngle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
@@ -2883,7 +2623,7 @@ public slots:
     void createGrid(const QString& gridType);
     void setRulerColor(QRgb color);
 
-    void previewOn(int clone, int mode, EmbReal x, EmbReal y, EmbReal data);
+    void previewOn(String clone, String mode, EmbReal x, EmbReal y, EmbReal data);
     void previewOff();
 
     void enableMoveRapidFire();
@@ -2894,7 +2634,7 @@ public slots:
     void vulcanizeRubberRoom();
     void clearRubberRoom();
     void spareRubber(int64_t id);
-    void setRubberMode(int mode);
+    void setRubberMode(String mode);
     void setRubberPoint(const QString& key, const QPointF& point);
     void setRubberText(const QString& key, const QString& txt);
 
@@ -2912,7 +2652,7 @@ protected:
 private:
     QHash<int64_t, QGraphicsItem*> hashDeletedObjects;
 
-    std::vector<int64_t> spareRubberList;
+    StringList spareRubberList;
 
     void createGridRect();
     void createGridPolar();
@@ -2930,7 +2670,7 @@ private:
     QGraphicsItemGroup* previewObjectItemGroup;
     QPointF previewPoint;
     EmbReal previewData;
-    int previewMode;
+    String previewMode;
 
     std::vector<QGraphicsItem*> createObjectList(std::vector<QGraphicsItem*> list);
     QPointF cutCopyMousePoint;

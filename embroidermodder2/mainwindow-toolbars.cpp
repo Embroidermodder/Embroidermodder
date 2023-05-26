@@ -20,22 +20,6 @@
 #include "embroidermodder.h"
 
 /**
- * @brief get_action_index
- * @param cmd
- * @return
- */
-int
-get_action_index(std::string cmd)
-{
-    for (int i=0; i<(int)action_table.size(); i++) {
-        if (cmd == action_table[i].icon) {
-            return i;
-        }
-    }
-    return 0;
-}
-
-/**
  * @brief MainWindow::create_toolbar
  * @param toolbar
  * @param label
