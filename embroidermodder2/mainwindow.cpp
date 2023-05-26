@@ -31,6 +31,11 @@ PropertyEditor* dockPropEdit = 0;
 UndoEditor* dockUndoEdit = 0;
 StatusBar* statusbar = 0;
 
+QWizard* wizardTipOfTheDay;
+QLabel* labelTipOfTheDay;
+QCheckBox* checkBoxTipOfTheDay;
+QStringList listTipOfTheDay;
+
 Dictionary config;
 
 std::unordered_map<String, QAction*> actionHash;
@@ -69,8 +74,18 @@ String pan_action(String args);
 String paste_action(String args);
 String set_rubber_text_action(String args);
 String spare_rubber_action(String args);
+String tip_of_the_day_action(String args);
 String todo_action(String args);
 String zoom_action(String args);
+
+String design_details_action(String args);
+String about_action(String args);
+String whats_this_action(String args);
+String print_action(String args);
+static String help_action(String args);
+static String changelog_action(String args);
+static String undo_action(String args);
+static String redo_action(String args);
 
 std::unordered_map<String, Command> command_map = {
     {"add-arc", add_arc_action},
@@ -88,6 +103,7 @@ std::unordered_map<String, Command> command_map = {
     {"paste", paste_action},
     {"set-rubber-text", set_rubber_text_action},
     {"spare-rubber", spare_rubber_action},
+    {"tip-of-the-day", tip_of_the_day_action},
     {"todo", todo_action},
     {"zoom", zoom_action}
 };
@@ -112,6 +128,12 @@ std::unordered_map<String, int> rubber_mode_hash = {
     {"RECTANGLE", OBJ_RUBBER_RECTANGLE},
     {"TEXTSINGLE", OBJ_RUBBER_TEXTSINGLE}
 };
+
+static QString
+tr(const char *str)
+{
+    return _mainWin->tr(str);
+}
 
 /**
  * @brief create_lisp
@@ -443,30 +465,36 @@ platformString(void)
 /**
  * .
  */
-void
-MainWindow::designDetails()
+String
+design_details_action(String args)
 {
-    QGraphicsScene* scene = activeScene();
+    no_argument_debug("about_action()", args);
+
+    QGraphicsScene* scene = _mainWin->activeScene();
     if (scene) {
-        EmbDetailsDialog dialog(scene, this);
+        EmbDetailsDialog dialog(scene, _mainWin);
         dialog.exec();
     }
+    return "";
 }
 
 /**
- * .
+ * @brief about_action
+ * @param args
+ * @return
  */
-void
-MainWindow::about()
+String
+about_action(String args)
 {
+    no_argument_debug("about_action()", args);
+
     //TODO: QTabWidget for about dialog
     QApplication::setOverrideCursor(Qt::ArrowCursor);
-    debug_message("about()");
     QString appDir = qApp->applicationDirPath();
     QString appName = QApplication::applicationName();
     QString title = "About " + appName;
 
-    QDialog dialog(this);
+    QDialog dialog(_mainWin);
     ImageWidget img(appDir + "/images/logo-small");
     QLabel text(appName + tr("\n\n") +
                           tr("https://www.libembroidery.org") +
@@ -490,7 +518,8 @@ MainWindow::about()
     button.setText("Oh, Yeah!");
     buttonbox.addButton(&button, QDialogButtonBox::AcceptRole);
     buttonbox.setCenterButtons(true);
-    connect(&buttonbox, SIGNAL(accepted()), &dialog, SLOT(accept()));
+    // TODO reconnect
+    //connect(&buttonbox, SIGNAL(accepted()), &dialog, SLOT(accept()));
 
     QVBoxLayout layout;
     layout.setAlignment(Qt::AlignCenter);
@@ -507,39 +536,47 @@ MainWindow::about()
 }
 
 /**
- * .
+ * @brief whats_this_action
+ * @param args
+ * @return
  */
-void
-MainWindow::whatsThisContextHelp()
+String
+whats_this_action(String args)
 {
-    debug_message("whatsThisContextHelp()");
+    no_argument_debug("whats_this_action()", args);
     QWhatsThis::enterWhatsThisMode();
+    return "";
 }
 
 /**
- * .
+ * @brief print_action
+ * @param args
+ * @return
  */
-void
-MainWindow::print()
+String
+print_action(String args)
 {
-    debug_message("print()");
+    no_argument_debug("print_action()", args);
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
         mdiWin->print();
     }
+    return "";
 }
 
 /**
- * .
+ * @brief tip_of_the_day_action
+ * @param args
+ * @return
  */
-void
-MainWindow::tipOfTheDay()
+String
+tip_of_the_day_action(String args)
 {
-    debug_message("tipOfTheDay()");
+    no_argument_debug("tip_of_the_day_action()", args);
 
     QString appDir = qApp->applicationDirPath();
 
-    wizardTipOfTheDay = new QWizard(this);
+    wizardTipOfTheDay = new QWizard(_mainWin);
     wizardTipOfTheDay->setAttribute(Qt::WA_DeleteOnClose);
     wizardTipOfTheDay->setWizardStyle(QWizard::ModernStyle);
     wizardTipOfTheDay->setMinimumSize(550, 400);
@@ -555,7 +592,8 @@ MainWindow::tipOfTheDay()
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("&Show tips on startup"), wizardTipOfTheDay);
     checkBoxTipOfTheDay->setChecked(settings.general_tip_of_the_day);
-    connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), this, SLOT(checkBoxTipOfTheDayStateChanged(int)));
+    // TODO reconnect
+    //connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), _mainWin, SLOT(checkBoxTipOfTheDayStateChanged(int)));
 
     QVBoxLayout* layout = new QVBoxLayout(wizardTipOfTheDay);
     layout->addWidget(imgBanner);
@@ -577,13 +615,15 @@ MainWindow::tipOfTheDay()
     wizardTipOfTheDay->setOption(QWizard::HaveCustomButton1, true);
     wizardTipOfTheDay->setOption(QWizard::HaveCustomButton2, true);
     wizardTipOfTheDay->setOption(QWizard::HaveCustomButton3, true);
-    connect(wizardTipOfTheDay, SIGNAL(customButtonClicked(int)), this, SLOT(buttonTipOfTheDayClicked(int)));
+    // TODO reconnect
+    //connect(wizardTipOfTheDay, SIGNAL(customButtonClicked(int)), _mainWin, SLOT(buttonTipOfTheDayClicked(int)));
 
     QList<QWizard::WizardButton> listTipOfTheDayButtons;
     listTipOfTheDayButtons << QWizard::Stretch << QWizard::CustomButton1 << QWizard::CustomButton2 << QWizard::CustomButton3;
     wizardTipOfTheDay->setButtonLayout(listTipOfTheDayButtons);
 
     wizardTipOfTheDay->exec();
+    return "";
 }
 
 /**
@@ -624,10 +664,12 @@ MainWindow::buttonTipOfTheDayClicked(int button)
 }
 
 /**
- * .
+ * @brief help_action
+ * @param args
+ * @return
  */
-void
-MainWindow::help()
+static String
+help_action(String args)
 {
     debug_message("help()");
 
@@ -641,20 +683,31 @@ MainWindow::help()
     //arguments << "help/commands.html";
     //QProcess *myProcess = new QProcess(this);
     //myProcess->start(program, arguments);
+    return "";
 }
 
-void
-MainWindow::changelog()
+/**
+ * @brief changelog_action
+ * @param args
+ * @return
+ */
+static String
+changelog_action(String args)
 {
     debug_message("changelog()");
 
     QUrl changelogURL("help/changelog.html");
     QDesktopServices::openUrl(changelogURL);
+    return "";
 }
 
-// Standard Slots
-void
-MainWindow::undo()
+/**
+ * @brief undo_action
+ * @param args
+ * @return
+ */
+static String
+undo_action(String args)
 {
     debug_message("undo()");
     QString prefix = prompt->getPrefix();
@@ -671,10 +724,16 @@ MainWindow::undo()
         prompt->alert("Nothing to undo");
         actuator("set-prompt-prefix " + prefix.toStdString());
     }
+    return "";
 }
 
-void
-MainWindow::redo()
+/**
+ * @brief redo_action
+ * @param args
+ * @return
+ */
+static String
+redo_action(String args)
 {
     debug_message("redo()");
     QString prefix = prompt->getPrefix();
@@ -688,6 +747,7 @@ MainWindow::redo()
         prompt->alert("Nothing to redo");
         actuator("set-prompt-prefix " + prefix.toStdString());
     }
+    return "";
 }
 
 bool MainWindow::isShiftPressed()
@@ -727,14 +787,24 @@ MainWindow::iconResize(int iconSize)
     settings.general_icon_size = iconSize;
 }
 
-MdiWindow* MainWindow::activeMdiWindow()
+/**
+ * @brief MainWindow::activeMdiWindow
+ * @return
+ */
+MdiWindow *
+MainWindow::activeMdiWindow()
 {
     debug_message("activeMdiWindow()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     return mdiWin;
 }
 
-View* MainWindow::activeView()
+/**
+ * @brief MainWindow::activeView
+ * @return
+ */
+View *
+MainWindow::activeView()
 {
     debug_message("activeView()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
@@ -744,7 +814,12 @@ View* MainWindow::activeView()
     return 0;
 }
 
-QGraphicsScene* MainWindow::activeScene()
+/**
+ * @brief MainWindow::activeScene
+ * @return
+ */
+QGraphicsScene *
+MainWindow::activeScene()
 {
     debug_message("activeScene()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
@@ -1332,7 +1407,7 @@ MainWindow::nativePrintArea(EmbReal x, EmbReal y, EmbReal w, EmbReal h)
 {
     qDebug("nativePrintArea(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
     //TODO: Print Setup Stuff
-    print();
+    print_action("");
 }
 
 /**
@@ -2603,7 +2678,7 @@ MainWindow::MainWindow() : QMainWindow(0)
         while(!tipLine.isNull());
     }
     if (settings.general_tip_of_the_day) {
-        tipOfTheDay();
+        actuator("tip-of-the-day");
     }
 }
 
@@ -2769,8 +2844,7 @@ actuator(String line)
     }
 
     if (command == "about") {
-        _mainWin->about();
-        return "";
+        return about_action("");
     }
 
     if (command == "add") {
@@ -2899,8 +2973,7 @@ actuator(String line)
     }
 
     if (command == "help") {
-        _mainWin->help();
-        return "";
+        return help_action("");
     }
 
     if (command == "init") {            
@@ -2922,8 +2995,7 @@ actuator(String line)
     }
 
     if (command == "redo") {
-        _mainWin->redo();
-        return "";
+        return redo_action("");
     }
 
     if (command == "selectall") {
@@ -2941,13 +3013,11 @@ actuator(String line)
     }
 
     if (command == "tipoftheday") {
-        _mainWin->tipOfTheDay();
-        return "";
+        return tip_of_the_day_action("");
     }
 
     if (command == "undo") {
-        _mainWin->undo();
-        return "";
+        return undo_action ("");
     }
 
     if (command == "window") {

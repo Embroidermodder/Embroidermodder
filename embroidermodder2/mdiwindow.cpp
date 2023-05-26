@@ -52,7 +52,7 @@ MdiWindow::MdiWindow(const int theIndex, QMdiArea* parent, Qt::WindowFlags wflag
 
     promptHistory = "Welcome to Embroidermodder 2!<br/>Open some of our sample files. Many formats are supported.<br/>For help, press F1.";
     prompt->setHistory(promptHistory);
-    promptInputList << "";
+    promptInputList.push_back("");
     promptInputNum = 0;
 
     curLayer = "0";
@@ -504,7 +504,7 @@ void MdiWindow::promptHistoryAppended(const QString& txt)
 
 void MdiWindow::logPromptInput(const QString& txt)
 {
-    promptInputList << txt;
+    promptInputList.push_back(txt);
     promptInputNum = promptInputList.size();
 }
 
@@ -530,7 +530,7 @@ MdiWindow::promptInputNext()
 void
 MdiWindow::promptInputPrevNext(bool prev)
 {
-    if (promptInputList.isEmpty()) {
+    if (promptInputList.size() == 0) {
         if (prev)
             QMessageBox::critical(this, tr("Prompt Previous Error"), tr("The prompt input is empty! Please report this as a bug!"));
         else

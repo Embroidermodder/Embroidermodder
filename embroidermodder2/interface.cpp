@@ -88,6 +88,36 @@ degrees__(EmbReal radian)
 }
 
 /**
+ * @brief to_vector
+ * @param list
+ * @return
+ */
+std::vector<QGraphicsItem*>
+to_vector(QList<QGraphicsItem*> list)
+{
+    std::vector<QGraphicsItem*> result;
+    foreach (QGraphicsItem *item , list) {
+        result.push_back(item);
+    }
+    return result;
+}
+
+/**
+ * @brief to_qlist
+ * @param list
+ * @return
+ */
+QList<QGraphicsItem*>
+to_qlist(std::vector<QGraphicsItem*> list)
+{
+    QList<QGraphicsItem*> result;
+    for (int i=0; i<list.size(); i++) {
+        result << list[i];
+    }
+    return result;
+}
+
+/**
  * @brief debug_message
  * @param msg
  */

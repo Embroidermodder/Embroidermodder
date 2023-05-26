@@ -20,6 +20,20 @@
 #include "embroidermodder.h"
 
 /**
+ * @brief operator *
+ * @param v
+ * @param s
+ * @return
+ */
+EmbVector
+operator*(EmbVector v, EmbReal s)
+{
+    EmbVector result;
+    embVector_multiply(v, s, &result);
+    return result;
+}
+
+/**
  * @brief mouse_snap_point
  * @param points
  * @return
@@ -85,7 +99,7 @@ void ArcObject::init(EmbArc arc, QRgb rgb, Qt::PenStyle lineType)
     setObjectColor(rgb);
     setObjectLineType(lineType);
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
-    setPen(objectPen());
+    setPen(objPen);
 }
 
 /**
@@ -97,13 +111,13 @@ void ArcObject::calculateArcData(EmbArc arc)
     EmbVector center;
     getArcCenter(arc, &center);
 
-    arcStartPoint = QPointF(arc.start.x - center.x, arc.start.y - center.y);
-    arcMidPoint   = QPointF(arc.mid.x   - center.x, arc.mid.y   - center.y);
-    arcEndPoint   = QPointF(arc.end.x   - center.x, arc.end.y   - center.y);
+    arcStartPoint = to_QPointF(arc.start - center);
+    arcMidPoint = to_QPointF(arc.mid - center);
+    arcEndPoint = to_QPointF(arc.end - center);
 
     setPos(center.x, center.y);
 
-    EmbReal radius = QLineF(center.x, center.y, arc.mid.x, arc.mid.y).length();
+    EmbReal radius = embVector_distance(center, arc.mid);
     updateArcRect(radius);
     updatePath();
     setRotation(0);
@@ -253,9 +267,8 @@ rotate_vector(EmbVector v, EmbReal alpha)
  */
 QPointF ArcObject::objectStartPoint() const
 {
-    EmbVector v;
     EmbReal rot = radians(rotation());
-    embVector_multiply(to_EmbVector(arcStartPoint), scale(), &v);
+    EmbVector v = to_EmbVector(arcStartPoint) * scale();
     EmbVector rotv = rotate_vector(v, rot);
 
     return scenePos() + to_QPointF(rotv);
@@ -267,9 +280,8 @@ QPointF ArcObject::objectStartPoint() const
  */
 QPointF ArcObject::objectMidPoint() const
 {
-    EmbVector v;
     EmbReal rot = radians(rotation());
-    embVector_multiply(to_EmbVector(arcMidPoint), scale(), &v);
+    EmbVector v = to_EmbVector(arcMidPoint) * scale();
     EmbVector rotv = rotate_vector(v, rot);
 
     return scenePos() + to_QPointF(rotv);
@@ -281,9 +293,8 @@ QPointF ArcObject::objectMidPoint() const
  */
 QPointF ArcObject::objectEndPoint() const
 {
-    EmbVector v;
     EmbReal rot = radians(rotation());
-    embVector_multiply(to_EmbVector(arcEndPoint), scale(), &v);
+    EmbVector v = to_EmbVector(arcEndPoint) * scale();
     EmbVector rotv = rotate_vector(v, rot);
 
     return scenePos() + to_QPointF(rotv);
@@ -460,11 +471,15 @@ ArcObject::mouseSnapPoint(const QPointF& mousePoint)
  * @brief ArcObject::allGripPoints
  * @return
  */
-QList<QPointF>
+std::vector<QPointF>
 ArcObject::allGripPoints()
 {
-    QList<QPointF> gripPoints;
-    gripPoints << objectCenter() << objectStartPoint() << objectMidPoint() << objectEndPoint();
+    std::vector<QPointF> gripPoints = {
+        objectCenter(),
+        objectStartPoint(),
+        objectMidPoint(),
+        objectEndPoint()
+    };
     return gripPoints;
 }
 
@@ -827,7 +842,7 @@ CircleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, Q
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
+    if (option->state & QStyle::State_Selected) { paintPen.setStyle(Qt::DashLine); }
     if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
@@ -901,11 +916,11 @@ CircleObject::updateRubber(QPainter* painter)
         if (painter) {
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
             if (gripPoint == objectCenter())
-            {
+ {
                 painter->drawEllipse(rect().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
             }
             else
-            {
+ {
                 EmbReal gripRadius = QLineF(objectCenter(), objectRubberPoint(QString())).length();
                 painter->drawEllipse(QPointF(), gripRadius, gripRadius);
             }
@@ -936,26 +951,23 @@ CircleObject::vulcanize()
 QPointF
 CircleObject::mouseSnapPoint(const QPointF& mousePoint)
 {
-    std::vector<QPointF> points = {
-        objectCenter(),
-        objectQuadrant0(),
-        objectQuadrant90(),
-        objectQuadrant180(),
-        objectQuadrant270()
-    };
-
-    return closest_point(mousePoint, points);
+    return closest_point(mousePoint, allGripPoints());
 }
 
 /**
  * @brief CircleObject::allGripPoints
  * @return
  */
-QList<QPointF>
+std::vector<QPointF>
 CircleObject::allGripPoints()
 {
-    QList<QPointF> gripPoints;
-    gripPoints << objectCenter() << objectQuadrant0() << objectQuadrant90() << objectQuadrant180() << objectQuadrant270();
+    std::vector<QPointF> gripPoints = {
+        objectCenter(),
+        objectQuadrant0(),
+        objectQuadrant90(),
+        objectQuadrant180(),
+        objectQuadrant270()
+    };
     return gripPoints;
 }
 
@@ -968,7 +980,7 @@ void
 CircleObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     if (before == objectCenter()) { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
-    else                         { setObjectRadius(QLineF(objectCenter(), after).length()); }
+    else { setObjectRadius(QLineF(objectCenter(), after).length()); }
 }
 
 /**
@@ -1014,7 +1026,7 @@ DimLeaderObject::DimLeaderObject(DimLeaderObject* obj, QGraphicsItem* parent) : 
 {
     debug_message("DimLeaderObject Constructor()");
     if (obj)
-    {
+ {
         init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
     }
 }
@@ -1049,22 +1061,17 @@ DimLeaderObject::init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, 
 
     curved = false;
     filled = true;
-    setObjectEndPoint1(x1, y1);
-    setObjectEndPoint2(x2, y2);
+    EmbVector endPt1, endPt2;
+    endPt1.x = x1;
+    endPt1.y = y1;
+    endPt2.x = x2;
+    endPt2.y = y2;
+    setObjectEndPoint1(endPt1);
+    setObjectEndPoint2(endPt2);
     setObjectColor(rgb);
     setObjectLineType(lineType);
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
-    setPen(objectPen());
-}
-
-/**
- * @brief DimLeaderObject::setObjectEndPoint1
- * @param endPt1
- */
-void
-DimLeaderObject::setObjectEndPoint1(const QPointF& endPt1)
-{
-    setObjectEndPoint1(endPt1.x(), endPt1.y());
+    setPen(objPen);
 }
 
 /**
@@ -1073,26 +1080,14 @@ DimLeaderObject::setObjectEndPoint1(const QPointF& endPt1)
  * @param y1
  */
 void
-DimLeaderObject::setObjectEndPoint1(EmbReal x1, EmbReal y1)
+DimLeaderObject::setObjectEndPoint1(EmbVector endPt1)
 {
-    EmbVector delta;
     EmbVector endPt2 = to_EmbVector(objectEndPoint2());
-    delta.x = endPt2.x - x1;
-    delta.y = endPt2.y - y1;
+    EmbVector delta = endPt2 - endPt1;
     setRotation(0);
     setLine(0, 0, delta.x, delta.y);
-    setPos(x1, y1);
+    setPos(endPt1.x, endPt1.y);
     updateLeader();
-}
-
-/**
- * @brief DimLeaderObject::setObjectEndPoint2
- * @param endPt2
- */
-void
-DimLeaderObject::setObjectEndPoint2(const QPointF& endPt2)
-{
-    setObjectEndPoint2(endPt2.x(), endPt2.y());
 }
 
 /**
@@ -1101,12 +1096,10 @@ DimLeaderObject::setObjectEndPoint2(const QPointF& endPt2)
  * @param y2
  */
 void
-DimLeaderObject::setObjectEndPoint2(EmbReal x2, EmbReal y2)
+DimLeaderObject::setObjectEndPoint2(EmbVector endPt2)
 {
-    EmbVector delta;
     EmbVector endPt1 = to_EmbVector(scenePos());
-    delta.x = x2 - endPt1.x;
-    delta.y = y2 - endPt1.y;
+    EmbVector delta = endPt2 - endPt1;
     setRotation(0);
     setLine(0, 0, delta.x, delta.y);
     setPos(endPt1.x, endPt1.y);
@@ -1270,7 +1263,7 @@ DimLeaderObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
+    if (option->state & QStyle::State_Selected) { paintPen.setStyle(Qt::DashLine); }
     if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
@@ -1292,8 +1285,8 @@ DimLeaderObject::updateRubber(QPainter* painter)
         QPointF sceneStartPoint = objectRubberPoint("DIMLEADER_LINE_START");
         QPointF sceneQSnapPoint = objectRubberPoint("DIMLEADER_LINE_END");
 
-        setObjectEndPoint1(sceneStartPoint);
-        setObjectEndPoint2(sceneQSnapPoint);
+        setObjectEndPoint1(to_EmbVector(sceneStartPoint));
+        setObjectEndPoint2(to_EmbVector(sceneQSnapPoint));
     }
     else if (rubberMode == OBJ_RUBBER_GRIP) {
         if (painter) {
@@ -1330,29 +1323,20 @@ DimLeaderObject::vulcanize()
  */
 QPointF DimLeaderObject::mouseSnapPoint(const QPointF& mousePoint)
 {
-    std::vector<QPointF> points = {
-        objectEndPoint1(),
-        objectEndPoint2()
-    };
-
-    if (curved) {
-        points.push_back(objectMidPoint());
-    }
-
-    return closest_point(mousePoint, points);
+    return closest_point(mousePoint, allGripPoints());
 }
 
 /**
  * @brief DimLeaderObject::allGripPoints
  * @return
  */
-QList<QPointF>
+std::vector<QPointF>
 DimLeaderObject::allGripPoints()
 {
-    QList<QPointF> gripPoints;
-    gripPoints << objectEndPoint1() << objectEndPoint2();
-    if (curved)
-        gripPoints << objectMidPoint();
+    std::vector<QPointF> gripPoints = {objectEndPoint1(), objectEndPoint2()};
+    if (curved) {
+        gripPoints.push_back(objectMidPoint());
+    }
     return gripPoints;
 }
 
@@ -1365,10 +1349,10 @@ void
 DimLeaderObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     if (before == objectEndPoint1()) {
-        setObjectEndPoint1(after);
+        setObjectEndPoint1(to_EmbVector(after));
     }
     else if (before == objectEndPoint2()) {
-        setObjectEndPoint2(after);
+        setObjectEndPoint2(to_EmbVector(after));
     }
     else if (before == objectMidPoint()) {
         QPointF delta = after-before;
@@ -1506,9 +1490,8 @@ EllipseObject::objectQuadrant0() const
 {
     EmbReal halfW = objectWidth()/2.0;
     EmbReal rot = radians(rotation());
-    EmbReal x = halfW * std::cos(rot);
-    EmbReal y = halfW * std::sin(rot);
-    return objectCenter() + QPointF(x,y);
+    EmbVector v = embVector_unit(rot) * halfW;
+    return objectCenter() + to_QPointF(v);
 }
 
 /**
@@ -1519,9 +1502,8 @@ EllipseObject::objectQuadrant90() const
 {
     EmbReal halfH = objectHeight()/2.0;
     EmbReal rot = radians(rotation()+90.0);
-    EmbReal x = halfH * std::cos(rot);
-    EmbReal y = halfH * std::sin(rot);
-    return objectCenter() + QPointF(x,y);
+    EmbVector v = embVector_unit(rot) * halfH;
+    return objectCenter() + to_QPointF(v);
 }
 
 /**
@@ -1577,7 +1559,7 @@ EllipseObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
+    if (option->state & QStyle::State_Selected) { paintPen.setStyle(Qt::DashLine); }
     if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
@@ -1633,7 +1615,7 @@ EllipseObject::updateRubber(QPainter* painter)
         updatePath();
     }
     else if (rubberMode == OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS)
-    {
+ {
         QPointF sceneAxis1Point2 = objectRubberPoint("ELLIPSE_AXIS1_POINT2");
         QPointF sceneCenterPoint = objectRubberPoint("ELLIPSE_CENTER");
         QPointF sceneAxis2Point2 = objectRubberPoint("ELLIPSE_AXIS2_POINT2");
@@ -1665,7 +1647,7 @@ EllipseObject::updateRubber(QPainter* painter)
         updatePath();
     }
     else if (rubberMode == OBJ_RUBBER_GRIP)
-    {
+ {
         //TODO: updateRubber() gripping for EllipseObject
     }
 }
@@ -1688,6 +1670,15 @@ EllipseObject::vulcanize()
 QPointF
 EllipseObject::mouseSnapPoint(const QPointF& mousePoint)
 {
+    return closest_point(mousePoint, allGripPoints());
+}
+
+/**
+ * \brief .
+ */
+std::vector<QPointF>
+EllipseObject::allGripPoints()
+{
     std::vector<QPointF> points = {
         objectCenter(),
         objectQuadrant0(),
@@ -1695,19 +1686,7 @@ EllipseObject::mouseSnapPoint(const QPointF& mousePoint)
         objectQuadrant180(),
         objectQuadrant270()
     };
-
-    return closest_point(mousePoint, points);
-}
-
-/**
- * \brief .
- */
-QList<QPointF>
-EllipseObject::allGripPoints()
-{
-    QList<QPointF> gripPoints;
-    gripPoints << objectCenter() << objectQuadrant0() << objectQuadrant90() << objectQuadrant180() << objectQuadrant270();
-    return gripPoints;
+    return points;
 }
 
 /**
@@ -1752,7 +1731,7 @@ ImageObject::ImageObject(ImageObject* obj, QGraphicsItem* parent) : BaseObject(p
 {
     debug_message("ImageObject Constructor()");
     if (obj)
-    {
+ {
         QPointF ptl = obj->objectTopLeft();
         init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
@@ -1838,12 +1817,10 @@ ImageObject::objectBottomLeft() const
 {
     EmbReal rot = radians(rotation());
     QPointF bl = rect().bottomLeft();
-    EmbVector pbl;
-    pbl.x = bl.x()*scale();
-    pbl.y = bl.y()*scale();
+    EmbVector pbl = to_EmbVector(bl) * scale();
     EmbVector pblRot = rotate_vector(pbl, rot);
 
-    return scenePos() + QPointF(pblRot.x, pblRot.y);
+    return scenePos() + to_QPointF(pblRot);
 }
 
 /**
@@ -1854,12 +1831,10 @@ ImageObject::objectBottomRight() const
 {
     EmbReal rot = radians(rotation());
     QPointF br = rect().bottomRight();
-    EmbVector pbr;
-    pbr.x = br.x()*scale();
-    pbr.y = br.y()*scale();
+    EmbVector pbr = to_EmbVector(br) * scale();
     EmbVector pbrRot = rotate_vector(pbr, rot);
 
-    return scenePos() + QPointF(pbrRot.x, pbrRot.y);
+    return scenePos() + to_QPointF(pbrRot);
 }
 
 /**
@@ -1948,25 +1923,22 @@ ImageObject::vulcanize()
 QPointF
 ImageObject::mouseSnapPoint(const QPointF& mousePoint)
 {
+    return closest_point(mousePoint, allGripPoints());
+}
+
+/**
+ * \brief .
+ */
+std::vector<QPointF>
+ImageObject::allGripPoints()
+{
     std::vector<QPointF> points = {
         objectTopLeft(),     //Top Left Corner QSnap
         objectTopRight(),    //Top Right Corner QSnap
         objectBottomLeft(),  //Bottom Left Corner QSnap
         objectBottomRight()  //Bottom Right Corner QSnap
     };
-
-    return closest_point(mousePoint, points);
-}
-
-/**
- * \brief .
- */
-QList<QPointF>
-ImageObject::allGripPoints()
-{
-    QList<QPointF> gripPoints;
-    gripPoints << objectTopLeft() << objectTopRight() << objectBottomLeft() << objectBottomRight();
-    return gripPoints;
+    return points;
 }
 
 /**
@@ -2037,8 +2009,8 @@ LineObject::init(EmbLine line, QRgb rgb, Qt::PenStyle lineType)
     //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
-    setObjectEndPoint1(line.start.x, line.start.y);
-    setObjectEndPoint2(line.end.x, line.end.y);
+    setObjectEndPoint1(line.start);
+    setObjectEndPoint2(line.end);
     setObjectColor(rgb);
     setObjectLineType(lineType);
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
@@ -2047,41 +2019,18 @@ LineObject::init(EmbLine line, QRgb rgb, Qt::PenStyle lineType)
 
 /**
  * @brief LineObject::setObjectEndPoint1
- * @param endPt1
- */
-void
-LineObject::setObjectEndPoint1(const QPointF& endPt1)
-{
-    setObjectEndPoint1(endPt1.x(), endPt1.y());
-}
-
-/**
- * @brief LineObject::setObjectEndPoint1
  * @param x1
  * @param y1
  */
 void
-LineObject::setObjectEndPoint1(EmbReal x1, EmbReal y1)
+LineObject::setObjectEndPoint1(EmbVector endPt1)
 {
-    QPointF endPt2 = objectEndPoint2();
-    EmbReal x2 = endPt2.x();
-    EmbReal y2 = endPt2.y();
-    EmbReal dx = x2 - x1;
-    EmbReal dy = y2 - y1;
+    EmbVector endPt2 = to_EmbVector(objectEndPoint2());
+    EmbVector delta = endPt2 - endPt1;
     setRotation(0);
     setScale(1);
-    setLine(0, 0, dx, dy);
-    setPos(x1, y1);
-}
-
-/**
- * @brief LineObject::setObjectEndPoint2
- * @param endPt2
- */
-void
-LineObject::setObjectEndPoint2(const QPointF& endPt2)
-{
-    setObjectEndPoint2(endPt2.x(), endPt2.y());
+    setLine(0, 0, delta.x, delta.y);
+    setPos(endPt1.x, endPt1.y);
 }
 
 /**
@@ -2090,17 +2039,14 @@ LineObject::setObjectEndPoint2(const QPointF& endPt2)
  * @param y2
  */
 void
-LineObject::setObjectEndPoint2(EmbReal x2, EmbReal y2)
+LineObject::setObjectEndPoint2(EmbVector endPt2)
 {
-    QPointF endPt1 = scenePos();
-    EmbReal x1 = endPt1.x();
-    EmbReal y1 = endPt1.y();
-    EmbReal dx = x2 - x1;
-    EmbReal dy = y2 - y1;
+    EmbVector endPt1 = to_EmbVector(scenePos());
+    EmbVector delta = endPt2 - endPt1;
     setRotation(0);
     setScale(1);
-    setLine(0, 0, dx, dy);
-    setPos(x1, y1);
+    setLine(0, 0, delta.x, delta.y);
+    setPos(endPt1.x, endPt1.y);
 }
 
 /**
@@ -2117,7 +2063,7 @@ LineObject::objectEndPoint2() const
     v.y = lyne.y2()*scale();
     EmbVector rotEnd = rotate_vector(v, rot);
 
-    return (scenePos() + QPointF(rotEnd.x, rotEnd.y));
+    return scenePos() + to_QPointF(rotEnd);
 }
 
 /**
@@ -2130,12 +2076,10 @@ LineObject::objectMidPoint() const
     QLineF lyne = line();
     QPointF mp = lyne.pointAt(0.5);
     EmbReal rot = radians(rotation());
-    EmbVector m;
-    m.x = mp.x()*scale();
-    m.y = mp.y()*scale();
+    EmbVector m = to_EmbVector(mp) * scale();
     EmbVector rotMid = rotate_vector(m, rot);
 
-    return (scenePos() + QPointF(rotMid.x, rotMid.y));
+    return scenePos() + to_QPointF(rotMid);
 }
 
 /**
@@ -2163,7 +2107,7 @@ LineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWi
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
+    if (option->state & QStyle::State_Selected) { paintPen.setStyle(Qt::DashLine); }
     if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
@@ -2189,8 +2133,8 @@ LineObject::updateRubber(QPainter* painter)
         QPointF sceneStartPoint = objectRubberPoint("LINE_START");
         QPointF sceneQSnapPoint = objectRubberPoint("LINE_END");
 
-        setObjectEndPoint1(sceneStartPoint);
-        setObjectEndPoint2(sceneQSnapPoint);
+        setObjectEndPoint1(to_EmbVector(sceneStartPoint));
+        setObjectEndPoint2(to_EmbVector(sceneQSnapPoint));
 
         drawRubberLine(line(), painter, "VIEW_COLOR_CROSSHAIR");
     }
@@ -2244,11 +2188,14 @@ QPointF LineObject::mouseSnapPoint(const QPointF& mousePoint)
  * @brief LineObject::allGripPoints
  * @return
  */
-QList<QPointF>
+std::vector<QPointF>
 LineObject::allGripPoints()
 {
-    QList<QPointF> gripPoints;
-    gripPoints << objectEndPoint1() << objectEndPoint2() << objectMidPoint();
+    std::vector<QPointF> gripPoints = {
+        objectEndPoint1(),
+        objectEndPoint2(),
+        objectMidPoint()
+    };
     return gripPoints;
 }
 
@@ -2261,10 +2208,10 @@ void
 LineObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     if (before == objectEndPoint1()) {
-        setObjectEndPoint1(after);
+        setObjectEndPoint1(to_EmbVector(after));
     }
     else if (before == objectEndPoint2()) {
-        setObjectEndPoint2(after);
+        setObjectEndPoint2(to_EmbVector(after));
     }
     else if (before == objectMidPoint()) {
         QPointF delta = after-before;
@@ -2347,7 +2294,7 @@ PathObject::init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenS
     setObjectColor(rgb);
     setObjectLineType(lineType);
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
-    setPen(objectPen());
+    setPen(objPen);
 }
 
 /**
@@ -2425,18 +2372,18 @@ PathObject::vulcanize()
 QPointF
 PathObject::mouseSnapPoint(const QPointF& mousePoint)
 {
-    return scenePos();
+    return closest_point(mousePoint, allGripPoints());
 }
 
 /**
  * @brief PathObject::allGripPoints
  * @return
+ * @todo loop thru all path Elements and return their points
  */
-QList<QPointF>
+std::vector<QPointF>
 PathObject::allGripPoints()
 {
-    QList<QPointF> gripPoints;
-    gripPoints << scenePos(); //TODO: loop thru all path Elements and return their points
+    std::vector<QPointF> gripPoints = {scenePos()};
     return gripPoints;
 }
 
@@ -2551,7 +2498,7 @@ PointObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QW
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
+    if (option->state & QStyle::State_Selected) { paintPen.setStyle(Qt::DashLine); }
     if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
@@ -2603,11 +2550,10 @@ PointObject::mouseSnapPoint(const QPointF& mousePoint)
  * @brief PointObject::allGripPoints
  * @return
  */
-QList<QPointF>
+std::vector<QPointF>
 PointObject::allGripPoints()
 {
-    QList<QPointF> gripPoints;
-    gripPoints << scenePos();
+    std::vector<QPointF> gripPoints = {scenePos()};
     return gripPoints;
 }
 
@@ -2731,7 +2677,7 @@ PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
+    if (option->state & QStyle::State_Selected) { paintPen.setStyle(Qt::DashLine); }
     if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
@@ -2764,7 +2710,7 @@ PolygonObject::updateRubber(QPainter* painter)
         QPainterPath rubberPath;
         rubberPath.moveTo(mapFromScene(objectRubberPoint("POLYGON_POINT_0")));
         for (int i = 1; i <= num; i++)
-        {
+ {
             appendStr = "POLYGON_POINT_" + QString().setNum(i);
             QPointF appendPoint = mapFromScene(objectRubberPoint(appendStr));
             rubberPath.lineTo(appendPoint);
@@ -2776,7 +2722,7 @@ PolygonObject::updateRubber(QPainter* painter)
         setObjectRubberText("POLYGON_NUM_POINTS", QString());
     }
     else if (rubberMode == OBJ_RUBBER_POLYGON_INSCRIBE)
-    {
+ {
         setObjectPos(objectRubberPoint("POLYGON_CENTER"));
 
         quint16 numSides = objectRubberPoint("POLYGON_NUM_SIDES").x();
@@ -2793,14 +2739,14 @@ PolygonObject::updateRubber(QPainter* painter)
         inscribePath.moveTo(inscribePoint);
         //Remaining Points
         for (int i = 1; i < numSides; i++)
-        {
+ {
             inscribeLine.setAngle(inscribeAngle + inscribeInc*i);
             inscribePath.lineTo(inscribeLine.p2());
         }
         updatePath(inscribePath);
     }
     else if (rubberMode == OBJ_RUBBER_POLYGON_CIRCUMSCRIBE)
-    {
+ {
         setObjectPos(objectRubberPoint("POLYGON_CENTER"));
 
         quint16 numSides = objectRubberPoint("POLYGON_NUM_SIDES").x();
@@ -2824,7 +2770,7 @@ PolygonObject::updateRubber(QPainter* painter)
         circumscribePath.moveTo(iPoint);
         //Remaining Points
         for (int i = 2; i <= numSides; i++)
-        {
+ {
             prev = perp;
             circumscribeLine.setAngle(circumscribeAngle + circumscribeInc*i);
             perp = QLineF(circumscribeLine.p2(), QPointF(0,0));
@@ -2844,9 +2790,9 @@ PolygonObject::updateRubber(QPainter* painter)
             int m = 0;
             int n = 0;
 
-            if (!gripIndex)                    { m = elemCount-1; n = 1; }
+            if (!gripIndex) { m = elemCount-1; n = 1; }
             else if (gripIndex == elemCount-1) { m = elemCount-2; n = 0; }
-            else                              { m = gripIndex-1; n = gripIndex+1; }
+            else { m = gripIndex-1; n = gripIndex+1; }
             QPainterPath::Element em = normalPath.elementAt(m);
             QPainterPath::Element en = normalPath.elementAt(n);
             QPointF emPoint = QPointF(em.x, em.y);
@@ -2903,15 +2849,14 @@ PolygonObject::mouseSnapPoint(const QPointF& mousePoint)
  * @brief PolygonObject::allGripPoints
  * @return
  */
-QList<QPointF>
+std::vector<QPointF>
 PolygonObject::allGripPoints()
 {
-    QList<QPointF> gripPoints;
+    std::vector<QPointF> gripPoints;
     QPainterPath::Element element;
-    for (int i = 0; i < normalPath.elementCount(); ++i)
-    {
+    for (int i = 0; i < normalPath.elementCount(); ++i) {
         element = normalPath.elementAt(i);
-        gripPoints << mapToScene(element.x, element.y);
+        gripPoints.push_back(mapToScene(element.x, element.y));
     }
     return gripPoints;
 }
@@ -2929,7 +2874,7 @@ PolygonObject::findIndex(const QPointF& point)
     //NOTE: Points here are in item coordinates
     QPointF itemPoint = mapFromScene(point);
     for (i = 0; i < elemCount; i++)
-    {
+ {
         QPainterPath::Element e = normalPath.elementAt(i);
         QPointF elemPoint = QPointF(e.x, e.y);
         if (itemPoint == elemPoint) return i;
@@ -3042,7 +2987,7 @@ PolylineObject::init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::
     setObjectColor(rgb);
     setObjectLineType(lineType);
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
-    setPen(objectPen());
+    setPen(objPen);
 }
 
 /**
@@ -3072,7 +3017,7 @@ PolylineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
+    if (option->state & QStyle::State_Selected) { paintPen.setStyle(Qt::DashLine); }
     if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
@@ -3120,20 +3065,20 @@ PolylineObject::updateRubber(QPainter* painter)
             if (gripIndex == -1) gripIndex = findIndex(gripPoint);
             if (gripIndex == -1) return;
 
-            if (!gripIndex) //First
-            {
+            if (!gripIndex) {
+                // First
                 QPainterPath::Element ef = normalPath.elementAt(1);
                 QPointF efPoint = QPointF(ef.x, ef.y);
                 painter->drawLine(efPoint, mapFromScene(objectRubberPoint(QString())));
             }
             else if (gripIndex == elemCount-1) //Last
-            {
+ {
                 QPainterPath::Element el = normalPath.elementAt(gripIndex-1);
                 QPointF elPoint = QPointF(el.x, el.y);
                 painter->drawLine(elPoint, mapFromScene(objectRubberPoint(QString())));
             }
             else //Middle
-            {
+ {
                 QPainterPath::Element em = normalPath.elementAt(gripIndex-1);
                 QPainterPath::Element en = normalPath.elementAt(gripIndex+1);
                 QPointF emPoint = QPointF(em.x, em.y);
@@ -3193,15 +3138,14 @@ PolylineObject::mouseSnapPoint(const QPointF& mousePoint)
  * @brief PolylineObject::allGripPoints
  * @return
  */
-QList<QPointF>
+std::vector<QPointF>
 PolylineObject::allGripPoints()
 {
-    QList<QPointF> gripPoints;
+    std::vector<QPointF> gripPoints;
     QPainterPath::Element element;
-    for (int i = 0; i < normalPath.elementCount(); ++i)
-    {
+    for (int i = 0; i < normalPath.elementCount(); ++i) {
         element = normalPath.elementAt(i);
-        gripPoints << mapToScene(element.x, element.y);
+        gripPoints.push_back(mapToScene(element.x, element.y));
     }
     return gripPoints;
 }
@@ -3217,8 +3161,7 @@ PolylineObject::findIndex(const QPointF& point)
     int elemCount = normalPath.elementCount();
     //NOTE: Points here are in item coordinates
     QPointF itemPoint = mapFromScene(point);
-    for (int i = 0; i < elemCount; i++)
-    {
+    for (int i = 0; i < elemCount; i++) {
         QPainterPath::Element e = normalPath.elementAt(i);
         QPointF elemPoint = QPointF(e.x, e.y);
         if (itemPoint == elemPoint) return i;
@@ -3313,7 +3256,7 @@ void RectObject::init(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, Qt::
     setObjectColor(rgb);
     setObjectLineType(lineType);
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
-    setPen(objectPen());
+    setPen(objPen);
 }
 
 /**
@@ -3334,16 +3277,11 @@ QPointF
 RectObject::objectTopLeft() const
 {
     EmbReal rot = radians(rotation());
-    EmbReal cosRot = qCos(rot);
-    EmbReal sinRot = qSin(rot);
-
     QPointF tl = rect().topLeft();
-    EmbReal ptlX = tl.x()*scale();
-    EmbReal ptlY = tl.y()*scale();
-    EmbReal ptlXrot = ptlX*cosRot - ptlY*sinRot;
-    EmbReal ptlYrot = ptlX*sinRot + ptlY*cosRot;
+    EmbVector ptl = to_EmbVector(tl) * scale();
+    EmbVector ptlrot = rotate_vector(ptl, rot);
 
-    return (scenePos() + QPointF(ptlXrot, ptlYrot));
+    return scenePos() + to_QPointF(ptlrot);
 }
 
 /**
@@ -3352,16 +3290,11 @@ RectObject::objectTopLeft() const
 QPointF RectObject::objectTopRight() const
 {
     EmbReal rot = radians(rotation());
-    EmbReal cosRot = std::cos(rot);
-    EmbReal sinRot = std::sin(rot);
-
     QPointF tr = rect().topRight();
-    EmbReal ptrX = tr.x()*scale();
-    EmbReal ptrY = tr.y()*scale();
-    EmbReal ptrXrot = ptrX*cosRot - ptrY*sinRot;
-    EmbReal ptrYrot = ptrX*sinRot + ptrY*cosRot;
+    EmbVector ptr = to_EmbVector(tr) * scale();
+    EmbVector ptrrot = rotate_vector(ptr, rot);
 
-    return (scenePos() + QPointF(ptrXrot, ptrYrot));
+    return scenePos() + to_QPointF(ptrrot);
 }
 
 /**
@@ -3370,16 +3303,11 @@ QPointF RectObject::objectTopRight() const
 QPointF RectObject::objectBottomLeft() const
 {
     EmbReal rot = radians(rotation());
-    EmbReal cosRot = std::cos(rot);
-    EmbReal sinRot = std::sin(rot);
-
     QPointF bl = rect().bottomLeft();
-    EmbReal pblX = bl.x()*scale();
-    EmbReal pblY = bl.y()*scale();
-    EmbReal pblXrot = pblX*cosRot - pblY*sinRot;
-    EmbReal pblYrot = pblX*sinRot + pblY*cosRot;
+    EmbVector pbl = to_EmbVector(bl) * scale();
+    EmbVector pblrot = rotate_vector(pbl, rot);
 
-    return (scenePos() + QPointF(pblXrot, pblYrot));
+    return scenePos() + to_QPointF(pblrot);
 }
 
 /**
@@ -3388,16 +3316,11 @@ QPointF RectObject::objectBottomLeft() const
 QPointF RectObject::objectBottomRight() const
 {
     EmbReal rot = radians(rotation());
-    EmbReal cosRot = std::cos(rot);
-    EmbReal sinRot = std::sin(rot);
+    QPointF br = rect().bottomLeft();
+    EmbVector pbr = to_EmbVector(br) * scale();
+    EmbVector pbrrot = rotate_vector(pbr, rot);
 
-    QPointF br = rect().bottomRight();
-    EmbReal pbrX = br.x()*scale();
-    EmbReal pbrY = br.y()*scale();
-    EmbReal pbrXrot = pbrX*cosRot - pbrY*sinRot;
-    EmbReal pbrYrot = pbrX*sinRot + pbrY*cosRot;
-
-    return (scenePos() + QPointF(pbrXrot, pbrYrot));
+    return scenePos() + to_QPointF(pbrrot);
 }
 
 /**
@@ -3465,9 +3388,9 @@ void RectObject::updateRubber(QPainter* painter)
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
             QPointF after = objectRubberPoint(QString());
             QPointF delta = after-gripPoint;
-            if     (gripPoint == objectTopLeft())     { painter->drawPolygon(mapFromScene(QRectF(after.x(), after.y(), objectWidth()-delta.x(), objectHeight()-delta.y()))); }
-            else if (gripPoint == objectTopRight())    { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y()))); }
-            else if (gripPoint == objectBottomLeft())  { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y()))); }
+            if     (gripPoint == objectTopLeft()) { painter->drawPolygon(mapFromScene(QRectF(after.x(), after.y(), objectWidth()-delta.x(), objectHeight()-delta.y()))); }
+            else if (gripPoint == objectTopRight()) { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y()))); }
+            else if (gripPoint == objectBottomLeft()) { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y()))); }
             else if (gripPoint == objectBottomRight()) { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()))); }
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
@@ -3517,10 +3440,10 @@ QPointF RectObject::mouseSnapPoint(const QPointF& mousePoint)
  * \return A list of all grip points for the object.
  * \todo make return value a std::vector<std::string>
  */
-QList<QPointF> RectObject::allGripPoints()
+std::vector<QPointF> RectObject::allGripPoints()
 {
-    QList<QPointF> gripPoints;
-    gripPoints << objectTopLeft() << objectTopRight() << objectBottomLeft() << objectBottomRight();
+    std::vector<QPointF> gripPoints;
+    gripPoints = {objectTopLeft(), objectTopRight(), objectBottomLeft(), objectBottomRight()};
     return gripPoints;
 }
 
@@ -3622,32 +3545,42 @@ SaveObject::save(const QString &fileName)
         foreach(QGraphicsItem* item, gscene->items(Qt::AscendingOrder)) {
             int objType = item->data(OBJ_TYPE).toInt();
 
-            if     (objType == OBJ_TYPE_ARC)          { addArc(pattern, item);          }
-            else if (objType == OBJ_TYPE_BLOCK)        { addBlock(pattern, item);        }
-            else if (objType == OBJ_TYPE_CIRCLE)       { addCircle(pattern, item);       }
-            else if (objType == OBJ_TYPE_DIMALIGNED)   { addDimAligned(pattern, item);   }
-            else if (objType == OBJ_TYPE_DIMANGULAR)   { addDimAngular(pattern, item);   }
+            if (objType == OBJ_TYPE_ARC) {
+                addArc(pattern, item);
+            }
+            else if (objType == OBJ_TYPE_BLOCK) {
+                addBlock(pattern, item);
+            }
+            else if (objType == OBJ_TYPE_CIRCLE) {
+                addCircle(pattern, item);
+            }
+            else if (objType == OBJ_TYPE_DIMALIGNED) {
+                addDimAligned(pattern, item);
+            }
+            else if (objType == OBJ_TYPE_DIMANGULAR) {
+                addDimAngular(pattern, item);
+            }
             else if (objType == OBJ_TYPE_DIMARCLENGTH) { addDimArcLength(pattern, item); }
-            else if (objType == OBJ_TYPE_DIMDIAMETER)  { addDimDiameter(pattern, item);  }
-            else if (objType == OBJ_TYPE_DIMLEADER)    { addDimLeader(pattern, item);    }
-            else if (objType == OBJ_TYPE_DIMLINEAR)    { addDimLinear(pattern, item);    }
-            else if (objType == OBJ_TYPE_DIMORDINATE)  { addDimOrdinate(pattern, item);  }
-            else if (objType == OBJ_TYPE_DIMRADIUS)    { addDimRadius(pattern, item);    }
-            else if (objType == OBJ_TYPE_ELLIPSE)      { addEllipse(pattern, item);      }
-            else if (objType == OBJ_TYPE_ELLIPSEARC)   { addEllipseArc(pattern, item);   }
-            else if (objType == OBJ_TYPE_GRID)         { addGrid(pattern, item);         }
-            else if (objType == OBJ_TYPE_HATCH)        { addHatch(pattern, item);        }
-            else if (objType == OBJ_TYPE_IMAGE)        { addImage(pattern, item);        }
+            else if (objType == OBJ_TYPE_DIMDIAMETER) { addDimDiameter(pattern, item);  }
+            else if (objType == OBJ_TYPE_DIMLEADER) { addDimLeader(pattern, item);    }
+            else if (objType == OBJ_TYPE_DIMLINEAR) { addDimLinear(pattern, item);    }
+            else if (objType == OBJ_TYPE_DIMORDINATE) { addDimOrdinate(pattern, item);  }
+            else if (objType == OBJ_TYPE_DIMRADIUS) { addDimRadius(pattern, item);    }
+            else if (objType == OBJ_TYPE_ELLIPSE) { addEllipse(pattern, item);      }
+            else if (objType == OBJ_TYPE_ELLIPSEARC) { addEllipseArc(pattern, item);   }
+            else if (objType == OBJ_TYPE_GRID) { addGrid(pattern, item);         }
+            else if (objType == OBJ_TYPE_HATCH) { addHatch(pattern, item);        }
+            else if (objType == OBJ_TYPE_IMAGE) { addImage(pattern, item);        }
             else if (objType == OBJ_TYPE_INFINITELINE) { addInfiniteLine(pattern, item); }
-            else if (objType == OBJ_TYPE_LINE)         { addLine(pattern, item);         }
-            else if (objType == OBJ_TYPE_POINT)        { addPoint(pattern, item);        }
-            else if (objType == OBJ_TYPE_POLYGON)      { addPolygon(pattern, item);      }
-            else if (objType == OBJ_TYPE_POLYLINE)     { addPolyline(pattern, item);     }
-            else if (objType == OBJ_TYPE_RAY)          { addRay(pattern, item);          }
-            else if (objType == OBJ_TYPE_RECTANGLE)    { addRectangle(pattern, item);    }
-            else if (objType == OBJ_TYPE_SPLINE)       { addSpline(pattern, item);       }
-            else if (objType == OBJ_TYPE_TEXTMULTI)    { addTextMulti(pattern, item);    }
-            else if (objType == OBJ_TYPE_TEXTSINGLE)   { addTextSingle(pattern, item);   }
+            else if (objType == OBJ_TYPE_LINE) { addLine(pattern, item);         }
+            else if (objType == OBJ_TYPE_POINT) { addPoint(pattern, item);        }
+            else if (objType == OBJ_TYPE_POLYGON) { addPolygon(pattern, item);      }
+            else if (objType == OBJ_TYPE_POLYLINE) { addPolyline(pattern, item);     }
+            else if (objType == OBJ_TYPE_RAY) { addRay(pattern, item);          }
+            else if (objType == OBJ_TYPE_RECTANGLE) { addRectangle(pattern, item);    }
+            else if (objType == OBJ_TYPE_SPLINE) { addSpline(pattern, item);       }
+            else if (objType == OBJ_TYPE_TEXTMULTI) { addTextMulti(pattern, item);    }
+            else if (objType == OBJ_TYPE_TEXTSINGLE) { addTextSingle(pattern, item);   }
         }
 
         /*
@@ -3916,19 +3849,15 @@ SaveObject::addPath(EmbPattern* pattern, QGraphicsItem* item)
         QPainterPath::Element P3;
         QPainterPath::Element P4;
 
-        for (int i = 0; i < path.elementCount()-1; ++i)
-        {
+        for (int i = 0; i < path.elementCount()-1; ++i) {
             element = path.elementAt(i);
-            if (element.isMoveTo())
-            {
+            if (element.isMoveTo()) {
                 pattern.AddStitchAbs((element.x + startX), -(element.y + startY), TRIM);
             }
-            else if (element.isLineTo())
-            {
+            else if (element.isLineTo()) {
                 pattern.AddStitchAbs((element.x + startX), -(element.y + startY), NORMAL);
             }
-            else if (element.isCurveTo())
-            {
+            else if (element.isCurveTo()) {
                 P1 = path.elementAt(i-1); // start point
                 P2 = path.elementAt(i);   // control point
                 P3 = path.elementAt(i+1); // control point
@@ -4015,9 +3944,9 @@ SaveObject::addRectangle(EmbPattern* pattern, QGraphicsItem* item)
 {
     RectObject* obj = static_cast<RectObject*>(item);
     if (obj)
-    {
+ {
         if (formatType == EMBFORMAT_STITCHONLY)
-        {
+ {
             toPolyline(pattern, obj->objectPos(), obj->objectSavePath(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
         }
         else {
@@ -4079,7 +4008,7 @@ SaveObject::addTextSingle(EmbPattern* pattern, QGraphicsItem* item)
     TextSingleObject* obj = static_cast<TextSingleObject*>(item);
     if (obj) {
         if (formatType == EMBFORMAT_STITCHONLY) {
-            QList<QPainterPath> pathList = obj->objectSavePathList();
+            std::vector<QPainterPath> pathList = obj->objectSavePathList();
             foreach(QPainterPath path, pathList) {
                 toPolyline(pattern, obj->objectPos(), path.simplified(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight //TODO: Improve precision, replace simplified
             }
@@ -4148,7 +4077,7 @@ TextSingleObject::TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent)
 {
     debug_message("TextSingleObject Constructor()");
     if (obj)
-    {
+ {
         setObjectTextFont(obj->objTextFont);
         setObjectTextSize(obj->objTextSize);
         setRotation(obj->rotation());
@@ -4238,19 +4167,19 @@ void TextSingleObject::setObjectText(const QString& str)
     else if (objTextJustify == "Center") {
         textPath.translate(-jRect.center().x(), 0);
     }
-    else if (objTextJustify == "Right")         { textPath.translate(-jRect.right(), 0); }
-    else if (objTextJustify == "Aligned")       { } //TODO: TextSingleObject Aligned Justification
-    else if (objTextJustify == "Middle")        { textPath.translate(-jRect.center()); }
-    else if (objTextJustify == "Fit")           { } //TODO: TextSingleObject Fit Justification
-    else if (objTextJustify == "Top Left")      { textPath.translate(-jRect.topLeft()); }
-    else if (objTextJustify == "Top Center")    { textPath.translate(-jRect.center().x(), -jRect.top()); }
-    else if (objTextJustify == "Top Right")     { textPath.translate(-jRect.topRight()); }
-    else if (objTextJustify == "Middle Left")   { textPath.translate(-jRect.left(), -jRect.top()/2.0); }
+    else if (objTextJustify == "Right") { textPath.translate(-jRect.right(), 0); }
+    else if (objTextJustify == "Aligned") { } //TODO: TextSingleObject Aligned Justification
+    else if (objTextJustify == "Middle") { textPath.translate(-jRect.center()); }
+    else if (objTextJustify == "Fit") { } //TODO: TextSingleObject Fit Justification
+    else if (objTextJustify == "Top Left") { textPath.translate(-jRect.topLeft()); }
+    else if (objTextJustify == "Top Center") { textPath.translate(-jRect.center().x(), -jRect.top()); }
+    else if (objTextJustify == "Top Right") { textPath.translate(-jRect.topRight()); }
+    else if (objTextJustify == "Middle Left") { textPath.translate(-jRect.left(), -jRect.top()/2.0); }
     else if (objTextJustify == "Middle Center") { textPath.translate(-jRect.center().x(), -jRect.top()/2.0); }
-    else if (objTextJustify == "Middle Right")  { textPath.translate(-jRect.right(), -jRect.top()/2.0); }
-    else if (objTextJustify == "Bottom Left")   { textPath.translate(-jRect.bottomLeft()); }
+    else if (objTextJustify == "Middle Right") { textPath.translate(-jRect.right(), -jRect.top()/2.0); }
+    else if (objTextJustify == "Bottom Left") { textPath.translate(-jRect.bottomLeft()); }
     else if (objTextJustify == "Bottom Center") { textPath.translate(-jRect.center().x(), -jRect.bottom()); }
-    else if (objTextJustify == "Bottom Right")  { textPath.translate(-jRect.bottomRight()); }
+    else if (objTextJustify == "Bottom Right") { textPath.translate(-jRect.bottomRight()); }
 
     //Backward or Upside Down
     if (objTextBackward || objTextUpsideDown) {
@@ -4492,11 +4421,10 @@ QPointF TextSingleObject::mouseSnapPoint(const QPointF& mousePoint)
 /**
  *
  */
-QList<QPointF>
+std::vector<QPointF>
 TextSingleObject::allGripPoints()
 {
-    QList<QPointF> gripPoints;
-    gripPoints << scenePos();
+    std::vector<QPointF> gripPoints = {scenePos()};
     return gripPoints;
 }
 
@@ -4515,7 +4443,7 @@ TextSingleObject::gripEdit(const QPointF& before, const QPointF& after)
 /**
  *
  */
-QList<QPainterPath>
+std::vector<QPainterPath>
 TextSingleObject::subPathList() const
 {
     EmbReal s = scale();
@@ -4523,27 +4451,27 @@ TextSingleObject::subPathList() const
     trans.rotate(rotation());
     trans.scale(s,s);
 
-    QList<QPainterPath> pathList;
+    std::vector<QPainterPath> pathList;
 
     QPainterPath path = objTextPath;
 
     QPainterPath::Element element;
-    QList<int> pathMoves;
+    std::vector<int> pathMoves;
     int numMoves = 0;
 
     for (int i = 0; i < path.elementCount(); i++) {
         element = path.elementAt(i);
         if (element.isMoveTo()) {
-            pathMoves << i;
+            pathMoves.push_back(i);
             numMoves++;
         }
     }
 
-    pathMoves << path.elementCount();
+    pathMoves.push_back(path.elementCount());
 
     for (int p = 0; p < pathMoves.size()-1 && p < numMoves; p++) {
         QPainterPath subPath;
-        for (int i = pathMoves.value(p); i < pathMoves.value(p+1); i++) {
+        for (int i = pathMoves[p]; i < pathMoves[p+1]; i++) {
             element = path.elementAt(i);
             if (element.isMoveTo()) {
                 subPath.moveTo(element.x, element.y);
@@ -4557,7 +4485,7 @@ TextSingleObject::subPathList() const
                                 path.elementAt(i+2).x, path.elementAt(i+2).y); //end point
             }
         }
-        pathList.append(trans.map(subPath));
+        pathList.push_back(trans.map(subPath));
     }
 
     return pathList;

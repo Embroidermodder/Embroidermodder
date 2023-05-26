@@ -317,14 +317,14 @@ PropertyEditor::togglePickAddMode()
  *
  */
 void
-PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
+PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
 {
     selectedItemList = itemList;
     //Hide all the groups initially, then decide which ones to show
     hideAllGroups();
     comboBoxSelected->clear();
 
-    if (itemList.isEmpty()) {
+    if (itemList.empty()) {
         comboBoxSelected->addItem(tr("No Selection"));
         return;
     }

@@ -143,7 +143,7 @@ View::addObject(BaseObject* obj)
 {
     gscene->addItem(obj);
     gscene->update();
-    hashDeletedObjects.remove(obj->objectID());
+    hashDeletedObjects.remove(obj->objID);
 }
 
 void
@@ -153,7 +153,7 @@ View::deleteObject(BaseObject* obj)
     obj->setSelected(false);
     gscene->removeItem(obj);
     gscene->update();
-    hashDeletedObjects.insert(obj->objectID(), obj);
+    hashDeletedObjects.insert(obj->objID, obj);
 }
 
 void
@@ -165,9 +165,15 @@ View::previewOn(int clone, int mode, EmbReal x, EmbReal y, EmbReal data)
     previewMode = mode;
 
     //Create new objects and add them to the scene in an item group.
-    if     (clone == PREVIEW_CLONE_SELECTED) previewObjectList = createObjectList(gscene->selectedItems());
-    else if (clone == PREVIEW_CLONE_RUBBER)   previewObjectList = createObjectList(rubberRoomList);
-    else return;
+    if (clone == PREVIEW_CLONE_SELECTED) {
+        previewObjectList = to_qlist(createObjectList(selected_items()));
+    }
+    else if (clone == PREVIEW_CLONE_RUBBER) {
+        previewObjectList = to_qlist(createObjectList(rubberRoomList));
+    }
+    else {
+        return;
+    }
     previewObjectItemGroup = gscene->createItemGroup(previewObjectList);
 
     if (previewMode == PREVIEW_MODE_MOVE   ||
@@ -230,7 +236,7 @@ bool View::allowRubber()
 void
 View::addToRubberRoom(QGraphicsItem* item)
 {
-    rubberRoomList.append(item);
+    rubberRoomList.push_back(item);
     item->show();
     gscene->update();
 }
@@ -258,6 +264,12 @@ View::vulcanizeObject(BaseObject* obj)
     if (cmd) undoStack->push(cmd);
 }
 
+bool
+contains(std::vector<long long int> list, long long int entry)
+{
+    return std::count(list.begin(), list.end(), entry) != 0;
+}
+
 void
 View::clearRubberRoom()
 {
@@ -265,10 +277,10 @@ View::clearRubberRoom()
         BaseObject* base = static_cast<BaseObject*>(item);
         if (base) {
             int type = base->type();
-            if ((type == OBJ_TYPE_PATH && spareRubberList.contains(SPARE_RUBBER_PATH)) ||
-               (type == OBJ_TYPE_POLYGON  && spareRubberList.contains(SPARE_RUBBER_POLYGON)) ||
-               (type == OBJ_TYPE_POLYLINE && spareRubberList.contains(SPARE_RUBBER_POLYLINE)) ||
-               (spareRubberList.contains(base->objectID()))) {
+            if ((type == OBJ_TYPE_PATH && contains(spareRubberList, SPARE_RUBBER_PATH)) ||
+               (type == OBJ_TYPE_POLYGON  && contains(spareRubberList, SPARE_RUBBER_POLYGON)) ||
+               (type == OBJ_TYPE_POLYLINE && contains(spareRubberList, SPARE_RUBBER_POLYLINE)) ||
+               (contains(spareRubberList, base->objID))) {
                 if (!base->path().elementCount()) {
                     QMessageBox::critical(this,
                         tr("Empty Rubber Object Error"),
@@ -299,7 +311,7 @@ View::clearRubberRoom()
 void
 View::spareRubber(int64_t id)
 {
-    spareRubberList.append(id);
+    spareRubberList.push_back(id);
 }
 
 /**
@@ -674,6 +686,13 @@ View::drawBackground(QPainter* painter, const QRectF& rect)
     }
 }
 
+std::vector<QGraphicsItem*>
+View::selected_items()
+{
+    QList<QGraphicsItem*> list = gscene->selectedItems();
+    return to_vector(list);
+}
+
 void
 View::drawForeground(QPainter* painter, const QRectF& rect)
 {
@@ -688,19 +707,17 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
     painter->setPen(gripPen);
     QPoint gripOffset(gripSize, gripSize);
 
-    QList<QPointF> selectedGripPoints;
-    QList<QGraphicsItem*> selectedItemList = gscene->selectedItems();
-    if (selectedItemList.size() <= 100)
-    {
-        foreach(QGraphicsItem* item, selectedItemList)
-        {
-            if (item->type() >= OBJ_TYPE_BASE)
-            {
+    std::vector<QPointF> selectedGripPoints;
+    std::vector<QGraphicsItem*> selectedItemList = selected_items();
+    if (selectedItemList.size() <= 100) {
+        foreach(QGraphicsItem* item, selectedItemList) {
+            if (item->type() >= OBJ_TYPE_BASE) {
                 tempBaseObj = static_cast<BaseObject*>(item);
-                if (tempBaseObj) { selectedGripPoints = tempBaseObj->allGripPoints(); }
+                if (tempBaseObj) {
+                    selectedGripPoints = tempBaseObj->allGripPoints();
+                }
 
-                foreach(QPointF ssp, selectedGripPoints)
-                {
+                foreach(QPointF ssp, selectedGripPoints) {
                     QPoint p1 = mapFromScene(ssp) - gripOffset;
                     QPoint q1 = mapFromScene(ssp) + gripOffset;
 
@@ -726,17 +743,18 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
         painter->setPen(qsnapPen);
         QPoint qsnapOffset(qsnapLocatorSize, qsnapLocatorSize);
 
-        QList<QPointF> apertureSnapPoints;
-        QList<QGraphicsItem *> apertureItemList = items(viewMousePoint.x()-qsnapApertureSize,
+        std::vector<QPointF> apertureSnapPoints;
+        std::vector<QGraphicsItem *> apertureItemList = to_vector(items(viewMousePoint.x()-qsnapApertureSize,
                                                         viewMousePoint.y()-qsnapApertureSize,
                                                         qsnapApertureSize*2,
-                                                        qsnapApertureSize*2);
-        foreach(QGraphicsItem* item, apertureItemList)
-        {
-            if (item->type() >= OBJ_TYPE_BASE)
-            {
+                                                                        qsnapApertureSize*2));
+        for (int i=0; i<apertureItemList.size(); i++) {
+            QGraphicsItem* item = apertureItemList[i];
+            if (item->type() >= OBJ_TYPE_BASE) {
                 tempBaseObj = static_cast<BaseObject*>(item);
-                if (tempBaseObj) { apertureSnapPoints << tempBaseObj->mouseSnapPoint(sceneMousePoint); }
+                if (tempBaseObj) {
+                    apertureSnapPoints.push_back(tempBaseObj->mouseSnapPoint(sceneMousePoint));
+                }
             }
         }
         //TODO: Check for intersection snap points and add them to the list
@@ -833,13 +851,13 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                 EmbReal textHeight = rhh*medium;
 
                 QVector<QLineF> lines;
-                lines.append(QLineF(ox, rhy, rhx, rhy));
-                lines.append(QLineF(rvx, oy, rvx, rvy));
+                lines.push_back(QLineF(ox, rhy, rhx, rhy));
+                lines.push_back(QLineF(rvx, oy, rvx, rvy));
 
                 EmbReal mx = sceneMousePoint.x();
                 EmbReal my = sceneMousePoint.y();
-                lines.append(QLineF(mx, rhy, mx, oy));
-                lines.append(QLineF(rvx, my, ox, my));
+                lines.push_back(QLineF(mx, rhy, mx, oy));
+                lines.push_back(QLineF(rvx, my, ox, my));
 
                 QTransform transform;
 
@@ -1258,7 +1276,7 @@ void
 View::zoomSelected()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    QList<QGraphicsItem*> itemList = gscene->selectedItems();
+    std::vector<QGraphicsItem*> itemList = selected_items();
     QPainterPath selectedRectPath;
     foreach(QGraphicsItem* item, itemList)
     {
@@ -1344,7 +1362,7 @@ void
 View::selectionChanged()
 {
     if (dockPropEdit->isVisible()) {
-        dockPropEdit->setSelectedItems(gscene->selectedItems());
+        dockPropEdit->setSelectedItems(selected_items());
     }
 }
 
@@ -1371,10 +1389,10 @@ View::mousePressEvent(QMouseEvent* event)
             return;
         }
         QPainterPath path;
-        QList<QGraphicsItem*> pickList = gscene->items(
+        std::vector<QGraphicsItem*> pickList = to_vector(gscene->items(
             QRectF(
                 mapToScene(viewMousePoint.x()-pickBoxSize, viewMousePoint.y()-pickBoxSize),
-                mapToScene(viewMousePoint.x()+pickBoxSize, viewMousePoint.y()+pickBoxSize)));
+                mapToScene(viewMousePoint.x()+pickBoxSize, viewMousePoint.y()+pickBoxSize))));
 
         bool itemsInPickBox = pickList.size();
         if (itemsInPickBox && !selectingActive && !grippingActive) {
@@ -1435,65 +1453,70 @@ View::mousePressEvent(QMouseEvent* event)
             if (sceneReleasePoint.x() > scenePressPoint.x()) {
                 if (settings.selection_mode_pickadd) {
                     if (_mainWin->isShiftPressed()) {
-                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
-                        foreach(QGraphicsItem* item, itemList)
-                            item->setSelected(false);
+                        std::vector<QGraphicsItem*> itemList = to_vector(gscene->items(path, Qt::ContainsItemShape));
+                        for (int i=0; i<(int)itemList.size(); i++) {
+                            itemList[i]->setSelected(false);
+                        }
                     }
                     else {
-                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
-                        foreach(QGraphicsItem* item, itemList)
-                            item->setSelected(true);
+                        std::vector<QGraphicsItem*> itemList = to_vector(gscene->items(path, Qt::ContainsItemShape));
+                        for (int i=0; i<(int)itemList.size(); i++) {
+                            itemList[i]->setSelected(true);
+                        }
                     }
                 }
                 else {
                     if (_mainWin->isShiftPressed()) {
-                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
+                        std::vector<QGraphicsItem*> itemList = to_vector(gscene->items(path, Qt::ContainsItemShape));
                         if (!itemList.size())
                             clearSelection();
-                        else
-                        {
-                            foreach(QGraphicsItem* item, itemList)
-                                item->setSelected(!item->isSelected()); //Toggle selected
+                        else {
+                            for (int i=0; i<(int)itemList.size(); i++) {
+                                itemList[i]->setSelected(!itemList[i]->isSelected()); //Toggle selected
+                            }
                         }
                     }
-                    else
-                    {
+                    else {
                         clearSelection();
-                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
-                        foreach(QGraphicsItem* item, itemList)
-                            item->setSelected(true);
+                        std::vector<QGraphicsItem*> itemList = to_vector(gscene->items(path, Qt::ContainsItemShape));
+                        for (int i=0; i<(int)itemList.size(); i++) {
+                            itemList[i]->setSelected(true);
+                        }
                     }
                 }
             }
             else {
                 if (settings.selection_mode_pickadd) {
                     if (_mainWin->isShiftPressed()) {
-                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
-                        foreach(QGraphicsItem* item, itemList)
-                            item->setSelected(false);
+                        std::vector<QGraphicsItem*> itemList = to_vector(gscene->items(path, Qt::IntersectsItemShape));
+                        for (int i=0; i<(int)itemList.size(); i++) {
+                            itemList[i]->setSelected(false);
+                        }
                     }
                     else {
-                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
-                        foreach(QGraphicsItem* item, itemList)
-                            item->setSelected(true);
+                        std::vector<QGraphicsItem*> itemList = to_vector(gscene->items(path, Qt::IntersectsItemShape));
+                        for (int i=0; i<(int)itemList.size(); i++) {
+                            itemList[i]->setSelected(true);
+                        }
                     }
                 }
                 else {
                     if (_mainWin->isShiftPressed()) {
-                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
+                        std::vector<QGraphicsItem*> itemList = to_vector(gscene->items(path, Qt::IntersectsItemShape));
                         if (!itemList.size())
                             clearSelection();
-                        else
-                        {
-                            foreach(QGraphicsItem* item, itemList)
-                                item->setSelected(!item->isSelected()); //Toggle selected
+                        else {
+                            for (int i=0; i<(int)itemList.size(); i++) {
+                                itemList[i]->setSelected(!itemList[i]->isSelected()); //Toggle selected
+                            }
                         }
                     }
                     else {
                         clearSelection();
-                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
-                        foreach(QGraphicsItem* item, itemList)
-                            item->setSelected(true);
+                        std::vector<QGraphicsItem*> itemList = to_vector(gscene->items(path, Qt::IntersectsItemShape));
+                        for (int i=0; i<(int)itemList.size(); i++) {
+                            itemList[i]->setSelected(true);
+                        }
                     }
                 }
             }
@@ -1502,19 +1525,16 @@ View::mousePressEvent(QMouseEvent* event)
 
         if (pastingActive)
         {
-            QList<QGraphicsItem*> itemList = pasteObjectItemGroup->childItems();
+            std::vector<QGraphicsItem*> itemList = to_vector(pasteObjectItemGroup->childItems());
             gscene->destroyItemGroup(pasteObjectItemGroup);
-            foreach(QGraphicsItem* item, itemList)
-            {
-                gscene->removeItem(item); //Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene
+            for (int i=0; i<(int)itemList.size(); i++) {
+                gscene->removeItem(itemList[i]); //Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene
             }
 
             undoStack->beginMacro("Paste");
-            foreach(QGraphicsItem* item, itemList)
-            {
-                BaseObject* base = static_cast<BaseObject*>(item);
-                if (base)
-                {
+            for (int i=0; i<(int)itemList.size(); i++) {
+                BaseObject* base = static_cast<BaseObject*>(itemList[i]);
+                if (base) {
                     UndoableAddCommand* cmd = new UndoableAddCommand(base->data(OBJ_NAME).toString(), base, this, 0);
                     if (cmd) undoStack->push(cmd);
                 }
@@ -1738,13 +1758,13 @@ View::mouseReleaseEvent(QMouseEvent* event)
     if (event->button() == Qt::XButton1)
     {
         debug_message("XButton1");
-        _mainWin->undo(); //TODO: Make this customizable
+        actuator("undo"); //TODO: Make this customizable
         event->accept();
     }
     if (event->button() == Qt::XButton2)
     {
         debug_message("XButton2");
-        _mainWin->redo(); //TODO: Make this customizable
+        actuator("redo"); //TODO: Make this customizable
         event->accept();
     }
     gscene->update();
@@ -1852,8 +1872,8 @@ void
 View::contextMenuEvent(QContextMenuEvent* event)
 {
     QMenu menu;
-    QList<QGraphicsItem*> itemList = gscene->selectedItems();
-    bool selectionEmpty = itemList.isEmpty();
+    std::vector<QGraphicsItem*> itemList = selected_items();
+    bool selectionEmpty = itemList.empty();
 
     for (int i = 0; i < itemList.size(); i++) {
         if (itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL) {
@@ -1993,7 +2013,7 @@ View::clearSelection()
 void
 View::deleteSelected()
 {
-    QList<QGraphicsItem*> itemList = gscene->selectedItems();
+    std::vector<QGraphicsItem*> itemList = selected_items();
     int numSelected = itemList.size();
     if (numSelected > 1)
         undoStack->beginMacro("Delete " + QString().setNum(itemList.size()));
@@ -2020,8 +2040,7 @@ View::deleteSelected()
 void
 View::cut()
 {
-    if (gscene->selectedItems().isEmpty())
-    {
+    if (selected_items().empty()) {
         QMessageBox::information(this, tr("Cut Preselect"), tr("Preselect objects before invoking the cut command."));
         return; //TODO: Prompt to select objects if nothing is preselected
     }
@@ -2038,8 +2057,7 @@ View::cut()
 void
 View::copy()
 {
-    if (gscene->selectedItems().isEmpty())
-    {
+    if (selected_items().empty()) {
         QMessageBox::information(this, tr("Copy Preselect"), tr("Preselect objects before invoking the copy command."));
         return; //TODO: Prompt to select objects if nothing is preselected
     }
@@ -2054,7 +2072,7 @@ View::copy()
 void
 View::copySelected()
 {
-    QList<QGraphicsItem*> selectedList = gscene->selectedItems();
+    std::vector<QGraphicsItem*> selectedList = selected_items();
 
     //Prevent memory leaks by deleting any unpasted instances
     qDeleteAll(_mainWin->cutCopyObjectList.begin(), _mainWin->cutCopyObjectList.end());
@@ -2078,7 +2096,7 @@ View::paste()
         delete pasteObjectItemGroup;
     }
 
-    pasteObjectItemGroup = gscene->createItemGroup(_mainWin->cutCopyObjectList);
+    pasteObjectItemGroup = gscene->createItemGroup(to_qlist(_mainWin->cutCopyObjectList));
     pasteDelta = pasteObjectItemGroup->boundingRect().bottomLeft();
     pasteObjectItemGroup->setPos(sceneMousePoint - pasteDelta);
     pastingActive = true;
@@ -2090,12 +2108,12 @@ View::paste()
 /**
  * .
  */
-QList<QGraphicsItem*>
-View::createObjectList(QList<QGraphicsItem*> list)
+std::vector<QGraphicsItem*>
+View::createObjectList(std::vector<QGraphicsItem*> list)
 {
-    QList<QGraphicsItem*> copyList;
+    std::vector<QGraphicsItem*> copyList;
 
-    for (int i = 0; i < list.size(); i++) {
+    for (int i = 0; i < (int)list.size(); i++) {
         QGraphicsItem* item = list.at(i);
         if (!item)
             continue;
@@ -2107,7 +2125,7 @@ View::createObjectList(QList<QGraphicsItem*> list)
             if (arcObj)
             {
                 ArcObject* copyArcObj = new ArcObject(arcObj);
-                copyList.append(copyArcObj);
+                copyList.push_back(copyArcObj);
             }
         }
         else if (objType == OBJ_TYPE_BLOCK) {
@@ -2118,7 +2136,7 @@ View::createObjectList(QList<QGraphicsItem*> list)
             if (circObj)
             {
                 CircleObject* copyCircObj = new CircleObject(circObj);
-                copyList.append(copyCircObj);
+                copyList.push_back(copyCircObj);
             }
         }
         else if (objType == OBJ_TYPE_DIMALIGNED) {
@@ -2141,7 +2159,7 @@ View::createObjectList(QList<QGraphicsItem*> list)
             if (dimLeaderObj)
             {
                 DimLeaderObject* copyDimLeaderObj = new DimLeaderObject(dimLeaderObj);
-                copyList.append(copyDimLeaderObj);
+                copyList.push_back(copyDimLeaderObj);
             }
         }
         else if (objType == OBJ_TYPE_DIMLINEAR)
@@ -2162,7 +2180,7 @@ View::createObjectList(QList<QGraphicsItem*> list)
             if (elipObj)
             {
                 EllipseObject* copyElipObj = new EllipseObject(elipObj);
-                copyList.append(copyElipObj);
+                copyList.push_back(copyElipObj);
             }
         }
         else if (objType == OBJ_TYPE_ELLIPSEARC)
@@ -2183,7 +2201,7 @@ View::createObjectList(QList<QGraphicsItem*> list)
             if (lineObj)
             {
                 LineObject* copyLineObj = new LineObject(lineObj);
-                copyList.append(copyLineObj);
+                copyList.push_back(copyLineObj);
             }
         }
         else if (objType == OBJ_TYPE_PATH)
@@ -2192,7 +2210,7 @@ View::createObjectList(QList<QGraphicsItem*> list)
             if (pathObj)
             {
                 PathObject* copyPathObj = new PathObject(pathObj);
-                copyList.append(copyPathObj);
+                copyList.push_back(copyPathObj);
             }
         }
         else if (objType == OBJ_TYPE_POINT)
@@ -2201,7 +2219,7 @@ View::createObjectList(QList<QGraphicsItem*> list)
             if (pointObj)
             {
                 PointObject* copyPointObj = new PointObject(pointObj);
-                copyList.append(copyPointObj);
+                copyList.push_back(copyPointObj);
             }
         }
         else if (objType == OBJ_TYPE_POLYGON)
@@ -2210,7 +2228,7 @@ View::createObjectList(QList<QGraphicsItem*> list)
             if (pgonObj)
             {
                 PolygonObject* copyPgonObj = new PolygonObject(pgonObj);
-                copyList.append(copyPgonObj);
+                copyList.push_back(copyPgonObj);
             }
         }
         else if (objType == OBJ_TYPE_POLYLINE)
@@ -2219,7 +2237,7 @@ View::createObjectList(QList<QGraphicsItem*> list)
             if (plineObj)
             {
                 PolylineObject* copyPlineObj = new PolylineObject(plineObj);
-                copyList.append(copyPlineObj);
+                copyList.push_back(copyPlineObj);
             }
         }
         else if (objType == OBJ_TYPE_RAY)
@@ -2232,7 +2250,7 @@ View::createObjectList(QList<QGraphicsItem*> list)
             if (rectObj)
             {
                 RectObject* copyRectObj = new RectObject(rectObj);
-                copyList.append(copyRectObj);
+                copyList.push_back(copyRectObj);
             }
         }
         else if (objType == OBJ_TYPE_TEXTSINGLE)
@@ -2241,7 +2259,7 @@ View::createObjectList(QList<QGraphicsItem*> list)
             if (textObj)
             {
                 TextSingleObject* copyTextObj = new TextSingleObject(textObj);
-                copyList.append(copyTextObj);
+                copyList.push_back(copyTextObj);
             }
         }
     }
@@ -2268,7 +2286,7 @@ View::moveAction()
 void
 View::moveSelected(EmbReal dx, EmbReal dy)
 {
-    QList<QGraphicsItem*> itemList = gscene->selectedItems();
+    std::vector<QGraphicsItem*> itemList = selected_items();
     int numSelected = itemList.size();
     if (numSelected > 1)
         undoStack->beginMacro("Move " + QString().setNum(itemList.size()));
@@ -2299,7 +2317,7 @@ View::rotateAction()
 void
 View::rotateSelected(EmbReal x, EmbReal y, EmbReal rot)
 {
-    QList<QGraphicsItem*> itemList = gscene->selectedItems();
+    std::vector<QGraphicsItem*> itemList = selected_items();
     int numSelected = itemList.size();
     if (numSelected > 1)
         undoStack->beginMacro("Rotate " + QString().setNum(itemList.size()));
@@ -2322,7 +2340,7 @@ View::rotateSelected(EmbReal x, EmbReal y, EmbReal rot)
 void
 View::mirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 {
-    QList<QGraphicsItem*> itemList = gscene->selectedItems();
+    std::vector<QGraphicsItem*> itemList = selected_items();
     int numSelected = itemList.size();
     if (numSelected > 1)
         undoStack->beginMacro("Mirror " + QString().setNum(itemList.size()));
@@ -2353,7 +2371,11 @@ View::scaleAction()
 void
 View::scaleSelected(EmbReal x, EmbReal y, EmbReal factor)
 {
-    QList<QGraphicsItem*> itemList = gscene->selectedItems();
+    QList<QGraphicsItem*> list = to_qlist(selected_items());
+    std::vector<QGraphicsItem*> itemList;
+    foreach (QGraphicsItem* item, list) {
+        itemList.push_back(item);
+    }
     int numSelected = itemList.size();
     if (numSelected > 1)
         undoStack->beginMacro("Scale " + QString().setNum(itemList.size()));
@@ -2377,7 +2399,7 @@ View::scaleSelected(EmbReal x, EmbReal y, EmbReal factor)
 int
 View::numSelected()
 {
-    return gscene->selectedItems().size();
+    return selected_items().size();
 }
 
 /**

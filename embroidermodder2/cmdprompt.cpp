@@ -688,11 +688,11 @@ CmdPromptInput::checkCursorPosition(int oldpos, int newpos)
  * @param formats
  */
 void
-CmdPromptInput::changeFormatting(const QList<QTextLayout::FormatRange>& formats)
+CmdPromptInput::changeFormatting(std::vector<QTextLayout::FormatRange> formats)
 {
     QList<QInputMethodEvent::Attribute> attributes;
-    foreach(const QTextLayout::FormatRange& range, formats)
-    {
+    for (int i=0; i<(int)(formats.size()); i++) {
+        QTextLayout::FormatRange range = formats[i];
         QInputMethodEvent::AttributeType type = QInputMethodEvent::TextFormat;
         int start = range.start - this->cursorPosition();
         int length = range.length;
@@ -709,7 +709,8 @@ CmdPromptInput::changeFormatting(const QList<QTextLayout::FormatRange>& formats)
 void
 CmdPromptInput::clearFormatting()
 {
-    changeFormatting(QList<QTextLayout::FormatRange>());
+    std::vector<QTextLayout::FormatRange> formatting;
+    changeFormatting(formatting);
 }
 
 /**
@@ -722,7 +723,7 @@ void CmdPromptInput::applyFormatting()
     int start = -1;
     int stop = -1;
 
-    QList<QTextLayout::FormatRange> formats;
+    std::vector<QTextLayout::FormatRange> formats;
 
     //Bold Prefix
     QTextCharFormat formatPrefix;
@@ -731,7 +732,7 @@ void CmdPromptInput::applyFormatting()
     rangePrefix.start = 0;
     rangePrefix.length = prefixLength;
     rangePrefix.format = formatPrefix;
-    formats.append(rangePrefix);
+    formats.push_back(rangePrefix);
 
     //Keywords
     start = prefix.indexOf('[');
@@ -756,7 +757,7 @@ void CmdPromptInput::applyFormatting()
                 rangeKeyword.start = rangeStart+1;
                 rangeKeyword.length = rangeStop-rangeStart-1;
                 rangeKeyword.format = formatKeyword;
-                formats.append(rangeKeyword);
+                formats.push_back(rangeKeyword);
 
                 rangeStop = i;
             }
@@ -784,7 +785,7 @@ void CmdPromptInput::applyFormatting()
                 rangeKeyword.start = rangeStart+1;
                 rangeKeyword.length = rangeStop-rangeStart-1;
                 rangeKeyword.format = formatKeyword;
-                formats.append(rangeKeyword);
+                formats.push_back(rangeKeyword);
 
                 rangeStop = i;
             }

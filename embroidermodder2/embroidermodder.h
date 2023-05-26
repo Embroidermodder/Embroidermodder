@@ -104,6 +104,7 @@ typedef String (*Command)(String);
 struct Node_ {
     String s;
     EmbReal r;
+    EmbVector v;
     int i;
     bool b;
     Command f;
@@ -870,6 +871,9 @@ EmbVector operator-(EmbVector a, EmbVector b);
 EmbReal radians__(EmbReal degrees);
 EmbReal degrees__(EmbReal radian);
 
+std::vector<QGraphicsItem*> to_vector(QList<QGraphicsItem*> list);
+QList<QGraphicsItem*> to_qlist(std::vector<QGraphicsItem*> list);
+
 Node node(bool value);
 Node node(int value);
 Node node(EmbReal value);
@@ -891,6 +895,8 @@ public:
     enum { Type = OBJ_TYPE_BASE };
     virtual int type() const { return Type; }
 
+    Dictionary properties;
+
     QPen objPen;
     QPen lwtPen;
     QLineF objLine;
@@ -899,8 +905,6 @@ public:
     QHash<QString, QString> objRubberTexts;
     int64_t objID;
 
-    int64_t objectID() const { return objID; }
-    QPen objectPen() const { return objPen; }
     QColor objectColor() const { return objPen.color(); }
     QRgb objectColorRGB() const { return objPen.color().rgb(); }
     Qt::PenStyle objectLineType() const { return objPen.style(); }
@@ -942,7 +946,7 @@ public:
 
     virtual void vulcanize() = 0;
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint) = 0;
-    virtual QList<QPointF> allGripPoints() = 0;
+    virtual std::vector<QPointF> allGripPoints() = 0;
     virtual void gripEdit(const QPointF& before, const QPointF& after) = 0;
 protected:
     QPen lineWeightPen() const { return lwtPen; }
@@ -1006,7 +1010,7 @@ public:
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
+    virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
@@ -1045,7 +1049,7 @@ public:
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
+    virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
@@ -1103,19 +1107,37 @@ public:
     EmbReal objectAngle() const;
     EmbReal objectLength() const { return line().length(); }
 
-    void setObjectEndPoint1(const QPointF& endPt1);
-    void setObjectEndPoint1(EmbReal x1, EmbReal y1);
-    void setObjectEndPoint2(const QPointF& endPt2);
-    void setObjectEndPoint2(EmbReal x2, EmbReal y2);
-    void setObjectX1(EmbReal x) { setObjectEndPoint1(x, objectY1()); }
-    void setObjectY1(EmbReal y) { setObjectEndPoint1(objectX1(), y); }
-    void setObjectX2(EmbReal x) { setObjectEndPoint2(x, objectY2()); }
-    void setObjectY2(EmbReal y) { setObjectEndPoint2(objectX2(), y); }
+    void setObjectEndPoint1(EmbVector endPt1);
+    void setObjectEndPoint2(EmbVector endPt2);
+    void setObjectX1(EmbReal x)
+    {
+        EmbVector v = to_EmbVector(objectEndPoint1());
+        v.x = x;
+        setObjectEndPoint1(v);
+    }
+    void setObjectY1(EmbReal y)
+    {
+        EmbVector v = to_EmbVector(objectEndPoint1());
+        v.y = y;
+        setObjectEndPoint1(v);
+    }
+    void setObjectX2(EmbReal x)
+    {
+        EmbVector v = to_EmbVector(objectEndPoint2());
+        v.x = x;
+        setObjectEndPoint2(v);
+    }
+    void setObjectY2(EmbReal y)
+    {
+        EmbVector v = to_EmbVector(objectEndPoint2());
+        v.y = y;
+        setObjectEndPoint2(v);
+    }
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
+    virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
@@ -1160,7 +1182,7 @@ public:
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
+    virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
@@ -1196,7 +1218,7 @@ public:
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
+    virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
@@ -1227,19 +1249,37 @@ public:
     EmbReal objectAngle() const;
     EmbReal objectLength() { return line().length()*scale(); }
 
-    void setObjectEndPoint1(const QPointF& endPt1);
-    void setObjectEndPoint1(EmbReal x1, EmbReal y1);
-    void setObjectEndPoint2(const QPointF& endPt2);
-    void setObjectEndPoint2(EmbReal x2, EmbReal y2);
-    void setObjectX1(EmbReal x) { setObjectEndPoint1(x, objectEndPoint1().y()); }
-    void setObjectY1(EmbReal y) { setObjectEndPoint1(objectEndPoint1().x(), y); }
-    void setObjectX2(EmbReal x) { setObjectEndPoint2(x, objectEndPoint1().y()); }
-    void setObjectY2(EmbReal y) { setObjectEndPoint2(objectEndPoint1().x(), y); }
+    void setObjectEndPoint1(EmbVector endPt1);
+    void setObjectEndPoint2(EmbVector endPt2);
+    void setObjectX1(EmbReal x)
+    {
+        EmbVector v = to_EmbVector(objectEndPoint1());
+        v.x = x;
+        setObjectEndPoint1(v);
+    }
+    void setObjectY1(EmbReal y)
+    {
+        EmbVector v = to_EmbVector(objectEndPoint1());
+        v.y = y;
+        setObjectEndPoint1(v);
+    }
+    void setObjectX2(EmbReal x)
+    {
+        EmbVector v = to_EmbVector(objectEndPoint2());
+        v.x = x;
+        setObjectEndPoint2(v);
+    }
+    void setObjectY2(EmbReal y)
+    {
+        EmbVector v = to_EmbVector(objectEndPoint2());
+        v.y = y;
+        setObjectEndPoint2(v);
+    }
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
+    virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
@@ -1279,7 +1319,7 @@ public:
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
+    virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
@@ -1315,7 +1355,7 @@ public:
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
+    virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
@@ -1356,7 +1396,7 @@ public:
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
+    virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
@@ -1396,7 +1436,7 @@ public:
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
+    virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
@@ -1435,7 +1475,7 @@ public:
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
+    virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
@@ -1517,8 +1557,8 @@ public:
     bool objTextUpsideDown;
     QPainterPath objTextPath;
 
-    QList<QPainterPath> objectSavePathList() const { return subPathList(); }
-    QList<QPainterPath> subPathList() const;
+    std::vector<QPainterPath> objectSavePathList() const { return subPathList(); }
+    std::vector<QPainterPath> subPathList() const;
 
     QPointF objectPos() const { return scenePos(); }
     EmbReal objectX()   const { return scenePos().x(); }
@@ -1544,7 +1584,7 @@ public:
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
+    virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
@@ -1591,7 +1631,7 @@ public:
 
     QHash<QString, QString>* aliasHash;
 
-    void changeFormatting(const QList<QTextLayout::FormatRange>& formats);
+    void changeFormatting(std::vector<QTextLayout::FormatRange> formats);
     void clearFormatting();
     void applyFormatting();
 
@@ -1914,7 +1954,7 @@ public:
 
     virtual void updateMenuToolbarStatusbar();
 
-    QList<QGraphicsItem*> cutCopyObjectList;
+    std::vector<QGraphicsItem*> cutCopyObjectList;
 
     QString formatFilterOpen;
     QString formatFilterSave;
@@ -1966,16 +2006,11 @@ protected:
     int numOfDocs;
     int docIndex;
 
-    QList<MdiWindow*> listMdiWin;
+    std::vector<MdiWindow*> listMdiWin;
     QMdiSubWindow* findMdiWindow(const QString &fileName);
     QString openFilesPath;
 
     QAction* myFileSeparator;
-
-    QWizard* wizardTipOfTheDay;
-    QLabel* labelTipOfTheDay;
-    QCheckBox* checkBoxTipOfTheDay;
-    QStringList listTipOfTheDay;
 
     void createAllActions();
     void createAllMenus();
@@ -2006,18 +2041,11 @@ public slots:
     void openrecentfile();
     void savefile();
     void saveasfile();
-    void print();
-    void designDetails();
     void quit();
     void checkForUpdates();
     // Help Menu
-    void tipOfTheDay();
     void buttonTipOfTheDayClicked(int);
     void checkBoxTipOfTheDayStateChanged(int);
-    void help();
-    void changelog();
-    void about();
-    void whatsThisContextHelp();
 
     void closeToolBar(QAction*);
     void floatingChangedToolBar(bool);
@@ -2045,10 +2073,6 @@ public slots:
     QString getCurrentLineType();
     QString getCurrentLineWeight();
 
-    // Standard Slots
-    void undo();
-    void redo();
-
     bool isShiftPressed();
     void setShiftPressed();
     void setShiftReleased();
@@ -2056,7 +2080,6 @@ public slots:
     void deletePressed();
     void escapePressed();
 
-    // Layer Toolbar
     void makeLayerActive();
     void layerManager();
     void layerPrevious();
@@ -2145,7 +2168,7 @@ public:
     bool fileWasLoaded;
 
     QString promptHistory;
-    QList<QString> promptInputList;
+    std::vector<QString> promptInputList;
     int promptInputNum;
 
     QPrinter printer;
@@ -2272,7 +2295,7 @@ public:
 
     bool pickAdd;
 
-    QList<QGraphicsItem*> selectedItemList;
+    std::vector<QGraphicsItem*> selectedItemList;
 
     QToolButton* createToolButton(const QString& iconName, const QString& txt);
     QLineEdit* createLineEdit(const QString& validatorType = QString(), bool readOnly = false);
@@ -2310,7 +2333,7 @@ signals:
     void pickAddModeToggled();
 
 public slots:
-    void setSelectedItems(QList<QGraphicsItem*> itemList);
+    void setSelectedItems(std::vector<QGraphicsItem*> itemList);
     void updatePickAddModeButton(bool pickAddMode);
 
 private slots:
@@ -2724,6 +2747,8 @@ public:
     
     EmbView view_state;
 
+    std::vector<QGraphicsItem*> selected_items();
+
     bool allowZoomIn();
     bool allowZoomOut();
 
@@ -2870,7 +2895,7 @@ protected:
 private:
     QHash<int64_t, QGraphicsItem*> hashDeletedObjects;
 
-    QList<int64_t> spareRubberList;
+    std::vector<int64_t> spareRubberList;
 
     void createGridRect();
     void createGridPolar();
@@ -2890,12 +2915,12 @@ private:
     EmbReal previewData;
     int previewMode;
 
-    QList<QGraphicsItem*> createObjectList(QList<QGraphicsItem*> list);
+    std::vector<QGraphicsItem*> createObjectList(std::vector<QGraphicsItem*> list);
     QPointF cutCopyMousePoint;
     QGraphicsItemGroup* pasteObjectItemGroup;
     QPointF pasteDelta;
 
-    QList<QGraphicsItem*> rubberRoomList;
+    std::vector<QGraphicsItem*> rubberRoomList;
 
     void copySelected();
 
