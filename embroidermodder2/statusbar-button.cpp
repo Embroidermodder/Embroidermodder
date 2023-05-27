@@ -98,7 +98,7 @@ StatusBarButton::contextMenuEvent(QContextMenuEvent *event)
         menu.addAction(settingsQTrackAction);
     }
     else if (objectName() == "StatusBarButtonLWT") {
-        View* gview = _mainWin->activeView();
+        View* gview = activeView();
         if (gview) {
             QAction* enableRealAction = new QAction(_mainWin->create_icon("realrender"), "&RealRender On", &menu);
             enableRealAction->setEnabled(!gview->isRealEnabled());
@@ -163,7 +163,7 @@ void StatusBarButton::settingsLwt()
 void StatusBarButton::toggleSnap(bool on)
 {
     debug_message("StatusBarButton toggleSnap()");
-    View* gview = _mainWin->activeView();
+    View* gview = activeView();
     if (gview) {
         gview->toggleSnap(on);
     }
@@ -172,7 +172,7 @@ void StatusBarButton::toggleSnap(bool on)
 void StatusBarButton::toggleGrid(bool on)
 {
     debug_message("StatusBarButton toggleGrid()");
-    View* gview = _mainWin->activeView();
+    View* gview = activeView();
     if (gview) {
         gview->toggleGrid(on);
     }
@@ -181,7 +181,7 @@ void StatusBarButton::toggleGrid(bool on)
 void StatusBarButton::toggleRuler(bool on)
 {
     debug_message("StatusBarButton toggleRuler()");
-    View* gview = _mainWin->activeView();
+    View* gview = activeView();
     if (gview) {
         gview->toggleRuler(on);
     }
@@ -190,7 +190,7 @@ void StatusBarButton::toggleRuler(bool on)
 void StatusBarButton::toggleOrtho(bool on)
 {
     debug_message("StatusBarButton toggleOrtho()");
-    View* gview = _mainWin->activeView();
+    View* gview = activeView();
     if (gview) {
         gview->toggleOrtho(on);
     }
@@ -199,7 +199,7 @@ void StatusBarButton::toggleOrtho(bool on)
 void StatusBarButton::togglePolar(bool on)
 {
     debug_message("StatusBarButton togglePolar()");
-    View* gview = _mainWin->activeView();
+    View* gview = activeView();
     if (gview) {
         gview->togglePolar(on);
     }
@@ -208,7 +208,7 @@ void StatusBarButton::togglePolar(bool on)
 void StatusBarButton::toggleQSnap(bool on)
 {
     debug_message("StatusBarButton toggleQSnap()");
-    View* gview = _mainWin->activeView();
+    View* gview = activeView();
     if (gview) {
         gview->toggleQSnap(on);
     }
@@ -217,7 +217,7 @@ void StatusBarButton::toggleQSnap(bool on)
 void StatusBarButton::toggleQTrack(bool on)
 {
     debug_message("StatusBarButton toggleQTrack()");
-    View* gview = _mainWin->activeView();
+    View* gview = activeView();
     if (gview) {
         gview->toggleQTrack(on);
     }
@@ -226,7 +226,7 @@ void StatusBarButton::toggleQTrack(bool on)
 void StatusBarButton::toggleLwt(bool on)
 {
     debug_message("StatusBarButton toggleLwt()");
-    View* gview = _mainWin->activeView();
+    View* gview = activeView();
     if (gview) {
         gview->toggleLwt(on);
     }
@@ -235,7 +235,7 @@ void StatusBarButton::toggleLwt(bool on)
 void StatusBarButton::enableLwt()
 {
     debug_message("StatusBarButton enableLwt()");
-    View* gview = _mainWin->activeView();
+    View* gview = activeView();
     if (gview) {
         gview->toggleLwt(true);
     }
@@ -244,7 +244,7 @@ void StatusBarButton::enableLwt()
 void StatusBarButton::disableLwt()
 {
     debug_message("StatusBarButton disableLwt()");
-    View* gview = _mainWin->activeView();
+    View* gview = activeView();
     if (gview) {
         gview->toggleLwt(false);
     }
@@ -253,7 +253,7 @@ void StatusBarButton::disableLwt()
 void StatusBarButton::enableReal()
 {
     debug_message("StatusBarButton enableReal()");
-    View* gview = _mainWin->activeView();
+    View* gview = activeView();
     if (gview) {
         gview->toggleReal(true);
     }
@@ -262,7 +262,7 @@ void StatusBarButton::enableReal()
 void StatusBarButton::disableReal()
 {
     debug_message("StatusBarButton disableReal()");
-    View* gview = _mainWin->activeView();
+    View* gview = activeView();
     if (gview) {
         gview->toggleReal(false);
     }

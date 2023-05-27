@@ -105,7 +105,7 @@ struct Node_ {
     String s;
     EmbReal r;
     EmbVector v;
-    int i;
+    int32_t i;
     bool b;
     Command f;
     StringList sl;
@@ -575,6 +575,8 @@ void write_settings(void);
 EmbVector rotate_vector(EmbVector v, EmbReal alpha);
 
 bool contains(StringList, String);
+
+View *activeView(void);
 
 void debug_message(String msg);
 void set_enabled(QObject *parent, const char *key, bool enabled);
@@ -1703,7 +1705,6 @@ public:
     ~MainWindow();
 
     MdiWindow* activeMdiWindow();
-    View* activeView();
     QGraphicsScene* activeScene();
     QUndoStack* activeUndoStack();
 
@@ -1792,6 +1793,9 @@ public slots:
     void promptInputPrevious();
     void promptInputNext();
 
+    void about(void);
+    void tipOfTheDay(void);
+
     void newFile();
     void openFile(bool recent = false, const QString& recentFile = "");
     void openFilesSelected(const QStringList&);
@@ -1836,10 +1840,6 @@ public slots:
 
     void deletePressed();
     void escapePressed();
-
-    void makeLayerActive();
-    void layerManager();
-    void layerPrevious();
 
 public:
     void nativeAlert(const QString& txt);
