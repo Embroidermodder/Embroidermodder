@@ -19,7 +19,7 @@
 
 #include "embroidermodder.h"
 
-UndoEditor::UndoEditor(const QString& iconDirectory, QWidget* widgetToFocus, QWidget* parent) : QDockWidget(parent)
+UndoEditor::UndoEditor(QString  iconDirectory, QWidget* widgetToFocus, QWidget* parent) : QDockWidget(parent)
 {
     iconDir = iconDirectory;
     iconSize = 16;
@@ -60,22 +60,22 @@ void UndoEditor::addStack(QUndoStack* stack)
     undoGroup->addStack(stack);
 }
 
-bool UndoEditor::canUndo() const
+bool UndoEditor::canUndo()
 {
     return undoGroup->canUndo();
 }
 
-bool UndoEditor::canRedo() const
+bool UndoEditor::canRedo()
 {
     return undoGroup->canRedo();
 }
 
-QString UndoEditor::undoText() const
+QString UndoEditor::undoText()
 {
     return undoGroup->undoText();
 }
 
-QString UndoEditor::redoText() const
+QString UndoEditor::redoText()
 {
     return undoGroup->redoText();
 }

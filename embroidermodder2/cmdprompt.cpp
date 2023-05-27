@@ -134,7 +134,7 @@ CmdPrompt::floatingChanged(bool isFloating)
  * @param html
  */
 void
-CmdPrompt::saveHistory(const QString& fileName, bool html)
+CmdPrompt::saveHistory(QString  fileName, bool html)
 {
     debug_message("CmdPrompt saveHistory");
     QFile file(fileName);
@@ -152,7 +152,7 @@ CmdPrompt::saveHistory(const QString& fileName, bool html)
  * @param txt
  */
 void
-CmdPrompt::alert(const QString& txt)
+CmdPrompt::alert(QString  txt)
 {
     QString alertTxt = "<font color=\"red\">" + txt + "</font>"; //TODO: Make the alert color customizable
     setPrefix(alertTxt);
@@ -223,7 +223,7 @@ CmdPrompt::setPromptBackgroundColor(const QColor& color)
  * @param family
  */
 void
-CmdPrompt::setPromptFontFamily(const QString& family)
+CmdPrompt::setPromptFontFamily(QString  family)
 {
     styleHash->insert("font-family", family);
     updateStyle();
@@ -234,7 +234,7 @@ CmdPrompt::setPromptFontFamily(const QString& family)
  * @param style
  */
 void
-CmdPrompt::setPromptFontStyle(const QString& style)
+CmdPrompt::setPromptFontStyle(QString  style)
 {
     styleHash->insert("font-style", style);
     updateStyle();
@@ -274,7 +274,7 @@ CmdPrompt::updateStyle()
  * @param txt
  */
 void
-CmdPrompt::appendHistory(const QString& txt)
+CmdPrompt::appendHistory(QString  txt)
 {
     if (txt.isNull()) {
         emit appendTheHistory(promptInput->curText, promptInput->prefix.length());
@@ -289,7 +289,7 @@ CmdPrompt::appendHistory(const QString& txt)
  * @param txt
  */
 void
-CmdPrompt::setPrefix(const QString& txt)
+CmdPrompt::setPrefix(QString  txt)
 {
     promptInput->prefix = txt;
     promptInput->curText = txt;
@@ -417,7 +417,7 @@ CmdPromptHistory::~CmdPromptHistory()
  * @param prefixLength
  * @return
  */
-QString CmdPromptHistory::applyFormatting(const QString& txt, int prefixLength)
+QString CmdPromptHistory::applyFormatting(QString  txt, int prefixLength)
 {
     QString prefix = txt.left(prefixLength);
     QString usrtxt = txt.right(txt.length()-prefixLength);
@@ -471,7 +471,7 @@ QString CmdPromptHistory::applyFormatting(const QString& txt, int prefixLength)
  * @param prefixLength
  */
 void
-CmdPromptHistory::appendHistory(const QString& txt, int prefixLength)
+CmdPromptHistory::appendHistory(QString  txt, int prefixLength)
 {
     QString formatStr = applyFormatting(txt, prefixLength);
     this->append(formatStr);
@@ -578,7 +578,7 @@ CmdPromptInput::~CmdPromptInput()
  * @param cmd
  */
 void
-CmdPromptInput::addCommand(const QString& alias, const QString& cmd)
+CmdPromptInput::addCommand(QString  alias, QString  cmd)
 {
     aliasHash->insert(alias.toLower(), cmd.toLower());
     qDebug("Command Added: %s, %s", qPrintable(alias), qPrintable(cmd));
@@ -800,7 +800,7 @@ void CmdPromptInput::applyFormatting()
  * @param txt
  */
 void
-CmdPromptInput::updateCurrentText(const QString& txt)
+CmdPromptInput::updateCurrentText(QString  txt)
 {
     int cursorPos = cursorPosition();
     if (!txt.startsWith(prefix)) {
@@ -827,7 +827,7 @@ CmdPromptInput::updateCurrentText(const QString& txt)
  * @param txt
  */
 void
-CmdPromptInput::checkEditedText(const QString& txt)
+CmdPromptInput::checkEditedText(QString  txt)
 {
     updateCurrentText(txt);
 
@@ -841,7 +841,7 @@ CmdPromptInput::checkEditedText(const QString& txt)
  * @param txt
  */
 void
-CmdPromptInput::checkChangedText(const QString& txt)
+CmdPromptInput::checkChangedText(QString  txt)
 {
     updateCurrentText(txt);
 }

@@ -63,7 +63,7 @@ View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, 
     setGridColor(settings.grid_color);
 
     if (settings.grid_show_on_load) {
-        createGrid(QString::fromStdString(settings.grid_type));
+        createGrid(QString::fromStdString(settings_["grid_type"].s));
     }
     else {
         createGrid("");
@@ -116,6 +116,38 @@ View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, 
     //TODO: wrap this with a setBackgroundPixmap() function: setBackgroundBrush(QPixmap("images/canvas.png"));
 
     connect(gscene, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+
+    /* set state */
+    /* EmbPattern *pattern; */
+    EmbVector origin;
+    EmbReal scale;
+    String grid_type;
+    int ui_mode;
+    state["snap_mode"] = node(false);
+    state["grid_mode"] = node(false);
+    state["ruler_mode"] = node(false);
+    bool ortho_mode;
+    bool polar_mode;
+    bool qsnap_mode;
+    bool qtrack_mode;
+    bool lwt_mode;
+    bool real_render;
+    bool metric;
+    bool simulate;
+    clock_t simulation_start;
+    String text_font;
+    EmbReal text_size;
+    EmbReal text_angle;
+    bool text_style_bold;
+    bool text_style_italic;
+    bool text_style_underline;
+    bool text_style_overline;
+    bool text_style_strikeout;
+    String filename;
+    StringList undo_history;
+    int selected[100];
+    int n_selected;
+    int rubber_mode;
 }
 
 View::~View()
@@ -333,7 +365,7 @@ View::setRubberMode(String mode)
  * .
  */
 void
-View::setRubberPoint(const QString& key, const QPointF& point)
+View::setRubberPoint(QString  key, const QPointF& point)
 {
     foreach(QGraphicsItem* item, rubberRoomList)
     {
@@ -347,7 +379,7 @@ View::setRubberPoint(const QString& key, const QPointF& point)
  * .
  */
 void
-View::setRubberText(const QString& key, const QString& txt)
+View::setRubberText(QString  key, QString  txt)
 {
     foreach(QGraphicsItem* item, rubberRoomList)
     {
@@ -379,7 +411,7 @@ View::setRulerColor(QRgb color)
 }
 
 void
-View::createGrid(const QString& gridType)
+View::createGrid(QString  gridType)
 {
     if (gridType == "Rectangular") {
         createGridRect();
@@ -560,7 +592,7 @@ View::toggleGrid(bool on)
     debug_message("View toggleGrid()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     if (on) {
-        createGrid(QString::fromStdString(settings.grid_type));
+        createGrid(QString::fromStdString(settings_["grid_type"].s));
     }
     else {
         createGrid("");

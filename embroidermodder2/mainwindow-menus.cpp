@@ -74,17 +74,17 @@ MainWindow::createAllMenus()
     debug_message("MainWindow createAllMenus()");
 
     /* Populate menus. */
-    create_menu("file", get_sl("file_menu"), true);
-    create_menu("edit", get_sl("edit_menu"), true);
-    create_menu("view", get_sl("view_menu"), true);
-    create_menu("settings", get_sl("settings_menu"), true);
-    create_menu("window", get_sl("window_menu"), true);
-    create_menu("help", get_sl("help_menu"), true);
-    create_menu("draw", get_sl("draw_menu"), true);
+    create_menu("file", config["file_menu"].sl, true);
+    create_menu("edit", config["edit_menu"].sl, true);
+    create_menu("view", config["view_menu"].sl, true);
+    create_menu("settings", config["settings_menu"].sl, true);
+    create_menu("window", config["window_menu"].sl, true);
+    create_menu("help", config["help_menu"].sl, true);
+    create_menu("draw", config["draw_menu"].sl, true);
 
     /* Populate submenus. */
-    create_menu("zoom", get_sl("zoom_menu"), false);
-    create_menu("pan", get_sl("pan_menu"), false);
+    create_menu("zoom", config["zoom_menu"].sl, false);
+    create_menu("pan", config["pan_menu"].sl, false);
 
     /* Connect dynamic menus. */
     connect(subMenuHash["recent"], SIGNAL(aboutToShow()), this, SLOT(recentMenuAboutToShow()));

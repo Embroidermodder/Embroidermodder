@@ -114,6 +114,8 @@ QLabel* labelTipOfTheDay;
 QCheckBox* checkBoxTipOfTheDay;
 QStringList listTipOfTheDay;
 
+Dictionary settings_;
+Dictionary dialog_;
 Dictionary config;
 
 std::unordered_map<String, StringList> scripts;
@@ -167,6 +169,51 @@ static String undo_action(String args);
 static String whats_this_action(String args);
 static String zoom_action(String args);
 
+String settings_dialog_action(String showTab);
+
+void Alert(QString  txt);
+
+void MessageBox(QString  type, QString  title, QString  text);
+
+void PrintArea(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
+
+void SetBackgroundColor(uint8_t r, uint8_t g, uint8_t b);
+void SetCrossHairColor(uint8_t r, uint8_t g, uint8_t b);
+void SetGridColor(uint8_t r, uint8_t g, uint8_t b);
+
+void PreviewOn(String clone, String mode, EmbReal x, EmbReal y, EmbReal data);
+void PreviewOff();
+
+void ClearRubber();
+bool AllowRubber();
+void SpareRubber(int64_t id);
+// \todo void SetRubberFilter(int64_t id);
+// \todo This is so more than 1 rubber object can exist at one time without updating all rubber objects at once
+String SetRubberMode(std::vector<Node> args);
+void SetRubberPoint(QString  key, EmbReal x, EmbReal y);
+void SetRubberText(QString  key, QString  txt);
+
+void SetCursorShape(QString  str);
+EmbReal CalculateAngle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
+EmbReal CalculateDistance(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
+EmbReal PerpendicularDistance(EmbReal px, EmbReal py, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
+
+int NumSelected();
+void AddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
+void DeleteSelected();
+void CutSelected(EmbReal x, EmbReal y);
+void CopySelected(EmbReal x, EmbReal y);
+void PasteSelected(EmbReal x, EmbReal y);
+void MoveSelected(EmbReal dx, EmbReal dy);
+void ScaleSelected(EmbReal x, EmbReal y, EmbReal factor);
+void RotateSelected(EmbReal x, EmbReal y, EmbReal rot);
+void MirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
+
+EmbReal QSnapX();
+EmbReal QSnapY();
+EmbReal MouseX();
+EmbReal MouseY();
+
 std::unordered_map<String, Command> command_map = {
     {"about", about_action},
     {"add-arc", add_arc_action},
@@ -186,6 +233,7 @@ std::unordered_map<String, Command> command_map = {
     {"paste", paste_action},
     {"redo", redo_action},
     {"set-rubber-text", set_rubber_text_action},
+    {"settingsdialog", settings_dialog_action},
     {"spare-rubber", spare_rubber_action},
     {"tip-of-the-day", tip_of_the_day_action},
     {"todo", todo_action},
@@ -219,21 +267,6 @@ static QString
 tr(const char *str)
 {
     return _mainWin->tr(str);
-}
-
-/**
- * @brief create_lisp
- * @return
- */
-Lisp
-lisp(void)
-{
-    Lisp l;
-    l.T.s = "T";
-    l.T.type = SYMBOL_TYPE;
-    l.F.s = "F";
-    l.F.type = SYMBOL_TYPE;
-    return l;
 }
 
 /**
@@ -307,14 +340,17 @@ node(StringList value)
 }
 
 /**
- * @brief get_sl
- * @param key
- * @return
+ * @brief set_node
+ * @param node
+ * @param value
  */
-StringList
-get_sl(String key)
+Node
+node(EmbVector value)
 {
-    return config[key].sl;
+    Node node;
+    node.type = VECTOR_TYPE;
+    node.v = value;
+    return node;
 }
 
 /**
@@ -363,18 +399,19 @@ to_string_vector(QStringList list)
 void
 MainWindow::settingsPrompt()
 {
-    settingsDialog("Prompt");
+    settings_dialog_action("Prompt");
 }
 
 /**
- * @brief MainWindow::settingsDialog
+ * @brief settingsDialog
  * @param showTab
  */
-void
-MainWindow::settingsDialog(const QString& showTab)
+String
+settings_dialog_action(String showTab)
 {
-    Settings_Dialog dialog(showTab);
+    Settings_Dialog dialog(QString::fromStdString(showTab));
     dialog.exec();
+    return "";
 }
 
 /**
@@ -584,7 +621,7 @@ design_details_action(String args)
 {
     no_argument_debug("about_action()", args);
 
-    QGraphicsScene* scene = _mainWin->activeScene();
+    QGraphicsScene* scene = activeScene();
     if (scene) {
         EmbDetailsDialog dialog(scene, _mainWin);
         dialog.exec();
@@ -638,8 +675,7 @@ MainWindow::about(void)
     button.setText("Oh, Yeah!");
     buttonbox.addButton(&button, QDialogButtonBox::AcceptRole);
     buttonbox.setCenterButtons(true);
-    // TODO reconnect
-    //connect(&buttonbox, SIGNAL(accepted()), &dialog, SLOT(accept()));
+    connect(&buttonbox, SIGNAL(accepted()), &dialog, SLOT(accept()));
 
     QVBoxLayout layout;
     layout.setAlignment(Qt::AlignCenter);
@@ -945,7 +981,7 @@ activeView(void)
  * @return
  */
 QGraphicsScene *
-MainWindow::activeScene()
+activeScene()
 {
     debug_message("activeScene()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
@@ -1148,42 +1184,46 @@ String
 pan_action(String mode)
 {
     View* gview = activeView();
+    if (!gview) {
+        return "ERROR: no active view found.";
+    }
     QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack) {
-        if (mode == "realtime") {
-            debug_message("panrealtime()");
-            gview->panRealTime();
-            return "";
-        }
-        if (mode == "point") {
-            debug_message("panpoint()");
-            gview->panPoint();
-            return "";
-        }
-        if (mode == "left") {
-            debug_message("panLeft()");
-            UndoableNavCommand* cmd = new UndoableNavCommand("PanLeft", gview, 0);
-            stack->push(cmd);
-            return "";
-        }
-        if (mode == "right") {
-            debug_message("panRight()");
-            UndoableNavCommand* cmd = new UndoableNavCommand("PanRight", gview, 0);
-            stack->push(cmd);
-            return "";
-        }
-        if (mode == "up") {
-            debug_message("panUp()");
-            UndoableNavCommand* cmd = new UndoableNavCommand("PanUp", gview, 0);
-            stack->push(cmd);
-            return "";
-        }
-        if (mode == "down") {
-            debug_message("panDown()");
-            UndoableNavCommand* cmd = new UndoableNavCommand("PanDown", gview, 0);
-            stack->push(cmd);
-            return "";
-        }
+    if (!stack) {
+        return "ERROR: no undo stack found.";
+    }
+    if (mode == "realtime") {
+        debug_message("panrealtime()");
+        gview->panRealTime();
+        return "";
+    }
+    if (mode == "point") {
+        debug_message("panpoint()");
+        gview->panPoint();
+        return "";
+    }
+    if (mode == "left") {
+        debug_message("panLeft()");
+        UndoableNavCommand* cmd = new UndoableNavCommand("PanLeft", gview, 0);
+        stack->push(cmd);
+        return "";
+    }
+    if (mode == "right") {
+        debug_message("panRight()");
+        UndoableNavCommand* cmd = new UndoableNavCommand("PanRight", gview, 0);
+        stack->push(cmd);
+        return "";
+    }
+    if (mode == "up") {
+        debug_message("panUp()");
+        UndoableNavCommand* cmd = new UndoableNavCommand("PanUp", gview, 0);
+        stack->push(cmd);
+        return "";
+    }
+    if (mode == "down") {
+        debug_message("panDown()");
+        UndoableNavCommand* cmd = new UndoableNavCommand("PanDown", gview, 0);
+        stack->push(cmd);
+        return "";
     }
     return "ERROR: pan subcommand not recognised.";
 }
@@ -1197,67 +1237,71 @@ String
 zoom_action(String mode)
 {
     View* gview = activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack) {
-        if (mode == "realtime") {
-            debug_message("zoomRealtime()");
-            debug_message("TODO: Implement zoomRealtime.");
-            return "";
-        }
-        if (mode == "previous") {
-            debug_message("zoomPrevious()");
-            debug_message("TODO: Implement zoomPrevious.");
-            return "";
-        }
-        if (mode == "window") {
-            debug_message("zoomWindow()");
-            gview->zoomWindow();
-            return "";
-        }
-        if (mode == "dynamic") {
-            debug_message("zoomDynamic()");
-            debug_message("TODO: Implement zoomDynamic.");
-            return "";
-        }
-        if (mode == "scale") {
-            debug_message("zoomScale()");
-            debug_message("TODO: Implement zoomScale.");
-            return "";
-        }
-        if (mode == "center") {
-            debug_message("zoomCenter()");
-            debug_message("TODO: Implement zoomCenter.");
-            return "";
-        }
-        if (mode == "in") {
-            debug_message("zoomIn()");
-            gview->zoomIn();
-            return "";
-        }
-        if (mode == "out") {
-            debug_message("zoomOut()");
-            gview->zoomOut();
-            return "";
-        }
-        if (mode == "selected") {
-            debug_message("zoomSelected()");
-            UndoableNavCommand* cmd = new UndoableNavCommand("ZoomSelected", gview, 0);
-            stack->push(cmd);
-            return "";
-        }
-        if (mode == "all") {
-            debug_message("zoomAll()");
-            debug_message("TODO: Implement zoomAll.");
-            return "";
-        }
-        if (mode == "extents") {
-            debug_message("zoomExtents()");
-            UndoableNavCommand* cmd = new UndoableNavCommand("ZoomExtents", gview, 0);
-            stack->push(cmd);
-            return "";
-        }
+    if (!gview) {
+        return "ERROR: no active view found.";
     }
-    return "</br>ERROR: zoom subcommand not recognised.";
+    QUndoStack* stack = gview->getUndoStack();
+    if (stack) {
+        return "ERROR: no undo stack found.";
+    }
+    if (mode == "realtime") {
+        debug_message("zoomRealtime()");
+        debug_message("TODO: Implement zoomRealtime.");
+        return "";
+    }
+    if (mode == "previous") {
+        debug_message("zoomPrevious()");
+        debug_message("TODO: Implement zoomPrevious.");
+        return "";
+    }
+    if (mode == "window") {
+        debug_message("zoomWindow()");
+        gview->zoomWindow();
+        return "";
+    }
+    if (mode == "dynamic") {
+        debug_message("zoomDynamic()");
+        debug_message("TODO: Implement zoomDynamic.");
+        return "";
+    }
+    if (mode == "scale") {
+        debug_message("zoomScale()");
+        debug_message("TODO: Implement zoomScale.");
+        return "";
+    }
+    if (mode == "center") {
+        debug_message("zoomCenter()");
+        debug_message("TODO: Implement zoomCenter.");
+        return "";
+    }
+    if (mode == "in") {
+        debug_message("zoomIn()");
+        gview->zoomIn();
+        return "";
+    }
+    if (mode == "out") {
+        debug_message("zoomOut()");
+        gview->zoomOut();
+        return "";
+    }
+    if (mode == "selected") {
+        debug_message("zoomSelected()");
+        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomSelected", gview, 0);
+        stack->push(cmd);
+        return "";
+    }
+    if (mode == "all") {
+        debug_message("zoomAll()");
+        debug_message("TODO: Implement zoomAll.");
+        return "";
+    }
+    if (mode == "extents") {
+        debug_message("zoomExtents()");
+        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomExtents", gview, 0);
+        stack->push(cmd);
+        return "";
+    }
+    return "ERROR: zoom subcommand not recognised.";
 }
 
 /**
@@ -1375,7 +1419,7 @@ MainWindow::textSizeSelectorIndexChanged(int index)
  * @param str
  */
 void
-MainWindow::setTextFont(const QString& str)
+MainWindow::setTextFont(QString str)
 {
     textFontSelector->setCurrentFont(QFont(str));
     settings.text_font = str.toStdString();
@@ -1521,7 +1565,7 @@ MainWindow::toggleLwt()
  * @param txt
  */
 void
-MainWindow::promptHistoryAppended(const QString& txt)
+MainWindow::promptHistoryAppended(QString  txt)
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
@@ -1534,7 +1578,7 @@ MainWindow::promptHistoryAppended(const QString& txt)
  * @param txt
  */
 void
-MainWindow::logPromptInput(const QString& txt)
+MainWindow::logPromptInput(QString  txt)
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin)
@@ -1569,44 +1613,44 @@ MainWindow::promptInputNext()
  * .
  */
 void
-MainWindow::nativeAlert(const QString& txt)
+Alert(QString  txt)
 {
     prompt->alert(txt);
 }
 
 /**
- * @brief MainWindow::nativeMessageBox
+ * @brief MessageBox
  * \a type
  * \a title
  * \a text
  */
 void
-MainWindow::nativeMessageBox(const QString& type, const QString& title, const QString& text)
+MessageBox(QString  type, QString  title, QString  text)
 {
     QString msgType = type.toLower();
     if (msgType == "critical") {
-        QMessageBox::critical(this, tr(qPrintable(title)), tr(qPrintable(text)));
+        QMessageBox::critical(_mainWin, tr(qPrintable(title)), tr(qPrintable(text)));
     }
     else if (msgType == "information") {
-        QMessageBox::information(this, tr(qPrintable(title)), tr(qPrintable(text)));
+        QMessageBox::information(_mainWin, tr(qPrintable(title)), tr(qPrintable(text)));
     }
     else if (msgType == "question") {
-        QMessageBox::question(this, tr(qPrintable(title)), tr(qPrintable(text)));
+        QMessageBox::question(_mainWin, tr(qPrintable(title)), tr(qPrintable(text)));
     }
     else if (msgType == "warning") {
-        QMessageBox::warning(this, tr(qPrintable(title)), tr(qPrintable(text)));
+        QMessageBox::warning(_mainWin, tr(qPrintable(title)), tr(qPrintable(text)));
     }
     else {
-        QMessageBox::critical(this, tr("Native MessageBox Error"), tr("Incorrect use of the native messageBox function."));
+        QMessageBox::critical(_mainWin, tr("Native MessageBox Error"), tr("Incorrect use of the native messageBox function."));
     }
 }
 
 /**
- * @brief MainWindow::nativePrintArea
+ * @brief PrintArea
  * \a x \a y \a w \a h
  */
 void
-MainWindow::nativePrintArea(EmbReal x, EmbReal y, EmbReal w, EmbReal h)
+PrintArea(EmbReal x, EmbReal y, EmbReal w, EmbReal h)
 {
     qDebug("nativePrintArea(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
     //TODO: Print Setup Stuff
@@ -1614,46 +1658,46 @@ MainWindow::nativePrintArea(EmbReal x, EmbReal y, EmbReal w, EmbReal h)
 }
 
 /**
- * @brief MainWindow::nativeSetBackgroundColor
+ * @brief SetBackgroundColor
  * @param r
  * @param g
  * @param b
  */
 void
-MainWindow::nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b)
+SetBackgroundColor(uint8_t r, uint8_t g, uint8_t b)
 {
     settings.display_bg_color = qRgb(r,g,b);
-    updateAllViewBackgroundColors(qRgb(r,g,b));
+    _mainWin->updateAllViewBackgroundColors(qRgb(r,g,b));
 }
 
 /**
- * @brief MainWindow::nativeSetCrossHairColor
+ * @brief SetCrossHairColor
  * @param r
  * @param g
  * @param b
  */
 void
-MainWindow::nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b)
+SetCrossHairColor(uint8_t r, uint8_t g, uint8_t b)
 {
     settings.display_crosshair_color = qRgb(r,g,b);
-    updateAllViewCrossHairColors(qRgb(r,g,b));
+    _mainWin->updateAllViewCrossHairColors(qRgb(r,g,b));
 }
 
 /**
- * @brief MainWindow::nativeSetGridColor
+ * @brief SetGridColor
  * @param r
  * @param g
  * @param b
  */
 void
-MainWindow::nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b)
+SetGridColor(uint8_t r, uint8_t g, uint8_t b)
 {
     settings.grid_color = qRgb(r,g,b);
-    updateAllViewGridColors(qRgb(r,g,b));
+    _mainWin->updateAllViewGridColors(qRgb(r,g,b));
 }
 
 /**
- * @brief MainWindow::nativePreviewOn
+ * @brief PreviewOn
  * @param clone
  * @param mode
  * @param x
@@ -1661,7 +1705,7 @@ MainWindow::nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b)
  * @param data
  */
 void
-MainWindow::nativePreviewOn(String clone, String mode, EmbReal x, EmbReal y, EmbReal data)
+PreviewOn(String clone, String mode, EmbReal x, EmbReal y, EmbReal data)
 {
     View* gview = activeView();
     if (gview) {
@@ -1670,10 +1714,10 @@ MainWindow::nativePreviewOn(String clone, String mode, EmbReal x, EmbReal y, Emb
 }
 
 /**
- * @brief MainWindow::nativePreviewOff
+ * @brief PreviewOff
  */
 void
-MainWindow::nativePreviewOff()
+PreviewOff()
 {
     View* gview = activeView();
     if (gview) {
@@ -1682,10 +1726,10 @@ MainWindow::nativePreviewOff()
 }
 
 /**
- * @brief MainWindow::nativeClearRubber
+ * @brief ClearRubber
  */
 void
-MainWindow::nativeClearRubber()
+ClearRubber()
 {
     View* gview = activeView();
     if (gview)
@@ -1693,11 +1737,11 @@ MainWindow::nativeClearRubber()
 }
 
 /**
- * @brief MainWindow::nativeAllowRubber
+ * @brief AllowRubber
  * @return
  */
 bool
-MainWindow::nativeAllowRubber()
+AllowRubber()
 {
     View* gview = activeView();
     if (gview)
@@ -1706,11 +1750,11 @@ MainWindow::nativeAllowRubber()
 }
 
 /**
- * @brief MainWindow::nativeSpareRubber
+ * @brief SpareRubber
  * @param id
  */
 void
-MainWindow::nativeSpareRubber(qint64 id)
+SpareRubber(qint64 id)
 {
     View* gview = activeView();
     if (gview) {
@@ -1722,7 +1766,7 @@ MainWindow::nativeSpareRubber(qint64 id)
  * .
  */
 String
-MainWindow::nativeSetRubberMode(NodeList a)
+SetRubberMode(NodeList a)
 {
     String mode = QString::fromStdString(a[0].s).toUpper().toStdString();
 
@@ -1743,7 +1787,7 @@ MainWindow::nativeSetRubberMode(NodeList a)
  * .
  */
 void
-MainWindow::nativeSetRubberPoint(const QString& key, EmbReal x, EmbReal y)
+SetRubberPoint(QString  key, EmbReal x, EmbReal y)
 {
     /*
     _mainWin->setRubberPoint(a[0].s.toUpper(), a[1].r, a[2].r);
@@ -1758,7 +1802,7 @@ MainWindow::nativeSetRubberPoint(const QString& key, EmbReal x, EmbReal y)
  * .
  */
 void
-MainWindow::nativeSetRubberText(const QString& key, const QString& txt)
+SetRubberText(QString  key, QString  txt)
 {
     View* gview = activeView();
     if (gview) {
@@ -1767,7 +1811,7 @@ MainWindow::nativeSetRubberText(const QString& key, const QString& txt)
 }
 
 void
-MainWindow::nativeAddTextMulti(const QString& str, EmbReal x, EmbReal y, EmbReal rot, bool fill, String rubberMode)
+AddTextMulti(QString  str, EmbReal x, EmbReal y, EmbReal rot, bool fill, String rubberMode)
 {
     /*
     _mainWin->nativeAddTextMulti(a[0].s, a[1].r, a[2].r, a[3].r, a[4].b, OBJ_RUBBER_OFF);
@@ -1775,7 +1819,7 @@ MainWindow::nativeAddTextMulti(const QString& str, EmbReal x, EmbReal y, EmbReal
 }
 
 void
-MainWindow::nativeAddTextSingle(const QString& str, EmbReal x, EmbReal y, EmbReal rot, bool fill, String rubberMode)
+AddTextSingle(QString  str, EmbReal x, EmbReal y, EmbReal rot, bool fill, String rubberMode)
 {
     /*
     _mainWin->nativeAddTextSingle(a[0].s, a[1].r, a[2].r, a[3].r, a[4].b, OBJ_RUBBER_OFF);
@@ -1784,7 +1828,7 @@ MainWindow::nativeAddTextSingle(const QString& str, EmbReal x, EmbReal y, EmbRea
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
-        TextSingleObject* obj = new TextSingleObject(str, x, -y, getCurrentColor());
+        TextSingleObject* obj = new TextSingleObject(str, x, -y, _mainWin->getCurrentColor());
         obj->setObjectTextFont(QString::fromStdString(settings.text_font));
         obj->setObjectTextSize(settings.text_size);
         obj->setObjectTextStyle(settings.text_style_bold,
@@ -1813,7 +1857,7 @@ MainWindow::nativeAddTextSingle(const QString& str, EmbReal x, EmbReal y, EmbRea
  * .
  */
 void
-MainWindow::nativeAddInfiniteLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot)
+AddInfiniteLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot)
 {
     /*
     //TODO: Node error checking
@@ -1825,7 +1869,7 @@ MainWindow::nativeAddInfiniteLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2
  * .
  */
 void
-MainWindow::nativeAddRay(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot)
+AddRay(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot)
 {
     /*
     //TODO: Node error checking
@@ -1837,7 +1881,7 @@ MainWindow::nativeAddRay(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal
  * .
  */
 void
-MainWindow::nativeAddLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String rubberMode)
+AddLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String rubberMode)
 {
     /*
     _mainWin->nativeAddLine(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, OBJ_RUBBER_OFF);
@@ -1851,7 +1895,7 @@ MainWindow::nativeAddLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbRea
         line.start.y = -y1;
         line.end.x = x2;
         line.end.y = -y2;
-        LineObject* obj = new LineObject(line, getCurrentColor());
+        LineObject* obj = new LineObject(line,_mainWin->getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
         if (rubberMode != "OBJ_RUBBER_OFF") {
@@ -1867,7 +1911,7 @@ MainWindow::nativeAddLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbRea
 }
 
 void
-MainWindow::nativeAddTriangle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal x3, EmbReal y3, EmbReal rot, bool fill)
+AddTriangle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal x3, EmbReal y3, EmbReal rot, bool fill)
 {
     /*
     AddTriangle(NodeList a)
@@ -1875,22 +1919,28 @@ MainWindow::nativeAddTriangle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, Em
     */
 }
 
-void
-MainWindow::nativeAddRectangle(NodeList a)
+String
+AddRectangle(NodeList a)
 {
-    EmbReal x = a[0].r;
-    EmbReal y = a[1].r;
-    EmbReal w = a[2].r;
-    EmbReal h = a[3].r;
-    EmbReal rot = a[4].r;
-    bool fill = a[5].b;
-    String rubberMode = a[6].s;
-
     View* gview = activeView();
+    if (!gview) {
+        return "ERROR: no active view found.";
+    }
     QGraphicsScene* gscene = gview->scene();
+    if (!gscene) {
+        return "ERROR: no graphics scene view found.";
+    }
     QUndoStack* stack = gview->getUndoStack();
-    if (gview && gscene && stack) {
-        RectObject* obj = new RectObject(x, -y, w, -h, getCurrentColor());
+    if (stack) {
+        EmbReal x = a[0].r;
+        EmbReal y = a[1].r;
+        EmbReal w = a[2].r;
+        EmbReal h = a[3].r;
+        EmbReal rot = a[4].r;
+        bool fill = a[5].b;
+        String rubberMode = a[6].s;
+
+        RectObject* obj = new RectObject(x, -y, w, -h,_mainWin->getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
         //TODO: rect fill
@@ -1904,10 +1954,11 @@ MainWindow::nativeAddRectangle(NodeList a)
             stack->push(cmd);
         }
     }
+    return "";
 }
 
 void
-MainWindow::nativeAddRoundedRectangle(EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rad, EmbReal rot, bool fill)
+AddRoundedRectangle(EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rad, EmbReal rot, bool fill)
 {
     /*
     String
@@ -1921,7 +1972,7 @@ MainWindow::nativeAddRoundedRectangle(EmbReal x, EmbReal y, EmbReal w, EmbReal h
 }
 
 void
-MainWindow::nativeAddArc(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, String rubberMode)
+AddArc(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, String rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* scene = activeScene();
@@ -1933,7 +1984,7 @@ MainWindow::nativeAddArc(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal m
         arc.mid.x = -midY;
         arc.end.x = endX;
         arc.end.x = -endY;
-        ArcObject* arcObj = new ArcObject(arc, getCurrentColor());
+        ArcObject* arcObj = new ArcObject(arc,_mainWin->getCurrentColor());
         arcObj->setObjectRubberMode(rubberMode);
         if (rubberMode != "OBJ_RUBBER_OFF") {
             gview->addToRubberRoom(arcObj);
@@ -1944,13 +1995,13 @@ MainWindow::nativeAddArc(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal m
 }
 
 void
-MainWindow::nativeAddCircle(EmbReal centerX, EmbReal centerY, EmbReal radius, bool fill, String rubberMode)
+AddCircle(EmbReal centerX, EmbReal centerY, EmbReal radius, bool fill, String rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
-        CircleObject* obj = new CircleObject(centerX, -centerY, radius, getCurrentColor());
+        CircleObject* obj = new CircleObject(centerX, -centerY, radius,_mainWin->getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
         //TODO: circle fill
         if (rubberMode != "OBJ_RUBBER_OFF") {
@@ -1966,11 +2017,11 @@ MainWindow::nativeAddCircle(EmbReal centerX, EmbReal centerY, EmbReal radius, bo
 }
 
 void
-MainWindow::nativeAddSlot(EmbReal centerX, EmbReal centerY, EmbReal diameter, EmbReal length, EmbReal rot, bool fill, String rubberMode)
+AddSlot(EmbReal centerX, EmbReal centerY, EmbReal diameter, EmbReal length, EmbReal rot, bool fill, String rubberMode)
 {
     //TODO: Use UndoableAddCommand for slots
     /*
-    SlotObject* slotObj = new SlotObject(centerX, -centerY, diameter, length, getCurrentColor());
+    SlotObject* slotObj = new SlotObject(centerX, -centerY, diameter, length,_mainWin->getCurrentColor());
     slotObj->setRotation(-rot);
     slotObj->setObjectRubberMode(rubberMode);
     if (rubberMode) gview->addToRubberRoom(slotObj);
@@ -1981,14 +2032,14 @@ MainWindow::nativeAddSlot(EmbReal centerX, EmbReal centerY, EmbReal diameter, Em
 }
 
 void
-MainWindow::nativeAddEllipse(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, EmbReal rot, bool fill, String rubberMode)
+AddEllipse(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, EmbReal rot, bool fill, String rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack)
     {
-        EllipseObject* obj = new EllipseObject(centerX, -centerY, width, height, getCurrentColor());
+        EllipseObject* obj = new EllipseObject(centerX, -centerY, width, height,_mainWin->getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
         //TODO: ellipse fill
@@ -2006,33 +2057,33 @@ MainWindow::nativeAddEllipse(EmbReal centerX, EmbReal centerY, EmbReal width, Em
 }
 
 void
-MainWindow::nativeAddPoint(EmbReal x, EmbReal y)
+AddPoint(EmbReal x, EmbReal y)
 {
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack)
     {
-        PointObject* obj = new PointObject(x, -y, getCurrentColor());
+        PointObject* obj = new PointObject(x, -y,_mainWin->getCurrentColor());
         UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
         stack->push(cmd);
     }
 }
 
 void
-MainWindow::nativeAddRegularPolygon(EmbReal centerX, EmbReal centerY, quint16 sides, uint8_t mode, EmbReal rad, EmbReal rot, bool fill)
+AddRegularPolygon(EmbReal centerX, EmbReal centerY, quint16 sides, uint8_t mode, EmbReal rad, EmbReal rot, bool fill)
 {
 }
 
 //NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
 void
-MainWindow::nativeAddPolygon(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode)
+AddPolygon(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack)
     {
-        PolygonObject* obj = new PolygonObject(startX, startY, p, getCurrentColor());
+        PolygonObject* obj = new PolygonObject(startX, startY, p,_mainWin->getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
         if (rubberMode != "OBJ_RUBBER_OFF") {
             gview->addToRubberRoom(obj);
@@ -2049,7 +2100,7 @@ MainWindow::nativeAddPolygon(EmbReal startX, EmbReal startY, const QPainterPath&
 
 //NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
 void
-MainWindow::nativeAddPolyline(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode)
+AddPolyline(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode)
 {
     /*
     QVariantList varList = a[0].toVariant().toList();
@@ -2102,7 +2153,7 @@ MainWindow::nativeAddPolyline(EmbReal startX, EmbReal startY, const QPainterPath
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
-        PolylineObject* obj = new PolylineObject(startX, startY, p, getCurrentColor());
+        PolylineObject* obj = new PolylineObject(startX, startY, p,_mainWin->getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
         if (rubberMode != "OBJ_RUBBER_OFF") {
             gview->addToRubberRoom(obj);
@@ -2122,7 +2173,7 @@ MainWindow::nativeAddPolyline(EmbReal startX, EmbReal startY, const QPainterPath
  * the Y+ is down (scripters need not worry about this).
  */
 void
-MainWindow::nativeAddPath(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode)
+AddPath(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode)
 {
     /*
     AddPath(NodeList a)
@@ -2135,7 +2186,7 @@ MainWindow::nativeAddPath(EmbReal startX, EmbReal startY, const QPainterPath& p,
  * .
  */
 void
-MainWindow::nativeAddHorizontalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight)
+AddHorizontalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight)
 {
     /*
     AddHorizontalDimension(NodeList a)
@@ -2148,7 +2199,7 @@ MainWindow::nativeAddHorizontalDimension(EmbReal x1, EmbReal y1, EmbReal x2, Emb
  * .
  */
 void
-MainWindow::nativeAddVerticalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight)
+AddVerticalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight)
 {
     /*
     AddVerticalDimension(NodeList a)
@@ -2161,7 +2212,7 @@ MainWindow::nativeAddVerticalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbRe
  * .
  */
 void
-MainWindow::nativeAddImage(const QString& img, EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot)
+AddImage(QString  img, EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot)
 {
     /*
     AddImage(NodeList a)
@@ -2174,7 +2225,7 @@ MainWindow::nativeAddImage(const QString& img, EmbReal x, EmbReal y, EmbReal w, 
  * .
  */
 void
-MainWindow::nativeAddDimLeader(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String rubberMode)
+AddDimLeader(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String rubberMode)
 {
     /*
     AddDimLeader(NodeList a)
@@ -2184,7 +2235,7 @@ MainWindow::nativeAddDimLeader(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, E
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
-        DimLeaderObject* obj = new DimLeaderObject(x1, -y1, x2, -y2, getCurrentColor());
+        DimLeaderObject* obj = new DimLeaderObject(x1, -y1, x2, -y2,_mainWin->getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
         if (rubberMode != "OBJ_RUBBER_OFF") {
@@ -2203,7 +2254,7 @@ MainWindow::nativeAddDimLeader(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, E
  * .
  */
 void
-MainWindow::nativeSetCursorShape(const QString& str)
+SetCursorShape(QString  str)
 {
     View* gview = activeView();
     if (gview) {
@@ -2259,7 +2310,7 @@ MainWindow::nativeSetCursorShape(const QString& str)
  * .
  */
 EmbReal
-MainWindow::nativeCalculateAngle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
+CalculateAngle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 {
     return QLineF(x1, -y1, x2, -y2).angle();
 }
@@ -2270,7 +2321,7 @@ MainWindow::nativeCalculateAngle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
  *     return String(result);
  */
 EmbReal
-MainWindow::nativeCalculateDistance(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
+CalculateDistance(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 {
     return QLineF(x1, y1, x2, y2).length();
 }
@@ -2279,7 +2330,7 @@ MainWindow::nativeCalculateDistance(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal 
  * .
  */
 EmbReal
-MainWindow::nativePerpendicularDistance(EmbReal px, EmbReal py, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
+PerpendicularDistance(EmbReal px, EmbReal py, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 {
     QLineF line(x1, y1, x2, y2);
     QLineF norm = line.normalVector();
@@ -2291,7 +2342,7 @@ MainWindow::nativePerpendicularDistance(EmbReal px, EmbReal py, EmbReal x1, EmbR
     return QLineF(px, py, iPoint.x(), iPoint.y()).length();
 }
 
-int MainWindow::nativeNumSelected()
+int NumSelected()
 {
     View* gview = activeView();
     if (gview) {
@@ -2301,15 +2352,15 @@ int MainWindow::nativeNumSelected()
 }
 
 void
-MainWindow::nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode)
+AddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode)
 {
 }
 
 /**
- * @brief MainWindow::nativeDeleteSelected
+ * @brief DeleteSelected
  */
 void
-MainWindow::nativeDeleteSelected()
+DeleteSelected()
 {
     View* gview = activeView();
     if (gview) {
@@ -2318,12 +2369,12 @@ MainWindow::nativeDeleteSelected()
 }
 
 /**
- * @brief MainWindow::nativeCutSelected
+ * @brief CutSelected
  * \a x
  * \a y
  */
 void
-MainWindow::nativeCutSelected(EmbReal x, EmbReal y)
+CutSelected(EmbReal x, EmbReal y)
 {
     /*
     _mainWin->nativeCutSelected(a[0].r, a[1].r);
@@ -2331,12 +2382,12 @@ MainWindow::nativeCutSelected(EmbReal x, EmbReal y)
 }
 
 /**
- * @brief MainWindow::nativeCopySelected
+ * @brief CopySelected
  * \a x
  * \a y
  */
 void
-MainWindow::nativeCopySelected(EmbReal x, EmbReal y)
+CopySelected(EmbReal x, EmbReal y)
 {
     /*
     _mainWin->nativeCopySelected(a[0].r, a[1].r);
@@ -2344,12 +2395,12 @@ MainWindow::nativeCopySelected(EmbReal x, EmbReal y)
 }
 
 /**
- * @brief MainWindow::nativePasteSelected
+ * @brief PasteSelected
  * \a x
  * \a y
  */
 void
-MainWindow::nativePasteSelected(EmbReal x, EmbReal y)
+PasteSelected(EmbReal x, EmbReal y)
 {
     /*
     _mainWin->nativePasteSelected(a[0].r, a[1].r);
@@ -2357,12 +2408,12 @@ MainWindow::nativePasteSelected(EmbReal x, EmbReal y)
 }
 
 /**
- * @brief MainWindow::nativeMoveSelected
+ * @brief MoveSelected
  * \a dx
  * \a dy
  */
 void
-MainWindow::nativeMoveSelected(EmbReal dx, EmbReal dy)
+MoveSelected(EmbReal dx, EmbReal dy)
 {
     /*
     _mainWin->nativeMoveSelected(a[0].r, a[1].r);
@@ -2372,13 +2423,13 @@ MainWindow::nativeMoveSelected(EmbReal dx, EmbReal dy)
 }
 
 /**
- * @brief MainWindow::nativeScaleSelected
+ * @brief ScaleSelected
  * \a x
  * \a y
  * \a factor
  */
 void
-MainWindow::nativeScaleSelected(EmbReal x, EmbReal y, EmbReal factor)
+ScaleSelected(EmbReal x, EmbReal y, EmbReal factor)
 {
     /*
     if (a[2].r <= 0.0) {
@@ -2388,7 +2439,7 @@ MainWindow::nativeScaleSelected(EmbReal x, EmbReal y, EmbReal factor)
     _mainWin->nativeScaleSelected(a[0].r, a[1].r, a[2].r);
     */
     if (factor <= 0.0) {
-        QMessageBox::critical(this,
+        QMessageBox::critical(_mainWin,
             tr("ScaleFactor Error"),
             tr("Hi there. If you are not a developer, report this as a bug. "
             "If you are a developer, your code needs examined, and possibly your head too."));
@@ -2401,13 +2452,13 @@ MainWindow::nativeScaleSelected(EmbReal x, EmbReal y, EmbReal factor)
 }
 
 /**
- * @brief MainWindow::nativeRotateSelected
+ * @brief RotateSelected
  * \a x
  * \a y
  * \a rot
  */
 void
-MainWindow::nativeRotateSelected(EmbReal x, EmbReal y, EmbReal rot)
+RotateSelected(EmbReal x, EmbReal y, EmbReal rot)
 {
     /*
     _mainWin->nativeRotateSelected(a[0].r, a[1].r, a[2].r);
@@ -2419,14 +2470,14 @@ MainWindow::nativeRotateSelected(EmbReal x, EmbReal y, EmbReal rot)
 }
 
 /**
- * @brief MainWindow::nativeMirrorSelected
+ * @brief MirrorSelected
  * \a x1
  * \a y1
  * \a x2
  * \a y2
  */
 void
-MainWindow::nativeMirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
+MirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 {
     /*
     _mainWin->nativeMirrorSelected(a[0].r, a[1].r, a[2].r, a[3].r);
@@ -2438,11 +2489,11 @@ MainWindow::nativeMirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 }
 
 /**
- * @brief MainWindow::nativeQSnapX
+ * @brief QSnapX
  * @return
  */
 EmbReal
-MainWindow::nativeQSnapX()
+QSnapX()
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {
@@ -2452,11 +2503,11 @@ MainWindow::nativeQSnapX()
 }
 
 /**
- * @brief MainWindow::nativeQSnapY
+ * @brief QSnapY
  * @return
  */
 EmbReal
-MainWindow::nativeQSnapY()
+QSnapY()
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {
@@ -2466,11 +2517,11 @@ MainWindow::nativeQSnapY()
 }
 
 /**
- * @brief MainWindow::nativeMouseX
+ * @brief MouseX
  * @return
  */
 EmbReal
-MainWindow::nativeMouseX()
+MouseX()
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {
@@ -2481,11 +2532,11 @@ MainWindow::nativeMouseX()
 }
 
 /**
- * @brief MainWindow::nativeMouseY
+ * @brief MouseY
  * @return
  */
 EmbReal
-MainWindow::nativeMouseY()
+MouseY()
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {
@@ -2674,19 +2725,19 @@ MainWindow::MainWindow() : QMainWindow(0)
     //Verify that files/directories needed are actually present.
     QFileInfo check = QFileInfo(appDir + "/help");
     if (!check.exists())
-        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+        QMessageBox::critical(_mainWin, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     check = QFileInfo(appDir + "/icons");
     if (!check.exists())
-        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+        QMessageBox::critical(_mainWin, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     check = QFileInfo(appDir + "/images");
     if (!check.exists())
-        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+        QMessageBox::critical(_mainWin, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     check = QFileInfo(appDir + "/samples");
     if (!check.exists())
-        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+        QMessageBox::critical(_mainWin, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     check = QFileInfo(appDir + "/translations");
     if (!check.exists())
-        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+        QMessageBox::critical(_mainWin, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
 
     QString lang = QString::fromStdString(settings.general_language);
     debug_message("language: " + lang.toStdString());
@@ -3109,19 +3160,19 @@ actuator(String line)
             return "";
         }
         if (command == "text-multi") {
-//            _mainWin->AddTextMulti();
+//          AddTextMulti();
             return "";
         }
         if (command == "text-single") {
-//            _mainWin->AddTextSingle();
+//          AddTextSingle();
             return "";
         }
         if (command == "infinite-line") {
- //           _mainWin->AddInfiniteLine();
+ //         AddInfiniteLine();
             return "";
         }
         if (command == "ray") {
-//            _mainWin->AddRay();
+//          AddRay();
             return "";
         }
         if (command == "line") {
@@ -3129,7 +3180,7 @@ actuator(String line)
             if (error != "") {
                 return error;
             }
-//            _mainWin->AddLine();
+//          AddLine();
             return "";
         }
         if (command == "triangle") {
@@ -3137,7 +3188,7 @@ actuator(String line)
             if (error != "") {
                 return error;
             }
-//            _mainWin->AddTriangle();
+//          AddTriangle();
             return "";
         }
         if (command == "rectangle") {
@@ -3145,7 +3196,7 @@ actuator(String line)
             if (error != "") {
                 return error;
             }
-            _mainWin->nativeAddRectangle(a);
+            AddRectangle(a);
             return "";
         }
         if (command == "rounded-rectangle") {
@@ -3153,7 +3204,7 @@ actuator(String line)
             if (error != "") {
                 return error;
             }
-//            _mainWin->AddRoundedRectangle();
+//          AddRoundedRectangle();
             return "";
         }
         return "</br>The add subcommand is not recognised.";
@@ -3294,11 +3345,6 @@ actuator(String line)
             _mainWin->iconResize(128);
             return "";
         }
-        return "";
-    }
-
-    if (command == "settingsdialog") {
-        _mainWin->settingsDialog();
         return "";
     }
 
@@ -4390,7 +4436,7 @@ MainWindow::newFile()
  * @param recentFile
  */
 void
-MainWindow::openFile(bool recent, const QString& recentFile)
+MainWindow::openFile(bool recent, QString  recentFile)
 {
     debug_message("MainWindow::openFile()");
 
@@ -4413,7 +4459,7 @@ MainWindow::openFile(bool recent, const QString& recentFile)
         }
         else {
             PreviewDialog* openDialog = new PreviewDialog(this, tr("Open w/Preview"), openFilesPath, formatFilterOpen);
-            //TODO: set openDialog->selectNameFilter(const QString& filter) from settings.opensave_open_format
+            //TODO: set openDialog->selectNameFilter(QString  filter) from settings.opensave_open_format
             connect(openDialog, SIGNAL(filesSelected(QStringList)), this, SLOT(openFilesSelected(QStringList)));
             openDialog->exec();
         }
@@ -4528,7 +4574,8 @@ MainWindow::saveasfile()
  * @param fileName
  * @return
  */
-QMdiSubWindow* MainWindow::findMdiWindow(const QString& fileName)
+QMdiSubWindow *
+MainWindow::findMdiWindow(QString fileName)
 {
     debug_message("MainWindow::findMdiWindow(%s)" + fileName.toStdString());
     QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
@@ -4656,8 +4703,9 @@ MainWindow::updateMenuToolbarStatusbar()
 
         //Menus
         menuBar()->clear();
-        for (int i=0; i<(int)get_sl("menubar_order").size(); i++) {
-            menuBar()->addMenu(menuHash[get_sl("menubar_order")[i]]);
+        StringList menubar_order = config["menubar_order"].sl;
+        for (int i=0; i<(int)menubar_order.size(); i++) {
+            menuBar()->addMenu(menuHash[menubar_order[i]]);
         }
 
         menuHash["window"]->setEnabled(true);
@@ -4728,7 +4776,7 @@ MainWindow::hideUnimplemented()
  * \todo check the file exists on the system, rename to validFile?
  */
 bool
-MainWindow::validFileFormat(const QString& fileName)
+MainWindow::validFileFormat(QString fileName)
 {
     if (fileName == "") {
         return false;

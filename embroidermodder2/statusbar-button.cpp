@@ -122,42 +122,42 @@ StatusBarButton::contextMenuEvent(QContextMenuEvent *event)
 
 void StatusBarButton::settingsSnap()
 {
-    _mainWin->settingsDialog("Snap");
+    actuator("settingsdialog Snap");
 }
 
 void StatusBarButton::settingsGrid()
 {
-    _mainWin->settingsDialog("Grid/Ruler");
+    actuator("settingsdialog Grid/Ruler");
 }
 
 void StatusBarButton::settingsRuler()
 {
-    _mainWin->settingsDialog("Grid/Ruler");
+    actuator("settingsdialog Grid/Ruler");
 }
 
 void StatusBarButton::settingsOrtho()
 {
-    _mainWin->settingsDialog("Ortho/Polar");
+    actuator("settingsdialog Ortho/Polar");
 }
 
 void StatusBarButton::settingsPolar()
 {
-    _mainWin->settingsDialog("Ortho/Polar");
+    actuator("settingsdialog Ortho/Polar");
 }
 
 void StatusBarButton::settingsQSnap()
 {
-    _mainWin->settingsDialog("QuickSnap");
+    actuator("settingsdialog QuickSnap");
 }
 
 void StatusBarButton::settingsQTrack()
 {
-    _mainWin->settingsDialog("QuickTrack");
+    actuator("settingsdialog QuickTrack");
 }
 
 void StatusBarButton::settingsLwt()
 {
-    _mainWin->settingsDialog("LineWeight");
+    actuator("settingsdialog LineWeight");
 }
 
 void StatusBarButton::toggleSnap(bool on)

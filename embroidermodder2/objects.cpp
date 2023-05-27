@@ -217,7 +217,7 @@ ArcObject::setObjectEndPoint(EmbVector point)
  * @brief ArcObject::objectStartAngle
  * @return
  */
-EmbReal ArcObject::objectStartAngle() const
+EmbReal ArcObject::objectStartAngle()
 {
     EmbReal angle = QLineF(scenePos(), objectStartPoint()).angle();
     return std::fmod(angle, 360.0);
@@ -227,7 +227,7 @@ EmbReal ArcObject::objectStartAngle() const
  * @brief ArcObject::objectEndAngle
  * @return
  */
-EmbReal ArcObject::objectEndAngle() const
+EmbReal ArcObject::objectEndAngle()
 {
     EmbReal angle = QLineF(scenePos(), objectEndPoint()).angle();
     return std::fmod(angle, 360.0);
@@ -251,7 +251,7 @@ rotate_vector(EmbVector v, EmbReal alpha)
  * @brief ArcObject::objectStartPoint
  * @return
  */
-QPointF ArcObject::objectStartPoint() const
+QPointF ArcObject::objectStartPoint()
 {
     EmbReal rot = radians(rotation());
     EmbVector v = to_EmbVector(arcStartPoint) * scale();
@@ -264,7 +264,7 @@ QPointF ArcObject::objectStartPoint() const
  * @brief ArcObject::objectMidPoint
  * @return
  */
-QPointF ArcObject::objectMidPoint() const
+QPointF ArcObject::objectMidPoint()
 {
     EmbReal rot = radians(rotation());
     EmbVector v = to_EmbVector(arcMidPoint) * scale();
@@ -277,7 +277,7 @@ QPointF ArcObject::objectMidPoint() const
  * @brief ArcObject::objectEndPoint
  * @return
  */
-QPointF ArcObject::objectEndPoint() const
+QPointF ArcObject::objectEndPoint()
 {
     EmbReal rot = radians(rotation());
     EmbVector v = to_EmbVector(arcEndPoint) * scale();
@@ -290,7 +290,7 @@ QPointF ArcObject::objectEndPoint() const
  * @brief ArcObject::objectArea
  * @return
  */
-EmbReal ArcObject::objectArea() const
+EmbReal ArcObject::objectArea()
 {
     //Area of a circular segment
     EmbReal r = objectRadius();
@@ -302,7 +302,7 @@ EmbReal ArcObject::objectArea() const
  * @brief ArcObject::objectArcLength
  * @return
  */
-EmbReal ArcObject::objectArcLength() const
+EmbReal ArcObject::objectArcLength()
 {
     return radians(objectIncludedAngle())*objectRadius();
 }
@@ -311,7 +311,7 @@ EmbReal ArcObject::objectArcLength() const
  * @brief ArcObject::objectChord
  * @return
  */
-EmbReal ArcObject::objectChord() const
+EmbReal ArcObject::objectChord()
 {
     return QLineF(
         objectStartPoint().x(),
@@ -324,7 +324,7 @@ EmbReal ArcObject::objectChord() const
  * @brief ArcObject::objectIncludedAngle
  * @return
  */
-EmbReal ArcObject::objectIncludedAngle() const
+EmbReal ArcObject::objectIncludedAngle()
 {
     EmbReal chord = objectChord();
     EmbReal rad = objectRadius();
@@ -342,7 +342,7 @@ EmbReal ArcObject::objectIncludedAngle() const
  * @brief ArcObject::objectClockwise
  * @return
  */
-bool ArcObject::objectClockwise() const
+bool ArcObject::objectClockwise()
 {
     //NOTE: Y values are inverted here on purpose
     EmbArc arc;
@@ -397,7 +397,7 @@ void ArcObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
         paintPen.setStyle(Qt::DashLine);
     }
     if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = lineWeightPen();
+        paintPen = lwtPen;
     }
     painter->setPen(paintPen);
 
@@ -573,7 +573,7 @@ BaseObject::setObjectLineWeight(String lineWeight)
  * @return
  */
 QPointF
-BaseObject::objectRubberPoint(const QString& key) const
+BaseObject::objectRubberPoint(QString  key)
 {
     if (objRubberPoints.contains(key))
         return objRubberPoints.value(key);
@@ -590,7 +590,7 @@ BaseObject::objectRubberPoint(const QString& key) const
  * @return
  */
 QString
-BaseObject::objectRubberText(const QString& key) const
+BaseObject::objectRubberText(QString  key)
 {
     if (objRubberTexts.contains(key))
         return objRubberTexts.value(key);
@@ -601,7 +601,7 @@ BaseObject::objectRubberText(const QString& key) const
  * If gripped, force this object to be drawn even if it is offscreen.
  */
 QRectF
-BaseObject::boundingRect() const
+BaseObject::boundingRect()
 {
     if (objRubberMode == "OBJ_RUBBER_GRIP") {
         return scene()->sceneRect();
@@ -707,7 +707,7 @@ CircleObject::CircleObject(CircleObject* obj, QGraphicsItem* parent) : BaseObjec
 {
     debug_message("CircleObject Constructor()");
     if (obj) {
-        init(obj->objectCenterX(), obj->objectCenterY(), obj->objectRadius(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        init(obj->objectCenter().x(), obj->objectCenter().y(), obj->objectRadius(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
     }
 }
@@ -829,7 +829,7 @@ CircleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, Q
     painter->setPen(paintPen);
     updateRubber(painter);
     if (option->state & QStyle::State_Selected) { paintPen.setStyle(Qt::DashLine); }
-    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
+    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lwtPen; }
     painter->setPen(paintPen);
 
     painter->drawEllipse(rect());
@@ -972,7 +972,7 @@ CircleObject::gripEdit(const QPointF& before, const QPointF& after)
  * @return
  */
 QPainterPath
-CircleObject::objectSavePath() const
+CircleObject::objectSavePath()
 {
     QPainterPath path;
     QRectF r = rect();
@@ -1095,7 +1095,7 @@ DimLeaderObject::setObjectEndPoint2(EmbVector endPt2)
  * @return
  */
 QPointF
-DimLeaderObject::objectEndPoint1() const
+DimLeaderObject::objectEndPoint1()
 {
     return scenePos();
 }
@@ -1105,13 +1105,12 @@ DimLeaderObject::objectEndPoint1() const
  * @return
  */
 QPointF
-DimLeaderObject::objectEndPoint2() const
+DimLeaderObject::objectEndPoint2()
 {
     EmbVector v;
-    QLineF lyne = line();
     EmbReal rot = radians(rotation());
-    v.x = lyne.x2()*scale();
-    v.y = lyne.y2()*scale();
+    v.x = objLine.x2()*scale();
+    v.y = objLine.y2()*scale();
     QPointF rotEnd = to_QPointF(rotate_vector(v, rot));
 
     return scenePos() + rotEnd;
@@ -1122,14 +1121,11 @@ DimLeaderObject::objectEndPoint2() const
  * @return
  */
 QPointF
-DimLeaderObject::objectMidPoint() const
+DimLeaderObject::objectMidPoint()
 {
-    EmbVector m;
-    QLineF lyne = line();
-    QPointF mp = lyne.pointAt(0.5);
+    QPointF mp = objLine.pointAt(0.5);
     EmbReal rot = radians(rotation());
-    m.x = mp.x()*scale();
-    m.y = mp.y()*scale();
+    EmbVector m = to_EmbVector(mp) * scale();
     QPointF rotMid = to_QPointF(rotate_vector(m, rot));
 
     return scenePos() + rotMid;
@@ -1140,9 +1136,9 @@ DimLeaderObject::objectMidPoint() const
  * @return
  */
 EmbReal
-DimLeaderObject::objectAngle() const
+DimLeaderObject::objectAngle()
 {
-    EmbReal angle = line().angle() - rotation();
+    EmbReal angle = objLine.angle() - rotation();
     return std::fmod(angle, 360.0);
 }
 
@@ -1158,7 +1154,7 @@ DimLeaderObject::updateLeader()
     EmbReal lineStyleAngle = 45.0; //TODO: Make this customizable
     EmbReal lineStyleLength = 1.0; //TODO: Make this customizable
 
-    QLineF lyne = line();
+    QLineF lyne = objLine;
     EmbReal angle = lyne.angle();
     QPointF ap0 = lyne.p1();
     QPointF lp0 = lyne.p2();
@@ -1248,7 +1244,7 @@ DimLeaderObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     painter->setPen(paintPen);
     updateRubber(painter);
     if (option->state & QStyle::State_Selected) { paintPen.setStyle(Qt::DashLine); }
-    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
+    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lwtPen; }
     painter->setPen(paintPen);
 
     painter->drawPath(lineStylePath);
@@ -1275,13 +1271,13 @@ DimLeaderObject::updateRubber(QPainter* painter)
         if (painter) {
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
             if (gripPoint == objectEndPoint1()) {
-                painter->drawLine(line().p2(), mapFromScene(objectRubberPoint(QString())));
+                painter->drawLine(objLine.p2(), mapFromScene(objectRubberPoint(QString())));
             }
             else if (gripPoint == objectEndPoint2()) {
-                painter->drawLine(line().p1(), mapFromScene(objectRubberPoint(QString())));
+                painter->drawLine(objLine.p1(), mapFromScene(objectRubberPoint(QString())));
             }
             else if (gripPoint == objectMidPoint()) {
-                painter->drawLine(line().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
+                painter->drawLine(objLine.translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
             }
         }
     }
@@ -1360,8 +1356,8 @@ EllipseObject::EllipseObject(EllipseObject* obj, QGraphicsItem* parent) : BaseOb
     debug_message("EllipseObject Constructor()");
     if (obj) {
         init(
-            obj->objectCenterX(),
-            obj->objectCenterY(),
+            obj->objectCenter().x(),
+            obj->objectCenter().y(),
             obj->objectWidth(),
             obj->objectHeight(),
             obj->objectColorRGB(),
@@ -1469,7 +1465,7 @@ EllipseObject::setObjectDiameterMinor(EmbReal diameter)
  * \brief .
  */
 QPointF
-EllipseObject::objectQuadrant0() const
+EllipseObject::objectQuadrant0()
 {
     EmbReal halfW = objectWidth()/2.0;
     EmbReal rot = radians(rotation());
@@ -1481,7 +1477,7 @@ EllipseObject::objectQuadrant0() const
  * \brief .
  */
 QPointF
-EllipseObject::objectQuadrant90() const
+EllipseObject::objectQuadrant90()
 {
     EmbReal halfH = objectHeight()/2.0;
     EmbReal rot = radians(rotation()+90.0);
@@ -1493,7 +1489,7 @@ EllipseObject::objectQuadrant90() const
  * \brief .
  */
 QPointF
-EllipseObject::objectQuadrant180() const
+EllipseObject::objectQuadrant180()
 {
     EmbReal halfW = objectWidth()/2.0;
     EmbReal rot = radians(rotation()+180.0);
@@ -1506,7 +1502,7 @@ EllipseObject::objectQuadrant180() const
  * \brief .
  */
 QPointF
-EllipseObject::objectQuadrant270() const
+EllipseObject::objectQuadrant270()
 {
     EmbReal halfH = objectHeight()/2.0;
     EmbReal rot = radians(rotation()+270.0);
@@ -1543,7 +1539,7 @@ EllipseObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
     painter->setPen(paintPen);
     updateRubber(painter);
     if (option->state & QStyle::State_Selected) { paintPen.setStyle(Qt::DashLine); }
-    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
+    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lwtPen; }
     painter->setPen(paintPen);
 
     painter->drawEllipse(rect());
@@ -1682,7 +1678,7 @@ EllipseObject::gripEdit(const QPointF& before, const QPointF& after)
 /**
  * \brief .
  */
-QPainterPath EllipseObject::objectSavePath() const
+QPainterPath EllipseObject::objectSavePath()
 {
     QPainterPath path;
     QRectF r = rect();
@@ -1762,7 +1758,7 @@ ImageObject::setObjectRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h)
  * \brief .
  */
 QPointF
-ImageObject::objectTopLeft() const
+ImageObject::objectTopLeft()
 {
     EmbReal rot = radians(rotation());
     QPointF tl = rect().topLeft();
@@ -1778,7 +1774,7 @@ ImageObject::objectTopLeft() const
  * \brief .
  */
 QPointF
-ImageObject::objectTopRight() const
+ImageObject::objectTopRight()
 {
     EmbReal rot = radians(rotation());
     QPointF tr = rect().topRight();
@@ -1794,7 +1790,7 @@ ImageObject::objectTopRight() const
  * \brief .
  */
 QPointF
-ImageObject::objectBottomLeft() const
+ImageObject::objectBottomLeft()
 {
     EmbReal rot = radians(rotation());
     QPointF bl = rect().bottomLeft();
@@ -1808,7 +1804,7 @@ ImageObject::objectBottomLeft() const
  * \brief .
  */
 QPointF
-ImageObject::objectBottomRight() const
+ImageObject::objectBottomRight()
 {
     EmbReal rot = radians(rotation());
     QPointF br = rect().bottomRight();
@@ -1857,7 +1853,7 @@ ImageObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QW
         paintPen.setStyle(Qt::DashLine);
     }
     if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = lineWeightPen();
+        paintPen = lwtPen;
     }
     painter->setPen(paintPen);
 
@@ -2035,9 +2031,9 @@ LineObject::setObjectEndPoint2(EmbVector endPt2)
  * @return
  */
 QPointF
-LineObject::objectEndPoint2() const
+LineObject::objectEndPoint2()
 {
-    QLineF lyne = line();
+    QLineF lyne = objLine;
     EmbReal rot = radians(rotation());
     EmbVector v;
     v.x = lyne.x2()*scale();
@@ -2052,9 +2048,9 @@ LineObject::objectEndPoint2() const
  * @return
  */
 QPointF
-LineObject::objectMidPoint() const
+LineObject::objectMidPoint()
 {
-    QLineF lyne = line();
+    QLineF lyne = objLine;
     QPointF mp = lyne.pointAt(0.5);
     EmbReal rot = radians(rotation());
     EmbVector m = to_EmbVector(mp) * scale();
@@ -2068,9 +2064,9 @@ LineObject::objectMidPoint() const
  * @return
  */
 EmbReal
-LineObject::objectAngle() const
+LineObject::objectAngle()
 {
-    EmbReal angle = line().angle() - rotation();
+    EmbReal angle = objLine.angle() - rotation();
     return std::fmod(angle, 360.0);
 }
 
@@ -2089,11 +2085,11 @@ LineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWi
     painter->setPen(paintPen);
     updateRubber(painter);
     if (option->state & QStyle::State_Selected) { paintPen.setStyle(Qt::DashLine); }
-    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
+    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lwtPen; }
     painter->setPen(paintPen);
 
     if (objRubberMode != "OBJ_RUBBER_LINE") {
-        painter->drawLine(line());
+        painter->drawLine(objLine);
     }
 
     if (objScene->property("ENABLE_LWT").toBool()
@@ -2117,19 +2113,19 @@ LineObject::updateRubber(QPainter* painter)
         setObjectEndPoint1(to_EmbVector(sceneStartPoint));
         setObjectEndPoint2(to_EmbVector(sceneQSnapPoint));
 
-        drawRubberLine(line(), painter, "VIEW_COLOR_CROSSHAIR");
+        drawRubberLine(objLine, painter, "VIEW_COLOR_CROSSHAIR");
     }
     else if (rubberMode == "OBJ_RUBBER_GRIP") {
         if (painter) {
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
             if (gripPoint == objectEndPoint1()) {
-                painter->drawLine(line().p2(), mapFromScene(objectRubberPoint(QString())));
+                painter->drawLine(objLine.p2(), mapFromScene(objectRubberPoint(QString())));
             }
             else if (gripPoint == objectEndPoint2()) {
-                painter->drawLine(line().p1(), mapFromScene(objectRubberPoint(QString())));
+                painter->drawLine(objLine.p1(), mapFromScene(objectRubberPoint(QString())));
             }
             else if (gripPoint == objectMidPoint())
-                painter->drawLine(line().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
+                painter->drawLine(objLine.translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
             drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
@@ -2205,7 +2201,7 @@ LineObject::gripEdit(const QPointF& before, const QPointF& after)
  * @return
  */
 QPainterPath
-LineObject::objectSavePath() const
+LineObject::objectSavePath()
 {
     QPainterPath path;
     /* \todo discards qualifiers error. */
@@ -2310,7 +2306,7 @@ PathObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWi
         paintPen.setStyle(Qt::DashLine);
     }
     if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = lineWeightPen();
+        paintPen = lwtPen;
     }
     painter->setPen(paintPen);
 
@@ -2384,7 +2380,7 @@ PathObject::gripEdit(const QPointF& before, const QPointF& after)
  * @return
  */
 QPainterPath
-PathObject::objectCopyPath() const
+PathObject::objectCopyPath()
 {
     return normalPath;
 }
@@ -2394,7 +2390,7 @@ PathObject::objectCopyPath() const
  * @return
  */
 QPainterPath
-PathObject::objectSavePath() const
+PathObject::objectSavePath()
 {
     EmbReal s = scale();
     QTransform trans;
@@ -2480,7 +2476,7 @@ PointObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QW
     painter->setPen(paintPen);
     updateRubber(painter);
     if (option->state & QStyle::State_Selected) { paintPen.setStyle(Qt::DashLine); }
-    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
+    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lwtPen; }
     painter->setPen(paintPen);
 
     painter->drawPoint(0,0);
@@ -2557,7 +2553,7 @@ PointObject::gripEdit(const QPointF& before, const QPointF& after)
  * @return
  */
 QPainterPath
-PointObject::objectSavePath() const
+PointObject::objectSavePath()
 {
     QPainterPath path;
     path.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
@@ -2587,7 +2583,7 @@ PolygonObject::PolygonObject(PolygonObject* obj, QGraphicsItem* parent) : BaseOb
 {
     debug_message("PolygonObject Constructor()");
     if (obj) {
-        init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        init(obj->objectPos().x(), obj->objectPos().y(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
         setScale(obj->scale());
     }
@@ -2659,7 +2655,7 @@ PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
     painter->setPen(paintPen);
     updateRubber(painter);
     if (option->state & QStyle::State_Selected) { paintPen.setStyle(Qt::DashLine); }
-    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
+    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lwtPen; }
     painter->setPen(paintPen);
 
     if (normalPath.elementCount()) {
@@ -2880,7 +2876,7 @@ PolygonObject::gripEdit(const QPointF& before, const QPointF& after)
  * @return
  */
 QPainterPath
-PolygonObject::objectCopyPath() const
+PolygonObject::objectCopyPath()
 {
     return normalPath;
 }
@@ -2890,7 +2886,7 @@ PolygonObject::objectCopyPath() const
  * @return
  */
 QPainterPath
-PolygonObject::objectSavePath() const
+PolygonObject::objectSavePath()
 {
     QPainterPath closedPath = normalPath;
     closedPath.closeSubpath();
@@ -2994,7 +2990,7 @@ PolylineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
     painter->setPen(paintPen);
     updateRubber(painter);
     if (option->state & QStyle::State_Selected) { paintPen.setStyle(Qt::DashLine); }
-    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
+    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lwtPen; }
     painter->setPen(paintPen);
 
     painter->drawPath(normalPath);
@@ -3164,7 +3160,7 @@ PolylineObject::gripEdit(const QPointF& before, const QPointF& after)
  * @return
  */
 QPainterPath
-PolylineObject::objectCopyPath() const
+PolylineObject::objectCopyPath()
 {
     return normalPath;
 }
@@ -3174,7 +3170,7 @@ PolylineObject::objectCopyPath() const
  * @return
  */
 QPainterPath
-PolylineObject::objectSavePath() const
+PolylineObject::objectSavePath()
 {
     EmbReal s = scale();
     QTransform trans;
@@ -3248,7 +3244,7 @@ void RectObject::setObjectRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h)
  * \return The top left corner location as a QPointF.
  */
 QPointF
-RectObject::objectTopLeft() const
+RectObject::objectTopLeft()
 {
     EmbReal rot = radians(rotation());
     QPointF tl = rect().topLeft();
@@ -3261,7 +3257,7 @@ RectObject::objectTopLeft() const
 /**
  * \brief .
  */
-QPointF RectObject::objectTopRight() const
+QPointF RectObject::objectTopRight()
 {
     EmbReal rot = radians(rotation());
     QPointF tr = rect().topRight();
@@ -3274,7 +3270,7 @@ QPointF RectObject::objectTopRight() const
 /**
  * \brief .
  */
-QPointF RectObject::objectBottomLeft() const
+QPointF RectObject::objectBottomLeft()
 {
     EmbReal rot = radians(rotation());
     QPointF bl = rect().bottomLeft();
@@ -3287,7 +3283,7 @@ QPointF RectObject::objectBottomLeft() const
 /**
  * \brief .
  */
-QPointF RectObject::objectBottomRight() const
+QPointF RectObject::objectBottomRight()
 {
     EmbReal rot = radians(rotation());
     QPointF br = rect().bottomLeft();
@@ -3332,7 +3328,7 @@ void RectObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
         paintPen.setStyle(Qt::DashLine);
     }
     if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = lineWeightPen();
+        paintPen = lwtPen;
     }
     painter->setPen(paintPen);
 
@@ -3445,7 +3441,7 @@ void RectObject::gripEdit(const QPointF& before, const QPointF& after)
  * \brief .
  */
 QPainterPath
-RectObject::objectSavePath() const
+RectObject::objectSavePath()
 {
     QPainterPath path;
     QRectF r = rect();
@@ -3494,7 +3490,7 @@ SaveObject::~SaveObject()
  * to try to hide dark colored stitches beneath light colored fills.
  */
 bool
-SaveObject::save(const QString &fileName)
+SaveObject::save(QString fileName)
 {
     qDebug("SaveObject save(%s)", qPrintable(fileName));
 
@@ -3611,8 +3607,8 @@ SaveObject::addCircle(EmbPattern* pattern, QGraphicsItem* item)
         }
         else {
             EmbCircle circle;
-            circle.center.x = (double)obj->objectCenterX();
-            circle.center.y = (double)obj->objectCenterY();
+            circle.center.x = (double)obj->objectCenter().x();
+            circle.center.y = (double)obj->objectCenter().y();
             circle.radius = (double)obj->objectRadius();
             
             embPattern_addCircleAbs(pattern, circle);
@@ -3716,8 +3712,8 @@ SaveObject::addEllipse(EmbPattern* pattern, QGraphicsItem* item)
         }
         else {
             EmbEllipse ellipse;
-            ellipse.center.x = (double)obj->objectCenterX();
-            ellipse.center.y = (double)obj->objectCenterY();
+            ellipse.center.x = (double)obj->objectCenter().x();
+            ellipse.center.y = (double)obj->objectCenter().y();
             ellipse.radius.x = (double)obj->objectWidth()/2.0;
             ellipse.radius.y = (double)obj->objectHeight()/2.0;
             //TODO: ellipse rotation
@@ -4006,7 +4002,7 @@ SaveObject::addTextSingle(EmbPattern* pattern, QGraphicsItem* item)
  * \note This function should be used to interpret various object types and save them as polylines for stitchOnly formats.
  */
 void
-SaveObject::toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainterPath& objPath, const QString& layer, const QColor& color, const QString& lineType, const QString& lineWeight)
+SaveObject::toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainterPath& objPath, QString  layer, const QColor& color, QString  lineType, QString  lineWeight)
 {
     EmbReal startX = objPos.x();
     EmbReal startY = objPos.y();
@@ -4038,7 +4034,7 @@ SaveObject::toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainte
 /**
  *
  */
-TextSingleObject::TextSingleObject(const QString& str, EmbReal x, EmbReal y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+TextSingleObject::TextSingleObject(QString  str, EmbReal x, EmbReal y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     debug_message("TextSingleObject Constructor()");
     init(str, x, y, rgb, Qt::SolidLine); //TODO: getCurrentLineType
@@ -4075,7 +4071,7 @@ TextSingleObject::~TextSingleObject()
  *
  */
 void
-TextSingleObject::init(const QString& str, EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType)
+TextSingleObject::init(QString  str, EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, OBJ_TYPE_TEXTSINGLE);
     setData(OBJ_NAME, "Single Line Text");
@@ -4119,7 +4115,7 @@ QStringList justify_options = {
 /**
  *
  */
-void TextSingleObject::setObjectText(const QString& str)
+void TextSingleObject::setObjectText(QString  str)
 {
     objText = str;
     QPainterPath textPath;
@@ -4204,7 +4200,7 @@ void TextSingleObject::setObjectText(const QString& str)
  *
  */
 void
-TextSingleObject::setObjectTextFont(const QString& font)
+TextSingleObject::setObjectTextFont(QString  font)
 {
     objTextFont = font;
     setObjectText(objText);
@@ -4214,7 +4210,7 @@ TextSingleObject::setObjectTextFont(const QString& font)
  * Verify the string is a valid option, otherwise default to "Left".
  */
 void
-TextSingleObject::setObjectTextJustify(const QString& justify)
+TextSingleObject::setObjectTextJustify(QString  justify)
 {
     objTextJustify = "Left";
     for (int i=0; i<justify_options.size(); i++) {
@@ -4335,7 +4331,7 @@ TextSingleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
         paintPen.setStyle(Qt::DashLine);
     }
     if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = lineWeightPen();
+        paintPen = lwtPen;
     }
     painter->setPen(paintPen);
 
@@ -4418,7 +4414,7 @@ TextSingleObject::gripEdit(const QPointF& before, const QPointF& after)
  *
  */
 std::vector<QPainterPath>
-TextSingleObject::subPathList() const
+TextSingleObject::subPathList()
 {
     EmbReal s = scale();
     QTransform trans;

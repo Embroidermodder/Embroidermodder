@@ -24,7 +24,7 @@
  * @param filename
  * @param parent
  */
-ImageWidget::ImageWidget(const QString &filename, QWidget* parent) : QWidget(parent)
+ImageWidget::ImageWidget(QString filename, QWidget* parent) : QWidget(parent)
 {
     debug_message("ImageWidget Constructor");
 
@@ -44,7 +44,7 @@ ImageWidget::ImageWidget(const QString &filename, QWidget* parent) : QWidget(par
  * @return
  */
 bool
-ImageWidget::load(const QString &fileName)
+ImageWidget::load(QString fileName)
 {
     img.load(fileName);
     return true;
@@ -56,7 +56,7 @@ ImageWidget::load(const QString &fileName)
  * @return
  */
 bool
-ImageWidget::save(const QString &fileName)
+ImageWidget::save(QString fileName)
 {
     img.save(fileName, "PNG");
     return true;

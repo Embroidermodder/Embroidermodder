@@ -79,7 +79,7 @@ MdiArea::useBackgroundColor(bool use)
  * @brief MdiArea::setBackgroundLogo
  * @param fileName
  */
-void MdiArea::setBackgroundLogo(const QString& fileName)
+void MdiArea::setBackgroundLogo(QString  fileName)
 {
     bgLogo.load(fileName);
 
@@ -90,7 +90,7 @@ void MdiArea::setBackgroundLogo(const QString& fileName)
  * @brief MdiArea::setBackgroundTexture
  * @param fileName
  */
-void MdiArea::setBackgroundTexture(const QString& fileName)
+void MdiArea::setBackgroundTexture(QString  fileName)
 {
     bgTexture.load(fileName);
 

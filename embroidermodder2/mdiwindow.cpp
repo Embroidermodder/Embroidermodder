@@ -86,7 +86,7 @@ MdiWindow::~MdiWindow()
  * @return
  */
 bool
-MdiWindow::saveFile(const QString &fileName)
+MdiWindow::saveFile(QString fileName)
 {
     SaveObject saveObj(gscene, this);
     return saveObj.save(fileName);
@@ -98,7 +98,7 @@ MdiWindow::saveFile(const QString &fileName)
  * @return
  */
 bool
-MdiWindow::loadFile(const QString &fileName)
+MdiWindow::loadFile(QString fileName)
 {
     qDebug("MdiWindow loadFile()");
 
@@ -152,17 +152,17 @@ MdiWindow::loadFile(const QString &fileName)
             if (g.type == EMB_CIRCLE) {
                 EmbCircle c = g.object.circle;
                 // NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                _mainWin->nativeAddCircle(c.center.x, c.center.y, c.radius, false, "OBJ_RUBBER_OFF"); //TODO: fill
+                AddCircle(c.center.x, c.center.y, c.radius, false, "OBJ_RUBBER_OFF"); //TODO: fill
             }
             if (g.type == EMB_ELLIPSE) {
                 EmbEllipse e = g.object.ellipse;
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                _mainWin->nativeAddEllipse(e.center.x, e.center.y, embEllipse_width(e), embEllipse_height(e), 0, false, "OBJ_RUBBER_OFF"); //TODO: rotation and fill
+                AddEllipse(e.center.x, e.center.y, embEllipse_width(e), embEllipse_height(e), 0, false, "OBJ_RUBBER_OFF"); //TODO: rotation and fill
             }
             if (g.type == EMB_LINE) {
                 EmbLine li = g.object.line;
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                _mainWin->nativeAddLine(li.start.x, li.start.y, li.end.x, li.end.y, 0, "OBJ_RUBBER_OFF"); //TODO: rotation
+                AddLine(li.start.x, li.start.y, li.end.x, li.end.y, 0, "OBJ_RUBBER_OFF"); //TODO: rotation
             }
             if (g.type == EMB_PATH) {
                 // TODO: This is unfinished. It needs more work
@@ -188,7 +188,7 @@ MdiWindow::loadFile(const QString &fileName)
             if (p->geometry->geometry[i].type == EMB_POINT) {
                 EmbPoint po = g.object.point;
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                _mainWin->nativeAddPoint(po.position.x, po.position.y);
+                AddPoint(po.position.x, po.position.y);
             }
             if (p->geometry->geometry[i].type == EMB_POLYGON) {
                 EmbPolygon polygon = g.object.polygon;
@@ -215,7 +215,7 @@ MdiWindow::loadFile(const QString &fileName)
                 }
 
                 polygonPath.translate(-startX, -startY);
-                _mainWin->nativeAddPolygon(startX, startY, polygonPath, "OBJ_RUBBER_OFF");
+                AddPolygon(startX, startY, polygonPath, "OBJ_RUBBER_OFF");
             }
             /* NOTE: Polylines should only contain NORMAL stitches. */
             if (p->geometry->geometry[i].type == EMB_POLYLINE) {
@@ -242,7 +242,7 @@ MdiWindow::loadFile(const QString &fileName)
                 }
 
                 polylinePath.translate(-start.x, -start.y);
-                _mainWin->nativeAddPolyline(start.x, start.y, polylinePath, "OBJ_RUBBER_OFF");
+                AddPolyline(start.x, start.y, polylinePath, "OBJ_RUBBER_OFF");
             }
             if (g.type == EMB_RECT) {
                 EmbRect r = g.object.rect;
@@ -347,7 +347,7 @@ void MdiWindow::saveBMC()
  * @param fileName
  */
 void
-MdiWindow::setCurrentFile(const QString &fileName)
+MdiWindow::setCurrentFile(QString fileName)
 {
     curFile = QFileInfo(fileName).canonicalFilePath();
     setWindowModified(false);
@@ -370,7 +370,7 @@ MdiWindow::getShortCurrentFile()
  * @return
  */
 QString
-MdiWindow::fileExtension(const QString& fileName)
+MdiWindow::fileExtension(QString  fileName)
 {
     return QFileInfo(fileName).suffix().toLower();
 }
@@ -410,7 +410,7 @@ MdiWindow::onWindowActivated()
  * @return
  */
 QSize
-MdiWindow::sizeHint() const
+MdiWindow::sizeHint()
 {
     qDebug("MdiWindow sizeHint()");
     return QSize(450, 300);
@@ -421,7 +421,7 @@ MdiWindow::sizeHint() const
  * @param layer
  */
 void
-MdiWindow::currentLayerChanged(const QString& layer)
+MdiWindow::currentLayerChanged(QString  layer)
 {
     curLayer = layer;
 }
@@ -439,7 +439,7 @@ void MdiWindow::currentColorChanged(const QRgb& color)
  * @brief MdiWindow::currentLinetypeChanged
  * @param type
  */
-void MdiWindow::currentLinetypeChanged(const QString& type)
+void MdiWindow::currentLinetypeChanged(QString  type)
 {
     curLineType = type;
 }
@@ -448,7 +448,7 @@ void MdiWindow::currentLinetypeChanged(const QString& type)
  * @brief MdiWindow::currentLineweightChanged
  * @param weight
  */
-void MdiWindow::currentLineweightChanged(const QString& weight)
+void MdiWindow::currentLineweightChanged(QString  weight)
 {
     curLineWeight = weight;
 }
@@ -497,12 +497,12 @@ void MdiWindow::setViewRulerColor(QRgb color)
     gview->setRulerColor(color);
 }
 
-void MdiWindow::promptHistoryAppended(const QString& txt)
+void MdiWindow::promptHistoryAppended(QString  txt)
 {
     promptHistory.append("<br/>" + txt);
 }
 
-void MdiWindow::logPromptInput(const QString& txt)
+void MdiWindow::logPromptInput(QString  txt)
 {
     promptInputList.push_back(txt);
     promptInputNum = promptInputList.size();

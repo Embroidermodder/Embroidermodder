@@ -95,23 +95,24 @@ std::unordered_map<String, QComboBox *> comboBoxes;
 std::unordered_map<String, QLineEdit *> lineEdits;
 std::unordered_map<String, QToolButton *> toolButtons;
 QFontComboBox* comboBoxTextSingleFont;
-std::unordered_map<String, GroupBoxData> group_box_data;
+std::unordered_map<String, Dictionary> group_box_data;
 
 /**
  * .
  */
-std::vector<GroupBoxData>
+std::vector<Dictionary>
 load_group_box_data_from_table(String key)
 {
-    std::vector<GroupBoxData> group_box;
-    for (int i=0; i<(int)(get_sl("all_line_editors").size()/6); i++) {
-        if (get_sl("all_line_editors")[6*i] == key) {
-            GroupBoxData data;
-            data.key = get_sl("all_line_editors")[6*i+1];
-            data.icon_name = get_sl("all_line_editors")[6*i+2];
-            data.label = get_sl("all_line_editors")[6*i+3];
-            data.type = get_sl("all_line_editors")[6*i+4];
-            data.map_signal = get_sl("all_line_editors")[6*i+5];
+    std::vector<Dictionary> group_box;
+    StringList all_line_editors = config["all_line_editors"].sl;
+    for (int i=0; i<(int)(all_line_editors.size()/6); i++) {
+        if (all_line_editors[6*i] == key) {
+            Dictionary data;
+            data["key"] = node(all_line_editors[6*i+1]);
+            data["icon_name"] = node(all_line_editors[6*i+2]);
+            data["label"] = node(all_line_editors[6*i+3]);
+            data["type"] = node(all_line_editors[6*i+4]);
+            data["map_signal"] = node(all_line_editors[6*i+5]);
             group_box.push_back(data);
         }
     }
@@ -121,7 +122,7 @@ load_group_box_data_from_table(String key)
 /**
  * .
  */
-PropertyEditor::PropertyEditor(const QString& iconDirectory, bool pickAddMode, QWidget* widgetToFocus, QWidget* parent) : QDockWidget(parent)
+PropertyEditor::PropertyEditor(QString  iconDirectory, bool pickAddMode, QWidget* widgetToFocus, QWidget* parent) : QDockWidget(parent)
 {
     qDebug("Creating PropertyEditor...");
     iconDir = iconDirectory;
@@ -188,8 +189,9 @@ PropertyEditor::PropertyEditor(const QString& iconDirectory, bool pickAddMode, Q
     QScrollArea* scrollProperties = new QScrollArea(this);
     QWidget* widgetProperties = new QWidget(this);
     QVBoxLayout* vboxLayoutProperties = new QVBoxLayout(this);
-    for (int i=0; i<(int)get_sl("group_box_list").size(); i++) {
-        vboxLayoutProperties->addWidget(groupBoxes[get_sl("group_box_list")[i]]);
+    StringList group_box_list = config["group_box_list"].sl;
+    for (int i=0; i<(int)group_box_list.size(); i++) {
+        vboxLayoutProperties->addWidget(groupBoxes[group_box_list[i]]);
     }
     vboxLayoutProperties->addStretch(1);
     widgetProperties->setLayout(vboxLayoutProperties);
@@ -391,8 +393,8 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
         if (objType == OBJ_TYPE_ARC) {
             ArcObject* obj = static_cast<ArcObject*>(item);
             if (obj) {
-                updateLineEditNumIfVaries(lineEdits["arc-center-x"], obj->objectCenterX(), false);
-                updateLineEditNumIfVaries(lineEdits["arc-center-y"], -obj->objectCenterY(), false);
+                updateLineEditNumIfVaries(lineEdits["arc-center-x"], obj->objectCenter().x(), false);
+                updateLineEditNumIfVaries(lineEdits["arc-center-y"], -obj->objectCenter().y(), false);
                 updateLineEditNumIfVaries(lineEdits["arc_radius"], obj->objectRadius(), false);
                 updateLineEditNumIfVaries(lineEdits["arc_start_angle"], obj->objectStartAngle(), true);
                 updateLineEditNumIfVaries(lineEdits["arc_end_angle"], obj->objectEndAngle(), true);
@@ -413,8 +415,8 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
         else if (objType == OBJ_TYPE_CIRCLE) {
             CircleObject* obj = static_cast<CircleObject*>(item);
             if (obj) {
-                updateLineEditNumIfVaries(lineEdits["circle_center_x"], obj->objectCenterX(), false);
-                updateLineEditNumIfVaries(lineEdits["circle_center_y"], -obj->objectCenterY(), false);
+                updateLineEditNumIfVaries(lineEdits["circle_center_x"], obj->objectCenter().x(), false);
+                updateLineEditNumIfVaries(lineEdits["circle_center_y"], -obj->objectCenter().y(), false);
                 updateLineEditNumIfVaries(lineEdits["circle_radius"], obj->objectRadius(), false);
                 updateLineEditNumIfVaries(lineEdits["circle_diameter"], obj->objectDiameter(), false);
                 updateLineEditNumIfVaries(lineEdits["circle_area"], obj->objectArea(), false);
@@ -448,8 +450,8 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
         else if (objType == OBJ_TYPE_ELLIPSE) {
             EllipseObject* obj = static_cast<EllipseObject*>(item);
             if (obj) {
-                updateLineEditNumIfVaries(lineEdits["ellipse-center-x"], obj->objectCenterX(), false);
-                updateLineEditNumIfVaries(lineEdits["ellipse-center-y"], -obj->objectCenterY(), false);
+                updateLineEditNumIfVaries(lineEdits["ellipse-center-x"], obj->objectCenter().x(), false);
+                updateLineEditNumIfVaries(lineEdits["ellipse-center-y"], -obj->objectCenter().y(), false);
                 updateLineEditNumIfVaries(lineEdits["ellipse-radius-major"], obj->objectRadiusMajor(), false);
                 updateLineEditNumIfVaries(lineEdits["ellipse-radius-minor"], obj->objectRadiusMinor(), false);
                 updateLineEditNumIfVaries(lineEdits["ellipse-diameter-major"], obj->objectDiameterMajor(), false);
@@ -542,7 +544,7 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
     }
 }
 
-void PropertyEditor::updateLineEditStrIfVaries(QLineEdit* lineEdit, const QString& str)
+void PropertyEditor::updateLineEditStrIfVaries(QLineEdit* lineEdit, QString  str)
 {
     fieldOldText = lineEdit->text();
     fieldNewText = str;
@@ -577,7 +579,7 @@ void PropertyEditor::updateLineEditNumIfVaries(QLineEdit* lineEdit, EmbReal num,
  *
  */
 void
-PropertyEditor::updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, const QString& str)
+PropertyEditor::updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, QString  str)
 {
     fieldOldText = fontComboBox->property("FontFamily").toString();
     fieldNewText = str;
@@ -597,7 +599,7 @@ PropertyEditor::updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, const
  *
  */
 void
-PropertyEditor::updateComboBoxStrIfVaries(QComboBox* comboBox, const QString& str, const QStringList& strList)
+PropertyEditor::updateComboBoxStrIfVaries(QComboBox* comboBox, QString  str, const QStringList& strList)
 {
     fieldOldText = comboBox->currentText();
     fieldNewText = str;
@@ -673,10 +675,11 @@ void PropertyEditor::showOneType(int index)
 void
 PropertyEditor::hideAllGroups()
 {
-    int n_groupboxes = (int)get_sl("group_box_list").size();
+    StringList group_box_list = config["group_box_list"].sl;
+    int n_groupboxes = (int)group_box_list.size();
     for (int i=0; i<n_groupboxes; i++) {
-        if (get_sl("group_box_list")[i] != "general") {
-            groupBoxes[get_sl("group_box_list")[i]]->hide();
+        if (group_box_list[i] != "general") {
+            groupBoxes[group_box_list[i]]->hide();
         }
     }
 }
@@ -694,14 +697,15 @@ PropertyEditor::hideAllGroups()
  */
 void PropertyEditor::clearAllFields()
 {
-    for (int i=0; i<(int)(get_sl("all_line_editors").size()); i++) {
-        if (get_sl("all_line_editors")[6*i+4] == "double") {
-            lineEdits[get_sl("all_line_editors")[6*i+1]]->clear();
+    StringList all_line_editors = config["all_line_editors"].sl;
+    for (int i=0; i<(int)(all_line_editors.size()); i++) {
+        if (all_line_editors[6*i+4] == "double") {
+            lineEdits[all_line_editors[6*i+1]]->clear();
         }
-        if (get_sl("all_line_editors")[6*i+4] == "combobox") {
-            comboBoxes[get_sl("all_line_editors")[6*i+1]]->clear();
+        if (all_line_editors[6*i+4] == "combobox") {
+            comboBoxes[all_line_editors[6*i+1]]->clear();
         }
-        if (get_sl("all_line_editors")[6*i+4] == "fontcombobox") {
+        if (all_line_editors[6*i+4] == "fontcombobox") {
             comboBoxTextSingleFont->removeItem(comboBoxTextSingleFont->findText(fieldVariesText)); //NOTE: Do not clear comboBoxTextSingleFont
             comboBoxTextSingleFont->setProperty("FontFamily", "");
         }
@@ -714,7 +718,7 @@ void PropertyEditor::clearAllFields()
 void
 PropertyEditor::createGroupBox(String group_box_key, const char *title)
 {
-    std::vector<GroupBoxData> data = load_group_box_data_from_table(group_box_key);
+    std::vector<Dictionary> data = load_group_box_data_from_table(group_box_key);
 
     groupBoxes[group_box_key] = new QGroupBox(tr(title), this);
 
@@ -728,22 +732,22 @@ PropertyEditor::createGroupBox(String group_box_key, const char *title)
 
     QFormLayout* formLayout = new QFormLayout(this);
     for (int i=0; i<data.size(); i++) {
-        GroupBoxData gbd = data[i];
-        String key(gbd.key);
-        toolButtons[key] = createToolButton(gbd.icon_name.c_str(), tr(gbd.label.c_str()));
-        if (gbd.type == "double") {
-            if (gbd.map_signal.size() == 0) {
-                lineEdits[key] = createLineEdit(gbd.type.c_str(), false);
+        Dictionary gbd = data[i];
+        String key(gbd["key"].s);
+        toolButtons[key] = createToolButton(gbd["icon_name"].s.c_str(), tr(gbd["label"].s.c_str()));
+        if (gbd["type"].s == "double") {
+            if (gbd["map_signal"].s.size() == 0) {
+                lineEdits[key] = createLineEdit(gbd["type"].s.c_str(), false);
             }
             else {
-                lineEdits[key] = createLineEdit(gbd.type.c_str(), true);
-                mapSignal(lineEdits[key], gbd.map_signal.c_str(), group_box_type);
+                lineEdits[key] = createLineEdit(gbd["type"].s.c_str(), true);
+                mapSignal(lineEdits[key], gbd["map_signal"].s.c_str(), group_box_type);
             }
             formLayout->addRow(toolButtons[key], lineEdits[key]);
         }
-        if (gbd.type == "combobox") {
+        if (gbd["type"].s == "combobox") {
             comboBoxes[key] = new QComboBox(this);
-            if (gbd.map_signal == "true") {
+            if (gbd["map_signal"].s == "true") {
                 comboBoxes[key]->setDisabled(true);
             }
             else {
@@ -751,7 +755,7 @@ PropertyEditor::createGroupBox(String group_box_key, const char *title)
             }
             formLayout->addRow(toolButtons[key], comboBoxes[key]);
         }
-        if (gbd.type == "fontcombobox") {
+        if (gbd["type"].s == "fontcombobox") {
             comboBoxTextSingleFont = new QFontComboBox(this);
             comboBoxTextSingleFont->setDisabled(false);
             formLayout->addRow(toolButtons[key], comboBoxTextSingleFont);
@@ -764,7 +768,7 @@ PropertyEditor::createGroupBox(String group_box_key, const char *title)
  * .
  */
 QToolButton*
-PropertyEditor::createToolButton(const QString& iconName, const QString& txt)
+PropertyEditor::createToolButton(QString iconName, QString  txt)
 {
     QToolButton* tb = new QToolButton(this);
     tb->setIcon(QIcon(iconDir + "/" + iconName + ".png"));
@@ -779,7 +783,7 @@ PropertyEditor::createToolButton(const QString& iconName, const QString& txt)
  * .
  */
 QLineEdit*
-PropertyEditor::createLineEdit(const QString& validatorType, bool readOnly)
+PropertyEditor::createLineEdit(QString  validatorType, bool readOnly)
 {
     QLineEdit* le = new QLineEdit(this);
     if (validatorType == "int") {
@@ -799,7 +803,7 @@ PropertyEditor::createLineEdit(const QString& validatorType, bool readOnly)
  * @param value
  */
 void
-PropertyEditor::mapSignal(QObject* fieldObj, const QString& name, QVariant value)
+PropertyEditor::mapSignal(QObject* fieldObj, QString  name, QVariant value)
 {
     fieldObj->setObjectName(name);
     fieldObj->setProperty(qPrintable(name), value);

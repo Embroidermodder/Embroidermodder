@@ -54,7 +54,7 @@
 #define INT_TYPE             3
 #define BOOL_TYPE            4
 #define FUNCTION_TYPE        5
-#define SYMBOL_TYPE          6
+#define VECTOR_TYPE          6
 #define UNKNOWN_TYPE         7
 
 class ImageWidget;
@@ -114,94 +114,8 @@ struct Node_ {
 
 typedef struct Node_ Node;
 
-typedef struct Lisp_ {
-    Node T;
-    Node F;
-} Lisp;
-
 typedef std::unordered_map<String, Node> Dictionary;
 typedef std::vector<Node> NodeList;
-
-/**
- * .
- */
-typedef struct GroupBoxData_ {
-    String key;
-    String icon_name;
-    String label;
-    String type;
-    String map_signal;
-} GroupBoxData;
-
-/**
- * @brief
- *
- * # EmbViews
- *
- * The EmbView describes how the render is displayed.
- */
-typedef struct EmbView_ {
-    EmbPattern *pattern;
-        /*< \todo document this */
-    EmbVector origin;
-        /*< \todo document this */
-    EmbReal scale;
-        /*< \todo document this */
-    String grid_type;
-        /*< \todo document this */
-    int ui_mode;
-        /*< \todo document this */
-    bool snap_mode;
-        /*< \todo document this */
-    bool grid_mode;
-        /*< \todo document this */
-    bool ruler_mode;
-        /*< \todo document this */
-    bool ortho_mode;
-        /*< \todo document this */
-    bool polar_mode;
-        /*< \todo document this */
-    bool qsnap_mode;
-        /*< \todo document this */
-    bool qtrack_mode;
-        /*< \todo document this */
-    bool lwt_mode;
-        /*< \todo document this */
-    bool real_render;
-        /*< \todo document this */
-    bool metric;
-        /*< \todo document this */
-    bool simulate;
-        /*< \todo document this */
-    clock_t simulation_start;
-        /*< \todo document this */
-    String text_font;
-        /*< \todo document this */
-    EmbReal text_size;
-        /*< \todo document this */
-    EmbReal text_angle;
-        /*< \todo document this */
-    bool text_style_bold;
-        /*< \todo document this */
-    bool text_style_italic;
-        /*< \todo document this */
-    bool text_style_underline;
-        /*< \todo document this */
-    bool text_style_overline;
-        /*< \todo document this */
-    bool text_style_strikeout;
-        /*< \todo document this */
-    String filename;
-        /*< \todo document this */
-    StringList undo_history;
-        /*< \todo document this */
-    int selected[100];
-        /*< \todo document this */
-    int n_selected;
-        /*< \todo document this */
-    int rubber_mode;
-        /*< . */
-} EmbView;
 
 /**
  * @brief Settings System
@@ -210,250 +124,138 @@ typedef struct EmbView_ {
  * settings into a structure that stores them. This also allows us to create a
  * complete copy of the settings for the purpose of restoring them if the user
  * cancels out of the Settings Dialog.
+ *
+ * @todo fully convert into the Dictionaries settings, dialog, accept and preivew.
  */
 typedef struct Settings_ {
     String version;
-        /*< \todo document this */
     String assets_dir;
-        /*< \todo document this */
     String general_language;
-        /*< \todo document this */
     String general_icon_theme;
-        /*< \todo document this */
     String general_mdi_bg_logo;
-        /*< \todo document this */
     String general_mdi_bg_texture;
-        /*< \todo document this */
-    String display_units;
-        /*< \todo document this */
     QString opensave_custom_filter;
-        /*< \todo document this */
     String opensave_open_format;
-        /*< \todo document this */
     String opensave_save_format;
-        /*< \todo document this */
     QStringList opensave_recent_list_of_files;
-        /*< \todo document this */
     String opensave_recent_directory;
-        /*< \todo document this */
     String printing_default_device;
-        /*< \todo document this */
-    String grid_type;
-        /*< \todo document this */
     String text_font;
-        /*< \todo document this */
-    String to_open;
-        /*< \todo document this */
-    String current_directory;
-        /*< \todo document this */
     String prompt_font_family;
-        /*< \todo document this */
     String prompt_font_style;
-        /*< \todo document this */
     String prompt_save_history_filename;
-        /*< \todo document this */
     QRgb general_mdi_bg_color;
-        /*< \todo document this */
     QRgb prompt_text_color;
-        /*< \todo document this */
     QRgb prompt_bg_color;
-        /*< \todo document this */
     uint32_t general_current_tip;
-        /*< \todo document this */
     uint32_t display_crosshair_color;
-        /*< \todo document this */
     uint32_t display_bg_color;
-        /*< \todo document this */
     uint32_t display_selectbox_left_color;
-        /*< \todo document this */
     uint32_t display_selectbox_left_fill;
-        /*< \todo document this */
     uint32_t display_selectbox_right_color;
-        /*< \todo document this */
     uint32_t display_selectbox_right_fill;
-        /*< \todo document this */
     uint32_t selection_coolgrip_color;
-        /*< \todo document this */
     uint32_t selection_hotgrip_color;
-        /*< \todo document this */
     uint32_t ticks_color;
-        /*< \todo document this */
     uint32_t shine_color;
-        /*< \todo document this */
     int position_x;
-        /*< \todo document this */
     int position_y;
-        /*< \todo document this */
     int size_x;
-        /*< \todo document this */
     int size_y;
-        /*< \todo document this */
     int general_icon_size;
-        /*< \todo document this */
     bool running;
-        /*< \todo document this */
     bool testing;
-        /*< \todo document this */
     int debug_mode;
-        /*< \todo document this */
     bool show_about_dialog;
-        /*< \todo document this */
     bool show_settings_editor;
-        /*< \todo document this */
     bool show_editor;
-        /*< \todo document this */
     bool show_details_dialog;
-        /*< \todo document this */
     bool show_open_file_dialog;
-        /*< \todo document this */
     int pattern_index;
-        /*< \todo document this */
     bool use_translation;
-        /*< \todo document this */
     bool general_mdi_bg_use_logo;
-        /*< \todo document this */
     bool general_mdi_bg_use_texture;
-        /*< \todo document this */
     bool general_mdi_bg_use_color;
-        /*< \todo document this */
     bool general_tip_of_the_day;
-        /*< \todo document this */
     bool general_system_help_browser;
-        /*< \todo document this */
     bool general_check_for_updates;
-        /*< \todo document this */
     bool display_use_opengl;
-        /*< \todo document this */
     bool display_renderhint_aa;
-        /*< \todo document this */
     bool display_renderhint_text_aa;
-        /*< \todo document this */
     bool display_renderhint_smooth_pix;
-        /*< \todo document this */
     bool display_renderhint_high_aa;
-        /*< \todo document this */
     bool display_renderhint_noncosmetic;
-        /*< \todo document this */
     bool display_show_scrollbars;
-        /*< \todo document this */
     int display_scrollbar_widget_num;
-        /*< \todo document this */
     uint8_t display_selectbox_alpha;
-        /*< \todo document this */
     EmbReal display_zoomscale_in;
-        /*< \todo document this */
     EmbReal display_zoomscale_out;
-        /*< \todo document this */
     uint8_t display_crosshair_percent;
-        /*< \todo document this */
     bool opensave_open_thumbnail;
-        /*< \todo document this */
     bool opensave_save_thumbnail;
-        /*< \todo document this */
     uint8_t opensave_recent_max_files;
-        /*< \todo document this */
     uint8_t opensave_trim_dst_num_jumps;
-        /*< \todo document this */
     bool printing_use_last_device;
-        /*< \todo document this */
     bool printing_disable_bg;
-        /*< \todo document this */
     bool grid_show_on_load;
-        /*< \todo document this */
     bool grid_show_origin;
-        /*< \todo document this */
     bool grid_color_match_crosshair;
-        /*< \todo document this */
     uint32_t grid_color;
-        /*< \todo document this */
     bool grid_load_from_file;
-        /*< \todo document this */
     bool grid_center_on_origin;
-        /*< \todo document this */
     EmbVector grid_center;
-        /*< \todo document this */
     EmbVector grid_size;
-        /*< \todo document this */
     EmbVector grid_spacing;
-        /*< \todo document this */
     EmbReal grid_size_radius;
-        /*< \todo document this */
     EmbReal grid_spacing_radius;
-        /*< \todo document this */
     EmbReal grid_spacing_angle;
-        /*< \todo document this */
     bool ruler_show_on_load;
-        /*< \todo document this */
-    bool ruler_metric; /*< \todo document this */
-    uint32_t ruler_color; /*< \todo document this */
-    uint8_t ruler_pixel_size; /*< \todo document this */
-    bool qsnap_enabled; /*< \todo document this */
-    uint32_t qsnap_locator_color; /*< \todo document this */
-    uint8_t qsnap_locator_size; /*< \todo document this */
-    uint8_t qsnap_aperture_size; /*< \todo document this */
-    bool qsnap_endpoint; /*< \todo document this */
-    bool qsnap_midpoint; /*< \todo document this */
-    bool qsnap_center; /*< \todo document this */
-    bool qsnap_node; /*< \todo document this */
-    bool qsnap_quadrant; /*< \todo document this */
-    bool qsnap_intersection; /*< \todo document this */
-    bool qsnap_extension; /*< \todo document this */
-    bool qsnap_insertion; /*< \todo document this */
-    bool qsnap_perpendicular; /*< \todo document this */
-    bool qsnap_tangent; /*< \todo document this */
-    bool qsnap_nearest; /*< \todo document this */
-    bool qsnap_apparent; /*< \todo document this */
-    bool qsnap_parallel; /*< \todo document this */
-    bool lwt_show_lwt; /*< \todo document this */
-    bool lwt_real_render; /*< \todo document this */
+    bool ruler_metric;
+    uint32_t ruler_color;
+    uint8_t ruler_pixel_size;
+    bool qsnap_enabled;
+    uint32_t qsnap_locator_color;
+    uint8_t qsnap_locator_size;
+    uint8_t qsnap_aperture_size;
+    bool qsnap_endpoint;
+    bool qsnap_midpoint;
+    bool qsnap_center;
+    bool qsnap_node;
+    bool qsnap_quadrant;
+    bool qsnap_intersection;
+    bool qsnap_extension;
+    bool qsnap_insertion;
+    bool qsnap_perpendicular;
+    bool qsnap_tangent;
+    bool qsnap_nearest;
+    bool qsnap_apparent;
+    bool qsnap_parallel;
+    bool lwt_show_lwt;
+    bool lwt_real_render;
     bool shift_held;
-        /*< \todo document this */
     EmbReal lwt_default_lwt;
-        /*< \todo document this */
     bool selection_mode_pickfirst;
-        /*< \todo document this */
     bool selection_mode_pickadd;
-        /*< \todo document this */
     bool selection_mode_pickdrag;
-        /*< \todo document this */
     uint8_t selection_grip_size;
-        /*< \todo document this */
     uint8_t selection_pickbox_size;
-        /*< \todo document this */
     EmbReal text_size;
-        /*< \todo document this */
     EmbReal text_angle;
-        /*< \todo document this */
     bool text_style_bold;
-        /*< \todo document this */
     bool text_style_italic;
-        /*< \todo document this */
     bool text_style_underline;
-        /*< \todo document this */
     bool text_style_overline;
-        /*< \todo document this */
     bool text_style_strikeout;
-        /*< \todo document this */
     EmbReal zoomInLimit;
-        /*< */
     EmbReal zoomOutLimit;
-        /*< */
     EmbReal ruler_width;
-        /*< */
     EmbReal tick_depth;
-        /*< */
     EmbReal major_tick_seperation;
-        /*< \todo document this */
     EmbReal needle_speed;
-        /*< \todo document this */
     EmbReal stitch_time;
-        /*< \todo document this */
     uint8_t prompt_font_size;
-        /*< \todo document this */
     bool prompt_save_history;
-        /*< \todo document this */
     bool prompt_save_history_as_html;
-        /*< \todo document this */
 } Settings;
 
 //Values
@@ -542,11 +344,11 @@ extern MdiArea* mdiArea;
 extern Settings settings;
 extern Settings dialog;
 
+extern Dictionary settings_;
+extern Dictionary dialog_;
 extern Dictionary config;
 
 extern QFontComboBox* comboBoxTextSingleFont;
-extern std::vector<GroupBoxData> group_box_arc_geometry;
-extern std::vector<GroupBoxData> group_box_ellipse_geometry;
 extern QStringList justify_options;
 
 extern MainWindow* _mainWin;
@@ -559,7 +361,7 @@ extern std::unordered_map<String, QGroupBox *> groupBoxes;
 extern std::unordered_map<String, QComboBox *> comboBoxes;
 extern std::unordered_map<String, QLineEdit *> lineEdits;
 extern std::unordered_map<String, QToolButton *> toolButtons;
-extern std::unordered_map<String, GroupBoxData> group_box_data;
+extern std::unordered_map<String, Dictionary> group_box_data;
 extern std::unordered_map<String, QAction*> actionHash;
 extern std::unordered_map<String, QToolBar*> toolbarHash;
 extern std::unordered_map<String, QMenu*> menuHash;
@@ -604,10 +406,34 @@ Node node(bool value);
 Node node(int value);
 Node node(EmbReal value);
 Node node(String value);
+Node node(EmbVector value);
 Node node(StringList value);
-StringList get_sl(String key);
 
-Lisp lisp(void);
+void AddTextMulti(QString  str, EmbReal x, EmbReal y, EmbReal rot, bool fill, String rubberMode);
+void AddTextSingle(QString  str, EmbReal x, EmbReal y, EmbReal rot, bool fill, String rubberMode);
+
+void AddInfiniteLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot);
+void AddRay(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot);
+void AddLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String rubberMode);
+void AddTriangle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal x3, EmbReal y3, EmbReal rot, bool fill);
+String AddRectangle(std::vector<Node> a);
+void AddRoundedRectangle(EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rad, EmbReal rot, bool fill);
+void AddArc(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, String rubberMode);
+void AddCircle(EmbReal centerX, EmbReal centerY, EmbReal radius, bool fill, String rubberMode);
+void AddSlot(EmbReal centerX, EmbReal centerY, EmbReal diameter, EmbReal length, EmbReal rot, bool fill, String rubberMode);
+void AddEllipse(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, EmbReal rot, bool fill, String rubberMode);
+void AddPoint(EmbReal x, EmbReal y);
+void AddRegularPolygon(EmbReal centerX, EmbReal centerY, quint16 sides, uint8_t mode, EmbReal rad, EmbReal rot, bool fill);
+void AddPolygon(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode);
+void AddPolyline(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode);
+void AddPath(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode);
+void AddHorizontalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight);
+void AddVerticalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight);
+void AddImage(QString  img, EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot);
+
+void AddDimLeader(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String rubberMode);
+
+QGraphicsScene* activeScene();
 
 /**
  * @brief The BaseObject class
@@ -619,7 +445,7 @@ public:
     virtual ~BaseObject();
 
     enum { Type = OBJ_TYPE_BASE };
-    virtual int type() const { return Type; }
+    virtual int type(){ return Type; }
 
     Dictionary properties;
 
@@ -631,17 +457,14 @@ public:
     QHash<QString, QString> objRubberTexts;
     int64_t objID;
 
-    QLineF line() const { return objLine; }
-    QColor objectColor() const { return objPen.color(); }
-    QRgb objectColorRGB() const { return objPen.color().rgb(); }
-    Qt::PenStyle objectLineType() const { return objPen.style(); }
-    EmbReal objectLineWeight() const { return lwtPen.widthF(); }
-    QPointF objectRubberPoint(const QString& key) const;
-    QString objectRubberText(const QString& key) const;
+    QColor objectColor() { return objPen.color(); }
+    QRgb objectColorRGB() { return objPen.color().rgb(); }
+    Qt::PenStyle objectLineType() { return objPen.style(); }
+    EmbReal objectLineWeight() { return lwtPen.widthF(); }
+    QPointF objectRubberPoint(QString  key);
+    QString objectRubberText(QString  key);
 
-    QPointF objectCenter() const { return scenePos(); }
-    EmbReal objectCenterX() const { return scenePos().x(); }
-    EmbReal objectCenterY() const { return scenePos().y(); }
+    QPointF objectCenter() { return scenePos(); }
 
     void setObjectCenter(EmbVector center)
     {
@@ -695,11 +518,11 @@ public:
     void setObjectLineWeight(String lineWeight);
     void setObjectPath(const QPainterPath& p) { setPath(p); }
     void setObjectRubberMode(String mode) { objRubberMode = mode; }
-    void setObjectRubberPoint(const QString& key, const QPointF& point) { objRubberPoints.insert(key, point); }
-    void setObjectRubberText(const QString& key, const QString& txt) { objRubberTexts.insert(key, txt); }
+    void setObjectRubberPoint(QString  key, const QPointF& point) { objRubberPoints.insert(key, point); }
+    void setObjectRubberText(QString  key, QString  txt) { objRubberTexts.insert(key, txt); }
 
-    virtual QRectF boundingRect() const;
-    virtual QPainterPath shape() const { return path(); }
+    virtual QRectF boundingRect();
+    virtual QPainterPath shape(){ return path(); }
 
     void drawRubberLine(const QLineF& rubLine, QPainter* painter = 0, const char* colorFromScene = 0);
 
@@ -707,8 +530,7 @@ public:
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint) = 0;
     virtual std::vector<QPointF> allGripPoints() = 0;
     virtual void gripEdit(const QPointF& before, const QPointF& after) = 0;
-protected:
-    QPen lineWeightPen() const { return lwtPen; }
+
     void realRender(QPainter* painter, const QPainterPath& renderPath);
 };
 
@@ -739,7 +561,7 @@ public:
     ~ArcObject();
 
     enum { Type = OBJ_TYPE_ARC };
-    virtual int type() const { return Type; }
+    virtual int type(){ return Type; }
 
     void init(EmbArc arc, QRgb rgb, Qt::PenStyle lineType);
     void updatePath();
@@ -747,17 +569,17 @@ public:
     void calculateArcData(EmbArc arc);
     void updateArcRect(EmbReal radius);
 
-    EmbReal objectRadius() const { return rect().width()/2.0*scale(); }
-    EmbReal objectStartAngle() const;
-    EmbReal objectEndAngle() const;
-    QPointF objectStartPoint() const;
-    QPointF objectMidPoint() const;
-    QPointF objectEndPoint() const;
-    EmbReal objectArea() const;
-    EmbReal objectArcLength() const;
-    EmbReal objectChord() const;
-    EmbReal objectIncludedAngle() const;
-    bool objectClockwise() const;
+    EmbReal objectRadius() { return rect().width()/2.0*scale(); }
+    EmbReal objectStartAngle();
+    EmbReal objectEndAngle();
+    QPointF objectStartPoint();
+    QPointF objectMidPoint();
+    QPointF objectEndPoint();
+    EmbReal objectArea();
+    EmbReal objectArcLength();
+    EmbReal objectChord();
+    EmbReal objectIncludedAngle();
+    bool objectClockwise();
 
     void setObjectRadius(EmbReal radius);
     void setObjectStartAngle(EmbReal angle);
@@ -771,7 +593,7 @@ public:
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
-protected:
+
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 };
 
@@ -787,18 +609,18 @@ public:
     void updatePath();
 
     enum { Type = OBJ_TYPE_CIRCLE };
-    virtual int type() const { return Type; }
+    virtual int type(){ return Type; }
 
-    QPainterPath objectSavePath() const;
+    QPainterPath objectSavePath();
 
-    EmbReal objectRadius() const { return rect().width()/2.0*scale(); }
-    EmbReal objectDiameter() const { return rect().width()*scale(); }
-    EmbReal objectArea() const { return emb_constant_pi*objectRadius()*objectRadius(); }
-    EmbReal objectCircumference() const { return emb_constant_pi*objectDiameter(); }
-    QPointF objectQuadrant0() const { return objectCenter() + QPointF(objectRadius(), 0); }
-    QPointF objectQuadrant90() const { return objectCenter() + QPointF(0,-objectRadius()); }
-    QPointF objectQuadrant180() const { return objectCenter() + QPointF(-objectRadius(),0); }
-    QPointF objectQuadrant270() const { return objectCenter() + QPointF(0, objectRadius()); }
+    EmbReal objectRadius() { return rect().width()/2.0*scale(); }
+    EmbReal objectDiameter() { return rect().width()*scale(); }
+    EmbReal objectArea() { return emb_constant_pi*objectRadius()*objectRadius(); }
+    EmbReal objectCircumference() { return emb_constant_pi*objectDiameter(); }
+    QPointF objectQuadrant0() { return objectCenter() + QPointF(objectRadius(), 0); }
+    QPointF objectQuadrant90() { return objectCenter() + QPointF(0,-objectRadius()); }
+    QPointF objectQuadrant180() { return objectCenter() + QPointF(-objectRadius(),0); }
+    QPointF objectQuadrant270() { return objectCenter() + QPointF(0, objectRadius()); }
 
     void setObjectRadius(EmbReal radius);
     void setObjectDiameter(EmbReal diameter);
@@ -810,7 +632,7 @@ public:
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
-protected:
+
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 };
 
@@ -852,19 +674,19 @@ public:
     };
 
     enum { Type = OBJ_TYPE_DIMLEADER };
-    virtual int type() const { return Type; }
+    virtual int type(){ return Type; }
 
-    QPointF objectEndPoint1() const;
-    QPointF objectEndPoint2() const;
-    QPointF objectMidPoint() const;
-    EmbReal objectX1() const { return objectEndPoint1().x(); }
-    EmbReal objectY1() const { return objectEndPoint1().y(); }
-    EmbReal objectX2() const { return objectEndPoint2().x(); }
-    EmbReal objectY2() const { return objectEndPoint2().y(); }
-    EmbReal objectDeltaX() const { return (objectX2() - objectX1()); }
-    EmbReal objectDeltaY() const { return (objectY2() - objectY1()); }
-    EmbReal objectAngle() const;
-    EmbReal objectLength() const { return line().length(); }
+    QPointF objectEndPoint1();
+    QPointF objectEndPoint2();
+    QPointF objectMidPoint();
+    EmbReal objectX1(){ return objectEndPoint1().x(); }
+    EmbReal objectY1(){ return objectEndPoint1().y(); }
+    EmbReal objectX2(){ return objectEndPoint2().x(); }
+    EmbReal objectY2(){ return objectEndPoint2().y(); }
+    EmbReal objectDeltaX(){ return (objectX2() - objectX1()); }
+    EmbReal objectDeltaY(){ return (objectY2() - objectY1()); }
+    EmbReal objectAngle();
+    EmbReal objectLength(){ return objLine.length(); }
 
     void setObjectEndPoint1(EmbVector endPt1);
     void setObjectEndPoint2(EmbVector endPt2);
@@ -898,7 +720,7 @@ public:
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
-protected:
+
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 };
 
@@ -917,20 +739,20 @@ public:
     void updatePath();
 
     enum { Type = OBJ_TYPE_ELLIPSE };
-    virtual int type() const { return Type; }
+    virtual int type(){ return Type; }
 
-    QPainterPath objectSavePath() const;
+    QPainterPath objectSavePath();
 
-    EmbReal objectRadiusMajor() const { return std::max(rect().width(), rect().height())/2.0*scale(); }
-    EmbReal objectRadiusMinor() const { return std::min(rect().width(), rect().height())/2.0*scale(); }
-    EmbReal objectDiameterMajor() const { return std::max(rect().width(), rect().height())*scale(); }
-    EmbReal objectDiameterMinor() const { return std::min(rect().width(), rect().height())*scale(); }
-    EmbReal objectWidth() const { return rect().width()*scale(); }
-    EmbReal objectHeight() const { return rect().height()*scale(); }
-    QPointF objectQuadrant0() const;
-    QPointF objectQuadrant90() const;
-    QPointF objectQuadrant180() const;
-    QPointF objectQuadrant270() const;
+    EmbReal objectRadiusMajor() { return std::max(rect().width(), rect().height())/2.0*scale(); }
+    EmbReal objectRadiusMinor() { return std::min(rect().width(), rect().height())/2.0*scale(); }
+    EmbReal objectDiameterMajor() { return std::max(rect().width(), rect().height())*scale(); }
+    EmbReal objectDiameterMinor() { return std::min(rect().width(), rect().height())*scale(); }
+    EmbReal objectWidth() { return rect().width()*scale(); }
+    EmbReal objectHeight() { return rect().height()*scale(); }
+    QPointF objectQuadrant0();
+    QPointF objectQuadrant90();
+    QPointF objectQuadrant180();
+    QPointF objectQuadrant270();
 
     void setObjectSize(EmbReal width, EmbReal height);
     void setObjectRadiusMajor(EmbReal radius);
@@ -943,7 +765,7 @@ public:
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
-protected:
+
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 };
 
@@ -962,15 +784,15 @@ public:
     void updatePath();
 
     enum { Type = OBJ_TYPE_IMAGE };
-    virtual int type() const { return Type; }
+    virtual int type(){ return Type; }
 
-    QPointF objectTopLeft() const;
-    QPointF objectTopRight() const;
-    QPointF objectBottomLeft() const;
-    QPointF objectBottomRight() const;
-    EmbReal objectWidth() const { return rect().width()*scale(); }
-    EmbReal objectHeight() const { return rect().height()*scale(); }
-    EmbReal objectArea() const { return qAbs(objectWidth()*objectHeight()); }
+    QPointF objectTopLeft();
+    QPointF objectTopRight();
+    QPointF objectBottomLeft();
+    QPointF objectBottomRight();
+    EmbReal objectWidth() { return rect().width()*scale(); }
+    EmbReal objectHeight() { return rect().height()*scale(); }
+    EmbReal objectArea() { return qAbs(objectWidth()*objectHeight()); }
 
     void setObjectRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
 
@@ -979,7 +801,7 @@ public:
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
-protected:
+
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 };
 
@@ -997,16 +819,16 @@ public:
     void init(EmbLine line, QRgb rgb, Qt::PenStyle lineType);
 
     enum { Type = OBJ_TYPE_LINE };
-    virtual int type() const { return Type; }
+    virtual int type(){ return Type; }
 
-    QPainterPath objectSavePath() const;
+    QPainterPath objectSavePath();
 
     QPointF objectEndPoint1() { return scenePos(); }
-    QPointF objectEndPoint2() const;
-    QPointF objectMidPoint() const;
+    QPointF objectEndPoint2();
+    QPointF objectMidPoint();
     QPointF objectDelta() { return objectEndPoint2() - objectEndPoint1(); }
-    EmbReal objectAngle() const;
-    EmbReal objectLength() { return line().length()*scale(); }
+    EmbReal objectAngle();
+    EmbReal objectLength() { return objLine.length()*scale(); }
 
     void setObjectEndPoint1(EmbVector endPt1);
     void setObjectEndPoint2(EmbVector endPt2);
@@ -1040,7 +862,7 @@ public:
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
-protected:
+
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 };
 
@@ -1056,19 +878,19 @@ public:
     ~PathObject();
 
     enum { Type = OBJ_TYPE_PATH };
-    virtual int type() const { return Type; }
+    virtual int type(){ return Type; }
 
     void init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
     void updatePath(const QPainterPath& p);
     QPainterPath normalPath;
     //TODO: make paths similar to polylines. Review and implement any missing functions/members.
 
-    QPainterPath objectCopyPath() const;
-    QPainterPath objectSavePath() const;
+    QPainterPath objectCopyPath();
+    QPainterPath objectSavePath();
 
-    QPointF objectPos() const { return scenePos(); }
-    EmbReal objectX() const { return scenePos().x(); }
-    EmbReal objectY() const { return scenePos().y(); }
+    QPointF objectPos() { return scenePos(); }
+    EmbReal objectX() { return scenePos().x(); }
+    EmbReal objectY() { return scenePos().y(); }
 
     void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
     void setObjectPos(EmbReal x, EmbReal y) { setPos(x, y); }
@@ -1080,7 +902,7 @@ public:
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
-protected:
+
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 };
 
@@ -1098,13 +920,13 @@ public:
     void init(EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType);
 
     enum { Type = OBJ_TYPE_POINT };
-    virtual int type() const { return Type; }
+    virtual int type(){ return Type; }
 
-    QPainterPath objectSavePath() const;
+    QPainterPath objectSavePath();
 
-    QPointF objectPos() const { return scenePos(); }
-    EmbReal objectX() const { return scenePos().x(); }
-    EmbReal objectY() const { return scenePos().y(); }
+    QPointF objectPos() { return scenePos(); }
+    EmbReal objectX() { return scenePos().x(); }
+    EmbReal objectY() { return scenePos().y(); }
 
     void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
     void setObjectPos(EmbReal x, EmbReal y) { setPos(x, y); }
@@ -1116,7 +938,7 @@ public:
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
-protected:
+
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 };
 
@@ -1132,7 +954,7 @@ public:
     ~PolygonObject();
 
     enum { Type = OBJ_TYPE_POLYGON };
-    virtual int type() const { return Type; }
+    virtual int type(){ return Type; }
 
     void init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
     void updatePath(const QPainterPath& p);
@@ -1140,24 +962,22 @@ public:
     int findIndex(const QPointF& point);
     int gripIndex;
 
-    QPainterPath objectCopyPath() const;
-    QPainterPath objectSavePath() const;
+    QPainterPath objectCopyPath();
+    QPainterPath objectSavePath();
 
-    QPointF objectPos() const { return scenePos(); }
-    EmbReal objectX() const { return scenePos().x(); }
-    EmbReal objectY() const { return scenePos().y(); }
+    QPointF objectPos(){ return scenePos(); }
 
     void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
     void setObjectPos(EmbReal x, EmbReal y) { setPos(x, y); }
-    void setObjectX(EmbReal x) { setObjectPos(x, objectY()); }
-    void setObjectY(EmbReal y) { setObjectPos(objectX(), y); }
+    void setObjectX(EmbReal x) { setObjectPos(x, objectPos().y()); }
+    void setObjectY(EmbReal y) { setObjectPos(objectPos().x(), y); }
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
-protected:
+
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 };
 
@@ -1172,7 +992,7 @@ public:
     ~PolylineObject();
 
     enum { Type = OBJ_TYPE_POLYLINE };
-    virtual int type() const { return Type; }
+    virtual int type(){ return Type; }
 
     void init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
     void updatePath(const QPainterPath& p);
@@ -1180,12 +1000,12 @@ public:
     int findIndex(const QPointF& point);
     int gripIndex;
 
-    QPainterPath objectCopyPath() const;
-    QPainterPath objectSavePath() const;
+    QPainterPath objectCopyPath();
+    QPainterPath objectSavePath();
 
-    QPointF objectPos() const { return scenePos(); }
-    EmbReal objectX() const { return scenePos().x(); }
-    EmbReal objectY() const { return scenePos().y(); }
+    QPointF objectPos(){ return scenePos(); }
+    EmbReal objectX(){ return scenePos().x(); }
+    EmbReal objectY(){ return scenePos().y(); }
 
     void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
     void setObjectPos(EmbReal x, EmbReal y) { setPos(x, y); }
@@ -1197,7 +1017,7 @@ public:
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
-protected:
+
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 };
 
@@ -1212,22 +1032,22 @@ public:
     ~RectObject();
 
     enum { Type = OBJ_TYPE_RECTANGLE };
-    virtual int type() const { return Type; }
+    virtual int type(){ return Type; }
 
-    QPainterPath objectSavePath() const;
+    QPainterPath objectSavePath();
 
     void init(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, Qt::PenStyle lineType);
     void updatePath();
 
-    QPointF objectPos() const { return scenePos(); }
+    QPointF objectPos(){ return scenePos(); }
 
-    QPointF objectTopLeft() const;
-    QPointF objectTopRight() const;
-    QPointF objectBottomLeft() const;
-    QPointF objectBottomRight() const;
-    EmbReal objectWidth() const { return rect().width()*scale(); }
-    EmbReal objectHeight() const { return rect().height()*scale(); }
-    EmbReal objectArea() const { return std::fabs(objectWidth()*objectHeight()); }
+    QPointF objectTopLeft();
+    QPointF objectTopRight();
+    QPointF objectBottomLeft();
+    QPointF objectBottomRight();
+    EmbReal objectWidth(){ return rect().width()*scale(); }
+    EmbReal objectHeight(){ return rect().height()*scale(); }
+    EmbReal objectArea(){ return std::fabs(objectWidth()*objectHeight()); }
 
     void setObjectRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
 
@@ -1236,7 +1056,7 @@ public:
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
-protected:
+
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 };
 
@@ -1251,7 +1071,7 @@ public:
     SaveObject(QGraphicsScene* theScene, QObject* parent = 0);
     ~SaveObject();
 
-    bool save(const QString &fileName);
+    bool save(QString fileName);
 
     void addArc(EmbPattern* pattern, QGraphicsItem* item);
     void addBlock(EmbPattern* pattern, QGraphicsItem* item);
@@ -1285,7 +1105,7 @@ public:
     QGraphicsScene* gscene;
     int formatType;
 
-    void toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainterPath& objPath, const QString& layer, const QColor& color, const QString& lineType, const QString& lineWeight);
+    void toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainterPath& objPath, QString  layer, const QColor& color, QString  lineType, QString  lineWeight);
 };
 
 /**
@@ -1294,14 +1114,14 @@ public:
 class TextSingleObject : public BaseObject
 {
 public:
-    TextSingleObject(const QString& str, EmbReal x, EmbReal y, QRgb rgb, QGraphicsItem* parent = 0);
+    TextSingleObject(QString  str, EmbReal x, EmbReal y, QRgb rgb, QGraphicsItem* parent = 0);
     TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent = 0);
     ~TextSingleObject();
 
     enum { Type = OBJ_TYPE_TEXTSINGLE };
-    virtual int type() const { return Type; }
+    virtual int type(){ return Type; }
 
-    void init(const QString& str, EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType);
+    void init(QString  str, EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType);
 
     QString objText;
     QString objTextFont;
@@ -1316,16 +1136,16 @@ public:
     bool objTextUpsideDown;
     QPainterPath objTextPath;
 
-    std::vector<QPainterPath> objectSavePathList() const { return subPathList(); }
-    std::vector<QPainterPath> subPathList() const;
+    std::vector<QPainterPath> objectSavePathList(){ return subPathList(); }
+    std::vector<QPainterPath> subPathList();
 
-    QPointF objectPos() const { return scenePos(); }
-    EmbReal objectX()   const { return scenePos().x(); }
-    EmbReal objectY()   const { return scenePos().y(); }
+    QPointF objectPos(){ return scenePos(); }
+    EmbReal objectX()  { return scenePos().x(); }
+    EmbReal objectY()  { return scenePos().y(); }
 
-    void setObjectText(const QString& str);
-    void setObjectTextFont(const QString& font);
-    void setObjectTextJustify(const QString& justify);
+    void setObjectText(QString  str);
+    void setObjectTextFont(QString  font);
+    void setObjectTextJustify(QString  justify);
     void setObjectTextSize(EmbReal size);
     void setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bool over);
     void setObjectTextBold(bool val);
@@ -1345,7 +1165,7 @@ public:
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
     virtual std::vector<QPointF> allGripPoints();
     virtual void gripEdit(const QPointF& before, const QPointF& after);
-protected:
+
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 };
 
@@ -1399,11 +1219,11 @@ protected:
     bool eventFilter(QObject *obj, QEvent *event);
 
 signals:
-    void appendHistory(const QString& txt, int prefixLength);
+    void appendHistory(QString  txt, int prefixLength);
 
     //These connect to the CmdPrompt signals
-    void startCommand(const QString& cmd);
-    void runCommand(const QString& cmd, const QString& cmdtxt);
+    void startCommand(QString  cmd);
+    void runCommand(QString  cmd, QString  cmdtxt);
     void deletePressed();
     void tabPressed();
     void escapePressed();
@@ -1436,13 +1256,13 @@ signals:
     void stopBlinking();
 
 public slots:
-    void addCommand(const QString& alias, const QString& cmd);
+    void addCommand(QString  alias, QString  cmd);
     void endCommand();
     void processInput(void);
     void checkSelection();
-    void updateCurrentText(const QString& txt);
-    void checkEditedText(const QString& txt);
-    void checkChangedText(const QString& txt);
+    void updateCurrentText(QString  txt);
+    void checkEditedText(QString  txt);
+    void checkChangedText(QString  txt);
     void checkCursorPosition(int oldpos, int newpos);
 private slots:
     void copyClip();
@@ -1461,19 +1281,19 @@ public:
     ~CmdPromptHistory();
 
     int tmpHeight;
-    QString applyFormatting(const QString& txt, int prefixLength);
+    QString applyFormatting(QString  txt, int prefixLength);
 
 protected:
     void contextMenuEvent(QContextMenuEvent* event);
 
 public slots:
-    void appendHistory(const QString& txt, int prefixLength);
+    void appendHistory(QString  txt, int prefixLength);
     void startResizeHistory(int y);
     void stopResizeHistory(int y);
     void resizeHistory(int y);
 
 signals:
-    void historyAppended(const QString& txt);
+    void historyAppended(QString  txt);
 };
 
 /**
@@ -1549,14 +1369,14 @@ public slots:
     QString getHistory() { return promptHistory->toHtml(); }
     QString getPrefix() { return promptInput->prefix; }
     QString getCurrentText() { return promptInput->curText; }
-    void setCurrentText(const QString& txt) { promptInput->curText = promptInput->prefix + txt; promptInput->setText(promptInput->curText); }
-    void setHistory(const QString& txt) { promptHistory->setHtml(txt); promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor); }
-    void setPrefix(const QString& txt);
-    void appendHistory(const QString& txt);
+    void setCurrentText(QString  txt) { promptInput->curText = promptInput->prefix + txt; promptInput->setText(promptInput->curText); }
+    void setHistory(QString  txt) { promptHistory->setHtml(txt); promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor); }
+    void setPrefix(QString  txt);
+    void appendHistory(QString  txt);
     void startResizingTheHistory(int y) { promptHistory->startResizeHistory(y); }
     void stopResizingTheHistory(int y) { promptHistory->stopResizeHistory(y); }
     void resizeTheHistory(int y) { promptHistory->resizeHistory(y); }
-    void addCommand(const QString& alias, const QString& cmd) { promptInput->addCommand(alias, cmd); }
+    void addCommand(QString  alias, QString  cmd) { promptInput->addCommand(alias, cmd); }
     void endCommand() { promptInput->endCommand(); }
     bool isCommandActive() { return promptInput->cmdActive; }
     QString activeCommand() { return promptInput->curCmd; }
@@ -1566,7 +1386,7 @@ public slots:
     void disableRapidFire() { promptInput->rapidFireEnabled = false; }
     bool isRapidFireEnabled() { return promptInput->rapidFireEnabled; }
 
-    void alert(const QString& txt);
+    void alert(QString  txt);
 
     void startBlinking();
     void stopBlinking();
@@ -1574,20 +1394,20 @@ public slots:
 
     void setPromptTextColor(const QColor&);
     void setPromptBackgroundColor(const QColor&);
-    void setPromptFontFamily(const QString&);
-    void setPromptFontStyle(const QString&);
+    void setPromptFontFamily(QString );
+    void setPromptFontStyle(QString );
     void setPromptFontSize(int);
 
     void floatingChanged(bool);
 
-    void saveHistory(const QString& fileName, bool html);
+    void saveHistory(QString  fileName, bool html);
 
 signals:
-    void appendTheHistory(const QString& txt, int prefixLength);
+    void appendTheHistory(QString  txt, int prefixLength);
 
     //For connecting outside of command prompt
-    void startCommand(const QString& cmd);
-    void runCommand(const QString& cmd, const QString& cmdtxt);
+    void startCommand(QString  cmd);
+    void runCommand(QString  cmd, QString  cmdtxt);
     void deletePressed();
     void tabPressed();
     void escapePressed();
@@ -1617,7 +1437,7 @@ signals:
 
     void showSettings();
 
-    void historyAppended(const QString& txt);
+    void historyAppended(QString  txt);
 };
 
 /**
@@ -1658,11 +1478,11 @@ class ImageWidget : public QWidget
 
 public:
     QImage img;
-    ImageWidget(const QString &filename, QWidget* parent = 0);
+    ImageWidget(QString filename, QWidget* parent = 0);
     ~ImageWidget();
 
-    bool load(const QString &fileName);
-    bool save(const QString &fileName);
+    bool load(QString fileName);
+    bool save(QString fileName);
 
 protected:
     void paintEvent(QPaintEvent* event);
@@ -1676,21 +1496,16 @@ class LayerManager : public QDialog
     Q_OBJECT
 
 public:
-    QStandardItemModel*    layerModel;
+    QStandardItemModel* layerModel;
     QSortFilterProxyModel* layerModelSorted;
-    QTreeView*             treeView;
+    QTreeView* treeView;
 
     LayerManager(QWidget *parent = 0);
     ~LayerManager();
 
-    void addLayer(const QString& name,
-        const bool visible,
-        const bool frozen,
-        const EmbReal zValue,
-        const QRgb color,
-        const QString& lineType,
-        const QString& lineWeight,
-        const bool print);
+    void addLayer(QString name, const bool visible, const bool frozen,
+        const EmbReal zValue, const QRgb color, QString lineType,
+        QString lineWeight, const bool print);
 };
 
 /**
@@ -1705,7 +1520,6 @@ public:
     ~MainWindow();
 
     MdiWindow* activeMdiWindow();
-    QGraphicsScene* activeScene();
     QUndoStack* activeUndoStack();
 
     void setUndoCleanIcon(bool opened);
@@ -1747,9 +1561,7 @@ public slots:
 
     void settingsPrompt();
 
-    void settingsDialog(const QString& showTab = QString());
-
-    static bool validFileFormat(const QString &fileName);
+    static bool validFileFormat(QString fileName);
 
 protected:
     virtual void resizeEvent(QResizeEvent*);
@@ -1765,7 +1577,7 @@ protected:
     int docIndex;
 
     std::vector<MdiWindow*> listMdiWin;
-    QMdiSubWindow* findMdiWindow(const QString &fileName);
+    QMdiSubWindow* findMdiWindow(QString fileName);
     QString openFilesPath;
 
     QAction* myFileSeparator;
@@ -1788,8 +1600,8 @@ private slots:
 public slots:
     void stub_testing();
 
-    void promptHistoryAppended(const QString& txt);
-    void logPromptInput(const QString& txt);
+    void promptHistoryAppended(QString  txt);
+    void logPromptInput(QString  txt);
     void promptInputPrevious();
     void promptInputNext();
 
@@ -1797,7 +1609,7 @@ public slots:
     void tipOfTheDay(void);
 
     void newFile();
-    void openFile(bool recent = false, const QString& recentFile = "");
+    void openFile(bool recent = false, QString  recentFile = "");
     void openFilesSelected(const QStringList&);
     void openrecentfile();
     void savefile();
@@ -1826,7 +1638,7 @@ public slots:
     void textFontSelectorCurrentFontChanged(const QFont& font);
     void textSizeSelectorIndexChanged(int index);
 
-    void setTextFont(const QString& str);
+    void setTextFont(QString  str);
     void setTextSize(EmbReal num);
 
     QString getCurrentLayer();
@@ -1840,74 +1652,6 @@ public slots:
 
     void deletePressed();
     void escapePressed();
-
-public:
-    void nativeAlert(const QString& txt);
-
-    void nativeMessageBox(const QString& type, const QString& title, const QString& text);
-
-    void nativePrintArea(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
-
-    void nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b);
-    void nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b);
-    void nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b);
-
-    void nativePreviewOn(String clone, String mode, EmbReal x, EmbReal y, EmbReal data);
-    void nativePreviewOff();
-
-    void nativeClearRubber();
-    bool nativeAllowRubber();
-    void nativeSpareRubber(int64_t id);
-    // \todo void nativeSetRubberFilter(int64_t id);
-    // \todo This is so more than 1 rubber object can exist at one time without updating all rubber objects at once
-    String nativeSetRubberMode(std::vector<Node> args);
-    void nativeSetRubberPoint(const QString& key, EmbReal x, EmbReal y);
-    void nativeSetRubberText(const QString& key, const QString& txt);
-
-    void nativeAddTextMulti(const QString& str, EmbReal x, EmbReal y, EmbReal rot, bool fill, String rubberMode);
-    void nativeAddTextSingle(const QString& str, EmbReal x, EmbReal y, EmbReal rot, bool fill, String rubberMode);
-
-    void nativeAddInfiniteLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot);
-    void nativeAddRay(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot);
-    void nativeAddLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String rubberMode);
-    void nativeAddTriangle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal x3, EmbReal y3, EmbReal rot, bool fill);
-    void nativeAddRectangle(std::vector<Node> a);
-    void nativeAddRoundedRectangle(EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rad, EmbReal rot, bool fill);
-    void nativeAddArc(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, String rubberMode);
-    void nativeAddCircle(EmbReal centerX, EmbReal centerY, EmbReal radius, bool fill, String rubberMode);
-    void nativeAddSlot(EmbReal centerX, EmbReal centerY, EmbReal diameter, EmbReal length, EmbReal rot, bool fill, String rubberMode);
-    void nativeAddEllipse(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, EmbReal rot, bool fill, String rubberMode);
-    void nativeAddPoint(EmbReal x, EmbReal y);
-    void nativeAddRegularPolygon(EmbReal centerX, EmbReal centerY, quint16 sides, uint8_t mode, EmbReal rad, EmbReal rot, bool fill);
-    void nativeAddPolygon(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode);
-    void nativeAddPolyline(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode);
-    void nativeAddPath(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode);
-    void nativeAddHorizontalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight);
-    void nativeAddVerticalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight);
-    void nativeAddImage(const QString& img, EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot);
-
-    void nativeAddDimLeader(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String rubberMode);
-
-    void nativeSetCursorShape(const QString& str);
-    EmbReal nativeCalculateAngle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
-    EmbReal nativeCalculateDistance(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
-    EmbReal nativePerpendicularDistance(EmbReal px, EmbReal py, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
-
-    int nativeNumSelected();
-    void nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
-    void nativeDeleteSelected();
-    void nativeCutSelected(EmbReal x, EmbReal y);
-    void nativeCopySelected(EmbReal x, EmbReal y);
-    void nativePasteSelected(EmbReal x, EmbReal y);
-    void nativeMoveSelected(EmbReal dx, EmbReal dy);
-    void nativeScaleSelected(EmbReal x, EmbReal y, EmbReal factor);
-    void nativeRotateSelected(EmbReal x, EmbReal y, EmbReal rot);
-    void nativeMirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
-
-    EmbReal nativeQSnapX();
-    EmbReal nativeQSnapY();
-    EmbReal nativeMouseX();
-    EmbReal nativeMouseY();
 };
 
 class MdiWindow: public QMdiSubWindow
@@ -1931,8 +1675,8 @@ public:
     QPrinter printer;
 
     QString curFile;
-    void setCurrentFile(const QString& fileName);
-    QString fileExtension(const QString& fileName);
+    void setCurrentFile(QString  fileName);
+    QString fileExtension(QString  fileName);
 
     int myIndex;
 
@@ -1943,11 +1687,11 @@ public:
 
     void promptInputPrevNext(bool prev);
 
-    virtual QSize sizeHint() const;
+    virtual QSize sizeHint();
     QString getShortCurrentFile();
     void designDetails();
-    bool loadFile(const QString &fileName);
-    bool saveFile(const QString &fileName);
+    bool loadFile(QString fileName);
+    bool saveFile(QString fileName);
 signals:
     void sendCloseMdiWin(MdiWindow*);
 
@@ -1955,10 +1699,10 @@ public slots:
     void closeEvent(QCloseEvent* e);
     void onWindowActivated();
 
-    void currentLayerChanged(const QString& layer);
+    void currentLayerChanged(QString  layer);
     void currentColorChanged(const QRgb& color);
-    void currentLinetypeChanged(const QString& type);
-    void currentLineweightChanged(const QString& weight);
+    void currentLinetypeChanged(QString  type);
+    void currentLineweightChanged(QString  weight);
 
     void updateColorLinetypeLineweight();
     void deletePressed();
@@ -1974,8 +1718,8 @@ public slots:
     void print();
     void saveBMC();
 
-    void promptHistoryAppended(const QString& txt);
-    void logPromptInput(const QString& txt);
+    void promptHistoryAppended(QString  txt);
+    void logPromptInput(QString  txt);
     void promptInputPrevious();
     void promptInputNext();
 };
@@ -2006,8 +1750,8 @@ public:
     void useBackgroundTexture(bool use);
     void useBackgroundColor(bool use);
 
-    void setBackgroundLogo(const QString& fileName);
-    void setBackgroundTexture(const QString& fileName);
+    void setBackgroundLogo(QString  fileName);
+    void setBackgroundTexture(QString  fileName);
     void setBackgroundColor(const QColor& color);
 
 public slots:
@@ -2027,9 +1771,9 @@ class PreviewDialog : public QFileDialog
 
 public:
     PreviewDialog(QWidget* parent = 0,
-       const QString& caption = QString(),
-       const QString& directory = QString(),
-       const QString& filter = QString());
+       QString  caption = QString(),
+       QString  directory = QString(),
+       QString  filter = QString());
     ~PreviewDialog();
 
     ImageWidget* imgWidget;
@@ -2041,7 +1785,7 @@ class PropertyEditor : public QDockWidget
     Q_OBJECT
 
 public:
-    PropertyEditor(const QString& iconDirectory = QString(), bool pickAddMode = true, QWidget* widgetToFocus = 0, QWidget* parent = 0); //, Qt::WindowFlags flags = 0);
+    PropertyEditor(QString  iconDirectory = QString(), bool pickAddMode = true, QWidget* widgetToFocus = 0, QWidget* parent = 0); //, Qt::WindowFlags flags = 0);
     ~PropertyEditor();
 
     QWidget* focusWidget;
@@ -2054,20 +1798,20 @@ public:
 
     std::vector<QGraphicsItem*> selectedItemList;
 
-    QToolButton* createToolButton(const QString& iconName, const QString& txt);
-    QLineEdit* createLineEdit(const QString& validatorType = QString(), bool readOnly = false);
+    QToolButton* createToolButton(QString  iconName, QString  txt);
+    QLineEdit* createLineEdit(QString  validatorType = QString(), bool readOnly = false);
 
     int precisionAngle;
     int precisionLength;
 
-    void updateLineEditStrIfVaries(QLineEdit* lineEdit, const QString& str);
+    void updateLineEditStrIfVaries(QLineEdit* lineEdit, QString  str);
     void updateLineEditNumIfVaries(QLineEdit* lineEdit, EmbReal num, bool useAnglePrecision);
-    void updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, const QString& str);
-    void updateComboBoxStrIfVaries(QComboBox* comboBox, const QString& str, const QStringList& strList);
+    void updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, QString  str);
+    void updateComboBoxStrIfVaries(QComboBox* comboBox, QString  str, const QStringList& strList);
     void updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, bool yesOrNoText);
 
     QSignalMapper* signalMapper;
-    void mapSignal(QObject* fieldObj, const QString& name, QVariant value);
+    void mapSignal(QObject* fieldObj, QString  name, QVariant value);
 
     // Selection
     // ====================
@@ -2144,7 +1888,7 @@ class Settings_Dialog : public QDialog
     Q_OBJECT
 
 public:
-    Settings_Dialog(const QString& showTab = QString(), QWidget *parent = 0);
+    Settings_Dialog(QString  showTab = QString(), QWidget *parent = 0);
     ~Settings_Dialog();
 
     QTabWidget* tabWidget;
@@ -2181,8 +1925,8 @@ public:
     QCheckBox* create_checkbox(QGroupBox *groupbox, String label);
 
 private slots:
-    void comboBoxLanguageCurrentIndexChanged(const QString&);
-    void comboBoxIconThemeCurrentIndexChanged(const QString&);
+    void comboBoxLanguageCurrentIndexChanged(QString );
+    void comboBoxIconThemeCurrentIndexChanged(QString );
     void comboBoxIconSizeCurrentIndexChanged(int);
     void checkBoxGeneralMdiBGUseLogoStateChanged(int);
     void chooseGeneralMdiBackgroundLogo();
@@ -2215,8 +1959,8 @@ private slots:
     void currentPromptTextColorChanged(const QColor&);
     void choosePromptBackgroundColor();
     void currentPromptBackgroundColorChanged(const QColor&);
-    void comboBoxPromptFontFamilyCurrentIndexChanged(const QString&);
-    void comboBoxPromptFontStyleCurrentIndexChanged(const QString&);
+    void comboBoxPromptFontFamilyCurrentIndexChanged(QString );
+    void comboBoxPromptFontStyleCurrentIndexChanged(QString );
     void spinBoxPromptFontSizeValueChanged(int);
     void checkBoxPromptSaveHistoryStateChanged(int);
     void checkBoxPromptSaveHistoryAsHtmlStateChanged(int);
@@ -2231,7 +1975,7 @@ private slots:
     void chooseGridColor();
     void currentGridColorChanged(const QColor&);
     void checkBoxGridLoadFromFileStateChanged(int);
-    void comboBoxGridTypeCurrentIndexChanged(const QString&);
+    void comboBoxGridTypeCurrentIndexChanged(QString );
     void checkBoxGridCenterOnOriginStateChanged(int);
     void checkBoxRulerShowOnLoadStateChanged(int);
     void comboBoxRulerMetricCurrentIndexChanged(int);
@@ -2322,13 +2066,13 @@ class UndoEditor : public QDockWidget
     Q_OBJECT
 
 public:
-    UndoEditor(const QString& iconDirectory = QString(), QWidget* widgetToFocus = 0, QWidget* parent = 0); //, Qt::WindowFlags flags = 0);
+    UndoEditor(QString  iconDirectory = QString(), QWidget* widgetToFocus = 0, QWidget* parent = 0); //, Qt::WindowFlags flags = 0);
     ~UndoEditor();
 
     void addStack(QUndoStack* stack);
 
-    bool canUndo() const;
-    bool canRedo() const;
+    bool canUndo();
+    bool canRedo();
 
     QWidget* focusWidget;
 
@@ -2338,8 +2082,8 @@ public:
     QUndoGroup* undoGroup;
     QUndoView*  undoView;
 
-    QString undoText() const;
-    QString redoText() const;
+    QString undoText();
+    QString redoText();
 protected:
 
 public slots:
@@ -2355,13 +2099,13 @@ public slots:
 class UndoableAddCommand : public QUndoCommand
 {
 public:
-    UndoableAddCommand(const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+    UndoableAddCommand(QString  text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
 
     BaseObject* object;
-    View*       gview;
+    View* gview;
 };
 
 /**
@@ -2370,7 +2114,7 @@ public:
 class UndoableDeleteCommand : public QUndoCommand
 {
 public:
-    UndoableDeleteCommand(const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+    UndoableDeleteCommand(QString  text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
@@ -2385,7 +2129,7 @@ public:
 class UndoableMoveCommand : public QUndoCommand
 {
 public:
-    UndoableMoveCommand(EmbReal deltaX, EmbReal deltaY, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+    UndoableMoveCommand(EmbReal deltaX, EmbReal deltaY, QString  text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
@@ -2402,7 +2146,7 @@ public:
 class UndoableRotateCommand : public QUndoCommand
 {
 public:
-    UndoableRotateCommand(EmbReal pivotPointX, EmbReal pivotPointY, EmbReal rotAngle, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+    UndoableRotateCommand(EmbReal pivotPointX, EmbReal pivotPointY, EmbReal rotAngle, QString  text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
@@ -2410,7 +2154,7 @@ public:
     void rotate(EmbReal x, EmbReal y, EmbReal rot);
 
     BaseObject* object;
-    View*       gview;
+    View* gview;
     EmbReal pivotX;
     EmbReal pivotY;
     EmbReal angle;
@@ -2422,13 +2166,13 @@ public:
 class UndoableScaleCommand : public QUndoCommand
 {
 public:
-    UndoableScaleCommand(EmbReal x, EmbReal y, EmbReal scaleFactor, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+    UndoableScaleCommand(EmbReal x, EmbReal y, EmbReal scaleFactor, QString  text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
 
     BaseObject* object;
-    View*       gview;
+    View* gview;
     EmbReal dx;
     EmbReal dy;
     EmbReal factor;
@@ -2440,9 +2184,9 @@ public:
 class UndoableNavCommand : public QUndoCommand
 {
 public:
-    UndoableNavCommand(const QString& type, View* v, QUndoCommand* parent = 0);
+    UndoableNavCommand(QString  type, View* v, QUndoCommand* parent = 0);
 
-    int id() const { return 1234; }
+    int id(){ return 1234; }
     bool mergeWith(const QUndoCommand* command);
     void undo();
     void redo();
@@ -2462,7 +2206,7 @@ public:
 class UndoableGripEditCommand : public QUndoCommand
 {
 public:
-    UndoableGripEditCommand(const QPointF beforePoint, const QPointF afterPoint, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+    UndoableGripEditCommand(const QPointF beforePoint, const QPointF afterPoint, QString  text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
@@ -2479,7 +2223,7 @@ public:
 class UndoableMirrorCommand : public QUndoCommand
 {
 public:
-    UndoableMirrorCommand(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+    UndoableMirrorCommand(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QString  text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
@@ -2502,7 +2246,7 @@ public:
     View(QGraphicsScene* theScene, QWidget* parent);
     ~View();
     
-    EmbView view_state;
+    Dictionary state;
 
     std::vector<QGraphicsItem*> selected_items();
 
@@ -2620,7 +2364,7 @@ public slots:
     bool isRealEnabled();
 
     void setGridColor(QRgb color);
-    void createGrid(const QString& gridType);
+    void createGrid(QString  gridType);
     void setRulerColor(QRgb color);
 
     void previewOn(String clone, String mode, EmbReal x, EmbReal y, EmbReal data);
@@ -2635,8 +2379,8 @@ public slots:
     void clearRubberRoom();
     void spareRubber(int64_t id);
     void setRubberMode(String mode);
-    void setRubberPoint(const QString& key, const QPointF& point);
-    void setRubberText(const QString& key, const QString& txt);
+    void setRubberPoint(QString  key, const QPointF& point);
+    void setRubberText(QString  key, QString  txt);
 
 protected:
     void mouseDoubleClickEvent(QMouseEvent* event);

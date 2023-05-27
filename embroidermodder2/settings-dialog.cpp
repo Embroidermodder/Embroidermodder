@@ -104,7 +104,7 @@ read_settings(void)
     settings.display_zoomscale_in = settings_file.value("Display/ZoomScaleIn", 2.0).toFloat();
     settings.display_zoomscale_out = settings_file.value("Display/ZoomScaleOut", 0.5).toFloat();
     settings.display_crosshair_percent = settings_file.value("Display/CrossHairPercent", 5).toInt();
-    settings.display_units = settings_file.value("Display/Units", "mm").toString().toStdString();
+    settings_["display_units"] = node(settings_file.value("Display/Units", "mm").toString().toStdString());
 
     //Prompt
     settings.prompt_text_color = settings_file.value("Prompt/TextColor", qRgb(  0, 0, 0)).toInt();
@@ -142,7 +142,7 @@ read_settings(void)
     settings.grid_color_match_crosshair = settings_file.value("Grid/ColorMatchCrossHair", true).toBool();
     settings.grid_color = settings_file.value("Grid/Color", qRgb(  0, 0, 0)).toInt();
     settings.grid_load_from_file = settings_file.value("Grid/LoadFromFile", true).toBool();
-    settings.grid_type = settings_file.value("Grid/Type", "Rectangular").toString().toStdString();
+    settings_["grid_type"] = node(settings_file.value("Grid/Type", "Rectangular").toString().toStdString());
     settings.grid_center_on_origin = settings_file.value("Grid/CenterOnOrigin", true).toBool();
     settings.grid_center.x = settings_file.value("Grid/CenterX", 0.0).toFloat();
     settings.grid_center.y = settings_file.value("Grid/CenterY", 0.0).toFloat();
@@ -217,6 +217,29 @@ write_settings(void)
     std::ofstream settings_file;
     settings_file.open(settingsPath.toStdString());
 
+    /**
+     * Planning
+     * --------
+     * for (auto iter = settings_.begin(); iter != settings_.end(); iter++) {
+     *     settings_file << iter->first << "=";
+     *     switch (iter->second.type) {
+     *     case INT_TYPE:
+     *         settings_file << iter->second.i;
+     *         break;
+     *     case REAL_TYPE:
+     *         settings_file << iter->second.r;
+     *         break;
+     *     case VECTOR_TYPE:
+     *         settings_file << iter->second.v.x << "," << iter->second.v.y;
+     *         break;
+     *     default:
+     *         break;
+     *     }
+     *     settings_file << std::endl;
+     * }
+     *
+     */
+
     settings_file << "[General]" << std::endl;
     //settings_file << "LayoutState=" << layoutState << std::endl;
     settings_file << "Language=" << settings.general_language << std::endl;
@@ -259,7 +282,7 @@ write_settings(void)
     settings_file << "ZoomScaleIn=" << settings.display_zoomscale_in << std::endl;
     settings_file << "ZoomScaleOut=" << settings.display_zoomscale_out << std::endl;
     settings_file << "CrossHairPercent=" << settings.display_crosshair_percent << std::endl;
-    settings_file << "Units=" << settings.display_units << std::endl;
+    settings_file << "Units=" << settings_["display_units"].s << std::endl;
     settings_file << std::endl;
 
     settings_file << "[Prompt]" << std::endl;
@@ -297,7 +320,7 @@ write_settings(void)
     settings_file << "ColorMatchCrossHair=" << settings.grid_color_match_crosshair << std::endl;
     settings_file << "Color=" << settings.grid_color << std::endl;
     settings_file << "LoadFromFile=" << settings.grid_load_from_file << std::endl;
-    settings_file << "Type=" << settings.grid_type << std::endl;;
+    settings_file << "Type=" << settings_["grid_type"].s << std::endl;;
     settings_file << "CenterOnOrigin=" << settings.grid_center_on_origin << std::endl;
     settings_file << "CenterX=" << settings.grid_center.x << std::endl;
     settings_file << "CenterY=" << settings.grid_center.y << std::endl;
@@ -384,7 +407,7 @@ Settings_Dialog::make_checkbox(QGroupBox *gb, const char *label, const char *ico
 /**
  *
  */
-Settings_Dialog::Settings_Dialog(const QString& showTab, QWidget* parent) : QDialog(parent)
+Settings_Dialog::Settings_Dialog(QString  showTab, QWidget* parent) : QDialog(parent)
 {
     setMinimumSize(750,550);
 
@@ -1126,7 +1149,7 @@ Settings_Dialog::create_float_spinbox(
     label->setEnabled(!dialog.grid_load_from_file);
     spinBox->setEnabled(!dialog.grid_load_from_file);
 
-    bool visibility = (dialog.grid_type == "Circular");
+    bool visibility = (dialog_["grid_type"].s == "Circular");
     label->setVisible(!visibility);
     spinBox->setVisible(!visibility);
 
@@ -1192,7 +1215,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     QGroupBox* groupBoxGridGeom = new QGroupBox(tr("Grid Geometry"), widget);
 
     dialog.grid_load_from_file = settings.grid_load_from_file;
-    dialog.grid_type = settings.grid_type;
+    dialog_["grid_type"] = settings_["grid_type"];
     dialog.grid_center_on_origin = settings.grid_center_on_origin;
     dialog.grid_center = settings.grid_center;
     dialog.grid_size = settings.grid_size;
@@ -1209,7 +1232,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     comboBoxGridType->addItem("Rectangular");
     comboBoxGridType->addItem("Circular");
     comboBoxGridType->addItem("Isometric");
-    comboBoxGridType->setCurrentIndex(comboBoxGridType->findText(QString::fromStdString(dialog.grid_type)));
+    comboBoxGridType->setCurrentIndex(comboBoxGridType->findText(QString::fromStdString(dialog_["grid_type"].s)));
     connect(comboBoxGridType, SIGNAL(currentIndexChanged(QString)), this, SLOT(comboBoxGridTypeCurrentIndexChanged(QString)));
 
     QCheckBox* checkBoxGridCenterOnOrigin = new QCheckBox(tr("Center the grid on the origin"), groupBoxGridGeom);
@@ -1470,7 +1493,7 @@ QWidget* Settings_Dialog::createTabLineWeight()
     //Misc
     QGroupBox* groupBoxLwtMisc = new QGroupBox(tr("LineWeight Misc"), widget);
 
-    QGraphicsScene* s = _mainWin->activeScene();
+    QGraphicsScene* s = activeScene();
 
     QCheckBox* checkBoxShowLwt = new QCheckBox(tr("Show LineWeight"), groupBoxLwtMisc);
     if (s) {
@@ -1636,7 +1659,7 @@ void Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
  * @param lang
  */
 void
-Settings_Dialog::comboBoxLanguageCurrentIndexChanged(const QString& lang)
+Settings_Dialog::comboBoxLanguageCurrentIndexChanged(QString  lang)
 {
     dialog.general_language = lang.toLower().toStdString();
 }
@@ -1646,7 +1669,7 @@ Settings_Dialog::comboBoxLanguageCurrentIndexChanged(const QString& lang)
  * @param theme
  */
 void
-Settings_Dialog::comboBoxIconThemeCurrentIndexChanged(const QString& theme)
+Settings_Dialog::comboBoxIconThemeCurrentIndexChanged(QString  theme)
 {
     dialog.general_icon_theme = theme.toStdString();
 }
@@ -2071,13 +2094,13 @@ void Settings_Dialog::currentPromptBackgroundColorChanged(const QColor& color)
     prompt->setPromptBackgroundColor(QColor(preview.prompt_bg_color));
 }
 
-void Settings_Dialog::comboBoxPromptFontFamilyCurrentIndexChanged(const QString& family)
+void Settings_Dialog::comboBoxPromptFontFamilyCurrentIndexChanged(QString  family)
 {
     preview.prompt_font_family = family.toStdString();
     prompt->setPromptFontFamily(QString::fromStdString(preview.prompt_font_family));
 }
 
-void Settings_Dialog::comboBoxPromptFontStyleCurrentIndexChanged(const QString& style)
+void Settings_Dialog::comboBoxPromptFontStyleCurrentIndexChanged(QString  style)
 {
     preview.prompt_font_style = style.toStdString();
     prompt->setPromptFontStyle(QString::fromStdString(preview.prompt_font_style));
@@ -2249,9 +2272,9 @@ void Settings_Dialog::checkBoxGridLoadFromFileStateChanged(int checked)
  * @brief Settings_Dialog::comboBoxGridTypeCurrentIndexChanged
  * @param type
  */
-void Settings_Dialog::comboBoxGridTypeCurrentIndexChanged(const QString& type)
+void Settings_Dialog::comboBoxGridTypeCurrentIndexChanged(QString  type)
 {
-    dialog.grid_type = type.toStdString();
+    dialog_["grid_type"].s = type.toStdString();
 
     QObject* senderObj = sender();
     if (!senderObj) {
