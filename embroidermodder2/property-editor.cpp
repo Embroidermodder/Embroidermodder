@@ -483,8 +483,8 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
         else if (objType == OBJ_TYPE_POINT) {
             PointObject* obj = static_cast<PointObject*>(item);
             if (obj) {
-                updateLineEditNumIfVaries(lineEdits["point-x"],  obj->objectX(), false);
-                updateLineEditNumIfVaries(lineEdits["point-y"], -obj->objectY(), false);
+                updateLineEditNumIfVaries(lineEdits["point-x"],  obj->objectPos().x(), false);
+                updateLineEditNumIfVaries(lineEdits["point-y"], -obj->objectPos().y(), false);
             }
         }
         else if (objType == OBJ_TYPE_POLYGON) {

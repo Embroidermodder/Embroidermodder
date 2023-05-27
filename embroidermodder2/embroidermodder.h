@@ -391,6 +391,8 @@ String construct_command(String command, const char *fmt, ...);
 
 void create_menu(String menu, StringList def, bool topLevel);
 
+StringList tokenize(String, char);
+
 QPointF to_QPointF(EmbVector a);
 EmbVector to_EmbVector(QPointF a);
 EmbVector operator+(EmbVector a, EmbVector b);
@@ -437,15 +439,28 @@ QGraphicsScene* activeScene();
 
 /**
  * @brief The BaseObject class
+ *
+ * Combine all geometry objects into one class that uses the Type
+ * flag to determine the behaviour of overlapping functions and
+ * bar the use of nonsensical function calls.
  */
 class BaseObject : public QGraphicsPathItem
 {
 public:
-    BaseObject(QGraphicsItem* parent = 0);
-    virtual ~BaseObject();
+    enum ArrowStyle {
+        NoArrow, //NOTE: Allow this enum to evaluate false
+        Open,
+        Closed,
+        Dot,
+        Box,
+        Tick
+    };
 
-    enum { Type = OBJ_TYPE_BASE };
-    virtual int type(){ return Type; }
+    enum lineStyle {
+        NoLine, //NOTE: Allow this enum to evaluate false
+        Flared,
+        Fletching
+    };
 
     Dictionary properties;
 
@@ -457,6 +472,60 @@ public:
     QHash<QString, QString> objRubberTexts;
     int64_t objID;
 
+    QPointF arcStartPoint;
+    QPointF arcMidPoint;
+    QPointF arcEndPoint;
+
+    bool curved;
+    bool filled;
+    QPainterPath lineStylePath;
+    QPainterPath arrowStylePath;
+    EmbReal arrowStyleAngle;
+    EmbReal arrowStyleLength;
+    EmbReal lineStyleAngle;
+    EmbReal lineStyleLength;
+
+    QString objText;
+    QString objTextFont;
+    QString objTextJustify;
+    EmbReal objTextSize;
+    bool objTextBold;
+    bool objTextItalic;
+    bool objTextUnderline;
+    bool objTextStrikeOut;
+    bool objTextOverline;
+    bool objTextBackward;
+    bool objTextUpsideDown;
+    QPainterPath objTextPath;
+
+    int Type = OBJ_TYPE_BASE;
+    virtual int type(){ return Type; }
+
+    /**
+     * @brief BaseObject
+     * @param parent
+     */
+    BaseObject(int object_type = OBJ_TYPE_BASE, QGraphicsItem* parent = 0)
+    {
+        debug_message("BaseObject Constructor()");
+
+        objPen.setCapStyle(Qt::RoundCap);
+        objPen.setJoinStyle(Qt::RoundJoin);
+        lwtPen.setCapStyle(Qt::RoundCap);
+        lwtPen.setJoinStyle(Qt::RoundJoin);
+
+        objID = QDateTime::currentMSecsSinceEpoch();
+
+        Type = object_type;
+        switch (Type) {
+        default:
+            break;
+        }
+    }
+
+    virtual ~BaseObject();
+
+
     QColor objectColor() { return objPen.color(); }
     QRgb objectColorRGB() { return objPen.color().rgb(); }
     Qt::PenStyle objectLineType() { return objPen.style(); }
@@ -465,6 +534,13 @@ public:
     QString objectRubberText(QString  key);
 
     QPointF objectCenter() { return scenePos(); }
+    QPointF objectPos() { return scenePos(); }
+    EmbReal objectX(){ return scenePos().x(); }
+    EmbReal objectY(){ return scenePos().y(); }
+
+    void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
+    void setObjectX(EmbReal x) { setPos(x, objectY()); }
+    void setObjectY(EmbReal y) { setPos(objectX(), y); }
 
     void setObjectCenter(EmbVector center)
     {
@@ -541,10 +617,6 @@ public:
 class ArcObject : public BaseObject
 {
 public:
-    QPointF arcStartPoint;
-    QPointF arcMidPoint;
-    QPointF arcEndPoint;
-
     /**
      * @brief ArcObject
      * @param arc
@@ -560,7 +632,7 @@ public:
     ArcObject(ArcObject* obj, QGraphicsItem* parent = 0);
     ~ArcObject();
 
-    enum { Type = OBJ_TYPE_ARC };
+    int Type = OBJ_TYPE_ARC;
     virtual int type(){ return Type; }
 
     void init(EmbArc arc, QRgb rgb, Qt::PenStyle lineType);
@@ -608,7 +680,7 @@ public:
     void init(EmbReal centerX, EmbReal centerY, EmbReal radius, QRgb rgb, Qt::PenStyle lineType);
     void updatePath();
 
-    enum { Type = OBJ_TYPE_CIRCLE };
+    int Type = OBJ_TYPE_CIRCLE;
     virtual int type(){ return Type; }
 
     QPainterPath objectSavePath();
@@ -648,33 +720,10 @@ public:
 
     void init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, Qt::PenStyle lineType);
 
-    bool curved;
-    bool filled;
-    void updateLeader();
-    QPainterPath lineStylePath;
-    QPainterPath arrowStylePath;
-    EmbReal arrowStyleAngle;
-    EmbReal arrowStyleLength;
-    EmbReal lineStyleAngle;
-    EmbReal lineStyleLength;
-
-    enum ArrowStyle {
-        NoArrow, //NOTE: Allow this enum to evaluate false
-        Open,
-        Closed,
-        Dot,
-        Box,
-        Tick
-    };
-
-    enum lineStyle {
-        NoLine, //NOTE: Allow this enum to evaluate false
-        Flared,
-        Fletching
-    };
-
-    enum { Type = OBJ_TYPE_DIMLEADER };
+    int Type = OBJ_TYPE_DIMLEADER;
     virtual int type(){ return Type; }
+
+    void updateLeader();
 
     QPointF objectEndPoint1();
     QPointF objectEndPoint2();
@@ -738,7 +787,7 @@ public:
     void init(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, QRgb rgb, Qt::PenStyle lineType);
     void updatePath();
 
-    enum { Type = OBJ_TYPE_ELLIPSE };
+    int Type = OBJ_TYPE_ELLIPSE;
     virtual int type(){ return Type; }
 
     QPainterPath objectSavePath();
@@ -783,7 +832,7 @@ public:
     void init(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, Qt::PenStyle lineType);
     void updatePath();
 
-    enum { Type = OBJ_TYPE_IMAGE };
+    int Type = OBJ_TYPE_IMAGE;
     virtual int type(){ return Type; }
 
     QPointF objectTopLeft();
@@ -818,7 +867,7 @@ public:
 
     void init(EmbLine line, QRgb rgb, Qt::PenStyle lineType);
 
-    enum { Type = OBJ_TYPE_LINE };
+    int Type = OBJ_TYPE_LINE;
     virtual int type(){ return Type; }
 
     QPainterPath objectSavePath();
@@ -877,7 +926,7 @@ public:
     PathObject(PathObject* obj, QGraphicsItem* parent = 0);
     ~PathObject();
 
-    enum { Type = OBJ_TYPE_PATH };
+    int Type = OBJ_TYPE_PATH;
     virtual int type(){ return Type; }
 
     void init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
@@ -888,14 +937,10 @@ public:
     QPainterPath objectCopyPath();
     QPainterPath objectSavePath();
 
-    QPointF objectPos() { return scenePos(); }
-    EmbReal objectX() { return scenePos().x(); }
-    EmbReal objectY() { return scenePos().y(); }
-
     void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
     void setObjectPos(EmbReal x, EmbReal y) { setPos(x, y); }
-    void setObjectX(EmbReal x) { setObjectPos(x, objectY()); }
-    void setObjectY(EmbReal y) { setObjectPos(objectX(), y); }
+    void setObjectX(EmbReal x) { setPos(x, objectPos().y()); }
+    void setObjectY(EmbReal y) { setPos(objectPos().x(), y); }
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
@@ -919,19 +964,16 @@ public:
 
     void init(EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType);
 
-    enum { Type = OBJ_TYPE_POINT };
+    int Type = OBJ_TYPE_POINT;
     virtual int type(){ return Type; }
 
     QPainterPath objectSavePath();
 
     QPointF objectPos() { return scenePos(); }
-    EmbReal objectX() { return scenePos().x(); }
-    EmbReal objectY() { return scenePos().y(); }
 
-    void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
     void setObjectPos(EmbReal x, EmbReal y) { setPos(x, y); }
-    void setObjectX(EmbReal x) { setObjectPos(x, objectY()); }
-    void setObjectY(EmbReal y) { setObjectPos(objectX(), y); }
+    void setObjectX(EmbReal x) { setPos(x, objectPos().y()); }
+    void setObjectY(EmbReal y) { setPos(objectPos().x(), y); }
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
@@ -953,7 +995,7 @@ public:
     PolygonObject(PolygonObject* obj, QGraphicsItem* parent = 0);
     ~PolygonObject();
 
-    enum { Type = OBJ_TYPE_POLYGON };
+    int Type = OBJ_TYPE_POLYGON;
     virtual int type(){ return Type; }
 
     void init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
@@ -991,7 +1033,7 @@ public:
     PolylineObject(PolylineObject* obj, QGraphicsItem* parent = 0);
     ~PolylineObject();
 
-    enum { Type = OBJ_TYPE_POLYLINE };
+    int Type = OBJ_TYPE_POLYLINE;
     virtual int type(){ return Type; }
 
     void init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
@@ -1002,15 +1044,6 @@ public:
 
     QPainterPath objectCopyPath();
     QPainterPath objectSavePath();
-
-    QPointF objectPos(){ return scenePos(); }
-    EmbReal objectX(){ return scenePos().x(); }
-    EmbReal objectY(){ return scenePos().y(); }
-
-    void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
-    void setObjectPos(EmbReal x, EmbReal y) { setPos(x, y); }
-    void setObjectX(EmbReal x) { setObjectPos(x, objectY()); }
-    void setObjectY(EmbReal y) { setObjectPos(objectX(), y); }
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
@@ -1031,15 +1064,13 @@ public:
     RectObject(RectObject* obj, QGraphicsItem* parent = 0);
     ~RectObject();
 
-    enum { Type = OBJ_TYPE_RECTANGLE };
+    int Type = OBJ_TYPE_RECTANGLE;
     virtual int type(){ return Type; }
 
     QPainterPath objectSavePath();
 
     void init(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, Qt::PenStyle lineType);
     void updatePath();
-
-    QPointF objectPos(){ return scenePos(); }
 
     QPointF objectTopLeft();
     QPointF objectTopRight();
@@ -1118,30 +1149,13 @@ public:
     TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent = 0);
     ~TextSingleObject();
 
-    enum { Type = OBJ_TYPE_TEXTSINGLE };
+    int Type = OBJ_TYPE_TEXTSINGLE;
     virtual int type(){ return Type; }
 
     void init(QString  str, EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType);
 
-    QString objText;
-    QString objTextFont;
-    QString objTextJustify;
-    EmbReal objTextSize;
-    bool objTextBold;
-    bool objTextItalic;
-    bool objTextUnderline;
-    bool objTextStrikeOut;
-    bool objTextOverline;
-    bool objTextBackward;
-    bool objTextUpsideDown;
-    QPainterPath objTextPath;
-
     std::vector<QPainterPath> objectSavePathList(){ return subPathList(); }
     std::vector<QPainterPath> subPathList();
-
-    QPointF objectPos(){ return scenePos(); }
-    EmbReal objectX()  { return scenePos().x(); }
-    EmbReal objectY()  { return scenePos().y(); }
 
     void setObjectText(QString  str);
     void setObjectTextFont(QString  font);
