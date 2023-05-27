@@ -139,32 +139,45 @@ String convert_args_to_type(String label, StringList args,
 static String about_action(String args);
 static String add_arc_action(String args);
 static String add_circle_action(String args);
+static String add_geometry_action(String args);
 static String add_rubber_action(String args);
 static String add_slot_action(String args);
+static String alert_action(String args);
 static String append_prompt_history_action(String args);
+static String append_history_action(String args);
 static String changelog_action(String args);
 static String copy_action(String args);
 static String cut_action(String args);
 static String day_vision_action(String args);
 static String design_details_action(String args);
 static String do_nothing_action(String args);
+static String end_action(String args);
 static String error_action(String args);
 static String help_action(String args);
-String new_file_action(String args);
+static String icon_action(String command);
+static String init_action(String args);
+static String new_file_action(String args);
 static String night_vision_action(String args);
+static String num_selected_action(String args);
+static String open_action(String args);
 static String pan_action(String args);
 static String paste_action(String args);
+static String platform_action(String args);
 static String print_action(String args);
+static String quit_action(String args);
 static String redo_action(String args);
+static String select_all_action(String args);
+static String set_prompt_prefix_action(String args);
 static String set_rubber_text_action(String args);
+static String settings_dialog_action(String showTab);
 static String spare_rubber_action(String args);
 static String tip_of_the_day_action(String args);
 static String todo_action(String args);
 static String undo_action(String args);
+static String version_action(String args);
 static String whats_this_action(String args);
+static String window_action(String args);
 static String zoom_action(String args);
-
-String settings_dialog_action(String showTab);
 
 void Alert(QString txt);
 
@@ -213,6 +226,7 @@ std::unordered_map<String, Command> command_map = {
     {"about", about_action},
     {"add-arc", add_arc_action},
     {"add-circle", add_circle_action},
+    {"add-geometry", add_geometry_action},
     {"add-rubber", add_rubber_action},
     {"add-slot", add_slot_action},
     {"append-history", append_prompt_history_action},
@@ -221,19 +235,28 @@ std::unordered_map<String, Command> command_map = {
     {"day", day_vision_action},
     {"design-details", design_details_action},
     {"donothing", do_nothing_action},
+    {"end", end_action},
     {"error", error_action},
+    {"icon", icon_action},
+    {"init", init_action},
     {"new", new_file_action},
     {"night", night_vision_action},
+    {"num-selected", num_selected_action},
+    {"open", open_action},
     {"pan", pan_action},
     {"paste", paste_action},
+    {"quit", quit_action},
     {"redo", redo_action},
+    {"select-all", select_all_action},
     {"set-rubber-text", set_rubber_text_action},
     {"settingsdialog", settings_dialog_action},
     {"spare-rubber", spare_rubber_action},
     {"tip-of-the-day", tip_of_the_day_action},
     {"todo", todo_action},
     {"undo", undo_action},
+    {"version", version_action},
     {"whats-this", whats_this_action},
+    {"window", window_action},
     {"zoom", zoom_action}
 };
 
@@ -2667,6 +2690,7 @@ read_configuration(void)
         return 0;
     }
 
+    config["version"] = node(read_string_setting(settings_toml, "version"));
     std::vector<String> action_labels =
         read_string_list_setting(settings_toml, "actions_");
 
@@ -2706,6 +2730,52 @@ validRGB(int r, int g, int b)
     result &= (b>=0);
     result &= (b<256);
     return result;
+}
+
+/**
+ * @brief disable_action
+ * @param variable
+ * @return
+ */
+String
+disable_action(String variable)
+{
+    if (variable == "text-angle") {
+        settings.text_angle = false;
+        return "";
+    }
+    if (variable == "text-bold") {
+        settings.text_style_bold = false;
+        return "";
+    }
+    if (variable == "text-italic") {
+        settings.text_style_italic = false;
+        return "";
+    }
+    if (variable == "text-underline") {
+        settings.text_style_underline = false;
+        return "";
+    }
+    if (variable == "text-strikeout") {
+        settings.text_style_strikeout = false;
+        return "";
+    }
+    if (variable == "text-overline") {
+        settings.text_style_overline = false;
+        return "";
+    }
+    if (variable == "prompt-rapid-fire") {
+        prompt->disableRapidFire();
+        return "";
+    }
+    if (variable == "move-rapid-fire") {
+        View* gview = activeView();
+        if (gview) {
+            gview->disableMoveRapidFire();
+        }
+        return "";
+    }
+    return "";
 }
 
 /**
@@ -3080,7 +3150,7 @@ actuator(String line)
         String args = line.substr(from);
         String result = iter->second(args);
         if (result != "") {
-            return "</br>" + result;
+            return "<br/>" + result;
         }
         return "";
     }
@@ -3089,686 +3159,684 @@ actuator(String line)
     if (script != scripts.end()) {
         String result = run_script(script->second);
         if (result != "") {
-            return "</br>" + result;
+            return "<br/>" + result;
         }
         return "";
     }
 
     return "<br/><font color=\"red\">Unknown command \"" + command
            + "\". Press F1 for help.</font>";
+}
 
-    if (command == "about") {
-        return about_action("");
+/**
+ * @brief add_geometry_action
+ * @param args
+ * @return
+ */
+static String
+add_geometry_action(String args)
+{
+    StringList list = tokenize(args, ' ');
+    String command = list[0];
+    if (command == "arc") {
+//      _mainWin->AddArc();
+        return "";
+    }
+    if (command == "circle") {
+//      _mainWin->AddCircle();
+        return "";
+    }
+    if (command == "ellipse") {
+//      _mainWin->AddEllipse();
+        return "";
+    }
+    if (command == "point") {
+//      _mainWin->AddPoint();
+        return "";
+    }
+    if (command == "regular-polygon") {
+//      _mainWin->AddRegularPolygon();
+        return "";
+    }
+    if (command == "polygon") {
+//      _mainWin->AddPolygon();
+        return "";
+    }
+    if (command == "polyline") {
+//       _mainWin->nativeAddPolyline();
+        return "";
+    }
+    if (command == "path") {
+//       _mainWin->nativeAddPath();
+        return "";
+    }
+    if (command == "horizontal-dimension") {
+//       _mainWin->nativeAddHorizontalDimension();
+        return "";
+    }
+    if (command == "vertical-dimension") {
+//      _mainWin->nativeAddVerticalDimension();
+        return "";
+    }
+    if (command == "image") {
+//      _mainWin->nativeAddImage();
+        return "";
+    }
+    if (command == "dim-leader") {
+//      _mainWin->AddDimLeader();
+        return "";
+    }
+    if (command == "text-multi") {
+//      AddTextMulti();
+        return "";
+    }
+    if (command == "text-single") {
+//      AddTextSingle();
+        return "";
+    }
+    if (command == "infinite-line") {
+//      AddInfiniteLine();
+        return "";
+    }
+    if (command == "ray") {
+//      AddRay();
+        return "";
+    }
+    if (command == "line") {
+//          AddLine();
+        return "";
+    }
+    if (command == "triangle") {
+//          AddTriangle();
+        return "";
+    }
+    if (command == "rectangle") {
+//        AddRectangle(a);
+        return "";
+    }
+    if (command == "rounded-rectangle") {
+//          AddRoundedRectangle();
+        return "";
+    }
+    return "</br>The add subcommand is not recognised.";
+}
+
+/**
+ * @brief alert_action
+ * @param args
+ * @return
+ */
+static String
+alert_action(String args)
+{
+    prompt->alert(QString::fromStdString(args));
+    return "";
+}
+
+/**
+ * @brief end_action
+ * @param args
+ * @return
+ */
+static String
+end_action(String args)
+{
+    View* gview = activeView();
+    if (gview) {
+        gview->clearRubberRoom();
+        gview->previewOff();
+        gview->disableMoveRapidFire();
+    }
+    prompt->endCommand();
+    return "";
+}
+
+/**
+ * @brief quit_action
+ * @param args
+ * @return
+ */
+static String
+quit_action(String args)
+{
+    _mainWin->quit();
+    return "";
+}
+
+/**
+ * @brief init_action
+ * @param args
+ * @return
+ */
+static String
+init_action(String args)
+{
+    no_argument_debug("init_action()", args);
+    View* gview = activeView();
+    if (gview) {
+        gview->clearRubberRoom();
+    }
+    return "";
+}
+
+/**
+ * @brief platform_action
+ * @param args
+ * @return
+ */
+static String
+platform_action(String args)
+{
+    no_argument_debug("init_action()", args);
+    return platformString();
+}
+
+/**
+ * @brief select_all_action
+ * @param args
+ * @return
+ */
+static String
+select_all_action(String args)
+{
+    debug_message("selectAll()");
+    View* gview = activeView();
+    if (gview) {
+        gview->selectAll();
+    }
+    return "";
+}
+
+/**
+ * @brief append_history_action
+ * @param args
+ * @return
+ */
+static String
+append_history_action(String args)
+{
+    prompt->appendHistory(QString::fromStdString(args));
+    return "";
+}
+
+/**
+ * @brief window_action
+ * @param args
+ * @return
+ */
+static String
+window_action(String args)
+{
+    StringList list = tokenize(args, ' ');
+    String command = list[0];
+    if (command == "cascade") {
+        mdiArea->cascade();
+        return "";
+    }
+    if (command == "close") {
+        _mainWin->onCloseWindow();
+        return "";
+    }
+    if (command == "closeall") {
+        mdiArea->closeAllSubWindows();
+        return "";
+    }
+    if (command == "tile") {
+        mdiArea->tile();
+        return "";
+    }
+    if (command == "next") {
+        mdiArea->activateNextSubWindow();
+        return "";
+    }
+    if (command == "previous") {
+        mdiArea->activatePreviousSubWindow();
+        return "";
+    }
+    return "window argument not recognised.";
+}
+
+/**
+ * @brief open_action
+ * @param args
+ * @return
+ */
+static String
+open_action(String args)
+{
+    _mainWin->openFile();
+    return "";
+}
+
+/**
+ * @brief icon_action
+ * @param command
+ * @return
+ */
+static String
+icon_action(String command)
+{
+    if (command == "16") {
+        debug_message("icon16()");
+        _mainWin->iconResize(16);
+        return "";
+    }
+    if (command == "24") {
+        debug_message("icon24()");
+        _mainWin->iconResize(24);
+        return "";
+    }
+    if (command == "32") {
+        debug_message("icon32()");
+        _mainWin->iconResize(32);
+        return "";
+    }
+    if (command == "48") {
+        debug_message("icon48()");
+        _mainWin->iconResize(48);
+        return "";
+    }
+    if (command == "64") {
+        debug_message("icon64()");
+        _mainWin->iconResize(64);
+        return "";
+    }
+    if (command == "128") {
+        debug_message("icon128()");
+        _mainWin->iconResize(128);
+        return "";
+    }
+    return "ERROR: this icon size is not supported.";
+}
+
+/*
+static String
+text_action(String command)
+{
+    if (list.size() < 1) {
+        return "text requires an argument.";
+    }
+    command = list[0];
+    if (command == "font") {
+        return settings.text_font;
+    }
+    if (command == "size") {
+        return std::to_string(settings.text_size);
+    }
+    if (command == "angle") {
+        return std::to_string(settings.text_angle);
+    }
+    if (command == "bold") {
+        return std::to_string(settings.text_style_bold);
+    }
+    if (command == "italic") {
+        return std::to_string(settings.text_style_italic);
+    }
+    if (command == "underline") {
+        return std::to_string(settings.text_style_underline);
+    }
+    if (command == "strikeout") {
+        return std::to_string(settings.text_style_strikeout);
+    }
+    if (command == "overline") {
+        return std::to_string(settings.text_style_overline);
+    }
+}
+
+if (command == "set") {
+    if (list.size() < 2) {
+        return "The command 'set' requires 2 arguments.";
+    }
+    bool value = (
+           list[1] == "true"
+        || list[1] == "True"
+        || list[1] == "TRUE"
+        || list[1] == "on"
+        || list[1] == "ON"
+        || list[1] == "T"
+        || list[1] == "t"
+        || list[1] == "1"
+    );
+    if (list[0] == "text_font") {
+        settings.text_font = list[1];
+        return "";
+    }
+    if (list[0] == "text_size") {
+        settings.text_size = std::stof(list[1]);
+        return "";
+    }
+    if (command == "text_angle") {
+        settings.text_angle = value;
+        return "";
+    }
+    if (command == "text_style_bold") {
+        settings.text_style_bold = value;
+        return "";
+    }
+    if (command == "text_style_italic") {
+        settings.text_style_italic = value;
+        return "";
+    }
+    if (command == "text_style_underline") {
+        settings.text_style_underline = value;
+        return "";
+    }
+    if (command == "text_style_strikeout") {
+        settings.text_style_strikeout = value;
+        return "";
+    }
+    if (command == "text_style_overline") {
+        settings.text_style_overline = value;
+        return "";
+    }
+}
+
+if (command == "enable") {
+    if (list.size() < 1) {
+        return "The command 'enable' requires an argument.";
+    }
+    if (command == "text-angle") {
+        settings.text_angle = true;
+        return "";
+    }
+    if (command == "text-bold") {
+        settings.text_style_bold = true;
+        return "";
+    }
+    if (command == "text-italic") {
+        settings.text_style_italic = true;
+        return "";
+    }
+    if (command == "text-underline") {
+        settings.text_style_underline = true;
+        return "";
+    }
+    if (command == "text-strikeout") {
+        settings.text_style_strikeout = true;
+        return "";
+    }
+    if (command == "text-overline") {
+        settings.text_style_overline = true;
+        return "";
+    }
+    if (command == "prompt-rapid-fire") {
+        prompt->enableRapidFire();
+        return "";
+    }
+    if (command == "move-rapid-fire") {
+        View* gview = activeView();
+        if (gview) {
+            gview->enableMoveRapidFire();
+        }
+        return "";
+    }
+    return "";
+}
+*/
+
+/**
+ * @brief version_action
+ * @param args
+ * @return
+ */
+static String
+version_action(String args)
+{
+    return config["version"].s;
+}
+
+/**
+ * @brief set_prompt_prefix_action
+ * @param args
+ * @return
+ */
+static String
+set_prompt_prefix_action(String args)
+{
+    prompt->setPrefix(QString::fromStdString(args));
+    return "";
+}
+
+/**
+ * @brief num_selected_action
+ * @param args
+ * @return
+ */
+static String
+num_selected_action(String args)
+{
+    return std::to_string(NumSelected());
+}
+
+/*
+static String
+add_to_selection_action(String args)
+{
+    AddToSelection();
+    return "";
+}
+
+if (command == "clear-selection") {
+    View* gview = activeView();
+    if (gview) {
+        gview->clearSelection();
+    }
+    return "";
+}
+
+if (command == "delete selection") {
+    nativeDeleteSelected();
+    return "";
+}
+
+if (command == "qsnapx") {
+    return nativeQSnapX();
+}
+
+if (command == "qsnapy") {
+    return nativeQSnapY();
+}
+
+if (command == "mousex") {
+    return nativeMouseX();
+}
+
+if (command == "mousey") {
+    return nativeMouseY();
+}
+
+if (command == "debug") {
+    scriptValDebug();
+    return "";
+}
+
+if (command == "error") {
+    scriptValError();
+    return "";
+}
+
+if (command == "todo") {
+    Todo();
+    return "";
+}
+
+if (command == "alert") {
+    Alert();
+    return "";
+}
+
+if (command == "appendPromptHistory") {
+    AppendPromptHistory();
+    return "";
+}
+
+if (command == "messageBox") {
+    MessageBox();
+    return "";
+}
+
+if (command == "isInt") {
+    IsInt();
+    return "";
+}
+
+if (command == "printArea") {
+    PrintArea();
+    return "";
+}
+if (command == "set_background_color_action") {
+    set_background_color_action();
+    return "";
+}
+
+if (command == "setCrossHairColor") {
+    SetCrossHairColor();
+    return "";
+}
+
+if (command == "set_grid_color") {
+    set_grid_color();
+    return "";
+}
+
+if (command == "previewOn") {
+    PreviewOn();
+    return "";
+}
+
+if (command == "previewOff")
+    PreviewOff();
+    return "";
+}
+
+if (command == "vulcanize") {
+    View* gview = activeView();
+    if (gview) {
+        gview->vulcanizeRubberRoom();
+    }
+    return "";
+}
+
+if (command == "rubber") {
+    if (command == "allow") {
+        AllowRubber();
+        return "";
+    }
+
+    if (command == "set-mode") {
+        SetRubberMode();
+        return "";
+    }
+
+    if (command == "set-point") {
+        SetRubberPoint();
+        return "";
+    }
+    if (command == "set-text") {
+        SetRubberText();
+        return "";
     }
 
     if (command == "add") {
-        if (list.size() < 1) {
-            return "</br>The add command requires an argument.";
-        }
-        command = list[0];
-        if (command == "arc") {
-//            _mainWin->AddArc();
-            return "";
-        }
-        if (command == "circle") {
-//            _mainWin->AddCircle();
-            return "";
-        }
-        if (command == "ellipse") {
-//           _mainWin->AddEllipse();
-            return "";
-        }
-        if (command == "point") {
-//            _mainWin->AddPoint();
-            return "";
-        }
-        if (command == "regular-polygon") {
-//            _mainWin->AddRegularPolygon();
-            return "";
-        }
-        if (command == "polygon") {
-//            _mainWin->AddPolygon();
-            return "";
-        }
-        if (command == "polyline") {
-//            _mainWin->nativeAddPolyline();
-            return "";
-        }
-        if (command == "path") {
-//            _mainWin->nativeAddPath();
-            return "";
-        }
-        if (command == "horizontal-dimension") {
-//            _mainWin->nativeAddHorizontalDimension();
-            return "";
-        }
-        if (command == "vertical-dimension") {
-//            _mainWin->nativeAddVerticalDimension();
-            return "";
-        }
-        if (command == "image") {
-//            _mainWin->nativeAddImage();
-            return "";
-        }
-        if (command == "dim-leader") {
-//            _mainWin->AddDimLeader();
-            return "";
-        }
-        if (command == "text-multi") {
-//          AddTextMulti();
-            return "";
-        }
-        if (command == "text-single") {
-//          AddTextSingle();
-            return "";
-        }
-        if (command == "infinite-line") {
- //         AddInfiniteLine();
-            return "";
-        }
-        if (command == "ray") {
-//          AddRay();
-            return "";
-        }
-        if (command == "line") {
-            String error = convert_args_to_type("add rectangle", list, "rrrrrbi", a);
-            if (error != "") {
-                return error;
-            }
-//          AddLine();
-            return "";
-        }
-        if (command == "triangle") {
-            String error = convert_args_to_type("add rectangle", list, "rrrrrbi", a);
-            if (error != "") {
-                return error;
-            }
-//          AddTriangle();
-            return "";
-        }
-        if (command == "rectangle") {
-            String error = convert_args_to_type("add rectangle", list, "rrrrrbi", a);
-            if (error != "") {
-                return error;
-            }
-            AddRectangle(a);
-            return "";
-        }
-        if (command == "rounded-rectangle") {
-            String error = convert_args_to_type("add rectangle", list, "rrrrrbi", a);
-            if (error != "") {
-                return error;
-            }
-//          AddRoundedRectangle();
-            return "";
-        }
-        return "</br>The add subcommand is not recognised.";
-    }
-
-    if (command == "alert") {
-        prompt->alert(QString::fromStdString(line.substr(5)));
+        AddRubber();
         return "";
     }
-
-    if (command == "end") {
-        View* gview = activeView();
-        if (gview) {
-            gview->clearRubberRoom();
-            gview->previewOff();
-            gview->disableMoveRapidFire();
-        }
-        prompt->endCommand();
+    if (command == "clear") {
+        ClearRubber();
         return "";
     }
-
-    if ((command == "exit") || (command == "quit")) {
-        _mainWin->quit();
+    if (command == "spare") {
+        SpareRubber();
         return "";
     }
-
-    if (command == "help") {
-        return help_action("");
-    }
-
-    if (command == "init") {
-        View* gview = activeView();
-        if (gview) {
-            gview->clearRubberRoom();
-        }
-        return "";
-    }
-
-    if (command == "platform") {
-        return "<br/>" + platformString();
-    }
-
-    if (command == "redo") {
-        return redo_action("");
-    }
-
-    if (command == "selectall") {
-        debug_message("selectAll()");
-        View* gview = activeView();
-        if (gview) {
-            gview->selectAll();
-        }
-        return "";
-    }
-
-    if (command == "append-history") {
-        prompt->appendHistory(QString::fromStdString(line));
-        return "";
-    }
-
-    if (command == "tipoftheday") {
-        return tip_of_the_day_action("");
-    }
-
-    if (command == "undo") {
-        return undo_action ("");
-    }
-
-    if (command == "window") {
-        if (list.size() < 1) {
-            return "</br>window requires an argument.";
-        }
-        command = list[0];
-        if (command == "cascade") {
-            mdiArea->cascade();
-            return "";
-        }
-        if (command == "close") {
-            _mainWin->onCloseWindow();
-            return "";
-        }
-        if (command == "closeall") {
-            mdiArea->closeAllSubWindows();
-            return "";
-        }
-        if (command == "tile") {
-            mdiArea->tile();
-            return "";
-        }
-        if (command == "next") {
-            mdiArea->activateNextSubWindow();
-            return "";
-        }
-        if (command == "previous") {
-            mdiArea->activatePreviousSubWindow();
-            return "";
-        }
-        return "</br>window argument not recognised.";
-    }
-
-    if (command == "open") {
-        _mainWin->openFile();
-        return "";
-    }
-
-    if (command == "icon") {
-        if (list.size() < 1) {
-            return "icon requires an argument.";
-        }
-        command = list[0];
-        if (command == "16") {
-            debug_message("icon16()");
-            _mainWin->iconResize(16);
-            return "";
-        }
-        if (command == "24") {
-            debug_message("icon24()");
-            _mainWin->iconResize(24);
-            return "";
-        }
-        if (command == "32") {
-            debug_message("icon32()");
-            _mainWin->iconResize(32);
-            return "";
-        }
-        if (command == "48") {
-            debug_message("icon48()");
-            _mainWin->iconResize(48);
-            return "";
-        }
-        if (command == "64") {
-            debug_message("icon64()");
-            _mainWin->iconResize(64);
-            return "";
-        }
-        if (command == "128") {
-            debug_message("icon128()");
-            _mainWin->iconResize(128);
-            return "";
-        }
-        return "";
-    }
-
-    if (command == "text") {
-        if (list.size() < 1) {
-            return "text requires an argument.";
-        }
-        command = list[0];
-        if (command == "font") {
-            return settings.text_font;
-        }
-        if (command == "size") {
-            return std::to_string(settings.text_size);
-        }
-        if (command == "angle") {
-            return std::to_string(settings.text_angle);
-        }
-        if (command == "bold") {
-            return std::to_string(settings.text_style_bold);
-        }
-        if (command == "italic") {
-            return std::to_string(settings.text_style_italic);
-        }
-        if (command == "underline") {
-            return std::to_string(settings.text_style_underline);
-        }
-        if (command == "strikeout") {
-            return std::to_string(settings.text_style_strikeout);
-        }
-        if (command == "overline") {
-            return std::to_string(settings.text_style_overline);
-        }
-    }
-
-    if (command == "set") {
-        if (list.size() < 2) {
-            return "The command 'set' requires 2 arguments.";
-        }
-        bool value = (
-               list[1] == "true"
-            || list[1] == "True"
-            || list[1] == "TRUE"
-            || list[1] == "on"
-            || list[1] == "ON"
-            || list[1] == "T"
-            || list[1] == "t"
-            || list[1] == "1"
-        );
-        if (list[0] == "text_font") {
-            settings.text_font = list[1];
-            return "";
-        }
-        if (list[0] == "text_size") {
-            settings.text_size = std::stof(list[1]);
-            return "";
-        }
-        if (command == "text_angle") {
-            settings.text_angle = value;
-            return "";
-        }
-        if (command == "text_style_bold") {
-            settings.text_style_bold = value;
-            return "";
-        }
-        if (command == "text_style_italic") {
-            settings.text_style_italic = value;
-            return "";
-        }
-        if (command == "text_style_underline") {
-            settings.text_style_underline = value;
-            return "";
-        }
-        if (command == "text_style_strikeout") {
-            settings.text_style_strikeout = value;
-            return "";
-        }
-        if (command == "text_style_overline") {
-            settings.text_style_overline = value;
-            return "";
-        }
-    }
-
-    if (command == "enable") {
-        if (list.size() < 1) {
-            return "The command 'enable' requires an argument.";
-        }
-        if (command == "text-angle") {
-            settings.text_angle = true;
-            return "";
-        }
-        if (command == "text-bold") {
-            settings.text_style_bold = true;
-            return "";
-        }
-        if (command == "text-italic") {
-            settings.text_style_italic = true;
-            return "";
-        }
-        if (command == "text-underline") {
-            settings.text_style_underline = true;
-            return "";
-        }
-        if (command == "text-strikeout") {
-            settings.text_style_strikeout = true;
-            return "";
-        }
-        if (command == "text-overline") {
-            settings.text_style_overline = true;
-            return "";
-        }
-        if (command == "prompt-rapid-fire") {
-            prompt->enableRapidFire();
-            return "";
-        }
-        if (command == "move-rapid-fire") {
-            View* gview = activeView();
-            if (gview) {
-                gview->enableMoveRapidFire();
-            }
-            return "";
-        }
-        return "";
-    }
-
-    if (command == "disable") {
-        if (list.size() < 1) {
-            return "The command 'disable' requires an argument.";
-        }
-        if (command == "text-angle") {
-            settings.text_angle = false;
-            return "";
-        }
-        if (command == "text-bold") {
-            settings.text_style_bold = false;
-            return "";
-        }
-        if (command == "text-italic") {
-            settings.text_style_italic = false;
-            return "";
-        }
-        if (command == "text-underline") {
-            settings.text_style_underline = false;
-            return "";
-        }
-        if (command == "text-strikeout") {
-            settings.text_style_strikeout = false;
-            return "";
-        }
-        if (command == "text-overline") {
-            settings.text_style_overline = false;
-            return "";
-        }
-        if (command == "prompt-rapid-fire") {
-            prompt->disableRapidFire();
-            return "";
-        }
-        if (command == "move-rapid-fire") {
-            View* gview = activeView();
-            if (gview) {
-                gview->disableMoveRapidFire();
-            }
-            return "";
-        }
-        return "";
-    }
-
-    if (command == "version") {
-        return "<br/>2.0.0-alpha";
-    }
-
-    if (command == "set-prompt-prefix") {
-        prompt->setPrefix(QString::fromStdString(line));
-    }
-
-    /*
-    if (command == "numselected") {
-        return itos(NumSelected());
-    }
-
-    if (command == "selectall") {
-        SelectAll();
-        return "";
-    }
-
-    if (command == "add to selection") {
-        AddToSelection();
-        return "";
-    }
-    */
-
-    if (command == "clear-selection") {
-        View* gview = activeView();
-        if (gview) {
-            gview->clearSelection();
-        }
-        return "";
-    }
-
-    /*
-    if (command == "delete selection") {
-        nativeDeleteSelected();
-        return "";
-    }
-
-    if (command == "qsnapx") {
-        return nativeQSnapX();
-    }
-
-    if (command == "qsnapy") {
-        return nativeQSnapY();
-    }
-
-    if (command == "mousex") {
-        return nativeMouseX();
-    }
-
-    if (command == "mousey") {
-        return nativeMouseY();
-    }
-
-    if (command == "debug") {
-        scriptValDebug();
-        return "";
-    }
-
-    if (command == "error") {
-        scriptValError();
-        return "";
-    }
-
-    if (command == "todo") {
-        Todo();
-        return "";
-    }
-
-    if (command == "alert") {
-        Alert();
-        return "";
-    }
-
-    if (command == "appendPromptHistory") {
-        AppendPromptHistory();
-        return "";
-    }
-
-    if (command == "initCommand") {
-        InitCommand();
-        return "";
-    }
-
-    if (command == "help") {
-        Help();
-        return "";
-    }
-
-    if (command == "messageBox") {
-        MessageBox();
-        return "";
-    }
-
-    if (command == "isInt") {
-        IsInt();
-        return "";
-    }
-
-    if (command == "printArea") {
-        PrintArea();
-        return "";
-    }
-    if (command == "set_background_color_action") {
-        set_background_color_action();
-        return "";
-    }
-
-    if (command == "setCrossHairColor") {
-        SetCrossHairColor();
-        return "";
-    }
-
-    if (command == "set_grid_color") {
-        set_grid_color();
-        return "";
-    }
-
-    if (command == "previewOn") {
-        PreviewOn();
-        return "";
-    }
-
-    if (command == "previewOff")
-        PreviewOff();
-        return "";
-    }
-    */
-
-    if (command == "vulcanize") {
-        View* gview = activeView();
-        if (gview) {
-            gview->vulcanizeRubberRoom();
-        }
-        return "";
-    }
-
-    /*
-    if (command == "rubber") {
-        if (command == "allow") {
-            AllowRubber();
-            return "";
-        }
-
-        if (command == "set-mode") {
-            SetRubberMode();
-            return "";
-        }
-
-        if (command == "set-point") {
-            SetRubberPoint();
-            return "";
-        }
-        if (command == "set-text") {
-            SetRubberText();
-            return "";
-        }
-
-        if (command == "add") {
-            AddRubber();
-            return "";
-        }
-        if (command == "clear") {
-            ClearRubber();
-            return "";
-        }
-        if (command == "spare") {
-            SpareRubber();
-            return "";
-        }
-        return "";
-    }
-
-    if (command == "setCursorShape") {
-        SetCursorShape();
-        return "";
-    }
-
-    if (command == "calculateAngle") {
-        CalculateAngle();
-        return "";
-    }
-
-    if (command == "calculateDistance") {
-        CalculateDistance();
-        return "";
-    }
-
-    if (command == "perpendicularDistance") {
-        PerpendicularDistance();
-        return "";
-    }
-
-    if (command == "addToSelection") {
-        scriptValAddToSelection();
-        return "";
-    }
-
-    if (command == "clearSelection") {
-        scriptValClearSelection();
-        return "";
-    }
-
-    if (command == "deleteSelected") {
-        scriptValDeleteSelected();
-        return "";
-    }
-
-    if (command == "cutSelected") {
-        scriptValCutSelected);
-        return "";
-    }
-
-    if (command == "copySelected") {
-        scriptValCopySelected);
-        return "";
-    }
-
-    if (command == "pasteSelected") {
-        scriptValPasteSelected();
-        return "";
-    }
-
-    if (command == "moveSelected") {
-        scriptValMoveSelected();
-        return "";
-    }
-
-    if (command == "scaleSelected") {
-        scriptValScaleSelected();
-        return "";
-    }
-
-    if (command == "rotateSelected") {
-        scriptValRotateSelected();
-        return "";
-    }
-
-    if (command == "mirrorSelected") {
-        scriptValMirrorSelected();
-        return "";
-    }
-
-    if (command == "include") {
-        Include();
-        return "";
-    }
-    */
-
-    if (command == "blink-prompt") {
-        prompt->startBlinking();
-        return "";
-    }
-
-    /*
-    if (command == "SetPromptPrefix") {
-        setPromptPrefix(args[0]);
-        return "";
-    }
-    */
-    return "<br/><font color=\"red\">Unknown command \"" + command
-        + "\". Press F1 for help.</font>";
+    return "";
 }
+
+if (command == "setCursorShape") {
+    SetCursorShape();
+    return "";
+}
+
+if (command == "calculateAngle") {
+    CalculateAngle();
+    return "";
+}
+
+if (command == "calculateDistance") {
+    CalculateDistance();
+    return "";
+}
+
+if (command == "perpendicularDistance") {
+    PerpendicularDistance();
+    return "";
+}
+
+if (command == "addToSelection") {
+    scriptValAddToSelection();
+    return "";
+}
+
+if (command == "clearSelection") {
+    scriptValClearSelection();
+    return "";
+}
+
+if (command == "deleteSelected") {
+    scriptValDeleteSelected();
+    return "";
+}
+
+if (command == "cutSelected") {
+    scriptValCutSelected);
+    return "";
+}
+
+if (command == "copySelected") {
+    scriptValCopySelected);
+    return "";
+}
+
+if (command == "pasteSelected") {
+    scriptValPasteSelected();
+    return "";
+}
+
+if (command == "moveSelected") {
+    scriptValMoveSelected();
+    return "";
+}
+
+if (command == "scaleSelected") {
+    scriptValScaleSelected();
+    return "";
+}
+
+if (command == "rotateSelected") {
+    scriptValRotateSelected();
+    return "";
+}
+
+if (command == "mirrorSelected") {
+    scriptValMirrorSelected();
+    return "";
+}
+
+if (command == "include") {
+    Include();
+    return "";
+}
+
+if (command == "blink-prompt") {
+    prompt->startBlinking();
+    return "";
+}
+
+if (command == "SetPromptPrefix") {
+    setPromptPrefix(args[0]);
+    return "";
+}
+*/
 
 /**
  * @brief Inspired by PyArg_ParseTupleAndKeywords allowing
