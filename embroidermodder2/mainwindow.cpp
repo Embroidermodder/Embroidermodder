@@ -139,37 +139,84 @@ String convert_args_to_type(String label, StringList args,
 static String about_action(String args);
 static String add_arc_action(String args);
 static String add_circle_action(String args);
+static String add_dim_leader_action(String args);
+static String add_ellipse_action(String args);
 static String add_geometry_action(String args);
+static String add_horizontal_dimension_action(String args);
+static String add_image_action(String args);
+static String add_infinite_line_action(String args);
+static String add_line_action(String args);
+static String add_path_action(String args);
+static String add_point_action(String args);
+static String add_polygon_action(String args);
+static String add_polyline_action(String args);
+static String add_ray_action(String args);
+static String add_rectangle_action(String args);
+static String add_regular_polygon_action(String args);
+static String add_rounded_rectangle_action(String args);
 static String add_rubber_action(String args);
 static String add_slot_action(String args);
+static String add_text_multi_action(String args);
+static String add_text_single_action(String args);
+static String add_to_selection_action(String args);
+static String add_triangle_action(String args);
+static String add_vertical_dimension_action(String args);
 static String alert_action(String args);
-static String append_prompt_history_action(String args);
+static String allow_rubber_action(String args);
 static String append_history_action(String args);
+static String append_prompt_history_action(String args);
+static String calculate_angle_action(String args);
+static String calculate_distance_action(String args);
 static String changelog_action(String args);
+static String clear_rubber_action(String args);
 static String copy_action(String args);
+static String copy_selected_action(String args);
 static String cut_action(String args);
+static String cut_selected_action(String args);
 static String day_vision_action(String args);
+static String delete_selected_action(String args);
 static String design_details_action(String args);
 static String do_nothing_action(String args);
 static String end_action(String args);
 static String error_action(String args);
 static String help_action(String args);
-static String icon_action(String command);
+static String icon_action(String args);
 static String init_action(String args);
-static String new_file_action(String args);
+static String messagebox_action(String args);
+static String mirror_selected_action(String args);
+static String mouse_x_action(String args);
+static String mouse_y_action(String args);
+static String move_selected_action(String args);
+static String new_action(String args);
 static String night_vision_action(String args);
 static String num_selected_action(String args);
 static String open_action(String args);
 static String pan_action(String args);
 static String paste_action(String args);
+static String paste_selected_action(String args);
+static String perpendicular_distance_action(String args);
 static String platform_action(String args);
+static String preview_off_action(String args);
+static String preview_on_action(String args);
 static String print_action(String args);
+static String print_area_action(String args);
+static String qsnap_x_action(String args);
+static String qsnap_y_action(String args);
 static String quit_action(String args);
 static String redo_action(String args);
+static String rotate_selected_action(String args);
+static String scale_selected_action(String args);
 static String select_all_action(String args);
+static String set_background_color_action(String args);
+static String set_crosshair_color_action(String args);
+static String set_cursor_shape_action(String args);
+static String set_grid_color_action(String args);
 static String set_prompt_prefix_action(String args);
+static String set_rubber_filter_action(String args);
+static String set_rubber_mode_action(String args);
+static String set_rubber_point_action(String args);
 static String set_rubber_text_action(String args);
-static String settings_dialog_action(String showTab);
+static String settings_dialog_action(String args);
 static String spare_rubber_action(String args);
 static String tip_of_the_day_action(String args);
 static String todo_action(String args);
@@ -179,85 +226,99 @@ static String whats_this_action(String args);
 static String window_action(String args);
 static String zoom_action(String args);
 
-void Alert(QString txt);
-
-void MessageBox(QString type, QString title, QString text);
-
-void PrintArea(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
-
-void set_background_color_action(uint8_t r, uint8_t g, uint8_t b);
-void SetCrossHairColor(uint8_t r, uint8_t g, uint8_t b);
-void set_grid_color(uint8_t r, uint8_t g, uint8_t b);
-
-void PreviewOn(String clone, String mode, EmbReal x, EmbReal y, EmbReal data);
-void PreviewOff();
-
-void ClearRubber();
-bool AllowRubber();
-void SpareRubber(int64_t id);
-// \todo void SetRubberFilter(int64_t id);
-// \todo This is so more than 1 rubber object can exist at one time without updating all rubber objects at once
-String SetRubberMode(std::vector<Node> args);
-void SetRubberPoint(QString  key, EmbReal x, EmbReal y);
-void SetRubberText(QString  key, QString  txt);
-
-void SetCursorShape(QString  str);
-EmbReal CalculateAngle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
-EmbReal CalculateDistance(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
-EmbReal PerpendicularDistance(EmbReal px, EmbReal py, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
-
-int NumSelected();
-void AddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
-void DeleteSelected();
-void CutSelected(EmbReal x, EmbReal y);
-void CopySelected(EmbReal x, EmbReal y);
-void PasteSelected(EmbReal x, EmbReal y);
-void MoveSelected(EmbReal dx, EmbReal dy);
-void ScaleSelected(EmbReal x, EmbReal y, EmbReal factor);
-void RotateSelected(EmbReal x, EmbReal y, EmbReal rot);
-void MirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
-
-EmbReal QSnapX();
-EmbReal QSnapY();
-EmbReal MouseX();
-EmbReal MouseY();
-
+/**
+ *
+ */
 std::unordered_map<String, Command> command_map = {
     {"about", about_action},
-    {"add-arc", add_arc_action},
-    {"add-circle", add_circle_action},
-    {"add-geometry", add_geometry_action},
-    {"add-rubber", add_rubber_action},
-    {"add-slot", add_slot_action},
-    {"append-history", append_prompt_history_action},
+    {"add_arc", add_arc_action},
+    {"add_circle", add_circle_action},
+    {"add_dim_leader", add_dim_leader_action},
+    {"add_ellipse", add_ellipse_action},
+    {"add_geometry", add_geometry_action},
+    {"add_horizontal_dimension", add_horizontal_dimension_action},
+    {"add_image", add_image_action},
+    {"add_infinite_line", add_infinite_line_action},
+    {"add_line", add_line_action},
+    {"add_path", add_path_action},
+    {"add_point", add_point_action},
+    {"add_polygon", add_polygon_action},
+    {"add_polyline", add_polyline_action},
+    {"add_ray", add_ray_action},
+    {"add_rectangle", add_rectangle_action},
+    {"add_regular_polygon", add_regular_polygon_action},
+    {"add_rounded_rectangle", add_rounded_rectangle_action},
+    {"add_rubber", add_rubber_action},
+    {"add_slot", add_slot_action},
+    {"add_text_multi", add_text_multi_action},
+    {"add_text_single", add_text_single_action},
+    {"add_to_selection", add_to_selection_action},
+    {"add_triangle", add_triangle_action},
+    {"add_vertical_dimension", add_vertical_dimension_action},
+    {"alert", alert_action},
+    {"allow_rubber", allow_rubber_action},
+    {"append_history", append_history_action},
+    {"append_prompt_history", append_prompt_history_action},
+    {"calculate_angle", calculate_angle_action},
+    {"calculate_distance", calculate_distance_action},
+    {"changelog", changelog_action},
+    {"clear_rubber", clear_rubber_action},
     {"copy", copy_action},
+    {"copy_selected", copy_selected_action},
     {"cut", cut_action},
-    {"day", day_vision_action},
-    {"design-details", design_details_action},
-    {"donothing", do_nothing_action},
+    {"cut_selected", cut_selected_action},
+    {"day_vision", day_vision_action},
+    {"delete_selected", delete_selected_action},
+    {"design_details", design_details_action},
+    {"do_nothing", do_nothing_action},
     {"end", end_action},
     {"error", error_action},
+    {"help", help_action},
     {"icon", icon_action},
     {"init", init_action},
-    {"new", new_file_action},
-    {"night", night_vision_action},
-    {"num-selected", num_selected_action},
+    {"messagebox", messagebox_action},
+    {"mirror_selected", mirror_selected_action},
+    {"mouse_x", mouse_x_action},
+    {"mouse_y", mouse_y_action},
+    {"move_selected", move_selected_action},
+    {"new", new_action},
+    {"night_vision", night_vision_action},
+    {"num_selected", num_selected_action},
     {"open", open_action},
     {"pan", pan_action},
     {"paste", paste_action},
+    {"paste_selected", paste_selected_action},
+    {"perpendicular_distance", perpendicular_distance_action},
+    {"platform", platform_action},
+    {"preview_off", preview_off_action},
+    {"preview_on", preview_on_action},
+    {"print", print_action},
+    {"print_area", print_area_action},
+    {"qsnap_x", qsnap_x_action},
+    {"qsnap_y", qsnap_y_action},
     {"quit", quit_action},
     {"redo", redo_action},
-    {"select-all", select_all_action},
-    {"set-rubber-text", set_rubber_text_action},
-    {"settingsdialog", settings_dialog_action},
-    {"spare-rubber", spare_rubber_action},
-    {"tip-of-the-day", tip_of_the_day_action},
+    {"rotate_selected", rotate_selected_action},
+    {"scale_selected", scale_selected_action},
+    {"select_all", select_all_action},
+    {"set_background_color", set_background_color_action},
+    {"set_crosshair_color", set_crosshair_color_action},
+    {"set_cursor_shape", set_cursor_shape_action},
+    {"set_grid_color", set_grid_color_action},
+    {"set_prompt_prefix", set_prompt_prefix_action},
+    {"set_rubber_filter", set_rubber_filter_action},
+    {"set_rubber_mode", set_rubber_mode_action},
+    {"set_rubber_point", set_rubber_point_action},
+    {"set_rubber_text", set_rubber_text_action},
+    {"settings_dialog", settings_dialog_action},
+    {"spare_rubber", spare_rubber_action},
+    {"tip_of_the_day", tip_of_the_day_action},
     {"todo", todo_action},
     {"undo", undo_action},
     {"version", version_action},
-    {"whats-this", whats_this_action},
+    {"whats_this", whats_this_action},
     {"window", window_action},
-    {"zoom", zoom_action}
+    {"zoom", zoom_action},
 };
 
 StringList rubber_modes = {
@@ -438,7 +499,7 @@ settings_dialog_action(String showTab)
 void
 MainWindow::stub_testing()
 {
-    QMessageBox::warning(this, tr("Testing Feature"), tr("<b>This feature is in testing.</b>"));
+    QMessageBox::warning(_mainWin, tr("Testing Feature"), tr("<b>This feature is in testing.</b>"));
 }
 
 /**
@@ -486,7 +547,7 @@ no_argument_debug(String function_name, String args)
  * @param args
  * @return
  */
-String
+static String
 cut_action(String args)
 {
     no_argument_debug("cut_action()", args);
@@ -502,7 +563,7 @@ cut_action(String args)
  * @param args
  * @return
  */
-String
+static String
 copy_action(String args)
 {
     no_argument_debug("copy_action()", args);
@@ -518,7 +579,7 @@ copy_action(String args)
  * @param args
  * @return
  */
-String
+static String
 paste_action(String args)
 {
     no_argument_debug("paste_action()", args);
@@ -1259,7 +1320,7 @@ zoom_action(String mode)
         return "ERROR: no active view found.";
     }
     QUndoStack* stack = gview->getUndoStack();
-    if (stack) {
+    if (!stack) {
         return "ERROR: no undo stack found.";
     }
     if (mode == "realtime") {
@@ -1628,23 +1689,16 @@ MainWindow::promptInputNext()
 }
 
 /**
- * .
- */
-void
-Alert(QString  txt)
-{
-    prompt->alert(txt);
-}
-
-/**
  * @brief MessageBox
  * \a type
  * \a title
  * \a text
  */
-void
-MessageBox(QString  type, QString  title, QString  text)
+static String
+messagebox_action(String args)
 {
+    /*
+    QString type, QString title, QString text
     QString msgType = type.toLower();
     if (msgType == "critical") {
         QMessageBox::critical(_mainWin, tr(qPrintable(title)), tr(qPrintable(text)));
@@ -1661,18 +1715,23 @@ MessageBox(QString  type, QString  title, QString  text)
     else {
         QMessageBox::critical(_mainWin, tr("Native MessageBox Error"), tr("Incorrect use of the native messageBox function."));
     }
+    */
+    return "";
 }
 
 /**
  * @brief PrintArea
  * \a x \a y \a w \a h
+ *
+ * EmbReal x, EmbReal y, EmbReal w, EmbReal h
  */
-void
-PrintArea(EmbReal x, EmbReal y, EmbReal w, EmbReal h)
+static String
+print_area_action(String args)
 {
-    qDebug("nativePrintArea(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
+    //    qDebug("nativeprint_area_action(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
     //TODO: Print Setup Stuff
-    print_action("");
+    actuator("print");
+    return "";
 }
 
 /**
@@ -1680,12 +1739,25 @@ PrintArea(EmbReal x, EmbReal y, EmbReal w, EmbReal h)
  * @param r
  * @param g
  * @param b
+ *
+ * uint8_t r, uint8_t g, uint8_t b
  */
-void
-set_background_color_action(uint8_t r, uint8_t g, uint8_t b)
+static String
+set_background_color_action(String args)
 {
+    /*
+    EmbReal r = a[0].r;
+    EmbReal g = a[1].r;
+    EmbReal b = a[2].r;
+
+    if (r < 0 || r > 255) { return context->throwError(QScriptContext::UnknownError, "set_background_color_action(): r value must be in range 0-255"); }
+    if (g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "set_background_color_action(): g value must be in range 0-255"); }
+    if (b < 0 || b > 255) { return context->throwError(QScriptContext::UnknownError, "set_background_color_action(): b value must be in range 0-255"); }
+
     settings.display_bg_color = qRgb(r,g,b);
     _mainWin->updateAllViewBackgroundColors(qRgb(r,g,b));
+    */
+    return "";
 }
 
 /**
@@ -1694,11 +1766,12 @@ set_background_color_action(uint8_t r, uint8_t g, uint8_t b)
  * @param g
  * @param b
  */
-void
-SetCrossHairColor(uint8_t r, uint8_t g, uint8_t b)
+static String
+set_crosshair_color_action(uint8_t r, uint8_t g, uint8_t b)
 {
     settings.display_crosshair_color = qRgb(r,g,b);
     _mainWin->updateAllViewCrossHairColors(qRgb(r,g,b));
+    return "";
 }
 
 /**
@@ -1707,11 +1780,12 @@ SetCrossHairColor(uint8_t r, uint8_t g, uint8_t b)
  * @param g
  * @param b
  */
-void
-set_grid_color(uint8_t r, uint8_t g, uint8_t b)
+static String
+set_grid_color_action(uint8_t r, uint8_t g, uint8_t b)
 {
     settings.grid_color = qRgb(r,g,b);
     _mainWin->updateAllViewGridColors(qRgb(r,g,b));
+    return "";
 }
 
 /**
@@ -1722,70 +1796,98 @@ set_grid_color(uint8_t r, uint8_t g, uint8_t b)
  * @param y
  * @param data
  */
-void
-PreviewOn(String clone, String mode, EmbReal x, EmbReal y, EmbReal data)
+static String
+preview_on_action(String clone, String mode, EmbReal x, EmbReal y, EmbReal data)
 {
     View* gview = activeView();
     if (gview) {
         gview->previewOn(clone, mode, x, -y, data);
     }
+    return "";
 }
 
 /**
  * @brief PreviewOff
  */
-void
-PreviewOff()
+static String
+preview_off_action(String args)
 {
     View* gview = activeView();
     if (gview) {
         gview->previewOff();
     }
+    return "";
 }
 
 /**
  * @brief ClearRubber
  */
-void
-ClearRubber()
+static String
+clear_rubber_action(String args)
 {
     View* gview = activeView();
-    if (gview)
+    if (gview) {
         gview->clearRubberRoom();
+    }
+    return "";
 }
 
 /**
  * @brief AllowRubber
  * @return
  */
-bool
-AllowRubber()
+static String
+allow_rubber_action(String args)
 {
     View* gview = activeView();
-    if (gview)
-        return gview->allowRubber();
-    return false;
+    if (gview) {
+        return std::to_string(gview->allowRubber());
+    }
+    return "false";
 }
 
 /**
  * @brief SpareRubber
- * @param id
+ * @param qint64 id
  */
-void
-SpareRubber(qint64 id)
+static String
+spare_rubber_action(String args)
 {
+    int64_t id = std::stoi(args);
     View* gview = activeView();
     if (gview) {
         gview->spareRubber(id);
     }
+
+    //QString objID = QString::fromStdString(a[0].s).toUpper();
+
+    /*
+    if (objID == "PATH") {
+        _mainWin->nativespare_rubber_action(SPARE_RUBBER_PATH);
+    }
+    else if (objID == "POLYGON") {
+        _mainWin->nativespare_rubber_action(SPARE_RUBBER_POLYGON);
+    }
+    else if (objID == "POLYLINE") {
+        _mainWin->nativespare_rubber_action(SPARE_RUBBER_POLYLINE);
+    }
+    else {
+        bool ok = false;
+        qint64 id = objID.toLongLong(&ok);
+        if (!ok) return "TYPE ERROR: spare_rubber_action(): error converting object ID into an int64");
+        _mainWin->nativespare_rubber_action(id);
+    }
+    */
+    return "";
 }
 
 /**
  * .
  */
-String
-SetRubberMode(NodeList a)
+static String
+set_rubber_mode_action(String args)
 {
+    /*
     String mode = QString::fromStdString(a[0].s).toUpper().toStdString();
 
     View* gview = activeView();
@@ -1798,54 +1900,72 @@ SetRubberMode(NodeList a)
             //return context->throwError(QScriptContext::UnknownError, "setRubberMode(): unknown rubberMode value");
         }
     }
+    */
     return "";
 }
 
 /**
  * .
+ * QString  key, EmbReal x, EmbReal y
  */
-void
-SetRubberPoint(QString  key, EmbReal x, EmbReal y)
+static String
+set_rubber_point_action(String args)
 {
     /*
     _mainWin->setRubberPoint(a[0].s.toUpper(), a[1].r, a[2].r);
     */
     View* gview = activeView();
     if (gview) {
-        gview->setRubberPoint(key, QPointF(x, -y));
+        //gview->setRubberPoint(key, QPointF(x, -y));
     }
+    return "";
 }
 
 /**
  * .
  */
-void
-SetRubberText(QString  key, QString  txt)
+static String
+SetRubberText(QString key, QString txt)
 {
     View* gview = activeView();
     if (gview) {
         gview->setRubberText(key, txt);
     }
+    return "";
 }
 
-void
-AddTextMulti(QString  str, EmbReal x, EmbReal y, EmbReal rot, bool fill, String rubberMode)
+/**
+ * @brief add_text_multi_action
+ * @return
+ *
+ * QString str, EmbReal x, EmbReal y, EmbReal rot, bool fill, String rubberMode
+ */
+static String
+add_text_multi_action(String args)
 {
     /*
-    _mainWin->nativeAddTextMulti(a[0].s, a[1].r, a[2].r, a[3].r, a[4].b, OBJ_RUBBER_OFF);
+    _mainWin->nativeadd_text_multi_action(a[0].s, a[1].r, a[2].r, a[3].r, a[4].b, OBJ_RUBBER_OFF);
     */
+    return "";
 }
 
-void
-AddTextSingle(QString  str, EmbReal x, EmbReal y, EmbReal rot, bool fill, String rubberMode)
+/**
+ * @brief add_text_single_action
+ * @return
+ *
+ * QString str, EmbReal x, EmbReal y, EmbReal rot, bool fill, String rubberMode
+ */
+static String
+add_text_single_action(String args)
 {
     /*
-    _mainWin->nativeAddTextSingle(a[0].s, a[1].r, a[2].r, a[3].r, a[4].b, OBJ_RUBBER_OFF);
+    _mainWin->nativeadd_text_single_action(a[0].s, a[1].r, a[2].r, a[3].r, a[4].b, OBJ_RUBBER_OFF);
     */
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
+        /*
         TextSingleObject* obj = new TextSingleObject(str, x, -y, _mainWin->getCurrentColor());
         obj->setObjectTextFont(QString::fromStdString(settings.text_font));
         obj->setObjectTextSize(settings.text_size);
@@ -1868,42 +1988,48 @@ AddTextSingle(QString  str, EmbReal x, EmbReal y, EmbReal rot, bool fill, String
             UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
+        */
     }
+    return "";
 }
 
 /**
  * .
+ * EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot
  */
-void
-AddInfiniteLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot)
+static String
+add_infinite_line_action(String args)
 {
     /*
     //TODO: Node error checking
     debug_message("TODO: finish addInfiniteLine command");
     */
+    return "";
 }
 
 /**
  * .
+ * EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot
  */
-void
-AddRay(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot)
+static String
+add_ray_action(String args)
 {
     /*
     //TODO: Node error checking
     debug_message("TODO: finish addRay command");
     */
+    return "";
 }
 
 /**
  * .
+ * EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String rubberMode
  */
-void
-AddLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String rubberMode)
+static String
+add_line_action(String args)
 {
     /*
-    _mainWin->nativeAddLine(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, OBJ_RUBBER_OFF);
-    */
+    _mainWin->nativeadd_line_action(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, OBJ_RUBBER_OFF);
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
@@ -1926,19 +2052,31 @@ AddLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String rubb
             stack->push(cmd);
         }
     }
+    */
+    return "";
 }
 
-void
-AddTriangle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal x3, EmbReal y3, EmbReal rot, bool fill)
+/**
+ * @brief add_triangle_action
+ * @param args
+ * @return
+ */
+static String
+add_triangle_action(String args)
 {
     /*
-    AddTriangle(NodeList a)
-    _mainWin->nativeAddTriangle(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, a[6].r, a[7].b);
+    _mainWin->nativeadd_triangle_action(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, a[6].r, a[7].b);
     */
+    return "";
 }
 
-String
-AddRectangle(NodeList a)
+/**
+ * @brief add_rectangle_action
+ * @param args
+ * @return
+ */
+static String
+add_rectangle_action(String args)
 {
     View* gview = activeView();
     if (!gview) {
@@ -1950,13 +2088,14 @@ AddRectangle(NodeList a)
     }
     QUndoStack* stack = gview->getUndoStack();
     if (stack) {
-        EmbReal x = a[0].r;
-        EmbReal y = a[1].r;
-        EmbReal w = a[2].r;
-        EmbReal h = a[3].r;
-        EmbReal rot = a[4].r;
-        bool fill = a[5].b;
-        String rubberMode = a[6].s;
+        StringList arg_list = tokenize(args, ' ');
+        EmbReal x = std::stof(arg_list[0]);
+        EmbReal y = std::stof(arg_list[1]);
+        EmbReal w = std::stof(arg_list[2]);
+        EmbReal h = std::stof(arg_list[3]);
+        EmbReal rot = std::stof(arg_list[4]);
+        bool fill = (arg_list[5] == "1");
+        String rubberMode = arg_list[6];
 
         RectObject* obj = new RectObject(x, -y, w, -h,_mainWin->getCurrentColor());
         obj->setRotation(-rot);
@@ -1975,26 +2114,37 @@ AddRectangle(NodeList a)
     return "";
 }
 
-void
-AddRoundedRectangle(EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rad, EmbReal rot, bool fill)
+/**
+ * @brief add_rounded_rectangle_action
+ * @param args
+ * @return
+ *
+ * EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rad, EmbReal rot, bool fill
+ */
+static String
+add_rounded_rectangle_action(String args)
 {
     /*
-    String
-    AddRoundedRectangle(NodeList a)
-    {
-        _mainWin->nativeAddRoundedRectangle(
-            a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, a[6].b);
-        return "";
-    }
+    _mainWin->nativeadd_rounded_rectangle_action(
+        a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, a[6].b);
     */
+    return "";
 }
 
-void
-AddArc(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, String rubberMode)
+/**
+ * @brief add_arc_action
+ * @param args
+ * @return
+ *
+ * EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, String rubberMode
+ */
+static String
+add_arc_action(String args)
 {
     View* gview = activeView();
     QGraphicsScene* scene = activeScene();
     if (gview && scene) {
+        /*
         EmbArc arc;
         arc.start.x = startX;
         arc.start.x = -startY;
@@ -2009,16 +2159,25 @@ AddArc(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX,
         }
         scene->addItem(arcObj);
         scene->update();
+        */
     }
+    return "";
 }
 
-void
-AddCircle(EmbReal centerX, EmbReal centerY, EmbReal radius, bool fill, String rubberMode)
+/**
+ * @brief add_circle_action
+ * @return
+ *
+ * EmbReal centerX, EmbReal centerY, EmbReal radius, bool fill, String rubberMode
+ */
+static String
+add_circle_action(String args)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
+        /*
         CircleObject* obj = new CircleObject(centerX, -centerY, radius,_mainWin->getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
         //TODO: circle fill
@@ -2031,32 +2190,26 @@ AddCircle(EmbReal centerX, EmbReal centerY, EmbReal radius, bool fill, String ru
             UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
+        */
     }
+    return "";
 }
 
-void
-AddSlot(EmbReal centerX, EmbReal centerY, EmbReal diameter, EmbReal length, EmbReal rot, bool fill, String rubberMode)
-{
-    //TODO: Use UndoableAddCommand for slots
-    /*
-    SlotObject* slotObj = new SlotObject(centerX, -centerY, diameter, length,_mainWin->getCurrentColor());
-    slotObj->setRotation(-rot);
-    slotObj->setObjectRubberMode(rubberMode);
-    if (rubberMode) gview->addToRubberRoom(slotObj);
-    scene->addItem(slotObj);
-    //TODO: slot fill
-    scene->update();
-    */
-}
-
-void
-AddEllipse(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, EmbReal rot, bool fill, String rubberMode)
+/**
+ * @brief AddEllipse
+ * @param args
+ * @return
+ *
+ * EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, EmbReal rot, bool fill, String rubberMode
+ */
+static String
+add_ellipse_action(String args)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
-    if (gview && gscene && stack)
-    {
+    if (gview && gscene && stack) {
+        /*
         EllipseObject* obj = new EllipseObject(centerX, -centerY, width, height,_mainWin->getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
@@ -2066,16 +2219,22 @@ AddEllipse(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, EmbR
             gscene->addItem(obj);
             gscene->update();
         }
-        else
-        {
+        else {
             UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
+        */
     }
+    return "";
 }
 
-void
-AddPoint(EmbReal x, EmbReal y)
+/**
+ * @brief AddPoint
+ * @param args
+ * @return
+ */
+static String
+add_point_action(EmbReal x, EmbReal y)
 {
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
@@ -2085,40 +2244,25 @@ AddPoint(EmbReal x, EmbReal y)
         UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
         stack->push(cmd);
     }
+    return "";
 }
 
-void
-AddRegularPolygon(EmbReal centerX, EmbReal centerY, quint16 sides, uint8_t mode, EmbReal rad, EmbReal rot, bool fill)
+/**
+ * @brief AddRegularPolygon
+ * @return
+ *
+ * EmbReal centerX, EmbReal centerY, quint16 sides, uint8_t mode, EmbReal rad, EmbReal rot, bool fill
+ */
+static String
+add_regular_polygon_action(String args)
 {
+    return "";
 }
 
 //NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
-void
-AddPolygon(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode)
-{
-    View* gview = activeView();
-    QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && gscene && stack)
-    {
-        PolygonObject* obj = new PolygonObject(startX, startY, p,_mainWin->getCurrentColor());
-        obj->setObjectRubberMode(rubberMode);
-        if (rubberMode != "OBJ_RUBBER_OFF") {
-            gview->addToRubberRoom(obj);
-            gscene->addItem(obj);
-            gscene->update();
-        }
-        else
-        {
-            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
-            stack->push(cmd);
-        }
-    }
-}
-
-//NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
-void
-AddPolyline(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode)
+// EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode
+static String
+add_polyline_action(String args)
 {
     /*
     QVariantList varList = a[0].toVariant().toList();
@@ -2171,6 +2315,7 @@ AddPolyline(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubber
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
+        /*
         PolylineObject* obj = new PolylineObject(startX, startY, p,_mainWin->getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
         if (rubberMode != "OBJ_RUBBER_OFF") {
@@ -2182,68 +2327,80 @@ AddPolyline(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubber
             UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
+        */
     }
+    return "";
 }
 
 /**
  * .
  * \note This native is different than the rest in that
  * the Y+ is down (scripters need not worry about this).
+ *
+ * EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode
  */
-void
-AddPath(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode)
+static String
+add_path_action(String args)
 {
     /*
     AddPath(NodeList a)
     // TODO: Node error checking
     debug_message("TODO: finish addPath command");
     */
+    return "";
 }
 
 /**
  * .
+ * EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight
  */
-void
-AddHorizontalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight)
+static String
+add_horizontal_dimension_action(String args)
 {
     /*
     AddHorizontalDimension(NodeList a)
     //TODO: Node error checking
     debug_message("TODO: finish addHorizontalDimension command");
     */
+    return "";
 }
 
 /**
  * .
+ * EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight
  */
-void
-AddVerticalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight)
+static String
+add_vertical_dimension_action(String args)
 {
     /*
     AddVerticalDimension(NodeList a)
     //TODO: Node error checking
     debug_message("TODO: finish addVerticalDimension command");
     */
+    return "";
 }
 
 /**
  * .
+ * QString  img, EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot
  */
-void
-AddImage(QString  img, EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot)
+static String
+add_image_action(String args)
 {
     /*
     AddImage(NodeList a)
     //TODO: Node error checking
     debug_message("TODO: finish addImage command");
     */
+    return "";
 }
 
 /**
  * .
+ * EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String rubberMode
  */
-void
-AddDimLeader(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String rubberMode)
+static String
+add_dim_leader_action(String args)
 {
     /*
     AddDimLeader(NodeList a)
@@ -2253,6 +2410,7 @@ AddDimLeader(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
+        /*
         DimLeaderObject* obj = new DimLeaderObject(x1, -y1, x2, -y2,_mainWin->getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
@@ -2265,18 +2423,20 @@ AddDimLeader(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String
             UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
+        */
     }
+    return "";
 }
 
 /**
  * .
  */
-void
-SetCursorShape(QString  str)
+static String
+set_cursor_shape_action(String str)
 {
     View* gview = activeView();
     if (gview) {
-        QString shape = str.toLower();
+        QString shape = QString::fromStdString(str).toLower();
         if (shape == "arrow")
             gview->setCursor(QCursor(Qt::ArrowCursor));
         else if (shape == "uparrow")
@@ -2322,34 +2482,54 @@ SetCursorShape(QString  str)
         else if (shape == "draglink")
             gview->setCursor(QCursor(Qt::DragLinkCursor));
     }
+    return "";
+}
+
+/**
+ * @brief calculate_angle_action
+ * @param args
+ * @return
+ */
+static String
+calculate_angle_action(String args)
+{
+    StringList arg_list = tokenize(args, ' ');
+    EmbReal x1 = std::stof(arg_list[0]);
+    EmbReal y1 = std::stof(arg_list[1]);
+    EmbReal x2 = std::stof(arg_list[2]);
+    EmbReal y2 = std::stof(arg_list[3]);
+    return std::to_string(QLineF(x1, -y1, x2, -y2).angle());
+}
+
+/**
+ * @brief calculate_distance
+ * @param args
+ * @return
+ */
+static String
+calculate_distance_action(String args)
+{
+    StringList arg_list = tokenize(args, ' ');
+    EmbReal x1 = std::stof(arg_list[0]);
+    EmbReal y1 = std::stof(arg_list[1]);
+    EmbReal x2 = std::stof(arg_list[2]);
+    EmbReal y2 = std::stof(arg_list[3]);
+    return std::to_string(QLineF(x1, y1, x2, y2).length());
 }
 
 /**
  * .
  */
-EmbReal
-CalculateAngle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
+static String
+perpendicular_distance_action(String args)
 {
-    return QLineF(x1, -y1, x2, -y2).angle();
-}
-
-/**
- * CalculateDistance(NodeList a)
- *     EmbReal result = _mainWin->nativeCalculateDistance(a[0].r, a[1].r, a[2].r, a[3].r);
- *     return String(result);
- */
-EmbReal
-CalculateDistance(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
-{
-    return QLineF(x1, y1, x2, y2).length();
-}
-
-/**
- * .
- */
-EmbReal
-PerpendicularDistance(EmbReal px, EmbReal py, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
-{
+    StringList arg_list = tokenize(args, ' ');
+    EmbReal px = std::stof(arg_list[0]);
+    EmbReal py = std::stof(arg_list[1]);
+    EmbReal x1 = std::stof(arg_list[2]);
+    EmbReal y1 = std::stof(arg_list[3]);
+    EmbReal x2 = std::stof(arg_list[4]);
+    EmbReal y2 = std::stof(arg_list[5]);
     QLineF line(x1, y1, x2, y2);
     QLineF norm = line.normalVector();
     EmbReal dx = px-x1;
@@ -2357,33 +2537,46 @@ PerpendicularDistance(EmbReal px, EmbReal py, EmbReal x1, EmbReal y1, EmbReal x2
     norm.translate(dx, dy);
     QPointF iPoint;
     norm.intersects(line, &iPoint);
-    return QLineF(px, py, iPoint.x(), iPoint.y()).length();
+    return std::to_string(QLineF(px, py, iPoint.x(), iPoint.y()).length());
 }
 
-int NumSelected()
+/**
+ * @brief NumSelected
+ * @param args
+ * @return
+ */
+static String
+num_selected_action(String args)
 {
     View* gview = activeView();
     if (gview) {
-        return gview->numSelected();
+        return std::to_string(gview->numSelected());
     }
-    return 0;
+    return "0";
 }
 
-void
-AddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode)
+/**
+ * @brief add_to_selection_action
+ * @param args
+ * @return
+ */
+static String
+add_to_selection_action(String args)
 {
+    return "";
 }
 
 /**
  * @brief DeleteSelected
  */
-void
-DeleteSelected()
+static String
+delete_selected_action(String args)
 {
     View* gview = activeView();
     if (gview) {
         gview->deleteSelected();
     }
+    return "";
 }
 
 /**
@@ -2391,12 +2584,13 @@ DeleteSelected()
  * \a x
  * \a y
  */
-void
-CutSelected(EmbReal x, EmbReal y)
+static String
+cut_selected_action(String args)
 {
     /*
     _mainWin->nativeCutSelected(a[0].r, a[1].r);
     */
+    return "";
 }
 
 /**
@@ -2404,12 +2598,13 @@ CutSelected(EmbReal x, EmbReal y)
  * \a x
  * \a y
  */
-void
-CopySelected(EmbReal x, EmbReal y)
+static String
+copy_selected_action(String args)
 {
     /*
     _mainWin->nativeCopySelected(a[0].r, a[1].r);
     */
+    return "";
 }
 
 /**
@@ -2417,12 +2612,13 @@ CopySelected(EmbReal x, EmbReal y)
  * \a x
  * \a y
  */
-void
-PasteSelected(EmbReal x, EmbReal y)
+static String
+paste_selected_action(String args)
 {
     /*
     _mainWin->nativePasteSelected(a[0].r, a[1].r);
     */
+    return "";
 }
 
 /**
@@ -2430,14 +2626,17 @@ PasteSelected(EmbReal x, EmbReal y)
  * \a dx
  * \a dy
  */
-void
-MoveSelected(EmbReal dx, EmbReal dy)
+static String
+move_selected_action(String args)
 {
-    /*
-    _mainWin->nativeMoveSelected(a[0].r, a[1].r);
-    */
+    StringList arg_list = tokenize(args, ' ');
+    EmbReal dx = std::stof(arg_list[0]);
+    EmbReal dy = std::stof(arg_list[1]);
     View* gview = activeView();
-    if (gview) { gview->moveSelected(dx, -dy); }
+    if (gview) {
+        gview->moveSelected(dx, -dy);
+    }
+    return "";
 }
 
 /**
@@ -2446,16 +2645,14 @@ MoveSelected(EmbReal dx, EmbReal dy)
  * \a y
  * \a factor
  */
-void
-ScaleSelected(EmbReal x, EmbReal y, EmbReal factor)
+static String
+scale_selected_action(String args)
 {
-    /*
-    if (a[2].r <= 0.0) {
-        return "ERROR scaleSelected(): scale factor must be greater than zero";
-    }
+    StringList arg_list = tokenize(args, ' ');
+    EmbReal x = std::stof(arg_list[0]);
+    EmbReal y = std::stof(arg_list[1]);
+    EmbReal factor = std::stof(arg_list[2]);
 
-    _mainWin->nativeScaleSelected(a[0].r, a[1].r, a[2].r);
-    */
     if (factor <= 0.0) {
         QMessageBox::critical(_mainWin,
             tr("ScaleFactor Error"),
@@ -2467,6 +2664,7 @@ ScaleSelected(EmbReal x, EmbReal y, EmbReal factor)
     if (gview) {
         gview->scaleSelected(x, -y, factor);
     }
+    return "";
 }
 
 /**
@@ -2475,16 +2673,19 @@ ScaleSelected(EmbReal x, EmbReal y, EmbReal factor)
  * \a y
  * \a rot
  */
-void
-RotateSelected(EmbReal x, EmbReal y, EmbReal rot)
+static String
+rotate_selected_action(String args)
 {
-    /*
-    _mainWin->nativeRotateSelected(a[0].r, a[1].r, a[2].r);
-    */
+    StringList arg_list = tokenize(args, ' ');
+    EmbReal x = std::stof(arg_list[0]);
+    EmbReal y = std::stof(arg_list[1]);
+    EmbReal rot = std::stof(arg_list[2]);
+
     View* gview = activeView();
     if (gview) {
         gview->rotateSelected(x, -y, -rot);
     }
+    return "";
 }
 
 /**
@@ -2494,74 +2695,79 @@ RotateSelected(EmbReal x, EmbReal y, EmbReal rot)
  * \a x2
  * \a y2
  */
-void
-MirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
+static String
+mirror_selected_action(String args)
 {
-    /*
-    _mainWin->nativeMirrorSelected(a[0].r, a[1].r, a[2].r, a[3].r);
-    */
+
+    StringList arg_list = tokenize(args, ' ');
+    EmbReal x1 = std::stof(arg_list[0]);
+    EmbReal y1 = std::stof(arg_list[1]);
+    EmbReal x2 = std::stof(arg_list[2]);
+    EmbReal y2 = std::stof(arg_list[3]);
+
     View* gview = activeView();
     if (gview) {
         gview->mirrorSelected(x1, -y1, x2, -y2);
     }
+    return "";
 }
 
 /**
  * @brief QSnapX
  * @return
  */
-EmbReal
-QSnapX()
+static String
+qsnap_x_action(String args)
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {
-        return scene->property("SCENE_QSNAP_POINT").toPointF().x();
+        return std::to_string(scene->property("SCENE_QSNAP_POINT").toPointF().x());
     }
-    return 0.0;
+    return "0.0";
 }
 
 /**
  * @brief QSnapY
  * @return
  */
-EmbReal
-QSnapY()
+static String
+qsnap_y_action(String args)
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {
-        return -scene->property("SCENE_QSNAP_POINT").toPointF().y();
+        return std::to_string(-scene->property("SCENE_QSNAP_POINT").toPointF().y());
     }
-    return 0.0;
+    return "0.0";
 }
 
 /**
  * @brief MouseX
  * @return
  */
-EmbReal
-MouseX()
+static String
+mouse_x_action(String args)
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {
         qDebug("mouseX: %.50f", scene->property("SCENE_MOUSE_POINT").toPointF().x());
-        return scene->property("SCENE_MOUSE_POINT").toPointF().x();
+        return std::to_string(scene->property("SCENE_MOUSE_POINT").toPointF().x());
     }
-    return 0.0;
+    return "0.0";
 }
 
 /**
  * @brief MouseY
  * @return
  */
-EmbReal
-MouseY()
+static String
+mouse_y_action(String args)
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {
         qDebug("mouseY: %.50f", -scene->property("SCENE_MOUSE_POINT").toPointF().y());
-        return -scene->property("SCENE_MOUSE_POINT").toPointF().y();
+        return std::to_string(-scene->property("SCENE_MOUSE_POINT").toPointF().y());
     }
-    return 0.0;
+    return "0.0";
 }
 
 /**
@@ -3178,87 +3384,41 @@ add_geometry_action(String args)
 {
     StringList list = tokenize(args, ' ');
     String command = list[0];
-    if (command == "arc") {
-//      _mainWin->AddArc();
-        return "";
+    args = args.substr(std::min(command.size()+1, args.size()));
+    StringList subcommands = {
+        "arc",
+        "circle",
+        "ellipse",
+        "horizontal_dimension",
+        "image",
+        "path",
+        "point",
+        "polygon",
+        "polyline",
+        "rectangle",
+        "regular_polygon",
+        "vertical_dimension",
+        "dim_leader",
+        "infinite_line",
+        "ray",
+        "line",
+        "triangle",
+        "text_multi",
+        "text_single",
+        "rounded-rectangle"
+    };
+    if (contains(subcommands, command)) {
+        return actuator("add_" + command + " " + args);
     }
-    if (command == "circle") {
-//      _mainWin->AddCircle();
-        return "";
-    }
-    if (command == "ellipse") {
-//      _mainWin->AddEllipse();
-        return "";
-    }
-    if (command == "point") {
-//      _mainWin->AddPoint();
-        return "";
-    }
-    if (command == "regular-polygon") {
-//      _mainWin->AddRegularPolygon();
-        return "";
-    }
-    if (command == "polygon") {
-//      _mainWin->AddPolygon();
-        return "";
-    }
-    if (command == "polyline") {
-//       _mainWin->nativeAddPolyline();
-        return "";
-    }
-    if (command == "path") {
-//       _mainWin->nativeAddPath();
-        return "";
-    }
-    if (command == "horizontal-dimension") {
-//       _mainWin->nativeAddHorizontalDimension();
-        return "";
-    }
-    if (command == "vertical-dimension") {
-//      _mainWin->nativeAddVerticalDimension();
-        return "";
-    }
-    if (command == "image") {
-//      _mainWin->nativeAddImage();
-        return "";
-    }
-    if (command == "dim-leader") {
-//      _mainWin->AddDimLeader();
-        return "";
-    }
-    if (command == "text-multi") {
-//      AddTextMulti();
-        return "";
-    }
-    if (command == "text-single") {
-//      AddTextSingle();
-        return "";
-    }
-    if (command == "infinite-line") {
-//      AddInfiniteLine();
-        return "";
-    }
-    if (command == "ray") {
-//      AddRay();
-        return "";
-    }
-    if (command == "line") {
-//          AddLine();
-        return "";
-    }
-    if (command == "triangle") {
-//          AddTriangle();
-        return "";
-    }
-    if (command == "rectangle") {
-//        AddRectangle(a);
-        return "";
-    }
-    if (command == "rounded-rectangle") {
-//          AddRoundedRectangle();
-        return "";
-    }
-    return "</br>The add subcommand is not recognised.";
+
+    return "The add subcommand is not recognised.";
+}
+
+// \todo This is so more than 1 rubber object can exist at one time without updating all rubber objects at once
+static String
+set_rubber_filter_action(String args)
+{
+    return args;
 }
 
 /**
@@ -3597,17 +3757,6 @@ set_prompt_prefix_action(String args)
     return "";
 }
 
-/**
- * @brief num_selected_action
- * @param args
- * @return
- */
-static String
-num_selected_action(String args)
-{
-    return std::to_string(NumSelected());
-}
-
 /*
 static String
 add_to_selection_action(String args)
@@ -3629,22 +3778,6 @@ if (command == "delete selection") {
     return "";
 }
 
-if (command == "qsnapx") {
-    return nativeQSnapX();
-}
-
-if (command == "qsnapy") {
-    return nativeQSnapY();
-}
-
-if (command == "mousex") {
-    return nativeMouseX();
-}
-
-if (command == "mousey") {
-    return nativeMouseY();
-}
-
 if (command == "debug") {
     scriptValDebug();
     return "";
@@ -3660,18 +3793,8 @@ if (command == "todo") {
     return "";
 }
 
-if (command == "alert") {
-    Alert();
-    return "";
-}
-
 if (command == "appendPromptHistory") {
     AppendPromptHistory();
-    return "";
-}
-
-if (command == "messageBox") {
-    MessageBox();
     return "";
 }
 
@@ -3680,32 +3803,13 @@ if (command == "isInt") {
     return "";
 }
 
-if (command == "printArea") {
-    PrintArea();
-    return "";
-}
-if (command == "set_background_color_action") {
-    set_background_color_action();
-    return "";
-}
-
-if (command == "setCrossHairColor") {
-    SetCrossHairColor();
-    return "";
-}
-
-if (command == "set_grid_color") {
-    set_grid_color();
-    return "";
-}
-
 if (command == "previewOn") {
-    PreviewOn();
+    preview_on_action();
     return "";
 }
 
 if (command == "previewOff")
-    PreviewOff();
+    preview_off_action();
     return "";
 }
 
@@ -3719,7 +3823,7 @@ if (command == "vulcanize") {
 
 if (command == "rubber") {
     if (command == "allow") {
-        AllowRubber();
+        allow_rubber_action();
         return "";
     }
 
@@ -3742,11 +3846,11 @@ if (command == "rubber") {
         return "";
     }
     if (command == "clear") {
-        ClearRubber();
+        clear_rubber_action();
         return "";
     }
     if (command == "spare") {
-        SpareRubber();
+        spare_rubber_action();
         return "";
     }
     return "";
@@ -3936,7 +4040,7 @@ String
 todo_action(String args)
 {
     /*
-    _mainWin->nativeAlert("TODO: (" + a[0].s + ") " + a[1].s);
+    _mainWin->nativealert_action("TODO: (" + a[0].s + ") " + a[1].s);
     actuator("end");
     */
     return "";
@@ -3966,29 +4070,6 @@ append_prompt_history_action(String args)
 }
 
 /**
- * @brief MessageBoxW
- * @param a
- * @return
- * argument string "sss"
- */
-String
-messagebox_action(String args)
-{
-    /*
-    QString type  = a[0].s.toLower();
-    QString title = a[1].s;
-    QString text  = a[2].s;
-
-    if (type != "critical" && type != "information" && type != "question" && type != "warning") {
-        return context->throwError(QScriptContext::UnknownError, "messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
-    }
-
-    _mainWin->nativeMessageBox(type, title, text);
-    */
-    return "";
-}
-
-/**
  * argument string "i"
  */
 String
@@ -4005,43 +4086,10 @@ is_int_action(String args)
 }
 
 /**
- * argument string "rrrr"
- */
-String
-PrintArea(String args)
-{
-    /*
-    _mainWin->nativePrintArea(a[0].r, a[1].r, a[2].r, a[3].r);
-    */
-    return "";
-}
-
-/**
- *
- * argument string "iii"
- */
-String
-set_background_color_action(String args)
-{
-    /*
-    EmbReal r = a[0].r;
-    EmbReal g = a[1].r;
-    EmbReal b = a[2].r;
-
-    if (r < 0 || r > 255) { return context->throwError(QScriptContext::UnknownError, "set_background_color_action(): r value must be in range 0-255"); }
-    if (g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "set_background_color_action(): g value must be in range 0-255"); }
-    if (b < 0 || b > 255) { return context->throwError(QScriptContext::UnknownError, "set_background_color_action(): b value must be in range 0-255"); }
-
-    _mainWin->set_background_color_action(r, g, b);
-    */
-    return "";
-}
-
-/**
  * .
  * argument string "iii"
  */
-String
+static String
 set_crosshair_color_action(String args)
 {
     /*
@@ -4080,16 +4128,16 @@ set_grid_color_action(String args)
     int b = a[2].r;
 
     if (r < 0 || r > 255) {
-        return "ERROR set_grid_color(): r value must be in range 0-255";
+        return "ERROR set_grid_color_action(): r value must be in range 0-255";
     }
     if (g < 0 || g > 255) {
-        return "ERROR set_grid_color(): g value must be in range 0-255";
+        return "ERROR set_grid_color_action(): g value must be in range 0-255";
     }
     if (b < 0 || b > 255) {
-        return "ERROR set_grid_color(): b value must be in range 0-255";
+        return "ERROR set_grid_color_action(): b value must be in range 0-255";
     }
 
-    _mainWin->set_grid_color(r, g, b);
+    _mainWin->set_grid_color_action(r, g, b);
     */
     return "";
 }
@@ -4122,21 +4170,21 @@ preview_on_action(String args)
     int mode = PREVIEW_MODE_NULL;
     if     (cloneStr == "SELECTED") { clone = PREVIEW_CLONE_SELECTED; }
     else if (cloneStr == "RUBBER") { clone = PREVIEW_CLONE_RUBBER;   }
-    else { return context->throwError(QScriptContext::UnknownError, "previewOn(): first argument must be \"SELECTED\" or \"RUBBER\"."); }
+    else { return context->throwError(QScriptContext::UnknownError, "preview_on_action(): first argument must be \"SELECTED\" or \"RUBBER\"."); }
 
     if     (modeStr == "MOVE") { mode = PREVIEW_MODE_MOVE;   }
     else if (modeStr == "ROTATE") { mode = PREVIEW_MODE_ROTATE; }
     else if (modeStr == "SCALE") { mode = PREVIEW_MODE_SCALE;  }
-    else { return context->throwError(QScriptContext::UnknownError, "previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\"."); }
+    else { return context->throwError(QScriptContext::UnknownError, "preview_on_action(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\"."); }
 
-    _mainWin->nativePreviewOn(clone, mode, x, y, data);
+    _mainWin->nativepreview_on_action(clone, mode, x, y, data);
     */
     return "";
 }
 
 /*
-"preview off", nativePreviewOff();
-"allow rubber", nativeAllowRubber();
+"preview off", nativepreview_off_action();
+"allow rubber", nativeallow_rubber_action();
 */
 
 /**
@@ -4163,11 +4211,11 @@ add_rubber_action(String args)
     //QString objType = QString::fromStdString(a[0].s).toUpper();
 
     /*
-    if (!_mainWin->nativeAllowRubber())
+    if (!_mainWin->nativeallow_rubber_action())
         return context->throwError(QScriptContext::UnknownError, "addRubber(): You must use actuator("vulcanize") before you can add another rubber object.");
 
-    EmbReal mx = _mainWin->nativeMouseX();
-    EmbReal my = _mainWin->nativeMouseY();
+    EmbReal mx = _mainWin->nativemouse_x_action();
+    EmbReal my = _mainWin->nativemouse_y_action();
 
     if (objType == "ARC") {
          //TODO: handle this type
@@ -4215,120 +4263,97 @@ add_rubber_action(String args)
     else if (objType == "INFINITELINE") {
     } //TODO: handle this type
     else if (objType == "LINE") {
-        _mainWin->nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON);
+        _mainWin->nativeadd_line_action(mx, my, mx, my, 0, OBJ_RUBBER_ON);
     }
     else if (objType == "PATH") {
     } //TODO: handle this type
     else if (objType == "POINT") {} //TODO: handle this type
-    else if (objType == "POLYGON") { _mainWin->nativeAddPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
+    else if (objType == "POLYGON") { _mainWin->nativeadd_polygon_action(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
     else if (objType == "POLYLINE") { _mainWin->nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
     else if (objType == "RAY") {} //TODO: handle this type
-    else if (objType == "RECTANGLE") { _mainWin->nativeAddRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }
+    else if (objType == "RECTANGLE") { _mainWin->nativeadd_rectangle_action(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }
     else if (objType == "SPLINE") {} //TODO: handle this type
     else if (objType == "TEXTMULTI") {} //TODO: handle this type
-    else if (objType == "TEXTSINGLE") { _mainWin->nativeAddTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON); }
+    else if (objType == "TEXTSINGLE") { _mainWin->nativeadd_text_single_action("", mx, my, 0, false, OBJ_RUBBER_ON); }
     */
     return "";
 }
 
 /*
-"clear rubber", nativeClearRubber();
+"clear rubber", nativeclear_rubber_action();
 */
 
 /**
- * @brief spare_rubber_action
+ * @brief add_slot_action
  * @param args
  * @return
+ *
+ * EmbReal centerX, EmbReal centerY, EmbReal diameter, EmbReal length, EmbReal rot, bool fill, String rubberMode
  */
-String
-spare_rubber_action(String args)
+static String
+add_slot_action(String args)
 {
-    //QString objID = QString::fromStdString(a[0].s).toUpper();
-
+    //TODO: Use UndoableAddCommand for slots
     /*
-    if (objID == "PATH") {
-        _mainWin->nativeSpareRubber(SPARE_RUBBER_PATH);
-    }
-    else if (objID == "POLYGON") {
-        _mainWin->nativeSpareRubber(SPARE_RUBBER_POLYGON);
-    }
-    else if (objID == "POLYLINE") {
-        _mainWin->nativeSpareRubber(SPARE_RUBBER_POLYLINE);
-    }
-    else {
-        bool ok = false;
-        qint64 id = objID.toLongLong(&ok);
-        if (!ok) return "TYPE ERROR: spareRubber(): error converting object ID into an int64");
-        _mainWin->nativeSpareRubber(id);
-    }
+    SlotObject* slotObj = new SlotObject(centerX, -centerY, diameter, length,_mainWin->getCurrentColor());
+    slotObj->setRotation(-rot);
+    slotObj->setObjectRubberMode(rubberMode);
+    if (rubberMode) gview->addToRubberRoom(slotObj);
+    scene->addItem(slotObj);
+    //TODO: slot fill
+    scene->update();
     */
-    return "";
-}
-
-/**
- * @brief add_arc_action
- * @param args
- * @return
- */
-String
-add_arc_action(String args)
-{
-    //_mainWin->nativeAddArc(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, OBJ_RUBBER_OFF);
-    return "";
-}
-
-/**
- * @brief add_circle_action
- * @param args
- * @return
- */
-String
-add_circle_action(String args)
-{
-    //_mainWin->nativeAddCircle(a[0].r, a[1].r, a[2].r, a[3].b, OBJ_RUBBER_OFF);
-    return "";
-}
-
-String
-add_slot_action(String a)
-{
     //_mainWin->nativeAddSlot(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].b, OBJ_RUBBER_OFF);
     return "";
 }
 
-String
-add_ellipse_action(String args)
-{
-    //_mainWin->nativeAddEllipse(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].b, OBJ_RUBBER_OFF);
-    return "";
-}
-
-String
+/**
+ * @brief add_point_action
+ * @param args
+ * @return
+ */
+static String
 add_point_action(String args)
 {
     //_mainWin->nativeAddPoint(a[0].r, a[1].r);
     return "";
 }
 
-String
-add_regular_polygon_action(String args)
-{
-    //TODO: Node error checking
-    debug_message("TODO: finish addRegularPolygon command");
-    return "";
-}
-
-String
-AddPolygon(String args)
+/**
+ * @brief add_polygon_action
+ * @param args
+ * @return
+ * NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
+ * EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode
+ */
+static String
+add_polygon_action(String args)
 {
     /*
+    View* gview = activeView();
+    QGraphicsScene* gscene = gview->scene();
+    QUndoStack* stack = gview->getUndoStack();
+    if (gview && gscene && stack) {
+        PolygonObject* obj = new PolygonObject(startX, startY, p,_mainWin->getCurrentColor());
+        obj->setObjectRubberMode(rubberMode);
+        if (rubberMode != "OBJ_RUBBER_OFF") {
+            gview->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            stack->push(cmd);
+        }
+    }
+
     QVariantList varList = a[0].toVariant().toList();
     int varSize = varList.size();
     if (varSize < 2) {
-        return "TYPE ERROR: addPolygon(): array must contain at least two elements";
+        return "TYPE ERROR: add_polygon_action(): array must contain at least two elements";
     }
     if (varSize % 2) {
-        return "TYPE ERROR: addPolygon(): array cannot contain an odd number of elements";
+        return "TYPE ERROR: add_polygon_action(): array cannot contain an odd number of elements";
     }
 
     bool lineTo = false;
@@ -4353,7 +4378,7 @@ AddPolygon(String args)
             }
         }
         else {
-            return "TYPE ERROR: addPolygon(): array contains one or more invalid elements");
+            return "TYPE ERROR: add_polygon_action(): array contains one or more invalid elements");
         }
     }
 
@@ -4362,25 +4387,10 @@ AddPolygon(String args)
 
     path.translate(-startX, -startY);
 
-    _mainWin->nativeAddPolygon(startX, startY, path, OBJ_RUBBER_OFF);
+    _mainWin->nativeadd_polygon_action(startX, startY, path, OBJ_RUBBER_OFF);
     */
     return "";
 }
-
-/*
-SetCursorShape(String args)
-    _mainWin->setCursorShape(a[0].s);
-
-CalculateAngle(String args)
-    EmbReal result = _mainWin->nativeCalculateAngle(a[0].r, a[1].r, a[2].r, a[3].r);
-    return String(result);
-
-
-PerpendicularDistance(String args)
-    EmbReal result = _mainWin->nativePerpendicularDistance(
-        a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r);
-    return String(result);
-*/
 
 /**
  * @brief MainWindow::recentMenuAboutToShow
@@ -4464,8 +4474,13 @@ MainWindow::windowMenuActivated(bool checked)
         w->setFocus();
 }
 
-String
-new_file_action(String args)
+/**
+ * @brief new_action
+ * @param args
+ * @return
+ */
+static String
+new_action(String args)
 {
     _mainWin->newFile();
     return "";
@@ -4622,8 +4637,9 @@ MainWindow::saveasfile()
     debug_message("MainWindow::saveasfile()");
     // need to find the activeSubWindow before it loses focus to the FileDialog
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (!mdiWin)
+    if (!mdiWin) {
         return;
+    }
 
     QString file;
     openFilesPath = QString::fromStdString(settings.opensave_recent_directory);

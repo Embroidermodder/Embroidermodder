@@ -128,7 +128,6 @@ typedef std::vector<Node> NodeList;
  * @todo fully convert into the Dictionaries settings, dialog, accept and preivew.
  */
 typedef struct Settings_ {
-    String version;
     String assets_dir;
     String general_language;
     String general_icon_theme;
@@ -410,30 +409,6 @@ Node node(EmbReal value);
 Node node(String value);
 Node node(EmbVector value);
 Node node(StringList value);
-
-void AddTextMulti(QString  str, EmbReal x, EmbReal y, EmbReal rot, bool fill, String rubberMode);
-void AddTextSingle(QString  str, EmbReal x, EmbReal y, EmbReal rot, bool fill, String rubberMode);
-
-void AddInfiniteLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot);
-void AddRay(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot);
-void AddLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String rubberMode);
-void AddTriangle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal x3, EmbReal y3, EmbReal rot, bool fill);
-String AddRectangle(std::vector<Node> a);
-void AddRoundedRectangle(EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rad, EmbReal rot, bool fill);
-void AddArc(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, String rubberMode);
-void AddCircle(EmbReal centerX, EmbReal centerY, EmbReal radius, bool fill, String rubberMode);
-void AddSlot(EmbReal centerX, EmbReal centerY, EmbReal diameter, EmbReal length, EmbReal rot, bool fill, String rubberMode);
-void AddEllipse(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, EmbReal rot, bool fill, String rubberMode);
-void AddPoint(EmbReal x, EmbReal y);
-void AddRegularPolygon(EmbReal centerX, EmbReal centerY, quint16 sides, uint8_t mode, EmbReal rad, EmbReal rot, bool fill);
-void AddPolygon(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode);
-void AddPolyline(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode);
-void AddPath(EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode);
-void AddHorizontalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight);
-void AddVerticalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight);
-void AddImage(QString  img, EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot);
-
-void AddDimLeader(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String rubberMode);
 
 QGraphicsScene* activeScene();
 
