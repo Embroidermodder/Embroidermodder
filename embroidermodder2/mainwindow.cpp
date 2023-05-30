@@ -112,7 +112,6 @@ StatusBar* statusbar = 0;
 QWizard* wizardTipOfTheDay;
 QLabel* labelTipOfTheDay;
 QCheckBox* checkBoxTipOfTheDay;
-QStringList listTipOfTheDay;
 
 Dictionary settings_;
 Dictionary dialog_;
@@ -235,7 +234,7 @@ std::unordered_map<String, Command> command_map = {
     {"add_circle", add_circle_action},
     {"add_dim_leader", add_dim_leader_action},
     {"add_ellipse", add_ellipse_action},
-    {"add_geometry", add_geometry_action},
+    {"add", add_geometry_action},
     {"add_horizontal_dimension", add_horizontal_dimension_action},
     {"add_image", add_image_action},
     {"add_infinite_line", add_infinite_line_action},
@@ -829,9 +828,10 @@ MainWindow::tipOfTheDay(void)
 
     ImageWidget* imgBanner = new ImageWidget(appDir + "/images/did-you-know.png", wizardTipOfTheDay);
 
-    if (settings.general_current_tip >= listTipOfTheDay.size())
+    if (settings.general_current_tip >= config["tips"].sl.size()) {
         settings.general_current_tip = 0;
-    labelTipOfTheDay = new QLabel(listTipOfTheDay.value(settings.general_current_tip), wizardTipOfTheDay);
+    }
+    labelTipOfTheDay = new QLabel(config["tips"].sl[settings.general_current_tip].c_str(), wizardTipOfTheDay);
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("&Show tips on startup"), wizardTipOfTheDay);
@@ -883,21 +883,22 @@ void
 MainWindow::buttonTipOfTheDayClicked(int button)
 {
     debug_message("buttonTipOfTheDayClicked(%d)" + std::to_string(button));
+    StringList tips = config["tips"].sl;
     if (button == QWizard::CustomButton1) {
         if (settings.general_current_tip > 0) {
             settings.general_current_tip--;
         }
         else {
-            settings.general_current_tip = listTipOfTheDay.size()-1;
+            settings.general_current_tip = tips.size()-1;
         }
-        labelTipOfTheDay->setText(listTipOfTheDay.value(settings.general_current_tip));
+        labelTipOfTheDay->setText(tips[settings.general_current_tip].c_str());
     }
     else if (button == QWizard::CustomButton2) {
         settings.general_current_tip++;
-        if (settings.general_current_tip >= listTipOfTheDay.size()) {
+        if (settings.general_current_tip >= tips.size()) {
             settings.general_current_tip = 0;
         }
-        labelTipOfTheDay->setText(listTipOfTheDay.value(settings.general_current_tip));
+        labelTipOfTheDay->setText(tips[settings.general_current_tip].c_str());
     }
     else if (button == QWizard::CustomButton3) {
         wizardTipOfTheDay->close();
@@ -2177,7 +2178,12 @@ add_circle_action(String args)
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
-        /*
+        EmbReal centerX = 0.0;
+        EmbReal centerY = 0.0;
+        EmbReal radius = 10.0;
+        bool fill = false;
+        String rubberMode = "OBJ_RUBBER_OFF";
+
         CircleObject* obj = new CircleObject(centerX, -centerY, radius,_mainWin->getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
         //TODO: circle fill
@@ -2190,7 +2196,6 @@ add_circle_action(String args)
             UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
-        */
     }
     return "";
 }
@@ -3145,7 +3150,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     connect(prompt, SIGNAL(shiftPressed()), this, SLOT(setShiftPressed()));
     connect(prompt, SIGNAL(shiftReleased()), this, SLOT(setShiftReleased()));
 
-    connect(prompt, SIGNAL(showSettings()),     this, SLOT(settingsPrompt()));
+    connect(prompt, SIGNAL(showSettings()), this, SLOT(settingsPrompt()));
 
     connect(prompt, SIGNAL(historyAppended(QString)), this, SLOT(promptHistoryAppended(QString)));
 
@@ -3178,18 +3183,6 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     showNormal();
 
-    //Load tips from external file
-    QFile tipFile(appDir + "/tips.txt");
-    if (tipFile.open(QFile::ReadOnly)) {
-        QTextStream stream(&tipFile);
-        QString tipLine;
-        do {
-            tipLine = stream.readLine();
-            if (!tipLine.isEmpty())
-                listTipOfTheDay << tipLine;
-        }
-        while(!tipLine.isNull());
-    }
     if (settings.general_tip_of_the_day) {
         actuator("tip-of-the-day");
     }

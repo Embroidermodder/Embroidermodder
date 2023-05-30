@@ -495,6 +495,16 @@ BaseObject::~BaseObject()
 }
 
 /**
+ * @brief BaseObject::run_command
+ * @param command
+ */
+void
+BaseObject::run_command(String command)
+{
+
+}
+
+/**
  * @brief BaseObject::setObjectColor
  * @param color
  */
@@ -3900,10 +3910,8 @@ void
 SaveObject::addRectangle(EmbPattern* pattern, QGraphicsItem* item)
 {
     RectObject* obj = static_cast<RectObject*>(item);
-    if (obj)
- {
-        if (formatType == EMBFORMAT_STITCHONLY)
- {
+    if (obj) {
+        if (formatType == EMBFORMAT_STITCHONLY) {
             toPolyline(pattern, obj->objectPos(), obj->objectSavePath(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
         }
         else {
@@ -4033,8 +4041,7 @@ TextSingleObject::TextSingleObject(QString  str, EmbReal x, EmbReal y, QRgb rgb,
 TextSingleObject::TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent) : BaseObject(OBJ_TYPE_TEXTSINGLE, parent)
 {
     debug_message("TextSingleObject Constructor()");
-    if (obj)
- {
+    if (obj) {
         setObjectTextFont(obj->objTextFont);
         setObjectTextSize(obj->objTextSize);
         setRotation(obj->rotation());

@@ -476,6 +476,8 @@ public:
     int Type = OBJ_TYPE_BASE;
     virtual int type(){ return Type; }
 
+    void run_command(String command);
+
     /**
      * @brief BaseObject
      * @param parent

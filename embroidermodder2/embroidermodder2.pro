@@ -2844,7 +2844,6 @@ DISTFILES += \
     samples/star/Star.tap.eox \
     samples/star/Star.u01 \
     samples/star/Star.u01.eox \
-    tips.txt \
     translations/afrikaans.toml \
     translations/afrikaans/commands_afrikaans.qm \
     translations/afrikaans/commands_afrikaans.ts \
