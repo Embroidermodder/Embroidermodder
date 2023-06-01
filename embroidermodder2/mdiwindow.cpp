@@ -187,9 +187,12 @@ MdiWindow::loadFile(QString fileName)
                 loadPen.setCapStyle(Qt::RoundCap);
                 loadPen.setJoinStyle(Qt::RoundJoin);
 
-                PathObject* obj = new PathObject(0,0, pathPath, loadPen.color().rgb());
-                obj->setObjectRubberMode("OBJ_RUBBER_OFF");
+                        /*
+                EmbVector v = {0.0, 0.0};
+                Geometry* obj = new Geometry(v, pathPath, loadPen.color().rgb(), Qt::SolidLine);
+                obj->objRubberMode = "OBJ_RUBBER_OFF";
                 gscene->addItem(obj);
+*/
             }
             if (p->geometry->geometry[i].type == EMB_POINT) {
                 EmbPoint po = g.object.point;

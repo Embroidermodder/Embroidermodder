@@ -2090,17 +2090,19 @@ add_rectangle_action(String args)
     QUndoStack* stack = gview->getUndoStack();
     if (stack) {
         StringList arg_list = tokenize(args, ' ');
-        EmbReal x = std::stof(arg_list[0]);
-        EmbReal y = std::stof(arg_list[1]);
-        EmbReal w = std::stof(arg_list[2]);
-        EmbReal h = std::stof(arg_list[3]);
+        EmbRect rect;
+        rect.left = std::stof(arg_list[0]);
+        rect.right = -std::stof(arg_list[1]);
+        rect.top = std::stof(arg_list[2]);
+        rect.bottom = -std::stof(arg_list[3]);
         EmbReal rot = std::stof(arg_list[4]);
         bool fill = (arg_list[5] == "1");
         String rubberMode = arg_list[6];
 
-        RectObject* obj = new RectObject(x, -y, w, -h,_mainWin->getCurrentColor());
+                /*
+        Geometry* obj = new Geometry(rect, _mainWin->getCurrentColor(), Qt::SolidLine);
         obj->setRotation(-rot);
-        obj->setObjectRubberMode(rubberMode);
+        obj->objRubberMode = rubberMode;
         //TODO: rect fill
         if (rubberMode != "OBJ_RUBBER_OFF") {
             gview->addToRubberRoom(obj);
@@ -2111,6 +2113,7 @@ add_rectangle_action(String args)
             UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
+*/
     }
     return "";
 }
@@ -2178,14 +2181,16 @@ add_circle_action(String args)
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
-        EmbReal centerX = 0.0;
-        EmbReal centerY = 0.0;
-        EmbReal radius = 10.0;
+        EmbCircle circle;
+        circle.center.x = 0.0;
+        circle.center.y = -0.0;
+        circle.radius = 10.0;
         bool fill = false;
         String rubberMode = "OBJ_RUBBER_OFF";
 
-        CircleObject* obj = new CircleObject(centerX, -centerY, radius,_mainWin->getCurrentColor());
-        obj->setObjectRubberMode(rubberMode);
+        /*
+        Geometry* obj = new Geometry(circle, _mainWin->getCurrentColor(), Qt::SolidLine);
+        obj->objRubberMode = rubberMode;
         //TODO: circle fill
         if (rubberMode != "OBJ_RUBBER_OFF") {
             gview->addToRubberRoom(obj);
@@ -2196,6 +2201,7 @@ add_circle_action(String args)
             UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
+        */
     }
     return "";
 }
@@ -2215,7 +2221,7 @@ add_ellipse_action(String args)
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
         /*
-        EllipseObject* obj = new EllipseObject(centerX, -centerY, width, height,_mainWin->getCurrentColor());
+        Geometry* obj = new Geometry(centerX, -centerY, width, height,_mainWin->getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
         //TODO: ellipse fill
@@ -2243,11 +2249,15 @@ add_point_action(EmbReal x, EmbReal y)
 {
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack)
-    {
-        PointObject* obj = new PointObject(x, -y,_mainWin->getCurrentColor());
+    if (gview && stack) {
+        EmbVector v;
+        v.x = x;
+        v.y = -y;
+        /*
+        Geometry* obj = new Geometry(v, _mainWin->getCurrentColor(), Qt::SolidLine);
         UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
         stack->push(cmd);
+        */
     }
     return "";
 }
@@ -2416,7 +2426,7 @@ add_dim_leader_action(String args)
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
         /*
-        DimLeaderObject* obj = new DimLeaderObject(x1, -y1, x2, -y2,_mainWin->getCurrentColor());
+        Geometry* obj = new Geometry(x1, -y1, x2, -y2,_mainWin->getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
         if (rubberMode != "OBJ_RUBBER_OFF") {
@@ -2795,10 +2805,10 @@ construct_command(String command, const char *fmt, ...)
             command += std::to_string(va_arg(args, int));
         }
         if (fmt[i] == 'b') {
-            command += std::to_string(va_arg(args, bool));
+            command += std::to_string(va_arg(args, int));
         }
         if (fmt[i] == 'f') {
-            command += std::to_string(va_arg(args, EmbReal));
+            command += std::to_string(va_arg(args, double));
         }
     }
     va_end(args);
@@ -3215,7 +3225,7 @@ MainWindow::createAllActions()
 {
     debug_message("Creating All Actions...");
 
-    for (int i=0; i<action_table.size(); i++) {
+    for (int i=0; i<(int)action_table.size(); i++) {
         Action action = action_table[i];
 
         QIcon icon = create_icon(QString::fromStdString(action.icon));

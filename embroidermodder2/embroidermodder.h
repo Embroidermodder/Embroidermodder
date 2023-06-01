@@ -67,35 +67,7 @@ class CmdPrompt;
 class PropertyEditor;
 class UndoEditor;
 class MainWindow;
-
-class BaseObject;
-class SelectBox;
-class ArcObject;
-class BlockObject;
-class CircleObject;
-class DimAlignedObject;
-class DimAngularObject;
-class DimArcLengthObject;
-class DimDiameterObject;
-class DimLeaderObject;
-class DimLinearObject;
-class DimOrdinateObject;
-class DimRadiusObject;
-class EllipseObject;
-class EllipseArcObject;
-class HatchObject;
-class ImageObject;
-class InfiniteLineObject;
-class LineObject;
-class PathObject;
-class PointObject;
-class PolygonObject;
-class PolylineObject;
-class RayObject;
-class RectObject;
-class SplineObject;
-class TextMultiObject;
-class TextSingleObject;
+class Geometry;
 
 typedef std::string String;
 typedef std::vector<String> StringList;
@@ -413,13 +385,13 @@ Node node(StringList value);
 QGraphicsScene* activeScene();
 
 /**
- * @brief The BaseObject class
+ * @brief The Geometry class
  *
  * Combine all geometry objects into one class that uses the Type
  * flag to determine the behaviour of overlapping functions and
  * bar the use of nonsensical function calls.
  */
-class BaseObject : public QGraphicsPathItem
+class Geometry : public QGraphicsPathItem
 {
 public:
     enum ArrowStyle {
@@ -460,6 +432,8 @@ public:
     EmbReal lineStyleAngle;
     EmbReal lineStyleLength;
 
+    QPainterPath normalPath;
+
     QString objText;
     QString objTextFont;
     QString objTextJustify;
@@ -477,15 +451,26 @@ public:
     virtual int type(){ return Type; }
 
     void run_command(String command);
+    void run_arc_command(String command);
+    void run_circle_command(String command);
+    void run_ellipse_command(String command);
+    void run_image_command(String command);
 
-    /**
-     * @brief BaseObject
-     * @param parent
-     */
-    BaseObject(int object_type = OBJ_TYPE_BASE, QGraphicsItem* parent = 0)
+    Geometry(int object_type = OBJ_TYPE_BASE, QGraphicsItem* parent = 0);
+    Geometry(Geometry *obj, QGraphicsItem* parent = 0);
+    /*
+    Geometry(EmbArc arc, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
+    Geometry(EmbCircle circle, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
+    Geometry(EmbLine line, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
+    Geometry(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
+    Geometry(EmbRect rect, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
+    Geometry(QString str, EmbReal x, EmbReal y, QRgb rgb, QGraphicsItem* parent = 0);
+    Geometry(EmbVector pos, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
+    Geometry(EmbVector pos, QRgb rgb, QGraphicsItem* parent = 0);
+    */
+
+    void init(void)
     {
-        debug_message("BaseObject Constructor()");
-
         objPen.setCapStyle(Qt::RoundCap);
         objPen.setJoinStyle(Qt::RoundJoin);
         lwtPen.setCapStyle(Qt::RoundCap);
@@ -493,22 +478,20 @@ public:
 
         objID = QDateTime::currentMSecsSinceEpoch();
 
-        Type = object_type;
         switch (Type) {
         default:
             break;
         }
     }
 
-    virtual ~BaseObject();
+    ~Geometry();
 
+    void setObjectRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
 
-    QColor objectColor() { return objPen.color(); }
-    QRgb objectColorRGB() { return objPen.color().rgb(); }
     Qt::PenStyle objectLineType() { return objPen.style(); }
     EmbReal objectLineWeight() { return lwtPen.widthF(); }
-    QPointF objectRubberPoint(QString  key);
-    QString objectRubberText(QString  key);
+    QPointF objectRubberPoint(QString key);
+    QString objectRubberText(QString key);
 
     QPointF objectCenter() { return scenePos(); }
     QPointF objectPos() { return scenePos(); }
@@ -519,553 +502,129 @@ public:
     void setObjectX(EmbReal x) { setPos(x, objectY()); }
     void setObjectY(EmbReal y) { setPos(objectX(), y); }
 
-    void setObjectCenter(EmbVector center)
-    {
-        setPos(center.x, center.y);
-    }
-    void setObjectCenterX(EmbReal centerX)
-    {
-        setX(centerX);
-    }
-    void setObjectCenterY(EmbReal centerY)
-    {
-        setY(centerY);
-    }
-
-    QRectF rect() const
-    {
-        return path().boundingRect();
-    }
-    void setRect(const QRectF& r)
-    {
-        QPainterPath p;
-        p.addRect(r);
-        setPath(p);
-    }
-    void setRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h)
-    {
-        QPainterPath p;
-        p.addRect(x,y,w,h);
-        setPath(p);
-    }
-    void setLine(const QLineF& li)
-    {
-        QPainterPath p;
-        p.moveTo(li.p1());
-        p.lineTo(li.p2());
-        setPath(p);
-        objLine = li;
-    }
-    void setLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
-    {
-        QPainterPath p;
-        p.moveTo(x1,y1);
-        p.lineTo(x2,y2);
-        setPath(p);
-        objLine.setLine(x1,y1,x2,y2);
-    }
-
-    void setObjectColor(const QColor& color);
-    void setObjectColorRGB(QRgb rgb);
-    void setObjectLineType(Qt::PenStyle lineType);
-    void setObjectLineWeight(String lineWeight);
-    void setObjectPath(const QPainterPath& p) { setPath(p); }
-    void setObjectRubberMode(String mode) { objRubberMode = mode; }
-    void setObjectRubberPoint(QString  key, const QPointF& point) { objRubberPoints.insert(key, point); }
-    void setObjectRubberText(QString  key, QString  txt) { objRubberTexts.insert(key, txt); }
-
-    virtual QRectF boundingRect();
-    virtual QPainterPath shape(){ return path(); }
-
-    void drawRubberLine(const QLineF& rubLine, QPainter* painter = 0, const char* colorFromScene = 0);
-
-    virtual void vulcanize() = 0;
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint) = 0;
-    virtual std::vector<QPointF> allGripPoints() = 0;
-    virtual void gripEdit(const QPointF& before, const QPointF& after) = 0;
-
-    void realRender(QPainter* painter, const QPainterPath& renderPath);
-};
-
-
-/**
- *
- */
-class ArcObject : public BaseObject
-{
-public:
-    /**
-     * @brief ArcObject
-     * @param arc
-     * @param rgb
-     * @param parent
-     */
-    ArcObject(EmbArc arc, QRgb rgb, QGraphicsItem* parent = 0)
-    {
-        debug_message("ArcObject Constructor()");
-        init(arc, rgb, Qt::SolidLine); //TODO: getCurrentLineType
-    }
-
-    ArcObject(ArcObject* obj, QGraphicsItem* parent = 0);
-    ~ArcObject();
-
-    int Type = OBJ_TYPE_ARC;
-    virtual int type(){ return Type; }
-
-    void init(EmbArc arc, QRgb rgb, Qt::PenStyle lineType);
-    void updatePath();
-
-    void calculateArcData(EmbArc arc);
-    void updateArcRect(EmbReal radius);
-
-    EmbReal objectRadius() { return rect().width()/2.0*scale(); }
-    EmbReal objectStartAngle();
-    EmbReal objectEndAngle();
+    QPointF objectTopLeft();
+    QPointF objectTopRight();
+    QPointF objectBottomLeft();
+    QPointF objectBottomRight();
+    EmbReal objectArea();
     QPointF objectStartPoint();
     QPointF objectMidPoint();
     QPointF objectEndPoint();
-    EmbReal objectArea();
+
+    void setObjectCenter(EmbVector center);
+    void setObjectCenterX(EmbReal centerX);
+    void setObjectCenterY(EmbReal centerY);
+    QRectF rect();
+    void setRect(const QRectF& r);
+    void setRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
+    void setLine(const QLineF& li);
+    void setLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
+
+    void setObjectLineWeight(String lineWeight);
+    void circle_click(Dictionary global, EmbVector v);
+    EmbReal objectWidth();
+    EmbReal objectHeight();
+    EmbReal objectRadiusMajor();
+    EmbReal objectRadiusMinor();
+    EmbReal objectDiameterMajor();
+    EmbReal objectDiameterMinor();
+    QPointF objectEndPoint1();
+    QPointF objectEndPoint2();
+
+    void setObjectEndPoint1(EmbVector endPt1);
+    void setObjectEndPoint2(EmbVector endPt2);
+
+    void updatePath();
+    void updatePath(const QPainterPath& p);
+    void updateLeader(void);
+
+    virtual QRectF boundingRect();
+
+    void drawRubberLine(const QLineF& rubLine, QPainter* painter = 0, const char* colorFromScene = 0);
+
+    void updateRubber(QPainter* painter = 0);
+    void vulcanize(void);
+    QPointF mouseSnapPoint(const QPointF& mousePoint);
+    std::vector<QPointF> allGripPoints();
+    void gripEdit(const QPointF& before, const QPointF& after);
+
+    EmbReal objectStartAngle();
+    EmbReal objectEndAngle();
     EmbReal objectArcLength();
     EmbReal objectChord();
     EmbReal objectIncludedAngle();
     bool objectClockwise();
 
+    EmbReal objectRadius();
+    EmbReal objectDiameter();
+    EmbReal objectCircumference();
+    QPointF objectQuadrant0();
+    QPointF objectQuadrant90();
+    QPointF objectQuadrant180();
+    QPointF objectQuadrant270();
+
+    void realRender(QPainter* painter, const QPainterPath& renderPath);
+
+    void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
+
+    void setObjectSize(EmbReal width, EmbReal height);
+
+    void calculateArcData(EmbArc arc);
+    void updateArcRect(EmbReal radius);
     void setObjectRadius(EmbReal radius);
     void setObjectStartAngle(EmbReal angle);
     void setObjectEndAngle(EmbReal angle);
     void setObjectStartPoint(EmbVector point);
     void setObjectMidPoint(EmbVector point);
     void setObjectEndPoint(EmbVector point);
-
-    void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual std::vector<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
-
-    void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-};
-
-
-class CircleObject : public BaseObject
-{
-public:
-    CircleObject(EmbReal centerX, EmbReal centerY, EmbReal radius, QRgb rgb, QGraphicsItem* parent = 0);
-    CircleObject(CircleObject* obj, QGraphicsItem* parent = 0);
-    ~CircleObject();
-
-    void init(EmbReal centerX, EmbReal centerY, EmbReal radius, QRgb rgb, Qt::PenStyle lineType);
-    void updatePath();
-
-    int Type = OBJ_TYPE_CIRCLE;
-    virtual int type(){ return Type; }
-
-    QPainterPath objectSavePath();
-
-    EmbReal objectRadius() { return rect().width()/2.0*scale(); }
-    EmbReal objectDiameter() { return rect().width()*scale(); }
-    EmbReal objectArea() { return emb_constant_pi*objectRadius()*objectRadius(); }
-    EmbReal objectCircumference() { return emb_constant_pi*objectDiameter(); }
-    QPointF objectQuadrant0() { return objectCenter() + QPointF(objectRadius(), 0); }
-    QPointF objectQuadrant90() { return objectCenter() + QPointF(0,-objectRadius()); }
-    QPointF objectQuadrant180() { return objectCenter() + QPointF(-objectRadius(),0); }
-    QPointF objectQuadrant270() { return objectCenter() + QPointF(0, objectRadius()); }
-
-    void setObjectRadius(EmbReal radius);
     void setObjectDiameter(EmbReal diameter);
     void setObjectArea(EmbReal area);
     void setObjectCircumference(EmbReal circumference);
 
-    void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual std::vector<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
-
-    void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-};
-
-/**
- *
- */
-class DimLeaderObject : public BaseObject
-{
-public:
-    DimLeaderObject(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, QGraphicsItem* parent = 0);
-    DimLeaderObject(DimLeaderObject* obj, QGraphicsItem* parent = 0);
-    ~DimLeaderObject();
-
-    void init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, Qt::PenStyle lineType);
-
-    int Type = OBJ_TYPE_DIMLEADER;
-    virtual int type(){ return Type; }
-
-    void updateLeader();
-
-    QPointF objectEndPoint1();
-    QPointF objectEndPoint2();
-    QPointF objectMidPoint();
-    EmbReal objectX1(){ return objectEndPoint1().x(); }
-    EmbReal objectY1(){ return objectEndPoint1().y(); }
-    EmbReal objectX2(){ return objectEndPoint2().x(); }
-    EmbReal objectY2(){ return objectEndPoint2().y(); }
-    EmbReal objectDeltaX(){ return (objectX2() - objectX1()); }
-    EmbReal objectDeltaY(){ return (objectY2() - objectY1()); }
+    EmbReal objectX1() { return objectEndPoint1().x(); }
+    EmbReal objectY1() { return objectEndPoint1().y(); }
+    EmbReal objectX2() { return objectEndPoint2().x(); }
+    EmbReal objectY2() { return objectEndPoint2().y(); }
     EmbReal objectAngle();
-    EmbReal objectLength(){ return objLine.length(); }
+    EmbReal objectLength() { return objLine.length()*scale(); }
 
-    void setObjectEndPoint1(EmbVector endPt1);
-    void setObjectEndPoint2(EmbVector endPt2);
-    void setObjectX1(EmbReal x)
-    {
-        EmbVector v = to_EmbVector(objectEndPoint1());
-        v.x = x;
-        setObjectEndPoint1(v);
-    }
-    void setObjectY1(EmbReal y)
-    {
-        EmbVector v = to_EmbVector(objectEndPoint1());
-        v.y = y;
-        setObjectEndPoint1(v);
-    }
-    void setObjectX2(EmbReal x)
-    {
-        EmbVector v = to_EmbVector(objectEndPoint2());
-        v.x = x;
-        setObjectEndPoint2(v);
-    }
-    void setObjectY2(EmbReal y)
-    {
-        EmbVector v = to_EmbVector(objectEndPoint2());
-        v.y = y;
-        setObjectEndPoint2(v);
-    }
+    void setObjectX1(EmbReal x);
+    void setObjectY1(EmbReal y);
+    void setObjectX2(EmbReal x);
+    void setObjectY2(EmbReal y);
 
-    void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual std::vector<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
-
-    void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-};
-
-
-/**
- *
- */
-class EllipseObject : public BaseObject
-{
-public:
-    EllipseObject(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, QRgb rgb, QGraphicsItem* parent = 0);
-    EllipseObject(EllipseObject* obj, QGraphicsItem* parent = 0);
-    ~EllipseObject();
-
-    void init(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, QRgb rgb, Qt::PenStyle lineType);
-    void updatePath();
-
-    int Type = OBJ_TYPE_ELLIPSE;
-    virtual int type(){ return Type; }
-
-    QPainterPath objectSavePath();
-
-    EmbReal objectRadiusMajor() { return std::max(rect().width(), rect().height())/2.0*scale(); }
-    EmbReal objectRadiusMinor() { return std::min(rect().width(), rect().height())/2.0*scale(); }
-    EmbReal objectDiameterMajor() { return std::max(rect().width(), rect().height())*scale(); }
-    EmbReal objectDiameterMinor() { return std::min(rect().width(), rect().height())*scale(); }
-    EmbReal objectWidth() { return rect().width()*scale(); }
-    EmbReal objectHeight() { return rect().height()*scale(); }
-    QPointF objectQuadrant0();
-    QPointF objectQuadrant90();
-    QPointF objectQuadrant180();
-    QPointF objectQuadrant270();
-
-    void setObjectSize(EmbReal width, EmbReal height);
     void setObjectRadiusMajor(EmbReal radius);
     void setObjectRadiusMinor(EmbReal radius);
     void setObjectDiameterMajor(EmbReal diameter);
     void setObjectDiameterMinor(EmbReal diameter);
 
-    void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual std::vector<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
+    QPointF objectDelta() { return objectEndPoint2() - objectEndPoint1(); }
 
-    void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-};
-
-
-/**
- *
- */
-class ImageObject : public BaseObject
-{
-public:
-    ImageObject(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, QGraphicsItem* parent = 0);
-    ImageObject(ImageObject* obj, QGraphicsItem* parent = 0);
-    ~ImageObject();
-
-    void init(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, Qt::PenStyle lineType);
-    void updatePath();
-
-    int Type = OBJ_TYPE_IMAGE;
-    virtual int type(){ return Type; }
-
-    QPointF objectTopLeft();
-    QPointF objectTopRight();
-    QPointF objectBottomLeft();
-    QPointF objectBottomRight();
-    EmbReal objectWidth() { return rect().width()*scale(); }
-    EmbReal objectHeight() { return rect().height()*scale(); }
-    EmbReal objectArea() { return qAbs(objectWidth()*objectHeight()); }
-
-    void setObjectRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
-
-    void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual std::vector<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
-
-    void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-};
-
-
-/**
- *
- */
-class LineObject : public BaseObject
-{
-public:
-    LineObject(EmbLine line, QRgb rgb, QGraphicsItem* parent = 0);
-    LineObject(LineObject* obj, QGraphicsItem* parent = 0);
-    ~LineObject();
-
-    void init(EmbLine line, QRgb rgb, Qt::PenStyle lineType);
-
-    int Type = OBJ_TYPE_LINE;
-    virtual int type(){ return Type; }
-
+    QPainterPath objectCopyPath();
     QPainterPath objectSavePath();
 
-    QPointF objectEndPoint1() { return scenePos(); }
-    QPointF objectEndPoint2();
-    QPointF objectMidPoint();
-    QPointF objectDelta() { return objectEndPoint2() - objectEndPoint1(); }
-    EmbReal objectAngle();
-    EmbReal objectLength() { return objLine.length()*scale(); }
-
-    void setObjectEndPoint1(EmbVector endPt1);
-    void setObjectEndPoint2(EmbVector endPt2);
-    void setObjectX1(EmbReal x)
-    {
-        EmbVector v = to_EmbVector(objectEndPoint1());
-        v.x = x;
-        setObjectEndPoint1(v);
-    }
-    void setObjectY1(EmbReal y)
-    {
-        EmbVector v = to_EmbVector(objectEndPoint1());
-        v.y = y;
-        setObjectEndPoint1(v);
-    }
-    void setObjectX2(EmbReal x)
-    {
-        EmbVector v = to_EmbVector(objectEndPoint2());
-        v.x = x;
-        setObjectEndPoint2(v);
-    }
-    void setObjectY2(EmbReal y)
-    {
-        EmbVector v = to_EmbVector(objectEndPoint2());
-        v.y = y;
-        setObjectEndPoint2(v);
-    }
-
-    void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual std::vector<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
-
-    void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-};
-
-
-/**
- *
- */
-class PathObject : public BaseObject
-{
-public:
-    PathObject(EmbReal x, EmbReal y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent = 0);
-    PathObject(PathObject* obj, QGraphicsItem* parent = 0);
-    ~PathObject();
-
-    int Type = OBJ_TYPE_PATH;
-    virtual int type(){ return Type; }
-
-    void init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
-    void updatePath(const QPainterPath& p);
-    QPainterPath normalPath;
     //TODO: make paths similar to polylines. Review and implement any missing functions/members.
 
-    QPainterPath objectCopyPath();
-    QPainterPath objectSavePath();
-
-    void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
     void setObjectPos(EmbReal x, EmbReal y) { setPos(x, y); }
-    void setObjectX(EmbReal x) { setPos(x, objectPos().y()); }
-    void setObjectY(EmbReal y) { setPos(objectPos().x(), y); }
 
-    void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual std::vector<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
+    std::vector<QPainterPath> objectSavePathList() { return subPathList(); }
+    std::vector<QPainterPath> subPathList();
 
-    void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-};
-
-
-/**
- *
- */
-class PointObject : public BaseObject
-{
-public:
-    PointObject(EmbReal x, EmbReal y, QRgb rgb, QGraphicsItem* parent = 0);
-    PointObject(PointObject* obj, QGraphicsItem* parent = 0);
-    ~PointObject();
-
-    void init(EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType);
-
-    int Type = OBJ_TYPE_POINT;
-    virtual int type(){ return Type; }
-
-    QPainterPath objectSavePath();
-
-    QPointF objectPos() { return scenePos(); }
-
-    void setObjectPos(EmbReal x, EmbReal y) { setPos(x, y); }
-    void setObjectX(EmbReal x) { setPos(x, objectPos().y()); }
-    void setObjectY(EmbReal y) { setPos(objectPos().x(), y); }
-
-    void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual std::vector<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
-
-    void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-};
-
-
-/**
- *
- */
-class PolygonObject : public BaseObject
-{
-public:
-    PolygonObject(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent = 0);
-    PolygonObject(PolygonObject* obj, QGraphicsItem* parent = 0);
-    ~PolygonObject();
-
-    int Type = OBJ_TYPE_POLYGON;
-    virtual int type(){ return Type; }
-
-    void init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
-    void updatePath(const QPainterPath& p);
-    QPainterPath normalPath;
     int findIndex(const QPointF& point);
     int gripIndex;
 
-    QPainterPath objectCopyPath();
-    QPainterPath objectSavePath();
-
-    QPointF objectPos(){ return scenePos(); }
-
-    void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
-    void setObjectPos(EmbReal x, EmbReal y) { setPos(x, y); }
-    void setObjectX(EmbReal x) { setObjectPos(x, objectPos().y()); }
-    void setObjectY(EmbReal y) { setObjectPos(objectPos().x(), y); }
-
-    void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual std::vector<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
-
-    void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-};
-
-/**
- *
- */
-class PolylineObject : public BaseObject
-{
-public:
-    PolylineObject(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent = 0);
-    PolylineObject(PolylineObject* obj, QGraphicsItem* parent = 0);
-    ~PolylineObject();
-
-    int Type = OBJ_TYPE_POLYLINE;
-    virtual int type(){ return Type; }
-
-    void init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
-    void updatePath(const QPainterPath& p);
-    QPainterPath normalPath;
-    int findIndex(const QPointF& point);
-    int gripIndex;
-
-    QPainterPath objectCopyPath();
-    QPainterPath objectSavePath();
-
-    void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual std::vector<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
-
-    void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-};
-
-/**
- *
- */
-class RectObject : public BaseObject
-{
-public:
-    RectObject(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, QGraphicsItem* parent = 0);
-    RectObject(RectObject* obj, QGraphicsItem* parent = 0);
-    ~RectObject();
-
-    int Type = OBJ_TYPE_RECTANGLE;
-    virtual int type(){ return Type; }
-
-    QPainterPath objectSavePath();
-
-    void init(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, Qt::PenStyle lineType);
-    void updatePath();
-
-    QPointF objectTopLeft();
-    QPointF objectTopRight();
-    QPointF objectBottomLeft();
-    QPointF objectBottomRight();
-    EmbReal objectWidth(){ return rect().width()*scale(); }
-    EmbReal objectHeight(){ return rect().height()*scale(); }
-    EmbReal objectArea(){ return std::fabs(objectWidth()*objectHeight()); }
-
-    void setObjectRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
-
-    void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual std::vector<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
-
-    void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
+    void setObjectText(QString str);
+    void setObjectTextFont(QString font);
+    void setObjectTextJustify(QString justify);
+    void setObjectTextSize(EmbReal size);
+    void setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bool over);
+    void setObjectTextBold(bool val);
+    void setObjectTextItalic(bool val);
+    void setObjectTextUnderline(bool val);
+    void setObjectTextStrikeOut(bool val);
+    void setObjectTextOverline(bool val);
+    void setObjectTextBackward(bool val);
+    void setObjectTextUpsideDown(bool val);
 };
 
 /**
@@ -1114,50 +673,6 @@ public:
     int formatType;
 
     void toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainterPath& objPath, QString  layer, const QColor& color, QString  lineType, QString  lineWeight);
-};
-
-/**
- *
- */
-class TextSingleObject : public BaseObject
-{
-public:
-    TextSingleObject(QString  str, EmbReal x, EmbReal y, QRgb rgb, QGraphicsItem* parent = 0);
-    TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent = 0);
-    ~TextSingleObject();
-
-    int Type = OBJ_TYPE_TEXTSINGLE;
-    virtual int type(){ return Type; }
-
-    void init(QString  str, EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType);
-
-    std::vector<QPainterPath> objectSavePathList(){ return subPathList(); }
-    std::vector<QPainterPath> subPathList();
-
-    void setObjectText(QString  str);
-    void setObjectTextFont(QString  font);
-    void setObjectTextJustify(QString  justify);
-    void setObjectTextSize(EmbReal size);
-    void setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bool over);
-    void setObjectTextBold(bool val);
-    void setObjectTextItalic(bool val);
-    void setObjectTextUnderline(bool val);
-    void setObjectTextStrikeOut(bool val);
-    void setObjectTextOverline(bool val);
-    void setObjectTextBackward(bool val);
-    void setObjectTextUpsideDown(bool val);
-    void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
-    void setObjectPos(EmbReal x, EmbReal y) { setPos(x, y); }
-    void setObjectX(EmbReal x) { setObjectPos(x, objectY()); }
-    void setObjectY(EmbReal y) { setObjectPos(objectX(), y); }
-
-    void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual std::vector<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
-
-    void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 };
 
 /**
@@ -2090,12 +1605,12 @@ public slots:
 class UndoableAddCommand : public QUndoCommand
 {
 public:
-    UndoableAddCommand(QString  text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+    UndoableAddCommand(QString  text, Geometry* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
 
-    BaseObject* object;
+    Geometry* object;
     View* gview;
 };
 
@@ -2105,12 +1620,12 @@ public:
 class UndoableDeleteCommand : public QUndoCommand
 {
 public:
-    UndoableDeleteCommand(QString  text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+    UndoableDeleteCommand(QString  text, Geometry* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
 
-    BaseObject* object;
+    Geometry* object;
     View*       gview;
 };
 
@@ -2120,12 +1635,12 @@ public:
 class UndoableMoveCommand : public QUndoCommand
 {
 public:
-    UndoableMoveCommand(EmbReal deltaX, EmbReal deltaY, QString  text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+    UndoableMoveCommand(EmbReal deltaX, EmbReal deltaY, QString  text, Geometry* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
 
-    BaseObject* object;
+    Geometry* object;
     View*       gview;
     EmbReal dx;
     EmbReal dy;
@@ -2137,14 +1652,14 @@ public:
 class UndoableRotateCommand : public QUndoCommand
 {
 public:
-    UndoableRotateCommand(EmbReal pivotPointX, EmbReal pivotPointY, EmbReal rotAngle, QString  text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+    UndoableRotateCommand(EmbReal pivotPointX, EmbReal pivotPointY, EmbReal rotAngle, QString  text, Geometry* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
 
     void rotate(EmbReal x, EmbReal y, EmbReal rot);
 
-    BaseObject* object;
+    Geometry* object;
     View* gview;
     EmbReal pivotX;
     EmbReal pivotY;
@@ -2157,12 +1672,12 @@ public:
 class UndoableScaleCommand : public QUndoCommand
 {
 public:
-    UndoableScaleCommand(EmbReal x, EmbReal y, EmbReal scaleFactor, QString  text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+    UndoableScaleCommand(EmbReal x, EmbReal y, EmbReal scaleFactor, QString  text, Geometry* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
 
-    BaseObject* object;
+    Geometry* object;
     View* gview;
     EmbReal dx;
     EmbReal dy;
@@ -2197,12 +1712,12 @@ public:
 class UndoableGripEditCommand : public QUndoCommand
 {
 public:
-    UndoableGripEditCommand(const QPointF beforePoint, const QPointF afterPoint, QString  text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+    UndoableGripEditCommand(const QPointF beforePoint, const QPointF afterPoint, QString  text, Geometry* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
 
-    BaseObject* object;
+    Geometry* object;
     View* gview;
     QPointF before;
     QPointF after;
@@ -2214,13 +1729,13 @@ public:
 class UndoableMirrorCommand : public QUndoCommand
 {
 public:
-    UndoableMirrorCommand(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QString  text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+    UndoableMirrorCommand(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QString  text, Geometry* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
     void mirror();
 
-    BaseObject* object;
+    Geometry* object;
     View*       gview;
     QLineF      mirrorLine;
 
@@ -2264,8 +1779,8 @@ public:
     bool qSnapActive;
     bool qSnapToggle;
 
-    BaseObject* gripBaseObj;
-    BaseObject* tempBaseObj;
+    Geometry* gripBaseObj;
+    Geometry* tempBaseObj;
 
     QGraphicsScene* gscene;
     QUndoStack* undoStack;
@@ -2298,9 +1813,9 @@ public:
     QPointF center() { return mapToScene(rect().center()); }
 
     QUndoStack* getUndoStack() { return undoStack; }
-    void addObject(BaseObject* obj);
-    void deleteObject(BaseObject* obj);
-    void vulcanizeObject(BaseObject* obj);
+    void addObject(Geometry* obj);
+    void deleteObject(Geometry* obj);
+    void vulcanizeObject(Geometry* obj);
 
 public slots:
     void zoomIn();
@@ -2416,7 +1931,7 @@ private:
 
     void copySelected();
 
-    void startGripping(BaseObject* obj);
+    void startGripping(Geometry* obj);
     void stopGripping(bool accept = false);
 
     void panStart(const QPoint& point);

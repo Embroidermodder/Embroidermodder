@@ -171,7 +171,7 @@ View::enterEvent(QEvent* /*event*/)
 }
 
 void
-View::addObject(BaseObject* obj)
+View::addObject(Geometry* obj)
 {
     gscene->addItem(obj);
     gscene->update();
@@ -179,7 +179,7 @@ View::addObject(BaseObject* obj)
 }
 
 void
-View::deleteObject(BaseObject* obj)
+View::deleteObject(Geometry* obj)
 {
     //NOTE: We really just remove the objects from the scene. deletion actually occurs in the destructor.
     obj->setSelected(false);
@@ -278,7 +278,7 @@ View::vulcanizeRubberRoom()
 {
     foreach(QGraphicsItem* item, rubberRoomList)
     {
-        BaseObject* base = static_cast<BaseObject*>(item);
+        Geometry* base = static_cast<Geometry*>(item);
         if (base) vulcanizeObject(base);
     }
     rubberRoomList.clear();
@@ -286,7 +286,7 @@ View::vulcanizeRubberRoom()
 }
 
 void
-View::vulcanizeObject(BaseObject* obj)
+View::vulcanizeObject(Geometry* obj)
 {
     if (!obj) return;
     gscene->removeItem(obj); //Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene
@@ -306,7 +306,7 @@ void
 View::clearRubberRoom()
 {
     foreach(QGraphicsItem* item, rubberRoomList) {
-        BaseObject* base = static_cast<BaseObject*>(item);
+        Geometry* base = static_cast<Geometry*>(item);
         if (base) {
             String type = std::to_string(base->type());
             if ((type == "OBJ_TYPE_PATH" && contains(spareRubberList, "SPARE_RUBBER_PATH")) ||
@@ -353,9 +353,9 @@ void
 View::setRubberMode(String mode)
 {
     foreach(QGraphicsItem* item, rubberRoomList) {
-        BaseObject* base = static_cast<BaseObject*>(item);
+        Geometry* base = static_cast<Geometry*>(item);
         if (base) {
-            base->setObjectRubberMode(mode);
+            base->objRubberMode = mode;
         }
     }
     gscene->update();
@@ -369,8 +369,8 @@ View::setRubberPoint(QString  key, const QPointF& point)
 {
     foreach(QGraphicsItem* item, rubberRoomList)
     {
-        BaseObject* base = static_cast<BaseObject*>(item);
-        if (base) { base->setObjectRubberPoint(key, point); }
+        Geometry* base = static_cast<Geometry*>(item);
+        if (base) { base->objRubberPoints.insert(key, point); }
     }
     gscene->update();
 }
@@ -383,8 +383,8 @@ View::setRubberText(QString  key, QString  txt)
 {
     foreach(QGraphicsItem* item, rubberRoomList)
     {
-        BaseObject* base = static_cast<BaseObject*>(item);
-        if (base) { base->setObjectRubberText(key, txt); }
+        Geometry* base = static_cast<Geometry*>(item);
+        if (base) { base->objRubberTexts.insert(key, txt); }
     }
     gscene->update();
 }
@@ -745,7 +745,7 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
     if (selectedItemList.size() <= 100) {
         foreach(QGraphicsItem* item, selectedItemList) {
             if (item->type() >= OBJ_TYPE_BASE) {
-                tempBaseObj = static_cast<BaseObject*>(item);
+                tempBaseObj = static_cast<Geometry*>(item);
                 if (tempBaseObj) {
                     selectedGripPoints = tempBaseObj->allGripPoints();
                 }
@@ -781,10 +781,10 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                                                         viewMousePoint.y()-qsnapApertureSize,
                                                         qsnapApertureSize*2,
                                                                         qsnapApertureSize*2));
-        for (int i=0; i<apertureItemList.size(); i++) {
+        for (int i=0; i<(int)apertureItemList.size(); i++) {
             QGraphicsItem* item = apertureItemList[i];
             if (item->type() >= OBJ_TYPE_BASE) {
-                tempBaseObj = static_cast<BaseObject*>(item);
+                tempBaseObj = static_cast<Geometry*>(item);
                 if (tempBaseObj) {
                     apertureSnapPoints.push_back(tempBaseObj->mouseSnapPoint(sceneMousePoint));
                 }
@@ -1435,7 +1435,7 @@ View::mousePressEvent(QMouseEvent* event)
             }
             else {
                 bool foundGrip = false;
-                BaseObject* base = static_cast<BaseObject*>(pickList.at(0)); //TODO: Allow multiple objects to be gripped at once
+                Geometry* base = static_cast<Geometry*>(pickList.at(0)); //TODO: Allow multiple objects to be gripped at once
                 if (!base) return;
 
                 QPoint qsnapOffset(qsnapLocatorSize, qsnapLocatorSize);
@@ -1566,7 +1566,7 @@ View::mousePressEvent(QMouseEvent* event)
 
             undoStack->beginMacro("Paste");
             for (int i=0; i<(int)itemList.size(); i++) {
-                BaseObject* base = static_cast<BaseObject*>(itemList[i]);
+                Geometry* base = static_cast<Geometry*>(itemList[i]);
                 if (base) {
                     UndoableAddCommand* cmd = new UndoableAddCommand(base->data(OBJ_NAME).toString(), base, this, 0);
                     if (cmd) undoStack->push(cmd);
@@ -2000,25 +2000,23 @@ View::escapePressed()
 }
 
 void
-View::startGripping(BaseObject* obj)
+View::startGripping(Geometry* obj)
 {
     if (!obj) return;
     grippingActive = true;
     gripBaseObj = obj;
     sceneGripPoint = gripBaseObj->mouseSnapPoint(sceneMousePoint);
-    gripBaseObj->setObjectRubberPoint("GRIP_POINT", sceneGripPoint);
-    gripBaseObj->setObjectRubberMode("OBJ_RUBBER_GRIP");
+    gripBaseObj->objRubberPoints.insert("GRIP_POINT", sceneGripPoint);
+    gripBaseObj->objRubberMode = "OBJ_RUBBER_GRIP";
 }
 
 void
 View::stopGripping(bool accept)
 {
     grippingActive = false;
-    if (gripBaseObj)
-    {
+    if (gripBaseObj) {
         gripBaseObj->vulcanize();
-        if (accept)
-        {
+        if (accept) {
             UndoableGripEditCommand* cmd = new UndoableGripEditCommand(sceneGripPoint, sceneMousePoint, tr("Grip Edit ") + gripBaseObj->data(OBJ_NAME).toString(), gripBaseObj, this, 0);
             if (cmd) undoStack->push(cmd);
             selectionChanged(); //Update the Property Editor
@@ -2049,7 +2047,7 @@ View::deleteSelected()
     {
         if (itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL)
         {
-            BaseObject* base = static_cast<BaseObject*>(itemList.at(i));
+            Geometry* base = static_cast<Geometry*>(itemList.at(i));
             if (base)
             {
                 UndoableDeleteCommand* cmd = new UndoableDeleteCommand(tr("Delete 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
@@ -2143,152 +2141,15 @@ View::createObjectList(std::vector<QGraphicsItem*> list)
 
     for (int i = 0; i < (int)list.size(); i++) {
         QGraphicsItem* item = list.at(i);
-        if (!item)
+        if (!item) {
             continue;
+        }
 
         int objType = item->data(OBJ_TYPE).toInt();
-
-        if (objType == OBJ_TYPE_ARC) {
-            ArcObject* arcObj = static_cast<ArcObject*>(item);
-            if (arcObj)
-            {
-                ArcObject* copyArcObj = new ArcObject(arcObj);
-                copyList.push_back(copyArcObj);
-            }
-        }
-        else if (objType == OBJ_TYPE_BLOCK) {
-            //TODO: cut/copy blocks
-        }
-        else if (objType == OBJ_TYPE_CIRCLE) {
-            CircleObject* circObj = static_cast<CircleObject*>(item);
-            if (circObj)
-            {
-                CircleObject* copyCircObj = new CircleObject(circObj);
-                copyList.push_back(copyCircObj);
-            }
-        }
-        else if (objType == OBJ_TYPE_DIMALIGNED) {
-            //TODO: cut/copy aligned dimensions
-        }
-        else if (objType == OBJ_TYPE_DIMANGULAR) {
-            //TODO: cut/copy angular dimensions
-        }
-        else if (objType == OBJ_TYPE_DIMARCLENGTH)
-        {
-            //TODO: cut/copy arclength dimensions
-        }
-        else if (objType == OBJ_TYPE_DIMDIAMETER)
-        {
-            //TODO: cut/copy diameter dimensions
-        }
-        else if (objType == OBJ_TYPE_DIMLEADER)
-        {
-            DimLeaderObject* dimLeaderObj = static_cast<DimLeaderObject*>(item);
-            if (dimLeaderObj)
-            {
-                DimLeaderObject* copyDimLeaderObj = new DimLeaderObject(dimLeaderObj);
-                copyList.push_back(copyDimLeaderObj);
-            }
-        }
-        else if (objType == OBJ_TYPE_DIMLINEAR)
-        {
-            //TODO: cut/copy linear dimensions
-        }
-        else if (objType == OBJ_TYPE_DIMORDINATE)
-        {
-            //TODO: cut/copy ordinate dimensions
-        }
-        else if (objType == OBJ_TYPE_DIMRADIUS)
-        {
-            //TODO: cut/copy radius dimensions
-        }
-        else if (objType == OBJ_TYPE_ELLIPSE)
-        {
-            EllipseObject* elipObj = static_cast<EllipseObject*>(item);
-            if (elipObj)
-            {
-                EllipseObject* copyElipObj = new EllipseObject(elipObj);
-                copyList.push_back(copyElipObj);
-            }
-        }
-        else if (objType == OBJ_TYPE_ELLIPSEARC)
-        {
-            //TODO: cut/copy elliptical arcs
-        }
-        else if (objType == OBJ_TYPE_IMAGE)
-        {
-            //TODO: cut/copy images
-        }
-        else if (objType == OBJ_TYPE_INFINITELINE)
-        {
-            //TODO: cut/copy infinite lines
-        }
-        else if (objType == OBJ_TYPE_LINE)
-        {
-            LineObject* lineObj = static_cast<LineObject*>(item);
-            if (lineObj)
-            {
-                LineObject* copyLineObj = new LineObject(lineObj);
-                copyList.push_back(copyLineObj);
-            }
-        }
-        else if (objType == OBJ_TYPE_PATH)
-        {
-            PathObject* pathObj = static_cast<PathObject*>(item);
-            if (pathObj)
-            {
-                PathObject* copyPathObj = new PathObject(pathObj);
-                copyList.push_back(copyPathObj);
-            }
-        }
-        else if (objType == OBJ_TYPE_POINT)
-        {
-            PointObject* pointObj = static_cast<PointObject*>(item);
-            if (pointObj)
-            {
-                PointObject* copyPointObj = new PointObject(pointObj);
-                copyList.push_back(copyPointObj);
-            }
-        }
-        else if (objType == OBJ_TYPE_POLYGON)
-        {
-            PolygonObject* pgonObj = static_cast<PolygonObject*>(item);
-            if (pgonObj)
-            {
-                PolygonObject* copyPgonObj = new PolygonObject(pgonObj);
-                copyList.push_back(copyPgonObj);
-            }
-        }
-        else if (objType == OBJ_TYPE_POLYLINE)
-        {
-            PolylineObject* plineObj = static_cast<PolylineObject*>(item);
-            if (plineObj)
-            {
-                PolylineObject* copyPlineObj = new PolylineObject(plineObj);
-                copyList.push_back(copyPlineObj);
-            }
-        }
-        else if (objType == OBJ_TYPE_RAY)
-        {
-            //TODO: cut/copy rays
-        }
-        else if (objType == OBJ_TYPE_RECTANGLE)
-        {
-            RectObject* rectObj = static_cast<RectObject*>(item);
-            if (rectObj)
-            {
-                RectObject* copyRectObj = new RectObject(rectObj);
-                copyList.push_back(copyRectObj);
-            }
-        }
-        else if (objType == OBJ_TYPE_TEXTSINGLE)
-        {
-            TextSingleObject* textObj = static_cast<TextSingleObject*>(item);
-            if (textObj)
-            {
-                TextSingleObject* copyTextObj = new TextSingleObject(textObj);
-                copyList.push_back(copyTextObj);
-            }
+        Geometry* obj = static_cast<Geometry*>(item);
+        if (obj) {
+            Geometry* copyObj = new Geometry(obj);
+            copyList.push_back(copyObj);
         }
     }
 
@@ -2320,7 +2181,7 @@ View::moveSelected(EmbReal dx, EmbReal dy)
         undoStack->beginMacro("Move " + QString().setNum(itemList.size()));
     foreach(QGraphicsItem* item, itemList)
     {
-        BaseObject* base = static_cast<BaseObject*>(item);
+        Geometry* base = static_cast<Geometry*>(item);
         if (base)
         {
             UndoableMoveCommand* cmd = new UndoableMoveCommand(dx, dy, tr("Move 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
@@ -2351,7 +2212,7 @@ View::rotateSelected(EmbReal x, EmbReal y, EmbReal rot)
         undoStack->beginMacro("Rotate " + QString().setNum(itemList.size()));
     foreach(QGraphicsItem* item, itemList)
     {
-        BaseObject* base = static_cast<BaseObject*>(item);
+        Geometry* base = static_cast<Geometry*>(item);
         if (base)
         {
             UndoableRotateCommand* cmd = new UndoableRotateCommand(x, y, rot, tr("Rotate 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
@@ -2374,7 +2235,7 @@ View::mirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
         undoStack->beginMacro("Mirror " + QString().setNum(itemList.size()));
     foreach(QGraphicsItem* item, itemList)
     {
-        BaseObject* base = static_cast<BaseObject*>(item);
+        Geometry* base = static_cast<Geometry*>(item);
         if (base)
         {
             UndoableMirrorCommand* cmd = new UndoableMirrorCommand(x1, y1, x2, y2, tr("Mirror 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
@@ -2408,7 +2269,7 @@ View::scaleSelected(EmbReal x, EmbReal y, EmbReal factor)
     if (numSelected > 1)
         undoStack->beginMacro("Scale " + QString().setNum(itemList.size()));
     foreach(QGraphicsItem* item, itemList) {
-        BaseObject* base = static_cast<BaseObject*>(item);
+        Geometry* base = static_cast<Geometry*>(item);
         if (base) {
             UndoableScaleCommand* cmd = new UndoableScaleCommand(x, y, factor, tr("Scale 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
             if (cmd) undoStack->push(cmd);
