@@ -905,16 +905,24 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
                 break;
             case OBJ_TYPE_LINE:
                 if (objName == "lineEditLineStartX") {
-                    obj->setObjectX1(lineEdits["line-start-x"]->text().toDouble());
+                    EmbVector v = to_EmbVector(obj->objectStartPoint());
+                    v.x = lineEdits["line-start-x"]->text().toDouble();
+                    obj->setObjectStartPoint(v);
                 }
                 if (objName == "lineEditLineStartY") {
-                    obj->setObjectY1(-lineEdits["line-start-y"]->text().toDouble());
+                    EmbVector v = to_EmbVector(obj->objectStartPoint());
+                    v.y = -lineEdits["line-start-y"]->text().toDouble();
+                    obj->setObjectStartPoint(v);
                 }
                 if (objName == "lineEditLineEndX") {
-                    obj->setObjectX2(lineEdits["line-end-x"]->text().toDouble());
+                    EmbVector v = to_EmbVector(obj->objectStartPoint());
+                    v.x = lineEdits["line-end-x"]->text().toDouble();
+                    obj->setObjectEndPoint(v);
                 }
                 if (objName == "lineEditLineEndY") {
-                    obj->setObjectY2(-lineEdits["line-end-y"]->text().toDouble());
+                    EmbVector v = to_EmbVector(obj->objectStartPoint());
+                    v.y = -lineEdits["line-end-y"]->text().toDouble();
+                    obj->setObjectEndPoint(v);
                 }
                 break;
             case OBJ_TYPE_PATH: // \todo field editing

@@ -3760,15 +3760,9 @@ set_prompt_prefix_action(String args)
     return "";
 }
 
-/*
 static String
-add_to_selection_action(String args)
+clear_selection_action(String args)
 {
-    AddToSelection();
-    return "";
-}
-
-if (command == "clear-selection") {
     View* gview = activeView();
     if (gview) {
         gview->clearSelection();
@@ -3776,47 +3770,16 @@ if (command == "clear-selection") {
     return "";
 }
 
-if (command == "delete selection") {
-    nativeDeleteSelected();
+static String
+debug_action(String args)
+{
+    debug_message(args);
     return "";
 }
 
-if (command == "debug") {
-    scriptValDebug();
-    return "";
-}
-
-if (command == "error") {
-    scriptValError();
-    return "";
-}
-
-if (command == "todo") {
-    Todo();
-    return "";
-}
-
-if (command == "appendPromptHistory") {
-    AppendPromptHistory();
-    return "";
-}
-
-if (command == "isInt") {
-    IsInt();
-    return "";
-}
-
-if (command == "previewOn") {
-    preview_on_action();
-    return "";
-}
-
-if (command == "previewOff")
-    preview_off_action();
-    return "";
-}
-
-if (command == "vulcanize") {
+static String
+vulcanize_action(String args)
+{
     View* gview = activeView();
     if (gview) {
         gview->vulcanizeRubberRoom();
@@ -3824,7 +3787,10 @@ if (command == "vulcanize") {
     return "";
 }
 
-if (command == "rubber") {
+static String
+rubber_action(String command)
+{
+    /*
     if (command == "allow") {
         allow_rubber_action();
         return "";
@@ -3856,94 +3822,16 @@ if (command == "rubber") {
         spare_rubber_action();
         return "";
     }
+    */
     return "";
 }
 
-if (command == "setCursorShape") {
-    SetCursorShape();
-    return "";
-}
-
-if (command == "calculateAngle") {
-    CalculateAngle();
-    return "";
-}
-
-if (command == "calculateDistance") {
-    CalculateDistance();
-    return "";
-}
-
-if (command == "perpendicularDistance") {
-    PerpendicularDistance();
-    return "";
-}
-
-if (command == "addToSelection") {
-    scriptValAddToSelection();
-    return "";
-}
-
-if (command == "clearSelection") {
-    scriptValClearSelection();
-    return "";
-}
-
-if (command == "deleteSelected") {
-    scriptValDeleteSelected();
-    return "";
-}
-
-if (command == "cutSelected") {
-    scriptValCutSelected);
-    return "";
-}
-
-if (command == "copySelected") {
-    scriptValCopySelected);
-    return "";
-}
-
-if (command == "pasteSelected") {
-    scriptValPasteSelected();
-    return "";
-}
-
-if (command == "moveSelected") {
-    scriptValMoveSelected();
-    return "";
-}
-
-if (command == "scaleSelected") {
-    scriptValScaleSelected();
-    return "";
-}
-
-if (command == "rotateSelected") {
-    scriptValRotateSelected();
-    return "";
-}
-
-if (command == "mirrorSelected") {
-    scriptValMirrorSelected();
-    return "";
-}
-
-if (command == "include") {
-    Include();
-    return "";
-}
-
-if (command == "blink-prompt") {
+static String
+blink_prompt_action(String args)
+{
     prompt->startBlinking();
     return "";
 }
-
-if (command == "SetPromptPrefix") {
-    setPromptPrefix(args[0]);
-    return "";
-}
-*/
 
 /**
  * @brief Inspired by PyArg_ParseTupleAndKeywords allowing
@@ -4184,11 +4072,6 @@ preview_on_action(String args)
     */
     return "";
 }
-
-/*
-"preview off", nativepreview_off_action();
-"allow rubber", nativeallow_rubber_action();
-*/
 
 /**
  * @brief set_rubber_text_action

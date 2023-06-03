@@ -700,10 +700,16 @@ Geometry::objectQuadrant90()
 }
 
 QPointF
-Geometry::objectQuadrant180() { return objectCenter() + QPointF(-objectRadius(),0); }
+Geometry::objectQuadrant180()
+{
+    return objectCenter() + QPointF(-objectRadius(),0);
+}
 
 QPointF
-Geometry::objectQuadrant270() { return objectCenter() + QPointF(0, objectRadius()); }
+Geometry::objectQuadrant270()
+{
+    return objectCenter() + QPointF(0, objectRadius());
+}
 
 EmbReal
 Geometry::objectWidth()
@@ -759,37 +765,6 @@ Geometry::setObjectCenterY(EmbReal centerY)
     setY(centerY);
 }
 
-void
-Geometry::setObjectX1(EmbReal x)
-{
-    EmbVector v = to_EmbVector(objectEndPoint1());
-    v.x = x;
-    setObjectEndPoint1(v);
-}
-
-void
-Geometry::setObjectY1(EmbReal y)
-{
-    EmbVector v = to_EmbVector(objectEndPoint1());
-    v.y = y;
-    setObjectEndPoint1(v);
-}
-
-void
-Geometry::setObjectX2(EmbReal x)
-{
-    EmbVector v = to_EmbVector(objectEndPoint2());
-    v.x = x;
-    setObjectEndPoint2(v);
-}
-
-void
-Geometry::setObjectY2(EmbReal y)
-{
-    EmbVector v = to_EmbVector(objectEndPoint2());
-    v.y = y;
-    setObjectEndPoint2(v);
-}
 QRectF
 Geometry::rect()
 {
@@ -940,15 +915,8 @@ Geometry::gripEdit(const QPointF& before, const QPointF& after)
 EmbReal
 Geometry::objectAngle()
 {
-    switch (Type) {
-    case OBJ_TYPE_DIMLEADER: {
-        EmbReal angle = objLine.angle() - rotation();
-        return std::fmod(angle, 360.0f);
-    }
-    default:
-        break;
-    }
-    return 0.0f;
+    EmbReal angle = objLine.angle() - rotation();
+    return std::fmod(angle, 360.0);
 }
 
 /**
@@ -964,7 +932,63 @@ Geometry::objectSavePath()
         QRectF r = rect();
         path.arcMoveTo(r, 0);
         path.arcTo(r, 0, 360);
+        break;
+    }
 
+    case OBJ_TYPE_ELLIPSE: {
+        QRectF r = rect();
+        path.arcMoveTo(r, 0);
+        path.arcTo(r, 0, 360);
+        break;
+    }
+
+    case OBJ_TYPE_LINE: {
+        /* \todo discards qualifiers error?
+        QPointF delta = objectDelta();
+        path.moveTo(objectStartPoint());
+        path.lineTo(delta.x(), delta.y());
+        */
+        break;
+    }
+
+    case OBJ_TYPE_POINT: {
+        path.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
+        break;
+    }
+    
+    case OBJ_TYPE_POLYLINE:
+    case OBJ_TYPE_PATH: {
+        path = normalPath;
+        break;
+    }
+
+    case OBJ_TYPE_POLYGON: {
+        path = normalPath;
+        path.closeSubpath();
+        break;
+    }
+
+    case OBJ_TYPE_RECTANGLE: {
+        QRectF r = rect();
+        path.moveTo(r.bottomLeft());
+        path.lineTo(r.bottomRight());
+        path.lineTo(r.topRight());
+        path.lineTo(r.topLeft());
+        path.lineTo(r.bottomLeft());
+        break;
+    }
+
+    default:
+        break;
+    }
+
+    switch (Type) {
+    case OBJ_TYPE_CIRCLE:
+    case OBJ_TYPE_ELLIPSE:
+    case OBJ_TYPE_POLYLINE:
+    case OBJ_TYPE_POLYGON:
+    case OBJ_TYPE_PATH:
+    case OBJ_TYPE_RECTANGLE: {
         EmbReal s = scale();
         QTransform trans;
         trans.rotate(rotation());
@@ -974,6 +998,7 @@ Geometry::objectSavePath()
     default:
         break;
     }
+
     return path;
 }
 
@@ -1869,20 +1894,6 @@ Geometry::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidg
     painter->drawEllipse(rect());
 }
 
-QPainterPath Geometry::objectSavePath()
-{
-    QPainterPath path;
-    QRectF r = rect();
-    path.arcMoveTo(r, 0);
-    path.arcTo(r, 0, 360);
-
-    EmbReal s = scale();
-    QTransform trans;
-    trans.rotate(rotation());
-    trans.scale(s,s);
-    return trans.map(path);
-}
-
 ImageObject::ImageObject(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, QGraphicsItem* parent) : Geometry(OBJ_TYPE_IMAGE, parent)
 {
     debug_message("ImageObject Constructor()");
@@ -2112,17 +2123,6 @@ Geometry::objectMidPoint()
 }
 
 /**
- * @brief Geometry::objectAngle
- * @return
- */
-EmbReal
-Geometry::objectAngle()
-{
-    EmbReal angle = objLine.angle() - rotation();
-    return std::fmod(angle, 360.0);
-}
-
-/**
  * @brief Geometry::paint
  * @param painter
  * @param option
@@ -2148,20 +2148,6 @@ Geometry::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidg
         && objScene->property("ENABLE_REAL").toBool()) {
         realRender(painter, path());
     }
-}
-
-/**
- * @brief Geometry::objectSavePath
- * @return
- */
-QPainterPath
-Geometry::objectSavePath()
-{
-    QPainterPath path;
-    /* \todo discards qualifiers error. */
-    // QPointF delta = objectDelta();
-    // path.lineTo(delta.x(), delta.y());
-    return path;
 }
 
 PathObject::PathObject(EmbReal x, EmbReal y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent) : Geometry(OBJ_TYPE_PATH, parent)
@@ -2328,24 +2314,6 @@ Geometry::updateRubber(QPainter* painter)
             }
         }
     }
-}
-
-/**
- * @brief Geometry::objectSavePath
- * @return
- */
-QPainterPath
-Geometry::objectSavePath()
-{
-    QPainterPath path;
-    switch (Type) {
-    case OBJ_TYPE_POINT:
-        path.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
-        break;
-    default:
-        break;
-    }
-    return path;
 }
 
 Geometry::Geometry(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : Geometry(OBJ_TYPE_POLYGON, parent)
@@ -2817,40 +2785,6 @@ Geometry::findIndex(const QPointF& point)
 }
 
 /**
- * @brief Geometry::objectSavePath
- * @return
- */
-QPainterPath
-Geometry::objectSavePath()
-{
-    switch (Type) {
-    case OBJ_TYPE_POLYLINE:
-    case OBJ_TYPE_PATH: {
-        EmbReal s = scale();
-        QTransform trans;
-        trans.rotate(rotation());
-        trans.scale(s,s);
-        return trans.map(normalPath);
-        break;
-    }
-
-    case OBJ_TYPE_POLYGON:
-        QPainterPath closedPath = normalPath;
-        closedPath.closeSubpath();
-        EmbReal s = scale();
-        QTransform trans;
-        trans.rotate(rotation());
-        trans.scale(s,s);
-        return trans.map(closedPath);
-        break;
-    }
-
-    default:
-        break;
-    }
-}
-
-/**
  * \brief .
  */
 Geometry::Geometry(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, QGraphicsItem* parent) : Geometry(OBJ_TYPE_RECTANGLE, parent)
@@ -3044,29 +2978,6 @@ void Geometry::updateRubber(QPainter* painter)
     }
 }
 
-/**
- * \brief .
- */
-QPainterPath
-Geometry::objectSavePath()
-{
-    QPainterPath path;
-    if (Type == OBJ_TYPE_RECTANGLE) {
-        QRectF r = rect();
-        path.moveTo(r.bottomLeft());
-        path.lineTo(r.bottomRight());
-        path.lineTo(r.topRight());
-        path.lineTo(r.topLeft());
-        path.lineTo(r.bottomLeft());
-
-        EmbReal s = scale();
-        QTransform trans;
-        trans.rotate(rotation());
-        trans.scale(s,s);
-        return trans.map(path);
-    }
-    return path;
-}
 #endif
 
 /**
@@ -3727,9 +3638,14 @@ void Geometry::setObjectText(QString  str)
     else if (objTextJustify == "Center") {
         textPath.translate(-jRect.center().x(), 0);
     }
-    else if (objTextJustify == "Right") { textPath.translate(-jRect.right(), 0); }
-    else if (objTextJustify == "Aligned") { } //TODO: Geometry Aligned Justification
-    else if (objTextJustify == "Middle") { textPath.translate(-jRect.center()); }
+    else if (objTextJustify == "Right") {
+    	textPath.translate(-jRect.right(), 0);
+    }
+    else if (objTextJustify == "Aligned") {
+    } //TODO: Geometry Aligned Justification
+    else if (objTextJustify == "Middle") {
+        textPath.translate(-jRect.center());
+    }
     else if (objTextJustify == "Fit") { } //TODO: Geometry Fit Justification
     else if (objTextJustify == "Top Left") { textPath.translate(-jRect.topLeft()); }
     else if (objTextJustify == "Top Center") { textPath.translate(-jRect.center().x(), -jRect.top()); }
@@ -4015,17 +3931,17 @@ Geometry::subPathList()
  * @brief circle_main
  * @return
  */
-Dictionary
+String
 circle_main(void)
 {
-    Dictionary global;
-    global["mode"] = node("CIRCLE_MODE_1P_RAD");
+    String properties;
+    properties["mode"] = node("CIRCLE_MODE_1P_RAD");
     /*
     initCommand();
     clearSelection();
     setPromptPrefix(tr("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
     */
-    return global;
+    return properties;
 }
 
 /**
@@ -4042,55 +3958,55 @@ circle_main(void)
  * oppose one another.
  */
 void
-Geometry::circle_click(Dictionary global, EmbVector v)
+Geometry::circle_click(String properties, EmbVector v)
 {
     /*
-    if (global["mode"].s == "CIRCLE_MODE_1P_RAD") {
-        auto iter = global.find("point1");
-        if (iter == global.end()) {
-            global["point1"] = node(v);
-            global["center"] = node(v);
+    if (properties["mode"].s == "CIRCLE_MODE_1P_RAD") {
+        auto iter = properties.find("point1");
+        if (iter == properties.end()) {
+            properties["point1"] = node(v);
+            properties["center"] = node(v);
             addRubber("CIRCLE");
             setRubberMode("CIRCLE_1P_RAD");
-            setRubberPoint("CIRCLE_CENTER", global->center.x, global->center.y);
+            setRubberPoint("CIRCLE_CENTER", properties->center.x, properties->center.y);
             actuator("append-prompt");
             setPromptPrefix(tr("Specify radius of circle or [Diameter]: "));
         }
         else {
-            global["point2"] = node(v);
+            properties["point2"] = node(v);
             setRubberPoint("CIRCLE_RADIUS", v);
             actuator("vulcanize");
             actuator("append-prompt");
             actuator("end");
         }
     }
-    else if (global["mode"].s == MODE_1P_DIA) {
-        auto iter = global.find("point1");
-        if (iter == global.end()) {
+    else if (properties["mode"].s == MODE_1P_DIA) {
+        auto iter = properties.find("point1");
+        if (iter == properties.end()) {
             error("CIRCLE", tr("This should never happen."));
         }
         else {
-            global.x2 = x;
-            global.y2 = y;
-            setRubberPoint("CIRCLE_DIAMETER", global.x2, global.y2);
+            properties.x2 = x;
+            properties.y2 = y;
+            setRubberPoint("CIRCLE_DIAMETER", properties.x2, properties.y2);
             actuator("vulcanize");
             appendPromptHistory();
             actuator("end");
         }
     }
-    else if (global["mode"].s == "MODE_2P") {
-        auto iter1 = global.find("point1");
-        auto iter2 = global.find("point2");
-        if (iter1 == global.end()) {
-            global.point1 = v;
+    else if (properties["mode"].s == "MODE_2P") {
+        auto iter1 = properties.find("point1");
+        auto iter2 = properties.find("point2");
+        if (iter1 == properties.end()) {
+            properties.point1 = v;
             addRubber("CIRCLE");
             setRubberMode("CIRCLE_2P");
             setRubberPoint("CIRCLE_TAN1", v);
             appendPromptHistory();
             setPromptPrefix(tr("Specify second end point of circle's diameter: "));
         }
-        else if (iter2 == global.end()) {
-            global.point2 = v;
+        else if (iter2 == properties.end()) {
+            properties.point2 = v;
             setRubberPoint("CIRCLE_TAN2", v);
             actuator("vulcanize");
             appendPromptHistory();
@@ -4100,27 +4016,27 @@ Geometry::circle_click(Dictionary global, EmbVector v)
             error("CIRCLE", tr("This should never happen."));
         }
     }
-    else if (global["mode"].s == MODE_3P) {
-        if (std::isnan(global.x1)) {
-            global.x1 = x;
-            global.y1 = y;
+    else if (properties["mode"].s == MODE_3P) {
+        if (std::isnan(properties.x1)) {
+            properties.x1 = x;
+            properties.y1 = y;
             appendPromptHistory();
             setPromptPrefix(tr("Specify second point on circle: "));
         }
-        else if (std::isnan(global.x2)) {
-            global.x2 = x;
-            global.y2 = y;
+        else if (std::isnan(properties.x2)) {
+            properties.x2 = x;
+            properties.y2 = y;
             addRubber("CIRCLE");
             setRubberMode("CIRCLE_3P");
-            setRubberPoint("CIRCLE_TAN1", global.x1, global.y1);
-            setRubberPoint("CIRCLE_TAN2", global.x2, global.y2);
+            setRubberPoint("CIRCLE_TAN1", properties.x1, properties.y1);
+            setRubberPoint("CIRCLE_TAN2", properties.x2, properties.y2);
             appendPromptHistory();
             setPromptPrefix(tr("Specify third point on circle: "));
         }
-        else if (std::isnan(global.x3)) {
-            global.x3 = x;
-            global.y3 = y;
-            setRubberPoint("CIRCLE_TAN3", global.x3, global.y3);
+        else if (std::isnan(properties.x3)) {
+            properties.x3 = x;
+            properties.y3 = y;
+            setRubberPoint("CIRCLE_TAN3", properties.x3, properties.y3);
             actuator("vulcanize");
             appendPromptHistory();
             actuator("end");
@@ -4129,22 +4045,22 @@ Geometry::circle_click(Dictionary global, EmbVector v)
             error("CIRCLE", tr("This should never happen."));
         }
     }
-    else if (global["mode"].s == MODE_TTR) {
-        if (std::isnan(global.x1)) {
-            global.x1 = x;
-            global.y1 = y;
+    else if (properties["mode"].s == MODE_TTR) {
+        if (std::isnan(properties.x1)) {
+            properties.x1 = x;
+            properties.y1 = y;
             appendPromptHistory();
             setPromptPrefix(tr("Specify point on object for second tangent of circle: "));
         }
-        else if (std::isnan(global.x2)) {
-            global.x2 = x;
-            global.y2 = y;
+        else if (std::isnan(properties.x2)) {
+            properties.x2 = x;
+            properties.y2 = y;
             appendPromptHistory();
             setPromptPrefix(tr("Specify radius of circle: "));
         }
-        else if (std::isnan(global.x3)) {
-            global.x3 = x;
-            global.y3 = y;
+        else if (std::isnan(properties.x3)) {
+            properties.x3 = x;
+            properties.y3 = y;
             appendPromptHistory();
             setPromptPrefix(tr("Specify second point: "));
         }
@@ -4171,18 +4087,18 @@ String
 circle_prompt(String str)
 {
     /*
-    if (global["mode"].s == MODE_1P_RAD) {
-        if (std::isnan(global.x1)) {
+    if (properties["mode"].s == MODE_1P_RAD) {
+        if (std::isnan(properties.x1)) {
             if (str == "2P") {
-                global.mode = MODE_2P;
+                properties.mode = MODE_2P;
                 setPromptPrefix(tr("Specify first end point of circle's diameter: "));
             }
             else if (str == "3P") {
-                global.mode = MODE_3P;
+                properties.mode = MODE_3P;
                 setPromptPrefix(tr("Specify first point of circle: "));
             }
             else if (str == "T" || str == "TTR") {
-                global.mode = MODE_TTR;
+                properties.mode = MODE_TTR;
                 setPromptPrefix(tr("Specify point on object for first tangent of circle: "));
             }
             else {
@@ -4192,20 +4108,20 @@ circle_prompt(String str)
                     setPromptPrefix(tr("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
                 }
                 else {
-                    global.x1 = Number(strList[0]);
-                    global.y1 = Number(strList[1]);
-                    global->center.x = global.x1;
-                    global->center.y = global.y1;
+                    properties.x1 = Number(strList[0]);
+                    properties.y1 = Number(strList[1]);
+                    properties->center.x = properties.x1;
+                    properties->center.y = properties.y1;
                     addRubber("CIRCLE");
                     setRubberMode("CIRCLE_1P_RAD");
-                    setRubberPoint("CIRCLE_CENTER", global->center.x, global->center.y);
+                    setRubberPoint("CIRCLE_CENTER", properties->center.x, properties->center.y);
                     setPromptPrefix(tr("Specify radius of circle or [Diameter]: "));
                 }
             }
         }
         else {
             if (str == "D" || str == "DIAMETER") {
-                global.mode = MODE_1P_DIA;
+                properties.mode = MODE_1P_DIA;
                 setRubberMode("CIRCLE_1P_DIA");
                 setPromptPrefix(tr("Specify diameter of circle: "));
             }
@@ -4216,31 +4132,31 @@ circle_prompt(String str)
                     setPromptPrefix(tr("Specify radius of circle or [Diameter]: "));
                 }
                 else {
-                    global.rad = num;
-                    global.x2 = global.x1 + global.rad;
-                    global.y2 = global.y1;
-                    setRubberPoint("CIRCLE_RADIUS", global.x2, global.y2);
+                    properties.rad = num;
+                    properties.x2 = properties.x1 + properties.rad;
+                    properties.y2 = properties.y1;
+                    setRubberPoint("CIRCLE_RADIUS", properties.x2, properties.y2);
                     actuator("vulcanize");
                     actuator("end");
                 }
             }
         }
     }
-    else if (global["mode"].s == MODE_1P_DIA) {
-        if (std::isnan(global.x1)) {
+    else if (properties["mode"].s == MODE_1P_DIA) {
+        if (std::isnan(properties.x1)) {
             error("CIRCLE", tr("This should never happen."));
         }
-        if (std::isnan(global.x2)) {
+        if (std::isnan(properties.x2)) {
             EmbReal num = Number(str);
             if (std::isnan(num)) {
                 alert(tr("Requires numeric distance or second point."));
                 setPromptPrefix(tr("Specify diameter of circle: "));
             }
             else {
-                global.dia = num;
-                global.x2 = global.x1 + global.dia;
-                global.y2 = global.y1;
-                setRubberPoint("CIRCLE_DIAMETER", global.x2, global.y2);
+                properties.dia = num;
+                properties.x2 = properties.x1 + properties.dia;
+                properties.y2 = properties.y1;
+                setRubberPoint("CIRCLE_DIAMETER", properties.x2, properties.y2);
                 actuator("vulcanize");
                 actuator("end");
             }
@@ -4249,32 +4165,32 @@ circle_prompt(String str)
             error("CIRCLE", tr("This should never happen."));
         }
     }
-    else if (global["mode"].s == MODE_2P) {
-        if (std::isnan(global.x1)) {
+    else if (properties["mode"].s == MODE_2P) {
+        if (std::isnan(properties.x1)) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Invalid point."));
                 setPromptPrefix(tr("Specify first end point of circle's diameter: "));
             }
             else {
-                global.x1 = Number(strList[0]);
-                global.y1 = Number(strList[1]);
+                properties.x1 = Number(strList[0]);
+                properties.y1 = Number(strList[1]);
                 addRubber("CIRCLE");
                 setRubberMode("CIRCLE_2P");
-                setRubberPoint("CIRCLE_TAN1", global.x1, global.y1);
+                setRubberPoint("CIRCLE_TAN1", properties.x1, properties.y1);
                 setPromptPrefix(tr("Specify second end point of circle's diameter: "));
             }
         }
-        else if (std::isnan(global.x2)) {
+        else if (std::isnan(properties.x2)) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Invalid point."));
                 setPromptPrefix(tr("Specify second end point of circle's diameter: "));
             }
             else {
-                global.x2 = Number(strList[0]);
-                global.y2 = Number(strList[1]);
-                setRubberPoint("CIRCLE_TAN2", global.x2, global.y2);
+                properties.x2 = Number(strList[0]);
+                properties.y2 = Number(strList[1]);
+                setRubberPoint("CIRCLE_TAN2", properties.x2, properties.y2);
                 actuator("vulcanize");
                 actuator("end");
             }
@@ -4283,45 +4199,45 @@ circle_prompt(String str)
             error("CIRCLE", tr("This should never happen."));
         }
     }
-    else if (global["mode"].s == MODE_3P) {
-        if (std::isnan(global.x1)) {
+    else if (properties["mode"].s == MODE_3P) {
+        if (std::isnan(properties.x1)) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Invalid point."));
                 setPromptPrefix(tr("Specify first point of circle: "));
             }
             else {
-                global.x1 = Number(strList[0]);
-                global.y1 = Number(strList[1]);
+                properties.x1 = Number(strList[0]);
+                properties.y1 = Number(strList[1]);
                 setPromptPrefix(tr("Specify second point of circle: "));
             }
         }
-        else if (std::isnan(global.x2)) {
+        else if (std::isnan(properties.x2)) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Invalid point."));
                 setPromptPrefix(tr("Specify second point of circle: "));
             }
             else {
-                global.x2 = Number(strList[0]);
-                global.y2 = Number(strList[1]);
+                properties.x2 = Number(strList[0]);
+                properties.y2 = Number(strList[1]);
                 addRubber("CIRCLE");
                 setRubberMode("CIRCLE_3P");
-                setRubberPoint("CIRCLE_TAN1", global.x1, global.y1);
-                setRubberPoint("CIRCLE_TAN2", global.x2, global.y2);
+                setRubberPoint("CIRCLE_TAN1", properties.x1, properties.y1);
+                setRubberPoint("CIRCLE_TAN2", properties.x2, properties.y2);
                 setPromptPrefix(tr("Specify third point of circle: "));
             }
         }
-        else if (std::isnan(global.x3)) {
+        else if (std::isnan(properties.x3)) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Invalid point."));
                 setPromptPrefix(tr("Specify third point of circle: "));
             }
             else {
-                global.x3 = Number(strList[0]);
-                global.y3 = Number(strList[1]);
-                setRubberPoint("CIRCLE_TAN3", global.x3, global.y3);
+                properties.x3 = Number(strList[0]);
+                properties.y3 = Number(strList[1]);
+                setRubberPoint("CIRCLE_TAN3", properties.x3, properties.y3);
                 actuator("vulcanize");
                 actuator("end");
             }
@@ -4330,7 +4246,7 @@ circle_prompt(String str)
             error("CIRCLE", tr("This should never happen."));
         }
     }
-    else if (global["mode"].s == MODE_TTR) {
+    else if (properties["mode"].s == MODE_TTR) {
         todo("CIRCLE", "prompt() for TTR");
     }
     */
@@ -4340,38 +4256,38 @@ circle_prompt(String str)
 /**
  * .
  */
-Dictionary
+String
 distance_main(void)
 {
-    Dictionary global;
+    String properties;
     /*
     initCommand();
     clearSelection();
     setPromptPrefix(tr("Specify first point: "));
     */
-    return global;
+    return properties;
 }
 
 /**
  * .
  */
 void
-distance_click(Dictionary global, EmbVector v)
+distance_click(String properties, EmbVector v)
 {
     /*
-    if (std::isnan(global.x1)) {
-        global.x1 = x;
-        global.y1 = y;
+    if (std::isnan(properties.x1)) {
+        properties.x1 = x;
+        properties.y1 = y;
         addRubber("LINE");
         setRubberMode("LINE");
-        setRubberPoint("LINE_START", global.x1, global.y1);
+        setRubberPoint("LINE_START", properties.x1, properties.y1);
         appendPromptHistory();
         setPromptPrefix(tr("Specify second point: "));
     }
     else {
         appendPromptHistory();
-        global.x2 = x;
-        global.y2 = y;
+        properties.x2 = x;
+        properties.y2 = y;
         reportDistance();
         actuator("end");
     }
@@ -4400,17 +4316,17 @@ distance_prompt(String args)
 {
     /*
     EmbReal strList = str.split(",");
-    if (std::isnan(global.x1)) {
+    if (std::isnan(properties.x1)) {
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Requires numeric distance or two points."));
             setPromptPrefix(tr("Specify first point: "));
         }
         else {
-            global.x1 = Number(strList[0]);
-            global.y1 = Number(strList[1]);
+            properties.x1 = Number(strList[0]);
+            properties.y1 = Number(strList[1]);
             addRubber("LINE");
             setRubberMode("LINE");
-            setRubberPoint("LINE_START", global.x1, global.y1);
+            setRubberPoint("LINE_START", properties.x1, properties.y1);
             setPromptPrefix(tr("Specify second point: "));
         }
     }
@@ -4420,8 +4336,8 @@ distance_prompt(String args)
             setPromptPrefix(tr("Specify second point: "));
         }
         else {
-            global.x2 = Number(strList[0]);
-            global.y2 = Number(strList[1]);
+            properties.x2 = Number(strList[0]);
+            properties.y2 = Number(strList[1]);
             reportDistance();
             actuator("end");
         }
@@ -4446,11 +4362,11 @@ reportDistance()
 {
     EmbVector delta;
     /*
-    EmbReal dx = global.x2 - global.x1;
-    EmbReal dy = global.y2 - global.y1;
+    EmbReal dx = properties.x2 - properties.x1;
+    EmbReal dy = properties.y2 - properties.y1;
 
-    EmbReal dist = calculateDistance(global.x1, global.y1, global.x2, global.y2);
-    EmbReal angle = calculateAngle(global.x1, global.y1, global.x2, global.y2);
+    EmbReal dist = calculateDistance(properties.x1, properties.y1, properties.x2, properties.y2);
+    EmbReal angle = calculateAngle(properties.x1, properties.y1, properties.x2, properties.y2);
 
     setPromptPrefix(tr("Distance") + " = " + dist.toString() + ", " + tr("Angle") + " = " + angle.toString());
     appendPromptHistory();
@@ -4466,24 +4382,24 @@ String
 dolphin_main(String args)
 {
     /*
-    Dictionary global;
-    global.numPoints = 512; //Default //TODO: min:64 max:8192
-    global->center.x;
-    global->center.y;
-    global.sx = 0.04; //Default
-    global.sy = 0.04; //Default
-    global.numPoints;
-    global.mode;
+    String properties;
+    properties.numPoints = 512; //Default //TODO: min:64 max:8192
+    properties->center.x;
+    properties->center.y;
+    properties.sx = 0.04; //Default
+    properties.sy = 0.04; //Default
+    properties.numPoints;
+    properties.mode;
 
     initCommand();
     clearSelection();
-    global->center.x = NaN;
-    global->center.y = NaN;
-    global.mode = MODE_NUM_POINTS;
+    properties->center.x = NaN;
+    properties->center.y = NaN;
+    properties.mode = MODE_NUM_POINTS;
 
     addRubber("POLYGON");
     setRubberMode("POLYGON");
-    updateDolphin(global.numPoints, global.sx, global.sy);
+    updateDolphin(properties.numPoints, properties.sx, properties.sy);
     spareRubber("POLYGON");
     actuator("end");
     */
@@ -4517,21 +4433,21 @@ updateDolphin(int numPoints, EmbReal xScale, EmbReal yScale)
  * @brief ellipse_main
  * @return
  */
-Dictionary
+String
 ellipse_main(void)
 {
-    Dictionary global;
-    global["mode"] = node("MODE_MAJORDIAMETER_MINORRADIUS");
+    String properties;
+    properties["mode"] = node("MODE_MAJORDIAMETER_MINORRADIUS");
     /*
-    global.width;
-    global.height;
-    global.rot;
-    global.mode;
+    properties.width;
+    properties.height;
+    properties.rot;
+    properties.mode;
     initCommand();
     clearSelection();
     setPromptPrefix(tr("Specify first axis start point or [Center]: "));
     */
-    return global;
+    return properties;
 }
 
 /**
@@ -4541,37 +4457,37 @@ ellipse_main(void)
 void
 ellipse_click(x, y)
 {
-    if (global["mode"].s == MODE_MAJORDIAMETER_MINORRADIUS) {
-        if (std::isnan(global.x1)) {
-            global.x1 = x;
-            global.y1 = y;
+    if (properties["mode"].s == MODE_MAJORDIAMETER_MINORRADIUS) {
+        if (std::isnan(properties.x1)) {
+            properties.x1 = x;
+            properties.y1 = y;
             addRubber("ELLIPSE");
             setRubberMode("ELLIPSE_LINE");
-            setRubberPoint("ELLIPSE_LINE_POINT1", global.x1, global.y1);
+            setRubberPoint("ELLIPSE_LINE_POINT1", properties.x1, properties.y1);
             appendPromptHistory();
             setPromptPrefix(tr("Specify first axis end point: "));
         }
-        else if (std::isnan(global.x2)) {
-            global.x2 = x;
-            global.y2 = y;
-            global->center.x = (global.x1 + global.x2)/2.0;
-            global->center.y = (global.y1 + global.y2)/2.0;
-            global.width = calculateDistance(global.x1, global.y1, global.x2, global.y2);
-            global.rot = calculateAngle(global.x1, global.y1, global.x2, global.y2);
+        else if (std::isnan(properties.x2)) {
+            properties.x2 = x;
+            properties.y2 = y;
+            properties->center.x = (properties.x1 + properties.x2)/2.0;
+            properties->center.y = (properties.y1 + properties.y2)/2.0;
+            properties.width = calculateDistance(properties.x1, properties.y1, properties.x2, properties.y2);
+            properties.rot = calculateAngle(properties.x1, properties.y1, properties.x2, properties.y2);
             setRubberMode("ELLIPSE_MAJORDIAMETER_MINORRADIUS");
-            setRubberPoint("ELLIPSE_AXIS1_POINT1", global.x1, global.y1);
-            setRubberPoint("ELLIPSE_AXIS1_POINT2", global.x2, global.y2);
-            setRubberPoint("ELLIPSE_CENTER", global->center.x, global->center.y);
-            setRubberPoint("ELLIPSE_WIDTH", global.width, 0);
-            setRubberPoint("ELLIPSE_ROT", global.rot, 0);
+            setRubberPoint("ELLIPSE_AXIS1_POINT1", properties.x1, properties.y1);
+            setRubberPoint("ELLIPSE_AXIS1_POINT2", properties.x2, properties.y2);
+            setRubberPoint("ELLIPSE_CENTER", properties->center.x, properties->center.y);
+            setRubberPoint("ELLIPSE_WIDTH", properties.width, 0);
+            setRubberPoint("ELLIPSE_ROT", properties.rot, 0);
             appendPromptHistory();
             setPromptPrefix(tr("Specify second axis end point or [Rotation]: "));
         }
-        else if (std::isnan(global.x3)) {
-            global.x3 = x;
-            global.y3 = y;
-            global.height = perpendicularDistance(global.x3, global.y3, global.x1, global.y1, global.x2, global.y2)*2.0;
-            setRubberPoint("ELLIPSE_AXIS2_POINT2", global.x3, global.y3);
+        else if (std::isnan(properties.x3)) {
+            properties.x3 = x;
+            properties.y3 = y;
+            properties.height = perpendicularDistance(properties.x3, properties.y3, properties.x1, properties.y1, properties.x2, properties.y2)*2.0;
+            setRubberPoint("ELLIPSE_AXIS2_POINT2", properties.x3, properties.y3);
             actuator("vulcanize");
             appendPromptHistory();
             actuator("end");
@@ -4580,36 +4496,36 @@ ellipse_click(x, y)
             error("ELLIPSE", tr("This should never happen."));
         }
     }
-    else if (global["mode"].s == MODE_MAJORRADIUS_MINORRADIUS) {
-        if (std::isnan(global.x1)) {
-            global.x1 = x;
-            global.y1 = y;
-            global->center.x = global.x1;
-            global->center.y = global.y1;
+    else if (properties["mode"].s == MODE_MAJORRADIUS_MINORRADIUS) {
+        if (std::isnan(properties.x1)) {
+            properties.x1 = x;
+            properties.y1 = y;
+            properties->center.x = properties.x1;
+            properties->center.y = properties.y1;
             addRubber("ELLIPSE");
             setRubberMode("ELLIPSE_LINE");
-            setRubberPoint("ELLIPSE_LINE_POINT1", global.x1, global.y1);
-            setRubberPoint("ELLIPSE_CENTER", global->center.x, global->center.y);
+            setRubberPoint("ELLIPSE_LINE_POINT1", properties.x1, properties.y1);
+            setRubberPoint("ELLIPSE_CENTER", properties->center.x, properties->center.y);
             appendPromptHistory();
             setPromptPrefix(tr("Specify first axis end point: "));
         }
-        else if (std::isnan(global.x2)) {
-            global.x2 = x;
-            global.y2 = y;
-            global.width = calculateDistance(global->center.x, global->center.y, global.x2, global.y2)*2.0;
-            global.rot = calculateAngle(global.x1, global.y1, global.x2, global.y2);
+        else if (std::isnan(properties.x2)) {
+            properties.x2 = x;
+            properties.y2 = y;
+            properties.width = calculateDistance(properties->center.x, properties->center.y, properties.x2, properties.y2)*2.0;
+            properties.rot = calculateAngle(properties.x1, properties.y1, properties.x2, properties.y2);
             setRubberMode("ELLIPSE_MAJORRADIUS_MINORRADIUS");
-            setRubberPoint("ELLIPSE_AXIS1_POINT2", global.x2, global.y2);
-            setRubberPoint("ELLIPSE_WIDTH", global.width, 0);
-            setRubberPoint("ELLIPSE_ROT", global.rot, 0);
+            setRubberPoint("ELLIPSE_AXIS1_POINT2", properties.x2, properties.y2);
+            setRubberPoint("ELLIPSE_WIDTH", properties.width, 0);
+            setRubberPoint("ELLIPSE_ROT", properties.rot, 0);
             appendPromptHistory();
             setPromptPrefix(tr("Specify second axis end point or [Rotation]: "));
         }
-        else if (std::isnan(global.x3)) {
-            global.x3 = x;
-            global.y3 = y;
-            global.height = perpendicularDistance(global.x3, global.y3, global->center.x, global->center.y, global.x2, global.y2)*2.0;
-            setRubberPoint("ELLIPSE_AXIS2_POINT2", global.x3, global.y3);
+        else if (std::isnan(properties.x3)) {
+            properties.x3 = x;
+            properties.y3 = y;
+            properties.height = perpendicularDistance(properties.x3, properties.y3, properties->center.x, properties->center.y, properties.x2, properties.y2)*2.0;
+            setRubberPoint("ELLIPSE_AXIS2_POINT2", properties.x3, properties.y3);
             actuator("vulcanize");
             appendPromptHistory();
             actuator("end");
@@ -4618,17 +4534,17 @@ ellipse_click(x, y)
             error("ELLIPSE", tr("This should never happen."));
         }
     }
-    else if (global["mode"].s == MODE_ELLIPSE_ROTATION) {
-        if (std::isnan(global.x1)) {
+    else if (properties["mode"].s == MODE_ELLIPSE_ROTATION) {
+        if (std::isnan(properties.x1)) {
             error("ELLIPSE", tr("This should never happen."));
         }
-        else if (std::isnan(global.x2)) {
+        else if (std::isnan(properties.x2)) {
             error("ELLIPSE", tr("This should never happen."));
         }
-        else if (std::isnan(global.x3)) {
-            EmbReal angle = calculateAngle(global->center.x, global->center.y, x, y);
-            global.height = cos(angle*PI/180.0)*global.width;
-            addEllipse(global->center.x, global->center.y, global.width, global.height, global.rot, false);
+        else if (std::isnan(properties.x3)) {
+            EmbReal angle = calculateAngle(properties->center.x, properties->center.y, x, y);
+            properties.height = cos(angle*PI/180.0)*properties.width;
+            addEllipse(properties->center.x, properties->center.y, properties.width, properties.height, properties.rot, false);
             appendPromptHistory();
             actuator("end");
         }
@@ -4654,10 +4570,10 @@ ellipse_context(String args)
 void
 ellipse_prompt(String args)
 {
-    if (global["mode"].s == MODE_MAJORDIAMETER_MINORRADIUS) {
-        if (std::isnan(global.x1)) {
+    if (properties["mode"].s == MODE_MAJORDIAMETER_MINORRADIUS) {
+        if (std::isnan(properties.x1)) {
             if (str == "C" || str == "CENTER") {
-                global.mode = MODE_MAJORRADIUS_MINORRADIUS;
+                properties.mode = MODE_MAJORRADIUS_MINORRADIUS;
                 setPromptPrefix(tr("Specify center point: "));
             }
             else {
@@ -4667,40 +4583,40 @@ ellipse_prompt(String args)
                     setPromptPrefix(tr("Specify first axis start point or [Center]: "));
                 }
                 else {
-                    global.x1 = Number(strList[0]);
-                    global.y1 = Number(strList[1]);
+                    properties.x1 = Number(strList[0]);
+                    properties.y1 = Number(strList[1]);
                     addRubber("ELLIPSE");
                     setRubberMode("ELLIPSE_LINE");
-                    setRubberPoint("ELLIPSE_LINE_POINT1", global.x1, global.y1);
+                    setRubberPoint("ELLIPSE_LINE_POINT1", properties.x1, properties.y1);
                     setPromptPrefix(tr("Specify first axis end point: "));
                 }
             }
         }
-        else if (std::isnan(global.x2)) {
+        else if (std::isnan(properties.x2)) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Invalid point."));
                 setPromptPrefix(tr("Specify first axis end point: "));
             }
             else {
-                global.x2 = Number(strList[0]);
-                global.y2 = Number(strList[1]);
-                global->center.x = (global.x1 + global.x2)/2.0;
-                global->center.y = (global.y1 + global.y2)/2.0;
-                global.width = calculateDistance(global.x1, global.y1, global.x2, global.y2);
-                global.rot = calculateAngle(global.x1, global.y1, global.x2, global.y2);
+                properties.x2 = Number(strList[0]);
+                properties.y2 = Number(strList[1]);
+                properties->center.x = (properties.x1 + properties.x2)/2.0;
+                properties->center.y = (properties.y1 + properties.y2)/2.0;
+                properties.width = calculateDistance(properties.x1, properties.y1, properties.x2, properties.y2);
+                properties.rot = calculateAngle(properties.x1, properties.y1, properties.x2, properties.y2);
                 setRubberMode("ELLIPSE_MAJORDIAMETER_MINORRADIUS");
-                setRubberPoint("ELLIPSE_AXIS1_POINT1", global.x1, global.y1);
-                setRubberPoint("ELLIPSE_AXIS1_POINT2", global.x2, global.y2);
-                setRubberPoint("ELLIPSE_CENTER", global->center.x, global->center.y);
-                setRubberPoint("ELLIPSE_WIDTH", global.width, 0);
-                setRubberPoint("ELLIPSE_ROT", global.rot, 0);
+                setRubberPoint("ELLIPSE_AXIS1_POINT1", properties.x1, properties.y1);
+                setRubberPoint("ELLIPSE_AXIS1_POINT2", properties.x2, properties.y2);
+                setRubberPoint("ELLIPSE_CENTER", properties->center.x, properties->center.y);
+                setRubberPoint("ELLIPSE_WIDTH", properties.width, 0);
+                setRubberPoint("ELLIPSE_ROT", properties.rot, 0);
                 setPromptPrefix(tr("Specify second axis end point or [Rotation]: "));
             }
         }
-        else if (std::isnan(global.x3)) {
+        else if (std::isnan(properties.x3)) {
             if (str == "R" || str == "ROTATION") {
-                global.mode = MODE_ELLIPSE_ROTATION;
+                properties.mode = MODE_ELLIPSE_ROTATION;
                 setPromptPrefix(tr("Specify rotation: "));
             }
             else {
@@ -4710,56 +4626,56 @@ ellipse_prompt(String args)
                     setPromptPrefix(tr("Specify second axis end point or [Rotation]: "));
                 }
                 else {
-                    global.x3 = Number(strList[0]);
-                    global.y3 = Number(strList[1]);
-                    global.height = perpendicularDistance(global.x3, global.y3, global.x1, global.y1, global.x2, global.y2)*2.0;
-                    setRubberPoint("ELLIPSE_AXIS2_POINT2", global.x3, global.y3);
+                    properties.x3 = Number(strList[0]);
+                    properties.y3 = Number(strList[1]);
+                    properties.height = perpendicularDistance(properties.x3, properties.y3, properties.x1, properties.y1, properties.x2, properties.y2)*2.0;
+                    setRubberPoint("ELLIPSE_AXIS2_POINT2", properties.x3, properties.y3);
                     actuator("vulcanize");
                     actuator("end");
                 }
             }
         }
     }
-    else if (global["mode"].s == MODE_MAJORRADIUS_MINORRADIUS) {
-        if (std::isnan(global.x1)) {
+    else if (properties["mode"].s == MODE_MAJORRADIUS_MINORRADIUS) {
+        if (std::isnan(properties.x1)) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Invalid point."));
                 setPromptPrefix(tr("Specify center point: "));
             }
             else {
-                global.x1 = Number(strList[0]);
-                global.y1 = Number(strList[1]);
-                global->center.x = global.x1;
-                global->center.y = global.y1;
+                properties.x1 = Number(strList[0]);
+                properties.y1 = Number(strList[1]);
+                properties->center.x = properties.x1;
+                properties->center.y = properties.y1;
                 addRubber("ELLIPSE");
                 setRubberMode("ELLIPSE_LINE");
-                setRubberPoint("ELLIPSE_LINE_POINT1", global.x1, global.y1);
-                setRubberPoint("ELLIPSE_CENTER", global->center.x, global->center.y);
+                setRubberPoint("ELLIPSE_LINE_POINT1", properties.x1, properties.y1);
+                setRubberPoint("ELLIPSE_CENTER", properties->center.x, properties->center.y);
                 setPromptPrefix(tr("Specify first axis end point: "));
             }
         }
-        else if (std::isnan(global.x2)) {
+        else if (std::isnan(properties.x2)) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Invalid point."));
                 setPromptPrefix(tr("Specify first axis end point: "));
             }
             else {
-                global.x2 = Number(strList[0]);
-                global.y2 = Number(strList[1]);
-                global.width = calculateDistance(global.x1, global.y1, global.x2, global.y2)*2.0;
-                global.rot = calculateAngle(global.x1, global.y1, global.x2, global.y2);
+                properties.x2 = Number(strList[0]);
+                properties.y2 = Number(strList[1]);
+                properties.width = calculateDistance(properties.x1, properties.y1, properties.x2, properties.y2)*2.0;
+                properties.rot = calculateAngle(properties.x1, properties.y1, properties.x2, properties.y2);
                 setRubberMode("ELLIPSE_MAJORRADIUS_MINORRADIUS");
-                setRubberPoint("ELLIPSE_AXIS1_POINT2", global.x2, global.y2);
-                setRubberPoint("ELLIPSE_WIDTH", global.width, 0);
-                setRubberPoint("ELLIPSE_ROT", global.rot, 0);
+                setRubberPoint("ELLIPSE_AXIS1_POINT2", properties.x2, properties.y2);
+                setRubberPoint("ELLIPSE_WIDTH", properties.width, 0);
+                setRubberPoint("ELLIPSE_ROT", properties.rot, 0);
                 setPromptPrefix(tr("Specify second axis end point or [Rotation]: "));
             }
         }
-        else if (std::isnan(global.x3)) {
+        else if (std::isnan(properties.x3)) {
             if (str == "R" || str == "ROTATION") {
-                global.mode = MODE_ELLIPSE_ROTATION;
+                properties.mode = MODE_ELLIPSE_ROTATION;
                 setPromptPrefix(tr("Specify ellipse rotation: "));
             }
             else {
@@ -4769,32 +4685,32 @@ ellipse_prompt(String args)
                     setPromptPrefix(tr("Specify second axis end point or [Rotation]: "));
                 }
                 else {
-                    global.x3 = Number(strList[0]);
-                    global.y3 = Number(strList[1]);
-                    global.height = perpendicularDistance(global.x3, global.y3, global.x1, global.y1, global.x2, global.y2)*2.0;
-                    setRubberPoint("ELLIPSE_AXIS2_POINT2", global.x3, global.y3);
+                    properties.x3 = Number(strList[0]);
+                    properties.y3 = Number(strList[1]);
+                    properties.height = perpendicularDistance(properties.x3, properties.y3, properties.x1, properties.y1, properties.x2, properties.y2)*2.0;
+                    setRubberPoint("ELLIPSE_AXIS2_POINT2", properties.x3, properties.y3);
                     actuator("vulcanize");
                     actuator("end");
                 }
             }
         }
     }
-    else if (global["mode"].s == MODE_ELLIPSE_ROTATION) {
-        if (std::isnan(global.x1)) {
+    else if (properties["mode"].s == MODE_ELLIPSE_ROTATION) {
+        if (std::isnan(properties.x1)) {
             error("ELLIPSE", tr("This should never happen."));
         }
-        else if (std::isnan(global.x2)) {
+        else if (std::isnan(properties.x2)) {
             error("ELLIPSE", tr("This should never happen."));
         }
-        else if (std::isnan(global.x3)) {
+        else if (std::isnan(properties.x3)) {
             if (std::isnan(str)) {
                 alert(tr("Invalid angle. Input a numeric angle or pick a point."));
                 setPromptPrefix(tr("Specify rotation: "));
             }
             else {
                 EmbReal angle = Number(str);
-                global.height = cos(angle*PI/180.0)*global.width;
-                addEllipse(global->center.x, global->center.y, global.width, global.height, global.rot, false);
+                properties.height = cos(angle*PI/180.0)*properties.width;
+                addEllipse(properties->center.x, properties->center.y, properties.width, properties.height, properties.rot, false);
                 actuator("end");
             }
         }
@@ -4822,26 +4738,26 @@ erase_main(void)
 void
 heart_main(void)
 {
-    Dictionary global;
-    global.numPoints = 512; //Default //TODO: min:64 max:8192
-    global->center.x;
-    global->center.y;
-    global.sx = 1.0;
-    global.sy = 1.0;
-    global.numPoints;
-    global.mode;
+    String properties;
+    properties.numPoints = 512; //Default //TODO: min:64 max:8192
+    properties->center.x;
+    properties->center.y;
+    properties.sx = 1.0;
+    properties.sy = 1.0;
+    properties.numPoints;
+    properties.mode;
     initCommand();
     clearSelection();
-    global->center.x = NaN;
-    global->center.y = NaN;
-    global.mode = MODE_NUM_POINTS;
+    properties->center.x = NaN;
+    properties->center.y = NaN;
+    properties.mode = MODE_NUM_POINTS;
 
     //Heart4: 10.0 / 512
     //Heart5: 1.0 / 512
 
     addRubber("POLYGON");
     setRubberMode("POLYGON");
-    updateHeart("HEART5", global.numPoints, global.sx, global.sy);
+    updateHeart("HEART5", properties.numPoints, properties.sx, properties.sy);
     spareRubber("POLYGON");
     actuator("end");
 }
@@ -4876,12 +4792,12 @@ updateHeart(style, numPoints, xScale, yScale)
 void
 line_main(void)
 {
-    Dictionary global;
+    String properties;
     initCommand();
     clearSelection();
-    global.firstRun = true;
-    global.first = {NaN, NaN};
-    global.prev = {NaN, NaN};
+    properties.firstRun = true;
+    properties.first = {NaN, NaN};
+    properties.prev = {NaN, NaN};
     setPromptPrefix(tr("Specify first point: "));
 }
 
@@ -4889,15 +4805,15 @@ line_main(void)
 void
 line_click(x, y)
 {
-    if (global.firstRun) {
-        global.firstRun = false;
-        global.firstX = x;
-        global.firstY = y;
-        global.prevX = x;
-        global.prevY = y;
+    if (properties.firstRun) {
+        properties.firstRun = false;
+        properties.firstX = x;
+        properties.firstY = y;
+        properties.prevX = x;
+        properties.prevY = y;
         addRubber("LINE");
         setRubberMode("LINE");
-        setRubberPoint("LINE_START", global.firstX, global.firstY);
+        setRubberPoint("LINE_START", properties.firstX, properties.firstY);
         appendPromptHistory();
         setPromptPrefix(tr("Specify next point or [Undo]: "));
     }
@@ -4908,8 +4824,8 @@ line_click(x, y)
         setRubberMode("LINE");
         setRubberPoint("LINE_START", x, y);
         appendPromptHistory();
-        global.prevX = x;
-        global.prevY = y;
+        properties.prevX = x;
+        properties.prevY = y;
     }
 }
 
@@ -4922,21 +4838,21 @@ line_context(String str)
 void
 line_prompt(String args)
 {
-    if (global.firstRun) {
+    if (properties.firstRun) {
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
             setPromptPrefix(tr("Specify first point: "));
         }
         else {
-            global.firstRun = false;
-            global.firstX = Number(strList[0]);
-            global.firstY = Number(strList[1]);
-            global.prevX = global.firstX;
-            global.prevY = global.firstY;
+            properties.firstRun = false;
+            properties.firstX = Number(strList[0]);
+            properties.firstY = Number(strList[1]);
+            properties.prevX = properties.firstX;
+            properties.prevY = properties.firstY;
             addRubber("LINE");
             setRubberMode("LINE");
-            setRubberPoint("LINE_START", global.firstX, global.firstY);
+            setRubberPoint("LINE_START", properties.firstX, properties.firstY);
             setPromptPrefix(tr("Specify next point or [Undo]: "));
         }
     }
@@ -4958,8 +4874,8 @@ line_prompt(String args)
                 addRubber("LINE");
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", x, y);
-                global.prevX = x;
-                global.prevY = y;
+                properties.prevX = x;
+                properties.prevY = y;
                 setPromptPrefix(tr("Specify next point or [Undo]: "));
             }
         }
@@ -4971,26 +4887,26 @@ line_prompt(String args)
  * @brief locate_point_main
  * @return
  */
-Dictionary
+String
 locate_point_main(void)
 {
-    Dictionary global;
+    String properties;
     /*
     initCommand();
     clearSelection();
     setPromptPrefix(tr("Specify point: "));
     */
-    return global;
+    return properties;
 }
 
 /**
  * @brief locate_point_click
- * @param global
+ * @param properties
  * @param v
  * @return
  */
-Dictionary
-locate_point_click(Dictionary global, EmbVector v)
+String
+locate_point_click(String properties, EmbVector v)
 {
     /*
     appendPromptHistory();
@@ -4998,7 +4914,7 @@ locate_point_click(Dictionary global, EmbVector v)
     appendPromptHistory();
     actuator("end");
     */
-    return global;
+    return properties;
 }
 
 void
@@ -5007,8 +4923,8 @@ locate_point_context(String str)
     //todo("LOCATEPOINT", "context()");
 }
 
-Dictionary
-locate_point_prompt(Dictionary global, String args)
+String
+locate_point_prompt(String properties, String args)
 {
     StringList strList = tokenize(args, ',');
     /*
@@ -5023,7 +4939,7 @@ locate_point_prompt(Dictionary global, String args)
         actuator("end");
     }
     */
-    return global;
+    return properties;
 }
 
 /**
@@ -5033,22 +4949,22 @@ locate_point_prompt(Dictionary global, String args)
 void
 move_main(void)
 {
-    Dictionary global;
-    global.firstRun;
-    global.baseX;
-    global.baseY;
-    global.destX;
-    global.destY;
-    global.deltaX;
-    global.deltaY;
+    String properties;
+    properties.firstRun;
+    properties.baseX;
+    properties.baseY;
+    properties.destX;
+    properties.destY;
+    properties.deltaX;
+    properties.deltaY;
     initCommand();
-    global.firstRun = true;
-    global.baseX  = NaN;
-    global.baseY  = NaN;
-    global.destX  = NaN;
-    global.destY  = NaN;
-    global.deltaX = NaN;
-    global.deltaY = NaN;
+    properties.firstRun = true;
+    properties.baseX  = NaN;
+    properties.baseY  = NaN;
+    properties.destX  = NaN;
+    properties.destY  = NaN;
+    properties.deltaX = NaN;
+    properties.deltaY = NaN;
 
     if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
@@ -5069,23 +4985,23 @@ move_main(void)
 void
 move_click(x, y)
 {
-    if (global.firstRun) {
-        global.firstRun = false;
-        global.baseX = x;
-        global.baseY = y;
+    if (properties.firstRun) {
+        properties.firstRun = false;
+        properties.baseX = x;
+        properties.baseY = y;
         addRubber("LINE");
         setRubberMode("LINE");
-        setRubberPoint("LINE_START", global.baseX, global.baseY);
-        previewOn("SELECTED", "MOVE", global.baseX, global.baseY, 0);
+        setRubberPoint("LINE_START", properties.baseX, properties.baseY);
+        previewOn("SELECTED", "MOVE", properties.baseX, properties.baseY, 0);
         appendPromptHistory();
         setPromptPrefix(tr("Specify destination point: "));
     }
     else {
-        global.destX = x;
-        global.destY = y;
-        global.deltaX = global.destX - global.baseX;
-        global.deltaY = global.destY - global.baseY;
-        moveSelected(global.deltaX, global.deltaY);
+        properties.destX = x;
+        properties.destY = y;
+        properties.deltaX = properties.destX - properties.baseX;
+        properties.deltaY = properties.destY - properties.baseY;
+        moveSelected(properties.deltaX, properties.deltaY);
         previewOff();
         actuator("end");
     }
@@ -5108,20 +5024,20 @@ void
 move_prompt(String str)
 {
     /*
-    if (global.firstRun) {
+    if (properties.firstRun) {
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
             setPromptPrefix(tr("Specify base point: "));
         }
         else {
-            global.firstRun = false;
-            global.baseX = Number(strList[0]);
-            global.baseY = Number(strList[1]);
+            properties.firstRun = false;
+            properties.baseX = Number(strList[0]);
+            properties.baseY = Number(strList[1]);
             addRubber("LINE");
             setRubberMode("LINE");
-            setRubberPoint("LINE_START", global.baseX, global.baseY);
-            previewOn("SELECTED", "MOVE", global.baseX, global.baseY, 0);
+            setRubberPoint("LINE_START", properties.baseX, properties.baseY);
+            previewOn("SELECTED", "MOVE", properties.baseX, properties.baseY, 0);
             setPromptPrefix(tr("Specify destination point: "));
         }
     }
@@ -5132,11 +5048,11 @@ move_prompt(String str)
             setPromptPrefix(tr("Specify destination point: "));
         }
         else {
-            global.destX = Number(strList[0]);
-            global.destY = Number(strList[1]);
-            global.deltaX = global.destX - global.baseX;
-            global.deltaY = global.destY - global.baseY;
-            moveSelected(global.deltaX, global.deltaY);
+            properties.destX = Number(strList[0]);
+            properties.destY = Number(strList[1]);
+            properties.deltaX = properties.destX - properties.baseX;
+            properties.deltaY = properties.destY - properties.baseY;
+            moveSelected(properties.deltaX, properties.deltaY);
             previewOff();
             actuator("end");
         }
@@ -5150,27 +5066,27 @@ move_prompt(String str)
 void
 path_main(void)
 {
-    Dictionary global;
-    global.firstRun;
-    global.first;
-    global.prev;
+    String properties;
+    properties.firstRun;
+    properties.first;
+    properties.prev;
     initCommand();
     clearSelection();
-    global["firstRun"] = node(true);
+    properties["firstRun"] = node(true);
     setPromptPrefix(tr("Specify start point: "));
-    return global;
+    return properties;
 }
 
 
 void
 path_click(x, y)
 {
-    if (global.firstRun) {
-        global.firstRun = false;
-        global.firstX = x;
-        global.firstY = y;
-        global.prevX = x;
-        global.prevY = y;
+    if (properties.firstRun) {
+        properties.firstRun = false;
+        properties.firstX = x;
+        properties.firstY = y;
+        properties.prevX = x;
+        properties.prevY = y;
         addPath(x,y);
         appendPromptHistory();
         setPromptPrefix(tr("Specify next point or [Arc/Undo]: "));
@@ -5178,8 +5094,8 @@ path_click(x, y)
     else {
         appendPromptHistory();
         appendLineToPath(x,y);
-        global.prevX = x;
-        global.prevY = y;
+        properties.prevX = x;
+        properties.prevY = y;
     }
 }
 
@@ -5207,43 +5123,43 @@ path_prompt(String args)
         else {
             EmbReal x = Number(strList[0]);
             EmbReal y = Number(strList[1]);
-            if (global.firstRun) {
-                global.firstRun = false;
-                global.firstX = x;
-                global.firstY = y;
-                global.prevX = x;
-                global.prevY = y;
+            if (properties.firstRun) {
+                properties.firstRun = false;
+                properties.firstX = x;
+                properties.firstY = y;
+                properties.prevX = x;
+                properties.prevY = y;
                 addPath(x,y);
                 setPromptPrefix(tr("Specify next point or [Arc/Undo]: "));
             }
             else {
                 appendLineToPath(x,y);
-                global.prevX = x;
-                global.prevY = y;
+                properties.prevX = x;
+                properties.prevY = y;
             }
         }
     }
 }
 
-Dictionary
+String
 point_main(void)
 {
-    Dictionary global;
+    String properties;
     initCommand();
     clearSelection();
-    global.firstRun = true;
+    properties.firstRun = true;
     setPromptPrefix("TODO: Current point settings: PDMODE=?  PDSIZE=?"); //TODO: tr needed here when complete
     appendPromptHistory();
     setPromptPrefix(tr("Specify first point: "));
-    return global;
+    return properties;
 }
 
 
 void
-point_click(Dictionary global, EmbVector v)
+point_click(String properties, EmbVector v)
 {
-    if (global.firstRun) {
-        global.firstRun = false;
+    if (properties.firstRun) {
+        properties.firstRun = false;
         appendPromptHistory();
         setPromptPrefix(tr("Specify next point: "));
         addPoint(x,y);
@@ -5263,7 +5179,7 @@ point_context(String str)
 void
 point_prompt(String str)
 {
-    if (global.firstRun) {
+    if (properties.firstRun) {
         if (str == "M" || str == "MODE") {
             todo("POINT", "prompt() for PDMODE");
         }
@@ -5276,7 +5192,7 @@ point_prompt(String str)
             setPromptPrefix(tr("Specify first point: "));
         }
         else {
-            global.firstRun = false;
+            properties.firstRun = false;
             EmbReal x = Number(strList[0]);
             EmbReal y = Number(strList[1]);
             setPromptPrefix(tr("Specify next point: "));
@@ -5300,19 +5216,19 @@ point_prompt(String str)
 
 //Command: Polygon
 
-Dictionary global;
-global->center;
-global.sideX1;
-global.sideY1;
-global.sideX2;
-global.sideY2;
-global.pointIX;
-global.pointIY;
-global.pointCX;
-global.pointCY;
-global.polyType = "Inscribed"; //Default
-global.numSides = 4;           //Default
-global.mode;
+String properties;
+properties->center;
+properties.sideX1;
+properties.sideY1;
+properties.sideX2;
+properties.sideY2;
+properties.pointIX;
+properties.pointIY;
+properties.pointCX;
+properties.pointCY;
+properties.polyType = "Inscribed"; //Default
+properties.numSides = 4;           //Default
+properties.mode;
 */
 
 /**
@@ -5324,18 +5240,18 @@ polygon_main(void)
 {
     initCommand();
     clearSelection();
-    global->centerX = NaN;
-    global->centerY = NaN;
-    global.sideX1  = NaN;
-    global.sideY1  = NaN;
-    global.sideX2  = NaN;
-    global.sideY2  = NaN;
-    global.pointIX = NaN;
-    global.pointIY = NaN;
-    global.pointCX = NaN;
-    global.pointCY = NaN;
-    global.mode = MODE_NUM_SIDES;
-    setPromptPrefix(tr("Enter number of sides") + " {" + global.numSides.toString() + "}: ");
+    properties->centerX = NaN;
+    properties->centerY = NaN;
+    properties.sideX1  = NaN;
+    properties.sideY1  = NaN;
+    properties.sideX2  = NaN;
+    properties.sideY2  = NaN;
+    properties.pointIX = NaN;
+    properties.pointIY = NaN;
+    properties.pointCX = NaN;
+    properties.pointCY = NaN;
+    properties.mode = MODE_NUM_SIDES;
+    setPromptPrefix(tr("Enter number of sides") + " {" + properties.numSides.toString() + "}: ");
 }
 */
 
@@ -5343,42 +5259,42 @@ polygon_main(void)
  * .
  */
 void
-polygon_click(Dictionary global, EmbVector v)
+polygon_click(String properties, EmbVector v)
 {
     /*
-    if (global["mode"].s == MODE_NUM_SIDES) {
+    if (properties["mode"].s == MODE_NUM_SIDES) {
         //Do nothing, the prompt controls this.
     }
-    else if (global["mode"].s == MODE_CENTER_PT) {
-        global->centerX = x;
-        global->centerY = y;
-        global.mode = MODE_POLYTYPE;
+    else if (properties["mode"].s == MODE_CENTER_PT) {
+        properties->centerX = x;
+        properties->centerY = y;
+        properties.mode = MODE_POLYTYPE;
         appendPromptHistory();
-        setPromptPrefix(tr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
+        setPromptPrefix(tr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + properties.polyType + "}: ");
     }
-    else if (global["mode"].s == MODE_POLYTYPE) {
+    else if (properties["mode"].s == MODE_POLYTYPE) {
         //Do nothing, the prompt controls this.
     }
-    else if (global["mode"].s == MODE_INSCRIBE) {
-        global.pointIX = x;
-        global.pointIY = y;
-        setRubberPoint("POLYGON_INSCRIBE_POINT", global.pointIX, global.pointIY);
+    else if (properties["mode"].s == MODE_INSCRIBE) {
+        properties.pointIX = x;
+        properties.pointIY = y;
+        setRubberPoint("POLYGON_INSCRIBE_POINT", properties.pointIX, properties.pointIY);
         actuator("vulcanize");
         appendPromptHistory();
         actuator("end");
     }
-    else if (global["mode"].s == MODE_CIRCUMSCRIBE) {
-        global.pointCX = x;
-        global.pointCY = y;
-        setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", global.pointCX, global.pointCY);
+    else if (properties["mode"].s == MODE_CIRCUMSCRIBE) {
+        properties.pointCX = x;
+        properties.pointCY = y;
+        setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", properties.pointCX, properties.pointCY);
         actuator("vulcanize");
         appendPromptHistory();
         actuator("end");
     }
-    else if (global["mode"].s == MODE_DISTANCE) {
+    else if (properties["mode"].s == MODE_DISTANCE) {
         //Do nothing, the prompt controls this.
     }
-    else if (global["mode"].s == MODE_SIDE_LEN) {
+    else if (properties["mode"].s == MODE_SIDE_LEN) {
         todo("POLYGON", "Sidelength mode");
     }
     */
@@ -5400,27 +5316,27 @@ void
 polygon_prompt(String str)
 {
     /*
-    if (global["mode"].s == MODE_NUM_SIDES) {
-        if (str == "" && global.numSides >= 3 && global.numSides <= 1024) {
+    if (properties["mode"].s == MODE_NUM_SIDES) {
+        if (str == "" && properties.numSides >= 3 && properties.numSides <= 1024) {
             setPromptPrefix(tr("Specify center point or [Sidelength]: "));
-            global.mode = MODE_CENTER_PT;
+            properties.mode = MODE_CENTER_PT;
         }
         else {
             EmbReal tmp = Number(str);
             if (std::isnan(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024) {
                 alert(tr("Requires an integer between 3 and 1024."));
-                setPromptPrefix(tr("Enter number of sides") + " {" + global.numSides.toString() + "}: ");
+                setPromptPrefix(tr("Enter number of sides") + " {" + properties.numSides.toString() + "}: ");
             }
             else {
-                global.numSides = tmp;
+                properties.numSides = tmp;
                 setPromptPrefix(tr("Specify center point or [Sidelength]: "));
-                global.mode = MODE_CENTER_PT;
+                properties.mode = MODE_CENTER_PT;
             }
         }
     }
-    else if (global["mode"].s == MODE_CENTER_PT) {
+    else if (properties["mode"].s == MODE_CENTER_PT) {
         if (str == "S" || str == "SIDELENGTH") {
-            global.mode = MODE_SIDE_LEN;
+            properties.mode = MODE_SIDE_LEN;
             setPromptPrefix(tr("Specify start point: "));
         }
         else {
@@ -5430,48 +5346,48 @@ polygon_prompt(String str)
                 setPromptPrefix(tr("Specify center point or [Sidelength]: "));
             }
             else {
-                global->centerX = Number(strList[0]);
-                global->centerY = Number(strList[1]);
-                global.mode = MODE_POLYTYPE;
-                setPromptPrefix(tr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
+                properties->centerX = Number(strList[0]);
+                properties->centerY = Number(strList[1]);
+                properties.mode = MODE_POLYTYPE;
+                setPromptPrefix(tr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + properties.polyType + "}: ");
             }
         }
     }
-    else if (global["mode"].s == MODE_POLYTYPE) {
+    else if (properties["mode"].s == MODE_POLYTYPE) {
         if (str == "INSCRIBED") {
-            global.mode = MODE_INSCRIBE;
-            global.polyType = "Inscribed";
+            properties.mode = MODE_INSCRIBE;
+            properties.polyType = "Inscribed";
             setPromptPrefix(tr("Specify polygon corner point or [Distance]: "));
             addRubber("POLYGON");
             setRubberMode("POLYGON_INSCRIBE");
-            setRubberPoint("POLYGON_CENTER", global->centerX, global->centerY);
-            setRubberPoint("POLYGON_NUM_SIDES", global.numSides, 0);
+            setRubberPoint("POLYGON_CENTER", properties->centerX, properties->centerY);
+            setRubberPoint("POLYGON_NUM_SIDES", properties.numSides, 0);
         }
         else if (str == "CIRCUMSCRIBED") {
-            global.mode = MODE_CIRCUMSCRIBE;
-            global.polyType = "Circumscribed";
+            properties.mode = MODE_CIRCUMSCRIBE;
+            properties.polyType = "Circumscribed";
             setPromptPrefix(tr("Specify polygon side point or [Distance]: "));
             addRubber("POLYGON");
             setRubberMode("POLYGON_CIRCUMSCRIBE");
-            setRubberPoint("POLYGON_CENTER", global->centerX, global->centerY);
-            setRubberPoint("POLYGON_NUM_SIDES", global.numSides, 0);
+            setRubberPoint("POLYGON_CENTER", properties->centerX, properties->centerY);
+            setRubberPoint("POLYGON_NUM_SIDES", properties.numSides, 0);
         }
         else if (str == "") {
-            if (global.polyType == "Inscribed") {
-                global.mode = MODE_INSCRIBE;
+            if (properties.polyType == "Inscribed") {
+                properties.mode = MODE_INSCRIBE;
                 setPromptPrefix(tr("Specify polygon corner point or [Distance]: "));
                 addRubber("POLYGON");
                 setRubberMode("POLYGON_INSCRIBE");
-                setRubberPoint("POLYGON_CENTER", global->centerX, global->centerY);
-                setRubberPoint("POLYGON_NUM_SIDES", global.numSides, 0);
+                setRubberPoint("POLYGON_CENTER", properties->centerX, properties->centerY);
+                setRubberPoint("POLYGON_NUM_SIDES", properties.numSides, 0);
             }
-            else if (global.polyType == "Circumscribed") {
-                global.mode = MODE_CIRCUMSCRIBE;
+            else if (properties.polyType == "Circumscribed") {
+                properties.mode = MODE_CIRCUMSCRIBE;
                 setPromptPrefix(tr("Specify polygon side point or [Distance]: "));
                 addRubber("POLYGON");
                 setRubberMode("POLYGON_CIRCUMSCRIBE");
-                setRubberPoint("POLYGON_CENTER", global->centerX, global->centerY);
-                setRubberPoint("POLYGON_NUM_SIDES", global.numSides, 0);
+                setRubberPoint("POLYGON_CENTER", properties->centerX, properties->centerY);
+                setRubberPoint("POLYGON_NUM_SIDES", properties.numSides, 0);
             }
             else {
                 error("POLYGON", tr("Polygon type is not Inscribed or Circumscribed."));
@@ -5479,12 +5395,12 @@ polygon_prompt(String str)
         }
         else {
             alert(tr("Invalid option keyword."));
-            setPromptPrefix(tr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
+            setPromptPrefix(tr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + properties.polyType + "}: ");
         }
     }
-    else if (global["mode"].s == MODE_INSCRIBE) {
+    else if (properties["mode"].s == MODE_INSCRIBE) {
         if (str == "D" || str == "DISTANCE") {
-            global.mode = MODE_DISTANCE;
+            properties.mode = MODE_DISTANCE;
             setPromptPrefix(tr("Specify distance: "));
         }
         else {
@@ -5494,17 +5410,17 @@ polygon_prompt(String str)
                 setPromptPrefix(tr("Specify polygon corner point or [Distance]: "));
             }
             else {
-                global.pointIX = Number(strList[0]);
-                global.pointIY = Number(strList[1]);
-                setRubberPoint("POLYGON_INSCRIBE_POINT", global.pointIX, global.pointIY);
+                properties.pointIX = Number(strList[0]);
+                properties.pointIY = Number(strList[1]);
+                setRubberPoint("POLYGON_INSCRIBE_POINT", properties.pointIX, properties.pointIY);
                 actuator("vulcanize");
                 actuator("end");
             }
         }
     }
-    else if (global["mode"].s == MODE_CIRCUMSCRIBE) {
+    else if (properties["mode"].s == MODE_CIRCUMSCRIBE) {
         if (str == "D" || str == "DISTANCE") {
-            global.mode = MODE_DISTANCE;
+            properties.mode = MODE_DISTANCE;
             setPromptPrefix(tr("Specify distance: "));
         }
         else {
@@ -5514,31 +5430,31 @@ polygon_prompt(String str)
                 setPromptPrefix(tr("Specify polygon side point or [Distance]: "));
             }
             else {
-                global.pointCX = Number(strList[0]);
-                global.pointCY = Number(strList[1]);
-                setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", global.pointCX, global.pointCY);
+                properties.pointCX = Number(strList[0]);
+                properties.pointCY = Number(strList[1]);
+                setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", properties.pointCX, properties.pointCY);
                 actuator("vulcanize");
                 actuator("end");
             }
         }
     }
-    else if (global["mode"].s == MODE_DISTANCE) {
+    else if (properties["mode"].s == MODE_DISTANCE) {
         if (std::isnan(str)) {
             alert(tr("Requires valid numeric distance."));
             setPromptPrefix(tr("Specify distance: "));
         }
         else {
-            if (global.polyType == "Inscribed") {
-                global.pointIX = global->centerX;
-                global.pointIY = global->centerY + Number(str);
-                setRubberPoint("POLYGON_INSCRIBE_POINT", global.pointIX, global.pointIY);
+            if (properties.polyType == "Inscribed") {
+                properties.pointIX = properties->centerX;
+                properties.pointIY = properties->centerY + Number(str);
+                setRubberPoint("POLYGON_INSCRIBE_POINT", properties.pointIX, properties.pointIY);
                 actuator("vulcanize");
                 actuator("end");
             }
-            else if (global.polyType == "Circumscribed") {
-                global.pointCX = global->centerX;
-                global.pointCY = global->centerY + Number(str);
-                setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", global.pointCX, global.pointCY);
+            else if (properties.polyType == "Circumscribed") {
+                properties.pointCX = properties->centerX;
+                properties.pointCY = properties->centerY + Number(str);
+                setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", properties.pointCX, properties.pointCY);
                 actuator("vulcanize");
                 actuator("end");
             }
@@ -5547,7 +5463,7 @@ polygon_prompt(String str)
             }
         }
     }
-    else if (global["mode"].s == MODE_SIDE_LEN) {
+    else if (properties["mode"].s == MODE_SIDE_LEN) {
         todo("POLYGON", "Sidelength mode");
     }
     */
@@ -5555,13 +5471,13 @@ polygon_prompt(String str)
 
 //Command: Polyline
 /*
-Dictionary global;
-global.firstRun;
-global.firstX;
-global.firstY;
-global.prevX;
-global.prevY;
-global.num;
+String properties;
+properties.firstRun;
+properties.firstX;
+properties.firstY;
+properties.prevX;
+properties.prevY;
+properties.num;
 */
 
 /**
@@ -5573,12 +5489,12 @@ polyline_main(void)
     /*
     initCommand();
     clearSelection();
-    global.firstRun = true;
-    global.firstX = NaN;
-    global.firstY = NaN;
-    global.prevX = NaN;
-    global.prevY = NaN;
-    global.num = 0;
+    properties.firstRun = true;
+    properties.firstX = NaN;
+    properties.firstY = NaN;
+    properties.prevX = NaN;
+    properties.prevY = NaN;
+    properties.num = 0;
     setPromptPrefix(tr("Specify first point: "));
     */
 }
@@ -5587,29 +5503,29 @@ polyline_main(void)
  * .
  */
 void
-polyline_click(Dictionary global, EmbVector v)
+polyline_click(String properties, EmbVector v)
 {
     /*
-    if (global.firstRun) {
-        global.firstRun = false;
-        global.firstX = x;
-        global.firstY = y;
-        global.prevX = x;
-        global.prevY = y;
+    if (properties.firstRun) {
+        properties.firstRun = false;
+        properties.firstX = x;
+        properties.firstY = y;
+        properties.prevX = x;
+        properties.prevY = y;
         addRubber("POLYLINE");
         setRubberMode("POLYLINE");
-        setRubberPoint("POLYLINE_POINT_0", global.firstX, global.firstY);
+        setRubberPoint("POLYLINE_POINT_0", properties.firstX, properties.firstY);
         appendPromptHistory();
         setPromptPrefix(tr("Specify next point or [Undo]: "));
     }
     else {
-        global.num++;
-        setRubberPoint("POLYLINE_POINT_" + global.num.toString(), x, y);
-        setRubberText("POLYLINE_NUM_POINTS", global.num.toString());
+        properties.num++;
+        setRubberPoint("POLYLINE_POINT_" + properties.num.toString(), x, y);
+        setRubberText("POLYLINE_NUM_POINTS", properties.num.toString());
         spareRubber("POLYLINE");
         appendPromptHistory();
-        global.prevX = x;
-        global.prevY = y;
+        properties.prevX = x;
+        properties.prevY = y;
     }
     */
 }
@@ -5630,21 +5546,21 @@ void
 polyline_prompt(String str)
 {
     /*
-    if (global.firstRun) {
+    if (properties.firstRun) {
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
             setPromptPrefix(tr("Specify first point: "));
         }
         else {
-            global.firstRun = false;
-            global.firstX = Number(strList[0]);
-            global.firstY = Number(strList[1]);
-            global.prevX = global.firstX;
-            global.prevY = global.firstY;
+            properties.firstRun = false;
+            properties.firstX = Number(strList[0]);
+            properties.firstY = Number(strList[1]);
+            properties.prevX = properties.firstX;
+            properties.prevY = properties.firstY;
             addRubber("POLYLINE");
             setRubberMode("POLYLINE");
-            setRubberPoint("POLYLINE_POINT_0", global.firstX, global.firstY);
+            setRubberPoint("POLYLINE_POINT_0", properties.firstX, properties.firstY);
             setPromptPrefix(tr("Specify next point or [Undo]: "));
         }
     }
@@ -5661,12 +5577,12 @@ polyline_prompt(String str)
             else {
                 EmbReal x = Number(strList[0]);
                 EmbReal y = Number(strList[1]);
-                global.num++;
-                setRubberPoint("POLYLINE_POINT_" + global.num.toString(), x, y);
-                setRubberText("POLYLINE_NUM_POINTS", global.num.toString());
+                properties.num++;
+                setRubberPoint("POLYLINE_POINT_" + properties.num.toString(), x, y);
+                setRubberText("POLYLINE_NUM_POINTS", properties.num.toString());
                 spareRubber("POLYLINE");
-                global.prevX = x;
-                global.prevY = y;
+                properties.prevX = x;
+                properties.prevY = y;
                 setPromptPrefix(tr("Specify next point or [Undo]: "));
             }
         }
@@ -5677,11 +5593,11 @@ polyline_prompt(String str)
 //Command: QuickLeader
 
 /*
-Dictionary global;
-global.x1;
-global.y1;
-global.x2;
-global.y2;
+String properties;
+properties.x1;
+properties.y1;
+properties.x2;
+properties.y2;
 */
 
 //TODO: Adding the text is not complete yet.
@@ -5695,10 +5611,10 @@ quickleader_main(void)
     /*
     initCommand();
     clearSelection();
-    global.x1 = NaN;
-    global.y1 = NaN;
-    global.x2 = NaN;
-    global.y2 = NaN;
+    properties.x1 = NaN;
+    properties.y1 = NaN;
+    properties.x2 = NaN;
+    properties.y2 = NaN;
     setPromptPrefix(tr("Specify first point: "));
     */
 }
@@ -5707,22 +5623,22 @@ quickleader_main(void)
  * .
  */
 void
-quickleader_click(Dictionary global, EmbVector v)
+quickleader_click(String properties, EmbVector v)
 {
     /*
-    if (std::isnan(global.x1)) {
-        global.x1 = x;
-        global.y1 = y;
+    if (std::isnan(properties.x1)) {
+        properties.x1 = x;
+        properties.y1 = y;
         addRubber("DIMLEADER");
         setRubberMode("DIMLEADER_LINE");
-        setRubberPoint("DIMLEADER_LINE_START", global.x1, global.y1);
+        setRubberPoint("DIMLEADER_LINE_START", properties.x1, properties.y1);
         appendPromptHistory();
         setPromptPrefix(tr("Specify second point: "));
     }
     else {
-        global.x2 = x;
-        global.y2 = y;
-        setRubberPoint("DIMLEADER_LINE_END", global.x2, global.y2);
+        properties.x2 = x;
+        properties.y2 = y;
+        setRubberPoint("DIMLEADER_LINE_END", properties.x2, properties.y2);
         actuator("vulcanize");
         appendPromptHistory();
         actuator("end");
@@ -5747,17 +5663,17 @@ quickleader_prompt(String str)
 {
     /*
     EmbReal strList = str.split(",");
-    if (std::isnan(global.x1)) {
+    if (std::isnan(properties.x1)) {
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Requires two points."));
             setPromptPrefix(tr("Specify first point: "));
         }
         else {
-            global.x1 = Number(strList[0]);
-            global.y1 = Number(strList[1]);
+            properties.x1 = Number(strList[0]);
+            properties.y1 = Number(strList[1]);
             addRubber("DIMLEADER");
             setRubberMode("DIMLEADER_LINE");
-            setRubberPoint("DIMLEADER_LINE_START", global.x1, global.y1);
+            setRubberPoint("DIMLEADER_LINE_START", properties.x1, properties.y1);
             setPromptPrefix(tr("Specify second point: "));
         }
     }
@@ -5767,9 +5683,9 @@ quickleader_prompt(String str)
             setPromptPrefix(tr("Specify second point: "));
         }
         else {
-            global.x2 = Number(strList[0]);
-            global.y2 = Number(strList[1]);
-            setRubberPoint("DIMLEADER_LINE_END", global.x2, global.y2);
+            properties.x2 = Number(strList[0]);
+            properties.y2 = Number(strList[1]);
+            setRubberPoint("DIMLEADER_LINE_END", properties.x2, properties.y2);
             actuator("vulcanize");
             actuator("end");
         }
@@ -5780,12 +5696,12 @@ quickleader_prompt(String str)
 //Command: Rectangle
 
 /*
-Dictionary global;
-global.newRect;
-global.x1;
-global.y1;
-global.x2;
-global.y2;
+String properties;
+properties.newRect;
+properties.x1;
+properties.y1;
+properties.x2;
+properties.y2;
 */
 
 /**
@@ -5797,11 +5713,11 @@ rectangle_main(void)
     /*
     initCommand();
     clearSelection();
-    global.newRect = true;
-    global.x1 = NaN;
-    global.y1 = NaN;
-    global.x2 = NaN;
-    global.y2 = NaN;
+    properties.newRect = true;
+    properties.x1 = NaN;
+    properties.y1 = NaN;
+    properties.x2 = NaN;
+    properties.y2 = NaN;
     setPromptPrefix(tr("Specify first corner point or [Chamfer/Fillet]: "));
     */
 }
@@ -5810,22 +5726,22 @@ rectangle_main(void)
  * .
  */
 void
-rectangle_click(Dictionary global, EmbVector v)
+rectangle_click(String properties, EmbVector v)
 {
     /*
-    if (global.newRect) {
-        global.newRect = false;
-        global.x1 = x;
-        global.y1 = y;
+    if (properties.newRect) {
+        properties.newRect = false;
+        properties.x1 = x;
+        properties.y1 = y;
         addRubber("RECTANGLE");
         setRubberMode("RECTANGLE");
         setRubberPoint("RECTANGLE_START", x, y);
         setPromptPrefix(tr("Specify other corner point or [Dimensions]: "));
     }
     else {
-        global.newRect = true;
-        global.x2 = x;
-        global.y2 = y;
+        properties.newRect = true;
+        properties.x2 = x;
+        properties.y2 = y;
         setRubberPoint("RECTANGLE_END", x, y);
         actuator("vulcanize");
         actuator("end");
@@ -5867,19 +5783,19 @@ rectangle_prompt(String str)
         else {
             EmbReal x = Number(strList[0]);
             EmbReal y = Number(strList[1]);
-            if (global.newRect) {
-                global.newRect = false;
-                global.x1 = x;
-                global.y1 = y;
+            if (properties.newRect) {
+                properties.newRect = false;
+                properties.x1 = x;
+                properties.y1 = y;
                 addRubber("RECTANGLE");
                 setRubberMode("RECTANGLE");
                 setRubberPoint("RECTANGLE_START", x, y);
                 setPromptPrefix(tr("Specify other corner point or [Dimensions]: "));
             }
             else {
-                global.newRect = true;
-                global.x2 = x;
-                global.y2 = y;
+                properties.newRect = true;
+                properties.x2 = x;
+                properties.y2 = y;
                 setRubberPoint("RECTANGLE_END", x, y);
                 actuator("vulcanize");
                 actuator("end");
@@ -5891,8 +5807,8 @@ rectangle_prompt(String str)
 
 //Command: RGB
 
-//Dictionary global;
-//global.mode;
+//String properties;
+//properties.mode;
 
 /**
  * .
@@ -5903,7 +5819,7 @@ rgb_main(void)
     /*
     initCommand();
     clearSelection();
-    global.mode = "RGB_MODE_BACKGROUND";
+    properties.mode = "RGB_MODE_BACKGROUND";
     setPromptPrefix(tr("Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: "));
     */
 }
@@ -5912,7 +5828,7 @@ rgb_main(void)
  * .
  */
 void
-rgb_click(Dictionary global, EmbVector v)
+rgb_click(String properties, EmbVector v)
 {
     //Do Nothing, prompt only command.
 }
@@ -5933,13 +5849,13 @@ void
 rgb_prompt(String str)
 {
     /*
-    if (global["mode"].s == "RGB_MODE_BACKGROUND") {
+    if (properties["mode"].s == "RGB_MODE_BACKGROUND") {
         if (str == "C" || str == "CROSSHAIR") {
-            global["mode"] = node("RGB_MODE_CROSSHAIR");
+            properties["mode"] = node("RGB_MODE_CROSSHAIR");
             setPromptPrefix(tr("Specify crosshair color: "));
         }
         else if (str == "G" || str == "GRID") {
-            global.mode = RGB_MODE_GRID;
+            properties.mode = RGB_MODE_GRID;
             setPromptPrefix(tr("Specify grid color: "));
         }
         else {
@@ -5957,7 +5873,7 @@ rgb_prompt(String str)
             }
         }
     }
-    else if (global["mode"].s == RGB_MODE_CROSSHAIR) {
+    else if (properties["mode"].s == RGB_MODE_CROSSHAIR) {
         EmbReal strList = str.split(",");
         EmbReal r = Number(strList[0]);
         EmbReal g = Number(strList[1]);
@@ -5971,7 +5887,7 @@ rgb_prompt(String str)
             actuator("end");
         }
     }
-    else if (global["mode"].s == RGB_MODE_GRID) {
+    else if (properties["mode"].s == RGB_MODE_GRID) {
         EmbReal strList = str.split(",");
         EmbReal r = Number(strList[0]);
         EmbReal g = Number(strList[1]);
@@ -5992,7 +5908,7 @@ rgb_prompt(String str)
  * .
  * Command: Rotate
  *
- * Dictionary global;
+ * String properties;
  * bool firstRun;
  * EmbVector base;
  * EmbVector dest;
@@ -6010,16 +5926,16 @@ rotate_main(String args)
 {
     /*
     initCommand();
-    global.mode = ROTATE_MODE_NORMAL;
-    global.firstRun = true;
-    global.base = {NaN, NaN};
-    global.dest = {NaN, NaN};
-    global.angle = NaN;
+    properties.mode = ROTATE_MODE_NORMAL;
+    properties.firstRun = true;
+    properties.base = {NaN, NaN};
+    properties.dest = {NaN, NaN};
+    properties.angle = NaN;
 
-    global.baseR = {NaN, NaN};
-    global.destR = {NaN, NaN};
-    global.angleRef = NaN;
-    global.angleNew = NaN;
+    properties.baseR = {NaN, NaN};
+    properties.destR = {NaN, NaN};
+    properties.angleRef = NaN;
+    properties.angleNew = NaN;
 
     if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
@@ -6038,49 +5954,49 @@ rotate_main(String args)
  * .
  */
 void
-rotate_click(Dictionary global, EmbVector v)
+rotate_click(String properties, EmbVector v)
 {
     /*
-    if (global["mode"].s == ROTATE_MODE_NORMAL) {
-        if (global.firstRun) {
-            global.firstRun = false;
-            global.base = v;
+    if (properties["mode"].s == ROTATE_MODE_NORMAL) {
+        if (properties.firstRun) {
+            properties.firstRun = false;
+            properties.base = v;
             addRubber("LINE");
             setRubberMode("LINE");
-            setRubberPoint("LINE_START", global.baseX, global.baseY);
-            previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, 0);
+            setRubberPoint("LINE_START", properties.baseX, properties.baseY);
+            previewOn("SELECTED", "ROTATE", properties.baseX, properties.baseY, 0);
             appendPromptHistory();
             setPromptPrefix(tr("Specify rotation angle or [Reference]: "));
         }
         else {
-            global.dest = v;
-            global.angle = calculateAngle(global.baseX, global.baseY, global.destX, global.destY);
+            properties.dest = v;
+            properties.angle = calculateAngle(properties.baseX, properties.baseY, properties.destX, properties.destY);
             appendPromptHistory();
-            rotateSelected(global.baseX, global.baseY, global.angle);
+            rotateSelected(properties.baseX, properties.baseY, properties.angle);
             previewOff();
             actuator("end");
         }
     }
-    else if (global["mode"].s == ROTATE_MODE_REFERENCE) {
-        if (std::isnan(global.baseRX)) {
-            global.baseR = v;
+    else if (properties["mode"].s == ROTATE_MODE_REFERENCE) {
+        if (std::isnan(properties.baseRX)) {
+            properties.baseR = v;
             appendPromptHistory();
             addRubber("LINE");
             setRubberMode("LINE");
-            setRubberPoint("LINE_START", global.baseRX, global.baseRY);
+            setRubberPoint("LINE_START", properties.baseRX, properties.baseRY);
             setPromptPrefix(tr("Specify second point: "));
         }
-        else if (std::isnan(global.destRX)) {
-            global.destR = v;
-            global.angleRef = calculateAngle(global.baseRX, global.baseRY, global.destRX, global.destRY);
-            setRubberPoint("LINE_START", global.baseX, global.baseY);
-            previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
+        else if (std::isnan(properties.destRX)) {
+            properties.destR = v;
+            properties.angleRef = calculateAngle(properties.baseRX, properties.baseRY, properties.destRX, properties.destRY);
+            setRubberPoint("LINE_START", properties.baseX, properties.baseY);
+            previewOn("SELECTED", "ROTATE", properties.baseX, properties.baseY, properties.angleRef);
             appendPromptHistory();
             setPromptPrefix(tr("Specify the new angle: "));
         }
-        else if (std::isnan(global.angleNew)) {
-            global.angleNew = calculateAngle(global.baseX, global.baseY, x, y);
-            rotateSelected(global.baseX, global.baseY, global.angleNew - global.angleRef);
+        else if (std::isnan(properties.angleNew)) {
+            properties.angleNew = calculateAngle(properties.baseX, properties.baseY, x, y);
+            rotateSelected(properties.baseX, properties.baseY, properties.angleNew - properties.angleRef);
             previewOff();
             actuator("end");
         }
@@ -6104,27 +6020,27 @@ void
 rotate_prompt(String str)
 {
     /*
-    if (global["mode"].s == ROTATE_MODE_NORMAL) {
-        if (global.firstRun) {
+    if (properties["mode"].s == ROTATE_MODE_NORMAL) {
+        if (properties.firstRun) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Invalid point."));
                 setPromptPrefix(tr("Specify base point: "));
             }
             else {
-                global.firstRun = false;
-                global.baseX = Number(strList[0]);
-                global.baseY = Number(strList[1]);
+                properties.firstRun = false;
+                properties.baseX = Number(strList[0]);
+                properties.baseY = Number(strList[1]);
                 addRubber("LINE");
                 setRubberMode("LINE");
-                setRubberPoint("LINE_START", global.baseX, global.baseY);
-                previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, 0);
+                setRubberPoint("LINE_START", properties.baseX, properties.baseY);
+                previewOn("SELECTED", "ROTATE", properties.baseX, properties.baseY, 0);
                 setPromptPrefix(tr("Specify rotation angle or [Reference]: "));
             }
         }
         else {
             if (str == "R" || str == "REFERENCE") {
-                global.mode = MODE_REFERENCE;
+                properties.mode = MODE_REFERENCE;
                 setPromptPrefix(tr("Specify the reference angle") + " {0.00}: ");
                 clearRubber();
                 previewOff();
@@ -6135,16 +6051,16 @@ rotate_prompt(String str)
                     setPromptPrefix(tr("Specify rotation angle or [Reference]: "));
                 }
                 else {
-                    global.angle = Number(str);
-                    rotateSelected(global.baseX, global.baseY, global.angle);
+                    properties.angle = Number(str);
+                    rotateSelected(properties.baseX, properties.baseY, properties.angle);
                     previewOff();
                     actuator("end");
                 }
             }
         }
     }
-    else if (global["mode"].s == MODE_REFERENCE) {
-        if (std::isnan(global.baseRX)) {
+    else if (properties["mode"].s == MODE_REFERENCE) {
+        if (std::isnan(properties.baseRX)) {
             if (std::isnan(str)) {
                 EmbReal strList = str.split(",");
                 if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -6152,30 +6068,30 @@ rotate_prompt(String str)
                     setPromptPrefix(tr("Specify the reference angle") + " {0.00}: ");
                 }
                 else {
-                    global.baseRX = Number(strList[0]);
-                    global.baseRY = Number(strList[1]);
+                    properties.baseRX = Number(strList[0]);
+                    properties.baseRY = Number(strList[1]);
                     addRubber("LINE");
                     setRubberMode("LINE");
-                    setRubberPoint("LINE_START", global.baseRX, global.baseRY);
+                    setRubberPoint("LINE_START", properties.baseRX, properties.baseRY);
                     setPromptPrefix(tr("Specify second point: "));
                 }
             }
             else {
                 //The base and dest values are only set here to advance the command.
-                global.baseRX = 0.0;
-                global.baseRY = 0.0;
-                global.destRX = 0.0;
-                global.destRY = 0.0;
+                properties.baseRX = 0.0;
+                properties.baseRY = 0.0;
+                properties.destRX = 0.0;
+                properties.destRY = 0.0;
                 //The reference angle is what we will use later.
-                global.angleRef = Number(str);
+                properties.angleRef = Number(str);
                 addRubber("LINE");
                 setRubberMode("LINE");
-                setRubberPoint("LINE_START", global.baseX, global.baseY);
-                previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
+                setRubberPoint("LINE_START", properties.baseX, properties.baseY);
+                previewOn("SELECTED", "ROTATE", properties.baseX, properties.baseY, properties.angleRef);
                 setPromptPrefix(tr("Specify the new angle: "));
             }
         }
-        else if (std::isnan(global.destRX)) {
+        else if (std::isnan(properties.destRX)) {
             if (std::isnan(str)) {
                 EmbReal strList = str.split(",");
                 if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -6183,27 +6099,27 @@ rotate_prompt(String str)
                     setPromptPrefix(tr("Specify second point: "));
                 }
                 else {
-                    global.destRX = Number(strList[0]);
-                    global.destRY = Number(strList[1]);
-                    global.angleRef = calculateAngle(global.baseRX, global.baseRY, global.destRX, global.destRY);
-                    previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
-                    setRubberPoint("LINE_START", global.baseX, global.baseY);
+                    properties.destRX = Number(strList[0]);
+                    properties.destRY = Number(strList[1]);
+                    properties.angleRef = calculateAngle(properties.baseRX, properties.baseRY, properties.destRX, properties.destRY);
+                    previewOn("SELECTED", "ROTATE", properties.baseX, properties.baseY, properties.angleRef);
+                    setRubberPoint("LINE_START", properties.baseX, properties.baseY);
                     setPromptPrefix(tr("Specify the new angle: "));
                 }
             }
             else {
                 //The base and dest values are only set here to advance the command.
-                global.baseRX = 0.0;
-                global.baseRY = 0.0;
-                global.destRX = 0.0;
-                global.destRY = 0.0;
+                properties.baseRX = 0.0;
+                properties.baseRY = 0.0;
+                properties.destRX = 0.0;
+                properties.destRY = 0.0;
                 //The reference angle is what we will use later.
-                global.angleRef = Number(str);
-                previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
+                properties.angleRef = Number(str);
+                previewOn("SELECTED", "ROTATE", properties.baseX, properties.baseY, properties.angleRef);
                 setPromptPrefix(tr("Specify the new angle: "));
             }
         }
-        else if (std::isnan(global.angleNew)) {
+        else if (std::isnan(properties.angleNew)) {
             if (std::isnan(str)) {
                 EmbReal strList = str.split(",");
                 if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -6213,15 +6129,15 @@ rotate_prompt(String str)
                 else {
                     EmbReal x = Number(strList[0]);
                     EmbReal y = Number(strList[1]);
-                    global.angleNew = calculateAngle(global.baseX, global.baseY, x, y);
-                    rotateSelected(global.baseX, global.baseY, global.angleNew - global.angleRef);
+                    properties.angleNew = calculateAngle(properties.baseX, properties.baseY, x, y);
+                    rotateSelected(properties.baseX, properties.baseY, properties.angleNew - properties.angleRef);
                     previewOff();
                     actuator("end");
                 }
             }
             else {
-                global.angleNew = Number(str);
-                rotateSelected(global.baseX, global.baseY, global.angleNew - global.angleRef);
+                properties.angleNew = Number(str);
+                rotateSelected(properties.baseX, properties.baseY, properties.angleNew - properties.angleRef);
                 previewOff();
                 actuator("end");
             }
@@ -6232,9 +6148,9 @@ rotate_prompt(String str)
 
 //Command: Sandbox
 
-/*Dictionary global;
-global.test1;
-global.test2;
+/*String properties;
+properties.test1;
+properties.test2;
 */
 
 /**
@@ -6310,42 +6226,42 @@ sandbox_main(String str)
  * .
  * Command: Scale
  *
- * Dictionary global;
- * global.firstRun;
- * global.baseX;
- * global.baseY;
- * global.destX;
- * global.destY;
- * global.factor;
+ * String properties;
+ * properties.firstRun;
+ * properties.baseX;
+ * properties.baseY;
+ * properties.destX;
+ * properties.destY;
+ * properties.factor;
  *
- * global.baseRX;
- * global.baseRY;
- * global.destRX;
- * global.destRY;
- * global.factorRef;
- * global.factorNew;
+ * properties.baseRX;
+ * properties.baseRY;
+ * properties.destRX;
+ * properties.destRY;
+ * properties.factorRef;
+ * properties.factorNew;
  *
- * global.mode;
+ * properties.mode;
  */
 void
 scale_main(void)
 {
     /*
     initCommand();
-    global.mode = MODE_NORMAL;
-    global.firstRun = true;
-    global.baseX  = NaN;
-    global.baseY  = NaN;
-    global.destX  = NaN;
-    global.destY  = NaN;
-    global.factor = NaN;
+    properties.mode = MODE_NORMAL;
+    properties.firstRun = true;
+    properties.baseX  = NaN;
+    properties.baseY  = NaN;
+    properties.destX  = NaN;
+    properties.destY  = NaN;
+    properties.factor = NaN;
 
-    global.baseRX    = NaN;
-    global.baseRY    = NaN;
-    global.destRX    = NaN;
-    global.destRY    = NaN;
-    global.factorRef = NaN;
-    global.factorNew = NaN;
+    properties.baseRX    = NaN;
+    properties.baseRY    = NaN;
+    properties.destRX    = NaN;
+    properties.destRY    = NaN;
+    properties.factorRef = NaN;
+    properties.factorNew = NaN;
 
     if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
@@ -6363,65 +6279,65 @@ scale_main(void)
  * .
  */
 void
-scale_click(Dictionary global, EmbVector v)
+scale_click(String properties, EmbVector v)
 {
     /*
-    if (global["mode"].s == MODE_NORMAL) {
-        if (global.firstRun) {
-            global.firstRun = false;
-            global.base = v;
+    if (properties["mode"].s == MODE_NORMAL) {
+        if (properties.firstRun) {
+            properties.firstRun = false;
+            properties.base = v;
             addRubber("LINE");
             setRubberMode("LINE");
-            setRubberPoint("LINE_START", global.baseX, global.baseY);
-            previewOn("SELECTED", "SCALE", global.baseX, global.baseY, 1);
+            setRubberPoint("LINE_START", properties.baseX, properties.baseY);
+            previewOn("SELECTED", "SCALE", properties.baseX, properties.baseY, 1);
             appendPromptHistory();
             setPromptPrefix(tr("Specify scale factor or [Reference]: "));
         }
         else {
-            global.dest = v;
-            global.factor = calculateDistance(global.base, global.dest);
+            properties.dest = v;
+            properties.factor = calculateDistance(properties.base, properties.dest);
             appendPromptHistory();
-            scaleSelected(global.baseX, global.baseY, global.factor);
+            scaleSelected(properties.baseX, properties.baseY, properties.factor);
             previewOff();
             actuator("end");
         }
     }
-    else if (global["mode"].s == MODE_REFERENCE) {
-        if (std::isnan(global.baseRX)) {
-            global.baseR = v;
+    else if (properties["mode"].s == MODE_REFERENCE) {
+        if (std::isnan(properties.baseRX)) {
+            properties.baseR = v;
             appendPromptHistory();
             addRubber("LINE");
             setRubberMode("LINE");
-            setRubberPoint("LINE_START", global.baseR);
+            setRubberPoint("LINE_START", properties.baseR);
             setPromptPrefix(tr("Specify second point: "));
         }
-        else if (std::isnan(global.destRX)) {
-            global.destR = v;
-            global.factorRef = calculateDistance(global.baseRX, global.baseRY, global.destRX, global.destRY);
-            if (global.factorRef <= 0.0) {
-                global.destRX    = NaN;
-                global.destRY    = NaN;
-                global.factorRef = NaN;
+        else if (std::isnan(properties.destRX)) {
+            properties.destR = v;
+            properties.factorRef = calculateDistance(properties.baseRX, properties.baseRY, properties.destRX, properties.destRY);
+            if (properties.factorRef <= 0.0) {
+                properties.destRX    = NaN;
+                properties.destRY    = NaN;
+                properties.factorRef = NaN;
                 alert(tr("Value must be positive and nonzero."));
                 setPromptPrefix(tr("Specify second point: "));
             }
             else {
                 appendPromptHistory();
-                setRubberPoint("LINE_START", global.baseX, global.baseY);
-                previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
+                setRubberPoint("LINE_START", properties.baseX, properties.baseY);
+                previewOn("SELECTED", "SCALE", properties.baseX, properties.baseY, properties.factorRef);
                 setPromptPrefix(tr("Specify new length: "));
             }
         }
-        else if (std::isnan(global.factorNew)) {
-            global.factorNew = calculateDistance(global.baseX, global.baseY, x, y);
-            if (global.factorNew <= 0.0) {
-                global.factorNew = NaN;
+        else if (std::isnan(properties.factorNew)) {
+            properties.factorNew = calculateDistance(properties.baseX, properties.baseY, x, y);
+            if (properties.factorNew <= 0.0) {
+                properties.factorNew = NaN;
                 alert(tr("Value must be positive and nonzero."));
                 setPromptPrefix(tr("Specify new length: "));
             }
             else {
                 appendPromptHistory();
-                scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
+                scaleSelected(properties.baseX, properties.baseY, properties.factorNew/properties.factorRef);
                 previewOff();
                 actuator("end");
             }
@@ -6446,27 +6362,27 @@ void
 scale_prompt(String str)
 {
     /*
-    if (global["mode"].s == MODE_NORMAL) {
-        if (global.firstRun) {
+    if (properties["mode"].s == MODE_NORMAL) {
+        if (properties.firstRun) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Invalid point."));
                 setPromptPrefix(tr("Specify base point: "));
             }
             else {
-                global.firstRun = false;
-                global.baseX = Number(strList[0]);
-                global.baseY = Number(strList[1]);
+                properties.firstRun = false;
+                properties.baseX = Number(strList[0]);
+                properties.baseY = Number(strList[1]);
                 addRubber("LINE");
                 setRubberMode("LINE");
-                setRubberPoint("LINE_START", global.baseX, global.baseY);
-                previewOn("SELECTED", "SCALE", global.baseX, global.baseY, 1);
+                setRubberPoint("LINE_START", properties.baseX, properties.baseY);
+                previewOn("SELECTED", "SCALE", properties.baseX, properties.baseY, 1);
                 setPromptPrefix(tr("Specify scale factor or [Reference]: "));
             }
         }
         else {
             if (str == "R" || str == "REFERENCE") {
-                global.mode = MODE_REFERENCE;
+                properties.mode = MODE_REFERENCE;
                 setPromptPrefix(tr("Specify reference length") + " {1}: ");
                 clearRubber();
                 previewOff();
@@ -6477,16 +6393,16 @@ scale_prompt(String str)
                     setPromptPrefix(tr("Specify scale factor or [Reference]: "));
                 }
                 else {
-                    global.factor = Number(str);
-                    scaleSelected(global.baseX, global.baseY, global.factor);
+                    properties.factor = Number(str);
+                    scaleSelected(properties.baseX, properties.baseY, properties.factor);
                     previewOff();
                     actuator("end");
                 }
             }
         }
     }
-    else if (global["mode"].s == MODE_REFERENCE) {
-        if (std::isnan(global.baseRX)) {
+    else if (properties["mode"].s == MODE_REFERENCE) {
+        if (std::isnan(properties.baseRX)) {
             if (std::isnan(str)) {
                 EmbReal strList = str.split(",");
                 if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -6494,41 +6410,41 @@ scale_prompt(String str)
                     setPromptPrefix(tr("Specify reference length") + " {1}: ");
                 }
                 else {
-                    global.baseRX = Number(strList[0]);
-                    global.baseRY = Number(strList[1]);
+                    properties.baseRX = Number(strList[0]);
+                    properties.baseRY = Number(strList[1]);
                     addRubber("LINE");
                     setRubberMode("LINE");
-                    setRubberPoint("LINE_START", global.baseRX, global.baseRY);
+                    setRubberPoint("LINE_START", properties.baseRX, properties.baseRY);
                     setPromptPrefix(tr("Specify second point: "));
                 }
             }
             else {
                 //The base and dest values are only set here to advance the command.
-                global.baseRX = 0.0;
-                global.baseRY = 0.0;
-                global.destRX = 0.0;
-                global.destRY = 0.0;
+                properties.baseRX = 0.0;
+                properties.baseRY = 0.0;
+                properties.destRX = 0.0;
+                properties.destRY = 0.0;
                 //The reference length is what we will use later.
-                global.factorRef = Number(str);
-                if (global.factorRef <= 0.0) {
-                    global.baseRX    = NaN;
-                    global.baseRY    = NaN;
-                    global.destRX    = NaN;
-                    global.destRY    = NaN;
-                    global.factorRef = NaN;
+                properties.factorRef = Number(str);
+                if (properties.factorRef <= 0.0) {
+                    properties.baseRX    = NaN;
+                    properties.baseRY    = NaN;
+                    properties.destRX    = NaN;
+                    properties.destRY    = NaN;
+                    properties.factorRef = NaN;
                     alert(tr("Value must be positive and nonzero."));
                     setPromptPrefix(tr("Specify reference length") + " {1}: ");
                 }
                 else {
                     addRubber("LINE");
                     setRubberMode("LINE");
-                    setRubberPoint("LINE_START", global.baseX, global.baseY);
-                    previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
+                    setRubberPoint("LINE_START", properties.baseX, properties.baseY);
+                    previewOn("SELECTED", "SCALE", properties.baseX, properties.baseY, properties.factorRef);
                     setPromptPrefix(tr("Specify new length: "));
                 }
             }
         }
-        else if (std::isnan(global.destRX)) {
+        else if (std::isnan(properties.destRX)) {
             if (std::isnan(str)) {
                 EmbReal strList = str.split(",");
                 if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -6536,46 +6452,46 @@ scale_prompt(String str)
                     setPromptPrefix(tr("Specify second point: "));
                 }
                 else {
-                    global.destRX = Number(strList[0]);
-                    global.destRY = Number(strList[1]);
-                    global.factorRef = calculateDistance(global.baseRX, global.baseRY, global.destRX, global.destRY);
-                    if (global.factorRef <= 0.0) {
-                        global.destRX    = NaN;
-                        global.destRY    = NaN;
-                        global.factorRef = NaN;
+                    properties.destRX = Number(strList[0]);
+                    properties.destRY = Number(strList[1]);
+                    properties.factorRef = calculateDistance(properties.baseRX, properties.baseRY, properties.destRX, properties.destRY);
+                    if (properties.factorRef <= 0.0) {
+                        properties.destRX    = NaN;
+                        properties.destRY    = NaN;
+                        properties.factorRef = NaN;
                         alert(tr("Value must be positive and nonzero."));
                         setPromptPrefix(tr("Specify second point: "));
                     }
                     else {
-                        setRubberPoint("LINE_START", global.baseX, global.baseY);
-                        previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
+                        setRubberPoint("LINE_START", properties.baseX, properties.baseY);
+                        previewOn("SELECTED", "SCALE", properties.baseX, properties.baseY, properties.factorRef);
                         setPromptPrefix(tr("Specify new length: "));
                     }
                 }
             }
             else {
                 //The base and dest values are only set here to advance the command.
-                global.baseRX = 0.0;
-                global.baseRY = 0.0;
-                global.destRX = 0.0;
-                global.destRY = 0.0;
+                properties.baseRX = 0.0;
+                properties.baseRY = 0.0;
+                properties.destRX = 0.0;
+                properties.destRY = 0.0;
                 //The reference length is what we will use later.
-                global.factorRef = Number(str);
-                if (global.factorRef <= 0.0) {
-                    global.destRX    = NaN;
-                    global.destRY    = NaN;
-                    global.factorRef = NaN;
+                properties.factorRef = Number(str);
+                if (properties.factorRef <= 0.0) {
+                    properties.destRX    = NaN;
+                    properties.destRY    = NaN;
+                    properties.factorRef = NaN;
                     alert(tr("Value must be positive and nonzero."));
                     setPromptPrefix(tr("Specify second point: "));
                 }
                 else {
-                    setRubberPoint("LINE_START", global.baseX, global.baseY);
-                    previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
+                    setRubberPoint("LINE_START", properties.baseX, properties.baseY);
+                    previewOn("SELECTED", "SCALE", properties.baseX, properties.baseY, properties.factorRef);
                     setPromptPrefix(tr("Specify new length: "));
                 }
             }
         }
-        else if (std::isnan(global.factorNew)) {
+        else if (std::isnan(properties.factorNew)) {
             if (std::isnan(str)) {
                 EmbReal strList = str.split(",");
                 if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -6585,28 +6501,28 @@ scale_prompt(String str)
                 else {
                     EmbReal x = Number(strList[0]);
                     EmbReal y = Number(strList[1]);
-                    global.factorNew = calculateDistance(global.baseX, global.baseY, x, y);
-                    if (global.factorNew <= 0.0) {
-                        global.factorNew = NaN;
+                    properties.factorNew = calculateDistance(properties.baseX, properties.baseY, x, y);
+                    if (properties.factorNew <= 0.0) {
+                        properties.factorNew = NaN;
                         alert(tr("Value must be positive and nonzero."));
                         setPromptPrefix(tr("Specify new length: "));
                     }
                     else {
-                        scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
+                        scaleSelected(properties.baseX, properties.baseY, properties.factorNew/properties.factorRef);
                         previewOff();
                         actuator("end");
                     }
                 }
             }
             else {
-                global.factorNew = Number(str);
-                if (global.factorNew <= 0.0) {
-                    global.factorNew = NaN;
+                properties.factorNew = Number(str);
+                if (properties.factorNew <= 0.0) {
+                    properties.factorNew = NaN;
                     alert(tr("Value must be positive and nonzero."));
                     setPromptPrefix(tr("Specify new length: "));
                 }
                 else {
-                    scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
+                    scaleSelected(properties.baseX, properties.baseY, properties.factorNew/properties.factorRef);
                     previewOff();
                     actuator("end");
                 }
@@ -6619,15 +6535,15 @@ scale_prompt(String str)
 
 //Command: Single Line Text
 /*
-Dictionary global;
-global.text;
-global.textX;
-global.textY;
-global.textJustify;
-global.textFont;
-global.textHeight;
-global.textRotation;
-global.mode;
+String properties;
+properties.text;
+properties.textX;
+properties.textY;
+properties.textJustify;
+properties.textFont;
+properties.textHeight;
+properties.textRotation;
+properties.mode;
 */
 
 /**
@@ -6639,15 +6555,15 @@ text_single_main(void)
     /*
     initCommand();
     clearSelection();
-    global.text = "";
-    global.textX = NaN;
-    global.textY = NaN;
-    global.textJustify = "Left";
-    global.textFont = textFont();
-    global.textHeight = NaN;
-    global.textRotation = NaN;
-    global.mode = MODE_SETGEOM;
-    setPromptPrefix(tr("Current font: ") + "{" + global.textFont + "} " + tr("Text height: ") + "{" +  textSize() + "}");
+    properties.text = "";
+    properties.textX = NaN;
+    properties.textY = NaN;
+    properties.textJustify = "Left";
+    properties.textFont = textFont();
+    properties.textHeight = NaN;
+    properties.textRotation = NaN;
+    properties.mode = MODE_SETGEOM;
+    setPromptPrefix(tr("Current font: ") + "{" + properties.textFont + "} " + tr("Text height: ") + "{" +  textSize() + "}");
     appendPromptHistory();
     setPromptPrefix(tr("Specify start point of text or [Justify/Setfont]: "));
     */
@@ -6657,40 +6573,40 @@ text_single_main(void)
  * .
  */
 void
-text_single_click(Dictionary global, EmbVector v)
+text_single_click(String properties, EmbVector v)
 {
     /*
-    if (global["mode"].s == MODE_SETGEOM) {
-        if (std::isnan(global.textX)) {
-            global.textX = x;
-            global.textY = y;
+    if (properties["mode"].s == MODE_SETGEOM) {
+        if (std::isnan(properties.textX)) {
+            properties.textX = x;
+            properties.textY = y;
             addRubber("LINE");
             setRubberMode("LINE");
-            setRubberPoint("LINE_START", global.textX, global.textY);
+            setRubberPoint("LINE_START", properties.textX, properties.textY);
             appendPromptHistory();
             setPromptPrefix(tr("Specify text height") + " {" + textSize() + "}: ");
         }
-        else if (std::isnan(global.textHeight)) {
-            global.textHeight = calculateDistance(global.textX, global.textY, x, y);
-            setTextSize(global.textHeight);
+        else if (std::isnan(properties.textHeight)) {
+            properties.textHeight = calculateDistance(properties.textX, properties.textY, x, y);
+            setTextSize(properties.textHeight);
             appendPromptHistory();
             setPromptPrefix(tr("Specify text angle") + " {" + textAngle() + "}: ");
         }
-        else if (std::isnan(global.textRotation)) {
-            global.textRotation = calculateAngle(global.textX, global.textY, x, y);
-            setTextAngle(global.textRotation);
+        else if (std::isnan(properties.textRotation)) {
+            properties.textRotation = calculateAngle(properties.textX, properties.textY, x, y);
+            setTextAngle(properties.textRotation);
             appendPromptHistory();
             setPromptPrefix(tr("Enter text: "));
-            global.mode = MODE_RAPID;
+            properties.mode = MODE_RAPID;
             prompt->enableRapidFire();
             clearRubber();
             addRubber("TEXTSINGLE");
             setRubberMode("TEXTSINGLE");
-            setRubberPoint("TEXT_POINT", global.textX, global.textY);
-            setRubberPoint("TEXT_HEIGHT_ROTATION", global.textHeight, global.textRotation);
-            setRubberText("TEXT_FONT", global.textFont);
-            setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setRubberText("TEXT_RAPID", global.text);
+            setRubberPoint("TEXT_POINT", properties.textX, properties.textY);
+            setRubberPoint("TEXT_HEIGHT_ROTATION", properties.textHeight, properties.textRotation);
+            setRubberText("TEXT_FONT", properties.textFont);
+            setRubberText("TEXT_JUSTIFY", properties.textJustify);
+            setRubberText("TEXT_RAPID", properties.text);
         }
         else {
             //Do nothing, as we are in rapidFire mode now.
@@ -6715,89 +6631,89 @@ void
 text_single_prompt(String str)
 {
     /*
-    if (global["mode"].s == MODE_JUSTIFY) {
+    if (properties["mode"].s == MODE_JUSTIFY) {
         if (str == "C" || str == "CENTER") {
-            global.mode = MODE_SETGEOM;
-            global.textJustify = "Center";
-            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            properties.mode = MODE_SETGEOM;
+            properties.textJustify = "Center";
+            setRubberText("TEXT_JUSTIFY", properties.textJustify);
             setPromptPrefix(tr("Specify center point of text or [Justify/Setfont]: "));
         }
         else if (str == "R" || str == "RIGHT") {
-            global.mode = MODE_SETGEOM;
-            global.textJustify = "Right";
-            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            properties.mode = MODE_SETGEOM;
+            properties.textJustify = "Right";
+            setRubberText("TEXT_JUSTIFY", properties.textJustify);
             setPromptPrefix(tr("Specify right-end point of text or [Justify/Setfont]: "));
         }
         else if (str == "A" || str == "ALIGN") {
-            global.mode = MODE_SETGEOM;
-            global.textJustify = "Aligned";
-            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            properties.mode = MODE_SETGEOM;
+            properties.textJustify = "Aligned";
+            setRubberText("TEXT_JUSTIFY", properties.textJustify);
             setPromptPrefix(tr("Specify start point of text or [Justify/Setfont]: "));
         }
         else if (str == "M" || str == "MIDDLE") {
-            global.mode = MODE_SETGEOM;
-            global.textJustify = "Middle";
-            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            properties.mode = MODE_SETGEOM;
+            properties.textJustify = "Middle";
+            setRubberText("TEXT_JUSTIFY", properties.textJustify);
             setPromptPrefix(tr("Specify middle point of text or [Justify/Setfont]: "));
         }
         else if (str == "F" || str == "FIT") {
-            global.mode = MODE_SETGEOM;
-            global.textJustify = "Fit";
-            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            properties.mode = MODE_SETGEOM;
+            properties.textJustify = "Fit";
+            setRubberText("TEXT_JUSTIFY", properties.textJustify);
             setPromptPrefix(tr("Specify start point of text or [Justify/Setfont]: "));
         }
         else if (str == "TL" || str == "TOPLEFT") {
-            global.mode = MODE_SETGEOM;
-            global.textJustify = "Top Left";
-            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            properties.mode = MODE_SETGEOM;
+            properties.textJustify = "Top Left";
+            setRubberText("TEXT_JUSTIFY", properties.textJustify);
             setPromptPrefix(tr("Specify top-left point of text or [Justify/Setfont]: "));
         }
         else if (str == "TC" || str == "TOPCENTER") {
-            global.mode = MODE_SETGEOM;
-            global.textJustify = "Top Center";
-            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            properties.mode = MODE_SETGEOM;
+            properties.textJustify = "Top Center";
+            setRubberText("TEXT_JUSTIFY", properties.textJustify);
             setPromptPrefix(tr("Specify top-center point of text or [Justify/Setfont]: "));
         }
         else if (str == "TR" || str == "TOPRIGHT") {
-            global.mode = MODE_SETGEOM;
-            global.textJustify = "Top Right";
-            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            properties.mode = MODE_SETGEOM;
+            properties.textJustify = "Top Right";
+            setRubberText("TEXT_JUSTIFY", properties.textJustify);
             setPromptPrefix(tr("Specify top-right point of text or [Justify/Setfont]: "));
         }
         else if (str == "ML" || str == "MIDDLELEFT") {
-            global.mode = MODE_SETGEOM;
-            global.textJustify = "Middle Left";
-            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            properties.mode = MODE_SETGEOM;
+            properties.textJustify = "Middle Left";
+            setRubberText("TEXT_JUSTIFY", properties.textJustify);
             setPromptPrefix(tr("Specify middle-left point of text or [Justify/Setfont]: "));
         }
         else if (str == "MC" || str == "MIDDLECENTER") {
-            global.mode = MODE_SETGEOM;
-            global.textJustify = "Middle Center";
-            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            properties.mode = MODE_SETGEOM;
+            properties.textJustify = "Middle Center";
+            setRubberText("TEXT_JUSTIFY", properties.textJustify);
             setPromptPrefix(tr("Specify middle-center point of text or [Justify/Setfont]: "));
         }
         else if (str == "MR" || str == "MIDDLERIGHT") {
-            global.mode = MODE_SETGEOM;
-            global.textJustify = "Middle Right";
-            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            properties.mode = MODE_SETGEOM;
+            properties.textJustify = "Middle Right";
+            setRubberText("TEXT_JUSTIFY", properties.textJustify);
             setPromptPrefix(tr("Specify middle-right point of text or [Justify/Setfont]: "));
         }
         else if (str == "BL" || str == "BOTTOMLEFT") {
-            global.mode = MODE_SETGEOM;
-            global.textJustify = "Bottom Left";
-            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            properties.mode = MODE_SETGEOM;
+            properties.textJustify = "Bottom Left";
+            setRubberText("TEXT_JUSTIFY", properties.textJustify);
             setPromptPrefix(tr("Specify bottom-left point of text or [Justify/Setfont]: "));
         }
         else if (str == "BC" || str == "BOTTOMCENTER") {
-            global.mode = MODE_SETGEOM;
-            global.textJustify = "Bottom Center";
-            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            properties.mode = MODE_SETGEOM;
+            properties.textJustify = "Bottom Center";
+            setRubberText("TEXT_JUSTIFY", properties.textJustify);
             setPromptPrefix(tr("Specify bottom-center point of text or [Justify/Setfont]: "));
         }
         else if (str == "BR" || str == "BOTTOMRIGHT") {
-            global.mode = MODE_SETGEOM;
-            global.textJustify = "Bottom Right";
-            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            properties.mode = MODE_SETGEOM;
+            properties.textJustify = "Bottom Right";
+            setRubberText("TEXT_JUSTIFY", properties.textJustify);
             setPromptPrefix(tr("Specify bottom-right point of text or [Justify/Setfont]: "));
         }
         else {
@@ -6805,21 +6721,21 @@ text_single_prompt(String str)
             setPromptPrefix(tr("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "));
         }
     }
-    else if (global["mode"].s == MODE_SETFONT) {
-        global.mode = MODE_SETGEOM;
-        global.textFont = str;
-        setRubberText("TEXT_FONT", global.textFont);
-        setTextFont(global.textFont);
+    else if (properties["mode"].s == MODE_SETFONT) {
+        properties.mode = MODE_SETGEOM;
+        properties.textFont = str;
+        setRubberText("TEXT_FONT", properties.textFont);
+        setTextFont(properties.textFont);
         setPromptPrefix(tr("Specify start point of text or [Justify/Setfont]: "));
     }
-    else if (global["mode"].s == MODE_SETGEOM) {
-        if (std::isnan(global.textX)) {
+    else if (properties["mode"].s == MODE_SETGEOM) {
+        if (std::isnan(properties.textX)) {
             if (str == "J" || str == "JUSTIFY") {
-                global.mode = MODE_JUSTIFY;
+                properties.mode = MODE_JUSTIFY;
                 setPromptPrefix(tr("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "));
             }
             else if (str == "S" || str == "SETFONT") {
-                global.mode = MODE_SETFONT;
+                properties.mode = MODE_SETFONT;
                 setPromptPrefix(tr("Specify font name: "));
             }
             else {
@@ -6829,18 +6745,18 @@ text_single_prompt(String str)
                     setPromptPrefix(tr("Specify start point of text or [Justify/Setfont]: "));
                 }
                 else {
-                    global.textX = Number(strList[0]);
-                    global.textY = Number(strList[1]);
+                    properties.textX = Number(strList[0]);
+                    properties.textY = Number(strList[1]);
                     addRubber("LINE");
                     setRubberMode("LINE");
-                    setRubberPoint("LINE_START", global.textX, global.textY);
+                    setRubberPoint("LINE_START", properties.textX, properties.textY);
                     setPromptPrefix(tr("Specify text height") + " {" + textSize() + "}: ");
                 }
             }
         }
-        else if (std::isnan(global.textHeight)) {
+        else if (std::isnan(properties.textHeight)) {
             if (str == "") {
-                global.textHeight = textSize();
+                properties.textHeight = textSize();
                 setPromptPrefix(tr("Specify text angle") + " {" + textAngle() + "}: ");
             }
             else if (std::isnan(str)) {
@@ -6848,53 +6764,53 @@ text_single_prompt(String str)
                 setPromptPrefix(tr("Specify text height") + " {" + textSize() + "}: ");
             }
             else {
-                global.textHeight = Number(str);
-                setTextSize(global.textHeight);
+                properties.textHeight = Number(str);
+                setTextSize(properties.textHeight);
                 setPromptPrefix(tr("Specify text angle") + " {" + textAngle() + "}: ");
             }
         }
-        else if (std::isnan(global.textRotation)) {
+        else if (std::isnan(properties.textRotation)) {
             if (str == "") {
-                global.textRotation = textAngle();
+                properties.textRotation = textAngle();
                 setPromptPrefix(tr("Enter text: "));
-                global.mode = MODE_RAPID;
+                properties.mode = MODE_RAPID;
                 prompt->enableRapidFire();
                 clearRubber();
                 addRubber("TEXTSINGLE");
                 setRubberMode("TEXTSINGLE");
-                setRubberPoint("TEXT_POINT", global.textX, global.textY);
-                setRubberPoint("TEXT_HEIGHT_ROTATION", global.textHeight, global.textRotation);
-                setRubberText("TEXT_FONT", global.textFont);
-                setRubberText("TEXT_JUSTIFY", global.textJustify);
-                setRubberText("TEXT_RAPID", global.text);
+                setRubberPoint("TEXT_POINT", properties.textX, properties.textY);
+                setRubberPoint("TEXT_HEIGHT_ROTATION", properties.textHeight, properties.textRotation);
+                setRubberText("TEXT_FONT", properties.textFont);
+                setRubberText("TEXT_JUSTIFY", properties.textJustify);
+                setRubberText("TEXT_RAPID", properties.text);
             }
             else if (std::isnan(str)) {
                 alert(tr("Requires valid numeric angle or second point."));
                 setPromptPrefix(tr("Specify text angle") + " {" + textAngle() + "}: ");
             }
             else {
-                global.textRotation = Number(str);
-                setTextAngle(global.textRotation);
+                properties.textRotation = Number(str);
+                setTextAngle(properties.textRotation);
                 setPromptPrefix(tr("Enter text: "));
-                global.mode = MODE_RAPID;
+                properties.mode = MODE_RAPID;
                 prompt->enableRapidFire();
                 clearRubber();
                 addRubber("TEXTSINGLE");
                 setRubberMode("TEXTSINGLE");
-                setRubberPoint("TEXT_POINT", global.textX, global.textY);
-                setRubberPoint("TEXT_HEIGHT_ROTATION", global.textHeight, global.textRotation);
-                setRubberText("TEXT_FONT", global.textFont);
-                setRubberText("TEXT_JUSTIFY", global.textJustify);
-                setRubberText("TEXT_RAPID", global.text);
+                setRubberPoint("TEXT_POINT", properties.textX, properties.textY);
+                setRubberPoint("TEXT_HEIGHT_ROTATION", properties.textHeight, properties.textRotation);
+                setRubberText("TEXT_FONT", properties.textFont);
+                setRubberText("TEXT_JUSTIFY", properties.textJustify);
+                setRubberText("TEXT_RAPID", properties.text);
             }
         }
         else {
             //Do nothing, as we are in rapidFire mode now.
         }
     }
-    else if (global["mode"].s == MODE_RAPID) {
+    else if (properties["mode"].s == MODE_RAPID) {
         if (str == "RAPID_ENTER") {
-            if (global.text == "") {
+            if (properties.text == "") {
                 actuator("end");
             }
             else {
@@ -6904,50 +6820,50 @@ text_single_prompt(String str)
             }
         }
         else {
-            global.text = str;
-            setRubberText("TEXT_RAPID", global.text);
+            properties.text = str;
+            setRubberText("TEXT_RAPID", properties.text);
         }
     }
     */
 }
 
-Dictionary snowflake_main(void);
-Dictionary updateSnowflake(Dictionary global, EmbVector scale);
+String snowflake_main(void);
+String updateSnowflake(String properties, EmbVector scale);
 
-Dictionary star_main(void);
-Dictionary star_move(Dictionary global, EmbVector v);
-Dictionary star_prompt(Dictionary global);
-Dictionary star_context(Dictionary global);
-Dictionary star_prompt(Dictionary global);
-Dictionary updateStar(Dictionary global, EmbVector mouse);
+String star_main(void);
+String star_move(String properties, EmbVector v);
+String star_prompt(String properties);
+String star_context(String properties);
+String star_prompt(String properties);
+String updateStar(String properties, EmbVector mouse);
 
-Dictionary syswindows_main(void);
-Dictionary syswindows_prompt(Dictionary global);
+String syswindows_main(void);
+String syswindows_prompt(String properties);
 
 /**
  * .
  */
-Dictionary
+String
 snowflake_main(void)
 {
-    Dictionary global;
+    String properties;
     //initCommand();
     //clearSelection();
-    global["numPoints"] = node(2048); //Default //TODO: min:64 max:8192
-    global["center.x"] = node(0.0f);
-    global["center.y"] = node(0.0f);
-    global["scale.x"] = node(0.04f);
-    global["scale.y"] = node(0.04f);
-    global["mode"] = node("SNOWFLAKE_MODE_NUM_POINTS");
+    properties["numPoints"] = node(2048); //Default //TODO: min:64 max:8192
+    properties["center.x"] = node(0.0f);
+    properties["center.y"] = node(0.0f);
+    properties["scale.x"] = node(0.04f);
+    properties["scale.y"] = node(0.04f);
+    properties["mode"] = node("SNOWFLAKE_MODE_NUM_POINTS");
 
     //addRubber("POLYGON");
     //setRubberMode("POLYGON");
     EmbVector v;
     v.x = 0.04f; v.y = 0.04f;
-    global = updateSnowflake(global, v);
+    properties = updateSnowflake(properties, v);
     //spareRubber("POLYGON");
     actuator("end");
-    return global;
+    return properties;
 }
 
 /**
@@ -6966,11 +6882,11 @@ fourier_series(EmbReal arg, std::vector<EmbReal> terms)
 /**
  * Snowflake Curve with t [0,2pi]
  */
-Dictionary
-updateSnowflake(Dictionary global, EmbVector scale)
+String
+updateSnowflake(String properties, EmbVector scale)
 {
-    for (int i = 0; i <= global["numPoints"].i; i++) {
-        EmbReal t = (2.0*emb_constant_pi) / global["numPoints"].i*i;
+    for (int i = 0; i <= properties["numPoints"].i; i++) {
+        EmbReal t = (2.0*emb_constant_pi) / properties["numPoints"].i*i;
         EmbVector v;
         v.x = fourier_series(t, snowflake_x);
         v.y = fourier_series(t, snowflake_y);
@@ -6989,14 +6905,14 @@ updateSnowflake(Dictionary global, EmbVector scale)
 /**
  * .
  */
-Dictionary
+String
 star_main(void)
 {
-    Dictionary global;
+    String properties;
     /*
     initCommand();
     clearSelection();
-    global.numPoints = 5;
+    properties.numPoints = 5;
     EmbVector center;
     EmbVector point1;
     EmbVector point2;
@@ -7006,117 +6922,117 @@ star_main(void)
     point1.y = 1.0;
     point2.x = 2.0;
     point2.y = 2.0;
-    global["center"] = node(center);
-    global["point1"] = node(point1);
-    global["point2"] = node(point2);
-    global.mode = STAR_MODE_NUM_POINTS;
+    properties["center"] = node(center);
+    properties["point1"] = node(point1);
+    properties["point2"] = node(point2);
+    properties.mode = STAR_MODE_NUM_POINTS;
     setPromptPrefix(tr("Enter number of star points {5}: "));
     */
-    return global;
+    return properties;
 }
 
 /**
  * @brief star_click
  */
-Dictionary
-star_click(Dictionary global, EmbReal mouse)
+String
+star_click(String properties, EmbReal mouse)
 {
     /*
-    if (global["mode"].s == MODE_NUM_POINTS) {
+    if (properties["mode"].s == MODE_NUM_POINTS) {
         //Do nothing, the prompt controls this.
     }
-    else if (global["mode"].s == MODE_CENTER_PT) {
-        global->center = mouse;
-        global.mode = MODE_RAD_OUTER;
+    else if (properties["mode"].s == MODE_CENTER_PT) {
+        properties->center = mouse;
+        properties.mode = MODE_RAD_OUTER;
         setPromptPrefix(tr("Specify outer radius of star: "));
         addRubber("POLYGON");
         setRubberMode("POLYGON");
-        updateStar(global, global->center);
+        updateStar(properties, properties->center);
         actuator("enable move-rapid-fire");
     }
-    else if (global["mode"].s == MODE_RAD_OUTER) {
-        global->point1 = mouse;
-        global["mode"].s = MODE_RAD_INNER;
+    else if (properties["mode"].s == MODE_RAD_OUTER) {
+        properties->point1 = mouse;
+        properties["mode"].s = MODE_RAD_INNER;
         setPromptPrefix(tr("Specify inner radius of star: "));
-        updateStar(global.point1);
+        updateStar(properties.point1);
     }
-    else if (global["mode"].s == MODE_RAD_INNER) {
-        global->point2 = mouse;
+    else if (properties["mode"].s == MODE_RAD_INNER) {
+        properties->point2 = mouse;
         actuator("disable move-rapid-fire");
-        updateStar(global.point2);
+        updateStar(properties.point2);
         spareRubber("POLYGON");
         //actuator("end");
     }
     */
-    return global;
+    return properties;
 }
 
 /**
  * @brief star_move
  */
-Dictionary
-star_move(Dictionary global, EmbVector v)
+String
+star_move(String properties, EmbVector v)
 {
-    if (global["mode"].s == "STAR_MODE_NUM_POINTS") {
+    if (properties["mode"].s == "STAR_MODE_NUM_POINTS") {
         //Do nothing, the prompt controls this.
     }
-    else if (global["mode"].s == "STAR_MODE_CENTER_PT") {
+    else if (properties["mode"].s == "STAR_MODE_CENTER_PT") {
         //Do nothing, prompt and click controls this.
     }
-    else if (global["mode"].s == "STAR_MODE_RAD_OUTER") {
-        global = updateStar(global, v);
+    else if (properties["mode"].s == "STAR_MODE_RAD_OUTER") {
+        properties = updateStar(properties, v);
     }
-    else if (global["mode"].s == "STAR_MODE_RAD_INNER") {
-        global = updateStar(global, v);
+    else if (properties["mode"].s == "STAR_MODE_RAD_INNER") {
+        properties = updateStar(properties, v);
     }
-    return global;
+    return properties;
 }
 
 /**
  * @brief star_context
  */
-Dictionary
-star_context(Dictionary global, String str)
+String
+star_context(String properties, String str)
 {
     //todo("STAR", "context()");
-    return global;
+    return properties;
 }
 
 /**
  * @brief star_prompt
  */
-Dictionary
-star_prompt(Dictionary global, String str)
+String
+star_prompt(String properties, String str)
 {
     /*
-    if (global["mode"].s == STAR_MODE_NUM_POINTS) {
-        if (str == "" && global.numPoints >= 3 && global.numPoints <= 1024) {
+    if (properties["mode"].s == STAR_MODE_NUM_POINTS) {
+        if (str == "" && properties.numPoints >= 3 && properties.numPoints <= 1024) {
             setPromptPrefix(tr("Specify center point: "));
-            global.mode = STAR_MODE_CENTER_PT;
+            properties.mode = STAR_MODE_CENTER_PT;
         }
         else {
             EmbReal tmp = Number(str);
             if (std::isnan(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024) {
                 alert(tr("Requires an integer between 3 and 1024."));
-                setPromptPrefix(tr("Enter number of star points") + " {" + global.numPoints.toString() + "}: ");
+                setPromptPrefix(tr("Enter number of star points") + " {" + properties.numPoints.toString() + "}: ");
             }
             else {
-                global.numPoints = tmp;
+                properties.numPoints = tmp;
                 setPromptPrefix(tr("Specify center point: "));
-                global.mode = MODE_CENTER_PT;
+                properties.mode = MODE_CENTER_PT;
             }
         }
     }
-    else if (global["mode"].s == STAR_MODE_CENTER_PT) {
+    else if (properties["mode"].s == STAR_MODE_CENTER_PT) {
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
             setPromptPrefix(tr("Specify center point: "));
         }
         else {
-            global->center.x = Number(strList[0]);
-            global->center.y = Number(strList[1]);
-            global.mode = MODE_RAD_OUTER;
+            properties->center.x = Number(strList[0]);
+            properties->center.y = Number(strList[1]);
+            properties.mode = MODE_RAD_OUTER;
             setPromptPrefix(tr("Specify outer radius of star: "));
             addRubber("POLYGON");
             setRubberMode("POLYGON");
@@ -7124,31 +7040,31 @@ star_prompt(Dictionary global, String str)
             actuator("enable move-rapid-fire");
         }
     }
-    else if (global["mode"].s == STAR_MODE_RAD_OUTER) {
+    else if (properties["mode"].s == STAR_MODE_RAD_OUTER) {
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
             setPromptPrefix(tr("Specify outer radius of star: "));
         }
         else {
-            global.x1 = Number(strList[0]);
-            global.y1 = Number(strList[1]);
-            global.mode = MODE_RAD_INNER;
+            properties.x1 = Number(strList[0]);
+            properties.y1 = Number(strList[1]);
+            properties.mode = MODE_RAD_INNER;
             setPromptPrefix(tr("Specify inner radius of star: "));
             updateStar(qsnapX(), qsnapY());
         }
     }
-    else if (global["mode"].s == STAR_MODE_RAD_INNER) {
+    else if (properties["mode"].s == STAR_MODE_RAD_INNER) {
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
             setPromptPrefix(tr("Specify inner radius of star: "));
         }
         else {
-            global.x2 = Number(strList[0]);
-            global.y2 = Number(strList[1]);
+            properties.x2 = Number(strList[0]);
+            properties.y2 = Number(strList[1]);
             actuator("disable move-rapid-fire");
-            updateStar(global.x2, global.y2);
+            updateStar(properties.x2, properties.y2);
             spareRubber("POLYGON");
             //actuator("end");
         }
@@ -7166,22 +7082,22 @@ Geometry::updateStar(EmbVector mouse)
     EmbReal distInner;
     EmbReal angOuter;
 
-    if (global["mode"].s == "STAR_MODE_RAD_OUTER") {
-        EmbVector v = mouse - global["center"].v;
+    if (properties["mode"].s == "STAR_MODE_RAD_OUTER") {
+        EmbVector v = mouse - properties["center"].v;
         angOuter = embVector_angle(v);
         distOuter = embVector_length(v);
         distInner = distOuter/2.0;
     }
-    else if (global["mode"].s == "STAR_MODE_RAD_INNER") {
-        EmbVector v = global["point1"].v - global["center"].v;
+    else if (properties["mode"].s == "STAR_MODE_RAD_INNER") {
+        EmbVector v = properties["point1"].v - properties["center"].v;
         angOuter = embVector_angle(v);
         distOuter = embVector_length(v);
-        distInner = embVector_distance(global["center"].v, mouse);
+        distInner = embVector_distance(properties["center"].v, mouse);
     }
 
     // Calculate the Star Points
-    EmbReal angInc = 360.0/(global["numPoints"].i*2);
-    for (int i = 0; i < global["numPoints"].i*2; i++) {
+    EmbReal angInc = 360.0/(properties["numPoints"].i*2);
+    for (int i = 0; i < properties["numPoints"].i*2; i++) {
         EmbReal angle = (angOuter + (angInc*i)) * emb_constant_pi / 180.0;
         EmbVector v = embVector_unit(angle);
         if (i%2 == 0) {
@@ -7193,13 +7109,13 @@ Geometry::updateStar(EmbVector mouse)
         /*
         setRubberPoint(
             QString::fromStdString("POLYGON_POINT_" + std::to_string(i)),
-            global->center.x + v.x,
-            global->center.y + v.y);
+            properties->center.x + v.x,
+            properties->center.y + v.y);
         */
     }
     /*
     setRubberText("POLYGON_NUM_POINTS",
-        (global.numPoints*2 - 1).toString());
+        (properties.numPoints*2 - 1).toString());
     */
 }
 

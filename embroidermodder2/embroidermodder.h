@@ -447,6 +447,8 @@ public:
     bool objTextUpsideDown;
     QPainterPath objTextPath;
 
+    int gripIndex;
+
     int Type = OBJ_TYPE_BASE;
     virtual int type(){ return Type; }
 
@@ -486,8 +488,7 @@ public:
 
     ~Geometry();
 
-    void setObjectRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
-
+    /* Getters */
     Qt::PenStyle objectLineType() { return objPen.style(); }
     EmbReal objectLineWeight() { return lwtPen.widthF(); }
     QPointF objectRubberPoint(QString key);
@@ -497,11 +498,7 @@ public:
     QPointF objectPos() { return scenePos(); }
     EmbReal objectX(){ return scenePos().x(); }
     EmbReal objectY(){ return scenePos().y(); }
-
-    void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
-    void setObjectX(EmbReal x) { setPos(x, objectY()); }
-    void setObjectY(EmbReal y) { setPos(objectX(), y); }
-
+    
     QPointF objectTopLeft();
     QPointF objectTopRight();
     QPointF objectBottomLeft();
@@ -511,16 +508,7 @@ public:
     QPointF objectMidPoint();
     QPointF objectEndPoint();
 
-    void setObjectCenter(EmbVector center);
-    void setObjectCenterX(EmbReal centerX);
-    void setObjectCenterY(EmbReal centerY);
     QRectF rect();
-    void setRect(const QRectF& r);
-    void setRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
-    void setLine(const QLineF& li);
-    void setLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
-
-    void setObjectLineWeight(String lineWeight);
     void circle_click(Dictionary global, EmbVector v);
     EmbReal objectWidth();
     EmbReal objectHeight();
@@ -530,6 +518,33 @@ public:
     EmbReal objectDiameterMinor();
     QPointF objectEndPoint1();
     QPointF objectEndPoint2();
+    EmbReal objectStartAngle();
+    EmbReal objectEndAngle();
+    EmbReal objectArcLength();
+    EmbReal objectChord();
+    EmbReal objectIncludedAngle();
+    bool objectClockwise();
+    EmbReal objectX1() { return objectEndPoint1().x(); }
+    EmbReal objectY1() { return objectEndPoint1().y(); }
+    EmbReal objectX2() { return objectEndPoint2().x(); }
+    EmbReal objectY2() { return objectEndPoint2().y(); }
+    EmbReal objectAngle();
+    QPointF objectDelta() { return objectEndPoint2() - objectEndPoint1(); }
+    EmbReal objectLength() { return objLine.length()*scale(); }
+    EmbReal objectRadius();
+    EmbReal objectDiameter();
+    EmbReal objectCircumference();
+    QPointF objectQuadrant0();
+    QPointF objectQuadrant90();
+    QPointF objectQuadrant180();
+    QPointF objectQuadrant270();
+    QPainterPath objectCopyPath();
+    QPainterPath objectSavePath();
+
+    std::vector<QPainterPath> objectSavePathList() { return subPathList(); }
+    std::vector<QPainterPath> subPathList();
+
+    int findIndex(const QPointF& point);
 
     void setObjectEndPoint1(EmbVector endPt1);
     void setObjectEndPoint2(EmbVector endPt2);
@@ -548,29 +563,27 @@ public:
     std::vector<QPointF> allGripPoints();
     void gripEdit(const QPointF& before, const QPointF& after);
 
-    EmbReal objectStartAngle();
-    EmbReal objectEndAngle();
-    EmbReal objectArcLength();
-    EmbReal objectChord();
-    EmbReal objectIncludedAngle();
-    bool objectClockwise();
-
-    EmbReal objectRadius();
-    EmbReal objectDiameter();
-    EmbReal objectCircumference();
-    QPointF objectQuadrant0();
-    QPointF objectQuadrant90();
-    QPointF objectQuadrant180();
-    QPointF objectQuadrant270();
-
     void realRender(QPainter* painter, const QPainterPath& renderPath);
-
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 
-    void setObjectSize(EmbReal width, EmbReal height);
-
+    /* Updaters, todo: combine */
     void calculateArcData(EmbArc arc);
     void updateArcRect(EmbReal radius);
+    
+    /* Setters */
+    void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
+    void setObjectX(EmbReal x) { setPos(x, objectY()); }
+    void setObjectY(EmbReal y) { setPos(objectX(), y); }
+    void setObjectCenter(EmbVector center);
+    void setObjectCenterX(EmbReal centerX);
+    void setObjectCenterY(EmbReal centerY);
+    void setObjectSize(EmbReal width, EmbReal height);
+    void setObjectRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
+    void setRect(const QRectF& r);
+    void setRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
+    void setLine(const QLineF& li);
+    void setLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
+    void setObjectLineWeight(String lineWeight);
     void setObjectRadius(EmbReal radius);
     void setObjectStartAngle(EmbReal angle);
     void setObjectEndAngle(EmbReal angle);
@@ -580,39 +593,7 @@ public:
     void setObjectDiameter(EmbReal diameter);
     void setObjectArea(EmbReal area);
     void setObjectCircumference(EmbReal circumference);
-
-    EmbReal objectX1() { return objectEndPoint1().x(); }
-    EmbReal objectY1() { return objectEndPoint1().y(); }
-    EmbReal objectX2() { return objectEndPoint2().x(); }
-    EmbReal objectY2() { return objectEndPoint2().y(); }
-    EmbReal objectAngle();
-    EmbReal objectLength() { return objLine.length()*scale(); }
-
-    void setObjectX1(EmbReal x);
-    void setObjectY1(EmbReal y);
-    void setObjectX2(EmbReal x);
-    void setObjectY2(EmbReal y);
-
-    void setObjectRadiusMajor(EmbReal radius);
-    void setObjectRadiusMinor(EmbReal radius);
-    void setObjectDiameterMajor(EmbReal diameter);
-    void setObjectDiameterMinor(EmbReal diameter);
-
-    QPointF objectDelta() { return objectEndPoint2() - objectEndPoint1(); }
-
-    QPainterPath objectCopyPath();
-    QPainterPath objectSavePath();
-
-    //TODO: make paths similar to polylines. Review and implement any missing functions/members.
-
     void setObjectPos(EmbReal x, EmbReal y) { setPos(x, y); }
-
-    std::vector<QPainterPath> objectSavePathList() { return subPathList(); }
-    std::vector<QPainterPath> subPathList();
-
-    int findIndex(const QPointF& point);
-    int gripIndex;
-
     void setObjectText(QString str);
     void setObjectTextFont(QString font);
     void setObjectTextJustify(QString justify);
@@ -625,6 +606,10 @@ public:
     void setObjectTextOverline(bool val);
     void setObjectTextBackward(bool val);
     void setObjectTextUpsideDown(bool val);
+    void setObjectRadiusMajor(EmbReal radius);
+    void setObjectRadiusMinor(EmbReal radius);
+    void setObjectDiameterMajor(EmbReal diameter);
+    void setObjectDiameterMinor(EmbReal diameter);
 };
 
 /**
