@@ -28,6 +28,7 @@ var NAVTREE =
     [ "Overview", "index.html", null ],
     [ "About", "about.html", [
       [ "The Embroidermodder Project and Team", "about.html#the-embroidermodder-team", [
+        [ "License", "index.html#license", null ],
         [ "\"Core Development Team\"", "about.html#core-development-team", null ]
       ] ],
       [ "for Embroidermodder 2, libembroidery and all other related code", "about.html#Credits", [
@@ -83,11 +84,12 @@ var NAVTREE =
       [ "Crowdfunding Campaign Coming Soon! (2013-09-09)", "post-history.html#kickstarter", null ],
       [ "Our Kickstarter Crowdfunding Campaign is LIVE! (2014-03-17)", "post-history.html#kickstarter-launched", null ]
     ] ],
-    [ "Changelog", "_changelog.html", null ],
-    [ "Ideas", "_ideas.html", null ],
+    [ "Changelog", "Changelog.html", null ],
+    [ "Ideas", "Ideas.html", null ],
     [ "Formats", "formats.html", [
       [ "Overview", "formats.html#overview", [
         [ "Read/Write Support Levels", "formats.html#read-write-support-levels", [
+          [ "Basic Features", "tutorials.html#basic-features", null ],
           [ "Test Support Levels", "formats.html#test-support-levels", null ],
           [ "Documentation Support Levels", "formats.html#documentation-support-levels", null ],
           [ "Overall Support", "formats.html#overall-support", null ]
@@ -147,23 +149,30 @@ var NAVTREE =
       ] ]
     ] ],
     [ "GNU Free Documentation License", "docs-license.html", null ],
-    [ "Contributor Covenant Code of Conduct", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html", [
-      [ "Our Pledge", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md41", null ],
-      [ "Our Standards", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md42", null ],
-      [ "Enforcement Responsibilities", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md43", null ],
-      [ "Scope", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md44", null ],
-      [ "Enforcement", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md45", null ],
-      [ "Enforcement Guidelines", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md46", [
-        [ "1. Correction", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md47", null ],
-        [ "2. Warning", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md48", null ],
-        [ "3. Temporary Ban", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md49", null ],
-        [ "4. Permanent Ban", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md50", null ]
+    [ "Contributor Covenant Code of Conduct", "md_CODE_OF_CONDUCT.html", [
+      [ "Our Pledge", "md_CODE_OF_CONDUCT.html#autotoc_md38", null ],
+      [ "Our Standards", "md_CODE_OF_CONDUCT.html#autotoc_md39", null ],
+      [ "Enforcement Responsibilities", "md_CODE_OF_CONDUCT.html#autotoc_md40", null ],
+      [ "Scope", "md_CODE_OF_CONDUCT.html#autotoc_md41", null ],
+      [ "Enforcement", "md_CODE_OF_CONDUCT.html#autotoc_md42", null ],
+      [ "Enforcement Guidelines", "md_CODE_OF_CONDUCT.html#autotoc_md43", [
+        [ "1. Correction", "md_CODE_OF_CONDUCT.html#autotoc_md44", null ],
+        [ "2. Warning", "md_CODE_OF_CONDUCT.html#autotoc_md45", null ],
+        [ "3. Temporary Ban", "md_CODE_OF_CONDUCT.html#autotoc_md46", null ],
+        [ "4. Permanent Ban", "md_CODE_OF_CONDUCT.html#autotoc_md47", null ]
       ] ],
-      [ "Attribution", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md51", null ]
+      [ "Attribution", "md_CODE_OF_CONDUCT.html#autotoc_md48", null ]
     ] ],
     [ "Privacy Policy for Embroidery Viewer", "md_privacy_policy.html", null ],
     [ "Todo List", "todo.html", null ],
     [ "Bibliography", "citelist.html", null ],
+    [ "Namespaces", "namespaces.html", [
+      [ "Namespace List", "namespaces.html", "namespaces_dup" ],
+      [ "Namespace Members", "namespacemembers.html", [
+        [ "All", "namespacemembers.html", null ],
+        [ "Variables", "namespacemembers_vars.html", null ]
+      ] ]
+    ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
@@ -181,7 +190,7 @@ var NAVTREE =
       [ "File Members", "globals.html", [
         [ "All", "globals.html", "globals_dup" ],
         [ "Functions", "globals_func.html", "globals_func" ],
-        [ "Variables", "globals_vars.html", "globals_vars" ],
+        [ "Variables", "globals_vars.html", null ],
         [ "Typedefs", "globals_type.html", null ],
         [ "Enumerations", "globals_enum.html", null ],
         [ "Enumerator", "globals_eval.html", null ],
@@ -193,23 +202,20 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_changelog.html",
-"class_cmd_prompt.html#a94d2a27a19e9c0e06e1318b6bc25de61",
-"class_line_object.html#a4980af51eaf26a5ffcb325656d70d1ba",
-"class_main_window.html#ae03dd5abbfc1517bfb0dfc62289ae48a",
-"class_property_editor.html#a6e903f301e6b9cddd3e33f622c58d096",
-"class_status_bar_button.html#a8c94cc2deff164da9600fff8b97f16d9",
-"class_view.html#ab890b2af643867855a5619068b9095df",
-"embroidermodder_8h.html#ab737782f7ffcf7b04b8e29bff1177afe",
-"embroidery_8h.html#a998fc646741524f4f3fffb9454f304f8",
-"embroidery__internal_8h.html#a4c14130d2f17b639d0bbd26357a047cc",
-"embroidery__internal_8h.html#af9f9798107f2ed098bd59c98467bdb63",
-"format__shv_8c.html#a2b7ac11373a51859a56c8b4bbfbd232c",
-"globals_defs_h.html",
-"object-save_8cpp.html",
-"struct__bcf__file.html#ade108e4dbaaf848bb151970e612624d7",
-"struct_emb_view__.html#ac73ebb96d8421e4c0c9fe2627b668a9a",
-"thread-color_8c.html#a0ddaecc4fc077a3db30ea5ffd20ac823"
+"Changelog.html",
+"classEmbDetailsDialog.html#a7cbe4033746077c923f49aa0aabbf911",
+"classMainWindow.html#ab9244d24146b5107c23f1143a3e0acef",
+"classSettings__Dialog.html#aa639d8dbe57622a26c1d2199a01d3bcf",
+"classView.html#aad5f1927dc9fc0811309eedb50747dae",
+"embroidery_8h.html#a09945e6e919629c5787e61582c712ba1",
+"embroidery_8h.html#adbd6d6feaccea72e3b9820dc7177d202",
+"embroidery__internal_8h.html#a7f539183b901a4c1d25adcb71c6fbdc9",
+"format__csd_8c.html#ac48ab7a06130111eabb754be9de5089b",
+"formats.html#format-support",
+"interface_8cpp.html#a58d530175261044460f54127530d5363",
+"mainwindow_8cpp.html#ace1093b4246d2a22a4b69a230334784ba185297f3947b1f73e9ac73ba7618bc4d",
+"structEmbFormatList__.html#accdaceb0021572501a2605c112a340af",
+"structSettings__.html#aec1dee03c858e0d3910c40c209890ab0"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

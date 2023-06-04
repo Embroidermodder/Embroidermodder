@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['imageobject_0',['ImageObject',['../class_image_object.html',1,'']]],
-  ['imagewidget_1',['ImageWidget',['../class_image_widget.html',1,'']]]
+  ['mainwindow_2584',['MainWindow',['../classMainWindow.html',1,'']]],
+  ['mdiarea_2585',['MdiArea',['../classMdiArea.html',1,'']]],
+  ['mdiwindow_2586',['MdiWindow',['../classMdiWindow.html',1,'']]]
 ];

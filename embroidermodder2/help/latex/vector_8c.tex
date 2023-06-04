@@ -48,10 +48,7 @@ The sum of vectors {\itshape a} and {\itshape b} returned as a vector.
 
 Equivalent to\+:
 
-\[
-      \mathbf{c} = \mathbf{a} + \mathbf{b}
-                 = \begin{pmatrix} a_{x} + b_{x} \\ a_{y}+b_{y} \end{pmatrix}
-\] \mbox{\Hypertarget{vector_8c_a2d40fb11eee627cc40fa0e0b8b0bbcb9}\label{vector_8c_a2d40fb11eee627cc40fa0e0b8b0bbcb9}} 
+\[ \mathbf{c} = \mathbf{a} + \mathbf{b} = \begin{pmatrix} a_{x} + b_{x} \\ a_{y}+b_{y} \end{pmatrix} \] \mbox{\Hypertarget{vector_8c_a2d40fb11eee627cc40fa0e0b8b0bbcb9}\label{vector_8c_a2d40fb11eee627cc40fa0e0b8b0bbcb9}} 
 \index{vector.c@{vector.c}!embVector\_angle@{embVector\_angle}}
 \index{embVector\_angle@{embVector\_angle}!vector.c@{vector.c}}
 \doxyparagraph{\texorpdfstring{embVector\_angle()}{embVector\_angle()}}
@@ -67,10 +64,7 @@ The average of vectors {\itshape v1} and {\itshape v2} returned as a vector.
 
 Equivalent to\+:
 
-\[
-      \mathbf{c} = \frac{\mathbf{a} + \mathbf{b}}{2}
-                 = \begin{pmatrix} \frac{a_{x} + b_{x}}{2} \\ \frac{a_{y}+b_{y}}{2} \end{pmatrix}
-\] \mbox{\Hypertarget{vector_8c_ac763a1a571c5cb36a99bf73e31ee6919}\label{vector_8c_ac763a1a571c5cb36a99bf73e31ee6919}} 
+\[ \mathbf{c} = \frac{\mathbf{a} + \mathbf{b}}{2} = \begin{pmatrix} \frac{a_{x} + b_{x}}{2} \\ \frac{a_{y}+b_{y}}{2} \end{pmatrix} \] \mbox{\Hypertarget{vector_8c_ac763a1a571c5cb36a99bf73e31ee6919}\label{vector_8c_ac763a1a571c5cb36a99bf73e31ee6919}} 
 \index{vector.c@{vector.c}!embVector\_cross@{embVector\_cross}}
 \index{embVector\_cross@{embVector\_cross}!vector.c@{vector.c}}
 \doxyparagraph{\texorpdfstring{embVector\_cross()}{embVector\_cross()}}
@@ -82,11 +76,7 @@ The \char`\"{}cross product\char`\"{} as vectors {\itshape a} and {\itshape b} r
 
 Technically, this is the magnitude of the cross product when the embroidery is placed in the z=0 plane (since the cross product is defined for 3-\/dimensional vectors). That is\+:
 
-\[
-      |c| = \left| \begin{pmatrix} a_x \\ a_y \\ 0 \end{pmatrix} \times \begin{pmatrix} b_x \\ b_y \\ 0 \end{pmatrix}\right|
-          = \left| \begin{pmatrix} 0 \\ 0 \\ a_x b_y - a_y b_x \end{pmatrix} \right|
-          = a_x b_y - a_y b_x
-\] \mbox{\Hypertarget{vector_8c_abdedf2d469e6f9f4dc6d530086c3aa11}\label{vector_8c_abdedf2d469e6f9f4dc6d530086c3aa11}} 
+\[ |c| = \left| \begin{pmatrix} a_x \\ a_y \\ 0 \end{pmatrix} \times \begin{pmatrix} b_x \\ b_y \\ 0 \end{pmatrix}\right| = \left| \begin{pmatrix} 0 \\ 0 \\ a_x b_y - a_y b_x \end{pmatrix} \right| = a_x b_y - a_y b_x \] \mbox{\Hypertarget{vector_8c_abdedf2d469e6f9f4dc6d530086c3aa11}\label{vector_8c_abdedf2d469e6f9f4dc6d530086c3aa11}} 
 \index{vector.c@{vector.c}!embVector\_distance@{embVector\_distance}}
 \index{embVector\_distance@{embVector\_distance}!vector.c@{vector.c}}
 \doxyparagraph{\texorpdfstring{embVector\_distance()}{embVector\_distance()}}
@@ -94,10 +84,7 @@ Technically, this is the magnitude of the cross product when the embroidery is p
 
 The distance between {\itshape a} and {\itshape b} returned as a real value.
 
-\[
-     d = \left|\mathbf{a}-\mathbf{b}\right|
-       = \sqrt{(a_x-b_x)^{2} + (a_y-b_y)^{2}}
-\] \mbox{\Hypertarget{vector_8c_a5eb0184af5d76ee1369f5019e61c27be}\label{vector_8c_a5eb0184af5d76ee1369f5019e61c27be}} 
+\[ d = \left|\mathbf{a}-\mathbf{b}\right| = \sqrt{(a_x-b_x)^{2} + (a_y-b_y)^{2}} \] \mbox{\Hypertarget{vector_8c_a5eb0184af5d76ee1369f5019e61c27be}\label{vector_8c_a5eb0184af5d76ee1369f5019e61c27be}} 
 \index{vector.c@{vector.c}!embVector\_dot@{embVector\_dot}}
 \index{embVector\_dot@{embVector\_dot}!vector.c@{vector.c}}
 \doxyparagraph{\texorpdfstring{embVector\_dot()}{embVector\_dot()}}
@@ -107,10 +94,7 @@ The dot product as vectors {\itshape v1} and {\itshape v2} returned as a Emb\+Re
 
 Equivalent to\+:
 
-\[
-      c = \mathbf{a} \cdot \mathbf{b}
-        = a_x b_x + a_y b_y
-\] \mbox{\Hypertarget{vector_8c_a96123840be79cee1c9857c7f47e772f2}\label{vector_8c_a96123840be79cee1c9857c7f47e772f2}} 
+\[ c = \mathbf{a} \cdot \mathbf{b} = a_x b_x + a_y b_y \] \mbox{\Hypertarget{vector_8c_a96123840be79cee1c9857c7f47e772f2}\label{vector_8c_a96123840be79cee1c9857c7f47e772f2}} 
 \index{vector.c@{vector.c}!embVector\_length@{embVector\_length}}
 \index{embVector\_length@{embVector\_length}!vector.c@{vector.c}}
 \doxyparagraph{\texorpdfstring{embVector\_length()}{embVector\_length()}}
@@ -120,9 +104,7 @@ The length or absolute value of the vector {\itshape vector}.
 
 Equivalent to\+:
 
-\[
-      |v| = \sqrt{v_{x}^{2} + v_{y}^{2}}
-\] \mbox{\Hypertarget{vector_8c_a0a4af07bfac410623cf77a35a11550b1}\label{vector_8c_a0a4af07bfac410623cf77a35a11550b1}} 
+\[ |v| = \sqrt{v_{x}^{2} + v_{y}^{2}} \] \mbox{\Hypertarget{vector_8c_a0a4af07bfac410623cf77a35a11550b1}\label{vector_8c_a0a4af07bfac410623cf77a35a11550b1}} 
 \index{vector.c@{vector.c}!embVector\_multiply@{embVector\_multiply}}
 \index{embVector\_multiply@{embVector\_multiply}!vector.c@{vector.c}}
 \doxyparagraph{\texorpdfstring{embVector\_multiply()}{embVector\_multiply()}}
@@ -131,7 +113,7 @@ Equivalent to\+:
 The scalar multiple {\itshape magnitude} of a vector {\itshape vector}. Returned as {\itshape result}.
 
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000257}{Todo}}]make result return argument. \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000228}{Todo}}]make result return argument. \end{DoxyRefDesc}
 \mbox{\Hypertarget{vector_8c_aaad72d90c58592e330de08139aee5077}\label{vector_8c_aaad72d90c58592e330de08139aee5077}} 
 \index{vector.c@{vector.c}!embVector\_normalize@{embVector\_normalize}}
 \index{embVector\_normalize@{embVector\_normalize}!vector.c@{vector.c}}
@@ -142,12 +124,10 @@ Finds the unit length vector {\itshape result} in the same direction as {\itshap
 
 Equivalent to\+:
 
-\[
-      \mathbf{u} = \frac{v}{|\mathbf{v}|}
-\]
+\[ \mathbf{u} = \frac{v}{|\mathbf{v}|} \]
 
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000256}{Todo}}]make result return argument. \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000227}{Todo}}]make result return argument. \end{DoxyRefDesc}
 \mbox{\Hypertarget{vector_8c_a0823dd7ae47773dea4dc396f895fc198}\label{vector_8c_a0823dd7ae47773dea4dc396f895fc198}} 
 \index{vector.c@{vector.c}!embVector\_relativeX@{embVector\_relativeX}}
 \index{embVector\_relativeX@{embVector\_relativeX}!vector.c@{vector.c}}
@@ -170,10 +150,7 @@ The difference between vectors {\itshape v1} and {\itshape v2} returned as {\its
 
 Equivalent to\+:
 
-\[
-      \mathbf{c} = \mathbf{a} - \mathbf{b}
-                 = \begin{pmatrix} a_{x} - b_{x} \\ a_{y}-b_{y} \end{pmatrix}
-\] \mbox{\Hypertarget{vector_8c_acb7c080f09a460062df3d4f9aa2693be}\label{vector_8c_acb7c080f09a460062df3d4f9aa2693be}} 
+\[ \mathbf{c} = \mathbf{a} - \mathbf{b} = \begin{pmatrix} a_{x} - b_{x} \\ a_{y}-b_{y} \end{pmatrix} \] \mbox{\Hypertarget{vector_8c_acb7c080f09a460062df3d4f9aa2693be}\label{vector_8c_acb7c080f09a460062df3d4f9aa2693be}} 
 \index{vector.c@{vector.c}!embVector\_transpose\_product@{embVector\_transpose\_product}}
 \index{embVector\_transpose\_product@{embVector\_transpose\_product}!vector.c@{vector.c}}
 \doxyparagraph{\texorpdfstring{embVector\_transpose\_product()}{embVector\_transpose\_product()}}
@@ -189,6 +166,4 @@ That is (1 0) (a) = (xa) (x y)(0 1) (b) (yb) \mbox{\Hypertarget{vector_8c_a375a5
 
 The unit vector in the direction {\itshape angle}.
 
-\[
-      \mathbf{a}_{\alpha} = \begin{pmatrix} \cos(\alpha) \\ \sin(\alpha) \end{pmatrix}
-\] 
+\[ \mathbf{a}_{\alpha} = \begin{pmatrix} \cos(\alpha) \\ \sin(\alpha) \end{pmatrix} \] 

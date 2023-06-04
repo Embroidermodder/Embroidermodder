@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['selectbox_2ecpp_0',['selectbox.cpp',['../selectbox_8cpp.html',1,'']]],
-  ['settings_2ddialog_2ecpp_1',['settings-dialog.cpp',['../settings-dialog_8cpp.html',1,'']]],
-  ['statusbar_2dbutton_2ecpp_2',['statusbar-button.cpp',['../statusbar-button_8cpp.html',1,'']]],
-  ['statusbar_2ecpp_3',['statusbar.cpp',['../statusbar_8cpp.html',1,'']]]
+  ['text_2ec_2718',['text.c',['../text_8c.html',1,'']]],
+  ['thread_2dcolor_2ec_2719',['thread-color.c',['../thread-color_8c.html',1,'']]]
 ];

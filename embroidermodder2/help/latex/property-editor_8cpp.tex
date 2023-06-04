@@ -1,1177 +1,174 @@
 \hypertarget{property-editor_8cpp}{}\doxysubsection{embroidermodder2/property-\/editor.cpp File Reference}
 \label{property-editor_8cpp}\index{embroidermodder2/property-\/editor.cpp@{embroidermodder2/property-\/editor.cpp}}
 {\ttfamily \#include \char`\"{}embroidermodder.\+h\char`\"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}} $>$ \mbox{\hyperlink{property-editor_8cpp_af0921454a5f89a9f8304c94a94079605}{load\+\_\+group\+\_\+box\+\_\+data\+\_\+from\+\_\+table}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} key)
+\end{DoxyCompactItemize}
 \doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_arc_object}{Arc\+Object}} $\ast$ \mbox{\hyperlink{property-editor_8cpp_a323bac76f47473671c8b588347996385}{temp\+Arc\+Obj}}
+QString \mbox{\hyperlink{property-editor_8cpp_ab0788c2a5bd8481167722c7f71d478ef}{field\+Old\+Text}}
 \item 
-Block\+Object $\ast$ \mbox{\hyperlink{property-editor_8cpp_a41071c045712cf07bedcedc6e42e050f}{temp\+Block\+Obj}}
+QString \mbox{\hyperlink{property-editor_8cpp_a14af17685a596d524d2590b7c3915676}{field\+New\+Text}}
 \item 
-\mbox{\hyperlink{class_circle_object}{Circle\+Object}} $\ast$ \mbox{\hyperlink{property-editor_8cpp_ae69172ef07bbc195992c7b7003d16eb5}{temp\+Circle\+Obj}}
+QString \mbox{\hyperlink{property-editor_8cpp_a24a396d80f610de17baf4c5c5503102e}{field\+Varies\+Text}}
 \item 
-Dim\+Aligned\+Object $\ast$ \mbox{\hyperlink{property-editor_8cpp_a6c0f4e2bf50f55925f800c6ab7d9baca}{temp\+Dim\+Aligned\+Obj}}
+QString \mbox{\hyperlink{property-editor_8cpp_a3061600ac10c33a3d58e5106bf5d8d1a}{field\+Yes\+Text}}
 \item 
-Dim\+Angular\+Object $\ast$ \mbox{\hyperlink{property-editor_8cpp_acfbc4375eb37fc2ad879fa018813f2d1}{temp\+Dim\+Angular\+Obj}}
+QString \mbox{\hyperlink{property-editor_8cpp_a4ffb7230efe45a09c1a4b638fbdab58b}{field\+No\+Text}}
 \item 
-Dim\+Arc\+Length\+Object $\ast$ \mbox{\hyperlink{property-editor_8cpp_a923b9ab491c4698cfb48020f00a5039b}{temp\+Dim\+Arc\+Len\+Obj}}
+QString \mbox{\hyperlink{property-editor_8cpp_a25a83a35273343ad0365fdc4cc682acd}{field\+On\+Text}}
 \item 
-Dim\+Diameter\+Object $\ast$ \mbox{\hyperlink{property-editor_8cpp_afb43bcab8d00b1f169a68058f9a97ca4}{temp\+Dim\+Diam\+Obj}}
+QString \mbox{\hyperlink{property-editor_8cpp_af9200f3b9e5f1a0a396fa1cff9e09268}{field\+Off\+Text}}
 \item 
-\mbox{\hyperlink{class_dim_leader_object}{Dim\+Leader\+Object}} $\ast$ \mbox{\hyperlink{property-editor_8cpp_aa9253542663af3d79e109878f12ec204}{temp\+Dim\+Leader\+Obj}}
+\mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}} \mbox{\hyperlink{property-editor_8cpp_a0f6a8256d826538321a69709aa0dec71}{object\+\_\+names}}
 \item 
-Dim\+Linear\+Object $\ast$ \mbox{\hyperlink{property-editor_8cpp_a70d3b3fd0e9c8a3f1217f7d435fa928e}{temp\+Dim\+Linear\+Obj}}
+std\+::vector$<$ std\+::pair$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, int $>$ $>$ \mbox{\hyperlink{property-editor_8cpp_abe06e3385bf081ac386522dcdf24360b}{group\+\_\+box\+\_\+types}}
 \item 
-Dim\+Ordinate\+Object $\ast$ \mbox{\hyperlink{property-editor_8cpp_ac9bfc1a4be5c0bc357fa06eb247a7411}{temp\+Dim\+Ord\+Obj}}
+std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QGroup\+Box $\ast$ $>$ \mbox{\hyperlink{property-editor_8cpp_acd41e54d655cc00c0f58566a0cd5cfbc}{group\+Boxes}}
 \item 
-Dim\+Radius\+Object $\ast$ \mbox{\hyperlink{property-editor_8cpp_a2ebe3377f6dbf695fb0cb8c50de5755d}{temp\+Dim\+Radius\+Obj}}
+std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QCombo\+Box $\ast$ $>$ \mbox{\hyperlink{property-editor_8cpp_a5ab829a66fe27b9c199e2c90607cb9e8}{combo\+Boxes}}
 \item 
-\mbox{\hyperlink{class_ellipse_object}{Ellipse\+Object}} $\ast$ \mbox{\hyperlink{property-editor_8cpp_a9c852d74ef9685683c18307ba8d423fd}{temp\+Ellipse\+Obj}}
+std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QLine\+Edit $\ast$ $>$ \mbox{\hyperlink{property-editor_8cpp_a08f234d24b95a26e62af91454e465228}{line\+Edits}}
 \item 
-Ellipse\+Arc\+Object $\ast$ \mbox{\hyperlink{property-editor_8cpp_ac63eb86a4eafbbad878fbe18af1665a6}{temp\+Ellipse\+Arc\+Obj}}
+std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QTool\+Button $\ast$ $>$ \mbox{\hyperlink{property-editor_8cpp_ae7f31dd8d0edef11d6f8e59be1b2c0b2}{tool\+Buttons}}
 \item 
-Hatch\+Object $\ast$ \mbox{\hyperlink{property-editor_8cpp_a3876727c3aebf355c3e21afc3a329dfc}{temp\+Hatch\+Obj}}
+QFont\+Combo\+Box $\ast$ \mbox{\hyperlink{property-editor_8cpp_a3aa139608b4816f4f70595814a31760d}{combo\+Box\+Text\+Single\+Font}}
 \item 
-\mbox{\hyperlink{class_image_object}{Image\+Object}} $\ast$ \mbox{\hyperlink{property-editor_8cpp_a25217c8bbdf7b3490c018a755ee0fdf1}{temp\+Image\+Obj}}
-\item 
-Infinite\+Line\+Object $\ast$ \mbox{\hyperlink{property-editor_8cpp_a92411002e51ad89bdd236614fc4ccd3e}{temp\+Inf\+Line\+Obj}}
-\item 
-\mbox{\hyperlink{class_line_object}{Line\+Object}} $\ast$ \mbox{\hyperlink{property-editor_8cpp_a4a530c3c3edce736f7c3aa5f9a3fdea9}{temp\+Line\+Obj}}
-\item 
-\mbox{\hyperlink{class_path_object}{Path\+Object}} $\ast$ \mbox{\hyperlink{property-editor_8cpp_a4ee02d3a281ccaaccb7a44e910c15f8a}{temp\+Path\+Obj}}
-\item 
-\mbox{\hyperlink{class_point_object}{Point\+Object}} $\ast$ \mbox{\hyperlink{property-editor_8cpp_aa5b82b2c08104040c0ef986089271fb0}{temp\+Point\+Obj}}
-\item 
-\mbox{\hyperlink{class_polygon_object}{Polygon\+Object}} $\ast$ \mbox{\hyperlink{property-editor_8cpp_a40843b506be05b4780b71f0694ce0a82}{temp\+Polygon\+Obj}}
-\item 
-\mbox{\hyperlink{class_polyline_object}{Polyline\+Object}} $\ast$ \mbox{\hyperlink{property-editor_8cpp_a3a95465131ee78910494993a85a65cb3}{temp\+Polyline\+Obj}}
-\item 
-Ray\+Object $\ast$ \mbox{\hyperlink{property-editor_8cpp_ac62698d7d2d8adccdd72888f5bb648c3}{temp\+Ray\+Obj}}
-\item 
-\mbox{\hyperlink{class_rect_object}{Rect\+Object}} $\ast$ \mbox{\hyperlink{property-editor_8cpp_a701f23d32d67993872b0ad418ee0238b}{temp\+Rect\+Obj}}
-\item 
-Spline\+Object $\ast$ \mbox{\hyperlink{property-editor_8cpp_a15107bb1516f6ff49c247d4352038150}{temp\+Spline\+Obj}}
-\item 
-Text\+Multi\+Object $\ast$ \mbox{\hyperlink{property-editor_8cpp_a0b20095be35cb74cb90cb2de07bbe856}{temp\+Text\+Multi\+Obj}}
-\item 
-\mbox{\hyperlink{class_text_single_object}{Text\+Single\+Object}} $\ast$ \mbox{\hyperlink{property-editor_8cpp_aaa6bf9c8bc980621380b9faa15111db6}{temp\+Text\+Single\+Obj}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a83d709d77be95b24ed991aafb80de7d7}{tool\+Button\+Arc\+Clockwise}}
-\item 
-QCombo\+Box $\ast$ \mbox{\hyperlink{property-editor_8cpp_a741a5034b8beefcf397c4f8f24be6b60}{combo\+Box\+Arc\+Clockwise}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_ac0ae4f3b4f605f3e7fcca42d36713ebd}{tool\+Button\+BlockX}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_afa8f7fd777dabc347b0f821815aeef24}{tool\+Button\+BlockY}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a912fc9e960f8de6a0b1f2bec467e33fe}{line\+Edit\+BlockX}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a0988042e44cdc4c1a0351c1d8e64fd3e}{line\+Edit\+BlockY}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a5bee0c1ce67e3148f8523cc5129779b3}{line\+Edit\+Ellipse\+CenterX}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a159d557d996e23790c1ab32963c4dc7d}{line\+Edit\+Ellipse\+CenterY}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a87bee4ce7b793c63309db0aa11f88e2d}{line\+Edit\+Ellipse\+Radius\+Major}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a0fe10146c48bd5e05bbfaf5c255c6b28}{line\+Edit\+Ellipse\+Radius\+Minor}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_abe62f83083e662f1c9ae4fc7b5e69b84}{line\+Edit\+Ellipse\+Diameter\+Major}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a36d14175a387b2640aacf1fcbbcaa5b7}{line\+Edit\+Ellipse\+Diameter\+Minor}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_aaa17b300192a1021164b0aca2e3395ff}{tool\+Button\+ImageX}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_acd0d0bf1fc35cfb23513510414373aee}{tool\+Button\+ImageY}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a00ef314f0770b0654b9affb5bee38662}{tool\+Button\+Image\+Width}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a61626bd812cd3baa6415290bbdd7da4a}{tool\+Button\+Image\+Height}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_ab6d5b12426cb4d1e37277689eb1b0cff}{line\+Edit\+ImageX}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_ade60c23795bfdf7f6bf7cb9e7b6896a8}{line\+Edit\+ImageY}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a8c769815e48c43def251357ca301359b}{line\+Edit\+Image\+Width}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_aa87351809ede6597bea2fb26f61b9308}{line\+Edit\+Image\+Height}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a376e840026e22a10631bf6cbe97626d6}{tool\+Button\+Image\+Name}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_ae3398b2b5e8e040fac3acef1edcb2aa3}{tool\+Button\+Image\+Path}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a15aff56888a4e3d37ef6a001ba481413}{line\+Edit\+Image\+Name}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a028266d465ee8f4a7a45c98345f22651}{line\+Edit\+Image\+Path}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a02b747c05131016409e6043d6c14faa3}{tool\+Button\+Infinite\+Line\+X2}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_ad571726d3d738c6c9a878c133232d769}{tool\+Button\+Infinite\+Line\+Y2}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a0ac9f8ecda1fced96067f7f710669823}{tool\+Button\+Infinite\+Line\+VectorX}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_abfe367545586fba892153c0a7310edaf}{tool\+Button\+Infinite\+Line\+VectorY}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_afd97631d52826ff1d6547302dc62e653}{line\+Edit\+Infinite\+Line\+Y1}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a5d52b256ee2b7a6b0f6648d0457f98c0}{line\+Edit\+Infinite\+Line\+X2}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a1891624316bc4ded15fa31f1eb112cdc}{line\+Edit\+Infinite\+Line\+Y2}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a44075c07a1e49e40e2771c669c3937da}{line\+Edit\+Infinite\+Line\+VectorX}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a3e835672ad8ea29b36c769d1ba7806eb}{line\+Edit\+Infinite\+Line\+VectorY}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a668a6ea08fc558c3b628bfa849ce0d5f}{tool\+Button\+Line\+StartX}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a0beb3f8e0fa1a45d67eb5e7b481dfc5a}{tool\+Button\+Line\+StartY}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_ae94dbd1302c59cc518367cac1772f385}{tool\+Button\+Line\+EndX}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_ac7023cc72f81df04ffe2a9f483ea6f59}{tool\+Button\+Line\+EndY}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_af9d56ffc133a995f8ca9ebb610655380}{tool\+Button\+Line\+DeltaX}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_aa0277eafcce7da468bac44a0acce1b78}{tool\+Button\+Line\+DeltaY}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a1c5a03fc9da8e021fcc3d83714af6ebd}{tool\+Button\+Line\+Angle}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a4086b8486b3cf7b5c7081a747e6ea8d1}{tool\+Button\+Line\+Length}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a17777b3757ae3b9bb968ddb82b6ae112}{line\+Edit\+Line\+StartX}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a4a5cbcafcc452144a91d333df4a6f198}{line\+Edit\+Line\+StartY}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a7611f6b9477fbc311dda79d8a0048ecf}{line\+Edit\+Line\+EndX}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_ac80edb74bdc34c276bf467b476a4ea90}{line\+Edit\+Line\+EndY}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a9afad26b814b8822559d6b10da0d3634}{line\+Edit\+Line\+DeltaX}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a86b7ce1cd5880e9c41bce7ffdf5d36ff}{line\+Edit\+Line\+DeltaY}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a2b21bc4f050f6e52a03a6b1495027707}{line\+Edit\+Line\+Angle}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a7b0931d123a5107c4949d3edb82a0e4a}{line\+Edit\+Line\+Length}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_aeaf83ba78e37f0b9d26211c3e42efb3b}{tool\+Button\+Polygon\+Radius\+Vertex}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a8f3c01e67fd5cbc96a5045cb384cd612}{tool\+Button\+Polygon\+Radius\+Side}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_aec5afeaab65410a3fe6838ce34d1286d}{tool\+Button\+Polygon\+Diameter\+Vertex}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a2dfc41841c21658f9a5696b3358b485a}{tool\+Button\+Polygon\+Diameter\+Side}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a0d81e39eec9a155dbfc2b9ee14cd92c5}{tool\+Button\+Polygon\+Interior\+Angle}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_ab77e523e36cbcefba0ebaad4039b7d02}{line\+Edit\+Polygon\+CenterX}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a6a90c000f97e1b99eae370cac8223b63}{line\+Edit\+Polygon\+CenterY}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a6ede4b57c3f80265f3bf170610f9b5f9}{line\+Edit\+Polygon\+Radius\+Vertex}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a4d4811a19f60acaa8cc831ecd5c414cf}{line\+Edit\+Polygon\+Radius\+Side}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_ae2c20e527e06f91193e8cbf99612a7cb}{line\+Edit\+Polygon\+Diameter\+Vertex}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a3e8c387fcf5b9511dbbd0150e43bd497}{line\+Edit\+Polygon\+Diameter\+Side}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a7b8cf01fe7594721a6bb6664ef5c4928}{line\+Edit\+Polygon\+Interior\+Angle}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_adf98ecffe3cb5ef715a1751e27be2ad7}{tool\+Button\+Polyline\+Vertex\+Num}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a4032b50b830b84b146e995d8e0795c74}{tool\+Button\+Polyline\+VertexX}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a53a5207fca843221f4517c3603c7fedc}{tool\+Button\+Polyline\+VertexY}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a5641507c2f3d9943a43ab1f5847fa125}{tool\+Button\+Polyline\+Area}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_ab3817dcfd8b3f8cbf666a764f9862193}{tool\+Button\+Polyline\+Length}}
-\item 
-QCombo\+Box $\ast$ \mbox{\hyperlink{property-editor_8cpp_a359e5211eb0aa91401adcedda30386af}{combo\+Box\+Polyline\+Vertex\+Num}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_aa1f590e99434367662aa6fd3fb3af2f0}{line\+Edit\+Polyline\+VertexX}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a3f3ad8f8129e99e0fe143c608e7c3666}{line\+Edit\+Polyline\+VertexY}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a5f470b64ab5c814f7a13668effaa9210}{line\+Edit\+Polyline\+Area}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_aad54d6180457ebe063d69c2a5abfa170}{line\+Edit\+Polyline\+Length}}
-\item 
-QCombo\+Box $\ast$ \mbox{\hyperlink{property-editor_8cpp_a54dc6f6b5fcb0d99ce3c06bdfba6eff7}{combo\+Box\+Path\+Vertex\+Num}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a0a37c0252091a23625b57f96b5531ce4}{line\+Edit\+Path\+VertexX}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a327271367947985f52b4ed716143406b}{line\+Edit\+Path\+VertexY}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a693169cb7cb34c1401cc6e9bed527e72}{line\+Edit\+Path\+Area}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a7a86f2216eb7d3f6292c8dbd6342d3a4}{line\+Edit\+Path\+Length}}
-\item 
-QCombo\+Box $\ast$ \mbox{\hyperlink{property-editor_8cpp_acc20773ca014e43fd87063a45d70b309}{combo\+Box\+Path\+Closed}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a7c9f34fca7d2fe0d640e3777a344e260}{line\+Edit\+PointX}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a4b96da36f68def1cafdd1b9c8067a5d5}{line\+Edit\+PointY}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_aa0d8aa16c860acf4728b6f63282844a7}{tool\+Button\+Polyline\+Closed}}
-\item 
-QCombo\+Box $\ast$ \mbox{\hyperlink{property-editor_8cpp_af119a767db29f440bbb1b9d5d61e0fcb}{combo\+Box\+Polyline\+Closed}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a7bdef7656aee7460101c6a3c149c3793}{tool\+Button\+Ray\+X1}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a77dc430f7389e1d19e5564e735bd4b8e}{tool\+Button\+Ray\+Y1}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a42af87b6188de41b595ba538f4e51626}{tool\+Button\+Ray\+X2}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_ad1bae5bc1a493002ee5befec9ede70bd}{tool\+Button\+Ray\+Y2}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a5ee8dcb8602a496c0615f4830c64e96d}{tool\+Button\+Ray\+VectorX}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a4f050624b208c00a3f25d160b182881c}{tool\+Button\+Ray\+VectorY}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_ac99654294d891ab22da2b88415d11de7}{line\+Edit\+Ray\+X1}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_aee98d2c190e8df4f9e3d11aed489f6a3}{line\+Edit\+Ray\+Y1}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_ab5114dbc0b55ed4c59b05a94b68fc7ab}{line\+Edit\+Ray\+X2}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_acc6c16c3f06960bd13348ba35feec9c9}{line\+Edit\+Ray\+Y2}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a1f37245ba7fe4cbd9caf1497de5f198c}{line\+Edit\+Ray\+VectorX}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a4426bcb728b68e8097890d6aa6257b61}{line\+Edit\+Ray\+VectorY}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a82ae0279f87ad97f9a608a8c4253f27e}{line\+Edit\+Rectangle\+Corner1X}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a7d463fb01789ea7f5d5ce0bb45e5e1be}{line\+Edit\+Rectangle\+Corner1Y}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a5f36ae470f2363d32ea63fdefbe193a3}{line\+Edit\+Rectangle\+Corner2X}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_ad17135c2d7e7c54b22ce61f29c22163a}{line\+Edit\+Rectangle\+Corner2Y}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a05e40172dcfaf1b03cd0d7fc59f5227e}{line\+Edit\+Rectangle\+Corner3X}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a6596bd39c67ed68b3496e276ea5f7914}{line\+Edit\+Rectangle\+Corner3Y}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a9c4f80081ec13d68b6fa6af41a092df2}{line\+Edit\+Rectangle\+Corner4X}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_aa376637a8bb14bfab856bf49d6a4c870}{line\+Edit\+Rectangle\+Corner4Y}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a6af84f9b188648c44650b9055e870814}{line\+Edit\+Rectangle\+Width}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a350081261a22bbbb5ff08a91f95f9a83}{line\+Edit\+Rectangle\+Height}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a15fc3c09a0226d61e40c6b3cca119a55}{line\+Edit\+Rectangle\+Area}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_ad6bf097a9c82ff6d3e818773b1800e8f}{tool\+Button\+Text\+MultiX}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_adf119830a5e9aae7b78ed70fa37a982b}{tool\+Button\+Text\+MultiY}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_aa1c918bedbc74f2d684145e8a4138828}{line\+Edit\+Text\+MultiX}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a18b30a6a7bc1b8d28d1d4460869944bc}{line\+Edit\+Text\+MultiY}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_ab1a8f268bdeef1f47dee87fabb857412}{tool\+Button\+Text\+Single\+Contents}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_ad84ab9a8e424b805d0955dbf5b8c70af}{tool\+Button\+Text\+Single\+Font}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_abed789dd4751ea607b3bb0d0facb94ca}{tool\+Button\+Text\+Single\+Justify}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a84c66f407463e59e441c763f6c68847a}{tool\+Button\+Text\+Single\+Height}}
-\item 
-QTool\+Button $\ast$ \mbox{\hyperlink{property-editor_8cpp_a6efc71330f1044543d108e7aafaacf2c}{tool\+Button\+Text\+Single\+Rotation}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a91b93273f161e2e4a8f75042cb84e65c}{line\+Edit\+Text\+Single\+Contents}}
-\item 
-QCombo\+Box $\ast$ \mbox{\hyperlink{property-editor_8cpp_a824c174b2dd0f56f8aeee97a538947ee}{combo\+Box\+Text\+Single\+Justify}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_adc168453836b03a0680da095eff46104}{line\+Edit\+Text\+Single\+Height}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_a74a3b0df14baf163db867e1459e7f902}{line\+Edit\+Text\+Single\+Rotation}}
-\item 
-QLine\+Edit $\ast$ \mbox{\hyperlink{property-editor_8cpp_ac41fb035ef899046590c14377ef74d81}{line\+Edit\+Text\+SingleY}}
-\item 
-QCombo\+Box $\ast$ \mbox{\hyperlink{property-editor_8cpp_a78b5f4d860898c409c72bdce2175d560}{combo\+Box\+Text\+Single\+Backward}}
-\item 
-QCombo\+Box $\ast$ \mbox{\hyperlink{property-editor_8cpp_a08687e5b17d6eae1b6260241276b0322}{combo\+Box\+Text\+Single\+Upside\+Down}}
+std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, \mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}} $>$ \mbox{\hyperlink{property-editor_8cpp_aacf3047c9cfd319c3e96a9865ed4157f}{group\+\_\+box\+\_\+data}}
 \end{DoxyCompactItemize}
 
 
+\doxysubsubsection{Function Documentation}
+\mbox{\Hypertarget{property-editor_8cpp_af0921454a5f89a9f8304c94a94079605}\label{property-editor_8cpp_af0921454a5f89a9f8304c94a94079605}} 
+\index{property-\/editor.cpp@{property-\/editor.cpp}!load\_group\_box\_data\_from\_table@{load\_group\_box\_data\_from\_table}}
+\index{load\_group\_box\_data\_from\_table@{load\_group\_box\_data\_from\_table}!property-\/editor.cpp@{property-\/editor.cpp}}
+\doxyparagraph{\texorpdfstring{load\_group\_box\_data\_from\_table()}{load\_group\_box\_data\_from\_table()}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}}$>$ load\+\_\+group\+\_\+box\+\_\+data\+\_\+from\+\_\+table (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{key }\end{DoxyParamCaption})}
+
+
+
 \doxysubsubsection{Variable Documentation}
-\mbox{\Hypertarget{property-editor_8cpp_a741a5034b8beefcf397c4f8f24be6b60}\label{property-editor_8cpp_a741a5034b8beefcf397c4f8f24be6b60}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!comboBoxArcClockwise@{comboBoxArcClockwise}}
-\index{comboBoxArcClockwise@{comboBoxArcClockwise}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{comboBoxArcClockwise}{comboBoxArcClockwise}}
-{\footnotesize\ttfamily QCombo\+Box$\ast$ combo\+Box\+Arc\+Clockwise}
-
-\mbox{\Hypertarget{property-editor_8cpp_acc20773ca014e43fd87063a45d70b309}\label{property-editor_8cpp_acc20773ca014e43fd87063a45d70b309}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!comboBoxPathClosed@{comboBoxPathClosed}}
-\index{comboBoxPathClosed@{comboBoxPathClosed}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{comboBoxPathClosed}{comboBoxPathClosed}}
-{\footnotesize\ttfamily QCombo\+Box$\ast$ combo\+Box\+Path\+Closed}
-
-\mbox{\Hypertarget{property-editor_8cpp_a54dc6f6b5fcb0d99ce3c06bdfba6eff7}\label{property-editor_8cpp_a54dc6f6b5fcb0d99ce3c06bdfba6eff7}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!comboBoxPathVertexNum@{comboBoxPathVertexNum}}
-\index{comboBoxPathVertexNum@{comboBoxPathVertexNum}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{comboBoxPathVertexNum}{comboBoxPathVertexNum}}
-{\footnotesize\ttfamily QCombo\+Box$\ast$ combo\+Box\+Path\+Vertex\+Num}
-
-\mbox{\Hypertarget{property-editor_8cpp_af119a767db29f440bbb1b9d5d61e0fcb}\label{property-editor_8cpp_af119a767db29f440bbb1b9d5d61e0fcb}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!comboBoxPolylineClosed@{comboBoxPolylineClosed}}
-\index{comboBoxPolylineClosed@{comboBoxPolylineClosed}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{comboBoxPolylineClosed}{comboBoxPolylineClosed}}
-{\footnotesize\ttfamily QCombo\+Box$\ast$ combo\+Box\+Polyline\+Closed}
-
-\mbox{\Hypertarget{property-editor_8cpp_a359e5211eb0aa91401adcedda30386af}\label{property-editor_8cpp_a359e5211eb0aa91401adcedda30386af}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!comboBoxPolylineVertexNum@{comboBoxPolylineVertexNum}}
-\index{comboBoxPolylineVertexNum@{comboBoxPolylineVertexNum}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{comboBoxPolylineVertexNum}{comboBoxPolylineVertexNum}}
-{\footnotesize\ttfamily QCombo\+Box$\ast$ combo\+Box\+Polyline\+Vertex\+Num}
-
-\mbox{\Hypertarget{property-editor_8cpp_a78b5f4d860898c409c72bdce2175d560}\label{property-editor_8cpp_a78b5f4d860898c409c72bdce2175d560}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!comboBoxTextSingleBackward@{comboBoxTextSingleBackward}}
-\index{comboBoxTextSingleBackward@{comboBoxTextSingleBackward}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{comboBoxTextSingleBackward}{comboBoxTextSingleBackward}}
-{\footnotesize\ttfamily QCombo\+Box$\ast$ combo\+Box\+Text\+Single\+Backward}
-
-\mbox{\Hypertarget{property-editor_8cpp_a824c174b2dd0f56f8aeee97a538947ee}\label{property-editor_8cpp_a824c174b2dd0f56f8aeee97a538947ee}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!comboBoxTextSingleJustify@{comboBoxTextSingleJustify}}
-\index{comboBoxTextSingleJustify@{comboBoxTextSingleJustify}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{comboBoxTextSingleJustify}{comboBoxTextSingleJustify}}
-{\footnotesize\ttfamily QCombo\+Box$\ast$ combo\+Box\+Text\+Single\+Justify}
-
-\mbox{\Hypertarget{property-editor_8cpp_a08687e5b17d6eae1b6260241276b0322}\label{property-editor_8cpp_a08687e5b17d6eae1b6260241276b0322}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!comboBoxTextSingleUpsideDown@{comboBoxTextSingleUpsideDown}}
-\index{comboBoxTextSingleUpsideDown@{comboBoxTextSingleUpsideDown}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{comboBoxTextSingleUpsideDown}{comboBoxTextSingleUpsideDown}}
-{\footnotesize\ttfamily QCombo\+Box$\ast$ combo\+Box\+Text\+Single\+Upside\+Down}
-
-\mbox{\Hypertarget{property-editor_8cpp_a912fc9e960f8de6a0b1f2bec467e33fe}\label{property-editor_8cpp_a912fc9e960f8de6a0b1f2bec467e33fe}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditBlockX@{lineEditBlockX}}
-\index{lineEditBlockX@{lineEditBlockX}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditBlockX}{lineEditBlockX}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+BlockX}
-
-\mbox{\Hypertarget{property-editor_8cpp_a0988042e44cdc4c1a0351c1d8e64fd3e}\label{property-editor_8cpp_a0988042e44cdc4c1a0351c1d8e64fd3e}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditBlockY@{lineEditBlockY}}
-\index{lineEditBlockY@{lineEditBlockY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditBlockY}{lineEditBlockY}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+BlockY}
-
-\mbox{\Hypertarget{property-editor_8cpp_a5bee0c1ce67e3148f8523cc5129779b3}\label{property-editor_8cpp_a5bee0c1ce67e3148f8523cc5129779b3}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditEllipseCenterX@{lineEditEllipseCenterX}}
-\index{lineEditEllipseCenterX@{lineEditEllipseCenterX}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditEllipseCenterX}{lineEditEllipseCenterX}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Ellipse\+CenterX}
-
-\mbox{\Hypertarget{property-editor_8cpp_a159d557d996e23790c1ab32963c4dc7d}\label{property-editor_8cpp_a159d557d996e23790c1ab32963c4dc7d}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditEllipseCenterY@{lineEditEllipseCenterY}}
-\index{lineEditEllipseCenterY@{lineEditEllipseCenterY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditEllipseCenterY}{lineEditEllipseCenterY}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Ellipse\+CenterY}
-
-\mbox{\Hypertarget{property-editor_8cpp_abe62f83083e662f1c9ae4fc7b5e69b84}\label{property-editor_8cpp_abe62f83083e662f1c9ae4fc7b5e69b84}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditEllipseDiameterMajor@{lineEditEllipseDiameterMajor}}
-\index{lineEditEllipseDiameterMajor@{lineEditEllipseDiameterMajor}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditEllipseDiameterMajor}{lineEditEllipseDiameterMajor}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Ellipse\+Diameter\+Major}
-
-\mbox{\Hypertarget{property-editor_8cpp_a36d14175a387b2640aacf1fcbbcaa5b7}\label{property-editor_8cpp_a36d14175a387b2640aacf1fcbbcaa5b7}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditEllipseDiameterMinor@{lineEditEllipseDiameterMinor}}
-\index{lineEditEllipseDiameterMinor@{lineEditEllipseDiameterMinor}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditEllipseDiameterMinor}{lineEditEllipseDiameterMinor}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Ellipse\+Diameter\+Minor}
-
-\mbox{\Hypertarget{property-editor_8cpp_a87bee4ce7b793c63309db0aa11f88e2d}\label{property-editor_8cpp_a87bee4ce7b793c63309db0aa11f88e2d}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditEllipseRadiusMajor@{lineEditEllipseRadiusMajor}}
-\index{lineEditEllipseRadiusMajor@{lineEditEllipseRadiusMajor}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditEllipseRadiusMajor}{lineEditEllipseRadiusMajor}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Ellipse\+Radius\+Major}
-
-\mbox{\Hypertarget{property-editor_8cpp_a0fe10146c48bd5e05bbfaf5c255c6b28}\label{property-editor_8cpp_a0fe10146c48bd5e05bbfaf5c255c6b28}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditEllipseRadiusMinor@{lineEditEllipseRadiusMinor}}
-\index{lineEditEllipseRadiusMinor@{lineEditEllipseRadiusMinor}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditEllipseRadiusMinor}{lineEditEllipseRadiusMinor}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Ellipse\+Radius\+Minor}
-
-\mbox{\Hypertarget{property-editor_8cpp_aa87351809ede6597bea2fb26f61b9308}\label{property-editor_8cpp_aa87351809ede6597bea2fb26f61b9308}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditImageHeight@{lineEditImageHeight}}
-\index{lineEditImageHeight@{lineEditImageHeight}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditImageHeight}{lineEditImageHeight}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Image\+Height}
-
-\mbox{\Hypertarget{property-editor_8cpp_a15aff56888a4e3d37ef6a001ba481413}\label{property-editor_8cpp_a15aff56888a4e3d37ef6a001ba481413}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditImageName@{lineEditImageName}}
-\index{lineEditImageName@{lineEditImageName}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditImageName}{lineEditImageName}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Image\+Name}
-
-\mbox{\Hypertarget{property-editor_8cpp_a028266d465ee8f4a7a45c98345f22651}\label{property-editor_8cpp_a028266d465ee8f4a7a45c98345f22651}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditImagePath@{lineEditImagePath}}
-\index{lineEditImagePath@{lineEditImagePath}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditImagePath}{lineEditImagePath}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Image\+Path}
-
-\mbox{\Hypertarget{property-editor_8cpp_a8c769815e48c43def251357ca301359b}\label{property-editor_8cpp_a8c769815e48c43def251357ca301359b}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditImageWidth@{lineEditImageWidth}}
-\index{lineEditImageWidth@{lineEditImageWidth}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditImageWidth}{lineEditImageWidth}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Image\+Width}
-
-\mbox{\Hypertarget{property-editor_8cpp_ab6d5b12426cb4d1e37277689eb1b0cff}\label{property-editor_8cpp_ab6d5b12426cb4d1e37277689eb1b0cff}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditImageX@{lineEditImageX}}
-\index{lineEditImageX@{lineEditImageX}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditImageX}{lineEditImageX}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+ImageX}
-
-\mbox{\Hypertarget{property-editor_8cpp_ade60c23795bfdf7f6bf7cb9e7b6896a8}\label{property-editor_8cpp_ade60c23795bfdf7f6bf7cb9e7b6896a8}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditImageY@{lineEditImageY}}
-\index{lineEditImageY@{lineEditImageY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditImageY}{lineEditImageY}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+ImageY}
-
-\mbox{\Hypertarget{property-editor_8cpp_a44075c07a1e49e40e2771c669c3937da}\label{property-editor_8cpp_a44075c07a1e49e40e2771c669c3937da}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditInfiniteLineVectorX@{lineEditInfiniteLineVectorX}}
-\index{lineEditInfiniteLineVectorX@{lineEditInfiniteLineVectorX}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditInfiniteLineVectorX}{lineEditInfiniteLineVectorX}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Infinite\+Line\+VectorX}
-
-\mbox{\Hypertarget{property-editor_8cpp_a3e835672ad8ea29b36c769d1ba7806eb}\label{property-editor_8cpp_a3e835672ad8ea29b36c769d1ba7806eb}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditInfiniteLineVectorY@{lineEditInfiniteLineVectorY}}
-\index{lineEditInfiniteLineVectorY@{lineEditInfiniteLineVectorY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditInfiniteLineVectorY}{lineEditInfiniteLineVectorY}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Infinite\+Line\+VectorY}
-
-\mbox{\Hypertarget{property-editor_8cpp_a5d52b256ee2b7a6b0f6648d0457f98c0}\label{property-editor_8cpp_a5d52b256ee2b7a6b0f6648d0457f98c0}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditInfiniteLineX2@{lineEditInfiniteLineX2}}
-\index{lineEditInfiniteLineX2@{lineEditInfiniteLineX2}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditInfiniteLineX2}{lineEditInfiniteLineX2}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Infinite\+Line\+X2}
-
-\mbox{\Hypertarget{property-editor_8cpp_afd97631d52826ff1d6547302dc62e653}\label{property-editor_8cpp_afd97631d52826ff1d6547302dc62e653}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditInfiniteLineY1@{lineEditInfiniteLineY1}}
-\index{lineEditInfiniteLineY1@{lineEditInfiniteLineY1}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditInfiniteLineY1}{lineEditInfiniteLineY1}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Infinite\+Line\+Y1}
-
-\mbox{\Hypertarget{property-editor_8cpp_a1891624316bc4ded15fa31f1eb112cdc}\label{property-editor_8cpp_a1891624316bc4ded15fa31f1eb112cdc}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditInfiniteLineY2@{lineEditInfiniteLineY2}}
-\index{lineEditInfiniteLineY2@{lineEditInfiniteLineY2}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditInfiniteLineY2}{lineEditInfiniteLineY2}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Infinite\+Line\+Y2}
-
-\mbox{\Hypertarget{property-editor_8cpp_a2b21bc4f050f6e52a03a6b1495027707}\label{property-editor_8cpp_a2b21bc4f050f6e52a03a6b1495027707}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditLineAngle@{lineEditLineAngle}}
-\index{lineEditLineAngle@{lineEditLineAngle}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditLineAngle}{lineEditLineAngle}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Line\+Angle}
-
-\mbox{\Hypertarget{property-editor_8cpp_a9afad26b814b8822559d6b10da0d3634}\label{property-editor_8cpp_a9afad26b814b8822559d6b10da0d3634}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditLineDeltaX@{lineEditLineDeltaX}}
-\index{lineEditLineDeltaX@{lineEditLineDeltaX}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditLineDeltaX}{lineEditLineDeltaX}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Line\+DeltaX}
-
-\mbox{\Hypertarget{property-editor_8cpp_a86b7ce1cd5880e9c41bce7ffdf5d36ff}\label{property-editor_8cpp_a86b7ce1cd5880e9c41bce7ffdf5d36ff}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditLineDeltaY@{lineEditLineDeltaY}}
-\index{lineEditLineDeltaY@{lineEditLineDeltaY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditLineDeltaY}{lineEditLineDeltaY}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Line\+DeltaY}
-
-\mbox{\Hypertarget{property-editor_8cpp_a7611f6b9477fbc311dda79d8a0048ecf}\label{property-editor_8cpp_a7611f6b9477fbc311dda79d8a0048ecf}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditLineEndX@{lineEditLineEndX}}
-\index{lineEditLineEndX@{lineEditLineEndX}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditLineEndX}{lineEditLineEndX}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Line\+EndX}
-
-\mbox{\Hypertarget{property-editor_8cpp_ac80edb74bdc34c276bf467b476a4ea90}\label{property-editor_8cpp_ac80edb74bdc34c276bf467b476a4ea90}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditLineEndY@{lineEditLineEndY}}
-\index{lineEditLineEndY@{lineEditLineEndY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditLineEndY}{lineEditLineEndY}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Line\+EndY}
-
-\mbox{\Hypertarget{property-editor_8cpp_a7b0931d123a5107c4949d3edb82a0e4a}\label{property-editor_8cpp_a7b0931d123a5107c4949d3edb82a0e4a}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditLineLength@{lineEditLineLength}}
-\index{lineEditLineLength@{lineEditLineLength}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditLineLength}{lineEditLineLength}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Line\+Length}
-
-\mbox{\Hypertarget{property-editor_8cpp_a17777b3757ae3b9bb968ddb82b6ae112}\label{property-editor_8cpp_a17777b3757ae3b9bb968ddb82b6ae112}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditLineStartX@{lineEditLineStartX}}
-\index{lineEditLineStartX@{lineEditLineStartX}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditLineStartX}{lineEditLineStartX}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Line\+StartX}
-
-\mbox{\Hypertarget{property-editor_8cpp_a4a5cbcafcc452144a91d333df4a6f198}\label{property-editor_8cpp_a4a5cbcafcc452144a91d333df4a6f198}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditLineStartY@{lineEditLineStartY}}
-\index{lineEditLineStartY@{lineEditLineStartY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditLineStartY}{lineEditLineStartY}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Line\+StartY}
-
-\mbox{\Hypertarget{property-editor_8cpp_a693169cb7cb34c1401cc6e9bed527e72}\label{property-editor_8cpp_a693169cb7cb34c1401cc6e9bed527e72}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditPathArea@{lineEditPathArea}}
-\index{lineEditPathArea@{lineEditPathArea}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditPathArea}{lineEditPathArea}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Path\+Area}
-
-\mbox{\Hypertarget{property-editor_8cpp_a7a86f2216eb7d3f6292c8dbd6342d3a4}\label{property-editor_8cpp_a7a86f2216eb7d3f6292c8dbd6342d3a4}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditPathLength@{lineEditPathLength}}
-\index{lineEditPathLength@{lineEditPathLength}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditPathLength}{lineEditPathLength}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Path\+Length}
-
-\mbox{\Hypertarget{property-editor_8cpp_a0a37c0252091a23625b57f96b5531ce4}\label{property-editor_8cpp_a0a37c0252091a23625b57f96b5531ce4}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditPathVertexX@{lineEditPathVertexX}}
-\index{lineEditPathVertexX@{lineEditPathVertexX}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditPathVertexX}{lineEditPathVertexX}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Path\+VertexX}
-
-\mbox{\Hypertarget{property-editor_8cpp_a327271367947985f52b4ed716143406b}\label{property-editor_8cpp_a327271367947985f52b4ed716143406b}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditPathVertexY@{lineEditPathVertexY}}
-\index{lineEditPathVertexY@{lineEditPathVertexY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditPathVertexY}{lineEditPathVertexY}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Path\+VertexY}
-
-\mbox{\Hypertarget{property-editor_8cpp_a7c9f34fca7d2fe0d640e3777a344e260}\label{property-editor_8cpp_a7c9f34fca7d2fe0d640e3777a344e260}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditPointX@{lineEditPointX}}
-\index{lineEditPointX@{lineEditPointX}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditPointX}{lineEditPointX}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+PointX}
-
-\mbox{\Hypertarget{property-editor_8cpp_a4b96da36f68def1cafdd1b9c8067a5d5}\label{property-editor_8cpp_a4b96da36f68def1cafdd1b9c8067a5d5}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditPointY@{lineEditPointY}}
-\index{lineEditPointY@{lineEditPointY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditPointY}{lineEditPointY}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+PointY}
-
-\mbox{\Hypertarget{property-editor_8cpp_ab77e523e36cbcefba0ebaad4039b7d02}\label{property-editor_8cpp_ab77e523e36cbcefba0ebaad4039b7d02}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditPolygonCenterX@{lineEditPolygonCenterX}}
-\index{lineEditPolygonCenterX@{lineEditPolygonCenterX}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditPolygonCenterX}{lineEditPolygonCenterX}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Polygon\+CenterX}
-
-\mbox{\Hypertarget{property-editor_8cpp_a6a90c000f97e1b99eae370cac8223b63}\label{property-editor_8cpp_a6a90c000f97e1b99eae370cac8223b63}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditPolygonCenterY@{lineEditPolygonCenterY}}
-\index{lineEditPolygonCenterY@{lineEditPolygonCenterY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditPolygonCenterY}{lineEditPolygonCenterY}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Polygon\+CenterY}
-
-\mbox{\Hypertarget{property-editor_8cpp_a3e8c387fcf5b9511dbbd0150e43bd497}\label{property-editor_8cpp_a3e8c387fcf5b9511dbbd0150e43bd497}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditPolygonDiameterSide@{lineEditPolygonDiameterSide}}
-\index{lineEditPolygonDiameterSide@{lineEditPolygonDiameterSide}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditPolygonDiameterSide}{lineEditPolygonDiameterSide}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Polygon\+Diameter\+Side}
-
-\mbox{\Hypertarget{property-editor_8cpp_ae2c20e527e06f91193e8cbf99612a7cb}\label{property-editor_8cpp_ae2c20e527e06f91193e8cbf99612a7cb}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditPolygonDiameterVertex@{lineEditPolygonDiameterVertex}}
-\index{lineEditPolygonDiameterVertex@{lineEditPolygonDiameterVertex}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditPolygonDiameterVertex}{lineEditPolygonDiameterVertex}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Polygon\+Diameter\+Vertex}
-
-\mbox{\Hypertarget{property-editor_8cpp_a7b8cf01fe7594721a6bb6664ef5c4928}\label{property-editor_8cpp_a7b8cf01fe7594721a6bb6664ef5c4928}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditPolygonInteriorAngle@{lineEditPolygonInteriorAngle}}
-\index{lineEditPolygonInteriorAngle@{lineEditPolygonInteriorAngle}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditPolygonInteriorAngle}{lineEditPolygonInteriorAngle}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Polygon\+Interior\+Angle}
-
-\mbox{\Hypertarget{property-editor_8cpp_a4d4811a19f60acaa8cc831ecd5c414cf}\label{property-editor_8cpp_a4d4811a19f60acaa8cc831ecd5c414cf}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditPolygonRadiusSide@{lineEditPolygonRadiusSide}}
-\index{lineEditPolygonRadiusSide@{lineEditPolygonRadiusSide}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditPolygonRadiusSide}{lineEditPolygonRadiusSide}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Polygon\+Radius\+Side}
-
-\mbox{\Hypertarget{property-editor_8cpp_a6ede4b57c3f80265f3bf170610f9b5f9}\label{property-editor_8cpp_a6ede4b57c3f80265f3bf170610f9b5f9}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditPolygonRadiusVertex@{lineEditPolygonRadiusVertex}}
-\index{lineEditPolygonRadiusVertex@{lineEditPolygonRadiusVertex}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditPolygonRadiusVertex}{lineEditPolygonRadiusVertex}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Polygon\+Radius\+Vertex}
-
-\mbox{\Hypertarget{property-editor_8cpp_a5f470b64ab5c814f7a13668effaa9210}\label{property-editor_8cpp_a5f470b64ab5c814f7a13668effaa9210}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditPolylineArea@{lineEditPolylineArea}}
-\index{lineEditPolylineArea@{lineEditPolylineArea}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditPolylineArea}{lineEditPolylineArea}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Polyline\+Area}
-
-\mbox{\Hypertarget{property-editor_8cpp_aad54d6180457ebe063d69c2a5abfa170}\label{property-editor_8cpp_aad54d6180457ebe063d69c2a5abfa170}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditPolylineLength@{lineEditPolylineLength}}
-\index{lineEditPolylineLength@{lineEditPolylineLength}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditPolylineLength}{lineEditPolylineLength}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Polyline\+Length}
-
-\mbox{\Hypertarget{property-editor_8cpp_aa1f590e99434367662aa6fd3fb3af2f0}\label{property-editor_8cpp_aa1f590e99434367662aa6fd3fb3af2f0}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditPolylineVertexX@{lineEditPolylineVertexX}}
-\index{lineEditPolylineVertexX@{lineEditPolylineVertexX}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditPolylineVertexX}{lineEditPolylineVertexX}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Polyline\+VertexX}
-
-\mbox{\Hypertarget{property-editor_8cpp_a3f3ad8f8129e99e0fe143c608e7c3666}\label{property-editor_8cpp_a3f3ad8f8129e99e0fe143c608e7c3666}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditPolylineVertexY@{lineEditPolylineVertexY}}
-\index{lineEditPolylineVertexY@{lineEditPolylineVertexY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditPolylineVertexY}{lineEditPolylineVertexY}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Polyline\+VertexY}
-
-\mbox{\Hypertarget{property-editor_8cpp_a1f37245ba7fe4cbd9caf1497de5f198c}\label{property-editor_8cpp_a1f37245ba7fe4cbd9caf1497de5f198c}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditRayVectorX@{lineEditRayVectorX}}
-\index{lineEditRayVectorX@{lineEditRayVectorX}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditRayVectorX}{lineEditRayVectorX}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Ray\+VectorX}
-
-\mbox{\Hypertarget{property-editor_8cpp_a4426bcb728b68e8097890d6aa6257b61}\label{property-editor_8cpp_a4426bcb728b68e8097890d6aa6257b61}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditRayVectorY@{lineEditRayVectorY}}
-\index{lineEditRayVectorY@{lineEditRayVectorY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditRayVectorY}{lineEditRayVectorY}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Ray\+VectorY}
-
-\mbox{\Hypertarget{property-editor_8cpp_ac99654294d891ab22da2b88415d11de7}\label{property-editor_8cpp_ac99654294d891ab22da2b88415d11de7}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditRayX1@{lineEditRayX1}}
-\index{lineEditRayX1@{lineEditRayX1}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditRayX1}{lineEditRayX1}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Ray\+X1}
-
-\mbox{\Hypertarget{property-editor_8cpp_ab5114dbc0b55ed4c59b05a94b68fc7ab}\label{property-editor_8cpp_ab5114dbc0b55ed4c59b05a94b68fc7ab}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditRayX2@{lineEditRayX2}}
-\index{lineEditRayX2@{lineEditRayX2}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditRayX2}{lineEditRayX2}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Ray\+X2}
-
-\mbox{\Hypertarget{property-editor_8cpp_aee98d2c190e8df4f9e3d11aed489f6a3}\label{property-editor_8cpp_aee98d2c190e8df4f9e3d11aed489f6a3}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditRayY1@{lineEditRayY1}}
-\index{lineEditRayY1@{lineEditRayY1}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditRayY1}{lineEditRayY1}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Ray\+Y1}
-
-\mbox{\Hypertarget{property-editor_8cpp_acc6c16c3f06960bd13348ba35feec9c9}\label{property-editor_8cpp_acc6c16c3f06960bd13348ba35feec9c9}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditRayY2@{lineEditRayY2}}
-\index{lineEditRayY2@{lineEditRayY2}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditRayY2}{lineEditRayY2}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Ray\+Y2}
-
-\mbox{\Hypertarget{property-editor_8cpp_a15fc3c09a0226d61e40c6b3cca119a55}\label{property-editor_8cpp_a15fc3c09a0226d61e40c6b3cca119a55}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditRectangleArea@{lineEditRectangleArea}}
-\index{lineEditRectangleArea@{lineEditRectangleArea}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditRectangleArea}{lineEditRectangleArea}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Rectangle\+Area}
-
-\mbox{\Hypertarget{property-editor_8cpp_a82ae0279f87ad97f9a608a8c4253f27e}\label{property-editor_8cpp_a82ae0279f87ad97f9a608a8c4253f27e}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditRectangleCorner1X@{lineEditRectangleCorner1X}}
-\index{lineEditRectangleCorner1X@{lineEditRectangleCorner1X}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditRectangleCorner1X}{lineEditRectangleCorner1X}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Rectangle\+Corner1X}
-
-\mbox{\Hypertarget{property-editor_8cpp_a7d463fb01789ea7f5d5ce0bb45e5e1be}\label{property-editor_8cpp_a7d463fb01789ea7f5d5ce0bb45e5e1be}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditRectangleCorner1Y@{lineEditRectangleCorner1Y}}
-\index{lineEditRectangleCorner1Y@{lineEditRectangleCorner1Y}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditRectangleCorner1Y}{lineEditRectangleCorner1Y}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Rectangle\+Corner1Y}
-
-\mbox{\Hypertarget{property-editor_8cpp_a5f36ae470f2363d32ea63fdefbe193a3}\label{property-editor_8cpp_a5f36ae470f2363d32ea63fdefbe193a3}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditRectangleCorner2X@{lineEditRectangleCorner2X}}
-\index{lineEditRectangleCorner2X@{lineEditRectangleCorner2X}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditRectangleCorner2X}{lineEditRectangleCorner2X}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Rectangle\+Corner2X}
-
-\mbox{\Hypertarget{property-editor_8cpp_ad17135c2d7e7c54b22ce61f29c22163a}\label{property-editor_8cpp_ad17135c2d7e7c54b22ce61f29c22163a}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditRectangleCorner2Y@{lineEditRectangleCorner2Y}}
-\index{lineEditRectangleCorner2Y@{lineEditRectangleCorner2Y}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditRectangleCorner2Y}{lineEditRectangleCorner2Y}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Rectangle\+Corner2Y}
-
-\mbox{\Hypertarget{property-editor_8cpp_a05e40172dcfaf1b03cd0d7fc59f5227e}\label{property-editor_8cpp_a05e40172dcfaf1b03cd0d7fc59f5227e}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditRectangleCorner3X@{lineEditRectangleCorner3X}}
-\index{lineEditRectangleCorner3X@{lineEditRectangleCorner3X}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditRectangleCorner3X}{lineEditRectangleCorner3X}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Rectangle\+Corner3X}
-
-\mbox{\Hypertarget{property-editor_8cpp_a6596bd39c67ed68b3496e276ea5f7914}\label{property-editor_8cpp_a6596bd39c67ed68b3496e276ea5f7914}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditRectangleCorner3Y@{lineEditRectangleCorner3Y}}
-\index{lineEditRectangleCorner3Y@{lineEditRectangleCorner3Y}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditRectangleCorner3Y}{lineEditRectangleCorner3Y}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Rectangle\+Corner3Y}
-
-\mbox{\Hypertarget{property-editor_8cpp_a9c4f80081ec13d68b6fa6af41a092df2}\label{property-editor_8cpp_a9c4f80081ec13d68b6fa6af41a092df2}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditRectangleCorner4X@{lineEditRectangleCorner4X}}
-\index{lineEditRectangleCorner4X@{lineEditRectangleCorner4X}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditRectangleCorner4X}{lineEditRectangleCorner4X}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Rectangle\+Corner4X}
-
-\mbox{\Hypertarget{property-editor_8cpp_aa376637a8bb14bfab856bf49d6a4c870}\label{property-editor_8cpp_aa376637a8bb14bfab856bf49d6a4c870}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditRectangleCorner4Y@{lineEditRectangleCorner4Y}}
-\index{lineEditRectangleCorner4Y@{lineEditRectangleCorner4Y}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditRectangleCorner4Y}{lineEditRectangleCorner4Y}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Rectangle\+Corner4Y}
-
-\mbox{\Hypertarget{property-editor_8cpp_a350081261a22bbbb5ff08a91f95f9a83}\label{property-editor_8cpp_a350081261a22bbbb5ff08a91f95f9a83}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditRectangleHeight@{lineEditRectangleHeight}}
-\index{lineEditRectangleHeight@{lineEditRectangleHeight}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditRectangleHeight}{lineEditRectangleHeight}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Rectangle\+Height}
-
-\mbox{\Hypertarget{property-editor_8cpp_a6af84f9b188648c44650b9055e870814}\label{property-editor_8cpp_a6af84f9b188648c44650b9055e870814}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditRectangleWidth@{lineEditRectangleWidth}}
-\index{lineEditRectangleWidth@{lineEditRectangleWidth}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditRectangleWidth}{lineEditRectangleWidth}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Rectangle\+Width}
-
-\mbox{\Hypertarget{property-editor_8cpp_aa1c918bedbc74f2d684145e8a4138828}\label{property-editor_8cpp_aa1c918bedbc74f2d684145e8a4138828}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditTextMultiX@{lineEditTextMultiX}}
-\index{lineEditTextMultiX@{lineEditTextMultiX}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditTextMultiX}{lineEditTextMultiX}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Text\+MultiX}
-
-\mbox{\Hypertarget{property-editor_8cpp_a18b30a6a7bc1b8d28d1d4460869944bc}\label{property-editor_8cpp_a18b30a6a7bc1b8d28d1d4460869944bc}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditTextMultiY@{lineEditTextMultiY}}
-\index{lineEditTextMultiY@{lineEditTextMultiY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditTextMultiY}{lineEditTextMultiY}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Text\+MultiY}
-
-\mbox{\Hypertarget{property-editor_8cpp_a91b93273f161e2e4a8f75042cb84e65c}\label{property-editor_8cpp_a91b93273f161e2e4a8f75042cb84e65c}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditTextSingleContents@{lineEditTextSingleContents}}
-\index{lineEditTextSingleContents@{lineEditTextSingleContents}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditTextSingleContents}{lineEditTextSingleContents}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Text\+Single\+Contents}
-
-\mbox{\Hypertarget{property-editor_8cpp_adc168453836b03a0680da095eff46104}\label{property-editor_8cpp_adc168453836b03a0680da095eff46104}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditTextSingleHeight@{lineEditTextSingleHeight}}
-\index{lineEditTextSingleHeight@{lineEditTextSingleHeight}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditTextSingleHeight}{lineEditTextSingleHeight}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Text\+Single\+Height}
-
-\mbox{\Hypertarget{property-editor_8cpp_a74a3b0df14baf163db867e1459e7f902}\label{property-editor_8cpp_a74a3b0df14baf163db867e1459e7f902}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditTextSingleRotation@{lineEditTextSingleRotation}}
-\index{lineEditTextSingleRotation@{lineEditTextSingleRotation}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditTextSingleRotation}{lineEditTextSingleRotation}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Text\+Single\+Rotation}
-
-\mbox{\Hypertarget{property-editor_8cpp_ac41fb035ef899046590c14377ef74d81}\label{property-editor_8cpp_ac41fb035ef899046590c14377ef74d81}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEditTextSingleY@{lineEditTextSingleY}}
-\index{lineEditTextSingleY@{lineEditTextSingleY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{lineEditTextSingleY}{lineEditTextSingleY}}
-{\footnotesize\ttfamily QLine\+Edit$\ast$ line\+Edit\+Text\+SingleY}
-
-\mbox{\Hypertarget{property-editor_8cpp_a323bac76f47473671c8b588347996385}\label{property-editor_8cpp_a323bac76f47473671c8b588347996385}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempArcObj@{tempArcObj}}
-\index{tempArcObj@{tempArcObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempArcObj}{tempArcObj}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_arc_object}{Arc\+Object}}$\ast$ temp\+Arc\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_a41071c045712cf07bedcedc6e42e050f}\label{property-editor_8cpp_a41071c045712cf07bedcedc6e42e050f}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempBlockObj@{tempBlockObj}}
-\index{tempBlockObj@{tempBlockObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempBlockObj}{tempBlockObj}}
-{\footnotesize\ttfamily Block\+Object$\ast$ temp\+Block\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_ae69172ef07bbc195992c7b7003d16eb5}\label{property-editor_8cpp_ae69172ef07bbc195992c7b7003d16eb5}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempCircleObj@{tempCircleObj}}
-\index{tempCircleObj@{tempCircleObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempCircleObj}{tempCircleObj}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_circle_object}{Circle\+Object}}$\ast$ temp\+Circle\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_a6c0f4e2bf50f55925f800c6ab7d9baca}\label{property-editor_8cpp_a6c0f4e2bf50f55925f800c6ab7d9baca}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempDimAlignedObj@{tempDimAlignedObj}}
-\index{tempDimAlignedObj@{tempDimAlignedObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempDimAlignedObj}{tempDimAlignedObj}}
-{\footnotesize\ttfamily Dim\+Aligned\+Object$\ast$ temp\+Dim\+Aligned\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_acfbc4375eb37fc2ad879fa018813f2d1}\label{property-editor_8cpp_acfbc4375eb37fc2ad879fa018813f2d1}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempDimAngularObj@{tempDimAngularObj}}
-\index{tempDimAngularObj@{tempDimAngularObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempDimAngularObj}{tempDimAngularObj}}
-{\footnotesize\ttfamily Dim\+Angular\+Object$\ast$ temp\+Dim\+Angular\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_a923b9ab491c4698cfb48020f00a5039b}\label{property-editor_8cpp_a923b9ab491c4698cfb48020f00a5039b}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempDimArcLenObj@{tempDimArcLenObj}}
-\index{tempDimArcLenObj@{tempDimArcLenObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempDimArcLenObj}{tempDimArcLenObj}}
-{\footnotesize\ttfamily Dim\+Arc\+Length\+Object$\ast$ temp\+Dim\+Arc\+Len\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_afb43bcab8d00b1f169a68058f9a97ca4}\label{property-editor_8cpp_afb43bcab8d00b1f169a68058f9a97ca4}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempDimDiamObj@{tempDimDiamObj}}
-\index{tempDimDiamObj@{tempDimDiamObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempDimDiamObj}{tempDimDiamObj}}
-{\footnotesize\ttfamily Dim\+Diameter\+Object$\ast$ temp\+Dim\+Diam\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_aa9253542663af3d79e109878f12ec204}\label{property-editor_8cpp_aa9253542663af3d79e109878f12ec204}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempDimLeaderObj@{tempDimLeaderObj}}
-\index{tempDimLeaderObj@{tempDimLeaderObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempDimLeaderObj}{tempDimLeaderObj}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_dim_leader_object}{Dim\+Leader\+Object}}$\ast$ temp\+Dim\+Leader\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_a70d3b3fd0e9c8a3f1217f7d435fa928e}\label{property-editor_8cpp_a70d3b3fd0e9c8a3f1217f7d435fa928e}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempDimLinearObj@{tempDimLinearObj}}
-\index{tempDimLinearObj@{tempDimLinearObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempDimLinearObj}{tempDimLinearObj}}
-{\footnotesize\ttfamily Dim\+Linear\+Object$\ast$ temp\+Dim\+Linear\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_ac9bfc1a4be5c0bc357fa06eb247a7411}\label{property-editor_8cpp_ac9bfc1a4be5c0bc357fa06eb247a7411}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempDimOrdObj@{tempDimOrdObj}}
-\index{tempDimOrdObj@{tempDimOrdObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempDimOrdObj}{tempDimOrdObj}}
-{\footnotesize\ttfamily Dim\+Ordinate\+Object$\ast$ temp\+Dim\+Ord\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_a2ebe3377f6dbf695fb0cb8c50de5755d}\label{property-editor_8cpp_a2ebe3377f6dbf695fb0cb8c50de5755d}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempDimRadiusObj@{tempDimRadiusObj}}
-\index{tempDimRadiusObj@{tempDimRadiusObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempDimRadiusObj}{tempDimRadiusObj}}
-{\footnotesize\ttfamily Dim\+Radius\+Object$\ast$ temp\+Dim\+Radius\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_ac63eb86a4eafbbad878fbe18af1665a6}\label{property-editor_8cpp_ac63eb86a4eafbbad878fbe18af1665a6}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempEllipseArcObj@{tempEllipseArcObj}}
-\index{tempEllipseArcObj@{tempEllipseArcObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempEllipseArcObj}{tempEllipseArcObj}}
-{\footnotesize\ttfamily Ellipse\+Arc\+Object$\ast$ temp\+Ellipse\+Arc\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_a9c852d74ef9685683c18307ba8d423fd}\label{property-editor_8cpp_a9c852d74ef9685683c18307ba8d423fd}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempEllipseObj@{tempEllipseObj}}
-\index{tempEllipseObj@{tempEllipseObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempEllipseObj}{tempEllipseObj}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_ellipse_object}{Ellipse\+Object}}$\ast$ temp\+Ellipse\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_a3876727c3aebf355c3e21afc3a329dfc}\label{property-editor_8cpp_a3876727c3aebf355c3e21afc3a329dfc}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempHatchObj@{tempHatchObj}}
-\index{tempHatchObj@{tempHatchObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempHatchObj}{tempHatchObj}}
-{\footnotesize\ttfamily Hatch\+Object$\ast$ temp\+Hatch\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_a25217c8bbdf7b3490c018a755ee0fdf1}\label{property-editor_8cpp_a25217c8bbdf7b3490c018a755ee0fdf1}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempImageObj@{tempImageObj}}
-\index{tempImageObj@{tempImageObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempImageObj}{tempImageObj}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_image_object}{Image\+Object}}$\ast$ temp\+Image\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_a92411002e51ad89bdd236614fc4ccd3e}\label{property-editor_8cpp_a92411002e51ad89bdd236614fc4ccd3e}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempInfLineObj@{tempInfLineObj}}
-\index{tempInfLineObj@{tempInfLineObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempInfLineObj}{tempInfLineObj}}
-{\footnotesize\ttfamily Infinite\+Line\+Object$\ast$ temp\+Inf\+Line\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_a4a530c3c3edce736f7c3aa5f9a3fdea9}\label{property-editor_8cpp_a4a530c3c3edce736f7c3aa5f9a3fdea9}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempLineObj@{tempLineObj}}
-\index{tempLineObj@{tempLineObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempLineObj}{tempLineObj}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_line_object}{Line\+Object}}$\ast$ temp\+Line\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_a4ee02d3a281ccaaccb7a44e910c15f8a}\label{property-editor_8cpp_a4ee02d3a281ccaaccb7a44e910c15f8a}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempPathObj@{tempPathObj}}
-\index{tempPathObj@{tempPathObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempPathObj}{tempPathObj}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_path_object}{Path\+Object}}$\ast$ temp\+Path\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_aa5b82b2c08104040c0ef986089271fb0}\label{property-editor_8cpp_aa5b82b2c08104040c0ef986089271fb0}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempPointObj@{tempPointObj}}
-\index{tempPointObj@{tempPointObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempPointObj}{tempPointObj}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_point_object}{Point\+Object}}$\ast$ temp\+Point\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_a40843b506be05b4780b71f0694ce0a82}\label{property-editor_8cpp_a40843b506be05b4780b71f0694ce0a82}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempPolygonObj@{tempPolygonObj}}
-\index{tempPolygonObj@{tempPolygonObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempPolygonObj}{tempPolygonObj}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_polygon_object}{Polygon\+Object}}$\ast$ temp\+Polygon\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_a3a95465131ee78910494993a85a65cb3}\label{property-editor_8cpp_a3a95465131ee78910494993a85a65cb3}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempPolylineObj@{tempPolylineObj}}
-\index{tempPolylineObj@{tempPolylineObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempPolylineObj}{tempPolylineObj}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_polyline_object}{Polyline\+Object}}$\ast$ temp\+Polyline\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_ac62698d7d2d8adccdd72888f5bb648c3}\label{property-editor_8cpp_ac62698d7d2d8adccdd72888f5bb648c3}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempRayObj@{tempRayObj}}
-\index{tempRayObj@{tempRayObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempRayObj}{tempRayObj}}
-{\footnotesize\ttfamily Ray\+Object$\ast$ temp\+Ray\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_a701f23d32d67993872b0ad418ee0238b}\label{property-editor_8cpp_a701f23d32d67993872b0ad418ee0238b}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempRectObj@{tempRectObj}}
-\index{tempRectObj@{tempRectObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempRectObj}{tempRectObj}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_rect_object}{Rect\+Object}}$\ast$ temp\+Rect\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_a15107bb1516f6ff49c247d4352038150}\label{property-editor_8cpp_a15107bb1516f6ff49c247d4352038150}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempSplineObj@{tempSplineObj}}
-\index{tempSplineObj@{tempSplineObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempSplineObj}{tempSplineObj}}
-{\footnotesize\ttfamily Spline\+Object$\ast$ temp\+Spline\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_a0b20095be35cb74cb90cb2de07bbe856}\label{property-editor_8cpp_a0b20095be35cb74cb90cb2de07bbe856}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempTextMultiObj@{tempTextMultiObj}}
-\index{tempTextMultiObj@{tempTextMultiObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempTextMultiObj}{tempTextMultiObj}}
-{\footnotesize\ttfamily Text\+Multi\+Object$\ast$ temp\+Text\+Multi\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_aaa6bf9c8bc980621380b9faa15111db6}\label{property-editor_8cpp_aaa6bf9c8bc980621380b9faa15111db6}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!tempTextSingleObj@{tempTextSingleObj}}
-\index{tempTextSingleObj@{tempTextSingleObj}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{tempTextSingleObj}{tempTextSingleObj}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_text_single_object}{Text\+Single\+Object}}$\ast$ temp\+Text\+Single\+Obj}
-
-\mbox{\Hypertarget{property-editor_8cpp_a83d709d77be95b24ed991aafb80de7d7}\label{property-editor_8cpp_a83d709d77be95b24ed991aafb80de7d7}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonArcClockwise@{toolButtonArcClockwise}}
-\index{toolButtonArcClockwise@{toolButtonArcClockwise}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonArcClockwise}{toolButtonArcClockwise}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Arc\+Clockwise}
-
-\mbox{\Hypertarget{property-editor_8cpp_ac0ae4f3b4f605f3e7fcca42d36713ebd}\label{property-editor_8cpp_ac0ae4f3b4f605f3e7fcca42d36713ebd}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonBlockX@{toolButtonBlockX}}
-\index{toolButtonBlockX@{toolButtonBlockX}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonBlockX}{toolButtonBlockX}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+BlockX}
-
-\mbox{\Hypertarget{property-editor_8cpp_afa8f7fd777dabc347b0f821815aeef24}\label{property-editor_8cpp_afa8f7fd777dabc347b0f821815aeef24}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonBlockY@{toolButtonBlockY}}
-\index{toolButtonBlockY@{toolButtonBlockY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonBlockY}{toolButtonBlockY}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+BlockY}
-
-\mbox{\Hypertarget{property-editor_8cpp_a61626bd812cd3baa6415290bbdd7da4a}\label{property-editor_8cpp_a61626bd812cd3baa6415290bbdd7da4a}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonImageHeight@{toolButtonImageHeight}}
-\index{toolButtonImageHeight@{toolButtonImageHeight}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonImageHeight}{toolButtonImageHeight}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Image\+Height}
-
-\mbox{\Hypertarget{property-editor_8cpp_a376e840026e22a10631bf6cbe97626d6}\label{property-editor_8cpp_a376e840026e22a10631bf6cbe97626d6}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonImageName@{toolButtonImageName}}
-\index{toolButtonImageName@{toolButtonImageName}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonImageName}{toolButtonImageName}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Image\+Name}
-
-\mbox{\Hypertarget{property-editor_8cpp_ae3398b2b5e8e040fac3acef1edcb2aa3}\label{property-editor_8cpp_ae3398b2b5e8e040fac3acef1edcb2aa3}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonImagePath@{toolButtonImagePath}}
-\index{toolButtonImagePath@{toolButtonImagePath}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonImagePath}{toolButtonImagePath}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Image\+Path}
-
-\mbox{\Hypertarget{property-editor_8cpp_a00ef314f0770b0654b9affb5bee38662}\label{property-editor_8cpp_a00ef314f0770b0654b9affb5bee38662}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonImageWidth@{toolButtonImageWidth}}
-\index{toolButtonImageWidth@{toolButtonImageWidth}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonImageWidth}{toolButtonImageWidth}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Image\+Width}
-
-\mbox{\Hypertarget{property-editor_8cpp_aaa17b300192a1021164b0aca2e3395ff}\label{property-editor_8cpp_aaa17b300192a1021164b0aca2e3395ff}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonImageX@{toolButtonImageX}}
-\index{toolButtonImageX@{toolButtonImageX}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonImageX}{toolButtonImageX}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+ImageX}
-
-\mbox{\Hypertarget{property-editor_8cpp_acd0d0bf1fc35cfb23513510414373aee}\label{property-editor_8cpp_acd0d0bf1fc35cfb23513510414373aee}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonImageY@{toolButtonImageY}}
-\index{toolButtonImageY@{toolButtonImageY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonImageY}{toolButtonImageY}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+ImageY}
-
-\mbox{\Hypertarget{property-editor_8cpp_a0ac9f8ecda1fced96067f7f710669823}\label{property-editor_8cpp_a0ac9f8ecda1fced96067f7f710669823}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonInfiniteLineVectorX@{toolButtonInfiniteLineVectorX}}
-\index{toolButtonInfiniteLineVectorX@{toolButtonInfiniteLineVectorX}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonInfiniteLineVectorX}{toolButtonInfiniteLineVectorX}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Infinite\+Line\+VectorX}
-
-\mbox{\Hypertarget{property-editor_8cpp_abfe367545586fba892153c0a7310edaf}\label{property-editor_8cpp_abfe367545586fba892153c0a7310edaf}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonInfiniteLineVectorY@{toolButtonInfiniteLineVectorY}}
-\index{toolButtonInfiniteLineVectorY@{toolButtonInfiniteLineVectorY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonInfiniteLineVectorY}{toolButtonInfiniteLineVectorY}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Infinite\+Line\+VectorY}
-
-\mbox{\Hypertarget{property-editor_8cpp_a02b747c05131016409e6043d6c14faa3}\label{property-editor_8cpp_a02b747c05131016409e6043d6c14faa3}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonInfiniteLineX2@{toolButtonInfiniteLineX2}}
-\index{toolButtonInfiniteLineX2@{toolButtonInfiniteLineX2}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonInfiniteLineX2}{toolButtonInfiniteLineX2}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Infinite\+Line\+X2}
-
-\mbox{\Hypertarget{property-editor_8cpp_ad571726d3d738c6c9a878c133232d769}\label{property-editor_8cpp_ad571726d3d738c6c9a878c133232d769}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonInfiniteLineY2@{toolButtonInfiniteLineY2}}
-\index{toolButtonInfiniteLineY2@{toolButtonInfiniteLineY2}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonInfiniteLineY2}{toolButtonInfiniteLineY2}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Infinite\+Line\+Y2}
-
-\mbox{\Hypertarget{property-editor_8cpp_a1c5a03fc9da8e021fcc3d83714af6ebd}\label{property-editor_8cpp_a1c5a03fc9da8e021fcc3d83714af6ebd}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonLineAngle@{toolButtonLineAngle}}
-\index{toolButtonLineAngle@{toolButtonLineAngle}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonLineAngle}{toolButtonLineAngle}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Line\+Angle}
-
-\mbox{\Hypertarget{property-editor_8cpp_af9d56ffc133a995f8ca9ebb610655380}\label{property-editor_8cpp_af9d56ffc133a995f8ca9ebb610655380}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonLineDeltaX@{toolButtonLineDeltaX}}
-\index{toolButtonLineDeltaX@{toolButtonLineDeltaX}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonLineDeltaX}{toolButtonLineDeltaX}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Line\+DeltaX}
-
-\mbox{\Hypertarget{property-editor_8cpp_aa0277eafcce7da468bac44a0acce1b78}\label{property-editor_8cpp_aa0277eafcce7da468bac44a0acce1b78}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonLineDeltaY@{toolButtonLineDeltaY}}
-\index{toolButtonLineDeltaY@{toolButtonLineDeltaY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonLineDeltaY}{toolButtonLineDeltaY}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Line\+DeltaY}
-
-\mbox{\Hypertarget{property-editor_8cpp_ae94dbd1302c59cc518367cac1772f385}\label{property-editor_8cpp_ae94dbd1302c59cc518367cac1772f385}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonLineEndX@{toolButtonLineEndX}}
-\index{toolButtonLineEndX@{toolButtonLineEndX}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonLineEndX}{toolButtonLineEndX}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Line\+EndX}
-
-\mbox{\Hypertarget{property-editor_8cpp_ac7023cc72f81df04ffe2a9f483ea6f59}\label{property-editor_8cpp_ac7023cc72f81df04ffe2a9f483ea6f59}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonLineEndY@{toolButtonLineEndY}}
-\index{toolButtonLineEndY@{toolButtonLineEndY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonLineEndY}{toolButtonLineEndY}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Line\+EndY}
-
-\mbox{\Hypertarget{property-editor_8cpp_a4086b8486b3cf7b5c7081a747e6ea8d1}\label{property-editor_8cpp_a4086b8486b3cf7b5c7081a747e6ea8d1}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonLineLength@{toolButtonLineLength}}
-\index{toolButtonLineLength@{toolButtonLineLength}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonLineLength}{toolButtonLineLength}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Line\+Length}
-
-\mbox{\Hypertarget{property-editor_8cpp_a668a6ea08fc558c3b628bfa849ce0d5f}\label{property-editor_8cpp_a668a6ea08fc558c3b628bfa849ce0d5f}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonLineStartX@{toolButtonLineStartX}}
-\index{toolButtonLineStartX@{toolButtonLineStartX}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonLineStartX}{toolButtonLineStartX}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Line\+StartX}
-
-\mbox{\Hypertarget{property-editor_8cpp_a0beb3f8e0fa1a45d67eb5e7b481dfc5a}\label{property-editor_8cpp_a0beb3f8e0fa1a45d67eb5e7b481dfc5a}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonLineStartY@{toolButtonLineStartY}}
-\index{toolButtonLineStartY@{toolButtonLineStartY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonLineStartY}{toolButtonLineStartY}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Line\+StartY}
-
-\mbox{\Hypertarget{property-editor_8cpp_a2dfc41841c21658f9a5696b3358b485a}\label{property-editor_8cpp_a2dfc41841c21658f9a5696b3358b485a}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonPolygonDiameterSide@{toolButtonPolygonDiameterSide}}
-\index{toolButtonPolygonDiameterSide@{toolButtonPolygonDiameterSide}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonPolygonDiameterSide}{toolButtonPolygonDiameterSide}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Polygon\+Diameter\+Side}
-
-\mbox{\Hypertarget{property-editor_8cpp_aec5afeaab65410a3fe6838ce34d1286d}\label{property-editor_8cpp_aec5afeaab65410a3fe6838ce34d1286d}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonPolygonDiameterVertex@{toolButtonPolygonDiameterVertex}}
-\index{toolButtonPolygonDiameterVertex@{toolButtonPolygonDiameterVertex}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonPolygonDiameterVertex}{toolButtonPolygonDiameterVertex}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Polygon\+Diameter\+Vertex}
-
-\mbox{\Hypertarget{property-editor_8cpp_a0d81e39eec9a155dbfc2b9ee14cd92c5}\label{property-editor_8cpp_a0d81e39eec9a155dbfc2b9ee14cd92c5}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonPolygonInteriorAngle@{toolButtonPolygonInteriorAngle}}
-\index{toolButtonPolygonInteriorAngle@{toolButtonPolygonInteriorAngle}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonPolygonInteriorAngle}{toolButtonPolygonInteriorAngle}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Polygon\+Interior\+Angle}
-
-\mbox{\Hypertarget{property-editor_8cpp_a8f3c01e67fd5cbc96a5045cb384cd612}\label{property-editor_8cpp_a8f3c01e67fd5cbc96a5045cb384cd612}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonPolygonRadiusSide@{toolButtonPolygonRadiusSide}}
-\index{toolButtonPolygonRadiusSide@{toolButtonPolygonRadiusSide}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonPolygonRadiusSide}{toolButtonPolygonRadiusSide}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Polygon\+Radius\+Side}
-
-\mbox{\Hypertarget{property-editor_8cpp_aeaf83ba78e37f0b9d26211c3e42efb3b}\label{property-editor_8cpp_aeaf83ba78e37f0b9d26211c3e42efb3b}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonPolygonRadiusVertex@{toolButtonPolygonRadiusVertex}}
-\index{toolButtonPolygonRadiusVertex@{toolButtonPolygonRadiusVertex}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonPolygonRadiusVertex}{toolButtonPolygonRadiusVertex}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Polygon\+Radius\+Vertex}
-
-\mbox{\Hypertarget{property-editor_8cpp_a5641507c2f3d9943a43ab1f5847fa125}\label{property-editor_8cpp_a5641507c2f3d9943a43ab1f5847fa125}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonPolylineArea@{toolButtonPolylineArea}}
-\index{toolButtonPolylineArea@{toolButtonPolylineArea}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonPolylineArea}{toolButtonPolylineArea}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Polyline\+Area}
-
-\mbox{\Hypertarget{property-editor_8cpp_aa0d8aa16c860acf4728b6f63282844a7}\label{property-editor_8cpp_aa0d8aa16c860acf4728b6f63282844a7}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonPolylineClosed@{toolButtonPolylineClosed}}
-\index{toolButtonPolylineClosed@{toolButtonPolylineClosed}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonPolylineClosed}{toolButtonPolylineClosed}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Polyline\+Closed}
-
-\mbox{\Hypertarget{property-editor_8cpp_ab3817dcfd8b3f8cbf666a764f9862193}\label{property-editor_8cpp_ab3817dcfd8b3f8cbf666a764f9862193}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonPolylineLength@{toolButtonPolylineLength}}
-\index{toolButtonPolylineLength@{toolButtonPolylineLength}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonPolylineLength}{toolButtonPolylineLength}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Polyline\+Length}
-
-\mbox{\Hypertarget{property-editor_8cpp_adf98ecffe3cb5ef715a1751e27be2ad7}\label{property-editor_8cpp_adf98ecffe3cb5ef715a1751e27be2ad7}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonPolylineVertexNum@{toolButtonPolylineVertexNum}}
-\index{toolButtonPolylineVertexNum@{toolButtonPolylineVertexNum}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonPolylineVertexNum}{toolButtonPolylineVertexNum}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Polyline\+Vertex\+Num}
-
-\mbox{\Hypertarget{property-editor_8cpp_a4032b50b830b84b146e995d8e0795c74}\label{property-editor_8cpp_a4032b50b830b84b146e995d8e0795c74}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonPolylineVertexX@{toolButtonPolylineVertexX}}
-\index{toolButtonPolylineVertexX@{toolButtonPolylineVertexX}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonPolylineVertexX}{toolButtonPolylineVertexX}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Polyline\+VertexX}
-
-\mbox{\Hypertarget{property-editor_8cpp_a53a5207fca843221f4517c3603c7fedc}\label{property-editor_8cpp_a53a5207fca843221f4517c3603c7fedc}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonPolylineVertexY@{toolButtonPolylineVertexY}}
-\index{toolButtonPolylineVertexY@{toolButtonPolylineVertexY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonPolylineVertexY}{toolButtonPolylineVertexY}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Polyline\+VertexY}
-
-\mbox{\Hypertarget{property-editor_8cpp_a5ee8dcb8602a496c0615f4830c64e96d}\label{property-editor_8cpp_a5ee8dcb8602a496c0615f4830c64e96d}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonRayVectorX@{toolButtonRayVectorX}}
-\index{toolButtonRayVectorX@{toolButtonRayVectorX}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonRayVectorX}{toolButtonRayVectorX}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Ray\+VectorX}
-
-\mbox{\Hypertarget{property-editor_8cpp_a4f050624b208c00a3f25d160b182881c}\label{property-editor_8cpp_a4f050624b208c00a3f25d160b182881c}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonRayVectorY@{toolButtonRayVectorY}}
-\index{toolButtonRayVectorY@{toolButtonRayVectorY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonRayVectorY}{toolButtonRayVectorY}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Ray\+VectorY}
-
-\mbox{\Hypertarget{property-editor_8cpp_a7bdef7656aee7460101c6a3c149c3793}\label{property-editor_8cpp_a7bdef7656aee7460101c6a3c149c3793}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonRayX1@{toolButtonRayX1}}
-\index{toolButtonRayX1@{toolButtonRayX1}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonRayX1}{toolButtonRayX1}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Ray\+X1}
-
-\mbox{\Hypertarget{property-editor_8cpp_a42af87b6188de41b595ba538f4e51626}\label{property-editor_8cpp_a42af87b6188de41b595ba538f4e51626}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonRayX2@{toolButtonRayX2}}
-\index{toolButtonRayX2@{toolButtonRayX2}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonRayX2}{toolButtonRayX2}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Ray\+X2}
-
-\mbox{\Hypertarget{property-editor_8cpp_a77dc430f7389e1d19e5564e735bd4b8e}\label{property-editor_8cpp_a77dc430f7389e1d19e5564e735bd4b8e}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonRayY1@{toolButtonRayY1}}
-\index{toolButtonRayY1@{toolButtonRayY1}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonRayY1}{toolButtonRayY1}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Ray\+Y1}
-
-\mbox{\Hypertarget{property-editor_8cpp_ad1bae5bc1a493002ee5befec9ede70bd}\label{property-editor_8cpp_ad1bae5bc1a493002ee5befec9ede70bd}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonRayY2@{toolButtonRayY2}}
-\index{toolButtonRayY2@{toolButtonRayY2}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonRayY2}{toolButtonRayY2}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Ray\+Y2}
-
-\mbox{\Hypertarget{property-editor_8cpp_ad6bf097a9c82ff6d3e818773b1800e8f}\label{property-editor_8cpp_ad6bf097a9c82ff6d3e818773b1800e8f}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonTextMultiX@{toolButtonTextMultiX}}
-\index{toolButtonTextMultiX@{toolButtonTextMultiX}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonTextMultiX}{toolButtonTextMultiX}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Text\+MultiX}
-
-\mbox{\Hypertarget{property-editor_8cpp_adf119830a5e9aae7b78ed70fa37a982b}\label{property-editor_8cpp_adf119830a5e9aae7b78ed70fa37a982b}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonTextMultiY@{toolButtonTextMultiY}}
-\index{toolButtonTextMultiY@{toolButtonTextMultiY}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonTextMultiY}{toolButtonTextMultiY}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Text\+MultiY}
-
-\mbox{\Hypertarget{property-editor_8cpp_ab1a8f268bdeef1f47dee87fabb857412}\label{property-editor_8cpp_ab1a8f268bdeef1f47dee87fabb857412}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonTextSingleContents@{toolButtonTextSingleContents}}
-\index{toolButtonTextSingleContents@{toolButtonTextSingleContents}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonTextSingleContents}{toolButtonTextSingleContents}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Text\+Single\+Contents}
-
-\mbox{\Hypertarget{property-editor_8cpp_ad84ab9a8e424b805d0955dbf5b8c70af}\label{property-editor_8cpp_ad84ab9a8e424b805d0955dbf5b8c70af}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonTextSingleFont@{toolButtonTextSingleFont}}
-\index{toolButtonTextSingleFont@{toolButtonTextSingleFont}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonTextSingleFont}{toolButtonTextSingleFont}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Text\+Single\+Font}
-
-\mbox{\Hypertarget{property-editor_8cpp_a84c66f407463e59e441c763f6c68847a}\label{property-editor_8cpp_a84c66f407463e59e441c763f6c68847a}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonTextSingleHeight@{toolButtonTextSingleHeight}}
-\index{toolButtonTextSingleHeight@{toolButtonTextSingleHeight}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonTextSingleHeight}{toolButtonTextSingleHeight}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Text\+Single\+Height}
-
-\mbox{\Hypertarget{property-editor_8cpp_abed789dd4751ea607b3bb0d0facb94ca}\label{property-editor_8cpp_abed789dd4751ea607b3bb0d0facb94ca}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonTextSingleJustify@{toolButtonTextSingleJustify}}
-\index{toolButtonTextSingleJustify@{toolButtonTextSingleJustify}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonTextSingleJustify}{toolButtonTextSingleJustify}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Text\+Single\+Justify}
-
-\mbox{\Hypertarget{property-editor_8cpp_a6efc71330f1044543d108e7aafaacf2c}\label{property-editor_8cpp_a6efc71330f1044543d108e7aafaacf2c}} 
-\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtonTextSingleRotation@{toolButtonTextSingleRotation}}
-\index{toolButtonTextSingleRotation@{toolButtonTextSingleRotation}!property-\/editor.cpp@{property-\/editor.cpp}}
-\doxyparagraph{\texorpdfstring{toolButtonTextSingleRotation}{toolButtonTextSingleRotation}}
-{\footnotesize\ttfamily QTool\+Button$\ast$ tool\+Button\+Text\+Single\+Rotation}
+\mbox{\Hypertarget{property-editor_8cpp_a5ab829a66fe27b9c199e2c90607cb9e8}\label{property-editor_8cpp_a5ab829a66fe27b9c199e2c90607cb9e8}} 
+\index{property-\/editor.cpp@{property-\/editor.cpp}!comboBoxes@{comboBoxes}}
+\index{comboBoxes@{comboBoxes}!property-\/editor.cpp@{property-\/editor.cpp}}
+\doxyparagraph{\texorpdfstring{comboBoxes}{comboBoxes}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QCombo\+Box $\ast$$>$ combo\+Boxes}
+
+\mbox{\Hypertarget{property-editor_8cpp_a3aa139608b4816f4f70595814a31760d}\label{property-editor_8cpp_a3aa139608b4816f4f70595814a31760d}} 
+\index{property-\/editor.cpp@{property-\/editor.cpp}!comboBoxTextSingleFont@{comboBoxTextSingleFont}}
+\index{comboBoxTextSingleFont@{comboBoxTextSingleFont}!property-\/editor.cpp@{property-\/editor.cpp}}
+\doxyparagraph{\texorpdfstring{comboBoxTextSingleFont}{comboBoxTextSingleFont}}
+{\footnotesize\ttfamily QFont\+Combo\+Box$\ast$ combo\+Box\+Text\+Single\+Font}
+
+\mbox{\Hypertarget{property-editor_8cpp_a14af17685a596d524d2590b7c3915676}\label{property-editor_8cpp_a14af17685a596d524d2590b7c3915676}} 
+\index{property-\/editor.cpp@{property-\/editor.cpp}!fieldNewText@{fieldNewText}}
+\index{fieldNewText@{fieldNewText}!property-\/editor.cpp@{property-\/editor.cpp}}
+\doxyparagraph{\texorpdfstring{fieldNewText}{fieldNewText}}
+{\footnotesize\ttfamily QString field\+New\+Text}
+
+\mbox{\Hypertarget{property-editor_8cpp_a4ffb7230efe45a09c1a4b638fbdab58b}\label{property-editor_8cpp_a4ffb7230efe45a09c1a4b638fbdab58b}} 
+\index{property-\/editor.cpp@{property-\/editor.cpp}!fieldNoText@{fieldNoText}}
+\index{fieldNoText@{fieldNoText}!property-\/editor.cpp@{property-\/editor.cpp}}
+\doxyparagraph{\texorpdfstring{fieldNoText}{fieldNoText}}
+{\footnotesize\ttfamily QString field\+No\+Text}
+
+\mbox{\Hypertarget{property-editor_8cpp_af9200f3b9e5f1a0a396fa1cff9e09268}\label{property-editor_8cpp_af9200f3b9e5f1a0a396fa1cff9e09268}} 
+\index{property-\/editor.cpp@{property-\/editor.cpp}!fieldOffText@{fieldOffText}}
+\index{fieldOffText@{fieldOffText}!property-\/editor.cpp@{property-\/editor.cpp}}
+\doxyparagraph{\texorpdfstring{fieldOffText}{fieldOffText}}
+{\footnotesize\ttfamily QString field\+Off\+Text}
+
+\mbox{\Hypertarget{property-editor_8cpp_ab0788c2a5bd8481167722c7f71d478ef}\label{property-editor_8cpp_ab0788c2a5bd8481167722c7f71d478ef}} 
+\index{property-\/editor.cpp@{property-\/editor.cpp}!fieldOldText@{fieldOldText}}
+\index{fieldOldText@{fieldOldText}!property-\/editor.cpp@{property-\/editor.cpp}}
+\doxyparagraph{\texorpdfstring{fieldOldText}{fieldOldText}}
+{\footnotesize\ttfamily QString field\+Old\+Text}
+
+\mbox{\Hypertarget{property-editor_8cpp_a25a83a35273343ad0365fdc4cc682acd}\label{property-editor_8cpp_a25a83a35273343ad0365fdc4cc682acd}} 
+\index{property-\/editor.cpp@{property-\/editor.cpp}!fieldOnText@{fieldOnText}}
+\index{fieldOnText@{fieldOnText}!property-\/editor.cpp@{property-\/editor.cpp}}
+\doxyparagraph{\texorpdfstring{fieldOnText}{fieldOnText}}
+{\footnotesize\ttfamily QString field\+On\+Text}
+
+\mbox{\Hypertarget{property-editor_8cpp_a24a396d80f610de17baf4c5c5503102e}\label{property-editor_8cpp_a24a396d80f610de17baf4c5c5503102e}} 
+\index{property-\/editor.cpp@{property-\/editor.cpp}!fieldVariesText@{fieldVariesText}}
+\index{fieldVariesText@{fieldVariesText}!property-\/editor.cpp@{property-\/editor.cpp}}
+\doxyparagraph{\texorpdfstring{fieldVariesText}{fieldVariesText}}
+{\footnotesize\ttfamily QString field\+Varies\+Text}
+
+\mbox{\Hypertarget{property-editor_8cpp_a3061600ac10c33a3d58e5106bf5d8d1a}\label{property-editor_8cpp_a3061600ac10c33a3d58e5106bf5d8d1a}} 
+\index{property-\/editor.cpp@{property-\/editor.cpp}!fieldYesText@{fieldYesText}}
+\index{fieldYesText@{fieldYesText}!property-\/editor.cpp@{property-\/editor.cpp}}
+\doxyparagraph{\texorpdfstring{fieldYesText}{fieldYesText}}
+{\footnotesize\ttfamily QString field\+Yes\+Text}
+
+\mbox{\Hypertarget{property-editor_8cpp_aacf3047c9cfd319c3e96a9865ed4157f}\label{property-editor_8cpp_aacf3047c9cfd319c3e96a9865ed4157f}} 
+\index{property-\/editor.cpp@{property-\/editor.cpp}!group\_box\_data@{group\_box\_data}}
+\index{group\_box\_data@{group\_box\_data}!property-\/editor.cpp@{property-\/editor.cpp}}
+\doxyparagraph{\texorpdfstring{group\_box\_data}{group\_box\_data}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, \mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}}$>$ group\+\_\+box\+\_\+data}
+
+\mbox{\Hypertarget{property-editor_8cpp_abe06e3385bf081ac386522dcdf24360b}\label{property-editor_8cpp_abe06e3385bf081ac386522dcdf24360b}} 
+\index{property-\/editor.cpp@{property-\/editor.cpp}!group\_box\_types@{group\_box\_types}}
+\index{group\_box\_types@{group\_box\_types}!property-\/editor.cpp@{property-\/editor.cpp}}
+\doxyparagraph{\texorpdfstring{group\_box\_types}{group\_box\_types}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::pair$<$\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, int$>$ $>$ group\+\_\+box\+\_\+types}
+
+\mbox{\Hypertarget{property-editor_8cpp_acd41e54d655cc00c0f58566a0cd5cfbc}\label{property-editor_8cpp_acd41e54d655cc00c0f58566a0cd5cfbc}} 
+\index{property-\/editor.cpp@{property-\/editor.cpp}!groupBoxes@{groupBoxes}}
+\index{groupBoxes@{groupBoxes}!property-\/editor.cpp@{property-\/editor.cpp}}
+\doxyparagraph{\texorpdfstring{groupBoxes}{groupBoxes}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QGroup\+Box $\ast$$>$ group\+Boxes}
+
+\mbox{\Hypertarget{property-editor_8cpp_a08f234d24b95a26e62af91454e465228}\label{property-editor_8cpp_a08f234d24b95a26e62af91454e465228}} 
+\index{property-\/editor.cpp@{property-\/editor.cpp}!lineEdits@{lineEdits}}
+\index{lineEdits@{lineEdits}!property-\/editor.cpp@{property-\/editor.cpp}}
+\doxyparagraph{\texorpdfstring{lineEdits}{lineEdits}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QLine\+Edit $\ast$$>$ line\+Edits}
+
+\mbox{\Hypertarget{property-editor_8cpp_a0f6a8256d826538321a69709aa0dec71}\label{property-editor_8cpp_a0f6a8256d826538321a69709aa0dec71}} 
+\index{property-\/editor.cpp@{property-\/editor.cpp}!object\_names@{object\_names}}
+\index{object\_names@{object\_names}!property-\/editor.cpp@{property-\/editor.cpp}}
+\doxyparagraph{\texorpdfstring{object\_names}{object\_names}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}} object\+\_\+names}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{= \{}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Base"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Arc"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Block"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Circle"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Aligned Dimension"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Angular Dimension"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Arclength Dimension"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Diameter Dimension"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Leader Dimension"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Linear Dimension"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Ordinate Dimension"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Radius Dimension"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Ellipse"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Image"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Infinite Line"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Line"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Path"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Point"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Polygon"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Polyline"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Ray"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Rectangle"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Multiline Text"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Text"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}Unknown"{}}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{property-editor_8cpp_ae7f31dd8d0edef11d6f8e59be1b2c0b2}\label{property-editor_8cpp_ae7f31dd8d0edef11d6f8e59be1b2c0b2}} 
+\index{property-\/editor.cpp@{property-\/editor.cpp}!toolButtons@{toolButtons}}
+\index{toolButtons@{toolButtons}!property-\/editor.cpp@{property-\/editor.cpp}}
+\doxyparagraph{\texorpdfstring{toolButtons}{toolButtons}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QTool\+Button $\ast$$>$ tool\+Buttons}
 

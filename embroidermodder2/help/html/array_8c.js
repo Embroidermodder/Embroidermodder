@@ -13,7 +13,7 @@ var array_8c =
     [ "embArray_addStitch", "array_8c.html#a1d13609cda6e94f68c1bb7f21fab2cb1", null ],
     [ "embArray_addVector", "array_8c.html#ae7afecc6b39df1016ccda59227922483", null ],
     [ "embArray_copy", "array_8c.html#a60f927b9cef227b5c19a8625580a9bad", null ],
-    [ "embArray_create", "array_8c.html#a67090c780a2818616877fb42b3a42e5c", null ],
+    [ "embArray_create", "array_8c.html#a505892053cbe76a7e9636242ab58bfbf", null ],
     [ "embArray_free", "array_8c.html#a2c70d3ca840560a5f9884f63f06f15bf", null ],
     [ "embArray_resize", "array_8c.html#a50c23acfd8e099acd98cc99bc01801ab", null ]
 ];

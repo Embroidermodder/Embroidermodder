@@ -1,9 +1,7 @@
-This is BibTeX, Version 0.99d
+This is BibTeX, Version 0.99d (TeX Live 2020/Debian)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: refman.aux
-Reallocating 'name_of_file' (item size: 1) to 6 items.
 The style file: plain.bst
-Reallocating 'name_of_file' (item size: 1) to 13 items.
 Database file #1: bibTmpFile_1.bib
 I was expecting a `,' or a `}'---line 131 of file bibTmpFile_1.bib
  :     

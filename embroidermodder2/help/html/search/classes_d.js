@@ -1,12 +1,12 @@
 var searchData=
 [
-  ['saveobject_0',['SaveObject',['../class_save_object.html',1,'']]],
-  ['selectbox_1',['SelectBox',['../class_select_box.html',1,'']]],
-  ['settings_5f_2',['Settings_',['../struct_settings__.html',1,'']]],
-  ['settings_5fdialog_3',['Settings_Dialog',['../class_settings___dialog.html',1,'']]],
-  ['statusbar_4',['StatusBar',['../class_status_bar.html',1,'']]],
-  ['statusbarbutton_5',['StatusBarButton',['../class_status_bar_button.html',1,'']]],
-  ['stxthread_5f_6',['StxThread_',['../struct_stx_thread__.html',1,'']]],
-  ['subdescriptor_5f_7',['SubDescriptor_',['../struct_sub_descriptor__.html',1,'']]],
-  ['svgattribute_5f_8',['SvgAttribute_',['../struct_svg_attribute__.html',1,'']]]
+  ['undoableaddcommand_2602',['UndoableAddCommand',['../classUndoableAddCommand.html',1,'']]],
+  ['undoabledeletecommand_2603',['UndoableDeleteCommand',['../classUndoableDeleteCommand.html',1,'']]],
+  ['undoablegripeditcommand_2604',['UndoableGripEditCommand',['../classUndoableGripEditCommand.html',1,'']]],
+  ['undoablemirrorcommand_2605',['UndoableMirrorCommand',['../classUndoableMirrorCommand.html',1,'']]],
+  ['undoablemovecommand_2606',['UndoableMoveCommand',['../classUndoableMoveCommand.html',1,'']]],
+  ['undoablenavcommand_2607',['UndoableNavCommand',['../classUndoableNavCommand.html',1,'']]],
+  ['undoablerotatecommand_2608',['UndoableRotateCommand',['../classUndoableRotateCommand.html',1,'']]],
+  ['undoablescalecommand_2609',['UndoableScaleCommand',['../classUndoableScaleCommand.html',1,'']]],
+  ['undoeditor_2610',['UndoEditor',['../classUndoEditor.html',1,'']]]
 ];

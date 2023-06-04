@@ -1,10 +1,12 @@
 var searchData=
 [
-  ['parameter_5f_0',['Parameter_',['../struct_parameter__.html',1,'']]],
-  ['pathobject_1',['PathObject',['../class_path_object.html',1,'']]],
-  ['pointobject_2',['PointObject',['../class_point_object.html',1,'']]],
-  ['polygonobject_3',['PolygonObject',['../class_polygon_object.html',1,'']]],
-  ['polylineobject_4',['PolylineObject',['../class_polyline_object.html',1,'']]],
-  ['previewdialog_5',['PreviewDialog',['../class_preview_dialog.html',1,'']]],
-  ['propertyeditor_6',['PropertyEditor',['../class_property_editor.html',1,'']]]
+  ['saveobject_2590',['SaveObject',['../classSaveObject.html',1,'']]],
+  ['selectbox_2591',['SelectBox',['../classSelectBox.html',1,'']]],
+  ['settings_5f_2592',['Settings_',['../structSettings__.html',1,'']]],
+  ['settings_5fdialog_2593',['Settings_Dialog',['../classSettings__Dialog.html',1,'']]],
+  ['statusbar_2594',['StatusBar',['../classStatusBar.html',1,'']]],
+  ['statusbarbutton_2595',['StatusBarButton',['../classStatusBarButton.html',1,'']]],
+  ['stxthread_5f_2596',['StxThread_',['../structStxThread__.html',1,'']]],
+  ['subdescriptor_5f_2597',['SubDescriptor_',['../structSubDescriptor__.html',1,'']]],
+  ['svgattribute_5f_2598',['SvgAttribute_',['../structSvgAttribute__.html',1,'']]]
 ];

@@ -1,6 +1,14 @@
 \hypertarget{settings-dialog_8cpp}{}\doxysubsection{embroidermodder2/settings-\/dialog.cpp File Reference}
 \label{settings-dialog_8cpp}\index{embroidermodder2/settings-\/dialog.cpp@{embroidermodder2/settings-\/dialog.cpp}}
 {\ttfamily \#include \char`\"{}embroidermodder.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{settings-dialog_8cpp_a85956dc9849133da7b4bf0c7be510513}{read\+\_\+settings}} (void)
+\begin{DoxyCompactList}\small\item\em read\+\_\+settings \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{settings-dialog_8cpp_a8dd746dfd5b2f0859b7d4f6a9b7cde80}{write\+\_\+settings}} (void)
+\begin{DoxyCompactList}\small\item\em Main\+Window\+::write\+Settings. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
@@ -12,9 +20,33 @@
 \item 
 \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} \mbox{\hyperlink{settings-dialog_8cpp_a926d1f2a5cae22e2a906e77637b10aa0}{accept\+\_\+}}
 \item 
-std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{settings-dialog_8cpp_a5041b3225978e5130dbc43a9c074ddb6}{extensions}}
+\mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}} \mbox{\hyperlink{settings-dialog_8cpp_a9fb534ec665bb6dc228988512525beb6}{extensions}}
 \end{DoxyCompactItemize}
 
+
+\doxysubsubsection{Function Documentation}
+\mbox{\Hypertarget{settings-dialog_8cpp_a85956dc9849133da7b4bf0c7be510513}\label{settings-dialog_8cpp_a85956dc9849133da7b4bf0c7be510513}} 
+\index{settings-\/dialog.cpp@{settings-\/dialog.cpp}!read\_settings@{read\_settings}}
+\index{read\_settings@{read\_settings}!settings-\/dialog.cpp@{settings-\/dialog.cpp}}
+\doxyparagraph{\texorpdfstring{read\_settings()}{read\_settings()}}
+{\footnotesize\ttfamily void read\+\_\+settings (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+read\+\_\+settings 
+
+This file needs to be read from the users home directory to ensure it is writable. \mbox{\Hypertarget{settings-dialog_8cpp_a8dd746dfd5b2f0859b7d4f6a9b7cde80}\label{settings-dialog_8cpp_a8dd746dfd5b2f0859b7d4f6a9b7cde80}} 
+\index{settings-\/dialog.cpp@{settings-\/dialog.cpp}!write\_settings@{write\_settings}}
+\index{write\_settings@{write\_settings}!settings-\/dialog.cpp@{settings-\/dialog.cpp}}
+\doxyparagraph{\texorpdfstring{write\_settings()}{write\_settings()}}
+{\footnotesize\ttfamily void write\+\_\+settings (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Main\+Window\+::write\+Settings. 
+
+This file needs to be read from the users home directory to ensure it is writable \hypertarget{settings-dialog.cpp_autotoc_md29}{}\doxyparagraph{Planning}\label{settings-dialog.cpp_autotoc_md29}
+for (auto iter = settings\+\_\+.\+begin(); iter != settings\+\_\+.\+end(); iter++) \{ settings\+\_\+file $<$$<$ iter-\/$>$first $<$$<$ \char`\"{}=\char`\"{}; switch (iter-\/$>$second.\+type) \{ case INT\+\_\+\+TYPE\+: settings\+\_\+file $<$$<$ iter-\/$>$second.\+i; break; case REAL\+\_\+\+TYPE\+: settings\+\_\+file $<$$<$ iter-\/$>$second.\+r; break; case VECTOR\+\_\+\+TYPE\+: settings\+\_\+file $<$$<$ iter-\/$>$second.\+v.\+x $<$$<$ \char`\"{},\char`\"{} $<$$<$ iter-\/$>$second.\+v.\+y; break; default\+: break; \} settings\+\_\+file $<$$<$ std\+::endl; \}
 
 \doxysubsubsection{Variable Documentation}
 \mbox{\Hypertarget{settings-dialog_8cpp_a926d1f2a5cae22e2a906e77637b10aa0}\label{settings-dialog_8cpp_a926d1f2a5cae22e2a906e77637b10aa0}} 
@@ -29,26 +61,26 @@ std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{settings-dialog_8cpp_a5041b3
 \doxyparagraph{\texorpdfstring{dialog}{dialog}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} dialog}
 
-These copies of the settings struct are for restoring the state if the user doesn\textquotesingle{}t want to accept their changes in the settings dialog. \mbox{\Hypertarget{settings-dialog_8cpp_a5041b3225978e5130dbc43a9c074ddb6}\label{settings-dialog_8cpp_a5041b3225978e5130dbc43a9c074ddb6}} 
+These copies of the settings struct are for restoring the state if the user doesn\textquotesingle{}t want to accept their changes in the settings dialog. \mbox{\Hypertarget{settings-dialog_8cpp_a9fb534ec665bb6dc228988512525beb6}\label{settings-dialog_8cpp_a9fb534ec665bb6dc228988512525beb6}} 
 \index{settings-\/dialog.cpp@{settings-\/dialog.cpp}!extensions@{extensions}}
 \index{extensions@{extensions}!settings-\/dialog.cpp@{settings-\/dialog.cpp}}
 \doxyparagraph{\texorpdfstring{extensions}{extensions}}
-{\footnotesize\ttfamily std\+::vector$<$std\+::string$>$ extensions}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}} extensions}
 
 {\bfseries Initial value\+:}
 \begin{DoxyCode}{0}
-\DoxyCodeLine{=\ \{}
-\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}100"{}},\ \textcolor{stringliteral}{"{}10o"{}},\ \textcolor{stringliteral}{"{}ART"{}},\ \textcolor{stringliteral}{"{}BMC"{}},\ \textcolor{stringliteral}{"{}BRO"{}},}
-\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}CND"{}},\ \textcolor{stringliteral}{"{}COL"{}},\ \textcolor{stringliteral}{"{}CSD"{}},\ \textcolor{stringliteral}{"{}CSV"{}},\ \textcolor{stringliteral}{"{}DAT"{}},}
-\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}DEM"{}},\ \textcolor{stringliteral}{"{}DSB"{}},\ \textcolor{stringliteral}{"{}DST"{}},\ \textcolor{stringliteral}{"{}DSZ"{}},\ \textcolor{stringliteral}{"{}DXF"{}},}
-\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}EDR"{}},\ \textcolor{stringliteral}{"{}EMD"{}},\ \textcolor{stringliteral}{"{}EXP"{}},\ \textcolor{stringliteral}{"{}EXY"{}},\ \textcolor{stringliteral}{"{}EYS"{}},}
-\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}FXY"{}},\ \textcolor{stringliteral}{"{}GNC"{}},\ \textcolor{stringliteral}{"{}GT"{}},\ \textcolor{stringliteral}{"{}HUS"{}},\ \textcolor{stringliteral}{"{}INB"{}},}
-\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}JEF"{}},\ \textcolor{stringliteral}{"{}KSM"{}},\ \textcolor{stringliteral}{"{}PCD"{}},\ \textcolor{stringliteral}{"{}PCM"{}},\ \textcolor{stringliteral}{"{}PCQ"{}},}
-\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}PCS"{}},\ \textcolor{stringliteral}{"{}PEC"{}},\ \textcolor{stringliteral}{"{}PEL"{}},\ \textcolor{stringliteral}{"{}PEM"{}},\ \textcolor{stringliteral}{"{}PES"{}},}
-\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}PHB"{}},\ \textcolor{stringliteral}{"{}PHC"{}},\ \textcolor{stringliteral}{"{}RGB"{}},\ \textcolor{stringliteral}{"{}SEW"{}},\ \textcolor{stringliteral}{"{}SHV"{}},}
-\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}SST"{}},\ \textcolor{stringliteral}{"{}STX"{}},\ \textcolor{stringliteral}{"{}SVG"{}},\ \textcolor{stringliteral}{"{}T09"{}},\ \textcolor{stringliteral}{"{}TAP"{}},}
-\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}THR"{}},\ \textcolor{stringliteral}{"{}TXT"{}},\ \textcolor{stringliteral}{"{}U00"{}},\ \textcolor{stringliteral}{"{}U01"{}},\ \textcolor{stringliteral}{"{}VIP"{}},}
-\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}VP3"{}},\ \textcolor{stringliteral}{"{}XXX"{}},\ \textcolor{stringliteral}{"{}ZSK"{}}}
+\DoxyCodeLine{= \{}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}100"{}}, \textcolor{stringliteral}{"{}10o"{}}, \textcolor{stringliteral}{"{}ART"{}}, \textcolor{stringliteral}{"{}BMC"{}}, \textcolor{stringliteral}{"{}BRO"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}CND"{}}, \textcolor{stringliteral}{"{}COL"{}}, \textcolor{stringliteral}{"{}CSD"{}}, \textcolor{stringliteral}{"{}CSV"{}}, \textcolor{stringliteral}{"{}DAT"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}DEM"{}}, \textcolor{stringliteral}{"{}DSB"{}}, \textcolor{stringliteral}{"{}DST"{}}, \textcolor{stringliteral}{"{}DSZ"{}}, \textcolor{stringliteral}{"{}DXF"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}EDR"{}}, \textcolor{stringliteral}{"{}EMD"{}}, \textcolor{stringliteral}{"{}EXP"{}}, \textcolor{stringliteral}{"{}EXY"{}}, \textcolor{stringliteral}{"{}EYS"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}FXY"{}}, \textcolor{stringliteral}{"{}GNC"{}}, \textcolor{stringliteral}{"{}GT"{}}, \textcolor{stringliteral}{"{}HUS"{}}, \textcolor{stringliteral}{"{}INB"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}JEF"{}}, \textcolor{stringliteral}{"{}KSM"{}}, \textcolor{stringliteral}{"{}PCD"{}}, \textcolor{stringliteral}{"{}PCM"{}}, \textcolor{stringliteral}{"{}PCQ"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}PCS"{}}, \textcolor{stringliteral}{"{}PEC"{}}, \textcolor{stringliteral}{"{}PEL"{}}, \textcolor{stringliteral}{"{}PEM"{}}, \textcolor{stringliteral}{"{}PES"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}PHB"{}}, \textcolor{stringliteral}{"{}PHC"{}}, \textcolor{stringliteral}{"{}RGB"{}}, \textcolor{stringliteral}{"{}SEW"{}}, \textcolor{stringliteral}{"{}SHV"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}SST"{}}, \textcolor{stringliteral}{"{}STX"{}}, \textcolor{stringliteral}{"{}SVG"{}}, \textcolor{stringliteral}{"{}T09"{}}, \textcolor{stringliteral}{"{}TAP"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}THR"{}}, \textcolor{stringliteral}{"{}TXT"{}}, \textcolor{stringliteral}{"{}U00"{}}, \textcolor{stringliteral}{"{}U01"{}}, \textcolor{stringliteral}{"{}VIP"{}},}
+\DoxyCodeLine{    \textcolor{stringliteral}{"{}VP3"{}}, \textcolor{stringliteral}{"{}XXX"{}}, \textcolor{stringliteral}{"{}ZSK"{}}}
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}

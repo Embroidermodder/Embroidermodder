@@ -11,7 +11,7 @@ int \mbox{\hyperlink{compress_8c_a053addffe32629b6727073e9c499cc32}{hus\+\_\+com
 \item 
 void \mbox{\hyperlink{compress_8c_a7e5d1d3488d7124ab020287e2606f89d}{huffman\+\_\+build\+\_\+table}} (\mbox{\hyperlink{embroidery__internal_8h_a8ad0df962f28b81981b3b0b7f04ebb17}{huffman}} $\ast$h)
 \item 
-int $\ast$ \mbox{\hyperlink{compress_8c_a04af50a7e18d0e4d85ae76c7c4bd80d9}{huffman\+\_\+lookup}} (\mbox{\hyperlink{embroidery__internal_8h_a8ad0df962f28b81981b3b0b7f04ebb17}{huffman}} h, int byte\+\_\+lookup)
+int $\ast$ \mbox{\hyperlink{compress_8c_a40e20a246d0cdc29c3dfcfdadd662c87}{huffman\+\_\+lookup}} (\mbox{\hyperlink{embroidery__internal_8h_a8ad0df962f28b81981b3b0b7f04ebb17}{huffman}} h, int byte\+\_\+lookup)
 \item 
 void \mbox{\hyperlink{compress_8c_ac2630b57677982cec1d413de85c262fd}{compress\+\_\+init}} ()
 \item 
@@ -134,11 +134,11 @@ Load character table to compress struct {\itshape c}. Returns nothing. \mbox{\Hy
 \doxyparagraph{\texorpdfstring{huffman\_build\_table()}{huffman\_build\_table()}}
 {\footnotesize\ttfamily void huffman\+\_\+build\+\_\+table (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery__internal_8h_a8ad0df962f28b81981b3b0b7f04ebb17}{huffman}} $\ast$}]{h }\end{DoxyParamCaption})}
 
-These next 2 functions represent the \mbox{\hyperlink{struct_huffman}{Huffman}} class in tartarize\textquotesingle{}s code. {\itshape h} \mbox{\Hypertarget{compress_8c_a04af50a7e18d0e4d85ae76c7c4bd80d9}\label{compress_8c_a04af50a7e18d0e4d85ae76c7c4bd80d9}} 
+These next 2 functions represent the \mbox{\hyperlink{structHuffman}{Huffman}} class in tartarize\textquotesingle{}s code. {\itshape h} \mbox{\Hypertarget{compress_8c_a40e20a246d0cdc29c3dfcfdadd662c87}\label{compress_8c_a40e20a246d0cdc29c3dfcfdadd662c87}} 
 \index{compress.c@{compress.c}!huffman\_lookup@{huffman\_lookup}}
 \index{huffman\_lookup@{huffman\_lookup}!compress.c@{compress.c}}
 \doxyparagraph{\texorpdfstring{huffman\_lookup()}{huffman\_lookup()}}
-{\footnotesize\ttfamily int $\ast$ huffman\+\_\+lookup (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery__internal_8h_a8ad0df962f28b81981b3b0b7f04ebb17}{huffman}}}]{h,  }\item[{int}]{byte\+\_\+lookup }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily int$\ast$ huffman\+\_\+lookup (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery__internal_8h_a8ad0df962f28b81981b3b0b7f04ebb17}{huffman}}}]{h,  }\item[{int}]{byte\+\_\+lookup }\end{DoxyParamCaption})}
 
 Lookup {\itshape byte\+\_\+lookup} in huffman table {\itshape h} return result as two bytes using the memory huffman\+\_\+lookup\+\_\+data. \mbox{\Hypertarget{compress_8c_a053addffe32629b6727073e9c499cc32}\label{compress_8c_a053addffe32629b6727073e9c499cc32}} 
 \index{compress.c@{compress.c}!hus\_compress@{hus\_compress}}
