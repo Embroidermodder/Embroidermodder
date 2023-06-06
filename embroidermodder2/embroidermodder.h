@@ -610,6 +610,12 @@ public:
     void setObjectRadiusMinor(EmbReal radius);
     void setObjectDiameterMajor(EmbReal diameter);
     void setObjectDiameterMinor(EmbReal diameter);
+    
+    /* Scripted commands, uses the script string in */
+    void script_main(void);
+    void script_click(EmbVector v);
+    void script_context(String str);
+    void script_prompt(String str);
 };
 
 /**
