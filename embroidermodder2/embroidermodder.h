@@ -460,15 +460,25 @@ public:
 
     Geometry(int object_type = OBJ_TYPE_BASE, QGraphicsItem* parent = 0);
     Geometry(Geometry *obj, QGraphicsItem* parent = 0);
-    /*
-    Geometry(EmbArc arc, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
+ //   Geometry(EmbArc arc, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
     Geometry(EmbCircle circle, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
-    Geometry(EmbLine line, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
+ /*   Geometry(EmbLine line, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
     Geometry(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
     Geometry(EmbRect rect, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
-    Geometry(QString str, EmbReal x, EmbReal y, QRgb rgb, QGraphicsItem* parent = 0);
+    Geometry(QString str, EmbVector position, QRgb rgb, QGraphicsItem* parent = 0);
     Geometry(EmbVector pos, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
     Geometry(EmbVector pos, QRgb rgb, QGraphicsItem* parent = 0);
+
+    void init_arc(EmbArc arc, QRgb rgb, Qt::PenStyle lineType);
+    */
+    void init_circle(EmbCircle circle, QRgb rgb, Qt::PenStyle lineType);
+    /*
+    void init_line(EmbLine line, QRgb rgb, Qt::PenStyle lineType);
+    void init_ellipse(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType);
+    void init_rect(EmbRect rect, QRgb rgb, Qt::PenStyle lineType);
+    void init_text_single(QString str, EmbVector position, QRgb rgb, Qt::PenStyle lineType);
+    void init_path(EmbVector pos, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
+    void init_point(EmbVector pos, QRgb rgb, Qt::PenStyle lineType);
     */
 
     void init(void)

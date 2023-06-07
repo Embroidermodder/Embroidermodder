@@ -48,6 +48,36 @@ QStringList justify_options = {
  */
 };
 
+StringList polyline_init = {
+    "init",
+    "clear-selection",
+    "firstRun=true",
+    "first.x=0.0f",
+    "first.y=0.0f",
+    "prev.x=0.0f",
+    "prev.y=0.0f",
+    "num=0",
+    "set-prompt-prefix-tr Specify first point: "
+};
+
+StringList snowflake_init = {
+    "init",
+    "clear-selection",
+    "numPoints=2048",
+    "minPoitns=64",
+    "maxPoints=8192",
+    "center.x=0.0f",
+    "center.y=0.0f",
+    "scale.x=0.04f",
+    "scale.y=0.04f",
+    "mode=SNOWFLAKE_MODE_NUM_POINTS",
+    "add-rubber POLYGON",
+    "set-rubber-mode POLYGON",
+    "update-snowflake",
+    "spare-rubber POLYGON",
+    "end"
+};
+
 /**
  * @brief mouse_snap_point
  * @param points
@@ -78,6 +108,435 @@ fourier_series(EmbReal arg, std::vector<EmbReal> terms)
         x += terms[3*i+0] * sin(terms[3*i+1] + terms[3*i+2] * arg);
     }
     return x;
+}
+
+/**
+ * .
+ */
+Geometry::Geometry(EmbCircle circle, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
+{
+    debug_message("Geometry Constructor()");
+    init_circle(circle, rgb, Qt::SolidLine); //TODO: getCurrentLineType
+}
+
+#if 0
+/**
+ * .
+ */
+Geometry::Geometry(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
+{
+    debug_message("Geometry Constructor()");
+    init_ellipse(ellipse, rgb, Qt::SolidLine); //TODO: getCurrentLineType
+}
+
+/**
+ * .
+ */
+Geometry::Geometry(EmbLine line, int Type_, QRgb rgb, QGraphicsItem* parent) : QGraphicsPathItem(parent)
+{
+    debug_message("DimLeaderObject Constructor()");
+    Type = Type_;
+    init_line(line, rgb, Qt::SolidLine); //TODO: getCurrentLineType
+}
+
+/**
+ * .
+ */
+Geometry::Geometry(EmbVector vector, QRgb rgb, QGraphicsItem* parent) : QGraphicsPathItem(parent)
+{
+    debug_message("Geometry Constructor()");
+    init_point(vector, rgb, Qt::SolidLine); //TODO: getCurrentLineType
+}
+
+/**
+ * For PATH, POLYLINE and POLYGON, set the Type_ variable to one of these.
+ */
+Geometry::Geometry(EmbVector v, const QPainterPath& p, int Type_, QRgb rgb, QGraphicsItem* parent) : QGraphicsPathItem(parent)
+{
+    debug_message("Geometry Constructor()");
+    Type = Type_;
+    init_path(v, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
+}
+
+/**
+ * \brief .
+ */
+Geometry::Geometry(EmbRect rect, QRgb rgb, QGraphicsItem* parent) : QGraphicsPathItem(parent)
+{
+    debug_message("Geometry Constructor()");
+    init_rect(rect, rgb, Qt::SolidLine); //TODO: getCurrentLineType
+}
+
+/**
+ * .
+ */
+Geometry::Geometry(QString str, EmbVector v, QRgb rgb, QGraphicsItem* parent) : QGraphicsPathItem(parent)
+{
+    debug_message("Geometry Constructor()");
+    init_text_single(str, v, rgb, Qt::SolidLine); //TODO: getCurrentLineType
+}
+
+/**
+ * @brief Geometry::init
+ * @param arc
+ * @param rgb
+ * @param lineType
+ *
+ * WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+ * WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+ * WARNING: All movement has to be handled explicitly by us, not by the scene.
+ */
+void
+Geometry::init_arc(EmbArc arc, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem *parent = 0)
+{
+    setData(OBJ_TYPE, OBJ_TYPE_ARC);
+    setData(OBJ_NAME, "Arc");
+
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
+
+    calculateArcData(arc);
+
+    objPen.setColor(rgb);
+    lwtPen.setColor(rgb);
+    objPen.setStyle(lineType);
+    lwtPen.setStyle(lineType);
+    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
+    setPen(objPen);
+}
+#endif
+
+/**
+ * .
+ * WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+ * WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+ * WARNING: All movement has to be handled explicitly by us, not by the scene.
+ */
+void
+Geometry::init_circle(EmbCircle circle, QRgb rgb, Qt::PenStyle lineType)
+{
+    setData(OBJ_TYPE, OBJ_TYPE_CIRCLE);
+    setData(OBJ_NAME, "Circle");
+
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
+
+    setObjectRadius(circle.radius);
+    setObjectCenter(circle.center);
+    objPen.setColor(rgb);
+    lwtPen.setColor(rgb);
+    objPen.setStyle(lineType);
+    lwtPen.setStyle(lineType);
+    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
+    setPen(objPen);
+    updatePath();
+}
+
+#if 0
+/**
+ * \brief .
+ */
+void
+Geometry::init_ellipse(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType)
+{
+    setData(OBJ_TYPE, OBJ_TYPE_ELLIPSE);
+    setData(OBJ_NAME, "Ellipse");
+
+    /**
+     * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+     * and the item is double clicked, the scene will erratically move the item while zooming.
+     * All movement has to be handled explicitly by us, not by the scene.
+     */
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
+
+    setObjectSize(ellipse.radius.x, ellipse.radius.y);
+    setObjectCenter(ellipse.center);
+    objPen.setColor(rgb);
+    lwtPen.setColor(rgb);
+    objPen.setStyle(lineType);
+    lwtPen.setStyle(lineType);
+    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
+    setPen(objPen);
+    updatePath();
+}
+
+//WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+//WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+//WARNING: All movement has to be handled explicitly by us, not by the scene.
+void
+Geometry::init_line(EmbLine line, QRgb rgb, Qt::PenStyle lineType)
+{
+    switch (Type) {
+    case OBJ_TYPE_DIMLEADER: {
+        setData(OBJ_TYPE, OBJ_TYPE_DIMLEADER);
+        setData(OBJ_NAME, "Dimension Leader");
+
+        setFlag(QGraphicsItem::ItemIsSelectable, true);
+
+        curved = false;
+        filled = true;
+        setObjectEndPoint1(line.start);
+        setObjectEndPoint2(line.end);
+        objPen.setColor(rgb);
+        lwtPen.setColor(rgb);
+        objPen.setStyle(lineType);
+        lwtPen.setStyle(lineType);
+        setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
+        setPen(objPen);
+        break;
+    }
+
+    case OBJ_TYPE_LINE: {
+        setData(OBJ_TYPE, OBJ_TYPE_LINE);
+        setData(OBJ_NAME, "Line");
+
+        setFlag(QGraphicsItem::ItemIsSelectable, true);
+
+        setObjectEndPoint1(line.start);
+        setObjectEndPoint2(line.end);
+        objPen.setColor(rgb);
+        lwtPen.setColor(rgb);
+        objPen.setStyle(lineType);
+        lwtPen.setStyle(lineType);
+        setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
+        setPen(objPen);
+        break;
+    }
+
+    default:
+        break;
+    }
+}
+
+//WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+//WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+//WARNING: All movement has to be handled explicitly by us, not by the scene.
+void
+Geometry::init_point(EmbVector position, QRgb rgb, Qt::PenStyle lineType)
+{
+    setData(OBJ_TYPE, OBJ_TYPE_POINT);
+    setData(OBJ_NAME, "Point");
+
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
+
+    setRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
+    setObjectPos(position.x, position.y);
+    objPen.setColor(rgb);
+    lwtPen.setColor(rgb);
+    objPen.setStyle(lineType);
+    lwtPen.setStyle(lineType);
+    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
+    setPen(objPen);
+}
+
+//WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+//WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+//WARNING: All movement has to be handled explicitly by us, not by the scene.
+void
+Geometry::init_path(EmbVector position, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
+{
+    switch (Type) {
+    case OBJ_TYPE_POLYGON: {
+        setData(OBJ_TYPE, OBJ_TYPE_POLYGON);
+        setData(OBJ_NAME, "Polygon");
+
+        setFlag(QGraphicsItem::ItemIsSelectable, true);
+
+        gripIndex = -1;
+        normalPath = p;
+        updatePath();
+        setObjectPos(position.x, position.y);
+        objPen.setColor(rgb);
+        lwtPen.setColor(rgb);
+        objPen.setStyle(lineType);
+        lwtPen.setStyle(lineType);
+        setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
+        setPen(objPen);
+        break;
+    }
+    case OBJ_TYPE_POLYLINE: {
+        setData(OBJ_TYPE, OBJ_TYPE_POLYLINE);
+        setData(OBJ_NAME, "Polyline");
+
+        setFlag(QGraphicsItem::ItemIsSelectable, true);
+
+        gripIndex = -1;
+        updatePath(p);
+        setPos(position.x, position.y);
+        objPen.setColor(rgb);
+        lwtPen.setColor(rgb);
+        objPen.setStyle(lineType);
+        lwtPen.setStyle(lineType);
+        setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
+        setPen(objPen);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/**
+ * \brief .
+ */
+void Geometry::init_rect(EmbRect rect, QRgb rgb, Qt::PenStyle lineType)
+{
+    setData(OBJ_TYPE, OBJ_TYPE_RECTANGLE);
+    setData(OBJ_NAME, "Rectangle");
+
+    //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+    //WARNING: All movement has to be handled explicitly by us, not by the scene.
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
+
+    setObjectRect(rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top);
+    objPen.setColor(rgb);
+    lwtPen.setColor(rgb);
+    objPen.setStyle(lineType);
+    lwtPen.setStyle(lineType);
+    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
+    setPen(objPen);
+}
+
+/**
+ *
+ */
+void
+Geometry::init_text_single(QString  str, EmbVector v, QRgb rgb, Qt::PenStyle lineType)
+{
+    setData(OBJ_TYPE, OBJ_TYPE_TEXTSINGLE);
+    setData(OBJ_NAME, "Single Line Text");
+
+    //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+    //WARNING: All movement has to be handled explicitly by us, not by the scene.
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
+
+    objTextJustify = "Left"; //TODO: set the justification properly
+
+    setObjectText(str);
+    setObjectPos(v.x, v.y);
+    objPen.setColor(rgb);
+    lwtPen.setColor(rgb);
+    objPen.setStyle(lineType);
+    lwtPen.setStyle(lineType);
+    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
+    setPen(objPen);
+}
+#endif
+
+/**
+ * .
+ */
+Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(parent)
+{
+    debug_message("Geometry Constructor()");
+    init();
+    if (obj) {
+        Type = obj->Type;
+        switch (Type) {
+/*        case OBJ_TYPE_ARC: {
+            EmbArc arc;
+            arc.start = to_EmbVector(obj->objectStartPoint());
+            arc.mid = to_EmbVector(obj->objectMidPoint());
+            arc.end = to_EmbVector(obj->objectEndPoint());
+            init_arc(arc, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
+            setRotation(obj->rotation());
+            break;
+        }
+*/
+        case OBJ_TYPE_CIRCLE: {
+            EmbCircle circle;
+            circle.center.x = obj->objectCenter().x();
+            circle.center.y = obj->objectCenter().y();
+            circle.radius = obj->objectRadius();
+            init_circle(circle, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
+            setRotation(obj->rotation());
+            break;
+        }
+#if 0
+        case OBJ_TYPE_DIMLEADER: {
+            debug_message("DimLeaderObject Constructor()");
+            EmbLine line;
+            line.start.x = obj->objectX1();
+            line.start.y = obj->objectY1();
+            line.end.x = obj->objectX2();
+            line.end.y = obj->objectY2();
+            init_line(line, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
+            break;
+        }
+        
+        case OBJ_TYPE_ELLIPSE: {
+            EmbEllipse ellipse;
+            ellipse.center.x = obj->objectCenter().x();
+            ellipse.center.y = obj->objectCenter().y();
+            ellipse.radius.x = obj->objectWidth();
+            ellipse.radius.y = obj->objectHeight();
+            init_ellipse(ellipse, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
+            setRotation(obj->rotation());
+            break;
+        }
+
+        case OBJ_TYPE_LINE: {
+            EmbLine line;
+            line.start = to_EmbVector(obj->objectEndPoint1());
+            line.end = to_EmbVector(obj->objectEndPoint2());
+            init_line(line, OBJ_TYPE_LINE, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
+            break;
+        }
+
+        case OBJ_TYPE_POINT: {
+            EmbVector position;
+            position.x = obj->objectPos().x();
+            position.y = obj->objectPos().y();
+            init_point(position, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
+            setRotation(obj->rotation());
+            break;
+        }
+
+        case OBJ_TYPE_POLYGON: {
+            init_path(obj->objectPos().x(), obj->objectPos().y(), obj->objectCopyPath(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
+            setRotation(obj->rotation());
+            setScale(obj->scale());
+            break;
+        }
+
+        case OBJ_TYPE_POLYLINE: {
+            init_path(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
+            setRotation(obj->rotation());
+            setScale(obj->scale());
+            break;
+        }
+        
+        case OBJ_TYPE_RECTANGLE: {
+            QPointF ptl = obj->objectTopLeft();
+            EmbRect rect;
+            rect.left = ptl.x();
+            rect.top = ptl.y();
+            rect.right = rect.left + obj->objectWidth();
+            rect.bottom = rect.top + obj->objectHeight();
+            init_rect(rect, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
+            setRotation(obj->rotation());
+            break;
+        }
+        
+        case OBJ_TYPE_TEXTSINGLE: {
+            setObjectTextFont(obj->objTextFont);
+            setObjectTextSize(obj->objTextSize);
+            setRotation(obj->rotation());
+            setObjectTextBackward(obj->objTextBackward);
+            setObjectTextUpsideDown(obj->objTextUpsideDown);
+            setObjectTextStyle(obj->objTextBold, obj->objTextItalic, obj->objTextUnderline, obj->objTextStrikeOut, obj->objTextOverline);
+            EmbVector v;
+            v.x = obj->objectX();
+            v.y = obj->objectY();
+            init_text_single(obj->objText, v, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
+            setScale(obj->scale());
+            break;
+        }
+#endif
+        default:
+            break;
+        }
+    }
 }
 
 /**
@@ -247,12 +706,14 @@ Geometry::setObjectLineWeight(String lineWeight)
 QPointF
 Geometry::objectRubberPoint(QString  key)
 {
-    if (objRubberPoints.contains(key))
+    if (objRubberPoints.contains(key)) {
         return objRubberPoints.value(key);
+    }
 
     QGraphicsScene* gscene = scene();
-    if (gscene)
+    if (gscene) {
         return scene()->property("SCENE_QSNAP_POINT").toPointF();
+    }
     return QPointF();
 }
 
@@ -264,8 +725,9 @@ Geometry::objectRubberPoint(QString  key)
 QString
 Geometry::objectRubberText(QString  key)
 {
-    if (objRubberTexts.contains(key))
+    if (objRubberTexts.contains(key)) {
         return objRubberTexts.value(key);
+    }
     return QString();
 }
 
@@ -290,15 +752,18 @@ Geometry::boundingRect()
 void
 Geometry::drawRubberLine(const QLineF& rubLine, QPainter* painter, const char* colorFromScene)
 {
-    if (painter) {
-        QGraphicsScene* objScene = scene();
-        if (!objScene) return;
-        QPen colorPen = objPen;
-        colorPen.setColor(QColor(objScene->property(colorFromScene).toUInt()));
-        painter->setPen(colorPen);
-        painter->drawLine(rubLine);
-        painter->setPen(objPen);
+    if (!painter) {
+        return;
     }
+    QGraphicsScene* objScene = scene();
+    if (!objScene) {
+        return;
+    }
+    QPen colorPen = objPen;
+    colorPen.setColor(QColor(objScene->property(colorFromScene).toUInt()));
+    painter->setPen(colorPen);
+    painter->drawLine(rubLine);
+    painter->setPen(objPen);
 }
 
 /**
@@ -378,6 +843,7 @@ Geometry::setObjectEndPoint1(EmbVector endPt1)
 {
     EmbVector endPt2 = to_EmbVector(objectEndPoint2());
     EmbVector delta = endPt2 - endPt1;
+    // setScale(1); ?
     setRotation(0);
     setLine(0, 0, delta.x, delta.y);
     setPos(endPt1.x, endPt1.y);
@@ -397,6 +863,7 @@ Geometry::setObjectEndPoint2(EmbVector endPt2)
     EmbVector endPt1 = to_EmbVector(scenePos());
     EmbVector delta = endPt2 - endPt1;
     setRotation(0);
+    // setScale(1); ?
     setLine(0, 0, delta.x, delta.y);
     setPos(endPt1.x, endPt1.y);
     if (Type == OBJ_TYPE_DIMLEADER) {
@@ -415,7 +882,7 @@ Geometry::objectEndPoint1()
 }
 
 /**
- * @brief DimLeaderObject::objectEndPoint2
+ * @brief Geometry::objectEndPoint2
  * @return
  */
 QPointF
@@ -524,7 +991,6 @@ Geometry::updateLeader()
 void
 Geometry::updateRubber(QPainter* painter)
 {
-    /*
     switch (Type) {
     case OBJ_TYPE_DIMLEADER: {
         if (objRubberMode == "OBJ_RUBBER_DIMLEADER_LINE") {
@@ -550,9 +1016,9 @@ Geometry::updateRubber(QPainter* painter)
         }
         break;
     }
+
     case OBJ_TYPE_ELLIPSE: {
-        String rubberMode = objRubberMode;
-        if (rubberMode == "OBJ_RUBBER_ELLIPSE_LINE") {
+        if (objRubberMode == "OBJ_RUBBER_ELLIPSE_LINE") {
             QPointF sceneLinePoint1 = objectRubberPoint("ELLIPSE_LINE_POINT1");
             QPointF sceneLinePoint2 = objectRubberPoint("ELLIPSE_LINE_POINT2");
             QPointF itemLinePoint1  = mapFromScene(sceneLinePoint1);
@@ -561,7 +1027,7 @@ Geometry::updateRubber(QPainter* painter)
             if (painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
             updatePath();
         }
-        else if (rubberMode == "OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS") {
+        else if (objRubberMode == "OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS") {
             QPointF sceneAxis1Point1 = objectRubberPoint("ELLIPSE_AXIS1_POINT1");
             QPointF sceneAxis1Point2 = objectRubberPoint("ELLIPSE_AXIS1_POINT2");
             QPointF sceneCenterPoint = objectRubberPoint("ELLIPSE_CENTER");
@@ -593,7 +1059,7 @@ Geometry::updateRubber(QPainter* painter)
             if (painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
             updatePath();
         }
-        else if (rubberMode == "OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS") {
+        else if (objRubberMode == "OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS") {
             QPointF sceneAxis1Point2 = objectRubberPoint("ELLIPSE_AXIS1_POINT2");
             QPointF sceneCenterPoint = objectRubberPoint("ELLIPSE_CENTER");
             QPointF sceneAxis2Point2 = objectRubberPoint("ELLIPSE_AXIS2_POINT2");
@@ -624,12 +1090,13 @@ Geometry::updateRubber(QPainter* painter)
             if (painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
             updatePath();
         }
-        else if (rubberMode == "OBJ_RUBBER_GRIP") {
+        else if (objRubberMode == "OBJ_RUBBER_GRIP") {
             //TODO: updateRubber() gripping for Geometry
         }
 
         break;
     }
+
     case OBJ_TYPE_IMAGE: {
         if (objRubberMode == "OBJ_RUBBER_IMAGE") {
             QPointF sceneStartPoint = objectRubberPoint("IMAGE_START");
@@ -646,6 +1113,7 @@ Geometry::updateRubber(QPainter* painter)
         }
         break;
     }
+
     case OBJ_TYPE_LINE: {
         String rubberMode = objRubberMode;
         if (rubberMode == "OBJ_RUBBER_LINE") {
@@ -675,10 +1143,330 @@ Geometry::updateRubber(QPainter* painter)
         }
         break;
     }
+
+    case OBJ_TYPE_CIRCLE: {
+        if (objRubberMode == "OBJ_RUBBER_CIRCLE_1P_RAD") {
+            QPointF sceneCenterPoint = objectRubberPoint("CIRCLE_CENTER");
+            QPointF sceneQSnapPoint = objectRubberPoint("CIRCLE_RADIUS");
+            QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
+            QPointF itemQSnapPoint = mapFromScene(sceneQSnapPoint);
+            QLineF itemLine(itemCenterPoint, itemQSnapPoint);
+            setObjectCenter(to_EmbVector(sceneCenterPoint));
+            QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
+            EmbReal radius = sceneLine.length();
+            setObjectRadius(radius);
+            if (painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
+            updatePath();
+        }
+        else if (objRubberMode == "OBJ_RUBBER_CIRCLE_1P_DIA") {
+            QPointF sceneCenterPoint = objectRubberPoint("CIRCLE_CENTER");
+            QPointF sceneQSnapPoint = objectRubberPoint("CIRCLE_DIAMETER");
+            QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
+            QPointF itemQSnapPoint = mapFromScene(sceneQSnapPoint);
+            QLineF itemLine(itemCenterPoint, itemQSnapPoint);
+            setObjectCenter(to_EmbVector(sceneCenterPoint));
+            QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
+            EmbReal diameter = sceneLine.length();
+            setObjectDiameter(diameter);
+            if (painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
+            updatePath();
+        }
+        else if (objRubberMode == "OBJ_RUBBER_CIRCLE_2P") {
+            QPointF sceneTan1Point = objectRubberPoint("CIRCLE_TAN1");
+            QPointF sceneQSnapPoint = objectRubberPoint("CIRCLE_TAN2");
+            QLineF sceneLine(sceneTan1Point, sceneQSnapPoint);
+            setObjectCenter(to_EmbVector(sceneLine.pointAt(0.5)));
+            EmbReal diameter = sceneLine.length();
+            setObjectDiameter(diameter);
+            updatePath();
+        }
+        else if (objRubberMode == "OBJ_RUBBER_CIRCLE_3P") {
+            QPointF sceneTan1Point = objectRubberPoint("CIRCLE_TAN1");
+            QPointF sceneTan2Point = objectRubberPoint("CIRCLE_TAN2");
+            QPointF sceneTan3Point = objectRubberPoint("CIRCLE_TAN3");
+
+            EmbVector sceneCenter;
+            EmbArc arc;
+            arc.start = to_EmbVector(sceneTan1Point);
+            arc.mid = to_EmbVector(sceneTan2Point);
+            arc.end = to_EmbVector(sceneTan3Point);
+            getArcCenter(arc, &sceneCenter);
+            QPointF sceneCenterPoint(sceneCenter.x, sceneCenter.y);
+            QLineF sceneLine(sceneCenterPoint, sceneTan3Point);
+            setObjectCenter(to_EmbVector(sceneCenterPoint));
+            EmbReal radius = sceneLine.length();
+            setObjectRadius(radius);
+            updatePath();
+        }
+        else if (objRubberMode == "OBJ_RUBBER_GRIP") {
+            if (painter) {
+                QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+                if (gripPoint == objectCenter()) {
+                    painter->drawEllipse(rect().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
+                }
+                else {
+                    EmbReal gripRadius = QLineF(objectCenter(), objectRubberPoint(QString())).length();
+                    painter->drawEllipse(QPointF(), gripRadius, gripRadius);
+                }
+
+                QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+                drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
+            }
+        }
+        break;
+    }
+
+    case OBJ_TYPE_POINT: {
+        if (objRubberMode == "OBJ_RUBBER_GRIP") {
+            if (painter) {
+                QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+                if (gripPoint == scenePos()) {
+                    QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+                    drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
+                }
+            }
+        }
+        break;
+    }
+
+    case OBJ_TYPE_POLYGON: {
+        String rubberMode = objRubberMode;
+        if (rubberMode == "OBJ_RUBBER_POLYGON") {
+            setObjectPos(objectRubberPoint("POLYGON_POINT_0"));
+
+            bool ok = false;
+            QString numStr = objectRubberText("POLYGON_NUM_POINTS");
+            if (numStr.isNull()) return;
+            int num = numStr.toInt(&ok);
+            if (!ok) return;
+
+            QString appendStr;
+            QPainterPath rubberPath;
+            rubberPath.moveTo(mapFromScene(objectRubberPoint("POLYGON_POINT_0")));
+            for (int i = 1; i <= num; i++) {
+                appendStr = "POLYGON_POINT_" + QString().setNum(i);
+                QPointF appendPoint = mapFromScene(objectRubberPoint(appendStr));
+                rubberPath.lineTo(appendPoint);
+            }
+            //rubberPath.lineTo(0,0);
+            //updatePath(rubberPath);
+
+            //Ensure the path isn't updated until the number of points is changed again
+            objRubberTexts.insert("POLYGON_NUM_POINTS", QString());
+        }
+        else if (rubberMode == "OBJ_RUBBER_POLYGON_INSCRIBE") {
+            setObjectPos(objectRubberPoint("POLYGON_CENTER"));
+
+            quint16 numSides = objectRubberPoint("POLYGON_NUM_SIDES").x();
+
+            QPointF inscribePoint = mapFromScene(objectRubberPoint("POLYGON_INSCRIBE_POINT"));
+            QLineF inscribeLine = QLineF(QPointF(0,0), inscribePoint);
+            EmbReal inscribeAngle = inscribeLine.angle();
+            EmbReal inscribeInc = 360.0/numSides;
+
+            if (painter) drawRubberLine(inscribeLine, painter, "VIEW_COLOR_CROSSHAIR");
+
+            QPainterPath inscribePath;
+            //First Point
+            inscribePath.moveTo(inscribePoint);
+            //Remaining Points
+            for (int i = 1; i < numSides; i++) {
+                inscribeLine.setAngle(inscribeAngle + inscribeInc*i);
+                inscribePath.lineTo(inscribeLine.p2());
+            }
+            // \todo fix this
+            //updatePath(inscribePath);
+        }
+        else if (rubberMode == "OBJ_RUBBER_POLYGON_CIRCUMSCRIBE") {
+            setObjectPos(objectRubberPoint("POLYGON_CENTER"));
+
+            quint16 numSides = objectRubberPoint("POLYGON_NUM_SIDES").x();
+
+            QPointF circumscribePoint = mapFromScene(objectRubberPoint("POLYGON_CIRCUMSCRIBE_POINT"));
+            QLineF circumscribeLine = QLineF(QPointF(0,0), circumscribePoint);
+            EmbReal circumscribeAngle = circumscribeLine.angle();
+            EmbReal circumscribeInc = 360.0/numSides;
+
+            if (painter) drawRubberLine(circumscribeLine, painter, "VIEW_COLOR_CROSSHAIR");
+
+            QPainterPath circumscribePath;
+            //First Point
+            QLineF prev(circumscribeLine.p2(), QPointF(0,0));
+            prev = prev.normalVector();
+            circumscribeLine.setAngle(circumscribeAngle + circumscribeInc);
+            QLineF perp(circumscribeLine.p2(), QPointF(0,0));
+            perp = perp.normalVector();
+            QPointF iPoint;
+            perp.intersects(prev, &iPoint);
+            circumscribePath.moveTo(iPoint);
+            //Remaining Points
+            for (int i = 2; i <= numSides; i++) {
+                prev = perp;
+                circumscribeLine.setAngle(circumscribeAngle + circumscribeInc*i);
+                perp = QLineF(circumscribeLine.p2(), QPointF(0,0));
+                perp = perp.normalVector();
+                perp.intersects(prev, &iPoint);
+                circumscribePath.lineTo(iPoint);
+            }
+            // \todo fix this
+            // updatePath(circumscribePath);
+        }
+        else if (rubberMode == "OBJ_RUBBER_GRIP") {
+            if (painter) {
+                int elemCount = normalPath.elementCount();
+                QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+                if (gripIndex == -1) gripIndex = findIndex(gripPoint);
+                if (gripIndex == -1) return;
+
+                int m = 0;
+                int n = 0;
+
+                if (!gripIndex) { m = elemCount-1; n = 1; }
+                else if (gripIndex == elemCount-1) { m = elemCount-2; n = 0; }
+                else { m = gripIndex-1; n = gripIndex+1; }
+                QPainterPath::Element em = normalPath.elementAt(m);
+                QPainterPath::Element en = normalPath.elementAt(n);
+                QPointF emPoint = QPointF(em.x, em.y);
+                QPointF enPoint = QPointF(en.x, en.y);
+                painter->drawLine(emPoint, mapFromScene(objectRubberPoint(QString())));
+                painter->drawLine(enPoint, mapFromScene(objectRubberPoint(QString())));
+
+                QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+                drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
+            }
+        }
+        break;
+    }
+
+    case OBJ_TYPE_POLYLINE: {
+        String rubberMode = objRubberMode;
+        if (rubberMode == "OBJ_RUBBER_POLYLINE") {
+            setObjectPos(objectRubberPoint("POLYLINE_POINT_0"));
+
+            QLineF rubberLine(normalPath.currentPosition(), mapFromScene(objectRubberPoint(QString())));
+            if (painter) drawRubberLine(rubberLine, painter, "VIEW_COLOR_CROSSHAIR");
+
+            bool ok = false;
+            QString numStr = objectRubberText("POLYLINE_NUM_POINTS");
+            if (numStr.isNull()) return;
+            int num = numStr.toInt(&ok);
+            if (!ok) return;
+
+            QString appendStr;
+            QPainterPath rubberPath;
+            for (int i = 1; i <= num; i++) {
+                appendStr = "POLYLINE_POINT_" + QString().setNum(i);
+                QPointF appendPoint = mapFromScene(objectRubberPoint(appendStr));
+                rubberPath.lineTo(appendPoint);
+            }
+            // \todo fix this
+            //updatePath(rubberPath);
+
+            //Ensure the path isn't updated until the number of points is changed again
+            objRubberTexts.insert("POLYLINE_NUM_POINTS", QString());
+        }
+        else if (rubberMode == "OBJ_RUBBER_GRIP") {
+            if (painter) {
+                int elemCount = normalPath.elementCount();
+                QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+                if (gripIndex == -1) gripIndex = findIndex(gripPoint);
+                if (gripIndex == -1) return;
+
+                if (!gripIndex) {
+                    // First
+                    QPainterPath::Element ef = normalPath.elementAt(1);
+                    QPointF efPoint = QPointF(ef.x, ef.y);
+                    painter->drawLine(efPoint, mapFromScene(objectRubberPoint(QString())));
+                }
+                else if (gripIndex == elemCount-1) { //Last
+                    QPainterPath::Element el = normalPath.elementAt(gripIndex-1);
+                    QPointF elPoint = QPointF(el.x, el.y);
+                    painter->drawLine(elPoint, mapFromScene(objectRubberPoint(QString())));
+                }
+                else { //Middle
+                    QPainterPath::Element em = normalPath.elementAt(gripIndex-1);
+                    QPainterPath::Element en = normalPath.elementAt(gripIndex+1);
+                    QPointF emPoint = QPointF(em.x, em.y);
+                    QPointF enPoint = QPointF(en.x, en.y);
+                    painter->drawLine(emPoint, mapFromScene(objectRubberPoint(QString())));
+                    painter->drawLine(enPoint, mapFromScene(objectRubberPoint(QString())));
+                }
+
+                QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+                drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
+            }
+        }
+        break;
+    }
+
+    case OBJ_TYPE_RECTANGLE: {
+        String rubberMode = objRubberMode;
+        if (objRubberMode == "OBJ_RUBBER_RECTANGLE") {
+            QPointF sceneStartPoint = objectRubberPoint("RECTANGLE_START");
+            QPointF sceneEndPoint = objectRubberPoint("RECTANGLE_END");
+            EmbReal x = sceneStartPoint.x();
+            EmbReal y = sceneStartPoint.y();
+            EmbReal w = sceneEndPoint.x() - sceneStartPoint.x();
+            EmbReal h = sceneEndPoint.y() - sceneStartPoint.y();
+            setObjectRect(x,y,w,h);
+            updatePath();
+        }
+        else if (rubberMode == "OBJ_RUBBER_GRIP") {
+            if (painter) {
+                //TODO: Make this work with rotation & scaling
+                /*
+                QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+                QPointF after = objectRubberPoint(QString());
+                QPointF delta = after-gripPoint;
+                if     (gripPoint == objectTopLeft()) { painter->drawPolygon(mapFromScene(QRectF(after.x(), after.y(), objectWidth()-delta.x(), objectHeight()-delta.y()))); }
+                else if (gripPoint == objectTopRight()) {
+                	painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y())));
+                }
+                else if (gripPoint == objectBottomLeft()) { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y()))); }
+                else if (gripPoint == objectBottomRight()) { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()))); }
+
+                QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+                drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
+                */
+
+                QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+                QPointF after = objectRubberPoint(QString());
+                QPointF delta = after-gripPoint;
+
+                QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+                drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
+            }
+        }
+        break;
+    }
+
+    case OBJ_TYPE_TEXTSINGLE: {
+        if (objRubberMode == "OBJ_RUBBER_TEXTSINGLE") {
+            setObjectTextFont(objectRubberText("TEXT_FONT"));
+            setObjectTextJustify(objectRubberText("TEXT_JUSTIFY"));
+            setObjectPos(objectRubberPoint("TEXT_POINT"));
+            QPointF hr = objectRubberPoint("TEXT_HEIGHT_ROTATION");
+            setObjectTextSize(hr.x());
+            setRotation(hr.y());
+            setObjectText(objectRubberText("TEXT_RAPID"));
+        }
+        else if (objRubberMode == "OBJ_RUBBER_GRIP") {
+            if (painter) {
+                QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+                if (gripPoint == scenePos()) {
+                    painter->drawPath(path().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
+                }
+
+                QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+                drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
+            }
+        }
+        break;
+    }
+
     default:
         break;
     }
-    */
 }
 
 EmbReal
@@ -1014,91 +1802,6 @@ Geometry::objectSavePath()
     return path;
 }
 
-#if 0
-DimLeaderObject::DimLeaderObject(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, QGraphicsItem* parent) : Geometry(OBJ_TYPE_DIMLEADER, parent)
-{
-    debug_message("DimLeaderObject Constructor()");
-    init(x1, y1, x2, y2, rgb, Qt::SolidLine); //TODO: getCurrentLineType
-}
-
-DimLeaderObject::DimLeaderObject(DimLeaderObject* obj, QGraphicsItem* parent) : Geometry(OBJ_TYPE_DIMLEADER, parent)
-{
-    debug_message("DimLeaderObject Constructor()");
-    if (obj) {
-        init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
-    }
-}
-
-void
-Geometry::DimLeaderObject::init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, Qt::PenStyle lineType)
-{
-    setData(OBJ_TYPE, OBJ_TYPE_DIMLEADER);
-    setData(OBJ_NAME, "Dimension Leader");
-
-    //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
-    //WARNING: All movement has to be handled explicitly by us, not by the scene.
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
-
-    curved = false;
-    filled = true;
-    EmbVector endPt1, endPt2;
-    endPt1.x = x1;
-    endPt1.y = y1;
-    endPt2.x = x2;
-    endPt2.y = y2;
-    setObjectEndPoint1(endPt1);
-    setObjectEndPoint2(endPt2);
-    objPen.setColor(rgb);
-    lwtPen.setColor(rgb);
-    objPen.setStyle(lineType);
-    lwtPen.setStyle(lineType);
-    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
-    setPen(objPen);
-}
-
-#endif
-
-Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(parent)
-{
-    debug_message("Geometry Constructor()");
-    init();
-    if (obj) {
-        EmbArc arc;
-        arc.start = to_EmbVector(obj->objectStartPoint());
-        arc.mid = to_EmbVector(obj->objectMidPoint());
-        arc.end = to_EmbVector(obj->objectEndPoint());
-        //init(arc, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
-        setRotation(obj->rotation());
-    }
-}
-
-/**
- * @brief Geometry::init
- * @param arc
- * @param rgb
- * @param lineType
-Geometry::Geometry(EmbArc arc, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem *parent = 0) : QGraphicsPathItem()
-{
-    setData(OBJ_TYPE, OBJ_TYPE_ARC);
-    setData(OBJ_NAME, "Arc");
-
-    //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
-    //WARNING: All movement has to be handled explicitly by us, not by the scene.
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
-
-    calculateArcData(arc);
-
-    objPen.setColor(rgb);
-    lwtPen.setColor(rgb);
-    objPen.setStyle(lineType);
-    lwtPen.setStyle(lineType);
-    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
-    setPen(objPen);
-}
- */
-
 /**
  * @brief Geometry::calculateArcData
  * @param arc
@@ -1331,18 +2034,15 @@ rotate_vector(EmbVector v, EmbReal alpha)
 QPointF
 Geometry::objectStartPoint()
 {
-    switch (Type) {
-    case OBJ_TYPE_ARC: {
-        EmbReal rot = radians(rotation());
-        EmbVector v = to_EmbVector(arcStartPoint) * scale();
-        EmbVector rotv = rotate_vector(v, rot);
+    EmbReal rot = radians(rotation());
+    QPointF start_point = objLine.pointAt(0.0);
+    if (Type == OBJ_TYPE_ARC) {
+        start_point = arcMidPoint;
+    }
+    EmbVector start = to_EmbVector(start_point) * scale();
+    QPointF rotv = to_QPointF(rotate_vector(start, rot));
 
-        return scenePos() + to_QPointF(rotv);
-    }
-    default:
-        break;
-    }
-    return scenePos();
+    return scenePos() + rotv;
 }
 
 /**
@@ -1352,26 +2052,15 @@ Geometry::objectStartPoint()
 QPointF
 Geometry::objectMidPoint()
 {
-    switch (Type) {
-    case OBJ_TYPE_ARC: {
-        EmbReal rot = radians(rotation());
-        EmbVector v = to_EmbVector(arcMidPoint) * scale();
-        EmbVector rotv = rotate_vector(v, rot);
+    EmbReal rot = radians(rotation());
+    QPointF mid_point = objLine.pointAt(0.5);
+    if (Type == OBJ_TYPE_ARC) {
+        mid_point = arcMidPoint;
+    }
+    EmbVector mid = to_EmbVector(mid_point) * scale();
+    QPointF rotv = to_QPointF(rotate_vector(mid, rot));
 
-        return scenePos() + to_QPointF(rotv);
-    }
-    case OBJ_TYPE_DIMLEADER: {
-        QPointF mp = objLine.pointAt(0.5);
-        EmbReal rot = radians(rotation());
-        EmbVector m = to_EmbVector(mp) * scale();
-        QPointF rotMid = to_QPointF(rotate_vector(m, rot));
-
-        return scenePos() + rotMid;
-    }
-    default:
-        break;
-    }
-    return scenePos();
+    return scenePos() + rotv;
 }
 
 /**
@@ -1380,18 +2069,15 @@ Geometry::objectMidPoint()
  */
 QPointF Geometry::objectEndPoint()
 {
-    switch (Type) {
-    case OBJ_TYPE_ARC: {
-        EmbReal rot = radians(rotation());
-        EmbVector v = to_EmbVector(arcEndPoint) * scale();
-        EmbVector rotv = rotate_vector(v, rot);
+    EmbReal rot = radians(rotation());
+    QPointF end_point = objLine.pointAt(1.0);
+    if (Type == OBJ_TYPE_ARC) {
+        end_point = arcEndPoint;
+    }
+    EmbVector end = to_EmbVector(end_point) * scale();
+    QPointF rotv = to_QPointF(rotate_vector(end, rot));
 
-        return scenePos() + to_QPointF(rotv);
-    }
-    default:
-        break;
-    }
-    return scenePos();
+    return scenePos() + rotv;
 }
 
 /**
@@ -1442,11 +2128,9 @@ Geometry::objectChord(void)
 {
     switch (Type) {
     case OBJ_TYPE_ARC: {
-        return QLineF(
-            objectStartPoint().x(),
-            objectStartPoint().y(),
-            objectEndPoint().x(),
-            objectEndPoint().y()).length();
+        return embVector_distance(
+            to_EmbVector(objectStartPoint()),
+            to_EmbVector(objectEndPoint()));
     }
     default:
         break;
@@ -1468,7 +2152,7 @@ Geometry::objectIncludedAngle(void)
         if (chord <= 0 || rad <= 0) return 0; //Prevents division by zero and non-existant circles
 
         //NOTE: Due to floating point rounding errors, we need to clamp the quotient so it is in the range [-1, 1]
-        //      If the quotient is out of that range, then the result of asin() will be NaN.
+        //      If the quotient is out of that range, then the result of asin() will be node(0.0f).
         EmbReal quotient = chord/(2.0*rad);
         if (quotient > 1.0) quotient = 1.0;
         if (quotient < 0.0) quotient = 0.0; //NOTE: 0 rather than -1 since we are enforcing a positive chord and radius
@@ -1524,38 +2208,37 @@ Geometry::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidg
     QPen paintPen = pen();
     painter->setPen(paintPen);
 
+    updateRubber(painter);
+
+    if (option->state & QStyle::State_Selected) {
+        paintPen.setStyle(Qt::DashLine);
+    }
+    if (objScene->property("ENABLE_LWT").toBool()) {
+        paintPen = lwtPen;
+    }
+    painter->setPen(paintPen);
+
     switch (Type) {
     case OBJ_TYPE_ARC: {
-        updateRubber(painter);
-        if (option->state & QStyle::State_Selected) {
-            paintPen.setStyle(Qt::DashLine);
-        }
-        if (objScene->property("ENABLE_LWT").toBool()) {
-            paintPen = lwtPen;
-        }
-        painter->setPen(paintPen);
-
         EmbReal startAngle = (objectStartAngle() + rotation())*16;
         EmbReal spanAngle = objectIncludedAngle()*16;
 
-        if (objectClockwise())
+        if (objectClockwise()) {
             spanAngle = -spanAngle;
+        }
 
         EmbReal rad = objectRadius();
         QRectF paintRect(-rad, -rad, rad*2.0, rad*2.0);
         painter->drawArc(paintRect, startAngle, spanAngle);
         break;
     }
-    case OBJ_TYPE_DIMLEADER: {
-        updateRubber(painter);
-        if (option->state & QStyle::State_Selected) {
-            paintPen.setStyle(Qt::DashLine);
-        }
-        if (objScene->property("ENABLE_LWT").toBool()) {
-            paintPen = lwtPen;
-        }
-        painter->setPen(paintPen);
 
+    case OBJ_TYPE_CIRCLE: {
+        painter->drawEllipse(rect());
+        break;
+    }
+
+    case OBJ_TYPE_DIMLEADER: {
         painter->drawPath(lineStylePath);
         painter->drawPath(arrowStylePath);
 
@@ -1564,51 +2247,69 @@ Geometry::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidg
         }
         break;
     }
+    
+    case OBJ_TYPE_ELLIPSE: {
+        painter->drawEllipse(rect());
+        break;
+    }
+    
+    case OBJ_TYPE_IMAGE:
+    case OBJ_TYPE_RECTANGLE: {
+        painter->drawRect(rect());
+        break;
+    }
+
+    case OBJ_TYPE_PATH: {
+        painter->drawPath(path());
+        break;
+    }
+
+    case OBJ_TYPE_POLYGON: {
+        if (normalPath.elementCount()) {
+            painter->drawPath(normalPath);
+            QPainterPath::Element zero = normalPath.elementAt(0);
+            QPainterPath::Element last = normalPath.elementAt(normalPath.elementCount()-1);
+            painter->drawLine(QPointF(zero.x, zero.y), QPointF(last.x, last.y));
+        }
+        break;
+    }
+
+    case OBJ_TYPE_POLYLINE: {
+        painter->drawPath(normalPath);
+
+        if (objScene->property("ENABLE_LWT").toBool()
+            && objScene->property("ENABLE_REAL").toBool()) {
+            realRender(painter, normalPath);
+        }
+        break;
+    }
+
+    case OBJ_TYPE_LINE: {
+        if (objRubberMode != "OBJ_RUBBER_LINE") {
+            painter->drawLine(objLine);
+        }
+
+        if (objScene->property("ENABLE_LWT").toBool()
+            && objScene->property("ENABLE_REAL").toBool()) {
+            realRender(painter, path());
+        }
+        break;
+    }
+
+    case OBJ_TYPE_POINT: {
+        painter->drawPoint(0,0);
+        break;
+    }
+
+    case OBJ_TYPE_TEXTSINGLE: {
+        painter->drawPath(objTextPath);
+        break;
+    }
+
     default:
         break;
     }
 }
-
-#if 0
-Geometry::Geometry(EmbCircle circle, QRgb rgb, QGraphicsItem* parent) : Geometry(OBJ_TYPE_CIRCLE, parent)
-{
-    debug_message("Geometry Constructor()");
-    init(centerX, centerY, radius, rgb, Qt::SolidLine); //TODO: getCurrentLineType
-}
-
-Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : Geometry(OBJ_TYPE_CIRCLE, parent)
-{
-    debug_message("Geometry Constructor()");
-    if (obj) {
-        init(obj->objectCenter().x(), obj->objectCenter().y(), obj->objectRadius(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
-        setRotation(obj->rotation());
-    }
-}
-
-void
-Geometry::init(EmbReal centerX, EmbReal centerY, EmbReal radius, QRgb rgb, Qt::PenStyle lineType)
-{
-    setData(OBJ_TYPE, OBJ_TYPE_CIRCLE);
-    setData(OBJ_NAME, "Circle");
-
-    //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
-    //WARNING: All movement has to be handled explicitly by us, not by the scene.
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
-
-    setObjectRadius(radius);
-    EmbVector center = {centerX, centerY};
-    setObjectCenter(center);
-    objPen.setColor(rgb);
-    lwtPen.setColor(rgb);
-    objPen.setStyle(lineType);
-    lwtPen.setStyle(lineType);
-    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
-    setPen(objPen);
-    updatePath();
-}
-#endif
-
 
 /**
  * @brief Geometry::setObjectDiameter
@@ -1647,158 +2348,6 @@ Geometry::setObjectCircumference(EmbReal circumference)
     setObjectDiameter(diameter);
 }
 
-#if 0
-/**
- * @brief Geometry::paint
- * @param painter
- * @param option
- */
-void
-Geometry::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
-{
-    case OBJ_TYPE_CIRCLE:
-        QGraphicsScene* objScene = scene();
-        if (!objScene) return;
-
-        QPen paintPen = pen();
-        painter->setPen(paintPen);
-        updateRubber(painter);
-        if (option->state & QStyle::State_Selected) { paintPen.setStyle(Qt::DashLine); }
-        if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lwtPen; }
-        painter->setPen(paintPen);
-
-        painter->drawEllipse(rect());
-}
-
-/**
- * @brief Geometry::updateRubber
- * @param painter
- */
-void
-Geometry::updateRubber(QPainter* painter)
-{
-    if (objRubberMode == "OBJ_RUBBER_CIRCLE_1P_RAD") {
-        QPointF sceneCenterPoint = objectRubberPoint("CIRCLE_CENTER");
-        QPointF sceneQSnapPoint = objectRubberPoint("CIRCLE_RADIUS");
-        QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
-        QPointF itemQSnapPoint = mapFromScene(sceneQSnapPoint);
-        QLineF itemLine(itemCenterPoint, itemQSnapPoint);
-        setObjectCenter(to_EmbVector(sceneCenterPoint));
-        QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
-        EmbReal radius = sceneLine.length();
-        setObjectRadius(radius);
-        if (painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
-        updatePath();
-    }
-    else if (objRubberMode == "OBJ_RUBBER_CIRCLE_1P_DIA") {
-        QPointF sceneCenterPoint = objectRubberPoint("CIRCLE_CENTER");
-        QPointF sceneQSnapPoint = objectRubberPoint("CIRCLE_DIAMETER");
-        QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
-        QPointF itemQSnapPoint = mapFromScene(sceneQSnapPoint);
-        QLineF itemLine(itemCenterPoint, itemQSnapPoint);
-        setObjectCenter(to_EmbVector(sceneCenterPoint));
-        QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
-        EmbReal diameter = sceneLine.length();
-        setObjectDiameter(diameter);
-        if (painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
-        updatePath();
-    }
-    else if (objRubberMode == "OBJ_RUBBER_CIRCLE_2P") {
-        QPointF sceneTan1Point = objectRubberPoint("CIRCLE_TAN1");
-        QPointF sceneQSnapPoint = objectRubberPoint("CIRCLE_TAN2");
-        QLineF sceneLine(sceneTan1Point, sceneQSnapPoint);
-        setObjectCenter(to_EmbVector(sceneLine.pointAt(0.5)));
-        EmbReal diameter = sceneLine.length();
-        setObjectDiameter(diameter);
-        updatePath();
-    }
-    else if (objRubberMode == "OBJ_RUBBER_CIRCLE_3P") {
-        QPointF sceneTan1Point = objectRubberPoint("CIRCLE_TAN1");
-        QPointF sceneTan2Point = objectRubberPoint("CIRCLE_TAN2");
-        QPointF sceneTan3Point = objectRubberPoint("CIRCLE_TAN3");
-
-        EmbVector sceneCenter;
-        EmbArc arc;
-        arc.start.x = sceneTan1Point.x();
-        arc.start.y = sceneTan1Point.y();
-        arc.mid.x = sceneTan2Point.x();
-        arc.mid.y = sceneTan2Point.y();
-        arc.end.x = sceneTan3Point.x();
-        arc.end.y = sceneTan3Point.y();
-        getArcCenter(arc, &sceneCenter);
-        QPointF sceneCenterPoint(sceneCenter.x, sceneCenter.y);
-        QLineF sceneLine(sceneCenterPoint, sceneTan3Point);
-        setObjectCenter(to_EmbVector(sceneCenterPoint));
-        EmbReal radius = sceneLine.length();
-        setObjectRadius(radius);
-        updatePath();
-    }
-    else if (objRubberMode == "OBJ_RUBBER_GRIP") {
-        if (painter) {
-            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if (gripPoint == objectCenter()) {
-                painter->drawEllipse(rect().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
-            }
-            else {
-                EmbReal gripRadius = QLineF(objectCenter(), objectRubberPoint(QString())).length();
-                painter->drawEllipse(QPointF(), gripRadius, gripRadius);
-            }
-
-            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
-    }
-}
-
-Geometry::Geometry(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, QRgb rgb, QGraphicsItem* parent) : Geometry(OBJ_TYPE_ELLIPSE, parent)
-{
-    debug_message("Geometry Constructor()");
-    init(centerX, centerY, width, height, rgb, Qt::SolidLine); //TODO: getCurrentLineType
-}
-
-Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : Geometry(OBJ_TYPE_ELLIPSE, parent)
-{
-    debug_message("Geometry Constructor()");
-    if (obj) {
-        init(
-            obj->objectCenter().x(),
-            obj->objectCenter().y(),
-            obj->objectWidth(),
-            obj->objectHeight(),
-            obj->objPen.color().rgb(),
-            Qt::SolidLine); //TODO: getCurrentLineType
-        setRotation(obj->rotation());
-    }
-}
-
-/**
- * \brief .
- */
-void
-Geometry::init(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, QRgb rgb, Qt::PenStyle lineType)
-{
-    setData(OBJ_TYPE, OBJ_TYPE_ELLIPSE);
-    setData(OBJ_NAME, "Ellipse");
-
-    /**
-     * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-     * and the item is double clicked, the scene will erratically move the item while zooming.
-     * All movement has to be handled explicitly by us, not by the scene.
-     */
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
-
-    setObjectSize(width, height);
-    EmbVector center = {centerX, centerY};
-    setObjectCenter(center);
-    objPen.setColor(rgb);
-    lwtPen.setColor(rgb);
-    objPen.setStyle(lineType);
-    lwtPen.setStyle(lineType);
-    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
-    setPen(objPen);
-    updatePath();
-}
-
 /**
  * \brief .
  */
@@ -1811,7 +2360,6 @@ Geometry::setObjectSize(EmbReal width, EmbReal height)
     elRect.moveCenter(QPointF(0,0));
     setRect(elRect);
 }
-#endif
 
 void
 Geometry::setObjectRadiusMajor(EmbReal radius)
@@ -1890,22 +2438,6 @@ Geometry::objectQuadrant270()
     return objectCenter() + QPointF(x,y);
 }
 
-void
-Geometry::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
-{
-    QGraphicsScene* objScene = scene();
-    if (!objScene) return;
-
-    QPen paintPen = pen();
-    painter->setPen(paintPen);
-    updateRubber(painter);
-    if (option->state & QStyle::State_Selected) { paintPen.setStyle(Qt::DashLine); }
-    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lwtPen; }
-    painter->setPen(paintPen);
-
-    painter->drawEllipse(rect());
-}
-
 ImageObject::ImageObject(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, QGraphicsItem* parent) : Geometry(OBJ_TYPE_IMAGE, parent)
 {
     debug_message("ImageObject Constructor()");
@@ -1922,15 +2454,15 @@ ImageObject::ImageObject(ImageObject* obj, QGraphicsItem* parent) : Geometry(OBJ
     }
 }
 
+// WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+// WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+// WARNING: All movement has to be handled explicitly by us, not by the scene.
 void
 Geometry::ImageObject::init(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, OBJ_TYPE_IMAGE);
     setData(OBJ_NAME, "Image");
 
-    //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
-    //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
     setObjectRect(x, y, w, h);
@@ -2008,159 +2540,6 @@ Geometry::objectBottomRight()
 }
 
 #if 0
-/**
- * \brief .
- */
-void
-Geometry::ImageObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
-{
-    QGraphicsScene* objScene = scene();
-    if (!objScene) {
-        return;
-    }
-
-    QPen paintPen = pen();
-    painter->setPen(paintPen);
-    updateRubber(painter);
-    if (option->state & QStyle::State_Selected) {
-        paintPen.setStyle(Qt::DashLine);
-    }
-    if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = lwtPen;
-    }
-    painter->setPen(paintPen);
-
-    painter->drawRect(rect());
-}
-
-Geometry::Geometry(EmbLine line, QRgb rgb, QGraphicsItem* parent) : Geometry(OBJ_TYPE_LINE, parent)
-{
-    debug_message("Geometry Constructor()");
-    init(line, rgb, Qt::SolidLine); //TODO: getCurrentLineType
-}
-
-Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : Geometry(OBJ_TYPE_LINE, parent)
-{
-    debug_message("Geometry Constructor()");
-    if (obj) {
-        EmbLine line;
-        line.start = to_EmbVector(obj->objectEndPoint1());
-        line.end = to_EmbVector(obj->objectEndPoint2());
-        init(line, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
-    }
-}
-
-void
-Geometry::init(EmbLine line, QRgb rgb, Qt::PenStyle lineType)
-{
-    setData(OBJ_TYPE, OBJ_TYPE_LINE);
-    setData(OBJ_NAME, "Line");
-
-    //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
-    //WARNING: All movement has to be handled explicitly by us, not by the scene.
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
-
-    setObjectEndPoint1(line.start);
-    setObjectEndPoint2(line.end);
-    objPen.setColor(rgb);
-    lwtPen.setColor(rgb);
-    objPen.setStyle(lineType);
-    lwtPen.setStyle(lineType);
-    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
-    setPen(objPen);
-}
-
-/**
- * @brief Geometry::setObjectEndPoint1
- * @param x1
- * @param y1
- */
-void
-Geometry::setObjectEndPoint1(EmbVector endPt1)
-{
-    EmbVector endPt2 = to_EmbVector(objectEndPoint2());
-    EmbVector delta = endPt2 - endPt1;
-    setRotation(0);
-    setScale(1);
-    setLine(0, 0, delta.x, delta.y);
-    setPos(endPt1.x, endPt1.y);
-}
-
-/**
- * @brief Geometry::setObjectEndPoint2
- * @param x2
- * @param y2
- */
-void
-Geometry::setObjectEndPoint2(EmbVector endPt2)
-{
-    EmbVector endPt1 = to_EmbVector(scenePos());
-    EmbVector delta = endPt2 - endPt1;
-    setRotation(0);
-    setScale(1);
-    setLine(0, 0, delta.x, delta.y);
-    setPos(endPt1.x, endPt1.y);
-}
-
-/**
- * @brief Geometry::objectEndPoint2
- * @return
- */
-QPointF
-Geometry::objectEndPoint2()
-{
-    EmbReal rot = radians(rotation());
-    EmbVector v;
-    v.x = objLine.x2()*scale();
-    v.y = objLine.y2()*scale();
-    EmbVector rotEnd = rotate_vector(v, rot);
-
-    return scenePos() + to_QPointF(rotEnd);
-}
-
-/**
- * @brief Geometry::objectMidPoint
- * @return
- */
-QPointF
-Geometry::objectMidPoint()
-{
-    QPointF mp = objLine.pointAt(0.5);
-    EmbReal rot = radians(rotation());
-    EmbVector m = to_EmbVector(mp) * scale();
-    EmbVector rotMid = rotate_vector(m, rot);
-
-    return scenePos() + to_QPointF(rotMid);
-}
-
-/**
- * @brief Geometry::paint
- * @param painter
- * @param option
- */
-void
-Geometry::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
-{
-    QGraphicsScene* objScene = scene();
-    if (!objScene) return;
-
-    QPen paintPen = pen();
-    painter->setPen(paintPen);
-    updateRubber(painter);
-    if (option->state & QStyle::State_Selected) { paintPen.setStyle(Qt::DashLine); }
-    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lwtPen; }
-    painter->setPen(paintPen);
-
-    if (objRubberMode != "OBJ_RUBBER_LINE") {
-        painter->drawLine(objLine);
-    }
-
-    if (objScene->property("ENABLE_LWT").toBool()
-        && objScene->property("ENABLE_REAL").toBool()) {
-        realRender(painter, path());
-    }
-}
 
 PathObject::PathObject(EmbReal x, EmbReal y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent) : Geometry(OBJ_TYPE_PATH, parent)
 {
@@ -2178,20 +2557,20 @@ PathObject::PathObject(PathObject* obj, QGraphicsItem* parent) : Geometry(OBJ_TY
     }
 }
 
+// WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+// WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+// WARNING: All movement has to be handled explicitly by us, not by the scene.
 void
-Geometry::PathObject::init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
+Geometry::init(EmbVector position, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, OBJ_TYPE_PATH);
     setData(OBJ_NAME, "Path");
 
-    //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
-    //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
     normalPath = p;
     updatePath();
-    setObjectPos(x,y);
+    setObjectPos(position.x, position.y);
     objPen.setColor(rgb);
     lwtPen.setColor(rgb);
     objPen.setStyle(lineType);
@@ -2199,34 +2578,6 @@ Geometry::PathObject::init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb
     setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
     setPen(objPen);
 }
-
-
-/**
- * @brief PathObject::paint
- * @param painter
- * @param option
- */
-void
-Geometry::PathObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
-{
-    QGraphicsScene* objScene = scene();
-    if (!objScene)
-        return;
-
-    QPen paintPen = pen();
-    painter->setPen(paintPen);
-    updateRubber(painter);
-    if (option->state & QStyle::State_Selected) {
-        paintPen.setStyle(Qt::DashLine);
-    }
-    if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = lwtPen;
-    }
-    painter->setPen(paintPen);
-
-    painter->drawPath(path());
-}
-
 #endif
 
 /**
@@ -2238,135 +2589,6 @@ Geometry::objectCopyPath()
 {
     return normalPath;
 }
-
-#if 0
-/**
- * @brief Geometry::Geometry
- * @param x
- * @param y
- * @param rgb
- * @param parent
- */
-Geometry::Geometry(EmbReal x, EmbReal y, QRgb rgb, QGraphicsItem* parent) : Geometry(OBJ_TYPE_POINT, parent)
-{
-    debug_message("Geometry Constructor()");
-    init(x, y, rgb, Qt::SolidLine); //TODO: getCurrentLineType
-}
-
-/**
- * @brief Geometry::Geometry
- * @param obj
- * @param parent
- */
-Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : Geometry(OBJ_TYPE_POINT, parent)
-{
-    debug_message("Geometry Constructor()");
-    if (obj) {
-        init(obj->objectPos().x(), obj->objectPos().y(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
-        setRotation(obj->rotation());
-    }
-}
-
-void
-Geometry::init(EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType)
-{
-    setData(OBJ_TYPE, OBJ_TYPE_POINT);
-    setData(OBJ_NAME, "Point");
-
-    //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
-    //WARNING: All movement has to be handled explicitly by us, not by the scene.
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
-
-    setRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
-    setObjectPos(x,y);
-    objPen.setColor(rgb);
-    lwtPen.setColor(rgb);
-    objPen.setStyle(lineType);
-    lwtPen.setStyle(lineType);
-    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
-    setPen(objPen);
-}
-
-/**
- * @brief Geometry::paint
- * @param painter
- * @param option
- */
-void
-Geometry::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
-{
-    QGraphicsScene* objScene = scene();
-    if (!objScene)
-        return;
-
-    QPen paintPen = pen();
-    painter->setPen(paintPen);
-    updateRubber(painter);
-    if (option->state & QStyle::State_Selected) { paintPen.setStyle(Qt::DashLine); }
-    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lwtPen; }
-    painter->setPen(paintPen);
-
-    painter->drawPoint(0,0);
-}
-
-/**
- * @brief Geometry::updateRubber
- * @param painter
- */
-void
-Geometry::updateRubber(QPainter* painter)
-{
-    if (objRubberMode == "OBJ_RUBBER_GRIP") {
-        if (painter) {
-            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if (gripPoint == scenePos()) {
-                QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-                drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
-            }
-        }
-    }
-}
-
-Geometry::Geometry(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : Geometry(OBJ_TYPE_POLYGON, parent)
-{
-    debug_message("Geometry Constructor()");
-    init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
-}
-
-Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : Geometry(OBJ_TYPE_POLYGON, parent)
-{
-    debug_message("Geometry Constructor()");
-    if (obj) {
-        init(obj->objectPos().x(), obj->objectPos().y(), obj->objectCopyPath(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
-        setRotation(obj->rotation());
-        setScale(obj->scale());
-    }
-}
-
-void
-Geometry::init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
-{
-    setData(OBJ_TYPE, OBJ_TYPE_POLYGON);
-    setData(OBJ_NAME, "Polygon");
-
-    //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
-    //WARNING: All movement has to be handled explicitly by us, not by the scene.
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
-
-    gripIndex = -1;
-    normalPath = p;
-    updatePath();
-    setObjectPos(x,y);
-    objPen.setColor(rgb);
-    lwtPen.setColor(rgb);
-    objPen.setStyle(lineType);
-    lwtPen.setStyle(lineType);
-    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
-    setPen(objPen);
-}
-#endif
 
 /**
  * @brief Geometry::updatePath
@@ -2454,146 +2676,6 @@ Geometry::updatePath()
     }
 }
 
-#if 0
-/**
- * @brief Geometry::paint
- * @param painter
- * @param option
- */
-void
-Geometry::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
-{
-    QGraphicsScene* objScene = scene();
-    if (!objScene) return;
-
-    QPen paintPen = pen();
-    painter->setPen(paintPen);
-    updateRubber(painter);
-    if (option->state & QStyle::State_Selected) { paintPen.setStyle(Qt::DashLine); }
-    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lwtPen; }
-    painter->setPen(paintPen);
-
-    if (normalPath.elementCount()) {
-        painter->drawPath(normalPath);
-        QPainterPath::Element zero = normalPath.elementAt(0);
-        QPainterPath::Element last = normalPath.elementAt(normalPath.elementCount()-1);
-        painter->drawLine(QPointF(zero.x, zero.y), QPointF(last.x, last.y));
-    }
-}
-
-/**
- * @brief Geometry::updateRubber
- * @param painter
- */
-void
-Geometry::updateRubber(QPainter* painter)
-{
-    String rubberMode = objRubberMode;
-    if (rubberMode == "OBJ_RUBBER_POLYGON") {
-        setObjectPos(objectRubberPoint("POLYGON_POINT_0"));
-
-        bool ok = false;
-        QString numStr = objectRubberText("POLYGON_NUM_POINTS");
-        if (numStr.isNull()) return;
-        int num = numStr.toInt(&ok);
-        if (!ok) return;
-
-        QString appendStr;
-        QPainterPath rubberPath;
-        rubberPath.moveTo(mapFromScene(objectRubberPoint("POLYGON_POINT_0")));
-        for (int i = 1; i <= num; i++) {
-            appendStr = "POLYGON_POINT_" + QString().setNum(i);
-            QPointF appendPoint = mapFromScene(objectRubberPoint(appendStr));
-            rubberPath.lineTo(appendPoint);
-        }
-        //rubberPath.lineTo(0,0);
-        updatePath(rubberPath);
-
-        //Ensure the path isn't updated until the number of points is changed again
-        objRubberTexts.insert("POLYGON_NUM_POINTS", QString());
-    }
-    else if (rubberMode == "OBJ_RUBBER_POLYGON_INSCRIBE") {
-        setObjectPos(objectRubberPoint("POLYGON_CENTER"));
-
-        quint16 numSides = objectRubberPoint("POLYGON_NUM_SIDES").x();
-
-        QPointF inscribePoint = mapFromScene(objectRubberPoint("POLYGON_INSCRIBE_POINT"));
-        QLineF inscribeLine = QLineF(QPointF(0,0), inscribePoint);
-        EmbReal inscribeAngle = inscribeLine.angle();
-        EmbReal inscribeInc = 360.0/numSides;
-
-        if (painter) drawRubberLine(inscribeLine, painter, "VIEW_COLOR_CROSSHAIR");
-
-        QPainterPath inscribePath;
-        //First Point
-        inscribePath.moveTo(inscribePoint);
-        //Remaining Points
-        for (int i = 1; i < numSides; i++) {
-            inscribeLine.setAngle(inscribeAngle + inscribeInc*i);
-            inscribePath.lineTo(inscribeLine.p2());
-        }
-        updatePath(inscribePath);
-    }
-    else if (rubberMode == "OBJ_RUBBER_POLYGON_CIRCUMSCRIBE") {
-        setObjectPos(objectRubberPoint("POLYGON_CENTER"));
-
-        quint16 numSides = objectRubberPoint("POLYGON_NUM_SIDES").x();
-
-        QPointF circumscribePoint = mapFromScene(objectRubberPoint("POLYGON_CIRCUMSCRIBE_POINT"));
-        QLineF circumscribeLine = QLineF(QPointF(0,0), circumscribePoint);
-        EmbReal circumscribeAngle = circumscribeLine.angle();
-        EmbReal circumscribeInc = 360.0/numSides;
-
-        if (painter) drawRubberLine(circumscribeLine, painter, "VIEW_COLOR_CROSSHAIR");
-
-        QPainterPath circumscribePath;
-        //First Point
-        QLineF prev(circumscribeLine.p2(), QPointF(0,0));
-        prev = prev.normalVector();
-        circumscribeLine.setAngle(circumscribeAngle + circumscribeInc);
-        QLineF perp(circumscribeLine.p2(), QPointF(0,0));
-        perp = perp.normalVector();
-        QPointF iPoint;
-        perp.intersects(prev, &iPoint);
-        circumscribePath.moveTo(iPoint);
-        //Remaining Points
-        for (int i = 2; i <= numSides; i++) {
-            prev = perp;
-            circumscribeLine.setAngle(circumscribeAngle + circumscribeInc*i);
-            perp = QLineF(circumscribeLine.p2(), QPointF(0,0));
-            perp = perp.normalVector();
-            perp.intersects(prev, &iPoint);
-            circumscribePath.lineTo(iPoint);
-        }
-        updatePath(circumscribePath);
-    }
-    else if (rubberMode == "OBJ_RUBBER_GRIP") {
-        if (painter) {
-            int elemCount = normalPath.elementCount();
-            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if (gripIndex == -1) gripIndex = findIndex(gripPoint);
-            if (gripIndex == -1) return;
-
-            int m = 0;
-            int n = 0;
-
-            if (!gripIndex) { m = elemCount-1; n = 1; }
-            else if (gripIndex == elemCount-1) { m = elemCount-2; n = 0; }
-            else { m = gripIndex-1; n = gripIndex+1; }
-            QPainterPath::Element em = normalPath.elementAt(m);
-            QPainterPath::Element en = normalPath.elementAt(n);
-            QPointF emPoint = QPointF(em.x, em.y);
-            QPointF enPoint = QPointF(en.x, en.y);
-            painter->drawLine(emPoint, mapFromScene(objectRubberPoint(QString())));
-            painter->drawLine(enPoint, mapFromScene(objectRubberPoint(QString())));
-
-            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
-    }
-}
-#endif
-
 /**
  * @brief Geometry::findIndex
  * @param point
@@ -2617,64 +2699,6 @@ Geometry::findIndex(const QPointF& point)
 }
 
 #if 0
-/**
- * @brief Geometry::Geometry
- * @param x
- * @param y
- * @param p
- * @param rgb
- * @param parent
- */
-Geometry::Geometry(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : Geometry(OBJ_TYPE_POLYLINE, parent)
-{
-    debug_message("Geometry Constructor()");
-    init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
-}
-
-/**
- * @brief Geometry::Geometry
- * @param obj
- * @param parent
- */
-Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : Geometry(OBJ_TYPE_POLYLINE, parent)
-{
-    debug_message("Geometry Constructor()");
-    if (obj) {
-        init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
-        setRotation(obj->rotation());
-        setScale(obj->scale());
-    }
-}
-
-/**
- * @brief Geometry::init
- * @param x
- * @param y
- * @param p
- * @param rgb
- * @param lineType
- */
-void
-Geometry::init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
-{
-    setData(OBJ_TYPE, OBJ_TYPE_POLYLINE);
-    setData(OBJ_NAME, "Polyline");
-
-    //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
-    //WARNING: All movement has to be handled explicitly by us, not by the scene.
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
-
-    gripIndex = -1;
-    updatePath(p);
-    setPos(x,y);
-    objPen.setColor(rgb);
-    lwtPen.setColor(rgb);
-    objPen.setStyle(lineType);
-    lwtPen.setStyle(lineType);
-    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
-    setPen(objPen);
-}
 
 /**
  * @brief Geometry::updatePath
@@ -2687,94 +2711,6 @@ Geometry::updatePath(const QPainterPath& p)
     QPainterPath reversePath = normalPath.toReversed();
     reversePath.connectPath(normalPath);
     setPath(reversePath);
-}
-
-/**
- * @brief Geometry::paint
- * @param painter
- * @param option
- */
-void
-Geometry::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
-{
-    QGraphicsScene* objScene = scene();
-    if (!objScene) return;
-
-    QPen paintPen = pen();
-    painter->setPen(paintPen);
-    updateRubber(painter);
-    if (option->state & QStyle::State_Selected) { paintPen.setStyle(Qt::DashLine); }
-    if (objScene->property("ENABLE_LWT").toBool()) { paintPen = lwtPen; }
-    painter->setPen(paintPen);
-
-    painter->drawPath(normalPath);
-
-    if (objScene->property("ENABLE_LWT").toBool() && objScene->property("ENABLE_REAL").toBool()) { realRender(painter, normalPath); }
-}
-
-/**
- * @brief Geometry::updateRubber
- * @param painter
- */
-void
-Geometry::updateRubber(QPainter* painter)
-{
-    String rubberMode = objRubberMode;
-    if (rubberMode == "OBJ_RUBBER_POLYLINE") {
-        setObjectPos(objectRubberPoint("POLYLINE_POINT_0"));
-
-        QLineF rubberLine(normalPath.currentPosition(), mapFromScene(objectRubberPoint(QString())));
-        if (painter) drawRubberLine(rubberLine, painter, "VIEW_COLOR_CROSSHAIR");
-
-        bool ok = false;
-        QString numStr = objectRubberText("POLYLINE_NUM_POINTS");
-        if (numStr.isNull()) return;
-        int num = numStr.toInt(&ok);
-        if (!ok) return;
-
-        QString appendStr;
-        QPainterPath rubberPath;
-        for (int i = 1; i <= num; i++) {
-            appendStr = "POLYLINE_POINT_" + QString().setNum(i);
-            QPointF appendPoint = mapFromScene(objectRubberPoint(appendStr));
-            rubberPath.lineTo(appendPoint);
-        }
-        updatePath(rubberPath);
-
-        //Ensure the path isn't updated until the number of points is changed again
-        objRubberTexts.insert("POLYLINE_NUM_POINTS", QString());
-    }
-    else if (rubberMode == "OBJ_RUBBER_GRIP") {
-        if (painter) {
-            int elemCount = normalPath.elementCount();
-            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if (gripIndex == -1) gripIndex = findIndex(gripPoint);
-            if (gripIndex == -1) return;
-
-            if (!gripIndex) {
-                // First
-                QPainterPath::Element ef = normalPath.elementAt(1);
-                QPointF efPoint = QPointF(ef.x, ef.y);
-                painter->drawLine(efPoint, mapFromScene(objectRubberPoint(QString())));
-            }
-            else if (gripIndex == elemCount-1) { //Last
-                QPainterPath::Element el = normalPath.elementAt(gripIndex-1);
-                QPointF elPoint = QPointF(el.x, el.y);
-                painter->drawLine(elPoint, mapFromScene(objectRubberPoint(QString())));
-            }
-            else { //Middle
-                QPainterPath::Element em = normalPath.elementAt(gripIndex-1);
-                QPainterPath::Element en = normalPath.elementAt(gripIndex+1);
-                QPointF emPoint = QPointF(em.x, em.y);
-                QPointF enPoint = QPointF(en.x, en.y);
-                painter->drawLine(emPoint, mapFromScene(objectRubberPoint(QString())));
-                painter->drawLine(enPoint, mapFromScene(objectRubberPoint(QString())));
-            }
-
-            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
-    }
 }
 
 /**
@@ -2794,50 +2730,6 @@ Geometry::findIndex(const QPointF& point)
         if (itemPoint == elemPoint) return i;
     }
     return -1;
-}
-
-/**
- * \brief .
- */
-Geometry::Geometry(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, QGraphicsItem* parent) : Geometry(OBJ_TYPE_RECTANGLE, parent)
-{
-    debug_message("Geometry Constructor()");
-    init(x, y, w, h, rgb, Qt::SolidLine); //TODO: getCurrentLineType
-}
-
-/**
- * \brief .
- */
-Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : Geometry(OBJ_TYPE_RECTANGLE, parent)
-{
-    debug_message("Geometry Constructor()");
-    if (obj) {
-        QPointF ptl = obj->objectTopLeft();
-        init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
-        setRotation(obj->rotation());
-    }
-}
-
-/**
- * \brief .
- */
-void Geometry::init(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, Qt::PenStyle lineType)
-{
-    setData(OBJ_TYPE, OBJ_TYPE_RECTANGLE);
-    setData(OBJ_NAME, "Rectangle");
-
-    //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
-    //WARNING: All movement has to be handled explicitly by us, not by the scene.
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
-
-    setObjectRect(x, y, w, h);
-    objPen.setColor(rgb);
-    lwtPen.setColor(rgb);
-    objPen.setStyle(lineType);
-    lwtPen.setStyle(lineType);
-    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
-    setPen(objPen);
 }
 
 /**
@@ -2926,69 +2818,6 @@ void Geometry::updatePath()
     }
 }
 
-/**
- * \brief .
- */
-void Geometry::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
-{
-    QGraphicsScene* objScene = scene();
-    if (!objScene) return;
-
-    QPen paintPen = pen();
-    painter->setPen(paintPen);
-    updateRubber(painter);
-    if (option->state & QStyle::State_Selected) {
-        paintPen.setStyle(Qt::DashLine);
-    }
-    if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = lwtPen;
-    }
-    painter->setPen(paintPen);
-
-    painter->drawRect(rect());
-}
-
-/**
- * \brief .
- */
-void Geometry::updateRubber(QPainter* painter)
-{
-    String rubberMode = objRubberMode;
-    if (objRubberMode == "OBJ_RUBBER_RECTANGLE") {
-        QPointF sceneStartPoint = objectRubberPoint("RECTANGLE_START");
-        QPointF sceneEndPoint = objectRubberPoint("RECTANGLE_END");
-        EmbReal x = sceneStartPoint.x();
-        EmbReal y = sceneStartPoint.y();
-        EmbReal w = sceneEndPoint.x() - sceneStartPoint.x();
-        EmbReal h = sceneEndPoint.y() - sceneStartPoint.y();
-        setObjectRect(x,y,w,h);
-        updatePath();
-    }
-    else if (rubberMode == "OBJ_RUBBER_GRIP") {
-        if (painter) {
-            //TODO: Make this work with rotation & scaling
-            /*
-            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            QPointF after = objectRubberPoint(QString());
-            QPointF delta = after-gripPoint;
-            if     (gripPoint == objectTopLeft()) { painter->drawPolygon(mapFromScene(QRectF(after.x(), after.y(), objectWidth()-delta.x(), objectHeight()-delta.y()))); }
-            else if (gripPoint == objectTopRight()) { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y()))); }
-            else if (gripPoint == objectBottomLeft()) { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y()))); }
-            else if (gripPoint == objectBottomRight()) { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()))); }
-
-            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
-            */
-
-            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            QPointF after = objectRubberPoint(QString());
-            QPointF delta = after-gripPoint;
-
-            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
-    }
-}
 
 #endif
 
@@ -3350,8 +3179,8 @@ SaveObject::addPath(EmbPattern* pattern, QGraphicsItem* item)
         /*
         QPainterPath path = polylineItem->path();
         QPointF pos = polylineItem->pos();
-        EmbReal startX = pos.x();
-        EmbReal startY = pos.y();
+        EmbReal start.x"] = pos.x();
+        EmbReal start.y"] = pos.y();
 
         QPainterPath::Element element;
         QPainterPath::Element P1;
@@ -3542,8 +3371,6 @@ SaveObject::addTextSingle(EmbPattern* pattern, QGraphicsItem* item)
 void
 SaveObject::toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainterPath& objPath, QString  layer, const QColor& color, QString  lineType, QString  lineWeight)
 {
-    EmbReal startX = objPos.x();
-    EmbReal startY = objPos.y();
     EmbArray* pointList = 0;
     QPainterPath::Element element;
     for (int i = 0; i < objPath.elementCount(); ++i) {
@@ -3552,8 +3379,8 @@ SaveObject::toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainte
             pointList = embArray_create(EMB_POINT);
         }
         EmbPoint po;
-        po.position.x = element.x + startX;
-        po.position.y = -(element.y + startY);
+        po.position.x = element.x + objPos.x();
+        po.position.y = -(element.y + objPos.y());
         embArray_addPoint(pointList, po);
     }
 
@@ -3568,62 +3395,6 @@ SaveObject::toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainte
     embPattern_addPolylineAbs(pattern, polyObject);
     */
 }
-
-#if 0
-/**
- *
- */
-Geometry::Geometry(QString  str, EmbReal x, EmbReal y, QRgb rgb, QGraphicsItem* parent) : Geometry(OBJ_TYPE_TEXTSINGLE, parent)
-{
-    debug_message("Geometry Constructor()");
-    init(str, x, y, rgb, Qt::SolidLine); //TODO: getCurrentLineType
-}
-
-/**
- *
- */
-Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : Geometry(OBJ_TYPE_TEXTSINGLE, parent)
-{
-    debug_message("Geometry Constructor()");
-    if (obj) {
-        setObjectTextFont(obj->objTextFont);
-        setObjectTextSize(obj->objTextSize);
-        setRotation(obj->rotation());
-        setObjectTextBackward(obj->objTextBackward);
-        setObjectTextUpsideDown(obj->objTextUpsideDown);
-        setObjectTextStyle(obj->objTextBold, obj->objTextItalic, obj->objTextUnderline, obj->objTextStrikeOut, obj->objTextOverline);
-        init(obj->objText, obj->objectX(), obj->objectY(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
-        setScale(obj->scale());
-    }
-}
-
-/**
- *
- */
-void
-Geometry::init(QString  str, EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType)
-{
-    setData(OBJ_TYPE, OBJ_TYPE_TEXTSINGLE);
-    setData(OBJ_NAME, "Single Line Text");
-
-    //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
-    //WARNING: All movement has to be handled explicitly by us, not by the scene.
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
-
-    objTextJustify = "Left"; //TODO: set the justification properly
-
-    setObjectText(str);
-    setObjectPos(x,y);
-    objPen.setColor(rgb);
-    lwtPen.setColor(rgb);
-    objPen.setStyle(lineType);
-    lwtPen.setStyle(lineType);
-    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
-    setPen(objPen);
-}
-
-#endif
 
 /**
  *
@@ -3659,12 +3430,24 @@ void Geometry::setObjectText(QString  str)
         textPath.translate(-jRect.center());
     }
     else if (objTextJustify == "Fit") { } //TODO: Geometry Fit Justification
-    else if (objTextJustify == "Top Left") { textPath.translate(-jRect.topLeft()); }
-    else if (objTextJustify == "Top Center") { textPath.translate(-jRect.center().x(), -jRect.top()); }
-    else if (objTextJustify == "Top Right") { textPath.translate(-jRect.topRight()); }
-    else if (objTextJustify == "Middle Left") { textPath.translate(-jRect.left(), -jRect.top()/2.0); }
-    else if (objTextJustify == "Middle Center") { textPath.translate(-jRect.center().x(), -jRect.top()/2.0); }
-    else if (objTextJustify == "Middle Right") { textPath.translate(-jRect.right(), -jRect.top()/2.0); }
+    else if (objTextJustify == "Top Left") {
+    	textPath.translate(-jRect.topLeft());
+    }
+    else if (objTextJustify == "Top Center") {
+    	textPath.translate(-jRect.center().x(), -jRect.top());
+    }
+    else if (objTextJustify == "Top Right") {
+    	textPath.translate(-jRect.topRight());
+    }
+    else if (objTextJustify == "Middle Left") {
+    	textPath.translate(-jRect.left(), -jRect.top()/2.0);
+    }
+    else if (objTextJustify == "Middle Center") {
+    	textPath.translate(-jRect.center().x(), -jRect.top()/2.0);
+    }
+    else if (objTextJustify == "Middle Right") {
+        textPath.translate(-jRect.right(), -jRect.top()/2.0);
+    }
     else if (objTextJustify == "Bottom Left") { textPath.translate(-jRect.bottomLeft()); }
     else if (objTextJustify == "Bottom Center") { textPath.translate(-jRect.center().x(), -jRect.bottom()); }
     else if (objTextJustify == "Bottom Right") { textPath.translate(-jRect.bottomRight()); }
@@ -3833,60 +3616,6 @@ Geometry::setObjectTextUpsideDown(bool val)
     setObjectText(objText);
 }
 
-#if 0
-/**
- *
- */
-void
-Geometry::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
-{
-    QGraphicsScene* objScene = scene();
-    if (!objScene) return;
-
-    QPen paintPen = pen();
-    painter->setPen(paintPen);
-    updateRubber(painter);
-    if (option->state & QStyle::State_Selected) {
-        paintPen.setStyle(Qt::DashLine);
-    }
-    if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = lwtPen;
-    }
-    painter->setPen(paintPen);
-
-    painter->drawPath(objTextPath);
-}
-
-/**
- *
- */
-void
-Geometry::updateRubber(QPainter* painter)
-{
-    String rubberMode = objRubberMode;
-    if (rubberMode == "OBJ_RUBBER_TEXTSINGLE") {
-        setObjectTextFont(objectRubberText("TEXT_FONT"));
-        setObjectTextJustify(objectRubberText("TEXT_JUSTIFY"));
-        setObjectPos(objectRubberPoint("TEXT_POINT"));
-        QPointF hr = objectRubberPoint("TEXT_HEIGHT_ROTATION");
-        setObjectTextSize(hr.x());
-        setRotation(hr.y());
-        setObjectText(objectRubberText("TEXT_RAPID"));
-    }
-    else if (rubberMode == "OBJ_RUBBER_GRIP") {
-        if (painter) {
-            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if (gripPoint == scenePos()) {
-                painter->drawPath(path().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
-            }
-
-            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
-    }
-}
-#endif
-
 /**
  *
  */
@@ -3945,14 +3674,61 @@ Geometry::subPathList()
 void
 Geometry::script_main(void)
 {
-    if (properties["script"].s == "circle") {
+    switch (Type) {
+    case OBJ_TYPE_CIRCLE: {
         properties["mode"] = node("CIRCLE_MODE_1P_RAD");
         StringList script = {
             "init",
             "clear_selection",
-            "set-prompt-prefix " + _mainWin->tr("Specify center point for circle or [3P/2P/TTR (tan tan radius)]: ").toStdString()
+            "set-prompt-prefix-tr Specify center point for circle or [3P/2P/TTR (tan tan radius)]: "
         };
         run_script(script);
+        break;
+    }
+    case OBJ_TYPE_ELLIPSE: {
+        properties["mode"] = node("MODE_MAJORDIAMETER_MINORRADIUS");
+        /*
+        properties["width"];
+        properties["height"];
+        properties["rot"];
+        StringList script = {
+            "init",
+            "clear-selection",
+            "set-prompt-prefix-tr Specify first axis start point or [Center]: "
+        };
+        run_script(script);
+        */
+        break;
+    }
+    /*
+    case DISTANCE:
+        actuator("init");
+        actuator("clear-selection");
+        actuator("set-prompt-prefix-tr Specify first point: "));
+        break;
+
+    case DOLPHIN: {
+        
+        actuator("init");
+        actuator("clear-selection");
+
+        properties["numPoints"] = node(512); //Default //TODO: min:64 max:8192
+        properties["center.x"] = node(0.0f);
+        properties["center.y"] = node(0.0f);
+        properties["sx"] = node(0.04f); //Default
+        properties["sy"] = node(0.04f); //Default
+        properties["mode"] = node(DOLPHIN_MODE_NUM_POINTS);
+
+        addRubber("POLYGON");
+        setRubberMode("POLYGON");
+        updateDolphin(properties["numPoints, properties["sx, properties["sy);
+        spareRubber("POLYGON");
+        actuator("end");
+        break;
+    }
+    */
+    default:
+        break;
     }
 }
 
@@ -3965,8 +3741,23 @@ Geometry::script_context(String str)
 
 }
 
+
 /**
- * .
+ * @brief circle_click
+ * @return
+ *
+ * ### CIRCLE_MODE_1P_RAD mode
+ *
+ * For the circle object currently focussed,
+ * show two rubber points: one for the centre (the anchor) and
+ * the other at some point on the radius to adjust the radius.
+ *
+ * ### CIRCLE_MODE_1P_DIA mode
+ *
+ * For the circle object currently focussed,
+ * show two rubber points: one for the left of the diameter and one for the right.
+ * These rubber points can be moved around the circle, but they always
+ * oppose one another.
  */
 void
 Geometry::script_click(EmbVector v)
@@ -3983,34 +3774,20 @@ Geometry::script_prompt(String str)
 
 }
 
-
 #if 0
-/**
- * @brief circle_click
- * @return
- *
- * In CIRCLE_MODE_1P_RAD mode: for the circle object currently focussed,
- * show two rubber points: one for the centre (the anchor) and
- * the other at some point on the radius to adjust the radius.
- *
- * In CIRCLE_MODE_1P_DIA For the curcle object currently focussed,
- * show two rubber points: one for the left of the diameter and one for the right.
- * These rubber points can be moved around the circle, but they always
- * oppose one another.
- */
 void
 Geometry::circle_click(EmbVector v)
 {
     if (properties["mode"].s == "CIRCLE_MODE_1P_RAD") {
-        auto iter = properties["find("point1");
-        if (iter == properties["end()) {
+        auto iter = properties.find("point1");
+        if (iter == properties.end()) {
             properties["point1"] = node(v);
             properties["center"] = node(v);
             addRubber("CIRCLE");
             setRubberMode("CIRCLE_1P_RAD");
-            setRubberPoint("CIRCLE_CENTER", properties["center.x, properties["center.y);
+            setRubberPoint("CIRCLE_CENTER", properties["center.x"].r, properties["center.y"].r);
             actuator("append-prompt");
-            setPromptPrefix(tr("Specify radius of circle or [Diameter]: "));
+            actuator("set-prompt-prefix-tr Specify radius of circle or [Diameter]: ");
         }
         else {
             properties["point2"] = node(v);
@@ -4020,36 +3797,36 @@ Geometry::circle_click(EmbVector v)
             actuator("end");
         }
     }
-    else if (properties["mode"].s == MODE_1P_DIA) {
-        auto iter = properties["find("point1");
-        if (iter == properties["end()) {
+    else if (properties["mode"].s == "CIRCLE_MODE_1P_DIA") {
+        auto iter = properties.find("point1");
+        if (iter == properties.end()) {
             error("CIRCLE", tr("This should never happen."));
         }
         else {
-            properties["x2 = x;
-            properties["y2 = y;
-            setRubberPoint("CIRCLE_DIAMETER", properties["x2, properties["y2);
+            properties["x2"] = node(v.x);
+            properties["y2"] = node(v.y);
+            setRubberPoint("CIRCLE_DIAMETER", properties["x2"].r, properties["y2"].r);
             actuator("vulcanize");
-            appendPromptHistory();
+            actuator("append-prompt-history");
             actuator("end");
         }
     }
-    else if (properties["mode"].s == "MODE_2P") {
-        auto iter1 = properties["find("point1");
-        auto iter2 = properties["find("point2");
-        if (iter1 == properties["end()) {
-            properties["point1 = v;
+    else if (properties["mode"].s == "CIRCLE_MODE_2P") {
+        auto iter1 = properties.find("point1");
+        auto iter2 = properties.find("point2");
+        if (iter1 == properties.end()) {
+            properties["point1"] = node(v);
             addRubber("CIRCLE");
             setRubberMode("CIRCLE_2P");
             setRubberPoint("CIRCLE_TAN1", v);
-            appendPromptHistory();
-            setPromptPrefix(tr("Specify second end point of circle's diameter: "));
+            actuator("append-prompt-history");
+            actuator("set-prompt-prefix-tr Specify second end point of circle's diameter: "));
         }
-        else if (iter2 == properties["end()) {
-            properties["point2 = v;
+        else if (iter2 == properties.end()) {
+            properties["point2"] = node(v);
             setRubberPoint("CIRCLE_TAN2", v);
             actuator("vulcanize");
-            appendPromptHistory();
+            actuator("append-prompt-history");
             actuator("end");
         }
         else {
@@ -4057,56 +3834,58 @@ Geometry::circle_click(EmbVector v)
         }
     }
     else if (properties["mode"].s == MODE_3P) {
-        if (std::isnan(properties["x1)) {
-            properties["x1 = x;
-            properties["y1 = y;
-            appendPromptHistory();
-            setPromptPrefix(tr("Specify second point on circle: "));
+        if (std::isnan(properties["x1"].r)) {
+            properties["x1"] = node(x);
+            properties["y1"] = node(y);
+            actuator("append-prompt-history");
+            actuator("set-prompt-prefix-tr Specify second point on circle: "));
         }
-        else if (std::isnan(properties["x2)) {
-            properties["x2 = x;
-            properties["y2 = y;
+        else if (std::isnan(properties["x2"])) {
+            properties["x2"] = node(x);
+            properties["y2"] = node(y);
             addRubber("CIRCLE");
             setRubberMode("CIRCLE_3P");
-            setRubberPoint("CIRCLE_TAN1", properties["x1, properties["y1);
-            setRubberPoint("CIRCLE_TAN2", properties["x2, properties["y2);
-            appendPromptHistory();
-            setPromptPrefix(tr("Specify third point on circle: "));
+            setRubberPoint("CIRCLE_TAN1", properties["x1"].r, properties["y1"].r);
+            setRubberPoint("CIRCLE_TAN2", properties["x2"].r, properties["y2"].r);
+            run_script({
+                "append-prompt-history",
+                "set-prompt-prefix-tr Specify third point on circle: "
+            });
         }
         else if (std::isnan(properties["x3)) {
-            properties["x3 = x;
-            properties["y3 = y;
-            setRubberPoint("CIRCLE_TAN3", properties["x3, properties["y3);
-            actuator("vulcanize");
-            appendPromptHistory();
-            actuator("end");
-        }
-        else {
-            error("CIRCLE", tr("This should never happen."));
+            properties["x3"] = node(x);
+            properties["y3"] = node(y);
+            setRubberPoint("CIRCLE_TAN3", properties["x3"].r, properties["y3"].r);
+            run_script({
+                "vulcanize",
+                "append-prompt-history",
+                "end"
+            });
         }
     }
-    else if (properties["mode"].s == MODE_TTR) {
-        if (std::isnan(properties["x1)) {
-            properties["x1 = x;
-            properties["y1 = y;
-            appendPromptHistory();
-            setPromptPrefix(tr("Specify point on object for second tangent of circle: "));
-        }
-        else if (std::isnan(properties["x2)) {
-            properties["x2 = x;
-            properties["y2 = y;
-            appendPromptHistory();
-            setPromptPrefix(tr("Specify radius of circle: "));
-        }
-        else if (std::isnan(properties["x3)) {
-            properties["x3 = x;
-            properties["y3 = y;
-            appendPromptHistory();
-            setPromptPrefix(tr("Specify second point: "));
-        }
-        else {
-            todo("CIRCLE", "click() for TTR");
-        }
+    else if (properties["mode"].s == "MODE_TTR") {
+        properties["x1"] = node(x);
+        properties["y1"] = node(y);
+        actuator("append-prompt-history");
+        actuator("set-prompt-prefix-tr Specify point on object for second tangent of circle: "));
+        properties["mode"] = node("MODE_TTR_SET_POINT_2");
+    }
+    else if (properties["mode"].s == "MODE_TTR_SET_POINT_2")) {
+        properties["x2"] = node(x);
+        properties["y2"] = node(y);
+        actuator("append-prompt-history");
+        actuator("set-prompt-prefix-tr Specify radius of circle: "));
+        properties["mode"] = node("MODE_TTR_SET_POINT_3");
+    }
+    else if (properties["mode"].s == "MODE_TTR_SET_POINT_3")) {
+        properties["x3"] = node(x);
+        properties["y3"] = node(y);
+        actuator("append-prompt-history");
+        actuator("set-prompt-prefix-tr Specify second point: "));
+        properties["mode"] = node("DEFAULT");
+    }
+    else {
+        error("CIRCLE", tr("This should never happen."));
     }
 }
 
@@ -4116,7 +3895,7 @@ Geometry::circle_click(EmbVector v)
 void
 Geometry::circle_context(String str)
 {
-    //todo("CIRCLE", "context()");
+    todo("CIRCLE", "context()");
 }
 
 /**
@@ -4126,24 +3905,24 @@ void
 Geometry::circle_prompt(String str)
 {
     if (properties["mode"].s == MODE_1P_RAD) {
-        if (std::isnan(properties["x1)) {
+        if (std::isnan(properties["x1"].r)) {
             if (str == "2P") {
                 properties["mode"].s = MODE_2P;
-                setPromptPrefix(tr("Specify first end point of circle's diameter: "));
+                actuator("set-prompt-prefix-tr Specify first end point of circle's diameter: "));
             }
             else if (str == "3P") {
                 properties["mode"].s = MODE_3P;
-                setPromptPrefix(tr("Specify first point of circle: "));
+                actuator("set-prompt-prefix-tr Specify first point of circle: "));
             }
             else if (str == "T" || str == "TTR") {
                 properties["mode"].s = MODE_TTR;
-                setPromptPrefix(tr("Specify point on object for first tangent of circle: "));
+                actuator("set-prompt-prefix-tr Specify point on object for first tangent of circle: "));
             }
             else {
                 EmbReal strList = str.split(",");
                 if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                     alert(tr("Point or option keyword required."));
-                    setPromptPrefix(tr("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
+                    actuator("set-prompt-prefix-tr Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
                 }
                 else {
                     properties["x1 = node(strList[0]);
@@ -4153,7 +3932,7 @@ Geometry::circle_prompt(String str)
                     addRubber("CIRCLE");
                     setRubberMode("CIRCLE_1P_RAD");
                     setRubberPoint("CIRCLE_CENTER", properties["center.x, properties["center.y);
-                    setPromptPrefix(tr("Specify radius of circle or [Diameter]: "));
+                    actuator("set-prompt-prefix-tr Specify radius of circle or [Diameter]: "));
                 }
             }
         }
@@ -4161,13 +3940,13 @@ Geometry::circle_prompt(String str)
             if (str == "D" || str == "DIAMETER") {
                 properties["mode"].s = MODE_1P_DIA;
                 setRubberMode("CIRCLE_1P_DIA");
-                setPromptPrefix(tr("Specify diameter of circle: "));
+                actuator("set-prompt-prefix-tr Specify diameter of circle: "));
             }
             else {
                 EmbReal num = node(str);
                 if (std::isnan(num)) {
                     alert(tr("Requires numeric radius, point on circumference, or \"D\"."));
-                    setPromptPrefix(tr("Specify radius of circle or [Diameter]: "));
+                    actuator("set-prompt-prefix-tr Specify radius of circle or [Diameter]: "));
                 }
                 else {
                     properties["rad = num;
@@ -4181,19 +3960,19 @@ Geometry::circle_prompt(String str)
         }
     }
     else if (properties["mode"].s == MODE_1P_DIA) {
-        if (std::isnan(properties["x1)) {
+        if (std::isnan(properties["x1"].r)) {
             error("CIRCLE", tr("This should never happen."));
         }
-        if (std::isnan(properties["x2)) {
+        if (std::isnan(properties["x2"])) {
             EmbReal num = node(str);
             if (std::isnan(num)) {
                 alert(tr("Requires numeric distance or second point."));
-                setPromptPrefix(tr("Specify diameter of circle: "));
+                actuator("set-prompt-prefix-tr Specify diameter of circle: "));
             }
             else {
-                properties["dia = num;
-                properties["x2 = properties["x1 + properties["dia;
-                properties["y2 = properties["y1;
+                properties["dia"] = num;
+                properties["x2"] = properties["x1"].r + properties["dia"].r;
+                properties["y2"] = properties["y1"].r;
                 setRubberPoint("CIRCLE_DIAMETER", properties["x2, properties["y2);
                 actuator("vulcanize");
                 actuator("end");
@@ -4203,31 +3982,31 @@ Geometry::circle_prompt(String str)
             error("CIRCLE", tr("This should never happen."));
         }
     }
-    else if (properties["mode"].s == MODE_2P) {
-        if (std::isnan(properties["x1)) {
+    else if (properties["mode"].s == "MODE_2P") {
+        if (std::isnan(properties["x1"].r)) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Invalid point."));
-                setPromptPrefix(tr("Specify first end point of circle's diameter: "));
+                actuator("set-prompt-prefix-tr Specify first end point of circle's diameter: "));
             }
             else {
-                properties["x1 = node(strList[0]);
-                properties["y1 = node(strList[1]);
+                properties["x1"] = node(strList[0]);
+                properties["y1"] = node(strList[1]);
                 addRubber("CIRCLE");
                 setRubberMode("CIRCLE_2P");
                 setRubberPoint("CIRCLE_TAN1", properties["x1, properties["y1);
-                setPromptPrefix(tr("Specify second end point of circle's diameter: "));
+                actuator("set-prompt-prefix-tr Specify second end point of circle's diameter: "));
             }
         }
-        else if (std::isnan(properties["x2)) {
+        else if (std::isnan(properties["x2"])) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Invalid point."));
-                setPromptPrefix(tr("Specify second end point of circle's diameter: "));
+                actuator("set-prompt-prefix-tr Specify second end point of circle's diameter: "));
             }
             else {
-                properties["x2 = node(strList[0]);
-                properties["y2 = node(strList[1]);
+                properties["x2"] = node(strList[0]);
+                properties["y2"] = node(strList[1]);
                 setRubberPoint("CIRCLE_TAN2", properties["x2, properties["y2);
                 actuator("vulcanize");
                 actuator("end");
@@ -4238,43 +4017,43 @@ Geometry::circle_prompt(String str)
         }
     }
     else if (properties["mode"].s == MODE_3P) {
-        if (std::isnan(properties["x1)) {
+        if (std::isnan(properties["x1"].r)) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Invalid point."));
-                setPromptPrefix(tr("Specify first point of circle: "));
+                actuator("set-prompt-prefix-tr Specify first point of circle: "));
             }
             else {
-                properties["x1 = node(strList[0]);
-                properties["y1 = node(strList[1]);
-                setPromptPrefix(tr("Specify second point of circle: "));
+                properties["x1"] = node(strList[0]);
+                properties["y1"] = node(strList[1]);
+                actuator("set-prompt-prefix-tr Specify second point of circle: "));
             }
         }
-        else if (std::isnan(properties["x2)) {
+        else if (std::isnan(properties["x2"])) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Invalid point."));
-                setPromptPrefix(tr("Specify second point of circle: "));
+                actuator("set-prompt-prefix-tr Specify second point of circle: "));
             }
             else {
-                properties["x2 = node(strList[0]);
-                properties["y2 = node(strList[1]);
+                properties["x2"] = node(strList[0]);
+                properties["y2"] = node(strList[1]);
                 addRubber("CIRCLE");
                 setRubberMode("CIRCLE_3P");
                 setRubberPoint("CIRCLE_TAN1", properties["x1, properties["y1);
                 setRubberPoint("CIRCLE_TAN2", properties["x2, properties["y2);
-                setPromptPrefix(tr("Specify third point of circle: "));
+                actuator("set-prompt-prefix-tr Specify third point of circle: "));
             }
         }
         else if (std::isnan(properties["x3)) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Invalid point."));
-                setPromptPrefix(tr("Specify third point of circle: "));
+                actuator("set-prompt-prefix-tr Specify third point of circle: "));
             }
             else {
-                properties["x3 = node(strList[0]);
-                properties["y3 = node(strList[1]);
+                properties["x3"] = node(strList[0]);
+                properties["y3"] = node(strList[1]);
                 setRubberPoint("CIRCLE_TAN3", properties["x3, properties["y3);
                 actuator("vulcanize");
                 actuator("end");
@@ -4293,32 +4072,21 @@ Geometry::circle_prompt(String str)
  * .
  */
 void
-Geometry::distance_main(void)
-{
-    initCommand();
-    clearSelection();
-    setPromptPrefix(tr("Specify first point: "));
-}
-
-/**
- * .
- */
-void
 Geometry::distance_click(EmbVector v)
 {
-    if (std::isnan(properties["x1)) {
-        properties["x1 = x;
-        properties["y1 = y;
+    if (std::isnan(properties["x1"].r)) {
+        properties["x1"] = v.x;
+        properties["y1"] = v.y;
         addRubber("LINE");
         setRubberMode("LINE");
         setRubberPoint("LINE_START", properties["x1, properties["y1);
-        appendPromptHistory();
-        setPromptPrefix(tr("Specify second point: "));
+        actuator("append-prompt-history");
+        actuator("set-prompt-prefix-tr Specify second point: "));
     }
     else {
-        appendPromptHistory();
-        properties["x2 = x;
-        properties["y2 = y;
+        actuator("append-prompt-history");
+        properties["x2"] = v.x;
+        properties["y2"] = v.y;
         reportDistance();
         actuator("end");
     }
@@ -4332,7 +4100,7 @@ Geometry::distance_click(EmbVector v)
 void
 Geometry::distance_context(String args)
 {
-    //todo("DISTANCE", "context()");
+    todo("DISTANCE", "context()");
 }
 
 /**
@@ -4344,28 +4112,28 @@ void
 Geometry::distance_prompt(String args)
 {
     EmbReal strList = str.split(",");
-    if (std::isnan(properties["x1)) {
+    if (std::isnan(properties["x1"].r)) {
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Requires numeric distance or two points."));
-            setPromptPrefix(tr("Specify first point: "));
+            actuator("set-prompt-prefix-tr Specify first point: "));
         }
         else {
-            properties["x1 = node(strList[0]);
-            properties["y1 = node(strList[1]);
+            properties["x1"] = node(strList[0]);
+            properties["y1"] = node(strList[1]);
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", properties["x1, properties["y1);
-            setPromptPrefix(tr("Specify second point: "));
+            actuator("set-prompt-prefix-tr Specify second point: "));
         }
     }
     else {
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Requires numeric distance or two points."));
-            setPromptPrefix(tr("Specify second point: "));
+            actuator("set-prompt-prefix-tr Specify second point: "));
         }
         else {
-            properties["x2 = node(strList[0]);
-            properties["y2 = node(strList[1]);
+            properties["x2"] = node(strList[0]);
+            properties["y2"] = node(strList[1]);
             reportDistance();
             actuator("end");
         }
@@ -4393,38 +4161,10 @@ Geometry::reportDistance()
     EmbReal dist = calculateDistance(properties["x1, properties["y1, properties["x2, properties["y2);
     EmbReal angle = calculateAngle(properties["x1, properties["y1, properties["x2, properties["y2);
 
-    setPromptPrefix(tr("Distance") + " = " + dist.toString() + ", " + tr("Angle") + " = " + angle.toString());
-    appendPromptHistory();
-    setPromptPrefix(tr("Delta X") + " = " + dx.toString() + ", " + tr("Delta Y") + " = " + dy.toString());
-    appendPromptHistory();
-}
-
-/**
- *
- */
-void
-Geometry::dolphin_main(String args)
-{
-    initCommand();
-    clearSelection();
-
-    properties["numPoints"] = node(512); //Default //TODO: min:64 max:8192
-    properties["center.x"] = node(0.0f);
-    properties["center.y;
-    properties["sx = 0.04; //Default
-    properties["sy = 0.04; //Default
-    properties["numPoints;
-    properties["mode"].s;
-
-    properties["center.x = NaN;
-    properties["center.y = NaN;
-    properties["mode"].s = MODE_NUM_POINTS;
-
-    addRubber("POLYGON");
-    setRubberMode("POLYGON");
-    updateDolphin(properties["numPoints, properties["sx, properties["sy);
-    spareRubber("POLYGON");
-    actuator("end");
+    actuator("set-prompt-prefix-tr Distance") + " = " + dist.toString() + ", " + tr("Angle") + " = " + angle.toString());
+    actuator("append-prompt-history");
+    actuator("set-prompt-prefix-tr Delta X") + " = " + dx.toString() + ", " + tr("Delta Y") + " = " + dy.toString());
+    actuator("append-prompt-history");
 }
 
 /**
@@ -4446,71 +4186,52 @@ Geometry::update_dolphin(int numPoints, EmbReal xScale, EmbReal yScale)
 }
 
 /**
- * @brief ellipse_main
- * @return
- */
-void
-Geometry::ellipse_main(void)
-{
-    properties["mode"].s = node("MODE_MAJORDIAMETER_MINORRADIUS");
-    /*
-    properties["width;
-    properties["height;
-    properties["rot;
-    properties["mode"].s;
-    initCommand();
-    clearSelection();
-    setPromptPrefix(tr("Specify first axis start point or [Center]: "));
-    */
-}
-
-/**
  * .
  */
 void
 Geometry::ellipse_click(EmbVector v)
 {
     if (properties["mode"].s == MODE_MAJORDIAMETER_MINORRADIUS) {
-        if (std::isnan(properties["x1)) {
+        if (std::isnan(properties["x1"].r)) {
             properties["x1"] = node(v.x);
             properties["y1"] = node(v.y);
             addRubber("ELLIPSE");
             setRubberMode("ELLIPSE_LINE");
             setRubberPoint("ELLIPSE_LINE_POINT1", properties["x1, properties["y1);
-            appendPromptHistory();
-            setPromptPrefix(tr("Specify first axis end point: "));
+            actuator("append-prompt-history");
+            actuator("set-prompt-prefix-tr Specify first axis end point: "));
         }
-        else if (std::isnan(properties["x2)) {
+        else if (std::isnan(properties["x2"])) {
             properties["x2"] = node(v.x);
             properties["y2"] = node(v.y);
             properties["center.x"] = node((properties["x1"].r + properties["x2"].r)/2.0);
             properties["center.y"] = node((properties["y1"].r + properties["y2"].r)/2.0);
-            properties["width = calculateDistance(properties["x1, properties["y1, properties["x2, properties["y2);
-            properties["rot = calculateAngle(properties["x1, properties["y1, properties["x2, properties["y2);
+            properties["width = calculateDistance(properties["x1"], properties["y1"], properties["x2"], properties["y2"]);
+            properties["rot = calculateAngle(properties["x1"], properties["y1"], properties["x2"], properties["y2"]);
             setRubberMode("ELLIPSE_MAJORDIAMETER_MINORRADIUS");
             setRubberPoint("ELLIPSE_AXIS1_POINT1", properties["x1, properties["y1);
             setRubberPoint("ELLIPSE_AXIS1_POINT2", properties["x2, properties["y2);
             setRubberPoint("ELLIPSE_CENTER", properties["center.x, properties["center.y);
             setRubberPoint("ELLIPSE_WIDTH", properties["width, 0);
             setRubberPoint("ELLIPSE_ROT", properties["rot, 0);
-            appendPromptHistory();
-            setPromptPrefix(tr("Specify second axis end point or [Rotation]: "));
+            actuator("append-prompt-history");
+            actuator("set-prompt-prefix-tr Specify second axis end point or [Rotation]: "));
         }
-        else if (std::isnan(properties["x3)) {
-            properties["x3 = x;
-            properties["y3 = y;
+        else if (std::isnan(properties["x3"])) {
+            properties["x3"] = x;
+            properties["y3"] = y;
             properties["height = perpendicularDistance(properties["x3, properties["y3, properties["x1, properties["y1, properties["x2, properties["y2)*2.0;
             setRubberPoint("ELLIPSE_AXIS2_POINT2", properties["x3, properties["y3);
             actuator("vulcanize");
-            appendPromptHistory();
+            actuator("append-prompt-history");
             actuator("end");
         }
         else {
             error("ELLIPSE", tr("This should never happen."));
         }
     }
-    else if (properties["mode"].s == MODE_MAJORRADIUS_MINORRADIUS) {
-        if (std::isnan(properties["x1)) {
+    else if (properties["mode"].s == "ELLIPSE_MODE_MAJORRADIUS_MINORRADIUS") {
+        if (std::isnan(properties["x1"].r)) {
             properties["x1 = x;
             properties["y1 = y;
             properties["center.x = properties["x1;
@@ -4519,10 +4240,10 @@ Geometry::ellipse_click(EmbVector v)
             setRubberMode("ELLIPSE_LINE");
             setRubberPoint("ELLIPSE_LINE_POINT1", properties["x1, properties["y1);
             setRubberPoint("ELLIPSE_CENTER", properties["center.x, properties["center.y);
-            appendPromptHistory();
-            setPromptPrefix(tr("Specify first axis end point: "));
+            actuator("append-prompt-history");
+            actuator("set-prompt-prefix-tr Specify first axis end point: "));
         }
-        else if (std::isnan(properties["x2)) {
+        else if (std::isnan(properties["x2"])) {
             properties["x2 = x;
             properties["y2 = y;
             properties["width = calculateDistance(properties["center.x, properties["center.y, properties["x2, properties["y2)*2.0;
@@ -4531,8 +4252,8 @@ Geometry::ellipse_click(EmbVector v)
             setRubberPoint("ELLIPSE_AXIS1_POINT2", properties["x2, properties["y2);
             setRubberPoint("ELLIPSE_WIDTH", properties["width, 0);
             setRubberPoint("ELLIPSE_ROT", properties["rot, 0);
-            appendPromptHistory();
-            setPromptPrefix(tr("Specify second axis end point or [Rotation]: "));
+            actuator("append-prompt-history");
+            actuator("set-prompt-prefix-tr Specify second axis end point or [Rotation]: "));
         }
         else if (std::isnan(properties["x3)) {
             properties["x3 = x;
@@ -4540,7 +4261,7 @@ Geometry::ellipse_click(EmbVector v)
             properties["height = perpendicularDistance(properties["x3, properties["y3, properties["center.x, properties["center.y, properties["x2, properties["y2)*2.0;
             setRubberPoint("ELLIPSE_AXIS2_POINT2", properties["x3, properties["y3);
             actuator("vulcanize");
-            appendPromptHistory();
+            actuator("append-prompt-history");
             actuator("end");
         }
         else {
@@ -4548,17 +4269,17 @@ Geometry::ellipse_click(EmbVector v)
         }
     }
     else if (properties["mode"].s == MODE_ELLIPSE_ROTATION) {
-        if (std::isnan(properties["x1)) {
+        if (std::isnan(properties["x1"].r)) {
             error("ELLIPSE", tr("This should never happen."));
         }
-        else if (std::isnan(properties["x2)) {
+        else if (std::isnan(properties["x2"])) {
             error("ELLIPSE", tr("This should never happen."));
         }
         else if (std::isnan(properties["x3)) {
             EmbReal angle = calculateAngle(properties["center.x, properties["center.y, x, y);
             properties["height = cos(angle*PI/180.0)*properties["width;
             addEllipse(properties["center.x, properties["center.y, properties["width, properties["height, properties["rot, false);
-            appendPromptHistory();
+            actuator("append-prompt-history");
             actuator("end");
         }
     }
@@ -4584,59 +4305,59 @@ void
 Geometry::ellipse_prompt(String args)
 {
     if (properties["mode"].s == MODE_MAJORDIAMETER_MINORRADIUS) {
-        if (std::isnan(properties["x1)) {
+        if (std::isnan(properties["x1"].r)) {
             if (str == "C" || str == "CENTER") {
                 properties["mode"].s = MODE_MAJORRADIUS_MINORRADIUS;
-                setPromptPrefix(tr("Specify center point: "));
+                actuator("set-prompt-prefix-tr Specify center point: "));
             }
             else {
                 EmbReal strList = str.split(",");
                 if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                     alert(tr("Point or option keyword required."));
-                    setPromptPrefix(tr("Specify first axis start point or [Center]: "));
+                    actuator("set-prompt-prefix-tr Specify first axis start point or [Center]: "));
                 }
                 else {
-                    properties["x1 = node(strList[0]);
-                    properties["y1 = node(strList[1]);
+                    properties["x1"] = node(strList[0]);
+                    properties["y1"] = node(strList[1]);
                     addRubber("ELLIPSE");
                     setRubberMode("ELLIPSE_LINE");
                     setRubberPoint("ELLIPSE_LINE_POINT1", properties["x1, properties["y1);
-                    setPromptPrefix(tr("Specify first axis end point: "));
+                    actuator("set-prompt-prefix-tr Specify first axis end point: "));
                 }
             }
         }
-        else if (std::isnan(properties["x2)) {
+        else if (std::isnan(properties["x2"])) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Invalid point."));
-                setPromptPrefix(tr("Specify first axis end point: "));
+                actuator("set-prompt-prefix-tr Specify first axis end point: "));
             }
             else {
-                properties["x2 = node(strList[0]);
-                properties["y2 = node(strList[1]);
-                properties["center.x = (properties["x1 + properties["x2)/2.0;
-                properties["center.y = (properties["y1 + properties["y2)/2.0;
-                properties["width = calculateDistance(properties["x1, properties["y1, properties["x2, properties["y2);
-                properties["rot = calculateAngle(properties["x1, properties["y1, properties["x2, properties["y2);
+                properties["x2"] = node(strList[0]);
+                properties["y2"] = node(strList[1]);
+                properties["center.x"] = (properties["x1 + properties["x2"])/2.0;
+                properties["center.y"] = (properties["y1 + properties["y2)/2.0;
+                properties["width"] = calculateDistance(properties["x1, properties["y1, properties["x2, properties["y2);
+                properties["rot"] = calculateAngle(properties["x1, properties["y1, properties["x2, properties["y2);
                 setRubberMode("ELLIPSE_MAJORDIAMETER_MINORRADIUS");
                 setRubberPoint("ELLIPSE_AXIS1_POINT1", properties["x1, properties["y1);
                 setRubberPoint("ELLIPSE_AXIS1_POINT2", properties["x2, properties["y2);
                 setRubberPoint("ELLIPSE_CENTER", properties["center.x, properties["center.y);
                 setRubberPoint("ELLIPSE_WIDTH", properties["width, 0);
                 setRubberPoint("ELLIPSE_ROT", properties["rot, 0);
-                setPromptPrefix(tr("Specify second axis end point or [Rotation]: "));
+                actuator("set-prompt-prefix-tr Specify second axis end point or [Rotation]: "));
             }
         }
         else if (std::isnan(properties["x3)) {
             if (str == "R" || str == "ROTATION") {
                 properties["mode"].s = MODE_ELLIPSE_ROTATION;
-                setPromptPrefix(tr("Specify rotation: "));
+                actuator("set-prompt-prefix-tr Specify rotation: "));
             }
             else {
                 EmbReal strList = str.split(",");
                 if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                     alert(tr("Point or option keyword required."));
-                    setPromptPrefix(tr("Specify second axis end point or [Rotation]: "));
+                    actuator("set-prompt-prefix-tr Specify second axis end point or [Rotation]: "));
                 }
                 else {
                     properties["x3 = node(strList[0]);
@@ -4650,11 +4371,11 @@ Geometry::ellipse_prompt(String args)
         }
     }
     else if (properties["mode"].s == MODE_MAJORRADIUS_MINORRADIUS) {
-        if (std::isnan(properties["x1)) {
+        if (std::isnan(properties["x1"].r)) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Invalid point."));
-                setPromptPrefix(tr("Specify center point: "));
+                actuator("set-prompt-prefix-tr Specify center point: "));
             }
             else {
                 properties["x1 = node(strList[0]);
@@ -4665,14 +4386,14 @@ Geometry::ellipse_prompt(String args)
                 setRubberMode("ELLIPSE_LINE");
                 setRubberPoint("ELLIPSE_LINE_POINT1", properties["x1, properties["y1);
                 setRubberPoint("ELLIPSE_CENTER", properties["center.x, properties["center.y);
-                setPromptPrefix(tr("Specify first axis end point: "));
+                actuator("set-prompt-prefix-tr Specify first axis end point: "));
             }
         }
-        else if (std::isnan(properties["x2)) {
+        else if (std::isnan(properties["x2"])) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Invalid point."));
-                setPromptPrefix(tr("Specify first axis end point: "));
+                actuator("set-prompt-prefix-tr Specify first axis end point: "));
             }
             else {
                 properties["x2 = node(strList[0]);
@@ -4683,19 +4404,19 @@ Geometry::ellipse_prompt(String args)
                 setRubberPoint("ELLIPSE_AXIS1_POINT2", properties["x2, properties["y2);
                 setRubberPoint("ELLIPSE_WIDTH", properties["width, 0);
                 setRubberPoint("ELLIPSE_ROT", properties["rot, 0);
-                setPromptPrefix(tr("Specify second axis end point or [Rotation]: "));
+                actuator("set-prompt-prefix-tr Specify second axis end point or [Rotation]: "));
             }
         }
         else if (std::isnan(properties["x3)) {
             if (str == "R" || str == "ROTATION") {
                 properties["mode"].s = MODE_ELLIPSE_ROTATION;
-                setPromptPrefix(tr("Specify ellipse rotation: "));
+                actuator("set-prompt-prefix-tr Specify ellipse rotation: "));
             }
             else {
                 EmbReal strList = str.split(",");
                 if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                     alert(tr("Point or option keyword required."));
-                    setPromptPrefix(tr("Specify second axis end point or [Rotation]: "));
+                    actuator("set-prompt-prefix-tr Specify second axis end point or [Rotation]: "));
                 }
                 else {
                     properties["x3 = node(strList[0]);
@@ -4709,16 +4430,16 @@ Geometry::ellipse_prompt(String args)
         }
     }
     else if (properties["mode"].s == MODE_ELLIPSE_ROTATION) {
-        if (std::isnan(properties["x1)) {
+        if (std::isnan(properties["x1"].r)) {
             error("ELLIPSE", tr("This should never happen."));
         }
-        else if (std::isnan(properties["x2)) {
+        else if (std::isnan(properties["x2"])) {
             error("ELLIPSE", tr("This should never happen."));
         }
         else if (std::isnan(properties["x3)) {
             if (std::isnan(str)) {
                 alert(tr("Invalid angle. Input a numeric angle or pick a point."));
-                setPromptPrefix(tr("Specify rotation: "));
+                actuator("set-prompt-prefix-tr Specify rotation: "));
             }
             else {
                 EmbReal angle = node(str);
@@ -4733,7 +4454,7 @@ Geometry::ellipse_prompt(String args)
 void
 Geometry::erase_main(void)
 {
-    initCommand();
+    actuator("init");
 
     if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
@@ -4758,10 +4479,10 @@ Geometry::heart_main(void)
     properties["sy = 1.0;
     properties["numPoints;
     properties["mode"].s;
-    initCommand();
-    clearSelection();
-    properties["center.x = NaN;
-    properties["center.y = NaN;
+    actuator("init");
+    actuator("clear-selection");
+    properties["center.x = node(0.0f);
+    properties["center.y = node(0.0f);
     properties["mode"].s = MODE_NUM_POINTS;
 
     //Heart4: 10.0 / 512
@@ -4802,12 +4523,12 @@ Geometry::updateHeart(style, numPoints, xScale, yScale)
 void
 Geometry::line_main(void)
 {
-    initCommand();
-    clearSelection();
+    actuator("init");
+    actuator("clear-selection");
     properties["firstRun = true;
-    properties["first = {NaN, NaN};
-    properties["prev = {NaN, NaN};
-    setPromptPrefix(tr("Specify first point: "));
+    properties["first = {node(0.0f), node(0.0f)};
+    properties["prev = {node(0.0f), node(0.0f)};
+    actuator("set-prompt-prefix-tr Specify first point: "));
 }
 
 
@@ -4816,15 +4537,15 @@ Geometry::line_click(x, y)
 {
     if (properties["firstRun) {
         properties["firstRun = false;
-        properties["firstX = x;
+        properties["first.x"] = x;
         properties["firstY = y;
-        properties["prevX = x;
+        properties["prev.x"] = x;
         properties["prevY = y;
         addRubber("LINE");
         setRubberMode("LINE");
         setRubberPoint("LINE_START", properties["firstX, properties["firstY);
-        appendPromptHistory();
-        setPromptPrefix(tr("Specify next point or [Undo]: "));
+        actuator("append-prompt-history");
+        actuator("set-prompt-prefix-tr Specify next point or [Undo]: "));
     }
     else {
         setRubberPoint("LINE_END", x, y);
@@ -4832,8 +4553,8 @@ Geometry::line_click(x, y)
         addRubber("LINE");
         setRubberMode("LINE");
         setRubberPoint("LINE_START", x, y);
-        appendPromptHistory();
-        properties["prevX = x;
+        actuator("append-prompt-history");
+        properties["prev.x"] = x;
         properties["prevY = y;
     }
 }
@@ -4851,18 +4572,18 @@ Geometry::line_prompt(String args)
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
-            setPromptPrefix(tr("Specify first point: "));
+            actuator("set-prompt-prefix-tr Specify first point: "));
         }
         else {
             properties["firstRun = false;
-            properties["firstX = node(strList[0]);
+            properties["first.x"] = node(strList[0]);
             properties["firstY = node(strList[1]);
-            properties["prevX = properties["firstX;
+            properties["prev.x"] = properties["firstX;
             properties["prevY = properties["firstY;
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", properties["firstX, properties["firstY);
-            setPromptPrefix(tr("Specify next point or [Undo]: "));
+            actuator("set-prompt-prefix-tr Specify next point or [Undo]: "));
         }
     }
     else {
@@ -4873,7 +4594,7 @@ Geometry::line_prompt(String args)
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Point or option keyword required."));
-                setPromptPrefix(tr("Specify next point or [Undo]: "));
+                actuator("set-prompt-prefix-tr Specify next point or [Undo]: "));
             }
             else {
                 EmbReal x = node(strList[0]);
@@ -4883,9 +4604,9 @@ Geometry::line_prompt(String args)
                 addRubber("LINE");
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", x, y);
-                properties["prevX = x;
+                properties["prev.x"] = x;
                 properties["prevY = y;
-                setPromptPrefix(tr("Specify next point or [Undo]: "));
+                actuator("set-prompt-prefix-tr Specify next point or [Undo]: "));
             }
         }
     }
@@ -4898,9 +4619,9 @@ Geometry::line_prompt(String args)
 void
 Geometry::locate_point_main(void)
 {
-    initCommand();
-    clearSelection();
-    setPromptPrefix(tr("Specify point: "));
+    actuator("init");
+    actuator("clear-selection");
+    actuator("set-prompt-prefix-tr Specify point: "));
 }
 
 /**
@@ -4912,16 +4633,16 @@ Geometry::locate_point_main(void)
 void
 Geometry::locate_point_click(EmbVector v)
 {
-    appendPromptHistory();
-    setPromptPrefix("X = " + v.x + ", Y = " + v.y);
-    appendPromptHistory();
+    actuator("append-prompt-history");
+    setPromptPrefix(".x"] = " + v.x + ", Y = " + v.y);
+    actuator("append-prompt-history");
     actuator("end");
 }
 
 void
 Geometry::locate_point_context(String str)
 {
-    //todo("LOCATEPOINT", "context()");
+    todo("LOCATEPOINT", "context()");
 }
 
 void
@@ -4930,11 +4651,11 @@ Geometry::locate_point_prompt(String args)
     StringList strList = tokenize(args, ',');
     if (std::isnan(strList[0]) || std::isnan(strList[1])) {
         alert(tr("Invalid point."));
-        setPromptPrefix(tr("Specify point: "));
+        actuator("set-prompt-prefix-tr Specify point: "));
     }
     else {
         actuator("append-prompt");
-        actuator("set-prompt-prefix X = " + strList[0] + ", Y = " + strList[1]);
+        actuator("set-prompt-prefix .x"] = " + strList[0] + ", Y = " + strList[1]);
         actuator("append-prompt");
         actuator("end");
     }
@@ -4946,14 +4667,14 @@ Geometry::locate_point_prompt(String args)
 void
 Geometry::move_main(void)
 {
-    initCommand();
+    actuator("init");
     properties["firstRun = true;
-    properties["baseX  = NaN;
-    properties["baseY  = NaN;
-    properties["destX  = NaN;
-    properties["destY  = NaN;
-    properties["deltaX = NaN;
-    properties["deltaY = NaN;
+    properties["baseX  = node(0.0f);
+    properties["baseY  = node(0.0f);
+    properties["destX  = node(0.0f);
+    properties["destY  = node(0.0f);
+    properties["delta.x"] = node(0.0f);
+    properties["deltaY = node(0.0f);
 
     if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
@@ -4962,7 +4683,7 @@ Geometry::move_main(void)
         messageBox("information", tr("Move Preselect"), tr("Preselect objects before invoking the move command."));
     }
     else {
-        setPromptPrefix(tr("Specify base point: "));
+        actuator("set-prompt-prefix-tr Specify base point: "));
     }
 }
 
@@ -4974,19 +4695,19 @@ Geometry::move_click(x, y)
 {
     if (properties["firstRun) {
         properties["firstRun = false;
-        properties["baseX = x;
+        properties["base.x"] = x;
         properties["baseY = y;
         addRubber("LINE");
         setRubberMode("LINE");
         setRubberPoint("LINE_START", properties["baseX, properties["baseY);
         previewOn("SELECTED", "MOVE", properties["baseX, properties["baseY, 0);
-        appendPromptHistory();
-        setPromptPrefix(tr("Specify destination point: "));
+        actuator("append-prompt-history");
+        actuator("set-prompt-prefix-tr Specify destination point: "));
     }
     else {
-        properties["destX = x;
+        properties["dest.x"] = x;
         properties["destY = y;
-        properties["deltaX = properties["destX - properties["baseX;
+        properties["delta.x"] = properties["destX - properties["baseX;
         properties["deltaY = properties["destY - properties["baseY;
         moveSelected(properties["deltaX, properties["deltaY);
         previewOff();
@@ -5014,29 +4735,29 @@ Geometry::move_prompt(String str)
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
-            setPromptPrefix(tr("Specify base point: "));
+            actuator("set-prompt-prefix-tr Specify base point: "));
         }
         else {
             properties["firstRun = false;
-            properties["baseX = node(strList[0]);
+            properties["base.x"] = node(strList[0]);
             properties["baseY = node(strList[1]);
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", properties["baseX, properties["baseY);
             previewOn("SELECTED", "MOVE", properties["baseX, properties["baseY, 0);
-            setPromptPrefix(tr("Specify destination point: "));
+            actuator("set-prompt-prefix-tr Specify destination point: "));
         }
     }
     else {
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
-            setPromptPrefix(tr("Specify destination point: "));
+            actuator("set-prompt-prefix-tr Specify destination point: "));
         }
         else {
-            properties["destX = node(strList[0]);
+            properties["dest.x"] = node(strList[0]);
             properties["destY = node(strList[1]);
-            properties["deltaX = properties["destX - properties["baseX;
+            properties["delta.x"] = properties["destX - properties["baseX;
             properties["deltaY = properties["destY - properties["baseY;
             moveSelected(properties["deltaX, properties["deltaY);
             previewOff();
@@ -5054,10 +4775,10 @@ Geometry::path_main(void)
     properties["firstRun;
     properties["first;
     properties["prev;
-    initCommand();
-    clearSelection();
+    actuator("init");
+    actuator("clear-selection");
     properties["firstRun"] = node(true);
-    setPromptPrefix(tr("Specify start point: "));
+    actuator("set-prompt-prefix-tr Specify start point: "));
 }
 
 
@@ -5066,18 +4787,18 @@ Geometry::path_click(x, y)
 {
     if (properties["firstRun) {
         properties["firstRun = false;
-        properties["firstX = x;
+        properties["first.x"] = x;
         properties["firstY = y;
-        properties["prevX = x;
+        properties["prev.x"] = x;
         properties["prevY = y;
         addPath(x,y);
-        appendPromptHistory();
-        setPromptPrefix(tr("Specify next point or [Arc/Undo]: "));
+        actuator("append-prompt-history");
+        actuator("set-prompt-prefix-tr Specify next point or [Arc/Undo]: "));
     }
     else {
-        appendPromptHistory();
+        actuator("append-prompt-history");
         appendLineToPath(x,y);
-        properties["prevX = x;
+        properties["prev.x"] = x;
         properties["prevY = y;
     }
 }
@@ -5101,23 +4822,23 @@ Geometry::path_prompt(String args)
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Point or option keyword required."));
-            setPromptPrefix(tr("Specify next point or [Arc/Undo]: "));
+            actuator("set-prompt-prefix-tr Specify next point or [Arc/Undo]: "));
         }
         else {
             EmbReal x = node(strList[0]);
             EmbReal y = node(strList[1]);
             if (properties["firstRun) {
                 properties["firstRun = false;
-                properties["firstX = x;
+                properties["first.x"] = x;
                 properties["firstY = y;
-                properties["prevX = x;
+                properties["prev.x"] = x;
                 properties["prevY = y;
                 addPath(x,y);
-                setPromptPrefix(tr("Specify next point or [Arc/Undo]: "));
+                actuator("set-prompt-prefix-tr Specify next point or [Arc/Undo]: "));
             }
             else {
                 appendLineToPath(x,y);
-                properties["prevX = x;
+                properties["prev.x"] = x;
                 properties["prevY = y;
             }
         }
@@ -5127,12 +4848,12 @@ Geometry::path_prompt(String args)
 void
 Geometry::point_main(void)
 {
-    initCommand();
-    clearSelection();
+    actuator("init");
+    actuator("clear-selection");
     properties["firstRun = true;
     setPromptPrefix("TODO: Current point settings: PDMODE=?  PDSIZE=?"); //TODO: tr needed here when complete
-    appendPromptHistory();
-    setPromptPrefix(tr("Specify first point: "));
+    actuator("append-prompt-history");
+    actuator("set-prompt-prefix-tr Specify first point: "));
 }
 
 
@@ -5141,12 +4862,12 @@ Geometry::point_click(EmbVector v)
 {
     if (properties["firstRun) {
         properties["firstRun = false;
-        appendPromptHistory();
-        setPromptPrefix(tr("Specify next point: "));
+        actuator("append-prompt-history");
+        actuator("set-prompt-prefix-tr Specify next point: "));
         addPoint(x,y);
     }
     else {
-        appendPromptHistory();
+        actuator("append-prompt-history");
         addPoint(x,y);
     }
 }
@@ -5170,13 +4891,13 @@ Geometry::point_prompt(String str)
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
-            setPromptPrefix(tr("Specify first point: "));
+            actuator("set-prompt-prefix-tr Specify first point: "));
         }
         else {
             properties["firstRun = false;
             EmbReal x = node(strList[0]);
             EmbReal y = node(strList[1]);
-            setPromptPrefix(tr("Specify next point: "));
+            actuator("set-prompt-prefix-tr Specify next point: "));
             addPoint(x,y);
         }
     }
@@ -5184,12 +4905,12 @@ Geometry::point_prompt(String str)
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
-            setPromptPrefix(tr("Specify next point: "));
+            actuator("set-prompt-prefix-tr Specify next point: "));
         }
         else {
             EmbReal x = node(strList[0]);
             EmbReal y = node(strList[1]);
-            setPromptPrefix(tr("Specify next point: "));
+            actuator("set-prompt-prefix-tr Specify next point: "));
             addPoint(x,y);
         }
     }
@@ -5201,22 +4922,22 @@ Geometry::point_prompt(String str)
 void
 Geometry::polygon_main(void)
 {
-    initCommand();
-    clearSelection();
-    properties["centerX = NaN;
-    properties["centerY = NaN;
-    properties["sideX1  = NaN;
-    properties["sideY1  = NaN;
-    properties["sideX2  = NaN;
-    properties["sideY2  = NaN;
-    properties["pointIX = NaN;
-    properties["pointIY = NaN;
-    properties["pointCX = NaN;
-    properties["pointCY = NaN;
+    actuator("init");
+    actuator("clear-selection");
+    properties["center.x"] = node(0.0f);
+    properties["centerY = node(0.0f);
+    properties["sideX1  = node(0.0f);
+    properties["sideY1  = node(0.0f);
+    properties["sideX2  = node(0.0f);
+    properties["sideY2  = node(0.0f);
+    properties["pointI.x"] = node(0.0f);
+    properties["pointIY = node(0.0f);
+    properties["pointC.x"] = node(0.0f);
+    properties["pointCY = node(0.0f);
     properties["polyType = "Inscribed"; //Default
     properties["numSides = 4;           //Default
     properties["mode"].s = MODE_NUM_SIDES;
-    setPromptPrefix(tr("Enter number of sides") + " {" + properties["numSides.toString() + "}: ");
+    actuator("set-prompt-prefix-tr Enter number of sides") + " {" + properties["numSides.toString() + "}: ");
 }
 
 /**
@@ -5229,29 +4950,29 @@ Geometry::polygon_click(EmbVector v)
         //Do nothing, the prompt controls this.
     }
     else if (properties["mode"].s == MODE_CENTER_PT) {
-        properties["centerX = x;
+        properties["center.x"] = x;
         properties["centerY = y;
         properties["mode"].s = MODE_POLYTYPE;
-        appendPromptHistory();
-        setPromptPrefix(tr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + properties["polyType + "}: ");
+        actuator("append-prompt-history");
+        actuator("set-prompt-prefix-tr Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + properties["polyType + "}: ");
     }
     else if (properties["mode"].s == MODE_POLYTYPE) {
         //Do nothing, the prompt controls this.
     }
     else if (properties["mode"].s == MODE_INSCRIBE) {
-        properties["pointIX = x;
+        properties["pointI.x"] = x;
         properties["pointIY = y;
         setRubberPoint("POLYGON_INSCRIBE_POINT", properties["pointIX, properties["pointIY);
         actuator("vulcanize");
-        appendPromptHistory();
+        actuator("append-prompt-history");
         actuator("end");
     }
     else if (properties["mode"].s == MODE_CIRCUMSCRIBE) {
-        properties["pointCX = x;
+        properties["pointC.x"] = x;
         properties["pointCY = y;
         setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", properties["pointCX, properties["pointCY);
         actuator("vulcanize");
-        appendPromptHistory();
+        actuator("append-prompt-history");
         actuator("end");
     }
     else if (properties["mode"].s == MODE_DISTANCE) {
@@ -5268,7 +4989,7 @@ Geometry::polygon_click(EmbVector v)
 void
 Geometry::polygon_context(String str)
 {
-    //todo("POLYGON", "context()");
+    todo("POLYGON", "context()");
 }
 
 /**
@@ -5279,18 +5000,18 @@ Geometry::polygon_prompt(String str)
 {
     if (properties["mode"].s == MODE_NUM_SIDES) {
         if (str == "" && properties["numSides >= 3 && properties["numSides <= 1024) {
-            setPromptPrefix(tr("Specify center point or [Sidelength]: "));
+            actuator("set-prompt-prefix-tr Specify center point or [Sidelength]: "));
             properties["mode"].s = MODE_CENTER_PT;
         }
         else {
             EmbReal tmp = node(str);
             if (std::isnan(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024) {
                 alert(tr("Requires an integer between 3 and 1024."));
-                setPromptPrefix(tr("Enter number of sides") + " {" + properties["numSides.toString() + "}: ");
+                actuator("set-prompt-prefix-tr Enter number of sides") + " {" + properties["numSides.toString() + "}: ");
             }
             else {
                 properties["numSides = tmp;
-                setPromptPrefix(tr("Specify center point or [Sidelength]: "));
+                actuator("set-prompt-prefix-tr Specify center point or [Sidelength]: "));
                 properties["mode"].s = MODE_CENTER_PT;
             }
         }
@@ -5298,19 +5019,19 @@ Geometry::polygon_prompt(String str)
     else if (properties["mode"].s == MODE_CENTER_PT) {
         if (str == "S" || str == "SIDELENGTH") {
             properties["mode"].s = MODE_SIDE_LEN;
-            setPromptPrefix(tr("Specify start point: "));
+            actuator("set-prompt-prefix-tr Specify start point: "));
         }
         else {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Point or option keyword required."));
-                setPromptPrefix(tr("Specify center point or [Sidelength]: "));
+                actuator("set-prompt-prefix-tr Specify center point or [Sidelength]: "));
             }
             else {
-                properties["centerX = node(strList[0]);
-                properties["centerY = node(strList[1]);
+                properties["center.x"] = node(strList[0]);
+                properties["center.y"] = node(strList[1]);
                 properties["mode"].s = MODE_POLYTYPE;
-                setPromptPrefix(tr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + properties["polyType + "}: ");
+                actuator("set-prompt-prefix-tr Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + properties["polyType + "}: ");
             }
         }
     }
@@ -5318,7 +5039,7 @@ Geometry::polygon_prompt(String str)
         if (str == "INSCRIBED") {
             properties["mode"].s = MODE_INSCRIBE;
             properties["polyType = "Inscribed";
-            setPromptPrefix(tr("Specify polygon corner point or [Distance]: "));
+            actuator("set-prompt-prefix-tr Specify polygon corner point or [Distance]: "));
             addRubber("POLYGON");
             setRubberMode("POLYGON_INSCRIBE");
             setRubberPoint("POLYGON_CENTER", properties["centerX, properties["centerY);
@@ -5327,7 +5048,7 @@ Geometry::polygon_prompt(String str)
         else if (str == "CIRCUMSCRIBED") {
             properties["mode"].s = MODE_CIRCUMSCRIBE;
             properties["polyType = "Circumscribed";
-            setPromptPrefix(tr("Specify polygon side point or [Distance]: "));
+            actuator("set-prompt-prefix-tr Specify polygon side point or [Distance]: "));
             addRubber("POLYGON");
             setRubberMode("POLYGON_CIRCUMSCRIBE");
             setRubberPoint("POLYGON_CENTER", properties["centerX, properties["centerY);
@@ -5336,7 +5057,7 @@ Geometry::polygon_prompt(String str)
         else if (str == "") {
             if (properties["polyType == "Inscribed") {
                 properties["mode"].s = MODE_INSCRIBE;
-                setPromptPrefix(tr("Specify polygon corner point or [Distance]: "));
+                actuator("set-prompt-prefix-tr Specify polygon corner point or [Distance]: "));
                 addRubber("POLYGON");
                 setRubberMode("POLYGON_INSCRIBE");
                 setRubberPoint("POLYGON_CENTER", properties["centerX, properties["centerY);
@@ -5344,7 +5065,7 @@ Geometry::polygon_prompt(String str)
             }
             else if (properties["polyType == "Circumscribed") {
                 properties["mode"].s = MODE_CIRCUMSCRIBE;
-                setPromptPrefix(tr("Specify polygon side point or [Distance]: "));
+                actuator("set-prompt-prefix-tr Specify polygon side point or [Distance]: "));
                 addRubber("POLYGON");
                 setRubberMode("POLYGON_CIRCUMSCRIBE");
                 setRubberPoint("POLYGON_CENTER", properties["centerX, properties["centerY);
@@ -5356,23 +5077,23 @@ Geometry::polygon_prompt(String str)
         }
         else {
             alert(tr("Invalid option keyword."));
-            setPromptPrefix(tr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + properties["polyType + "}: ");
+            actuator("set-prompt-prefix-tr Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + properties["polyType + "}: ");
         }
     }
     else if (properties["mode"].s == MODE_INSCRIBE) {
         if (str == "D" || str == "DISTANCE") {
             properties["mode"].s = MODE_DISTANCE;
-            setPromptPrefix(tr("Specify distance: "));
+            actuator("set-prompt-prefix-tr Specify distance: "));
         }
         else {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Point or option keyword required."));
-                setPromptPrefix(tr("Specify polygon corner point or [Distance]: "));
+                actuator("set-prompt-prefix-tr Specify polygon corner point or [Distance]: "));
             }
             else {
-                properties["pointIX = node(strList[0]);
-                properties["pointIY = node(strList[1]);
+                properties["pointI.x"] = node(strList[0]);
+                properties["pointI.y"] = node(strList[1]);
                 setRubberPoint("POLYGON_INSCRIBE_POINT", properties["pointIX, properties["pointIY);
                 actuator("vulcanize");
                 actuator("end");
@@ -5382,17 +5103,17 @@ Geometry::polygon_prompt(String str)
     else if (properties["mode"].s == MODE_CIRCUMSCRIBE) {
         if (str == "D" || str == "DISTANCE") {
             properties["mode"].s = MODE_DISTANCE;
-            setPromptPrefix(tr("Specify distance: "));
+            actuator("set-prompt-prefix-tr Specify distance: "));
         }
         else {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Point or option keyword required."));
-                setPromptPrefix(tr("Specify polygon side point or [Distance]: "));
+                actuator("set-prompt-prefix-tr Specify polygon side point or [Distance]: "));
             }
             else {
-                properties["pointCX = node(strList[0]);
-                properties["pointCY = node(strList[1]);
+                properties["pointC.x"] = node(strList[0]);
+                properties["pointC.y"] = node(strList[1]);
                 setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", properties["pointCX, properties["pointCY);
                 actuator("vulcanize");
                 actuator("end");
@@ -5402,19 +5123,19 @@ Geometry::polygon_prompt(String str)
     else if (properties["mode"].s == MODE_DISTANCE) {
         if (std::isnan(str)) {
             alert(tr("Requires valid numeric distance."));
-            setPromptPrefix(tr("Specify distance: "));
+            actuator("set-prompt-prefix-tr Specify distance: "));
         }
         else {
             if (properties["polyType == "Inscribed") {
-                properties["pointIX = properties["centerX;
-                properties["pointIY = properties["centerY + node(str);
+                properties["pointI.x"] = properties["centerX;
+                properties["pointI.y"] = properties["centerY + node(str);
                 setRubberPoint("POLYGON_INSCRIBE_POINT", properties["pointIX, properties["pointIY);
                 actuator("vulcanize");
                 actuator("end");
             }
             else if (properties["polyType == "Circumscribed") {
-                properties["pointCX = properties["centerX;
-                properties["pointCY = properties["centerY + node(str);
+                properties["pointC.x"] = properties["centerX;
+                properties["pointC.y"] = properties["centerY + node(str);
                 setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", properties["pointCX, properties["pointCY);
                 actuator("vulcanize");
                 actuator("end");
@@ -5435,15 +5156,7 @@ Geometry::polygon_prompt(String str)
 void
 Geometry::polyline_main(void)
 {
-    initCommand();
-    clearSelection();
-    properties["firstRun = true;
-    properties["firstX = NaN;
-    properties["firstY = NaN;
-    properties["prevX = NaN;
-    properties["prevY = NaN;
-    properties["num = 0;
-    setPromptPrefix(tr("Specify first point: "));
+    script(polyline_init);
 }
 
 /**
@@ -5454,24 +5167,24 @@ Geometry::polyline_click(EmbVector v)
 {
     if (properties["firstRun"].b) {
         properties["firstRun = false;
-        properties["firstX = x;
-        properties["firstY = y;
-        properties["prevX = x;
-        properties["prevY = y;
+        properties["first.x"] = x;
+        properties["first.y"] = y;
+        properties["prev.x"] = x;
+        properties["prev.y"] = y;
         addRubber("POLYLINE");
         setRubberMode("POLYLINE");
         setRubberPoint("POLYLINE_POINT_0", properties["firstX, properties["firstY);
-        appendPromptHistory();
-        setPromptPrefix(tr("Specify next point or [Undo]: "));
+        actuator("append-prompt-history");
+        actuator("set-prompt-prefix-tr Specify next point or [Undo]: "));
     }
     else {
         properties["num++;
         setRubberPoint("POLYLINE_POINT_" + properties["num.toString(), x, y);
         setRubberText("POLYLINE_NUM_POINTS", properties["num.toString());
         spareRubber("POLYLINE");
-        appendPromptHistory();
-        properties["prevX = x;
-        properties["prevY = y;
+        actuator("append-prompt-history");
+        properties["prev.x"] = x;
+        properties["prev.y"] = y;
     }
 }
 
@@ -5481,7 +5194,7 @@ Geometry::polyline_click(EmbVector v)
 void
 Geometry::polyline_context(String str)
 {
-    //todo("POLYLINE", "context()");
+    todo("POLYLINE", "context()");
 }
 
 /**
@@ -5494,18 +5207,18 @@ Geometry::polyline_prompt(String str)
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
-            setPromptPrefix(tr("Specify first point: "));
+            actuator("set-prompt-prefix-tr Specify first point: "));
         }
         else {
             properties["firstRun = false;
-            properties["firstX = node(strList[0]);
-            properties["firstY = node(strList[1]);
-            properties["prevX = properties["firstX;
-            properties["prevY = properties["firstY;
+            properties["first.x"] = node(strList[0]);
+            properties["first.y"] = node(strList[1]);
+            properties["prev.x"] = properties["firstX;
+            properties["prev.y"] = properties["firstY;
             addRubber("POLYLINE");
             setRubberMode("POLYLINE");
             setRubberPoint("POLYLINE_POINT_0", properties["firstX, properties["firstY);
-            setPromptPrefix(tr("Specify next point or [Undo]: "));
+            actuator("set-prompt-prefix-tr Specify next point or [Undo]: "));
         }
     }
     else {
@@ -5516,18 +5229,18 @@ Geometry::polyline_prompt(String str)
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Point or option keyword required."));
-                setPromptPrefix(tr("Specify next point or [Undo]: "));
+                actuator("set-prompt-prefix-tr Specify next point or [Undo]: "));
             }
             else {
-                EmbReal x = node(strList[0]);
+                EmbReal .x"] = node(strList[0]);
                 EmbReal y = node(strList[1]);
                 properties["num++;
                 setRubberPoint("POLYLINE_POINT_" + properties["num.toString(), x, y);
                 setRubberText("POLYLINE_NUM_POINTS", properties["num.toString());
                 spareRubber("POLYLINE");
-                properties["prevX = x;
-                properties["prevY = y;
-                setPromptPrefix(tr("Specify next point or [Undo]: "));
+                properties["prev.x"] = x;
+                properties["prev.y"] = y;
+                actuator("set-prompt-prefix-tr Specify next point or [Undo]: "));
             }
         }
     }
@@ -5540,13 +5253,13 @@ Geometry::polyline_prompt(String str)
 void
 Geometry::quickleader_main(void)
 {
-    initCommand();
-    clearSelection();
-    properties["x1 = NaN;
-    properties["y1 = NaN;
-    properties["x2 = NaN;
-    properties["y2 = NaN;
-    setPromptPrefix(tr("Specify first point: "));
+    actuator("init");
+    actuator("clear-selection");
+    properties["x1"] = node(0.0f);
+    properties["y1"] = node(0.0f);
+    properties["x2"] = node(0.0f);
+    properties["y2"] = node(0.0f);
+    actuator("set-prompt-prefix-tr Specify first point: "));
 }
 
 /**
@@ -5555,21 +5268,21 @@ Geometry::quickleader_main(void)
 void
 Geometry::quickleader_click(EmbVector v)
 {
-    if (std::isnan(properties["x1)) {
+    if (std::isnan(properties["x1"].r)) {
         properties["x1 = x;
         properties["y1 = y;
         addRubber("DIMLEADER");
         setRubberMode("DIMLEADER_LINE");
-        setRubberPoint("DIMLEADER_LINE_START", properties["x1, properties["y1);
-        appendPromptHistory();
-        setPromptPrefix(tr("Specify second point: "));
+        setRubberPoint("DIMLEADER_LINE_START", properties["x1"].r, properties["y1"].r);
+        actuator("append-prompt-history");
+        actuator("set-prompt-prefix-tr Specify second point: "));
     }
     else {
         properties["x2 = x;
         properties["y2 = y;
-        setRubberPoint("DIMLEADER_LINE_END", properties["x2, properties["y2);
+        setRubberPoint("DIMLEADER_LINE_END", properties["x2"].r, properties["y2"].r);
         actuator("vulcanize");
-        appendPromptHistory();
+        actuator("append-prompt-history");
         actuator("end");
     }
 }
@@ -5580,7 +5293,7 @@ Geometry::quickleader_click(EmbVector v)
 void
 Geometry::quickleader_context(String str)
 {
-    //todo("QUICKLEADER", "context()");
+    todo("QUICKLEADER", "context()");
 }
 
 /**
@@ -5590,10 +5303,10 @@ void
 Geometry::quickleader_prompt(String str)
 {
     EmbReal strList = str.split(",");
-    if (std::isnan(properties["x1)) {
+    if (std::isnan(properties["x1"].r)) {
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Requires two points."));
-            setPromptPrefix(tr("Specify first point: "));
+            actuator("set-prompt-prefix-tr Specify first point: "));
         }
         else {
             properties["x1 = node(strList[0]);
@@ -5601,13 +5314,13 @@ Geometry::quickleader_prompt(String str)
             addRubber("DIMLEADER");
             setRubberMode("DIMLEADER_LINE");
             setRubberPoint("DIMLEADER_LINE_START", properties["x1, properties["y1);
-            setPromptPrefix(tr("Specify second point: "));
+            actuator("set-prompt-prefix-tr Specify second point: "));
         }
     }
     else {
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Requires two points."));
-            setPromptPrefix(tr("Specify second point: "));
+            actuator("set-prompt-prefix-tr Specify second point: "));
         }
         else {
             properties["x2 = node(strList[0]);
@@ -5625,14 +5338,16 @@ Geometry::quickleader_prompt(String str)
 void
 Geometry::rectangle_main(void)
 {
-    initCommand();
-    clearSelection();
-    properties["newRect = true;
-    properties["x1 = NaN;
-    properties["y1 = NaN;
-    properties["x2 = NaN;
-    properties["y2 = NaN;
-    setPromptPrefix(tr("Specify first corner point or [Chamfer/Fillet]: "));
+    script({
+        "init",
+        "clear-selection",
+        "newRect=true",
+        "x1=0.0f",
+        "y1=0.0f",
+        "x2=0.0f",
+        "y2=0.0f",
+        "set-prompt-prefix-tr Specify first corner point or [Chamfer/Fillet]: "
+    });
 }
 
 /**
@@ -5641,19 +5356,19 @@ Geometry::rectangle_main(void)
 void
 Geometry::rectangle_click(EmbVector v)
 {
-    if (properties["newRect) {
-        properties["newRect = false;
-        properties["x1 = x;
-        properties["y1 = y;
+    if (properties["newRect"].b) {
+        properties["newRect"].b = false;
+        properties["x1"] = node(v.x);
+        properties["y1"] = node(v.y);
         addRubber("RECTANGLE");
         setRubberMode("RECTANGLE");
         setRubberPoint("RECTANGLE_START", x, y);
-        setPromptPrefix(tr("Specify other corner point or [Dimensions]: "));
+        actuator("set-prompt-prefix-tr Specify other corner point or [Dimensions]: "));
     }
     else {
-        properties["newRect = true;
-        properties["x2 = x;
-        properties["y2 = y;
+        properties["newRect"].b = true;
+        properties["x2"] = node(v.x);
+        properties["y2"] = node(v.y);
         setRubberPoint("RECTANGLE_END", x, y);
         actuator("vulcanize");
         actuator("end");
@@ -5666,7 +5381,7 @@ Geometry::rectangle_click(EmbVector v)
 void
 Geometry::rectangle_context(String str)
 {
-    //todo("RECTANGLE", "context()");
+    todo("RECTANGLE", "context()");
 }
 
 /**
@@ -5688,7 +5403,7 @@ Geometry::rectangle_prompt(String str)
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
-            setPromptPrefix(tr("Specify first point: "));
+            actuator("set-prompt-prefix-tr Specify first point: "));
         }
         else {
             EmbReal x = node(strList[0]);
@@ -5700,7 +5415,7 @@ Geometry::rectangle_prompt(String str)
                 addRubber("RECTANGLE");
                 setRubberMode("RECTANGLE");
                 setRubberPoint("RECTANGLE_START", x, y);
-                setPromptPrefix(tr("Specify other corner point or [Dimensions]: "));
+                actuator("set-prompt-prefix-tr Specify other corner point or [Dimensions]: "));
             }
             else {
                 properties["newRect = true;
@@ -5720,10 +5435,10 @@ Geometry::rectangle_prompt(String str)
 void
 Geometry::rgb_main(void)
 {
-    initCommand();
-    clearSelection();
-    properties["mode"] = node("RGB_MODE_BACKGROUND");
-    setPromptPrefix(tr("Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: "));
+    actuator("init");
+    actuator("clear-selection");
+    actuator("mode=RGB_MODE_BACKGROUND");
+    actuator("set-prompt-prefix-tr Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: "));
 }
 
 /**
@@ -5741,7 +5456,7 @@ Geometry::rgb_click(EmbVector v)
 void
 Geometry::rgb_context(String str)
 {
-    //todo("RGB", "context()");
+    todo("RGB", "context()");
 }
 
 /**
@@ -5752,12 +5467,12 @@ Geometry::rgb_prompt(String str)
 {
     if (properties["mode"].s == "RGB_MODE_BACKGROUND") {
         if (str == "C" || str == "CROSSHAIR") {
-            properties["mode"].s = node("RGB_MODE_CROSSHAIR");
-            setPromptPrefix(tr("Specify crosshair color: "));
+            properties["mode"] = node("RGB_MODE_CROSSHAIR");
+            actuator("set-prompt-prefix-tr Specify crosshair color: "));
         }
         else if (str == "G" || str == "GRID") {
             properties["mode"].s = RGB_MODE_GRID;
-            setPromptPrefix(tr("Specify grid color: "));
+            actuator("set-prompt-prefix-tr Specify grid color: "));
         }
         else {
             EmbReal strList = str.split(",");
@@ -5766,7 +5481,7 @@ Geometry::rgb_prompt(String str)
             EmbReal b = node(strList[2]);
             if (!validRGB(r,g,b)) {
                 alert(tr("Invalid color. R,G,B values must be in the range of 0-255."));
-                setPromptPrefix(tr("Specify background color: "));
+                actuator("set-prompt-prefix-tr Specify background color: "));
             }
             else {
                 setBackgroundColor(r,g,b);
@@ -5781,7 +5496,7 @@ Geometry::rgb_prompt(String str)
         EmbReal b = node(strList[2]);
         if (!validRGB(r,g,b)) {
             alert(tr("Invalid color. R,G,B values must be in the range of 0-255."));
-            setPromptPrefix(tr("Specify crosshair color: "));
+            actuator("set-prompt-prefix-tr Specify crosshair color: "));
         }
         else {
             setCrossHairColor(r,g,b);
@@ -5795,7 +5510,7 @@ Geometry::rgb_prompt(String str)
         EmbReal b = node(strList[2]);
         if (!validRGB(r,g,b)) {
             alert(tr("Invalid color. R,G,B values must be in the range of 0-255."));
-            setPromptPrefix(tr("Specify grid color: "));
+            actuator("set-prompt-prefix-tr Specify grid color: "));
         }
         else {
             setGridColor(r,g,b);
@@ -5805,35 +5520,22 @@ Geometry::rgb_prompt(String str)
 }
 
 /**
- * .
  * Command: Rotate
- *
- * bool firstRun;
- * EmbVector base;
- * EmbVector dest;
- * EmbReal angle;
- *
- * EmbVector baseR;
- * EmbVector destR;
- * EmbReal angleRef;
- * EmbReal angleNew;
- *
- * int mode;
  */
 void
 Geometry::rotate_main(String args)
 {
-    initCommand();
+    actuator("init");
     properties["mode"].s = ROTATE_MODE_NORMAL;
     properties["firstRun = true;
-    properties["base = {NaN, NaN};
-    properties["dest = {NaN, NaN};
-    properties["angle = NaN;
+    properties["base = {node(0.0f), node(0.0f)};
+    properties["dest = {node(0.0f), node(0.0f)};
+    properties["angle = node(0.0f);
 
-    properties["baseR = {NaN, NaN};
-    properties["destR = {NaN, NaN};
-    properties["angleRef = NaN;
-    properties["angleNew = NaN;
+    properties["baseR = {node(0.0f), node(0.0f)};
+    properties["destR = {node(0.0f), node(0.0f)};
+    properties["angleRef = node(0.0f);
+    properties["angleNew = node(0.0f);
 
     if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
@@ -5842,7 +5544,7 @@ Geometry::rotate_main(String args)
         messageBox("information", tr("Rotate Preselect"), tr("Preselect objects before invoking the rotate command."));
     }
     else {
-        setPromptPrefix(tr("Specify base point: "));
+        actuator("set-prompt-prefix-tr Specify base point: "));
     }
 }
 
@@ -5861,13 +5563,13 @@ Geometry::rotate_click(EmbVector v)
             setRubberMode("LINE");
             setRubberPoint("LINE_START", properties["baseX, properties["baseY);
             previewOn("SELECTED", "ROTATE", properties["baseX, properties["baseY, 0);
-            appendPromptHistory();
-            setPromptPrefix(tr("Specify rotation angle or [Reference]: "));
+            actuator("append-prompt-history");
+            actuator("set-prompt-prefix-tr Specify rotation angle or [Reference]: "));
         }
         else {
             properties["dest = v;
             properties["angle = calculateAngle(properties["baseX, properties["baseY, properties["destX, properties["destY);
-            appendPromptHistory();
+            actuator("append-prompt-history");
             rotateSelected(properties["baseX, properties["baseY, properties["angle);
             previewOff();
             actuator("end");
@@ -5876,19 +5578,19 @@ Geometry::rotate_click(EmbVector v)
     else if (properties["mode"].s == ROTATE_MODE_REFERENCE) {
         if (std::isnan(properties["baseRX)) {
             properties["baseR = v;
-            appendPromptHistory();
+            actuator("append-prompt-history");
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", properties["baseRX, properties["baseRY);
-            setPromptPrefix(tr("Specify second point: "));
+            actuator("set-prompt-prefix-tr Specify second point: "));
         }
         else if (std::isnan(properties["destRX)) {
             properties["destR = v;
             properties["angleRef = calculateAngle(properties["baseRX, properties["baseRY, properties["destRX, properties["destRY);
             setRubberPoint("LINE_START", properties["baseX, properties["baseY);
             previewOn("SELECTED", "ROTATE", properties["baseX, properties["baseY, properties["angleRef);
-            appendPromptHistory();
-            setPromptPrefix(tr("Specify the new angle: "));
+            actuator("append-prompt-history");
+            actuator("set-prompt-prefix-tr Specify the new angle: "));
         }
         else if (std::isnan(properties["angleNew)) {
             properties["angleNew = calculateAngle(properties["baseX, properties["baseY, x, y);
@@ -5906,7 +5608,7 @@ Geometry::rotate_click(EmbVector v)
 void
 Geometry::rotate_context(String str)
 {
-    //todo("ROTATE", "context()");
+    todo("ROTATE", "context()");
 }
 
 /**
@@ -5921,30 +5623,30 @@ Geometry::rotate_prompt(String str)
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Invalid point."));
-                setPromptPrefix(tr("Specify base point: "));
+                actuator("set-prompt-prefix-tr Specify base point: "));
             }
             else {
                 properties["firstRun = false;
-                properties["baseX = node(strList[0]);
-                properties["baseY = node(strList[1]);
+                properties["base.x"] = node(strList[0]);
+                properties["base.y"] = node(strList[1]);
                 addRubber("LINE");
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", properties["baseX, properties["baseY);
                 previewOn("SELECTED", "ROTATE", properties["baseX, properties["baseY, 0);
-                setPromptPrefix(tr("Specify rotation angle or [Reference]: "));
+                actuator("set-prompt-prefix-tr Specify rotation angle or [Reference]: "));
             }
         }
         else {
             if (str == "R" || str == "REFERENCE") {
                 properties["mode"].s = MODE_REFERENCE;
-                setPromptPrefix(tr("Specify the reference angle") + " {0.00}: ");
+                actuator("set-prompt-prefix-tr Specify the reference angle") + " {0.00}: ");
                 clearRubber();
                 previewOff();
             }
             else {
                 if (std::isnan(str)) {
                     alert(tr("Requires valid numeric angle, second point, or option keyword."));
-                    setPromptPrefix(tr("Specify rotation angle or [Reference]: "));
+                    actuator("set-prompt-prefix-tr Specify rotation angle or [Reference]: "));
                 }
                 else {
                     properties["angle = node(str);
@@ -5961,30 +5663,30 @@ Geometry::rotate_prompt(String str)
                 EmbReal strList = str.split(",");
                 if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                     alert(tr("Requires valid numeric angle or two points."));
-                    setPromptPrefix(tr("Specify the reference angle") + " {0.00}: ");
+                    actuator("set-prompt-prefix-tr Specify the reference angle") + " {0.00}: ");
                 }
                 else {
-                    properties["baseRX = node(strList[0]);
-                    properties["baseRY = node(strList[1]);
+                    properties["baseR.x"] = node(strList[0]);
+                    properties["baseR.y"] = node(strList[1]);
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", properties["baseRX, properties["baseRY);
-                    setPromptPrefix(tr("Specify second point: "));
+                    actuator("set-prompt-prefix-tr Specify second point: "));
                 }
             }
             else {
                 //The base and dest values are only set here to advance the command.
-                properties["baseRX = 0.0;
-                properties["baseRY = 0.0;
-                properties["destRX = 0.0;
-                properties["destRY = 0.0;
+                properties["baseR.x"] = 0.0;
+                properties["baseR.y"] = 0.0;
+                properties["destR.x"] = 0.0;
+                properties["destR.y"] = 0.0;
                 //The reference angle is what we will use later.
                 properties["angleRef = node(str);
                 addRubber("LINE");
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", properties["baseX, properties["baseY);
                 previewOn("SELECTED", "ROTATE", properties["baseX, properties["baseY, properties["angleRef);
-                setPromptPrefix(tr("Specify the new angle: "));
+                actuator("set-prompt-prefix-tr Specify the new angle: "));
             }
         }
         else if (std::isnan(properties["destRX)) {
@@ -5992,27 +5694,27 @@ Geometry::rotate_prompt(String str)
                 EmbReal strList = str.split(",");
                 if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                     alert(tr("Requires valid numeric angle or two points."));
-                    setPromptPrefix(tr("Specify second point: "));
+                    actuator("set-prompt-prefix-tr Specify second point: "));
                 }
                 else {
-                    properties["destRX = node(strList[0]);
-                    properties["destRY = node(strList[1]);
+                    properties["destR.x"] = node(strList[0]);
+                    properties["destR.y"] = node(strList[1]);
                     properties["angleRef = calculateAngle(properties["baseRX, properties["baseRY, properties["destRX, properties["destRY);
                     previewOn("SELECTED", "ROTATE", properties["baseX, properties["baseY, properties["angleRef);
                     setRubberPoint("LINE_START", properties["baseX, properties["baseY);
-                    setPromptPrefix(tr("Specify the new angle: "));
+                    actuator("set-prompt-prefix-tr Specify the new angle: "));
                 }
             }
             else {
                 //The base and dest values are only set here to advance the command.
-                properties["baseRX = 0.0;
-                properties["baseRY = 0.0;
-                properties["destRX = 0.0;
-                properties["destRY = 0.0;
+                properties["baseR.x"] = 0.0;
+                properties["baseR.y"] = 0.0;
+                properties["destR.x"] = 0.0;
+                properties["destR.y"] = 0.0;
                 //The reference angle is what we will use later.
                 properties["angleRef = node(str);
                 previewOn("SELECTED", "ROTATE", properties["baseX, properties["baseY, properties["angleRef);
-                setPromptPrefix(tr("Specify the new angle: "));
+                actuator("set-prompt-prefix-tr Specify the new angle: "));
             }
         }
         else if (std::isnan(properties["angleNew)) {
@@ -6020,7 +5722,7 @@ Geometry::rotate_prompt(String str)
                 EmbReal strList = str.split(",");
                 if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                     alert(tr("Requires valid numeric angle or second point."));
-                    setPromptPrefix(tr("Specify the new angle: "));
+                    actuator("set-prompt-prefix-tr Specify the new angle: "));
                 }
                 else {
                     EmbReal x = node(strList[0]);
@@ -6054,11 +5756,11 @@ properties["test2;
 void
 Geometry::sandbox_main(String str)
 {
-    initCommand();
+    actuator("init");
 
     //Report number of pre-selected objects
     setPromptPrefix("Number of Objects Selected: " + numSelected().toString());
-    appendPromptHistory();
+    actuator("append-prompt-history");
 
     mirrorSelected(0,0,0,1);
 
@@ -6067,8 +5769,8 @@ Geometry::sandbox_main(String str)
 
     //Polyline & Polygon Testing
 
-    EmbReal offsetX = 0.0;
-    EmbReal offsetY = 0.0;
+    EmbReal offset.x"] = 0.0;
+    EmbReal offset.y"] = 0.0;
 
     EmbReal polylineArray = [];
     polylineArray.push(1.0 + offsetX);
@@ -6089,8 +5791,8 @@ Geometry::sandbox_main(String str)
     polylineArray.push(1.0 + offsetY);
     addPolyline(polylineArray);
 
-    offsetX = 5.0;
-    offsetY = 0.0;
+    offset.x"] = 5.0;
+    offset.y"] = 0.0;
 
     EmbReal polygonArray = [];
     polygonArray.push(1.0 + offsetX);
@@ -6120,7 +5822,7 @@ Geometry::sandbox_main(String str)
 void
 Geometry::scale_main(void)
 {
-    initCommand();
+    actuator("init");
 
     properties["mode"] = node("MODE_NORMAL");
     properties["firstRun"] = node(true);
@@ -6144,7 +5846,7 @@ Geometry::scale_main(void)
         messageBox("information", tr("Scale Preselect"), tr("Preselect objects before invoking the scale command."));
     }
     else {
-        setPromptPrefix(tr("Specify base point: "));
+        actuator("set-prompt-prefix-tr Specify base point: "));
     }
 }
 
@@ -6162,13 +5864,13 @@ Geometry::scale_click(EmbVector v)
             setRubberMode("LINE");
             setRubberPoint("LINE_START", properties["baseX, properties["baseY);
             previewOn("SELECTED", "SCALE", properties["baseX, properties["baseY, 1);
-            appendPromptHistory();
-            setPromptPrefix(tr("Specify scale factor or [Reference]: "));
+            actuator("append-prompt-history");
+            actuator("set-prompt-prefix-tr Specify scale factor or [Reference]: "));
         }
         else {
             properties["dest = v;
             properties["factor = calculateDistance(properties["base, properties["dest);
-            appendPromptHistory();
+            actuator("append-prompt-history");
             scaleSelected(properties["baseX, properties["baseY, properties["factor);
             previewOff();
             actuator("end");
@@ -6177,38 +5879,38 @@ Geometry::scale_click(EmbVector v)
     else if (properties["mode"].s == MODE_REFERENCE) {
         if (std::isnan(properties["baseRX)) {
             properties["baseR = v;
-            appendPromptHistory();
+            actuator("append-prompt-history");
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", properties["baseR);
-            setPromptPrefix(tr("Specify second point: "));
+            actuator("set-prompt-prefix-tr Specify second point: "));
         }
         else if (std::isnan(properties["destRX)) {
             properties["destR = v;
             properties["factorRef = calculateDistance(properties["baseRX, properties["baseRY, properties["destRX, properties["destRY);
             if (properties["factorRef <= 0.0) {
-                properties["destRX    = NaN;
-                properties["destRY    = NaN;
-                properties["factorRef = NaN;
+                properties["destRX    = node(0.0f);
+                properties["destRY    = node(0.0f);
+                properties["factorRef = node(0.0f);
                 alert(tr("Value must be positive and nonzero."));
-                setPromptPrefix(tr("Specify second point: "));
+                actuator("set-prompt-prefix-tr Specify second point: "));
             }
             else {
-                appendPromptHistory();
+                actuator("append-prompt-history");
                 setRubberPoint("LINE_START", properties["baseX, properties["baseY);
                 previewOn("SELECTED", "SCALE", properties["baseX, properties["baseY, properties["factorRef);
-                setPromptPrefix(tr("Specify new length: "));
+                actuator("set-prompt-prefix-tr Specify new length: "));
             }
         }
         else if (std::isnan(properties["factorNew)) {
             properties["factorNew = calculateDistance(properties["baseX, properties["baseY, x, y);
             if (properties["factorNew <= 0.0) {
-                properties["factorNew = NaN;
+                properties["factorNew = node(0.0f);
                 alert(tr("Value must be positive and nonzero."));
-                setPromptPrefix(tr("Specify new length: "));
+                actuator("set-prompt-prefix-tr Specify new length: "));
             }
             else {
-                appendPromptHistory();
+                actuator("append-prompt-history");
                 scaleSelected(properties["baseX, properties["baseY, properties["factorNew/properties["factorRef);
                 previewOff();
                 actuator("end");
@@ -6237,30 +5939,30 @@ Geometry::scale_prompt(String str)
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                 alert(tr("Invalid point."));
-                setPromptPrefix(tr("Specify base point: "));
+                actuator("set-prompt-prefix-tr Specify base point: "));
             }
             else {
                 properties["firstRun = false;
-                properties["baseX = node(strList[0]);
-                properties["baseY = node(strList[1]);
+                properties["base.x"] = node(strList[0]);
+                properties["base.y"] = node(strList[1]);
                 addRubber("LINE");
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", properties["baseX, properties["baseY);
                 previewOn("SELECTED", "SCALE", properties["baseX, properties["baseY, 1);
-                setPromptPrefix(tr("Specify scale factor or [Reference]: "));
+                actuator("set-prompt-prefix-tr Specify scale factor or [Reference]: "));
             }
         }
         else {
             if (str == "R" || str == "REFERENCE") {
                 properties["mode"].s = MODE_REFERENCE;
-                setPromptPrefix(tr("Specify reference length") + " {1}: ");
+                actuator("set-prompt-prefix-tr Specify reference length") + " {1}: ");
                 clearRubber();
                 previewOff();
             }
             else {
                 if (std::isnan(str)) {
                     alert(tr("Requires valid numeric distance, second point, or option keyword."));
-                    setPromptPrefix(tr("Specify scale factor or [Reference]: "));
+                    actuator("set-prompt-prefix-tr Specify scale factor or [Reference]: "));
                 }
                 else {
                     properties["factor = node(str);
@@ -6277,40 +5979,40 @@ Geometry::scale_prompt(String str)
                 EmbReal strList = str.split(",");
                 if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                     alert(tr("Requires valid numeric distance or two points."));
-                    setPromptPrefix(tr("Specify reference length") + " {1}: ");
+                    actuator("set-prompt-prefix-tr Specify reference length") + " {1}: ");
                 }
                 else {
-                    properties["baseRX = node(strList[0]);
-                    properties["baseRY = node(strList[1]);
+                    properties["baseR.x"] = node(strList[0]);
+                    properties["baseR.y"] = node(strList[1]);
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", properties["baseRX, properties["baseRY);
-                    setPromptPrefix(tr("Specify second point: "));
+                    actuator("set-prompt-prefix-tr Specify second point: "));
                 }
             }
             else {
                 //The base and dest values are only set here to advance the command.
-                properties["baseRX = 0.0;
-                properties["baseRY = 0.0;
-                properties["destRX = 0.0;
-                properties["destRY = 0.0;
+                properties["baseR.x"] = 0.0;
+                properties["baseR.y"] = 0.0;
+                properties["destR.x"] = 0.0;
+                properties["destR.y"] = 0.0;
                 //The reference length is what we will use later.
                 properties["factorRef = node(str);
                 if (properties["factorRef <= 0.0) {
-                    properties["baseRX    = NaN;
-                    properties["baseRY    = NaN;
-                    properties["destRX    = NaN;
-                    properties["destRY    = NaN;
-                    properties["factorRef = NaN;
+                    properties["baseRX    = node(0.0f);
+                    properties["baseRY    = node(0.0f);
+                    properties["destRX    = node(0.0f);
+                    properties["destRY    = node(0.0f);
+                    properties["factorRef = node(0.0f);
                     alert(tr("Value must be positive and nonzero."));
-                    setPromptPrefix(tr("Specify reference length") + " {1}: ");
+                    actuator("set-prompt-prefix-tr Specify reference length") + " {1}: ");
                 }
                 else {
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", properties["baseX, properties["baseY);
                     previewOn("SELECTED", "SCALE", properties["baseX, properties["baseY, properties["factorRef);
-                    setPromptPrefix(tr("Specify new length: "));
+                    actuator("set-prompt-prefix-tr Specify new length: "));
                 }
             }
         }
@@ -6319,45 +6021,45 @@ Geometry::scale_prompt(String str)
                 EmbReal strList = str.split(",");
                 if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                     alert(tr("Requires valid numeric distance or two points."));
-                    setPromptPrefix(tr("Specify second point: "));
+                    actuator("set-prompt-prefix-tr Specify second point: "));
                 }
                 else {
-                    properties["destRX = node(strList[0]);
-                    properties["destRY = node(strList[1]);
+                    properties["destR.x"] = node(strList[0]);
+                    properties["destR.y"] = node(strList[1]);
                     properties["factorRef = calculateDistance(properties["baseRX, properties["baseRY, properties["destRX, properties["destRY);
                     if (properties["factorRef <= 0.0) {
-                        properties["destRX    = NaN;
-                        properties["destRY    = NaN;
-                        properties["factorRef = NaN;
+                        properties["destRX    = node(0.0f);
+                        properties["destRY    = node(0.0f);
+                        properties["factorRef = node(0.0f);
                         alert(tr("Value must be positive and nonzero."));
-                        setPromptPrefix(tr("Specify second point: "));
+                        actuator("set-prompt-prefix-tr Specify second point: "));
                     }
                     else {
                         setRubberPoint("LINE_START", properties["baseX, properties["baseY);
                         previewOn("SELECTED", "SCALE", properties["baseX, properties["baseY, properties["factorRef);
-                        setPromptPrefix(tr("Specify new length: "));
+                        actuator("set-prompt-prefix-tr Specify new length: "));
                     }
                 }
             }
             else {
                 //The base and dest values are only set here to advance the command.
-                properties["baseRX = 0.0;
-                properties["baseRY = 0.0;
-                properties["destRX = 0.0;
-                properties["destRY = 0.0;
+                properties["baseR.x"] = 0.0;
+                properties["baseR.y"] = 0.0;
+                properties["destR.x"] = 0.0;
+                properties["destR.y"] = 0.0;
                 //The reference length is what we will use later.
                 properties["factorRef = node(str);
                 if (properties["factorRef <= 0.0) {
-                    properties["destRX    = NaN;
-                    properties["destRY    = NaN;
-                    properties["factorRef = NaN;
+                    properties["destRX    = node(0.0f);
+                    properties["destRY    = node(0.0f);
+                    properties["factorRef = node(0.0f);
                     alert(tr("Value must be positive and nonzero."));
-                    setPromptPrefix(tr("Specify second point: "));
+                    actuator("set-prompt-prefix-tr Specify second point: "));
                 }
                 else {
                     setRubberPoint("LINE_START", properties["baseX, properties["baseY);
                     previewOn("SELECTED", "SCALE", properties["baseX, properties["baseY, properties["factorRef);
-                    setPromptPrefix(tr("Specify new length: "));
+                    actuator("set-prompt-prefix-tr Specify new length: "));
                 }
             }
         }
@@ -6366,16 +6068,16 @@ Geometry::scale_prompt(String str)
                 EmbReal strList = str.split(",");
                 if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                     alert(tr("Requires valid numeric distance or second point."));
-                    setPromptPrefix(tr("Specify new length: "));
+                    actuator("set-prompt-prefix-tr Specify new length: "));
                 }
                 else {
                     EmbReal x = node(strList[0]);
                     EmbReal y = node(strList[1]);
                     properties["factorNew = calculateDistance(properties["baseX, properties["baseY, x, y);
                     if (properties["factorNew <= 0.0) {
-                        properties["factorNew = NaN;
+                        properties["factorNew = node(0.0f);
                         alert(tr("Value must be positive and nonzero."));
-                        setPromptPrefix(tr("Specify new length: "));
+                        actuator("set-prompt-prefix-tr Specify new length: "));
                     }
                     else {
                         scaleSelected(properties["baseX, properties["baseY, properties["factorNew/properties["factorRef);
@@ -6387,9 +6089,9 @@ Geometry::scale_prompt(String str)
             else {
                 properties["factorNew = node(str);
                 if (properties["factorNew <= 0.0) {
-                    properties["factorNew = NaN;
+                    properties["factorNew = node(0.0f);
                     alert(tr("Value must be positive and nonzero."));
-                    setPromptPrefix(tr("Specify new length: "));
+                    actuator("set-prompt-prefix-tr Specify new length: "));
                 }
                 else {
                     scaleSelected(properties["baseX, properties["baseY, properties["factorNew/properties["factorRef);
@@ -6407,19 +6109,19 @@ Geometry::scale_prompt(String str)
 void
 Geometry::text_single_main(void)
 {
-    initCommand();
-    clearSelection();
+    actuator("init");
+    actuator("clear-selection");
     properties["text"] = node("");
     properties["text.x"] = node(0.0f);
     properties["text.y"] = node(0.0f);
     properties["text.justify"] = node("Left");
     properties["textFont"] = textFont();
-    properties["textHeight"] = NaN;
-    properties["textRotation"] = NaN;
+    properties["textHeight"] = node(0.0f);
+    properties["textRotation"] = node(0.0f);
     properties["mode"] = node("MODE_SETGEOM");
-    setPromptPrefix(tr("Current font: ") + "{" + properties["textFont + "} " + tr("Text height: ") + "{" +  textSize() + "}");
-    appendPromptHistory();
-    setPromptPrefix(tr("Specify start point of text or [Justify/Setfont]: "));
+    actuator("set-prompt-prefix-tr Current font: ") + "{" + properties["textFont + "} " + tr("Text height: ") + "{" +  textSize() + "}");
+    actuator("append-prompt-history");
+    actuator("set-prompt-prefix-tr Specify start point of text or [Justify/Setfont]: "));
 }
 
 /**
@@ -6428,28 +6130,27 @@ Geometry::text_single_main(void)
 void
 Geometry::text_single_click(EmbVector v)
 {
-    /*
     if (properties["mode"].s == MODE_SETGEOM) {
         if (std::isnan(properties["textX)) {
-            properties["textX = x;
-            properties["textY = y;
+            properties["text.x"] = x;
+            properties["text.y"] = y;
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", properties["textX, properties["textY);
-            appendPromptHistory();
-            setPromptPrefix(tr("Specify text height") + " {" + textSize() + "}: ");
+            actuator("append-prompt-history");
+            actuator("set-prompt-prefix-tr Specify text height") + " {" + textSize() + "}: ");
         }
         else if (std::isnan(properties["textHeight)) {
             properties["textHeight = calculateDistance(properties["textX, properties["textY, x, y);
             setTextSize(properties["textHeight);
-            appendPromptHistory();
-            setPromptPrefix(tr("Specify text angle") + " {" + textAngle() + "}: ");
+            actuator("append-prompt-history");
+            actuator("set-prompt-prefix-tr Specify text angle") + " {" + textAngle() + "}: ");
         }
         else if (std::isnan(properties["textRotation)) {
             properties["textRotation = calculateAngle(properties["textX, properties["textY, x, y);
             setTextAngle(properties["textRotation);
-            appendPromptHistory();
-            setPromptPrefix(tr("Enter text: "));
+            actuator("append-prompt-history");
+            actuator("set-prompt-prefix-tr Enter text: "));
             properties["mode"].s = MODE_RAPID;
             prompt->enableRapidFire();
             clearRubber();
@@ -6465,7 +6166,6 @@ Geometry::text_single_click(EmbVector v)
             //Do nothing, as we are in rapidFire mode now.
         }
     }
-    */
 }
 
 /**
@@ -6474,7 +6174,7 @@ Geometry::text_single_click(EmbVector v)
 void
 Geometry::text_single_context(String str)
 {
-    //todo("SINGLELINETEXT", "context()");
+    todo("SINGLELINETEXT", "context()");
 }
 
 /**
@@ -6488,89 +6188,89 @@ Geometry::text_single_prompt(String str)
             properties["mode"].s = MODE_SETGEOM;
             properties["textJustify = "Center";
             setRubberText("TEXT_JUSTIFY", properties["textJustify);
-            setPromptPrefix(tr("Specify center point of text or [Justify/Setfont]: "));
+            actuator("set-prompt-prefix-tr Specify center point of text or [Justify/Setfont]: "));
         }
         else if (str == "R" || str == "RIGHT") {
             properties["mode"].s = MODE_SETGEOM;
             properties["textJustify = "Right";
             setRubberText("TEXT_JUSTIFY", properties["textJustify);
-            setPromptPrefix(tr("Specify right-end point of text or [Justify/Setfont]: "));
+            actuator("set-prompt-prefix-tr Specify right-end point of text or [Justify/Setfont]: "));
         }
         else if (str == "A" || str == "ALIGN") {
             properties["mode"].s = MODE_SETGEOM;
             properties["textJustify = "Aligned";
             setRubberText("TEXT_JUSTIFY", properties["textJustify);
-            setPromptPrefix(tr("Specify start point of text or [Justify/Setfont]: "));
+            actuator("set-prompt-prefix-tr Specify start point of text or [Justify/Setfont]: "));
         }
         else if (str == "M" || str == "MIDDLE") {
             properties["mode"].s = MODE_SETGEOM;
             properties["textJustify = "Middle";
             setRubberText("TEXT_JUSTIFY", properties["textJustify);
-            setPromptPrefix(tr("Specify middle point of text or [Justify/Setfont]: "));
+            actuator("set-prompt-prefix-tr Specify middle point of text or [Justify/Setfont]: "));
         }
         else if (str == "F" || str == "FIT") {
             properties["mode"].s = MODE_SETGEOM;
             properties["textJustify = "Fit";
             setRubberText("TEXT_JUSTIFY", properties["textJustify);
-            setPromptPrefix(tr("Specify start point of text or [Justify/Setfont]: "));
+            actuator("set-prompt-prefix-tr Specify start point of text or [Justify/Setfont]: "));
         }
         else if (str == "TL" || str == "TOPLEFT") {
             properties["mode"].s = MODE_SETGEOM;
             properties["textJustify = "Top Left";
             setRubberText("TEXT_JUSTIFY", properties["textJustify);
-            setPromptPrefix(tr("Specify top-left point of text or [Justify/Setfont]: "));
+            actuator("set-prompt-prefix-tr Specify top-left point of text or [Justify/Setfont]: "));
         }
         else if (str == "TC" || str == "TOPCENTER") {
             properties["mode"].s = MODE_SETGEOM;
             properties["textJustify = "Top Center";
             setRubberText("TEXT_JUSTIFY", properties["textJustify);
-            setPromptPrefix(tr("Specify top-center point of text or [Justify/Setfont]: "));
+            actuator("set-prompt-prefix-tr Specify top-center point of text or [Justify/Setfont]: "));
         }
         else if (str == "TR" || str == "TOPRIGHT") {
             properties["mode"].s = MODE_SETGEOM;
             properties["textJustify = "Top Right";
             setRubberText("TEXT_JUSTIFY", properties["textJustify);
-            setPromptPrefix(tr("Specify top-right point of text or [Justify/Setfont]: "));
+            actuator("set-prompt-prefix-tr Specify top-right point of text or [Justify/Setfont]: "));
         }
         else if (str == "ML" || str == "MIDDLELEFT") {
             properties["mode"].s = MODE_SETGEOM;
             properties["textJustify = "Middle Left";
             setRubberText("TEXT_JUSTIFY", properties["textJustify);
-            setPromptPrefix(tr("Specify middle-left point of text or [Justify/Setfont]: "));
+            actuator("set-prompt-prefix-tr Specify middle-left point of text or [Justify/Setfont]: "));
         }
         else if (str == "MC" || str == "MIDDLECENTER") {
             properties["mode"].s = MODE_SETGEOM;
             properties["textJustify = "Middle Center";
             setRubberText("TEXT_JUSTIFY", properties["textJustify);
-            setPromptPrefix(tr("Specify middle-center point of text or [Justify/Setfont]: "));
+            actuator("set-prompt-prefix-tr Specify middle-center point of text or [Justify/Setfont]: "));
         }
         else if (str == "MR" || str == "MIDDLERIGHT") {
             properties["mode"].s = MODE_SETGEOM;
             properties["textJustify = "Middle Right";
             setRubberText("TEXT_JUSTIFY", properties["textJustify);
-            setPromptPrefix(tr("Specify middle-right point of text or [Justify/Setfont]: "));
+            actuator("set-prompt-prefix-tr Specify middle-right point of text or [Justify/Setfont]: "));
         }
         else if (str == "BL" || str == "BOTTOMLEFT") {
             properties["mode"].s = MODE_SETGEOM;
             properties["textJustify = "Bottom Left";
             setRubberText("TEXT_JUSTIFY", properties["textJustify);
-            setPromptPrefix(tr("Specify bottom-left point of text or [Justify/Setfont]: "));
+            actuator("set-prompt-prefix-tr Specify bottom-left point of text or [Justify/Setfont]: "));
         }
         else if (str == "BC" || str == "BOTTOMCENTER") {
             properties["mode"].s = MODE_SETGEOM;
             properties["textJustify = "Bottom Center";
             setRubberText("TEXT_JUSTIFY", properties["textJustify);
-            setPromptPrefix(tr("Specify bottom-center point of text or [Justify/Setfont]: "));
+            actuator("set-prompt-prefix-tr Specify bottom-center point of text or [Justify/Setfont]: "));
         }
         else if (str == "BR" || str == "BOTTOMRIGHT") {
             properties["mode"].s = MODE_SETGEOM;
             properties["textJustify = "Bottom Right";
             setRubberText("TEXT_JUSTIFY", properties["textJustify);
-            setPromptPrefix(tr("Specify bottom-right point of text or [Justify/Setfont]: "));
+            actuator("set-prompt-prefix-tr Specify bottom-right point of text or [Justify/Setfont]: "));
         }
         else {
             alert(tr("Invalid option keyword."));
-            setPromptPrefix(tr("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "));
+            actuator("set-prompt-prefix-tr Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "));
         }
     }
     else if (properties["mode"].s == MODE_SETFONT) {
@@ -6578,53 +6278,53 @@ Geometry::text_single_prompt(String str)
         properties["textFont = str;
         setRubberText("TEXT_FONT", properties["textFont);
         setTextFont(properties["textFont);
-        setPromptPrefix(tr("Specify start point of text or [Justify/Setfont]: "));
+        actuator("set-prompt-prefix-tr Specify start point of text or [Justify/Setfont]: "));
     }
     else if (properties["mode"].s == MODE_SETGEOM) {
         if (std::isnan(properties["textX)) {
             if (str == "J" || str == "JUSTIFY") {
                 properties["mode"].s = MODE_JUSTIFY;
-                setPromptPrefix(tr("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "));
+                actuator("set-prompt-prefix-tr Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "));
             }
             else if (str == "S" || str == "SETFONT") {
                 properties["mode"].s = MODE_SETFONT;
-                setPromptPrefix(tr("Specify font name: "));
+                actuator("set-prompt-prefix-tr Specify font name: "));
             }
             else {
                 EmbReal strList = str.split(",");
                 if (std::isnan(strList[0]) || std::isnan(strList[1])) {
                     alert(tr("Point or option keyword required."));
-                    setPromptPrefix(tr("Specify start point of text or [Justify/Setfont]: "));
+                    actuator("set-prompt-prefix-tr Specify start point of text or [Justify/Setfont]: "));
                 }
                 else {
-                    properties["textX = node(strList[0]);
-                    properties["textY = node(strList[1]);
+                    properties["text.x"] = node(strList[0]);
+                    properties["text.y"] = node(strList[1]);
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", properties["textX, properties["textY);
-                    setPromptPrefix(tr("Specify text height") + " {" + textSize() + "}: ");
+                    actuator("set-prompt-prefix-tr Specify text height") + " {" + textSize() + "}: ");
                 }
             }
         }
         else if (std::isnan(properties["textHeight)) {
             if (str == "") {
                 properties["textHeight = textSize();
-                setPromptPrefix(tr("Specify text angle") + " {" + textAngle() + "}: ");
+                actuator("set-prompt-prefix-tr Specify text angle") + " {" + textAngle() + "}: ");
             }
             else if (std::isnan(str)) {
                 alert(tr("Requires valid numeric distance or second point."));
-                setPromptPrefix(tr("Specify text height") + " {" + textSize() + "}: ");
+                actuator("set-prompt-prefix-tr Specify text height") + " {" + textSize() + "}: ");
             }
             else {
                 properties["textHeight = node(str);
                 setTextSize(properties["textHeight);
-                setPromptPrefix(tr("Specify text angle") + " {" + textAngle() + "}: ");
+                actuator("set-prompt-prefix-tr Specify text angle") + " {" + textAngle() + "}: ");
             }
         }
         else if (std::isnan(properties["textRotation)) {
             if (str == "") {
                 properties["textRotation = textAngle();
-                setPromptPrefix(tr("Enter text: "));
+                actuator("set-prompt-prefix-tr Enter text: "));
                 properties["mode"].s = MODE_RAPID;
                 prompt->enableRapidFire();
                 clearRubber();
@@ -6638,12 +6338,12 @@ Geometry::text_single_prompt(String str)
             }
             else if (std::isnan(str)) {
                 alert(tr("Requires valid numeric angle or second point."));
-                setPromptPrefix(tr("Specify text angle") + " {" + textAngle() + "}: ");
+                actuator("set-prompt-prefix-tr Specify text angle") + " {" + textAngle() + "}: ");
             }
             else {
                 properties["textRotation = node(str);
-                setTextAngle(properties["textRotation);
-                setPromptPrefix(tr("Enter text: "));
+                setTextAngle(properties["textRotation"].r);
+                actuator("set-prompt-prefix-tr Enter text: ");
                 properties["mode"].s = MODE_RAPID;
                 prompt->enableRapidFire();
                 clearRubber();
@@ -6660,7 +6360,7 @@ Geometry::text_single_prompt(String str)
             //Do nothing, as we are in rapidFire mode now.
         }
     }
-    else if (properties["mode"].s == MODE_RAPID) {
+    else if (properties["mode"].s == "MODE_RAPID") {
         if (str == "RAPID_ENTER") {
             if (properties["text == "") {
                 actuator("end");
@@ -6672,24 +6372,11 @@ Geometry::text_single_prompt(String str)
             }
         }
         else {
-            properties["text = str;
+            properties["text"] = node(str);
             setRubberText("TEXT_RAPID", properties["text);
         }
     }
 }
-
-void snowflake_main(void);
-void updateSnowflake(EmbVector scale);
-
-void star_main(void);
-void star_move(EmbVector v);
-void star_prompt(String properties);
-void star_context(String properties);
-void star_prompt(String properties);
-void updateStar(EmbVector mouse);
-
-void syswindows_main(void);
-void syswindows_prompt(String properties);
 
 /**
  * .
@@ -6697,38 +6384,25 @@ void syswindows_prompt(String properties);
 void
 Geometry::snowflake_main(void)
 {
-    //initCommand();
-    //clearSelection();
-    properties["numPoints"] = node(2048); //Default //TODO: min:64 max:8192
-    properties["center.x"] = node(0.0f);
-    properties["center.y"] = node(0.0f);
-    properties["scale.x"] = node(0.04f);
-    properties["scale.y"] = node(0.04f);
-    properties["mode"].s = node("SNOWFLAKE_MODE_NUM_POINTS");
-
-    //addRubber("POLYGON");
-    //setRubberMode("POLYGON");
-    EmbVector v;
-    v.x = 0.04f; v.y = 0.04f;
-    properties = updateSnowflake(properties, v);
-    //spareRubber("POLYGON");
-    actuator("end");
+    object_script(snowflake_init);
 }
 
 /**
  * Snowflake Curve with t [0,2pi]
  */
 void
-Geometry::updateSnowflake(EmbVector scale)
+Geometry::update_snowflake(void)
 {
+    EmbVector scale;
+    scale.x = properties["scale.x"].r;
+    scale.y = properties["scale.y"].r;
     for (int i = 0; i <= properties["numPoints"].i; i++) {
         EmbReal t = (2.0*emb_constant_pi) / properties["numPoints"].i*i;
         EmbVector v;
         v.x = fourier_series(t, snowflake_x);
         v.y = fourier_series(t, snowflake_y);
 
-        setRubberPoint("POLYGON_POINT_" + i.toString(),
-            xx*scale.x, yy*scale.y);
+        setRubberPoint("POLYGON_POINT_" + i.toString(), v.x*scale.x, v.y*scale.y);
     }
 
     setRubberText("POLYGON_NUM_POINTS", numPoints.toString());
@@ -6740,23 +6414,17 @@ Geometry::updateSnowflake(EmbVector scale)
 void
 Geometry::star_main(void)
 {
-    initCommand();
-    clearSelection();
-    properties["numPoints = 5;
-    EmbVector center;
-    EmbVector point1;
-    EmbVector point2;
-    center.x = 0.0;
-    center.y = 0.0;
-    point1.x = 1.0;
-    point1.y = 1.0;
-    point2.x = 2.0;
-    point2.y = 2.0;
-    properties["center"] = node(center);
-    properties["point1"] = node(point1);
-    properties["point2"] = node(point2);
-    properties["mode"].s = STAR_MODE_NUM_POINTS;
-    setPromptPrefix(tr("Enter number of star points {5}: "));
+    actuator("init");
+    actuator("clear-selection");
+    properties["numPoints"] = node(5);
+    properties["center.x"] = node(0.0f);
+    properties["center.y"] = node(0.0f);
+    properties["point1.x"] = node(1.0f);
+    properties["point1.y"] = node(1.0f);
+    properties["point2.x"] = node(2.0f);
+    properties["point2.y"] = node(2.0f);
+    properties["mode"] = node("STAR_MODE_NUM_POINTS");
+    actuator("set-prompt-prefix-tr Enter number of star points {5}: ");
 }
 
 /**
@@ -6770,8 +6438,8 @@ Geometry::star_click(EmbReal mouse)
     }
     else if (properties["mode"].s == "MODE_CENTER_PT") {
         properties["center = mouse;
-        properties["mode"].s = MODE_RAD_OUTER;
-        setPromptPrefix(tr("Specify outer radius of star: "));
+        properties["mode"].s = "MODE_RAD_OUTER";
+        actuator("set-prompt-prefix-tr Specify outer radius of star: ");
         addRubber("POLYGON");
         setRubberMode("POLYGON");
         updateStar(properties, properties["center);
@@ -6779,8 +6447,8 @@ Geometry::star_click(EmbReal mouse)
     }
     else if (properties["mode"].s == "MODE_RAD_OUTER") {
         properties["point1 = mouse;
-        properties["mode"].s = MODE_RAD_INNER;
-        setPromptPrefix(tr("Specify inner radius of star: "));
+        properties["mode"].s = "MODE_RAD_INNER";
+        actuator("set-prompt-prefix-tr Specify inner radius of star: ");
         updateStar(properties["point1);
     }
     else if (properties["mode"].s == "MODE_RAD_INNER") {
@@ -6788,7 +6456,7 @@ Geometry::star_click(EmbReal mouse)
         actuator("disable move-rapid-fire");
         updateStar(properties["point2);
         spareRubber("POLYGON");
-        //actuator("end");
+        actuator("end");
     }
 }
 
@@ -6818,7 +6486,7 @@ Geometry::star_move(EmbVector v)
 void
 Geometry::star_context(String str)
 {
-    //todo("STAR", "context()");
+    todo("STAR", "context()");
 }
 
 /**
@@ -6827,21 +6495,20 @@ Geometry::star_context(String str)
 void
 Geometry::star_prompt(String str)
 {
-    /*
-    if (properties["mode"].s == STAR_MODE_NUM_POINTS) {
-        if (str == "" && properties["numPoints >= 3 && properties["numPoints <= 1024) {
-            setPromptPrefix(tr("Specify center point: "));
+    if (properties["mode"].s == "STAR_MODE_NUM_POINTS") {
+        if (str == "" && properties["numPoints"].i >= 3 && properties["numPoints"].i <= 1024) {
+            actuator("set-prompt-prefix-tr Specify center point: ");
             properties["mode"].s = STAR_MODE_CENTER_PT;
         }
         else {
             EmbReal tmp = node(str);
             if (std::isnan(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024) {
                 alert(tr("Requires an integer between 3 and 1024."));
-                setPromptPrefix(tr("Enter number of star points") + " {" + properties["numPoints.toString() + "}: ");
+                actuator("set-prompt-prefix-tr Enter number of star points") + " {" + properties["numPoints.toString() + "}: ");
             }
             else {
                 properties["numPoints = tmp;
-                setPromptPrefix(tr("Specify center point: "));
+                actuator("set-prompt-prefix-tr Specify center point: ");
                 properties["mode"].s = "MODE_CENTER_PT";
             }
         }
@@ -6850,13 +6517,13 @@ Geometry::star_prompt(String str)
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
-            setPromptPrefix(tr("Specify center point: "));
+            actuator("set-prompt-prefix-tr Specify center point: ");
         }
         else {
             properties["center.x"] = node(strList[0]);
             properties["center.y"] = node(strList[1]);
             properties["mode"].s = MODE_RAD_OUTER;
-            setPromptPrefix(tr("Specify outer radius of star: "));
+            actuator("set-prompt-prefix-tr Specify outer radius of star: ");
             addRubber("POLYGON");
             setRubberMode("POLYGON");
             updateStar(qsnapX(), qsnapY());
@@ -6867,13 +6534,13 @@ Geometry::star_prompt(String str)
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
-            setPromptPrefix(tr("Specify outer radius of star: "));
+            actuator("set-prompt-prefix-tr Specify outer radius of star: ");
         }
         else {
             properties["x1 = node(strList[0]);
             properties["y1 = node(strList[1]);
             properties["mode"].s = MODE_RAD_INNER;
-            setPromptPrefix(tr("Specify inner radius of star: "));
+            actuator("set-prompt-prefix-tr Specify inner radius of star: ");
             updateStar(qsnapX(), qsnapY());
         }
     }
@@ -6881,7 +6548,7 @@ Geometry::star_prompt(String str)
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
-            setPromptPrefix(tr("Specify inner radius of star: "));
+            actuator("set-prompt-prefix-tr Specify inner radius of star: ");
         }
         else {
             properties["x2 = node(strList[0]);
@@ -6892,14 +6559,13 @@ Geometry::star_prompt(String str)
             //actuator("end");
         }
     }
-    */
 }
 
 /**
  * @brief updateStar
  */
 void
-Geometry::Geometry::updateStar(EmbVector mouse)
+Geometry::updateStar(EmbVector mouse)
 {
     EmbReal distOuter;
     EmbReal distInner;
@@ -6929,49 +6595,12 @@ Geometry::Geometry::updateStar(EmbVector mouse)
         else {
             v = v * distInner;
         }
-        /*
         setRubberPoint(
             QString::fromStdString("POLYGON_POINT_" + std::to_string(i)),
-            properties["center.x + v.x,
-            properties["center.y + v.y);
-        */
+            properties["center.x"].r + v.x,
+            properties["center.y"].r + v.y);
     }
-    /*
-    setRubberText("POLYGON_NUM_POINTS",
-        (properties["numPoints*2 - 1).toString());
-    */
-}
-
-/**
- * .
- */
-void
-Geometry::syswindows_main(void)
-{
-    initCommand();
-    clearSelection();
-    setPromptPrefix(tr("Enter an option [Cascade/Tile]: "));
-}
-
-/**
- * .
- */
-void
-Geometry::syswindows_prompt(String str)
-{
-    if (str == "C" || str == "CASCADE") {
-        actuator("window cascade");
-        actuator("end");
-    }
-    else if (str == "T" || str == "TILE") {
-        actuator("window tile");
-        actuator("end");
-    }
-    else {
-        /*
-        alert(tr("Invalid option keyword."));
-        setPromptPrefix(tr("Enter an option [Cascade/Tile]: "));
-        */
-    }
+    setRubberText("POLYGON_NUM_POINTS", (properties["numPoints*2"].i - 1).toString());
 }
 #endif
+
