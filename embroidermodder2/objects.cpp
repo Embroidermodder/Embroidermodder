@@ -14,7 +14,7 @@
  */
 
 /**
- * \file object-arc.cpp
+ * \file objects.cpp
  */
 
 #include "embroidermodder.h"
@@ -23,60 +23,6 @@ std::vector<EmbReal> snowflake_x;
 std::vector<EmbReal> snowflake_y;
 std::vector<EmbReal> dolphin_x;
 std::vector<EmbReal> dolphin_y;
-
-/**
- * @todo convert to StringList, move to configuration
- */
-QStringList justify_options = {
-    "Left",
-    "Center",
-    "Right",
-    "Aligned",
-    "Middle",
-    "Fit",
-    "Top Left",
-    "Top Center",
-    "Top Right",
-    "Middle Left",
-    "Middle Center",
-    "Middle Right",
-    "Bottom Left",
-    "Bottom Center",
-    "Bottom Right"
-    /* \todo "Aligned"
- * \todo "Fit"
- */
-};
-
-StringList polyline_init = {
-    "init",
-    "clear-selection",
-    "firstRun=true",
-    "first.x=0.0f",
-    "first.y=0.0f",
-    "prev.x=0.0f",
-    "prev.y=0.0f",
-    "num=0",
-    "set-prompt-prefix-tr Specify first point: "
-};
-
-StringList snowflake_init = {
-    "init",
-    "clear-selection",
-    "numPoints=2048",
-    "minPoitns=64",
-    "maxPoints=8192",
-    "center.x=0.0f",
-    "center.y=0.0f",
-    "scale.x=0.04f",
-    "scale.y=0.04f",
-    "mode=SNOWFLAKE_MODE_NUM_POINTS",
-    "add-rubber POLYGON",
-    "set-rubber-mode POLYGON",
-    "update-snowflake",
-    "spare-rubber POLYGON",
-    "end"
-};
 
 /**
  * @brief mouse_snap_point
@@ -3511,11 +3457,13 @@ Geometry::setObjectTextFont(QString  font)
  * Verify the string is a valid option, otherwise default to "Left".
  */
 void
-Geometry::setObjectTextJustify(QString  justify)
+Geometry::setObjectTextJustify(QString justify)
 {
     objTextJustify = "Left";
-    for (int i=0; i<justify_options.size(); i++) {
-        if (justify == justify_options[i]) {
+    String justify_ = justify.toStdString();
+    StringList justify_options = config["justify_options"].sl;
+    for (int i=0; i<(int)justify_options.size(); i++) {
+        if (justify_ == justify_options[i]) {
             objTextJustify = justify;
         }
     }
@@ -3667,69 +3615,40 @@ Geometry::subPathList()
     return pathList;
 }
 
-
 /**
  * .
  */
 void
 Geometry::script_main(void)
 {
+    StringList script = {"end"};
     switch (Type) {
     case OBJ_TYPE_CIRCLE: {
-        properties["mode"] = node("CIRCLE_MODE_1P_RAD");
-        StringList script = {
-            "init",
-            "clear_selection",
-            "set-prompt-prefix-tr Specify center point for circle or [3P/2P/TTR (tan tan radius)]: "
-        };
-        run_script(script);
+        script = scripts["circle_init"];
         break;
     }
     case OBJ_TYPE_ELLIPSE: {
-        properties["mode"] = node("MODE_MAJORDIAMETER_MINORRADIUS");
-        /*
-        properties["width"];
-        properties["height"];
-        properties["rot"];
-        StringList script = {
-            "init",
-            "clear-selection",
-            "set-prompt-prefix-tr Specify first axis start point or [Center]: "
-        };
-        run_script(script);
-        */
+        script = scripts["ellipse_init"];
         break;
     }
     /*
     case DISTANCE:
-        actuator("init");
-        actuator("clear-selection");
-        actuator("set-prompt-prefix-tr Specify first point: "));
+        script = {
+            "init",
+            "clear-selection",
+            "set-prompt-prefix-tr Specify first point: "
+        };
         break;
 
     case DOLPHIN: {
-        
-        actuator("init");
-        actuator("clear-selection");
-
-        properties["numPoints"] = node(512); //Default //TODO: min:64 max:8192
-        properties["center.x"] = node(0.0f);
-        properties["center.y"] = node(0.0f);
-        properties["sx"] = node(0.04f); //Default
-        properties["sy"] = node(0.04f); //Default
-        properties["mode"] = node(DOLPHIN_MODE_NUM_POINTS);
-
-        addRubber("POLYGON");
-        setRubberMode("POLYGON");
-        updateDolphin(properties["numPoints, properties["sx, properties["sy);
-        spareRubber("POLYGON");
-        actuator("end");
+        script = dolphin_init_script;
         break;
     }
     */
     default:
         break;
     }
+    run_script(script);
 }
 
 /**

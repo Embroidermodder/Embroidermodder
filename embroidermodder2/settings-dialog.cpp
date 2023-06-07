@@ -54,9 +54,14 @@ void
 read_settings(void)
 {
     debug_message("Reading Settings...");
-    QString settingsPath = SettingsPath();
-    QString settingsDir = SettingsDir();
+
     QString appDir = qApp->applicationDirPath();
+#if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
+    QString settingsPath = QDir::homePath() + "/.embroidermodder2/settings.ini";
+#else
+    QString settingsPath = appDir + "/settings.ini";
+#endif
+
     QSettings settings_file(settingsPath, QSettings::IniFormat);
     settings.position_x = settings_file.value("Window/PositionX", 0).toInt();
     settings.position_y = settings_file.value("Window/PositionY", 0).toInt();
@@ -114,7 +119,12 @@ read_settings(void)
     settings.prompt_font_size = settings_file.value("Prompt/FontSize", 12).toInt();
     settings.prompt_save_history = settings_file.value("Prompt/SaveHistory", true).toBool();
     settings.prompt_save_history_as_html = settings_file.value("Prompt/SaveHistoryAsHtml", false).toBool();
-    settings.prompt_save_history_filename = settings_file.value("Prompt/SaveHistoryFilename", settingsDir + "prompt.log").toString().toStdString();
+
+#if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
+    settings.prompt_save_history_filename = settings_file.value("Prompt/SaveHistoryFilename", QDir::homePath() + "/.embroidermodder2/prompt.log").toString().toStdString();
+#else
+    settings.prompt_save_history_filename = settings_file.value("Prompt/SaveHistoryFilename", appDir + "prompt.log").toString().toStdString();
+#endif
 
     //OpenSave
     settings.opensave_custom_filter = settings_file.value("OpenSave/CustomFilter", "supported").toString();
@@ -213,9 +223,14 @@ void
 write_settings(void)
 {
     debug_message("Writing Settings...");
-    QString settingsPath = SettingsPath();
+    QString appDir = qApp->applicationDirPath();
+#if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
+    String settingsPath = QDir::homePath().toStdString() + "/.embroidermodder2/settings.ini";
+#else
+    String settingsPath = appDir + "/settings.ini";
+#endif
     std::ofstream settings_file;
-    settings_file.open(settingsPath.toStdString());
+    settings_file.open(settingsPath);
 
     /**
      * Planning
@@ -399,8 +414,7 @@ Settings_Dialog::make_checkbox(QGroupBox *gb, const char *label, const char *ico
     QCheckBox *checkBox = new QCheckBox(tr(label), gb);
     checkBox->setChecked(*ptr);
     checkBox->setIcon(_mainWin->create_icon(icon));
-    auto f = [=](int x) { *ptr = (x != 0); };
-    connect(gb, SIGNAL(stateChanged(int)), this, SLOT(f));
+    connect(checkBox, &QCheckBox::stateChanged, this, [=](int x) { *ptr = (x != 0); });
     return checkBox;
 }
 
@@ -477,15 +491,22 @@ QWidget* Settings_Dialog::createTabGeneral()
     comboBoxLanguage->insertSeparator(2);
     QDir trDir(qApp->applicationDirPath());
     trDir.cd("translations");
-    foreach(QString dirName, trDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
-    {
+    foreach(QString dirName, trDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
         dirName[0] = dirName[0].toUpper();
         comboBoxLanguage->addItem(dirName);
     }
     QString current = QString::fromStdString(dialog.general_language);
     current[0] = current[0].toUpper();
     comboBoxLanguage->setCurrentIndex(comboBoxLanguage->findText(current));
-    connect(comboBoxLanguage, SIGNAL(currentIndexChanged(QString)), this, SLOT(comboBoxLanguageCurrentIndexChanged(QString)));
+    /*
+    TODO: FIX
+    connect(
+        comboBoxLanguage,
+        SIGNAL(currentIndexChanged(QString)),
+        this,
+        [=](const char *lang) { dialog.general_language = QString::fromStdString(lang).toLower().toStdString(); }
+    );
+    */
 
     QVBoxLayout* vboxLayoutLanguage = new QVBoxLayout(groupBoxLanguage);
     vboxLayoutLanguage->addWidget(labelLanguage);
@@ -504,7 +525,15 @@ QWidget* Settings_Dialog::createTabGeneral()
         comboBoxIconTheme->addItem(QIcon("icons/" + dirName + "/" + "theme" + ".png"), dirName);
     }
     comboBoxIconTheme->setCurrentIndex(comboBoxIconTheme->findText(QString::fromStdString(dialog.general_icon_theme)));
-    connect(comboBoxIconTheme, SIGNAL(currentIndexChanged(QString)), this, SLOT(comboBoxIconThemeCurrentIndexChanged(QString)));
+    /*
+    TODO: FIX
+    connect(
+        comboBoxIconTheme,
+        &QComboBox::currentIndexChanged,
+        this,
+        [=](int i) { dialog.general_icon_theme = theme.toStdString(); }
+    );
+    */
 
     QLabel* labelIconSize = new QLabel(tr("Icon Size"), groupBoxIcon);
     QComboBox* comboBoxIconSize = new QComboBox(groupBoxIcon);
@@ -788,7 +817,12 @@ QWidget* Settings_Dialog::createTabDisplay()
     spinBoxZoomScaleIn->setValue(dialog.display_zoomscale_in);
     spinBoxZoomScaleIn->setSingleStep(0.01);
     spinBoxZoomScaleIn->setRange(1.01, 10.00);
-    connect(spinBoxZoomScaleIn, SIGNAL(valueChanged(double)), this, SLOT(spinBoxZoomScaleInValueChanged(double)));
+    connect(
+        spinBoxZoomScaleIn,
+        &QDoubleSpinBox::valueChanged,
+        this,
+        [=](double value) { dialog.display_zoomscale_in = value; }
+    );
 
     QLabel* labelZoomScaleOut = new QLabel(tr("Zoom Out Scale"), groupBoxZoom);
     QDoubleSpinBox* spinBoxZoomScaleOut = new QDoubleSpinBox(groupBoxZoom);
@@ -796,7 +830,12 @@ QWidget* Settings_Dialog::createTabDisplay()
     spinBoxZoomScaleOut->setValue(dialog.display_zoomscale_out);
     spinBoxZoomScaleOut->setSingleStep(0.01);
     spinBoxZoomScaleOut->setRange(0.01, 0.99);
-    connect(spinBoxZoomScaleOut, SIGNAL(valueChanged(double)), this, SLOT(spinBoxZoomScaleOutValueChanged(double)));
+    connect(
+        spinBoxZoomScaleOut,
+        &QDoubleSpinBox::valueChanged,
+        this,
+        [=](double value) { dialog.display_zoomscale_out = value; }
+    );
 
     QGridLayout* gridLayoutZoom = new QGridLayout(groupBoxZoom);
     gridLayoutZoom->addWidget(labelZoomScaleIn, 0, 0, Qt::AlignLeft);
@@ -894,7 +933,12 @@ QWidget* Settings_Dialog::createTabPrompt()
     QCheckBox* checkBoxPromptSaveHistory = new QCheckBox(tr("Save History"), groupBoxHistory);
     dialog.prompt_save_history = settings.prompt_save_history;
     checkBoxPromptSaveHistory->setChecked(dialog.prompt_save_history);
-    connect(checkBoxPromptSaveHistory, SIGNAL(stateChanged(int)), this, SLOT(checkBoxPromptSaveHistoryStateChanged(int)));
+    connect(
+        checkBoxPromptSaveHistory,
+        &QCheckBox::stateChanged,
+        this,
+        [=](int checked) { dialog.prompt_save_history = checked; }
+    );
 
     QCheckBox* checkBoxPromptSaveHistoryAsHtml = new QCheckBox(tr("Save As HTML"), groupBoxHistory);
     dialog.prompt_save_history_as_html = settings.prompt_save_history_as_html;
@@ -954,13 +998,23 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QPushButton* buttonCustomFilterSelectAll = new QPushButton(tr("Select All"), groupBoxCustomFilter);
     connect(buttonCustomFilterSelectAll, SIGNAL(clicked()), this, SLOT(buttonCustomFilterSelectAllClicked()));
     for (int i=0; i<n_extensions; i++) {
-        connect(this, SIGNAL(buttonCustomFilterSelectAll(bool)), checkBoxCustomFilter[extensions[i]], SLOT(setChecked(bool)));
+        connect(
+            this,
+            SIGNAL(buttonCustomFilterSelectAll(bool)),
+            checkBoxCustomFilter[extensions[i]],
+            SLOT(setChecked(bool))
+        );
     }
 
     QPushButton* buttonCustomFilterClearAll = new QPushButton("Clear All", groupBoxCustomFilter);
     connect(buttonCustomFilterClearAll, SIGNAL(clicked()), this, SLOT(buttonCustomFilterClearAllClicked()));
     for (int i=0; i<n_extensions; i++) {
-        connect(this, SIGNAL(buttonCustomFilterClearAll(bool)), checkBoxCustomFilter[extensions[i]], SLOT(setChecked(bool)));
+        connect(
+            this,
+            SIGNAL(buttonCustomFilterClearAll(bool)),
+            checkBoxCustomFilter[extensions[i]],
+            SLOT(setChecked(bool))
+        );
     }
 
     QGridLayout* gridLayoutCustomFilter = new QGridLayout(groupBoxCustomFilter);
@@ -994,7 +1048,12 @@ QWidget* Settings_Dialog::createTabOpenSave()
     spinBoxRecentMaxFiles->setRange(0, 10);
     dialog.opensave_recent_max_files = settings.opensave_recent_max_files;
     spinBoxRecentMaxFiles->setValue(dialog.opensave_recent_max_files);
-    connect(spinBoxRecentMaxFiles, SIGNAL(valueChanged(int)), this, SLOT(spinBoxRecentMaxFilesValueChanged(int)));
+    connect(
+        spinBoxRecentMaxFiles,
+        &QSpinBox::valueChanged,
+        this,
+        [=](int value) { dialog.opensave_recent_max_files = value; }
+    );
 
     QFrame* frameRecent = new QFrame(groupBoxOpening);
     QGridLayout* gridLayoutRecent = new QGridLayout(frameRecent);
@@ -1033,7 +1092,12 @@ QWidget* Settings_Dialog::createTabOpenSave()
     spinBoxTrimDstNumJumps->setRange(1, 20);
     dialog.opensave_trim_dst_num_jumps = settings.opensave_trim_dst_num_jumps;
     spinBoxTrimDstNumJumps->setValue(dialog.opensave_trim_dst_num_jumps);
-    connect(spinBoxTrimDstNumJumps, SIGNAL(valueChanged(int)), this, SLOT(spinBoxTrimDstNumJumpsValueChanged(int)));
+    connect(
+        spinBoxTrimDstNumJumps,
+        &QSpinBox::valueChanged,
+        this,
+        [=](int value){ dialog.opensave_trim_dst_num_jumps = value; }
+    );
 
     QFrame* frameTrimDstNumJumps = new QFrame(groupBoxTrim);
     QGridLayout* gridLayoutTrimDstNumJumps = new QGridLayout(frameTrimDstNumJumps);
@@ -1090,7 +1154,12 @@ QWidget* Settings_Dialog::createTabPrinting()
     QCheckBox* checkBoxDisableBG = new QCheckBox(tr("Disable Background"), groupBoxSaveInk);
     dialog.printing_disable_bg = settings.printing_disable_bg;
     checkBoxDisableBG->setChecked(dialog.printing_disable_bg);
-    connect(checkBoxDisableBG, SIGNAL(stateChanged(int)), this, SLOT(checkBoxDisableBGStateChanged(int)));
+    connect(
+        checkBoxDisableBG,
+        &QCheckBox::stateChanged,
+        this,
+        [=](int checked) { dialog.printing_disable_bg = checked; }
+    );
 
     QVBoxLayout* vboxLayoutSaveInk = new QVBoxLayout(groupBoxSaveInk);
     vboxLayoutSaveInk->addWidget(checkBoxDisableBG);
@@ -1508,8 +1577,12 @@ QWidget* Settings_Dialog::createTabLineWeight()
 
     QCheckBox* checkBoxRealRender = new QCheckBox(tr("RealRender"), groupBoxLwtMisc);
     checkBoxRealRender->setObjectName("checkBoxRealRender");
-    if (s) { dialog.lwt_real_render = s->property("ENABLE_REAL").toBool(); }
-    else  { dialog.lwt_real_render = settings.lwt_real_render; }
+    if (s) {
+        dialog.lwt_real_render = s->property("ENABLE_REAL").toBool();
+    }
+    else  {
+        dialog.lwt_real_render = settings.lwt_real_render;
+    }
     preview.lwt_real_render = dialog.lwt_real_render;
     checkBoxRealRender->setChecked(preview.lwt_real_render);
     connect(checkBoxRealRender, SIGNAL(stateChanged(int)), this, SLOT(checkBoxLwtRealRenderStateChanged(int)));
@@ -1655,26 +1728,6 @@ void Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
 }
 
 /**
- * @brief Settings_Dialog::comboBoxLanguageCurrentIndexChanged
- * @param lang
- */
-void
-Settings_Dialog::comboBoxLanguageCurrentIndexChanged(QString  lang)
-{
-    dialog.general_language = lang.toLower().toStdString();
-}
-
-/**
- * @brief Settings_Dialog::comboBoxIconThemeCurrentIndexChanged
- * @param theme
- */
-void
-Settings_Dialog::comboBoxIconThemeCurrentIndexChanged(QString  theme)
-{
-    dialog.general_icon_theme = theme.toStdString();
-}
-
-/**
  * @brief Settings_Dialog::comboBoxIconSizeCurrentIndexChanged
  * @param index
  */
@@ -1685,11 +1738,13 @@ Settings_Dialog::comboBoxIconSizeCurrentIndexChanged(int index)
     if (comboBox) {
         bool ok = 0;
         dialog.general_icon_size = comboBox->itemData(index).toUInt(&ok);
-        if (!ok)
+        if (!ok) {
             dialog.general_icon_size = 16;
+        }
     }
-    else
+    else {
         dialog.general_icon_size = 16;
+    }
 }
 
 void Settings_Dialog::checkBoxGeneralMdiBGUseLogoStateChanged(int checked)
@@ -1753,22 +1808,19 @@ void Settings_Dialog::checkBoxGeneralMdiBGUseColorStateChanged(int checked)
 void Settings_Dialog::chooseGeneralMdiBackgroundColor()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
-    if (button)
-    {
+    if (button) {
         QColorDialog* colorDialog = new QColorDialog(QColor(accept_.general_mdi_bg_color), this);
         connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentGeneralMdiBackgroundColorChanged(const QColor&)));
         colorDialog->exec();
 
-        if (colorDialog->result() == QDialog::Accepted)
-        {
+        if (colorDialog->result() == QDialog::Accepted) {
             accept_.general_mdi_bg_color = colorDialog->selectedColor().rgb();
             QPixmap pix(16,16);
             pix.fill(QColor(accept_.general_mdi_bg_color));
             button->setIcon(QIcon(pix));
             mdiArea->setBackgroundColor(QColor(accept_.general_mdi_bg_color));
         }
-        else
-        {
+        else {
             mdiArea->setBackgroundColor(QColor(dialog.general_mdi_bg_color));
         }
     }
@@ -1789,21 +1841,6 @@ void Settings_Dialog::checkBoxShowScrollBarsStateChanged(int checked)
 void Settings_Dialog::comboBoxScrollBarWidgetCurrentIndexChanged(int index)
 {
     dialog.display_scrollbar_widget_num = index;
-}
-
-void Settings_Dialog::spinBoxZoomScaleInValueChanged(double value)
-{
-    dialog.display_zoomscale_in = value;
-}
-
-void Settings_Dialog::spinBoxZoomScaleOutValueChanged(double value)
-{
-    dialog.display_zoomscale_out = value;
-}
-
-void Settings_Dialog::checkBoxDisableBGStateChanged(int checked)
-{
-    dialog.printing_disable_bg = checked;
 }
 
 void Settings_Dialog::chooseDisplayCrossHairColor()
@@ -2112,11 +2149,6 @@ void Settings_Dialog::spinBoxPromptFontSizeValueChanged(int value)
     prompt->setPromptFontSize(preview.prompt_font_size);
 }
 
-void Settings_Dialog::checkBoxPromptSaveHistoryStateChanged(int checked)
-{
-    dialog.prompt_save_history = checked;
-}
-
 void Settings_Dialog::checkBoxPromptSaveHistoryAsHtmlStateChanged(int checked)
 {
     dialog.prompt_save_history_as_html = checked;
@@ -2146,26 +2178,6 @@ void Settings_Dialog::buttonCustomFilterClearAllClicked()
 {
     emit buttonCustomFilterClearAll(false);
     dialog.opensave_custom_filter.clear();
-}
-
-void Settings_Dialog::spinBoxRecentMaxFilesValueChanged(int value)
-{
-    dialog.opensave_recent_max_files = value;
-}
-
-void Settings_Dialog::spinBoxTrimDstNumJumpsValueChanged(int value)
-{
-    dialog.opensave_trim_dst_num_jumps = value;
-}
-
-void Settings_Dialog::checkBoxGridShowOnLoadStateChanged(int checked)
-{
-    dialog.grid_show_on_load = checked;
-}
-
-void Settings_Dialog::checkBoxGridShowOriginStateChanged(int checked)
-{
-    dialog.grid_show_origin = checked;
 }
 
 void Settings_Dialog::checkBoxGridColorMatchCrossHairStateChanged(int checked)
@@ -2337,13 +2349,13 @@ void Settings_Dialog::checkBoxRulerShowOnLoadStateChanged(int checked)
 void Settings_Dialog::comboBoxRulerMetricCurrentIndexChanged(int index)
 {
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
-    if (comboBox)
-    {
+    if (comboBox) {
         bool ok = 0;
         dialog.ruler_metric = comboBox->itemData(index).toBool();
     }
-    else
+    else {
         dialog.ruler_metric = true;
+    }
 }
 
 void Settings_Dialog::chooseRulerColor()

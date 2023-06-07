@@ -432,31 +432,6 @@ node(EmbVector value)
 }
 
 /**
- * .
- * Note: on Unix we include the trailing separator.
- * For Windows compatibility we omit it.
- */
-QString SettingsDir()
-{
-#if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
-    QString homePath = QDir::homePath();
-    return homePath + "/.embroidermodder2/";
-#else
-    return "";
-#endif
-}
-
-/**
- * @brief SettingsPath
- * @return
- */
-QString SettingsPath()
-{
-    QString settingsPath = SettingsDir() + "settings.ini";
-    return settingsPath;
-}
-
-/**
  * @brief to_string_vector
  * @param list
  * @return
@@ -2903,22 +2878,49 @@ read_configuration(void)
         printf("%s", fname.c_str());
         return 0;
     }
-    toml_table_t *settings_toml = toml_parse_file(f, error_buffer, sizeof(error_buffer));
+    toml_table_t *configuration = toml_parse_file(f, error_buffer, sizeof(error_buffer));
     fclose(f);
 
-    if (!settings_toml) {
+    if (!configuration) {
         puts("ERROR: failed to parse config.toml, continuing with defaults.");
         return 0;
     }
 
-    config["version"] = node(read_string_setting(settings_toml, "version"));
-    std::vector<String> action_labels =
-        read_string_list_setting(settings_toml, "actions_");
-
+    StringList action_labels;
+    for (int i=0; ; i++) {
+        const char *key = toml_key_in(configuration, i);
+        if (!key) {
+            break;
+        }
+        debug_message(key);
+        toml_table_t *table = toml_table_in(configuration, key);
+        if (table) {
+            toml_datum_t action = toml_string_in(table, "type");
+            if (action.ok) {
+                if (!strcmp(action.u.s, "action")) {
+                    action_labels.push_back(std::string(key));
+                }
+                free(action.u.s);
+            }
+            continue;
+        }
+        toml_array_t *array = toml_array_in(configuration, key);
+        if (array) {
+            std::string k(key);
+            config[k] = node(read_string_list_setting(configuration, key));
+            continue;
+        }
+        toml_datum_t str = toml_string_in(configuration, key);
+        if (str.ok) {
+            std::string str_(str.u.s);
+            config[str_] = node(read_string_setting(configuration, key));
+            free(str.u.s);
+        }
+    }
+ 
     for (int i=0; i<(int)action_labels.size(); i++) {
         Action action;
-        String label = "ACTION_" + action_labels[i];
-        toml_table_t *table = toml_table_in(settings_toml, label.c_str());
+        toml_table_t *table = toml_table_in(configuration, action_labels[i].c_str());
         action.icon = read_string_setting(table, "icon");
         action.command = read_string_setting(table, "command");
         action.shortcut = read_string_setting(table, "shortcut");
@@ -2927,13 +2929,9 @@ read_configuration(void)
         action_table.push_back(action);
     }
 
-    StringList string_lists_list = read_string_list_setting(settings_toml, "string_lists");
-    for (int i=0; i<(int)string_lists_list.size(); i++) {
-        String key = string_lists_list[i];
-        config[key] = node(read_string_list_setting(settings_toml, key.c_str()));
-    }
+    toml_free(configuration);
 
-    toml_free(settings_toml);
+    debug_message("Configuration loaded.");
 
     return 1;
 }
@@ -3246,9 +3244,7 @@ MainWindow::createAllActions()
             ACTION->setCheckable(true);
         }
 
-        std::string command = action.command;
-        auto f = [=](){ actuator(command); };
-        connect(ACTION, &QAction::triggered, this, f);
+        connect(ACTION, &QAction::triggered, this, [=](){ actuator(action.command); });
         actionHash[action.icon] = ACTION;
     }
 
@@ -3348,7 +3344,6 @@ run_script(StringList script)
 String
 actuator(String line)
 {
-    NodeList a;
     std::vector<String> list = tokenize(line, ' ');
     String command = list[0];
     list.erase(list.begin());
@@ -3930,10 +3925,8 @@ error_action(String args)
 String
 todo_action(String args)
 {
-    /*
-    _mainWin->nativealert_action("TODO: (" + a[0].s + ") " + a[1].s);
+    //_mainWin->nativeAlert("TODO: " + args);
     actuator("end");
-    */
     return "";
 }
 
@@ -4152,22 +4145,35 @@ add_rubber_action(String args)
         _mainWin->nativeadd_line_action(mx, my, mx, my, 0, OBJ_RUBBER_ON);
     }
     else if (objType == "PATH") {
-    } //TODO: handle this type
-    else if (objType == "POINT") {} //TODO: handle this type
-    else if (objType == "POLYGON") { _mainWin->nativeadd_polygon_action(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
-    else if (objType == "POLYLINE") { _mainWin->nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
-    else if (objType == "RAY") {} //TODO: handle this type
-    else if (objType == "RECTANGLE") { _mainWin->nativeadd_rectangle_action(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }
-    else if (objType == "SPLINE") {} //TODO: handle this type
-    else if (objType == "TEXTMULTI") {} //TODO: handle this type
-    else if (objType == "TEXTSINGLE") { _mainWin->nativeadd_text_single_action("", mx, my, 0, false, OBJ_RUBBER_ON); }
+        actuator("todo handle path type in add_rubber_action.);
+    }
+    else if (objType == "POINT") {
+        actuator("todo handle point type in add_rubber_action.);
+    }
+    else if (objType == "POLYGON") {
+    	_mainWin->nativeadd_polygon_action(mx, my, QPainterPath(), OBJ_RUBBER_ON);
+    }
+    else if (objType == "POLYLINE") {
+        _mainWin->nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON);
+    }
+    else if (objType == "RAY") {
+        actuator("todo handle ray type in add_rubber_action.);
+    }
+    else if (objType == "RECTANGLE") {
+        _mainWin->nativeadd_rectangle_action(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON);
+    }
+    else if (objType == "SPLINE") {
+        actuator("todo handle spline type in add_rubber_action.);
+    }
+    else if (objType == "TEXTMULTI") {
+        actuator("todo handle text multi type in add_rubber_action.);
+    }
+    else if (objType == "TEXTSINGLE") {
+        _mainWin->nativeadd_text_single_action("", mx, my, 0, false, OBJ_RUBBER_ON);
+    }
     */
     return "";
 }
-
-/*
-"clear rubber", nativeclear_rubber_action();
-*/
 
 /**
  * @brief add_slot_action
@@ -4870,3 +4876,4 @@ MainWindow::floatingChangedToolBar(bool isFloating)
         }
     }
 }
+

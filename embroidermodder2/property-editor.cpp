@@ -509,7 +509,7 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
         else if (objType == OBJ_TYPE_TEXTSINGLE) {
             updateLineEditStrIfVaries(lineEdits["text-single-contents"], obj->objText);
             updateFontComboBoxStrIfVaries(comboBoxTextSingleFont, obj->objTextFont);
-            updateComboBoxStrIfVaries(comboBoxes["text-single-justify"], obj->objTextJustify, justify_options);
+            updateComboBoxStrIfVaries(comboBoxes["text-single-justify"], obj->objTextJustify, config["justify_options"].sl);
             updateLineEditNumIfVaries(lineEdits["text-single-height"], obj->objTextSize, false);
             updateLineEditNumIfVaries(lineEdits["text-single-rotation"], -obj->rotation(), true);
             updateLineEditNumIfVaries(lineEdits["text-single-x"], obj->objectX(), false);
@@ -582,13 +582,14 @@ PropertyEditor::updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, QStri
  *
  */
 void
-PropertyEditor::updateComboBoxStrIfVaries(QComboBox* comboBox, QString  str, const QStringList& strList)
+PropertyEditor::updateComboBoxStrIfVaries(QComboBox* comboBox, QString str, StringList strList)
 {
     fieldOldText = comboBox->currentText();
     fieldNewText = str;
 
     if (fieldOldText.isEmpty()) {
-        foreach(QString s, strList) {
+        for (int i=0; i<(int)strList.size(); i++) {
+            QString s = QString::fromStdString(strList[i]);
             comboBox->addItem(s, s);
         }
         comboBox->setCurrentIndex(comboBox->findText(fieldNewText));

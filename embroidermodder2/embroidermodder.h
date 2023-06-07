@@ -318,9 +318,9 @@ extern Settings dialog;
 extern Dictionary settings_;
 extern Dictionary dialog_;
 extern Dictionary config;
+extern std::unordered_map<String, StringList> scripts;
 
 extern QFontComboBox* comboBoxTextSingleFont;
-extern QStringList justify_options;
 
 extern MainWindow* _mainWin;
 extern CmdPrompt* prompt;
@@ -415,6 +415,10 @@ public:
     QPen lwtPen;
     QLineF objLine;
     String objRubberMode = "OBJ_RUBBER_OFF";
+    String init_script = "";
+    String prompt_script = "";
+    String click_script = "";
+    String context_script = "";
     QHash<QString, QPointF> objRubberPoints;
     QHash<QString, QString> objRubberTexts;
     int64_t objID;
@@ -1314,7 +1318,7 @@ public:
     void updateLineEditStrIfVaries(QLineEdit* lineEdit, QString  str);
     void updateLineEditNumIfVaries(QLineEdit* lineEdit, EmbReal num, bool useAnglePrecision);
     void updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, QString  str);
-    void updateComboBoxStrIfVaries(QComboBox* comboBox, QString  str, const QStringList& strList);
+    void updateComboBoxStrIfVaries(QComboBox* comboBox, QString str, StringList strList);
     void updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, bool yesOrNoText);
 
     QSignalMapper* signalMapper;
@@ -1432,8 +1436,6 @@ public:
     QCheckBox* create_checkbox(QGroupBox *groupbox, String label);
 
 private slots:
-    void comboBoxLanguageCurrentIndexChanged(QString );
-    void comboBoxIconThemeCurrentIndexChanged(QString );
     void comboBoxIconSizeCurrentIndexChanged(int);
     void checkBoxGeneralMdiBGUseLogoStateChanged(int);
     void chooseGeneralMdiBackgroundLogo();
@@ -1444,9 +1446,6 @@ private slots:
     void currentGeneralMdiBackgroundColorChanged(const QColor&);
     void checkBoxShowScrollBarsStateChanged(int);
     void comboBoxScrollBarWidgetCurrentIndexChanged(int);
-    void spinBoxZoomScaleInValueChanged(double);
-    void spinBoxZoomScaleOutValueChanged(double);
-    void checkBoxDisableBGStateChanged(int);
     void chooseDisplayCrossHairColor();
     void currentDisplayCrossHairColorChanged(const QColor&);
     void chooseDisplayBackgroundColor();
@@ -1469,15 +1468,10 @@ private slots:
     void comboBoxPromptFontFamilyCurrentIndexChanged(QString );
     void comboBoxPromptFontStyleCurrentIndexChanged(QString );
     void spinBoxPromptFontSizeValueChanged(int);
-    void checkBoxPromptSaveHistoryStateChanged(int);
     void checkBoxPromptSaveHistoryAsHtmlStateChanged(int);
     void checkBoxCustomFilterStateChanged(int);
     void buttonCustomFilterSelectAllClicked();
     void buttonCustomFilterClearAllClicked();
-    void spinBoxRecentMaxFilesValueChanged(int);
-    void spinBoxTrimDstNumJumpsValueChanged(int);
-    void checkBoxGridShowOnLoadStateChanged(int);
-    void checkBoxGridShowOriginStateChanged(int);
     void checkBoxGridColorMatchCrossHairStateChanged(int);
     void chooseGridColor();
     void currentGridColorChanged(const QColor&);
@@ -1627,7 +1621,7 @@ public:
     void redo();
 
     Geometry* object;
-    View*       gview;
+    View* gview;
 };
 
 /**
@@ -1737,8 +1731,8 @@ public:
     void mirror();
 
     Geometry* object;
-    View*       gview;
-    QLineF      mirrorLine;
+    View* gview;
+    QLineF mirrorLine;
 
 };
 
@@ -1942,8 +1936,5 @@ private:
 
     void alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& viewPoint);
 };
-
-QString SettingsPath();
-QString SettingsDir();
 
 #endif

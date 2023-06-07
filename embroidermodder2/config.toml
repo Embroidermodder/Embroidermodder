@@ -22,107 +22,6 @@ designs = [
     "designs/treble_clef.toml"
 ]
 
-# \todo This should be replaced by scanning this file for
-# blocks of type "action".
-actions_ = [
-    "donothing",
-    "new",
-    "open",
-    "save",
-    "saveas",
-    "print",
-    "designdetails",
-    "exit",
-    "cut",
-    "copy",
-    "paste",
-    "undo",
-    "redo",
-    "windowclose",
-    "windowcloseall",
-    "windowcascade",
-    "windowtile",
-    "windownext",
-    "windowprevious",
-    "help",
-    "changelog",
-    "tipoftheday",
-    "about",
-    "whatsthis",
-    "icon16",
-    "icon24",
-    "icon32",
-    "icon48",
-    "icon64",
-    "icon128",
-    "settingsdialog",
-    "makelayercurrent",
-    "layers",
-    "layerselector",
-    "layerprevious",
-    "colorselector",
-    "linetypeselector",
-    "lineweightselector",
-    "hidealllayers",
-    "showalllayers",
-    "freezealllayers",
-    "thawalllayers",
-    "lockalllayers",
-    "unlockalllayers",
-    "textbold",
-    "textitalic",
-    "textoverline",
-    "textstrikeout",
-    "textunderline",
-    "zoomrealtime",
-    "zoomprevious",
-    "zoomwindow",
-    "zoomdynamic",
-    "zoomextents",
-    "zoomin",
-    "zoomout",
-    "zoomall",
-    "zoomscale",
-    "zoomselected",
-    "panrealtime",
-    "panpoint",
-    "panleft",
-    "panright",
-    "panup",
-    "pandown",
-    "day",
-    "night",
-    "circle",
-    "heart"
-]
-
-string_lists = [
-    "group_box_list",
-    "all_line_editors",
-    "file_toolbar",
-    "edit_toolbar",
-    "view_toolbar",
-    "zoom_toolbar",
-    "pan_toolbar",
-    "icon_toolbar",
-    "help_toolbar",
-    "draw_toolbar",
-    "top_toolbar_layout",
-    "bottom_toolbar_layout",
-    "side_toolbar_layout",
-    "file_menu",
-    "edit_menu",
-    "pan_menu",
-    "zoom_menu",
-    "view_menu",
-    "settings_menu",
-    "window_menu",
-    "help_menu",
-    "draw_menu",
-    "menubar_order",
-    "tips"
-]
-
 tips = [
     "we need more tips?",
     "you can change the color of the display through settings?",
@@ -525,6 +424,100 @@ all_line_editors = [
     "geometry_text_multi", "text-multi-x", "blank", "Position X", "double", "",
     "geometry_text_multi", "text-multi-y", "blank", "Position Y", "double", ""
 ]
+
+# TODO: "Aligned"
+# TODO: "Fit"
+justify_options = [
+    "Left",
+    "Center",
+    "Right",
+    "Aligned",
+    "Middle",
+    "Fit",
+    "Top Left",
+    "Top Center",
+    "Top Right",
+    "Middle Left",
+    "Middle Center",
+    "Middle Right",
+    "Bottom Left",
+    "Bottom Center",
+    "Bottom Right"
+]
+
+circle_init_script = [
+    "init",
+    "clear_selection",
+    "# FIX SELECTING CURRENT OBJECT",
+    "select this",
+    "set mode CIRCLE_MODE_1P_RAD",
+    "set-prompt-prefix-tr Specify center point for circle or [3P/2P/TTR (tan tan radius)]: "
+]
+
+dolphin_init_script = [
+    "init",
+    "clear-selection",
+    "set mode DOLPHIN_MODE_NUM_POINTS", 
+    "# FIX SELECTING CURRENT OBJECT",
+    "select this",
+    "set-selected numPoints 512",
+    "set-selected minPoints 64",
+    "set-selected maxPoints 8192",
+    "set-selected center_x 0.0f",
+    "set-selected center_y 0.0f",
+    "set-selected scale_x 0.04f",
+    "set-selected scale_y 0.04f",
+    "add-rubber-selected POLYGON",
+    "set-rubber-mode POLYGON",
+    "update-dolphin numPoints scale_x scale_y",
+    "spare-rubber POLYGON",
+    "end"
+]
+
+ellipse_init_script = [
+    "init",
+    "clear-selection",
+    "# FIX SELECTING CURRENT OBJECT",
+    "select this",
+    "set mode ELLIPSE_MODE_MAJORDIAMETER_MINORRADIUS",
+    "set-selected height 1.0",
+    "set-selected width 2.0",
+    "set-selected rotation 0.0",
+    "set-prompt-prefix-tr Specify first axis start point or [Center]: "
+]
+
+polyline_init_script = [
+    "init",
+    "clear-selection",
+    "# FIX SELECTING CURRENT OBJECT",
+    "select this",
+    "set-selected firstRun true",
+    "set-selected first_x 0.0f",
+    "set-selected first.y 0.0f",
+    "set-selected prev_x 0.0f",
+    "set-selected prev_y 0.0f",
+    "set-selected num 0",
+    "set-prompt-prefix-tr Specify first point: "
+]
+
+snowflake_init_script = [
+    "init",
+    "clear-selection",
+    "numPoints=2048",
+    "minPoitns=64",
+    "maxPoints=8192",
+    "center.x=0.0f",
+    "center.y=0.0f",
+    "scale.x=0.04f",
+    "scale.y=0.04f",
+    "mode=SNOWFLAKE_MODE_NUM_POINTS",
+    "add-rubber POLYGON",
+    "set-rubber-mode POLYGON",
+    "update-snowflake",
+    "spare-rubber POLYGON",
+    "end"
+]
+
 
 [ACTION_donothing]
 type = "action"
@@ -1114,15 +1107,16 @@ alias = ["PANDOWN"]
 [ACTION_day]
 type = "action"
 icon = "day"
-command = "day"
+command = "day_vision"
 tooltip = "&Day"
 statustip = "Updates the current view using day vision settings: DAY."
 shortcut = ""
+alias = ["DAY"]
 
 [ACTION_night]
 type = "action"
 icon = "night"
-command = "night"
+command = "night_vision"
 tooltip = "&Night"
 statustip = "Updates the current view using night vision settings: NIGHT"
 shortcut = ""
@@ -1376,3 +1370,4 @@ toolbar = "None"
 tooltip = "E&xit"
 statustip = "Exit the application: EXIT."
 alias = ["EXIT", "QUIT"]
+
