@@ -1871,9 +1871,6 @@ public slots:
     void previewOn(String clone, String mode, EmbReal x, EmbReal y, EmbReal data);
     void previewOff();
 
-    void enableMoveRapidFire();
-    void disableMoveRapidFire();
-
     bool allowRubber();
     void addToRubberRoom(QGraphicsItem* item);
     void vulcanizeRubberRoom();
@@ -1909,7 +1906,7 @@ private:
     bool willUnderflowInt32(int64_t a, int64_t b);
     bool willOverflowInt32(int64_t a, int64_t b);
     int roundToMultiple(bool roundUp, int numToRound, int multiple);
-    QPainterPath createRulerTextPath(float x, EmbReal y, QString str, EmbReal height);
+    QPainterPath createRulerTextPath(EmbVector position, QString str, EmbReal height);
 
     QList<QGraphicsItem*> previewObjectList;
     QGraphicsItemGroup* previewObjectItemGroup;

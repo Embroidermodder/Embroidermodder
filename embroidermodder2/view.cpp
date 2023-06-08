@@ -19,6 +19,8 @@
 
 #include "embroidermodder.h"
 
+#include <cassert>
+
 //#include <QOpenGLWidget>
 
 View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
@@ -244,18 +246,6 @@ View::previewOff()
     previewActive = false;
 
     gscene->update();
-}
-
-void
-View::enableMoveRapidFire()
-{
-    rapidMoveActive = true;
-}
-
-void
-View::disableMoveRapidFire()
-{
-    rapidMoveActive = false;
 }
 
 bool View::allowRubber()
@@ -803,75 +793,60 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
     //Draw horizontal and vertical rulers
     //==================================================
 
-    if (gscene->property("ENABLE_RULER").toBool())
-    {
+    if (gscene->property("ENABLE_RULER").toBool()) {
         bool proceed = true;
 
-        int vw = width();  //View Width
-        int vh = height(); //View Height
-        QPointF origin = mapToScene(0,0);
-        QPointF rulerHoriz = mapToScene(vw,rulerPixelSize);
-        QPointF rulerVert  = mapToScene(rulerPixelSize,vh);
+        EmbVector view_dim;
+        view_dim.x = width();  //View Width
+        view_dim.y = height(); //View Height
+        EmbVector origin = to_EmbVector(mapToScene(0, 0));
+        EmbVector rh = to_EmbVector(mapToScene(view_dim.x, rulerPixelSize));
+        EmbVector rv = to_EmbVector(mapToScene(rulerPixelSize, view_dim.y));
 
-        EmbReal ox = origin.x();
-        EmbReal oy = origin.y();
+        EmbReal rhw = rh.x - origin.x;
+        EmbReal rhh = rh.y - origin.y;
 
-        EmbReal rhx = rulerHoriz.x();
-        EmbReal rhy = rulerHoriz.y();
-        EmbReal rhw = rhx - ox;
-        EmbReal rhh = rhy - oy;
-
-        EmbReal rvx = rulerVert.x();
-        EmbReal rvy = rulerVert.y();
-        EmbReal rvw = rvx - ox;
-        EmbReal rvh = rvy - oy;
+        EmbReal rvw = rv.x - origin.x;
+        EmbReal rvh = rv.y - origin.y;
 
         //NOTE: Drawing ruler if zoomed out too far will cause an assertion failure.
         //      We will limit the maximum size the ruler can be shown at.
         quint16 maxSize = -1; //Intentional underflow
-        if (rhw >= maxSize || rvh >= maxSize) proceed = false;
+        if (rhw >= maxSize || rvh >= maxSize)
+            proceed = false;
 
-        if (proceed)
-        {
-            int distance = mapToScene(rulerPixelSize*3, 0).x() - ox;
+        if (proceed) {
+            int distance = mapToScene(rulerPixelSize*3, 0).x() - origin.x;
             QString distStr = QString().setNum(distance);
             int distStrSize = distStr.size();
             int msd = distStr.at(0).digitValue(); //Most Significant Digit
 
-            if (msd != -1)
-            {
-
+            if (msd != -1) {
                 msd++;
-                if (msd == 10)
-                {
+                if (msd == 10) {
                     msd = 1;
                     distStr.resize(distStrSize+1);
                     distStrSize++;
                 }
 
                 distStr.replace(0, 1, QString().setNum(msd));
-                for (int i = 1; i < distStrSize; ++i)
-                {
+                for (int i = 1; i < distStrSize; ++i) {
                     distStr.replace(i, 1, '0');
                 }
                 int unit = distStr.toInt();
                 EmbReal fraction;
                 bool feet = true;
-                if (rulerMetric)
-                {
+                if (rulerMetric) {
                     if (unit < 10) unit = 10;
                     fraction = unit/10;
                 }
-                else
-                {
-                    if (unit <= 1)
-                    {
+                else {
+                    if (unit <= 1) {
                         unit = 1;
                         feet = false;
                         fraction = (EmbReal)(unit/16);
                     }
-                    else
-                    {
+                    else {
                         unit = roundToMultiple(true, unit, 12);
                         fraction = unit/12;
                     }
@@ -879,36 +854,35 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
 
                 EmbReal little  = 0.20;
                 EmbReal medium = 0.40;
-                EmbReal rhTextOffset = mapToScene(3, 0).x() - ox;
-                EmbReal rvTextOffset = mapToScene(0, 3).y() - oy;
+                EmbReal rhTextOffset = mapToScene(3, 0).x() - origin.x;
+                EmbReal rvTextOffset = mapToScene(0, 3).y() - origin.y;
                 EmbReal textHeight = rhh*medium;
 
                 QVector<QLineF> lines;
-                lines.push_back(QLineF(ox, rhy, rhx, rhy));
-                lines.push_back(QLineF(rvx, oy, rvx, rvy));
+                lines.push_back(QLineF(origin.x, rh.y, rh.x, rh.y));
+                lines.push_back(QLineF(rv.x, origin.y, rv.x, rv.y));
 
-                EmbReal mx = sceneMousePoint.x();
-                EmbReal my = sceneMousePoint.y();
-                lines.push_back(QLineF(mx, rhy, mx, oy));
-                lines.push_back(QLineF(rvx, my, ox, my));
+                EmbVector mp = to_EmbVector(sceneMousePoint);
+                lines.push_back(QLineF(mp.x, rh.y, mp.x, origin.y));
+                lines.push_back(QLineF(rv.x, mp.y, origin.x, mp.y));
 
                 QTransform transform;
 
                 QPen rulerPen(QColor(0,0,0));
                 rulerPen.setCosmetic(true);
                 painter->setPen(rulerPen);
-                painter->fillRect(QRectF(ox, oy, rhw, rhh), rulerColor);
-                painter->fillRect(QRectF(ox, oy, rvw, rvh), rulerColor);
+                painter->fillRect(QRectF(origin.x, origin.y, rhw, rhh), rulerColor);
+                painter->fillRect(QRectF(origin.x, origin.y, rvw, rvh), rulerColor);
 
                 int xFlow;
                 int xStart;
                 int yFlow;
                 int yStart;
-                if (willUnderflowInt32(ox, unit)) {
+                if (willUnderflowInt32(origin.x, unit)) {
                     proceed = false;
                 }
                 else {
-                    xFlow = roundToMultiple(false, ox, unit);
+                    xFlow = roundToMultiple(false, origin.x, unit);
                 }
                 if (willUnderflowInt32(xFlow, unit)) {
                     proceed = false;
@@ -916,11 +890,11 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                 else {
                     xStart = xFlow - unit;
                 }
-                if (willUnderflowInt32(oy, unit)) {
+                if (willUnderflowInt32(origin.y, unit)) {
                     proceed = false;
                 }
                 else {
-                    yFlow = roundToMultiple(false, oy, unit);
+                    yFlow = roundToMultiple(false, origin.y, unit);
                 }
                 if (willUnderflowInt32(yFlow, unit)) {
                     proceed = false;
@@ -930,129 +904,118 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                 }
 
                 if (proceed) {
-                    for (int x = xStart; x < rhx; x += unit) {
-                        transform.translate(x+rhTextOffset, rhy-rhh/2);
+                    for (int x = xStart; x < rh.x; x += unit) {
+                        transform.translate(x+rhTextOffset, rh.y-rhh/2);
                         QPainterPath rulerTextPath;
+                            EmbVector pos;
+                            pos.x = 0.0f;
+                            pos.y = 0.0f;
                         if (rulerMetric) {
-                            rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(x), textHeight));
+                            rulerTextPath = transform.map(createRulerTextPath(pos, QString().setNum(x), textHeight));
                         }
                         else {
                             if (feet)
-                                rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(x/12).append('\''), textHeight));
+                                rulerTextPath = transform.map(createRulerTextPath(pos, QString().setNum(x/12).append('\''), textHeight));
                             else
-                                rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(x).append('\"'), textHeight));
+                                rulerTextPath = transform.map(createRulerTextPath(pos, QString().setNum(x).append('\"'), textHeight));
                         }
                         transform.reset();
                         painter->drawPath(rulerTextPath);
 
-                        lines.append(QLineF(x, rhy, x, oy));
-                        if (rulerMetric)
-                        {
-                            lines.append(QLineF(x, rhy, x, oy));
-                            lines.append(QLineF(x+fraction  , rhy, x+fraction,   rhy-rhh*little));
-                            lines.append(QLineF(x+fraction*2, rhy, x+fraction*2, rhy-rhh*little));
-                            lines.append(QLineF(x+fraction*3, rhy, x+fraction*3, rhy-rhh*little));
-                            lines.append(QLineF(x+fraction*4, rhy, x+fraction*4, rhy-rhh*little));
-                            lines.append(QLineF(x+fraction*5, rhy, x+fraction*5, rhy-rhh*medium)); //Half
-                            lines.append(QLineF(x+fraction*6, rhy, x+fraction*6, rhy-rhh*little));
-                            lines.append(QLineF(x+fraction*7, rhy, x+fraction*7, rhy-rhh*little));
-                            lines.append(QLineF(x+fraction*8, rhy, x+fraction*8, rhy-rhh*little));
-                            lines.append(QLineF(x+fraction*9, rhy, x+fraction*9, rhy-rhh*little));
-                        }
-                        else
-                        {
-                            if (feet)
-                            {
-                                for (int i = 0; i < 12; ++i)
-                                {
-                                    lines.append(QLineF(x+fraction*i, rhy, x+fraction*i, rhy-rhh*medium));
+                        lines.append(QLineF(x, rh.y, x, origin.y));
+                        if (rulerMetric) {
+                            for (int i=0; i<10; i++) {
+                                if (i == 5) {
+                                    lines.append(QLineF(x+fraction*5, rh.y, x+fraction*5, rh.y-rhh*medium)); //Half
+                                }
+                                else {
+                                    lines.append(QLineF(x+fraction*i, rh.y, x+fraction*i,   rh.y-rhh*little));
                                 }
                             }
-                            else
-                            {
-                                lines.append(QLineF(x+fraction   , rhy, x+fraction,    rhy-rhh*little));
-                                lines.append(QLineF(x+fraction* 2, rhy, x+fraction* 2, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction* 3, rhy, x+fraction* 3, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction* 4, rhy, x+fraction* 4, rhy-rhh*medium)); //Quarter
-                                lines.append(QLineF(x+fraction* 5, rhy, x+fraction* 5, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction* 6, rhy, x+fraction* 6, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction* 7, rhy, x+fraction* 7, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction* 8, rhy, x+fraction* 8, rhy-rhh*medium)); //Half
-                                lines.append(QLineF(x+fraction* 9, rhy, x+fraction* 9, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction*10, rhy, x+fraction*10, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction*11, rhy, x+fraction*11, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction*12, rhy, x+fraction*12, rhy-rhh*medium)); //Quarter
-                                lines.append(QLineF(x+fraction*13, rhy, x+fraction*13, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction*14, rhy, x+fraction*14, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction*15, rhy, x+fraction*15, rhy-rhh*little));
+                        }
+                        else {
+                            if (feet) {
+                                for (int i = 0; i < 12; ++i) {
+                                    lines.append(QLineF(x+fraction*i, rh.y, x+fraction*i, rh.y-rhh*medium));
+                                }
+                            }
+                            else {
+                                lines.append(QLineF(x+fraction   , rh.y, x+fraction,    rh.y-rhh*little));
+                                lines.append(QLineF(x+fraction* 2, rh.y, x+fraction* 2, rh.y-rhh*little));
+                                lines.append(QLineF(x+fraction* 3, rh.y, x+fraction* 3, rh.y-rhh*little));
+                                lines.append(QLineF(x+fraction* 4, rh.y, x+fraction* 4, rh.y-rhh*medium)); //Quarter
+                                lines.append(QLineF(x+fraction* 5, rh.y, x+fraction* 5, rh.y-rhh*little));
+                                lines.append(QLineF(x+fraction* 6, rh.y, x+fraction* 6, rh.y-rhh*little));
+                                lines.append(QLineF(x+fraction* 7, rh.y, x+fraction* 7, rh.y-rhh*little));
+                                lines.append(QLineF(x+fraction* 8, rh.y, x+fraction* 8, rh.y-rhh*medium)); //Half
+                                lines.append(QLineF(x+fraction* 9, rh.y, x+fraction* 9, rh.y-rhh*little));
+                                lines.append(QLineF(x+fraction*10, rh.y, x+fraction*10, rh.y-rhh*little));
+                                lines.append(QLineF(x+fraction*11, rh.y, x+fraction*11, rh.y-rhh*little));
+                                lines.append(QLineF(x+fraction*12, rh.y, x+fraction*12, rh.y-rhh*medium)); //Quarter
+                                lines.append(QLineF(x+fraction*13, rh.y, x+fraction*13, rh.y-rhh*little));
+                                lines.append(QLineF(x+fraction*14, rh.y, x+fraction*14, rh.y-rhh*little));
+                                lines.append(QLineF(x+fraction*15, rh.y, x+fraction*15, rh.y-rhh*little));
                             }
                         }
                     }
-                    for (int y = yStart; y < rvy; y += unit)
-                    {
-                        transform.translate(rvx-rvw/2, y-rvTextOffset);
+                    for (int y = yStart; y < rv.y; y += unit) {
+                        transform.translate(rv.x-rvw/2, y-rvTextOffset);
                         transform.rotate(-90);
                         QPainterPath rulerTextPath;
-                        if (rulerMetric)
-                        {
-                            rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(-y), textHeight));
+                        EmbVector pos;
+                        pos.x = 0.0f;
+                        pos.y = 0.0f;
+                        if (rulerMetric) {
+                            rulerTextPath = transform.map(createRulerTextPath(pos, QString().setNum(-y), textHeight));
                         }
-                        else
-                        {
+                        else {
                             if (feet)
-                                rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(-y/12).append('\''), textHeight));
+                                rulerTextPath = transform.map(createRulerTextPath(pos, QString().setNum(-y/12).append('\''), textHeight));
                             else
-                                rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(-y).append('\"'), textHeight));
+                                rulerTextPath = transform.map(createRulerTextPath(pos, QString().setNum(-y).append('\"'), textHeight));
                         }
                         transform.reset();
                         painter->drawPath(rulerTextPath);
 
-                        lines.append(QLineF(rvx, y, ox, y));
-                        if (rulerMetric)
-                        {
-                            lines.append(QLineF(rvx, y+fraction  , rvx-rvw*little, y+fraction));
-                            lines.append(QLineF(rvx, y+fraction*2, rvx-rvw*little, y+fraction*2));
-                            lines.append(QLineF(rvx, y+fraction*3, rvx-rvw*little, y+fraction*3));
-                            lines.append(QLineF(rvx, y+fraction*4, rvx-rvw*little, y+fraction*4));
-                            lines.append(QLineF(rvx, y+fraction*5, rvx-rvw*medium, y+fraction*5)); //Half
-                            lines.append(QLineF(rvx, y+fraction*6, rvx-rvw*little, y+fraction*6));
-                            lines.append(QLineF(rvx, y+fraction*7, rvx-rvw*little, y+fraction*7));
-                            lines.append(QLineF(rvx, y+fraction*8, rvx-rvw*little, y+fraction*8));
-                            lines.append(QLineF(rvx, y+fraction*9, rvx-rvw*little, y+fraction*9));
-                        }
-                        else
-                        {
-                            if (feet)
-                            {
-                                for (int i = 0; i < 12; ++i)
-                                {
-                                    lines.append(QLineF(rvx, y+fraction*i, rvx-rvw*medium, y+fraction*i));
+                        lines.append(QLineF(rv.x, y, origin.x, y));
+                        if (rulerMetric) {
+                            for (int i=1; i<10; i++) {
+                                if (i == 5) {
+                                    lines.append(QLineF(rv.x, y+fraction*5, rv.x-rvw*medium, y+fraction*5)); //Half
+                                }
+                                else {
+                                    lines.append(QLineF(rv.x, y+fraction*i, rv.x-rvw*little, y+fraction*i));
                                 }
                             }
-                            else
-                            {
-                                lines.append(QLineF(rvx, y+fraction   , rvx-rvw*little, y+fraction));
-                                lines.append(QLineF(rvx, y+fraction* 2, rvx-rvw*little, y+fraction* 2));
-                                lines.append(QLineF(rvx, y+fraction* 3, rvx-rvw*little, y+fraction* 3));
-                                lines.append(QLineF(rvx, y+fraction* 4, rvx-rvw*medium, y+fraction* 4)); //Quarter
-                                lines.append(QLineF(rvx, y+fraction* 5, rvx-rvw*little, y+fraction* 5));
-                                lines.append(QLineF(rvx, y+fraction* 6, rvx-rvw*little, y+fraction* 6));
-                                lines.append(QLineF(rvx, y+fraction* 7, rvx-rvw*little, y+fraction* 7));
-                                lines.append(QLineF(rvx, y+fraction* 8, rvx-rvw*medium, y+fraction* 8)); //Half
-                                lines.append(QLineF(rvx, y+fraction* 9, rvx-rvw*little, y+fraction* 9));
-                                lines.append(QLineF(rvx, y+fraction*10, rvx-rvw*little, y+fraction*10));
-                                lines.append(QLineF(rvx, y+fraction*11, rvx-rvw*little, y+fraction*11));
-                                lines.append(QLineF(rvx, y+fraction*12, rvx-rvw*medium, y+fraction*12)); //Quarter
-                                lines.append(QLineF(rvx, y+fraction*13, rvx-rvw*little, y+fraction*13));
-                                lines.append(QLineF(rvx, y+fraction*14, rvx-rvw*little, y+fraction*14));
-                                lines.append(QLineF(rvx, y+fraction*15, rvx-rvw*little, y+fraction*15));
+                        }
+                        else {
+                            if (feet) {
+                                for (int i = 0; i < 12; ++i) {
+                                    lines.append(QLineF(rv.x, y+fraction*i, rv.x-rvw*medium, y+fraction*i));
+                                }
+                            }
+                            else {
+                                for (int i=1; i<16; i++) {
+                                    if (i == 8) {
+                                        lines.append(
+                                            QLineF(rv.x, y+fraction* 8, rv.x-rvw*medium, y+fraction* 8)); //Half
+                                    }
+                                    else if (i % 4 == 0) {
+                                        lines.append(
+                                            QLineF(rv.x, y+fraction* 4, rv.x-rvw*medium, y+fraction* 4)); //Quarter
+                                    }
+                                    else {
+                                        lines.append(
+                                            QLineF(rv.x, y+fraction*i, rv.x-rvw*little, y+fraction*i));
+                                    }
+                                }
                             }
                         }
                     }
                 }
 
                 painter->drawLines(lines);
-                painter->fillRect(QRectF(ox, oy, rvw, rhh), rulerColor);
+                painter->fillRect(QRectF(origin.x, origin.y, rvw, rhh), rulerColor);
             }
         }
     }
@@ -1078,112 +1041,118 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
 
 bool View::willUnderflowInt32(int64_t a, int64_t b)
 {
-    int64_t c;
-    Q_ASSERT(LLONG_MAX>INT_MAX);
-    c = (int64_t)a-b;
-    if (c < INT_MIN || c > INT_MAX)
-        return true;
-    return false;
+    assert(LLONG_MAX>INT_MAX);
+    int64_t c = (int64_t)a-b;
+    return (c < INT_MIN || c > INT_MAX);
 }
 
 bool View::willOverflowInt32(int64_t a, int64_t b)
 {
-    int64_t c;
-    Q_ASSERT(LLONG_MAX>INT_MAX);
-    c = (int64_t)a+b;
-    if (c < INT_MIN || c > INT_MAX)
-        return true;
-    return false;
+    assert(LLONG_MAX>INT_MAX);
+    int64_t c = (int64_t)a+b;
+    return (c < INT_MIN || c > INT_MAX);
 }
 
-QPainterPath View::createRulerTextPath(float x, float y, QString str, float height)
+void
+add_to_path(QPainterPath path, EmbVector position, EmbVector scale, char command, float x, float y)
+{
+    if (command == 'M') {
+        path.moveTo(position.x+x*scale.x, position.y+y*scale.y);
+    }
+    else if (command == 'L') {
+        path.lineTo(position.x+x*scale.x, position.y+y*scale.y);
+    }
+}
+
+QPainterPath View::createRulerTextPath(EmbVector position, QString str, float height)
 {
     QPainterPath path;
 
-    EmbReal xScale = height;
-    EmbReal yScale = height;
+    EmbVector scale;
+    scale.x = height;
+    scale.y = height;
 
     int len = str.length();
     for (int i = 0; i < len; ++i) {
         if (str[i] == QChar('1')) {
-            path.moveTo(x+0.05*xScale, y-0.00*yScale);
-            path.lineTo(x+0.45*xScale, y-0.00*yScale);
-            path.moveTo(x+0.00*xScale, y-0.75*yScale);
-            path.lineTo(x+0.25*xScale, y-1.00*yScale);
-            path.lineTo(x+0.25*xScale, y-0.00*yScale);
+            add_to_path(path, position, scale, 'M', 0.05, 0.0);
+            add_to_path(path, position, scale, 'L', 0.45, 0.0);
+            add_to_path(path, position, scale, 'M', 0.0, -0.75);
+            add_to_path(path, position, scale, 'L', 0.25, -1.0);
+            add_to_path(path, position, scale, 'L', 0.25, 0.0);
         }
         else if (str[i] == QChar('2')) {
-            path.moveTo(x+0.00*xScale, y-0.75*yScale);
-            path.arcTo(x+0.00*xScale, y-1.00*yScale, 0.50*xScale, 0.50*yScale, 180.00, -216.87);
-            path.lineTo(x+0.00*xScale, y-0.00*yScale);
-            path.lineTo(x+0.50*xScale, y-0.00*yScale);
+            path.moveTo(position.x+0.00*scale.x, position.y-0.75*scale.y);
+            path.arcTo(position.x+0.00*scale.x, position.y-1.00*scale.y, 0.50*scale.x, 0.50*scale.y, 180.00, -216.87);
+            path.lineTo(position.x+0.00*scale.x, position.y-0.00*scale.y);
+            path.lineTo(position.x+0.50*scale.x, position.y-0.00*scale.y);
         }
         else if (str[i] == QChar('3')) {
-            path.arcMoveTo(x+0.00*xScale, y-0.50*yScale, 0.50*xScale, 0.50*yScale, 195.00);
-            path.arcTo(x+0.00*xScale, y-0.50*yScale, 0.50*xScale, 0.50*yScale, 195.00, 255.00);
-            path.arcTo(x+0.00*xScale, y-1.00*yScale, 0.50*xScale, 0.50*yScale, 270.00, 255.00);
+            path.arcMoveTo(position.x+0.00*scale.x, position.y-0.50*scale.y, 0.50*scale.x, 0.50*scale.y, 195.00);
+            path.arcTo(position.x+0.00*scale.x, position.y-0.50*scale.y, 0.50*scale.x, 0.50*scale.y, 195.00, 255.00);
+            path.arcTo(position.x+0.00*scale.x, position.y-1.00*scale.y, 0.50*scale.x, 0.50*scale.y, 270.00, 255.00);
         }
         else if (str[i] == QChar('4')) {
-            path.moveTo(x+0.50*xScale, y-0.00*yScale);
-            path.lineTo(x+0.50*xScale, y-1.00*yScale);
-            path.lineTo(x+0.00*xScale, y-0.50*yScale);
-            path.lineTo(x+0.50*xScale, y-0.50*yScale);
+            path.moveTo(position.x+0.50*scale.x, position.y-0.00*scale.y);
+            path.lineTo(position.x+0.50*scale.x, position.y-1.00*scale.y);
+            path.lineTo(position.x+0.00*scale.x, position.y-0.50*scale.y);
+            path.lineTo(position.x+0.50*scale.x, position.y-0.50*scale.y);
         }
         else if (str[i] == QChar('5')) {
-            path.moveTo(x+0.50*xScale, y-1.00*yScale);
-            path.lineTo(x+0.00*xScale, y-1.00*yScale);
-            path.lineTo(x+0.00*xScale, y-0.50*yScale);
-            path.lineTo(x+0.25*xScale, y-0.50*yScale);
-            path.arcTo(x+0.00*xScale, y-0.50*yScale, 0.50*xScale, 0.50*yScale, 90.00, -180.00);
-            path.lineTo(x+0.00*xScale, y-0.00*yScale);
+            path.moveTo(position.x+0.50*scale.x, position.y-1.00*scale.y);
+            path.lineTo(position.x+0.00*scale.x, position.y-1.00*scale.y);
+            path.lineTo(position.x+0.00*scale.x, position.y-0.50*scale.y);
+            path.lineTo(position.x+0.25*scale.x, position.y-0.50*scale.y);
+            path.arcTo(position.x+0.00*scale.x, position.y-0.50*scale.y, 0.50*scale.x, 0.50*scale.y, 90.00, -180.00);
+            path.lineTo(position.x+0.00*scale.x, position.y-0.00*scale.y);
         }
         else if (str[i] == QChar('6')) {
-            path.addEllipse(QPointF(x+0.25*xScale, y-0.25*yScale), 0.25*xScale, 0.25*yScale);
-            path.moveTo(x+0.00*xScale, y-0.25*yScale);
-            path.lineTo(x+0.00*xScale, y-0.75*yScale);
-            path.arcTo(x+0.00*xScale, y-1.00*yScale, 0.50*xScale, 0.50*yScale, 180.00, -140.00);
+            path.addEllipse(QPointF(position.x+0.25*scale.x, position.y-0.25*scale.y), 0.25*scale.x, 0.25*scale.y);
+            path.moveTo(position.x+0.00*scale.x, position.y-0.25*scale.y);
+            path.lineTo(position.x+0.00*scale.x, position.y-0.75*scale.y);
+            path.arcTo(position.x+0.00*scale.x, position.y-1.00*scale.y, 0.50*scale.x, 0.50*scale.y, 180.00, -140.00);
         }
         else if (str[i] == QChar('7')) {
-            path.moveTo(x+0.00*xScale, y-1.00*yScale);
-            path.lineTo(x+0.50*xScale, y-1.00*yScale);
-            path.lineTo(x+0.25*xScale, y-0.25*yScale);
-            path.lineTo(x+0.25*xScale, y-0.00*yScale);
+            path.moveTo(position.x+0.00*scale.x, position.y-1.00*scale.y);
+            path.lineTo(position.x+0.50*scale.x, position.y-1.00*scale.y);
+            path.lineTo(position.x+0.25*scale.x, position.y-0.25*scale.y);
+            path.lineTo(position.x+0.25*scale.x, position.y-0.00*scale.y);
         }
         else if (str[i] == QChar('8')) {
-            path.addEllipse(QPointF(x+0.25*xScale, y-0.25*yScale), 0.25*xScale, 0.25*yScale);
-            path.addEllipse(QPointF(x+0.25*xScale, y-0.75*yScale), 0.25*xScale, 0.25*yScale);
+            path.addEllipse(QPointF(position.x+0.25*scale.x, position.y-0.25*scale.y), 0.25*scale.x, 0.25*scale.y);
+            path.addEllipse(QPointF(position.x+0.25*scale.x, position.y-0.75*scale.y), 0.25*scale.x, 0.25*scale.y);
         }
         else if (str[i] == QChar('9')) {
-            path.addEllipse(QPointF(x+0.25*xScale, y-0.75*yScale), 0.25*xScale, 0.25*yScale);
-            path.moveTo(x+0.50*xScale, y-0.75*yScale);
-            path.lineTo(x+0.50*xScale, y-0.25*yScale);
-            path.arcTo(x+0.00*xScale, y-0.50*yScale, 0.50*xScale, 0.50*yScale, 0.00, -140.00);
+            path.addEllipse(QPointF(position.x+0.25*scale.x, position.y-0.75*scale.y), 0.25*scale.x, 0.25*scale.y);
+            path.moveTo(position.x+0.50*scale.x, position.y-0.75*scale.y);
+            path.lineTo(position.x+0.50*scale.x, position.y-0.25*scale.y);
+            path.arcTo(position.x+0.00*scale.x, position.y-0.50*scale.y, 0.50*scale.x, 0.50*scale.y, 0.00, -140.00);
         }
         else if (str[i] == QChar('0')) {
-            //path.addEllipse(QPointF(x+0.25*xScale, y-0.50*yScale), 0.25*xScale, 0.50*yScale);
+            //path.addEllipse(QPointF(position.x+0.25*scale.x, position.y-0.50*scale.y), 0.25*scale.x, 0.50*scale.y);
 
-            path.moveTo(x+0.00*xScale, y-0.75*yScale);
-            path.lineTo(x+0.00*xScale, y-0.25*yScale);
-            path.arcTo(x+0.00*xScale, y-0.50*yScale, 0.50*xScale, 0.50*yScale, 180.00, 180.00);
-            path.lineTo(x+0.50*xScale, y-0.75*yScale);
-            path.arcTo(x+0.00*xScale, y-1.00*yScale, 0.50*xScale, 0.50*yScale,   0.00, 180.00);
+            path.moveTo(position.x+0.00*scale.x, position.y-0.75*scale.y);
+            path.lineTo(position.x+0.00*scale.x, position.y-0.25*scale.y);
+            path.arcTo(position.x+0.00*scale.x, position.y-0.50*scale.y, 0.50*scale.x, 0.50*scale.y, 180.00, 180.00);
+            path.lineTo(position.x+0.50*scale.x, position.y-0.75*scale.y);
+            path.arcTo(position.x+0.00*scale.x, position.y-1.00*scale.y, 0.50*scale.x, 0.50*scale.y,   0.00, 180.00);
         }
         else if (str[i] == QChar('-')) {
-            path.moveTo(x+0.00*xScale, y-0.50*yScale);
-            path.lineTo(x+0.50*xScale, y-0.50*yScale);
+            path.moveTo(position.x+0.00*scale.x, position.y-0.50*scale.y);
+            path.lineTo(position.x+0.50*scale.x, position.y-0.50*scale.y);
         }
         else if (str[i] == QChar('\'')) {
-            path.moveTo(x+0.25*xScale, y-1.00*yScale);
-            path.lineTo(x+0.25*xScale, y-0.75*yScale);
+            path.moveTo(position.x+0.25*scale.x, position.y-1.00*scale.y);
+            path.lineTo(position.x+0.25*scale.x, position.y-0.75*scale.y);
         }
         else if (str[i] == QChar('\"')) {
-            path.moveTo(x+0.10*xScale, y-1.00*yScale);
-            path.lineTo(x+0.10*xScale, y-0.75*yScale);
-            path.moveTo(x+0.40*xScale, y-1.00*yScale);
-            path.lineTo(x+0.40*xScale, y-0.75*yScale);
+            path.moveTo(position.x+0.10*scale.x, position.y-1.00*scale.y);
+            path.lineTo(position.x+0.10*scale.x, position.y-0.75*scale.y);
+            path.moveTo(position.x+0.40*scale.x, position.y-1.00*scale.y);
+            path.lineTo(position.x+0.40*scale.x, position.y-0.75*scale.y);
         }
 
-        x += 0.75*xScale;
+        position.x += 0.75*scale.x;
     }
 
     return path;

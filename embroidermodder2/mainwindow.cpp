@@ -2990,7 +2990,7 @@ disable_action(String variable)
     if (variable == "move-rapid-fire") {
         View* gview = activeView();
         if (gview) {
-            gview->disableMoveRapidFire();
+            gview->rapidMoveActive = false;
         }
         return "";
     }
@@ -3443,7 +3443,7 @@ end_action(String args)
     if (gview) {
         gview->clearRubberRoom();
         gview->previewOff();
-        gview->disableMoveRapidFire();
+        gview->rapidMoveActive = false;
     }
     prompt->endCommand();
     return "";
@@ -3724,7 +3724,7 @@ if (command == "enable") {
     if (command == "move-rapid-fire") {
         View* gview = activeView();
         if (gview) {
-            gview->enableMoveRapidFire();
+            gview->rapidMoveActive = true;
         }
         return "";
     }
