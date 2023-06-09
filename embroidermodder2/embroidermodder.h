@@ -76,10 +76,8 @@ typedef String (*Command)(String);
 struct Node_ {
     String s;
     EmbReal r;
-    EmbVector v;
     int32_t i;
     bool b;
-    Command f;
     StringList sl;
     int type;
 };
@@ -103,7 +101,6 @@ typedef struct Settings_ {
     String assets_dir;
     String general_language;
     String general_icon_theme;
-    String general_mdi_bg_logo;
     String general_mdi_bg_texture;
     QString opensave_custom_filter;
     String opensave_open_format;
@@ -315,9 +312,7 @@ extern MdiArea* mdiArea;
 extern Settings settings;
 extern Settings dialog;
 
-extern Dictionary settings_;
-extern Dictionary dialog_;
-extern Dictionary config;
+extern Dictionary settings_, dialog_, config;
 extern std::unordered_map<String, StringList> scripts;
 
 extern QFontComboBox* comboBoxTextSingleFont;
@@ -379,8 +374,13 @@ Node node(bool value);
 Node node(int value);
 Node node(EmbReal value);
 Node node(String value);
-Node node(EmbVector value);
 Node node(StringList value);
+
+bool get_bool(Dictionary d, String key);
+int get_int(Dictionary d, String key);
+EmbReal get_real(Dictionary d, String key);
+String get_str(Dictionary d, String key);
+StringList get_str_list(Dictionary d, String key);
 
 QGraphicsScene* activeScene();
 
@@ -706,7 +706,7 @@ class CmdPromptInput : public QLineEdit
 
 public:
     CmdPromptInput(QWidget* parent = 0);
-    ~CmdPromptInput();
+    ~CmdPromptInput() {}
 
     QString curText;
     QString defaultPrefix;
@@ -718,8 +718,6 @@ public:
 
     bool rapidFireEnabled;
     bool isBlinking;
-
-    QHash<QString, QString>* aliasHash;
 
     void changeFormatting(std::vector<QTextLayout::FormatRange> formats);
     void clearFormatting();
@@ -767,7 +765,6 @@ signals:
     void stopBlinking();
 
 public slots:
-    void addCommand(QString  alias, QString  cmd);
     void endCommand();
     void processInput(void);
     void checkSelection();
@@ -864,10 +861,10 @@ public:
     CmdPrompt(QWidget* parent = 0);
     ~CmdPrompt();
 
-    CmdPromptInput*    promptInput;
-    CmdPromptHistory*  promptHistory;
-    QVBoxLayout*       promptVBoxLayout;
-    QFrame*            promptDivider;
+    CmdPromptInput* promptInput;
+    CmdPromptHistory* promptHistory;
+    QVBoxLayout* promptVBoxLayout;
+    QFrame* promptDivider;
 
     CmdPromptSplitter* promptSplitter;
 
@@ -877,25 +874,16 @@ public:
     bool blinkState;
 
 public slots:
-    QString getHistory() { return promptHistory->toHtml(); }
-    QString getPrefix() { return promptInput->prefix; }
-    QString getCurrentText() { return promptInput->curText; }
-    void setCurrentText(QString  txt) { promptInput->curText = promptInput->prefix + txt; promptInput->setText(promptInput->curText); }
-    void setHistory(QString  txt) { promptHistory->setHtml(txt); promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor); }
+    void setCurrentText(QString  txt) {
+    	promptInput->curText = promptInput->prefix + txt;
+    	promptInput->setText(promptInput->curText);
+    }
+    void setHistory(QString txt) {
+        promptHistory->setHtml(txt);
+        promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+    }
     void setPrefix(QString  txt);
     void appendHistory(QString  txt);
-    void startResizingTheHistory(int y) { promptHistory->startResizeHistory(y); }
-    void stopResizingTheHistory(int y) { promptHistory->stopResizeHistory(y); }
-    void resizeTheHistory(int y) { promptHistory->resizeHistory(y); }
-    void addCommand(QString  alias, QString  cmd) { promptInput->addCommand(alias, cmd); }
-    void endCommand() { promptInput->endCommand(); }
-    bool isCommandActive() { return promptInput->cmdActive; }
-    QString activeCommand() { return promptInput->curCmd; }
-    QString lastCommand() { return promptInput->lastCmd; }
-    void processInput() { promptInput->processInput(); }
-    void enableRapidFire() { promptInput->rapidFireEnabled = true; }
-    void disableRapidFire() { promptInput->rapidFireEnabled = false; }
-    bool isRapidFireEnabled() { return promptInput->rapidFireEnabled; }
 
     void alert(QString  txt);
 
@@ -1042,8 +1030,8 @@ public:
     QString formatFilterOpen;
     QString formatFilterSave;
 
-    bool isCommandActive() { return prompt->isCommandActive(); }
-    QString activeCommand() { return prompt->activeCommand(); }
+    bool isCommandActive() { return prompt->promptInput->cmdActive; }
+    QString activeCommand() { return prompt->promptInput->curCmd; }
     QIcon create_icon(QString stub);
     void create_toolbar(String toolbar, String label, StringList entries);
 
@@ -1597,143 +1585,39 @@ public slots:
 /**
  *
  */
-class UndoableAddCommand : public QUndoCommand
+class UndoableCommand : public QUndoCommand
 {
 public:
-    UndoableAddCommand(QString  text, Geometry* obj, View* v, QUndoCommand* parent = 0);
-
-    void undo();
-    void redo();
-
-    Geometry* object;
-    View* gview;
-};
-
-/**
- *
- */
-class UndoableDeleteCommand : public QUndoCommand
-{
-public:
-    UndoableDeleteCommand(QString  text, Geometry* obj, View* v, QUndoCommand* parent = 0);
-
-    void undo();
-    void redo();
-
-    Geometry* object;
-    View* gview;
-};
-
-/**
- *
- */
-class UndoableMoveCommand : public QUndoCommand
-{
-public:
-    UndoableMoveCommand(EmbReal deltaX, EmbReal deltaY, QString  text, Geometry* obj, View* v, QUndoCommand* parent = 0);
-
-    void undo();
-    void redo();
-
-    Geometry* object;
-    View*       gview;
-    EmbReal dx;
-    EmbReal dy;
-};
-
-/**
- *
- */
-class UndoableRotateCommand : public QUndoCommand
-{
-public:
-    UndoableRotateCommand(EmbReal pivotPointX, EmbReal pivotPointY, EmbReal rotAngle, QString  text, Geometry* obj, View* v, QUndoCommand* parent = 0);
-
-    void undo();
-    void redo();
-
-    void rotate(EmbReal x, EmbReal y, EmbReal rot);
-
-    Geometry* object;
-    View* gview;
-    EmbReal pivotX;
-    EmbReal pivotY;
-    EmbReal angle;
-};
-
-/**
- *
- */
-class UndoableScaleCommand : public QUndoCommand
-{
-public:
-    UndoableScaleCommand(EmbReal x, EmbReal y, EmbReal scaleFactor, QString  text, Geometry* obj, View* v, QUndoCommand* parent = 0);
-
-    void undo();
-    void redo();
-
-    Geometry* object;
-    View* gview;
-    EmbReal dx;
-    EmbReal dy;
-    EmbReal factor;
-};
-
-/**
- *
- */
-class UndoableNavCommand : public QUndoCommand
-{
-public:
-    UndoableNavCommand(QString  type, View* v, QUndoCommand* parent = 0);
+    UndoableCommand(String command, QString text, Geometry* obj, View* v, QUndoCommand* parent = 0);
+    UndoableCommand(EmbVector d, QString text, Geometry* obj, View* v, QUndoCommand* parent = 0);
+    UndoableCommand(String command, EmbVector pivot, EmbReal angle, QString text, Geometry* obj, View* v, QUndoCommand* parent = 0);
+    UndoableCommand(QString type, View* v, QUndoCommand* parent = 0);
+    UndoableCommand(const QPointF beforePoint, const QPointF afterPoint, QString text, Geometry* obj, View* v, QUndoCommand* parent = 0);
+    UndoableCommand(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QString  text, Geometry* obj, View* v, QUndoCommand* parent = 0);
 
     int id(){ return 1234; }
     bool mergeWith(const QUndoCommand* command);
     void undo();
     void redo();
+    void mirror();
+    void rotate(EmbVector pivot, EmbReal rot);
 
+    Geometry* object;
+    View* gview;
+    String command;
+    EmbVector delta;
+    EmbVector pivot;
+    QPointF before;
+    QPointF after;
+    EmbReal angle;
+    EmbReal factor;
     QString navType;
     QTransform fromTransform;
     QTransform toTransform;
     QPointF fromCenter;
     QPointF toCenter;
-    bool done;
-    View* gview;
-};
-
-/**
- *
- */
-class UndoableGripEditCommand : public QUndoCommand
-{
-public:
-    UndoableGripEditCommand(const QPointF beforePoint, const QPointF afterPoint, QString  text, Geometry* obj, View* v, QUndoCommand* parent = 0);
-
-    void undo();
-    void redo();
-
-    Geometry* object;
-    View* gview;
-    QPointF before;
-    QPointF after;
-};
-
-/**
- *
- */
-class UndoableMirrorCommand : public QUndoCommand
-{
-public:
-    UndoableMirrorCommand(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QString  text, Geometry* obj, View* v, QUndoCommand* parent = 0);
-
-    void undo();
-    void redo();
-    void mirror();
-
-    Geometry* object;
-    View* gview;
     QLineF mirrorLine;
-
+    bool done;
 };
 
 /**

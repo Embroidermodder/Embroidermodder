@@ -140,11 +140,12 @@ MdiWindow::loadFile(QString fileName)
     }
 
     if (readSuccessful) {
-        /**
-        \todo reincorporate
-        embPattern_moveStitchListToPolylines(p); //TODO: Test more
-        */
+        //embPattern_moveStitchListToPolylines(p); //TODO: Test more
+        
         int stitchCount = p->stitch_list->count;
+        for (int i=0; i<stitchCount; i++) {
+            
+        }
 
         for (int i=0; i<p->geometry->count; i++) {
             EmbGeometry g = p->geometry->geometry[i];
@@ -187,12 +188,12 @@ MdiWindow::loadFile(QString fileName)
                 loadPen.setCapStyle(Qt::RoundCap);
                 loadPen.setJoinStyle(Qt::RoundJoin);
 
-                        /*
+                /*
                 EmbVector v = {0.0, 0.0};
                 Geometry* obj = new Geometry(v, pathPath, loadPen.color().rgb(), Qt::SolidLine);
                 obj->objRubberMode = "OBJ_RUBBER_OFF";
                 gscene->addItem(obj);
-*/
+                */
             }
             if (p->geometry->geometry[i].type == EMB_POINT) {
                 EmbPoint po = g.object.point;

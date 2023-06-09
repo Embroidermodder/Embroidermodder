@@ -278,12 +278,16 @@ View::vulcanizeRubberRoom()
 void
 View::vulcanizeObject(Geometry* obj)
 {
-    if (!obj) return;
+    if (!obj) {
+        return;
+    }
     gscene->removeItem(obj); //Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene
     obj->vulcanize();
 
-    UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, this, 0);
-    if (cmd) undoStack->push(cmd);
+    UndoableCommand* cmd = new UndoableCommand("add", obj->data(OBJ_NAME).toString(), obj, this, 0);
+    if (cmd) {
+        undoStack->push(cmd);
+    }
 }
 
 bool
@@ -1537,8 +1541,10 @@ View::mousePressEvent(QMouseEvent* event)
             for (int i=0; i<(int)itemList.size(); i++) {
                 Geometry* base = static_cast<Geometry*>(itemList[i]);
                 if (base) {
-                    UndoableAddCommand* cmd = new UndoableAddCommand(base->data(OBJ_NAME).toString(), base, this, 0);
-                    if (cmd) undoStack->push(cmd);
+                    UndoableCommand* cmd = new UndoableCommand("add", base->data(OBJ_NAME).toString(), base, this, 0);
+                    if (cmd) {
+                        undoStack->push(cmd);
+                    }
                 }
             }
             undoStack->endMacro();
@@ -1546,17 +1552,15 @@ View::mousePressEvent(QMouseEvent* event)
             pastingActive = false;
             selectingActive = false;
         }
-        if (zoomWindowActive)
-        {
+        if (zoomWindowActive) {
             fitInView(path.boundingRect(), Qt::KeepAspectRatio);
             clearSelection();
         }
     }
-    if (event->button() == Qt::MiddleButton)
-    {
+    if (event->button() == Qt::MiddleButton) {
         panStart(event->pos());
         //The Undo command will record the spot where the pan started.
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanStart", this, 0);
+        UndoableCommand* cmd = new UndoableCommand("PanStart", this, 0);
         undoStack->push(cmd);
         event->accept();
     }
@@ -1748,7 +1752,7 @@ View::mouseReleaseEvent(QMouseEvent* event)
     {
         panningActive = false;
         //The Undo command will record the spot where the pan completed.
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanStop", this, 0);
+        UndoableCommand* cmd = new UndoableCommand("PanStop", this, 0);
         undoStack->push(cmd);
         event->accept();
     }
@@ -1819,11 +1823,11 @@ View::wheelEvent(QWheelEvent* event)
 
     updateMouseCoords(mousePoint.x(), mousePoint.y());
     if (zoomDir > 0) {
-        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomInToPoint", this, 0);
+        UndoableCommand* cmd = new UndoableCommand("ZoomInToPoint", this, 0);
         undoStack->push(cmd);
     }
     else {
-        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomOutToPoint", this, 0);
+        UndoableCommand* cmd = new UndoableCommand("ZoomOutToPoint", this, 0);
         undoStack->push(cmd);
     }
     */
@@ -1882,8 +1886,8 @@ View::contextMenuEvent(QContextMenuEvent* event)
     if (pastingActive) {
         return;
     }
-    if (!prompt->isCommandActive()) {
-        QString lastCmd = prompt->lastCommand();
+    if (!prompt->promptInput->cmdActive) {
+        QString lastCmd = prompt->promptInput->lastCmd;
         QAction* repeatAction = new QAction(_mainWin->create_icon(lastCmd), "Repeat " + lastCmd, this);
         repeatAction->setStatusTip("Repeats the previously issued command.");
         connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()));
@@ -1986,7 +1990,7 @@ View::stopGripping(bool accept)
     if (gripBaseObj) {
         gripBaseObj->vulcanize();
         if (accept) {
-            UndoableGripEditCommand* cmd = new UndoableGripEditCommand(sceneGripPoint, sceneMousePoint, tr("Grip Edit ") + gripBaseObj->data(OBJ_NAME).toString(), gripBaseObj, this, 0);
+            UndoableCommand* cmd = new UndoableCommand(sceneGripPoint, sceneMousePoint, tr("Grip Edit ") + gripBaseObj->data(OBJ_NAME).toString(), gripBaseObj, this, 0);
             if (cmd) undoStack->push(cmd);
             selectionChanged(); //Update the Property Editor
         }
@@ -2012,16 +2016,13 @@ View::deleteSelected()
     int numSelected = itemList.size();
     if (numSelected > 1)
         undoStack->beginMacro("Delete " + QString().setNum(itemList.size()));
-    for (int i = 0; i < itemList.size(); i++)
-    {
-        if (itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL)
-        {
+    for (int i = 0; i < itemList.size(); i++) {
+        if (itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL) {
             Geometry* base = static_cast<Geometry*>(itemList.at(i));
-            if (base)
-            {
-                UndoableDeleteCommand* cmd = new UndoableDeleteCommand(tr("Delete 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+            if (base) {
+                UndoableCommand* cmd = new UndoableCommand("delete", tr("Delete 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
                 if (cmd)
-                undoStack->push(cmd);
+                    undoStack->push(cmd);
             }
         }
     }
@@ -2128,17 +2129,17 @@ View::createObjectList(std::vector<QGraphicsItem*> list)
 void
 View::repeatAction()
 {
-    prompt->endCommand();
-    prompt->setCurrentText(prompt->lastCommand());
-    prompt->processInput();
+    prompt->promptInput->endCommand();
+    prompt->setCurrentText(prompt->promptInput->lastCmd);
+    prompt->promptInput->processInput();
 }
 
 void
 View::moveAction()
 {
-    prompt->endCommand();
+    prompt->promptInput->endCommand();
     prompt->setCurrentText("move");
-    prompt->processInput();
+    prompt->promptInput->processInput();
 }
 
 void
@@ -2148,17 +2149,19 @@ View::moveSelected(EmbReal dx, EmbReal dy)
     int numSelected = itemList.size();
     if (numSelected > 1)
         undoStack->beginMacro("Move " + QString().setNum(itemList.size()));
-    foreach(QGraphicsItem* item, itemList)
-    {
+    foreach(QGraphicsItem* item, itemList) {
         Geometry* base = static_cast<Geometry*>(item);
-        if (base)
-        {
-            UndoableMoveCommand* cmd = new UndoableMoveCommand(dx, dy, tr("Move 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+        if (base) {
+            EmbVector delta;
+            delta.x = dx;
+            delta.y = dy;
+            UndoableCommand* cmd = new UndoableCommand(delta, tr("Move 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
             if (cmd) undoStack->push(cmd);
         }
     }
-    if (numSelected > 1)
+    if (numSelected > 1) {
         undoStack->endMacro();
+    }
 
     //Always clear the selection after a move
     gscene->clearSelection();
@@ -2167,9 +2170,9 @@ View::moveSelected(EmbReal dx, EmbReal dy)
 void
 View::rotateAction()
 {
-    prompt->endCommand();
+    prompt->promptInput->endCommand();
     prompt->setCurrentText("rotate");
-    prompt->processInput();
+    prompt->promptInput->processInput();
 }
 
 void
@@ -2179,17 +2182,20 @@ View::rotateSelected(EmbReal x, EmbReal y, EmbReal rot)
     int numSelected = itemList.size();
     if (numSelected > 1)
         undoStack->beginMacro("Rotate " + QString().setNum(itemList.size()));
-    foreach(QGraphicsItem* item, itemList)
-    {
+    foreach(QGraphicsItem* item, itemList) {
         Geometry* base = static_cast<Geometry*>(item);
-        if (base)
-        {
-            UndoableRotateCommand* cmd = new UndoableRotateCommand(x, y, rot, tr("Rotate 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
-            if (cmd) undoStack->push(cmd);
+        if (base) {
+            EmbVector pivot;
+            pivot.x = x;
+            pivot.y = y;
+            UndoableCommand* cmd = new UndoableCommand("rotate", pivot, rot, tr("Rotate 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+            if (cmd)
+                undoStack->push(cmd);
         }
     }
-    if (numSelected > 1)
+    if (numSelected > 1) {
         undoStack->endMacro();
+    }
 
     //Always clear the selection after a rotate
     gscene->clearSelection();
@@ -2202,12 +2208,10 @@ View::mirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
     int numSelected = itemList.size();
     if (numSelected > 1)
         undoStack->beginMacro("Mirror " + QString().setNum(itemList.size()));
-    foreach(QGraphicsItem* item, itemList)
-    {
+    foreach(QGraphicsItem* item, itemList) {
         Geometry* base = static_cast<Geometry*>(item);
-        if (base)
-        {
-            UndoableMirrorCommand* cmd = new UndoableMirrorCommand(x1, y1, x2, y2, tr("Mirror 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+        if (base) {
+            UndoableCommand* cmd = new UndoableCommand(x1, y1, x2, y2, tr("Mirror 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
             if (cmd) undoStack->push(cmd);
         }
     }
@@ -2221,9 +2225,9 @@ View::mirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 void
 View::scaleAction()
 {
-    prompt->endCommand();
+    prompt->promptInput->endCommand();
     prompt->setCurrentText("scale");
-    prompt->processInput();
+    prompt->promptInput->processInput();
 }
 
 void
@@ -2240,7 +2244,10 @@ View::scaleSelected(EmbReal x, EmbReal y, EmbReal factor)
     foreach(QGraphicsItem* item, itemList) {
         Geometry* base = static_cast<Geometry*>(item);
         if (base) {
-            UndoableScaleCommand* cmd = new UndoableScaleCommand(x, y, factor, tr("Scale 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+            EmbVector point;
+            point.x = x;
+            point.y = y;
+            UndoableCommand* cmd = new UndoableCommand("scale", point, factor, tr("Scale 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
             if (cmd) undoStack->push(cmd);
         }
     }

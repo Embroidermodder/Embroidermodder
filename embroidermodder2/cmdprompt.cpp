@@ -143,8 +143,12 @@ CmdPrompt::saveHistory(QString  fileName, bool html)
 
     //TODO: save during input in case of crash
     QTextStream output(&file);
-    if (html) { output << promptHistory->toHtml();      }
-    else     { output << promptHistory->toPlainText(); }
+    if (html) {
+        output << promptHistory->toHtml();
+    }
+    else {
+        output << promptHistory->toPlainText();
+    }
 }
 
 /**
@@ -289,7 +293,7 @@ CmdPrompt::appendHistory(QString  txt)
  * @param txt
  */
 void
-CmdPrompt::setPrefix(QString  txt)
+CmdPrompt::setPrefix(QString txt)
 {
     promptInput->prefix = txt;
     promptInput->curText = txt;
@@ -556,32 +560,10 @@ CmdPromptInput::CmdPromptInput(QWidget* parent) : QLineEdit(parent)
     connect(this, SIGNAL(textChanged(QString)), this, SLOT(checkChangedText(QString)));
     connect(this, SIGNAL(selectionChanged()), this, SLOT(checkSelection()));
 
-    aliasHash = new QHash<QString, QString>;
-
     this->installEventFilter(this);
     this->setFocus(Qt::OtherFocusReason);
 
     applyFormatting();
-}
-
-/**
- * @brief CmdPromptInput::~CmdPromptInput
- */
-CmdPromptInput::~CmdPromptInput()
-{
-    delete aliasHash;
-}
-
-/**
- * @brief CmdPromptInput::addCommand
- * @param alias
- * @param cmd
- */
-void
-CmdPromptInput::addCommand(QString  alias, QString  cmd)
-{
-    aliasHash->insert(alias.toLower(), cmd.toLower());
-    qDebug("Command Added: %s, %s", qPrintable(alias), qPrintable(cmd));
 }
 
 /**
@@ -745,12 +727,10 @@ void CmdPromptInput::applyFormatting()
         int rangeStart = -1;
         int rangeStop = -1;
         for (int i = stop; i >= start; i--) {
-            if (prefix.at(i) == ']')
-            {
+            if (prefix.at(i) == ']') {
                 rangeStop = i;
             }
-            if (prefix.at(i) == '[' || prefix.at(i) == '/')
-            {
+            if (prefix.at(i) == '[' || prefix.at(i) == '/') {
                 rangeStart = i;
 
                 QTextLayout::FormatRange rangeKeyword;

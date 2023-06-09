@@ -27,6 +27,7 @@ Settings settings;
  * the user doesn't want to accept their changes in the settings dialog.
  */
 Settings dialog, preview, accept_;
+Dictionary settings_, dialog_, preview_, accept__;
 
 /**
  * .
@@ -83,7 +84,7 @@ read_settings(void)
     settings.general_mdi_bg_use_logo = settings_file.value("MdiBGUseLogo", true).toBool();
     settings.general_mdi_bg_use_texture = settings_file.value("MdiBGUseTexture", true).toBool();
     settings.general_mdi_bg_use_color = settings_file.value("MdiBGUseColor", true).toBool();
-    settings.general_mdi_bg_logo = settings_file.value("MdiBGLogo", appDir + "/images/logo-spirals.png").toString().toStdString();
+    settings_["general_mdi_bg_logo"] = node(settings_file.value("MdiBGLogo", appDir + "/images/logo-spirals.png").toString().toStdString());
     settings.general_mdi_bg_texture = settings_file.value("MdiBGTexture", appDir + "/images/texture-spirals.png").toString().toStdString();
     settings.general_mdi_bg_color = settings_file.value("MdiBGColor", qRgb(192,192,192)).toInt();
     settings.general_tip_of_the_day = settings_file.value("TipOfTheDay", true).toBool();
@@ -263,7 +264,7 @@ write_settings(void)
     settings_file << "MdiBGUseLogo=" << settings.general_mdi_bg_use_logo << std::endl;
     settings_file << "MdiBGUseTexture=" << settings.general_mdi_bg_use_texture << std::endl;
     settings_file << "MdiBGUseColor=" << settings.general_mdi_bg_use_color << std::endl;
-    settings_file << "MdiBGLogo=" << settings.general_mdi_bg_logo << std::endl;
+    settings_file << "MdiBGLogo=" << get_str(settings_, "general_mdi_bg_logo") << std::endl;
     settings_file << "MdiBGTexture=" << settings.general_mdi_bg_texture << std::endl;
     settings_file << "MdiBGColor=" << settings.general_mdi_bg_color << std::endl;
     settings_file << "TipOfTheDay=" << settings.general_tip_of_the_day << std::endl;
@@ -566,8 +567,8 @@ QWidget* Settings_Dialog::createTabGeneral()
 
     QPushButton* buttonMdiBGLogo = new QPushButton(tr("Choose"), groupBoxMdiBG);
     buttonMdiBGLogo->setEnabled(dialog.general_mdi_bg_use_logo);
-    dialog.general_mdi_bg_logo  = settings.general_mdi_bg_logo;
-    accept_.general_mdi_bg_logo  = dialog.general_mdi_bg_logo;
+    dialog_["general_mdi_bg_logo"] = node(get_str(settings_, "general_mdi_bg_logo"));
+    accept__["general_mdi_bg_logo"] = dialog_["general_mdi_bg_logo"];
     connect(buttonMdiBGLogo, SIGNAL(clicked()), this, SLOT(chooseGeneralMdiBackgroundLogo()));
     connect(checkBoxMdiBGUseLogo, SIGNAL(toggled(bool)), buttonMdiBGLogo, SLOT(setEnabled(bool)));
 
@@ -1762,11 +1763,12 @@ void Settings_Dialog::chooseGeneralMdiBackgroundLogo()
                         QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
                         tr("Images (*.bmp *.png *.jpg)"));
 
-        if (!selectedImage.isNull())
-            accept_.general_mdi_bg_logo = selectedImage.toStdString();
+        if (!selectedImage.isNull()) {
+            accept__["general_mdi_bg_logo"] = node(selectedImage.toStdString());
+        }
 
         //Update immediately so it can be previewed
-        mdiArea->setBackgroundLogo(QString::fromStdString(accept_.general_mdi_bg_logo));
+        mdiArea->setBackgroundLogo(QString::fromStdString(get_str(accept__, "general_mdi_bg_logo")));
     }
 }
 
@@ -2492,7 +2494,7 @@ void Settings_Dialog::acceptChanges()
     dialog.general_mdi_bg_use_logo = preview.general_mdi_bg_use_logo;
     dialog.general_mdi_bg_use_texture = preview.general_mdi_bg_use_texture;
     dialog.general_mdi_bg_use_color = preview.general_mdi_bg_use_color;
-    dialog.general_mdi_bg_logo = accept_.general_mdi_bg_logo;
+    dialog_["general_mdi_bg_logo"] = node(get_str(accept__, "general_mdi_bg_logo"));
     dialog.general_mdi_bg_texture = accept_.general_mdi_bg_texture;
     dialog.general_mdi_bg_color = accept_.general_mdi_bg_color;
     dialog.display_show_scrollbars = preview.display_show_scrollbars;
@@ -2540,7 +2542,7 @@ void Settings_Dialog::acceptChanges()
     mdiArea->useBackgroundLogo(dialog.general_mdi_bg_use_logo);
     mdiArea->useBackgroundTexture(dialog.general_mdi_bg_use_texture);
     mdiArea->useBackgroundColor(dialog.general_mdi_bg_use_color);
-    mdiArea->setBackgroundLogo(QString::fromStdString(dialog.general_mdi_bg_logo));
+    mdiArea->setBackgroundLogo(QString::fromStdString(get_str(dialog_, "general_mdi_bg_logo")));
     mdiArea->setBackgroundTexture(QString::fromStdString(dialog.general_mdi_bg_texture));
     mdiArea->setBackgroundColor(dialog.general_mdi_bg_color);
     _mainWin->iconResize(dialog.general_icon_size);
@@ -2590,7 +2592,7 @@ Settings_Dialog::rejectChanges()
     mdiArea->useBackgroundLogo(dialog.general_mdi_bg_use_logo);
     mdiArea->useBackgroundTexture(dialog.general_mdi_bg_use_texture);
     mdiArea->useBackgroundColor(dialog.general_mdi_bg_use_color);
-    mdiArea->setBackgroundLogo(QString::fromStdString(dialog.general_mdi_bg_logo));
+    mdiArea->setBackgroundLogo(QString::fromStdString(get_str(dialog_, "general_mdi_bg_logo")));
     mdiArea->setBackgroundTexture(QString::fromStdString(dialog.general_mdi_bg_texture));
     mdiArea->setBackgroundColor(dialog.general_mdi_bg_color);
     _mainWin->updateAllViewScrollBars(dialog.display_show_scrollbars);

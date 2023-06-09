@@ -3122,40 +3122,32 @@ SaveObject::addPath(EmbPattern* pattern, QGraphicsItem* item)
     qDebug("addPolyline()");
     QGraphicsPathItem* polylineItem = (QGraphicsPathItem*)item;
     if (polylineItem) {
-        /*
         QPainterPath path = polylineItem->path();
-        QPointF pos = polylineItem->pos();
-        EmbReal start.x"] = pos.x();
-        EmbReal start.y"] = pos.y();
-
-        QPainterPath::Element element;
-        QPainterPath::Element P1;
-        QPainterPath::Element P2;
-        QPainterPath::Element P3;
-        QPainterPath::Element P4;
+        EmbVector start = to_EmbVector(polylineItem->pos());
 
         for (int i = 0; i < path.elementCount()-1; ++i) {
-            element = path.elementAt(i);
+            QPainterPath::Element element = path.elementAt(i);
+            /*
             if (element.isMoveTo()) {
-                pattern.AddStitchAbs((element.x + startX), -(element.y + startY), TRIM);
+                embPattern_addStitchAbs(pattern, (element.x + start.x), -(element.y + start.y), TRIM);
             }
             else if (element.isLineTo()) {
-                pattern.AddStitchAbs((element.x + startX), -(element.y + startY), NORMAL);
+                embPattern_addStitchAbs(pattern, (element.x + start.x), -(element.y + start.y), NORMAL);
             }
             else if (element.isCurveTo()) {
-                P1 = path.elementAt(i-1); // start point
-                P2 = path.elementAt(i);   // control point
-                P3 = path.elementAt(i+1); // control point
-                P4 = path.elementAt(i+2); // end point
+                QPainterPath::Element P1 = path.elementAt(i-1); // start point
+                QPainterPath::Element P2 = path.elementAt(i);   // control point
+                QPainterPath::Element P3 = path.elementAt(i+1); // control point
+                QPainterPath::Element P4 = path.elementAt(i+2); // end point
 
-                pattern.AddStitchAbs(P4.x, -P4.y, NORMAL); //TODO: This is temporary
+                embPattern_addStitchAbs(P4.x, -P4.y, NORMAL); //TODO: This is temporary
                 //TODO: Curved Polyline segments are always arcs
             }
+            */
         }
-        pattern.AddStitchRel(0, 0, STOP);
+        /* embPattern_addStitchRel(pattern, 0, 0, STOP); */
         QColor c= polylineItem->pen().color();
-        pattern.AddColor(c.red(), c.green(), c.blue(), "", "");
-        */
+        /* embPattern_addThread(pattern, c.red(), c.green(), c.blue(), "", ""); */
     }
 }
 
@@ -3371,11 +3363,14 @@ void Geometry::setObjectText(QString  str)
     	textPath.translate(-jRect.right(), 0);
     }
     else if (objTextJustify == "Aligned") {
-    } //TODO: Geometry Aligned Justification
+        //TODO: Geometry Aligned Justification
+    }
     else if (objTextJustify == "Middle") {
         textPath.translate(-jRect.center());
     }
-    else if (objTextJustify == "Fit") { } //TODO: Geometry Fit Justification
+    else if (objTextJustify == "Fit") {
+        //TODO: Geometry Fit Justification
+    }
     else if (objTextJustify == "Top Left") {
     	textPath.translate(-jRect.topLeft());
     }
@@ -3394,9 +3389,15 @@ void Geometry::setObjectText(QString  str)
     else if (objTextJustify == "Middle Right") {
         textPath.translate(-jRect.right(), -jRect.top()/2.0);
     }
-    else if (objTextJustify == "Bottom Left") { textPath.translate(-jRect.bottomLeft()); }
-    else if (objTextJustify == "Bottom Center") { textPath.translate(-jRect.center().x(), -jRect.bottom()); }
-    else if (objTextJustify == "Bottom Right") { textPath.translate(-jRect.bottomRight()); }
+    else if (objTextJustify == "Bottom Left") {
+        textPath.translate(-jRect.bottomLeft());
+    }
+    else if (objTextJustify == "Bottom Center") {
+        textPath.translate(-jRect.center().x(), -jRect.bottom());
+    }
+    else if (objTextJustify == "Bottom Right") {
+        textPath.translate(-jRect.bottomRight());
+    }
 
     //Backward or Upside Down
     if (objTextBackward || objTextUpsideDown) {

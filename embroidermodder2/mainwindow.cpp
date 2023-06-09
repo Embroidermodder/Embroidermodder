@@ -113,12 +113,9 @@ QWizard* wizardTipOfTheDay;
 QLabel* labelTipOfTheDay;
 QCheckBox* checkBoxTipOfTheDay;
 
-Dictionary settings_;
-Dictionary dialog_;
 Dictionary config;
 
 std::unordered_map<String, StringList> scripts;
-
 std::unordered_map<String, QAction*> actionHash;
 std::unordered_map<String, QToolBar*> toolbarHash;
 std::unordered_map<String, QMenu*> menuHash;
@@ -417,19 +414,87 @@ node(StringList value)
     return node;
 }
 
-/**
- * @brief set_node
- * @param node
- * @param value
- */
-Node
-node(EmbVector value)
+bool
+get_bool(Dictionary d, String key)
 {
-    Node node;
-    node.type = VECTOR_TYPE;
-    node.v = value;
-    return node;
+    auto iter = d.find(key);
+    if (iter != d.end()) {
+        if (d[key].type == BOOL_TYPE) {
+            return d[key].b;
+        }
+        debug_message(("ERROR: bool setting with key " + key + " is not of bool type.").c_str());
+    }
+    else {
+        debug_message(("ERROR: bool setting with key " + key + " missing.").c_str());
+    }
+    return true;
 }
+
+int
+get_int(Dictionary d, String key)
+{
+    auto iter = d.find(key);
+    if (iter != d.end()) {
+        if (d[key].type == INT_TYPE) {
+            return d[key].i;
+        }
+        debug_message(("ERROR: int setting with key " + key + " is not of int type.").c_str());
+    }
+    else {
+        debug_message(("ERROR: int setting with key " + key + " missing.").c_str());
+    }
+    return 0;
+}
+
+EmbReal
+get_real(Dictionary d, String key)
+{
+    auto iter = d.find(key);
+    if (iter != d.end()) {
+        if (d[key].type == REAL_TYPE) {
+            return d[key].r;
+        }
+        debug_message(("ERROR: real dictionary entry with key " + key + " is not of real type.").c_str());
+    }
+    else {
+        debug_message(("ERROR: EmbReal dictionary entry with key " + key + " missing.").c_str());
+    }
+    return 0.0f;
+}
+
+String
+get_str(Dictionary d, String key)
+{
+    auto iter = d.find(key);
+    if (iter != d.end()) {
+        if (d[key].type == STRING_TYPE) {
+            return d[key].s;
+        }
+        debug_message(("ERROR: string dictionary entry with key " + key + " is not of string type.").c_str());
+    }
+    else {
+        debug_message(("ERROR: String setting with key " + key + " missing.").c_str());
+    }
+    return "";
+}
+
+StringList
+get_str_list(Dictionary d, String key)
+{
+    StringList list = {};
+    auto iter = d.find(key);
+    if (iter != d.end()) {
+        if (d[key].type == STRING_LIST_TYPE) {
+            return d[key].sl;
+        }
+        debug_message(("ERROR: StringList dictionary entry with key " + key + " is not of StringList type.").c_str());
+    }
+    else {
+        debug_message(("ERROR: StringList setting with key " + key + " missing.").c_str());
+    }
+    return list;
+}
+
 
 /**
  * @brief to_string_vector
@@ -927,7 +992,7 @@ static String
 undo_action(String args)
 {
     debug_message("undo()");
-    QString prefix = prompt->getPrefix();
+    QString prefix = prompt->promptInput->prefix;
     if (dockUndoEdit->canUndo()) {
         actuator("set-prompt-prefix Undo "
             + dockUndoEdit->undoText().toStdString());
@@ -953,7 +1018,7 @@ static String
 redo_action(String args)
 {
     debug_message("redo()");
-    QString prefix = prompt->getPrefix();
+    QString prefix = prompt->promptInput->prefix;
     if (dockUndoEdit->canRedo()) {
         actuator("set-prompt-prefix Redo " + dockUndoEdit->redoText().toStdString());
         actuator("append-history ");
@@ -1258,25 +1323,25 @@ pan_action(String mode)
     }
     if (mode == "left") {
         debug_message("panLeft()");
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanLeft", gview, 0);
+        UndoableCommand* cmd = new UndoableCommand("PanLeft", gview, 0);
         stack->push(cmd);
         return "";
     }
     if (mode == "right") {
         debug_message("panRight()");
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanRight", gview, 0);
+        UndoableCommand* cmd = new UndoableCommand("PanRight", gview, 0);
         stack->push(cmd);
         return "";
     }
     if (mode == "up") {
         debug_message("panUp()");
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanUp", gview, 0);
+        UndoableCommand* cmd = new UndoableCommand("PanUp", gview, 0);
         stack->push(cmd);
         return "";
     }
     if (mode == "down") {
         debug_message("panDown()");
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanDown", gview, 0);
+        UndoableCommand* cmd = new UndoableCommand("PanDown", gview, 0);
         stack->push(cmd);
         return "";
     }
@@ -1341,7 +1406,7 @@ zoom_action(String mode)
     }
     if (mode == "selected") {
         debug_message("zoomSelected()");
-        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomSelected", gview, 0);
+        UndoableCommand* cmd = new UndoableCommand("ZoomSelected", gview, 0);
         stack->push(cmd);
         return "";
     }
@@ -1352,7 +1417,7 @@ zoom_action(String mode)
     }
     if (mode == "extents") {
         debug_message("zoomExtents()");
-        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomExtents", gview, 0);
+        UndoableCommand* cmd = new UndoableCommand("ZoomExtents", gview, 0);
         stack->push(cmd);
         return "";
     }
@@ -2984,7 +3049,7 @@ disable_action(String variable)
         return "";
     }
     if (variable == "prompt-rapid-fire") {
-        prompt->disableRapidFire();
+        prompt->promptInput->rapidFireEnabled = false;
         return "";
     }
     if (variable == "move-rapid-fire") {
@@ -3107,7 +3172,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     mdiArea->useBackgroundLogo(settings.general_mdi_bg_use_logo);
     mdiArea->useBackgroundTexture(settings.general_mdi_bg_use_texture);
     mdiArea->useBackgroundColor(settings.general_mdi_bg_use_color);
-    mdiArea->setBackgroundLogo(QString::fromStdString(settings.general_mdi_bg_logo));
+    String general_mdi_bg_logo = get_str(settings_, "general_mdi_bg_logo");
+    mdiArea->setBackgroundLogo(QString::fromStdString(general_mdi_bg_logo));
     mdiArea->setBackgroundTexture(QString::fromStdString(settings.general_mdi_bg_texture));
     mdiArea->setBackgroundColor(QColor(settings.general_mdi_bg_color));
     mdiArea->setViewMode(QMdiArea::TabbedView);
@@ -3334,7 +3400,7 @@ run_script(StringList script)
  * safeStr.replace("\\", "\\\\");
  * safeStr.replace("\'", "\\\'");
  *
- * if (prompt->isRapidFireEnabled()) {
+ * if (prompt->promptInput->rapidFireEnabled) {
  *     engine->evaluate(cmd + "_prompt('" + safeStr + "')", fileName);
  * }
  * else {
@@ -3445,7 +3511,7 @@ end_action(String args)
         gview->previewOff();
         gview->rapidMoveActive = false;
     }
-    prompt->endCommand();
+    prompt->promptInput->endCommand();
     return "";
 }
 
@@ -3718,7 +3784,7 @@ if (command == "enable") {
         return "";
     }
     if (command == "prompt-rapid-fire") {
-        prompt->enableRapidFire();
+        prompt->promptInput->rapidFireEnabled = true;
         return "";
     }
     if (command == "move-rapid-fire") {
