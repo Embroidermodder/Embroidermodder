@@ -445,6 +445,17 @@ justify_options = [
     "Bottom Right"
 ]
 
+statusbar_buttons = [
+    "SNAP",
+    "GRID",
+    "RULER",
+    "ORTHO",
+    "POLAR",
+    "QSNAP",
+    "QTRACK",
+    "LWT"
+]
+
 circle_init_script = [
     "init",
     "clear_selection",

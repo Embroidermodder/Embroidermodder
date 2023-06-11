@@ -405,14 +405,14 @@ MdiWindow::onWindowActivated()
     qDebug("MdiWindow onWindowActivated()");
     gview->getUndoStack()->setActive(true);
     _mainWin->setUndoCleanIcon(fileWasLoaded);
-    statusbar->statusBarSnapButton->setChecked(gscene->property("ENABLE_SNAP").toBool());
-    statusbar->statusBarGridButton->setChecked(gscene->property("ENABLE_GRID").toBool());
-    statusbar->statusBarRulerButton->setChecked(gscene->property("ENABLE_RULER").toBool());
-    statusbar->statusBarOrthoButton->setChecked(gscene->property("ENABLE_ORTHO").toBool());
-    statusbar->statusBarPolarButton->setChecked(gscene->property("ENABLE_POLAR").toBool());
-    statusbar->statusBarQSnapButton->setChecked(gscene->property("ENABLE_QSNAP").toBool());
-    statusbar->statusBarQTrackButton->setChecked(gscene->property("ENABLE_QTRACK").toBool());
-    statusbar->statusBarLwtButton->setChecked(gscene->property("ENABLE_LWT").toBool());
+    statusbar->buttons["SNAP"]->setChecked(gscene->property("ENABLE_SNAP").toBool());
+    statusbar->buttons["GRID"]->setChecked(gscene->property("ENABLE_GRID").toBool());
+    statusbar->buttons["RULER"]->setChecked(gscene->property("ENABLE_RULER").toBool());
+    statusbar->buttons["ORTHO"]->setChecked(gscene->property("ENABLE_ORTHO").toBool());
+    statusbar->buttons["POLAR"]->setChecked(gscene->property("ENABLE_POLAR").toBool());
+    statusbar->buttons["QSNAP"]->setChecked(gscene->property("ENABLE_QSNAP").toBool());
+    statusbar->buttons["QTRACK"]->setChecked(gscene->property("ENABLE_QTRACK").toBool());
+    statusbar->buttons["LWT"]->setChecked(gscene->property("ENABLE_LWT").toBool());
     prompt->setHistory(promptHistory);
 }
 

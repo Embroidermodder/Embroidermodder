@@ -2424,12 +2424,7 @@ void Settings_Dialog::comboBoxQSnapLocatorColorCurrentIndexChanged(int index)
 void Settings_Dialog::checkBoxLwtShowLwtStateChanged(int checked)
 {
     preview.lwt_show_lwt = checked;
-    if (preview.lwt_show_lwt) {
-        statusbar->statusBarLwtButton->enableLwt();
-    }
-    else {
-        statusbar->statusBarLwtButton->disableLwt();
-    }
+    statusbar->toggle("LWT", preview.lwt_show_lwt);
 
     QObject* senderObj = sender();
     if (senderObj) {
@@ -2444,12 +2439,7 @@ void Settings_Dialog::checkBoxLwtShowLwtStateChanged(int checked)
 void Settings_Dialog::checkBoxLwtRealRenderStateChanged(int checked)
 {
     preview.lwt_real_render = checked;
-    if (preview.lwt_real_render) {
-        statusbar->statusBarLwtButton->enableReal();
-    }
-    else {
-        statusbar->statusBarLwtButton->disableReal();
-    }
+    statusbar->toggle("LWT", preview.lwt_real_render);
 }
 
 void Settings_Dialog::comboBoxSelectionCoolGripColorCurrentIndexChanged(int index)
@@ -2522,22 +2512,6 @@ void Settings_Dialog::acceptChanges()
 
     settings = dialog;
 
-    /*
-     * \todo check these are present in Settings:
-     *     * settings.general_system_help_browser
-     *     * _mainWin->set_display_crosshair_percent
-     *     * _mainWin->set_display_units
-     *     * settings.prompt_save_history_filename
-     *     * settings.opensave_open_format
-     *     * settings.opensave_open_thumbnail
-     *     * settings.opensave_save_format
-     *     * settings.opensave_save_thumbnail
-     *     * settings.printing_default_device
-     *     * settings.printing_use_last_device
-     *     * settings.gridLoadFromFile
-     *     * _mainWin->set_qsnap_enabled
-     */
-
     //Make sure the user sees the changes applied immediately
     mdiArea->useBackgroundLogo(dialog.general_mdi_bg_use_logo);
     mdiArea->useBackgroundTexture(dialog.general_mdi_bg_use_texture);
@@ -2562,18 +2536,10 @@ void Settings_Dialog::acceptChanges()
     prompt->setPromptFontSize(dialog.prompt_font_size);
     _mainWin->updateAllViewGridColors(dialog.grid_color);
     _mainWin->updateAllViewRulerColors(dialog.ruler_color);
-    if (dialog.lwt_show_lwt) {
-        statusbar->statusBarLwtButton->enableLwt();
-    }
-    else {
-        statusbar->statusBarLwtButton->disableLwt();
-    }
-    if (dialog.lwt_real_render) {
-        statusbar->statusBarLwtButton->enableReal();
-    }
-    else {
-        statusbar->statusBarLwtButton->disableReal();
-    }
+    statusbar->toggle("LWT", dialog.lwt_show_lwt);
+    /*
+    statusbar->toggle("REAL", dialog.lwt_real_render); ?
+    */
     _mainWin->updatePickAddMode(dialog.selection_mode_pickadd);
 
     write_settings();
@@ -2611,18 +2577,11 @@ Settings_Dialog::rejectChanges()
     prompt->setPromptFontSize(dialog.prompt_font_size);
     _mainWin->updateAllViewGridColors(dialog.grid_color);
     _mainWin->updateAllViewRulerColors(dialog.ruler_color);
-    if (dialog.lwt_show_lwt) {
-        statusbar->statusBarLwtButton->enableLwt();
-    }
-    else {
-        statusbar->statusBarLwtButton->disableLwt();
-    }
-    if (dialog.lwt_real_render) {
-        statusbar->statusBarLwtButton->enableReal();
-    }
-    else {
-        statusbar->statusBarLwtButton->disableReal();
-    }
+    statusbar->toggle("LWT", settings.lwt_show_lwt);
+    /*
+    statusbar->toggle("REAL", settings.lwt_real_render); ?
+    */
 
     reject();
 }
+

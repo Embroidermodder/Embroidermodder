@@ -1657,7 +1657,7 @@ void
 MainWindow::toggleGrid()
 {
     debug_message("toggleGrid()");
-    statusbar->statusBarGridButton->toggle();
+    statusbar->buttons["GRID"]->toggle();
 }
 
 /**
@@ -1667,7 +1667,7 @@ void
 MainWindow::toggleRuler()
 {
     debug_message("toggleRuler()");
-    statusbar->statusBarRulerButton->toggle();
+    statusbar->buttons["RULER"]->toggle();
 }
 
 /**
@@ -1677,7 +1677,7 @@ void
 MainWindow::toggleLwt()
 {
     debug_message("toggleLwt()");
-    statusbar->statusBarLwtButton->toggle();
+    statusbar->buttons["LWT"]->toggle();
 }
 
 /**
@@ -4724,6 +4724,7 @@ void
 MainWindow::updateMenuToolbarStatusbar()
 {
     debug_message("MainWindow::updateMenuToolbarStatusbar()");
+    StringList button_list = config["statusbar_buttons"].sl;
 
     actionHash["print"]->setEnabled(numOfDocs > 0);
     actionHash["windowclose"]->setEnabled(numOfDocs > 0);
@@ -4750,14 +4751,9 @@ MainWindow::updateMenuToolbarStatusbar()
         //Statusbar
         statusbar->clearMessage();
         statusbar->statusBarMouseCoord->show();
-        statusbar->statusBarSnapButton->show();
-        statusbar->statusBarGridButton->show();
-        statusbar->statusBarRulerButton->show();
-        statusbar->statusBarOrthoButton->show();
-        statusbar->statusBarPolarButton->show();
-        statusbar->statusBarQSnapButton->show();
-        statusbar->statusBarQTrackButton->show();
-        statusbar->statusBarLwtButton->show();
+        for (int i=0; i<(int)button_list.size(); i++) {
+            statusbar->buttons[button_list[i]]->show();
+        }
     }
     else {
         for (auto iter=toolbarHash.begin(); iter != toolbarHash.end(); iter++) {
@@ -4784,14 +4780,9 @@ MainWindow::updateMenuToolbarStatusbar()
         //Statusbar
         statusbar->clearMessage();
         statusbar->statusBarMouseCoord->hide();
-        statusbar->statusBarSnapButton->hide();
-        statusbar->statusBarGridButton->hide();
-        statusbar->statusBarRulerButton->hide();
-        statusbar->statusBarOrthoButton->hide();
-        statusbar->statusBarPolarButton->hide();
-        statusbar->statusBarQSnapButton->hide();
-        statusbar->statusBarQTrackButton->hide();
-        statusbar->statusBarLwtButton->hide();
+        for (int i=0; i<(int)button_list.size(); i++) {
+            statusbar->buttons[button_list[i]]->hide();
+        }
     }
     hideUnimplemented();
 }

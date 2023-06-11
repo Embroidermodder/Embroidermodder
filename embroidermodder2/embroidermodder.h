@@ -62,7 +62,6 @@ class MdiArea;
 class MdiWindow;
 class View;
 class StatusBar;
-class StatusBarButton;
 class CmdPrompt;
 class PropertyEditor;
 class UndoEditor;
@@ -96,6 +95,17 @@ typedef std::vector<Node> NodeList;
  * cancels out of the Settings Dialog.
  *
  * @todo fully convert into the Dictionaries settings, dialog, accept and preivew.
+ *
+ * \todo check these are present in Settings:
+ *  system_help_browser
+ *  display_crosshair_percent
+ *  display_units
+ *  prompt_save_history_filename
+ *  opensave_open_thumbnail
+ *  opensave_save_thumbnail
+ *  printing_use_last_device
+ *  grid_load_from_file
+ *  qsnap_enabled
  */
 typedef struct Settings_ {
     String assets_dir;
@@ -1487,64 +1497,21 @@ signals:
     void buttonQSnapClearAll(bool);
 };
 
-
+/**
+ * .
+ */
 class StatusBar : public QStatusBar
 {
     Q_OBJECT
 
 public:
     StatusBar(QWidget* parent = 0);
-
-    StatusBarButton* statusBarSnapButton;
-    StatusBarButton* statusBarGridButton;
-    StatusBarButton* statusBarRulerButton;
-    StatusBarButton* statusBarOrthoButton;
-    StatusBarButton* statusBarPolarButton;
-    StatusBarButton* statusBarQSnapButton;
-    StatusBarButton* statusBarQTrackButton;
-    StatusBarButton* statusBarLwtButton;
+    std::unordered_map<String, QToolButton*> buttons;
     QLabel* statusBarMouseCoord;
-
     void setMouseCoord(EmbReal x, EmbReal y);
-};
-
-/**
- *
- */
-class StatusBarButton : public QToolButton
-{
-    Q_OBJECT
-
-public:
-    StatusBarButton(QString buttonText, StatusBar* statbar, QWidget *parent = 0);
-
-    StatusBar*  statusbar;
-
-protected:
-    void contextMenuEvent(QContextMenuEvent *event = 0);
-
-private slots:
-    void settingsSnap();
-    void settingsGrid();
-    void settingsRuler();
-    void settingsOrtho();
-    void settingsPolar();
-    void settingsQSnap();
-    void settingsQTrack();
-    void settingsLwt();
-    void toggleSnap(bool on);
-    void toggleGrid(bool on);
-    void toggleRuler(bool on);
-    void toggleOrtho(bool on);
-    void togglePolar(bool on);
-    void toggleQSnap(bool on);
-    void toggleQTrack(bool on);
-    void toggleLwt(bool on);
-public slots:
-    void enableLwt();
-    void disableLwt();
-    void enableReal();
-    void disableReal();
+    void context_menu_action(QToolButton *button, const char *icon, const char *label, QMenu *menu, String setting_page);
+    void toggle(String key, bool on);
+    void context_menu_event(QContextMenuEvent *event, QToolButton *button);
 };
 
 /**

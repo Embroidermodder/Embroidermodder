@@ -78,7 +78,6 @@ add_executable(embroidermodder2
     ${SRC_DIR}/property-editor.cpp
     ${SRC_DIR}/selectbox.cpp
     ${SRC_DIR}/settings-dialog.cpp
-    ${SRC_DIR}/statusbar-button.cpp
     ${SRC_DIR}/statusbar.cpp
     ${SRC_DIR}/undo-commands.cpp
     ${SRC_DIR}/undo-editor.cpp
