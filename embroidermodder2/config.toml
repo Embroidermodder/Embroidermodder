@@ -529,6 +529,133 @@ snowflake_init_script = [
     "end"
 ]
 
+[default_settings]
+general_language = "default"
+general_icon_theme = "default"
+general_icon_size = 16
+general_mdi_bg_use_logo = true
+general_mdi_bg_use_texture = true
+general_mdi_bg_use_color = true
+general_mdi_bg_logo = "images/logo-spirals.png"
+general_mdi_bg_texture = "images/texture-spirals.png"
+general_mdi_bg_color = 4290822336
+general_tip_of_the_day = true
+general_current_tip = 0
+general_system_help_browser = true
+
+window_position_x = 100
+window_position_y = 100
+window_size_x = 800
+window_size_y = 600
+
+display_use_open_gl = false
+display_render_hint_anti_alias = false
+display_render_hint_text_anti_alias = false
+display_render_hint_smooth_pixmap = false
+display_render_hint_high_quality_anti_alias = false
+display_render_hint_non_cosmetic = false
+display_show_scrollbars = true
+display_scrollbar_widget_num = 0
+display_crosshair_color = 4278190080
+display_background_color = 4293651435
+display_selectbox_left_color = 4278222848
+display_selectbox_left_fill = 4278255360
+display_selectbox_right_color = 4278190208
+display_selectbox_right_fill = 4278190335
+display_selectbox_alpha= 32
+display_zoom_scale_in = 2.0
+display_zoom_scale_out = 0.5
+display_crosshair_percent = 5
+display_units = "mm"
+
+prompt_text_color = 4278190080
+prompt_background_color = 4294967295
+prompt_font_family = "Monospace"
+prompt_font_style = "normal"
+prompt_font_size = 12
+prompt_save_history = true
+prompt_save_history_as_html = false
+prompt_save_history_filename = "prompt.log"
+
+opensave_custom_filter = "supported"
+opensave_open_format = "*.*"
+opensave_open_thumbnail = false
+opensave_save_format = "*.*"
+opensave_save_thumbnail = false
+opensave_recent_max = 10
+opensave_recent_list_of_files = ""
+opensave_recent_directory = "samples"
+opensave_trim_dst_num_jumps = 5
+
+printing_default_device = ""
+printing_use_last_device = false
+printing_disable_bg = true
+
+grid_show_on_load = true
+grid_show_origin = true
+grid_color_match_crosshair = true
+grid_color = 4278190080
+grid_load_from_file = true
+grid_type = "Rectangular"
+grid_center_on_origin = true
+grid_center_x = 0.0
+grid_center_y = 0.0
+grid_size_x = 100.0
+grid_size_y = 100.0
+grid_spacing_x = 25.0
+grid_spacing_y = 25.0
+grid_size_radius = 50.0
+grid_spacing_radius = 25.0
+grid_spacing_angle = 45.0
+
+ruler_show_on_load = true
+ruler_metric = true
+ruler_color = 4292006450
+ruler_pixel_size = 20
+
+quicksnap_enabled = true
+quicksnap_locator_color = 4294967040
+quicksnap_locator_size = 4
+quicksnap_aperture_size = 10
+quicksnap_endpoint = true
+quicksnap_midpoint = true
+quicksnap_center = true
+quicksnap_node = true
+quicksnap_quadrant = true
+quicksnap_intersection = true
+quicksnap_extension = true
+quicksnap_insertion = false
+quicksnap_perpendicular = true
+quicksnap_tangent = true
+quicksnap_nearest = false
+quicksnap_apparent = false
+quicksnap_parallel = false
+
+lineweight_show_line_weight = false
+lineweight_real_render = true
+lineweight_default_line_weight = 0.0
+
+selection_pick_first = true
+selection_pick_add = true
+selection_pick_drag = false
+selection_cool_grip_color = 4278190335
+selection_hot_grip_color = 4294901760
+selection_grip_size = 4
+selection_pickbox_size = 4
+
+text_font = "Arial"
+text_size = 12.0
+text_angle = 0.0
+text_style_bold = false
+text_style_italic = false
+text_style_underline = false
+text_style_strikeout = false
+text_style_overline = false
+
+ruler_tick_depth = 0.5
+major_tick_seperation = 0.4
+needle_speed = 100.0
+stitch_time = 0.01
 
 [ACTION_donothing]
 type = "action"

@@ -97,15 +97,12 @@ typedef std::vector<Node> NodeList;
  * @todo fully convert into the Dictionaries settings, dialog, accept and preivew.
  *
  * \todo check these are present in Settings:
- *  system_help_browser
- *  display_crosshair_percent
  *  display_units
  *  prompt_save_history_filename
  *  opensave_open_thumbnail
  *  opensave_save_thumbnail
  *  printing_use_last_device
  *  grid_load_from_file
- *  qsnap_enabled
  */
 typedef struct Settings_ {
     String assets_dir;
@@ -136,10 +133,6 @@ typedef struct Settings_ {
     uint32_t selection_hotgrip_color;
     uint32_t ticks_color;
     uint32_t shine_color;
-    int position_x;
-    int position_y;
-    int size_x;
-    int size_y;
     int general_icon_size;
     bool running;
     bool testing;
@@ -195,19 +188,6 @@ typedef struct Settings_ {
     uint32_t qsnap_locator_color;
     uint8_t qsnap_locator_size;
     uint8_t qsnap_aperture_size;
-    bool qsnap_endpoint;
-    bool qsnap_midpoint;
-    bool qsnap_center;
-    bool qsnap_node;
-    bool qsnap_quadrant;
-    bool qsnap_intersection;
-    bool qsnap_extension;
-    bool qsnap_insertion;
-    bool qsnap_perpendicular;
-    bool qsnap_tangent;
-    bool qsnap_nearest;
-    bool qsnap_apparent;
-    bool qsnap_parallel;
     bool lwt_show_lwt;
     bool lwt_real_render;
     bool shift_held;
@@ -227,10 +207,6 @@ typedef struct Settings_ {
     EmbReal zoomInLimit;
     EmbReal zoomOutLimit;
     EmbReal ruler_width;
-    EmbReal tick_depth;
-    EmbReal major_tick_seperation;
-    EmbReal needle_speed;
-    EmbReal stitch_time;
     uint8_t prompt_font_size;
     bool prompt_save_history;
     bool prompt_save_history_as_html;
@@ -353,6 +329,8 @@ void write_settings(void);
 EmbVector rotate_vector(EmbVector v, EmbReal alpha);
 
 bool contains(StringList, String);
+
+String read_string_setting(toml_table_t *table, const char *key);
 
 View *activeView(void);
 

@@ -29,6 +29,12 @@ Settings settings;
 Settings dialog, preview, accept_;
 Dictionary settings_, dialog_, preview_, accept__;
 
+bool qsnap_endpoint_cb, qsnap_midpoint_cb, qsnap_center_cb,
+    qsnap_node_cb, qsnap_quadrant_cb, qsnap_intersection_cb,
+    qsnap_extension_cb, qsnap_insertion_cb, qsnap_perpendicular_cb,
+    qsnap_tangent_cb, qsnap_nearest_cb, qsnap_apparent_cb,
+    qsnap_parallel_cb;
+
 /**
  * .
  */
@@ -64,17 +70,13 @@ read_settings(void)
 #endif
 
     QSettings settings_file(settingsPath, QSettings::IniFormat);
-    settings.position_x = settings_file.value("Window/PositionX", 0).toInt();
-    settings.position_y = settings_file.value("Window/PositionY", 0).toInt();
-    settings.size_x = settings_file.value("Window/SizeX", 800).toInt();
-    settings.size_y = settings_file.value("Window/SizeY", 600).toInt();
 
     /*
     layoutState = settings_file.value("LayoutState").toByteArray();
     if (!restoreState(layoutState)) {
         debug_message("LayoutState NOT restored! Setting Default Layout...");
         //someToolBar->setVisible(true);
-    }
+     }
     */
 
     //General
@@ -176,19 +178,6 @@ read_settings(void)
     settings.qsnap_locator_color = settings_file.value("QuickSnap/LocatorColor", qRgb(255,255, 0)).toInt();
     settings.qsnap_locator_size = settings_file.value("QuickSnap/LocatorSize", 4).toInt();
     settings.qsnap_aperture_size = settings_file.value("QuickSnap/ApertureSize", 10).toInt();
-    settings.qsnap_endpoint = settings_file.value("QuickSnap/EndPoint", true).toBool();
-    settings.qsnap_midpoint = settings_file.value("QuickSnap/MidPoint", true).toBool();
-    settings.qsnap_center = settings_file.value("QuickSnap/Center", true).toBool();
-    settings.qsnap_node = settings_file.value("QuickSnap/Node", true).toBool();
-    settings.qsnap_quadrant = settings_file.value("QuickSnap/Quadrant", true).toBool();
-    settings.qsnap_intersection = settings_file.value("QuickSnap/Intersection", true).toBool();
-    settings.qsnap_extension = settings_file.value("QuickSnap/Extension", true).toBool();
-    settings.qsnap_insertion = settings_file.value("QuickSnap/Insertion", false).toBool();
-    settings.qsnap_perpendicular = settings_file.value("QuickSnap/Perpendicular", true).toBool();
-    settings.qsnap_tangent = settings_file.value("QuickSnap/Tangent", true).toBool();
-    settings.qsnap_nearest = settings_file.value("QuickSnap/Nearest", false).toBool();
-    settings.qsnap_apparent = settings_file.value("QuickSnap/Apparent", false).toBool();
-    settings.qsnap_parallel = settings_file.value("QuickSnap/Parallel", false).toBool();
 
     //LineWeight
     settings.lwt_show_lwt = settings_file.value("LineWeight/ShowLineWeight", false).toBool();
@@ -213,6 +202,54 @@ read_settings(void)
     settings.text_style_underline = settings_file.value("Text/StyleUnderline", false).toBool();
     settings.text_style_strikeout = settings_file.value("Text/StyleStrikeOut", false).toBool();
     settings.text_style_overline = settings_file.value("Text/StyleOverline", false).toBool();
+
+#if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
+    QString fname = QDir::homePath() + "/.embroidermodder2/settings.toml";
+#else
+    QString fname = qApp->applicationDirPath() + "/settings.toml";
+#endif
+
+    char error_buffer[200];
+    FILE *f = fopen(fname.toStdString().c_str(), "r");
+    if (!f) {
+        puts("ERROR: Failed to open settings file:");
+        printf("%s", fname.toStdString().c_str());
+        return;
+    }
+    toml_table_t *table = toml_parse_file(f, error_buffer, sizeof(error_buffer));
+    fclose(f);
+
+    if (!table) {
+        puts("ERROR: failed to parse settings.ini, continuing with defaults.");
+        return;
+    }
+
+    for (int i=0; ; i++) {
+        const char *key = toml_key_in(table, i);
+        if (!key) {
+            break;
+        }
+        std::string k(key);
+        toml_datum_t string_in = toml_string_in(table, key);
+        if (string_in.ok) {
+            settings_[k] = node(read_string_setting(table, key));
+            continue;
+        }
+        toml_datum_t int_in = toml_int_in(table, key);
+        if (int_in.ok) {
+            settings_[k] = node((int)int_in.u.i);
+            continue;
+        }
+        toml_datum_t float_in = toml_double_in(table, key);
+        if (float_in.ok) {
+            settings_[k] = node((EmbReal)float_in.u.d);
+            continue;
+        }
+        toml_datum_t bool_in = toml_bool_in(table, key);
+        if (bool_in.ok) {
+            settings_[k] = node(bool_in.u.b);
+        }
+    }
 }
 
 /**
@@ -233,28 +270,10 @@ write_settings(void)
     std::ofstream settings_file;
     settings_file.open(settingsPath);
 
-    /**
-     * Planning
-     * --------
-     * for (auto iter = settings_.begin(); iter != settings_.end(); iter++) {
-     *     settings_file << iter->first << "=";
-     *     switch (iter->second.type) {
-     *     case INT_TYPE:
-     *         settings_file << iter->second.i;
-     *         break;
-     *     case REAL_TYPE:
-     *         settings_file << iter->second.r;
-     *         break;
-     *     case VECTOR_TYPE:
-     *         settings_file << iter->second.v.x << "," << iter->second.v.y;
-     *         break;
-     *     default:
-     *         break;
-     *     }
-     *     settings_file << std::endl;
-     * }
-     *
-     */
+    settings_["window_position_x"] = node((int)_mainWin->pos().x());
+    settings_["window_position_y"] = node((int)_mainWin->pos().y());
+    settings_["window_size_x"] = node((int)_mainWin->size().width());
+    settings_["window_size_y"] = node((int)_mainWin->size().height());
 
     settings_file << "[General]" << std::endl;
     //settings_file << "LayoutState=" << layoutState << std::endl;
@@ -270,13 +289,6 @@ write_settings(void)
     settings_file << "TipOfTheDay=" << settings.general_tip_of_the_day << std::endl;
     settings_file << "CurrentTip=" << settings.general_current_tip + 1 << std::endl;
     settings_file << "SystemHelpBrowser=" << settings.general_system_help_browser << std::endl;
-    settings_file << std::endl;
-
-    settings_file << "[Window]" << std::endl;
-    settings_file << "PositionX=" << _mainWin->pos().x() << std::endl;
-    settings_file << "PositionY=" << _mainWin->pos().y() << std::endl;
-    settings_file << "SizeX=" << _mainWin->size().width() << std::endl;
-    settings_file << "SizeY=" << _mainWin->size().height() << std::endl;
     settings_file << std::endl;
 
     settings_file << "[Display]" << std::endl;
@@ -361,19 +373,6 @@ write_settings(void)
     settings_file << "LocatorColor=" << settings.qsnap_locator_color << std::endl;
     settings_file << "LocatorSize=" << settings.qsnap_locator_size << std::endl;
     settings_file << "ApertureSize=" << settings.qsnap_aperture_size << std::endl;
-    settings_file << "EndPoint=" << settings.qsnap_endpoint << std::endl;
-    settings_file << "MidPoint=" << settings.qsnap_midpoint << std::endl;
-    settings_file << "Center=" << settings.qsnap_center << std::endl;
-    settings_file << "Node=" << settings.qsnap_node << std::endl;
-    settings_file << "Quadrant=" << settings.qsnap_quadrant << std::endl;
-    settings_file << "Intersection=" << settings.qsnap_intersection << std::endl;
-    settings_file << "Extension=" << settings.qsnap_extension << std::endl;
-    settings_file << "Insertion=" << settings.qsnap_insertion << std::endl;
-    settings_file << "Perpendicular=" << settings.qsnap_perpendicular << std::endl;
-    settings_file << "Tangent=" << settings.qsnap_tangent << std::endl;
-    settings_file << "Nearest=" << settings.qsnap_nearest << std::endl;
-    settings_file << "Apparent=" << settings.qsnap_apparent << std::endl;
-    settings_file << "Parallel=" << settings.qsnap_parallel << std::endl;
     settings_file << std::endl;
 
     settings_file << "[LineWeight]" << std::endl;
@@ -402,8 +401,48 @@ write_settings(void)
     settings_file << "StyleStrikeOut=" << settings.text_style_strikeout << std::endl;
     settings_file << "StyleOverline=" << settings.text_style_overline << std::endl;
     settings_file << std::endl;
-
+    
     settings_file.close();
+
+#if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
+    settingsPath = QDir::homePath().toStdString() + "/.embroidermodder2/settings.toml";
+#else
+    settingsPath = qApp->applicationDirPath() + "/settings.toml";
+#endif
+    std::ofstream file;
+    file.open(settingsPath);
+
+    for (auto iter = settings_.begin(); iter != settings_.end(); iter++) {
+        file << iter->first << "=";
+        switch (iter->second.type) {
+        case INT_TYPE:
+            file << iter->second.i;
+            break;
+        case REAL_TYPE:
+            file << iter->second.r;
+            break;
+        case STRING_TYPE:
+            file << "\"" << iter->second.s << "\"";
+            break;
+        /*
+        case STRING_LIST_TYPE: {
+            file << "[" << std::endl;
+            for (int i=0; i<(int)iter->second.sl.size(); i++) {
+                file << "    \"" << iter->second.sl[i] << "\"";
+                if (i < (int)iter->second.sl.size() - 1) {
+                    file << ",";
+                }
+            }
+            file << "]";
+            break;
+        }
+        */
+        default:
+            break;
+        }
+        file << std::endl;
+    }
+    file.close();
 }
 
 /**
@@ -1435,34 +1474,34 @@ QWidget* Settings_Dialog::createTabQuickSnap()
     //QSnap Locators
     QGroupBox* groupBoxQSnapLoc = new QGroupBox(tr("Locators Used"), widget);
 
-    dialog.qsnap_endpoint = settings.qsnap_endpoint;
-    dialog.qsnap_midpoint = settings.qsnap_midpoint;
-    dialog.qsnap_center = settings.qsnap_center;
-    dialog.qsnap_node = settings.qsnap_node;
-    dialog.qsnap_quadrant = settings.qsnap_quadrant;
-    dialog.qsnap_intersection = settings.qsnap_intersection;
-    dialog.qsnap_extension = settings.qsnap_extension;
-    dialog.qsnap_insertion = settings.qsnap_insertion;
-    dialog.qsnap_perpendicular = settings.qsnap_perpendicular;
-    dialog.qsnap_tangent = settings.qsnap_tangent;
-    dialog.qsnap_nearest = settings.qsnap_nearest;
-    dialog.qsnap_apparent = settings.qsnap_apparent;
-    dialog.qsnap_parallel = settings.qsnap_parallel;
+    qsnap_endpoint_cb = get_bool(settings_, "qsnap_endpoint");
+    qsnap_midpoint_cb = get_bool(settings_, "qsnap_midpoint");
+    qsnap_center_cb = get_bool(settings_, "qsnap_center");
+    qsnap_node_cb = get_bool(settings_, "qsnap_node");
+    qsnap_quadrant_cb = get_bool(settings_, "qsnap_quadrant");
+    qsnap_intersection_cb = get_bool(settings_, "qsnap_intersection");
+    qsnap_extension_cb = get_bool(settings_, "qsnap_extension");
+    qsnap_insertion_cb = get_bool(settings_, "qsnap_insertion");
+    qsnap_perpendicular_cb = get_bool(settings_, "qsnap_perpendicular");
+    qsnap_tangent_cb = get_bool(settings_, "qsnap_tangent");
+    qsnap_nearest_cb = get_bool(settings_, "qsnap_nearest");
+    qsnap_apparent_cb = get_bool(settings_, "qsnap_apparent");
+    qsnap_parallel_cb = get_bool(settings_, "qsnap_parallel");
 
     std::vector<QCheckBox*> checkboxes = {
-        make_checkbox(groupBoxQSnapLoc, "Endpoint", "locator-snaptoendpoint", &(dialog.qsnap_endpoint)),
-        make_checkbox(groupBoxQSnapLoc, "Midpoint", "locator-snaptomidpoint", &(dialog.qsnap_midpoint)),
-        make_checkbox(groupBoxQSnapLoc, "Center", "locator-snaptocenter", &(dialog.qsnap_center)),
-        make_checkbox(groupBoxQSnapLoc, "Node", "locator-snaptonode", &(dialog.qsnap_node)),
-        make_checkbox(groupBoxQSnapLoc, "Quadrant", "locator-snaptoquadrant", &(dialog.qsnap_quadrant)),
-        make_checkbox(groupBoxQSnapLoc, "Intersection", "locator-snaptointersection", &(dialog.qsnap_intersection)),
-        make_checkbox(groupBoxQSnapLoc, "Extension", "locator-snaptoextension", &(dialog.qsnap_extension)),
-        make_checkbox(groupBoxQSnapLoc, "Insertion", "locator-snaptoinsert", &(dialog.qsnap_insertion)),
-        make_checkbox(groupBoxQSnapLoc, "Perpendicular", "locator-snaptoperpendicular", &(dialog.qsnap_perpendicular)),
-        make_checkbox(groupBoxQSnapLoc, "Tangent", "locator-snaptotangent", &(dialog.qsnap_tangent)),
-        make_checkbox(groupBoxQSnapLoc, "Nearest", "locator-snaptonearest", &(dialog.qsnap_nearest)),
-        make_checkbox(groupBoxQSnapLoc, "Apparent Intersection", "locator-snaptoapparentintersection", &(dialog.qsnap_apparent)),
-        make_checkbox(groupBoxQSnapLoc, "Parallel", "locator-snaptoparallel", &(dialog.qsnap_parallel))
+        make_checkbox(groupBoxQSnapLoc, "Endpoint", "locator-snaptoendpoint", &qsnap_endpoint_cb),
+        make_checkbox(groupBoxQSnapLoc, "Midpoint", "locator-snaptomidpoint", &qsnap_midpoint_cb),
+        make_checkbox(groupBoxQSnapLoc, "Center", "locator-snaptocenter", &qsnap_center_cb),
+        make_checkbox(groupBoxQSnapLoc, "Node", "locator-snaptonode", &qsnap_node_cb),
+        make_checkbox(groupBoxQSnapLoc, "Quadrant", "locator-snaptoquadrant", &qsnap_quadrant_cb),
+        make_checkbox(groupBoxQSnapLoc, "Intersection", "locator-snaptointersection", &qsnap_intersection_cb),
+        make_checkbox(groupBoxQSnapLoc, "Extension", "locator-snaptoextension", &qsnap_extension_cb),
+        make_checkbox(groupBoxQSnapLoc, "Insertion", "locator-snaptoinsert", &qsnap_insertion_cb),
+        make_checkbox(groupBoxQSnapLoc, "Perpendicular", "locator-snaptoperpendicular", &qsnap_perpendicular_cb),
+        make_checkbox(groupBoxQSnapLoc, "Tangent", "locator-snaptotangent", &qsnap_tangent_cb),
+        make_checkbox(groupBoxQSnapLoc, "Nearest", "locator-snaptonearest", &qsnap_nearest_cb),
+        make_checkbox(groupBoxQSnapLoc, "Apparent Intersection", "locator-snaptoapparentintersection", &qsnap_apparent_cb),
+        make_checkbox(groupBoxQSnapLoc, "Parallel", "locator-snaptoparallel", &qsnap_parallel_cb)
     };
     int n_checkboxes = (int)checkboxes.size();
 

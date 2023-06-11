@@ -2957,7 +2957,6 @@ read_configuration(void)
         if (!key) {
             break;
         }
-        debug_message(key);
         toml_table_t *table = toml_table_in(configuration, key);
         if (table) {
             toml_datum_t action = toml_string_in(table, "type");
@@ -2983,6 +2982,36 @@ read_configuration(void)
         }
     }
  
+    toml_table_t *table = toml_table_in(configuration, "default_settings");
+    if (table) {
+        for (int i=0; ; i++) {
+            const char *key = toml_key_in(table, i);
+            if (!key) {
+                break;
+            }
+            std::string k(key);
+            toml_datum_t string_in = toml_string_in(table, key);
+            if (string_in.ok) {
+                settings_[k] = node(read_string_setting(table, key));
+                continue;
+            }
+            toml_datum_t int_in = toml_int_in(table, key);
+            if (int_in.ok) {
+                settings_[k] = node((int)int_in.u.i);
+                continue;
+            }
+            toml_datum_t float_in = toml_double_in(table, key);
+            if (float_in.ok) {
+                settings_[k] = node((EmbReal)float_in.u.d);
+                continue;
+            }
+            toml_datum_t bool_in = toml_bool_in(table, key);
+            if (bool_in.ok) {
+                settings_[k] = node(bool_in.u.b);
+            }
+        }
+    }
+
     for (int i=0; i<(int)action_labels.size(); i++) {
         Action action;
         toml_table_t *table = toml_table_in(configuration, action_labels[i].c_str());
@@ -3025,27 +3054,27 @@ String
 disable_action(String variable)
 {
     if (variable == "text-angle") {
-        settings.text_angle = false;
+        settings_["text_angle"] = node(false);
         return "";
     }
     if (variable == "text-bold") {
-        settings.text_style_bold = false;
+        settings_["text_style_bold"] = node(false);
         return "";
     }
     if (variable == "text-italic") {
-        settings.text_style_italic = false;
+        settings_["text_style_italic"] = node(false);
         return "";
     }
     if (variable == "text-underline") {
-        settings.text_style_underline = false;
+        settings_["text_style_underline"] = node(false);
         return "";
     }
     if (variable == "text-strikeout") {
-        settings.text_style_strikeout = false;
+        settings_["text_style_strikeout"] = node(false);
         return "";
     }
     if (variable == "text-overline") {
-        settings.text_style_overline = false;
+        settings_["text_style_overline"] = node(false);
         return "";
     }
     if (variable == "prompt-rapid-fire") {
@@ -3073,25 +3102,31 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     //Verify that files/directories needed are actually present.
     QFileInfo check = QFileInfo(appDir + "/help");
-    if (!check.exists())
+    if (!check.exists()) {
         QMessageBox::critical(_mainWin, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+    }
     check = QFileInfo(appDir + "/icons");
-    if (!check.exists())
+    if (!check.exists()) {
         QMessageBox::critical(_mainWin, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+    }
     check = QFileInfo(appDir + "/images");
-    if (!check.exists())
+    if (!check.exists()) {
         QMessageBox::critical(_mainWin, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+    }
     check = QFileInfo(appDir + "/samples");
-    if (!check.exists())
+    if (!check.exists()) {
         QMessageBox::critical(_mainWin, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+    }
     check = QFileInfo(appDir + "/translations");
-    if (!check.exists())
+    if (!check.exists()) {
         QMessageBox::critical(_mainWin, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+    }
 
-    QString lang = QString::fromStdString(settings.general_language);
+    QString lang = QString::fromStdString(get_str(settings_, "general_language"));
     debug_message("language: " + lang.toStdString());
-    if (lang == "system")
+    if (lang == "system") {
         lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
+    }
 
     //Load translations for the Embroidermodder 2 GUI
     QTranslator translatorEmb;
@@ -3111,8 +3146,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     //Init
     _mainWin = this;
 
-    QPoint pos = QPoint(settings.position_x, settings.position_y);
-    QSize size = QSize(settings.size_x, settings.size_y);
+    QPoint pos = QPoint(get_int(settings_, "window_position_x"), get_int(settings_, "window_position_y"));
+    QSize size = QSize(get_int(settings_, "window_size_x"), get_int(settings_, "window_size_y"));
 
     move(pos);
     resize(size);
@@ -3169,7 +3204,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     //layout->setMargin(0);
     vbox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     mdiArea = new MdiArea(vbox);
-    mdiArea->useBackgroundLogo(settings.general_mdi_bg_use_logo);
+    mdiArea->useBackgroundLogo(get_bool(settings_, "general_mdi_bg_use_logo"));
     mdiArea->useBackgroundTexture(settings.general_mdi_bg_use_texture);
     mdiArea->useBackgroundColor(settings.general_mdi_bg_use_color);
     String general_mdi_bg_logo = get_str(settings_, "general_mdi_bg_logo");
