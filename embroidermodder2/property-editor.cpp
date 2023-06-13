@@ -510,7 +510,7 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
             updateLineEditStrIfVaries(lineEdits["text-single-contents"], obj->objText);
             updateFontComboBoxStrIfVaries(comboBoxTextSingleFont, obj->objTextFont);
             updateComboBoxStrIfVaries(comboBoxes["text-single-justify"], obj->objTextJustify, config["justify_options"].sl);
-            updateLineEditNumIfVaries(lineEdits["text-single-height"], obj->objTextSize, false);
+            updateLineEditNumIfVaries(lineEdits["text-single-height"], get_real(obj->properties, "text_size"), false);
             updateLineEditNumIfVaries(lineEdits["text-single-rotation"], -obj->rotation(), true);
             updateLineEditNumIfVaries(lineEdits["text-single-x"], obj->objectX(), false);
             updateLineEditNumIfVaries(lineEdits["text-single-y"], -obj->objectY(), false);

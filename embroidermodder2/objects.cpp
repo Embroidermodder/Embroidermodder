@@ -59,67 +59,107 @@ fourier_series(EmbReal arg, std::vector<EmbReal> terms)
 /**
  * .
  */
+Geometry::Geometry(EmbArc arc, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
+{
+    debug_message("Geometry Constructor()");
+    init();
+    init_arc(arc, rgb, lineType); //TODO: getCurrentLineType
+}
+
+/**
+ * .
+ */
 Geometry::Geometry(EmbCircle circle, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
     debug_message("Geometry Constructor()");
-    init_circle(circle, rgb, Qt::SolidLine); //TODO: getCurrentLineType
+    init();
+    init_circle(circle, rgb, lineType); //TODO: getCurrentLineType
 }
 
-#if 0
 /**
  * .
  */
 Geometry::Geometry(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
     debug_message("Geometry Constructor()");
-    init_ellipse(ellipse, rgb, Qt::SolidLine); //TODO: getCurrentLineType
+    Type = OBJ_TYPE_ELLIPSE;
+    init();
+    init_ellipse(ellipse, rgb, lineType); //TODO: getCurrentLineType
 }
 
 /**
  * .
  */
-Geometry::Geometry(EmbLine line, int Type_, QRgb rgb, QGraphicsItem* parent) : QGraphicsPathItem(parent)
+Geometry::Geometry(EmbLine line, int Type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
     debug_message("DimLeaderObject Constructor()");
     Type = Type_;
-    init_line(line, rgb, Qt::SolidLine); //TODO: getCurrentLineType
+    init();
+    init_line(line, rgb, lineType); //TODO: getCurrentLineType
 }
 
 /**
  * .
  */
-Geometry::Geometry(EmbVector vector, QRgb rgb, QGraphicsItem* parent) : QGraphicsPathItem(parent)
+Geometry::Geometry(EmbVector vector, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
     debug_message("Geometry Constructor()");
-    init_point(vector, rgb, Qt::SolidLine); //TODO: getCurrentLineType
+    init();
+    init_point(vector, rgb, lineType); //TODO: getCurrentLineType
 }
 
 /**
  * For PATH, POLYLINE and POLYGON, set the Type_ variable to one of these.
  */
-Geometry::Geometry(EmbVector v, const QPainterPath& p, int Type_, QRgb rgb, QGraphicsItem* parent) : QGraphicsPathItem(parent)
+Geometry::Geometry(EmbVector v, const QPainterPath& p, int Type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
     debug_message("Geometry Constructor()");
     Type = Type_;
-    init_path(v, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
+    init();
+    init_path(v, p, rgb, lineType); //TODO: getCurrentLineType
 }
 
 /**
  * \brief .
  */
-Geometry::Geometry(EmbRect rect, QRgb rgb, QGraphicsItem* parent) : QGraphicsPathItem(parent)
+Geometry::Geometry(EmbRect rect, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
     debug_message("Geometry Constructor()");
-    init_rect(rect, rgb, Qt::SolidLine); //TODO: getCurrentLineType
+    init();
+    init_rect(rect, rgb, lineType); //TODO: getCurrentLineType
 }
 
 /**
  * .
  */
-Geometry::Geometry(QString str, EmbVector v, QRgb rgb, QGraphicsItem* parent) : QGraphicsPathItem(parent)
+Geometry::Geometry(QString str, EmbVector v, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
     debug_message("Geometry Constructor()");
-    init_text_single(str, v, rgb, Qt::SolidLine); //TODO: getCurrentLineType
+    init();
+    init_text_single(str, v, rgb, lineType); //TODO: getCurrentLineType
+}
+
+/**
+ *
+ */
+void
+Geometry::init(void)
+{
+    objPen.setCapStyle(Qt::RoundCap);
+    objPen.setJoinStyle(Qt::RoundJoin);
+    lwtPen.setCapStyle(Qt::RoundCap);
+    lwtPen.setJoinStyle(Qt::RoundJoin);
+
+    objID = QDateTime::currentMSecsSinceEpoch();
+
+    properties["init_script"] = node("");
+    properties["prompt_script"] = node("");
+    properties["click_script"] = node("");
+    properties["context_script"] = node("");
+
+    if (get_str(properties, "init_script") != "") {
+        run_script(scripts[get_str(properties, "init_script")]);
+    }
 }
 
 /**
@@ -133,7 +173,7 @@ Geometry::Geometry(QString str, EmbVector v, QRgb rgb, QGraphicsItem* parent) : 
  * WARNING: All movement has to be handled explicitly by us, not by the scene.
  */
 void
-Geometry::init_arc(EmbArc arc, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem *parent = 0)
+Geometry::init_arc(EmbArc arc, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, OBJ_TYPE_ARC);
     setData(OBJ_NAME, "Arc");
@@ -149,7 +189,6 @@ Geometry::init_arc(EmbArc arc, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem *p
     setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
     setPen(objPen);
 }
-#endif
 
 /**
  * .
@@ -176,7 +215,6 @@ Geometry::init_circle(EmbCircle circle, QRgb rgb, Qt::PenStyle lineType)
     updatePath();
 }
 
-#if 0
 /**
  * \brief .
  */
@@ -367,7 +405,6 @@ Geometry::init_text_single(QString  str, EmbVector v, QRgb rgb, Qt::PenStyle lin
     setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
     setPen(objPen);
 }
-#endif
 
 /**
  * .
@@ -379,7 +416,7 @@ Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(par
     if (obj) {
         Type = obj->Type;
         switch (Type) {
-/*        case OBJ_TYPE_ARC: {
+        case OBJ_TYPE_ARC: {
             EmbArc arc;
             arc.start = to_EmbVector(obj->objectStartPoint());
             arc.mid = to_EmbVector(obj->objectMidPoint());
@@ -388,7 +425,7 @@ Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(par
             setRotation(obj->rotation());
             break;
         }
-*/
+
         case OBJ_TYPE_CIRCLE: {
             EmbCircle circle;
             circle.center.x = obj->objectCenter().x();
@@ -398,7 +435,7 @@ Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(par
             setRotation(obj->rotation());
             break;
         }
-#if 0
+
         case OBJ_TYPE_DIMLEADER: {
             debug_message("DimLeaderObject Constructor()");
             EmbLine line;
@@ -425,28 +462,25 @@ Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(par
             EmbLine line;
             line.start = to_EmbVector(obj->objectEndPoint1());
             line.end = to_EmbVector(obj->objectEndPoint2());
-            init_line(line, OBJ_TYPE_LINE, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
+            init_line(line, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
             break;
         }
 
         case OBJ_TYPE_POINT: {
-            EmbVector position;
-            position.x = obj->objectPos().x();
-            position.y = obj->objectPos().y();
-            init_point(position, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
+            init_point(to_EmbVector(obj->objectPos()), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
             setRotation(obj->rotation());
             break;
         }
 
         case OBJ_TYPE_POLYGON: {
-            init_path(obj->objectPos().x(), obj->objectPos().y(), obj->objectCopyPath(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
+            init_path(to_EmbVector(obj->objectPos()), obj->objectCopyPath(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
             setRotation(obj->rotation());
             setScale(obj->scale());
             break;
         }
 
         case OBJ_TYPE_POLYLINE: {
-            init_path(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
+            init_path(to_EmbVector(obj->objectPos()), obj->objectCopyPath(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
             setRotation(obj->rotation());
             setScale(obj->scale());
             break;
@@ -466,11 +500,16 @@ Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(par
         
         case OBJ_TYPE_TEXTSINGLE: {
             setObjectTextFont(obj->objTextFont);
-            setObjectTextSize(obj->objTextSize);
+            setObjectTextSize(get_real(obj->properties, "text_size"));
             setRotation(obj->rotation());
-            setObjectTextBackward(obj->objTextBackward);
+            setObjectTextBackward(get_bool(obj->properties, "text_backward"));
             setObjectTextUpsideDown(obj->objTextUpsideDown);
-            setObjectTextStyle(obj->objTextBold, obj->objTextItalic, obj->objTextUnderline, obj->objTextStrikeOut, obj->objTextOverline);
+            bool bold = get_bool(obj->properties, "text_bold");
+            bool italic = get_bool(obj->properties, "text_italic");
+            bool underline = get_bool(obj->properties, "text_underline");
+            bool strikeout = get_bool(obj->properties, "text_strikeout");
+            bool overline = get_bool(obj->properties, "text_overline");
+            setObjectTextStyle(bold, italic, underline, strikeout, overline);
             EmbVector v;
             v.x = obj->objectX();
             v.y = obj->objectY();
@@ -478,7 +517,7 @@ Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(par
             setScale(obj->scale());
             break;
         }
-#endif
+
         default:
             break;
         }
@@ -565,54 +604,6 @@ Geometry::allGripPoints()
 Geometry::~Geometry()
 {
     debug_message("Geometry Destructor()");
-}
-
-/**
- * @brief Geometry::run_command
- * @param command
- */
-void
-Geometry::run_command(String command)
-{
-    switch (Type) {
-    case OBJ_TYPE_BASE:
-        break;
-    case OBJ_TYPE_ARC:
-        run_arc_command(command);
-        break;
-    case OBJ_TYPE_CIRCLE:
-        run_circle_command(command);
-        break;
-    case OBJ_TYPE_ELLIPSE:
-        run_ellipse_command(command);
-        break;
-    default:
-        break;
-    }
-}
-
-void
-Geometry::run_arc_command(String command)
-{
-
-}
-
-void
-Geometry::run_circle_command(String command)
-{
-
-}
-
-void
-Geometry::run_ellipse_command(String command)
-{
-
-}
-
-void
-Geometry::run_image_command(String command)
-{
-
 }
 
 /**
@@ -2644,8 +2635,6 @@ Geometry::findIndex(const QPointF& point)
     return -1;
 }
 
-#if 0
-
 /**
  * @brief Geometry::updatePath
  * @param p
@@ -2659,6 +2648,7 @@ Geometry::updatePath(const QPainterPath& p)
     setPath(reversePath);
 }
 
+#if 0
 /**
  * @brief Geometry::findIndex
  * @param point
@@ -3337,18 +3327,18 @@ SaveObject::toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainte
 /**
  *
  */
-void Geometry::setObjectText(QString  str)
+void Geometry::setObjectText(QString str)
 {
     objText = str;
     QPainterPath textPath;
     QFont font;
     font.setFamily(objTextFont);
-    font.setPointSizeF(objTextSize);
-    font.setBold(objTextBold);
-    font.setItalic(objTextItalic);
-    font.setUnderline(objTextUnderline);
-    font.setStrikeOut(objTextStrikeOut);
-    font.setOverline(objTextOverline);
+    font.setPointSizeF(get_real(properties, "text_size"));
+    font.setBold(get_bool(properties, "text_bold"));
+    font.setItalic(get_bool(properties, "text_italic"));
+    font.setUnderline(get_bool(properties, "text_underline"));
+    font.setStrikeOut(get_bool(properties, "text_strikeout"));
+    font.setOverline(get_bool(properties, "text_overline"));
     textPath.addText(0, 0, font, str);
 
     //Translate the path based on the justification
@@ -3448,7 +3438,7 @@ void Geometry::setObjectText(QString  str)
  *
  */
 void
-Geometry::setObjectTextFont(QString  font)
+Geometry::setObjectTextFont(QString font)
 {
     objTextFont = font;
     setObjectText(objText);
@@ -3477,7 +3467,7 @@ Geometry::setObjectTextJustify(QString justify)
 void
 Geometry::setObjectTextSize(EmbReal size)
 {
-    objTextSize = size;
+    properties["text_size"] = node(size);
     setObjectText(objText);
 }
 
@@ -3487,11 +3477,11 @@ Geometry::setObjectTextSize(EmbReal size)
 void
 Geometry::setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bool over)
 {
-    objTextBold = bold;
-    objTextItalic = italic;
-    objTextUnderline = under;
-    objTextStrikeOut = strike;
-    objTextOverline = over;
+    properties["text_bold"] = node(bold);
+    properties["text_italic"] = node(italic);
+    properties["text_underline"] = node(under);
+    properties["text_strikeout"] = node(strike);
+    properties["text_overline"] = node(over);
     setObjectText(objText);
 }
 
@@ -3501,7 +3491,7 @@ Geometry::setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bo
 void
 Geometry::setObjectTextBold(bool val)
 {
-    objTextBold = val;
+    properties["text_bold"] = node(val);
     setObjectText(objText);
 }
 
@@ -3511,7 +3501,7 @@ Geometry::setObjectTextBold(bool val)
 void
 Geometry::setObjectTextItalic(bool val)
 {
-    objTextItalic = val;
+    properties["text_italic"] = node(val);
     setObjectText(objText);
 }
 
@@ -3521,7 +3511,7 @@ Geometry::setObjectTextItalic(bool val)
 void
 Geometry::setObjectTextUnderline(bool val)
 {
-    objTextUnderline = val;
+    properties["text_underline"] = node(val);
     setObjectText(objText);
 }
 
@@ -3531,7 +3521,7 @@ Geometry::setObjectTextUnderline(bool val)
 void
 Geometry::setObjectTextStrikeOut(bool val)
 {
-    objTextStrikeOut = val;
+    properties["text_strikeout"] = node(val);
     setObjectText(objText);
 }
 
@@ -3541,7 +3531,7 @@ Geometry::setObjectTextStrikeOut(bool val)
 void
 Geometry::setObjectTextOverline(bool val)
 {
-    objTextOverline = val;
+    properties["text_overline"] = node(val);
     setObjectText(objText);
 }
 
@@ -3551,7 +3541,7 @@ Geometry::setObjectTextOverline(bool val)
 void
 Geometry::setObjectTextBackward(bool val)
 {
-    objTextBackward = val;
+    properties["text_backward"] = node(val);
     setObjectText(objText);
 }
 
@@ -3561,7 +3551,7 @@ Geometry::setObjectTextBackward(bool val)
 void
 Geometry::setObjectTextUpsideDown(bool val)
 {
-    objTextUpsideDown = val;
+    properties["text_upsidedown"] = node(val);
     setObjectText(objText);
 }
 

@@ -403,10 +403,6 @@ public:
     QPen lwtPen;
     QLineF objLine;
     String objRubberMode = "OBJ_RUBBER_OFF";
-    String init_script = "";
-    String prompt_script = "";
-    String click_script = "";
-    String context_script = "";
     QHash<QString, QPointF> objRubberPoints;
     QHash<QString, QString> objRubberTexts;
     int64_t objID;
@@ -429,12 +425,6 @@ public:
     QString objText;
     QString objTextFont;
     QString objTextJustify;
-    EmbReal objTextSize;
-    bool objTextBold;
-    bool objTextItalic;
-    bool objTextUnderline;
-    bool objTextStrikeOut;
-    bool objTextOverline;
     bool objTextBackward;
     bool objTextUpsideDown;
     QPainterPath objTextPath;
@@ -444,49 +434,28 @@ public:
     int Type = OBJ_TYPE_BASE;
     virtual int type(){ return Type; }
 
-    void run_command(String command);
-    void run_arc_command(String command);
-    void run_circle_command(String command);
-    void run_ellipse_command(String command);
-    void run_image_command(String command);
-
     Geometry(int object_type = OBJ_TYPE_BASE, QGraphicsItem* parent = 0);
     Geometry(Geometry *obj, QGraphicsItem* parent = 0);
- //   Geometry(EmbArc arc, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
+    Geometry(EmbArc arc, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
     Geometry(EmbCircle circle, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
- /*   Geometry(EmbLine line, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
+    Geometry(EmbLine line, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
     Geometry(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
     Geometry(EmbRect rect, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
-    Geometry(QString str, EmbVector position, QRgb rgb, QGraphicsItem* parent = 0);
-    Geometry(EmbVector pos, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
-    Geometry(EmbVector pos, QRgb rgb, QGraphicsItem* parent = 0);
+    Geometry(QString str, EmbVector position, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
+    Geometry(EmbLine line, int Type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent);
+    Geometry(EmbVector pos, const QPainterPath& p, int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
+    Geometry(EmbVector pos, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
 
     void init_arc(EmbArc arc, QRgb rgb, Qt::PenStyle lineType);
-    */
     void init_circle(EmbCircle circle, QRgb rgb, Qt::PenStyle lineType);
-    /*
     void init_line(EmbLine line, QRgb rgb, Qt::PenStyle lineType);
     void init_ellipse(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType);
     void init_rect(EmbRect rect, QRgb rgb, Qt::PenStyle lineType);
     void init_text_single(QString str, EmbVector position, QRgb rgb, Qt::PenStyle lineType);
     void init_path(EmbVector pos, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
     void init_point(EmbVector pos, QRgb rgb, Qt::PenStyle lineType);
-    */
 
-    void init(void)
-    {
-        objPen.setCapStyle(Qt::RoundCap);
-        objPen.setJoinStyle(Qt::RoundJoin);
-        lwtPen.setCapStyle(Qt::RoundCap);
-        lwtPen.setJoinStyle(Qt::RoundJoin);
-
-        objID = QDateTime::currentMSecsSinceEpoch();
-
-        switch (Type) {
-        default:
-            break;
-        }
-    }
+    void init(void);
 
     ~Geometry();
 
