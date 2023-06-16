@@ -270,7 +270,7 @@ MdiWindow::loadFile(QString fileName)
         QString stitches;
         stitches.setNum(stitchCount);
 
-        if (settings.grid_load_from_file) {
+        if (get_bool(settings, "grid_load_from_file")) {
             //TODO: Josh, provide me a hoop size and/or grid spacing from the pattern.
         }
 
@@ -301,7 +301,7 @@ void MdiWindow::print()
     QPrintDialog dialog(&printer, this);
     if (dialog.exec() == QDialog::Accepted) {
         QPainter painter(&printer);
-        if (settings.printing_disable_bg) {
+        if (get_bool(settings, "printing_disable_bg")) {
             //Save current bg
             QBrush brush = gview->backgroundBrush();
             //Save ink by not printing the bg at all
@@ -338,7 +338,7 @@ void MdiWindow::saveBMC()
     QPainter painter(&img);
     QRectF targetRect(0,0,150,150);
     // TODO: Make BMC background into it's own setting?
-    if (settings.printing_disable_bg) {
+    if (get_bool(settings, "printing_disable_bg")) {
         QBrush brush = gscene->backgroundBrush();
         gscene->setBackgroundBrush(Qt::NoBrush);
         gscene->update();

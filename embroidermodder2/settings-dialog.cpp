@@ -19,21 +19,11 @@
 
 /**
  * The actuator changes the program state via these global variables.
- */
-Settings settings;
-
-/**
+ *
  * These copies of the settings struct are for restoring the state if
  * the user doesn't want to accept their changes in the settings dialog.
  */
-Settings dialog, preview, accept_;
-Dictionary settings_, dialog_, preview_, accept__;
-
-bool qsnap_endpoint_cb, qsnap_midpoint_cb, qsnap_center_cb,
-    qsnap_node_cb, qsnap_quadrant_cb, qsnap_intersection_cb,
-    qsnap_extension_cb, qsnap_insertion_cb, qsnap_perpendicular_cb,
-    qsnap_tangent_cb, qsnap_nearest_cb, qsnap_apparent_cb,
-    qsnap_parallel_cb;
+Dictionary settings, dialog, preview, accept_;
 
 /**
  * .
@@ -52,6 +42,82 @@ StringList extensions = {
     "VP3", "XXX", "ZSK"
 };
 
+StringList general_props = {
+    "general_icon_theme",
+    "general_icon_size",
+    "general_mdi_bg_use_logo",
+    "general_mdi_bg_logo",
+    "general_mdi_bg_use_texture",
+    "general_mdi_bg_texture",
+    "general_mdi_bg_use_color",
+    "general_mdi_bg_color",
+    "general_tip_of_the_day"
+};
+
+StringList display_props = {
+    "display_use_opengl",
+    "display_renderhint_aa",
+    "display_renderhint_text_aa",
+    "display_renderhint_smooth_pix",
+    "display_renderhint_high_aa",
+    "display_renderhint_noncosmetic",
+    "display_show_scrollbars",
+    "display_scrollbar_widget_num",
+    "display_crosshair_color",
+    "display_bg_color",
+    "display_selectbox_left_color",
+    "display_selectbox_left_fill",
+    "display_selectbox_right_color",
+    "display_selectbox_right_fill",
+    "display_selectbox_alpha",
+    "display_zoomscale_in",
+    "display_zoomscale_out"
+};
+
+StringList prompt_props = {
+    "prompt_text_color",
+    "prompt_background_color",
+    "prompt_font_family",
+    "prompt_font_size",
+    "prompt_save_history",
+    "prompt_save_history_as_html"
+};
+
+StringList quick_snap_props = {
+    "quicksnap_endpoint",
+    "quicksnap_midpoint",
+    "quicksnap_center",
+    "quicksnap_node",
+    "quicksnap_quadrant",
+    "quicksnap_intersection",
+    "quicksnap_extension",
+    "quicksnap_insertion",
+    "quicksnap_perpendicular",
+    "quicksnap_tangent",
+    "quicksnap_nearest",
+    "quicksnap_apparent",
+    "quicksnap_parallel",
+    "quicksnap_locator_color",
+    "quicksnap_locator_size",
+    "quicksnap_aperture_size"
+};
+
+StringList opensave_props = {
+    "opensave_custom_filter"
+};
+
+
+void
+make_editing_copy(StringList props)
+{
+    for (int i=0; i<(int)props.size(); i++) {
+        String s = props[i];
+        dialog[s] = settings[s];
+        preview[s] = dialog[s];
+        accept_[s] = dialog[s];
+    }
+}
+
 /**
  * @brief read_settings
  *
@@ -63,145 +129,20 @@ read_settings(void)
     debug_message("Reading Settings...");
 
     QString appDir = qApp->applicationDirPath();
-#if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
-    QString settingsPath = QDir::homePath() + "/.embroidermodder2/settings.ini";
-#else
-    QString settingsPath = appDir + "/settings.ini";
-#endif
-
-    QSettings settings_file(settingsPath, QSettings::IniFormat);
 
     /*
-    layoutState = settings_file.value("LayoutState").toByteArray();
+    layoutState = settingsfile.value("LayoutState").toByteArray();
     if (!restoreState(layoutState)) {
         debug_message("LayoutState NOT restored! Setting Default Layout...");
         //someToolBar->setVisible(true);
      }
     */
 
-    //General
-    settings.general_language = settings_file.value("Language", "default").toString().toStdString();
-    settings.general_icon_theme = settings_file.value("IconTheme", "default").toString().toStdString();
-    settings.general_icon_size = settings_file.value("IconSize", 16).toInt();
-    settings.general_mdi_bg_use_logo = settings_file.value("MdiBGUseLogo", true).toBool();
-    settings.general_mdi_bg_use_texture = settings_file.value("MdiBGUseTexture", true).toBool();
-    settings.general_mdi_bg_use_color = settings_file.value("MdiBGUseColor", true).toBool();
-    settings_["general_mdi_bg_logo"] = node(settings_file.value("MdiBGLogo", appDir + "/images/logo-spirals.png").toString().toStdString());
-    settings.general_mdi_bg_texture = settings_file.value("MdiBGTexture", appDir + "/images/texture-spirals.png").toString().toStdString();
-    settings.general_mdi_bg_color = settings_file.value("MdiBGColor", qRgb(192,192,192)).toInt();
-    settings.general_tip_of_the_day = settings_file.value("TipOfTheDay", true).toBool();
-    settings.general_current_tip = settings_file.value("CurrentTip", 0).toInt();
-    settings.general_system_help_browser = settings_file.value("SystemHelpBrowser", true).toBool();
-
-    //Display
-    settings.display_use_opengl = settings_file.value("Display/UseOpenGL", false).toBool();
-    settings.display_renderhint_aa = settings_file.value("Display/RenderHintAntiAlias", false).toBool();
-    settings.display_renderhint_text_aa = settings_file.value("Display/RenderHintTextAntiAlias", false).toBool();
-    settings.display_renderhint_smooth_pix = settings_file.value("Display/RenderHintSmoothPixmap", false).toBool();
-    settings.display_renderhint_high_aa = settings_file.value("Display/RenderHintHighQualityAntiAlias", false).toBool();
-    settings.display_renderhint_noncosmetic = settings_file.value("Display/RenderHintNonCosmetic", false).toBool();
-    settings.display_show_scrollbars = settings_file.value("Display/ShowScrollBars", true).toBool();
-    settings.display_scrollbar_widget_num = settings_file.value("Display/ScrollBarWidgetNum", 0).toInt();
-    settings.display_crosshair_color = settings_file.value("Display/CrossHairColor", qRgb(  0, 0, 0)).toInt();
-    settings.display_bg_color = settings_file.value("Display/BackgroundColor", qRgb(235,235,235)).toInt();
-    settings.display_selectbox_left_color = settings_file.value("Display/SelectBoxLeftColor", qRgb(  0,128, 0)).toInt();
-    settings.display_selectbox_left_fill = settings_file.value("Display/SelectBoxLeftFill", qRgb(  0,255, 0)).toInt();
-    settings.display_selectbox_right_color = settings_file.value("Display/SelectBoxRightColor", qRgb(  0, 0,128)).toInt();
-    settings.display_selectbox_right_fill = settings_file.value("Display/SelectBoxRightFill", qRgb(  0, 0,255)).toInt();
-    settings.display_selectbox_alpha = settings_file.value("Display/SelectBoxAlpha", 32).toInt();
-    settings.display_zoomscale_in = settings_file.value("Display/ZoomScaleIn", 2.0).toFloat();
-    settings.display_zoomscale_out = settings_file.value("Display/ZoomScaleOut", 0.5).toFloat();
-    settings.display_crosshair_percent = settings_file.value("Display/CrossHairPercent", 5).toInt();
-    settings_["display_units"] = node(settings_file.value("Display/Units", "mm").toString().toStdString());
-
-    //Prompt
-    settings.prompt_text_color = settings_file.value("Prompt/TextColor", qRgb(  0, 0, 0)).toInt();
-    settings.prompt_bg_color = settings_file.value("Prompt/BackgroundColor", qRgb(255,255,255)).toInt();
-    settings.prompt_font_family = settings_file.value("Prompt/FontFamily", "Monospace").toString().toStdString();
-    settings.prompt_font_style = settings_file.value("Prompt/FontStyle", "normal").toString().toStdString();
-    settings.prompt_font_size = settings_file.value("Prompt/FontSize", 12).toInt();
-    settings.prompt_save_history = settings_file.value("Prompt/SaveHistory", true).toBool();
-    settings.prompt_save_history_as_html = settings_file.value("Prompt/SaveHistoryAsHtml", false).toBool();
-
 #if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
-    settings.prompt_save_history_filename = settings_file.value("Prompt/SaveHistoryFilename", QDir::homePath() + "/.embroidermodder2/prompt.log").toString().toStdString();
+//    settings["prompt_save_history_filename"] = node_qstr(QDir::homePath() + "/.embroidermodder2/prompt.log");
 #else
-    settings.prompt_save_history_filename = settings_file.value("Prompt/SaveHistoryFilename", appDir + "prompt.log").toString().toStdString();
+//    settings["prompt_save_history_filename"] = node_qstr(appDir + "prompt.log");
 #endif
-
-    //OpenSave
-    settings.opensave_custom_filter = settings_file.value("OpenSave/CustomFilter", "supported").toString();
-    settings.opensave_open_format = settings_file.value("OpenSave/OpenFormat", "*.*").toString().toStdString();
-    settings.opensave_open_thumbnail = settings_file.value("OpenSave/OpenThumbnail", false).toBool();
-    settings.opensave_save_format = settings_file.value("OpenSave/SaveFormat", "*.*").toString().toStdString();
-    settings.opensave_save_thumbnail = settings_file.value("OpenSave/SaveThumbnail", false).toBool();
-
-    //Recent
-    settings.opensave_recent_max_files = settings_file.value("OpenSave/RecentMax", 10).toInt();
-    settings.opensave_recent_list_of_files = settings_file.value("OpenSave/RecentFiles").toStringList();
-    settings.opensave_recent_directory = settings_file.value("OpenSave/RecentDirectory", appDir + "/samples").toString().toStdString();
-
-    //Trimming
-    settings.opensave_trim_dst_num_jumps = settings_file.value("OpenSave/TrimDstNumJumps", 5).toInt();
-
-    //Printing
-    settings.printing_default_device = settings_file.value("Printing/DefaultDevice", "").toString().toStdString();
-    settings.printing_use_last_device = settings_file.value("Printing/UseLastDevice", false).toBool();
-    settings.printing_disable_bg = settings_file.value("Printing/DisableBG", true).toBool();
-
-    //Grid
-    settings.grid_show_on_load = settings_file.value("Grid/ShowOnLoad", true).toBool();
-    settings.grid_show_origin = settings_file.value("Grid/ShowOrigin", true).toBool();
-    settings.grid_color_match_crosshair = settings_file.value("Grid/ColorMatchCrossHair", true).toBool();
-    settings.grid_color = settings_file.value("Grid/Color", qRgb(  0, 0, 0)).toInt();
-    settings.grid_load_from_file = settings_file.value("Grid/LoadFromFile", true).toBool();
-    settings_["grid_type"] = node(settings_file.value("Grid/Type", "Rectangular").toString().toStdString());
-    settings.grid_center_on_origin = settings_file.value("Grid/CenterOnOrigin", true).toBool();
-    settings.grid_center.x = settings_file.value("Grid/CenterX", 0.0).toFloat();
-    settings.grid_center.y = settings_file.value("Grid/CenterY", 0.0).toFloat();
-    settings.grid_size.x = settings_file.value("Grid/SizeX", 100.0).toFloat();
-    settings.grid_size.y = settings_file.value("Grid/SizeY", 100.0).toFloat();
-    settings.grid_spacing.x = settings_file.value("Grid/SpacingX", 25.0).toFloat();
-    settings.grid_spacing.y = settings_file.value("Grid/SpacingY", 25.0).toFloat();
-    settings.grid_size_radius = settings_file.value("Grid/SizeRadius", 50.0).toFloat();
-    settings.grid_spacing_radius = settings_file.value("Grid/SpacingRadius", 25.0).toFloat();
-    settings.grid_spacing_angle = settings_file.value("Grid/SpacingAngle", 45.0).toFloat();
-
-    //Ruler
-    settings.ruler_show_on_load = settings_file.value("Ruler/ShowOnLoad", true).toBool();
-    settings.ruler_metric = settings_file.value("Ruler/Metric", true).toBool();
-    settings.ruler_color = settings_file.value("Ruler/Color", qRgb(210,210, 50)).toInt();
-    settings.ruler_pixel_size = settings_file.value("Ruler/PixelSize", 20).toInt();
-
-    //Quick Snap
-    settings.qsnap_enabled = settings_file.value("QuickSnap/Enabled", true).toBool();
-    settings.qsnap_locator_color = settings_file.value("QuickSnap/LocatorColor", qRgb(255,255, 0)).toInt();
-    settings.qsnap_locator_size = settings_file.value("QuickSnap/LocatorSize", 4).toInt();
-    settings.qsnap_aperture_size = settings_file.value("QuickSnap/ApertureSize", 10).toInt();
-
-    //LineWeight
-    settings.lwt_show_lwt = settings_file.value("LineWeight/ShowLineWeight", false).toBool();
-    settings.lwt_real_render = settings_file.value("LineWeight/RealRender", true).toBool();
-    settings.lwt_default_lwt = settings_file.value("LineWeight/DefaultLineWeight", 0).toReal();
-
-    //Selection
-    settings.selection_mode_pickfirst = settings_file.value("Selection/PickFirst", true).toBool();
-    settings.selection_mode_pickadd = settings_file.value("Selection/PickAdd", true).toBool();
-    settings.selection_mode_pickdrag = settings_file.value("Selection/PickDrag", false).toBool();
-    settings.selection_coolgrip_color = settings_file.value("Selection/CoolGripColor", qRgb(  0, 0,255)).toInt();
-    settings.selection_hotgrip_color = settings_file.value("Selection/HotGripColor", qRgb(255, 0, 0)).toInt();
-    settings.selection_grip_size = settings_file.value("Selection/GripSize", 4).toInt();
-    settings.selection_pickbox_size = settings_file.value("Selection/PickBoxSize", 4).toInt();
-
-    //Text
-    settings.text_font = settings_file.value("Text/Font", "Arial").toString().toStdString();
-    settings.text_size = settings_file.value("Text/Size", 12).toReal();
-    settings.text_angle = settings_file.value("Text/Angle", 0).toReal();
-    settings.text_style_bold = settings_file.value("Text/StyleBold", false).toBool();
-    settings.text_style_italic = settings_file.value("Text/StyleItalic", false).toBool();
-    settings.text_style_underline = settings_file.value("Text/StyleUnderline", false).toBool();
-    settings.text_style_strikeout = settings_file.value("Text/StyleStrikeOut", false).toBool();
-    settings.text_style_overline = settings_file.value("Text/StyleOverline", false).toBool();
 
 #if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
     QString fname = QDir::homePath() + "/.embroidermodder2/settings.toml";
@@ -232,22 +173,22 @@ read_settings(void)
         std::string k(key);
         toml_datum_t string_in = toml_string_in(table, key);
         if (string_in.ok) {
-            settings_[k] = node(read_string_setting(table, key));
+            settings[k] = node_str(read_string_setting(table, key));
             continue;
         }
         toml_datum_t int_in = toml_int_in(table, key);
         if (int_in.ok) {
-            settings_[k] = node((int)int_in.u.i);
+            settings[k] = node_int((int)int_in.u.i);
             continue;
         }
         toml_datum_t float_in = toml_double_in(table, key);
         if (float_in.ok) {
-            settings_[k] = node((EmbReal)float_in.u.d);
+            settings[k] = node_real((EmbReal)float_in.u.d);
             continue;
         }
         toml_datum_t bool_in = toml_bool_in(table, key);
         if (bool_in.ok) {
-            settings_[k] = node(bool_in.u.b);
+            settings[k] = node_bool(bool_in.u.b);
         }
     }
 }
@@ -261,158 +202,22 @@ void
 write_settings(void)
 {
     debug_message("Writing Settings...");
-    QString appDir = qApp->applicationDirPath();
-#if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
-    String settingsPath = QDir::homePath().toStdString() + "/.embroidermodder2/settings.ini";
-#else
-    String settingsPath = appDir + "/settings.ini";
-#endif
-    std::ofstream settings_file;
-    settings_file.open(settingsPath);
+    String settingsPath;
 
-    settings_["window_position_x"] = node((int)_mainWin->pos().x());
-    settings_["window_position_y"] = node((int)_mainWin->pos().y());
-    settings_["window_size_x"] = node((int)_mainWin->size().width());
-    settings_["window_size_y"] = node((int)_mainWin->size().height());
-
-    settings_file << "[General]" << std::endl;
-    //settings_file << "LayoutState=" << layoutState << std::endl;
-    settings_file << "Language=" << settings.general_language << std::endl;
-    settings_file << "IconTheme=" << settings.general_icon_theme << std::endl;
-    settings_file << "IconSize=" << settings.general_icon_size << std::endl;
-    settings_file << "MdiBGUseLogo=" << settings.general_mdi_bg_use_logo << std::endl;
-    settings_file << "MdiBGUseTexture=" << settings.general_mdi_bg_use_texture << std::endl;
-    settings_file << "MdiBGUseColor=" << settings.general_mdi_bg_use_color << std::endl;
-    settings_file << "MdiBGLogo=" << get_str(settings_, "general_mdi_bg_logo") << std::endl;
-    settings_file << "MdiBGTexture=" << settings.general_mdi_bg_texture << std::endl;
-    settings_file << "MdiBGColor=" << settings.general_mdi_bg_color << std::endl;
-    settings_file << "TipOfTheDay=" << settings.general_tip_of_the_day << std::endl;
-    settings_file << "CurrentTip=" << settings.general_current_tip + 1 << std::endl;
-    settings_file << "SystemHelpBrowser=" << settings.general_system_help_browser << std::endl;
-    settings_file << std::endl;
-
-    settings_file << "[Display]" << std::endl;
-    settings_file << "UseOpenGL=" << settings.display_use_opengl << std::endl;
-    settings_file << "RenderHintAntiAlias=" << settings.display_renderhint_aa << std::endl;
-    settings_file << "RenderHintTextAntiAlias=" << settings.display_renderhint_text_aa << std::endl;
-    settings_file << "RenderHintSmoothPixmap=" << settings.display_renderhint_smooth_pix << std::endl;
-    settings_file << "RenderHintHighQualityAntiAlias=" << settings.display_renderhint_high_aa << std::endl;
-    settings_file << "RenderHintNonCosmetic=" << settings.display_renderhint_noncosmetic << std::endl;
-    settings_file << "ShowScrollBars=" << settings.display_show_scrollbars << std::endl;
-    settings_file << "ScrollBarWidgetNum=" << settings.display_scrollbar_widget_num << std::endl;
-    settings_file << "CrossHairColor=" << settings.display_crosshair_color << std::endl;
-    settings_file << "BackgroundColor=" << settings.display_bg_color << std::endl;
-    settings_file << "SelectBoxLeftColor=" << settings.display_selectbox_left_color << std::endl;
-    settings_file << "SelectBoxLeftFill=" << settings.display_selectbox_left_fill << std::endl;
-    settings_file << "SelectBoxRightColor=" << settings.display_selectbox_right_color << std::endl;
-    settings_file << "SelectBoxRightFill=" << settings.display_selectbox_right_fill << std::endl;
-    settings_file << "SelectBoxAlpha=" << settings.display_selectbox_alpha << std::endl;
-    settings_file << "ZoomScaleIn=" << settings.display_zoomscale_in << std::endl;
-    settings_file << "ZoomScaleOut=" << settings.display_zoomscale_out << std::endl;
-    settings_file << "CrossHairPercent=" << settings.display_crosshair_percent << std::endl;
-    settings_file << "Units=" << settings_["display_units"].s << std::endl;
-    settings_file << std::endl;
-
-    settings_file << "[Prompt]" << std::endl;
-    settings_file << "TextColor=" << settings.prompt_text_color << std::endl;
-    settings_file << "BackgroundColor=" << (unsigned int)settings.prompt_bg_color << std::endl;
-    settings_file << "FontFamily=" << settings.prompt_font_family << std::endl;
-    settings_file << "FontStyle=" << settings.prompt_font_style << std::endl;
-    settings_file << "FontSize=" << settings.prompt_font_size << std::endl;
-    settings_file << "SaveHistory=" << settings.prompt_save_history << std::endl;
-    settings_file << "SaveHistoryAsHtml=" << settings.prompt_save_history_as_html << std::endl;
-    settings_file << "SaveHistoryFilename=" << settings.prompt_save_history_filename  << std::endl;
-    settings_file << std::endl;
-
-    settings_file << "[OpenSave]" << std::endl;
-    settings_file << "CustomFilter=" << settings.opensave_custom_filter.toStdString() << std::endl;
-    settings_file << "OpenFormat=" << settings.opensave_open_format << std::endl;
-    settings_file << "OpenThumbnail=" << settings.opensave_open_thumbnail << std::endl;
-    settings_file << "SaveFormat=" << settings.opensave_save_format << std::endl;
-    settings_file << "SaveThumbnail=" << settings.opensave_save_thumbnail << std::endl;
-    settings_file << "RecentMax=" << settings.opensave_recent_max_files << std::endl;
-    // settings_file << "RecentFiles=" << settings.opensave_recent_list_of_files << std::endl;
-    settings_file << "RecentDirectory=" << settings.opensave_recent_directory << std::endl;
-    settings_file << "TrimDstNumJumps=" << settings.opensave_trim_dst_num_jumps << std::endl;
-    settings_file << std::endl;
-
-    settings_file << "[Printing]" << std::endl;
-    settings_file << "DefaultDevice=" << settings.printing_default_device << std::endl;
-    settings_file << "UseLastDevice=" << settings.printing_use_last_device << std::endl;
-    settings_file << "DisableBG=" << settings.printing_disable_bg << std::endl;
-    settings_file << std::endl;
-
-    settings_file << "[Grid]" << std::endl;
-    settings_file << "ShowOnLoad=" << settings.grid_show_on_load << std::endl;
-    settings_file << "ShowOrigin=" << settings.grid_show_origin << std::endl;
-    settings_file << "ColorMatchCrossHair=" << settings.grid_color_match_crosshair << std::endl;
-    settings_file << "Color=" << settings.grid_color << std::endl;
-    settings_file << "LoadFromFile=" << settings.grid_load_from_file << std::endl;
-    settings_file << "Type=" << settings_["grid_type"].s << std::endl;;
-    settings_file << "CenterOnOrigin=" << settings.grid_center_on_origin << std::endl;
-    settings_file << "CenterX=" << settings.grid_center.x << std::endl;
-    settings_file << "CenterY=" << settings.grid_center.y << std::endl;
-    settings_file << "SizeX=" << settings.grid_size.x << std::endl;
-    settings_file << "SizeY=" << settings.grid_size.y << std::endl;
-    settings_file << "SpacingX=" << settings.grid_spacing.x << std::endl;
-    settings_file << "SpacingY=" << settings.grid_spacing.y << std::endl;
-    settings_file << "SizeRadius=" << settings.grid_size_radius << std::endl;
-    settings_file << "SpacingRadius=" << settings.grid_spacing_radius << std::endl;
-    settings_file << "SpacingAngle=" << settings.grid_spacing_angle << std::endl;
-    settings_file << std::endl;
-
-    settings_file << "[Ruler]" << std::endl;
-    settings_file << "ShowOnLoad=" << settings.ruler_show_on_load << std::endl;
-    settings_file << "Metric=" << settings.ruler_metric << std::endl;
-    settings_file << "Color=" << (unsigned int)settings.ruler_color << std::endl;
-    settings_file << "PixelSize=" << settings.ruler_pixel_size << std::endl;
-    settings_file << std::endl;
-
-    settings_file << "[QuickSnap]" << std::endl;
-    settings_file << "Enabled=" << settings.qsnap_enabled << std::endl;
-    settings_file << "LocatorColor=" << settings.qsnap_locator_color << std::endl;
-    settings_file << "LocatorSize=" << settings.qsnap_locator_size << std::endl;
-    settings_file << "ApertureSize=" << settings.qsnap_aperture_size << std::endl;
-    settings_file << std::endl;
-
-    settings_file << "[LineWeight]" << std::endl;
-    settings_file << "ShowLineWeight=" << settings.lwt_show_lwt << std::endl;
-    settings_file << "RealRender=" << settings.lwt_real_render << std::endl;
-    settings_file << "DefaultLineWeight=" << settings.lwt_default_lwt << std::endl;
-    settings_file << std::endl;
-
-    settings_file << "[Selection]" << std::endl;
-    settings_file << "PickFirst=" << settings.selection_mode_pickfirst << std::endl;
-    settings_file << "PickAdd=" << settings.selection_mode_pickadd << std::endl;
-    settings_file << "PickDrag=" << settings.selection_mode_pickdrag << std::endl;
-    settings_file << "CoolGripColor=" << settings.selection_coolgrip_color << std::endl;
-    settings_file << "HotGripColor=" << settings.selection_hotgrip_color << std::endl;
-    settings_file << "GripSize=" << settings.selection_grip_size << std::endl;
-    settings_file << "PickBoxSize=" << settings.selection_pickbox_size << std::endl;
-    settings_file << std::endl;
-
-    settings_file << "[Text]" << std::endl;
-    settings_file << "Font=" << settings.text_font << std::endl;
-    settings_file << "Size=" << settings.text_size << std::endl;
-    settings_file << "Angle=" << settings.text_angle << std::endl;
-    settings_file << "StyleBold=" << settings.text_style_bold << std::endl;
-    settings_file << "StyleItalic=" << settings.text_style_italic << std::endl;
-    settings_file << "StyleUnderline=" << settings.text_style_underline << std::endl;
-    settings_file << "StyleStrikeOut=" << settings.text_style_strikeout << std::endl;
-    settings_file << "StyleOverline=" << settings.text_style_overline << std::endl;
-    settings_file << std::endl;
-    
-    settings_file.close();
+    settings["window_position_x"] = node_int((int)_mainWin->pos().x());
+    settings["window_position_y"] = node_int((int)_mainWin->pos().y());
+    settings["window_size_x"] = node_int((int)_mainWin->size().width());
+    settings["window_size_y"] = node_int((int)_mainWin->size().height());
 
 #if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
     settingsPath = QDir::homePath().toStdString() + "/.embroidermodder2/settings.toml";
 #else
-    settingsPath = qApp->applicationDirPath() + "/settings.toml";
+    settingsPath = qApp->applicationDirPath().toStdString() + "/settings.toml";
 #endif
     std::ofstream file;
     file.open(settingsPath);
 
-    for (auto iter = settings_.begin(); iter != settings_.end(); iter++) {
+    for (auto iter = settings.begin(); iter != settings.end(); iter++) {
         file << iter->first << "=";
         switch (iter->second.type) {
         case INT_TYPE:
@@ -443,19 +248,6 @@ write_settings(void)
         file << std::endl;
     }
     file.close();
-}
-
-/**
- * .
- */
-QCheckBox *
-Settings_Dialog::make_checkbox(QGroupBox *gb, const char *label, const char *icon, bool *ptr)
-{
-    QCheckBox *checkBox = new QCheckBox(tr(label), gb);
-    checkBox->setChecked(*ptr);
-    checkBox->setIcon(_mainWin->create_icon(icon));
-    connect(checkBox, &QCheckBox::stateChanged, this, [=](int x) { *ptr = (x != 0); });
-    return checkBox;
 }
 
 /**
@@ -523,9 +315,11 @@ QWidget* Settings_Dialog::createTabGeneral()
     //Language
     QGroupBox* groupBoxLanguage = new QGroupBox(tr("Language"), widget);
 
+    make_editing_copy(general_props);
+
     QLabel* labelLanguage = new QLabel(tr("Language (Requires Restart)"), groupBoxLanguage);
     QComboBox* comboBoxLanguage = new QComboBox(groupBoxLanguage);
-    dialog.general_language = QString::fromStdString(settings.general_language).toLower().toStdString();
+    dialog["general_language"] = node_qstr(get_qstr(settings, "general_language").toLower());
     comboBoxLanguage->addItem("Default");
     comboBoxLanguage->addItem("System");
     comboBoxLanguage->insertSeparator(2);
@@ -535,7 +329,7 @@ QWidget* Settings_Dialog::createTabGeneral()
         dirName[0] = dirName[0].toUpper();
         comboBoxLanguage->addItem(dirName);
     }
-    QString current = QString::fromStdString(dialog.general_language);
+    QString current = get_qstr(dialog, "general_language");
     current[0] = current[0].toUpper();
     comboBoxLanguage->setCurrentIndex(comboBoxLanguage->findText(current));
     /*
@@ -544,7 +338,7 @@ QWidget* Settings_Dialog::createTabGeneral()
         comboBoxLanguage,
         SIGNAL(currentIndexChanged(QString)),
         this,
-        [=](const char *lang) { dialog.general_language = QString::fromStdString(lang).toLower().toStdString(); }
+        [=](const char *lang) { dialog["general_language"] = node_qstr(QString::fromStdString(lang).toLower()); }
     );
     */
 
@@ -560,31 +354,30 @@ QWidget* Settings_Dialog::createTabGeneral()
     QComboBox* comboBoxIconTheme = new QComboBox(groupBoxIcon);
     QDir dir(qApp->applicationDirPath());
     dir.cd("icons");
-    dialog.general_icon_theme = settings.general_icon_theme;
     foreach(QString dirName, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
         comboBoxIconTheme->addItem(QIcon("icons/" + dirName + "/" + "theme" + ".png"), dirName);
     }
-    comboBoxIconTheme->setCurrentIndex(comboBoxIconTheme->findText(QString::fromStdString(dialog.general_icon_theme)));
+    comboBoxIconTheme->setCurrentIndex(comboBoxIconTheme->findText(get_qstr(dialog, "general_icon_theme")));
     /*
     TODO: FIX
     connect(
         comboBoxIconTheme,
         &QComboBox::currentIndexChanged,
         this,
-        [=](int i) { dialog.general_icon_theme = theme.toStdString(); }
+        [=](int i) { dialog["general_icon_theme"] = node_qstr(theme); }
     );
     */
 
     QLabel* labelIconSize = new QLabel(tr("Icon Size"), groupBoxIcon);
     QComboBox* comboBoxIconSize = new QComboBox(groupBoxIcon);
-    comboBoxIconSize->addItem(QIcon("icons/" + QString::fromStdString(dialog.general_icon_theme) + "/" + "icon16"  + ".png"), "Very Small", 16);
-    comboBoxIconSize->addItem(QIcon("icons/" + QString::fromStdString(dialog.general_icon_theme) + "/" + "icon24"  + ".png"), "Small", 24);
-    comboBoxIconSize->addItem(QIcon("icons/" + QString::fromStdString(dialog.general_icon_theme) + "/" + "icon32"  + ".png"), "Medium", 32);
-    comboBoxIconSize->addItem(QIcon("icons/" + QString::fromStdString(dialog.general_icon_theme) + "/" + "icon48"  + ".png"), "Large", 48);
-    comboBoxIconSize->addItem(QIcon("icons/" + QString::fromStdString(dialog.general_icon_theme) + "/" + "icon64"  + ".png"), "Very Large", 64);
-    comboBoxIconSize->addItem(QIcon("icons/" + QString::fromStdString(dialog.general_icon_theme) + "/" + "icon128" + ".png"), "I'm Blind", 128);
-    dialog.general_icon_size = settings.general_icon_size;
-    comboBoxIconSize->setCurrentIndex(comboBoxIconSize->findData(dialog.general_icon_size));
+    QString theme = get_qstr(dialog, "general_icon_theme");
+    comboBoxIconSize->addItem(QIcon("icons/" + theme + "/" + "icon16"  + ".png"), "Very Small", 16);
+    comboBoxIconSize->addItem(QIcon("icons/" + theme + "/" + "icon24"  + ".png"), "Small", 24);
+    comboBoxIconSize->addItem(QIcon("icons/" + theme + "/" + "icon32"  + ".png"), "Medium", 32);
+    comboBoxIconSize->addItem(QIcon("icons/" + theme + "/" + "icon48"  + ".png"), "Large", 48);
+    comboBoxIconSize->addItem(QIcon("icons/" + theme + "/" + "icon64"  + ".png"), "Very Large", 64);
+    comboBoxIconSize->addItem(QIcon("icons/" + theme + "/" + "icon128" + ".png"), "I'm Blind", 128);
+    comboBoxIconSize->setCurrentIndex(comboBoxIconSize->findData(get_int(dialog, "general_icon_size")));
     connect(comboBoxIconSize, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxIconSizeCurrentIndexChanged(int)));
 
     QVBoxLayout* vboxLayoutIcon = new QVBoxLayout(groupBoxIcon);
@@ -597,46 +390,31 @@ QWidget* Settings_Dialog::createTabGeneral()
     //Mdi Background
     QGroupBox* groupBoxMdiBG = new QGroupBox(tr("Background"), widget);
 
-
     QCheckBox* checkBoxMdiBGUseLogo = new QCheckBox(tr("Use Logo"), groupBoxMdiBG);
-    dialog.general_mdi_bg_use_logo = settings.general_mdi_bg_use_logo;
-    preview.general_mdi_bg_use_logo = dialog.general_mdi_bg_use_logo;
-    checkBoxMdiBGUseLogo->setChecked(preview.general_mdi_bg_use_logo);
+    checkBoxMdiBGUseLogo->setChecked(get_bool(preview, "general_mdi_bg_use_logo"));
     connect(checkBoxMdiBGUseLogo, SIGNAL(stateChanged(int)), this, SLOT(checkBoxGeneralMdiBGUseLogoStateChanged(int)));
 
     QPushButton* buttonMdiBGLogo = new QPushButton(tr("Choose"), groupBoxMdiBG);
-    buttonMdiBGLogo->setEnabled(dialog.general_mdi_bg_use_logo);
-    dialog_["general_mdi_bg_logo"] = node(get_str(settings_, "general_mdi_bg_logo"));
-    accept__["general_mdi_bg_logo"] = dialog_["general_mdi_bg_logo"];
+    buttonMdiBGLogo->setEnabled(get_bool(dialog, "general_mdi_bg_use_logo"));
     connect(buttonMdiBGLogo, SIGNAL(clicked()), this, SLOT(chooseGeneralMdiBackgroundLogo()));
     connect(checkBoxMdiBGUseLogo, SIGNAL(toggled(bool)), buttonMdiBGLogo, SLOT(setEnabled(bool)));
 
     QCheckBox* checkBoxMdiBGUseTexture = new QCheckBox(tr("Use Texture"), groupBoxMdiBG);
-    dialog.general_mdi_bg_use_texture = settings.general_mdi_bg_use_texture;
-    preview.general_mdi_bg_use_texture = dialog.general_mdi_bg_use_texture;
-    checkBoxMdiBGUseTexture->setChecked(preview.general_mdi_bg_use_texture);
+    checkBoxMdiBGUseTexture->setChecked(get_bool(preview, "general_mdi_bg_use_texture"));
     connect(checkBoxMdiBGUseTexture, SIGNAL(stateChanged(int)), this, SLOT(checkBoxGeneralMdiBGUseTextureStateChanged(int)));
 
     QPushButton* buttonMdiBGTexture = new QPushButton(tr("Choose"), groupBoxMdiBG);
-    buttonMdiBGTexture->setEnabled(dialog.general_mdi_bg_use_texture);
-    dialog.general_mdi_bg_texture  = settings.general_mdi_bg_texture;
-    accept_.general_mdi_bg_texture  = dialog.general_mdi_bg_texture;
+    buttonMdiBGTexture->setEnabled(get_bool(dialog, "general_mdi_bg_use_texture"));
     connect(buttonMdiBGTexture, SIGNAL(clicked()), this, SLOT(chooseGeneralMdiBackgroundTexture()));
     connect(checkBoxMdiBGUseTexture, SIGNAL(toggled(bool)), buttonMdiBGTexture, SLOT(setEnabled(bool)));
 
-    QCheckBox* checkBoxMdiBGUseColor = new QCheckBox(tr("Use Color"), groupBoxMdiBG);
-    dialog.general_mdi_bg_use_color = settings.general_mdi_bg_use_color;
-    preview.general_mdi_bg_use_color = dialog.general_mdi_bg_use_color;
-    checkBoxMdiBGUseColor->setChecked(preview.general_mdi_bg_use_color);
-    connect(checkBoxMdiBGUseColor, SIGNAL(stateChanged(int)), this, SLOT(checkBoxGeneralMdiBGUseColorStateChanged(int)));
+    QCheckBox* checkBoxMdiBGUseColor = make_checkbox(groupBoxMdiBG, "dialog",
+        "Use Color", "blank", "general_mdi_bg_use_color");
 
     QPushButton* buttonMdiBGColor = new QPushButton(tr("Choose"), groupBoxMdiBG);
-    buttonMdiBGColor->setEnabled(dialog.general_mdi_bg_use_color);
-    dialog.general_mdi_bg_color = settings.general_mdi_bg_color;
-    preview.general_mdi_bg_color = dialog.general_mdi_bg_color;
-    accept_.general_mdi_bg_color = dialog.general_mdi_bg_color;
+    buttonMdiBGColor->setEnabled(get_bool(dialog, "general_mdi_bg_use_color"));
     QPixmap mdiBGPix(16,16);
-    mdiBGPix.fill(QColor(preview.general_mdi_bg_color));
+    mdiBGPix.fill(QColor(get_uint(preview, "general_mdi_bg_color")));
     buttonMdiBGColor->setIcon(QIcon(mdiBGPix));
     connect(buttonMdiBGColor, SIGNAL(clicked()), this, SLOT(chooseGeneralMdiBackgroundColor()));
     connect(checkBoxMdiBGUseColor, SIGNAL(toggled(bool)), buttonMdiBGColor, SLOT(setEnabled(bool)));
@@ -653,10 +431,8 @@ QWidget* Settings_Dialog::createTabGeneral()
     //Tips
     QGroupBox* groupBoxTips = new QGroupBox(tr("Tips"), widget);
 
-    dialog.general_tip_of_the_day = settings.general_tip_of_the_day;
-
-    QCheckBox* checkBoxTipOfTheDay = make_checkbox(groupBoxTips,
-        "Show Tip of the Day on startup", "blank", &(dialog.general_tip_of_the_day));
+    QCheckBox* checkBoxTipOfTheDay = make_checkbox(groupBoxTips, "dialog",
+        "Show Tip of the Day on startup", "blank", "general_tip_of_the_day");
 
     QVBoxLayout* vboxLayoutTips = new QVBoxLayout(groupBoxTips);
     vboxLayoutTips->addWidget(checkBoxTipOfTheDay);
@@ -666,9 +442,9 @@ QWidget* Settings_Dialog::createTabGeneral()
     QGroupBox* groupBoxHelpBrowser = new QGroupBox(tr("Help Browser"), widget);
 
     QRadioButton* radioButtonSystemHelpBrowser = new QRadioButton(tr("System"), groupBoxHelpBrowser);
-    radioButtonSystemHelpBrowser->setChecked(settings.general_system_help_browser);
+    radioButtonSystemHelpBrowser->setChecked(get_bool(settings, "general_system_help_browser"));
     QRadioButton* radioButtonCustomHelpBrowser = new QRadioButton(tr("Custom"), groupBoxHelpBrowser);
-    radioButtonCustomHelpBrowser->setChecked(!settings.general_system_help_browser);
+    radioButtonCustomHelpBrowser->setChecked(!get_bool(settings, "general_system_help_browser"));
     radioButtonCustomHelpBrowser->setEnabled(false); //TODO: finish this
 
     QVBoxLayout* vboxLayoutHelpBrowser = new QVBoxLayout(groupBoxHelpBrowser);
@@ -710,19 +486,20 @@ QWidget* Settings_Dialog::createTabDisplay()
     //TODO: Review OpenGL and Rendering settings for future inclusion
     QGroupBox* groupBoxRender = new QGroupBox(tr("Rendering"), widget);
 
-    dialog.display_use_opengl = settings.display_use_opengl;
-    dialog.display_renderhint_aa = settings.display_renderhint_aa;
-    dialog.display_renderhint_text_aa = settings.display_renderhint_text_aa;
-    dialog.display_renderhint_smooth_pix = settings.display_renderhint_smooth_pix;
-    dialog.display_renderhint_high_aa = settings.display_renderhint_high_aa;
-    dialog.display_renderhint_noncosmetic = settings.display_renderhint_noncosmetic;
+    make_editing_copy(display_props);
 
-    QCheckBox* checkBoxUseOpenGL = make_checkbox(groupBoxRender, "Use OpenGL", "blank", &(dialog.display_use_opengl));
-    QCheckBox* checkBoxRenderHintAA = make_checkbox(groupBoxRender, "Antialias", "blank", &(dialog.display_renderhint_aa));
-    QCheckBox* checkBoxRenderHintTextAA = make_checkbox(groupBoxRender, "Antialias Text", "blank", &(dialog.display_renderhint_text_aa));
-    QCheckBox* checkBoxRenderHintSmoothPix = make_checkbox(groupBoxRender, "Smooth Pixmap", "blank", &(dialog.display_renderhint_smooth_pix));
-    QCheckBox* checkBoxRenderHintHighAA = make_checkbox(groupBoxRender, "High Quality Antialiasing (OpenGL)", "blank", &(dialog.display_renderhint_high_aa));
-    QCheckBox* checkBoxRenderHintNonCosmetic = make_checkbox(groupBoxRender, "Non Cosmetic", "blank", &(dialog.display_renderhint_noncosmetic));
+    QCheckBox* checkBoxUseOpenGL = make_checkbox(groupBoxRender, "dialog",
+        "Use OpenGL", "blank", "display_use_opengl");
+    QCheckBox* checkBoxRenderHintAA = make_checkbox(groupBoxRender, "dialog",
+        "Antialias", "blank", "display_renderhint_aa");
+    QCheckBox* checkBoxRenderHintTextAA = make_checkbox(groupBoxRender, "dialog",
+        "Antialias Text", "blank", "display_renderhint_text_aa");
+    QCheckBox* checkBoxRenderHintSmoothPix = make_checkbox(groupBoxRender, "dialog",
+        "Smooth Pixmap", "blank", "display_renderhint_smooth_pix");
+    QCheckBox* checkBoxRenderHintHighAA = make_checkbox(groupBoxRender, "dialog",
+        "High Quality Antialiasing (OpenGL)", "blank", "display_renderhint_high_aa");
+    QCheckBox* checkBoxRenderHintNonCosmetic = make_checkbox(groupBoxRender, "dialog",
+        "Non Cosmetic", "blank", "display_renderhint_noncosmetic");
 
     QVBoxLayout* vboxLayoutRender = new QVBoxLayout(groupBoxRender);
     vboxLayoutRender->addWidget(checkBoxUseOpenGL);
@@ -736,22 +513,18 @@ QWidget* Settings_Dialog::createTabDisplay()
     //ScrollBars
     QGroupBox* groupBoxScrollBars = new QGroupBox(tr("ScrollBars"), widget);
 
-    QCheckBox* checkBoxShowScrollBars = new QCheckBox(tr("Show ScrollBars"), groupBoxScrollBars);
-    dialog.display_show_scrollbars = settings.display_show_scrollbars;
-    preview.display_show_scrollbars = dialog.display_show_scrollbars;
-    checkBoxShowScrollBars->setChecked(preview.display_show_scrollbars);
-    connect(checkBoxShowScrollBars, SIGNAL(stateChanged(int)), this, SLOT(checkBoxShowScrollBarsStateChanged(int)));
+    QCheckBox* checkBoxShowScrollBars = make_checkbox(groupBoxScrollBars, "dialog",
+        "Show ScrollBars", "blank", "display_show_scrollbars");
 
     QLabel* labelScrollBarWidget = new QLabel(tr("Perform action when clicking corner widget"), groupBoxScrollBars);
     QComboBox* comboBoxScrollBarWidget = new QComboBox(groupBoxScrollBars);
-    dialog.display_scrollbar_widget_num = settings.display_scrollbar_widget_num;
     for (auto iter = actionHash.begin(); iter!=actionHash.end(); iter++) {
         QAction* action = iter->second;
         if (action) {
             comboBoxScrollBarWidget->addItem(action->icon(), action->text().replace("&", ""));
         }
     }
-    comboBoxScrollBarWidget->setCurrentIndex(dialog.display_scrollbar_widget_num);
+    comboBoxScrollBarWidget->setCurrentIndex(get_int(dialog, "display_scrollbar_widget_num"));
     connect(comboBoxScrollBarWidget, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxScrollBarWidgetCurrentIndexChanged(int)));
 
     QVBoxLayout* vboxLayoutScrollBars = new QVBoxLayout(groupBoxScrollBars);
@@ -765,70 +538,50 @@ QWidget* Settings_Dialog::createTabDisplay()
 
     QLabel* labelCrossHairColor = new QLabel(tr("Crosshair Color"), groupBoxColor);
     QPushButton* buttonCrossHairColor = new QPushButton(tr("Choose"), groupBoxColor);
-    dialog.display_crosshair_color  = settings.display_crosshair_color;
-    preview.display_crosshair_color = dialog.display_crosshair_color;
-    accept_.display_crosshair_color  = dialog.display_crosshair_color;
     QPixmap crosshairPix(16,16);
-    crosshairPix.fill(QColor(preview.display_crosshair_color));
+    crosshairPix.fill(QColor(get_uint(preview, "display_crosshair_color")));
     buttonCrossHairColor->setIcon(QIcon(crosshairPix));
     connect(buttonCrossHairColor, SIGNAL(clicked()), this, SLOT(chooseDisplayCrossHairColor()));
 
     QLabel* labelBGColor = new QLabel(tr("Background Color"), groupBoxColor);
     QPushButton* buttonBGColor = new QPushButton(tr("Choose"), groupBoxColor);
-    dialog.display_bg_color  = settings.display_bg_color;
-    preview.display_bg_color = dialog.display_bg_color;
-    accept_.display_bg_color  = dialog.display_bg_color;
     QPixmap bgPix(16,16);
-    bgPix.fill(QColor(preview.display_bg_color));
+    bgPix.fill(QColor(get_uint(preview, "display_bg_color")));
     buttonBGColor->setIcon(QIcon(bgPix));
     connect(buttonBGColor, SIGNAL(clicked()), this, SLOT(chooseDisplayBackgroundColor()));
 
     QLabel* labelSelectBoxLeftColor = new QLabel(tr("Selection Box Color (Crossing)"), groupBoxColor);
     QPushButton* buttonSelectBoxLeftColor = new QPushButton(tr("Choose"), groupBoxColor);
-    dialog.display_selectbox_left_color  = settings.display_selectbox_left_color;
-    preview.display_selectbox_left_color = dialog.display_selectbox_left_color;
-    accept_.display_selectbox_left_color  = dialog.display_selectbox_left_color;
     QPixmap sBoxLCPix(16,16);
-    sBoxLCPix.fill(QColor(preview.display_selectbox_left_color));
+    sBoxLCPix.fill(QColor(get_uint(preview, "display_selectbox_left_color")));
     buttonSelectBoxLeftColor->setIcon(QIcon(sBoxLCPix));
     connect(buttonSelectBoxLeftColor, SIGNAL(clicked()), this, SLOT(chooseDisplaySelectBoxLeftColor()));
 
     QLabel* labelSelectBoxLeftFill = new QLabel(tr("Selection Box Fill (Crossing)"), groupBoxColor);
     QPushButton* buttonSelectBoxLeftFill = new QPushButton(tr("Choose"), groupBoxColor);
-    dialog.display_selectbox_left_fill  = settings.display_selectbox_left_fill;
-    preview.display_selectbox_left_fill = dialog.display_selectbox_left_fill;
-    accept_.display_selectbox_left_fill  = dialog.display_selectbox_left_fill;
     QPixmap sBoxLFPix(16,16);
-    sBoxLFPix.fill(QColor(preview.display_selectbox_left_fill));
+    sBoxLFPix.fill(QColor(get_uint(preview, "display_selectbox_left_fill")));
     buttonSelectBoxLeftFill->setIcon(QIcon(sBoxLFPix));
     connect(buttonSelectBoxLeftFill, SIGNAL(clicked()), this, SLOT(chooseDisplaySelectBoxLeftFill()));
 
     QLabel* labelSelectBoxRightColor = new QLabel(tr("Selection Box Color (Window)"), groupBoxColor);
     QPushButton* buttonSelectBoxRightColor = new QPushButton(tr("Choose"), groupBoxColor);
-    dialog.display_selectbox_right_color  = settings.display_selectbox_right_color;
-    preview.display_selectbox_right_color = dialog.display_selectbox_right_color;
-    accept_.display_selectbox_right_color  = dialog.display_selectbox_right_color;
     QPixmap sBoxRCPix(16,16);
-    sBoxRCPix.fill(QColor(preview.display_selectbox_right_color));
+    sBoxRCPix.fill(QColor(get_uint(preview, "display_selectbox_right_color")));
     buttonSelectBoxRightColor->setIcon(QIcon(sBoxRCPix));
     connect(buttonSelectBoxRightColor, SIGNAL(clicked()), this, SLOT(chooseDisplaySelectBoxRightColor()));
 
     QLabel* labelSelectBoxRightFill = new QLabel(tr("Selection Box Fill (Window)"), groupBoxColor);
     QPushButton* buttonSelectBoxRightFill = new QPushButton(tr("Choose"), groupBoxColor);
-    dialog.display_selectbox_right_fill  = settings.display_selectbox_right_fill;
-    preview.display_selectbox_right_fill = dialog.display_selectbox_right_fill;
-    accept_.display_selectbox_right_fill  = dialog.display_selectbox_right_fill;
     QPixmap sBoxRFPix(16,16);
-    sBoxRFPix.fill(QColor(preview.display_selectbox_right_fill));
+    sBoxRFPix.fill(QColor(get_uint(preview, "display_selectbox_right_fill")));
     buttonSelectBoxRightFill->setIcon(QIcon(sBoxRFPix));
     connect(buttonSelectBoxRightFill, SIGNAL(clicked()), this, SLOT(chooseDisplaySelectBoxRightFill()));
 
     QLabel* labelSelectBoxAlpha = new QLabel(tr("Selection Box Fill Alpha"), groupBoxColor);
     QSpinBox* spinBoxSelectBoxAlpha = new QSpinBox(groupBoxColor);
     spinBoxSelectBoxAlpha->setRange(0, 255);
-    dialog.display_selectbox_alpha = settings.display_selectbox_alpha;
-    preview.display_selectbox_alpha = dialog.display_selectbox_alpha;
-    spinBoxSelectBoxAlpha->setValue(preview.display_selectbox_alpha);
+    spinBoxSelectBoxAlpha->setValue(get_int(preview, "display_selectbox_alpha"));
     connect(spinBoxSelectBoxAlpha, SIGNAL(valueChanged(int)), this, SLOT(spinBoxDisplaySelectBoxAlphaValueChanged(int)));
 
     QGridLayout* gridLayoutColor = new QGridLayout(widget);
@@ -853,28 +606,26 @@ QWidget* Settings_Dialog::createTabDisplay()
 
     QLabel* labelZoomScaleIn = new QLabel(tr("Zoom In Scale"), groupBoxZoom);
     QDoubleSpinBox* spinBoxZoomScaleIn = new QDoubleSpinBox(groupBoxZoom);
-    dialog.display_zoomscale_in = settings.display_zoomscale_in;
-    spinBoxZoomScaleIn->setValue(dialog.display_zoomscale_in);
+    spinBoxZoomScaleIn->setValue(get_real(dialog, "display_zoomscale_in"));
     spinBoxZoomScaleIn->setSingleStep(0.01);
     spinBoxZoomScaleIn->setRange(1.01, 10.00);
     connect(
         spinBoxZoomScaleIn,
         &QDoubleSpinBox::valueChanged,
         this,
-        [=](double value) { dialog.display_zoomscale_in = value; }
+        [=](double value) { dialog["display_zoomscale_in"] = node_real((EmbReal)value); }
     );
 
     QLabel* labelZoomScaleOut = new QLabel(tr("Zoom Out Scale"), groupBoxZoom);
     QDoubleSpinBox* spinBoxZoomScaleOut = new QDoubleSpinBox(groupBoxZoom);
-    dialog.display_zoomscale_out = settings.display_zoomscale_out;
-    spinBoxZoomScaleOut->setValue(dialog.display_zoomscale_out);
+    spinBoxZoomScaleOut->setValue(get_real(dialog, "display_zoomscale_out"));
     spinBoxZoomScaleOut->setSingleStep(0.01);
     spinBoxZoomScaleOut->setRange(0.01, 0.99);
     connect(
         spinBoxZoomScaleOut,
         &QDoubleSpinBox::valueChanged,
         this,
-        [=](double value) { dialog.display_zoomscale_out = value; }
+        [=](double value) { dialog["display_zoomscale_out"] = node_real((EmbReal)value); }
     );
 
     QGridLayout* gridLayoutZoom = new QGridLayout(groupBoxZoom);
@@ -907,23 +658,19 @@ QWidget* Settings_Dialog::createTabPrompt()
     //Colors
     QGroupBox* groupBoxColor = new QGroupBox(tr("Colors"), widget);
 
+    make_editing_copy(prompt_props);
+
     QLabel* labelTextColor = new QLabel(tr("Text Color"), groupBoxColor);
     QPushButton* buttonTextColor = new QPushButton(tr("Choose"), groupBoxColor);
-    dialog.prompt_text_color  = settings.prompt_text_color;
-    preview.prompt_text_color = dialog.prompt_text_color;
-    accept_.prompt_text_color  = dialog.prompt_text_color;
     QPixmap pix(16,16);
-    pix.fill(QColor(preview.prompt_text_color));
+    pix.fill(QColor(get_uint(preview, "prompt_text_color")));
     buttonTextColor->setIcon(QIcon(pix));
     connect(buttonTextColor, SIGNAL(clicked()), this, SLOT(choosePromptTextColor()));
 
     QLabel* labelBGColor = new QLabel(tr("Background Color"), groupBoxColor);
     QPushButton* buttonBGColor = new QPushButton(tr("Choose"), groupBoxColor);
-    dialog.prompt_bg_color  = settings.prompt_bg_color;
-    preview.prompt_bg_color = dialog.prompt_bg_color;
-    accept_.prompt_bg_color  = dialog.prompt_bg_color;
     QPixmap pixx(16,16);
-    pixx.fill(QColor(preview.prompt_bg_color));
+    pixx.fill(QColor(get_uint(preview, "prompt_background_color")));
     buttonBGColor->setIcon(QIcon(pixx));
     connect(buttonBGColor, SIGNAL(clicked()), this, SLOT(choosePromptBackgroundColor()));
 
@@ -940,22 +687,18 @@ QWidget* Settings_Dialog::createTabPrompt()
 
     QLabel* labelFontFamily = new QLabel(tr("Font Family"), groupBoxFont);
     QFontComboBox* comboBoxFontFamily = new QFontComboBox(groupBoxFont);
-    dialog.prompt_font_family = settings.prompt_font_family;
-    preview.prompt_font_family = dialog.prompt_font_family;
-    comboBoxFontFamily->setCurrentFont(QFont(QString::fromStdString(preview.prompt_font_family)));
+    comboBoxFontFamily->setCurrentFont(QFont(get_qstr(preview, "prompt_font_family")));
     connect(comboBoxFontFamily, SIGNAL(currentIndexChanged(QString)), this, SLOT(comboBoxPromptFontFamilyCurrentIndexChanged(QString)));
     QLabel* labelFontStyle = new QLabel(tr("Font Style"), groupBoxFont);
     QComboBox* comboBoxFontStyle = new QComboBox(groupBoxFont);
     comboBoxFontStyle->addItem("Normal");
     comboBoxFontStyle->addItem("Italic");
-    comboBoxFontStyle->setEditText(QString::fromStdString(preview.prompt_font_style));
+    comboBoxFontStyle->setEditText(get_qstr(preview, "prompt_font_style"));
     connect(comboBoxFontStyle, SIGNAL(currentIndexChanged(QString)), this, SLOT(comboBoxPromptFontStyleCurrentIndexChanged(QString)));
     QLabel* labelFontSize = new QLabel(tr("Font Size"), groupBoxFont);
     QSpinBox* spinBoxFontSize = new QSpinBox(groupBoxFont);
     spinBoxFontSize->setRange(4, 64);
-    dialog.prompt_font_size = settings.prompt_font_size;
-    preview.prompt_font_size = dialog.prompt_font_size;
-    spinBoxFontSize->setValue(preview.prompt_font_size);
+    spinBoxFontSize->setValue(get_real(preview, "prompt_font_size"));
     connect(spinBoxFontSize, SIGNAL(valueChanged(int)), this, SLOT(spinBoxPromptFontSizeValueChanged(int)));
 
     QGridLayout* gridLayoutFont = new QGridLayout(groupBoxFont);
@@ -970,20 +713,10 @@ QWidget* Settings_Dialog::createTabPrompt()
     //History
     QGroupBox* groupBoxHistory = new QGroupBox(tr("History"), widget);
 
-    QCheckBox* checkBoxPromptSaveHistory = new QCheckBox(tr("Save History"), groupBoxHistory);
-    dialog.prompt_save_history = settings.prompt_save_history;
-    checkBoxPromptSaveHistory->setChecked(dialog.prompt_save_history);
-    connect(
-        checkBoxPromptSaveHistory,
-        &QCheckBox::stateChanged,
-        this,
-        [=](int checked) { dialog.prompt_save_history = checked; }
-    );
-
-    QCheckBox* checkBoxPromptSaveHistoryAsHtml = new QCheckBox(tr("Save As HTML"), groupBoxHistory);
-    dialog.prompt_save_history_as_html = settings.prompt_save_history_as_html;
-    checkBoxPromptSaveHistoryAsHtml->setChecked(dialog.prompt_save_history_as_html);
-    connect(checkBoxPromptSaveHistoryAsHtml, SIGNAL(stateChanged(int)), this, SLOT(checkBoxPromptSaveHistoryAsHtmlStateChanged(int)));
+    QCheckBox* checkBoxPromptSaveHistory = make_checkbox(groupBoxHistory, "dialog",
+        "Save History", "blank", "prompt_save_history");
+    QCheckBox* checkBoxPromptSaveHistoryAsHtml = make_checkbox(groupBoxHistory, "dialog",
+        "Save As HTML", "blank", "prompt_save_history_as_html");
 
     QVBoxLayout* vboxLayoutHistory = new QVBoxLayout(groupBoxHistory);
     vboxLayoutHistory->addWidget(checkBoxPromptSaveHistory);
@@ -1012,7 +745,7 @@ Settings_Dialog::create_checkbox(QGroupBox *groupbox, std::string label)
 {
     QCheckBox* checkbox = new QCheckBox(label.c_str(), groupbox);
     std::string filter = "*." + label;
-    checkbox->setChecked(dialog.opensave_custom_filter.contains(filter.c_str(), Qt::CaseInsensitive));
+    checkbox->setChecked(get_qstr(dialog, "opensave_custom_filter").contains(filter.c_str(), Qt::CaseInsensitive));
     connect(checkbox, SIGNAL(stateChanged(int)), this, SLOT(checkBoxCustomFilterStateChanged(int)));
     return checkbox;
 }
@@ -1026,7 +759,7 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QGroupBox* groupBoxCustomFilter = new QGroupBox(tr("Custom Filter"), widget);
     groupBoxCustomFilter->setEnabled(false); //TODO: Fixup custom filter
 
-    dialog.opensave_custom_filter = settings.opensave_custom_filter;
+    dialog["opensave_custom_filter"] = settings["opensave_custom_filter"];
 
     std::unordered_map<std::string, QCheckBox*> checkBoxCustomFilter;
     int n_extensions = (int)extensions.size();
@@ -1071,7 +804,7 @@ QWidget* Settings_Dialog::createTabOpenSave()
     gridLayoutCustomFilter->setColumnStretch(6,1);
     groupBoxCustomFilter->setLayout(gridLayoutCustomFilter);
 
-    if (dialog.opensave_custom_filter.contains("supported", Qt::CaseInsensitive)) buttonCustomFilterSelectAllClicked();
+    if (get_qstr(dialog, "opensave_custom_filter").contains("supported", Qt::CaseInsensitive)) buttonCustomFilterSelectAllClicked();
 
     //Opening
     QGroupBox* groupBoxOpening = new QGroupBox(tr("File Open"), widget);
@@ -1083,16 +816,17 @@ QWidget* Settings_Dialog::createTabOpenSave()
 
     //TODO: Add a button to clear the recent history.
 
+    dialog["opensave_recent_max_files"] = settings["opensave_recent_max_files"];
+
     QLabel* labelRecentMaxFiles = new QLabel(tr("Number of recently accessed files to show"), groupBoxOpening);
     QSpinBox* spinBoxRecentMaxFiles = new QSpinBox(groupBoxOpening);
     spinBoxRecentMaxFiles->setRange(0, 10);
-    dialog.opensave_recent_max_files = settings.opensave_recent_max_files;
-    spinBoxRecentMaxFiles->setValue(dialog.opensave_recent_max_files);
+    spinBoxRecentMaxFiles->setValue(get_int(dialog, "opensave_recent_max_files"));
     connect(
         spinBoxRecentMaxFiles,
         &QSpinBox::valueChanged,
         this,
-        [=](int value) { dialog.opensave_recent_max_files = value; }
+        [=](int value) { dialog["opensave_recent_max_files"] = node_int(value); }
     );
 
     QFrame* frameRecent = new QFrame(groupBoxOpening);
@@ -1130,13 +864,13 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QLabel* labelTrimDstNumJumps = new QLabel(tr("DST Only: Minimum number of jumps to trim"), groupBoxTrim);
     QSpinBox* spinBoxTrimDstNumJumps = new QSpinBox(groupBoxTrim);
     spinBoxTrimDstNumJumps->setRange(1, 20);
-    dialog.opensave_trim_dst_num_jumps = settings.opensave_trim_dst_num_jumps;
-    spinBoxTrimDstNumJumps->setValue(dialog.opensave_trim_dst_num_jumps);
+    dialog["opensave_trim_dst_num_jumps"] = settings["opensave_trim_dst_num_jumps"];
+    spinBoxTrimDstNumJumps->setValue(get_int(dialog, "opensave_trim_dst_num_jumps"));
     connect(
         spinBoxTrimDstNumJumps,
         &QSpinBox::valueChanged,
         this,
-        [=](int value){ dialog.opensave_trim_dst_num_jumps = value; }
+        [=](int value){ dialog["opensave_trim_dst_num_jumps"] = node_int(value); }
     );
 
     QFrame* frameTrimDstNumJumps = new QFrame(groupBoxTrim);
@@ -1172,9 +906,9 @@ QWidget* Settings_Dialog::createTabPrinting()
     QGroupBox* groupBoxDefaultPrinter = new QGroupBox(tr("Default Printer"), widget);
 
     QRadioButton* radioButtonUseSame = new QRadioButton(tr("Use as default device"), groupBoxDefaultPrinter);
-    radioButtonUseSame->setChecked(!settings.printing_use_last_device);
+    radioButtonUseSame->setChecked(!get_bool(settings, "printing_use_last_device"));
     QRadioButton* radioButtonUseLast = new QRadioButton(tr("Use last used device"), groupBoxDefaultPrinter);
-    radioButtonUseLast->setChecked(settings.printing_use_last_device);
+    radioButtonUseLast->setChecked(get_bool(settings, "printing_use_last_device"));
 
     QComboBox* comboBoxDefaultDevice = new QComboBox(groupBoxDefaultPrinter);
     QList<QPrinterInfo> listAvailPrinters = QPrinterInfo::availablePrinters();
@@ -1191,15 +925,10 @@ QWidget* Settings_Dialog::createTabPrinting()
     //Save Ink
     QGroupBox* groupBoxSaveInk = new QGroupBox(tr("Save Ink"), widget);
 
-    QCheckBox* checkBoxDisableBG = new QCheckBox(tr("Disable Background"), groupBoxSaveInk);
-    dialog.printing_disable_bg = settings.printing_disable_bg;
-    checkBoxDisableBG->setChecked(dialog.printing_disable_bg);
-    connect(
-        checkBoxDisableBG,
-        &QCheckBox::stateChanged,
-        this,
-        [=](int checked) { dialog.printing_disable_bg = checked; }
-    );
+    dialog["printing_disable_bg"] = settings["printing_disable_bg"];
+
+    QCheckBox* checkBoxDisableBG = make_checkbox(groupBoxSaveInk, "dialog",
+        "Disable Background", "blank", "printing_disable_bg");
 
     QVBoxLayout* vboxLayoutSaveInk = new QVBoxLayout(groupBoxSaveInk);
     vboxLayoutSaveInk->addWidget(checkBoxDisableBG);
@@ -1230,6 +959,7 @@ QWidget* Settings_Dialog::createTabSnap()
     return scrollArea;
 }
 
+
 void
 Settings_Dialog::create_float_spinbox(
     QGroupBox *gb,
@@ -1238,7 +968,7 @@ Settings_Dialog::create_float_spinbox(
     EmbReal single_step,
     EmbReal lower,
     EmbReal upper,
-    EmbReal *ptr,
+    String key,
     int row)
 {
     QString label_object_name(label_in);
@@ -1247,18 +977,13 @@ Settings_Dialog::create_float_spinbox(
     spinbox_object_name = "spinBox" + spinbox_object_name.simplified().remove(' ');
     QLabel* label = new QLabel(tr(label_in), gb);
     label->setObjectName(label_object_name);
-    QDoubleSpinBox* spinBox = new QDoubleSpinBox(gb);
-    spinBox->setObjectName(spinbox_object_name);
-    spinBox->setSingleStep(single_step);
-    spinBox->setRange(lower, upper);
-    spinBox->setValue(*ptr);
-    auto f = [=](EmbReal x){ *ptr = x; };
-    connect(spinBox, SIGNAL(valueChanged(double)), this, SLOT(f));
+    QDoubleSpinBox* spinBox = make_spinbox(gb, "dialog", spinbox_object_name, single_step,
+        lower, upper, key);
 
-    label->setEnabled(!dialog.grid_load_from_file);
-    spinBox->setEnabled(!dialog.grid_load_from_file);
+    label->setEnabled(!get_bool(dialog, "grid_load_from_file"));
+    spinBox->setEnabled(!get_bool(dialog, "grid_load_from_file"));
 
-    bool visibility = (dialog_["grid_type"].s == "Circular");
+    bool visibility = (dialog["grid_type"].s == "Circular");
     label->setVisible(!visibility);
     spinBox->setVisible(!visibility);
 
@@ -1273,13 +998,36 @@ QWidget* Settings_Dialog::createTabGridRuler()
     //Grid Misc
     QGroupBox* groupBoxGridMisc = new QGroupBox(tr("Grid Misc"), widget);
 
-    dialog.grid_show_on_load = settings.grid_show_on_load;
-    dialog.grid_show_origin = settings.grid_show_origin;
+    dialog["grid_show_on_load"] = settings["grid_show_on_load"];
+    dialog["grid_show_origin"] = settings["grid_show_origin"];
+    dialog["grid_color_match_crosshair"] = settings["grid_color_match_crosshair"];
 
-    QCheckBox* checkBoxGridShowOnLoad = make_checkbox(groupBoxGridMisc,
-        "Initially show grid when loading a file", "blank", &(dialog.grid_show_on_load));
-    QCheckBox* checkBoxGridShowOrigin = make_checkbox(groupBoxGridMisc,
-        "Show the origin when the grid is enabled", "blank", &(dialog.grid_show_origin));
+    if (get_bool(dialog, "grid_color_match_crosshair")) {
+        dialog["grid_color"] = settings["display_crosshair_color"];
+    }
+    else {
+        dialog["grid_color"] = settings["grid_color"];
+    }
+    preview["grid_color"] = dialog["grid_color"];
+    accept_["grid_color"] = dialog["grid_color"];
+
+    dialog["grid_load_from_file"] = settings["grid_load_from_file"];
+    dialog["grid_type"] = settings["grid_type"];
+    dialog["grid_center_on_origin"] = settings["grid_center_on_origin"];
+    dialog["grid_center"] = settings["grid_center"];
+    dialog["grid_size"] = settings["grid_size"];
+    dialog["grid_spacing"] = settings["grid_spacing"];
+
+    dialog["ruler_color"] = settings["ruler_color"];
+    preview["ruler_color"] = dialog["ruler_color"];
+    accept_["ruler_color"]  = dialog["ruler_color"];
+
+    dialog["ruler_pixel_size"] = settings["ruler_pixel_size"];
+
+    QCheckBox* checkBoxGridShowOnLoad = make_checkbox(groupBoxGridMisc, "dialog",
+        "Initially show grid when loading a file", "blank", "grid_show_on_load");
+    QCheckBox* checkBoxGridShowOrigin = make_checkbox(groupBoxGridMisc, "dialog",
+        "Show the origin when the grid is enabled", "blank", "grid_show_origin");
 
     QGridLayout* gridLayoutGridMisc = new QGridLayout(widget);
     gridLayoutGridMisc->addWidget(checkBoxGridShowOnLoad, 0, 0, Qt::AlignLeft);
@@ -1290,29 +1038,20 @@ QWidget* Settings_Dialog::createTabGridRuler()
     QGroupBox* groupBoxGridColor = new QGroupBox(tr("Grid Color"), widget);
 
     QCheckBox* checkBoxGridColorMatchCrossHair = new QCheckBox(tr("Match grid color to crosshair color"), groupBoxGridColor);
-    dialog.grid_color_match_crosshair = settings.grid_color_match_crosshair;
-    checkBoxGridColorMatchCrossHair->setChecked(dialog.grid_color_match_crosshair);
+    checkBoxGridColorMatchCrossHair->setChecked(get_bool(dialog, "grid_color_match_crosshair"));
     connect(checkBoxGridColorMatchCrossHair, SIGNAL(stateChanged(int)), this, SLOT(checkBoxGridColorMatchCrossHairStateChanged(int)));
 
     QLabel* labelGridColor = new QLabel(tr("Grid Color"), groupBoxGridColor);
     labelGridColor->setObjectName("labelGridColor");
     QPushButton* buttonGridColor = new QPushButton(tr("Choose"), groupBoxGridColor);
     buttonGridColor->setObjectName("buttonGridColor");
-    if (dialog.grid_color_match_crosshair) {
-        dialog.grid_color = settings.display_crosshair_color;
-    }
-    else {
-        dialog.grid_color = settings.grid_color;
-    }
-    preview.grid_color = dialog.grid_color;
-    accept_.grid_color  = dialog.grid_color;
     QPixmap gridPix(16,16);
-    gridPix.fill(QColor(preview.grid_color));
+    gridPix.fill(QColor(get_uint(preview, "grid_color")));
     buttonGridColor->setIcon(QIcon(gridPix));
     connect(buttonGridColor, SIGNAL(clicked()), this, SLOT(chooseGridColor()));
 
-    labelGridColor->setEnabled(!dialog.grid_color_match_crosshair);
-    buttonGridColor->setEnabled(!dialog.grid_color_match_crosshair);
+    labelGridColor->setEnabled(!get_bool(dialog, "grid_color_match_crosshair"));
+    buttonGridColor->setEnabled(!get_bool(dialog, "grid_color_match_crosshair"));
 
     QGridLayout* gridLayoutGridColor = new QGridLayout(widget);
     gridLayoutGridColor->addWidget(checkBoxGridColorMatchCrossHair, 0, 0, Qt::AlignLeft);
@@ -1323,16 +1062,8 @@ QWidget* Settings_Dialog::createTabGridRuler()
     //Grid Geometry
     QGroupBox* groupBoxGridGeom = new QGroupBox(tr("Grid Geometry"), widget);
 
-    dialog.grid_load_from_file = settings.grid_load_from_file;
-    dialog_["grid_type"] = settings_["grid_type"];
-    dialog.grid_center_on_origin = settings.grid_center_on_origin;
-    dialog.grid_center = settings.grid_center;
-    dialog.grid_size = settings.grid_size;
-    dialog.grid_spacing = settings.grid_spacing;
-
-    QCheckBox* checkBoxGridLoadFromFile = new QCheckBox(tr("Set grid size from opened file"), groupBoxGridGeom);
-    checkBoxGridLoadFromFile->setChecked(dialog.grid_load_from_file);
-    connect(checkBoxGridLoadFromFile, SIGNAL(stateChanged(int)), this, SLOT(checkBoxGridLoadFromFileStateChanged(int)));
+    QCheckBox* checkBoxGridLoadFromFile = make_checkbox(groupBoxGridGeom, "dialog",
+        "Set grid size from opened file", "blank", "grid_load_from_file");
 
     QLabel* labelGridType = new QLabel(tr("Grid Type"), groupBoxGridGeom);
     labelGridType->setObjectName("labelGridType");
@@ -1341,17 +1072,16 @@ QWidget* Settings_Dialog::createTabGridRuler()
     comboBoxGridType->addItem("Rectangular");
     comboBoxGridType->addItem("Circular");
     comboBoxGridType->addItem("Isometric");
-    comboBoxGridType->setCurrentIndex(comboBoxGridType->findText(QString::fromStdString(dialog_["grid_type"].s)));
+    comboBoxGridType->setCurrentIndex(comboBoxGridType->findText(QString::fromStdString(dialog["grid_type"].s)));
     connect(comboBoxGridType, SIGNAL(currentIndexChanged(QString)), this, SLOT(comboBoxGridTypeCurrentIndexChanged(QString)));
 
-    QCheckBox* checkBoxGridCenterOnOrigin = new QCheckBox(tr("Center the grid on the origin"), groupBoxGridGeom);
+    QCheckBox* checkBoxGridCenterOnOrigin = make_checkbox(groupBoxGridGeom, "dialog",
+        "Center the grid on the origin", "blank", "grid_center_on_origin");
     checkBoxGridCenterOnOrigin->setObjectName("checkBoxGridCenterOnOrigin");
-    checkBoxGridCenterOnOrigin->setChecked(dialog.grid_center_on_origin);
-    connect(checkBoxGridCenterOnOrigin, SIGNAL(stateChanged(int)), this, SLOT(checkBoxGridCenterOnOriginStateChanged(int)));
 
-    labelGridType->setEnabled(!dialog.grid_load_from_file);
-    comboBoxGridType->setEnabled(!dialog.grid_load_from_file);
-    checkBoxGridCenterOnOrigin->setEnabled(!dialog.grid_load_from_file);
+    labelGridType->setEnabled(!get_bool(dialog, "grid_load_from_file"));
+    comboBoxGridType->setEnabled(!get_bool(dialog, "grid_load_from_file"));
+    checkBoxGridCenterOnOrigin->setEnabled(!get_bool(dialog, "grid_load_from_file"));
 
     QGridLayout* gridLayoutGridGeom = new QGridLayout(groupBoxGridGeom);
     gridLayoutGridGeom->addWidget(checkBoxGridLoadFromFile, 0, 0, Qt::AlignLeft);
@@ -1359,39 +1089,40 @@ QWidget* Settings_Dialog::createTabGridRuler()
     gridLayoutGridGeom->addWidget(comboBoxGridType, 1, 1, Qt::AlignRight);
     gridLayoutGridGeom->addWidget(checkBoxGridCenterOnOrigin, 2, 0, Qt::AlignLeft);
     create_float_spinbox(groupBoxGridGeom, gridLayoutGridGeom,
-        "Grid Center X", 1.0, -1000.0, 1000.0, &(dialog.grid_center.x), 3);
+        "Grid Center X", 1.0, -1000.0, 1000.0, "grid_center_x", 3);
     create_float_spinbox(groupBoxGridGeom, gridLayoutGridGeom,
-        "Grid Center Y", 1.0, -1000.0, 1000.0, &(dialog.grid_center.y), 4);
+        "Grid Center Y", 1.0, -1000.0, 1000.0, "grid_center_y", 4);
     create_float_spinbox(groupBoxGridGeom, gridLayoutGridGeom,
-        "Grid Size X", 1.0, 1.0, 1000.0, &(dialog.grid_size.x), 5);
+        "Grid Size X", 1.0, 1.0, 1000.0, "grid_size_x", 5);
     create_float_spinbox(groupBoxGridGeom, gridLayoutGridGeom,
-        "Grid Size Y", 1.0, 1.0, 1000.0, &(dialog.grid_size.y), 6);
+        "Grid Size Y", 1.0, 1.0, 1000.0, "grid_size_y", 6);
     create_float_spinbox(groupBoxGridGeom, gridLayoutGridGeom,
-        "Grid Spacing X", 1.0, 0.001, 1000.0, &(dialog.grid_spacing.x), 7);
+        "Grid Spacing X", 1.0, 0.001, 1000.0, "grid_spacing_x", 7);
     create_float_spinbox(groupBoxGridGeom, gridLayoutGridGeom,
-        "Grid Spacing Y", 1.0, 0.001, 1000.0, &(dialog.grid_spacing.y), 8);
+        "Grid Spacing Y", 1.0, 0.001, 1000.0, "grid_spacing_y", 8);
     create_float_spinbox(groupBoxGridGeom, gridLayoutGridGeom,
-        "Grid Size Radius", 1.0, 1.0, 1000.0, &(dialog.grid_size_radius), 9);
+        "Grid Size Radius", 1.0, 1.0, 1000.0, "grid_size_radius", 9);
     create_float_spinbox(groupBoxGridGeom, gridLayoutGridGeom,
-        "Grid Spacing Radius", 1.0, 1.0, 1000.0, &(dialog.grid_spacing_radius), 10);
+        "Grid Spacing Radius", 1.0, 1.0, 1000.0, "grid_spacing_radius", 10);
     create_float_spinbox(groupBoxGridGeom, gridLayoutGridGeom,
-        "Grid Spacing Angle", 1.0, 0.001, 1000.0, &(dialog.grid_spacing_angle), 11);
+        "Grid Spacing Angle", 1.0, 0.001, 1000.0, "grid_spacing_angle", 11);
     groupBoxGridGeom->setLayout(gridLayoutGridGeom);
 
     //Ruler Misc
     QGroupBox* groupBoxRulerMisc = new QGroupBox(tr("Ruler Misc"), widget);
 
+    dialog["ruler_show_on_load"] = settings["ruler_show_on_load"];
+    dialog["ruler_metric"] = settings["ruler_metric"];
+
     QCheckBox* checkBoxRulerShowOnLoad = new QCheckBox(tr("Initially show ruler when loading a file"), groupBoxRulerMisc);
-    dialog.ruler_show_on_load = settings.ruler_show_on_load;
-    checkBoxRulerShowOnLoad->setChecked(dialog.ruler_show_on_load);
+    checkBoxRulerShowOnLoad->setChecked(get_bool(dialog, "ruler_show_on_load"));
     connect(checkBoxRulerShowOnLoad, SIGNAL(stateChanged(int)), this, SLOT(checkBoxRulerShowOnLoadStateChanged(int)));
 
     QLabel* labelRulerMetric = new QLabel(tr("Ruler Units"), groupBoxRulerMisc);
     QComboBox* comboBoxRulerMetric = new QComboBox(groupBoxRulerMisc);
     comboBoxRulerMetric->addItem("Imperial", false);
     comboBoxRulerMetric->addItem("Metric", true);
-    dialog.ruler_metric = settings.ruler_metric;
-    comboBoxRulerMetric->setCurrentIndex(comboBoxRulerMetric->findData(dialog.ruler_metric));
+    comboBoxRulerMetric->setCurrentIndex(comboBoxRulerMetric->findData(get_bool(dialog, "ruler_metric")));
     connect(comboBoxRulerMetric, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxRulerMetricCurrentIndexChanged(int)));
 
     QGridLayout* gridLayoutRulerMisc = new QGridLayout(widget);
@@ -1407,11 +1138,8 @@ QWidget* Settings_Dialog::createTabGridRuler()
     labelRulerColor->setObjectName("labelRulerColor");
     QPushButton* buttonRulerColor = new QPushButton(tr("Choose"), groupBoxRulerColor);
     buttonRulerColor->setObjectName("buttonRulerColor");
-    dialog.ruler_color = settings.ruler_color;
-    preview.ruler_color = dialog.ruler_color;
-    accept_.ruler_color  = dialog.ruler_color;
     QPixmap rulerPix(16,16);
-    rulerPix.fill(QColor(preview.ruler_color));
+    rulerPix.fill(QColor(get_uint(preview, "ruler_color")));
     buttonRulerColor->setIcon(QIcon(rulerPix));
     connect(buttonRulerColor, SIGNAL(clicked()), this, SLOT(chooseRulerColor()));
 
@@ -1425,13 +1153,8 @@ QWidget* Settings_Dialog::createTabGridRuler()
 
     QLabel* labelRulerPixelSize = new QLabel(tr("Ruler Pixel Size"), groupBoxRulerGeom);
     labelRulerPixelSize->setObjectName("labelRulerPixelSize");
-    QDoubleSpinBox* spinBoxRulerPixelSize = new QDoubleSpinBox(groupBoxRulerGeom);
-    spinBoxRulerPixelSize->setObjectName("spinBoxRulerPixelSize");
-    dialog.ruler_pixel_size = settings.ruler_pixel_size;
-    spinBoxRulerPixelSize->setSingleStep(1.000);
-    spinBoxRulerPixelSize->setRange(20.000, 100.000);
-    spinBoxRulerPixelSize->setValue(dialog.ruler_pixel_size);
-    connect(spinBoxRulerPixelSize, SIGNAL(valueChanged(double)), this, SLOT(spinBoxRulerPixelSizeValueChanged(double)));
+    QDoubleSpinBox* spinBoxRulerPixelSize = make_spinbox(groupBoxRulerGeom,
+        "dialog", "spinBoxRulerPixelSize", 1.0, 20.0, 100.0, "ruler_pixel_size");
 
     QGridLayout* gridLayoutRulerGeom = new QGridLayout(groupBoxRulerGeom);
     gridLayoutRulerGeom->addWidget(labelRulerPixelSize, 0, 0, Qt::AlignLeft);
@@ -1455,7 +1178,8 @@ QWidget* Settings_Dialog::createTabGridRuler()
     return scrollArea;
 }
 
-QWidget* Settings_Dialog::createTabOrthoPolar()
+QWidget*
+Settings_Dialog::createTabOrthoPolar()
 {
     QWidget* widget = new QWidget(this);
 
@@ -1467,41 +1191,31 @@ QWidget* Settings_Dialog::createTabOrthoPolar()
     return scrollArea;
 }
 
-QWidget* Settings_Dialog::createTabQuickSnap()
+
+QWidget*
+Settings_Dialog::createTabQuickSnap()
 {
     QWidget* widget = new QWidget(this);
 
     //QSnap Locators
     QGroupBox* groupBoxQSnapLoc = new QGroupBox(tr("Locators Used"), widget);
 
-    qsnap_endpoint_cb = get_bool(settings_, "qsnap_endpoint");
-    qsnap_midpoint_cb = get_bool(settings_, "qsnap_midpoint");
-    qsnap_center_cb = get_bool(settings_, "qsnap_center");
-    qsnap_node_cb = get_bool(settings_, "qsnap_node");
-    qsnap_quadrant_cb = get_bool(settings_, "qsnap_quadrant");
-    qsnap_intersection_cb = get_bool(settings_, "qsnap_intersection");
-    qsnap_extension_cb = get_bool(settings_, "qsnap_extension");
-    qsnap_insertion_cb = get_bool(settings_, "qsnap_insertion");
-    qsnap_perpendicular_cb = get_bool(settings_, "qsnap_perpendicular");
-    qsnap_tangent_cb = get_bool(settings_, "qsnap_tangent");
-    qsnap_nearest_cb = get_bool(settings_, "qsnap_nearest");
-    qsnap_apparent_cb = get_bool(settings_, "qsnap_apparent");
-    qsnap_parallel_cb = get_bool(settings_, "qsnap_parallel");
+    make_editing_copy(quick_snap_props);
 
     std::vector<QCheckBox*> checkboxes = {
-        make_checkbox(groupBoxQSnapLoc, "Endpoint", "locator-snaptoendpoint", &qsnap_endpoint_cb),
-        make_checkbox(groupBoxQSnapLoc, "Midpoint", "locator-snaptomidpoint", &qsnap_midpoint_cb),
-        make_checkbox(groupBoxQSnapLoc, "Center", "locator-snaptocenter", &qsnap_center_cb),
-        make_checkbox(groupBoxQSnapLoc, "Node", "locator-snaptonode", &qsnap_node_cb),
-        make_checkbox(groupBoxQSnapLoc, "Quadrant", "locator-snaptoquadrant", &qsnap_quadrant_cb),
-        make_checkbox(groupBoxQSnapLoc, "Intersection", "locator-snaptointersection", &qsnap_intersection_cb),
-        make_checkbox(groupBoxQSnapLoc, "Extension", "locator-snaptoextension", &qsnap_extension_cb),
-        make_checkbox(groupBoxQSnapLoc, "Insertion", "locator-snaptoinsert", &qsnap_insertion_cb),
-        make_checkbox(groupBoxQSnapLoc, "Perpendicular", "locator-snaptoperpendicular", &qsnap_perpendicular_cb),
-        make_checkbox(groupBoxQSnapLoc, "Tangent", "locator-snaptotangent", &qsnap_tangent_cb),
-        make_checkbox(groupBoxQSnapLoc, "Nearest", "locator-snaptonearest", &qsnap_nearest_cb),
-        make_checkbox(groupBoxQSnapLoc, "Apparent Intersection", "locator-snaptoapparentintersection", &qsnap_apparent_cb),
-        make_checkbox(groupBoxQSnapLoc, "Parallel", "locator-snaptoparallel", &qsnap_parallel_cb)
+        make_checkbox(groupBoxQSnapLoc, "dialog", "Endpoint", "locator-snaptoendpoint", "quicksnap_endpoint"),
+        make_checkbox(groupBoxQSnapLoc, "dialog", "Midpoint", "locator-snaptomidpoint", "quicksnap_midpoint"),
+        make_checkbox(groupBoxQSnapLoc, "dialog", "Center", "locator-snaptocenter", "quicksnap_center"),
+        make_checkbox(groupBoxQSnapLoc, "dialog", "Node", "locator-snaptonode", "quicksnap_node"),
+        make_checkbox(groupBoxQSnapLoc, "dialog", "Quadrant", "locator-snaptoquadrant", "quicksnap_quadrant"),
+        make_checkbox(groupBoxQSnapLoc, "dialog", "Intersection", "locator-snaptointersection", "quicksnap_intersection"),
+        make_checkbox(groupBoxQSnapLoc, "dialog", "Extension", "locator-snaptoextension", "quicksnap_extension"),
+        make_checkbox(groupBoxQSnapLoc, "dialog", "Insertion", "locator-snaptoinsert", "quicksnap_insertion"),
+        make_checkbox(groupBoxQSnapLoc, "dialog", "Perpendicular", "locator-snaptoperpendicular", "quicksnap_perpendicular"),
+        make_checkbox(groupBoxQSnapLoc, "dialog", "Tangent", "locator-snaptotangent", "quicksnap_tangent"),
+        make_checkbox(groupBoxQSnapLoc, "dialog", "Nearest", "locator-snaptonearest", "quicksnap_nearest"),
+        make_checkbox(groupBoxQSnapLoc, "dialog", "Apparent Intersection", "locator-snaptoapparentintersection", "quicksnap_apparent"),
+        make_checkbox(groupBoxQSnapLoc, "dialog", "Parallel", "locator-snaptoparallel", "quicksnap_parallel")
     };
     int n_checkboxes = (int)checkboxes.size();
 
@@ -1532,16 +1246,14 @@ QWidget* Settings_Dialog::createTabQuickSnap()
     QLabel* labelQSnapLocColor = new QLabel(tr("Locator Color"), groupBoxQSnapVisual);
     QComboBox* comboBoxQSnapLocColor = new QComboBox(groupBoxQSnapVisual);
     addColorsToComboBox(comboBoxQSnapLocColor);
-    dialog.qsnap_locator_color = settings.qsnap_locator_color;
-    comboBoxQSnapLocColor->setCurrentIndex(comboBoxQSnapLocColor->findData(dialog.qsnap_locator_color));
+    comboBoxQSnapLocColor->setCurrentIndex(comboBoxQSnapLocColor->findData(get_uint(dialog, "quicksnap_locator_color")));
     connect(comboBoxQSnapLocColor, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxQSnapLocatorColorCurrentIndexChanged(int)));
 
     QLabel* labelQSnapLocSize = new QLabel(tr("Locator Size"), groupBoxQSnapVisual);
     QSlider* sliderQSnapLocSize = new QSlider(Qt::Horizontal, groupBoxQSnapVisual);
     sliderQSnapLocSize->setRange(1,20);
-    dialog.qsnap_locator_size = settings.qsnap_locator_size;
-    sliderQSnapLocSize->setValue(dialog.qsnap_locator_size);
-    auto f = [=](int x) { dialog.qsnap_locator_size = x; };
+    sliderQSnapLocSize->setValue(get_real(dialog, "quicksnap_locator_size"));
+    auto f = [=](int x) { dialog["quicksnap_locator_size"] = node_real(x); };
     connect(sliderQSnapLocSize, SIGNAL(valueChanged(int)), this, SLOT(f));
 
     QVBoxLayout* vboxLayoutQSnapVisual = new QVBoxLayout(groupBoxQSnapVisual);
@@ -1557,10 +1269,9 @@ QWidget* Settings_Dialog::createTabQuickSnap()
     QLabel* labelQSnapApertureSize = new QLabel(tr("Aperture Size"), groupBoxQSnapSensitivity);
     QSlider* sliderQSnapApertureSize = new QSlider(Qt::Horizontal, groupBoxQSnapSensitivity);
     sliderQSnapApertureSize->setRange(1,20);
-    dialog.qsnap_aperture_size = settings.qsnap_aperture_size;
-    sliderQSnapApertureSize->setValue(dialog.qsnap_aperture_size);
+    sliderQSnapApertureSize->setValue(get_real(dialog, "quicksnap_aperture_size"));
     connect(sliderQSnapApertureSize, SIGNAL(valueChanged(int)), this,
-        SLOT([=](int x) { dialog.qsnap_aperture_size = x; } ));
+        SLOT([=](int x) { dialog["quicksnap_aperture_size"] = node_real(x); } ));
 
     QVBoxLayout* vboxLayoutQSnapSensitivity = new QVBoxLayout(groupBoxQSnapSensitivity);
     vboxLayoutQSnapSensitivity->addWidget(labelQSnapApertureSize);
@@ -1581,7 +1292,8 @@ QWidget* Settings_Dialog::createTabQuickSnap()
     return scrollArea;
 }
 
-QWidget* Settings_Dialog::createTabQuickTrack()
+QWidget*
+Settings_Dialog::createTabQuickTrack()
 {
     QWidget* widget = new QWidget(this);
 
@@ -1593,7 +1305,8 @@ QWidget* Settings_Dialog::createTabQuickTrack()
     return scrollArea;
 }
 
-QWidget* Settings_Dialog::createTabLineWeight()
+QWidget*
+Settings_Dialog::createTabLineWeight()
 {
     QWidget* widget = new QWidget(this);
 
@@ -1606,34 +1319,34 @@ QWidget* Settings_Dialog::createTabLineWeight()
 
     QCheckBox* checkBoxShowLwt = new QCheckBox(tr("Show LineWeight"), groupBoxLwtMisc);
     if (s) {
-        dialog.lwt_show_lwt = s->property("ENABLE_LWT").toBool();
+        dialog["lwt_show_lwt"] = node_bool(s->property("ENABLE_LWT").toBool());
     }
     else {
-        dialog.lwt_show_lwt = settings.lwt_show_lwt;
+        dialog["lwt_show_lwt"] = settings["lwt_show_lwt"];
     }
-    preview.lwt_show_lwt = dialog.lwt_show_lwt;
-    checkBoxShowLwt->setChecked(preview.lwt_show_lwt);
+    preview["lwt_show_lwt"] = dialog["lwt_show_lwt"];
+    checkBoxShowLwt->setChecked(get_bool(preview, "lwt_show_lwt"));
     connect(checkBoxShowLwt, SIGNAL(stateChanged(int)), this, SLOT(checkBoxLwtShowLwtStateChanged(int)));
 
     QCheckBox* checkBoxRealRender = new QCheckBox(tr("RealRender"), groupBoxLwtMisc);
     checkBoxRealRender->setObjectName("checkBoxRealRender");
     if (s) {
-        dialog.lwt_real_render = s->property("ENABLE_REAL").toBool();
+        dialog["lwt_real_render"] = node_bool(s->property("ENABLE_REAL").toBool());
     }
     else  {
-        dialog.lwt_real_render = settings.lwt_real_render;
+        dialog["lwt_real_render"] = settings["lwt_real_render"];
     }
-    preview.lwt_real_render = dialog.lwt_real_render;
-    checkBoxRealRender->setChecked(preview.lwt_real_render);
+    preview["lwt_real_render"] = dialog["lwt_real_render"];
+    checkBoxRealRender->setChecked(get_bool(preview, "lwt_real_render"));
     connect(checkBoxRealRender, SIGNAL(stateChanged(int)), this, SLOT(checkBoxLwtRealRenderStateChanged(int)));
-    checkBoxRealRender->setEnabled(dialog.lwt_show_lwt);
+    checkBoxRealRender->setEnabled(get_bool(dialog, "lwt_show_lwt"));
 
     QLabel* labelDefaultLwt = new QLabel(tr("Default weight"), groupBoxLwtMisc);
     labelDefaultLwt->setEnabled(false); //TODO: remove later
     QComboBox* comboBoxDefaultLwt = new QComboBox(groupBoxLwtMisc);
-    dialog.lwt_default_lwt = settings.lwt_default_lwt;
+    dialog["lwt_default_lwt"] = settings["lwt_default_lwt"];
     //TODO: populate the comboBox and set the initial value
-    comboBoxDefaultLwt->addItem(QString().setNum(dialog.lwt_default_lwt, 'F', 2).append(" mm"), dialog.lwt_default_lwt);
+    comboBoxDefaultLwt->addItem(QString().setNum(get_real(dialog, "lwt_default_lwt"), 'F', 2).append(" mm"), get_real(dialog, "lwt_default_lwt"));
     comboBoxDefaultLwt->setEnabled(false); //TODO: remove later
 
     QVBoxLayout* vboxLayoutLwtMisc = new QVBoxLayout(groupBoxLwtMisc);
@@ -1655,33 +1368,38 @@ QWidget* Settings_Dialog::createTabLineWeight()
     return scrollArea;
 }
 
-QWidget* Settings_Dialog::createTabSelection()
+QWidget*
+Settings_Dialog::createTabSelection()
 {
     QWidget* widget = new QWidget(this);
 
     //Selection Modes
     QGroupBox* groupBoxSelectionModes = new QGroupBox(tr("Modes"), widget);
 
+    dialog["selection_mode_pickfirst"] = settings["selection_mode_pickfirst"];
+    dialog["selection_mode_pickadd"] = settings["selection_mode_pickadd"];
+    dialog["selection_mode_pickdrag"] = settings["selection_mode_pickdrag"];
+    dialog["selection_coolgrip_color"] = settings["selection_coolgrip_color"];
+    dialog["selection_hotgrip_color"] = settings["selection_hotgrip_color"];
+    dialog["selection_grip_size"] = settings["selection_grip_size"];
+    dialog["selection_pickbox_size"] = settings["selection_pickbox_size"];
+
     QCheckBox* checkBoxSelectionModePickFirst = new QCheckBox(tr("Allow Preselection (PickFirst)"), groupBoxSelectionModes);
-    dialog.selection_mode_pickfirst = settings.selection_mode_pickfirst;
-    checkBoxSelectionModePickFirst->setChecked(dialog.selection_mode_pickfirst);
+    checkBoxSelectionModePickFirst->setChecked(get_bool(dialog, "selection_mode_pickfirst"));
     checkBoxSelectionModePickFirst->setChecked(true);
     checkBoxSelectionModePickFirst->setEnabled(false); //TODO: Remove this line when Post-selection is available
     connect(checkBoxSelectionModePickFirst, SIGNAL(stateChanged(int)), this,
-        SLOT([=](int x) {dialog.selection_mode_pickfirst = x; } ));
+        SLOT([=](int x) {dialog["selection_mode_pickfirst"] = x; } ));
 
-    QCheckBox* checkBoxSelectionModePickAdd = new QCheckBox(tr("Add to Selection (PickAdd)"), groupBoxSelectionModes);
-    dialog.selection_mode_pickadd = settings.selection_mode_pickadd;
-    checkBoxSelectionModePickAdd->setChecked(dialog.selection_mode_pickadd);
-    connect(checkBoxSelectionModePickAdd, SIGNAL(stateChanged(int)), this,
-        SLOT([=](int x) { dialog.selection_mode_pickadd = x; } ));
+    QCheckBox* checkBoxSelectionModePickAdd = make_checkbox(groupBoxSelectionModes, "dialog",
+        "Add to Selection (PickAdd)", "blank", "selection_mode_pickadd");
 
     QCheckBox* checkBoxSelectionModePickDrag = new QCheckBox(tr("Drag to Select (PickDrag)"), groupBoxSelectionModes);
-    dialog.selection_mode_pickdrag = settings.selection_mode_pickdrag;
-    checkBoxSelectionModePickDrag->setChecked(dialog.selection_mode_pickdrag);
+    checkBoxSelectionModePickDrag->setChecked(get_bool(dialog, "selection_mode_pickdrag"));
     checkBoxSelectionModePickDrag->setChecked(false);
     checkBoxSelectionModePickDrag->setEnabled(false); //TODO: Remove this line when this functionality is available
-    connect(checkBoxSelectionModePickDrag, SIGNAL(stateChanged(int)), this,    SLOT([=](int x) {dialog.selection_mode_pickdrag = x; } ));
+    connect(checkBoxSelectionModePickDrag, SIGNAL(stateChanged(int)), this,
+        SLOT([=](int x) {dialog["selection_mode_pickdrag"] = x; } ));
 
     QVBoxLayout* vboxLayoutSelectionModes = new QVBoxLayout(groupBoxSelectionModes);
     vboxLayoutSelectionModes->addWidget(checkBoxSelectionModePickFirst);
@@ -1695,18 +1413,16 @@ QWidget* Settings_Dialog::createTabSelection()
     QLabel* labelCoolGripColor = new QLabel(tr("Cool Grip (Unselected)"), groupBoxSelectionColors);
     QComboBox* comboBoxCoolGripColor = new QComboBox(groupBoxSelectionColors);
     addColorsToComboBox(comboBoxCoolGripColor);
-    dialog.selection_coolgrip_color = settings.selection_coolgrip_color;
-    comboBoxCoolGripColor->setCurrentIndex(comboBoxCoolGripColor->findData(dialog.selection_coolgrip_color));
+    comboBoxCoolGripColor->setCurrentIndex(comboBoxCoolGripColor->findData(get_uint(dialog, "selection_coolgrip_color")));
     connect(comboBoxCoolGripColor, SIGNAL(currentIndexChanged(int)), this,
-        SLOT([=](int x) { dialog.selection_coolgrip_color = x; } ));
+        SLOT([=](int x) { dialog["selection_coolgrip_color"] = node_int(x); } ));
 
     QLabel* labelHotGripColor = new QLabel(tr("Hot Grip (Selected)"), groupBoxSelectionColors);
     QComboBox* comboBoxHotGripColor = new QComboBox(groupBoxSelectionColors);
     addColorsToComboBox(comboBoxHotGripColor);
-    dialog.selection_hotgrip_color = settings.selection_hotgrip_color;
-    comboBoxHotGripColor->setCurrentIndex(comboBoxHotGripColor->findData(dialog.selection_hotgrip_color));
+    comboBoxHotGripColor->setCurrentIndex(comboBoxHotGripColor->findData(get_uint(dialog, "selection_hotgrip_color")));
     connect(comboBoxHotGripColor, SIGNAL(currentIndexChanged(int)), this,
-        SLOT([=](int x) { dialog.selection_hotgrip_color = x; } ));
+        SLOT([=](int x) { dialog["selection_hotgrip_color"] = node_int(x); } ));
 
     QVBoxLayout* vboxLayoutSelectionColors = new QVBoxLayout(groupBoxSelectionColors);
     vboxLayoutSelectionColors->addWidget(labelCoolGripColor);
@@ -1721,18 +1437,16 @@ QWidget* Settings_Dialog::createTabSelection()
     QLabel* labelSelectionGripSize = new QLabel(tr("Grip Size"), groupBoxSelectionSizes);
     QSlider* sliderSelectionGripSize = new QSlider(Qt::Horizontal, groupBoxSelectionSizes);
     sliderSelectionGripSize->setRange(1,20);
-    dialog.selection_grip_size = settings.selection_grip_size;
-    sliderSelectionGripSize->setValue(dialog.selection_grip_size);
+    sliderSelectionGripSize->setValue(get_int(dialog, "selection_grip_size"));
     connect(sliderSelectionGripSize, SIGNAL(valueChanged(int)), this,
-        SLOT([=](int x) { dialog.selection_grip_size = x; } ));
+        SLOT([=](int x) { dialog["selection_grip_size"] = node_int(x); } ));
 
     QLabel* labelSelectionPickBoxSize = new QLabel(tr("Pickbox Size"), groupBoxSelectionSizes);
     QSlider* sliderSelectionPickBoxSize = new QSlider(Qt::Horizontal, groupBoxSelectionSizes);
     sliderSelectionPickBoxSize->setRange(1,20);
-    dialog.selection_pickbox_size = settings.selection_pickbox_size;
-    sliderSelectionPickBoxSize->setValue(dialog.selection_pickbox_size);
+    sliderSelectionPickBoxSize->setValue(get_int(dialog, "selection_pickbox_size"));
     connect(sliderSelectionPickBoxSize, SIGNAL(valueChanged(int)), this,
-        SLOT([=](int x) { dialog.selection_pickbox_size = x; } ));
+        SLOT([=](int x) { dialog["selection_pickbox_size"] = node_int(x); } ));
 
     QVBoxLayout* vboxLayoutSelectionSizes = new QVBoxLayout(groupBoxSelectionSizes);
     vboxLayoutSelectionSizes->addWidget(labelSelectionGripSize);
@@ -1755,7 +1469,8 @@ QWidget* Settings_Dialog::createTabSelection()
     return scrollArea;
 }
 
-void Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
+void
+Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
 {
     comboBox->addItem(_mainWin->create_icon("colorred"), tr("Red"), qRgb(255, 0, 0));
     comboBox->addItem(_mainWin->create_icon("coloryellow"), tr("Yellow"), qRgb(255,255, 0));
@@ -1777,23 +1492,25 @@ Settings_Dialog::comboBoxIconSizeCurrentIndexChanged(int index)
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
     if (comboBox) {
         bool ok = 0;
-        dialog.general_icon_size = comboBox->itemData(index).toUInt(&ok);
+        dialog["general_icon_size"] = node_uint(comboBox->itemData(index).toUInt(&ok));
         if (!ok) {
-            dialog.general_icon_size = 16;
+            dialog["general_icon_size"] = node_uint(16);
         }
     }
     else {
-        dialog.general_icon_size = 16;
+        dialog["general_icon_size"] = node_uint(16);
     }
 }
 
-void Settings_Dialog::checkBoxGeneralMdiBGUseLogoStateChanged(int checked)
+void
+Settings_Dialog::checkBoxGeneralMdiBGUseLogoStateChanged(int checked)
 {
-    preview.general_mdi_bg_use_logo = checked;
+    preview["general_mdi_bg_use_logo"] = node_bool(checked != 0);
     mdiArea->useBackgroundLogo(checked);
 }
 
-void Settings_Dialog::chooseGeneralMdiBackgroundLogo()
+void
+Settings_Dialog::chooseGeneralMdiBackgroundLogo()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
     if (button) {
@@ -1803,11 +1520,11 @@ void Settings_Dialog::chooseGeneralMdiBackgroundLogo()
                         tr("Images (*.bmp *.png *.jpg)"));
 
         if (!selectedImage.isNull()) {
-            accept__["general_mdi_bg_logo"] = node(selectedImage.toStdString());
+            accept_["general_mdi_bg_logo"] = node_str(selectedImage.toStdString());
         }
 
         //Update immediately so it can be previewed
-        mdiArea->setBackgroundLogo(QString::fromStdString(get_str(accept__, "general_mdi_bg_logo")));
+        mdiArea->setBackgroundLogo(QString::fromStdString(get_str(accept_, "general_mdi_bg_logo")));
     }
 }
 
@@ -1818,7 +1535,7 @@ void Settings_Dialog::chooseGeneralMdiBackgroundLogo()
 void
 Settings_Dialog::checkBoxGeneralMdiBGUseTextureStateChanged(int checked)
 {
-    preview.general_mdi_bg_use_texture = checked;
+    preview["general_mdi_bg_use_texture"] = node_bool(checked != 0);
     mdiArea->useBackgroundTexture(checked);
 }
 
@@ -1832,17 +1549,17 @@ void Settings_Dialog::chooseGeneralMdiBackgroundTexture()
                         tr("Images (*.bmp *.png *.jpg)"));
 
         if (!selectedImage.isNull()) {
-            accept_.general_mdi_bg_texture = selectedImage.toStdString();
+            accept_["general_mdi_bg_texture"] = node_qstr(selectedImage);
         }
 
         //Update immediately so it can be previewed
-        mdiArea->setBackgroundTexture(QString::fromStdString(accept_.general_mdi_bg_texture));
+        mdiArea->setBackgroundTexture(get_qstr(accept_, "general_mdi_bg_texture"));
     }
 }
 
 void Settings_Dialog::checkBoxGeneralMdiBGUseColorStateChanged(int checked)
 {
-    preview.general_mdi_bg_use_color = checked;
+    preview["general_mdi_bg_use_color"] = node_int(checked != 0);
     mdiArea->useBackgroundColor(checked);
 }
 
@@ -1850,349 +1567,348 @@ void Settings_Dialog::chooseGeneralMdiBackgroundColor()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
     if (button) {
-        QColorDialog* colorDialog = new QColorDialog(QColor(accept_.general_mdi_bg_color), this);
+        QColorDialog* colorDialog = new QColorDialog(QColor(get_uint(accept_, "general_mdi_bg_color")), this);
         connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentGeneralMdiBackgroundColorChanged(const QColor&)));
         colorDialog->exec();
 
         if (colorDialog->result() == QDialog::Accepted) {
-            accept_.general_mdi_bg_color = colorDialog->selectedColor().rgb();
+            accept_["general_mdi_bg_color"] = node_uint(colorDialog->selectedColor().rgb());
             QPixmap pix(16,16);
-            pix.fill(QColor(accept_.general_mdi_bg_color));
+            pix.fill(QColor(get_uint(accept_, "general_mdi_bg_color")));
             button->setIcon(QIcon(pix));
-            mdiArea->setBackgroundColor(QColor(accept_.general_mdi_bg_color));
+            mdiArea->setBackgroundColor(QColor(get_uint(accept_, "general_mdi_bg_color")));
         }
         else {
-            mdiArea->setBackgroundColor(QColor(dialog.general_mdi_bg_color));
+            mdiArea->setBackgroundColor(QColor(get_uint(dialog, "general_mdi_bg_color")));
         }
     }
 }
 
 void Settings_Dialog::currentGeneralMdiBackgroundColorChanged(const QColor& color)
 {
-    preview.general_mdi_bg_color = color.rgb();
-    mdiArea->setBackgroundColor(QColor(preview.general_mdi_bg_color));
+    preview["general_mdi_bg_color"] = node_uint(color.rgb());
+    mdiArea->setBackgroundColor(color);
 }
 
 void Settings_Dialog::checkBoxShowScrollBarsStateChanged(int checked)
 {
-    preview.display_show_scrollbars = checked;
-    _mainWin->updateAllViewScrollBars(preview.display_show_scrollbars);
+    preview["display_show_scrollbars"] = node_bool(checked != 0);
+    _mainWin->updateAllViewScrollBars(checked);
 }
 
 void Settings_Dialog::comboBoxScrollBarWidgetCurrentIndexChanged(int index)
 {
-    dialog.display_scrollbar_widget_num = index;
+    dialog["display_scrollbar_widget_num"] = node_int(index);
 }
 
 void Settings_Dialog::chooseDisplayCrossHairColor()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
     if (button) {
-        QColorDialog* colorDialog = new QColorDialog(QColor(accept_.display_crosshair_color), this);
+        QColorDialog* colorDialog = new QColorDialog(QColor(get_uint(accept_, "display_crosshair_color")), this);
         connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentDisplayCrossHairColorChanged(const QColor&)));
         colorDialog->exec();
 
         if (colorDialog->result() == QDialog::Accepted) {
-            accept_.display_crosshair_color = colorDialog->selectedColor().rgb();
+            accept_["display_crosshair_color"] = node_uint(colorDialog->selectedColor().rgb());
             QPixmap pix(16,16);
-            pix.fill(QColor(accept_.display_crosshair_color));
+            pix.fill(QColor(get_uint(accept_, "display_crosshair_color")));
             button->setIcon(QIcon(pix));
-            _mainWin->updateAllViewCrossHairColors(accept_.display_crosshair_color);
+            _mainWin->updateAllViewCrossHairColors(get_uint(accept_, "display_crosshair_color"));
         }
         else {
-            _mainWin->updateAllViewCrossHairColors(dialog.display_crosshair_color);
+            _mainWin->updateAllViewCrossHairColors(get_uint(dialog, "display_crosshair_color"));
         }
     }
 }
 
 void Settings_Dialog::currentDisplayCrossHairColorChanged(const QColor& color)
 {
-    preview.display_crosshair_color = color.rgb();
-    _mainWin->updateAllViewCrossHairColors(preview.display_crosshair_color);
+    preview["display_crosshair_color"] = node_uint(color.rgb());
+    _mainWin->updateAllViewCrossHairColors(color.rgb());
 }
 
 void Settings_Dialog::chooseDisplayBackgroundColor()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
     if (button) {
-        QColorDialog* colorDialog = new QColorDialog(QColor(accept_.display_bg_color), this);
+        QColorDialog* colorDialog = new QColorDialog(QColor(get_uint(accept_, "display_bg_color")), this);
         connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentDisplayBackgroundColorChanged(const QColor&)));
         colorDialog->exec();
 
         if (colorDialog->result() == QDialog::Accepted) {
-            accept_.display_bg_color = colorDialog->selectedColor().rgb();
+            accept_["display_bg_color"] = node_uint(colorDialog->selectedColor().rgb());
             QPixmap pix(16,16);
-            pix.fill(QColor(accept_.display_bg_color));
+            pix.fill(QColor(get_uint(accept_, "display_bg_color")));
             button->setIcon(QIcon(pix));
-            _mainWin->updateAllViewBackgroundColors(accept_.display_bg_color);
+            _mainWin->updateAllViewBackgroundColors(get_uint(accept_, "display_bg_color"));
         }
         else {
-            _mainWin->updateAllViewBackgroundColors(dialog.display_bg_color);
+            _mainWin->updateAllViewBackgroundColors(get_uint(dialog, "display_bg_color"));
         }
     }
 }
 
 void Settings_Dialog::currentDisplayBackgroundColorChanged(const QColor& color)
 {
-    preview.display_bg_color = color.rgb();
-    _mainWin->updateAllViewBackgroundColors(preview.display_bg_color);
+    preview["display_bg_color"] = node_uint(color.rgb());
+    _mainWin->updateAllViewBackgroundColors(color.rgb());
 }
 
 void Settings_Dialog::chooseDisplaySelectBoxLeftColor()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
     if (button) {
-        QColorDialog* colorDialog = new QColorDialog(QColor(accept_.display_selectbox_left_color), this);
+        QColorDialog* colorDialog = new QColorDialog(QColor(get_uint(accept_, "display_selectbox_left_color")), this);
         connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentDisplaySelectBoxLeftColorChanged(const QColor&)));
         colorDialog->exec();
 
         if (colorDialog->result() == QDialog::Accepted) {
-            accept_.display_selectbox_left_color = colorDialog->selectedColor().rgb();
+            accept_["display_selectbox_left_color"] = node_uint(colorDialog->selectedColor().rgb());
             QPixmap pix(16,16);
-            pix.fill(QColor(accept_.display_selectbox_left_color));
+            pix.fill(QColor(get_uint(accept_, "display_selectbox_left_color")));
             button->setIcon(QIcon(pix));
             _mainWin->updateAllViewSelectBoxColors(
-                accept_.display_selectbox_left_color,
-                accept_.display_selectbox_left_fill,
-                accept_.display_selectbox_right_color,
-                accept_.display_selectbox_right_fill,
-                preview.display_selectbox_alpha);
+                get_uint(accept_, "display_selectbox_left_color"),
+                get_uint(accept_, "display_selectbox_left_fill"),
+                get_uint(accept_, "display_selectbox_right_color"),
+                get_uint(accept_, "display_selectbox_right_fill"),
+                get_int(preview, "display_selectbox_alpha"));
         }
         else {
             _mainWin->updateAllViewSelectBoxColors(
-                dialog.display_selectbox_left_color,
-                dialog.display_selectbox_left_fill,
-                dialog.display_selectbox_right_color,
-                dialog.display_selectbox_right_fill,
-                preview.display_selectbox_alpha);
+                get_uint(dialog, "display_selectbox_left_color"),
+                get_uint(dialog, "display_selectbox_left_fill"),
+                get_uint(dialog, "display_selectbox_right_color"),
+                get_uint(dialog, "display_selectbox_right_fill"),
+                get_int(preview, "display_selectbox_alpha"));
         }
     }
 }
 
 void Settings_Dialog::currentDisplaySelectBoxLeftColorChanged(const QColor& color)
 {
-    preview.display_selectbox_left_color = color.rgb();
+    preview["display_selectbox_left_color"] = node_uint(color.rgb());
     _mainWin->updateAllViewSelectBoxColors(
-        preview.display_selectbox_left_color,
-        preview.display_selectbox_left_fill,
-        preview.display_selectbox_right_color,
-        preview.display_selectbox_right_fill,
-        preview.display_selectbox_alpha);
+        get_uint(preview, "display_selectbox_left_color"),
+        get_uint(preview, "display_selectbox_left_fill"),
+        get_uint(preview, "display_selectbox_right_color"),
+        get_uint(preview, "display_selectbox_right_fill"),
+        get_int(preview, "display_selectbox_alpha"));
 }
 
 void Settings_Dialog::chooseDisplaySelectBoxLeftFill()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
     if (button) {
-        QColorDialog* colorDialog = new QColorDialog(QColor(accept_.display_selectbox_left_fill), this);
+        QColorDialog* colorDialog = new QColorDialog(QColor(get_uint(accept_, "display_selectbox_left_fill")), this);
         connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentDisplaySelectBoxLeftFillChanged(const QColor&)));
         colorDialog->exec();
 
         if (colorDialog->result() == QDialog::Accepted) {
-            accept_.display_selectbox_left_fill = colorDialog->selectedColor().rgb();
+            accept_["display_selectbox_left_fill"] = node_uint(colorDialog->selectedColor().rgb());
             QPixmap pix(16,16);
-            pix.fill(QColor(accept_.display_selectbox_left_fill));
+            pix.fill(QColor(get_uint(accept_, "display_selectbox_left_fill")));
             button->setIcon(QIcon(pix));
             _mainWin->updateAllViewSelectBoxColors(
-                accept_.display_selectbox_left_color,
-                accept_.display_selectbox_left_fill,
-                accept_.display_selectbox_right_color,
-                accept_.display_selectbox_right_fill,
-                preview.display_selectbox_alpha);
+                get_uint(accept_, "display_selectbox_left_color"),
+                get_uint(accept_, "display_selectbox_left_fill"),
+                get_uint(accept_, "display_selectbox_right_color"),
+                get_uint(accept_, "display_selectbox_right_fill"),
+                get_int(preview, "display_selectbox_alpha"));
         }
         else {
             _mainWin->updateAllViewSelectBoxColors(
-                dialog.display_selectbox_left_color,
-                dialog.display_selectbox_left_fill,
-                dialog.display_selectbox_right_color,
-                dialog.display_selectbox_right_fill,
-                preview.display_selectbox_alpha);
+                get_uint(dialog, "display_selectbox_left_color"),
+                get_uint(dialog, "display_selectbox_left_fill"),
+                get_uint(dialog, "display_selectbox_right_color"),
+                get_uint(dialog, "display_selectbox_right_fill"),
+                get_int(preview, "display_selectbox_alpha"));
         }
     }
 }
 
 void Settings_Dialog::currentDisplaySelectBoxLeftFillChanged(const QColor& color)
 {
-    preview.display_selectbox_left_fill = color.rgb();
+    preview["display_selectbox_left_fill"] = node_uint(color.rgb());
     _mainWin->updateAllViewSelectBoxColors(
-        preview.display_selectbox_left_color,
-        preview.display_selectbox_left_fill,
-        preview.display_selectbox_right_color,
-        preview.display_selectbox_right_fill,
-        preview.display_selectbox_alpha);
+        get_uint(preview, "display_selectbox_left_color"),
+        get_uint(preview, "display_selectbox_left_fill"),
+        get_uint(preview, "display_selectbox_right_color"),
+        get_uint(preview, "display_selectbox_right_fill"),
+        get_int(preview, "display_selectbox_alpha"));
 }
 
 void Settings_Dialog::chooseDisplaySelectBoxRightColor()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
-    if (button)
-    {
-        QColorDialog* colorDialog = new QColorDialog(QColor(accept_.display_selectbox_right_color), this);
+    if (button) {
+        QColorDialog* colorDialog = new QColorDialog(QColor(get_uint(accept_, "display_selectbox_right_color")), this);
         connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentDisplaySelectBoxRightColorChanged(const QColor&)));
         colorDialog->exec();
 
         if (colorDialog->result() == QDialog::Accepted) {
-            accept_.display_selectbox_right_color = colorDialog->selectedColor().rgb();
+            accept_["display_selectbox_right_color"] = node_uint(colorDialog->selectedColor().rgb());
             QPixmap pix(16,16);
-            pix.fill(QColor(accept_.display_selectbox_right_color));
+            pix.fill(QColor(get_uint(accept_, "display_selectbox_right_color")));
             button->setIcon(QIcon(pix));
             _mainWin->updateAllViewSelectBoxColors(
-                accept_.display_selectbox_left_color,
-                accept_.display_selectbox_left_fill,
-                accept_.display_selectbox_right_color,
-                accept_.display_selectbox_right_fill,
-                preview.display_selectbox_alpha);
+                get_uint(accept_, "display_selectbox_left_color"),
+                get_uint(accept_, "display_selectbox_left_fill"),
+                get_uint(accept_, "display_selectbox_right_color"),
+                get_uint(accept_, "display_selectbox_right_fill"),
+                get_int(preview, "display_selectbox_alpha"));
         }
         else {
             _mainWin->updateAllViewSelectBoxColors(
-                dialog.display_selectbox_left_color,
-                dialog.display_selectbox_left_fill,
-                dialog.display_selectbox_right_color,
-                dialog.display_selectbox_right_fill,
-                preview.display_selectbox_alpha);
+                get_uint(dialog, "display_selectbox_left_color"),
+                get_uint(dialog, "display_selectbox_left_fill"),
+                get_uint(dialog, "display_selectbox_right_color"),
+                get_uint(dialog, "display_selectbox_right_fill"),
+                get_int(preview, "display_selectbox_alpha"));
         }
     }
 }
 
 void Settings_Dialog::currentDisplaySelectBoxRightColorChanged(const QColor& color)
 {
-    preview.display_selectbox_right_color = color.rgb();
+    preview["display_selectbox_right_color"] = node_uint(color.rgb());
     _mainWin->updateAllViewSelectBoxColors(
-        preview.display_selectbox_left_color,
-        preview.display_selectbox_left_fill,
-        preview.display_selectbox_right_color,
-        preview.display_selectbox_right_fill,
-        preview.display_selectbox_alpha);
+        get_uint(preview, "display_selectbox_left_color"),
+        get_uint(preview, "display_selectbox_left_fill"),
+        get_uint(preview, "display_selectbox_right_color"),
+        get_uint(preview, "display_selectbox_right_fill"),
+        get_int(preview, "display_selectbox_alpha"));
 }
 
 void Settings_Dialog::chooseDisplaySelectBoxRightFill()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
     if (button) {
-        QColorDialog* colorDialog = new QColorDialog(QColor(accept_.display_selectbox_right_fill), this);
+        QColorDialog* colorDialog = new QColorDialog(QColor(get_uint(accept_, "display_selectbox_right_fill")), this);
         connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentDisplaySelectBoxRightFillChanged(const QColor&)));
         colorDialog->exec();
 
         if (colorDialog->result() == QDialog::Accepted) {
-            accept_.display_selectbox_right_fill = colorDialog->selectedColor().rgb();
+            accept_["display_selectbox_right_fill"] = node_uint(colorDialog->selectedColor().rgb());
             QPixmap pix(16,16);
-            pix.fill(QColor(accept_.display_selectbox_right_fill));
+            pix.fill(QColor(get_uint(accept_, "display_selectbox_right_fill")));
             button->setIcon(QIcon(pix));
             _mainWin->updateAllViewSelectBoxColors(
-                accept_.display_selectbox_left_color,
-                accept_.display_selectbox_left_fill,
-                accept_.display_selectbox_right_color,
-                accept_.display_selectbox_right_fill,
-                preview.display_selectbox_alpha);
+                get_uint(accept_, "display_selectbox_left_color"),
+                get_uint(accept_, "display_selectbox_left_fill"),
+                get_uint(accept_, "display_selectbox_right_color"),
+                get_uint(accept_, "display_selectbox_right_fill"),
+                get_int(preview, "display_selectbox_alpha"));
         }
         else {
             _mainWin->updateAllViewSelectBoxColors(
-                dialog.display_selectbox_left_color,
-                dialog.display_selectbox_left_fill,
-                dialog.display_selectbox_right_color,
-                dialog.display_selectbox_right_fill,
-                preview.display_selectbox_alpha);
+                get_uint(dialog, "display_selectbox_left_color"),
+                get_uint(dialog, "display_selectbox_left_fill"),
+                get_uint(dialog, "display_selectbox_right_color"),
+                get_uint(dialog, "display_selectbox_right_fill"),
+                get_int(preview, "display_selectbox_alpha"));
         }
     }
 }
 
 void Settings_Dialog::currentDisplaySelectBoxRightFillChanged(const QColor& color)
 {
-    preview.display_selectbox_right_fill = color.rgb();
+    preview["display_selectbox_right_fill"] = node_uint(color.rgb());
     _mainWin->updateAllViewSelectBoxColors(
-        preview.display_selectbox_left_color,
-        preview.display_selectbox_left_fill,
-        preview.display_selectbox_right_color,
-        preview.display_selectbox_right_fill,
-        preview.display_selectbox_alpha);
+        get_uint(preview, "display_selectbox_left_color"),
+        get_uint(preview, "display_selectbox_left_fill"),
+        get_uint(preview, "display_selectbox_right_color"),
+        get_uint(preview, "display_selectbox_right_fill"),
+        get_int(preview, "display_selectbox_alpha"));
 }
 
 void Settings_Dialog::spinBoxDisplaySelectBoxAlphaValueChanged(int value)
 {
-    preview.display_selectbox_alpha = value;
+    preview["display_selectbox_alpha"] = node_int(value);
     _mainWin->updateAllViewSelectBoxColors(
-        accept_.display_selectbox_left_color,
-        accept_.display_selectbox_left_fill,
-        accept_.display_selectbox_right_color,
-        accept_.display_selectbox_right_fill,
-        preview.display_selectbox_alpha);
+        get_uint(accept_, "display_selectbox_left_color"),
+        get_uint(accept_, "display_selectbox_left_fill"),
+        get_uint(accept_, "display_selectbox_right_color"),
+        get_uint(accept_, "display_selectbox_right_fill"),
+        get_int(preview, "display_selectbox_alpha"));
 }
 
 void Settings_Dialog::choosePromptTextColor()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
     if (button) {
-        QColorDialog* colorDialog = new QColorDialog(QColor(accept_.prompt_text_color), this);
+        QColorDialog* colorDialog = new QColorDialog(QColor(get_uint(accept_, "prompt_text_color")), this);
         connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentPromptTextColorChanged(const QColor&)));
         colorDialog->exec();
 
         if (colorDialog->result() == QDialog::Accepted) {
-            accept_.prompt_text_color = colorDialog->selectedColor().rgb();
+            accept_["prompt_text_color"] = node_uint(colorDialog->selectedColor().rgb());
             QPixmap pix(16,16);
-            pix.fill(QColor(accept_.prompt_text_color));
+            pix.fill(QColor(get_uint(accept_, "prompt_text_color")));
             button->setIcon(QIcon(pix));
-            prompt->setPromptTextColor(QColor(accept_.prompt_text_color));
+            prompt->setPromptTextColor(QColor(get_uint(accept_, "prompt_text_color")));
         }
         else {
-            prompt->setPromptTextColor(QColor(dialog.prompt_text_color));
+            prompt->setPromptTextColor(QColor(get_uint(dialog, "prompt_text_color")));
         }
     }
 }
 
 void Settings_Dialog::currentPromptTextColorChanged(const QColor& color)
 {
-    preview.prompt_text_color = color.rgb();
-    prompt->setPromptTextColor(QColor(preview.prompt_text_color));
+    preview["prompt_text_color"] = node_uint(color.rgb());
+    prompt->setPromptTextColor(QColor(get_uint(preview, "prompt_text_color")));
 }
 
 void Settings_Dialog::choosePromptBackgroundColor()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
     if (button) {
-        QColorDialog* colorDialog = new QColorDialog(QColor(accept_.prompt_bg_color), this);
+        QColorDialog* colorDialog = new QColorDialog(QColor(get_uint(accept_, "prompt_background_color")), this);
         connect(colorDialog, SIGNAL(currentColorChanged(QColor)), this, SLOT(currentPromptBackgroundColorChanged(QColor)));
         colorDialog->exec();
 
         if (colorDialog->result() == QDialog::Accepted) {
-            accept_.prompt_bg_color = colorDialog->selectedColor().rgb();
+            accept_["prompt_background_color"] = node_uint(colorDialog->selectedColor().rgb());
             QPixmap pix(16,16);
-            pix.fill(QColor(accept_.prompt_bg_color));
+            pix.fill(QColor(get_uint(accept_, "prompt_background_color")));
             button->setIcon(QIcon(pix));
-            prompt->setPromptBackgroundColor(QColor(accept_.prompt_bg_color));
+            prompt->setPromptBackgroundColor(QColor(get_uint(accept_, "prompt_background_color")));
         }
         else {
-            prompt->setPromptBackgroundColor(QColor(dialog.prompt_bg_color));
+            prompt->setPromptBackgroundColor(QColor(get_uint(dialog, "prompt_background_color")));
         }
     }
 }
 
 void Settings_Dialog::currentPromptBackgroundColorChanged(const QColor& color)
 {
-    preview.prompt_bg_color = color.rgb();
-    prompt->setPromptBackgroundColor(QColor(preview.prompt_bg_color));
+    preview["prompt_background_color"] = node_uint(color.rgb());
+    prompt->setPromptBackgroundColor(color);
 }
 
-void Settings_Dialog::comboBoxPromptFontFamilyCurrentIndexChanged(QString  family)
+void Settings_Dialog::comboBoxPromptFontFamilyCurrentIndexChanged(QString family)
 {
-    preview.prompt_font_family = family.toStdString();
-    prompt->setPromptFontFamily(QString::fromStdString(preview.prompt_font_family));
+    preview["prompt_font_family"] = node_qstr(family);
+    prompt->setPromptFontFamily(get_qstr(preview, "prompt_font_family"));
 }
 
-void Settings_Dialog::comboBoxPromptFontStyleCurrentIndexChanged(QString  style)
+void Settings_Dialog::comboBoxPromptFontStyleCurrentIndexChanged(QString style)
 {
-    preview.prompt_font_style = style.toStdString();
-    prompt->setPromptFontStyle(QString::fromStdString(preview.prompt_font_style));
+    preview["prompt_font_style"] = node_qstr(style);
+    prompt->setPromptFontStyle(get_qstr(preview, "prompt_font_style"));
 }
 
 void Settings_Dialog::spinBoxPromptFontSizeValueChanged(int value)
 {
-    preview.prompt_font_size = value;
-    prompt->setPromptFontSize(preview.prompt_font_size);
+    preview["prompt_font_size"] = node_int(value);
+    prompt->setPromptFontSize(get_int(preview, "prompt_font_size"));
 }
 
 void Settings_Dialog::checkBoxPromptSaveHistoryAsHtmlStateChanged(int checked)
 {
-    dialog.prompt_save_history_as_html = checked;
+    dialog["prompt_save_history_as_html"] = node_bool(checked != 0);
 }
 
 void Settings_Dialog::checkBoxCustomFilterStateChanged(int checked)
@@ -2201,42 +1917,46 @@ void Settings_Dialog::checkBoxCustomFilterStateChanged(int checked)
     if (checkBox) {
         QString format = checkBox->text();
         qDebug("CustomFilter: %s %d", qPrintable(format), checked);
-        if (checked)
+        /*
+        if (checked) {
             dialog.opensave_custom_filter.append(" *." + format.toLower());
-        else
+        }
+        else {
             dialog.opensave_custom_filter.remove("*." + format, Qt::CaseInsensitive);
+        }
         //dialog.opensave_custom_filter = checked; //TODO
+        */
     }
 }
 
 void Settings_Dialog::buttonCustomFilterSelectAllClicked()
 {
     emit buttonCustomFilterSelectAll(true);
-    dialog.opensave_custom_filter = "supported";
+    dialog["opensave_custom_filter"] = node_str("supported");
 }
 
 void Settings_Dialog::buttonCustomFilterClearAllClicked()
 {
     emit buttonCustomFilterClearAll(false);
-    dialog.opensave_custom_filter.clear();
+    dialog["opensave_custom_filter"] = node_str("");
 }
 
 void Settings_Dialog::checkBoxGridColorMatchCrossHairStateChanged(int checked)
 {
-    dialog.grid_color_match_crosshair = checked;
-    if (dialog.grid_color_match_crosshair) {
-        _mainWin->updateAllViewGridColors(accept_.display_crosshair_color);
+    dialog["grid_color_match_crosshair"] = node_bool(checked != 0);
+    if (checked) {
+        _mainWin->updateAllViewGridColors(get_uint(accept_, "display_crosshair_color"));
     }
     else {
-        _mainWin->updateAllViewGridColors(accept_.grid_color);
+        _mainWin->updateAllViewGridColors(get_uint(accept_, "grid_color"));
     }
 
     QObject* senderObj = sender();
     if (senderObj) {
         QObject* parent = senderObj->parent();
         if (parent) {
-            set_enabled(parent, "labelGridColor", !dialog.grid_color_match_crosshair);
-            set_enabled(parent, "buttonGridColor", !dialog.grid_color_match_crosshair);
+            set_enabled(parent, "labelGridColor", !checked);
+            set_enabled(parent, "buttonGridColor", !checked);
         }
     }
 }
@@ -2244,36 +1964,33 @@ void Settings_Dialog::checkBoxGridColorMatchCrossHairStateChanged(int checked)
 void Settings_Dialog::chooseGridColor()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
-    if (button)
-    {
-        QColorDialog* colorDialog = new QColorDialog(QColor(accept_.grid_color), this);
+    if (button) {
+        QColorDialog* colorDialog = new QColorDialog(QColor(get_uint(accept_, "grid_color")), this);
         connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentGridColorChanged(const QColor&)));
         colorDialog->exec();
 
-        if (colorDialog->result() == QDialog::Accepted)
-        {
-            accept_.grid_color = colorDialog->selectedColor().rgb();
+        if (colorDialog->result() == QDialog::Accepted) {
+            accept_["grid_color"] = node_uint(colorDialog->selectedColor().rgb());
             QPixmap pix(16,16);
-            pix.fill(QColor(accept_.grid_color));
+            pix.fill(QColor(get_uint(accept_, "grid_color")));
             button->setIcon(QIcon(pix));
-            _mainWin->updateAllViewGridColors(accept_.grid_color);
+            _mainWin->updateAllViewGridColors(get_uint(accept_, "grid_color"));
         }
-        else
-        {
-            _mainWin->updateAllViewGridColors(dialog.grid_color);
+        else {
+            _mainWin->updateAllViewGridColors(get_uint(dialog, "grid_color"));
         }
     }
 }
 
 void Settings_Dialog::currentGridColorChanged(const QColor& color)
 {
-    preview.grid_color = color.rgb();
-    _mainWin->updateAllViewGridColors(preview.grid_color);
+    preview["grid_color"] = node_uint(color.rgb());
+    _mainWin->updateAllViewGridColors(color.rgb());
 }
 
 void Settings_Dialog::checkBoxGridLoadFromFileStateChanged(int checked)
 {
-    dialog.grid_load_from_file = checked;
+    dialog["grid_load_from_file"] = node_bool(checked != 0);
 
     QObject* senderObj = sender();
     if (!senderObj) {
@@ -2285,49 +2002,47 @@ void Settings_Dialog::checkBoxGridLoadFromFileStateChanged(int checked)
         return;
     }
 
-    set_enabled(parent, "labelGridType", !dialog.grid_load_from_file);
-    set_enabled(parent, "comboBoxGridType", !dialog.grid_load_from_file);
-    set_enabled(parent, "checkBoxGridCenterOnOrigin", !dialog.grid_load_from_file);
+    set_enabled(parent, "labelGridType", !checked);
+    set_enabled(parent, "comboBoxGridType", !checked);
+    set_enabled(parent, "checkBoxGridCenterOnOrigin", !checked);
 
-    set_enabled(parent, "labelGridCenterX",
-        !dialog.grid_load_from_file && !dialog.grid_center_on_origin);
-    set_enabled(parent, "spinBoxGridCenterX",
-        !dialog.grid_load_from_file && !dialog.grid_center_on_origin);
+    bool not_center = !checked && !get_bool(dialog, "grid_center_on_origin");
 
-    set_enabled(parent, "labelGridCenterY",
-        !dialog.grid_load_from_file && !dialog.grid_center_on_origin);
-    set_enabled(parent, "spinBoxGridCenterY",
-        !dialog.grid_load_from_file && !dialog.grid_center_on_origin);
+    set_enabled(parent, "labelGridCenterX", not_center);
+    set_enabled(parent, "spinBoxGridCenterX", not_center);
 
-    set_enabled(parent, "labelGridSizeX", !dialog.grid_load_from_file);
-    set_enabled(parent, "spinBoxGridSizeX", !dialog.grid_load_from_file);
+    set_enabled(parent, "labelGridCenterY", not_center);
+    set_enabled(parent, "spinBoxGridCenterY", not_center);
 
-    set_enabled(parent, "labelGridSizeY", !dialog.grid_load_from_file);
-    set_enabled(parent, "spinBoxGridSizeY", !dialog.grid_load_from_file);
+    set_enabled(parent, "labelGridSizeX", !checked);
+    set_enabled(parent, "spinBoxGridSizeX", !checked);
 
-    set_enabled(parent, "labelGridSpacingX", !dialog.grid_load_from_file);
-    set_enabled(parent, "spinBoxGridSpacingX", !dialog.grid_load_from_file);
+    set_enabled(parent, "labelGridSizeY", !checked);
+    set_enabled(parent, "spinBoxGridSizeY", !checked);
 
-    set_enabled(parent, "labelGridSpacingY", !dialog.grid_load_from_file);
-    set_enabled(parent, "spinBoxGridSpacingY", !dialog.grid_load_from_file);
+    set_enabled(parent, "labelGridSpacingX", !checked);
+    set_enabled(parent, "spinBoxGridSpacingX", !checked);
 
-    set_enabled(parent, "labelGridSizeRadius", !dialog.grid_load_from_file);
-    set_enabled(parent, "spinBoxGridSizeRadius", !dialog.grid_load_from_file);
+    set_enabled(parent, "labelGridSpacingY", !checked);
+    set_enabled(parent, "spinBoxGridSpacingY", !checked);
 
-    set_enabled(parent, "labelGridSpacingRadius", !dialog.grid_load_from_file);
-    set_enabled(parent, "spinBoxGridSpacingRadius", !dialog.grid_load_from_file);
+    set_enabled(parent, "labelGridSizeRadius", !checked);
+    set_enabled(parent, "spinBoxGridSizeRadius", !checked);
 
-    set_enabled(parent, "labelGridSpacingAngle", !dialog.grid_load_from_file);
-    set_enabled(parent, "spinBoxGridSpacingAngle", !dialog.grid_load_from_file);
+    set_enabled(parent, "labelGridSpacingRadius", !checked);
+    set_enabled(parent, "spinBoxGridSpacingRadius", !checked);
+
+    set_enabled(parent, "labelGridSpacingAngle", !checked);
+    set_enabled(parent, "spinBoxGridSpacingAngle", !checked);
 }
 
 /**
  * @brief Settings_Dialog::comboBoxGridTypeCurrentIndexChanged
  * @param type
  */
-void Settings_Dialog::comboBoxGridTypeCurrentIndexChanged(QString  type)
+void Settings_Dialog::comboBoxGridTypeCurrentIndexChanged(QString type)
 {
-    dialog_["grid_type"].s = type.toStdString();
+    dialog["grid_type"] = node_qstr(type);
 
     QObject* senderObj = sender();
     if (!senderObj) {
@@ -2363,7 +2078,7 @@ void Settings_Dialog::comboBoxGridTypeCurrentIndexChanged(QString  type)
 
 void Settings_Dialog::checkBoxGridCenterOnOriginStateChanged(int checked)
 {
-    dialog.grid_center_on_origin = checked;
+    dialog["grid_center_on_origin"] = node_int(checked != 0);
 
     QObject* senderObj = sender();
     if (senderObj) {
@@ -2375,16 +2090,16 @@ void Settings_Dialog::checkBoxGridCenterOnOriginStateChanged(int checked)
         return;
     }
 
-    set_enabled(parent, "labelGridCenterX", !dialog.grid_center_on_origin);
-    set_enabled(parent, "spinBoxGridCenterX", !dialog.grid_center_on_origin);
+    set_enabled(parent, "labelGridCenterX", !checked);
+    set_enabled(parent, "spinBoxGridCenterX", !checked);
 
-    set_enabled(parent, "labelGridCenterY", !dialog.grid_center_on_origin);
-    set_enabled(parent, "spinBoxGridCenterY", !dialog.grid_center_on_origin);
+    set_enabled(parent, "labelGridCenterY", !checked);
+    set_enabled(parent, "spinBoxGridCenterY", !checked);
 }
 
 void Settings_Dialog::checkBoxRulerShowOnLoadStateChanged(int checked)
 {
-    dialog.ruler_show_on_load = checked;
+    dialog["ruler_show_on_load"] = node_bool(checked != 0);
 }
 
 void Settings_Dialog::comboBoxRulerMetricCurrentIndexChanged(int index)
@@ -2392,10 +2107,10 @@ void Settings_Dialog::comboBoxRulerMetricCurrentIndexChanged(int index)
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
     if (comboBox) {
         bool ok = 0;
-        dialog.ruler_metric = comboBox->itemData(index).toBool();
+        dialog["ruler_metric"] = node_bool(comboBox->itemData(index).toBool());
     }
     else {
-        dialog.ruler_metric = true;
+        dialog["ruler_metric"] = node_bool(true);
     }
 }
 
@@ -2403,32 +2118,32 @@ void Settings_Dialog::chooseRulerColor()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
     if (button) {
-        QColorDialog* colorDialog = new QColorDialog(QColor(accept_.ruler_color), this);
+        QColorDialog* colorDialog = new QColorDialog(QColor(get_uint(accept_, "ruler_color")), this);
         connect(colorDialog, SIGNAL(currentColorChanged(QColor)), this, SLOT(currentRulerColorChanged(QColor)));
         colorDialog->exec();
 
         if (colorDialog->result() == QDialog::Accepted) {
-            accept_.ruler_color = colorDialog->selectedColor().rgb();
+            accept_["ruler_color"] = node_uint(colorDialog->selectedColor().rgb());
             QPixmap pix(16,16);
-            pix.fill(QColor(accept_.ruler_color));
+            pix.fill(QColor(get_uint(accept_, "ruler_color")));
             button->setIcon(QIcon(pix));
-            _mainWin->updateAllViewRulerColors(accept_.ruler_color);
+            _mainWin->updateAllViewRulerColors(get_uint(accept_, "ruler_color"));
         }
         else {
-            _mainWin->updateAllViewRulerColors(dialog.ruler_color);
+            _mainWin->updateAllViewRulerColors(get_uint(dialog, "ruler_color"));
         }
     }
 }
 
 void Settings_Dialog::currentRulerColorChanged(const QColor& color)
 {
-    preview.ruler_color = color.rgb();
-    _mainWin->updateAllViewRulerColors(preview.ruler_color);
+    preview["ruler_color"] = node_uint(color.rgb());
+    _mainWin->updateAllViewRulerColors(get_uint(preview, "ruler_color"));
 }
 
 void Settings_Dialog::spinBoxRulerPixelSizeValueChanged(double value)
 {
-    dialog.ruler_pixel_size = value;
+    dialog["ruler_pixel_size"] = node_real((EmbReal)value);
 }
 
 void Settings_Dialog::buttonQSnapSelectAllClicked()
@@ -2451,34 +2166,38 @@ void Settings_Dialog::comboBoxQSnapLocatorColorCurrentIndexChanged(int index)
     QRgb defaultColor = qRgb(255,255,0); //Yellow
     if (comboBox) {
         bool ok = 0;
-        dialog.qsnap_locator_color = comboBox->itemData(index).toUInt(&ok);
+        dialog["quicksnap_locator_color"] = node_uint(comboBox->itemData(index).toUInt(&ok));
         if (!ok)
-            dialog.qsnap_locator_color = defaultColor;
+            dialog["quicksnap_locator_color"] = node_uint(defaultColor);
     }
     else {
-        dialog.qsnap_locator_color = defaultColor;
+        dialog["quicksnap_locator_color"] = node_uint(defaultColor);
     }
 }
 
 void Settings_Dialog::checkBoxLwtShowLwtStateChanged(int checked)
 {
-    preview.lwt_show_lwt = checked;
-    statusbar->toggle("LWT", preview.lwt_show_lwt);
+    preview["lwt_show_lwt"] = node_bool(checked != 0);
+    statusbar->toggle("LWT", checked);
 
     QObject* senderObj = sender();
-    if (senderObj) {
-        QObject* parent = senderObj->parent();
-        if (parent) {
-            QCheckBox* checkBoxRealRender = parent->findChild<QCheckBox*>("checkBoxRealRender");
-            if (checkBoxRealRender) checkBoxRealRender->setEnabled(preview.lwt_show_lwt);
-        }
+    if (!senderObj) {
+        return;
+    }
+    QObject* parent = senderObj->parent();
+    if (parent) {
+        return;
+    }
+    QCheckBox* checkBoxRealRender = parent->findChild<QCheckBox*>("checkBoxRealRender");
+    if (checkBoxRealRender) {
+        checkBoxRealRender->setEnabled(checked);
     }
 }
 
 void Settings_Dialog::checkBoxLwtRealRenderStateChanged(int checked)
 {
-    preview.lwt_real_render = checked;
-    statusbar->toggle("LWT", preview.lwt_real_render);
+    preview["lwt_real_render"] = node_bool(checked != 0);
+    statusbar->toggle("LWT", checked);
 }
 
 void Settings_Dialog::comboBoxSelectionCoolGripColorCurrentIndexChanged(int index)
@@ -2488,13 +2207,13 @@ void Settings_Dialog::comboBoxSelectionCoolGripColorCurrentIndexChanged(int inde
     QRgb defaultColor = qRgb(0,0,255); //Blue
     if (comboBox) {
         bool ok = 0;
-        dialog.selection_coolgrip_color = comboBox->itemData(index).toUInt(&ok);
+        dialog["selection_coolgrip_color"] = node_uint(comboBox->itemData(index).toUInt(&ok));
         if (!ok) {
-            dialog.selection_coolgrip_color = defaultColor;
+            dialog["selection_coolgrip_color"] = node_uint(defaultColor);
         }
     }
     else {
-        dialog.selection_coolgrip_color = defaultColor;
+        dialog["selection_coolgrip_color"] = node_uint(defaultColor);
     }
 }
 
@@ -2505,13 +2224,13 @@ void Settings_Dialog::comboBoxSelectionHotGripColorCurrentIndexChanged(int index
     QRgb defaultColor = qRgb(255,0,0); //Red
     if (comboBox) {
         bool ok = 0;
-        dialog.selection_hotgrip_color = comboBox->itemData(index).toUInt(&ok);
+        dialog["selection_hotgrip_color"] = node_uint(comboBox->itemData(index).toUInt(&ok));
         if (!ok) {
-            dialog.selection_hotgrip_color = defaultColor;
+            dialog["selection_hotgrip_color"] = node_uint(defaultColor);
         }
     }
     else {
-        dialog.selection_hotgrip_color = defaultColor;
+        dialog["selection_hotgrip_color"] = node_uint(defaultColor);
     }
 }
 
@@ -2520,66 +2239,68 @@ void Settings_Dialog::comboBoxSelectionHotGripColorCurrentIndexChanged(int index
  */
 void Settings_Dialog::acceptChanges()
 {
-    dialog.general_mdi_bg_use_logo = preview.general_mdi_bg_use_logo;
-    dialog.general_mdi_bg_use_texture = preview.general_mdi_bg_use_texture;
-    dialog.general_mdi_bg_use_color = preview.general_mdi_bg_use_color;
-    dialog_["general_mdi_bg_logo"] = node(get_str(accept__, "general_mdi_bg_logo"));
-    dialog.general_mdi_bg_texture = accept_.general_mdi_bg_texture;
-    dialog.general_mdi_bg_color = accept_.general_mdi_bg_color;
-    dialog.display_show_scrollbars = preview.display_show_scrollbars;
-    dialog.display_crosshair_color = accept_.display_crosshair_color;
-    dialog.display_bg_color = accept_.display_bg_color;
-    dialog.display_selectbox_left_color = accept_.display_selectbox_left_color;
-    dialog.display_selectbox_left_fill = accept_.display_selectbox_left_fill;
-    dialog.display_selectbox_right_color = accept_.display_selectbox_right_color;
-    dialog.display_selectbox_right_fill = accept_.display_selectbox_right_fill;
-    dialog.display_selectbox_alpha = preview.display_selectbox_alpha;
-    dialog.prompt_text_color = accept_.prompt_text_color;
-    dialog.prompt_bg_color = accept_.prompt_bg_color;
-    dialog.prompt_font_family = preview.prompt_font_family;
-    dialog.prompt_font_style = preview.prompt_font_style;
-    dialog.prompt_font_size = preview.prompt_font_size;
-    if (dialog.grid_color_match_crosshair) {
-        dialog.grid_color = accept_.display_crosshair_color;
+    dialog["general_mdi_bg_use_logo"] = preview["general_mdi_bg_use_logo"];
+    dialog["general_mdi_bg_use_texture"] = preview["general_mdi_bg_use_texture"];
+    dialog["general_mdi_bg_use_color"] = preview["general_mdi_bg_use_color"];
+    dialog["general_mdi_bg_logo"] = accept_["general_mdi_bg_logo"];
+    dialog["general_mdi_bg_texture"] = accept_["general_mdi_bg_texture"];
+    dialog["general_mdi_bg_color"] = accept_["general_mdi_bg_color"];
+    dialog["display_show_scrollbars"] = preview["display_show_scrollbars"];
+    dialog["display_crosshair_color"] = accept_["display_crosshair_color"];
+    dialog["display_bg_color"] = accept_["display_bg_color"];
+    dialog["display_selectbox_left_color"] = accept_["display_selectbox_left_color"];
+    dialog["display_selectbox_left_fill"] = accept_["display_selectbox_left_fill"];
+    dialog["display_selectbox_right_color"] = accept_["display_selectbox_right_color"];
+    dialog["display_selectbox_right_fill"] = accept_["display_selectbox_right_fill"];
+    dialog["display_selectbox_alpha"] = preview["display_selectbox_alpha"];
+    dialog["prompt_text_color"] = accept_["prompt_text_color"];
+    dialog["prompt_background_color"] = accept_["prompt_background_color"];
+    dialog["prompt_font_family"] = preview["prompt_font_family"];
+    dialog["prompt_font_style"] = preview["prompt_font_style"];
+    dialog["prompt_font_size"] = preview["prompt_font_size"];
+    if (get_bool(dialog, "grid_color_match_crosshair")) {
+        dialog["grid_color"] = accept_["display_crosshair_color"];
     }
     else {
-        dialog.grid_color = accept_.grid_color;
+        dialog["grid_color"] = accept_["grid_color"];
     }
-    dialog.ruler_color = accept_.ruler_color;
-    dialog.lwt_show_lwt = preview.lwt_show_lwt;
-    dialog.lwt_real_render = preview.lwt_real_render;
+    dialog["ruler_color"] = accept_["ruler_color"];
+    dialog["lwt_show_lwt"] = preview["lwt_show_lwt"];
+    dialog["lwt_real_render"] = preview["lwt_real_render"];
 
-    settings = dialog;
+    for (auto iter = settings.begin(); iter != settings.end(); iter++) {
+        settings[iter->first] = dialog[iter->first];
+    }
 
     //Make sure the user sees the changes applied immediately
-    mdiArea->useBackgroundLogo(dialog.general_mdi_bg_use_logo);
-    mdiArea->useBackgroundTexture(dialog.general_mdi_bg_use_texture);
-    mdiArea->useBackgroundColor(dialog.general_mdi_bg_use_color);
-    mdiArea->setBackgroundLogo(QString::fromStdString(get_str(dialog_, "general_mdi_bg_logo")));
-    mdiArea->setBackgroundTexture(QString::fromStdString(dialog.general_mdi_bg_texture));
-    mdiArea->setBackgroundColor(dialog.general_mdi_bg_color);
-    _mainWin->iconResize(dialog.general_icon_size);
-    _mainWin->updateAllViewScrollBars(dialog.display_show_scrollbars);
-    _mainWin->updateAllViewCrossHairColors(dialog.display_crosshair_color);
-    _mainWin->updateAllViewBackgroundColors(dialog.display_bg_color);
+    mdiArea->useBackgroundLogo(get_int(dialog, "general_mdi_bg_use_logo"));
+    mdiArea->useBackgroundTexture(get_int(dialog, "general_mdi_bg_use_texture"));
+    mdiArea->useBackgroundColor(get_uint(dialog, "general_mdi_bg_use_color"));
+    mdiArea->setBackgroundLogo(get_qstr(dialog, "general_mdi_bg_logo"));
+    mdiArea->setBackgroundTexture(get_qstr(dialog, "general_mdi_bg_texture"));
+    mdiArea->setBackgroundColor(get_uint(dialog, "general_mdi_bg_color"));
+    _mainWin->iconResize(get_int(dialog, "general_icon_size"));
+    _mainWin->updateAllViewScrollBars(get_bool(dialog, "display_show_scrollbars"));
+    _mainWin->updateAllViewCrossHairColors(get_uint(dialog, "display_crosshair_color"));
+    _mainWin->updateAllViewBackgroundColors(get_uint(dialog, "display_bg_color"));
     _mainWin->updateAllViewSelectBoxColors(
-        dialog.display_selectbox_left_color,
-        dialog.display_selectbox_left_fill,
-        dialog.display_selectbox_right_color,
-        dialog.display_selectbox_right_fill,
-        dialog.display_selectbox_alpha);
-    prompt->setPromptTextColor(QColor(dialog.prompt_text_color));
-    prompt->setPromptBackgroundColor(QColor(dialog.prompt_bg_color));
-    prompt->setPromptFontFamily(QString::fromStdString(dialog.prompt_font_family));
-    prompt->setPromptFontStyle(QString::fromStdString(dialog.prompt_font_style));
-    prompt->setPromptFontSize(dialog.prompt_font_size);
-    _mainWin->updateAllViewGridColors(dialog.grid_color);
-    _mainWin->updateAllViewRulerColors(dialog.ruler_color);
-    statusbar->toggle("LWT", dialog.lwt_show_lwt);
+        get_uint(dialog, "display_selectbox_left_color"),
+        get_uint(dialog, "display_selectbox_left_fill"),
+        get_uint(dialog, "display_selectbox_right_color"),
+        get_uint(dialog, "display_selectbox_right_fill"),
+        get_int(dialog, "display_selectbox_alpha"));
+    prompt->setPromptTextColor(QColor(get_uint(dialog, "prompt_text_color")));
+    prompt->setPromptBackgroundColor(QColor(get_uint(dialog, "prompt_background_color")));
+    prompt->setPromptFontFamily(get_qstr(dialog, "prompt_font_family"));
+    prompt->setPromptFontStyle(get_qstr(dialog, "prompt_font_style"));
+    prompt->setPromptFontSize(get_int(dialog, "prompt_font_size"));
+    _mainWin->updateAllViewGridColors(get_uint(dialog, "grid_color"));
+    _mainWin->updateAllViewRulerColors(get_uint(dialog, "ruler_color"));
+    statusbar->toggle("LWT", get_bool(dialog, "lwt_show_lwt"));
     /*
-    statusbar->toggle("REAL", dialog.lwt_real_render); ?
+    statusbar->toggle("REAL", get_bool(dialog, "lwt_real_render")); ?
     */
-    _mainWin->updatePickAddMode(dialog.selection_mode_pickadd);
+    _mainWin->updatePickAddMode(get_bool(dialog, "selection_mode_pickadd"));
 
     write_settings();
     accept();
@@ -2594,29 +2315,29 @@ Settings_Dialog::rejectChanges()
     //TODO: inform the user if they have changed settings
 
     //Update the view since the user must accept the preview
-    mdiArea->useBackgroundLogo(dialog.general_mdi_bg_use_logo);
-    mdiArea->useBackgroundTexture(dialog.general_mdi_bg_use_texture);
-    mdiArea->useBackgroundColor(dialog.general_mdi_bg_use_color);
-    mdiArea->setBackgroundLogo(QString::fromStdString(get_str(dialog_, "general_mdi_bg_logo")));
-    mdiArea->setBackgroundTexture(QString::fromStdString(dialog.general_mdi_bg_texture));
-    mdiArea->setBackgroundColor(dialog.general_mdi_bg_color);
-    _mainWin->updateAllViewScrollBars(dialog.display_show_scrollbars);
-    _mainWin->updateAllViewCrossHairColors(dialog.display_crosshair_color);
-    _mainWin->updateAllViewBackgroundColors(dialog.display_bg_color);
+    mdiArea->useBackgroundLogo(get_bool(dialog, "general_mdi_bg_use_logo"));
+    mdiArea->useBackgroundTexture(get_bool(dialog, "general_mdi_bg_use_texture"));
+    mdiArea->useBackgroundColor(get_bool(dialog, "general_mdi_bg_use_color"));
+    mdiArea->setBackgroundLogo(get_qstr(dialog, "general_mdi_bg_logo"));
+    mdiArea->setBackgroundTexture(get_qstr(dialog, "general_mdi_bg_texture"));
+    mdiArea->setBackgroundColor(get_uint(dialog, "general_mdi_bg_color"));
+    _mainWin->updateAllViewScrollBars(get_bool(dialog, "display_show_scrollbars"));
+    _mainWin->updateAllViewCrossHairColors(get_uint(dialog, "display_crosshair_color"));
+    _mainWin->updateAllViewBackgroundColors(get_uint(dialog, "display_bg_color"));
     _mainWin->updateAllViewSelectBoxColors(
-        dialog.display_selectbox_left_color,
-        dialog.display_selectbox_left_fill,
-        dialog.display_selectbox_right_color,
-        dialog.display_selectbox_right_fill,
-        dialog.display_selectbox_alpha);
-    prompt->setPromptTextColor(QColor(dialog.prompt_text_color));
-    prompt->setPromptBackgroundColor(QColor(dialog.prompt_bg_color));
-    prompt->setPromptFontFamily(QString::fromStdString(dialog.prompt_font_family));
-    prompt->setPromptFontStyle(QString::fromStdString(dialog.prompt_font_style));
-    prompt->setPromptFontSize(dialog.prompt_font_size);
-    _mainWin->updateAllViewGridColors(dialog.grid_color);
-    _mainWin->updateAllViewRulerColors(dialog.ruler_color);
-    statusbar->toggle("LWT", settings.lwt_show_lwt);
+        get_uint(dialog, "display_selectbox_left_color"),
+        get_uint(dialog, "display_selectbox_left_fill"),
+        get_uint(dialog, "display_selectbox_right_color"),
+        get_uint(dialog, "display_selectbox_right_fill"),
+        get_int(dialog, "display_selectbox_alpha"));
+    prompt->setPromptTextColor(QColor(get_uint(dialog, "prompt_text_color")));
+    prompt->setPromptBackgroundColor(QColor(get_uint(dialog, "prompt_background_color")));
+    prompt->setPromptFontFamily(get_qstr(dialog, "prompt_font_family"));
+    prompt->setPromptFontStyle(get_qstr(dialog, "prompt_font_style"));
+    prompt->setPromptFontSize(get_real(dialog, "prompt_font_size"));
+    _mainWin->updateAllViewGridColors(get_uint(dialog, "grid_color"));
+    _mainWin->updateAllViewRulerColors(get_uint(dialog, "ruler_color"));
+    statusbar->toggle("LWT", get_bool(settings, "lwt_show_lwt"));
     /*
     statusbar->toggle("REAL", settings.lwt_real_render); ?
     */

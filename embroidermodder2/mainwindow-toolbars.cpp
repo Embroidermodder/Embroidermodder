@@ -52,7 +52,7 @@ QIcon
 MainWindow::create_icon(QString stub)
 {
     QString appDir = qApp->applicationDirPath();
-    QString icontheme = QString::fromStdString(settings.general_icon_theme);
+    QString icontheme = get_qstr(settings, "general_icon_theme");
     return QIcon(appDir + "/icons/" + icontheme + "/" + stub + ".png");
 }
 
@@ -171,23 +171,24 @@ MainWindow::createAllToolbars()
     toolbarHash["text"]->setObjectName("toolbarText");
 
     toolbarHash["text"]->addWidget(textFontSelector);
-    textFontSelector->setCurrentFont(QFont(QString::fromStdString(settings.text_font)));
+    QString font_ = QString::fromStdString(get_str(settings, "text_font"));
+    textFontSelector->setCurrentFont(QFont(font_));
     connect(textFontSelector, SIGNAL(currentFontChanged(QFont)), this, SLOT(textFontSelectorCurrentFontChanged(QFont)));
 
     toolbarHash["text"]->addAction(actionHash["textbold"]);
-    actionHash["textbold"]->setChecked(settings.text_style_bold);
+    actionHash["textbold"]->setChecked(get_bool(settings, "text_style_bold"));
 
     toolbarHash["text"]->addAction(actionHash["textitalic"]);
-    actionHash["textitalic"]->setChecked(settings.text_style_italic);
+    actionHash["textitalic"]->setChecked(get_bool(settings, "text_style_italic"));
 
     toolbarHash["text"]->addAction(actionHash["textunderline"]);
-    actionHash["textunderline"]->setChecked(settings.text_style_underline);
+    actionHash["textunderline"]->setChecked(get_bool(settings, "text_style_underline"));
 
     toolbarHash["text"]->addAction(actionHash["textstrikeout"]);
-    actionHash["textstrikeout"]->setChecked(settings.text_style_strikeout);
+    actionHash["textstrikeout"]->setChecked(get_bool(settings, "text_style_strikeout"));
 
     toolbarHash["text"]->addAction(actionHash["textoverline"]);
-    actionHash["textoverline"]->setChecked(settings.text_style_overline);
+    actionHash["textoverline"]->setChecked(get_bool(settings, "text_style_overline"));
 
     textSizeSelector->setFocusProxy(prompt);
     textSizeSelector->addItem("6 pt",   6);
@@ -204,7 +205,7 @@ MainWindow::createAllToolbars()
     textSizeSelector->addItem("48 pt", 48);
     textSizeSelector->addItem("60 pt", 60);
     textSizeSelector->addItem("72 pt", 72);
-    setTextSize(settings.text_size);
+    setTextSize(get_real(settings, "text_size"));
     toolbarHash["text"]->addWidget(textSizeSelector);
     connect(textSizeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(textSizeSelectorIndexChanged(int)));
 

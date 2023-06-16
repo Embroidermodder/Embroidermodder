@@ -126,7 +126,7 @@ QList<QGraphicsItem*>
 to_qlist(std::vector<QGraphicsItem*> list)
 {
     QList<QGraphicsItem*> result;
-    for (int i=0; i<list.size(); i++) {
+    for (int i=0; i<(int)list.size(); i++) {
         result << list[i];
     }
     return result;
@@ -209,3 +209,60 @@ set_visibility(QObject* parent, const char *key, bool visibility)
         return;
     }
 }
+
+/**
+ * .
+ */
+QCheckBox *
+make_checkbox(QGroupBox *gb, String dictionary, const char *label, const char *icon, String key)
+{
+    QCheckBox *checkBox = new QCheckBox(_mainWin->tr(label), gb);
+    checkBox->setIcon(_mainWin->create_icon(icon));
+    /* checkBox->setName(); */
+    if (dictionary == "settings") {
+        checkBox->setChecked(get_bool(settings, key));
+        QObject::connect(checkBox, &QCheckBox::stateChanged, _mainWin,
+            [=](int x) { settings[key] = node_bool(x != 0); });
+    }
+    if (dictionary == "dialog") {
+        checkBox->setChecked(get_bool(dialog, key));
+        QObject::connect(checkBox, &QCheckBox::stateChanged, _mainWin,
+            [=](int x) { dialog[key] = node_bool(x != 0); });
+    }
+    if (dictionary == "config") {
+        checkBox->setChecked(get_bool(config, key));
+        QObject::connect(checkBox, &QCheckBox::stateChanged, _mainWin,
+            [=](int x) { config[key] = node_bool(x != 0); });
+    }
+    return checkBox;
+}
+
+/**
+ * .
+ */
+QDoubleSpinBox *
+make_spinbox(QGroupBox *gb, String dictionary,
+    QString object_name, EmbReal single_step, EmbReal lower, EmbReal upper, String key)
+{
+    QDoubleSpinBox* spinBox = new QDoubleSpinBox(gb);
+    spinBox->setObjectName(object_name);
+    spinBox->setSingleStep(single_step);
+    spinBox->setRange(lower, upper);
+    if (dictionary == "settings") {
+        spinBox->setValue(get_real(settings, key));
+        QObject::connect(spinBox, &QDoubleSpinBox::valueChanged, _mainWin,
+            [=](double x){ settings[key] = node_real((EmbReal)x); });
+    }
+    if (dictionary == "dialog") {
+        spinBox->setValue(get_real(dialog, key));
+        QObject::connect(spinBox, &QDoubleSpinBox::valueChanged, _mainWin,
+            [=](double x){ dialog[key] = node_real((EmbReal)x); });
+    }
+    if (dictionary == "config") {
+        spinBox->setValue(get_real(config, key));
+        QObject::connect(spinBox, &QDoubleSpinBox::valueChanged, _mainWin,
+            [=](double x){ config[key] = node_real((EmbReal)x); });
+    }
+    return spinBox;
+}
+

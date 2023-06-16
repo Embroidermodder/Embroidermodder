@@ -108,11 +108,11 @@ load_group_box_data_from_table(String key)
     for (int i=0; i<(int)(all_line_editors.size()/6); i++) {
         if (all_line_editors[6*i] == key) {
             Dictionary data;
-            data["key"] = node(all_line_editors[6*i+1]);
-            data["icon_name"] = node(all_line_editors[6*i+2]);
-            data["label"] = node(all_line_editors[6*i+3]);
-            data["type"] = node(all_line_editors[6*i+4]);
-            data["map_signal"] = node(all_line_editors[6*i+5]);
+            data["key"] = node_str(all_line_editors[6*i+1]);
+            data["icon_name"] = node_str(all_line_editors[6*i+2]);
+            data["label"] = node_str(all_line_editors[6*i+3]);
+            data["type"] = node_str(all_line_editors[6*i+4]);
+            data["map_signal"] = node_str(all_line_editors[6*i+5]);
             group_box.push_back(data);
         }
     }

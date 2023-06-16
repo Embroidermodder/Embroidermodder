@@ -24,6 +24,9 @@
 #include <fstream>
 #include <string>
 
+typedef String (*Command)(String);
+typedef std::vector<Node> NodeList;
+
 enum OBJ_LTYPE_VALUES {
     //CAD Linetypes
     OBJ_LTYPE_CONT = 0,
@@ -350,7 +353,7 @@ tr(const char *str)
  * @param value
  */
 Node
-node(bool value)
+node_bool(bool value)
 {
     Node node;
     node.type = BOOL_TYPE;
@@ -364,11 +367,26 @@ node(bool value)
  * @return
  */
 Node
-node(int value)
+node_int(int32_t value)
 {
     Node node;
     node.type = INT_TYPE;
     node.i = value;
+    return node;
+}
+
+
+/**
+ * @brief create_node
+ * @param mode
+ * @return
+ */
+Node
+node_uint(uint32_t value)
+{
+    Node node;
+    node.type = INT_TYPE;
+    node.i = (int32_t)value;
     return node;
 }
 
@@ -378,7 +396,7 @@ node(int value)
  * @param value
  */
 Node
-node(EmbReal value)
+node_real(EmbReal value)
 {
     Node node;
     node.type = REAL_TYPE;
@@ -392,7 +410,7 @@ node(EmbReal value)
  * @param value
  */
 Node
-node(String value)
+node_str(String value)
 {
     Node node;
     node.type = STRING_TYPE;
@@ -406,7 +424,21 @@ node(String value)
  * @param value
  */
 Node
-node(StringList value)
+node_qstr(QString value)
+{
+    Node node;
+    node.type = STRING_TYPE;
+    node.s = value.toStdString();
+    return node;
+}
+
+/**
+ * @brief set_node
+ * @param node
+ * @param value
+ */
+Node
+node_str_list(StringList value)
 {
     Node node;
     node.type = STRING_LIST_TYPE;
@@ -446,6 +478,12 @@ get_int(Dictionary d, String key)
     return 0;
 }
 
+uint32_t
+get_uint(Dictionary d, String key)
+{
+    return (uint32_t)get_int(d, key);
+}
+
 EmbReal
 get_real(Dictionary d, String key)
 {
@@ -476,6 +514,12 @@ get_str(Dictionary d, String key)
         debug_message(("ERROR: String setting with key " + key + " missing.").c_str());
     }
     return "";
+}
+
+QString
+get_qstr(Dictionary d, String key)
+{
+    return QString::fromStdString(get_str(d, key));
 }
 
 StringList
@@ -521,7 +565,7 @@ MainWindow::settingsPrompt()
 }
 
 /**
- * @brief settingsDialog
+ * @brief settings_dialog
  * @param showTab
  */
 String
@@ -548,8 +592,8 @@ void
 MainWindow::quit()
 {
     debug_message("quit()");
-    if (settings.prompt_save_history) {
-        prompt->saveHistory("prompt.log", settings.prompt_save_history_as_html);
+    if (get_bool(settings, "prompt_save_history")) {
+        prompt->saveHistory("prompt.log", get_bool(settings, "prompt_save_history_as_html"));
         //TODO: get filename from settings
     }
     qApp->closeAllWindows();
@@ -868,14 +912,15 @@ MainWindow::tipOfTheDay(void)
 
     ImageWidget* imgBanner = new ImageWidget(appDir + "/images/did-you-know.png", wizardTipOfTheDay);
 
-    if (settings.general_current_tip >= config["tips"].sl.size()) {
-        settings.general_current_tip = 0;
+    if (get_int(settings, "general_current_tip") >= config["tips"].sl.size()) {
+        settings["general_current_tip"] = node_int(0);
     }
-    labelTipOfTheDay = new QLabel(config["tips"].sl[settings.general_current_tip].c_str(), wizardTipOfTheDay);
+    int general_current_tip = get_int(settings, "general_current_tip");
+    labelTipOfTheDay = new QLabel(config["tips"].sl[general_current_tip].c_str(), wizardTipOfTheDay);
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("&Show tips on startup"), wizardTipOfTheDay);
-    checkBoxTipOfTheDay->setChecked(settings.general_tip_of_the_day);
+    checkBoxTipOfTheDay->setChecked(get_bool(settings, "general_tip_of_the_day"));
     connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), _mainWin, SLOT(checkBoxTipOfTheDayStateChanged(int)));
 
     QVBoxLayout* layout = new QVBoxLayout(wizardTipOfTheDay);
@@ -911,34 +956,25 @@ MainWindow::tipOfTheDay(void)
  * .
  */
 void
-MainWindow::checkBoxTipOfTheDayStateChanged(int checked)
-{
-    settings.general_tip_of_the_day = checked;
-}
-
-/**
- * .
- */
-void
 MainWindow::buttonTipOfTheDayClicked(int button)
 {
     debug_message("buttonTipOfTheDayClicked(%d)" + std::to_string(button));
     StringList tips = config["tips"].sl;
     if (button == QWizard::CustomButton1) {
-        if (settings.general_current_tip > 0) {
-            settings.general_current_tip--;
+        if (get_int(settings, "general_current_tip") > 0) {
+            settings["general_current_tip"] = node_int(get_int(settings, "general_current_tip") - 1);
         }
         else {
-            settings.general_current_tip = tips.size()-1;
+            settings["general_current_tip"] = node_int((int32_t)tips.size()-1);
         }
-        labelTipOfTheDay->setText(tips[settings.general_current_tip].c_str());
+        labelTipOfTheDay->setText(tips[get_int(settings, "general_current_tip")].c_str());
     }
     else if (button == QWizard::CustomButton2) {
-        settings.general_current_tip++;
-        if (settings.general_current_tip >= tips.size()) {
-            settings.general_current_tip = 0;
+        settings["general_current_tip"] = node_int(get_int(settings, "general_current_tip") + 1);
+        if (get_int(settings, "general_current_tip") >= (int32_t)tips.size()) {
+            settings["general_current_tip"] = node_int(0);
         }
-        labelTipOfTheDay->setText(tips[settings.general_current_tip].c_str());
+        labelTipOfTheDay->setText(tips[get_int(settings, "general_current_tip")].c_str());
     }
     else if (button == QWizard::CustomButton3) {
         wizardTipOfTheDay->close();
@@ -1066,7 +1102,7 @@ MainWindow::iconResize(int iconSize)
 
     //TODO: low-priority: open app with iconSize set to 128. resize the icons to a smaller size.
 
-    settings.general_icon_size = iconSize;
+    settings["general_icon_size"] = node_int(iconSize);
 }
 
 /**
@@ -1242,7 +1278,7 @@ MainWindow::updateAllViewRulerColors(QRgb color)
 void
 MainWindow::updatePickAddMode(bool val)
 {
-    settings.selection_mode_pickadd = val;
+    settings["selection_mode_pickadd"] = node_bool(val);
     dockPropEdit->updatePickAddModeButton(val);
 }
 
@@ -1252,7 +1288,7 @@ MainWindow::updatePickAddMode(bool val)
 void
 MainWindow::pickAddModeToggled()
 {
-    updatePickAddMode(!settings.selection_mode_pickadd);
+    updatePickAddMode(!get_bool(settings, "selection_mode_pickadd"));
 }
 
 /**
@@ -1520,7 +1556,7 @@ void
 MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
 {
     debug_message("textFontSelectorCurrentFontChanged()");
-    settings.text_font = font.family().toStdString();
+    settings["text_font"] = node_qstr(font.family());
 }
 
 /**
@@ -1531,7 +1567,7 @@ void
 MainWindow::textSizeSelectorIndexChanged(int index)
 {
     debug_message("textSizeSelectorIndexChanged(%d)" + std::to_string(index));
-    settings.text_size = fabs(textSizeSelector->itemData(index).toReal()); //TODO: check that the toReal() conversion is ok
+    settings["text_size"] = node_real((EmbReal)fabs(textSizeSelector->itemData(index).toReal())); //TODO: check that the toReal() conversion is ok
 }
 
 /**
@@ -1542,7 +1578,7 @@ void
 MainWindow::setTextFont(QString str)
 {
     textFontSelector->setCurrentFont(QFont(str));
-    settings.text_font = str.toStdString();
+    settings["text_font"] = node_qstr(str);
 }
 
 /**
@@ -1552,7 +1588,7 @@ MainWindow::setTextFont(QString str)
 void
 MainWindow::setTextSize(EmbReal num)
 {
-    settings.text_size = fabs(num);
+    settings["text_size"] = node_real((EmbReal)fabs(num));
     int index = textSizeSelector->findText("Custom", Qt::MatchContains);
     if (index != -1) {
         textSizeSelector->removeItem(index);
@@ -1810,7 +1846,7 @@ set_background_color_action(String args)
 static String
 set_crosshair_color_action(uint8_t r, uint8_t g, uint8_t b)
 {
-    settings.display_crosshair_color = qRgb(r,g,b);
+    settings["display_crosshair_color"] = node_uint(qRgb(r,g,b));
     _mainWin->updateAllViewCrossHairColors(qRgb(r,g,b));
     return "";
 }
@@ -1824,7 +1860,7 @@ set_crosshair_color_action(uint8_t r, uint8_t g, uint8_t b)
 static String
 set_grid_color_action(uint8_t r, uint8_t g, uint8_t b)
 {
-    settings.grid_color = qRgb(r,g,b);
+    settings["grid_color"] = node_uint(qRgb(r,g,b));
     _mainWin->updateAllViewGridColors(qRgb(r,g,b));
     return "";
 }
@@ -2971,13 +3007,13 @@ read_configuration(void)
         toml_array_t *array = toml_array_in(configuration, key);
         if (array) {
             std::string k(key);
-            config[k] = node(read_string_list_setting(configuration, key));
+            config[k] = node_str_list(read_string_list_setting(configuration, key));
             continue;
         }
         toml_datum_t str = toml_string_in(configuration, key);
         if (str.ok) {
             std::string str_(str.u.s);
-            config[str_] = node(read_string_setting(configuration, key));
+            config[str_] = node_str(read_string_setting(configuration, key));
             free(str.u.s);
         }
     }
@@ -2990,24 +3026,33 @@ read_configuration(void)
                 break;
             }
             std::string k(key);
+            toml_array_t *array_in = toml_array_in(table, key);
+            if (array_in) {
+                toml_datum_t red = toml_int_at(array_in, 0);
+                toml_datum_t green = toml_int_at(array_in, 1);
+                toml_datum_t blue = toml_int_at(array_in, 2);
+                settings[k] = node_int(qRgb(red.u.i, green.u.i, blue.u.i));
+                qDebug("color %u", qRgb(red.u.i, green.u.i, blue.u.i));
+                continue;
+            }
             toml_datum_t string_in = toml_string_in(table, key);
             if (string_in.ok) {
-                settings_[k] = node(read_string_setting(table, key));
+                settings[k] = node_str(read_string_setting(table, key));
                 continue;
             }
             toml_datum_t int_in = toml_int_in(table, key);
             if (int_in.ok) {
-                settings_[k] = node((int)int_in.u.i);
+                settings[k] = node_int((int)int_in.u.i);
                 continue;
             }
             toml_datum_t float_in = toml_double_in(table, key);
             if (float_in.ok) {
-                settings_[k] = node((EmbReal)float_in.u.d);
+                settings[k] = node_real((EmbReal)float_in.u.d);
                 continue;
             }
             toml_datum_t bool_in = toml_bool_in(table, key);
             if (bool_in.ok) {
-                settings_[k] = node(bool_in.u.b);
+                settings[k] = node_bool(bool_in.u.b);
             }
         }
     }
@@ -3054,27 +3099,27 @@ String
 disable_action(String variable)
 {
     if (variable == "text-angle") {
-        settings_["text_angle"] = node(false);
+        settings["text_angle"] = node_bool(false);
         return "";
     }
     if (variable == "text-bold") {
-        settings_["text_style_bold"] = node(false);
+        settings["text_style_bold"] = node_bool(false);
         return "";
     }
     if (variable == "text-italic") {
-        settings_["text_style_italic"] = node(false);
+        settings["text_style_italic"] = node_bool(false);
         return "";
     }
     if (variable == "text-underline") {
-        settings_["text_style_underline"] = node(false);
+        settings["text_style_underline"] = node_bool(false);
         return "";
     }
     if (variable == "text-strikeout") {
-        settings_["text_style_strikeout"] = node(false);
+        settings["text_style_strikeout"] = node_bool(false);
         return "";
     }
     if (variable == "text-overline") {
-        settings_["text_style_overline"] = node(false);
+        settings["text_style_overline"] = node_bool(false);
         return "";
     }
     if (variable == "prompt-rapid-fire") {
@@ -3122,7 +3167,7 @@ MainWindow::MainWindow() : QMainWindow(0)
         QMessageBox::critical(_mainWin, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     }
 
-    QString lang = QString::fromStdString(get_str(settings_, "general_language"));
+    QString lang = QString::fromStdString(get_str(settings, "general_language"));
     debug_message("language: " + lang.toStdString());
     if (lang == "system") {
         lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
@@ -3146,8 +3191,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     //Init
     _mainWin = this;
 
-    QPoint pos = QPoint(get_int(settings_, "window_position_x"), get_int(settings_, "window_position_y"));
-    QSize size = QSize(get_int(settings_, "window_size_x"), get_int(settings_, "window_size_y"));
+    QPoint pos = QPoint(get_int(settings, "window_position_x"), get_int(settings, "window_position_y"));
+    QSize size = QSize(get_int(settings, "window_size_x"), get_int(settings, "window_size_y"));
 
     move(pos);
     resize(size);
@@ -3204,13 +3249,12 @@ MainWindow::MainWindow() : QMainWindow(0)
     //layout->setMargin(0);
     vbox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     mdiArea = new MdiArea(vbox);
-    mdiArea->useBackgroundLogo(get_bool(settings_, "general_mdi_bg_use_logo"));
-    mdiArea->useBackgroundTexture(settings.general_mdi_bg_use_texture);
-    mdiArea->useBackgroundColor(settings.general_mdi_bg_use_color);
-    String general_mdi_bg_logo = get_str(settings_, "general_mdi_bg_logo");
-    mdiArea->setBackgroundLogo(QString::fromStdString(general_mdi_bg_logo));
-    mdiArea->setBackgroundTexture(QString::fromStdString(settings.general_mdi_bg_texture));
-    mdiArea->setBackgroundColor(QColor(settings.general_mdi_bg_color));
+    mdiArea->useBackgroundLogo(get_bool(settings, "general_mdi_bg_use_logo"));
+    mdiArea->useBackgroundTexture(get_bool(settings, "general_mdi_bg_use_texture"));
+    mdiArea->useBackgroundColor(get_bool(settings, "general_mdi_bg_use_color"));
+    mdiArea->setBackgroundLogo(get_qstr(settings, "general_mdi_bg_logo"));
+    mdiArea->setBackgroundTexture(get_qstr(settings, "general_mdi_bg_texture"));
+    mdiArea->setBackgroundColor(QColor(get_uint(settings, "general_mdi_bg_color")));
     mdiArea->setViewMode(QMdiArea::TabbedView);
     mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -3224,8 +3268,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     this->setFocusProxy(prompt);
     mdiArea->setFocusProxy(prompt);
 
-    prompt->setPromptTextColor(QColor(settings.prompt_text_color));
-    prompt->setPromptBackgroundColor(QColor(settings.prompt_bg_color));
+    prompt->setPromptTextColor(QColor(get_uint(settings, "prompt_text_color")));
+    prompt->setPromptBackgroundColor(QColor(get_uint(settings, "prompt_background_color")));
 
     connect(prompt, SIGNAL(startCommand(QString)), this, SLOT(logPromptInput(QString)));
 
@@ -3264,12 +3308,12 @@ MainWindow::MainWindow() : QMainWindow(0)
     connect(prompt, SIGNAL(historyAppended(QString)), this, SLOT(promptHistoryAppended(QString)));
 
     //create the Object Property Editor
-    dockPropEdit = new PropertyEditor(appDir + "/icons/" + QString::fromStdString(settings.general_icon_theme), settings.selection_mode_pickadd, prompt, this);
+    dockPropEdit = new PropertyEditor(appDir + "/icons/" + get_qstr(settings, "general_icon_theme"), get_bool(settings, "selection_mode_pickadd"), prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockPropEdit);
     connect(dockPropEdit, SIGNAL(pickAddModeToggled()), this, SLOT(pickAddModeToggled()));
 
     //create the Command History Undo Editor
-    dockUndoEdit = new UndoEditor(appDir + "/icons/" + QString::fromStdString(settings.general_icon_theme), prompt, this);
+    dockUndoEdit = new UndoEditor(appDir + "/icons/" + QString::fromStdString(get_str(settings, "general_icon_theme")), prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockUndoEdit);
 
     //setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); //TODO: Load these from settings
@@ -3282,7 +3326,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     createAllMenus();
     createAllToolbars();
 
-    iconResize(settings.general_icon_size);
+    iconResize(get_int(settings, "general_icon_size"));
     updateMenuToolbarStatusbar();
 
     //Show date in statusbar after it has been updated
@@ -3292,7 +3336,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     showNormal();
 
-    if (settings.general_tip_of_the_day) {
+    if (get_bool(settings, "general_tip_of_the_day")) {
         actuator("tip-of-the-day");
     }
 }
@@ -3717,36 +3761,39 @@ text_action(String command)
     }
     command = list[0];
     if (command == "font") {
-        return settings.text_font;
+        return get_str(settings, "text_font");
     }
     if (command == "size") {
-        return std::to_string(settings.text_size);
+        return std::to_string(get_real(settings, "text_size"));
     }
     if (command == "angle") {
-        return std::to_string(settings.text_angle);
+        return std::to_string(get_real(settings, "text_angle"));
     }
     if (command == "bold") {
-        return std::to_string(settings.text_style_bold);
+        return std::to_string(get_bool(settings, "text_style_bold"));
     }
     if (command == "italic") {
-        return std::to_string(settings.text_style_italic);
+        return std::to_string(get_bool(settings, "text_style_italic"));
     }
     if (command == "underline") {
-        return std::to_string(settings.text_style_underline);
+        return std::to_string(get_bool(settings, "text_style_underline"));
     }
     if (command == "strikeout") {
-        return std::to_string(settings.text_style_strikeout);
+        return std::to_string(get_bool(settings, "text_style_strikeout"));
     }
     if (command == "overline") {
-        return std::to_string(settings.text_style_overline);
+        return std::to_string(get_bool(settings, "text_style_overline"));
     }
+    return "";
 }
 
-if (command == "set") {
+static String
+set_action(StringList list)
+{
     if (list.size() < 2) {
         return "The command 'set' requires 2 arguments.";
     }
-    bool value = (
+    node value = node_bool(
            list[1] == "true"
         || list[1] == "True"
         || list[1] == "TRUE"
@@ -3757,65 +3804,67 @@ if (command == "set") {
         || list[1] == "1"
     );
     if (list[0] == "text_font") {
-        settings.text_font = list[1];
+        settings["text_font"] = node_str(list[1]);
         return "";
     }
     if (list[0] == "text_size") {
-        settings.text_size = std::stof(list[1]);
+        settings["text_size"] = std::stof(list[1]);
         return "";
     }
     if (command == "text_angle") {
-        settings.text_angle = value;
+        settings["text_angle"] = std::stof(list[1]);
         return "";
     }
     if (command == "text_style_bold") {
-        settings.text_style_bold = value;
+        settings["text_style_bold"] = value;
         return "";
     }
     if (command == "text_style_italic") {
-        settings.text_style_italic = value;
+        settings["text_style_italic = value;
         return "";
     }
     if (command == "text_style_underline") {
-        settings.text_style_underline = value;
+        settings["text_style_underline = value;
         return "";
     }
     if (command == "text_style_strikeout") {
-        settings.text_style_strikeout = value;
+        settings["text_style_strikeout = value;
         return "";
     }
     if (command == "text_style_overline") {
-        settings.text_style_overline = value;
+        settings["text_style_overline = value;
         return "";
     }
 }
 
-if (command == "enable") {
+static String
+enable_action()
+{
     if (list.size() < 1) {
         return "The command 'enable' requires an argument.";
     }
     if (command == "text-angle") {
-        settings.text_angle = true;
+        settings["text_angle"] = node_bool(true);
         return "";
     }
     if (command == "text-bold") {
-        settings.text_style_bold = true;
+        settings["text_style_bold"] = node_bool(true);
         return "";
     }
     if (command == "text-italic") {
-        settings.text_style_italic = true;
+        settings["text_style_italic"] = node_bool(true);
         return "";
     }
     if (command == "text-underline") {
-        settings.text_style_underline = true;
+        settings["text_style_underline"] = node_bool(true);
         return "";
     }
     if (command == "text-strikeout") {
-        settings.text_style_strikeout = true;
+        settings["text_style_strikeout"] = node_bool(true);
         return "";
     }
     if (command == "text-overline") {
-        settings.text_style_overline = true;
+        settings["text_style_overline"] = node_bool(true);
         return "";
     }
     if (command == "prompt-rapid-fire") {
@@ -4396,30 +4445,37 @@ MainWindow::recentMenuAboutToShow()
 
     QFileInfo recentFileInfo;
     QString recentValue;
-    for (int i = 0; i < settings.opensave_recent_list_of_files.size(); ++i) {
+    StringList recent_files = get_str_list(settings, "opensave_recent_list_of_files");
+    for (int i = 0; i < (int)recent_files.size(); ++i) {
         //If less than the max amount of entries add to menu
-        if (i < settings.opensave_recent_max_files) {
-            recentFileInfo = QFileInfo(settings.opensave_recent_list_of_files.at(i));
+        if (i < get_int(settings, "opensave_recent_max_files")) {
+            recentFileInfo = QFileInfo(QString::fromStdString(recent_files[i]));
             if (recentFileInfo.exists() && validFileFormat(recentFileInfo.fileName())) {
                 recentValue.setNum(i+1);
                 QAction* rAction;
-                if     (recentValue.toInt() >= 1 && recentValue.toInt() <= 9)
+                if (recentValue.toInt() >= 1 && recentValue.toInt() <= 9) {
                     rAction = new QAction("&" + recentValue + " " + recentFileInfo.fileName(), this);
-                else if (recentValue.toInt() == 10)
+                }
+                else if (recentValue.toInt() == 10) {
                     rAction = new QAction("1&0 " + recentFileInfo.fileName(), this);
-                else
+                }
+                else {
                     rAction = new QAction(recentValue + " " + recentFileInfo.fileName(), this);
+                }
                 rAction->setCheckable(false);
-                rAction->setData(settings.opensave_recent_list_of_files.at(i));
+                rAction->setData(QString::fromStdString(recent_files[i]));
                 subMenuHash["recent"]->addAction(rAction);
                 connect(rAction, SIGNAL(triggered()), this, SLOT(openrecentfile()));
             }
         }
     }
+
     //Ensure the list only has max amount of entries
-    while (settings.opensave_recent_list_of_files.size() > settings.opensave_recent_max_files) {
-        settings.opensave_recent_list_of_files.removeLast();
+    int max_files = get_int(settings, "opensave_recent_max_files");
+    if (recent_files.size() > max_files) {
+        recent_files.resize(max_files);
     }
+    settings["opensave_recent_list_of_files"] = node_str_list(recent_files);
 }
 
 /**
@@ -4514,8 +4570,8 @@ MainWindow::openFile(bool recent, QString  recentFile)
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
     QStringList files;
-    bool preview = settings.opensave_open_thumbnail;
-    openFilesPath = QString::fromStdString(settings.opensave_recent_directory);
+    bool preview = get_bool(settings, "opensave_open_thumbnail");
+    openFilesPath = QString::fromStdString(get_str(settings, "opensave_recent_directory"));
 
     //Check to see if this from the recent files list
     if (recent) {
@@ -4524,13 +4580,13 @@ MainWindow::openFile(bool recent, QString  recentFile)
     }
     else {
         if (!preview) {
-            //TODO: set getOpenFileNames' selectedFilter Node from settings.opensave_open_format
+            //TODO: set getOpenFileNames' selectedFilter Node from settings["opensave_open_format"]
             files = QFileDialog::getOpenFileNames(this, tr("Open"), openFilesPath, formatFilterOpen);
             openFilesSelected(files);
         }
         else {
             PreviewDialog* openDialog = new PreviewDialog(this, tr("Open w/Preview"), openFilesPath, formatFilterOpen);
-            //TODO: set openDialog->selectNameFilter(QString  filter) from settings.opensave_open_format
+            //TODO: set openDialog->selectNameFilter(QString  filter) from settings["opensave_open_format"]
             connect(openDialog, SIGNAL(filesSelected(QStringList)), this, SLOT(openFilesSelected(QStringList)));
             openDialog->exec();
         }
@@ -4573,15 +4629,19 @@ MainWindow::openFilesSelected(const QStringList& filesToOpen)
                 mdiWin->show();
                 mdiWin->showMaximized();
                 //Prevent duplicate entries in the recent files list
-                if (!settings.opensave_recent_list_of_files.contains(filesToOpen.at(i), Qt::CaseInsensitive)) {
-                    settings.opensave_recent_list_of_files.prepend(filesToOpen.at(i));
+                /* \todo fix this
+                StringList list = get_str_list(settings, "opensave_recent_list_of_files");
+                if (!list.contains(filesToOpen.at(i), Qt::CaseInsensitive)) {
+                    list.prepend(filesToOpen.at(i));
                 }
                 //Move the recent file to the top of the list
                 else {
-                    settings.opensave_recent_list_of_files.removeAll(filesToOpen.at(i));
-                    settings.opensave_recent_list_of_files.prepend(filesToOpen.at(i));
+                    list.removeAll(filesToOpen.at(i));
+                    list.prepend(filesToOpen.at(i));
                 }
-                settings.opensave_recent_directory = QFileInfo(filesToOpen.at(i)).absolutePath().toStdString();
+                settings["opensave_recent_list_of_files"] = node_str_list(list);
+                */
+                settings["opensave_recent_directory"] = node_qstr(QFileInfo(filesToOpen.at(i)).absolutePath());
 
                 if (mdiWin->gview) {
                     mdiWin->gview->recalculateLimits();
@@ -4635,7 +4695,7 @@ MainWindow::saveasfile()
     }
 
     QString file;
-    openFilesPath = QString::fromStdString(settings.opensave_recent_directory);
+    openFilesPath = QString::fromStdString(get_str(settings, "opensave_recent_directory"));
     file = QFileDialog::getSaveFileName(this, tr("Save As"), openFilesPath, formatFilterSave);
 
     mdiWin->saveFile(file);

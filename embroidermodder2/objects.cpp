@@ -152,10 +152,10 @@ Geometry::init(void)
 
     objID = QDateTime::currentMSecsSinceEpoch();
 
-    properties["init_script"] = node("");
-    properties["prompt_script"] = node("");
-    properties["click_script"] = node("");
-    properties["context_script"] = node("");
+    properties["init_script"] = node_str("");
+    properties["prompt_script"] = node_str("");
+    properties["click_script"] = node_str("");
+    properties["context_script"] = node_str("");
 
     if (get_str(properties, "init_script") != "") {
         run_script(scripts[get_str(properties, "init_script")]);
@@ -2089,7 +2089,7 @@ Geometry::objectIncludedAngle(void)
         if (chord <= 0 || rad <= 0) return 0; //Prevents division by zero and non-existant circles
 
         //NOTE: Due to floating point rounding errors, we need to clamp the quotient so it is in the range [-1, 1]
-        //      If the quotient is out of that range, then the result of asin() will be node(0.0f).
+        //      If the quotient is out of that range, then the result of asin() will be node_real(0.0f).
         EmbReal quotient = chord/(2.0*rad);
         if (quotient > 1.0) quotient = 1.0;
         if (quotient < 0.0) quotient = 0.0; //NOTE: 0 rather than -1 since we are enforcing a positive chord and radius
@@ -3467,7 +3467,7 @@ Geometry::setObjectTextJustify(QString justify)
 void
 Geometry::setObjectTextSize(EmbReal size)
 {
-    properties["text_size"] = node(size);
+    properties["text_size"] = node_real(size);
     setObjectText(objText);
 }
 
@@ -3477,11 +3477,11 @@ Geometry::setObjectTextSize(EmbReal size)
 void
 Geometry::setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bool over)
 {
-    properties["text_bold"] = node(bold);
-    properties["text_italic"] = node(italic);
-    properties["text_underline"] = node(under);
-    properties["text_strikeout"] = node(strike);
-    properties["text_overline"] = node(over);
+    properties["text_bold"] = node_bool(bold);
+    properties["text_italic"] = node_bool(italic);
+    properties["text_underline"] = node_bool(under);
+    properties["text_strikeout"] = node_bool(strike);
+    properties["text_overline"] = node_bool(over);
     setObjectText(objText);
 }
 
@@ -3491,7 +3491,7 @@ Geometry::setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bo
 void
 Geometry::setObjectTextBold(bool val)
 {
-    properties["text_bold"] = node(val);
+    properties["text_bold"] = node_bool(val);
     setObjectText(objText);
 }
 
@@ -3501,7 +3501,7 @@ Geometry::setObjectTextBold(bool val)
 void
 Geometry::setObjectTextItalic(bool val)
 {
-    properties["text_italic"] = node(val);
+    properties["text_italic"] = node_bool(val);
     setObjectText(objText);
 }
 
@@ -3511,7 +3511,7 @@ Geometry::setObjectTextItalic(bool val)
 void
 Geometry::setObjectTextUnderline(bool val)
 {
-    properties["text_underline"] = node(val);
+    properties["text_underline"] = node_bool(val);
     setObjectText(objText);
 }
 
@@ -3521,7 +3521,7 @@ Geometry::setObjectTextUnderline(bool val)
 void
 Geometry::setObjectTextStrikeOut(bool val)
 {
-    properties["text_strikeout"] = node(val);
+    properties["text_strikeout"] = node_bool(val);
     setObjectText(objText);
 }
 
@@ -3531,7 +3531,7 @@ Geometry::setObjectTextStrikeOut(bool val)
 void
 Geometry::setObjectTextOverline(bool val)
 {
-    properties["text_overline"] = node(val);
+    properties["text_overline"] = node_bool(val);
     setObjectText(objText);
 }
 
@@ -3541,7 +3541,7 @@ Geometry::setObjectTextOverline(bool val)
 void
 Geometry::setObjectTextBackward(bool val)
 {
-    properties["text_backward"] = node(val);
+    properties["text_backward"] = node_bool(val);
     setObjectText(objText);
 }
 
@@ -3551,7 +3551,7 @@ Geometry::setObjectTextBackward(bool val)
 void
 Geometry::setObjectTextUpsideDown(bool val)
 {
-    properties["text_upsidedown"] = node(val);
+    properties["text_upsidedown"] = node_bool(val);
     setObjectText(objText);
 }
 
@@ -3691,8 +3691,8 @@ Geometry::circle_click(EmbVector v)
     if (properties["mode"].s == "CIRCLE_MODE_1P_RAD") {
         auto iter = properties.find("point1");
         if (iter == properties.end()) {
-            properties["point1"] = node(v);
-            properties["center"] = node(v);
+            properties["point1"] = node_vector(v);
+            properties["center"] = node_vector(v);
             addRubber("CIRCLE");
             setRubberMode("CIRCLE_1P_RAD");
             setRubberPoint("CIRCLE_CENTER", properties["center.x"].r, properties["center.y"].r);
@@ -3700,7 +3700,7 @@ Geometry::circle_click(EmbVector v)
             actuator("set-prompt-prefix-tr Specify radius of circle or [Diameter]: ");
         }
         else {
-            properties["point2"] = node(v);
+            properties["point2"] = node_vector(v);
             setRubberPoint("CIRCLE_RADIUS", v);
             actuator("vulcanize");
             actuator("append-prompt");
@@ -3713,8 +3713,8 @@ Geometry::circle_click(EmbVector v)
             error("CIRCLE", tr("This should never happen."));
         }
         else {
-            properties["x2"] = node(v.x);
-            properties["y2"] = node(v.y);
+            properties["x2"] = node_real(v.x);
+            properties["y2"] = node_real(v.y);
             setRubberPoint("CIRCLE_DIAMETER", properties["x2"].r, properties["y2"].r);
             actuator("vulcanize");
             actuator("append-prompt-history");
@@ -3725,7 +3725,7 @@ Geometry::circle_click(EmbVector v)
         auto iter1 = properties.find("point1");
         auto iter2 = properties.find("point2");
         if (iter1 == properties.end()) {
-            properties["point1"] = node(v);
+            properties["point1"] = node_vector(v);
             addRubber("CIRCLE");
             setRubberMode("CIRCLE_2P");
             setRubberPoint("CIRCLE_TAN1", v);
@@ -3733,7 +3733,7 @@ Geometry::circle_click(EmbVector v)
             actuator("set-prompt-prefix-tr Specify second end point of circle's diameter: "));
         }
         else if (iter2 == properties.end()) {
-            properties["point2"] = node(v);
+            properties["point2"] = node_vector(v);
             setRubberPoint("CIRCLE_TAN2", v);
             actuator("vulcanize");
             actuator("append-prompt-history");
@@ -3745,14 +3745,14 @@ Geometry::circle_click(EmbVector v)
     }
     else if (properties["mode"].s == MODE_3P) {
         if (std::isnan(properties["x1"].r)) {
-            properties["x1"] = node(x);
-            properties["y1"] = node(y);
+            properties["x1"] = node_real(x);
+            properties["y1"] = node_real(y);
             actuator("append-prompt-history");
             actuator("set-prompt-prefix-tr Specify second point on circle: "));
         }
         else if (std::isnan(properties["x2"])) {
-            properties["x2"] = node(x);
-            properties["y2"] = node(y);
+            properties["x2"] = node_real(x);
+            properties["y2"] = node_real(y);
             addRubber("CIRCLE");
             setRubberMode("CIRCLE_3P");
             setRubberPoint("CIRCLE_TAN1", properties["x1"].r, properties["y1"].r);
@@ -3763,8 +3763,8 @@ Geometry::circle_click(EmbVector v)
             });
         }
         else if (std::isnan(properties["x3)) {
-            properties["x3"] = node(x);
-            properties["y3"] = node(y);
+            properties["x3"] = node_real(x);
+            properties["y3"] = node_real(y);
             setRubberPoint("CIRCLE_TAN3", properties["x3"].r, properties["y3"].r);
             run_script({
                 "vulcanize",
@@ -3774,25 +3774,25 @@ Geometry::circle_click(EmbVector v)
         }
     }
     else if (properties["mode"].s == "MODE_TTR") {
-        properties["x1"] = node(x);
-        properties["y1"] = node(y);
+        properties["x1"] = node_real(x);
+        properties["y1"] = node_real(y);
         actuator("append-prompt-history");
         actuator("set-prompt-prefix-tr Specify point on object for second tangent of circle: "));
-        properties["mode"] = node("MODE_TTR_SET_POINT_2");
+        properties["mode"] = node_str("MODE_TTR_SET_POINT_2");
     }
     else if (properties["mode"].s == "MODE_TTR_SET_POINT_2")) {
-        properties["x2"] = node(x);
-        properties["y2"] = node(y);
+        properties["x2"] = node_real(x);
+        properties["y2"] = node_real(y);
         actuator("append-prompt-history");
         actuator("set-prompt-prefix-tr Specify radius of circle: "));
-        properties["mode"] = node("MODE_TTR_SET_POINT_3");
+        properties["mode"] = node_str("MODE_TTR_SET_POINT_3");
     }
     else if (properties["mode"].s == "MODE_TTR_SET_POINT_3")) {
-        properties["x3"] = node(x);
-        properties["y3"] = node(y);
+        properties["x3"] = node_real(x);
+        properties["y3"] = node_real(y);
         actuator("append-prompt-history");
         actuator("set-prompt-prefix-tr Specify second point: "));
-        properties["mode"] = node("DEFAULT");
+        properties["mode"] = node_str("DEFAULT");
     }
     else {
         error("CIRCLE", tr("This should never happen."));
@@ -3835,8 +3835,8 @@ Geometry::circle_prompt(String str)
                     actuator("set-prompt-prefix-tr Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
                 }
                 else {
-                    properties["x1 = node(strList[0]);
-                    properties["y1 = node(strList[1]);
+                    properties["x1"] = node_real(strList[0]);
+                    properties["y1"] = node_real(strList[1]);
                     properties["center.x = properties["x1;
                     properties["center.y = properties["y1;
                     addRubber("CIRCLE");
@@ -3853,7 +3853,7 @@ Geometry::circle_prompt(String str)
                 actuator("set-prompt-prefix-tr Specify diameter of circle: "));
             }
             else {
-                EmbReal num = node(str);
+                EmbReal num = node_real(str);
                 if (std::isnan(num)) {
                     alert(tr("Requires numeric radius, point on circumference, or \"D\"."));
                     actuator("set-prompt-prefix-tr Specify radius of circle or [Diameter]: "));
@@ -3874,7 +3874,7 @@ Geometry::circle_prompt(String str)
             error("CIRCLE", tr("This should never happen."));
         }
         if (std::isnan(properties["x2"])) {
-            EmbReal num = node(str);
+            EmbReal num = node_real(str);
             if (std::isnan(num)) {
                 alert(tr("Requires numeric distance or second point."));
                 actuator("set-prompt-prefix-tr Specify diameter of circle: "));
@@ -3900,8 +3900,8 @@ Geometry::circle_prompt(String str)
                 actuator("set-prompt-prefix-tr Specify first end point of circle's diameter: "));
             }
             else {
-                properties["x1"] = node(strList[0]);
-                properties["y1"] = node(strList[1]);
+                properties["x1"] = node_real(strList[0]);
+                properties["y1"] = node_real(strList[1]);
                 addRubber("CIRCLE");
                 setRubberMode("CIRCLE_2P");
                 setRubberPoint("CIRCLE_TAN1", properties["x1, properties["y1);
@@ -3915,8 +3915,8 @@ Geometry::circle_prompt(String str)
                 actuator("set-prompt-prefix-tr Specify second end point of circle's diameter: "));
             }
             else {
-                properties["x2"] = node(strList[0]);
-                properties["y2"] = node(strList[1]);
+                properties["x2"] = node_real(strList[0]);
+                properties["y2"] = node_real(strList[1]);
                 setRubberPoint("CIRCLE_TAN2", properties["x2, properties["y2);
                 actuator("vulcanize");
                 actuator("end");
@@ -3934,8 +3934,8 @@ Geometry::circle_prompt(String str)
                 actuator("set-prompt-prefix-tr Specify first point of circle: "));
             }
             else {
-                properties["x1"] = node(strList[0]);
-                properties["y1"] = node(strList[1]);
+                properties["x1"] = node_real(strList[0]);
+                properties["y1"] = node_real(strList[1]);
                 actuator("set-prompt-prefix-tr Specify second point of circle: "));
             }
         }
@@ -3946,8 +3946,8 @@ Geometry::circle_prompt(String str)
                 actuator("set-prompt-prefix-tr Specify second point of circle: "));
             }
             else {
-                properties["x2"] = node(strList[0]);
-                properties["y2"] = node(strList[1]);
+                properties["x2"] = node_real(strList[0]);
+                properties["y2"] = node_real(strList[1]);
                 addRubber("CIRCLE");
                 setRubberMode("CIRCLE_3P");
                 setRubberPoint("CIRCLE_TAN1", properties["x1, properties["y1);
@@ -3962,8 +3962,8 @@ Geometry::circle_prompt(String str)
                 actuator("set-prompt-prefix-tr Specify third point of circle: "));
             }
             else {
-                properties["x3"] = node(strList[0]);
-                properties["y3"] = node(strList[1]);
+                properties["x3"] = node_real(strList[0]);
+                properties["y3"] = node_real(strList[1]);
                 setRubberPoint("CIRCLE_TAN3", properties["x3, properties["y3);
                 actuator("vulcanize");
                 actuator("end");
@@ -4028,8 +4028,8 @@ Geometry::distance_prompt(String args)
             actuator("set-prompt-prefix-tr Specify first point: "));
         }
         else {
-            properties["x1"] = node(strList[0]);
-            properties["y1"] = node(strList[1]);
+            properties["x1"] = node_real(strList[0]);
+            properties["y1"] = node_real(strList[1]);
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", properties["x1, properties["y1);
@@ -4042,8 +4042,8 @@ Geometry::distance_prompt(String args)
             actuator("set-prompt-prefix-tr Specify second point: "));
         }
         else {
-            properties["x2"] = node(strList[0]);
-            properties["y2"] = node(strList[1]);
+            properties["x2"] = node_real(strList[0]);
+            properties["y2"] = node_real(strList[1]);
             reportDistance();
             actuator("end");
         }
@@ -4103,8 +4103,8 @@ Geometry::ellipse_click(EmbVector v)
 {
     if (properties["mode"].s == MODE_MAJORDIAMETER_MINORRADIUS) {
         if (std::isnan(properties["x1"].r)) {
-            properties["x1"] = node(v.x);
-            properties["y1"] = node(v.y);
+            properties["x1"] = node_real(v.x);
+            properties["y1"] = node_real(v.y);
             addRubber("ELLIPSE");
             setRubberMode("ELLIPSE_LINE");
             setRubberPoint("ELLIPSE_LINE_POINT1", properties["x1, properties["y1);
@@ -4112,10 +4112,10 @@ Geometry::ellipse_click(EmbVector v)
             actuator("set-prompt-prefix-tr Specify first axis end point: "));
         }
         else if (std::isnan(properties["x2"])) {
-            properties["x2"] = node(v.x);
-            properties["y2"] = node(v.y);
-            properties["center.x"] = node((properties["x1"].r + properties["x2"].r)/2.0);
-            properties["center.y"] = node((properties["y1"].r + properties["y2"].r)/2.0);
+            properties["x2"] = node_real(v.x);
+            properties["y2"] = node_real(v.y);
+            properties["center.x"] = node_real((properties["x1"].r + properties["x2"].r)/2.0);
+            properties["center.y"] = node_real((properties["y1"].r + properties["y2"].r)/2.0);
             properties["width = calculateDistance(properties["x1"], properties["y1"], properties["x2"], properties["y2"]);
             properties["rot = calculateAngle(properties["x1"], properties["y1"], properties["x2"], properties["y2"]);
             setRubberMode("ELLIPSE_MAJORDIAMETER_MINORRADIUS");
@@ -4227,8 +4227,8 @@ Geometry::ellipse_prompt(String args)
                     actuator("set-prompt-prefix-tr Specify first axis start point or [Center]: "));
                 }
                 else {
-                    properties["x1"] = node(strList[0]);
-                    properties["y1"] = node(strList[1]);
+                    properties["x1"] = node_real(strList[0]);
+                    properties["y1"] = node_real(strList[1]);
                     addRubber("ELLIPSE");
                     setRubberMode("ELLIPSE_LINE");
                     setRubberPoint("ELLIPSE_LINE_POINT1", properties["x1, properties["y1);
@@ -4243,8 +4243,8 @@ Geometry::ellipse_prompt(String args)
                 actuator("set-prompt-prefix-tr Specify first axis end point: "));
             }
             else {
-                properties["x2"] = node(strList[0]);
-                properties["y2"] = node(strList[1]);
+                properties["x2"] = node_real(strList[0]);
+                properties["y2"] = node_real(strList[1]);
                 properties["center.x"] = (properties["x1 + properties["x2"])/2.0;
                 properties["center.y"] = (properties["y1 + properties["y2)/2.0;
                 properties["width"] = calculateDistance(properties["x1, properties["y1, properties["x2, properties["y2);
@@ -4270,8 +4270,8 @@ Geometry::ellipse_prompt(String args)
                     actuator("set-prompt-prefix-tr Specify second axis end point or [Rotation]: "));
                 }
                 else {
-                    properties["x3 = node(strList[0]);
-                    properties["y3 = node(strList[1]);
+                    properties["x3 = node_real(strList[0]);
+                    properties["y3 = node_real(strList[1]);
                     properties["height = perpendicularDistance(properties["x3, properties["y3, properties["x1, properties["y1, properties["x2, properties["y2)*2.0;
                     setRubberPoint("ELLIPSE_AXIS2_POINT2", properties["x3, properties["y3);
                     actuator("vulcanize");
@@ -4288,10 +4288,10 @@ Geometry::ellipse_prompt(String args)
                 actuator("set-prompt-prefix-tr Specify center point: "));
             }
             else {
-                properties["x1 = node(strList[0]);
-                properties["y1 = node(strList[1]);
-                properties["center.x = properties["x1;
-                properties["center.y = properties["y1;
+                properties["x1"] = node_real(strList[0]);
+                properties["y1"] = node_real(strList[1]);
+                properties["center.x"] = properties["x1"];
+                properties["center.y"] = properties["y1"];
                 addRubber("ELLIPSE");
                 setRubberMode("ELLIPSE_LINE");
                 setRubberPoint("ELLIPSE_LINE_POINT1", properties["x1, properties["y1);
@@ -4306,10 +4306,10 @@ Geometry::ellipse_prompt(String args)
                 actuator("set-prompt-prefix-tr Specify first axis end point: "));
             }
             else {
-                properties["x2 = node(strList[0]);
-                properties["y2 = node(strList[1]);
-                properties["width = calculateDistance(properties["x1, properties["y1, properties["x2, properties["y2)*2.0;
-                properties["rot = calculateAngle(properties["x1, properties["y1, properties["x2, properties["y2);
+                properties["x2"] = node_real(strList[0]);
+                properties["y2"] = node_real(strList[1]);
+                properties["width"] = calculateDistance(properties["x1, properties["y1, properties["x2, properties["y2)*2.0;
+                properties["rot"] = calculateAngle(properties["x1, properties["y1, properties["x2, properties["y2);
                 setRubberMode("ELLIPSE_MAJORRADIUS_MINORRADIUS");
                 setRubberPoint("ELLIPSE_AXIS1_POINT2", properties["x2, properties["y2);
                 setRubberPoint("ELLIPSE_WIDTH", properties["width, 0);
@@ -4329,8 +4329,8 @@ Geometry::ellipse_prompt(String args)
                     actuator("set-prompt-prefix-tr Specify second axis end point or [Rotation]: "));
                 }
                 else {
-                    properties["x3 = node(strList[0]);
-                    properties["y3 = node(strList[1]);
+                    properties["x3"] = node_real(strList[0]);
+                    properties["y3"] = node_real(strList[1]);
                     properties["height = perpendicularDistance(properties["x3, properties["y3, properties["x1, properties["y1, properties["x2, properties["y2)*2.0;
                     setRubberPoint("ELLIPSE_AXIS2_POINT2", properties["x3, properties["y3);
                     actuator("vulcanize");
@@ -4352,7 +4352,7 @@ Geometry::ellipse_prompt(String args)
                 actuator("set-prompt-prefix-tr Specify rotation: "));
             }
             else {
-                EmbReal angle = node(str);
+                EmbReal angle = node_real(str);
                 properties["height = cos(angle*PI/180.0)*properties["width;
                 addEllipse(properties["center.x, properties["center.y, properties["width, properties["height, properties["rot, false);
                 actuator("end");
@@ -4385,15 +4385,15 @@ Geometry::heart_main(void)
     properties["numPoints = 512; //Default //TODO: min:64 max:8192
     properties["center.x;
     properties["center.y;
-    properties["sx = 1.0;
-    properties["sy = 1.0;
-    properties["numPoints;
+    properties["sx"] = 1.0;
+    properties["sy"] = 1.0;
+    properties["numPoints"];
     properties["mode"].s;
     actuator("init");
     actuator("clear-selection");
-    properties["center.x = node(0.0f);
-    properties["center.y = node(0.0f);
-    properties["mode"].s = MODE_NUM_POINTS;
+    properties["center.x"] = node_real(0.0f);
+    properties["center.y"] = node_real(0.0f);
+    properties["mode"] = node_str("MODE_NUM_POINTS");
 
     //Heart4: 10.0 / 512
     //Heart5: 1.0 / 512
@@ -4436,8 +4436,8 @@ Geometry::line_main(void)
     actuator("init");
     actuator("clear-selection");
     properties["firstRun = true;
-    properties["first = {node(0.0f), node(0.0f)};
-    properties["prev = {node(0.0f), node(0.0f)};
+    properties["first = {node_real(0.0f), node_real(0.0f)};
+    properties["prev = {node_real(0.0f), node_real(0.0f)};
     actuator("set-prompt-prefix-tr Specify first point: "));
 }
 
@@ -4486,10 +4486,10 @@ Geometry::line_prompt(String args)
         }
         else {
             properties["firstRun = false;
-            properties["first.x"] = node(strList[0]);
-            properties["firstY = node(strList[1]);
-            properties["prev.x"] = properties["firstX;
-            properties["prevY = properties["firstY;
+            properties["first.x"] = node_real(strList[0]);
+            properties["firstY = node_real(strList[1]);
+            properties["prev.x"] = properties["first.x"];
+            properties["prev.y"] = properties["first.y"];
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", properties["firstX, properties["firstY);
@@ -4507,8 +4507,8 @@ Geometry::line_prompt(String args)
                 actuator("set-prompt-prefix-tr Specify next point or [Undo]: "));
             }
             else {
-                EmbReal x = node(strList[0]);
-                EmbReal y = node(strList[1]);
+                EmbReal x = node_real(strList[0]);
+                EmbReal y = node_real(strList[1]);
                 setRubberPoint("LINE_END", x, y);
                 actuator("vulcanize");
                 addRubber("LINE");
@@ -4579,12 +4579,12 @@ Geometry::move_main(void)
 {
     actuator("init");
     properties["firstRun = true;
-    properties["baseX  = node(0.0f);
-    properties["baseY  = node(0.0f);
-    properties["destX  = node(0.0f);
-    properties["destY  = node(0.0f);
-    properties["delta.x"] = node(0.0f);
-    properties["deltaY = node(0.0f);
+    properties["base.x"] = node_real(0.0f);
+    properties["base.y"] = node_real(0.0f);
+    properties["dest.x"] = node_real(0.0f);
+    properties["dest.y"] = node_real(0.0f);
+    properties["delta.x"] = node_real(0.0f);
+    properties["delta.y"] = node_real(0.0f);
 
     if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
@@ -4649,8 +4649,8 @@ Geometry::move_prompt(String str)
         }
         else {
             properties["firstRun = false;
-            properties["base.x"] = node(strList[0]);
-            properties["baseY = node(strList[1]);
+            properties["base.x"] = node_real(strList[0]);
+            properties["base.y"] = node_real(strList[1]);
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", properties["baseX, properties["baseY);
@@ -4665,10 +4665,10 @@ Geometry::move_prompt(String str)
             actuator("set-prompt-prefix-tr Specify destination point: "));
         }
         else {
-            properties["dest.x"] = node(strList[0]);
-            properties["destY = node(strList[1]);
-            properties["delta.x"] = properties["destX - properties["baseX;
-            properties["deltaY = properties["destY - properties["baseY;
+            properties["dest.x"] = node_real(strList[0]);
+            properties["dest.y"] = node_real(strList[1]);
+            properties["delta.x"] = properties["dest.x"] - properties["base.x"];
+            properties["delta.y"] = properties["dest.y"] - properties["base.y"];
             moveSelected(properties["deltaX, properties["deltaY);
             previewOff();
             actuator("end");
@@ -4687,7 +4687,7 @@ Geometry::path_main(void)
     properties["prev;
     actuator("init");
     actuator("clear-selection");
-    properties["firstRun"] = node(true);
+    properties["firstRun"] = node_real(true);
     actuator("set-prompt-prefix-tr Specify start point: "));
 }
 
@@ -4735,8 +4735,8 @@ Geometry::path_prompt(String args)
             actuator("set-prompt-prefix-tr Specify next point or [Arc/Undo]: "));
         }
         else {
-            EmbReal x = node(strList[0]);
-            EmbReal y = node(strList[1]);
+            EmbReal x = node_real(strList[0]);
+            EmbReal y = node_real(strList[1]);
             if (properties["firstRun) {
                 properties["firstRun = false;
                 properties["first.x"] = x;
@@ -4805,8 +4805,8 @@ Geometry::point_prompt(String str)
         }
         else {
             properties["firstRun = false;
-            EmbReal x = node(strList[0]);
-            EmbReal y = node(strList[1]);
+            EmbReal x = node_real(strList[0]);
+            EmbReal y = node_real(strList[1]);
             actuator("set-prompt-prefix-tr Specify next point: "));
             addPoint(x,y);
         }
@@ -4818,8 +4818,8 @@ Geometry::point_prompt(String str)
             actuator("set-prompt-prefix-tr Specify next point: "));
         }
         else {
-            EmbReal x = node(strList[0]);
-            EmbReal y = node(strList[1]);
+            EmbReal x = node_real(strList[0]);
+            EmbReal y = node_real(strList[1]);
             actuator("set-prompt-prefix-tr Specify next point: "));
             addPoint(x,y);
         }
@@ -4834,16 +4834,16 @@ Geometry::polygon_main(void)
 {
     actuator("init");
     actuator("clear-selection");
-    properties["center.x"] = node(0.0f);
-    properties["centerY = node(0.0f);
-    properties["sideX1  = node(0.0f);
-    properties["sideY1  = node(0.0f);
-    properties["sideX2  = node(0.0f);
-    properties["sideY2  = node(0.0f);
-    properties["pointI.x"] = node(0.0f);
-    properties["pointIY = node(0.0f);
-    properties["pointC.x"] = node(0.0f);
-    properties["pointCY = node(0.0f);
+    properties["center.x"] = node_real(0.0f);
+    properties["centerY = node_real(0.0f);
+    properties["sideX1  = node_real(0.0f);
+    properties["sideY1  = node_real(0.0f);
+    properties["sideX2  = node_real(0.0f);
+    properties["sideY2  = node_real(0.0f);
+    properties["pointI.x"] = node_real(0.0f);
+    properties["pointIY = node_real(0.0f);
+    properties["pointC.x"] = node_real(0.0f);
+    properties["pointCY = node_real(0.0f);
     properties["polyType = "Inscribed"; //Default
     properties["numSides = 4;           //Default
     properties["mode"].s = MODE_NUM_SIDES;
@@ -4914,7 +4914,7 @@ Geometry::polygon_prompt(String str)
             properties["mode"].s = MODE_CENTER_PT;
         }
         else {
-            EmbReal tmp = node(str);
+            EmbReal tmp = node_real(str);
             if (std::isnan(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024) {
                 alert(tr("Requires an integer between 3 and 1024."));
                 actuator("set-prompt-prefix-tr Enter number of sides") + " {" + properties["numSides.toString() + "}: ");
@@ -4938,8 +4938,8 @@ Geometry::polygon_prompt(String str)
                 actuator("set-prompt-prefix-tr Specify center point or [Sidelength]: "));
             }
             else {
-                properties["center.x"] = node(strList[0]);
-                properties["center.y"] = node(strList[1]);
+                properties["center.x"] = node_real(strList[0]);
+                properties["center.y"] = node_real(strList[1]);
                 properties["mode"].s = MODE_POLYTYPE;
                 actuator("set-prompt-prefix-tr Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + properties["polyType + "}: ");
             }
@@ -5002,8 +5002,8 @@ Geometry::polygon_prompt(String str)
                 actuator("set-prompt-prefix-tr Specify polygon corner point or [Distance]: "));
             }
             else {
-                properties["pointI.x"] = node(strList[0]);
-                properties["pointI.y"] = node(strList[1]);
+                properties["pointI.x"] = node_real(strList[0]);
+                properties["pointI.y"] = node_real(strList[1]);
                 setRubberPoint("POLYGON_INSCRIBE_POINT", properties["pointIX, properties["pointIY);
                 actuator("vulcanize");
                 actuator("end");
@@ -5022,8 +5022,8 @@ Geometry::polygon_prompt(String str)
                 actuator("set-prompt-prefix-tr Specify polygon side point or [Distance]: "));
             }
             else {
-                properties["pointC.x"] = node(strList[0]);
-                properties["pointC.y"] = node(strList[1]);
+                properties["pointC.x"] = node_real(strList[0]);
+                properties["pointC.y"] = node_real(strList[1]);
                 setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", properties["pointCX, properties["pointCY);
                 actuator("vulcanize");
                 actuator("end");
@@ -5038,14 +5038,14 @@ Geometry::polygon_prompt(String str)
         else {
             if (properties["polyType == "Inscribed") {
                 properties["pointI.x"] = properties["centerX;
-                properties["pointI.y"] = properties["centerY + node(str);
+                properties["pointI.y"] = properties["centerY + node_real(str);
                 setRubberPoint("POLYGON_INSCRIBE_POINT", properties["pointIX, properties["pointIY);
                 actuator("vulcanize");
                 actuator("end");
             }
             else if (properties["polyType == "Circumscribed") {
                 properties["pointC.x"] = properties["centerX;
-                properties["pointC.y"] = properties["centerY + node(str);
+                properties["pointC.y"] = properties["centerY + node_real(str);
                 setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", properties["pointCX, properties["pointCY);
                 actuator("vulcanize");
                 actuator("end");
@@ -5121,8 +5121,8 @@ Geometry::polyline_prompt(String str)
         }
         else {
             properties["firstRun = false;
-            properties["first.x"] = node(strList[0]);
-            properties["first.y"] = node(strList[1]);
+            properties["first.x"] = node_real(strList[0]);
+            properties["first.y"] = node_real(strList[1]);
             properties["prev.x"] = properties["firstX;
             properties["prev.y"] = properties["firstY;
             addRubber("POLYLINE");
@@ -5142,8 +5142,8 @@ Geometry::polyline_prompt(String str)
                 actuator("set-prompt-prefix-tr Specify next point or [Undo]: "));
             }
             else {
-                EmbReal .x"] = node(strList[0]);
-                EmbReal y = node(strList[1]);
+                EmbReal .x"] = node_real(strList[0]);
+                EmbReal y = node_real(strList[1]);
                 properties["num++;
                 setRubberPoint("POLYLINE_POINT_" + properties["num.toString(), x, y);
                 setRubberText("POLYLINE_NUM_POINTS", properties["num.toString());
@@ -5165,10 +5165,10 @@ Geometry::quickleader_main(void)
 {
     actuator("init");
     actuator("clear-selection");
-    properties["x1"] = node(0.0f);
-    properties["y1"] = node(0.0f);
-    properties["x2"] = node(0.0f);
-    properties["y2"] = node(0.0f);
+    properties["x1"] = node_real(0.0f);
+    properties["y1"] = node_real(0.0f);
+    properties["x2"] = node_real(0.0f);
+    properties["y2"] = node_real(0.0f);
     actuator("set-prompt-prefix-tr Specify first point: "));
 }
 
@@ -5179,8 +5179,8 @@ void
 Geometry::quickleader_click(EmbVector v)
 {
     if (std::isnan(properties["x1"].r)) {
-        properties["x1 = x;
-        properties["y1 = y;
+        properties["x1"] = x;
+        properties["y1"] = y;
         addRubber("DIMLEADER");
         setRubberMode("DIMLEADER_LINE");
         setRubberPoint("DIMLEADER_LINE_START", properties["x1"].r, properties["y1"].r);
@@ -5219,8 +5219,8 @@ Geometry::quickleader_prompt(String str)
             actuator("set-prompt-prefix-tr Specify first point: "));
         }
         else {
-            properties["x1 = node(strList[0]);
-            properties["y1 = node(strList[1]);
+            properties["x1"] = node_real(strList[0]);
+            properties["y1"] = node_real(strList[1]);
             addRubber("DIMLEADER");
             setRubberMode("DIMLEADER_LINE");
             setRubberPoint("DIMLEADER_LINE_START", properties["x1, properties["y1);
@@ -5233,8 +5233,8 @@ Geometry::quickleader_prompt(String str)
             actuator("set-prompt-prefix-tr Specify second point: "));
         }
         else {
-            properties["x2 = node(strList[0]);
-            properties["y2 = node(strList[1]);
+            properties["x2 = node_real(strList[0]);
+            properties["y2 = node_real(strList[1]);
             setRubberPoint("DIMLEADER_LINE_END", properties["x2, properties["y2);
             actuator("vulcanize");
             actuator("end");
@@ -5268,8 +5268,8 @@ Geometry::rectangle_click(EmbVector v)
 {
     if (properties["newRect"].b) {
         properties["newRect"].b = false;
-        properties["x1"] = node(v.x);
-        properties["y1"] = node(v.y);
+        properties["x1"] = node_real(v.x);
+        properties["y1"] = node_real(v.y);
         addRubber("RECTANGLE");
         setRubberMode("RECTANGLE");
         setRubberPoint("RECTANGLE_START", x, y);
@@ -5277,8 +5277,8 @@ Geometry::rectangle_click(EmbVector v)
     }
     else {
         properties["newRect"].b = true;
-        properties["x2"] = node(v.x);
-        properties["y2"] = node(v.y);
+        properties["x2"] = node_real(v.x);
+        properties["y2"] = node_real(v.y);
         setRubberPoint("RECTANGLE_END", x, y);
         actuator("vulcanize");
         actuator("end");
@@ -5316,21 +5316,21 @@ Geometry::rectangle_prompt(String str)
             actuator("set-prompt-prefix-tr Specify first point: "));
         }
         else {
-            EmbReal x = node(strList[0]);
-            EmbReal y = node(strList[1]);
+            EmbReal x = node_real(strList[0]);
+            EmbReal y = node_real(strList[1]);
             if (properties["newRect) {
-                properties["newRect = false;
-                properties["x1 = x;
-                properties["y1 = y;
+                properties["newRect"] = false;
+                properties["x1"] = x;
+                properties["y1"] = y;
                 addRubber("RECTANGLE");
                 setRubberMode("RECTANGLE");
                 setRubberPoint("RECTANGLE_START", x, y);
                 actuator("set-prompt-prefix-tr Specify other corner point or [Dimensions]: "));
             }
             else {
-                properties["newRect = true;
-                properties["x2 = x;
-                properties["y2 = y;
+                properties["newRect"] = true;
+                properties["x2"] = x;
+                properties["y2"] = y;
                 setRubberPoint("RECTANGLE_END", x, y);
                 actuator("vulcanize");
                 actuator("end");
@@ -5377,7 +5377,7 @@ Geometry::rgb_prompt(String str)
 {
     if (properties["mode"].s == "RGB_MODE_BACKGROUND") {
         if (str == "C" || str == "CROSSHAIR") {
-            properties["mode"] = node("RGB_MODE_CROSSHAIR");
+            properties["mode"] = node_real("RGB_MODE_CROSSHAIR");
             actuator("set-prompt-prefix-tr Specify crosshair color: "));
         }
         else if (str == "G" || str == "GRID") {
@@ -5386,9 +5386,9 @@ Geometry::rgb_prompt(String str)
         }
         else {
             EmbReal strList = str.split(",");
-            EmbReal r = node(strList[0]);
-            EmbReal g = node(strList[1]);
-            EmbReal b = node(strList[2]);
+            EmbReal r = node_real(strList[0]);
+            EmbReal g = node_real(strList[1]);
+            EmbReal b = node_real(strList[2]);
             if (!validRGB(r,g,b)) {
                 alert(tr("Invalid color. R,G,B values must be in the range of 0-255."));
                 actuator("set-prompt-prefix-tr Specify background color: "));
@@ -5401,9 +5401,9 @@ Geometry::rgb_prompt(String str)
     }
     else if (properties["mode"].s == RGB_MODE_CROSSHAIR) {
         EmbReal strList = str.split(",");
-        EmbReal r = node(strList[0]);
-        EmbReal g = node(strList[1]);
-        EmbReal b = node(strList[2]);
+        EmbReal r = node_real(strList[0]);
+        EmbReal g = node_real(strList[1]);
+        EmbReal b = node_real(strList[2]);
         if (!validRGB(r,g,b)) {
             alert(tr("Invalid color. R,G,B values must be in the range of 0-255."));
             actuator("set-prompt-prefix-tr Specify crosshair color: "));
@@ -5415,9 +5415,9 @@ Geometry::rgb_prompt(String str)
     }
     else if (properties["mode"].s == RGB_MODE_GRID) {
         EmbReal strList = str.split(",");
-        EmbReal r = node(strList[0]);
-        EmbReal g = node(strList[1]);
-        EmbReal b = node(strList[2]);
+        EmbReal r = node_real(strList[0]);
+        EmbReal g = node_real(strList[1]);
+        EmbReal b = node_real(strList[2]);
         if (!validRGB(r,g,b)) {
             alert(tr("Invalid color. R,G,B values must be in the range of 0-255."));
             actuator("set-prompt-prefix-tr Specify grid color: "));
@@ -5438,14 +5438,14 @@ Geometry::rotate_main(String args)
     actuator("init");
     properties["mode"].s = ROTATE_MODE_NORMAL;
     properties["firstRun = true;
-    properties["base = {node(0.0f), node(0.0f)};
-    properties["dest = {node(0.0f), node(0.0f)};
-    properties["angle = node(0.0f);
+    properties["base = {node_real(0.0f), node_real(0.0f)};
+    properties["dest = {node_real(0.0f), node_real(0.0f)};
+    properties["angle = node_real(0.0f);
 
-    properties["baseR = {node(0.0f), node(0.0f)};
-    properties["destR = {node(0.0f), node(0.0f)};
-    properties["angleRef = node(0.0f);
-    properties["angleNew = node(0.0f);
+    properties["baseR = {node_real(0.0f), node_real(0.0f)};
+    properties["destR = {node_real(0.0f), node_real(0.0f)};
+    properties["angleRef = node_real(0.0f);
+    properties["angleNew = node_real(0.0f);
 
     if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
@@ -5537,8 +5537,8 @@ Geometry::rotate_prompt(String str)
             }
             else {
                 properties["firstRun = false;
-                properties["base.x"] = node(strList[0]);
-                properties["base.y"] = node(strList[1]);
+                properties["base.x"] = node_real(strList[0]);
+                properties["base.y"] = node_real(strList[1]);
                 addRubber("LINE");
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", properties["baseX, properties["baseY);
@@ -5559,7 +5559,7 @@ Geometry::rotate_prompt(String str)
                     actuator("set-prompt-prefix-tr Specify rotation angle or [Reference]: "));
                 }
                 else {
-                    properties["angle = node(str);
+                    properties["angle = node_real(str);
                     rotateSelected(properties["baseX, properties["baseY, properties["angle);
                     previewOff();
                     actuator("end");
@@ -5576,8 +5576,8 @@ Geometry::rotate_prompt(String str)
                     actuator("set-prompt-prefix-tr Specify the reference angle") + " {0.00}: ");
                 }
                 else {
-                    properties["baseR.x"] = node(strList[0]);
-                    properties["baseR.y"] = node(strList[1]);
+                    properties["baseR.x"] = node_real(strList[0]);
+                    properties["baseR.y"] = node_real(strList[1]);
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", properties["baseRX, properties["baseRY);
@@ -5591,7 +5591,7 @@ Geometry::rotate_prompt(String str)
                 properties["destR.x"] = 0.0;
                 properties["destR.y"] = 0.0;
                 //The reference angle is what we will use later.
-                properties["angleRef = node(str);
+                properties["angleRef = node_real(str);
                 addRubber("LINE");
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", properties["baseX, properties["baseY);
@@ -5607,8 +5607,8 @@ Geometry::rotate_prompt(String str)
                     actuator("set-prompt-prefix-tr Specify second point: "));
                 }
                 else {
-                    properties["destR.x"] = node(strList[0]);
-                    properties["destR.y"] = node(strList[1]);
+                    properties["destR.x"] = node_real(strList[0]);
+                    properties["destR.y"] = node_real(strList[1]);
                     properties["angleRef = calculateAngle(properties["baseRX, properties["baseRY, properties["destRX, properties["destRY);
                     previewOn("SELECTED", "ROTATE", properties["baseX, properties["baseY, properties["angleRef);
                     setRubberPoint("LINE_START", properties["baseX, properties["baseY);
@@ -5622,7 +5622,7 @@ Geometry::rotate_prompt(String str)
                 properties["destR.x"] = 0.0;
                 properties["destR.y"] = 0.0;
                 //The reference angle is what we will use later.
-                properties["angleRef = node(str);
+                properties["angleRef = node_real(str);
                 previewOn("SELECTED", "ROTATE", properties["baseX, properties["baseY, properties["angleRef);
                 actuator("set-prompt-prefix-tr Specify the new angle: "));
             }
@@ -5635,8 +5635,8 @@ Geometry::rotate_prompt(String str)
                     actuator("set-prompt-prefix-tr Specify the new angle: "));
                 }
                 else {
-                    EmbReal x = node(strList[0]);
-                    EmbReal y = node(strList[1]);
+                    EmbReal x = node_real(strList[0]);
+                    EmbReal y = node_real(strList[1]);
                     properties["angleNew = calculateAngle(properties["baseX, properties["baseY, x, y);
                     rotateSelected(properties["baseX, properties["baseY, properties["angleNew - properties["angleRef);
                     previewOff();
@@ -5644,7 +5644,7 @@ Geometry::rotate_prompt(String str)
                 }
             }
             else {
-                properties["angleNew = node(str);
+                properties["angleNew = node_real(str);
                 rotateSelected(properties["baseX, properties["baseY, properties["angleNew - properties["angleRef);
                 previewOff();
                 actuator("end");
@@ -5734,20 +5734,20 @@ Geometry::scale_main(void)
 {
     actuator("init");
 
-    properties["mode"] = node("MODE_NORMAL");
-    properties["firstRun"] = node(true);
-    properties["base.x"] = node(0.0f);
-    properties["base.y"] = node(0.0f);
-    properties["dest.x"] = node(0.0f);
-    properties["dest.y"] = node(0.0f);
-    properties["factor"] = node(0.0f);
+    properties["mode"] = node_real("MODE_NORMAL");
+    properties["firstRun"] = node_real(true);
+    properties["base.x"] = node_real(0.0f);
+    properties["base.y"] = node_real(0.0f);
+    properties["dest.x"] = node_real(0.0f);
+    properties["dest.y"] = node_real(0.0f);
+    properties["factor"] = node_real(0.0f);
 
-    properties["baseR.x"] = node(0.0f);
-    properties["baseR.y"] = node(0.0f);
-    properties["destR.x"] = node(0.0f);
-    properties["destR.y"] = node(0.0f);
-    properties["factorRef"] = node(0.0f);
-    properties["factorNew"] = node(0.0f);
+    properties["baseR.x"] = node_real(0.0f);
+    properties["baseR.y"] = node_real(0.0f);
+    properties["destR.x"] = node_real(0.0f);
+    properties["destR.y"] = node_real(0.0f);
+    properties["factorRef"] = node_real(0.0f);
+    properties["factorNew"] = node_real(0.0f);
 
     if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
@@ -5799,9 +5799,9 @@ Geometry::scale_click(EmbVector v)
             properties["destR = v;
             properties["factorRef = calculateDistance(properties["baseRX, properties["baseRY, properties["destRX, properties["destRY);
             if (properties["factorRef <= 0.0) {
-                properties["destRX    = node(0.0f);
-                properties["destRY    = node(0.0f);
-                properties["factorRef = node(0.0f);
+                properties["destRX    = node_real(0.0f);
+                properties["destRY    = node_real(0.0f);
+                properties["factorRef = node_real(0.0f);
                 alert(tr("Value must be positive and nonzero."));
                 actuator("set-prompt-prefix-tr Specify second point: "));
             }
@@ -5815,7 +5815,7 @@ Geometry::scale_click(EmbVector v)
         else if (std::isnan(properties["factorNew)) {
             properties["factorNew = calculateDistance(properties["baseX, properties["baseY, x, y);
             if (properties["factorNew <= 0.0) {
-                properties["factorNew = node(0.0f);
+                properties["factorNew = node_real(0.0f);
                 alert(tr("Value must be positive and nonzero."));
                 actuator("set-prompt-prefix-tr Specify new length: "));
             }
@@ -5853,8 +5853,8 @@ Geometry::scale_prompt(String str)
             }
             else {
                 properties["firstRun = false;
-                properties["base.x"] = node(strList[0]);
-                properties["base.y"] = node(strList[1]);
+                properties["base.x"] = node_real(strList[0]);
+                properties["base.y"] = node_real(strList[1]);
                 addRubber("LINE");
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", properties["baseX, properties["baseY);
@@ -5875,7 +5875,7 @@ Geometry::scale_prompt(String str)
                     actuator("set-prompt-prefix-tr Specify scale factor or [Reference]: "));
                 }
                 else {
-                    properties["factor = node(str);
+                    properties["factor = node_real(str);
                     scaleSelected(properties["baseX, properties["baseY, properties["factor);
                     previewOff();
                     actuator("end");
@@ -5892,8 +5892,8 @@ Geometry::scale_prompt(String str)
                     actuator("set-prompt-prefix-tr Specify reference length") + " {1}: ");
                 }
                 else {
-                    properties["baseR.x"] = node(strList[0]);
-                    properties["baseR.y"] = node(strList[1]);
+                    properties["baseR.x"] = node_real(strList[0]);
+                    properties["baseR.y"] = node_real(strList[1]);
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", properties["baseRX, properties["baseRY);
@@ -5907,13 +5907,13 @@ Geometry::scale_prompt(String str)
                 properties["destR.x"] = 0.0;
                 properties["destR.y"] = 0.0;
                 //The reference length is what we will use later.
-                properties["factorRef = node(str);
+                properties["factorRef = node_real(str);
                 if (properties["factorRef <= 0.0) {
-                    properties["baseRX    = node(0.0f);
-                    properties["baseRY    = node(0.0f);
-                    properties["destRX    = node(0.0f);
-                    properties["destRY    = node(0.0f);
-                    properties["factorRef = node(0.0f);
+                    properties["baseRX    = node_real(0.0f);
+                    properties["baseRY    = node_real(0.0f);
+                    properties["destRX    = node_real(0.0f);
+                    properties["destRY    = node_real(0.0f);
+                    properties["factorRef = node_real(0.0f);
                     alert(tr("Value must be positive and nonzero."));
                     actuator("set-prompt-prefix-tr Specify reference length") + " {1}: ");
                 }
@@ -5934,13 +5934,13 @@ Geometry::scale_prompt(String str)
                     actuator("set-prompt-prefix-tr Specify second point: "));
                 }
                 else {
-                    properties["destR.x"] = node(strList[0]);
-                    properties["destR.y"] = node(strList[1]);
+                    properties["destR.x"] = node_real(strList[0]);
+                    properties["destR.y"] = node_real(strList[1]);
                     properties["factorRef = calculateDistance(properties["baseRX, properties["baseRY, properties["destRX, properties["destRY);
                     if (properties["factorRef <= 0.0) {
-                        properties["destRX    = node(0.0f);
-                        properties["destRY    = node(0.0f);
-                        properties["factorRef = node(0.0f);
+                        properties["destRX    = node_real(0.0f);
+                        properties["destRY    = node_real(0.0f);
+                        properties["factorRef = node_real(0.0f);
                         alert(tr("Value must be positive and nonzero."));
                         actuator("set-prompt-prefix-tr Specify second point: "));
                     }
@@ -5958,11 +5958,11 @@ Geometry::scale_prompt(String str)
                 properties["destR.x"] = 0.0;
                 properties["destR.y"] = 0.0;
                 //The reference length is what we will use later.
-                properties["factorRef = node(str);
+                properties["factorRef = node_real(str);
                 if (properties["factorRef <= 0.0) {
-                    properties["destRX    = node(0.0f);
-                    properties["destRY    = node(0.0f);
-                    properties["factorRef = node(0.0f);
+                    properties["destRX    = node_real(0.0f);
+                    properties["destRY    = node_real(0.0f);
+                    properties["factorRef = node_real(0.0f);
                     alert(tr("Value must be positive and nonzero."));
                     actuator("set-prompt-prefix-tr Specify second point: "));
                 }
@@ -5981,11 +5981,11 @@ Geometry::scale_prompt(String str)
                     actuator("set-prompt-prefix-tr Specify new length: "));
                 }
                 else {
-                    EmbReal x = node(strList[0]);
-                    EmbReal y = node(strList[1]);
+                    EmbReal x = node_real(strList[0]);
+                    EmbReal y = node_real(strList[1]);
                     properties["factorNew = calculateDistance(properties["baseX, properties["baseY, x, y);
                     if (properties["factorNew <= 0.0) {
-                        properties["factorNew = node(0.0f);
+                        properties["factorNew = node_real(0.0f);
                         alert(tr("Value must be positive and nonzero."));
                         actuator("set-prompt-prefix-tr Specify new length: "));
                     }
@@ -5997,9 +5997,9 @@ Geometry::scale_prompt(String str)
                 }
             }
             else {
-                properties["factorNew = node(str);
+                properties["factorNew = node_real(str);
                 if (properties["factorNew <= 0.0) {
-                    properties["factorNew = node(0.0f);
+                    properties["factorNew = node_real(0.0f);
                     alert(tr("Value must be positive and nonzero."));
                     actuator("set-prompt-prefix-tr Specify new length: "));
                 }
@@ -6021,14 +6021,14 @@ Geometry::text_single_main(void)
 {
     actuator("init");
     actuator("clear-selection");
-    properties["text"] = node("");
-    properties["text.x"] = node(0.0f);
-    properties["text.y"] = node(0.0f);
-    properties["text.justify"] = node("Left");
+    properties["text"] = node_real("");
+    properties["text.x"] = node_real(0.0f);
+    properties["text.y"] = node_real(0.0f);
+    properties["text.justify"] = node_real("Left");
     properties["textFont"] = textFont();
-    properties["textHeight"] = node(0.0f);
-    properties["textRotation"] = node(0.0f);
-    properties["mode"] = node("MODE_SETGEOM");
+    properties["textHeight"] = node_real(0.0f);
+    properties["textRotation"] = node_real(0.0f);
+    properties["mode"] = node_real("MODE_SETGEOM");
     actuator("set-prompt-prefix-tr Current font: ") + "{" + properties["textFont + "} " + tr("Text height: ") + "{" +  textSize() + "}");
     actuator("append-prompt-history");
     actuator("set-prompt-prefix-tr Specify start point of text or [Justify/Setfont]: "));
@@ -6207,8 +6207,8 @@ Geometry::text_single_prompt(String str)
                     actuator("set-prompt-prefix-tr Specify start point of text or [Justify/Setfont]: "));
                 }
                 else {
-                    properties["text.x"] = node(strList[0]);
-                    properties["text.y"] = node(strList[1]);
+                    properties["text.x"] = node_real(strList[0]);
+                    properties["text.y"] = node_real(strList[1]);
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", properties["textX, properties["textY);
@@ -6226,7 +6226,7 @@ Geometry::text_single_prompt(String str)
                 actuator("set-prompt-prefix-tr Specify text height") + " {" + textSize() + "}: ");
             }
             else {
-                properties["textHeight = node(str);
+                properties["textHeight = node_real(str);
                 setTextSize(properties["textHeight);
                 actuator("set-prompt-prefix-tr Specify text angle") + " {" + textAngle() + "}: ");
             }
@@ -6251,7 +6251,7 @@ Geometry::text_single_prompt(String str)
                 actuator("set-prompt-prefix-tr Specify text angle") + " {" + textAngle() + "}: ");
             }
             else {
-                properties["textRotation = node(str);
+                properties["textRotation = node_real(str);
                 setTextAngle(properties["textRotation"].r);
                 actuator("set-prompt-prefix-tr Enter text: ");
                 properties["mode"].s = MODE_RAPID;
@@ -6282,7 +6282,7 @@ Geometry::text_single_prompt(String str)
             }
         }
         else {
-            properties["text"] = node(str);
+            properties["text"] = node_real(str);
             setRubberText("TEXT_RAPID", properties["text);
         }
     }
@@ -6326,14 +6326,14 @@ Geometry::star_main(void)
 {
     actuator("init");
     actuator("clear-selection");
-    properties["numPoints"] = node(5);
-    properties["center.x"] = node(0.0f);
-    properties["center.y"] = node(0.0f);
-    properties["point1.x"] = node(1.0f);
-    properties["point1.y"] = node(1.0f);
-    properties["point2.x"] = node(2.0f);
-    properties["point2.y"] = node(2.0f);
-    properties["mode"] = node("STAR_MODE_NUM_POINTS");
+    properties["numPoints"] = node_real(5);
+    properties["center.x"] = node_real(0.0f);
+    properties["center.y"] = node_real(0.0f);
+    properties["point1.x"] = node_real(1.0f);
+    properties["point1.y"] = node_real(1.0f);
+    properties["point2.x"] = node_real(2.0f);
+    properties["point2.y"] = node_real(2.0f);
+    properties["mode"] = node_real("STAR_MODE_NUM_POINTS");
     actuator("set-prompt-prefix-tr Enter number of star points {5}: ");
 }
 
@@ -6411,7 +6411,7 @@ Geometry::star_prompt(String str)
             properties["mode"].s = STAR_MODE_CENTER_PT;
         }
         else {
-            EmbReal tmp = node(str);
+            EmbReal tmp = node_real(str);
             if (std::isnan(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024) {
                 alert(tr("Requires an integer between 3 and 1024."));
                 actuator("set-prompt-prefix-tr Enter number of star points") + " {" + properties["numPoints.toString() + "}: ");
@@ -6430,8 +6430,8 @@ Geometry::star_prompt(String str)
             actuator("set-prompt-prefix-tr Specify center point: ");
         }
         else {
-            properties["center.x"] = node(strList[0]);
-            properties["center.y"] = node(strList[1]);
+            properties["center.x"] = node_real(strList[0]);
+            properties["center.y"] = node_real(strList[1]);
             properties["mode"].s = MODE_RAD_OUTER;
             actuator("set-prompt-prefix-tr Specify outer radius of star: ");
             addRubber("POLYGON");
@@ -6447,8 +6447,8 @@ Geometry::star_prompt(String str)
             actuator("set-prompt-prefix-tr Specify outer radius of star: ");
         }
         else {
-            properties["x1 = node(strList[0]);
-            properties["y1 = node(strList[1]);
+            properties["x1 = node_real(strList[0]);
+            properties["y1 = node_real(strList[1]);
             properties["mode"].s = MODE_RAD_INNER;
             actuator("set-prompt-prefix-tr Specify inner radius of star: ");
             updateStar(qsnapX(), qsnapY());
@@ -6461,8 +6461,8 @@ Geometry::star_prompt(String str)
             actuator("set-prompt-prefix-tr Specify inner radius of star: ");
         }
         else {
-            properties["x2 = node(strList[0]);
-            properties["y2 = node(strList[1]);
+            properties["x2 = node_real(strList[0]);
+            properties["y2 = node_real(strList[1]);
             actuator("disable move-rapid-fire");
             updateStar(properties["x2, properties["y2);
             spareRubber("POLYGON");

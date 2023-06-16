@@ -70,147 +70,17 @@ class Geometry;
 
 typedef std::string String;
 typedef std::vector<String> StringList;
-typedef String (*Command)(String);
 
-struct Node_ {
+typedef struct Node_ {
     String s;
     EmbReal r;
     int32_t i;
     bool b;
     StringList sl;
     int type;
-};
-
-typedef struct Node_ Node;
+} Node;
 
 typedef std::unordered_map<String, Node> Dictionary;
-typedef std::vector<Node> NodeList;
-
-/**
- * @brief Settings System
- *
- * Rather than pollute the global namespace, we collect together all the global
- * settings into a structure that stores them. This also allows us to create a
- * complete copy of the settings for the purpose of restoring them if the user
- * cancels out of the Settings Dialog.
- *
- * @todo fully convert into the Dictionaries settings, dialog, accept and preivew.
- *
- * \todo check these are present in Settings:
- *  display_units
- *  prompt_save_history_filename
- *  opensave_open_thumbnail
- *  opensave_save_thumbnail
- *  printing_use_last_device
- *  grid_load_from_file
- */
-typedef struct Settings_ {
-    String assets_dir;
-    String general_language;
-    String general_icon_theme;
-    String general_mdi_bg_texture;
-    QString opensave_custom_filter;
-    String opensave_open_format;
-    String opensave_save_format;
-    QStringList opensave_recent_list_of_files;
-    String opensave_recent_directory;
-    String printing_default_device;
-    String text_font;
-    String prompt_font_family;
-    String prompt_font_style;
-    String prompt_save_history_filename;
-    QRgb general_mdi_bg_color;
-    QRgb prompt_text_color;
-    QRgb prompt_bg_color;
-    uint32_t general_current_tip;
-    uint32_t display_crosshair_color;
-    uint32_t display_bg_color;
-    uint32_t display_selectbox_left_color;
-    uint32_t display_selectbox_left_fill;
-    uint32_t display_selectbox_right_color;
-    uint32_t display_selectbox_right_fill;
-    uint32_t selection_coolgrip_color;
-    uint32_t selection_hotgrip_color;
-    uint32_t ticks_color;
-    uint32_t shine_color;
-    int general_icon_size;
-    bool running;
-    bool testing;
-    int debug_mode;
-    bool show_about_dialog;
-    bool show_settings_editor;
-    bool show_editor;
-    bool show_details_dialog;
-    bool show_open_file_dialog;
-    int pattern_index;
-    bool use_translation;
-    bool general_mdi_bg_use_logo;
-    bool general_mdi_bg_use_texture;
-    bool general_mdi_bg_use_color;
-    bool general_tip_of_the_day;
-    bool general_system_help_browser;
-    bool general_check_for_updates;
-    bool display_use_opengl;
-    bool display_renderhint_aa;
-    bool display_renderhint_text_aa;
-    bool display_renderhint_smooth_pix;
-    bool display_renderhint_high_aa;
-    bool display_renderhint_noncosmetic;
-    bool display_show_scrollbars;
-    int display_scrollbar_widget_num;
-    uint8_t display_selectbox_alpha;
-    EmbReal display_zoomscale_in;
-    EmbReal display_zoomscale_out;
-    uint8_t display_crosshair_percent;
-    bool opensave_open_thumbnail;
-    bool opensave_save_thumbnail;
-    uint8_t opensave_recent_max_files;
-    uint8_t opensave_trim_dst_num_jumps;
-    bool printing_use_last_device;
-    bool printing_disable_bg;
-    bool grid_show_on_load;
-    bool grid_show_origin;
-    bool grid_color_match_crosshair;
-    uint32_t grid_color;
-    bool grid_load_from_file;
-    bool grid_center_on_origin;
-    EmbVector grid_center;
-    EmbVector grid_size;
-    EmbVector grid_spacing;
-    EmbReal grid_size_radius;
-    EmbReal grid_spacing_radius;
-    EmbReal grid_spacing_angle;
-    bool ruler_show_on_load;
-    bool ruler_metric;
-    uint32_t ruler_color;
-    uint8_t ruler_pixel_size;
-    bool qsnap_enabled;
-    uint32_t qsnap_locator_color;
-    uint8_t qsnap_locator_size;
-    uint8_t qsnap_aperture_size;
-    bool lwt_show_lwt;
-    bool lwt_real_render;
-    bool shift_held;
-    EmbReal lwt_default_lwt;
-    bool selection_mode_pickfirst;
-    bool selection_mode_pickadd;
-    bool selection_mode_pickdrag;
-    uint8_t selection_grip_size;
-    uint8_t selection_pickbox_size;
-    EmbReal text_size;
-    EmbReal text_angle;
-    bool text_style_bold;
-    bool text_style_italic;
-    bool text_style_underline;
-    bool text_style_overline;
-    bool text_style_strikeout;
-    EmbReal zoomInLimit;
-    EmbReal zoomOutLimit;
-    EmbReal ruler_width;
-    uint8_t prompt_font_size;
-    bool prompt_save_history;
-    bool prompt_save_history_as_html;
-} Settings;
 
 //Values
 enum OBJ_TYPE_VALUES {
@@ -295,10 +165,16 @@ static const EmbReal emb_constant_pi = 3.14159265358979323846;
  * ----------------
  */
 extern MdiArea* mdiArea;
-extern Settings settings;
-extern Settings dialog;
 
-extern Dictionary settings_, dialog_, config;
+/**
+ * @brief Settings System
+ *
+ * Rather than pollute the global namespace, we collect together all the global
+ * settings into a structure that stores them. This also allows us to create a
+ * complete copy of the settings for the purpose of restoring them if the user
+ * cancels out of the Settings Dialog.
+ */
+extern Dictionary settings, dialog, config;
 extern std::unordered_map<String, StringList> scripts;
 
 extern QFontComboBox* comboBoxTextSingleFont;
@@ -333,6 +209,7 @@ bool contains(StringList, String);
 String read_string_setting(toml_table_t *table, const char *key);
 
 View *activeView(void);
+QGraphicsScene* activeScene();
 
 void debug_message(String msg);
 void set_enabled(QObject *parent, const char *key, bool enabled);
@@ -358,19 +235,30 @@ EmbReal degrees__(EmbReal radian);
 std::vector<QGraphicsItem*> to_vector(QList<QGraphicsItem*> list);
 QList<QGraphicsItem*> to_qlist(std::vector<QGraphicsItem*> list);
 
-Node node(bool value);
-Node node(int value);
-Node node(EmbReal value);
-Node node(String value);
-Node node(StringList value);
+/* Interface creation functions.
+ */
+QDoubleSpinBox *make_spinbox(QGroupBox *gb, String d,
+    QString object_name, EmbReal single_step, EmbReal lower, EmbReal upper, String key);
+QCheckBox *make_checkbox(QGroupBox *gb, String d,
+    const char *label, const char *icon, String key);
+
+/* Dictionary management functions.
+ */
+Node node_bool(bool value);
+Node node_int(int32_t value);
+Node node_uint(uint32_t value);
+Node node_real(EmbReal value);
+Node node_str(String value);
+Node node_qstr(QString value);
+Node node_str_list(StringList value);
 
 bool get_bool(Dictionary d, String key);
-int get_int(Dictionary d, String key);
+int32_t get_int(Dictionary d, String key);
+uint32_t get_uint(Dictionary d, String key);
 EmbReal get_real(Dictionary d, String key);
 String get_str(Dictionary d, String key);
+QString get_qstr(Dictionary d, String key);
 StringList get_str_list(Dictionary d, String key);
-
-QGraphicsScene* activeScene();
 
 /**
  * @brief The Geometry class
@@ -1074,7 +962,6 @@ public slots:
     void checkForUpdates();
     // Help Menu
     void buttonTipOfTheDayClicked(int);
-    void checkBoxTipOfTheDayStateChanged(int);
 
     void closeToolBar(QAction*);
     void floatingChangedToolBar(bool);
@@ -1349,8 +1236,6 @@ public:
 
     QTabWidget* tabWidget;
 
-    QCheckBox * make_checkbox(QGroupBox *gb, const char *label, const char *icon, bool *ptr);
-
     QWidget* createTabGeneral();
     QWidget* createTabFilesPaths();
     QWidget* createTabDisplay();
@@ -1376,7 +1261,7 @@ public:
         EmbReal single_step,
         EmbReal lower,
         EmbReal upper,
-        EmbReal *ptr,
+        String,
         int row);
     QCheckBox* create_checkbox(QGroupBox *groupbox, String label);
 
