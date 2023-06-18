@@ -24,9 +24,6 @@
 #include <fstream>
 #include <string>
 
-typedef String (*Command)(String);
-typedef std::vector<Node> NodeList;
-
 enum OBJ_LTYPE_VALUES {
     //CAD Linetypes
     OBJ_LTYPE_CONT = 0,
@@ -88,23 +85,6 @@ enum OBJ_SNAP_VALUES {
     OBJ_SNAP_PARALLEL = 13
 };
 
-/**
- * .
- * If an action calls a script then there will be an entry in
- * config that is a StringList to be interpreted as a script.
- *
- * An alias is another entry in config that is also a StringList
- * containing just the name of the command it aliases.
- */
-typedef struct Action__ {
-    String icon; /*< The stub used for the icon and the basic command. */
-    String command; /*< . */
-    String tooltip;  /*< The label in the menus and the message that appears when
-                         you hover over an icon. */
-    String statustip; /*< The message that appears at the bottom of the . */
-    String shortcut; /*< The keyboard shortcut for this action. */
-} Action;
-
 MainWindow* _mainWin = 0;
 MdiArea* mdiArea = 0;
 CmdPrompt* prompt = 0;
@@ -116,19 +96,21 @@ QWizard* wizardTipOfTheDay;
 QLabel* labelTipOfTheDay;
 QCheckBox* checkBoxTipOfTheDay;
 
-Dictionary config;
-
+Dictionary settings, dialog, config;
 std::unordered_map<String, StringList> scripts;
+std::unordered_map<String, QGroupBox *> groupBoxes;
+std::unordered_map<String, QCheckBox *> checkBoxes;
+std::unordered_map<String, QSpinBox *> spinBoxes;
+std::unordered_map<String, QDoubleSpinBox *> doubleSpinBoxes;
+std::unordered_map<String, QLabel *> labels;
+std::unordered_map<String, QComboBox *> comboBoxes;
+std::unordered_map<String, QLineEdit *> lineEdits;
+std::unordered_map<String, QToolButton *> toolButtons;
+std::unordered_map<String, Dictionary> config_tables;
 std::unordered_map<String, QAction*> actionHash;
 std::unordered_map<String, QToolBar*> toolbarHash;
 std::unordered_map<String, QMenu*> menuHash;
 std::unordered_map<String, QMenu*> subMenuHash;
-
-std::vector<Action> action_table;
-
-StringList tokenize(String str, const char delim);
-String convert_args_to_type(String label, StringList args,
-    const char *args_template, NodeList a);
 
 /**
  * ACTIONS
@@ -341,219 +323,6 @@ StringList rubber_modes = {
     "TEXTSINGLE"
 };
 
-static QString
-tr(const char *str)
-{
-    return _mainWin->tr(str);
-}
-
-/**
- * @brief set_node
- * @param node
- * @param value
- */
-Node
-node_bool(bool value)
-{
-    Node node;
-    node.type = BOOL_TYPE;
-    node.b = value;
-    return node;
-}
-
-/**
- * @brief create_node
- * @param mode
- * @return
- */
-Node
-node_int(int32_t value)
-{
-    Node node;
-    node.type = INT_TYPE;
-    node.i = value;
-    return node;
-}
-
-
-/**
- * @brief create_node
- * @param mode
- * @return
- */
-Node
-node_uint(uint32_t value)
-{
-    Node node;
-    node.type = INT_TYPE;
-    node.i = (int32_t)value;
-    return node;
-}
-
-/**
- * @brief set_node
- * @param node
- * @param value
- */
-Node
-node_real(EmbReal value)
-{
-    Node node;
-    node.type = REAL_TYPE;
-    node.r = value;
-    return node;
-}
-
-/**
- * @brief set_node
- * @param node
- * @param value
- */
-Node
-node_str(String value)
-{
-    Node node;
-    node.type = STRING_TYPE;
-    node.s = value;
-    return node;
-}
-
-/**
- * @brief set_node
- * @param node
- * @param value
- */
-Node
-node_qstr(QString value)
-{
-    Node node;
-    node.type = STRING_TYPE;
-    node.s = value.toStdString();
-    return node;
-}
-
-/**
- * @brief set_node
- * @param node
- * @param value
- */
-Node
-node_str_list(StringList value)
-{
-    Node node;
-    node.type = STRING_LIST_TYPE;
-    node.sl = value;
-    return node;
-}
-
-bool
-get_bool(Dictionary d, String key)
-{
-    auto iter = d.find(key);
-    if (iter != d.end()) {
-        if (d[key].type == BOOL_TYPE) {
-            return d[key].b;
-        }
-        debug_message(("ERROR: bool setting with key " + key + " is not of bool type.").c_str());
-    }
-    else {
-        debug_message(("ERROR: bool setting with key " + key + " missing.").c_str());
-    }
-    return true;
-}
-
-int
-get_int(Dictionary d, String key)
-{
-    auto iter = d.find(key);
-    if (iter != d.end()) {
-        if (d[key].type == INT_TYPE) {
-            return d[key].i;
-        }
-        debug_message(("ERROR: int setting with key " + key + " is not of int type.").c_str());
-    }
-    else {
-        debug_message(("ERROR: int setting with key " + key + " missing.").c_str());
-    }
-    return 0;
-}
-
-uint32_t
-get_uint(Dictionary d, String key)
-{
-    return (uint32_t)get_int(d, key);
-}
-
-EmbReal
-get_real(Dictionary d, String key)
-{
-    auto iter = d.find(key);
-    if (iter != d.end()) {
-        if (d[key].type == REAL_TYPE) {
-            return d[key].r;
-        }
-        debug_message(("ERROR: real dictionary entry with key " + key + " is not of real type.").c_str());
-    }
-    else {
-        debug_message(("ERROR: EmbReal dictionary entry with key " + key + " missing.").c_str());
-    }
-    return 0.0f;
-}
-
-String
-get_str(Dictionary d, String key)
-{
-    auto iter = d.find(key);
-    if (iter != d.end()) {
-        if (d[key].type == STRING_TYPE) {
-            return d[key].s;
-        }
-        debug_message(("ERROR: string dictionary entry with key " + key + " is not of string type.").c_str());
-    }
-    else {
-        debug_message(("ERROR: String setting with key " + key + " missing.").c_str());
-    }
-    return "";
-}
-
-QString
-get_qstr(Dictionary d, String key)
-{
-    return QString::fromStdString(get_str(d, key));
-}
-
-StringList
-get_str_list(Dictionary d, String key)
-{
-    StringList list = {};
-    auto iter = d.find(key);
-    if (iter != d.end()) {
-        if (d[key].type == STRING_LIST_TYPE) {
-            return d[key].sl;
-        }
-        debug_message(("ERROR: StringList dictionary entry with key " + key + " is not of StringList type.").c_str());
-    }
-    else {
-        debug_message(("ERROR: StringList setting with key " + key + " missing.").c_str());
-    }
-    return list;
-}
-
-
-/**
- * @brief to_string_vector
- * @param list
- * @return
- */
-std::vector<String>
-to_string_vector(QStringList list)
-{
-    std::vector<String> a;
-    for (int i=0; i<(int)list.size(); i++) {
-        a.push_back(list[i].toStdString());
-    }
-    return a;
-}
 
 /**
  * @brief MainWindow::settingsPrompt
@@ -582,7 +351,7 @@ settings_dialog_action(String showTab)
 void
 MainWindow::stub_testing()
 {
-    QMessageBox::warning(_mainWin, tr("Testing Feature"), tr("<b>This feature is in testing.</b>"));
+    QMessageBox::warning(_mainWin, translate_str("Testing Feature"), translate_str("<b>This feature is in testing.</b>"));
 }
 
 /**
@@ -683,22 +452,6 @@ do_nothing_action(String args)
 {
     no_argument_debug("do_nothing_action()", args);
     return "";
-}
-
-/**
- * @brief get_action_index
- * @param cmd
- * @return
- */
-int
-get_action_index(std::string cmd)
-{
-    for (int i=0; i<(int)action_table.size(); i++) {
-        if (cmd == action_table[i].icon) {
-            return i;
-        }
-    }
-    return 0;
 }
 
 /**
@@ -815,19 +568,19 @@ MainWindow::about(void)
 
     QDialog dialog(_mainWin);
     ImageWidget img(appDir + "/images/logo-small");
-    QLabel text(appName + tr("\n\n") +
-                          tr("https://www.libembroidery.org") +
-                          tr("\n\n") +
-                          tr("Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi") +
-                          tr("\n\n") +
-                          tr("Embroidery formats by Josh Varga.") +
-                          tr("\n") +
-                          tr("User Interface by Jonathan Greig.") +
-                          tr("\n\n") +
-                          tr("Free under the zlib/libpng license.")
+    QLabel text(appName + translate_str("\n\n") +
+                          translate_str("https://www.libembroidery.org") +
+                          translate_str("\n\n") +
+                          translate_str("Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi") +
+                          translate_str("\n\n") +
+                          translate_str("Embroidery formats by Josh Varga.") +
+                          translate_str("\n") +
+                          translate_str("User Interface by Jonathan Greig.") +
+                          translate_str("\n\n") +
+                          translate_str("Free under the zlib/libpng license.")
                           #if defined(BUILD_GIT_HASH)
-                          + tr("\n\n") +
-                          tr("Build Hash: ") + qPrintable(BUILD_GIT_HASH)
+                          + translate_str("\n\n") +
+                          translate_str("Build Hash: ") + qPrintable(BUILD_GIT_HASH)
                           #endif
                           );
     text.setWordWrap(true);
@@ -919,7 +672,7 @@ MainWindow::tipOfTheDay(void)
     labelTipOfTheDay = new QLabel(config["tips"].sl[general_current_tip].c_str(), wizardTipOfTheDay);
     labelTipOfTheDay->setWordWrap(true);
 
-    QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("&Show tips on startup"), wizardTipOfTheDay);
+    QCheckBox* checkBoxTipOfTheDay = new QCheckBox(translate_str("&Show tips on startup"), wizardTipOfTheDay);
     checkBoxTipOfTheDay->setChecked(get_bool(settings, "general_tip_of_the_day"));
     connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), _mainWin, SLOT(checkBoxTipOfTheDayStateChanged(int)));
 
@@ -937,9 +690,9 @@ MainWindow::tipOfTheDay(void)
     //TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonPrevious)
     //TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonNext)
     //TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonClose)
-    wizardTipOfTheDay->setButtonText(QWizard::CustomButton1, tr("&Previous"));
-    wizardTipOfTheDay->setButtonText(QWizard::CustomButton2, tr("&Next"));
-    wizardTipOfTheDay->setButtonText(QWizard::CustomButton3, tr("&Close"));
+    wizardTipOfTheDay->setButtonText(QWizard::CustomButton1, translate_str("&Previous"));
+    wizardTipOfTheDay->setButtonText(QWizard::CustomButton2, translate_str("&Next"));
+    wizardTipOfTheDay->setButtonText(QWizard::CustomButton3, translate_str("&Close"));
     wizardTipOfTheDay->setOption(QWizard::HaveCustomButton1, true);
     wizardTipOfTheDay->setOption(QWizard::HaveCustomButton2, true);
     wizardTipOfTheDay->setOption(QWizard::HaveCustomButton3, true);
@@ -1520,10 +1273,10 @@ MainWindow::colorSelectorIndexChanged(int index)
         //TODO: Handle ByLayer and ByBlock and Other...
         newColor = comboBox->itemData(index).toUInt(&ok);
         if (!ok)
-            QMessageBox::warning(this, tr("Color Selector Conversion Error"), tr("<b>An error has occured while changing colors.</b>"));
+            QMessageBox::warning(this, translate_str("Color Selector Conversion Error"), translate_str("<b>An error has occured while changing colors.</b>"));
     }
     else
-        QMessageBox::warning(this, tr("Color Selector Pointer Error"), tr("<b>An error has occured while changing colors.</b>"));
+        QMessageBox::warning(this, translate_str("Color Selector Pointer Error"), translate_str("<b>An error has occured while changing colors.</b>"));
 
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) { mdiWin->currentColorChanged(newColor); }
@@ -1790,7 +1543,7 @@ messagebox_action(String args)
         QMessageBox::warning(_mainWin, tr(qPrintable(title)), tr(qPrintable(text)));
     }
     else {
-        QMessageBox::critical(_mainWin, tr("Native MessageBox Error"), tr("Incorrect use of the native messageBox function."));
+        QMessageBox::critical(_mainWin, translate_str("Native MessageBox Error"), translate_str("Incorrect use of the native messageBox function."));
     }
     */
     return "";
@@ -2746,8 +2499,8 @@ scale_selected_action(String args)
 
     if (factor <= 0.0) {
         QMessageBox::critical(_mainWin,
-            tr("ScaleFactor Error"),
-            tr("Hi there. If you are not a developer, report this as a bug. "
+            translate_str("ScaleFactor Error"),
+            translate_str("Hi there. If you are not a developer, report this as a bug. "
             "If you are a developer, your code needs examined, and possibly your head too."));
     }
 
@@ -2892,24 +2645,6 @@ construct_command(String command, const char *fmt, ...)
 }
 
 /**
- * @brief tokenize
- * @param str
- * @param delim
- * @return
- */
-StringList
-tokenize(String str, const char delim)
-{
-    StringList list;
-    std::stringstream str_stream(str);
-    String s;
-    while (std::getline(str_stream, s, delim)) {
-        list.push_back(s);
-    }
-    return list;
-}
-
-/**
  * .
  */
 String
@@ -2993,27 +2728,33 @@ read_configuration(void)
         if (!key) {
             break;
         }
+        std::string k(key);
         toml_table_t *table = toml_table_in(configuration, key);
         if (table) {
-            toml_datum_t action = toml_string_in(table, "type");
-            if (action.ok) {
-                if (!strcmp(action.u.s, "action")) {
-                    action_labels.push_back(std::string(key));
+            toml_datum_t subtable_name = toml_string_in(table, "type");
+            if (subtable_name.ok) {
+                Dictionary subtable_values;
+                for (int j=0; ; j++) {
+                    const char *subtable_key = toml_key_in(table, j);
+                    if (!subtable_key) {
+                        break;
+                    }
+                    String st_key(subtable_key);
+                    subtable_values[st_key] = node_str(read_string_setting(table, subtable_key));
                 }
-                free(action.u.s);
+                config_tables[k] = subtable_values;
+                free(subtable_name.u.s);
             }
             continue;
         }
         toml_array_t *array = toml_array_in(configuration, key);
         if (array) {
-            std::string k(key);
             config[k] = node_str_list(read_string_list_setting(configuration, key));
             continue;
         }
         toml_datum_t str = toml_string_in(configuration, key);
         if (str.ok) {
-            std::string str_(str.u.s);
-            config[str_] = node_str(read_string_setting(configuration, key));
+            config[k] = node_str(str.u.s);
             free(str.u.s);
         }
     }
@@ -3055,17 +2796,6 @@ read_configuration(void)
                 settings[k] = node_bool(bool_in.u.b);
             }
         }
-    }
-
-    for (int i=0; i<(int)action_labels.size(); i++) {
-        Action action;
-        toml_table_t *table = toml_table_in(configuration, action_labels[i].c_str());
-        action.icon = read_string_setting(table, "icon");
-        action.command = read_string_setting(table, "command");
-        action.shortcut = read_string_setting(table, "shortcut");
-        action.tooltip = read_string_setting(table, "tooltip");
-        action.statustip = read_string_setting(table, "statustip");
-        action_table.push_back(action);
     }
 
     toml_free(configuration);
@@ -3148,23 +2878,23 @@ MainWindow::MainWindow() : QMainWindow(0)
     //Verify that files/directories needed are actually present.
     QFileInfo check = QFileInfo(appDir + "/help");
     if (!check.exists()) {
-        QMessageBox::critical(_mainWin, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+        QMessageBox::critical(_mainWin, translate_str("Path Error"), translate_str("Cannot locate: ") + check.absoluteFilePath());
     }
     check = QFileInfo(appDir + "/icons");
     if (!check.exists()) {
-        QMessageBox::critical(_mainWin, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+        QMessageBox::critical(_mainWin, translate_str("Path Error"), translate_str("Cannot locate: ") + check.absoluteFilePath());
     }
     check = QFileInfo(appDir + "/images");
     if (!check.exists()) {
-        QMessageBox::critical(_mainWin, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+        QMessageBox::critical(_mainWin, translate_str("Path Error"), translate_str("Cannot locate: ") + check.absoluteFilePath());
     }
     check = QFileInfo(appDir + "/samples");
     if (!check.exists()) {
-        QMessageBox::critical(_mainWin, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+        QMessageBox::critical(_mainWin, translate_str("Path Error"), translate_str("Cannot locate: ") + check.absoluteFilePath());
     }
     check = QFileInfo(appDir + "/translations");
     if (!check.exists()) {
-        QMessageBox::critical(_mainWin, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+        QMessageBox::critical(_mainWin, translate_str("Path Error"), translate_str("Cannot locate: ") + check.absoluteFilePath());
     }
 
     QString lang = QString::fromStdString(get_str(settings, "general_language"));
@@ -3198,32 +2928,32 @@ MainWindow::MainWindow() : QMainWindow(0)
     resize(size);
 
     //Menus
-    menuHash["file"] = new QMenu(tr("&File"), this);
-    menuHash["edit"] = new QMenu(tr("&Edit"), this);
-    menuHash["view"] = new QMenu(tr("&View"), this);
-    menuHash["settings"] = new QMenu(tr("&Settings"), this);
-    menuHash["window"] = new QMenu(tr("&Window"), this);
-    menuHash["help"] = new QMenu(tr("&Help"), this);
-    menuHash["draw"] = new QMenu(tr("&Draw"), this);
+    menuHash["file"] = new QMenu(translate_str("&File"), this);
+    menuHash["edit"] = new QMenu(translate_str("&Edit"), this);
+    menuHash["view"] = new QMenu(translate_str("&View"), this);
+    menuHash["settings"] = new QMenu(translate_str("&Settings"), this);
+    menuHash["window"] = new QMenu(translate_str("&Window"), this);
+    menuHash["help"] = new QMenu(translate_str("&Help"), this);
+    menuHash["draw"] = new QMenu(translate_str("&Draw"), this);
 
     //SubMenus
-    subMenuHash["recent"] = new QMenu(tr("Open &Recent"), this);
-    subMenuHash["zoom"] = new QMenu(tr("&Zoom"), this);
-    subMenuHash["pan"] = new QMenu(tr("&Pan"), this);
+    subMenuHash["recent"] = new QMenu(translate_str("Open &Recent"), this);
+    subMenuHash["zoom"] = new QMenu(translate_str("&Zoom"), this);
+    subMenuHash["pan"] = new QMenu(translate_str("&Pan"), this);
 
     //Toolbars
-    toolbarHash["file"] = addToolBar(tr("File"));
-    toolbarHash["edit"] = addToolBar(tr("Edit"));
-    toolbarHash["view"] = addToolBar(tr("View"));
-    toolbarHash["zoom"] = addToolBar(tr("Zoom"));
-    toolbarHash["pan"] = addToolBar(tr("Pan"));
-    toolbarHash["icon"] = addToolBar(tr("Icon"));
-    toolbarHash["help"] = addToolBar(tr("Help"));
-    toolbarHash["layer"] = addToolBar(tr("Layer"));
-    toolbarHash["properties"] = addToolBar(tr("Properties"));
-    toolbarHash["text"] = addToolBar(tr("Text"));
-    toolbarHash["prompt"] = addToolBar(tr("Command Prompt"));
-    toolbarHash["draw"] = addToolBar(tr("Draw"));
+    toolbarHash["file"] = addToolBar(translate_str("File"));
+    toolbarHash["edit"] = addToolBar(translate_str("Edit"));
+    toolbarHash["view"] = addToolBar(translate_str("View"));
+    toolbarHash["zoom"] = addToolBar(translate_str("Zoom"));
+    toolbarHash["pan"] = addToolBar(translate_str("Pan"));
+    toolbarHash["icon"] = addToolBar(translate_str("Icon"));
+    toolbarHash["help"] = addToolBar(translate_str("Help"));
+    toolbarHash["layer"] = addToolBar(translate_str("Layer"));
+    toolbarHash["properties"] = addToolBar(translate_str("Properties"));
+    toolbarHash["text"] = addToolBar(translate_str("Text"));
+    toolbarHash["prompt"] = addToolBar(translate_str("Command Prompt"));
+    toolbarHash["draw"] = addToolBar(translate_str("Draw"));
 
     //Selectors
     layerSelector = new QComboBox(this);
@@ -3362,35 +3092,53 @@ MainWindow::~MainWindow()
  * at the bottom to open full help file description. Ex: like wxPython AGW's SuperToolTip.
 ACTION->setWhatsThis(statusTip);
  * \todo Finish All Commands ... <.<
+ * .
+ * If an action calls a script then there will be an entry in
+ * config that is a StringList to be interpreted as a script.
+ *
+ * An alias is another entry in config that is also a StringList
+ * containing just the name of the command it aliases.
+ *
+ * icon: The stub used for the icon and the basic command.
+ * command:
+ * tooltip: The label in the menus and the message that appears when
+ *                       you hover over an icon.
+ * statustip: The message that appears at the bottom of the .
+ * shortcut: The keyboard shortcut for this action.
  */
 void
 MainWindow::createAllActions()
 {
     debug_message("Creating All Actions...");
 
-    for (int i=0; i<(int)action_table.size(); i++) {
-        Action action = action_table[i];
+    for (auto iter=config_tables.begin(); iter != config_tables.end(); iter++) {
+        Dictionary action = iter->second;
+        if (get_str(action, "type") != "action") {
+            continue;
+        }
 
-        QIcon icon = create_icon(QString::fromStdString(action.icon));
-        QAction *ACTION = new QAction(icon, QString::fromStdString(action.tooltip), this);
-        ACTION->setStatusTip(QString::fromStdString(action.statustip));
-        ACTION->setObjectName(QString::fromStdString(action.icon));
-        if (action.shortcut != "") {
+        QString icon_s = get_qstr(action, "icon");
+        QIcon icon = create_icon(icon_s);
+        QAction *ACTION = new QAction(icon, get_qstr(action, "tooltip"), this);
+        ACTION->setStatusTip(get_qstr(action, "statustip"));
+        ACTION->setObjectName(icon_s);
+        if (get_str(action, "shortcut") != "") {
             ACTION->setShortcut(
-                QKeySequence(QString::fromStdString(action.shortcut))
+                QKeySequence(get_qstr(action, "shortcut"))
             );
         }
 
-        if (   (action.icon == "textbold")
-            || (action.icon == "textitalic")
-            || (action.icon == "textunderline")
-            || (action.icon == "textstrikeout")
-            || (action.icon == "textoverline")) {
+        if (   (icon_s == "textbold")
+            || (icon_s == "textitalic")
+            || (icon_s == "textunderline")
+            || (icon_s == "textstrikeout")
+            || (icon_s == "textoverline")) {
             ACTION->setCheckable(true);
         }
 
-        connect(ACTION, &QAction::triggered, this, [=](){ actuator(action.command); });
-        actionHash[action.icon] = ACTION;
+        connect(ACTION, &QAction::triggered, this,
+            [=](){ actuator(get_str(action, "command")); });
+        actionHash[icon_s.toStdString()] = ACTION;
     }
 
     actionHash["windowclose"]->setEnabled(numOfDocs > 0);
@@ -4450,7 +4198,7 @@ MainWindow::recentMenuAboutToShow()
         //If less than the max amount of entries add to menu
         if (i < get_int(settings, "opensave_recent_max_files")) {
             recentFileInfo = QFileInfo(QString::fromStdString(recent_files[i]));
-            if (recentFileInfo.exists() && validFileFormat(recentFileInfo.fileName())) {
+            if (recentFileInfo.exists() && validFileFormat(recentFileInfo.fileName().toStdString())) {
                 recentValue.setNum(i+1);
                 QAction* rAction;
                 if (recentValue.toInt() >= 1 && recentValue.toInt() <= 9) {
@@ -4563,29 +4311,29 @@ MainWindow::newFile()
  * @param recentFile
  */
 void
-MainWindow::openFile(bool recent, QString  recentFile)
+MainWindow::openFile(bool recent, String recentFile)
 {
     debug_message("MainWindow::openFile()");
 
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
-    QStringList files;
+    StringList files;
     bool preview = get_bool(settings, "opensave_open_thumbnail");
-    openFilesPath = QString::fromStdString(get_str(settings, "opensave_recent_directory"));
+    String openFilesPath = get_str(settings, "opensave_recent_directory");
 
     //Check to see if this from the recent files list
     if (recent) {
-        files.append(recentFile);
+        files.push_back(recentFile);
         openFilesSelected(files);
     }
     else {
         if (!preview) {
             //TODO: set getOpenFileNames' selectedFilter Node from settings["opensave_open_format"]
-            files = QFileDialog::getOpenFileNames(this, tr("Open"), openFilesPath, formatFilterOpen);
+            files = to_string_vector(QFileDialog::getOpenFileNames(this, translate_str("Open"), QString::fromStdString(openFilesPath), formatFilterOpen));
             openFilesSelected(files);
         }
         else {
-            PreviewDialog* openDialog = new PreviewDialog(this, tr("Open w/Preview"), openFilesPath, formatFilterOpen);
+            PreviewDialog* openDialog = new PreviewDialog(this, translate_str("Open w/Preview"), QString::fromStdString(openFilesPath), formatFilterOpen);
             //TODO: set openDialog->selectNameFilter(QString  filter) from settings["opensave_open_format"]
             connect(openDialog, SIGNAL(filesSelected(QStringList)), this, SLOT(openFilesSelected(QStringList)));
             openDialog->exec();
@@ -4600,57 +4348,59 @@ MainWindow::openFile(bool recent, QString  recentFile)
  * @param filesToOpen
  */
 void
-MainWindow::openFilesSelected(const QStringList& filesToOpen)
+MainWindow::openFilesSelected(StringList filesToOpen)
 {
     bool doOnce = true;
 
-    if (filesToOpen.count()) {
-        for (int i = 0; i < filesToOpen.count(); i++) {
-            if (!validFileFormat(filesToOpen[i]))
-                continue;
+    if (filesToOpen.size() == 0) {
+        return;
+    }
+    for (int i = 0; i < (int)filesToOpen.size(); i++) {
+        if (!validFileFormat(filesToOpen[i])) {
+            continue;
+        }
 
-            QMdiSubWindow* existing = findMdiWindow(filesToOpen[i]);
-            if (existing) {
-                mdiArea->setActiveSubWindow(existing);
-                continue;
+        QMdiSubWindow* existing = findMdiWindow(filesToOpen[i]);
+        if (existing) {
+            mdiArea->setActiveSubWindow(existing);
+            continue;
+        }
+
+        //The docIndex doesn't need increased as it is only used for unnamed files
+        numOfDocs++;
+        MdiWindow* mdiWin = new MdiWindow(docIndex, mdiArea, Qt::SubWindow);
+        connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
+        connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
+
+        //Make sure the toolbars/etc... are shown before doing their zoomExtents
+        if (doOnce) { updateMenuToolbarStatusbar(); doOnce = false; }
+
+        if (mdiWin->loadFile(filesToOpen[i])) {
+            statusbar->showMessage(translate_str("File(s) loaded"), 2000);
+            mdiWin->show();
+            mdiWin->showMaximized();
+            //Prevent duplicate entries in the recent files list
+            /* \todo fix this
+            StringList list = get_str_list(settings, "opensave_recent_list_of_files");
+            if (!list.contains(filesToOpen[i], Qt::CaseInsensitive)) {
+                list.prepend(filesToOpen[i]);
             }
-
-            //The docIndex doesn't need increased as it is only used for unnamed files
-            numOfDocs++;
-            MdiWindow* mdiWin = new MdiWindow(docIndex, mdiArea, Qt::SubWindow);
-            connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
-            connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
-
-            //Make sure the toolbars/etc... are shown before doing their zoomExtents
-            if (doOnce) { updateMenuToolbarStatusbar(); doOnce = false; }
-
-            if (mdiWin->loadFile(filesToOpen.at(i))) {
-                statusbar->showMessage(tr("File(s) loaded"), 2000);
-                mdiWin->show();
-                mdiWin->showMaximized();
-                //Prevent duplicate entries in the recent files list
-                /* \todo fix this
-                StringList list = get_str_list(settings, "opensave_recent_list_of_files");
-                if (!list.contains(filesToOpen.at(i), Qt::CaseInsensitive)) {
-                    list.prepend(filesToOpen.at(i));
-                }
-                //Move the recent file to the top of the list
-                else {
-                    list.removeAll(filesToOpen.at(i));
-                    list.prepend(filesToOpen.at(i));
-                }
-                settings["opensave_recent_list_of_files"] = node_str_list(list);
-                */
-                settings["opensave_recent_directory"] = node_qstr(QFileInfo(filesToOpen.at(i)).absolutePath());
-
-                if (mdiWin->gview) {
-                    mdiWin->gview->recalculateLimits();
-                    mdiWin->gview->zoomExtents();
-                }
-            }
+            //Move the recent file to the top of the list
             else {
-                mdiWin->close();
+                list.removeAll(filesToOpen[i]);
+                list.prepend(filesToOpen[i]));
             }
+            settings["opensave_recent_list_of_files"] = node_str_list(list);
+            */
+            settings["opensave_recent_directory"] = node_qstr(QFileInfo(QString::fromStdString(filesToOpen[i])).absolutePath());
+
+            if (mdiWin->gview) {
+                mdiWin->gview->recalculateLimits();
+                mdiWin->gview->zoomExtents();
+            }
+        }
+        else {
+            mdiWin->close();
         }
     }
 
@@ -4668,7 +4418,7 @@ MainWindow::openrecentfile()
     //Check to see if this from the recent files list
     QAction* recentSender = qobject_cast<QAction*>(sender());
     if (recentSender) {
-        openFile(true, recentSender->data().toString());
+        openFile(true, recentSender->data().toString().toStdString());
     }
 }
 
@@ -4694,11 +4444,10 @@ MainWindow::saveasfile()
         return;
     }
 
-    QString file;
-    openFilesPath = QString::fromStdString(get_str(settings, "opensave_recent_directory"));
-    file = QFileDialog::getSaveFileName(this, tr("Save As"), openFilesPath, formatFilterSave);
+    QString openFilesPath = QString::fromStdString(get_str(settings, "opensave_recent_directory"));
+    QString file = QFileDialog::getSaveFileName(this, translate_str("Save As"), openFilesPath, formatFilterSave);
 
-    mdiWin->saveFile(file);
+    mdiWin->saveFile(file.toStdString());
 }
 
 /**
@@ -4707,10 +4456,10 @@ MainWindow::saveasfile()
  * @return
  */
 QMdiSubWindow *
-MainWindow::findMdiWindow(QString fileName)
+MainWindow::findMdiWindow(String fileName)
 {
-    debug_message("MainWindow::findMdiWindow(%s)" + fileName.toStdString());
-    QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
+    debug_message("MainWindow::findMdiWindow(%s)" + fileName);
+    QString canonicalFilePath = QFileInfo(QString::fromStdString(fileName)).canonicalFilePath();
 
     foreach(QMdiSubWindow* subWindow, mdiArea->subWindowList()) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(subWindow);
@@ -4899,12 +4648,12 @@ MainWindow::hideUnimplemented()
  * \todo check the file exists on the system, rename to validFile?
  */
 bool
-MainWindow::validFileFormat(QString fileName)
+validFileFormat(String fileName)
 {
     if (fileName == "") {
         return false;
     }
-    if (emb_identify_format(qPrintable(fileName)) >= 0) {
+    if (emb_identify_format(fileName.c_str()) >= 0) {
         return true;
     }
     return false;

@@ -19,11 +19,6 @@
 
 #include "embroidermodder.h"
 
-std::vector<EmbReal> snowflake_x;
-std::vector<EmbReal> snowflake_y;
-std::vector<EmbReal> dolphin_x;
-std::vector<EmbReal> dolphin_y;
-
 /**
  * @brief mouse_snap_point
  * @param points

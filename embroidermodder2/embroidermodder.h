@@ -80,6 +80,8 @@ typedef struct Node_ {
     int type;
 } Node;
 
+typedef String (*Command)(String);
+typedef std::vector<Node> NodeList;
 typedef std::unordered_map<String, Node> Dictionary;
 
 //Values
@@ -176,8 +178,19 @@ extern MdiArea* mdiArea;
  */
 extern Dictionary settings, dialog, config;
 extern std::unordered_map<String, StringList> scripts;
-
-extern QFontComboBox* comboBoxTextSingleFont;
+extern std::unordered_map<String, QGroupBox *> groupBoxes;
+extern std::unordered_map<String, QCheckBox *> checkBoxes;
+extern std::unordered_map<String, QSpinBox *> spinBoxes;
+extern std::unordered_map<String, QDoubleSpinBox *> doubleSpinBoxes;
+extern std::unordered_map<String, QLabel *> labels;
+extern std::unordered_map<String, QComboBox *> comboBoxes;
+extern std::unordered_map<String, QLineEdit *> lineEdits;
+extern std::unordered_map<String, QToolButton *> toolButtons;
+extern std::unordered_map<String, Dictionary> config_tables;
+extern std::unordered_map<String, QAction*> actionHash;
+extern std::unordered_map<String, QToolBar*> toolbarHash;
+extern std::unordered_map<String, QMenu*> menuHash;
+extern std::unordered_map<String, QMenu*> subMenuHash;
 
 extern MainWindow* _mainWin;
 extern CmdPrompt* prompt;
@@ -185,28 +198,23 @@ extern PropertyEditor* dockPropEdit;
 extern UndoEditor* dockUndoEdit;
 extern StatusBar* statusbar;
 
-extern std::unordered_map<String, QGroupBox *> groupBoxes;
-extern std::unordered_map<String, QComboBox *> comboBoxes;
-extern std::unordered_map<String, QLineEdit *> lineEdits;
-extern std::unordered_map<String, QToolButton *> toolButtons;
-extern std::unordered_map<String, Dictionary> group_box_data;
-extern std::unordered_map<String, QAction*> actionHash;
-extern std::unordered_map<String, QToolBar*> toolbarHash;
-extern std::unordered_map<String, QMenu*> menuHash;
-extern std::unordered_map<String, QMenu*> subMenuHash;
-
 /* Functions in the global namespace
  * ---------------------------------
  */
-int get_action_index(String cmd);
 int read_configuration(const char *file);
 void read_settings(void);
 void write_settings(void);
 EmbVector rotate_vector(EmbVector v, EmbReal alpha);
 
+QString translate_str(const char *str);
 bool contains(StringList, String);
+bool validFileFormat(String fileName);
+QString fileExtension(String fileName);
 
 String read_string_setting(toml_table_t *table, const char *key);
+StringList tokenize(String str, const char delim);
+String convert_args_to_type(String label, StringList args,
+    const char *args_template, NodeList a);
 
 View *activeView(void);
 QGraphicsScene* activeScene();
@@ -222,8 +230,6 @@ String construct_command(String command, const char *fmt, ...);
 
 void create_menu(String menu, StringList def, bool topLevel);
 
-StringList tokenize(String, char);
-
 QPointF to_QPointF(EmbVector a);
 EmbVector to_EmbVector(QPointF a);
 EmbVector operator+(EmbVector a, EmbVector b);
@@ -235,8 +241,11 @@ EmbReal degrees__(EmbReal radian);
 std::vector<QGraphicsItem*> to_vector(QList<QGraphicsItem*> list);
 QList<QGraphicsItem*> to_qlist(std::vector<QGraphicsItem*> list);
 
+StringList to_string_vector(QStringList list);
+
 /* Interface creation functions.
  */
+void make_ui_element(String description);
 QDoubleSpinBox *make_spinbox(QGroupBox *gb, String d,
     QString object_name, EmbReal single_step, EmbReal lower, EmbReal upper, String key);
 QCheckBox *make_checkbox(QGroupBox *gb, String d,
@@ -316,6 +325,9 @@ public:
     bool objTextBackward;
     bool objTextUpsideDown;
     QPainterPath objTextPath;
+
+    std::vector<EmbReal> x_values;
+    std::vector<EmbReal> y_values;
 
     int gripIndex;
 
@@ -905,8 +917,6 @@ public slots:
 
     void settingsPrompt();
 
-    static bool validFileFormat(QString fileName);
-
 protected:
     virtual void resizeEvent(QResizeEvent*);
     void closeEvent(QCloseEvent *event);
@@ -921,8 +931,7 @@ protected:
     int docIndex;
 
     std::vector<MdiWindow*> listMdiWin;
-    QMdiSubWindow* findMdiWindow(QString fileName);
-    QString openFilesPath;
+    QMdiSubWindow* findMdiWindow(String fileName);
 
     QAction* myFileSeparator;
 
@@ -953,8 +962,8 @@ public slots:
     void tipOfTheDay(void);
 
     void newFile();
-    void openFile(bool recent = false, QString  recentFile = "");
-    void openFilesSelected(const QStringList&);
+    void openFile(bool recent = false, String recentFile = "");
+    void openFilesSelected(StringList files);
     void openrecentfile();
     void savefile();
     void saveasfile();
@@ -1019,7 +1028,6 @@ public:
 
     QString curFile;
     void setCurrentFile(QString  fileName);
-    QString fileExtension(QString  fileName);
 
     int myIndex;
 
@@ -1033,8 +1041,8 @@ public:
     virtual QSize sizeHint();
     QString getShortCurrentFile();
     void designDetails();
-    bool loadFile(QString fileName);
-    bool saveFile(QString fileName);
+    bool loadFile(String fileName);
+    bool saveFile(String fileName);
 signals:
     void sendCloseMdiWin(MdiWindow*);
 
@@ -1042,7 +1050,7 @@ public slots:
     void closeEvent(QCloseEvent* e);
     void onWindowActivated();
 
-    void currentLayerChanged(QString  layer);
+    void currentLayerChanged(QString layer);
     void currentColorChanged(const QRgb& color);
     void currentLinetypeChanged(QString  type);
     void currentLineweightChanged(QString  weight);

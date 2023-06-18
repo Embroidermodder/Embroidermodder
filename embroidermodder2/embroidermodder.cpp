@@ -41,7 +41,8 @@ bool Application::event(QEvent *event)
     switch (event->type()) {
     case QEvent::FileOpen:
         if (_mainWin) {
-            _mainWin->openFilesSelected(QStringList(static_cast<QFileOpenEvent *>(event)->file()));
+            String file = static_cast<QFileOpenEvent *>(event)->file().toStdString();
+            _mainWin->openFilesSelected({file});
             return true;
         }
         // Fall through
@@ -93,6 +94,8 @@ static void version()
  */
 int main(int argc, char* argv[])
 {
+    /* Load configuration and settings here. */
+
 #if defined(Q_OS_MAC)
     Application app(argc, argv);
 #else
@@ -101,25 +104,29 @@ int main(int argc, char* argv[])
     app.setApplicationName("Embroidermodder");
     app.setApplicationVersion(_appVer_);
 
-    QStringList filesToOpen;
+    StringList filesToOpen;
 
-    for (int i = 1; i < argc; i++)
-    {
-        if     (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--debug")  ) {  }
-        else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")   ) { usage(); }
-        else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) { version(); }
-        else if (QFile::exists(argv[i]) && MainWindow::validFileFormat(argv[i]))
-        {
-            filesToOpen << argv[i];
+    for (int i = 1; i < argc; i++) {
+        String arg(argv[i]);
+        if ((arg == "-d") || (arg == "--debug")) {
         }
-        else
-        {
+        else if ((arg == "-h") || (arg == "--help")) {
+            usage();
+        }
+        else if ((arg == "-v") || (arg == "--version")) {
+            version();
+        }
+        else if (QFile::exists(argv[i]) && validFileFormat(arg)) {
+            filesToOpen.push_back(arg);
+        }
+        else {
             usage();
         }
     }
 
-    if (exitApp)
+    if (exitApp) {
         return 1;
+    }
 
     MainWindow* mainWin = new MainWindow();
 #if defined(Q_OS_MAC)
@@ -128,12 +135,14 @@ int main(int argc, char* argv[])
 
     QObject::connect(&app, SIGNAL(lastWindowClosed()), mainWin, SLOT(quit()));
 
-    mainWin->setWindowTitle(app.applicationName() + " " + app.applicationVersion());
+    mainWin->setWindowTitle("Embroidermodder " + app.applicationVersion());
     mainWin->show();
 
     //NOTE: If openFilesSelected() is called from within the mainWin constructor, slot commands wont work and the window menu will be screwed
-    if (!filesToOpen.isEmpty())
+    if (filesToOpen.size() > 0) {
         mainWin->openFilesSelected(filesToOpen);
+    }
 
     return app.exec();
 }
+

@@ -22,6 +22,260 @@
  */
 
 #include "embroidermodder.h"
+/**
+ * .
+ */
+QString
+translate_str(const char *str)
+{
+    return _mainWin->tr(str);
+}
+
+/**
+ * @brief set_node
+ * @param node
+ * @param value
+ */
+Node
+node_bool(bool value)
+{
+    Node node;
+    node.type = BOOL_TYPE;
+    node.b = value;
+    return node;
+}
+
+/**
+ * @brief create_node
+ * @param mode
+ * @return
+ */
+Node
+node_int(int32_t value)
+{
+    Node node;
+    node.type = INT_TYPE;
+    node.i = value;
+    return node;
+}
+
+
+/**
+ * @brief create_node
+ * @param mode
+ * @return
+ */
+Node
+node_uint(uint32_t value)
+{
+    Node node;
+    node.type = INT_TYPE;
+    node.i = (int32_t)value;
+    return node;
+}
+
+/**
+ * @brief set_node
+ * @param node
+ * @param value
+ */
+Node
+node_real(EmbReal value)
+{
+    Node node;
+    node.type = REAL_TYPE;
+    node.r = value;
+    return node;
+}
+
+/**
+ * @brief set_node
+ * @param node
+ * @param value
+ */
+Node
+node_str(String value)
+{
+    Node node;
+    node.type = STRING_TYPE;
+    node.s = value;
+    return node;
+}
+
+/**
+ * @brief set_node
+ * @param node
+ * @param value
+ */
+Node
+node_qstr(QString value)
+{
+    Node node;
+    node.type = STRING_TYPE;
+    node.s = value.toStdString();
+    return node;
+}
+
+/**
+ * @brief set_node
+ * @param node
+ * @param value
+ */
+Node
+node_str_list(StringList value)
+{
+    Node node;
+    node.type = STRING_LIST_TYPE;
+    node.sl = value;
+    return node;
+}
+
+/**
+ * .
+ */
+bool
+get_bool(Dictionary d, String key)
+{
+    auto iter = d.find(key);
+    if (iter != d.end()) {
+        if (d[key].type == BOOL_TYPE) {
+            return d[key].b;
+        }
+        debug_message(("ERROR: bool setting with key " + key + " is not of bool type.").c_str());
+    }
+    else {
+        debug_message(("ERROR: bool setting with key " + key + " missing.").c_str());
+    }
+    return true;
+}
+
+/**
+ * .
+ */
+int
+get_int(Dictionary d, String key)
+{
+    auto iter = d.find(key);
+    if (iter != d.end()) {
+        if (d[key].type == INT_TYPE) {
+            return d[key].i;
+        }
+        debug_message(("ERROR: int setting with key " + key + " is not of int type.").c_str());
+    }
+    else {
+        debug_message(("ERROR: int setting with key " + key + " missing.").c_str());
+    }
+    return 0;
+}
+
+/**
+ * .
+ */
+uint32_t
+get_uint(Dictionary d, String key)
+{
+    return (uint32_t)get_int(d, key);
+}
+
+/**
+ * .
+ */
+EmbReal
+get_real(Dictionary d, String key)
+{
+    auto iter = d.find(key);
+    if (iter != d.end()) {
+        if (d[key].type == REAL_TYPE) {
+            return d[key].r;
+        }
+        debug_message(("ERROR: real dictionary entry with key " + key + " is not of real type.").c_str());
+    }
+    else {
+        debug_message(("ERROR: EmbReal dictionary entry with key " + key + " missing.").c_str());
+    }
+    return 0.0f;
+}
+
+/**
+ * .
+ */
+String
+get_str(Dictionary d, String key)
+{
+    auto iter = d.find(key);
+    if (iter != d.end()) {
+        if (d[key].type == STRING_TYPE) {
+            return d[key].s;
+        }
+        debug_message(("ERROR: string dictionary entry with key " + key + " is not of string type.").c_str());
+    }
+    else {
+        debug_message(("ERROR: String setting with key " + key + " missing.").c_str());
+    }
+    return "";
+}
+
+/**
+ * .
+ */
+QString
+get_qstr(Dictionary d, String key)
+{
+    return QString::fromStdString(get_str(d, key));
+}
+
+/**
+ * .
+ */
+StringList
+get_str_list(Dictionary d, String key)
+{
+    StringList list = {};
+    auto iter = d.find(key);
+    if (iter != d.end()) {
+        if (d[key].type == STRING_LIST_TYPE) {
+            return d[key].sl;
+        }
+        debug_message(("ERROR: StringList dictionary entry with key " + key + " is not of StringList type.").c_str());
+    }
+    else {
+        debug_message(("ERROR: StringList setting with key " + key + " missing.").c_str());
+    }
+    return list;
+}
+
+/**
+ * @brief to_string_vector
+ * @param list
+ * @return
+ */
+StringList
+to_string_vector(QStringList list)
+{
+    std::vector<String> a;
+    for (int i=0; i<(int)list.size(); i++) {
+        a.push_back(list[i].toStdString());
+    }
+    return a;
+}
+
+/**
+ * @brief tokenize
+ * @param str
+ * @param delim
+ * @return
+ */
+StringList
+tokenize(String str, const char delim)
+{
+    StringList list;
+    std::stringstream str_stream(str);
+    String s;
+    while (std::getline(str_stream, s, delim)) {
+        list.push_back(s);
+    }
+    return list;
+}
 
 /*
  * \brief Convert \a a to a QPointF.
@@ -213,10 +467,53 @@ set_visibility(QObject* parent, const char *key, bool visibility)
 /**
  * .
  */
+void
+make_ui_element(Dictionary description)
+{
+    String element_type = get_str(description, "type");
+    if (element_type == "groupBox") {
+
+    }
+    else if (element_type == "lineEdit") {
+
+    }
+    else if (element_type == "checkBox") {
+        // make_checkbox(QGroupBox *gb, String dictionary, const char *label, const char *icon, String key)
+    }
+    else if (element_type == "spinBox") {
+
+    }
+    else if (element_type == "doubleSpinBox") {
+        // make_spinbox(QGroupBox *gb, String dictionary,
+        //  QString object_name, EmbReal single_step, EmbReal lower, EmbReal upper, String key)
+    }
+    else if (element_type == "label") {
+
+    }
+    else if (element_type == "comboBox") {
+
+    }
+    else if (element_type == "toolButton") {
+
+    }
+    else if (element_type == "action") {
+
+    }
+    else if (element_type == "toolbar") {
+
+    }
+    else if (element_type == "menu") {
+
+    }
+}
+
+/**
+ * .
+ */
 QCheckBox *
 make_checkbox(QGroupBox *gb, String dictionary, const char *label, const char *icon, String key)
 {
-    QCheckBox *checkBox = new QCheckBox(_mainWin->tr(label), gb);
+    QCheckBox *checkBox = new QCheckBox(translate_str(label), gb);
     checkBox->setIcon(_mainWin->create_icon(icon));
     /* checkBox->setName(); */
     if (dictionary == "settings") {

@@ -313,8 +313,8 @@ View::clearRubberRoom()
                 (contains(spareRubberList, std::to_string(base->objID)))) {
                 if (!base->path().elementCount()) {
                     QMessageBox::critical(this,
-                        tr("Empty Rubber Object Error"),
-                        tr("The rubber object added contains no points. "
+                        translate_str("Empty Rubber Object Error"),
+                        translate_str("The rubber object added contains no points. "
                         "The command that created this object has flawed logic. "
                         "The object will be deleted."));
                     gscene->removeItem(item);
@@ -1221,7 +1221,7 @@ View::setCornerButton()
         QAction* act = actionHash[num];
         //NOTE: Prevent crashing if the action is NULL.
         if (!act) {
-            QMessageBox::information(this, tr("Corner Widget Error"), tr("There are unused enum values in COMMAND_ACTIONS. Please report this as a bug."));
+            QMessageBox::information(this, translate_str("Corner Widget Error"), translate_str("There are unused enum values in COMMAND_ACTIONS. Please report this as a bug."));
             setCornerWidget(0);
         }
         else {
@@ -1295,7 +1295,7 @@ View::zoomSelected()
     QRectF selectedRect = selectedRectPath.boundingRect();
     if (selectedRect.isNull())
     {
-        QMessageBox::information(this, tr("ZoomSelected Preselect"), tr("Preselect objects before invoking the zoomSelected command."));
+        QMessageBox::information(this, translate_str("ZoomSelected Preselect"), translate_str("Preselect objects before invoking the zoomSelected command."));
         //TODO: Support Post selection of objects
     }
     fitInView(selectedRect, Qt::KeepAspectRatio);
@@ -1683,9 +1683,9 @@ View::mouseMoveEvent(QMouseEvent* event)
             previewObjectItemGroup->setPos(0,0);
 
             if (scaleFactor <= 0.0) {
-                QMessageBox::critical(this, QObject::tr("ScaleFactor Error"),
-                                    QObject::tr("Hi there. If you are not a developer, report this as a bug. "
-                                    "If you are a developer, your code needs examined, and possibly your head too."));
+                QMessageBox::critical(this, translate_str("ScaleFactor Error"),
+                    translate_str("Hi there. If you are not a developer, report this as a bug. "
+                    "If you are a developer, your code needs examined, and possibly your head too."));
             }
             else {
                 //Calculate the offset
@@ -1704,25 +1704,23 @@ View::mouseMoveEvent(QMouseEvent* event)
             }
         }
     }
-    if (pastingActive)
-    {
+    if (pastingActive) {
         pasteObjectItemGroup->setPos(sceneMousePoint - pasteDelta);
     }
-    if (movingActive)
-    {
+    if (movingActive) {
         //Ensure that the preview is only shown if the mouse has moved.
         if (!previewActive)
             previewOn("PREVIEW_CLONE_SELECTED", "PREVIEW_MODE_MOVE", scenePressPoint.x(), scenePressPoint.y(), 0);
     }
-    if (selectingActive)
-    {
-        if (sceneMovePoint.x() >= scenePressPoint.x()) { selectBox->setDirection(1); }
+    if (selectingActive) {
+        if (sceneMovePoint.x() >= scenePressPoint.x()) {
+            selectBox->setDirection(1);
+        }
         else                                          { selectBox->setDirection(0); }
         selectBox->setGeometry(QRect(mapFromScene(scenePressPoint), event->pos()).normalized());
         event->accept();
     }
-    if (panningActive)
-    {
+    if (panningActive) {
         horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (event->position().x() - panStartX));
         verticalScrollBar()->setValue(verticalScrollBar()->value() - (event->position().y() - panStartY));
         panStartX = event->position().x();
@@ -1994,7 +1992,7 @@ View::stopGripping(bool accept)
     if (gripBaseObj) {
         gripBaseObj->vulcanize();
         if (accept) {
-            UndoableCommand* cmd = new UndoableCommand(sceneGripPoint, sceneMousePoint, tr("Grip Edit ") + gripBaseObj->data(OBJ_NAME).toString(), gripBaseObj, this, 0);
+            UndoableCommand* cmd = new UndoableCommand(sceneGripPoint, sceneMousePoint, translate_str("Grip Edit ") + gripBaseObj->data(OBJ_NAME).toString(), gripBaseObj, this, 0);
             if (cmd) undoStack->push(cmd);
             selectionChanged(); //Update the Property Editor
         }
@@ -2024,7 +2022,7 @@ View::deleteSelected()
         if (itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL) {
             Geometry* base = static_cast<Geometry*>(itemList.at(i));
             if (base) {
-                UndoableCommand* cmd = new UndoableCommand("delete", tr("Delete 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+                UndoableCommand* cmd = new UndoableCommand("delete", translate_str("Delete 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
                 if (cmd)
                     undoStack->push(cmd);
             }
@@ -2042,7 +2040,7 @@ void
 View::cut()
 {
     if (selected_items().empty()) {
-        QMessageBox::information(this, tr("Cut Preselect"), tr("Preselect objects before invoking the cut command."));
+        QMessageBox::information(this, translate_str("Cut Preselect"), translate_str("Preselect objects before invoking the cut command."));
         return; //TODO: Prompt to select objects if nothing is preselected
     }
 
@@ -2059,7 +2057,7 @@ void
 View::copy()
 {
     if (selected_items().empty()) {
-        QMessageBox::information(this, tr("Copy Preselect"), tr("Preselect objects before invoking the copy command."));
+        QMessageBox::information(this, translate_str("Copy Preselect"), translate_str("Preselect objects before invoking the copy command."));
         return; //TODO: Prompt to select objects if nothing is preselected
     }
 
@@ -2160,7 +2158,7 @@ View::moveSelected(EmbReal dx, EmbReal dy)
             EmbVector delta;
             delta.x = dx;
             delta.y = dy;
-            UndoableCommand* cmd = new UndoableCommand(delta, tr("Move 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+            UndoableCommand* cmd = new UndoableCommand(delta, translate_str("Move 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
             if (cmd) undoStack->push(cmd);
         }
     }
@@ -2193,7 +2191,7 @@ View::rotateSelected(EmbReal x, EmbReal y, EmbReal rot)
             EmbVector pivot;
             pivot.x = x;
             pivot.y = y;
-            UndoableCommand* cmd = new UndoableCommand("rotate", pivot, rot, tr("Rotate 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+            UndoableCommand* cmd = new UndoableCommand("rotate", pivot, rot, translate_str("Rotate 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
             if (cmd)
                 undoStack->push(cmd);
         }
@@ -2216,7 +2214,7 @@ View::mirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
     foreach(QGraphicsItem* item, itemList) {
         Geometry* base = static_cast<Geometry*>(item);
         if (base) {
-            UndoableCommand* cmd = new UndoableCommand(x1, y1, x2, y2, tr("Mirror 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+            UndoableCommand* cmd = new UndoableCommand(x1, y1, x2, y2, translate_str("Mirror 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
             if (cmd) undoStack->push(cmd);
         }
     }
@@ -2253,7 +2251,7 @@ View::scaleSelected(EmbReal x, EmbReal y, EmbReal factor)
             EmbVector point;
             point.x = x;
             point.y = y;
-            UndoableCommand* cmd = new UndoableCommand("scale", point, factor, tr("Scale 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+            UndoableCommand* cmd = new UndoableCommand("scale", point, factor, translate_str("Scale 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
             if (cmd) undoStack->push(cmd);
         }
     }
@@ -2280,13 +2278,11 @@ View::numSelected()
 void
 View::showScrollBars(bool val)
 {
-    if (val)
-    {
+    if (val) {
         setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     }
-    else
-    {
+    else {
         setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     }

@@ -86,10 +86,10 @@ MdiWindow::~MdiWindow()
  * @return
  */
 bool
-MdiWindow::saveFile(QString fileName)
+MdiWindow::saveFile(String fileName)
 {
     SaveObject saveObj(gscene, this);
-    return saveObj.save(fileName);
+    return saveObj.save(QString::fromStdString(fileName));
 }
 
 /**
@@ -98,16 +98,16 @@ MdiWindow::saveFile(QString fileName)
  * @return
  */
 bool
-MdiWindow::loadFile(QString fileName)
+MdiWindow::loadFile(String fileName)
 {
     qDebug("MdiWindow loadFile()");
 
     QRgb tmpColor = curColor;
 
-    QFile file(fileName);
+    QFile file(QString::fromStdString(fileName));
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        QString error = tr("Cannot read file")
-            + fileName + ": " + file.errorString();
+        QString error = translate_str("Cannot read file")
+            + QString::fromStdString(fileName) + ": " + file.errorString();
         QMessageBox::warning(this, tr("Error reading file"), error);
         return false;
     }
@@ -124,18 +124,18 @@ MdiWindow::loadFile(QString fileName)
         exit(1);
     }
     int readSuccessful = 0;
-    QString readError;
-    int reader = emb_identify_format(qPrintable(fileName));
+    String readError;
+    int reader = emb_identify_format(fileName.c_str());
     if (reader < 0) {
         readSuccessful = 0;
         readError = "Unsupported read file type: " + fileName;
-        qDebug("Unsupported read file type: %s\n", qPrintable(fileName));
+        debug_message("Unsupported read file type: " + fileName);
     }
     else {
-        readSuccessful = embPattern_readAuto(p, qPrintable(fileName));
+        readSuccessful = embPattern_readAuto(p, fileName.c_str());
         if (!readSuccessful) {
             readError = "Reading file was unsuccessful: " + fileName;
-            qDebug("Reading file was unsuccessful: %s\n", qPrintable(fileName));
+            debug_message("Reading file was unsuccessful: " + fileName);
         }
     }
 
@@ -265,7 +265,7 @@ MdiWindow::loadFile(QString fileName)
             }
         }
 
-        setCurrentFile(fileName);
+        setCurrentFile(QString::fromStdString(fileName));
         statusbar->showMessage("File loaded.");
         QString stitches;
         stitches.setNum(stitchCount);
@@ -277,9 +277,9 @@ MdiWindow::loadFile(QString fileName)
         QApplication::restoreOverrideCursor();
     }
     else {
-        QMessageBox::warning(this, tr("Error reading pattern"), tr(qPrintable(readError)));
+        QMessageBox::warning(this, translate_str("Error reading pattern"), translate_str(readError.c_str()));
         QApplication::restoreOverrideCursor();
-        QMessageBox::warning(this, tr("Error reading pattern"), tr("Cannot read pattern"));
+        QMessageBox::warning(this, translate_str("Error reading pattern"), translate_str("Cannot read pattern"));
     }
     embPattern_free(p);
 
@@ -381,9 +381,9 @@ MdiWindow::getShortCurrentFile()
  * @return
  */
 QString
-MdiWindow::fileExtension(QString  fileName)
+fileExtension(String fileName)
 {
-    return QFileInfo(fileName).suffix().toLower();
+    return QFileInfo(QString::fromStdString(fileName)).suffix().toLower();
 }
 
 /**

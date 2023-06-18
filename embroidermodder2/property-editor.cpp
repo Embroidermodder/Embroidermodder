@@ -90,10 +90,6 @@ std::vector<std::pair<String, int>> group_box_types = {
     {"misc_text_single", OBJ_TYPE_TEXTSINGLE}
 };
 
-std::unordered_map<String, QGroupBox *> groupBoxes;
-std::unordered_map<String, QComboBox *> comboBoxes;
-std::unordered_map<String, QLineEdit *> lineEdits;
-std::unordered_map<String, QToolButton *> toolButtons;
 QFontComboBox* comboBoxTextSingleFont;
 std::unordered_map<String, Dictionary> group_box_data;
 
@@ -204,7 +200,7 @@ PropertyEditor::PropertyEditor(QString  iconDirectory, bool pickAddMode, QWidget
     widgetMain->setLayout(vboxLayoutMain);
 
     setWidget(widgetMain);
-    setWindowTitle(tr("Properties"));
+    setWindowTitle(translate_str("Properties"));
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
     hideAllGroups();
@@ -251,7 +247,7 @@ QComboBox*
 PropertyEditor::createComboBoxSelected()
 {
     comboBoxSelected = new QComboBox(this);
-    comboBoxSelected->addItem(tr("No Selection"));
+    comboBoxSelected->addItem(translate_str("No Selection"));
     return comboBoxSelected;
 }
 
@@ -327,7 +323,7 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
     comboBoxSelected->clear();
 
     if (itemList.empty()) {
-        comboBoxSelected->addItem(tr("No Selection"));
+        comboBoxSelected->addItem(translate_str("No Selection"));
         return;
     }
 
@@ -361,7 +357,7 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
     // Populate the selection comboBox
     //==================================================
     if (numTypes > 1) {
-        comboBoxSelected->addItem(tr("Varies") + " (" + QString().setNum(numAll) + ")");
+        comboBoxSelected->addItem(translate_str("Varies") + " (" + QString().setNum(numAll) + ")");
         connect(comboBoxSelected, SIGNAL(currentIndexChanged(int)), this, SLOT(showOneType(int)));
     }
 
@@ -372,7 +368,7 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
             comboBoxStr = tr(object_names[objType - OBJ_TYPE_BASE].c_str()) + "(" + num + ")";
         }
         else {
-            comboBoxStr = tr("Unknown") + " (" + QString().setNum(numPerType[objType - OBJ_TYPE_UNKNOWN]) + ")";
+            comboBoxStr = translate_str("Unknown") + " (" + QString().setNum(numPerType[objType - OBJ_TYPE_UNKNOWN]) + ")";
         }
 
         comboBoxSelected->addItem(comboBoxStr, objType);
