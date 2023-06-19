@@ -32,19 +32,43 @@ enum \mbox{\hyperlink{classGeometry_a1ba74c135760b767a54ded6dbefe946d}{line\+Sty
 \item 
 virtual int \mbox{\hyperlink{classGeometry_a9cb074acda65e1d0e20b71c2ca570257}{type}} ()
 \item 
-void \mbox{\hyperlink{classGeometry_afa6d158831d0fe05a893018bee3ec42f}{run\+\_\+command}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} command)
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classGeometry_afa6d158831d0fe05a893018bee3ec42f}{Geometry\+::run\+\_\+command}}. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{classGeometry_a0f49b1ea1d7ae51ec8cbeb00ffb97e7c}{run\+\_\+arc\+\_\+command}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} command)
-\item 
-void \mbox{\hyperlink{classGeometry_a3676e711788b632daada24fd468770fe}{run\+\_\+circle\+\_\+command}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} command)
-\item 
-void \mbox{\hyperlink{classGeometry_aabea3641b78003299e529f20161d7d40}{run\+\_\+ellipse\+\_\+command}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} command)
-\item 
-void \mbox{\hyperlink{classGeometry_ae2347ba5916f0ed66016ccc7be04e782}{run\+\_\+image\+\_\+command}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} command)
-\item 
 \mbox{\hyperlink{classGeometry_ab0d9ac1447fd492410b12a80408bdfc1}{Geometry}} (int object\+\_\+type=\mbox{\hyperlink{embroidermodder_8h_a22d81a3797a15002a24137b9aa8e9ed8a188856aed0c8c16c681ef5a5ac15069e}{OBJ\+\_\+\+TYPE\+\_\+\+BASE}}, QGraphics\+Item $\ast$parent=0)
 \item 
 \mbox{\hyperlink{classGeometry_a580ba5ba24ac0a004e61992dba6188b2}{Geometry}} (\mbox{\hyperlink{classGeometry}{Geometry}} $\ast$obj, QGraphics\+Item $\ast$parent=0)
+\item 
+\mbox{\hyperlink{classGeometry_a137aca56c3fd17667a200be1b7afbf1a}{Geometry}} (\mbox{\hyperlink{embroidery_8h_a09945e6e919629c5787e61582c712ba1}{Emb\+Arc}} arc, QRgb rgb, Qt\+::\+Pen\+Style line\+Type, QGraphics\+Item $\ast$parent=0)
+\item 
+\mbox{\hyperlink{classGeometry_a9c47bfc50bb15ad1a8060e33e84a2a0e}{Geometry}} (\mbox{\hyperlink{embroidery_8h_a87fc13ccd4dbaa7de7c85efde17bba0e}{Emb\+Circle}} circle, QRgb rgb, Qt\+::\+Pen\+Style line\+Type, QGraphics\+Item $\ast$parent=0)
+\item 
+\mbox{\hyperlink{classGeometry_a3c18ee2dfeece6b9b1e7640c0082e5d3}{Geometry}} (\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}} line, QRgb rgb, Qt\+::\+Pen\+Style line\+Type, QGraphics\+Item $\ast$parent=0)
+\item 
+\mbox{\hyperlink{classGeometry_a5184b1638c630dfd69f56e604447132b}{Geometry}} (\mbox{\hyperlink{embroidery_8h_a4e48ebde5bd4d82b875f98b347bdd62c}{Emb\+Ellipse}} ellipse, QRgb rgb, Qt\+::\+Pen\+Style line\+Type, QGraphics\+Item $\ast$parent=0)
+\item 
+\mbox{\hyperlink{classGeometry_a1a76b64f28185ceb4298b18204ec88e9}{Geometry}} (\mbox{\hyperlink{embroidery_8h_ac2f33b151fc40a0da3b14379aa0ec653}{Emb\+Rect}} \mbox{\hyperlink{classGeometry_a48b4497b44b5cad37e9c822d4f7f0bf8}{rect}}, QRgb rgb, Qt\+::\+Pen\+Style line\+Type, QGraphics\+Item $\ast$parent=0)
+\item 
+\mbox{\hyperlink{classGeometry_a983aadd8e453b362dea24914e678c64f}{Geometry}} (QString str, \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} position, QRgb rgb, Qt\+::\+Pen\+Style line\+Type, QGraphics\+Item $\ast$parent=0)
+\item 
+\mbox{\hyperlink{classGeometry_a3c87410f2337277ead84c6e700a44426}{Geometry}} (\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}} line, int Type\+\_\+, QRgb rgb, Qt\+::\+Pen\+Style line\+Type, QGraphics\+Item $\ast$parent)
+\item 
+\mbox{\hyperlink{classGeometry_a5df8915eb1a375531f26db211f1bfbed}{Geometry}} (QPainter\+Path p, int type\+\_\+, QRgb rgb, Qt\+::\+Pen\+Style line\+Type, QGraphics\+Item $\ast$parent=0)
+\item 
+\mbox{\hyperlink{classGeometry_a11e81b51ae61f9c5f7a5bdfe3f94f7b1}{Geometry}} (\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} pos, QRgb rgb, Qt\+::\+Pen\+Style line\+Type, QGraphics\+Item $\ast$parent=0)
+\item 
+void \mbox{\hyperlink{classGeometry_a49b9daa4f327a2167e5d5eba86ffae7e}{init\+\_\+arc}} (\mbox{\hyperlink{embroidery_8h_a09945e6e919629c5787e61582c712ba1}{Emb\+Arc}} arc, QRgb rgb, Qt\+::\+Pen\+Style line\+Type)
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classGeometry_a2858154e2009b0e6e616f313177762bc}{Geometry\+::init}}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGeometry_a6f8f336739f26e9c2564b0839f134f68}{init\+\_\+circle}} (\mbox{\hyperlink{embroidery_8h_a87fc13ccd4dbaa7de7c85efde17bba0e}{Emb\+Circle}} circle, QRgb rgb, Qt\+::\+Pen\+Style line\+Type)
+\item 
+void \mbox{\hyperlink{classGeometry_a81f66c667e4acd39b2ef5dfa02fd0625}{init\+\_\+line}} (\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}} line, QRgb rgb, Qt\+::\+Pen\+Style line\+Type)
+\item 
+void \mbox{\hyperlink{classGeometry_a73bc8da96e36f1dc90ae3b4eddf61d67}{init\+\_\+ellipse}} (\mbox{\hyperlink{embroidery_8h_a4e48ebde5bd4d82b875f98b347bdd62c}{Emb\+Ellipse}} ellipse, QRgb rgb, Qt\+::\+Pen\+Style line\+Type)
+\item 
+void \mbox{\hyperlink{classGeometry_a96c69ff3e796b7f9a06c14334dcbb1de}{init\+\_\+rect}} (\mbox{\hyperlink{embroidery_8h_ac2f33b151fc40a0da3b14379aa0ec653}{Emb\+Rect}} \mbox{\hyperlink{classGeometry_a48b4497b44b5cad37e9c822d4f7f0bf8}{rect}}, QRgb rgb, Qt\+::\+Pen\+Style line\+Type)
+\item 
+void \mbox{\hyperlink{classGeometry_a3a2630a232e7ee84a0ac8fa76ba70523}{init\+\_\+text\+\_\+single}} (QString str, \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} position, QRgb rgb, Qt\+::\+Pen\+Style line\+Type)
+\item 
+void \mbox{\hyperlink{classGeometry_a286eaaf695d45f9e82a556861de32c26}{init\+\_\+path}} (QPainter\+Path p, QRgb rgb, Qt\+::\+Pen\+Style line\+Type)
+\item 
+void \mbox{\hyperlink{classGeometry_a509ad4f68dcdfc7e674a48aa18917be2}{init\+\_\+point}} (\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} pos, QRgb rgb, Qt\+::\+Pen\+Style line\+Type)
 \item 
 void \mbox{\hyperlink{classGeometry_a2858154e2009b0e6e616f313177762bc}{init}} (void)
 \item 
@@ -101,7 +125,7 @@ void \mbox{\hyperlink{classGeometry_aff75cfb422ad670b15b3e79beee36e65}{circle\+\
 QPointF \mbox{\hyperlink{classGeometry_a3f43874c051efa40e13979d6d1f4b0fa}{object\+End\+Point1}} ()
 \begin{DoxyCompactList}\small\item\em Dim\+Leader\+Object\+::object\+End\+Point1. \end{DoxyCompactList}\item 
 QPointF \mbox{\hyperlink{classGeometry_a3fae9c9cb7b95033323c18b31c12543b}{object\+End\+Point2}} ()
-\begin{DoxyCompactList}\small\item\em Dim\+Leader\+Object\+::object\+End\+Point2. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classGeometry_a3fae9c9cb7b95033323c18b31c12543b}{Geometry\+::object\+End\+Point2}}. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{classGeometry_a2090c19b875b602fa31c843ad2b88eb3}{object\+Start\+Angle}} ()
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classGeometry_a2090c19b875b602fa31c843ad2b88eb3}{Geometry\+::object\+Start\+Angle}}. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{classGeometry_a0ee8020262d9c7f613e08a99a902e4f6}{object\+End\+Angle}} ()
@@ -146,7 +170,7 @@ QPainter\+Path \mbox{\hyperlink{classGeometry_a4e99f98e556fb046d44c3aa0668b3415}
 \begin{DoxyCompactList}\small\item\em Path\+Object\+::object\+Copy\+Path. \end{DoxyCompactList}\item 
 QPainter\+Path \mbox{\hyperlink{classGeometry_a97d75a3261eed41a361d141fa283a7d7}{object\+Save\+Path}} ()
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classGeometry_a97d75a3261eed41a361d141fa283a7d7}{Geometry\+::object\+Save\+Path}}. \end{DoxyCompactList}\item 
-std\+::vector$<$ QPainter\+Path $>$ \mbox{\hyperlink{classGeometry_a16968928d9e23b75f60d27146b909485}{object\+Save\+Path\+List}} ()
+std\+::vector$<$ QPainter\+Path $>$ \mbox{\hyperlink{classGeometry_a58f9727d6c13ba1b8d0af1d437a0e578}{object\+Save\+Path\+List}} ()
 \item 
 std\+::vector$<$ QPainter\+Path $>$ \mbox{\hyperlink{classGeometry_a62d4c9cc0b6f78cdb862446503a875bd}{sub\+Path\+List}} ()
 \item 
@@ -159,7 +183,7 @@ void \mbox{\hyperlink{classGeometry_aca65765d4960a53104e4bc890ecfca4e}{set\+Obje
 void \mbox{\hyperlink{classGeometry_a039f7f27373baf7ff380fc8977240095}{update\+Path}} ()
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classGeometry_a039f7f27373baf7ff380fc8977240095}{Geometry\+::update\+Path}}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classGeometry_a0c5988f5592958a4a556713f81ac01f2}{update\+Path}} (const QPainter\+Path \&p)
-\item 
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classGeometry_a039f7f27373baf7ff380fc8977240095}{Geometry\+::update\+Path}}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classGeometry_ab568f2641d0416b0a106d260f52b02db}{update\+Leader}} (void)
 \begin{DoxyCompactList}\small\item\em Dim\+Leader\+Object\+::update\+Leader. \end{DoxyCompactList}\item 
 virtual QRectF \mbox{\hyperlink{classGeometry_acbc30e7f21e01b3654c584a5dd2c4572}{bounding\+Rect}} ()
@@ -181,7 +205,7 @@ void \mbox{\hyperlink{classGeometry_a7f8405662dc85ae3f3e257c36a065c8d}{real\+Ren
 void \mbox{\hyperlink{classGeometry_a8c124c843504f6971f6677f12ac9247f}{paint}} (QPainter $\ast$, const QStyle\+Option\+Graphics\+Item $\ast$, QWidget $\ast$)
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classGeometry_a8c124c843504f6971f6677f12ac9247f}{Geometry\+::paint}}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classGeometry_a1545e793f7715b0886a884790622f847}{calculate\+Arc\+Data}} (\mbox{\hyperlink{embroidery_8h_a09945e6e919629c5787e61582c712ba1}{Emb\+Arc}} arc)
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classGeometry_a2858154e2009b0e6e616f313177762bc}{Geometry\+::init}}. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classGeometry_a1545e793f7715b0886a884790622f847}{Geometry\+::calculate\+Arc\+Data}}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classGeometry_a290c1d76d4b7ca0eb115d7a0dee4ef60}{update\+Arc\+Rect}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} radius)
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classGeometry_a290c1d76d4b7ca0eb115d7a0dee4ef60}{Geometry\+::update\+Arc\+Rect}}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classGeometry_a4c60e3a9a4952f0780a652dfbc2d5c38}{set\+Object\+Pos}} (const QPointF \&point)
@@ -261,6 +285,14 @@ void \mbox{\hyperlink{classGeometry_af9784975bc2244a286aa596a74c50c78}{set\+Obje
 void \mbox{\hyperlink{classGeometry_af43110139375d00ef5c2dbcce6f825a6}{set\+Object\+Diameter\+Major}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} diameter)
 \item 
 void \mbox{\hyperlink{classGeometry_aaa9c07c9c123e62f2610b5cc740adb6f}{set\+Object\+Diameter\+Minor}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} diameter)
+\item 
+void \mbox{\hyperlink{classGeometry_a9c4f23d73985c1d5e74c8ddd7806480b}{script\+\_\+main}} (void)
+\item 
+void \mbox{\hyperlink{classGeometry_a2439920cdd90dd38f50f557824299d0c}{script\+\_\+click}} (\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} v)
+\begin{DoxyCompactList}\small\item\em circle\+\_\+click \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGeometry_a7ee44bad81e83c9383e44a61a52ed4c0}{script\+\_\+context}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} str)
+\item 
+void \mbox{\hyperlink{classGeometry_a1446481a8cdebdb41bddf173d610ce65}{script\+\_\+prompt}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} str)
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
@@ -311,23 +343,15 @@ QString \mbox{\hyperlink{classGeometry_a55a3988ac8255fcf5e354aca19fa984d}{obj\+T
 \item 
 QString \mbox{\hyperlink{classGeometry_a6aeda44e1b3a63360c352b5454d1e7da}{obj\+Text\+Justify}}
 \item 
-\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{classGeometry_a697933a191825b602d76eefaf3af326f}{obj\+Text\+Size}}
-\item 
-bool \mbox{\hyperlink{classGeometry_afed9a50ce71a6b4afe8be0fa01faf85a}{obj\+Text\+Bold}}
-\item 
-bool \mbox{\hyperlink{classGeometry_a51e25f445db383dcfbf9c07b7ff74590}{obj\+Text\+Italic}}
-\item 
-bool \mbox{\hyperlink{classGeometry_a24c17d15655e63cdcdb9831b3b3a1e3d}{obj\+Text\+Underline}}
-\item 
-bool \mbox{\hyperlink{classGeometry_ae6838350c529ce34b7ebc265a2f9b416}{obj\+Text\+Strike\+Out}}
-\item 
-bool \mbox{\hyperlink{classGeometry_a7abd4d0a3137df09011f00abcd48effa}{obj\+Text\+Overline}}
-\item 
 bool \mbox{\hyperlink{classGeometry_a7377723a61779d93dac21ab6baf1e524}{obj\+Text\+Backward}}
 \item 
 bool \mbox{\hyperlink{classGeometry_aea46e55e75f9793fa12c083156f0fb93}{obj\+Text\+Upside\+Down}}
 \item 
 QPainter\+Path \mbox{\hyperlink{classGeometry_ac9429bed2406eb0b91c4757f9a14ace3}{obj\+Text\+Path}}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $>$ \mbox{\hyperlink{classGeometry_a4ea20b9e54bcd6116d4f667e8ce4fce8}{x\+\_\+values}}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $>$ \mbox{\hyperlink{classGeometry_ac60faf88647a7a2c624aeb1caedd6581}{y\+\_\+values}}
 \item 
 int \mbox{\hyperlink{classGeometry_ad13cefad9b419a67d5a86189cd70a6a9}{grip\+Index}}
 \item 
@@ -399,14 +423,72 @@ Fletching&\\
 \mbox{\Hypertarget{classGeometry_ab0d9ac1447fd492410b12a80408bdfc1}\label{classGeometry_ab0d9ac1447fd492410b12a80408bdfc1}} 
 \index{Geometry@{Geometry}!Geometry@{Geometry}}
 \index{Geometry@{Geometry}!Geometry@{Geometry}}
-\doxyparagraph{\texorpdfstring{Geometry()}{Geometry()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+\doxyparagraph{\texorpdfstring{Geometry()}{Geometry()}\hspace{0.1cm}{\footnotesize\ttfamily [1/11]}}
 {\footnotesize\ttfamily \mbox{\hyperlink{classGeometry}{Geometry}} (\begin{DoxyParamCaption}\item[{int}]{object\+\_\+type = {\ttfamily \mbox{\hyperlink{embroidermodder_8h_a22d81a3797a15002a24137b9aa8e9ed8a188856aed0c8c16c681ef5a5ac15069e}{OBJ\+\_\+\+TYPE\+\_\+\+BASE}}},  }\item[{QGraphics\+Item $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{classGeometry_a580ba5ba24ac0a004e61992dba6188b2}\label{classGeometry_a580ba5ba24ac0a004e61992dba6188b2}} 
 \index{Geometry@{Geometry}!Geometry@{Geometry}}
 \index{Geometry@{Geometry}!Geometry@{Geometry}}
-\doxyparagraph{\texorpdfstring{Geometry()}{Geometry()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+\doxyparagraph{\texorpdfstring{Geometry()}{Geometry()}\hspace{0.1cm}{\footnotesize\ttfamily [2/11]}}
 {\footnotesize\ttfamily \mbox{\hyperlink{classGeometry}{Geometry}} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classGeometry}{Geometry}} $\ast$}]{obj,  }\item[{QGraphics\+Item $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classGeometry_a137aca56c3fd17667a200be1b7afbf1a}\label{classGeometry_a137aca56c3fd17667a200be1b7afbf1a}} 
+\index{Geometry@{Geometry}!Geometry@{Geometry}}
+\index{Geometry@{Geometry}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{Geometry()}{Geometry()}\hspace{0.1cm}{\footnotesize\ttfamily [3/11]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classGeometry}{Geometry}} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a09945e6e919629c5787e61582c712ba1}{Emb\+Arc}}}]{arc,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type,  }\item[{QGraphics\+Item $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classGeometry_a9c47bfc50bb15ad1a8060e33e84a2a0e}\label{classGeometry_a9c47bfc50bb15ad1a8060e33e84a2a0e}} 
+\index{Geometry@{Geometry}!Geometry@{Geometry}}
+\index{Geometry@{Geometry}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{Geometry()}{Geometry()}\hspace{0.1cm}{\footnotesize\ttfamily [4/11]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classGeometry}{Geometry}} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a87fc13ccd4dbaa7de7c85efde17bba0e}{Emb\+Circle}}}]{circle,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type,  }\item[{QGraphics\+Item $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classGeometry_a3c18ee2dfeece6b9b1e7640c0082e5d3}\label{classGeometry_a3c18ee2dfeece6b9b1e7640c0082e5d3}} 
+\index{Geometry@{Geometry}!Geometry@{Geometry}}
+\index{Geometry@{Geometry}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{Geometry()}{Geometry()}\hspace{0.1cm}{\footnotesize\ttfamily [5/11]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classGeometry}{Geometry}} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}}}]{line,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type,  }\item[{QGraphics\+Item $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classGeometry_a5184b1638c630dfd69f56e604447132b}\label{classGeometry_a5184b1638c630dfd69f56e604447132b}} 
+\index{Geometry@{Geometry}!Geometry@{Geometry}}
+\index{Geometry@{Geometry}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{Geometry()}{Geometry()}\hspace{0.1cm}{\footnotesize\ttfamily [6/11]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classGeometry}{Geometry}} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a4e48ebde5bd4d82b875f98b347bdd62c}{Emb\+Ellipse}}}]{ellipse,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type,  }\item[{QGraphics\+Item $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classGeometry_a1a76b64f28185ceb4298b18204ec88e9}\label{classGeometry_a1a76b64f28185ceb4298b18204ec88e9}} 
+\index{Geometry@{Geometry}!Geometry@{Geometry}}
+\index{Geometry@{Geometry}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{Geometry()}{Geometry()}\hspace{0.1cm}{\footnotesize\ttfamily [7/11]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classGeometry}{Geometry}} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_ac2f33b151fc40a0da3b14379aa0ec653}{Emb\+Rect}}}]{rect,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type,  }\item[{QGraphics\+Item $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+
+
+
+
+\mbox{\Hypertarget{classGeometry_a983aadd8e453b362dea24914e678c64f}\label{classGeometry_a983aadd8e453b362dea24914e678c64f}} 
+\index{Geometry@{Geometry}!Geometry@{Geometry}}
+\index{Geometry@{Geometry}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{Geometry()}{Geometry()}\hspace{0.1cm}{\footnotesize\ttfamily [8/11]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classGeometry}{Geometry}} (\begin{DoxyParamCaption}\item[{QString}]{str,  }\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{v,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type,  }\item[{QGraphics\+Item $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classGeometry_a3c87410f2337277ead84c6e700a44426}\label{classGeometry_a3c87410f2337277ead84c6e700a44426}} 
+\index{Geometry@{Geometry}!Geometry@{Geometry}}
+\index{Geometry@{Geometry}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{Geometry()}{Geometry()}\hspace{0.1cm}{\footnotesize\ttfamily [9/11]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classGeometry}{Geometry}} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}}}]{line,  }\item[{int}]{Type\+\_\+,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type,  }\item[{QGraphics\+Item $\ast$}]{parent }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classGeometry_a5df8915eb1a375531f26db211f1bfbed}\label{classGeometry_a5df8915eb1a375531f26db211f1bfbed}} 
+\index{Geometry@{Geometry}!Geometry@{Geometry}}
+\index{Geometry@{Geometry}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{Geometry()}{Geometry()}\hspace{0.1cm}{\footnotesize\ttfamily [10/11]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classGeometry}{Geometry}} (\begin{DoxyParamCaption}\item[{QPainter\+Path}]{p,  }\item[{int}]{Type\+\_\+,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type,  }\item[{QGraphics\+Item $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+For PATH, POLYLINE and POLYGON, set the Type\+\_\+ variable to one of these. \mbox{\Hypertarget{classGeometry_a11e81b51ae61f9c5f7a5bdfe3f94f7b1}\label{classGeometry_a11e81b51ae61f9c5f7a5bdfe3f94f7b1}} 
+\index{Geometry@{Geometry}!Geometry@{Geometry}}
+\index{Geometry@{Geometry}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{Geometry()}{Geometry()}\hspace{0.1cm}{\footnotesize\ttfamily [11/11]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classGeometry}{Geometry}} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{vector,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type,  }\item[{QGraphics\+Item $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{classGeometry_a6962692374e4aa8d9ef75e55fd4f5833}\label{classGeometry_a6962692374e4aa8d9ef75e55fd4f5833}} 
 \index{Geometry@{Geometry}!````~Geometry@{$\sim$Geometry}}
@@ -448,30 +530,15 @@ If gripped, force this object to be drawn even if it is offscreen. \mbox{\Hypert
 
 
 
-\mbox{\hyperlink{classGeometry_a2858154e2009b0e6e616f313177762bc}{Geometry\+::init}}. 
+\mbox{\hyperlink{classGeometry_a1545e793f7715b0886a884790622f847}{Geometry\+::calculate\+Arc\+Data}}. 
 
 
-\begin{DoxyParams}{Parameters}
-{\em arc} & \\
-\hline
-{\em rgb} & \\
-\hline
-{\em line\+Type} & \mbox{\hyperlink{classGeometry_ab0d9ac1447fd492410b12a80408bdfc1}{Geometry\+::\+Geometry}}(Emb\+Arc arc, QRgb rgb, Qt\+::\+Pen\+Style line\+Type, QGraphics\+Item $\ast$parent = 0) \+: QGraphics\+Path\+Item() \{ set\+Data(\+OBJ\+\_\+\+TYPE, OBJ\+\_\+\+TYPE\+\_\+\+ARC); set\+Data(OBJ\+\_\+\+NAME, \char`\"{}\+Arc\char`\"{});\\
-\hline
-\end{DoxyParams}
-WARNING\+: DO NOT enable QGraphics\+Item\+::\+Item\+Is\+Movable. If it is enabled, WARNING\+: and the item is double clicked, the scene will erratically move the item while zooming. WARNING\+: All movement has to be handled explicitly by us, not by the scene. set\+Flag(\+QGraphics\+Item\+::\+Item\+Is\+Selectable, true);
-
-calculate\+Arc\+Data(arc);
-
-obj\+Pen.\+set\+Color(rgb); lwt\+Pen.\+set\+Color(rgb); obj\+Pen.\+set\+Style(line\+Type); lwt\+Pen.\+set\+Style(line\+Type); set\+Object\+Line\+Weight(\char`\"{}0.\+35\char`\"{}); //\+TODO\+: pass in proper lineweight set\+Pen(obj\+Pen); \}
-
-\mbox{\hyperlink{classGeometry_a1545e793f7715b0886a884790622f847}{Geometry\+::calculate\+Arc\+Data}} 
 \begin{DoxyParams}{Parameters}
 {\em arc} & \\
 \hline
 \end{DoxyParams}
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000015}{Todo}}]convert this to update and make it Type sensitive. \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000012}{Todo}}]convert this to update and make it Type sensitive. \end{DoxyRefDesc}
 \mbox{\Hypertarget{classGeometry_aff75cfb422ad670b15b3e79beee36e65}\label{classGeometry_aff75cfb422ad670b15b3e79beee36e65}} 
 \index{Geometry@{Geometry}!circle\_click@{circle\_click}}
 \index{circle\_click@{circle\_click}!Geometry@{Geometry}}
@@ -536,7 +603,79 @@ Dim\+Leader\+Object\+::grip\+Edit.
 \index{Geometry@{Geometry}!init@{init}}
 \index{init@{init}!Geometry@{Geometry}}
 \doxyparagraph{\texorpdfstring{init()}{init()}}
-{\footnotesize\ttfamily void init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily void init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classGeometry_a49b9daa4f327a2167e5d5eba86ffae7e}\label{classGeometry_a49b9daa4f327a2167e5d5eba86ffae7e}} 
+\index{Geometry@{Geometry}!init\_arc@{init\_arc}}
+\index{init\_arc@{init\_arc}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{init\_arc()}{init\_arc()}}
+{\footnotesize\ttfamily void init\+\_\+arc (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a09945e6e919629c5787e61582c712ba1}{Emb\+Arc}}}]{arc,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type }\end{DoxyParamCaption})}
+
+
+
+\mbox{\hyperlink{classGeometry_a2858154e2009b0e6e616f313177762bc}{Geometry\+::init}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em arc} & \\
+\hline
+{\em rgb} & \\
+\hline
+{\em line\+Type} & \\
+\hline
+\end{DoxyParams}
+WARNING\+: DO NOT enable QGraphics\+Item\+::\+Item\+Is\+Movable. If it is enabled, WARNING\+: and the item is double clicked, the scene will erratically move the item while zooming. WARNING\+: All movement has to be handled explicitly by us, not by the scene. \mbox{\Hypertarget{classGeometry_a6f8f336739f26e9c2564b0839f134f68}\label{classGeometry_a6f8f336739f26e9c2564b0839f134f68}} 
+\index{Geometry@{Geometry}!init\_circle@{init\_circle}}
+\index{init\_circle@{init\_circle}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{init\_circle()}{init\_circle()}}
+{\footnotesize\ttfamily void init\+\_\+circle (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a87fc13ccd4dbaa7de7c85efde17bba0e}{Emb\+Circle}}}]{circle,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type }\end{DoxyParamCaption})}
+
+WARNING\+: DO NOT enable QGraphics\+Item\+::\+Item\+Is\+Movable. If it is enabled, WARNING\+: and the item is double clicked, the scene will erratically move the item while zooming. WARNING\+: All movement has to be handled explicitly by us, not by the scene. \mbox{\Hypertarget{classGeometry_a73bc8da96e36f1dc90ae3b4eddf61d67}\label{classGeometry_a73bc8da96e36f1dc90ae3b4eddf61d67}} 
+\index{Geometry@{Geometry}!init\_ellipse@{init\_ellipse}}
+\index{init\_ellipse@{init\_ellipse}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{init\_ellipse()}{init\_ellipse()}}
+{\footnotesize\ttfamily void init\+\_\+ellipse (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a4e48ebde5bd4d82b875f98b347bdd62c}{Emb\+Ellipse}}}]{ellipse,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type }\end{DoxyParamCaption})}
+
+
+
+
+
+\begin{DoxyWarning}{Warning}
+DO NOT enable QGraphics\+Item\+::\+Item\+Is\+Movable. If it is enabled, and the item is double clicked, the scene will erratically move the item while zooming. All movement has to be handled explicitly by us, not by the scene.
+\end{DoxyWarning}
+\mbox{\Hypertarget{classGeometry_a81f66c667e4acd39b2ef5dfa02fd0625}\label{classGeometry_a81f66c667e4acd39b2ef5dfa02fd0625}} 
+\index{Geometry@{Geometry}!init\_line@{init\_line}}
+\index{init\_line@{init\_line}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{init\_line()}{init\_line()}}
+{\footnotesize\ttfamily void init\+\_\+line (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}}}]{line,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classGeometry_a286eaaf695d45f9e82a556861de32c26}\label{classGeometry_a286eaaf695d45f9e82a556861de32c26}} 
+\index{Geometry@{Geometry}!init\_path@{init\_path}}
+\index{init\_path@{init\_path}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{init\_path()}{init\_path()}}
+{\footnotesize\ttfamily void init\+\_\+path (\begin{DoxyParamCaption}\item[{QPainter\+Path}]{p,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classGeometry_a509ad4f68dcdfc7e674a48aa18917be2}\label{classGeometry_a509ad4f68dcdfc7e674a48aa18917be2}} 
+\index{Geometry@{Geometry}!init\_point@{init\_point}}
+\index{init\_point@{init\_point}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{init\_point()}{init\_point()}}
+{\footnotesize\ttfamily void init\+\_\+point (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{pos,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classGeometry_a96c69ff3e796b7f9a06c14334dcbb1de}\label{classGeometry_a96c69ff3e796b7f9a06c14334dcbb1de}} 
+\index{Geometry@{Geometry}!init\_rect@{init\_rect}}
+\index{init\_rect@{init\_rect}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{init\_rect()}{init\_rect()}}
+{\footnotesize\ttfamily void init\+\_\+rect (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_ac2f33b151fc40a0da3b14379aa0ec653}{Emb\+Rect}}}]{rect,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type }\end{DoxyParamCaption})}
+
+
+
+
+
+\mbox{\Hypertarget{classGeometry_a3a2630a232e7ee84a0ac8fa76ba70523}\label{classGeometry_a3a2630a232e7ee84a0ac8fa76ba70523}} 
+\index{Geometry@{Geometry}!init\_text\_single@{init\_text\_single}}
+\index{init\_text\_single@{init\_text\_single}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{init\_text\_single()}{init\_text\_single()}}
+{\footnotesize\ttfamily void init\+\_\+text\+\_\+single (\begin{DoxyParamCaption}\item[{QString}]{str,  }\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{position,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{classGeometry_a71dcd474d5a8c0e5fdc137b48da18a0c}\label{classGeometry_a71dcd474d5a8c0e5fdc137b48da18a0c}} 
 \index{Geometry@{Geometry}!mouseSnapPoint@{mouseSnapPoint}}
@@ -733,7 +872,7 @@ Dim\+Leader\+Object\+::object\+End\+Point1.
 
 
 
-Dim\+Leader\+Object\+::object\+End\+Point2. 
+\mbox{\hyperlink{classGeometry_a3fae9c9cb7b95033323c18b31c12543b}{Geometry\+::object\+End\+Point2}}. 
 
 \begin{DoxyReturn}{Returns}
 
@@ -885,11 +1024,11 @@ Dim\+Leader\+Object\+::object\+End\+Point2.
 \begin{DoxyReturn}{Returns}
 
 \end{DoxyReturn}
-\mbox{\Hypertarget{classGeometry_a16968928d9e23b75f60d27146b909485}\label{classGeometry_a16968928d9e23b75f60d27146b909485}} 
+\mbox{\Hypertarget{classGeometry_a58f9727d6c13ba1b8d0af1d437a0e578}\label{classGeometry_a58f9727d6c13ba1b8d0af1d437a0e578}} 
 \index{Geometry@{Geometry}!objectSavePathList@{objectSavePathList}}
 \index{objectSavePathList@{objectSavePathList}!Geometry@{Geometry}}
 \doxyparagraph{\texorpdfstring{objectSavePathList()}{objectSavePathList()}}
-{\footnotesize\ttfamily std\+::vector$<$QPainter\+Path$>$ object\+Save\+Path\+List (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily std\+::vector$<$ QPainter\+Path $>$ object\+Save\+Path\+List (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 \mbox{\Hypertarget{classGeometry_a2090c19b875b602fa31c843ad2b88eb3}\label{classGeometry_a2090c19b875b602fa31c843ad2b88eb3}} 
 \index{Geometry@{Geometry}!objectStartAngle@{objectStartAngle}}
@@ -1019,44 +1158,38 @@ Dim\+Leader\+Object\+::object\+End\+Point2.
 \doxyparagraph{\texorpdfstring{rect()}{rect()}}
 {\footnotesize\ttfamily QRectF rect (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{classGeometry_a0f49b1ea1d7ae51ec8cbeb00ffb97e7c}\label{classGeometry_a0f49b1ea1d7ae51ec8cbeb00ffb97e7c}} 
-\index{Geometry@{Geometry}!run\_arc\_command@{run\_arc\_command}}
-\index{run\_arc\_command@{run\_arc\_command}!Geometry@{Geometry}}
-\doxyparagraph{\texorpdfstring{run\_arc\_command()}{run\_arc\_command()}}
-{\footnotesize\ttfamily void run\+\_\+arc\+\_\+command (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{command }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{classGeometry_a3676e711788b632daada24fd468770fe}\label{classGeometry_a3676e711788b632daada24fd468770fe}} 
-\index{Geometry@{Geometry}!run\_circle\_command@{run\_circle\_command}}
-\index{run\_circle\_command@{run\_circle\_command}!Geometry@{Geometry}}
-\doxyparagraph{\texorpdfstring{run\_circle\_command()}{run\_circle\_command()}}
-{\footnotesize\ttfamily void run\+\_\+circle\+\_\+command (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{command }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{classGeometry_afa6d158831d0fe05a893018bee3ec42f}\label{classGeometry_afa6d158831d0fe05a893018bee3ec42f}} 
-\index{Geometry@{Geometry}!run\_command@{run\_command}}
-\index{run\_command@{run\_command}!Geometry@{Geometry}}
-\doxyparagraph{\texorpdfstring{run\_command()}{run\_command()}}
-{\footnotesize\ttfamily void run\+\_\+command (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{command }\end{DoxyParamCaption})}
+\mbox{\Hypertarget{classGeometry_a2439920cdd90dd38f50f557824299d0c}\label{classGeometry_a2439920cdd90dd38f50f557824299d0c}} 
+\index{Geometry@{Geometry}!script\_click@{script\_click}}
+\index{script\_click@{script\_click}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{script\_click()}{script\_click()}}
+{\footnotesize\ttfamily void script\+\_\+click (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{v }\end{DoxyParamCaption})}
 
 
 
-\mbox{\hyperlink{classGeometry_afa6d158831d0fe05a893018bee3ec42f}{Geometry\+::run\+\_\+command}}. 
+circle\+\_\+click 
 
+\begin{DoxyReturn}{Returns}
 
-\begin{DoxyParams}{Parameters}
-{\em command} & \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{classGeometry_aabea3641b78003299e529f20161d7d40}\label{classGeometry_aabea3641b78003299e529f20161d7d40}} 
-\index{Geometry@{Geometry}!run\_ellipse\_command@{run\_ellipse\_command}}
-\index{run\_ellipse\_command@{run\_ellipse\_command}!Geometry@{Geometry}}
-\doxyparagraph{\texorpdfstring{run\_ellipse\_command()}{run\_ellipse\_command()}}
-{\footnotesize\ttfamily void run\+\_\+ellipse\+\_\+command (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{command }\end{DoxyParamCaption})}
+\end{DoxyReturn}
+\hypertarget{classGeometry_autotoc_md10}{}\doxysubparagraph{CIRCLE\+\_\+\+MODE\+\_\+1\+P\+\_\+\+RAD mode}\label{classGeometry_autotoc_md10}
+For the circle object currently focussed, show two rubber points\+: one for the centre (the anchor) and the other at some point on the radius to adjust the radius.\hypertarget{classGeometry_autotoc_md11}{}\doxysubparagraph{CIRCLE\+\_\+\+MODE\+\_\+1\+P\+\_\+\+DIA mode}\label{classGeometry_autotoc_md11}
+For the circle object currently focussed, show two rubber points\+: one for the left of the diameter and one for the right. These rubber points can be moved around the circle, but they always oppose one another. \mbox{\Hypertarget{classGeometry_a7ee44bad81e83c9383e44a61a52ed4c0}\label{classGeometry_a7ee44bad81e83c9383e44a61a52ed4c0}} 
+\index{Geometry@{Geometry}!script\_context@{script\_context}}
+\index{script\_context@{script\_context}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{script\_context()}{script\_context()}}
+{\footnotesize\ttfamily void script\+\_\+context (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{str }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{classGeometry_ae2347ba5916f0ed66016ccc7be04e782}\label{classGeometry_ae2347ba5916f0ed66016ccc7be04e782}} 
-\index{Geometry@{Geometry}!run\_image\_command@{run\_image\_command}}
-\index{run\_image\_command@{run\_image\_command}!Geometry@{Geometry}}
-\doxyparagraph{\texorpdfstring{run\_image\_command()}{run\_image\_command()}}
-{\footnotesize\ttfamily void run\+\_\+image\+\_\+command (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{command }\end{DoxyParamCaption})}
+\mbox{\Hypertarget{classGeometry_a9c4f23d73985c1d5e74c8ddd7806480b}\label{classGeometry_a9c4f23d73985c1d5e74c8ddd7806480b}} 
+\index{Geometry@{Geometry}!script\_main@{script\_main}}
+\index{script\_main@{script\_main}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{script\_main()}{script\_main()}}
+{\footnotesize\ttfamily void script\+\_\+main (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classGeometry_a1446481a8cdebdb41bddf173d610ce65}\label{classGeometry_a1446481a8cdebdb41bddf173d610ce65}} 
+\index{Geometry@{Geometry}!script\_prompt@{script\_prompt}}
+\index{script\_prompt@{script\_prompt}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{script\_prompt()}{script\_prompt()}}
+{\footnotesize\ttfamily void script\+\_\+prompt (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{str }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{classGeometry_a321d2d38e3176c39656090d311ea753e}\label{classGeometry_a321d2d38e3176c39656090d311ea753e}} 
 \index{Geometry@{Geometry}!setLine@{setLine}}
@@ -1294,6 +1427,10 @@ Dim\+Leader\+Object\+::set\+Object\+End\+Point2.
 \doxyparagraph{\texorpdfstring{setObjectSize()}{setObjectSize()}}
 {\footnotesize\ttfamily void set\+Object\+Size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{width,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{height }\end{DoxyParamCaption})}
 
+
+
+
+
 \mbox{\Hypertarget{classGeometry_a6c2d9827466eb0f7d341993118485878}\label{classGeometry_a6c2d9827466eb0f7d341993118485878}} 
 \index{Geometry@{Geometry}!setObjectStartAngle@{setObjectStartAngle}}
 \index{setObjectStartAngle@{setObjectStartAngle}!Geometry@{Geometry}}
@@ -1473,6 +1610,15 @@ For path and polyline set normal\+Path before calling. \mbox{\Hypertarget{classG
 \doxyparagraph{\texorpdfstring{updatePath()}{updatePath()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
 {\footnotesize\ttfamily void update\+Path (\begin{DoxyParamCaption}\item[{const QPainter\+Path \&}]{p }\end{DoxyParamCaption})}
 
+
+
+\mbox{\hyperlink{classGeometry_a039f7f27373baf7ff380fc8977240095}{Geometry\+::update\+Path}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p} & \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{classGeometry_add4e11623be9bc6e02557c67674564ed}\label{classGeometry_add4e11623be9bc6e02557c67674564ed}} 
 \index{Geometry@{Geometry}!updateRubber@{updateRubber}}
 \index{updateRubber@{updateRubber}!Geometry@{Geometry}}
@@ -1633,23 +1779,11 @@ Dim\+Leader\+Object\+::vulcanize.
 \doxyparagraph{\texorpdfstring{objTextBackward}{objTextBackward}}
 {\footnotesize\ttfamily bool obj\+Text\+Backward}
 
-\mbox{\Hypertarget{classGeometry_afed9a50ce71a6b4afe8be0fa01faf85a}\label{classGeometry_afed9a50ce71a6b4afe8be0fa01faf85a}} 
-\index{Geometry@{Geometry}!objTextBold@{objTextBold}}
-\index{objTextBold@{objTextBold}!Geometry@{Geometry}}
-\doxyparagraph{\texorpdfstring{objTextBold}{objTextBold}}
-{\footnotesize\ttfamily bool obj\+Text\+Bold}
-
 \mbox{\Hypertarget{classGeometry_a55a3988ac8255fcf5e354aca19fa984d}\label{classGeometry_a55a3988ac8255fcf5e354aca19fa984d}} 
 \index{Geometry@{Geometry}!objTextFont@{objTextFont}}
 \index{objTextFont@{objTextFont}!Geometry@{Geometry}}
 \doxyparagraph{\texorpdfstring{objTextFont}{objTextFont}}
 {\footnotesize\ttfamily QString obj\+Text\+Font}
-
-\mbox{\Hypertarget{classGeometry_a51e25f445db383dcfbf9c07b7ff74590}\label{classGeometry_a51e25f445db383dcfbf9c07b7ff74590}} 
-\index{Geometry@{Geometry}!objTextItalic@{objTextItalic}}
-\index{objTextItalic@{objTextItalic}!Geometry@{Geometry}}
-\doxyparagraph{\texorpdfstring{objTextItalic}{objTextItalic}}
-{\footnotesize\ttfamily bool obj\+Text\+Italic}
 
 \mbox{\Hypertarget{classGeometry_a6aeda44e1b3a63360c352b5454d1e7da}\label{classGeometry_a6aeda44e1b3a63360c352b5454d1e7da}} 
 \index{Geometry@{Geometry}!objTextJustify@{objTextJustify}}
@@ -1657,35 +1791,11 @@ Dim\+Leader\+Object\+::vulcanize.
 \doxyparagraph{\texorpdfstring{objTextJustify}{objTextJustify}}
 {\footnotesize\ttfamily QString obj\+Text\+Justify}
 
-\mbox{\Hypertarget{classGeometry_a7abd4d0a3137df09011f00abcd48effa}\label{classGeometry_a7abd4d0a3137df09011f00abcd48effa}} 
-\index{Geometry@{Geometry}!objTextOverline@{objTextOverline}}
-\index{objTextOverline@{objTextOverline}!Geometry@{Geometry}}
-\doxyparagraph{\texorpdfstring{objTextOverline}{objTextOverline}}
-{\footnotesize\ttfamily bool obj\+Text\+Overline}
-
 \mbox{\Hypertarget{classGeometry_ac9429bed2406eb0b91c4757f9a14ace3}\label{classGeometry_ac9429bed2406eb0b91c4757f9a14ace3}} 
 \index{Geometry@{Geometry}!objTextPath@{objTextPath}}
 \index{objTextPath@{objTextPath}!Geometry@{Geometry}}
 \doxyparagraph{\texorpdfstring{objTextPath}{objTextPath}}
 {\footnotesize\ttfamily QPainter\+Path obj\+Text\+Path}
-
-\mbox{\Hypertarget{classGeometry_a697933a191825b602d76eefaf3af326f}\label{classGeometry_a697933a191825b602d76eefaf3af326f}} 
-\index{Geometry@{Geometry}!objTextSize@{objTextSize}}
-\index{objTextSize@{objTextSize}!Geometry@{Geometry}}
-\doxyparagraph{\texorpdfstring{objTextSize}{objTextSize}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} obj\+Text\+Size}
-
-\mbox{\Hypertarget{classGeometry_ae6838350c529ce34b7ebc265a2f9b416}\label{classGeometry_ae6838350c529ce34b7ebc265a2f9b416}} 
-\index{Geometry@{Geometry}!objTextStrikeOut@{objTextStrikeOut}}
-\index{objTextStrikeOut@{objTextStrikeOut}!Geometry@{Geometry}}
-\doxyparagraph{\texorpdfstring{objTextStrikeOut}{objTextStrikeOut}}
-{\footnotesize\ttfamily bool obj\+Text\+Strike\+Out}
-
-\mbox{\Hypertarget{classGeometry_a24c17d15655e63cdcdb9831b3b3a1e3d}\label{classGeometry_a24c17d15655e63cdcdb9831b3b3a1e3d}} 
-\index{Geometry@{Geometry}!objTextUnderline@{objTextUnderline}}
-\index{objTextUnderline@{objTextUnderline}!Geometry@{Geometry}}
-\doxyparagraph{\texorpdfstring{objTextUnderline}{objTextUnderline}}
-{\footnotesize\ttfamily bool obj\+Text\+Underline}
 
 \mbox{\Hypertarget{classGeometry_aea46e55e75f9793fa12c083156f0fb93}\label{classGeometry_aea46e55e75f9793fa12c083156f0fb93}} 
 \index{Geometry@{Geometry}!objTextUpsideDown@{objTextUpsideDown}}
@@ -1704,6 +1814,18 @@ Dim\+Leader\+Object\+::vulcanize.
 \index{Type@{Type}!Geometry@{Geometry}}
 \doxyparagraph{\texorpdfstring{Type}{Type}}
 {\footnotesize\ttfamily int Type = \mbox{\hyperlink{embroidermodder_8h_a22d81a3797a15002a24137b9aa8e9ed8a188856aed0c8c16c681ef5a5ac15069e}{OBJ\+\_\+\+TYPE\+\_\+\+BASE}}}
+
+\mbox{\Hypertarget{classGeometry_a4ea20b9e54bcd6116d4f667e8ce4fce8}\label{classGeometry_a4ea20b9e54bcd6116d4f667e8ce4fce8}} 
+\index{Geometry@{Geometry}!x\_values@{x\_values}}
+\index{x\_values@{x\_values}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{x\_values}{x\_values}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}$>$ x\+\_\+values}
+
+\mbox{\Hypertarget{classGeometry_ac60faf88647a7a2c624aeb1caedd6581}\label{classGeometry_ac60faf88647a7a2c624aeb1caedd6581}} 
+\index{Geometry@{Geometry}!y\_values@{y\_values}}
+\index{y\_values@{y\_values}!Geometry@{Geometry}}
+\doxyparagraph{\texorpdfstring{y\_values}{y\_values}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}$>$ y\+\_\+values}
 
 
 

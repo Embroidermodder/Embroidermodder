@@ -28,7 +28,6 @@ var NAVTREE =
     [ "Overview", "index.html", null ],
     [ "About", "about.html", [
       [ "The Embroidermodder Project and Team", "about.html#the-embroidermodder-team", [
-        [ "License", "index.html#license", null ],
         [ "\"Core Development Team\"", "about.html#core-development-team", null ]
       ] ],
       [ "for Embroidermodder 2, libembroidery and all other related code", "about.html#Credits", [
@@ -51,45 +50,11 @@ var NAVTREE =
     [ "Downloads", "downloads.html", [
       [ "Alpha Build", "downloads.html#alpha-build", null ]
     ] ],
-    [ "Tutorials", "tutorials.html", [
-      [ "Altering a Single Stitch (2022-09-19)", "tutorials.html#altering-a-single-stitch", [
-        [ "Move a single stitch in an existing pattern", "tutorials.html#move-single-stitch", null ],
-        [ "Convert one pattern to another format", "tutorials.html#convert-patterns", null ]
-      ] ],
-      [ "Advanced Features", "tutorials.html#advanced-features", null ]
-    ] ],
-    [ "Post History", "post-history.html", [
-      [ "Fast Forward (2014-02-13)", "post-history.html#fast-forward", null ],
-      [ "January 2022 Development Notes For Embroidermodder 2 (2022-01-31)", "post-history.html#jan22news", [
-        [ "Broad Development Goals", "post-history.html#broad-development-goals", null ],
-        [ "The New Settings System", "post-history.html#new-settings-system", null ],
-        [ "Reducing Reliance on Qt5", "post-history.html#reducing-reliance-on-qt5", null ],
-        [ "Color Palettes", "post-history.html#color-palettes", null ],
-        [ "Conclusion", "post-history.html#conclusion", null ]
-      ] ],
-      [ "2022 Backer Update (2022-06-22)", "post-history.html#June", [
-        [ "Working Fill Algorithms", "post-history.html#working-fill-algorithm", null ],
-        [ "Working Render Algorithm", "post-history.html#working-render-algorithm", null ],
-        [ "Timetable", "post-history.html#timetable", null ]
-      ] ],
-      [ "Open Collective and New Plan (2021-12-19)", "post-history.html#open-collective", [
-        [ "The New Settings System", "post-history.html#the-new-settings-system", null ],
-        [ "Palettes", "post-history.html#Color", null ],
-        [ "Conclusion", "post-history.html#Conclusion", null ]
-      ] ],
-      [ "June 2022 Backer Update (2022-06-22)", "post-history.html#jun22news", [
-        [ "Fill Algorithms", "post-history.html#Working", null ]
-      ] ],
-      [ "New Website! (2013-09-09)", "post-history.html#new-website", null ],
-      [ "Crowdfunding Campaign Coming Soon! (2013-09-09)", "post-history.html#kickstarter", null ],
-      [ "Our Kickstarter Crowdfunding Campaign is LIVE! (2014-03-17)", "post-history.html#kickstarter-launched", null ]
-    ] ],
     [ "Changelog", "Changelog.html", null ],
     [ "Ideas", "Ideas.html", null ],
     [ "Formats", "formats.html", [
       [ "Overview", "formats.html#overview", [
         [ "Read/Write Support Levels", "formats.html#read-write-support-levels", [
-          [ "Basic Features", "tutorials.html#basic-features", null ],
           [ "Test Support Levels", "formats.html#test-support-levels", null ],
           [ "Documentation Support Levels", "formats.html#documentation-support-levels", null ],
           [ "Overall Support", "formats.html#overall-support", null ]
@@ -124,6 +89,7 @@ var NAVTREE =
           [ "Image Fitting", "geometry-and-algorithms.html#image-fitting", null ],
           [ "To Place", "geometry-and-algorithms.html#to-place", null ],
           [ "To Do", "geometry-and-algorithms.html#development-to-do", null ],
+          [ "Basic features", "geometry-and-algorithms.html#basic-features", null ],
           [ "Code quality and user friendliness", "geometry-and-algorithms.html#code-quality-and-user-friendliness", null ],
           [ "GUI", "geometry-and-algorithms.html#gui", null ]
         ] ],
@@ -150,18 +116,18 @@ var NAVTREE =
     ] ],
     [ "GNU Free Documentation License", "docs-license.html", null ],
     [ "Contributor Covenant Code of Conduct", "md_CODE_OF_CONDUCT.html", [
-      [ "Our Pledge", "md_CODE_OF_CONDUCT.html#autotoc_md38", null ],
-      [ "Our Standards", "md_CODE_OF_CONDUCT.html#autotoc_md39", null ],
-      [ "Enforcement Responsibilities", "md_CODE_OF_CONDUCT.html#autotoc_md40", null ],
-      [ "Scope", "md_CODE_OF_CONDUCT.html#autotoc_md41", null ],
-      [ "Enforcement", "md_CODE_OF_CONDUCT.html#autotoc_md42", null ],
-      [ "Enforcement Guidelines", "md_CODE_OF_CONDUCT.html#autotoc_md43", [
-        [ "1. Correction", "md_CODE_OF_CONDUCT.html#autotoc_md44", null ],
-        [ "2. Warning", "md_CODE_OF_CONDUCT.html#autotoc_md45", null ],
-        [ "3. Temporary Ban", "md_CODE_OF_CONDUCT.html#autotoc_md46", null ],
-        [ "4. Permanent Ban", "md_CODE_OF_CONDUCT.html#autotoc_md47", null ]
+      [ "Our Pledge", "md_CODE_OF_CONDUCT.html#autotoc_md37", null ],
+      [ "Our Standards", "md_CODE_OF_CONDUCT.html#autotoc_md38", null ],
+      [ "Enforcement Responsibilities", "md_CODE_OF_CONDUCT.html#autotoc_md39", null ],
+      [ "Scope", "md_CODE_OF_CONDUCT.html#autotoc_md40", null ],
+      [ "Enforcement", "md_CODE_OF_CONDUCT.html#autotoc_md41", null ],
+      [ "Enforcement Guidelines", "md_CODE_OF_CONDUCT.html#autotoc_md42", [
+        [ "1. Correction", "md_CODE_OF_CONDUCT.html#autotoc_md43", null ],
+        [ "2. Warning", "md_CODE_OF_CONDUCT.html#autotoc_md44", null ],
+        [ "3. Temporary Ban", "md_CODE_OF_CONDUCT.html#autotoc_md45", null ],
+        [ "4. Permanent Ban", "md_CODE_OF_CONDUCT.html#autotoc_md46", null ]
       ] ],
-      [ "Attribution", "md_CODE_OF_CONDUCT.html#autotoc_md48", null ]
+      [ "Attribution", "md_CODE_OF_CONDUCT.html#autotoc_md47", null ]
     ] ],
     [ "Privacy Policy for Embroidery Viewer", "md_privacy_policy.html", null ],
     [ "Todo List", "todo.html", null ],
@@ -203,19 +169,18 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "Changelog.html",
-"classEmbDetailsDialog.html#a7cbe4033746077c923f49aa0aabbf911",
-"classMainWindow.html#ab9244d24146b5107c23f1143a3e0acef",
-"classSettings__Dialog.html#aa639d8dbe57622a26c1d2199a01d3bcf",
-"classView.html#aad5f1927dc9fc0811309eedb50747dae",
-"embroidery_8h.html#a09945e6e919629c5787e61582c712ba1",
-"embroidery_8h.html#adbd6d6feaccea72e3b9820dc7177d202",
-"embroidery__internal_8h.html#a7f539183b901a4c1d25adcb71c6fbdc9",
-"format__csd_8c.html#ac48ab7a06130111eabb754be9de5089b",
-"formats.html#format-support",
-"interface_8cpp.html#a58d530175261044460f54127530d5363",
-"mainwindow_8cpp.html#ace1093b4246d2a22a4b69a230334784ba185297f3947b1f73e9ac73ba7618bc4d",
-"structEmbFormatList__.html#accdaceb0021572501a2605c112a340af",
-"structSettings__.html#aec1dee03c858e0d3910c40c209890ab0"
+"classGeometry.html#a0d9b69cf13c8a73745edb323ff4b5067",
+"classMainWindow.html#ac9c127dff59bfd141b4ba67221553134",
+"classSettings__Dialog.html#ae5efbb81adb03daffbc56f552f46b17a",
+"ellipse_8c.html#a5797ee3132ec4f879fb7866c1520941f",
+"embroidery_8h.html#a4e48ebde5bd4d82b875f98b347bdd62c",
+"embroidery__internal_8h.html#a10bf7626bac9c6c19648f5321e62439d",
+"embroidery__internal_8h.html#ac4422447b520fefbf45d4015ae206f6a",
+"format__ksm_8c.html#aa8a6f858c45e0292d4e4dc3ac72a7f09",
+"functions_vars_g.html",
+"main_8c.html#a7e6b98c4c0b01661909ee6b8383318cc",
+"md_CODE_OF_CONDUCT.html#autotoc_md42",
+"structEmbTime__.html#a7ff63df03ff6549639b712d24a94adef"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

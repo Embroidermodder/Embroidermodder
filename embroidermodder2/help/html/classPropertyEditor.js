@@ -19,7 +19,7 @@ var classPropertyEditor =
     [ "showOneType", "classPropertyEditor.html#aa3d58838990eed46ed357186724d74d4", null ],
     [ "togglePickAddMode", "classPropertyEditor.html#afae78b003aef6f5128ba9d8f026928b0", null ],
     [ "updateComboBoxBoolIfVaries", "classPropertyEditor.html#a7c782c237fdeb80dd92cad765ae1cf63", null ],
-    [ "updateComboBoxStrIfVaries", "classPropertyEditor.html#a4eb81070299b966cbb331115eb2c0955", null ],
+    [ "updateComboBoxStrIfVaries", "classPropertyEditor.html#aea7fa64986dcbd45d93b5b6068047855", null ],
     [ "updateFontComboBoxStrIfVaries", "classPropertyEditor.html#aecb9cebed7e91468135ae493121f53af", null ],
     [ "updateLineEditNumIfVaries", "classPropertyEditor.html#a4bae2ff6e83289bdb8b04a345b3dd8f3", null ],
     [ "updateLineEditStrIfVaries", "classPropertyEditor.html#a1804db7bfb8b06b386775c4de31e798e", null ],

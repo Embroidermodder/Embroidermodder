@@ -111,10 +111,6 @@ void \mbox{\hyperlink{classView_a4802757f067e398587073aac608f4a0f}{preview\+On}}
 \item 
 void \mbox{\hyperlink{classView_a70844daf87c63fdfb93c78436fb83215}{preview\+Off}} ()
 \item 
-void \mbox{\hyperlink{classView_ac85a07d654a28f7ba6fccddd0328d1a0}{enable\+Move\+Rapid\+Fire}} ()
-\item 
-void \mbox{\hyperlink{classView_ab1b8d3117e804d31da3f538473d9bb68}{disable\+Move\+Rapid\+Fire}} ()
-\item 
 bool \mbox{\hyperlink{classView_a03fe569d1119d2252ef8f547d0f5ef3b}{allow\+Rubber}} ()
 \item 
 void \mbox{\hyperlink{classView_aa9ac21e89f642400a99275f5d4553fb3}{add\+To\+Rubber\+Room}} (QGraphics\+Item $\ast$item)
@@ -154,7 +150,7 @@ void \mbox{\hyperlink{classView_a762bca22928e74a869759f7e19304496}{center\+At}} 
 \item 
 QPointF \mbox{\hyperlink{classView_a410eee3fe77195bbe49197bd8a3929d9}{center}} ()
 \item 
-QUndo\+Stack $\ast$ \mbox{\hyperlink{classView_a12f5b502fcacd93a3c6b66aae8ab4fd8}{get\+Undo\+Stack}} ()
+QUndo\+Stack $\ast$ \mbox{\hyperlink{classView_aa987e8c7cd0567c751a38aba012b7ce7}{get\+Undo\+Stack}} ()
 \item 
 void \mbox{\hyperlink{classView_ab710204f5bfc68633fdd0cb495ed76a9}{add\+Object}} (\mbox{\hyperlink{classGeometry}{Geometry}} $\ast$obj)
 \item 
@@ -289,7 +285,7 @@ bool \mbox{\hyperlink{classView_af239d1620261d1f625a40dfe22508543}{will\+Overflo
 \item 
 int \mbox{\hyperlink{classView_aff2e842454cfe5eda3cc35acdb9f8ff6}{round\+To\+Multiple}} (bool round\+Up, int num\+To\+Round, int multiple)
 \item 
-QPainter\+Path \mbox{\hyperlink{classView_ab36e5b39d5c1c97d8ca238f2ae83f2fc}{create\+Ruler\+Text\+Path}} (float x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y, QString str, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} height)
+QPainter\+Path \mbox{\hyperlink{classView_a7643705eaac2ac16cfcad63d39c91f8e}{create\+Ruler\+Text\+Path}} (\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} position, QString str, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} height)
 \item 
 std\+::vector$<$ QGraphics\+Item $\ast$ $>$ \mbox{\hyperlink{classView_ad68985233b2c0e3c0b7a12eee7cb8874}{create\+Object\+List}} (std\+::vector$<$ QGraphics\+Item $\ast$ $>$ list)
 \item 
@@ -472,11 +468,11 @@ int \mbox{\hyperlink{classView_ae8d25dfb73d42c4a5395fcecaaabe399}{pan\+StartY}}
 \doxyparagraph{\texorpdfstring{createOrigin()}{createOrigin()}}
 {\footnotesize\ttfamily void create\+Origin (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
-\mbox{\Hypertarget{classView_ab36e5b39d5c1c97d8ca238f2ae83f2fc}\label{classView_ab36e5b39d5c1c97d8ca238f2ae83f2fc}} 
+\mbox{\Hypertarget{classView_a7643705eaac2ac16cfcad63d39c91f8e}\label{classView_a7643705eaac2ac16cfcad63d39c91f8e}} 
 \index{View@{View}!createRulerTextPath@{createRulerTextPath}}
 \index{createRulerTextPath@{createRulerTextPath}!View@{View}}
 \doxyparagraph{\texorpdfstring{createRulerTextPath()}{createRulerTextPath()}}
-{\footnotesize\ttfamily QPainter\+Path create\+Ruler\+Text\+Path (\begin{DoxyParamCaption}\item[{float}]{x,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y,  }\item[{QString}]{str,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{height }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QPainter\+Path create\+Ruler\+Text\+Path (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{position,  }\item[{QString}]{str,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{height }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
 \mbox{\Hypertarget{classView_ada01f65675afbbc0b8006d58df5acb81}\label{classView_ada01f65675afbbc0b8006d58df5acb81}} 
 \index{View@{View}!cut@{cut}}
@@ -502,12 +498,6 @@ int \mbox{\hyperlink{classView_ae8d25dfb73d42c4a5395fcecaaabe399}{pan\+StartY}}
 \doxyparagraph{\texorpdfstring{deleteSelected}{deleteSelected}}
 {\footnotesize\ttfamily void delete\+Selected (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
-\mbox{\Hypertarget{classView_ab1b8d3117e804d31da3f538473d9bb68}\label{classView_ab1b8d3117e804d31da3f538473d9bb68}} 
-\index{View@{View}!disableMoveRapidFire@{disableMoveRapidFire}}
-\index{disableMoveRapidFire@{disableMoveRapidFire}!View@{View}}
-\doxyparagraph{\texorpdfstring{disableMoveRapidFire}{disableMoveRapidFire}}
-{\footnotesize\ttfamily void disable\+Move\+Rapid\+Fire (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
-
 \mbox{\Hypertarget{classView_a862810f7e46922a88db3c1d8cca8a1eb}\label{classView_a862810f7e46922a88db3c1d8cca8a1eb}} 
 \index{View@{View}!drawBackground@{drawBackground}}
 \index{drawBackground@{drawBackground}!View@{View}}
@@ -519,12 +509,6 @@ int \mbox{\hyperlink{classView_ae8d25dfb73d42c4a5395fcecaaabe399}{pan\+StartY}}
 \index{drawForeground@{drawForeground}!View@{View}}
 \doxyparagraph{\texorpdfstring{drawForeground()}{drawForeground()}}
 {\footnotesize\ttfamily void draw\+Foreground (\begin{DoxyParamCaption}\item[{QPainter $\ast$}]{painter,  }\item[{const QRectF \&}]{rect }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
-
-\mbox{\Hypertarget{classView_ac85a07d654a28f7ba6fccddd0328d1a0}\label{classView_ac85a07d654a28f7ba6fccddd0328d1a0}} 
-\index{View@{View}!enableMoveRapidFire@{enableMoveRapidFire}}
-\index{enableMoveRapidFire@{enableMoveRapidFire}!View@{View}}
-\doxyparagraph{\texorpdfstring{enableMoveRapidFire}{enableMoveRapidFire}}
-{\footnotesize\ttfamily void enable\+Move\+Rapid\+Fire (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
 \mbox{\Hypertarget{classView_a5edce8f98a7b7ab40e4c7b8787475e39}\label{classView_a5edce8f98a7b7ab40e4c7b8787475e39}} 
 \index{View@{View}!enterEvent@{enterEvent}}
@@ -538,11 +522,11 @@ int \mbox{\hyperlink{classView_ae8d25dfb73d42c4a5395fcecaaabe399}{pan\+StartY}}
 \doxyparagraph{\texorpdfstring{escapePressed}{escapePressed}}
 {\footnotesize\ttfamily void escape\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
-\mbox{\Hypertarget{classView_a12f5b502fcacd93a3c6b66aae8ab4fd8}\label{classView_a12f5b502fcacd93a3c6b66aae8ab4fd8}} 
+\mbox{\Hypertarget{classView_aa987e8c7cd0567c751a38aba012b7ce7}\label{classView_aa987e8c7cd0567c751a38aba012b7ce7}} 
 \index{View@{View}!getUndoStack@{getUndoStack}}
 \index{getUndoStack@{getUndoStack}!View@{View}}
 \doxyparagraph{\texorpdfstring{getUndoStack()}{getUndoStack()}}
-{\footnotesize\ttfamily QUndo\+Stack$\ast$ get\+Undo\+Stack (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily QUndo\+Stack $\ast$ get\+Undo\+Stack (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 \mbox{\Hypertarget{classView_ad4f95dfb8b4585faffcb4f1cadd8f746}\label{classView_ad4f95dfb8b4585faffcb4f1cadd8f746}} 
 \index{View@{View}!isLwtEnabled@{isLwtEnabled}}
@@ -581,7 +565,7 @@ int \mbox{\hyperlink{classView_ae8d25dfb73d42c4a5395fcecaaabe399}{pan\+StartY}}
 {\footnotesize\ttfamily void mouse\+Move\+Event (\begin{DoxyParamCaption}\item[{QMouse\+Event $\ast$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
 
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000200}{Todo}}]turn move into an actuator call. \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000197}{Todo}}]turn move into an actuator call. \end{DoxyRefDesc}
 \mbox{\Hypertarget{classView_ad2272e344e46519f026cd02f419884f1}\label{classView_ad2272e344e46519f026cd02f419884f1}} 
 \index{View@{View}!mousePressEvent@{mousePressEvent}}
 \index{mousePressEvent@{mousePressEvent}!View@{View}}
@@ -702,7 +686,11 @@ int \mbox{\hyperlink{classView_ae8d25dfb73d42c4a5395fcecaaabe399}{pan\+StartY}}
 \doxyparagraph{\texorpdfstring{roundToMultiple()}{roundToMultiple()}}
 {\footnotesize\ttfamily int round\+To\+Multiple (\begin{DoxyParamCaption}\item[{bool}]{round\+Up,  }\item[{int}]{num\+To\+Round,  }\item[{int}]{multiple }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
-\mbox{\Hypertarget{classView_ad0a1d907f075c38a1d34cf976a9527d8}\label{classView_ad0a1d907f075c38a1d34cf976a9527d8}} 
+Round the number {\itshape num\+To\+Round} to a multple of the number {\itshape multiple}, rounding up if {\itshape round\+Up} is true.
+
+First, {\itshape multiple} is 0 then we have an invalid input so just return the argument, then if the number is already a multiple of {\itshape multiple} then return the argument.
+
+Then take the remainder off the argument and determine which way to round the result. \mbox{\Hypertarget{classView_ad0a1d907f075c38a1d34cf976a9527d8}\label{classView_ad0a1d907f075c38a1d34cf976a9527d8}} 
 \index{View@{View}!scaleAction@{scaleAction}}
 \index{scaleAction@{scaleAction}!View@{View}}
 \doxyparagraph{\texorpdfstring{scaleAction}{scaleAction}}

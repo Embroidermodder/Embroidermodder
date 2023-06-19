@@ -19,8 +19,6 @@
 \item 
 struct \mbox{\hyperlink{structNode__}{Node\+\_\+}}
 \item 
-struct \mbox{\hyperlink{structSettings__}{Settings\+\_\+}}
-\begin{DoxyCompactList}\small\item\em Settings System. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classGeometry}{Geometry}}
 \begin{DoxyCompactList}\small\item\em The \mbox{\hyperlink{classGeometry}{Geometry}} class. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classSaveObject}{Save\+Object}}
@@ -59,25 +57,9 @@ class \mbox{\hyperlink{classSettings__Dialog}{Settings\+\_\+\+Dialog}}
 \item 
 class \mbox{\hyperlink{classStatusBar}{Status\+Bar}}
 \item 
-class \mbox{\hyperlink{classStatusBarButton}{Status\+Bar\+Button}}
-\item 
 class \mbox{\hyperlink{classUndoEditor}{Undo\+Editor}}
 \item 
-class \mbox{\hyperlink{classUndoableAddCommand}{Undoable\+Add\+Command}}
-\item 
-class \mbox{\hyperlink{classUndoableDeleteCommand}{Undoable\+Delete\+Command}}
-\item 
-class \mbox{\hyperlink{classUndoableMoveCommand}{Undoable\+Move\+Command}}
-\item 
-class \mbox{\hyperlink{classUndoableRotateCommand}{Undoable\+Rotate\+Command}}
-\item 
-class \mbox{\hyperlink{classUndoableScaleCommand}{Undoable\+Scale\+Command}}
-\item 
-class \mbox{\hyperlink{classUndoableNavCommand}{Undoable\+Nav\+Command}}
-\item 
-class \mbox{\hyperlink{classUndoableGripEditCommand}{Undoable\+Grip\+Edit\+Command}}
-\item 
-class \mbox{\hyperlink{classUndoableMirrorCommand}{Undoable\+Mirror\+Command}}
+class \mbox{\hyperlink{classUndoableCommand}{Undoable\+Command}}
 \item 
 class \mbox{\hyperlink{classView}{View}}
 \end{DoxyCompactItemize}
@@ -107,16 +89,14 @@ typedef std\+::string \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bd
 \item 
 typedef std\+::vector$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} $>$ \mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}}
 \item 
-typedef \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}($\ast$ \mbox{\hyperlink{embroidermodder_8h_ac4752dd96cc51c819d4a0625f08e984e}{Command}}) (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}})
-\item 
 typedef struct \mbox{\hyperlink{structNode__}{Node\+\_\+}} \mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}}
 \item 
-typedef std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, \mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} $>$ \mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}}
+typedef \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}($\ast$ \mbox{\hyperlink{embroidermodder_8h_ac4752dd96cc51c819d4a0625f08e984e}{Command}}) (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}})
 \item 
 typedef std\+::vector$<$ \mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} $>$ \mbox{\hyperlink{embroidermodder_8h_a0a2fc5503b3aad4fcbe2d25df1ac59b7}{Node\+List}}
 \item 
-typedef struct \mbox{\hyperlink{structSettings__}{Settings\+\_\+}} \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}}
-\begin{DoxyCompactList}\small\item\em Settings System. \end{DoxyCompactList}\end{DoxyCompactItemize}
+typedef std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, \mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} $>$ \mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}}
+\end{DoxyCompactItemize}
 \doxysubsubsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
@@ -176,8 +156,6 @@ enum \mbox{\hyperlink{embroidermodder_8h_a29bcbce98e36705fa9c1577a227d53c0}{OBJ\
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-int \mbox{\hyperlink{embroidermodder_8h_a6ae578baacca67900c25039bcf79b68f}{get\+\_\+action\+\_\+index}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} cmd)
-\begin{DoxyCompactList}\small\item\em get\+\_\+action\+\_\+index \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{embroidermodder_8h_ad141f39b096e71e6ce5fc4895050c0e7}{read\+\_\+configuration}} (const char $\ast$file)
 \item 
 void \mbox{\hyperlink{embroidermodder_8h_a85956dc9849133da7b4bf0c7be510513}{read\+\_\+settings}} (void)
@@ -186,10 +164,26 @@ void \mbox{\hyperlink{embroidermodder_8h_a8dd746dfd5b2f0859b7d4f6a9b7cde80}{writ
 \begin{DoxyCompactList}\small\item\em Main\+Window\+::write\+Settings. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} \mbox{\hyperlink{embroidermodder_8h_ae52bff4e5d4e869bcf009bc30b805249}{rotate\+\_\+vector}} (\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} v, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} alpha)
 \item 
+QString \mbox{\hyperlink{embroidermodder_8h_a8c7ebbbd85c9629efe7a233e96f5aa80}{translate\+\_\+str}} (const char $\ast$str)
+\item 
 bool \mbox{\hyperlink{embroidermodder_8h_adf72ec071837a334b7b15ecfe46a8404}{contains}} (\mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}}, \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}})
 \item 
-\mbox{\hyperlink{classView}{View}} $\ast$ \mbox{\hyperlink{embroidermodder_8h_a56168ddf2fbb6424cf793bc84e15ddfa}{active\+View}} (void)
+bool \mbox{\hyperlink{embroidermodder_8h_a8e199e892707e7dbbe2e5b44513253c8}{valid\+File\+Format}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} file\+Name)
+\begin{DoxyCompactList}\small\item\em Main\+Window\+::valid\+File\+Format. \end{DoxyCompactList}\item 
+QString \mbox{\hyperlink{embroidermodder_8h_a8a078e60ff6b32268d5229d5ab78c907}{file\+Extension}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} file\+Name)
+\begin{DoxyCompactList}\small\item\em Mdi\+Window\+::file\+Extension. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{embroidermodder_8h_ad26e1b3a371690d3865d8fcc237ade6b}{add\+\_\+polyline}} (QPainter\+Path p, \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} rubber\+Mode)
+\item 
+\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} \mbox{\hyperlink{embroidermodder_8h_a6868dc5b7d9778c0876e20fbc88af8e6}{read\+\_\+string\+\_\+setting}} (toml\+\_\+table\+\_\+t $\ast$table, const char $\ast$key)
+\item 
+\mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}} \mbox{\hyperlink{embroidermodder_8h_a6beda6410ec4a336a5b85fbb3bd402c8}{tokenize}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} str, const char delim)
+\begin{DoxyCompactList}\small\item\em tokenize \end{DoxyCompactList}\item 
+\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} \mbox{\hyperlink{embroidermodder_8h_a1ad59bc990c5a0fe30a47bd6f80127c1}{convert\+\_\+args\+\_\+to\+\_\+type}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} label, \mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}} args, const char $\ast$args\+\_\+template, \mbox{\hyperlink{embroidermodder_8h_a0a2fc5503b3aad4fcbe2d25df1ac59b7}{Node\+List}} a)
+\item 
+\mbox{\hyperlink{classView}{View}} $\ast$ \mbox{\hyperlink{embroidermodder_8h_ad46b684fa5c53504aed2c7dd2f1bc51d}{active\+View}} (void)
 \begin{DoxyCompactList}\small\item\em active\+View \end{DoxyCompactList}\item 
+QGraphics\+Scene $\ast$ \mbox{\hyperlink{embroidermodder_8h_a7e8f60beeeac6d93016cce43a7b9bf40}{active\+Scene}} ()
+\begin{DoxyCompactList}\small\item\em Main\+Window\+::active\+Scene. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidermodder_8h_a9cdb0f8f067cf167c29e1c7ed15f063a}{debug\+\_\+message}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} msg)
 \begin{DoxyCompactList}\small\item\em debug\+\_\+message \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidermodder_8h_a0eca4d9adccf7ea7711afaaa4bfb2843}{set\+\_\+enabled}} (QObject $\ast$parent, const char $\ast$key, bool enabled)
@@ -206,8 +200,6 @@ void \mbox{\hyperlink{embroidermodder_8h_abcc899d046aad6d80c8afd8b6553ca68}{set\
 \begin{DoxyCompactList}\small\item\em construct\+\_\+command \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidermodder_8h_ae79e367d32124bd7807d4e1b7a05c820}{create\+\_\+menu}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} menu, \mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}} def, bool top\+Level)
 \begin{DoxyCompactList}\small\item\em create\+\_\+menu \end{DoxyCompactList}\item 
-\mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}} \mbox{\hyperlink{embroidermodder_8h_a5d908072ba0e78d33b587b5e8d50526e}{tokenize}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, char)
-\begin{DoxyCompactList}\small\item\em tokenize \end{DoxyCompactList}\item 
 QPointF \mbox{\hyperlink{embroidermodder_8h_a58d530175261044460f54127530d5363}{to\+\_\+\+QPointF}} (\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} a)
 \item 
 \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} \mbox{\hyperlink{embroidermodder_8h_ad318219f41e0a4a05136b4fdcc479461}{to\+\_\+\+Emb\+Vector}} (QPointF a)
@@ -222,27 +214,45 @@ QPointF \mbox{\hyperlink{embroidermodder_8h_a58d530175261044460f54127530d5363}{t
 \begin{DoxyCompactList}\small\item\em radians\+\_\+\+\_\+ \end{DoxyCompactList}\item 
 \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{embroidermodder_8h_a2d40ea0351bf055cf11fe72d93e5d69a}{degrees\+\_\+\+\_\+}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} radian)
 \begin{DoxyCompactList}\small\item\em degrees\+\_\+\+\_\+ \end{DoxyCompactList}\item 
-std\+::vector$<$ QGraphics\+Item $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_ab31a3d11a592ee776e5f73fff35d9097}{to\+\_\+vector}} (QList$<$ QGraphics\+Item $\ast$ $>$ list)
+std\+::vector$<$ QGraphics\+Item $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_afced0743f0b3f38c899d12e6b480dc9c}{to\+\_\+vector}} (QList$<$ QGraphics\+Item $\ast$ $>$ list)
 \begin{DoxyCompactList}\small\item\em to\+\_\+vector \end{DoxyCompactList}\item 
-QList$<$ QGraphics\+Item $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_af3938e258c62845cb41c1972ce92bf03}{to\+\_\+qlist}} (std\+::vector$<$ QGraphics\+Item $\ast$ $>$ list)
+QList$<$ QGraphics\+Item $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_ada9fe285205bad34779526fca8a18b6b}{to\+\_\+qlist}} (std\+::vector$<$ QGraphics\+Item $\ast$ $>$ list)
 \begin{DoxyCompactList}\small\item\em to\+\_\+qlist \end{DoxyCompactList}\item 
-\mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} \mbox{\hyperlink{embroidermodder_8h_a4d6e0cc528689fbf18d6ca04e03332f2}{node}} (bool value)
+\mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}} \mbox{\hyperlink{embroidermodder_8h_ab8bd6d023f28244df60ce9cafc0dc278}{to\+\_\+string\+\_\+vector}} (QString\+List list)
+\begin{DoxyCompactList}\small\item\em to\+\_\+string\+\_\+vector \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{embroidermodder_8h_a59fb6bd04c98ec823436d8832a9b3772}{make\+\_\+ui\+\_\+element}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} description)
+\item 
+QDouble\+Spin\+Box $\ast$ \mbox{\hyperlink{embroidermodder_8h_a4fb76d346d7103ab5d99ecc677b9868c}{make\+\_\+spinbox}} (QGroup\+Box $\ast$gb, \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} d, QString object\+\_\+name, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} single\+\_\+step, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} lower, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} upper, \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} key)
+\item 
+QCheck\+Box $\ast$ \mbox{\hyperlink{embroidermodder_8h_a5d18f4bf5a61d31439ed8088cb3ca699}{make\+\_\+checkbox}} (QGroup\+Box $\ast$gb, \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} d, const char $\ast$label, const char $\ast$icon, \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} key)
+\item 
+\mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} \mbox{\hyperlink{embroidermodder_8h_a831cc93be15019cee791f21691944fa4}{node\+\_\+bool}} (bool value)
 \begin{DoxyCompactList}\small\item\em set\+\_\+node \end{DoxyCompactList}\item 
-\mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} \mbox{\hyperlink{embroidermodder_8h_ae479a4b38f144e39f92b68fdbe9ab4e6}{node}} (int value)
+\mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} \mbox{\hyperlink{embroidermodder_8h_ad78201538f20df69ca009392e3c1237b}{node\+\_\+int}} (int32\+\_\+t value)
 \begin{DoxyCompactList}\small\item\em create\+\_\+node \end{DoxyCompactList}\item 
-\mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} \mbox{\hyperlink{embroidermodder_8h_a033cc98378446006e0bc7a6e78daa5a6}{node}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} value)
+\mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} \mbox{\hyperlink{embroidermodder_8h_a1e37580068ea256fabf91ebc2be75edf}{node\+\_\+uint}} (uint32\+\_\+t value)
+\begin{DoxyCompactList}\small\item\em create\+\_\+node \end{DoxyCompactList}\item 
+\mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} \mbox{\hyperlink{embroidermodder_8h_a109ee4a1660d504581b8eb57acb32e9c}{node\+\_\+real}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} value)
 \begin{DoxyCompactList}\small\item\em set\+\_\+node \end{DoxyCompactList}\item 
-\mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} \mbox{\hyperlink{embroidermodder_8h_a24540929280f3c71dacaeed25a4a5bfc}{node}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} value)
+\mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} \mbox{\hyperlink{embroidermodder_8h_a2f6159b08040deb21534867f8a5dd60a}{node\+\_\+str}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} value)
 \begin{DoxyCompactList}\small\item\em set\+\_\+node \end{DoxyCompactList}\item 
-\mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} \mbox{\hyperlink{embroidermodder_8h_a20e487b734f7f12f0ea35395658268ef}{node}} (\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} value)
+\mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} \mbox{\hyperlink{embroidermodder_8h_a9bb99b3429827e0777aafd974fa29b9a}{node\+\_\+qstr}} (QString value)
 \begin{DoxyCompactList}\small\item\em set\+\_\+node \end{DoxyCompactList}\item 
-\mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} \mbox{\hyperlink{embroidermodder_8h_a5b21d729b12dcbb16e9176a5a80036bd}{node}} (\mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}} value)
+\mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} \mbox{\hyperlink{embroidermodder_8h_accf5aab1c0e4fa43f98c5b003ea9728d}{node\+\_\+str\+\_\+list}} (\mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}} value)
 \begin{DoxyCompactList}\small\item\em set\+\_\+node \end{DoxyCompactList}\item 
-QGraphics\+Scene $\ast$ \mbox{\hyperlink{embroidermodder_8h_a763cf8053b91a928c47b9f5f4f4d1984}{active\+Scene}} ()
-\begin{DoxyCompactList}\small\item\em Main\+Window\+::active\+Scene. \end{DoxyCompactList}\item 
-QString \mbox{\hyperlink{embroidermodder_8h_aab62fc203baa98973095e37c7bfad281}{Settings\+Path}} ()
-\begin{DoxyCompactList}\small\item\em Settings\+Path. \end{DoxyCompactList}\item 
-QString \mbox{\hyperlink{embroidermodder_8h_a862d81ba7c41e15d443394838a0e064e}{Settings\+Dir}} ()
+bool \mbox{\hyperlink{embroidermodder_8h_a76afffa21ebcd4469637a57865b5d00b}{get\+\_\+bool}} (\mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}} d, \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} key)
+\item 
+int32\+\_\+t \mbox{\hyperlink{embroidermodder_8h_a3992ed27b4b7968dee27321ae1d94193}{get\+\_\+int}} (\mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}} d, \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} key)
+\item 
+uint32\+\_\+t \mbox{\hyperlink{embroidermodder_8h_a34130d150d7cb128b8551d40c37916a2}{get\+\_\+uint}} (\mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}} d, \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} key)
+\item 
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{embroidermodder_8h_afac86b879835fc1bdfd97f9e4115e333}{get\+\_\+real}} (\mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}} d, \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} key)
+\item 
+\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} \mbox{\hyperlink{embroidermodder_8h_a69b2540d2c43e1c074890be5e394d981}{get\+\_\+str}} (\mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}} d, \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} key)
+\item 
+QString \mbox{\hyperlink{embroidermodder_8h_a42e35e0d1e48cb2b4a9a55e07da5cc7e}{get\+\_\+qstr}} (\mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}} d, \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} key)
+\item 
+\mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}} \mbox{\hyperlink{embroidermodder_8h_af43d3319ef2475b40e489d59c3a7afda}{get\+\_\+str\+\_\+list}} (\mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}} d, \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} key)
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
@@ -251,19 +261,39 @@ static const \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{E
 \item 
 \mbox{\hyperlink{classMdiArea}{Mdi\+Area}} $\ast$ \mbox{\hyperlink{embroidermodder_8h_a66e281cfd154b14af0793d81367287fe}{mdi\+Area}}
 \item 
-\mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} \mbox{\hyperlink{embroidermodder_8h_a19276c778f3034b94881cf1f8614dbb2}{settings}}
-\item 
-\mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} \mbox{\hyperlink{embroidermodder_8h_a1c6510838c31a5cc8eeadcdfceda753e}{dialog}}
-\item 
-\mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}} \mbox{\hyperlink{embroidermodder_8h_a478df7efa7a7b38c7be1b604ee9ddbde}{settings\+\_\+}}
-\item 
-\mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}} \mbox{\hyperlink{embroidermodder_8h_a191d89e97836acf4d1b64b3e5b2844a8}{dialog\+\_\+}}
+\mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}} \mbox{\hyperlink{embroidermodder_8h_a377eecdac06a43e089de9967e8f7a185}{settings}}
+\begin{DoxyCompactList}\small\item\em Settings System. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}} \mbox{\hyperlink{embroidermodder_8h_a634b03056e692115259bdc846325472e}{dialog}}
 \item 
 \mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}} \mbox{\hyperlink{embroidermodder_8h_aa31f965158c9fedd925896cd4bc73000}{config}}
 \item 
-QFont\+Combo\+Box $\ast$ \mbox{\hyperlink{embroidermodder_8h_a3aa139608b4816f4f70595814a31760d}{combo\+Box\+Text\+Single\+Font}}
+std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, \mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}} $>$ \mbox{\hyperlink{embroidermodder_8h_a8fd55704c68e0b0c761d71dcb4ce0928}{scripts}}
 \item 
-QString\+List \mbox{\hyperlink{embroidermodder_8h_aef9addca2233bf242fc9afb674437d3e}{justify\+\_\+options}}
+std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QGroup\+Box $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_acd41e54d655cc00c0f58566a0cd5cfbc}{group\+Boxes}}
+\item 
+std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QCheck\+Box $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_a3afa2dfea26b8cc2bc817168fa431159}{check\+Boxes}}
+\item 
+std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QSpin\+Box $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_a36054ce668377b97982074ea4fc8070a}{spin\+Boxes}}
+\item 
+std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QDouble\+Spin\+Box $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_a7d41329436505f01152817b9254a9aa1}{double\+Spin\+Boxes}}
+\item 
+std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QLabel $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_a58d8b86b54fc3a2b7816cdfab8b98747}{labels}}
+\item 
+std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QCombo\+Box $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_a5ab829a66fe27b9c199e2c90607cb9e8}{combo\+Boxes}}
+\item 
+std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QLine\+Edit $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_a08f234d24b95a26e62af91454e465228}{line\+Edits}}
+\item 
+std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QTool\+Button $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_ae7f31dd8d0edef11d6f8e59be1b2c0b2}{tool\+Buttons}}
+\item 
+std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, \mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}} $>$ \mbox{\hyperlink{embroidermodder_8h_aeb513579fb427affbe2400502a99862e}{config\+\_\+tables}}
+\item 
+std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QAction $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_ab73b1e9da070131adc3b89ef41d3638e}{action\+Hash}}
+\item 
+std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QTool\+Bar $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_adb2bff983070cfbd4a8ea792c2394aa8}{toolbar\+Hash}}
+\item 
+std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QMenu $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_a7a0dce18b70028dbaa1f4e40d67825ba}{menu\+Hash}}
+\item 
+std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QMenu $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_a558a1521e0dce5f93ccddf22beefdc9d}{sub\+Menu\+Hash}}
 \item 
 \mbox{\hyperlink{classMainWindow}{Main\+Window}} $\ast$ \mbox{\hyperlink{embroidermodder_8h_a13c21041ff7e5b6de6cedd66bd347f52}{\+\_\+main\+Win}}
 \item 
@@ -274,24 +304,6 @@ QString\+List \mbox{\hyperlink{embroidermodder_8h_aef9addca2233bf242fc9afb674437
 \mbox{\hyperlink{classUndoEditor}{Undo\+Editor}} $\ast$ \mbox{\hyperlink{embroidermodder_8h_a1ca7f462fb503628fcffef7f97f510ba}{dock\+Undo\+Edit}}
 \item 
 \mbox{\hyperlink{classStatusBar}{Status\+Bar}} $\ast$ \mbox{\hyperlink{embroidermodder_8h_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}
-\item 
-std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QGroup\+Box $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_acd41e54d655cc00c0f58566a0cd5cfbc}{group\+Boxes}}
-\item 
-std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QCombo\+Box $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_a5ab829a66fe27b9c199e2c90607cb9e8}{combo\+Boxes}}
-\item 
-std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QLine\+Edit $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_a08f234d24b95a26e62af91454e465228}{line\+Edits}}
-\item 
-std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QTool\+Button $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_ae7f31dd8d0edef11d6f8e59be1b2c0b2}{tool\+Buttons}}
-\item 
-std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, \mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}} $>$ \mbox{\hyperlink{embroidermodder_8h_aacf3047c9cfd319c3e96a9865ed4157f}{group\+\_\+box\+\_\+data}}
-\item 
-std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QAction $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_ab73b1e9da070131adc3b89ef41d3638e}{action\+Hash}}
-\item 
-std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QTool\+Bar $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_adb2bff983070cfbd4a8ea792c2394aa8}{toolbar\+Hash}}
-\item 
-std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QMenu $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_a7a0dce18b70028dbaa1f4e40d67825ba}{menu\+Hash}}
-\item 
-std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QMenu $\ast$ $>$ \mbox{\hyperlink{embroidermodder_8h_a558a1521e0dce5f93ccddf22beefdc9d}{sub\+Menu\+Hash}}
 \end{DoxyCompactItemize}
 
 
@@ -374,20 +386,6 @@ The only header for the GUI part\+: a good overview of this source code.
 \doxyparagraph{\texorpdfstring{NodeList}{NodeList}}
 {\footnotesize\ttfamily typedef std\+::vector$<$\mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}}$>$ \mbox{\hyperlink{embroidermodder_8h_a0a2fc5503b3aad4fcbe2d25df1ac59b7}{Node\+List}}}
 
-\mbox{\Hypertarget{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}\label{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}} 
-\index{embroidermodder.h@{embroidermodder.h}!Settings@{Settings}}
-\index{Settings@{Settings}!embroidermodder.h@{embroidermodder.h}}
-\doxyparagraph{\texorpdfstring{Settings}{Settings}}
-{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{structSettings__}{Settings\+\_\+}} \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}}}
-
-
-
-Settings System. 
-
-Rather than pollute the global namespace, we collect together all the global settings into a structure that stores them. This also allows us to create a complete copy of the settings for the purpose of restoring them if the user cancels out of the Settings Dialog.
-
-\begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000002}{Todo}}]fully convert into the Dictionaries settings, dialog, accept and preivew. \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}\label{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}} 
 \index{embroidermodder.h@{embroidermodder.h}!String@{String}}
 \index{String@{String}!embroidermodder.h@{embroidermodder.h}}
@@ -432,7 +430,7 @@ OBJ\+\_\+\+COLOR&\\
 
 \raisebox{\heightof{T}}[0pt][0pt]{\index{OBJ\_LTYPE@{OBJ\_LTYPE}!embroidermodder.h@{embroidermodder.h}}\index{embroidermodder.h@{embroidermodder.h}!OBJ\_LTYPE@{OBJ\_LTYPE}}}\mbox{\Hypertarget{embroidermodder_8h_a29bcbce98e36705fa9c1577a227d53c0a21cbc22cd57ac906315fac3d245a25b9}\label{embroidermodder_8h_a29bcbce98e36705fa9c1577a227d53c0a21cbc22cd57ac906315fac3d245a25b9}} 
 OBJ\+\_\+\+LTYPE&value type -\/ int\+: 0-\/255 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000003}{Todo}}]Use color chart in formats/format-\/dxf.\+h for this \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000002}{Todo}}]Use color chart in formats/format-\/dxf.\+h for this \end{DoxyRefDesc}
 \\
 \hline
 
@@ -584,11 +582,11 @@ OBJ\+\_\+\+TYPE\+\_\+\+UNKNOWN&\\
 
 
 \doxysubsubsection{Function Documentation}
-\mbox{\Hypertarget{embroidermodder_8h_a763cf8053b91a928c47b9f5f4f4d1984}\label{embroidermodder_8h_a763cf8053b91a928c47b9f5f4f4d1984}} 
+\mbox{\Hypertarget{embroidermodder_8h_a7e8f60beeeac6d93016cce43a7b9bf40}\label{embroidermodder_8h_a7e8f60beeeac6d93016cce43a7b9bf40}} 
 \index{embroidermodder.h@{embroidermodder.h}!activeScene@{activeScene}}
 \index{activeScene@{activeScene}!embroidermodder.h@{embroidermodder.h}}
 \doxyparagraph{\texorpdfstring{activeScene()}{activeScene()}}
-{\footnotesize\ttfamily QGraphics\+Scene$\ast$ active\+Scene (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily QGraphics\+Scene $\ast$ active\+Scene (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 
 
@@ -597,11 +595,11 @@ Main\+Window\+::active\+Scene.
 \begin{DoxyReturn}{Returns}
 
 \end{DoxyReturn}
-\mbox{\Hypertarget{embroidermodder_8h_a56168ddf2fbb6424cf793bc84e15ddfa}\label{embroidermodder_8h_a56168ddf2fbb6424cf793bc84e15ddfa}} 
+\mbox{\Hypertarget{embroidermodder_8h_ad46b684fa5c53504aed2c7dd2f1bc51d}\label{embroidermodder_8h_ad46b684fa5c53504aed2c7dd2f1bc51d}} 
 \index{embroidermodder.h@{embroidermodder.h}!activeView@{activeView}}
 \index{activeView@{activeView}!embroidermodder.h@{embroidermodder.h}}
 \doxyparagraph{\texorpdfstring{activeView()}{activeView()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classView}{View}}$\ast$ active\+View (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{classView}{View}} $\ast$ active\+View (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
 
 
 
@@ -626,11 +624,15 @@ Main\+Window\+::actuator.
 \hline
 \end{DoxyParams}
 \hypertarget{mainwindow_8cpp_autotoc_md7}{}\doxyparagraph{RUN COMMAND}\label{mainwindow_8cpp_autotoc_md7}
-QAction$\ast$ act = qobject\+\_\+cast$<$\+QAction$\ast$$>$(sender()); if (act) \{ prompt-\/$>$end\+Command(); prompt-\/$>$set\+Current\+Text(act-\/$>$object\+Name()); prompt-\/$>$process\+Input(); \}\hypertarget{mainwindow_8cpp_autotoc_md8}{}\doxyparagraph{INIT}\label{mainwindow_8cpp_autotoc_md8}
-QString file\+Name = \char`\"{}commands/\char`\"{} + cmd + \char`\"{}/\char`\"{} + cmd + \char`\"{}.\+js\char`\"{}; if (!get\+Settings\+Selection\+Mode\+Pick\+First()) \{ actuator(\char`\"{}clear-\/selection\char`\"{}); \} TODO\+: Uncomment this line when post-\/selection is available engine-\/$>$evaluate(cmd + \char`\"{}\+\_\+main(void)\char`\"{}, file\+Name);\hypertarget{mainwindow_8cpp_autotoc_md9}{}\doxyparagraph{PROMPT}\label{mainwindow_8cpp_autotoc_md9}
-QString file\+Name = \char`\"{}commands/\char`\"{} + cmd + \char`\"{}/\char`\"{} + cmd + \char`\"{}.\+js\char`\"{}; NOTE\+: Replace any special characters that will cause a syntax error QString safe\+Str = str; safe\+Str.\+replace(\char`\"{}\textbackslash{}\textbackslash{}\char`\"{}, \char`\"{}\textbackslash{}\textbackslash{}\textbackslash{}\textbackslash{}\char`\"{}); safe\+Str.\+replace(\char`\"{}\textbackslash{}\textquotesingle{}\char`\"{}, \char`\"{}\textbackslash{}\textbackslash{}\textbackslash{}\textquotesingle{}\char`\"{});
+QAction$\ast$ act = qobject\+\_\+cast$<$\+QAction$\ast$$>$(sender()); if (act) \{ prompt-\/\texorpdfstring{$>$}{>}end\+Command(); prompt-\/\texorpdfstring{$>$}{>}set\+Current\+Text(act-\/\texorpdfstring{$>$}{>}object\+Name()); prompt-\/\texorpdfstring{$>$}{>}process\+Input(); \}\hypertarget{mainwindow_8cpp_autotoc_md8}{}\doxyparagraph{INIT}\label{mainwindow_8cpp_autotoc_md8}
+QString file\+Name = \char`\"{}commands/\char`\"{} + cmd + \char`\"{}/\char`\"{} + cmd + \char`\"{}.\+js\char`\"{}; if (!get\+Settings\+Selection\+Mode\+Pick\+First()) \{ actuator(\char`\"{}clear-\/selection\char`\"{}); \} TODO\+: Uncomment this line when post-\/selection is available engine-\/\texorpdfstring{$>$}{>}evaluate(cmd + \char`\"{}\+\_\+main(void)\char`\"{}, file\+Name);\hypertarget{mainwindow_8cpp_autotoc_md9}{}\doxyparagraph{PROMPT}\label{mainwindow_8cpp_autotoc_md9}
+QString file\+Name = \char`\"{}commands/\char`\"{} + cmd + \char`\"{}/\char`\"{} + cmd + \char`\"{}.\+js\char`\"{}; NOTE\+: Replace any special characters that will cause a syntax error QString safe\+Str = str; safe\+Str.\+replace(\char`\"{}\textbackslash{}\textbackslash{}\char`\"{}, \char`\"{}\textbackslash{}\textbackslash{}\char`\"{}); safe\+Str.\+replace(\char`\"{}\textbackslash{}\textquotesingle{}\char`\"{}, \char`\"{}\textbackslash{}\textbackslash{}\textquotesingle{}\char`\"{});  if (prompt-\/$>$prompt\+Input-\/$>$rapid\+Fire\+Enabled) \{     engine-\/$>$evaluate(cmd + \char`\"{}\+\_\+prompt(\textquotesingle{}\char`\"{} + safe\+Str + \char`\"{}\textquotesingle{})\char`\"{}, file\+Name); \} else \{     engine-\/$>$evaluate(cmd + \char`\"{}\+\_\+prompt(\textquotesingle{}\char`\"{} + safe\+Str.\+to\+Upper() + \char`\"{}\textquotesingle{})"{}, file\+Name); \} \mbox{\Hypertarget{embroidermodder_8h_ad26e1b3a371690d3865d8fcc237ade6b}\label{embroidermodder_8h_ad26e1b3a371690d3865d8fcc237ade6b}} 
+\index{embroidermodder.h@{embroidermodder.h}!add\_polyline@{add\_polyline}}
+\index{add\_polyline@{add\_polyline}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{add\_polyline()}{add\_polyline()}}
+{\footnotesize\ttfamily void add\+\_\+polyline (\begin{DoxyParamCaption}\item[{QPainter\+Path}]{p,  }\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{rubber\+Mode }\end{DoxyParamCaption})}
 
-if (prompt-\/$>$is\+Rapid\+Fire\+Enabled()) \{ engine-\/$>$evaluate(cmd + \char`\"{}\+\_\+prompt(\textquotesingle{}\char`\"{} + safe\+Str + \char`\"{}\textquotesingle{})\char`\"{}, file\+Name); \} else \{ engine-\/$>$evaluate(cmd + \char`\"{}\+\_\+prompt(\textquotesingle{}\char`\"{} + safe\+Str.\+to\+Upper() + \char`\"{}\textquotesingle{})\char`\"{}, file\+Name); \} \mbox{\Hypertarget{embroidermodder_8h_af5aed5ab4829e09b6c9baa6ff33cdd2e}\label{embroidermodder_8h_af5aed5ab4829e09b6c9baa6ff33cdd2e}} 
+\mbox{\Hypertarget{embroidermodder_8h_af5aed5ab4829e09b6c9baa6ff33cdd2e}\label{embroidermodder_8h_af5aed5ab4829e09b6c9baa6ff33cdd2e}} 
 \index{embroidermodder.h@{embroidermodder.h}!construct\_command@{construct\_command}}
 \index{construct\_command@{construct\_command}!embroidermodder.h@{embroidermodder.h}}
 \doxyparagraph{\texorpdfstring{construct\_command()}{construct\_command()}}
@@ -655,6 +657,12 @@ construct\+\_\+command
 \index{contains@{contains}!embroidermodder.h@{embroidermodder.h}}
 \doxyparagraph{\texorpdfstring{contains()}{contains()}}
 {\footnotesize\ttfamily bool contains (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}}}]{list,  }\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{entry }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{embroidermodder_8h_a1ad59bc990c5a0fe30a47bd6f80127c1}\label{embroidermodder_8h_a1ad59bc990c5a0fe30a47bd6f80127c1}} 
+\index{embroidermodder.h@{embroidermodder.h}!convert\_args\_to\_type@{convert\_args\_to\_type}}
+\index{convert\_args\_to\_type@{convert\_args\_to\_type}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{convert\_args\_to\_type()}{convert\_args\_to\_type()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} convert\+\_\+args\+\_\+to\+\_\+type (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{label,  }\item[{\mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}}}]{args,  }\item[{const char $\ast$}]{args\+\_\+template,  }\item[{\mbox{\hyperlink{embroidermodder_8h_a0a2fc5503b3aad4fcbe2d25df1ac59b7}{Node\+List}}}]{a }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{embroidermodder_8h_ae79e367d32124bd7807d4e1b7a05c820}\label{embroidermodder_8h_ae79e367d32124bd7807d4e1b7a05c820}} 
 \index{embroidermodder.h@{embroidermodder.h}!create\_menu@{create\_menu}}
@@ -708,29 +716,89 @@ degrees\+\_\+\+\_\+
 \begin{DoxyReturn}{Returns}
 
 \end{DoxyReturn}
-\mbox{\Hypertarget{embroidermodder_8h_a6ae578baacca67900c25039bcf79b68f}\label{embroidermodder_8h_a6ae578baacca67900c25039bcf79b68f}} 
-\index{embroidermodder.h@{embroidermodder.h}!get\_action\_index@{get\_action\_index}}
-\index{get\_action\_index@{get\_action\_index}!embroidermodder.h@{embroidermodder.h}}
-\doxyparagraph{\texorpdfstring{get\_action\_index()}{get\_action\_index()}}
-{\footnotesize\ttfamily int get\+\_\+action\+\_\+index (\begin{DoxyParamCaption}\item[{std\+::string}]{cmd }\end{DoxyParamCaption})}
+\mbox{\Hypertarget{embroidermodder_8h_a8a078e60ff6b32268d5229d5ab78c907}\label{embroidermodder_8h_a8a078e60ff6b32268d5229d5ab78c907}} 
+\index{embroidermodder.h@{embroidermodder.h}!fileExtension@{fileExtension}}
+\index{fileExtension@{fileExtension}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{fileExtension()}{fileExtension()}}
+{\footnotesize\ttfamily QString file\+Extension (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{file\+Name }\end{DoxyParamCaption})}
 
 
 
-get\+\_\+action\+\_\+index 
+Mdi\+Window\+::file\+Extension. 
 
 
 \begin{DoxyParams}{Parameters}
-{\em cmd} & \\
+{\em file\+Name} & \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 
 \end{DoxyReturn}
-\mbox{\Hypertarget{embroidermodder_8h_a4d6e0cc528689fbf18d6ca04e03332f2}\label{embroidermodder_8h_a4d6e0cc528689fbf18d6ca04e03332f2}} 
-\index{embroidermodder.h@{embroidermodder.h}!node@{node}}
-\index{node@{node}!embroidermodder.h@{embroidermodder.h}}
-\doxyparagraph{\texorpdfstring{node()}{node()}\hspace{0.1cm}{\footnotesize\ttfamily [1/6]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} node (\begin{DoxyParamCaption}\item[{bool}]{value }\end{DoxyParamCaption})}
+\mbox{\Hypertarget{embroidermodder_8h_a76afffa21ebcd4469637a57865b5d00b}\label{embroidermodder_8h_a76afffa21ebcd4469637a57865b5d00b}} 
+\index{embroidermodder.h@{embroidermodder.h}!get\_bool@{get\_bool}}
+\index{get\_bool@{get\_bool}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{get\_bool()}{get\_bool()}}
+{\footnotesize\ttfamily bool get\+\_\+bool (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}}}]{d,  }\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{key }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{embroidermodder_8h_a3992ed27b4b7968dee27321ae1d94193}\label{embroidermodder_8h_a3992ed27b4b7968dee27321ae1d94193}} 
+\index{embroidermodder.h@{embroidermodder.h}!get\_int@{get\_int}}
+\index{get\_int@{get\_int}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{get\_int()}{get\_int()}}
+{\footnotesize\ttfamily int32\+\_\+t get\+\_\+int (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}}}]{d,  }\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{key }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{embroidermodder_8h_a42e35e0d1e48cb2b4a9a55e07da5cc7e}\label{embroidermodder_8h_a42e35e0d1e48cb2b4a9a55e07da5cc7e}} 
+\index{embroidermodder.h@{embroidermodder.h}!get\_qstr@{get\_qstr}}
+\index{get\_qstr@{get\_qstr}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{get\_qstr()}{get\_qstr()}}
+{\footnotesize\ttfamily QString get\+\_\+qstr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}}}]{d,  }\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{key }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{embroidermodder_8h_afac86b879835fc1bdfd97f9e4115e333}\label{embroidermodder_8h_afac86b879835fc1bdfd97f9e4115e333}} 
+\index{embroidermodder.h@{embroidermodder.h}!get\_real@{get\_real}}
+\index{get\_real@{get\_real}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{get\_real()}{get\_real()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} get\+\_\+real (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}}}]{d,  }\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{key }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{embroidermodder_8h_a69b2540d2c43e1c074890be5e394d981}\label{embroidermodder_8h_a69b2540d2c43e1c074890be5e394d981}} 
+\index{embroidermodder.h@{embroidermodder.h}!get\_str@{get\_str}}
+\index{get\_str@{get\_str}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{get\_str()}{get\_str()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} get\+\_\+str (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}}}]{d,  }\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{key }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{embroidermodder_8h_af43d3319ef2475b40e489d59c3a7afda}\label{embroidermodder_8h_af43d3319ef2475b40e489d59c3a7afda}} 
+\index{embroidermodder.h@{embroidermodder.h}!get\_str\_list@{get\_str\_list}}
+\index{get\_str\_list@{get\_str\_list}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{get\_str\_list()}{get\_str\_list()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}} get\+\_\+str\+\_\+list (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}}}]{d,  }\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{key }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{embroidermodder_8h_a34130d150d7cb128b8551d40c37916a2}\label{embroidermodder_8h_a34130d150d7cb128b8551d40c37916a2}} 
+\index{embroidermodder.h@{embroidermodder.h}!get\_uint@{get\_uint}}
+\index{get\_uint@{get\_uint}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{get\_uint()}{get\_uint()}}
+{\footnotesize\ttfamily uint32\+\_\+t get\+\_\+uint (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}}}]{d,  }\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{key }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{embroidermodder_8h_a5d18f4bf5a61d31439ed8088cb3ca699}\label{embroidermodder_8h_a5d18f4bf5a61d31439ed8088cb3ca699}} 
+\index{embroidermodder.h@{embroidermodder.h}!make\_checkbox@{make\_checkbox}}
+\index{make\_checkbox@{make\_checkbox}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{make\_checkbox()}{make\_checkbox()}}
+{\footnotesize\ttfamily QCheck\+Box $\ast$ make\+\_\+checkbox (\begin{DoxyParamCaption}\item[{QGroup\+Box $\ast$}]{gb,  }\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{dictionary,  }\item[{const char $\ast$}]{label,  }\item[{const char $\ast$}]{icon,  }\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{key }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{embroidermodder_8h_a4fb76d346d7103ab5d99ecc677b9868c}\label{embroidermodder_8h_a4fb76d346d7103ab5d99ecc677b9868c}} 
+\index{embroidermodder.h@{embroidermodder.h}!make\_spinbox@{make\_spinbox}}
+\index{make\_spinbox@{make\_spinbox}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{make\_spinbox()}{make\_spinbox()}}
+{\footnotesize\ttfamily QDouble\+Spin\+Box $\ast$ make\+\_\+spinbox (\begin{DoxyParamCaption}\item[{QGroup\+Box $\ast$}]{gb,  }\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{dictionary,  }\item[{QString}]{object\+\_\+name,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{single\+\_\+step,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{lower,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{upper,  }\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{key }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{embroidermodder_8h_a59fb6bd04c98ec823436d8832a9b3772}\label{embroidermodder_8h_a59fb6bd04c98ec823436d8832a9b3772}} 
+\index{embroidermodder.h@{embroidermodder.h}!make\_ui\_element@{make\_ui\_element}}
+\index{make\_ui\_element@{make\_ui\_element}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{make\_ui\_element()}{make\_ui\_element()}}
+{\footnotesize\ttfamily void make\+\_\+ui\+\_\+element (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{description }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{embroidermodder_8h_a831cc93be15019cee791f21691944fa4}\label{embroidermodder_8h_a831cc93be15019cee791f21691944fa4}} 
+\index{embroidermodder.h@{embroidermodder.h}!node\_bool@{node\_bool}}
+\index{node\_bool@{node\_bool}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{node\_bool()}{node\_bool()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} node\+\_\+bool (\begin{DoxyParamCaption}\item[{bool}]{value }\end{DoxyParamCaption})}
 
 
 
@@ -743,45 +811,11 @@ set\+\_\+node
 {\em value} & \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{embroidermodder_8h_a033cc98378446006e0bc7a6e78daa5a6}\label{embroidermodder_8h_a033cc98378446006e0bc7a6e78daa5a6}} 
-\index{embroidermodder.h@{embroidermodder.h}!node@{node}}
-\index{node@{node}!embroidermodder.h@{embroidermodder.h}}
-\doxyparagraph{\texorpdfstring{node()}{node()}\hspace{0.1cm}{\footnotesize\ttfamily [2/6]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} node (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{value }\end{DoxyParamCaption})}
-
-
-
-set\+\_\+node 
-
-
-\begin{DoxyParams}{Parameters}
-{\em node} & \\
-\hline
-{\em value} & \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{embroidermodder_8h_a20e487b734f7f12f0ea35395658268ef}\label{embroidermodder_8h_a20e487b734f7f12f0ea35395658268ef}} 
-\index{embroidermodder.h@{embroidermodder.h}!node@{node}}
-\index{node@{node}!embroidermodder.h@{embroidermodder.h}}
-\doxyparagraph{\texorpdfstring{node()}{node()}\hspace{0.1cm}{\footnotesize\ttfamily [3/6]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} node (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{value }\end{DoxyParamCaption})}
-
-
-
-set\+\_\+node 
-
-
-\begin{DoxyParams}{Parameters}
-{\em node} & \\
-\hline
-{\em value} & \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{embroidermodder_8h_ae479a4b38f144e39f92b68fdbe9ab4e6}\label{embroidermodder_8h_ae479a4b38f144e39f92b68fdbe9ab4e6}} 
-\index{embroidermodder.h@{embroidermodder.h}!node@{node}}
-\index{node@{node}!embroidermodder.h@{embroidermodder.h}}
-\doxyparagraph{\texorpdfstring{node()}{node()}\hspace{0.1cm}{\footnotesize\ttfamily [4/6]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} node (\begin{DoxyParamCaption}\item[{int}]{value }\end{DoxyParamCaption})}
+\mbox{\Hypertarget{embroidermodder_8h_ad78201538f20df69ca009392e3c1237b}\label{embroidermodder_8h_ad78201538f20df69ca009392e3c1237b}} 
+\index{embroidermodder.h@{embroidermodder.h}!node\_int@{node\_int}}
+\index{node\_int@{node\_int}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{node\_int()}{node\_int()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} node\+\_\+int (\begin{DoxyParamCaption}\item[{int32\+\_\+t}]{value }\end{DoxyParamCaption})}
 
 
 
@@ -795,11 +829,11 @@ create\+\_\+node
 \begin{DoxyReturn}{Returns}
 
 \end{DoxyReturn}
-\mbox{\Hypertarget{embroidermodder_8h_a24540929280f3c71dacaeed25a4a5bfc}\label{embroidermodder_8h_a24540929280f3c71dacaeed25a4a5bfc}} 
-\index{embroidermodder.h@{embroidermodder.h}!node@{node}}
-\index{node@{node}!embroidermodder.h@{embroidermodder.h}}
-\doxyparagraph{\texorpdfstring{node()}{node()}\hspace{0.1cm}{\footnotesize\ttfamily [5/6]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} node (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{value }\end{DoxyParamCaption})}
+\mbox{\Hypertarget{embroidermodder_8h_a9bb99b3429827e0777aafd974fa29b9a}\label{embroidermodder_8h_a9bb99b3429827e0777aafd974fa29b9a}} 
+\index{embroidermodder.h@{embroidermodder.h}!node\_qstr@{node\_qstr}}
+\index{node\_qstr@{node\_qstr}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{node\_qstr()}{node\_qstr()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} node\+\_\+qstr (\begin{DoxyParamCaption}\item[{QString}]{value }\end{DoxyParamCaption})}
 
 
 
@@ -812,11 +846,11 @@ set\+\_\+node
 {\em value} & \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{embroidermodder_8h_a5b21d729b12dcbb16e9176a5a80036bd}\label{embroidermodder_8h_a5b21d729b12dcbb16e9176a5a80036bd}} 
-\index{embroidermodder.h@{embroidermodder.h}!node@{node}}
-\index{node@{node}!embroidermodder.h@{embroidermodder.h}}
-\doxyparagraph{\texorpdfstring{node()}{node()}\hspace{0.1cm}{\footnotesize\ttfamily [6/6]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} node (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}}}]{value }\end{DoxyParamCaption})}
+\mbox{\Hypertarget{embroidermodder_8h_a109ee4a1660d504581b8eb57acb32e9c}\label{embroidermodder_8h_a109ee4a1660d504581b8eb57acb32e9c}} 
+\index{embroidermodder.h@{embroidermodder.h}!node\_real@{node\_real}}
+\index{node\_real@{node\_real}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{node\_real()}{node\_real()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} node\+\_\+real (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{value }\end{DoxyParamCaption})}
 
 
 
@@ -829,6 +863,58 @@ set\+\_\+node
 {\em value} & \\
 \hline
 \end{DoxyParams}
+\mbox{\Hypertarget{embroidermodder_8h_a2f6159b08040deb21534867f8a5dd60a}\label{embroidermodder_8h_a2f6159b08040deb21534867f8a5dd60a}} 
+\index{embroidermodder.h@{embroidermodder.h}!node\_str@{node\_str}}
+\index{node\_str@{node\_str}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{node\_str()}{node\_str()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} node\+\_\+str (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{value }\end{DoxyParamCaption})}
+
+
+
+set\+\_\+node 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & \\
+\hline
+{\em value} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{embroidermodder_8h_accf5aab1c0e4fa43f98c5b003ea9728d}\label{embroidermodder_8h_accf5aab1c0e4fa43f98c5b003ea9728d}} 
+\index{embroidermodder.h@{embroidermodder.h}!node\_str\_list@{node\_str\_list}}
+\index{node\_str\_list@{node\_str\_list}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{node\_str\_list()}{node\_str\_list()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} node\+\_\+str\+\_\+list (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}}}]{value }\end{DoxyParamCaption})}
+
+
+
+set\+\_\+node 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & \\
+\hline
+{\em value} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{embroidermodder_8h_a1e37580068ea256fabf91ebc2be75edf}\label{embroidermodder_8h_a1e37580068ea256fabf91ebc2be75edf}} 
+\index{embroidermodder.h@{embroidermodder.h}!node\_uint@{node\_uint}}
+\index{node\_uint@{node\_uint}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{node\_uint()}{node\_uint()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a967b873ec6a73c5a5a477ef60ea82e44}{Node}} node\+\_\+uint (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{value }\end{DoxyParamCaption})}
+
+
+
+create\+\_\+node 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mode} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
 \mbox{\Hypertarget{embroidermodder_8h_a926f8379b38a5c52f4f027811c1a7494}\label{embroidermodder_8h_a926f8379b38a5c52f4f027811c1a7494}} 
 \index{embroidermodder.h@{embroidermodder.h}!operator$\ast$@{operator$\ast$}}
 \index{operator$\ast$@{operator$\ast$}!embroidermodder.h@{embroidermodder.h}}
@@ -903,7 +989,13 @@ radians\+\_\+\+\_\+
 
 read\+\_\+settings 
 
-This file needs to be read from the users home directory to ensure it is writable. \mbox{\Hypertarget{embroidermodder_8h_ae52bff4e5d4e869bcf009bc30b805249}\label{embroidermodder_8h_ae52bff4e5d4e869bcf009bc30b805249}} 
+This file needs to be read from the users home directory to ensure it is writable. \mbox{\Hypertarget{embroidermodder_8h_a6868dc5b7d9778c0876e20fbc88af8e6}\label{embroidermodder_8h_a6868dc5b7d9778c0876e20fbc88af8e6}} 
+\index{embroidermodder.h@{embroidermodder.h}!read\_string\_setting@{read\_string\_setting}}
+\index{read\_string\_setting@{read\_string\_setting}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{read\_string\_setting()}{read\_string\_setting()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} read\+\_\+string\+\_\+setting (\begin{DoxyParamCaption}\item[{toml\+\_\+table\+\_\+t $\ast$}]{table,  }\item[{const char $\ast$}]{key }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{embroidermodder_8h_ae52bff4e5d4e869bcf009bc30b805249}\label{embroidermodder_8h_ae52bff4e5d4e869bcf009bc30b805249}} 
 \index{embroidermodder.h@{embroidermodder.h}!rotate\_vector@{rotate\_vector}}
 \index{rotate\_vector@{rotate\_vector}!embroidermodder.h@{embroidermodder.h}}
 \doxyparagraph{\texorpdfstring{rotate\_vector()}{rotate\_vector()}}
@@ -975,7 +1067,7 @@ set\+\_\+enabled
 \hline
 \end{DoxyParams}
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000004}{Todo}}]error reporting. \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000003}{Todo}}]error reporting. \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidermodder_8h_abcc899d046aad6d80c8afd8b6553ca68}\label{embroidermodder_8h_abcc899d046aad6d80c8afd8b6553ca68}} 
 \index{embroidermodder.h@{embroidermodder.h}!set\_visibility@{set\_visibility}}
 \index{set\_visibility@{set\_visibility}!embroidermodder.h@{embroidermodder.h}}
@@ -996,37 +1088,18 @@ set\+\_\+visibility
 \hline
 \end{DoxyParams}
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000005}{Todo}}]error reporting. \end{DoxyRefDesc}
-\mbox{\Hypertarget{embroidermodder_8h_a862d81ba7c41e15d443394838a0e064e}\label{embroidermodder_8h_a862d81ba7c41e15d443394838a0e064e}} 
-\index{embroidermodder.h@{embroidermodder.h}!SettingsDir@{SettingsDir}}
-\index{SettingsDir@{SettingsDir}!embroidermodder.h@{embroidermodder.h}}
-\doxyparagraph{\texorpdfstring{SettingsDir()}{SettingsDir()}}
-{\footnotesize\ttfamily QString Settings\+Dir (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-Note\+: on Unix we include the trailing separator. For Windows compatibility we omit it. \mbox{\Hypertarget{embroidermodder_8h_aab62fc203baa98973095e37c7bfad281}\label{embroidermodder_8h_aab62fc203baa98973095e37c7bfad281}} 
-\index{embroidermodder.h@{embroidermodder.h}!SettingsPath@{SettingsPath}}
-\index{SettingsPath@{SettingsPath}!embroidermodder.h@{embroidermodder.h}}
-\doxyparagraph{\texorpdfstring{SettingsPath()}{SettingsPath()}}
-{\footnotesize\ttfamily QString Settings\+Path (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-
-
-Settings\+Path. 
-
-\begin{DoxyReturn}{Returns}
-
-\end{DoxyReturn}
+\item[\mbox{\hyperlink{todo__todo000004}{Todo}}]error reporting. \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidermodder_8h_ad318219f41e0a4a05136b4fdcc479461}\label{embroidermodder_8h_ad318219f41e0a4a05136b4fdcc479461}} 
 \index{embroidermodder.h@{embroidermodder.h}!to\_EmbVector@{to\_EmbVector}}
 \index{to\_EmbVector@{to\_EmbVector}!embroidermodder.h@{embroidermodder.h}}
 \doxyparagraph{\texorpdfstring{to\_EmbVector()}{to\_EmbVector()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} to\+\_\+\+Emb\+Vector (\begin{DoxyParamCaption}\item[{QPointF}]{a }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidermodder_8h_af3938e258c62845cb41c1972ce92bf03}\label{embroidermodder_8h_af3938e258c62845cb41c1972ce92bf03}} 
+\mbox{\Hypertarget{embroidermodder_8h_ada9fe285205bad34779526fca8a18b6b}\label{embroidermodder_8h_ada9fe285205bad34779526fca8a18b6b}} 
 \index{embroidermodder.h@{embroidermodder.h}!to\_qlist@{to\_qlist}}
 \index{to\_qlist@{to\_qlist}!embroidermodder.h@{embroidermodder.h}}
 \doxyparagraph{\texorpdfstring{to\_qlist()}{to\_qlist()}}
-{\footnotesize\ttfamily QList$<$QGraphics\+Item$\ast$$>$ to\+\_\+qlist (\begin{DoxyParamCaption}\item[{std\+::vector$<$ QGraphics\+Item $\ast$ $>$}]{list }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily QList$<$ QGraphics\+Item $\ast$ $>$ to\+\_\+qlist (\begin{DoxyParamCaption}\item[{std\+::vector$<$ QGraphics\+Item $\ast$ $>$}]{list }\end{DoxyParamCaption})}
 
 
 
@@ -1046,11 +1119,29 @@ to\+\_\+qlist
 \doxyparagraph{\texorpdfstring{to\_QPointF()}{to\_QPointF()}}
 {\footnotesize\ttfamily QPointF to\+\_\+\+QPointF (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{a }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidermodder_8h_ab31a3d11a592ee776e5f73fff35d9097}\label{embroidermodder_8h_ab31a3d11a592ee776e5f73fff35d9097}} 
+\mbox{\Hypertarget{embroidermodder_8h_ab8bd6d023f28244df60ce9cafc0dc278}\label{embroidermodder_8h_ab8bd6d023f28244df60ce9cafc0dc278}} 
+\index{embroidermodder.h@{embroidermodder.h}!to\_string\_vector@{to\_string\_vector}}
+\index{to\_string\_vector@{to\_string\_vector}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{to\_string\_vector()}{to\_string\_vector()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}} to\+\_\+string\+\_\+vector (\begin{DoxyParamCaption}\item[{QString\+List}]{list }\end{DoxyParamCaption})}
+
+
+
+to\+\_\+string\+\_\+vector 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{embroidermodder_8h_afced0743f0b3f38c899d12e6b480dc9c}\label{embroidermodder_8h_afced0743f0b3f38c899d12e6b480dc9c}} 
 \index{embroidermodder.h@{embroidermodder.h}!to\_vector@{to\_vector}}
 \index{to\_vector@{to\_vector}!embroidermodder.h@{embroidermodder.h}}
 \doxyparagraph{\texorpdfstring{to\_vector()}{to\_vector()}}
-{\footnotesize\ttfamily std\+::vector$<$QGraphics\+Item$\ast$$>$ to\+\_\+vector (\begin{DoxyParamCaption}\item[{QList$<$ QGraphics\+Item $\ast$ $>$}]{list }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily std\+::vector$<$ QGraphics\+Item $\ast$ $>$ to\+\_\+vector (\begin{DoxyParamCaption}\item[{QList$<$ QGraphics\+Item $\ast$ $>$}]{list }\end{DoxyParamCaption})}
 
 
 
@@ -1064,7 +1155,7 @@ to\+\_\+vector
 \begin{DoxyReturn}{Returns}
 
 \end{DoxyReturn}
-\mbox{\Hypertarget{embroidermodder_8h_a5d908072ba0e78d33b587b5e8d50526e}\label{embroidermodder_8h_a5d908072ba0e78d33b587b5e8d50526e}} 
+\mbox{\Hypertarget{embroidermodder_8h_a6beda6410ec4a336a5b85fbb3bd402c8}\label{embroidermodder_8h_a6beda6410ec4a336a5b85fbb3bd402c8}} 
 \index{embroidermodder.h@{embroidermodder.h}!tokenize@{tokenize}}
 \index{tokenize@{tokenize}!embroidermodder.h@{embroidermodder.h}}
 \doxyparagraph{\texorpdfstring{tokenize()}{tokenize()}}
@@ -1084,6 +1175,32 @@ tokenize
 \begin{DoxyReturn}{Returns}
 
 \end{DoxyReturn}
+\mbox{\Hypertarget{embroidermodder_8h_a8c7ebbbd85c9629efe7a233e96f5aa80}\label{embroidermodder_8h_a8c7ebbbd85c9629efe7a233e96f5aa80}} 
+\index{embroidermodder.h@{embroidermodder.h}!translate\_str@{translate\_str}}
+\index{translate\_str@{translate\_str}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{translate\_str()}{translate\_str()}}
+{\footnotesize\ttfamily QString translate\+\_\+str (\begin{DoxyParamCaption}\item[{const char $\ast$}]{str }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{embroidermodder_8h_a8e199e892707e7dbbe2e5b44513253c8}\label{embroidermodder_8h_a8e199e892707e7dbbe2e5b44513253c8}} 
+\index{embroidermodder.h@{embroidermodder.h}!validFileFormat@{validFileFormat}}
+\index{validFileFormat@{validFileFormat}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{validFileFormat()}{validFileFormat()}}
+{\footnotesize\ttfamily bool valid\+File\+Format (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{file\+Name }\end{DoxyParamCaption})}
+
+
+
+Main\+Window\+::valid\+File\+Format. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\+Name} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000009}{Todo}}]check the file exists on the system, rename to valid\+File? \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidermodder_8h_a8dd746dfd5b2f0859b7d4f6a9b7cde80}\label{embroidermodder_8h_a8dd746dfd5b2f0859b7d4f6a9b7cde80}} 
 \index{embroidermodder.h@{embroidermodder.h}!write\_settings@{write\_settings}}
 \index{write\_settings@{write\_settings}!embroidermodder.h@{embroidermodder.h}}
@@ -1094,8 +1211,7 @@ tokenize
 
 Main\+Window\+::write\+Settings. 
 
-This file needs to be read from the users home directory to ensure it is writable \hypertarget{settings-dialog.cpp_autotoc_md29}{}\doxyparagraph{Planning}\label{settings-dialog.cpp_autotoc_md29}
-for (auto iter = settings\+\_\+.\+begin(); iter != settings\+\_\+.\+end(); iter++) \{ settings\+\_\+file $<$$<$ iter-\/$>$first $<$$<$ \char`\"{}=\char`\"{}; switch (iter-\/$>$second.\+type) \{ case INT\+\_\+\+TYPE\+: settings\+\_\+file $<$$<$ iter-\/$>$second.\+i; break; case REAL\+\_\+\+TYPE\+: settings\+\_\+file $<$$<$ iter-\/$>$second.\+r; break; case VECTOR\+\_\+\+TYPE\+: settings\+\_\+file $<$$<$ iter-\/$>$second.\+v.\+x $<$$<$ \char`\"{},\char`\"{} $<$$<$ iter-\/$>$second.\+v.\+y; break; default\+: break; \} settings\+\_\+file $<$$<$ std\+::endl; \}
+This file needs to be read from the users home directory to ensure it is writable 
 
 \doxysubsubsection{Variable Documentation}
 \mbox{\Hypertarget{embroidermodder_8h_a13c21041ff7e5b6de6cedd66bd347f52}\label{embroidermodder_8h_a13c21041ff7e5b6de6cedd66bd347f52}} 
@@ -1110,35 +1226,35 @@ for (auto iter = settings\+\_\+.\+begin(); iter != settings\+\_\+.\+end(); iter+
 \doxyparagraph{\texorpdfstring{actionHash}{actionHash}}
 {\footnotesize\ttfamily std\+::unordered\+\_\+map$<$\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QAction$\ast$$>$ action\+Hash\hspace{0.3cm}{\ttfamily [extern]}}
 
+\mbox{\Hypertarget{embroidermodder_8h_a3afa2dfea26b8cc2bc817168fa431159}\label{embroidermodder_8h_a3afa2dfea26b8cc2bc817168fa431159}} 
+\index{embroidermodder.h@{embroidermodder.h}!checkBoxes@{checkBoxes}}
+\index{checkBoxes@{checkBoxes}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{checkBoxes}{checkBoxes}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QCheck\+Box $\ast$$>$ check\+Boxes\hspace{0.3cm}{\ttfamily [extern]}}
+
 \mbox{\Hypertarget{embroidermodder_8h_a5ab829a66fe27b9c199e2c90607cb9e8}\label{embroidermodder_8h_a5ab829a66fe27b9c199e2c90607cb9e8}} 
 \index{embroidermodder.h@{embroidermodder.h}!comboBoxes@{comboBoxes}}
 \index{comboBoxes@{comboBoxes}!embroidermodder.h@{embroidermodder.h}}
 \doxyparagraph{\texorpdfstring{comboBoxes}{comboBoxes}}
 {\footnotesize\ttfamily std\+::unordered\+\_\+map$<$\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QCombo\+Box $\ast$$>$ combo\+Boxes\hspace{0.3cm}{\ttfamily [extern]}}
 
-\mbox{\Hypertarget{embroidermodder_8h_a3aa139608b4816f4f70595814a31760d}\label{embroidermodder_8h_a3aa139608b4816f4f70595814a31760d}} 
-\index{embroidermodder.h@{embroidermodder.h}!comboBoxTextSingleFont@{comboBoxTextSingleFont}}
-\index{comboBoxTextSingleFont@{comboBoxTextSingleFont}!embroidermodder.h@{embroidermodder.h}}
-\doxyparagraph{\texorpdfstring{comboBoxTextSingleFont}{comboBoxTextSingleFont}}
-{\footnotesize\ttfamily QFont\+Combo\+Box$\ast$ combo\+Box\+Text\+Single\+Font\hspace{0.3cm}{\ttfamily [extern]}}
-
 \mbox{\Hypertarget{embroidermodder_8h_aa31f965158c9fedd925896cd4bc73000}\label{embroidermodder_8h_aa31f965158c9fedd925896cd4bc73000}} 
 \index{embroidermodder.h@{embroidermodder.h}!config@{config}}
 \index{config@{config}!embroidermodder.h@{embroidermodder.h}}
 \doxyparagraph{\texorpdfstring{config}{config}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}} config\hspace{0.3cm}{\ttfamily [extern]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}} config}
 
-\mbox{\Hypertarget{embroidermodder_8h_a1c6510838c31a5cc8eeadcdfceda753e}\label{embroidermodder_8h_a1c6510838c31a5cc8eeadcdfceda753e}} 
+\mbox{\Hypertarget{embroidermodder_8h_aeb513579fb427affbe2400502a99862e}\label{embroidermodder_8h_aeb513579fb427affbe2400502a99862e}} 
+\index{embroidermodder.h@{embroidermodder.h}!config\_tables@{config\_tables}}
+\index{config\_tables@{config\_tables}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{config\_tables}{config\_tables}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, \mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}}$>$ config\+\_\+tables\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{embroidermodder_8h_a634b03056e692115259bdc846325472e}\label{embroidermodder_8h_a634b03056e692115259bdc846325472e}} 
 \index{embroidermodder.h@{embroidermodder.h}!dialog@{dialog}}
 \index{dialog@{dialog}!embroidermodder.h@{embroidermodder.h}}
 \doxyparagraph{\texorpdfstring{dialog}{dialog}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} dialog\hspace{0.3cm}{\ttfamily [extern]}}
-
-These copies of the settings struct are for restoring the state if the user doesn\textquotesingle{}t want to accept their changes in the settings dialog. \mbox{\Hypertarget{embroidermodder_8h_a191d89e97836acf4d1b64b3e5b2844a8}\label{embroidermodder_8h_a191d89e97836acf4d1b64b3e5b2844a8}} 
-\index{embroidermodder.h@{embroidermodder.h}!dialog\_@{dialog\_}}
-\index{dialog\_@{dialog\_}!embroidermodder.h@{embroidermodder.h}}
-\doxyparagraph{\texorpdfstring{dialog\_}{dialog\_}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}} dialog\+\_\+\hspace{0.3cm}{\ttfamily [extern]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}} dialog}
 
 \mbox{\Hypertarget{embroidermodder_8h_aab786bd954c5177fc10dacf1150767eb}\label{embroidermodder_8h_aab786bd954c5177fc10dacf1150767eb}} 
 \index{embroidermodder.h@{embroidermodder.h}!dockPropEdit@{dockPropEdit}}
@@ -1152,17 +1268,17 @@ These copies of the settings struct are for restoring the state if the user does
 \doxyparagraph{\texorpdfstring{dockUndoEdit}{dockUndoEdit}}
 {\footnotesize\ttfamily \mbox{\hyperlink{classUndoEditor}{Undo\+Editor}}$\ast$ dock\+Undo\+Edit\hspace{0.3cm}{\ttfamily [extern]}}
 
+\mbox{\Hypertarget{embroidermodder_8h_a7d41329436505f01152817b9254a9aa1}\label{embroidermodder_8h_a7d41329436505f01152817b9254a9aa1}} 
+\index{embroidermodder.h@{embroidermodder.h}!doubleSpinBoxes@{doubleSpinBoxes}}
+\index{doubleSpinBoxes@{doubleSpinBoxes}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{doubleSpinBoxes}{doubleSpinBoxes}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QDouble\+Spin\+Box $\ast$$>$ double\+Spin\+Boxes\hspace{0.3cm}{\ttfamily [extern]}}
+
 \mbox{\Hypertarget{embroidermodder_8h_a6c0943a9b40fc0928358ffe567a9e49f}\label{embroidermodder_8h_a6c0943a9b40fc0928358ffe567a9e49f}} 
 \index{embroidermodder.h@{embroidermodder.h}!emb\_constant\_pi@{emb\_constant\_pi}}
 \index{emb\_constant\_pi@{emb\_constant\_pi}!embroidermodder.h@{embroidermodder.h}}
 \doxyparagraph{\texorpdfstring{emb\_constant\_pi}{emb\_constant\_pi}}
 {\footnotesize\ttfamily const \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} emb\+\_\+constant\+\_\+pi = 3.\+14159265358979323846\hspace{0.3cm}{\ttfamily [static]}}
-
-\mbox{\Hypertarget{embroidermodder_8h_aacf3047c9cfd319c3e96a9865ed4157f}\label{embroidermodder_8h_aacf3047c9cfd319c3e96a9865ed4157f}} 
-\index{embroidermodder.h@{embroidermodder.h}!group\_box\_data@{group\_box\_data}}
-\index{group\_box\_data@{group\_box\_data}!embroidermodder.h@{embroidermodder.h}}
-\doxyparagraph{\texorpdfstring{group\_box\_data}{group\_box\_data}}
-{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, \mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}}$>$ group\+\_\+box\+\_\+data\hspace{0.3cm}{\ttfamily [extern]}}
 
 \mbox{\Hypertarget{embroidermodder_8h_acd41e54d655cc00c0f58566a0cd5cfbc}\label{embroidermodder_8h_acd41e54d655cc00c0f58566a0cd5cfbc}} 
 \index{embroidermodder.h@{embroidermodder.h}!groupBoxes@{groupBoxes}}
@@ -1170,14 +1286,12 @@ These copies of the settings struct are for restoring the state if the user does
 \doxyparagraph{\texorpdfstring{groupBoxes}{groupBoxes}}
 {\footnotesize\ttfamily std\+::unordered\+\_\+map$<$\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QGroup\+Box $\ast$$>$ group\+Boxes\hspace{0.3cm}{\ttfamily [extern]}}
 
-\mbox{\Hypertarget{embroidermodder_8h_aef9addca2233bf242fc9afb674437d3e}\label{embroidermodder_8h_aef9addca2233bf242fc9afb674437d3e}} 
-\index{embroidermodder.h@{embroidermodder.h}!justify\_options@{justify\_options}}
-\index{justify\_options@{justify\_options}!embroidermodder.h@{embroidermodder.h}}
-\doxyparagraph{\texorpdfstring{justify\_options}{justify\_options}}
-{\footnotesize\ttfamily QString\+List justify\+\_\+options\hspace{0.3cm}{\ttfamily [extern]}}
+\mbox{\Hypertarget{embroidermodder_8h_a58d8b86b54fc3a2b7816cdfab8b98747}\label{embroidermodder_8h_a58d8b86b54fc3a2b7816cdfab8b98747}} 
+\index{embroidermodder.h@{embroidermodder.h}!labels@{labels}}
+\index{labels@{labels}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{labels}{labels}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QLabel $\ast$$>$ labels\hspace{0.3cm}{\ttfamily [extern]}}
 
-\begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000014}{Todo}}]convert to String\+List, move to configuration \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidermodder_8h_a08f234d24b95a26e62af91454e465228}\label{embroidermodder_8h_a08f234d24b95a26e62af91454e465228}} 
 \index{embroidermodder.h@{embroidermodder.h}!lineEdits@{lineEdits}}
 \index{lineEdits@{lineEdits}!embroidermodder.h@{embroidermodder.h}}
@@ -1202,27 +1316,27 @@ These copies of the settings struct are for restoring the state if the user does
 \doxyparagraph{\texorpdfstring{prompt}{prompt}}
 {\footnotesize\ttfamily \mbox{\hyperlink{classCmdPrompt}{Cmd\+Prompt}}$\ast$ prompt\hspace{0.3cm}{\ttfamily [extern]}}
 
-\mbox{\Hypertarget{embroidermodder_8h_a19276c778f3034b94881cf1f8614dbb2}\label{embroidermodder_8h_a19276c778f3034b94881cf1f8614dbb2}} 
+\mbox{\Hypertarget{embroidermodder_8h_a8fd55704c68e0b0c761d71dcb4ce0928}\label{embroidermodder_8h_a8fd55704c68e0b0c761d71dcb4ce0928}} 
+\index{embroidermodder.h@{embroidermodder.h}!scripts@{scripts}}
+\index{scripts@{scripts}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{scripts}{scripts}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, \mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}}$>$ scripts\hspace{0.3cm}{\ttfamily [extern]}}
+
+\mbox{\Hypertarget{embroidermodder_8h_a377eecdac06a43e089de9967e8f7a185}\label{embroidermodder_8h_a377eecdac06a43e089de9967e8f7a185}} 
 \index{embroidermodder.h@{embroidermodder.h}!settings@{settings}}
 \index{settings@{settings}!embroidermodder.h@{embroidermodder.h}}
 \doxyparagraph{\texorpdfstring{settings}{settings}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} settings\hspace{0.3cm}{\ttfamily [extern]}}
-
-Embroidermodder 2.
-
-\DoxyHorRuler{0}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}} settings\hspace{0.3cm}{\ttfamily [extern]}}
 
 
-Copyright 2013-\/2022 The Embroidermodder Team Embroidermodder 2 is Open Source Software. See LICENSE for licensing terms.
 
-\DoxyHorRuler{0}
+Settings System. 
 
-
-Use Python\textquotesingle{}s PEP7 style guide. \href{https://peps.python.org/pep-0007/}{\texttt{ https\+://peps.\+python.\+org/pep-\/0007/}} The actuator changes the program state via these global variables. \mbox{\Hypertarget{embroidermodder_8h_a478df7efa7a7b38c7be1b604ee9ddbde}\label{embroidermodder_8h_a478df7efa7a7b38c7be1b604ee9ddbde}} 
-\index{embroidermodder.h@{embroidermodder.h}!settings\_@{settings\_}}
-\index{settings\_@{settings\_}!embroidermodder.h@{embroidermodder.h}}
-\doxyparagraph{\texorpdfstring{settings\_}{settings\_}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a4eea196dcdbc639ced9795286fc1bf1e}{Dictionary}} settings\+\_\+\hspace{0.3cm}{\ttfamily [extern]}}
+Rather than pollute the global namespace, we collect together all the global settings into a structure that stores them. This also allows us to create a complete copy of the settings for the purpose of restoring them if the user cancels out of the Settings Dialog. \mbox{\Hypertarget{embroidermodder_8h_a36054ce668377b97982074ea4fc8070a}\label{embroidermodder_8h_a36054ce668377b97982074ea4fc8070a}} 
+\index{embroidermodder.h@{embroidermodder.h}!spinBoxes@{spinBoxes}}
+\index{spinBoxes@{spinBoxes}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{spinBoxes}{spinBoxes}}
+{\footnotesize\ttfamily std\+::unordered\+\_\+map$<$\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}, QSpin\+Box $\ast$$>$ spin\+Boxes\hspace{0.3cm}{\ttfamily [extern]}}
 
 \mbox{\Hypertarget{embroidermodder_8h_a5cab0ad2192beefe7d07056cc4b3825b}\label{embroidermodder_8h_a5cab0ad2192beefe7d07056cc4b3825b}} 
 \index{embroidermodder.h@{embroidermodder.h}!statusbar@{statusbar}}

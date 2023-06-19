@@ -224,6 +224,7 @@ QGraphicsScene* activeScene();
 void debug_message(String msg);
 void set_enabled(QObject *parent, const char *key, bool enabled);
 void set_visibility(QObject *parent, const char *name, bool visibility);
+QPainterPath add_to_path(QPainterPath path, EmbVector scale, String s);
 
 String actuator(String line);
 String run_script_file(String fname);

@@ -2,7 +2,6 @@ var classCmdPromptInput =
 [
     [ "CmdPromptInput", "classCmdPromptInput.html#ab5f12870265949b620f2d5d39398193c", null ],
     [ "~CmdPromptInput", "classCmdPromptInput.html#a8c4c9cf079dd926513eb04799032cf2b", null ],
-    [ "addCommand", "classCmdPromptInput.html#a07b17bcff2b7789c77e4236ca6db353c", null ],
     [ "appendHistory", "classCmdPromptInput.html#ad7b7072a2ec5222570150a25bbc23441", null ],
     [ "applyFormatting", "classCmdPromptInput.html#a96eb04cda6b08d5a0748ee2329d88add", null ],
     [ "changeFormatting", "classCmdPromptInput.html#af9e1421c22964fc3f18ff9b0514fc537", null ],
@@ -47,7 +46,6 @@ var classCmdPromptInput =
     [ "undoPressed", "classCmdPromptInput.html#a05b431deab4716a1cd8d608c9c3d5503", null ],
     [ "updateCurrentText", "classCmdPromptInput.html#a4b87e09bbfd0d9fc6344029c24c9761c", null ],
     [ "upPressed", "classCmdPromptInput.html#a3ac8ff7536eaff8c48297effe38dd49b", null ],
-    [ "aliasHash", "classCmdPromptInput.html#adfa881da9910b019e20455f6dcd3fdd3", null ],
     [ "cmdActive", "classCmdPromptInput.html#a5b910e1bf795b20bdb8b51f09fae8e45", null ],
     [ "curCmd", "classCmdPromptInput.html#a252c1bea192e7d97caf8d3e0f8262240", null ],
     [ "curText", "classCmdPromptInput.html#a50cac6b92ecebfb210ae7367e73a3020", null ],

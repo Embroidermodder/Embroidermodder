@@ -397,6 +397,53 @@ debug_message(std::string msg)
 }
 
 /**
+ * Utility function for add_to_path.
+ */
+std::vector<float>
+get_n_reals(StringList list, int n, int *offset)
+{
+    std::vector<float> result;
+    for (int i=1; i<n+1; i++) {
+        result.push_back(std::stof(list[*offset+i]));
+    }
+    *offset += n;
+    return result;
+}
+
+/**
+ * .
+ */
+QPainterPath
+add_to_path(QPainterPath path, EmbVector scale, String command)
+{
+    StringList list = tokenize(command, ' ');
+    for (int i=0; i<(int)list.size(); i++) {
+        command = list[i];
+        if (command == "M") {
+            std::vector<float> r = get_n_reals(list, 2, &i);
+            path.moveTo(r[0]*scale.x, r[1]*scale.y);
+        }
+        else if (command == "L") {
+            std::vector<float> r = get_n_reals(list, 2, &i);
+            path.lineTo(r[0]*scale.x, r[1]*scale.y);
+        }
+        else if (command == "A") {
+            std::vector<float> r = get_n_reals(list, 6, &i);
+            path.arcTo(r[0]*scale.x, r[1]*scale.y, r[2]*scale.x, r[3]*scale.y, r[4], r[5]);
+        }
+        else if (command == "AM") {
+            std::vector<float> r = get_n_reals(list, 5, &i);
+            path.arcMoveTo(r[0]*scale.x, r[1]*scale.y, r[2]*scale.x, r[3]*scale.y, r[4]);
+        }
+        else if (command == "E") {
+            std::vector<float> r = get_n_reals(list, 4, &i);
+            path.addEllipse(QPointF(r[0], r[1]), r[2], r[3]);
+        }
+    }
+    return path;
+}
+
+/**
  * @brief set_enabled
  * @param parent
  * @param key

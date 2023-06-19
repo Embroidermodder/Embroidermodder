@@ -12,7 +12,7 @@ var compress_8c =
     [ "compress_pop", "compress_8c.html#af511532a8a7f9f6646379e8fbb472331", null ],
     [ "compress_read_variable_length", "compress_8c.html#afb74b97766d1968313b6e637032e9686", null ],
     [ "huffman_build_table", "compress_8c.html#a7e5d1d3488d7124ab020287e2606f89d", null ],
-    [ "huffman_lookup", "compress_8c.html#a40e20a246d0cdc29c3dfcfdadd662c87", null ],
+    [ "huffman_lookup", "compress_8c.html#a04af50a7e18d0e4d85ae76c7c4bd80d9", null ],
     [ "hus_compress", "compress_8c.html#a053addffe32629b6727073e9c499cc32", null ],
     [ "hus_decompress", "compress_8c.html#aa5370ff498be6c8a440bb0a581c2ed5c", null ],
     [ "huffman_lookup_data", "compress_8c.html#af0a0646ec730d0abdffced84a07f845e", null ]

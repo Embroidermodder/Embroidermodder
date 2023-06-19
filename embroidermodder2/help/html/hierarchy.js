@@ -7,7 +7,6 @@ var hierarchy =
     [ "_bcf_file_fat", "struct__bcf__file__fat.html", null ],
     [ "_bcf_file_header", "struct__bcf__file__header.html", null ],
     [ "_vp3Hoop", "struct__vp3Hoop.html", null ],
-    [ "Action__", "structAction____.html", null ],
     [ "Compress", "structCompress.html", null ],
     [ "EmbAlignedDim_", "structEmbAlignedDim__.html", null ],
     [ "EmbAngularDim_", "structEmbAngularDim__.html", null ],
@@ -98,24 +97,13 @@ var hierarchy =
     [ "QTextBrowser", null, [
       [ "CmdPromptHistory", "classCmdPromptHistory.html", null ]
     ] ],
-    [ "QToolButton", null, [
-      [ "StatusBarButton", "classStatusBarButton.html", null ]
-    ] ],
     [ "QUndoCommand", null, [
-      [ "UndoableAddCommand", "classUndoableAddCommand.html", null ],
-      [ "UndoableDeleteCommand", "classUndoableDeleteCommand.html", null ],
-      [ "UndoableGripEditCommand", "classUndoableGripEditCommand.html", null ],
-      [ "UndoableMirrorCommand", "classUndoableMirrorCommand.html", null ],
-      [ "UndoableMoveCommand", "classUndoableMoveCommand.html", null ],
-      [ "UndoableNavCommand", "classUndoableNavCommand.html", null ],
-      [ "UndoableRotateCommand", "classUndoableRotateCommand.html", null ],
-      [ "UndoableScaleCommand", "classUndoableScaleCommand.html", null ]
+      [ "UndoableCommand", "classUndoableCommand.html", null ]
     ] ],
     [ "QWidget", null, [
       [ "CmdPrompt", "classCmdPrompt.html", null ],
       [ "ImageWidget", "classImageWidget.html", null ]
     ] ],
-    [ "Settings_", "structSettings__.html", null ],
     [ "StxThread_", "structStxThread__.html", null ],
     [ "SubDescriptor_", "structSubDescriptor__.html", null ],
     [ "SvgAttribute_", "structSvgAttribute__.html", null ],

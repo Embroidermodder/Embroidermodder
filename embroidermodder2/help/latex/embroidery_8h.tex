@@ -436,13 +436,13 @@ typedef struct \mbox{\hyperlink{structEmbFormatList__}{Emb\+Format\+List\+\_\+}}
 \item 
 \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_acde9d757854564332fd795a084ec88b3}{Emb\+Color}} \mbox{\hyperlink{embroidery_8h_a075db63a6ebdae9a30ee3549d92047e0}{emb\+Color\+\_\+make}} (unsigned char r, unsigned char g, unsigned char b)
 \item 
-\mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_acde9d757854564332fd795a084ec88b3}{Emb\+Color}} $\ast$ \mbox{\hyperlink{embroidery_8h_abcbc67cfdf55e2e3508b87c89d2f47c8}{emb\+Color\+\_\+create}} (unsigned char r, unsigned char g, unsigned char b)
+\mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_acde9d757854564332fd795a084ec88b3}{Emb\+Color}} $\ast$ \mbox{\hyperlink{embroidery_8h_acb02ef0b5cae46807df2ad2b3a99f57f}{emb\+Color\+\_\+create}} (unsigned char r, unsigned char g, unsigned char b)
 \item 
 \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_acde9d757854564332fd795a084ec88b3}{Emb\+Color}} \mbox{\hyperlink{embroidery_8h_aa26fa3dbc266462673043ca0b65c3c4e}{emb\+Color\+\_\+from\+Hex\+Str}} (char $\ast$val)
 \begin{DoxyCompactList}\small\item\em Converts a 6 digit hex string (I.\+E. \char`\"{}00\+FF00\char`\"{}) into an Emb\+Color and returns it. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} int \mbox{\hyperlink{embroidery_8h_ae8bd6d2ec578fa1b975f1ff639fc7390}{emb\+Color\+\_\+distance}} (\mbox{\hyperlink{embroidery_8h_acde9d757854564332fd795a084ec88b3}{Emb\+Color}} a, \mbox{\hyperlink{embroidery_8h_acde9d757854564332fd795a084ec88b3}{Emb\+Color}} b)
 \begin{DoxyCompactList}\small\item\em {\itshape a} {\itshape b} \end{DoxyCompactList}\item 
-\mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_aebe8b1561a59d167cfe6613863a671ca}{Emb\+Array}} $\ast$ \mbox{\hyperlink{embroidery_8h_aa31fb87e5255ddbbc46a2d9ca84579e4}{emb\+Array\+\_\+create}} (int type)
+\mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_aebe8b1561a59d167cfe6613863a671ca}{Emb\+Array}} $\ast$ \mbox{\hyperlink{embroidery_8h_a5bd3cad4995558d9b4fdd322155bedbc}{emb\+Array\+\_\+create}} (int type)
 \item 
 \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} int \mbox{\hyperlink{embroidery_8h_a85d705f3076d37ccc0eeb5d4f156975c}{emb\+Array\+\_\+resize}} (\mbox{\hyperlink{embroidery_8h_aebe8b1561a59d167cfe6613863a671ca}{Emb\+Array}} $\ast$g)
 \item 
@@ -562,7 +562,7 @@ typedef struct \mbox{\hyperlink{structEmbFormatList__}{Emb\+Format\+List\+\_\+}}
 \item 
 \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} int \mbox{\hyperlink{embroidery_8h_ae6976ffd0a29cdf4247e8da3aefc8ef0}{thread\+Color\+Num}} (unsigned int color, int brand)
 \item 
-\mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} const char $\ast$ \mbox{\hyperlink{embroidery_8h_a1ceec74a0119ebe554cf6d9df1199571}{thread\+Color\+Name}} (unsigned int color, int brand)
+\mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} const char $\ast$ \mbox{\hyperlink{embroidery_8h_a2be9bcb326d8bb595079f9129df9e35e}{thread\+Color\+Name}} (unsigned int color, int brand)
 \item 
 \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void \mbox{\hyperlink{embroidery_8h_aab99160f0470d40b5f7bf4bbe5017fae}{emb\+Time\+\_\+init\+Now}} (\mbox{\hyperlink{embroidery_8h_a3829b58c37eab5cd81529f1916adcd33}{Emb\+Time}} $\ast$t)
 \begin{DoxyCompactList}\small\item\em {\itshape t} \end{DoxyCompactList}\item 
@@ -570,9 +570,9 @@ typedef struct \mbox{\hyperlink{structEmbFormatList__}{Emb\+Format\+List\+\_\+}}
 \begin{DoxyCompactList}\small\item\em {\itshape t} \end{DoxyCompactList}\item 
 \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void \mbox{\hyperlink{embroidery_8h_aac78be5a14c3044d704e8f39dd160fa9}{emb\+Satin\+Outline\+\_\+generate\+Satin\+Outline}} (\mbox{\hyperlink{embroidery_8h_aebe8b1561a59d167cfe6613863a671ca}{Emb\+Array}} $\ast$lines, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} thickness, \mbox{\hyperlink{embroidery_8h_af3d7bc78977c54ad019cf191aee0f276}{Emb\+Satin\+Outline}} $\ast$result)
 \begin{DoxyCompactList}\small\item\em {\itshape lines} {\itshape thickness} {\itshape result} \end{DoxyCompactList}\item 
-\mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_aebe8b1561a59d167cfe6613863a671ca}{Emb\+Array}} $\ast$ \mbox{\hyperlink{embroidery_8h_a02535995aa414792bc7e590f7d9ee2f2}{emb\+Satin\+Outline\+\_\+render\+Stitches}} (\mbox{\hyperlink{embroidery_8h_af3d7bc78977c54ad019cf191aee0f276}{Emb\+Satin\+Outline}} $\ast$result, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} density)
+\mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_aebe8b1561a59d167cfe6613863a671ca}{Emb\+Array}} $\ast$ \mbox{\hyperlink{embroidery_8h_a9e843bec24828324a88b8a0ad699a07a}{emb\+Satin\+Outline\+\_\+render\+Stitches}} (\mbox{\hyperlink{embroidery_8h_af3d7bc78977c54ad019cf191aee0f276}{Emb\+Satin\+Outline}} $\ast$result, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} density)
 \begin{DoxyCompactList}\small\item\em {\itshape result} {\itshape density} \end{DoxyCompactList}\item 
-\mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_aca7cafe21cb651b77560fece69fb1984}{Emb\+Geometry}} $\ast$ \mbox{\hyperlink{embroidery_8h_ac71c335b8808d1f65ac473132d844301}{emb\+Geometry\+\_\+init}} (int type\+\_\+in)
+\mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_aca7cafe21cb651b77560fece69fb1984}{Emb\+Geometry}} $\ast$ \mbox{\hyperlink{embroidery_8h_a1f7e5a1db0dc11ef2bb7def04bae32b9}{emb\+Geometry\+\_\+init}} (int type\+\_\+in)
 \begin{DoxyCompactList}\small\item\em Our generic object interface backends to each individual type. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void \mbox{\hyperlink{embroidery_8h_a439d686b2b6c28793e50ef72b909f12f}{emb\+Geometry\+\_\+free}} (\mbox{\hyperlink{embroidery_8h_aca7cafe21cb651b77560fece69fb1984}{Emb\+Geometry}} $\ast$obj)
 \begin{DoxyCompactList}\small\item\em Free the memory occupied by a non-\/stitch geometry object. \end{DoxyCompactList}\item 
@@ -582,7 +582,7 @@ typedef struct \mbox{\hyperlink{structEmbFormatList__}{Emb\+Format\+List\+\_\+}}
 \begin{DoxyCompactList}\small\item\em Calculate the bounding box of geometry {\itshape obj} based on what kind of geometric object it is. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void \mbox{\hyperlink{embroidery_8h_aaad366b6c8651825c096c9b8fd731fcc}{emb\+Geometry\+\_\+vulcanize}} (\mbox{\hyperlink{embroidery_8h_aca7cafe21cb651b77560fece69fb1984}{Emb\+Geometry}} $\ast$obj)
 \begin{DoxyCompactList}\small\item\em Toggle the rubber mode of the object. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$ \mbox{\hyperlink{embroidery_8h_a7e71a98de7886434ace479e0bb155a6f}{emb\+Pattern\+\_\+create}} (void)
+\mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$ \mbox{\hyperlink{embroidery_8h_ad1be1abf388d4479ffe2b75f8470273b}{emb\+Pattern\+\_\+create}} (void)
 \item 
 \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void \mbox{\hyperlink{embroidery_8h_a405e65b9e43916a34bcc149480e0bfea}{emb\+Pattern\+\_\+hide\+Stitches\+Over\+Length}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$p, int length)
 \item 
@@ -634,7 +634,7 @@ typedef struct \mbox{\hyperlink{structEmbFormatList__}{Emb\+Format\+List\+\_\+}}
 \item 
 \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void \mbox{\hyperlink{embroidery_8h_abcedd1e1682fbb2af2db3dc9704c035e}{emb\+Pattern\+\_\+design\+Details}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$p)
 \item 
-\mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$ \mbox{\hyperlink{embroidery_8h_af858a1bd00396b6318edb2dcd1d60170}{emb\+Pattern\+\_\+combine}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$p1, \mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$p2)
+\mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$ \mbox{\hyperlink{embroidery_8h_a00deebb53dcaab1a1669e4549f97de62}{emb\+Pattern\+\_\+combine}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$p1, \mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$p2)
 \item 
 \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} int \mbox{\hyperlink{embroidery_8h_ade565ade884217b77053c4cd62c9ade3}{emb\+Pattern\+\_\+color\+\_\+count}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$pattern, \mbox{\hyperlink{embroidery_8h_acde9d757854564332fd795a084ec88b3}{Emb\+Color}} start\+Color)
 \item 
@@ -1883,11 +1883,11 @@ Add a vector {\itshape b} to the Emb\+Array {\itshape a} and it returns if the e
 \doxyparagraph{\texorpdfstring{embArray\_copy()}{embArray\_copy()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Array\+\_\+copy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_aebe8b1561a59d167cfe6613863a671ca}{Emb\+Array}} $\ast$}]{dst,  }\item[{\mbox{\hyperlink{embroidery_8h_aebe8b1561a59d167cfe6613863a671ca}{Emb\+Array}} $\ast$}]{src }\end{DoxyParamCaption})}
 
-Copies all entries in the Emb\+Array struct from {\itshape src} to {\itshape dst}. \mbox{\Hypertarget{embroidery_8h_aa31fb87e5255ddbbc46a2d9ca84579e4}\label{embroidery_8h_aa31fb87e5255ddbbc46a2d9ca84579e4}} 
+Copies all entries in the Emb\+Array struct from {\itshape src} to {\itshape dst}. \mbox{\Hypertarget{embroidery_8h_a5bd3cad4995558d9b4fdd322155bedbc}\label{embroidery_8h_a5bd3cad4995558d9b4fdd322155bedbc}} 
 \index{embroidery.h@{embroidery.h}!embArray\_create@{embArray\_create}}
 \index{embArray\_create@{embArray\_create}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embArray\_create()}{embArray\_create()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_aebe8b1561a59d167cfe6613863a671ca}{Emb\+Array}}$\ast$ emb\+Array\+\_\+create (\begin{DoxyParamCaption}\item[{int}]{type }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_aebe8b1561a59d167cfe6613863a671ca}{Emb\+Array}} $\ast$ emb\+Array\+\_\+create (\begin{DoxyParamCaption}\item[{int}]{type }\end{DoxyParamCaption})}
 
 Allocates memory for an Emb\+Array of the type determined by the argument {\itshape type}. \mbox{\Hypertarget{embroidery_8h_ada30f6c98c39769efc9471ea3a54220c}\label{embroidery_8h_ada30f6c98c39769efc9471ea3a54220c}} 
 \index{embroidery.h@{embroidery.h}!embArray\_free@{embArray\_free}}
@@ -1907,11 +1907,11 @@ Resizes the array {\itshape a} to be CHUNK\+\_\+\+SIZE entries longer if and onl
 \doxyparagraph{\texorpdfstring{embCircle\_init()}{embCircle\_init()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a87fc13ccd4dbaa7de7c85efde17bba0e}{Emb\+Circle}} emb\+Circle\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery_8h_abcbc67cfdf55e2e3508b87c89d2f47c8}\label{embroidery_8h_abcbc67cfdf55e2e3508b87c89d2f47c8}} 
+\mbox{\Hypertarget{embroidery_8h_acb02ef0b5cae46807df2ad2b3a99f57f}\label{embroidery_8h_acb02ef0b5cae46807df2ad2b3a99f57f}} 
 \index{embroidery.h@{embroidery.h}!embColor\_create@{embColor\_create}}
 \index{embColor\_create@{embColor\_create}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embColor\_create()}{embColor\_create()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_acde9d757854564332fd795a084ec88b3}{Emb\+Color}}$\ast$ emb\+Color\+\_\+create (\begin{DoxyParamCaption}\item[{unsigned char}]{r,  }\item[{unsigned char}]{g,  }\item[{unsigned char}]{b }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_acde9d757854564332fd795a084ec88b3}{Emb\+Color}} $\ast$ emb\+Color\+\_\+create (\begin{DoxyParamCaption}\item[{unsigned char}]{r,  }\item[{unsigned char}]{g,  }\item[{unsigned char}]{b }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{embroidery_8h_ae8bd6d2ec578fa1b975f1ff639fc7390}\label{embroidery_8h_ae8bd6d2ec578fa1b975f1ff639fc7390}} 
 \index{embroidery.h@{embroidery.h}!embColor\_distance@{embColor\_distance}}
@@ -2016,11 +2016,11 @@ In the case of a failure the bounding box returned is always the unit square wit
 
 Free the memory occupied by a non-\/stitch geometry object. 
 
-{\itshape obj} Pointer to geometry memory. \mbox{\Hypertarget{embroidery_8h_ac71c335b8808d1f65ac473132d844301}\label{embroidery_8h_ac71c335b8808d1f65ac473132d844301}} 
+{\itshape obj} Pointer to geometry memory. \mbox{\Hypertarget{embroidery_8h_a1f7e5a1db0dc11ef2bb7def04bae32b9}\label{embroidery_8h_a1f7e5a1db0dc11ef2bb7def04bae32b9}} 
 \index{embroidery.h@{embroidery.h}!embGeometry\_init@{embGeometry\_init}}
 \index{embGeometry\_init@{embGeometry\_init}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embGeometry\_init()}{embGeometry\_init()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_aca7cafe21cb651b77560fece69fb1984}{Emb\+Geometry}}$\ast$ emb\+Geometry\+\_\+init (\begin{DoxyParamCaption}\item[{int}]{type\+\_\+in }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_aca7cafe21cb651b77560fece69fb1984}{Emb\+Geometry}} $\ast$ emb\+Geometry\+\_\+init (\begin{DoxyParamCaption}\item[{int}]{type\+\_\+in }\end{DoxyParamCaption})}
 
 
 
@@ -2052,7 +2052,7 @@ Toggle the rubber mode of the object.
 {\itshape obj} 
 
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000223}{Todo}}]Review. This could be controlled by a simple flag. \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000220}{Todo}}]Review. This could be controlled by a simple flag. \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery_8h_a910afe5c3ca865bc9afd8a520ae73e37}\label{embroidery_8h_a910afe5c3ca865bc9afd8a520ae73e37}} 
 \index{embroidery.h@{embroidery.h}!embImage\_create@{embImage\_create}}
 \index{embImage\_create@{embImage\_create}!embroidery.h@{embroidery.h}}
@@ -2095,7 +2095,7 @@ Toggle the rubber mode of the object.
 \doxyparagraph{\texorpdfstring{embLine\_normalVector()}{embLine\_normalVector()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Line\+\_\+normal\+Vector (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}}}]{line,  }\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} $\ast$}]{result,  }\item[{int}]{clockwise }\end{DoxyParamCaption})}
 
-Finds the normalized vector perpendicular (clockwise) to the line given by v1-\/$>$v2 (normal to the line) \mbox{\Hypertarget{embroidery_8h_a324691deebb0e224ce2f406b8cc30e0e}\label{embroidery_8h_a324691deebb0e224ce2f406b8cc30e0e}} 
+Finds the normalized vector perpendicular (clockwise) to the line given by v1-\/\texorpdfstring{$>$}{>}v2 (normal to the line) \mbox{\Hypertarget{embroidery_8h_a324691deebb0e224ce2f406b8cc30e0e}\label{embroidery_8h_a324691deebb0e224ce2f406b8cc30e0e}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_addCircleAbs@{embPattern\_addCircleAbs}}
 \index{embPattern\_addCircleAbs@{embPattern\_addCircleAbs}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_addCircleAbs()}{embPattern\_addCircleAbs()}}
@@ -2188,11 +2188,11 @@ Change the current\+Color\+Index of pattern {\itshape p} to {\itshape index}. \m
 \doxyparagraph{\texorpdfstring{embPattern\_color\_count()}{embPattern\_color\_count()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} int emb\+Pattern\+\_\+color\+\_\+count (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{\mbox{\hyperlink{embroidery_8h_acde9d757854564332fd795a084ec88b3}{Emb\+Color}}}]{start\+Color }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery_8h_af858a1bd00396b6318edb2dcd1d60170}\label{embroidery_8h_af858a1bd00396b6318edb2dcd1d60170}} 
+\mbox{\Hypertarget{embroidery_8h_a00deebb53dcaab1a1669e4549f97de62}\label{embroidery_8h_a00deebb53dcaab1a1669e4549f97de62}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_combine@{embPattern\_combine}}
 \index{embPattern\_combine@{embPattern\_combine}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_combine()}{embPattern\_combine()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}}$\ast$ emb\+Pattern\+\_\+combine (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p1,  }\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p2 }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$ emb\+Pattern\+\_\+combine (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p1,  }\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p2 }\end{DoxyParamCaption})}
 
 {\itshape p1} {\itshape p2} \begin{DoxyReturn}{Returns}
 Emb\+Pattern$\ast$ 
@@ -2228,12 +2228,12 @@ Emb\+Pattern$\ast$
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Pattern\+\_\+correct\+For\+Max\+Stitch\+Length (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{max\+Stitch\+Length,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{max\+Jump\+Length }\end{DoxyParamCaption})}
 
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000226}{Todo}}]The params determine the max XY movement rather than the length. They need renamed or clarified further. \end{DoxyRefDesc}
-\mbox{\Hypertarget{embroidery_8h_a7e71a98de7886434ace479e0bb155a6f}\label{embroidery_8h_a7e71a98de7886434ace479e0bb155a6f}} 
+\item[\mbox{\hyperlink{todo__todo000223}{Todo}}]The params determine the max XY movement rather than the length. They need renamed or clarified further. \end{DoxyRefDesc}
+\mbox{\Hypertarget{embroidery_8h_ad1be1abf388d4479ffe2b75f8470273b}\label{embroidery_8h_ad1be1abf388d4479ffe2b75f8470273b}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_create@{embPattern\_create}}
 \index{embPattern\_create@{embPattern\_create}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_create()}{embPattern\_create()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}}$\ast$ emb\+Pattern\+\_\+create (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$ emb\+Pattern\+\_\+create (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
 
 Returns a pointer to an Emb\+Pattern. It is created on the heap. The caller is responsible for freeing the allocated memory with \mbox{\hyperlink{pattern_8c_a644e83f2c9bcb606bc0b252a6fe443ed}{emb\+Pattern\+\_\+free()}}.
 
@@ -2308,7 +2308,7 @@ Frees all memory allocated in the pattern ({\itshape p}). \mbox{\Hypertarget{emb
 
 Uses a threshhold method to determine where to put lines in the fill.
 
-Needs to pass a \char`\"{}donut test\char`\"{}, i.\+e. an image with black pixels where\+: 10 $<$ x$\ast$x + y$\ast$y $<$ 20 over the area (-\/30, 30) x (-\/30, 30).
+Needs to pass a \char`\"{}donut test\char`\"{}, i.\+e. an image with black pixels where\+: 10 \texorpdfstring{$<$}{<} x$\ast$x + y$\ast$y \texorpdfstring{$<$}{<} 20 over the area (-\/30, 30) x (-\/30, 30).
 
 Use render then image difference to see how well it passes. \mbox{\Hypertarget{embroidery_8h_a0169ae239bf5c69b878b67755e25ea46}\label{embroidery_8h_a0169ae239bf5c69b878b67755e25ea46}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_jumpStitches@{embPattern\_jumpStitches}}
@@ -2465,11 +2465,11 @@ char
 
 {\itshape lines} {\itshape thickness} {\itshape result} 
 
-\mbox{\Hypertarget{embroidery_8h_a02535995aa414792bc7e590f7d9ee2f2}\label{embroidery_8h_a02535995aa414792bc7e590f7d9ee2f2}} 
+\mbox{\Hypertarget{embroidery_8h_a9e843bec24828324a88b8a0ad699a07a}\label{embroidery_8h_a9e843bec24828324a88b8a0ad699a07a}} 
 \index{embroidery.h@{embroidery.h}!embSatinOutline\_renderStitches@{embSatinOutline\_renderStitches}}
 \index{embSatinOutline\_renderStitches@{embSatinOutline\_renderStitches}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embSatinOutline\_renderStitches()}{embSatinOutline\_renderStitches()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_aebe8b1561a59d167cfe6613863a671ca}{Emb\+Array}}$\ast$ emb\+Satin\+Outline\+\_\+render\+Stitches (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_af3d7bc78977c54ad019cf191aee0f276}{Emb\+Satin\+Outline}} $\ast$}]{result,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{density }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_aebe8b1561a59d167cfe6613863a671ca}{Emb\+Array}} $\ast$ emb\+Satin\+Outline\+\_\+render\+Stitches (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_af3d7bc78977c54ad019cf191aee0f276}{Emb\+Satin\+Outline}} $\ast$}]{result,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{density }\end{DoxyParamCaption})}
 
 
 
@@ -2546,7 +2546,10 @@ The sum of vectors {\itshape a} and {\itshape b} returned as a vector.
 
 Equivalent to\+:
 
-\[ \mathbf{c} = \mathbf{a} + \mathbf{b} = \begin{pmatrix} a_{x} + b_{x} \\ a_{y}+b_{y} \end{pmatrix} \] \mbox{\Hypertarget{embroidery_8h_a04639683e8ca6259a875aea58c397a17}\label{embroidery_8h_a04639683e8ca6259a875aea58c397a17}} 
+\[
+      \mathbf{c} = \mathbf{a} + \mathbf{b}
+                 = \begin{pmatrix} a_{x} + b_{x} \\ a_{y}+b_{y} \end{pmatrix}
+\] \mbox{\Hypertarget{embroidery_8h_a04639683e8ca6259a875aea58c397a17}\label{embroidery_8h_a04639683e8ca6259a875aea58c397a17}} 
 \index{embroidery.h@{embroidery.h}!embVector\_angle@{embVector\_angle}}
 \index{embVector\_angle@{embVector\_angle}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embVector\_angle()}{embVector\_angle()}}
@@ -2562,7 +2565,10 @@ The average of vectors {\itshape v1} and {\itshape v2} returned as a vector.
 
 Equivalent to\+:
 
-\[ \mathbf{c} = \frac{\mathbf{a} + \mathbf{b}}{2} = \begin{pmatrix} \frac{a_{x} + b_{x}}{2} \\ \frac{a_{y}+b_{y}}{2} \end{pmatrix} \] \mbox{\Hypertarget{embroidery_8h_a07e04b93bf1b220b0287b3e8e7de7c0c}\label{embroidery_8h_a07e04b93bf1b220b0287b3e8e7de7c0c}} 
+\[
+      \mathbf{c} = \frac{\mathbf{a} + \mathbf{b}}{2}
+                 = \begin{pmatrix} \frac{a_{x} + b_{x}}{2} \\ \frac{a_{y}+b_{y}}{2} \end{pmatrix}
+\] \mbox{\Hypertarget{embroidery_8h_a07e04b93bf1b220b0287b3e8e7de7c0c}\label{embroidery_8h_a07e04b93bf1b220b0287b3e8e7de7c0c}} 
 \index{embroidery.h@{embroidery.h}!embVector\_cross@{embVector\_cross}}
 \index{embVector\_cross@{embVector\_cross}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embVector\_cross()}{embVector\_cross()}}
@@ -2574,7 +2580,11 @@ The \char`\"{}cross product\char`\"{} as vectors {\itshape a} and {\itshape b} r
 
 Technically, this is the magnitude of the cross product when the embroidery is placed in the z=0 plane (since the cross product is defined for 3-\/dimensional vectors). That is\+:
 
-\[ |c| = \left| \begin{pmatrix} a_x \\ a_y \\ 0 \end{pmatrix} \times \begin{pmatrix} b_x \\ b_y \\ 0 \end{pmatrix}\right| = \left| \begin{pmatrix} 0 \\ 0 \\ a_x b_y - a_y b_x \end{pmatrix} \right| = a_x b_y - a_y b_x \] \mbox{\Hypertarget{embroidery_8h_ae6eb6571cc109a253dc4f7d825e56694}\label{embroidery_8h_ae6eb6571cc109a253dc4f7d825e56694}} 
+\[
+      |c| = \left| \begin{pmatrix} a_x \\ a_y \\ 0 \end{pmatrix} \times \begin{pmatrix} b_x \\ b_y \\ 0 \end{pmatrix}\right|
+          = \left| \begin{pmatrix} 0 \\ 0 \\ a_x b_y - a_y b_x \end{pmatrix} \right|
+          = a_x b_y - a_y b_x
+\] \mbox{\Hypertarget{embroidery_8h_ae6eb6571cc109a253dc4f7d825e56694}\label{embroidery_8h_ae6eb6571cc109a253dc4f7d825e56694}} 
 \index{embroidery.h@{embroidery.h}!embVector\_distance@{embVector\_distance}}
 \index{embVector\_distance@{embVector\_distance}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embVector\_distance()}{embVector\_distance()}}
@@ -2582,7 +2592,10 @@ Technically, this is the magnitude of the cross product when the embroidery is p
 
 The distance between {\itshape a} and {\itshape b} returned as a real value.
 
-\[ d = \left|\mathbf{a}-\mathbf{b}\right| = \sqrt{(a_x-b_x)^{2} + (a_y-b_y)^{2}} \] \mbox{\Hypertarget{embroidery_8h_a30cd27cebdce50d05099d257afc91381}\label{embroidery_8h_a30cd27cebdce50d05099d257afc91381}} 
+\[
+     d = \left|\mathbf{a}-\mathbf{b}\right|
+       = \sqrt{(a_x-b_x)^{2} + (a_y-b_y)^{2}}
+\] \mbox{\Hypertarget{embroidery_8h_a30cd27cebdce50d05099d257afc91381}\label{embroidery_8h_a30cd27cebdce50d05099d257afc91381}} 
 \index{embroidery.h@{embroidery.h}!embVector\_dot@{embVector\_dot}}
 \index{embVector\_dot@{embVector\_dot}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embVector\_dot()}{embVector\_dot()}}
@@ -2592,7 +2605,10 @@ The dot product as vectors {\itshape v1} and {\itshape v2} returned as a Emb\+Re
 
 Equivalent to\+:
 
-\[ c = \mathbf{a} \cdot \mathbf{b} = a_x b_x + a_y b_y \] \mbox{\Hypertarget{embroidery_8h_ac0161afdbecb1d33336072331183e441}\label{embroidery_8h_ac0161afdbecb1d33336072331183e441}} 
+\[
+      c = \mathbf{a} \cdot \mathbf{b}
+        = a_x b_x + a_y b_y
+\] \mbox{\Hypertarget{embroidery_8h_ac0161afdbecb1d33336072331183e441}\label{embroidery_8h_ac0161afdbecb1d33336072331183e441}} 
 \index{embroidery.h@{embroidery.h}!embVector\_length@{embVector\_length}}
 \index{embVector\_length@{embVector\_length}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embVector\_length()}{embVector\_length()}}
@@ -2602,7 +2618,9 @@ The length or absolute value of the vector {\itshape vector}.
 
 Equivalent to\+:
 
-\[ |v| = \sqrt{v_{x}^{2} + v_{y}^{2}} \] \mbox{\Hypertarget{embroidery_8h_a710ebab38d10db6e2582707c1d60036b}\label{embroidery_8h_a710ebab38d10db6e2582707c1d60036b}} 
+\[
+      |v| = \sqrt{v_{x}^{2} + v_{y}^{2}}
+\] \mbox{\Hypertarget{embroidery_8h_a710ebab38d10db6e2582707c1d60036b}\label{embroidery_8h_a710ebab38d10db6e2582707c1d60036b}} 
 \index{embroidery.h@{embroidery.h}!embVector\_multiply@{embVector\_multiply}}
 \index{embVector\_multiply@{embVector\_multiply}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embVector\_multiply()}{embVector\_multiply()}}
@@ -2611,7 +2629,7 @@ Equivalent to\+:
 The scalar multiple {\itshape magnitude} of a vector {\itshape vector}. Returned as {\itshape result}.
 
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000228}{Todo}}]make result return argument. \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000225}{Todo}}]make result return argument. \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery_8h_a34e670486dcdd3b97c65c81ba8eea067}\label{embroidery_8h_a34e670486dcdd3b97c65c81ba8eea067}} 
 \index{embroidery.h@{embroidery.h}!embVector\_normalize@{embVector\_normalize}}
 \index{embVector\_normalize@{embVector\_normalize}!embroidery.h@{embroidery.h}}
@@ -2622,10 +2640,12 @@ Finds the unit length vector {\itshape result} in the same direction as {\itshap
 
 Equivalent to\+:
 
-\[ \mathbf{u} = \frac{v}{|\mathbf{v}|} \]
+\[
+      \mathbf{u} = \frac{v}{|\mathbf{v}|}
+\]
 
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000227}{Todo}}]make result return argument. \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000224}{Todo}}]make result return argument. \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery_8h_af790aef236de4e53badb9a9c8ce5664a}\label{embroidery_8h_af790aef236de4e53badb9a9c8ce5664a}} 
 \index{embroidery.h@{embroidery.h}!embVector\_relativeX@{embVector\_relativeX}}
 \index{embVector\_relativeX@{embVector\_relativeX}!embroidery.h@{embroidery.h}}
@@ -2648,7 +2668,10 @@ The difference between vectors {\itshape v1} and {\itshape v2} returned as {\its
 
 Equivalent to\+:
 
-\[ \mathbf{c} = \mathbf{a} - \mathbf{b} = \begin{pmatrix} a_{x} - b_{x} \\ a_{y}-b_{y} \end{pmatrix} \] \mbox{\Hypertarget{embroidery_8h_a25608cfbca820b4a4bdd53083ec87450}\label{embroidery_8h_a25608cfbca820b4a4bdd53083ec87450}} 
+\[
+      \mathbf{c} = \mathbf{a} - \mathbf{b}
+                 = \begin{pmatrix} a_{x} - b_{x} \\ a_{y}-b_{y} \end{pmatrix}
+\] \mbox{\Hypertarget{embroidery_8h_a25608cfbca820b4a4bdd53083ec87450}\label{embroidery_8h_a25608cfbca820b4a4bdd53083ec87450}} 
 \index{embroidery.h@{embroidery.h}!embVector\_transpose\_product@{embVector\_transpose\_product}}
 \index{embVector\_transpose\_product@{embVector\_transpose\_product}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embVector\_transpose\_product()}{embVector\_transpose\_product()}}
@@ -2664,7 +2687,9 @@ That is (1 0) (a) = (xa) (x y)(0 1) (b) (yb) \mbox{\Hypertarget{embroidery_8h_ab
 
 The unit vector in the direction {\itshape angle}.
 
-\[ \mathbf{a}_{\alpha} = \begin{pmatrix} \cos(\alpha) \\ \sin(\alpha) \end{pmatrix} \] \mbox{\Hypertarget{embroidery_8h_aa72a9eb0e258efbb67453e5f79af62c8}\label{embroidery_8h_aa72a9eb0e258efbb67453e5f79af62c8}} 
+\[
+      \mathbf{a}_{\alpha} = \begin{pmatrix} \cos(\alpha) \\ \sin(\alpha) \end{pmatrix}
+\] \mbox{\Hypertarget{embroidery_8h_aa72a9eb0e258efbb67453e5f79af62c8}\label{embroidery_8h_aa72a9eb0e258efbb67453e5f79af62c8}} 
 \index{embroidery.h@{embroidery.h}!full\_test\_matrix@{full\_test\_matrix}}
 \index{full\_test\_matrix@{full\_test\_matrix}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{full\_test\_matrix()}{full\_test\_matrix()}}
@@ -2737,11 +2762,11 @@ This is a slow generation algorithm. \mbox{\Hypertarget{embroidery_8h_a0e589a7b4
 \doxyparagraph{\texorpdfstring{threadColor()}{threadColor()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} int thread\+Color (\begin{DoxyParamCaption}\item[{const char $\ast$}]{name,  }\item[{int}]{brand }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{embroidery_8h_a1ceec74a0119ebe554cf6d9df1199571}\label{embroidery_8h_a1ceec74a0119ebe554cf6d9df1199571}} 
+\mbox{\Hypertarget{embroidery_8h_a2be9bcb326d8bb595079f9129df9e35e}\label{embroidery_8h_a2be9bcb326d8bb595079f9129df9e35e}} 
 \index{embroidery.h@{embroidery.h}!threadColorName@{threadColorName}}
 \index{threadColorName@{threadColorName}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{threadColorName()}{threadColorName()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} const char$\ast$ thread\+Color\+Name (\begin{DoxyParamCaption}\item[{unsigned int}]{color,  }\item[{int}]{brand }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} const char $\ast$ thread\+Color\+Name (\begin{DoxyParamCaption}\item[{unsigned int}]{color,  }\item[{int}]{brand }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{embroidery_8h_ae6976ffd0a29cdf4247e8da3aefc8ef0}\label{embroidery_8h_ae6976ffd0a29cdf4247e8da3aefc8ef0}} 
 \index{embroidery.h@{embroidery.h}!threadColorNum@{threadColorNum}}
@@ -2801,7 +2826,7 @@ This file is part of libembroidery.
 Copyright 2018-\/2022 The Embroidermodder Team Licensed under the terms of the zlib license.
 
 This file contains all the read and write functions for the library. \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000213}{Todo}}]This list needs reviewed in case some stitch formats also can contain object data (EMBFORMAT\+\_\+\+STCHANDOBJ). $\ast$ \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000210}{Todo}}]This list needs reviewed in case some stitch formats also can contain object data (EMBFORMAT\+\_\+\+STCHANDOBJ). $\ast$ \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery_8h_a79aeead6ed60b9a00526759a7b0a65d3}\label{embroidery_8h_a79aeead6ed60b9a00526759a7b0a65d3}} 
 \index{embroidery.h@{embroidery.h}!husThreads@{husThreads}}
 \index{husThreads@{husThreads}!embroidery.h@{embroidery.h}}

@@ -20,7 +20,7 @@ var pattern_8c =
     [ "embPattern_copyPolylinesTostitch_list", "pattern_8c.html#a54aee02ff890052e686ee3833530810e", null ],
     [ "embPattern_copystitch_listToPolylines", "pattern_8c.html#a007fd0ac881d6ac89ef4d42b280df25c", null ],
     [ "embPattern_correctForMaxStitchLength", "pattern_8c.html#a6d1fde93564a15d1ec24399fc613d1ac", null ],
-    [ "embPattern_create", "pattern_8c.html#a666c744ae707b3dba5664f779416bc69", null ],
+    [ "embPattern_create", "pattern_8c.html#a7454ecbf98b46d74f1138772b6c9244f", null ],
     [ "embPattern_designDetails", "pattern_8c.html#a521b227079bdcc139481887a62cac7d8", null ],
     [ "embPattern_end", "pattern_8c.html#a88d9dae8d9ba52860504600c3817f6ea", null ],
     [ "embPattern_fixColorCount", "pattern_8c.html#a07b42ab1ae4028608bf4462d4a5abbcc", null ],

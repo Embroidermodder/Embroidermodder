@@ -23,6 +23,9 @@
 
 //#include <QOpenGLWidget>
 
+/**
+ * .
+ */
 View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
 {
     gscene = theScene;
@@ -1051,14 +1054,22 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
     }
 }
 
-bool View::willUnderflowInt32(int64_t a, int64_t b)
+/**
+ * .
+ */
+bool
+View::willUnderflowInt32(int64_t a, int64_t b)
 {
     assert(LLONG_MAX>INT_MAX);
     int64_t c = (int64_t)a-b;
     return (c < INT_MIN || c > INT_MAX);
 }
 
-bool View::willOverflowInt32(int64_t a, int64_t b)
+/**
+ * .
+ */
+bool
+View::willOverflowInt32(int64_t a, int64_t b)
 {
     assert(LLONG_MAX>INT_MAX);
     int64_t c = (int64_t)a+b;
@@ -1066,161 +1077,88 @@ bool View::willOverflowInt32(int64_t a, int64_t b)
 }
 
 /**
- * Utility function for add_to_path.
- */
-std::vector<float>
-get_n_reals(StringList list, int n, int *offset)
-{
-    std::vector<float> result;
-    for (int i=1; i<n+1; i++) {
-        result.push_back(std::stof(list[*offset+i]));
-    }
-    *offset += n;
-    return result;
-}
-
-/**
  * .
  */
-void
-add_to_path(QPainterPath *path, EmbVector scale, String command)
-{
-    StringList list = tokenize(command, ' ');
-    for (int i=0; i<(int)list.size(); i++) {
-        command = list[i];
-        if (command == "M") {
-            std::vector<float> r = get_n_reals(list, 2, &i);
-            path->moveTo(r[0]*scale.x, r[1]*scale.y);
-        }
-        else if (command == "L") {
-            std::vector<float> r = get_n_reals(list, 2, &i);
-            path->lineTo(r[0]*scale.x, r[1]*scale.y);
-        }
-        else if (command == "A") {
-            std::vector<float> r = get_n_reals(list, 6, &i);
-            path->arcTo(r[0]*scale.x, r[1]*scale.y, r[2]*scale.x, r[3]*scale.y, r[4], r[5]);
-        }
-        else if (command == "AM") {
-            std::vector<float> r = get_n_reals(list, 5, &i);
-            path->arcMoveTo(r[0]*scale.x, r[1]*scale.y, r[2]*scale.x, r[3]*scale.y, r[4]);
-        }
-        else if (command == "E") {
-            std::vector<float> r = get_n_reals(list, 4, &i);
-            path->addEllipse(QPointF(r[0], r[1]), r[2], r[3]);
-        }
-    }
-}
-
-QPainterPath View::createRulerTextPath(EmbVector position, QString str, float height)
+QPainterPath
+View::createRulerTextPath(EmbVector position, QString str, float height)
 {
     QPainterPath path;
 
     EmbVector scale;
     scale.x = height;
     scale.y = height;
-    EmbReal offset = 0.0f;
 
-    int len = str.length();
-    for (int i = 0; i < len; ++i) {
-        if (str[i] == QChar('1')) {
-            add_to_path(&path, scale,
-                "M 0.05 0.0 L 0.45 0.0 M 0.0 -0.75 L 0.25 -1.0 L 0.25 0.0");
-        }
-        else if (str[i] == QChar('2')) {
-            add_to_path(&path, scale,
-                "M 0.0 -0.75 A 0.00 -1.00 0.50 0.50 180.00 -216.87 L 0.0 0.0 L 0.5 0.0");
-        }
-        else if (str[i] == QChar('3')) {
-            path.arcMoveTo(0.00*scale.x, -0.50*scale.y, 0.50*scale.x, 0.50*scale.y, 195.00);
-            path.arcTo(0.00*scale.x, -0.50*scale.y, 0.50*scale.x, 0.50*scale.y, 195.00, 255.00);
-            path.arcTo(0.00*scale.x, -1.00*scale.y, 0.50*scale.x, 0.50*scale.y, 270.00, 255.00);
-        }
-        else if (str[i] == QChar('4')) {
-            path.moveTo(0.50*scale.x, -0.00*scale.y);
-            path.lineTo(0.50*scale.x, -1.00*scale.y);
-            path.lineTo(0.00*scale.x, -0.50*scale.y);
-            path.lineTo(0.50*scale.x, -0.50*scale.y);
-        }
-        else if (str[i] == QChar('5')) {
-            path.moveTo(0.50*scale.x, -1.00*scale.y);
-            path.lineTo(0.00*scale.x, -1.00*scale.y);
-            path.lineTo(0.00*scale.x, -0.50*scale.y);
-            path.lineTo(0.25*scale.x, -0.50*scale.y);
-            path.arcTo(0.00*scale.x, -0.50*scale.y, 0.50*scale.x, 0.50*scale.y, 90.00, -180.00);
-            path.lineTo(0.00*scale.x, -0.00*scale.y);
-        }
-        else if (str[i] == QChar('6')) {
-            path.addEllipse(QPointF(0.25*scale.x, -0.25*scale.y), 0.25*scale.x, 0.25*scale.y);
-            path.moveTo(0.00*scale.x, -0.25*scale.y);
-            path.lineTo(0.00*scale.x, -0.75*scale.y);
-            path.arcTo(0.00*scale.x, -1.00*scale.y, 0.50*scale.x, 0.50*scale.y, 180.00, -140.00);
-        }
-        else if (str[i] == QChar('7')) {
-            path.moveTo(0.00*scale.x, -1.00*scale.y);
-            path.lineTo(0.50*scale.x, -1.00*scale.y);
-            path.lineTo(0.25*scale.x, -0.25*scale.y);
-            path.lineTo(0.25*scale.x, -0.00*scale.y);
-        }
-        else if (str[i] == QChar('8')) {
-            path.addEllipse(QPointF(0.25*scale.x, -0.25*scale.y), 0.25*scale.x, 0.25*scale.y);
-            path.addEllipse(QPointF(0.25*scale.x, -0.75*scale.y), 0.25*scale.x, 0.25*scale.y);
-        }
-        else if (str[i] == QChar('9')) {
-            path.addEllipse(QPointF(0.25*scale.x, -0.75*scale.y), 0.25*scale.x, 0.25*scale.y);
-            path.moveTo(0.50*scale.x, -0.75*scale.y);
-            path.lineTo(0.50*scale.x, -0.25*scale.y);
-            path.arcTo(0.00*scale.x, -0.50*scale.y, 0.50*scale.x, 0.50*scale.y, 0.00, -140.00);
-        }
-        else if (str[i] == QChar('0')) {
-            //path.addEllipse(QPointF(0.25*scale.x, -0.50*scale.y), 0.25*scale.x, 0.50*scale.y);
+    Dictionary paths;
+    paths["0"] = node_str("M 0.00 -0.75 L 0.00 -0.25 A 0.00 -0.50 0.50 0.50 180.00, 180.00 L 0.50 -0.75 A 0.00 -1.00 0.50 0.50 0.00, 180.00");
+    paths["1"] = node_str("M 0.05 0.0 L 0.45 0.0 M 0.0 -0.75 L 0.25 -1.0 L 0.25 0.0");
+    paths["2"] = node_str("M 0.0 -0.75 A 0.00 -1.00 0.50 0.50 180.00 -216.87 L 0.0 0.0 L 0.5 0.0");
+    paths["3"] = node_str("AM 0.00 -0.50 0.50 0.50 195.00 A 0.00 -0.50 0.50 0.50 195.00 255.00 A 0.00 -1.00 0.50 0.50 270.00 255.00");
+    paths["4"] = node_str("M 0.50 -0.00 L 0.50 -1.00 L 0.00 -0.50 L 0.50 -0.50");
+    paths["5"] = node_str("M 0.50 -1.00 L 0.00 -1.00 L 0.00 -0.50 L 0.25 -0.50 A 0.00 -0.50 0.50 0.50 90.00 -180.00 L 0.00 -0.00");
+    paths["6"] = node_str("E 0.25 -0.25 0.25 0.25 M 0.00 -0.25 L 0.00 -0.75 A 0.00 -1.00 0.50 0.50 180.00 -140.00");
+    paths["7"] = node_str("M 0.00 -1.00 L 0.50 -1.00 L 0.25 -0.25 L 0.25 -0.00");
+    paths["8"] = node_str("E 0.25 -0.25 0.25 0.25 E 0.25 -0.75 0.25 0.25");
+    paths["9"] = node_str("E 0.25 -0.75 0.25 0.25 M 0.50 -0.75 L 0.50 -0.25 A 0.00 -0.50 0.50 0.50 0.00, -140.00");
+    //path.addEllipse(QPointF(0.25 -0.50*scale.y), 0.25 0.50
+    paths["0"] = node_str("M 0.00 -0.75 L 0.00 -0.25 A 0.00 -0.50 0.50 0.50 180.00, 180.00 L 0.50 -0.75 A 0.00 -1.00 0.50 0.50 0.00, 180.00");
+    paths["-"] = node_str("M 0.00 -0.50 L 0.50 -0.50");
+    paths["'"] = node_str("M 0.25 -1.00 L 0.25 -0.75");
+    paths["\""] = node_str("M 0.10 -1.00 L 0.10 -0.75 M 0.40 -1.00 L 0.40 -0.75");
 
-            path.moveTo(0.00*scale.x, -0.75*scale.y);
-            path.lineTo(0.00*scale.x, -0.25*scale.y);
-            path.arcTo(0.00*scale.x, -0.50*scale.y, 0.50*scale.x, 0.50*scale.y, 180.00, 180.00);
-            path.lineTo(0.50*scale.x, -0.75*scale.y);
-            path.arcTo(0.00*scale.x, -1.00*scale.y, 0.50*scale.x, 0.50*scale.y,   0.00, 180.00);
+    String s = str.toStdString();
+    for (int i = 0; i < (int)s.length(); ++i) {
+        String S(1, s[i]);
+        auto iter = paths.find(S);
+        if (iter != paths.end()) {
+            path = add_to_path(path, scale, paths[S].s);
         }
-        else if (str[i] == QChar('-')) {
-            path.moveTo(0.00*scale.x, -0.50*scale.y);
-            path.lineTo(0.50*scale.x, -0.50*scale.y);
-        }
-        else if (str[i] == QChar('\'')) {
-            path.moveTo(0.25*scale.x, -1.00*scale.y);
-            path.lineTo(0.25*scale.x, -0.75*scale.y);
-        }
-        else if (str[i] == QChar('\"')) {
-            path.moveTo(0.10*scale.x, -1.00*scale.y);
-            path.lineTo(0.10*scale.x, -0.75*scale.y);
-            path.moveTo(0.40*scale.x, -1.00*scale.y);
-            path.lineTo(0.40*scale.x, -0.75*scale.y);
-        }
-
         path.translate(QPointF(-0.75*scale.x, 0.0));
     }
 
-    path.translate(QPointF(len*0.75*scale.x, 0.0) + to_QPointF(position));
+    path.translate(QPointF(s.length()*0.75*scale.x, 0.0) + to_QPointF(position));
 
     return path;
 }
 
-int View::roundToMultiple(bool roundUp, int numToRound, int multiple)
+/**
+ * Round the number \a numToRound to a multple of the number \a multiple,
+ * rounding up if \a roundUp is true.
+ *
+ * First, \a multiple is 0 then we have an invalid input so just return the
+ * argument, then if the number is already a multiple of \a multiple then
+ * return the argument.
+ *
+ * Then take the remainder off the argument and determine which way to round
+ * the result.
+ */
+int
+View::roundToMultiple(bool roundUp, int numToRound, int multiple)
 {
-    if (multiple == 0)
+    if (multiple == 0) {
         return numToRound;
+    }
     int remainder = numToRound % multiple;
-    if (remainder == 0)
+    if (remainder == 0) {
         return numToRound;
+    }
 
-    if (numToRound < 0 && roundUp)
-        return numToRound - remainder;
-    if (roundUp)
-        return numToRound + multiple - remainder;
-    //else round down
-    if (numToRound < 0 && !roundUp)
-        return numToRound - multiple - remainder;
-    return numToRound - remainder;
+    int result = numToRound - remainder;
+    if (roundUp) {
+        if (numToRound < 0) {
+            return result;
+        }
+        return result + multiple;
+    }
+    /* else round down */
+    if (numToRound < 0) {
+        return result - multiple;
+    }
+    return result;
 }
 
+/**
+ * .
+ */
 void
 View::updateMouseCoords(int x, int y)
 {
@@ -1232,6 +1170,9 @@ View::updateMouseCoords(int x, int y)
     statusbar->setMouseCoord(sceneMousePoint.x(), -sceneMousePoint.y());
 }
 
+/**
+ * .
+ */
 void
 View::setCrossHairSize(quint8 percent)
 {
@@ -1247,6 +1188,9 @@ View::setCrossHairSize(quint8 percent)
     }
 }
 
+/**
+ * .
+ */
 void
 View::setCornerButton()
 {
@@ -1274,6 +1218,9 @@ View::setCornerButton()
     */
 }
 
+/**
+ * .
+ */
 void
 View::cornerButtonClicked()
 {
@@ -1281,6 +1228,9 @@ View::cornerButtonClicked()
     //actionHash[settings.display_scrollbar_widget_num]->trigger();
 }
 
+/**
+ * .
+ */
 void
 View::zoomIn()
 {
@@ -1297,6 +1247,9 @@ View::zoomIn()
     QApplication::restoreOverrideCursor();
 }
 
+/**
+ * .
+ */
 void
 View::zoomOut()
 {
@@ -1311,6 +1264,9 @@ View::zoomOut()
     QApplication::restoreOverrideCursor();
 }
 
+/**
+ * .
+ */
 void
 View::zoomWindow()
 {
@@ -1319,6 +1275,9 @@ View::zoomWindow()
     clearSelection();
 }
 
+/**
+ * .
+ */
 void
 View::zoomSelected()
 {
@@ -1339,6 +1298,9 @@ View::zoomSelected()
     QApplication::restoreOverrideCursor();
 }
 
+/**
+ * .
+ */
 void
 View::zoomExtents()
 {
@@ -1353,18 +1315,27 @@ View::zoomExtents()
     QApplication::restoreOverrideCursor();
 }
 
+/**
+ * .
+ */
 void
 View::panRealTime()
 {
     panningRealTimeActive = true;
 }
 
+/**
+ * .
+ */
 void
 View::panPoint()
 {
     panningPointActive = true;
 }
 
+/**
+ * .
+ */
 void
 View::panLeft()
 {
@@ -1373,6 +1344,9 @@ View::panLeft()
     gscene->update();
 }
 
+/**
+ * .
+ */
 void
 View::panRight()
 {
@@ -1381,6 +1355,9 @@ View::panRight()
     gscene->update();
 }
 
+/**
+ * .
+ */
 void
 View::panUp()
 {
@@ -1389,6 +1366,9 @@ View::panUp()
     gscene->update();
 }
 
+/**
+ * .
+ */
 void
 View::panDown()
 {
@@ -1397,6 +1377,9 @@ View::panDown()
     gscene->update();
 }
 
+/**
+ * .
+ */
 void
 View::selectAll()
 {
@@ -1405,6 +1388,9 @@ View::selectAll()
     // gscene->setSelectionArea(allPath, Qt::IntersectsItemShape, this->transform());
 }
 
+/**
+ * .
+ */
 void
 View::selectionChanged()
 {
@@ -1413,6 +1399,9 @@ View::selectionChanged()
     }
 }
 
+/**
+ * .
+ */
 void
 View::mouseDoubleClickEvent(QMouseEvent* event)
 {
@@ -1424,6 +1413,9 @@ View::mouseDoubleClickEvent(QMouseEvent* event)
     }
 }
 
+/**
+ * .
+ */
 void
 View::mousePressEvent(QMouseEvent* event)
 {

@@ -1,25 +1,9 @@
 var searchData=
 [
-  ['qsnap_5faperture_5fsize_4380',['qsnap_aperture_size',['../structSettings__.html#aee92f76b6b8b352a2970e53ba5fc705e',1,'Settings_']]],
-  ['qsnap_5fapparent_4381',['qsnap_apparent',['../structSettings__.html#a95f0da4e237c11f048dd77641390baa3',1,'Settings_']]],
-  ['qsnap_5fcenter_4382',['qsnap_center',['../structSettings__.html#a99203fb64a25c538eb1a0bf893092388',1,'Settings_']]],
-  ['qsnap_5fenabled_4383',['qsnap_enabled',['../structSettings__.html#ad56654b53ad84517e2c639ad55c828a1',1,'Settings_']]],
-  ['qsnap_5fendpoint_4384',['qsnap_endpoint',['../structSettings__.html#a6a7fbf8bd82235c5e735e3e965dfffd4',1,'Settings_']]],
-  ['qsnap_5fextension_4385',['qsnap_extension',['../structSettings__.html#aa2e69459ac2429fd1292cc83fe489caa',1,'Settings_']]],
-  ['qsnap_5finsertion_4386',['qsnap_insertion',['../structSettings__.html#a8bf3751d40b0ccfd30435b6555de4da3',1,'Settings_']]],
-  ['qsnap_5fintersection_4387',['qsnap_intersection',['../structSettings__.html#abd2cb3da9d3f27dccf5697cf420e6bdc',1,'Settings_']]],
-  ['qsnap_5flocator_5fcolor_4388',['qsnap_locator_color',['../structSettings__.html#a2d5632623f70cb230be221454abc24bc',1,'Settings_']]],
-  ['qsnap_5flocator_5fsize_4389',['qsnap_locator_size',['../structSettings__.html#a15066fb73e8d8051ef26098471d30158',1,'Settings_']]],
-  ['qsnap_5fmidpoint_4390',['qsnap_midpoint',['../structSettings__.html#adcf597596d14d26a89d84cfabb11b18a',1,'Settings_']]],
-  ['qsnap_5fnearest_4391',['qsnap_nearest',['../structSettings__.html#a415a7fd8c81a74a10ec9baa8437bd819',1,'Settings_']]],
-  ['qsnap_5fnode_4392',['qsnap_node',['../structSettings__.html#a1e946b98bba62cd67aeab6f06f45ef03',1,'Settings_']]],
-  ['qsnap_5fparallel_4393',['qsnap_parallel',['../structSettings__.html#aa07416630c112a1678ac781f1967469c',1,'Settings_']]],
-  ['qsnap_5fperpendicular_4394',['qsnap_perpendicular',['../structSettings__.html#a3b2f5e6f30732489a78dfd1c6deafd94',1,'Settings_']]],
-  ['qsnap_5fquadrant_4395',['qsnap_quadrant',['../structSettings__.html#a708071a7eeafee3132e1e3d9ebbe378c',1,'Settings_']]],
-  ['qsnap_5ftangent_4396',['qsnap_tangent',['../structSettings__.html#a45f375e014e027a97ecd2cb36d1d3c31',1,'Settings_']]],
-  ['qsnapactive_4397',['qSnapActive',['../classView.html#a6a8be994b833ec12a9e8fbdad48f7ca2',1,'View']]],
-  ['qsnapaperturesize_4398',['qsnapApertureSize',['../classView.html#a117cdf31f7ec5aee34918bbabb9001b0',1,'View']]],
-  ['qsnaplocatorcolor_4399',['qsnapLocatorColor',['../classView.html#a75f72855bbcbbeb072006d662bb3a1dd',1,'View']]],
-  ['qsnaplocatorsize_4400',['qsnapLocatorSize',['../classView.html#ac0325fd95b5834c14bfd5a6070840497',1,'View']]],
-  ['qsnaptoggle_4401',['qSnapToggle',['../classView.html#a8c6f84b32094a0b2a0387e2ae5eec659',1,'View']]]
+  ['qsnapactive_0',['qSnapActive',['../classView.html#a6a8be994b833ec12a9e8fbdad48f7ca2',1,'View']]],
+  ['qsnapaperturesize_1',['qsnapApertureSize',['../classView.html#a117cdf31f7ec5aee34918bbabb9001b0',1,'View']]],
+  ['qsnaplocatorcolor_2',['qsnapLocatorColor',['../classView.html#a75f72855bbcbbeb072006d662bb3a1dd',1,'View']]],
+  ['qsnaplocatorsize_3',['qsnapLocatorSize',['../classView.html#ac0325fd95b5834c14bfd5a6070840497',1,'View']]],
+  ['qsnaptoggle_4',['qSnapToggle',['../classView.html#a8c6f84b32094a0b2a0387e2ae5eec659',1,'View']]],
+  ['quick_5fsnap_5fprops_5',['quick_snap_props',['../settings-dialog_8cpp.html#a1bf7f5a1ff3294041a5188afff074aa6',1,'settings-dialog.cpp']]]
 ];
