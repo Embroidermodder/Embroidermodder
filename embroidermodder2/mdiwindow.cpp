@@ -140,11 +140,40 @@ MdiWindow::loadFile(String fileName)
     }
 
     if (readSuccessful) {
+        debug_message("Starting to load the read file.");
         //embPattern_moveStitchListToPolylines(p); //TODO: Test more
         
         int stitchCount = p->stitch_list->count;
+        qDebug("%d", stitchCount);
         for (int i=0; i<stitchCount; i++) {
-            
+            EmbStitch st = p->stitch_list->stitch[i];
+            int color = 0;
+            QPainterPath stitchPath;
+            bool firstPoint = true;
+            EmbVector start = {0, 0};
+            EmbVector pos = {0, 0};
+            for (; (st.flags <= 2) && (i<stitchCount); i++) {
+                st = p->stitch_list->stitch[i];
+                // NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
+                pos.x = st.x;
+                pos.y = -st.y;
+                qDebug("%d %f %f", i, pos.x, pos.y);
+
+                /* BUG: This means that the trim information is forgot in loading to a
+                 * polyline. We should have a custom class for this.
+                 */
+                if (firstPoint || (st.flags == JUMP) || (st.flags == TRIM)) {
+                    stitchPath.moveTo(pos.x, pos.y);
+                }
+                else {
+                    if (st.flags == NORMAL) {
+                        stitchPath.lineTo(pos.x, pos.y);
+                    }
+                    firstPoint = false;
+                }
+            }
+
+            add_polyline(stitchPath, "OBJ_RUBBER_OFF");
         }
 
         for (int i=0; i<p->geometry->count; i++) {

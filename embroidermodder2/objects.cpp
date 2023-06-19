@@ -54,6 +54,31 @@ fourier_series(EmbReal arg, std::vector<EmbReal> terms)
 /**
  * .
  */
+void
+add_polyline(QPainterPath p, String rubberMode)
+{
+    View* gview = activeView();
+    QGraphicsScene* gscene = gview->scene();
+    QUndoStack* stack = gview->getUndoStack();
+    if (!(gview && gscene && stack)) {
+        return;
+    }
+    Geometry* obj = new Geometry(p, OBJ_TYPE_POLYLINE, _mainWin->getCurrentColor(), Qt::SolidLine);
+    obj->objRubberMode = rubberMode;
+    if (rubberMode != "OBJ_RUBBER_OFF") {
+        gview->addToRubberRoom(obj);
+        gscene->addItem(obj);
+        gscene->update();
+    }
+    else {
+        UndoableCommand* cmd = new UndoableCommand("add", obj->data(OBJ_NAME).toString(), obj, gview);
+        stack->push(cmd);
+    }
+}
+
+/**
+ * .
+ */
 Geometry::Geometry(EmbArc arc, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
     debug_message("Geometry Constructor()");
@@ -106,12 +131,12 @@ Geometry::Geometry(EmbVector vector, QRgb rgb, Qt::PenStyle lineType, QGraphicsI
 /**
  * For PATH, POLYLINE and POLYGON, set the Type_ variable to one of these.
  */
-Geometry::Geometry(EmbVector v, const QPainterPath& p, int Type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
+Geometry::Geometry(QPainterPath p, int Type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
     debug_message("Geometry Constructor()");
     Type = Type_;
     init();
-    init_path(v, p, rgb, lineType); //TODO: getCurrentLineType
+    init_path(p, rgb, lineType); //TODO: getCurrentLineType
 }
 
 /**
@@ -310,7 +335,7 @@ Geometry::init_point(EmbVector position, QRgb rgb, Qt::PenStyle lineType)
 //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
 //WARNING: All movement has to be handled explicitly by us, not by the scene.
 void
-Geometry::init_path(EmbVector position, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
+Geometry::init_path(QPainterPath p, QRgb rgb, Qt::PenStyle lineType)
 {
     switch (Type) {
     case OBJ_TYPE_POLYGON: {
@@ -322,6 +347,7 @@ Geometry::init_path(EmbVector position, const QPainterPath& p, QRgb rgb, Qt::Pen
         gripIndex = -1;
         normalPath = p;
         updatePath();
+        QPainterPath::Element position = p.elementAt(0);
         setObjectPos(position.x, position.y);
         objPen.setColor(rgb);
         lwtPen.setColor(rgb);
@@ -339,6 +365,7 @@ Geometry::init_path(EmbVector position, const QPainterPath& p, QRgb rgb, Qt::Pen
 
         gripIndex = -1;
         updatePath(p);
+        QPainterPath::Element position = p.elementAt(0);
         setPos(position.x, position.y);
         objPen.setColor(rgb);
         lwtPen.setColor(rgb);
@@ -468,14 +495,14 @@ Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(par
         }
 
         case OBJ_TYPE_POLYGON: {
-            init_path(to_EmbVector(obj->objectPos()), obj->objectCopyPath(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
+            init_path(obj->objectCopyPath(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
             setRotation(obj->rotation());
             setScale(obj->scale());
             break;
         }
 
         case OBJ_TYPE_POLYLINE: {
-            init_path(to_EmbVector(obj->objectPos()), obj->objectCopyPath(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
+            init_path(obj->objectCopyPath(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
             setRotation(obj->rotation());
             setScale(obj->scale());
             break;
@@ -4377,17 +4404,13 @@ Geometry::erase_main(void)
 void
 Geometry::heart_main(void)
 {
-    properties["numPoints = 512; //Default //TODO: min:64 max:8192
-    properties["center.x;
-    properties["center.y;
-    properties["sx"] = 1.0;
-    properties["sy"] = 1.0;
-    properties["numPoints"];
-    properties["mode"].s;
-    actuator("init");
-    actuator("clear-selection");
+    properties["numPoints"] = node_int(512); //Default //TODO: min:64 max:8192
     properties["center.x"] = node_real(0.0f);
     properties["center.y"] = node_real(0.0f);
+    properties["sx"] = node(1.0f);
+    properties["sy"] = node(1.0f);
+    actuator("init");
+    actuator("clear-selection");
     properties["mode"] = node_str("MODE_NUM_POINTS");
 
     //Heart4: 10.0 / 512

@@ -2153,26 +2153,8 @@ add_polyline_action(String args)
 
     path.translate(-startX, -startY);
 
-    _mainWin->nativeAddPolyline(startX, startY, path, OBJ_RUBBER_OFF);
+    add_polyline(startX, startY, path, OBJ_RUBBER_OFF);
     */
-    View* gview = activeView();
-    QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && gscene && stack) {
-        /*
-        PolylineObject* obj = new PolylineObject(startX, startY, p,_mainWin->getCurrentColor());
-        obj->setObjectRubberMode(rubberMode);
-        if (rubberMode != "OBJ_RUBBER_OFF") {
-            gview->addToRubberRoom(obj);
-            gscene->addItem(obj);
-            gscene->update();
-        }
-        else {
-            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
-            stack->push(cmd);
-        }
-        */
-    }
     return "";
 }
 
@@ -2722,7 +2704,6 @@ read_configuration(void)
         return 0;
     }
 
-    StringList action_labels;
     for (int i=0; ; i++) {
         const char *key = toml_key_in(configuration, i);
         if (!key) {
@@ -2740,7 +2721,15 @@ read_configuration(void)
                         break;
                     }
                     String st_key(subtable_key);
-                    subtable_values[st_key] = node_str(read_string_setting(table, subtable_key));
+                    toml_datum_t str = toml_string_in(table, subtable_key);
+                    if (str.ok) {
+                        String s(str.u.s);
+                        subtable_values[st_key] = node_str(s);
+                        free(str.u.s);
+                    }
+                    else {
+                        subtable_values[st_key] = node_str("");
+                    }
                 }
                 config_tables[k] = subtable_values;
                 free(subtable_name.u.s);
@@ -4458,7 +4447,7 @@ MainWindow::saveasfile()
 QMdiSubWindow *
 MainWindow::findMdiWindow(String fileName)
 {
-    debug_message("MainWindow::findMdiWindow(%s)" + fileName);
+    debug_message("MainWindow::findMdiWindow(" + fileName + ")");
     QString canonicalFilePath = QFileInfo(QString::fromStdString(fileName)).canonicalFilePath();
 
     foreach(QMdiSubWindow* subWindow, mdiArea->subWindowList()) {

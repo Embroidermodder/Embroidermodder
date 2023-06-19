@@ -211,6 +211,8 @@ bool contains(StringList, String);
 bool validFileFormat(String fileName);
 QString fileExtension(String fileName);
 
+void add_polyline(QPainterPath p, String rubberMode);
+
 String read_string_setting(toml_table_t *table, const char *key);
 StringList tokenize(String str, const char delim);
 String convert_args_to_type(String label, StringList args,
@@ -343,7 +345,7 @@ public:
     Geometry(EmbRect rect, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
     Geometry(QString str, EmbVector position, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
     Geometry(EmbLine line, int Type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent);
-    Geometry(EmbVector pos, const QPainterPath& p, int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
+    Geometry(QPainterPath p, int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
     Geometry(EmbVector pos, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
 
     void init_arc(EmbArc arc, QRgb rgb, Qt::PenStyle lineType);
@@ -352,7 +354,7 @@ public:
     void init_ellipse(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType);
     void init_rect(EmbRect rect, QRgb rgb, Qt::PenStyle lineType);
     void init_text_single(QString str, EmbVector position, QRgb rgb, Qt::PenStyle lineType);
-    void init_path(EmbVector pos, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
+    void init_path(QPainterPath p, QRgb rgb, Qt::PenStyle lineType);
     void init_point(EmbVector pos, QRgb rgb, Qt::PenStyle lineType);
 
     void init(void);
