@@ -39,7 +39,9 @@ closest_point(QPointF position, std::vector<QPointF> points)
 }
 
 /**
- *
+ * @brief fourier_series
+ * @param arg
+ * @param terms
  */
 EmbReal
 fourier_series(EmbReal arg, std::vector<EmbReal> terms)
@@ -52,7 +54,9 @@ fourier_series(EmbReal arg, std::vector<EmbReal> terms)
 }
 
 /**
- * .
+ * @brief add_polyline
+ * @param p
+ * @param rubberMode
  */
 void
 add_polyline(QPainterPath p, String rubberMode)
@@ -211,7 +215,11 @@ Geometry::init_arc(EmbArc arc, QRgb rgb, Qt::PenStyle lineType)
 }
 
 /**
- * .
+ * @brief Geometry::init_circle
+ * @param circle
+ * @param rgb
+ * @param lineType
+ *
  * WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
  * WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
  * WARNING: All movement has to be handled explicitly by us, not by the scene.
@@ -236,7 +244,14 @@ Geometry::init_circle(EmbCircle circle, QRgb rgb, Qt::PenStyle lineType)
 }
 
 /**
- * \brief .
+ * @brief Geometry::init_ellipse
+ * @param ellipse
+ * @param rgb
+ * @param lineType
+ *
+ * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+ * and the item is double clicked, the scene will erratically move the item while zooming.
+ * All movement has to be handled explicitly by us, not by the scene.
  */
 void
 Geometry::init_ellipse(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType)
@@ -244,11 +259,6 @@ Geometry::init_ellipse(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType)
     setData(OBJ_TYPE, OBJ_TYPE_ELLIPSE);
     setData(OBJ_NAME, "Ellipse");
 
-    /**
-     * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-     * and the item is double clicked, the scene will erratically move the item while zooming.
-     * All movement has to be handled explicitly by us, not by the scene.
-     */
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
     setObjectSize(ellipse.radius.x, ellipse.radius.y);
@@ -262,9 +272,16 @@ Geometry::init_ellipse(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType)
     updatePath();
 }
 
-//WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-//WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
-//WARNING: All movement has to be handled explicitly by us, not by the scene.
+/**
+ * @brief Geometry::init_line
+ * @param ellipse
+ * @param rgb
+ * @param lineType
+ *
+ * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+ * and the item is double clicked, the scene will erratically move the item while zooming.
+ * All movement has to be handled explicitly by us, not by the scene.
+ */
 void
 Geometry::init_line(EmbLine line, QRgb rgb, Qt::PenStyle lineType)
 {
@@ -310,9 +327,16 @@ Geometry::init_line(EmbLine line, QRgb rgb, Qt::PenStyle lineType)
     }
 }
 
-//WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-//WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
-//WARNING: All movement has to be handled explicitly by us, not by the scene.
+/**
+ * @brief Geometry::init_line
+ * @param ellipse
+ * @param rgb
+ * @param lineType
+ *
+ * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+ * and the item is double clicked, the scene will erratically move the item while zooming.
+ * All movement has to be handled explicitly by us, not by the scene.
+ */
 void
 Geometry::init_point(EmbVector position, QRgb rgb, Qt::PenStyle lineType)
 {
@@ -331,9 +355,16 @@ Geometry::init_point(EmbVector position, QRgb rgb, Qt::PenStyle lineType)
     setPen(objPen);
 }
 
-//WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-//WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
-//WARNING: All movement has to be handled explicitly by us, not by the scene.
+/**
+ * @brief Geometry::init_line
+ * @param ellipse
+ * @param rgb
+ * @param lineType
+ *
+ * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+ * and the item is double clicked, the scene will erratically move the item while zooming.
+ * All movement has to be handled explicitly by us, not by the scene.
+ */
 void
 Geometry::init_path(QPainterPath p, QRgb rgb, Qt::PenStyle lineType)
 {
@@ -349,12 +380,6 @@ Geometry::init_path(QPainterPath p, QRgb rgb, Qt::PenStyle lineType)
         updatePath();
         QPainterPath::Element position = p.elementAt(0);
         setObjectPos(position.x, position.y);
-        objPen.setColor(rgb);
-        lwtPen.setColor(rgb);
-        objPen.setStyle(lineType);
-        lwtPen.setStyle(lineType);
-        setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
-        setPen(objPen);
         break;
     }
     case OBJ_TYPE_POLYLINE: {
@@ -367,30 +392,35 @@ Geometry::init_path(QPainterPath p, QRgb rgb, Qt::PenStyle lineType)
         updatePath(p);
         QPainterPath::Element position = p.elementAt(0);
         setPos(position.x, position.y);
-        objPen.setColor(rgb);
-        lwtPen.setColor(rgb);
-        objPen.setStyle(lineType);
-        lwtPen.setStyle(lineType);
-        setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
-        setPen(objPen);
         break;
     }
     default:
         break;
     }
+
+    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
+    objPen.setColor(rgb);
+    lwtPen.setColor(rgb);
+    objPen.setStyle(lineType);
+    lwtPen.setStyle(lineType);
+    setPen(objPen);
 }
 
 /**
- * \brief .
+ * @brief Geometry::init_line
+ * @param ellipse
+ * @param rgb
+ * @param lineType
+ *
+ * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+ * and the item is double clicked, the scene will erratically move the item while zooming.
+ * All movement has to be handled explicitly by us, not by the scene.
  */
 void Geometry::init_rect(EmbRect rect, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, OBJ_TYPE_RECTANGLE);
     setData(OBJ_NAME, "Rectangle");
 
-    //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
-    //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
     setObjectRect(rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top);
@@ -403,20 +433,27 @@ void Geometry::init_rect(EmbRect rect, QRgb rgb, Qt::PenStyle lineType)
 }
 
 /**
+ * @brief Geometry::init_line
+ * @param ellipse
+ * @param rgb
+ * @param lineType
  *
+ * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+ * and the item is double clicked, the scene will erratically move the item while zooming.
+ * All movement has to be handled explicitly by us, not by the scene.
+ *
+ * \todo  set the justification properly.
+ * \todo  pass in proper lineweight
  */
 void
-Geometry::init_text_single(QString  str, EmbVector v, QRgb rgb, Qt::PenStyle lineType)
+Geometry::init_text_single(QString str, EmbVector v, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, OBJ_TYPE_TEXTSINGLE);
     setData(OBJ_NAME, "Single Line Text");
 
-    //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
-    //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
-    objTextJustify = "Left"; //TODO: set the justification properly
+    objTextJustify = "Left";
 
     setObjectText(str);
     setObjectPos(v.x, v.y);
@@ -424,12 +461,14 @@ Geometry::init_text_single(QString  str, EmbVector v, QRgb rgb, Qt::PenStyle lin
     lwtPen.setColor(rgb);
     objPen.setStyle(lineType);
     lwtPen.setStyle(lineType);
-    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
+    setObjectLineWeight("0.35");
     setPen(objPen);
 }
 
 /**
- * .
+ * @brief Geometry::Geometry
+ * @param *obj
+ * @param *parent
  */
 Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
@@ -443,7 +482,7 @@ Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(par
             arc.start = to_EmbVector(obj->objectStartPoint());
             arc.mid = to_EmbVector(obj->objectMidPoint());
             arc.end = to_EmbVector(obj->objectEndPoint());
-            init_arc(arc, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
+            init_arc(arc, obj->objPen.color().rgb(), Qt::SolidLine); /* \todo getCurrentLineType */
             setRotation(obj->rotation());
             break;
         }

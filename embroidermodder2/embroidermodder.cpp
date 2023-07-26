@@ -21,6 +21,23 @@
 
 static const char* _appVer_  = "v2.0.0-alpha3";
 static bool exitApp = false;
+const char *usage_msg = ""
+    " ___ _____ ___  ___   __  _ ___  ___ ___   _____  __  ___  ___  ___ ___    ___ \n"
+    "| __|     | _ \\| _ \\ /  \\| |   \\| __| _ \\ |     |/  \\|   \\|   \\| __| _ \\  |__ \\\n"
+    "| __| | | | _ <|   /| () | | |) | __|   / | | | | () | |) | |) | __|   /  / __/\n"
+    "|___|_|_|_|___/|_|\\_\\\\__/|_|___/|___|_|\\_\\|_|_|_|\\__/|___/|___/|___|_|\\_\\ |___|\n"
+    " _____________________________________________________________________________ \n"
+    "|                                                                             |\n"
+    "|                     https://www.libembroidery.org                           |\n"
+    "|_____________________________________________________________________________|\n"
+    "\n"
+    "Usage: embroidermodder [options] files ...\n"
+    "\n"
+    "Options:\n"
+    "  -d, --debug      Print lots of debugging information.\n"
+    "  -h, --help       Print this message and exit.\n"
+    "  -v, --version    Print the version number of embroidermodder and exit.\n"
+    "\n";
 
 /**
  * @brief Application::Application
@@ -52,41 +69,6 @@ bool Application::event(QEvent *event)
 }
 
 /**
- * @brief usage
- */
-static void usage(void)
-{
-    fprintf(stderr,
-    " ___ _____ ___  ___   __  _ ___  ___ ___   _____  __  ___  ___  ___ ___    ___ "           "\n"
-    "| __|     | _ \\| _ \\ /  \\| |   \\| __| _ \\ |     |/  \\|   \\|   \\| __| _ \\  |__ \\" "\n"
-    "| __| | | | _ <|   /| () | | |) | __|   / | | | | () | |) | |) | __|   /  / __/"           "\n"
-    "|___|_|_|_|___/|_|\\_\\\\__/|_|___/|___|_|\\_\\|_|_|_|\\__/|___/|___/|___|_|\\_\\ |___|"   "\n"
-    " _____________________________________________________________________________ "           "\n"
-    "|                                                                             | "          "\n"
-    "|                   http://embroidermodder.github.io                          | "          "\n"
-    "|_____________________________________________________________________________| "          "\n"
-    "                                                                               "           "\n"
-    "Usage: embroidermodder [options] files ..."                                      "\n"
-   //80CHARS======================================================================MAX
-    "Options:"                                                                        "\n"
-    "  -d, --debug      Print lots of debugging information."                         "\n"
-    "  -h, --help       Print this message and exit."                                 "\n"
-    "  -v, --version    Print the version number of embroidermodder and exit."        "\n"
-    "\n"
-           );
-    exitApp = true;
-}
-
-/**
- * @brief version
- */
-static void version()
-{
-    fprintf(stdout, "Embroidermodder %s\n", _appVer_);
-    exitApp = true;
-}
-
-/**
  * @brief qMain
  * @param argc
  * @param argv
@@ -111,16 +93,19 @@ int main(int argc, char* argv[])
         if ((arg == "-d") || (arg == "--debug")) {
         }
         else if ((arg == "-h") || (arg == "--help")) {
-            usage();
+            fprintf(stderr, usage_msg);
+            exitApp = true;
         }
         else if ((arg == "-v") || (arg == "--version")) {
-            version();
+            fprintf(stdout, "Embroidermodder %s\n", _appVer_);
+            exitApp = true;
         }
         else if (QFile::exists(argv[i]) && validFileFormat(arg)) {
             filesToOpen.push_back(arg);
         }
         else {
-            usage();
+            fprintf(stderr, usage_msg);
+            exitApp = true;
         }
     }
 

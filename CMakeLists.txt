@@ -11,7 +11,7 @@ project(embroidermodder VERSION 2.0.0 LANGUAGES C CXX)
 
 include(config.cmake)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets PrintSupport)
+find_package(Qt6 REQUIRED COMPONENTS OpenGL Widgets PrintSupport)
 
 if(LINUX)
 else(LINUX)
@@ -107,6 +107,7 @@ target_link_libraries(embroidermodder2 PRIVATE
     Qt6::Core
     Qt6::Widgets
     Qt6::PrintSupport
+    Qt6::OpenGL
     embroidery_static)
 
 if (WIN32)

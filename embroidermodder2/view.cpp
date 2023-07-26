@@ -21,7 +21,7 @@
 
 #include <cassert>
 
-//#include <QOpenGLWidget>
+#include <QtOpenGL>
 
 /**
  * .
