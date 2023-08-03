@@ -26,9 +26,7 @@
  */
 MdiArea::MdiArea(QWidget *parent) : QMdiArea(parent)
 {
-    #if QT_VERSION >= 0x040800
-        setTabsClosable(true);
-    #endif
+    setTabsClosable(true);
 
     useLogo = false;
     useTexture = false;
@@ -90,7 +88,7 @@ void MdiArea::setBackgroundLogo(QString  fileName)
  * @brief MdiArea::setBackgroundTexture
  * @param fileName
  */
-void MdiArea::setBackgroundTexture(QString  fileName)
+void MdiArea::setBackgroundTexture(QString fileName)
 {
     bgTexture.load(fileName);
 

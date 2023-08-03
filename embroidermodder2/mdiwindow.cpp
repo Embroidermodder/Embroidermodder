@@ -20,7 +20,15 @@
 #include "embroidermodder.h"
 
 /**
+ * @brief Construct a new MdiWindow object.
+ * 
+ * @param theIndex 
+ * @param parent 
+ * @param wflags 
  *
+ * @warning DO NOT SET THE QMDISUBWINDOW (this) FOCUSPROXY TO THE PROMPT
+ *   AS IT WILL CAUSE THE WINDOW MENU TO NOT SWITCH WINDOWS PROPERLY!
+ *   ALTHOUGH IT SEEMS THAT SETTING INTERNAL WIDGETS FOCUSPROXY IS OK.
  */
 MdiWindow::MdiWindow(const int theIndex, QMdiArea* parent, Qt::WindowFlags wflags) : QMdiSubWindow(parent, wflags)
 {
@@ -43,9 +51,6 @@ MdiWindow::MdiWindow(const int theIndex, QMdiArea* parent, Qt::WindowFlags wflag
 
     setWidget(gview);
 
-    //WARNING: DO NOT SET THE QMDISUBWINDOW (this) FOCUSPROXY TO THE PROMPT
-    //WARNING: AS IT WILL CAUSE THE WINDOW MENU TO NOT SWITCH WINDOWS PROPERLY!
-    //WARNING: ALTHOUGH IT SEEMS THAT SETTING INTERNAL WIDGETS FOCUSPROXY IS OK.
     gview->setFocusProxy(prompt);
 
     resize(sizeHint());
@@ -60,10 +65,6 @@ MdiWindow::MdiWindow(const int theIndex, QMdiArea* parent, Qt::WindowFlags wflag
     curLineType = "ByLayer";
     curLineWeight = "ByLayer";
 
-    // Due to strange Qt4.2.3 feature the child window icon is not drawn
-    // in the main menu if showMaximized() is called for a non-visible child window
-    // Therefore calling show() first...
-    show();
     showMaximized();
 
     setFocusPolicy(Qt::WheelFocus);
@@ -100,7 +101,7 @@ MdiWindow::saveFile(String fileName)
 bool
 MdiWindow::loadFile(String fileName)
 {
-    qDebug("MdiWindow loadFile()");
+    debug_message("MdiWindow loadFile()");
 
     QRgb tmpColor = curColor;
 
@@ -421,7 +422,7 @@ fileExtension(String fileName)
 void
 MdiWindow::closeEvent(QCloseEvent* /*e*/)
 {
-    qDebug("MdiWindow closeEvent()");
+    debug_message("MdiWindow closeEvent()");
     emit sendCloseMdiWin(this);
 }
 
@@ -431,7 +432,7 @@ MdiWindow::closeEvent(QCloseEvent* /*e*/)
 void
 MdiWindow::onWindowActivated()
 {
-    qDebug("MdiWindow onWindowActivated()");
+    debug_message("MdiWindow onWindowActivated()");
     gview->getUndoStack()->setActive(true);
     _mainWin->setUndoCleanIcon(fileWasLoaded);
     statusbar->buttons["SNAP"]->setChecked(gscene->property("ENABLE_SNAP").toBool());
@@ -452,7 +453,7 @@ MdiWindow::onWindowActivated()
 QSize
 MdiWindow::sizeHint()
 {
-    qDebug("MdiWindow sizeHint()");
+    debug_message("MdiWindow sizeHint()");
     return QSize(450, 300);
 }
 
@@ -461,7 +462,7 @@ MdiWindow::sizeHint()
  * @param layer
  */
 void
-MdiWindow::currentLayerChanged(QString  layer)
+MdiWindow::currentLayerChanged(QString layer)
 {
     curLayer = layer;
 }
@@ -488,66 +489,138 @@ void MdiWindow::currentLinetypeChanged(QString  type)
  * @brief MdiWindow::currentLineweightChanged
  * @param weight
  */
-void MdiWindow::currentLineweightChanged(QString  weight)
+void
+MdiWindow::currentLineweightChanged(QString weight)
 {
     curLineWeight = weight;
 }
 
-void MdiWindow::updateColorLinetypeLineweight()
+/**
+ * @brief 
+ * 
+ */
+void
+MdiWindow::updateColorLinetypeLineweight()
 {
 }
 
-void MdiWindow::deletePressed()
+/**
+ * @brief 
+ * 
+ */
+void
+MdiWindow::deletePressed()
 {
     gview->deletePressed();
 }
 
-void MdiWindow::escapePressed()
+/**
+ * @brief 
+ * 
+ */
+void
+MdiWindow::escapePressed()
 {
     gview->escapePressed();
 }
 
-void MdiWindow::showViewScrollBars(bool val)
+/**
+ * @brief 
+ * 
+ * @param val 
+ */
+void
+MdiWindow::showViewScrollBars(bool val)
 {
     gview->showScrollBars(val);
 }
 
-void MdiWindow::setViewCrossHairColor(QRgb color)
+/**
+ * @brief 
+ * 
+ * @param color 
+ */
+void
+MdiWindow::setViewCrossHairColor(QRgb color)
 {
     gview->setCrossHairColor(color);
 }
 
-void MdiWindow::setViewBackgroundColor(QRgb color)
+/**
+ * @brief 
+ * 
+ * @param color 
+ */
+void
+MdiWindow::setViewBackgroundColor(QRgb color)
 {
     gview->setBackgroundColor(color);
 }
 
-void MdiWindow::setViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
+/**
+ * @brief 
+ * 
+ * @param colorL 
+ * @param fillL 
+ * @param colorR 
+ * @param fillR 
+ * @param alpha 
+ */
+void
+MdiWindow::setViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
 {
     gview->setSelectBoxColors(colorL, fillL, colorR, fillR, alpha);
 }
 
-void MdiWindow::setViewGridColor(QRgb color)
+/**
+ * @brief 
+ * 
+ * @param color 
+ */
+void
+MdiWindow::setViewGridColor(QRgb color)
 {
     gview->setGridColor(color);
 }
 
-void MdiWindow::setViewRulerColor(QRgb color)
+/**
+ * @brief 
+ * 
+ * @param color 
+ */
+void
+MdiWindow::setViewRulerColor(QRgb color)
 {
     gview->setRulerColor(color);
 }
 
-void MdiWindow::promptHistoryAppended(QString  txt)
+/**
+ * @brief 
+ * 
+ * @param txt 
+ */
+void
+MdiWindow::promptHistoryAppended(QString txt)
 {
     promptHistory.append("<br/>" + txt);
 }
 
-void MdiWindow::logPromptInput(QString  txt)
+/**
+ * @brief 
+ * 
+ * @param txt 
+ */
+void
+MdiWindow::logPromptInput(QString txt)
 {
     promptInputList.push_back(txt);
     promptInputNum = promptInputList.size();
 }
 
+/**
+ * @brief 
+ * 
+ */
 void
 MdiWindow::promptInputPrevious()
 {
