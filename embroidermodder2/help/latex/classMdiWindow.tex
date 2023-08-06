@@ -58,7 +58,7 @@ void \mbox{\hyperlink{classMdiWindow_a2a3936fc781a9fdcb8793c8f2030834c}{send\+Cl
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{classMdiWindow_ae08baeb10616d8bbd32c991405381a9f}{Mdi\+Window}} (const int the\+Index, QMdi\+Area $\ast$parent, Qt\+::\+Window\+Flags wflags)
-\item 
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{classMdiWindow}{Mdi\+Window}} object. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classMdiWindow_a7dc5f33f85d9521df57d0b2b52a3925b}{$\sim$\+Mdi\+Window}} ()
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classMdiWindow_a7dc5f33f85d9521df57d0b2b52a3925b}{Mdi\+Window\+::$\sim$\+Mdi\+Window}}. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classMdiWindow_ab0c6c50a5719c379c325d0f5d8c8e921}{set\+Current\+File}} (QString file\+Name)
@@ -115,6 +115,22 @@ QString \mbox{\hyperlink{classMdiWindow_aa2c2576bb903851128481093c0e88710}{cur\+
 \doxyparagraph{\texorpdfstring{MdiWindow()}{MdiWindow()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{classMdiWindow}{Mdi\+Window}} (\begin{DoxyParamCaption}\item[{const int}]{the\+Index,  }\item[{QMdi\+Area $\ast$}]{parent,  }\item[{Qt\+::\+Window\+Flags}]{wflags }\end{DoxyParamCaption})}
 
+
+
+Construct a new \mbox{\hyperlink{classMdiWindow}{Mdi\+Window}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em the\+Index} & \\
+\hline
+{\em parent} & \\
+\hline
+{\em wflags} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+DO NOT SET THE QMDISUBWINDOW (this) FOCUSPROXY TO THE PROMPT AS IT WILL CAUSE THE WINDOW MENU TO NOT SWITCH WINDOWS PROPERLY! ALTHOUGH IT SEEMS THAT SETTING INTERNAL WIDGETS FOCUSPROXY IS OK. 
+\end{DoxyWarning}
 \mbox{\Hypertarget{classMdiWindow_a7dc5f33f85d9521df57d0b2b52a3925b}\label{classMdiWindow_a7dc5f33f85d9521df57d0b2b52a3925b}} 
 \index{MdiWindow@{MdiWindow}!````~MdiWindow@{$\sim$MdiWindow}}
 \index{````~MdiWindow@{$\sim$MdiWindow}!MdiWindow@{MdiWindow}}
@@ -253,6 +269,11 @@ QString \mbox{\hyperlink{classMdiWindow_aa2c2576bb903851128481093c0e88710}{cur\+
 \doxyparagraph{\texorpdfstring{logPromptInput}{logPromptInput}}
 {\footnotesize\ttfamily void log\+Prompt\+Input (\begin{DoxyParamCaption}\item[{QString}]{txt }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
+
+\begin{DoxyParams}{Parameters}
+{\em txt} & \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{classMdiWindow_abe8de8cccec92139e7b920659a38a62d}\label{classMdiWindow_abe8de8cccec92139e7b920659a38a62d}} 
 \index{MdiWindow@{MdiWindow}!onWindowActivated@{onWindowActivated}}
 \index{onWindowActivated@{onWindowActivated}!MdiWindow@{MdiWindow}}
@@ -279,6 +300,11 @@ QString \mbox{\hyperlink{classMdiWindow_aa2c2576bb903851128481093c0e88710}{cur\+
 \doxyparagraph{\texorpdfstring{promptHistoryAppended}{promptHistoryAppended}}
 {\footnotesize\ttfamily void prompt\+History\+Appended (\begin{DoxyParamCaption}\item[{QString}]{txt }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
+
+\begin{DoxyParams}{Parameters}
+{\em txt} & \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{classMdiWindow_aa183f50daf2ba1bed0068f7eae87f6a4}\label{classMdiWindow_aa183f50daf2ba1bed0068f7eae87f6a4}} 
 \index{MdiWindow@{MdiWindow}!promptInputNext@{promptInputNext}}
 \index{promptInputNext@{promptInputNext}!MdiWindow@{MdiWindow}}
@@ -376,36 +402,74 @@ Can save a Singer BMC image (An 8bpp, 130x113 pixel colored bitmap image)
 \doxyparagraph{\texorpdfstring{setViewBackgroundColor}{setViewBackgroundColor}}
 {\footnotesize\ttfamily void set\+View\+Background\+Color (\begin{DoxyParamCaption}\item[{QRgb}]{color }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
+
+\begin{DoxyParams}{Parameters}
+{\em color} & \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{classMdiWindow_add3eae5083efcf9079114646741288a9}\label{classMdiWindow_add3eae5083efcf9079114646741288a9}} 
 \index{MdiWindow@{MdiWindow}!setViewCrossHairColor@{setViewCrossHairColor}}
 \index{setViewCrossHairColor@{setViewCrossHairColor}!MdiWindow@{MdiWindow}}
 \doxyparagraph{\texorpdfstring{setViewCrossHairColor}{setViewCrossHairColor}}
 {\footnotesize\ttfamily void set\+View\+Cross\+Hair\+Color (\begin{DoxyParamCaption}\item[{QRgb}]{color }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
+
+\begin{DoxyParams}{Parameters}
+{\em color} & \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{classMdiWindow_ad3ef5fde0863f6e6b924cbbbf1627205}\label{classMdiWindow_ad3ef5fde0863f6e6b924cbbbf1627205}} 
 \index{MdiWindow@{MdiWindow}!setViewGridColor@{setViewGridColor}}
 \index{setViewGridColor@{setViewGridColor}!MdiWindow@{MdiWindow}}
 \doxyparagraph{\texorpdfstring{setViewGridColor}{setViewGridColor}}
 {\footnotesize\ttfamily void set\+View\+Grid\+Color (\begin{DoxyParamCaption}\item[{QRgb}]{color }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
+
+\begin{DoxyParams}{Parameters}
+{\em color} & \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{classMdiWindow_a46c80c43b6ddf7cf2b1465af15f23226}\label{classMdiWindow_a46c80c43b6ddf7cf2b1465af15f23226}} 
 \index{MdiWindow@{MdiWindow}!setViewRulerColor@{setViewRulerColor}}
 \index{setViewRulerColor@{setViewRulerColor}!MdiWindow@{MdiWindow}}
 \doxyparagraph{\texorpdfstring{setViewRulerColor}{setViewRulerColor}}
 {\footnotesize\ttfamily void set\+View\+Ruler\+Color (\begin{DoxyParamCaption}\item[{QRgb}]{color }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
+
+\begin{DoxyParams}{Parameters}
+{\em color} & \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{classMdiWindow_a1bd06495bfd1d5c7b22997d61e08904f}\label{classMdiWindow_a1bd06495bfd1d5c7b22997d61e08904f}} 
 \index{MdiWindow@{MdiWindow}!setViewSelectBoxColors@{setViewSelectBoxColors}}
 \index{setViewSelectBoxColors@{setViewSelectBoxColors}!MdiWindow@{MdiWindow}}
 \doxyparagraph{\texorpdfstring{setViewSelectBoxColors}{setViewSelectBoxColors}}
 {\footnotesize\ttfamily void set\+View\+Select\+Box\+Colors (\begin{DoxyParamCaption}\item[{QRgb}]{colorL,  }\item[{QRgb}]{fillL,  }\item[{QRgb}]{colorR,  }\item[{QRgb}]{fillR,  }\item[{int}]{alpha }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
+
+\begin{DoxyParams}{Parameters}
+{\em colorL} & \\
+\hline
+{\em fillL} & \\
+\hline
+{\em colorR} & \\
+\hline
+{\em fillR} & \\
+\hline
+{\em alpha} & \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{classMdiWindow_a754be5f2a56472b04d88b98cdcac1caf}\label{classMdiWindow_a754be5f2a56472b04d88b98cdcac1caf}} 
 \index{MdiWindow@{MdiWindow}!showViewScrollBars@{showViewScrollBars}}
 \index{showViewScrollBars@{showViewScrollBars}!MdiWindow@{MdiWindow}}
 \doxyparagraph{\texorpdfstring{showViewScrollBars}{showViewScrollBars}}
 {\footnotesize\ttfamily void show\+View\+Scroll\+Bars (\begin{DoxyParamCaption}\item[{bool}]{val }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
+
+\begin{DoxyParams}{Parameters}
+{\em val} & \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{classMdiWindow_ac39e5fe7ac775e769afb1b63e16466d2}\label{classMdiWindow_ac39e5fe7ac775e769afb1b63e16466d2}} 
 \index{MdiWindow@{MdiWindow}!sizeHint@{sizeHint}}
 \index{sizeHint@{sizeHint}!MdiWindow@{MdiWindow}}

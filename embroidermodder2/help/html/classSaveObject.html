@@ -34,7 +34,7 @@ MathJax.Hub.Config({
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo_embroidermodder_2_0.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Embroidermodder<span id="projectnumber">&#160;2.0.0 alpha</span>
+   <div id="projectname">Embroidermodder<span id="projectnumber">&#160;2.0.0-alpha4</span>
    </div>
    <div id="projectbrief">A free and open source software for machine embroidery</div>
   </td>
@@ -965,7 +965,7 @@ Public Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000014">Todo:</a></b></dt><dd>Reimplement <a class="el" href="classSaveObject.html#ace37a0a25fcffac8075e6814ed54255a" title="SaveObject::addPolyline.">addPolyline()</a> using the libembroidery C API </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000015">Todo:</a></b></dt><dd>Reimplement <a class="el" href="classSaveObject.html#ace37a0a25fcffac8075e6814ed54255a" title="SaveObject::addPolyline.">addPolyline()</a> using the libembroidery C API </dd></dl>
 
 </div>
 </div>
@@ -1299,6 +1299,8 @@ Public Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000016">Todo:</a></b></dt><dd>saving polygons, polylines and paths must be stable before we go here.</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000017">Todo:</a></b></dt><dd>This needs to work like a path, not a polyline. Improve this. </dd></dl>
 
 </div>
 </div>
@@ -1318,7 +1320,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p >Returns whether the save to file process was successful.</p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000013">Todo:</a></b></dt><dd>Before saving to a stitch only format, Embroidermodder needs to calculate the optimal path to minimize jump stitches. Also based upon which layer needs to be stitched first, the path to the next object needs to be hidden beneath fills that will come later. When finding the optimal path, we need to take into account the color of the thread, as we do not want to try to hide dark colored stitches beneath light colored fills. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000014">Todo:</a></b></dt><dd>Before saving to a stitch only format, Embroidermodder needs to calculate the optimal path to minimize jump stitches. Also based upon which layer needs to be stitched first, the path to the next object needs to be hidden beneath fills that will come later. When finding the optimal path, we need to take into account the color of the thread, as we do not want to try to hide dark colored stitches beneath light colored fills. </dd></dl>
 
 </div>
 </div>
@@ -1392,7 +1394,9 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section note"><dt>Note</dt><dd>This function should be used to interpret various object types and save them as polylines for stitchOnly formats. </dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000015">Todo:</a></b></dt><dd>FIX EmbPolyline* polyObject = embPolyline_init(pointList, color_out, 1); //TODO: proper lineType embPattern_addPolylineAbs(pattern, polyObject); </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000018">Todo:</a></b></dt><dd>FIX EmbPolyline* polyObject = embPolyline_init(pointList, color_out, 1); //</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000019">Todo:</a></b></dt><dd></dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000020">Todo:</a></b></dt><dd>proper lineType embPattern_addPolylineAbs(pattern, polyObject); </dd></dl>
 
 </div>
 </div>

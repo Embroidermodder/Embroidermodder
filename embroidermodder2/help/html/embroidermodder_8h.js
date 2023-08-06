@@ -84,6 +84,7 @@ var embroidermodder_8h =
     [ "activeView", "embroidermodder_8h.html#ad46b684fa5c53504aed2c7dd2f1bc51d", null ],
     [ "actuator", "embroidermodder_8h.html#a1e793bd021fdc5f3273d233d708bac8b", null ],
     [ "add_polyline", "embroidermodder_8h.html#ad26e1b3a371690d3865d8fcc237ade6b", null ],
+    [ "add_to_path", "embroidermodder_8h.html#aea7714d09bd4f1bae777eb9e5aa4cbbe", null ],
     [ "construct_command", "embroidermodder_8h.html#af5aed5ab4829e09b6c9baa6ff33cdd2e", null ],
     [ "contains", "embroidermodder_8h.html#adf72ec071837a334b7b15ecfe46a8404", null ],
     [ "convert_args_to_type", "embroidermodder_8h.html#a1ad59bc990c5a0fe30a47bd6f80127c1", null ],

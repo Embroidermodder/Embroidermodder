@@ -173,7 +173,7 @@ bool \mbox{\hyperlink{embroidermodder_8h_a8e199e892707e7dbbe2e5b44513253c8}{vali
 QString \mbox{\hyperlink{embroidermodder_8h_a8a078e60ff6b32268d5229d5ab78c907}{file\+Extension}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} file\+Name)
 \begin{DoxyCompactList}\small\item\em Mdi\+Window\+::file\+Extension. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidermodder_8h_ad26e1b3a371690d3865d8fcc237ade6b}{add\+\_\+polyline}} (QPainter\+Path p, \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} rubber\+Mode)
-\item 
+\begin{DoxyCompactList}\small\item\em add\+\_\+polyline \end{DoxyCompactList}\item 
 \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} \mbox{\hyperlink{embroidermodder_8h_a6868dc5b7d9778c0876e20fbc88af8e6}{read\+\_\+string\+\_\+setting}} (toml\+\_\+table\+\_\+t $\ast$table, const char $\ast$key)
 \item 
 \mbox{\hyperlink{embroidermodder_8h_ac0c47f2f1845fe2047ec8991451a4223}{String\+List}} \mbox{\hyperlink{embroidermodder_8h_a6beda6410ec4a336a5b85fbb3bd402c8}{tokenize}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} str, const char delim)
@@ -190,6 +190,8 @@ void \mbox{\hyperlink{embroidermodder_8h_a0eca4d9adccf7ea7711afaaa4bfb2843}{set\
 \begin{DoxyCompactList}\small\item\em set\+\_\+enabled \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{embroidermodder_8h_abcc899d046aad6d80c8afd8b6553ca68}{set\+\_\+visibility}} (QObject $\ast$parent, const char $\ast$name, bool visibility)
 \begin{DoxyCompactList}\small\item\em set\+\_\+visibility \end{DoxyCompactList}\item 
+QPainter\+Path \mbox{\hyperlink{embroidermodder_8h_aea7714d09bd4f1bae777eb9e5aa4cbbe}{add\+\_\+to\+\_\+path}} (QPainter\+Path path, \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} scale, \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} s)
+\item 
 \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} \mbox{\hyperlink{embroidermodder_8h_a1e793bd021fdc5f3273d233d708bac8b}{actuator}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} line)
 \begin{DoxyCompactList}\small\item\em Main\+Window\+::actuator. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} \mbox{\hyperlink{embroidermodder_8h_afa1cd2f1eb1b1a76856c092da443f069}{run\+\_\+script\+\_\+file}} (\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}} fname)
@@ -631,6 +633,23 @@ QString file\+Name = \char`\"{}commands/\char`\"{} + cmd + \char`\"{}/\char`\"{}
 \index{add\_polyline@{add\_polyline}!embroidermodder.h@{embroidermodder.h}}
 \doxyparagraph{\texorpdfstring{add\_polyline()}{add\_polyline()}}
 {\footnotesize\ttfamily void add\+\_\+polyline (\begin{DoxyParamCaption}\item[{QPainter\+Path}]{p,  }\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{rubber\+Mode }\end{DoxyParamCaption})}
+
+
+
+add\+\_\+polyline 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p} & \\
+\hline
+{\em rubber\+Mode} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{embroidermodder_8h_aea7714d09bd4f1bae777eb9e5aa4cbbe}\label{embroidermodder_8h_aea7714d09bd4f1bae777eb9e5aa4cbbe}} 
+\index{embroidermodder.h@{embroidermodder.h}!add\_to\_path@{add\_to\_path}}
+\index{add\_to\_path@{add\_to\_path}!embroidermodder.h@{embroidermodder.h}}
+\doxyparagraph{\texorpdfstring{add\_to\_path()}{add\_to\_path()}}
+{\footnotesize\ttfamily QPainter\+Path add\+\_\+to\+\_\+path (\begin{DoxyParamCaption}\item[{QPainter\+Path}]{path,  }\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{scale,  }\item[{\mbox{\hyperlink{embroidermodder_8h_afbeda3fd1bdc8c37d01bdf9f5c8274ff}{String}}}]{command }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{embroidermodder_8h_af5aed5ab4829e09b6c9baa6ff33cdd2e}\label{embroidermodder_8h_af5aed5ab4829e09b6c9baa6ff33cdd2e}} 
 \index{embroidermodder.h@{embroidermodder.h}!construct\_command@{construct\_command}}

@@ -34,7 +34,7 @@ var searchData=
   ['add_5fslot_5faction_31',['add_slot_action',['../mainwindow_8cpp.html#a87f801ac9ce7b865952c3351d9f35412',1,'mainwindow.cpp']]],
   ['add_5ftext_5fmulti_5faction_32',['add_text_multi_action',['../mainwindow_8cpp.html#a1eeacf1c1a010c5d8e999407becdbb30',1,'mainwindow.cpp']]],
   ['add_5ftext_5fsingle_5faction_33',['add_text_single_action',['../mainwindow_8cpp.html#a6f47952da5466d2af9c845927ad1b797',1,'mainwindow.cpp']]],
-  ['add_5fto_5fpath_34',['add_to_path',['../interface_8cpp.html#a72517a9224a79718db1ae4192312df98',1,'interface.cpp']]],
+  ['add_5fto_5fpath_34',['add_to_path',['../interface_8cpp.html#a4e4ff17852fbc11c3ef91f8a3508a60c',1,'add_to_path(QPainterPath path, EmbVector scale, String command):&#160;interface.cpp'],['../embroidermodder_8h.html#aea7714d09bd4f1bae777eb9e5aa4cbbe',1,'add_to_path(QPainterPath path, EmbVector scale, String s):&#160;interface.cpp']]],
   ['add_5fto_5fselection_5faction_35',['add_to_selection_action',['../mainwindow_8cpp.html#a2c6adb69a6f88379f132269cd84e93e0',1,'mainwindow.cpp']]],
   ['add_5ftriangle_5faction_36',['add_triangle_action',['../mainwindow_8cpp.html#ae4fcb390d87c7f02e10e60da21fb9e0d',1,'mainwindow.cpp']]],
   ['add_5fvertical_5fdimension_5faction_37',['add_vertical_dimension_action',['../mainwindow_8cpp.html#a78f1dfbc32c0b7e9bb009fed52c658fc',1,'mainwindow.cpp']]],

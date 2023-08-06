@@ -40,7 +40,7 @@ var searchData=
   ['updaterubber_37',['updateRubber',['../classGeometry.html#add4e11623be9bc6e02557c67674564ed',1,'Geometry']]],
   ['updatestyle_38',['updateStyle',['../classCmdPrompt.html#a4e399094a33a34f9e7ed1747c7bc99de',1,'CmdPrompt']]],
   ['uppressed_39',['upPressed',['../classCmdPrompt.html#a3ac8ff7536eaff8c48297effe38dd49b',1,'CmdPrompt::upPressed()'],['../classCmdPromptInput.html#a3ac8ff7536eaff8c48297effe38dd49b',1,'CmdPromptInput::upPressed()']]],
-  ['usage_40',['usage',['../embroidermodder_8cpp.html#ad96d407a911fbb914fa8e4cfbf2faf0f',1,'embroidermodder.cpp']]],
+  ['usage_5fmsg_40',['usage_msg',['../embroidermodder_8cpp.html#a30670b1ad8764ffaa7794cffc4c51ae6',1,'embroidermodder.cpp']]],
   ['usebackgroundcolor_41',['useBackgroundColor',['../classMdiArea.html#a3efe3a03c1f43d8371d59a12e9d72ed2',1,'MdiArea']]],
   ['usebackgroundlogo_42',['useBackgroundLogo',['../classMdiArea.html#a51320500372fafd1b4752e986aefd5e5',1,'MdiArea']]],
   ['usebackgroundtexture_43',['useBackgroundTexture',['../classMdiArea.html#a4e52adca7532608b02f316555022d30c',1,'MdiArea']]],

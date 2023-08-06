@@ -34,7 +34,7 @@ MathJax.Hub.Config({
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo_embroidermodder_2_0.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Embroidermodder<span id="projectnumber">&#160;2.0.0 alpha</span>
+   <div id="projectname">Embroidermodder<span id="projectnumber">&#160;2.0.0-alpha4</span>
    </div>
    <div id="projectbrief">A free and open source software for machine embroidery</div>
   </td>
@@ -166,6 +166,7 @@ Signals</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ae08baeb10616d8bbd32c991405381a9f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMdiWindow.html#ae08baeb10616d8bbd32c991405381a9f">MdiWindow</a> (const int theIndex, QMdiArea *parent, Qt::WindowFlags wflags)</td></tr>
+<tr class="memdesc:ae08baeb10616d8bbd32c991405381a9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classMdiWindow.html">MdiWindow</a> object.  <a href="classMdiWindow.html#ae08baeb10616d8bbd32c991405381a9f">More...</a><br /></td></tr>
 <tr class="separator:ae08baeb10616d8bbd32c991405381a9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7dc5f33f85d9521df57d0b2b52a3925b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMdiWindow.html#a7dc5f33f85d9521df57d0b2b52a3925b">~MdiWindow</a> ()</td></tr>
 <tr class="memdesc:a7dc5f33f85d9521df57d0b2b52a3925b"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classMdiWindow.html#a7dc5f33f85d9521df57d0b2b52a3925b" title="MdiWindow::~MdiWindow.">MdiWindow::~MdiWindow</a>.  <a href="classMdiWindow.html#a7dc5f33f85d9521df57d0b2b52a3925b">More...</a><br /></td></tr>
@@ -254,6 +255,17 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classMdiWindow.html">MdiWindow</a> object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">theIndex</td><td></td></tr>
+    <tr><td class="paramname">parent</td><td></td></tr>
+    <tr><td class="paramname">wflags</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section warning"><dt>Warning</dt><dd>DO NOT SET THE QMDISUBWINDOW (this) FOCUSPROXY TO THE PROMPT AS IT WILL CAUSE THE WINDOW MENU TO NOT SWITCH WINDOWS PROPERLY! ALTHOUGH IT SEEMS THAT SETTING INTERNAL WIDGETS FOCUSPROXY IS OK. </dd></dl>
 
 </div>
 </div>
@@ -578,6 +590,12 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">txt</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -658,6 +676,12 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">txt</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -873,6 +897,12 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">color</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -899,6 +929,12 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">color</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -925,6 +961,12 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">color</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -951,6 +993,12 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">color</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1005,6 +1053,16 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">colorL</td><td></td></tr>
+    <tr><td class="paramname">fillL</td><td></td></tr>
+    <tr><td class="paramname">colorR</td><td></td></tr>
+    <tr><td class="paramname">fillR</td><td></td></tr>
+    <tr><td class="paramname">alpha</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -1031,6 +1089,12 @@ Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">val</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

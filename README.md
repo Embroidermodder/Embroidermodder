@@ -41,11 +41,11 @@ Realistic rendering sample \#1:
 
 Realistic rendering sample \#2:
 
-![features real render 2](embroidermodder2/features-realrender-2.png)
+![features real render 2](embroidermodder2/images/features-realrender-2.png)
 
 Realistic rendering sample \#3:
 
-![features real render 3](embroidermodder2/features-realrender-3.png)
+![features real render 3](embroidermodder2/images/features-realrender-3.png)
 
 Various grid types and auto-adjusting rulers
 
@@ -158,7 +158,7 @@ bash build.sh --help
 
 If you don't have bash, the following commands should build the software:
 
-```
+```sh
 mkdir build
 cd build
 cmake ..
@@ -166,34 +166,7 @@ cmake --build .
 mv embroidermodder* ../embroidermodder2
 ```
 
-or you can use the qmake build, or load the cmake build in Visual Studio Code.
-
-### QMake
-
-Various methods of building can be found in the project-files subfolder.
-For most builds, it is as simple as opening a terminal in the
-embroidermodder2 subfolder and typing:
-
-```
-qmake && make
-```
-
-Build time can be considerably decreased on multi-core machines, for example:
-
-- Dual Core:
-
-```
-qmake && make -j2
-```
-
-- Quad Core:
-
-```
-qmake && make -j4
-```
-
-When building for Fedora:
-Substitute `qmake-qt4` for `qmake`.
+or load the cmake build in Visual Studio Code.
 
 When building the thumbnailer do the same but in the appropriate subfolder.
 Libembroidery is now maintained as a repository unto itself.

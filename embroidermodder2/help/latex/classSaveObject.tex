@@ -435,7 +435,7 @@ int \mbox{\hyperlink{classSaveObject_aeb6ef11808c001275918420f9793256e}{format\+
 \hline
 \end{DoxyParams}
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000014}{Todo}}]Reimplement \mbox{\hyperlink{classSaveObject_ace37a0a25fcffac8075e6814ed54255a}{add\+Polyline()}} using the libembroidery C API \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000015}{Todo}}]Reimplement \mbox{\hyperlink{classSaveObject_ace37a0a25fcffac8075e6814ed54255a}{add\+Polyline()}} using the libembroidery C API \end{DoxyRefDesc}
 \mbox{\Hypertarget{classSaveObject_a84cb4108e2977f858248b4ddb4dcde59}\label{classSaveObject_a84cb4108e2977f858248b4ddb4dcde59}} 
 \index{SaveObject@{SaveObject}!addPoint@{addPoint}}
 \index{addPoint@{addPoint}!SaveObject@{SaveObject}}
@@ -589,6 +589,12 @@ int \mbox{\hyperlink{classSaveObject_aeb6ef11808c001275918420f9793256e}{format\+
 {\em item} & \\
 \hline
 \end{DoxyParams}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000016}{Todo}}]saving polygons, polylines and paths must be stable before we go here.\end{DoxyRefDesc}
+
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000017}{Todo}}]This needs to work like a path, not a polyline. Improve this. \end{DoxyRefDesc}
 \mbox{\Hypertarget{classSaveObject_a450a41fe8347cc65b1c72caeeab38e67}\label{classSaveObject_a450a41fe8347cc65b1c72caeeab38e67}} 
 \index{SaveObject@{SaveObject}!save@{save}}
 \index{save@{save}!SaveObject@{SaveObject}}
@@ -598,7 +604,7 @@ int \mbox{\hyperlink{classSaveObject_aeb6ef11808c001275918420f9793256e}{format\+
 Returns whether the save to file process was successful.
 
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000013}{Todo}}]Before saving to a stitch only format, Embroidermodder needs to calculate the optimal path to minimize jump stitches. Also based upon which layer needs to be stitched first, the path to the next object needs to be hidden beneath fills that will come later. When finding the optimal path, we need to take into account the color of the thread, as we do not want to try to hide dark colored stitches beneath light colored fills. \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000014}{Todo}}]Before saving to a stitch only format, Embroidermodder needs to calculate the optimal path to minimize jump stitches. Also based upon which layer needs to be stitched first, the path to the next object needs to be hidden beneath fills that will come later. When finding the optimal path, we need to take into account the color of the thread, as we do not want to try to hide dark colored stitches beneath light colored fills. \end{DoxyRefDesc}
 \mbox{\Hypertarget{classSaveObject_a0d041d54c0440f2ea8393c67df3c25a9}\label{classSaveObject_a0d041d54c0440f2ea8393c67df3c25a9}} 
 \index{SaveObject@{SaveObject}!toPolyline@{toPolyline}}
 \index{toPolyline@{toPolyline}!SaveObject@{SaveObject}}
@@ -630,7 +636,11 @@ Returns whether the save to file process was successful.
 This function should be used to interpret various object types and save them as polylines for stitch\+Only formats. 
 \end{DoxyNote}
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000015}{Todo}}]FIX Emb\+Polyline$\ast$ poly\+Object = emb\+Polyline\+\_\+init(point\+List, color\+\_\+out, 1); //\+TODO\+: proper line\+Type emb\+Pattern\+\_\+add\+Polyline\+Abs(pattern, poly\+Object); \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000018}{Todo}}]FIX Emb\+Polyline$\ast$ poly\+Object = emb\+Polyline\+\_\+init(point\+List, color\+\_\+out, 1); //\end{DoxyRefDesc}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000019}{Todo}}]\end{DoxyRefDesc}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000020}{Todo}}]proper line\+Type emb\+Pattern\+\_\+add\+Polyline\+Abs(pattern, poly\+Object); \end{DoxyRefDesc}
 
 
 \doxysubsubsection{Member Data Documentation}

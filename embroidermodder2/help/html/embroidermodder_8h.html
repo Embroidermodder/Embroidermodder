@@ -34,7 +34,7 @@ MathJax.Hub.Config({
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="logo_embroidermodder_2_0.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Embroidermodder<span id="projectnumber">&#160;2.0.0 alpha</span>
+   <div id="projectname">Embroidermodder<span id="projectnumber">&#160;2.0.0-alpha4</span>
    </div>
    <div id="projectbrief">A free and open source software for machine embroidery</div>
   </td>
@@ -286,6 +286,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:a8a078e60ff6b32268d5229d5ab78c907"><td class="mdescLeft">&#160;</td><td class="mdescRight">MdiWindow::fileExtension.  <a href="embroidermodder_8h.html#a8a078e60ff6b32268d5229d5ab78c907">More...</a><br /></td></tr>
 <tr class="separator:a8a078e60ff6b32268d5229d5ab78c907"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad26e1b3a371690d3865d8fcc237ade6b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="embroidermodder_8h.html#ad26e1b3a371690d3865d8fcc237ade6b">add_polyline</a> (QPainterPath p, <a class="el" href="embroidermodder_8h.html#afbeda3fd1bdc8c37d01bdf9f5c8274ff">String</a> rubberMode)</td></tr>
+<tr class="memdesc:ad26e1b3a371690d3865d8fcc237ade6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">add_polyline  <a href="embroidermodder_8h.html#ad26e1b3a371690d3865d8fcc237ade6b">More...</a><br /></td></tr>
 <tr class="separator:ad26e1b3a371690d3865d8fcc237ade6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6868dc5b7d9778c0876e20fbc88af8e6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="embroidermodder_8h.html#afbeda3fd1bdc8c37d01bdf9f5c8274ff">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="embroidermodder_8h.html#a6868dc5b7d9778c0876e20fbc88af8e6">read_string_setting</a> (toml_table_t *table, const char *key)</td></tr>
 <tr class="separator:a6868dc5b7d9778c0876e20fbc88af8e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -309,6 +310,8 @@ Functions</h2></td></tr>
 <tr class="memitem:abcc899d046aad6d80c8afd8b6553ca68"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="embroidermodder_8h.html#abcc899d046aad6d80c8afd8b6553ca68">set_visibility</a> (QObject *parent, const char *name, bool visibility)</td></tr>
 <tr class="memdesc:abcc899d046aad6d80c8afd8b6553ca68"><td class="mdescLeft">&#160;</td><td class="mdescRight">set_visibility  <a href="embroidermodder_8h.html#abcc899d046aad6d80c8afd8b6553ca68">More...</a><br /></td></tr>
 <tr class="separator:abcc899d046aad6d80c8afd8b6553ca68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea7714d09bd4f1bae777eb9e5aa4cbbe"><td class="memItemLeft" align="right" valign="top">QPainterPath&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="embroidermodder_8h.html#aea7714d09bd4f1bae777eb9e5aa4cbbe">add_to_path</a> (QPainterPath path, <a class="el" href="embroidery_8h.html#a16fa26764453571074cb85a7574738d4">EmbVector</a> scale, <a class="el" href="embroidermodder_8h.html#afbeda3fd1bdc8c37d01bdf9f5c8274ff">String</a> s)</td></tr>
+<tr class="separator:aea7714d09bd4f1bae777eb9e5aa4cbbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e793bd021fdc5f3273d233d708bac8b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="embroidermodder_8h.html#afbeda3fd1bdc8c37d01bdf9f5c8274ff">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="embroidermodder_8h.html#a1e793bd021fdc5f3273d233d708bac8b">actuator</a> (<a class="el" href="embroidermodder_8h.html#afbeda3fd1bdc8c37d01bdf9f5c8274ff">String</a> line)</td></tr>
 <tr class="memdesc:a1e793bd021fdc5f3273d233d708bac8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">MainWindow::actuator.  <a href="embroidermodder_8h.html#a1e793bd021fdc5f3273d233d708bac8b">More...</a><br /></td></tr>
 <tr class="separator:a1e793bd021fdc5f3273d233d708bac8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -823,6 +826,49 @@ else {
           <td></td>
           <td class="paramtype"><a class="el" href="embroidermodder_8h.html#afbeda3fd1bdc8c37d01bdf9f5c8274ff">String</a>&#160;</td>
           <td class="paramname"><em>rubberMode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>add_polyline </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td></td></tr>
+    <tr><td class="paramname">rubberMode</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aea7714d09bd4f1bae777eb9e5aa4cbbe" name="aea7714d09bd4f1bae777eb9e5aa4cbbe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea7714d09bd4f1bae777eb9e5aa4cbbe">&#9670;&nbsp;</a></span>add_to_path()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QPainterPath add_to_path </td>
+          <td>(</td>
+          <td class="paramtype">QPainterPath&#160;</td>
+          <td class="paramname"><em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="embroidery_8h.html#a16fa26764453571074cb85a7574738d4">EmbVector</a>&#160;</td>
+          <td class="paramname"><em>scale</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="embroidermodder_8h.html#afbeda3fd1bdc8c37d01bdf9f5c8274ff">String</a>&#160;</td>
+          <td class="paramname"><em>command</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
