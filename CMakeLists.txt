@@ -58,8 +58,8 @@ endif()
 # give them the same treatment and list them explicitly here.
 #
 
-set(SRC_ASSETS ${CMAKE_SOURCE_DIR}/embroidermodder2)
-set(SRC_DIR ${CMAKE_SOURCE_DIR}/embroidermodder2)
+set(SRC_ASSETS ${CMAKE_SOURCE_DIR}/src)
+set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
 
 add_executable(embroidermodder2
     ${SRC_DIR}/cmdprompt.cpp

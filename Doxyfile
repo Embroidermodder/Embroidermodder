@@ -61,14 +61,14 @@ PROJECT_BRIEF          = "A free and open source software for machine embroidery
 # pixels and the maximum width should not exceed 200 pixels. Doxygen will copy
 # the logo to the output directory.
 
-PROJECT_LOGO           = ./embroidermodder2/images/logo_embroidermodder_2_0.png
+PROJECT_LOGO           = ./src/images/logo_embroidermodder_2_0.png
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) path
 # into which the generated documentation will be written. If a relative path is
 # entered, it will be relative to the location where doxygen was started. If
 # left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = ./embroidermodder2/help
+OUTPUT_DIRECTORY       = ./src/help
 
 # If the CREATE_SUBDIRS tag is set to YES then doxygen will create up to 4096
 # sub-directories (in 2 levels) under the output directory of each output format
@@ -806,7 +806,7 @@ LAYOUT_FILE            =
 # LATEX_BIB_STYLE. To use this feature you need bibtex and perl available in the
 # search path. See also \cite for info how to create references.
 
-CITE_BIB_FILES         = embroidermodder2/embroidermodder.bib
+CITE_BIB_FILES         = src/embroidermodder.bib
 
 #---------------------------------------------------------------------------
 # Configuration options related to warning and progress messages
@@ -917,7 +917,7 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = ./embroidermodder2 \
+INPUT                  = ./src \
                          ./extern/libembroidery/src \
                          ./extern/libembroidery/src/geometry \
                          ./extern/libembroidery/src/formats \

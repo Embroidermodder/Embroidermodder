@@ -40,7 +40,7 @@ beta release use:
 
 depending on your system. Then run without installing using:
 
-    cd embroidermodder2 && ./embroidermodder2
+    cd src && ./embroidermodder2
 
 or, on Windows double-click the executable in the embroidermodder2 directory.
 
@@ -90,20 +90,20 @@ function build_release () {
 
 function assemble_release () {
 
-    rm -fr $BUILD_DIR/CMake* $BUILD_DIR/embroidermodder2_autogen $BUILD_DIR/extern
-    rm -fr embroidermodder2/*.cpp embroidermodder2/*.h
+    rm -fr $BUILD_DIR/CMake* $BUILD_DIR/src_autogen $BUILD_DIR/extern
+    rm -fr src/*.cpp src/*.h
     cp -r $BUILD_DIR/* embroidermodder2
-    mv *manual*pdf embroidermodder2
+    mv *manual*pdf src
 
 }
 
 function build_docs () {
 
-    rm -fr embroidermodder2/help/latex assets/help/html
+    rm -fr src/help/latex src/help/html
 
     doxygen
 
-    cd embroidermodder2/help/latex
+    cd src/help/latex
 
     pdflatex -interaction=nonstopmode refman.tex
     makeindex refman.idx
@@ -122,7 +122,7 @@ function build_debug () {
     BUILD_TYPE="Debug"
     build_release
 
-    cd embroidermodder2
+    cd src
     gdb -q -ex r --args ./embroidermodder \
       assets/samples/spiral/spiral5.csv \
       assets/samples/spiral/spiral6.csv \
@@ -166,7 +166,7 @@ function package_msi () {
     #cpack -G WIX
     cd ..
     assemble_release
-    powershell Compress-Archive embroidermodder2 embroidermodder_2.0.0-alpha_windows.zip 
+    powershell Compress-Archive src embroidermodder_2.0.0-alpha_windows.zip 
     mv *.zip ..
     cd ..
 
