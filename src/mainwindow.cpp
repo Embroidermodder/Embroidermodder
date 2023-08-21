@@ -2877,10 +2877,6 @@ MainWindow::MainWindow() : QMainWindow(0)
     if (!check.exists()) {
         QMessageBox::critical(_mainWin, translate_str("Path Error"), translate_str("Cannot locate: ") + check.absoluteFilePath());
     }
-    check = QFileInfo(appDir + "/samples");
-    if (!check.exists()) {
-        QMessageBox::critical(_mainWin, translate_str("Path Error"), translate_str("Cannot locate: ") + check.absoluteFilePath());
-    }
     check = QFileInfo(appDir + "/translations");
     if (!check.exists()) {
         QMessageBox::critical(_mainWin, translate_str("Path Error"), translate_str("Cannot locate: ") + check.absoluteFilePath());
