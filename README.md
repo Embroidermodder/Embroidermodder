@@ -11,7 +11,7 @@ The newest version, Embroidermodder 2 can:
 - upscale or downscale designs
 - run on Windows, Mac and Linux
 
-For more in-depth information, see [our website](http://www.libembroidery.org).
+For more in-depth information, see [our website](http://www.libembroidery.org) and get the manuals [here](http://www.libembroidery.org/documentation).
 
 To try out the software in alpha see our current
 [alpha pre-release](https://github.com/Embroidermodder/Embroidermodder/releases).
