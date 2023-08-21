@@ -2865,11 +2865,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     read_settings();
 
     //Verify that files/directories needed are actually present.
-    QFileInfo check = QFileInfo(appDir + "/help");
-    if (!check.exists()) {
-        QMessageBox::critical(_mainWin, translate_str("Path Error"), translate_str("Cannot locate: ") + check.absoluteFilePath());
-    }
-    check = QFileInfo(appDir + "/icons");
+    QFileInfo check = QFileInfo(appDir + "/icons");
     if (!check.exists()) {
         QMessageBox::critical(_mainWin, translate_str("Path Error"), translate_str("Cannot locate: ") + check.absoluteFilePath());
     }
