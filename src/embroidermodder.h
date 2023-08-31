@@ -702,8 +702,6 @@ class Application : public QApplication
     Q_OBJECT
 public:
     Application(int argc, char **argv);
-    void setMainWin(MainWindow* mainWin) { __mainWin = _mainWin; }
-    MainWindow* __mainWin;
 protected:
     virtual bool event(QEvent *e);
 };

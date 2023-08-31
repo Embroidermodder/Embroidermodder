@@ -148,10 +148,9 @@ MdiWindow::loadFile(String fileName)
         qDebug("%d", stitchCount);
         for (int i=0; i<stitchCount; i++) {
             EmbStitch st = p->stitch_list->stitch[i];
-            int color = 0;
+            // int color = 0;
             QPainterPath stitchPath;
             bool firstPoint = true;
-            EmbVector start = {0, 0};
             EmbVector pos = {0, 0};
             for (; (st.flags <= 2) && (i<stitchCount); i++) {
                 st = p->stitch_list->stitch[i];

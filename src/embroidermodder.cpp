@@ -44,7 +44,7 @@ const char *usage_msg = ""
  * @param argc
  * @param argv
  */
-Application::Application(int argc, char **argv) : QApplication(argc, argv), __mainWin(NULL)
+Application::Application(int argc, char **argv) : QApplication(argc, argv)
 {
 }
 
