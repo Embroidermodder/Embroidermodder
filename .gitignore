@@ -2,70 +2,18 @@
 ## This is the project-wide .gitignore file for the Embroidermodder 2 project 
 ## source code repository.
 ## These file and directory patterns are ignored when commiting changes.
-##
-## Lines starting with a (#) character are comments. 
-## A python lexer with just comment lines highlighting is usually fine for syntax highlighting in 
-## your prefered editor for gitignore files. NOTE: patterns starting with \# are valid(escaped).
-##
-## Additional information on .gitignore files can be found here:
-##   http://git-scm.com/docs/gitignore
-##   https://help.github.com/articles/ignoring-files
-##   http://stackoverflow.com/questions/10274424/best-practice-for-using-multiple-gitignore
-## Additional .gitignore templates can be found here: 
-##   https://github.com/github/gitignore
 ##############################################################################
 
-#########################
-# Embroidermodder 2     #
-#########################
-embroidermodder2/TODO
-embroidermodder2/settings.ini
-embroidermodder2/prompt.log
-embroidermodder2/doxygen
+build/
 
-#########################
-# Misc Dev Files        #
-#########################
-*.moc
-*.obj
-*Makefile*
-*_memleak*
-*callgrind.*
-*object_script.*
-*.pro.user*
-moc_*.cpp
-qrc_*.cpp
-*-build-*
+# OS generated files
 
-#########################
-# Libraries             #
-#########################
-## Compiled Static libraries
-*.lai
-*.la
-*.lib
-*.a
-## Compiled Dynamic libraries
-*.dll
-*.so
-*.so.*
-*.dylib
-
-#########################
-# Executables           #
-#########################
-*.exe
-*.out
-*.app
-
-#########################
-# OS generated files    #
-#########################
 ## Macintosh
 .DS_Store
 .DS_Store?
 .Spotlight-V100
 .Trashes
+
 ## MSWindows
 ehthumbs.db
 Thumbs.db
