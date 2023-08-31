@@ -19,6 +19,8 @@ To try out the software in alpha see our current
 Various sample embroidery design files can be found in
 the embroidermodder2/samples folder.
 
+Embroidermodder is developed by The Embroidermodder Team which is maintained as a list on the website under ["Credits"](http://www.libembroidery.org/credits).
+
 ## Screenshots
 
 If you use multiple operating systems, it's important to choose software that works on all of them.
