@@ -6,6 +6,8 @@ BUILD_TYPE="Debug"
 VERSION="2.0.0-alpha"
 GENERATOR="Unix Makefiles"
 
+rm -fr build
+
 git submodule init
 git submodule update
 
@@ -13,5 +15,6 @@ cmake -S . -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
 cd $BUILD_DIR
 cp ../ZLIB-LICENSE.txt .
 cp -r ../src/* .
-cmake --build . &> build.log
+rm *.cpp *.h
+cmake --build . 2> build.log
 cd ..
