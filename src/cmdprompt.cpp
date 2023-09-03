@@ -303,20 +303,13 @@ CmdPromptSplitter::~CmdPromptSplitter()
 {
 }
 
-/**
- * @brief CmdPromptSplitter::createHandle
- * @return
- */
+/* Create handle for this command prompt. */
 QSplitterHandle* CmdPromptSplitter::createHandle()
 {
     return new CmdPromptHandle(orientation(), this);
 }
 
-/**
- * @brief CmdPromptHandle::CmdPromptHandle
- * @param orientation
- * @param parent
- */
+/* Create command prompt handle object. */
 CmdPromptHandle::CmdPromptHandle(Qt::Orientation orientation, QSplitter* parent) : QSplitterHandle(orientation, parent)
 {
     debug_message("CmdPromptHandle Constructor");
@@ -327,17 +320,12 @@ CmdPromptHandle::CmdPromptHandle(Qt::Orientation orientation, QSplitter* parent)
     connect(this, SIGNAL(handleMoved(int)),    parent, SIGNAL(moveResizeHistory(int)));
 }
 
-/**
- * @brief CmdPromptHandle::~CmdPromptHandle
- */
+/* Destroy the command prompt handle object. */
 CmdPromptHandle::~CmdPromptHandle()
 {
 }
 
-/**
- * @brief CmdPromptHandle::mousePressEvent
- * @param e
- */
+/* Process mouse press in the command prompt handle context. */
 void
 CmdPromptHandle::mousePressEvent(QMouseEvent* e)
 {
@@ -345,10 +333,7 @@ CmdPromptHandle::mousePressEvent(QMouseEvent* e)
     emit handlePressed(pressY);
 }
 
-/**
- * @brief CmdPromptHandle::mouseReleaseEvent
- * @param e The mouse event.
- */
+/* Process mouse release in the command prompt handle context. */
 void
 CmdPromptHandle::mouseReleaseEvent(QMouseEvent* e)
 {
@@ -356,10 +341,7 @@ CmdPromptHandle::mouseReleaseEvent(QMouseEvent* e)
     emit handleReleased(releaseY);
 }
 
-/**
- * @brief CmdPromptHandle::mouseMoveEvent
- * @param e The mouse event.
- */
+/* Process mouse move in the command prompt handle context. */
 void
 CmdPromptHandle::mouseMoveEvent(QMouseEvent* e)
 {
@@ -463,19 +445,14 @@ CmdPromptHistory::startResizeHistory(int /*y*/)
     tmpHeight = height();
 }
 
-/**
- * @brief CmdPromptHistory::stopResizeHistory
- */
+/* stopResizeHistory */
 void
 CmdPromptHistory::stopResizeHistory(int /*y*/)
 {
     tmpHeight = height();
 }
 
-/**
- * @brief CmdPromptHistory::resizeHistory
- * @param y
- */
+/* Resize history to "y" lines. */
 void
 CmdPromptHistory::resizeHistory(int y)
 {
@@ -485,8 +462,7 @@ CmdPromptHistory::resizeHistory(int y)
     setMaximumHeight(newHeight);
 }
 
-/**
- * @brief CmdPromptHistory::contextMenuEvent
+/* contextMenuEvent
  * @param event
  */
 void
@@ -537,9 +513,7 @@ CmdPromptInput::CmdPromptInput(QWidget* parent) : QLineEdit(parent)
     applyFormatting();
 }
 
-/**
- * @brief CmdPromptInput::endCommand
- */
+/* EndCommand */
 void
 CmdPromptInput::endCommand()
 {
@@ -553,9 +527,7 @@ CmdPromptInput::endCommand()
     clear();
 }
 
-/**
- * @brief CmdPromptInput::processInput
- */
+/* ProcessInput */
 void
 CmdPromptInput::processInput()
 {
@@ -621,8 +593,7 @@ CmdPromptInput::checkSelection()
     }
 }
 
-/**
- * @brief CmdPromptInput::checkCursorPosition
+/* checkCursorPosition
  * @param oldpos
  * @param newpos
  */
@@ -636,8 +607,7 @@ CmdPromptInput::checkCursorPosition(int oldpos, int newpos)
         this->setCursorPosition(prefix.length());
 }
 
-/**
- * @brief CmdPromptInput::changeFormatting
+/* changeFormatting
  * @param formats
  */
 void
@@ -656,9 +626,7 @@ CmdPromptInput::changeFormatting(std::vector<QTextLayout::FormatRange> formats)
     QCoreApplication::sendEvent(this, &event);
 }
 
-/**
- * @brief CmdPromptInput::clearFormatting
- */
+/* clearFormatting */
 void
 CmdPromptInput::clearFormatting()
 {
@@ -666,9 +634,7 @@ CmdPromptInput::clearFormatting()
     changeFormatting(formatting);
 }
 
-/**
- * @brief CmdPromptInput::applyFormatting
- */
+/* applyFormatting */
 void CmdPromptInput::applyFormatting()
 {
     int prefixLength = prefix.length();
@@ -746,12 +712,9 @@ void CmdPromptInput::applyFormatting()
     changeFormatting(formats);
 }
 
-/**
- * @brief CmdPromptInput::updateCurrentText
- * @param txt
- */
+/* Update current text to "txt". */
 void
-CmdPromptInput::updateCurrentText(QString  txt)
+CmdPromptInput::updateCurrentText(QString txt)
 {
     int cursorPos = cursorPosition();
     if (!txt.startsWith(prefix)) {
@@ -778,7 +741,7 @@ CmdPromptInput::updateCurrentText(QString  txt)
  * @param txt
  */
 void
-CmdPromptInput::checkEditedText(QString  txt)
+CmdPromptInput::checkEditedText(QString txt)
 {
     updateCurrentText(txt);
 

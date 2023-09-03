@@ -13,20 +13,16 @@
  *      https://peps.python.org/pep-0007/
  */
 
-/**
- * \file mdiwindow.cpp
- */
-
 #include "embroidermodder.h"
 
-/**
- * @brief Construct a new MdiWindow object.
+/* Construct a new MdiWindow object.
  * 
- * @param theIndex 
- * @param parent 
- * @param wflags 
+ * theIndex 
+ * parent 
+ * wflags 
  *
- * @warning DO NOT SET THE QMDISUBWINDOW (this) FOCUSPROXY TO THE PROMPT
+ * WARNING:
+ *   DO NOT SET THE QMDISUBWINDOW (this) FOCUSPROXY TO THE PROMPT
  *   AS IT WILL CAUSE THE WINDOW MENU TO NOT SWITCH WINDOWS PROPERLY!
  *   ALTHOUGH IT SEEMS THAT SETTING INTERNAL WIDGETS FOCUSPROXY IS OK.
  */
@@ -73,19 +69,13 @@ MdiWindow::MdiWindow(const int theIndex, QMdiArea* parent, Qt::WindowFlags wflag
     onWindowActivated();
 }
 
-/**
- * @brief MdiWindow::~MdiWindow
- */
+/* Destroy the MdiWindow object. */
 MdiWindow::~MdiWindow()
 {
     debug_message("MdiWindow Destructor()");
 }
 
-/**
- * @brief MdiWindow::saveFile
- * @param fileName
- * @return
- */
+/* Save file to "fileName". */
 bool
 MdiWindow::saveFile(String fileName)
 {

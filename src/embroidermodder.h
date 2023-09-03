@@ -13,8 +13,7 @@
  *      https://peps.python.org/pep-0007/
  */
 
-/**
- * \file embroidermodder.h
+/*
  * The only header for the GUI part: a good overview of this source code.
  *
  * ## Stuff for 2.0 alpha1
@@ -56,7 +55,6 @@ WIP - Advanced Printing
  *
  * ## Stuff for 2.0 rc1
  *
- * \todo QDoc Comments
  * \todo Review KDE4 Thumbnailer
  * \todo Documentation for libembroidery & formats
  * \todo HTML Help files
@@ -162,7 +160,6 @@ WIP - Advanced Printing
  * \todo Logging of Last Stitch Location to External USB Storage(commonly available and easily replaced) ...wait until TRE is available to avoid rework
  * \todo inotool.org - seems like the logical solution for Nightly/CI builds
  * \todo Smoothieboard experiments
- *
  *
  * ## libembroidery-tests
  *
@@ -644,13 +641,8 @@ public:
     void script_prompt(String str);
 };
 
-/**
- *
- */
 class SaveObject : public QObject
 {
-    Q_OBJECT
-
 public:
     SaveObject(QGraphicsScene* theScene, QObject* parent = 0);
     ~SaveObject();
@@ -691,21 +683,6 @@ public:
 
     void toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainterPath& objPath, QString  layer, const QColor& color, QString  lineType, QString  lineWeight);
 };
-
-/**
- *
- * \note On Mac, if the user drops a file on the app's Dock icon,
- * or uses Open As, then this is how the app actually opens the file.
- */
-class Application : public QApplication
-{
-    Q_OBJECT
-public:
-    Application(int argc, char **argv);
-protected:
-    virtual bool event(QEvent *e);
-};
-
 
 /**
  *
@@ -1017,9 +994,7 @@ public:
         QString lineWeight, const bool print);
 };
 
-/**
- * @brief The MainWindow class
- */
+/* The MainWindow class. */
 class MainWindow: public QMainWindow
 {
     Q_OBJECT

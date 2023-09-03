@@ -630,10 +630,7 @@ Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(par
     }
 }
 
-/**
- * @brief Geometry::allGripPoints
- * @return
- */
+/* Geometry::allGripPoints */
 std::vector<QPointF>
 Geometry::allGripPoints()
 {
@@ -741,11 +738,8 @@ Geometry::setObjectLineWeight(String lineWeight)
     */
 }
 
-/**
- * @brief Geometry::objectRubberPoint
- * key
- * @return
- */
+/* Geometry::objectRubberPoint
+ * key */
 QPointF
 Geometry::objectRubberPoint(QString  key)
 {
@@ -760,10 +754,8 @@ Geometry::objectRubberPoint(QString  key)
     return QPointF();
 }
 
-/**
- * @brief Geometry::objectRubberText
+/* Geometry::objectRubberText
  * key
- * @return
  */
 QString
 Geometry::objectRubberText(QString  key)
@@ -774,9 +766,7 @@ Geometry::objectRubberText(QString  key)
     return QString();
 }
 
-/**
- * If gripped, force this object to be drawn even if it is offscreen.
- */
+/* If gripped, force this object to be drawn even if it is offscreen. */
 QRectF
 Geometry::boundingRect()
 {
@@ -859,10 +849,7 @@ Geometry::realRender(QPainter* painter, const QPainterPath& renderPath)
     }
 }
 
-/* Geometry::mouseSnapPoint
- * mousePoint
- * @return the closest snap point to the mouse point.
- */
+/* Return the closest snap point to the mouse point. */
 QPointF
 Geometry::mouseSnapPoint(const QPointF& mousePoint)
 {
@@ -3416,7 +3403,9 @@ Geometry::subPathList()
     return pathList;
 }
 
-/* . */
+/* Run initialisation script for this object, based on the
+ * object Type.
+ */
 void
 Geometry::script_main(void)
 {
@@ -3450,30 +3439,19 @@ Geometry::script_main(void)
     run_script(script);
 }
 
-/* . */
+/* Script to change the entries in the context menu when acting
+ * on this object. Also, if one is activated carry out that
+ * script.
+ */
 void
 Geometry::script_context(String str)
 {
 
 }
 
-
-/**
- * @brief circle_click
- * @return
+/* Script to run on each click for this geometry object.
  *
- * ### CIRCLE_MODE_1P_RAD mode
- *
- * For the circle object currently focussed,
- * show two rubber points: one for the centre (the anchor) and
- * the other at some point on the radius to adjust the radius.
- *
- * ### CIRCLE_MODE_1P_DIA mode
- *
- * For the circle object currently focussed,
- * show two rubber points: one for the left of the diameter and one for the right.
- * These rubber points can be moved around the circle, but they always
- * oppose one another.
+ * The modes are documented in detail in the reference manual.
  */
 void
 Geometry::script_click(EmbVector v)
@@ -3481,7 +3459,9 @@ Geometry::script_click(EmbVector v)
 
 }
 
-/* . */
+/* Script to control the behavior of the prompt when processing
+ * events for this object.
+ */
 void
 Geometry::script_prompt(String str)
 {
@@ -3605,22 +3585,14 @@ Geometry::circle_click(EmbVector v)
     }
 }
 
-/**
- * @brief 
- * 
- * str 
- */
+/* . */
 void
 Geometry::circle_context(String str)
 {
     todo("CIRCLE", "context()");
 }
 
-/**
- * @brief 
- * 
- * str 
- */
+/* . */
 void
 Geometry::circle_prompt(String str)
 {
@@ -3788,11 +3760,7 @@ Geometry::circle_prompt(String str)
     }
 }
 
-/**
- * @brief .
- * 
- * v 
- */
+/* . */
 void
 Geometry::distance_click(EmbVector v)
 {
@@ -3814,22 +3782,14 @@ Geometry::distance_click(EmbVector v)
     }
 }
 
-/**
- * @brief distance_context
- * args
- * @return
- */
+/* . */
 void
 Geometry::distance_context(String args)
 {
     todo("DISTANCE", "context()");
 }
 
-/**
- * @brief distance_prompt
- * args
- * @return
- */
+/* . */
 void
 Geometry::distance_prompt(String args)
 {
@@ -3889,9 +3849,7 @@ Geometry::reportDistance()
     actuator("append-prompt-history");
 }
 
-/**
- * @brief updateDolphin
- */
+/* Update the dolphin object. */
 void
 Geometry::update_dolphin(int numPoints, EmbReal xScale, EmbReal yScale)
 {
@@ -3907,11 +3865,7 @@ Geometry::update_dolphin(int numPoints, EmbReal xScale, EmbReal yScale)
     setRubberText("POLYGON_NUM_POINTS", numPoints.toString());
 }
 
-/**
- * @brief 
- * 
- * v 
- */
+/* . */
 void
 Geometry::ellipse_click(EmbVector v)
 {
@@ -4008,24 +3962,15 @@ Geometry::ellipse_click(EmbVector v)
         }
     }
 }
-*/
 
-/**
- * @brief 
- * 
- * args 
- */
+/* . */
 void
 Geometry::ellipse_context(String args)
 {
-    /*
     todo("ELLIPSE", "context()");
-    */
 }
 
-/**
- * .
- */
+/* . */
 void
 Geometry::ellipse_prompt(String args)
 {
@@ -4176,9 +4121,7 @@ Geometry::ellipse_prompt(String args)
     }
 }
 
-/**
- * .
- */
+/* . */
 void
 Geometry::erase_main(void)
 {
@@ -4196,9 +4139,7 @@ Geometry::erase_main(void)
     }
 }
 
-/**
- * .
- */
+/* . */
 void
 Geometry::heart_main(void)
 {
@@ -4221,9 +4162,7 @@ Geometry::heart_main(void)
     actuator("end");
 }
 
-/**
- * .
- */
+/* . */
 void
 Geometry::updateHeart(String style, int numPoints, EmbReal xScale, EmbReal yScale)
 {
@@ -4246,9 +4185,7 @@ Geometry::updateHeart(String style, int numPoints, EmbReal xScale, EmbReal yScal
     setRubberText("POLYGON_NUM_POINTS", numPoints.toString());
 }
 
-/**
- * .
- */
+/* . */
 void
 Geometry::line_main(void)
 {
@@ -4260,9 +4197,7 @@ Geometry::line_main(void)
     actuator("set-prompt-prefix-tr Specify first point: ");
 }
 
-/**
- * .
- */
+/* . */
 void
 Geometry::line_click(EmbReal x, EmbReal y)
 {
@@ -4361,11 +4296,9 @@ Geometry::locate_point_main(void)
     actuator("set-prompt-prefix-tr Specify point: "));
 }
 
-/**
- * @brief locate_point_click
+/* locate_point_click
  * properties
  * v
- * @return
  */
 void
 Geometry::locate_point_click(EmbVector v)
@@ -4376,16 +4309,14 @@ Geometry::locate_point_click(EmbVector v)
     actuator("end");
 }
 
-/**
- */
+/* . */
 void
 Geometry::locate_point_context(String str)
 {
     todo("LOCATEPOINT", "context()");
 }
 
-/**
- */
+/* . */
 void
 Geometry::locate_point_prompt(String args)
 {
@@ -4402,9 +4333,7 @@ Geometry::locate_point_prompt(String args)
     }
 }
 
-/**
- * .
- */
+/* . */
 void
 Geometry::move_main(void)
 {
@@ -4428,9 +4357,7 @@ Geometry::move_main(void)
     }
 }
 
-/**
- * .
- */
+/* . */
 void
 Geometry::move_click(EmbReal x, EmbReal y)
 {
@@ -4457,18 +4384,14 @@ Geometry::move_click(EmbReal x, EmbReal y)
 }
 */
 
-/**
- * .
- */
+/* . */
 void
 Geometry::move_context(String str)
 {
     // todo("MOVE", "context()");
 }
 
-/**
- * .
- */
+/* . */
 void
 Geometry::move_prompt(String str)
 {
@@ -4507,9 +4430,7 @@ Geometry::move_prompt(String str)
     }
 }
 
-/**
- * TODO: The path command is currently broken.
- */
+/* TODO: The path command is currently broken. */
 void
 Geometry::path_main(void)
 {
@@ -4522,9 +4443,7 @@ Geometry::path_main(void)
     actuator("set-prompt-prefix-tr Specify start point: ");
 }
 
-/**
- * .
- */
+/* . */
 void
 Geometry::path_click(EmbReal x, EmbReal y)
 {
@@ -4546,18 +4465,14 @@ Geometry::path_click(EmbReal x, EmbReal y)
     }
 }
 
-/**
- * .
- */
+/* . */
 void
 Geometry::path_context(String str)
 {
     todo("PATH", "context()");
 }
 
-/**
- * .
- */
+/* . */
 void
 Geometry::path_prompt(String args)
 {
@@ -4594,9 +4509,7 @@ Geometry::path_prompt(String args)
     }
 }
 
-/**
- * .
- */
+/* . */
 void
 Geometry::point_main(void)
 {
@@ -4608,9 +4521,7 @@ Geometry::point_main(void)
     actuator("set-prompt-prefix-tr Specify first point: ");
 }
 
-/**
- * .
- */
+/* . */
 void
 Geometry::point_click(EmbVector v)
 {
@@ -4626,18 +4537,14 @@ Geometry::point_click(EmbVector v)
     }
 }
 
-/**
- * .
- */
+/* . */
 void
 Geometry::point_context(String str)
 {
     todo("POINT", "context()");
 }
 
-/**
- * .
- */
+/* . */
 void
 Geometry::point_prompt(String str)
 {
@@ -4676,9 +4583,7 @@ Geometry::point_prompt(String str)
     }
 }
 
-/**
- * .
- */
+/* . */
 void
 Geometry::polygon_main(void)
 {
@@ -4700,9 +4605,7 @@ Geometry::polygon_main(void)
     actuator("set-prompt-prefix-tr Enter number of sides" + " {" + properties["numSides.toString() + "}: ");
 }
 
-/**
- * .
- */
+/* . */
 void
 Geometry::polygon_click(EmbVector v)
 {
