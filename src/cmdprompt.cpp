@@ -1,4 +1,4 @@
-/**
+/*
  *  Embroidermodder 2.
  *
  *  ------------------------------------------------------------
@@ -13,15 +13,10 @@
  *      https://peps.python.org/pep-0007/
  */
 
-/**
- * \file cmdprompt.cpp
- */
-
 #include "embroidermodder.h"
 
-/**
- * @brief CmdPrompt::CmdPrompt
- * @param parent
+/* CmdPrompt::CmdPrompt
+ * parent
  */
 CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
 {
@@ -108,17 +103,14 @@ CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
     connect(promptHistory, SIGNAL(historyAppended(QString)), this, SIGNAL(historyAppended(QString)));
 }
 
-/**
- * @brief CmdPrompt::~CmdPrompt
- */
+/* Destroy CmdPrompt object. */
 CmdPrompt::~CmdPrompt()
 {
     delete styleHash;
 }
 
-/**
- * @brief CmdPrompt::floatingChanged
- * @param isFloating
+/* CmdPrompt::floatingChanged
+ * isFloating
  */
 void
 CmdPrompt::floatingChanged(bool isFloating)
@@ -128,10 +120,9 @@ CmdPrompt::floatingChanged(bool isFloating)
     else           promptSplitter->show();
 }
 
-/**
- * @brief CmdPrompt::saveHistory
- * @param fileName
- * @param html
+/* CmdPrompt::saveHistory
+ * fileName
+ * html
  */
 void
 CmdPrompt::saveHistory(QString  fileName, bool html)
@@ -151,21 +142,18 @@ CmdPrompt::saveHistory(QString  fileName, bool html)
     }
 }
 
-/**
- * @brief CmdPrompt::alert
- * @param txt
+/* CmdPrompt::alert
+ * txt
  */
 void
-CmdPrompt::alert(QString  txt)
+CmdPrompt::alert(QString txt)
 {
     QString alertTxt = "<font color=\"red\">" + txt + "</font>"; //TODO: Make the alert color customizable
     setPrefix(alertTxt);
     appendHistory(QString());
 }
 
-/**
- * @brief CmdPrompt::startBlinking
- */
+/* Start blinking the prompt cursor. */
 void
 CmdPrompt::startBlinking()
 {
@@ -173,9 +161,7 @@ CmdPrompt::startBlinking()
     promptInput->isBlinking = true;
 }
 
-/**
- * @brief CmdPrompt::stopBlinking
- */
+/* Stop blinking the prompt cursor. */
 void
 CmdPrompt::stopBlinking()
 {
@@ -183,9 +169,7 @@ CmdPrompt::stopBlinking()
     promptInput->isBlinking = false;
 }
 
-/**
- * @brief CmdPrompt::blink
- */
+/* Blink the prompt cursor. */
 void
 CmdPrompt::blink()
 {
@@ -198,10 +182,7 @@ CmdPrompt::blink()
     }
 }
 
-/**
- * @brief CmdPrompt::setPromptTextColor
- * @param color
- */
+/* Set prompt text color. */
 void
 CmdPrompt::setPromptTextColor(const QColor& color)
 {
@@ -210,10 +191,7 @@ CmdPrompt::setPromptTextColor(const QColor& color)
     updateStyle();
 }
 
-/**
- * @brief CmdPrompt::setPromptBackgroundColor
- * @param color
- */
+/* Set prompt background color. */
 void
 CmdPrompt::setPromptBackgroundColor(const QColor& color)
 {
@@ -408,18 +386,14 @@ CmdPromptHistory::CmdPromptHistory(QWidget* parent) : QTextBrowser(parent)
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 }
 
-/**
- * @brief CmdPromptHistory::~CmdPromptHistory
- */
+/* CmdPromptHistory::~CmdPromptHistory */
 CmdPromptHistory::~CmdPromptHistory()
 {
 }
 
-/**
- * @brief CmdPromptHistory::applyFormatting
- * @param txt
- * @param prefixLength
- * @return
+/* CmdPromptHistory::applyFormatting
+ * txt
+ * prefixLength
  */
 QString CmdPromptHistory::applyFormatting(QString  txt, int prefixLength)
 {
@@ -455,27 +429,26 @@ QString CmdPromptHistory::applyFormatting(QString  txt, int prefixLength)
     //Default Values
     start = prefix.indexOf('{');
     stop = prefix.lastIndexOf('}');
-    if (start != -1 && stop != -1 && start < stop)
-    {
-        for (int i = stop; i >= start; i--)
-        {
-            if (prefix.at(i) == '}')
+    if (start != -1 && stop != -1 && start < stop) {
+        for (int i = stop; i >= start; i--) {
+            if (prefix.at(i) == '}') {
                 prefix.insert(i, "</font>");
-            if (prefix.at(i) == '{')
+            }
+            if (prefix.at(i) == '{') {
                 prefix.insert(i+1, "<font color=\"#00AA00\">");
+            }
         }
     }
 
     return prefix + usrtxt;
 }
 
-/**
- * @brief CmdPromptHistory::appendHistory
- * @param txt
- * @param prefixLength
+/* CmdPromptHistory::appendHistory
+ * txt
+ * prefixLength
  */
 void
-CmdPromptHistory::appendHistory(QString  txt, int prefixLength)
+CmdPromptHistory::appendHistory(QString txt, int prefixLength)
 {
     QString formatStr = applyFormatting(txt, prefixLength);
     this->append(formatStr);
@@ -483,9 +456,7 @@ CmdPromptHistory::appendHistory(QString  txt, int prefixLength)
     this->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
 }
 
-/**
- * @brief CmdPromptHistory::startResizeHistory
- */
+/* CmdPromptHistory::startResizeHistory */
 void
 CmdPromptHistory::startResizeHistory(int /*y*/)
 {

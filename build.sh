@@ -6,15 +6,14 @@ BUILD_TYPE="Debug"
 VERSION="2.0.0-alpha"
 GENERATOR="Unix Makefiles"
 
-rm -fr build
+git submodule init || exit 1
+git submodule update || exit 1
 
-git submodule init
-git submodule update
+rm -fr $BUILD_DIR || exit 1
+cp -r assets $BUILD_DIR || exit 1
+cp ZLIB-LICENSE.txt $BUILD_DIR || exit 1
 
-cmake -S . -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
-cd $BUILD_DIR
-cp ../ZLIB-LICENSE.txt .
-cp -r ../src/* .
-rm *.cpp *.h
-cmake --build . 2> build.log
-cd ..
+cd $BUILD_DIR || exit 1
+cmake -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE" .. || exit 1
+cmake --build . 2> build.log || exit 1
+cd $SRC_DIR || exit 1

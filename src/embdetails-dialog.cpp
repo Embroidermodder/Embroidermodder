@@ -71,10 +71,7 @@ EmbDetailsDialog::getInfo()
     boundingRect.setRect(0, 0, 50, 100); //TODO: embPattern_calcBoundingBox(pattern);
 }
 
-/**
- * @brief EmbDetailsDialog::createMainWidget
- * @return
- */
+/* EmbDetailsDialog::createMainWidget */
 QWidget*
 EmbDetailsDialog::createMainWidget()
 {
