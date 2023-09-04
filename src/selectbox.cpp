@@ -21,14 +21,18 @@ SelectBox::SelectBox(Shape s, QWidget* parent) : QRubberBand(s, parent)
     setColors(QColor(Qt::darkGreen), QColor(Qt::green), QColor(Qt::darkBlue), QColor(Qt::blue), 32);
 }
 
-void SelectBox::setDirection(int dir)
+/* . */
+void
+SelectBox::setDirection(int dir)
 {
     if (!dir) { dirPen = leftPen;  dirBrush = leftBrush;  }
     else     { dirPen = rightPen; dirBrush = rightBrush; }
     boxDir = dir;
 }
 
-void SelectBox::setColors(const QColor& colorL, const QColor& fillL, const QColor& colorR, const QColor& fillR, int newAlpha)
+/* . */
+void
+SelectBox::setColors(const QColor& colorL, const QColor& fillL, const QColor& colorR, const QColor& fillR, int newAlpha)
 {
     qDebug("SelectBox setColors()");
     alpha = newAlpha;

@@ -13,12 +13,10 @@
  *      https://peps.python.org/pep-0007/
  */
 
-/**
- * \file object-rect.cpp
- */
-
 #include "embroidermodder.h"
 
+/*
+ */
 PreviewDialog::PreviewDialog(QWidget* parent, QString caption, QString dir,
                              QString filter) : QFileDialog(parent, caption, dir, filter)
 {
@@ -42,6 +40,8 @@ PreviewDialog::PreviewDialog(QWidget* parent, QString caption, QString dir,
     //TODO: connect the currentChanged signal to update the preview imgWidget.
 }
 
+/*
+ */
 PreviewDialog::~PreviewDialog()
 {
     qDebug("PreviewDialog Destructor");

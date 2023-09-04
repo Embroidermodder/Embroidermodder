@@ -13,17 +13,59 @@
  *      https://peps.python.org/pep-0007/
  */
 
-/**
- * \file objects.cpp
- */
-
 #include "embroidermodder.h"
 
-/**
- * @brief mouse_snap_point
- * points
- * @return
- */
+void addArc(View* view, QGraphicsItem* item);
+void addBlock(View* view, QGraphicsItem* item);
+void addCircle(View* view, QGraphicsItem* item);
+void addDimAligned(View* view, QGraphicsItem* item);
+void addDimAngular(View* view, QGraphicsItem* item);
+void addDimArcLength(View* view, QGraphicsItem* item);
+void addDimDiameter(View* view, QGraphicsItem* item);
+void addDimLeader(View* view, QGraphicsItem* item);
+void addDimLinear(View* view, QGraphicsItem* item);
+void addDimOrdinate(View* view, QGraphicsItem* item);
+void addDimRadius(View* view, QGraphicsItem* item);
+void addEllipse(View* view, QGraphicsItem* item);
+void addEllipseArc(View* view, QGraphicsItem* item);
+void addGrid(View* view, QGraphicsItem* item);
+void addHatch(View* view, QGraphicsItem* item);
+void addImage(View* view, QGraphicsItem* item);
+void addInfiniteLine(View* view, QGraphicsItem* item);
+void addLine(View* view, QGraphicsItem* item);
+void addPath(View* view, QGraphicsItem* item);
+void addPoint(View* view, QGraphicsItem* item);
+void addPolygon(View* view, QGraphicsItem* item);
+void addPolyline(View* view, QGraphicsItem* item);
+void addRay(View* view, QGraphicsItem* item);
+void addRectangle(View* view, QGraphicsItem* item);
+void addSlot(View* view, QGraphicsItem* item);
+void addSpline(View* view, QGraphicsItem* item);
+void addTextMulti(View* view, QGraphicsItem* item);
+void addTextSingle(View* view, QGraphicsItem* item);
+
+void toPolyline(
+    View* view,
+    QPointF objPos,
+    QPainterPath objPath,
+    QString layer,
+    QColor color,
+    QString lineType,
+    QString lineWeight);
+
+bool save(View *view, QString f);
+
+/* . */
+bool
+save_current_file(String fileName)
+{
+    View* view = activeView();
+    QGraphicsScene* gscene = activeScene();
+    view->formatType = EMBFORMAT_UNSUPPORTED;
+    return save(view, QString::fromStdString(fileName));
+}
+
+/* Find closest point to "position" from the list of points given. */
 QPointF
 closest_point(QPointF position, std::vector<QPointF> points)
 {
@@ -38,11 +80,7 @@ closest_point(QPointF position, std::vector<QPointF> points)
     return result;
 }
 
-/**
- * @brief fourier_series
- * arg
- * terms
- */
+/* Fourier series for parametric plotting. */
 EmbReal
 fourier_series(EmbReal arg, std::vector<EmbReal> terms)
 {
@@ -53,11 +91,7 @@ fourier_series(EmbReal arg, std::vector<EmbReal> terms)
     return x;
 }
 
-/**
- * @brief add_polyline
- * p
- * rubberMode
- */
+/* Add_polyline. */
 void
 add_polyline(QPainterPath p, String rubberMode)
 {
@@ -80,14 +114,7 @@ add_polyline(QPainterPath p, String rubberMode)
     }
 }
 
-/**
- * @brief Construct a new Geometry:: Geometry object
- * 
- * arc 
- * rgb 
- * lineType 
- * parent 
- */
+/* Construct a new Geometry object of arc type. */
 Geometry::Geometry(EmbArc arc, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
     debug_message("Geometry Constructor()");
@@ -95,14 +122,7 @@ Geometry::Geometry(EmbArc arc, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* p
     init_arc(arc, rgb, lineType); //TODO: getCurrentLineType
 }
 
-/**
- * @brief Construct a new Geometry:: Geometry object
- * 
- * circle 
- * rgb 
- * lineType 
- * parent 
- */
+/* Construct a new Geometry object of circle type. */
 Geometry::Geometry(EmbCircle circle, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
     debug_message("Geometry Constructor()");
@@ -110,14 +130,7 @@ Geometry::Geometry(EmbCircle circle, QRgb rgb, Qt::PenStyle lineType, QGraphicsI
     init_circle(circle, rgb, lineType); //TODO: getCurrentLineType
 }
 
-/**
- * @brief Construct a new Geometry:: Geometry object
- * 
- * ellipse 
- * rgb 
- * lineType 
- * parent 
- */
+/* Construct a new Geometry object of ellipse type. */
 Geometry::Geometry(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
     debug_message("Geometry Constructor()");
@@ -126,15 +139,7 @@ Geometry::Geometry(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType, QGraphic
     init_ellipse(ellipse, rgb, lineType); //TODO: getCurrentLineType
 }
 
-/**
- * @brief Construct a new Geometry:: Geometry object
- * 
- * line 
- * Type_ 
- * rgb 
- * lineType 
- * parent 
- */
+/* Construct a new Geometry object of line type. */
 Geometry::Geometry(EmbLine line, int Type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
     debug_message("DimLeaderObject Constructor()");
@@ -143,14 +148,7 @@ Geometry::Geometry(EmbLine line, int Type_, QRgb rgb, Qt::PenStyle lineType, QGr
     init_line(line, rgb, lineType); //TODO: getCurrentLineType
 }
 
-/**
- * @brief Construct a new Geometry:: Geometry object
- * 
- * vector 
- * rgb 
- * lineType 
- * parent 
- */
+/* Construct a new Geometry object of vector type. */
 Geometry::Geometry(EmbVector vector, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
     debug_message("Geometry Constructor()");
@@ -158,14 +156,7 @@ Geometry::Geometry(EmbVector vector, QRgb rgb, Qt::PenStyle lineType, QGraphicsI
     init_point(vector, rgb, lineType); //TODO: getCurrentLineType
 }
 
-/**
- * @brief Construct a new Geometry:: Geometry object
- * 
- * p 
- * Type_ 
- * rgb 
- * lineType 
- * parent 
+/* Construct a new Geometry object of one of the path types.
  *
  * For PATH, POLYLINE and POLYGON, set the Type_ variable to one of these.
  */
@@ -177,14 +168,7 @@ Geometry::Geometry(QPainterPath p, int Type_, QRgb rgb, Qt::PenStyle lineType, Q
     init_path(p, rgb, lineType); //TODO: getCurrentLineType
 }
 
-/**
- * @brief Construct a new Geometry object
- * 
- * rect 
- * rgb 
- * lineType 
- * parent 
- */
+/* Construct a new Geometry object of rect type. */
 Geometry::Geometry(EmbRect rect, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
     debug_message("Geometry Constructor()");
@@ -192,15 +176,7 @@ Geometry::Geometry(EmbRect rect, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem*
     init_rect(rect, rgb, lineType); //TODO: getCurrentLineType
 }
 
-/**
- * @brief Construct a new Geometry object.
- * 
- * str 
- * v 
- * rgb 
- * lineType 
- * parent 
- */
+/* Construct a new Geometry object of text type. */
 Geometry::Geometry(QString str, EmbVector v, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
     debug_message("Geometry Constructor()");
@@ -2657,21 +2633,6 @@ Geometry::updatePath(const QPainterPath& p)
     setPath(reversePath);
 }
 
-/* SaveObject, theScene, parent
- */
-SaveObject::SaveObject(QGraphicsScene* theScene, QObject* parent) : QObject(parent)
-{
-    debug_message("SaveObject Constructor()");
-    gscene = theScene;
-    formatType = EMBFORMAT_UNSUPPORTED;
-}
-
-/* Destroy SaveObject. */
-SaveObject::~SaveObject()
-{
-    debug_message("SaveObject Destructor()");
-}
-
 /* Returns whether the save to file process was successful.
  *
  * \todo Before saving to a stitch only format, Embroidermodder needs
@@ -2683,14 +2644,19 @@ SaveObject::~SaveObject()
  * to try to hide dark colored stitches beneath light colored fills.
  */
 bool
-SaveObject::save(QString fileName)
+save(View* view, QString fileName)
 {
     qDebug("SaveObject save(%s)", qPrintable(fileName));
+    QGraphicsScene* gscene = view->scene();
+    QUndoStack* stack = view->getUndoStack();
+    if (!(gscene && stack)) {
+        return false;
+    }
 
     bool writeSuccessful = false;
 
-    formatType = formatTable[emb_identify_format(qPrintable(fileName))].type;
-    if (formatType == EMBFORMAT_UNSUPPORTED) {
+    view->formatType = formatTable[emb_identify_format(qPrintable(fileName))].type;
+    if (view->formatType == EMBFORMAT_UNSUPPORTED) {
         return false;
     }
 
@@ -2709,88 +2675,88 @@ SaveObject::save(QString fileName)
             int objType = item->data(OBJ_TYPE).toInt();
 
             if (objType == OBJ_TYPE_ARC) {
-                addArc(pattern, item);
+                addArc(view, item);
             }
             else if (objType == OBJ_TYPE_BLOCK) {
-                addBlock(pattern, item);
+                addBlock(view, item);
             }
             else if (objType == OBJ_TYPE_CIRCLE) {
-                addCircle(pattern, item);
+                addCircle(view, item);
             }
             else if (objType == OBJ_TYPE_DIMALIGNED) {
-                addDimAligned(pattern, item);
+                addDimAligned(view, item);
             }
             else if (objType == OBJ_TYPE_DIMANGULAR) {
-                addDimAngular(pattern, item);
+                addDimAngular(view, item);
             }
             else if (objType == OBJ_TYPE_DIMARCLENGTH) {
-                addDimArcLength(pattern, item);
+                addDimArcLength(view, item);
             }
             else if (objType == OBJ_TYPE_DIMDIAMETER) {
-                addDimDiameter(pattern, item);
+                addDimDiameter(view, item);
             }
             else if (objType == OBJ_TYPE_DIMLEADER) {
-                addDimLeader(pattern, item);
+                addDimLeader(view, item);
             }
             else if (objType == OBJ_TYPE_DIMLINEAR) {
-                addDimLinear(pattern, item);
+                addDimLinear(view, item);
             }
             else if (objType == OBJ_TYPE_DIMORDINATE) {
-                addDimOrdinate(pattern, item);
+                addDimOrdinate(view, item);
             }
             else if (objType == OBJ_TYPE_DIMRADIUS) {
-                addDimRadius(pattern, item);
+                addDimRadius(view, item);
             }
             else if (objType == OBJ_TYPE_ELLIPSE) {
-                addEllipse(pattern, item);
+                addEllipse(view, item);
             }
             else if (objType == OBJ_TYPE_ELLIPSEARC) {
-                addEllipseArc(pattern, item);
+                addEllipseArc(view, item);
             }
             else if (objType == OBJ_TYPE_GRID) {
-                addGrid(pattern, item);
+                addGrid(view, item);
             }
             else if (objType == OBJ_TYPE_HATCH) {
-                addHatch(pattern, item);
+                addHatch(view, item);
             }
             else if (objType == OBJ_TYPE_IMAGE) {
-                addImage(pattern, item);
+                addImage(view, item);
             }
             else if (objType == OBJ_TYPE_INFINITELINE) {
-                addInfiniteLine(pattern, item);
+                addInfiniteLine(view, item);
             }
             else if (objType == OBJ_TYPE_LINE) {
-                addLine(pattern, item);
+                addLine(view, item);
             }
             else if (objType == OBJ_TYPE_POINT) {
-                addPoint(pattern, item);
+                addPoint(view, item);
             }
             else if (objType == OBJ_TYPE_POLYGON) {
-                addPolygon(pattern, item);
+                addPolygon(view, item);
             }
             else if (objType == OBJ_TYPE_POLYLINE) {
-                addPolyline(pattern, item);
+                addPolyline(view, item);
             }
             else if (objType == OBJ_TYPE_RAY) {
-                addRay(pattern, item);
+                addRay(view, item);
             }
             else if (objType == OBJ_TYPE_RECTANGLE) {
-                addRectangle(pattern, item);
+                addRectangle(view, item);
             }
             else if (objType == OBJ_TYPE_SPLINE) {
-                addSpline(pattern, item);
+                addSpline(view, item);
             }
             else if (objType == OBJ_TYPE_TEXTMULTI) {
-                addTextMulti(pattern, item);
+                addTextMulti(view, item);
             }
             else if (objType == OBJ_TYPE_TEXTSINGLE) {
-                addTextSingle(pattern, item);
+                addTextSingle(view, item);
             }
         }
 
         /*
         //TODO: handle EMBFORMAT_STCHANDOBJ also
-        if (formatType == EMBFORMAT_STITCHONLY)
+        if (view->formatType == EMBFORMAT_STITCHONLY)
             embPattern_movePolylinesToStitchList(pattern); //TODO: handle all objects like this
         */
 
@@ -2808,25 +2774,25 @@ SaveObject::save(QString fileName)
 
 /* Add arc "item" to "pattern". */
 void
-SaveObject::addArc(EmbPattern* pattern, QGraphicsItem* item)
+addArc(View* view, QGraphicsItem* item)
 {
 }
 
 /* Add block "item" to "pattern". */
 void
-SaveObject::addBlock(EmbPattern* pattern, QGraphicsItem* item)
+addBlock(View* view, QGraphicsItem* item)
 {
 }
 
 /* Add circle "item" to "pattern". */
 void
-SaveObject::addCircle(EmbPattern* pattern, QGraphicsItem* item)
+addCircle(View* view, QGraphicsItem* item)
 {
     Geometry* obj = static_cast<Geometry*>(item);
     if (obj) {
-        if (formatType == EMBFORMAT_STITCHONLY) {
+        if (view->formatType == EMBFORMAT_STITCHONLY) {
             QPainterPath path = obj->objectSavePath();
-            toPolyline(pattern, obj->objectCenter(), path.simplified(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight //TODO: Improve precision, replace simplified
+            toPolyline(view, obj->objectCenter(), path.simplified(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight //TODO: Improve precision, replace simplified
         }
         else {
             EmbCircle circle;
@@ -2834,68 +2800,68 @@ SaveObject::addCircle(EmbPattern* pattern, QGraphicsItem* item)
             circle.center.y = (double)obj->objectCenter().y();
             circle.radius = (double)obj->objectRadius();
             
-            embPattern_addCircleAbs(pattern, circle);
+            embPattern_addCircleAbs(view->pattern, circle);
         }
     }
 }
 
 /* Add aligned dimension "item" to "pattern". */
 void
-SaveObject::addDimAligned(EmbPattern* pattern, QGraphicsItem* item)
+addDimAligned(View* view, QGraphicsItem* item)
 {
 }
 
 /* Add angular dimension "item" to "pattern". */
 void
-SaveObject::addDimAngular(EmbPattern* pattern, QGraphicsItem* item)
+addDimAngular(View* view, QGraphicsItem* item)
 {
 }
 
 /* Add arc length dimension "item" to "pattern". */
 void
-SaveObject::addDimArcLength(EmbPattern* pattern, QGraphicsItem* item)
+addDimArcLength(View* view, QGraphicsItem* item)
 {
 }
 
 /* Add diameter dimension "item" to "pattern". */
 void
-SaveObject::addDimDiameter(EmbPattern* pattern, QGraphicsItem* item)
+addDimDiameter(View* view, QGraphicsItem* item)
 {
 }
 
 /* Add dimension leader "item" to "pattern". */
 void
-SaveObject::addDimLeader(EmbPattern* pattern, QGraphicsItem* item)
+addDimLeader(View* view, QGraphicsItem* item)
 {
 }
 
 /* Add linear dimension "item" to "pattern". */
 void
-SaveObject::addDimLinear(EmbPattern* pattern, QGraphicsItem* item)
+addDimLinear(View* view, QGraphicsItem* item)
 {
 }
 
 /* Add ordinate dimension "item" to "pattern". */
 void
-SaveObject::addDimOrdinate(EmbPattern* pattern, QGraphicsItem* item)
+addDimOrdinate(View* view, QGraphicsItem* item)
 {
 }
 
 /* Add radius dimension "item" to "pattern". */
 void
-SaveObject::addDimRadius(EmbPattern* pattern, QGraphicsItem* item)
+addDimRadius(View* view, QGraphicsItem* item)
 {
 }
 
 /* Add ellipse "item" to "pattern". */
 void
-SaveObject::addEllipse(EmbPattern* pattern, QGraphicsItem* item)
+addEllipse(View* view, QGraphicsItem* item)
 {
     Geometry* obj = static_cast<Geometry*>(item);
     if (obj) {
-        if (formatType == EMBFORMAT_STITCHONLY) {
+        if (view->formatType == EMBFORMAT_STITCHONLY) {
             QPainterPath path = obj->objectSavePath();
-            toPolyline(pattern, obj->objectCenter(), path.simplified(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight //TODO: Improve precision, replace simplified
+            toPolyline(view, obj->objectCenter(), path.simplified(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight //TODO: Improve precision, replace simplified
         }
         else {
             EmbEllipse ellipse;
@@ -2904,55 +2870,55 @@ SaveObject::addEllipse(EmbPattern* pattern, QGraphicsItem* item)
             ellipse.radius.x = (double)obj->objectWidth()/2.0;
             ellipse.radius.y = (double)obj->objectHeight()/2.0;
             //TODO: ellipse rotation
-            embPattern_addEllipseAbs(pattern, ellipse);
+            embPattern_addEllipseAbs(view->pattern, ellipse);
         }
     }
 }
 
 /* Add elliptical arc "item" to "pattern". */
 void
-SaveObject::addEllipseArc(EmbPattern* pattern, QGraphicsItem* item)
+addEllipseArc(View* view, QGraphicsItem* item)
 {
 }
 
 /* Add grid "item" to "pattern". */
 void
-SaveObject::addGrid(EmbPattern* pattern, QGraphicsItem* item)
+addGrid(View* view, QGraphicsItem* item)
 {
 }
 
 /* Add hatch "item" to "pattern". */
 void
-SaveObject::addHatch(EmbPattern* pattern, QGraphicsItem* item)
+addHatch(View* view, QGraphicsItem* item)
 {
 }
 
 /* Add image "item" to "pattern". */
 void
-SaveObject::addImage(EmbPattern* pattern, QGraphicsItem* item)
+addImage(View* view, QGraphicsItem* item)
 {
 }
 
 /* Add infinite line "item" to "pattern". */
 void
-SaveObject::addInfiniteLine(EmbPattern* pattern, QGraphicsItem* item)
+addInfiniteLine(View* view, QGraphicsItem* item)
 {
 }
 
 /* Add line "item" to "pattern". */
 void
-SaveObject::addLine(EmbPattern* pattern, QGraphicsItem* item)
+addLine(View* view, QGraphicsItem* item)
 {
     Geometry* obj = static_cast<Geometry*>(item);
     if (obj) {
-        if (formatType == EMBFORMAT_STITCHONLY) {
-            toPolyline(pattern, obj->objectEndPoint1(), obj->objectSavePath(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
+        if (view->formatType == EMBFORMAT_STITCHONLY) {
+            toPolyline(view, obj->objectEndPoint1(), obj->objectSavePath(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
         }
         else {
             EmbLine line;
             line.start = to_EmbVector(obj->objectEndPoint1());
             line.end = to_EmbVector(obj->objectEndPoint2());
-            embPattern_addLineAbs(pattern, line);
+            embPattern_addLineAbs(view->pattern, line);
         }
     }
 }
@@ -2962,7 +2928,7 @@ SaveObject::addLine(EmbPattern* pattern, QGraphicsItem* item)
  * \todo Reimplement addPolyline() using the libembroidery C API
  */
 void
-SaveObject::addPath(EmbPattern* pattern, QGraphicsItem* item)
+addPath(View* view, QGraphicsItem* item)
 {
     qDebug("addPolyline()");
     QGraphicsPathItem* polylineItem = (QGraphicsPathItem*)item;
@@ -2974,10 +2940,10 @@ SaveObject::addPath(EmbPattern* pattern, QGraphicsItem* item)
             QPainterPath::Element element = path.elementAt(i);
             /*
             if (element.isMoveTo()) {
-                embPattern_addStitchAbs(pattern, (element.x + start.x), -(element.y + start.y), TRIM);
+                embPattern_addStitchAbs(view->pattern, (element.x + start.x), -(element.y + start.y), TRIM);
             }
             else if (element.isLineTo()) {
-                embPattern_addStitchAbs(pattern, (element.x + start.x), -(element.y + start.y), NORMAL);
+                embPattern_addStitchAbs(view->pattern, (element.x + start.x), -(element.y + start.y), NORMAL);
             }
             else if (element.isCurveTo()) {
                 QPainterPath::Element P1 = path.elementAt(i-1); // start point
@@ -2990,64 +2956,64 @@ SaveObject::addPath(EmbPattern* pattern, QGraphicsItem* item)
             }
             */
         }
-        /* embPattern_addStitchRel(pattern, 0, 0, STOP); */
+        /* embPattern_addStitchRel(view->pattern, 0, 0, STOP); */
         QColor c= polylineItem->pen().color();
-        /* embPattern_addThread(pattern, c.red(), c.green(), c.blue(), "", ""); */
+        /* embPattern_addThread(view->pattern, c.red(), c.green(), c.blue(), "", ""); */
     }
 }
 
 /* Add point "item" to "pattern". */
 void
-SaveObject::addPoint(EmbPattern* pattern, QGraphicsItem* item)
+addPoint(View* view, QGraphicsItem* item)
 {
     Geometry* obj = static_cast<Geometry*>(item);
     if (obj) {
-        if (formatType == EMBFORMAT_STITCHONLY) {
-            toPolyline(pattern, obj->objectPos(), obj->objectSavePath(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
+        if (view->formatType == EMBFORMAT_STITCHONLY) {
+            toPolyline(view, obj->objectPos(), obj->objectSavePath(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
         }
         else {
             EmbPoint po;
             po.position.x = (double)obj->objectPos().x();
             po.position.y = (double)obj->objectPos().y();
-            embPattern_addPointAbs(pattern, po);
+            embPattern_addPointAbs(view->pattern, po);
         }
     }
 }
 
 /* Add polygon "item" to "pattern". */
 void
-SaveObject::addPolygon(EmbPattern* pattern, QGraphicsItem* item)
+addPolygon(View* view, QGraphicsItem* item)
 {
     Geometry* obj = static_cast<Geometry*>(item);
     if (obj) {
-        toPolyline(pattern, obj->objectPos(), obj->objectSavePath(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
+        toPolyline(view, obj->objectPos(), obj->objectSavePath(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
     }
 }
 
 /* Add polyline "item" to "pattern". */
 void
-SaveObject::addPolyline(EmbPattern* pattern, QGraphicsItem* item)
+addPolyline(View* view, QGraphicsItem* item)
 {
     Geometry* obj = static_cast<Geometry*>(item);
     if (obj) {
-        toPolyline(pattern, obj->objectPos(), obj->objectSavePath(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
+        toPolyline(view, obj->objectPos(), obj->objectSavePath(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
     }
 }
 
 /* Add ray "item" to "pattern". */
 void
-SaveObject::addRay(EmbPattern* pattern, QGraphicsItem* item)
+addRay(View* view, QGraphicsItem* item)
 {
 }
 
 /* Add rectangle "item" to "pattern". */
 void
-SaveObject::addRectangle(EmbPattern* pattern, QGraphicsItem* item)
+addRectangle(View* view, QGraphicsItem* item)
 {
     Geometry* obj = static_cast<Geometry*>(item);
     if (obj) {
-        if (formatType == EMBFORMAT_STITCHONLY) {
-            toPolyline(pattern, obj->objectPos(), obj->objectSavePath(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
+        if (view->formatType == EMBFORMAT_STITCHONLY) {
+            toPolyline(view, obj->objectPos(), obj->objectSavePath(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
         }
         else {
             //TODO: Review this at some point
@@ -3057,27 +3023,27 @@ SaveObject::addRectangle(EmbPattern* pattern, QGraphicsItem* item)
             r.left = topLeft.y();
             r.right = r.left + (double)obj->objectWidth();
             r.bottom = r.top + (double)obj->objectHeight();
-            embPattern_addRectAbs(pattern, r);
+            embPattern_addRectAbs(view->pattern, r);
         }
     }
 }
 
 /* Add slot "item" to "pattern". */
 void
-SaveObject::addSlot(EmbPattern* pattern, QGraphicsItem* item)
+addSlot(View* view, QGraphicsItem* item)
 {
 }
 
 /* Add spline "item" to "pattern". */
 void
-SaveObject::addSpline(EmbPattern* pattern, QGraphicsItem* item)
+addSpline(View* view, QGraphicsItem* item)
 {
     //TODO: abstract bezier into geom-bezier... cubicBezierMagic(P1, P2, P3, P4, 0.0, 1.0, tPoints);
 }
 
 /* Add text multi "item" to "pattern". */
 void
-SaveObject::addTextMulti(EmbPattern* pattern, QGraphicsItem* item)
+addTextMulti(View* view, QGraphicsItem* item)
 {
     //TODO: saving polygons, polylines and paths must be stable before we go here.
 }
@@ -3089,14 +3055,14 @@ SaveObject::addTextMulti(EmbPattern* pattern, QGraphicsItem* item)
  * @todo This needs to work like a path, not a polyline. Improve this.
  */
 void
-SaveObject::addTextSingle(EmbPattern* pattern, QGraphicsItem* item)
+addTextSingle(View* view, QGraphicsItem* item)
 {
     Geometry* obj = static_cast<Geometry*>(item);
     if (obj) {
-        if (formatType == EMBFORMAT_STITCHONLY) {
+        if (view->formatType == EMBFORMAT_STITCHONLY) {
             std::vector<QPainterPath> pathList = obj->objectSavePathList();
             foreach(QPainterPath path, pathList) {
-                toPolyline(pattern, obj->objectPos(), path.simplified(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight //TODO: Improve precision, replace simplified
+                toPolyline(view, obj->objectPos(), path.simplified(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight //TODO: Improve precision, replace simplified
             }
         }
         else {
@@ -3105,20 +3071,20 @@ SaveObject::addTextSingle(EmbPattern* pattern, QGraphicsItem* item)
     }
 }
 
-/**
- * @brief SaveObject::toPolyline
- * pattern
- * objPos
- * objPath
- * layer
- * color
- * lineType
- * lineWeight
- *
- * @note This function should be used to interpret various object types and save them as polylines for stitchOnly formats.
+/* toPolyline
+ * 
+ * NOTE: This function should be used to interpret various object types
+ * and save them as polylines for stitchOnly formats.
  */
 void
-SaveObject::toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainterPath& objPath, QString  layer, const QColor& color, QString  lineType, QString  lineWeight)
+toPolyline(
+    View* view,
+    QPointF objPos,
+    QPainterPath objPath,
+    QString layer,
+    QColor color,
+    QString lineType,
+    QString lineWeight)
 {
     EmbArray* pointList = 0;
     QPainterPath::Element element;
@@ -3141,7 +3107,7 @@ SaveObject::toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainte
     /**
     @todo FIX
     EmbPolyline* polyObject = embPolyline_init(pointList, color_out, 1); //@todo proper lineType
-    embPattern_addPolylineAbs(pattern, polyObject);
+    embPattern_addPolylineAbs(view->pattern, polyObject);
     */
 }
 

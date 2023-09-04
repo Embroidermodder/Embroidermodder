@@ -13,17 +13,9 @@
  *      https://peps.python.org/pep-0007/
  */
 
-/**
- * \file mdiarea.cpp
- */
-
 #include "embroidermodder.h"
 
-/**
- * @brief MdiArea::MdiArea
- * @param mw
- * @param parent
- */
+/* Create the MDI area. */
 MdiArea::MdiArea(QWidget *parent) : QMdiArea(parent)
 {
     setTabsClosable(true);
@@ -33,17 +25,12 @@ MdiArea::MdiArea(QWidget *parent) : QMdiArea(parent)
     useColor = false;
 }
 
-/**
- * @brief MdiArea::~MdiArea
- */
+/* Destroy the MDI area. */
 MdiArea::~MdiArea()
 {
 }
 
-/**
- * @brief MdiArea::useBackgroundLogo
- * @param use
- */
+/* Set whether to use the background logo. */
 void
 MdiArea::useBackgroundLogo(bool use)
 {
@@ -51,10 +38,7 @@ MdiArea::useBackgroundLogo(bool use)
     forceRepaint();
 }
 
-/**
- * @brief MdiArea::useBackgroundTexture
- * @param use
- */
+/* Set whether to use the background texture. */
 void
 MdiArea::useBackgroundTexture(bool use)
 {
@@ -62,10 +46,7 @@ MdiArea::useBackgroundTexture(bool use)
     forceRepaint();
 }
 
-/**
- * @brief 
- * @param use
- */
+/* Set whether to use the background color. */
 void
 MdiArea::useBackgroundColor(bool use)
 {
@@ -73,10 +54,7 @@ MdiArea::useBackgroundColor(bool use)
     forceRepaint();
 }
 
-/**
- * @brief MdiArea::setBackgroundLogo
- * @param fileName
- */
+/* Set what background logo to use. */
 void MdiArea::setBackgroundLogo(QString  fileName)
 {
     bgLogo.load(fileName);
@@ -84,10 +62,7 @@ void MdiArea::setBackgroundLogo(QString  fileName)
     forceRepaint();
 }
 
-/**
- * @brief MdiArea::setBackgroundTexture
- * @param fileName
- */
+/* Set what background texture to use. */
 void MdiArea::setBackgroundTexture(QString fileName)
 {
     bgTexture.load(fileName);
@@ -95,10 +70,7 @@ void MdiArea::setBackgroundTexture(QString fileName)
     forceRepaint();
 }
 
-/**
- * @brief MdiArea::setBackgroundColor
- * @param color
- */
+/* Set what background color to use. */
 void MdiArea::setBackgroundColor(const QColor& color)
 {
     if (!color.isValid()) {
@@ -111,18 +83,14 @@ void MdiArea::setBackgroundColor(const QColor& color)
     forceRepaint();
 }
 
-/**
- * @brief MdiArea::mouseDoubleClickEvent
- */
+/* . */
 void
 MdiArea::mouseDoubleClickEvent(QMouseEvent* /*e*/)
 {
     _mainWin->openFile();
 }
 
-/**
- * @brief MdiArea::paintEvent
- */
+/* . */
 void
 MdiArea::paintEvent(QPaintEvent* /*e*/)
 {
@@ -155,27 +123,21 @@ MdiArea::paintEvent(QPaintEvent* /*e*/)
     }
 }
 
-/**
- * @brief MdiArea::cascade
- */
+/* Cascade the MDI windows. */
 void MdiArea::cascade()
 {
     cascadeSubWindows();
     zoomExtentsAllSubWindows();
 }
 
-/**
- * @brief MdiArea::tile
- */
+/* Tile the MDI windows. */
 void MdiArea::tile()
 {
     tileSubWindows();
     zoomExtentsAllSubWindows();
 }
 
-/**
- * @brief MdiArea::zoomExtentsAllSubWindows
- */
+/* Zoom extents all subwindows. */
 void MdiArea::zoomExtentsAllSubWindows()
 {
     foreach(QMdiSubWindow* window, subWindowList()) {
@@ -189,9 +151,7 @@ void MdiArea::zoomExtentsAllSubWindows()
     }
 }
 
-/**
- * @brief MdiArea::forceRepaint
- */
+/* Force repaint. */
 void MdiArea::forceRepaint()
 {
     //HACK: Take that QMdiArea!

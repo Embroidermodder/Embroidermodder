@@ -1951,7 +1951,7 @@ add_path_action(String args)
 {
     no_argument_debug("add_path_action()", args);
     /*
-    AddPath(NodeList a)
+    AddPath(std::vector<Node> a)
     // TODO: Node error checking
     debug_message("TODO: finish addPath command");
     */
@@ -1966,7 +1966,7 @@ add_horizontal_dimension_action(String args)
 {
     no_argument_debug("add_horizontal_dimension_action()", args);
     /*
-    AddHorizontalDimension(NodeList a)
+    AddHorizontalDimension(std::vector<Node> a)
     //TODO: Node error checking
     debug_message("TODO: finish addHorizontalDimension command");
     */
@@ -1981,7 +1981,7 @@ add_vertical_dimension_action(String args)
 {
     no_argument_debug("add_vertical_dimension_action()", args);
     /*
-    AddVerticalDimension(NodeList a)
+    AddVerticalDimension(std::vector<Node> a)
     //TODO: Node error checking
     debug_message("TODO: finish addVerticalDimension command");
     */
@@ -1996,7 +1996,7 @@ add_image_action(String args)
 {
     no_argument_debug("add_image_action()", args);
     /*
-    AddImage(NodeList a)
+    AddImage(std::vector<Node> a)
     //TODO: Node error checking
     debug_message("TODO: finish addImage command");
     */
@@ -2010,7 +2010,7 @@ add_dim_leader_action(String args)
 {
     no_argument_debug("add_dim_leader_action()", args);
     /*
-    AddDimLeader(NodeList a)
+    AddDimLeader(std::vector<Node> a)
     _mainWin->nativeAddDimLeader(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, OBJ_RUBBER_OFF);
     */
     View* gview = activeView();
@@ -3416,7 +3416,7 @@ convert_args_to_type(
     String label,
     std::vector<String> args,
     const char *args_template,
-    NodeList a)
+    std::vector<Node> a)
 {
     int n_args = (int)args.size();
     int required_args = strlen(args_template);
@@ -3466,7 +3466,7 @@ convert_args_to_type(
 
 /* Run the lines in another script before continuing. */
 String
-include_action(NodeList a)
+include_action(std::vector<Node> a)
 {
     return run_script_file("commands/" + a[0].s);
 }
@@ -3522,7 +3522,7 @@ append_prompt_history_action(String args)
 String
 is_int_action(String args)
 {
-    NodeList result;
+    std::vector<Node> result;
     StringList a = tokenize(args, ' ');
     String error = convert_args_to_type("IsInt()", a, "i", result);
     if (error != "") {

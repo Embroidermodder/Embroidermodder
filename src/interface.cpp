@@ -360,9 +360,7 @@ get_n_reals(StringList list, int n, int *offset)
     return result;
 }
 
-/**
- * .
- */
+/* . */
 QPainterPath
 add_to_path(QPainterPath path, EmbVector scale, String command)
 {
@@ -434,7 +432,7 @@ set_enabled(QObject* parent, const char *key, bool enabled)
 /* Set visibility of parent's object that has the name given by key to
  * the boolean value in visibility.
  *
- * \todo error reporting.
+ * TODO: error reporting.
  */
 void
 set_visibility(QObject* parent, const char *key, bool visibility)
@@ -455,9 +453,7 @@ set_visibility(QObject* parent, const char *key, bool visibility)
     }
 }
 
-/**
- * .
- */
+/* . */
 void
 make_ui_element(Dictionary description)
 {
@@ -498,9 +494,7 @@ make_ui_element(Dictionary description)
     }
 }
 
-/*
- * .
- */
+/* . */
 QCheckBox *
 make_checkbox(QGroupBox *gb, String dictionary, const char *label, const char *icon, String key)
 {

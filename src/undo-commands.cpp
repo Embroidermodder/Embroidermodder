@@ -13,15 +13,9 @@
  *      https://peps.python.org/pep-0007/
  */
 
-/**
- * \file undo-commands.cpp
- */
-
 #include "embroidermodder.h"
 
-/**
- *
- */
+/* . */
 UndoableCommand::UndoableCommand(String command_, QString text, Geometry* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
@@ -30,9 +24,7 @@ UndoableCommand::UndoableCommand(String command_, QString text, Geometry* obj, V
     setText(text);
 }
 
-/**
- *
- */
+/* . */
 UndoableCommand::UndoableCommand(EmbVector delta_, QString text, Geometry* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
@@ -42,9 +34,7 @@ UndoableCommand::UndoableCommand(EmbVector delta_, QString text, Geometry* obj, 
     delta = delta_;
 }
 
-/**
- *
- */
+/* . */
 UndoableCommand::UndoableCommand(String command, EmbVector point, EmbReal value, QString text, Geometry* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
@@ -83,9 +73,7 @@ UndoableCommand::UndoableCommand(String command, EmbVector point, EmbReal value,
     }
 }
 
-/**
- *
- */
+/* . */
 void
 UndoableCommand::undo()
 {
@@ -123,9 +111,7 @@ UndoableCommand::undo()
     }
 }
 
-/**
- *
- */
+/* . */
 void
 UndoableCommand::redo()
 {
@@ -193,9 +179,7 @@ UndoableCommand::redo()
     }
 }
 
-/**
- *
- */
+/* . */
 void
 UndoableCommand::rotate(EmbVector pivot, EmbReal rot)
 {
@@ -207,9 +191,7 @@ UndoableCommand::rotate(EmbVector pivot, EmbReal rot)
     object->setRotation(object->rotation() + rot);
 }
 
-/**
- *
- */
+/* . */
 UndoableCommand::UndoableCommand(QString type, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
@@ -221,9 +203,7 @@ UndoableCommand::UndoableCommand(QString type, View* v, QUndoCommand* parent) : 
     fromCenter = gview->center();
 }
 
-/**
- *
- */
+/* . */
 bool
 UndoableCommand::mergeWith(const QUndoCommand* newest)
 {
@@ -237,9 +217,7 @@ UndoableCommand::mergeWith(const QUndoCommand* newest)
     return true;
 }
 
-/**
- *
- */
+/* . */
 UndoableCommand::UndoableCommand(const QPointF beforePoint, const QPointF afterPoint, QString  text, Geometry* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
@@ -250,9 +228,7 @@ UndoableCommand::UndoableCommand(const QPointF beforePoint, const QPointF afterP
     after = afterPoint;
 }
 
-/**
- *
- */
+/* . */
 UndoableCommand::UndoableCommand(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QString  text, Geometry* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
@@ -262,9 +238,7 @@ UndoableCommand::UndoableCommand(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2,
     mirrorLine = QLineF(x1, y1, x2, y2);
 }
 
-/**
- *
- */
+/* . */
 void
 UndoableCommand::mirror()
 {

@@ -591,10 +591,7 @@ CmdPromptInput::checkSelection()
     }
 }
 
-/* checkCursorPosition
- * @param oldpos
- * @param newpos
- */
+/* checkCursorPosition */
 void
 CmdPromptInput::checkCursorPosition(int oldpos, int newpos)
 {
@@ -605,9 +602,7 @@ CmdPromptInput::checkCursorPosition(int oldpos, int newpos)
         this->setCursorPosition(prefix.length());
 }
 
-/* changeFormatting
- * @param formats
- */
+/* changeFormatting */
 void
 CmdPromptInput::changeFormatting(std::vector<QTextLayout::FormatRange> formats)
 {

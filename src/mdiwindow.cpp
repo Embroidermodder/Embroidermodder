@@ -79,15 +79,10 @@ MdiWindow::~MdiWindow()
 bool
 MdiWindow::saveFile(String fileName)
 {
-    SaveObject saveObj(gscene, this);
-    return saveObj.save(QString::fromStdString(fileName));
+    return save_current_file(fileName);
 }
 
-/**
- * @brief MdiWindow::loadFile
- * @param fileName
- * @return
- */
+/* Load file to this subwindow. */
 bool
 MdiWindow::loadFile(String fileName)
 {
@@ -312,9 +307,7 @@ MdiWindow::loadFile(String fileName)
     return fileWasLoaded;
 }
 
-/**
- * @brief MdiWindow::print
- */
+/* Print this subwindow. */
 void MdiWindow::print()
 {
     QPrintDialog dialog(&printer, this);
@@ -338,14 +331,13 @@ void MdiWindow::print()
 }
 
 
-/**
- * @brief MdiWindow::saveBMC
+/* Save BMC
  *
- * \todo Save a Brother PEL image (An 8bpp, 130x113 pixel monochromatic? bitmap image) Why 8bpp when only 1bpp is needed?
+ * TODO: Save a Brother PEL image (An 8bpp, 130x113 pixel monochromatic? bitmap image) Why 8bpp when only 1bpp is needed?
  *
- * \todo Should BMC be limited to ~32KB or is this a mix up with Bitmap Cache?
- * \todo Is there/should there be other embedded data in the bitmap besides the image itself?
- * \note Can save a Singer BMC image (An 8bpp, 130x113 pixel colored bitmap image)
+ * TODO: Should BMC be limited to ~32KB or is this a mix up with Bitmap Cache?
+ * TODO: Is there/should there be other embedded data in the bitmap besides the image itself?
+ * NOTE: Can save a Singer BMC image (An 8bpp, 130x113 pixel colored bitmap image)
  */
 void MdiWindow::saveBMC()
 {
@@ -372,10 +364,7 @@ void MdiWindow::saveBMC()
     img.convertToFormat(QImage::Format_Indexed8, Qt::ThresholdDither|Qt::AvoidDither).save("test.bmc", "BMP");
 }
 
-/**
- * @brief MdiWindow::setCurrentFile
- * @param fileName
- */
+/* Set current file. */
 void
 MdiWindow::setCurrentFile(QString fileName)
 {
@@ -384,30 +373,21 @@ MdiWindow::setCurrentFile(QString fileName)
     setWindowTitle(getShortCurrentFile());
 }
 
-/**
- * @brief MdiWindow::getShortCurrentFile
- * @return
- */
+/* Get short current file. */
 QString
 MdiWindow::getShortCurrentFile()
 {
     return QFileInfo(curFile).fileName();
 }
 
-/**
- * @brief MdiWindow::fileExtension
- * @param fileName
- * @return
- */
+/* Get file extension from fileName. */
 QString
 fileExtension(String fileName)
 {
     return QFileInfo(QString::fromStdString(fileName)).suffix().toLower();
 }
 
-/**
- * @brief MdiWindow::closeEvent
- */
+/* Close event. */
 void
 MdiWindow::closeEvent(QCloseEvent* /*e*/)
 {
@@ -415,9 +395,7 @@ MdiWindow::closeEvent(QCloseEvent* /*e*/)
     emit sendCloseMdiWin(this);
 }
 
-/**
- * @brief MdiWindow::onWindowActivated
- */
+/* On window activated. */
 void
 MdiWindow::onWindowActivated()
 {
@@ -435,10 +413,7 @@ MdiWindow::onWindowActivated()
     prompt->setHistory(promptHistory);
 }
 
-/**
- * @brief MdiWindow::sizeHint
- * @return
- */
+/* SizeHint */
 QSize
 MdiWindow::sizeHint()
 {
@@ -446,159 +421,102 @@ MdiWindow::sizeHint()
     return QSize(450, 300);
 }
 
-/**
- * @brief MdiWindow::currentLayerChanged
- * @param layer
- */
+/* CurrentLayerChanged. */
 void
 MdiWindow::currentLayerChanged(QString layer)
 {
     curLayer = layer;
 }
 
-/**
- * @brief MdiWindow::currentColorChanged
- * @param color
- */
+/* currentColorChanged. */
 void MdiWindow::currentColorChanged(const QRgb& color)
 {
     curColor = color;
 }
 
-/**
- * @brief MdiWindow::currentLinetypeChanged
- * @param type
- */
-void MdiWindow::currentLinetypeChanged(QString  type)
+/* currentLinetypeChanged. */
+void MdiWindow::currentLinetypeChanged(QString type)
 {
     curLineType = type;
 }
 
-/**
- * @brief MdiWindow::currentLineweightChanged
- * @param weight
- */
+/* currentLineweightChanged */
 void
 MdiWindow::currentLineweightChanged(QString weight)
 {
     curLineWeight = weight;
 }
 
-/**
- * @brief 
- * 
- */
+/* . */
 void
 MdiWindow::updateColorLinetypeLineweight()
 {
 }
 
-/**
- * @brief 
- * 
- */
+/* Pass the delete pressed event to the gview. */
 void
 MdiWindow::deletePressed()
 {
     gview->deletePressed();
 }
 
-/**
- * @brief 
- * 
- */
+/* Pass the escape pressed event to the gview. */
 void
 MdiWindow::escapePressed()
 {
     gview->escapePressed();
 }
 
-/**
- * @brief 
- * 
- * @param val 
- */
+/* . */
 void
 MdiWindow::showViewScrollBars(bool val)
 {
     gview->showScrollBars(val);
 }
 
-/**
- * @brief 
- * 
- * @param color 
- */
+/* . */
 void
 MdiWindow::setViewCrossHairColor(QRgb color)
 {
     gview->setCrossHairColor(color);
 }
 
-/**
- * @brief 
- * 
- * @param color 
- */
+/* . */
 void
 MdiWindow::setViewBackgroundColor(QRgb color)
 {
     gview->setBackgroundColor(color);
 }
 
-/**
- * @brief 
- * 
- * @param colorL 
- * @param fillL 
- * @param colorR 
- * @param fillR 
- * @param alpha 
- */
+/* . */
 void
 MdiWindow::setViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
 {
     gview->setSelectBoxColors(colorL, fillL, colorR, fillR, alpha);
 }
 
-/**
- * @brief 
- * 
- * @param color 
- */
+/* . */
 void
 MdiWindow::setViewGridColor(QRgb color)
 {
     gview->setGridColor(color);
 }
 
-/**
- * @brief 
- * 
- * @param color 
- */
+/* . */
 void
 MdiWindow::setViewRulerColor(QRgb color)
 {
     gview->setRulerColor(color);
 }
 
-/**
- * @brief 
- * 
- * @param txt 
- */
+/* . */
 void
 MdiWindow::promptHistoryAppended(QString txt)
 {
     promptHistory.append("<br/>" + txt);
 }
 
-/**
- * @brief 
- * 
- * @param txt 
- */
+/* . */
 void
 MdiWindow::logPromptInput(QString txt)
 {
@@ -606,44 +524,44 @@ MdiWindow::logPromptInput(QString txt)
     promptInputNum = promptInputList.size();
 }
 
-/**
- * @brief 
- * 
- */
+/* . */
 void
 MdiWindow::promptInputPrevious()
 {
     promptInputPrevNext(true);
 }
 
-/**
- * @brief MdiWindow::promptInputNext
- */
+/* . */
 void
 MdiWindow::promptInputNext()
 {
     promptInputPrevNext(false);
 }
 
-/**
- * @brief MdiWindow::promptInputPrevNext
- * @param prev
- */
+/* promptInputPrevNext. */
 void
 MdiWindow::promptInputPrevNext(bool prev)
 {
     if (promptInputList.size() == 0) {
-        if (prev)
-            QMessageBox::critical(this, tr("Prompt Previous Error"), tr("The prompt input is empty! Please report this as a bug!"));
-        else
-            QMessageBox::critical(this, tr("Prompt Next Error"),     tr("The prompt input is empty! Please report this as a bug!"));
-        qDebug("The prompt input is empty! Please report this as a bug!");
+        if (prev) {
+            QMessageBox::critical(this,
+                tr("Prompt Previous Error"),
+                tr("The prompt input is empty! Please report this as a bug!"));
+        }
+        else {
+            QMessageBox::critical(this,
+                tr("Prompt Next Error"),
+                tr("The prompt input is empty! Please report this as a bug!"));
+        }
+        debug_message("The prompt input is empty! Please report this as a bug!");
     }
     else {
-        if (prev)
+        if (prev) {
             promptInputNum--;
-        else
+        }
+        else {
             promptInputNum++;
+        }
         int maxNum = promptInputList.size();
         if (promptInputNum < 0) {
             promptInputNum = 0;

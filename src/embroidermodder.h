@@ -11,160 +11,10 @@
  *
  *  Use Python's PEP7 style guide.
  *      https://peps.python.org/pep-0007/
- */
-
-/*
- * The only header for the GUI part: a good overview of this source code.
  *
- * ## Stuff for 2.0 alpha1
+ *  ------------------------------------------------------------
  *
- * WIP - Statistics from 1.0, needs histogram
- * WIP - Saving DST/PES/JEF (varga)
- * WIP - Saving CSV/SVG (rt) + CSV read/write UNKNOWN interpreted as COLOR bug
- *
- * ## Stuff for 2.0 alpha2
- *
- * \todo Notify user of data loss if not saving to an object format.
- * \todo Import Raster Image
- * \todo SNAP/ORTHO/POLAR
- * \todo Layer Manager + LayerSwitcher DockWidget
- * \todo Reading DXF
- *
- * ## Stuff for 2.0 alpha3
- *
- * \todo Writing DXF
-DONE - Up and Down keys cycle thru commands in the command prompt
- * \todo Amount of Thread & Machine Time Estimation (also allow customizable times for setup, color changes, manually trimming jump threads, etc...that way a realistic total time can be estimated)
- * \todo Otto Theme Icons - whatsthis icon doesn't scale well, needs redone
- * \todo embroidermodder2.ico 16 x 16 looks horrible
- *
- * ## Stuff for 2.0 alpha4
- *
- * WIP - CAD Command: Arc (rt)
- * \todo Load/Save Menu/Toolbars configurations into settings.ini
- * \todo automate changelog and write to a javascript file for the docs: git log --pretty=tformat:'<a href="https://github.com/Embroidermodder/Embroidermodder/commit/%H">%s</a>'
- *
- * ## Stuff for 2.0 beta1
- *
- * \todo Custom Filter Bug - doesn't save changes in some cases
- * \todo Cannot open file with # in name when opening multiple files (works fine when opening the single file)
- * \todo Closing Settings Dialog with the X in the window saves settings rather than discards them
-WIP - Advanced Printing
- * \todo Filling Algorithms (varga)
- * \todo Otto Theme Icons - beta (rt) - Units, Render, Selectors
- *
- * ## Stuff for 2.0 rc1
- *
- * \todo Review KDE4 Thumbnailer
- * \todo Documentation for libembroidery & formats
- * \todo HTML Help files
- * \todo Update language translations
- * \todo CAD Command review: line
- * \todo CAD Command review: circle
- * \todo CAD Command review: rectangle
- * \todo CAD Command review: polygon
- * \todo CAD Command review: polyline
- * \todo CAD Command review: point
- * \todo CAD Command review: ellipse
- * \todo CAD Command review: arc
- * \todo CAD Command review: distance
- * \todo CAD Command review: locatepoint
- * \todo CAD Command review: move
- * \todo CAD Command review: rgb
- * \todo CAD Command review: rotate
- * \todo CAD Command review: scale
- * \todo CAD Command review: singlelinetext
- * \todo CAD Command review: star
- * \todo Clean up all compiler warning messages, right now theres plenty :P
- *
- * ## Stuff for 2.0 release
- *
- * \todo tar.gz archive
- * \todo zip archive
- * \todo Debian Package (rt)
- * \todo NSIS Installer (rt)
- * \todo Mac Bundle?
- * \todo press release
- *
- * Stuff for 2.x/Ideas:
- *
- * \todo libembroidery.mk for MXE project (refer to qt submodule packages for qmake based building. Also refer to plibc.mk for example of how write an update macro for github.)
- * \todo libembroidery safeguard for all writers - check if the last stitch is an END stitch. If not, add an end stitch in the writer and modify the header data if necessary.
- * \todo Cut/Copy - Allow Post-selection
- * \todo CAD Command: Array
- * \todo CAD Command: Offset
- * \todo CAD Command: Extend
- * \todo CAD Command: Trim
- * \todo CAD Command: BreakAtPoint
- * \todo CAD Command: Break2Points
- * \todo CAD Command: Fillet
- * \todo CAD Command: Chamfer
- * \todo CAD Command: Split
- * \todo CAD Command: Area
- * \todo CAD Command: Time
- * \todo CAD Command: PickAdd
- * \todo CAD Command: Product
- * \todo CAD Command: Program
- * \todo CAD Command: ZoomFactor
- * \todo CAD Command: GripHot
- * \todo CAD Command: GripColor & GripCool
- * \todo CAD Command: GripSize
- * \todo CAD Command: Highlight
- * \todo CAD Command: Units
- * \todo CAD Command: Grid
- * \todo CAD Command: Find
- * \todo CAD Command: Divide
- * \todo CAD Command: ZoomWindow (Move out of view.cpp)
- * \todo Command: Web (Generates Spiderweb patterns)
- * \todo Command: Guilloche (Generates Guilloche patterns)
- * \todo Command: Celtic Knots
- * \todo Command: Knotted Wreath
- * \todo Lego Mindstorms NXT/EV3 ports and/or commands.
- * \todo native function that flashes the command prompt to get users attention when using the prompt is required for a command.
- * \todo libembroidery-composer like app that combines multiple files into one.
- * \todo Settings Dialog, it would be nice to have it notify you when switching tabs that a setting has been changed. Adding an Apply button is what would make sense for this to happen. 
- * \todo Keyboard Zooming/Panning
- * \todo G-Code format?
- * \todo 3D Raised Embroidery
- * \todo Gradient Filling Algorithms
- * \todo Stitching Simulation
- * \todo RPM packages?
- * \todo Reports?
- * \todo Record and Playback Commands
- * \todo Settings option for reversing zoom scrolling direction
- * \todo Qt GUI for libembroidery-convert
- * \todo EPS format? Look at using Ghostscript as an optional add-on to libembroidery...
- * \todo optional compile option for including LGPL/GPL libs etc... with warning to user about license requirements.
- * \todo Realistic Visualization - Bump Mapping/OpenGL/Gradients?
- * \todo Stippling Fill
- * \todo User Designed Custom Fill
- * \todo Honeycomb Fill
- * \todo Hilburt Curve Fill
- * \todo Sierpinski Triangle fill
- * \todo Circle Grid Fill
- * \todo Spiral Fill
- * \todo Offset Fill
- * \todo Brick Fill
- * \todo Trim jumps over a certain length.
- * \todo FAQ about setting high number of jumps for more controlled trimming.
- * \todo Minimum stitch length option. (Many machines also have this option too)
- * \todo Add 'Design Details' functionality to libembroidery-convert
- * \todo Add 'Batch convert many to one format' functionality to libembroidery-convert
- * \todo EmbroideryFLOSS - Color picker that displays catalog numbers and names.
- * \todo emscripten/javascript port of libembroidery
- *
- * ## Stuff for Arduino:
- *
- * \todo Fix emb-outline files
- * \todo Fix thread-color files
- * \todo Logging of Last Stitch Location to External USB Storage(commonly available and easily replaced) ...wait until TRE is available to avoid rework
- * \todo inotool.org - seems like the logical solution for Nightly/CI builds
- * \todo Smoothieboard experiments
- *
- * ## libembroidery-tests
- *
- * \todo looping test that reads 10 times while running valgrind. See embPattern_loadExternalColorFile() Arduino leak note for more info.
- *
+ *  The only header for the GUI part: a good overview of this source code.
  */
 
 #ifndef __EMBROIDERMODDER_UTILITY_H__
@@ -223,7 +73,6 @@ typedef struct Node_ {
 } Node;
 
 typedef String (*Command)(String);
-typedef std::vector<Node> NodeList;
 typedef std::unordered_map<String, Node> Dictionary;
 
 /* Global variables
@@ -278,7 +127,7 @@ void add_polyline(QPainterPath p, String rubberMode);
 String read_string_setting(toml_table_t *table, const char *key);
 StringList tokenize(String str, const char delim);
 String convert_args_to_type(String label, StringList args,
-    const char *args_template, NodeList a);
+    const char *args_template, std::vector<Node> a);
 
 View *activeView(void);
 QGraphicsScene* activeScene();
@@ -333,6 +182,8 @@ EmbReal get_real(Dictionary d, String key);
 String get_str(Dictionary d, String key);
 QString get_qstr(Dictionary d, String key);
 StringList get_str_list(Dictionary d, String key);
+
+bool save_current_file(String fileName);
 
 /* The Geometry class
  *
@@ -536,49 +387,6 @@ public:
     void script_click(EmbVector v);
     void script_context(String str);
     void script_prompt(String str);
-};
-
-class SaveObject : public QObject
-{
-public:
-    SaveObject(QGraphicsScene* theScene, QObject* parent = 0);
-    ~SaveObject();
-
-    bool save(QString fileName);
-
-    void addArc(EmbPattern* pattern, QGraphicsItem* item);
-    void addBlock(EmbPattern* pattern, QGraphicsItem* item);
-    void addCircle(EmbPattern* pattern, QGraphicsItem* item);
-    void addDimAligned(EmbPattern* pattern, QGraphicsItem* item);
-    void addDimAngular(EmbPattern* pattern, QGraphicsItem* item);
-    void addDimArcLength(EmbPattern* pattern, QGraphicsItem* item);
-    void addDimDiameter(EmbPattern* pattern, QGraphicsItem* item);
-    void addDimLeader(EmbPattern* pattern, QGraphicsItem* item);
-    void addDimLinear(EmbPattern* pattern, QGraphicsItem* item);
-    void addDimOrdinate(EmbPattern* pattern, QGraphicsItem* item);
-    void addDimRadius(EmbPattern* pattern, QGraphicsItem* item);
-    void addEllipse(EmbPattern* pattern, QGraphicsItem* item);
-    void addEllipseArc(EmbPattern* pattern, QGraphicsItem* item);
-    void addGrid(EmbPattern* pattern, QGraphicsItem* item);
-    void addHatch(EmbPattern* pattern, QGraphicsItem* item);
-    void addImage(EmbPattern* pattern, QGraphicsItem* item);
-    void addInfiniteLine(EmbPattern* pattern, QGraphicsItem* item);
-    void addLine(EmbPattern* pattern, QGraphicsItem* item);
-    void addPath(EmbPattern* pattern, QGraphicsItem* item);
-    void addPoint(EmbPattern* pattern, QGraphicsItem* item);
-    void addPolygon(EmbPattern* pattern, QGraphicsItem* item);
-    void addPolyline(EmbPattern* pattern, QGraphicsItem* item);
-    void addRay(EmbPattern* pattern, QGraphicsItem* item);
-    void addRectangle(EmbPattern* pattern, QGraphicsItem* item);
-    void addSlot(EmbPattern* pattern, QGraphicsItem* item);
-    void addSpline(EmbPattern* pattern, QGraphicsItem* item);
-    void addTextMulti(EmbPattern* pattern, QGraphicsItem* item);
-    void addTextSingle(EmbPattern* pattern, QGraphicsItem* item);
-
-    QGraphicsScene* gscene;
-    int formatType;
-
-    void toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainterPath& objPath, QString  layer, const QColor& color, QString  lineType, QString  lineWeight);
 };
 
 /* The Command Prompt object. */
@@ -1439,6 +1247,9 @@ public:
 
     bool allowZoomIn();
     bool allowZoomOut();
+
+    int formatType;
+    EmbPattern *pattern;
 
     QColor gridColor;
     QPainterPath gridPath;
