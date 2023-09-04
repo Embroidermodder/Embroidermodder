@@ -2535,20 +2535,6 @@ read_configuration(void)
     return 1;
 }
 
-/* .
- */
-bool
-validRGB(int r, int g, int b)
-{
-    bool result = (r>=0);
-    result &= (r<256);
-    result &= (g>=0);
-    result &= (g<256);
-    result &= (b>=0);
-    result &= (b<256);
-    return result;
-}
-
 /* disable_action
  * variable
  */

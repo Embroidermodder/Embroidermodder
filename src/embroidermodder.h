@@ -170,6 +170,8 @@ WIP - Advanced Printing
 #ifndef __EMBROIDERMODDER_UTILITY_H__
 #define __EMBROIDERMODDER_UTILITY_H__
 
+#include "data.h"
+
 /*
  * C/C++ Standard Libraries.
  */
@@ -196,15 +198,6 @@ WIP - Advanced Printing
 #include <QApplication>
 
 #include <QtPrintSupport>
-
-#define STRING_TYPE          0
-#define STRING_LIST_TYPE     1
-#define REAL_TYPE            2
-#define INT_TYPE             3
-#define BOOL_TYPE            4
-#define FUNCTION_TYPE        5
-#define VECTOR_TYPE          6
-#define UNKNOWN_TYPE         7
 
 class ImageWidget;
 class MdiArea;
@@ -233,92 +226,12 @@ typedef String (*Command)(String);
 typedef std::vector<Node> NodeList;
 typedef std::unordered_map<String, Node> Dictionary;
 
-//Values
-enum OBJ_TYPE_VALUES {
-    OBJ_TYPE_NULL =      0,
-    /*< NOTE: Allow this enum to evaluate false */
-    OBJ_TYPE_BASE = 100000,
-    /*< NOTE: Values >= 65536 ensure compatibility with qgraphicsitem_cast() */
-    OBJ_TYPE_ARC = 100001,
-    OBJ_TYPE_BLOCK = 100002,
-    /*< For the block type, that has to exist for SVG. */
-    OBJ_TYPE_CIRCLE = 100003,
-    OBJ_TYPE_DIMALIGNED = 100004,
-    /*< For the Aligned Dimension, that has to exist for DXF drawings. */
-    OBJ_TYPE_DIMANGULAR = 100005,
-    /*< For the Angular Dimension, that has to exist for DXF drawings. */
-    OBJ_TYPE_DIMARCLENGTH = 100006,
-    /*< For the Arc Length Dimension, that has to exist for DXF drawings. */
-    OBJ_TYPE_DIMDIAMETER = 100007,
-    OBJ_TYPE_DIMLEADER = 100008,
-    OBJ_TYPE_DIMLINEAR = 100009,
-    /*< For the Linear Dimension, that has to exist for DXF drawings. */
-    OBJ_TYPE_DIMORDINATE = 100010,
-    /*< For the Ordinate Dimension, that has to exist for DXF drawings. */
-    OBJ_TYPE_DIMRADIUS = 100011,
-    /*< For the Radial Dimension, that has to exist for DXF drawings. */
-    OBJ_TYPE_ELLIPSE = 100012,
-    OBJ_TYPE_ELLIPSEARC = 100013,
-    OBJ_TYPE_RUBBER = 100014,
-    OBJ_TYPE_GRID = 100015,
-    OBJ_TYPE_HATCH = 100016,
-    OBJ_TYPE_IMAGE = 100017,
-    OBJ_TYPE_INFINITELINE = 100018,
-    /*< For the Infinite Line object. Which should be removed from output as it exists
-            for drafting reasons. */
-    OBJ_TYPE_LINE = 100019,
-    OBJ_TYPE_PATH = 100020,
-    OBJ_TYPE_POINT = 100021,
-    OBJ_TYPE_POLYGON = 100022,
-    OBJ_TYPE_POLYLINE = 100023,
-    OBJ_TYPE_RAY = 100024,
-    /*< For the Ray object. */
-    OBJ_TYPE_RECTANGLE = 100025,
-    OBJ_TYPE_SLOT = 100026,
-    OBJ_TYPE_SPLINE = 100027,
-    OBJ_TYPE_TEXTMULTI = 100028,
-    OBJ_TYPE_TEXTSINGLE = 100029,
-    OBJ_TYPE_UNKNOWN = 100030
-};
-
-/**
- * Custom Data used in QGraphicsItems
- *
- *                    (     int, const QVariant)
- * I.E. object.setData(OBJ_TYPE, OBJ_TYPE_LINE);
- * I.E. object.setData(OBJ_LAYER, "OUTLINE");
- * I.E. object.setData(OBJ_COLOR, 123);
- * I.E. object.setData(OBJ_LTYPE, OBJ_LTYPE_CONT);
- *
- * Keys
- */
-enum OBJ_KEYS {
-    OBJ_TYPE = 0,
-    /*< value type - int: See OBJ_TYPE_VALUES */
-    OBJ_NAME = 1,
-    /*< value type - str: See OBJ_NAME_VALUES */
-    OBJ_LAYER = 2,
-    /*< value type - str: "USER", "DEFINED", "STRINGS", etc... */
-    OBJ_COLOR = 3,
-    /**
-     * value type - int: 0-255
-     * \todo Use color chart in formats/format-dxf.h for this
-     */
-    OBJ_LTYPE = 4,
-    /*< value type - int: See OBJ_LTYPE_VALUES */
-    OBJ_LWT = 5, //value type - int: 0-27
-    OBJ_RUBBER = 6  //value type - int: See OBJ_RUBBER_VALUES
-};
-
-static const EmbReal emb_constant_pi = 3.14159265358979323846;
-
 /* Global variables
  * ----------------
  */
 extern MdiArea* mdiArea;
 
-/**
- * @brief Settings System
+/* The Settings System
  *
  * Rather than pollute the global namespace, we collect together all the global
  * settings into a structure that stores them. This also allows us to create a
@@ -421,8 +334,7 @@ String get_str(Dictionary d, String key);
 QString get_qstr(Dictionary d, String key);
 StringList get_str_list(Dictionary d, String key);
 
-/**
- * @brief The Geometry class
+/* The Geometry class
  *
  * Combine all geometry objects into one class that uses the Type
  * flag to determine the behaviour of overlapping functions and
@@ -431,21 +343,6 @@ StringList get_str_list(Dictionary d, String key);
 class Geometry : public QGraphicsPathItem
 {
 public:
-    enum ArrowStyle {
-        NoArrow, //NOTE: Allow this enum to evaluate false
-        Open,
-        Closed,
-        Dot,
-        Box,
-        Tick
-    };
-
-    enum lineStyle {
-        NoLine, //NOTE: Allow this enum to evaluate false
-        Flared,
-        Fletching
-    };
-
     Dictionary properties;
 
     QPen objPen;
@@ -684,9 +581,7 @@ public:
     void toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainterPath& objPath, QString  layer, const QColor& color, QString  lineType, QString  lineWeight);
 };
 
-/**
- *
- */
+/* The Command Prompt object. */
 class CmdPromptInput : public QLineEdit
 {
     Q_OBJECT
@@ -764,9 +659,7 @@ private slots:
     void pasteClip();
 };
 
-/**
- * @brief The Command Prompt History class.
- */
+/* The Command Prompt History class. */
 class CmdPromptHistory : public QTextBrowser
 {
     Q_OBJECT
@@ -791,9 +684,7 @@ signals:
     void historyAppended(QString  txt);
 };
 
-/**
- * @brief .
- */
+/* . */
 class CmdPromptSplitter : public QSplitter
 {
     Q_OBJECT
@@ -811,9 +702,7 @@ signals:
     void moveResizeHistory(int y);
 };
 
-/**
- * @brief .
- */
+/* . */
 class CmdPromptHandle : public QSplitterHandle
 {
     Q_OBJECT
@@ -837,9 +726,7 @@ signals:
     void handleMoved(int y);
 };
 
-/**
- * @brief .
- */
+/* . */
 class CmdPrompt : public QWidget
 {
     Q_OBJECT
@@ -926,9 +813,7 @@ signals:
     void historyAppended(QString  txt);
 };
 
-/**
- * @brief .
- */
+/* . */
 class EmbDetailsDialog : public QDialog
 {
     Q_OBJECT
@@ -955,9 +840,7 @@ public:
     QRectF boundingRect;
 };
 
-/**
- * @brief .
- */
+/* The Image widget object. */
 class ImageWidget : public QWidget
 {
     Q_OBJECT
@@ -974,9 +857,7 @@ protected:
     void paintEvent(QPaintEvent* event);
 };
 
-/**
- * @brief .
- */
+/*  . */
 class LayerManager : public QDialog
 {
     Q_OBJECT
@@ -1203,9 +1084,7 @@ public slots:
     void promptInputNext();
 };
 
-/**
- *
- */
+/* . */
 class MdiArea : public QMdiArea
 {
     Q_OBJECT
@@ -1241,9 +1120,7 @@ protected:
     virtual void paintEvent(QPaintEvent* e);
 };
 
-/**
- *
- */
+/* . */
 class PreviewDialog : public QFileDialog
 {
     Q_OBJECT
@@ -1359,9 +1236,7 @@ protected:
     void paintEvent(QPaintEvent*);
 };
 
-/**
- *
- */
+/* . */
 class Settings_Dialog : public QDialog
 {
     Q_OBJECT
@@ -1465,9 +1340,7 @@ signals:
     void buttonQSnapClearAll(bool);
 };
 
-/**
- * .
- */
+/* . */
 class StatusBar : public QStatusBar
 {
     Q_OBJECT
@@ -1482,9 +1355,7 @@ public:
     void context_menu_event(QContextMenuEvent *event, QToolButton *button);
 };
 
-/**
- *
- */
+/* . */
 class UndoEditor : public QDockWidget
 {
     Q_OBJECT
@@ -1517,9 +1388,7 @@ public slots:
     void updateCleanIcon(bool opened);
 };
 
-/**
- *
- */
+/* . */
 class UndoableCommand : public QUndoCommand
 {
 public:
@@ -1555,9 +1424,7 @@ public:
     bool done;
 };
 
-/**
- *
- */
+/* . */
 class View : public QGraphicsView
 {
     Q_OBJECT

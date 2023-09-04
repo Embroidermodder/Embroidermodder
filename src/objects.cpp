@@ -915,7 +915,7 @@ Geometry::objectEndPoint2()
 void
 Geometry::updateLeader()
 {
-    int arrowStyle = Closed; //TODO: Make this customizable
+    int arrowStyle = ARROW_STYLE_CLOSED; //TODO: Make this customizable
     EmbReal arrowStyleAngle = 15.0; //TODO: Make this customizable
     EmbReal arrowStyleLength = 1.0; //TODO: Make this customizable
     EmbReal lineStyleAngle = 45.0; //TODO: Make this customizable
@@ -962,33 +962,41 @@ Geometry::updateLeader()
     //                \|                         \|
     //                 .(ap2)                     .(lp2)
 
-    if (arrowStyle == Open) {
+    switch (arrowStyle) {
+    case ARROW_STYLE_OPEN: {
         arrowStylePath = QPainterPath();
         arrowStylePath.moveTo(ap1);
         arrowStylePath.lineTo(ap0);
         arrowStylePath.lineTo(ap2);
         arrowStylePath.lineTo(ap0);
         arrowStylePath.lineTo(ap1);
+        break;
     }
-    else if (arrowStyle == Closed) {
+    case ARROW_STYLE_CLOSED: {
         arrowStylePath = QPainterPath();
         arrowStylePath.moveTo(ap1);
         arrowStylePath.lineTo(ap0);
         arrowStylePath.lineTo(ap2);
         arrowStylePath.lineTo(ap1);
+        break;
     }
-    else if (arrowStyle == Dot) {
+    case ARROW_STYLE_DOT: {
         arrowStylePath = QPainterPath();
         arrowStylePath.addEllipse(ap0, arrowStyleLength, arrowStyleLength);
+        break;
     }
-    else if (arrowStyle == Box) {
+    case ARROW_STYLE_BOX: {
         arrowStylePath = QPainterPath();
         EmbReal side = QLineF(ap1, ap2).length();
         QRectF ar0(0, 0, side, side);
         ar0.moveCenter(ap0);
         arrowStylePath.addRect(ar0);
+        break;
     }
-    else if (arrowStyle == Tick) {
+    case ARROW_STYLE_TICK:
+        break;
+    default:
+        break;
     }
 
     lineStylePath = QPainterPath();

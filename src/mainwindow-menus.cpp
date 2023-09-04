@@ -13,18 +13,9 @@
  *      https://peps.python.org/pep-0007/
  */
 
-/**
- * \file mainwindow-menus.cpp
- */
-
 #include "embroidermodder.h"
 
-/**
- * @brief create_menu
- * @param menu
- * @param def
- * @param topLevel
- */
+/* Create menu. */
 void
 create_menu(std::string menu, StringList def, bool topLevel)
 {
@@ -65,9 +56,7 @@ create_menu(std::string menu, StringList def, bool topLevel)
     }
 }
 
-/**
- * @brief MainWindow::createAllMenus
- */
+/* Create all menus. */
 void
 MainWindow::createAllMenus()
 {

@@ -581,9 +581,7 @@ CmdPromptInput::processInput()
     }
 }
 
-/**
- * @brief CmdPromptInput::checkSelection
- */
+/* CheckSelection */
 void
 CmdPromptInput::checkSelection()
 {
