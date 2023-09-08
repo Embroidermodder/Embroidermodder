@@ -14,4 +14,5 @@ cd $BUILD_DIR
 cp ../ZLIB-LICENSE.txt .
 cp -r ../src/* .
 cmake --build . &> build.log
+cat build.log
 cd ..
