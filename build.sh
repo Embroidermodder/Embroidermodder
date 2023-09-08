@@ -15,6 +15,7 @@ cmake -S . -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
 cd $BUILD_DIR
 cp ../ZLIB-LICENSE.txt .
 cp -r ../src/* .
-rm *.cpp *.h
-cmake --build . 2> build.log
+rm -f *.cpp *.h
+cmake --build . &> build.log
+cat build.log
 cd ..

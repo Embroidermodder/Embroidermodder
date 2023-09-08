@@ -17,7 +17,7 @@ To try out the software in alpha see our current
 [alpha pre-release](https://github.com/Embroidermodder/Embroidermodder/releases).
 
 Various sample embroidery design files can be found in
-the embroidermodder2/samples folder.
+the src/samples folder.
 
 Embroidermodder is developed by The Embroidermodder Team which is maintained as a list on the website under ["Credits"](http://www.libembroidery.org/credits).
 
@@ -28,7 +28,7 @@ If you use multiple operating systems, it's important to choose software that wo
 Embroidermodder 2 runs on Windows, Linux and Mac OS X. Let's not forget the [Raspberry
 Pi](http://www.raspberrypi.org).
 
-![features: platforms 1](embroidermodder2/images/features-platforms-1.png)
+![features: platforms 1](src/images/features-platforms-1.png)
 
 ### Realistic Rendering
 
@@ -39,15 +39,15 @@ pseudo ``3D'' realistic rendering helps achieve this.
 
 Realistic rendering sample \#1:
 
-![features real render 1](embroidermodder2/images/features-realrender-1.png)
+![features real render 1](src/images/features-realrender-1.png)
 
 Realistic rendering sample \#2:
 
-![features real render 2](embroidermodder2/images/features-realrender-2.png)
+![features real render 2](src/images/features-realrender-2.png)
 
 Realistic rendering sample \#3:
 
-![features real render 3](embroidermodder2/images/features-realrender-3.png)
+![features real render 3](src/images/features-realrender-3.png)
 
 Various grid types and auto-adjusting rulers
 
@@ -58,7 +58,7 @@ Use rectangular, circular or isometric grids to construct your masterpiece!
 
 Multiple grids and rulers in action:
 
-![features grid ruler](embroidermodder2/images/features-grid-ruler-1.png)
+![features grid ruler](src/images/features-grid-ruler-1.png)
 
 ### Many measurement tools
 
@@ -69,7 +69,7 @@ locate individual points or find distances between any 2 points anywhere in the 
 
 Take quick and accurate measurements:
 
-![features measure 1](embroidermodder2/images/features-measure-1.png)
+![features measure 1](src/images/features-measure-1.png)
 
 ### Add text to any design
 
@@ -80,7 +80,7 @@ with the property editor.
 
 Add text and adjust its properties quickly:
 
-![features text 1](embroidermodder2/images/features-text-1.png)
+![features text 1](src/images/features-text-1.png)
 
 ### Supports many formats
 
@@ -99,7 +99,7 @@ line utility which supports batch file conversion.
 
 There are a multitude of formats to choose from:
 
-![features formats](embroidermodder2/images/features-formats-1.png)
+![features formats](src/images/features-formats-1.png)
 
 ### Scripting API
 
@@ -110,13 +110,13 @@ the GUI can offer.
 
 A (no longer current) Embroidermodder 2 command excerpt:
 
-![scripting screenshot](embroidermodder2/images/features-scripting-1.png)
+![scripting screenshot](src/images/features-scripting-1.png)
 
 ## Building
 
-To build Embroidermodder 2 from source you will need at least:
-- [Embroidermodder 2](https://github.com/Embroidermodder/Embroidermodder)
-- [Qt](http://www.qt-project.org) (version >= 6.0).
+To build Embroidermodder 2 from source you will need at least
+[the Embroidermodder 2 source code itself](https://github.com/Embroidermodder/Embroidermodder), a build environment including [CMake](https://cmake.org) and [Qt](http://www.qt-project.org) (version >= 6.0). For advice on how to get these,
+see the following subsections.
 
 You will also need the git submodules, which can be collected by running these lines
 from the embroidermodder source directory:
@@ -131,15 +131,20 @@ Optionally, you may want to add:
 - [KDE](http://www.kde.org) for thumbnailer
 - [Valgrind](http://www.valgrind.org) for debugging
 
-Ubuntu repository packages:
+### Debian/Ubuntu repository packages
+
 The Qt, KDE and Valgrind build dependencies can be installed easily by
-opening a terminal and issuing this command:
+opening a terminal and issuing these commands:
 
 ```
-sudo apt-get install git build-essential qt4-dev-tools libqt4-opengl-dev kdelibs5-dev valgrind
+sudo apt-get update
+sudo apt-get install qt6-base-dev libqt6gui6 libqt6widgets6 libqt6printsupport6 libqt6core6 libgl-dev libglx-dev libopengl-dev
 ```
 
-Fedora repository packages:
+### Fedora repository packages
+
+_TODO: This is outdated advice._
+
 The Qt, KDE and Valgrind build dependencies can be installed easily
 by opening a terminal and issuing this command:
 
@@ -147,57 +152,68 @@ by opening a terminal and issuing this command:
 sudo yum install git gdb gcc-c++ qt-devel kdelibs-devel valgrind
 ```
 
-### CMake
+### Windows Advice
 
-The more capable build is the CMake one, which is what we use to make the installers as
-well.
+On Windows, we recommend doing the same as Debian/Ubuntu in [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) although other
+options like [Cygwin](https://www.cygwin.com/)
+and [MSYS2](https://www.msys2.org/) are available.
 
-To use it read the output of the helper script like this:
+Our behind-the-scenes
+Windows build uses Python to get the Qt libraries [like this](https://github.com/Embroidermodder/testing-site/blob/main/scripts/package_em2_msi.sh).
 
-```
-bash build.sh --help
-```
+If you want to do this some other way, like in an IDE, run these
+installers (not recommended):
 
-If you don't have bash, the following commands should build the software:
+* CMake: https://cmake.org/download/#latest
+* Qt: http://www.qt-project.org
+* Visual Studio Code: https://code.visualstudio.com/
+* Some version of MinGW for `gcc`:` https://www.mingw-w64.org/downloads/
+* Git Bash: https://gitforwindows.org/
+* A backend for CMake like Ninja: https://ninja-build.org/
+
+## Building
+
+On all systems with Bash, the following should work:
 
 ```sh
-mkdir build
+bash build.sh
+```
+
+If your system does not have bash, it may still run as sh.
+Failing that, try typing each line in in turn like this:
+
+```sh
+git submodule init
+git submodule update
+
+cmake -S . -B"build" -G"Unix Makefiles" -DCMAKE_BUILD_TYPE="Debug"
 cd build
-cmake ..
+cp ../ZLIB-LICENSE.txt .
+cp -r ../src/* .
 cmake --build .
-mv embroidermodder* ../embroidermodder2
+cat build.log
+cd ..
 ```
 
-or load the cmake build in Visual Studio Code.
+### Running the Development Version
 
-When building the thumbnailer do the same but in the appropriate subfolder.
-Libembroidery is now maintained as a repository unto itself.
+After building as above, run your own development copy with:
 
-When building for Windows:
-If you are using Qt/Mingw, substitute mingw32-make for make.
-If you are using Qt/MSVC, substitute nmake for make.
-You may need to add the directory where those executables are located to your system path.
-It is recommended that when targeting Windows, that you should omit the -j switch completely,
-otherwise build errors may occur unless you are building an individual pro file.
-
-## Install/Uninstall
-
-To install, build one of the installers.
-
-On Windows, install WIX and then run cpack with
-
-```
-./build.sh --package
+```sh
+cd build
+./embroidermodder2
 ```
 
-Then double click the `.msi` file in the `build/build` subdirectory.
+### Troubleshooting
 
-On Debian, the same command will build the `.deb` package which you can then
-install using the aptitude package manager like this:
+If you have no luck with the above advice and still want to
+run the development alpha, try reading the `build.log` in your
+`build/` folder like this:
 
+```sh
+cat build/build.log
 ```
-./build.sh --package
-dpkg -i build/build/embroidermodder*.deb
-```
 
-to uninstall you can remove it using the name of the package.
+If, after googling keywords from the errors you're still stuck
+post and issue on GitHub here: https://github.com/Embroidermodder/Embroidermodder/issues and supply the `build.log` file. If something
+comes up a lot then we can add advice here.
