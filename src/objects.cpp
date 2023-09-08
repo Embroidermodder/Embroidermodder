@@ -21,7 +21,7 @@
 
 /**
  * @brief mouse_snap_point
- * @param points
+ * points
  * @return
  */
 QPointF
@@ -40,8 +40,8 @@ closest_point(QPointF position, std::vector<QPointF> points)
 
 /**
  * @brief fourier_series
- * @param arg
- * @param terms
+ * arg
+ * terms
  */
 EmbReal
 fourier_series(EmbReal arg, std::vector<EmbReal> terms)
@@ -55,8 +55,8 @@ fourier_series(EmbReal arg, std::vector<EmbReal> terms)
 
 /**
  * @brief add_polyline
- * @param p
- * @param rubberMode
+ * p
+ * rubberMode
  */
 void
 add_polyline(QPainterPath p, String rubberMode)
@@ -83,10 +83,10 @@ add_polyline(QPainterPath p, String rubberMode)
 /**
  * @brief Construct a new Geometry:: Geometry object
  * 
- * @param arc 
- * @param rgb 
- * @param lineType 
- * @param parent 
+ * arc 
+ * rgb 
+ * lineType 
+ * parent 
  */
 Geometry::Geometry(EmbArc arc, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
@@ -98,10 +98,10 @@ Geometry::Geometry(EmbArc arc, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* p
 /**
  * @brief Construct a new Geometry:: Geometry object
  * 
- * @param circle 
- * @param rgb 
- * @param lineType 
- * @param parent 
+ * circle 
+ * rgb 
+ * lineType 
+ * parent 
  */
 Geometry::Geometry(EmbCircle circle, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
@@ -113,10 +113,10 @@ Geometry::Geometry(EmbCircle circle, QRgb rgb, Qt::PenStyle lineType, QGraphicsI
 /**
  * @brief Construct a new Geometry:: Geometry object
  * 
- * @param ellipse 
- * @param rgb 
- * @param lineType 
- * @param parent 
+ * ellipse 
+ * rgb 
+ * lineType 
+ * parent 
  */
 Geometry::Geometry(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
@@ -129,11 +129,11 @@ Geometry::Geometry(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType, QGraphic
 /**
  * @brief Construct a new Geometry:: Geometry object
  * 
- * @param line 
- * @param Type_ 
- * @param rgb 
- * @param lineType 
- * @param parent 
+ * line 
+ * Type_ 
+ * rgb 
+ * lineType 
+ * parent 
  */
 Geometry::Geometry(EmbLine line, int Type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
@@ -146,10 +146,10 @@ Geometry::Geometry(EmbLine line, int Type_, QRgb rgb, Qt::PenStyle lineType, QGr
 /**
  * @brief Construct a new Geometry:: Geometry object
  * 
- * @param vector 
- * @param rgb 
- * @param lineType 
- * @param parent 
+ * vector 
+ * rgb 
+ * lineType 
+ * parent 
  */
 Geometry::Geometry(EmbVector vector, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
@@ -161,11 +161,11 @@ Geometry::Geometry(EmbVector vector, QRgb rgb, Qt::PenStyle lineType, QGraphicsI
 /**
  * @brief Construct a new Geometry:: Geometry object
  * 
- * @param p 
- * @param Type_ 
- * @param rgb 
- * @param lineType 
- * @param parent 
+ * p 
+ * Type_ 
+ * rgb 
+ * lineType 
+ * parent 
  *
  * For PATH, POLYLINE and POLYGON, set the Type_ variable to one of these.
  */
@@ -180,10 +180,10 @@ Geometry::Geometry(QPainterPath p, int Type_, QRgb rgb, Qt::PenStyle lineType, Q
 /**
  * @brief Construct a new Geometry object
  * 
- * @param rect 
- * @param rgb 
- * @param lineType 
- * @param parent 
+ * rect 
+ * rgb 
+ * lineType 
+ * parent 
  */
 Geometry::Geometry(EmbRect rect, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
@@ -195,11 +195,11 @@ Geometry::Geometry(EmbRect rect, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem*
 /**
  * @brief Construct a new Geometry object.
  * 
- * @param str 
- * @param v 
- * @param rgb 
- * @param lineType 
- * @param parent 
+ * str 
+ * v 
+ * rgb 
+ * lineType 
+ * parent 
  */
 Geometry::Geometry(QString str, EmbVector v, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
@@ -233,9 +233,9 @@ Geometry::init(void)
 
 /**
  * @brief Geometry::init
- * @param arc
- * @param rgb
- * @param lineType
+ * arc
+ * rgb
+ * lineType
  *
  * WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
  * WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
@@ -261,9 +261,9 @@ Geometry::init_arc(EmbArc arc, QRgb rgb, Qt::PenStyle lineType)
 
 /**
  * @brief Geometry::init_circle
- * @param circle
- * @param rgb
- * @param lineType
+ * circle
+ * rgb
+ * lineType
  *
  * WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
  * WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
@@ -290,9 +290,9 @@ Geometry::init_circle(EmbCircle circle, QRgb rgb, Qt::PenStyle lineType)
 
 /**
  * @brief Geometry::init_ellipse
- * @param ellipse
- * @param rgb
- * @param lineType
+ * ellipse
+ * rgb
+ * lineType
  *
  * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
  * and the item is double clicked, the scene will erratically move the item while zooming.
@@ -319,9 +319,9 @@ Geometry::init_ellipse(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType)
 
 /**
  * @brief Geometry::init_line
- * @param ellipse
- * @param rgb
- * @param lineType
+ * ellipse
+ * rgb
+ * lineType
  *
  * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
  * and the item is double clicked, the scene will erratically move the item while zooming.
@@ -374,9 +374,9 @@ Geometry::init_line(EmbLine line, QRgb rgb, Qt::PenStyle lineType)
 
 /**
  * @brief Geometry::init_line
- * @param ellipse
- * @param rgb
- * @param lineType
+ * ellipse
+ * rgb
+ * lineType
  *
  * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
  * and the item is double clicked, the scene will erratically move the item while zooming.
@@ -402,9 +402,9 @@ Geometry::init_point(EmbVector position, QRgb rgb, Qt::PenStyle lineType)
 
 /**
  * @brief Geometry::init_line
- * @param ellipse
- * @param rgb
- * @param lineType
+ * ellipse
+ * rgb
+ * lineType
  *
  * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
  * and the item is double clicked, the scene will erratically move the item while zooming.
@@ -453,9 +453,9 @@ Geometry::init_path(QPainterPath p, QRgb rgb, Qt::PenStyle lineType)
 
 /**
  * @brief Geometry::init_line
- * @param ellipse
- * @param rgb
- * @param lineType
+ * ellipse
+ * rgb
+ * lineType
  *
  * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
  * and the item is double clicked, the scene will erratically move the item while zooming.
@@ -479,9 +479,9 @@ void Geometry::init_rect(EmbRect rect, QRgb rgb, Qt::PenStyle lineType)
 
 /**
  * @brief Geometry::init_line
- * @param ellipse
- * @param rgb
- * @param lineType
+ * ellipse
+ * rgb
+ * lineType
  *
  * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
  * and the item is double clicked, the scene will erratically move the item while zooming.
@@ -512,8 +512,8 @@ Geometry::init_text_single(QString str, EmbVector v, QRgb rgb, Qt::PenStyle line
 
 /**
  * @brief Geometry::Geometry
- * @param *obj
- * @param *parent
+ * *obj
+ * *parent
  */
 Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
@@ -714,7 +714,7 @@ Geometry::~Geometry()
 
 /**
  * @brief Geometry::setObjectLineWeight
- * @param lineWeight
+ * lineWeight
  */
 void
 Geometry::setObjectLineWeight(String lineWeight)
@@ -743,7 +743,7 @@ Geometry::setObjectLineWeight(String lineWeight)
 
 /**
  * @brief Geometry::objectRubberPoint
- * @param key
+ * key
  * @return
  */
 QPointF
@@ -762,7 +762,7 @@ Geometry::objectRubberPoint(QString  key)
 
 /**
  * @brief Geometry::objectRubberText
- * @param key
+ * key
  * @return
  */
 QString
@@ -786,11 +786,8 @@ Geometry::boundingRect()
     return path().boundingRect();
 }
 
-/**
- * @brief Geometry::drawRubberLine
- * @param rubLine
- * @param painter
- * @param colorFromScene
+/* Geometry::drawRubberLine
+ * rubLine, painter, colorFromScene
  */
 void
 Geometry::drawRubberLine(const QLineF& rubLine, QPainter* painter, const char* colorFromScene)
@@ -809,10 +806,8 @@ Geometry::drawRubberLine(const QLineF& rubLine, QPainter* painter, const char* c
     painter->setPen(objPen);
 }
 
-/**
- * @brief Geometry::realRender
- * @param painter
- * @param renderPath
+/* Geometry::realRender
+ * painter, renderPath
  */
 void
 Geometry::realRender(QPainter* painter, const QPainterPath& renderPath)
@@ -864,10 +859,8 @@ Geometry::realRender(QPainter* painter, const QPainterPath& renderPath)
     }
 }
 
-
-/**
- * @brief Geometry::mouseSnapPoint
- * @param mousePoint
+/* Geometry::mouseSnapPoint
+ * mousePoint
  * @return the closest snap point to the mouse point.
  */
 QPointF
@@ -876,10 +869,8 @@ Geometry::mouseSnapPoint(const QPointF& mousePoint)
     return closest_point(mousePoint, allGripPoints());
 }
 
-/**
- * @brief DimLeaderObject::setObjectEndPoint1
- * @param x1
- * @param y1
+/* Geometry::setObjectEndPoint1
+ * x1, y1
  */
 void
 Geometry::setObjectEndPoint1(EmbVector endPt1)
@@ -895,10 +886,9 @@ Geometry::setObjectEndPoint1(EmbVector endPt1)
     }
 }
 
-/**
- * @brief DimLeaderObject::setObjectEndPoint2
- * @param x2
- * @param y2
+/* Geometry::setObjectEndPoint2
+ * x2
+ * y2
  */
 void
 Geometry::setObjectEndPoint2(EmbVector endPt2)
@@ -914,20 +904,14 @@ Geometry::setObjectEndPoint2(EmbVector endPt2)
     }
 }
 
-/**
- * @brief DimLeaderObject::objectEndPoint1
- * @return
- */
+/* Geometry::objectEndPoint1 */
 QPointF
 Geometry::objectEndPoint1()
 {
     return scenePos();
 }
 
-/**
- * @brief Geometry::objectEndPoint2
- * @return
- */
+/* Geometry::objectEndPoint2 */
 QPointF
 Geometry::objectEndPoint2()
 {
@@ -940,9 +924,7 @@ Geometry::objectEndPoint2()
     return scenePos() + rotEnd;
 }
 
-/**
- * @brief DimLeaderObject::updateLeader
- */
+/* Geometry::updateLeader */
 void
 Geometry::updateLeader()
 {
@@ -1027,9 +1009,8 @@ Geometry::updateLeader()
     lineStylePath.lineTo(lp0);
 }
 
-/**
- * @brief DimLeaderObject::updateRubber
- * @param painter
+/* Geometry::updateRubber
+ * painter
  */
 void
 Geometry::updateRubber(QPainter* painter)
@@ -1512,29 +1493,28 @@ Geometry::updateRubber(QPainter* painter)
     }
 }
 
+/* . */
 EmbReal
 Geometry::objectRadius()
 {
     return rect().width()/2.0*scale();
 }
 
+/* . */
 EmbReal
 Geometry::objectDiameter()
 {
     return 2.0 * objectRadius() * scale();
 }
 
+/* . */
 EmbReal
 Geometry::objectCircumference()
 {
     return emb_constant_pi * objectDiameter();
 }
 
-/**
- * @brief 
- * 
- * @return QPointF 
- */
+/* QPointF. */
 QPointF
 Geometry::objectQuadrant0()
 {
@@ -1547,11 +1527,7 @@ Geometry::objectQuadrant0()
     return objectCenter() + QPointF(objectRadius(), 0);
 }
 
-/**
- * @brief 
- * 
- * @return QPointF 
- */
+/* QPointF. */
 QPointF
 Geometry::objectQuadrant90()
 {
@@ -1564,11 +1540,7 @@ Geometry::objectQuadrant90()
     return objectCenter() + QPointF(0,-objectRadius());
 }
 
-/**
- * @brief 
- * 
- * @return QPointF 
- */
+/* QPointF. */
 QPointF
 Geometry::objectQuadrant180()
 {
@@ -1582,11 +1554,7 @@ Geometry::objectQuadrant180()
     return objectCenter() + QPointF(-objectRadius(),0);
 }
 
-/**
- * @brief 
- * 
- * @return QPointF 
- */
+/* QPointF. */
 QPointF
 Geometry::objectQuadrant270()
 {
@@ -1600,76 +1568,77 @@ Geometry::objectQuadrant270()
     return objectCenter() + QPointF(0, objectRadius());
 }
 
-/**
- * @brief .
- * 
- * @return EmbReal 
- */
+/* EmbReal. */
 EmbReal
 Geometry::objectWidth()
 {
     return rect().width()*scale();
 }
 
-/**
- * @brief .
- * 
- * @return EmbReal 
- */
+/* EmbReal. */
 EmbReal
 Geometry::objectHeight()
 {
     return rect().height()*scale();
 }
 
+/* EmbReal. */
 EmbReal
 Geometry::objectRadiusMajor()
 {
     return std::max(rect().width(), rect().height())/2.0*scale();
 }
 
+/* EmbReal. */
 EmbReal
 Geometry::objectRadiusMinor()
 {
     return std::min(rect().width(), rect().height())/2.0*scale();
 }
 
+/* EmbReal. */
 EmbReal
 Geometry::objectDiameterMajor()
 {
     return std::max(rect().width(), rect().height())*scale();
 }
 
+/* EmbReal. */
 EmbReal
 Geometry::objectDiameterMinor()
 {
     return std::min(rect().width(), rect().height())*scale();
 }
 
+/* . */
 void
 Geometry::setObjectCenter(EmbVector center)
 {
     setPos(center.x, center.y);
 }
 
+/* . */
 void
 Geometry::setObjectCenterX(EmbReal centerX)
 {
     setX(centerX);
 }
 
+/* . */
 void
 Geometry::setObjectCenterY(EmbReal centerY)
 {
     setY(centerY);
 }
 
+/* . */
 QRectF
 Geometry::rect()
 {
     return path().boundingRect();
 }
 
+/* . */
 void
 Geometry::setRect(const QRectF& r)
 {
@@ -1678,6 +1647,7 @@ Geometry::setRect(const QRectF& r)
     setPath(p);
 }
 
+/* . */
 void
 Geometry::setRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h)
 {
@@ -1686,6 +1656,7 @@ Geometry::setRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h)
     setPath(p);
 }
 
+/* . */
 void
 Geometry::setLine(const QLineF& li)
 {
@@ -1696,6 +1667,7 @@ Geometry::setLine(const QLineF& li)
     objLine = li;
 }
 
+/* . */
 void
 Geometry::setLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 {
@@ -1706,9 +1678,7 @@ Geometry::setLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
     objLine.setLine(x1,y1,x2,y2);
 }
 
-/**
- * @brief DimLeaderObject::vulcanize
- */
+/* Geometry::vulcanize */
 void
 Geometry::vulcanize(void)
 {
@@ -1734,10 +1704,8 @@ Geometry::vulcanize(void)
     }
 }
 
-/**
- * @brief DimLeaderObject::gripEdit
- * @param before
- * @param after
+/* Geometry::gripEdit
+ * before, after
  */
 void
 Geometry::gripEdit(const QPointF& before, const QPointF& after)
@@ -1807,10 +1775,7 @@ Geometry::gripEdit(const QPointF& before, const QPointF& after)
     }
 }
 
-/**
- * @brief DimLeaderObject::objectAngle
- * @return
- */
+/* Geometry::objectAngle */
 EmbReal
 Geometry::objectAngle()
 {
@@ -1818,10 +1783,7 @@ Geometry::objectAngle()
     return std::fmod(angle, 360.0);
 }
 
-/**
- * @brief Geometry::objectSavePath
- * @return
- */
+/* Geometry::objectSavePath */
 QPainterPath
 Geometry::objectSavePath()
 {
@@ -1901,9 +1863,8 @@ Geometry::objectSavePath()
     return path;
 }
 
-/**
- * @brief Geometry::calculateArcData
- * @param arc
+/* Geometry::calculateArcData
+ * arc
  *
  * @todo convert this to update and make it Type sensitive.
  */
@@ -1925,9 +1886,8 @@ void Geometry::calculateArcData(EmbArc arc)
     setScale(1);
 }
 
-/**
- * @brief Geometry::updateArcRect
- * @param radius
+/* Geometry::updateArcRect
+ * radius
  */
 void
 Geometry::updateArcRect(EmbReal radius)
@@ -1939,9 +1899,8 @@ Geometry::updateArcRect(EmbReal radius)
     setRect(arcRect);
 }
 
-/**
- * @brief Geometry::setObjectRadius
- * @param radius
+/* Geometry::setObjectRadius
+ * radius
  */
 void
 Geometry::setObjectRadius(EmbReal radius)
@@ -1979,9 +1938,8 @@ Geometry::setObjectRadius(EmbReal radius)
     }
 }
 
-/**
- * @brief Geometry::setObjectStartAngle
- * @param angle
+/* Geometry::setObjectStartAngle
+ * angle
  */
 void
 Geometry::setObjectStartAngle(EmbReal angle)
@@ -1996,9 +1954,8 @@ Geometry::setObjectStartAngle(EmbReal angle)
     }
 }
 
-/**
- * @brief Geometry::setObjectEndAngle
- * @param angle
+/* Geometry::setObjectEndAngle
+ * angle
  */
 void
 Geometry::setObjectEndAngle(EmbReal angle)
@@ -2013,9 +1970,8 @@ Geometry::setObjectEndAngle(EmbReal angle)
     }
 }
 
-/**
- * @brief Geometry::setObjectStartPoint
- * @param point
+/* Geometry::setObjectStartPoint
+ * point
  */
 void
 Geometry::setObjectStartPoint(EmbVector point)
@@ -2034,9 +1990,8 @@ Geometry::setObjectStartPoint(EmbVector point)
     }
 }
 
-/**
- * @brief Geometry::setObjectMidPoint
- * @param point
+/* Geometry::setObjectMidPoint
+ * point
  */
 void
 Geometry::setObjectMidPoint(EmbVector point)
@@ -2055,10 +2010,7 @@ Geometry::setObjectMidPoint(EmbVector point)
     }
 }
 
-/**
- * @brief Geometry::setObjectEndPoint
- * @param point
- */
+/* Set object endPoint to point. */
 void
 Geometry::setObjectEndPoint(EmbVector point)
 {
@@ -2076,10 +2028,7 @@ Geometry::setObjectEndPoint(EmbVector point)
     }
 }
 
-/**
- * @brief Geometry::objectStartAngle
- * @return
- */
+/* ObjectStartAngle */
 EmbReal
 Geometry::objectStartAngle(void)
 {
@@ -2094,10 +2043,7 @@ Geometry::objectStartAngle(void)
     return 0.0f;
 }
 
-/**
- * @brief Geometry::objectEndAngle
- * @return
- */
+/* objectEndAngle */
 EmbReal
 Geometry::objectEndAngle(void)
 {
@@ -2112,10 +2058,7 @@ Geometry::objectEndAngle(void)
     return 0.0f;
 }
 
-/**
- * @brief
- * @return
- */
+/* . */
 EmbVector
 rotate_vector(EmbVector v, EmbReal alpha)
 {
@@ -2126,10 +2069,7 @@ rotate_vector(EmbVector v, EmbReal alpha)
     return rotv;
 }
 
-/**
- * @brief Geometry::objectStartPoint
- * @return
- */
+/* ObjectStartPoint */
 QPointF
 Geometry::objectStartPoint()
 {
@@ -2144,10 +2084,7 @@ Geometry::objectStartPoint()
     return scenePos() + rotv;
 }
 
-/**
- * @brief Geometry::objectMidPoint
- * @return
- */
+/* ObjectMidPoint */
 QPointF
 Geometry::objectMidPoint()
 {
@@ -2162,10 +2099,7 @@ Geometry::objectMidPoint()
     return scenePos() + rotv;
 }
 
-/**
- * @brief Geometry::objectEndPoint
- * @return
- */
+/* ObjectEndPoint */
 QPointF Geometry::objectEndPoint()
 {
     EmbReal rot = radians(rotation());
@@ -2179,10 +2113,7 @@ QPointF Geometry::objectEndPoint()
     return scenePos() + rotv;
 }
 
-/**
- * @brief Geometry::objectArea
- * @return
- */
+/* objectArea */
 EmbReal
 Geometry::objectArea()
 {
@@ -2201,10 +2132,7 @@ Geometry::objectArea()
     return std::fabs(objectWidth()*objectHeight());
 }
 
-/**
- * @brief Geometry::objectArcLength
- * @return
- */
+/* ObjectArcLength. */
 EmbReal
 Geometry::objectArcLength(void)
 {
@@ -2218,10 +2146,7 @@ Geometry::objectArcLength(void)
     return 0.0f;
 }
 
-/**
- * @brief Geometry::objectChord
- * @return
- */
+/* objectChord */
 EmbReal
 Geometry::objectChord(void)
 {
@@ -2237,10 +2162,7 @@ Geometry::objectChord(void)
     return 0.0f;
 }
 
-/**
- * @brief Geometry::objectIncludedAngle
- * @return
- */
+/* objectIncludedAngle */
 EmbReal
 Geometry::objectIncludedAngle(void)
 {
@@ -2263,10 +2185,7 @@ Geometry::objectIncludedAngle(void)
     return 0.0f;
 }
 
-/**
- * @brief Geometry::objectClockwise
- * @return
- */
+/* objectClockwise */
 bool
 Geometry::objectClockwise()
 {
@@ -2291,11 +2210,7 @@ Geometry::objectClockwise()
     return false;
 }
 
-/**
- * @brief Geometry::paint
- * @param painter
- * @param option
- */
+/* paint */
 void
 Geometry::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
@@ -2410,10 +2325,7 @@ Geometry::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidg
     }
 }
 
-/**
- * @brief Geometry::setObjectDiameter
- * @param diameter
- */
+/* Set object diameter. */
 void
 Geometry::setObjectDiameter(EmbReal diameter)
 {
@@ -2425,10 +2337,7 @@ Geometry::setObjectDiameter(EmbReal diameter)
     updatePath();
 }
 
-/**
- * @brief Geometry::setObjectArea
- * @param area
- */
+/* SetObjectArea. */
 void
 Geometry::setObjectArea(EmbReal area)
 {
@@ -2436,10 +2345,7 @@ Geometry::setObjectArea(EmbReal area)
     setObjectRadius(radius);
 }
 
-/**
- * @brief Geometry::setObjectCircumference
- * @param circumference
- */
+/* SetObjectCircumference. */
 void
 Geometry::setObjectCircumference(EmbReal circumference)
 {
@@ -2447,9 +2353,7 @@ Geometry::setObjectCircumference(EmbReal circumference)
     setObjectDiameter(diameter);
 }
 
-/**
- * \brief .
- */
+/* . */
 void
 Geometry::setObjectSize(EmbReal width, EmbReal height)
 {
@@ -2460,12 +2364,14 @@ Geometry::setObjectSize(EmbReal width, EmbReal height)
     setRect(elRect);
 }
 
+/* . */
 void
 Geometry::setObjectRadiusMajor(EmbReal radius)
 {
     setObjectDiameterMajor(radius*2.0);
 }
 
+/* . */
 void
 Geometry::setObjectRadiusMinor(EmbReal radius)
 {
@@ -2536,9 +2442,7 @@ Geometry::ImageObject::init(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb
 }
 */
 
-/**
- * \brief .
- */
+/* . */
 void
 Geometry::setObjectRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h)
 {
@@ -2547,11 +2451,7 @@ Geometry::setObjectRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h)
     updatePath();
 }
 
-/**
- * \brief .
- *
- * \return The top left corner location as a QPointF.
- */
+/* The top left corner location as a QPointF. */
 QPointF
 Geometry::objectTopLeft()
 {
@@ -2563,11 +2463,7 @@ Geometry::objectTopLeft()
     return scenePos() + to_QPointF(ptlRot);
 }
  
-/**
- * @brief 
- * 
- * @return QPointF 
- */
+/* QPointF. */
 QPointF
 Geometry::objectTopRight()
 {
@@ -2579,11 +2475,7 @@ Geometry::objectTopRight()
     return (scenePos() + QPointF(ptrRot.x, ptrRot.y));
 }
 
-/**
- * @brief 
- * 
- * @return QPointF 
- */
+/* QPointF. */
 QPointF
 Geometry::objectBottomLeft()
 {
@@ -2595,11 +2487,7 @@ Geometry::objectBottomLeft()
     return scenePos() + to_QPointF(pblRot);
 }
 
-/**
- * @brief 
- * 
- * @return QPointF 
- */
+/* QPointF */
 QPointF
 Geometry::objectBottomRight()
 {
@@ -2627,10 +2515,13 @@ PathObject::PathObject(PathObject* obj, QGraphicsItem* parent) : Geometry(OBJ_TY
         setScale(obj->scale());
     }
 }
+*/
 
-// WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-// WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
-// WARNING: All movement has to be handled explicitly by us, not by the scene.
+/* WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+ * WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+ * WARNING: All movement has to be handled explicitly by us, not by the scene.
+ */
+/*
 void
 Geometry::init(EmbVector position, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
 {
@@ -2651,19 +2542,14 @@ Geometry::init(EmbVector position, const QPainterPath& p, QRgb rgb, Qt::PenStyle
 }
 */
 
-/**
- * @brief PathObject::objectCopyPath
- * @return
- */
+/* objectCopyPath */
 QPainterPath
 Geometry::objectCopyPath()
 {
     return normalPath;
 }
 
-/**
- * @brief Geometry::updatePath
- *
+/* Update path.
  * For path and polyline set normalPath before calling.
  */
 void
@@ -2747,11 +2633,8 @@ Geometry::updatePath()
     }
 }
 
-/**
- * @brief Geometry::findIndex
- * @param point
- * @return
- */
+/* Find index of a point within a path.
+ * Return as an int, if not found return -1 */
 int
 Geometry::findIndex(const QPointF& point)
 {
@@ -2769,10 +2652,7 @@ Geometry::findIndex(const QPointF& point)
     return -1;
 }
 
-/**
- * @brief Geometry::updatePath
- * @param p
- */
+/* UpdatePath */
 void
 Geometry::updatePath(const QPainterPath& p)
 {
@@ -2782,10 +2662,7 @@ Geometry::updatePath(const QPainterPath& p)
     setPath(reversePath);
 }
 
-/**
- * @brief SaveObject::SaveObject
- * @param theScene
- * @param parent
+/* SaveObject, theScene, parent
  */
 SaveObject::SaveObject(QGraphicsScene* theScene, QObject* parent) : QObject(parent)
 {
@@ -2794,16 +2671,13 @@ SaveObject::SaveObject(QGraphicsScene* theScene, QObject* parent) : QObject(pare
     formatType = EMBFORMAT_UNSUPPORTED;
 }
 
-/**
- * @brief SaveObject::~SaveObject
- */
+/* Destroy SaveObject. */
 SaveObject::~SaveObject()
 {
     debug_message("SaveObject Destructor()");
 }
 
-/**
- * Returns whether the save to file process was successful.
+/* Returns whether the save to file process was successful.
  *
  * \todo Before saving to a stitch only format, Embroidermodder needs
  * to calculate the optimal path to minimize jump stitches. Also
@@ -2937,31 +2811,19 @@ SaveObject::save(QString fileName)
     return writeSuccessful;
 }
 
-/**
- * @brief SaveObject::addArc
- * @param pattern
- * @param item
- */
+/* Add arc "item" to "pattern". */
 void
 SaveObject::addArc(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
-/**
- * @brief SaveObject::addBlock
- * @param pattern
- * @param item
- */
+/* Add block "item" to "pattern". */
 void
 SaveObject::addBlock(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
-/**
- * @brief SaveObject::addCircle
- * @param pattern
- * @param item
- */
+/* Add circle "item" to "pattern". */
 void
 SaveObject::addCircle(EmbPattern* pattern, QGraphicsItem* item)
 {
@@ -2982,91 +2844,55 @@ SaveObject::addCircle(EmbPattern* pattern, QGraphicsItem* item)
     }
 }
 
-/**
- * @brief SaveObject::addDimAligned
- * @param pattern
- * @param item
- */
+/* Add aligned dimension "item" to "pattern". */
 void
 SaveObject::addDimAligned(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
-/**
- * @brief SaveObject::addDimAngular
- * @param pattern
- * @param item
- */
+/* Add angular dimension "item" to "pattern". */
 void
 SaveObject::addDimAngular(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
-/**
- * @brief SaveObject::addDimArcLength
- * @param pattern
- * @param item
- */
+/* Add arc length dimension "item" to "pattern". */
 void
 SaveObject::addDimArcLength(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
-/**
- * @brief SaveObject::addDimDiameter
- * @param pattern
- * @param item
- */
+/* Add diameter dimension "item" to "pattern". */
 void
 SaveObject::addDimDiameter(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
-/**
- * @brief SaveObject::addDimLeader
- * @param pattern
- * @param item
- */
+/* Add dimension leader "item" to "pattern". */
 void
 SaveObject::addDimLeader(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
-/**
- * @brief SaveObject::addDimLinear
- * @param pattern
- * @param item
- */
+/* Add linear dimension "item" to "pattern". */
 void
 SaveObject::addDimLinear(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
-/**
- * @brief SaveObject::addDimOrdinate
- * @param pattern
- * @param item
- */
+/* Add ordinate dimension "item" to "pattern". */
 void
 SaveObject::addDimOrdinate(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
-/**
- * @brief SaveObject::addDimRadius
- * @param pattern
- * @param item
- */
+/* Add radius dimension "item" to "pattern". */
 void
 SaveObject::addDimRadius(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
-/**
- * @brief SaveObject::addEllipse
- * @param pattern
- * @param item
- */
+/* Add ellipse "item" to "pattern". */
 void
 SaveObject::addEllipse(EmbPattern* pattern, QGraphicsItem* item)
 {
@@ -3088,61 +2914,37 @@ SaveObject::addEllipse(EmbPattern* pattern, QGraphicsItem* item)
     }
 }
 
-/**
- * @brief SaveObject::addEllipseArc
- * @param pattern
- * @param item
- */
+/* Add elliptical arc "item" to "pattern". */
 void
 SaveObject::addEllipseArc(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
-/**
- * @brief SaveObject::addGrid
- * @param pattern
- * @param item
- */
+/* Add grid "item" to "pattern". */
 void
 SaveObject::addGrid(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
-/**
- * @brief SaveObject::addHatch
- * @param pattern
- * @param item
- */
+/* Add hatch "item" to "pattern". */
 void
 SaveObject::addHatch(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
-/**
- * @brief SaveObject::addImage
- * @param pattern
- * @param item
- */
+/* Add image "item" to "pattern". */
 void
 SaveObject::addImage(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
-/**
- * @brief SaveObject::addInfiniteLine
- * @param pattern
- * @param item
- */
+/* Add infinite line "item" to "pattern". */
 void
 SaveObject::addInfiniteLine(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
-/**
- * @brief SaveObject::addLine
- * @param pattern
- * @param item
- */
+/* Add line "item" to "pattern". */
 void
 SaveObject::addLine(EmbPattern* pattern, QGraphicsItem* item)
 {
@@ -3160,10 +2962,7 @@ SaveObject::addLine(EmbPattern* pattern, QGraphicsItem* item)
     }
 }
 
-/**
- * @brief SaveObject::addPath
- * @param pattern
- * @param item
+/* Add path "item" to "pattern".
  *
  * \todo Reimplement addPolyline() using the libembroidery C API
  */
@@ -3202,11 +3001,7 @@ SaveObject::addPath(EmbPattern* pattern, QGraphicsItem* item)
     }
 }
 
-/**
- * @brief SaveObject::addPoint
- * @param pattern
- * @param item
- */
+/* Add point "item" to "pattern". */
 void
 SaveObject::addPoint(EmbPattern* pattern, QGraphicsItem* item)
 {
@@ -3224,11 +3019,7 @@ SaveObject::addPoint(EmbPattern* pattern, QGraphicsItem* item)
     }
 }
 
-/**
- * @brief SaveObject::addPolygon
- * @param pattern
- * @param item
- */
+/* Add polygon "item" to "pattern". */
 void
 SaveObject::addPolygon(EmbPattern* pattern, QGraphicsItem* item)
 {
@@ -3238,11 +3029,7 @@ SaveObject::addPolygon(EmbPattern* pattern, QGraphicsItem* item)
     }
 }
 
-/**
- * @brief SaveObject::addPolyline
- * @param pattern
- * @param item
- */
+/* Add polyline "item" to "pattern". */
 void
 SaveObject::addPolyline(EmbPattern* pattern, QGraphicsItem* item)
 {
@@ -3252,21 +3039,13 @@ SaveObject::addPolyline(EmbPattern* pattern, QGraphicsItem* item)
     }
 }
 
-/**
- * @brief SaveObject::addRay
- * @param pattern
- * @param item
- */
+/* Add ray "item" to "pattern". */
 void
 SaveObject::addRay(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
-/**
- * @brief SaveObject::addRectangle
- * @param pattern
- * @param item
- */
+/* Add rectangle "item" to "pattern". */
 void
 SaveObject::addRectangle(EmbPattern* pattern, QGraphicsItem* item)
 {
@@ -3288,42 +3067,27 @@ SaveObject::addRectangle(EmbPattern* pattern, QGraphicsItem* item)
     }
 }
 
-/**
- * @brief SaveObject::addSlot
- * @param pattern
- * @param item
- */
+/* Add slot "item" to "pattern". */
 void
 SaveObject::addSlot(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
-/**
- * @brief SaveObject::addSpline
- * @param pattern
- * @param item
- */
+/* Add spline "item" to "pattern". */
 void
 SaveObject::addSpline(EmbPattern* pattern, QGraphicsItem* item)
 {
     //TODO: abstract bezier into geom-bezier... cubicBezierMagic(P1, P2, P3, P4, 0.0, 1.0, tPoints);
 }
 
-/**
- * @brief SaveObject::addTextMulti
- * @param pattern
- * @param item
- */
+/* Add text multi "item" to "pattern". */
 void
 SaveObject::addTextMulti(EmbPattern* pattern, QGraphicsItem* item)
 {
     //TODO: saving polygons, polylines and paths must be stable before we go here.
 }
 
-/**
- * @brief SaveObject::addTextSingle
- * @param pattern
- * @param item
+/* Add text single "item" to "pattern".
  *
  * @todo saving polygons, polylines and paths must be stable before we go here.
  *
@@ -3348,13 +3112,13 @@ SaveObject::addTextSingle(EmbPattern* pattern, QGraphicsItem* item)
 
 /**
  * @brief SaveObject::toPolyline
- * @param pattern
- * @param objPos
- * @param objPath
- * @param layer
- * @param color
- * @param lineType
- * @param lineWeight
+ * pattern
+ * objPos
+ * objPath
+ * layer
+ * color
+ * lineType
+ * lineWeight
  *
  * @note This function should be used to interpret various object types and save them as polylines for stitchOnly formats.
  */
@@ -3386,9 +3150,7 @@ SaveObject::toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainte
     */
 }
 
-/**
- *
- */
+/* Set object text. */
 void Geometry::setObjectText(QString str)
 {
     objText = str;
@@ -3496,10 +3258,7 @@ void Geometry::setObjectText(QString str)
     setPath(gripPath);
 }
 
-/**
- * @brief 
- * 
- * @param font 
+/* font 
  */
 void
 Geometry::setObjectTextFont(QString font)
@@ -3508,10 +3267,8 @@ Geometry::setObjectTextFont(QString font)
     setObjectText(objText);
 }
 
-/**
- * @brief Verify the string is a valid option, otherwise default to "Left".
- * 
- * @param justify 
+/* Set the text justification.
+ * Verify the string is a valid option, otherwise default to "Left".
  */
 void
 Geometry::setObjectTextJustify(QString justify)
@@ -3527,10 +3284,7 @@ Geometry::setObjectTextJustify(QString justify)
     setObjectText(objText);
 }
 
-/**
- * @brief 
- * 
- * @param size 
+/* size 
  */
 void
 Geometry::setObjectTextSize(EmbReal size)
@@ -3539,14 +3293,11 @@ Geometry::setObjectTextSize(EmbReal size)
     setObjectText(objText);
 }
 
-/**
- * @brief 
- * 
- * @param bold 
- * @param italic 
- * @param under 
- * @param strike 
- * @param over 
+/* bold 
+ * italic 
+ * under 
+ * strike 
+ * over 
  */
 void
 Geometry::setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bool over)
@@ -3559,10 +3310,7 @@ Geometry::setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bo
     setObjectText(objText);
 }
 
-/**
- * @brief 
- * 
- * @param val 
+/* val 
  */
 void
 Geometry::setObjectTextBold(bool val)
@@ -3571,11 +3319,7 @@ Geometry::setObjectTextBold(bool val)
     setObjectText(objText);
 }
 
-/**
- * @brief 
- * 
- * @param val 
- */
+/* . */
 void
 Geometry::setObjectTextItalic(bool val)
 {
@@ -3583,11 +3327,7 @@ Geometry::setObjectTextItalic(bool val)
     setObjectText(objText);
 }
 
-/**
- * @brief 
- * 
- * @param val 
- */
+/* . */
 void
 Geometry::setObjectTextUnderline(bool val)
 {
@@ -3595,11 +3335,7 @@ Geometry::setObjectTextUnderline(bool val)
     setObjectText(objText);
 }
 
-/**
- * @brief 
- * 
- * @param val 
- */
+/* . */
 void
 Geometry::setObjectTextStrikeOut(bool val)
 {
@@ -3607,11 +3343,7 @@ Geometry::setObjectTextStrikeOut(bool val)
     setObjectText(objText);
 }
 
-/**
- * @brief 
- * 
- * @param val 
- */
+/* . */
 void
 Geometry::setObjectTextOverline(bool val)
 {
@@ -3619,11 +3351,7 @@ Geometry::setObjectTextOverline(bool val)
     setObjectText(objText);
 }
 
-/**
- * @brief 
- * 
- * @param val 
- */
+/* . */
 void
 Geometry::setObjectTextBackward(bool val)
 {
@@ -3631,11 +3359,7 @@ Geometry::setObjectTextBackward(bool val)
     setObjectText(objText);
 }
 
-/**
- * @brief 
- * 
- * @param val 
- */
+/* . */
 void
 Geometry::setObjectTextUpsideDown(bool val)
 {
@@ -3643,11 +3367,7 @@ Geometry::setObjectTextUpsideDown(bool val)
     setObjectText(objText);
 }
 
-/**
- * @brief 
- * 
- * @return std::vector<QPainterPath> 
- */
+/* Returns std::vector<QPainterPath>. */
 std::vector<QPainterPath>
 Geometry::subPathList()
 {
@@ -3696,10 +3416,7 @@ Geometry::subPathList()
     return pathList;
 }
 
-/**
- * @brief 
- * 
- */
+/* . */
 void
 Geometry::script_main(void)
 {
@@ -3733,11 +3450,7 @@ Geometry::script_main(void)
     run_script(script);
 }
 
-/**
- * @brief 
- * 
- * @param str 
- */
+/* . */
 void
 Geometry::script_context(String str)
 {
@@ -3768,11 +3481,7 @@ Geometry::script_click(EmbVector v)
 
 }
 
-/**
- * @brief 
- * 
- * @param str 
- */
+/* . */
 void
 Geometry::script_prompt(String str)
 {
@@ -3781,11 +3490,7 @@ Geometry::script_prompt(String str)
 
 #if 0
 
-/**
- * @brief 
- * 
- * @param v 
- */
+/* . */
 void
 Geometry::circle_click(EmbVector v)
 {
@@ -3903,7 +3608,7 @@ Geometry::circle_click(EmbVector v)
 /**
  * @brief 
  * 
- * @param str 
+ * str 
  */
 void
 Geometry::circle_context(String str)
@@ -3914,7 +3619,7 @@ Geometry::circle_context(String str)
 /**
  * @brief 
  * 
- * @param str 
+ * str 
  */
 void
 Geometry::circle_prompt(String str)
@@ -4086,7 +3791,7 @@ Geometry::circle_prompt(String str)
 /**
  * @brief .
  * 
- * @param v 
+ * v 
  */
 void
 Geometry::distance_click(EmbVector v)
@@ -4111,7 +3816,7 @@ Geometry::distance_click(EmbVector v)
 
 /**
  * @brief distance_context
- * @param args
+ * args
  * @return
  */
 void
@@ -4122,7 +3827,7 @@ Geometry::distance_context(String args)
 
 /**
  * @brief distance_prompt
- * @param args
+ * args
  * @return
  */
 void
@@ -4205,7 +3910,7 @@ Geometry::update_dolphin(int numPoints, EmbReal xScale, EmbReal yScale)
 /**
  * @brief 
  * 
- * @param v 
+ * v 
  */
 void
 Geometry::ellipse_click(EmbVector v)
@@ -4308,7 +4013,7 @@ Geometry::ellipse_click(EmbVector v)
 /**
  * @brief 
  * 
- * @param args 
+ * args 
  */
 void
 Geometry::ellipse_context(String args)
@@ -4658,8 +4363,8 @@ Geometry::locate_point_main(void)
 
 /**
  * @brief locate_point_click
- * @param properties
- * @param v
+ * properties
+ * v
  * @return
  */
 void
@@ -5217,7 +4922,7 @@ Geometry::polyline_main(void)
 /**
  * @brief .
  * 
- * @param v 
+ * v 
  */
 void
 Geometry::polyline_click(EmbVector v)
@@ -5322,7 +5027,7 @@ Geometry::quickleader_main(void)
 /**
  * @brief .
  * 
- * @param v 
+ * v 
  */
 void
 Geometry::quickleader_click(EmbVector v)
@@ -5349,7 +5054,7 @@ Geometry::quickleader_click(EmbVector v)
 /**
  * @brief .
  * 
- * @param str 
+ * str 
  */
 void
 Geometry::quickleader_context(String str)
@@ -5360,7 +5065,7 @@ Geometry::quickleader_context(String str)
 /**
  * @brief .
  * 
- * @param str 
+ * str 
  */
 void
 Geometry::quickleader_prompt(String str)
@@ -5417,7 +5122,7 @@ Geometry::rectangle_main(void)
 /**
  * @brief .
  * 
- * @param v 
+ * v 
  */
 void
 Geometry::rectangle_click(EmbVector v)
@@ -5444,7 +5149,7 @@ Geometry::rectangle_click(EmbVector v)
 /**
  * @brief .
  * 
- * @param str 
+ * str 
  */
 void
 Geometry::rectangle_context(String str)
@@ -5455,7 +5160,7 @@ Geometry::rectangle_context(String str)
 /**
  * @brief .
  * 
- * @param str 
+ * str 
  */
 void
 Geometry::rectangle_prompt(String str)
@@ -5515,7 +5220,7 @@ Geometry::rgb_main(void)
 /**
  * @brief .
  * 
- * @param v 
+ * v 
  */
 void
 Geometry::rgb_click(EmbVector v)
@@ -5526,7 +5231,7 @@ Geometry::rgb_click(EmbVector v)
 /**
  * @brief .
  * 
- * @param str 
+ * str 
  */
 void
 Geometry::rgb_context(String str)
@@ -5597,7 +5302,7 @@ Geometry::rgb_prompt(String str)
 /**
  * @brief .
  * 
- * @param args 
+ * args 
  */
 void
 Geometry::rotate_main(String args)
@@ -5628,7 +5333,7 @@ Geometry::rotate_main(String args)
 /**
  * @brief 
  * 
- * @param v 
+ * v 
  */
 void
 Geometry::rotate_click(EmbVector v)
@@ -5682,7 +5387,7 @@ Geometry::rotate_click(EmbVector v)
 /**
  * @brief 
  * 
- * @param str 
+ * str 
  */
 void
 Geometry::rotate_context(String str)
@@ -5693,7 +5398,7 @@ Geometry::rotate_context(String str)
 /**
  * @brief 
  * 
- * @param str 
+ * str 
  */
 void
 Geometry::rotate_prompt(String str)
@@ -6208,7 +5913,7 @@ Geometry::text_single_main(void)
 /**
  * @brief 
  * 
- * @param v 
+ * v 
  */
 void
 Geometry::text_single_click(EmbVector v)
@@ -6254,7 +5959,7 @@ Geometry::text_single_click(EmbVector v)
 /**
  * @brief 
  * 
- * @param str 
+ * str 
  */
 void
 Geometry::text_single_context(String str)
@@ -6265,7 +5970,7 @@ Geometry::text_single_context(String str)
 /**
  * @brief 
  * 
- * @param str 
+ * str 
  */
 void
 Geometry::text_single_prompt(String str)
