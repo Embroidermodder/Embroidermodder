@@ -84,6 +84,7 @@ add_executable(embroidermodder2
     ${SRC_DIR}/view.cpp
 
     ${SRC_DIR}/embroidermodder.h
+    ${SRC_DIR}/data.h
 
     ${CMAKE_SOURCE_DIR}/extern/tomlc99/toml.c
 )

@@ -13,17 +13,9 @@
  *      https://peps.python.org/pep-0007/
  */
 
-/**
- * \file layer-manager.cpp
- */
-
 #include "embroidermodder.h"
 
-/**
- * @brief LayerManager::LayerManager
- * \a mw
- * \a parent
- */
+/* Create the Layer Manager. */
 LayerManager::LayerManager(QWidget* parent) : QDialog(parent)
 {
     layerModel = new QStandardItemModel(0, 8, this);
@@ -72,25 +64,13 @@ LayerManager::LayerManager(QWidget* parent) : QDialog(parent)
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
-/**
- * @brief LayerManager::~LayerManager
- */
+/* Destroy the Layer Manager. */
 LayerManager::~LayerManager()
 {
     QApplication::restoreOverrideCursor();
 }
 
-/**
- * @brief LayerManager::addLayer
- * @param name
- * @param visible
- * @param frozen
- * @param zValue
- * @param color
- * @param lineType
- * @param lineWeight
- * @param print
- */
+/* Add layer to Layer Manager. */
 void
 LayerManager::addLayer(QString name, const bool visible, const bool frozen, const EmbReal zValue,
                        const QRgb color, QString lineType, QString lineWeight, const bool print)

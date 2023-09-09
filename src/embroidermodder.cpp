@@ -13,11 +13,34 @@
  *      https://peps.python.org/pep-0007/
  */
 
-/**
- * \file embroidermodder.cpp
- */
-
 #include "embroidermodder.h"
+
+#if defined(Q_OS_MAC)
+/* NOTE: On Mac, if the user drops a file on the app's Dock icon,
+ * or uses Open As, then this is how the app actually opens the file.
+ */
+class Application : public QApplication
+{
+public:
+    Application(int argc, char **argv) {}
+protected:
+    /* Override the standard file open event. */
+    virtual bool event(QEvent *event)
+    {
+        switch (event->type()) {
+        case QEvent::FileOpen:
+            if (_mainWin) {
+                String file = static_cast<QFileOpenEvent *>(event)->file().toStdString();
+                _mainWin->openFilesSelected({file});
+                return true;
+            }
+            // Fall through
+        default:
+            return QApplication::event(event);
+        }
+    }
+};
+#endif /* MacOS */
 
 static const char* _appVer_  = "v2.0.0-alpha3";
 static bool exitApp = false;
@@ -39,42 +62,8 @@ const char *usage_msg = ""
     "  -v, --version    Print the version number of embroidermodder and exit.\n"
     "\n";
 
-/**
- * @brief Application::Application
- * @param argc
- * @param argv
- */
-Application::Application(int argc, char **argv) : QApplication(argc, argv)
-{
-}
-
-/**
- * @brief Application::event
- * @param event
- * @return
- */
-bool Application::event(QEvent *event)
-{
-    switch (event->type()) {
-    case QEvent::FileOpen:
-        if (_mainWin) {
-            String file = static_cast<QFileOpenEvent *>(event)->file().toStdString();
-            _mainWin->openFilesSelected({file});
-            return true;
-        }
-        // Fall through
-    default:
-        return QApplication::event(event);
-    }
-}
-
-/**
- * @brief qMain
- * @param argc
- * @param argv
- * @return
- */
-int main(int argc, char* argv[])
+int
+main(int argc, char* argv[])
 {
     /* Load configuration and settings here. */
 
@@ -113,19 +102,18 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    MainWindow* mainWin = new MainWindow();
-#if defined(Q_OS_MAC)
-    app.setMainWin(mainWin);
-#endif
+    _mainWin = new MainWindow();
 
-    QObject::connect(&app, SIGNAL(lastWindowClosed()), mainWin, SLOT(quit()));
+    QObject::connect(&app, SIGNAL(lastWindowClosed()), _mainWin, SLOT(quit()));
 
-    mainWin->setWindowTitle("Embroidermodder " + app.applicationVersion());
-    mainWin->show();
+    _mainWin->setWindowTitle("Embroidermodder " + app.applicationVersion());
+    _mainWin->show();
 
-    //NOTE: If openFilesSelected() is called from within the mainWin constructor, slot commands wont work and the window menu will be screwed
+    /* NOTE: If openFilesSelected() is called from within the _mainWin
+     * constructor, slot commands wont work and the window menu will be screwed.
+     */
     if (filesToOpen.size() > 0) {
-        mainWin->openFilesSelected(filesToOpen);
+        _mainWin->openFilesSelected(filesToOpen);
     }
 
     return app.exec();

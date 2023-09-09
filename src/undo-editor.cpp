@@ -13,12 +13,9 @@
  *      https://peps.python.org/pep-0007/
  */
 
-/**
- * \file undo-editor.cpp
- */
-
 #include "embroidermodder.h"
 
+/* . */
 UndoEditor::UndoEditor(QString  iconDirectory, QWidget* widgetToFocus, QWidget* parent) : QDockWidget(parent)
 {
     iconDir = iconDirectory;
@@ -37,55 +34,70 @@ UndoEditor::UndoEditor(QString  iconDirectory, QWidget* widgetToFocus, QWidget* 
     undoView->setFocusProxy(widgetToFocus);
 }
 
+/* Destroy the undo editor, maintaining the stack. */
 UndoEditor::~UndoEditor()
 {
 }
 
-void UndoEditor::updateCleanIcon(bool opened)
+/* . */
+void
+UndoEditor::updateCleanIcon(bool opened)
 {
-    if (opened)
-    {
+    if (opened) {
         undoView->setEmptyLabel(tr("Open"));
         undoView->setCleanIcon(QIcon(iconDir + "/" + "open" + ".png"));
     }
-    else
-    {
+    else {
         undoView->setEmptyLabel(tr("New"));
         undoView->setCleanIcon(QIcon(iconDir + "/" + "new" + ".png"));
     }
 }
 
-void UndoEditor::addStack(QUndoStack* stack)
+/* . */
+void
+UndoEditor::addStack(QUndoStack* stack)
 {
     undoGroup->addStack(stack);
 }
 
-bool UndoEditor::canUndo()
+/* . */
+bool
+UndoEditor::canUndo()
 {
     return undoGroup->canUndo();
 }
 
-bool UndoEditor::canRedo()
+/* . */
+bool
+UndoEditor::canRedo()
 {
     return undoGroup->canRedo();
 }
 
-QString UndoEditor::undoText()
+/* . */
+QString
+UndoEditor::undoText()
 {
     return undoGroup->undoText();
 }
 
-QString UndoEditor::redoText()
+/* . */
+QString
+UndoEditor::redoText()
 {
     return undoGroup->redoText();
 }
 
-void UndoEditor::undo()
+/* . */
+void
+UndoEditor::undo()
 {
     undoGroup->undo();
 }
 
-void UndoEditor::redo()
+/* . */
+void
+UndoEditor::redo()
 {
     undoGroup->redo();
 }

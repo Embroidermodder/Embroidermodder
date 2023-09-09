@@ -13,19 +13,13 @@
  *      https://peps.python.org/pep-0007/
  */
 
-/**
- * \file view.cpp
- */
-
 #include "embroidermodder.h"
 
 #include <cassert>
 
 #include <QtOpenGL>
 
-/**
- * .
- */
+/* Create a View object. */
 View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
 {
     gscene = theScene;

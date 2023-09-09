@@ -13,11 +13,6 @@
  *      https://peps.python.org/pep-0007/
  */
 
-/**
- * \file property_editor.cpp
- *
- */
-
 #include "embroidermodder.h"
 
 // Used when checking if fields vary
@@ -115,9 +110,7 @@ load_group_box_data_from_table(String key)
     return group_box;
 }
 
-/**
- * .
- */
+/* Create a property editor object. */
 PropertyEditor::PropertyEditor(QString  iconDirectory, bool pickAddMode, QWidget* widgetToFocus, QWidget* parent) : QDockWidget(parent)
 {
     qDebug("Creating PropertyEditor...");
@@ -211,16 +204,12 @@ PropertyEditor::PropertyEditor(QString  iconDirectory, bool pickAddMode, QWidget
     this->installEventFilter(this);
 }
 
-/**
- * \todo document this
- */
+/* Destroy the property editor. */
 PropertyEditor::~PropertyEditor()
 {
 }
 
-/**
- * \todo document this
- */
+/* Event filter. */
 bool
 PropertyEditor::eventFilter(QObject *obj, QEvent *event)
 {
@@ -302,18 +291,14 @@ PropertyEditor::updatePickAddModeButton(bool pickAddMode)
     }
 }
 
-/**
- *
- */
+/* . */
 void
 PropertyEditor::togglePickAddMode()
 {
     emit pickAddModeToggled();
 }
 
-/**
- *
- */
+/* . */
 void
 PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
 {
@@ -353,9 +338,7 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
 
     int numTypes = typeSet.size();
 
-    //==================================================
-    // Populate the selection comboBox
-    //==================================================
+    /* Populate the selection comboBox. */
     if (numTypes > 1) {
         comboBoxSelected->addItem(translate_str("Varies") + " (" + QString().setNum(numAll) + ")");
         connect(comboBoxSelected, SIGNAL(currentIndexChanged(int)), this, SLOT(showOneType(int)));
@@ -374,8 +357,7 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
         comboBoxSelected->addItem(comboBoxStr, objType);
     }
 
-    // Load Data into the fields
-    //==================================================
+    /* Load Data into the fields. */
 
     //Clear fields first so if the selected data varies, the comparison is simple
     clearAllFields();
@@ -515,7 +497,7 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
         }
     }
 
-    // Only show fields if all objects are the same type
+    /* Only show fields if all objects are the same type. */
     if (numTypes == 1) {
         foreach(int objType, typeSet) {
             showGroups(objType);
@@ -523,13 +505,19 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
     }
 }
 
-void PropertyEditor::updateLineEditStrIfVaries(QLineEdit* lineEdit, QString  str)
+/* . */
+void
+PropertyEditor::updateLineEditStrIfVaries(QLineEdit* lineEdit, QString str)
 {
     fieldOldText = lineEdit->text();
     fieldNewText = str;
 
-    if     (fieldOldText.isEmpty())       lineEdit->setText(fieldNewText);
-    else if (fieldOldText != fieldNewText) lineEdit->setText(fieldVariesText);
+    if (fieldOldText.isEmpty()) {
+        lineEdit->setText(fieldNewText);
+    }
+    else if (fieldOldText != fieldNewText) {
+        lineEdit->setText(fieldVariesText);
+    }
 }
 
 void PropertyEditor::updateLineEditNumIfVaries(QLineEdit* lineEdit, EmbReal num, bool useAnglePrecision)
@@ -574,9 +562,7 @@ PropertyEditor::updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, QStri
     }
 }
 
-/**
- *
- */
+/* . */
 void
 PropertyEditor::updateComboBoxStrIfVaries(QComboBox* comboBox, QString str, StringList strList)
 {
@@ -597,9 +583,7 @@ PropertyEditor::updateComboBoxStrIfVaries(QComboBox* comboBox, QString str, Stri
     }
 }
 
-/**
- *
- */
+/* . */
 void PropertyEditor::updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, bool yesOrNoText)
 {
     fieldOldText = comboBox->currentText();
@@ -630,7 +614,9 @@ void PropertyEditor::updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, b
     }
 }
 
-void PropertyEditor::showGroups(int objType)
+/* . */
+void
+PropertyEditor::showGroups(int objType)
 {
     for (int i=0; i<(int)group_box_types.size(); i++) {
         if (group_box_types[i].second == objType) {
@@ -639,21 +625,17 @@ void PropertyEditor::showGroups(int objType)
     }
 }
 
-/**
- * .
- */
-void PropertyEditor::showOneType(int index)
+/* . */
+void
+PropertyEditor::showOneType(int index)
 {
     hideAllGroups();
     showGroups(comboBoxSelected->itemData(index).toInt());
 }
 
-/**
- *
- * \note General group will never be hidden.
- */
+/* NOTE: General group will never be hidden. */
 void
-PropertyEditor::hideAllGroups()
+PropertyEditor::hideAllGroups(void)
 {
     StringList group_box_list = config["group_box_list"].sl;
     int n_groupboxes = (int)group_box_list.size();
@@ -664,16 +646,9 @@ PropertyEditor::hideAllGroups()
     }
 }
 
-/**
- * .
- * \todo DimAligned
- * \todo DimAngular
- * \todo DimArcLength
- * \todo DimDiameter
- * \todo DimLeader
- * \todo DimLinear
- * \todo DimOrdinate
- * \todo DimRadius
+/*
+ * TODO: DimAligned, DimAngular, DimArcLength, DimDiameter,
+ *  DimLeader, DimLinear, DimOrdinate, DimRadius
  */
 void PropertyEditor::clearAllFields()
 {

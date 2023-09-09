@@ -13,18 +13,9 @@
  *      https://peps.python.org/pep-0007/
  */
 
-/**
- * \file mainwindow-toolbars.cpp
- */
-
 #include "embroidermodder.h"
 
-/**
- * @brief MainWindow::create_toolbar
- * @param toolbar
- * @param label
- * @param entries
- */
+/* Create toolbar. */
 void
 MainWindow::create_toolbar(std::string toolbar, std::string label, StringList entries)
 {
@@ -43,11 +34,7 @@ MainWindow::create_toolbar(std::string toolbar, std::string label, StringList en
         SLOT(floatingChangedToolBar(bool)));
 }
 
-/**
- * @brief MainWindow::create_icon
- * @param stub
- * @return
- */
+/* Create icon. */
 QIcon
 MainWindow::create_icon(QString stub)
 {
@@ -56,9 +43,7 @@ MainWindow::create_icon(QString stub)
     return QIcon(appDir + "/icons/" + icontheme + "/" + stub + ".png");
 }
 
-/**
- * @brief MainWindow::createAllToolbars
- */
+/* Create all toolbars. */
 void
 MainWindow::createAllToolbars()
 {

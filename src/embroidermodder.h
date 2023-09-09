@@ -11,167 +11,16 @@
  *
  *  Use Python's PEP7 style guide.
  *      https://peps.python.org/pep-0007/
- */
-
-/**
- * \file embroidermodder.h
- * The only header for the GUI part: a good overview of this source code.
  *
- * ## Stuff for 2.0 alpha1
+ *  ------------------------------------------------------------
  *
- * WIP - Statistics from 1.0, needs histogram
- * WIP - Saving DST/PES/JEF (varga)
- * WIP - Saving CSV/SVG (rt) + CSV read/write UNKNOWN interpreted as COLOR bug
- *
- * ## Stuff for 2.0 alpha2
- *
- * \todo Notify user of data loss if not saving to an object format.
- * \todo Import Raster Image
- * \todo SNAP/ORTHO/POLAR
- * \todo Layer Manager + LayerSwitcher DockWidget
- * \todo Reading DXF
- *
- * ## Stuff for 2.0 alpha3
- *
- * \todo Writing DXF
-DONE - Up and Down keys cycle thru commands in the command prompt
- * \todo Amount of Thread & Machine Time Estimation (also allow customizable times for setup, color changes, manually trimming jump threads, etc...that way a realistic total time can be estimated)
- * \todo Otto Theme Icons - whatsthis icon doesn't scale well, needs redone
- * \todo embroidermodder2.ico 16 x 16 looks horrible
- *
- * ## Stuff for 2.0 alpha4
- *
- * WIP - CAD Command: Arc (rt)
- * \todo Load/Save Menu/Toolbars configurations into settings.ini
- * \todo automate changelog and write to a javascript file for the docs: git log --pretty=tformat:'<a href="https://github.com/Embroidermodder/Embroidermodder/commit/%H">%s</a>'
- *
- * ## Stuff for 2.0 beta1
- *
- * \todo Custom Filter Bug - doesn't save changes in some cases
- * \todo Cannot open file with # in name when opening multiple files (works fine when opening the single file)
- * \todo Closing Settings Dialog with the X in the window saves settings rather than discards them
-WIP - Advanced Printing
- * \todo Filling Algorithms (varga)
- * \todo Otto Theme Icons - beta (rt) - Units, Render, Selectors
- *
- * ## Stuff for 2.0 rc1
- *
- * \todo QDoc Comments
- * \todo Review KDE4 Thumbnailer
- * \todo Documentation for libembroidery & formats
- * \todo HTML Help files
- * \todo Update language translations
- * \todo CAD Command review: line
- * \todo CAD Command review: circle
- * \todo CAD Command review: rectangle
- * \todo CAD Command review: polygon
- * \todo CAD Command review: polyline
- * \todo CAD Command review: point
- * \todo CAD Command review: ellipse
- * \todo CAD Command review: arc
- * \todo CAD Command review: distance
- * \todo CAD Command review: locatepoint
- * \todo CAD Command review: move
- * \todo CAD Command review: rgb
- * \todo CAD Command review: rotate
- * \todo CAD Command review: scale
- * \todo CAD Command review: singlelinetext
- * \todo CAD Command review: star
- * \todo Clean up all compiler warning messages, right now theres plenty :P
- *
- * ## Stuff for 2.0 release
- *
- * \todo tar.gz archive
- * \todo zip archive
- * \todo Debian Package (rt)
- * \todo NSIS Installer (rt)
- * \todo Mac Bundle?
- * \todo press release
- *
- * Stuff for 2.x/Ideas:
- *
- * \todo libembroidery.mk for MXE project (refer to qt submodule packages for qmake based building. Also refer to plibc.mk for example of how write an update macro for github.)
- * \todo libembroidery safeguard for all writers - check if the last stitch is an END stitch. If not, add an end stitch in the writer and modify the header data if necessary.
- * \todo Cut/Copy - Allow Post-selection
- * \todo CAD Command: Array
- * \todo CAD Command: Offset
- * \todo CAD Command: Extend
- * \todo CAD Command: Trim
- * \todo CAD Command: BreakAtPoint
- * \todo CAD Command: Break2Points
- * \todo CAD Command: Fillet
- * \todo CAD Command: Chamfer
- * \todo CAD Command: Split
- * \todo CAD Command: Area
- * \todo CAD Command: Time
- * \todo CAD Command: PickAdd
- * \todo CAD Command: Product
- * \todo CAD Command: Program
- * \todo CAD Command: ZoomFactor
- * \todo CAD Command: GripHot
- * \todo CAD Command: GripColor & GripCool
- * \todo CAD Command: GripSize
- * \todo CAD Command: Highlight
- * \todo CAD Command: Units
- * \todo CAD Command: Grid
- * \todo CAD Command: Find
- * \todo CAD Command: Divide
- * \todo CAD Command: ZoomWindow (Move out of view.cpp)
- * \todo Command: Web (Generates Spiderweb patterns)
- * \todo Command: Guilloche (Generates Guilloche patterns)
- * \todo Command: Celtic Knots
- * \todo Command: Knotted Wreath
- * \todo Lego Mindstorms NXT/EV3 ports and/or commands.
- * \todo native function that flashes the command prompt to get users attention when using the prompt is required for a command.
- * \todo libembroidery-composer like app that combines multiple files into one.
- * \todo Settings Dialog, it would be nice to have it notify you when switching tabs that a setting has been changed. Adding an Apply button is what would make sense for this to happen. 
- * \todo Keyboard Zooming/Panning
- * \todo G-Code format?
- * \todo 3D Raised Embroidery
- * \todo Gradient Filling Algorithms
- * \todo Stitching Simulation
- * \todo RPM packages?
- * \todo Reports?
- * \todo Record and Playback Commands
- * \todo Settings option for reversing zoom scrolling direction
- * \todo Qt GUI for libembroidery-convert
- * \todo EPS format? Look at using Ghostscript as an optional add-on to libembroidery...
- * \todo optional compile option for including LGPL/GPL libs etc... with warning to user about license requirements.
- * \todo Realistic Visualization - Bump Mapping/OpenGL/Gradients?
- * \todo Stippling Fill
- * \todo User Designed Custom Fill
- * \todo Honeycomb Fill
- * \todo Hilburt Curve Fill
- * \todo Sierpinski Triangle fill
- * \todo Circle Grid Fill
- * \todo Spiral Fill
- * \todo Offset Fill
- * \todo Brick Fill
- * \todo Trim jumps over a certain length.
- * \todo FAQ about setting high number of jumps for more controlled trimming.
- * \todo Minimum stitch length option. (Many machines also have this option too)
- * \todo Add 'Design Details' functionality to libembroidery-convert
- * \todo Add 'Batch convert many to one format' functionality to libembroidery-convert
- * \todo EmbroideryFLOSS - Color picker that displays catalog numbers and names.
- * \todo emscripten/javascript port of libembroidery
- *
- * ## Stuff for Arduino:
- *
- * \todo Fix emb-outline files
- * \todo Fix thread-color files
- * \todo Logging of Last Stitch Location to External USB Storage(commonly available and easily replaced) ...wait until TRE is available to avoid rework
- * \todo inotool.org - seems like the logical solution for Nightly/CI builds
- * \todo Smoothieboard experiments
- *
- *
- * ## libembroidery-tests
- *
- * \todo looping test that reads 10 times while running valgrind. See embPattern_loadExternalColorFile() Arduino leak note for more info.
- *
+ *  The only header for the GUI part: a good overview of this source code.
  */
 
 #ifndef __EMBROIDERMODDER_UTILITY_H__
 #define __EMBROIDERMODDER_UTILITY_H__
+
+#include "data.h"
 
 /*
  * C/C++ Standard Libraries.
@@ -200,15 +49,6 @@ WIP - Advanced Printing
 
 #include <QtPrintSupport>
 
-#define STRING_TYPE          0
-#define STRING_LIST_TYPE     1
-#define REAL_TYPE            2
-#define INT_TYPE             3
-#define BOOL_TYPE            4
-#define FUNCTION_TYPE        5
-#define VECTOR_TYPE          6
-#define UNKNOWN_TYPE         7
-
 class ImageWidget;
 class MdiArea;
 class MdiWindow;
@@ -233,95 +73,14 @@ typedef struct Node_ {
 } Node;
 
 typedef String (*Command)(String);
-typedef std::vector<Node> NodeList;
 typedef std::unordered_map<String, Node> Dictionary;
-
-//Values
-enum OBJ_TYPE_VALUES {
-    OBJ_TYPE_NULL =      0,
-    /*< NOTE: Allow this enum to evaluate false */
-    OBJ_TYPE_BASE = 100000,
-    /*< NOTE: Values >= 65536 ensure compatibility with qgraphicsitem_cast() */
-    OBJ_TYPE_ARC = 100001,
-    OBJ_TYPE_BLOCK = 100002,
-    /*< For the block type, that has to exist for SVG. */
-    OBJ_TYPE_CIRCLE = 100003,
-    OBJ_TYPE_DIMALIGNED = 100004,
-    /*< For the Aligned Dimension, that has to exist for DXF drawings. */
-    OBJ_TYPE_DIMANGULAR = 100005,
-    /*< For the Angular Dimension, that has to exist for DXF drawings. */
-    OBJ_TYPE_DIMARCLENGTH = 100006,
-    /*< For the Arc Length Dimension, that has to exist for DXF drawings. */
-    OBJ_TYPE_DIMDIAMETER = 100007,
-    OBJ_TYPE_DIMLEADER = 100008,
-    OBJ_TYPE_DIMLINEAR = 100009,
-    /*< For the Linear Dimension, that has to exist for DXF drawings. */
-    OBJ_TYPE_DIMORDINATE = 100010,
-    /*< For the Ordinate Dimension, that has to exist for DXF drawings. */
-    OBJ_TYPE_DIMRADIUS = 100011,
-    /*< For the Radial Dimension, that has to exist for DXF drawings. */
-    OBJ_TYPE_ELLIPSE = 100012,
-    OBJ_TYPE_ELLIPSEARC = 100013,
-    OBJ_TYPE_RUBBER = 100014,
-    OBJ_TYPE_GRID = 100015,
-    OBJ_TYPE_HATCH = 100016,
-    OBJ_TYPE_IMAGE = 100017,
-    OBJ_TYPE_INFINITELINE = 100018,
-    /*< For the Infinite Line object. Which should be removed from output as it exists
-            for drafting reasons. */
-    OBJ_TYPE_LINE = 100019,
-    OBJ_TYPE_PATH = 100020,
-    OBJ_TYPE_POINT = 100021,
-    OBJ_TYPE_POLYGON = 100022,
-    OBJ_TYPE_POLYLINE = 100023,
-    OBJ_TYPE_RAY = 100024,
-    /*< For the Ray object. */
-    OBJ_TYPE_RECTANGLE = 100025,
-    OBJ_TYPE_SLOT = 100026,
-    OBJ_TYPE_SPLINE = 100027,
-    OBJ_TYPE_TEXTMULTI = 100028,
-    OBJ_TYPE_TEXTSINGLE = 100029,
-    OBJ_TYPE_UNKNOWN = 100030
-};
-
-/**
- * Custom Data used in QGraphicsItems
- *
- *                    (     int, const QVariant)
- * I.E. object.setData(OBJ_TYPE, OBJ_TYPE_LINE);
- * I.E. object.setData(OBJ_LAYER, "OUTLINE");
- * I.E. object.setData(OBJ_COLOR, 123);
- * I.E. object.setData(OBJ_LTYPE, OBJ_LTYPE_CONT);
- *
- * Keys
- */
-enum OBJ_KEYS {
-    OBJ_TYPE = 0,
-    /*< value type - int: See OBJ_TYPE_VALUES */
-    OBJ_NAME = 1,
-    /*< value type - str: See OBJ_NAME_VALUES */
-    OBJ_LAYER = 2,
-    /*< value type - str: "USER", "DEFINED", "STRINGS", etc... */
-    OBJ_COLOR = 3,
-    /**
-     * value type - int: 0-255
-     * \todo Use color chart in formats/format-dxf.h for this
-     */
-    OBJ_LTYPE = 4,
-    /*< value type - int: See OBJ_LTYPE_VALUES */
-    OBJ_LWT = 5, //value type - int: 0-27
-    OBJ_RUBBER = 6  //value type - int: See OBJ_RUBBER_VALUES
-};
-
-static const EmbReal emb_constant_pi = 3.14159265358979323846;
 
 /* Global variables
  * ----------------
  */
 extern MdiArea* mdiArea;
 
-/**
- * @brief Settings System
+/* The Settings System
  *
  * Rather than pollute the global namespace, we collect together all the global
  * settings into a structure that stores them. This also allows us to create a
@@ -368,7 +127,7 @@ void add_polyline(QPainterPath p, String rubberMode);
 String read_string_setting(toml_table_t *table, const char *key);
 StringList tokenize(String str, const char delim);
 String convert_args_to_type(String label, StringList args,
-    const char *args_template, NodeList a);
+    const char *args_template, std::vector<Node> a);
 
 View *activeView(void);
 QGraphicsScene* activeScene();
@@ -424,8 +183,9 @@ String get_str(Dictionary d, String key);
 QString get_qstr(Dictionary d, String key);
 StringList get_str_list(Dictionary d, String key);
 
-/**
- * @brief The Geometry class
+bool save_current_file(String fileName);
+
+/* The Geometry class
  *
  * Combine all geometry objects into one class that uses the Type
  * flag to determine the behaviour of overlapping functions and
@@ -434,21 +194,6 @@ StringList get_str_list(Dictionary d, String key);
 class Geometry : public QGraphicsPathItem
 {
 public:
-    enum ArrowStyle {
-        NoArrow, //NOTE: Allow this enum to evaluate false
-        Open,
-        Closed,
-        Dot,
-        Box,
-        Tick
-    };
-
-    enum lineStyle {
-        NoLine, //NOTE: Allow this enum to evaluate false
-        Flared,
-        Fletching
-    };
-
     Dictionary properties;
 
     QPen objPen;
@@ -644,72 +389,7 @@ public:
     void script_prompt(String str);
 };
 
-/**
- *
- */
-class SaveObject : public QObject
-{
-    Q_OBJECT
-
-public:
-    SaveObject(QGraphicsScene* theScene, QObject* parent = 0);
-    ~SaveObject();
-
-    bool save(QString fileName);
-
-    void addArc(EmbPattern* pattern, QGraphicsItem* item);
-    void addBlock(EmbPattern* pattern, QGraphicsItem* item);
-    void addCircle(EmbPattern* pattern, QGraphicsItem* item);
-    void addDimAligned(EmbPattern* pattern, QGraphicsItem* item);
-    void addDimAngular(EmbPattern* pattern, QGraphicsItem* item);
-    void addDimArcLength(EmbPattern* pattern, QGraphicsItem* item);
-    void addDimDiameter(EmbPattern* pattern, QGraphicsItem* item);
-    void addDimLeader(EmbPattern* pattern, QGraphicsItem* item);
-    void addDimLinear(EmbPattern* pattern, QGraphicsItem* item);
-    void addDimOrdinate(EmbPattern* pattern, QGraphicsItem* item);
-    void addDimRadius(EmbPattern* pattern, QGraphicsItem* item);
-    void addEllipse(EmbPattern* pattern, QGraphicsItem* item);
-    void addEllipseArc(EmbPattern* pattern, QGraphicsItem* item);
-    void addGrid(EmbPattern* pattern, QGraphicsItem* item);
-    void addHatch(EmbPattern* pattern, QGraphicsItem* item);
-    void addImage(EmbPattern* pattern, QGraphicsItem* item);
-    void addInfiniteLine(EmbPattern* pattern, QGraphicsItem* item);
-    void addLine(EmbPattern* pattern, QGraphicsItem* item);
-    void addPath(EmbPattern* pattern, QGraphicsItem* item);
-    void addPoint(EmbPattern* pattern, QGraphicsItem* item);
-    void addPolygon(EmbPattern* pattern, QGraphicsItem* item);
-    void addPolyline(EmbPattern* pattern, QGraphicsItem* item);
-    void addRay(EmbPattern* pattern, QGraphicsItem* item);
-    void addRectangle(EmbPattern* pattern, QGraphicsItem* item);
-    void addSlot(EmbPattern* pattern, QGraphicsItem* item);
-    void addSpline(EmbPattern* pattern, QGraphicsItem* item);
-    void addTextMulti(EmbPattern* pattern, QGraphicsItem* item);
-    void addTextSingle(EmbPattern* pattern, QGraphicsItem* item);
-
-    QGraphicsScene* gscene;
-    int formatType;
-
-    void toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainterPath& objPath, QString  layer, const QColor& color, QString  lineType, QString  lineWeight);
-};
-
-/**
- *
- * \note On Mac, if the user drops a file on the app's Dock icon,
- * or uses Open As, then this is how the app actually opens the file.
- */
-class Application : public QApplication
-{
-    Q_OBJECT
-public:
-    Application(int argc, char **argv);
-protected:
-    virtual bool event(QEvent *e);
-};
-
-
-/**
- *
- */
+/* The Command Prompt object. */
 class CmdPromptInput : public QLineEdit
 {
     Q_OBJECT
@@ -787,9 +467,7 @@ private slots:
     void pasteClip();
 };
 
-/**
- * @brief The Command Prompt History class.
- */
+/* The Command Prompt History class. */
 class CmdPromptHistory : public QTextBrowser
 {
     Q_OBJECT
@@ -814,9 +492,7 @@ signals:
     void historyAppended(QString  txt);
 };
 
-/**
- * @brief .
- */
+/* . */
 class CmdPromptSplitter : public QSplitter
 {
     Q_OBJECT
@@ -834,9 +510,7 @@ signals:
     void moveResizeHistory(int y);
 };
 
-/**
- * @brief .
- */
+/* . */
 class CmdPromptHandle : public QSplitterHandle
 {
     Q_OBJECT
@@ -860,9 +534,7 @@ signals:
     void handleMoved(int y);
 };
 
-/**
- * @brief .
- */
+/* . */
 class CmdPrompt : public QWidget
 {
     Q_OBJECT
@@ -949,9 +621,7 @@ signals:
     void historyAppended(QString  txt);
 };
 
-/**
- * @brief .
- */
+/* . */
 class EmbDetailsDialog : public QDialog
 {
     Q_OBJECT
@@ -978,9 +648,7 @@ public:
     QRectF boundingRect;
 };
 
-/**
- * @brief .
- */
+/* The Image widget object. */
 class ImageWidget : public QWidget
 {
     Q_OBJECT
@@ -997,9 +665,7 @@ protected:
     void paintEvent(QPaintEvent* event);
 };
 
-/**
- * @brief .
- */
+/*  . */
 class LayerManager : public QDialog
 {
     Q_OBJECT
@@ -1017,9 +683,7 @@ public:
         QString lineWeight, const bool print);
 };
 
-/**
- * @brief The MainWindow class
- */
+/* The MainWindow class. */
 class MainWindow: public QMainWindow
 {
     Q_OBJECT
@@ -1228,9 +892,7 @@ public slots:
     void promptInputNext();
 };
 
-/**
- *
- */
+/* . */
 class MdiArea : public QMdiArea
 {
     Q_OBJECT
@@ -1266,9 +928,7 @@ protected:
     virtual void paintEvent(QPaintEvent* e);
 };
 
-/**
- *
- */
+/* . */
 class PreviewDialog : public QFileDialog
 {
     Q_OBJECT
@@ -1384,9 +1044,7 @@ protected:
     void paintEvent(QPaintEvent*);
 };
 
-/**
- *
- */
+/* . */
 class Settings_Dialog : public QDialog
 {
     Q_OBJECT
@@ -1490,9 +1148,7 @@ signals:
     void buttonQSnapClearAll(bool);
 };
 
-/**
- * .
- */
+/* . */
 class StatusBar : public QStatusBar
 {
     Q_OBJECT
@@ -1507,9 +1163,7 @@ public:
     void context_menu_event(QContextMenuEvent *event, QToolButton *button);
 };
 
-/**
- *
- */
+/* . */
 class UndoEditor : public QDockWidget
 {
     Q_OBJECT
@@ -1542,9 +1196,7 @@ public slots:
     void updateCleanIcon(bool opened);
 };
 
-/**
- *
- */
+/* . */
 class UndoableCommand : public QUndoCommand
 {
 public:
@@ -1580,9 +1232,7 @@ public:
     bool done;
 };
 
-/**
- *
- */
+/* . */
 class View : public QGraphicsView
 {
     Q_OBJECT
@@ -1597,6 +1247,9 @@ public:
 
     bool allowZoomIn();
     bool allowZoomOut();
+
+    int formatType;
+    EmbPattern *pattern;
 
     QColor gridColor;
     QPainterPath gridPath;

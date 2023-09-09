@@ -13,17 +13,9 @@
  *      https://peps.python.org/pep-0007/
  */
 
-/**
- * \file imagewidget.cpp
- */
-
 #include "embroidermodder.h"
 
-/**
- * @brief ImageWidget::ImageWidget
- * @param filename
- * @param parent
- */
+/* Create the image widget for filename. */
 ImageWidget::ImageWidget(QString filename, QWidget* parent) : QWidget(parent)
 {
     debug_message("ImageWidget Constructor");
@@ -38,11 +30,7 @@ ImageWidget::ImageWidget(QString filename, QWidget* parent) : QWidget(parent)
     this->show();
 }
 
-/**
- * @brief ImageWidget::load
- * @param fileName
- * @return
- */
+/* Load image to widget. */
 bool
 ImageWidget::load(QString fileName)
 {
@@ -50,11 +38,7 @@ ImageWidget::load(QString fileName)
     return true;
 }
 
-/**
- * @brief ImageWidget::save
- * @param fileName
- * @return
- */
+/* Save image from widget. */
 bool
 ImageWidget::save(QString fileName)
 {
@@ -62,17 +46,13 @@ ImageWidget::save(QString fileName)
     return true;
 }
 
-/**
- * @brief ImageWidget::~ImageWidget
- */
+/* Destroy image widget. */
 ImageWidget::~ImageWidget()
 {
     debug_message("ImageWidget Destructor");
 }
 
-/**
- * @brief ImageWidget::paintEvent
- */
+/* Paint the widget. */
 void
 ImageWidget::paintEvent(QPaintEvent*)
 {

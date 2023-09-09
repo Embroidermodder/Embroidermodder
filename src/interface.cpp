@@ -11,31 +11,27 @@
  *
  *  Use Python's PEP7 style guide.
  *      https://peps.python.org/pep-0007/
- */
- 
-/**
- * \file interface.cpp For wrappers to the Qt internals.
  *
- * To help reduce reliance on Qt, only the functions wrap the
- * Qt functions have a wrapper here. Ideally we could move some
- * of the Qt headers here.
+ *  ------------------------------------------------------------
+ *
+ *  interface.cpp
+ *  For wrappers to the Qt internals.
+ *
+ *  To help reduce reliance on Qt, only the functions wrap the
+ *  Qt functions have a wrapper here. Ideally we could move some
+ *  of the Qt headers here.
  */
 
 #include "embroidermodder.h"
-/**
- * .
- */
+
+/* Make the translation function global in scope. */
 QString
 translate_str(const char *str)
 {
     return _mainWin->tr(str);
 }
 
-/**
- * @brief set_node
- * @param node
- * @param value
- */
+/* Makes a node from a boolean value. */
 Node
 node_bool(bool value)
 {
@@ -45,11 +41,7 @@ node_bool(bool value)
     return node;
 }
 
-/**
- * @brief create_node
- * @param mode
- * @return
- */
+/* Makes a node from a 32-bit signed integer. */
 Node
 node_int(int32_t value)
 {
@@ -59,12 +51,7 @@ node_int(int32_t value)
     return node;
 }
 
-
-/**
- * @brief create_node
- * @param mode
- * @return
- */
+/* Makes a node from a 32-bit unsigned integer. */
 Node
 node_uint(uint32_t value)
 {
@@ -74,11 +61,7 @@ node_uint(uint32_t value)
     return node;
 }
 
-/**
- * @brief set_node
- * @param node
- * @param value
- */
+/* Makes a node from an EmbReal value. */
 Node
 node_real(EmbReal value)
 {
@@ -88,11 +71,7 @@ node_real(EmbReal value)
     return node;
 }
 
-/**
- * @brief set_node
- * @param node
- * @param value
- */
+/* Makes a node from a String value. */
 Node
 node_str(String value)
 {
@@ -102,11 +81,7 @@ node_str(String value)
     return node;
 }
 
-/**
- * @brief set_node
- * @param node
- * @param value
- */
+/* Makes a node from a QString value. */
 Node
 node_qstr(QString value)
 {
@@ -116,11 +91,7 @@ node_qstr(QString value)
     return node;
 }
 
-/**
- * @brief set_node
- * @param node
- * @param value
- */
+/* Makes a node from a StringList value. */
 Node
 node_str_list(StringList value)
 {
@@ -130,9 +101,7 @@ node_str_list(StringList value)
     return node;
 }
 
-/**
- * .
- */
+/* Get a boolean value from a Dictionary with the given key. */
 bool
 get_bool(Dictionary d, String key)
 {
@@ -149,9 +118,7 @@ get_bool(Dictionary d, String key)
     return true;
 }
 
-/**
- * .
- */
+/* Get a 32-bit signed integer value from a Dictionary with the given key. */
 int
 get_int(Dictionary d, String key)
 {
@@ -168,9 +135,7 @@ get_int(Dictionary d, String key)
     return 0;
 }
 
-/**
- * .
- */
+/* Get a 32-bit unsigned integer from a Dictionary with the given key. */
 uint32_t
 get_uint(Dictionary d, String key)
 {
@@ -277,9 +242,7 @@ tokenize(String str, const char delim)
     return list;
 }
 
-/*
- * \brief Convert \a a to a QPointF.
- */
+/* Convert an EmbVector to a QPointF. */
 QPointF
 to_QPointF(EmbVector a)
 {
@@ -287,9 +250,7 @@ to_QPointF(EmbVector a)
     return result;
 }
 
-/*
- * \brief Convert \a a to an EmbVector.
- */
+/* Convert a QPointF to an EmbVector. */
 EmbVector
 to_EmbVector(QPointF a)
 {
@@ -299,32 +260,21 @@ to_EmbVector(QPointF a)
     return v;
 }
 
-/**
- * @brief operator +
- *     Wrapper for embVector_add to use the syntax \a a + \a b.
- */
+/* Wrapper for embVector_add to use the syntax "a + b" for EmbVectors. */
 EmbVector
 operator+(EmbVector a, EmbVector b)
 {
     return embVector_add(a, b);
 }
 
-/**
- * @brief operator -
- *     Wrapper for embVector_subtract to use the syntax \a a - \a b.
- */
+/* Wrapper for embVector_subtract to use the syntax "a - b" for EmbVectors. */
 EmbVector
 operator-(EmbVector a, EmbVector b)
 {
     return embVector_subtract(a, b);
 }
 
-/**
- * @brief operator *
- * @param v
- * @param s
- * @return
- */
+/* Wrapper for embVector_multiply to use the syntax "v * s" for EmbVectors. */
 EmbVector
 operator*(EmbVector v, EmbReal s)
 {
@@ -356,11 +306,20 @@ degrees__(EmbReal radian)
     return (radian*180.0/emb_constant_pi);
 }
 
-/**
- * @brief to_vector
- * @param list
- * @return
- */
+/* Check that RBG values are in the range (0,255) inclusive. */
+unsigned char
+validRGB(int r, int g, int b)
+{
+    unsigned char result = (r>=0);
+    result &= (r<256);
+    result &= (g>=0);
+    result &= (g<256);
+    result &= (b>=0);
+    result &= (b<256);
+    return result;
+}
+
+/* Convert from QList to std::vector. */
 std::vector<QGraphicsItem*>
 to_vector(QList<QGraphicsItem*> list)
 {
@@ -371,11 +330,7 @@ to_vector(QList<QGraphicsItem*> list)
     return result;
 }
 
-/**
- * @brief to_qlist
- * @param list
- * @return
- */
+/* Convert from std::vector to QList. */
 QList<QGraphicsItem*>
 to_qlist(std::vector<QGraphicsItem*> list)
 {
@@ -386,19 +341,14 @@ to_qlist(std::vector<QGraphicsItem*> list)
     return result;
 }
 
-/**
- * @brief debug_message
- * @param msg
- */
+/* Debug message wrapper for qDebug. */
 void
 debug_message(std::string msg)
 {
     qDebug(msg.c_str());
 }
 
-/**
- * Utility function for add_to_path.
- */
+/* Utility function for add_to_path. */
 std::vector<float>
 get_n_reals(StringList list, int n, int *offset)
 {
@@ -410,9 +360,7 @@ get_n_reals(StringList list, int n, int *offset)
     return result;
 }
 
-/**
- * .
- */
+/* . */
 QPainterPath
 add_to_path(QPainterPath path, EmbVector scale, String command)
 {
@@ -443,13 +391,10 @@ add_to_path(QPainterPath path, EmbVector scale, String command)
     return path;
 }
 
-/**
- * @brief set_enabled
- * @param parent
- * @param key
- * @param enabled
+/* Set whether the of parent's object that has the name given by key
+ * is enabled.
  *
- * \todo error reporting.
+ * TODO: error reporting.
  */
 void
 set_enabled(QObject* parent, const char *key, bool enabled)
@@ -484,13 +429,10 @@ set_enabled(QObject* parent, const char *key, bool enabled)
     }
 }
 
-/**
- * @brief set_visibility
- * @param parent
- * @param key
- * @param visibility
+/* Set visibility of parent's object that has the name given by key to
+ * the boolean value in visibility.
  *
- * \todo error reporting.
+ * TODO: error reporting.
  */
 void
 set_visibility(QObject* parent, const char *key, bool visibility)
@@ -511,9 +453,7 @@ set_visibility(QObject* parent, const char *key, bool visibility)
     }
 }
 
-/**
- * .
- */
+/* . */
 void
 make_ui_element(Dictionary description)
 {
@@ -554,9 +494,7 @@ make_ui_element(Dictionary description)
     }
 }
 
-/**
- * .
- */
+/* . */
 QCheckBox *
 make_checkbox(QGroupBox *gb, String dictionary, const char *label, const char *icon, String key)
 {
@@ -581,8 +519,19 @@ make_checkbox(QGroupBox *gb, String dictionary, const char *label, const char *i
     return checkBox;
 }
 
-/**
- * .
+/* TODO: Make spinbox using this toml syntax:
+ *
+ *     [zoom_level_spinbox]
+ *     type = "double_spinbox"
+ *     object_name = "Zoom Level"
+ *     single_step = 0.1
+ *     lower_bound = -10
+ *     upper_bound = 10
+ *     key = "settings.zoom_level"
+ *
+ * The content (not including):
+ *
+ *     QDoubleSpinBox *sb = make_spinbox(gb, desc);
  */
 QDoubleSpinBox *
 make_spinbox(QGroupBox *gb, String dictionary,
