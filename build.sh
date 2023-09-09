@@ -15,9 +15,6 @@ cp ZLIB-LICENSE.txt $BUILD_DIR || exit 1
 
 cmake -S . -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE"  || exit 1
 cd $BUILD_DIR || exit 1
-cp ../ZLIB-LICENSE.txt . || exit 1
-cp -r ../src/* . || exit 1
-rm -f *.cpp *.h || exit 1
 cmake --build . &> build.log || exit 1
 cat build.log || exit 1
 cd .. || exit 1
