@@ -1,8 +1,5 @@
-Unless explicitly noted otherwise here, the source code is zlib licensed as follows:
+# License for Embroidermodder 2, libembroidery and the PET
 
-***************************************************************
-* Embroidermodder 2, libembroidery and all other related code *
-***************************************************************
 Copyright (c) 2011-2023 Embroidermodder, Jonathan Greig, Josh Varga and all other contributers
 
 This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.
@@ -14,8 +11,3 @@ Permission is granted to anyone to use this software for any purpose, including 
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution.
-
-************************************
-* Keith Pomakis' HashTable Library *
-************************************
-Released to the public domain.
