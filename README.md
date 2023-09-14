@@ -28,7 +28,7 @@ If you use multiple operating systems, it's important to choose software that wo
 Embroidermodder 2 runs on Windows, Linux and Mac OS X. Let's not forget the [Raspberry
 Pi](http://www.raspberrypi.org).
 
-![features: platforms 1](src/images/features-platforms-1.png)
+![features: platforms 1](assets/images/features-platforms-1.png)
 
 ### Realistic Rendering
 
@@ -39,15 +39,15 @@ pseudo ``3D'' realistic rendering helps achieve this.
 
 Realistic rendering sample \#1:
 
-![features real render 1](src/images/features-realrender-1.png)
+![features real render 1](assets/images/features-realrender-1.png)
 
 Realistic rendering sample \#2:
 
-![features real render 2](src/images/features-realrender-2.png)
+![features real render 2](assets/images/features-realrender-2.png)
 
 Realistic rendering sample \#3:
 
-![features real render 3](src/images/features-realrender-3.png)
+![features real render 3](assets/images/features-realrender-3.png)
 
 Various grid types and auto-adjusting rulers
 
@@ -58,7 +58,7 @@ Use rectangular, circular or isometric grids to construct your masterpiece!
 
 Multiple grids and rulers in action:
 
-![features grid ruler](src/images/features-grid-ruler-1.png)
+![features grid ruler](assets/images/features-grid-ruler-1.png)
 
 ### Many measurement tools
 
@@ -69,7 +69,7 @@ locate individual points or find distances between any 2 points anywhere in the 
 
 Take quick and accurate measurements:
 
-![features measure 1](src/images/features-measure-1.png)
+![features measure 1](assets/images/features-measure-1.png)
 
 ### Add text to any design
 
@@ -80,7 +80,7 @@ with the property editor.
 
 Add text and adjust its properties quickly:
 
-![features text 1](src/images/features-text-1.png)
+![features text 1](assets/images/features-text-1.png)
 
 ### Supports many formats
 
@@ -99,7 +99,7 @@ line utility which supports batch file conversion.
 
 There are a multitude of formats to choose from:
 
-![features formats](src/images/features-formats-1.png)
+![features formats](assets/images/features-formats-1.png)
 
 ### Scripting API
 
@@ -110,7 +110,7 @@ the GUI can offer.
 
 A (no longer current) Embroidermodder 2 command excerpt:
 
-![scripting screenshot](src/images/features-scripting-1.png)
+![scripting screenshot](assets/images/features-scripting-1.png)
 
 ## Building
 
