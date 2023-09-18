@@ -149,8 +149,6 @@ EmbVector to_EmbVector(QPointF a);
 EmbVector operator+(EmbVector a, EmbVector b);
 EmbVector operator-(EmbVector a, EmbVector b);
 EmbVector operator*(EmbVector v, EmbReal s);
-EmbReal radians__(EmbReal degrees);
-EmbReal degrees__(EmbReal radian);
 
 std::vector<QGraphicsItem*> to_vector(QList<QGraphicsItem*> list);
 QList<QGraphicsItem*> to_qlist(std::vector<QGraphicsItem*> list);
@@ -418,11 +416,11 @@ protected:
     bool eventFilter(QObject *obj, QEvent *event);
 
 signals:
-    void appendHistory(QString  txt, int prefixLength);
+    void appendHistory(QString txt, int prefixLength);
 
     //These connect to the CmdPrompt signals
-    void startCommand(QString  cmd);
-    void runCommand(QString  cmd, QString  cmdtxt);
+    void startCommand(QString cmd);
+    void runCommand(QString cmd, QString cmdtxt);
     void deletePressed();
     void tabPressed();
     void escapePressed();
@@ -458,9 +456,9 @@ public slots:
     void endCommand();
     void processInput(void);
     void checkSelection();
-    void updateCurrentText(QString  txt);
-    void checkEditedText(QString  txt);
-    void checkChangedText(QString  txt);
+    void updateCurrentText(QString txt);
+    void checkEditedText(QString txt);
+    void checkChangedText(QString txt);
     void checkCursorPosition(int oldpos, int newpos);
 private slots:
     void copyClip();
@@ -477,19 +475,19 @@ public:
     ~CmdPromptHistory();
 
     int tmpHeight;
-    QString applyFormatting(QString  txt, int prefixLength);
+    QString applyFormatting(QString txt, int prefixLength);
 
 protected:
     void contextMenuEvent(QContextMenuEvent* event);
 
 public slots:
-    void appendHistory(QString  txt, int prefixLength);
+    void appendHistory(QString txt, int prefixLength);
     void startResizeHistory(int y);
     void stopResizeHistory(int y);
     void resizeHistory(int y);
 
 signals:
-    void historyAppended(QString  txt);
+    void historyAppended(QString txt);
 };
 
 /* . */
@@ -556,7 +554,7 @@ public:
     bool blinkState;
 
 public slots:
-    void setCurrentText(QString  txt) {
+    void setCurrentText(QString txt) {
     	promptInput->curText = promptInput->prefix + txt;
     	promptInput->setText(promptInput->curText);
     }
@@ -564,10 +562,10 @@ public slots:
         promptHistory->setHtml(txt);
         promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
     }
-    void setPrefix(QString  txt);
-    void appendHistory(QString  txt);
+    void setPrefix(QString txt);
+    void appendHistory(QString txt);
 
-    void alert(QString  txt);
+    void alert(QString txt);
 
     void startBlinking();
     void stopBlinking();
@@ -581,14 +579,14 @@ public slots:
 
     void floatingChanged(bool);
 
-    void saveHistory(QString  fileName, bool html);
+    void saveHistory(QString fileName, bool html);
 
 signals:
-    void appendTheHistory(QString  txt, int prefixLength);
+    void appendTheHistory(QString txt, int prefixLength);
 
     //For connecting outside of command prompt
-    void startCommand(QString  cmd);
-    void runCommand(QString  cmd, QString  cmdtxt);
+    void startCommand(QString cmd);
+    void runCommand(QString cmd, QString cmdtxt);
     void deletePressed();
     void tabPressed();
     void escapePressed();
@@ -618,7 +616,7 @@ signals:
 
     void showSettings();
 
-    void historyAppended(QString  txt);
+    void historyAppended(QString txt);
 };
 
 /* . */
@@ -770,8 +768,8 @@ private slots:
 public slots:
     void stub_testing();
 
-    void promptHistoryAppended(QString  txt);
-    void logPromptInput(QString  txt);
+    void promptHistoryAppended(QString txt);
+    void logPromptInput(QString txt);
     void promptInputPrevious();
     void promptInputNext();
 
@@ -807,7 +805,7 @@ public slots:
     void textFontSelectorCurrentFontChanged(const QFont& font);
     void textSizeSelectorIndexChanged(int index);
 
-    void setTextFont(QString  str);
+    void setTextFont(QString str);
     void setTextSize(EmbReal num);
 
     QString getCurrentLayer();
@@ -844,7 +842,7 @@ public:
     QPrinter printer;
 
     QString curFile;
-    void setCurrentFile(QString  fileName);
+    void setCurrentFile(QString fileName);
 
     int myIndex;
 
@@ -869,8 +867,8 @@ public slots:
 
     void currentLayerChanged(QString layer);
     void currentColorChanged(const QRgb& color);
-    void currentLinetypeChanged(QString  type);
-    void currentLineweightChanged(QString  weight);
+    void currentLinetypeChanged(QString type);
+    void currentLineweightChanged(QString weight);
 
     void updateColorLinetypeLineweight();
     void deletePressed();
@@ -886,8 +884,8 @@ public slots:
     void print();
     void saveBMC();
 
-    void promptHistoryAppended(QString  txt);
-    void logPromptInput(QString  txt);
+    void promptHistoryAppended(QString txt);
+    void logPromptInput(QString txt);
     void promptInputPrevious();
     void promptInputNext();
 };
@@ -904,7 +902,7 @@ public:
 
     QPixmap bgLogo;
     QPixmap bgTexture;
-    QColor  bgColor;
+    QColor bgColor;
 
     void zoomExtentsAllSubWindows();
     void forceRepaint();
@@ -916,8 +914,8 @@ public:
     void useBackgroundTexture(bool use);
     void useBackgroundColor(bool use);
 
-    void setBackgroundLogo(QString  fileName);
-    void setBackgroundTexture(QString  fileName);
+    void setBackgroundLogo(QString fileName);
+    void setBackgroundTexture(QString fileName);
     void setBackgroundColor(const QColor& color);
 
 public slots:
@@ -935,9 +933,9 @@ class PreviewDialog : public QFileDialog
 
 public:
     PreviewDialog(QWidget* parent = 0,
-       QString  caption = QString(),
-       QString  directory = QString(),
-       QString  filter = QString());
+       QString caption = QString(),
+       QString directory = QString(),
+       QString filter = QString());
     ~PreviewDialog();
 
     ImageWidget* imgWidget;
@@ -949,7 +947,7 @@ class PropertyEditor : public QDockWidget
     Q_OBJECT
 
 public:
-    PropertyEditor(QString  iconDirectory = QString(), bool pickAddMode = true, QWidget* widgetToFocus = 0, QWidget* parent = 0); //, Qt::WindowFlags flags = 0);
+    PropertyEditor(QString iconDirectory = QString(), bool pickAddMode = true, QWidget* widgetToFocus = 0, QWidget* parent = 0); //, Qt::WindowFlags flags = 0);
     ~PropertyEditor();
 
     QWidget* focusWidget;
@@ -962,20 +960,20 @@ public:
 
     std::vector<QGraphicsItem*> selectedItemList;
 
-    QToolButton* createToolButton(QString  iconName, QString  txt);
-    QLineEdit* createLineEdit(QString  validatorType = QString(), bool readOnly = false);
+    QToolButton* createToolButton(QString iconName, QString txt);
+    QLineEdit* createLineEdit(QString validatorType = QString(), bool readOnly = false);
 
     int precisionAngle;
     int precisionLength;
 
-    void updateLineEditStrIfVaries(QLineEdit* lineEdit, QString  str);
+    void updateLineEditStrIfVaries(QLineEdit* lineEdit, QString str);
     void updateLineEditNumIfVaries(QLineEdit* lineEdit, EmbReal num, bool useAnglePrecision);
-    void updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, QString  str);
+    void updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, QString str);
     void updateComboBoxStrIfVaries(QComboBox* comboBox, QString str, StringList strList);
     void updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, bool yesOrNoText);
 
     QSignalMapper* signalMapper;
-    void mapSignal(QObject* fieldObj, QString  name, QVariant value);
+    void mapSignal(QObject* fieldObj, QString name, QVariant value);
 
     // Selection
     // ====================
@@ -1050,7 +1048,7 @@ class Settings_Dialog : public QDialog
     Q_OBJECT
 
 public:
-    Settings_Dialog(QString  showTab = QString(), QWidget *parent = 0);
+    Settings_Dialog(QString showTab = QString(), QWidget *parent = 0);
     ~Settings_Dialog();
 
     QTabWidget* tabWidget;
@@ -1169,7 +1167,7 @@ class UndoEditor : public QDockWidget
     Q_OBJECT
 
 public:
-    UndoEditor(QString  iconDirectory = QString(), QWidget* widgetToFocus = 0, QWidget* parent = 0); //, Qt::WindowFlags flags = 0);
+    UndoEditor(QString iconDirectory = QString(), QWidget* widgetToFocus = 0, QWidget* parent = 0); //, Qt::WindowFlags flags = 0);
     ~UndoEditor();
 
     void addStack(QUndoStack* stack);
@@ -1205,7 +1203,7 @@ public:
     UndoableCommand(String command, EmbVector pivot, EmbReal angle, QString text, Geometry* obj, View* v, QUndoCommand* parent = 0);
     UndoableCommand(QString type, View* v, QUndoCommand* parent = 0);
     UndoableCommand(const QPointF beforePoint, const QPointF afterPoint, QString text, Geometry* obj, View* v, QUndoCommand* parent = 0);
-    UndoableCommand(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QString  text, Geometry* obj, View* v, QUndoCommand* parent = 0);
+    UndoableCommand(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QString text, Geometry* obj, View* v, QUndoCommand* parent = 0);
 
     int id(){ return 1234; }
     bool mergeWith(const QUndoCommand* command);
@@ -1362,7 +1360,7 @@ public slots:
     bool isRealEnabled();
 
     void setGridColor(QRgb color);
-    void createGrid(QString  gridType);
+    void createGrid(QString gridType);
     void setRulerColor(QRgb color);
 
     void previewOn(String clone, String mode, EmbReal x, EmbReal y, EmbReal data);
@@ -1374,8 +1372,8 @@ public slots:
     void clearRubberRoom();
     void spareRubber(int64_t id);
     void setRubberMode(String mode);
-    void setRubberPoint(QString  key, const QPointF& point);
-    void setRubberText(QString  key, QString  txt);
+    void setRubberPoint(QString key, const QPointF& point);
+    void setRubberText(QString key, QString txt);
 
 protected:
     void mouseDoubleClickEvent(QMouseEvent* event);

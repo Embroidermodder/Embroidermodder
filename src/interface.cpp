@@ -135,16 +135,14 @@ get_int(Dictionary d, String key)
     return 0;
 }
 
-/* Get a 32-bit unsigned integer from a Dictionary with the given key. */
+/* Get the 32-bit unsigned integer from the Dictionary d with the given key. */
 uint32_t
 get_uint(Dictionary d, String key)
 {
     return (uint32_t)get_int(d, key);
 }
 
-/**
- * .
- */
+/* Get the 32-bit float EmbReal from the Dictionary d with the given key. */
 EmbReal
 get_real(Dictionary d, String key)
 {
@@ -161,9 +159,7 @@ get_real(Dictionary d, String key)
     return 0.0f;
 }
 
-/**
- * .
- */
+/* Get String from Dictionary. */
 String
 get_str(Dictionary d, String key)
 {
@@ -180,18 +176,14 @@ get_str(Dictionary d, String key)
     return "";
 }
 
-/**
- * .
- */
+/* Get QString from Dictionary. */
 QString
 get_qstr(Dictionary d, String key)
 {
     return QString::fromStdString(get_str(d, key));
 }
 
-/**
- * .
- */
+/* Get StringList from Dictionary. */
 StringList
 get_str_list(Dictionary d, String key)
 {
@@ -209,11 +201,7 @@ get_str_list(Dictionary d, String key)
     return list;
 }
 
-/**
- * @brief to_string_vector
- * @param list
- * @return
- */
+/* Convert QStringList to our own StringList type. */
 StringList
 to_string_vector(QStringList list)
 {
@@ -224,12 +212,7 @@ to_string_vector(QStringList list)
     return a;
 }
 
-/**
- * @brief tokenize
- * @param str
- * @param delim
- * @return
- */
+/* Tokenize our String type using a 1 character deliminator. */
 StringList
 tokenize(String str, const char delim)
 {
@@ -284,26 +267,18 @@ operator*(EmbVector v, EmbReal s)
 }
 
 
-/**
- * @brief radians__
- * @param degrees
- * @return
- */
+/* Convert degrees to radians. */
 EmbReal
 radians__(EmbReal degrees)
 {
-    return (degrees*emb_constant_pi/180.0);
+    return degrees * DEGREES_TO_RADIANS;
 }
 
-/**
- * @brief degrees__
- * @param radian
- * @return
- */
+/* Convert radians to degrees. */
 EmbReal
 degrees__(EmbReal radian)
 {
-    return (radian*180.0/emb_constant_pi);
+    return radian * RADIANS_TO_DEGREES;
 }
 
 /* Check that RBG values are in the range (0,255) inclusive. */
@@ -360,7 +335,9 @@ get_n_reals(StringList list, int n, int *offset)
     return result;
 }
 
-/* . */
+/* Render an SVG-like .
+ *
+ */
 QPainterPath
 add_to_path(QPainterPath path, EmbVector scale, String command)
 {
@@ -453,7 +430,15 @@ set_visibility(QObject* parent, const char *key, bool visibility)
     }
 }
 
-/* . */
+/* Turn our own markup in config.toml into the various UI elements.
+ *
+ * The required variable "type" is taken to choose a function to process
+ * the UI element.
+ *
+ * This would be faster as a switch table.
+ *
+ * This function should take a parent object to build...
+ */
 void
 make_ui_element(Dictionary description)
 {
@@ -465,14 +450,13 @@ make_ui_element(Dictionary description)
 
     }
     else if (element_type == "checkBox") {
-        // make_checkbox(QGroupBox *gb, String dictionary, const char *label, const char *icon, String key)
+        // make_checkbox(gb, description, label, icon, key);
     }
     else if (element_type == "spinBox") {
 
     }
     else if (element_type == "doubleSpinBox") {
-        // make_spinbox(QGroupBox *gb, String dictionary,
-        //  QString object_name, EmbReal single_step, EmbReal lower, EmbReal upper, String key)
+        // make_spinbox(gb, description, object_name, single_step, lower, upper, key)
     }
     else if (element_type == "label") {
 
@@ -522,7 +506,7 @@ make_checkbox(QGroupBox *gb, String dictionary, const char *label, const char *i
 /* TODO: Make spinbox using this toml syntax:
  *
  *     [zoom_level_spinbox]
- *     type = "double_spinbox"
+ *     type = "doubleSpinBox"
  *     object_name = "Zoom Level"
  *     single_step = 0.1
  *     lower_bound = -10

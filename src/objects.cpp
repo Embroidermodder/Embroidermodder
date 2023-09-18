@@ -1482,7 +1482,7 @@ Geometry::objectDiameter()
 EmbReal
 Geometry::objectCircumference()
 {
-    return emb_constant_pi * objectDiameter();
+    return CONSTANT_PI * objectDiameter();
 }
 
 /* QPointF. */
@@ -2096,7 +2096,7 @@ Geometry::objectArea()
         return ((r*r)/2)*(theta - std::sin(theta));
     }
     case OBJ_TYPE_CIRCLE:
-        return emb_constant_pi*objectRadius()*objectRadius();
+        return CONSTANT_PI*objectRadius()*objectRadius();
     default:
         break;
     }
@@ -2312,7 +2312,7 @@ Geometry::setObjectDiameter(EmbReal diameter)
 void
 Geometry::setObjectArea(EmbReal area)
 {
-    EmbReal radius = std::sqrt(area/emb_constant_pi);
+    EmbReal radius = std::sqrt(area/CONSTANT_PI);
     setObjectRadius(radius);
 }
 
@@ -2320,7 +2320,7 @@ Geometry::setObjectArea(EmbReal area)
 void
 Geometry::setObjectCircumference(EmbReal circumference)
 {
-    EmbReal diameter = circumference/emb_constant_pi;
+    EmbReal diameter = circumference/CONSTANT_PI;
     setObjectDiameter(diameter);
 }
 
@@ -3828,7 +3828,7 @@ void
 Geometry::update_dolphin(int numPoints, EmbReal xScale, EmbReal yScale)
 {
     for (int i = 0; i <= numPoints; i++) {
-        EmbReal t = (2.0 * emb_constant_pi) / numPoints*i;
+        EmbReal t = (2.0 * CONSTANT_PI) / numPoints*i;
         EmbVector v;
         v.x = fourier_series(t, dolphin_x);
         v.y = fourier_series(t, dolphin_y);
@@ -4142,7 +4142,7 @@ Geometry::updateHeart(String style, int numPoints, EmbReal xScale, EmbReal yScal
 {
     for (int i = 0; i <= numPoints; i++) {
         EmbReal xx, yy;
-        EmbReal t = (2.0*emb_constant_pi)/numPoints*i;
+        EmbReal t = (2.0*CONSTANT_PI)/numPoints*i;
 
         if (style == "HEART4") {
             xx = cos(t)*((sin(t)*sqrt(abs(cos(t))))/(sin(t)+7/5) - 2*sin(t) + 2);
@@ -4576,29 +4576,30 @@ Geometry::polygon_main(void)
     properties["polyType"] = "Inscribed"; //Default
     properties["numSides"] = 4;           //Default
     properties["mode"].s = MODE_NUM_SIDES;
-    actuator("set-prompt-prefix-tr Enter number of sides" + " {" + properties["numSides.toString() + "}: ");
+    actuator("set-prompt-prefix-tr Enter number of sides" + " {" + properties["numSides"].toString() + "}: ");
 }
+
 
 /* . */
 void
 Geometry::polygon_click(EmbVector v)
 {
-    if (properties["mode"].s == MODE_NUM_SIDES) {
+    if (properties["mode"].s == "MODE_NUM_SIDES") {
         //Do nothing, the prompt controls this.
     }
-    else if (properties["mode"].s == MODE_CENTER_PT) {
-        properties["center.x"] = x;
-        properties["centerY = y;
-        properties["mode"].s = MODE_POLYTYPE;
+    else if (properties["mode"].s == "MODE_CENTER_PT") {
+        properties["center.x"] = node_real(x);
+        properties["center.y"] = node_real(y);
+        properties["mode"].i = POLYGON_MODE_POLYTYPE;
         actuator("append-prompt-history");
         actuator("set-prompt-prefix-tr Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + properties["polyType"] + "}: ");
     }
-    else if (properties["mode"].s == MODE_POLYTYPE) {
+    else if (properties["mode"].i == POLYGON_MODE_POLYTYPE) {
         //Do nothing, the prompt controls this.
     }
     else if (properties["mode"].s == MODE_INSCRIBE) {
         properties["pointI.x"] = x;
-        properties["pointIY"] = y;
+        properties["pointI.y"] = y;
         setRubberPoint("POLYGON_INSCRIBE_POINT", properties["pointIX"], properties["pointIY"]);
         actuator("vulcanize");
         actuator("append-prompt-history");
@@ -5833,22 +5834,14 @@ Geometry::text_single_click(EmbVector v)
     }
 }
 
-/**
- * @brief 
- * 
- * str 
- */
+/* . */
 void
 Geometry::text_single_context(String str)
 {
     todo("SINGLELINETEXT", "context()");
 }
 
-/**
- * @brief 
- * 
- * str 
- */
+/* . */
 void
 Geometry::text_single_prompt(String str)
 {
@@ -6049,20 +6042,14 @@ Geometry::text_single_prompt(String str)
     }
 }
 
-/**
- * @brief .
- * 
- */
+/* . */
 void
 Geometry::snowflake_main(void)
 {
     object_script(snowflake_init);
 }
 
-/**
- * @brief Snowflake Curve with $t \in [0, 2\pi]$.
- * 
- */
+/* Snowflake Curve with $t \in [0, 2\pi]$. */
 void
 Geometry::update_snowflake(void)
 {
@@ -6070,7 +6057,7 @@ Geometry::update_snowflake(void)
     scale.x = properties["scale.x"].r;
     scale.y = properties["scale.y"].r;
     for (int i = 0; i <= properties["numPoints"].i; i++) {
-        EmbReal t = (2.0*emb_constant_pi) / properties["numPoints"].i*i;
+        EmbReal t = (2.0*CONSTANT_PI) / properties["numPoints"].i*i;
         EmbVector v;
         v.x = fourier_series(t, snowflake_x);
         v.y = fourier_series(t, snowflake_y);
@@ -6256,7 +6243,7 @@ Geometry::updateStar(EmbVector mouse)
     // Calculate the Star Points
     EmbReal angInc = 360.0/(properties["numPoints"].i*2);
     for (int i = 0; i < properties["numPoints"].i*2; i++) {
-        EmbReal angle = (angOuter + (angInc*i)) * emb_constant_pi / 180.0;
+        EmbReal angle = (angOuter + (angInc*i)) * CONSTANT_PI / 180.0;
         EmbVector v = embVector_unit(angle);
         if (i%2 == 0) {
             v = v * distOuter;

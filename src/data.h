@@ -124,7 +124,9 @@
 #define LINE_STYLE_FLARED                        1
 #define LINE_STYLE_FLETCHING                     2
 
-/* */
-#define emb_constant_pi     3.14159265358979323846
+/* Mathematical Constants. */
+#define CONSTANT_PI         3.14159265358979323846
+#define RADIANS_TO_DEGREES    (180.0f/CONSTANT_PI)
+#define DEGREES_TO_RADIANS    (CONSTANT_PI/180.0f)
 
 #endif
