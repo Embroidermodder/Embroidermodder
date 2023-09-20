@@ -5719,13 +5719,13 @@ Geometry::scale_prompt(String str)
                     actuator("set-prompt-prefix-tr Specify second point: "));
                 }
                 else {
-                    setRubberPoint("LINE_START", properties["baseX, properties["baseY);
-                    previewOn("SELECTED", "SCALE", properties["baseX, properties["baseY, properties["factorRef);
+                    setRubberPoint("LINE_START", properties["baseX"], properties["baseY"]);
+                    previewOn("SELECTED", "SCALE", properties["baseX"], properties["baseY"], properties["factorRef"]);
                     actuator("set-prompt-prefix-tr Specify new length: "));
                 }
             }
         }
-        else if (std::isnan(properties["factorNew)) {
+        else if (std::isnan(properties["factorNew"])) {
             if (std::isnan(str)) {
                 EmbReal strList = str.split(",");
                 if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -5749,9 +5749,9 @@ Geometry::scale_prompt(String str)
                 }
             }
             else {
-                properties["factorNew = node_real(str);
-                if (properties["factorNew <= 0.0) {
-                    properties["factorNew = node_real(0.0f);
+                properties["factorNew"] = node_real(str);
+                if (properties["factorNew"].r <= 0.0) {
+                    properties["factorNew"].r = node_real(0.0f);
                     alert(tr("Value must be positive and nonzero."));
                     actuator("set-prompt-prefix-tr Specify new length: "));
                 }
@@ -5879,8 +5879,8 @@ Geometry::text_single_prompt(String str)
         }
         else if (str == "F" || str == "FIT") {
             properties["mode"].s = MODE_SETGEOM;
-            properties["textJustify = "Fit";
-            setRubberText("TEXT_JUSTIFY", properties["textJustify);
+            properties["textJustify"] = "Fit";
+            setRubberText("TEXT_JUSTIFY", properties["textJustify"]);
             actuator("set-prompt-prefix-tr Specify start point of text or [Justify/Setfont]: "));
         }
         else if (str == "TL" || str == "TOPLEFT") {
@@ -6126,9 +6126,9 @@ Geometry::star_click(EmbReal mouse)
         updateStar(properties["point1"]);
     }
     else if (properties["mode"].s == "MODE_RAD_INNER") {
-        properties["point2 = mouse;
+        properties["point2"] = mouse;
         actuator("disable move-rapid-fire");
-        updateStar(properties["point2);
+        updateStar(properties["point2"]);
         spareRubber("POLYGON");
         actuator("end");
     }
