@@ -207,15 +207,13 @@ Geometry::init(void)
     }
 }
 
-/**
- * @brief Geometry::init
- * arc
- * rgb
- * lineType
+/* Initialise arc object.
  *
- * WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
- * WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
- * WARNING: All movement has to be handled explicitly by us, not by the scene.
+ * WARNING
+ * -------
+ * DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+ * and the item is double clicked, the scene will erratically move the item while zooming.
+ * All movement has to be handled explicitly by us, not by the scene.
  */
 void
 Geometry::init_arc(EmbArc arc, QRgb rgb, Qt::PenStyle lineType)
@@ -235,15 +233,13 @@ Geometry::init_arc(EmbArc arc, QRgb rgb, Qt::PenStyle lineType)
     setPen(objPen);
 }
 
-/**
- * @brief Geometry::init_circle
- * circle
- * rgb
- * lineType
+/* Init circle
  *
- * WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
- * WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
- * WARNING: All movement has to be handled explicitly by us, not by the scene.
+ * WARNING
+ * -------
+ * DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+ * and the item is double clicked, the scene will erratically move the item while zooming.
+ * All movement has to be handled explicitly by us, not by the scene.
  */
 void
 Geometry::init_circle(EmbCircle circle, QRgb rgb, Qt::PenStyle lineType)
@@ -264,13 +260,11 @@ Geometry::init_circle(EmbCircle circle, QRgb rgb, Qt::PenStyle lineType)
     updatePath();
 }
 
-/**
- * @brief Geometry::init_ellipse
- * ellipse
- * rgb
- * lineType
+/* Geometry::init_ellipse
  *
- * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+ * WARNING
+ * -------
+ * DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
  * and the item is double clicked, the scene will erratically move the item while zooming.
  * All movement has to be handled explicitly by us, not by the scene.
  */
@@ -293,11 +287,7 @@ Geometry::init_ellipse(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType)
     updatePath();
 }
 
-/**
- * @brief Geometry::init_line
- * ellipse
- * rgb
- * lineType
+/* Geometry::init_line
  *
  * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
  * and the item is double clicked, the scene will erratically move the item while zooming.
@@ -348,11 +338,7 @@ Geometry::init_line(EmbLine line, QRgb rgb, Qt::PenStyle lineType)
     }
 }
 
-/**
- * @brief Geometry::init_line
- * ellipse
- * rgb
- * lineType
+/* Geometry::init_line
  *
  * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
  * and the item is double clicked, the scene will erratically move the item while zooming.
@@ -376,11 +362,7 @@ Geometry::init_point(EmbVector position, QRgb rgb, Qt::PenStyle lineType)
     setPen(objPen);
 }
 
-/**
- * @brief Geometry::init_line
- * ellipse
- * rgb
- * lineType
+/* Geometry::init_line
  *
  * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
  * and the item is double clicked, the scene will erratically move the item while zooming.
@@ -427,11 +409,7 @@ Geometry::init_path(QPainterPath p, QRgb rgb, Qt::PenStyle lineType)
     setPen(objPen);
 }
 
-/**
- * @brief Geometry::init_line
- * ellipse
- * rgb
- * lineType
+/* Geometry::init_line
  *
  * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
  * and the item is double clicked, the scene will erratically move the item while zooming.
@@ -453,18 +431,15 @@ void Geometry::init_rect(EmbRect rect, QRgb rgb, Qt::PenStyle lineType)
     setPen(objPen);
 }
 
-/**
- * @brief Geometry::init_line
- * ellipse
- * rgb
- * lineType
+/* Init_text_single.
  *
- * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+ * WARNING
+ * DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
  * and the item is double clicked, the scene will erratically move the item while zooming.
  * All movement has to be handled explicitly by us, not by the scene.
  *
- * \todo  set the justification properly.
- * \todo  pass in proper lineweight
+ * TODO: set the justification properly.
+ * TODO: pass in proper lineweight
  */
 void
 Geometry::init_text_single(QString str, EmbVector v, QRgb rgb, Qt::PenStyle lineType)
@@ -486,11 +461,7 @@ Geometry::init_text_single(QString str, EmbVector v, QRgb rgb, Qt::PenStyle line
     setPen(objPen);
 }
 
-/**
- * @brief Geometry::Geometry
- * *obj
- * *parent
- */
+/* Geometry::Geometry *obj *parent. */
 Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
     debug_message("Geometry Constructor()");
@@ -677,18 +648,14 @@ Geometry::allGripPoints()
     return gripPoints;
 }
 
-/**
- * @brief Geometry::~Geometry
+/* Geometry::~Geometry
  */
 Geometry::~Geometry()
 {
     debug_message("Geometry Destructor()");
 }
 
-/**
- * @brief Geometry::setObjectLineWeight
- * lineWeight
- */
+/* Set object line weight. */
 void
 Geometry::setObjectLineWeight(String lineWeight)
 {
@@ -705,8 +672,8 @@ Geometry::setObjectLineWeight(String lineWeight)
     }
     /*
     else {
-        QMessageBox::warning(0, QObject::tr("Error - Negative Lineweight"),
-                                QObject::tr("Lineweight: %1")
+        QMessageBox::warning(0, translate_str("Error - Negative Lineweight"),
+                                translate_str("Lineweight: %1")
                                 .arg(QString().setNum(lineWeight)));
         debug_message("Lineweight cannot be negative! Inverting sign.");
         lwtPen.setWidthF(-lineWeight);
@@ -1660,17 +1627,17 @@ Geometry::vulcanize(void)
 
     if (Type == OBJ_TYPE_POLYGON) {
         if (!normalPath.elementCount()) {
-            QMessageBox::critical(0, QObject::tr("Empty Polygon Error"), QObject::tr("The polygon added contains no points. The command that created this object has flawed logic."));
+            QMessageBox::critical(0, translate_str("Empty Polygon Error"), translate_str("The polygon added contains no points. The command that created this object has flawed logic."));
         }
     }
     if (Type == OBJ_TYPE_POLYLINE) {
         if (!normalPath.elementCount()) {
-            QMessageBox::critical(0, QObject::tr("Empty Polyline Error"), QObject::tr("The polyline added contains no points. The command that created this object has flawed logic."));
+            QMessageBox::critical(0, translate_str("Empty Polyline Error"), translate_str("The polyline added contains no points. The command that created this object has flawed logic."));
         }
     }
     if (Type == OBJ_TYPE_PATH) {
         if (!normalPath.elementCount()) {
-            QMessageBox::critical(0, QObject::tr("Empty Path Error"), QObject::tr("The path added contains no points. The command that created this object has flawed logic."));
+            QMessageBox::critical(0, translate_str("Empty Path Error"), translate_str("The path added contains no points. The command that created this object has flawed logic."));
         }
     }
 }
@@ -1837,7 +1804,7 @@ Geometry::objectSavePath()
 /* Geometry::calculateArcData
  * arc
  *
- * @todo convert this to update and make it Type sensitive.
+ * TODO: convert this to update and make it Type sensitive.
  */
 void Geometry::calculateArcData(EmbArc arc)
 {
@@ -1857,9 +1824,7 @@ void Geometry::calculateArcData(EmbArc arc)
     setScale(1);
 }
 
-/* Geometry::updateArcRect
- * radius
- */
+/* Update arc rect radius. */
 void
 Geometry::updateArcRect(EmbReal radius)
 {
@@ -1870,9 +1835,7 @@ Geometry::updateArcRect(EmbReal radius)
     setRect(arcRect);
 }
 
-/* Geometry::setObjectRadius
- * radius
- */
+/* Set object radius to radius. */
 void
 Geometry::setObjectRadius(EmbReal radius)
 {
@@ -1909,9 +1872,7 @@ Geometry::setObjectRadius(EmbReal radius)
     }
 }
 
-/* Geometry::setObjectStartAngle
- * angle
- */
+/* Set object start angle to angle. */
 void
 Geometry::setObjectStartAngle(EmbReal angle)
 {
@@ -1925,15 +1886,49 @@ Geometry::setObjectStartAngle(EmbReal angle)
     }
 }
 
-/* Geometry::setObjectEndAngle
- * angle
- */
+/* SetObjectEndAngle to angle. */
 void
 Geometry::setObjectEndAngle(EmbReal angle)
 {
     switch (Type) {
     case OBJ_TYPE_ARC: {
         //TODO: Geometry setObjectEndAngle
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/* Geometry::setObjectPoint
+ * point
+ */
+void
+Geometry::setObjectPoint(EmbVector point, int64_t point_type)
+{
+    switch (point_type) {
+    case ARC_START_POINT: {
+        EmbArc arc;
+        arc.start = point;
+        arc.mid = to_EmbVector(objectMidPoint());
+        arc.mid = to_EmbVector(objectEndPoint());
+        calculateArcData(arc);
+        break;
+    }
+    case ARC_MID_POINT: {
+        EmbArc arc;
+        arc.start = to_EmbVector(objectStartPoint());
+        arc.mid = point;
+        arc.end = to_EmbVector(objectEndPoint());
+        calculateArcData(arc);
+        break;
+    }
+    case ARC_END_POINT: {
+        EmbArc arc;
+        arc.start = to_EmbVector(objectStartPoint());
+        arc.mid = to_EmbVector(objectMidPoint());
+        arc.end = point;
+        calculateArcData(arc);
         break;
     }
     default:
@@ -1949,11 +1944,7 @@ Geometry::setObjectStartPoint(EmbVector point)
 {
     switch (Type) {
     case OBJ_TYPE_ARC: {
-        EmbArc arc;
-        arc.start = point;
-        arc.mid = to_EmbVector(objectMidPoint());
-        arc.mid = to_EmbVector(objectEndPoint());
-        calculateArcData(arc);
+        setObjectPoint(point, ARC_START_POINT);
         break;
     }
     default:
@@ -1969,11 +1960,7 @@ Geometry::setObjectMidPoint(EmbVector point)
 {
     switch (Type) {
     case OBJ_TYPE_ARC: {
-        EmbArc arc;
-        arc.start = to_EmbVector(objectStartPoint());
-        arc.mid = point;
-        arc.end = to_EmbVector(objectEndPoint());
-        calculateArcData(arc);
+        setObjectPoint(point, ARC_MID_POINT);
         break;
     }
     default:
@@ -1987,11 +1974,7 @@ Geometry::setObjectEndPoint(EmbVector point)
 {
     switch (Type) {
     case OBJ_TYPE_ARC: {
-        EmbArc arc;
-        arc.start = to_EmbVector(objectStartPoint());
-        arc.mid = to_EmbVector(objectMidPoint());
-        arc.end = point;
-        calculateArcData(arc);
+        setObjectPoint(point, ARC_END_POINT);
         break;
     }
     default:
@@ -2101,6 +2084,13 @@ Geometry::objectArea()
         break;
     }
     return std::fabs(objectWidth()*objectHeight());
+}
+
+EmbReal
+Geometry::objectReal(int64_t real_type)
+{
+
+    return 0.0f;
 }
 
 /* ObjectArcLength. */
@@ -2308,7 +2298,7 @@ Geometry::setObjectDiameter(EmbReal diameter)
     updatePath();
 }
 
-/* SetObjectArea. */
+/* Set object area. */
 void
 Geometry::setObjectArea(EmbReal area)
 {
@@ -2316,7 +2306,7 @@ Geometry::setObjectArea(EmbReal area)
     setObjectRadius(radius);
 }
 
-/* SetObjectCircumference. */
+/* Set object circumference. */
 void
 Geometry::setObjectCircumference(EmbReal circumference)
 {
@@ -2605,7 +2595,8 @@ Geometry::updatePath()
 }
 
 /* Find index of a point within a path.
- * Return as an int, if not found return -1 */
+ * Return as an int, if not found return -1.
+ */
 int
 Geometry::findIndex(const QPointF& point)
 {
@@ -2809,48 +2800,80 @@ addCircle(View* view, QGraphicsItem* item)
 void
 addDimAligned(View* view, QGraphicsItem* item)
 {
+    Geometry* obj = static_cast<Geometry*>(item);
+    if (obj) {
+
+    }
 }
 
 /* Add angular dimension "item" to "pattern". */
 void
 addDimAngular(View* view, QGraphicsItem* item)
 {
+    Geometry* obj = static_cast<Geometry*>(item);
+    if (obj) {
+
+    }
 }
 
 /* Add arc length dimension "item" to "pattern". */
 void
 addDimArcLength(View* view, QGraphicsItem* item)
 {
+    Geometry* obj = static_cast<Geometry*>(item);
+    if (obj) {
+
+    }
 }
 
 /* Add diameter dimension "item" to "pattern". */
 void
 addDimDiameter(View* view, QGraphicsItem* item)
 {
+    Geometry* obj = static_cast<Geometry*>(item);
+    if (obj) {
+
+    }
 }
 
 /* Add dimension leader "item" to "pattern". */
 void
 addDimLeader(View* view, QGraphicsItem* item)
 {
+    Geometry* obj = static_cast<Geometry*>(item);
+    if (obj) {
+
+    }
 }
 
 /* Add linear dimension "item" to "pattern". */
 void
 addDimLinear(View* view, QGraphicsItem* item)
 {
+    Geometry* obj = static_cast<Geometry*>(item);
+    if (obj) {
+
+    }
 }
 
 /* Add ordinate dimension "item" to "pattern". */
 void
 addDimOrdinate(View* view, QGraphicsItem* item)
 {
+    Geometry* obj = static_cast<Geometry*>(item);
+    if (obj) {
+        /* view->pattern */
+    }
 }
 
 /* Add radius dimension "item" to "pattern". */
 void
 addDimRadius(View* view, QGraphicsItem* item)
 {
+    Geometry* obj = static_cast<Geometry*>(item);
+    if (obj) {
+        /* view->pattern */
+    }
 }
 
 /* Add ellipse "item" to "pattern". */
@@ -2879,30 +2902,50 @@ addEllipse(View* view, QGraphicsItem* item)
 void
 addEllipseArc(View* view, QGraphicsItem* item)
 {
+    Geometry* obj = static_cast<Geometry*>(item);
+    if (obj) {
+        /* view->pattern */
+    }
 }
 
 /* Add grid "item" to "pattern". */
 void
 addGrid(View* view, QGraphicsItem* item)
 {
+    Geometry* obj = static_cast<Geometry*>(item);
+    if (obj) {
+        /* view->pattern */
+    }
 }
 
 /* Add hatch "item" to "pattern". */
 void
 addHatch(View* view, QGraphicsItem* item)
 {
+    Geometry* obj = static_cast<Geometry*>(item);
+    if (obj) {
+        /* view->pattern */
+    }
 }
 
 /* Add image "item" to "pattern". */
 void
 addImage(View* view, QGraphicsItem* item)
 {
+    Geometry* obj = static_cast<Geometry*>(item);
+    if (obj) {
+        /* view->pattern */
+    }
 }
 
 /* Add infinite line "item" to "pattern". */
 void
 addInfiniteLine(View* view, QGraphicsItem* item)
 {
+    Geometry* obj = static_cast<Geometry*>(item);
+    if (obj) {
+        /* view->pattern */
+    }
 }
 
 /* Add line "item" to "pattern". */
@@ -3004,6 +3047,10 @@ addPolyline(View* view, QGraphicsItem* item)
 void
 addRay(View* view, QGraphicsItem* item)
 {
+    Geometry* obj = static_cast<Geometry*>(item);
+    if (obj) {
+        /* view->pattern */
+    }
 }
 
 /* Add rectangle "item" to "pattern". */
@@ -3032,6 +3079,10 @@ addRectangle(View* view, QGraphicsItem* item)
 void
 addSlot(View* view, QGraphicsItem* item)
 {
+    Geometry* obj = static_cast<Geometry*>(item);
+    if (obj) {
+        /* view->pattern */
+    }
 }
 
 /* Add spline "item" to "pattern". */
@@ -3039,6 +3090,10 @@ void
 addSpline(View* view, QGraphicsItem* item)
 {
     //TODO: abstract bezier into geom-bezier... cubicBezierMagic(P1, P2, P3, P4, 0.0, 1.0, tPoints);
+    Geometry* obj = static_cast<Geometry*>(item);
+    if (obj) {
+        /* view->pattern */
+    }
 }
 
 /* Add text multi "item" to "pattern". */
@@ -3046,13 +3101,17 @@ void
 addTextMulti(View* view, QGraphicsItem* item)
 {
     //TODO: saving polygons, polylines and paths must be stable before we go here.
+    Geometry* obj = static_cast<Geometry*>(item);
+    if (obj) {
+        /* view->pattern */
+    }
 }
 
 /* Add text single "item" to "pattern".
  *
- * @todo saving polygons, polylines and paths must be stable before we go here.
+ * TODO: saving polygons, polylines and paths must be stable before we go here.
  *
- * @todo This needs to work like a path, not a polyline. Improve this.
+ * TODO: This needs to work like a path, not a polyline. Improve this.
  */
 void
 addTextSingle(View* view, QGraphicsItem* item)
@@ -3105,8 +3164,8 @@ toPolyline(
     color_out.b = color.blue();
     
     /**
-    @todo FIX
-    EmbPolyline* polyObject = embPolyline_init(pointList, color_out, 1); //@todo proper lineType
+    TODO: FIX
+    EmbPolyline* polyObject = embPolyline_init(pointList, color_out, 1); //TODO: proper lineType
     embPattern_addPolylineAbs(view->pattern, polyObject);
     */
 }
@@ -3269,6 +3328,14 @@ Geometry::setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bo
     properties["text_strikeout"] = node_bool(strike);
     properties["text_overline"] = node_bool(over);
     setObjectText(objText);
+}
+
+/* val
+ */
+void
+Geometry::setObjectBoolean(const char *key, bool val)
+{
+
 }
 
 /* val 
@@ -3467,7 +3534,7 @@ Geometry::circle_click(EmbVector v)
             actuator("end");
         }
     }
-    else if (properties["mode"].s == "CIRCLE_MODE_1P_DIA") {
+    case "CIRCLE_MODE_1P_DIA") {
         auto iter = properties.find("point1");
         if (iter == properties.end()) {
             error("CIRCLE", tr("This should never happen."));
@@ -3481,7 +3548,7 @@ Geometry::circle_click(EmbVector v)
             actuator("end");
         }
     }
-    else if (properties["mode"].s == "CIRCLE_MODE_2P") {
+    case "CIRCLE_MODE_2P") {
         auto iter1 = properties.find("point1");
         auto iter2 = properties.find("point2");
         if (iter1 == properties.end()) {
@@ -3503,7 +3570,7 @@ Geometry::circle_click(EmbVector v)
             error("CIRCLE", tr("This should never happen."));
         }
     }
-    else if (properties["mode"].s == MODE_3P) {
+    case MODE_3P) {
         if (std::isnan(properties["x1"].r)) {
             properties["x1"] = node_real(x);
             properties["y1"] = node_real(y);
@@ -3533,21 +3600,21 @@ Geometry::circle_click(EmbVector v)
             });
         }
     }
-    else if (properties["mode"].s == "MODE_TTR") {
+    case "MODE_TTR") {
         properties["x1"] = node_real(x);
         properties["y1"] = node_real(y);
         actuator("append-prompt-history");
         actuator("set-prompt-prefix-tr Specify point on object for second tangent of circle: ");
         properties["mode"] = node_str("MODE_TTR_SET_POINT_2");
     }
-    else if (properties["mode"].s == "MODE_TTR_SET_POINT_2") {
+    case "MODE_TTR_SET_POINT_2") {
         properties["x2"] = node_real(x);
         properties["y2"] = node_real(y);
         actuator("append-prompt-history");
         actuator("set-prompt-prefix-tr Specify radius of circle: ");
         properties["mode"] = node_str("MODE_TTR_SET_POINT_3");
     }
-    else if (properties["mode"].s == "MODE_TTR_SET_POINT_3") {
+    case "MODE_TTR_SET_POINT_3") {
         properties["x3"] = node_real(x);
         properties["y3"] = node_real(y);
         actuator("append-prompt-history");
@@ -3625,7 +3692,7 @@ Geometry::circle_prompt(String str)
             }
         }
     }
-    else if (properties["mode"].s == MODE_1P_DIA) {
+    case MODE_1P_DIA) {
         if (std::isnan(properties["x1"].r)) {
             error("CIRCLE", tr("This should never happen."));
         }
@@ -3648,7 +3715,7 @@ Geometry::circle_prompt(String str)
             error("CIRCLE", tr("This should never happen."));
         }
     }
-    else if (properties["mode"].s == "MODE_2P") {
+    case "MODE_2P") {
         if (std::isnan(properties["x1"].r)) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -3682,7 +3749,7 @@ Geometry::circle_prompt(String str)
             error("CIRCLE", tr("This should never happen."));
         }
     }
-    else if (properties["mode"].s == MODE_3P) {
+    case MODE_3P) {
         if (std::isnan(properties["x1"].r)) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -3729,7 +3796,7 @@ Geometry::circle_prompt(String str)
             error("CIRCLE", tr("This should never happen."));
         }
     }
-    else if (properties["mode"].s == MODE_TTR) {
+    case MODE_TTR) {
         todo("CIRCLE", "prompt() for TTR");
     }
 }
@@ -3882,7 +3949,7 @@ Geometry::ellipse_click(EmbVector v)
             error("ELLIPSE", tr("This should never happen."));
         }
     }
-    else if (properties["mode"].s == "ELLIPSE_MODE_MAJORRADIUS_MINORRADIUS") {
+    case "ELLIPSE_MODE_MAJORRADIUS_MINORRADIUS") {
         if (std::isnan(properties["x1"].r)) {
             properties["x1"] = x;
             properties["y1"] = y;
@@ -3920,7 +3987,7 @@ Geometry::ellipse_click(EmbVector v)
             error("ELLIPSE", tr("This should never happen."));
         }
     }
-    else if (properties["mode"].s == MODE_ELLIPSE_ROTATION) {
+    case MODE_ELLIPSE_ROTATION) {
         if (std::isnan(properties["x1"].r)) {
             error("ELLIPSE", tr("This should never happen."));
         }
@@ -4014,7 +4081,7 @@ Geometry::ellipse_prompt(String args)
             }
         }
     }
-    else if (properties["mode"].s == MODE_MAJORRADIUS_MINORRADIUS) {
+    case MODE_MAJORRADIUS_MINORRADIUS) {
         if (std::isnan(properties["x1"].r)) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -4073,7 +4140,7 @@ Geometry::ellipse_prompt(String args)
             }
         }
     }
-    else if (properties["mode"].s == MODE_ELLIPSE_ROTATION) {
+    case MODE_ELLIPSE_ROTATION) {
         if (std::isnan(properties["x1"].r)) {
             error("ELLIPSE", tr("This should never happen."));
         }
@@ -4258,10 +4325,7 @@ Geometry::line_prompt(String args)
     }
 }
 
-/**
- * @brief locate_point_main
- * @return
- */
+/* locate_point_main */
 void
 Geometry::locate_point_main(void)
 {
@@ -4312,7 +4376,7 @@ void
 Geometry::move_main(void)
 {
     actuator("init");
-    properties["firstRun = true;
+    properties["firstRun"].b = node_bool(true);
     properties["base.x"] = node_real(0.0f);
     properties["base.y"] = node_real(0.0f);
     properties["dest.x"] = node_real(0.0f);
@@ -4369,7 +4433,7 @@ Geometry::move_context(String str)
 void
 Geometry::move_prompt(String str)
 {
-    if (properties["firstRun) {
+    if (properties["firstRun"].b) {
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
@@ -4579,60 +4643,60 @@ Geometry::polygon_main(void)
     actuator("set-prompt-prefix-tr Enter number of sides" + " {" + properties["numSides"].toString() + "}: ");
 }
 
-
 /* . */
 void
 Geometry::polygon_click(EmbVector v)
 {
-    if (properties["mode"].s == "MODE_NUM_SIDES") {
+    int mode = properties["mode"].i;
+    switch (mode) {
+    case POLYGON_MODE_NUM_SIDES:
+    case POLYGON_MODE_POLYTYPE:
         //Do nothing, the prompt controls this.
-    }
-    else if (properties["mode"].s == "MODE_CENTER_PT") {
+        break;
+    case POLYGON_MODE_CENTER_PT: {
         properties["center.x"] = node_real(x);
         properties["center.y"] = node_real(y);
         properties["mode"].i = POLYGON_MODE_POLYTYPE;
         actuator("append-prompt-history");
         actuator("set-prompt-prefix-tr Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + properties["polyType"] + "}: ");
+        break;
     }
-    else if (properties["mode"].i == POLYGON_MODE_POLYTYPE) {
-        //Do nothing, the prompt controls this.
-    }
-    else if (properties["mode"].s == MODE_INSCRIBE) {
+    case POLYGON_MODE_INSCRIBE: {
         properties["pointI.x"] = x;
         properties["pointI.y"] = y;
         setRubberPoint("POLYGON_INSCRIBE_POINT", properties["pointIX"], properties["pointIY"]);
         actuator("vulcanize");
         actuator("append-prompt-history");
         actuator("end");
+        break;
     }
-    else if (properties["mode"].s == MODE_CIRCUMSCRIBE) {
+    case POLYGON_MODE_CIRCUMSCRIBE: {
         properties["pointC.x"] = x;
         properties["pointC.Y"] = y;
-        setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", properties["pointCX, properties["pointCY"]);
+        setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", properties["pointCX"], properties["pointCY"]);
         actuator("vulcanize");
         actuator("append-prompt-history");
         actuator("end");
+        break;
     }
-    else if (properties["mode"].s == MODE_DISTANCE) {
+    case MODE_DISTANCE) {
         //Do nothing, the prompt controls this.
+        break;
     }
-    else if (properties["mode"].s == MODE_SIDE_LEN) {
+    case MODE_SIDE_LEN) {
         todo("POLYGON", "Sidelength mode");
+        break;
     }
 }
 
-/**
- * .
- */
+/* Polygon */
 void
 Geometry::polygon_context(String str)
 {
     todo("POLYGON", "context()");
 }
 
-/**
- * .
- */
+/* Polygon */
 void
 Geometry::polygon_prompt(String str)
 {
@@ -4654,7 +4718,7 @@ Geometry::polygon_prompt(String str)
             }
         }
     }
-    else if (properties["mode"].s == MODE_CENTER_PT) {
+    case MODE_CENTER_PT) {
         if (str == "S" || str == "SIDELENGTH") {
             properties["mode"].s = MODE_SIDE_LEN;
             actuator("set-prompt-prefix-tr Specify start point: "));
@@ -4673,7 +4737,7 @@ Geometry::polygon_prompt(String str)
             }
         }
     }
-    else if (properties["mode"].s == MODE_POLYTYPE) {
+    case MODE_POLYTYPE) {
         if (str == "INSCRIBED") {
             properties["mode"].s = MODE_INSCRIBE;
             properties["polyType"] = "Inscribed";
@@ -4718,7 +4782,7 @@ Geometry::polygon_prompt(String str)
             actuator("set-prompt-prefix-tr Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + properties["polyType"] + "}: ");
         }
     }
-    else if (properties["mode"].s == MODE_INSCRIBE) {
+    case MODE_INSCRIBE) {
         if (str == "D" || str == "DISTANCE") {
             properties["mode"].s = MODE_DISTANCE;
             actuator("set-prompt-prefix-tr Specify distance: "));
@@ -4738,7 +4802,7 @@ Geometry::polygon_prompt(String str)
             }
         }
     }
-    else if (properties["mode"].s == MODE_CIRCUMSCRIBE) {
+    case MODE_CIRCUMSCRIBE) {
         if (str == "D" || str == "DISTANCE") {
             properties["mode"].s = MODE_DISTANCE;
             actuator("set-prompt-prefix-tr Specify distance: "));
@@ -4758,7 +4822,7 @@ Geometry::polygon_prompt(String str)
             }
         }
     }
-    else if (properties["mode"].s == MODE_DISTANCE) {
+    case MODE_DISTANCE) {
         if (std::isnan(str)) {
             alert(tr("Requires valid numeric distance."));
             actuator("set-prompt-prefix-tr Specify distance: "));
@@ -4783,25 +4847,19 @@ Geometry::polygon_prompt(String str)
             }
         }
     }
-    else if (properties["mode"].s == MODE_SIDE_LEN) {
+    case MODE_SIDE_LEN) {
         todo("POLYGON", "Sidelength mode");
     }
 }
 
-/**
- * .
- */
+/* . */
 void
 Geometry::polyline_main(void)
 {
     script(polyline_init);
 }
 
-/**
- * @brief .
- * 
- * v 
- */
+/* . */
 void
 Geometry::polyline_click(EmbVector v)
 {
@@ -4886,10 +4944,7 @@ Geometry::polyline_prompt(String str)
     }
 }
 
-/**
- * @brief .
- * @todo Adding the text is not complete yet.
- */
+/* TODO: Adding the text is not complete yet. */
 void
 Geometry::quickleader_main(void)
 {
@@ -4902,11 +4957,7 @@ Geometry::quickleader_main(void)
     actuator("set-prompt-prefix-tr Specify first point: ");
 }
 
-/**
- * @brief .
- * 
- * v 
- */
+/* . */
 void
 Geometry::quickleader_click(EmbVector v)
 {
@@ -4929,22 +4980,14 @@ Geometry::quickleader_click(EmbVector v)
     }
 }
 
-/**
- * @brief .
- * 
- * str 
- */
+/* . */
 void
 Geometry::quickleader_context(String str)
 {
     todo("QUICKLEADER", "context()");
 }
 
-/**
- * @brief .
- * 
- * str 
- */
+/* . */
 void
 Geometry::quickleader_prompt(String str)
 {
@@ -4978,10 +5021,7 @@ Geometry::quickleader_prompt(String str)
     }
 }
 
-/**
- * @brief .
- * 
- */
+/* . */
 void
 Geometry::rectangle_main(void)
 {
@@ -4997,11 +5037,7 @@ Geometry::rectangle_main(void)
     });
 }
 
-/**
- * @brief .
- * 
- * v 
- */
+/* . */
 void
 Geometry::rectangle_click(EmbVector v)
 {
@@ -5024,22 +5060,14 @@ Geometry::rectangle_click(EmbVector v)
     }
 }
 
-/**
- * @brief .
- * 
- * str 
- */
+/* . */
 void
 Geometry::rectangle_context(String str)
 {
     todo("RECTANGLE", "context()");
 }
 
-/**
- * @brief .
- * 
- * str 
- */
+/* . */
 void
 Geometry::rectangle_prompt(String str)
 {
@@ -5082,10 +5110,7 @@ Geometry::rectangle_prompt(String str)
     }
 }
 
-/**
- * @brief .
- * 
- */
+/* . */
 void
 Geometry::rgb_main(void)
 {
@@ -5095,22 +5120,14 @@ Geometry::rgb_main(void)
     actuator("set-prompt-prefix-tr Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: "));
 }
 
-/**
- * @brief .
- * 
- * v 
- */
+/* . */
 void
 Geometry::rgb_click(EmbVector v)
 {
     //Do Nothing, prompt only command.
 }
 
-/**
- * @brief .
- * 
- * str 
- */
+/* . */
 void
 Geometry::rgb_context(String str)
 {
@@ -5147,7 +5164,7 @@ Geometry::rgb_prompt(String str)
             }
         }
     }
-    else if (properties["mode"].s == RGB_MODE_CROSSHAIR) {
+    case RGB_MODE_CROSSHAIR) {
         EmbReal strList = str.split(",");
         EmbReal r = node_real(strList[0]);
         EmbReal g = node_real(strList[1]);
@@ -5161,7 +5178,7 @@ Geometry::rgb_prompt(String str)
             actuator("end");
         }
     }
-    else if (properties["mode"].s == RGB_MODE_GRID) {
+    case RGB_MODE_GRID) {
         EmbReal strList = str.split(",");
         EmbReal r = node_real(strList[0]);
         EmbReal g = node_real(strList[1]);
@@ -5177,11 +5194,7 @@ Geometry::rgb_prompt(String str)
     }
 }
 
-/**
- * @brief .
- * 
- * args 
- */
+/* . */
 void
 Geometry::rotate_main(String args)
 {
@@ -5208,18 +5221,15 @@ Geometry::rotate_main(String args)
     }
 }
 
-/**
- * @brief 
- * 
- * v 
- */
+/* . */
 void
 Geometry::rotate_click(EmbVector v)
 {
-    if (properties["mode"].s == ROTATE_MODE_NORMAL) {
-        if (properties["firstRun) {
-            properties["firstRun = false;
-            properties["base = v;
+    switch (mode) {
+    case ROTATE_MODE_NORMAL:
+        if (properties["firstRun"]) {
+            properties["firstRun"] = false;
+            properties["base"] = v;
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", properties["baseX, properties["baseY);
@@ -5236,7 +5246,7 @@ Geometry::rotate_click(EmbVector v)
             actuator("end");
         }
     }
-    else if (properties["mode"].s == ROTATE_MODE_REFERENCE) {
+    case ROTATE_MODE_REFERENCE) {
         if (std::isnan(properties["baseRX"])) {
             properties["baseR"] = v;
             actuator("append-prompt-history");
@@ -5262,22 +5272,14 @@ Geometry::rotate_click(EmbVector v)
     }
 }
 
-/**
- * @brief 
- * 
- * str 
- */
+/* . */
 void
 Geometry::rotate_context(String str)
 {
     todo("ROTATE", "context()");
 }
 
-/**
- * @brief 
- * 
- * str 
- */
+/* . */
 void
 Geometry::rotate_prompt(String str)
 {
@@ -5320,7 +5322,7 @@ Geometry::rotate_prompt(String str)
             }
         }
     }
-    else if (properties["mode"].s == MODE_REFERENCE) {
+    case MODE_REFERENCE) {
         if (std::isnan(properties["baseRX"])) {
             if (std::isnan(str)) {
                 EmbReal strList = str.split(",");
@@ -5413,9 +5415,7 @@ properties["test1"];
 properties["test2"];
 */
 
-/**
- * .
- */
+/* . */
 void
 Geometry::sandbox_main(String str)
 {
@@ -5432,8 +5432,8 @@ Geometry::sandbox_main(String str)
 
     //Polyline & Polygon Testing
 
-    EmbReal offset.x"] = 0.0;
-    EmbReal offset.y"] = 0.0;
+    properties["offset.x"] = node_real(0.0);
+    properties["offset.y"] = node_real(0.0);
 
     EmbReal polylineArray = [];
     polylineArray.push(1.0 + offsetX);
@@ -5454,8 +5454,8 @@ Geometry::sandbox_main(String str)
     polylineArray.push(1.0 + offsetY);
     addPolyline(polylineArray);
 
-    offset.x"] = 5.0;
-    offset.y"] = 0.0;
+    properties["offset.x"] = 5.0;
+    properties["offset.y"] = 0.0;
 
     EmbReal polygonArray = [];
     polygonArray.push(1.0 + offsetX);
@@ -5479,9 +5479,7 @@ Geometry::sandbox_main(String str)
     actuator("end");
 }
 
-/**.
- * Command: Scale
- */
+/* Command: Scale. */
 void
 Geometry::scale_main(void)
 {
@@ -5513,13 +5511,12 @@ Geometry::scale_main(void)
     }
 }
 
-/**
- * .
- */
+/* . */
 void
 Geometry::scale_click(EmbVector v)
 {
-    if (properties["mode"].s == MODE_NORMAL) {
+    switch (mode) {
+    case SCALE_MODE_NORMAL: {
         if (properties["firstRun"]) {
             properties["firstRun"] = false;
             properties["base"] = v;
@@ -5531,21 +5528,22 @@ Geometry::scale_click(EmbVector v)
             actuator("set-prompt-prefix-tr Specify scale factor or [Reference]: "));
         }
         else {
-            properties["dest = v;
-            properties["factor = calculateDistance(properties["base, properties["dest);
+            properties["dest"] = v;
+            properties["factor"] = calculateDistance(properties["base"], properties["dest"]);
             actuator("append-prompt-history");
-            scaleSelected(properties["baseX, properties["baseY, properties["factor);
+            scaleSelected(properties["baseX"], properties["baseY"], properties["factor"]);
             previewOff();
             actuator("end");
         }
+        break;
     }
-    else if (properties["mode"].s == "MODE_REFERENCE") {
+    case "MODE_REFERENCE") {
         if (std::isnan(properties["baseRX"])) {
-            properties["baseR = v;
+            properties["baseR"] = v;
             actuator("append-prompt-history");
             addRubber("LINE");
             setRubberMode("LINE");
-            setRubberPoint("LINE_START", properties["baseR);
+            setRubberPoint("LINE_START", properties["baseR"]);
             actuator("set-prompt-prefix-tr Specify second point: "));
         }
         else if (std::isnan(properties["destRX"])) {
@@ -5582,18 +5580,14 @@ Geometry::scale_click(EmbVector v)
     }
 }
 
-/**
- * .
- */
+/* . */
 void
 Geometry::scale_context(String str)
 {
     todo("SCALE", "context()");
 }
 
-/**
- * .
- */
+/* . */
 void
 Geometry::scale_prompt(String str)
 {
@@ -5636,7 +5630,7 @@ Geometry::scale_prompt(String str)
             }
         }
     }
-    else if (properties["mode"].s == "MODE_REFERENCE") {
+    case "MODE_REFERENCE") {
         if (std::isnan(properties["baseRX"].r)) {
             if (std::isnan(str)) {
                 EmbReal strList = str.split(",");
@@ -5689,7 +5683,7 @@ Geometry::scale_prompt(String str)
                 else {
                     properties["destR.x"] = node_real(strList[0]);
                     properties["destR.y"] = node_real(strList[1]);
-                    properties["factorRef = calculateDistance(properties["baseRX, properties["baseRY, properties["destRX, properties["destRY);
+                    properties["factorRef = calculateDistance(properties["baseRX, properties["baseRY"], properties["destRX"], properties["destRY"]);
                     if (properties["factorRef"].r <= 0.0) {
                         properties["destRX"] = node_real(0.0f);
                         properties["destRY"] = node_real(0.0f);
@@ -5710,12 +5704,12 @@ Geometry::scale_prompt(String str)
                 properties["baseR.y"] = 0.0;
                 properties["destR.x"] = 0.0;
                 properties["destR.y"] = 0.0;
-                //The reference length is what we will use later.
-                properties["factorRef = node_real(str);
-                if (properties["factorRef <= 0.0) {
-                    properties["destRX    = node_real(0.0f);
-                    properties["destRY    = node_real(0.0f);
-                    properties["factorRef = node_real(0.0f);
+                // The reference length is what we will use later.
+                properties["factorRef"] = node_real(str);
+                if (properties["factorRef"] <= 0.0) {
+                    properties["destRX"] = node_real(0.0f);
+                    properties["destRY"] = node_real(0.0f);
+                    properties["factorRef"] = node_real(0.0f);
                     alert(tr("Value must be positive and nonzero."));
                     actuator("set-prompt-prefix-tr Specify second point: "));
                 }
@@ -5736,8 +5730,8 @@ Geometry::scale_prompt(String str)
                 else {
                     EmbReal x = node_real(strList[0]);
                     EmbReal y = node_real(strList[1]);
-                    properties["factorNew = calculateDistance(properties["baseX"], properties["baseY"], x, y);
-                    if (properties["factorNew <= 0.0) {
+                    properties["factorNew"] = calculateDistance(properties["baseX"], properties["baseY"], x, y);
+                    if (properties["factorNew"].r <= 0.0) {
                         properties["factorNew"] = node_real(0.0f);
                         alert(tr("Value must be positive and nonzero."));
                         actuator("set-prompt-prefix-tr Specify new length: "));
@@ -5766,10 +5760,7 @@ Geometry::scale_prompt(String str)
     }
 }
 
-/**
- * @brief .
- * 
- */
+/* . */
 void
 Geometry::text_single_main(void)
 {
@@ -5788,11 +5779,7 @@ Geometry::text_single_main(void)
     actuator("set-prompt-prefix-tr Specify start point of text or [Justify/Setfont]: ");
 }
 
-/**
- * @brief 
- * 
- * v 
- */
+/* . */
 void
 Geometry::text_single_click(EmbVector v)
 {
@@ -5935,14 +5922,14 @@ Geometry::text_single_prompt(String str)
             actuator("set-prompt-prefix-tr Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: ");
         }
     }
-    else if (properties["mode"].s == "MODE_SETFONT") {
+    case "MODE_SETFONT") {
         properties["mode"].s = "MODE_SETGEOM";
         properties["textFont"] = str;
         setRubberText("TEXT_FONT", properties["textFont"].s);
         setTextFont(properties["textFont"].s);
         actuator("set-prompt-prefix-tr Specify start point of text or [Justify/Setfont]: ");
     }
-    else if (properties["mode"].s == "MODE_SETGEOM") {
+    case "MODE_SETGEOM") {
         if (std::isnan(properties["textX"])) {
             if (str == "J" || str == "JUSTIFY") {
                 properties["mode"].s = "MODE_JUSTIFY";
@@ -6022,7 +6009,7 @@ Geometry::text_single_prompt(String str)
             //Do nothing, as we are in rapidFire mode now.
         }
     }
-    else if (properties["mode"].s == "MODE_RAPID") {
+    case "MODE_RAPID") {
         if (str == "RAPID_ENTER") {
             if (properties["text"] == "") {
                 actuator("end");
@@ -6030,7 +6017,7 @@ Geometry::text_single_prompt(String str)
             else {
                 actuator("vulcanize");
                 actuator("end");
-                /** @TODO Rather than ending the command, calculate where the
+                /** TODO: Rather than ending the command, calculate where the
                  * next line would be and modify the x/y to the new point.
                  */
             }
@@ -6068,10 +6055,7 @@ Geometry::update_snowflake(void)
     setRubberText("POLYGON_NUM_POINTS", numPoints.toString());
 }
 
-/**
- * @brief 
- * 
- */
+/* . */
 void
 Geometry::star_main(void)
 {
@@ -6088,16 +6072,14 @@ Geometry::star_main(void)
     actuator("set-prompt-prefix-tr Enter number of star points {5}: ");
 }
 
-/**
- * @brief star_click
- */
+/* . */
 void
 Geometry::star_click(EmbReal mouse)
 {
     if (properties["mode"].s == "MODE_NUM_POINTS") {
         //Do nothing, the prompt controls this.
     }
-    else if (properties["mode"].s == "MODE_CENTER_PT") {
+    case "MODE_CENTER_PT") {
         properties["center"] = mouse;
         properties["mode"].s = "MODE_RAD_OUTER";
         actuator("set-prompt-prefix-tr Specify outer radius of star: ");
@@ -6106,13 +6088,13 @@ Geometry::star_click(EmbReal mouse)
         updateStar(properties, properties["center"]);
         actuator("enable move-rapid-fire");
     }
-    else if (properties["mode"].s == "MODE_RAD_OUTER") {
+    case "MODE_RAD_OUTER") {
         properties["point1"] = mouse;
         properties["mode"].s = "MODE_RAD_INNER";
         actuator("set-prompt-prefix-tr Specify inner radius of star: ");
         updateStar(properties["point1"]);
     }
-    else if (properties["mode"].s == "MODE_RAD_INNER") {
+    case "MODE_RAD_INNER") {
         properties["point2"] = mouse;
         actuator("disable move-rapid-fire");
         updateStar(properties["point2"]);
@@ -6121,38 +6103,32 @@ Geometry::star_click(EmbReal mouse)
     }
 }
 
-/**
- * @brief star_move
- */
+/* . */
 void
 Geometry::star_move(EmbVector v)
 {
     if (properties["mode"].s == "STAR_MODE_NUM_POINTS") {
         //Do nothing, the prompt controls this.
     }
-    else if (properties["mode"].s == "STAR_MODE_CENTER_PT") {
+    case "STAR_MODE_CENTER_PT") {
         //Do nothing, prompt and click controls this.
     }
-    else if (properties["mode"].s == "STAR_MODE_RAD_OUTER") {
+    case "STAR_MODE_RAD_OUTER") {
         properties = updateStar(properties, v);
     }
-    else if (properties["mode"].s == "STAR_MODE_RAD_INNER") {
+    case "STAR_MODE_RAD_INNER") {
         properties = updateStar(properties, v);
     }
 }
 
-/**
- * @brief star_context
- */
+/* . */
 void
 Geometry::star_context(String str)
 {
     todo("STAR", "context()");
 }
 
-/**
- * @brief star_prompt
- */
+/* . */
 void
 Geometry::star_prompt(String str)
 {
@@ -6174,7 +6150,7 @@ Geometry::star_prompt(String str)
             }
         }
     }
-    else if (properties["mode"].s == STAR_MODE_CENTER_PT) {
+    case STAR_MODE_CENTER_PT) {
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
@@ -6191,7 +6167,7 @@ Geometry::star_prompt(String str)
             actuator("enable move-rapid-fire");
         }
     }
-    else if (properties["mode"].s == STAR_MODE_RAD_OUTER) {
+    case STAR_MODE_RAD_OUTER) {
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
@@ -6205,7 +6181,7 @@ Geometry::star_prompt(String str)
             updateStar(qsnapX(), qsnapY());
         }
     }
-    else if (properties["mode"].s == STAR_MODE_RAD_INNER) {
+    case STAR_MODE_RAD_INNER) {
         EmbReal strList = str.split(",");
         if (std::isnan(strList[0]) || std::isnan(strList[1])) {
             alert(tr("Invalid point."));
@@ -6222,9 +6198,7 @@ Geometry::star_prompt(String str)
     }
 }
 
-/**
- * @brief updateStar
- */
+/* Update star. */
 void
 Geometry::updateStar(EmbVector mouse)
 {

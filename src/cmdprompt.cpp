@@ -201,7 +201,7 @@ CmdPrompt::setPromptBackgroundColor(const QColor& color)
 }
 
 /**
- * @brief CmdPrompt::setPromptFontFamily
+ * setPromptFontFamily
  * @param family
  */
 void
@@ -212,7 +212,7 @@ CmdPrompt::setPromptFontFamily(QString  family)
 }
 
 /**
- * @brief CmdPrompt::setPromptFontStyle
+ * setPromptFontStyle
  * @param style
  */
 void
@@ -222,8 +222,7 @@ CmdPrompt::setPromptFontStyle(QString  style)
     updateStyle();
 }
 
-/**
- * @brief CmdPrompt::setPromptFontSize
+/* setPromptFontSize
  * @param size
  */
 void
@@ -234,7 +233,7 @@ CmdPrompt::setPromptFontSize(int size)
 }
 
 /**
- * @brief CmdPrompt::updateStyle
+ * updateStyle
  */
 void
 CmdPrompt::updateStyle()
@@ -251,8 +250,7 @@ CmdPrompt::updateStyle()
     this->setStyleSheet(style);
 }
 
-/**
- * @brief CmdPrompt::appendHistory
+/* appendHistory
  * @param txt
  */
 void
@@ -267,7 +265,7 @@ CmdPrompt::appendHistory(QString  txt)
 }
 
 /**
- * @brief CmdPrompt::setPrefix
+ * setPrefix
  * @param txt
  */
 void

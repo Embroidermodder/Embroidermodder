@@ -15,6 +15,22 @@
 
 #include "embroidermodder.h"
 
+#define MAX_HISTOGRAM_BINS                    1000
+
+/* . */
+QLabel *
+make_label(const char *label_str, QWidget *parent)
+{
+    return new QLabel(label_str, parent);
+}
+
+/* . */
+QLabel *
+make_translated_label(const char *label_str, QWidget *parent)
+{
+    return new QLabel(translate_str(label_str), parent);
+}
+
 /* Create a details dialog object. */
 EmbDetailsDialog::EmbDetailsDialog(QGraphicsScene* theScene, QWidget* parent) : QDialog(parent)
 {
@@ -42,23 +58,6 @@ EmbDetailsDialog::~EmbDetailsDialog()
     QApplication::restoreOverrideCursor();
 }
 
-/* Get information from the embroidery. */
-void
-EmbDetailsDialog::getInfo()
-{
-    //TODO: generate a temporary pattern from the scene data.
-
-    //TODO: grab this information from the pattern
-    stitchesTotal = 5; //TODO: embStitchList_count(pattern->stitchList, TOTAL);
-    stitchesReal  = 4; //TODO: embStitchList_count(pattern->stitchList, NORMAL);
-    stitchesJump  = 3; //TODO: embStitchList_count(pattern->stitchList, JUMP);
-    stitchesTrim  = 2; //TODO: embStitchList_count(pattern->stitchList, TRIM);
-    colorTotal    = 1; //TODO: embThreadList_count(pattern->threadList, TOTAL);
-    colorChanges  = 0; //TODO: embThreadList_count(pattern->threadList, CHANGES);
-
-    boundingRect.setRect(0, 0, 50, 100); //TODO: embPattern_calcBoundingBox(pattern);
-}
-
 /* EmbDetailsDialog::createMainWidget */
 QWidget*
 EmbDetailsDialog::createMainWidget()
@@ -68,7 +67,6 @@ EmbDetailsDialog::createMainWidget()
     //Misc
     QGroupBox* groupBoxMisc = new QGroupBox(tr("General Information"), widget);
 
-    QLabel* labelStitchesTotal = new QLabel(tr("Total Stitches:"), this);
     QLabel* labelStitchesReal  = new QLabel(tr("Real Stitches:"),  this);
     QLabel* labelStitchesJump  = new QLabel(tr("Jump Stitches:"),  this);
     QLabel* labelStitchesTrim  = new QLabel(tr("Trim Stitches:"),  this);
@@ -95,7 +93,7 @@ EmbDetailsDialog::createMainWidget()
     QLabel* fieldRectHeight    = new QLabel(QString::number(boundingRect.height()) + " mm", this);
 
     QGridLayout* gridLayoutMisc = new QGridLayout(groupBoxMisc);
-    gridLayoutMisc->addWidget(labelStitchesTotal,  0, 0, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(make_translated_label("Total Stitches:", widget),  0, 0, Qt::AlignLeft);
     gridLayoutMisc->addWidget(labelStitchesReal,   1, 0, Qt::AlignLeft);
     gridLayoutMisc->addWidget(labelStitchesJump,   2, 0, Qt::AlignLeft);
     gridLayoutMisc->addWidget(labelStitchesTrim,   3, 0, Qt::AlignLeft);
@@ -142,21 +140,30 @@ EmbDetailsDialog::createMainWidget()
     return scrollArea;
 }
 
-#define MAX_HISTOGRAM_BINS                    1000
-
-/* Original design details code.
+/* Get information from the embroidery.
  *
  * TODO: Move majority of this code into libembroidery.
  */
 void
-design_details(void)
+EmbDetailsDialog::getInfo(void)
 {
+    debug_message("designDetails()");
+
+    //TODO: generate a temporary pattern from the scene data.
+
+    //TODO: grab this information from the pattern
+    stitchesTotal = 5; //TODO: embStitchList_count(pattern->stitchList, TOTAL);
+    stitchesReal  = 4; //TODO: embStitchList_count(pattern->stitchList, NORMAL);
+    stitchesJump  = 3; //TODO: embStitchList_count(pattern->stitchList, JUMP);
+    stitchesTrim  = 2; //TODO: embStitchList_count(pattern->stitchList, TRIM);
+    colorTotal    = 1; //TODO: embThreadList_count(pattern->threadList, TOTAL);
+    colorChanges  = 0; //TODO: embThreadList_count(pattern->threadList, CHANGES);
+
+    boundingRect.setRect(0, 0, 50, 100); //TODO: embPattern_calcBoundingBox(pattern);
+
     int bin[MAX_HISTOGRAM_BINS+1];
 
     QApplication::setOverrideCursor(Qt::ArrowCursor);
-    debug_message("designDetails()");
-    QString appName = QApplication::applicationName();
-    QString title = "Design Details";
 
     EmbPattern* pattern = embPattern_create();
     if (!pattern) {
@@ -192,27 +199,30 @@ design_details(void)
     EmbRect bounds = embPattern_calcBoundingBox(pattern);
     */
 
+    EmbVector minimum, maximum, last_pos, delta;
     int colors = 1;
     int num_bins = 10;
     int real_stitches = 0;
     int jump_stitches = 0;
     int trim_stitches = 0;
     int unknown_stitches = 0;
-    int num_colors = 0;
-    double minx = 0.0, maxx = 0.0, miny = 0.0, maxy = 0.0;
+    int num_colors = pattern->thread_list->count;
     double min_stitchlength = 999.0;
     double max_stitchlength = 0.0;
     double total_stitchlength = 0.0;
     int number_of_minlength_stitches = 0;
     int number_of_maxlength_stitches = 0;
-
-    double xx = 0.0, yy = 0.0;
-    double dx = 0.0, dy = 0.0;
     double length = 0.0;
 
-    /*
-    num_colors = embThreadList_count(pattern->threadList);
-    */
+    minimum.x = 1000.0f;
+    minimum.y = 1000.0f;
+    maximum.x = 0.0f;
+    maximum.y = 0.0f;
+    last_pos.x = 0.0f;
+    last_pos.y = 0.0f;
+    delta.x = 0.0f;
+    delta.y = 0.0f;
+
     if (pattern->stitch_list->count == 0) {
         QMessageBox::warning(_mainWin,
             translate_str("No Design Loaded"),
@@ -223,17 +233,19 @@ design_details(void)
 
     QVector<double> stitchLengths;
     double totalColorLength = 0.0;
-    /*
     for (int i = 0; i < pattern->stitch_list->count; i++) {
-        dx = embStitchList_getAt(pattern->stitchList, i).xx - xx;
-        dy = embStitchList_getAt(pattern->stitchList, i).yy - yy;
-        xx = embStitchList_getAt(pattern->stitchList, i).xx;
-        yy = embStitchList_getAt(pattern->stitchList, i).yy;
-        length=sqrt(dx * dx + dy * dy);
+        EmbStitch st = pattern->stitch_list->stitch[i];
+        delta.x = st.x - last_pos.x;
+        delta.y = st.y - last_pos.y;
+        last_pos.x = st.x;
+        last_pos.y = st.y;
+        length = embVector_length(delta);
         totalColorLength += length;
-        if (i > 0 && embStitchList_getAt(pattern->stitchList, i-1).flags != NORMAL)
-            length = 0.0; //can't count first normal stitch;
-        if (!(embStitchList_getAt(pattern->stitchList, i).flags & (JUMP | TRIM))) {
+        // can't count first normal stitch
+        if (i > 0 && pattern->stitch_list->stitch[i-1].flags != NORMAL) {
+            length = 0.0;
+        }
+        if (!(st.flags & (JUMP | TRIM))) {
             real_stitches++;
             if (length > max_stitchlength) {
                 max_stitchlength = length;
@@ -250,27 +262,37 @@ design_details(void)
                 number_of_minlength_stitches++;
             }
             total_stitchlength += length;
-            if (xx < minx) minx = xx;
-            if (xx > maxx) maxx = xx;
-            if (yy < miny) miny = yy;
-            if (yy > maxy) maxy = yy;
+            if (last_pos.x < minimum.x) {
+                minimum.x = last_pos.x;
+            }
+            if (last_pos.y < minimum.y) {
+                minimum.y = last_pos.y;
+            }
+            if (last_pos.x > maximum.x) {
+                maximum.x = last_pos.x;
+            }
+            if (last_pos.y > maximum.y) {
+                maximum.y = last_pos.y;
+            }
         }
-        if (embStitchList_getAt(pattern->stitchList, i).flags & JUMP) {
+        if (st.flags & JUMP) {
             jump_stitches++;
         }
-        if (embStitchList_getAt(pattern->stitchList, i).flags & TRIM) {
+        if (st.flags & TRIM) {
             trim_stitches++;
         }
-        if (embStitchList_getAt(pattern->stitchList, i).flags & STOP) {
+        if (st.flags & STOP) {
             stitchLengths.push_back(totalColorLength);
             totalColorLength = 0;
             colors++;
         }
-        if (embStitchList_getAt(pattern->stitchList, i).flags & END) {
+        if (st.flags & END) {
             stitchLengths.push_back(totalColorLength);
         }
+        if (st.flags | (JUMP & TRIM & STOP & END)) {
+            unknown_stitches++;
+        }
     }
-    */
 
     /* Second pass to fill bins now that we know max stitch length. */
     double binSize = max_stitchlength / num_bins;
@@ -279,18 +301,21 @@ design_details(void)
         bin[i]=0;
     }
 
-    /*
+    last_pos.x = 0.0f;
+    last_pos.y = 0.0f;
     for (int i = 0; i < pattern->stitch_list->count; i++) {
-        dx = embStitchList_getAt(pattern->stitchList, i).xx - xx;
-        dy = embStitchList_getAt(pattern->stitchList, i).yy - yy;
-        xx = embStitchList_getAt(pattern->stitchList, i).xx;
-        yy = embStitchList_getAt(pattern->stitchList, i).yy;
-        if (i > 0
-            && embStitchList_getAt(pattern->stitchList, i-1).flags == NORMAL
-            && embStitchList_getAt(pattern->stitchList, i).flags == NORMAL) {
-            length=sqrt(dx * dx + dy * dy);
-            bin[int(floor(num_bins*length/max_stitchlength))]++;
+        EmbStitch st = pattern->stitch_list->stitch[i];
+        delta.x = st.x - last_pos.x;
+        delta.y = st.y - last_pos.y;
+        if (i > 0) {
+            if (pattern->stitch_list->stitch[i-1].flags == NORMAL
+               && st.flags == NORMAL) {
+                length = embVector_length(delta);
+                bin[int(floor(num_bins*length/max_stitchlength))]++;
+            }
         }
+        last_pos.x = st.x;
+        last_pos.y = st.y;
     }
 
     QString str;
@@ -298,45 +323,45 @@ design_details(void)
         str += QString::number(binSize * (i), 'f', 1) + " - " + QString::number(binSize * (i+1), 'f', 1) + " mm: " +  QString::number(bin[i]) + "\n\n";
     }
 
-    QDialog dialog(this);
+    QDialog dialog(_mainWin);
 
-    QGridLayout* grid = new QGridLayout(this);
+    QGridLayout* grid = new QGridLayout(_mainWin);
     grid->setSpacing(2);
 
-    grid->addWidget(new QLabel(tr("Stitches:")),0,0,1,1);
+    grid->addWidget(new QLabel(translate_str("Stitches:")),0,0,1,1);
     grid->addWidget(new QLabel(QString::number(pattern->stitch_list->count)), 0, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Colors:")),1,0,1,1);
+    grid->addWidget(new QLabel(translate_str("Colors:")),1,0,1,1);
     grid->addWidget(new QLabel(QString::number(num_colors)), 1, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Jumps:")),2,0,1,1);
+    grid->addWidget(new QLabel(translate_str("Jumps:")),2,0,1,1);
     grid->addWidget(new QLabel(QString::number(jump_stitches)), 2, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Top:")),3,0,1,1);
-    grid->addWidget(new QLabel(QString::number(bounds.top) + " mm"), 3, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Left:")),4,0,1,1);
-    grid->addWidget(new QLabel(QString::number(bounds.left) + " mm"), 4, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Bottom:")),5,0,1,1);
-    grid->addWidget(new QLabel(QString::number(bounds.bottom) + " mm"), 5, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Right:")),6,0,1,1);
-    grid->addWidget(new QLabel(QString::number(bounds.right) + " mm"), 6, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Width:")),7,0,1,1);
-    grid->addWidget(new QLabel(QString::number((bounds.right - bounds.left)) + " mm"), 7, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Height:")),8,0,1,1);
-    grid->addWidget(new QLabel(QString::number((bounds.bottom - bounds.top)) + " mm"), 8, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("\nStitch Distribution: \n")),9,0,1,2);
+    grid->addWidget(new QLabel(translate_str("Top:")),3,0,1,1);
+    //grid->addWidget(new QLabel(QString::number(bounds.top) + " mm"), 3, 1, 1, 1);
+    grid->addWidget(new QLabel(translate_str("Left:")),4,0,1,1);
+    //grid->addWidget(new QLabel(QString::number(bounds.left) + " mm"), 4, 1, 1, 1);
+    grid->addWidget(new QLabel(translate_str("Bottom:")),5,0,1,1);
+    //grid->addWidget(new QLabel(QString::number(bounds.bottom) + " mm"), 5, 1, 1, 1);
+    grid->addWidget(new QLabel(translate_str("Right:")),6,0,1,1);
+    //grid->addWidget(new QLabel(QString::number(bounds.right) + " mm"), 6, 1, 1, 1);
+    grid->addWidget(new QLabel(translate_str("Width:")),7,0,1,1);
+    //grid->addWidget(new QLabel(QString::number((bounds.right - bounds.left)) + " mm"), 7, 1, 1, 1);
+    grid->addWidget(new QLabel(translate_str("Height:")),8,0,1,1);
+    //grid->addWidget(new QLabel(QString::number((bounds.bottom - bounds.top)) + " mm"), 8, 1, 1, 1);
+    grid->addWidget(new QLabel(translate_str("\nStitch Distribution: \n")),9,0,1,2);
     grid->addWidget(new QLabel(str), 10, 0, 1, 1);
-    grid->addWidget(new QLabel(tr("\nThread Length By Color: \n")),11,0,1,2);
+    grid->addWidget(new QLabel(translate_str("\nThread Length By Color: \n")),11,0,1,2);
     int currentRow = 12;
 
     for (int i = 0; i < num_colors; i++) {
         QFrame *frame = new QFrame();
         frame->setGeometry(0,0,30,30);
         QPalette palette = frame->palette();
-        EmbColor t = embThreadList_getAt(pattern->threadList, i).color;
-        palette.setColor(backgroundRole(), QColor( t.r, t.g, t.b ) );
+        EmbColor t = pattern->thread_list->thread[i].color;
+        //palette.setColor(backgroundRole(), QColor( t.r, t.g, t.b ) );
         frame->setPalette( palette );
         frame->setAutoFillBackground(true);
         grid->addWidget(frame, currentRow,0,1,1);
         qDebug("size: %d i: %d", stitchLengths.size(), i);
-        grid->addWidget(new QLabel(QString::number(stitchLengths.at(i)) + " mm"), currentRow,1,1,1);
+        //grid->addWidget(new QLabel(QString::number(stitch_lengths[i]) + " mm"), currentRow,1,1,1);
         currentRow++;
     }
 
@@ -345,15 +370,15 @@ design_details(void)
     button.setText("Ok");
     buttonbox.addButton(&button, QDialogButtonBox::AcceptRole);
     buttonbox.setCenterButtons(true);
-    connect(&buttonbox, SIGNAL(accepted()), &dialog, SLOT(accept()));
+    //connect(&buttonbox, SIGNAL(accepted()), &dialog, SLOT(accept()));
 
     grid->addWidget(&buttonbox, currentRow, 0, 1, 2);
 
-    dialog.setWindowTitle(title);
+    dialog.setWindowTitle(translate_str("Embroidery Design Details"));
     dialog.setMinimumWidth(100);
     dialog.setMinimumHeight(50);
     dialog.setLayout(grid);
     dialog.exec();
-    */
+
     QApplication::restoreOverrideCursor();
 }
