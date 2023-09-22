@@ -15,9 +15,7 @@
 
 #include "embroidermodder.h"
 
-/* CmdPrompt::CmdPrompt
- * parent
- */
+/* Create command prompt object. */
 CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
 {
     debug_message("CmdPrompt Constructor");
@@ -200,10 +198,7 @@ CmdPrompt::setPromptBackgroundColor(const QColor& color)
     updateStyle();
 }
 
-/**
- * setPromptFontFamily
- * @param family
- */
+/* Set prompt font family. */
 void
 CmdPrompt::setPromptFontFamily(QString  family)
 {
@@ -211,10 +206,7 @@ CmdPrompt::setPromptFontFamily(QString  family)
     updateStyle();
 }
 
-/**
- * setPromptFontStyle
- * @param style
- */
+/* Set prompt font style. */
 void
 CmdPrompt::setPromptFontStyle(QString  style)
 {
@@ -264,10 +256,7 @@ CmdPrompt::appendHistory(QString  txt)
     emit appendTheHistory(txt, promptInput->prefix.length());
 }
 
-/**
- * setPrefix
- * @param txt
- */
+/* Set prefix to txt. */
 void
 CmdPrompt::setPrefix(QString txt)
 {
@@ -276,10 +265,7 @@ CmdPrompt::setPrefix(QString txt)
     promptInput->setText(txt);
 }
 
-/**
- * @brief CmdPromptSplitter::CmdPromptSplitter
- * @param parent
- */
+/* CmdPromptSplitter parent */
 CmdPromptSplitter::CmdPromptSplitter(QWidget* parent) : QSplitter(parent)
 {
     debug_message("CmdPromptSplitter Constructor");
@@ -294,9 +280,7 @@ CmdPromptSplitter::CmdPromptSplitter(QWidget* parent) : QSplitter(parent)
     connect(this, SIGNAL(moveResizeHistory(int)),    parent, SLOT(resizeTheHistory(int)));
 }
 
-/**
- * @brief CmdPromptSplitter::~CmdPromptSplitter
- */
+/* . */
 CmdPromptSplitter::~CmdPromptSplitter()
 {
 }
@@ -741,10 +725,7 @@ CmdPromptInput::checkEditedText(QString txt)
     }
 }
 
-/**
- * @brief CmdPromptInput::checkChangedText
- * @param txt
- */
+/* CheckChangedText. */
 void
 CmdPromptInput::checkChangedText(QString  txt)
 {
@@ -761,18 +742,13 @@ CmdPromptInput::copyClip()
     qApp->clipboard()->setText(copyText);
 }
 
-/**
- * @brief CmdPromptInput::pasteClip
- */
+/* PasteClip. */
 void CmdPromptInput::pasteClip()
 {
     paste();
 }
 
-/**
- * @brief CmdPromptInput::contextMenuEvent
- * @param event
- */
+/* ContextMenuEvent. */
 void
 CmdPromptInput::contextMenuEvent(QContextMenuEvent* event)
 {
@@ -798,12 +774,7 @@ CmdPromptInput::contextMenuEvent(QContextMenuEvent* event)
     menu.exec(event->globalPos());
 }
 
-/**
- * @brief CmdPromptInput::eventFilter
- * @param obj
- * @param event
- * @return
- */
+/* EventFilter */
 bool
 CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
 {

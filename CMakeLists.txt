@@ -65,6 +65,8 @@ qt_add_executable(embroidermodder2 WIN32 MACOSX_BUNDLE
 
     ${CMAKE_SOURCE_DIR}/src/embroidermodder.h
 
+    ${CMAKE_SOURCE_DIR}/src/core.c
+
     ${CMAKE_SOURCE_DIR}/extern/tomlc99/toml.c
 
     ${CMAKE_SOURCE_DIR}/assets/assets.qrc

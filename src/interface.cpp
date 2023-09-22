@@ -266,34 +266,6 @@ operator*(EmbVector v, EmbReal s)
     return result;
 }
 
-
-/* Convert degrees to radians. */
-EmbReal
-radians__(EmbReal degrees)
-{
-    return degrees * DEGREES_TO_RADIANS;
-}
-
-/* Convert radians to degrees. */
-EmbReal
-degrees__(EmbReal radian)
-{
-    return radian * RADIANS_TO_DEGREES;
-}
-
-/* Check that RBG values are in the range (0,255) inclusive. */
-unsigned char
-validRGB(int r, int g, int b)
-{
-    unsigned char result = (r>=0);
-    result &= (r<256);
-    result &= (g>=0);
-    result &= (g<256);
-    result &= (b>=0);
-    result &= (b<256);
-    return result;
-}
-
 /* Convert from QList to std::vector. */
 std::vector<QGraphicsItem*>
 to_vector(QList<QGraphicsItem*> list)

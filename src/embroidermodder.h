@@ -1601,4 +1601,11 @@ private:
     void alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& viewPoint);
 };
 
+/* Functions and data without C++ dependencies from core.c. */
+extern "C" {
+    unsigned char validRGB(int r, int g, int b);
+
+    extern char details_labels[12][100];
+}
+
 #endif
