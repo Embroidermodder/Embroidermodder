@@ -4,9 +4,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(embroidermodder VERSION 2.0.0 LANGUAGES C CXX)
 
-set(CMAKE_AUTOMOC ON)
-
-include(config.cmake)
+#include(config.cmake)
 
 find_package(Qt6 REQUIRED COMPONENTS Core OpenGL Widgets PrintSupport)
 
@@ -88,13 +86,13 @@ target_link_libraries(embroidermodder2 PRIVATE
     embroidery_static)
 
 if (WIN32)
-set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder2.exe)
-
 else(WIN32)
 target_link_libraries(embroidermodder2 PRIVATE m)
-set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder2)
-
 endif()
+
+set_target_properties(embroidermodder2
+    WIN32_EXECUTIBLE ON
+    MACOS BUNDLE ON)
 
 install(TARGETS embroidermodder2
     BUNDLE DESTINATION .

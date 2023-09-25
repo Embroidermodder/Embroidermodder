@@ -17,7 +17,7 @@
 
 #include <cassert>
 
-#include <QtOpenGL>
+/* #include <QtOpenGL> */
 
 /* Create a View object. */
 View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)

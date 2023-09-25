@@ -20,67 +20,6 @@
 #include <fstream>
 #include <string>
 
-enum OBJ_LTYPE_VALUES {
-    //CAD Linetypes
-    OBJ_LTYPE_CONT = 0,
-    OBJ_LTYPE_CENTER = 1,
-    OBJ_LTYPE_DOT = 2,
-    OBJ_LTYPE_HIDDEN = 3,
-    OBJ_LTYPE_PHANTOM = 4,
-    OBJ_LTYPE_ZIGZAG = 5,
-    //Embroidery Stitchtypes
-    OBJ_LTYPE_RUNNING = 6, // __________
-    OBJ_LTYPE_SATIN = 7, // vvvvvvvvvv
-    OBJ_LTYPE_FISHBONE = 8, // >>>>>>>>>>
-};
-
-enum OBJ_LWT_VALUES {
-    OBJ_LWT_BYLAYER = -2,
-    OBJ_LWT_BYBLOCK = -1,
-    OBJ_LWT_DEFAULT =  0,
-    OBJ_LWT_01 =  1,
-    OBJ_LWT_02 =  2,
-    OBJ_LWT_03 =  3,
-    OBJ_LWT_04 =  4,
-    OBJ_LWT_05 =  5,
-    OBJ_LWT_06 =  6,
-    OBJ_LWT_07 =  7,
-    OBJ_LWT_08 =  8,
-    OBJ_LWT_09 =  9,
-    OBJ_LWT_10 = 10,
-    OBJ_LWT_11 = 11,
-    OBJ_LWT_12 = 12,
-    OBJ_LWT_13 = 13,
-    OBJ_LWT_14 = 14,
-    OBJ_LWT_15 = 15,
-    OBJ_LWT_16 = 16,
-    OBJ_LWT_17 = 17,
-    OBJ_LWT_18 = 18,
-    OBJ_LWT_19 = 19,
-    OBJ_LWT_20 = 20,
-    OBJ_LWT_21 = 21,
-    OBJ_LWT_22 = 22,
-    OBJ_LWT_23 = 23,
-    OBJ_LWT_24 = 24
-};
-
-enum OBJ_SNAP_VALUES {
-    OBJ_SNAP_NULL =  0, //NOTE: Allow this enum to evaluate false
-    OBJ_SNAP_ENDPOINT =  1,
-    OBJ_SNAP_MIDPOINT =  2,
-    OBJ_SNAP_CENTER =  3,
-    OBJ_SNAP_NODE =  4,
-    OBJ_SNAP_QUADRANT =  5,
-    OBJ_SNAP_INTERSECTION =  6,
-    OBJ_SNAP_EXTENSION =  7,
-    OBJ_SNAP_INSERTION =  8,
-    OBJ_SNAP_PERPENDICULAR =  9,
-    OBJ_SNAP_TANGENT = 10,
-    OBJ_SNAP_NEAREST = 11,
-    OBJ_SNAP_APPINTERSECTION = 12,
-    OBJ_SNAP_PARALLEL = 13
-};
-
 MainWindow* _mainWin = 0;
 MdiArea* mdiArea = 0;
 CmdPrompt* prompt = 0;
@@ -2959,6 +2898,117 @@ actuator(String line)
         }
         return "";
     }
+
+/*
+    switch (action_id) {
+    case ACTION_ABOUT:
+    case ACTION_ADD_ARC:
+    case ACTION_ADD_ARC:
+    case ACTION_ADD_CIRCLE:
+    case ACTION_ADD_CIRCLE:
+    case ACTION_ADD_DIM_LEADER:
+    case ACTION_ADD_ELLIPSE:
+    case ACTION_ADD_GEOMETRY:
+    case ACTION_ADD_HORIZONTAL_DIMENSION:
+    case ACTION_ADD_IMAGE:
+    case ACTION_ADD_INFINITE_LINE:
+    case ACTION_ADD_LINE:
+    case ACTION_ADD_PATH:
+    case ACTION_ADD_POINT:
+    case ACTION_ADD_POLYGON:
+    case ACTION_ADD_POLYLINE			15
+    case ACTION_ADD_RAY				16
+    case ACTION_ADD_RECTANGLE			17
+    case ACTION_ADD_REGULAR_POLYGON		18
+    case ACTION_ADD_ROUNDED_RECTANGLE		19
+    case ACTION_ADD_RUBBER			20
+    case ACTION_ADD_SLOT			21
+    case ACTION_ADD_TEXT_MULTI			22
+    case ACTION_ADD_TEXT_SINGLE			23
+    case ACTION_ADD_TO_SELECTION		24
+    case ACTION_ADD_TRIANGLE			25
+    case ACTION_ADD_VERTICAL_DIMENSION		26
+    case ACTION_ALERT				27
+    case ACTION_ALLOW_RUBBER			28
+    case ACTION_APPEND_HISTORY			29
+    case ACTION_APPEND_PROMPT_HISTORY		30
+    case ACTION_CALCULATE_ANGLE			31
+    case ACTION_CALCULATE_DISTANCE		32
+    case ACTION_CHANGELOG			33
+    case ACTION_CLEAR_RUBBER			34
+    case ACTION_CLEAR_SELECTION			35
+    case ACTION_COPY				36
+    case ACTION_COPY_SELECTED			37
+    case ACTION_COPY_SELECTED			38
+    case ACTION_CUT				39
+    case ACTION_CUT_SELECTED			40
+    case ACTION_CUT_SELECTED			41
+    case ACTION_DAY_VISION			42
+    case ACTION_DEBUG				43
+    case ACTION_DELETE_SELECTED			44
+    case ACTION_DELETE_SELECTED			45
+    case ACTION_DESIGN_DETAILS			46
+    case ACTION_DO_NOTHING			47
+    case ACTION_END				48
+    case ACTION_ERROR				49
+    case ACTION_HELP				50
+    case ACTION_ICON				51
+    case ACTION_INIT				52
+    case ACTION_MESSAGEBOX			53
+    case ACTION_MIRROR_SELECTED			54
+    case ACTION_MOUSE_X				55
+    case ACTION_MOUSE_Y				56
+    case ACTION_MOVE_SELECTED			57
+    case ACTION_MOVE_SELECTED			58
+    case ACTION_NEW				59
+    case ACTION_NIGHT_VISION			60
+    case ACTION_NUM_SELECTED			61
+    case ACTION_NUM_SELECTED			62
+    case ACTION_OPEN				63
+    case ACTION_PAN				64
+    case ACTION_PASTE				65
+    case ACTION_PASTE_SELECTED			66
+    case ACTION_PASTE_SELECTED			67
+    case ACTION_PERPENDICULAR_DISTANCE		68
+    case ACTION_PERPENDICULAR_DISTANCE		69
+    case ACTION_PLATFORM			70
+    case ACTION_PREVIEW_OFF			71
+    case ACTION_PREVIEW_ON			72
+    case ACTION_PRINT				72
+    case ACTION_PRINT_AREA			73
+    case ACTION_QSNAP_X				74
+    case ACTION_QSNAP_Y				75
+    case ACTION_QUIT				76
+    case ACTION_REDO				78
+    case ACTION_ROTATE_SELECTED			79
+    case ACTION_ROTATE_SELECTED			80
+    case ACTION_RUBBER				81
+    case ACTION_SCALE_SELECTED			82
+    case ACTION_SCALE_SELECTED			83
+    case ACTION_SELECT_ALL			84
+    case ACTION_SETTINGS_DIALOG			85
+    case ACTION_SET_BACKGROUND_COLOR		86
+    case ACTION_SET_CROSSHAIR_COLOR		87
+    case ACTION_SET_CURSOR_SHAPE		88
+    case ACTION_SET_GRID_COLOR			89
+    case ACTION_SET_PROMPT_PREFIX		90
+    case ACTION_SET_RUBBER_FILTER		91
+    case ACTION_SET_RUBBER_MODE			92
+    case ACTION_SET_RUBBER_POINT		93
+    case ACTION_SET_RUBBER_TEXT			94
+    case ACTION_SPARE_RUBBER			95
+    case ACTION_TIP_OF_THE_DAY			96
+    case ACTION_TODO				97
+    case ACTION_UNDO				98
+    case ACTION_VERSION				99
+    case ACTION_VULCANIZE			100
+    case ACTION_WHATS_THIS			101
+    case ACTION_WINDOW				102
+    case ACTION_ZOOM:
+	default:
+		break;
+	}
+*/
 
     return "<br/><font color=\"red\">Unknown command \"" + command
            + "\". Press F1 for help.</font>";

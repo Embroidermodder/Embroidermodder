@@ -17,6 +17,12 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+/*
+ * Libraries included in "extern/".
+ */
+#include "embroidery.h"
+#include "toml.h"
+
 char details_labels[12][100] = {
     "Total Stitches:",
     "Real Stitches:",
