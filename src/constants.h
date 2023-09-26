@@ -1,4 +1,19 @@
 /*
+ * Embroidermodder 2.
+ *
+ * ------------------------------------------------------------
+ *
+ * Copyright 2013-2023 The Embroidermodder Team
+ * Embroidermodder 2 is Open Source Software.
+ * See LICENSE for licensing terms.
+ *
+ * ------------------------------------------------------------
+ *
+ * Use Python's PEP7 style guide.
+ *     https://peps.python.org/pep-0007/
+ *
+ * ------------------------------------------------------------
+ *
  * Since we use a lot of switch tables and a generally
  * procedural style, most of these constants are for identifying
  * our internal types. More general constants belong

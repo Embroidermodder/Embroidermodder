@@ -13,8 +13,6 @@
  *      https://peps.python.org/pep-0007/
  *
  *  ------------------------------------------------------------
- *
- *  All of the 
  */
 
 #ifndef __EMBROIDERMODDER_UTILITY_H__
@@ -23,9 +21,10 @@
 /* C/C++ Standard Libraries. */
 #include <stdio.h>
 #include <math.h>
-#include <ctime>
-#include <cinttypes>
-#include <cstdarg>
+#include <time.h>
+#include <inttypes.h>
+#include <stdarg.h>
+
 #include <vector>
 #include <unordered_map>
 #include <string>
