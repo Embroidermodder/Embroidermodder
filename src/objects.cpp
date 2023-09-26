@@ -1632,12 +1632,16 @@ Geometry::vulcanize(void)
     }
     if (Type == OBJ_TYPE_POLYLINE) {
         if (!normalPath.elementCount()) {
-            QMessageBox::critical(0, translate_str("Empty Polyline Error"), translate_str("The polyline added contains no points. The command that created this object has flawed logic."));
+            QMessageBox::critical(0,
+                translate_str("Empty Polyline Error"),
+                translate_str("The polyline added contains no points. The command that created this object has flawed logic."));
         }
     }
     if (Type == OBJ_TYPE_PATH) {
         if (!normalPath.elementCount()) {
-            QMessageBox::critical(0, translate_str("Empty Path Error"), translate_str("The path added contains no points. The command that created this object has flawed logic."));
+            QMessageBox::critical(0,
+                translate_str("Empty Path Error"),
+                translate_str("The path added contains no points. The command that created this object has flawed logic."));
         }
     }
 }

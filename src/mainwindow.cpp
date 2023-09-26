@@ -15,7 +15,13 @@
 
 #include "embroidermodder.h"
 
-#include <cerrno>
+/* We assume here that all free systems and MacOS are POSIX compliant. */
+#if !defined(WIN32)
+#include <sys/utsname.h>
+#endif
+
+#include <errno.h>
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -362,75 +368,21 @@ do_nothing_action(String args)
     return "";
 }
 
-/* platformString. */
+/* platformString.
+ * TODO: Append QSysInfo to string where applicable.
+ */
 String
 platformString(void)
 {
-    //TODO: Append QSysInfo to string where applicable.
     String os;
-    #if   defined(Q_OS_AIX)
-    os = "AIX";
-    #elif defined(Q_OS_BSD4)
-    os = "BSD 4.4";
-    #elif defined(Q_OS_BSDI)
-    os = "BSD/OS";
-    #elif defined(Q_OS_CYGWIN)
-    os = "Cygwin";
-    #elif defined(Q_OS_DARWIN)
-    os = "Mac OS";
-    #elif defined(Q_OS_DGUX)
-    os = "DG/UX";
-    #elif defined(Q_OS_DYNIX)
-    os = "DYNIX/ptx";
-    #elif defined(Q_OS_FREEBSD)
-    os = "FreeBSD";
-    #elif defined(Q_OS_HPUX)
-    os = "HP-UX";
-    #elif defined(Q_OS_HURD)
-    os = "GNU Hurd";
-    #elif defined(Q_OS_IRIX)
-    os = "SGI Irix";
-    #elif defined(Q_OS_LINUX)
-    os = "Linux";
-    #elif defined(Q_OS_LYNX)
-    os = "LynxOS";
-    #elif defined(Q_OS_MAC)
-    os = "Mac OS";
-    #elif defined(Q_OS_MSDOS)
-    os = "MS-DOS";
-    #elif defined(Q_OS_NETBSD)
-    os = "NetBSD";
-    #elif defined(Q_OS_OS2)
-    os = "OS/2";
-    #elif defined(Q_OS_OPENBSD)
-    os = "OpenBSD";
-    #elif defined(Q_OS_OS2EMX)
-    os = "XFree86 on OS/2";
-    #elif defined(Q_OS_OSF)
-    os = "HP Tru64 UNIX";
-    #elif defined(Q_OS_QNX)
-    os = "QNX Neutrino";
-    #elif defined(Q_OS_RELIANT)
-    os = "Reliant UNIX";
-    #elif defined(Q_OS_SCO)
-    os = "SCO OpenServer 5";
-    #elif defined(Q_OS_SOLARIS)
-    os = "Sun Solaris";
-    #elif defined(Q_OS_SYMBIAN)
-    os = "Symbian";
-    #elif defined(Q_OS_ULTRIX)
-    os = "DEC Ultrix";
-    #elif defined(Q_OS_UNIX)
-    os = "UNIX BSD/SYSV";
-    #elif defined(Q_OS_UNIXWARE)
-    os = "UnixWare";
-    #elif defined(Q_OS_WIN32)
-    os = "Windows";
-    #elif defined(Q_OS_WINCE)
-    os = "Windows CE";
-    #endif
-    debug_message("Platform: " + os);
-    return os;
+#if defined(WIN32)
+    return "Windows";
+#else
+    struct utsname platform;
+    uname(&platform);
+    String ret(platform.sysname);
+    return ret;
+#endif
 }
 
 /* Open the design details dialog. */
@@ -2899,116 +2851,290 @@ actuator(String line)
         return "";
     }
 
-/*
+    int action_id = 0;
     switch (action_id) {
     case ACTION_ABOUT:
+        break;
+
     case ACTION_ADD_ARC:
-    case ACTION_ADD_ARC:
+        break;
+
     case ACTION_ADD_CIRCLE:
-    case ACTION_ADD_CIRCLE:
+        break;
+
     case ACTION_ADD_DIM_LEADER:
+        break;
+
     case ACTION_ADD_ELLIPSE:
+        break;
+
     case ACTION_ADD_GEOMETRY:
+        break;
+
     case ACTION_ADD_HORIZONTAL_DIMENSION:
+        break;
+
     case ACTION_ADD_IMAGE:
+        break;
+
     case ACTION_ADD_INFINITE_LINE:
+        break;
+
     case ACTION_ADD_LINE:
+        break;
+
     case ACTION_ADD_PATH:
+        break;
+
     case ACTION_ADD_POINT:
+        break;
+
     case ACTION_ADD_POLYGON:
-    case ACTION_ADD_POLYLINE			15
-    case ACTION_ADD_RAY				16
-    case ACTION_ADD_RECTANGLE			17
-    case ACTION_ADD_REGULAR_POLYGON		18
-    case ACTION_ADD_ROUNDED_RECTANGLE		19
-    case ACTION_ADD_RUBBER			20
-    case ACTION_ADD_SLOT			21
-    case ACTION_ADD_TEXT_MULTI			22
-    case ACTION_ADD_TEXT_SINGLE			23
-    case ACTION_ADD_TO_SELECTION		24
-    case ACTION_ADD_TRIANGLE			25
-    case ACTION_ADD_VERTICAL_DIMENSION		26
-    case ACTION_ALERT				27
-    case ACTION_ALLOW_RUBBER			28
-    case ACTION_APPEND_HISTORY			29
-    case ACTION_APPEND_PROMPT_HISTORY		30
-    case ACTION_CALCULATE_ANGLE			31
-    case ACTION_CALCULATE_DISTANCE		32
-    case ACTION_CHANGELOG			33
-    case ACTION_CLEAR_RUBBER			34
-    case ACTION_CLEAR_SELECTION			35
-    case ACTION_COPY				36
-    case ACTION_COPY_SELECTED			37
-    case ACTION_COPY_SELECTED			38
-    case ACTION_CUT				39
-    case ACTION_CUT_SELECTED			40
-    case ACTION_CUT_SELECTED			41
-    case ACTION_DAY_VISION			42
-    case ACTION_DEBUG				43
-    case ACTION_DELETE_SELECTED			44
-    case ACTION_DELETE_SELECTED			45
-    case ACTION_DESIGN_DETAILS			46
-    case ACTION_DO_NOTHING			47
-    case ACTION_END				48
-    case ACTION_ERROR				49
-    case ACTION_HELP				50
-    case ACTION_ICON				51
-    case ACTION_INIT				52
-    case ACTION_MESSAGEBOX			53
-    case ACTION_MIRROR_SELECTED			54
-    case ACTION_MOUSE_X				55
-    case ACTION_MOUSE_Y				56
-    case ACTION_MOVE_SELECTED			57
-    case ACTION_MOVE_SELECTED			58
-    case ACTION_NEW				59
-    case ACTION_NIGHT_VISION			60
-    case ACTION_NUM_SELECTED			61
-    case ACTION_NUM_SELECTED			62
-    case ACTION_OPEN				63
-    case ACTION_PAN				64
-    case ACTION_PASTE				65
-    case ACTION_PASTE_SELECTED			66
-    case ACTION_PASTE_SELECTED			67
-    case ACTION_PERPENDICULAR_DISTANCE		68
-    case ACTION_PERPENDICULAR_DISTANCE		69
-    case ACTION_PLATFORM			70
-    case ACTION_PREVIEW_OFF			71
-    case ACTION_PREVIEW_ON			72
-    case ACTION_PRINT				72
-    case ACTION_PRINT_AREA			73
-    case ACTION_QSNAP_X				74
-    case ACTION_QSNAP_Y				75
-    case ACTION_QUIT				76
-    case ACTION_REDO				78
-    case ACTION_ROTATE_SELECTED			79
-    case ACTION_ROTATE_SELECTED			80
-    case ACTION_RUBBER				81
-    case ACTION_SCALE_SELECTED			82
-    case ACTION_SCALE_SELECTED			83
-    case ACTION_SELECT_ALL			84
-    case ACTION_SETTINGS_DIALOG			85
-    case ACTION_SET_BACKGROUND_COLOR		86
-    case ACTION_SET_CROSSHAIR_COLOR		87
-    case ACTION_SET_CURSOR_SHAPE		88
-    case ACTION_SET_GRID_COLOR			89
-    case ACTION_SET_PROMPT_PREFIX		90
-    case ACTION_SET_RUBBER_FILTER		91
-    case ACTION_SET_RUBBER_MODE			92
-    case ACTION_SET_RUBBER_POINT		93
-    case ACTION_SET_RUBBER_TEXT			94
-    case ACTION_SPARE_RUBBER			95
-    case ACTION_TIP_OF_THE_DAY			96
-    case ACTION_TODO				97
-    case ACTION_UNDO				98
-    case ACTION_VERSION				99
-    case ACTION_VULCANIZE			100
-    case ACTION_WHATS_THIS			101
-    case ACTION_WINDOW				102
+        break;
+
+    case ACTION_ADD_POLYLINE:
+        break;
+
+    case ACTION_ADD_RAY:
+        break;
+
+    case ACTION_ADD_RECTANGLE:
+        break;
+
+    case ACTION_ADD_REGULAR_POLYGON:
+        break;
+
+    case ACTION_ADD_ROUNDED_RECTANGLE:
+        break;
+
+    case ACTION_ADD_RUBBER:
+        break;
+
+    case ACTION_ADD_SLOT:
+        break;
+
+    case ACTION_ADD_TEXT_MULTI:
+        break;
+
+    case ACTION_ADD_TEXT_SINGLE:
+        break;
+
+    case ACTION_ADD_TO_SELECTION:
+        break;
+
+    case ACTION_ADD_TRIANGLE:
+        break;
+
+    case ACTION_ADD_VERTICAL_DIMENSION:
+        break;
+
+    case ACTION_ALERT:
+        break;
+
+    case ACTION_ALLOW_RUBBER:
+        break;
+
+    case ACTION_APPEND_HISTORY:
+        break;
+
+    case ACTION_APPEND_PROMPT_HISTORY:
+        break;
+
+    case ACTION_CALCULATE_ANGLE:
+        break;
+
+    case ACTION_CALCULATE_DISTANCE:
+        break;
+
+    case ACTION_CHANGELOG:
+        break;
+
+    case ACTION_CLEAR_RUBBER:
+        break;
+
+    case ACTION_CLEAR_SELECTION:
+        break;
+
+    case ACTION_COPY:
+        break;
+
+    case ACTION_COPY_SELECTED:
+        break;
+
+    case ACTION_CUT:
+        break;
+
+    case ACTION_CUT_SELECTED:
+        break;
+
+    case ACTION_DAY_VISION:
+        break;
+
+    case ACTION_DEBUG:
+        break;
+
+    case ACTION_DELETE_SELECTED:
+        break;
+
+    case ACTION_DESIGN_DETAILS:
+        break;
+
+    case ACTION_DO_NOTHING:
+        break;
+
+    case ACTION_END:
+        break;
+
+    case ACTION_ERROR:
+        break;
+
+    case ACTION_HELP:
+        break;
+
+    case ACTION_ICON:
+        break;
+
+    case ACTION_INIT:
+        break;
+
+    case ACTION_MESSAGEBOX:
+        break;
+
+    case ACTION_MIRROR_SELECTED:
+        break;
+
+    case ACTION_MOUSE_X:
+        break;
+
+    case ACTION_MOUSE_Y:
+        break;
+
+    case ACTION_MOVE_SELECTED:
+        break;
+
+    case ACTION_NEW:
+        break;
+
+    case ACTION_NIGHT_VISION:
+        break;
+
+    case ACTION_NUM_SELECTED:
+        break;
+
+    case ACTION_OPEN:
+        break;
+
+    case ACTION_PAN:
+        break;
+
+    case ACTION_PASTE:
+        break;
+
+    case ACTION_PASTE_SELECTED:
+        break;
+
+    case ACTION_PERPENDICULAR_DISTANCE:
+        break;
+
+    case ACTION_PLATFORM:
+        break;
+
+    case ACTION_PREVIEW_OFF:
+        break;
+
+    case ACTION_PREVIEW_ON:
+        break;
+
+    case ACTION_PRINT:
+        break;
+
+    case ACTION_PRINT_AREA:
+        break;
+
+    case ACTION_QSNAP_X:
+        break;
+
+    case ACTION_QSNAP_Y:
+        break;
+
+    case ACTION_QUIT:
+        break;
+
+    case ACTION_REDO:
+        break;
+
+    case ACTION_ROTATE_SELECTED:
+        break;
+
+    case ACTION_RUBBER:
+        break;
+
+    case ACTION_SCALE_SELECTED:
+        break;
+
+    case ACTION_SELECT_ALL:
+        break;
+
+    case ACTION_SETTINGS_DIALOG:
+        break;
+
+    case ACTION_SET_BACKGROUND_COLOR:
+        break;
+
+    case ACTION_SET_CROSSHAIR_COLOR:
+        break;
+
+    case ACTION_SET_CURSOR_SHAPE:
+        break;
+
+    case ACTION_SET_GRID_COLOR:
+        break;
+
+    case ACTION_SET_PROMPT_PREFIX:
+        break;
+
+    case ACTION_SET_RUBBER_FILTER:
+        break;
+
+    case ACTION_SET_RUBBER_MODE:
+        break;
+
+    case ACTION_SET_RUBBER_POINT:
+        break;
+
+    case ACTION_SET_RUBBER_TEXT:
+        break;
+
+    case ACTION_SPARE_RUBBER:
+        break;
+
+    case ACTION_TIP_OF_THE_DAY:
+        break;
+
+    case ACTION_TODO:
+        break;
+
+    case ACTION_UNDO:
+        break;
+
+    case ACTION_VERSION:
+        break;
+
+    case ACTION_VULCANIZE:
+        break;
+
+    case ACTION_WHATS_THIS:
+        break;
+
+    case ACTION_WINDOW:
+        break;
+
     case ACTION_ZOOM:
-	default:
+        break;
+
+    default:
 		break;
 	}
-*/
 
     return "<br/><font color=\"red\">Unknown command \"" + command
            + "\". Press F1 for help.</font>";
