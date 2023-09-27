@@ -31,9 +31,7 @@
 #include <filesystem>
 
 /* From this source code directory. */
-#include "constants.h"
-#include "../extern/libembroidery/src/embroidery.h"
-#include "../extern/tomlc99/toml.h"
+#include "core.h"
 
 /* Qt 6.0+ libraries. */
 #include <QAction>
@@ -140,7 +138,6 @@ QPointF to_QPointF(EmbVector a);
 EmbVector to_EmbVector(QPointF a);
 EmbVector operator+(EmbVector a, EmbVector b);
 EmbVector operator-(EmbVector a, EmbVector b);
-EmbVector operator*(EmbVector v, EmbReal s);
 
 std::vector<QGraphicsItem*> to_vector(QList<QGraphicsItem*> list);
 QList<QGraphicsItem*> to_qlist(std::vector<QGraphicsItem*> list);
@@ -1430,12 +1427,5 @@ private:
 
     void alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& viewPoint);
 };
-
-/* Functions and data without C++ dependencies from core.c. */
-extern "C" {
-    unsigned char validRGB(int r, int g, int b);
-
-    extern char details_labels[12][100];
-}
 
 #endif

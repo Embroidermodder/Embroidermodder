@@ -44,23 +44,6 @@ protected:
 
 static const char* _appVer_  = "v2.0.0-alpha3";
 static bool exitApp = false;
-const char *usage_msg = ""
-    " ___ _____ ___  ___   __  _ ___  ___ ___   _____  __  ___  ___  ___ ___    ___ \n"
-    "| __|     | _ \\| _ \\ /  \\| |   \\| __| _ \\ |     |/  \\|   \\|   \\| __| _ \\  |__ \\\n"
-    "| __| | | | _ <|   /| () | | |) | __|   / | | | | () | |) | |) | __|   /  / __/\n"
-    "|___|_|_|_|___/|_|\\_\\\\__/|_|___/|___|_|\\_\\|_|_|_|\\__/|___/|___/|___|_|\\_\\ |___|\n"
-    " _____________________________________________________________________________ \n"
-    "|                                                                             |\n"
-    "|                     https://www.libembroidery.org                           |\n"
-    "|_____________________________________________________________________________|\n"
-    "\n"
-    "Usage: embroidermodder [options] files ...\n"
-    "\n"
-    "Options:\n"
-    "  -d, --debug      Print lots of debugging information.\n"
-    "  -h, --help       Print this message and exit.\n"
-    "  -v, --version    Print the version number of embroidermodder and exit.\n"
-    "\n";
 
 int
 main(int argc, char* argv[])

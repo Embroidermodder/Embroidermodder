@@ -163,16 +163,18 @@ get_real(Dictionary d, String key)
 String
 get_str(Dictionary d, String key)
 {
+    char error_str[MAX_STRING_LENGTH];
     auto iter = d.find(key);
     if (iter != d.end()) {
         if (d[key].type == STRING_TYPE) {
             return d[key].s;
         }
-        debug_message(("ERROR: string dictionary entry with key " + key + " is not of string type.").c_str());
+        sprintf(error_str, "ERROR: string dictionary entry with key %s is not of string type.", key.c_str());
     }
     else {
-        debug_message(("ERROR: String setting with key " + key + " missing.").c_str());
+        sprintf(error_str, "ERROR: String setting with key %s  missing.", key.c_str());
     }
+    debug_message(error_str);
     return "";
 }
 

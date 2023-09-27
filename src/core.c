@@ -17,13 +17,9 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-/*
- * Libraries included in "extern/".
- */
-#include "embroidery.h"
-#include "toml.h"
+#include "core.h"
 
-char details_labels[12][100] = {
+const char details_labels[12][MAX_STRING_LENGTH] = {
     "Total Stitches:",
     "Real Stitches:",
     "Jump Stitches:",
@@ -37,6 +33,46 @@ char details_labels[12][100] = {
     "Width:",
     "Height:"
 };
+
+const char default_prompt_style[14][MAX_STRING_LENGTH] = {
+    "color",                      "#000000", // Match -------|
+    "background-color",           "#FFFFFF", //              |
+    "selection-color",            "#FFFFFF", //              |
+    "selection-background-color", "#000000", // Match -------|
+    "font-family",              "Monospace",
+    "font-style",                  "normal",
+    "font-size",                     "12px"
+};
+
+const ActionData action_table[] = {
+    {
+        .type = "action",
+        .icon = "trebleclef",
+        .command = "trebleclef",
+        .tooltip = "Treble Clef",
+        .statustip = "Adds a treble clef design to the vector layer."
+    }
+};
+
+const char *usage_msg = ""
+    " ___ _____ ___  ___   __  _ ___  ___ ___   _____  __  ___  ___  ___ ___    ___ \n"
+    "| __|     | _ \\| _ \\ /  \\| |   \\| __| _ \\ |     |/  \\|   \\|   \\| __| _ \\  |__ \\\n"
+    "| __| | | | _ <|   /| () | | |) | __|   / | | | | () | |) | |) | __|   /  / __/\n"
+    "|___|_|_|_|___/|_|\\_\\\\__/|_|___/|___|_|\\_\\|_|_|_|\\__/|___/|___/|___|_|\\_\\ |___|\n"
+    " _____________________________________________________________________________ \n"
+    "|                                                                             |\n"
+    "|                     https://www.libembroidery.org                           |\n"
+    "|_____________________________________________________________________________|\n"
+    "\n"
+    "Usage: embroidermodder [options] files ...\n"
+    "\n"
+    "Options:\n"
+    "  -d, --debug      Print lots of debugging information.\n"
+    "  -h, --help       Print this message and exit.\n"
+    "  -v, --version    Print the version number of embroidermodder and exit.\n"
+    "\n";
+
+
 
 /* Check that RBG values are in the range (0,255) inclusive. */
 unsigned char

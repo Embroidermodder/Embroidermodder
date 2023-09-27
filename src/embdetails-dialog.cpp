@@ -15,10 +15,6 @@
 
 #include "embroidermodder.h"
 
-#define MAX_HISTOGRAM_BINS                    1000
-
-extern char details_labels[12][100];
-
 /* . */
 QLabel *
 make_label(char label_str[100], QWidget *parent)
@@ -83,7 +79,7 @@ EmbDetailsDialog::createMainWidget()
 
     QGridLayout* gridLayoutMisc = new QGridLayout(groupBoxMisc);
     for (int i=0; i<12; i++) {
-        gridLayoutMisc->addWidget(make_translated_label(details_labels[i], widget), i, 0, Qt::AlignLeft);
+        gridLayoutMisc->addWidget(make_translated_label((char*)details_labels[i], widget), i, 0, Qt::AlignLeft);
     }
     gridLayoutMisc->addWidget(make_label(stitchesTotal, widget), 0, 1, Qt::AlignLeft);
     gridLayoutMisc->addWidget(make_label(stitchesReal, widget), 1, 1, Qt::AlignLeft);

@@ -46,13 +46,9 @@ CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
     this->setLayout(promptVBoxLayout);
 
     styleHash = new QHash<QString, QString>();
-    styleHash->insert("color",                      "#000000"); // Match -------|
-    styleHash->insert("background-color",           "#FFFFFF"); //              |
-    styleHash->insert("selection-color",            "#FFFFFF"); //              |
-    styleHash->insert("selection-background-color", "#000000"); // Match -------|
-    styleHash->insert("font-family",              "Monospace");
-    styleHash->insert("font-style",                  "normal");
-    styleHash->insert("font-size",                     "12px");
+    for (int i=0; i<7; i++) {
+        styleHash->insert(default_prompt_style[2*i], default_prompt_style[2*i+1]);
+    }
 
     updateStyle();
 

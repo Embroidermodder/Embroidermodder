@@ -12,7 +12,7 @@ HEADERS += src/embroidermodder.h \
     extern/libembroidery/src/nanosvg/src/nanosvg.h \
     extern/libembroidery/src/nanosvg/src/nanosvgrast.h \
     extern/tomlc99/toml.h \
-    src/constants.h
+    src/core.h
 SOURCES += src/embroidermodder.cpp \
     extern/libembroidery/src/array.c \
     extern/libembroidery/src/compress.c \
@@ -137,7 +137,6 @@ DISTFILES += \
     assets/commands/star.toml \
     assets/commands/treble_clef.toml \
     assets/config.toml \
-    assets/em2_dev_script.py \
     assets/embroidermodder2.icns \
     assets/embroidermodder2.ico \
     assets/fonts/SourceCodePro-Regular.ttf \

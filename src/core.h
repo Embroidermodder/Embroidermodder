@@ -23,6 +23,9 @@
 #ifndef __EMBROIDERMODDER_CONSTANTS__
 #define __EMBROIDERMODDER_CONSTANTS__
 
+#define MAX_STRING_LENGTH                      200
+#define MAX_HISTOGRAM_BINS                    1000
+
 /* Node types. */
 #define STRING_TYPE                              0
 #define STRING_LIST_TYPE                         1
@@ -335,5 +338,31 @@
 #define REALS_PER_BASE_OBJECT                  100
 #define BOOLS_PER_BASE_OBJECT                  100
 #define STRINGS_PER_BASE_OBJECT                 10
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "../extern/libembroidery/src/embroidery.h"
+#include "../extern/tomlc99/toml.h"
+
+typedef struct ActionData_ {
+    char type[MAX_STRING_LENGTH];
+    char icon[MAX_STRING_LENGTH];
+    char command[MAX_STRING_LENGTH];
+    char tooltip[MAX_STRING_LENGTH];
+    char statustip[MAX_STRING_LENGTH];
+} ActionData;
+
+unsigned char validRGB(int r, int g, int b);
+
+extern const ActionData action_table[];
+extern const char default_prompt_style[14][MAX_STRING_LENGTH];
+extern const char details_labels[12][MAX_STRING_LENGTH];
+extern const char *usage_msg;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

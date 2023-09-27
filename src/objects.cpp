@@ -1459,7 +1459,8 @@ Geometry::objectQuadrant0()
     if (Type == OBJ_TYPE_ELLIPSE) {
         EmbReal halfW = objectWidth()/2.0;
         EmbReal rot = radians(rotation());
-        EmbVector v = embVector_unit(rot) * halfW;
+        EmbVector v;
+        embVector_multiply(embVector_unit(rot), halfW, &v);
         return objectCenter() + to_QPointF(v);
     }
     return objectCenter() + QPointF(objectRadius(), 0);
@@ -1472,7 +1473,8 @@ Geometry::objectQuadrant90()
     if (Type == OBJ_TYPE_ELLIPSE) {
         EmbReal halfH = objectHeight()/2.0;
         EmbReal rot = radians(rotation()+90.0);
-        EmbVector v = embVector_unit(rot) * halfH;
+        EmbVector v;
+        embVector_multiply(embVector_unit(rot), halfH, &v);
         return objectCenter() + to_QPointF(v);
     }
     return objectCenter() + QPointF(0,-objectRadius());
@@ -2036,7 +2038,8 @@ Geometry::objectStartPoint()
     if (Type == OBJ_TYPE_ARC) {
         start_point = arcMidPoint;
     }
-    EmbVector start = to_EmbVector(start_point) * scale();
+    EmbVector start;
+    embVector_multiply(to_EmbVector(start_point), scale(), &start);
     QPointF rotv = to_QPointF(rotate_vector(start, rot));
 
     return scenePos() + rotv;
@@ -2051,7 +2054,8 @@ Geometry::objectMidPoint()
     if (Type == OBJ_TYPE_ARC) {
         mid_point = arcMidPoint;
     }
-    EmbVector mid = to_EmbVector(mid_point) * scale();
+    EmbVector mid;
+    embVector_multiply(to_EmbVector(mid_point), scale(), &mid);
     QPointF rotv = to_QPointF(rotate_vector(mid, rot));
 
     return scenePos() + rotv;
@@ -2065,7 +2069,8 @@ QPointF Geometry::objectEndPoint()
     if (Type == OBJ_TYPE_ARC) {
         end_point = arcEndPoint;
     }
-    EmbVector end = to_EmbVector(end_point) * scale();
+    EmbVector end;
+    embVector_multiply(to_EmbVector(end_point), scale(), &end);
     QPointF rotv = to_QPointF(rotate_vector(end, rot));
 
     return scenePos() + rotv;
@@ -2422,7 +2427,8 @@ Geometry::objectTopLeft()
 {
     EmbReal rot = radians(rotation());
     QPointF tl = rect().topLeft();
-    EmbVector ptl = to_EmbVector(tl) * scale();
+    EmbVector ptl;
+    embVector_multiply(to_EmbVector(tl), scale(), &ptl);
     EmbVector ptlRot = rotate_vector(ptl, rot);
 
     return scenePos() + to_QPointF(ptlRot);
@@ -2434,7 +2440,8 @@ Geometry::objectTopRight()
 {
     EmbReal rot = radians(rotation());
     QPointF tr = rect().topRight();
-    EmbVector ptr = to_EmbVector(tr) * scale();
+    EmbVector ptr;
+    embVector_multiply(to_EmbVector(tr), scale(), &ptr);
     EmbVector ptrRot = rotate_vector(ptr, rot);
 
     return (scenePos() + QPointF(ptrRot.x, ptrRot.y));
@@ -2446,7 +2453,8 @@ Geometry::objectBottomLeft()
 {
     EmbReal rot = radians(rotation());
     QPointF bl = rect().bottomLeft();
-    EmbVector pbl = to_EmbVector(bl) * scale();
+    EmbVector pbl;
+    embVector_multiply(to_EmbVector(bl), scale(), &pbl);
     EmbVector pblRot = rotate_vector(pbl, rot);
 
     return scenePos() + to_QPointF(pblRot);
@@ -2458,7 +2466,8 @@ Geometry::objectBottomRight()
 {
     EmbReal rot = radians(rotation());
     QPointF br = rect().bottomRight();
-    EmbVector pbr = to_EmbVector(br) * scale();
+    EmbVector pbr;
+    embVector_multiply(to_EmbVector(br), scale(), &pbr);
     EmbVector pbrRot = rotate_vector(pbr, rot);
 
     return scenePos() + to_QPointF(pbrRot);
@@ -3513,13 +3522,19 @@ Geometry::script_prompt(String str)
 
 }
 
+#define CIRCLE_MODE_1P_RAD     0
+#define CIRCLE_MODE_1P_DIA     1
+#define CIRCLE_MODE_2P         2
+#define CIRCLE_MODE_3P         3
+
 #if 0
 
 /* . */
 void
 Geometry::circle_click(EmbVector v)
 {
-    if (properties["mode"].s == "CIRCLE_MODE_1P_RAD") {
+    switch () {
+    case CIRCLE_MODE_1P_RAD: {
         auto iter = properties.find("point1");
         if (iter == properties.end()) {
             properties["point1"] = node_vector(v);
@@ -3537,8 +3552,9 @@ Geometry::circle_click(EmbVector v)
             actuator("append-prompt");
             actuator("end");
         }
+        break;
     }
-    case "CIRCLE_MODE_1P_DIA") {
+    case CIRCLE_MODE_1P_DIA:
         auto iter = properties.find("point1");
         if (iter == properties.end()) {
             error("CIRCLE", tr("This should never happen."));
@@ -3552,7 +3568,7 @@ Geometry::circle_click(EmbVector v)
             actuator("end");
         }
     }
-    case "CIRCLE_MODE_2P") {
+    case CIRCLE_MODE_2P: {
         auto iter1 = properties.find("point1");
         auto iter2 = properties.find("point2");
         if (iter1 == properties.end()) {
@@ -3573,8 +3589,9 @@ Geometry::circle_click(EmbVector v)
         else {
             error("CIRCLE", tr("This should never happen."));
         }
+        break;
     }
-    case MODE_3P) {
+    case CIRCLE_MODE_3P: {
         if (std::isnan(properties["x1"].r)) {
             properties["x1"] = node_real(x);
             properties["y1"] = node_real(y);
@@ -3604,29 +3621,34 @@ Geometry::circle_click(EmbVector v)
             });
         }
     }
-    case "MODE_TTR") {
+    case CIRCLE_MODE_TTR: {
         properties["x1"] = node_real(x);
         properties["y1"] = node_real(y);
         actuator("append-prompt-history");
         actuator("set-prompt-prefix-tr Specify point on object for second tangent of circle: ");
         properties["mode"] = node_str("MODE_TTR_SET_POINT_2");
+        break;
     }
-    case "MODE_TTR_SET_POINT_2") {
+    case CIRCLE_MODE_TTR_SET_POINT_2: {
         properties["x2"] = node_real(x);
         properties["y2"] = node_real(y);
         actuator("append-prompt-history");
         actuator("set-prompt-prefix-tr Specify radius of circle: ");
         properties["mode"] = node_str("MODE_TTR_SET_POINT_3");
+        break;
     }
-    case "MODE_TTR_SET_POINT_3") {
+    case CIRCLE_MODE_TTR_SET_POINT_3: {
         properties["x3"] = node_real(x);
         properties["y3"] = node_real(y);
         actuator("append-prompt-history");
         actuator("set-prompt-prefix-tr Specify second point: ");
         properties["mode"] = node_str("DEFAULT");
+        break;
     }
-    else {
+    default: {
         error("CIRCLE", tr("This should never happen."));
+        break;
+    }
     }
 }
 
@@ -5093,7 +5115,7 @@ Geometry::rectangle_prompt(String str)
         else {
             EmbReal x = node_real(strList[0]);
             EmbReal y = node_real(strList[1]);
-            if (properties["newRect) {
+            if (properties["newRect"].b) {
                 properties["newRect"] = false;
                 properties["x1"] = x;
                 properties["y1"] = y;
@@ -5553,7 +5575,7 @@ Geometry::scale_click(EmbVector v)
         else if (std::isnan(properties["destRX"])) {
             properties["destR"] = v;
             properties["factorRef"] = calculateDistance(properties["baseRX"].r, properties["baseRY"].r, properties["destRX"].r, properties["destRY"].r);
-            if (properties["factorRef <= 0.0) {
+            if (properties["factorRef"].r <= 0.0) {
                 properties["destRX"] = node_real(0.0f);
                 properties["destRY"] = node_real(0.0f);
                 properties["factorRef"] = node_real(0.0f);
