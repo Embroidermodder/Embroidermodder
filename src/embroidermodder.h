@@ -43,18 +43,15 @@ class UndoEditor;
 class MainWindow;
 class Geometry;
 
-struct Node_ {
-    struct Node_ *leaves;
-    int n_leaves;
+typedef struct Node_ {
     std::string s;
     char st[MAX_STRING_LENGTH];
     EmbReal r;
     int32_t i;
     bool b;
     std::vector<std::string> sl;
-	void *ref;
     int type;
-};
+} Node;
 
 typedef std::string String;
 typedef std::vector<std::string> StringList;
@@ -63,6 +60,8 @@ typedef std::unordered_map<std::string, Node> Dictionary;
 /* Global variables
  * ----------------
  */
+extern Node *root;
+
 extern MdiArea* mdiArea;
 
 /* The Settings System
@@ -115,7 +114,7 @@ std::string convert_args_to_type(
     std::string label,
     std::vector<std::string> args,
     const char *args_template,
-	std::vector<Node> a);
+    std::vector<Node> a);
 
 View *activeView(void);
 QGraphicsScene* activeScene();
@@ -732,7 +731,6 @@ public slots:
 protected:
     virtual void resizeEvent(QResizeEvent*);
     void closeEvent(QCloseEvent *event);
-    QAction* getFileSeparator();
     void loadFormats();
 
     bool shiftKeyPressedState;

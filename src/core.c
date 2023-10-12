@@ -16,12 +16,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 
 #include "core.h"
 
 /* See the "Programming principles for the C core" in the reference manual
  * before changing this file.
  */
+
+/* So we can find any given piece of data in our UI for the functions to act
+ * on they all lie in a tree that uses C-style tree walking during runtime.
+ */
+CNode *root;
 
 const char details_labels[][MAX_STRING_LENGTH] = {
     "Total Stitches:",
@@ -362,7 +368,7 @@ const char group_box_list[][MAX_STRING_LENGTH] = {
 };
 
 char command_labels[N_ACTIONS][MAX_STRING_LENGTH] = {
-	"about",                        /* 0 */
+    "about",                        /* 0 */
     "add_arc",                      /* 1 */
     "add_circle",                   /* 2 */
     "add_dim_leader",               /* 3 */
@@ -387,9 +393,9 @@ char command_labels[N_ACTIONS][MAX_STRING_LENGTH] = {
     "add_to_selection",             /* 22 */
     "add_triangle",                 /* 23 */
     "add_vertical_dimension",       /* 24 */
-	"alert",                        /* 25 */
+    "alert",                        /* 25 */
     "allow_rubber",                 /* 26 */
-	"append_history",               /* 27 */
+    "append_history",               /* 27 */
     "calculate_angle",              /* 28 */
     "calculate_distance",           /* 29 */
     "changelog",                    /* 30 */
@@ -435,7 +441,7 @@ char command_labels[N_ACTIONS][MAX_STRING_LENGTH] = {
     "rubber",                       /* 70 */
     "scale_selected",               /* 71 */
     "select_all",                   /* 72 */
-	"settings_dialog",              /* 73 */
+    "settings_dialog",              /* 73 */
     "set_background_color",         /* 74 */
     "set_crosshair_color",          /* 75 */
     "set_cursor_shape",             /* 76 */
@@ -474,7 +480,8 @@ char rubber_modes[N_RUBBER_MODES][MAX_STRING_LENGTH] = {
     "POLYGON_CIRCUMSCRIBE",
     "POLYLINE",
     "RECTANGLE",
-    "TEXTSINGLE"
+    "TEXTSINGLE",
+    "END"
 };
 
 /* Check that RBG values are in the range (0,255) inclusive. */
@@ -489,3 +496,89 @@ validRGB(int r, int g, int b)
     result &= (b<256);
     return result;
 }
+
+/*
+ */
+CNode *
+create_node(int type)
+{
+    CNode *new_node = (CNode*)malloc(sizeof(CNode));
+    new_node->n_leaves = 0;
+    new_node->max_leaves = 10;
+    new_node->leaves = (CNode**)malloc(new_node->max_leaves * sizeof(CNode *));
+    new_node->type = type;
+    return new_node;
+}
+
+/*
+ *
+ */
+int
+add_leaf(CNode *branch, CNode *leaf)
+{
+    if (branch->n_leaves >= branch->max_leaves) {
+        branch->max_leaves += 100;
+        branch->leaves = realloc(branch->leaves,
+            branch->max_leaves*sizeof(CNode*));
+    }
+    branch->leaves[branch->n_leaves] = leaf;
+    branch->n_leaves++;
+    return 0;
+}
+
+/*
+ * We traverse each level from highest to lowest index so at each stage the 
+ * readout of n_leaves remains correct.
+ *
+ * To remove_leaf, just call this on a leaf node rather than a larger branch.
+ */
+void
+free_node(CNode *branch)
+{
+    if (branch->n_leaves > 0) {
+        branch->n_leaves--;
+        free_node(branch->leaves[branch->n_leaves]);
+    }
+    else {
+        free(branch);
+    }
+}
+
+/*
+ * TODO: use the C dot notation for traversing down the branches of a tree.
+ *
+ * For example: (root, "setting.font_size") 
+ *
+ * In Python notation this would be represented as:
+ *     root["setting"]["font_size"]
+ *
+ */
+CNode *
+find_node(CNode *branch, char key[MAX_STRING_LENGTH])
+{
+    if (branch->type == CNODE_TYPE_DICTIONARY) {
+        int i;
+        for (i=0; i<branch->n_leaves; i++) {
+            if (!strncmp(key, branch->leaves[i]->key, MAX_STRING_LENGTH)) {
+                return branch->leaves[i];
+            }
+        }
+    }
+    else {
+        /* debug_message("ERROR: cannot search for keys in a non-dictionary type."); */
+    }
+    return NULL;
+}
+
+/*
+ * Print out all the data for the tree for debugging.
+ */
+void
+print_tree(CNode *branch)
+{    
+    int i;
+    for (i=0; i<branch->n_leaves; i++) {
+        /* */
+    }
+}
+

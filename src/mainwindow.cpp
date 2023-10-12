@@ -1598,16 +1598,16 @@ set_cursor_shape_action(String str)
         QString shape = QString::fromStdString(str).toLower();
         if (shape == "arrow") {
             gview->setCursor(QCursor(Qt::ArrowCursor));
-		}
+        }
         else if (shape == "uparrow") {
             gview->setCursor(QCursor(Qt::UpArrowCursor));
-		}
+        }
         else if (shape == "cross") {
             gview->setCursor(QCursor(Qt::CrossCursor));
-		}
+        }
         else if (shape == "wait") {
             gview->setCursor(QCursor(Qt::WaitCursor));
-		}
+        }
         else if (shape == "ibeam")
             gview->setCursor(QCursor(Qt::IBeamCursor));
         else if (shape == "resizevert")
@@ -2446,12 +2446,12 @@ int
 pop_command(const char *line)
 {
     int i;
-	for (i=0; i<N_ACTIONS; i++) {
-		if (!strncmp(line, command_labels[i], strlen(command_labels[i]))) {
-			return i;
-		}
-	}
-	return -1;
+    for (i=0; i<N_ACTIONS; i++) {
+        if (!strncmp(line, command_labels[i], strlen(command_labels[i]))) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 /* MainWindow::actuator
@@ -2492,28 +2492,28 @@ pop_command(const char *line)
 String
 actuator(String line)
 {
-	View* gview = activeView();
+    View* gview = activeView();
 
-	char args[MAX_STRING_LENGTH];
+    char args[MAX_STRING_LENGTH];
     int action_id = pop_command(line.c_str());
-	char error_str[MAX_STRING_LENGTH];
-	/* This could produce silly amounts of output, so watch this line. */
-	sprintf(error_str, "action: %d\n", action_id);
-	debug_message(error_str);
+    char error_str[MAX_STRING_LENGTH];
+    /* This could produce silly amounts of output, so watch this line. */
+    sprintf(error_str, "action: %d\n", action_id);
+    debug_message(error_str);
 
     if (action_id < 0) {
-		char out[2*MAX_STRING_LENGTH];
-		sprintf(out, "<br/><font color=\"red\">Unknown command \"%s\". Press F1 for help.</font>", line.c_str());
-		std::string output(out);
-		return output;
-	}
+        char out[2*MAX_STRING_LENGTH];
+        sprintf(out, "<br/><font color=\"red\">Unknown command \"%s\". Press F1 for help.</font>", line.c_str());
+        std::string output(out);
+        return output;
+    }
 
     strcpy(args, line.c_str() + strlen(command_labels[action_id]) + 1);
     std::string args_(args);
 
     switch (action_id) {
     case ACTION_ABOUT:
-		_mainWin->about();
+        _mainWin->about();
         break;
 
     case ACTION_ADD_ARC:
@@ -2589,16 +2589,16 @@ actuator(String line)
         break;
 
     case ACTION_ALERT:
-		/* Alert the user with a message box. */
-		prompt->alert(QString::fromStdString(args));
+        /* Alert the user with a message box. */
+        prompt->alert(QString::fromStdString(args));
         break;
 
     case ACTION_ALLOW_RUBBER:
         break;
 
     case ACTION_APPEND_HISTORY:
-		/* Can accept no argument. */
-		prompt->appendHistory(QString::fromStdString(args));
+        /* Can accept no argument. */
+        prompt->appendHistory(QString::fromStdString(args));
         break;
 
     case ACTION_CALCULATE_ANGLE:
@@ -2632,7 +2632,7 @@ actuator(String line)
         if (gview) {
             gview->cut();
         }
-		return "";
+        return "";
 
     /* Activate day vision.
      * TODO: Make day vision color settings.
@@ -2645,9 +2645,9 @@ actuator(String line)
         }
         return "";
 
-	/* Allows scripts to produce debug output similar to "echo". */
+    /* Allows scripts to produce debug output similar to "echo". */
     case ACTION_DEBUG:
-    	return "DEBUG: " + args_;
+        return "DEBUG: " + args_;
 
     case ACTION_DELETE_SELECTED:
         break;
@@ -2671,7 +2671,7 @@ actuator(String line)
         break;
 
     case ACTION_INIT:
-    	/* For scripts: clear out any current variables before running. */
+        /* For scripts: clear out any current variables before running. */
         if (gview) {
             gview->clearRubberRoom();
         }
@@ -2693,12 +2693,12 @@ actuator(String line)
         break;
 
     case ACTION_NEW:
-	    _mainWin->newFile();
+        _mainWin->newFile();
         break;
 
-	/* Activate night vision.
-	 * TODO: Make night vision color settings.
-	 */
+    /* Activate night vision.
+     * TODO: Make night vision color settings.
+     */
     case ACTION_NIGHT_VISION:
         if (gview) {
             gview->setBackgroundColor(qRgb(0,0,0));
@@ -2707,9 +2707,9 @@ actuator(String line)
         }
         break;
 
-	/* Return the number of objects selected currently,
-	 * if no view is present returns 0.
-	 */
+    /* Return the number of objects selected currently,
+     * if no view is present returns 0.
+     */
     case ACTION_NUM_SELECTED:
         if (gview) {
             return std::to_string(gview->numSelected());
@@ -2754,7 +2754,7 @@ actuator(String line)
     case ACTION_QSNAP_Y:
         break;
 
-	/* Close the program. */
+    /* Close the program. */
     case ACTION_QUIT:
         _mainWin->quit();
         break;
@@ -2771,7 +2771,7 @@ actuator(String line)
     case ACTION_SCALE_SELECTED:
         break;
 
-	/* For every object in the scene, add it to the selected array. */
+    /* For every object in the scene, add it to the selected array. */
     case ACTION_SELECT_ALL:
         if (gview) {
             gview->selectAll();
@@ -2821,7 +2821,7 @@ actuator(String line)
     case ACTION_UNDO:
         break;
 
-	/* Return the version string to the user (for the CLI). */
+    /* Return the version string to the user (for the CLI). */
     case ACTION_VERSION:
         return config["version"].s;
 
@@ -2837,22 +2837,22 @@ actuator(String line)
     case ACTION_ZOOM:
         break;
 
-	/*
-	case ACTION_SCRIPT:
+    /*
+    case ACTION_SCRIPT:
         auto script = scripts.find(command);
-		if (script != scripts.end()) {
-			String result = run_script(script->second);
-			if (result != "") {
-				return "<br/>" + result;
-			}
-			return "";
+        if (script != scripts.end()) {
+            String result = run_script(script->second);
+            if (result != "") {
+                return "<br/>" + result;
+            }
+            return "";
         }
-		break;
-	*/
+        break;
+    */
 
     default:
-		break;
-	}
+        break;
+    }
 
     return "";
 }
@@ -3449,7 +3449,7 @@ add_rubber_action(String args)
         actuator("todo handle point type in add_rubber_action.);
     }
     else if (objType == "POLYGON") {
-    	_mainWin->nativeadd_polygon_action(mx, my, QPainterPath(), OBJ_RUBBER_ON);
+        _mainWin->nativeadd_polygon_action(mx, my, QPainterPath(), OBJ_RUBBER_ON);
     }
     else if (objType == "POLYLINE") {
         _mainWin->nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON);
@@ -3928,15 +3928,6 @@ MainWindow::resizeEvent(QResizeEvent* e)
     debug_message("MainWindow::resizeEvent()");
     QMainWindow::resizeEvent(e);
     statusBar()->setSizeGripEnabled(!isMaximized());
-}
-
-/* MainWindow::getFileSeparator
- */
-QAction*
-MainWindow::getFileSeparator()
-{
-    debug_message("MainWindow::getFileSeparator()");
-    return myFileSeparator;
 }
 
 /* MainWindow::updateMenuToolbarStatusbar

@@ -20,6 +20,13 @@
  *  To help reduce reliance on Qt, only the functions wrap the
  *  Qt functions have a wrapper here. Ideally we could move some
  *  of the Qt headers here.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  The tree walking, merging, freeing and otherwise altering functions
+ *  are an attempt to create a solid foundation for the internal scripting
+ *  language by having a fully abstract data model similar to an AST for
+ *  the whole state of the program at run-time. 
  */
 
 #include "embroidermodder.h"

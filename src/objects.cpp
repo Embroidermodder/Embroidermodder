@@ -1382,7 +1382,7 @@ Geometry::updateRubber(QPainter* painter)
                 QPointF delta = after-gripPoint;
                 if     (gripPoint == objectTopLeft()) { painter->drawPolygon(mapFromScene(QRectF(after.x(), after.y(), objectWidth()-delta.x(), objectHeight()-delta.y()))); }
                 else if (gripPoint == objectTopRight()) {
-                	painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y())));
+                    painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y())));
                 }
                 else if (gripPoint == objectBottomLeft()) { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y()))); }
                 else if (gripPoint == objectBottomRight()) { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()))); }
@@ -3207,7 +3207,7 @@ void Geometry::setObjectText(QString str)
         textPath.translate(-jRect.center().x(), 0);
     }
     else if (objTextJustify == "Right") {
-    	textPath.translate(-jRect.right(), 0);
+        textPath.translate(-jRect.right(), 0);
     }
     else if (objTextJustify == "Aligned") {
         //TODO: Geometry Aligned Justification
@@ -3219,19 +3219,19 @@ void Geometry::setObjectText(QString str)
         //TODO: Geometry Fit Justification
     }
     else if (objTextJustify == "Top Left") {
-    	textPath.translate(-jRect.topLeft());
+        textPath.translate(-jRect.topLeft());
     }
     else if (objTextJustify == "Top Center") {
-    	textPath.translate(-jRect.center().x(), -jRect.top());
+        textPath.translate(-jRect.center().x(), -jRect.top());
     }
     else if (objTextJustify == "Top Right") {
-    	textPath.translate(-jRect.topRight());
+        textPath.translate(-jRect.topRight());
     }
     else if (objTextJustify == "Middle Left") {
-    	textPath.translate(-jRect.left(), -jRect.top()/2.0);
+        textPath.translate(-jRect.left(), -jRect.top()/2.0);
     }
     else if (objTextJustify == "Middle Center") {
-    	textPath.translate(-jRect.center().x(), -jRect.top()/2.0);
+        textPath.translate(-jRect.center().x(), -jRect.top()/2.0);
     }
     else if (objTextJustify == "Middle Right") {
         textPath.translate(-jRect.right(), -jRect.top()/2.0);
@@ -4034,14 +4034,15 @@ Geometry::ellipse_click(EmbVector v)
 void
 Geometry::ellipse_context(String args)
 {
-    todo("ELLIPSE", "context()");
+    debug_message("TODO ELLIPSE context()");
 }
 
 /* . */
 void
 Geometry::ellipse_prompt(String args)
 {
-    if (properties["mode"].s == MODE_MAJORDIAMETER_MINORRADIUS) {
+    switch (mode) {
+    case MODE_MAJORDIAMETER_MINORRADIUS: {
         if (std::isnan(properties["x1"].r)) {
             if (str == "C" || str == "CENTER") {
                 properties["mode"].s = MODE_MAJORRADIUS_MINORRADIUS;
@@ -4106,8 +4107,9 @@ Geometry::ellipse_prompt(String args)
                 }
             }
         }
+        break;
     }
-    case MODE_MAJORRADIUS_MINORRADIUS) {
+    case MODE_MAJORRADIUS_MINORRADIUS: {
         if (std::isnan(properties["x1"].r)) {
             EmbReal strList = str.split(",");
             if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -4166,7 +4168,7 @@ Geometry::ellipse_prompt(String args)
             }
         }
     }
-    case MODE_ELLIPSE_ROTATION) {
+    case MODE_ELLIPSE_ROTATION: {
         if (std::isnan(properties["x1"].r)) {
             error("ELLIPSE", tr("This should never happen."));
         }
@@ -4185,6 +4187,10 @@ Geometry::ellipse_prompt(String args)
                 actuator("end");
             }
         }
+        break;
+    }
+    default:
+        break;
     }
 }
 
@@ -4298,7 +4304,7 @@ Geometry::line_click(EmbReal x, EmbReal y)
 void
 Geometry::line_context(String str)
 {
-    todo("LINE", "context()");
+    actuator("todo LINE context()");
 }
 
 /**
@@ -4327,7 +4333,7 @@ Geometry::line_prompt(String args)
     }
     else {
         if (str == "U" || str == "UNDO") {
-            todo("LINE", "prompt() for UNDO");
+            actuator("todo LINE prompt() for UNDO");
         }
         else {
             EmbReal strList = str.split(",");
@@ -4355,15 +4361,14 @@ Geometry::line_prompt(String args)
 void
 Geometry::locate_point_main(void)
 {
-    actuator("init");
-    actuator("clear-selection");
-    actuator("set-prompt-prefix-tr Specify point: "));
+    script(
+        "init\n" \
+        "clear-selection\n" \
+        "set-prompt-prefix-tr Specify point: \n"
+    );
 }
 
-/* locate_point_click
- * properties
- * v
- */
+/* locate_point_click v */
 void
 Geometry::locate_point_click(EmbVector v)
 {
@@ -4446,13 +4451,12 @@ Geometry::move_click(EmbReal x, EmbReal y)
         actuator("end");
     }
 }
-*/
 
 /* . */
 void
 Geometry::move_context(String str)
 {
-    // todo("MOVE", "context()");
+    actuator("todo MOVE context()");
 }
 
 /* . */
@@ -4970,18 +4974,16 @@ Geometry::polyline_prompt(String str)
     }
 }
 
-/* TODO: Adding the text is not complete yet. */
-void
-Geometry::quickleader_main(void)
-{
-    actuator("init");
-    actuator("clear-selection");
-    actuator("real x1 = 0.0f");
-    actuator("real y1 = 0.0f");
-    properties["x2"] = node_real(0.0f);
-    properties["y2"] = node_real(0.0f);
-    actuator("set-prompt-prefix-tr Specify first point: ");
-}
+const char quickleader_main[][MAX_STRING_LENGTH] = {
+    "todo Adding the text is not complete yet.",
+    "init",
+    "clear-selection",
+    "x[0] = 0.0f",
+    "y[0] = 0.0f",
+    "x[1] = 0.0f",
+    "y[1] = 0.0f",
+    "set-prompt-prefix-tr Specify first point: "
+};
 
 /* . */
 void
@@ -5010,7 +5012,7 @@ Geometry::quickleader_click(EmbVector v)
 void
 Geometry::quickleader_context(String str)
 {
-    todo("QUICKLEADER", "context()");
+    actuator("todo QUICKLEADER context()");
 }
 
 /* . */
@@ -5048,25 +5050,19 @@ Geometry::quickleader_prompt(String str)
 }
 
 /* . */
-void
-Geometry::rectangle_main(void)
-{
-    script({
-        "init",
-        "clear-selection",
-        "newRect=true",
-        "x1=0.0f",
-        "y1=0.0f",
-        "x2=0.0f",
-        "y2=0.0f",
-        "set-prompt-prefix-tr Specify first corner point or [Chamfer/Fillet]: "
-    });
-}
+const char rectangle_main_script[][MAX_STRING_LENGTH] = {
+    "init",
+    "clear-selection",
+    "newRect=true",
+    "real x1 = 0.0f",
+    "real y1 = 0.0f",
+    "real x2 = 0.0f",
+    "real y2 = 0.0f",
+    "set-prompt-prefix-tr Specify first corner point or [Chamfer/Fillet]: "
+};
 
 /* . */
-void
-Geometry::rectangle_click(EmbVector v)
-{
+const char rectangle_click_script[][MAX_STRING_LENGTH] = {
     if (properties["newRect"].b) {
         properties["newRect"].b = false;
         properties["x1"] = node_real(v.x);
@@ -5077,14 +5073,14 @@ Geometry::rectangle_click(EmbVector v)
         actuator("set-prompt-prefix-tr Specify other corner point or [Dimensions]: "));
     }
     else {
-        properties["newRect"].b = true;
-        properties["x2"] = node_real(v.x);
-        properties["y2"] = node_real(v.y);
-        setRubberPoint("RECTANGLE_END", x, y);
-        actuator("vulcanize");
-        actuator("end");
+        "newRect = true",
+        "x2 = node_real(v.x)",
+        "y2 = node_real(v.y)",
+        "setRubberPoint RECTANGLE_END x y",
+        "vulcanize",
+        "end"
     }
-}
+};
 
 /* . */
 void
@@ -5098,7 +5094,7 @@ void
 Geometry::rectangle_prompt(String str)
 {
     if (str == "C" || str == "CHAMFER") {
-        todo("RECTANGLE", "prompt() for CHAMFER");
+        actuator("todo RECTANGLE prompt() for CHAMFER");
     }
     else if (str == "D" || str == "DIMENSIONS") {
         todo("RECTANGLE", "prompt() for DIMENSIONS");
@@ -6130,22 +6126,26 @@ Geometry::star_click(EmbReal mouse)
 }
 
 /* . */
-void
-Geometry::star_move(EmbVector v)
-{
-    if (properties["mode"].s == "STAR_MODE_NUM_POINTS") {
+const char star_move[][] = {
+    (EmbVector v)
+    switch (mode) {
+    case STAR_MODE_NUM_POINTS: {
         //Do nothing, the prompt controls this.
+        break;
     }
-    case "STAR_MODE_CENTER_PT") {
+    case STAR_MODE_CENTER_PT: {
         //Do nothing, prompt and click controls this.
+        break;
     }
-    case "STAR_MODE_RAD_OUTER") {
+    case STAR_MODE_RAD_OUTER: {
         properties = updateStar(properties, v);
+        break;
     }
-    case "STAR_MODE_RAD_INNER") {
+    case STAR_MODE_RAD_INNER: {
         properties = updateStar(properties, v);
+        break;
     }
-}
+};
 
 /* . */
 void

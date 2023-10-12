@@ -53,6 +53,17 @@
 #define MODE_TYPE                               19
 #define UNKNOWN_TYPE                            20   
 
+/* CNode types. */
+#define CNODE_TYPE_NULL                          0
+#define CNODE_TYPE_STRING                        1
+#define CNODE_TYPE_REAL                          2
+#define CNODE_TYPE_INT                           3
+#define CNODE_TYPE_BOOL                          4
+#define CNODE_TYPE_FUNCTION                      5
+#define CNODE_TYPE_DICTIONARY                    6
+#define CNODE_TYPE_ARRAY                         7
+#define CNODE_TYPE_UNKNOWN                       8
+
 /* Actions.
  * These identifiers are subject to change since they are in alphabetical order
  * and the numbers are increasing.
@@ -389,10 +400,24 @@ typedef struct ActionData_ {
     char statustip[MAX_STRING_LENGTH];
 } ActionData;
 
-typedef struct Node_ Node;
+struct CNode_ {
+    struct CNode_ **leaves;
+    int32_t n_leaves;
+    int32_t max_leaves;
+    char key[MAX_STRING_LENGTH];
+    char data[MAX_STRING_LENGTH];
+    int32_t type;
+};
+
+typedef struct CNode_ CNode;
 
 unsigned char validRGB(int r, int g, int b);
 
+CNode *create_node(int type);
+int add_leaf(CNode *branch, CNode *leaf);
+void free_node(CNode *branch);
+
+extern CNode *root;
 extern const ActionData action_table[];
 extern const char default_prompt_style[14][MAX_STRING_LENGTH];
 extern const char details_labels[12][MAX_STRING_LENGTH];
