@@ -23,22 +23,39 @@
 #ifndef __EMBROIDERMODDER_CONSTANTS__
 #define __EMBROIDERMODDER_CONSTANTS__
 
+/* Maximums for C-style memory arrays. */
 #define MAX_STRING_LENGTH                      200
 #define MAX_HISTOGRAM_BINS                    1000
+#define MAX_TOOLBAR_LENGTH                      30
+#define MAX_MENU_LENGTH                         30
+#define MAX_MENUBAR_LENGTH                      10
 
 /* Node types. */
-#define STRING_TYPE                              0
-#define STRING_LIST_TYPE                         1
-#define REAL_TYPE                                2
-#define INT_TYPE                                 3
-#define BOOL_TYPE                                4
-#define FUNCTION_TYPE                            5
-#define VECTOR_TYPE                              6
-#define UNKNOWN_TYPE                             7
+#define NULL_TYPE                                0
+#define STRING_TYPE                              1
+#define STRING_LIST_TYPE                         2
+#define REAL_TYPE                                3
+#define INT_TYPE                                 4
+#define BOOL_TYPE                                5
+#define FUNCTION_TYPE                            6
+#define VECTOR_TYPE                              7
+#define GROUP_BOX_TYPE                           8
+#define CHECK_BOX_TYPE                           9
+#define SPIN_BOX_TYPE                           10
+#define DOUBLE_SPIN_BOX_TYPE                    11
+#define LABEL_TYPE                              12
+#define COMBO_BOX_TYPE                          13
+#define LINE_EDIT_TYPE                          14
+#define TOOL_BUTTON_TYPE                        15
+#define DICTIONARY_TYPE                         16
+#define QACTION_TYPE                            17
+#define TOOLBAR_TYPE                            18
+#define MODE_TYPE                               19
+#define UNKNOWN_TYPE                            20   
 
 /* Actions.
  * These identifiers are subject to change since they are in alphabetical order
- * and the numebrs are increasing.
+ * and the numbers are increasing.
  */
 #define ACTION_ABOUT                             0
 #define ACTION_ADD_ARC                           1
@@ -68,71 +85,73 @@
 #define ACTION_ALERT                            25
 #define ACTION_ALLOW_RUBBER                     26
 #define ACTION_APPEND_HISTORY                   27
-#define ACTION_APPEND_PROMPT_HISTORY            28
-#define ACTION_CALCULATE_ANGLE                  29
-#define ACTION_CALCULATE_DISTANCE               30
-#define ACTION_CHANGELOG                        31
-#define ACTION_CLEAR_RUBBER                     32
-#define ACTION_CLEAR_SELECTION                  33
-#define ACTION_COPY                             34
-#define ACTION_COPY_SELECTED                    35
-#define ACTION_CUT                              36
-#define ACTION_CUT_SELECTED                     37
-#define ACTION_DAY_VISION                       38
-#define ACTION_DEBUG                            39
-#define ACTION_DELETE_SELECTED                  40
-#define ACTION_DESIGN_DETAILS                   41
-#define ACTION_DO_NOTHING                       42
-#define ACTION_END                              43
-#define ACTION_ERROR                            44
-#define ACTION_HELP                             45
-#define ACTION_ICON                             46
-#define ACTION_INIT                             47
-#define ACTION_MESSAGEBOX                       48
-#define ACTION_MIRROR_SELECTED                  49
-#define ACTION_MOUSE_X                          50
-#define ACTION_MOUSE_Y                          51
-#define ACTION_MOVE_SELECTED                    52
-#define ACTION_NEW                              53
-#define ACTION_NIGHT_VISION                     54
-#define ACTION_NUM_SELECTED                     55
-#define ACTION_OPEN                             56
-#define ACTION_PAN                              57
-#define ACTION_PASTE                            58
-#define ACTION_PASTE_SELECTED                   59
-#define ACTION_PERPENDICULAR_DISTANCE           60
-#define ACTION_PLATFORM                         61
-#define ACTION_PREVIEW_OFF                      62
-#define ACTION_PREVIEW_ON                       63
-#define ACTION_PRINT                            64
-#define ACTION_PRINT_AREA                       65
-#define ACTION_QSNAP_X                          66
-#define ACTION_QSNAP_Y                          67
-#define ACTION_QUIT                             68
-#define ACTION_REDO                             69
-#define ACTION_ROTATE_SELECTED                  70
-#define ACTION_RUBBER                           71
-#define ACTION_SCALE_SELECTED                   72
-#define ACTION_SELECT_ALL                       73
-#define ACTION_SETTINGS_DIALOG                  74
-#define ACTION_SET_BACKGROUND_COLOR             75
-#define ACTION_SET_CROSSHAIR_COLOR              76
-#define ACTION_SET_CURSOR_SHAPE                 77
-#define ACTION_SET_GRID_COLOR                   78
-#define ACTION_SET_PROMPT_PREFIX                79
-#define ACTION_SET_RUBBER_FILTER                80
-#define ACTION_SET_RUBBER_MODE                  81
-#define ACTION_SET_RUBBER_POINT                 82
-#define ACTION_SET_RUBBER_TEXT                  83
-#define ACTION_SPARE_RUBBER                     84
-#define ACTION_TIP_OF_THE_DAY                   85
-#define ACTION_TODO                             86
-#define ACTION_UNDO                             87
-#define ACTION_VERSION                          88
-#define ACTION_VULCANIZE                        89
-#define ACTION_WHATS_THIS                       90
-#define ACTION_WINDOW                           91
-#define ACTION_ZOOM                             92
+#define ACTION_CALCULATE_ANGLE                  28
+#define ACTION_CALCULATE_DISTANCE               29
+#define ACTION_CHANGELOG                        30
+#define ACTION_CLEAR_RUBBER                     31
+#define ACTION_CLEAR_SELECTION                  32
+#define ACTION_COPY                             33
+#define ACTION_COPY_SELECTED                    34
+#define ACTION_CUT                              35
+#define ACTION_CUT_SELECTED                     36
+#define ACTION_DAY_VISION                       37
+#define ACTION_DEBUG                            38
+#define ACTION_DELETE_SELECTED                  39
+#define ACTION_DESIGN_DETAILS                   40
+#define ACTION_DO_NOTHING                       41
+#define ACTION_END                              42
+#define ACTION_ERROR                            43
+#define ACTION_HELP                             44
+#define ACTION_ICON                             45
+#define ACTION_INIT                             46
+#define ACTION_MESSAGEBOX                       47
+#define ACTION_MIRROR_SELECTED                  48
+#define ACTION_MOUSE_X                          49
+#define ACTION_MOUSE_Y                          50
+#define ACTION_MOVE_SELECTED                    51
+#define ACTION_NEW                              52
+#define ACTION_NIGHT_VISION                     53
+#define ACTION_NUM_SELECTED                     54
+#define ACTION_OPEN                             55
+#define ACTION_PAN                              56
+#define ACTION_PASTE                            57
+#define ACTION_PASTE_SELECTED                   58
+#define ACTION_PERPENDICULAR_DISTANCE           59
+#define ACTION_PLATFORM                         60
+#define ACTION_PREVIEW_OFF                      61
+#define ACTION_PREVIEW_ON                       62
+#define ACTION_PRINT                            63
+#define ACTION_PRINT_AREA                       64
+#define ACTION_QSNAP_X                          65
+#define ACTION_QSNAP_Y                          66
+#define ACTION_QUIT                             67
+#define ACTION_REDO                             68
+#define ACTION_ROTATE_SELECTED                  69
+#define ACTION_RUBBER                           70
+#define ACTION_SCALE_SELECTED                   71
+#define ACTION_SELECT_ALL                       72
+#define ACTION_SETTINGS_DIALOG                  73
+#define ACTION_SET_BACKGROUND_COLOR             74
+#define ACTION_SET_CROSSHAIR_COLOR              75
+#define ACTION_SET_CURSOR_SHAPE                 76
+#define ACTION_SET_GRID_COLOR                   77
+#define ACTION_SET_PROMPT_PREFIX                78
+#define ACTION_SET_RUBBER_FILTER                79
+#define ACTION_SET_RUBBER_MODE                  80
+#define ACTION_SET_RUBBER_POINT                 81
+#define ACTION_SET_RUBBER_TEXT                  82
+#define ACTION_SPARE_RUBBER                     83
+#define ACTION_TIP_OF_THE_DAY                   84
+#define ACTION_TODO                             85
+#define ACTION_UNDO                             86
+#define ACTION_VERSION                          87
+#define ACTION_VULCANIZE                        88
+#define ACTION_WHATS_THIS                       89
+#define ACTION_WINDOW                           90
+#define ACTION_ZOOM                             91
+#define N_ACTIONS                               92
+
+#define MAX_ACTIONS                            256
 
 /* OBJ_LTYPE_VALUES */
 // CAD Linetypes
@@ -333,6 +352,8 @@
 #define OBJECT_DiameterMinor(EmbReal diameter);
 */
 
+#define N_RUBBER_MODES                          40
+
 /* Per object constants. */
 #define POINTS_PER_BASE_OBJECT                 100
 #define REALS_PER_BASE_OBJECT                  100
@@ -342,6 +363,20 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/* C/C++ Standard Libraries. */
+#include <stdio.h>
+#include <math.h>
+#include <time.h>
+#include <inttypes.h>
+#include <stdarg.h>
+
+/* We assume here that all free systems and MacOS are POSIX compliant. */
+#if !defined(WIN32)
+#include <sys/utsname.h>
+#endif
+
+#include <errno.h>
 
 #include "../extern/libembroidery/src/embroidery.h"
 #include "../extern/tomlc99/toml.h"
@@ -354,12 +389,15 @@ typedef struct ActionData_ {
     char statustip[MAX_STRING_LENGTH];
 } ActionData;
 
+typedef struct Node_ Node;
+
 unsigned char validRGB(int r, int g, int b);
 
 extern const ActionData action_table[];
 extern const char default_prompt_style[14][MAX_STRING_LENGTH];
 extern const char details_labels[12][MAX_STRING_LENGTH];
 extern const char *usage_msg;
+extern char command_labels[N_ACTIONS][MAX_STRING_LENGTH];
 
 #ifdef __cplusplus
 }

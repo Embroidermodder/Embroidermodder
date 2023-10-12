@@ -15,16 +15,11 @@
 
 #include "embroidermodder.h"
 
-/* We assume here that all free systems and MacOS are POSIX compliant. */
-#if !defined(WIN32)
-#include <sys/utsname.h>
-#endif
-
-#include <errno.h>
-
 #include <iostream>
 #include <fstream>
 #include <string>
+
+int pop_command(const char *line);
 
 MainWindow* _mainWin = 0;
 MdiArea* mdiArea = 0;
@@ -53,227 +48,6 @@ std::unordered_map<String, QToolBar*> toolbarHash;
 std::unordered_map<String, QMenu*> menuHash;
 std::unordered_map<String, QMenu*> subMenuHash;
 
-/* ACTIONS */
-String about_action(String args);
-String add_arc_action(String args);
-String add_circle_action(String args);
-String add_dim_leader_action(String args);
-String add_ellipse_action(String args);
-String add_geometry_action(String args);
-String add_horizontal_dimension_action(String args);
-String add_image_action(String args);
-String add_infinite_line_action(String args);
-String add_line_action(String args);
-String add_path_action(String args);
-String add_point_action(String args);
-String add_polygon_action(String args);
-String add_polyline_action(String args);
-String add_ray_action(String args);
-String add_rectangle_action(String args);
-String add_regular_polygon_action(String args);
-String add_rounded_rectangle_action(String args);
-String add_rubber_action(String args);
-String add_slot_action(String args);
-String add_text_multi_action(String args);
-String add_text_single_action(String args);
-String add_to_selection_action(String args);
-String add_triangle_action(String args);
-String add_vertical_dimension_action(String args);
-String alert_action(String args);
-String allow_rubber_action(String args);
-String append_history_action(String args);
-String append_prompt_history_action(String args);
-String calculate_angle_action(String args);
-String calculate_distance_action(String args);
-String changelog_action(String args);
-String clear_rubber_action(String args);
-String clear_selection_action(String args);
-String copy_action(String args);
-String copy_selected_action(String args);
-String cut_action(String args);
-String cut_selected_action(String args);
-String day_vision_action(String args);
-String delete_selected_action(String args);
-String debug_action(String args);
-String design_details_action(String args);
-String do_nothing_action(String args);
-String end_action(String args);
-String error_action(String args);
-String help_action(String args);
-String icon_action(String args);
-String init_action(String args);
-String messagebox_action(String args);
-String mirror_selected_action(String args);
-String mouse_x_action(String args);
-String mouse_y_action(String args);
-String move_selected_action(String args);
-String new_action(String args);
-String night_vision_action(String args);
-String num_selected_action(String args);
-String open_action(String args);
-String pan_action(String args);
-String paste_action(String args);
-String paste_selected_action(String args);
-String perpendicular_distance_action(String args);
-String platform_action(String args);
-String preview_off_action(String args);
-String preview_on_action(String args);
-String print_action(String args);
-String print_area_action(String args);
-String qsnap_x_action(String args);
-String qsnap_y_action(String args);
-String quit_action(String args);
-String redo_action(String args);
-String rotate_selected_action(String args);
-String rubber_action(String args);
-String scale_selected_action(String args);
-String select_all_action(String args);
-String set_background_color_action(String args);
-String set_crosshair_color_action(String args);
-String set_cursor_shape_action(String args);
-String set_grid_color_action(String args);
-String set_prompt_prefix_action(String args);
-String set_rubber_filter_action(String args);
-String set_rubber_mode_action(String args);
-String set_rubber_point_action(String args);
-String set_rubber_text_action(String args);
-String settings_dialog_action(String args);
-String spare_rubber_action(String args);
-String tip_of_the_day_action(String args);
-String todo_action(String args);
-String undo_action(String args);
-String version_action(String args);
-String vulcanize_action(String args);
-String whats_this_action(String args);
-String window_action(String args);
-String zoom_action(String args);
-
-/* . */
-std::unordered_map<String, Command> command_map = {
-    {"about", about_action},
-    {"add_arc", add_arc_action},
-    {"add_circle", add_circle_action},
-    {"add_dim_leader", add_dim_leader_action},
-    {"add_ellipse", add_ellipse_action},
-    {"add", add_geometry_action},
-    {"add_horizontal_dimension", add_horizontal_dimension_action},
-    {"add_image", add_image_action},
-    {"add_infinite_line", add_infinite_line_action},
-    {"add_line", add_line_action},
-    {"add_path", add_path_action},
-    {"add_point", add_point_action},
-    {"add_polygon", add_polygon_action},
-    {"add_polyline", add_polyline_action},
-    {"add_ray", add_ray_action},
-    {"add_rectangle", add_rectangle_action},
-    {"add_regular_polygon", add_regular_polygon_action},
-    {"add_rounded_rectangle", add_rounded_rectangle_action},
-    {"add_rubber", add_rubber_action},
-    {"add_slot", add_slot_action},
-    {"add_text_multi", add_text_multi_action},
-    {"add_text_single", add_text_single_action},
-    {"add_to_selection", add_to_selection_action},
-    {"add_triangle", add_triangle_action},
-    {"add_vertical_dimension", add_vertical_dimension_action},
-    {"alert", alert_action},
-    {"allow_rubber", allow_rubber_action},
-    {"append_history", append_history_action},
-    {"append_prompt_history", append_prompt_history_action},
-    {"calculate_angle", calculate_angle_action},
-    {"calculate_distance", calculate_distance_action},
-    {"changelog", changelog_action},
-    {"clear_rubber", clear_rubber_action},
-    {"clear_selection", clear_selection_action},
-    {"copy", copy_action},
-    {"copy_selected", copy_selected_action},
-    {"cut", cut_action},
-    {"cut_selected", cut_selected_action},
-    {"day_vision", day_vision_action},
-    {"debug", debug_action},
-    {"delete_selected", delete_selected_action},
-    {"design_details", design_details_action},
-    {"do_nothing", do_nothing_action},
-    {"end", end_action},
-    {"error", error_action},
-    {"help", help_action},
-    {"icon", icon_action},
-    {"init", init_action},
-    {"messagebox", messagebox_action},
-    {"mirror_selected", mirror_selected_action},
-    {"mouse_x", mouse_x_action},
-    {"mouse_y", mouse_y_action},
-    {"move_selected", move_selected_action},
-    {"new", new_action},
-    {"night_vision", night_vision_action},
-    {"num_selected", num_selected_action},
-    {"open", open_action},
-    {"pan", pan_action},
-    {"paste", paste_action},
-    {"paste_selected", paste_selected_action},
-    {"perpendicular_distance", perpendicular_distance_action},
-    {"platform", platform_action},
-    {"preview_off", preview_off_action},
-    {"preview_on", preview_on_action},
-    {"print", print_action},
-    {"print_area", print_area_action},
-    {"qsnap_x", qsnap_x_action},
-    {"qsnap_y", qsnap_y_action},
-    {"quit", quit_action},
-    {"redo", redo_action},
-    {"rotate_selected", rotate_selected_action},
-    {"rubber", rubber_action},
-    {"scale_selected", scale_selected_action},
-    {"select_all", select_all_action},
-    {"set_background_color", set_background_color_action},
-    {"set_crosshair_color", set_crosshair_color_action},
-    {"set_cursor_shape", set_cursor_shape_action},
-    {"set_grid_color", set_grid_color_action},
-    {"set_prompt_prefix", set_prompt_prefix_action},
-    {"set_rubber_filter", set_rubber_filter_action},
-    {"set_rubber_mode", set_rubber_mode_action},
-    {"set_rubber_point", set_rubber_point_action},
-    {"set_rubber_text", set_rubber_text_action},
-    {"settings_dialog", settings_dialog_action},
-    {"spare_rubber", spare_rubber_action},
-    {"tip_of_the_day", tip_of_the_day_action},
-    {"todo", todo_action},
-    {"undo", undo_action},
-    {"version", version_action},
-    {"vulcanize", vulcanize_action},
-    {"whats_this", whats_this_action},
-    {"window", window_action},
-    {"zoom", zoom_action}
-};
-
-StringList rubber_modes = {
-    "CIRCLE_1P_RAD",
-    "CIRCLE_1P_DIA",
-    "CIRCLE_2P",
-    "CIRCLE_3P",
-    "CIRCLE_TTR",
-    "CIRCLE_TTT",
-    "DIMLEADER_LINE",
-    "ELLIPSE_LINE",
-    "ELLIPSE_MAJORDIAMETER_MINORRADIUS",
-    "ELLIPSE_MAJORRADIUS_MINORRADIUS",
-    "ELLIPSE_ROTATION",
-    "LINE",
-    "POLYGON",
-    "POLYGON_INSCRIBE",
-    "POLYGON_CIRCUMSCRIBE",
-    "POLYLINE",
-    "RECTANGLE",
-    "TEXTSINGLE"
-};
-
-
-/* settingsPrompt */
-void
-MainWindow::settingsPrompt()
-{
-    settings_dialog_action("Prompt");
-}
-
 /* settings_dialog showTab */
 String
 settings_dialog_action(String showTab)
@@ -281,6 +55,13 @@ settings_dialog_action(String showTab)
     Settings_Dialog dialog(QString::fromStdString(showTab));
     dialog.exec();
     return "";
+}
+
+/* settingsPrompt */
+void
+MainWindow::settingsPrompt()
+{
+    settings_dialog_action("Prompt");
 }
 
 /* stub_testing */
@@ -312,47 +93,10 @@ MainWindow::checkForUpdates()
     //TODO: Check website for new versions, commands, etc...
 }
 
-/* Checks that no arguments are passed to functions that do not take them.
- * If there are arguments, warn the script writer with a debug_message.
- */
-void
-no_argument_debug(String function_name, String args)
-{
-    debug_message(function_name);
-    if (args != "") {
-        debug_message(function_name + " was passed an argument that was ignored");
-    }
-}
-
-/* Cut the selected objects, placing them into the clipboard variable for this gview. */
-String
-cut_action(String args)
-{
-    no_argument_debug("cut_action()", args);
-    View* gview = activeView();
-    if (gview) {
-        gview->cut();
-    }
-    return "";
-}
-
-/* Copy the selected objects to this activeView's clipboard. */
-String
-copy_action(String args)
-{
-    no_argument_debug("copy_action()", args);
-    View* gview = activeView();
-    if (gview) {
-        gview->copy();
-    }
-    return "";
-}
-
 /* Copy the current clipboard's objects to the scene. */
 String
 paste_action(String args)
 {
-    no_argument_debug("paste_action()", args);
     View* gview = activeView();
     if (gview) {
         gview->paste();
@@ -364,7 +108,6 @@ paste_action(String args)
 String
 do_nothing_action(String args)
 {
-    no_argument_debug("do_nothing_action()", args);
     return "";
 }
 
@@ -389,22 +132,11 @@ platformString(void)
 String
 design_details_action(String args)
 {
-    no_argument_debug("design_details_action()", args);
-
     QGraphicsScene* scene = activeScene();
     if (scene) {
         EmbDetailsDialog dialog(scene, _mainWin);
         dialog.exec();
     }
-    return "";
-}
-
-/* Open the about dialog. */
-String
-about_action(String args)
-{
-    no_argument_debug("about_action()", args);
-    _mainWin->about();
     return "";
 }
 
@@ -462,7 +194,6 @@ MainWindow::about(void)
 String
 whats_this_action(String args)
 {
-    no_argument_debug("whats_this_action()", args);
     QWhatsThis::enterWhatsThisMode();
     return "";
 }
@@ -471,7 +202,6 @@ whats_this_action(String args)
 String
 print_action(String args)
 {
-    no_argument_debug("print_action()", args);
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
         mdiWin->print();
@@ -483,7 +213,6 @@ print_action(String args)
 String
 tip_of_the_day_action(String args)
 {
-    no_argument_debug("tip_of_the_day_action()", args);
     _mainWin->tipOfTheDay();
     return "";
 }
@@ -574,8 +303,6 @@ MainWindow::buttonTipOfTheDayClicked(int button)
 String
 help_action(String args)
 {
-    no_argument_debug("help_action()", args);
-
     // Open the HTML Help in the default browser
     QUrl helpURL("file:///" + qApp->applicationDirPath() + "/help/doc-index.html");
     QDesktopServices::openUrl(helpURL);
@@ -593,8 +320,6 @@ help_action(String args)
 String
 changelog_action(String args)
 {
-    no_argument_debug("changelog_action()", args);
-
     QUrl changelogURL("help/changelog.html");
     QDesktopServices::openUrl(changelogURL);
     return "";
@@ -607,7 +332,6 @@ changelog_action(String args)
 String
 undo_action(String args)
 {
-    no_argument_debug("undo_action()", args);
     QString prefix = prompt->promptInput->prefix;
     if (dockUndoEdit->canUndo()) {
         actuator("set-prompt-prefix Undo "
@@ -632,7 +356,6 @@ undo_action(String args)
 String
 redo_action(String args)
 {
-    no_argument_debug("redo_action()", args);
     QString prefix = prompt->promptInput->prefix;
     if (dockUndoEdit->canRedo()) {
         actuator("set-prompt-prefix Redo " + dockUndoEdit->redoText().toStdString());
@@ -845,7 +568,6 @@ MainWindow::pickAddModeToggled()
 String
 make_layer_active_action(String args)
 {
-    no_argument_debug("make_layer_active_action()", args);
     debug_message("TODO: Implement makeLayerActive.");
     return "";
 }
@@ -854,7 +576,6 @@ make_layer_active_action(String args)
 String
 layer_manager_action(String args)
 {
-    no_argument_debug("layer_manager_action()", args);
     debug_message("TODO: Implement layerManager.");
     LayerManager layman(_mainWin);
     layman.exec();
@@ -865,7 +586,6 @@ layer_manager_action(String args)
 String
 layer_previous_action(String args)
 {
-    no_argument_debug("layer_previous_action()", args);
     debug_message("TODO: Implement layerPrevious.");
     return "";
 }
@@ -989,38 +709,6 @@ zoom_action(String mode)
         return "";
     }
     return "ERROR: zoom subcommand not recognised.";
-}
-
-/* Activate day vision.
- * \todo Make day vision color settings.
- */
-String
-day_vision_action(String args)
-{
-    no_argument_debug("day_vision_action()", args);
-    View* gview = activeView();
-    if (gview) {
-        gview->setBackgroundColor(qRgb(255,255,255));
-        gview->setCrossHairColor(qRgb(0,0,0));
-        gview->setGridColor(qRgb(0,0,0));
-    }
-    return "";
-}
-
-/* Activate night vision.
- * \todo Make night vision color settings.
- */
-String
-night_vision_action(String args)
-{
-    no_argument_debug("night_vision_action()", args);
-    View* gview = activeView();
-    if (gview) {
-        gview->setBackgroundColor(qRgb(0,0,0));
-        gview->setCrossHairColor(qRgb(255,255,255));
-        gview->setGridColor(qRgb(255,255,255));
-    }
-    return "";
 }
 
 /* LayerSelectorIndexChanged index */
@@ -1248,7 +936,6 @@ MainWindow::promptInputNext()
 String
 messagebox_action(String args)
 {
-    no_argument_debug("messagebox_action()", args);
     /*
     QString type, QString title, QString text
     QString msgType = type.toLower();
@@ -1332,7 +1019,6 @@ set_grid_color_action(uint8_t r, uint8_t g, uint8_t b)
 String
 preview_on_action(String args)
 {
-    no_argument_debug("preview_on_action()", args);
     View* gview = activeView();
     if (gview) {
         //gview->previewOn(clone, mode, x, -y, data);
@@ -1365,7 +1051,6 @@ preview_on_action(String args)
 String
 preview_off_action(String args)
 {
-    no_argument_debug("preview_off_action()", args);
     View* gview = activeView();
     if (gview) {
         gview->previewOff();
@@ -1377,7 +1062,6 @@ preview_off_action(String args)
 String
 clear_rubber_action(String args)
 {
-    no_argument_debug("clear_rubber_action()", args);
     View* gview = activeView();
     if (gview) {
         gview->clearRubberRoom();
@@ -1389,7 +1073,6 @@ clear_rubber_action(String args)
 String
 allow_rubber_action(String args)
 {
-    no_argument_debug("allow_rubber_action()", args);
     View* gview = activeView();
     if (gview) {
         return std::to_string(gview->allowRubber());
@@ -1403,7 +1086,6 @@ allow_rubber_action(String args)
 String
 spare_rubber_action(String args)
 {
-    no_argument_debug("spare_rubber_action()", args);
     int64_t id = std::stoi(args);
     View* gview = activeView();
     if (gview) {
@@ -1436,7 +1118,6 @@ spare_rubber_action(String args)
 String
 set_rubber_mode_action(String args)
 {
-    no_argument_debug("set_rubber_mode_action()", args);
     /*
     String mode = QString::fromStdString(a[0].s).toUpper().toStdString();
 
@@ -1459,7 +1140,6 @@ set_rubber_mode_action(String args)
 String
 set_rubber_point_action(String args)
 {
-    no_argument_debug("set_rubber_point_action()", args);
     /*
     _mainWin->setRubberPoint(a[0].s.toUpper(), a[1].r, a[2].r);
     */
@@ -1477,7 +1157,6 @@ set_rubber_point_action(String args)
 String
 add_text_multi_action(String args)
 {
-    no_argument_debug("add_text_multi_action()", args);
     /*
     _mainWin->nativeadd_text_multi_action(a[0].s, a[1].r, a[2].r, a[3].r, a[4].b, OBJ_RUBBER_OFF);
     */
@@ -1491,7 +1170,6 @@ add_text_multi_action(String args)
 String
 add_text_single_action(String args)
 {
-    no_argument_debug("add_text_single_action()", args);
     /*
     _mainWin->nativeadd_text_single_action(a[0].s, a[1].r, a[2].r, a[3].r, a[4].b, OBJ_RUBBER_OFF);
     */
@@ -1533,7 +1211,6 @@ add_text_single_action(String args)
 String
 add_infinite_line_action(String args)
 {
-    no_argument_debug("add_infinite_line_action()", args);
     /*
     //TODO: Node error checking
     debug_message("TODO: finish addInfiniteLine command");
@@ -1548,7 +1225,6 @@ add_infinite_line_action(String args)
 String
 add_ray_action(String args)
 {
-    no_argument_debug("add_ray_action()", args);
     /*
     //TODO: Node error checking
     debug_message("TODO: finish addRay command");
@@ -1563,7 +1239,6 @@ add_ray_action(String args)
 String
 add_line_action(String args)
 {
-    no_argument_debug("add_line_action()", args);
     /*
     _mainWin->nativeadd_line_action(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, OBJ_RUBBER_OFF);
     View* gview = activeView();
@@ -1596,7 +1271,6 @@ add_line_action(String args)
 String
 add_triangle_action(String args)
 {
-    no_argument_debug("add_triangle_action()", args);
     /*
     _mainWin->nativeadd_triangle_action(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, a[6].r, a[7].b);
     */
@@ -1653,7 +1327,6 @@ add_rectangle_action(String args)
 String
 add_rounded_rectangle_action(String args)
 {
-    no_argument_debug("add_rounded_rectangle_action()", args);
     /*
     _mainWin->nativeadd_rounded_rectangle_action(
         a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, a[6].b);
@@ -1668,7 +1341,6 @@ add_rounded_rectangle_action(String args)
 String
 add_arc_action(String args)
 {
-    no_argument_debug("add_arc_action()", args);
     View* gview = activeView();
     QGraphicsScene* scene = activeScene();
     if (gview && scene) {
@@ -1699,7 +1371,6 @@ add_arc_action(String args)
 String
 add_circle_action(String args)
 {
-    no_argument_debug("add_circle_action()", args);
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
@@ -1736,7 +1407,6 @@ add_circle_action(String args)
 String
 add_ellipse_action(String args)
 {
-    no_argument_debug("add_ellipse_action()", args);
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
@@ -1768,7 +1438,6 @@ add_ellipse_action(String args)
 String
 add_regular_polygon_action(String args)
 {
-    no_argument_debug("add_regular_polygon_action()", args);
     return "";
 }
 
@@ -1780,7 +1449,6 @@ add_regular_polygon_action(String args)
 String
 add_polyline_action(String args)
 {
-    no_argument_debug("add_polyline_action()", args);
     /*
     QVariantList varList = a[0].toVariant().toList();
     int varSize = varList.size();
@@ -1840,7 +1508,6 @@ add_polyline_action(String args)
 String
 add_path_action(String args)
 {
-    no_argument_debug("add_path_action()", args);
     /*
     AddPath(std::vector<Node> a)
     // TODO: Node error checking
@@ -1855,7 +1522,6 @@ add_path_action(String args)
 String
 add_horizontal_dimension_action(String args)
 {
-    no_argument_debug("add_horizontal_dimension_action()", args);
     /*
     AddHorizontalDimension(std::vector<Node> a)
     //TODO: Node error checking
@@ -1870,7 +1536,6 @@ add_horizontal_dimension_action(String args)
 String
 add_vertical_dimension_action(String args)
 {
-    no_argument_debug("add_vertical_dimension_action()", args);
     /*
     AddVerticalDimension(std::vector<Node> a)
     //TODO: Node error checking
@@ -1885,7 +1550,6 @@ add_vertical_dimension_action(String args)
 String
 add_image_action(String args)
 {
-    no_argument_debug("add_image_action()", args);
     /*
     AddImage(std::vector<Node> a)
     //TODO: Node error checking
@@ -1899,7 +1563,6 @@ add_image_action(String args)
 String
 add_dim_leader_action(String args)
 {
-    no_argument_debug("add_dim_leader_action()", args);
     /*
     AddDimLeader(std::vector<Node> a)
     _mainWin->nativeAddDimLeader(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, OBJ_RUBBER_OFF);
@@ -1933,14 +1596,18 @@ set_cursor_shape_action(String str)
     View* gview = activeView();
     if (gview) {
         QString shape = QString::fromStdString(str).toLower();
-        if (shape == "arrow")
+        if (shape == "arrow") {
             gview->setCursor(QCursor(Qt::ArrowCursor));
-        else if (shape == "uparrow")
+		}
+        else if (shape == "uparrow") {
             gview->setCursor(QCursor(Qt::UpArrowCursor));
-        else if (shape == "cross")
+		}
+        else if (shape == "cross") {
             gview->setCursor(QCursor(Qt::CrossCursor));
-        else if (shape == "wait")
+		}
+        else if (shape == "wait") {
             gview->setCursor(QCursor(Qt::WaitCursor));
+		}
         else if (shape == "ibeam")
             gview->setCursor(QCursor(Qt::IBeamCursor));
         else if (shape == "resizevert")
@@ -2028,25 +1695,10 @@ perpendicular_distance_action(String args)
     return std::to_string(QLineF(px, py, iPoint.x(), iPoint.y()).length());
 }
 
-/* Return the number of objects selected currently,
- * if no view is present returns 0.
- */
-String
-num_selected_action(String args)
-{
-    no_argument_debug("num_selected_action()", args);
-    View* gview = activeView();
-    if (gview) {
-        return std::to_string(gview->numSelected());
-    }
-    return "0";
-}
-
 /* . */
 String
 add_to_selection_action(String args)
 {
-    no_argument_debug("add_to_selection_action()", args);
     return "";
 }
 
@@ -2054,7 +1706,6 @@ add_to_selection_action(String args)
 String
 delete_selected_action(String args)
 {
-    no_argument_debug("delete_selected_action()", args);
     View* gview = activeView();
     if (gview) {
         gview->deleteSelected();
@@ -2066,7 +1717,6 @@ delete_selected_action(String args)
 String
 cut_selected_action(String args)
 {
-    no_argument_debug("cut_selected_action()", args);
     /*
     _mainWin->nativeCutSelected(a[0].r, a[1].r);
     */
@@ -2789,6 +2439,21 @@ run_script(StringList script)
     return output;
 }
 
+/* Note that this function relies on the command_labels being alphabetised and
+ * that _ sorts before all lowercase letters.
+ */
+int
+pop_command(const char *line)
+{
+    int i;
+	for (i=0; i<N_ACTIONS; i++) {
+		if (!strncmp(line, command_labels[i], strlen(command_labels[i]))) {
+			return i;
+		}
+	}
+	return -1;
+}
+
 /* MainWindow::actuator
  * command
  *
@@ -2827,33 +2492,28 @@ run_script(StringList script)
 String
 actuator(String line)
 {
-    std::vector<String> list = tokenize(line, ' ');
-    String command = list[0];
-    list.erase(list.begin());
+	View* gview = activeView();
 
-    auto iter = command_map.find(command);
-    if (iter != command_map.end()) {
-        int from = std::min(line.size(), command.size() + 1);
-        String args = line.substr(from);
-        String result = iter->second(args);
-        if (result != "") {
-            return "<br/>" + result;
-        }
-        return "";
-    }
+	char args[MAX_STRING_LENGTH];
+    int action_id = pop_command(line.c_str());
+	char error_str[MAX_STRING_LENGTH];
+	/* This could produce silly amounts of output, so watch this line. */
+	sprintf(error_str, "action: %d\n", action_id);
+	debug_message(error_str);
 
-    auto script = scripts.find(command);
-    if (script != scripts.end()) {
-        String result = run_script(script->second);
-        if (result != "") {
-            return "<br/>" + result;
-        }
-        return "";
-    }
+    if (action_id < 0) {
+		char out[2*MAX_STRING_LENGTH];
+		sprintf(out, "<br/><font color=\"red\">Unknown command \"%s\". Press F1 for help.</font>", line.c_str());
+		std::string output(out);
+		return output;
+	}
 
-    int action_id = 0;
+    strcpy(args, line.c_str() + strlen(command_labels[action_id]) + 1);
+    std::string args_(args);
+
     switch (action_id) {
     case ACTION_ABOUT:
+		_mainWin->about();
         break;
 
     case ACTION_ADD_ARC:
@@ -2929,15 +2589,16 @@ actuator(String line)
         break;
 
     case ACTION_ALERT:
+		/* Alert the user with a message box. */
+		prompt->alert(QString::fromStdString(args));
         break;
 
     case ACTION_ALLOW_RUBBER:
         break;
 
     case ACTION_APPEND_HISTORY:
-        break;
-
-    case ACTION_APPEND_PROMPT_HISTORY:
+		/* Can accept no argument. */
+		prompt->appendHistory(QString::fromStdString(args));
         break;
 
     case ACTION_CALCULATE_ANGLE:
@@ -2955,23 +2616,38 @@ actuator(String line)
     case ACTION_CLEAR_SELECTION:
         break;
 
+    /* Copy the selected objects to this activeView's clipboard. */
     case ACTION_COPY:
-        break;
-
     case ACTION_COPY_SELECTED:
-        break;
+        if (gview) {
+            gview->copy();
+        }
+        return "";
 
+    /* Cut the selected objects, placing them into the clipboard variable
+     * for this gview.
+     */
     case ACTION_CUT:
-        break;
-
     case ACTION_CUT_SELECTED:
-        break;
+        if (gview) {
+            gview->cut();
+        }
+		return "";
 
+    /* Activate day vision.
+     * TODO: Make day vision color settings.
+     */
     case ACTION_DAY_VISION:
-        break;
+        if (gview) {
+            gview->setBackgroundColor(qRgb(255,255,255));
+            gview->setCrossHairColor(qRgb(0,0,0));
+            gview->setGridColor(qRgb(0,0,0));
+        }
+        return "";
 
+	/* Allows scripts to produce debug output similar to "echo". */
     case ACTION_DEBUG:
-        break;
+    	return "DEBUG: " + args_;
 
     case ACTION_DELETE_SELECTED:
         break;
@@ -2995,6 +2671,10 @@ actuator(String line)
         break;
 
     case ACTION_INIT:
+    	/* For scripts: clear out any current variables before running. */
+        if (gview) {
+            gview->clearRubberRoom();
+        }
         break;
 
     case ACTION_MESSAGEBOX:
@@ -3013,15 +2693,31 @@ actuator(String line)
         break;
 
     case ACTION_NEW:
+	    _mainWin->newFile();
         break;
 
+	/* Activate night vision.
+	 * TODO: Make night vision color settings.
+	 */
     case ACTION_NIGHT_VISION:
+        if (gview) {
+            gview->setBackgroundColor(qRgb(0,0,0));
+            gview->setCrossHairColor(qRgb(255,255,255));
+            gview->setGridColor(qRgb(255,255,255));
+        }
         break;
 
+	/* Return the number of objects selected currently,
+	 * if no view is present returns 0.
+	 */
     case ACTION_NUM_SELECTED:
-        break;
+        if (gview) {
+            return std::to_string(gview->numSelected());
+        }
+        return "0";
 
     case ACTION_OPEN:
+        _mainWin->openFile();
         break;
 
     case ACTION_PAN:
@@ -3036,8 +2732,9 @@ actuator(String line)
     case ACTION_PERPENDICULAR_DISTANCE:
         break;
 
+    /* Return the platform running the software (for the CLI). */
     case ACTION_PLATFORM:
-        break;
+        return platformString();
 
     case ACTION_PREVIEW_OFF:
         break;
@@ -3057,7 +2754,9 @@ actuator(String line)
     case ACTION_QSNAP_Y:
         break;
 
+	/* Close the program. */
     case ACTION_QUIT:
+        _mainWin->quit();
         break;
 
     case ACTION_REDO:
@@ -3072,7 +2771,11 @@ actuator(String line)
     case ACTION_SCALE_SELECTED:
         break;
 
+	/* For every object in the scene, add it to the selected array. */
     case ACTION_SELECT_ALL:
+        if (gview) {
+            gview->selectAll();
+        }
         break;
 
     case ACTION_SETTINGS_DIALOG:
@@ -3111,14 +2814,16 @@ actuator(String line)
     case ACTION_TIP_OF_THE_DAY:
         break;
 
+    /* TODO reminders for the developers. */
     case ACTION_TODO:
-        break;
+        return "TODO: " + args_;
 
     case ACTION_UNDO:
         break;
 
+	/* Return the version string to the user (for the CLI). */
     case ACTION_VERSION:
-        break;
+        return config["version"].s;
 
     case ACTION_VULCANIZE:
         break;
@@ -3132,12 +2837,24 @@ actuator(String line)
     case ACTION_ZOOM:
         break;
 
+	/*
+	case ACTION_SCRIPT:
+        auto script = scripts.find(command);
+		if (script != scripts.end()) {
+			String result = run_script(script->second);
+			if (result != "") {
+				return "<br/>" + result;
+			}
+			return "";
+        }
+		break;
+	*/
+
     default:
 		break;
 	}
 
-    return "<br/><font color=\"red\">Unknown command \"" + command
-           + "\". Press F1 for help.</font>";
+    return "";
 }
 
 /* add_geometry_action
@@ -3187,19 +2904,10 @@ set_rubber_filter_action(String args)
     return args;
 }
 
-/* Alert the user with a message box. */
-String
-alert_action(String args)
-{
-    prompt->alert(QString::fromStdString(args));
-    return "";
-}
-
 /* For scripts: ensure that the script is tidied up. */
 String
 end_action(String args)
 {
-    no_argument_debug("end_action()", args);
     View* gview = activeView();
     if (gview) {
         gview->clearRubberRoom();
@@ -3207,55 +2915,6 @@ end_action(String args)
         gview->rapidMoveActive = false;
     }
     prompt->promptInput->endCommand();
-    return "";
-}
-
-/* Close the program. */
-String
-quit_action(String args)
-{
-    no_argument_debug("quit_action()", args);
-    _mainWin->quit();
-    return "";
-}
-
-/* For scripts: clear out any current variables before running. */
-String
-init_action(String args)
-{
-    no_argument_debug("init_action()", args);
-    View* gview = activeView();
-    if (gview) {
-        gview->clearRubberRoom();
-    }
-    return "";
-}
-
-/* Return the platform running the software (for the CLI). */
-String
-platform_action(String args)
-{
-    no_argument_debug("init_action()", args);
-    return platformString();
-}
-
-/* For every object in the scene, add it to the selected array. */
-String
-select_all_action(String args)
-{
-    no_argument_debug("select_all_action()", args);
-    View* gview = activeView();
-    if (gview) {
-        gview->selectAll();
-    }
-    return "";
-}
-
-/* . */
-String
-append_history_action(String args)
-{
-    prompt->appendHistory(QString::fromStdString(args));
     return "";
 }
 
@@ -3294,44 +2953,29 @@ window_action(String args)
 
 /* . */
 String
-open_action(String args)
-{
-    no_argument_debug("open_action()", args);
-    _mainWin->openFile();
-    return "";
-}
-
-/* . */
-String
 icon_action(String command)
 {
     if (command == "16") {
-        debug_message("icon16()");
         _mainWin->iconResize(16);
         return "";
     }
     if (command == "24") {
-        debug_message("icon24()");
         _mainWin->iconResize(24);
         return "";
     }
     if (command == "32") {
-        debug_message("icon32()");
         _mainWin->iconResize(32);
         return "";
     }
     if (command == "48") {
-        debug_message("icon48()");
         _mainWin->iconResize(48);
         return "";
     }
     if (command == "64") {
-        debug_message("icon64()");
         _mainWin->iconResize(64);
         return "";
     }
     if (command == "128") {
-        debug_message("icon128()");
         _mainWin->iconResize(128);
         return "";
     }
@@ -3342,7 +2986,6 @@ icon_action(String command)
 String
 text_action(String args)
 {
-    no_argument_debug("text_action()", args);
     /*
     if (list.size() < 1) {
         return "text requires an argument.";
@@ -3380,7 +3023,6 @@ text_action(String args)
 String
 set_action(String args)
 {
-    no_argument_debug("set_action()", args);
     /*
     if (list.size() < 2) {
         return "The command 'set' requires 2 arguments.";
@@ -3435,7 +3077,6 @@ set_action(String args)
 String
 enable_action(String args)
 {
-    no_argument_debug("enable_action()", args);
     /*
     if (list.size() < 1) {
         return "The command 'enable' requires an argument.";
@@ -3479,14 +3120,6 @@ enable_action(String args)
     return "";
 }
 
-/* Return the version string to the user (for the CLI). */
-String
-version_action(String args)
-{
-    no_argument_debug("version_action()", args);
-    return config["version"].s;
-}
-
 /* TODO: This setting should override a config variable used to set the prefix. */
 String
 set_prompt_prefix_action(String args)
@@ -3499,7 +3132,6 @@ set_prompt_prefix_action(String args)
 String
 clear_selection_action(String args)
 {
-    no_argument_debug("clear_selection_action()", args);
     View* gview = activeView();
     if (gview) {
         gview->clearSelection();
@@ -3507,19 +3139,10 @@ clear_selection_action(String args)
     return "";
 }
 
-/* Allows scripts to produce debug output similar to "echo". */
-String
-debug_action(String args)
-{
-    debug_message(args);
-    return "";
-}
-
 /* . */
 String
 vulcanize_action(String args)
 {
-    no_argument_debug("vulcanize_action()", args);
     View* gview = activeView();
     if (gview) {
         gview->vulcanizeRubberRoom();
@@ -3531,7 +3154,6 @@ vulcanize_action(String args)
 String
 rubber_action(String args)
 {
-    no_argument_debug("rubber_action()", args);
     /*
     if (command == "allow") {
         allow_rubber_action();
@@ -3572,7 +3194,6 @@ rubber_action(String args)
 String
 blink_prompt_action(String args)
 {
-    no_argument_debug("blink_prompt_action()", args);
     prompt->startBlinking();
     return "";
 }
@@ -3651,44 +3272,11 @@ include_action(std::vector<Node> a)
 String
 error_action(String args)
 {
-    no_argument_debug("error_action()", args);
     /*
     _mainWin->setPromptPrefix("ERROR: (" + a[0].s + ") " + a[1].s);
     */
     actuator("append-prompt-history");
     actuator("end");
-    return "";
-}
-
-/* . */
-String
-todo_action(String args)
-{
-    no_argument_debug("todo_action()", args);
-    //_mainWin->nativeAlert("TODO: " + args);
-    actuator("end");
-    return "";
-}
-
-/* AppendPromptHistory
- * a
- */
-String
-append_prompt_history_action(String args)
-{
-    no_argument_debug("append_prompt_history_action()", args);
-    /*
-    int args = args.size();
-    if (args == 0) {
-        _mainWin->nativeAppendPromptHistory(QString());
-    }
-    else if (args == 1) {
-        _mainWin->nativeAppendPromptHistory(a[0].s);
-    }
-    else {
-        return "ERROR: appendPromptHistory() requires one or zero arguments");
-    }
-    */
     return "";
 }
 
@@ -3715,7 +3303,6 @@ is_int_action(String args)
 String
 set_crosshair_color_action(String args)
 {
-    no_argument_debug("set_crosshair_color_action()", args);
     /*
     int r = args[0].r;
     int g = args[1].r;
@@ -3746,7 +3333,6 @@ set_crosshair_color_action(String args)
 String
 set_grid_color_action(String args)
 {
-    no_argument_debug("set_grid_color_action()", args);
     /*
     int r = a[0].r;
     int g = a[1].r;
@@ -3770,7 +3356,6 @@ set_grid_color_action(String args)
 String
 SetTextAngle_action(String args)
 {
-    no_argument_debug("set_text_angle_action()", args);
     /*
     _mainWin->setTextAngle(a[0].r);
     */
@@ -3783,7 +3368,6 @@ SetTextAngle_action(String args)
 String
 set_rubber_text_action(String args)
 {
-    no_argument_debug("set_rubber_text_action()", args);
     View* gview = activeView();
     if (gview) {
         // if (!contains(args, " ")) { return "requires 2 arguments." }
@@ -3801,7 +3385,6 @@ set_rubber_text_action(String args)
 String
 add_rubber_action(String args)
 {
-    no_argument_debug("add_rubber_action()", args);
     //QString objType = QString::fromStdString(a[0].s).toUpper();
 
     /*
@@ -3898,7 +3481,6 @@ add_rubber_action(String args)
 String
 add_slot_action(String args)
 {
-    no_argument_debug("add_slot_action()", args);
     //TODO: Use UndoableAddCommand for slots
     /*
     SlotObject* slotObj = new SlotObject(centerX, -centerY, diameter, length,_mainWin->getCurrentColor());
@@ -3919,7 +3501,6 @@ add_slot_action(String args)
 String
 add_point_action(String args)
 {
-    no_argument_debug("add_point_action()", args);
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack) {
@@ -3946,7 +3527,6 @@ add_point_action(String args)
 String
 add_polygon_action(String args)
 {
-    no_argument_debug("add_polygon_action()", args);
     /*
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -4094,16 +3674,6 @@ MainWindow::windowMenuActivated(bool checked)
     QWidget* w = mdiArea->subWindowList().at(aSender->data().toInt());
     if (w && checked)
         w->setFocus();
-}
-
-/* new_action
- */
-String
-new_action(String args)
-{
-    no_argument_debug("new_action()", args);
-    _mainWin->newFile();
-    return "";
 }
 
 /* MainWindow::newFile

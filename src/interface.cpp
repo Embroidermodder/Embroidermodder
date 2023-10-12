@@ -24,6 +24,9 @@
 
 #include "embroidermodder.h"
 
+Node get_node(Dictionary d, String key);
+void wrong_type_message(int type);
+
 /* Make the translation function global in scope. */
 QString
 translate_str(const char *str)
@@ -71,6 +74,16 @@ node_real(EmbReal value)
     return node;
 }
 
+/* Makes a node from a C string value. */
+Node
+node_cstr(char *value)
+{
+    Node node;
+    node.type = STRING_TYPE;
+    node.s = QString::fromUtf8(value).toStdString();
+    return node;
+}
+
 /* Makes a node from a String value. */
 Node
 node_str(String value)
@@ -101,20 +114,62 @@ node_str_list(StringList value)
     return node;
 }
 
+/* . */
+Node
+get_node(Dictionary d, String key)
+{
+    char error_msg[MAX_STRING_LENGTH];
+    Node n = {
+        .type = NULL_TYPE
+    };
+    auto iter = d.find(key);
+    if (iter != d.end()) {
+        return d[key];
+    }
+    /*
+    int i;
+    for (i=0; i<d.size(); i++) {
+        if (d[i].key == key) {
+            return i;
+        }
+    }
+    */
+    sprintf(error_msg, "ERROR: dictionary entry with key %s missing.", key.c_str());
+    debug_message(error_msg);
+    return n;
+}
+
+/* Wrong type */
+void
+wrong_type_message(Node n, String key, int type)
+{
+    char types[][MAX_STRING_LENGTH] = {
+        "NULL",
+        "STRING",
+        "STRING_LIST",
+        "REAL",
+        "INT",
+        "BOOL",
+        "FUNCTION",
+        "VECTOR",
+        "UNKNOWN"
+    };
+    if (n.type != NULL_TYPE) {
+        char error_str[MAX_STRING_LENGTH];
+        sprintf(error_str, "ERROR: setting with key %s is not of %s type.", key.c_str(), types[type]);
+        debug_message(error_str);
+    }
+}
+
 /* Get a boolean value from a Dictionary with the given key. */
 bool
 get_bool(Dictionary d, String key)
 {
-    auto iter = d.find(key);
-    if (iter != d.end()) {
-        if (d[key].type == BOOL_TYPE) {
-            return d[key].b;
-        }
-        debug_message(("ERROR: bool setting with key " + key + " is not of bool type.").c_str());
+    Node n = get_node(d, key);
+    if (n.type == BOOL_TYPE) {
+        return n.b;
     }
-    else {
-        debug_message(("ERROR: bool setting with key " + key + " missing.").c_str());
-    }
+    wrong_type_message(n, key, BOOL_TYPE);
     return true;
 }
 
@@ -122,16 +177,11 @@ get_bool(Dictionary d, String key)
 int
 get_int(Dictionary d, String key)
 {
-    auto iter = d.find(key);
-    if (iter != d.end()) {
-        if (d[key].type == INT_TYPE) {
-            return d[key].i;
-        }
-        debug_message(("ERROR: int setting with key " + key + " is not of int type.").c_str());
+    Node n = get_node(d, key);
+    if (n.type == INT_TYPE) {
+        return n.i;
     }
-    else {
-        debug_message(("ERROR: int setting with key " + key + " missing.").c_str());
-    }
+    wrong_type_message(n, key, INT_TYPE);
     return 0;
 }
 
@@ -146,16 +196,11 @@ get_uint(Dictionary d, String key)
 EmbReal
 get_real(Dictionary d, String key)
 {
-    auto iter = d.find(key);
-    if (iter != d.end()) {
-        if (d[key].type == REAL_TYPE) {
-            return d[key].r;
-        }
-        debug_message(("ERROR: real dictionary entry with key " + key + " is not of real type.").c_str());
+    Node n = get_node(d, key);
+    if (n.type == REAL_TYPE) {
+        return n.r;
     }
-    else {
-        debug_message(("ERROR: EmbReal dictionary entry with key " + key + " missing.").c_str());
-    }
+    wrong_type_message(n, key, REAL_TYPE);
     return 0.0f;
 }
 
@@ -163,18 +208,11 @@ get_real(Dictionary d, String key)
 String
 get_str(Dictionary d, String key)
 {
-    char error_str[MAX_STRING_LENGTH];
-    auto iter = d.find(key);
-    if (iter != d.end()) {
-        if (d[key].type == STRING_TYPE) {
-            return d[key].s;
-        }
-        sprintf(error_str, "ERROR: string dictionary entry with key %s is not of string type.", key.c_str());
+    Node n = get_node(d, key);
+    if (n.type == STRING_TYPE) {
+        return n.s;
     }
-    else {
-        sprintf(error_str, "ERROR: String setting with key %s  missing.", key.c_str());
-    }
-    debug_message(error_str);
+    wrong_type_message(n, key, STRING_TYPE);
     return "";
 }
 
@@ -189,18 +227,12 @@ get_qstr(Dictionary d, String key)
 StringList
 get_str_list(Dictionary d, String key)
 {
-    StringList list = {};
-    auto iter = d.find(key);
-    if (iter != d.end()) {
-        if (d[key].type == STRING_LIST_TYPE) {
-            return d[key].sl;
-        }
-        debug_message(("ERROR: StringList dictionary entry with key " + key + " is not of StringList type.").c_str());
+    Node n = get_node(d, key);
+    if (n.type == STRING_LIST_TYPE) {
+        return n.sl;
     }
-    else {
-        debug_message(("ERROR: StringList setting with key " + key + " missing.").c_str());
-    }
-    return list;
+    wrong_type_message(n, key, STRING_LIST_TYPE);
+    return n.sl;
 }
 
 /* Convert QStringList to our own StringList type. */

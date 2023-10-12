@@ -18,13 +18,6 @@
 #ifndef __EMBROIDERMODDER_UTILITY_H__
 #define __EMBROIDERMODDER_UTILITY_H__
 
-/* C/C++ Standard Libraries. */
-#include <stdio.h>
-#include <math.h>
-#include <time.h>
-#include <inttypes.h>
-#include <stdarg.h>
-
 #include <vector>
 #include <unordered_map>
 #include <string>
@@ -50,20 +43,22 @@ class UndoEditor;
 class MainWindow;
 class Geometry;
 
-typedef std::string String;
-typedef std::vector<String> StringList;
-
-typedef struct Node_ {
-    String s;
+struct Node_ {
+    struct Node_ *leaves;
+    int n_leaves;
+    std::string s;
+    char st[MAX_STRING_LENGTH];
     EmbReal r;
     int32_t i;
     bool b;
-    StringList sl;
+    std::vector<std::string> sl;
+	void *ref;
     int type;
-} Node;
+};
 
-typedef String (*Command)(String);
-typedef std::unordered_map<String, Node> Dictionary;
+typedef std::string String;
+typedef std::vector<std::string> StringList;
+typedef std::unordered_map<std::string, Node> Dictionary;
 
 /* Global variables
  * ----------------
@@ -78,20 +73,20 @@ extern MdiArea* mdiArea;
  * cancels out of the Settings Dialog.
  */
 extern Dictionary settings, dialog, config;
-extern std::unordered_map<String, StringList> scripts;
-extern std::unordered_map<String, QGroupBox *> groupBoxes;
-extern std::unordered_map<String, QCheckBox *> checkBoxes;
-extern std::unordered_map<String, QSpinBox *> spinBoxes;
-extern std::unordered_map<String, QDoubleSpinBox *> doubleSpinBoxes;
-extern std::unordered_map<String, QLabel *> labels;
-extern std::unordered_map<String, QComboBox *> comboBoxes;
-extern std::unordered_map<String, QLineEdit *> lineEdits;
-extern std::unordered_map<String, QToolButton *> toolButtons;
-extern std::unordered_map<String, Dictionary> config_tables;
-extern std::unordered_map<String, QAction*> actionHash;
-extern std::unordered_map<String, QToolBar*> toolbarHash;
-extern std::unordered_map<String, QMenu*> menuHash;
-extern std::unordered_map<String, QMenu*> subMenuHash;
+extern std::unordered_map<std::string, StringList> scripts;
+extern std::unordered_map<std::string, QGroupBox *> groupBoxes;
+extern std::unordered_map<std::string, QCheckBox *> checkBoxes;
+extern std::unordered_map<std::string, QSpinBox *> spinBoxes;
+extern std::unordered_map<std::string, QDoubleSpinBox *> doubleSpinBoxes;
+extern std::unordered_map<std::string, QLabel *> labels;
+extern std::unordered_map<std::string, QComboBox *> comboBoxes;
+extern std::unordered_map<std::string, QLineEdit *> lineEdits;
+extern std::unordered_map<std::string, QToolButton *> toolButtons;
+extern std::unordered_map<std::string, Dictionary> config_tables;
+extern std::unordered_map<std::string, QAction*> actionHash;
+extern std::unordered_map<std::string, QToolBar*> toolbarHash;
+extern std::unordered_map<std::string, QMenu*> menuHash;
+extern std::unordered_map<std::string, QMenu*> subMenuHash;
 
 extern MainWindow* _mainWin;
 extern CmdPrompt* prompt;
@@ -108,31 +103,34 @@ void write_settings(void);
 EmbVector rotate_vector(EmbVector v, EmbReal alpha);
 
 QString translate_str(const char *str);
-bool contains(StringList, String);
-bool validFileFormat(String fileName);
-QString fileExtension(String fileName);
+bool contains(std::vector<std::string>, std::string);
+bool validFileFormat(std::string fileName);
+QString fileExtension(std::string fileName);
 
 void add_polyline(QPainterPath p, String rubberMode);
 
-String read_string_setting(toml_table_t *table, const char *key);
-StringList tokenize(String str, const char delim);
-String convert_args_to_type(String label, StringList args,
-    const char *args_template, std::vector<Node> a);
+std::string read_string_setting(toml_table_t *table, const char *key);
+StringList tokenize(std::string str, const char delim);
+std::string convert_args_to_type(
+    std::string label,
+    std::vector<std::string> args,
+    const char *args_template,
+	std::vector<Node> a);
 
 View *activeView(void);
 QGraphicsScene* activeScene();
 
-void debug_message(String msg);
+void debug_message(std::string msg);
 void set_enabled(QObject *parent, const char *key, bool enabled);
 void set_visibility(QObject *parent, const char *name, bool visibility);
 QPainterPath add_to_path(QPainterPath path, EmbVector scale, String s);
 
-String actuator(String line);
-String run_script_file(String fname);
-String run_script(StringList script);
-String construct_command(String command, const char *fmt, ...);
+String actuator(std::string line);
+String run_script_file(std::string fname);
+String run_script(std::vector<std::string> script);
+String construct_command(std::string command, const char *fmt, ...);
 
-void create_menu(String menu, StringList def, bool topLevel);
+void create_menu(std::string menu, StringList def, bool topLevel);
 
 QPointF to_QPointF(EmbVector a);
 EmbVector to_EmbVector(QPointF a);
@@ -146,7 +144,7 @@ StringList to_string_vector(QStringList list);
 
 /* Interface creation functions.
  */
-void make_ui_element(String description);
+void make_ui_element(std::string description);
 QDoubleSpinBox *make_spinbox(QGroupBox *gb, String d,
     QString object_name, EmbReal single_step, EmbReal lower, EmbReal upper, String key);
 QCheckBox *make_checkbox(QGroupBox *gb, String d,
@@ -158,19 +156,19 @@ Node node_bool(bool value);
 Node node_int(int32_t value);
 Node node_uint(uint32_t value);
 Node node_real(EmbReal value);
-Node node_str(String value);
+Node node_str(std::string value);
 Node node_qstr(QString value);
-Node node_str_list(StringList value);
+Node node_str_list(std::vector<std::string> value);
 
 bool get_bool(Dictionary d, String key);
 int32_t get_int(Dictionary d, String key);
 uint32_t get_uint(Dictionary d, String key);
 EmbReal get_real(Dictionary d, String key);
-String get_str(Dictionary d, String key);
+std::string get_str(Dictionary d, String key);
 QString get_qstr(Dictionary d, String key);
 StringList get_str_list(Dictionary d, String key);
 
-bool save_current_file(String fileName);
+bool save_current_file(std::string fileName);
 
 /* The Geometry class
  *
@@ -351,7 +349,7 @@ public:
     void setRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
     void setLine(const QLineF& li);
     void setLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
-    void setObjectLineWeight(String lineWeight);
+    void setObjectLineWeight(std::string lineWeight);
     void setObjectRadius(EmbReal radius);
     void setObjectStartAngle(EmbReal angle);
     void setObjectEndAngle(EmbReal angle);
@@ -382,8 +380,8 @@ public:
     /* Scripted commands, uses the script string in */
     void script_main(void);
     void script_click(EmbVector v);
-    void script_context(String str);
-    void script_prompt(String str);
+    void script_context(std::string str);
+    void script_prompt(std::string str);
 };
 
 /* The Command Prompt object. */
@@ -704,7 +702,7 @@ public:
     bool isCommandActive() { return prompt->promptInput->cmdActive; }
     QString activeCommand() { return prompt->promptInput->curCmd; }
     QIcon create_icon(QString stub);
-    void create_toolbar(String toolbar, String label, StringList entries);
+    void create_toolbar(std::string toolbar, String label, StringList entries);
 
     QString platformString();
 
@@ -745,7 +743,7 @@ protected:
     int docIndex;
 
     std::vector<MdiWindow*> listMdiWin;
-    QMdiSubWindow* findMdiWindow(String fileName);
+    QMdiSubWindow* findMdiWindow(std::string fileName);
 
     QAction* myFileSeparator;
 
@@ -777,7 +775,7 @@ public slots:
 
     void newFile();
     void openFile(bool recent = false, String recentFile = "");
-    void openFilesSelected(StringList files);
+    void openFilesSelected(std::vector<std::string> files);
     void openrecentfile();
     void savefile();
     void saveasfile();
@@ -855,8 +853,8 @@ public:
     virtual QSize sizeHint();
     QString getShortCurrentFile();
     void designDetails();
-    bool loadFile(String fileName);
-    bool saveFile(String fileName);
+    bool loadFile(std::string fileName);
+    bool saveFile(std::string fileName);
 signals:
     void sendCloseMdiWin(MdiWindow*);
 
@@ -986,7 +984,7 @@ public:
 
     //TODO: Alphabetic/Categorized TabWidget
 
-    void createGroupBox(String group_box_key, const char *title);
+    void createGroupBox(std::string group_box_key, const char *title);
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
@@ -1152,11 +1150,11 @@ class StatusBar : public QStatusBar
 
 public:
     StatusBar(QWidget* parent = 0);
-    std::unordered_map<String, QToolButton*> buttons;
+    std::unordered_map<std::string, QToolButton*> buttons;
     QLabel* statusBarMouseCoord;
     void setMouseCoord(EmbReal x, EmbReal y);
     void context_menu_action(QToolButton *button, const char *icon, const char *label, QMenu *menu, String setting_page);
-    void toggle(String key, bool on);
+    void toggle(std::string key, bool on);
     void context_menu_event(QContextMenuEvent *event, QToolButton *button);
 };
 
@@ -1197,9 +1195,9 @@ public slots:
 class UndoableCommand : public QUndoCommand
 {
 public:
-    UndoableCommand(String command, QString text, Geometry* obj, View* v, QUndoCommand* parent = 0);
+    UndoableCommand(std::string command, QString text, Geometry* obj, View* v, QUndoCommand* parent = 0);
     UndoableCommand(EmbVector d, QString text, Geometry* obj, View* v, QUndoCommand* parent = 0);
-    UndoableCommand(String command, EmbVector pivot, EmbReal angle, QString text, Geometry* obj, View* v, QUndoCommand* parent = 0);
+    UndoableCommand(std::string command, EmbVector pivot, EmbReal angle, QString text, Geometry* obj, View* v, QUndoCommand* parent = 0);
     UndoableCommand(QString type, View* v, QUndoCommand* parent = 0);
     UndoableCommand(const QPointF beforePoint, const QPointF afterPoint, QString text, Geometry* obj, View* v, QUndoCommand* parent = 0);
     UndoableCommand(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QString text, Geometry* obj, View* v, QUndoCommand* parent = 0);
@@ -1362,7 +1360,7 @@ public slots:
     void createGrid(QString gridType);
     void setRulerColor(QRgb color);
 
-    void previewOn(String clone, String mode, EmbReal x, EmbReal y, EmbReal data);
+    void previewOn(std::string clone, String mode, EmbReal x, EmbReal y, EmbReal data);
     void previewOff();
 
     bool allowRubber();
@@ -1370,7 +1368,7 @@ public slots:
     void vulcanizeRubberRoom();
     void clearRubberRoom();
     void spareRubber(int64_t id);
-    void setRubberMode(String mode);
+    void setRubberMode(std::string mode);
     void setRubberPoint(QString key, const QPointF& point);
     void setRubberText(QString key, QString txt);
 
