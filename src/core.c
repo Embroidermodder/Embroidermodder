@@ -545,6 +545,21 @@ free_node(CNode *branch)
 }
 
 /*
+ *
+ */
+int
+str_contains(char *s, char c)
+{
+    int i;
+    for (i=0; s[i]; i++) {
+        if (s[i] == c) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+/*
  * TODO: use the C dot notation for traversing down the branches of a tree.
  *
  * For example: (root, "setting.font_size") 
@@ -557,10 +572,24 @@ CNode *
 find_node(CNode *branch, char key[MAX_STRING_LENGTH])
 {
     if (branch->type == CNODE_TYPE_DICTIONARY) {
-        int i;
-        for (i=0; i<branch->n_leaves; i++) {
-            if (!strncmp(key, branch->leaves[i]->key, MAX_STRING_LENGTH)) {
-                return branch->leaves[i];
+        int pos = str_contains(key, '.');
+        if (pos >= 0) {
+            int i;
+            char working_copy[2*MAX_STRING_LENGTH];
+            strncpy(working_copy, key, MAX_STRING_LENGTH);
+            working_copy[pos] = 0;
+            for (i=0; i<branch->n_leaves; i++) {
+                if (!strncmp(working_copy, branch->leaves[i]->key, MAX_STRING_LENGTH)) {
+                    return find_node(branch->leaves[i], working_copy+pos+1);
+                }
+            }
+        }
+        else {
+            int i;
+            for (i=0; i<branch->n_leaves; i++) {
+                if (!strncmp(key, branch->leaves[i]->key, MAX_STRING_LENGTH)) {
+                    return branch->leaves[i];
+                }
             }
         }
     }
@@ -571,14 +600,83 @@ find_node(CNode *branch, char key[MAX_STRING_LENGTH])
 }
 
 /*
+ * FIXME
+ */
+int
+insert_node(CNode *branch, char key[MAX_STRING_LENGTH], CNode *node)
+{
+    if (branch->type == CNODE_TYPE_DICTIONARY) {
+        int pos = str_contains(key, '.');
+        if (pos >= 0) {
+            int i;
+            char working_copy[2*MAX_STRING_LENGTH];
+            strncpy(working_copy, key, MAX_STRING_LENGTH);
+            working_copy[pos] = 0;
+            for (i=0; i<branch->n_leaves; i++) {
+                if (!strncmp(working_copy, branch->leaves[i]->key, MAX_STRING_LENGTH)) {
+                    insert_node(branch->leaves[i], working_copy+pos+1);
+                }
+            }
+        }
+        else {
+            add_leaf(branch, node);
+            return 1;
+        }
+    }
+    else {
+        /* debug_message("ERROR: cannot search for keys in a non-dictionary type."); */
+    }
+    return 0;
+}
+
+
+/*
  * Print out all the data for the tree for debugging.
  */
 void
-print_tree(CNode *branch)
-{    
-    int i;
-    for (i=0; i<branch->n_leaves; i++) {
-        /* */
+print_tree(CNode *branch, int indent)
+{
+    int j;
+    for (j=0; j<indent; j++) {
+        printf("|");
+    }
+    switch (branch->type) {
+    case CNODE_TYPE_STRING: {
+        printf("-%s: %s\n", branch->key, branch->data);
+        break;
+    }
+    case CNODE_TYPE_DICTIONARY: {
+        int i;
+        printf("-dictionary %s\n", branch->key);
+        for (i=0; i<branch->n_leaves; i++) {
+            print_tree(branch->leaves[i], indent+1);
+        }
+        break;
+    }
+    default: {
+        printf("-UNKNOWN\n");
+        break;
+    }
     }
 }
 
+/* CNode needs to check for duplicate keys.
+ */
+CNode *
+create_and_add_leaf(CNode *parent, char *key, char *value)
+{
+    CNode *n = (CNode*)malloc(sizeof(CNode));
+    n->n_leaves = 0;
+    n->max_leaves = 10;
+    n->leaves = (CNode**)malloc(n->max_leaves * sizeof(CNode *));
+    if (!strcmp(value, "{}")) {
+        n->type = CNODE_TYPE_DICTIONARY;
+    }
+    else {
+        n->type = CNODE_TYPE_STRING;
+    }
+    strncpy(n->key, key, MAX_STRING_LENGTH);
+    strncpy(n->data, value, MAX_STRING_LENGTH);
+    add_leaf(parent, n);
+    return n;
+}

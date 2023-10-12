@@ -415,7 +415,11 @@ unsigned char validRGB(int r, int g, int b);
 
 CNode *create_node(int type);
 int add_leaf(CNode *branch, CNode *leaf);
+void print_tree(CNode *branch, int indent);
+CNode *find_node(CNode *branch, char key[MAX_STRING_LENGTH]);
 void free_node(CNode *branch);
+CNode *create_and_add_leaf(CNode *parent, char *key, char *value);
+int insert_node(CNode *branch, char key[MAX_STRING_LENGTH], CNode *node);
 
 extern CNode *root;
 extern const ActionData action_table[];
