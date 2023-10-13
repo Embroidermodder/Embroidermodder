@@ -29,7 +29,7 @@
  */
 CNode *root;
 
-const char details_labels[][MAX_STRING_LENGTH] = {
+const char details_labels[20][MAX_STRING_LENGTH] = {
     "Total Stitches:",
     "Real Stitches:",
     "Jump Stitches:",
@@ -45,7 +45,7 @@ const char details_labels[][MAX_STRING_LENGTH] = {
     "END"
 };
 
-const char default_prompt_style[][MAX_STRING_LENGTH] = {
+const char default_prompt_style[20][MAX_STRING_LENGTH] = {
     "color",                      "#000000", // Match -------|
     "background-color",           "#FFFFFF", //              |
     "selection-color",            "#FFFFFF", //              |
@@ -97,101 +97,7 @@ char menubar_order[MAX_MENUBAR_LENGTH][MAX_STRING_LENGTH] = {
 };
 
 /*  . */
-char file_toolbar[MAX_TOOLBAR_LENGTH][MAX_STRING_LENGTH] = {
-    "new",
-    "open",
-    "save",
-    "saveas",
-    "print",
-    "designdetails",
-    "---",
-    "undo",
-    "redo",
-    "---",
-    "help",
-    "END"
-};
-
-/*  . */
-char edit_toolbar[MAX_TOOLBAR_LENGTH][MAX_STRING_LENGTH] = {
-    "cut",
-    "copy",
-    "paste",
-    "END"
-};
-
-/*  . */
-char view_toolbar[MAX_TOOLBAR_LENGTH][MAX_STRING_LENGTH] = {
-    "day",
-    "night",
-    "END"
-};
-
-/*  . */
-char zoom_toolbar[MAX_TOOLBAR_LENGTH][MAX_STRING_LENGTH] = {
-    "zoomwindow",
-    "zoomdynamic",
-    "zoomscale",
-    "---",
-    "zoomcenter",
-    "zoomin",
-    "zoomout",
-    "---",
-    "zoomselected",
-    "zoomall",
-    "zoomextents",
-    "END"
-};
-
-/* A submenu. */
-char pan_toolbar[][MAX_STRING_LENGTH] = {
-    "panrealtime",
-    "panpoint",
-    "---",
-    "panleft",
-    "panright",
-    "panup",
-    "pandown",
-    "END"
-};
-
-/*  . */
-char icon_toolbar[][MAX_STRING_LENGTH] = {
-    "icon16",
-    "icon24",
-    "icon32",
-    "icon48",
-    "icon64",
-    "icon128",
-    "END"
-};
-
-/*  . */
-char help_toolbar[][MAX_STRING_LENGTH] = {
-    "help",
-    "---",
-    "changelog",
-    "---",
-    "about",
-    "---",
-    "whatsthis",
-    "END"
-};
-
-/*  . */
-char draw_toolbar[][MAX_STRING_LENGTH] = {
-    "circle",
-    "path",
-    "polygon",
-    "polyline",
-    "point",
-    "heart",
-    "single-line-text",
-    "END"
-};
-
-/*  . */
-char top_toolbar_layout[][MAX_STRING_LENGTH] = {
+char top_toolbar_layout[2*MAX_TOOLBARS][MAX_STRING_LENGTH] = {
     "---",
     "file",
     "edit",
@@ -210,124 +116,225 @@ char top_toolbar_layout[][MAX_STRING_LENGTH] = {
 };
 
 /*  . */
-char bottom_toolbar_layout[][MAX_STRING_LENGTH] = {
+char bottom_toolbar_layout[2*MAX_TOOLBARS][MAX_STRING_LENGTH] = {
     "prompt",
     "END"
 };
 
 /*  . */
-char side_toolbar_layout[][MAX_STRING_LENGTH] = {
+char side_toolbar_layout[2*MAX_TOOLBARS][MAX_STRING_LENGTH] = {
     "draw",
     "END"
 };
 
-/*  . */
-char file_menu[][MAX_STRING_LENGTH] = {
-    "new",
-    "---",
-    "open",
-    "submenu recent",
-    "---",
-    "save",
-    "saveas",
-    "---",
-    "print",
-    "---",
-    "windowclose",
-    "---",
-    "designdetails",
-    "---",
-    "exit",
-    "END"
+char menus[MAX_MENUS][MAX_MENU_LENGTH][MAX_STRING_LENGTH] = {
+    /* file_menu */
+    {
+        "new",
+        "---",
+        "open",
+        "submenu recent",
+        "---",
+        "save",
+        "saveas",
+        "---",
+        "print",
+        "---",
+        "windowclose",
+        "---",
+        "designdetails",
+        "---",
+        "exit",
+        "END"
+    },
+    /* edit_menu */
+    {
+        "undo",
+        "redo",
+        "---",
+        "cut",
+        "copy",
+        "paste",
+        "---",
+        "END"
+    },
+    /* pan_menu */
+    {
+        "icon pan",
+        "panrealtime",
+        "panpoint",
+        "---",
+        "panleft",
+        "panright",
+        "panup",
+        "pandown",
+        "END"
+    },
+    /* zoom_menu */
+    {
+        "icon zoom",
+        "zoomrealtime",
+        "zoomprevious",
+        "---",
+        "zoomwindow",
+        "zoomdynamic",
+        "zoomscale",
+        "zoomcenter",
+        "---",
+        "zoomin",
+        "zoomout",
+        "---",
+        "zoomselected",
+        "zoomall",
+        "zoomextents",
+        "END"
+    },
+    /* view_menu */
+    {
+        "---",
+        "submenu zoom",
+        "submenu pan",
+        "---",
+        "day",
+        "night",
+        "---",
+        "END"
+    },
+    /* settings_menu */
+    {
+        "settingsdialog",
+        "---",
+        "END"
+    },
+    /* window_menu */
+    {
+        "---",
+        "END"
+    },
+    /* help_menu */
+    {
+        "help",
+        "---",
+        "changelog",
+        "---",
+        "tipoftheday",
+        "---",
+        "about",
+        "---",
+        "whatsthis",
+        "END"
+    },
+    /* draw_menu */
+    {
+        "circle",
+        "path",
+        "polygon",
+        "polyline",
+        "point",
+        "heart",
+        "single-line-text",
+        "END"
+    }
 };
 
-/*  . */
-char edit_menu[][MAX_STRING_LENGTH] = {
-    "undo",
-    "redo",
-    "---",
-    "cut",
-    "copy",
-    "paste",
-    "---",
-    "END"
+char toolbar_list[2*MAX_TOOLBARS][MAX_STRING_LENGTH] = {
+    "file", "fileToolbar",
+    "edit", "editToolbar",
+    "view", "viewToolbar",
+    "zoom", "zoomToolbar",
+    "pan", "panToolbar",
+    "icon", "iconToolbar",
+    "help", "helpToolbar",
+    "draw", "drawToolbar"
 };
 
-char pan_menu[][MAX_STRING_LENGTH] = {
-    "icon pan",
-    "panrealtime",
-    "panpoint",
-    "---",
-    "panleft",
-    "panright",
-    "panup",
-    "pandown",
-    "END"
-};
-
-char zoom_menu[][MAX_STRING_LENGTH] = {
-    "icon zoom",
-    "zoomrealtime",
-    "zoomprevious",
-    "---",
-    "zoomwindow",
-    "zoomdynamic",
-    "zoomscale",
-    "zoomcenter",
-    "---",
-    "zoomin",
-    "zoomout",
-    "---",
-    "zoomselected",
-    "zoomall",
-    "zoomextents",
-    "END"
-};
-
-char view_menu[MAX_MENU_LENGTH][MAX_STRING_LENGTH] = {
-    "---",
-    "submenu zoom",
-    "submenu pan",
-    "---",
-    "day",
-    "night",
-    "---",
-    "END"
-};
-
-char settings_menu[MAX_MENU_LENGTH][MAX_STRING_LENGTH] = {
-    "settingsdialog",
-    "---",
-    "END"
-};
-
-char window_menu[MAX_MENU_LENGTH][MAX_STRING_LENGTH] = {
-    "---",
-    "END"
-};
-
-char help_menu[MAX_MENU_LENGTH][MAX_STRING_LENGTH] = {
-    "help",
-    "---",
-    "changelog",
-    "---",
-    "tipoftheday",
-    "---",
-    "about",
-    "---",
-    "whatsthis",
-    "END"
-};
-
-char draw_menu[MAX_MENU_LENGTH][MAX_STRING_LENGTH] = {
-    "circle",
-    "path",
-    "polygon",
-    "polyline",
-    "point",
-    "heart",
-    "single-line-text",
-    "END"
+char toolbars[MAX_TOOLBARS][MAX_TOOLBAR_LENGTH][MAX_STRING_LENGTH] = {
+    /* file_toolbar */
+    {
+        "new",
+        "open",
+        "save",
+        "saveas",
+        "print",
+        "designdetails",
+        "---",
+        "undo",
+        "redo",
+        "---",
+        "help",
+        "END"
+    },
+    /* edit_toolbar */
+    {
+        "cut",
+        "copy",
+        "paste",
+        "END"
+    },
+    /* view_toolbar */
+    {
+        "day",
+        "night",
+        "END"
+    },
+    /* zoom_toolbar */
+    {
+        "zoomwindow",
+        "zoomdynamic",
+        "zoomscale",
+        "---",
+        "zoomcenter",
+        "zoomin",
+        "zoomout",
+        "---",
+        "zoomselected",
+        "zoomall",
+        "zoomextents",
+        "END"
+    },
+    /* pan_toolbar */
+    {
+        "panrealtime",
+        "panpoint",
+        "---",
+        "panleft",
+        "panright",
+        "panup",
+        "pandown",
+        "END"
+    },
+    /* icon_toolbar */
+    {
+        "icon16",
+        "icon24",
+        "icon32",
+        "icon48",
+        "icon64",
+        "icon128",
+        "END"
+    },
+    /* help_toolbar */
+    {
+        "help",
+        "---",
+        "changelog",
+        "---",
+        "about",
+        "---",
+        "whatsthis",
+        "END"
+    },
+    /* draw_toolbar */
+    {
+        "circle",
+        "path",
+        "polygon",
+        "polyline",
+        "point",
+        "heart",
+        "single-line-text",
+        "END"
+    }
 };
 
 /* The group box list is not changeable at runtime, so it's fixed length
@@ -614,7 +621,7 @@ insert_node(CNode *branch, char key[MAX_STRING_LENGTH], CNode *node)
             working_copy[pos] = 0;
             for (i=0; i<branch->n_leaves; i++) {
                 if (!strncmp(working_copy, branch->leaves[i]->key, MAX_STRING_LENGTH)) {
-                    insert_node(branch->leaves[i], working_copy+pos+1);
+                    insert_node(branch->leaves[i], working_copy+pos+1, node);
                 }
             }
         }

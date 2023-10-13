@@ -49,6 +49,7 @@ MainWindow::createAllToolbars()
 {
     debug_message("MainWindow createAllToolbars()");
 
+
     create_toolbar("file", "toolbarFile", config["file_toolbar"].sl);
     create_toolbar("edit", "toolbarEdit", config["edit_toolbar"].sl);
     create_toolbar("view", "toolbarView", config["view_toolbar"].sl);

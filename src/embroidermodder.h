@@ -60,8 +60,6 @@ typedef std::unordered_map<std::string, Node> Dictionary;
 /* Global variables
  * ----------------
  */
-extern Node *root;
-
 extern MdiArea* mdiArea;
 
 /* The Settings System
@@ -700,10 +698,10 @@ public:
 
     bool isCommandActive() { return prompt->promptInput->cmdActive; }
     QString activeCommand() { return prompt->promptInput->curCmd; }
-    QIcon create_icon(QString stub);
-    void create_toolbar(std::string toolbar, String label, StringList entries);
 
     QString platformString();
+    void create_toolbar(std::string toolbar, std::string label, StringList entries);
+    QIcon create_icon(QString stub);
 
 public slots:
 

@@ -93,24 +93,6 @@ MainWindow::checkForUpdates()
     //TODO: Check website for new versions, commands, etc...
 }
 
-/* Copy the current clipboard's objects to the scene. */
-String
-paste_action(String args)
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->paste();
-    }
-    return "";
-}
-
-/* This action intensionally does nothing. */
-String
-do_nothing_action(String args)
-{
-    return "";
-}
-
 /* platformString.
  * TODO: Append QSysInfo to string where applicable.
  */
@@ -188,25 +170,6 @@ MainWindow::about(void)
     dialog.setLayout(&layout);
     dialog.exec();
     QApplication::restoreOverrideCursor();
-}
-
-/* Enter "whats this" mode. */
-String
-whats_this_action(String args)
-{
-    QWhatsThis::enterWhatsThisMode();
-    return "";
-}
-
-/* Open the system's print dialog. */
-String
-print_action(String args)
-{
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) {
-        mdiWin->print();
-    }
-    return "";
 }
 
 /* Open the Tip of the Day dialog. */
@@ -297,56 +260,6 @@ MainWindow::buttonTipOfTheDayClicked(int button)
     else if (button == QWizard::CustomButton3) {
         wizardTipOfTheDay->close();
     }
-}
-
-/* Open the help dialog. */
-String
-help_action(String args)
-{
-    // Open the HTML Help in the default browser
-    QUrl helpURL("file:///" + qApp->applicationDirPath() + "/help/doc-index.html");
-    QDesktopServices::openUrl(helpURL);
-
-    //TODO: This is how to start an external program. Use this elsewhere...
-    //QString program = "firefox";
-    //QStringList arguments;
-    //arguments << "help/commands.html";
-    //QProcess *myProcess = new QProcess(this);
-    //myProcess->start(program, arguments);
-    return "";
-}
-
-/* Open the changelog dialog. */
-String
-changelog_action(String args)
-{
-    QUrl changelogURL("help/changelog.html");
-    QDesktopServices::openUrl(changelogURL);
-    return "";
-}
-
-/* Undo the previous action as defined on the undo stack.
- * This is described in detail in the documentation.
- * TODO: reference section.
- */
-String
-undo_action(String args)
-{
-    QString prefix = prompt->promptInput->prefix;
-    if (dockUndoEdit->canUndo()) {
-        actuator("set-prompt-prefix Undo "
-            + dockUndoEdit->undoText().toStdString());
-        /* \bug this won't append history because there's no mechanism
-           for and empty string */
-        actuator("append-history ");
-        dockUndoEdit->undo();
-        actuator("set-prompt-prefix " + prefix.toStdString());
-    }
-    else {
-        prompt->alert("Nothing to undo");
-        actuator("set-prompt-prefix " + prefix.toStdString());
-    }
-    return "";
 }
 
 /* Redo the next action as defined on the undo stack.
@@ -588,55 +501,6 @@ layer_previous_action(String args)
 {
     debug_message("TODO: Implement layerPrevious.");
     return "";
-}
-
-/* Pan the current view using behaviour described by "mode". */
-String
-pan_action(String mode)
-{
-    View* gview = activeView();
-    if (!gview) {
-        return "ERROR: no active view found.";
-    }
-    QUndoStack* stack = gview->getUndoStack();
-    if (!stack) {
-        return "ERROR: no undo stack found.";
-    }
-    if (mode == "realtime") {
-        debug_message("panrealtime()");
-        gview->panRealTime();
-        return "";
-    }
-    if (mode == "point") {
-        debug_message("panpoint()");
-        gview->panPoint();
-        return "";
-    }
-    if (mode == "left") {
-        debug_message("panLeft()");
-        UndoableCommand* cmd = new UndoableCommand("PanLeft", gview, 0);
-        stack->push(cmd);
-        return "";
-    }
-    if (mode == "right") {
-        debug_message("panRight()");
-        UndoableCommand* cmd = new UndoableCommand("PanRight", gview, 0);
-        stack->push(cmd);
-        return "";
-    }
-    if (mode == "up") {
-        debug_message("panUp()");
-        UndoableCommand* cmd = new UndoableCommand("PanUp", gview, 0);
-        stack->push(cmd);
-        return "";
-    }
-    if (mode == "down") {
-        debug_message("panDown()");
-        UndoableCommand* cmd = new UndoableCommand("PanDown", gview, 0);
-        stack->push(cmd);
-        return "";
-    }
-    return "ERROR: pan subcommand not recognised.";
 }
 
 /* Zoom the current view using behaviour described by "mode". */
@@ -890,10 +754,9 @@ MainWindow::toggleLwt()
     statusbar->buttons["LWT"]->toggle();
 }
 
-/* MainWindow::promptHistoryAppended
- * txt */
+/* MainWindow::promptHistoryAppended(txt) */
 void
-MainWindow::promptHistoryAppended(QString  txt)
+MainWindow::promptHistoryAppended(QString txt)
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
@@ -903,11 +766,12 @@ MainWindow::promptHistoryAppended(QString  txt)
 
 /* MainWindow::logPromptInput  txt */
 void
-MainWindow::logPromptInput(QString  txt)
+MainWindow::logPromptInput(QString txt)
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin)
+    if (mdiWin) {
         mdiWin->logPromptInput(txt);
+    }
 }
 
 /* MainWindow::promptInputPrevious */
@@ -936,8 +800,8 @@ MainWindow::promptInputNext()
 String
 messagebox_action(String args)
 {
+    QString type, title, text;
     /*
-    QString type, QString title, QString text
     QString msgType = type.toLower();
     if (msgType == "critical") {
         QMessageBox::critical(_mainWin, tr(qPrintable(title)), tr(qPrintable(text)));
@@ -955,18 +819,6 @@ messagebox_action(String args)
         QMessageBox::critical(_mainWin, translate_str("Native MessageBox Error"), translate_str("Incorrect use of the native messageBox function."));
     }
     */
-    return "";
-}
-
-/* PrintArea
- * EmbReal x, EmbReal y, EmbReal w, EmbReal h
- */
-String
-print_area_action(String args)
-{
-    //    qDebug("nativeprint_area_action(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
-    //TODO: Print Setup Stuff
-    actuator("print " + args);
     return "";
 }
 
@@ -1045,39 +897,6 @@ preview_on_action(String args)
         */
     }
     return "";
-}
-
-/* PreviewOff. */
-String
-preview_off_action(String args)
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->previewOff();
-    }
-    return "";
-}
-
-/* ClearRubber. */
-String
-clear_rubber_action(String args)
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->clearRubberRoom();
-    }
-    return "";
-}
-
-/* AllowRubber. */
-String
-allow_rubber_action(String args)
-{
-    View* gview = activeView();
-    if (gview) {
-        return std::to_string(gview->allowRubber());
-    }
-    return "false";
 }
 
 /* SpareRubber
@@ -1269,16 +1088,6 @@ add_line_action(String args)
 
 /* . */
 String
-add_triangle_action(String args)
-{
-    /*
-    _mainWin->nativeadd_triangle_action(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, a[6].r, a[7].b);
-    */
-    return "";
-}
-
-/* . */
-String
 add_rectangle_action(String args)
 {
     View* gview = activeView();
@@ -1331,72 +1140,6 @@ add_rounded_rectangle_action(String args)
     _mainWin->nativeadd_rounded_rectangle_action(
         a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, a[6].b);
     */
-    return "";
-}
-
-/* add_arc_action.
- *
- * EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, String rubberMode
- */
-String
-add_arc_action(String args)
-{
-    View* gview = activeView();
-    QGraphicsScene* scene = activeScene();
-    if (gview && scene) {
-        /*
-        EmbArc arc;
-        arc.start.x = startX;
-        arc.start.x = -startY;
-        arc.mid.x = midX;
-        arc.mid.x = -midY;
-        arc.end.x = endX;
-        arc.end.x = -endY;
-        ArcObject* arcObj = new ArcObject(arc,_mainWin->getCurrentColor());
-        arcObj->setObjectRubberMode(rubberMode);
-        if (rubberMode != "OBJ_RUBBER_OFF") {
-            gview->addToRubberRoom(arcObj);
-        }
-        scene->addItem(arcObj);
-        scene->update();
-        */
-    }
-    return "";
-}
-
-/* add_circle_action.
- *
- * EmbReal centerX, EmbReal centerY, EmbReal radius, bool fill, String rubberMode
- */
-String
-add_circle_action(String args)
-{
-    View* gview = activeView();
-    QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && gscene && stack) {
-        EmbCircle circle;
-        circle.center.x = 0.0;
-        circle.center.y = -0.0;
-        circle.radius = 10.0;
-        bool fill = false;
-        String rubberMode = "OBJ_RUBBER_OFF";
-
-        /*
-        Geometry* obj = new Geometry(circle, _mainWin->getCurrentColor(), Qt::SolidLine);
-        obj->objRubberMode = rubberMode;
-        //TODO: circle fill
-        if (rubberMode != "OBJ_RUBBER_OFF") {
-            gview->addToRubberRoom(obj);
-            gscene->addItem(obj);
-            gscene->update();
-        }
-        else {
-            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
-            stack->push(cmd);
-        }
-        */
-    }
     return "";
 }
 
@@ -1531,20 +1274,6 @@ add_horizontal_dimension_action(String args)
 }
 
 /*
- * EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight
- */
-String
-add_vertical_dimension_action(String args)
-{
-    /*
-    AddVerticalDimension(std::vector<Node> a)
-    //TODO: Node error checking
-    debug_message("TODO: finish addVerticalDimension command");
-    */
-    return "";
-}
-
-/*
  * QString img, EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot
  */
 String
@@ -1556,120 +1285,6 @@ add_image_action(String args)
     debug_message("TODO: finish addImage command");
     */
     return "";
-}
-
-/* EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String rubberMode
- */
-String
-add_dim_leader_action(String args)
-{
-    /*
-    AddDimLeader(std::vector<Node> a)
-    _mainWin->nativeAddDimLeader(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, OBJ_RUBBER_OFF);
-    */
-    View* gview = activeView();
-    QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && gscene && stack) {
-        /*
-        Geometry* obj = new Geometry(x1, -y1, x2, -y2,_mainWin->getCurrentColor());
-        obj->setRotation(-rot);
-        obj->setObjectRubberMode(rubberMode);
-        if (rubberMode != "OBJ_RUBBER_OFF") {
-            gview->addToRubberRoom(obj);
-            gscene->addItem(obj);
-            gscene->update();
-        }
-        else {
-            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
-            stack->push(cmd);
-        }
-        */
-    }
-    return "";
-}
-
-/* . */
-String
-set_cursor_shape_action(String str)
-{
-    View* gview = activeView();
-    if (gview) {
-        QString shape = QString::fromStdString(str).toLower();
-        if (shape == "arrow") {
-            gview->setCursor(QCursor(Qt::ArrowCursor));
-        }
-        else if (shape == "uparrow") {
-            gview->setCursor(QCursor(Qt::UpArrowCursor));
-        }
-        else if (shape == "cross") {
-            gview->setCursor(QCursor(Qt::CrossCursor));
-        }
-        else if (shape == "wait") {
-            gview->setCursor(QCursor(Qt::WaitCursor));
-        }
-        else if (shape == "ibeam")
-            gview->setCursor(QCursor(Qt::IBeamCursor));
-        else if (shape == "resizevert")
-            gview->setCursor(QCursor(Qt::SizeVerCursor));
-        else if (shape == "resizehoriz")
-            gview->setCursor(QCursor(Qt::SizeHorCursor));
-        else if (shape == "resizediagleft")
-            gview->setCursor(QCursor(Qt::SizeBDiagCursor));
-        else if (shape == "resizediagright")
-            gview->setCursor(QCursor(Qt::SizeFDiagCursor));
-        else if (shape == "move")
-            gview->setCursor(QCursor(Qt::SizeAllCursor));
-        else if (shape == "blank")
-            gview->setCursor(QCursor(Qt::BlankCursor));
-        else if (shape == "splitvert")
-            gview->setCursor(QCursor(Qt::SplitVCursor));
-        else if (shape == "splithoriz")
-            gview->setCursor(QCursor(Qt::SplitHCursor));
-        else if (shape == "handpointing")
-            gview->setCursor(QCursor(Qt::PointingHandCursor));
-        else if (shape == "forbidden")
-            gview->setCursor(QCursor(Qt::ForbiddenCursor));
-        else if (shape == "handopen")
-            gview->setCursor(QCursor(Qt::OpenHandCursor));
-        else if (shape == "handclosed")
-            gview->setCursor(QCursor(Qt::ClosedHandCursor));
-        else if (shape == "whatsthis")
-            gview->setCursor(QCursor(Qt::WhatsThisCursor));
-        else if (shape == "busy")
-            gview->setCursor(QCursor(Qt::BusyCursor));
-        else if (shape == "dragmove")
-            gview->setCursor(QCursor(Qt::DragMoveCursor));
-        else if (shape == "dragcopy")
-            gview->setCursor(QCursor(Qt::DragCopyCursor));
-        else if (shape == "draglink")
-            gview->setCursor(QCursor(Qt::DragLinkCursor));
-    }
-    return "";
-}
-
-/* . */
-String
-calculate_angle_action(String args)
-{
-    StringList arg_list = tokenize(args, ' ');
-    EmbReal x1 = std::stof(arg_list[0]);
-    EmbReal y1 = std::stof(arg_list[1]);
-    EmbReal x2 = std::stof(arg_list[2]);
-    EmbReal y2 = std::stof(arg_list[3]);
-    return std::to_string(QLineF(x1, -y1, x2, -y2).angle());
-}
-
-/* . */
-String
-calculate_distance_action(String args)
-{
-    StringList arg_list = tokenize(args, ' ');
-    EmbReal x1 = std::stof(arg_list[0]);
-    EmbReal y1 = std::stof(arg_list[1]);
-    EmbReal x2 = std::stof(arg_list[2]);
-    EmbReal y2 = std::stof(arg_list[3]);
-    return std::to_string(QLineF(x1, y1, x2, y2).length());
 }
 
 /*
@@ -1697,39 +1312,12 @@ perpendicular_distance_action(String args)
 
 /* . */
 String
-add_to_selection_action(String args)
-{
-    return "";
-}
-
-/* . */
-String
 delete_selected_action(String args)
 {
     View* gview = activeView();
     if (gview) {
         gview->deleteSelected();
     }
-    return "";
-}
-
-/* . */
-String
-cut_selected_action(String args)
-{
-    /*
-    _mainWin->nativeCutSelected(a[0].r, a[1].r);
-    */
-    return "";
-}
-
-/* . */
-String
-copy_selected_action(String args)
-{
-    /*
-    _mainWin->nativeCopySelected(a[0].r, a[1].r);
-    */
     return "";
 }
 
@@ -1743,10 +1331,7 @@ paste_selected_action(String args)
     return "";
 }
 
-/* MoveSelected
- * \a dx
- * \a dy
- */
+/* MoveSelected(dx, dy) */
 String
 move_selected_action(String args)
 {
@@ -1760,11 +1345,7 @@ move_selected_action(String args)
     return "";
 }
 
-/* ScaleSelected
- * \a x
- * \a y
- * \a factor
- */
+/* ScaleSelected(x, y, factor) */
 String
 scale_selected_action(String args)
 {
@@ -1787,71 +1368,37 @@ scale_selected_action(String args)
     return "";
 }
 
-/* RotateSelected
- * \a x
- * \a y
- * \a rot
+/* RotateSelected(x, y, rot)
  */
 String
 rotate_selected_action(String args)
 {
-    StringList arg_list = tokenize(args, ' ');
-    EmbReal x = std::stof(arg_list[0]);
-    EmbReal y = std::stof(arg_list[1]);
-    EmbReal rot = std::stof(arg_list[2]);
-
     View* gview = activeView();
     if (gview) {
+        StringList arg_list = tokenize(args, ' ');
+        EmbReal x = std::stof(arg_list[0]);
+        EmbReal y = std::stof(arg_list[1]);
+        EmbReal rot = std::stof(arg_list[2]);
         gview->rotateSelected(x, -y, -rot);
     }
     return "";
 }
 
-/* MirrorSelected
- * \a x1
- * \a y1
- * \a x2
- * \a y2
+/* MirrorSelected(x1, y1, x2, y2)
  */
 String
 mirror_selected_action(String args)
 {
-
-    StringList arg_list = tokenize(args, ' ');
-    EmbReal x1 = std::stof(arg_list[0]);
-    EmbReal y1 = std::stof(arg_list[1]);
-    EmbReal x2 = std::stof(arg_list[2]);
-    EmbReal y2 = std::stof(arg_list[3]);
-
     View* gview = activeView();
     if (gview) {
+        StringList arg_list = tokenize(args, ' ');
+        EmbReal x1 = std::stof(arg_list[0]);
+        EmbReal y1 = std::stof(arg_list[1]);
+        EmbReal x2 = std::stof(arg_list[2]);
+        EmbReal y2 = std::stof(arg_list[3]);
         gview->mirrorSelected(x1, -y1, x2, -y2);
     }
     return "";
-}
-
-/* QSnapX
- */
-String
-qsnap_x_action(String args)
-{
-    QGraphicsScene* scene = activeScene();
-    if (scene) {
-        return std::to_string(scene->property("SCENE_QSNAP_POINT").toPointF().x());
-    }
-    return "0.0";
-}
-
-/* QSnapY
- */
-String
-qsnap_y_action(String args)
-{
-    QGraphicsScene* scene = activeScene();
-    if (scene) {
-        return std::to_string(-scene->property("SCENE_QSNAP_POINT").toPointF().y());
-    }
-    return "0.0";
 }
 
 /* MouseX
@@ -2213,7 +1760,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     shiftKeyPressedState = false;
 
-    setWindowIcon(create_icon("app"));
+    setWindowIcon(_mainWin->create_icon("app"));
     setMinimumSize(800, 480); //Require Minimum WVGA
 
     loadFormats();
@@ -2247,7 +1794,6 @@ MainWindow::MainWindow() : QMainWindow(0)
     prompt->setPromptBackgroundColor(QColor(get_uint(settings, "prompt_background_color")));
 
     connect(prompt, SIGNAL(startCommand(QString)), this, SLOT(logPromptInput(QString)));
-
     connect(prompt, SIGNAL(startCommand(QString)), this, SLOT(runCommandMain(QString)));
     connect(prompt, SIGNAL(runCommand(QString,QString)), this, SLOT(runCommandPrompt(QString,QString)));
 
@@ -2361,7 +1907,10 @@ MainWindow::createAllActions()
         }
 
         QString icon_s = get_qstr(action, "icon");
-        QIcon icon = create_icon(icon_s);
+        QString appDir = qApp->applicationDirPath();
+        QString icontheme = get_qstr(settings, "general_icon_theme");
+        QIcon icon = QIcon(appDir + "/icons/" + icontheme + "/" + icon_s + ".png");
+
         QAction *ACTION = new QAction(icon, get_qstr(action, "tooltip"), this);
         ACTION->setStatusTip(get_qstr(action, "statustip"));
         ACTION->setObjectName(icon_s);
@@ -2512,330 +2061,808 @@ actuator(String line)
     std::string args_(args);
 
     switch (action_id) {
-    case ACTION_ABOUT:
+
+    /* Open the about dialog. */
+    case ACTION_ABOUT: {
         _mainWin->about();
-        break;
+        return "";
+    }
 
-    case ACTION_ADD_ARC:
-        break;
+    /* add_arc_action.
+     *
+     * EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, String rubberMode
+     */
+    case ACTION_ADD_ARC: {
+        QGraphicsScene* scene = activeScene();
+        if (gview && scene) {
+            /*
+            EmbArc arc;
+            arc.start.x = startX;
+            arc.start.x = -startY;
+            arc.mid.x = midX;
+            arc.mid.x = -midY;
+            arc.end.x = endX;
+            arc.end.x = -endY;
+            ArcObject* arcObj = new ArcObject(arc,_mainWin->getCurrentColor());
+            arcObj->setObjectRubberMode(rubberMode);
+            if (rubberMode != "OBJ_RUBBER_OFF") {
+                gview->addToRubberRoom(arcObj);
+            }
+            scene->addItem(arcObj);
+            scene->update();
+            */
+        }
+        return "";
+    }
 
-    case ACTION_ADD_CIRCLE:
-        break;
+    /* add_circle_action.
+     *
+     * EmbReal centerX, EmbReal centerY, EmbReal radius, bool fill, String rubberMode
+     */
+    case ACTION_ADD_CIRCLE: {
+        QGraphicsScene* gscene = gview->scene();
+        QUndoStack* stack = gview->getUndoStack();
+        if (gview && gscene && stack) {
+            EmbCircle circle;
+            circle.center.x = 0.0;
+            circle.center.y = -0.0;
+            circle.radius = 10.0;
+            bool fill = false;
+            String rubberMode = "OBJ_RUBBER_OFF";
 
-    case ACTION_ADD_DIM_LEADER:
-        break;
+            /*
+            Geometry* obj = new Geometry(circle, _mainWin->getCurrentColor(), Qt::SolidLine);
+            obj->objRubberMode = rubberMode;
+            //TODO: circle fill
+            if (rubberMode != "OBJ_RUBBER_OFF") {
+                gview->addToRubberRoom(obj);
+                gscene->addItem(obj);
+                gscene->update();
+            }
+            else {
+                UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+                stack->push(cmd);
+            }
+            */
+        }
+        return "";
+    }
 
-    case ACTION_ADD_ELLIPSE:
-        break;
+    /* EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String rubberMode
+     */
+    case ACTION_ADD_DIM_LEADER: {
+        /*
+        AddDimLeader(std::vector<Node> a)
+        _mainWin->nativeAddDimLeader(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, OBJ_RUBBER_OFF);
+        */
+        QGraphicsScene* gscene = gview->scene();
+        QUndoStack* stack = gview->getUndoStack();
+        if (gview && gscene && stack) {
+            /*
+            Geometry* obj = new Geometry(x1, -y1, x2, -y2,_mainWin->getCurrentColor());
+            obj->setRotation(-rot);
+            obj->setObjectRubberMode(rubberMode);
+            if (rubberMode != "OBJ_RUBBER_OFF") {
+                gview->addToRubberRoom(obj);
+                gscene->addItem(obj);
+                gscene->update();
+            }
+            else {
+                UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+                stack->push(cmd);
+            }
+            */
+        }
+        return "";
+    }
 
-    case ACTION_ADD_GEOMETRY:
-        break;
+    /* . */
+    case ACTION_ADD_ELLIPSE: {
+        return "";
+    }
 
-    case ACTION_ADD_HORIZONTAL_DIMENSION:
-        break;
+    /* . */
+    case ACTION_ADD_GEOMETRY: {
+        return "";
+    }
 
-    case ACTION_ADD_IMAGE:
-        break;
+    /* . */
+    case ACTION_ADD_HORIZONTAL_DIMENSION: {
+        return "";
+    }
 
-    case ACTION_ADD_INFINITE_LINE:
-        break;
+    /* . */
+    case ACTION_ADD_IMAGE: {
+        return "";
+    }
 
-    case ACTION_ADD_LINE:
-        break;
+    /* . */
+    case ACTION_ADD_INFINITE_LINE: {
+        return "";
+    }
 
-    case ACTION_ADD_PATH:
-        break;
+    /* . */
+    case ACTION_ADD_LINE: {
+        return "";
+    }
 
-    case ACTION_ADD_POINT:
-        break;
+    case ACTION_ADD_PATH: {
+        return "";
+    }
 
-    case ACTION_ADD_POLYGON:
-        break;
+    case ACTION_ADD_POINT: {
+        return "";
+    }
 
-    case ACTION_ADD_POLYLINE:
-        break;
+    case ACTION_ADD_POLYGON: {
+        return "";
+    }
 
-    case ACTION_ADD_RAY:
-        break;
+    case ACTION_ADD_POLYLINE: {
+        return "";
+    }
 
-    case ACTION_ADD_RECTANGLE:
-        break;
+    case ACTION_ADD_RAY: {
+        return "";
+    }
 
-    case ACTION_ADD_REGULAR_POLYGON:
-        break;
+    case ACTION_ADD_RECTANGLE: {
+        return "";
+    }
 
-    case ACTION_ADD_ROUNDED_RECTANGLE:
-        break;
+    case ACTION_ADD_REGULAR_POLYGON: {
+        return "";
+    }
 
-    case ACTION_ADD_RUBBER:
-        break;
+    case ACTION_ADD_ROUNDED_RECTANGLE: {
+        return "";
+    }
 
-    case ACTION_ADD_SLOT:
-        break;
+    case ACTION_ADD_RUBBER: {
+        return "";
+    }
 
-    case ACTION_ADD_TEXT_MULTI:
-        break;
+    case ACTION_ADD_SLOT: {
+        return "";
+    }
 
-    case ACTION_ADD_TEXT_SINGLE:
-        break;
+    case ACTION_ADD_TEXT_MULTI: {
+        return "";
+    }
 
-    case ACTION_ADD_TO_SELECTION:
-        break;
+    /* . */
+    case ACTION_ADD_TEXT_SINGLE: {
+        return "";
+    }
 
-    case ACTION_ADD_TRIANGLE:
-        break;
+    /* . */
+    case ACTION_ADD_TO_SELECTION: {
+        return "";
+    }
 
-    case ACTION_ADD_VERTICAL_DIMENSION:
-        break;
+    /* . */
+    case ACTION_ADD_TRIANGLE: {
+        /*
+        _mainWin->nativeadd_triangle_action(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, a[6].r, a[7].b);
+        */
+        return "";
+    }
 
-    case ACTION_ALERT:
-        /* Alert the user with a message box. */
+    /*
+     * EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight
+     */
+    case ACTION_ADD_VERTICAL_DIMENSION: {
+        /*
+        AddVerticalDimension(std::vector<Node> a)
+        //TODO: Node error checking
+        debug_message("TODO: finish addVerticalDimension command");
+        */
+        return "";
+    }
+
+    /* Alert the user with a message box. */
+    case ACTION_ALERT: {
         prompt->alert(QString::fromStdString(args));
-        break;
+        return "";
+    }
 
-    case ACTION_ALLOW_RUBBER:
-        break;
+    /* AllowRubber. */
+    case ACTION_ALLOW_RUBBER: {
+        if (gview) {
+            return std::to_string(gview->allowRubber());
+        }
+        return "false";
+    }
 
-    case ACTION_APPEND_HISTORY:
-        /* Can accept no argument. */
+    /* Can accept no argument. */
+    case ACTION_APPEND_HISTORY: {
         prompt->appendHistory(QString::fromStdString(args));
-        break;
+        return "";
+    }
 
-    case ACTION_CALCULATE_ANGLE:
-        break;
+    /* . */
+    case ACTION_CALCULATE_ANGLE: {
+        StringList arg_list = tokenize(args_, ' ');
+        EmbReal x1 = std::stof(arg_list[0]);
+        EmbReal y1 = std::stof(arg_list[1]);
+        EmbReal x2 = std::stof(arg_list[2]);
+        EmbReal y2 = std::stof(arg_list[3]);
+        return std::to_string(QLineF(x1, -y1, x2, -y2).angle());
+    }
 
-    case ACTION_CALCULATE_DISTANCE:
-        break;
+    /* . */
+    case ACTION_CALCULATE_DISTANCE: {        
+        StringList arg_list = tokenize(args_, ' ');
+        EmbReal x1 = std::stof(arg_list[0]);
+        EmbReal y1 = std::stof(arg_list[1]);
+        EmbReal x2 = std::stof(arg_list[2]);
+        EmbReal y2 = std::stof(arg_list[3]);
+        return std::to_string(QLineF(x1, y1, x2, y2).length());
+    }
 
-    case ACTION_CHANGELOG:
-        break;
+    /* Open the changelog dialog. */
+    case ACTION_CHANGELOG: {
+        QUrl changelogURL("help/changelog.html");
+        QDesktopServices::openUrl(changelogURL);
+        return "";
+    }
 
-    case ACTION_CLEAR_RUBBER:
-        break;
+    /* ClearRubber. */
+    case ACTION_CLEAR_RUBBER: {
+        if (gview) {
+            gview->clearRubberRoom();
+        }
+        return "";
+    }
 
-    case ACTION_CLEAR_SELECTION:
-        break;
+    /* . */
+    case ACTION_CLEAR_SELECTION: {
+        if (gview) {
+            gview->clearSelection();
+        }
+        return "";
+    }
 
     /* Copy the selected objects to this activeView's clipboard. */
-    case ACTION_COPY:
-    case ACTION_COPY_SELECTED:
+    case ACTION_COPY: {
         if (gview) {
             gview->copy();
         }
         return "";
+    }
+
+    case ACTION_COPY_SELECTED: {
+        /* _mainWin->nativeCopySelected(a[0].r, a[1].r); */
+        return "";
+    }
 
     /* Cut the selected objects, placing them into the clipboard variable
      * for this gview.
      */
-    case ACTION_CUT:
-    case ACTION_CUT_SELECTED:
+    case ACTION_CUT: {
         if (gview) {
             gview->cut();
         }
         return "";
+    }
+
+    case ACTION_CUT_SELECTED: {
+        /* _mainWin->nativeCutSelected(a[0].r, a[1].r); */
+        return "";
+    }
 
     /* Activate day vision.
      * TODO: Make day vision color settings.
      */
-    case ACTION_DAY_VISION:
+    case ACTION_DAY_VISION: {
         if (gview) {
             gview->setBackgroundColor(qRgb(255,255,255));
             gview->setCrossHairColor(qRgb(0,0,0));
             gview->setGridColor(qRgb(0,0,0));
         }
         return "";
+    }
 
     /* Allows scripts to produce debug output similar to "echo". */
-    case ACTION_DEBUG:
+    case ACTION_DEBUG: {
         return "DEBUG: " + args_;
+    }
 
-    case ACTION_DELETE_SELECTED:
-        break;
+    case ACTION_DELETE_SELECTED: {
+        return "";
+    }
 
-    case ACTION_DESIGN_DETAILS:
-        break;
+    case ACTION_DESIGN_DETAILS: {
+        return "";
+    }
 
-    case ACTION_DO_NOTHING:
-        break;
+    /* This action intensionally does nothing. */
+    case ACTION_DO_NOTHING: {
+        return "";
+    }
 
-    case ACTION_END:
-        break;
+    /* For scripts: ensure that the script is tidied up. */
+    case ACTION_END: {
+        if (gview) {
+            gview->clearRubberRoom();
+            gview->previewOff();
+            gview->rapidMoveActive = false;
+        }
+        prompt->promptInput->endCommand();
+        return "";
+    }
 
-    case ACTION_ERROR:
-        break;
+    case ACTION_ERROR: {
+        return "";
+    }
 
-    case ACTION_HELP:
-        break;
+    /* Open the help dialog. */
+    case ACTION_HELP: {
+        // Open the HTML Help in the default browser
+        QUrl helpURL("file:///" + qApp->applicationDirPath() + "/help/doc-index.html");
+        QDesktopServices::openUrl(helpURL);
 
-    case ACTION_ICON:
-        break;
+        //TODO: This is how to start an external program. Use this elsewhere...
+        //QString program = "firefox";
+        //QStringList arguments;
+        //arguments << "help/commands.html";
+        //QProcess *myProcess = new QProcess(this);
+        //myProcess->start(program, arguments);
+        return "";
+    }
 
-    case ACTION_INIT:
-        /* For scripts: clear out any current variables before running. */
+    case ACTION_ICON: {
+        if (args_ == "16") {
+            _mainWin->iconResize(16);
+            return "";
+        }
+        if (args_ == "24") {
+            _mainWin->iconResize(24);
+            return "";
+        }
+        if (args_ == "32") {
+            _mainWin->iconResize(32);
+            return "";
+        }
+        if (args_ == "48") {
+            _mainWin->iconResize(48);
+            return "";
+        }
+        if (args_ == "64") {
+            _mainWin->iconResize(64);
+            return "";
+        }
+        if (args_ == "128") {
+            _mainWin->iconResize(128);
+            return "";
+        }
+        return "ERROR: this icon size is not supported.";
+    }
+
+    /* For scripts: clear out any current variables before running. */
+    case ACTION_INIT: {
         if (gview) {
             gview->clearRubberRoom();
         }
-        break;
+        return "";
+    }
 
-    case ACTION_MESSAGEBOX:
-        break;
+    case ACTION_MESSAGEBOX: {
+        return "";
+    }
 
-    case ACTION_MIRROR_SELECTED:
-        break;
+    case ACTION_MIRROR_SELECTED: {
+        return "";
+    }
 
-    case ACTION_MOUSE_X:
-        break;
+    case ACTION_MOUSE_X: {
+        return "";
+    }
 
-    case ACTION_MOUSE_Y:
-        break;
+    case ACTION_MOUSE_Y: {
+        return "";
+    }
 
-    case ACTION_MOVE_SELECTED:
-        break;
+    case ACTION_MOVE_SELECTED: {
+        return "";
+    }
 
-    case ACTION_NEW:
+    case ACTION_NEW: {
         _mainWin->newFile();
-        break;
+        return "";
+    }
 
     /* Activate night vision.
      * TODO: Make night vision color settings.
      */
-    case ACTION_NIGHT_VISION:
+    case ACTION_NIGHT_VISION: {
         if (gview) {
             gview->setBackgroundColor(qRgb(0,0,0));
             gview->setCrossHairColor(qRgb(255,255,255));
             gview->setGridColor(qRgb(255,255,255));
         }
-        break;
+        return "0";
+    }
 
     /* Return the number of objects selected currently,
      * if no view is present returns 0.
      */
-    case ACTION_NUM_SELECTED:
+    case ACTION_NUM_SELECTED: {
         if (gview) {
             return std::to_string(gview->numSelected());
         }
         return "0";
+    }
 
-    case ACTION_OPEN:
+    case ACTION_OPEN: {
         _mainWin->openFile();
-        break;
+        return "";
+    }
 
-    case ACTION_PAN:
-        break;
+    /* Pan the current view using behaviour described by "mode". */
+    case ACTION_PAN: {
+        if (!gview) {
+            return "ERROR: no active view found.";
+        }
+        QUndoStack* stack = gview->getUndoStack();
+        if (!stack) {
+            return "ERROR: no undo stack found.";
+        }
+        if (args_ == "realtime") {
+            gview->panRealTime();
+            return "";
+        }
+        if (args_ == "point") {
+            gview->panPoint();
+            return "";
+        }
+        if (args_ == "left") {
+            UndoableCommand* cmd = new UndoableCommand("PanLeft", gview, 0);
+            stack->push(cmd);
+            return "";
+        }
+        if (args_ == "right") {
+            UndoableCommand* cmd = new UndoableCommand("PanRight", gview, 0);
+            stack->push(cmd);
+            return "";
+        }
+        if (args_ == "up") {
+            UndoableCommand* cmd = new UndoableCommand("PanUp", gview, 0);
+            stack->push(cmd);
+            return "";
+        }
+        if (args_ == "down") {
+            UndoableCommand* cmd = new UndoableCommand("PanDown", gview, 0);
+            stack->push(cmd);
+            return "";
+        }
+        return "ERROR: pan subcommand not recognised.";
+    }
 
-    case ACTION_PASTE:
-        break;
+    /* Copy the current clipboard's objects to the scene. */
+    case ACTION_PASTE: {
+        if (gview) {
+            gview->paste();
+        }
+        return "";
+    }
 
-    case ACTION_PASTE_SELECTED:
-        break;
+    case ACTION_PASTE_SELECTED: {
+        return "";
+    }
 
-    case ACTION_PERPENDICULAR_DISTANCE:
-        break;
+    case ACTION_PERPENDICULAR_DISTANCE: {
+        return "";
+    }
 
     /* Return the platform running the software (for the CLI). */
-    case ACTION_PLATFORM:
+    case ACTION_PLATFORM: {
         return platformString();
+    }
 
-    case ACTION_PREVIEW_OFF:
-        break;
+    /* Turn preview off for this view. */
+    case ACTION_PREVIEW_OFF: {
+        if (gview) {
+            gview->previewOff();
+        }
+        return "";
+    }
 
-    case ACTION_PREVIEW_ON:
-        break;
+    case ACTION_PREVIEW_ON: {
+        return "";
+    }
 
-    case ACTION_PRINT:
-        break;
+    /* Open the system's print dialog. */
+    case ACTION_PRINT: {        
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+        if (mdiWin) {
+            mdiWin->print();
+        }
+        return "";
+    }
 
-    case ACTION_PRINT_AREA:
-        break;
+    /* PrintArea
+     * EmbReal x, EmbReal y, EmbReal w, EmbReal h
+     */
+    case ACTION_PRINT_AREA: {
+        // qDebug("nativeprint_area_action(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
+        // TODO: Print Setup Stuff
+        actuator("print " + args_);
+        return "";
+    }
 
-    case ACTION_QSNAP_X:
-        break;
+    /* QSnapX
+     */
+    case ACTION_QSNAP_X: {
+        QGraphicsScene* scene = activeScene();
+        if (scene) {
+            float x = scene->property("SCENE_QSNAP_POINT").toPointF().x();
+            return std::to_string(x);
+        }
+        return "0.0";
+    }
 
-    case ACTION_QSNAP_Y:
-        break;
+    /* QSnapX
+     */
+    case ACTION_QSNAP_Y: {
+        QGraphicsScene* scene = activeScene();
+        if (scene) {
+            float y = scene->property("SCENE_QSNAP_POINT").toPointF().y();
+            return std::to_string(y);
+        }
+        return "0.0";
+    }
 
     /* Close the program. */
-    case ACTION_QUIT:
+    case ACTION_QUIT: {
         _mainWin->quit();
-        break;
+        return "";
+    }
 
-    case ACTION_REDO:
-        break;
+    case ACTION_REDO: {
+        return "";
+    }
 
-    case ACTION_ROTATE_SELECTED:
-        break;
+    case ACTION_ROTATE_SELECTED: {
+        return "";
+    }
 
-    case ACTION_RUBBER:
-        break;
+    case ACTION_RUBBER: {
+        return "";
+    }
 
-    case ACTION_SCALE_SELECTED:
-        break;
+    case ACTION_SCALE_SELECTED: {
+        return "";
+    }
 
     /* For every object in the scene, add it to the selected array. */
-    case ACTION_SELECT_ALL:
+    case ACTION_SELECT_ALL: {
         if (gview) {
             gview->selectAll();
         }
-        break;
+        return "";
+    }
+    case ACTION_SETTINGS_DIALOG: {
+        return "";
+    }
 
-    case ACTION_SETTINGS_DIALOG:
-        break;
+    case ACTION_SET_BACKGROUND_COLOR: {
+        return "";
+    }
 
-    case ACTION_SET_BACKGROUND_COLOR:
-        break;
+    case ACTION_SET_CROSSHAIR_COLOR: {
+        return "";
+    }
 
-    case ACTION_SET_CROSSHAIR_COLOR:
-        break;
+    /* . */
+    case ACTION_SET_CURSOR_SHAPE: {
+        if (gview) {
+            QString shape = QString::fromStdString(args_).toLower();
+            if (shape == "arrow") {
+                gview->setCursor(QCursor(Qt::ArrowCursor));
+            }
+            else if (shape == "uparrow") {
+                gview->setCursor(QCursor(Qt::UpArrowCursor));
+            }
+            else if (shape == "cross") {
+                gview->setCursor(QCursor(Qt::CrossCursor));
+            }
+            else if (shape == "wait") {
+                gview->setCursor(QCursor(Qt::WaitCursor));
+            }
+            else if (shape == "ibeam") {
+                gview->setCursor(QCursor(Qt::IBeamCursor));
+            }
+            else if (shape == "resizevert") {
+                gview->setCursor(QCursor(Qt::SizeVerCursor));
+            }
+            else if (shape == "resizehoriz") {
+                gview->setCursor(QCursor(Qt::SizeHorCursor));
+            }
+            else if (shape == "resizediagleft") {
+                gview->setCursor(QCursor(Qt::SizeBDiagCursor));
+            }
+            else if (shape == "resizediagright") {
+                gview->setCursor(QCursor(Qt::SizeFDiagCursor));
+            }
+            else if (shape == "move") {
+                gview->setCursor(QCursor(Qt::SizeAllCursor));
+            }
+            else if (shape == "blank") {
+                gview->setCursor(QCursor(Qt::BlankCursor));
+            }
+            else if (shape == "splitvert") {
+                gview->setCursor(QCursor(Qt::SplitVCursor));
+            }
+            else if (shape == "splithoriz") {
+                gview->setCursor(QCursor(Qt::SplitHCursor));
+            }
+            else if (shape == "handpointing") {
+                gview->setCursor(QCursor(Qt::PointingHandCursor));
+            }
+            else if (shape == "forbidden") {
+                gview->setCursor(QCursor(Qt::ForbiddenCursor));
+            }
+            else if (shape == "handopen") {
+                gview->setCursor(QCursor(Qt::OpenHandCursor));
+            }
+            else if (shape == "handclosed") {
+                gview->setCursor(QCursor(Qt::ClosedHandCursor));
+            }
+            else if (shape == "whatsthis") {
+                gview->setCursor(QCursor(Qt::WhatsThisCursor));
+            }
+            else if (shape == "busy") {
+                gview->setCursor(QCursor(Qt::BusyCursor));
+            }
+            else if (shape == "dragmove") {
+                gview->setCursor(QCursor(Qt::DragMoveCursor));
+            }
+            else if (shape == "dragcopy") {
+                gview->setCursor(QCursor(Qt::DragCopyCursor));
+            }
+            else if (shape == "draglink") {
+                gview->setCursor(QCursor(Qt::DragLinkCursor));
+            }
+        }
+        return "";
+    }
 
-    case ACTION_SET_CURSOR_SHAPE:
-        break;
+    /*
+     * .
+     * argument string "iii"
+     */
+    case ACTION_SET_GRID_COLOR: {
+        /*
+        int r = a[0].r;
+        int g = a[1].r;
+        int b = a[2].r;
 
-    case ACTION_SET_GRID_COLOR:
-        break;
+        if (r < 0 || r > 255) {
+            return "ERROR set_grid_color_action(): r value must be in range 0-255";
+        }
+        if (g < 0 || g > 255) {
+            return "ERROR set_grid_color_action(): g value must be in range 0-255";
+        }
+        if (b < 0 || b > 255) {
+            return "ERROR set_grid_color_action(): b value must be in range 0-255";
+        }
 
-    case ACTION_SET_PROMPT_PREFIX:
-        break;
+        _mainWin->set_grid_color_action(r, g, b);
+        */
+        return "";
+    }
 
-    case ACTION_SET_RUBBER_FILTER:
-        break;
+    /* TODO: This setting should override a config variable used to set the prefix. */
+    case ACTION_SET_PROMPT_PREFIX: {
+        prompt->setPrefix(QString::fromStdString(args_));
+        return "";
+    }
 
-    case ACTION_SET_RUBBER_MODE:
-        break;
+    /* \todo This is so more than 1 rubber object can exist at one time
+     * without updating all rubber objects at once
+     */
+    case ACTION_SET_RUBBER_FILTER: {
+        return args_;
+    }
 
-    case ACTION_SET_RUBBER_POINT:
-        break;
+    case ACTION_SET_RUBBER_MODE: {
+        return "";
+    }
 
-    case ACTION_SET_RUBBER_TEXT:
-        break;
+    case ACTION_SET_RUBBER_POINT: {
+        return "";
+    }
 
-    case ACTION_SPARE_RUBBER:
-        break;
+    case ACTION_SET_RUBBER_TEXT: {
+        return "";
+    }
 
-    case ACTION_TIP_OF_THE_DAY:
-        break;
+    case ACTION_SPARE_RUBBER: {
+        return "";
+    }
+
+    case ACTION_TIP_OF_THE_DAY: {
+        return "";
+    }
 
     /* TODO reminders for the developers. */
-    case ACTION_TODO:
+    case ACTION_TODO: {
         return "TODO: " + args_;
+    }
 
-    case ACTION_UNDO:
-        break;
+    /* Undo the previous action as defined on the undo stack.
+     * This is described in detail in the documentation.
+     * TODO: reference section.
+     */
+    case ACTION_UNDO: {
+        QString prefix = prompt->promptInput->prefix;
+        if (dockUndoEdit->canUndo()) {
+            actuator("set-prompt-prefix Undo "
+                + dockUndoEdit->undoText().toStdString());
+            /* \bug this won't append history because there's no mechanism
+               for and empty string */
+            actuator("append-history ");
+            dockUndoEdit->undo();
+            actuator("set-prompt-prefix " + prefix.toStdString());
+        }
+        else {
+            prompt->alert("Nothing to undo");
+            actuator("set-prompt-prefix " + prefix.toStdString());
+        }
+        return "";
+    }
 
     /* Return the version string to the user (for the CLI). */
-    case ACTION_VERSION:
+    case ACTION_VERSION: {
         return config["version"].s;
+    }
 
-    case ACTION_VULCANIZE:
-        break;
+    case ACTION_VULCANIZE: {
+        if (gview) {
+            gview->vulcanizeRubberRoom();
+        }
+        return "";
+    }
 
-    case ACTION_WHATS_THIS:
-        break;
+    /* Enter "whats this" mode. */
+    case ACTION_WHATS_THIS: {
+        QWhatsThis::enterWhatsThisMode();
+        return "";
+    }
 
-    case ACTION_WINDOW:
-        break;
+    /* . */
+    case ACTION_WINDOW:{
+        if (args_ == "cascade") {
+            mdiArea->cascade();
+            return "";
+        }
+        if (args_ == "close") {
+            _mainWin->onCloseWindow();
+            return "";
+        }
+        if (args_ == "closeall") {
+            mdiArea->closeAllSubWindows();
+            return "";
+        }
+        if (args_ == "tile") {
+            mdiArea->tile();
+            return "";
+        }
+        if (args_ == "next") {
+            mdiArea->activateNextSubWindow();
+            return "";
+        }
+        if (args_ == "previous") {
+            mdiArea->activatePreviousSubWindow();
+            return "";
+        }
+        return "window argument not recognised.";
+    }
 
-    case ACTION_ZOOM:
-        break;
+    case ACTION_ZOOM: {
+        return "";
+    }
 
     /*
     case ACTION_SCRIPT:
@@ -2850,8 +2877,10 @@ actuator(String line)
         break;
     */
 
-    default:
+    default: {
         break;
+    }
+
     }
 
     return "";
@@ -2893,93 +2922,6 @@ add_geometry_action(String args)
     }
 
     return "The add subcommand is not recognised.";
-}
-
-/* \todo This is so more than 1 rubber object can exist at one time
- * without updating all rubber objects at once
- */
-String
-set_rubber_filter_action(String args)
-{
-    return args;
-}
-
-/* For scripts: ensure that the script is tidied up. */
-String
-end_action(String args)
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->clearRubberRoom();
-        gview->previewOff();
-        gview->rapidMoveActive = false;
-    }
-    prompt->promptInput->endCommand();
-    return "";
-}
-
-/* . */
-String
-window_action(String args)
-{
-    StringList list = tokenize(args, ' ');
-    String command = list[0];
-    if (command == "cascade") {
-        mdiArea->cascade();
-        return "";
-    }
-    if (command == "close") {
-        _mainWin->onCloseWindow();
-        return "";
-    }
-    if (command == "closeall") {
-        mdiArea->closeAllSubWindows();
-        return "";
-    }
-    if (command == "tile") {
-        mdiArea->tile();
-        return "";
-    }
-    if (command == "next") {
-        mdiArea->activateNextSubWindow();
-        return "";
-    }
-    if (command == "previous") {
-        mdiArea->activatePreviousSubWindow();
-        return "";
-    }
-    return "window argument not recognised.";
-}
-
-/* . */
-String
-icon_action(String command)
-{
-    if (command == "16") {
-        _mainWin->iconResize(16);
-        return "";
-    }
-    if (command == "24") {
-        _mainWin->iconResize(24);
-        return "";
-    }
-    if (command == "32") {
-        _mainWin->iconResize(32);
-        return "";
-    }
-    if (command == "48") {
-        _mainWin->iconResize(48);
-        return "";
-    }
-    if (command == "64") {
-        _mainWin->iconResize(64);
-        return "";
-    }
-    if (command == "128") {
-        _mainWin->iconResize(128);
-        return "";
-    }
-    return "ERROR: this icon size is not supported.";
 }
 
 /* . */
@@ -3120,36 +3062,6 @@ enable_action(String args)
     return "";
 }
 
-/* TODO: This setting should override a config variable used to set the prefix. */
-String
-set_prompt_prefix_action(String args)
-{
-    prompt->setPrefix(QString::fromStdString(args));
-    return "";
-}
-
-/* . */
-String
-clear_selection_action(String args)
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->clearSelection();
-    }
-    return "";
-}
-
-/* . */
-String
-vulcanize_action(String args)
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->vulcanizeRubberRoom();
-    }
-    return "";
-}
-
 /* . */
 String
 rubber_action(String args)
@@ -3210,8 +3122,8 @@ blink_prompt_action(String args)
  */
 String
 convert_args_to_type(
-    String label,
-    std::vector<String> args,
+    std::string label,
+    std::vector<std::string> args,
     const char *args_template,
     std::vector<Node> a)
 {
@@ -3326,33 +3238,6 @@ set_crosshair_color_action(String args)
     return "";
 }
 
-/*
- * .
- * argument string "iii"
- */
-String
-set_grid_color_action(String args)
-{
-    /*
-    int r = a[0].r;
-    int g = a[1].r;
-    int b = a[2].r;
-
-    if (r < 0 || r > 255) {
-        return "ERROR set_grid_color_action(): r value must be in range 0-255";
-    }
-    if (g < 0 || g > 255) {
-        return "ERROR set_grid_color_action(): g value must be in range 0-255";
-    }
-    if (b < 0 || b > 255) {
-        return "ERROR set_grid_color_action(): b value must be in range 0-255";
-    }
-
-    _mainWin->set_grid_color_action(r, g, b);
-    */
-    return "";
-}
-
 String
 SetTextAngle_action(String args)
 {
@@ -3388,8 +3273,9 @@ add_rubber_action(String args)
     //QString objType = QString::fromStdString(a[0].s).toUpper();
 
     /*
-    if (!_mainWin->nativeallow_rubber_action())
+    if (!_mainWin->nativeallow_rubber_action()) {
         return context->throwError(QScriptContext::UnknownError, "addRubber(): You must use actuator("vulcanize") before you can add another rubber object.");
+    }
 
     EmbReal mx = _mainWin->nativemouse_x_action();
     EmbReal my = _mainWin->nativemouse_y_action();

@@ -31,7 +31,7 @@
 
 #include "embroidermodder.h"
 
-Node get_node(Dictionary d, String key);
+Node get_node(Dictionary d, std::string key);
 void wrong_type_message(int type);
 
 /* Make the translation function global in scope. */
@@ -91,7 +91,7 @@ node_cstr(char *value)
     return node;
 }
 
-/* Makes a node from a String value. */
+/* Makes a node from a std::string value. */
 Node
 node_str(String value)
 {
@@ -111,9 +111,9 @@ node_qstr(QString value)
     return node;
 }
 
-/* Makes a node from a StringList value. */
+/* Makes a node from a std::vector<std::string> value. */
 Node
-node_str_list(StringList value)
+node_str_list(std::vector<std::string> value)
 {
     Node node;
     node.type = STRING_LIST_TYPE;
@@ -123,7 +123,7 @@ node_str_list(StringList value)
 
 /* . */
 Node
-get_node(Dictionary d, String key)
+get_node(Dictionary d, std::string key)
 {
     char error_msg[MAX_STRING_LENGTH];
     Node n = {
@@ -148,7 +148,7 @@ get_node(Dictionary d, String key)
 
 /* Wrong type */
 void
-wrong_type_message(Node n, String key, int type)
+wrong_type_message(Node n, std::string key, int type)
 {
     char types[][MAX_STRING_LENGTH] = {
         "NULL",
@@ -170,7 +170,7 @@ wrong_type_message(Node n, String key, int type)
 
 /* Get a boolean value from a Dictionary with the given key. */
 bool
-get_bool(Dictionary d, String key)
+get_bool(Dictionary d, std::string key)
 {
     Node n = get_node(d, key);
     if (n.type == BOOL_TYPE) {
@@ -182,7 +182,7 @@ get_bool(Dictionary d, String key)
 
 /* Get a 32-bit signed integer value from a Dictionary with the given key. */
 int
-get_int(Dictionary d, String key)
+get_int(Dictionary d, std::string key)
 {
     Node n = get_node(d, key);
     if (n.type == INT_TYPE) {
@@ -194,14 +194,14 @@ get_int(Dictionary d, String key)
 
 /* Get the 32-bit unsigned integer from the Dictionary d with the given key. */
 uint32_t
-get_uint(Dictionary d, String key)
+get_uint(Dictionary d, std::string key)
 {
     return (uint32_t)get_int(d, key);
 }
 
 /* Get the 32-bit float EmbReal from the Dictionary d with the given key. */
 EmbReal
-get_real(Dictionary d, String key)
+get_real(Dictionary d, std::string key)
 {
     Node n = get_node(d, key);
     if (n.type == REAL_TYPE) {
@@ -211,9 +211,9 @@ get_real(Dictionary d, String key)
     return 0.0f;
 }
 
-/* Get String from Dictionary. */
+/* Get std::string from Dictionary. */
 String
-get_str(Dictionary d, String key)
+get_str(Dictionary d, std::string key)
 {
     Node n = get_node(d, key);
     if (n.type == STRING_TYPE) {
@@ -225,14 +225,14 @@ get_str(Dictionary d, String key)
 
 /* Get QString from Dictionary. */
 QString
-get_qstr(Dictionary d, String key)
+get_qstr(Dictionary d, std::string key)
 {
     return QString::fromStdString(get_str(d, key));
 }
 
-/* Get StringList from Dictionary. */
-StringList
-get_str_list(Dictionary d, String key)
+/* Get std::stringList from Dictionary. */
+std::vector<std::string>
+get_str_list(Dictionary d, std::string key)
 {
     Node n = get_node(d, key);
     if (n.type == STRING_LIST_TYPE) {
@@ -242,24 +242,24 @@ get_str_list(Dictionary d, String key)
     return n.sl;
 }
 
-/* Convert QStringList to our own StringList type. */
-StringList
+/* Convert QStringList to the std library type. */
+std::vector<std::string>
 to_string_vector(QStringList list)
 {
-    std::vector<String> a;
+    std::vector<std::string> a;
     for (int i=0; i<(int)list.size(); i++) {
         a.push_back(list[i].toStdString());
     }
     return a;
 }
 
-/* Tokenize our String type using a 1 character deliminator. */
-StringList
+/* Tokenize our std::string type using a 1 character deliminator. */
+std::vector<std::string>
 tokenize(String str, const char delim)
 {
-    StringList list;
+    std::vector<std::string> list;
     std::stringstream str_stream(str);
-    String s;
+    std::string s;
     while (std::getline(str_stream, s, delim)) {
         list.push_back(s);
     }
@@ -338,7 +338,7 @@ debug_message(std::string msg)
 
 /* Utility function for add_to_path. */
 std::vector<float>
-get_n_reals(StringList list, int n, int *offset)
+get_n_reals(std::vector<std::string> list, int n, int *offset)
 {
     std::vector<float> result;
     for (int i=1; i<n+1; i++) {
@@ -352,9 +352,9 @@ get_n_reals(StringList list, int n, int *offset)
  *
  */
 QPainterPath
-add_to_path(QPainterPath path, EmbVector scale, String command)
+add_to_path(QPainterPath path, EmbVector scale, std::string command)
 {
-    StringList list = tokenize(command, ' ');
+    std::vector<std::string> list = tokenize(command, ' ');
     for (int i=0; i<(int)list.size(); i++) {
         command = list[i];
         if (command == "M") {
@@ -455,7 +455,7 @@ set_visibility(QObject* parent, const char *key, bool visibility)
 void
 make_ui_element(Dictionary description)
 {
-    String element_type = get_str(description, "type");
+    std::string element_type = get_str(description, "type");
     if (element_type == "groupBox") {
 
     }
@@ -493,7 +493,7 @@ make_ui_element(Dictionary description)
 
 /* . */
 QCheckBox *
-make_checkbox(QGroupBox *gb, String dictionary, const char *label, const char *icon, String key)
+make_checkbox(QGroupBox *gb, std::string dictionary, const char *label, const char *icon, std::string key)
 {
     QCheckBox *checkBox = new QCheckBox(translate_str(label), gb);
     checkBox->setIcon(_mainWin->create_icon(icon));
@@ -531,8 +531,8 @@ make_checkbox(QGroupBox *gb, String dictionary, const char *label, const char *i
  *     QDoubleSpinBox *sb = make_spinbox(gb, desc);
  */
 QDoubleSpinBox *
-make_spinbox(QGroupBox *gb, String dictionary,
-    QString object_name, EmbReal single_step, EmbReal lower, EmbReal upper, String key)
+make_spinbox(QGroupBox *gb, std::string dictionary,
+    QString object_name, EmbReal single_step, EmbReal lower, EmbReal upper, std::string key)
 {
     QDoubleSpinBox* spinBox = new QDoubleSpinBox(gb);
     spinBox->setObjectName(object_name);

@@ -1472,6 +1472,7 @@ Settings_Dialog::createTabSelection()
     return scrollArea;
 }
 
+/* */
 void
 Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
 {

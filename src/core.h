@@ -29,6 +29,8 @@
 #define MAX_TOOLBAR_LENGTH                      30
 #define MAX_MENU_LENGTH                         30
 #define MAX_MENUBAR_LENGTH                      10
+#define MAX_TOOLBARS                            10
+#define MAX_MENUS                               10
 
 /* Node types. */
 #define NULL_TYPE                                0
@@ -423,10 +425,18 @@ int insert_node(CNode *branch, char key[MAX_STRING_LENGTH], CNode *node);
 
 extern CNode *root;
 extern const ActionData action_table[];
-extern const char default_prompt_style[14][MAX_STRING_LENGTH];
-extern const char details_labels[12][MAX_STRING_LENGTH];
+extern const char default_prompt_style[20][MAX_STRING_LENGTH];
+extern const char details_labels[20][MAX_STRING_LENGTH];
 extern const char *usage_msg;
 extern char command_labels[N_ACTIONS][MAX_STRING_LENGTH];
+
+extern char menubar_order[MAX_MENUBAR_LENGTH][MAX_STRING_LENGTH];
+extern char toolbar_list[2*MAX_TOOLBARS][MAX_STRING_LENGTH];
+extern char toolbars[MAX_TOOLBARS][MAX_TOOLBAR_LENGTH][MAX_STRING_LENGTH];
+extern char menus[MAX_MENUS][MAX_MENU_LENGTH][MAX_STRING_LENGTH];
+extern char top_toolbar_layout[2*MAX_TOOLBARS][MAX_STRING_LENGTH];
+extern char bottom_toolbar_layout[2*MAX_TOOLBARS][MAX_STRING_LENGTH];
+extern char side_toolbar_layout[2*MAX_TOOLBARS][MAX_STRING_LENGTH];
 
 #ifdef __cplusplus
 }
