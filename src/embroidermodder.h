@@ -125,7 +125,6 @@ QPainterPath add_to_path(QPainterPath path, EmbVector scale, String s);
 String actuator(std::string line);
 String run_script_file(std::string fname);
 String run_script(std::vector<std::string> script);
-String construct_command(std::string command, const char *fmt, ...);
 
 void create_menu(std::string menu, StringList def, bool topLevel);
 

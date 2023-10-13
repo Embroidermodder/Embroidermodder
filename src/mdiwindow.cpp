@@ -162,26 +162,36 @@ MdiWindow::loadFile(String fileName)
         }
 
         for (int i=0; i<p->geometry->count; i++) {
+            char command_str[MAX_STRING_LENGTH];
             EmbGeometry g = p->geometry->geometry[i];
             curColor = qRgb(g.color.r, g.color.g, g.color.b);
             if (g.type == EMB_CIRCLE) {
                 EmbCircle c = g.object.circle;
-                std::string command = construct_command("add circle ", "rrrbs",
+                sprintf(command_str, "add circle %f %f %f %i %s",
                     c.center.x, c.center.y, c.radius, false, "OBJ_RUBBER_OFF");
+                std::string command(command_str);
                 // NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
                 actuator(command); //TODO: fill
             }
             if (g.type == EMB_ELLIPSE) {
                 EmbEllipse e = g.object.ellipse;
-                std::string command = construct_command("add ellipse ", "rrrribs",
-                    e.center.x, e.center.y, embEllipse_width(e), embEllipse_height(e), 0, false, "OBJ_RUBBER_OFF");
+                sprintf(command_str, "add ellipse %f %f %f %f %i %i %s",    e.center.x, e.center.y, embEllipse_width(e),
+                    embEllipse_height(e), 0, false, "OBJ_RUBBER_OFF");
+                std::string command(command_str);
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
                 actuator(command); //TODO: rotation and fill
             }
             if (g.type == EMB_LINE) {
                 EmbLine li = g.object.line;
-                std::string command = construct_command("add line ", "rrrris",
-                    li.start.x, li.start.y, li.end.x, li.end.y, 0, "OBJ_RUBBER_OFF");
+                sprintf(command_str,
+                    "add line %f %f %f %f %i %s",
+                    li.start.x,
+                    li.start.y,
+                    li.end.x,
+                    li.end.y,
+                    0,
+                    "OBJ_RUBBER_OFF");
+                std::string command(command_str);
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
                 actuator(command); //TODO: rotation
             }
@@ -212,7 +222,11 @@ MdiWindow::loadFile(String fileName)
             if (p->geometry->geometry[i].type == EMB_POINT) {
                 EmbPoint po = g.object.point;
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                std::string command = construct_command("add point ", "rr", po.position.x, po.position.y);
+                sprintf(command_str,
+                    "add point %f %f",
+                    po.position.x,
+                    po.position.y);
+                std::string command(command_str);
                 actuator(command);
             }
             if (p->geometry->geometry[i].type == EMB_POLYGON) {
@@ -272,9 +286,16 @@ MdiWindow::loadFile(String fileName)
             if (g.type == EMB_RECT) {
                 EmbRect r = g.object.rect;
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                std::string command = construct_command("add rectangle ", "rrrrribi",
-                    r.left, r.top,
-                    r.right - r.left, r.bottom - r.top, 0, false, "OBJ_RUBBER_OFF");
+                sprintf(command_str,
+                      "add rectangle %f %f %f %f %i %i %i",
+                    r.left,
+                    r.top,
+                    r.right - r.left,
+                    r.bottom - r.top,
+                    0,
+                    false,
+                    "OBJ_RUBBER_OFF");
+                std::string command(command_str);
                 actuator(command);
             }
         }
