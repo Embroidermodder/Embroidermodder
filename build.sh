@@ -11,7 +11,7 @@ git submodule update || exit 1
 
 rm -fr $BUILD_DIR || exit 1
 cp -r assets $BUILD_DIR || exit 1
-cp ZLIB-LICENSE.txt $BUILD_DIR || exit 1
+cp LICENSE.md $BUILD_DIR || exit 1
 
 cmake -S . -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE"  || exit 1
 cd $BUILD_DIR || exit 1
