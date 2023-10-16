@@ -31,6 +31,7 @@
 #define MAX_MENUBAR_LENGTH                      10
 #define MAX_TOOLBARS                            10
 #define MAX_MENUS                               10
+#define VECTOR_CHUNK_SIZE                       50
 
 /* Node types. */
 #define NULL_TYPE                                0
@@ -53,7 +54,7 @@
 #define QACTION_TYPE                            17
 #define TOOLBAR_TYPE                            18
 #define MODE_TYPE                               19
-#define UNKNOWN_TYPE                            20   
+#define UNKNOWN_TYPE                            20
 
 /* CNode types. */
 #define CNODE_TYPE_NULL                          0
@@ -402,16 +403,37 @@ typedef struct ActionData_ {
     char statustip[MAX_STRING_LENGTH];
 } ActionData;
 
+/* To allow us to resize general C arrays when necessary.
+ * Note that for char arrays, the buffer is a normal c-style string.
+ */
+typedef struct Cvector_ {
+    char *buffer;
+    int32_t size;
+    int32_t max_length;
+    int32_t element_size;
+} Cvector;
+
+/*
+ *
+ */
 struct CNode_ {
     struct CNode_ **leaves;
     int32_t n_leaves;
     int32_t max_leaves;
     char key[MAX_STRING_LENGTH];
     char data[MAX_STRING_LENGTH];
+    Cvector *vec;
     int32_t type;
 };
 
 typedef struct CNode_ CNode;
+
+Cvector *cvector_create(size_t element_size);
+void cvector_append(Cvector *a, Cvector *b);
+void cvector_add_cstr(Cvector *a, char *b);
+Cvector *cvector_copy(Cvector *a);
+void cvector_free(Cvector *vector);
+int string_array_length(const char *list[]);
 
 unsigned char validRGB(int r, int g, int b);
 
@@ -425,18 +447,45 @@ int insert_node(CNode *branch, char key[MAX_STRING_LENGTH], CNode *node);
 
 extern CNode *root;
 extern const ActionData action_table[];
-extern const char default_prompt_style[20][MAX_STRING_LENGTH];
-extern const char details_labels[20][MAX_STRING_LENGTH];
 extern const char *usage_msg;
-extern char command_labels[N_ACTIONS][MAX_STRING_LENGTH];
 
-extern char menubar_order[MAX_MENUBAR_LENGTH][MAX_STRING_LENGTH];
-extern char toolbar_list[2*MAX_TOOLBARS][MAX_STRING_LENGTH];
-extern char toolbars[MAX_TOOLBARS][MAX_TOOLBAR_LENGTH][MAX_STRING_LENGTH];
-extern char menus[MAX_MENUS][MAX_MENU_LENGTH][MAX_STRING_LENGTH];
-extern char top_toolbar_layout[2*MAX_TOOLBARS][MAX_STRING_LENGTH];
-extern char bottom_toolbar_layout[2*MAX_TOOLBARS][MAX_STRING_LENGTH];
-extern char side_toolbar_layout[2*MAX_TOOLBARS][MAX_STRING_LENGTH];
+extern const char *toolbar_list[];
+extern const char *menubar_order[];
+extern const char *top_toolbar_layout[];
+extern const char *bottom_toolbar_layout[];
+extern const char *side_toolbar_layout[];
+extern const char *file_menu[];
+extern const char *edit_menu[];
+extern const char *pan_menu[];
+extern const char *zoom_menu[];
+extern const char *view_menu[];
+extern const char *settings_menu[];
+extern const char *window_menu[];
+extern const char *help_menu[];
+extern const char *draw_menu[];
+
+extern const char *file_toolbar[];
+extern const char *edit_toolbar[];
+extern const char *pan_toolbar[];
+extern const char *zoom_toolbar[];
+extern const char *view_toolbar[];
+extern const char *settings_toolbar[];
+extern const char *window_toolbar[];
+extern const char *help_toolbar[];
+extern const char *draw_toolbar[];
+extern const char *icon_toolbar[];
+
+extern const char *default_prompt_style[];
+extern const char *details_labels[];
+extern const char *command_labels[];
+extern const char *all_line_editors[];
+extern const char *justify_options[];
+extern const char *object_names[];
+extern const char *button_list[];
+extern const char *tips[];
+extern const char *group_box_types[];
+
+extern const int32_t group_box_ids[];
 
 #ifdef __cplusplus
 }

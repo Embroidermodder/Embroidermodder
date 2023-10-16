@@ -16,10 +16,10 @@
 #include "embroidermodder.h"
 
 /* Construct a new MdiWindow object.
- * 
- * theIndex 
- * parent 
- * wflags 
+ *
+ * theIndex
+ * parent
+ * wflags
  *
  * WARNING:
  *   DO NOT SET THE QMDISUBWINDOW (this) FOCUSPROXY TO THE PROMPT
@@ -128,7 +128,7 @@ MdiWindow::loadFile(String fileName)
     if (readSuccessful) {
         debug_message("Starting to load the read file.");
         //embPattern_moveStitchListToPolylines(p); //TODO: Test more
-        
+
         int stitchCount = p->stitch_list->count;
         qDebug("%d", stitchCount);
         for (int i=0; i<stitchCount; i++) {
@@ -206,7 +206,7 @@ MdiWindow::loadFile(String fileName)
                     EmbPoint pp = curPointList->geometry[j].object.point;
                     pathPath.lineTo(pp.position.x, -pp.position.y);
                 }
-                 
+
                 QPen loadPen(qRgb(g.color.r, g.color.g, g.color.b));
                 loadPen.setWidthF(0.35);
                 loadPen.setCapStyle(Qt::RoundCap);
@@ -287,7 +287,7 @@ MdiWindow::loadFile(String fileName)
                 EmbRect r = g.object.rect;
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
                 sprintf(command_str,
-                      "add rectangle %f %f %f %f %i %i %i",
+                      "add rectangle %f %f %f %f %i %i %s",
                     r.left,
                     r.top,
                     r.right - r.left,

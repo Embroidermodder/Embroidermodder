@@ -13,7 +13,9 @@ HEADERS += src/embroidermodder.h \
     extern/libembroidery/src/nanosvg/src/nanosvgrast.h \
     extern/tomlc99/toml.h \
     src/core.h
-SOURCES += src/embroidermodder.cpp \
+SOURCES += \
+    src/object_data.c \
+    src/embroidermodder.cpp \
     extern/libembroidery/src/array.c \
     extern/libembroidery/src/compress.c \
     extern/libembroidery/src/encoding.c \
@@ -103,8 +105,6 @@ SOURCES += src/embroidermodder.cpp \
     src/imagewidget.cpp \
     src/interface.cpp \
     src/layer-manager.cpp \
-    src/mainwindow-menus.cpp \
-    src/mainwindow-toolbars.cpp \
     src/mdiarea.cpp \
     src/mdiwindow.cpp \
     src/objects.cpp \

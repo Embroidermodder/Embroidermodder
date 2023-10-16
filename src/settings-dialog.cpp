@@ -160,7 +160,7 @@ read_settings(void)
     fclose(f);
 
     if (!table) {
-        puts("ERROR: failed to parse settings.ini, continuing with defaults.");
+        puts("ERROR: failed to parse settings.toml, continuing with defaults.");
         return;
     }
 
@@ -227,19 +227,6 @@ write_settings(void)
         case STRING_TYPE:
             file << "\"" << iter->second.s << "\"";
             break;
-        /*
-        case STRING_LIST_TYPE: {
-            file << "[" << std::endl;
-            for (int i=0; i<(int)iter->second.sl.size(); i++) {
-                file << "    \"" << iter->second.sl[i] << "\"";
-                if (i < (int)iter->second.sl.size() - 1) {
-                    file << ",";
-                }
-            }
-            file << "]";
-            break;
-        }
-        */
         default:
             break;
         }

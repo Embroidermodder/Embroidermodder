@@ -26,7 +26,7 @@
  *  The tree walking, merging, freeing and otherwise altering functions
  *  are an attempt to create a solid foundation for the internal scripting
  *  language by having a fully abstract data model similar to an AST for
- *  the whole state of the program at run-time. 
+ *  the whole state of the program at run-time.
  */
 
 #include "embroidermodder.h"
@@ -108,16 +108,6 @@ node_qstr(QString value)
     Node node;
     node.type = STRING_TYPE;
     node.s = value.toStdString();
-    return node;
-}
-
-/* Makes a node from a std::vector<std::string> value. */
-Node
-node_str_list(std::vector<std::string> value)
-{
-    Node node;
-    node.type = STRING_LIST_TYPE;
-    node.sl = value;
     return node;
 }
 
@@ -230,18 +220,6 @@ get_qstr(Dictionary d, std::string key)
     return QString::fromStdString(get_str(d, key));
 }
 
-/* Get std::stringList from Dictionary. */
-std::vector<std::string>
-get_str_list(Dictionary d, std::string key)
-{
-    Node n = get_node(d, key);
-    if (n.type == STRING_LIST_TYPE) {
-        return n.sl;
-    }
-    wrong_type_message(n, key, STRING_LIST_TYPE);
-    return n.sl;
-}
-
 /* Convert QStringList to the std library type. */
 std::vector<std::string>
 to_string_vector(QStringList list)
@@ -282,29 +260,6 @@ to_EmbVector(QPointF a)
     v.x = a.x();
     v.y = a.y();
     return v;
-}
-
-/* Wrapper for embVector_add to use the syntax "a + b" for EmbVectors. */
-EmbVector
-operator+(EmbVector a, EmbVector b)
-{
-    return embVector_add(a, b);
-}
-
-/* Wrapper for embVector_subtract to use the syntax "a - b" for EmbVectors. */
-EmbVector
-operator-(EmbVector a, EmbVector b)
-{
-    return embVector_subtract(a, b);
-}
-
-/* Wrapper for embVector_multiply to use the syntax "v * s" for EmbVectors. */
-EmbVector
-operator*(EmbVector v, EmbReal s)
-{
-    EmbVector result;
-    embVector_multiply(v, s, &result);
-    return result;
 }
 
 /* Convert from QList to std::vector. */
@@ -399,7 +354,7 @@ set_enabled(QObject* parent, const char *key, bool enabled)
     if (!strncmp(key, "comboBox", 8)) {
         QComboBox* comboBox = parent->findChild<QComboBox*>(key);
         if (comboBox) {
-            comboBox->setEnabled(enabled);    
+            comboBox->setEnabled(enabled);
         }
         return;
     }

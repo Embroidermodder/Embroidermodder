@@ -46,8 +46,6 @@ qt_add_executable(embroidermodder2 WIN32 MACOSX_BUNDLE
     ${CMAKE_SOURCE_DIR}/src/imagewidget.cpp
     ${CMAKE_SOURCE_DIR}/src/interface.cpp
     ${CMAKE_SOURCE_DIR}/src/layer-manager.cpp
-    ${CMAKE_SOURCE_DIR}/src/mainwindow-menus.cpp
-    ${CMAKE_SOURCE_DIR}/src/mainwindow-toolbars.cpp
     ${CMAKE_SOURCE_DIR}/src/mainwindow.cpp
     ${CMAKE_SOURCE_DIR}/src/mdiarea.cpp
     ${CMAKE_SOURCE_DIR}/src/mdiwindow.cpp
@@ -64,6 +62,7 @@ qt_add_executable(embroidermodder2 WIN32 MACOSX_BUNDLE
     ${CMAKE_SOURCE_DIR}/src/embroidermodder.h
 
     ${CMAKE_SOURCE_DIR}/src/core.c
+    ${CMAKE_SOURCE_DIR}/src/objects_data.c
 
     ${CMAKE_SOURCE_DIR}/extern/tomlc99/toml.c
 

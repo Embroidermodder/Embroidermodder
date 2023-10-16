@@ -55,6 +55,21 @@ void toPolyline(
 
 bool save(View *view, QString f);
 
+int
+test_geometry(Geometry *g)
+{
+    return g->Type;
+}
+
+Geometry *
+create_geometry(void)
+{
+    Geometry g(OBJ_TYPE_ARC);
+    printf("%d", test_geometry(&g));
+    return &g;
+}
+
+
 /* . */
 bool
 save_current_file(String fileName)
@@ -112,6 +127,13 @@ add_polyline(QPainterPath p, String rubberMode)
         UndoableCommand* cmd = new UndoableCommand("add", obj->data(OBJ_NAME).toString(), obj, gview);
         stack->push(cmd);
     }
+}
+
+/* Construct a new Geometry object of arc type. */
+Geometry::Geometry(int type_, QGraphicsItem* parent) : QGraphicsPathItem(parent)
+{
+    debug_message("Geometry Constructor()");
+    init();
 }
 
 /* Construct a new Geometry object of arc type. */
@@ -202,9 +224,11 @@ Geometry::init(void)
     properties["click_script"] = node_str("");
     properties["context_script"] = node_str("");
 
+	/*
     if (get_str(properties, "init_script") != "") {
         run_script(scripts[get_str(properties, "init_script")]);
     }
+	*/
 }
 
 /* Initialise arc object.
@@ -499,7 +523,7 @@ Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(par
             init_line(line, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
             break;
         }
-        
+
         case OBJ_TYPE_ELLIPSE: {
             EmbEllipse ellipse;
             ellipse.center.x = obj->objectCenter().x();
@@ -538,7 +562,7 @@ Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(par
             setScale(obj->scale());
             break;
         }
-        
+
         case OBJ_TYPE_RECTANGLE: {
             QPointF ptl = obj->objectTopLeft();
             EmbRect rect;
@@ -550,7 +574,7 @@ Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(par
             setRotation(obj->rotation());
             break;
         }
-        
+
         case OBJ_TYPE_TEXTSINGLE: {
             setObjectTextFont(obj->objTextFont);
             setObjectTextSize(get_real(obj->properties, "text_size"));
@@ -806,7 +830,7 @@ void
 Geometry::setObjectEndPoint1(EmbVector endPt1)
 {
     EmbVector endPt2 = to_EmbVector(objectEndPoint2());
-    EmbVector delta = endPt2 - endPt1;
+    EmbVector delta = embVector_subtract(endPt2, endPt1);
     // setScale(1); ?
     setRotation(0);
     setLine(0, 0, delta.x, delta.y);
@@ -824,7 +848,7 @@ void
 Geometry::setObjectEndPoint2(EmbVector endPt2)
 {
     EmbVector endPt1 = to_EmbVector(scenePos());
-    EmbVector delta = endPt2 - endPt1;
+    EmbVector delta = embVector_subtract(endPt2, endPt1);
     setRotation(0);
     // setScale(1); ?
     setLine(0, 0, delta.x, delta.y);
@@ -1760,7 +1784,7 @@ Geometry::objectSavePath()
         path.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
         break;
     }
-    
+
     case OBJ_TYPE_POLYLINE:
     case OBJ_TYPE_PATH: {
         path = normalPath;
@@ -1817,9 +1841,9 @@ void Geometry::calculateArcData(EmbArc arc)
     EmbVector center;
     getArcCenter(arc, &center);
 
-    arcStartPoint = to_QPointF(arc.start - center);
-    arcMidPoint = to_QPointF(arc.mid - center);
-    arcEndPoint = to_QPointF(arc.end - center);
+    arcStartPoint = to_QPointF(embVector_subtract(arc.start, center));
+    arcMidPoint = to_QPointF(embVector_subtract(arc.mid, center));
+    arcEndPoint = to_QPointF(embVector_subtract(arc.end, center));
 
     setPos(center.x, center.y);
 
@@ -2231,12 +2255,12 @@ Geometry::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidg
         }
         break;
     }
-    
+
     case OBJ_TYPE_ELLIPSE: {
         painter->drawEllipse(rect());
         break;
     }
-    
+
     case OBJ_TYPE_IMAGE:
     case OBJ_TYPE_RECTANGLE: {
         painter->drawRect(rect());
@@ -2433,7 +2457,7 @@ Geometry::objectTopLeft()
 
     return scenePos() + to_QPointF(ptlRot);
 }
- 
+
 /* QPointF. */
 QPointF
 Geometry::objectTopRight()
@@ -2803,7 +2827,7 @@ addCircle(View* view, QGraphicsItem* item)
             circle.center.x = (double)obj->objectCenter().x();
             circle.center.y = (double)obj->objectCenter().y();
             circle.radius = (double)obj->objectRadius();
-            
+
             embPattern_addCircleAbs(view->pattern, circle);
         }
     }
@@ -3144,7 +3168,7 @@ addTextSingle(View* view, QGraphicsItem* item)
 }
 
 /* toPolyline
- * 
+ *
  * NOTE: This function should be used to interpret various object types
  * and save them as polylines for stitchOnly formats.
  */
@@ -3175,7 +3199,7 @@ toPolyline(
     color_out.r = color.red();
     color_out.g = color.green();
     color_out.b = color.blue();
-    
+
     /**
     TODO: FIX
     EmbPolyline* polyObject = embPolyline_init(pointList, color_out, 1); //TODO: proper lineType
@@ -3291,7 +3315,7 @@ void Geometry::setObjectText(QString str)
     setPath(gripPath);
 }
 
-/* font 
+/* font
  */
 void
 Geometry::setObjectTextFont(QString font)
@@ -3308,16 +3332,15 @@ Geometry::setObjectTextJustify(QString justify)
 {
     objTextJustify = "Left";
     String justify_ = justify.toStdString();
-    StringList justify_options = config["justify_options"].sl;
-    for (int i=0; i<(int)justify_options.size(); i++) {
-        if (justify_ == justify_options[i]) {
+    for (int i=0; strcmp(justify_options[i], "END"); i++) {
+        if (!strcmp(justify_.c_str(), justify_options[i])) {
             objTextJustify = justify;
         }
     }
     setObjectText(objText);
 }
 
-/* size 
+/* size
  */
 void
 Geometry::setObjectTextSize(EmbReal size)
@@ -3326,12 +3349,7 @@ Geometry::setObjectTextSize(EmbReal size)
     setObjectText(objText);
 }
 
-/* bold 
- * italic 
- * under 
- * strike 
- * over 
- */
+/* bold, italic, under, strike, over */
 void
 Geometry::setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bool over)
 {
@@ -3351,7 +3369,7 @@ Geometry::setObjectBoolean(const char *key, bool val)
 
 }
 
-/* val 
+/* val
  */
 void
 Geometry::setObjectTextBold(bool val)
@@ -3463,6 +3481,7 @@ Geometry::subPathList()
 void
 Geometry::script_main(void)
 {
+	/*
     StringList script = {"end"};
     switch (Type) {
     case OBJ_TYPE_CIRCLE: {
@@ -3473,7 +3492,6 @@ Geometry::script_main(void)
         script = scripts["ellipse_init"];
         break;
     }
-    /*
     case DISTANCE:
         script = {
             "init",
@@ -3486,11 +3504,11 @@ Geometry::script_main(void)
         script = dolphin_init_script;
         break;
     }
-    */
     default:
         break;
     }
     run_script(script);
+    */
 }
 
 /* Script to change the entries in the context menu when acting
@@ -5048,18 +5066,6 @@ Geometry::quickleader_prompt(String str)
         }
     }
 }
-
-/* . */
-const char rectangle_main_script[][MAX_STRING_LENGTH] = {
-    "init",
-    "clear-selection",
-    "newRect=true",
-    "real x1 = 0.0f",
-    "real y1 = 0.0f",
-    "real x2 = 0.0f",
-    "real y2 = 0.0f",
-    "set-prompt-prefix-tr Specify first corner point or [Chamfer/Fillet]: "
-};
 
 /* . */
 const char rectangle_click_script[][MAX_STRING_LENGTH] = {

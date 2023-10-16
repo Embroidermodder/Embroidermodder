@@ -29,7 +29,7 @@
  */
 CNode *root;
 
-const char details_labels[20][MAX_STRING_LENGTH] = {
+const char *details_labels[] = {
     "Total Stitches:",
     "Real Stitches:",
     "Jump Stitches:",
@@ -45,7 +45,7 @@ const char details_labels[20][MAX_STRING_LENGTH] = {
     "END"
 };
 
-const char default_prompt_style[20][MAX_STRING_LENGTH] = {
+const char *default_prompt_style[] = {
     "color",                      "#000000", // Match -------|
     "background-color",           "#FFFFFF", //              |
     "selection-color",            "#FFFFFF", //              |
@@ -85,7 +85,7 @@ const char *usage_msg = ""
     "\n";
 
 /*  . */
-char menubar_order[MAX_MENUBAR_LENGTH][MAX_STRING_LENGTH] = {
+const char *menubar_order[] = {
     "file",
     "edit",
     "view",
@@ -97,7 +97,7 @@ char menubar_order[MAX_MENUBAR_LENGTH][MAX_STRING_LENGTH] = {
 };
 
 /*  . */
-char top_toolbar_layout[2*MAX_TOOLBARS][MAX_STRING_LENGTH] = {
+const char *top_toolbar_layout[] = {
     "---",
     "file",
     "edit",
@@ -116,128 +116,125 @@ char top_toolbar_layout[2*MAX_TOOLBARS][MAX_STRING_LENGTH] = {
 };
 
 /*  . */
-char bottom_toolbar_layout[2*MAX_TOOLBARS][MAX_STRING_LENGTH] = {
+const char *bottom_toolbar_layout[] = {
     "prompt",
     "END"
 };
 
 /*  . */
-char side_toolbar_layout[2*MAX_TOOLBARS][MAX_STRING_LENGTH] = {
+const char *side_toolbar_layout[] = {
     "draw",
     "END"
 };
 
-char menus[MAX_MENUS][MAX_MENU_LENGTH][MAX_STRING_LENGTH] = {
-    /* file_menu */
-    {
-        "new",
-        "---",
-        "open",
-        "submenu recent",
-        "---",
-        "save",
-        "saveas",
-        "---",
-        "print",
-        "---",
-        "windowclose",
-        "---",
-        "designdetails",
-        "---",
-        "exit",
-        "END"
-    },
-    /* edit_menu */
-    {
-        "undo",
-        "redo",
-        "---",
-        "cut",
-        "copy",
-        "paste",
-        "---",
-        "END"
-    },
-    /* pan_menu */
-    {
-        "icon pan",
-        "panrealtime",
-        "panpoint",
-        "---",
-        "panleft",
-        "panright",
-        "panup",
-        "pandown",
-        "END"
-    },
-    /* zoom_menu */
-    {
-        "icon zoom",
-        "zoomrealtime",
-        "zoomprevious",
-        "---",
-        "zoomwindow",
-        "zoomdynamic",
-        "zoomscale",
-        "zoomcenter",
-        "---",
-        "zoomin",
-        "zoomout",
-        "---",
-        "zoomselected",
-        "zoomall",
-        "zoomextents",
-        "END"
-    },
-    /* view_menu */
-    {
-        "---",
-        "submenu zoom",
-        "submenu pan",
-        "---",
-        "day",
-        "night",
-        "---",
-        "END"
-    },
-    /* settings_menu */
-    {
-        "settingsdialog",
-        "---",
-        "END"
-    },
-    /* window_menu */
-    {
-        "---",
-        "END"
-    },
-    /* help_menu */
-    {
-        "help",
-        "---",
-        "changelog",
-        "---",
-        "tipoftheday",
-        "---",
-        "about",
-        "---",
-        "whatsthis",
-        "END"
-    },
-    /* draw_menu */
-    {
-        "circle",
-        "path",
-        "polygon",
-        "polyline",
-        "point",
-        "heart",
-        "single-line-text",
-        "END"
-    }
+const char *file_menu[] = {
+	"new",
+	"---",
+	"open",
+	"submenu recent",
+	"---",
+	"save",
+	"saveas",
+	"---",
+	"print",
+	"---",
+	"windowclose",
+	"---",
+	"designdetails",
+	"---",
+	"exit",
+	"END"
 };
 
-char toolbar_list[2*MAX_TOOLBARS][MAX_STRING_LENGTH] = {
+const char *edit_menu[] = {
+	"undo",
+	"redo",
+	"---",
+	"cut",
+	"copy",
+	"paste",
+	"---",
+	"END"
+};
+
+const char *pan_menu[] = {
+	"icon pan",
+	"panrealtime",
+	"panpoint",
+	"---",
+	"panleft",
+	"panright",
+	"panup",
+	"pandown",
+	"END"
+};
+
+const char *zoom_menu[] = {
+	"icon zoom",
+	"zoomrealtime",
+	"zoomprevious",
+	"---",
+	"zoomwindow",
+	"zoomdynamic",
+	"zoomscale",
+	"zoomcenter",
+	"---",
+	"zoomin",
+	"zoomout",
+	"---",
+	"zoomselected",
+	"zoomall",
+	"zoomextents",
+	"END"
+};
+
+const char *view_menu[] = {
+	"---",
+	"submenu zoom",
+	"submenu pan",
+	"---",
+	"day",
+	"night",
+	"---",
+	"END"
+};
+
+const char *settings_menu[] = {
+	"settingsdialog",
+	"---",
+	"END"
+};
+
+const char *window_menu[] = {
+	"---",
+	"END"
+};
+
+const char *help_menu[] = {
+	"help",
+	"---",
+	"changelog",
+	"---",
+	"tipoftheday",
+	"---",
+	"about",
+	"---",
+	"whatsthis",
+	"END"
+};
+
+const char *draw_menu[] = {
+	"circle",
+	"path",
+	"polygon",
+	"polyline",
+	"point",
+	"heart",
+	"single-line-text",
+	"END"
+};
+
+const char *toolbar_list[] = {
     "file", "fileToolbar",
     "edit", "editToolbar",
     "view", "viewToolbar",
@@ -245,102 +242,122 @@ char toolbar_list[2*MAX_TOOLBARS][MAX_STRING_LENGTH] = {
     "pan", "panToolbar",
     "icon", "iconToolbar",
     "help", "helpToolbar",
-    "draw", "drawToolbar"
+    "draw", "drawToolbar",
+    "END"
 };
 
-char toolbars[MAX_TOOLBARS][MAX_TOOLBAR_LENGTH][MAX_STRING_LENGTH] = {
-    /* file_toolbar */
-    {
-        "new",
-        "open",
-        "save",
-        "saveas",
-        "print",
-        "designdetails",
-        "---",
-        "undo",
-        "redo",
-        "---",
-        "help",
-        "END"
-    },
-    /* edit_toolbar */
-    {
-        "cut",
-        "copy",
-        "paste",
-        "END"
-    },
-    /* view_toolbar */
-    {
-        "day",
-        "night",
-        "END"
-    },
-    /* zoom_toolbar */
-    {
-        "zoomwindow",
-        "zoomdynamic",
-        "zoomscale",
-        "---",
-        "zoomcenter",
-        "zoomin",
-        "zoomout",
-        "---",
-        "zoomselected",
-        "zoomall",
-        "zoomextents",
-        "END"
-    },
-    /* pan_toolbar */
-    {
-        "panrealtime",
-        "panpoint",
-        "---",
-        "panleft",
-        "panright",
-        "panup",
-        "pandown",
-        "END"
-    },
-    /* icon_toolbar */
-    {
-        "icon16",
-        "icon24",
-        "icon32",
-        "icon48",
-        "icon64",
-        "icon128",
-        "END"
-    },
-    /* help_toolbar */
-    {
-        "help",
-        "---",
-        "changelog",
-        "---",
-        "about",
-        "---",
-        "whatsthis",
-        "END"
-    },
-    /* draw_toolbar */
-    {
-        "circle",
-        "path",
-        "polygon",
-        "polyline",
-        "point",
-        "heart",
-        "single-line-text",
-        "END"
-    }
+const char *file_toolbar[] = {
+	"new",
+	"open",
+	"save",
+	"saveas",
+	"print",
+	"designdetails",
+	"---",
+	"undo",
+	"redo",
+	"---",
+	"help",
+	"END"
+};
+
+const char *edit_toolbar[] = {
+	"cut",
+	"copy",
+	"paste",
+	"END"
+};
+
+const char *view_toolbar[] = {
+	"day",
+	"night",
+	"END"
+};
+
+const char *zoom_toolbar[] = {
+	"zoomwindow",
+	"zoomdynamic",
+	"zoomscale",
+	"---",
+	"zoomcenter",
+	"zoomin",
+	"zoomout",
+	"---",
+	"zoomselected",
+	"zoomall",
+	"zoomextents",
+	"END"
+};
+
+const char *pan_toolbar[] = {
+	"panrealtime",
+	"panpoint",
+	"---",
+	"panleft",
+	"panright",
+	"panup",
+	"pandown",
+	"END"
+};
+
+const char *icon_toolbar[] = {
+	"icon16",
+	"icon24",
+	"icon32",
+	"icon48",
+	"icon64",
+	"icon128",
+	"END"
+};
+
+const char *help_toolbar[] = {
+	"help",
+	"---",
+	"changelog",
+	"---",
+	"about",
+	"---",
+	"whatsthis",
+	"END"
+};
+
+const char *draw_toolbar[] = {
+	"circle",
+	"path",
+	"polygon",
+	"polyline",
+	"point",
+	"heart",
+	"single-line-text",
+	"END"
+};
+
+/* TODO: "Aligned"
+ * TODO: "Fit"
+ */
+const char *justify_options[] = {
+    "Left",
+    "Center",
+    "Right",
+    "Aligned",
+    "Middle",
+    "Fit",
+    "Top Left",
+    "Top Center",
+    "Top Right",
+    "Middle Left",
+    "Middle Center",
+    "Middle Right",
+    "Bottom Left",
+    "Bottom Center",
+    "Bottom Right",
+    "END"
 };
 
 /* The group box list is not changeable at runtime, so it's fixed length
  * and a constant.
  */
-const char group_box_list[][MAX_STRING_LENGTH] = {
+const char *group_box_types[] = {
     "general",
     "geometry_arc",
     "misc_arc",
@@ -374,7 +391,54 @@ const char group_box_list[][MAX_STRING_LENGTH] = {
     "END"
 };
 
-char command_labels[N_ACTIONS][MAX_STRING_LENGTH] = {
+const int32_t group_box_ids[] = {
+    OBJ_TYPE_NULL,
+    OBJ_TYPE_ARC,
+    OBJ_TYPE_ARC,
+    OBJ_TYPE_BLOCK,
+    OBJ_TYPE_CIRCLE,
+    OBJ_TYPE_DIMALIGNED,
+    OBJ_TYPE_DIMANGULAR,
+    OBJ_TYPE_DIMARCLENGTH,
+    OBJ_TYPE_DIMDIAMETER,
+    OBJ_TYPE_DIMLEADER,
+    OBJ_TYPE_DIMLINEAR,
+    OBJ_TYPE_DIMORDINATE,
+    OBJ_TYPE_DIMRADIUS,
+    OBJ_TYPE_ELLIPSE,
+    OBJ_TYPE_IMAGE,
+    OBJ_TYPE_IMAGE,
+    OBJ_TYPE_INFINITELINE,
+    OBJ_TYPE_LINE,
+    OBJ_TYPE_PATH,
+    OBJ_TYPE_PATH,
+    OBJ_TYPE_POINT,
+    OBJ_TYPE_POLYGON,
+    OBJ_TYPE_POLYLINE,
+    OBJ_TYPE_POLYLINE,
+    OBJ_TYPE_RAY,
+    OBJ_TYPE_RECTANGLE,
+    OBJ_TYPE_TEXTMULTI,
+    OBJ_TYPE_TEXTSINGLE,
+    OBJ_TYPE_TEXTSINGLE,
+    OBJ_TYPE_TEXTSINGLE
+};
+
+/* . */
+const char *button_list[] = {
+    "SNAP",
+    "GRID",
+    "RULER",
+    "ORTHO",
+    "POLAR",
+    "QSNAP",
+    "QTRACK",
+    "LWT",
+    "END"
+};
+
+/* . */
+const char *command_labels[] = {
     "about",                        /* 0 */
     "add_arc",                      /* 1 */
     "add_circle",                   /* 2 */
@@ -491,6 +555,167 @@ char rubber_modes[N_RUBBER_MODES][MAX_STRING_LENGTH] = {
     "END"
 };
 
+/* . */
+const char *all_line_editors[] = {
+    "general", "general_layer", "blank", "Layer", "combobox", "false",
+    "general", "general_color", "blank", "Color", "combobox", "false",
+    "general", "general_line_type", "blank", "LineType", "combobox", "false",
+    "general", "general_line_weight", "blank", "LineWeight", "combobox", "false",
+
+    "geometry_arc", "arc_center_x", "blank", "Center X", "double", "lineEditArcCenterX",
+    "geometry_arc", "arc_center_y", "blank", "Center Y", "double", "lineEditArcCenterY",
+    "geometry_arc", "arc_radius", "blank", "Radius", "double", "lineEditArcRadius",
+    "geometry_arc", "arc_start_angle", "blank", "Start Angle", "double", "lineEditArcStartAngle",
+    "geometry_arc", "arc_end_angle", "blank", "End Angle", "double", "lineEditArcEndAngle",
+    "geometry_arc", "arc_start_x", "blank", "Start X", "double", "",
+    "geometry_arc", "arc_start_y", "blank", "Start Y", "double", "",
+    "geometry_arc", "arc_end_x", "blank", "End X", "double", "",
+    "geometry_arc", "arc_end_y", "blank", "End Y", "double", "",
+    "geometry_arc", "arc_area", "blank", "Area", "double", "",
+    "geometry_arc", "arc_length", "blank", "Arc Length", "double", "",
+    "geometry_arc", "arc_chord", "blank", "Chord", "double", "",
+    "geometry_arc", "arc_inc_angle", "blank", "Included Angle", "double",  "",
+
+    "misc_arc", "arc-clockwise", "blank", "Clockwise", "combobox", "true",
+
+    "geometry_block", "block-x", "blank", "Position X", "double", "",
+    "geometry_block", "block-y", "blank", "Position Y", "double", "",
+
+    "geometry_circle", "circle_center_x", "blank", "Center X", "double", "lineEditCircleCenterX",
+    "geometry_circle", "circle_center_y", "blank", "Center Y", "double", "lineEditCircleCenterY",
+    "geometry_circle", "circle_radius", "blank", "Radius", "double", "lineEditCircleRadius",
+    "geometry_circle", "circle_diameter", "blank", "Diameter", "double", "lineEditCircleDiameter",
+    "geometry_circle", "circle_area", "blank", "Area", "double", "lineEditCircleArea",
+    "geometry_circle", "circle_circumference", "blank", "Circumference", "double", "lineEditCircleCircumference",
+
+    "geometry_dim_aligned", "dim-aligned-x", "blank", "Position X", "double", "",
+
+    "geometry_dim_angular", "dim-angular-x", "blank", "Position X", "double", "",
+
+    "geometry_dim_arc_length", "dim-arc-length-x", "blank", "Position X", "double", "",
+
+    "geometry_dim_diameter", "dim-diameter-x", "blank", "Position X", "double", "",
+
+    "geometry_dim_leader", "dim-linear-x", "blank", "Position X", "double", "",
+
+    "geometry_dim_linear", "dim-linear-x", "blank", "Position X", "double", "",
+
+    "geometry_dim_ordinate", "dim-ordinate-x", "blank", "Position X", "double", "",
+
+    "geometry_dim_radius", "dim-radius-x", "blank", "Position X", "double", "",
+
+    "geometry_ellipse", "ellipse_center_x", "blank", "Center X", "double", "lineEditEllipseCenterX",
+    "geometry_ellipse", "ellipse_center_y", "blank", "Center Y", "double", "lineEditEllipseCenterY",
+    "geometry_ellipse", "ellipse_semi_major_axis", "blank", "Semi-Major Axis", "double", "lineEditEllipseSemiMajorAxis",
+    "geometry_ellipse", "ellipse_semi_minor_axis", "blank", "Semi-Minor Axis", "double", "lineEditEllipseSemiMinorAxis",
+    "geometry_ellipse", "ellipse_major_axis", "blank", "Major Axis", "double", "lineEditEllipseMajorAxis",
+    "geometry_ellipse", "ellipse_minor_axis", "blank", "Minor Axis", "double", "lineEditEllipseMinorAxis",
+
+    "geometry_image", "image-x", "blank", "Position X", "double", "",
+    "geometry_image", "image-y", "blank", "Position Y", "double", "",
+    "geometry_image", "image-width", "blank", "Width", "double", "",
+    "geometry_image", "image-height", "blank", "Height", "double", "",
+
+    "misc_image", "image-name", "blank", "Name", "double", "",
+    "misc_image", "image-path", "blank", "Path", "double", "",
+
+    "geometry_infinite_line", "infinite-line-x1", "blank", "Start X", "double", "lineEditInfiniteLineX1",
+    "geometry_infinite_line", "infinite-line-y1", "blank", "Start Y", "double", "lineEditInfiniteLineY1",
+    "geometry_infinite_line", "infinite-line-x2", "blank", "2nd X", "double", "lineEditInfiniteLineX2",
+    "geometry_infinite_line", "infinite-line-y2", "blank", "2nd Y", "double", "lineEditInfiniteLineY2",
+    "geometry_infinite_line", "infinite-line-vector-x", "blank", "Vector X", "double", "",
+    "geometry_infinite_line", "infinite-line-vector-y", "blank", "Vector Y", "double", "",
+
+    "geometry_line", "line-start-x", "blank", "Start X", "double", "lineEditLineStartX",
+    "geometry_line", "line-start-y", "blank", "Start Y", "double", "lineEditLineStartY",
+    "geometry_line", "line-end-x", "blank", "End X", "double", "lineEditLineEndX",
+    "geometry_line", "line-end-y", "blank", "End Y", "double", "lineEditLineEndY",
+    "geometry_line", "line-delta-x", "blank", "Delta X", "double", "",
+    "geometry_line", "line-delta-y", "blank", "Delta Y", "double", "",
+    "geometry_line", "line-angle", "blank", "Angle", "double", "",
+    "geometry_line", "line-length", "blank", "Length", "double", "",
+
+    "geometry_path", "path_vertex_num", "blank", "Vertex #", "combobox", "",
+    "geometry_path", "path_vertex_x", "blank", "Vertex X", "double", "",
+    "geometry_path", "path_vertex_y", "blank", "Vertex Y", "double", "",
+    "geometry_path", "path_area", "blank", "Area", "double", "",
+    "geometry_path", "path_length", "blank", "Length", "double", "",
+
+    "misc_path", "path_closed", "blank", "Closed", "combobox", "",
+
+    "geometry_point", "point_x", "blank", "Position X", "double", "lineEditPointX",
+    "geometry_point", "point_y", "blank", "Position Y", "double", "lineEditPointY",
+
+    "geometry_polygon", "polygon_center_x", "blank", "Center X", "double", "",
+    "geometry_polygon", "polygon_center_y", "blank", "Center Y", "double", "",
+    "geometry_polygon", "polygon-radius-vertex", "blank", "Vertex Radius", "double", "",
+    "geometry_polygon", "polygon-radius-side", "blank", "Side Radius", "double", "",
+    "geometry_polygon", "polygon-diameter-vertex", "blank", "Vertex Diameter", "double", "",
+    "geometry_polygon", "polygon-diameter-side", "blank", "Side Diameter", "double", "",
+    "geometry_polygon", "polygon-interior-angle", "blank", "Interior Angle", "double", "",
+
+    "geometry_polyline", "polyline-vertex-num", "blank", "Vertex #", "combobox", "false",
+    "geometry_polyline", "polyline-vertex-x", "blank", "Vertex X", "double", "",
+    "geometry_polyline", "polyline-vertex-y", "blank", "Vertex Y", "double", "",
+    "geometry_polyline", "polyline-vertex-area", "blank", "Area", "double", "",
+    "geometry_polyline", "polyline-vertex-length", "blank", "Length", "double", "",
+
+    "misc_polyline", "polyline-vertex-closed", "blank", "Closed", "combobox", "false",
+
+    "geometry_ray", "ray-x1", "blank", "Start X", "double", "",
+    "geometry_ray", "ray-y1", "blank", "Start Y", "double", "",
+    "geometry_ray", "ray-x2", "blank", "2nd X", "double", "",
+    "geometry_ray", "ray-y2", "blank", "2nd Y", "double", "",
+    "geometry_ray", "ray-vector-x", "blank", "Vector X", "double", "",
+    "geometry_ray", "ray-vector-y", "blank", "Vector Y", "double", "",
+
+    "geometry_rectangle", "rectangle_corner1_x", "blank", "Corner 1 X", "double", "",
+    "geometry_rectangle", "rectangle_corner1_y", "blank", "Corner 1 Y", "double", "",
+    "geometry_rectangle", "rectangle_corner2_x", "blank", "Corner 2 X", "double", "",
+    "geometry_rectangle", "rectangle_corner2_y", "blank", "Corner 2 Y", "double", "",
+    "geometry_rectangle", "rectangle_corner3_x", "blank", "Corner 3 X", "double", "",
+    "geometry_rectangle", "rectangle_corner3_y", "blank", "Corner 3 Y", "double", "",
+    "geometry_rectangle", "rectangle_corner4_x", "blank", "Corner 4 X", "double", "",
+    "geometry_rectangle", "rectangle_corner4_y", "blank", "Corner 4 Y", "double", "",
+    "geometry_rectangle", "rectangle_width", "blank", "Width", "double", "",
+    "geometry_rectangle", "rectangle_height", "blank", "Height", "double", "",
+    "geometry_rectangle", "rectangle_area", "blank", "Area", "double", "",
+
+    "text_text_single", "text-single-contents", "blank", "Contents", "string", "lineEditTextSingleContents",
+    "text_text_single", "text-single-font", "blank", "Font", "fontcombobox", "comboBoxTextSingleFont",
+    "text_text_single", "text-single-justify", "blank", "Justify", "combobox", "comboBoxTextSingleJustify",
+    "text_text_single", "text-single-height", "blank", "Height", "double", "lineEditTextSingleHeight",
+    "text_text_single", "text-single-rotation", "blank", "Rotation", "double", "lineEditTextSingleRotation",
+
+    "geometry_text_single", "text-single-x", "blank", "Position X", "double", "lineEditTextSingleX",
+    "geometry_text_single", "text_single_y", "blank", "Position Y", "double", "lineEditTextSingleY",
+
+    "misc_text_single", "text_single_backward", "blank", "Backward", "combobox", "comboBoxTextSingleBackward",
+    "misc_text_single", "text_single_upside_down", "blank", "UpsideDown", "combobox", "comboBoxTextSingleUpsideDown",
+
+    "geometry_text_multi", "text-multi-x", "blank", "Position X", "double", "",
+    "geometry_text_multi", "text-multi-y", "blank", "Position Y", "double", "",
+    "END"
+};
+
+const char *tips[] = {
+    "we need more tips?",
+    "you can change the color of the display through settings?",
+    "you can hide the scrollbars to increase the viewable area through settings?",
+    "you can change the icon size for increased visibility?",
+    "you can toggle the grid on and off by pressing the button in the statusbar?",
+    "the grid size can be changed to match your hoop size through settings?",
+    "the crosshair size is based on a percentage of your screen size? Setting it to 100 may help you visually line things up better.",
+    "you can pan by pressing the middle mouse button and dragging your mouse across the screen?",
+    "you can open and edit multiple designs simultaneously?",
+    "you that many embroidery machines support the .dst format?",
+    "that you can zoom in and out using your mouse wheel?",
+    "that you can use circular and isometric grids?",
+    "about our command line format converter?",
+    "that you can use the 'DAY' and 'NIGHT' commands to quickly switch the view colors to commonly used white or black?",
+    "that you can quickly change the background, crosshair and grid colors using the 'RGB' command?"
+};
+
 /* Check that RBG values are in the range (0,255) inclusive. */
 unsigned char
 validRGB(int r, int g, int b)
@@ -534,7 +759,7 @@ add_leaf(CNode *branch, CNode *leaf)
 }
 
 /*
- * We traverse each level from highest to lowest index so at each stage the 
+ * We traverse each level from highest to lowest index so at each stage the
  * readout of n_leaves remains correct.
  *
  * To remove_leaf, just call this on a leaf node rather than a larger branch.
@@ -569,7 +794,7 @@ str_contains(char *s, char c)
 /*
  * TODO: use the C dot notation for traversing down the branches of a tree.
  *
- * For example: (root, "setting.font_size") 
+ * For example: (root, "setting.font_size")
  *
  * In Python notation this would be represented as:
  *     root["setting"]["font_size"]
@@ -686,4 +911,76 @@ create_and_add_leaf(CNode *parent, char *key, char *value)
     strncpy(n->data, value, MAX_STRING_LENGTH);
     add_leaf(parent, n);
     return n;
+}
+
+/*
+ */
+Cvector *
+cvector_create(size_t element_size)
+{
+    Cvector *a = malloc(sizeof(Cvector));
+    a->size = 0;
+    a->max_length = VECTOR_CHUNK_SIZE;
+    a->element_size = element_size;
+    a->buffer = (void *) malloc(a->element_size * a->size);
+    return a;
+}
+
+/*
+ */
+void
+cvector_append(Cvector *a, Cvector *b)
+{
+    if (a->element_size != b->element_size) {
+        puts("ERROR: element_size mismatch.");
+        return;
+    }
+    if (a->max_length < a->size + b->size) {
+        a->max_length += VECTOR_CHUNK_SIZE;
+        a->buffer = (void *)realloc(a->buffer,
+            a->max_length * sizeof(a->element_size));
+    }
+    memcpy(a->buffer + a->element_size * a->size, b->buffer,
+        a->element_size*b->size);
+}
+
+/*
+ */
+void
+cvector_add_cstr(Cvector *a, char *b)
+{
+    Cvector c;
+    c.buffer = b;
+    c.element_size = 1;
+    c.size = strlen(b) + 1;
+    c.max_length = c.size;
+    cvector_append(a, &c);
+}
+
+/*
+ */
+Cvector *
+cvector_copy(Cvector *a)
+{
+    Cvector *c = cvector_create(a->element_size);
+    cvector_append(c, a);
+    return c;
+}
+
+/*
+ */
+void
+cvector_free(Cvector *vector)
+{
+    free(vector->buffer);
+    free(vector);
+}
+
+/* . */
+int
+string_array_length(const char *list[])
+{
+    int i = 0;
+    for (i=0; strcmp(list[i], "END"); i++) {}
+	return i;
 }

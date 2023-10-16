@@ -45,11 +45,9 @@ class Geometry;
 
 typedef struct Node_ {
     std::string s;
-    char st[MAX_STRING_LENGTH];
     EmbReal r;
     int32_t i;
     bool b;
-    std::vector<std::string> sl;
     int type;
 } Node;
 
@@ -60,7 +58,14 @@ typedef std::unordered_map<std::string, Node> Dictionary;
 /* Global variables
  * ----------------
  */
+extern std::unordered_map<std::string, QAction*> actionHash;
+
 extern MdiArea* mdiArea;
+extern MainWindow* _mainWin;
+extern CmdPrompt* prompt;
+extern PropertyEditor* dockPropEdit;
+extern UndoEditor* dockUndoEdit;
+extern StatusBar* statusbar;
 
 /* The Settings System
  *
@@ -70,26 +75,6 @@ extern MdiArea* mdiArea;
  * cancels out of the Settings Dialog.
  */
 extern Dictionary settings, dialog, config;
-extern std::unordered_map<std::string, StringList> scripts;
-extern std::unordered_map<std::string, QGroupBox *> groupBoxes;
-extern std::unordered_map<std::string, QCheckBox *> checkBoxes;
-extern std::unordered_map<std::string, QSpinBox *> spinBoxes;
-extern std::unordered_map<std::string, QDoubleSpinBox *> doubleSpinBoxes;
-extern std::unordered_map<std::string, QLabel *> labels;
-extern std::unordered_map<std::string, QComboBox *> comboBoxes;
-extern std::unordered_map<std::string, QLineEdit *> lineEdits;
-extern std::unordered_map<std::string, QToolButton *> toolButtons;
-extern std::unordered_map<std::string, Dictionary> config_tables;
-extern std::unordered_map<std::string, QAction*> actionHash;
-extern std::unordered_map<std::string, QToolBar*> toolbarHash;
-extern std::unordered_map<std::string, QMenu*> menuHash;
-extern std::unordered_map<std::string, QMenu*> subMenuHash;
-
-extern MainWindow* _mainWin;
-extern CmdPrompt* prompt;
-extern PropertyEditor* dockPropEdit;
-extern UndoEditor* dockUndoEdit;
-extern StatusBar* statusbar;
 
 /* Functions in the global namespace
  * ---------------------------------
@@ -107,12 +92,6 @@ QString fileExtension(std::string fileName);
 void add_polyline(QPainterPath p, String rubberMode);
 
 std::string read_string_setting(toml_table_t *table, const char *key);
-StringList tokenize(std::string str, const char delim);
-std::string convert_args_to_type(
-    std::string label,
-    std::vector<std::string> args,
-    const char *args_template,
-    std::vector<Node> a);
 
 View *activeView(void);
 QGraphicsScene* activeScene();
@@ -126,12 +105,8 @@ String actuator(std::string line);
 String run_script_file(std::string fname);
 String run_script(std::vector<std::string> script);
 
-void create_menu(std::string menu, StringList def, bool topLevel);
-
 QPointF to_QPointF(EmbVector a);
 EmbVector to_EmbVector(QPointF a);
-EmbVector operator+(EmbVector a, EmbVector b);
-EmbVector operator-(EmbVector a, EmbVector b);
 
 std::vector<QGraphicsItem*> to_vector(QList<QGraphicsItem*> list);
 QList<QGraphicsItem*> to_qlist(std::vector<QGraphicsItem*> list);
@@ -165,6 +140,9 @@ QString get_qstr(Dictionary d, String key);
 StringList get_str_list(Dictionary d, String key);
 
 bool save_current_file(std::string fileName);
+
+/* to allow us to de-OO this massive class */
+int test_geometry(Geometry *g);
 
 /* The Geometry class
  *
@@ -256,7 +234,7 @@ public:
     QPointF objectPos() { return scenePos(); }
     EmbReal objectX(){ return scenePos().x(); }
     EmbReal objectY(){ return scenePos().y(); }
-    
+
     QPointF objectTopLeft();
     QPointF objectTopRight();
     QPointF objectBottomLeft();
@@ -331,7 +309,7 @@ public:
     /* Updaters, todo: combine */
     void calculateArcData(EmbArc arc);
     void updateArcRect(EmbReal radius);
-    
+
     /* Setters */
     void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
     void setObjectX(EmbReal x) { setPos(x, objectY()); }
@@ -372,7 +350,7 @@ public:
     void setObjectRadiusMinor(EmbReal radius);
     void setObjectDiameterMajor(EmbReal diameter);
     void setObjectDiameterMinor(EmbReal diameter);
-    
+
     /* Scripted commands, uses the script string in */
     void script_main(void);
     void script_click(EmbVector v);
@@ -699,7 +677,7 @@ public:
     QString activeCommand() { return prompt->promptInput->curCmd; }
 
     QString platformString();
-    void create_toolbar(std::string toolbar, std::string label, StringList entries);
+    void create_toolbar(std::string toolbar, std::string label, const char **entries);
     QIcon create_icon(QString stub);
 
 public slots:
@@ -753,9 +731,6 @@ protected:
     QComboBox* lineweightSelector;
     QFontComboBox* textFontSelector;
     QComboBox* textSizeSelector;
-
-private slots:
-    void hideUnimplemented();
 
 public slots:
     void stub_testing();
@@ -1230,7 +1205,7 @@ class View : public QGraphicsView
 public:
     View(QGraphicsScene* theScene, QWidget* parent);
     ~View();
-    
+
     Dictionary state;
 
     std::vector<QGraphicsItem*> selected_items();

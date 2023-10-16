@@ -24,80 +24,24 @@ QString fieldNoText;
 QString fieldOnText;
 QString fieldOffText;
 
-StringList object_names = {
-    "Base",
-    "Arc",
-    "Block",
-    "Circle",
-    "Aligned Dimension",
-    "Angular Dimension",
-    "Arclength Dimension",
-    "Diameter Dimension",
-    "Leader Dimension",
-    "Linear Dimension",
-    "Ordinate Dimension",
-    "Radius Dimension",
-    "Ellipse",
-    "Image",
-    "Infinite Line",
-    "Line",
-    "Path",
-    "Point",
-    "Polygon",
-    "Polyline",
-    "Ray",
-    "Rectangle",
-    "Multiline Text",
-    "Text",
-    "Unknown"
-};
-
-std::vector<std::pair<String, int>> group_box_types = {
-    {"general", OBJ_TYPE_NULL},
-    {"geometry_arc", OBJ_TYPE_ARC},
-    {"misc_arc", OBJ_TYPE_ARC},
-    {"geometry_block", OBJ_TYPE_BLOCK},
-    {"geometry_circle", OBJ_TYPE_CIRCLE},
-    {"geometry_dim_aligned", OBJ_TYPE_DIMALIGNED},
-    {"geometry_dim_angular", OBJ_TYPE_DIMANGULAR},
-    {"geometry_dim_arc_length", OBJ_TYPE_DIMARCLENGTH},
-    {"geometry_dim_diameter", OBJ_TYPE_DIMDIAMETER},
-    {"geometry_dim_leader", OBJ_TYPE_DIMLEADER},
-    {"geometry_dim_linear", OBJ_TYPE_DIMLINEAR},
-    {"geometry_dim_ordinate", OBJ_TYPE_DIMORDINATE},
-    {"geometry_dim_radius", OBJ_TYPE_DIMRADIUS},
-    {"geometry_ellipse", OBJ_TYPE_ELLIPSE},
-    {"geometry_image", OBJ_TYPE_IMAGE},
-    {"misc_image", OBJ_TYPE_IMAGE},
-    {"geometry_infinite_line", OBJ_TYPE_INFINITELINE},
-    {"geometry_line", OBJ_TYPE_LINE},
-    {"geometry_path", OBJ_TYPE_PATH},
-    {"misc_path", OBJ_TYPE_PATH},
-    {"geometry_point", OBJ_TYPE_POINT},
-    {"geometry_polygon", OBJ_TYPE_POLYGON},
-    {"geometry_polyline", OBJ_TYPE_POLYLINE},
-    {"misc_polyline", OBJ_TYPE_POLYLINE},
-    {"geometry_ray", OBJ_TYPE_RAY},
-    {"geometry_rectangle", OBJ_TYPE_RECTANGLE},
-    {"geometry_text_multi", OBJ_TYPE_TEXTMULTI},
-    {"text_text_single", OBJ_TYPE_TEXTSINGLE},
-    {"geometry_text_single", OBJ_TYPE_TEXTSINGLE},
-    {"misc_text_single", OBJ_TYPE_TEXTSINGLE}
-};
+std::unordered_map<String, QGroupBox *> groupBoxes;
+std::unordered_map<String, QLineEdit *> lineEdits;
+std::unordered_map<String, QToolButton *> toolButtons;
+std::unordered_map<String, QSpinBox *> spinBoxes;
+std::unordered_map<String, QDoubleSpinBox *> doubleSpinBoxes;
+std::unordered_map<String, QComboBox *> comboBoxes;
 
 QFontComboBox* comboBoxTextSingleFont;
 std::unordered_map<String, Dictionary> group_box_data;
 
-/**
- * .
- */
+/* . */
 std::vector<Dictionary>
 load_group_box_data_from_table(String key)
 {
     std::vector<Dictionary> group_box;
-    StringList all_line_editors = config["all_line_editors"].sl;
-    for (int i=0; i<(int)(all_line_editors.size()/6); i++) {
-        if (all_line_editors[6*i] == key) {
+    int n = string_array_length(all_line_editors);
+    for (int i=0; i<n/6; i++) {
+        if (!strcmp(all_line_editors[6*i], key.c_str())) {
             Dictionary data;
             data["key"] = node_str(all_line_editors[6*i+1]);
             data["icon_name"] = node_str(all_line_editors[6*i+2]);
@@ -178,9 +122,9 @@ PropertyEditor::PropertyEditor(QString  iconDirectory, bool pickAddMode, QWidget
     QScrollArea* scrollProperties = new QScrollArea(this);
     QWidget* widgetProperties = new QWidget(this);
     QVBoxLayout* vboxLayoutProperties = new QVBoxLayout(this);
-    StringList group_box_list = config["group_box_list"].sl;
-    for (int i=0; i<(int)group_box_list.size(); i++) {
-        vboxLayoutProperties->addWidget(groupBoxes[group_box_list[i]]);
+    int n = string_array_length(group_box_types);
+    for (int i=0; i<n; i++) {
+        vboxLayoutProperties->addWidget(groupBoxes[group_box_types[i]]);
     }
     vboxLayoutProperties->addStretch(1);
     widgetProperties->setLayout(vboxLayoutProperties);
@@ -348,7 +292,7 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
     foreach(int objType, typeSet) {
         QString num = QString().setNum(numPerType[objType - OBJ_TYPE_BASE]);
         if ((objType > OBJ_TYPE_ARC) && (objType < OBJ_TYPE_UNKNOWN)) {
-            comboBoxStr = tr(object_names[objType - OBJ_TYPE_BASE].c_str()) + "(" + num + ")";
+            comboBoxStr = tr(object_names[objType - OBJ_TYPE_BASE]) + "(" + num + ")";
         }
         else {
             comboBoxStr = translate_str("Unknown") + " (" + QString().setNum(numPerType[objType - OBJ_TYPE_UNKNOWN]) + ")";
@@ -487,7 +431,7 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
         else if (objType == OBJ_TYPE_TEXTSINGLE) {
             updateLineEditStrIfVaries(lineEdits["text-single-contents"], obj->objText);
             updateFontComboBoxStrIfVaries(comboBoxTextSingleFont, obj->objTextFont);
-            updateComboBoxStrIfVaries(comboBoxes["text-single-justify"], obj->objTextJustify, config["justify_options"].sl);
+            updateComboBoxStrIfVaries(comboBoxes["text-single-justify"], obj->objTextJustify, {});
             updateLineEditNumIfVaries(lineEdits["text-single-height"], get_real(obj->properties, "text_size"), false);
             updateLineEditNumIfVaries(lineEdits["text-single-rotation"], -obj->rotation(), true);
             updateLineEditNumIfVaries(lineEdits["text-single-x"], obj->objectX(), false);
@@ -570,8 +514,9 @@ PropertyEditor::updateComboBoxStrIfVaries(QComboBox* comboBox, QString str, Stri
     fieldNewText = str;
 
     if (fieldOldText.isEmpty()) {
-        for (int i=0; i<(int)strList.size(); i++) {
-            QString s = QString::fromStdString(strList[i]);
+        int n = string_array_length(justify_options);
+        for (int i=0; i<n; i++) {
+            QString s(justify_options[i]);
             comboBox->addItem(s, s);
         }
         comboBox->setCurrentIndex(comboBox->findText(fieldNewText));
@@ -618,9 +563,10 @@ void PropertyEditor::updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, b
 void
 PropertyEditor::showGroups(int objType)
 {
-    for (int i=0; i<(int)group_box_types.size(); i++) {
-        if (group_box_types[i].second == objType) {
-            groupBoxes[group_box_types[i].first]->show();
+    int n = string_array_length(group_box_types);
+    for (int i=0; i<n; i++) {
+        if (group_box_ids[i]== objType) {
+            groupBoxes[group_box_types[i]]->show();
         }
     }
 }
@@ -637,11 +583,10 @@ PropertyEditor::showOneType(int index)
 void
 PropertyEditor::hideAllGroups(void)
 {
-    StringList group_box_list = config["group_box_list"].sl;
-    int n_groupboxes = (int)group_box_list.size();
-    for (int i=0; i<n_groupboxes; i++) {
-        if (group_box_list[i] != "general") {
-            groupBoxes[group_box_list[i]]->hide();
+    int n = string_array_length(group_box_types);
+    for (int i=0; i<n; i++) {
+        if (strcmp(group_box_types[i], "general")) {
+            groupBoxes[group_box_types[i]]->hide();
         }
     }
 }
@@ -652,15 +597,15 @@ PropertyEditor::hideAllGroups(void)
  */
 void PropertyEditor::clearAllFields()
 {
-    StringList all_line_editors = config["all_line_editors"].sl;
-    for (int i=0; i<(int)(all_line_editors.size()); i++) {
-        if (all_line_editors[6*i+4] == "double") {
+    int n = string_array_length(all_line_editors);
+    for (int i=0; i<n; i++) {
+        if (!strcmp(all_line_editors[6*i+4], "double")) {
             lineEdits[all_line_editors[6*i+1]]->clear();
         }
-        if (all_line_editors[6*i+4] == "combobox") {
+        if (!strcmp(all_line_editors[6*i+4], "combobox")) {
             comboBoxes[all_line_editors[6*i+1]]->clear();
         }
-        if (all_line_editors[6*i+4] == "fontcombobox") {
+        if (!strcmp(all_line_editors[6*i+4], "fontcombobox")) {
             comboBoxTextSingleFont->removeItem(comboBoxTextSingleFont->findText(fieldVariesText)); //NOTE: Do not clear comboBoxTextSingleFont
             comboBoxTextSingleFont->setProperty("FontFamily", "");
         }
@@ -678,9 +623,10 @@ PropertyEditor::createGroupBox(String group_box_key, const char *title)
     groupBoxes[group_box_key] = new QGroupBox(tr(title), this);
 
     int group_box_type = OBJ_TYPE_BASE;
-    for (int i=0; i<group_box_types.size(); i++) {
-        if (group_box_types[i].first == group_box_key) {
-            group_box_type = group_box_types[i].second;
+    int n_group_box_types = string_array_length(group_box_types);
+    for (int i=0; i<n_group_box_types; i++) {
+        if (!strcmp(group_box_types[i], group_box_key.c_str())) {
+            group_box_type = group_box_ids[i];
             break;
         }
     }

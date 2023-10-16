@@ -34,19 +34,326 @@ QCheckBox* checkBoxTipOfTheDay;
 
 Dictionary settings, dialog, config;
 std::unordered_map<String, StringList> scripts;
-std::unordered_map<String, QGroupBox *> groupBoxes;
 std::unordered_map<String, QCheckBox *> checkBoxes;
-std::unordered_map<String, QSpinBox *> spinBoxes;
-std::unordered_map<String, QDoubleSpinBox *> doubleSpinBoxes;
-std::unordered_map<String, QLabel *> labels;
-std::unordered_map<String, QComboBox *> comboBoxes;
-std::unordered_map<String, QLineEdit *> lineEdits;
-std::unordered_map<String, QToolButton *> toolButtons;
-std::unordered_map<String, Dictionary> config_tables;
 std::unordered_map<String, QAction*> actionHash;
 std::unordered_map<String, QToolBar*> toolbarHash;
 std::unordered_map<String, QMenu*> menuHash;
 std::unordered_map<String, QMenu*> subMenuHash;
+std::unordered_map<String, Dictionary> config_tables;
+
+StringList tokenize(std::string str, const char delim);
+std::string convert_args_to_type(
+    std::string label,
+    std::vector<std::string> args,
+    const char *args_template,
+    std::vector<Node> a);
+
+
+/* Create menu. */
+void
+create_menu(std::string menu, const char **def, bool topLevel)
+{
+    if (topLevel) {
+        _mainWin->menuBar()->addMenu(menuHash[menu]);
+    }
+    int n = string_array_length((const char**)def);
+    char msg[1024];
+	sprintf(msg, "%s %d\n", menu.c_str(), n);
+    debug_message(msg);
+
+    for (int i=0; i<n; i++) {
+        if (!strcmp(def[i], "---")) {
+            if (topLevel) {
+                menuHash[menu]->addSeparator();
+            }
+            else {
+                subMenuHash[menu]->addSeparator();
+            }
+        }
+        else if (!strncmp(def[i], "submenu", 7)) {
+            const char *submenu_name = def[i] + 8;
+            std::string submenu(submenu_name);
+            menuHash[menu]->addMenu(subMenuHash[submenu]);
+        }
+        else if (!strncmp(def[i], "icon", 4)) {
+            QString icon_fname(def[i] + 5);
+            if (topLevel) {
+                menuHash[menu]->setIcon(_mainWin->create_icon(icon_fname));
+            }
+            else {
+                subMenuHash[menu]->setIcon(_mainWin->create_icon(icon_fname));
+            }
+        }
+        else {
+            if (topLevel) {
+                menuHash[menu]->addAction(actionHash[def[i]]);
+            }
+            else {
+                subMenuHash[menu]->addAction(actionHash[def[i]]);
+            }
+        }
+    }
+}
+
+/* Create all menus. */
+void
+MainWindow::createAllMenus()
+{
+    debug_message("MainWindow createAllMenus()");
+
+    /* Populate menus. */
+    create_menu("file", file_menu, true);
+    create_menu("edit", edit_menu, true);
+    create_menu("view", view_menu, true);
+    create_menu("settings", settings_menu, true);
+    create_menu("window", window_menu, true);
+    create_menu("help", help_menu, true);
+    create_menu("draw", draw_menu, true);
+
+    /* Populate submenus. */
+    create_menu("zoom", zoom_menu, false);
+    create_menu("pan", pan_menu, false);
+
+    /* Connect dynamic menus. */
+    connect(subMenuHash["recent"], SIGNAL(aboutToShow()), this, SLOT(recentMenuAboutToShow()));
+    connect(menuHash["window"], SIGNAL(aboutToShow()), this, SLOT(windowMenuAboutToShow()));
+
+    /* Do not allow the Menus to be torn off. It's a pain in the ass to maintain. */
+    for (auto iter=menuHash.begin(); iter!=menuHash.end(); iter++) {
+        iter->second->setTearOffEnabled(false);
+    }
+    for (auto iter=subMenuHash.begin(); iter!=subMenuHash.end(); iter++) {
+        iter->second->setTearOffEnabled(false);
+    }
+}
+
+/* Create toolbar. */
+void
+MainWindow::create_toolbar(std::string toolbar, std::string label, const char **entries)
+{
+    QString label_ = QString::fromStdString(label);
+    toolbarHash[toolbar]->setObjectName(label_);
+    int n = string_array_length(entries);
+    for (int i=0; i<n; i++) {
+        if (!strcmp(entries[i], "---")) {
+            toolbarHash[toolbar]->addSeparator();
+        }
+        else {
+            toolbarHash[toolbar]->addAction(actionHash[entries[i]]);
+        }
+    }
+    connect(toolbarHash[toolbar],
+        SIGNAL(topLevelChanged(bool)),
+        this,
+        SLOT(floatingChangedToolBar(bool)));
+}
+
+/* Create icon. */
+QIcon
+MainWindow::create_icon(QString stub)
+{
+    QString appDir = qApp->applicationDirPath();
+    QString icontheme = get_qstr(settings, "general_icon_theme");
+    return QIcon(appDir + "/icons/" + icontheme + "/" + stub + ".png");
+}
+
+/* Create all toolbars. */
+void
+MainWindow::createAllToolbars()
+{
+    debug_message("MainWindow createAllToolbars()");
+
+    create_toolbar("file", "toolbarFile", file_toolbar);
+    create_toolbar("edit", "toolbarEdit", edit_toolbar);
+    create_toolbar("view", "toolbarView", view_toolbar);
+    create_toolbar("zoom", "toolbarZoom", zoom_toolbar);
+    create_toolbar("pan", "toolbarPan", pan_toolbar);
+    create_toolbar("icon", "toolbarIcon", icon_toolbar);
+    create_toolbar("help", "toolbarHelp", help_toolbar);
+    create_toolbar("draw", "toolbarHelp", draw_toolbar);
+
+    debug_message("MainWindow createLayerToolbar()");
+
+    toolbarHash["layer"]->setObjectName("toolbarLayer");
+    toolbarHash["layer"]->addAction(actionHash["makelayercurrent"]);
+    toolbarHash["layer"]->addAction(actionHash["layers"]);
+
+    layerSelector->setFocusProxy(prompt);
+    //TODO: Create layer pixmaps by concatenating several icons
+    layerSelector->addItem(create_icon("linetypebylayer"), "0");
+    layerSelector->addItem(create_icon("linetypebylayer"), "1");
+    layerSelector->addItem(create_icon("linetypebylayer"), "2");
+    layerSelector->addItem(create_icon("linetypebylayer"), "3");
+    layerSelector->addItem(create_icon("linetypebylayer"), "4");
+    layerSelector->addItem(create_icon("linetypebylayer"), "5");
+    layerSelector->addItem(create_icon("linetypebylayer"), "6");
+    layerSelector->addItem(create_icon("linetypebylayer"), "7");
+    layerSelector->addItem(create_icon("linetypebylayer"), "8");
+    layerSelector->addItem(create_icon("linetypebylayer"), "9");
+    toolbarHash["layer"]->addWidget(layerSelector);
+    connect(layerSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(layerSelectorIndexChanged(int)));
+
+    toolbarHash["layer"]->addAction(actionHash["layerprevious"]);
+
+    connect(toolbarHash["layer"], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+
+    debug_message("MainWindow createPropertiesToolbar()");
+
+    toolbarHash["properties"]->setObjectName("toolbarProperties");
+
+    colorSelector->setFocusProxy(prompt);
+    //NOTE: Qt4.7 wont load icons without an extension...
+    colorSelector->addItem(create_icon("colorbylayer"), "ByLayer");
+    colorSelector->addItem(create_icon("colorbyblock"), "ByBlock");
+    colorSelector->addItem(create_icon("colorred"), tr("Red"),     qRgb(255,  0,  0));
+    colorSelector->addItem(create_icon("coloryellow"), tr("Yellow"),  qRgb(255,255,  0));
+    colorSelector->addItem(create_icon("colorgreen"), tr("Green"),   qRgb(  0,255,  0));
+    colorSelector->addItem(create_icon("colorcyan"), tr("Cyan"),    qRgb(  0,255,255));
+    colorSelector->addItem(create_icon("colorblue"), tr("Blue"),    qRgb(  0,  0,255));
+    colorSelector->addItem(create_icon("colormagenta"), tr("Magenta"), qRgb(255,  0,255));
+    colorSelector->addItem(create_icon("colorwhite"), tr("White"),   qRgb(255,255,255));
+    colorSelector->addItem(create_icon("colorother"), tr("Other..."));
+    toolbarHash["properties"]->addWidget(colorSelector);
+    connect(colorSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(colorSelectorIndexChanged(int)));
+
+    toolbarHash["properties"]->addSeparator();
+    linetypeSelector->setFocusProxy(prompt);
+    //NOTE: Qt4.7 wont load icons without an extension...
+    linetypeSelector->addItem(create_icon("linetypebylayer"), "ByLayer");
+    linetypeSelector->addItem(create_icon("linetypebyblock"), "ByBlock");
+    linetypeSelector->addItem(create_icon("linetypecontinuous"), "Continuous");
+    linetypeSelector->addItem(create_icon("linetypehidden"), "Hidden");
+    linetypeSelector->addItem(create_icon("linetypecenter"), "Center");
+    linetypeSelector->addItem(create_icon("linetypeother"), "Other...");
+    toolbarHash["properties"]->addWidget(linetypeSelector);
+    connect(linetypeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(linetypeSelectorIndexChanged(int)));
+
+    toolbarHash["properties"]->addSeparator();
+    lineweightSelector->setFocusProxy(prompt);
+    //NOTE: Qt4.7 wont load icons without an extension...
+    lineweightSelector->addItem(create_icon("lineweightbylayer"), "ByLayer", -2.00);
+    lineweightSelector->addItem(create_icon("lineweightbyblock"), "ByBlock", -1.00);
+    lineweightSelector->addItem(create_icon("lineweightdefault"), "Default",  0.00);
+    //TODO: Thread weight is weird. See http://en.wikipedia.org/wiki/Thread_(yarn)#Weight
+    lineweightSelector->addItem(create_icon("lineweight01"), "0.00 mm", 0.00);
+    lineweightSelector->addItem(create_icon("lineweight02"), "0.05 mm", 0.05);
+    lineweightSelector->addItem(create_icon("lineweight03"), "0.15 mm", 0.15);
+    lineweightSelector->addItem(create_icon("lineweight04"), "0.20 mm", 0.20);
+    lineweightSelector->addItem(create_icon("lineweight05"), "0.25 mm", 0.25);
+    lineweightSelector->addItem(create_icon("lineweight06"), "0.30 mm", 0.30);
+    lineweightSelector->addItem(create_icon("lineweight07"), "0.35 mm", 0.35);
+    lineweightSelector->addItem(create_icon("lineweight08"), "0.40 mm", 0.40);
+    lineweightSelector->addItem(create_icon("lineweight09"), "0.45 mm", 0.45);
+    lineweightSelector->addItem(create_icon("lineweight10"), "0.50 mm", 0.50);
+    lineweightSelector->addItem(create_icon("lineweight11"), "0.55 mm", 0.55);
+    lineweightSelector->addItem(create_icon("lineweight12"), "0.60 mm", 0.60);
+    lineweightSelector->addItem(create_icon("lineweight13"), "0.65 mm", 0.65);
+    lineweightSelector->addItem(create_icon("lineweight14"), "0.70 mm", 0.70);
+    lineweightSelector->addItem(create_icon("lineweight15"), "0.75 mm", 0.75);
+    lineweightSelector->addItem(create_icon("lineweight16"), "0.80 mm", 0.80);
+    lineweightSelector->addItem(create_icon("lineweight17"), "0.85 mm", 0.85);
+    lineweightSelector->addItem(create_icon("lineweight18"), "0.90 mm", 0.90);
+    lineweightSelector->addItem(create_icon("lineweight19"), "0.95 mm", 0.95);
+    lineweightSelector->addItem(create_icon("lineweight20"), "1.00 mm", 1.00);
+    lineweightSelector->addItem(create_icon("lineweight21"), "1.05 mm", 1.05);
+    lineweightSelector->addItem(create_icon("lineweight22"), "1.10 mm", 1.10);
+    lineweightSelector->addItem(create_icon("lineweight23"), "1.15 mm", 1.15);
+    lineweightSelector->addItem(create_icon("lineweight24"), "1.20 mm", 1.20);
+    lineweightSelector->setMinimumContentsLength(8); // Prevent dropdown text readability being squish...d.
+    toolbarHash["properties"]->addWidget(lineweightSelector);
+    connect(lineweightSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(lineweightSelectorIndexChanged(int)));
+
+    connect(toolbarHash["properties"], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+
+    debug_message("MainWindow createTextToolbar()");
+
+    toolbarHash["text"]->setObjectName("toolbarText");
+
+    toolbarHash["text"]->addWidget(textFontSelector);
+    QString font_ = QString::fromStdString(get_str(settings, "text_font"));
+    textFontSelector->setCurrentFont(QFont(font_));
+    connect(textFontSelector, SIGNAL(currentFontChanged(QFont)), this, SLOT(textFontSelectorCurrentFontChanged(QFont)));
+
+    toolbarHash["text"]->addAction(actionHash["textbold"]);
+    actionHash["textbold"]->setChecked(get_bool(settings, "text_style_bold"));
+
+    toolbarHash["text"]->addAction(actionHash["textitalic"]);
+    actionHash["textitalic"]->setChecked(get_bool(settings, "text_style_italic"));
+
+    toolbarHash["text"]->addAction(actionHash["textunderline"]);
+    actionHash["textunderline"]->setChecked(get_bool(settings, "text_style_underline"));
+
+    toolbarHash["text"]->addAction(actionHash["textstrikeout"]);
+    actionHash["textstrikeout"]->setChecked(get_bool(settings, "text_style_strikeout"));
+
+    toolbarHash["text"]->addAction(actionHash["textoverline"]);
+    actionHash["textoverline"]->setChecked(get_bool(settings, "text_style_overline"));
+
+    textSizeSelector->setFocusProxy(prompt);
+    textSizeSelector->addItem("6 pt",   6);
+    textSizeSelector->addItem("8 pt",   8);
+    textSizeSelector->addItem("9 pt",   9);
+    textSizeSelector->addItem("10 pt", 10);
+    textSizeSelector->addItem("11 pt", 11);
+    textSizeSelector->addItem("12 pt", 12);
+    textSizeSelector->addItem("14 pt", 14);
+    textSizeSelector->addItem("18 pt", 18);
+    textSizeSelector->addItem("24 pt", 24);
+    textSizeSelector->addItem("30 pt", 30);
+    textSizeSelector->addItem("36 pt", 36);
+    textSizeSelector->addItem("48 pt", 48);
+    textSizeSelector->addItem("60 pt", 60);
+    textSizeSelector->addItem("72 pt", 72);
+    setTextSize(get_real(settings, "text_size"));
+    toolbarHash["text"]->addWidget(textSizeSelector);
+    connect(textSizeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(textSizeSelectorIndexChanged(int)));
+
+    connect(toolbarHash["text"], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+
+    debug_message("MainWindow createPromptToolbar()");
+
+    toolbarHash["prompt"]->setObjectName("toolbarPrompt");
+    toolbarHash["prompt"]->addWidget(prompt);
+    toolbarHash["prompt"]->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
+    connect(toolbarHash["prompt"], SIGNAL(topLevelChanged(bool)),
+		prompt, SLOT(floatingChanged(bool)));
+
+    // Horizontal
+    toolbarHash["view"]->setOrientation(Qt::Horizontal);
+    toolbarHash["zoom"]->setOrientation(Qt::Horizontal);
+    toolbarHash["layer"]->setOrientation(Qt::Horizontal);
+    toolbarHash["properties"]->setOrientation(Qt::Horizontal);
+    toolbarHash["text"]->setOrientation(Qt::Horizontal);
+    toolbarHash["prompt"]->setOrientation(Qt::Horizontal);
+    toolbarHash["draw"]->setOrientation(Qt::Vertical);
+
+    int top_toolbar_n = string_array_length(top_toolbar_layout);
+    for (int i=0; i<top_toolbar_n; i++) {
+        String entry(top_toolbar_layout[i]);
+        if (entry == "---") {
+            addToolBarBreak(Qt::TopToolBarArea);
+        }
+        else {
+            addToolBar(Qt::TopToolBarArea, toolbarHash[entry]);
+        }
+    }
+
+    addToolBar(Qt::TopToolBarArea, toolbarHash["draw"]);
+
+    int bottom_toolbar_n = string_array_length((const char**)bottom_toolbar_layout);
+    for (int i=0; i<bottom_toolbar_n; i++) {
+        String entry(bottom_toolbar_layout[i]);
+        if (entry == "---") {
+            addToolBarBreak(Qt::BottomToolBarArea);
+        }
+        else {
+            addToolBar(Qt::BottomToolBarArea, toolbarHash[entry]);
+        }
+    }
+
+    //zoomToolBar->setToolButtonStyle(Qt::ToolButtonTextOnly);
+}
+
 
 /* settingsPrompt */
 void
@@ -168,11 +475,12 @@ MainWindow::tipOfTheDay(void)
 
     ImageWidget* imgBanner = new ImageWidget(appDir + "/images/did-you-know.png", wizardTipOfTheDay);
 
-    if (get_int(settings, "general_current_tip") >= config["tips"].sl.size()) {
+    int n = string_array_length(tips);
+    if (get_int(settings, "general_current_tip") >= n) {
         settings["general_current_tip"] = node_int(0);
     }
     int general_current_tip = get_int(settings, "general_current_tip");
-    labelTipOfTheDay = new QLabel(config["tips"].sl[general_current_tip].c_str(), wizardTipOfTheDay);
+    labelTipOfTheDay = new QLabel(tips[general_current_tip], wizardTipOfTheDay);
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(translate_str("&Show tips on startup"), wizardTipOfTheDay);
@@ -213,22 +521,22 @@ void
 MainWindow::buttonTipOfTheDayClicked(int button)
 {
     debug_message("buttonTipOfTheDayClicked(%d)" + std::to_string(button));
-    StringList tips = config["tips"].sl;
+    int n_tips = string_array_length(tips);
     if (button == QWizard::CustomButton1) {
         if (get_int(settings, "general_current_tip") > 0) {
             settings["general_current_tip"] = node_int(get_int(settings, "general_current_tip") - 1);
         }
         else {
-            settings["general_current_tip"] = node_int((int32_t)tips.size()-1);
+            settings["general_current_tip"] = node_int(n_tips-1);
         }
-        labelTipOfTheDay->setText(tips[get_int(settings, "general_current_tip")].c_str());
+        labelTipOfTheDay->setText(tips[get_int(settings, "general_current_tip")]);
     }
     else if (button == QWizard::CustomButton2) {
         settings["general_current_tip"] = node_int(get_int(settings, "general_current_tip") + 1);
-        if (get_int(settings, "general_current_tip") >= (int32_t)tips.size()) {
+        if (get_int(settings, "general_current_tip") >= n_tips) {
             settings["general_current_tip"] = node_int(0);
         }
-        labelTipOfTheDay->setText(tips[get_int(settings, "general_current_tip")].c_str());
+        labelTipOfTheDay->setText(tips[get_int(settings, "general_current_tip")]);
     }
     else if (button == QWizard::CustomButton3) {
         wizardTipOfTheDay->close();
@@ -384,9 +692,7 @@ MainWindow::updateAllViewSelectBoxColors(
     }
 }
 
-/* MainWindow::updateAllViewGridColors
- * color
- */
+/* Update all view grid colors to QRgb color. */
 void
 MainWindow::updateAllViewGridColors(QRgb color)
 {
@@ -399,9 +705,7 @@ MainWindow::updateAllViewGridColors(QRgb color)
     }
 }
 
-/* MainWindow::updateAllViewRulerColors
- * color
- */
+/* MainWindow::updateAllViewRulerColors color */
 void
 MainWindow::updateAllViewRulerColors(QRgb color)
 {
@@ -1028,18 +1332,20 @@ read_configuration(void)
             }
             continue;
         }
+        /*
         toml_array_t *array = toml_array_in(configuration, key);
         if (array) {
             config[k] = node_str_list(read_string_list_setting(configuration, key));
             continue;
         }
+        */
         toml_datum_t str = toml_string_in(configuration, key);
         if (str.ok) {
             config[k] = node_str(str.u.s);
             free(str.u.s);
         }
     }
- 
+
     toml_table_t *table = toml_table_in(configuration, "default_settings");
     if (table) {
         for (int i=0; ; i++) {
@@ -1369,10 +1675,10 @@ MainWindow::createAllActions()
             continue;
         }
 
-        QString icon_s = get_qstr(action, "icon");
-        QString appDir = qApp->applicationDirPath();
-        QString icontheme = get_qstr(settings, "general_icon_theme");
-        QIcon icon = QIcon(appDir + "/icons/" + icontheme + "/" + icon_s + ".png");
+        std::string icon_s = get_str(action, "icon");
+        std::string appDir = qApp->applicationDirPath().toStdString();
+        std::string icontheme = get_str(settings, "general_icon_theme");
+        QIcon icon = QIcon(QString::fromStdString(appDir + "/icons/" + icontheme + "/" + icon_s + ".png"));
 
         QAction *ACTION = new QAction(icon, get_qstr(action, "tooltip"), this);
         ACTION->setStatusTip(get_qstr(action, "statustip"));
@@ -1393,7 +1699,7 @@ MainWindow::createAllActions()
 
         connect(ACTION, &QAction::triggered, this,
             [=](){ actuator(get_str(action, "command")); });
-        actionHash[icon_s.toStdString()] = ACTION;
+        actionHash[icon_s] = ACTION;
     }
 
     actionHash["windowclose"]->setEnabled(numOfDocs > 0);
@@ -1466,9 +1772,7 @@ pop_command(const char *line)
     return -1;
 }
 
-/* MainWindow::actuator
- * command
- *
+/* MainWindow::actuator(command)
  *
  * RUN COMMAND
  * -----------
@@ -1624,7 +1928,7 @@ actuator(String line)
      * EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, EmbReal rot, bool fill, String rubberMode
      */
     case ACTION_ADD_ELLIPSE: {
-        
+
         QGraphicsScene* gscene = gview->scene();
         QUndoStack* stack = gview->getUndoStack();
         if (gview && gscene && stack) {
@@ -1651,7 +1955,7 @@ actuator(String line)
     /* add_geometry_action
      * args
      */
-    case ACTION_ADD_GEOMETRY: {        
+    case ACTION_ADD_GEOMETRY: {
         StringList list = tokenize(args_, ' ');
         String command = list[0];
         args_ = args_.substr(std::min(command.size()+1, args_.size()));
@@ -1687,7 +1991,7 @@ actuator(String line)
     /*
      * EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight
      */
-    case ACTION_ADD_HORIZONTAL_DIMENSION: {        
+    case ACTION_ADD_HORIZONTAL_DIMENSION: {
         /*
         AddHorizontalDimension(std::vector<Node> a)
         //TODO: Node error checking
@@ -1711,7 +2015,7 @@ actuator(String line)
     /* .
      * EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot
      */
-    case ACTION_ADD_INFINITE_LINE: {        
+    case ACTION_ADD_INFINITE_LINE: {
         /*
         //TODO: Node error checking
         debug_message("TODO: finish addInfiniteLine command");
@@ -1757,7 +2061,7 @@ actuator(String line)
      *
      * EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode
      */
-    case ACTION_ADD_PATH: {        
+    case ACTION_ADD_PATH: {
         /*
         AddPath(std::vector<Node> a)
         // TODO: Node error checking
@@ -1863,7 +2167,7 @@ actuator(String line)
      * .
      * EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot
      */
-    case ACTION_ADD_RAY: {        
+    case ACTION_ADD_RAY: {
         /*
         //TODO: Node error checking
         debug_message("TODO: finish addRay command");
@@ -2030,7 +2334,7 @@ actuator(String line)
      *
      * EmbReal centerX, EmbReal centerY, EmbReal diameter, EmbReal length, EmbReal rot, bool fill, String rubberMode
      */
-    case ACTION_ADD_SLOT: {        
+    case ACTION_ADD_SLOT: {
         //TODO: Use UndoableAddCommand for slots
         /*
         SlotObject* slotObj = new SlotObject(centerX, -centerY, diameter, length,_mainWin->getCurrentColor());
@@ -2050,7 +2354,7 @@ actuator(String line)
      *
      * QString str, EmbReal x, EmbReal y, EmbReal rot, bool fill, String rubberMode
      */
-    case ACTION_ADD_TEXT_MULTI: {        
+    case ACTION_ADD_TEXT_MULTI: {
         /*
         _mainWin->nativeadd_text_multi_action(a[0].s, a[1].r, a[2].r, a[3].r, a[4].b, OBJ_RUBBER_OFF);
         */
@@ -2152,7 +2456,7 @@ actuator(String line)
     }
 
     /* . */
-    case ACTION_CALCULATE_DISTANCE: {        
+    case ACTION_CALCULATE_DISTANCE: {
         StringList arg_list = tokenize(args_, ' ');
         EmbReal x1 = std::stof(arg_list[0]);
         EmbReal y1 = std::stof(arg_list[1]);
@@ -2505,7 +2809,7 @@ actuator(String line)
     }
 
     /* Open the system's print dialog. */
-    case ACTION_PRINT: {        
+    case ACTION_PRINT: {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
         if (mdiWin) {
             mdiWin->print();
@@ -2555,7 +2859,7 @@ actuator(String line)
      * This is described in detail in the documentation.
      * TODO: reference section.
      */
-    case ACTION_REDO: {        
+    case ACTION_REDO: {
         QString prefix = prompt->promptInput->prefix;
         if (dockUndoEdit->canRedo()) {
             actuator("set-prompt-prefix Redo " + dockUndoEdit->redoText().toStdString());
@@ -3230,7 +3534,9 @@ MainWindow::recentMenuAboutToShow()
 
     QFileInfo recentFileInfo;
     QString recentValue;
-    StringList recent_files = get_str_list(settings, "opensave_recent_list_of_files");
+    String recent_files_str = get_str(settings, "opensave_recent_list_of_files");
+    /* doesn't account for quoting/escaped quotes */
+    StringList recent_files = tokenize(recent_files_str, ' ');
     for (int i = 0; i < (int)recent_files.size(); ++i) {
         //If less than the max amount of entries add to menu
         if (i < get_int(settings, "opensave_recent_max_files")) {
@@ -3260,7 +3566,7 @@ MainWindow::recentMenuAboutToShow()
     if (recent_files.size() > max_files) {
         recent_files.resize(max_files);
     }
-    settings["opensave_recent_list_of_files"] = node_str_list(recent_files);
+    //settings["opensave_recent_list_of_files"] = node_str_list({}); //recent_files);
 }
 
 /* MainWindow::windowMenuAboutToShow
@@ -3566,7 +3872,6 @@ void
 MainWindow::updateMenuToolbarStatusbar()
 {
     debug_message("MainWindow::updateMenuToolbarStatusbar()");
-    StringList button_list = config["statusbar_buttons"].sl;
 
     actionHash["print"]->setEnabled(numOfDocs > 0);
     actionHash["windowclose"]->setEnabled(numOfDocs > 0);
@@ -3583,8 +3888,8 @@ MainWindow::updateMenuToolbarStatusbar()
 
         //Menus
         menuBar()->clear();
-        StringList menubar_order = config["menubar_order"].sl;
-        for (int i=0; i<(int)menubar_order.size(); i++) {
+        int n = string_array_length(menubar_order);
+        for (int i=0; i<n; i++) {
             menuBar()->addMenu(menuHash[menubar_order[i]]);
         }
 
@@ -3593,7 +3898,8 @@ MainWindow::updateMenuToolbarStatusbar()
         //Statusbar
         statusbar->clearMessage();
         statusbar->statusBarMouseCoord->show();
-        for (int i=0; i<(int)button_list.size(); i++) {
+        n = string_array_length(button_list);
+        for (int i=0; i<n; i++) {
             statusbar->buttons[button_list[i]]->show();
         }
     }
@@ -3622,18 +3928,12 @@ MainWindow::updateMenuToolbarStatusbar()
         //Statusbar
         statusbar->clearMessage();
         statusbar->statusBarMouseCoord->hide();
-        for (int i=0; i<(int)button_list.size(); i++) {
+        int n = string_array_length(button_list);
+        for (int i=0; i<n; i++) {
             statusbar->buttons[button_list[i]]->hide();
         }
     }
-    hideUnimplemented();
-}
-
-/* MainWindow::hideUnimplemented
- */
-void
-MainWindow::hideUnimplemented()
-{
+    /* TODO: decide why this call was here */
     debug_message("MainWindow::hideUnimplemented()");
 }
 
