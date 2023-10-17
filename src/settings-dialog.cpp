@@ -106,7 +106,7 @@ StringList opensave_props = {
     "opensave_custom_filter"
 };
 
-
+/* . */
 void
 make_editing_copy(StringList props)
 {
@@ -118,8 +118,7 @@ make_editing_copy(StringList props)
     }
 }
 
-/**
- * @brief read_settings
+/* Read settings from file.
  *
  * This file needs to be read from the users home directory to ensure it is writable.
  */
@@ -161,7 +160,7 @@ read_settings(void)
     fclose(f);
 
     if (!table) {
-        puts("ERROR: failed to parse settings.ini, continuing with defaults.");
+        puts("ERROR: failed to parse settings.toml, continuing with defaults.");
         return;
     }
 
@@ -193,8 +192,7 @@ read_settings(void)
     }
 }
 
-/**
- * @brief MainWindow::writeSettings
+/* Write settings to file.
  *
  * This file needs to be read from the users home directory to ensure it is writable
  */
@@ -229,19 +227,6 @@ write_settings(void)
         case STRING_TYPE:
             file << "\"" << iter->second.s << "\"";
             break;
-        /*
-        case STRING_LIST_TYPE: {
-            file << "[" << std::endl;
-            for (int i=0; i<(int)iter->second.sl.size(); i++) {
-                file << "    \"" << iter->second.sl[i] << "\"";
-                if (i < (int)iter->second.sl.size() - 1) {
-                    file << ",";
-                }
-            }
-            file << "]";
-            break;
-        }
-        */
         default:
             break;
         }
@@ -250,9 +235,7 @@ write_settings(void)
     file.close();
 }
 
-/**
- *
- */
+/* Create settings dialog object. */
 Settings_Dialog::Settings_Dialog(QString  showTab, QWidget* parent) : QDialog(parent)
 {
     setMinimumSize(750,550);
@@ -303,12 +286,15 @@ Settings_Dialog::Settings_Dialog(QString  showTab, QWidget* parent) : QDialog(pa
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
+/* . */
 Settings_Dialog::~Settings_Dialog()
 {
     QApplication::restoreOverrideCursor();
 }
 
-QWidget* Settings_Dialog::createTabGeneral()
+/* . */
+QWidget*
+Settings_Dialog::createTabGeneral()
 {
     QWidget* widget = new QWidget(this);
 
@@ -468,7 +454,9 @@ QWidget* Settings_Dialog::createTabGeneral()
     return scrollArea;
 }
 
-QWidget* Settings_Dialog::createTabFilesPaths()
+/* . */
+QWidget*
+Settings_Dialog::createTabFilesPaths()
 {
     QWidget* widget = new QWidget(this);
 
@@ -478,7 +466,9 @@ QWidget* Settings_Dialog::createTabFilesPaths()
     return scrollArea;
 }
 
-QWidget* Settings_Dialog::createTabDisplay()
+/* . */
+QWidget*
+Settings_Dialog::createTabDisplay()
 {
     QWidget* widget = new QWidget(this);
 
@@ -650,8 +640,9 @@ QWidget* Settings_Dialog::createTabDisplay()
     return scrollArea;
 }
 
-//TODO: finish prompt options
-QWidget* Settings_Dialog::createTabPrompt()
+/* TODO: finish prompt options. */
+QWidget*
+Settings_Dialog::createTabPrompt()
 {
     QWidget* widget = new QWidget(this);
 
@@ -737,9 +728,7 @@ QWidget* Settings_Dialog::createTabPrompt()
     return scrollArea;
 }
 
-/**
- * .
- */
+/* . */
 QCheckBox*
 Settings_Dialog::create_checkbox(QGroupBox *groupbox, std::string label)
 {
@@ -750,8 +739,9 @@ Settings_Dialog::create_checkbox(QGroupBox *groupbox, std::string label)
     return checkbox;
 }
 
-//TODO: finish open/save options
-QWidget* Settings_Dialog::createTabOpenSave()
+/* TODO: finish open/save options. */
+QWidget*
+Settings_Dialog::createTabOpenSave()
 {
     QWidget* widget = new QWidget(this);
 
@@ -1469,6 +1459,7 @@ Settings_Dialog::createTabSelection()
     return scrollArea;
 }
 
+/* */
 void
 Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
 {

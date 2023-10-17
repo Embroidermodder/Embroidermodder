@@ -20,9 +20,19 @@
  *  To help reduce reliance on Qt, only the functions wrap the
  *  Qt functions have a wrapper here. Ideally we could move some
  *  of the Qt headers here.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  The tree walking, merging, freeing and otherwise altering functions
+ *  are an attempt to create a solid foundation for the internal scripting
+ *  language by having a fully abstract data model similar to an AST for
+ *  the whole state of the program at run-time.
  */
 
 #include "embroidermodder.h"
+
+Node get_node(Dictionary d, std::string key);
+void wrong_type_message(int type);
 
 /* Make the translation function global in scope. */
 QString
@@ -71,7 +81,17 @@ node_real(EmbReal value)
     return node;
 }
 
-/* Makes a node from a String value. */
+/* Makes a node from a C string value. */
+Node
+node_cstr(char *value)
+{
+    Node node;
+    node.type = STRING_TYPE;
+    node.s = QString::fromUtf8(value).toStdString();
+    return node;
+}
+
+/* Makes a node from a std::string value. */
 Node
 node_str(String value)
 {
@@ -91,151 +111,133 @@ node_qstr(QString value)
     return node;
 }
 
-/* Makes a node from a StringList value. */
+/* . */
 Node
-node_str_list(StringList value)
+get_node(Dictionary d, std::string key)
 {
-    Node node;
-    node.type = STRING_LIST_TYPE;
-    node.sl = value;
-    return node;
+    char error_msg[MAX_STRING_LENGTH];
+    Node n = {
+        .type = NULL_TYPE
+    };
+    auto iter = d.find(key);
+    if (iter != d.end()) {
+        return d[key];
+    }
+    /*
+    int i;
+    for (i=0; i<d.size(); i++) {
+        if (d[i].key == key) {
+            return i;
+        }
+    }
+    */
+    sprintf(error_msg, "ERROR: dictionary entry with key %s missing.", key.c_str());
+    debug_message(error_msg);
+    return n;
+}
+
+/* Wrong type */
+void
+wrong_type_message(Node n, std::string key, int type)
+{
+    char types[][MAX_STRING_LENGTH] = {
+        "NULL",
+        "STRING",
+        "STRING_LIST",
+        "REAL",
+        "INT",
+        "BOOL",
+        "FUNCTION",
+        "VECTOR",
+        "UNKNOWN"
+    };
+    if (n.type != NULL_TYPE) {
+        char error_str[MAX_STRING_LENGTH];
+        sprintf(error_str, "ERROR: setting with key %s is not of %s type.", key.c_str(), types[type]);
+        debug_message(error_str);
+    }
 }
 
 /* Get a boolean value from a Dictionary with the given key. */
 bool
-get_bool(Dictionary d, String key)
+get_bool(Dictionary d, std::string key)
 {
-    auto iter = d.find(key);
-    if (iter != d.end()) {
-        if (d[key].type == BOOL_TYPE) {
-            return d[key].b;
-        }
-        debug_message(("ERROR: bool setting with key " + key + " is not of bool type.").c_str());
+    Node n = get_node(d, key);
+    if (n.type == BOOL_TYPE) {
+        return n.b;
     }
-    else {
-        debug_message(("ERROR: bool setting with key " + key + " missing.").c_str());
-    }
+    wrong_type_message(n, key, BOOL_TYPE);
     return true;
 }
 
 /* Get a 32-bit signed integer value from a Dictionary with the given key. */
 int
-get_int(Dictionary d, String key)
+get_int(Dictionary d, std::string key)
 {
-    auto iter = d.find(key);
-    if (iter != d.end()) {
-        if (d[key].type == INT_TYPE) {
-            return d[key].i;
-        }
-        debug_message(("ERROR: int setting with key " + key + " is not of int type.").c_str());
+    Node n = get_node(d, key);
+    if (n.type == INT_TYPE) {
+        return n.i;
     }
-    else {
-        debug_message(("ERROR: int setting with key " + key + " missing.").c_str());
-    }
+    wrong_type_message(n, key, INT_TYPE);
     return 0;
 }
 
-/* Get a 32-bit unsigned integer from a Dictionary with the given key. */
+/* Get the 32-bit unsigned integer from the Dictionary d with the given key. */
 uint32_t
-get_uint(Dictionary d, String key)
+get_uint(Dictionary d, std::string key)
 {
     return (uint32_t)get_int(d, key);
 }
 
-/**
- * .
- */
+/* Get the 32-bit float EmbReal from the Dictionary d with the given key. */
 EmbReal
-get_real(Dictionary d, String key)
+get_real(Dictionary d, std::string key)
 {
-    auto iter = d.find(key);
-    if (iter != d.end()) {
-        if (d[key].type == REAL_TYPE) {
-            return d[key].r;
-        }
-        debug_message(("ERROR: real dictionary entry with key " + key + " is not of real type.").c_str());
+    Node n = get_node(d, key);
+    if (n.type == REAL_TYPE) {
+        return n.r;
     }
-    else {
-        debug_message(("ERROR: EmbReal dictionary entry with key " + key + " missing.").c_str());
-    }
+    wrong_type_message(n, key, REAL_TYPE);
     return 0.0f;
 }
 
-/**
- * .
- */
+/* Get std::string from Dictionary. */
 String
-get_str(Dictionary d, String key)
+get_str(Dictionary d, std::string key)
 {
-    auto iter = d.find(key);
-    if (iter != d.end()) {
-        if (d[key].type == STRING_TYPE) {
-            return d[key].s;
-        }
-        debug_message(("ERROR: string dictionary entry with key " + key + " is not of string type.").c_str());
+    Node n = get_node(d, key);
+    if (n.type == STRING_TYPE) {
+        return n.s;
     }
-    else {
-        debug_message(("ERROR: String setting with key " + key + " missing.").c_str());
-    }
+    wrong_type_message(n, key, STRING_TYPE);
     return "";
 }
 
-/**
- * .
- */
+/* Get QString from Dictionary. */
 QString
-get_qstr(Dictionary d, String key)
+get_qstr(Dictionary d, std::string key)
 {
     return QString::fromStdString(get_str(d, key));
 }
 
-/**
- * .
- */
-StringList
-get_str_list(Dictionary d, String key)
-{
-    StringList list = {};
-    auto iter = d.find(key);
-    if (iter != d.end()) {
-        if (d[key].type == STRING_LIST_TYPE) {
-            return d[key].sl;
-        }
-        debug_message(("ERROR: StringList dictionary entry with key " + key + " is not of StringList type.").c_str());
-    }
-    else {
-        debug_message(("ERROR: StringList setting with key " + key + " missing.").c_str());
-    }
-    return list;
-}
-
-/**
- * @brief to_string_vector
- * @param list
- * @return
- */
-StringList
+/* Convert QStringList to the std library type. */
+std::vector<std::string>
 to_string_vector(QStringList list)
 {
-    std::vector<String> a;
+    std::vector<std::string> a;
     for (int i=0; i<(int)list.size(); i++) {
         a.push_back(list[i].toStdString());
     }
     return a;
 }
 
-/**
- * @brief tokenize
- * @param str
- * @param delim
- * @return
- */
-StringList
+/* Tokenize our std::string type using a 1 character deliminator. */
+std::vector<std::string>
 tokenize(String str, const char delim)
 {
-    StringList list;
+    std::vector<std::string> list;
     std::stringstream str_stream(str);
-    String s;
+    std::string s;
     while (std::getline(str_stream, s, delim)) {
         list.push_back(s);
     }
@@ -258,65 +260,6 @@ to_EmbVector(QPointF a)
     v.x = a.x();
     v.y = a.y();
     return v;
-}
-
-/* Wrapper for embVector_add to use the syntax "a + b" for EmbVectors. */
-EmbVector
-operator+(EmbVector a, EmbVector b)
-{
-    return embVector_add(a, b);
-}
-
-/* Wrapper for embVector_subtract to use the syntax "a - b" for EmbVectors. */
-EmbVector
-operator-(EmbVector a, EmbVector b)
-{
-    return embVector_subtract(a, b);
-}
-
-/* Wrapper for embVector_multiply to use the syntax "v * s" for EmbVectors. */
-EmbVector
-operator*(EmbVector v, EmbReal s)
-{
-    EmbVector result;
-    embVector_multiply(v, s, &result);
-    return result;
-}
-
-
-/**
- * @brief radians__
- * @param degrees
- * @return
- */
-EmbReal
-radians__(EmbReal degrees)
-{
-    return (degrees*emb_constant_pi/180.0);
-}
-
-/**
- * @brief degrees__
- * @param radian
- * @return
- */
-EmbReal
-degrees__(EmbReal radian)
-{
-    return (radian*180.0/emb_constant_pi);
-}
-
-/* Check that RBG values are in the range (0,255) inclusive. */
-unsigned char
-validRGB(int r, int g, int b)
-{
-    unsigned char result = (r>=0);
-    result &= (r<256);
-    result &= (g>=0);
-    result &= (g<256);
-    result &= (b>=0);
-    result &= (b<256);
-    return result;
 }
 
 /* Convert from QList to std::vector. */
@@ -350,7 +293,7 @@ debug_message(std::string msg)
 
 /* Utility function for add_to_path. */
 std::vector<float>
-get_n_reals(StringList list, int n, int *offset)
+get_n_reals(std::vector<std::string> list, int n, int *offset)
 {
     std::vector<float> result;
     for (int i=1; i<n+1; i++) {
@@ -360,11 +303,13 @@ get_n_reals(StringList list, int n, int *offset)
     return result;
 }
 
-/* . */
+/* Render an SVG-like .
+ *
+ */
 QPainterPath
-add_to_path(QPainterPath path, EmbVector scale, String command)
+add_to_path(QPainterPath path, EmbVector scale, std::string command)
 {
-    StringList list = tokenize(command, ' ');
+    std::vector<std::string> list = tokenize(command, ' ');
     for (int i=0; i<(int)list.size(); i++) {
         command = list[i];
         if (command == "M") {
@@ -409,7 +354,7 @@ set_enabled(QObject* parent, const char *key, bool enabled)
     if (!strncmp(key, "comboBox", 8)) {
         QComboBox* comboBox = parent->findChild<QComboBox*>(key);
         if (comboBox) {
-            comboBox->setEnabled(enabled);    
+            comboBox->setEnabled(enabled);
         }
         return;
     }
@@ -453,11 +398,19 @@ set_visibility(QObject* parent, const char *key, bool visibility)
     }
 }
 
-/* . */
+/* Turn our own markup in config.toml into the various UI elements.
+ *
+ * The required variable "type" is taken to choose a function to process
+ * the UI element.
+ *
+ * This would be faster as a switch table.
+ *
+ * This function should take a parent object to build...
+ */
 void
 make_ui_element(Dictionary description)
 {
-    String element_type = get_str(description, "type");
+    std::string element_type = get_str(description, "type");
     if (element_type == "groupBox") {
 
     }
@@ -465,14 +418,13 @@ make_ui_element(Dictionary description)
 
     }
     else if (element_type == "checkBox") {
-        // make_checkbox(QGroupBox *gb, String dictionary, const char *label, const char *icon, String key)
+        // make_checkbox(gb, description, label, icon, key);
     }
     else if (element_type == "spinBox") {
 
     }
     else if (element_type == "doubleSpinBox") {
-        // make_spinbox(QGroupBox *gb, String dictionary,
-        //  QString object_name, EmbReal single_step, EmbReal lower, EmbReal upper, String key)
+        // make_spinbox(gb, description, object_name, single_step, lower, upper, key)
     }
     else if (element_type == "label") {
 
@@ -496,7 +448,7 @@ make_ui_element(Dictionary description)
 
 /* . */
 QCheckBox *
-make_checkbox(QGroupBox *gb, String dictionary, const char *label, const char *icon, String key)
+make_checkbox(QGroupBox *gb, std::string dictionary, const char *label, const char *icon, std::string key)
 {
     QCheckBox *checkBox = new QCheckBox(translate_str(label), gb);
     checkBox->setIcon(_mainWin->create_icon(icon));
@@ -522,7 +474,7 @@ make_checkbox(QGroupBox *gb, String dictionary, const char *label, const char *i
 /* TODO: Make spinbox using this toml syntax:
  *
  *     [zoom_level_spinbox]
- *     type = "double_spinbox"
+ *     type = "doubleSpinBox"
  *     object_name = "Zoom Level"
  *     single_step = 0.1
  *     lower_bound = -10
@@ -534,8 +486,8 @@ make_checkbox(QGroupBox *gb, String dictionary, const char *label, const char *i
  *     QDoubleSpinBox *sb = make_spinbox(gb, desc);
  */
 QDoubleSpinBox *
-make_spinbox(QGroupBox *gb, String dictionary,
-    QString object_name, EmbReal single_step, EmbReal lower, EmbReal upper, String key)
+make_spinbox(QGroupBox *gb, std::string dictionary,
+    QString object_name, EmbReal single_step, EmbReal lower, EmbReal upper, std::string key)
 {
     QDoubleSpinBox* spinBox = new QDoubleSpinBox(gb);
     spinBox->setObjectName(object_name);

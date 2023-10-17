@@ -17,19 +17,20 @@
 
 StatusBar::StatusBar(QWidget *parent) : QStatusBar(parent)
 {
-    StringList button_list = config["statusbar_buttons"].sl;
     this->setObjectName("StatusBar");
 
-    for (int i=0; i<(int)button_list.size(); i++) {
+    int n = string_array_length(button_list);
+    for (int i=0; i<n; i++) {
+        QString name = "StatusBarButton";
         QToolButton* button = new QToolButton(parent);
-        button->setObjectName("StatusBarButton" + button_list[i]);
+        button->setObjectName(name + button_list[i]);
 
         button->setText(QString::fromStdString(button_list[i]));
         button->setAutoRaise(true);
         button->setCheckable(true);
 
-        connect(button, &QToolButton::toggled, this, [=](bool a) { toggle(button_list[i], a); } ); 
-        buttons[button_list[i]] = button;        
+        connect(button, &QToolButton::toggled, this, [=](bool a) { toggle(button_list[i], a); } );
+        buttons[button_list[i]] = button;
     }
 
     statusBarMouseCoord = new QLabel(this);
@@ -38,7 +39,7 @@ StatusBar::StatusBar(QWidget *parent) : QStatusBar(parent)
     statusBarMouseCoord->setMaximumWidth(300); // "+1.2345E+99, +1.2345E+99, +1.2345E+99"
 
     this->addWidget(statusBarMouseCoord);
-    for (int i=0; i<(int)button_list.size(); i++) {
+    for (int i=0; i<n; i++) {
         this->addWidget(buttons[button_list[i]]);
     }
 }

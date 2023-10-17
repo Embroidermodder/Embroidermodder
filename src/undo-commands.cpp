@@ -68,7 +68,7 @@ UndoableCommand::UndoableCommand(String command, EmbVector point, EmbReal value,
             new_.x = scaleLine.x2();
             new_.y = scaleLine.y2();
 
-            delta = new_ - old;
+            delta = embVector_subtract(new_, old);
         }
     }
 }
@@ -184,8 +184,8 @@ void
 UndoableCommand::rotate(EmbVector pivot, EmbReal rot)
 {
     EmbReal rad = radians(rot);
-    EmbVector p = to_EmbVector(object->scenePos()) - pivot;
-    EmbVector rotv = rotate_vector(p, rad) + pivot;
+    EmbVector p = embVector_subtract(to_EmbVector(object->scenePos()), pivot);
+    EmbVector rotv = embVector_add(rotate_vector(p, rad), pivot);
 
     object->setPos(rotv.x, rotv.y);
     object->setRotation(object->rotation() + rot);
