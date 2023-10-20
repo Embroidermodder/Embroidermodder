@@ -1772,6 +1772,27 @@ pop_command(const char *line)
     return -1;
 }
 
+#define MAX_ARGS                         10
+
+int
+break_up_arguments(const char *line, char arg_list[MAX_ARGS][MAX_STRING_LENGTH])
+{
+    int i;
+    int n_args = 0;
+    int arg_pos = 0;
+    for (i=0; i<MAX_STRING_LENGTH && line[i]; i++) {
+        arg_list[n_args][arg_pos] = line[i];
+        arg_pos++;
+        if (line[i] == ' ') {
+            arg_list[n_args][arg_pos] = 0;
+            n_args++;
+            arg_pos = 0;
+        }
+    }
+	arg_list[n_args][arg_pos] = 0;
+    return n_args;
+}
+
 /* MainWindow::actuator(command)
  *
  * RUN COMMAND
@@ -1809,6 +1830,9 @@ String
 actuator(String line)
 {
     View* gview = activeView();
+    char arg_list[MAX_ARGS][MAX_STRING_LENGTH];
+
+    int n_args = break_up_arguments(line.c_str(), arg_list);
 
     char args[MAX_STRING_LENGTH];
     int action_id = pop_command(line.c_str());

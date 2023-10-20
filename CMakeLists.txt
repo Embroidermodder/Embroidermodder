@@ -62,7 +62,9 @@ qt_add_executable(embroidermodder2 WIN32 MACOSX_BUNDLE
     ${CMAKE_SOURCE_DIR}/src/embroidermodder.h
 
     ${CMAKE_SOURCE_DIR}/src/core.c
-    ${CMAKE_SOURCE_DIR}/src/objects_data.c
+    ${CMAKE_SOURCE_DIR}/src/action_table.c
+    ${CMAKE_SOURCE_DIR}/src/editor_table.c
+    ${CMAKE_SOURCE_DIR}/src/object_data.c
 
     ${CMAKE_SOURCE_DIR}/extern/tomlc99/toml.c
 
@@ -85,13 +87,12 @@ target_link_libraries(embroidermodder2 PRIVATE
     embroidery_static)
 
 if (WIN32)
-else(WIN32)
-target_link_libraries(embroidermodder2 PRIVATE m)
-endif()
-
 set_target_properties(embroidermodder2
     WIN32_EXECUTIBLE ON
     MACOS BUNDLE ON)
+else(WIN32)
+target_link_libraries(embroidermodder2 PRIVATE m)
+endif()
 
 install(TARGETS embroidermodder2
     BUNDLE DESTINATION .

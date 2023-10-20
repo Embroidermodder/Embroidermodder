@@ -32,6 +32,8 @@
 #define MAX_TOOLBARS                            10
 #define MAX_MENUS                               10
 #define VECTOR_CHUNK_SIZE                       50
+#define MAX_ACTIONS                            256
+#define MAX_EDITORS                            300
 
 /* Node types. */
 #define NULL_TYPE                                0
@@ -164,8 +166,6 @@
 #define ACTION_WINDOW                           90
 #define ACTION_ZOOM                             91
 #define N_ACTIONS                               92
-
-#define MAX_ACTIONS                            256
 
 /* OBJ_LTYPE_VALUES */
 // CAD Linetypes
@@ -396,12 +396,25 @@ extern "C" {
 #include "../extern/tomlc99/toml.h"
 
 typedef struct ActionData_ {
-    char type[MAX_STRING_LENGTH];
     char icon[MAX_STRING_LENGTH];
     char command[MAX_STRING_LENGTH];
     char tooltip[MAX_STRING_LENGTH];
     char statustip[MAX_STRING_LENGTH];
+    char shortcut[MAX_STRING_LENGTH];
+    int32_t min_args;
+    int32_t gview;
+    int32_t gscene;
+    int32_t undo;
 } ActionData;
+
+typedef struct LineEditData_ {
+    char groupbox[MAX_STRING_LENGTH];
+    char key[MAX_STRING_LENGTH];
+    char icon[MAX_STRING_LENGTH];
+    char label[MAX_STRING_LENGTH];
+    char type[MAX_STRING_LENGTH];
+    char map_signal[MAX_STRING_LENGTH];
+} LineEditData;
 
 /* To allow us to resize general C arrays when necessary.
  * Note that for char arrays, the buffer is a normal c-style string.
@@ -446,7 +459,8 @@ CNode *create_and_add_leaf(CNode *parent, char *key, char *value);
 int insert_node(CNode *branch, char key[MAX_STRING_LENGTH], CNode *node);
 
 extern CNode *root;
-extern const ActionData action_table[];
+extern const ActionData action_table[MAX_ACTIONS];
+extern const LineEditData all_line_editors[MAX_EDITORS];
 extern const char *usage_msg;
 
 extern const char *toolbar_list[];
@@ -478,7 +492,6 @@ extern const char *icon_toolbar[];
 extern const char *default_prompt_style[];
 extern const char *details_labels[];
 extern const char *command_labels[];
-extern const char *all_line_editors[];
 extern const char *justify_options[];
 extern const char *object_names[];
 extern const char *button_list[];

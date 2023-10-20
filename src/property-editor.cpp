@@ -39,15 +39,14 @@ std::vector<Dictionary>
 load_group_box_data_from_table(String key)
 {
     std::vector<Dictionary> group_box;
-    int n = string_array_length(all_line_editors);
-    for (int i=0; i<n/6; i++) {
-        if (!strcmp(all_line_editors[6*i], key.c_str())) {
+    for (int i=0; strcmp(all_line_editors[i].key, "END"); i++) {
+        if (!strcmp(all_line_editors[i].key, key.c_str())) {
             Dictionary data;
-            data["key"] = node_str(all_line_editors[6*i+1]);
-            data["icon_name"] = node_str(all_line_editors[6*i+2]);
-            data["label"] = node_str(all_line_editors[6*i+3]);
-            data["type"] = node_str(all_line_editors[6*i+4]);
-            data["map_signal"] = node_str(all_line_editors[6*i+5]);
+            data["key"] = node_str(all_line_editors[i].key);
+            data["icon_name"] = node_str(all_line_editors[i].icon);
+            data["label"] = node_str(all_line_editors[i].label);
+            data["type"] = node_str(all_line_editors[i].type);
+            data["map_signal"] = node_str(all_line_editors[i].map_signal);
             group_box.push_back(data);
         }
     }
@@ -597,15 +596,14 @@ PropertyEditor::hideAllGroups(void)
  */
 void PropertyEditor::clearAllFields()
 {
-    int n = string_array_length(all_line_editors);
-    for (int i=0; i<n; i++) {
-        if (!strcmp(all_line_editors[6*i+4], "double")) {
-            lineEdits[all_line_editors[6*i+1]]->clear();
+    for (int i=0; strcmp(all_line_editors[i].key, "END"); i++) {
+        if (!strcmp(all_line_editors[i].type, "double")) {
+            lineEdits[all_line_editors[i].key]->clear();
         }
-        if (!strcmp(all_line_editors[6*i+4], "combobox")) {
-            comboBoxes[all_line_editors[6*i+1]]->clear();
+        if (!strcmp(all_line_editors[i].type, "combobox")) {
+            comboBoxes[all_line_editors[i].key]->clear();
         }
-        if (!strcmp(all_line_editors[6*i+4], "fontcombobox")) {
+        if (!strcmp(all_line_editors[i].type, "fontcombobox")) {
             comboBoxTextSingleFont->removeItem(comboBoxTextSingleFont->findText(fieldVariesText)); //NOTE: Do not clear comboBoxTextSingleFont
             comboBoxTextSingleFont->setProperty("FontFamily", "");
         }

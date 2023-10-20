@@ -101,6 +101,8 @@ SOURCES += \
     extern/tomlc99/toml.c \
     src/cmdprompt.cpp \
     src/core.c \
+    src/action_table.c \
+    src/editor_table.c \
     src/embdetails-dialog.cpp \
     src/imagewidget.cpp \
     src/interface.cpp \

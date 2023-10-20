@@ -56,14 +56,159 @@ const char *default_prompt_style[] = {
     "END"
 };
 
-const ActionData action_table[] = {
-    {
-        .type = "action",
-        .icon = "trebleclef",
-        .command = "trebleclef",
-        .tooltip = "Treble Clef",
-        .statustip = "Adds a treble clef design to the vector layer."
-    }
+/* This imitates an initiation file, and if none is present it is loaded
+ * using the same parser.
+ *
+ * Our ini syntax is minimal: all lines with an equals sign '=' are parsed
+ * comments are lines without the sign, everything to the left is the key,
+ * everything to the right is the value.
+ *
+ * There are 3 types: int, float and string (char array). Boolean values are
+ * treated as ints and arrays are strings with comma seperation.
+ *
+ * 1. If the first char of the value string is a number but not period is present
+ *    then it is an int.
+ * 2. If a period is present and it starts with a number then it is a float.
+ * 3. Otherwise it is a string.
+ * 4. Colors start with an open parenthesis, so we know that the string passed
+ *    should then be converted into a color in the next loop.
+ */
+const char *default_settings[] = {
+    "general_language=default",
+    "general_icon_theme=default",
+    "general_icon_size=16",
+    "general_mdi_bg_use_logo=1",
+    "general_mdi_bg_use_texture=1",
+    "general_mdi_bg_use_color=1",
+    "general_mdi_bg_logo=images/logo-spirals.png",
+    "general_mdi_bg_texture=images/texture-spirals.png",
+    "general_mdi_bg_color=(0,0,255)",
+    "general_tip_of_the_day=true",
+    "general_current_tip=0",
+    "general_system_help_browser=true",
+    "",
+    "window_position_x=100",
+    "window_position_y=100",
+    "window_size_x=800",
+    "window_size_y=600",
+    "",
+    "display_use_open_gl=false",
+    "display_render_hint_anti_alias=false",
+    "display_render_hint_text_anti_alias=false",
+    "display_render_hint_smooth_pixmap=false",
+    "display_render_hint_high_quality_anti_alias=false",
+    "display_render_hint_non_cosmetic=false",
+    "display_show_scrollbars=true",
+    "display_scrollbar_widget_num=0",
+    "display_crosshair_color=[0, 0, 0]",
+    "display_background_color=[255, 255, 255]",
+    "display_selectbox_left_color=[0, 0, 0]",
+    "display_selectbox_left_fill=[0, 0, 0]",
+    "display_selectbox_right_color=[0, 0, 0]",
+    "display_selectbox_right_fill=[0, 0, 0]",
+    "display_selectbox_alpha= 32",
+    "display_zoomscale_in=2.0",
+    "display_zoomscale_out=0.5",
+    "display_crosshair_percent=5.0",
+    "display_units=mm",
+    "",
+    "prompt_text_color= [0, 0, 0]",
+    "prompt_background_color= [255, 255, 255]",
+    "prompt_font_family=Monospace",
+    "prompt_font_style=normal",
+    "prompt_font_size=12",
+    "prompt_save_history=true",
+    "prompt_save_history_as_html=false",
+    "prompt_save_history_filename=prompt.log",
+    "",
+    "opensave_custom_filter=supported",
+    "opensave_open_format=*.*",
+    "opensave_open_thumbnail=false",
+    "opensave_save_format=*.*",
+    "opensave_save_thumbnail=false",
+    "opensave_recent_max=10",
+    "opensave_recent_list_of_files=",
+    "opensave_recent_directory=samples",
+    "opensave_trim_dst_num_jumps=5",
+    "",
+    "printing_default_device=""",
+    "printing_use_last_device=false",
+    "printing_disable_bg=true",
+    "",
+    "grid_show_on_load=true",
+    "grid_show_origin=true",
+    "grid_color_match_crosshair=true",
+    "grid_color=[0, 0, 0]",
+    "grid_load_from_file=true",
+    "grid_type=Rectangular",
+    "grid_center_on_origin=true",
+    "grid_center_x=0.0",
+    "grid_center_y=0.0",
+    "grid_size_x=100.0",
+    "grid_size_y=100.0",
+    "grid_spacing_x=25.0",
+    "grid_spacing_y=25.0",
+    "grid_size_radius=50.0",
+    "grid_spacing_radius=25.0",
+    "grid_spacing_angle=45.0",
+    "",
+    "ruler_show_on_load=true",
+    "ruler_metric=true",
+    "ruler_color=[220, 240, 0]",
+    "ruler_pixel_size=20.0",
+    "",
+    "quicksnap_enabled=true",
+    "quicksnap_locator_color=[0, 0, 0]",
+    "quicksnap_locator_size=4",
+    "quicksnap_aperture_size=10",
+    "quicksnap_endpoint=true",
+    "quicksnap_midpoint=true",
+    "quicksnap_center=true",
+    "quicksnap_node=true",
+    "quicksnap_quadrant=true",
+    "quicksnap_intersection=true",
+    "quicksnap_extension=true",
+    "quicksnap_insertion=false",
+    "quicksnap_perpendicular=true",
+    "quicksnap_tangent=true",
+    "quicksnap_nearest=false",
+    "quicksnap_apparent=false",
+    "quicksnap_parallel=false",
+    "",
+    "lineweight_show_line_weight=false",
+    "lineweight_real_render=true",
+    "lineweight_default_line_weight=0.0",
+    "",
+    "selection_pick_first=true",
+    "selection_pick_add=true",
+    "selection_pick_drag=false",
+    "selection_coolgrip_color=[0, 0, 255]",
+    "selection_hotgrip_color=[255, 0, 0]",
+    "selection_grip_size=4",
+    "selection_pickbox_size=4",
+    "",
+    "text_font=Arial",
+    "text_size=12.0",
+    "text_angle=0.0",
+    "text_style_bold=0",
+    "text_style_italic=0",
+    "text_style_underline=0",
+    "text_style_strikeout=0",
+    "text_style_overline=0",
+    "",
+    "ruler_tick_depth=0.5",
+    "major_tick_seperation=0.4",
+    "needle_speed=100.0",
+    "stitch_time=0.01"
+};
+
+/* . */
+const char *alias_table[] = {
+    "exit", "quit",
+    "u", "undo",
+    "close", "windowclose",
+    "closeall", "windowcloseall",
+    "cascade", "windowcascade"
 };
 
 const char *usage_msg = ""
@@ -128,110 +273,110 @@ const char *side_toolbar_layout[] = {
 };
 
 const char *file_menu[] = {
-	"new",
-	"---",
-	"open",
-	"submenu recent",
-	"---",
-	"save",
-	"saveas",
-	"---",
-	"print",
-	"---",
-	"windowclose",
-	"---",
-	"designdetails",
-	"---",
-	"exit",
-	"END"
+    "new",
+    "---",
+    "open",
+    "submenu recent",
+    "---",
+    "save",
+    "saveas",
+    "---",
+    "print",
+    "---",
+    "windowclose",
+    "---",
+    "designdetails",
+    "---",
+    "exit",
+    "END"
 };
 
 const char *edit_menu[] = {
-	"undo",
-	"redo",
-	"---",
-	"cut",
-	"copy",
-	"paste",
-	"---",
-	"END"
+    "undo",
+    "redo",
+    "---",
+    "cut",
+    "copy",
+    "paste",
+    "---",
+    "END"
 };
 
 const char *pan_menu[] = {
-	"icon pan",
-	"panrealtime",
-	"panpoint",
-	"---",
-	"panleft",
-	"panright",
-	"panup",
-	"pandown",
-	"END"
+    "icon pan",
+    "panrealtime",
+    "panpoint",
+    "---",
+    "panleft",
+    "panright",
+    "panup",
+    "pandown",
+    "END"
 };
 
 const char *zoom_menu[] = {
-	"icon zoom",
-	"zoomrealtime",
-	"zoomprevious",
-	"---",
-	"zoomwindow",
-	"zoomdynamic",
-	"zoomscale",
-	"zoomcenter",
-	"---",
-	"zoomin",
-	"zoomout",
-	"---",
-	"zoomselected",
-	"zoomall",
-	"zoomextents",
-	"END"
+    "icon zoom",
+    "zoomrealtime",
+    "zoomprevious",
+    "---",
+    "zoomwindow",
+    "zoomdynamic",
+    "zoomscale",
+    "zoomcenter",
+    "---",
+    "zoomin",
+    "zoomout",
+    "---",
+    "zoomselected",
+    "zoomall",
+    "zoomextents",
+    "END"
 };
 
 const char *view_menu[] = {
-	"---",
-	"submenu zoom",
-	"submenu pan",
-	"---",
-	"day",
-	"night",
-	"---",
-	"END"
+    "---",
+    "submenu zoom",
+    "submenu pan",
+    "---",
+    "day",
+    "night",
+    "---",
+    "END"
 };
 
 const char *settings_menu[] = {
-	"settingsdialog",
-	"---",
-	"END"
+    "settingsdialog",
+    "---",
+    "END"
 };
 
 const char *window_menu[] = {
-	"---",
-	"END"
+    "---",
+    "END"
 };
 
 const char *help_menu[] = {
-	"help",
-	"---",
-	"changelog",
-	"---",
-	"tipoftheday",
-	"---",
-	"about",
-	"---",
-	"whatsthis",
-	"END"
+    "help",
+    "---",
+    "changelog",
+    "---",
+    "tipoftheday",
+    "---",
+    "about",
+    "---",
+    "whatsthis",
+    "END"
 };
 
 const char *draw_menu[] = {
-	"circle",
-	"path",
-	"polygon",
-	"polyline",
-	"point",
-	"heart",
-	"single-line-text",
-	"END"
+    "circle",
+    "path",
+    "polygon",
+    "polyline",
+    "point",
+    "heart",
+    "single-line-text",
+    "END"
 };
 
 const char *toolbar_list[] = {
@@ -247,89 +392,89 @@ const char *toolbar_list[] = {
 };
 
 const char *file_toolbar[] = {
-	"new",
-	"open",
-	"save",
-	"saveas",
-	"print",
-	"designdetails",
-	"---",
-	"undo",
-	"redo",
-	"---",
-	"help",
-	"END"
+    "new",
+    "open",
+    "save",
+    "saveas",
+    "print",
+    "designdetails",
+    "---",
+    "undo",
+    "redo",
+    "---",
+    "help",
+    "END"
 };
 
 const char *edit_toolbar[] = {
-	"cut",
-	"copy",
-	"paste",
-	"END"
+    "cut",
+    "copy",
+    "paste",
+    "END"
 };
 
 const char *view_toolbar[] = {
-	"day",
-	"night",
-	"END"
+    "day",
+    "night",
+    "END"
 };
 
 const char *zoom_toolbar[] = {
-	"zoomwindow",
-	"zoomdynamic",
-	"zoomscale",
-	"---",
-	"zoomcenter",
-	"zoomin",
-	"zoomout",
-	"---",
-	"zoomselected",
-	"zoomall",
-	"zoomextents",
-	"END"
+    "zoomwindow",
+    "zoomdynamic",
+    "zoomscale",
+    "---",
+    "zoomcenter",
+    "zoomin",
+    "zoomout",
+    "---",
+    "zoomselected",
+    "zoomall",
+    "zoomextents",
+    "END"
 };
 
 const char *pan_toolbar[] = {
-	"panrealtime",
-	"panpoint",
-	"---",
-	"panleft",
-	"panright",
-	"panup",
-	"pandown",
-	"END"
+    "panrealtime",
+    "panpoint",
+    "---",
+    "panleft",
+    "panright",
+    "panup",
+    "pandown",
+    "END"
 };
 
 const char *icon_toolbar[] = {
-	"icon16",
-	"icon24",
-	"icon32",
-	"icon48",
-	"icon64",
-	"icon128",
-	"END"
+    "icon16",
+    "icon24",
+    "icon32",
+    "icon48",
+    "icon64",
+    "icon128",
+    "END"
 };
 
 const char *help_toolbar[] = {
-	"help",
-	"---",
-	"changelog",
-	"---",
-	"about",
-	"---",
-	"whatsthis",
-	"END"
+    "help",
+    "---",
+    "changelog",
+    "---",
+    "about",
+    "---",
+    "whatsthis",
+    "END"
 };
 
 const char *draw_toolbar[] = {
-	"circle",
-	"path",
-	"polygon",
-	"polyline",
-	"point",
-	"heart",
-	"single-line-text",
-	"END"
+    "circle",
+    "path",
+    "polygon",
+    "polyline",
+    "point",
+    "heart",
+    "single-line-text",
+    "END"
 };
 
 /* TODO: "Aligned"
@@ -552,149 +697,6 @@ char rubber_modes[N_RUBBER_MODES][MAX_STRING_LENGTH] = {
     "POLYLINE",
     "RECTANGLE",
     "TEXTSINGLE",
-    "END"
-};
-
-/* . */
-const char *all_line_editors[] = {
-    "general", "general_layer", "blank", "Layer", "combobox", "false",
-    "general", "general_color", "blank", "Color", "combobox", "false",
-    "general", "general_line_type", "blank", "LineType", "combobox", "false",
-    "general", "general_line_weight", "blank", "LineWeight", "combobox", "false",
-
-    "geometry_arc", "arc_center_x", "blank", "Center X", "double", "lineEditArcCenterX",
-    "geometry_arc", "arc_center_y", "blank", "Center Y", "double", "lineEditArcCenterY",
-    "geometry_arc", "arc_radius", "blank", "Radius", "double", "lineEditArcRadius",
-    "geometry_arc", "arc_start_angle", "blank", "Start Angle", "double", "lineEditArcStartAngle",
-    "geometry_arc", "arc_end_angle", "blank", "End Angle", "double", "lineEditArcEndAngle",
-    "geometry_arc", "arc_start_x", "blank", "Start X", "double", "",
-    "geometry_arc", "arc_start_y", "blank", "Start Y", "double", "",
-    "geometry_arc", "arc_end_x", "blank", "End X", "double", "",
-    "geometry_arc", "arc_end_y", "blank", "End Y", "double", "",
-    "geometry_arc", "arc_area", "blank", "Area", "double", "",
-    "geometry_arc", "arc_length", "blank", "Arc Length", "double", "",
-    "geometry_arc", "arc_chord", "blank", "Chord", "double", "",
-    "geometry_arc", "arc_inc_angle", "blank", "Included Angle", "double",  "",
-
-    "misc_arc", "arc-clockwise", "blank", "Clockwise", "combobox", "true",
-
-    "geometry_block", "block-x", "blank", "Position X", "double", "",
-    "geometry_block", "block-y", "blank", "Position Y", "double", "",
-
-    "geometry_circle", "circle_center_x", "blank", "Center X", "double", "lineEditCircleCenterX",
-    "geometry_circle", "circle_center_y", "blank", "Center Y", "double", "lineEditCircleCenterY",
-    "geometry_circle", "circle_radius", "blank", "Radius", "double", "lineEditCircleRadius",
-    "geometry_circle", "circle_diameter", "blank", "Diameter", "double", "lineEditCircleDiameter",
-    "geometry_circle", "circle_area", "blank", "Area", "double", "lineEditCircleArea",
-    "geometry_circle", "circle_circumference", "blank", "Circumference", "double", "lineEditCircleCircumference",
-
-    "geometry_dim_aligned", "dim-aligned-x", "blank", "Position X", "double", "",
-
-    "geometry_dim_angular", "dim-angular-x", "blank", "Position X", "double", "",
-
-    "geometry_dim_arc_length", "dim-arc-length-x", "blank", "Position X", "double", "",
-
-    "geometry_dim_diameter", "dim-diameter-x", "blank", "Position X", "double", "",
-
-    "geometry_dim_leader", "dim-linear-x", "blank", "Position X", "double", "",
-
-    "geometry_dim_linear", "dim-linear-x", "blank", "Position X", "double", "",
-
-    "geometry_dim_ordinate", "dim-ordinate-x", "blank", "Position X", "double", "",
-
-    "geometry_dim_radius", "dim-radius-x", "blank", "Position X", "double", "",
-
-    "geometry_ellipse", "ellipse_center_x", "blank", "Center X", "double", "lineEditEllipseCenterX",
-    "geometry_ellipse", "ellipse_center_y", "blank", "Center Y", "double", "lineEditEllipseCenterY",
-    "geometry_ellipse", "ellipse_semi_major_axis", "blank", "Semi-Major Axis", "double", "lineEditEllipseSemiMajorAxis",
-    "geometry_ellipse", "ellipse_semi_minor_axis", "blank", "Semi-Minor Axis", "double", "lineEditEllipseSemiMinorAxis",
-    "geometry_ellipse", "ellipse_major_axis", "blank", "Major Axis", "double", "lineEditEllipseMajorAxis",
-    "geometry_ellipse", "ellipse_minor_axis", "blank", "Minor Axis", "double", "lineEditEllipseMinorAxis",
-
-    "geometry_image", "image-x", "blank", "Position X", "double", "",
-    "geometry_image", "image-y", "blank", "Position Y", "double", "",
-    "geometry_image", "image-width", "blank", "Width", "double", "",
-    "geometry_image", "image-height", "blank", "Height", "double", "",
-
-    "misc_image", "image-name", "blank", "Name", "double", "",
-    "misc_image", "image-path", "blank", "Path", "double", "",
-
-    "geometry_infinite_line", "infinite-line-x1", "blank", "Start X", "double", "lineEditInfiniteLineX1",
-    "geometry_infinite_line", "infinite-line-y1", "blank", "Start Y", "double", "lineEditInfiniteLineY1",
-    "geometry_infinite_line", "infinite-line-x2", "blank", "2nd X", "double", "lineEditInfiniteLineX2",
-    "geometry_infinite_line", "infinite-line-y2", "blank", "2nd Y", "double", "lineEditInfiniteLineY2",
-    "geometry_infinite_line", "infinite-line-vector-x", "blank", "Vector X", "double", "",
-    "geometry_infinite_line", "infinite-line-vector-y", "blank", "Vector Y", "double", "",
-
-    "geometry_line", "line-start-x", "blank", "Start X", "double", "lineEditLineStartX",
-    "geometry_line", "line-start-y", "blank", "Start Y", "double", "lineEditLineStartY",
-    "geometry_line", "line-end-x", "blank", "End X", "double", "lineEditLineEndX",
-    "geometry_line", "line-end-y", "blank", "End Y", "double", "lineEditLineEndY",
-    "geometry_line", "line-delta-x", "blank", "Delta X", "double", "",
-    "geometry_line", "line-delta-y", "blank", "Delta Y", "double", "",
-    "geometry_line", "line-angle", "blank", "Angle", "double", "",
-    "geometry_line", "line-length", "blank", "Length", "double", "",
-
-    "geometry_path", "path_vertex_num", "blank", "Vertex #", "combobox", "",
-    "geometry_path", "path_vertex_x", "blank", "Vertex X", "double", "",
-    "geometry_path", "path_vertex_y", "blank", "Vertex Y", "double", "",
-    "geometry_path", "path_area", "blank", "Area", "double", "",
-    "geometry_path", "path_length", "blank", "Length", "double", "",
-
-    "misc_path", "path_closed", "blank", "Closed", "combobox", "",
-
-    "geometry_point", "point_x", "blank", "Position X", "double", "lineEditPointX",
-    "geometry_point", "point_y", "blank", "Position Y", "double", "lineEditPointY",
-
-    "geometry_polygon", "polygon_center_x", "blank", "Center X", "double", "",
-    "geometry_polygon", "polygon_center_y", "blank", "Center Y", "double", "",
-    "geometry_polygon", "polygon-radius-vertex", "blank", "Vertex Radius", "double", "",
-    "geometry_polygon", "polygon-radius-side", "blank", "Side Radius", "double", "",
-    "geometry_polygon", "polygon-diameter-vertex", "blank", "Vertex Diameter", "double", "",
-    "geometry_polygon", "polygon-diameter-side", "blank", "Side Diameter", "double", "",
-    "geometry_polygon", "polygon-interior-angle", "blank", "Interior Angle", "double", "",
-
-    "geometry_polyline", "polyline-vertex-num", "blank", "Vertex #", "combobox", "false",
-    "geometry_polyline", "polyline-vertex-x", "blank", "Vertex X", "double", "",
-    "geometry_polyline", "polyline-vertex-y", "blank", "Vertex Y", "double", "",
-    "geometry_polyline", "polyline-vertex-area", "blank", "Area", "double", "",
-    "geometry_polyline", "polyline-vertex-length", "blank", "Length", "double", "",
-
-    "misc_polyline", "polyline-vertex-closed", "blank", "Closed", "combobox", "false",
-
-    "geometry_ray", "ray-x1", "blank", "Start X", "double", "",
-    "geometry_ray", "ray-y1", "blank", "Start Y", "double", "",
-    "geometry_ray", "ray-x2", "blank", "2nd X", "double", "",
-    "geometry_ray", "ray-y2", "blank", "2nd Y", "double", "",
-    "geometry_ray", "ray-vector-x", "blank", "Vector X", "double", "",
-    "geometry_ray", "ray-vector-y", "blank", "Vector Y", "double", "",
-
-    "geometry_rectangle", "rectangle_corner1_x", "blank", "Corner 1 X", "double", "",
-    "geometry_rectangle", "rectangle_corner1_y", "blank", "Corner 1 Y", "double", "",
-    "geometry_rectangle", "rectangle_corner2_x", "blank", "Corner 2 X", "double", "",
-    "geometry_rectangle", "rectangle_corner2_y", "blank", "Corner 2 Y", "double", "",
-    "geometry_rectangle", "rectangle_corner3_x", "blank", "Corner 3 X", "double", "",
-    "geometry_rectangle", "rectangle_corner3_y", "blank", "Corner 3 Y", "double", "",
-    "geometry_rectangle", "rectangle_corner4_x", "blank", "Corner 4 X", "double", "",
-    "geometry_rectangle", "rectangle_corner4_y", "blank", "Corner 4 Y", "double", "",
-    "geometry_rectangle", "rectangle_width", "blank", "Width", "double", "",
-    "geometry_rectangle", "rectangle_height", "blank", "Height", "double", "",
-    "geometry_rectangle", "rectangle_area", "blank", "Area", "double", "",
-
-    "text_text_single", "text-single-contents", "blank", "Contents", "string", "lineEditTextSingleContents",
-    "text_text_single", "text-single-font", "blank", "Font", "fontcombobox", "comboBoxTextSingleFont",
-    "text_text_single", "text-single-justify", "blank", "Justify", "combobox", "comboBoxTextSingleJustify",
-    "text_text_single", "text-single-height", "blank", "Height", "double", "lineEditTextSingleHeight",
-    "text_text_single", "text-single-rotation", "blank", "Rotation", "double", "lineEditTextSingleRotation",
-
-    "geometry_text_single", "text-single-x", "blank", "Position X", "double", "lineEditTextSingleX",
-    "geometry_text_single", "text_single_y", "blank", "Position Y", "double", "lineEditTextSingleY",
-
-    "misc_text_single", "text_single_backward", "blank", "Backward", "combobox", "comboBoxTextSingleBackward",
-    "misc_text_single", "text_single_upside_down", "blank", "UpsideDown", "combobox", "comboBoxTextSingleUpsideDown",
-
-    "geometry_text_multi", "text-multi-x", "blank", "Position X", "double", "",
-    "geometry_text_multi", "text-multi-y", "blank", "Position Y", "double", "",
     "END"
 };
 
@@ -982,5 +984,5 @@ string_array_length(const char *list[])
 {
     int i = 0;
     for (i=0; strcmp(list[i], "END"); i++) {}
-	return i;
+    return i;
 }
