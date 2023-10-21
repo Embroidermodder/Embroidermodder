@@ -41,16 +41,6 @@ translate_str(const char *str)
     return _mainWin->tr(str);
 }
 
-/* Makes a node from a boolean value. */
-Node
-node_bool(bool value)
-{
-    Node node;
-    node.type = BOOL_TYPE;
-    node.b = value;
-    return node;
-}
-
 /* Makes a node from a 32-bit signed integer. */
 Node
 node_int(int32_t value)
@@ -164,7 +154,10 @@ get_bool(Dictionary d, std::string key)
 {
     Node n = get_node(d, key);
     if (n.type == BOOL_TYPE) {
-        return n.b;
+        if (n.i) {
+            return true;
+        }
+        return false;
     }
     wrong_type_message(n, key, BOOL_TYPE);
     return true;
@@ -456,17 +449,17 @@ make_checkbox(QGroupBox *gb, std::string dictionary, const char *label, const ch
     if (dictionary == "settings") {
         checkBox->setChecked(get_bool(settings, key));
         QObject::connect(checkBox, &QCheckBox::stateChanged, _mainWin,
-            [=](int x) { settings[key] = node_bool(x != 0); });
+            [=](int x) { settings[key] = node_int(x != 0); });
     }
     if (dictionary == "dialog") {
         checkBox->setChecked(get_bool(dialog, key));
         QObject::connect(checkBox, &QCheckBox::stateChanged, _mainWin,
-            [=](int x) { dialog[key] = node_bool(x != 0); });
+            [=](int x) { dialog[key] = node_int(x != 0); });
     }
     if (dictionary == "config") {
         checkBox->setChecked(get_bool(config, key));
         QObject::connect(checkBox, &QCheckBox::stateChanged, _mainWin,
-            [=](int x) { config[key] = node_bool(x != 0); });
+            [=](int x) { config[key] = node_int(x != 0); });
     }
     return checkBox;
 }

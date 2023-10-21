@@ -566,7 +566,7 @@ const ActionData action_table[MAX_ACTIONS] = {
     },
     /* index 44 */
     {
-        .icon = "showalllayers",
+        .icon = "unlockalllayers",
         .command = "unlockalllayers",
         .tooltip = "&Unlock All Layers",
         .statustip = "Unlocks all layers in the current drawing:  UNLOCKALL",
@@ -578,7 +578,7 @@ const ActionData action_table[MAX_ACTIONS] = {
     },
     /* index 45 */
     {
-        .icon = "showalllayers",
+        .icon = "textbold",
         .command = "textbold",
         .tooltip = "&Bold Text",
         .statustip = "Sets text to be bold.",
@@ -590,7 +590,7 @@ const ActionData action_table[MAX_ACTIONS] = {
     },
     /* index 46 */
     {
-        .icon = "showalllayers",
+        .icon = "textitalic",
         .command = "textitalic",
         .tooltip = "&Italic Text",
         .statustip = "Sets text to be italic.",
@@ -602,7 +602,7 @@ const ActionData action_table[MAX_ACTIONS] = {
     },
     /* index 47 */
     {
-        .icon = "showalllayers",
+        .icon = "textunderline",
         .command = "textunderline",
         .tooltip = "&Underline Text",
         .statustip = "Sets text to be underlined.",
@@ -614,7 +614,7 @@ const ActionData action_table[MAX_ACTIONS] = {
     },
     /* index 48 */
     {
-        .icon = "showalllayers",
+        .icon = "textstrikeout",
         .command = "textstrikeout",
         .tooltip = "&StrikeOut Text",
         .statustip = "Sets text to be striked out.",

@@ -124,9 +124,9 @@ View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, 
     String grid_type;
     int ui_mode;
     */
-    state["snap_mode"] = node_bool(false);
-    state["grid_mode"] = node_bool(false);
-    state["ruler_mode"] = node_bool(false);
+    state["snap_mode"] = node_int(false);
+    state["grid_mode"] = node_int(false);
+    state["ruler_mode"] = node_int(false);
     /*
     bool ortho_mode;
     bool polar_mode;

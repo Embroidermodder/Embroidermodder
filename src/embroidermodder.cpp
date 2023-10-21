@@ -42,21 +42,18 @@ protected:
 };
 #endif /* MacOS */
 
-static const char* _appVer_  = "v2.0.0-alpha3";
 static bool exitApp = false;
 
 int
 main(int argc, char* argv[])
 {
-    /* Load configuration and settings here. */
-
 #if defined(Q_OS_MAC)
     Application app(argc, argv);
 #else
     QApplication app(argc, argv);
 #endif
     app.setApplicationName("Embroidermodder");
-    app.setApplicationVersion(_appVer_);
+    app.setApplicationVersion(version);
 
     StringList filesToOpen;
 
@@ -69,7 +66,7 @@ main(int argc, char* argv[])
             exitApp = true;
         }
         else if ((arg == "-v") || (arg == "--version")) {
-            fprintf(stdout, "Embroidermodder %s\n", _appVer_);
+            fprintf(stdout, "Embroidermodder %s\n", version);
             exitApp = true;
         }
         else if (QFile::exists(argv[i]) && validFileFormat(arg)) {

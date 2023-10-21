@@ -24,6 +24,8 @@
  * before changing this file.
  */
 
+const char *version = "2.0.0-alpha4";
+
 /* So we can find any given piece of data in our UI for the functions to act
  * on they all lie in a tree that uses C-style tree walking during runtime.
  */
@@ -73,7 +75,7 @@ const char *default_prompt_style[] = {
  * 4. Colors start with an open parenthesis, so we know that the string passed
  *    should then be converted into a color in the next loop.
  */
-const char *default_settings[] = {
+const char default_settings[MAX_SETTINGS][MAX_STRING_LENGTH] = {
     "general_language=default",
     "general_icon_theme=default",
     "general_icon_size=16",
@@ -82,16 +84,16 @@ const char *default_settings[] = {
     "general_mdi_bg_use_color=1",
     "general_mdi_bg_logo=images/logo-spirals.png",
     "general_mdi_bg_texture=images/texture-spirals.png",
-    "general_mdi_bg_color=(0,0,255)",
+    "general_mdi_bg_color=255",
     "general_tip_of_the_day=true",
     "general_current_tip=0",
     "general_system_help_browser=true",
-    "",
+
     "window_position_x=100",
     "window_position_y=100",
     "window_size_x=800",
     "window_size_y=600",
-    "",
+
     "display_use_open_gl=false",
     "display_render_hint_anti_alias=false",
     "display_render_hint_text_anti_alias=false",
@@ -100,27 +102,27 @@ const char *default_settings[] = {
     "display_render_hint_non_cosmetic=false",
     "display_show_scrollbars=true",
     "display_scrollbar_widget_num=0",
-    "display_crosshair_color=[0, 0, 0]",
-    "display_background_color=[255, 255, 255]",
-    "display_selectbox_left_color=[0, 0, 0]",
-    "display_selectbox_left_fill=[0, 0, 0]",
-    "display_selectbox_right_color=[0, 0, 0]",
-    "display_selectbox_right_fill=[0, 0, 0]",
+    "display_crosshair_color=0",
+    "display_background_color=16777215",
+    "display_selectbox_left_color=0",
+    "display_selectbox_left_fill=0",
+    "display_selectbox_right_color=0",
+    "display_selectbox_right_fill=0",
     "display_selectbox_alpha= 32",
     "display_zoomscale_in=2.0",
     "display_zoomscale_out=0.5",
     "display_crosshair_percent=5.0",
     "display_units=mm",
-    "",
-    "prompt_text_color= [0, 0, 0]",
-    "prompt_background_color= [255, 255, 255]",
+
+    "prompt_text_color=0",
+    "prompt_background_color=16777215",
     "prompt_font_family=Monospace",
     "prompt_font_style=normal",
     "prompt_font_size=12",
     "prompt_save_history=true",
     "prompt_save_history_as_html=false",
     "prompt_save_history_filename=prompt.log",
-    "",
+
     "opensave_custom_filter=supported",
     "opensave_open_format=*.*",
     "opensave_open_thumbnail=false",
@@ -130,15 +132,15 @@ const char *default_settings[] = {
     "opensave_recent_list_of_files=",
     "opensave_recent_directory=samples",
     "opensave_trim_dst_num_jumps=5",
-    "",
+
     "printing_default_device=""",
     "printing_use_last_device=false",
     "printing_disable_bg=true",
-    "",
+
     "grid_show_on_load=true",
     "grid_show_origin=true",
     "grid_color_match_crosshair=true",
-    "grid_color=[0, 0, 0]",
+    "grid_color=0",
     "grid_load_from_file=true",
     "grid_type=Rectangular",
     "grid_center_on_origin=true",
@@ -151,14 +153,14 @@ const char *default_settings[] = {
     "grid_size_radius=50.0",
     "grid_spacing_radius=25.0",
     "grid_spacing_angle=45.0",
-    "",
+
     "ruler_show_on_load=true",
     "ruler_metric=true",
-    "ruler_color=[220, 240, 0]",
+    "ruler_color=14479360",
     "ruler_pixel_size=20.0",
-    "",
+
     "quicksnap_enabled=true",
-    "quicksnap_locator_color=[0, 0, 0]",
+    "quicksnap_locator_color=0",
     "quicksnap_locator_size=4",
     "quicksnap_aperture_size=10",
     "quicksnap_endpoint=true",
@@ -174,19 +176,19 @@ const char *default_settings[] = {
     "quicksnap_nearest=false",
     "quicksnap_apparent=false",
     "quicksnap_parallel=false",
-    "",
+
     "lineweight_show_line_weight=false",
     "lineweight_real_render=true",
     "lineweight_default_line_weight=0.0",
-    "",
+
     "selection_pick_first=true",
     "selection_pick_add=true",
     "selection_pick_drag=false",
-    "selection_coolgrip_color=[0, 0, 255]",
-    "selection_hotgrip_color=[255, 0, 0]",
+    "selection_coolgrip_color=255",
+    "selection_hotgrip_color=25500",
     "selection_grip_size=4",
     "selection_pickbox_size=4",
-    "",
+
     "text_font=Arial",
     "text_size=12.0",
     "text_angle=0.0",
@@ -195,7 +197,7 @@ const char *default_settings[] = {
     "text_style_underline=0",
     "text_style_strikeout=0",
     "text_style_overline=0",
-    "",
+
     "ruler_tick_depth=0.5",
     "major_tick_seperation=0.4",
     "needle_speed=100.0",
@@ -779,7 +781,8 @@ free_node(CNode *branch)
 }
 
 /*
- *
+ * Returns the location of the first occurence of c in s if present. Otherwise
+ * return -1.
  */
 int
 str_contains(char *s, char c)

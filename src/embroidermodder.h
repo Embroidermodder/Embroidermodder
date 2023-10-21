@@ -47,7 +47,6 @@ typedef struct Node_ {
     std::string s;
     EmbReal r;
     int32_t i;
-    bool b;
     int type;
 } Node;
 
@@ -79,8 +78,7 @@ extern Dictionary settings, dialog, config;
 /* Functions in the global namespace
  * ---------------------------------
  */
-int read_configuration(const char *file);
-void read_settings(void);
+int read_settings(void);
 void write_settings(void);
 EmbVector rotate_vector(EmbVector v, EmbReal alpha);
 
@@ -90,8 +88,6 @@ bool validFileFormat(std::string fileName);
 QString fileExtension(std::string fileName);
 
 void add_polyline(QPainterPath p, String rubberMode);
-
-std::string read_string_setting(toml_table_t *table, const char *key);
 
 View *activeView(void);
 QGraphicsScene* activeScene();

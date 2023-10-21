@@ -33,6 +33,7 @@
 #define MAX_MENUS                               10
 #define VECTOR_CHUNK_SIZE                       50
 #define MAX_ACTIONS                            256
+#define MAX_SETTINGS                           256
 #define MAX_EDITORS                            300
 
 /* Node types. */
@@ -374,6 +375,29 @@
 #define BOOLS_PER_BASE_OBJECT                  100
 #define STRINGS_PER_BASE_OBJECT                 10
 
+/* User Interface Mode */
+#define MODE_ARC                                 0
+#define MODE_CIRCLE_1P_RAD                       1
+#define MODE_CIRCLE_1P_DIA                       2
+#define MODE_CIRCLE_2P                           3
+#define MODE_CIRCLE_3P                           4
+#define MODE_CIRCLE_TTR                          5
+#define MODE_CIRCLE_TTR_SET_POINT_2              6
+#define MODE_CIRCLE_TTR_SET_POINT_3              7
+#define MODE_ELLIPSE                             8
+#define MODE_RECTANGLE                           9
+#define MODE_STAR_NUM_POINTS                    10
+#define MODE_STAR_CENTER_PT                     11
+#define MODE_STAR_RAD_INNER                     12
+#define MODE_STAR_RAD_OUTER                     13
+#define MODE_POLYGON_NUM_SIDES                  14
+#define MODE_POLYGON_POLYTYPE                   15
+#define MODE_POLYGON_DISTANCE                   16
+#define MODE_POLYGON_CENTER_PT                  17
+#define MODE_POLYGON_INSCRIBE                   18
+#define MODE_POLYGON_CIRCUMSCRIBE               19
+#define MODE_POLYGON_SIDE_LEN                   20
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -393,8 +417,28 @@ extern "C" {
 #include <errno.h>
 
 #include "../extern/libembroidery/src/embroidery.h"
-#include "../extern/tomlc99/toml.h"
 
+/*
+ * Expected Keys for actions
+ * String icon;
+ *      The stub used for the icon and the basic command.
+ * String command;
+ * String tooltip;
+ *      The label in the menus and the message that appears when
+ *      you hover over an icon.
+ * String statustip;
+ *       The message that appears at the bottom of the .
+ * String shortcut;
+ *       The keyboard shortcut for this action.
+ * StringList aliases;
+ *       A list of all alternative commands, if empty only
+ *       the icon sttring will be .
+ * StringList script;
+ *      If this is a compound action this will be a
+ *      list of commands or it can allow for command line
+ *      style command aliases. For example: icon16 would become
+ *      the string list {"iconResize 16"}.
+ */
 typedef struct ActionData_ {
     char icon[MAX_STRING_LENGTH];
     char command[MAX_STRING_LENGTH];
@@ -449,6 +493,7 @@ void cvector_free(Cvector *vector);
 int string_array_length(const char *list[]);
 
 unsigned char validRGB(int r, int g, int b);
+int str_contains(char *s, char c);
 
 CNode *create_node(int type);
 int add_leaf(CNode *branch, CNode *leaf);
@@ -461,7 +506,9 @@ int insert_node(CNode *branch, char key[MAX_STRING_LENGTH], CNode *node);
 extern CNode *root;
 extern const ActionData action_table[MAX_ACTIONS];
 extern const LineEditData all_line_editors[MAX_EDITORS];
+extern const char *version;
 extern const char *usage_msg;
+extern const char default_settings[MAX_SETTINGS][MAX_STRING_LENGTH];
 
 extern const char *toolbar_list[];
 extern const char *menubar_order[];

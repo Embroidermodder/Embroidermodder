@@ -722,7 +722,7 @@ MainWindow::updateAllViewRulerColors(QRgb color)
 void
 MainWindow::updatePickAddMode(bool val)
 {
-    settings["selection_mode_pickadd"] = node_bool(val);
+    settings["selection_mode_pickadd"] = node_int(val);
     dockPropEdit->updatePickAddModeButton(val);
 }
 
@@ -1222,176 +1222,6 @@ scale_selected_action(String args)
     return "";
 }
 
-/*
- * .
- */
-String
-read_string_setting(toml_table_t *table, const char *key)
-{
-    toml_datum_t str = toml_string_in(table, key);
-    if (!str.ok) {
-        return "";
-    }
-    String s(str.u.s);
-    free(str.u.s);
-    return s;
-}
-
-/*
- * .
- */
-std::vector<String>
-read_string_list_setting(toml_table_t *table, const char *key)
-{
-    std::vector<String> str_list;
-    toml_array_t* array = toml_array_in(table, key);
-    for (int i=0; ; i++) {
-        toml_datum_t str = toml_string_at(array, i);
-        if (!str.ok) {
-            break;
-        }
-        String s(str.u.s);
-        str_list.push_back(s);
-        free(str.u.s);
-    }
-    return str_list;
-}
-
-/*
- * \brief Read the settings from file which aren't editable by the user.
- * These files need to be placed in the install folder.
- *
- * Expected Keys for actions
- * String icon;
- *      The stub used for the icon and the basic command.
- * String command;
- * String tooltip;
- *      The label in the menus and the message that appears when
- *      you hover over an icon.
- * String statustip;
- *       The message that appears at the bottom of the .
- * String shortcut;
- *       The keyboard shortcut for this action.
- * StringList aliases;
- *       A list of all alternative commands, if empty only
- *       the icon sttring will be .
- * StringList script;
- *      If this is a compound action this will be a
- *      list of commands or it can allow for command line
- *      style command aliases. For example: icon16 would become
- *      the string list {"iconResize 16"}.
- */
-int
-read_configuration(void)
-{
-    String fname = qApp->applicationDirPath().toStdString() + "/config.toml";
-    char error_buffer[200];
-    FILE *f = fopen(fname.c_str(), "r");
-    if (!f) {
-        puts("ERROR: Failed to open settings file:");
-        printf("%s", fname.c_str());
-        return 0;
-    }
-    toml_table_t *configuration = toml_parse_file(f, error_buffer, sizeof(error_buffer));
-    fclose(f);
-
-    if (!configuration) {
-        puts("ERROR: failed to parse config.toml, continuing with defaults.");
-        return 0;
-    }
-
-    for (int i=0; ; i++) {
-        const char *key = toml_key_in(configuration, i);
-        if (!key) {
-            break;
-        }
-        std::string k(key);
-        toml_table_t *table = toml_table_in(configuration, key);
-        if (table) {
-            toml_datum_t subtable_name = toml_string_in(table, "type");
-            if (subtable_name.ok) {
-                Dictionary subtable_values;
-                for (int j=0; ; j++) {
-                    const char *subtable_key = toml_key_in(table, j);
-                    if (!subtable_key) {
-                        break;
-                    }
-                    String st_key(subtable_key);
-                    toml_datum_t str = toml_string_in(table, subtable_key);
-                    if (str.ok) {
-                        String s(str.u.s);
-                        subtable_values[st_key] = node_str(s);
-                        free(str.u.s);
-                    }
-                    else {
-                        subtable_values[st_key] = node_str("");
-                    }
-                }
-                config_tables[k] = subtable_values;
-                free(subtable_name.u.s);
-            }
-            continue;
-        }
-        /*
-        toml_array_t *array = toml_array_in(configuration, key);
-        if (array) {
-            config[k] = node_str_list(read_string_list_setting(configuration, key));
-            continue;
-        }
-        */
-        toml_datum_t str = toml_string_in(configuration, key);
-        if (str.ok) {
-            config[k] = node_str(str.u.s);
-            free(str.u.s);
-        }
-    }
-
-    toml_table_t *table = toml_table_in(configuration, "default_settings");
-    if (table) {
-        for (int i=0; ; i++) {
-            const char *key = toml_key_in(table, i);
-            if (!key) {
-                break;
-            }
-            std::string k(key);
-            toml_array_t *array_in = toml_array_in(table, key);
-            if (array_in) {
-                toml_datum_t red = toml_int_at(array_in, 0);
-                toml_datum_t green = toml_int_at(array_in, 1);
-                toml_datum_t blue = toml_int_at(array_in, 2);
-                settings[k] = node_int(qRgb(red.u.i, green.u.i, blue.u.i));
-                qDebug("color %u", qRgb(red.u.i, green.u.i, blue.u.i));
-                continue;
-            }
-            toml_datum_t string_in = toml_string_in(table, key);
-            if (string_in.ok) {
-                settings[k] = node_str(read_string_setting(table, key));
-                continue;
-            }
-            toml_datum_t int_in = toml_int_in(table, key);
-            if (int_in.ok) {
-                settings[k] = node_int((int)int_in.u.i);
-                continue;
-            }
-            toml_datum_t float_in = toml_double_in(table, key);
-            if (float_in.ok) {
-                settings[k] = node_real((EmbReal)float_in.u.d);
-                continue;
-            }
-            toml_datum_t bool_in = toml_bool_in(table, key);
-            if (bool_in.ok) {
-                settings[k] = node_bool(bool_in.u.b);
-            }
-        }
-    }
-
-    toml_free(configuration);
-
-    debug_message("Configuration loaded.");
-
-    return 1;
-}
-
 /* disable_action
  * variable
  */
@@ -1399,27 +1229,27 @@ String
 disable_action(String variable)
 {
     if (variable == "text-angle") {
-        settings["text_angle"] = node_bool(false);
+        settings["text_angle"] = node_int(false);
         return "";
     }
     if (variable == "text-bold") {
-        settings["text_style_bold"] = node_bool(false);
+        settings["text_style_bold"] = node_int(false);
         return "";
     }
     if (variable == "text-italic") {
-        settings["text_style_italic"] = node_bool(false);
+        settings["text_style_italic"] = node_int(false);
         return "";
     }
     if (variable == "text-underline") {
-        settings["text_style_underline"] = node_bool(false);
+        settings["text_style_underline"] = node_int(false);
         return "";
     }
     if (variable == "text-strikeout") {
-        settings["text_style_strikeout"] = node_bool(false);
+        settings["text_style_strikeout"] = node_int(false);
         return "";
     }
     if (variable == "text-overline") {
-        settings["text_style_overline"] = node_bool(false);
+        settings["text_style_overline"] = node_int(false);
         return "";
     }
     if (variable == "prompt-rapid-fire") {
@@ -1441,7 +1271,6 @@ disable_action(String variable)
 MainWindow::MainWindow() : QMainWindow(0)
 {
     QString appDir = qApp->applicationDirPath();
-    read_configuration();
     read_settings();
 
     //Verify that files/directories needed are actually present.
@@ -1669,23 +1498,25 @@ MainWindow::createAllActions()
 {
     debug_message("Creating All Actions...");
 
-    for (auto iter=config_tables.begin(); iter != config_tables.end(); iter++) {
-        Dictionary action = iter->second;
-        if (get_str(action, "type") != "action") {
-            continue;
-        }
+    for (int i=0; strcmp(action_table[i].command, "END"); i++) {
+        ActionData a = action_table[i];
+ 
+        std::string icon_s(a.icon);
+        std::string tooltip(a.tooltip);
+        std::string statustip(a.statustip);
+        std::string shortcut(a.shortcut);
+        std::string command(a.command);
 
-        std::string icon_s = get_str(action, "icon");
         std::string appDir = qApp->applicationDirPath().toStdString();
         std::string icontheme = get_str(settings, "general_icon_theme");
         QIcon icon = QIcon(QString::fromStdString(appDir + "/icons/" + icontheme + "/" + icon_s + ".png"));
 
-        QAction *ACTION = new QAction(icon, get_qstr(action, "tooltip"), this);
-        ACTION->setStatusTip(get_qstr(action, "statustip"));
+        QAction *ACTION = new QAction(icon, QString::fromStdString(tooltip), this);
+        ACTION->setStatusTip(QString::fromStdString(statustip));
         ACTION->setObjectName(icon_s);
-        if (get_str(action, "shortcut") != "") {
+        if (shortcut != "") {
             ACTION->setShortcut(
-                QKeySequence(get_qstr(action, "shortcut"))
+                QKeySequence(QString::fromStdString(shortcut))
             );
         }
 
@@ -1697,8 +1528,7 @@ MainWindow::createAllActions()
             ACTION->setCheckable(true);
         }
 
-        connect(ACTION, &QAction::triggered, this,
-            [=](){ actuator(get_str(action, "command")); });
+        connect(ACTION, &QAction::triggered, this, [=](){ actuator(command); });
         actionHash[icon_s] = ACTION;
     }
 
@@ -3236,7 +3066,8 @@ actuator(String line)
 
     /* Return the version string to the user (for the CLI). */
     case ACTION_VERSION: {
-        return config["version"].s;
+        std::string v(version);
+        return v;
     }
 
     case ACTION_VULCANIZE: {
@@ -3352,7 +3183,7 @@ set_action(String args)
     if (list.size() < 2) {
         return "The command 'set' requires 2 arguments.";
     }
-    node value = node_bool(
+    node value = node_int(
            list[1] == "true"
         || list[1] == "True"
         || list[1] == "TRUE"
@@ -3407,27 +3238,27 @@ enable_action(String args)
         return "The command 'enable' requires an argument.";
     }
     if (command == "text-angle") {
-        settings["text_angle"] = node_bool(true);
+        settings["text_angle"] = node_int(true);
         return "";
     }
     if (command == "text-bold") {
-        settings["text_style_bold"] = node_bool(true);
+        settings["text_style_bold"] = node_int(true);
         return "";
     }
     if (command == "text-italic") {
-        settings["text_style_italic"] = node_bool(true);
+        settings["text_style_italic"] = node_int(true);
         return "";
     }
     if (command == "text-underline") {
-        settings["text_style_underline"] = node_bool(true);
+        settings["text_style_underline"] = node_int(true);
         return "";
     }
     if (command == "text-strikeout") {
-        settings["text_style_strikeout"] = node_bool(true);
+        settings["text_style_strikeout"] = node_int(true);
         return "";
     }
     if (command == "text-overline") {
-        settings["text_style_overline"] = node_bool(true);
+        settings["text_style_overline"] = node_int(true);
         return "";
     }
     if (command == "prompt-rapid-fire") {

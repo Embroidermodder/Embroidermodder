@@ -121,13 +121,17 @@ make_editing_copy(StringList props)
 /* Read settings from file.
  *
  * This file needs to be read from the users home directory to ensure it is writable.
+ *
+ * \brief Read the settings from file which are editable by the user.
+ * These files need to be placed in the install folder.
  */
-void
+int
 read_settings(void)
 {
     debug_message("Reading Settings...");
 
-    QString appDir = qApp->applicationDirPath();
+    char config[MAX_SETTINGS][MAX_STRING_LENGTH];
+    char config_pairs[MAX_SETTINGS][MAX_STRING_LENGTH];
 
     /*
     layoutState = settingsfile.value("LayoutState").toByteArray();
@@ -138,58 +142,76 @@ read_settings(void)
     */
 
 #if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
+    QString settings_dir = QDir::homePath() + "/.embroidermodder2";
 //    settings["prompt_save_history_filename"] = node_qstr(QDir::homePath() + "/.embroidermodder2/prompt.log");
 #else
+    QString settings_dir = qApp->applicationDirPath();
 //    settings["prompt_save_history_filename"] = node_qstr(appDir + "prompt.log");
 #endif
 
-#if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
-    QString fname = QDir::homePath() + "/.embroidermodder2/settings.toml";
-#else
-    QString fname = qApp->applicationDirPath() + "/settings.toml";
-#endif
-
-    char error_buffer[200];
-    FILE *f = fopen(fname.toStdString().c_str(), "r");
+    std::string fname = settings_dir.toStdString() + "/em2_settings.ini";
+    FILE *f = fopen(fname.c_str(), "r");
     if (!f) {
-        puts("ERROR: Failed to open settings file:");
-        printf("%s", fname.toStdString().c_str());
-        return;
+        printf("WARNING: Failed to open settings file (%s), continuing with defaults.",
+            fname.c_str());
+        for (int i=0; i<MAX_SETTINGS; i++) {
+            strcpy(config[i], default_settings[i]);
+        }
     }
-    toml_table_t *table = toml_parse_file(f, error_buffer, sizeof(error_buffer));
-    fclose(f);
+    else {
+        char c;
+        int line = 0;
+        int line_pos = 0;
+        while (fread(&c, 1, 1, f)) {
+            if (c == '\r') {
+                continue;
+            }
+            config[line][line_pos] = c;
+			line_pos++;
+            if (c != '\n') {
+                continue;
+            }
+			config[line][line_pos] = 0;
+			line++;
+			line_pos = 0;
+			if (line == MAX_SETTINGS) {
+				puts("WARNING too many lines in the settings file.");
+				break;
+			}
+        }
+		config[line][line_pos] = 0;
+        line++;
+        for (; line<MAX_SETTINGS; line++) {
+            config[line][0] = 0;
+        }
+        fclose(f);
+    }
 
-    if (!table) {
-        puts("ERROR: failed to parse settings.toml, continuing with defaults.");
-        return;
+    for (int line=0; line<MAX_SETTINGS; line++) {
+        int eq_pos = str_contains(config[line], '=');
+        if (eq_pos < 0) {
+            continue;
+        }
+        config[line][eq_pos] = 0;
+		std::string key(config[line]);
+		std::string value(config[line]+eq_pos+1);
+        char c = value.c_str()[0];
+        if (c >= '0' && c <= '9') {
+            if (str_contains(config[line]+eq_pos+1, '.') >= 0) {
+    			settings[key] = node_real(std::stof(value));
+            }
+            else {
+    			settings[key] = node_int(std::stoi(value));
+            }
+        }
+        else {
+    		settings[key] = node_str(value);
+        }
     }
 
-    for (int i=0; ; i++) {
-        const char *key = toml_key_in(table, i);
-        if (!key) {
-            break;
-        }
-        std::string k(key);
-        toml_datum_t string_in = toml_string_in(table, key);
-        if (string_in.ok) {
-            settings[k] = node_str(read_string_setting(table, key));
-            continue;
-        }
-        toml_datum_t int_in = toml_int_in(table, key);
-        if (int_in.ok) {
-            settings[k] = node_int((int)int_in.u.i);
-            continue;
-        }
-        toml_datum_t float_in = toml_double_in(table, key);
-        if (float_in.ok) {
-            settings[k] = node_real((EmbReal)float_in.u.d);
-            continue;
-        }
-        toml_datum_t bool_in = toml_bool_in(table, key);
-        if (bool_in.ok) {
-            settings[k] = node_bool(bool_in.u.b);
-        }
-    }
+    debug_message("Configuration loaded.");
+
+    return 1;
 }
 
 /* Write settings to file.
@@ -208,9 +230,9 @@ write_settings(void)
     settings["window_size_y"] = node_int((int)_mainWin->size().height());
 
 #if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
-    settingsPath = QDir::homePath().toStdString() + "/.embroidermodder2/settings.toml";
+    settingsPath = QDir::homePath().toStdString() + "/.embroidermodder2/settings.ini";
 #else
-    settingsPath = qApp->applicationDirPath().toStdString() + "/settings.toml";
+    settingsPath = qApp->applicationDirPath().toStdString() + "/settings.ini";
 #endif
     std::ofstream file;
     file.open(settingsPath);
@@ -1309,7 +1331,7 @@ Settings_Dialog::createTabLineWeight()
 
     QCheckBox* checkBoxShowLwt = new QCheckBox(translate_str("Show LineWeight"), groupBoxLwtMisc);
     if (s) {
-        dialog["lwt_show_lwt"] = node_bool(s->property("ENABLE_LWT").toBool());
+        dialog["lwt_show_lwt"] = node_int(s->property("ENABLE_LWT").toBool());
     }
     else {
         dialog["lwt_show_lwt"] = settings["lwt_show_lwt"];
@@ -1321,7 +1343,7 @@ Settings_Dialog::createTabLineWeight()
     QCheckBox* checkBoxRealRender = new QCheckBox(translate_str("RealRender"), groupBoxLwtMisc);
     checkBoxRealRender->setObjectName("checkBoxRealRender");
     if (s) {
-        dialog["lwt_real_render"] = node_bool(s->property("ENABLE_REAL").toBool());
+        dialog["lwt_real_render"] = node_int(s->property("ENABLE_REAL").toBool());
     }
     else  {
         dialog["lwt_real_render"] = settings["lwt_real_render"];
@@ -1496,7 +1518,7 @@ Settings_Dialog::comboBoxIconSizeCurrentIndexChanged(int index)
 void
 Settings_Dialog::checkBoxGeneralMdiBGUseLogoStateChanged(int checked)
 {
-    preview["general_mdi_bg_use_logo"] = node_bool(checked != 0);
+    preview["general_mdi_bg_use_logo"] = node_int(checked != 0);
     mdiArea->useBackgroundLogo(checked);
 }
 
@@ -1526,7 +1548,7 @@ Settings_Dialog::chooseGeneralMdiBackgroundLogo()
 void
 Settings_Dialog::checkBoxGeneralMdiBGUseTextureStateChanged(int checked)
 {
-    preview["general_mdi_bg_use_texture"] = node_bool(checked != 0);
+    preview["general_mdi_bg_use_texture"] = node_int(checked != 0);
     mdiArea->useBackgroundTexture(checked);
 }
 
@@ -1583,7 +1605,7 @@ void Settings_Dialog::currentGeneralMdiBackgroundColorChanged(const QColor& colo
 
 void Settings_Dialog::checkBoxShowScrollBarsStateChanged(int checked)
 {
-    preview["display_show_scrollbars"] = node_bool(checked != 0);
+    preview["display_show_scrollbars"] = node_int(checked != 0);
     _mainWin->updateAllViewScrollBars(checked);
 }
 
@@ -1899,7 +1921,7 @@ void Settings_Dialog::spinBoxPromptFontSizeValueChanged(int value)
 
 void Settings_Dialog::checkBoxPromptSaveHistoryAsHtmlStateChanged(int checked)
 {
-    dialog["prompt_save_history_as_html"] = node_bool(checked != 0);
+    dialog["prompt_save_history_as_html"] = node_int(checked != 0);
 }
 
 void Settings_Dialog::checkBoxCustomFilterStateChanged(int checked)
@@ -1934,7 +1956,7 @@ void Settings_Dialog::buttonCustomFilterClearAllClicked()
 
 void Settings_Dialog::checkBoxGridColorMatchCrossHairStateChanged(int checked)
 {
-    dialog["grid_color_match_crosshair"] = node_bool(checked != 0);
+    dialog["grid_color_match_crosshair"] = node_int(checked != 0);
     if (checked) {
         _mainWin->updateAllViewGridColors(get_uint(accept_, "display_crosshair_color"));
     }
@@ -1981,7 +2003,7 @@ void Settings_Dialog::currentGridColorChanged(const QColor& color)
 
 void Settings_Dialog::checkBoxGridLoadFromFileStateChanged(int checked)
 {
-    dialog["grid_load_from_file"] = node_bool(checked != 0);
+    dialog["grid_load_from_file"] = node_int(checked != 0);
 
     QObject* senderObj = sender();
     if (!senderObj) {
@@ -2090,7 +2112,7 @@ void Settings_Dialog::checkBoxGridCenterOnOriginStateChanged(int checked)
 
 void Settings_Dialog::checkBoxRulerShowOnLoadStateChanged(int checked)
 {
-    dialog["ruler_show_on_load"] = node_bool(checked != 0);
+    dialog["ruler_show_on_load"] = node_int(checked != 0);
 }
 
 void Settings_Dialog::comboBoxRulerMetricCurrentIndexChanged(int index)
@@ -2098,10 +2120,10 @@ void Settings_Dialog::comboBoxRulerMetricCurrentIndexChanged(int index)
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
     if (comboBox) {
         bool ok = 0;
-        dialog["ruler_metric"] = node_bool(comboBox->itemData(index).toBool());
+        dialog["ruler_metric"] = node_int(comboBox->itemData(index).toBool());
     }
     else {
-        dialog["ruler_metric"] = node_bool(true);
+        dialog["ruler_metric"] = node_int(true);
     }
 }
 
@@ -2168,7 +2190,7 @@ void Settings_Dialog::comboBoxQSnapLocatorColorCurrentIndexChanged(int index)
 
 void Settings_Dialog::checkBoxLwtShowLwtStateChanged(int checked)
 {
-    preview["lwt_show_lwt"] = node_bool(checked != 0);
+    preview["lwt_show_lwt"] = node_int(checked != 0);
     statusbar->toggle("LWT", checked);
 
     QObject* senderObj = sender();
@@ -2187,7 +2209,7 @@ void Settings_Dialog::checkBoxLwtShowLwtStateChanged(int checked)
 
 void Settings_Dialog::checkBoxLwtRealRenderStateChanged(int checked)
 {
-    preview["lwt_real_render"] = node_bool(checked != 0);
+    preview["lwt_real_render"] = node_int(checked != 0);
     statusbar->toggle("LWT", checked);
 }
 
