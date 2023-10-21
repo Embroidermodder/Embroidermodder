@@ -66,13 +66,10 @@ qt_add_executable(embroidermodder2 WIN32 MACOSX_BUNDLE
     ${CMAKE_SOURCE_DIR}/src/editor_table.c
     ${CMAKE_SOURCE_DIR}/src/object_data.c
 
-    ${CMAKE_SOURCE_DIR}/extern/tomlc99/toml.c
-
     ${CMAKE_SOURCE_DIR}/assets/assets.qrc
 )
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/extern/tomlc99
     ${CMAKE_SOURCE_DIR}/extern/libembroidery/src
     ${CMAKE_SOURCE_DIR}/extern/libembroidery/src/stb
     ${CMAKE_SOURCE_DIR}/extern/libembroidery/src/nanosvg

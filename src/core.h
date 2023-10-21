@@ -37,38 +37,16 @@
 #define MAX_EDITORS                            300
 
 /* Node types. */
-#define NULL_TYPE                                0
-#define STRING_TYPE                              1
-#define STRING_LIST_TYPE                         2
-#define REAL_TYPE                                3
-#define INT_TYPE                                 4
-#define BOOL_TYPE                                5
-#define FUNCTION_TYPE                            6
-#define VECTOR_TYPE                              7
-#define GROUP_BOX_TYPE                           8
-#define CHECK_BOX_TYPE                           9
-#define SPIN_BOX_TYPE                           10
-#define DOUBLE_SPIN_BOX_TYPE                    11
-#define LABEL_TYPE                              12
-#define COMBO_BOX_TYPE                          13
-#define LINE_EDIT_TYPE                          14
-#define TOOL_BUTTON_TYPE                        15
-#define DICTIONARY_TYPE                         16
-#define QACTION_TYPE                            17
-#define TOOLBAR_TYPE                            18
-#define MODE_TYPE                               19
-#define UNKNOWN_TYPE                            20
-
-/* CNode types. */
-#define CNODE_TYPE_NULL                          0
-#define CNODE_TYPE_STRING                        1
-#define CNODE_TYPE_REAL                          2
-#define CNODE_TYPE_INT                           3
-#define CNODE_TYPE_BOOL                          4
-#define CNODE_TYPE_FUNCTION                      5
-#define CNODE_TYPE_DICTIONARY                    6
-#define CNODE_TYPE_ARRAY                         7
-#define CNODE_TYPE_UNKNOWN                       8
+#define NODE_NULL                                0
+#define NODE_STRING                              1
+#define NODE_REAL                                2
+#define NODE_INT                                 3
+#define NODE_BOOL                                4
+#define NODE_FUNCTION                            5
+#define NODE_DICTIONARY                          6
+#define NODE_ARRAY                               7
+#define NODE_VECTOR                              8
+#define NODE_UNKNOWN                             9
 
 /* Actions.
  * These identifiers are subject to change since they are in alphabetical order
@@ -473,17 +451,20 @@ typedef struct Cvector_ {
 /*
  *
  */
-struct CNode_ {
-    struct CNode_ **leaves;
+struct Node_ {
+    struct Node_ **leaves;
     int32_t n_leaves;
     int32_t max_leaves;
     char key[MAX_STRING_LENGTH];
     char data[MAX_STRING_LENGTH];
+    char s[MAX_STRING_LENGTH];
+    int32_t i;
+    EmbReal r;
     Cvector *vec;
     int32_t type;
 };
 
-typedef struct CNode_ CNode;
+typedef struct Node_ Node;
 
 Cvector *cvector_create(size_t element_size);
 void cvector_append(Cvector *a, Cvector *b);
@@ -495,15 +476,15 @@ int string_array_length(const char *list[]);
 unsigned char validRGB(int r, int g, int b);
 int str_contains(char *s, char c);
 
-CNode *create_node(int type);
-int add_leaf(CNode *branch, CNode *leaf);
-void print_tree(CNode *branch, int indent);
-CNode *find_node(CNode *branch, char key[MAX_STRING_LENGTH]);
-void free_node(CNode *branch);
-CNode *create_and_add_leaf(CNode *parent, char *key, char *value);
-int insert_node(CNode *branch, char key[MAX_STRING_LENGTH], CNode *node);
+Node *create_node(int type);
+int add_leaf(Node *branch, Node *leaf);
+void print_tree(Node *branch, int indent);
+Node *find_node(Node *branch, char key[MAX_STRING_LENGTH]);
+void free_node(Node *branch);
+Node *create_and_add_leaf(Node *parent, char *key, char *value);
+int insert_node(Node *branch, char key[MAX_STRING_LENGTH], Node *node);
 
-extern CNode *root;
+extern Node *root;
 extern const ActionData action_table[MAX_ACTIONS];
 extern const LineEditData all_line_editors[MAX_EDITORS];
 extern const char *version;

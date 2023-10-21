@@ -32,16 +32,16 @@ QWizard* wizardTipOfTheDay;
 QLabel* labelTipOfTheDay;
 QCheckBox* checkBoxTipOfTheDay;
 
-Dictionary settings, dialog, config;
-std::unordered_map<String, StringList> scripts;
-std::unordered_map<String, QCheckBox *> checkBoxes;
-std::unordered_map<String, QAction*> actionHash;
-std::unordered_map<String, QToolBar*> toolbarHash;
-std::unordered_map<String, QMenu*> menuHash;
-std::unordered_map<String, QMenu*> subMenuHash;
-std::unordered_map<String, Dictionary> config_tables;
+std::unordered_map<std::string, Node> settings, dialog, config;
+std::unordered_map<std::string, std::vector<std::string>> scripts;
+std::unordered_map<std::string, QCheckBox *> checkBoxes;
+std::unordered_map<std::string, QAction*> actionHash;
+std::unordered_map<std::string, QToolBar*> toolbarHash;
+std::unordered_map<std::string, QMenu*> menuHash;
+std::unordered_map<std::string, QMenu*> subMenuHash;
+std::unordered_map<std::string, std::unordered_map<std::string, Node>> config_tables;
 
-StringList tokenize(std::string str, const char delim);
+std::vector<std::string> tokenize(std::string str, const char delim);
 std::string convert_args_to_type(
     std::string label,
     std::vector<std::string> args,
@@ -1189,7 +1189,7 @@ paste_selected_action(String args)
 String
 move_selected_action(String args)
 {
-    StringList arg_list = tokenize(args, ' ');
+    std::vector<std::string> arg_list = tokenize(args, ' ');
     EmbReal dx = std::stof(arg_list[0]);
     EmbReal dy = std::stof(arg_list[1]);
     View* gview = activeView();
@@ -1203,7 +1203,7 @@ move_selected_action(String args)
 String
 scale_selected_action(String args)
 {
-    StringList arg_list = tokenize(args, ' ');
+    std::vector<std::string> arg_list = tokenize(args, ' ');
     EmbReal x = std::stof(arg_list[0]);
     EmbReal y = std::stof(arg_list[1]);
     EmbReal factor = std::stof(arg_list[2]);
@@ -1481,9 +1481,9 @@ ACTION->setWhatsThis(statusTip);
  * \todo Finish All Commands ... <.<
  * .
  * If an action calls a script then there will be an entry in
- * config that is a StringList to be interpreted as a script.
+ * config that is a std::vector<std::string> to be interpreted as a script.
  *
- * An alias is another entry in config that is also a StringList
+ * An alias is another entry in config that is also a std::vector<std::string>
  * containing just the name of the command it aliases.
  *
  * icon: The stub used for the icon and the basic command.
@@ -1578,7 +1578,7 @@ run_script_file(String fname)
  *     ------------------------------------------------------------------
  */
 String
-run_script(StringList script)
+run_script(std::vector<std::string> script)
 {
     String output = "";
     for (int i=0; i<(int)script.size(); i++) {
@@ -1810,10 +1810,10 @@ actuator(String line)
      * args
      */
     case ACTION_ADD_GEOMETRY: {
-        StringList list = tokenize(args_, ' ');
+        std::vector<std::string> list = tokenize(args_, ' ');
         String command = list[0];
         args_ = args_.substr(std::min(command.size()+1, args_.size()));
-        StringList subcommands = {
+        std::vector<std::string> subcommands = {
             "arc",
             "circle",
             "ellipse",
@@ -2040,7 +2040,7 @@ actuator(String line)
         }
         QUndoStack* stack = gview->getUndoStack();
         if (stack) {
-            StringList arg_list = tokenize(args, ' ');
+            std::vector<std::string> arg_list = tokenize(args, ' ');
             EmbRect rect;
             rect.left = std::stof(arg_list[0]);
             rect.right = -std::stof(arg_list[1]);
@@ -2301,7 +2301,7 @@ actuator(String line)
 
     /* . */
     case ACTION_CALCULATE_ANGLE: {
-        StringList arg_list = tokenize(args_, ' ');
+        std::vector<std::string> arg_list = tokenize(args_, ' ');
         EmbReal x1 = std::stof(arg_list[0]);
         EmbReal y1 = std::stof(arg_list[1]);
         EmbReal x2 = std::stof(arg_list[2]);
@@ -2311,7 +2311,7 @@ actuator(String line)
 
     /* . */
     case ACTION_CALCULATE_DISTANCE: {
-        StringList arg_list = tokenize(args_, ' ');
+        std::vector<std::string> arg_list = tokenize(args_, ' ');
         EmbReal x1 = std::stof(arg_list[0]);
         EmbReal y1 = std::stof(arg_list[1]);
         EmbReal x2 = std::stof(arg_list[2]);
@@ -2509,7 +2509,7 @@ actuator(String line)
      */
     case ACTION_MIRROR_SELECTED: {
         if (gview) {
-            StringList arg_list = tokenize(args, ' ');
+            std::vector<std::string> arg_list = tokenize(args, ' ');
             EmbReal x1 = std::stof(arg_list[0]);
             EmbReal y1 = std::stof(arg_list[1]);
             EmbReal x2 = std::stof(arg_list[2]);
@@ -2628,7 +2628,7 @@ actuator(String line)
     }
 
     case ACTION_PERPENDICULAR_DISTANCE: {
-        StringList arg_list = tokenize(args, ' ');
+        std::vector<std::string> arg_list = tokenize(args, ' ');
         EmbReal px = std::stof(arg_list[0]);
         EmbReal py = std::stof(arg_list[1]);
         EmbReal x1 = std::stof(arg_list[2]);
@@ -2732,7 +2732,7 @@ actuator(String line)
      */
     case ACTION_ROTATE_SELECTED: {
         if (gview) {
-            StringList arg_list = tokenize(args, ' ');
+            std::vector<std::string> arg_list = tokenize(args, ' ');
             EmbReal x = std::stof(arg_list[0]);
             EmbReal y = std::stof(arg_list[1]);
             EmbReal rot = std::stof(arg_list[2]);
@@ -3335,7 +3335,7 @@ convert_args_to_type(
         }
         case 's': {
             Node entry;
-            entry.s = args[i];
+            strcpy(entry.s, args[i].c_str());
             a.push_back(entry);
             break;
         }
@@ -3351,7 +3351,9 @@ convert_args_to_type(
 String
 include_action(std::vector<Node> a)
 {
-    return run_script_file("commands/" + a[0].s);
+    std::string file("commands/");
+    file += a[0].s;
+    return run_script_file(file);
 }
 
 /*
@@ -3361,7 +3363,7 @@ String
 is_int_action(String args)
 {
     std::vector<Node> result;
-    StringList a = tokenize(args, ' ');
+    std::vector<std::string> a = tokenize(args, ' ');
     String error = convert_args_to_type("IsInt()", a, "i", result);
     if (error != "") {
         return "false";
@@ -3391,7 +3393,7 @@ MainWindow::recentMenuAboutToShow()
     QString recentValue;
     String recent_files_str = get_str(settings, "opensave_recent_list_of_files");
     /* doesn't account for quoting/escaped quotes */
-    StringList recent_files = tokenize(recent_files_str, ' ');
+    std::vector<std::string> recent_files = tokenize(recent_files_str, ' ');
     for (int i = 0; i < (int)recent_files.size(); ++i) {
         //If less than the max amount of entries add to menu
         if (i < get_int(settings, "opensave_recent_max_files")) {
@@ -3499,7 +3501,7 @@ MainWindow::openFile(bool recent, String recentFile)
 
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
-    StringList files;
+    std::vector<std::string> files;
     bool preview = get_bool(settings, "opensave_open_thumbnail");
     String openFilesPath = get_str(settings, "opensave_recent_directory");
 
@@ -3529,7 +3531,7 @@ MainWindow::openFile(bool recent, String recentFile)
  * filesToOpen
  */
 void
-MainWindow::openFilesSelected(StringList filesToOpen)
+MainWindow::openFilesSelected(std::vector<std::string> filesToOpen)
 {
     bool doOnce = true;
 
@@ -3562,7 +3564,7 @@ MainWindow::openFilesSelected(StringList filesToOpen)
             mdiWin->showMaximized();
             //Prevent duplicate entries in the recent files list
             /* \todo fix this
-            StringList list = get_str_list(settings, "opensave_recent_list_of_files");
+            std::vector<std::string> list = get_str_list(settings, "opensave_recent_list_of_files");
             if (!list.contains(filesToOpen[i], Qt::CaseInsensitive)) {
                 list.prepend(filesToOpen[i]);
             }

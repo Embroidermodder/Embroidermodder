@@ -31,8 +31,20 @@
 
 #include "embroidermodder.h"
 
-Node get_node(Dictionary d, std::string key);
+Node get_node(std::unordered_map<std::string, Node> d, std::string key);
 void wrong_type_message(int type);
+
+const char types[][MAX_STRING_LENGTH] = {
+	"NULL",
+	"STRING",
+	"STRING_LIST",
+	"REAL",
+	"INT",
+	"BOOL",
+	"FUNCTION",
+	"VECTOR",
+	"UNKNOWN"
+};
 
 /* Make the translation function global in scope. */
 QString
@@ -46,7 +58,7 @@ Node
 node_int(int32_t value)
 {
     Node node;
-    node.type = INT_TYPE;
+    node.type = NODE_INT;
     node.i = value;
     return node;
 }
@@ -56,7 +68,7 @@ Node
 node_uint(uint32_t value)
 {
     Node node;
-    node.type = INT_TYPE;
+    node.type = NODE_INT;
     node.i = (int32_t)value;
     return node;
 }
@@ -66,18 +78,18 @@ Node
 node_real(EmbReal value)
 {
     Node node;
-    node.type = REAL_TYPE;
+    node.type = NODE_REAL;
     node.r = value;
     return node;
 }
 
 /* Makes a node from a C string value. */
 Node
-node_cstr(char *value)
+node_cstr(const char *value)
 {
     Node node;
-    node.type = STRING_TYPE;
-    node.s = QString::fromUtf8(value).toStdString();
+    node.type = NODE_STRING;
+    strcpy(node.s, value);
     return node;
 }
 
@@ -85,29 +97,23 @@ node_cstr(char *value)
 Node
 node_str(String value)
 {
-    Node node;
-    node.type = STRING_TYPE;
-    node.s = value;
-    return node;
+    return node_cstr(value.c_str());
 }
 
 /* Makes a node from a QString value. */
 Node
 node_qstr(QString value)
 {
-    Node node;
-    node.type = STRING_TYPE;
-    node.s = value.toStdString();
-    return node;
+    return node_cstr(value.toStdString().c_str());
 }
 
 /* . */
 Node
-get_node(Dictionary d, std::string key)
+get_node(std::unordered_map<std::string, Node> d, std::string key)
 {
     char error_msg[MAX_STRING_LENGTH];
     Node n = {
-        .type = NULL_TYPE
+        .type = NODE_NULL
     };
     auto iter = d.find(key);
     if (iter != d.end()) {
@@ -130,85 +136,74 @@ get_node(Dictionary d, std::string key)
 void
 wrong_type_message(Node n, std::string key, int type)
 {
-    char types[][MAX_STRING_LENGTH] = {
-        "NULL",
-        "STRING",
-        "STRING_LIST",
-        "REAL",
-        "INT",
-        "BOOL",
-        "FUNCTION",
-        "VECTOR",
-        "UNKNOWN"
-    };
-    if (n.type != NULL_TYPE) {
+    if (n.type != NODE_NULL) {
         char error_str[MAX_STRING_LENGTH];
         sprintf(error_str, "ERROR: setting with key %s is not of %s type.", key.c_str(), types[type]);
         debug_message(error_str);
     }
 }
 
-/* Get a boolean value from a Dictionary with the given key. */
+/* Get a boolean value from a std::unordered_map<std::string, Node> with the given key. */
 bool
-get_bool(Dictionary d, std::string key)
+get_bool(std::unordered_map<std::string, Node> d, std::string key)
 {
     Node n = get_node(d, key);
-    if (n.type == BOOL_TYPE) {
+    if (n.type == NODE_BOOL) {
         if (n.i) {
             return true;
         }
         return false;
     }
-    wrong_type_message(n, key, BOOL_TYPE);
+    wrong_type_message(n, key, NODE_BOOL);
     return true;
 }
 
-/* Get a 32-bit signed integer value from a Dictionary with the given key. */
+/* Get a 32-bit signed integer value from a std::unordered_map<std::string, Node> with the given key. */
 int
-get_int(Dictionary d, std::string key)
+get_int(std::unordered_map<std::string, Node> d, std::string key)
 {
     Node n = get_node(d, key);
-    if (n.type == INT_TYPE) {
+    if (n.type == NODE_INT) {
         return n.i;
     }
-    wrong_type_message(n, key, INT_TYPE);
+    wrong_type_message(n, key, NODE_INT);
     return 0;
 }
 
-/* Get the 32-bit unsigned integer from the Dictionary d with the given key. */
+/* Get the 32-bit unsigned integer from the std::unordered_map<std::string, Node> d with the given key. */
 uint32_t
-get_uint(Dictionary d, std::string key)
+get_uint(std::unordered_map<std::string, Node> d, std::string key)
 {
     return (uint32_t)get_int(d, key);
 }
 
-/* Get the 32-bit float EmbReal from the Dictionary d with the given key. */
+/* Get the 32-bit float EmbReal from the std::unordered_map<std::string, Node> d with the given key. */
 EmbReal
-get_real(Dictionary d, std::string key)
+get_real(std::unordered_map<std::string, Node> d, std::string key)
 {
     Node n = get_node(d, key);
-    if (n.type == REAL_TYPE) {
+    if (n.type == NODE_REAL) {
         return n.r;
     }
-    wrong_type_message(n, key, REAL_TYPE);
+    wrong_type_message(n, key, NODE_REAL);
     return 0.0f;
 }
 
-/* Get std::string from Dictionary. */
+/* Get std::string from std::unordered_map<std::string, Node>. */
 String
-get_str(Dictionary d, std::string key)
+get_str(std::unordered_map<std::string, Node> d, std::string key)
 {
     Node n = get_node(d, key);
-    if (n.type == STRING_TYPE) {
+    if (n.type == NODE_STRING) {
         return n.s;
     }
-    wrong_type_message(n, key, STRING_TYPE);
+    wrong_type_message(n, key, NODE_STRING);
     return "";
 }
 
-/* Get QString from Dictionary. */
+/* Get QString from std::unordered_map<std::string, Node>. */
 QString
-get_qstr(Dictionary d, std::string key)
+get_qstr(std::unordered_map<std::string, Node> d, std::string key)
 {
     return QString::fromStdString(get_str(d, key));
 }
@@ -401,7 +396,7 @@ set_visibility(QObject* parent, const char *key, bool visibility)
  * This function should take a parent object to build...
  */
 void
-make_ui_element(Dictionary description)
+make_ui_element(std::unordered_map<std::string, Node> description)
 {
     std::string element_type = get_str(description, "type");
     if (element_type == "groupBox") {

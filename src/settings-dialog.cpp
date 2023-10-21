@@ -23,12 +23,12 @@
  * These copies of the settings struct are for restoring the state if
  * the user doesn't want to accept their changes in the settings dialog.
  */
-Dictionary preview, accept_;
+std::unordered_map<std::string, Node> preview, accept_;
 
 /**
  * .
  */
-StringList extensions = {
+std::vector<std::string> extensions = {
     "100", "10o", "ART", "BMC", "BRO",
     "CND", "COL", "CSD", "CSV", "DAT",
     "DEM", "DSB", "DST", "DSZ", "DXF",
@@ -42,7 +42,7 @@ StringList extensions = {
     "VP3", "XXX", "ZSK"
 };
 
-StringList general_props = {
+std::vector<std::string> general_props = {
     "general_icon_theme",
     "general_icon_size",
     "general_mdi_bg_use_logo",
@@ -54,7 +54,7 @@ StringList general_props = {
     "general_tip_of_the_day"
 };
 
-StringList display_props = {
+std::vector<std::string> display_props = {
     "display_use_opengl",
     "display_renderhint_aa",
     "display_renderhint_text_aa",
@@ -74,7 +74,7 @@ StringList display_props = {
     "display_zoomscale_out"
 };
 
-StringList prompt_props = {
+std::vector<std::string> prompt_props = {
     "prompt_text_color",
     "prompt_background_color",
     "prompt_font_family",
@@ -83,7 +83,7 @@ StringList prompt_props = {
     "prompt_save_history_as_html"
 };
 
-StringList quick_snap_props = {
+std::vector<std::string> quick_snap_props = {
     "quicksnap_endpoint",
     "quicksnap_midpoint",
     "quicksnap_center",
@@ -102,13 +102,13 @@ StringList quick_snap_props = {
     "quicksnap_aperture_size"
 };
 
-StringList opensave_props = {
+std::vector<std::string> opensave_props = {
     "opensave_custom_filter"
 };
 
 /* . */
 void
-make_editing_copy(StringList props)
+make_editing_copy(std::vector<std::string> props)
 {
     for (int i=0; i<(int)props.size(); i++) {
         String s = props[i];
@@ -240,13 +240,13 @@ write_settings(void)
     for (auto iter = settings.begin(); iter != settings.end(); iter++) {
         file << iter->first << "=";
         switch (iter->second.type) {
-        case INT_TYPE:
+        case NODE_INT:
             file << iter->second.i;
             break;
-        case REAL_TYPE:
+        case NODE_REAL:
             file << iter->second.r;
             break;
-        case STRING_TYPE:
+        case NODE_STRING:
             file << "\"" << iter->second.s << "\"";
             break;
         default:

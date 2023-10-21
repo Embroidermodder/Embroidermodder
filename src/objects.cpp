@@ -3593,7 +3593,7 @@ void
 Geometry::script_main(void)
 {
 	/*
-    StringList script = {"end"};
+    std::vector<std::string> script = {"end"};
     switch (mode) {
 
     case OBJ_TYPE_CIRCLE: {
@@ -4533,7 +4533,7 @@ Geometry::locate_point_context(String str)
 void
 Geometry::locate_point_prompt(String args)
 {
-    StringList strList = tokenize(args, ',');
+    std::vector<std::string> strList = tokenize(args, ',');
     if (std::isnan(strList[0]) || std::isnan(strList[1])) {
         alert(tr("Invalid point."));
         actuator("set-prompt-prefix-tr Specify point: ");

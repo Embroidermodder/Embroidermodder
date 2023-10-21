@@ -43,16 +43,7 @@ class UndoEditor;
 class MainWindow;
 class Geometry;
 
-typedef struct Node_ {
-    std::string s;
-    EmbReal r;
-    int32_t i;
-    int type;
-} Node;
-
 typedef std::string String;
-typedef std::vector<std::string> StringList;
-typedef std::unordered_map<std::string, Node> Dictionary;
 
 /* Global variables
  * ----------------
@@ -73,7 +64,7 @@ extern StatusBar* statusbar;
  * complete copy of the settings for the purpose of restoring them if the user
  * cancels out of the Settings Dialog.
  */
-extern Dictionary settings, dialog, config;
+extern std::unordered_map<std::string, Node> settings, dialog, config;
 
 /* Functions in the global namespace
  * ---------------------------------
@@ -87,7 +78,7 @@ bool contains(std::vector<std::string>, std::string);
 bool validFileFormat(std::string fileName);
 QString fileExtension(std::string fileName);
 
-void add_polyline(QPainterPath p, String rubberMode);
+void add_polyline(QPainterPath p, std::string rubberMode);
 
 View *activeView(void);
 QGraphicsScene* activeScene();
@@ -95,7 +86,7 @@ QGraphicsScene* activeScene();
 void debug_message(std::string msg);
 void set_enabled(QObject *parent, const char *key, bool enabled);
 void set_visibility(QObject *parent, const char *name, bool visibility);
-QPainterPath add_to_path(QPainterPath path, EmbVector scale, String s);
+QPainterPath add_to_path(QPainterPath path, EmbVector scale, std::string s);
 
 String actuator(std::string line);
 String run_script_file(std::string fname);
@@ -107,17 +98,17 @@ EmbVector to_EmbVector(QPointF a);
 std::vector<QGraphicsItem*> to_vector(QList<QGraphicsItem*> list);
 QList<QGraphicsItem*> to_qlist(std::vector<QGraphicsItem*> list);
 
-StringList to_string_vector(QStringList list);
+std::vector<std::string> to_string_vector(QStringList list);
 
 /* Interface creation functions.
  */
 void make_ui_element(std::string description);
-QDoubleSpinBox *make_spinbox(QGroupBox *gb, String d,
-    QString object_name, EmbReal single_step, EmbReal lower, EmbReal upper, String key);
-QCheckBox *make_checkbox(QGroupBox *gb, String d,
-    const char *label, const char *icon, String key);
+QDoubleSpinBox *make_spinbox(QGroupBox *gb, std::string d,
+    QString object_name, EmbReal single_step, EmbReal lower, EmbReal upper, std::string key);
+QCheckBox *make_checkbox(QGroupBox *gb, std::string d,
+    const char *label, const char *icon, std::string key);
 
-/* Dictionary management functions.
+/* std::unordered_map<std::string, Node> management functions.
  */
 Node node_bool(bool value);
 Node node_int(int32_t value);
@@ -125,15 +116,13 @@ Node node_uint(uint32_t value);
 Node node_real(EmbReal value);
 Node node_str(std::string value);
 Node node_qstr(QString value);
-Node node_str_list(std::vector<std::string> value);
 
-bool get_bool(Dictionary d, String key);
-int32_t get_int(Dictionary d, String key);
-uint32_t get_uint(Dictionary d, String key);
-EmbReal get_real(Dictionary d, String key);
-std::string get_str(Dictionary d, String key);
-QString get_qstr(Dictionary d, String key);
-StringList get_str_list(Dictionary d, String key);
+bool get_bool(std::unordered_map<std::string, Node> d, std::string key);
+int32_t get_int(std::unordered_map<std::string, Node> d, std::string key);
+uint32_t get_uint(std::unordered_map<std::string, Node> d, std::string key);
+EmbReal get_real(std::unordered_map<std::string, Node> d, std::string key);
+std::string get_str(std::unordered_map<std::string, Node> d, std::string key);
+QString get_qstr(std::unordered_map<std::string, Node> d, std::string key);
 
 bool save_current_file(std::string fileName);
 
@@ -149,7 +138,7 @@ int test_geometry(Geometry *g);
 class Geometry : public QGraphicsPathItem
 {
 public:
-    Dictionary properties;
+    std::unordered_map<std::string, Node> properties;
 
     EmbVector positions[POINTS_PER_BASE_OBJECT];
     EmbReal real[REALS_PER_BASE_OBJECT];
@@ -159,7 +148,7 @@ public:
     QPen objPen;
     QPen lwtPen;
     QLineF objLine;
-    String objRubberMode = "OBJ_RUBBER_OFF";
+    std::string objRubberMode = "OBJ_RUBBER_OFF";
     QHash<QString, QPointF> objRubberPoints;
     QHash<QString, QString> objRubberTexts;
     int64_t objID;
@@ -241,7 +230,7 @@ public:
     QPointF objectEndPoint();
 
     QRectF rect();
-    void circle_click(Dictionary global, EmbVector v);
+    void circle_click(std::unordered_map<std::string, Node> global, EmbVector v);
     EmbReal objectWidth();
     EmbReal objectHeight();
     EmbReal objectRadiusMajor();
@@ -740,7 +729,7 @@ public slots:
     void tipOfTheDay(void);
 
     void newFile();
-    void openFile(bool recent = false, String recentFile = "");
+    void openFile(bool recent = false, std::string recentFile = "");
     void openFilesSelected(std::vector<std::string> files);
     void openrecentfile();
     void savefile();
@@ -932,7 +921,7 @@ public:
     void updateLineEditStrIfVaries(QLineEdit* lineEdit, QString str);
     void updateLineEditNumIfVaries(QLineEdit* lineEdit, EmbReal num, bool useAnglePrecision);
     void updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, QString str);
-    void updateComboBoxStrIfVaries(QComboBox* comboBox, QString str, StringList strList);
+    void updateComboBoxStrIfVaries(QComboBox* comboBox, QString str, std::vector<std::string> strList);
     void updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, bool yesOrNoText);
 
     QSignalMapper* signalMapper;
@@ -1041,9 +1030,9 @@ public:
         EmbReal single_step,
         EmbReal lower,
         EmbReal upper,
-        String,
+        std::string,
         int row);
-    QCheckBox* create_checkbox(QGroupBox *groupbox, String label);
+    QCheckBox* create_checkbox(QGroupBox *groupbox, std::string label);
 
 private slots:
     void comboBoxIconSizeCurrentIndexChanged(int);
@@ -1119,7 +1108,7 @@ public:
     std::unordered_map<std::string, QToolButton*> buttons;
     QLabel* statusBarMouseCoord;
     void setMouseCoord(EmbReal x, EmbReal y);
-    void context_menu_action(QToolButton *button, const char *icon, const char *label, QMenu *menu, String setting_page);
+    void context_menu_action(QToolButton *button, const char *icon, const char *label, QMenu *menu, std::string setting_page);
     void toggle(std::string key, bool on);
     void context_menu_event(QContextMenuEvent *event, QToolButton *button);
 };
@@ -1177,7 +1166,7 @@ public:
 
     Geometry* object;
     View* gview;
-    String command;
+    std::string command;
     EmbVector delta;
     EmbVector pivot;
     QPointF before;
@@ -1202,7 +1191,7 @@ public:
     View(QGraphicsScene* theScene, QWidget* parent);
     ~View();
 
-    Dictionary state;
+    std::unordered_map<std::string, Node> state;
 
     std::vector<QGraphicsItem*> selected_items();
 
@@ -1326,7 +1315,7 @@ public slots:
     void createGrid(QString gridType);
     void setRulerColor(QRgb color);
 
-    void previewOn(std::string clone, String mode, EmbReal x, EmbReal y, EmbReal data);
+    void previewOn(std::string clone, std::string mode, EmbReal x, EmbReal y, EmbReal data);
     void previewOff();
 
     bool allowRubber();
@@ -1352,7 +1341,7 @@ protected:
 private:
     QHash<int64_t, QGraphicsItem*> hashDeletedObjects;
 
-    StringList spareRubberList;
+    std::vector<std::string> spareRubberList;
 
     void createGridRect();
     void createGridPolar();
@@ -1370,7 +1359,7 @@ private:
     QGraphicsItemGroup* previewObjectItemGroup;
     QPointF previewPoint;
     EmbReal previewData;
-    String previewMode;
+    std::string previewMode;
 
     std::vector<QGraphicsItem*> createObjectList(std::vector<QGraphicsItem*> list);
     QPointF cutCopyMousePoint;

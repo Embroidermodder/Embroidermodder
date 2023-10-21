@@ -24,24 +24,24 @@ QString fieldNoText;
 QString fieldOnText;
 QString fieldOffText;
 
-std::unordered_map<String, QGroupBox *> groupBoxes;
-std::unordered_map<String, QLineEdit *> lineEdits;
-std::unordered_map<String, QToolButton *> toolButtons;
-std::unordered_map<String, QSpinBox *> spinBoxes;
-std::unordered_map<String, QDoubleSpinBox *> doubleSpinBoxes;
-std::unordered_map<String, QComboBox *> comboBoxes;
+std::unordered_map<std::string, QGroupBox *> groupBoxes;
+std::unordered_map<std::string, QLineEdit *> lineEdits;
+std::unordered_map<std::string, QToolButton *> toolButtons;
+std::unordered_map<std::string, QSpinBox *> spinBoxes;
+std::unordered_map<std::string, QDoubleSpinBox *> doubleSpinBoxes;
+std::unordered_map<std::string, QComboBox *> comboBoxes;
 
 QFontComboBox* comboBoxTextSingleFont;
-std::unordered_map<String, Dictionary> group_box_data;
+std::unordered_map<std::string, std::unordered_map<std::string, Node>> group_box_data;
 
 /* . */
-std::vector<Dictionary>
+std::vector<std::unordered_map<std::string, Node>>
 load_group_box_data_from_table(String key)
 {
-    std::vector<Dictionary> group_box;
+    std::vector<std::unordered_map<std::string, Node>> group_box;
     for (int i=0; strcmp(all_line_editors[i].key, "END"); i++) {
         if (!strcmp(all_line_editors[i].key, key.c_str())) {
-            Dictionary data;
+            std::unordered_map<std::string, Node> data;
             data["key"] = node_str(all_line_editors[i].key);
             data["icon_name"] = node_str(all_line_editors[i].icon);
             data["label"] = node_str(all_line_editors[i].label);
@@ -507,7 +507,7 @@ PropertyEditor::updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, QStri
 
 /* . */
 void
-PropertyEditor::updateComboBoxStrIfVaries(QComboBox* comboBox, QString str, StringList strList)
+PropertyEditor::updateComboBoxStrIfVaries(QComboBox* comboBox, QString str, std::vector<std::string> strList)
 {
     fieldOldText = comboBox->currentText();
     fieldNewText = str;
@@ -616,7 +616,7 @@ void PropertyEditor::clearAllFields()
 void
 PropertyEditor::createGroupBox(String group_box_key, const char *title)
 {
-    std::vector<Dictionary> data = load_group_box_data_from_table(group_box_key);
+    std::vector<std::unordered_map<std::string, Node>> data = load_group_box_data_from_table(group_box_key);
 
     groupBoxes[group_box_key] = new QGroupBox(tr(title), this);
 
@@ -631,16 +631,16 @@ PropertyEditor::createGroupBox(String group_box_key, const char *title)
 
     QFormLayout* formLayout = new QFormLayout(this);
     for (int i=0; i<data.size(); i++) {
-        Dictionary gbd = data[i];
+        std::unordered_map<std::string, Node> gbd = data[i];
         String key(gbd["key"].s);
-        toolButtons[key] = createToolButton(gbd["icon_name"].s.c_str(), tr(gbd["label"].s.c_str()));
+        toolButtons[key] = createToolButton(gbd["icon_name"].s, tr(gbd["label"].s));
         if (gbd["type"].s == "double") {
-            if (gbd["map_signal"].s.size() == 0) {
-                lineEdits[key] = createLineEdit(gbd["type"].s.c_str(), false);
+            if (strlen(gbd["map_signal"].s) == 0) {
+                lineEdits[key] = createLineEdit(gbd["type"].s, false);
             }
             else {
-                lineEdits[key] = createLineEdit(gbd["type"].s.c_str(), true);
-                mapSignal(lineEdits[key], gbd["map_signal"].s.c_str(), group_box_type);
+                lineEdits[key] = createLineEdit(gbd["type"].s, true);
+                mapSignal(lineEdits[key], gbd["map_signal"].s, group_box_type);
             }
             formLayout->addRow(toolButtons[key], lineEdits[key]);
         }

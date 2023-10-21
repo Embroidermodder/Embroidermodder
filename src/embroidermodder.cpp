@@ -55,7 +55,7 @@ main(int argc, char* argv[])
     app.setApplicationName("Embroidermodder");
     app.setApplicationVersion(version);
 
-    StringList filesToOpen;
+    std::vector<std::string> filesToOpen;
 
     for (int i = 1; i < argc; i++) {
         String arg(argv[i]);

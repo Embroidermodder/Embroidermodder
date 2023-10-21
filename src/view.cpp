@@ -146,7 +146,7 @@ View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, 
     bool text_style_overline;
     bool text_style_strikeout;
     String filename;
-    StringList undo_history;
+    std::vector<std::string> undo_history;
     int selected[100];
     int n_selected;
     int rubber_mode;
@@ -292,7 +292,7 @@ View::vulcanizeObject(Geometry* obj)
 }
 
 bool
-contains(StringList list, String entry)
+contains(std::vector<std::string> list, String entry)
 {
     return std::count(list.begin(), list.end(), entry) != 0;
 }
@@ -1082,7 +1082,7 @@ View::createRulerTextPath(EmbVector position, QString str, float height)
     scale.x = height;
     scale.y = height;
 
-    Dictionary paths;
+    std::unordered_map<std::string, Node> paths;
     paths["0"] = node_str("M 0.00 -0.75 L 0.00 -0.25 A 0.00 -0.50 0.50 0.50 180.00, 180.00 L 0.50 -0.75 A 0.00 -1.00 0.50 0.50 0.00, 180.00");
     paths["1"] = node_str("M 0.05 0.0 L 0.45 0.0 M 0.0 -0.75 L 0.25 -1.0 L 0.25 0.0");
     paths["2"] = node_str("M 0.0 -0.75 A 0.00 -1.00 0.50 0.50 180.00 -216.87 L 0.0 0.0 L 0.5 0.0");

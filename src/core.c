@@ -29,7 +29,7 @@ const char *version = "2.0.0-alpha4";
 /* So we can find any given piece of data in our UI for the functions to act
  * on they all lie in a tree that uses C-style tree walking during runtime.
  */
-CNode *root;
+Node *root;
 
 const char *details_labels[] = {
     "Total Stitches:",
@@ -735,13 +735,13 @@ validRGB(int r, int g, int b)
 
 /*
  */
-CNode *
+Node *
 create_node(int type)
 {
-    CNode *new_node = (CNode*)malloc(sizeof(CNode));
+    Node *new_node = (Node*)malloc(sizeof(Node));
     new_node->n_leaves = 0;
     new_node->max_leaves = 10;
-    new_node->leaves = (CNode**)malloc(new_node->max_leaves * sizeof(CNode *));
+    new_node->leaves = (Node**)malloc(new_node->max_leaves * sizeof(Node *));
     new_node->type = type;
     return new_node;
 }
@@ -750,12 +750,12 @@ create_node(int type)
  *
  */
 int
-add_leaf(CNode *branch, CNode *leaf)
+add_leaf(Node *branch, Node *leaf)
 {
     if (branch->n_leaves >= branch->max_leaves) {
         branch->max_leaves += 100;
         branch->leaves = realloc(branch->leaves,
-            branch->max_leaves*sizeof(CNode*));
+            branch->max_leaves*sizeof(Node*));
     }
     branch->leaves[branch->n_leaves] = leaf;
     branch->n_leaves++;
@@ -769,7 +769,7 @@ add_leaf(CNode *branch, CNode *leaf)
  * To remove_leaf, just call this on a leaf node rather than a larger branch.
  */
 void
-free_node(CNode *branch)
+free_node(Node *branch)
 {
     if (branch->n_leaves > 0) {
         branch->n_leaves--;
@@ -805,10 +805,10 @@ str_contains(char *s, char c)
  *     root["setting"]["font_size"]
  *
  */
-CNode *
-find_node(CNode *branch, char key[MAX_STRING_LENGTH])
+Node *
+find_node(Node *branch, char key[MAX_STRING_LENGTH])
 {
-    if (branch->type == CNODE_TYPE_DICTIONARY) {
+    if (branch->type == NODE_DICTIONARY) {
         int pos = str_contains(key, '.');
         if (pos >= 0) {
             int i;
@@ -840,9 +840,9 @@ find_node(CNode *branch, char key[MAX_STRING_LENGTH])
  * FIXME
  */
 int
-insert_node(CNode *branch, char key[MAX_STRING_LENGTH], CNode *node)
+insert_node(Node *branch, char key[MAX_STRING_LENGTH], Node *node)
 {
-    if (branch->type == CNODE_TYPE_DICTIONARY) {
+    if (branch->type == NODE_DICTIONARY) {
         int pos = str_contains(key, '.');
         if (pos >= 0) {
             int i;
@@ -871,18 +871,18 @@ insert_node(CNode *branch, char key[MAX_STRING_LENGTH], CNode *node)
  * Print out all the data for the tree for debugging.
  */
 void
-print_tree(CNode *branch, int indent)
+print_tree(Node *branch, int indent)
 {
     int j;
     for (j=0; j<indent; j++) {
         printf("|");
     }
     switch (branch->type) {
-    case CNODE_TYPE_STRING: {
+    case NODE_STRING: {
         printf("-%s: %s\n", branch->key, branch->data);
         break;
     }
-    case CNODE_TYPE_DICTIONARY: {
+    case NODE_DICTIONARY: {
         int i;
         printf("-dictionary %s\n", branch->key);
         for (i=0; i<branch->n_leaves; i++) {
@@ -897,20 +897,20 @@ print_tree(CNode *branch, int indent)
     }
 }
 
-/* CNode needs to check for duplicate keys.
+/* Node needs to check for duplicate keys.
  */
-CNode *
-create_and_add_leaf(CNode *parent, char *key, char *value)
+Node *
+create_and_add_leaf(Node *parent, char *key, char *value)
 {
-    CNode *n = (CNode*)malloc(sizeof(CNode));
+    Node *n = (Node*)malloc(sizeof(Node));
     n->n_leaves = 0;
     n->max_leaves = 10;
-    n->leaves = (CNode**)malloc(n->max_leaves * sizeof(CNode *));
+    n->leaves = (Node**)malloc(n->max_leaves * sizeof(Node *));
     if (!strcmp(value, "{}")) {
-        n->type = CNODE_TYPE_DICTIONARY;
+        n->type = NODE_DICTIONARY;
     }
     else {
-        n->type = CNODE_TYPE_STRING;
+        n->type = NODE_STRING;
     }
     strncpy(n->key, key, MAX_STRING_LENGTH);
     strncpy(n->data, value, MAX_STRING_LENGTH);
