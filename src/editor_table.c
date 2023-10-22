@@ -260,7 +260,7 @@ const LineEditData all_line_editors[MAX_EDITORS] = {
         .map_signal = ""
     },
     {
-		.groupbox = "geometry_dim_leader",
+        .groupbox = "geometry_dim_leader",
         .key = "dim-linear-x",
         .icon = "blank",
         .label = "Position X",

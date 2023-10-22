@@ -73,14 +73,14 @@ LayerManager::~LayerManager()
 /* Add layer to Layer Manager. */
 void
 LayerManager::addLayer(
-	QString name,
-	const bool visible,
-	const bool frozen,
-	const EmbReal zValue,
-	const QRgb color,
-	QString lineType,
-	QString lineWeight,
-	const bool print)
+    QString name,
+    const bool visible,
+    const bool frozen,
+    const EmbReal zValue,
+    const QRgb color,
+    QString lineType,
+    QString lineWeight,
+    const bool print)
 {
     layerModel->insertRow(0);
     layerModel->setData(layerModel->index(0, 0), name);

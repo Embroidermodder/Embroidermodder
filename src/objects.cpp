@@ -14,7 +14,7 @@
  *
  * For additional tips on our style see the linux Kernel style:
  *     https://www.kernel.org/doc/Documentation/process/coding-style.rst
- * 
+ *
  */
 
 #include "embroidermodder.h"
@@ -71,7 +71,7 @@ circle_init_script = [
 dolphin_init_script = [
     "init",
     "clear-selection",
-    "set mode DOLPHIN_MODE_NUM_POINTS", 
+    "set mode DOLPHIN_MODE_NUM_POINTS",
     "# FIX SELECTING CURRENT OBJECT",
     "select this",
     "set-selected numPoints 512",
@@ -304,11 +304,11 @@ Geometry::init(void)
     properties["click_script"] = node_str("");
     properties["context_script"] = node_str("");
 
-	/*
+    /*
     if (get_str(properties, "init_script") != "") {
         run_script(scripts[get_str(properties, "init_script")]);
     }
-	*/
+    */
 }
 
 /* Initialise arc object.
@@ -3592,7 +3592,7 @@ Geometry::subPathList()
 void
 Geometry::script_main(void)
 {
-	/*
+    /*
     std::vector<std::string> script = {"end"};
     switch (mode) {
 

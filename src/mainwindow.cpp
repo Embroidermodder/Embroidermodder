@@ -58,7 +58,7 @@ create_menu(std::string menu, const char **def, bool topLevel)
     }
     int n = string_array_length((const char**)def);
     char msg[1024];
-	sprintf(msg, "%s %d\n", menu.c_str(), n);
+    sprintf(msg, "%s %d\n", menu.c_str(), n);
     debug_message(msg);
 
     for (int i=0; i<n; i++) {
@@ -316,7 +316,7 @@ MainWindow::createAllToolbars()
     toolbarHash["prompt"]->addWidget(prompt);
     toolbarHash["prompt"]->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
     connect(toolbarHash["prompt"], SIGNAL(topLevelChanged(bool)),
-		prompt, SLOT(floatingChanged(bool)));
+        prompt, SLOT(floatingChanged(bool)));
 
     // Horizontal
     toolbarHash["view"]->setOrientation(Qt::Horizontal);
@@ -1500,7 +1500,7 @@ MainWindow::createAllActions()
 
     for (int i=0; strcmp(action_table[i].command, "END"); i++) {
         ActionData a = action_table[i];
- 
+
         std::string icon_s(a.icon);
         std::string tooltip(a.tooltip);
         std::string statustip(a.statustip);
@@ -1619,7 +1619,7 @@ break_up_arguments(const char *line, char arg_list[MAX_ARGS][MAX_STRING_LENGTH])
             arg_pos = 0;
         }
     }
-	arg_list[n_args][arg_pos] = 0;
+    arg_list[n_args][arg_pos] = 0;
     return n_args;
 }
 

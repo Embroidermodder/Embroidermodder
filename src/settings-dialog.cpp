@@ -167,19 +167,19 @@ read_settings(void)
                 continue;
             }
             config[line][line_pos] = c;
-			line_pos++;
+            line_pos++;
             if (c != '\n') {
                 continue;
             }
-			config[line][line_pos] = 0;
-			line++;
-			line_pos = 0;
-			if (line == MAX_SETTINGS) {
-				puts("WARNING too many lines in the settings file.");
-				break;
-			}
+            config[line][line_pos] = 0;
+            line++;
+            line_pos = 0;
+            if (line == MAX_SETTINGS) {
+                puts("WARNING too many lines in the settings file.");
+                break;
+            }
         }
-		config[line][line_pos] = 0;
+        config[line][line_pos] = 0;
         line++;
         for (; line<MAX_SETTINGS; line++) {
             config[line][0] = 0;
@@ -193,19 +193,19 @@ read_settings(void)
             continue;
         }
         config[line][eq_pos] = 0;
-		std::string key(config[line]);
-		std::string value(config[line]+eq_pos+1);
+        std::string key(config[line]);
+        std::string value(config[line]+eq_pos+1);
         char c = value.c_str()[0];
         if (c >= '0' && c <= '9') {
             if (str_contains(config[line]+eq_pos+1, '.') >= 0) {
-    			settings[key] = node_real(std::stof(value));
+                settings[key] = node_real(std::stof(value));
             }
             else {
-    			settings[key] = node_int(std::stoi(value));
+                settings[key] = node_int(std::stoi(value));
             }
         }
         else {
-    		settings[key] = node_str(value);
+            settings[key] = node_str(value);
         }
     }
 

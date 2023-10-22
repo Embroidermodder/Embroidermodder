@@ -35,15 +35,15 @@ Node get_node(std::unordered_map<std::string, Node> d, std::string key);
 void wrong_type_message(int type);
 
 const char types[][MAX_STRING_LENGTH] = {
-	"NULL",
-	"STRING",
-	"STRING_LIST",
-	"REAL",
-	"INT",
-	"BOOL",
-	"FUNCTION",
-	"VECTOR",
-	"UNKNOWN"
+    "NULL",
+    "STRING",
+    "STRING_LIST",
+    "REAL",
+    "INT",
+    "BOOL",
+    "FUNCTION",
+    "VECTOR",
+    "UNKNOWN"
 };
 
 /* Make the translation function global in scope. */

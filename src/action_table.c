@@ -1072,10 +1072,10 @@ const ActionData action_table[MAX_ACTIONS] = {
         .undo = 1
     },
     /* index 82
-		menu = "Draw",
-		toolbar = "Draw",
-		alias = "PO POINT",
-		*/
+        menu = "Draw",
+        toolbar = "Draw",
+        alias = "PO POINT",
+        */
     {
         .icon = "addpoint",
         .command = "addpoint",
@@ -1089,11 +1089,11 @@ const ActionData action_table[MAX_ACTIONS] = {
     },
     /* index 83 */
     {
-		/*
-		menu = "Draw",
-		toolbar = "Draw",
-		alias = "POLY POLYGON",
-		*/
+        /*
+        menu = "Draw",
+        toolbar = "Draw",
+        alias = "POLY POLYGON",
+        */
         .icon = "add-polygon",
         .command = "add-polygon",
         .tooltip = "Pol&ygon",
@@ -1106,11 +1106,11 @@ const ActionData action_table[MAX_ACTIONS] = {
     },
     /* index 84 */
     {
-		/*
-		.menu = "Draw",
-		.toolbar = "Draw",
-		.alias = "PL PLINE POLYLINE",
-		*/
+        /*
+        .menu = "Draw",
+        .toolbar = "Draw",
+        .alias = "PL PLINE POLYLINE",
+        */
         .icon = "add-polyline",
         .command = "add-polyline",
         .tooltip = "&Polyline",
@@ -1123,11 +1123,11 @@ const ActionData action_table[MAX_ACTIONS] = {
     },
     /* index 85 */
     {
-		/*
-		menu = "Dimension",
-		toolbar = "Dimension",
-		alias = "LE LEADER QLEADER QUICKLEADER",
-		*/
+        /*
+        menu = "Dimension",
+        toolbar = "Dimension",
+        alias = "LE LEADER QLEADER QUICKLEADER",
+        */
         .icon = "add-quickleader",
         .command = "add-quickleader",
         .tooltip = "&QuickLeader",
@@ -1140,11 +1140,11 @@ const ActionData action_table[MAX_ACTIONS] = {
     },
     /* index 86 */
     {
-		/*
-		menu = "Draw",
-		toolbar = "Draw",
-		alias = "REC RECT RECTANG RECTANGLE",
-		*/
+        /*
+        menu = "Draw",
+        toolbar = "Draw",
+        alias = "REC RECT RECTANG RECTANGLE",
+        */
         .icon = "add-rectangle",
         .command = "add-rectangle",
         .tooltip = "&Rectangle",
@@ -1157,11 +1157,11 @@ const ActionData action_table[MAX_ACTIONS] = {
     },
     /* index 87 */
     {
-		/*
-		menu = "Sandbox"
-		toolbar = "Sandbox"
-		alias = "RGB",
-		*/
+        /*
+        menu = "Sandbox"
+        toolbar = "Sandbox"
+        alias = "RGB",
+        */
         .icon =  "rgb",
         .command =  "rgb",
         .tooltip =  "&RGB",
@@ -1174,11 +1174,11 @@ const ActionData action_table[MAX_ACTIONS] = {
     },
     /* index 89 */
     {
-		/*
-		alias = "RO ROTATE",
-		menu = "Modify",
-		toolbar = "Modify",
-		*/
+        /*
+        alias = "RO ROTATE",
+        menu = "Modify",
+        toolbar = "Modify",
+        */
         .icon = "rotate",
         .command = "rotate",
         .tooltip = "&Rotate",
@@ -1191,11 +1191,11 @@ const ActionData action_table[MAX_ACTIONS] = {
     },
     /* index 90 */
     {
-		/*
-		menu = "Sandbox",
-		toolbar = "Sandbox",
-		alias = "SAND SANDBOX",
-		*/
+        /*
+        menu = "Sandbox",
+        toolbar = "Sandbox",
+        alias = "SAND SANDBOX",
+        */
         .icon = "sandbox",
         .command = "sandbox",
         .tooltip = "Sandbox",
