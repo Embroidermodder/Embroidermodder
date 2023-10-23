@@ -31,6 +31,10 @@
 
 #include "embroidermodder.h"
 
+#include <time.h>
+
+typedef std::string String;
+
 Node get_node(std::unordered_map<std::string, Node> d, std::string key);
 void wrong_type_message(int type);
 
@@ -190,7 +194,7 @@ get_real(std::unordered_map<std::string, Node> d, std::string key)
 }
 
 /* Get std::string from std::unordered_map<std::string, Node>. */
-String
+std::string
 get_str(std::unordered_map<std::string, Node> d, std::string key)
 {
     Node n = get_node(d, key);
@@ -208,20 +212,9 @@ get_qstr(std::unordered_map<std::string, Node> d, std::string key)
     return QString::fromStdString(get_str(d, key));
 }
 
-/* Convert QStringList to the std library type. */
-std::vector<std::string>
-to_string_vector(QStringList list)
-{
-    std::vector<std::string> a;
-    for (int i=0; i<(int)list.size(); i++) {
-        a.push_back(list[i].toStdString());
-    }
-    return a;
-}
-
 /* Tokenize our std::string type using a 1 character deliminator. */
 std::vector<std::string>
-tokenize(String str, const char delim)
+tokenize(std::string str, const char delim)
 {
     std::vector<std::string> list;
     std::stringstream str_stream(str);
@@ -250,33 +243,24 @@ to_EmbVector(QPointF a)
     return v;
 }
 
-/* Convert from QList to std::vector. */
-std::vector<QGraphicsItem*>
-to_vector(QList<QGraphicsItem*> list)
-{
-    std::vector<QGraphicsItem*> result;
-    foreach (QGraphicsItem *item , list) {
-        result.push_back(item);
-    }
-    return result;
-}
-
-/* Convert from std::vector to QList. */
-QList<QGraphicsItem*>
-to_qlist(std::vector<QGraphicsItem*> list)
-{
-    QList<QGraphicsItem*> result;
-    for (int i=0; i<(int)list.size(); i++) {
-        result << list[i];
-    }
-    return result;
-}
-
-/* Debug message wrapper for qDebug. */
+/* Debug message wrapper for qDebug.
+ *
+ * For debugging code running on other machines append these messages to log
+ * file.
+ *
+ * Timestamps are added to each message so we can trace in what order things
+ * happen.
+ */
 void
 debug_message(std::string msg)
 {
+    struct timespec ts;
+    clock_gettime(CLOCK_REALTIME, &ts);
     qDebug(msg.c_str());
+    FILE *f = fopen("debug.txt", "a");
+    fprintf(f, "%.2ld:%.2ld:%.2ld.%.3ld> %s\n",
+        (ts.tv_sec/3600)%24, (ts.tv_sec%3600)/60, ts.tv_sec%60, ts.tv_nsec%1000, msg.c_str());
+    fclose(f);
 }
 
 /* Utility function for add_to_path. */

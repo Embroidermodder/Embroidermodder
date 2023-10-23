@@ -58,7 +58,7 @@ main(int argc, char* argv[])
     std::vector<std::string> filesToOpen;
 
     for (int i = 1; i < argc; i++) {
-        String arg(argv[i]);
+        std::string arg(argv[i]);
         if ((arg == "-d") || (arg == "--debug")) {
         }
         else if ((arg == "-h") || (arg == "--help")) {

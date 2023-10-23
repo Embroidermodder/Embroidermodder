@@ -43,13 +43,9 @@ class UndoEditor;
 class MainWindow;
 class Geometry;
 
-typedef std::string String;
-
 /* Global variables
  * ----------------
  */
-extern std::unordered_map<std::string, QAction*> actionHash;
-
 extern MdiArea* mdiArea;
 extern MainWindow* _mainWin;
 extern CmdPrompt* prompt;
@@ -88,17 +84,13 @@ void set_enabled(QObject *parent, const char *key, bool enabled);
 void set_visibility(QObject *parent, const char *name, bool visibility);
 QPainterPath add_to_path(QPainterPath path, EmbVector scale, std::string s);
 
-String actuator(std::string line);
-String run_script_file(std::string fname);
-String run_script(std::vector<std::string> script);
+const char *actuator(char string[MAX_STRING_LENGTH]);
+std::string actuator(std::string line);
+std::string run_script_file(std::string fname);
+std::string run_script(std::vector<std::string> script);
 
 QPointF to_QPointF(EmbVector a);
 EmbVector to_EmbVector(QPointF a);
-
-std::vector<QGraphicsItem*> to_vector(QList<QGraphicsItem*> list);
-QList<QGraphicsItem*> to_qlist(std::vector<QGraphicsItem*> list);
-
-std::vector<std::string> to_string_vector(QStringList list);
 
 /* Interface creation functions.
  */
@@ -138,13 +130,6 @@ int test_geometry(Geometry *g);
 class Geometry : public QGraphicsPathItem
 {
 public:
-    std::unordered_map<std::string, Node> properties;
-
-    EmbVector positions[POINTS_PER_BASE_OBJECT];
-    EmbReal real[REALS_PER_BASE_OBJECT];
-    bool boolean[BOOLS_PER_BASE_OBJECT];
-    QString strings[STRINGS_PER_BASE_OBJECT];
-
     QPen objPen;
     QPen lwtPen;
     QLineF objLine;
@@ -158,8 +143,10 @@ public:
     QPointF arcMidPoint;
     QPointF arcEndPoint;
 
-    bool curved;
-    bool filled;
+    uint64_t flags = 0;
+
+    EmbReal text_size = 20.0;
+
     QPainterPath lineStylePath;
     QPainterPath arrowStylePath;
     EmbReal arrowStyleAngle;
@@ -172,12 +159,9 @@ public:
     QString objText;
     QString objTextFont;
     QString objTextJustify;
-    bool objTextBackward;
-    bool objTextUpsideDown;
     QPainterPath objTextPath;
 
-    std::vector<EmbReal> x_values;
-    std::vector<EmbReal> y_values;
+    std::vector<EmbVector> positions;
 
     int gripIndex;
 
@@ -230,7 +214,6 @@ public:
     QPointF objectEndPoint();
 
     QRectF rect();
-    void circle_click(std::unordered_map<std::string, Node> global, EmbVector v);
     EmbReal objectWidth();
     EmbReal objectHeight();
     EmbReal objectRadiusMajor();
@@ -269,7 +252,6 @@ public:
 
     EmbReal objectReal(int64_t real_type);
     void setObjectPoint(EmbVector pt, int64_t point_type);
-    void setObjectBoolean(const char *key, bool val);
 
     void setObjectEndPoint1(EmbVector endPt1);
     void setObjectEndPoint2(EmbVector endPt2);
@@ -939,7 +921,26 @@ public:
 
     //TODO: Alphabetic/Categorized TabWidget
 
-    void createGroupBox(std::string group_box_key, const char *title);
+    std::unordered_map<std::string, QLineEdit *> lineEdits;
+    std::unordered_map<std::string, QToolButton *> toolButtons;
+    std::unordered_map<std::string, QSpinBox *> spinBoxes;
+    std::unordered_map<std::string, QDoubleSpinBox *> doubleSpinBoxes;
+    std::unordered_map<std::string, QComboBox *> comboBoxes;
+
+    // Used when checking if fields vary
+    QString fieldOldText;
+    QString fieldNewText;
+    QString fieldVariesText;
+    QString fieldYesText;
+    QString fieldNoText;
+    QString fieldOnText;
+    QString fieldOffText;
+
+    QFontComboBox* comboBoxTextSingleFont;
+
+    QGroupBox *createGroupBox(const char *group_box_key, const char *title);
+
+    QGroupBox *groupBoxes[GB_TOTAL];
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
@@ -1191,7 +1192,7 @@ public:
     View(QGraphicsScene* theScene, QWidget* parent);
     ~View();
 
-    std::unordered_map<std::string, Node> state;
+    uint64_t state;
 
     std::vector<QGraphicsItem*> selected_items();
 

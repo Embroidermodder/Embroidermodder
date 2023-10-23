@@ -16,7 +16,7 @@
 #include "embroidermodder.h"
 
 /* . */
-UndoableCommand::UndoableCommand(String command_, QString text, Geometry* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableCommand::UndoableCommand(std::string command_, QString text, Geometry* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
     object = obj;
@@ -35,7 +35,8 @@ UndoableCommand::UndoableCommand(EmbVector delta_, QString text, Geometry* obj, 
 }
 
 /* . */
-UndoableCommand::UndoableCommand(String command, EmbVector point, EmbReal value, QString text, Geometry* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableCommand::UndoableCommand(
+    std::string command, EmbVector point, EmbReal value, QString text, Geometry* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
     object = obj;

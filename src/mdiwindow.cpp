@@ -15,6 +15,8 @@
 
 #include "embroidermodder.h"
 
+typedef std::string String;
+
 /* Construct a new MdiWindow object.
  *
  * theIndex

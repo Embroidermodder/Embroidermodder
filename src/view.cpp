@@ -17,7 +17,32 @@
 
 #include <cassert>
 
+typedef std::string String;
+
 /* #include <QtOpenGL> */
+extern std::unordered_map<std::string, QAction*> actionHash;
+
+/* Convert from QList to std::vector. */
+std::vector<QGraphicsItem*>
+to_vector(QList<QGraphicsItem*> list)
+{
+    std::vector<QGraphicsItem*> result;
+    foreach (QGraphicsItem *item , list) {
+        result.push_back(item);
+    }
+    return result;
+}
+
+/* Convert from std::vector to QList. */
+QList<QGraphicsItem*>
+to_qlist(std::vector<QGraphicsItem*> list)
+{
+    QList<QGraphicsItem*> result;
+    for (int i=0; i<(int)list.size(); i++) {
+        result << list[i];
+    }
+    return result;
+}
 
 /* Create a View object. */
 View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
@@ -117,17 +142,13 @@ View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, 
     connect(gscene, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 
     /* set state */
+    state = 0;
     /*
     EmbPattern *pattern;
     EmbVector origin;
     EmbReal scale;
     String grid_type;
     int ui_mode;
-    */
-    state["snap_mode"] = node_int(false);
-    state["grid_mode"] = node_int(false);
-    state["ruler_mode"] = node_int(false);
-    /*
     bool ortho_mode;
     bool polar_mode;
     bool qsnap_mode;

@@ -21,6 +21,8 @@
 
 int pop_command(const char *line);
 
+typedef std::string String;
+
 MainWindow* _mainWin = 0;
 MdiArea* mdiArea = 0;
 CmdPrompt* prompt = 0;
@@ -1502,8 +1504,8 @@ MainWindow::createAllActions()
         ActionData a = action_table[i];
 
         std::string icon_s(a.icon);
-        std::string tooltip(a.tooltip);
-        std::string statustip(a.statustip);
+        QString tooltip(a.tooltip);
+        QString statustip(a.statustip);
         std::string shortcut(a.shortcut);
         std::string command(a.command);
 
@@ -1511,8 +1513,8 @@ MainWindow::createAllActions()
         std::string icontheme = get_str(settings, "general_icon_theme");
         QIcon icon = QIcon(QString::fromStdString(appDir + "/icons/" + icontheme + "/" + icon_s + ".png"));
 
-        QAction *ACTION = new QAction(icon, QString::fromStdString(tooltip), this);
-        ACTION->setStatusTip(QString::fromStdString(statustip));
+        QAction *ACTION = new QAction(icon, tooltip, this);
+        ACTION->setStatusTip(statustip);
         ACTION->setObjectName(icon_s);
         if (shortcut != "") {
             ACTION->setShortcut(
@@ -1623,7 +1625,17 @@ break_up_arguments(const char *line, char arg_list[MAX_ARGS][MAX_STRING_LENGTH])
     return n_args;
 }
 
-/* MainWindow::actuator(command)
+/* .
+ */
+const char *
+actuator(char string[MAX_STRING_LENGTH])
+{
+    std::string s(string);
+    s = actuator(s);
+    return s.c_str();
+}
+
+/* actuator(command)
  *
  * RUN COMMAND
  * -----------
@@ -1656,8 +1668,8 @@ break_up_arguments(const char *line, char arg_list[MAX_ARGS][MAX_STRING_LENGTH])
  *     engine->evaluate(cmd + "_prompt('" + safeStr.toUpper() + "')", fileName);
  * }
  */
-String
-actuator(String line)
+std::string
+actuator(std::string line)
 {
     View* gview = activeView();
     char arg_list[MAX_ARGS][MAX_STRING_LENGTH];
@@ -3513,7 +3525,11 @@ MainWindow::openFile(bool recent, String recentFile)
     else {
         if (!preview) {
             //TODO: set getOpenFileNames' selectedFilter Node from settings["opensave_open_format"]
-            files = to_string_vector(QFileDialog::getOpenFileNames(this, translate_str("Open"), QString::fromStdString(openFilesPath), formatFilterOpen));
+			std::vector<std::string> files;
+            QStringList sl = QFileDialog::getOpenFileNames(this, translate_str("Open"), QString::fromStdString(openFilesPath), formatFilterOpen);
+			for (int i=0; i<(int)sl.size(); i++) {
+				files.push_back(sl[i].toStdString());
+			}
             openFilesSelected(files);
         }
         else {

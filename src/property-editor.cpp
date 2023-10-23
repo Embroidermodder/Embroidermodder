@@ -15,43 +15,7 @@
 
 #include "embroidermodder.h"
 
-// Used when checking if fields vary
-QString fieldOldText;
-QString fieldNewText;
-QString fieldVariesText;
-QString fieldYesText;
-QString fieldNoText;
-QString fieldOnText;
-QString fieldOffText;
-
-std::unordered_map<std::string, QGroupBox *> groupBoxes;
-std::unordered_map<std::string, QLineEdit *> lineEdits;
-std::unordered_map<std::string, QToolButton *> toolButtons;
-std::unordered_map<std::string, QSpinBox *> spinBoxes;
-std::unordered_map<std::string, QDoubleSpinBox *> doubleSpinBoxes;
-std::unordered_map<std::string, QComboBox *> comboBoxes;
-
-QFontComboBox* comboBoxTextSingleFont;
-std::unordered_map<std::string, std::unordered_map<std::string, Node>> group_box_data;
-
-/* . */
-std::vector<std::unordered_map<std::string, Node>>
-load_group_box_data_from_table(String key)
-{
-    std::vector<std::unordered_map<std::string, Node>> group_box;
-    for (int i=0; strcmp(all_line_editors[i].key, "END"); i++) {
-        if (!strcmp(all_line_editors[i].key, key.c_str())) {
-            std::unordered_map<std::string, Node> data;
-            data["key"] = node_str(all_line_editors[i].key);
-            data["icon_name"] = node_str(all_line_editors[i].icon);
-            data["label"] = node_str(all_line_editors[i].label);
-            data["type"] = node_str(all_line_editors[i].type);
-            data["map_signal"] = node_str(all_line_editors[i].map_signal);
-            group_box.push_back(data);
-        }
-    }
-    return group_box;
-}
+typedef std::string String;
 
 /* Create a property editor object. */
 PropertyEditor::PropertyEditor(QString  iconDirectory, bool pickAddMode, QWidget* widgetToFocus, QWidget* parent) : QDockWidget(parent)
@@ -77,37 +41,9 @@ PropertyEditor::PropertyEditor(QString  iconDirectory, bool pickAddMode, QWidget
     fieldOnText = "On";
     fieldOffText = "Off";
 
-    createGroupBox("general", "General");
-    createGroupBox("geometry_arc", "Geometry");
-    createGroupBox("misc_arc", "Misc");
-    createGroupBox("geometry_block", "Geometry");
-    createGroupBox("geometry_circle", "Geometry");
-    createGroupBox("geometry_dim_aligned", "Geometry");
-    createGroupBox("geometry_dim_angular", "Geometry");
-    createGroupBox("geometry_dim_arc_length", "Geometry");
-    createGroupBox("geometry_dim_diameter", "Geometry");
-    createGroupBox("geometry_dim_leader", "Geometry");
-    createGroupBox("geometry_dim_linear", "Geometry");
-    createGroupBox("geometry_dim_ordinate", "Geometry");
-    createGroupBox("geometry_dim_radius", "Geometry");
-    createGroupBox("geometry_ellipse", "Geometry");
-    createGroupBox("geometry_image", "Geometry");
-    createGroupBox("misc_image", "Misc");
-    createGroupBox("geometry_infinite_line", "Geometry");
-    createGroupBox("geometry_line", "Geometry");
-    createGroupBox("geometry_path", "Geometry");
-    createGroupBox("misc_path", "Misc");
-    createGroupBox("geometry_point", "Geometry");
-    createGroupBox("geometry_polygon", "Geometry");
-    createGroupBox("geometry_polyline", "Geometry");
-    createGroupBox("misc_polyline", "Misc");
-    createGroupBox("geometry_ray", "Geometry");
-    createGroupBox("geometry_rectangle", "Geometry");
-    createGroupBox("geometry_text_multi", "Geometry");
-    createGroupBox("text_text_single", "Text");
-    createGroupBox("geometry_text_single", "Geometry");
-    createGroupBox("misc_text_single", "Misc");
-    createGroupBox("geometry_text_multi", "Geometry");
+    for (int i=0; i<GB_TOTAL; i++) {
+        groupBoxes[i] = createGroupBox(group_box_data[2*i+0], group_box_data[2*i+1]);
+    }
 
     QWidget* widgetMain = new QWidget(this);
 
@@ -121,9 +57,8 @@ PropertyEditor::PropertyEditor(QString  iconDirectory, bool pickAddMode, QWidget
     QScrollArea* scrollProperties = new QScrollArea(this);
     QWidget* widgetProperties = new QWidget(this);
     QVBoxLayout* vboxLayoutProperties = new QVBoxLayout(this);
-    int n = string_array_length(group_box_types);
-    for (int i=0; i<n; i++) {
-        vboxLayoutProperties->addWidget(groupBoxes[group_box_types[i]]);
+    for (int i=0; i<GB_TOTAL; i++) {
+        vboxLayoutProperties->addWidget(groupBoxes[i]);
     }
     vboxLayoutProperties->addStretch(1);
     widgetProperties->setLayout(vboxLayoutProperties);
@@ -431,12 +366,12 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
             updateLineEditStrIfVaries(lineEdits["text-single-contents"], obj->objText);
             updateFontComboBoxStrIfVaries(comboBoxTextSingleFont, obj->objTextFont);
             updateComboBoxStrIfVaries(comboBoxes["text-single-justify"], obj->objTextJustify, {});
-            updateLineEditNumIfVaries(lineEdits["text-single-height"], get_real(obj->properties, "text_size"), false);
+            updateLineEditNumIfVaries(lineEdits["text-single-height"], obj->text_size, false);
             updateLineEditNumIfVaries(lineEdits["text-single-rotation"], -obj->rotation(), true);
             updateLineEditNumIfVaries(lineEdits["text-single-x"], obj->objectX(), false);
             updateLineEditNumIfVaries(lineEdits["text-single-y"], -obj->objectY(), false);
-            updateComboBoxBoolIfVaries(comboBoxes["text-single-backward"], obj->objTextBackward,   true);
-            updateComboBoxBoolIfVaries(comboBoxes["text-single-upside-down"], obj->objTextUpsideDown, true);
+            updateComboBoxBoolIfVaries(comboBoxes["text-single-backward"], obj->flags & PROP_BACKWARD, true);
+            updateComboBoxBoolIfVaries(comboBoxes["text-single-upside-down"], obj->flags & PROP_UPSIDEDOWN, true);
         }
     }
 
@@ -463,7 +398,8 @@ PropertyEditor::updateLineEditStrIfVaries(QLineEdit* lineEdit, QString str)
     }
 }
 
-void PropertyEditor::updateLineEditNumIfVaries(QLineEdit* lineEdit, EmbReal num, bool useAnglePrecision)
+void
+PropertyEditor::updateLineEditNumIfVaries(QLineEdit* lineEdit, EmbReal num, bool useAnglePrecision)
 {
     int precision = 0;
     if (useAnglePrecision) precision = precisionAngle;
@@ -532,8 +468,12 @@ void PropertyEditor::updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, b
 {
     fieldOldText = comboBox->currentText();
     if (yesOrNoText) {
-        if (val) fieldNewText = fieldYesText;
-        else    fieldNewText = fieldNoText;
+        if (val) {
+            fieldNewText = fieldYesText;
+        }
+        else {
+            fieldNewText = fieldNoText;
+        }
     }
     else {
         if (val) fieldNewText = fieldOnText;
@@ -562,10 +502,9 @@ void PropertyEditor::updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, b
 void
 PropertyEditor::showGroups(int objType)
 {
-    int n = string_array_length(group_box_types);
-    for (int i=0; i<n; i++) {
+    for (int i=0; i<GB_TOTAL; i++) {
         if (group_box_ids[i]== objType) {
-            groupBoxes[group_box_types[i]]->show();
+            groupBoxes[i]->show();
         }
     }
 }
@@ -582,10 +521,9 @@ PropertyEditor::showOneType(int index)
 void
 PropertyEditor::hideAllGroups(void)
 {
-    int n = string_array_length(group_box_types);
-    for (int i=0; i<n; i++) {
+    for (int i=0; i<GB_TOTAL; i++) {
         if (strcmp(group_box_types[i], "general")) {
-            groupBoxes[group_box_types[i]]->hide();
+            groupBoxes[i]->hide();
         }
     }
 }
@@ -613,40 +551,44 @@ void PropertyEditor::clearAllFields()
 /**
  * .
  */
-void
-PropertyEditor::createGroupBox(String group_box_key, const char *title)
+QGroupBox *
+PropertyEditor::createGroupBox(const char *group_box_key, const char *title)
 {
-    std::vector<std::unordered_map<std::string, Node>> data = load_group_box_data_from_table(group_box_key);
-
-    groupBoxes[group_box_key] = new QGroupBox(tr(title), this);
+    QGroupBox *gb = new QGroupBox(tr(title), this);
+    gb->setObjectName(group_box_key);
 
     int group_box_type = OBJ_TYPE_BASE;
     int n_group_box_types = string_array_length(group_box_types);
     for (int i=0; i<n_group_box_types; i++) {
-        if (!strcmp(group_box_types[i], group_box_key.c_str())) {
+        if (!strcmp(group_box_types[i], group_box_key)) {
             group_box_type = group_box_ids[i];
             break;
         }
     }
 
     QFormLayout* formLayout = new QFormLayout(this);
-    for (int i=0; i<data.size(); i++) {
-        std::unordered_map<std::string, Node> gbd = data[i];
-        String key(gbd["key"].s);
-        toolButtons[key] = createToolButton(gbd["icon_name"].s, tr(gbd["label"].s));
-        if (gbd["type"].s == "double") {
-            if (strlen(gbd["map_signal"].s) == 0) {
-                lineEdits[key] = createLineEdit(gbd["type"].s, false);
+
+    int n = (sizeof all_line_editors)/(sizeof all_line_editors[0]);
+    for (int i=0; i<n-1; i++) {
+        LineEditData gbd = all_line_editors[i];
+        if (strcmp(all_line_editors[i].key, group_box_key)) {
+            continue;
+        }
+        String key(gbd.key);
+        toolButtons[key] = createToolButton(gbd.icon, tr(gbd.label));
+        if (!strcmp(gbd.type, "double")) {
+            if (strlen(gbd.map_signal) == 0) {
+                lineEdits[key] = createLineEdit(gbd.type, false);
             }
             else {
-                lineEdits[key] = createLineEdit(gbd["type"].s, true);
-                mapSignal(lineEdits[key], gbd["map_signal"].s, group_box_type);
+                lineEdits[key] = createLineEdit(gbd.type, true);
+                mapSignal(lineEdits[key], gbd.map_signal, group_box_type);
             }
             formLayout->addRow(toolButtons[key], lineEdits[key]);
         }
-        if (gbd["type"].s == "combobox") {
+        if (!strcmp(gbd.type, "combobox")) {
             comboBoxes[key] = new QComboBox(this);
-            if (gbd["map_signal"].s == "true") {
+            if (strlen(gbd.map_signal) == 0) {
                 comboBoxes[key]->setDisabled(true);
             }
             else {
@@ -654,20 +596,21 @@ PropertyEditor::createGroupBox(String group_box_key, const char *title)
             }
             formLayout->addRow(toolButtons[key], comboBoxes[key]);
         }
-        if (gbd["type"].s == "fontcombobox") {
+        if (!strcmp(gbd.type, "fontcombobox")) {
             comboBoxTextSingleFont = new QFontComboBox(this);
             comboBoxTextSingleFont->setDisabled(false);
             formLayout->addRow(toolButtons[key], comboBoxTextSingleFont);
         }
     }
-    groupBoxes[group_box_key]->setLayout(formLayout);
+    gb->setLayout(formLayout);
+    return gb;
 }
 
 /**
  * .
  */
 QToolButton*
-PropertyEditor::createToolButton(QString iconName, QString  txt)
+PropertyEditor::createToolButton(QString iconName, QString txt)
 {
     QToolButton* tb = new QToolButton(this);
     tb->setIcon(QIcon(iconDir + "/" + iconName + ".png"));
@@ -695,11 +638,7 @@ PropertyEditor::createLineEdit(QString  validatorType, bool readOnly)
     return le;
 }
 
-/**
- * @brief PropertyEditor::mapSignal
- * @param fieldObj
- * @param name
- * @param value
+/* PropertyEditor::mapSignal fieldObj name value
  */
 void
 PropertyEditor::mapSignal(QObject* fieldObj, QString  name, QVariant value)

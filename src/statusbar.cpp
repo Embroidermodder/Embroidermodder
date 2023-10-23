@@ -59,7 +59,7 @@ void StatusBar::setMouseCoord(EmbReal x, EmbReal y)
  * .
  */
 void
-StatusBar::context_menu_action(QToolButton *button, const char *icon, const char *label, QMenu *menu, String setting_page)
+StatusBar::context_menu_action(QToolButton *button, const char *icon, const char *label, QMenu *menu, std::string setting_page)
 {
     QAction* action = new QAction(_mainWin->create_icon(icon), label, menu);
     connect(action, &QAction::triggered, button, [=](){ actuator("settingsdialog " + setting_page ); });
@@ -119,7 +119,7 @@ StatusBar::context_menu_event(QContextMenuEvent *event, QToolButton *button)
 }
 
 void
-StatusBar::toggle(String key, bool on)
+StatusBar::toggle(std::string key, bool on)
 {
     debug_message("StatusBarButton toggleSnap()");
     View* gview = activeView();

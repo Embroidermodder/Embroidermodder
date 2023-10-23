@@ -19,6 +19,8 @@
 
 #include "embroidermodder.h"
 
+typedef std::string String;
+
 void addArc(View* view, QGraphicsItem* item);
 void addBlock(View* view, QGraphicsItem* item);
 void addCircle(View* view, QGraphicsItem* item);
@@ -57,81 +59,6 @@ void toPolyline(
     QString lineType,
     QString lineWeight);
 
-/*
-
-circle_init_script = [
-    "init",
-    "clear_selection",
-    "# FIX SELECTING CURRENT OBJECT",
-    "select this",
-    "set mode CIRCLE_MODE_1P_RAD",
-    "set-prompt-prefix-tr Specify center point for circle or [3P/2P/TTR (tan tan radius)]: "
-]
-
-dolphin_init_script = [
-    "init",
-    "clear-selection",
-    "set mode DOLPHIN_MODE_NUM_POINTS",
-    "# FIX SELECTING CURRENT OBJECT",
-    "select this",
-    "set-selected numPoints 512",
-    "set-selected minPoints 64",
-    "set-selected maxPoints 8192",
-    "set-selected center_x 0.0f",
-    "set-selected center_y 0.0f",
-    "set-selected scale_x 0.04f",
-    "set-selected scale_y 0.04f",
-    "add-rubber-selected POLYGON",
-    "set-rubber-mode POLYGON",
-    "update-dolphin numPoints scale_x scale_y",
-    "spare-rubber POLYGON",
-    "end"
-]
-
-ellipse_init_script = [
-    "init",
-    "clear-selection",
-    "# FIX SELECTING CURRENT OBJECT",
-    "select this",
-    "set mode ELLIPSE_MODE_MAJORDIAMETER_MINORRADIUS",
-    "set-selected height 1.0",
-    "set-selected width 2.0",
-    "set-selected rotation 0.0",
-    "set-prompt-prefix-tr Specify first axis start point or [Center]: "
-]
-
-polyline_init_script = [
-    "init",
-    "clear-selection",
-    "# FIX SELECTING CURRENT OBJECT",
-    "select this",
-    "set-selected firstRun true",
-    "set-selected first_x 0.0f",
-    "set-selected first.y 0.0f",
-    "set-selected prev_x 0.0f",
-    "set-selected prev_y 0.0f",
-    "set-selected num 0",
-    "set-prompt-prefix-tr Specify first point: "
-]
-
-snowflake_init_script = [
-    "init",
-    "clear-selection",
-    "numPoints=2048",
-    "minPoitns=64",
-    "maxPoints=8192",
-    "center.x=0.0f",
-    "center.y=0.0f",
-    "scale.x=0.04f",
-    "scale.y=0.04f",
-    "mode=SNOWFLAKE_MODE_NUM_POINTS",
-    "add-rubber POLYGON",
-    "set-rubber-mode POLYGON",
-    "update-snowflake",
-    "spare-rubber POLYGON",
-    "end"
-]
- */
 
 bool save(View *view, QString f);
 
@@ -298,17 +225,6 @@ Geometry::init(void)
     lwtPen.setJoinStyle(Qt::RoundJoin);
 
     objID = QDateTime::currentMSecsSinceEpoch();
-
-    properties["init_script"] = node_str("");
-    properties["prompt_script"] = node_str("");
-    properties["click_script"] = node_str("");
-    properties["context_script"] = node_str("");
-
-    /*
-    if (get_str(properties, "init_script") != "") {
-        run_script(scripts[get_str(properties, "init_script")]);
-    }
-    */
 }
 
 /* Initialise arc object.
@@ -407,8 +323,7 @@ Geometry::init_line(EmbLine line, QRgb rgb, Qt::PenStyle lineType)
 
         setFlag(QGraphicsItem::ItemIsSelectable, true);
 
-        curved = false;
-        filled = true;
+        flags |= ((!PROP_CURVED) & PROP_FILLED);
         setObjectEndPoint1(line.start);
         setObjectEndPoint2(line.end);
         objPen.setColor(rgb);
@@ -570,6 +485,7 @@ Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(par
 {
     debug_message("Geometry Constructor()");
     init();
+    flags = obj->flags;
     if (obj) {
         Type = obj->Type;
         switch (Type) {
@@ -657,21 +573,14 @@ Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(par
 
         case OBJ_TYPE_TEXTSINGLE: {
             setObjectTextFont(obj->objTextFont);
-            setObjectTextSize(get_real(obj->properties, "text_size"));
+            setObjectTextSize(obj->text_size);
             setRotation(obj->rotation());
-            setObjectTextBackward(get_bool(obj->properties, "text_backward"));
-            setObjectTextUpsideDown(obj->objTextUpsideDown);
-            bool bold = get_bool(obj->properties, "text_bold");
-            bool italic = get_bool(obj->properties, "text_italic");
-            bool underline = get_bool(obj->properties, "text_underline");
-            bool strikeout = get_bool(obj->properties, "text_strikeout");
-            bool overline = get_bool(obj->properties, "text_overline");
-            setObjectTextStyle(bold, italic, underline, strikeout, overline);
             EmbVector v;
             v.x = obj->objectX();
             v.y = obj->objectY();
             init_text_single(obj->objText, v, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
             setScale(obj->scale());
+            setObjectText(obj->objText);
             break;
         }
 
@@ -710,7 +619,7 @@ Geometry::allGripPoints()
             objectEndPoint1(),
             objectEndPoint2()
         };
-        if (curved) {
+        if (flags & PROP_CURVED) {
             gripPoints.push_back(objectMidPoint());
         }
         break;
@@ -2330,7 +2239,7 @@ Geometry::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidg
         painter->drawPath(lineStylePath);
         painter->drawPath(arrowStylePath);
 
-        if (filled) {
+        if (flags & PROP_FILLED) {
             painter->fillPath(arrowStylePath, objPen.color());
         }
         break;
@@ -3325,12 +3234,12 @@ void Geometry::setObjectText(QString str)
     QPainterPath textPath;
     QFont font;
     font.setFamily(objTextFont);
-    font.setPointSizeF(get_real(properties, "text_size"));
-    font.setBold(get_bool(properties, "text_bold"));
-    font.setItalic(get_bool(properties, "text_italic"));
-    font.setUnderline(get_bool(properties, "text_underline"));
-    font.setStrikeOut(get_bool(properties, "text_strikeout"));
-    font.setOverline(get_bool(properties, "text_overline"));
+    font.setPointSizeF(text_size);
+    font.setBold(flags & PROP_BOLD);
+    font.setItalic(flags & PROP_ITALIC);
+    font.setUnderline(flags & PROP_UNDERLINE);
+    font.setStrikeOut(flags & PROP_STRIKEOUT);
+    font.setOverline(flags & PROP_OVERLINE);
     textPath.addText(0, 0, font, str);
 
     //Translate the path based on the justification
@@ -3381,12 +3290,16 @@ void Geometry::setObjectText(QString str)
         textPath.translate(-jRect.bottomRight());
     }
 
-    //Backward or Upside Down
-    if (objTextBackward || objTextUpsideDown) {
+    /* Backward or Upside Down */
+    if (flags & (PROP_BACKWARD + PROP_UPSIDEDOWN)) {
         EmbReal horiz = 1.0;
         EmbReal vert = 1.0;
-        if (objTextBackward) horiz = -1.0;
-        if (objTextUpsideDown) vert = -1.0;
+        if (flags & PROP_BACKWARD) {
+            horiz = -1.0;
+        }
+        if (flags & PROP_UPSIDEDOWN) {
+            vert = -1.0;
+        }
 
         QPainterPath flippedPath;
 
@@ -3456,7 +3369,7 @@ Geometry::setObjectTextJustify(QString justify)
 void
 Geometry::setObjectTextSize(EmbReal size)
 {
-    properties["text_size"] = node_real(size);
+    text_size = size;
     setObjectText(objText);
 }
 
@@ -3464,20 +3377,12 @@ Geometry::setObjectTextSize(EmbReal size)
 void
 Geometry::setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bool over)
 {
-    properties["text_bold"] = node_int(bold);
-    properties["text_italic"] = node_int(italic);
-    properties["text_underline"] = node_int(under);
-    properties["text_strikeout"] = node_int(strike);
-    properties["text_overline"] = node_int(over);
+    flags |= bold * PROP_BOLD;
+    flags |= italic * PROP_ITALIC;
+    flags |= under * PROP_UNDERLINE;
+    flags |= strike * PROP_STRIKEOUT;
+    flags |= over * PROP_OVERLINE;
     setObjectText(objText);
-}
-
-/* val
- */
-void
-Geometry::setObjectBoolean(const char *key, bool val)
-{
-
 }
 
 /* val
@@ -3485,7 +3390,7 @@ Geometry::setObjectBoolean(const char *key, bool val)
 void
 Geometry::setObjectTextBold(bool val)
 {
-    properties["text_bold"] = node_int(val);
+    flags |= val * PROP_BOLD;
     setObjectText(objText);
 }
 
@@ -3493,7 +3398,7 @@ Geometry::setObjectTextBold(bool val)
 void
 Geometry::setObjectTextItalic(bool val)
 {
-    properties["text_italic"] = node_int(val);
+    flags |= val * PROP_ITALIC;
     setObjectText(objText);
 }
 
@@ -3501,7 +3406,7 @@ Geometry::setObjectTextItalic(bool val)
 void
 Geometry::setObjectTextUnderline(bool val)
 {
-    properties["text_underline"] = node_int(val);
+    flags |= val * PROP_UNDERLINE;
     setObjectText(objText);
 }
 
@@ -3509,7 +3414,7 @@ Geometry::setObjectTextUnderline(bool val)
 void
 Geometry::setObjectTextStrikeOut(bool val)
 {
-    properties["text_strikeout"] = node_int(val);
+    flags |= val * PROP_STRIKEOUT;
     setObjectText(objText);
 }
 
@@ -3517,7 +3422,7 @@ Geometry::setObjectTextStrikeOut(bool val)
 void
 Geometry::setObjectTextOverline(bool val)
 {
-    properties["text_overline"] = node_int(val);
+    flags |= val * PROP_OVERLINE;
     setObjectText(objText);
 }
 
@@ -3525,7 +3430,7 @@ Geometry::setObjectTextOverline(bool val)
 void
 Geometry::setObjectTextBackward(bool val)
 {
-    properties["text_backward"] = node_int(val);
+    flags |= val * PROP_BACKWARD;
     setObjectText(objText);
 }
 
@@ -3533,7 +3438,7 @@ Geometry::setObjectTextBackward(bool val)
 void
 Geometry::setObjectTextUpsideDown(bool val)
 {
-    properties["text_upsidedown"] = node_int(val);
+    flags |= val * PROP_UPSIDEDOWN;
     setObjectText(objText);
 }
 
@@ -3619,6 +3524,79 @@ Geometry::script_main(void)
         script = dolphin_init_script;
         break;
     }
+
+circle_init_script = [
+    "init",
+    "clear_selection",
+    "# FIX SELECTING CURRENT OBJECT",
+    "select this",
+    "set mode CIRCLE_MODE_1P_RAD",
+    "set-prompt-prefix-tr Specify center point for circle or [3P/2P/TTR (tan tan radius)]: "
+]
+
+dolphin_init_script = [
+    "init",
+    "clear-selection",
+    "set mode DOLPHIN_MODE_NUM_POINTS",
+    "# FIX SELECTING CURRENT OBJECT",
+    "select this",
+    "set-selected numPoints 512",
+    "set-selected minPoints 64",
+    "set-selected maxPoints 8192",
+    "set-selected center_x 0.0f",
+    "set-selected center_y 0.0f",
+    "set-selected scale_x 0.04f",
+    "set-selected scale_y 0.04f",
+    "add-rubber-selected POLYGON",
+    "set-rubber-mode POLYGON",
+    "update-dolphin numPoints scale_x scale_y",
+    "spare-rubber POLYGON",
+    "end"
+]
+
+ellipse_init_script = [
+    "init",
+    "clear-selection",
+    "# FIX SELECTING CURRENT OBJECT",
+    "select this",
+    "set mode ELLIPSE_MODE_MAJORDIAMETER_MINORRADIUS",
+    "set-selected height 1.0",
+    "set-selected width 2.0",
+    "set-selected rotation 0.0",
+    "set-prompt-prefix-tr Specify first axis start point or [Center]: "
+]
+
+polyline_init_script = [
+    "init",
+    "clear-selection",
+    "# FIX SELECTING CURRENT OBJECT",
+    "select this",
+    "set-selected firstRun true",
+    "set-selected first_x 0.0f",
+    "set-selected first.y 0.0f",
+    "set-selected prev_x 0.0f",
+    "set-selected prev_y 0.0f",
+    "set-selected num 0",
+    "set-prompt-prefix-tr Specify first point: "
+]
+
+snowflake_init_script = [
+    "init",
+    "clear-selection",
+    "numPoints=2048",
+    "minPoitns=64",
+    "maxPoints=8192",
+    "center.x=0.0f",
+    "center.y=0.0f",
+    "scale.x=0.04f",
+    "scale.y=0.04f",
+    "mode=SNOWFLAKE_MODE_NUM_POINTS",
+    "add-rubber POLYGON",
+    "set-rubber-mode POLYGON",
+    "update-snowflake",
+    "spare-rubber POLYGON",
+    "end"
+]
 
     default: {
         break;

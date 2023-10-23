@@ -376,6 +376,57 @@
 #define MODE_POLYGON_CIRCUMSCRIBE               19
 #define MODE_POLYGON_SIDE_LEN                   20
 
+/* Object Properties: packed into the uint64_t flags variable. */
+#define PROP_BOLD                           0x0001
+#define PROP_ITALIC                         0x0002
+#define PROP_UNDERLINE                      0x0004
+#define PROP_STRIKEOUT                      0x0008
+#define PROP_OVERLINE                       0x0010
+#define PROP_BACKWARD                       0x0020
+#define PROP_UPSIDEDOWN                     0x0040
+#define PROP_CURVED                         0x0080
+#define PROP_FILLED                         0x0100
+
+/* View state */
+#define VIEW_SNAP_MODE                      0x0001
+#define VIEW_GRID_MODE                      0x0002
+#define VIEW_RULER_MODE                     0x0004
+
+/* Groupboxen */
+#define GB_GENERAL                               0
+#define GB_GROUPBOX_ARC                          1
+#define GB_MISC_ARC                              2
+#define GB_GEOM_BLOCK                            3
+#define GB_GEOM_CIRCLE                           4
+#define GB_GEOM_DIM_ALIGNED                      5
+#define GB_GEOM_DIM_ANGULAR                      6
+#define GB_GEOM_DIM_ARC_LENGTH                   7
+#define GB_GEOM_DIM_DIAMETER                     8
+#define GB_GEOM_DIM_LEADER                       9
+#define GB_GEOM_DIM_LINEAR                      10
+#define GB_GEOM_DIM_ORDINATE                    11
+#define GB_GEOM_DIM_RADIUS                      12
+#define GB_GEOM_ELLIPSE                         13
+#define GB_GEOM_IMAGE                           14
+#define GB_MISC_IMAGE                           15
+#define GB_INFINITE_LINE                        16
+#define GB_GEOM_LINE                            17
+#define GB_GEOM_PATH                            18
+#define GB_MISC_PATH                            19
+#define GB_GEOM_POINT                           20
+/*
+    geometry_polygon_gb = createGroupBox("geometry_polygon", "Geometry");
+    geometry_polyline_gb = createGroupBox("geometry_polyline", "Geometry");
+    misc_polyline_gb = createGroupBox("misc_polyline", "Misc");
+    geometry_ray_gb = createGroupBox("geometry_ray", "Geometry");
+    geometry_rectangle_gb = createGroupBox("geometry_rectangle", "Geometry");
+    geometry_text_multi_gb = createGroupBox("geometry_text_multi", "Geometry");
+    text_text_single_gb = createGroupBox("text_text_single", "Text");
+    geometry_text_single_gb = createGroupBox("geometry_text_single", "Geometry");
+    misc_text_single_gb = createGroupBox("misc_text_single", "Misc
+*/
+#define GB_TOTAL                                22
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -386,6 +437,7 @@ extern "C" {
 #include <time.h>
 #include <inttypes.h>
 #include <stdarg.h>
+#include <stdbool.h>
 
 /* We assume here that all free systems and MacOS are POSIX compliant. */
 #if !defined(WIN32)
@@ -399,8 +451,9 @@ extern "C" {
 /*
  * Expected Keys for actions
  * String icon;
- *      The stub used for the icon and the basic command.
+ *      The stub used for finding the icon image file.
  * String command;
+ *      The command sent to the actuator.
  * String tooltip;
  *      The label in the menus and the message that appears when
  *      you hover over an icon.
@@ -429,6 +482,8 @@ typedef struct ActionData_ {
     int32_t undo;
 } ActionData;
 
+/*
+ */
 typedef struct LineEditData_ {
     char groupbox[MAX_STRING_LENGTH];
     char key[MAX_STRING_LENGTH];
@@ -437,6 +492,19 @@ typedef struct LineEditData_ {
     char type[MAX_STRING_LENGTH];
     char map_signal[MAX_STRING_LENGTH];
 } LineEditData;
+
+/*
+ */
+typedef struct Settings_ {
+    EmbReal quicksnap_locator_size;
+    bool selection_mode_pickadd;
+    bool grid_show_on_load;
+    bool grid_center_on_origin;
+    bool grid_show_origin;
+    bool ruler_show_on_load;
+    bool ruler_metric;
+    uint32_t ruler_color;
+} Settings;
 
 /* To allow us to resize general C arrays when necessary.
  * Note that for char arrays, the buffer is a normal c-style string.
@@ -491,6 +559,7 @@ extern const char *version;
 extern const char *usage_msg;
 extern const char default_settings[MAX_SETTINGS][MAX_STRING_LENGTH];
 
+extern const char *group_box_data[];
 extern const char *toolbar_list[];
 extern const char *menubar_order[];
 extern const char *top_toolbar_layout[];

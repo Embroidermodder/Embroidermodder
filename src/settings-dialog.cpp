@@ -17,6 +17,10 @@
 
 #include <fstream>
 
+typedef std::string String;
+
+extern std::unordered_map<std::string, QAction*> actionHash;
+
 /**
  * The actuator changes the program state via these global variables.
  *
@@ -40,6 +44,19 @@ std::vector<std::string> extensions = {
     "SST", "STX", "SVG", "T09", "TAP",
     "THR", "TXT", "U00", "U01", "VIP",
     "VP3", "XXX", "ZSK"
+};
+
+const char *settings_labels[] = {
+    "general_icon_theme",
+    "general_icon_size",
+    "general_mdi_bg_use_logo",
+    "general_mdi_bg_logo",
+    "general_mdi_bg_use_texture",
+    "general_mdi_bg_texture",
+    "general_mdi_bg_use_color",
+    "general_mdi_bg_color",
+    "general_tip_of_the_day",
+    "END"
 };
 
 std::vector<std::string> general_props = {
