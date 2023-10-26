@@ -681,10 +681,10 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
         switch(objType) {
             case OBJ_TYPE_ARC:
                 if (objName == "lineEditArcCenterX") {
-                    obj->setObjectCenterX(lineEdits["arc-center-x"]->text().toDouble());
+                    obj->setX(lineEdits["arc-center-x"]->text().toDouble());
                 }
                 if (objName == "lineEditArcCenterY") {
-                    obj->setObjectCenterY(-lineEdits["arc-center-y"]->text().toDouble());
+                    obj->setY(-lineEdits["arc-center-y"]->text().toDouble());
                 }
                 if (objName == "lineEditArcRadius") {
                     obj->setObjectRadius(lineEdits["arc_radius"]->text().toDouble());
@@ -700,10 +700,10 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
                 break;
             case OBJ_TYPE_CIRCLE:
                 if (objName == "lineEditCircleCenterX") {
-                    obj->setObjectCenterX(lineEdits["circle_center_x"]->text().toDouble());
+                    obj->setX(lineEdits["circle_center_x"]->text().toDouble());
                 }
                 if (objName == "lineEditCircleCenterY") {
-                    obj->setObjectCenterY(-lineEdits["circle_center_y"]->text().toDouble());
+                    obj->setY(-lineEdits["circle_center_y"]->text().toDouble());
                 }
                 if (objName == "lineEditCircleRadius") {
                     obj->setObjectRadius(lineEdits["circle_radius"]->text().toDouble());
@@ -736,10 +736,10 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
                 break;
             case OBJ_TYPE_ELLIPSE:
                 if (objName == "lineEditEllipseCenterX") {
-                    obj->setObjectCenterX(lineEdits["ellipse-center-x"]->text().toDouble());
+                    obj->setX(lineEdits["ellipse-center-x"]->text().toDouble());
                 }
                 if (objName == "lineEditEllipseCenterY") {
-                    obj->setObjectCenterY(-lineEdits["ellipse-center-y"]->text().toDouble());
+                    obj->setY(-lineEdits["ellipse-center-y"]->text().toDouble());
                 }
                 if (objName == "lineEditEllipseRadiusMajor") {
                     obj->setObjectRadiusMajor(lineEdits["ellipse-radius-major"]->text().toDouble());
@@ -784,10 +784,10 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
                 break;
             case OBJ_TYPE_POINT:
                 if (objName == "lineEditPointX") {
-                    obj->setObjectX(lineEdits["point-x"]->text().toDouble());
+                    obj->setX(lineEdits["point-x"]->text().toDouble());
                 }
                 if (objName == "lineEditPointY") {
-                    obj->setObjectY(-lineEdits["point-y"]->text().toDouble());
+                    obj->setY(-lineEdits["point-y"]->text().toDouble());
                 }
                 break;
             case OBJ_TYPE_POLYGON: // \todo field editing
@@ -823,10 +823,10 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
                     obj->setRotation(-lineEdits["text-single-rotation"]->text().toDouble());
                 }
                 if (objName == "lineEditTextSingleX") {
-                    obj->setObjectX(lineEdits["text-single-x"]->text().toDouble());
+                    obj->setX(lineEdits["text-single-x"]->text().toDouble());
                 }
                 if (objName == "lineEditTextSingleY") {
-                    obj->setObjectY(lineEdits["text-single-y"]->text().toDouble());
+                    obj->setY(lineEdits["text-single-y"]->text().toDouble());
                 }
                 if (objName == "comboBoxTextSingleBackward") {
                     if (comboBoxes["text-single-backward"]->currentText() == fieldVariesText) {

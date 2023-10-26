@@ -1037,3 +1037,14 @@ string_array_length(const char *list[])
     for (i=0; strcmp(list[i], "END"); i++) {}
     return i;
 }
+
+/* Fourier series for parametric plotting. */
+EmbReal
+fourier_series(EmbReal arg, EmbReal *terms, int n_terms)
+{
+    EmbReal x = 0.0f;
+    for (int i=0; i<(n_terms/3); i++) {
+        x += terms[3*i+0] * sin(terms[3*i+1] + terms[3*i+2] * arg);
+    }
+    return x;
+}

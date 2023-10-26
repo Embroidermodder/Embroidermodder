@@ -53,6 +53,8 @@ extern PropertyEditor* dockPropEdit;
 extern UndoEditor* dockUndoEdit;
 extern StatusBar* statusbar;
 
+extern std::unordered_map<std::string, QAction*> actionHash;
+
 /* Functions in the global namespace
  * ---------------------------------
  */
@@ -64,6 +66,13 @@ QString translate_str(const char *str);
 bool contains(std::vector<std::string>, std::string);
 bool validFileFormat(std::string fileName);
 QString fileExtension(std::string fileName);
+
+std::vector<std::string> tokenize(std::string str, const char delim);
+std::string convert_args_to_type(
+    std::string label,
+    std::vector<std::string> args,
+    const char *args_template,
+    std::vector<Node> a);
 
 void add_polyline(QPainterPath p, std::string rubberMode);
 
@@ -92,9 +101,6 @@ QDoubleSpinBox *make_spinbox(QGroupBox *gb, std::string d,
     QString object_name, EmbReal single_step, EmbReal lower, EmbReal upper, int key);
 QCheckBox *make_checkbox(QGroupBox *gb, std::string d,
     const char *label, const char *icon, int key);
-
-/* to allow us to de-OO this massive class */
-int test_geometry(Geometry *g);
 
 /* The Geometry class
  *
@@ -136,36 +142,21 @@ public:
     QString objTextJustify;
     QPainterPath objTextPath;
 
-    std::vector<EmbVector> positions;
+    EmbVector positions[MAX_POSITIONS];
 
     int gripIndex;
 
     int Type = OBJ_TYPE_BASE;
     virtual int type(){ return Type; }
 
-    Geometry(int object_type = OBJ_TYPE_BASE, QGraphicsItem* parent = 0);
+    /* Constructors. */
+    Geometry(int object_type, QRgb rgb, Qt::PenStyle lineType,
+        QGraphicsItem* parent = 0);
     Geometry(Geometry *obj, QGraphicsItem* parent = 0);
-    Geometry(EmbArc arc, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
-    Geometry(EmbCircle circle, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
-    Geometry(EmbLine line, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
-    Geometry(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
-    Geometry(EmbRect rect, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
-    Geometry(QString str, EmbVector position, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
-    Geometry(EmbLine line, int Type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent);
-    Geometry(QPainterPath p, int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
-    Geometry(EmbVector pos, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent = 0);
+    void init(int object_type, QRgb rgb, Qt::PenStyle lineType,
+        QGraphicsItem* parent = 0);
 
-    void init_arc(EmbArc arc, QRgb rgb, Qt::PenStyle lineType);
-    void init_circle(EmbCircle circle, QRgb rgb, Qt::PenStyle lineType);
-    void init_line(EmbLine line, QRgb rgb, Qt::PenStyle lineType);
-    void init_ellipse(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType);
-    void init_rect(EmbRect rect, QRgb rgb, Qt::PenStyle lineType);
-    void init_text_single(QString str, EmbVector position, QRgb rgb, Qt::PenStyle lineType);
-    void init_path(QPainterPath p, QRgb rgb, Qt::PenStyle lineType);
-    void init_point(EmbVector pos, QRgb rgb, Qt::PenStyle lineType);
-
-    void init(void);
-
+    /* Destructor. */
     ~Geometry();
 
     /* Getters */
@@ -203,10 +194,6 @@ public:
     EmbReal objectChord();
     EmbReal objectIncludedAngle();
     bool objectClockwise();
-    EmbReal objectX1() { return objectEndPoint1().x(); }
-    EmbReal objectY1() { return objectEndPoint1().y(); }
-    EmbReal objectX2() { return objectEndPoint2().x(); }
-    EmbReal objectY2() { return objectEndPoint2().y(); }
     EmbReal objectAngle();
     QPointF objectDelta() { return objectEndPoint2() - objectEndPoint1(); }
     EmbReal objectLength() { return objLine.length()*scale(); }
@@ -251,17 +238,22 @@ public:
     /* Updaters, todo: combine */
     void calculateArcData(EmbArc arc);
     void updateArcRect(EmbReal radius);
+    void update(void);
 
     /* Setters */
+    void init_arc(EmbArc arc);
+    void init_circle(EmbCircle circle);
+    void init_line(EmbLine line);
+    void init_ellipse(EmbEllipse ellipse);
+    void init_rect(EmbRect rect);
+    void init_text_single(QString str, EmbVector position);
+    void init_path(QPainterPath p);
+    void init_point(EmbVector pos);
+
     void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
-    void setObjectX(EmbReal x) { setPos(x, objectY()); }
-    void setObjectY(EmbReal y) { setPos(objectX(), y); }
     void setObjectCenter(EmbVector center);
-    void setObjectCenterX(EmbReal centerX);
-    void setObjectCenterY(EmbReal centerY);
     void setObjectSize(EmbReal width, EmbReal height);
     void setObjectRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
-    void setRect(const QRectF& r);
     void setRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
     void setLine(const QLineF& li);
     void setLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);

@@ -34,6 +34,7 @@
 #define VECTOR_CHUNK_SIZE                       50
 #define MAX_ACTIONS                            256
 #define MAX_SETTINGS                           256
+#define MAX_POSITIONS                           26
 #define MAX_EDITORS                            300
 
 /* Node types. */
@@ -575,6 +576,7 @@ extern "C" {
 #include <inttypes.h>
 #include <stdarg.h>
 #include <stdbool.h>
+#include <assert.h>
 
 /* We assume here that all free systems and MacOS are POSIX compliant. */
 #if !defined(WIN32)
@@ -687,6 +689,7 @@ int string_array_length(const char *list[]);
 
 unsigned char validRGB(int r, int g, int b);
 int str_contains(char *s, char c);
+EmbReal fourier_series(EmbReal arg, EmbReal *terms, int n_terms);
 
 Node *create_node(int type);
 int add_leaf(Node *branch, Node *leaf);

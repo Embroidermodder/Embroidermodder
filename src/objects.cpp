@@ -62,21 +62,6 @@ void toPolyline(
 
 bool save(View *view, QString f);
 
-int
-test_geometry(Geometry *g)
-{
-    return g->Type;
-}
-
-Geometry *
-create_geometry(void)
-{
-    Geometry g(OBJ_TYPE_ARC);
-    printf("%d", test_geometry(&g));
-    return &g;
-}
-
-
 /* . */
 bool
 save_current_file(String fileName)
@@ -102,17 +87,6 @@ closest_point(QPointF position, std::vector<QPointF> points)
     return result;
 }
 
-/* Fourier series for parametric plotting. */
-EmbReal
-fourier_series(EmbReal arg, std::vector<EmbReal> terms)
-{
-    EmbReal x = 0.0f;
-    for (int i=0; i<(int)(terms.size()/3); i++) {
-        x += terms[3*i+0] * sin(terms[3*i+1] + terms[3*i+2] * arg);
-    }
-    return x;
-}
-
 /* Add_polyline. */
 void
 add_polyline(QPainterPath p, String rubberMode)
@@ -123,7 +97,9 @@ add_polyline(QPainterPath p, String rubberMode)
     if (!(gview && gscene && stack)) {
         return;
     }
-    Geometry* obj = new Geometry(p, OBJ_TYPE_POLYLINE, _mainWin->getCurrentColor(), Qt::SolidLine);
+    Geometry* obj = new Geometry(OBJ_TYPE_POLYLINE, _mainWin->getCurrentColor(), Qt::SolidLine);
+    obj->normalPath = p;
+    obj->updatePath();
     obj->objRubberMode = rubberMode;
     if (rubberMode != "OBJ_RUBBER_OFF") {
         gview->addToRubberRoom(obj);
@@ -136,458 +112,278 @@ add_polyline(QPainterPath p, String rubberMode)
     }
 }
 
-/* Construct a new Geometry object of arc type. */
-Geometry::Geometry(int type_, QGraphicsItem* parent) : QGraphicsPathItem(parent)
-{
-    debug_message("Geometry Constructor()");
-    init();
-}
-
-/* Construct a new Geometry object of arc type. */
-Geometry::Geometry(EmbArc arc, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
-{
-    debug_message("Geometry Constructor()");
-    init();
-    init_arc(arc, rgb, lineType); //TODO: getCurrentLineType
-}
-
-/* Construct a new Geometry object of circle type. */
-Geometry::Geometry(EmbCircle circle, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
-{
-    debug_message("Geometry Constructor()");
-    init();
-    init_circle(circle, rgb, lineType); //TODO: getCurrentLineType
-}
-
-/* Construct a new Geometry object of ellipse type. */
-Geometry::Geometry(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
-{
-    debug_message("Geometry Constructor()");
-    Type = OBJ_TYPE_ELLIPSE;
-    init();
-    init_ellipse(ellipse, rgb, lineType); //TODO: getCurrentLineType
-}
-
-/* Construct a new Geometry object of line type. */
-Geometry::Geometry(EmbLine line, int Type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
-{
-    debug_message("DimLeaderObject Constructor()");
-    Type = Type_;
-    init();
-    init_line(line, rgb, lineType); //TODO: getCurrentLineType
-}
-
-/* Construct a new Geometry object of vector type. */
-Geometry::Geometry(EmbVector vector, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
-{
-    debug_message("Geometry Constructor()");
-    init();
-    init_point(vector, rgb, lineType); //TODO: getCurrentLineType
-}
-
-/* Construct a new Geometry object of one of the path types.
+/* Construct a new Geometry object of arc type.
+ * Initialize common object properties.
  *
- * For PATH, POLYLINE and POLYGON, set the Type_ variable to one of these.
- */
-Geometry::Geometry(QPainterPath p, int Type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
-{
-    debug_message("Geometry Constructor()");
-    Type = Type_;
-    init();
-    init_path(p, rgb, lineType); //TODO: getCurrentLineType
-}
-
-/* Construct a new Geometry object of rect type. */
-Geometry::Geometry(EmbRect rect, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
-{
-    debug_message("Geometry Constructor()");
-    init();
-    init_rect(rect, rgb, lineType); //TODO: getCurrentLineType
-}
-
-/* Construct a new Geometry object of text type. */
-Geometry::Geometry(QString str, EmbVector v, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent) : QGraphicsPathItem(parent)
-{
-    debug_message("Geometry Constructor()");
-    init();
-    init_text_single(str, v, rgb, lineType); //TODO: getCurrentLineType
-}
-
-/**
+ * WARNING
+ * -------
+ * DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+ * and the item is double clicked, the scene will erratically move the item while zooming.
+ * All movement has to be handled explicitly by us, not by the scene.
  *
+ * TODO: getCurrentLineType
  */
 void
-Geometry::init(void)
+Geometry::init(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent)
 {
+    debug_message("Geometry Constructor()");
+    Type = type_;
+    setData(OBJ_TYPE, Type);
+
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
+
+    objPen.setColor(rgb);
+    lwtPen.setColor(rgb);
+    objPen.setStyle(lineType);
+    lwtPen.setStyle(lineType);
     objPen.setCapStyle(Qt::RoundCap);
     objPen.setJoinStyle(Qt::RoundJoin);
     lwtPen.setCapStyle(Qt::RoundCap);
     lwtPen.setJoinStyle(Qt::RoundJoin);
 
     objID = QDateTime::currentMSecsSinceEpoch();
+
+    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
+
+    switch (Type) {
+    case OBJ_TYPE_ARC:
+        setData(OBJ_NAME, "Arc");
+        break;
+    case OBJ_TYPE_CIRCLE:
+        setData(OBJ_NAME, "Circle");
+        break;
+    case OBJ_TYPE_ELLIPSE:
+        setData(OBJ_NAME, "Ellipse");
+        break;
+        setData(OBJ_NAME, "Dimension Leader");
+        break;
+        setData(OBJ_NAME, "Line");
+        break;
+        setData(OBJ_NAME, "Point");
+        break;
+        setData(OBJ_NAME, "Polygon");
+        break;
+        setData(OBJ_NAME, "Polyline");
+        break;
+        setData(OBJ_NAME, "Rectangle");
+        break;
+        setData(OBJ_NAME, "Single Line Text");
+        break;
+        setData(OBJ_NAME, "Multi Line Text");
+        break;
+    default:
+        setData(OBJ_NAME, "Unknown");
+        break;
+    }
+
+/*
+    init_arc(arc); 
+    init_circle(circle);
+    init_ellipse(ellipse);
+    init_line(line); //TODO: getCurrentLineType
+    init_point(vector); //TODO: getCurrentLineType
+    init_path(p); //TODO: getCurrentLineType
+    init_rect(rect); //TODO: getCurrentLineType
+    init_text_single(str, v); //TODO: getCurrentLineType
+*/
+
+    setPen(objPen);
+}
+
+Geometry::Geometry(int type_, QRgb rgb, Qt::PenStyle lineType,
+    QGraphicsItem* parent) : QGraphicsPathItem(parent)
+{
+    init(type_, rgb, lineType, parent);
+}
+
+/* TODO: 
+ */
+void
+Geometry::update(void)
+{
+
 }
 
 /* Initialise arc object.
- *
- * WARNING
- * -------
- * DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
- * and the item is double clicked, the scene will erratically move the item while zooming.
- * All movement has to be handled explicitly by us, not by the scene.
  */
 void
-Geometry::init_arc(EmbArc arc, QRgb rgb, Qt::PenStyle lineType)
+Geometry::init_arc(EmbArc arc)
 {
-    setData(OBJ_TYPE, OBJ_TYPE_ARC);
-    setData(OBJ_NAME, "Arc");
-
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
-
     calculateArcData(arc);
-
-    objPen.setColor(rgb);
-    lwtPen.setColor(rgb);
-    objPen.setStyle(lineType);
-    lwtPen.setStyle(lineType);
-    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
-    setPen(objPen);
 }
 
 /* Init circle
- *
- * WARNING
- * -------
- * DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
- * and the item is double clicked, the scene will erratically move the item while zooming.
- * All movement has to be handled explicitly by us, not by the scene.
  */
 void
-Geometry::init_circle(EmbCircle circle, QRgb rgb, Qt::PenStyle lineType)
+Geometry::init_circle(EmbCircle circle)
 {
-    setData(OBJ_TYPE, OBJ_TYPE_CIRCLE);
-    setData(OBJ_NAME, "Circle");
-
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
-
     setObjectRadius(circle.radius);
     setObjectCenter(circle.center);
-    objPen.setColor(rgb);
-    lwtPen.setColor(rgb);
-    objPen.setStyle(lineType);
-    lwtPen.setStyle(lineType);
-    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
-    setPen(objPen);
     updatePath();
 }
 
 /* Geometry::init_ellipse
- *
- * WARNING
- * -------
- * DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
- * and the item is double clicked, the scene will erratically move the item while zooming.
- * All movement has to be handled explicitly by us, not by the scene.
  */
 void
-Geometry::init_ellipse(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType)
+Geometry::init_ellipse(EmbEllipse ellipse)
 {
-    setData(OBJ_TYPE, OBJ_TYPE_ELLIPSE);
-    setData(OBJ_NAME, "Ellipse");
-
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
-
     setObjectSize(ellipse.radius.x, ellipse.radius.y);
     setObjectCenter(ellipse.center);
-    objPen.setColor(rgb);
-    lwtPen.setColor(rgb);
-    objPen.setStyle(lineType);
-    lwtPen.setStyle(lineType);
-    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
-    setPen(objPen);
     updatePath();
 }
 
 /* Geometry::init_line
- *
- * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
- * and the item is double clicked, the scene will erratically move the item while zooming.
- * All movement has to be handled explicitly by us, not by the scene.
  */
 void
-Geometry::init_line(EmbLine line, QRgb rgb, Qt::PenStyle lineType)
+Geometry::init_line(EmbLine line)
 {
-    switch (Type) {
-    case OBJ_TYPE_DIMLEADER: {
-        setData(OBJ_TYPE, OBJ_TYPE_DIMLEADER);
-        setData(OBJ_NAME, "Dimension Leader");
-
-        setFlag(QGraphicsItem::ItemIsSelectable, true);
-
+    if (Type==OBJ_TYPE_DIMLEADER) {
         flags |= ((!PROP_CURVED) & PROP_FILLED);
-        setObjectEndPoint1(line.start);
-        setObjectEndPoint2(line.end);
-        objPen.setColor(rgb);
-        lwtPen.setColor(rgb);
-        objPen.setStyle(lineType);
-        lwtPen.setStyle(lineType);
-        setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
-        setPen(objPen);
-        break;
     }
 
-    case OBJ_TYPE_LINE: {
-        setData(OBJ_TYPE, OBJ_TYPE_LINE);
-        setData(OBJ_NAME, "Line");
-
-        setFlag(QGraphicsItem::ItemIsSelectable, true);
-
-        setObjectEndPoint1(line.start);
-        setObjectEndPoint2(line.end);
-        objPen.setColor(rgb);
-        lwtPen.setColor(rgb);
-        objPen.setStyle(lineType);
-        lwtPen.setStyle(lineType);
-        setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
-        setPen(objPen);
-        break;
-    }
-
-    default:
-        break;
-    }
+	setObjectEndPoint1(line.start);
+	setObjectEndPoint2(line.end);
 }
 
-/* Geometry::init_line
- *
- * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
- * and the item is double clicked, the scene will erratically move the item while zooming.
- * All movement has to be handled explicitly by us, not by the scene.
+/* Geometry::init_point
  */
 void
-Geometry::init_point(EmbVector position, QRgb rgb, Qt::PenStyle lineType)
+Geometry::init_point(EmbVector position)
 {
-    setData(OBJ_TYPE, OBJ_TYPE_POINT);
-    setData(OBJ_NAME, "Point");
-
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
-
     setRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
-    setObjectPos(position.x, position.y);
-    objPen.setColor(rgb);
-    lwtPen.setColor(rgb);
-    objPen.setStyle(lineType);
-    lwtPen.setStyle(lineType);
-    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
-    setPen(objPen);
+    setPos(position.x, position.y);
 }
 
-/* Geometry::init_line
- *
- * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
- * and the item is double clicked, the scene will erratically move the item while zooming.
- * All movement has to be handled explicitly by us, not by the scene.
+
+/* Geometry::init_path
  */
 void
-Geometry::init_path(QPainterPath p, QRgb rgb, Qt::PenStyle lineType)
+Geometry::init_path(QPainterPath p)
 {
-    switch (Type) {
-    case OBJ_TYPE_POLYGON: {
-        setData(OBJ_TYPE, OBJ_TYPE_POLYGON);
-        setData(OBJ_NAME, "Polygon");
-
-        setFlag(QGraphicsItem::ItemIsSelectable, true);
-
-        gripIndex = -1;
-        normalPath = p;
-        updatePath();
-        QPainterPath::Element position = p.elementAt(0);
-        setObjectPos(position.x, position.y);
-        break;
-    }
-    case OBJ_TYPE_POLYLINE: {
-        setData(OBJ_TYPE, OBJ_TYPE_POLYLINE);
-        setData(OBJ_NAME, "Polyline");
-
-        setFlag(QGraphicsItem::ItemIsSelectable, true);
-
-        gripIndex = -1;
+	gripIndex = -1;
+	normalPath = p;
+    updatePath();
+    if (Type==OBJ_TYPE_POLYLINE) {
         updatePath(p);
-        QPainterPath::Element position = p.elementAt(0);
-        setPos(position.x, position.y);
-        break;
-    }
-    default:
-        break;
     }
 
-    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
-    objPen.setColor(rgb);
-    lwtPen.setColor(rgb);
-    objPen.setStyle(lineType);
-    lwtPen.setStyle(lineType);
-    setPen(objPen);
+	QPainterPath::Element position = p.elementAt(0);
+	setPos(position.x, position.y);
 }
 
-/* Geometry::init_line
- *
- * \warning DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
- * and the item is double clicked, the scene will erratically move the item while zooming.
- * All movement has to be handled explicitly by us, not by the scene.
+/* Geometry::init_rect
  */
-void Geometry::init_rect(EmbRect rect, QRgb rgb, Qt::PenStyle lineType)
+void Geometry::init_rect(EmbRect rect)
 {
-    setData(OBJ_TYPE, OBJ_TYPE_RECTANGLE);
-    setData(OBJ_NAME, "Rectangle");
-
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
-
     setObjectRect(rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top);
-    objPen.setColor(rgb);
-    lwtPen.setColor(rgb);
-    objPen.setStyle(lineType);
-    lwtPen.setStyle(lineType);
-    setObjectLineWeight("0.35"); //TODO: pass in proper lineweight
-    setPen(objPen);
 }
 
 /* Init_text_single.
- *
- * WARNING
- * DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
- * and the item is double clicked, the scene will erratically move the item while zooming.
- * All movement has to be handled explicitly by us, not by the scene.
  *
  * TODO: set the justification properly.
  * TODO: pass in proper lineweight
  */
 void
-Geometry::init_text_single(QString str, EmbVector v, QRgb rgb, Qt::PenStyle lineType)
+Geometry::init_text_single(QString str, EmbVector v)
 {
-    setData(OBJ_TYPE, OBJ_TYPE_TEXTSINGLE);
-    setData(OBJ_NAME, "Single Line Text");
-
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
-
     objTextJustify = "Left";
 
     setObjectText(str);
-    setObjectPos(v.x, v.y);
-    objPen.setColor(rgb);
-    lwtPen.setColor(rgb);
-    objPen.setStyle(lineType);
-    lwtPen.setStyle(lineType);
-    setObjectLineWeight("0.35");
-    setPen(objPen);
+    setPos(v.x, v.y);
 }
 
 /* Geometry::Geometry *obj *parent. */
 Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
     debug_message("Geometry Constructor()");
-    init();
-    flags = obj->flags;
-    if (obj) {
-        Type = obj->Type;
-        switch (Type) {
-        case OBJ_TYPE_ARC: {
-            EmbArc arc;
-            arc.start = to_EmbVector(obj->objectStartPoint());
-            arc.mid = to_EmbVector(obj->objectMidPoint());
-            arc.end = to_EmbVector(obj->objectEndPoint());
-            init_arc(arc, obj->objPen.color().rgb(), Qt::SolidLine); /* \todo getCurrentLineType */
-            setRotation(obj->rotation());
-            break;
-        }
-
-        case OBJ_TYPE_CIRCLE: {
-            EmbCircle circle;
-            circle.center.x = obj->objectCenter().x();
-            circle.center.y = obj->objectCenter().y();
-            circle.radius = obj->objectRadius();
-            init_circle(circle, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
-            setRotation(obj->rotation());
-            break;
-        }
-
-        case OBJ_TYPE_DIMLEADER: {
-            debug_message("DimLeaderObject Constructor()");
-            EmbLine line;
-            line.start.x = obj->objectX1();
-            line.start.y = obj->objectY1();
-            line.end.x = obj->objectX2();
-            line.end.y = obj->objectY2();
-            init_line(line, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
-            break;
-        }
-
-        case OBJ_TYPE_ELLIPSE: {
-            EmbEllipse ellipse;
-            ellipse.center.x = obj->objectCenter().x();
-            ellipse.center.y = obj->objectCenter().y();
-            ellipse.radius.x = obj->objectWidth();
-            ellipse.radius.y = obj->objectHeight();
-            init_ellipse(ellipse, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
-            setRotation(obj->rotation());
-            break;
-        }
-
-        case OBJ_TYPE_LINE: {
-            EmbLine line;
-            line.start = to_EmbVector(obj->objectEndPoint1());
-            line.end = to_EmbVector(obj->objectEndPoint2());
-            init_line(line, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
-            break;
-        }
-
-        case OBJ_TYPE_POINT: {
-            init_point(to_EmbVector(obj->objectPos()), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
-            setRotation(obj->rotation());
-            break;
-        }
-
-        case OBJ_TYPE_POLYGON: {
-            init_path(obj->objectCopyPath(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
-            setRotation(obj->rotation());
-            setScale(obj->scale());
-            break;
-        }
-
-        case OBJ_TYPE_POLYLINE: {
-            init_path(obj->objectCopyPath(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
-            setRotation(obj->rotation());
-            setScale(obj->scale());
-            break;
-        }
-
-        case OBJ_TYPE_RECTANGLE: {
-            QPointF ptl = obj->objectTopLeft();
-            EmbRect rect;
-            rect.left = ptl.x();
-            rect.top = ptl.y();
-            rect.right = rect.left + obj->objectWidth();
-            rect.bottom = rect.top + obj->objectHeight();
-            init_rect(rect, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
-            setRotation(obj->rotation());
-            break;
-        }
-
-        case OBJ_TYPE_TEXTSINGLE: {
-            setObjectTextFont(obj->objTextFont);
-            setObjectTextSize(obj->text_size);
-            setRotation(obj->rotation());
-            EmbVector v;
-            v.x = obj->objectX();
-            v.y = obj->objectY();
-            init_text_single(obj->objText, v, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
-            setScale(obj->scale());
-            setObjectText(obj->objText);
-            break;
-        }
-
-        default:
-            break;
-        }
+    if (!obj) {
+        debug_message("ERROR: null obj pointer passed to Geometry contructor.");
+        return;
     }
+    init(obj->Type, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
+    flags = obj->flags;
+	Type = obj->Type;
+	setRotation(obj->rotation());
+	setScale(obj->scale());
+	switch (Type) {
+	case OBJ_TYPE_ARC: {
+		EmbArc arc;
+		arc.start = to_EmbVector(obj->objectStartPoint());
+		arc.mid = to_EmbVector(obj->objectMidPoint());
+		arc.end = to_EmbVector(obj->objectEndPoint());
+		init_arc(arc);
+		break;
+	}
+
+	case OBJ_TYPE_CIRCLE: {
+		EmbCircle circle;
+		circle.center = to_EmbVector(obj->objectCenter());
+		circle.radius = obj->objectRadius();
+		init_circle(circle);
+		break;
+	}
+
+	case OBJ_TYPE_DIMLEADER: {
+		EmbLine line;
+		line.start = to_EmbVector(obj->objectEndPoint1());
+		line.end = to_EmbVector(obj->objectEndPoint2());
+		init_line(line);
+		break;
+	}
+
+	case OBJ_TYPE_ELLIPSE: {
+		EmbEllipse ellipse;
+		ellipse.center = to_EmbVector(obj->objectCenter());
+		ellipse.radius.x = obj->objectWidth();
+		ellipse.radius.y = obj->objectHeight();
+		init_ellipse(ellipse);
+		break;
+	}
+
+	case OBJ_TYPE_LINE: {
+		EmbLine line;
+		line.start = to_EmbVector(obj->objectEndPoint1());
+		line.end = to_EmbVector(obj->objectEndPoint2());
+		init_line(line);
+		break;
+	}
+
+	case OBJ_TYPE_POINT: {
+		init_point(to_EmbVector(obj->objectPos()));
+		break;
+	}
+
+	case OBJ_TYPE_POLYGON:
+	case OBJ_TYPE_POLYLINE: {
+		init_path(obj->objectCopyPath());
+		break;
+	}
+
+	case OBJ_TYPE_RECTANGLE: {
+		QPointF ptl = obj->objectTopLeft();
+		EmbRect rect;
+		rect.left = ptl.x();
+		rect.top = ptl.y();
+		rect.right = rect.left + obj->objectWidth();
+		rect.bottom = rect.top + obj->objectHeight();
+		init_rect(rect);
+		break;
+	}
+
+	case OBJ_TYPE_TEXTSINGLE: {
+		setObjectTextFont(obj->objTextFont);
+		setObjectTextSize(obj->text_size);
+		EmbVector v;
+		v.x = obj->objectX();
+		v.y = obj->objectY();
+		init_text_single(obj->objText, v);
+		setObjectText(obj->objText);
+		break;
+	}
+
+	default:
+		break;
+	}
 }
 
 /* Geometry::allGripPoints */
@@ -1571,20 +1367,6 @@ Geometry::setObjectCenter(EmbVector center)
 }
 
 /* . */
-void
-Geometry::setObjectCenterX(EmbReal centerX)
-{
-    setX(centerX);
-}
-
-/* . */
-void
-Geometry::setObjectCenterY(EmbReal centerY)
-{
-    setY(centerY);
-}
-
-/* . */
 QRectF
 Geometry::rect()
 {
@@ -1593,19 +1375,10 @@ Geometry::rect()
 
 /* . */
 void
-Geometry::setRect(const QRectF& r)
-{
-    QPainterPath p;
-    p.addRect(r);
-    setPath(p);
-}
-
-/* . */
-void
 Geometry::setRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h)
 {
     QPainterPath p;
-    p.addRect(x,y,w,h);
+    p.addRect(x, y, w, h);
     setPath(p);
 }
 
@@ -1621,7 +1394,7 @@ Geometry::setLine(const QLineF& li)
 }
 
 /* . */
-void
+void 
 Geometry::setLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 {
     QPainterPath p;
@@ -1847,11 +1620,11 @@ void Geometry::calculateArcData(EmbArc arc)
 void
 Geometry::updateArcRect(EmbReal radius)
 {
-    QRectF arcRect;
-    arcRect.setWidth(radius*2.0);
-    arcRect.setHeight(radius*2.0);
-    arcRect.moveCenter(QPointF(0,0));
-    setRect(arcRect);
+    QRectF elRect;
+    elRect.setWidth(radius*2.0);
+    elRect.setHeight(radius*2.0);
+    elRect.moveCenter(QPointF(0,0));
+    setRect(elRect.x(), elRect.y(), elRect.width(), elRect.height());
 }
 
 /* Set object radius to radius. */
@@ -2312,11 +2085,11 @@ Geometry::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidg
 void
 Geometry::setObjectDiameter(EmbReal diameter)
 {
-    QRectF circRect;
-    circRect.setWidth(diameter);
-    circRect.setHeight(diameter);
-    circRect.moveCenter(QPointF(0,0));
-    setRect(circRect);
+    QRectF elRect;
+    elRect.setWidth(diameter);
+    elRect.setHeight(diameter);
+    elRect.moveCenter(QPointF(0,0));
+    setRect(elRect.x(), elRect.y(), elRect.width(), elRect.height());
     updatePath();
 }
 
@@ -2344,7 +2117,7 @@ Geometry::setObjectSize(EmbReal width, EmbReal height)
     elRect.setWidth(width);
     elRect.setHeight(height);
     elRect.moveCenter(QPointF(0,0));
-    setRect(elRect);
+    setRect(elRect.x(), elRect.y(), width, height);
 }
 
 /* . */
@@ -2370,7 +2143,7 @@ Geometry::setObjectDiameterMajor(EmbReal diameter)
     else
         elRect.setHeight(diameter);
     elRect.moveCenter(QPointF(0,0));
-    setRect(elRect);
+    setRect(elRect.x(), elRect.y(), elRect.width(), elRect.height());
 }
 
 void
@@ -2384,7 +2157,7 @@ Geometry::setObjectDiameterMinor(EmbReal diameter)
         elRect.setHeight(diameter);
     }
     elRect.moveCenter(QPointF(0,0));
-    setRect(elRect);
+    setRect(elRect.x(), elRect.y(), elRect.width(), elRect.height());
 }
 
 /*
@@ -3502,7 +3275,12 @@ Geometry::script_main(void)
     switch (mode) {
 
     case OBJ_TYPE_CIRCLE: {
-        script = scripts["circle_init"];
+		"init",
+		"clear_selection",
+		"# FIX SELECTING CURRENT OBJECT",
+		"select this",
+		"set mode CIRCLE_MODE_1P_RAD",
+		"set-prompt-prefix-tr Specify center point for circle or [3P/2P/TTR (tan tan radius)]: "
         break;
     }
 
@@ -3521,38 +3299,27 @@ Geometry::script_main(void)
     }
 
     case DOLPHIN: {
-        script = dolphin_init_script;
+		"init",
+		"clear-selection",
+		"set mode DOLPHIN_MODE_NUM_POINTS",
+		"# FIX SELECTING CURRENT OBJECT",
+		"select this",
+		"set-selected numPoints 512",
+		"set-selected minPoints 64",
+		"set-selected maxPoints 8192",
+		"set-selected center_x 0.0f",
+		"set-selected center_y 0.0f",
+		"set-selected scale_x 0.04f",
+		"set-selected scale_y 0.04f",
+		"add-rubber-selected POLYGON",
+		"set-rubber-mode POLYGON",
+		"update-dolphin numPoints scale_x scale_y",
+		"spare-rubber POLYGON",
+		"end"
         break;
     }
 
-circle_init_script = [
-    "init",
-    "clear_selection",
-    "# FIX SELECTING CURRENT OBJECT",
-    "select this",
-    "set mode CIRCLE_MODE_1P_RAD",
-    "set-prompt-prefix-tr Specify center point for circle or [3P/2P/TTR (tan tan radius)]: "
-]
 
-dolphin_init_script = [
-    "init",
-    "clear-selection",
-    "set mode DOLPHIN_MODE_NUM_POINTS",
-    "# FIX SELECTING CURRENT OBJECT",
-    "select this",
-    "set-selected numPoints 512",
-    "set-selected minPoints 64",
-    "set-selected maxPoints 8192",
-    "set-selected center_x 0.0f",
-    "set-selected center_y 0.0f",
-    "set-selected scale_x 0.04f",
-    "set-selected scale_y 0.04f",
-    "add-rubber-selected POLYGON",
-    "set-rubber-mode POLYGON",
-    "update-dolphin numPoints scale_x scale_y",
-    "spare-rubber POLYGON",
-    "end"
-]
 
 ellipse_init_script = [
     "init",

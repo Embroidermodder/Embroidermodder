@@ -15,12 +15,9 @@
 
 #include "embroidermodder.h"
 
-#include <cassert>
-
 typedef std::string String;
 
 /* #include <QtOpenGL> */
-extern std::unordered_map<std::string, QAction*> actionHash;
 
 /* Convert from QList to std::vector. */
 std::vector<QGraphicsItem*>
@@ -572,16 +569,14 @@ View::createGridIso()
     QRectF gridRect = gridPath.boundingRect();
     // bx is unused
     EmbReal by = -gridRect.height()/2.0;
-    EmbReal cx = settings[ST_GRID_CENTER_X].r;
-    EmbReal cy = -settings[ST_GRID_CENTER_Y].r;
 
     if (settings[ST_GRID_CENTER_ORIGIN].i) {
         gridPath.translate(0, -by);
     }
-    else
-    {
-        gridPath.translate(0, -by);
-        gridPath.translate(cx, cy);
+    else {
+		EmbReal cx = settings[ST_GRID_CENTER_X].r;
+		EmbReal cy = settings[ST_GRID_CENTER_Y].r;
+        gridPath.translate(cx, -by-cy);
     }
 }
 

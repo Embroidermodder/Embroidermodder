@@ -15,10 +15,6 @@
 
 #include "embroidermodder.h"
 
-#include <iostream>
-#include <fstream>
-#include <string>
-
 int pop_command(const char *line);
 
 typedef std::string String;
@@ -34,21 +30,9 @@ QWizard* wizardTipOfTheDay;
 QLabel* labelTipOfTheDay;
 QCheckBox* checkBoxTipOfTheDay;
 
-std::unordered_map<std::string, std::vector<std::string>> scripts;
-std::unordered_map<std::string, QCheckBox *> checkBoxes;
 std::unordered_map<std::string, QAction*> actionHash;
 std::unordered_map<std::string, QToolBar*> toolbarHash;
 std::unordered_map<std::string, QMenu*> menuHash;
-std::unordered_map<std::string, QMenu*> subMenuHash;
-std::unordered_map<std::string, std::unordered_map<std::string, Node>> config_tables;
-
-std::vector<std::string> tokenize(std::string str, const char delim);
-std::string convert_args_to_type(
-    std::string label,
-    std::vector<std::string> args,
-    const char *args_template,
-    std::vector<Node> a);
-
 
 /* Create menu. */
 void
@@ -58,42 +42,24 @@ create_menu(std::string menu, const char **def, bool topLevel)
         _mainWin->menuBar()->addMenu(menuHash[menu]);
     }
     int n = string_array_length((const char**)def);
-    char msg[1024];
-    sprintf(msg, "%s %d\n", menu.c_str(), n);
-    debug_message(msg);
-
     for (int i=0; i<n; i++) {
         if (!strcmp(def[i], "---")) {
-            if (topLevel) {
-                menuHash[menu]->addSeparator();
-            }
-            else {
-                subMenuHash[menu]->addSeparator();
-            }
+			menuHash[menu]->addSeparator();
         }
         else if (!strncmp(def[i], "submenu", 7)) {
-            const char *submenu_name = def[i] + 8;
-            std::string submenu(submenu_name);
-            menuHash[menu]->addMenu(subMenuHash[submenu]);
+            std::string submenu(def[i] + 8);
+            menuHash[menu]->addMenu(menuHash[submenu]);
         }
         else if (!strncmp(def[i], "icon", 4)) {
             QString icon_fname(def[i] + 5);
-            if (topLevel) {
-                menuHash[menu]->setIcon(_mainWin->create_icon(icon_fname));
-            }
-            else {
-                subMenuHash[menu]->setIcon(_mainWin->create_icon(icon_fname));
-            }
+			menuHash[menu]->setIcon(_mainWin->create_icon(icon_fname));
         }
         else {
-            if (topLevel) {
-                menuHash[menu]->addAction(actionHash[def[i]]);
-            }
-            else {
-                subMenuHash[menu]->addAction(actionHash[def[i]]);
-            }
+			menuHash[menu]->addAction(actionHash[def[i]]);
         }
     }
+    /* Do not allow the Menus to be torn off. It's a pain in the ass to maintain. */
+    menuHash[menu]->setTearOffEnabled(false);
 }
 
 /* Create all menus. */
@@ -116,16 +82,8 @@ MainWindow::createAllMenus()
     create_menu("pan", pan_menu, false);
 
     /* Connect dynamic menus. */
-    connect(subMenuHash["recent"], SIGNAL(aboutToShow()), this, SLOT(recentMenuAboutToShow()));
+    connect(menuHash["recent"], SIGNAL(aboutToShow()), this, SLOT(recentMenuAboutToShow()));
     connect(menuHash["window"], SIGNAL(aboutToShow()), this, SLOT(windowMenuAboutToShow()));
-
-    /* Do not allow the Menus to be torn off. It's a pain in the ass to maintain. */
-    for (auto iter=menuHash.begin(); iter!=menuHash.end(); iter++) {
-        iter->second->setTearOffEnabled(false);
-    }
-    for (auto iter=subMenuHash.begin(); iter!=subMenuHash.end(); iter++) {
-        iter->second->setTearOffEnabled(false);
-    }
 }
 
 /* Create toolbar. */
@@ -339,7 +297,7 @@ MainWindow::createAllToolbars()
         }
     }
 
-    addToolBar(Qt::TopToolBarArea, toolbarHash["draw"]);
+    addToolBar(Qt::LeftToolBarArea, toolbarHash["draw"]);
 
     int bottom_toolbar_n = string_array_length((const char**)bottom_toolbar_layout);
     for (int i=0; i<bottom_toolbar_n; i++) {
@@ -1329,9 +1287,9 @@ MainWindow::MainWindow() : QMainWindow(0)
     menuHash["draw"] = new QMenu(translate_str("&Draw"), this);
 
     //SubMenus
-    subMenuHash["recent"] = new QMenu(translate_str("Open &Recent"), this);
-    subMenuHash["zoom"] = new QMenu(translate_str("&Zoom"), this);
-    subMenuHash["pan"] = new QMenu(translate_str("&Pan"), this);
+    menuHash["recent"] = new QMenu(translate_str("Open &Recent"), this);
+    menuHash["zoom"] = new QMenu(translate_str("&Zoom"), this);
+    menuHash["pan"] = new QMenu(translate_str("&Pan"), this);
 
     //Toolbars
     toolbarHash["file"] = addToolBar(translate_str("File"));
@@ -1539,20 +1497,6 @@ MainWindow::createAllActions()
 
     actionHash["windowclose"]->setEnabled(numOfDocs > 0);
     actionHash["designdetails"]->setEnabled(numOfDocs > 0);
-}
-
-/* MainWindow::run_script_file
- * fname The path of the script to run.
- */
-String
-run_script_file(String fname)
-{
-    String output = "", line;
-    std::ifstream file(fname);
-    while (std::getline(file, line)) {
-        output += actuator(line);
-    }
-    return output;
 }
 
 /* A basic line-by-line script processor to allow for extensions to the program.
@@ -3365,9 +3309,12 @@ convert_args_to_type(
 String
 include_action(std::vector<Node> a)
 {
+/*
     std::string file("commands/");
     file += a[0].s;
     return run_script_file(file);
+*/
+    return "";
 }
 
 /*
@@ -3401,7 +3348,7 @@ void
 MainWindow::recentMenuAboutToShow()
 {
     debug_message("MainWindow::recentMenuAboutToShow()");
-    subMenuHash["recent"]->clear();
+    menuHash["recent"]->clear();
 
     QFileInfo recentFileInfo;
     QString recentValue;
@@ -3426,7 +3373,7 @@ MainWindow::recentMenuAboutToShow()
                 }
                 rAction->setCheckable(false);
                 rAction->setData(QString::fromStdString(recent_files[i]));
-                subMenuHash["recent"]->addAction(rAction);
+                menuHash["recent"]->addAction(rAction);
                 connect(rAction, SIGNAL(triggered()), this, SLOT(openrecentfile()));
             }
         }

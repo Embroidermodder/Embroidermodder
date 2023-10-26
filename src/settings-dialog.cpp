@@ -15,11 +15,7 @@
 
 #include "embroidermodder.h"
 
-#include <fstream>
-
 typedef std::string String;
-
-extern std::unordered_map<std::string, QAction*> actionHash;
 
 void
 copy_node(Node *a, Node *b, int index)
