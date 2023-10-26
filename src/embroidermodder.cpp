@@ -55,7 +55,7 @@ main(int argc, char* argv[])
     app.setApplicationName("Embroidermodder");
     app.setApplicationVersion(version);
 
-	QStringList files;
+    QStringList files;
 
     for (int i = 1; i < argc; i++) {
         QString arg(argv[i]);

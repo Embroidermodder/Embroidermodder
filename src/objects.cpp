@@ -177,7 +177,7 @@ Geometry::init(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent
     }
 
 /*
-    init_arc(arc); 
+    init_arc(arc);
     init_circle(circle);
     init_ellipse(ellipse);
     init_line(line); //TODO: getCurrentLineType
@@ -196,7 +196,7 @@ Geometry::Geometry(int type_, QRgb rgb, Qt::PenStyle lineType,
     init(type_, rgb, lineType, parent);
 }
 
-/* TODO: 
+/* TODO:
  */
 void
 Geometry::update(void)
@@ -241,8 +241,8 @@ Geometry::init_line(EmbLine line)
         flags |= ((!PROP_CURVED) & PROP_FILLED);
     }
 
-	setObjectEndPoint1(line.start);
-	setObjectEndPoint2(line.end);
+    setObjectEndPoint1(line.start);
+    setObjectEndPoint2(line.end);
 }
 
 /* Geometry::init_point
@@ -260,15 +260,15 @@ Geometry::init_point(EmbVector position)
 void
 Geometry::init_path(QPainterPath p)
 {
-	gripIndex = -1;
-	normalPath = p;
+    gripIndex = -1;
+    normalPath = p;
     updatePath();
     if (Type==OBJ_TYPE_POLYLINE) {
         updatePath(p);
     }
 
-	QPainterPath::Element position = p.elementAt(0);
-	setPos(position.x, position.y);
+    QPainterPath::Element position = p.elementAt(0);
+    setPos(position.x, position.y);
 }
 
 /* Geometry::init_rect
@@ -302,88 +302,86 @@ Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(par
     }
     init(obj->Type, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
     flags = obj->flags;
-	Type = obj->Type;
-	setRotation(obj->rotation());
-	setScale(obj->scale());
-	switch (Type) {
-	case OBJ_TYPE_ARC: {
-		EmbArc arc;
-		arc.start = to_EmbVector(obj->objectStartPoint());
-		arc.mid = to_EmbVector(obj->objectMidPoint());
-		arc.end = to_EmbVector(obj->objectEndPoint());
-		init_arc(arc);
-		break;
-	}
+    Type = obj->Type;
+    setRotation(obj->rotation());
+    setScale(obj->scale());
+    switch (Type) {
+    case OBJ_TYPE_ARC: {
+        EmbArc arc;
+        arc.start = to_EmbVector(obj->objectStartPoint());
+        arc.mid = to_EmbVector(obj->objectMidPoint());
+        arc.end = to_EmbVector(obj->objectEndPoint());
+        init_arc(arc);
+        break;
+    }
 
-	case OBJ_TYPE_CIRCLE: {
-		EmbCircle circle;
-		circle.center = to_EmbVector(obj->objectCenter());
-		circle.radius = obj->objectRadius();
-		init_circle(circle);
-		break;
-	}
+    case OBJ_TYPE_CIRCLE: {
+        EmbCircle circle;
+        circle.center = to_EmbVector(obj->scenePos());
+        circle.radius = obj->objectRadius();
+        init_circle(circle);
+        break;
+    }
 
-	case OBJ_TYPE_DIMLEADER: {
-		EmbLine line;
-		line.start = to_EmbVector(obj->objectEndPoint1());
-		line.end = to_EmbVector(obj->objectEndPoint2());
-		init_line(line);
-		break;
-	}
+    case OBJ_TYPE_DIMLEADER: {
+        EmbLine line;
+        line.start = to_EmbVector(obj->objectEndPoint1());
+        line.end = to_EmbVector(obj->objectEndPoint2());
+        init_line(line);
+        break;
+    }
 
-	case OBJ_TYPE_ELLIPSE: {
-		EmbEllipse ellipse;
-		ellipse.center = to_EmbVector(obj->objectCenter());
-		ellipse.radius.x = obj->objectWidth();
-		ellipse.radius.y = obj->objectHeight();
-		init_ellipse(ellipse);
-		break;
-	}
+    case OBJ_TYPE_ELLIPSE: {
+        EmbEllipse ellipse;
+        ellipse.center = to_EmbVector(obj->scenePos());
+        ellipse.radius.x = obj->objectWidth();
+        ellipse.radius.y = obj->objectHeight();
+        init_ellipse(ellipse);
+        break;
+    }
 
-	case OBJ_TYPE_LINE: {
-		EmbLine line;
-		line.start = to_EmbVector(obj->objectEndPoint1());
-		line.end = to_EmbVector(obj->objectEndPoint2());
-		init_line(line);
-		break;
-	}
+    case OBJ_TYPE_LINE: {
+        EmbLine line;
+        line.start = to_EmbVector(obj->objectEndPoint1());
+        line.end = to_EmbVector(obj->objectEndPoint2());
+        init_line(line);
+        break;
+    }
 
-	case OBJ_TYPE_POINT: {
-		init_point(to_EmbVector(obj->objectPos()));
-		break;
-	}
+    case OBJ_TYPE_POINT: {
+        init_point(to_EmbVector(obj->scenePos()));
+        break;
+    }
 
-	case OBJ_TYPE_POLYGON:
-	case OBJ_TYPE_POLYLINE: {
-		init_path(obj->objectCopyPath());
-		break;
-	}
+    case OBJ_TYPE_POLYGON:
+    case OBJ_TYPE_POLYLINE: {
+        init_path(obj->objectCopyPath());
+        break;
+    }
 
-	case OBJ_TYPE_RECTANGLE: {
-		QPointF ptl = obj->objectTopLeft();
-		EmbRect rect;
-		rect.left = ptl.x();
-		rect.top = ptl.y();
-		rect.right = rect.left + obj->objectWidth();
-		rect.bottom = rect.top + obj->objectHeight();
-		init_rect(rect);
-		break;
-	}
+    case OBJ_TYPE_RECTANGLE: {
+        QPointF ptl = obj->objectTopLeft();
+        EmbRect rect;
+        rect.left = ptl.x();
+        rect.top = ptl.y();
+        rect.right = rect.left + obj->objectWidth();
+        rect.bottom = rect.top + obj->objectHeight();
+        init_rect(rect);
+        break;
+    }
 
-	case OBJ_TYPE_TEXTSINGLE: {
-		setObjectTextFont(obj->objTextFont);
-		setObjectTextSize(obj->text_size);
-		EmbVector v;
-		v.x = obj->objectX();
-		v.y = obj->objectY();
-		init_text_single(obj->objText, v);
-		setObjectText(obj->objText);
-		break;
-	}
+    case OBJ_TYPE_TEXTSINGLE: {
+        setObjectTextFont(obj->objTextFont);
+        setObjectTextSize(obj->text_size);
+        EmbVector v = to_EmbVector(obj->scenePos());
+        init_text_single(obj->objText, v);
+        setObjectText(obj->objText);
+        break;
+    }
 
-	default:
-		break;
-	}
+    default:
+        break;
+    }
 }
 
 /* Geometry::allGripPoints */
@@ -394,7 +392,7 @@ Geometry::allGripPoints()
     switch (Type) {
     case OBJ_TYPE_ARC:
         gripPoints = {
-            objectCenter(),
+            scenePos(),
             objectStartPoint(),
             objectMidPoint(),
             objectEndPoint()
@@ -403,7 +401,7 @@ Geometry::allGripPoints()
     case OBJ_TYPE_CIRCLE:
     case OBJ_TYPE_ELLIPSE:
         gripPoints = {
-            objectCenter(),
+            scenePos(),
             objectQuadrant0(),
             objectQuadrant90(),
             objectQuadrant180(),
@@ -972,11 +970,11 @@ Geometry::updateRubber(QPainter* painter)
         else if (objRubberMode == "OBJ_RUBBER_GRIP") {
             if (painter) {
                 QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-                if (gripPoint == objectCenter()) {
+                if (gripPoint == scenePos()) {
                     painter->drawEllipse(rect().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
                 }
                 else {
-                    EmbReal gripRadius = QLineF(objectCenter(), objectRubberPoint(QString())).length();
+                    EmbReal gripRadius = QLineF(scenePos(), objectRubberPoint(QString())).length();
                     painter->drawEllipse(QPointF(), gripRadius, gripRadius);
                 }
 
@@ -1270,9 +1268,9 @@ Geometry::objectQuadrant0()
         EmbReal rot = radians(rotation());
         EmbVector v;
         embVector_multiply(embVector_unit(rot), halfW, &v);
-        return objectCenter() + to_QPointF(v);
+        return scenePos() + to_QPointF(v);
     }
-    return objectCenter() + QPointF(objectRadius(), 0);
+    return scenePos() + QPointF(objectRadius(), 0);
 }
 
 /* QPointF. */
@@ -1284,9 +1282,9 @@ Geometry::objectQuadrant90()
         EmbReal rot = radians(rotation()+90.0);
         EmbVector v;
         embVector_multiply(embVector_unit(rot), halfH, &v);
-        return objectCenter() + to_QPointF(v);
+        return scenePos() + to_QPointF(v);
     }
-    return objectCenter() + QPointF(0,-objectRadius());
+    return scenePos() + QPointF(0,-objectRadius());
 }
 
 /* QPointF. */
@@ -1298,9 +1296,9 @@ Geometry::objectQuadrant180()
         EmbReal rot = radians(rotation()+180.0);
         EmbReal x = halfW*std::cos(rot);
         EmbReal y = halfW*std::sin(rot);
-        return objectCenter() + QPointF(x,y);
+        return scenePos() + QPointF(x,y);
     }
-    return objectCenter() + QPointF(-objectRadius(),0);
+    return scenePos() + QPointF(-objectRadius(),0);
 }
 
 /* QPointF. */
@@ -1312,9 +1310,9 @@ Geometry::objectQuadrant270()
         EmbReal rot = radians(rotation()+270.0);
         EmbReal x = halfH*std::cos(rot);
         EmbReal y = halfH*std::sin(rot);
-        return objectCenter() + QPointF(x,y);
+        return scenePos() + QPointF(x,y);
     }
-    return objectCenter() + QPointF(0, objectRadius());
+    return scenePos() + QPointF(0, objectRadius());
 }
 
 /* EmbReal. */
@@ -1394,7 +1392,7 @@ Geometry::setLine(const QLineF& li)
 }
 
 /* . */
-void 
+void
 Geometry::setLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 {
     QPainterPath p;
@@ -1457,11 +1455,11 @@ Geometry::gripEdit(const QPointF& before, const QPointF& after)
         break;
 
     case OBJ_TYPE_CIRCLE:
-        if (before == objectCenter()) {
+        if (before == scenePos()) {
             moveBy(delta.x(), delta.y());
         }
         else {
-            setObjectRadius(QLineF(objectCenter(), after).length());
+            setObjectRadius(QLineF(scenePos(), after).length());
         }
         break;
 
@@ -2270,7 +2268,7 @@ PathObject::PathObject(PathObject* obj, QGraphicsItem* parent) : Geometry(OBJ_TY
 {
     debug_message("PathObject Constructor()");
     if (obj) {
-        init(obj->objectPos().x(), obj->objectPos().y(), obj->objectCopyPath(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
+        init(obj->scenePos().x(), obj->scenePos().y(), obj->objectCopyPath(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
         setScale(obj->scale());
     }
@@ -2613,12 +2611,12 @@ addCircle(View* view, QGraphicsItem* item)
     if (obj) {
         if (view->formatType == EMBFORMAT_STITCHONLY) {
             QPainterPath path = obj->objectSavePath();
-            toPolyline(view, obj->objectCenter(), path.simplified(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight //TODO: Improve precision, replace simplified
+            toPolyline(view, obj->scenePos(), path.simplified(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight //TODO: Improve precision, replace simplified
         }
         else {
             EmbCircle circle;
-            circle.center.x = (double)obj->objectCenter().x();
-            circle.center.y = (double)obj->objectCenter().y();
+            circle.center.x = (double)obj->scenePos().x();
+            circle.center.y = (double)obj->scenePos().y();
             circle.radius = (double)obj->objectRadius();
 
             embPattern_addCircleAbs(view->pattern, circle);
@@ -2714,12 +2712,12 @@ addEllipse(View* view, QGraphicsItem* item)
     if (obj) {
         if (view->formatType == EMBFORMAT_STITCHONLY) {
             QPainterPath path = obj->objectSavePath();
-            toPolyline(view, obj->objectCenter(), path.simplified(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight //TODO: Improve precision, replace simplified
+            toPolyline(view, obj->scenePos(), path.simplified(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight //TODO: Improve precision, replace simplified
         }
         else {
             EmbEllipse ellipse;
-            ellipse.center.x = (double)obj->objectCenter().x();
-            ellipse.center.y = (double)obj->objectCenter().y();
+            ellipse.center.x = (double)obj->scenePos().x();
+            ellipse.center.y = (double)obj->scenePos().y();
             ellipse.radius.x = (double)obj->objectWidth()/2.0;
             ellipse.radius.y = (double)obj->objectHeight()/2.0;
             //TODO: ellipse rotation
@@ -2842,12 +2840,12 @@ addPoint(View* view, QGraphicsItem* item)
     Geometry* obj = static_cast<Geometry*>(item);
     if (obj) {
         if (view->formatType == EMBFORMAT_STITCHONLY) {
-            toPolyline(view, obj->objectPos(), obj->objectSavePath(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
+            toPolyline(view, obj->scenePos(), obj->objectSavePath(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
         }
         else {
             EmbPoint po;
-            po.position.x = (double)obj->objectPos().x();
-            po.position.y = (double)obj->objectPos().y();
+            po.position.x = (double)obj->scenePos().x();
+            po.position.y = (double)obj->scenePos().y();
             embPattern_addPointAbs(view->pattern, po);
         }
     }
@@ -2859,7 +2857,7 @@ addPolygon(View* view, QGraphicsItem* item)
 {
     Geometry* obj = static_cast<Geometry*>(item);
     if (obj) {
-        toPolyline(view, obj->objectPos(), obj->objectSavePath(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
+        toPolyline(view, obj->scenePos(), obj->objectSavePath(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
     }
 }
 
@@ -2869,7 +2867,7 @@ addPolyline(View* view, QGraphicsItem* item)
 {
     Geometry* obj = static_cast<Geometry*>(item);
     if (obj) {
-        toPolyline(view, obj->objectPos(), obj->objectSavePath(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
+        toPolyline(view, obj->scenePos(), obj->objectSavePath(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
     }
 }
 
@@ -2890,7 +2888,7 @@ addRectangle(View* view, QGraphicsItem* item)
     Geometry* obj = static_cast<Geometry*>(item);
     if (obj) {
         if (view->formatType == EMBFORMAT_STITCHONLY) {
-            toPolyline(view, obj->objectPos(), obj->objectSavePath(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
+            toPolyline(view, obj->scenePos(), obj->objectSavePath(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
         }
         else {
             //TODO: Review this at some point
@@ -2951,7 +2949,7 @@ addTextSingle(View* view, QGraphicsItem* item)
         if (view->formatType == EMBFORMAT_STITCHONLY) {
             std::vector<QPainterPath> pathList = obj->objectSavePathList();
             foreach(QPainterPath path, pathList) {
-                toPolyline(view, obj->objectPos(), path.simplified(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight //TODO: Improve precision, replace simplified
+                toPolyline(view, obj->scenePos(), path.simplified(), "0", obj->objPen.color(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight //TODO: Improve precision, replace simplified
             }
         }
         else {
@@ -3275,12 +3273,12 @@ Geometry::script_main(void)
     switch (mode) {
 
     case OBJ_TYPE_CIRCLE: {
-		"init",
-		"clear_selection",
-		"# FIX SELECTING CURRENT OBJECT",
-		"select this",
-		"set mode CIRCLE_MODE_1P_RAD",
-		"set-prompt-prefix-tr Specify center point for circle or [3P/2P/TTR (tan tan radius)]: "
+        "init",
+        "clear_selection",
+        "# FIX SELECTING CURRENT OBJECT",
+        "select this",
+        "set mode CIRCLE_MODE_1P_RAD",
+        "set-prompt-prefix-tr Specify center point for circle or [3P/2P/TTR (tan tan radius)]: "
         break;
     }
 
@@ -3299,23 +3297,23 @@ Geometry::script_main(void)
     }
 
     case DOLPHIN: {
-		"init",
-		"clear-selection",
-		"set mode DOLPHIN_MODE_NUM_POINTS",
-		"# FIX SELECTING CURRENT OBJECT",
-		"select this",
-		"set-selected numPoints 512",
-		"set-selected minPoints 64",
-		"set-selected maxPoints 8192",
-		"set-selected center_x 0.0f",
-		"set-selected center_y 0.0f",
-		"set-selected scale_x 0.04f",
-		"set-selected scale_y 0.04f",
-		"add-rubber-selected POLYGON",
-		"set-rubber-mode POLYGON",
-		"update-dolphin numPoints scale_x scale_y",
-		"spare-rubber POLYGON",
-		"end"
+        "init",
+        "clear-selection",
+        "set mode DOLPHIN_MODE_NUM_POINTS",
+        "# FIX SELECTING CURRENT OBJECT",
+        "select this",
+        "set-selected numPoints 512",
+        "set-selected minPoints 64",
+        "set-selected maxPoints 8192",
+        "set-selected center_x 0.0f",
+        "set-selected center_y 0.0f",
+        "set-selected scale_x 0.04f",
+        "set-selected scale_y 0.04f",
+        "add-rubber-selected POLYGON",
+        "set-rubber-mode POLYGON",
+        "update-dolphin numPoints scale_x scale_y",
+        "spare-rubber POLYGON",
+        "end"
         break;
     }
 

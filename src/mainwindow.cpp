@@ -44,7 +44,7 @@ create_menu(std::string menu, const char **def, bool topLevel)
     int n = string_array_length((const char**)def);
     for (int i=0; i<n; i++) {
         if (!strcmp(def[i], "---")) {
-			menuHash[menu]->addSeparator();
+            menuHash[menu]->addSeparator();
         }
         else if (!strncmp(def[i], "submenu", 7)) {
             std::string submenu(def[i] + 8);
@@ -52,10 +52,10 @@ create_menu(std::string menu, const char **def, bool topLevel)
         }
         else if (!strncmp(def[i], "icon", 4)) {
             QString icon_fname(def[i] + 5);
-			menuHash[menu]->setIcon(_mainWin->create_icon(icon_fname));
+            menuHash[menu]->setIcon(_mainWin->create_icon(icon_fname));
         }
         else {
-			menuHash[menu]->addAction(actionHash[def[i]]);
+            menuHash[menu]->addAction(actionHash[def[i]]);
         }
     }
     /* Do not allow the Menus to be torn off. It's a pain in the ass to maintain. */
@@ -3474,12 +3474,12 @@ MainWindow::openFile(bool recent, std::string recentFile)
     else {
         if (!preview) {
             //TODO: set getOpenFileNames' selectedFilter Node from settings[ST_OPEN_FORMAT]
-			QStringList sl = QFileDialog::getOpenFileNames(this,
+            QStringList sl = QFileDialog::getOpenFileNames(this,
                 translate_str("Open"), QString::fromStdString(openFilesPath), formatFilterOpen);
-			/*for (int i=0; i<(int)sl.size(); i++) {
-				files.push_back(sl[i].toStdString());
-			}
-			*/
+            /*for (int i=0; i<(int)sl.size(); i++) {
+                files.push_back(sl[i].toStdString());
+            }
+            */
             openFilesSelected(sl);
         }
         else {

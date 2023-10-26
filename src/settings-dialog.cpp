@@ -123,15 +123,15 @@ read_settings(void)
             if (c != '\n') {
                 continue;
             }
-			config[line][line_pos] = 0;
-			line++;
-			line_pos = 0;
-			if (line == MAX_SETTINGS) {
-				puts("WARNING too many lines in the settings file.");
-				break;
-			}
+            config[line][line_pos] = 0;
+            line++;
+            line_pos = 0;
+            if (line == MAX_SETTINGS) {
+                puts("WARNING too many lines in the settings file.");
+                break;
+            }
         }
-		config[line][line_pos] = 0;
+        config[line][line_pos] = 0;
         fclose(f);
 
         for (int i=0; i<SETTINGS_TOTAL; i++) {
@@ -188,26 +188,26 @@ write_settings(void)
         return;
     }
 
-	for (int i=0; i<SETTINGS_TOTAL; i++) {
+    for (int i=0; i<SETTINGS_TOTAL; i++) {
         char line[MAX_STRING_LENGTH];
-		Setting s = settings_data[i];
-		switch (s.type) {
-		case NODE_INT:
-			fprintf(file, "%s=%d\n", s.key, settings[s.id].i);
+        Setting s = settings_data[i];
+        switch (s.type) {
+        case NODE_INT:
+            fprintf(file, "%s=%d\n", s.key, settings[s.id].i);
             sprintf(line, "%s=%d\n", s.key, settings[s.id].i);
             debug_message(line);
-			break;
-		case NODE_REAL:
-			fprintf(file, "%s=%f\n", s.key, settings[s.id].r);
-			break;
-		case NODE_STRING:
-			fprintf(file, "%s=%s\n", s.key, settings[s.id].s);
-			break;
-		default:
-			break;
-		}
-	}
-	fclose(file);
+            break;
+        case NODE_REAL:
+            fprintf(file, "%s=%f\n", s.key, settings[s.id].r);
+            break;
+        case NODE_STRING:
+            fprintf(file, "%s=%s\n", s.key, settings[s.id].s);
+            break;
+        default:
+            break;
+        }
+    }
+    fclose(file);
 }
 
 /* Create settings dialog object. */
@@ -1324,7 +1324,7 @@ Settings_Dialog::createTabLineWeight()
     QLabel* labelDefaultLwt = new QLabel(translate_str("Default weight"), groupBoxLwtMisc);
     labelDefaultLwt->setEnabled(false); //TODO: remove later
     QComboBox* comboBoxDefaultLwt = new QComboBox(groupBoxLwtMisc);
-	copy_node(dialog, settings, ST_LWT_DEFAULT);
+    copy_node(dialog, settings, ST_LWT_DEFAULT);
     //TODO: populate the comboBox and set the initial value
     comboBoxDefaultLwt->addItem(QString().setNum(dialog[ST_LWT_DEFAULT].r, 'F', 2).append(" mm"), dialog[ST_LWT_DEFAULT].r);
     comboBoxDefaultLwt->setEnabled(false); //TODO: remove later

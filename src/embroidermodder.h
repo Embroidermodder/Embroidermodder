@@ -165,11 +165,6 @@ public:
     QPointF objectRubberPoint(QString key);
     QString objectRubberText(QString key);
 
-    QPointF objectCenter() { return scenePos(); }
-    QPointF objectPos() { return scenePos(); }
-    EmbReal objectX(){ return scenePos().x(); }
-    EmbReal objectY(){ return scenePos().y(); }
-
     QPointF objectTopLeft();
     QPointF objectTopRight();
     QPointF objectBottomLeft();

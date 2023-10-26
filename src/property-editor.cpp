@@ -251,8 +251,8 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
             continue;
         }
         if (objType == OBJ_TYPE_ARC) {
-            updateLineEditNumIfVaries(lineEdits["arc-center-x"], obj->objectCenter().x(), false);
-            updateLineEditNumIfVaries(lineEdits["arc-center-y"], -obj->objectCenter().y(), false);
+            updateLineEditNumIfVaries(lineEdits["arc-center-x"], obj->scenePos().x(), false);
+            updateLineEditNumIfVaries(lineEdits["arc-center-y"], -obj->scenePos().y(), false);
             updateLineEditNumIfVaries(lineEdits["arc_radius"], obj->objectRadius(), false);
             updateLineEditNumIfVaries(lineEdits["arc_start_angle"], obj->objectStartAngle(), true);
             updateLineEditNumIfVaries(lineEdits["arc_end_angle"], obj->objectEndAngle(), true);
@@ -270,8 +270,8 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
             // \todo load block data
         }
         else if (objType == OBJ_TYPE_CIRCLE) {
-            updateLineEditNumIfVaries(lineEdits["circle_center_x"], obj->objectCenter().x(), false);
-            updateLineEditNumIfVaries(lineEdits["circle_center_y"], -obj->objectCenter().y(), false);
+            updateLineEditNumIfVaries(lineEdits["circle_center_x"], obj->scenePos().x(), false);
+            updateLineEditNumIfVaries(lineEdits["circle_center_y"], -obj->scenePos().y(), false);
             updateLineEditNumIfVaries(lineEdits["circle_radius"], obj->objectRadius(), false);
             updateLineEditNumIfVaries(lineEdits["circle_diameter"], obj->objectDiameter(), false);
             updateLineEditNumIfVaries(lineEdits["circle_area"], obj->objectArea(), false);
@@ -302,8 +302,8 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
             // \todo load radius dimension data
         }
         else if (objType == OBJ_TYPE_ELLIPSE) {
-            updateLineEditNumIfVaries(lineEdits["ellipse-center-x"], obj->objectCenter().x(), false);
-            updateLineEditNumIfVaries(lineEdits["ellipse-center-y"], -obj->objectCenter().y(), false);
+            updateLineEditNumIfVaries(lineEdits["ellipse-center-x"], obj->scenePos().x(), false);
+            updateLineEditNumIfVaries(lineEdits["ellipse-center-y"], -obj->scenePos().y(), false);
             updateLineEditNumIfVaries(lineEdits["ellipse-radius-major"], obj->objectRadiusMajor(), false);
             updateLineEditNumIfVaries(lineEdits["ellipse-radius-minor"], obj->objectRadiusMinor(), false);
             updateLineEditNumIfVaries(lineEdits["ellipse-diameter-major"], obj->objectDiameterMajor(), false);
@@ -329,8 +329,8 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
             // \todo load path data
         }
         else if (objType == OBJ_TYPE_POINT) {
-            updateLineEditNumIfVaries(lineEdits["point-x"],  obj->objectPos().x(), false);
-            updateLineEditNumIfVaries(lineEdits["point-y"], -obj->objectPos().y(), false);
+            updateLineEditNumIfVaries(lineEdits["point-x"],  obj->scenePos().x(), false);
+            updateLineEditNumIfVaries(lineEdits["point-y"], -obj->scenePos().y(), false);
         }
         else if (objType == OBJ_TYPE_POLYGON) {
             // \todo load polygon data
@@ -368,8 +368,8 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
             updateComboBoxStrIfVaries(comboBoxes["text-single-justify"], obj->objTextJustify, {});
             updateLineEditNumIfVaries(lineEdits["text-single-height"], obj->text_size, false);
             updateLineEditNumIfVaries(lineEdits["text-single-rotation"], -obj->rotation(), true);
-            updateLineEditNumIfVaries(lineEdits["text-single-x"], obj->objectX(), false);
-            updateLineEditNumIfVaries(lineEdits["text-single-y"], -obj->objectY(), false);
+            updateLineEditNumIfVaries(lineEdits["text-single-x"], obj->scenePos().x(), false);
+            updateLineEditNumIfVaries(lineEdits["text-single-y"], -obj->scenePos().y(), false);
             updateComboBoxBoolIfVaries(comboBoxes["text-single-backward"], obj->flags & PROP_BACKWARD, true);
             updateComboBoxBoolIfVaries(comboBoxes["text-single-upside-down"], obj->flags & PROP_UPSIDEDOWN, true);
         }

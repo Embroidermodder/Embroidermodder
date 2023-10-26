@@ -246,13 +246,13 @@ Setting settings_data[SETTINGS_TOTAL] = {
     {
         .id = ST_DISPLAY_UNITS,
         .key = "display_units",
-        .value = "display_units=mm",
+        .value = "mm",
         .type = NODE_STRING
     },
     {
         .id = ST_PROMPT_TEXT_COLOR,
         .key = "prompt_text_color",
-        .value = "prompt_text_color=0",
+        .value = "0",
         .type = NODE_INT
     },
     {
@@ -330,7 +330,7 @@ Setting settings_data[SETTINGS_TOTAL] = {
     {
         .id = ST_RECENT_MAX,
         .key = "opensave_recent_max",
-        .value = "opensave_recent_max=10",
+        .value = "10",
         .type = NODE_INT
     },
     {
@@ -354,55 +354,55 @@ Setting settings_data[SETTINGS_TOTAL] = {
     {
         .id = ST_DEFAULT_PRINTER,
         .key = "printing_default_device",
-        .value = "printing_default_device=""",
+        .value = "",
         .type = NODE_STRING
     },
     {
         .id = ST_USE_LAST_PRINTER,
         .key = "printing_use_last_device",
-        .value = "printing_use_last_device=0",
+        .value = "0",
         .type = NODE_INT
     },
     {
         .id = ST_PRINT_DISABLE_BG,
         .key = "printing_disable_bg",
-        .value = "printing_disable_bg=1",
+        .value = "1",
         .type = NODE_INT
     },
     {
         .id = ST_GRID_ON_LOAD,
         .key = "grid_show_on_load",
-        .value = "grid_show_on_load=1",
+        .value = "1",
         .type = NODE_INT
     },
     {
         .id = ST_SHOW_ORIGIN,
         .key = "grid_show_origin",
-        .value = "grid_show_origin=1",
+        .value = "1",
         .type = NODE_INT
     },
     {
         .id = ST_MATCH_GRID_CROSSHAIR,
         .key = "grid_color_match_crosshair",
-        .value = "grid_color_match_crosshair=1",
+        .value = "1",
         .type = NODE_INT
     },
     {
         .id = ST_GRID_COLOR,
         .key = "grid_color",
-        .value = "grid_color=0",
+        .value = "0",
         .type = NODE_INT
     },
     {
         .id = ST_GRID_LOAD_FROM_FILE,
         .key = "grid_load_from_file",
-        .value = "grid_load_from_file=1",
+        .value = "1",
         .type = NODE_INT
     },
     {
         .id = ST_GRID_TYPE,
         .key = "grid_type",
-        .value = "grid_type=Rectangular",
+        .value = "Rectangular",
         .type = NODE_STRING
     },
     {

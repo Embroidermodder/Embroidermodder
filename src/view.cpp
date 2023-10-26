@@ -501,7 +501,7 @@ View::createGridRect()
         gridPath.translate(-b.x, -b.y);
     }
     else {
-		EmbVector c;
+        EmbVector c;
         c.x = settings[ST_GRID_CENTER_X].r;
         c.y = -settings[ST_GRID_CENTER_Y].r;
         EmbVector d = embVector_subtract(c, b);
@@ -534,8 +534,8 @@ View::createGridPolar()
 void
 View::createGridIso()
 {
-	EmbReal xSpacing = settings[ST_GRID_SPACING_X].r;
-	EmbReal ySpacing = settings[ST_GRID_SPACING_Y].r;
+    EmbReal xSpacing = settings[ST_GRID_SPACING_X].r;
+    EmbReal ySpacing = settings[ST_GRID_SPACING_Y].r;
 
     //Ensure the loop will work correctly with negative numbers
     EmbReal isoW = fabs(settings[ST_GRID_SIZE_X].r);
@@ -574,8 +574,8 @@ View::createGridIso()
         gridPath.translate(0, -by);
     }
     else {
-		EmbReal cx = settings[ST_GRID_CENTER_X].r;
-		EmbReal cy = settings[ST_GRID_CENTER_Y].r;
+        EmbReal cx = settings[ST_GRID_CENTER_X].r;
+        EmbReal cy = settings[ST_GRID_CENTER_Y].r;
         gridPath.translate(cx, -by-cy);
     }
 }
@@ -613,7 +613,7 @@ View::toggleRuler(bool on)
     gscene->setProperty("ENABLE_RULER", on);
     rulerMetric = settings[ST_RULER_METRIC].i;
     rulerColor = QColor(settings[ST_RULER_COLOR].i);
-    rulerPixelSize = settings[ST_RULER_SIZE].r;
+    rulerPixelSize = settings[ST_RULER_SIZE].i;
     gscene->update();
     QApplication::restoreOverrideCursor();
 }
@@ -1086,40 +1086,12 @@ View::willOverflowInt32(int64_t a, int64_t b)
 QPainterPath
 View::createRulerTextPath(EmbVector position, QString str, float height)
 {
+    QFont font_ = font();
+    font_.setPointSize(height);
+
     QPainterPath path;
-
-    EmbVector scale;
-    scale.x = height;
-    scale.y = height;
-
-    std::unordered_map<std::string, std::string> paths;
-    paths["0"] = "M 0.00 -0.75 L 0.00 -0.25 A 0.00 -0.50 0.50 0.50 180.00, 180.00 L 0.50 -0.75 A 0.00 -1.00 0.50 0.50 0.00, 180.00";
-    paths["1"] = "M 0.05 0.0 L 0.45 0.0 M 0.0 -0.75 L 0.25 -1.0 L 0.25 0.0";
-    paths["2"] = "M 0.0 -0.75 A 0.00 -1.00 0.50 0.50 180.00 -216.87 L 0.0 0.0 L 0.5 0.0";
-    paths["3"] = "AM 0.00 -0.50 0.50 0.50 195.00 A 0.00 -0.50 0.50 0.50 195.00 255.00 A 0.00 -1.00 0.50 0.50 270.00 255.00";
-    paths["4"] = "M 0.50 -0.00 L 0.50 -1.00 L 0.00 -0.50 L 0.50 -0.50";
-    paths["5"] = "M 0.50 -1.00 L 0.00 -1.00 L 0.00 -0.50 L 0.25 -0.50 A 0.00 -0.50 0.50 0.50 90.00 -180.00 L 0.00 -0.00";
-    paths["6"] = "E 0.25 -0.25 0.25 0.25 M 0.00 -0.25 L 0.00 -0.75 A 0.00 -1.00 0.50 0.50 180.00 -140.00";
-    paths["7"] = "M 0.00 -1.00 L 0.50 -1.00 L 0.25 -0.25 L 0.25 -0.00";
-    paths["8"] = "E 0.25 -0.25 0.25 0.25 E 0.25 -0.75 0.25 0.25";
-    paths["9"] = "E 0.25 -0.75 0.25 0.25 M 0.50 -0.75 L 0.50 -0.25 A 0.00 -0.50 0.50 0.50 0.00, -140.00";
-    //path.addEllipse(QPointF(0.25 -0.50*scale.y), 0.25 0.50
-    paths["0"] = "M 0.00 -0.75 L 0.00 -0.25 A 0.00 -0.50 0.50 0.50 180.00, 180.00 L 0.50 -0.75 A 0.00 -1.00 0.50 0.50 0.00, 180.00";
-    paths["-"] = "M 0.00 -0.50 L 0.50 -0.50";
-    paths["'"] = "M 0.25 -1.00 L 0.25 -0.75";
-    paths["\""] = "M 0.10 -1.00 L 0.10 -0.75 M 0.40 -1.00 L 0.40 -0.75";
-
-    String s = str.toStdString();
-    for (int i = 0; i < (int)s.length(); ++i) {
-        String S(1, s[i]);
-        auto iter = paths.find(S);
-        if (iter != paths.end()) {
-            path = add_to_path(path, scale, paths[S]);
-        }
-        path.translate(QPointF(-0.75*scale.x, 0.0));
-    }
-
-    path.translate(QPointF(s.length()*0.75*scale.x, 0.0) + to_QPointF(position));
+    path.addText(0, 0, font_, str);
+    path.translate(QPointF(str.length()*height, 0.0) + to_QPointF(position));
 
     return path;
 }
