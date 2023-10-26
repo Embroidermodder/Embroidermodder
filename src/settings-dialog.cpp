@@ -97,16 +97,16 @@ read_settings(void)
         printf("WARNING: Failed to open settings file (%s), continuing with defaults.",
             fname.c_str());
         for (int i=0; i<SETTINGS_TOTAL; i++) {
-            int id = settings_data[i].id;
-            switch (settings[id].type) {
+            Setting s = settings_data[i];
+            switch (s.type) {
             case NODE_INT:
-                settings[id].i = atoi(settings_data[i].value);
+                settings[s.id].i = atoi(s.value);
                 break;
             case NODE_REAL:
-                settings[id].r = atof(settings_data[i].value);
+                settings[s.id].r = atof(s.value);
                 break;
             case NODE_STRING:
-                strcpy(settings[id].s, settings_data[i].value);
+                strcpy(settings[s.id].s, s.value);
                 break;
             default:
                 break;
@@ -145,7 +145,7 @@ read_settings(void)
             }
             Setting s = settings_data[i];
             char *value = config[i] + eq_pos + 1;
-            switch (settings[s.id].type) {
+            switch (s.type) {
             case NODE_INT:
                 settings[s.id].i = atoi(value);
                 break;
@@ -195,7 +195,7 @@ write_settings(void)
 	for (int i=0; i<SETTINGS_TOTAL; i++) {
         char line[MAX_STRING_LENGTH];
 		Setting s = settings_data[i];
-		switch (settings[i].type) {
+		switch (s.type) {
 		case NODE_INT:
 			fprintf(file, "%s=%d\n", s.key, settings[s.id].i);
             sprintf(line, "%s=%d\n", s.key, settings[s.id].i);
