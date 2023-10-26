@@ -31,6 +31,14 @@ const char *version = "2.0.0-alpha4";
  */
 Node *root;
 
+/* The actuator changes the program state via these global variables.
+ *
+ * These copies of the settings struct are for restoring the state if
+ * the user doesn't want to accept their changes in the settings dialog.
+ */
+Node settings[SETTINGS_TOTAL], dialog[SETTINGS_TOTAL],
+    preview[SETTINGS_TOTAL], accept_[SETTINGS_TOTAL];
+
 const char *details_labels[] = {
     "Total Stitches:",
     "Real Stitches:",
@@ -56,152 +64,6 @@ const char *default_prompt_style[] = {
     "font-style",                  "normal",
     "font-size",                     "12px"
     "END"
-};
-
-/* This imitates an initiation file, and if none is present it is loaded
- * using the same parser.
- *
- * Our ini syntax is minimal: all lines with an equals sign '=' are parsed
- * comments are lines without the sign, everything to the left is the key,
- * everything to the right is the value.
- *
- * There are 3 types: int, float and string (char array). Boolean values are
- * treated as ints and arrays are strings with comma seperation.
- *
- * 1. If the first char of the value string is a number but not period is present
- *    then it is an int.
- * 2. If a period is present and it starts with a number then it is a float.
- * 3. Otherwise it is a string.
- * 4. Colors start with an open parenthesis, so we know that the string passed
- *    should then be converted into a color in the next loop.
- */
-const char default_settings[MAX_SETTINGS][MAX_STRING_LENGTH] = {
-    "general_language=default",
-    "general_icon_theme=default",
-    "general_icon_size=16",
-    "general_mdi_bg_use_logo=1",
-    "general_mdi_bg_use_texture=1",
-    "general_mdi_bg_use_color=1",
-    "general_mdi_bg_logo=images/logo-spirals.png",
-    "general_mdi_bg_texture=images/texture-spirals.png",
-    "general_mdi_bg_color=255",
-    "general_tip_of_the_day=true",
-    "general_current_tip=0",
-    "general_system_help_browser=true",
-
-    "window_position_x=100",
-    "window_position_y=100",
-    "window_size_x=800",
-    "window_size_y=600",
-
-    "display_use_open_gl=false",
-    "display_render_hint_anti_alias=false",
-    "display_render_hint_text_anti_alias=false",
-    "display_render_hint_smooth_pixmap=false",
-    "display_render_hint_high_quality_anti_alias=false",
-    "display_render_hint_non_cosmetic=false",
-    "display_show_scrollbars=true",
-    "display_scrollbar_widget_num=0",
-    "display_crosshair_color=0",
-    "display_background_color=16777215",
-    "display_selectbox_left_color=0",
-    "display_selectbox_left_fill=0",
-    "display_selectbox_right_color=0",
-    "display_selectbox_right_fill=0",
-    "display_selectbox_alpha= 32",
-    "display_zoomscale_in=2.0",
-    "display_zoomscale_out=0.5",
-    "display_crosshair_percent=5.0",
-    "display_units=mm",
-
-    "prompt_text_color=0",
-    "prompt_background_color=16777215",
-    "prompt_font_family=Monospace",
-    "prompt_font_style=normal",
-    "prompt_font_size=12",
-    "prompt_save_history=true",
-    "prompt_save_history_as_html=false",
-    "prompt_save_history_filename=prompt.log",
-
-    "opensave_custom_filter=supported",
-    "opensave_open_format=*.*",
-    "opensave_open_thumbnail=false",
-    "opensave_save_format=*.*",
-    "opensave_save_thumbnail=false",
-    "opensave_recent_max=10",
-    "opensave_recent_list_of_files=",
-    "opensave_recent_directory=samples",
-    "opensave_trim_dst_num_jumps=5",
-
-    "printing_default_device=""",
-    "printing_use_last_device=false",
-    "printing_disable_bg=true",
-
-    "grid_show_on_load=true",
-    "grid_show_origin=true",
-    "grid_color_match_crosshair=true",
-    "grid_color=0",
-    "grid_load_from_file=true",
-    "grid_type=Rectangular",
-    "grid_center_on_origin=true",
-    "grid_center_x=0.0",
-    "grid_center_y=0.0",
-    "grid_size_x=100.0",
-    "grid_size_y=100.0",
-    "grid_spacing_x=25.0",
-    "grid_spacing_y=25.0",
-    "grid_size_radius=50.0",
-    "grid_spacing_radius=25.0",
-    "grid_spacing_angle=45.0",
-
-    "ruler_show_on_load=true",
-    "ruler_metric=true",
-    "ruler_color=14479360",
-    "ruler_pixel_size=20.0",
-
-    "quicksnap_enabled=true",
-    "quicksnap_locator_color=0",
-    "quicksnap_locator_size=4",
-    "quicksnap_aperture_size=10",
-    "quicksnap_endpoint=true",
-    "quicksnap_midpoint=true",
-    "quicksnap_center=true",
-    "quicksnap_node=true",
-    "quicksnap_quadrant=true",
-    "quicksnap_intersection=true",
-    "quicksnap_extension=true",
-    "quicksnap_insertion=false",
-    "quicksnap_perpendicular=true",
-    "quicksnap_tangent=true",
-    "quicksnap_nearest=false",
-    "quicksnap_apparent=false",
-    "quicksnap_parallel=false",
-
-    "lineweight_show_line_weight=false",
-    "lineweight_real_render=true",
-    "lineweight_default_line_weight=0.0",
-
-    "selection_pick_first=true",
-    "selection_pick_add=true",
-    "selection_pick_drag=false",
-    "selection_coolgrip_color=255",
-    "selection_hotgrip_color=25500",
-    "selection_grip_size=4",
-    "selection_pickbox_size=4",
-
-    "text_font=Arial",
-    "text_size=12.0",
-    "text_angle=0.0",
-    "text_style_bold=0",
-    "text_style_italic=0",
-    "text_style_underline=0",
-    "text_style_strikeout=0",
-    "text_style_overline=0",
-
-    "ruler_tick_depth=0.5",
-    "major_tick_seperation=0.4",
-    "needle_speed=100.0",
-    "stitch_time=0.01"
 };
 
 /* . */
@@ -753,6 +615,158 @@ const char *tips[] = {
     "that you can use the 'DAY' and 'NIGHT' commands to quickly switch the view colors to commonly used white or black?",
     "that you can quickly change the background, crosshair and grid colors using the 'RGB' command?"
 };
+
+const char types[][MAX_STRING_LENGTH] = {
+    "NULL",
+    "STRING",
+    "STRING_LIST",
+    "REAL",
+    "INT",
+    "BOOL",
+    "FUNCTION",
+    "VECTOR",
+    "UNKNOWN"
+};
+
+/**
+ * .
+ */
+const char *extensions[] = {
+    "100",
+    "10o",
+    "ART",
+    "BMC",
+    "BRO",
+    "CND",
+    "COL",
+    "CSD",
+    "CSV",
+    "DAT",
+    "DEM",
+    "DSB",
+    "DST",
+    "DSZ",
+    "DXF",
+    "EDR",
+    "EMD",
+    "EXP",
+    "EXY",
+    "EYS",
+    "FXY",
+    "GNC",
+    "GT",
+    "HUS",
+    "INB",
+    "JEF",
+    "KSM",
+    "PCD",
+    "PCM",
+    "PCQ",
+    "PCS",
+    "PEC",
+    "PEL",
+    "PEM",
+    "PES",
+    "PHB",
+    "PHC",
+    "RGB",
+    "SEW",
+    "SHV",
+    "SST",
+    "STX",
+    "SVG",
+    "T09",
+    "TAP",
+    "THR",
+    "TXT",
+    "U00",
+    "U01",
+    "VIP",
+    "VP3",
+    "XXX",
+    "ZSK",
+    "END"
+};
+
+int general_props[] = {
+    ST_ICON_THEME,
+    ST_ICON_SIZE,
+    ST_MDI_USE_COLOR,
+    ST_MDI_USE_LOGO,
+    ST_MDI_USE_TEXTURE,
+    ST_MDI_COLOR,
+    ST_MDI_LOGO,
+    ST_MDI_TEXTURE,
+    ST_TIP_OF_THE_DAY,
+    -1
+};
+
+int display_props[] = {
+    ST_USE_OPENGL,
+    ST_ANTI_ALIAS,
+    ST_TEXT_ANTI_ALIAS,
+    ST_SMOOTH_PIXMAP,
+    ST_HQ_ANTI_ALIAS,
+    ST_NON_COSMETIC,
+    ST_SHOW_SCROLLBARS,
+    ST_SCROLLBAR_WIDGET_NUM,
+    ST_CROSSHAIR_COLOR,
+    ST_BG_COLOR,
+    ST_SELECTBOX_LEFT_COLOR,
+    ST_SELECTBOX_LEFT_FILL,
+    ST_SELECTBOX_RIGHT_COLOR,
+    ST_SELECTBOX_RIGHT_FILL,
+    ST_SELECTBOX_ALPHA,
+    ST_ZOOMSCALE_IN,
+    ST_ZOOMSCALE_OUT,
+    -1
+};
+
+int prompt_props[] = {
+    ST_PROMPT_TEXT_COLOR,
+    ST_PROMPT_BG_COLOR,
+    ST_PROMPT_FONT_FAMILY,
+    ST_PROMPT_FONT_SIZE,
+    ST_SAVE_HISTORY,
+    ST_HTML_OUTPUT,
+    -1
+};
+
+int quick_snap_props[] = {
+    ST_QSNAP_ENABLED,
+    ST_QSNAP_LOCATOR_COLOR,
+    ST_QSNAP_LOCATOR_SIZE,
+    ST_QSNAP_APERTURE_SIZE,
+    ST_QSNAP_ENDPOINT,
+    ST_QSNAP_MIDPOINT,
+    ST_QSNAP_CENTER,
+    ST_QSNAP_NODE,
+    ST_QSNAP_QUADRANT,
+    ST_QSNAP_INTERSECTION,
+    ST_QSNAP_EXTENSION,
+    ST_QSNAP_INSERTION,
+    ST_QSNAP_PERPENDICULAR,
+    ST_QSNAP_TANGENT,
+    ST_QSNAP_NEAREST,
+    ST_QSNAP_APPARENT,
+    ST_QSNAP_PARALLEL,
+    -1
+};
+
+int opensave_props[] = {
+    ST_OPENSAVE_FILTER,
+    -1
+};
+
+/* Wrong type */
+void
+wrong_type_message(Node n, const char *key, int type)
+{
+    if (n.type == NODE_NULL) {
+        return;
+    }
+    printf("ERROR: setting with key %s is not of %s type.", key, types[type]);
+}
 
 /* Check that RBG values are in the range (0,255) inclusive. */
 unsigned char

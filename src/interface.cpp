@@ -35,181 +35,11 @@
 
 typedef std::string String;
 
-Node get_node(std::unordered_map<std::string, Node> d, std::string key);
-void wrong_type_message(int type);
-
-const char types[][MAX_STRING_LENGTH] = {
-    "NULL",
-    "STRING",
-    "STRING_LIST",
-    "REAL",
-    "INT",
-    "BOOL",
-    "FUNCTION",
-    "VECTOR",
-    "UNKNOWN"
-};
-
 /* Make the translation function global in scope. */
 QString
 translate_str(const char *str)
 {
     return _mainWin->tr(str);
-}
-
-/* Makes a node from a 32-bit signed integer. */
-Node
-node_int(int32_t value)
-{
-    Node node;
-    node.type = NODE_INT;
-    node.i = value;
-    return node;
-}
-
-/* Makes a node from a 32-bit unsigned integer. */
-Node
-node_uint(uint32_t value)
-{
-    Node node;
-    node.type = NODE_INT;
-    node.i = (int32_t)value;
-    return node;
-}
-
-/* Makes a node from an EmbReal value. */
-Node
-node_real(EmbReal value)
-{
-    Node node;
-    node.type = NODE_REAL;
-    node.r = value;
-    return node;
-}
-
-/* Makes a node from a C string value. */
-Node
-node_cstr(const char *value)
-{
-    Node node;
-    node.type = NODE_STRING;
-    strcpy(node.s, value);
-    return node;
-}
-
-/* Makes a node from a std::string value. */
-Node
-node_str(String value)
-{
-    return node_cstr(value.c_str());
-}
-
-/* Makes a node from a QString value. */
-Node
-node_qstr(QString value)
-{
-    return node_cstr(value.toStdString().c_str());
-}
-
-/* . */
-Node
-get_node(std::unordered_map<std::string, Node> d, std::string key)
-{
-    char error_msg[MAX_STRING_LENGTH];
-    Node n = {
-        .type = NODE_NULL
-    };
-    auto iter = d.find(key);
-    if (iter != d.end()) {
-        return d[key];
-    }
-    /*
-    int i;
-    for (i=0; i<d.size(); i++) {
-        if (d[i].key == key) {
-            return i;
-        }
-    }
-    */
-    sprintf(error_msg, "ERROR: dictionary entry with key %s missing.", key.c_str());
-    debug_message(error_msg);
-    return n;
-}
-
-/* Wrong type */
-void
-wrong_type_message(Node n, std::string key, int type)
-{
-    if (n.type != NODE_NULL) {
-        char error_str[MAX_STRING_LENGTH];
-        sprintf(error_str, "ERROR: setting with key %s is not of %s type.", key.c_str(), types[type]);
-        debug_message(error_str);
-    }
-}
-
-/* Get a boolean value from a std::unordered_map<std::string, Node> with the given key. */
-bool
-get_bool(std::unordered_map<std::string, Node> d, std::string key)
-{
-    Node n = get_node(d, key);
-    if (n.type == NODE_BOOL) {
-        if (n.i) {
-            return true;
-        }
-        return false;
-    }
-    wrong_type_message(n, key, NODE_BOOL);
-    return true;
-}
-
-/* Get a 32-bit signed integer value from a std::unordered_map<std::string, Node> with the given key. */
-int
-get_int(std::unordered_map<std::string, Node> d, std::string key)
-{
-    Node n = get_node(d, key);
-    if (n.type == NODE_INT) {
-        return n.i;
-    }
-    wrong_type_message(n, key, NODE_INT);
-    return 0;
-}
-
-/* Get the 32-bit unsigned integer from the std::unordered_map<std::string, Node> d with the given key. */
-uint32_t
-get_uint(std::unordered_map<std::string, Node> d, std::string key)
-{
-    return (uint32_t)get_int(d, key);
-}
-
-/* Get the 32-bit float EmbReal from the std::unordered_map<std::string, Node> d with the given key. */
-EmbReal
-get_real(std::unordered_map<std::string, Node> d, std::string key)
-{
-    Node n = get_node(d, key);
-    if (n.type == NODE_REAL) {
-        return n.r;
-    }
-    wrong_type_message(n, key, NODE_REAL);
-    return 0.0f;
-}
-
-/* Get std::string from std::unordered_map<std::string, Node>. */
-std::string
-get_str(std::unordered_map<std::string, Node> d, std::string key)
-{
-    Node n = get_node(d, key);
-    if (n.type == NODE_STRING) {
-        return n.s;
-    }
-    wrong_type_message(n, key, NODE_STRING);
-    return "";
-}
-
-/* Get QString from std::unordered_map<std::string, Node>. */
-QString
-get_qstr(std::unordered_map<std::string, Node> d, std::string key)
-{
-    return QString::fromStdString(get_str(d, key));
 }
 
 /* Tokenize our std::string type using a 1 character deliminator. */
@@ -380,9 +210,10 @@ set_visibility(QObject* parent, const char *key, bool visibility)
  * This function should take a parent object to build...
  */
 void
-make_ui_element(std::unordered_map<std::string, Node> description)
+make_ui_element(
+    std::string element_type
+)
 {
-    std::string element_type = get_str(description, "type");
     if (element_type == "groupBox") {
 
     }
@@ -420,26 +251,32 @@ make_ui_element(std::unordered_map<std::string, Node> description)
 
 /* . */
 QCheckBox *
-make_checkbox(QGroupBox *gb, std::string dictionary, const char *label, const char *icon, std::string key)
+make_checkbox(
+    QGroupBox *gb,
+    std::string dictionary,
+    const char *label,
+    const char *icon,
+    int key)
 {
     QCheckBox *checkBox = new QCheckBox(translate_str(label), gb);
     checkBox->setIcon(_mainWin->create_icon(icon));
     /* checkBox->setName(); */
     if (dictionary == "settings") {
-        checkBox->setChecked(get_bool(settings, key));
+        checkBox->setChecked(settings[key].i);
         QObject::connect(checkBox, &QCheckBox::stateChanged, _mainWin,
-            [=](int x) { settings[key] = node_int(x != 0); });
+            [=](int x) { settings[key].i = x; });
     }
     if (dictionary == "dialog") {
-        checkBox->setChecked(get_bool(dialog, key));
+        checkBox->setChecked(dialog[key].i);
         QObject::connect(checkBox, &QCheckBox::stateChanged, _mainWin,
-            [=](int x) { dialog[key] = node_int(x != 0); });
+            [=](int x) { dialog[key].i = x; });
     }
-    if (dictionary == "config") {
-        checkBox->setChecked(get_bool(config, key));
+/*    if (dictionary == "config") {
+        checkBox->setChecked(config[key].i);
         QObject::connect(checkBox, &QCheckBox::stateChanged, _mainWin,
-            [=](int x) { config[key] = node_int(x != 0); });
+            [=](int x) { config[key].i = x; });
     }
+*/
     return checkBox;
 }
 
@@ -459,27 +296,30 @@ make_checkbox(QGroupBox *gb, std::string dictionary, const char *label, const ch
  */
 QDoubleSpinBox *
 make_spinbox(QGroupBox *gb, std::string dictionary,
-    QString object_name, EmbReal single_step, EmbReal lower, EmbReal upper, std::string key)
+    QString object_name, EmbReal single_step, EmbReal lower, EmbReal upper,
+    int key)
 {
     QDoubleSpinBox* spinBox = new QDoubleSpinBox(gb);
     spinBox->setObjectName(object_name);
     spinBox->setSingleStep(single_step);
     spinBox->setRange(lower, upper);
     if (dictionary == "settings") {
-        spinBox->setValue(get_real(settings, key));
+        spinBox->setValue(settings[key].r);
         QObject::connect(spinBox, &QDoubleSpinBox::valueChanged, _mainWin,
-            [=](double x){ settings[key] = node_real((EmbReal)x); });
+            [=](double x){ settings[key].r = (EmbReal)x; });
     }
     if (dictionary == "dialog") {
-        spinBox->setValue(get_real(dialog, key));
+        spinBox->setValue(dialog[key].r);
         QObject::connect(spinBox, &QDoubleSpinBox::valueChanged, _mainWin,
-            [=](double x){ dialog[key] = node_real((EmbReal)x); });
+            [=](double x){ dialog[key].r = (EmbReal)x; });
     }
+/*
     if (dictionary == "config") {
-        spinBox->setValue(get_real(config, key));
+        spinBox->setValue(config[key].r);
         QObject::connect(spinBox, &QDoubleSpinBox::valueChanged, _mainWin,
-            [=](double x){ config[key] = node_real((EmbReal)x); });
+            [=](double x){ config[key].r = (EmbReal)x; });
     }
+*/
     return spinBox;
 }
 

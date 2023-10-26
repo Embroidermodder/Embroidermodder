@@ -53,15 +53,6 @@ extern PropertyEditor* dockPropEdit;
 extern UndoEditor* dockUndoEdit;
 extern StatusBar* statusbar;
 
-/* The Settings System
- *
- * Rather than pollute the global namespace, we collect together all the global
- * settings into a structure that stores them. This also allows us to create a
- * complete copy of the settings for the purpose of restoring them if the user
- * cancels out of the Settings Dialog.
- */
-extern std::unordered_map<std::string, Node> settings, dialog, config;
-
 /* Functions in the global namespace
  * ---------------------------------
  */
@@ -92,31 +83,15 @@ std::string run_script(std::vector<std::string> script);
 QPointF to_QPointF(EmbVector a);
 EmbVector to_EmbVector(QPointF a);
 
+bool save_current_file(std::string fileName);
+
 /* Interface creation functions.
  */
 void make_ui_element(std::string description);
 QDoubleSpinBox *make_spinbox(QGroupBox *gb, std::string d,
-    QString object_name, EmbReal single_step, EmbReal lower, EmbReal upper, std::string key);
+    QString object_name, EmbReal single_step, EmbReal lower, EmbReal upper, int key);
 QCheckBox *make_checkbox(QGroupBox *gb, std::string d,
-    const char *label, const char *icon, std::string key);
-
-/* std::unordered_map<std::string, Node> management functions.
- */
-Node node_bool(bool value);
-Node node_int(int32_t value);
-Node node_uint(uint32_t value);
-Node node_real(EmbReal value);
-Node node_str(std::string value);
-Node node_qstr(QString value);
-
-bool get_bool(std::unordered_map<std::string, Node> d, std::string key);
-int32_t get_int(std::unordered_map<std::string, Node> d, std::string key);
-uint32_t get_uint(std::unordered_map<std::string, Node> d, std::string key);
-EmbReal get_real(std::unordered_map<std::string, Node> d, std::string key);
-std::string get_str(std::unordered_map<std::string, Node> d, std::string key);
-QString get_qstr(std::unordered_map<std::string, Node> d, std::string key);
-
-bool save_current_file(std::string fileName);
+    const char *label, const char *icon, int key);
 
 /* to allow us to de-OO this massive class */
 int test_geometry(Geometry *g);
@@ -712,7 +687,7 @@ public slots:
 
     void newFile();
     void openFile(bool recent = false, std::string recentFile = "");
-    void openFilesSelected(std::vector<std::string> files);
+    void openFilesSelected(QStringList files);
     void openrecentfile();
     void savefile();
     void saveasfile();
@@ -1031,7 +1006,7 @@ public:
         EmbReal single_step,
         EmbReal lower,
         EmbReal upper,
-        std::string,
+        int key,
         int row);
     QCheckBox* create_checkbox(QGroupBox *groupbox, std::string label);
 

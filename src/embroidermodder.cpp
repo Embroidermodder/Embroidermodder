@@ -55,10 +55,10 @@ main(int argc, char* argv[])
     app.setApplicationName("Embroidermodder");
     app.setApplicationVersion(version);
 
-    std::vector<std::string> filesToOpen;
+	QStringList files;
 
     for (int i = 1; i < argc; i++) {
-        std::string arg(argv[i]);
+        QString arg(argv[i]);
         if ((arg == "-d") || (arg == "--debug")) {
         }
         else if ((arg == "-h") || (arg == "--help")) {
@@ -69,8 +69,8 @@ main(int argc, char* argv[])
             fprintf(stdout, "Embroidermodder %s\n", version);
             exitApp = true;
         }
-        else if (QFile::exists(argv[i]) && validFileFormat(arg)) {
-            filesToOpen.push_back(arg);
+        else if (QFile::exists(argv[i]) && validFileFormat(arg.toStdString())) {
+            files += arg;
         }
         else {
             fprintf(stderr, usage_msg);
@@ -92,8 +92,8 @@ main(int argc, char* argv[])
     /* NOTE: If openFilesSelected() is called from within the _mainWin
      * constructor, slot commands wont work and the window menu will be screwed.
      */
-    if (filesToOpen.size() > 0) {
-        _mainWin->openFilesSelected(filesToOpen);
+    if (files.size() > 0) {
+        _mainWin->openFilesSelected(files);
     }
 
     return app.exec();

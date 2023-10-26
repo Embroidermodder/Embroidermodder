@@ -323,27 +323,24 @@
 #define ARC_END_ANGLE                            5
 #define ARC_DIAMETER                             6
 #define ARC_AREA                                 7
+#define ARC_CIRCUMFERENCE                        9
+#define ARC_POSITION                            10
+#define OBJECT_TEXT                             12
+#define OBJECT_TEXT_FONT                        13
+#define OBJECT_TEXT_JUSTIFY                     14
+#define OBJECT_TEXT_SIZE                        15
+#define OBJECT_TEXT_BOLD                        16
+#define OBJECT_TEXT_ITALIC                      17
+#define OBJECT_TEXT_UNDERLINE                   18
+#define OBJECT_TEXT_STRIKEOUT                   19
+#define OBJECT_TEXT_OVERLINE                    20
+#define OBJECT_TEXT_BACKWARD                    21
+#define OBJECT_TEXT_UPSIDEDOWN                  22
+#define OBJECT_RADIUS_MAJOR                     23
+#define OBJECT_RADIUS_MINOR                     24
+#define OBJECT_DIAMETER_MAJOR                   25
+#define OBJECT_DIAMETER_MINOR                   26
 
-/*
-#define ARC_CIRCUMFERENCE                    9
-#define ARC_POSITION                        10
-#define OBJECT_TEXT                        12
-#define OBJECT_TEXT_FONT                    13
-#define OBJECT_TextJustify(QString justify);
-#define OBJECT_TextSize(EmbReal size);
-#define OBJECT_TextStyle(bool bold, bool italic, bool under, bool strike, bool over);
-#define OBJECT_TextBold(bool val);
-#define OBJECT_TextItalic(bool val);
-#define OBJECT_TextUnderline(bool val);
-#define OBJECT_TextStrikeOut(bool val);
-#define OBJECT_TextOverline(bool val);
-#define OBJECT_TextBackward(bool val);
-#define OBJECT_TextUpsideDown(bool val);
-#define OBJECT_RadiusMajor(EmbReal radius);
-#define OBJECT_RadiusMinor(EmbReal radius);
-#define OBJECT_DiameterMajor(EmbReal diameter);
-#define OBJECT_DiameterMinor(EmbReal diameter);
-*/
 
 #define N_RUBBER_MODES                          40
 
@@ -414,18 +411,158 @@
 #define GB_GEOM_PATH                            18
 #define GB_MISC_PATH                            19
 #define GB_GEOM_POINT                           20
-/*
-    geometry_polygon_gb = createGroupBox("geometry_polygon", "Geometry");
-    geometry_polyline_gb = createGroupBox("geometry_polyline", "Geometry");
-    misc_polyline_gb = createGroupBox("misc_polyline", "Misc");
-    geometry_ray_gb = createGroupBox("geometry_ray", "Geometry");
-    geometry_rectangle_gb = createGroupBox("geometry_rectangle", "Geometry");
-    geometry_text_multi_gb = createGroupBox("geometry_text_multi", "Geometry");
-    text_text_single_gb = createGroupBox("text_text_single", "Text");
-    geometry_text_single_gb = createGroupBox("geometry_text_single", "Geometry");
-    misc_text_single_gb = createGroupBox("misc_text_single", "Misc
-*/
-#define GB_TOTAL                                22
+#define GB_GEOM_POLYGON                         21
+#define GB_GEOM_POLYLINE                        22
+#define GB_MISC_POLYLINE                        23
+#define GB_GEOM_RAY                             24
+#define GB_GEOM_RECTANGLE                       25
+#define GB_GEOM_TEXT_MULTI                      26
+#define GB_TEXT_TEXT_SINGLE                     27
+#define GB_GEOM_TEXT_SINGLE                     28
+#define GB_MISC_TEXT_SINGLE                     29
+#define GB_TOTAL                                30
+
+/* Settings indices. */
+#define ST_LANGUAGE                              0
+#define ST_ICON_THEME                            1
+#define ST_ICON_SIZE                             2
+#define ST_MDI_USE_LOGO                          3
+#define ST_MDI_USE_TEXTURE                       4
+#define ST_MDI_USE_COLOR                         5
+#define ST_MDI_LOGO                              6
+#define ST_MDI_TEXTURE                           7
+#define ST_MDI_COLOR                             8
+#define ST_TIP_OF_THE_DAY                        9
+#define ST_CURRENT_TIP                          10
+#define ST_SYSTEM_HELP_BROWSER                  11
+
+/* Window settings. */
+#define ST_WINDOW_POS_X                         12
+#define ST_WINDOW_POS_Y                         13
+#define ST_WINDOW_SIZE_X                        14
+#define ST_WINDOW_SIZE_Y                        15
+
+/* Display settings. */
+#define ST_USE_OPENGL                           16
+#define ST_ANTI_ALIAS                           17
+#define ST_TEXT_ANTI_ALIAS                      18
+#define ST_SMOOTH_PIXMAP                        19
+#define ST_HQ_ANTI_ALIAS                        20
+#define ST_NON_COSMETIC                         21
+#define ST_SHOW_SCROLLBARS                      22
+#define ST_SCROLLBAR_WIDGET_NUM                 23
+#define ST_CROSSHAIR_COLOR                      24
+#define ST_BG_COLOR                             25
+#define ST_SELECTBOX_LEFT_COLOR                 26
+#define ST_SELECTBOX_LEFT_FILL                  27
+#define ST_SELECTBOX_RIGHT_COLOR                28
+#define ST_SELECTBOX_RIGHT_FILL                 29
+#define ST_SELECTBOX_ALPHA                      30
+#define ST_ZOOMSCALE_IN                         31
+#define ST_ZOOMSCALE_OUT                        32
+#define ST_CROSSHAIR_PERCENT                    33
+#define ST_DISPLAY_UNITS                        34
+
+/* Prompt settings. */
+#define ST_PROMPT_TEXT_COLOR                    35
+#define ST_PROMPT_BG_COLOR                      36
+#define ST_PROMPT_FONT_FAMILY                   37
+#define ST_PROMPT_FONT_STYLE                    38
+#define ST_PROMPT_FONT_SIZE                     39
+#define ST_SAVE_HISTORY                         40
+#define ST_HTML_OUTPUT                          41
+#define ST_HISTORY_FILE                         42
+
+/* Open/save settings. */
+#define ST_OPENSAVE_FILTER                      43
+#define ST_OPENSAVE_FORMAT                      44
+#define ST_OPEN_THUMBNAIL                       45
+#define ST_SAVE_FORMAT                          46
+#define ST_SAVE_THUMBNAIL                       47
+#define ST_RECENT_MAX                           48
+#define ST_RECENT_FILES                         49
+#define ST_RECENT_DIRECTORY                     50
+#define ST_TRIM_NUM_JUMPS                       51
+
+/* Print settings. */
+#define ST_DEFAULT_PRINTER                      52
+#define ST_USE_LAST_PRINTER                     53
+#define ST_PRINT_DISABLE_BG                     54
+
+/* Grid settings. */
+#define ST_GRID_ON_LOAD                         55
+#define ST_SHOW_ORIGIN                          56
+#define ST_MATCH_GRID_CROSSHAIR                 57
+#define ST_GRID_COLOR                           58
+#define ST_GRID_LOAD_FROM_FILE                  59
+#define ST_GRID_TYPE                            60
+#define ST_GRID_CENTER_ORIGIN                   61
+#define ST_GRID_SIZE_RADIUS                     62
+#define ST_GRID_SPACING_RADIUS                  63
+#define ST_GRID_SPACING_ANGLE                   64
+
+/* Ruler settings. */
+#define ST_RULER_ON_LOAD                        65
+#define ST_RULER_METRIC                         66
+#define ST_RULER_COLOR                          67
+#define ST_RULER_SIZE                           68
+
+/* Quicksnap settings. */
+#define ST_QSNAP_ENABLED                        69
+#define ST_QSNAP_LOCATOR_COLOR                  70
+#define ST_QSNAP_LOCATOR_SIZE                   71
+#define ST_QSNAP_APERTURE_SIZE                  72
+#define ST_QSNAP_ENDPOINT                       73
+#define ST_QSNAP_MIDPOINT                       74
+#define ST_QSNAP_CENTER                         75
+#define ST_QSNAP_NODE                           76
+#define ST_QSNAP_QUADRANT                       77
+#define ST_QSNAP_INTERSECTION                   78
+#define ST_QSNAP_EXTENSION                      79
+#define ST_QSNAP_INSERTION                      80
+#define ST_QSNAP_PERPENDICULAR                  81
+#define ST_QSNAP_TANGENT                        82
+#define ST_QSNAP_NEAREST                        83
+#define ST_QSNAP_APPARENT                       84
+#define ST_QSNAP_PARALLEL                       85
+
+/* Lineweight settings. */
+#define ST_LWT_SHOW                             86
+#define ST_LWT_REAL                             87
+#define ST_LWT_DEFAULT                          88
+
+/* Selection settings. */
+#define ST_SELECTION_PICK_FIRST                 89
+#define ST_SELECTION_PICK_ADD                   90
+#define ST_SELECTION_PICK_DRAG                  91
+#define ST_SELECTION_COOLGRIP_COLOR             92
+#define ST_SELECTION_HOTGRIP_COLOR              93
+#define ST_SELECTION_GRIP_SIZE                  94
+#define ST_SELECTION_PICKBOX_SIZE               95
+
+/* Text settings. */
+#define ST_TEXT_FONT                            96
+#define ST_TEXT_SIZE                            97
+#define ST_TEXT_ANGLE                           98
+#define ST_TEXT_BOLD                            99
+#define ST_TEXT_ITALIC                         100
+#define ST_TEXT_UNDERLINE                      101
+#define ST_TEXT_STRIKEOUT                      102
+#define ST_TEXT_OVERLINE                       103
+
+#define ST_TICK_DEPTH                          104
+#define ST_MAJOR_TICK_SEPERATION               105
+#define ST_NEEDLE_SPEED                        106
+#define ST_STITCH_TIME                         107
+
+#define ST_GRID_CENTER_X                       108
+#define ST_GRID_CENTER_Y                       109
+#define ST_GRID_SIZE_X                         110
+#define ST_GRID_SIZE_Y                         111
+#define ST_GRID_SPACING_X                      112
+#define ST_GRID_SPACING_Y                      113
+
+#define SETTINGS_TOTAL                         114
 
 #ifdef __cplusplus
 extern "C" {
@@ -450,21 +587,21 @@ extern "C" {
 
 /*
  * Expected Keys for actions
- * String icon;
+ * String icon
  *      The stub used for finding the icon image file.
- * String command;
+ * String command
  *      The command sent to the actuator.
- * String tooltip;
+ * String tooltip
  *      The label in the menus and the message that appears when
  *      you hover over an icon.
- * String statustip;
+ * String statustip
  *       The message that appears at the bottom of the .
- * String shortcut;
+ * String shortcut
  *       The keyboard shortcut for this action.
- * StringList aliases;
+ * StringList aliases
  *       A list of all alternative commands, if empty only
  *       the icon sttring will be .
- * StringList script;
+ * StringList script
  *      If this is a compound action this will be a
  *      list of commands or it can allow for command line
  *      style command aliases. For example: icon16 would become
@@ -495,16 +632,12 @@ typedef struct LineEditData_ {
 
 /*
  */
-typedef struct Settings_ {
-    EmbReal quicksnap_locator_size;
-    bool selection_mode_pickadd;
-    bool grid_show_on_load;
-    bool grid_center_on_origin;
-    bool grid_show_origin;
-    bool ruler_show_on_load;
-    bool ruler_metric;
-    uint32_t ruler_color;
-} Settings;
+typedef struct Setting_ {
+    int id;
+    char key[MAX_STRING_LENGTH];
+    char value[MAX_STRING_LENGTH];
+    int type;
+} Setting;
 
 /* To allow us to resize general C arrays when necessary.
  * Note that for char arrays, the buffer is a normal c-style string.
@@ -534,6 +667,17 @@ struct Node_ {
 
 typedef struct Node_ Node;
 
+/* The Settings System
+ *
+ * Rather than pollute the global namespace, we collect together all the global
+ * settings into a structure that stores them. This also allows us to create a
+ * complete copy of the settings for the purpose of restoring them if the user
+ * cancels out of the Settings Dialog.
+ */
+extern const char *settings_labels[];
+extern Node settings[SETTINGS_TOTAL], dialog[SETTINGS_TOTAL],
+    preview[SETTINGS_TOTAL], accept_[SETTINGS_TOTAL];
+
 Cvector *cvector_create(size_t element_size);
 void cvector_append(Cvector *a, Cvector *b);
 void cvector_add_cstr(Cvector *a, char *b);
@@ -553,11 +697,21 @@ Node *create_and_add_leaf(Node *parent, char *key, char *value);
 int insert_node(Node *branch, char key[MAX_STRING_LENGTH], Node *node);
 
 extern Node *root;
+
 extern const ActionData action_table[MAX_ACTIONS];
 extern const LineEditData all_line_editors[MAX_EDITORS];
 extern const char *version;
 extern const char *usage_msg;
 extern const char default_settings[MAX_SETTINGS][MAX_STRING_LENGTH];
+
+extern const char *extensions[];
+extern int general_props[];
+extern int display_props[];
+extern int prompt_props[];
+extern int quick_snap_props[];
+extern int opensave_props[];
+
+extern Setting settings_data[];
 
 extern const char *group_box_data[];
 extern const char *toolbar_list[];

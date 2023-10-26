@@ -75,25 +75,25 @@ View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, 
     setCursor(Qt::BlankCursor);
     horizontalScrollBar()->setCursor(Qt::ArrowCursor);
     verticalScrollBar()->setCursor(Qt::ArrowCursor);
-    qsnapLocatorColor = get_uint(settings, "quicksnap_locator_color");
-    qsnapLocatorSize = get_real(settings, "quicksnap_locator_size");
-    qsnapApertureSize = get_real(settings, "quicksnap_aperture_size");
-    gripColorCool = get_uint(settings, "selection_coolgrip_color");
-    gripColorHot = get_uint(settings, "selection_hotgrip_color");
-    gripSize = get_real(settings, "selection_grip_size");
-    pickBoxSize = get_real(settings, "selection_pickbox_size");
-    setCrossHairColor(get_uint(settings, "display_crosshair_color"));
-    setCrossHairSize(get_real(settings, "display_crosshair_percent"));
-    setGridColor(get_uint(settings, "grid_color"));
+    qsnapLocatorColor = settings[ST_QSNAP_LOCATOR_COLOR].i;
+    qsnapLocatorSize = settings[ST_QSNAP_LOCATOR_SIZE].i;
+    qsnapApertureSize = settings[ST_QSNAP_APERTURE_SIZE].i;
+    gripColorCool = settings[ST_SELECTION_COOLGRIP_COLOR].i;
+    gripColorHot = settings[ST_SELECTION_HOTGRIP_COLOR].i;
+    gripSize = settings[ST_SELECTION_GRIP_SIZE].i;
+    pickBoxSize = settings[ST_SELECTION_PICKBOX_SIZE].i;
+    setCrossHairColor(settings[ST_CROSSHAIR_COLOR].i);
+    setCrossHairSize(settings[ST_CROSSHAIR_PERCENT].r);
+    setGridColor(settings[ST_GRID_COLOR].i);
 
-    if (get_bool(settings, "grid_show_on_load")) {
-        createGrid(get_qstr(settings, "grid_type"));
+    if (settings[ST_GRID_ON_LOAD].i) {
+        createGrid(settings[ST_GRID_TYPE].s);
     }
     else {
         createGrid("");
     }
 
-    toggleRuler(get_bool(settings, "ruler_show_on_load"));
+    toggleRuler(settings[ST_RULER_ON_LOAD].i);
     toggleReal(true); //TODO: load this from file, else settings with default being true
 
     grippingActive = false;
@@ -121,13 +121,13 @@ View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, 
     tempBaseObj = 0;
 
     selectBox = new SelectBox(QRubberBand::Rectangle, this);
-    selectBox->setColors(QColor(get_uint(settings, "display_selectbox_left_color")),
-                         QColor(get_uint(settings, "display_selectbox_left_fill")),
-                         QColor(get_uint(settings, "display_selectbox_right_color")),
-                         QColor(get_uint(settings, "display_selectbox_right_fill")),
-                         get_int(settings, "display_selectbox_alpha"));
+    selectBox->setColors(QColor(settings[ST_SELECTBOX_LEFT_COLOR].i),
+                         QColor(settings[ST_SELECTBOX_LEFT_FILL].i),
+                         QColor(settings[ST_SELECTBOX_RIGHT_COLOR].i),
+                         QColor(settings[ST_SELECTBOX_RIGHT_FILL].i),
+                         settings[ST_SELECTBOX_ALPHA].i);
 
-    showScrollBars(get_bool(settings, "display_show_scrollbars"));
+    showScrollBars(settings[ST_SHOW_SCROLLBARS].i);
     setCornerButton();
 
     undoStack = new QUndoStack(this);
@@ -136,7 +136,7 @@ View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, 
     installEventFilter(this);
 
     setMouseTracking(true);
-    setBackgroundColor(get_uint(settings, "display_background_color"));
+    setBackgroundColor(settings[ST_BG_COLOR].i);
     //TODO: wrap this with a setBackgroundPixmap() function: setBackgroundBrush(QPixmap("images/canvas.png"));
 
     connect(gscene, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
@@ -456,7 +456,7 @@ View::createOrigin() //TODO: Make Origin Customizable
 {
     originPath = QPainterPath();
 
-    if (get_bool(settings, "grid_show_origin")) {
+    if (settings[ST_SHOW_ORIGIN].i) {
         //originPath.addEllipse(QPointF(0,0), 0.5, 0.5); //TODO: Make Origin Customizable
         EmbReal rad = 0.5;
         originPath.moveTo(0.0, rad);
@@ -476,11 +476,8 @@ View::createOrigin() //TODO: Make Origin Customizable
 void
 View::createGridRect()
 {
-    EmbReal xSpacing = get_real(settings, "grid_spacing_x");
-    EmbReal ySpacing = get_real(settings, "grid_spacing_y");
-
-    QRectF gr(0, 0, get_real(settings, "grid_size_x"), -get_real(settings, "grid_size_y"));
-    // Ensure the loop will work correctly with negative numbers
+    QRectF gr(0, 0, settings[ST_GRID_SIZE_X].r, -settings[ST_GRID_SIZE_Y].r);
+    /* Ensure the loop will work correctly with negative numbers. */
     EmbReal x1 = std::min(gr.left(), gr.right());
     EmbReal y1 = std::min(gr.top(), gr.bottom());
     EmbReal x2 = std::max(gr.left(), gr.right());
@@ -488,67 +485,64 @@ View::createGridRect()
 
     gridPath = QPainterPath();
     gridPath.addRect(gr);
-    for (EmbReal gx = x1; gx < x2; gx += xSpacing) {
+    for (EmbReal gx = x1; gx < x2; gx += settings[ST_GRID_SPACING_X].r) {
         gridPath.moveTo(gx, y1);
         gridPath.lineTo(gx, y2);
     }
-    for (EmbReal gy = y1; gy < y2; gy += ySpacing) {
+    for (EmbReal gy = y1; gy < y2; gy += settings[ST_GRID_SPACING_Y].r) {
         gridPath.moveTo(x1, gy);
         gridPath.lineTo(x2, gy);
     }
 
-    //Center the Grid
+    /* Center the Grid. */
     QRectF gridRect = gridPath.boundingRect();
-    EmbReal bx = gridRect.width()/2.0;
-    EmbReal by = -gridRect.height()/2.0;
-    EmbReal cx = get_real(settings, "grid_center_x");
-    EmbReal cy = -get_real(settings, "grid_center_y");
-    EmbReal dx = cx - bx;
-    EmbReal dy = cy - by;
+    EmbVector b;
+    b.x = gridRect.width()/2.0;
+    b.y = -gridRect.height()/2.0;
 
-    if (get_bool(settings, "grid_center_on_origin")) {
-        gridPath.translate(-bx, -by);
+    if (settings[ST_GRID_CENTER_ORIGIN].i) {
+        gridPath.translate(-b.x, -b.y);
     }
     else {
-        gridPath.translate(dx, dy);
+		EmbVector c;
+        c.x = settings[ST_GRID_CENTER_X].r;
+        c.y = -settings[ST_GRID_CENTER_Y].r;
+        EmbVector d = embVector_subtract(c, b);
+        gridPath.translate(d.x, d.y);
     }
 }
 
 void
 View::createGridPolar()
 {
-    EmbReal radSpacing = get_real(settings, "grid_spacing_radius");
-    EmbReal angSpacing = get_real(settings, "grid_spacing_angle");
-
-    EmbReal rad = get_real(settings, "grid_size_radius");
+    EmbReal rad = settings[ST_GRID_SIZE_RADIUS].r;
 
     gridPath = QPainterPath();
     gridPath.addEllipse(QPointF(0,0), rad, rad);
-    for (EmbReal r = 0; r < rad; r += radSpacing) {
+    for (EmbReal r = 0; r < rad; r += settings[ST_GRID_SPACING_RADIUS].r) {
         gridPath.addEllipse(QPointF(0,0), r, r);
     }
-    for (EmbReal ang = 0; ang < 360; ang += angSpacing) {
+    for (EmbReal ang = 0; ang < 360; ang += settings[ST_GRID_SPACING_ANGLE].r) {
         gridPath.moveTo(0,0);
         gridPath.lineTo(QLineF::fromPolar(rad, ang).p2());
     }
 
-    EmbReal cx = get_real(settings, "grid_center_x");
-    EmbReal cy = get_real(settings, "grid_center_y");
-
-    if (!get_bool(settings, "grid_center_on_origin")) {
-        gridPath.translate(cx, -cy);
+    if (!settings[ST_GRID_CENTER_ORIGIN].i) {
+        EmbReal x = settings[ST_GRID_CENTER_X].r;
+        EmbReal y = settings[ST_GRID_CENTER_Y].r;
+        gridPath.translate(x, -y);
     }
 }
 
 void
 View::createGridIso()
 {
-    EmbReal xSpacing = get_real(settings, "grid_spacing_x");
-    EmbReal ySpacing = get_real(settings, "grid_spacing_y");
+	EmbReal xSpacing = settings[ST_GRID_SPACING_X].r;
+	EmbReal ySpacing = settings[ST_GRID_SPACING_Y].r;
 
     //Ensure the loop will work correctly with negative numbers
-    EmbReal isoW = std::fabs(get_real(settings, "grid_size_x"));
-    EmbReal isoH = std::fabs(get_real(settings, "grid_size_y"));
+    EmbReal isoW = fabs(settings[ST_GRID_SIZE_X].r);
+    EmbReal isoH = fabs(settings[ST_GRID_SIZE_Y].r);
 
     QPointF p1 = QPointF(0,0);
     QPointF p2 = QLineF::fromPolar(isoW,  30).p2();
@@ -578,10 +572,10 @@ View::createGridIso()
     QRectF gridRect = gridPath.boundingRect();
     // bx is unused
     EmbReal by = -gridRect.height()/2.0;
-    EmbReal cx = get_real(settings, "grid_center_x");
-    EmbReal cy = -get_real(settings, "grid_center_y");
+    EmbReal cx = settings[ST_GRID_CENTER_X].r;
+    EmbReal cy = -settings[ST_GRID_CENTER_Y].r;
 
-    if (get_bool(settings, "grid_center_on_origin")) {
+    if (settings[ST_GRID_CENTER_ORIGIN].i) {
         gridPath.translate(0, -by);
     }
     else
@@ -608,7 +602,7 @@ View::toggleGrid(bool on)
     debug_message("View toggleGrid()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     if (on) {
-        createGrid(get_qstr(settings, "grid_type"));
+        createGrid(settings[ST_GRID_TYPE].s);
     }
     else {
         createGrid("");
@@ -622,9 +616,9 @@ View::toggleRuler(bool on)
     debug_message("View toggleRuler()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     gscene->setProperty("ENABLE_RULER", on);
-    rulerMetric = get_bool(settings, "ruler_metric");
-    rulerColor = QColor(get_uint(settings, "ruler_color"));
-    rulerPixelSize = get_real(settings, "ruler_pixel_size");
+    rulerMetric = settings[ST_RULER_METRIC].i;
+    rulerColor = QColor(settings[ST_RULER_COLOR].i);
+    rulerPixelSize = settings[ST_RULER_SIZE].r;
     gscene->update();
     QApplication::restoreOverrideCursor();
 }
@@ -1103,29 +1097,29 @@ View::createRulerTextPath(EmbVector position, QString str, float height)
     scale.x = height;
     scale.y = height;
 
-    std::unordered_map<std::string, Node> paths;
-    paths["0"] = node_str("M 0.00 -0.75 L 0.00 -0.25 A 0.00 -0.50 0.50 0.50 180.00, 180.00 L 0.50 -0.75 A 0.00 -1.00 0.50 0.50 0.00, 180.00");
-    paths["1"] = node_str("M 0.05 0.0 L 0.45 0.0 M 0.0 -0.75 L 0.25 -1.0 L 0.25 0.0");
-    paths["2"] = node_str("M 0.0 -0.75 A 0.00 -1.00 0.50 0.50 180.00 -216.87 L 0.0 0.0 L 0.5 0.0");
-    paths["3"] = node_str("AM 0.00 -0.50 0.50 0.50 195.00 A 0.00 -0.50 0.50 0.50 195.00 255.00 A 0.00 -1.00 0.50 0.50 270.00 255.00");
-    paths["4"] = node_str("M 0.50 -0.00 L 0.50 -1.00 L 0.00 -0.50 L 0.50 -0.50");
-    paths["5"] = node_str("M 0.50 -1.00 L 0.00 -1.00 L 0.00 -0.50 L 0.25 -0.50 A 0.00 -0.50 0.50 0.50 90.00 -180.00 L 0.00 -0.00");
-    paths["6"] = node_str("E 0.25 -0.25 0.25 0.25 M 0.00 -0.25 L 0.00 -0.75 A 0.00 -1.00 0.50 0.50 180.00 -140.00");
-    paths["7"] = node_str("M 0.00 -1.00 L 0.50 -1.00 L 0.25 -0.25 L 0.25 -0.00");
-    paths["8"] = node_str("E 0.25 -0.25 0.25 0.25 E 0.25 -0.75 0.25 0.25");
-    paths["9"] = node_str("E 0.25 -0.75 0.25 0.25 M 0.50 -0.75 L 0.50 -0.25 A 0.00 -0.50 0.50 0.50 0.00, -140.00");
+    std::unordered_map<std::string, std::string> paths;
+    paths["0"] = "M 0.00 -0.75 L 0.00 -0.25 A 0.00 -0.50 0.50 0.50 180.00, 180.00 L 0.50 -0.75 A 0.00 -1.00 0.50 0.50 0.00, 180.00";
+    paths["1"] = "M 0.05 0.0 L 0.45 0.0 M 0.0 -0.75 L 0.25 -1.0 L 0.25 0.0";
+    paths["2"] = "M 0.0 -0.75 A 0.00 -1.00 0.50 0.50 180.00 -216.87 L 0.0 0.0 L 0.5 0.0";
+    paths["3"] = "AM 0.00 -0.50 0.50 0.50 195.00 A 0.00 -0.50 0.50 0.50 195.00 255.00 A 0.00 -1.00 0.50 0.50 270.00 255.00";
+    paths["4"] = "M 0.50 -0.00 L 0.50 -1.00 L 0.00 -0.50 L 0.50 -0.50";
+    paths["5"] = "M 0.50 -1.00 L 0.00 -1.00 L 0.00 -0.50 L 0.25 -0.50 A 0.00 -0.50 0.50 0.50 90.00 -180.00 L 0.00 -0.00";
+    paths["6"] = "E 0.25 -0.25 0.25 0.25 M 0.00 -0.25 L 0.00 -0.75 A 0.00 -1.00 0.50 0.50 180.00 -140.00";
+    paths["7"] = "M 0.00 -1.00 L 0.50 -1.00 L 0.25 -0.25 L 0.25 -0.00";
+    paths["8"] = "E 0.25 -0.25 0.25 0.25 E 0.25 -0.75 0.25 0.25";
+    paths["9"] = "E 0.25 -0.75 0.25 0.25 M 0.50 -0.75 L 0.50 -0.25 A 0.00 -0.50 0.50 0.50 0.00, -140.00";
     //path.addEllipse(QPointF(0.25 -0.50*scale.y), 0.25 0.50
-    paths["0"] = node_str("M 0.00 -0.75 L 0.00 -0.25 A 0.00 -0.50 0.50 0.50 180.00, 180.00 L 0.50 -0.75 A 0.00 -1.00 0.50 0.50 0.00, 180.00");
-    paths["-"] = node_str("M 0.00 -0.50 L 0.50 -0.50");
-    paths["'"] = node_str("M 0.25 -1.00 L 0.25 -0.75");
-    paths["\""] = node_str("M 0.10 -1.00 L 0.10 -0.75 M 0.40 -1.00 L 0.40 -0.75");
+    paths["0"] = "M 0.00 -0.75 L 0.00 -0.25 A 0.00 -0.50 0.50 0.50 180.00, 180.00 L 0.50 -0.75 A 0.00 -1.00 0.50 0.50 0.00, 180.00";
+    paths["-"] = "M 0.00 -0.50 L 0.50 -0.50";
+    paths["'"] = "M 0.25 -1.00 L 0.25 -0.75";
+    paths["\""] = "M 0.10 -1.00 L 0.10 -0.75 M 0.40 -1.00 L 0.40 -0.75";
 
     String s = str.toStdString();
     for (int i = 0; i < (int)s.length(); ++i) {
         String S(1, s[i]);
         auto iter = paths.find(S);
         if (iter != paths.end()) {
-            path = add_to_path(path, scale, paths[S].s);
+            path = add_to_path(path, scale, paths[S]);
         }
         path.translate(QPointF(-0.75*scale.x, 0.0));
     }
@@ -1255,7 +1249,7 @@ View::zoomIn()
     }
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QPointF cntr = mapToScene(QPoint(width()/2,height()/2));
-    EmbReal s = get_real(settings, "display_zoomscale_in");
+    EmbReal s = settings[ST_ZOOMSCALE_IN].r;
     scale(s, s);
 
     centerOn(cntr);
@@ -1272,7 +1266,7 @@ View::zoomOut()
     if (!allowZoomOut()) { return; }
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QPointF cntr = mapToScene(QPoint(width()/2,height()/2));
-    EmbReal s = get_real(settings, "display_zoomscale_out");
+    EmbReal s = settings[ST_ZOOMSCALE_OUT].r;
     scale(s, s);
 
     centerOn(cntr);
@@ -1322,8 +1316,8 @@ View::zoomExtents()
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QRectF extents = gscene->itemsBoundingRect();
     if (extents.isNull()) {
-        extents.setWidth(get_real(settings, "grid_size_x"));
-        extents.setHeight(get_real(settings, "grid_size_y"));
+        extents.setWidth(settings[ST_GRID_SIZE_X].r);
+        extents.setHeight(settings[ST_GRID_SIZE_Y].r);
         extents.moveCenter(QPointF(0,0));
     }
     fitInView(extents, Qt::KeepAspectRatio);
@@ -1505,7 +1499,7 @@ View::mousePressEvent(QMouseEvent* event)
             //Start SelectBox Code
             path.addPolygon(mapToScene(selectBox->geometry()));
             if (sceneReleasePoint.x() > scenePressPoint.x()) {
-                if (get_bool(settings, "selection_mode_pickadd")) {
+                if (settings[ST_SELECTION_PICK_ADD].i) {
                     if (_mainWin->isShiftPressed()) {
                         std::vector<QGraphicsItem*> itemList = to_vector(gscene->items(path, Qt::ContainsItemShape));
                         for (int i=0; i<(int)itemList.size(); i++) {
@@ -1540,7 +1534,7 @@ View::mousePressEvent(QMouseEvent* event)
                 }
             }
             else {
-                if (get_bool(settings, "selection_mode_pickadd")) {
+                if (settings[ST_SELECTION_PICK_ADD].i) {
                     if (_mainWin->isShiftPressed()) {
                         std::vector<QGraphicsItem*> itemList = to_vector(gscene->items(path, Qt::IntersectsItemShape));
                         for (int i=0; i<(int)itemList.size(); i++) {
@@ -1890,13 +1884,13 @@ View::zoomToPoint(const QPoint& mousePoint, int zoomDir)
         if (!allowZoomIn()) {
             return;
         }
-        s = get_real(settings, "display_zoomscale_in");
+        s = settings[ST_ZOOMSCALE_IN].r;
     }
     else {
         if (!allowZoomOut()) {
             return;
         }
-        s = get_real(settings, "display_zoomscale_out");
+        s = settings[ST_ZOOMSCALE_OUT].r;
     }
 
     scale(s, s);
