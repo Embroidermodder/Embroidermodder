@@ -565,6 +565,22 @@
 
 #define SETTINGS_TOTAL                         114
 
+/* Line editors */
+#define LE_ARC_CENTER_X                          0
+#define LE_ARC_CENTER_Y                          1
+#define LE_ARC_RADIUS                            2
+#define LE_ARC_START_ANGLE                       3
+#define LE_ARC_END_ANGLE                         4
+#define LE_ARC_START_X                           5
+#define LE_ARC_START_Y                           6
+#define LE_ARC_END_X                             7
+#define LE_ARC_END_Y                             8
+#define LE_ARC_AREA                              9
+#define LE_ARC_LENGTH                           10
+#define LE_ARC_CHORD                            11
+#define LE_ARC_INC_ANGLE                        12
+#define LE_ARC_CLOCKWISE                        13
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -669,6 +685,33 @@ struct Node_ {
 
 typedef struct Node_ Node;
 
+/* Memory management. */
+Cvector *cvector_create(size_t element_size);
+void cvector_append(Cvector *a, Cvector *b);
+void cvector_add_cstr(Cvector *a, char *b);
+Cvector *cvector_copy(Cvector *a);
+void cvector_free(Cvector *vector);
+int string_array_length(const char *list[]);
+
+Node *create_node(int type);
+int add_leaf(Node *branch, Node *leaf);
+void print_tree(Node *branch, int indent);
+Node *find_node(Node *branch, char key[MAX_STRING_LENGTH]);
+void free_node(Node *branch);
+Node *create_and_add_leaf(Node *parent, char *key, char *value);
+int insert_node(Node *branch, char key[MAX_STRING_LENGTH], Node *node);
+
+/* Utility Functions. */
+unsigned char validRGB(int r, int g, int b);
+int str_contains(char *s, char c);
+EmbReal fourier_series(EmbReal arg, EmbReal *terms, int n_terms);
+bool willUnderflowInt32(int64_t a, int64_t b);
+bool willOverflowInt32(int64_t a, int64_t b);
+int roundToMultiple(bool roundUp, int numToRound, int multiple);
+
+/* Global memory. */
+extern Node *root;
+
 /* The Settings System
  *
  * Rather than pollute the global namespace, we collect together all the global
@@ -679,27 +722,6 @@ typedef struct Node_ Node;
 extern const char *settings_labels[];
 extern Node settings[SETTINGS_TOTAL], dialog[SETTINGS_TOTAL],
     preview[SETTINGS_TOTAL], accept_[SETTINGS_TOTAL];
-
-Cvector *cvector_create(size_t element_size);
-void cvector_append(Cvector *a, Cvector *b);
-void cvector_add_cstr(Cvector *a, char *b);
-Cvector *cvector_copy(Cvector *a);
-void cvector_free(Cvector *vector);
-int string_array_length(const char *list[]);
-
-unsigned char validRGB(int r, int g, int b);
-int str_contains(char *s, char c);
-EmbReal fourier_series(EmbReal arg, EmbReal *terms, int n_terms);
-
-Node *create_node(int type);
-int add_leaf(Node *branch, Node *leaf);
-void print_tree(Node *branch, int indent);
-Node *find_node(Node *branch, char key[MAX_STRING_LENGTH]);
-void free_node(Node *branch);
-Node *create_and_add_leaf(Node *parent, char *key, char *value);
-int insert_node(Node *branch, char key[MAX_STRING_LENGTH], Node *node);
-
-extern Node *root;
 
 extern const ActionData action_table[MAX_ACTIONS];
 extern const LineEditData all_line_editors[MAX_EDITORS];

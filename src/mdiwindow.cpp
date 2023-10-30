@@ -321,7 +321,7 @@ MdiWindow::loadFile(String fileName)
     embPattern_free(p);
 
     // Clear the undo stack so it is not possible to undo past this point.
-    gview->getUndoStack()->clear();
+    gview->undoStack->clear();
 
     curColor = tmpColor;
 
@@ -423,7 +423,7 @@ void
 MdiWindow::onWindowActivated()
 {
     debug_message("MdiWindow onWindowActivated()");
-    gview->getUndoStack()->setActive(true);
+    gview->undoStack->setActive(true);
     _mainWin->setUndoCleanIcon(fileWasLoaded);
     statusbar->buttons["SNAP"]->setChecked(gscene->property("ENABLE_SNAP").toBool());
     statusbar->buttons["GRID"]->setChecked(gscene->property("ENABLE_GRID").toBool());

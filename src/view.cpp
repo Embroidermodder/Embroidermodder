@@ -731,6 +731,281 @@ View::selected_items()
     return to_vector(list);
 }
 
+/*
+ */
+void
+View::draw_rulers(QPainter* painter, const QRectF& rect)
+{
+    bool proceed = true;
+
+    EmbVector view_dim;
+    view_dim.x = width();  //View Width
+    view_dim.y = height(); //View Height
+    EmbVector origin = to_EmbVector(mapToScene(0, 0));
+    EmbVector rh = to_EmbVector(mapToScene(view_dim.x, rulerPixelSize));
+    EmbVector rv = to_EmbVector(mapToScene(rulerPixelSize, view_dim.y));
+
+    EmbReal rhw = rh.x - origin.x;
+    EmbReal rhh = rh.y - origin.y;
+
+    EmbReal rvw = rv.x - origin.x;
+    EmbReal rvh = rv.y - origin.y;
+
+    //NOTE: Drawing ruler if zoomed out too far will cause an assertion failure.
+    //      We will limit the maximum size the ruler can be shown at.
+    quint16 maxSize = -1; //Intentional underflow
+    if (rhw >= maxSize || rvh >= maxSize)
+        proceed = false;
+
+    if (proceed) {
+        int distance = mapToScene(rulerPixelSize*3, 0).x() - origin.x;
+        QString distStr = QString().setNum(distance);
+        int distStrSize = distStr.size();
+        int msd = distStr.at(0).digitValue(); //Most Significant Digit
+
+        if (msd != -1) {
+            msd++;
+            if (msd == 10) {
+                msd = 1;
+                distStr.resize(distStrSize+1);
+                distStrSize++;
+            }
+
+            distStr.replace(0, 1, QString().setNum(msd));
+            for (int i = 1; i < distStrSize; ++i) {
+                distStr.replace(i, 1, '0');
+            }
+            int unit = distStr.toInt();
+            EmbReal fraction;
+            bool feet = true;
+            if (rulerMetric) {
+                if (unit < 10) unit = 10;
+                fraction = unit/10;
+            }
+            else {
+                if (unit <= 1) {
+                    unit = 1;
+                    feet = false;
+                    fraction = (EmbReal)(unit/16);
+                }
+                else {
+                    unit = roundToMultiple(true, unit, 12);
+                    fraction = unit/12;
+                }
+            }
+
+            EmbReal little  = 0.20;
+            EmbReal medium = 0.40;
+            EmbReal rhTextOffset = mapToScene(3, 0).x() - origin.x;
+            EmbReal rvTextOffset = mapToScene(0, 3).y() - origin.y;
+            EmbReal textHeight = rhh*medium;
+
+            QVector<QLineF> lines;
+            lines.push_back(QLineF(origin.x, rh.y, rh.x, rh.y));
+            lines.push_back(QLineF(rv.x, origin.y, rv.x, rv.y));
+
+            EmbVector mp = to_EmbVector(sceneMousePoint);
+            lines.push_back(QLineF(mp.x, rh.y, mp.x, origin.y));
+            lines.push_back(QLineF(rv.x, mp.y, origin.x, mp.y));
+
+            QTransform transform;
+
+            QPen rulerPen(QColor(0,0,0));
+            rulerPen.setCosmetic(true);
+            painter->setPen(rulerPen);
+            painter->fillRect(QRectF(origin.x, origin.y, rhw, rhh), rulerColor);
+            painter->fillRect(QRectF(origin.x, origin.y, rvw, rvh), rulerColor);
+
+            int xFlow;
+            int xStart;
+            int yFlow;
+            int yStart;
+            if (willUnderflowInt32(origin.x, unit)) {
+                proceed = false;
+            }
+            else {
+                xFlow = roundToMultiple(false, origin.x, unit);
+            }
+            if (willUnderflowInt32(xFlow, unit)) {
+                proceed = false;
+            }
+            else {
+                xStart = xFlow - unit;
+            }
+            if (willUnderflowInt32(origin.y, unit)) {
+                proceed = false;
+            }
+            else {
+                yFlow = roundToMultiple(false, origin.y, unit);
+            }
+            if (willUnderflowInt32(yFlow, unit)) {
+                proceed = false;
+            }
+            else {
+                yStart = yFlow - unit;
+            }
+
+            if (proceed) {
+                for (int x = xStart; x < rh.x; x += unit) {
+                    transform.translate(x+rhTextOffset, rh.y-rhh/2);
+                    QPainterPath rulerTextPath;
+                        EmbVector pos;
+                        pos.x = 0.0f;
+                        pos.y = 0.0f;
+                    if (rulerMetric) {
+                        rulerTextPath = transform.map(createRulerTextPath(pos, QString().setNum(x), textHeight));
+                    }
+                    else {
+                        if (feet)
+                            rulerTextPath = transform.map(createRulerTextPath(pos, QString().setNum(x/12).append('\''), textHeight));
+                        else
+                            rulerTextPath = transform.map(createRulerTextPath(pos, QString().setNum(x).append('\"'), textHeight));
+                    }
+                    transform.reset();
+                    painter->drawPath(rulerTextPath);
+
+                    lines.append(QLineF(x, rh.y, x, origin.y));
+                    if (rulerMetric) {
+                        for (int i=0; i<10; i++) {
+                            if (i == 5) {
+                                lines.append(QLineF(x+fraction*5, rh.y, x+fraction*5, rh.y-rhh*medium)); //Half
+                            }
+                            else {
+                                lines.append(QLineF(x+fraction*i, rh.y, x+fraction*i,   rh.y-rhh*little));
+                            }
+                        }
+                    }
+                    else {
+                        if (feet) {
+                            for (int i = 0; i < 12; ++i) {
+                                lines.append(QLineF(x+fraction*i, rh.y, x+fraction*i, rh.y-rhh*medium));
+                            }
+                        }
+                        else {
+                            lines.append(QLineF(x+fraction   , rh.y, x+fraction,    rh.y-rhh*little));
+                            lines.append(QLineF(x+fraction* 2, rh.y, x+fraction* 2, rh.y-rhh*little));
+                            lines.append(QLineF(x+fraction* 3, rh.y, x+fraction* 3, rh.y-rhh*little));
+                            lines.append(QLineF(x+fraction* 4, rh.y, x+fraction* 4, rh.y-rhh*medium)); //Quarter
+                            lines.append(QLineF(x+fraction* 5, rh.y, x+fraction* 5, rh.y-rhh*little));
+                            lines.append(QLineF(x+fraction* 6, rh.y, x+fraction* 6, rh.y-rhh*little));
+                            lines.append(QLineF(x+fraction* 7, rh.y, x+fraction* 7, rh.y-rhh*little));
+                            lines.append(QLineF(x+fraction* 8, rh.y, x+fraction* 8, rh.y-rhh*medium)); //Half
+                            lines.append(QLineF(x+fraction* 9, rh.y, x+fraction* 9, rh.y-rhh*little));
+                            lines.append(QLineF(x+fraction*10, rh.y, x+fraction*10, rh.y-rhh*little));
+                            lines.append(QLineF(x+fraction*11, rh.y, x+fraction*11, rh.y-rhh*little));
+                            lines.append(QLineF(x+fraction*12, rh.y, x+fraction*12, rh.y-rhh*medium)); //Quarter
+                            lines.append(QLineF(x+fraction*13, rh.y, x+fraction*13, rh.y-rhh*little));
+                            lines.append(QLineF(x+fraction*14, rh.y, x+fraction*14, rh.y-rhh*little));
+                            lines.append(QLineF(x+fraction*15, rh.y, x+fraction*15, rh.y-rhh*little));
+                        }
+                    }
+                }
+                for (int y = yStart; y < rv.y; y += unit) {
+                    transform.translate(rv.x-rvw/2, y-rvTextOffset);
+                    transform.rotate(-90);
+                    QPainterPath rulerTextPath;
+                    EmbVector pos;
+                    pos.x = 0.0f;
+                    pos.y = 0.0f;
+                    /*
+                    QGraphicsTextItem *text = gscene->addText("Hello, World!");
+                    text->setPos(0, 100);
+                    */
+                    if (rulerMetric) {
+                        rulerTextPath = transform.map(createRulerTextPath(pos, QString().setNum(-y), textHeight));
+                    }
+                    else {
+                        if (feet)
+                            rulerTextPath = transform.map(createRulerTextPath(pos, QString().setNum(-y/12).append('\''), textHeight));
+                        else
+                            rulerTextPath = transform.map(createRulerTextPath(pos, QString().setNum(-y).append('\"'), textHeight));
+                    }
+                    transform.reset();
+                    painter->drawPath(rulerTextPath);
+
+                    lines.append(QLineF(rv.x, y, origin.x, y));
+                    if (rulerMetric) {
+                        for (int i=1; i<10; i++) {
+                            if (i == 5) {
+                                lines.append(QLineF(rv.x, y+fraction*5, rv.x-rvw*medium, y+fraction*5)); //Half
+                            }
+                            else {
+                                lines.append(QLineF(rv.x, y+fraction*i, rv.x-rvw*little, y+fraction*i));
+                            }
+                        }
+                    }
+                    else {
+                        if (feet) {
+                            for (int i = 0; i < 12; ++i) {
+                                lines.append(QLineF(rv.x, y+fraction*i, rv.x-rvw*medium, y+fraction*i));
+                            }
+                        }
+                        else {
+                            for (int i=1; i<16; i++) {
+                                if (i == 8) {
+                                    lines.append(
+                                        QLineF(rv.x, y+fraction* 8, rv.x-rvw*medium, y+fraction* 8)); //Half
+                                }
+                                else if (i % 4 == 0) {
+                                    lines.append(
+                                        QLineF(rv.x, y+fraction* 4, rv.x-rvw*medium, y+fraction* 4)); //Quarter
+                                }
+                                else {
+                                    lines.append(
+                                        QLineF(rv.x, y+fraction*i, rv.x-rvw*little, y+fraction*i));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            painter->drawLines(lines);
+            painter->fillRect(QRectF(origin.x, origin.y, rvw, rhh), rulerColor);
+        }
+    }
+}
+
+/*
+ */
+void
+View::draw_line(QPainter *painter, QPointF start_, QPointF end_)
+{
+    QPointF start = mapToScene(start_.x(), start_.y());
+    QPointF end = mapToScene(end_.x(), end_.y());
+    QLineF line(start, end);
+    painter->drawLine(line);
+}
+
+/*
+ */
+void
+View::draw_rect(QPainter *painter, QPointF start_, QPointF end_)
+{
+    QPointF start = mapToScene(start_.x(), start_.y());
+    QPointF end = mapToScene(end_.x(), end_.y());
+    QRectF rect(start, end);
+    painter->drawRect(rect);
+}
+
+/*
+ */
+void
+View::draw_crosshair(QPainter* painter, const QRectF& rect)
+{
+    //painter->setBrush(Qt::NoBrush);
+    QPen crosshairPen(QColor::fromRgb(crosshairColor));
+    crosshairPen.setCosmetic(true);
+    painter->setPen(crosshairPen);
+    QPointF p(viewMousePoint.x(), viewMousePoint.y());
+    QPointF offset_x(crosshairSize, 0.0);
+    QPointF offset_y(0.0, crosshairSize);
+    QPointF pickbox_br(pickBoxSize, pickBoxSize);
+    draw_line(painter, p-offset_x, p+offset_x);
+    draw_line(painter, p-offset_y, p+offset_y);
+    draw_rect(painter, p-pickbox_br, p+pickbox_br);
+}
+
 void
 View::drawForeground(QPainter* painter, const QRectF& rect)
 {
@@ -804,280 +1079,13 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
         }
     }
 
-    //==================================================
-    //Draw horizontal and vertical rulers
-    //==================================================
-
     if (gscene->property("ENABLE_RULER").toBool()) {
-        bool proceed = true;
-
-        EmbVector view_dim;
-        view_dim.x = width();  //View Width
-        view_dim.y = height(); //View Height
-        EmbVector origin = to_EmbVector(mapToScene(0, 0));
-        EmbVector rh = to_EmbVector(mapToScene(view_dim.x, rulerPixelSize));
-        EmbVector rv = to_EmbVector(mapToScene(rulerPixelSize, view_dim.y));
-
-        EmbReal rhw = rh.x - origin.x;
-        EmbReal rhh = rh.y - origin.y;
-
-        EmbReal rvw = rv.x - origin.x;
-        EmbReal rvh = rv.y - origin.y;
-
-        //NOTE: Drawing ruler if zoomed out too far will cause an assertion failure.
-        //      We will limit the maximum size the ruler can be shown at.
-        quint16 maxSize = -1; //Intentional underflow
-        if (rhw >= maxSize || rvh >= maxSize)
-            proceed = false;
-
-        if (proceed) {
-            int distance = mapToScene(rulerPixelSize*3, 0).x() - origin.x;
-            QString distStr = QString().setNum(distance);
-            int distStrSize = distStr.size();
-            int msd = distStr.at(0).digitValue(); //Most Significant Digit
-
-            if (msd != -1) {
-                msd++;
-                if (msd == 10) {
-                    msd = 1;
-                    distStr.resize(distStrSize+1);
-                    distStrSize++;
-                }
-
-                distStr.replace(0, 1, QString().setNum(msd));
-                for (int i = 1; i < distStrSize; ++i) {
-                    distStr.replace(i, 1, '0');
-                }
-                int unit = distStr.toInt();
-                EmbReal fraction;
-                bool feet = true;
-                if (rulerMetric) {
-                    if (unit < 10) unit = 10;
-                    fraction = unit/10;
-                }
-                else {
-                    if (unit <= 1) {
-                        unit = 1;
-                        feet = false;
-                        fraction = (EmbReal)(unit/16);
-                    }
-                    else {
-                        unit = roundToMultiple(true, unit, 12);
-                        fraction = unit/12;
-                    }
-                }
-
-                EmbReal little  = 0.20;
-                EmbReal medium = 0.40;
-                EmbReal rhTextOffset = mapToScene(3, 0).x() - origin.x;
-                EmbReal rvTextOffset = mapToScene(0, 3).y() - origin.y;
-                EmbReal textHeight = rhh*medium;
-
-                QVector<QLineF> lines;
-                lines.push_back(QLineF(origin.x, rh.y, rh.x, rh.y));
-                lines.push_back(QLineF(rv.x, origin.y, rv.x, rv.y));
-
-                EmbVector mp = to_EmbVector(sceneMousePoint);
-                lines.push_back(QLineF(mp.x, rh.y, mp.x, origin.y));
-                lines.push_back(QLineF(rv.x, mp.y, origin.x, mp.y));
-
-                QTransform transform;
-
-                QPen rulerPen(QColor(0,0,0));
-                rulerPen.setCosmetic(true);
-                painter->setPen(rulerPen);
-                painter->fillRect(QRectF(origin.x, origin.y, rhw, rhh), rulerColor);
-                painter->fillRect(QRectF(origin.x, origin.y, rvw, rvh), rulerColor);
-
-                int xFlow;
-                int xStart;
-                int yFlow;
-                int yStart;
-                if (willUnderflowInt32(origin.x, unit)) {
-                    proceed = false;
-                }
-                else {
-                    xFlow = roundToMultiple(false, origin.x, unit);
-                }
-                if (willUnderflowInt32(xFlow, unit)) {
-                    proceed = false;
-                }
-                else {
-                    xStart = xFlow - unit;
-                }
-                if (willUnderflowInt32(origin.y, unit)) {
-                    proceed = false;
-                }
-                else {
-                    yFlow = roundToMultiple(false, origin.y, unit);
-                }
-                if (willUnderflowInt32(yFlow, unit)) {
-                    proceed = false;
-                }
-                else {
-                    yStart = yFlow - unit;
-                }
-
-                if (proceed) {
-                    for (int x = xStart; x < rh.x; x += unit) {
-                        transform.translate(x+rhTextOffset, rh.y-rhh/2);
-                        QPainterPath rulerTextPath;
-                            EmbVector pos;
-                            pos.x = 0.0f;
-                            pos.y = 0.0f;
-                        if (rulerMetric) {
-                            rulerTextPath = transform.map(createRulerTextPath(pos, QString().setNum(x), textHeight));
-                        }
-                        else {
-                            if (feet)
-                                rulerTextPath = transform.map(createRulerTextPath(pos, QString().setNum(x/12).append('\''), textHeight));
-                            else
-                                rulerTextPath = transform.map(createRulerTextPath(pos, QString().setNum(x).append('\"'), textHeight));
-                        }
-                        transform.reset();
-                        painter->drawPath(rulerTextPath);
-
-                        lines.append(QLineF(x, rh.y, x, origin.y));
-                        if (rulerMetric) {
-                            for (int i=0; i<10; i++) {
-                                if (i == 5) {
-                                    lines.append(QLineF(x+fraction*5, rh.y, x+fraction*5, rh.y-rhh*medium)); //Half
-                                }
-                                else {
-                                    lines.append(QLineF(x+fraction*i, rh.y, x+fraction*i,   rh.y-rhh*little));
-                                }
-                            }
-                        }
-                        else {
-                            if (feet) {
-                                for (int i = 0; i < 12; ++i) {
-                                    lines.append(QLineF(x+fraction*i, rh.y, x+fraction*i, rh.y-rhh*medium));
-                                }
-                            }
-                            else {
-                                lines.append(QLineF(x+fraction   , rh.y, x+fraction,    rh.y-rhh*little));
-                                lines.append(QLineF(x+fraction* 2, rh.y, x+fraction* 2, rh.y-rhh*little));
-                                lines.append(QLineF(x+fraction* 3, rh.y, x+fraction* 3, rh.y-rhh*little));
-                                lines.append(QLineF(x+fraction* 4, rh.y, x+fraction* 4, rh.y-rhh*medium)); //Quarter
-                                lines.append(QLineF(x+fraction* 5, rh.y, x+fraction* 5, rh.y-rhh*little));
-                                lines.append(QLineF(x+fraction* 6, rh.y, x+fraction* 6, rh.y-rhh*little));
-                                lines.append(QLineF(x+fraction* 7, rh.y, x+fraction* 7, rh.y-rhh*little));
-                                lines.append(QLineF(x+fraction* 8, rh.y, x+fraction* 8, rh.y-rhh*medium)); //Half
-                                lines.append(QLineF(x+fraction* 9, rh.y, x+fraction* 9, rh.y-rhh*little));
-                                lines.append(QLineF(x+fraction*10, rh.y, x+fraction*10, rh.y-rhh*little));
-                                lines.append(QLineF(x+fraction*11, rh.y, x+fraction*11, rh.y-rhh*little));
-                                lines.append(QLineF(x+fraction*12, rh.y, x+fraction*12, rh.y-rhh*medium)); //Quarter
-                                lines.append(QLineF(x+fraction*13, rh.y, x+fraction*13, rh.y-rhh*little));
-                                lines.append(QLineF(x+fraction*14, rh.y, x+fraction*14, rh.y-rhh*little));
-                                lines.append(QLineF(x+fraction*15, rh.y, x+fraction*15, rh.y-rhh*little));
-                            }
-                        }
-                    }
-                    for (int y = yStart; y < rv.y; y += unit) {
-                        transform.translate(rv.x-rvw/2, y-rvTextOffset);
-                        transform.rotate(-90);
-                        QPainterPath rulerTextPath;
-                        EmbVector pos;
-                        pos.x = 0.0f;
-                        pos.y = 0.0f;
-                        /*
-                        QGraphicsTextItem *text = gscene->addText("Hello, World!");
-                        text->setPos(0, 100);
-                        */
-                        if (rulerMetric) {
-                            rulerTextPath = transform.map(createRulerTextPath(pos, QString().setNum(-y), textHeight));
-                        }
-                        else {
-                            if (feet)
-                                rulerTextPath = transform.map(createRulerTextPath(pos, QString().setNum(-y/12).append('\''), textHeight));
-                            else
-                                rulerTextPath = transform.map(createRulerTextPath(pos, QString().setNum(-y).append('\"'), textHeight));
-                        }
-                        transform.reset();
-                        painter->drawPath(rulerTextPath);
-
-                        lines.append(QLineF(rv.x, y, origin.x, y));
-                        if (rulerMetric) {
-                            for (int i=1; i<10; i++) {
-                                if (i == 5) {
-                                    lines.append(QLineF(rv.x, y+fraction*5, rv.x-rvw*medium, y+fraction*5)); //Half
-                                }
-                                else {
-                                    lines.append(QLineF(rv.x, y+fraction*i, rv.x-rvw*little, y+fraction*i));
-                                }
-                            }
-                        }
-                        else {
-                            if (feet) {
-                                for (int i = 0; i < 12; ++i) {
-                                    lines.append(QLineF(rv.x, y+fraction*i, rv.x-rvw*medium, y+fraction*i));
-                                }
-                            }
-                            else {
-                                for (int i=1; i<16; i++) {
-                                    if (i == 8) {
-                                        lines.append(
-                                            QLineF(rv.x, y+fraction* 8, rv.x-rvw*medium, y+fraction* 8)); //Half
-                                    }
-                                    else if (i % 4 == 0) {
-                                        lines.append(
-                                            QLineF(rv.x, y+fraction* 4, rv.x-rvw*medium, y+fraction* 4)); //Quarter
-                                    }
-                                    else {
-                                        lines.append(
-                                            QLineF(rv.x, y+fraction*i, rv.x-rvw*little, y+fraction*i));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                painter->drawLines(lines);
-                painter->fillRect(QRectF(origin.x, origin.y, rvw, rhh), rulerColor);
-            }
-        }
+        draw_rulers(painter, rect);
     }
-
-    // Draw the crosshair
-    // ==================================================
 
     if (!selectingActive) {
-        //painter->setBrush(Qt::NoBrush);
-        QPen crosshairPen(QColor::fromRgb(crosshairColor));
-        crosshairPen.setCosmetic(true);
-        painter->setPen(crosshairPen);
-        painter->drawLine(
-            QLineF(
-                mapToScene(viewMousePoint.x(), viewMousePoint.y()-crosshairSize),
-                mapToScene(viewMousePoint.x(), viewMousePoint.y()+crosshairSize)));
-        painter->drawLine(QLineF(mapToScene(viewMousePoint.x()-crosshairSize, viewMousePoint.y()),
-                                 mapToScene(viewMousePoint.x()+crosshairSize, viewMousePoint.y())));
-        painter->drawRect(QRectF(mapToScene(viewMousePoint.x()-pickBoxSize, viewMousePoint.y()-pickBoxSize),
-                                 mapToScene(viewMousePoint.x()+pickBoxSize, viewMousePoint.y()+pickBoxSize)));
+        draw_crosshair(painter, rect);
     }
-}
-
-/**
- * .
- */
-bool
-View::willUnderflowInt32(int64_t a, int64_t b)
-{
-    assert(LLONG_MAX>INT_MAX);
-    int64_t c = (int64_t)a-b;
-    return (c < INT_MIN || c > INT_MAX);
-}
-
-/**
- * .
- */
-bool
-View::willOverflowInt32(int64_t a, int64_t b)
-{
-    assert(LLONG_MAX>INT_MAX);
-    int64_t c = (int64_t)a+b;
-    return (c < INT_MIN || c > INT_MAX);
 }
 
 /**
@@ -1094,42 +1102,6 @@ View::createRulerTextPath(EmbVector position, QString str, float height)
     path.translate(QPointF(str.length()*height, 0.0) + to_QPointF(position));
 
     return path;
-}
-
-/**
- * Round the number \a numToRound to a multple of the number \a multiple,
- * rounding up if \a roundUp is true.
- *
- * First, \a multiple is 0 then we have an invalid input so just return the
- * argument, then if the number is already a multiple of \a multiple then
- * return the argument.
- *
- * Then take the remainder off the argument and determine which way to round
- * the result.
- */
-int
-View::roundToMultiple(bool roundUp, int numToRound, int multiple)
-{
-    if (multiple == 0) {
-        return numToRound;
-    }
-    int remainder = numToRound % multiple;
-    if (remainder == 0) {
-        return numToRound;
-    }
-
-    int result = numToRound - remainder;
-    if (roundUp) {
-        if (numToRound < 0) {
-            return result;
-        }
-        return result + multiple;
-    }
-    /* else round down */
-    if (numToRound < 0) {
-        return result - multiple;
-    }
-    return result;
 }
 
 /**
@@ -1645,8 +1617,7 @@ View::mouseMoveEvent(QMouseEvent* event)
 
     if (_mainWin->isCommandActive()) {
         if (rapidMoveActive) {
-            /**
-             * \todo turn move into an actuator call.
+            /* todo: turn move into an actuator call.
              */
             //mainWin->runCommandMove(_mainWin->activeCommand(), sceneMovePoint.x(), sceneMovePoint.y());
         }
@@ -1663,8 +1634,8 @@ View::mouseMoveEvent(QMouseEvent* event)
             EmbReal mouseAngle = QLineF(x, y, sceneMousePoint.x(), sceneMousePoint.y()).angle();
 
             EmbReal rad = radians(rot-mouseAngle);
-            EmbReal cosRot = qCos(rad);
-            EmbReal sinRot = qSin(rad);
+            EmbReal cosRot = cos(rad);
+            EmbReal sinRot = sin(rad);
             EmbReal px = 0;
             EmbReal py = 0;
             px -= x;

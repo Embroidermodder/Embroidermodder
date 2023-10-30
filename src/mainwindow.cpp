@@ -583,7 +583,7 @@ MainWindow::activeUndoStack(void)
     debug_message("activeUndoStack()");
     View* v = activeView();
     if (v) {
-        QUndoStack* u = v->getUndoStack();
+        QUndoStack* u = v->undoStack;
         return u;
     }
     return 0;
@@ -726,7 +726,7 @@ zoom_action(String mode)
     if (!gview) {
         return "ERROR: no active view found.";
     }
-    QUndoStack* stack = gview->getUndoStack();
+    QUndoStack* stack = gview->undoStack;
     if (!stack) {
         return "ERROR: no undo stack found.";
     }
@@ -1681,7 +1681,7 @@ actuator(std::string line)
      */
     case ACTION_ADD_CIRCLE: {
         QGraphicsScene* gscene = gview->scene();
-        QUndoStack* stack = gview->getUndoStack();
+        QUndoStack* stack = gview->undoStack;
         if (gview && gscene && stack) {
             EmbCircle circle;
             circle.center.x = 0.0;
@@ -1716,7 +1716,7 @@ actuator(std::string line)
         _mainWin->nativeAddDimLeader(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, OBJ_RUBBER_OFF);
         */
         QGraphicsScene* gscene = gview->scene();
-        QUndoStack* stack = gview->getUndoStack();
+        QUndoStack* stack = gview->undoStack;
         if (gview && gscene && stack) {
             /*
             Geometry* obj = new Geometry(x1, -y1, x2, -y2,_mainWin->getCurrentColor());
@@ -1743,7 +1743,7 @@ actuator(std::string line)
     case ACTION_ADD_ELLIPSE: {
 
         QGraphicsScene* gscene = gview->scene();
-        QUndoStack* stack = gview->getUndoStack();
+        QUndoStack* stack = gview->undoStack;
         if (gview && gscene && stack) {
             /*
             Geometry* obj = new Geometry(centerX, -centerY, width, height,_mainWin->getCurrentColor());
@@ -1844,7 +1844,7 @@ actuator(std::string line)
         /*
         _mainWin->nativeadd_line_action(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, OBJ_RUBBER_OFF);
         QGraphicsScene* gscene = gview->scene();
-        QUndoStack* stack = gview->getUndoStack();
+        QUndoStack* stack = gview->undoStack;
         if (gview && gscene && stack) {
             EmbLine line;
             line.start.x = x1;
@@ -1887,7 +1887,7 @@ actuator(std::string line)
      * args
      */
     case ACTION_ADD_POINT: {
-        QUndoStack* stack = gview->getUndoStack();
+        QUndoStack* stack = gview->undoStack;
         if (gview && stack) {
             /*
             EmbVector v;
@@ -1912,7 +1912,7 @@ actuator(std::string line)
     case ACTION_ADD_POLYGON: {
         /*
         QGraphicsScene* gscene = gview->scene();
-        QUndoStack* stack = gview->getUndoStack();
+        QUndoStack* stack = gview->undoStack;
         if (gview && gscene && stack) {
             PolygonObject* obj = new PolygonObject(startX, startY, p,_mainWin->getCurrentColor());
             obj->setObjectRubberMode(rubberMode);
@@ -1997,7 +1997,7 @@ actuator(std::string line)
         if (!gscene) {
             return "ERROR: no graphics scene view found.";
         }
-        QUndoStack* stack = gview->getUndoStack();
+        QUndoStack* stack = gview->undoStack;
         if (stack) {
             std::vector<std::string> arg_list = tokenize(args, ' ');
             EmbRect rect;
@@ -2183,7 +2183,7 @@ actuator(std::string line)
         _mainWin->nativeadd_text_single_action(a[0].s, a[1].r, a[2].r, a[3].r, a[4].b, OBJ_RUBBER_OFF);
         */
         QGraphicsScene* gscene = gview->scene();
-        QUndoStack* stack = gview->getUndoStack();
+        QUndoStack* stack = gview->undoStack;
         if (gview && gscene && stack) {
             /*
             TextSingleObject* obj = new TextSingleObject(str, x, -y, _mainWin->getCurrentColor());
@@ -2539,7 +2539,7 @@ actuator(std::string line)
         if (!gview) {
             return "ERROR: no active view found.";
         }
-        QUndoStack* stack = gview->getUndoStack();
+        QUndoStack* stack = gview->undoStack;
         if (!stack) {
             return "ERROR: no undo stack found.";
         }

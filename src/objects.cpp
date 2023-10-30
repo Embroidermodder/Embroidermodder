@@ -93,7 +93,7 @@ add_polyline(QPainterPath p, String rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->getUndoStack();
+    QUndoStack* stack = gview->undoStack;
     if (!(gview && gscene && stack)) {
         return;
     }
@@ -2436,7 +2436,7 @@ save(View* view, QString fileName)
 {
     qDebug("SaveObject save(%s)", qPrintable(fileName));
     QGraphicsScene* gscene = view->scene();
-    QUndoStack* stack = view->getUndoStack();
+    QUndoStack* stack = view->undoStack;
     if (!(gscene && stack)) {
         return false;
     }

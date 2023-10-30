@@ -1212,17 +1212,25 @@ public:
     QRgb crosshairColor;
     uint32_t crosshairSize;
 
+    /* Graphics functions */
+    void draw_line(QPainter *painter, QPointF start, QPointF end);
+    void draw_rect(QPainter *painter, QPointF start, QPointF end);
+    void draw_rulers(QPainter* painter, const QRectF& rect);
+    void draw_crosshair(QPainter* painter, const QRectF& rect);
+
     void recalculateLimits();
     void zoomToPoint(const QPoint& mousePoint, int zoomDir);
     void centerAt(const QPointF& centerPoint);
     QPointF center() { return mapToScene(rect().center()); }
 
-    QUndoStack* getUndoStack() { return undoStack; }
+//    QUndoStack* getUndoStack() { return undoStack; }
     void addObject(Geometry* obj);
     void deleteObject(Geometry* obj);
     void vulcanizeObject(Geometry* obj);
 
 public slots:
+    void action() {}
+
     void zoomIn();
     void zoomOut();
     void zoomWindow();
@@ -1313,9 +1321,6 @@ private:
 
     void loadRulerSettings();
 
-    bool willUnderflowInt32(int64_t a, int64_t b);
-    bool willOverflowInt32(int64_t a, int64_t b);
-    int roundToMultiple(bool roundUp, int numToRound, int multiple);
     QPainterPath createRulerTextPath(EmbVector position, QString str, EmbReal height);
 
     QList<QGraphicsItem*> previewObjectList;

@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+#include <limits.h>
 
 #include "core.h"
 
@@ -1047,4 +1048,57 @@ fourier_series(EmbReal arg, EmbReal *terms, int n_terms)
         x += terms[3*i+0] * sin(terms[3*i+1] + terms[3*i+2] * arg);
     }
     return x;
+}
+
+/* . */
+bool
+willUnderflowInt32(int64_t a, int64_t b)
+{
+    assert(LLONG_MAX>INT_MAX);
+    int64_t c = (int64_t)a-b;
+    return (c < INT_MIN || c > INT_MAX);
+}
+
+/* . */
+bool
+willOverflowInt32(int64_t a, int64_t b)
+{
+    assert(LLONG_MAX>INT_MAX);
+    int64_t c = (int64_t)a+b;
+    return (c < INT_MIN || c > INT_MAX);
+}
+
+/* Round the number "numToRound" to a multple of the number "multiple",
+ * rounding up if "roundUp" is true.
+ *
+ * First, "multiple" is 0 then we have an invalid input so just return the
+ * argument, then if the number is already a multiple of \a multiple then
+ * return the argument.
+ *
+ * Then take the remainder off the argument and determine which way to round
+ * the result.
+ */
+int
+roundToMultiple(bool roundUp, int numToRound, int multiple)
+{
+    if (multiple == 0) {
+        return numToRound;
+    }
+    int remainder = numToRound % multiple;
+    if (remainder == 0) {
+        return numToRound;
+    }
+
+    int result = numToRound - remainder;
+    if (roundUp) {
+        if (numToRound < 0) {
+            return result;
+        }
+        return result + multiple;
+    }
+    /* else round down */
+    if (numToRound < 0) {
+        return result - multiple;
+    }
+    return result;
 }
