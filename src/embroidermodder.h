@@ -130,6 +130,7 @@ public:
     EmbArc arc;
     EmbCircle circle;
     EmbEllipse ellipse;
+    EmbLine line;
 
     QPointF arcStartPoint;
     QPointF arcMidPoint;
