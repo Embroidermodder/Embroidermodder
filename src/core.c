@@ -212,6 +212,7 @@ const char *view_menu[] = {
 const char *settings_menu[] = {
     "settingsdialog",
     "---",
+    "test",
     "END"
 };
 
@@ -574,7 +575,9 @@ const char *command_labels[] = {
     "vulcanize",                    /* 88 */
     "whats_this",                   /* 89 */
     "window",                       /* 90 */
-    "zoom"                          /* 91 */
+    "zoom",                         /* 91 */
+    "test",                         /* 92 */
+    "sleep"                         /* 93 */
 };
 
 char rubber_modes[N_RUBBER_MODES][MAX_STRING_LENGTH] = {

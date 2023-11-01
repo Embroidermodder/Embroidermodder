@@ -145,7 +145,9 @@
 #define ACTION_WHATS_THIS                       89
 #define ACTION_WINDOW                           90
 #define ACTION_ZOOM                             91
-#define N_ACTIONS                               92
+#define ACTION_TEST                             92
+#define ACTION_SLEEP                            93
+#define N_ACTIONS                               94
 
 /* OBJ_LTYPE_VALUES */
 // CAD Linetypes
@@ -385,11 +387,6 @@
 #define PROP_CURVED                         0x0080
 #define PROP_FILLED                         0x0100
 
-/* View state */
-#define VIEW_SNAP_MODE                      0x0001
-#define VIEW_GRID_MODE                      0x0002
-#define VIEW_RULER_MODE                     0x0004
-
 /* Groupboxen */
 #define GB_GENERAL                               0
 #define GB_GROUPBOX_ARC                          1
@@ -581,7 +578,7 @@
 #define LE_ARC_INC_ANGLE                        12
 #define LE_ARC_CLOCKWISE                        13
 
-
+/* View state */
 #define VIEW_STATE_GRID                       0x01
 #define VIEW_STATE_ORTHO                      0x02
 #define VIEW_STATE_POLAR                      0x04
@@ -595,11 +592,13 @@
 #define VIEW_STATE_SNAP                      0x400
 #define VIEW_STATE_RULER                     0x800
 
+/* Preview mode */
 #define PREVIEW_MODE_NULL                        0
 #define PREVIEW_MODE_MOVE                        1
 #define PREVIEW_MODE_ROTATE                      2
 #define PREVIEW_MODE_SCALE                       3
 
+/* Preview clone */
 #define PREVIEW_CLONE_NULL                       0
 #define PREVIEW_CLONE_RUBBER                     1
 #define PREVIEW_CLONE_SELECTED                   2
@@ -616,13 +615,15 @@ extern "C" {
 #include <stdarg.h>
 #include <stdbool.h>
 #include <assert.h>
+#include <errno.h>
 
 /* We assume here that all free systems and MacOS are POSIX compliant. */
-#if !defined(WIN32)
+#if defined(WIN32)
+#include <windows.h>
+#else
+#include <unistd.h>
 #include <sys/utsname.h>
 #endif
-
-#include <errno.h>
 
 #include "../extern/libembroidery/src/embroidery.h"
 

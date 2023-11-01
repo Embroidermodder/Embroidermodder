@@ -15,6 +15,8 @@
 
 #include "embroidermodder.h"
 
+bool test_program = false;
+
 #if defined(Q_OS_MAC)
 /* NOTE: On Mac, if the user drops a file on the app's Dock icon,
  * or uses Open As, then this is how the app actually opens the file.
@@ -68,6 +70,9 @@ main(int argc, char* argv[])
         else if ((arg == "-v") || (arg == "--version")) {
             fprintf(stdout, "Embroidermodder %s\n", version);
             exitApp = true;
+        }
+        else if (arg == "--cov") {
+            test_program = true;
         }
         else if (QFile::exists(argv[i]) && validFileFormat(arg.toStdString())) {
             files += arg;

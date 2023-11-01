@@ -102,6 +102,12 @@ QDoubleSpinBox *make_spinbox(QGroupBox *gb, std::string d,
 QCheckBox *make_checkbox(QGroupBox *gb, std::string d,
     const char *label, const char *icon, int key);
 
+typedef struct RubberPoint_ {
+    char key[MAX_STRING_LENGTH];
+    char text[MAX_STRING_LENGTH];
+    EmbVector position;
+} RubberPoint;
+
 /* The Geometry class
  *
  * Combine all geometry objects into one class that uses the Type
@@ -115,10 +121,15 @@ public:
     QPen lwtPen;
     QLineF objLine;
     std::string objRubberMode = "OBJ_RUBBER_OFF";
+    std::vector<RubberPoint> rubber_points;
     QHash<QString, QPointF> objRubberPoints;
     QHash<QString, QString> objRubberTexts;
     int64_t objID;
     int64_t mode;
+
+    EmbArc arc;
+    EmbCircle circle;
+    EmbEllipse ellipse;
 
     QPointF arcStartPoint;
     QPointF arcMidPoint;
@@ -158,6 +169,10 @@ public:
 
     /* Destructor. */
     ~Geometry();
+
+    /* Alter state */
+    void setFlag_(uint64_t new_flag) { flags |= new_flag; }
+    void unsetFlag_(uint64_t new_flag) { flags ^= new_flag; }
 
     /* Getters */
     Qt::PenStyle objectLineType() { return objPen.style(); }
@@ -236,10 +251,7 @@ public:
     void update(void);
 
     /* Setters */
-    void init_arc(EmbArc arc);
-    void init_circle(EmbCircle circle);
     void init_line(EmbLine line);
-    void init_ellipse(EmbEllipse ellipse);
     void init_rect(EmbRect rect);
     void init_text_single(QString str, EmbVector position);
     void init_path(QPainterPath p);
@@ -262,7 +274,6 @@ public:
     void setObjectDiameter(EmbReal diameter);
     void setObjectArea(EmbReal area);
     void setObjectCircumference(EmbReal circumference);
-    void setObjectPos(EmbReal x, EmbReal y) { setPos(x, y); }
     void setObjectText(QString str);
     void setObjectTextFont(QString font);
     void setObjectTextJustify(QString justify);
@@ -360,6 +371,7 @@ public slots:
     void checkEditedText(QString txt);
     void checkChangedText(QString txt);
     void checkCursorPosition(int oldpos, int newpos);
+
 private slots:
     void copyClip();
     void pasteClip();

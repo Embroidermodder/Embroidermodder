@@ -48,7 +48,7 @@ View::rect_from_center(const QPointF center, float radius)
     QPointF offset(radius, radius);
     QPointF bl = mapFromScene(center-offset);
     QPointF tr = mapFromScene(center+offset);
-	return QRectF(bl, tr);
+    return QRectF(bl, tr);
 }
 
 /* Create a View object. */
@@ -1284,7 +1284,7 @@ View::mousePressEvent(QMouseEvent* event)
             return;
         }
         QPainterPath path;
-        QRectF pickbox = rect_from_center(viewMousePoint, pickBoxSize); 
+        QRectF pickbox = rect_from_center(viewMousePoint, pickBoxSize);
         std::vector<QGraphicsItem*> pickList = to_vector(gscene->items(pickbox));
 
         bool itemsInPickBox = pickList.size();
@@ -2031,10 +2031,10 @@ View::moveSelected(EmbVector delta)
             continue;
         }
         QString a =  translate_str("Move 1 ") + base->data(OBJ_NAME).toString();
-		UndoableCommand* cmd = new UndoableCommand(delta, a, base, this, 0);
-		if (cmd) {
-			undoStack->push(cmd);
-		}
+        UndoableCommand* cmd = new UndoableCommand(delta, a, base, this, 0);
+        if (cmd) {
+            undoStack->push(cmd);
+        }
     }
     if (numSelected > 1) {
         undoStack->endMacro();
@@ -2067,11 +2067,11 @@ View::rotateSelected(EmbVector pivot, EmbReal rot)
         if (!base) {
             continue;
         }
-		QString a = translate_str("Rotate 1 ") + base->data(OBJ_NAME).toString();
-		UndoableCommand* cmd = new UndoableCommand("rotate", pivot, rot, a, base, this, 0);
-		if (cmd) {
-			undoStack->push(cmd);
-		}
+        QString a = translate_str("Rotate 1 ") + base->data(OBJ_NAME).toString();
+        UndoableCommand* cmd = new UndoableCommand("rotate", pivot, rot, a, base, this, 0);
+        if (cmd) {
+            undoStack->push(cmd);
+        }
     }
     if (numSelected > 1) {
         undoStack->endMacro();
@@ -2095,11 +2095,11 @@ View::mirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
         if (!base) {
             continue;
         }
-		QString a = translate_str("Mirror 1 ") + base->data(OBJ_NAME).toString();
-		UndoableCommand* cmd = new UndoableCommand(x1, y1, x2, y2, a, base, this, 0);
-		if (cmd) {
-			undoStack->push(cmd);
-		}
+        QString a = translate_str("Mirror 1 ") + base->data(OBJ_NAME).toString();
+        UndoableCommand* cmd = new UndoableCommand(x1, y1, x2, y2, a, base, this, 0);
+        if (cmd) {
+            undoStack->push(cmd);
+        }
     }
     if (numSelected > 1) {
         undoStack->endMacro();
@@ -2132,10 +2132,10 @@ View::scaleSelected(EmbVector point, EmbReal factor)
         if (!base) {
             continue;
         }
-		UndoableCommand* cmd = new UndoableCommand("scale", point, factor, translate_str("Scale 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
-		if (cmd) {
-			undoStack->push(cmd);
-		}
+        UndoableCommand* cmd = new UndoableCommand("scale", point, factor, translate_str("Scale 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+        if (cmd) {
+            undoStack->push(cmd);
+        }
     }
     if (numSelected > 1) {
         undoStack->endMacro();

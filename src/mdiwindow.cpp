@@ -15,13 +15,9 @@
 
 #include "embroidermodder.h"
 
-typedef std::string String;
-
 /* Construct a new MdiWindow object.
  *
- * theIndex
- * parent
- * wflags
+ * theIndex, parent, wflags
  *
  * WARNING:
  *   DO NOT SET THE QMDISUBWINDOW (this) FOCUSPROXY TO THE PROMPT
@@ -79,14 +75,14 @@ MdiWindow::~MdiWindow()
 
 /* Save file to "fileName". */
 bool
-MdiWindow::saveFile(String fileName)
+MdiWindow::saveFile(std::string fileName)
 {
     return save_current_file(fileName);
 }
 
 /* Load file to this subwindow. */
 bool
-MdiWindow::loadFile(String fileName)
+MdiWindow::loadFile(std::string fileName)
 {
     debug_message("MdiWindow loadFile()");
 
@@ -112,7 +108,7 @@ MdiWindow::loadFile(String fileName)
         exit(1);
     }
     int readSuccessful = 0;
-    String readError;
+    std::string readError;
     int reader = emb_identify_format(fileName.c_str());
     if (reader < 0) {
         readSuccessful = 0;
@@ -405,7 +401,7 @@ MdiWindow::getShortCurrentFile()
 
 /* Get file extension from fileName. */
 QString
-fileExtension(String fileName)
+fileExtension(std::string fileName)
 {
     return QFileInfo(QString::fromStdString(fileName)).suffix().toLower();
 }

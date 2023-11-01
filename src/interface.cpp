@@ -33,8 +33,6 @@
 
 #include <time.h>
 
-typedef std::string String;
-
 /* Make the translation function global in scope. */
 QString
 translate_str(const char *str)
@@ -727,13 +725,13 @@ StatusBar::context_menu_event(QContextMenuEvent *event, QToolButton *button)
             menu.addAction(enableRealAction);
             menu.addAction(disableRealAction);
 
-			/*
+            /*
             QObject::connect(enableRealAction, &(QToolButton::triggered),
                this,  [=](){ gview->setFlag(VIEW_STATE_REAL); });
 
             QObject::connect(disableRealAction, &QToolButton::triggered,
                 this, [=](){ gview->unsetFlag(VIEW_STATE_REAL); });
-			*/
+            */
         }
 
         context_menu_action(button, "lineweightsettings", "&Settings...", &menu, "LineWeight");
@@ -752,36 +750,36 @@ StatusBar::toggle(std::string key, bool on)
         return;
     }
     uint64_t flag = VIEW_STATE_GRID;
-	if (key == "SNAP") {
+    if (key == "SNAP") {
         flag = VIEW_STATE_SNAP;
-	}
-	else if (key == "GRID") {
+    }
+    else if (key == "GRID") {
         flag = VIEW_STATE_GRID;
-	}
-	else if (key == "RULER") {
+    }
+    else if (key == "RULER") {
         flag = VIEW_STATE_RULER;
-	}
-	else if (key == "ORTHO") {
+    }
+    else if (key == "ORTHO") {
         flag = VIEW_STATE_ORTHO;
-	}
-	else if (key == "POLAR") {
+    }
+    else if (key == "POLAR") {
         flag = VIEW_STATE_POLAR;
-	}
-	else if (key == "QSNAP") {
+    }
+    else if (key == "QSNAP") {
         flag = VIEW_STATE_QSNAP;
-	}
-	else if (key == "QTRACK") {
+    }
+    else if (key == "QTRACK") {
         flag = VIEW_STATE_QTRACK;
-	}
-	else if (key == "LWT") {
+    }
+    else if (key == "LWT") {
         flag = VIEW_STATE_LWT;
-	}
+    }
 
-	if (on) {
-		gview->setFlag(flag);
-	}
-	else {
-		gview->unsetFlag(flag);
-	}
+    if (on) {
+        gview->setFlag(flag);
+    }
+    else {
+        gview->unsetFlag(flag);
+    }
 }
 

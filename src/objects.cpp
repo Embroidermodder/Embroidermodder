@@ -155,20 +155,28 @@ Geometry::init(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent
     case OBJ_TYPE_ELLIPSE:
         setData(OBJ_NAME, "Ellipse");
         break;
+    case OBJ_TYPE_DIMLEADER:
         setData(OBJ_NAME, "Dimension Leader");
         break;
+    case OBJ_TYPE_LINE:
         setData(OBJ_NAME, "Line");
         break;
+    case OBJ_TYPE_POINT:
         setData(OBJ_NAME, "Point");
         break;
+    case OBJ_TYPE_POLYGON:
         setData(OBJ_NAME, "Polygon");
         break;
+    case OBJ_TYPE_POLYLINE:
         setData(OBJ_NAME, "Polyline");
         break;
+    case OBJ_TYPE_RECTANGLE:
         setData(OBJ_NAME, "Rectangle");
         break;
+    case OBJ_TYPE_TEXTSINGLE:
         setData(OBJ_NAME, "Single Line Text");
         break;
+    case OBJ_TYPE_TEXTMULTI:
         setData(OBJ_NAME, "Multi Line Text");
         break;
     default:
@@ -177,9 +185,6 @@ Geometry::init(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent
     }
 
 /*
-    init_arc(arc);
-    init_circle(circle);
-    init_ellipse(ellipse);
     init_line(line); //TODO: getCurrentLineType
     init_point(vector); //TODO: getCurrentLineType
     init_path(p); //TODO: getCurrentLineType
@@ -188,6 +193,8 @@ Geometry::init(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent
 */
 
     setPen(objPen);
+
+    update();
 }
 
 Geometry::Geometry(int type_, QRgb rgb, Qt::PenStyle lineType,
@@ -201,34 +208,46 @@ Geometry::Geometry(int type_, QRgb rgb, Qt::PenStyle lineType,
 void
 Geometry::update(void)
 {
-
-}
-
-/* Initialise arc object.
- */
-void
-Geometry::init_arc(EmbArc arc)
-{
-    calculateArcData(arc);
-}
-
-/* Init circle
- */
-void
-Geometry::init_circle(EmbCircle circle)
-{
-    setObjectRadius(circle.radius);
-    setObjectCenter(circle.center);
-    updatePath();
-}
-
-/* Geometry::init_ellipse
- */
-void
-Geometry::init_ellipse(EmbEllipse ellipse)
-{
-    setObjectSize(ellipse.radius.x, ellipse.radius.y);
-    setObjectCenter(ellipse.center);
+    switch (Type) {
+    case OBJ_TYPE_ARC:
+        calculateArcData(arc);
+        break;
+    case OBJ_TYPE_CIRCLE:
+        setObjectRadius(circle.radius);
+        setObjectCenter(circle.center);
+        break;
+    case OBJ_TYPE_ELLIPSE:
+        setObjectSize(ellipse.radius.x, ellipse.radius.y);
+        setObjectCenter(ellipse.center);
+        break;
+    case OBJ_TYPE_DIMLEADER:
+        setData(OBJ_NAME, "Dimension Leader");
+        break;
+    case OBJ_TYPE_LINE:
+        setData(OBJ_NAME, "Line");
+        break;
+    case OBJ_TYPE_POINT:
+        setData(OBJ_NAME, "Point");
+        break;
+    case OBJ_TYPE_POLYGON:
+        setData(OBJ_NAME, "Polygon");
+        break;
+    case OBJ_TYPE_POLYLINE:
+        setData(OBJ_NAME, "Polyline");
+        break;
+    case OBJ_TYPE_RECTANGLE:
+        setData(OBJ_NAME, "Rectangle");
+        break;
+    case OBJ_TYPE_TEXTSINGLE:
+        setData(OBJ_NAME, "Single Line Text");
+        break;
+    case OBJ_TYPE_TEXTMULTI:
+        setData(OBJ_NAME, "Multi Line Text");
+        break;
+    default:
+        setData(OBJ_NAME, "Unknown");
+        break;
+    }
     updatePath();
 }
 
@@ -307,19 +326,15 @@ Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(par
     setScale(obj->scale());
     switch (Type) {
     case OBJ_TYPE_ARC: {
-        EmbArc arc;
         arc.start = to_EmbVector(obj->objectStartPoint());
         arc.mid = to_EmbVector(obj->objectMidPoint());
         arc.end = to_EmbVector(obj->objectEndPoint());
-        init_arc(arc);
         break;
     }
 
     case OBJ_TYPE_CIRCLE: {
-        EmbCircle circle;
         circle.center = to_EmbVector(obj->scenePos());
         circle.radius = obj->objectRadius();
-        init_circle(circle);
         break;
     }
 
@@ -332,11 +347,9 @@ Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(par
     }
 
     case OBJ_TYPE_ELLIPSE: {
-        EmbEllipse ellipse;
         ellipse.center = to_EmbVector(obj->scenePos());
         ellipse.radius.x = obj->objectWidth();
         ellipse.radius.y = obj->objectHeight();
-        init_ellipse(ellipse);
         break;
     }
 
@@ -382,6 +395,8 @@ Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(par
     default:
         break;
     }
+
+    update();
 }
 
 /* Geometry::allGripPoints */

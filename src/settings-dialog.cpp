@@ -443,6 +443,7 @@ Settings_Dialog::createTabFilesPaths()
     return scrollArea;
 }
 
+
 /* . */
 QWidget*
 Settings_Dialog::createTabDisplay()

@@ -110,8 +110,12 @@ void
 CmdPrompt::floatingChanged(bool isFloating)
 {
     qDebug("CmdPrompt floatingChanged(%d)", isFloating);
-    if (isFloating) promptSplitter->hide();
-    else           promptSplitter->show();
+    if (isFloating) {
+        promptSplitter->hide();
+    }
+    else {
+        promptSplitter->show();
+    }
 }
 
 /* CmdPrompt::saveHistory
@@ -370,16 +374,15 @@ QString CmdPromptHistory::applyFormatting(QString  txt, int prefixLength)
     //Keywords
     start = prefix.indexOf('[');
     stop = prefix.lastIndexOf(']');
-    if (start != -1 && stop != -1 && start < stop)
-    {
-        for (int i = stop; i >= start; i--)
-        {
-            if (prefix.at(i) == ']')
+    if (start != -1 && stop != -1 && start < stop) {
+        for (int i = stop; i >= start; i--) {
+            if (prefix.at(i) == ']') {
                 prefix.insert(i, "</font>");
-            if (prefix.at(i) == '[')
+            }
+            if (prefix.at(i) == '[') {
                 prefix.insert(i+1, "<font color=\"#0095FF\">");
-            if (prefix.at(i) == '/')
-            {
+            }
+            if (prefix.at(i) == '/') {
                 prefix.insert(i+1, "<font color=\"#0095FF\">");
                 prefix.insert(i, "</font>");
             }
@@ -707,9 +710,7 @@ CmdPromptInput::updateCurrentText(QString txt)
     applyFormatting();
 }
 
-/**
- * @brief CmdPromptInput::checkEditedText
- * @param txt
+/* CmdPromptInput::checkEditedText txt
  */
 void
 CmdPromptInput::checkEditedText(QString txt)
@@ -728,9 +729,7 @@ CmdPromptInput::checkChangedText(QString  txt)
     updateCurrentText(txt);
 }
 
-/**
- * @brief CmdPromptInput::copyClip
- */
+/* CmdPromptInput::copyClip */
 void
 CmdPromptInput::copyClip()
 {

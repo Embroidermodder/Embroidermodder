@@ -17,6 +17,8 @@
 
 int pop_command(const char *line);
 
+extern bool test_program;
+
 MainWindow* _mainWin = 0;
 MdiArea* mdiArea = 0;
 CmdPrompt* prompt = 0;
@@ -31,6 +33,36 @@ QCheckBox* checkBoxTipOfTheDay;
 std::unordered_map<std::string, QAction*> actionHash;
 std::unordered_map<std::string, QToolBar*> toolbarHash;
 std::unordered_map<std::string, QMenu*> menuHash;
+
+std::vector<std::string> coverage_test_script = {
+    "new",
+    "icon 16",
+    "icon 32",
+    "icon 64",
+    "icon 128",
+    "icon 24",
+    "zoom in",
+    "zoom extents",
+    "pan up",
+    "pan down",
+    "pan right",
+    "pan left",
+    "quit"
+};
+
+#if defined(WIN32)
+void
+emb_sleep(int seconds)
+{
+    sleep(1);
+}
+#else
+void
+emb_sleep(int seconds)
+{
+    usleep(1000000);
+}
+#endif
 
 /* Create menu. */
 void
@@ -1491,6 +1523,7 @@ run_script(std::vector<std::string> script)
 {
     std::string output = "";
     for (int i=0; i<(int)script.size(); i++) {
+        debug_message(script[i]);
         output += actuator(script[i]);
     }
     return output;
@@ -2457,15 +2490,15 @@ actuator(std::string line)
 
     /* . */
     case ACTION_MOVE_SELECTED: {
-		EmbVector delta;
-		std::vector<std::string> arg_list = tokenize(args, ' ');
-		delta.x = std::stof(arg_list[0]);
-		delta.y = -std::stof(arg_list[1]);
-		View* gview = activeView();
-		if (gview) {
-			gview->moveSelected(delta);
-		}
-		return "";
+        EmbVector delta;
+        std::vector<std::string> arg_list = tokenize(args, ' ');
+        delta.x = std::stof(arg_list[0]);
+        delta.y = -std::stof(arg_list[1]);
+        View* gview = activeView();
+        if (gview) {
+            gview->moveSelected(delta);
+        }
+        return "";
     }
 
     /* . */
@@ -2708,21 +2741,21 @@ actuator(std::string line)
 
     case ACTION_SCALE_SELECTED: {
         EmbVector v;
-		std::vector<std::string> arg_list = tokenize(args, ' ');
-		v.x = std::stof(arg_list[0]);
-		v.y = -std::stof(arg_list[1]);
-		EmbReal factor = std::stof(arg_list[2]);
+        std::vector<std::string> arg_list = tokenize(args, ' ');
+        v.x = std::stof(arg_list[0]);
+        v.y = -std::stof(arg_list[1]);
+        EmbReal factor = std::stof(arg_list[2]);
 
-		if (factor <= 0.0) {
-			QMessageBox::critical(_mainWin,
-				translate_str("ScaleFactor Error"),
-				translate_str("Hi there. If you are not a developer, report this as a bug. "
-				"If you are a developer, your code needs examined, and possibly your head too."));
-		}
+        if (factor <= 0.0) {
+            QMessageBox::critical(_mainWin,
+                translate_str("ScaleFactor Error"),
+                translate_str("Hi there. If you are not a developer, report this as a bug. "
+                "If you are a developer, your code needs examined, and possibly your head too."));
+        }
 
-		if (gview) {
-			gview->scaleSelected(v, factor);
-		}
+        if (gview) {
+            gview->scaleSelected(v, factor);
+        }
         return "";
     }
 
@@ -2971,6 +3004,18 @@ actuator(std::string line)
             _mainWin->nativespare_rubber_action(id);
         }
         */
+        return "";
+    }
+
+    case ACTION_SLEEP: {
+        emb_sleep(1);
+        return "";
+    }
+
+    case ACTION_TEST: {
+        if (test_program) {
+            return run_script(coverage_test_script);
+        }
         return "";
     }
 

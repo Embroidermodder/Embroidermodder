@@ -1331,6 +1331,40 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
+    /* index 99 */
+    {
+        /*
+        .menu = "None",
+        .toolbar = "None",
+        .alias = "EXIT QUIT",
+        */
+        .icon = "test",
+        .command = "test",
+        .tooltip = "Coverage Test",
+        .statustip = "Run all commands at least once to test that nothing crashes.",
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
+    },
+    /* index 100 */
+    {
+        /*
+        .menu = "None",
+        .toolbar = "None",
+        .alias = "EXIT QUIT",
+        */
+        .icon = "sleep",
+        .command = "sleep",
+        .tooltip = "Sleep for 1 second.",
+        .statustip = "Sleep for 1 second.",
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 0,
+        .gscene = 0,
+        .undo = 0
+    },
     /* end symbol */
     {
         .icon = "END",
