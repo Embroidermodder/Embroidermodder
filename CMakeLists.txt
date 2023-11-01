@@ -43,20 +43,13 @@ qt_add_executable(embroidermodder2 WIN32 MACOSX_BUNDLE
     ${CMAKE_SOURCE_DIR}/src/cmdprompt.cpp
     ${CMAKE_SOURCE_DIR}/src/embdetails-dialog.cpp
     ${CMAKE_SOURCE_DIR}/src/embroidermodder.cpp
-    ${CMAKE_SOURCE_DIR}/src/imagewidget.cpp
     ${CMAKE_SOURCE_DIR}/src/interface.cpp
-    ${CMAKE_SOURCE_DIR}/src/layer-manager.cpp
     ${CMAKE_SOURCE_DIR}/src/mainwindow.cpp
     ${CMAKE_SOURCE_DIR}/src/mdiarea.cpp
     ${CMAKE_SOURCE_DIR}/src/mdiwindow.cpp
     ${CMAKE_SOURCE_DIR}/src/objects.cpp
-    ${CMAKE_SOURCE_DIR}/src/preview-dialog.cpp
     ${CMAKE_SOURCE_DIR}/src/property-editor.cpp
-    ${CMAKE_SOURCE_DIR}/src/selectbox.cpp
     ${CMAKE_SOURCE_DIR}/src/settings-dialog.cpp
-    ${CMAKE_SOURCE_DIR}/src/statusbar.cpp
-    ${CMAKE_SOURCE_DIR}/src/undo-commands.cpp
-    ${CMAKE_SOURCE_DIR}/src/undo-editor.cpp
     ${CMAKE_SOURCE_DIR}/src/view.cpp
 
     ${CMAKE_SOURCE_DIR}/src/embroidermodder.h

@@ -1156,11 +1156,6 @@ public:
 
     uint64_t state;
 
-    std::vector<QGraphicsItem*> selected_items();
-
-    bool allowZoomIn();
-    bool allowZoomOut();
-
     int formatType;
     EmbPattern *pattern;
 
@@ -1182,7 +1177,6 @@ public:
     bool panningPointActive;
     bool panningActive;
     bool qSnapActive;
-    bool qSnapToggle;
 
     Geometry* gripBaseObj;
     Geometry* tempBaseObj;
@@ -1199,7 +1193,6 @@ public:
     QPoint releasePoint;
     QPointF sceneGripPoint;
 
-    void updateMouseCoords(int x, int y);
     QPoint viewMousePoint;
     QPointF sceneMousePoint;
     QRgb qsnapLocatorColor;
@@ -1212,23 +1205,63 @@ public:
     QRgb crosshairColor;
     uint32_t crosshairSize;
 
+    QHash<int64_t, QGraphicsItem*> hashDeletedObjects;
+    std::vector<std::string> spareRubberList;
+    std::vector<QGraphicsItem*> rubberRoomList;
+    std::vector<QGraphicsItem*> previewObjectList;
+    QPointF previewPoint;
+    EmbReal previewData;
+    uint32_t previewMode;
+    QPointF cutCopyMousePoint;
+    QPointF pasteDelta;
+    uint32_t panDistance;
+    EmbVector panStartPos;
+
     /* Graphics functions */
     void draw_line(QPainter *painter, QPointF start, QPointF end);
     void draw_rect(QPainter *painter, QPointF start, QPointF end);
     void draw_rulers(QPainter* painter, const QRectF& rect);
     void draw_crosshair(QPainter* painter, const QRectF& rect);
+    QRectF rect_from_center(QPointF center, float radius);
 
     void recalculateLimits();
     void zoomToPoint(const QPoint& mousePoint, int zoomDir);
     void centerAt(const QPointF& centerPoint);
     QPointF center() { return mapToScene(rect().center()); }
+    void updateMouseCoords(int x, int y);
 
-//    QUndoStack* getUndoStack() { return undoStack; }
     void addObject(Geometry* obj);
     void deleteObject(Geometry* obj);
     void vulcanizeObject(Geometry* obj);
 
-public slots:
+    std::vector<QGraphicsItem*> selected_items();
+
+    bool allowZoomIn();
+    bool allowZoomOut();
+
+    void createGridRect();
+    void createGridPolar();
+    void createGridIso();
+    void createOrigin();
+
+    void loadRulerSettings();
+
+    QPainterPath createRulerTextPath(EmbVector position, QString str, EmbReal height);
+
+    QGraphicsItemGroup* previewObjectItemGroup;
+
+    std::vector<QGraphicsItem*> createObjectList(std::vector<QGraphicsItem*> list);
+    QGraphicsItemGroup* pasteObjectItemGroup;
+
+    void copySelected();
+
+    void startGripping(Geometry* obj);
+    void stopGripping(bool accept = false);
+
+    void panStart(const QPoint& point);
+
+    void alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& viewPoint);
+
     void action() {}
 
     void zoomIn();
@@ -1239,6 +1272,7 @@ public slots:
     void panRealTime();
     void panPoint();
     void panLeft();
+public slots:
     void panRight();
     void panUp();
     void panDown();
@@ -1246,16 +1280,16 @@ public slots:
     void selectionChanged();
     void clearSelection();
     void deleteSelected();
-    void moveSelected(EmbReal dx, EmbReal dy);
+    void moveSelected(EmbVector delta);
     void cut();
     void copy();
     void paste();
     void repeatAction();
     void moveAction();
     void scaleAction();
-    void scaleSelected(EmbReal x, EmbReal y, EmbReal factor);
+    void scaleSelected(EmbVector point, EmbReal factor);
     void rotateAction();
-    void rotateSelected(EmbReal x, EmbReal y, EmbReal rot);
+    void rotateSelected(EmbVector pivot, EmbReal rot);
     void mirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
     int numSelected();
 
@@ -1270,23 +1304,14 @@ public slots:
     void setCrossHairSize(uint8_t percent);
     void setBackgroundColor(QRgb color);
     void setSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
-    void toggleSnap(bool on);
-    void toggleGrid(bool on);
-    void toggleRuler(bool on);
-    void toggleOrtho(bool on);
-    void togglePolar(bool on);
-    void toggleQSnap(bool on);
-    void toggleQTrack(bool on);
-    void toggleLwt(bool on);
-    void toggleReal(bool on);
-    bool isLwtEnabled();
-    bool isRealEnabled();
+    void setFlag(uint64_t flag);
+    void unsetFlag(uint64_t flag);
 
     void setGridColor(QRgb color);
-    void createGrid(QString gridType);
+    void createGrid(void);
     void setRulerColor(QRgb color);
 
-    void previewOn(std::string clone, std::string mode, EmbReal x, EmbReal y, EmbReal data);
+    void previewOn(uint32_t clone, uint32_t mode, EmbVector v, EmbReal data);
     void previewOff();
 
     bool allowRubber();
@@ -1308,45 +1333,6 @@ protected:
     void drawBackground(QPainter* painter, const QRectF& rect);
     void drawForeground(QPainter* painter, const QRectF& rect);
     void enterEvent(QEvent* event);
-
-private:
-    QHash<int64_t, QGraphicsItem*> hashDeletedObjects;
-
-    std::vector<std::string> spareRubberList;
-
-    void createGridRect();
-    void createGridPolar();
-    void createGridIso();
-    void createOrigin();
-
-    void loadRulerSettings();
-
-    QPainterPath createRulerTextPath(EmbVector position, QString str, EmbReal height);
-
-    QList<QGraphicsItem*> previewObjectList;
-    QGraphicsItemGroup* previewObjectItemGroup;
-    QPointF previewPoint;
-    EmbReal previewData;
-    std::string previewMode;
-
-    std::vector<QGraphicsItem*> createObjectList(std::vector<QGraphicsItem*> list);
-    QPointF cutCopyMousePoint;
-    QGraphicsItemGroup* pasteObjectItemGroup;
-    QPointF pasteDelta;
-
-    std::vector<QGraphicsItem*> rubberRoomList;
-
-    void copySelected();
-
-    void startGripping(Geometry* obj);
-    void stopGripping(bool accept = false);
-
-    void panStart(const QPoint& point);
-    int panDistance;
-    int panStartX;
-    int panStartY;
-
-    void alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& viewPoint);
 };
 
 #endif

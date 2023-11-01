@@ -17,8 +17,6 @@
 
 int pop_command(const char *line);
 
-typedef std::string String;
-
 MainWindow* _mainWin = 0;
 MdiArea* mdiArea = 0;
 CmdPrompt* prompt = 0;
@@ -288,7 +286,7 @@ MainWindow::createAllToolbars()
 
     int top_toolbar_n = string_array_length(top_toolbar_layout);
     for (int i=0; i<top_toolbar_n; i++) {
-        String entry(top_toolbar_layout[i]);
+        std::string entry(top_toolbar_layout[i]);
         if (entry == "---") {
             addToolBarBreak(Qt::TopToolBarArea);
         }
@@ -301,7 +299,7 @@ MainWindow::createAllToolbars()
 
     int bottom_toolbar_n = string_array_length((const char**)bottom_toolbar_layout);
     for (int i=0; i<bottom_toolbar_n; i++) {
-        String entry(bottom_toolbar_layout[i]);
+        std::string entry(bottom_toolbar_layout[i]);
         if (entry == "---") {
             addToolBarBreak(Qt::BottomToolBarArea);
         }
@@ -355,16 +353,16 @@ MainWindow::checkForUpdates()
 /* platformString.
  * TODO: Append QSysInfo to string where applicable.
  */
-String
+std::string
 platformString(void)
 {
-    String os;
+    std::string os;
 #if defined(WIN32)
     return "Windows";
 #else
     struct utsname platform;
     uname(&platform);
-    String ret(platform.sysname);
+    std::string ret(platform.sysname);
     return ret;
 #endif
 }
@@ -693,16 +691,16 @@ MainWindow::pickAddModeToggled()
 }
 
 /* MainWindow::makeLayerActive */
-String
-make_layer_active_action(String args)
+std::string
+make_layer_active_action(std::string args)
 {
     debug_message("TODO: Implement makeLayerActive.");
     return "";
 }
 
 /* layer_manager_action  args */
-String
-layer_manager_action(String args)
+std::string
+layer_manager_action(std::string args)
 {
     debug_message("TODO: Implement layerManager.");
     LayerManager layman(_mainWin);
@@ -711,16 +709,16 @@ layer_manager_action(String args)
 }
 
 /* Using the undo stack for data, return to the last layer displayed. */
-String
-layer_previous_action(String args)
+std::string
+layer_previous_action(std::string args)
 {
     debug_message("TODO: Implement layerPrevious.");
     return "";
 }
 
 /* Zoom the current view using behaviour described by "mode". */
-String
-zoom_action(String mode)
+std::string
+zoom_action(std::string mode)
 {
     View* gview = activeView();
     if (!gview) {
@@ -1009,10 +1007,9 @@ MainWindow::promptInputNext()
     }
 }
 
-/* SetCrossHairColor
- * uint8_t r, uint8_t g, uint8_t b
+/* SetCrossHairColor uint8_t r, uint8_t g, uint8_t b
  */
-String
+std::string
 set_crosshair_color_action(uint8_t r, uint8_t g, uint8_t b)
 {
     settings[ST_CROSSHAIR_COLOR].i = qRgb(r,g,b);
@@ -1023,7 +1020,7 @@ set_crosshair_color_action(uint8_t r, uint8_t g, uint8_t b)
 /* set_grid_color
  * uint8_t r, uint8_t g, uint8_t b
  */
-String
+std::string
 set_grid_color_action(uint8_t r, uint8_t g, uint8_t b)
 {
     settings[ST_GRID_COLOR].i = qRgb(r,g,b);
@@ -1034,8 +1031,8 @@ set_grid_color_action(uint8_t r, uint8_t g, uint8_t b)
 /* PreviewOn
  * clone, mode, x, y, data
  */
-String
-preview_on_action(String args)
+std::string
+preview_on_action(std::string args)
 {
     View* gview = activeView();
     if (gview) {
@@ -1068,10 +1065,10 @@ preview_on_action(String args)
 /*
  * NOTE: This native is different than the rest in that the Y+ is down
  * (scripters need not worry about this)
- * EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode
+ * EmbReal startX, EmbReal startY, const QPainterPath& p, std::string rubberMode
  */
-String
-add_polyline_action(String args)
+std::string
+add_polyline_action(std::string args)
 {
     /*
     QVariantList varList = a[0].toVariant().toList();
@@ -1124,8 +1121,8 @@ add_polyline_action(String args)
 }
 
 /* . */
-String
-delete_selected_action(String args)
+std::string
+delete_selected_action(std::string args)
 {
     View* gview = activeView();
     if (gview) {
@@ -1135,8 +1132,8 @@ delete_selected_action(String args)
 }
 
 /* . */
-String
-paste_selected_action(String args)
+std::string
+paste_selected_action(std::string args)
 {
     /*
     _mainWin->nativePasteSelected(a[0].r, a[1].r);
@@ -1144,48 +1141,11 @@ paste_selected_action(String args)
     return "";
 }
 
-/* MoveSelected(dx, dy) */
-String
-move_selected_action(String args)
-{
-    std::vector<std::string> arg_list = tokenize(args, ' ');
-    EmbReal dx = std::stof(arg_list[0]);
-    EmbReal dy = std::stof(arg_list[1]);
-    View* gview = activeView();
-    if (gview) {
-        gview->moveSelected(dx, -dy);
-    }
-    return "";
-}
-
-/* ScaleSelected(x, y, factor) */
-String
-scale_selected_action(String args)
-{
-    std::vector<std::string> arg_list = tokenize(args, ' ');
-    EmbReal x = std::stof(arg_list[0]);
-    EmbReal y = std::stof(arg_list[1]);
-    EmbReal factor = std::stof(arg_list[2]);
-
-    if (factor <= 0.0) {
-        QMessageBox::critical(_mainWin,
-            translate_str("ScaleFactor Error"),
-            translate_str("Hi there. If you are not a developer, report this as a bug. "
-            "If you are a developer, your code needs examined, and possibly your head too."));
-    }
-
-    View* gview = activeView();
-    if (gview) {
-        gview->scaleSelected(x, -y, factor);
-    }
-    return "";
-}
-
 /* disable_action
  * variable
  */
-String
-disable_action(String variable)
+std::string
+disable_action(std::string variable)
 {
     if (variable == "text-angle") {
         settings[ST_TEXT_ANGLE].i = 0;
@@ -1526,10 +1486,10 @@ MainWindow::createAllActions()
  *     donut 20 40 20 black
  *     ------------------------------------------------------------------
  */
-String
+std::string
 run_script(std::vector<std::string> script)
 {
-    String output = "";
+    std::string output = "";
     for (int i=0; i<(int)script.size(); i++) {
         output += actuator(script[i]);
     }
@@ -1650,7 +1610,7 @@ actuator(std::string line)
 
     /* add_arc_action.
      *
-     * EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, String rubberMode
+     * EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, std::string rubberMode
      */
     case ACTION_ADD_ARC: {
         QGraphicsScene* scene = activeScene();
@@ -1677,7 +1637,7 @@ actuator(std::string line)
 
     /* add_circle_action.
      *
-     * EmbReal centerX, EmbReal centerY, EmbReal radius, bool fill, String rubberMode
+     * EmbReal centerX, EmbReal centerY, EmbReal radius, bool fill, std::string rubberMode
      */
     case ACTION_ADD_CIRCLE: {
         QGraphicsScene* gscene = gview->scene();
@@ -1688,7 +1648,7 @@ actuator(std::string line)
             circle.center.y = -0.0;
             circle.radius = 10.0;
             bool fill = false;
-            String rubberMode = "OBJ_RUBBER_OFF";
+            std::string rubberMode = "OBJ_RUBBER_OFF";
 
             /*
             Geometry* obj = new Geometry(circle, _mainWin->getCurrentColor(), Qt::SolidLine);
@@ -1708,7 +1668,7 @@ actuator(std::string line)
         return "";
     }
 
-    /* EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String rubberMode
+    /* EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, std::string rubberMode
      */
     case ACTION_ADD_DIM_LEADER: {
         /*
@@ -1738,7 +1698,7 @@ actuator(std::string line)
 
     /* Add an ellipse to the scene.
      *
-     * EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, EmbReal rot, bool fill, String rubberMode
+     * EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, EmbReal rot, bool fill, std::string rubberMode
      */
     case ACTION_ADD_ELLIPSE: {
 
@@ -1770,7 +1730,7 @@ actuator(std::string line)
      */
     case ACTION_ADD_GEOMETRY: {
         std::vector<std::string> list = tokenize(args_, ' ');
-        String command = list[0];
+        std::string command = list[0];
         args_ = args_.substr(std::min(command.size()+1, args_.size()));
         std::vector<std::string> subcommands = {
             "arc",
@@ -1838,7 +1798,7 @@ actuator(std::string line)
 
     /*
      * .
-     * EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, String rubberMode
+     * EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, std::string rubberMode
      */
     case ACTION_ADD_LINE: {
         /*
@@ -1872,7 +1832,7 @@ actuator(std::string line)
      * NOTE: This native is different than the rest in that
      * the Y+ is down (scripters need not worry about this).
      *
-     * EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode
+     * EmbReal startX, EmbReal startY, const QPainterPath& p, std::string rubberMode
      */
     case ACTION_ADD_PATH: {
         /*
@@ -1907,7 +1867,7 @@ actuator(std::string line)
      * args
      *
      * NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
-     * EmbReal startX, EmbReal startY, const QPainterPath& p, String rubberMode
+     * EmbReal startX, EmbReal startY, const QPainterPath& p, std::string rubberMode
      */
     case ACTION_ADD_POLYGON: {
         /*
@@ -2007,7 +1967,7 @@ actuator(std::string line)
             rect.bottom = -std::stof(arg_list[3]);
             EmbReal rot = std::stof(arg_list[4]);
             bool fill = (arg_list[5] == "1");
-            String rubberMode = arg_list[6];
+            std::string rubberMode = arg_list[6];
 
             /*
             Geometry* obj = new Geometry(rect, _mainWin->getCurrentColor(), Qt::SolidLine);
@@ -2145,7 +2105,7 @@ actuator(std::string line)
     /* add_slot_action
      * args
      *
-     * EmbReal centerX, EmbReal centerY, EmbReal diameter, EmbReal length, EmbReal rot, bool fill, String rubberMode
+     * EmbReal centerX, EmbReal centerY, EmbReal diameter, EmbReal length, EmbReal rot, bool fill, std::string rubberMode
      */
     case ACTION_ADD_SLOT: {
         //TODO: Use UndoableAddCommand for slots
@@ -2165,7 +2125,7 @@ actuator(std::string line)
 
     /* add_text_multi_action
      *
-     * QString str, EmbReal x, EmbReal y, EmbReal rot, bool fill, String rubberMode
+     * QString str, EmbReal x, EmbReal y, EmbReal rot, bool fill, std::string rubberMode
      */
     case ACTION_ADD_TEXT_MULTI: {
         /*
@@ -2176,7 +2136,7 @@ actuator(std::string line)
 
     /* add_text_single_action
      *
-     * QString str, EmbReal x, EmbReal y, EmbReal rot, bool fill, String rubberMode
+     * QString str, EmbReal x, EmbReal y, EmbReal rot, bool fill, std::string rubberMode
      */
     case ACTION_ADD_TEXT_SINGLE: {
         /*
@@ -2226,13 +2186,12 @@ actuator(std::string line)
         return "";
     }
 
-    /*
+    /* TODO: Node error checking
+     *
      * EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight
      */
     case ACTION_ADD_VERTICAL_DIMENSION: {
         /*
-        AddVerticalDimension(std::vector<Node> a)
-        //TODO: Node error checking
         debug_message("TODO: finish addVerticalDimension command");
         */
         return "";
@@ -2498,7 +2457,15 @@ actuator(std::string line)
 
     /* . */
     case ACTION_MOVE_SELECTED: {
-        return "";
+		EmbVector delta;
+		std::vector<std::string> arg_list = tokenize(args, ' ');
+		delta.x = std::stof(arg_list[0]);
+		delta.y = -std::stof(arg_list[1]);
+		View* gview = activeView();
+		if (gview) {
+			gview->moveSelected(delta);
+		}
+		return "";
     }
 
     /* . */
@@ -2687,15 +2654,16 @@ actuator(std::string line)
         return "";
     }
 
-    /* RotateSelected(x, y, rot)
+    /* RotateSelected(v, rot)
      */
     case ACTION_ROTATE_SELECTED: {
         if (gview) {
+            EmbVector v;
             std::vector<std::string> arg_list = tokenize(args, ' ');
-            EmbReal x = std::stof(arg_list[0]);
-            EmbReal y = std::stof(arg_list[1]);
+            v.x = std::stof(arg_list[0]);
+            v.y = -std::stof(arg_list[1]);
             EmbReal rot = std::stof(arg_list[2]);
-            gview->rotateSelected(x, -y, -rot);
+            gview->rotateSelected(v, -rot);
         }
         return "";
     }
@@ -2739,6 +2707,22 @@ actuator(std::string line)
     }
 
     case ACTION_SCALE_SELECTED: {
+        EmbVector v;
+		std::vector<std::string> arg_list = tokenize(args, ' ');
+		v.x = std::stof(arg_list[0]);
+		v.y = -std::stof(arg_list[1]);
+		EmbReal factor = std::stof(arg_list[2]);
+
+		if (factor <= 0.0) {
+			QMessageBox::critical(_mainWin,
+				translate_str("ScaleFactor Error"),
+				translate_str("Hi there. If you are not a developer, report this as a bug. "
+				"If you are a developer, your code needs examined, and possibly your head too."));
+		}
+
+		if (gview) {
+			gview->scaleSelected(v, factor);
+		}
         return "";
     }
 
@@ -2919,7 +2903,7 @@ actuator(std::string line)
     case ACTION_SET_RUBBER_MODE: {
         /*
         if (gview) {
-            String mode = QString::fromStdString(a[0].s).toUpper().toStdString();
+            std::string mode = QString::fromStdString(a[0].s).toUpper().toStdString();
 
             if (contains(rubber_modes, mode)) {
                 gview->setRubberMode("OBJ_RUBBER_" + mode);
@@ -3079,7 +3063,7 @@ actuator(std::string line)
     case ACTION_SCRIPT:
         auto script = scripts.find(command);
         if (script != scripts.end()) {
-            String result = run_script(script->second);
+            std::string result = run_script(script->second);
             if (result != "") {
                 return "<br/>" + result;
             }
@@ -3135,7 +3119,7 @@ text_action(std::string args)
 }
 
 /* Create or alter variables in the script environment. */
-String
+std::string
 set_action(std::string args)
 {
     /*
@@ -3188,8 +3172,8 @@ set_action(std::string args)
 }
 
 /* . */
-String
-enable_action(String args)
+std::string
+enable_action(std::string args)
 {
     /*
     if (list.size() < 1) {
@@ -3235,8 +3219,8 @@ enable_action(String args)
 }
 
 /* . */
-String
-blink_prompt_action(String args)
+std::string
+blink_prompt_action(std::string args)
 {
     prompt->startBlinking();
     return "";
@@ -3252,7 +3236,7 @@ blink_prompt_action(String args)
  *
  * Returns an error message if an error occured or an empty string if it passes.
  */
-String
+std::string
 convert_args_to_type(
     std::string label,
     std::vector<std::string> args,
@@ -3262,7 +3246,7 @@ convert_args_to_type(
     int n_args = (int)args.size();
     int required_args = strlen(args_template);
     if (n_args < required_args) {
-        String required = std::to_string(required_args);
+        std::string required = std::to_string(required_args);
         return "ERROR: " + label + "requires" + required + "arguments";
     }
     for (int i=0; i<n_args; i++) {
@@ -3306,8 +3290,8 @@ convert_args_to_type(
 }
 
 /* Run the lines in another script before continuing. */
-String
-include_action(std::vector<Node> a)
+std::string
+include_action(std::string a)
 {
 /*
     std::string file("commands/");
@@ -3320,12 +3304,12 @@ include_action(std::vector<Node> a)
 /*
  * argument string "i"
  */
-String
-is_int_action(String args)
+std::string
+is_int_action(std::string args)
 {
     std::vector<Node> result;
     std::vector<std::string> a = tokenize(args, ' ');
-    String error = convert_args_to_type("IsInt()", a, "i", result);
+    std::string error = convert_args_to_type("IsInt()", a, "i", result);
     if (error != "") {
         return "false";
     }
@@ -3333,8 +3317,8 @@ is_int_action(String args)
     return "true";
 }
 
-String
-SetTextAngle_action(String args)
+std::string
+SetTextAngle_action(std::string args)
 {
     /*
     _mainWin->setTextAngle(a[0].r);
@@ -3601,7 +3585,7 @@ MainWindow::saveasfile()
  * fileName
  */
 QMdiSubWindow *
-MainWindow::findMdiWindow(String fileName)
+MainWindow::findMdiWindow(std::string fileName)
 {
     debug_message("MainWindow::findMdiWindow(" + fileName + ")");
     QString canonicalFilePath = QFileInfo(QString::fromStdString(fileName)).canonicalFilePath();
@@ -3767,7 +3751,7 @@ MainWindow::updateMenuToolbarStatusbar()
  * \todo check the file exists on the system, rename to validFile?
  */
 bool
-validFileFormat(String fileName)
+validFileFormat(std::string fileName)
 {
     if (fileName == "") {
         return false;
@@ -3894,3 +3878,234 @@ MainWindow::floatingChangedToolBar(bool isFloating)
     }
 }
 
+
+/* . */
+UndoableCommand::UndoableCommand(std::string command_, QString text, Geometry* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+{
+    gview = v;
+    object = obj;
+    command = command_;
+    setText(text);
+}
+
+/* . */
+UndoableCommand::UndoableCommand(EmbVector delta_, QString text, Geometry* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+{
+    gview = v;
+    object = obj;
+    command = "move";
+    setText(text);
+    delta = delta_;
+}
+
+/* . */
+UndoableCommand::UndoableCommand(
+    std::string command, EmbVector point, EmbReal value, QString text, Geometry* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+{
+    gview = v;
+    object = obj;
+    setText(text);
+    command = command;
+    if (command == "scale") {
+        pivot = point;
+        angle = value;
+    }
+    else {
+        //Prevent division by zero and other wacky behavior
+        if (value <= 0.0) {
+            delta.x = 0.0;
+            delta.y = 0.0;
+            factor = 1.0;
+            QMessageBox::critical(0,
+                QObject::tr("ScaleFactor Error"),
+                QObject::tr("Hi there. If you are not a developer, report this as a bug. "
+            "If you are a developer, your code needs examined, and possibly your head too."));
+        }
+        else {
+            //Calculate the offset
+            EmbVector old;
+            old.x = object->x();
+            old.y = object->y();
+            factor = value;
+            QLineF scaleLine(point.x, point.y, old.x, old.y);
+            scaleLine.setLength(scaleLine.length() * factor);
+            EmbVector new_;
+            new_.x = scaleLine.x2();
+            new_.y = scaleLine.y2();
+
+            delta = embVector_subtract(new_, old);
+        }
+    }
+}
+
+/* . */
+void
+UndoableCommand::undo()
+{
+    if (command == "add") {
+        gview->deleteObject(object);
+    }
+    else if (command == "delete") {
+        gview->addObject(object);
+    }
+    else if (command == "move") {
+        object->moveBy(-delta.x, -delta.y);
+    }
+    else if (command == "rotate") {
+        rotate(pivot, -angle);
+    }
+    else if (command == "scale") {
+        object->setScale(object->scale()*(1/factor));
+        object->moveBy(-delta.x, -delta.y);
+    }
+    else if (command == "gripedit") {
+        object->gripEdit(after, before);
+    }
+    else if (command == "mirror") {
+        mirror();
+    }
+    else if (command == "nav") {
+        if (!done) {
+            toTransform = gview->transform();
+            toCenter = gview->center();
+        }
+        done = true;
+
+        gview->setTransform(fromTransform);
+        gview->centerAt(fromCenter);
+    }
+}
+
+/* . */
+void
+UndoableCommand::redo()
+{
+    if (command == "add") {
+        gview->addObject(object);
+    }
+    else if (command == "delete") {
+        gview->deleteObject(object);
+    }
+    else if (command == "move") {
+        object->moveBy(delta.x, delta.y);
+    }
+    else if (command == "rotate") {
+        rotate(pivot, angle);
+    }
+    else if (command == "scale") {
+        object->setScale(object->scale()*factor);
+        object->moveBy(delta.x, delta.y);
+    }
+    else if (command == "gripedit") {
+        object->gripEdit(before, after);
+    }
+    else if (command == "mirror") {
+        mirror();
+    }
+    else if (command == "nav") {
+        if (!done) {
+            if (navType == "ZoomInToPoint")  {
+                gview->zoomToPoint(gview->scene()->property("VIEW_MOUSE_POINT").toPoint(), +1);
+            }
+            else if (navType == "ZoomOutToPoint") {
+                gview->zoomToPoint(gview->scene()->property("VIEW_MOUSE_POINT").toPoint(), -1);
+            }
+            else if (navType == "ZoomExtents") {
+                gview->zoomExtents();
+            }
+            else if (navType == "ZoomSelected") {
+                gview->zoomSelected();
+            }
+            else if (navType == "PanStart") {
+                /* Do Nothing. We are just recording the spot where the pan started. */
+            }
+            else if (navType == "PanStop") {
+                /* Do Nothing. We are just recording the spot where the pan stopped. */
+            }
+            else if (navType == "PanLeft") {
+                gview->panLeft();
+            }
+            else if (navType == "PanRight") {
+                gview->panRight();
+            }
+            else if (navType == "PanUp") {
+                gview->panUp();
+            }
+            else if (navType == "PanDown") {
+                gview->panDown();
+            }
+            toTransform = gview->transform();
+            toCenter = gview->center();
+        }
+        else {
+            gview->setTransform(toTransform);
+            gview->centerAt(toCenter);
+        }
+    }
+}
+
+/* . */
+void
+UndoableCommand::rotate(EmbVector pivot, EmbReal rot)
+{
+    EmbReal rad = radians(rot);
+    EmbVector p = embVector_subtract(to_EmbVector(object->scenePos()), pivot);
+    EmbVector rotv = embVector_add(rotate_vector(p, rad), pivot);
+
+    object->setPos(rotv.x, rotv.y);
+    object->setRotation(object->rotation() + rot);
+}
+
+/* . */
+UndoableCommand::UndoableCommand(QString type, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+{
+    gview = v;
+    navType = type;
+    setText(QObject::tr("Navigation"));
+    command = "nav";
+    done = false;
+    fromTransform = gview->transform();
+    fromCenter = gview->center();
+}
+
+/* . */
+bool
+UndoableCommand::mergeWith(const QUndoCommand* newest)
+{
+    if (newest->id() != id()) // make sure other is also an UndoableNavCommand
+         return false;
+
+    const UndoableCommand* cmd = static_cast<const UndoableCommand*>(newest);
+    toTransform = cmd->toTransform;
+    toCenter = cmd->toCenter;
+
+    return true;
+}
+
+/* . */
+UndoableCommand::UndoableCommand(const QPointF beforePoint, const QPointF afterPoint, QString  text, Geometry* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+{
+    gview = v;
+    object = obj;
+    setText(text);
+    command = "gripedit";
+    before = beforePoint;
+    after = afterPoint;
+}
+
+/* . */
+UndoableCommand::UndoableCommand(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QString  text, Geometry* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+{
+    gview = v;
+    object = obj;
+    setText(text);
+    command = "mirror";
+    mirrorLine = QLineF(x1, y1, x2, y2);
+}
+
+/* . */
+void
+UndoableCommand::mirror()
+{
+    //TODO: finish undoable mirror
+}

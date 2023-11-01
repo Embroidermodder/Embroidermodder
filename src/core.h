@@ -581,6 +581,29 @@
 #define LE_ARC_INC_ANGLE                        12
 #define LE_ARC_CLOCKWISE                        13
 
+
+#define VIEW_STATE_GRID                       0x01
+#define VIEW_STATE_ORTHO                      0x02
+#define VIEW_STATE_POLAR                      0x04
+#define VIEW_STATE_ISO                        0x08
+#define VIEW_STATE_QSNAP                      0x10
+#define VIEW_STATE_QTRACK                     0x20
+#define VIEW_STATE_LWT                        0x40
+#define VIEW_STATE_REAL                       0x80
+#define VIEW_STATE_METRIC                    0x100
+#define VIEW_STATE_SIMULATE                  0x200
+#define VIEW_STATE_SNAP                      0x400
+#define VIEW_STATE_RULER                     0x800
+
+#define PREVIEW_MODE_NULL                        0
+#define PREVIEW_MODE_MOVE                        1
+#define PREVIEW_MODE_ROTATE                      2
+#define PREVIEW_MODE_SCALE                       3
+
+#define PREVIEW_CLONE_NULL                       0
+#define PREVIEW_CLONE_RUBBER                     1
+#define PREVIEW_CLONE_SELECTED                   2
+
 #ifdef __cplusplus
 extern "C" {
 #endif
