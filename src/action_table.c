@@ -19,8 +19,8 @@
 
 /* . */
 const ActionData action_table[MAX_ACTIONS] = {
-    /* index 0 */
     {
+        .id = ACTION_ABOUT,
         .icon = "about",
         .command = "about",
         .tooltip = "&About Embroidermodder 2",
@@ -31,8 +31,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 0,
         .undo = 0
     },
-    /* index 0 */
     {
+        .id = ACTION_TREBLECLEF,
         .icon = "trebleclef",
         .command = "trebleclef",
         .tooltip = "Treble Clef",
@@ -43,8 +43,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 1 */
     {
+        .id = ACTION_DO_NOTHING,
         .icon = "donothing",
         .command = "donothing",
         .tooltip = "&Do Nothing",
@@ -55,8 +55,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 2 */
     {
+        .id = ACTION_NEW,
         .icon = "new",
         .command = "new",
         .tooltip = "&New",
@@ -67,8 +67,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 3 */
     {
+        .id = ACTION_OPEN,
         .icon = "open",
         .command = "open",
         .tooltip = "&Open",
@@ -79,8 +79,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 4 */
     {
+        .id = ACTION_SAVE,
         .icon = "save",
         .command = "save",
         .tooltip = "&Save",
@@ -91,8 +91,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 5 */
     {
+        .id = ACTION_SAVEAS,
         .icon = "saveas",
         .command = "saveas",
         .tooltip = "Save &As",
@@ -103,8 +103,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 6 */
     {
+        .id = ACTION_PRINT,
         .icon = "print",
         .command = "print",
         .tooltip = "&Print",
@@ -115,8 +115,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 7 */
     {
+        .id = ACTION_DESIGN_DETAILS,
         .icon = "designdetails",
         .command = "designdetails",
         .tooltip = "&Details",
@@ -127,8 +127,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 8 */
     {
+        .id = ACTION_EXIT,
         .icon = "exit",
         .command = "exit",
         .tooltip = "E&xit",
@@ -139,8 +139,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 9 */
     {
+        .id = ACTION_CUT,
         .icon = "cut",
         .command = "cut",
         .tooltip = "Cu&t",
@@ -151,8 +151,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 10 */
     {
+        .id = ACTION_COPY,
         .icon = "copy",
         .command = "copy",
         .tooltip = "&Copy",
@@ -163,8 +163,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 11 */
     {
+        .id = ACTION_PASTE,
         .icon = "paste",
         .command = "paste",
         .tooltip = "&Paste",
@@ -175,8 +175,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 12 */
     {
+        .id = ACTION_UNDO,
         .icon = "undo",
         .command = "undo",
         .tooltip = "&Undo",
@@ -187,11 +187,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 13
-    menu = "None",
-    toolbar = "None"
-    */
     {
+        .id = ACTION_REDO,
         .icon = "redo",
         .command = "redo",
         .tooltip = "&Redo",
@@ -202,10 +199,10 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 14 */
     {
+        .id = ACTION_WINDOW_CLOSE,
         .icon = "windowclose",
-        .command = "window close",
+        .command = "windowclose",
         .tooltip = "Cl&ose",
         .statustip = "Close the active window: CLOSE",
         .shortcut = "Ctrl+W",
@@ -214,8 +211,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 15 */
     {
+        .id = ACTION_WINDOW_CLOSE_ALL,
         .icon = "windowcloseall",
         .command = "windowcloseall",
         .tooltip = "Close &All",
@@ -226,9 +223,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 16
-    alias = "CASCADE WINDOWCASCADE" */
     {
+        .id = ACTION_WINDOW_CASCADE,
         .icon = "windowcascade",
         .command = "windowcascade",
         .tooltip = "&Cascade",
@@ -239,9 +235,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 17 */
-    /* alias = ["TILE", "WINDOWTILE"] */
     {
+        .id = ACTION_WINDOW_TILE,
         .icon = "windowtile",
         .command = "windowtile",
         .tooltip = "&Tile",
@@ -252,9 +247,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 18 */
-    /* alias = ["NEXT", "WINDOWNEXT"] */
     {
+        .id = ACTION_WINDOW_NEXT,
         .icon = "windownext",
         .command = "windownext",
         .tooltip = "Ne&xt",
@@ -265,9 +259,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 19 */
-    /* alias = ["PREV", "PREVIOUS", "WINDOWPREVIOUS"] */
     {
+        .id = ACTION_WINDOW_PREVIOUS,
         .icon = "windowprevious",
         .command = "windowprevious",
         .tooltip = "Pre&vious",
@@ -278,9 +271,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 20
-     * alias = ["?", "HELP"] */
     {
+        .id = ACTION_HELP,
         .icon = "help",
         .command = "help",
         .tooltip = "&Help",
@@ -291,8 +283,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 21 */
     {
+        .id = ACTION_CHANGELOG,
         .icon = "changelog",
         .command = "changelog",
         .tooltip = "&Changelog",
@@ -303,11 +295,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 22
-    menu = "None",
-    toolbar = "None",
-    alias = ["TIPS", "TIPOFTHEDAY"] */
     {
+        .id = ACTION_TIP_OF_THE_DAY,
         .icon = "tipoftheday",
         .command = "tipoftheday",
         .tooltip = "&Tip Of The Day",
@@ -318,8 +307,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 24 */
     {
+        .id = ACTION_WHATS_THIS,
         .icon = "whatsthis",
         .command = "whatsthis",
         .tooltip = "&What's This?",
@@ -330,9 +319,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 25
-    alias = ["ICON16"] */
     {
+        .id = ACTION_ICON16,
         .icon = "icon16",
         .command = "icon 16",
         .tooltip = "Icon&16",
@@ -343,9 +331,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 26
-    alias = ["ICON24"] */
     {
+        .id = ACTION_ICON24,
         .icon = "icon24",
         .command = "icon 24",
         .tooltip = "Icon&24",
@@ -356,9 +343,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 27
-    alias = ["ICON32"] */
     {
+        .id = ACTION_ICON32,
         .icon = "icon32",
         .command = "icon 32",
         .tooltip = "Icon&32",
@@ -369,9 +355,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 28
-    alias = ["ICON48"] */
     {
+        .id = ACTION_ICON48,
         .icon = "icon48",
         .command = "icon 48",
         .tooltip = "Icon&48",
@@ -382,9 +367,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 29
-    alias = ["ICON64"] */
     {
+        .id = ACTION_ICON64,
         .icon = "icon64",
         .command = "icon 64",
         .tooltip = "Icon&64",
@@ -395,9 +379,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 30
-    alias = ["ICON128"] */
     {
+        .id = ACTION_ICON128,
         .icon = "icon128",
         .command = "icon 128",
         .tooltip = "Icon12&8",
@@ -408,10 +391,10 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 31 */
     {
+        .id = ACTION_SETTINGS_DIALOG,
         .icon = "settingsdialog",
-        .command = "settings_dialog",
+        .command = "settingsdialog",
         .tooltip = "&Settings",
         .statustip = "Configure settings specific to this product.",
         .shortcut = "",
@@ -420,8 +403,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 32 */
     {
+        .id = ACTION_MAKE_LAYER_CURRENT,
         .icon = "makelayercurrent",
         .command = "makelayercurrent",
         .tooltip = "&Make Layer Active",
@@ -432,8 +415,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 33 */
     {
+        .id = ACTION_LAYERS,
         .icon = "layers",
         .command = "layers",
         .tooltip = "&Layers",
@@ -444,8 +427,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 34 */
     {
+        .id = ACTION_LAYER_SELECTOR,
         .icon = "layerselector",
         .command = "layerselector",
         .tooltip = "&Layer Selector",
@@ -456,8 +439,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 35*/
     {
+        .id = ACTION_LAYER_PREVIOUS,
         .icon = "layerprevious",
         .command = "layerprevious",
         .tooltip = "&Layer Previous",
@@ -468,8 +451,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 36 */
     {
+        .id = ACTION_COLOR_SELECTOR,
         .icon = "colorselector",
         .command = "colorselector",
         .tooltip = "&Color Selector",
@@ -480,8 +463,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 37 */
     {
+        .id = ACTION_LINE_TYPE_SELECTOR,
         .icon = "linetypeselector",
         .command = "linetypeselector",
         .tooltip = "&Stitchtype Selector",
@@ -492,8 +475,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 38 */
     {
+        .id = ACTION_LINE_WEIGHT_SELECTOR,
         .icon = "lineweightselector",
         .command = "lineweightselector",
         .tooltip = "&Threadweight Selector",
@@ -504,8 +487,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 39 */
     {
+        .id = ACTION_HIDE_ALL_LAYERS,
         .icon = "hidealllayers",
         .command = "hidealllayers",
         .tooltip = "&Hide All Layers",
@@ -516,8 +499,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 40 */
     {
+        .id = ACTION_SHOW_ALL_LAYERS,
         .icon = "showalllayers",
         .command = "showalllayers",
         .tooltip = "&Show All Layers",
@@ -528,9 +511,9 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 41 */
     {
-        .icon = "showalllayers",
+        .id = ACTION_FREEZE_ALL_LAYERS,
+        .icon = "freezealllayers",
         .command = "freezealllayers",
         .tooltip = "&Freeze All Layers",
         .statustip = "Freezes all layers in the current drawing:  FREEZEALL",
@@ -540,9 +523,9 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 42 */
     {
-        .icon = "showalllayers",
+        .id = ACTION_THAW_ALL_LAYERS,
+        .icon = "thawlllayers",
         .command = "thawalllayers",
         .tooltip = "&Thaw All Layers",
         .statustip = "Thaws all layers in the current drawing:  THAWALL",
@@ -552,9 +535,9 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 43 */
     {
-        .icon = "showalllayers",
+        .id = ACTION_LOCK_ALL_LAYERS,
+        .icon = "lockalllayers",
         .command = "lockalllayers",
         .tooltip = "&Lock All Layers",
         .statustip = "Locks all layers in the current drawing:  LOCKALL",
@@ -564,8 +547,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 44 */
     {
+        .id = ACTION_UNLOCK_ALL_LAYERS,
         .icon = "unlockalllayers",
         .command = "unlockalllayers",
         .tooltip = "&Unlock All Layers",
@@ -576,8 +559,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 45 */
     {
+        .id = ACTION_TEXT_BOLD,
         .icon = "textbold",
         .command = "textbold",
         .tooltip = "&Bold Text",
@@ -588,8 +571,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 46 */
     {
+        .id = ACTION_TEXT_ITALIC,
         .icon = "textitalic",
         .command = "textitalic",
         .tooltip = "&Italic Text",
@@ -600,8 +583,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 47 */
     {
+        .id = ACTION_TEXT_UNDERLINE,
         .icon = "textunderline",
         .command = "textunderline",
         .tooltip = "&Underline Text",
@@ -612,8 +595,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 48 */
     {
+        .id = ACTION_TEXT_STRIKEOUT,
         .icon = "textstrikeout",
         .command = "textstrikeout",
         .tooltip = "&StrikeOut Text",
@@ -624,8 +607,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 49 */
     {
+        .id = ACTION_TEXT_OVERLINE,
         .icon = "textoverline",
         .command = "textoverline",
         .tooltip = "&Overline Text",
@@ -636,8 +619,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 50 */
     {
+        .id = ACTION_ZOOM_REAL_TIME,
         .icon = "zoomrealtime",
         .command = "zoomrealtime",
         .tooltip = "Zoom &Realtime",
@@ -648,8 +631,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 51 */
     {
+        .id = ACTION_ZOOM_PREVIOUS,
         .icon = "zoomprevious",
         .command = "zoomprevious",
         .tooltip = "Zoom &Previous",
@@ -660,8 +643,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 52 */
     {
+        .id = ACTION_ZOOM_WINDOW,
         .icon = "zoomwindow",
         .command = "zoomwindow",
         .tooltip = "Zoom &Window",
@@ -672,8 +655,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 53 */
     {
+        .id = ACTION_ZOOM_DYNAMIC,
         .icon = "zoomdynamic",
         .command = "zoomdynamic",
         .tooltip = "Zoom &Dynamic",
@@ -684,8 +667,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 54 */
     {
+        .id = ACTION_ZOOM_SCALE,
         .icon = "zoomscale",
         .command = "zoomscale",
         .tooltip = "Zoom &Scale",
@@ -696,8 +679,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 55 */
     {
+        .id = ACTION_ZOOM_CENTER,
         .icon = "zoomcenter",
         .command = "zoomcenter",
         .tooltip = "Zoom &Center",
@@ -708,11 +691,10 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 56
-    alias = ["ZOOMIN"] */
     {
+        .id = ACTION_ZOOM_IN,
         .icon = "zoomin",
-        .command = "zoom in",
+        .command = "zoomin",
         .tooltip = "Zoom &In",
         .statustip = "Zooms to increase the apparent size of objects: ZOOMIN",
         .shortcut = "",
@@ -721,9 +703,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 57 */
-    /* alias = ["ZOOMOUT"] */
     {
+        .id = ACTION_ZOOM_OUT,
         .icon = "zoomout",
         .command = "zoomout",
         .tooltip = "Zoom &Out",
@@ -734,10 +715,10 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 58 */
     {
+        .id = ACTION_ZOOM_SELECTED,
         .icon = "zoomselected",
-        .command = "zoom selected",
+        .command = "zoomselected",
         .tooltip = "Zoom Selec&ted",
         .statustip = "Zooms to display the selected objects.",
         .shortcut = "",
@@ -746,10 +727,10 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 59 */
     {
+        .id = ACTION_ZOOM_ALL,
         .icon = "zoomall",
-        .command = "zoom all",
+        .command = "zoomall",
         .tooltip = "Zoom &All",
         .statustip = "Zooms to display the drawing extents or the grid limits.",
         .shortcut = "",
@@ -758,9 +739,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 60 */
-    /* alias = ["ZOOMEXTENTS"] */
     {
+        .id = ACTION_ZOOM_EXTENTS,
         .icon = "zoomextents",
         .command = "zoomextents",
         .tooltip = "Zoom &Extents",
@@ -771,10 +751,10 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 61 */
     {
+        .id = ACTION_PAN_REAL_TIME,
         .icon = "panrealtime",
-        .command = "pan realtime",
+        .command = "panrealtime",
         .tooltip = "&Pan Realtime",
         .statustip = "Moves the view in the current viewport.",
         .shortcut = "",
@@ -783,10 +763,10 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 62 */
     {
+        .id = ACTION_PAN_POINT,
         .icon = "panpoint",
-        .command = "pan point",
+        .command = "panpoint",
         .tooltip = "&Pan Point",
         .statustip = "Moves the view by the specified distance.",
         .shortcut = "",
@@ -795,11 +775,10 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 63 */
-    /* alias = ["PANLEFT"] */
     {
+        .id = ACTION_PAN_LEFT,
         .icon = "panleft",
-        .command = "pan left",
+        .command = "panleft",
         .tooltip = "&Pan Left",
         .statustip = "Moves the view to the left: PANLEFT",
         .shortcut = "",
@@ -808,11 +787,10 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 64 */
-    /* alias = ["PANRIGHT"] */
     {
+        .id = ACTION_PAN_RIGHT,
         .icon = "panright",
-        .command = "pan right",
+        .command = "panright",
         .tooltip = "&Pan Right",
         .statustip = "Moves the view to the right: PANRIGHT",
         .shortcut = "",
@@ -821,11 +799,10 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 65 */
-    /* alias = ["PANUP"] */
     {
+        .id = ACTION_PAN_UP,
         .icon = "panup",
-        .command = "pan up",
+        .command = "panup",
         .tooltip = "&Pan Up",
         .statustip = "Moves the view up: PANUP",
         .shortcut = "",
@@ -834,11 +811,10 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 66 */
-    /* alias = ["PANDOWN"] */
     {
+        .id = ACTION_PAN_DOWN,
         .icon = "pandown",
-        .command = "pan down",
+        .command = "pandown",
         .tooltip = "&Pan Down",
         .statustip = "Moves the view down: PANDOWN",
         .shortcut = "",
@@ -847,9 +823,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 67
-     * alias = ["DAY"] */
     {
+        .id = ACTION_DAY,
         .icon = "day",
         .command = "day",
         .tooltip = "&Day",
@@ -860,12 +835,10 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 68
-    alias = ["NIGHT"]
-    */
     {
+        .id = ACTION_NIGHT,
         .icon = "night_vision",
-        .command = "night_vision",
+        .command = "night",
         .tooltip = "&Night",
         .statustip = "Updates the current view using night vision settings: NIGHT",
         .shortcut = "",
@@ -874,10 +847,9 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* todo
-     * -------------- */
-    /* index 69 */
     {
+        /* todo */
+        .id = ACTION_SPELLCHECK,
         .icon = "spellcheck",
         .command = "spellcheck",
         .tooltip = "",
@@ -888,8 +860,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 70 */
     {
+        .id = ACTION_QUICKSELECT,
         .icon = "quickselect",
         .command = "quickselect",
         .tooltip = "",
@@ -900,11 +872,11 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 71
-    alias = ["C", "CIRCLE"] */
     {
+        /* .alias = "C", */
+        .id = ACTION_ADD_CIRCLE,
         .icon = "circle",
-        .command = "add circle",
+        .command = "circle",
         .tooltip = "Circle",
         .statustip = "Creates a circle: CIRCLE",
         .shortcut = "",
@@ -913,11 +885,12 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 72
-    alias = ["HEART"],
-    menu = "Draw",
-    toolbar = "Draw", */
     {
+        /*
+        menu = "Draw",
+        toolbar = "Draw",
+        */
+        .id = ACTION_ADD_HEART,
         .icon = "heart",
         .command = "heart",
         .tooltip = "&Heart",
@@ -928,12 +901,12 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 73
-    menu = "Tools",
-    toolbar = "Inquiry",
-    alias = "DI DIST DISTANCE",
-    */
     {
+        /*
+        menu = "Tools",
+        toolbar = "Inquiry",
+        */
+        .id = ACTION_DISTANCE,
         .icon = "distance",
         .command = "distance",
         .tooltip = "&Distance",
@@ -944,12 +917,12 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 74
-    menu = "Draw",
-    toolbar = "Draw",
-    alias = "DOLPHIN",
-    */
     {
+        /*
+        menu = "Draw",
+        toolbar = "Draw",
+        */
+        .id = ACTION_ADD_DOLPHIN,
         .icon = "dolphin",
         .command = "dolphin",
         .tooltip = "&Dolphin",
@@ -960,14 +933,14 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 75
-    menu = "Draw",
-    toolbar = "Draw",
-    alias = "EL ELLIPSE",
-     */
     {
+        /*
+        menu = "Draw",
+        toolbar = "Draw",
+        */
+        .id = ACTION_ADD_ELLIPSE,
         .icon = "addellipse",
-        .command = "addellipse",
+        .command = "ellipse",
         .tooltip = "Ellipse",
         .statustip = "Creates a ellipse: ELLIPSE",
         .shortcut = "",
@@ -976,11 +949,12 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 76
-    menu = "Modify",
-    toolbar = "Modify",
-    alias = "E ERASE DEL DELETE", */
     {
+        /*
+        menu = "Modify",
+        toolbar = "Modify",
+        */
+        .id = ACTION_DELETE,
         .icon = "erase",
         .command = "erase",
         .tooltip = "D&elete",
@@ -991,12 +965,12 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 77
-    menu = "Draw",
-    toolbar = "Draw",
-    alias = "L LINE",
-    */
     {
+        /*
+        menu = "Draw",
+        toolbar = "Draw",
+        */
+        .id = ACTION_ADD_LINE,
         .icon = "line",
         .command = "line",
         .tooltip = "&Line",
@@ -1007,12 +981,12 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 78
-    menu = "Tools",
-    toolbar = "Inquiry",
-    alias = "ID LOCATEPOINT",
-    */
     {
+        /*
+        menu = "Tools",
+        toolbar = "Inquiry",
+        */
+        .id = ACTION_LOCATE_POINT,
         .icon = "locatepoint",
         .command = "locatepoint",
         .tooltip = "&Locate Point",
@@ -1023,12 +997,12 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 79
-    menu = "Modify",
-    toolbar = "Modify",
-    alias = "M MOVE",
-    */
     {
+        /*
+        menu = "Modify",
+        toolbar = "Modify"
+        */
+        .id = ACTION_MOVE,
         .icon = "move",
         .command = "move",
         .tooltip = "&Move",
@@ -1039,12 +1013,12 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 80
-    menu = "Draw",
-    toolbar = "Draw",
-    alias = "PA PATH",
-    */
     {
+        /*
+        menu = "Draw",
+        toolbar = "Draw"
+        */
+        .id = ACTION_ADD_PATH,
         .icon = "addpath",
         .command = "addpath",
         .tooltip = "&Path",
@@ -1055,12 +1029,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 81
-    menu = "None",
-    toolbar = "None",
-    alias = "PLATFORM",
-    */
     {
+        .id = ACTION_PLATFORM,
         .icon = "platform",
         .command = "platform",
         .tooltip = "&Platform",
@@ -1071,12 +1041,12 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 82
+    {
+        /*
         menu = "Draw",
         toolbar = "Draw",
-        alias = "PO POINT",
         */
-    {
+        .id = ACTION_ADD_POINT,
         .icon = "addpoint",
         .command = "addpoint",
         .tooltip = "&Point",
@@ -1087,15 +1057,14 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 83 */
     {
         /*
         menu = "Draw",
         toolbar = "Draw",
-        alias = "POLY POLYGON",
         */
+        .id = ACTION_ADD_POLYGON,
         .icon = "add-polygon",
-        .command = "add-polygon",
+        .command = "addpolygon",
         .tooltip = "Pol&ygon",
         .statustip = "Creates a regular polygon: POLYGON.",
         .shortcut = "",
@@ -1104,15 +1073,14 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 84 */
     {
         /*
         .menu = "Draw",
         .toolbar = "Draw",
-        .alias = "PL PLINE POLYLINE",
         */
+        .id = ACTION_ADD_POLYLINE,
         .icon = "add-polyline",
-        .command = "add-polyline",
+        .command = "addpolyline",
         .tooltip = "&Polyline",
         .statustip = "Creates a 2D polyline: PLINE.",
         .shortcut = "",
@@ -1121,15 +1089,14 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 85 */
     {
         /*
         menu = "Dimension",
         toolbar = "Dimension",
-        alias = "LE LEADER QLEADER QUICKLEADER",
         */
+        .id = ACTION_QUICKLEADER,
         .icon = "add-quickleader",
-        .command = "add-quickleader",
+        .command = "addquickleader",
         .tooltip = "&QuickLeader",
         .statustip = "Creates a leader and annotation: QUICKLEADER.",
         .shortcut = "",
@@ -1138,15 +1105,14 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 86 */
     {
         /*
         menu = "Draw",
         toolbar = "Draw",
-        alias = "REC RECT RECTANG RECTANGLE",
         */
+        .id = ACTION_ADD_RECTANGLE,
         .icon = "add-rectangle",
-        .command = "add-rectangle",
+        .command = "rectangle",
         .tooltip = "&Rectangle",
         .statustip = "Creates a rectangular polyline: RECTANGLE.",
         .shortcut = "",
@@ -1155,15 +1121,14 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 87 */
     {
         /*
         menu = "Sandbox"
         toolbar = "Sandbox"
-        alias = "RGB",
         */
+        .id = ACTION_RGB,
         .icon =  "rgb",
-        .command =  "rgb",
+        .command = "rgb",
         .tooltip =  "&RGB",
         .statustip = "Updates the current view colors: RGB.",
         .shortcut = "",
@@ -1172,13 +1137,12 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 89 */
     {
         /*
-        alias = "RO ROTATE",
         menu = "Modify",
         toolbar = "Modify",
         */
+        .id = ACTION_ROTATE,
         .icon = "rotate",
         .command = "rotate",
         .tooltip = "&Rotate",
@@ -1189,13 +1153,12 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 90 */
     {
         /*
         menu = "Sandbox",
         toolbar = "Sandbox",
-        alias = "SAND SANDBOX",
         */
+        .id = ACTION_SANDBOX,
         .icon = "sandbox",
         .command = "sandbox",
         .tooltip = "Sandbox",
@@ -1206,12 +1169,12 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 91
-    menu = "Modify",
-    toolbar = "Modify",
-    alias = "SC SCALE",
-    */
     {
+        /*
+        menu = "Modify",
+        toolbar = "Modify",
+        */
+        .id = ACTION_SCALE,
         .icon = "scale",
         .command = "scale",
         .tooltip = "Sca&le",
@@ -1222,12 +1185,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 92
-    menu = "None",
-    toolbar = "None",
-    alias = ["AI_SELALL", "SELALL", "SELECTALL"],
-    */
     {
+        .id = ACTION_SELECT_ALL,
         .icon = "selectall",
         .command = "selectall",
         .tooltip = "&Select All",
@@ -1238,14 +1197,14 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 93
-    menu = "Draw",
-    toolbar = "Draw",
-    alias = "DT DTEXT TEXT SINGLELINETEXT",
-    */
     {
+        /*
+        menu = "Draw",
+        toolbar = "Draw",
+        */
+        .id = ACTION_SINGLE_LINE_TEXT,
         .icon = "single-line-text",
-        .command = "single-line-text",
+        .command = "singlelinetext",
         .tooltip = "&Single Line Text",
         .statustip = "Creates single-line text objects: TEXT",
         .shortcut = "",
@@ -1254,12 +1213,12 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 94
-    menu = "Draw",
-    toolbar = "Draw",
-    alias = ["SNOWFLAKE"],
-    */
     {
+        /*
+        menu = "Draw",
+        toolbar = "Draw",
+        */
+        .id = ACTION_ADD_SNOWFLAKE,
         .icon = "snowflake",
         .command = "snowflake",
         .tooltip = "&Snowflake",
@@ -1270,12 +1229,12 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 95
-    menu "Draw",
-    toolbar "Draw",
-    alias = ["STAR"],
-    */
     {
+        /*
+        menu "Draw",
+        toolbar "Draw",
+        */
+        .id = ACTION_ADD_STAR,
         .icon = "star",
         .command = "star",
         .tooltip = "&Star",
@@ -1286,12 +1245,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 96
-    menu = "None",
-    toolbar = "None",
-    alias = "WINDOWS SYSWINDOWS",
-    */
     {
+        .id = ACTION_SYSWINDOWS,
         .icon = "syswindows",
         .command = "syswindows",
         .tooltip = "&SysWindows",
@@ -1302,8 +1257,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 97 */
     {
+        .id = ACTION_TREBLECLEF,
         .icon = "trebleclef",
         .command = "trebleclef",
         .tooltip = "Treble Clef",
@@ -1314,13 +1269,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 98 */
     {
-        /*
-        .menu = "None",
-        .toolbar = "None",
-        .alias = "EXIT QUIT",
-        */
+        .id = ACTION_EXIT,
         .icon = "exit",
         .command = "exit",
         .tooltip = "E&xit",
@@ -1331,13 +1281,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 99 */
     {
-        /*
-        .menu = "None",
-        .toolbar = "None",
-        .alias = "EXIT QUIT",
-        */
+        .id = ACTION_TEST,
         .icon = "test",
         .command = "test",
         .tooltip = "Coverage Test",
@@ -1348,13 +1293,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 1,
         .undo = 1
     },
-    /* index 100 */
     {
-        /*
-        .menu = "None",
-        .toolbar = "None",
-        .alias = "EXIT QUIT",
-        */
+        .id = ACTION_SLEEP,
         .icon = "sleep",
         .command = "sleep",
         .tooltip = "Sleep for 1 second.",
@@ -1365,8 +1305,8 @@ const ActionData action_table[MAX_ACTIONS] = {
         .gscene = 0,
         .undo = 0
     },
-    /* end symbol */
     {
+        .id = ACTION_END,
         .icon = "END",
         .command = "END",
         .tooltip = "END",

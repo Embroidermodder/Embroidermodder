@@ -486,8 +486,8 @@ Settings_Dialog::createTabDisplay()
 
     QLabel* labelScrollBarWidget = new QLabel(translate_str("Perform action when clicking corner widget"), groupBoxScrollBars);
     QComboBox* comboBoxScrollBarWidget = new QComboBox(groupBoxScrollBars);
-    for (auto iter = actionHash.begin(); iter!=actionHash.end(); iter++) {
-        QAction* action = iter->second;
+    for (int i=0; i<N_ACTIONS; i++) {
+        QAction* action = actionHash[i];
         if (action) {
             comboBoxScrollBarWidget->addItem(action->icon(), action->text().replace("&", ""));
         }

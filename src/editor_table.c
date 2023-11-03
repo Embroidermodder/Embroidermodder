@@ -901,3 +901,15 @@ const LineEditData all_line_editors[MAX_EDITORS] = {
         .map_signal = "END"
     }
 };
+
+const SpinBoxEditData all_spinbox_editors[] = {
+    /* end symbol */
+    {
+        .groupbox = "END",
+        .key = "END",
+        .icon = "END",
+        .label = "END",
+        .type = "END",
+        .map_signal = "END"
+    }
+};

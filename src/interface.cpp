@@ -42,17 +42,23 @@ translate_str(const char *str)
     return _mainWin->tr(str);
 }
 
-/* Tokenize our std::string type using a 1 character deliminator. */
-std::vector<std::string>
-tokenize(std::string str, const char delim)
+/* Tokenize our command using a 1 character deliminator. */
+int
+tokenize(char **argv, char *str, const char delim)
 {
-    std::vector<std::string> list;
-    std::stringstream str_stream(str);
-    std::string s;
-    while (std::getline(str_stream, s, delim)) {
-        list.push_back(s);
+    int argc = 0;
+    argv[argc] = 0;
+    if (strlen(str) == 0) {
+        return 0;
     }
-    return list;
+    for (int i=0; str[i]; i++) {
+        if (str[i] == delim) {
+            str[i] = 0;
+            argc++;
+            argv[argc] = str+i;
+        }
+    }
+    return argc;
 }
 
 /* Convert an EmbVector to a QPointF. */
@@ -94,15 +100,12 @@ debug_message(std::string msg)
 }
 
 /* Utility function for add_to_path. */
-std::vector<float>
-get_n_reals(std::vector<std::string> list, int n, int *offset)
+void
+get_n_reals(float result[], char *argv[], int n, int offset)
 {
-    std::vector<float> result;
-    for (int i=1; i<n+1; i++) {
-        result.push_back(std::stof(list[*offset+i]));
+    for (int i=0; i<n; i++) {
+        result[i] = atof(argv[offset+i]);
     }
-    *offset += n;
-    return result;
 }
 
 /* Render an SVG-like .
@@ -111,27 +114,30 @@ get_n_reals(std::vector<std::string> list, int n, int *offset)
 QPainterPath
 add_to_path(QPainterPath path, EmbVector scale, std::string command)
 {
-    std::vector<std::string> list = tokenize(command, ' ');
-    for (int i=0; i<(int)list.size(); i++) {
-        command = list[i];
-        if (command == "M") {
-            std::vector<float> r = get_n_reals(list, 2, &i);
+    float r[10];
+    char *argv[100];
+    char c[MAX_STRING_LENGTH];
+    strcpy(c, command.c_str());
+    int argc = tokenize(argv, c, ' ');
+    for (int i=0; i<argc; i++) {
+        if (!strcmp(argv[i], "M")) {
+            get_n_reals(r, argv, 2, i+1);
             path.moveTo(r[0]*scale.x, r[1]*scale.y);
         }
-        else if (command == "L") {
-            std::vector<float> r = get_n_reals(list, 2, &i);
+        else if (!strcmp(argv[i], "L")) {
+            get_n_reals(r, argv, 2, i+1);
             path.lineTo(r[0]*scale.x, r[1]*scale.y);
         }
-        else if (command == "A") {
-            std::vector<float> r = get_n_reals(list, 6, &i);
+        else if (!strcmp(argv[i], "A")) {
+            get_n_reals(r, argv, 6, i+1);
             path.arcTo(r[0]*scale.x, r[1]*scale.y, r[2]*scale.x, r[3]*scale.y, r[4], r[5]);
         }
-        else if (command == "AM") {
-            std::vector<float> r = get_n_reals(list, 5, &i);
+        else if (!strcmp(argv[i], "AM")) {
+            get_n_reals(r, argv, 5, i+1);
             path.arcMoveTo(r[0]*scale.x, r[1]*scale.y, r[2]*scale.x, r[3]*scale.y, r[4]);
         }
-        else if (command == "E") {
-            std::vector<float> r = get_n_reals(list, 4, &i);
+        else if (!strcmp(argv[i], "E")) {
+            get_n_reals(r, argv, 4, i+1);
             path.addEllipse(QPointF(r[0], r[1]), r[2], r[3]);
         }
     }

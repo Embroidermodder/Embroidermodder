@@ -40,6 +40,48 @@ Node *root;
 Node settings[SETTINGS_TOTAL], dialog[SETTINGS_TOTAL],
     preview[SETTINGS_TOTAL], accept_[SETTINGS_TOTAL];
 
+/* . */
+const char *object_names[] = {
+    "Base",
+    "Arc",
+    "Block",
+    "Circle",
+    "Aligned Dimension",
+    "Angular Dimension",
+    "Arclength Dimension",
+    "Diameter Dimension",
+    "Leader Dimension",
+    "Linear Dimension",
+    "Ordinate Dimension",
+    "Radius Dimension",
+    "Ellipse",
+    "Image",
+    "Infinite Line",
+    "Line",
+    "Path",
+    "Point",
+    "Polygon",
+    "Polyline",
+    "Ray",
+    "Rectangle",
+    "Multiline Text",
+    "Text",
+    "Unknown",
+    "END"
+};
+
+/* . */
+const char rectangle_main_script[][MAX_STRING_LENGTH] = {
+    "init",
+    "clear-selection",
+    "newRect = true",
+    "real x1 = 0.0f",
+    "real y1 = 0.0f",
+    "real x2 = 0.0f",
+    "real y2 = 0.0f",
+    "set-prompt-prefix-tr Specify first corner point or [Chamfer/Fillet]: "
+};
+
 const char *details_labels[] = {
     "Total Stitches:",
     "Real Stitches:",
@@ -95,252 +137,327 @@ const char *usage_msg = ""
     "\n";
 
 /*  . */
-const char *menubar_order[] = {
-    "file",
-    "edit",
-    "view",
-    "draw",
-    "settings",
-    "window",
-    "help",
-    "END"
+int32_t menubar_order[] = {
+    MENU_FILE,
+    MENU_EDIT,
+    MENU_VIEW,
+    MENU_DRAW,
+    MENU_SETTINGS,
+    MENU_WINDOW,
+    MENU_HELP,
+    -1
 };
 
 /*  . */
-const char *top_toolbar_layout[] = {
-    "---",
-    "file",
-    "edit",
-    "help",
-    "icon",
-    "---",
-    "zoom",
-    "pan",
-    "view",
-    "---",
-    "layer",
-    "properties",
-    "---",
-    "text",
-    "END"
+int32_t top_toolbar_layout[] = {
+    TOOLBAR_SEPERATOR,
+    TOOLBAR_FILE,
+    TOOLBAR_EDIT,
+    TOOLBAR_HELP,
+    TOOLBAR_ICON,
+    TOOLBAR_SEPERATOR,
+    TOOLBAR_ZOOM,
+    TOOLBAR_PAN,
+    TOOLBAR_VIEW,
+    TOOLBAR_SEPERATOR,
+    TOOLBAR_LAYER,
+    TOOLBAR_PROPERTIES,
+    TOOLBAR_SEPERATOR,
+    TOOLBAR_TEXT,
+    TOOLBAR_END
 };
 
 /*  . */
-const char *bottom_toolbar_layout[] = {
-    "prompt",
-    "END"
+int32_t bottom_toolbar_layout[] = {
+    TOOLBAR_PROMPT,
+    TOOLBAR_END
 };
 
 /*  . */
-const char *side_toolbar_layout[] = {
-    "draw",
-    "END"
+int32_t side_toolbar_layout[] = {
+    TOOLBAR_DRAW,
+    TOOLBAR_END
 };
 
-const char *file_menu[] = {
-    "new",
-    "---",
-    "open",
-    "submenu recent",
-    "---",
-    "save",
-    "saveas",
-    "---",
-    "print",
-    "---",
-    "windowclose",
-    "---",
-    "designdetails",
-    "---",
-    "exit",
-    "END"
+int32_t file_menu[] = {
+    ACTION_NEW,
+    MENU_SEPERATOR,
+    ACTION_OPEN,
+    MENU_SUBMENU, MENU_RECENT,
+    MENU_SEPERATOR,
+    ACTION_SAVE,
+    ACTION_SAVEAS,
+    MENU_SEPERATOR,
+    ACTION_PRINT,
+    MENU_SEPERATOR,
+    ACTION_WINDOW_CLOSE,
+    MENU_SEPERATOR,
+    ACTION_DESIGN_DETAILS,
+    MENU_SEPERATOR,
+    ACTION_EXIT,
+    MENU_END
 };
 
-const char *edit_menu[] = {
-    "undo",
-    "redo",
-    "---",
-    "cut",
-    "copy",
-    "paste",
-    "---",
-    "END"
+int32_t edit_menu[] = {
+    ACTION_UNDO,
+    ACTION_REDO,
+    MENU_SEPERATOR,
+    ACTION_CUT,
+    ACTION_COPY,
+    ACTION_PASTE,
+    MENU_SEPERATOR,
+    MENU_END
 };
 
-const char *pan_menu[] = {
-    "icon pan",
-    "panrealtime",
-    "panpoint",
-    "---",
-    "panleft",
-    "panright",
-    "panup",
-    "pandown",
-    "END"
+int32_t pan_menu[] = {
+    MENU_ICON,
+    ACTION_PAN,
+    ACTION_PAN_REAL_TIME,
+    ACTION_PAN_POINT,
+    MENU_SEPERATOR,
+    ACTION_PAN_LEFT,
+    ACTION_PAN_RIGHT,
+    ACTION_PAN_UP,
+    ACTION_PAN_DOWN,
+    MENU_END
 };
 
-const char *zoom_menu[] = {
-    "icon zoom",
-    "zoomrealtime",
-    "zoomprevious",
-    "---",
-    "zoomwindow",
-    "zoomdynamic",
-    "zoomscale",
-    "zoomcenter",
-    "---",
-    "zoomin",
-    "zoomout",
-    "---",
-    "zoomselected",
-    "zoomall",
-    "zoomextents",
-    "END"
+int32_t zoom_menu[] = {
+    MENU_ICON,
+    ACTION_ZOOM,
+    ACTION_ZOOM_REAL_TIME,
+    ACTION_ZOOM_PREVIOUS,
+    MENU_SEPERATOR,
+    ACTION_ZOOM_WINDOW,
+    ACTION_ZOOM_DYNAMIC,
+    ACTION_ZOOM_SCALE,
+    ACTION_ZOOM_CENTER,
+    MENU_SEPERATOR,
+    ACTION_ZOOM_IN,
+    ACTION_ZOOM_OUT,
+    MENU_SEPERATOR,
+    ACTION_ZOOM_SELECTED,
+    ACTION_ZOOM_ALL,
+    ACTION_ZOOM_EXTENTS,
+    MENU_END
 };
 
-const char *view_menu[] = {
-    "---",
-    "submenu zoom",
-    "submenu pan",
-    "---",
-    "day",
-    "night",
-    "---",
-    "END"
+int32_t view_menu[] = {
+    MENU_SEPERATOR,
+    MENU_SUBMENU, MENU_ZOOM,
+    MENU_SUBMENU, MENU_PAN,
+    MENU_SEPERATOR,
+    ACTION_DAY,
+    ACTION_NIGHT,
+    MENU_SEPERATOR,
+    MENU_END
 };
 
-const char *settings_menu[] = {
-    "settingsdialog",
-    "---",
-    "test",
-    "END"
+int32_t settings_menu[] = {
+    ACTION_SETTINGS_DIALOG,
+    MENU_SEPERATOR,
+    ACTION_TEST,
+    MENU_END
 };
 
-const char *window_menu[] = {
-    "---",
-    "END"
+int32_t window_menu[] = {
+    MENU_SEPERATOR,
+    MENU_END
 };
 
-const char *help_menu[] = {
-    "help",
-    "---",
-    "changelog",
-    "---",
-    "tipoftheday",
-    "---",
-    "about",
-    "---",
-    "whatsthis",
-    "END"
+int32_t help_menu[] = {
+    ACTION_HELP,
+    MENU_SEPERATOR,
+    ACTION_CHANGELOG,
+    MENU_SEPERATOR,
+    ACTION_TIP_OF_THE_DAY,
+    MENU_SEPERATOR,
+    ACTION_ABOUT,
+    MENU_SEPERATOR,
+    ACTION_WHATS_THIS,
+    MENU_END
 };
 
-const char *draw_menu[] = {
-    "circle",
-    "path",
-    "polygon",
-    "polyline",
-    "point",
-    "heart",
-    "single-line-text",
-    "END"
+int32_t draw_menu[] = {
+    ACTION_ADD_CIRCLE,
+    ACTION_ADD_PATH,
+    ACTION_ADD_POLYGON,
+    ACTION_ADD_POLYLINE,
+    ACTION_ADD_POINT,
+    ACTION_ADD_HEART,
+    ACTION_ADD_SINGLE_LINE_TEXT,
+    MENU_END
 };
 
-const char *toolbar_list[] = {
-    "file", "fileToolbar",
-    "edit", "editToolbar",
-    "view", "viewToolbar",
-    "zoom", "zoomToolbar",
-    "pan", "panToolbar",
-    "icon", "iconToolbar",
-    "help", "helpToolbar",
-    "draw", "drawToolbar",
-    "END"
-};
-
-const char *file_toolbar[] = {
-    "new",
-    "open",
-    "save",
-    "saveas",
-    "print",
-    "designdetails",
-    "---",
-    "undo",
-    "redo",
-    "---",
-    "help",
-    "END"
-};
-
-const char *edit_toolbar[] = {
-    "cut",
-    "copy",
-    "paste",
-    "END"
-};
-
-const char *view_toolbar[] = {
-    "day",
-    "night",
-    "END"
-};
-
-const char *zoom_toolbar[] = {
-    "zoomwindow",
-    "zoomdynamic",
-    "zoomscale",
-    "---",
-    "zoomcenter",
-    "zoomin",
-    "zoomout",
-    "---",
-    "zoomselected",
-    "zoomall",
-    "zoomextents",
-    "END"
-};
-
-const char *pan_toolbar[] = {
-    "panrealtime",
-    "panpoint",
-    "---",
-    "panleft",
-    "panright",
-    "panup",
-    "pandown",
-    "END"
-};
-
-const char *icon_toolbar[] = {
-    "icon16",
-    "icon24",
-    "icon32",
-    "icon48",
-    "icon64",
-    "icon128",
-    "END"
-};
-
-const char *help_toolbar[] = {
-    "help",
-    "---",
-    "changelog",
-    "---",
-    "about",
-    "---",
-    "whatsthis",
-    "END"
-};
-
-const char *draw_toolbar[] = {
-    "circle",
-    "path",
-    "polygon",
-    "polyline",
-    "point",
-    "heart",
-    "single-line-text",
-    "END"
+ToolbarData toolbar_data[MAX_TOOLBARS] = {
+    {
+        .id = TOOLBAR_FILE,
+        .key = "File",
+        .entries = {
+            ACTION_NEW,
+            ACTION_OPEN,
+            ACTION_SAVE,
+            ACTION_SAVEAS,
+            ACTION_PRINT,
+            ACTION_DESIGN_DETAILS,
+            TOOLBAR_SEPERATOR,
+            ACTION_UNDO,
+            ACTION_REDO,
+            TOOLBAR_SEPERATOR,
+            ACTION_HELP,
+            TOOLBAR_END
+        },
+        .horizontal = 1
+    },
+    {
+        .id = TOOLBAR_EDIT,
+        .key = "Edit",
+        .entries = {
+            ACTION_CUT,
+            ACTION_COPY,
+            ACTION_PASTE,
+            TOOLBAR_END
+        },
+        .horizontal = 1
+    },
+    {
+        .id = TOOLBAR_PAN,
+        .key = "Pan",
+        .entries = {
+            ACTION_PAN_REAL_TIME,
+            ACTION_PAN_POINT,
+            TOOLBAR_SEPERATOR,
+            ACTION_PAN_LEFT,
+            ACTION_PAN_RIGHT,
+            ACTION_PAN_UP,
+            ACTION_PAN_DOWN,
+            TOOLBAR_END
+        },
+        .horizontal = 1
+    },
+    {
+        .id = TOOLBAR_ZOOM,
+        .key = "Zoom",
+        .entries = {
+            ACTION_ZOOM_WINDOW,
+            ACTION_ZOOM_DYNAMIC,
+            ACTION_ZOOM_SCALE,
+            TOOLBAR_SEPERATOR,
+            ACTION_ZOOM_CENTER,
+            ACTION_ZOOM_IN,
+            ACTION_ZOOM_OUT,
+            TOOLBAR_SEPERATOR,
+            ACTION_ZOOM_SELECTED,
+            ACTION_ZOOM_ALL,
+            ACTION_ZOOM_EXTENTS,
+            TOOLBAR_END
+        },
+        .horizontal = 1
+    },
+    {
+        .id = TOOLBAR_VIEW,
+        .key = "View",
+        .entries = {
+            ACTION_DAY,
+            ACTION_NIGHT,
+            TOOLBAR_END
+        },
+        .horizontal = 1
+    },
+    {
+        .id = TOOLBAR_SETTINGS,
+        .key = "Settings",
+        .entries = {
+            TOOLBAR_END
+        },
+        .horizontal = 1
+    },
+    {
+        .id = TOOLBAR_WINDOW,
+        .key = "Window",
+        .entries = {
+            TOOLBAR_END
+        },
+        .horizontal = 1
+    },
+    {
+        .id = TOOLBAR_HELP,
+        .key = "Help",
+        .entries = {
+            ACTION_HELP,
+            TOOLBAR_SEPERATOR,
+            ACTION_CHANGELOG,
+            TOOLBAR_SEPERATOR,
+            ACTION_ABOUT,
+            TOOLBAR_SEPERATOR,
+            ACTION_WHATS_THIS,
+            TOOLBAR_END
+        },
+        .horizontal = 1
+    },
+    {
+        .id = TOOLBAR_DRAW,
+        .key = "Draw",
+        .entries = {
+            ACTION_ADD_CIRCLE,
+            ACTION_ADD_PATH,
+            ACTION_ADD_POLYGON,
+            ACTION_ADD_POLYLINE,
+            ACTION_ADD_POINT,
+            ACTION_ADD_HEART,
+            ACTION_ADD_SINGLE_LINE_TEXT,
+            TOOLBAR_END
+        },
+        .horizontal = 0
+    },
+    {
+        .id = TOOLBAR_ICON,
+        .key = "Icon",
+        .entries = {
+            ACTION_ICON16,
+            ACTION_ICON24,
+            ACTION_ICON32,
+            ACTION_ICON48,
+            ACTION_ICON64,
+            ACTION_ICON128,
+            TOOLBAR_END
+        },
+        .horizontal = 1
+    },
+    {
+        .id = TOOLBAR_LAYER,
+        .key = "Layer",
+        .entries = {
+            ACTION_MAKE_LAYER_CURRENT,
+            ACTION_LAYER_EDITOR,
+            TOOLBAR_END
+        },
+        .horizontal = 1
+    },
+    {
+        .id = TOOLBAR_PROPERTIES,
+        .key = "Properties",
+        .entries = {
+            TOOLBAR_END
+        },
+        .horizontal = 1
+    },
+    {
+        .id = TOOLBAR_TEXT,
+        .key = "Text",
+        .entries = {
+            TOOLBAR_END
+        },
+        .horizontal = 1
+    },
+    {
+        .id = TOOLBAR_PROMPT,
+        .key = "Command Prompt",
+        .entries = {
+            TOOLBAR_END
+        },
+        .horizontal = 1
+    }
 };
 
 /* TODO: "Aligned"
@@ -617,7 +734,8 @@ const char *tips[] = {
     "that you can use circular and isometric grids?",
     "about our command line format converter?",
     "that you can use the 'DAY' and 'NIGHT' commands to quickly switch the view colors to commonly used white or black?",
-    "that you can quickly change the background, crosshair and grid colors using the 'RGB' command?"
+    "that you can quickly change the background, crosshair and grid colors using the 'RGB' command?",
+    "END"
 };
 
 const char types[][MAX_STRING_LENGTH] = {

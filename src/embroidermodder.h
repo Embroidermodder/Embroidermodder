@@ -21,7 +21,6 @@
 #include <vector>
 #include <unordered_map>
 #include <string>
-#include <filesystem>
 
 /* From this source code directory. */
 #include "core.h"
@@ -52,8 +51,7 @@ extern CmdPrompt* prompt;
 extern PropertyEditor* dockPropEdit;
 extern UndoEditor* dockUndoEdit;
 extern StatusBar* statusbar;
-
-extern std::unordered_map<std::string, QAction*> actionHash;
+extern QAction* actionHash[MAX_ACTIONS];
 
 /* Functions in the global namespace
  * ---------------------------------
@@ -67,7 +65,6 @@ bool contains(std::vector<std::string>, std::string);
 bool validFileFormat(std::string fileName);
 QString fileExtension(std::string fileName);
 
-std::vector<std::string> tokenize(std::string str, const char delim);
 std::string convert_args_to_type(
     std::string label,
     std::vector<std::string> args,
@@ -85,6 +82,7 @@ void set_visibility(QObject *parent, const char *name, bool visibility);
 QPainterPath add_to_path(QPainterPath path, EmbVector scale, std::string s);
 
 const char *actuator(char string[MAX_STRING_LENGTH]);
+std::string actuator_core(int32_t action, std::string args_);
 std::string actuator(std::string line);
 std::string run_script_file(std::string fname);
 std::string run_script(std::vector<std::string> script);
@@ -619,8 +617,11 @@ public:
     QString activeCommand() { return prompt->promptInput->curCmd; }
 
     QString platformString();
-    void create_toolbar(std::string toolbar, std::string label, const char **entries);
+
+    void create_toolbar(ToolbarData t);
+    void populate_toolbars(Qt::ToolBarArea area, int32_t list[]);
     QIcon create_icon(QString stub);
+    QIcon create_icon(int32_t stub);
 
 public slots:
 
