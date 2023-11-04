@@ -635,7 +635,7 @@ MainWindow::updateAllViewScrollBars(bool val)
     for (int i = 0; i < windowList.count(); ++i) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
         if (mdiWin) {
-            mdiWin->showViewScrollBars(val);
+            mdiWin->gview->showScrollBars(val);
         }
     }
 }
@@ -647,7 +647,9 @@ MainWindow::updateAllViewCrossHairColors(QRgb color)
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if (mdiWin) { mdiWin->setViewCrossHairColor(color); }
+        if (mdiWin) {
+            mdiWin->gview->setCrossHairColor(color);
+        }
     }
 }
 
@@ -659,7 +661,7 @@ MainWindow::updateAllViewBackgroundColors(QRgb color)
     for (int i = 0; i < windowList.count(); ++i) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
         if (mdiWin) {
-            mdiWin->setViewBackgroundColor(color);
+            mdiWin->gview->setBackgroundColor(color);
         }
     }
 }
@@ -677,7 +679,7 @@ MainWindow::updateAllViewSelectBoxColors(
     for (int i = 0; i < windowList.count(); ++i) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
         if (mdiWin) {
-            mdiWin->setViewSelectBoxColors(colorL, fillL, colorR, fillR, alpha);
+            mdiWin->gview->setSelectBoxColors(colorL, fillL, colorR, fillR, alpha);
         }
     }
 }
@@ -690,7 +692,7 @@ MainWindow::updateAllViewGridColors(QRgb color)
     for (int i = 0; i < windowList.count(); ++i) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
         if (mdiWin) {
-            mdiWin->setViewGridColor(color);
+            mdiWin->gview->setGridColor(color);
         }
     }
 }
@@ -703,7 +705,7 @@ MainWindow::updateAllViewRulerColors(QRgb color)
     for (int i = 0; i < windowList.count(); ++i) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
         if (mdiWin) {
-            mdiWin->setViewRulerColor(color);
+            mdiWin->gview->setRulerColor(color);
         }
     }
 }
@@ -828,7 +830,7 @@ MainWindow::layerSelectorIndexChanged(int index)
     debug_message("layerSelectorIndexChanged(%d)" + std::to_string(index));
 }
 
-/* MainWindow::colorSelectorIndexChanged index */
+/* colorSelectorIndexChanged index */
 void
 MainWindow::colorSelectorIndexChanged(int index)
 {
@@ -840,14 +842,22 @@ MainWindow::colorSelectorIndexChanged(int index)
         bool ok = 0;
         //TODO: Handle ByLayer and ByBlock and Other...
         newColor = comboBox->itemData(index).toUInt(&ok);
-        if (!ok)
-            QMessageBox::warning(this, translate_str("Color Selector Conversion Error"), translate_str("<b>An error has occured while changing colors.</b>"));
+        if (!ok) {
+            QMessageBox::warning(this,
+                translate_str("Color Selector Conversion Error"),
+                translate_str("<b>An error has occured while changing colors.</b>"));
+        }
     }
-    else
-        QMessageBox::warning(this, translate_str("Color Selector Pointer Error"), translate_str("<b>An error has occured while changing colors.</b>"));
+    else {
+        QMessageBox::warning(this,
+            translate_str("Color Selector Pointer Error"),
+            translate_str("<b>An error has occured while changing colors.</b>"));
+    }
 
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) { mdiWin->currentColorChanged(newColor); }
+    if (mdiWin) {
+        mdiWin->curColor = newColor;
+    }
 }
 
 /* . */
@@ -956,7 +966,7 @@ MainWindow::deletePressed()
     QApplication::setOverrideCursor(Qt::WaitCursor);
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
-        mdiWin->deletePressed();
+        mdiWin->gview->deletePressed();
     }
     QApplication::restoreOverrideCursor();
 }
@@ -969,7 +979,7 @@ MainWindow::escapePressed()
     QApplication::setOverrideCursor(Qt::WaitCursor);
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
-        mdiWin->escapePressed();
+        mdiWin->gview->escapePressed();
     }
     QApplication::restoreOverrideCursor();
 
@@ -1000,13 +1010,13 @@ MainWindow::toggleLwt()
     statusbar->buttons["LWT"]->toggle();
 }
 
-/* MainWindow::promptHistoryAppended(txt) */
+/* Prompt history appended. */
 void
 MainWindow::promptHistoryAppended(QString txt)
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
-        mdiWin->promptHistoryAppended(txt);
+        mdiWin->promptHistory.append("<br/>" + txt);
     }
 }
 
@@ -1016,7 +1026,8 @@ MainWindow::logPromptInput(QString txt)
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
-        mdiWin->logPromptInput(txt);
+        mdiWin->promptInputList.push_back(txt);
+        mdiWin->promptInputNum = mdiWin->promptInputList.size();
     }
 }
 
@@ -1026,7 +1037,7 @@ MainWindow::promptInputPrevious()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
-        mdiWin->promptInputPrevious();
+        mdiWin->promptInputPrevNext(true);
     }
 }
 
@@ -1036,7 +1047,7 @@ MainWindow::promptInputNext()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
-        mdiWin->promptInputNext();
+        mdiWin->promptInputPrevNext(false);
     }
 }
 
@@ -1316,18 +1327,20 @@ MainWindow::MainWindow() : QMainWindow(0)
     //layout->setMargin(0);
     vbox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     mdiArea = new MdiArea(vbox);
-    mdiArea->useBackgroundLogo(settings[ST_MDI_USE_LOGO].i);
-    mdiArea->useBackgroundTexture(settings[ST_MDI_USE_TEXTURE].i);
-    mdiArea->useBackgroundColor(settings[ST_MDI_USE_COLOR].i);
-    mdiArea->setBackgroundLogo(QString(settings[ST_MDI_LOGO].s));
-    mdiArea->setBackgroundTexture(QString(settings[ST_MDI_TEXTURE].s));
-    mdiArea->setBackgroundColor(QColor(settings[ST_MDI_COLOR].i));
+    mdiArea->useLogo = settings[ST_MDI_USE_LOGO].i;
+    mdiArea->useTexture = settings[ST_MDI_USE_TEXTURE].i;
+    mdiArea->useColor = settings[ST_MDI_USE_COLOR].i;
+    mdiArea->bgLogo.load(QString(settings[ST_MDI_LOGO].s));
+    mdiArea->bgTexture.load(QString(settings[ST_MDI_TEXTURE].s));
+    mdiArea->bgColor = QColor(settings[ST_MDI_COLOR].i);
     mdiArea->setViewMode(QMdiArea::TabbedView);
     mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
     layout->addWidget(mdiArea);
     setCentralWidget(vbox);
+
+    mdiArea->forceRepaint();
 
     //create the Command Prompt
     prompt = new CmdPrompt();

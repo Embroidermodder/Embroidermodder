@@ -17,6 +17,8 @@
 
 typedef std::string String;
 
+void update_view_selectbox(Node *d);
+
 void
 copy_node(Node *a, Node *b, int index)
 {
@@ -1464,10 +1466,7 @@ Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
     //TODO: Add Other... so the user can select custom colors
 }
 
-/**
- * @brief Settings_Dialog::comboBoxIconSizeCurrentIndexChanged
- * @param index
- */
+/* comboBoxIconSizeCurrentIndexChanged */
 void
 Settings_Dialog::comboBoxIconSizeCurrentIndexChanged(int index)
 {
@@ -1488,7 +1487,8 @@ void
 Settings_Dialog::checkBoxGeneralMdiBGUseLogoStateChanged(int checked)
 {
     preview[ST_MDI_USE_LOGO].i = checked;
-    mdiArea->useBackgroundLogo(checked);
+    mdiArea->useLogo = checked;
+    mdiArea->forceRepaint();
 }
 
 void
@@ -1506,19 +1506,18 @@ Settings_Dialog::chooseGeneralMdiBackgroundLogo()
         }
 
         //Update immediately so it can be previewed
-        mdiArea->setBackgroundLogo(get_qstr(accept_, ST_MDI_LOGO));
+        mdiArea->bgLogo.load(get_qstr(accept_, ST_MDI_LOGO));
+        mdiArea->forceRepaint();
     }
 }
 
-/**
- * @brief Settings_Dialog::checkBoxGeneralMdiBGUseTextureStateChanged
- * @param checked
- */
+/* checkBoxGeneralMdiBGUseTextureStateChanged */
 void
 Settings_Dialog::checkBoxGeneralMdiBGUseTextureStateChanged(int checked)
 {
     preview[ST_MDI_USE_TEXTURE].i = checked;
-    mdiArea->useBackgroundTexture(checked);
+    mdiArea->useTexture = checked;
+    mdiArea->forceRepaint();
 }
 
 void Settings_Dialog::chooseGeneralMdiBackgroundTexture()
@@ -1535,14 +1534,16 @@ void Settings_Dialog::chooseGeneralMdiBackgroundTexture()
         }
 
         //Update immediately so it can be previewed
-        mdiArea->setBackgroundTexture(accept_[ST_MDI_TEXTURE].s);
+        mdiArea->bgTexture.load(accept_[ST_MDI_TEXTURE].s);
+        mdiArea->forceRepaint();
     }
 }
 
 void Settings_Dialog::checkBoxGeneralMdiBGUseColorStateChanged(int checked)
 {
     preview[ST_MDI_USE_COLOR].i = checked;
-    mdiArea->useBackgroundColor(checked);
+    mdiArea->useColor = checked;
+    mdiArea->forceRepaint();
 }
 
 void Settings_Dialog::chooseGeneralMdiBackgroundColor()
@@ -1558,18 +1559,20 @@ void Settings_Dialog::chooseGeneralMdiBackgroundColor()
             QPixmap pix(16, 16);
             pix.fill(QColor(accept_[ST_MDI_COLOR].i));
             button->setIcon(QIcon(pix));
-            mdiArea->setBackgroundColor(QColor(accept_[ST_MDI_COLOR].i));
+            mdiArea->bgColor = QColor(accept_[ST_MDI_COLOR].i);
         }
         else {
-            mdiArea->setBackgroundColor(QColor(dialog[ST_MDI_COLOR].i));
+            mdiArea->bgColor = QColor(dialog[ST_MDI_COLOR].i);
         }
+        mdiArea->forceRepaint();
     }
 }
 
 void Settings_Dialog::currentGeneralMdiBackgroundColorChanged(const QColor& color)
 {
-    preview[ST_MDI_COLOR].i = (color.rgb());
-    mdiArea->setBackgroundColor(color);
+    preview[ST_MDI_COLOR].i = color.rgb();
+    mdiArea->bgColor = color;
+    mdiArea->forceRepaint();
 }
 
 void Settings_Dialog::checkBoxShowScrollBarsStateChanged(int checked)
@@ -1637,33 +1640,34 @@ void Settings_Dialog::currentDisplayBackgroundColorChanged(const QColor& color)
     _mainWin->updateAllViewBackgroundColors(color.rgb());
 }
 
+void
+update_view_selectbox(Node *d)
+{
+    _mainWin->updateAllViewSelectBoxColors(
+        d[ST_SELECTBOX_LEFT_COLOR].i,
+        d[ST_SELECTBOX_LEFT_FILL].i,
+        d[ST_SELECTBOX_RIGHT_COLOR].i,
+        d[ST_SELECTBOX_RIGHT_FILL].i,
+        preview[ST_SELECTBOX_ALPHA].i);
+}
+
 void Settings_Dialog::chooseDisplaySelectBoxLeftColor()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
     if (button) {
-        QColorDialog* colorDialog = new QColorDialog(QColor(get_uint(accept_, ST_SELECTBOX_LEFT_COLOR)), this);
+        QColorDialog* colorDialog = new QColorDialog(QColor(accept_[ST_SELECTBOX_LEFT_COLOR].i), this);
         connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentDisplaySelectBoxLeftColorChanged(const QColor&)));
         colorDialog->exec();
 
         if (colorDialog->result() == QDialog::Accepted) {
             accept_[ST_SELECTBOX_LEFT_COLOR].i = (colorDialog->selectedColor().rgb());
             QPixmap pix(16,16);
-            pix.fill(QColor(get_uint(accept_, ST_SELECTBOX_LEFT_COLOR)));
+            pix.fill(QColor(accept_[ST_SELECTBOX_LEFT_COLOR].i));
             button->setIcon(QIcon(pix));
-            _mainWin->updateAllViewSelectBoxColors(
-                get_uint(accept_, ST_SELECTBOX_LEFT_COLOR),
-                get_uint(accept_, ST_SELECTBOX_LEFT_FILL),
-                get_uint(accept_, ST_SELECTBOX_RIGHT_COLOR),
-                get_uint(accept_, ST_SELECTBOX_RIGHT_FILL),
-                get_int(preview, ST_SELECTBOX_ALPHA));
+            update_view_selectbox(accept_);
         }
         else {
-            _mainWin->updateAllViewSelectBoxColors(
-                get_uint(dialog, ST_SELECTBOX_LEFT_COLOR),
-                get_uint(dialog, ST_SELECTBOX_LEFT_FILL),
-                get_uint(dialog, ST_SELECTBOX_RIGHT_COLOR),
-                get_uint(dialog, ST_SELECTBOX_RIGHT_FILL),
-                get_int(preview, ST_SELECTBOX_ALPHA));
+            update_view_selectbox(dialog);
         }
     }
 }
@@ -1671,41 +1675,26 @@ void Settings_Dialog::chooseDisplaySelectBoxLeftColor()
 void Settings_Dialog::currentDisplaySelectBoxLeftColorChanged(const QColor& color)
 {
     preview[ST_SELECTBOX_LEFT_COLOR].i = (color.rgb());
-    _mainWin->updateAllViewSelectBoxColors(
-        get_uint(preview, ST_SELECTBOX_LEFT_COLOR),
-        get_uint(preview, ST_SELECTBOX_LEFT_FILL),
-        get_uint(preview, ST_SELECTBOX_RIGHT_COLOR),
-        get_uint(preview, ST_SELECTBOX_RIGHT_FILL),
-        get_int(preview, ST_SELECTBOX_ALPHA));
+    update_view_selectbox(preview);
 }
 
 void Settings_Dialog::chooseDisplaySelectBoxLeftFill()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
     if (button) {
-        QColorDialog* colorDialog = new QColorDialog(QColor(get_uint(accept_, ST_SELECTBOX_LEFT_FILL)), this);
+        QColorDialog* colorDialog = new QColorDialog(QColor(accept_[ST_SELECTBOX_LEFT_FILL].i), this);
         connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentDisplaySelectBoxLeftFillChanged(const QColor&)));
         colorDialog->exec();
 
         if (colorDialog->result() == QDialog::Accepted) {
             accept_[ST_SELECTBOX_LEFT_FILL].i = (colorDialog->selectedColor().rgb());
             QPixmap pix(16,16);
-            pix.fill(QColor(get_uint(accept_, ST_SELECTBOX_LEFT_FILL)));
+            pix.fill(QColor(accept_[ST_SELECTBOX_LEFT_FILL].i));
             button->setIcon(QIcon(pix));
-            _mainWin->updateAllViewSelectBoxColors(
-                get_uint(accept_, ST_SELECTBOX_LEFT_COLOR),
-                get_uint(accept_, ST_SELECTBOX_LEFT_FILL),
-                get_uint(accept_, ST_SELECTBOX_RIGHT_COLOR),
-                get_uint(accept_, ST_SELECTBOX_RIGHT_FILL),
-                get_int(preview, ST_SELECTBOX_ALPHA));
+            update_view_selectbox(accept_);
         }
         else {
-            _mainWin->updateAllViewSelectBoxColors(
-                get_uint(dialog, ST_SELECTBOX_LEFT_COLOR),
-                get_uint(dialog, ST_SELECTBOX_LEFT_FILL),
-                get_uint(dialog, ST_SELECTBOX_RIGHT_COLOR),
-                get_uint(dialog, ST_SELECTBOX_RIGHT_FILL),
-                get_int(preview, ST_SELECTBOX_ALPHA));
+            update_view_selectbox(dialog);
         }
     }
 }
@@ -1713,41 +1702,26 @@ void Settings_Dialog::chooseDisplaySelectBoxLeftFill()
 void Settings_Dialog::currentDisplaySelectBoxLeftFillChanged(const QColor& color)
 {
     preview[ST_SELECTBOX_LEFT_FILL].i = (color.rgb());
-    _mainWin->updateAllViewSelectBoxColors(
-        get_uint(preview, ST_SELECTBOX_LEFT_COLOR),
-        get_uint(preview, ST_SELECTBOX_LEFT_FILL),
-        get_uint(preview, ST_SELECTBOX_RIGHT_COLOR),
-        get_uint(preview, ST_SELECTBOX_RIGHT_FILL),
-        get_int(preview, ST_SELECTBOX_ALPHA));
+    update_view_selectbox(preview);
 }
 
 void Settings_Dialog::chooseDisplaySelectBoxRightColor()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
     if (button) {
-        QColorDialog* colorDialog = new QColorDialog(QColor(get_uint(accept_, ST_SELECTBOX_RIGHT_COLOR)), this);
+        QColorDialog* colorDialog = new QColorDialog(QColor(accept_[ST_SELECTBOX_RIGHT_COLOR].i), this);
         connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentDisplaySelectBoxRightColorChanged(const QColor&)));
         colorDialog->exec();
 
         if (colorDialog->result() == QDialog::Accepted) {
             accept_[ST_SELECTBOX_RIGHT_COLOR].i = (colorDialog->selectedColor().rgb());
             QPixmap pix(16,16);
-            pix.fill(QColor(get_uint(accept_, ST_SELECTBOX_RIGHT_COLOR)));
+            pix.fill(QColor(accept_[ST_SELECTBOX_RIGHT_COLOR].i));
             button->setIcon(QIcon(pix));
-            _mainWin->updateAllViewSelectBoxColors(
-                get_uint(accept_, ST_SELECTBOX_LEFT_COLOR),
-                get_uint(accept_, ST_SELECTBOX_LEFT_FILL),
-                get_uint(accept_, ST_SELECTBOX_RIGHT_COLOR),
-                get_uint(accept_, ST_SELECTBOX_RIGHT_FILL),
-                get_int(preview, ST_SELECTBOX_ALPHA));
+            update_view_selectbox(accept_);
         }
         else {
-            _mainWin->updateAllViewSelectBoxColors(
-                get_uint(dialog, ST_SELECTBOX_LEFT_COLOR),
-                get_uint(dialog, ST_SELECTBOX_LEFT_FILL),
-                get_uint(dialog, ST_SELECTBOX_RIGHT_COLOR),
-                get_uint(dialog, ST_SELECTBOX_RIGHT_FILL),
-                get_int(preview, ST_SELECTBOX_ALPHA));
+            update_view_selectbox(dialog);
         }
     }
 }
@@ -1755,41 +1729,26 @@ void Settings_Dialog::chooseDisplaySelectBoxRightColor()
 void Settings_Dialog::currentDisplaySelectBoxRightColorChanged(const QColor& color)
 {
     preview[ST_SELECTBOX_RIGHT_COLOR].i = (color.rgb());
-    _mainWin->updateAllViewSelectBoxColors(
-        get_uint(preview, ST_SELECTBOX_LEFT_COLOR),
-        get_uint(preview, ST_SELECTBOX_LEFT_FILL),
-        get_uint(preview, ST_SELECTBOX_RIGHT_COLOR),
-        get_uint(preview, ST_SELECTBOX_RIGHT_FILL),
-        get_int(preview, ST_SELECTBOX_ALPHA));
+    update_view_selectbox(preview);
 }
 
 void Settings_Dialog::chooseDisplaySelectBoxRightFill()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
     if (button) {
-        QColorDialog* colorDialog = new QColorDialog(QColor(get_uint(accept_, ST_SELECTBOX_RIGHT_FILL)), this);
+        QColorDialog* colorDialog = new QColorDialog(QColor(accept_[ST_SELECTBOX_RIGHT_FILL].i), this);
         connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentDisplaySelectBoxRightFillChanged(const QColor&)));
         colorDialog->exec();
 
         if (colorDialog->result() == QDialog::Accepted) {
             accept_[ST_SELECTBOX_RIGHT_FILL].i = (colorDialog->selectedColor().rgb());
             QPixmap pix(16,16);
-            pix.fill(QColor(get_uint(accept_, ST_SELECTBOX_RIGHT_FILL)));
+            pix.fill(QColor(accept_[ST_SELECTBOX_RIGHT_FILL].i));
             button->setIcon(QIcon(pix));
-            _mainWin->updateAllViewSelectBoxColors(
-                get_uint(accept_, ST_SELECTBOX_LEFT_COLOR),
-                get_uint(accept_, ST_SELECTBOX_LEFT_FILL),
-                get_uint(accept_, ST_SELECTBOX_RIGHT_COLOR),
-                get_uint(accept_, ST_SELECTBOX_RIGHT_FILL),
-                get_int(preview, ST_SELECTBOX_ALPHA));
+            update_view_selectbox(accept_);
         }
         else {
-            _mainWin->updateAllViewSelectBoxColors(
-                get_uint(dialog, ST_SELECTBOX_LEFT_COLOR),
-                get_uint(dialog, ST_SELECTBOX_LEFT_FILL),
-                get_uint(dialog, ST_SELECTBOX_RIGHT_COLOR),
-                get_uint(dialog, ST_SELECTBOX_RIGHT_FILL),
-                get_int(preview, ST_SELECTBOX_ALPHA));
+            update_view_selectbox(dialog);
         }
     }
 }
@@ -1797,23 +1756,13 @@ void Settings_Dialog::chooseDisplaySelectBoxRightFill()
 void Settings_Dialog::currentDisplaySelectBoxRightFillChanged(const QColor& color)
 {
     preview[ST_SELECTBOX_RIGHT_FILL].i = (color.rgb());
-    _mainWin->updateAllViewSelectBoxColors(
-        get_uint(preview, ST_SELECTBOX_LEFT_COLOR),
-        get_uint(preview, ST_SELECTBOX_LEFT_FILL),
-        get_uint(preview, ST_SELECTBOX_RIGHT_COLOR),
-        get_uint(preview, ST_SELECTBOX_RIGHT_FILL),
-        get_int(preview, ST_SELECTBOX_ALPHA));
+    update_view_selectbox(preview);
 }
 
 void Settings_Dialog::spinBoxDisplaySelectBoxAlphaValueChanged(int value)
 {
     preview[ST_SELECTBOX_ALPHA].i = value;
-    _mainWin->updateAllViewSelectBoxColors(
-        get_uint(accept_, ST_SELECTBOX_LEFT_COLOR),
-        get_uint(accept_, ST_SELECTBOX_LEFT_FILL),
-        get_uint(accept_, ST_SELECTBOX_RIGHT_COLOR),
-        get_uint(accept_, ST_SELECTBOX_RIGHT_FILL),
-        get_int(preview, ST_SELECTBOX_ALPHA));
+    update_view_selectbox(accept_);
 }
 
 void Settings_Dialog::choosePromptTextColor()
@@ -2255,13 +2204,13 @@ void Settings_Dialog::acceptChanges()
 
     memcpy(settings, dialog, SETTINGS_TOTAL * sizeof settings[0]);
 
-    //Make sure the user sees the changes applied immediately
-    mdiArea->useBackgroundLogo(dialog[ST_MDI_USE_LOGO].i);
-    mdiArea->useBackgroundTexture(dialog[ST_MDI_USE_TEXTURE].i);
-    mdiArea->useBackgroundColor(dialog[ST_MDI_USE_COLOR].i);
-    mdiArea->setBackgroundLogo(QString(dialog[ST_MDI_LOGO].s));
-    mdiArea->setBackgroundTexture(dialog[ST_MDI_TEXTURE].s);
-    mdiArea->setBackgroundColor(dialog[ST_MDI_COLOR].i);
+    // Make sure the user sees the changes applied immediately
+    mdiArea->useLogo = dialog[ST_MDI_USE_LOGO].i;
+    mdiArea->useTexture = dialog[ST_MDI_USE_TEXTURE].i;
+    mdiArea->useColor = dialog[ST_MDI_USE_COLOR].i;
+    mdiArea->bgLogo.load(dialog[ST_MDI_LOGO].s);
+    mdiArea->bgTexture.load(dialog[ST_MDI_TEXTURE].s);
+    mdiArea->bgColor = dialog[ST_MDI_COLOR].i;
     _mainWin->iconResize(dialog[ST_ICON_SIZE].i);
     _mainWin->updateAllViewScrollBars(dialog[ST_SHOW_SCROLLBARS].i);
     _mainWin->updateAllViewCrossHairColors(dialog[ST_CROSSHAIR_COLOR].i);
@@ -2285,6 +2234,8 @@ void Settings_Dialog::acceptChanges()
     */
     _mainWin->updatePickAddMode(get_bool(dialog, ST_SELECTION_PICK_ADD));
 
+    mdiArea->forceRepaint();
+
     write_settings();
     accept();
 }
@@ -2298,21 +2249,21 @@ Settings_Dialog::rejectChanges()
     //TODO: inform the user if they have changed settings
 
     //Update the view since the user must accept the preview
-    mdiArea->useBackgroundLogo(get_bool(dialog, ST_MDI_USE_LOGO));
-    mdiArea->useBackgroundTexture(get_bool(dialog, ST_MDI_USE_TEXTURE));
-    mdiArea->useBackgroundColor(get_bool(dialog, ST_MDI_USE_COLOR));
-    mdiArea->setBackgroundLogo(get_qstr(dialog, ST_MDI_LOGO));
-    mdiArea->setBackgroundTexture(get_qstr(dialog, ST_MDI_TEXTURE));
-    mdiArea->setBackgroundColor(get_uint(dialog, ST_MDI_COLOR));
-    _mainWin->updateAllViewScrollBars(get_bool(dialog, ST_SHOW_SCROLLBARS));
-    _mainWin->updateAllViewCrossHairColors(get_uint(dialog, ST_CROSSHAIR_COLOR));
-    _mainWin->updateAllViewBackgroundColors(get_uint(dialog, ST_BG_COLOR));
+    mdiArea->useLogo = dialog[ST_MDI_USE_LOGO].i;
+    mdiArea->useTexture = dialog[ST_MDI_USE_TEXTURE].i;
+    mdiArea->useColor = dialog[ST_MDI_USE_COLOR].i;
+    mdiArea->bgLogo.load(dialog[ST_MDI_LOGO].s);
+    mdiArea->bgTexture.load(dialog[ST_MDI_TEXTURE].s);
+    mdiArea->bgColor = dialog[ST_MDI_COLOR].i;
+    _mainWin->updateAllViewScrollBars(dialog[ST_SHOW_SCROLLBARS].i);
+    _mainWin->updateAllViewCrossHairColors(dialog[dialog, ST_CROSSHAIR_COLOR].i);
+    _mainWin->updateAllViewBackgroundColors(dialog[dialog, ST_BG_COLOR].i);
     _mainWin->updateAllViewSelectBoxColors(
-        get_uint(dialog, ST_SELECTBOX_LEFT_COLOR),
-        get_uint(dialog, ST_SELECTBOX_LEFT_FILL),
-        get_uint(dialog, ST_SELECTBOX_RIGHT_COLOR),
-        get_uint(dialog, ST_SELECTBOX_RIGHT_FILL),
-        get_int(dialog, ST_SELECTBOX_ALPHA));
+        dialog[ST_SELECTBOX_LEFT_COLOR].i,
+        dialog[ST_SELECTBOX_LEFT_FILL].i,
+        dialog[ST_SELECTBOX_RIGHT_COLOR].i,
+        dialog[ST_SELECTBOX_RIGHT_FILL].i,
+        dialog[ST_SELECTBOX_ALPHA].i);
     prompt->setPromptTextColor(QColor(get_uint(dialog, ST_PROMPT_TEXT_COLOR)));
     prompt->setPromptBackgroundColor(QColor(get_uint(dialog, ST_PROMPT_BG_COLOR)));
     prompt->setPromptFontFamily(get_qstr(dialog, ST_PROMPT_FONT_FAMILY));
@@ -2320,10 +2271,12 @@ Settings_Dialog::rejectChanges()
     prompt->setPromptFontSize(dialog[ST_PROMPT_FONT_SIZE].r);
     _mainWin->updateAllViewGridColors(get_uint(dialog, ST_GRID_COLOR));
     _mainWin->updateAllViewRulerColors(get_uint(dialog, ST_RULER_COLOR));
-    statusbar->toggle("LWT", get_bool(settings, ST_LWT_SHOW));
+    statusbar->toggle("LWT", settings[ST_LWT_SHOW].i);
     /*
-    statusbar->toggle("REAL", settings.lwt_real_render); ?
+    statusbar->toggle("REAL", settings[ST_LWT_REAL].i); ?
     */
+
+    mdiArea->forceRepaint();
 
     reject();
 }

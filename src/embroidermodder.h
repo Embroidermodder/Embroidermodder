@@ -331,35 +331,7 @@ signals:
     //These connect to the CmdPrompt signals
     void startCommand(QString cmd);
     void runCommand(QString cmd, QString cmdtxt);
-    void deletePressed();
-    void tabPressed();
-    void escapePressed();
-    void upPressed();
-    void downPressed();
-    void F1Pressed();
-    void F2Pressed();
-    void F3Pressed();
-    void F4Pressed();
-    void F5Pressed();
-    void F6Pressed();
-    void F7Pressed();
-    void F8Pressed();
-    void F9Pressed();
-    void F10Pressed();
-    void F11Pressed();
-    void F12Pressed();
-    void cutPressed();
-    void copyPressed();
-    void pastePressed();
-    void selectAllPressed();
-    void undoPressed();
-    void redoPressed();
-
-    void shiftPressed();
-    void shiftReleased();
-
     void showSettings();
-
     void stopBlinking();
 
 public slots:
@@ -370,10 +342,6 @@ public slots:
     void checkEditedText(QString txt);
     void checkChangedText(QString txt);
     void checkCursorPosition(int oldpos, int newpos);
-
-private slots:
-    void copyClip();
-    void pasteClip();
 };
 
 /* The Command Prompt History class. */
@@ -383,7 +351,7 @@ class CmdPromptHistory : public QTextBrowser
 
 public:
     CmdPromptHistory(QWidget* parent = 0);
-    ~CmdPromptHistory();
+    ~CmdPromptHistory() {}
 
     int tmpHeight;
     QString applyFormatting(QString txt, int prefixLength);
@@ -393,8 +361,6 @@ protected:
 
 public slots:
     void appendHistory(QString txt, int prefixLength);
-    void startResizeHistory(int y);
-    void stopResizeHistory(int y);
     void resizeHistory(int y);
 
 signals:
@@ -408,7 +374,7 @@ class CmdPromptSplitter : public QSplitter
 
 public:
     CmdPromptSplitter(QWidget* parent = 0);
-    ~CmdPromptSplitter();
+    ~CmdPromptSplitter() {}
 
 protected:
     QSplitterHandle* createHandle();
@@ -426,7 +392,7 @@ class CmdPromptHandle : public QSplitterHandle
 
 public:
     CmdPromptHandle(Qt::Orientation orientation, QSplitter* parent);
-    ~CmdPromptHandle();
+    ~CmdPromptHandle() {}
 
     int pressY;
     int releaseY;
@@ -443,6 +409,14 @@ signals:
     void handleMoved(int y);
 };
 
+#define CONSOLE_STYLE_COLOR                 0
+#define CONSOLE_STYLE_BG_COLOR              1
+#define CONSOLE_STYLE_SELECTION_COLOR       2
+#define CONSOLE_STYLE_SELECTION_BG_COLOR    3
+#define CONSOLE_STYLE_FONT_FAMILY           4
+#define CONSOLE_STYLE_FONT_STYLE            5
+#define CONSOLE_STYLE_FONT_SIZE             6
+
 /* . */
 class CmdPrompt : public QWidget
 {
@@ -450,7 +424,7 @@ class CmdPrompt : public QWidget
 
 public:
     CmdPrompt(QWidget* parent = 0);
-    ~CmdPrompt();
+    ~CmdPrompt() {}
 
     CmdPromptInput* promptInput;
     CmdPromptHistory* promptHistory;
@@ -459,7 +433,7 @@ public:
 
     CmdPromptSplitter* promptSplitter;
 
-    QHash<QString, QString>*  styleHash;
+    QString styleHash[10];
     void updateStyle();
     QTimer* blinkTimer;
     bool blinkState;
@@ -480,7 +454,6 @@ public slots:
 
     void startBlinking();
     void stopBlinking();
-    void blink();
 
     void setPromptTextColor(const QColor&);
     void setPromptBackgroundColor(const QColor&);
@@ -498,29 +471,6 @@ signals:
     //For connecting outside of command prompt
     void startCommand(QString cmd);
     void runCommand(QString cmd, QString cmdtxt);
-    void deletePressed();
-    void tabPressed();
-    void escapePressed();
-    void upPressed();
-    void downPressed();
-    void F1Pressed();
-    void F2Pressed();
-    void F3Pressed();
-    void F4Pressed();
-    void F5Pressed();
-    void F6Pressed();
-    void F7Pressed();
-    void F8Pressed();
-    void F9Pressed();
-    void F10Pressed();
-    void F11Pressed();
-    void F12Pressed();
-    void cutPressed();
-    void copyPressed();
-    void pastePressed();
-    void selectAllPressed();
-    void undoPressed();
-    void redoPressed();
 
     void shiftPressed();
     void shiftReleased();
@@ -775,29 +725,8 @@ public slots:
     void closeEvent(QCloseEvent* e);
     void onWindowActivated();
 
-    void currentLayerChanged(QString layer);
-    void currentColorChanged(const QRgb& color);
-    void currentLinetypeChanged(QString type);
-    void currentLineweightChanged(QString weight);
-
-    void updateColorLinetypeLineweight();
-    void deletePressed();
-    void escapePressed();
-
-    void showViewScrollBars(bool val);
-    void setViewCrossHairColor(QRgb color);
-    void setViewBackgroundColor(QRgb color);
-    void setViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
-    void setViewGridColor(QRgb color);
-    void setViewRulerColor(QRgb color);
-
     void print();
     void saveBMC();
-
-    void promptHistoryAppended(QString txt);
-    void logPromptInput(QString txt);
-    void promptInputPrevious();
-    void promptInputNext();
 };
 
 /* . */
@@ -817,20 +746,30 @@ public:
     void zoomExtentsAllSubWindows();
     void forceRepaint();
 
-    MdiArea(QWidget* parent = 0);
-    ~MdiArea();
+    MdiArea(QWidget* parent = 0)
+    {
+        setTabsClosable(true);
 
-    void useBackgroundLogo(bool use);
-    void useBackgroundTexture(bool use);
-    void useBackgroundColor(bool use);
+        useLogo = false;
+        useTexture = false;
+        useColor = false;
+    }
 
-    void setBackgroundLogo(QString fileName);
-    void setBackgroundTexture(QString fileName);
-    void setBackgroundColor(const QColor& color);
-
+    ~MdiArea() {}
 public slots:
-    void cascade();
-    void tile();
+    /* Cascade the MDI windows. */
+    void cascade()
+    {
+        cascadeSubWindows();
+        zoomExtentsAllSubWindows();
+    }
+
+    /* Tile the MDI windows. */
+    void tile()
+    {
+        tileSubWindows();
+        zoomExtentsAllSubWindows();
+    }
 protected:
     virtual void mouseDoubleClickEvent(QMouseEvent* e);
     virtual void paintEvent(QPaintEvent* e);

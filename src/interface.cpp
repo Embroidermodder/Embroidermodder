@@ -431,6 +431,14 @@ LayerManager::~LayerManager()
     QApplication::restoreOverrideCursor();
 }
 
+QPixmap
+make_pixmap(int size, int color)
+{
+    QPixmap pix(QSize(size, size));
+    pix.fill(QColor(color));
+    return pix;
+}
+
 /* Add layer to Layer Manager. */
 void
 LayerManager::addLayer(
@@ -449,8 +457,7 @@ LayerManager::addLayer(
     layerModel->setData(layerModel->index(0, 2), frozen);
     layerModel->setData(layerModel->index(0, 3), zValue);
 
-    QPixmap colorPix(QSize(16,16));
-    colorPix.fill(QColor(color));
+    QPixmap colorPix = make_pixmap(16, color);
     layerModel->itemFromIndex(layerModel->index(0, 4))->setIcon(QIcon(colorPix));
     layerModel->setData(layerModel->index(0, 4), QColor(color));
 
@@ -470,8 +477,14 @@ SelectBox::SelectBox(Shape s, QWidget* parent) : QRubberBand(s, parent)
 void
 SelectBox::setDirection(int dir)
 {
-    if (!dir) { dirPen = leftPen;  dirBrush = leftBrush;  }
-    else     { dirPen = rightPen; dirBrush = rightBrush; }
+    if (!dir) {
+        dirPen = leftPen;
+        dirBrush = leftBrush;
+    }
+    else {
+        dirPen = rightPen;
+        dirBrush = rightBrush;
+    }
     boxDir = dir;
 }
 
@@ -497,8 +510,7 @@ SelectBox::setColors(const QColor& colorL, const QColor& fillL, const QColor& co
     rightBrush.setStyle(Qt::SolidPattern);
     rightBrush.setColor(rightBrushColor);
 
-    if (!boxDir) { dirPen = leftPen;  dirBrush = leftBrush;  }
-    else        { dirPen = rightPen; dirBrush = rightBrush; }
+    setDirection(boxDir);
 
     forceRepaint();
 }
@@ -821,16 +833,16 @@ CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
 
     this->setLayout(promptVBoxLayout);
 
-    styleHash = new QHash<QString, QString>();
     for (int i=0; i<7; i++) {
-        styleHash->insert(default_prompt_style[2*i], default_prompt_style[2*i+1]);
+        QString s(default_prompt_style[2*i+1]);
+        styleHash[i] = s;
     }
 
     updateStyle();
 
     blinkState = false;
     blinkTimer = new QTimer(this);
-    connect(blinkTimer, SIGNAL(timeout()), this, SLOT(blink()));
+    connect(blinkTimer, &QTimer::timeout, this, [=](void) { blinkState = !blinkState; } );
 
     this->show();
 
@@ -840,48 +852,13 @@ CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
 
     //For use outside of command prompt
     connect(promptInput, SIGNAL(startCommand(QString)), this, SIGNAL(startCommand(QString)));
-    connect(promptInput, SIGNAL(runCommand(QString,QString)), this, SIGNAL(runCommand(QString,QString)));
-    connect(promptInput, SIGNAL(deletePressed()), this, SIGNAL(deletePressed()));
-    connect(promptInput, SIGNAL(tabPressed()), this, SIGNAL(tabPressed()));
-    connect(promptInput, SIGNAL(escapePressed()), this, SIGNAL(escapePressed()));
-    connect(promptInput, SIGNAL(upPressed()), this, SIGNAL(upPressed()));
-    connect(promptInput, SIGNAL(downPressed()), this, SIGNAL(downPressed()));
-    connect(promptInput, SIGNAL(F1Pressed()), this, SIGNAL(F1Pressed()));
-    connect(promptInput, SIGNAL(F2Pressed()), this, SIGNAL(F2Pressed()));
-    connect(promptInput, SIGNAL(F3Pressed()), this, SIGNAL(F3Pressed()));
-    connect(promptInput, SIGNAL(F4Pressed()), this, SIGNAL(F4Pressed()));
-    connect(promptInput, SIGNAL(F5Pressed()), this, SIGNAL(F5Pressed()));
-    connect(promptInput, SIGNAL(F6Pressed()), this, SIGNAL(F6Pressed()));
-    connect(promptInput, SIGNAL(F7Pressed()), this, SIGNAL(F7Pressed()));
-    connect(promptInput, SIGNAL(F8Pressed()), this, SIGNAL(F8Pressed()));
-    connect(promptInput, SIGNAL(F9Pressed()), this, SIGNAL(F9Pressed()));
-    connect(promptInput, SIGNAL(F10Pressed()), this, SIGNAL(F10Pressed()));
-    connect(promptInput, SIGNAL(F11Pressed()), this, SIGNAL(F11Pressed()));
-    connect(promptInput, SIGNAL(F12Pressed()), this, SIGNAL(F12Pressed()));
-    connect(promptInput, SIGNAL(cutPressed()), this, SIGNAL(cutPressed()));
-    connect(promptInput, SIGNAL(copyPressed()), this, SIGNAL(copyPressed()));
-    connect(promptInput, SIGNAL(pastePressed()), this, SIGNAL(pastePressed()));
-    connect(promptInput, SIGNAL(selectAllPressed()), this, SIGNAL(selectAllPressed()));
-    connect(promptInput, SIGNAL(undoPressed()), this, SIGNAL(undoPressed()));
-    connect(promptInput, SIGNAL(redoPressed()), this, SIGNAL(redoPressed()));
-
-    connect(promptInput, SIGNAL(shiftPressed()), this, SIGNAL(shiftPressed()));
-    connect(promptInput, SIGNAL(shiftReleased()), this, SIGNAL(shiftReleased()));
-
+    connect(promptInput, SIGNAL(runCommand(QString, QString)), this, SIGNAL(runCommand(QString, QString)));
     connect(promptInput, SIGNAL(showSettings()), this, SIGNAL(showSettings()));
 
     connect(promptHistory, SIGNAL(historyAppended(QString)), this, SIGNAL(historyAppended(QString)));
 }
 
-/* Destroy CmdPrompt object. */
-CmdPrompt::~CmdPrompt()
-{
-    delete styleHash;
-}
-
-/* CmdPrompt::floatingChanged
- * isFloating
- */
+/* floatingChanged isFloating */
 void
 CmdPrompt::floatingChanged(bool isFloating)
 {
@@ -894,17 +871,15 @@ CmdPrompt::floatingChanged(bool isFloating)
     }
 }
 
-/* CmdPrompt::saveHistory
- * fileName
- * html
- */
+/* saveHistory fileName html */
 void
 CmdPrompt::saveHistory(QString  fileName, bool html)
 {
     debug_message("CmdPrompt saveHistory");
     QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         return;
+    }
 
     //TODO: save during input in case of crash
     QTextStream output(&file);
@@ -943,25 +918,12 @@ CmdPrompt::stopBlinking()
     promptInput->isBlinking = false;
 }
 
-/* Blink the prompt cursor. */
-void
-CmdPrompt::blink()
-{
-    blinkState = !blinkState;
-    if (blinkState) {
-        debug_message("CmdPrompt blink1");
-    }
-    else {
-        debug_message("CmdPrompt blink0");
-    }
-}
-
 /* Set prompt text color. */
 void
 CmdPrompt::setPromptTextColor(const QColor& color)
 {
-    styleHash->insert("color", color.name());
-    styleHash->insert("selection-background-color", color.name());
+    styleHash[CONSOLE_STYLE_COLOR] = color.name();
+    styleHash[CONSOLE_STYLE_SELECTION_COLOR] = color.name();
     updateStyle();
 }
 
@@ -969,58 +931,50 @@ CmdPrompt::setPromptTextColor(const QColor& color)
 void
 CmdPrompt::setPromptBackgroundColor(const QColor& color)
 {
-    styleHash->insert("background-color", color.name());
-    styleHash->insert("selection-color", color.name());
+    styleHash[CONSOLE_STYLE_BG_COLOR] = color.name();
+    styleHash[CONSOLE_STYLE_SELECTION_BG_COLOR] = color.name();
     updateStyle();
 }
 
 /* Set prompt font family. */
 void
-CmdPrompt::setPromptFontFamily(QString  family)
+CmdPrompt::setPromptFontFamily(QString family)
 {
-    styleHash->insert("font-family", family);
+    styleHash[CONSOLE_STYLE_FONT_FAMILY] = family;
     updateStyle();
 }
 
 /* Set prompt font style. */
 void
-CmdPrompt::setPromptFontStyle(QString  style)
+CmdPrompt::setPromptFontStyle(QString style)
 {
-    styleHash->insert("font-style", style);
+    styleHash[CONSOLE_STYLE_FONT_STYLE] = style;
     updateStyle();
 }
 
-/* setPromptFontSize
- * @param size
- */
+/* Set prompt font size. */
 void
 CmdPrompt::setPromptFontSize(int size)
 {
-    styleHash->insert("font-size", QString().setNum(size).append("px"));
+    styleHash[CONSOLE_STYLE_FONT_SIZE] = QString().setNum(size).append("px");
     updateStyle();
 }
 
-/**
- * updateStyle
- */
+/* Update style. */
 void
 CmdPrompt::updateStyle()
 {
     QString style = "QTextBrowser,QLineEdit{";
-
-    QHashIterator<QString, QString> i(*styleHash);
-    while (i.hasNext()) {
-        i.next();
-        style.append(i.key() + ":" + i.value() + ";");
+    for (int i=0; i<7; i++) {
+        QString key(default_prompt_style[2*i]);
+        style += key + ":" + styleHash[i] + ";";
     }
-    style.append("}");
+    style += "}";
 
     this->setStyleSheet(style);
 }
 
-/* appendHistory
- * @param txt
- */
+/* appendHistory txt */
 void
 CmdPrompt::appendHistory(QString  txt)
 {
@@ -1056,11 +1010,6 @@ CmdPromptSplitter::CmdPromptSplitter(QWidget* parent) : QSplitter(parent)
     connect(this, SIGNAL(moveResizeHistory(int)),    parent, SLOT(resizeTheHistory(int)));
 }
 
-/* . */
-CmdPromptSplitter::~CmdPromptSplitter()
-{
-}
-
 /* Create handle for this command prompt. */
 QSplitterHandle* CmdPromptSplitter::createHandle()
 {
@@ -1076,11 +1025,6 @@ CmdPromptHandle::CmdPromptHandle(Qt::Orientation orientation, QSplitter* parent)
     connect(this, SIGNAL(handlePressed(int)),  parent, SIGNAL(pressResizeHistory(int)));
     connect(this, SIGNAL(handleReleased(int)), parent, SIGNAL(releaseResizeHistory(int)));
     connect(this, SIGNAL(handleMoved(int)),    parent, SIGNAL(moveResizeHistory(int)));
-}
-
-/* Destroy the command prompt handle object. */
-CmdPromptHandle::~CmdPromptHandle()
-{
 }
 
 /* Process mouse press in the command prompt handle context. */
@@ -1108,10 +1052,7 @@ CmdPromptHandle::mouseMoveEvent(QMouseEvent* e)
     emit handleMoved(dY);
 }
 
-/**
- * @brief CmdPromptHistory::CmdPromptHistory
- * @param parent The QWidget that it sits in.
- */
+/* CmdPromptHistory */
 CmdPromptHistory::CmdPromptHistory(QWidget* parent) : QTextBrowser(parent)
 {
     debug_message("CmdPromptHistory Constructor");
@@ -1126,15 +1067,7 @@ CmdPromptHistory::CmdPromptHistory(QWidget* parent) : QTextBrowser(parent)
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 }
 
-/* CmdPromptHistory::~CmdPromptHistory */
-CmdPromptHistory::~CmdPromptHistory()
-{
-}
-
-/* CmdPromptHistory::applyFormatting
- * txt
- * prefixLength
- */
+/* ApplyFormatting txt prefixLength */
 QString CmdPromptHistory::applyFormatting(QString  txt, int prefixLength)
 {
     QString prefix = txt.left(prefixLength);
@@ -1195,33 +1128,18 @@ CmdPromptHistory::appendHistory(QString txt, int prefixLength)
     this->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
 }
 
-/* CmdPromptHistory::startResizeHistory */
-void
-CmdPromptHistory::startResizeHistory(int /*y*/)
-{
-    tmpHeight = height();
-}
-
-/* stopResizeHistory */
-void
-CmdPromptHistory::stopResizeHistory(int /*y*/)
-{
-    tmpHeight = height();
-}
-
 /* Resize history to "y" lines. */
 void
 CmdPromptHistory::resizeHistory(int y)
 {
     int newHeight = tmpHeight - y;
-    if (newHeight < 0)
+    if (newHeight < 0) {
         newHeight = 0;
+    }
     setMaximumHeight(newHeight);
 }
 
-/* contextMenuEvent
- * @param event
- */
+/* contextMenuEvent event */
 void
 CmdPromptHistory::contextMenuEvent(QContextMenuEvent* event)
 {
@@ -1505,20 +1423,6 @@ CmdPromptInput::checkChangedText(QString  txt)
     updateCurrentText(txt);
 }
 
-/* CmdPromptInput::copyClip */
-void
-CmdPromptInput::copyClip()
-{
-    QString copyText = curText.remove(0, prefix.length());
-    qApp->clipboard()->setText(copyText);
-}
-
-/* PasteClip. */
-void CmdPromptInput::pasteClip()
-{
-    paste();
-}
-
 /* ContextMenuEvent. */
 void
 CmdPromptInput::contextMenuEvent(QContextMenuEvent* event)
@@ -1527,19 +1431,26 @@ CmdPromptInput::contextMenuEvent(QContextMenuEvent* event)
 
     QAction* copyAction = new QAction("&Copy", this);
     copyAction->setStatusTip("Copies the command prompt text to the clipboard.");
-    connect(copyAction, SIGNAL(triggered()), this, SLOT(copyClip()));
+    connect(
+        copyAction,
+        &QAction::triggered,
+        this,
+        [=](void) {
+            qApp->clipboard()->setText(curText.remove(0, prefix.length()));
+        }
+    );
     menu.addAction(copyAction);
 
     QAction* pasteAction = new QAction("&Paste", this);
     pasteAction->setStatusTip("Inserts the clipboard's text into the command prompt at the cursor position.");
-    connect(pasteAction, SIGNAL(triggered()), this, SLOT(pasteClip()));
+    connect(pasteAction, &QAction::triggered, this, [=](void) { paste(); });
     menu.addAction(pasteAction);
 
     menu.addSeparator();
 
     QAction* settingsAction = new QAction("&Settings...", this);
     settingsAction->setStatusTip("Opens settings for the command prompt.");
-    connect(settingsAction, SIGNAL(triggered()), this, SIGNAL(showSettings()));
+    connect(settingsAction, &QAction::triggered, this, [=](void) { showSettings(); });
     menu.addAction(settingsAction);
 
     menu.exec(event->globalPos());
@@ -1556,35 +1467,29 @@ CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
 
         QKeyEvent* pressedKey = (QKeyEvent*)event;
 
-        //NOTE: These shortcuts need to be caught since QLineEdit uses them
+        // NOTE: These shortcuts need to be caught since QLineEdit uses them
         if (pressedKey->matches(QKeySequence::Cut)) {
             pressedKey->accept();
-            emit cutPressed();
             return true;
         }
         else if (pressedKey->matches(QKeySequence::Copy)) {
             pressedKey->accept();
-            emit copyPressed();
             return true;
         }
         else if (pressedKey->matches(QKeySequence::Paste)) {
             pressedKey->accept();
-            emit pastePressed();
             return true;
         }
         else if (pressedKey->matches(QKeySequence::SelectAll)) {
             pressedKey->accept();
-            emit selectAllPressed();
             return true;
         }
         else if (pressedKey->matches(QKeySequence::Undo)) {
             pressedKey->accept();
-            emit undoPressed();
             return true;
         }
         else if (pressedKey->matches(QKeySequence::Redo)) {
             pressedKey->accept();
-            emit redoPressed();
             return true;
         }
 
@@ -1598,91 +1503,39 @@ CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
             case Qt::Key_Delete:
                 pressedKey->accept();
                 del();
-                emit deletePressed();
                 return true;
             case Qt::Key_Tab:
                 pressedKey->accept();
-                emit tabPressed();
                 return true;
             case Qt::Key_Escape:
                 pressedKey->accept();
                 prefix = defaultPrefix;
                 clear();
                 emit appendHistory(curText + tr("*Cancel*"), prefix.length());
-                emit escapePressed();
                 return true;
             case Qt::Key_Up:
-                pressedKey->accept();
-                emit upPressed();
-                return true;
             case Qt::Key_Down:
-                pressedKey->accept();
-                emit downPressed();
-                return true;
             case Qt::Key_F1:
-                pressedKey->accept();
-                emit F1Pressed();
-                return true;
             case Qt::Key_F2:
-                pressedKey->accept();
-                emit F2Pressed();
-                return true;
             case Qt::Key_F3:
-                pressedKey->accept();
-                emit F3Pressed();
-                return true;
-                break;
             case Qt::Key_F4:
-                pressedKey->accept();
-                emit F4Pressed();
-                return true;
-                break;
             case Qt::Key_F5:
-                emit F5Pressed();
-                pressedKey->accept();
-                return true;
-                break;
             case Qt::Key_F6:
-                pressedKey->accept();
-                emit F6Pressed();
-                return true;
-                break;
             case Qt::Key_F7:
-                pressedKey->accept();
-                emit F7Pressed();
-                return true;
-                break;
             case Qt::Key_F8:
-                pressedKey->accept();
-                emit F8Pressed();
-                return true;
-                break;
             case Qt::Key_F9:
-                pressedKey->accept();
-                emit F9Pressed();
-                return true;
-                break;
             case Qt::Key_F10:
-                pressedKey->accept();
-                emit F10Pressed();
-                return true;
-                break;
             case Qt::Key_F11:
-                pressedKey->accept();
-                emit F11Pressed();
-                return true;
-                break;
             case Qt::Key_F12:
                 pressedKey->accept();
-                emit F12Pressed();
                 return true;
-                break;
             case Qt::Key_Shift:
                 pressedKey->ignore(); //we don't want to eat it, we just want to keep track of it
-                emit shiftPressed();
+                emit prompt->shiftPressed();
                 break;
             default:
                 pressedKey->ignore();
+                break;
         }
     }
 
@@ -1692,7 +1545,7 @@ CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
         switch (key) {
             case Qt::Key_Shift:
                 releasedKey->ignore(); //we don't want to eat it, we just want to keep track of it
-                emit shiftReleased();
+                emit prompt->shiftReleased();
                 break;
             default:
                 releasedKey->ignore();
@@ -1987,74 +1840,6 @@ EmbDetailsDialog::getInfo(void)
     }
 }
 
-/* Create the MDI area. */
-MdiArea::MdiArea(QWidget *parent) : QMdiArea(parent)
-{
-    setTabsClosable(true);
-
-    useLogo = false;
-    useTexture = false;
-    useColor = false;
-}
-
-/* Destroy the MDI area. */
-MdiArea::~MdiArea()
-{
-}
-
-/* Set whether to use the background logo. */
-void
-MdiArea::useBackgroundLogo(bool use)
-{
-    useLogo = use;
-    forceRepaint();
-}
-
-/* Set whether to use the background texture. */
-void
-MdiArea::useBackgroundTexture(bool use)
-{
-    useTexture = use;
-    forceRepaint();
-}
-
-/* Set whether to use the background color. */
-void
-MdiArea::useBackgroundColor(bool use)
-{
-    useColor = use;
-    forceRepaint();
-}
-
-/* Set what background logo to use. */
-void MdiArea::setBackgroundLogo(QString  fileName)
-{
-    bgLogo.load(fileName);
-
-    forceRepaint();
-}
-
-/* Set what background texture to use. */
-void MdiArea::setBackgroundTexture(QString fileName)
-{
-    bgTexture.load(fileName);
-
-    forceRepaint();
-}
-
-/* Set what background color to use. */
-void MdiArea::setBackgroundColor(const QColor& color)
-{
-    if (!color.isValid()) {
-        bgColor = background().color();
-    }
-    else {
-        bgColor = color;
-    }
-
-    forceRepaint();
-}
-
 /* . */
 void
 MdiArea::mouseDoubleClickEvent(QMouseEvent* /*e*/)
@@ -2093,20 +1878,6 @@ MdiArea::paintEvent(QPaintEvent* /*e*/)
         int dy = (rect.height()-bgLogo.height())/2;
         painter.drawPixmap(dx, dy, bgLogo.width(), bgLogo.height(), bgLogo);
     }
-}
-
-/* Cascade the MDI windows. */
-void MdiArea::cascade()
-{
-    cascadeSubWindows();
-    zoomExtentsAllSubWindows();
-}
-
-/* Tile the MDI windows. */
-void MdiArea::tile()
-{
-    tileSubWindows();
-    zoomExtentsAllSubWindows();
 }
 
 /* Zoom extents all subwindows. */
@@ -2555,123 +2326,6 @@ MdiWindow::sizeHint()
 {
     debug_message("MdiWindow sizeHint()");
     return QSize(450, 300);
-}
-
-/* CurrentLayerChanged. */
-void
-MdiWindow::currentLayerChanged(QString layer)
-{
-    curLayer = layer;
-}
-
-/* currentColorChanged. */
-void MdiWindow::currentColorChanged(const QRgb& color)
-{
-    curColor = color;
-}
-
-/* currentLinetypeChanged. */
-void MdiWindow::currentLinetypeChanged(QString type)
-{
-    curLineType = type;
-}
-
-/* currentLineweightChanged */
-void
-MdiWindow::currentLineweightChanged(QString weight)
-{
-    curLineWeight = weight;
-}
-
-/* . */
-void
-MdiWindow::updateColorLinetypeLineweight()
-{
-}
-
-/* Pass the delete pressed event to the gview. */
-void
-MdiWindow::deletePressed()
-{
-    gview->deletePressed();
-}
-
-/* Pass the escape pressed event to the gview. */
-void
-MdiWindow::escapePressed()
-{
-    gview->escapePressed();
-}
-
-/* . */
-void
-MdiWindow::showViewScrollBars(bool val)
-{
-    gview->showScrollBars(val);
-}
-
-/* . */
-void
-MdiWindow::setViewCrossHairColor(QRgb color)
-{
-    gview->setCrossHairColor(color);
-}
-
-/* . */
-void
-MdiWindow::setViewBackgroundColor(QRgb color)
-{
-    gview->setBackgroundColor(color);
-}
-
-/* . */
-void
-MdiWindow::setViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
-{
-    gview->setSelectBoxColors(colorL, fillL, colorR, fillR, alpha);
-}
-
-/* . */
-void
-MdiWindow::setViewGridColor(QRgb color)
-{
-    gview->setGridColor(color);
-}
-
-/* . */
-void
-MdiWindow::setViewRulerColor(QRgb color)
-{
-    gview->setRulerColor(color);
-}
-
-/* . */
-void
-MdiWindow::promptHistoryAppended(QString txt)
-{
-    promptHistory.append("<br/>" + txt);
-}
-
-/* . */
-void
-MdiWindow::logPromptInput(QString txt)
-{
-    promptInputList.push_back(txt);
-    promptInputNum = promptInputList.size();
-}
-
-/* . */
-void
-MdiWindow::promptInputPrevious()
-{
-    promptInputPrevNext(true);
-}
-
-/* . */
-void
-MdiWindow::promptInputNext()
-{
-    promptInputPrevNext(false);
 }
 
 /* promptInputPrevNext. */

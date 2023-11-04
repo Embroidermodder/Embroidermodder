@@ -2567,13 +2567,13 @@ saveObjectAsStitches(int objType, View *view, Geometry *obj)
         break;
     }
 
-	// TODO: proper layer/lineType/lineWeight
+    // TODO: proper layer/lineType/lineWeight
     case OBJ_TYPE_LINE: {
         toPolyline(view, position, obj->objectSavePath(), "0", color, "CONTINUOUS", "BYLAYER");
         break;
     }
 
-	// TODO: proper layer/lineType/lineWeight
+    // TODO: proper layer/lineType/lineWeight
     case OBJ_TYPE_POINT: {
         toPolyline(view, position, obj->objectSavePath(), "0", color, "CONTINUOUS", "BYLAYER");
         break;
@@ -3180,48 +3180,48 @@ Geometry::script_main(void)
         break;
     }
 
-	ellipse_init_script = [
-		init();
-		clear_selection();
-		# FIX SELECTING CURRENT OBJECT
-		set mode ELLIPSE_MODE_MAJORDIAMETER_MINORRADIUS;
-		height = 1.0;
-		width = 2.0;
-		rotation = 0.0;
-		"set-prompt-prefix-tr Specify first axis start point or [Center]: "
-	]
+    ellipse_init_script = [
+        init();
+        clear_selection();
+        # FIX SELECTING CURRENT OBJECT
+        set mode ELLIPSE_MODE_MAJORDIAMETER_MINORRADIUS;
+        height = 1.0;
+        width = 2.0;
+        rotation = 0.0;
+        "set-prompt-prefix-tr Specify first axis start point or [Center]: "
+    ]
 
-	polyline_init_script = [
-		init();
-		clear_selection();
-		# FIX SELECTING CURRENT OBJECT
-		firstRun = true;
-		first_x = 0.0f;
-		first.y = 0.0f;
-		prev_x = 0.0f;
-		prev_y = 0.0f;
-		num 0;
-		set-prompt-prefix(tr("Specify first point: "));
+    polyline_init_script = [
+        init();
+        clear_selection();
+        # FIX SELECTING CURRENT OBJECT
+        firstRun = true;
+        first_x = 0.0f;
+        first.y = 0.0f;
+        prev_x = 0.0f;
+        prev_y = 0.0f;
+        num 0;
+        set-prompt-prefix(tr("Specify first point: "));
         break;
-	}
+    }
 
-	snowflake_init_script = [
-		init();
-		clear_selection();
-		numPoints = 2048;
-		minPoitns = 64;
-		"maxPoints = 8192;
-		"center.x = 0.0f;
-		"center.y = 0.0f;
-		"scale.x = 0.04f;
-		"scale.y = 0.04f;
-		"mode = SNOWFLAKE_MODE_NUM_POINTS;
-		"add-rubber POLYGON;
-		"set-rubber-mode POLYGON;
-		"update-snowflake;
-		"spare-rubber POLYGON;
-		"end"
-	]
+    snowflake_init_script = [
+        init();
+        clear_selection();
+        numPoints = 2048;
+        minPoitns = 64;
+        "maxPoints = 8192;
+        "center.x = 0.0f;
+        "center.y = 0.0f;
+        "scale.x = 0.04f;
+        "scale.y = 0.04f;
+        "mode = SNOWFLAKE_MODE_NUM_POINTS;
+        "add-rubber POLYGON;
+        "set-rubber-mode POLYGON;
+        "update-snowflake;
+        "spare-rubber POLYGON;
+        "end"
+    ]
 
     default: {
         break;
