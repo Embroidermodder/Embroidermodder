@@ -50,6 +50,7 @@ qt_add_executable(embroidermodder2 WIN32 MACOSX_BUNDLE
     ${CMAKE_SOURCE_DIR}/src/core.h
 
     ${CMAKE_SOURCE_DIR}/src/core.c
+    ${CMAKE_SOURCE_DIR}/src/object_core.c
     ${CMAKE_SOURCE_DIR}/src/settings.c
     ${CMAKE_SOURCE_DIR}/src/action_table.c
     ${CMAKE_SOURCE_DIR}/src/editor_table.c

@@ -801,6 +801,12 @@ typedef struct Setting_ {
     int type;
 } Setting;
 
+/*
+ */
+typedef struct GeometryData_ {
+    EmbVector vector;
+} GeometryData;
+
 /* To allow us to resize general C arrays when necessary.
  * Note that for char arrays, the buffer is a normal c-style string.
  */
@@ -819,6 +825,14 @@ typedef struct ToolbarData_ {
     int32_t entries[MAX_TOOLBAR_LENGTH];
     char horizontal;
 } ToolbarData;
+
+/*
+ */
+typedef struct MenuData_ {
+    int32_t id;
+    const char key[MAX_STRING_LENGTH];
+    int32_t entries[MAX_TOOLBAR_LENGTH];
+} MenuData;
 
 /*
  *
@@ -866,6 +880,19 @@ int tokenize(char **argv, char *str, const char delim);
 /* Global memory. */
 extern Node *root;
 
+/* Geometry UI Processors */
+GeometryData *geometry_init(int type);
+void geometry_free(GeometryData *g);
+void geometry_left_click(GeometryData *geometry, EmbVector v);
+void geometry_prompt(
+    GeometryData *geometry,
+    char input[MAX_STRING_LENGTH],
+    char output[MAX_STRING_LENGTH]);
+void geometry_context(
+    void *m,
+    GeometryData *geometry,
+    char output[MAX_STRING_LENGTH]);
+
 /* The Settings System
  *
  * Rather than pollute the global namespace, we collect together all the global
@@ -899,6 +926,7 @@ extern const char *button_list[];
 extern const char *tips[];
 
 /* Menus data */
+extern MenuData menu_data[MAX_MENUS];
 extern int32_t menubar_order[];
 extern int32_t file_menu[];
 extern int32_t edit_menu[];

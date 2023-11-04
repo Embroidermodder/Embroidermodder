@@ -179,6 +179,8 @@ int32_t side_toolbar_layout[] = {
     TOOLBAR_END
 };
 
+MenuData menu_data[MAX_MENUS];
+
 int32_t file_menu[] = {
     ACTION_NEW,
     MENU_SEPERATOR,

@@ -19,6 +19,7 @@ SOURCES += \
     extern/libembroidery/src/encoding.c \
     extern/libembroidery/src/fill.c \
     extern/libembroidery/src/formats.c \
+    extern/libembroidery/src/object_core.c \
     extern/libembroidery/src/formats/format_100.c \
     extern/libembroidery/src/formats/format_10o.c \
     extern/libembroidery/src/formats/format_art.c \
