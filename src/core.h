@@ -29,43 +29,26 @@
 #define MAX_TOOLBAR_LENGTH                      30
 #define MAX_MENU_LENGTH                         30
 #define MAX_MENUBAR_LENGTH                      10
-#define MAX_TOOLBARS                            10
-#define MAX_MENUS                               10
+#define MAX_TOOLBARS                            40
+#define MAX_MENUS                               40
 #define VECTOR_CHUNK_SIZE                       50
+#define MAX_ACTIONS                            256
+#define MAX_ICONS                              256
+#define MAX_SETTINGS                           256
+#define MAX_POSITIONS                           26
+#define MAX_EDITORS                            300
 
 /* Node types. */
-#define NULL_TYPE                                0
-#define STRING_TYPE                              1
-#define STRING_LIST_TYPE                         2
-#define REAL_TYPE                                3
-#define INT_TYPE                                 4
-#define BOOL_TYPE                                5
-#define FUNCTION_TYPE                            6
-#define VECTOR_TYPE                              7
-#define GROUP_BOX_TYPE                           8
-#define CHECK_BOX_TYPE                           9
-#define SPIN_BOX_TYPE                           10
-#define DOUBLE_SPIN_BOX_TYPE                    11
-#define LABEL_TYPE                              12
-#define COMBO_BOX_TYPE                          13
-#define LINE_EDIT_TYPE                          14
-#define TOOL_BUTTON_TYPE                        15
-#define DICTIONARY_TYPE                         16
-#define QACTION_TYPE                            17
-#define TOOLBAR_TYPE                            18
-#define MODE_TYPE                               19
-#define UNKNOWN_TYPE                            20
-
-/* CNode types. */
-#define CNODE_TYPE_NULL                          0
-#define CNODE_TYPE_STRING                        1
-#define CNODE_TYPE_REAL                          2
-#define CNODE_TYPE_INT                           3
-#define CNODE_TYPE_BOOL                          4
-#define CNODE_TYPE_FUNCTION                      5
-#define CNODE_TYPE_DICTIONARY                    6
-#define CNODE_TYPE_ARRAY                         7
-#define CNODE_TYPE_UNKNOWN                       8
+#define NODE_NULL                                0
+#define NODE_STRING                              1
+#define NODE_REAL                                2
+#define NODE_INT                                 3
+#define NODE_BOOL                                4
+#define NODE_FUNCTION                            5
+#define NODE_DICTIONARY                          6
+#define NODE_ARRAY                               7
+#define NODE_VECTOR                              8
+#define NODE_UNKNOWN                             9
 
 /* Actions.
  * These identifiers are subject to change since they are in alphabetical order
@@ -108,7 +91,7 @@
 #define ACTION_COPY_SELECTED                    34
 #define ACTION_CUT                              35
 #define ACTION_CUT_SELECTED                     36
-#define ACTION_DAY_VISION                       37
+#define ACTION_DAY                              37
 #define ACTION_DEBUG                            38
 #define ACTION_DELETE_SELECTED                  39
 #define ACTION_DESIGN_DETAILS                   40
@@ -124,7 +107,7 @@
 #define ACTION_MOUSE_Y                          50
 #define ACTION_MOVE_SELECTED                    51
 #define ACTION_NEW                              52
-#define ACTION_NIGHT_VISION                     53
+#define ACTION_NIGHT                            53
 #define ACTION_NUM_SELECTED                     54
 #define ACTION_OPEN                             55
 #define ACTION_PAN                              56
@@ -138,7 +121,7 @@
 #define ACTION_PRINT_AREA                       64
 #define ACTION_QSNAP_X                          65
 #define ACTION_QSNAP_Y                          66
-#define ACTION_QUIT                             67
+#define ACTION_EXIT                             67
 #define ACTION_REDO                             68
 #define ACTION_ROTATE_SELECTED                  69
 #define ACTION_RUBBER                           70
@@ -161,11 +144,80 @@
 #define ACTION_VERSION                          87
 #define ACTION_VULCANIZE                        88
 #define ACTION_WHATS_THIS                       89
-#define ACTION_WINDOW                           90
-#define ACTION_ZOOM                             91
-#define N_ACTIONS                               92
-
-#define MAX_ACTIONS                            256
+#define ACTION_WINDOW_CLOSE                     90
+#define ACTION_WINDOW_CLOSE_ALL                 91
+#define ACTION_WINDOW_TILE                      92
+#define ACTION_WINDOW_CASCADE                   93
+#define ACTION_WINDOW_NEXT                      94
+#define ACTION_WINDOW_PREVIOUS                  95
+#define ACTION_ZOOM                             96
+#define ACTION_ZOOM_IN                          97
+#define ACTION_TEST                             98
+#define ACTION_SLEEP                            99
+#define ACTION_LAYER_EDITOR                    100
+#define ACTION_MAKE_LAYER_CURRENT              101
+#define ACTION_TEXT_BOLD                       102
+#define ACTION_TEXT_ITALIC                     103
+#define ACTION_TEXT_UNDERLINE                  104
+#define ACTION_TEXT_STRIKEOUT                  105
+#define ACTION_TEXT_OVERLINE                   106
+#define ACTION_LAYER_PREVIOUS                  107
+#define ACTION_ICON16                          108
+#define ACTION_ICON24                          109
+#define ACTION_ICON32                          110
+#define ACTION_ICON48                          111
+#define ACTION_ICON64                          112
+#define ACTION_ICON128                         113
+#define ACTION_SAVE                            114
+#define ACTION_SAVEAS                          115
+#define ACTION_PAN_REAL_TIME                   116
+#define ACTION_PAN_POINT                       117
+#define ACTION_PAN_LEFT                        118
+#define ACTION_PAN_RIGHT                       119
+#define ACTION_PAN_UP                          120
+#define ACTION_PAN_DOWN                        121
+#define ACTION_ZOOM_REAL_TIME                  122
+#define ACTION_ZOOM_PREVIOUS                   123
+#define ACTION_ZOOM_WINDOW                     124
+#define ACTION_ZOOM_DYNAMIC                    125
+#define ACTION_ZOOM_OUT                        126
+#define ACTION_ZOOM_EXTENTS                    127
+#define ACTION_LAYERS                          128
+#define ACTION_LAYER_SELECTOR                  129
+#define ACTION_TREBLECLEF                      130
+#define ACTION_COLOR_SELECTOR                  131
+#define ACTION_LINE_TYPE_SELECTOR              132
+#define ACTION_LINE_WEIGHT_SELECTOR            133
+#define ACTION_ZOOM_SCALE                      134
+#define ACTION_ZOOM_CENTER                     135
+#define ACTION_HIDE_ALL_LAYERS                 136
+#define ACTION_ZOOM_SELECTED                   137
+#define ACTION_ZOOM_ALL                        138
+#define ACTION_ADD_HEART                       139
+#define ACTION_ADD_SINGLE_LINE_TEXT            140
+#define ACTION_SHOW_ALL_LAYERS                 141
+#define ACTION_FREEZE_ALL_LAYERS               142
+#define ACTION_THAW_ALL_LAYERS                 143
+#define ACTION_LOCK_ALL_LAYERS                 144
+#define ACTION_UNLOCK_ALL_LAYERS               145
+#define ACTION_ADD_DOLPHIN                     146
+#define ACTION_ADD_DISTANCE                    147
+#define ACTION_LOCATE_POINT                    148
+#define ACTION_QUICKSELECT                     149
+#define ACTION_SPELLCHECK                      150
+#define ACTION_DISTANCE                        151
+#define ACTION_MOVE                            152
+#define ACTION_QUICKLEADER                     153
+#define ACTION_RGB                             154
+#define ACTION_ROTATE                          155
+#define ACTION_SANDBOX                         156
+#define ACTION_ADD_SNOWFLAKE                   157
+#define ACTION_ADD_STAR                        158
+#define ACTION_DELETE                          159
+#define ACTION_SCALE                           160
+#define ACTION_SINGLE_LINE_TEXT                161
+#define ACTION_SYSWINDOWS                      162
+#define N_ACTIONS                              163
 
 /* OBJ_LTYPE_VALUES */
 // CAD Linetypes
@@ -344,27 +396,24 @@
 #define ARC_END_ANGLE                            5
 #define ARC_DIAMETER                             6
 #define ARC_AREA                                 7
+#define ARC_CIRCUMFERENCE                        9
+#define ARC_POSITION                            10
+#define OBJECT_TEXT                             12
+#define OBJECT_TEXT_FONT                        13
+#define OBJECT_TEXT_JUSTIFY                     14
+#define OBJECT_TEXT_SIZE                        15
+#define OBJECT_TEXT_BOLD                        16
+#define OBJECT_TEXT_ITALIC                      17
+#define OBJECT_TEXT_UNDERLINE                   18
+#define OBJECT_TEXT_STRIKEOUT                   19
+#define OBJECT_TEXT_OVERLINE                    20
+#define OBJECT_TEXT_BACKWARD                    21
+#define OBJECT_TEXT_UPSIDEDOWN                  22
+#define OBJECT_RADIUS_MAJOR                     23
+#define OBJECT_RADIUS_MINOR                     24
+#define OBJECT_DIAMETER_MAJOR                   25
+#define OBJECT_DIAMETER_MINOR                   26
 
-/*
-#define ARC_CIRCUMFERENCE                    9
-#define ARC_POSITION                        10
-#define OBJECT_TEXT                        12
-#define OBJECT_TEXT_FONT                    13
-#define OBJECT_TextJustify(QString justify);
-#define OBJECT_TextSize(EmbReal size);
-#define OBJECT_TextStyle(bool bold, bool italic, bool under, bool strike, bool over);
-#define OBJECT_TextBold(bool val);
-#define OBJECT_TextItalic(bool val);
-#define OBJECT_TextUnderline(bool val);
-#define OBJECT_TextStrikeOut(bool val);
-#define OBJECT_TextOverline(bool val);
-#define OBJECT_TextBackward(bool val);
-#define OBJECT_TextUpsideDown(bool val);
-#define OBJECT_RadiusMajor(EmbReal radius);
-#define OBJECT_RadiusMinor(EmbReal radius);
-#define OBJECT_DiameterMajor(EmbReal diameter);
-#define OBJECT_DiameterMinor(EmbReal diameter);
-*/
 
 #define N_RUBBER_MODES                          40
 
@@ -373,6 +422,292 @@
 #define REALS_PER_BASE_OBJECT                  100
 #define BOOLS_PER_BASE_OBJECT                  100
 #define STRINGS_PER_BASE_OBJECT                 10
+
+/* User Interface Mode */
+#define MODE_ARC                                 0
+#define MODE_CIRCLE_1P_RAD                       1
+#define MODE_CIRCLE_1P_DIA                       2
+#define MODE_CIRCLE_2P                           3
+#define MODE_CIRCLE_3P                           4
+#define MODE_CIRCLE_TTR                          5
+#define MODE_CIRCLE_TTR_SET_POINT_2              6
+#define MODE_CIRCLE_TTR_SET_POINT_3              7
+#define MODE_ELLIPSE                             8
+#define MODE_RECTANGLE                           9
+#define MODE_STAR_NUM_POINTS                    10
+#define MODE_STAR_CENTER_PT                     11
+#define MODE_STAR_RAD_INNER                     12
+#define MODE_STAR_RAD_OUTER                     13
+#define MODE_POLYGON_NUM_SIDES                  14
+#define MODE_POLYGON_POLYTYPE                   15
+#define MODE_POLYGON_DISTANCE                   16
+#define MODE_POLYGON_CENTER_PT                  17
+#define MODE_POLYGON_INSCRIBE                   18
+#define MODE_POLYGON_CIRCUMSCRIBE               19
+#define MODE_POLYGON_SIDE_LEN                   20
+
+/* Object Properties: packed into the uint64_t flags variable. */
+#define PROP_BOLD                           0x0001
+#define PROP_ITALIC                         0x0002
+#define PROP_UNDERLINE                      0x0004
+#define PROP_STRIKEOUT                      0x0008
+#define PROP_OVERLINE                       0x0010
+#define PROP_BACKWARD                       0x0020
+#define PROP_UPSIDEDOWN                     0x0040
+#define PROP_CURVED                         0x0080
+#define PROP_FILLED                         0x0100
+
+/* Groupboxen */
+#define GB_GENERAL                               0
+#define GB_GROUPBOX_ARC                          1
+#define GB_MISC_ARC                              2
+#define GB_GEOM_BLOCK                            3
+#define GB_GEOM_CIRCLE                           4
+#define GB_GEOM_DIM_ALIGNED                      5
+#define GB_GEOM_DIM_ANGULAR                      6
+#define GB_GEOM_DIM_ARC_LENGTH                   7
+#define GB_GEOM_DIM_DIAMETER                     8
+#define GB_GEOM_DIM_LEADER                       9
+#define GB_GEOM_DIM_LINEAR                      10
+#define GB_GEOM_DIM_ORDINATE                    11
+#define GB_GEOM_DIM_RADIUS                      12
+#define GB_GEOM_ELLIPSE                         13
+#define GB_GEOM_IMAGE                           14
+#define GB_MISC_IMAGE                           15
+#define GB_INFINITE_LINE                        16
+#define GB_GEOM_LINE                            17
+#define GB_GEOM_PATH                            18
+#define GB_MISC_PATH                            19
+#define GB_GEOM_POINT                           20
+#define GB_GEOM_POLYGON                         21
+#define GB_GEOM_POLYLINE                        22
+#define GB_MISC_POLYLINE                        23
+#define GB_GEOM_RAY                             24
+#define GB_GEOM_RECTANGLE                       25
+#define GB_GEOM_TEXT_MULTI                      26
+#define GB_TEXT_TEXT_SINGLE                     27
+#define GB_GEOM_TEXT_SINGLE                     28
+#define GB_MISC_TEXT_SINGLE                     29
+#define GB_TOTAL                                30
+
+/* Settings indices. */
+#define ST_LANGUAGE                              0
+#define ST_ICON_THEME                            1
+#define ST_ICON_SIZE                             2
+#define ST_MDI_USE_LOGO                          3
+#define ST_MDI_USE_TEXTURE                       4
+#define ST_MDI_USE_COLOR                         5
+#define ST_MDI_LOGO                              6
+#define ST_MDI_TEXTURE                           7
+#define ST_MDI_COLOR                             8
+#define ST_TIP_OF_THE_DAY                        9
+#define ST_CURRENT_TIP                          10
+#define ST_SYSTEM_HELP_BROWSER                  11
+
+/* Window settings. */
+#define ST_WINDOW_POS_X                         12
+#define ST_WINDOW_POS_Y                         13
+#define ST_WINDOW_SIZE_X                        14
+#define ST_WINDOW_SIZE_Y                        15
+
+/* Display settings. */
+#define ST_USE_OPENGL                           16
+#define ST_ANTI_ALIAS                           17
+#define ST_TEXT_ANTI_ALIAS                      18
+#define ST_SMOOTH_PIXMAP                        19
+#define ST_HQ_ANTI_ALIAS                        20
+#define ST_NON_COSMETIC                         21
+#define ST_SHOW_SCROLLBARS                      22
+#define ST_SCROLLBAR_WIDGET_NUM                 23
+#define ST_CROSSHAIR_COLOR                      24
+#define ST_BG_COLOR                             25
+#define ST_SELECTBOX_LEFT_COLOR                 26
+#define ST_SELECTBOX_LEFT_FILL                  27
+#define ST_SELECTBOX_RIGHT_COLOR                28
+#define ST_SELECTBOX_RIGHT_FILL                 29
+#define ST_SELECTBOX_ALPHA                      30
+#define ST_ZOOMSCALE_IN                         31
+#define ST_ZOOMSCALE_OUT                        32
+#define ST_CROSSHAIR_PERCENT                    33
+#define ST_DISPLAY_UNITS                        34
+
+/* Prompt settings. */
+#define ST_PROMPT_TEXT_COLOR                    35
+#define ST_PROMPT_BG_COLOR                      36
+#define ST_PROMPT_FONT_FAMILY                   37
+#define ST_PROMPT_FONT_STYLE                    38
+#define ST_PROMPT_FONT_SIZE                     39
+#define ST_SAVE_HISTORY                         40
+#define ST_HTML_OUTPUT                          41
+#define ST_HISTORY_FILE                         42
+
+/* Open/save settings. */
+#define ST_OPENSAVE_FILTER                      43
+#define ST_OPENSAVE_FORMAT                      44
+#define ST_OPEN_THUMBNAIL                       45
+#define ST_SAVE_FORMAT                          46
+#define ST_SAVE_THUMBNAIL                       47
+#define ST_RECENT_MAX                           48
+#define ST_RECENT_FILES                         49
+#define ST_RECENT_DIRECTORY                     50
+#define ST_TRIM_NUM_JUMPS                       51
+
+/* Print settings. */
+#define ST_DEFAULT_PRINTER                      52
+#define ST_USE_LAST_PRINTER                     53
+#define ST_PRINT_DISABLE_BG                     54
+
+/* Grid settings. */
+#define ST_GRID_ON_LOAD                         55
+#define ST_SHOW_ORIGIN                          56
+#define ST_MATCH_GRID_CROSSHAIR                 57
+#define ST_GRID_COLOR                           58
+#define ST_GRID_LOAD_FROM_FILE                  59
+#define ST_GRID_TYPE                            60
+#define ST_GRID_CENTER_ORIGIN                   61
+#define ST_GRID_SIZE_RADIUS                     62
+#define ST_GRID_SPACING_RADIUS                  63
+#define ST_GRID_SPACING_ANGLE                   64
+
+/* Ruler settings. */
+#define ST_RULER_ON_LOAD                        65
+#define ST_RULER_METRIC                         66
+#define ST_RULER_COLOR                          67
+#define ST_RULER_SIZE                           68
+
+/* Quicksnap settings. */
+#define ST_QSNAP_ENABLED                        69
+#define ST_QSNAP_LOCATOR_COLOR                  70
+#define ST_QSNAP_LOCATOR_SIZE                   71
+#define ST_QSNAP_APERTURE_SIZE                  72
+#define ST_QSNAP_ENDPOINT                       73
+#define ST_QSNAP_MIDPOINT                       74
+#define ST_QSNAP_CENTER                         75
+#define ST_QSNAP_NODE                           76
+#define ST_QSNAP_QUADRANT                       77
+#define ST_QSNAP_INTERSECTION                   78
+#define ST_QSNAP_EXTENSION                      79
+#define ST_QSNAP_INSERTION                      80
+#define ST_QSNAP_PERPENDICULAR                  81
+#define ST_QSNAP_TANGENT                        82
+#define ST_QSNAP_NEAREST                        83
+#define ST_QSNAP_APPARENT                       84
+#define ST_QSNAP_PARALLEL                       85
+
+/* Lineweight settings. */
+#define ST_LWT_SHOW                             86
+#define ST_LWT_REAL                             87
+#define ST_LWT_DEFAULT                          88
+
+/* Selection settings. */
+#define ST_SELECTION_PICK_FIRST                 89
+#define ST_SELECTION_PICK_ADD                   90
+#define ST_SELECTION_PICK_DRAG                  91
+#define ST_SELECTION_COOLGRIP_COLOR             92
+#define ST_SELECTION_HOTGRIP_COLOR              93
+#define ST_SELECTION_GRIP_SIZE                  94
+#define ST_SELECTION_PICKBOX_SIZE               95
+
+/* Text settings. */
+#define ST_TEXT_FONT                            96
+#define ST_TEXT_SIZE                            97
+#define ST_TEXT_ANGLE                           98
+#define ST_TEXT_BOLD                            99
+#define ST_TEXT_ITALIC                         100
+#define ST_TEXT_UNDERLINE                      101
+#define ST_TEXT_STRIKEOUT                      102
+#define ST_TEXT_OVERLINE                       103
+
+#define ST_TICK_DEPTH                          104
+#define ST_MAJOR_TICK_SEPERATION               105
+#define ST_NEEDLE_SPEED                        106
+#define ST_STITCH_TIME                         107
+
+#define ST_GRID_CENTER_X                       108
+#define ST_GRID_CENTER_Y                       109
+#define ST_GRID_SIZE_X                         110
+#define ST_GRID_SIZE_Y                         111
+#define ST_GRID_SPACING_X                      112
+#define ST_GRID_SPACING_Y                      113
+
+#define SETTINGS_TOTAL                         114
+
+/* Line editors */
+#define LE_ARC_CENTER_X                          0
+#define LE_ARC_CENTER_Y                          1
+#define LE_ARC_RADIUS                            2
+#define LE_ARC_START_ANGLE                       3
+#define LE_ARC_END_ANGLE                         4
+#define LE_ARC_START_X                           5
+#define LE_ARC_START_Y                           6
+#define LE_ARC_END_X                             7
+#define LE_ARC_END_Y                             8
+#define LE_ARC_AREA                              9
+#define LE_ARC_LENGTH                           10
+#define LE_ARC_CHORD                            11
+#define LE_ARC_INC_ANGLE                        12
+#define LE_ARC_CLOCKWISE                        13
+
+/* View state */
+#define VIEW_STATE_GRID                       0x01
+#define VIEW_STATE_ORTHO                      0x02
+#define VIEW_STATE_POLAR                      0x04
+#define VIEW_STATE_ISO                        0x08
+#define VIEW_STATE_QSNAP                      0x10
+#define VIEW_STATE_QTRACK                     0x20
+#define VIEW_STATE_LWT                        0x40
+#define VIEW_STATE_REAL                       0x80
+#define VIEW_STATE_METRIC                    0x100
+#define VIEW_STATE_SIMULATE                  0x200
+#define VIEW_STATE_SNAP                      0x400
+#define VIEW_STATE_RULER                     0x800
+
+/* Preview mode */
+#define PREVIEW_MODE_NULL                        0
+#define PREVIEW_MODE_MOVE                        1
+#define PREVIEW_MODE_ROTATE                      2
+#define PREVIEW_MODE_SCALE                       3
+
+/* Preview clone */
+#define PREVIEW_CLONE_NULL                       0
+#define PREVIEW_CLONE_RUBBER                     1
+#define PREVIEW_CLONE_SELECTED                   2
+
+/* Menus */
+#define MENU_ICON                               -4
+#define MENU_SUBMENU                            -3
+#define MENU_SEPERATOR                          -2
+#define MENU_END                                -1
+#define MENU_FILE                                0
+#define MENU_EDIT                                1
+#define MENU_PAN                                 2
+#define MENU_ZOOM                                3
+#define MENU_VIEW                                4
+#define MENU_SETTINGS                            5
+#define MENU_WINDOW                              6
+#define MENU_HELP                                7
+#define MENU_DRAW                                8
+#define MENU_RECENT                              9
+#define TOTAL_MENUS                             10
+
+/* Toolbars */
+#define TOOLBAR_SEPERATOR                       -2
+#define TOOLBAR_END                             -1
+#define TOOLBAR_FILE                             0
+#define TOOLBAR_EDIT                             1
+#define TOOLBAR_PAN                              2
+#define TOOLBAR_ZOOM                             3
+#define TOOLBAR_VIEW                             4
+#define TOOLBAR_SETTINGS                         5
+#define TOOLBAR_WINDOW                           6
+#define TOOLBAR_HELP                             7
+#define TOOLBAR_DRAW                             8
+#define TOOLBAR_ICON                             9
+#define TOOLBAR_LAYER                           10
+#define TOOLBAR_PROPERTIES                      11
+#define TOOLBAR_TEXT                            12
+#define TOOLBAR_PROMPT                          13
+#define TOTAL_TOOLBARS                          14
 
 #ifdef __cplusplus
 extern "C" {
@@ -384,24 +719,93 @@ extern "C" {
 #include <time.h>
 #include <inttypes.h>
 #include <stdarg.h>
+#include <stdbool.h>
+#include <assert.h>
+#include <errno.h>
 
 /* We assume here that all free systems and MacOS are POSIX compliant. */
-#if !defined(WIN32)
+#if defined(WIN32)
+#include <windows.h>
+#else
+#include <unistd.h>
 #include <sys/utsname.h>
 #endif
 
-#include <errno.h>
-
 #include "../extern/libembroidery/src/embroidery.h"
-#include "../extern/tomlc99/toml.h"
 
+/*
+ * Expected Keys for actions
+ * String icon
+ *      The stub used for finding the icon image file.
+ * String command
+ *      The command sent to the actuator.
+ * String tooltip
+ *      The label in the menus and the message that appears when
+ *      you hover over an icon.
+ * String statustip
+ *       The message that appears at the bottom of the .
+ * String shortcut
+ *       The keyboard shortcut for this action.
+ * StringList aliases
+ *       A list of all alternative commands, if empty only
+ *       the icon sttring will be .
+ * StringList script
+ *      If this is a compound action this will be a
+ *      list of commands or it can allow for command line
+ *      style command aliases. For example: icon16 would become
+ *      the string list {"iconResize 16"}.
+ */
 typedef struct ActionData_ {
-    char type[MAX_STRING_LENGTH];
+    int32_t id;
     char icon[MAX_STRING_LENGTH];
     char command[MAX_STRING_LENGTH];
     char tooltip[MAX_STRING_LENGTH];
     char statustip[MAX_STRING_LENGTH];
+    char shortcut[MAX_STRING_LENGTH];
+    int32_t min_args;
+    int32_t gview;
+    int32_t gscene;
+    int32_t undo;
 } ActionData;
+
+/*
+ */
+typedef struct LineEditData_ {
+    int32_t id;
+    char groupbox[MAX_STRING_LENGTH];
+    char key[MAX_STRING_LENGTH];
+    char icon[MAX_STRING_LENGTH];
+    char label[MAX_STRING_LENGTH];
+    char type[MAX_STRING_LENGTH];
+    char map_signal[MAX_STRING_LENGTH];
+} LineEditData;
+
+/*
+ */
+typedef struct SpinBoxEditData_ {
+    int32_t id;
+    char groupbox[MAX_STRING_LENGTH];
+    char key[MAX_STRING_LENGTH];
+    char icon[MAX_STRING_LENGTH];
+    char label[MAX_STRING_LENGTH];
+    char type[MAX_STRING_LENGTH];
+    char map_signal[MAX_STRING_LENGTH];
+} SpinBoxEditData;
+
+/*
+ */
+typedef struct Setting_ {
+    int32_t id;
+    char key[MAX_STRING_LENGTH];
+    char value[MAX_STRING_LENGTH];
+    int type;
+} Setting;
+
+/*
+ */
+typedef struct GeometryData_ {
+    EmbVector vector;
+} GeometryData;
 
 /* To allow us to resize general C arrays when necessary.
  * Note that for char arrays, the buffer is a normal c-style string.
@@ -414,20 +818,41 @@ typedef struct Cvector_ {
 } Cvector;
 
 /*
+ */
+typedef struct ToolbarData_ {
+    int32_t id;
+    const char key[MAX_STRING_LENGTH];
+    int32_t entries[MAX_TOOLBAR_LENGTH];
+    char horizontal;
+} ToolbarData;
+
+/*
+ */
+typedef struct MenuData_ {
+    int32_t id;
+    const char key[MAX_STRING_LENGTH];
+    int32_t entries[MAX_TOOLBAR_LENGTH];
+} MenuData;
+
+/*
  *
  */
-struct CNode_ {
-    struct CNode_ **leaves;
+struct Node_ {
+    struct Node_ **leaves;
     int32_t n_leaves;
     int32_t max_leaves;
     char key[MAX_STRING_LENGTH];
     char data[MAX_STRING_LENGTH];
+    char s[MAX_STRING_LENGTH];
+    int32_t i;
+    EmbReal r;
     Cvector *vec;
     int32_t type;
 };
 
-typedef struct CNode_ CNode;
+typedef struct Node_ Node;
 
+/* Memory management. */
 Cvector *cvector_create(size_t element_size);
 void cvector_append(Cvector *a, Cvector *b);
 void cvector_add_cstr(Cvector *a, char *b);
@@ -435,56 +860,93 @@ Cvector *cvector_copy(Cvector *a);
 void cvector_free(Cvector *vector);
 int string_array_length(const char *list[]);
 
+Node *create_node(int type);
+int add_leaf(Node *branch, Node *leaf);
+void print_tree(Node *branch, int indent);
+Node *find_node(Node *branch, char key[MAX_STRING_LENGTH]);
+void free_node(Node *branch);
+Node *create_and_add_leaf(Node *parent, char *key, char *value);
+int insert_node(Node *branch, char key[MAX_STRING_LENGTH], Node *node);
+
+/* Utility Functions. */
 unsigned char validRGB(int r, int g, int b);
+int str_contains(char *s, char c);
+EmbReal fourier_series(EmbReal arg, EmbReal *terms, int n_terms);
+bool willUnderflowInt32(int64_t a, int64_t b);
+bool willOverflowInt32(int64_t a, int64_t b);
+int roundToMultiple(bool roundUp, int numToRound, int multiple);
+int tokenize(char **argv, char *str, const char delim);
 
-CNode *create_node(int type);
-int add_leaf(CNode *branch, CNode *leaf);
-void print_tree(CNode *branch, int indent);
-CNode *find_node(CNode *branch, char key[MAX_STRING_LENGTH]);
-void free_node(CNode *branch);
-CNode *create_and_add_leaf(CNode *parent, char *key, char *value);
-int insert_node(CNode *branch, char key[MAX_STRING_LENGTH], CNode *node);
+/* Global memory. */
+extern Node *root;
 
-extern CNode *root;
-extern const ActionData action_table[];
+/* Geometry UI Processors */
+GeometryData *geometry_init(int type);
+void geometry_free(GeometryData *g);
+void geometry_left_click(GeometryData *geometry, EmbVector v);
+void geometry_prompt(
+    GeometryData *geometry,
+    char input[MAX_STRING_LENGTH],
+    char output[MAX_STRING_LENGTH]);
+void geometry_context(
+    void *m,
+    GeometryData *geometry,
+    char output[MAX_STRING_LENGTH]);
+
+/* The Settings System
+ *
+ * Rather than pollute the global namespace, we collect together all the global
+ * settings into a structure that stores them. This also allows us to create a
+ * complete copy of the settings for the purpose of restoring them if the user
+ * cancels out of the Settings Dialog.
+ */
+extern const char *settings_labels[];
+extern Node settings[SETTINGS_TOTAL], dialog[SETTINGS_TOTAL],
+    preview[SETTINGS_TOTAL], accept_[SETTINGS_TOTAL];
+
+extern const ActionData action_table[MAX_ACTIONS];
+extern const LineEditData all_line_editors[MAX_EDITORS];
+extern const SpinBoxEditData all_spinbox_editors[MAX_EDITORS];
+extern Setting settings_data[];
+
+extern const char *version;
 extern const char *usage_msg;
-
-extern const char *toolbar_list[];
-extern const char *menubar_order[];
-extern const char *top_toolbar_layout[];
-extern const char *bottom_toolbar_layout[];
-extern const char *side_toolbar_layout[];
-extern const char *file_menu[];
-extern const char *edit_menu[];
-extern const char *pan_menu[];
-extern const char *zoom_menu[];
-extern const char *view_menu[];
-extern const char *settings_menu[];
-extern const char *window_menu[];
-extern const char *help_menu[];
-extern const char *draw_menu[];
-
-extern const char *file_toolbar[];
-extern const char *edit_toolbar[];
-extern const char *pan_toolbar[];
-extern const char *zoom_toolbar[];
-extern const char *view_toolbar[];
-extern const char *settings_toolbar[];
-extern const char *window_toolbar[];
-extern const char *help_toolbar[];
-extern const char *draw_toolbar[];
-extern const char *icon_toolbar[];
-
+extern const char *extensions[];
+extern int general_props[];
+extern int display_props[];
+extern int prompt_props[];
+extern int quick_snap_props[];
+extern int opensave_props[];
 extern const char *default_prompt_style[];
 extern const char *details_labels[];
 extern const char *command_labels[];
-extern const char *all_line_editors[];
 extern const char *justify_options[];
 extern const char *object_names[];
 extern const char *button_list[];
 extern const char *tips[];
-extern const char *group_box_types[];
 
+/* Menus data */
+extern MenuData menu_data[MAX_MENUS];
+extern int32_t menubar_order[];
+extern int32_t file_menu[];
+extern int32_t edit_menu[];
+extern int32_t pan_menu[];
+extern int32_t zoom_menu[];
+extern int32_t view_menu[];
+extern int32_t settings_menu[];
+extern int32_t window_menu[];
+extern int32_t help_menu[];
+extern int32_t draw_menu[];
+
+/* Toolbar data */
+extern ToolbarData toolbar_data[MAX_TOOLBARS];
+extern int32_t top_toolbar_layout[];
+extern int32_t bottom_toolbar_layout[];
+extern int32_t side_toolbar_layout[];
+
+/* Property editor data */
+extern const char *group_box_data[];
+extern const char *group_box_types[];
 extern const int32_t group_box_ids[];
 
 #ifdef __cplusplus

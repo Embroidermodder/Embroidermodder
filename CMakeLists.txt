@@ -40,37 +40,25 @@ endif()
 add_subdirectory(extern/libembroidery)
 
 qt_add_executable(embroidermodder2 WIN32 MACOSX_BUNDLE
-    ${CMAKE_SOURCE_DIR}/src/cmdprompt.cpp
-    ${CMAKE_SOURCE_DIR}/src/embdetails-dialog.cpp
-    ${CMAKE_SOURCE_DIR}/src/embroidermodder.cpp
-    ${CMAKE_SOURCE_DIR}/src/imagewidget.cpp
     ${CMAKE_SOURCE_DIR}/src/interface.cpp
-    ${CMAKE_SOURCE_DIR}/src/layer-manager.cpp
     ${CMAKE_SOURCE_DIR}/src/mainwindow.cpp
-    ${CMAKE_SOURCE_DIR}/src/mdiarea.cpp
-    ${CMAKE_SOURCE_DIR}/src/mdiwindow.cpp
     ${CMAKE_SOURCE_DIR}/src/objects.cpp
-    ${CMAKE_SOURCE_DIR}/src/preview-dialog.cpp
-    ${CMAKE_SOURCE_DIR}/src/property-editor.cpp
-    ${CMAKE_SOURCE_DIR}/src/selectbox.cpp
     ${CMAKE_SOURCE_DIR}/src/settings-dialog.cpp
-    ${CMAKE_SOURCE_DIR}/src/statusbar.cpp
-    ${CMAKE_SOURCE_DIR}/src/undo-commands.cpp
-    ${CMAKE_SOURCE_DIR}/src/undo-editor.cpp
     ${CMAKE_SOURCE_DIR}/src/view.cpp
 
     ${CMAKE_SOURCE_DIR}/src/embroidermodder.h
+    ${CMAKE_SOURCE_DIR}/src/core.h
 
     ${CMAKE_SOURCE_DIR}/src/core.c
-    ${CMAKE_SOURCE_DIR}/src/objects_data.c
-
-    ${CMAKE_SOURCE_DIR}/extern/tomlc99/toml.c
+    ${CMAKE_SOURCE_DIR}/src/object_core.c
+    ${CMAKE_SOURCE_DIR}/src/settings.c
+    ${CMAKE_SOURCE_DIR}/src/action_table.c
+    ${CMAKE_SOURCE_DIR}/src/editor_table.c
 
     ${CMAKE_SOURCE_DIR}/assets/assets.qrc
 )
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/extern/tomlc99
     ${CMAKE_SOURCE_DIR}/extern/libembroidery/src
     ${CMAKE_SOURCE_DIR}/extern/libembroidery/src/stb
     ${CMAKE_SOURCE_DIR}/extern/libembroidery/src/nanosvg
@@ -85,13 +73,12 @@ target_link_libraries(embroidermodder2 PRIVATE
     embroidery_static)
 
 if (WIN32)
-else(WIN32)
-target_link_libraries(embroidermodder2 PRIVATE m)
-endif()
-
 set_target_properties(embroidermodder2
     WIN32_EXECUTIBLE ON
     MACOS BUNDLE ON)
+else(WIN32)
+target_link_libraries(embroidermodder2 PRIVATE m)
+endif()
 
 install(TARGETS embroidermodder2
     BUNDLE DESTINATION .

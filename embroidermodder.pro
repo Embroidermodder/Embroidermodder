@@ -14,13 +14,12 @@ HEADERS += src/embroidermodder.h \
     extern/tomlc99/toml.h \
     src/core.h
 SOURCES += \
-    src/object_data.c \
-    src/embroidermodder.cpp \
     extern/libembroidery/src/array.c \
     extern/libembroidery/src/compress.c \
     extern/libembroidery/src/encoding.c \
     extern/libembroidery/src/fill.c \
     extern/libembroidery/src/formats.c \
+    extern/libembroidery/src/object_core.c \
     extern/libembroidery/src/formats/format_100.c \
     extern/libembroidery/src/formats/format_10o.c \
     extern/libembroidery/src/formats/format_art.c \
@@ -98,25 +97,15 @@ SOURCES += \
     extern/libembroidery/src/main.c \
     extern/libembroidery/src/pattern.c \
     extern/libembroidery/src/thread-color.c \
-    extern/tomlc99/toml.c \
-    src/cmdprompt.cpp \
+    src/object_data.c \
     src/core.c \
-    src/embdetails-dialog.cpp \
-    src/imagewidget.cpp \
+    src/action_table.c \
+    src/editor_table.c \
     src/interface.cpp \
-    src/layer-manager.cpp \
-    src/mdiarea.cpp \
-    src/mdiwindow.cpp \
     src/objects.cpp \
-    src/preview-dialog.cpp \
-    src/property-editor.cpp \
-    src/selectbox.cpp \
     src/settings-dialog.cpp \
-    src/statusbar.cpp \
-    src/undo-commands.cpp \
-    src/undo-editor.cpp \
-    src/view.cpp
-SOURCES += src/mainwindow.cpp
+    src/view.cpp \
+    src/mainwindow.cpp
 
 #CONFIG += qt debug application
 
