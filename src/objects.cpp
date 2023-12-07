@@ -944,13 +944,12 @@ Geometry::updateRubber(QPainter* painter)
             QPointF sceneTan2Point = objectRubberPoint("CIRCLE_TAN2");
             QPointF sceneTan3Point = objectRubberPoint("CIRCLE_TAN3");
 
-            EmbVector sceneCenter;
             EmbArc arc;
             arc.start = to_EmbVector(sceneTan1Point);
             arc.mid = to_EmbVector(sceneTan2Point);
             arc.end = to_EmbVector(sceneTan3Point);
-            getArcCenter(arc, &sceneCenter);
-            QPointF sceneCenterPoint(sceneCenter.x, sceneCenter.y);
+            EmbVector sceneCenter = embArc_center(arc);
+            QPointF sceneCenterPoint = to_QPointF(sceneCenter);
             QLineF sceneLine(sceneCenterPoint, sceneTan3Point);
             setObjectCenter(to_EmbVector(sceneCenterPoint));
             EmbReal radius = sceneLine.length();
@@ -1254,10 +1253,8 @@ QPointF
 Geometry::objectQuadrant0()
 {
     if (Type == OBJ_TYPE_ELLIPSE) {
-        EmbReal halfW = objectWidth()/2.0;
         EmbReal rot = radians(rotation());
-        EmbVector v;
-        embVector_multiply(embVector_unit(rot), halfW, &v);
+        EmbVector v = embVector_scale(embVector_unit(rot), objectWidth()/2.0);
         return scenePos() + to_QPointF(v);
     }
     return scenePos() + QPointF(objectRadius(), 0);
@@ -1268,10 +1265,8 @@ QPointF
 Geometry::objectQuadrant90()
 {
     if (Type == OBJ_TYPE_ELLIPSE) {
-        EmbReal halfH = objectHeight()/2.0;
         EmbReal rot = radians(rotation()+90.0);
-        EmbVector v;
-        embVector_multiply(embVector_unit(rot), halfH, &v);
+        EmbVector v = embVector_scale(embVector_unit(rot), objectHeight()/2.0);
         return scenePos() + to_QPointF(v);
     }
     return scenePos() + QPointF(0,-objectRadius());
@@ -1282,11 +1277,9 @@ QPointF
 Geometry::objectQuadrant180()
 {
     if (Type == OBJ_TYPE_ELLIPSE) {
-        EmbReal halfW = objectWidth()/2.0;
         EmbReal rot = radians(rotation()+180.0);
-        EmbReal x = halfW*std::cos(rot);
-        EmbReal y = halfW*std::sin(rot);
-        return scenePos() + QPointF(x,y);
+        EmbVector v = embVector_scale(embVector_unit(rot), objectWidth()/2.0);
+        return scenePos() + to_QPointF(v);
     }
     return scenePos() + QPointF(-objectRadius(),0);
 }
@@ -1296,11 +1289,9 @@ QPointF
 Geometry::objectQuadrant270()
 {
     if (Type == OBJ_TYPE_ELLIPSE) {
-        EmbReal halfH = objectHeight()/2.0;
         EmbReal rot = radians(rotation()+270.0);
-        EmbReal x = halfH*std::cos(rot);
-        EmbReal y = halfH*std::sin(rot);
-        return scenePos() + QPointF(x,y);
+        EmbVector v = embVector_scale(embVector_unit(rot), objectHeight()/2.0);
+        return scenePos() + to_QPointF(v);
     }
     return scenePos() + QPointF(0, objectRadius());
 }
@@ -1588,8 +1579,7 @@ Geometry::objectSavePath()
  */
 void Geometry::calculateArcData(EmbArc arc)
 {
-    EmbVector center;
-    getArcCenter(arc, &center);
+    EmbVector center = embArc_center(arc);
 
     arcStartPoint = to_QPointF(embVector_subtract(arc.start, center));
     arcMidPoint = to_QPointF(embVector_subtract(arc.mid, center));
@@ -1812,8 +1802,7 @@ Geometry::objectStartPoint()
     if (Type == OBJ_TYPE_ARC) {
         start_point = arcMidPoint;
     }
-    EmbVector start;
-    embVector_multiply(to_EmbVector(start_point), scale(), &start);
+    EmbVector start = embVector_scale(to_EmbVector(start_point), scale());
     QPointF rotv = to_QPointF(rotate_vector(start, rot));
 
     return scenePos() + rotv;
@@ -1828,8 +1817,7 @@ Geometry::objectMidPoint()
     if (Type == OBJ_TYPE_ARC) {
         mid_point = arcMidPoint;
     }
-    EmbVector mid;
-    embVector_multiply(to_EmbVector(mid_point), scale(), &mid);
+    EmbVector mid = embVector_scale(to_EmbVector(mid_point), scale());
     QPointF rotv = to_QPointF(rotate_vector(mid, rot));
 
     return scenePos() + rotv;
@@ -1843,8 +1831,7 @@ QPointF Geometry::objectEndPoint()
     if (Type == OBJ_TYPE_ARC) {
         end_point = arcEndPoint;
     }
-    EmbVector end;
-    embVector_multiply(to_EmbVector(end_point), scale(), &end);
+    EmbVector end = embVector_scale(to_EmbVector(end_point), scale());
     QPointF rotv = to_QPointF(rotate_vector(end, rot));
 
     return scenePos() + rotv;
@@ -2201,8 +2188,7 @@ Geometry::objectTopLeft()
 {
     EmbReal rot = radians(rotation());
     QPointF tl = rect().topLeft();
-    EmbVector ptl;
-    embVector_multiply(to_EmbVector(tl), scale(), &ptl);
+    EmbVector ptl = embVector_scale(to_EmbVector(tl), scale());
     EmbVector ptlRot = rotate_vector(ptl, rot);
 
     return scenePos() + to_QPointF(ptlRot);
@@ -2214,8 +2200,7 @@ Geometry::objectTopRight()
 {
     EmbReal rot = radians(rotation());
     QPointF tr = rect().topRight();
-    EmbVector ptr;
-    embVector_multiply(to_EmbVector(tr), scale(), &ptr);
+    EmbVector ptr = embVector_scale(to_EmbVector(tr), scale());
     EmbVector ptrRot = rotate_vector(ptr, rot);
 
     return (scenePos() + QPointF(ptrRot.x, ptrRot.y));
@@ -2227,8 +2212,7 @@ Geometry::objectBottomLeft()
 {
     EmbReal rot = radians(rotation());
     QPointF bl = rect().bottomLeft();
-    EmbVector pbl;
-    embVector_multiply(to_EmbVector(bl), scale(), &pbl);
+    EmbVector pbl = embVector_scale(to_EmbVector(bl), scale());
     EmbVector pblRot = rotate_vector(pbl, rot);
 
     return scenePos() + to_QPointF(pblRot);
@@ -2240,8 +2224,7 @@ Geometry::objectBottomRight()
 {
     EmbReal rot = radians(rotation());
     QPointF br = rect().bottomRight();
-    EmbVector pbr;
-    embVector_multiply(to_EmbVector(br), scale(), &pbr);
+    EmbVector pbr = embVector_scale(to_EmbVector(br), scale());
     EmbVector pbrRot = rotate_vector(pbr, rot);
 
     return scenePos() + to_QPointF(pbrRot);
