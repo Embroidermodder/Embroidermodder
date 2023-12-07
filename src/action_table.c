@@ -298,7 +298,7 @@ const ActionData action_table[MAX_ACTIONS] = {
     {
         .id = ACTION_TIP_OF_THE_DAY,
         .icon = "tipoftheday",
-        .command = "tipoftheday",
+        .command = "tips",
         .tooltip = "&Tip Of The Day",
         .statustip = "Displays a dialog with useful tips: TIPS",
         .shortcut = "",
@@ -322,7 +322,7 @@ const ActionData action_table[MAX_ACTIONS] = {
     {
         .id = ACTION_ICON16,
         .icon = "icon16",
-        .command = "icon 16",
+        .command = "icon16",
         .tooltip = "Icon&16",
         .statustip = "Sets the toolbar icon size to 16x16: ICON16",
         .shortcut = "",
@@ -334,7 +334,7 @@ const ActionData action_table[MAX_ACTIONS] = {
     {
         .id = ACTION_ICON24,
         .icon = "icon24",
-        .command = "icon 24",
+        .command = "icon24",
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24: ICON24.",
         .shortcut = "",
@@ -346,7 +346,7 @@ const ActionData action_table[MAX_ACTIONS] = {
     {
         .id = ACTION_ICON32,
         .icon = "icon32",
-        .command = "icon 32",
+        .command = "icon32",
         .tooltip = "Icon&32",
         .statustip = "Sets the toolbar icon size to 32x32: ICON32",
         .shortcut = "",
@@ -358,7 +358,7 @@ const ActionData action_table[MAX_ACTIONS] = {
     {
         .id = ACTION_ICON48,
         .icon = "icon48",
-        .command = "icon 48",
+        .command = "icon48",
         .tooltip = "Icon&48",
         .statustip = "Sets the toolbar icon size to 48x48: ICON48",
         .shortcut = "",
@@ -370,7 +370,7 @@ const ActionData action_table[MAX_ACTIONS] = {
     {
         .id = ACTION_ICON64,
         .icon = "icon64",
-        .command = "icon 64",
+        .command = "icon64",
         .tooltip = "Icon&64",
         .statustip = "Sets the toolbar icon size to 64x64: ICON64",
         .shortcut = "",
@@ -382,7 +382,7 @@ const ActionData action_table[MAX_ACTIONS] = {
     {
         .id = ACTION_ICON128,
         .icon = "icon128",
-        .command = "icon 128",
+        .command = "icon128",
         .tooltip = "Icon12&8",
         .statustip = "Sets the toolbar icon size to 128x128: ICON128",
         .shortcut = "",
@@ -939,7 +939,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         toolbar = "Draw",
         */
         .id = ACTION_ADD_ELLIPSE,
-        .icon = "addellipse",
+        .icon = "ellipse",
         .command = "ellipse",
         .tooltip = "Ellipse",
         .statustip = "Creates a ellipse: ELLIPSE",
@@ -1019,7 +1019,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         toolbar = "Draw"
         */
         .id = ACTION_ADD_PATH,
-        .icon = "addpath",
+        .icon = "path",
         .command = "addpath",
         .tooltip = "&Path",
         .statustip = "Creates a 2D path: PATH.",
@@ -1047,7 +1047,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         toolbar = "Draw",
         */
         .id = ACTION_ADD_POINT,
-        .icon = "addpoint",
+        .icon = "point",
         .command = "addpoint",
         .tooltip = "&Point",
         .statustip = "Creates multiple points: POINT.",
@@ -1063,7 +1063,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         toolbar = "Draw",
         */
         .id = ACTION_ADD_POLYGON,
-        .icon = "add-polygon",
+        .icon = "polygon",
         .command = "addpolygon",
         .tooltip = "Pol&ygon",
         .statustip = "Creates a regular polygon: POLYGON.",
@@ -1079,7 +1079,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .toolbar = "Draw",
         */
         .id = ACTION_ADD_POLYLINE,
-        .icon = "add-polyline",
+        .icon = "polyline",
         .command = "addpolyline",
         .tooltip = "&Polyline",
         .statustip = "Creates a 2D polyline: PLINE.",
@@ -1095,7 +1095,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         toolbar = "Dimension",
         */
         .id = ACTION_QUICKLEADER,
-        .icon = "add-quickleader",
+        .icon = "quickleader",
         .command = "addquickleader",
         .tooltip = "&QuickLeader",
         .statustip = "Creates a leader and annotation: QUICKLEADER.",
@@ -1111,7 +1111,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         toolbar = "Draw",
         */
         .id = ACTION_ADD_RECTANGLE,
-        .icon = "add-rectangle",
+        .icon = "rectangle",
         .command = "rectangle",
         .tooltip = "&Rectangle",
         .statustip = "Creates a rectangular polyline: RECTANGLE.",

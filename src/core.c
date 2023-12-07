@@ -281,13 +281,36 @@ int32_t help_menu[] = {
 };
 
 int32_t draw_menu[] = {
-    ACTION_ADD_CIRCLE,
-    ACTION_ADD_PATH,
-    ACTION_ADD_POLYGON,
     ACTION_ADD_POLYLINE,
+    ACTION_ADD_PATH,
+    ACTION_ADD_REGULAR_POLYGON,
+    ACTION_ADD_POLYGON,
+    MENU_SEPERATOR,
+    ACTION_ADD_ARC,
+    ACTION_ADD_CIRCLE,
+    ACTION_ADD_ELLIPSE,
+    ACTION_ADD_LINE,
     ACTION_ADD_POINT,
+    MENU_SEPERATOR,
     ACTION_ADD_HEART,
+    ACTION_ADD_DOLPHIN,
+    ACTION_TREBLECLEF,
+    ACTION_ADD_SNOWFLAKE,
+    MENU_SEPERATOR,
     ACTION_ADD_SINGLE_LINE_TEXT,
+    ACTION_ADD_TEXT_MULTI,
+    ACTION_ADD_TEXT_SINGLE,
+    ACTION_ADD_DIM_LEADER,
+    ACTION_ADD_VERTICAL_DIMENSION,
+    ACTION_ADD_HORIZONTAL_DIMENSION,
+    ACTION_ADD_IMAGE,
+    ACTION_ADD_INFINITE_LINE,
+    ACTION_ADD_RAY,
+    ACTION_ADD_RECTANGLE,
+    ACTION_ADD_ROUNDED_RECTANGLE,
+    ACTION_ADD_RUBBER,
+    ACTION_ADD_SLOT,
+    ACTION_ADD_TRIANGLE,
     MENU_END
 };
 
@@ -401,13 +424,36 @@ ToolbarData toolbar_data[MAX_TOOLBARS] = {
         .id = TOOLBAR_DRAW,
         .key = "Draw",
         .entries = {
-            ACTION_ADD_CIRCLE,
-            ACTION_ADD_PATH,
-            ACTION_ADD_POLYGON,
             ACTION_ADD_POLYLINE,
+            ACTION_ADD_PATH,
+            TOOLBAR_SEPERATOR,
+            ACTION_ADD_ARC,
+            ACTION_ADD_CIRCLE,
+            ACTION_ADD_ELLIPSE,
+            ACTION_ADD_LINE,
             ACTION_ADD_POINT,
+            ACTION_ADD_REGULAR_POLYGON,
+            ACTION_ADD_POLYGON,
+            ACTION_ADD_TRIANGLE,
+            TOOLBAR_SEPERATOR,
             ACTION_ADD_HEART,
+            ACTION_ADD_DOLPHIN,
+            ACTION_TREBLECLEF,
+            ACTION_ADD_SNOWFLAKE,
+            TOOLBAR_SEPERATOR,
             ACTION_ADD_SINGLE_LINE_TEXT,
+            ACTION_ADD_TEXT_MULTI,
+            ACTION_ADD_TEXT_SINGLE,
+            ACTION_ADD_DIM_LEADER,
+            ACTION_ADD_VERTICAL_DIMENSION,
+            ACTION_ADD_HORIZONTAL_DIMENSION,
+            ACTION_ADD_IMAGE,
+            ACTION_ADD_INFINITE_LINE,
+            ACTION_ADD_RAY,
+            ACTION_ADD_RECTANGLE,
+            ACTION_ADD_ROUNDED_RECTANGLE,
+            ACTION_ADD_RUBBER,
+            ACTION_ADD_SLOT,
             TOOLBAR_END
         },
         .horizontal = 0
@@ -599,104 +645,6 @@ const char *button_list[] = {
     "QTRACK",
     "LWT",
     "END"
-};
-
-/* . */
-const char *command_labels[] = {
-    "about",                        /* 0 */
-    "add_arc",                      /* 1 */
-    "add_circle",                   /* 2 */
-    "add_dim_leader",               /* 3 */
-    "add_ellipse",                  /* 4 */
-    "add",                          /* 5 */
-    "add_horizontal_dimension",     /* 6 */
-    "add_image",                    /* 7 */
-    "add_infinite_line",            /* 8 */
-    "add_line",                     /* 9 */
-    "add_path",                     /* 10 */
-    "add_point",                    /* 11 */
-    "add_polygon",                  /* 12 */
-    "add_polyline",                 /* 13 */
-    "add_ray",                      /* 14 */
-    "add_rectangle",                /* 15 */
-    "add_regular_polygon",          /* 16 */
-    "add_rounded_rectangle",        /* 17 */
-    "add_rubber",                   /* 18 */
-    "add_slot",                     /* 19 */
-    "add_text_multi",               /* 20 */
-    "add_text_single",              /* 21 */
-    "add_to_selection",             /* 22 */
-    "add_triangle",                 /* 23 */
-    "add_vertical_dimension",       /* 24 */
-    "alert",                        /* 25 */
-    "allow_rubber",                 /* 26 */
-    "append_history",               /* 27 */
-    "calculate_angle",              /* 28 */
-    "calculate_distance",           /* 29 */
-    "changelog",                    /* 30 */
-    "clear_rubber",                 /* 31 */
-    "clear_selection",              /* 32 */
-    "copy",                         /* 33 */
-    "copy_selected",                /* 34 */
-    "cut",                          /* 35 */
-    "cut_selected",                 /* 36 */
-    "day_vision",                   /* 37 */
-    "debug",                        /* 38 */
-    "delete_selected",              /* 39 */
-    "design_details",               /* 40 */
-    "do_nothing",                   /* 41 */
-    "end",                          /* 42 */
-    "error",                        /* 43 */
-    "help",                         /* 44 */
-    "icon",                         /* 45 */
-    "init",                         /* 46 */
-    "messagebox",                   /* 47 */
-    "mirror_selected",              /* 48 */
-    "mouse_x",                      /* 49 */
-    "mouse_y",                      /* 50 */
-    "move_selected",                /* 51 */
-    "new",                          /* 52 */
-    "night_vision",                 /* 53 */
-    "num_selected",                 /* 54 */
-    "open",                         /* 55 */
-    "pan",                          /* 56 */
-    "paste",                        /* 57 */
-    "paste_selected",               /* 58 */
-    "perpendicular_distance",       /* 59 */
-    "platform",                     /* 60 */
-    "preview_off",                  /* 61 */
-    "preview_on",                   /* 62 */
-    "print",                        /* 63 */
-    "print_area",                   /* 64 */
-    "qsnap_x",                      /* 65 */
-    "qsnap_y",                      /* 66 */
-    "quit",                         /* 67 */
-    "redo",                         /* 68 */
-    "rotate_selected",              /* 69 */
-    "rubber",                       /* 70 */
-    "scale_selected",               /* 71 */
-    "select_all",                   /* 72 */
-    "settings_dialog",              /* 73 */
-    "set_background_color",         /* 74 */
-    "set_crosshair_color",          /* 75 */
-    "set_cursor_shape",             /* 76 */
-    "set_grid_color",               /* 77 */
-    "set_prompt_prefix",            /* 78 */
-    "set_rubber_filter",            /* 79 */
-    "set_rubber_mode",              /* 80 */
-    "set_rubber_point",             /* 81 */
-    "set_rubber_text",              /* 82 */
-    "spare_rubber",                 /* 83 */
-    "tip_of_the_day",               /* 84 */
-    "todo",                         /* 85 */
-    "undo",                         /* 86 */
-    "version",                      /* 87 */
-    "vulcanize",                    /* 88 */
-    "whats_this",                   /* 89 */
-    "window",                       /* 90 */
-    "zoom",                         /* 91 */
-    "test",                         /* 92 */
-    "sleep"                         /* 93 */
 };
 
 char rubber_modes[N_RUBBER_MODES][MAX_STRING_LENGTH] = {

@@ -26,7 +26,7 @@
 /* Maximums for C-style memory arrays. */
 #define MAX_STRING_LENGTH                      200
 #define MAX_HISTOGRAM_BINS                    1000
-#define MAX_TOOLBAR_LENGTH                      30
+#define MAX_TOOLBAR_LENGTH                      50
 #define MAX_MENU_LENGTH                         30
 #define MAX_MENUBAR_LENGTH                      10
 #define MAX_TOOLBARS                            40

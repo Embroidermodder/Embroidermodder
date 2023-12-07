@@ -15,8 +15,6 @@
 
 #include "embroidermodder.h"
 
-int pop_command(const char *line);
-
 extern bool test_program;
 
 MainWindow* _mainWin = 0;
@@ -50,6 +48,12 @@ std::vector<std::string> coverage_test_script = {
     "pan left",
     "quit"
 };
+
+int
+string_equal(const char *a, const char *b)
+{
+    return !strcmp(a, b);
+}
 
 #if defined(WIN32)
 void
@@ -1419,7 +1423,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     showNormal();
 
     if (settings[ST_TIP_OF_THE_DAY].i) {
-        actuator_core(ACTION_TIP_OF_THE_DAY, "");
+        actuator("tips");
     }
 }
 
@@ -1582,38 +1586,34 @@ std::string
 actuator(std::string line)
 {
     char args[MAX_STRING_LENGTH];
+    char command[MAX_STRING_LENGTH];
     char *argv[100];
     char error_str[MAX_STRING_LENGTH];
     int i;
-    int found_space = 0;
+    int argc = 1;
+    std::vector<Node> result;
+    View* gview = activeView();
+
+    strcpy(command, line.c_str());
+    strcpy(args, "");
 
     for (i=0; i<(int)line.size(); i++) {
         if (line[i] == ' ') {
-            found_space = 1;
+            argc = tokenize(argv, command, ' ');
+            strncpy(command, line.c_str(), i);
+            strcpy(args, (line.c_str()) + i + 1);
             break;
         }
     }
 
-    strcpy(args, line.c_str());
-    int argc = tokenize(argv, args, ' ');
     int action_id = -1;
 
-    if (found_space) {
-        for (i=0; i<N_ACTIONS; i++) {
-            if (!strncmp(argv[0], command_labels[i], strlen(command_labels[i]))) {
-                action_id = i;
-                break;
-            }
-        }
-    }
-    else {
-        for (i=0; i<N_ACTIONS; i++) {
-            if (!strncmp((char*)line.c_str(), command_labels[i], strlen(command_labels[i]))) {
-                action_id = i;
-                break;
-            }
-        }
-    }
+	for (i=0; i<N_ACTIONS; i++) {
+		if (string_equal(command, action_table[i].command)) {
+			action_id = action_table[i].id;
+			break;
+		}
+	}
 
     /* This could produce silly amounts of output, so watch this line. */
     sprintf(error_str, "action: %d\n", action_id);
@@ -1625,27 +1625,6 @@ actuator(std::string line)
         std::string output(out);
         return output;
     }
-
-    strcpy(args, line.c_str() + strlen(command_labels[action_id]) + 1);
-    std::string args_(args);
-    return actuator_core(action_id, args_);
-}
-
-/* To speed up the majority of actuator calls, rather than using the command
- * hash, jump to the command directly with a jump table.
- *
- * Most calls should use this version directly rather than the CLI style version.
- */
-std::string
-actuator_core(int32_t action_id, std::string args_)
-{
-    std::vector<Node> result;
-    char args[MAX_STRING_LENGTH];
-    char *argv[MAX_STRING_LENGTH];
-    View* gview = activeView();
-    debug_message("actuator_core " + std::to_string(action_id));
-    strcpy(args, args_.c_str());
-    int argc = tokenize(argv, args, ' ');
 
     switch (action_id) {
 
@@ -2346,7 +2325,8 @@ actuator_core(int32_t action_id, std::string args_)
 
     /* Allows scripts to produce debug output similar to "echo". */
     case ACTION_DEBUG: {
-        return "DEBUG: " + args_;
+        sprintf(command, "DEBUG: ", args);
+        return actuator(command);
     }
 
     case ACTION_DELETE_SELECTED: {
@@ -2404,33 +2384,35 @@ actuator_core(int32_t action_id, std::string args_)
         return "";
     }
 
-    case ACTION_ICON: {
-        if (args_ == "16") {
-            _mainWin->iconResize(16);
-            return "";
-        }
-        if (args_ == "24") {
-            _mainWin->iconResize(24);
-            return "";
-        }
-        if (args_ == "32") {
-            _mainWin->iconResize(32);
-            return "";
-        }
-        if (args_ == "48") {
-            _mainWin->iconResize(48);
-            return "";
-        }
-        if (args_ == "64") {
-            _mainWin->iconResize(64);
-            return "";
-        }
-        if (args_ == "128") {
-            _mainWin->iconResize(128);
-            return "";
-        }
-        return "ERROR: this icon size is not supported.";
-    }
+    case ACTION_ICON16: {
+		_mainWin->iconResize(16);
+		return "";
+	}
+
+    case ACTION_ICON24: {
+		_mainWin->iconResize(24);
+		return "";
+	}
+
+    case ACTION_ICON32: {
+		_mainWin->iconResize(32);
+		return "";
+	}
+
+    case ACTION_ICON48: {
+		_mainWin->iconResize(48);
+		return "";
+	}
+
+    case ACTION_ICON64: {
+		_mainWin->iconResize(64);
+		return "";
+	}
+
+    case ACTION_ICON128: {
+		_mainWin->iconResize(128);
+		return "";
+	}
 
     /* For scripts: clear out any current variables before running. */
     case ACTION_INIT: {
@@ -2552,30 +2534,30 @@ actuator_core(int32_t action_id, std::string args_)
         if (!stack) {
             return "ERROR: no undo stack found.";
         }
-        if (args_ == "realtime") {
+        if (string_equal(args, "realtime")) {
             gview->panRealTime();
             return "";
         }
-        if (args_ == "point") {
+        if (string_equal(args, "point")) {
             gview->panPoint();
             return "";
         }
-        if (args_ == "left") {
+        if (string_equal(args, "left")) {
             UndoableCommand* cmd = new UndoableCommand("PanLeft", gview, 0);
             stack->push(cmd);
             return "";
         }
-        if (args_ == "right") {
+        if (string_equal(args, "right")) {
             UndoableCommand* cmd = new UndoableCommand("PanRight", gview, 0);
             stack->push(cmd);
             return "";
         }
-        if (args_ == "up") {
+        if (string_equal(args, "up")) {
             UndoableCommand* cmd = new UndoableCommand("PanUp", gview, 0);
             stack->push(cmd);
             return "";
         }
-        if (args_ == "down") {
+        if (string_equal(args, "down")) {
             UndoableCommand* cmd = new UndoableCommand("PanDown", gview, 0);
             stack->push(cmd);
             return "";
@@ -2644,8 +2626,8 @@ actuator_core(int32_t action_id, std::string args_)
     case ACTION_PRINT_AREA: {
         // qDebug("nativeprint_area_action(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
         // TODO: Print Setup Stuff
-        actuator("print " + args_);
-        return "";
+        sprintf(command, "print %s", args);
+        return actuator(command);
     }
 
     /* QSnapX
@@ -2776,7 +2758,7 @@ actuator_core(int32_t action_id, std::string args_)
 
     /* settings_dialog showTab */
     case ACTION_SETTINGS_DIALOG: {
-        Settings_Dialog dialog(QString::fromStdString(args_));
+        Settings_Dialog dialog(QString::fromStdString(args));
         dialog.exec();
         return "";
     }
@@ -2831,7 +2813,7 @@ actuator_core(int32_t action_id, std::string args_)
     /* . */
     case ACTION_SET_CURSOR_SHAPE: {
         if (gview) {
-            QString shape = QString::fromStdString(args_).toLower();
+            QString shape = QString::fromStdString(args).toLower();
             if (shape == "arrow") {
                 gview->setCursor(QCursor(Qt::ArrowCursor));
             }
@@ -2929,7 +2911,7 @@ actuator_core(int32_t action_id, std::string args_)
 
     /* TODO: This setting should override a config variable used to set the prefix. */
     case ACTION_SET_PROMPT_PREFIX: {
-        prompt->setPrefix(QString::fromStdString(args_));
+        prompt->setPrefix(QString::fromStdString(args));
         return "";
     }
 
@@ -2937,7 +2919,7 @@ actuator_core(int32_t action_id, std::string args_)
      * without updating all rubber objects at once
      */
     case ACTION_SET_RUBBER_FILTER: {
-        return args_;
+        return args;
     }
 
     case ACTION_SET_RUBBER_MODE: {
@@ -2988,7 +2970,7 @@ actuator_core(int32_t action_id, std::string args_)
      */
     case ACTION_SPARE_RUBBER: {
         if (gview) {
-            int64_t id = std::stoi(args_);
+            int64_t id = std::stoi(args);
             gview->spareRubber(id);
         }
 
@@ -3034,7 +3016,8 @@ actuator_core(int32_t action_id, std::string args_)
 
     /* TODO reminders for the developers. */
     case ACTION_TODO: {
-        return "TODO: " + args_;
+        sprintf(command, "TODO: %s", args);
+        return actuator(command);
     }
 
     /* Undo the previous action as defined on the undo stack.

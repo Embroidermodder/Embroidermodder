@@ -82,7 +82,6 @@ void set_visibility(QObject *parent, const char *name, bool visibility);
 QPainterPath add_to_path(QPainterPath path, EmbVector scale, std::string s);
 
 const char *actuator(char string[MAX_STRING_LENGTH]);
-std::string actuator_core(int32_t action, std::string args_);
 std::string actuator(std::string line);
 std::string run_script_file(std::string fname);
 std::string run_script(std::vector<std::string> script);
