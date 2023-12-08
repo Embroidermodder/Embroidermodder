@@ -56,10 +56,6 @@ extern QAction* actionHash[MAX_ACTIONS];
 /* Functions in the global namespace
  * ---------------------------------
  */
-int read_settings(void);
-void write_settings(void);
-EmbVector rotate_vector(EmbVector v, EmbReal alpha);
-
 QString translate_str(const char *str);
 bool contains(std::vector<std::string>, std::string);
 bool validFileFormat(std::string fileName);
@@ -81,11 +77,6 @@ void set_enabled(QObject *parent, const char *key, bool enabled);
 void set_visibility(QObject *parent, const char *name, bool visibility);
 QPainterPath add_to_path(QPainterPath path, EmbVector scale, std::string s);
 
-const char *actuator(char string[MAX_STRING_LENGTH]);
-std::string actuator(std::string line);
-std::string run_script_file(std::string fname);
-std::string run_script(std::vector<std::string> script);
-
 QPointF to_QPointF(EmbVector a);
 EmbVector to_EmbVector(QPointF a);
 
@@ -98,12 +89,6 @@ QDoubleSpinBox *make_spinbox(QGroupBox *gb, std::string d,
     QString object_name, EmbReal single_step, EmbReal lower, EmbReal upper, int key);
 QCheckBox *make_checkbox(QGroupBox *gb, std::string d,
     const char *label, const char *icon, int key);
-
-typedef struct RubberPoint_ {
-    char key[MAX_STRING_LENGTH];
-    char text[MAX_STRING_LENGTH];
-    EmbVector position;
-} RubberPoint;
 
 /* The Geometry class
  *
@@ -159,8 +144,7 @@ public:
     virtual int type(){ return Type; }
 
     /* Constructors. */
-    Geometry(int object_type, QRgb rgb, Qt::PenStyle lineType,
-        QGraphicsItem* parent = 0);
+    Geometry(int object_type, QGraphicsItem* parent = 0);
     Geometry(Geometry *obj, QGraphicsItem* parent = 0);
     void init(int object_type, QRgb rgb, Qt::PenStyle lineType,
         QGraphicsItem* parent = 0);

@@ -33,10 +33,12 @@
 #define MAX_MENUS                               40
 #define VECTOR_CHUNK_SIZE                       50
 #define MAX_ACTIONS                            256
+#define MAX_COMMANDS                           256
 #define MAX_ICONS                              256
 #define MAX_SETTINGS                           256
 #define MAX_POSITIONS                           26
 #define MAX_EDITORS                            300
+#define MAX_ARGS                                20
 
 /* Node types. */
 #define NODE_NULL                                0
@@ -49,6 +51,131 @@
 #define NODE_ARRAY                               7
 #define NODE_VECTOR                              8
 #define NODE_UNKNOWN                             9
+
+/* Actions.
+ * These identifiers are subject to change since they are in alphabetical order
+ * and the numbers are increasing.
+ */
+#define COMMAND_ABOUT                             0
+#define COMMAND_ADD                               1
+#define COMMAND_ADD_RUBBER                       18
+#define COMMAND_ADD_SLOT                         19
+#define COMMAND_ADD_TEXT_MULTI                   20
+#define COMMAND_ADD_TEXT_SINGLE                  21
+#define COMMAND_ADD_TO_SELECTION                 22
+#define COMMAND_ADD_TRIANGLE                     23
+#define COMMAND_ADD_VERTICAL_DIMENSION           24
+#define COMMAND_ALERT                            25
+#define COMMAND_ALLOW_RUBBER                     26
+#define COMMAND_APPEND_HISTORY                   27
+#define COMMAND_CALCULATE_ANGLE                  28
+#define COMMAND_CALCULATE_DISTANCE               29
+#define COMMAND_CHANGELOG                        30
+#define COMMAND_CLEAR_RUBBER                     31
+#define COMMAND_CLEAR_SELECTION                  32
+#define COMMAND_COPY                             33
+#define COMMAND_COPY_SELECTED                    34
+#define COMMAND_CUT                              35
+#define COMMAND_CUT_SELECTED                     36
+#define COMMAND_DAY                              37
+#define COMMAND_DEBUG                            38
+#define COMMAND_DELETE_SELECTED                  39
+#define COMMAND_DESIGN_DETAILS                   40
+#define COMMAND_DO_NOTHING                       41
+#define COMMAND_END                              42
+#define COMMAND_ERROR                            43
+#define COMMAND_HELP                             44
+#define COMMAND_ICON                             45
+#define COMMAND_INIT                             46
+#define COMMAND_MESSAGEBOX                       47
+#define COMMAND_MIRROR_SELECTED                  48
+#define COMMAND_MOUSE_X                          49
+#define COMMAND_MOUSE_Y                          50
+#define COMMAND_MOVE_SELECTED                    51
+#define COMMAND_NEW                              52
+#define COMMAND_NIGHT                            53
+#define COMMAND_NUM_SELECTED                     54
+#define COMMAND_OPEN                             55
+#define COMMAND_PAN                              56
+#define COMMAND_PASTE                            57
+#define COMMAND_PASTE_SELECTED                   58
+#define COMMAND_PERPENDICULAR_DISTANCE           59
+#define COMMAND_PLATFORM                         60
+#define COMMAND_PREVIEW_OFF                      61
+#define COMMAND_PREVIEW_ON                       62
+#define COMMAND_PRINT                            63
+#define COMMAND_PRINT_AREA                       64
+#define COMMAND_QSNAP_X                          65
+#define COMMAND_QSNAP_Y                          66
+#define COMMAND_EXIT                             67
+#define COMMAND_REDO                             68
+#define COMMAND_ROTATE_SELECTED                  69
+#define COMMAND_RUBBER                           70
+#define COMMAND_SCALE_SELECTED                   71
+#define COMMAND_SELECT_ALL                       72
+#define COMMAND_SETTINGS_DIALOG                  73
+#define COMMAND_SET                              74
+#define COMMAND_SPARE_RUBBER                     75
+#define COMMAND_TIP_OF_THE_DAY                   76
+#define COMMAND_TODO                             77
+#define COMMAND_UNDO                             78
+#define COMMAND_VERSION                          79
+#define COMMAND_VULCANIZE                        80
+#define COMMAND_WHATS_THIS                       81
+#define COMMAND_WINDOW                           82
+#define COMMAND_ZOOM                             83
+#define COMMAND_TEST                             84
+#define COMMAND_SLEEP                            85
+#define COMMAND_LAYER_EDITOR                     86
+#define COMMAND_MAKE_LAYER_CURRENT               87
+#define COMMAND_TEXT                             88
+#define COMMAND_LAYER_PREVIOUS                   89
+#define COMMAND_SAVE                             90
+#define COMMAND_SAVEAS                           91
+#define COMMAND_LAYERS                           94
+#define COMMAND_LAYER_SELECTOR                   95
+#define COMMAND_TREBLECLEF                       96
+#define COMMAND_COLOR_SELECTOR                   97
+#define COMMAND_LINE_TYPE_SELECTOR               98
+#define COMMAND_LINE_WEIGHT_SELECTOR             99
+#define COMMAND_HIDE_ALL_LAYERS                 100
+#define COMMAND_ADD_HEART                       101
+#define COMMAND_ADD_SINGLE_LINE_TEXT            102
+#define COMMAND_SHOW_ALL_LAYERS                 103
+#define COMMAND_FREEZE_ALL_LAYERS               104
+#define COMMAND_THAW_ALL_LAYERS                 105
+#define COMMAND_LOCK_ALL_LAYERS                 106
+#define COMMAND_UNLOCK_ALL_LAYERS               107
+#define COMMAND_ADD_DOLPHIN                     108
+#define COMMAND_ADD_DISTANCE                    109
+#define COMMAND_LOCATE_POINT                    110
+#define COMMAND_QUICKSELECT                     111
+#define COMMAND_SPELLCHECK                      112
+#define COMMAND_DISTANCE                        113
+#define COMMAND_MOVE                            114
+#define COMMAND_QUICKLEADER                     115
+#define COMMAND_RGB                             116
+#define COMMAND_ROTATE                          117
+#define COMMAND_SANDBOX                         118
+#define COMMAND_ADD_SNOWFLAKE                   119
+#define COMMAND_ADD_STAR                        120
+#define COMMAND_DELETE                          121
+#define COMMAND_SCALE                           122
+#define COMMAND_SINGLE_LINE_TEXT                123
+#define COMMAND_SYSWINDOWS                      124
+#define COMMAND_ENABLE                          125
+#define COMMAND_DISABLE                         126
+#define COMMAND_SET_COLOR                       127
+#define COMMAND_SET_BACKGROUND_COLOR            128
+#define COMMAND_SET_CROSSHAIR_COLOR             129
+#define COMMAND_SET_CURSOR_SHAPE                130
+#define COMMAND_SET_GRID_COLOR                  131
+#define COMMAND_SET_PROMPT_PREFIX               132
+#define COMMAND_SET_RUBBER_FILTER               133
+#define COMMAND_SET_RUBBER_MODE                 134
+#define COMMAND_SET_RUBBER_POINT                135
+#define COMMAND_SET_RUBBER_TEXT                 136
+#define N_COMMANDS                              137
 
 /* Actions.
  * These identifiers are subject to change since they are in alphabetical order
@@ -734,26 +861,6 @@ extern "C" {
 #include "../extern/libembroidery/src/embroidery.h"
 
 /*
- * Expected Keys for actions
- * String icon
- *      The stub used for finding the icon image file.
- * String command
- *      The command sent to the actuator.
- * String tooltip
- *      The label in the menus and the message that appears when
- *      you hover over an icon.
- * String statustip
- *       The message that appears at the bottom of the .
- * String shortcut
- *       The keyboard shortcut for this action.
- * StringList aliases
- *       A list of all alternative commands, if empty only
- *       the icon sttring will be .
- * StringList script
- *      If this is a compound action this will be a
- *      list of commands or it can allow for command line
- *      style command aliases. For example: icon16 would become
- *      the string list {"iconResize 16"}.
  */
 typedef struct ActionData_ {
     int32_t id;
@@ -762,11 +869,18 @@ typedef struct ActionData_ {
     char tooltip[MAX_STRING_LENGTH];
     char statustip[MAX_STRING_LENGTH];
     char shortcut[MAX_STRING_LENGTH];
+} ActionData;
+
+/*
+ */
+typedef struct CommandData_ {
+    int32_t id;
+    char command[MAX_STRING_LENGTH];
     int32_t min_args;
     int32_t gview;
     int32_t gscene;
     int32_t undo;
-} ActionData;
+} CommandData;
 
 /*
  */
@@ -834,6 +948,12 @@ typedef struct MenuData_ {
     int32_t entries[MAX_TOOLBAR_LENGTH];
 } MenuData;
 
+typedef struct RubberPoint_ {
+    char key[MAX_STRING_LENGTH];
+    char text[MAX_STRING_LENGTH];
+    EmbVector position;
+} RubberPoint;
+
 /*
  *
  */
@@ -852,6 +972,13 @@ struct Node_ {
 
 typedef struct Node_ Node;
 
+int read_settings(void);
+void write_settings(void);
+EmbVector rotate_vector(EmbVector v, EmbReal alpha);
+const char *actuator(char string[MAX_STRING_LENGTH]);
+int string_equal(const char *a, const char *b);
+void emb_sleep(int seconds);
+
 /* Memory management. */
 Cvector *cvector_create(size_t element_size);
 void cvector_append(Cvector *a, Cvector *b);
@@ -867,6 +994,11 @@ Node *find_node(Node *branch, char key[MAX_STRING_LENGTH]);
 void free_node(Node *branch);
 Node *create_and_add_leaf(Node *parent, char *key, char *value);
 int insert_node(Node *branch, char key[MAX_STRING_LENGTH], Node *node);
+
+const char *add_geometry(char argv[MAX_ARGS][MAX_STRING_LENGTH], int argc);
+const char *actuator(char *line);
+const char *run_script_file(char *fname);
+const char *run_script(char **script);
 
 /* Utility Functions. */
 unsigned char validRGB(int r, int g, int b);
@@ -904,9 +1036,10 @@ extern const char *settings_labels[];
 extern Node settings[SETTINGS_TOTAL], dialog[SETTINGS_TOTAL],
     preview[SETTINGS_TOTAL], accept_[SETTINGS_TOTAL];
 
-extern const ActionData action_table[MAX_ACTIONS];
-extern const LineEditData all_line_editors[MAX_EDITORS];
-extern const SpinBoxEditData all_spinbox_editors[MAX_EDITORS];
+extern ActionData action_table[MAX_ACTIONS];
+extern CommandData command_table[MAX_COMMANDS];
+extern LineEditData all_line_editors[MAX_EDITORS];
+extern SpinBoxEditData all_spinbox_editors[MAX_EDITORS];
 extern Setting settings_data[];
 
 extern const char *version;
@@ -948,6 +1081,8 @@ extern int32_t side_toolbar_layout[];
 extern const char *group_box_data[];
 extern const char *group_box_types[];
 extern const int32_t group_box_ids[];
+
+extern char *coverage_test_script[];
 
 #ifdef __cplusplus
 }

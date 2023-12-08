@@ -18,18 +18,14 @@
 #include "core.h"
 
 /* . */
-const ActionData action_table[MAX_ACTIONS] = {
+ActionData action_table[MAX_ACTIONS] = {
     {
         .id = ACTION_ABOUT,
         .icon = "about",
         .command = "about",
         .tooltip = "&About Embroidermodder 2",
         .statustip = "Displays information about this product: ABOUT.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 0,
-        .gscene = 0,
-        .undo = 0
+        .shortcut = ""
     },
     {
         .id = ACTION_TREBLECLEF,
@@ -37,11 +33,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "trebleclef",
         .tooltip = "Treble Clef",
         .statustip = "Adds a treble clef design to the vector layer.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_DO_NOTHING,
@@ -49,11 +41,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "donothing",
         .tooltip = "&Do Nothing",
         .statustip = "Does Nothing",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_NEW,
@@ -61,11 +49,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "new",
         .tooltip = "&New",
         .statustip = "Create a new file: NEW.",
-        .shortcut = "Ctrl+N",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = "Ctrl+N"
     },
     {
         .id = ACTION_OPEN,
@@ -73,11 +57,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "open",
         .tooltip = "&Open",
         .statustip = "Open an existing file: OPEN",
-        .shortcut = "Ctrl+O",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = "Ctrl+O"
     },
     {
         .id = ACTION_SAVE,
@@ -85,11 +65,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "save",
         .tooltip = "&Save",
         .statustip = "Save the design to disk.",
-        .shortcut = "Ctrl+S",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = "Ctrl+S"
     },
     {
         .id = ACTION_SAVEAS,
@@ -97,11 +73,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "saveas",
         .tooltip = "Save &As",
         .statustip = "Save the design under a new name and type.",
-        .shortcut = "Ctrl+Shift+S",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = "Ctrl+Shift+S"
     },
     {
         .id = ACTION_PRINT,
@@ -109,11 +81,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "print",
         .tooltip = "&Print",
         .statustip = "Print the design.",
-        .shortcut = "Ctrl+P",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = "Ctrl+P"
     },
     {
         .id = ACTION_DESIGN_DETAILS,
@@ -121,11 +89,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "designdetails",
         .tooltip = "&Details",
         .statustip = "Details of the current design.",
-        .shortcut = "Ctrl+D",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = "Ctrl+D"
     },
     {
         .id = ACTION_EXIT,
@@ -133,11 +97,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "exit",
         .tooltip = "E&xit",
         .statustip = "Exit the application: EXIT",
-        .shortcut = "Ctrl+Q",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = "Ctrl+Q"
     },
     {
         .id = ACTION_CUT,
@@ -145,11 +105,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "cut",
         .tooltip = "Cu&t",
         .statustip = "Cut the current selection's contents to the clipboard.",
-        .shortcut = "Ctrl+X",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = "Ctrl+X"
     },
     {
         .id = ACTION_COPY,
@@ -157,11 +113,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "copy",
         .tooltip = "&Copy",
         .statustip = "Copy the current selection's contents to the clipboard.",
-        .shortcut = "Ctrl+C",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = "Ctrl+C"
     },
     {
         .id = ACTION_PASTE,
@@ -169,11 +121,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "paste",
         .tooltip = "&Paste",
         .statustip = "Paste the clipboard's contents into the current selection.",
-        .shortcut = "Ctrl+V",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = "Ctrl+V"
     },
     {
         .id = ACTION_UNDO,
@@ -181,11 +129,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "undo",
         .tooltip = "&Undo",
         .statustip = "Reverses the most recent action: UNDO",
-        .shortcut = "Ctrl+Z",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = "Ctrl+Z"
     },
     {
         .id = ACTION_REDO,
@@ -193,83 +137,55 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "redo",
         .tooltip = "&Redo",
         .statustip = "Reverses the effects of the previous undo action: REDO",
-        .shortcut = "Ctrl+Shift+Z",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = "Ctrl+Shift+Z"
     },
     {
         .id = ACTION_WINDOW_CLOSE,
         .icon = "windowclose",
-        .command = "windowclose",
+        .command = "window close",
         .tooltip = "Cl&ose",
         .statustip = "Close the active window: CLOSE",
-        .shortcut = "Ctrl+W",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = "Ctrl+W"
     },
     {
         .id = ACTION_WINDOW_CLOSE_ALL,
         .icon = "windowcloseall",
-        .command = "windowcloseall",
+        .command = "window closeall",
         .tooltip = "Close &All",
         .statustip = "Close all the windows: CLOSEALL",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_WINDOW_CASCADE,
         .icon = "windowcascade",
-        .command = "windowcascade",
+        .command = "window cascade",
         .tooltip = "&Cascade",
         .statustip = "Cascade the windows: CASCADE",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_WINDOW_TILE,
         .icon = "windowtile",
-        .command = "windowtile",
+        .command = "window tile",
         .tooltip = "&Tile",
         .statustip = "Tile the windows: TILE",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_WINDOW_NEXT,
         .icon = "windownext",
-        .command = "windownext",
+        .command = "window next",
         .tooltip = "Ne&xt",
         .statustip = "Move the focus to the next window: NEXT",
-        .shortcut = "Ctrl+Tab",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = "Ctrl+Tab"
     },
     {
         .id = ACTION_WINDOW_PREVIOUS,
         .icon = "windowprevious",
-        .command = "windowprevious",
+        .command = "window previous",
         .tooltip = "Pre&vious",
         .statustip = "Move the focus to the previous window: PREVIOUS",
-        .shortcut = "Ctrl+Shift+Tab",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = "Ctrl+Shift+Tab"
     },
     {
         .id = ACTION_HELP,
@@ -277,11 +193,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "help",
         .tooltip = "&Help",
         .statustip = "Displays the help file: HELP.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_CHANGELOG,
@@ -289,11 +201,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "changelog",
         .tooltip = "&Changelog",
         .statustip = "Describes new features in this product.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_TIP_OF_THE_DAY,
@@ -301,11 +209,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "tips",
         .tooltip = "&Tip Of The Day",
         .statustip = "Displays a dialog with useful tips: TIPS",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_WHATS_THIS,
@@ -313,83 +217,55 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "whatsthis",
         .tooltip = "&What's This?",
         .statustip = "What's This? Context Help!",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_ICON16,
         .icon = "icon16",
-        .command = "icon16",
+        .command = "icon 16",
         .tooltip = "Icon&16",
         .statustip = "Sets the toolbar icon size to 16x16: ICON16",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_ICON24,
         .icon = "icon24",
-        .command = "icon24",
+        .command = "icon 24",
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24: ICON24.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_ICON32,
         .icon = "icon32",
-        .command = "icon32",
+        .command = "icon 32",
         .tooltip = "Icon&32",
         .statustip = "Sets the toolbar icon size to 32x32: ICON32",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_ICON48,
         .icon = "icon48",
-        .command = "icon48",
+        .command = "icon 48",
         .tooltip = "Icon&48",
         .statustip = "Sets the toolbar icon size to 48x48: ICON48",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_ICON64,
         .icon = "icon64",
-        .command = "icon64",
+        .command = "icon 64",
         .tooltip = "Icon&64",
         .statustip = "Sets the toolbar icon size to 64x64: ICON64",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_ICON128,
         .icon = "icon128",
-        .command = "icon128",
+        .command = "icon 128",
         .tooltip = "Icon12&8",
         .statustip = "Sets the toolbar icon size to 128x128: ICON128",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_SETTINGS_DIALOG,
@@ -397,11 +273,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "settingsdialog",
         .tooltip = "&Settings",
         .statustip = "Configure settings specific to this product.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_MAKE_LAYER_CURRENT,
@@ -409,11 +281,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "makelayercurrent",
         .tooltip = "&Make Layer Active",
         .statustip = "Makes the layer of a selected object the active layer",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_LAYERS,
@@ -421,11 +289,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "layers",
         .tooltip = "&Layers",
         .statustip = "Manages layers and layer properties:  LAYER",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_LAYER_SELECTOR,
@@ -433,11 +297,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "layerselector",
         .tooltip = "&Layer Selector",
         .statustip = "Dropdown selector for changing the current layer",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_LAYER_PREVIOUS,
@@ -445,11 +305,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "layerprevious",
         .tooltip = "&Layer Previous",
         .statustip = "Restores the previous layer settings: LAYERP",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_COLOR_SELECTOR,
@@ -457,11 +313,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "colorselector",
         .tooltip = "&Color Selector",
         .statustip = "Dropdown selector for changing the current thread color",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_LINE_TYPE_SELECTOR,
@@ -469,11 +321,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "linetypeselector",
         .tooltip = "&Stitchtype Selector",
         .statustip = "Dropdown selector for changing the current stitch type",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_LINE_WEIGHT_SELECTOR,
@@ -481,11 +329,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "lineweightselector",
         .tooltip = "&Threadweight Selector",
         .statustip = "Dropdown selector for changing the current thread weight",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_HIDE_ALL_LAYERS,
@@ -493,11 +337,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "hidealllayers",
         .tooltip = "&Hide All Layers",
         .statustip = "Turns the visibility off for all layers in the current drawing:  HIDEALL",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_SHOW_ALL_LAYERS,
@@ -505,11 +345,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "showalllayers",
         .tooltip = "&Show All Layers",
         .statustip = "Turns the visibility on for all layers in the current drawing:  SHOWALL",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_FREEZE_ALL_LAYERS,
@@ -517,11 +353,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "freezealllayers",
         .tooltip = "&Freeze All Layers",
         .statustip = "Freezes all layers in the current drawing:  FREEZEALL",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_THAW_ALL_LAYERS,
@@ -529,11 +361,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "thawalllayers",
         .tooltip = "&Thaw All Layers",
         .statustip = "Thaws all layers in the current drawing:  THAWALL",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_LOCK_ALL_LAYERS,
@@ -541,11 +369,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "lockalllayers",
         .tooltip = "&Lock All Layers",
         .statustip = "Locks all layers in the current drawing:  LOCKALL",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_UNLOCK_ALL_LAYERS,
@@ -553,275 +377,183 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "unlockalllayers",
         .tooltip = "&Unlock All Layers",
         .statustip = "Unlocks all layers in the current drawing:  UNLOCKALL",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_TEXT_BOLD,
         .icon = "textbold",
-        .command = "textbold",
+        .command = "text bold",
         .tooltip = "&Bold Text",
         .statustip = "Sets text to be bold.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_TEXT_ITALIC,
         .icon = "textitalic",
-        .command = "textitalic",
+        .command = "text italic",
         .tooltip = "&Italic Text",
         .statustip = "Sets text to be italic.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_TEXT_UNDERLINE,
         .icon = "textunderline",
-        .command = "textunderline",
+        .command = "text underline",
         .tooltip = "&Underline Text",
         .statustip = "Sets text to be underlined.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_TEXT_STRIKEOUT,
         .icon = "textstrikeout",
-        .command = "textstrikeout",
+        .command = "text strikeout",
         .tooltip = "&StrikeOut Text",
         .statustip = "Sets text to be striked out.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_TEXT_OVERLINE,
         .icon = "textoverline",
-        .command = "textoverline",
+        .command = "text overline",
         .tooltip = "&Overline Text",
         .statustip = "Sets text to be overlined.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_ZOOM_REAL_TIME,
         .icon = "zoomrealtime",
-        .command = "zoomrealtime",
+        .command = "zoom realtime",
         .tooltip = "Zoom &Realtime",
         .statustip = "Zooms to increase or decrease the apparent size of objects in the current viewport.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_ZOOM_PREVIOUS,
         .icon = "zoomprevious",
-        .command = "zoomprevious",
+        .command = "zoom previous",
         .tooltip = "Zoom &Previous",
         .statustip = "Zooms to display the previous view.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_ZOOM_WINDOW,
         .icon = "zoomwindow",
-        .command = "zoomwindow",
+        .command = "zoom window",
         .tooltip = "Zoom &Window",
         .statustip = "Zooms to display an area specified by a rectangular window.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_ZOOM_DYNAMIC,
         .icon = "zoomdynamic",
-        .command = "zoomdynamic",
+        .command = "zoom dynamic",
         .tooltip = "Zoom &Dynamic",
         .statustip = "Zooms to display the generated portion of the drawing.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_ZOOM_SCALE,
         .icon = "zoomscale",
-        .command = "zoomscale",
+        .command = "zoom scale",
         .tooltip = "Zoom &Scale",
         .statustip = "Zooms the display using a specified scale factor.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_ZOOM_CENTER,
         .icon = "zoomcenter",
-        .command = "zoomcenter",
+        .command = "zoom center",
         .tooltip = "Zoom &Center",
         .statustip = "Zooms to display a view specified by a center point and magnification or height.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_ZOOM_IN,
         .icon = "zoomin",
-        .command = "zoomin",
+        .command = "zoom in",
         .tooltip = "Zoom &In",
         .statustip = "Zooms to increase the apparent size of objects: ZOOMIN",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_ZOOM_OUT,
         .icon = "zoomout",
-        .command = "zoomout",
+        .command = "zoom out",
         .tooltip = "Zoom &Out",
         .statustip = "Zooms to decrease the apparent size of objects: ZOOMOUT",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_ZOOM_SELECTED,
         .icon = "zoomselected",
-        .command = "zoomselected",
+        .command = "zoom selected",
         .tooltip = "Zoom Selec&ted",
         .statustip = "Zooms to display the selected objects.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_ZOOM_ALL,
         .icon = "zoomall",
-        .command = "zoomall",
+        .command = "zoom all",
         .tooltip = "Zoom &All",
         .statustip = "Zooms to display the drawing extents or the grid limits.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_ZOOM_EXTENTS,
         .icon = "zoomextents",
-        .command = "zoomextents",
+        .command = "zoom extents",
         .tooltip = "Zoom &Extents",
         .statustip = "Zooms to display the drawing extents: ZOOMEXTENTS",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_PAN_REAL_TIME,
         .icon = "panrealtime",
-        .command = "panrealtime",
+        .command = "pan realtime",
         .tooltip = "&Pan Realtime",
         .statustip = "Moves the view in the current viewport.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_PAN_POINT,
         .icon = "panpoint",
-        .command = "panpoint",
+        .command = "pan point",
         .tooltip = "&Pan Point",
         .statustip = "Moves the view by the specified distance.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_PAN_LEFT,
         .icon = "panleft",
-        .command = "panleft",
+        .command = "pan left",
         .tooltip = "&Pan Left",
         .statustip = "Moves the view to the left: PANLEFT",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_PAN_RIGHT,
         .icon = "panright",
-        .command = "panright",
+        .command = "pan right",
         .tooltip = "&Pan Right",
         .statustip = "Moves the view to the right: PANRIGHT",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_PAN_UP,
         .icon = "panup",
-        .command = "panup",
+        .command = "pan up",
         .tooltip = "&Pan Up",
         .statustip = "Moves the view up: PANUP",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_PAN_DOWN,
         .icon = "pandown",
-        .command = "pandown",
+        .command = "pan down",
         .tooltip = "&Pan Down",
         .statustip = "Moves the view down: PANDOWN",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_DAY,
@@ -829,11 +561,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "day",
         .tooltip = "&Day",
         .statustip = "Updates the current view using day vision settings: DAY.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_NIGHT,
@@ -841,11 +569,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "night",
         .tooltip = "&Night",
         .statustip = "Updates the current view using night vision settings: NIGHT",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /* todo */
@@ -854,11 +578,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "spellcheck",
         .tooltip = "",
         .statustip = "",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_QUICKSELECT,
@@ -866,11 +586,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "quickselect",
         .tooltip = "",
         .statustip = "",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /* .alias = "C", */
@@ -879,11 +595,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "circle",
         .tooltip = "Circle",
         .statustip = "Creates a circle: CIRCLE",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /*
@@ -895,11 +607,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "heart",
         .tooltip = "&Heart",
         .statustip = "Creates a heart: HEART",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /*
@@ -911,11 +619,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "distance",
         .tooltip = "&Distance",
         .statustip = "Measures the distance and angle between two points: DIST",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /*
@@ -927,11 +631,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "dolphin",
         .tooltip = "&Dolphin",
         .statustip = "Adds a dolphin design to the vector layer: DOLPHIN.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /*
@@ -943,11 +643,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "ellipse",
         .tooltip = "Ellipse",
         .statustip = "Creates a ellipse: ELLIPSE",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /*
@@ -959,11 +655,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "erase",
         .tooltip = "D&elete",
         .statustip = "Removes objects from a drawing: DELETE.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /*
@@ -975,11 +667,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "line",
         .tooltip = "&Line",
         .statustip = "Creates straight line segments: LINE.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /*
@@ -991,11 +679,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "locatepoint",
         .tooltip = "&Locate Point",
         .statustip = "Displays the coordinate values of a location: ID.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /*
@@ -1007,11 +691,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "move",
         .tooltip = "&Move",
         .statustip = "Displaces objects a specified distance in a specified direction: MOVE.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /*
@@ -1023,11 +703,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "addpath",
         .tooltip = "&Path",
         .statustip = "Creates a 2D path: PATH.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_PLATFORM,
@@ -1035,11 +711,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "platform",
         .tooltip = "&Platform",
         .statustip = "List which platform is in use: PLATFORM.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /*
@@ -1051,11 +723,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "addpoint",
         .tooltip = "&Point",
         .statustip = "Creates multiple points: POINT.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /*
@@ -1067,11 +735,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "addpolygon",
         .tooltip = "Pol&ygon",
         .statustip = "Creates a regular polygon: POLYGON.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /*
@@ -1083,11 +747,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "addpolyline",
         .tooltip = "&Polyline",
         .statustip = "Creates a 2D polyline: PLINE.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /*
@@ -1099,11 +759,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "addquickleader",
         .tooltip = "&QuickLeader",
         .statustip = "Creates a leader and annotation: QUICKLEADER.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /*
@@ -1115,11 +771,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "rectangle",
         .tooltip = "&Rectangle",
         .statustip = "Creates a rectangular polyline: RECTANGLE.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /*
@@ -1131,11 +783,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "rgb",
         .tooltip =  "&RGB",
         .statustip = "Updates the current view colors: RGB.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /*
@@ -1147,11 +795,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "rotate",
         .tooltip = "&Rotate",
         .statustip = "Rotates objects about a base point: ROTATE.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /*
@@ -1163,11 +807,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "sandbox",
         .tooltip = "Sandbox",
         .statustip = "A sandbox to play in: SANDBOX.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /*
@@ -1179,11 +819,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "scale",
         .tooltip = "Sca&le",
         .statustip = "Enlarges or reduces objects proportionally in the X, Y, and Z directions: SCALE.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_SELECT_ALL,
@@ -1191,11 +827,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "selectall",
         .tooltip = "&Select All",
         .statustip = "Selects all objects: SELECTALL.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /*
@@ -1207,11 +839,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "singlelinetext",
         .tooltip = "&Single Line Text",
         .statustip = "Creates single-line text objects: TEXT",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /*
@@ -1223,11 +851,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "snowflake",
         .tooltip = "&Snowflake",
         .statustip = "Creates a snowflake: SNOWFLAKE",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         /*
@@ -1239,11 +863,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "star",
         .tooltip = "&Star",
         .statustip = "Creates a star: STAR",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_SYSWINDOWS,
@@ -1251,11 +871,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "syswindows",
         .tooltip = "&SysWindows",
         .statustip = "Arrange the windows: SYSWINDOWS",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_TREBLECLEF,
@@ -1263,11 +879,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "trebleclef",
         .tooltip = "Treble Clef",
         .statustip = "Adds a treble clef design to the vector layer.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_EXIT,
@@ -1275,11 +887,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "exit",
         .tooltip = "E&xit",
         .statustip = "Exit the application: EXIT.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_TEST,
@@ -1287,11 +895,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "test",
         .tooltip = "Coverage Test",
         .statustip = "Run all commands at least once to test that nothing crashes.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = ""
     },
     {
         .id = ACTION_SLEEP,
@@ -1299,11 +903,7 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "sleep",
         .tooltip = "Sleep for 1 second.",
         .statustip = "Sleep for 1 second.",
-        .shortcut = "",
-        .min_args = 0,
-        .gview = 0,
-        .gscene = 0,
-        .undo = 0
+        .shortcut = ""
     },
     {
         .id = ACTION_END,
@@ -1311,10 +911,6 @@ const ActionData action_table[MAX_ACTIONS] = {
         .command = "END",
         .tooltip = "END",
         .statustip = "END",
-        .shortcut = "END",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
+        .shortcut = "END"
     }
 };

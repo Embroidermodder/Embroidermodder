@@ -37,6 +37,516 @@ void toPolyline(
 
 bool save(View *view, QString f);
 
+#define SUBCOMMAND_ARC                       0
+#define SUBCOMMAND_CIRCLE                    1
+#define SUBCOMMAND_ELLIPSE                   2
+#define SUBCOMMAND_HORIZONTAL_DIMENSION      3
+#define SUBCOMMAND_IMAGE                     4
+#define SUBCOMMAND_PATH                      5
+#define SUBCOMMAND_POLYGON                   6
+#define SUBCOMMAND_POLYLINE                  7
+#define SUBCOMMAND_RECTANGLE                 8
+#define SUBCOMMAND_REGULAR_POLYGON           9
+#define SUBCOMMAND_VERTICAL_DIMENSION       10
+#define SUBCOMMAND_DIM_LEADER               11
+#define SUBCOMMAND_INFINITE_LINE            12
+#define SUBCOMMAND_RAY                      13
+#define SUBCOMMAND_LINE                     14
+#define SUBCOMMAND_TRIANGLE                 15
+#define SUBCOMMAND_TEXT_MULTI               16
+#define SUBCOMMAND_TEXT_SINGLE              17
+#define SUBCOMMAND_ROUNDED_RECTANGLE        18
+#define SUBCOMMAND_POINT                    19
+#define SUBCOMMAND_SLOT                     20
+
+const char *geometry_subcommands[] = {
+	"arc",
+	"circle",
+	"ellipse",
+	"horizontal_dimension",
+	"image",
+	"path",
+	"point",
+	"polygon",
+	"polyline",
+	"rectangle",
+	"regular_polygon",
+	"vertical_dimension",
+	"dim_leader",
+	"infinite_line",
+	"ray",
+	"line",
+	"triangle",
+	"text_multi",
+	"text_single",
+	"rounded-rectangle",
+	"point",
+	"slot",
+    "END"
+};
+
+const CommandData subcommand_table[MAX_COMMANDS] = {
+    {
+    },
+    {
+        .id = -1,
+        .command="END"
+    }
+};
+
+/* add_geometry_action args
+ */
+const char *
+add_geometry(char **argv, int argc)
+{
+    View *gview = activeView();
+	QGraphicsScene* gscene = gview->scene();
+	QUndoStack* stack = gview->undoStack;
+    int subcommand = -1;
+
+	if (!gview) {
+		return "ERROR: no active view found.";
+	}
+	if (!gscene) {
+		return "ERROR: no graphics scene view found.";
+	}
+    if (!stack) {
+        return "ERROR: no undo stack for scene";
+    }
+
+    for (int i=0; !string_equal(geometry_subcommands[i], "END"); i++) {
+        /* FIXME */
+        if (string_equal(geometry_subcommands[i], argv[0])) {
+            subcommand = -1;
+        }
+    }
+
+    switch (subcommand) {
+    
+    /* add_arc_action.
+     *
+     * EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, std::string rubberMode
+     */
+    case SUBCOMMAND_ARC: {
+        if (argc < 7) {
+            return "SUBCOMMAND_ARC requires 6 arguments";
+        }
+		EmbArc arc;
+		arc.start.x = atof(argv[1]);
+		arc.start.x = -atof(argv[2]);
+		arc.mid.x = atof(argv[3]);
+		arc.mid.x = -atof(argv[4]);
+		arc.end.x = atof(argv[5]);
+		arc.end.x = -atof(argv[6]);
+		Geometry* arcObj = new Geometry(OBJ_TYPE_ARC);
+        /*
+		arcObj->setObjectRubberMode(rubberMode);
+		if (rubberMode != "OBJ_RUBBER_OFF") {
+			gview->addToRubberRoom(arcObj);
+		}
+		scene->addItem(arcObj);
+		*/
+		return "";
+    }
+
+    /* add_circle_action.
+     *
+     * EmbReal centerX, EmbReal centerY, EmbReal radius, bool fill, std::string rubberMode
+     */
+    case SUBCOMMAND_CIRCLE: {
+		Geometry* circleObj = new Geometry(OBJ_TYPE_CIRCLE);
+		EmbCircle circle;
+		circle.center.x = atof(argv[1]);
+		circle.center.y = -atof(argv[2]);
+		circle.radius = atof(argv[3]);
+		bool fill = false;
+		std::string rubberMode = "OBJ_RUBBER_OFF";
+
+		/*
+		Geometry* obj = new Geometry(circle, _mainWin->getCurrentColor(), Qt::SolidLine);
+		obj->objRubberMode = rubberMode;
+		//TODO: circle fill
+		if (rubberMode != "OBJ_RUBBER_OFF") {
+			gview->addToRubberRoom(obj);
+			gscene->addItem(obj);
+			gscene->update();
+		}
+		else {
+			UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+			stack->push(cmd);
+		}
+		*/
+        return "";
+    }
+
+    /* EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, std::string rubberMode
+     */
+    case SUBCOMMAND_DIM_LEADER: {
+        /*
+        AddDimLeader(std::vector<Node> a)
+        _mainWin->nativeAddDimLeader(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, OBJ_RUBBER_OFF);
+
+		Geometry* obj = new Geometry(x1, -y1, x2, -y2,_mainWin->getCurrentColor());
+		obj->setRotation(-rot);
+		obj->setObjectRubberMode(rubberMode);
+		if (rubberMode != "OBJ_RUBBER_OFF") {
+			gview->addToRubberRoom(obj);
+			gscene->addItem(obj);
+			gscene->update();
+		}
+		else {
+			UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+			stack->push(cmd);
+		}
+		*/
+        return "";
+    }
+
+    /* Add an ellipse to the scene.
+     *
+     * EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, EmbReal rot, bool fill, std::string rubberMode
+     */
+    case SUBCOMMAND_ELLIPSE: {
+		/*
+		Geometry* obj = new Geometry(centerX, -centerY, width, height,_mainWin->getCurrentColor());
+		obj->setRotation(-rot);
+		obj->setObjectRubberMode(rubberMode);
+		//TODO: ellipse fill
+		if (rubberMode != "OBJ_RUBBER_OFF") {
+			gview->addToRubberRoom(obj);
+			gscene->addItem(obj);
+			gscene->update();
+		}
+		else {
+			UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+			stack->push(cmd);
+		}
+		*/
+
+        return "";
+    }
+
+    /*
+     * EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight
+     */
+    case SUBCOMMAND_HORIZONTAL_DIMENSION: {
+        /*
+        AddHorizontalDimension(std::vector<Node> a)
+        //TODO: Node error checking
+        debug_message("TODO: finish addHorizontalDimension command");
+        */
+        return "";
+    }
+
+    /*
+     * QString img, EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot
+     */
+    case SUBCOMMAND_IMAGE: {
+        /*
+        AddImage(std::vector<Node> a)
+        //TODO: Node error checking
+        debug_message("TODO: finish addImage command");
+        */
+        return "";
+    }
+
+    /* .
+     * EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot
+     */
+    case SUBCOMMAND_INFINITE_LINE: {
+        /*
+        //TODO: Node error checking
+        debug_message("TODO: finish addInfiniteLine command");
+        */
+        return "";
+    }
+
+    /*
+     * .
+     * EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, std::string rubberMode
+     */
+    case SUBCOMMAND_LINE: {
+        /*
+        _mainWin->nativeadd_line_action(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, OBJ_RUBBER_OFF);
+
+		EmbLine line;
+		line.start.x = x1;
+		line.start.y = -y1;
+		line.end.x = x2;
+		line.end.y = -y2;
+		LineObject* obj = new LineObject(line,_mainWin->getCurrentColor());
+		obj->setRotation(-rot);
+		obj->setObjectRubberMode(rubberMode);
+		if (rubberMode != "OBJ_RUBBER_OFF") {
+			gview->addToRubberRoom(obj);
+			gscene->addItem(obj);
+			gscene->update();
+		}
+		else {
+			UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+			stack->push(cmd);
+		}
+        */
+        return "";
+    }
+
+    /*
+     * NOTE: This native is different than the rest in that
+     * the Y+ is down (scripters need not worry about this).
+     *
+     * EmbReal startX, EmbReal startY, const QPainterPath& p, std::string rubberMode
+     */
+    case SUBCOMMAND_PATH: {
+        /*
+        AddPath(std::vector<Node> a)
+        // TODO: Node error checking
+        debug_message("TODO: finish addPath command");
+        */
+        return "";
+    }
+
+    /* add_point_action
+     * args
+     */
+    case SUBCOMMAND_POINT: {
+		/*
+		EmbVector v;
+		v.x = x;
+		v.y = -y;
+
+		Geometry* obj = new Geometry(v, _mainWin->getCurrentColor(), Qt::SolidLine);
+		UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+		stack->push(cmd);
+		*/
+        return "";
+    }
+
+    /* add_polygon_action
+     * args
+     *
+     * NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
+     * EmbReal startX, EmbReal startY, const QPainterPath& p, std::string rubberMode
+     */
+    case SUBCOMMAND_POLYGON: {
+        /*
+		PolygonObject* obj = new PolygonObject(startX, startY, p,_mainWin->getCurrentColor());
+		obj->setObjectRubberMode(rubberMode);
+		if (rubberMode != "OBJ_RUBBER_OFF") {
+			gview->addToRubberRoom(obj);
+			gscene->addItem(obj);
+			gscene->update();
+		}
+		else {
+			UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+			stack->push(cmd);
+		}
+
+        QVariantList varList = a[0].toVariant().toList();
+        int varSize = varList.size();
+        if (varSize < 2) {
+            return "TYPE ERROR: add_polygon_action(): array must contain at least two elements";
+        }
+        if (varSize % 2) {
+            return "TYPE ERROR: add_polygon_action(): array cannot contain an odd number of elements";
+        }
+
+        bool lineTo = false;
+        bool xCoord = true;
+        EmbReal x = 0;
+        EmbReal y = 0;
+        EmbReal startX = 0;
+        EmbReal startY = 0;
+        QPainterPath path;
+        foreach(QVariant var, varList) {
+            if (var.canConvert(QVariant::Double)) {
+                if (xCoord) {
+                    xCoord = false;
+                    x = var.toReal();
+                }
+                else {
+                    xCoord = true;
+                    y = -var.toReal();
+
+                    if (lineTo) { path.lineTo(x,y); }
+                    else { path.moveTo(x,y); lineTo = true; startX = x; startY = y; }
+                }
+            }
+            else {
+                return "TYPE ERROR: add_polygon_action(): array contains one or more invalid elements");
+            }
+        }
+
+        //Close the polygon
+        path.closeSubpath();
+
+        path.translate(-startX, -startY);
+
+        _mainWin->nativeadd_polygon_action(startX, startY, path, OBJ_RUBBER_OFF);
+        */
+        return "";
+    }
+
+    case SUBCOMMAND_POLYLINE: {
+        return "";
+    }
+
+    /*
+     * .
+     * EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot
+     */
+    case SUBCOMMAND_RAY: {
+        /*
+        //TODO: Node error checking
+        debug_message("TODO: finish addRay command");
+        */
+        return "";
+    }
+
+    /* . */
+    case SUBCOMMAND_RECTANGLE: {
+		EmbRect rect;
+		rect.left = atof(argv[0]);
+		rect.right = -atof(argv[1]);
+		rect.top = atof(argv[2]);
+		rect.bottom = -atof(argv[3]);
+		EmbReal rot = atof(argv[4]);
+		bool fill = (argv[5] == "1");
+		std::string rubberMode = argv[6];
+
+		/*
+		Geometry* obj = new Geometry(rect, _mainWin->getCurrentColor(), Qt::SolidLine);
+		obj->setRotation(-rot);
+		obj->objRubberMode = rubberMode;
+		//TODO: rect fill
+		if (rubberMode != "OBJ_RUBBER_OFF") {
+			gview->addToRubberRoom(obj);
+			gscene->addItem(obj);
+			gscene->update();
+		}
+		else {
+			UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+			stack->push(cmd);
+		}
+		*/
+        return "";
+    }
+
+    /* AddRegularPolygon
+     *
+     * EmbReal centerX, EmbReal centerY, quint16 sides, uint8_t mode,
+     * EmbReal rad, EmbReal rot, bool fill
+     */
+    case SUBCOMMAND_REGULAR_POLYGON: {
+        return "";
+    }
+
+    /* add_rounded_rectangle_action.
+     *
+     * EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rad, EmbReal rot, bool fill
+     */
+    case SUBCOMMAND_ROUNDED_RECTANGLE: {
+        /*
+        _mainWin->nativeadd_rounded_rectangle_action(
+            a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, a[6].b);
+        */
+        return "";
+    }
+
+
+    /* add_slot_action
+     * args
+     *
+     * EmbReal centerX, EmbReal centerY, EmbReal diameter, EmbReal length, EmbReal rot, bool fill, std::string rubberMode
+     */
+    case SUBCOMMAND_SLOT: {
+        //TODO: Use UndoableAddCommand for slots
+        /*
+        SlotObject* slotObj = new SlotObject(centerX, -centerY, diameter, length,_mainWin->getCurrentColor());
+        slotObj->setRotation(-rot);
+        slotObj->setObjectRubberMode(rubberMode);
+        if (rubberMode) gview->addToRubberRoom(slotObj);
+        scene->addItem(slotObj);
+        //TODO: slot fill
+        */
+        //_mainWin->nativeAddSlot(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].b, OBJ_RUBBER_OFF);
+
+        return "";
+    }
+
+    /* add_text_multi_action
+     *
+     * QString str, EmbReal x, EmbReal y, EmbReal rot, bool fill, std::string rubberMode
+     */
+    case SUBCOMMAND_TEXT_MULTI: {
+        /*
+        _mainWin->nativeadd_text_multi_action(a[0].s, a[1].r, a[2].r, a[3].r, a[4].b, OBJ_RUBBER_OFF);
+        */
+        return "";
+    }
+
+    /* add_text_single_action
+     *
+     * QString str, EmbReal x, EmbReal y, EmbReal rot, bool fill, std::string rubberMode
+     */
+    case SUBCOMMAND_TEXT_SINGLE: {
+        /*
+        _mainWin->nativeadd_text_single_action(a[0].s, a[1].r, a[2].r, a[3].r, a[4].b, OBJ_RUBBER_OFF);
+        */
+		/*
+		TextSingleObject* obj = new TextSingleObject(str, x, -y, _mainWin->getCurrentColor());
+		obj->setObjectTextFont(QString::fromStdString(settings.text_font));
+		obj->setObjectTextSize(settings.text_size);
+		obj->setObjectTextStyle(settings.text_style_bold,
+								settings.text_style_italic,
+								settings.text_style_underline,
+								settings.text_style_strikeout,
+								settings.text_style_overline);
+		obj->setObjectTextBackward(false);
+		obj->setObjectTextUpsideDown(false);
+		obj->setRotation(-rot);
+		//TODO: single line text fill
+		obj->setObjectRubberMode(rubberMode);
+		if (rubberMode != "OBJ_RUBBER_OFF") {
+			gview->addToRubberRoom(obj);
+			gscene->addItem(obj);
+			gscene->update();
+		}
+		else {
+			UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+			stack->push(cmd);
+		}
+		*/
+        return "";
+    }
+
+    /* . */
+    case SUBCOMMAND_TRIANGLE: {
+        /*
+        _mainWin->nativeadd_triangle_action(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, a[5].r, a[6].r, a[7].b);
+        */
+        return "";
+    }
+
+    /* TODO: Node error checking
+     *
+     * EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight
+     */
+    case SUBCOMMAND_VERTICAL_DIMENSION: {
+        /*
+        debug_message("TODO: finish addVerticalDimension command");
+        */
+        return "";
+    }
+
+    default: {
+    	return "The add subcommand is not recognised.";
+    }
+    }
+
+	gscene->update();
+	return "";
+}
+
 /* . */
 bool
 save_current_file(String fileName)
@@ -72,7 +582,7 @@ add_polyline(QPainterPath p, String rubberMode)
     if (!(gview && gscene && stack)) {
         return;
     }
-    Geometry* obj = new Geometry(OBJ_TYPE_POLYLINE, _mainWin->getCurrentColor(), Qt::SolidLine);
+    Geometry* obj = new Geometry(OBJ_TYPE_POLYLINE);
     obj->normalPath = p;
     obj->updatePath();
     obj->objRubberMode = rubberMode;
@@ -172,10 +682,9 @@ Geometry::init(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent
     update();
 }
 
-Geometry::Geometry(int type_, QRgb rgb, Qt::PenStyle lineType,
-    QGraphicsItem* parent) : QGraphicsPathItem(parent)
+Geometry::Geometry(int type_, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
-    init(type_, rgb, lineType, parent);
+    init(type_, _mainWin->getCurrentColor(), Qt::SolidLine, parent);
 }
 
 /* TODO:

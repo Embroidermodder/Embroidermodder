@@ -70,6 +70,23 @@ const char *object_names[] = {
     "END"
 };
 
+char *coverage_test_script[] = {
+    "new",
+    "icon 16",
+    "icon 32",
+    "icon 64",
+    "icon 128",
+    "icon 24",
+    "zoom in",
+    "zoom extents",
+    "pan up",
+    "pan down",
+    "pan right",
+    "pan left",
+    "quit",
+    "END"
+};
+
 /* . */
 const char rectangle_main_script[][MAX_STRING_LENGTH] = {
     "init",
