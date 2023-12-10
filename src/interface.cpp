@@ -2927,7 +2927,7 @@ PropertyEditor::createGroupBox(const char *group_box_key, const char *title)
 
     int n = (sizeof all_line_editors)/(sizeof all_line_editors[0]);
     for (int i=0; i<n-1; i++) {
-        LineEditData gbd = all_line_editors[i];
+        EditorData gbd = all_line_editors[i];
         if (strcmp(all_line_editors[i].key, group_box_key)) {
             continue;
         }

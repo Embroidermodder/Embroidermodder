@@ -2108,7 +2108,7 @@ void
 Geometry::setObjectPoint(EmbVector point, int64_t point_type)
 {
     switch (point_type) {
-    case ARC_START_POINT: {;
+    case VECTOR_ARC_START_POINT: {;
         EmbArc arc;
         arc.start = point;
         arc.mid = to_EmbVector(objectMidPoint());
@@ -2116,7 +2116,7 @@ Geometry::setObjectPoint(EmbVector point, int64_t point_type)
         calculateArcData(arc);
         break;
     }
-    case ARC_MID_POINT: {
+    case VECTOR_ARC_MID_POINT: {
         EmbArc arc;
         arc.start = to_EmbVector(objectStartPoint());
         arc.mid = point;
@@ -2124,7 +2124,7 @@ Geometry::setObjectPoint(EmbVector point, int64_t point_type)
         calculateArcData(arc);
         break;
     }
-    case ARC_END_POINT: {
+    case VECTOR_ARC_END_POINT: {
         EmbArc arc;
         arc.start = to_EmbVector(objectStartPoint());
         arc.mid = to_EmbVector(objectMidPoint());
@@ -2145,7 +2145,7 @@ Geometry::setObjectStartPoint(EmbVector point)
 {
     switch (Type) {
     case OBJ_TYPE_ARC: {
-        setObjectPoint(point, ARC_START_POINT);
+        setObjectPoint(point, VECTOR_ARC_START_POINT);
         break;
     }
     default:
@@ -2161,7 +2161,7 @@ Geometry::setObjectMidPoint(EmbVector point)
 {
     switch (Type) {
     case OBJ_TYPE_ARC: {
-        setObjectPoint(point, ARC_MID_POINT);
+        setObjectPoint(point, VECTOR_ARC_MID_POINT);
         break;
     }
     default:
@@ -2175,7 +2175,7 @@ Geometry::setObjectEndPoint(EmbVector point)
 {
     switch (Type) {
     case OBJ_TYPE_ARC: {
-        setObjectPoint(point, ARC_END_POINT);
+        setObjectPoint(point, VECTOR_ARC_END_POINT);
         break;
     }
     default:

@@ -177,7 +177,7 @@ geometry_left_click(GeometryData *geometry, EmbVector v)
 
     case MODE_POLYGON_CENTER_PT: {
         geometry->center = v;
-        geometry->mode = POLYGON_MODE_POLYTYPE;
+        geometry->mode = MODE_POLYGON_POLYTYPE;
         actuator("append-prompt-history");
         char msg[MAX_STRING_LENGTH];
         sprintf(msg, "set-prompt-prefix %s {%s}: ",

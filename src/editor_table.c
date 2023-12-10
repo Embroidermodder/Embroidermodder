@@ -18,7 +18,7 @@
 #include "core.h"
 
 /* . */
-LineEditData all_line_editors[MAX_EDITORS] = {
+EditorData all_line_editors[MAX_EDITORS] = {
     {
         .groupbox = "general",
         .key = "general_layer",
@@ -902,7 +902,7 @@ LineEditData all_line_editors[MAX_EDITORS] = {
     }
 };
 
-SpinBoxEditData all_spinbox_editors[] = {
+EditorData all_spinbox_editors[] = {
     /* end symbol */
     {
         .groupbox = "END",
