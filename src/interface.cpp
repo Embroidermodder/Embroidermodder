@@ -35,6 +35,21 @@
 
 bool test_program = false;
 
+// Used when checking if fields vary
+QString fieldOldText;
+QString fieldNewText;
+QString fieldVariesText;
+QString fieldYesText;
+QString fieldNoText;
+QString fieldOnText;
+QString fieldOffText;
+
+QLineEdit *lineEdits[TOTAL_EDITORS];
+QToolButton *toolButtons[TOTAL_EDITORS];
+QSpinBox *spinBoxes[TOTAL_EDITORS];
+QDoubleSpinBox *doubleSpinBoxes[TOTAL_EDITORS];
+QComboBox *comboBoxes[TOTAL_EDITORS];
+
 /* Make the translation function global in scope. */
 QString
 translate_str(const char *str)
@@ -83,6 +98,15 @@ to_EmbVector(QPointF a)
     v.x = a.x();
     v.y = a.y();
     return v;
+}
+
+/* . */
+QIcon
+swatch(int32_t c)
+{
+    QPixmap crosshairPix(16,16);
+    crosshairPix.fill(QColor(c));
+    return QIcon(crosshairPix);
 }
 
 /* Debug message wrapper for qDebug.
@@ -665,15 +689,14 @@ StatusBar::StatusBar(QWidget *parent) : QStatusBar(parent)
     int n = string_array_length(button_list);
     for (int i=0; i<n; i++) {
         QString name = "StatusBarButton";
-        QToolButton* button = new QToolButton(parent);
-        button->setObjectName(name + button_list[i]);
+        buttons[i] = new QToolButton(parent);
+        buttons[i]->setObjectName(name + button_list[i]);
 
-        button->setText(QString::fromStdString(button_list[i]));
-        button->setAutoRaise(true);
-        button->setCheckable(true);
+        buttons[i]->setText(QString::fromStdString(button_list[i]));
+        buttons[i]->setAutoRaise(true);
+        buttons[i]->setCheckable(true);
 
-        connect(button, &QToolButton::toggled, this, [=](bool a) { toggle(button_list[i], a); } );
-        buttons[button_list[i]] = button;
+        connect(buttons[i], &QToolButton::toggled, this, [=](bool a) { toggle(button_list[i], a); } );
     }
 
     statusBarMouseCoord = new QLabel(this);
@@ -683,7 +706,7 @@ StatusBar::StatusBar(QWidget *parent) : QStatusBar(parent)
 
     this->addWidget(statusBarMouseCoord);
     for (int i=0; i<n; i++) {
-        this->addWidget(buttons[button_list[i]]);
+        this->addWidget(buttons[i]);
     }
 }
 
@@ -2316,14 +2339,14 @@ MdiWindow::onWindowActivated()
     debug_message("MdiWindow onWindowActivated()");
     gview->undoStack->setActive(true);
     _mainWin->setUndoCleanIcon(fileWasLoaded);
-    statusbar->buttons["SNAP"]->setChecked(gscene->property("ENABLE_SNAP").toBool());
-    statusbar->buttons["GRID"]->setChecked(gscene->property("ENABLE_GRID").toBool());
-    statusbar->buttons["RULER"]->setChecked(gscene->property("ENABLE_RULER").toBool());
-    statusbar->buttons["ORTHO"]->setChecked(gscene->property("ENABLE_ORTHO").toBool());
-    statusbar->buttons["POLAR"]->setChecked(gscene->property("ENABLE_POLAR").toBool());
-    statusbar->buttons["QSNAP"]->setChecked(gscene->property("ENABLE_QSNAP").toBool());
-    statusbar->buttons["QTRACK"]->setChecked(gscene->property("ENABLE_QTRACK").toBool());
-    statusbar->buttons["LWT"]->setChecked(gscene->property("ENABLE_LWT").toBool());
+    statusbar->buttons[STATUSBAR_SNAP]->setChecked(gscene->property("ENABLE_SNAP").toBool());
+    statusbar->buttons[STATUSBAR_GRID]->setChecked(gscene->property("ENABLE_GRID").toBool());
+    statusbar->buttons[STATUSBAR_RULER]->setChecked(gscene->property("ENABLE_RULER").toBool());
+    statusbar->buttons[STATUSBAR_ORTHO]->setChecked(gscene->property("ENABLE_ORTHO").toBool());
+    statusbar->buttons[STATUSBAR_POLAR]->setChecked(gscene->property("ENABLE_POLAR").toBool());
+    statusbar->buttons[STATUSBAR_QSNAP]->setChecked(gscene->property("ENABLE_QSNAP").toBool());
+    statusbar->buttons[STATUSBAR_QTRACK]->setChecked(gscene->property("ENABLE_QTRACK").toBool());
+    statusbar->buttons[STATUSBAR_LWT]->setChecked(gscene->property("ENABLE_LWT").toBool());
     prompt->setHistory(promptHistory);
 }
 
@@ -2399,7 +2422,7 @@ PropertyEditor::PropertyEditor(QString  iconDirectory, bool pickAddMode, QWidget
     fieldOffText = "Off";
 
     for (int i=0; i<GB_TOTAL; i++) {
-        groupBoxes[i] = createGroupBox(group_box_data[2*i+0], group_box_data[2*i+1]);
+        groupBoxes[i] = createGroupBox(i, group_box_data[2*i+1]);
     }
 
     QWidget* widgetMain = new QWidget(this);
@@ -2575,7 +2598,9 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
 
     /* Populate the selection comboBox. */
     if (numTypes > 1) {
-        comboBoxSelected->addItem(translate_str("Varies") + " (" + QString().setNum(numAll) + ")");
+        QString item = translate_str("Varies");
+        item += " (" + QString().setNum(numAll) + ")";
+        comboBoxSelected->addItem(item);
         connect(comboBoxSelected, SIGNAL(currentIndexChanged(int)), this, SLOT(showOneType(int)));
     }
 
@@ -2598,7 +2623,9 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
     clearAllFields();
 
     foreach(QGraphicsItem* item, itemList) {
-        if (!item) continue;
+        if (!item) {
+            continue;
+        }
 
         // \todo load data into the General field
 
@@ -2608,31 +2635,51 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
             continue;
         }
         if (objType == OBJ_TYPE_ARC) {
-            updateLineEditNumIfVaries(lineEdits["arc-center-x"], obj->scenePos().x(), false);
-            updateLineEditNumIfVaries(lineEdits["arc-center-y"], -obj->scenePos().y(), false);
-            updateLineEditNumIfVaries(lineEdits["arc_radius"], obj->objectRadius(), false);
-            updateLineEditNumIfVaries(lineEdits["arc_start_angle"], obj->objectStartAngle(), true);
-            updateLineEditNumIfVaries(lineEdits["arc_end_angle"], obj->objectEndAngle(), true);
-            updateLineEditNumIfVaries(lineEdits["arc_start_x"], obj->objectStartPoint().x(), false);
-            updateLineEditNumIfVaries(lineEdits["arc_start_y"], -obj->objectStartPoint().y(), false);
-            updateLineEditNumIfVaries(lineEdits["arc_end_x"], obj->objectEndPoint().x(), false);
-            updateLineEditNumIfVaries(lineEdits["arc_end_y"], -obj->objectEndPoint().y(), false);
-            updateLineEditNumIfVaries(lineEdits["arc_area"], obj->objectArea(), false);
-            updateLineEditNumIfVaries(lineEdits["arc_length"], obj->objectArcLength(), false);
-            updateLineEditNumIfVaries(lineEdits["arc_chord"], obj->objectChord(), false);
-            updateLineEditNumIfVaries(lineEdits["arc_inc_angle"], obj->objectIncludedAngle(), true);
-            updateComboBoxBoolIfVaries(comboBoxes["arc-clockwise"], obj->objectClockwise(), true);
+            updateLineEditNumIfVaries(lineEdits[ED_ARC_CENTER_X],
+                obj->scenePos().x(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_ARC_CENTER_Y],
+                -obj->scenePos().y(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_ARC_RADIUS],
+                obj->objectRadius(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_ARC_START_ANGLE],
+                obj->objectStartAngle(), true);
+            updateLineEditNumIfVaries(lineEdits[ED_ARC_END_ANGLE],
+                obj->objectEndAngle(), true);
+            updateLineEditNumIfVaries(lineEdits[ED_ARC_START_X],
+                obj->objectStartPoint().x(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_ARC_START_Y],
+                -obj->objectStartPoint().y(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_ARC_END_X],
+                obj->objectEndPoint().x(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_ARC_END_Y],
+                -obj->objectEndPoint().y(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_ARC_AREA],
+                obj->objectArea(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_ARC_LENGTH],
+                obj->objectArcLength(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_ARC_CHORD],
+                obj->objectChord(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_ARC_INC_ANGLE],
+                obj->objectIncludedAngle(), true);
+            updateComboBoxBoolIfVaries(comboBoxes[ED_ARC_CLOCKWISE],
+                obj->objectClockwise(), true);
         }
         else if (objType == OBJ_TYPE_BLOCK) {
             // \todo load block data
         }
         else if (objType == OBJ_TYPE_CIRCLE) {
-            updateLineEditNumIfVaries(lineEdits["circle_center_x"], obj->scenePos().x(), false);
-            updateLineEditNumIfVaries(lineEdits["circle_center_y"], -obj->scenePos().y(), false);
-            updateLineEditNumIfVaries(lineEdits["circle_radius"], obj->objectRadius(), false);
-            updateLineEditNumIfVaries(lineEdits["circle_diameter"], obj->objectDiameter(), false);
-            updateLineEditNumIfVaries(lineEdits["circle_area"], obj->objectArea(), false);
-            updateLineEditNumIfVaries(lineEdits["circle_circumference"], obj->objectCircumference(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_CIRCLE_CENTER_X],
+                obj->scenePos().x(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_CIRCLE_CENTER_Y],
+                -obj->scenePos().y(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_CIRCLE_RADIUS],
+                obj->objectRadius(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_CIRCLE_DIAMETER],
+                obj->objectDiameter(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_CIRCLE_AREA],
+                obj->objectArea(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_CIRCLE_CIRCUMFERENCE],
+                obj->objectCircumference(), false);
         }
         else if (objType == OBJ_TYPE_DIMALIGNED) {
             // \todo load aligned dimension data
@@ -2659,12 +2706,18 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
             // \todo load radius dimension data
         }
         else if (objType == OBJ_TYPE_ELLIPSE) {
-            updateLineEditNumIfVaries(lineEdits["ellipse-center-x"], obj->scenePos().x(), false);
-            updateLineEditNumIfVaries(lineEdits["ellipse-center-y"], -obj->scenePos().y(), false);
-            updateLineEditNumIfVaries(lineEdits["ellipse-radius-major"], obj->objectRadiusMajor(), false);
-            updateLineEditNumIfVaries(lineEdits["ellipse-radius-minor"], obj->objectRadiusMinor(), false);
-            updateLineEditNumIfVaries(lineEdits["ellipse-diameter-major"], obj->objectDiameterMajor(), false);
-            updateLineEditNumIfVaries(lineEdits["ellipse-diameter-minor"], obj->objectDiameterMinor(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_ELLIPSE_CENTER_X],
+                obj->scenePos().x(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_ELLIPSE_CENTER_Y],
+                -obj->scenePos().y(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_ELLIPSE_RADIUS_MAJOR],
+                obj->objectRadiusMajor(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_ELLIPSE_RADIUS_MINOR],
+                obj->objectRadiusMinor(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_ELLIPSE_DIAMETER_MAJOR],
+                obj->objectDiameterMajor(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_ELLIPSE_DIAMETER_MINOR],
+                obj->objectDiameterMinor(), false);
         }
         else if (objType == OBJ_TYPE_IMAGE) {
             // \todo load image data
@@ -2673,21 +2726,31 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
             // \todo load infinite line data
         }
         else if (objType == OBJ_TYPE_LINE) {
-            updateLineEditNumIfVaries(lineEdits["line-start-x"], obj->objectEndPoint1().x(), false);
-            updateLineEditNumIfVaries(lineEdits["line-start-y"], -obj->objectEndPoint1().y(), false);
-            updateLineEditNumIfVaries(lineEdits["line-end-x"], obj->objectEndPoint2().x(), false);
-            updateLineEditNumIfVaries(lineEdits["line-end-y"], -obj->objectEndPoint2().y(), false);
-            updateLineEditNumIfVaries(lineEdits["line-delta-x"], obj->objectDelta().x(), false);
-            updateLineEditNumIfVaries(lineEdits["line-delta-y"], -obj->objectDelta().y(), false);
-            updateLineEditNumIfVaries(lineEdits["line-angle"], obj->objectAngle(), true);
-            updateLineEditNumIfVaries(lineEdits["line-length"], obj->objectLength(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_LINE_START_X],
+                obj->objectEndPoint1().x(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_LINE_START_Y],
+                -obj->objectEndPoint1().y(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_LINE_END_X],
+                obj->objectEndPoint2().x(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_LINE_END_Y],
+                -obj->objectEndPoint2().y(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_LINE_DELTA_X],
+                obj->objectDelta().x(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_LINE_DELTA_Y],
+                -obj->objectDelta().y(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_LINE_ANGLE],
+                obj->objectAngle(), true);
+            updateLineEditNumIfVaries(lineEdits[ED_LINE_LENGTH],
+                obj->objectLength(), false);
         }
         else if (objType == OBJ_TYPE_PATH) {
             // \todo load path data
         }
         else if (objType == OBJ_TYPE_POINT) {
-            updateLineEditNumIfVaries(lineEdits["point-x"],  obj->scenePos().x(), false);
-            updateLineEditNumIfVaries(lineEdits["point-y"], -obj->scenePos().y(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_POINT_X],
+                obj->scenePos().x(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_POINT_Y],
+                -obj->scenePos().y(), false);
         }
         else if (objType == OBJ_TYPE_POLYGON) {
             // \todo load polygon data
@@ -2704,31 +2767,51 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
             QPointF corn3 = obj->objectBottomLeft();
             QPointF corn4 = obj->objectBottomRight();
 
-            updateLineEditNumIfVaries(lineEdits["rectangle_corner1_x"], corn1.x(), false);
-            updateLineEditNumIfVaries(lineEdits["rectangle_corner1_y"], -corn1.y(), false);
-            updateLineEditNumIfVaries(lineEdits["rectangle_corner2_x"], corn2.x(), false);
-            updateLineEditNumIfVaries(lineEdits["rectangle_corner2_y"], -corn2.y(), false);
-            updateLineEditNumIfVaries(lineEdits["rectangle_corner3_x"], corn3.x(), false);
-            updateLineEditNumIfVaries(lineEdits["rectangle_corner3_y"], -corn3.y(), false);
-            updateLineEditNumIfVaries(lineEdits["rectangle_corner4_x"], corn4.x(), false);
-            updateLineEditNumIfVaries(lineEdits["rectangle_corner4_y"], -corn4.y(), false);
-            updateLineEditNumIfVaries(lineEdits["rectangle_width"], obj->objectWidth(), false);
-            updateLineEditNumIfVaries(lineEdits["rectangle_height"], -obj->objectHeight(), false);
-            updateLineEditNumIfVaries(lineEdits["rectangle_area"], obj->objectArea(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_RECTANGLE_CORNER1_X],
+                corn1.x(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_RECTANGLE_CORNER1_Y],
+                -corn1.y(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_RECTANGLE_CORNER2_X],
+                corn2.x(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_RECTANGLE_CORNER2_Y],
+                -corn2.y(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_RECTANGLE_CORNER3_X],
+                corn3.x(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_RECTANGLE_CORNER3_Y],
+                -corn3.y(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_RECTANGLE_CORNER4_X],
+                corn4.x(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_RECTANGLE_CORNER4_Y],
+                -corn4.y(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_RECTANGLE_WIDTH],
+                obj->objectWidth(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_RECTANGLE_HEIGHT],
+                -obj->objectHeight(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_RECTANGLE_AREA],
+                obj->objectArea(), false);
         }
         else if (objType == OBJ_TYPE_TEXTMULTI) {
             // \todo load multiline text data
         }
         else if (objType == OBJ_TYPE_TEXTSINGLE) {
-            updateLineEditStrIfVaries(lineEdits["text-single-contents"], obj->objText);
-            updateFontComboBoxStrIfVaries(comboBoxTextSingleFont, obj->objTextFont);
-            updateComboBoxStrIfVaries(comboBoxes["text-single-justify"], obj->objTextJustify, {});
-            updateLineEditNumIfVaries(lineEdits["text-single-height"], obj->text_size, false);
-            updateLineEditNumIfVaries(lineEdits["text-single-rotation"], -obj->rotation(), true);
-            updateLineEditNumIfVaries(lineEdits["text-single-x"], obj->scenePos().x(), false);
-            updateLineEditNumIfVaries(lineEdits["text-single-y"], -obj->scenePos().y(), false);
-            updateComboBoxBoolIfVaries(comboBoxes["text-single-backward"], obj->flags & PROP_BACKWARD, true);
-            updateComboBoxBoolIfVaries(comboBoxes["text-single-upside-down"], obj->flags & PROP_UPSIDEDOWN, true);
+            updateLineEditStrIfVaries(lineEdits[ED_TEXT_SINGLE_CONTENTS],
+                obj->objText);
+            updateFontComboBoxStrIfVaries(comboBoxTextSingleFont,
+                obj->objTextFont);
+            updateComboBoxStrIfVaries(comboBoxes[ED_TEXT_SINGLE_JUSTIFY],
+                obj->objTextJustify, {});
+            updateLineEditNumIfVaries(lineEdits[ED_TEXT_SINGLE_HEIGHT],
+                obj->text_size, false);
+            updateLineEditNumIfVaries(lineEdits[ED_TEXT_SINGLE_ROTATION],
+                -obj->rotation(), true);
+            updateLineEditNumIfVaries(lineEdits[ED_TEXT_SINGLE_X],
+                obj->scenePos().x(), false);
+            updateLineEditNumIfVaries(lineEdits[ED_TEXT_SINGLE_Y],
+                -obj->scenePos().y(), false);
+            updateComboBoxBoolIfVaries(comboBoxes[ED_TEXT_SINGLE_BACKWARD],
+                obj->flags & PROP_BACKWARD, true);
+            updateComboBoxBoolIfVaries(comboBoxes[ED_TEXT_SINGLE_UPSIDE_DOWN],
+                obj->flags & PROP_UPSIDEDOWN, true);
         }
     }
 
@@ -2879,7 +2962,7 @@ void
 PropertyEditor::hideAllGroups(void)
 {
     for (int i=0; i<GB_TOTAL; i++) {
-        if (strcmp(group_box_types[i], "general")) {
+        if (i != GB_GENERAL) {
             groupBoxes[i]->hide();
         }
     }
@@ -2891,16 +2974,24 @@ PropertyEditor::hideAllGroups(void)
  */
 void PropertyEditor::clearAllFields()
 {
-    for (int i=0; strcmp(all_line_editors[i].key, "END"); i++) {
-        if (!strcmp(all_line_editors[i].type, "double")) {
-            lineEdits[all_line_editors[i].key]->clear();
+    for (int i=0; all_line_editors[i].key >= 0; i++) {
+        int key = all_line_editors[i].key;
+        switch (all_line_editors[i].type) {
+        case EDITOR_DOUBLE: {
+            lineEdits[key]->clear();
+            break;
         }
-        if (!strcmp(all_line_editors[i].type, "combobox")) {
-            comboBoxes[all_line_editors[i].key]->clear();
+        case EDITOR_COMBOBOX: {
+            comboBoxes[key]->clear();
+            break;
         }
-        if (!strcmp(all_line_editors[i].type, "fontcombobox")) {
+        case EDITOR_FONT: {
             comboBoxTextSingleFont->removeItem(comboBoxTextSingleFont->findText(fieldVariesText)); //NOTE: Do not clear comboBoxTextSingleFont
             comboBoxTextSingleFont->setProperty("FontFamily", "");
+            break;
+        }
+        default:
+            break;
         }
     }
 }
@@ -2909,54 +3000,65 @@ void PropertyEditor::clearAllFields()
  * .
  */
 QGroupBox *
-PropertyEditor::createGroupBox(const char *group_box_key, const char *title)
+PropertyEditor::createGroupBox(int group_box_key, const char *title)
 {
     QGroupBox *gb = new QGroupBox(tr(title), this);
-    gb->setObjectName(group_box_key);
-
-    int group_box_type = OBJ_TYPE_BASE;
-    int n_group_box_types = string_array_length(group_box_types);
-    for (int i=0; i<n_group_box_types; i++) {
-        if (!strcmp(group_box_types[i], group_box_key)) {
-            group_box_type = group_box_ids[i];
-            break;
-        }
-    }
+    gb->setObjectName(group_box_data[2*group_box_key]);
 
     QFormLayout* formLayout = new QFormLayout(this);
 
-    int n = (sizeof all_line_editors)/(sizeof all_line_editors[0]);
-    for (int i=0; i<n-1; i++) {
+    for (int i=0; all_line_editors[i].key >= 0; i++) {
         EditorData gbd = all_line_editors[i];
-        if (strcmp(all_line_editors[i].key, group_box_key)) {
+        if (gbd.groupbox != group_box_key) {
             continue;
         }
-        std::string key(gbd.key);
-        toolButtons[key] = createToolButton(gbd.icon, tr(gbd.label));
-        if (!strcmp(gbd.type, "double")) {
+        toolButtons[gbd.key] = createToolButton(gbd.icon, tr(gbd.label));
+        switch (gbd.type) {
+        case EDITOR_INT: {
+            lineEdits[gbd.key] = new QLineEdit(this);
+			lineEdits[gbd.key]->setValidator(new QIntValidator(lineEdits[gbd.key]));
             if (strlen(gbd.map_signal) == 0) {
-                lineEdits[key] = createLineEdit(gbd.type, false);
+                lineEdits[gbd.key]->setReadOnly(false);
             }
             else {
-                lineEdits[key] = createLineEdit(gbd.type, true);
-                mapSignal(lineEdits[key], gbd.map_signal, group_box_type);
+                lineEdits[gbd.key]->setReadOnly(true);
+                mapSignal(lineEdits[gbd.key], gbd.map_signal, gbd.type);
             }
-            formLayout->addRow(toolButtons[key], lineEdits[key]);
+            formLayout->addRow(toolButtons[gbd.key], lineEdits[gbd.key]);
+            break;
         }
-        if (!strcmp(gbd.type, "combobox")) {
-            comboBoxes[key] = new QComboBox(this);
+        case EDITOR_DOUBLE: {
+            lineEdits[gbd.key] = new QLineEdit(this);
+			lineEdits[gbd.key]->setValidator(new QDoubleValidator(lineEdits[gbd.key]));
             if (strlen(gbd.map_signal) == 0) {
-                comboBoxes[key]->setDisabled(true);
+                lineEdits[gbd.key]->setReadOnly(false);
             }
             else {
-                comboBoxes[key]->setDisabled(false);
+                lineEdits[gbd.key]->setReadOnly(true);
+                mapSignal(lineEdits[gbd.key], gbd.map_signal, gbd.type);
             }
-            formLayout->addRow(toolButtons[key], comboBoxes[key]);
+            formLayout->addRow(toolButtons[gbd.key], lineEdits[gbd.key]);
+            break;
         }
-        if (!strcmp(gbd.type, "fontcombobox")) {
+        case EDITOR_COMBOBOX: {
+            comboBoxes[gbd.key] = new QComboBox(this);
+            if (strlen(gbd.map_signal) == 0) {
+                comboBoxes[gbd.key]->setDisabled(true);
+            }
+            else {
+                comboBoxes[gbd.key]->setDisabled(false);
+            }
+            formLayout->addRow(toolButtons[gbd.key], comboBoxes[gbd.key]);
+            break;
+        }
+        case EDITOR_FONT: {
             comboBoxTextSingleFont = new QFontComboBox(this);
             comboBoxTextSingleFont->setDisabled(false);
-            formLayout->addRow(toolButtons[key], comboBoxTextSingleFont);
+            formLayout->addRow(toolButtons[gbd.key], comboBoxTextSingleFont);
+            break;
+        }
+        default:
+            break;
         }
     }
     gb->setLayout(formLayout);
@@ -2976,23 +3078,6 @@ PropertyEditor::createToolButton(QString iconName, QString txt)
     tb->setToolButtonStyle(propertyEditorButtonStyle);
     tb->setStyleSheet("border:none;");
     return tb;
-}
-
-/**
- * .
- */
-QLineEdit*
-PropertyEditor::createLineEdit(QString  validatorType, bool readOnly)
-{
-    QLineEdit* le = new QLineEdit(this);
-    if (validatorType == "int") {
-        le->setValidator(new QIntValidator(le));
-    }
-    else if (validatorType == "double") {
-        le->setValidator(new QDoubleValidator(le));
-    }
-    le->setReadOnly(readOnly);
-    return le;
 }
 
 /* PropertyEditor::mapSignal fieldObj name value
@@ -3020,9 +3105,11 @@ void
 PropertyEditor::fieldEdited(QObject* fieldObj)
 {
     static bool blockSignals = false;
-    if (blockSignals) return;
+    if (blockSignals) {
+        return;
+    }
 
-    qDebug("==========Field was Edited==========");
+    debug_message("==========Field was Edited==========");
     QString objName = fieldObj->objectName();
     int objType = fieldObj->property(qPrintable(objName)).toInt();
 
@@ -3038,41 +3125,41 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
         switch(objType) {
             case OBJ_TYPE_ARC:
                 if (objName == "lineEditArcCenterX") {
-                    obj->setX(lineEdits["arc-center-x"]->text().toDouble());
+                    obj->setX(lineEdits[ED_ARC_CENTER_X]->text().toDouble());
                 }
                 if (objName == "lineEditArcCenterY") {
-                    obj->setY(-lineEdits["arc-center-y"]->text().toDouble());
+                    obj->setY(-lineEdits[ED_ARC_CENTER_Y]->text().toDouble());
                 }
                 if (objName == "lineEditArcRadius") {
-                    obj->setObjectRadius(lineEdits["arc_radius"]->text().toDouble());
+                    obj->setObjectRadius(lineEdits[ED_ARC_RADIUS]->text().toDouble());
                 }
                 if (objName == "lineEditArcStartAngle") {
-                    obj->setObjectStartAngle(lineEdits["arc_start_angle"]->text().toDouble());
+                    obj->setObjectStartAngle(lineEdits[ED_ARC_START_ANGLE]->text().toDouble());
                 }
                 if (objName == "lineEditArcEndAngle") {
-                    obj->setObjectEndAngle(lineEdits["arc_end_angle"]->text().toDouble());
+                    obj->setObjectEndAngle(lineEdits[ED_ARC_END_ANGLE]->text().toDouble());
                 }
                 break;
             case OBJ_TYPE_BLOCK: // \todo field editing
                 break;
             case OBJ_TYPE_CIRCLE:
                 if (objName == "lineEditCircleCenterX") {
-                    obj->setX(lineEdits["circle_center_x"]->text().toDouble());
+                    obj->setX(lineEdits[ED_CIRCLE_CENTER_X]->text().toDouble());
                 }
                 if (objName == "lineEditCircleCenterY") {
-                    obj->setY(-lineEdits["circle_center_y"]->text().toDouble());
+                    obj->setY(-lineEdits[ED_CIRCLE_CENTER_Y]->text().toDouble());
                 }
                 if (objName == "lineEditCircleRadius") {
-                    obj->setObjectRadius(lineEdits["circle_radius"]->text().toDouble());
+                    obj->setObjectRadius(lineEdits[ED_CIRCLE_RADIUS]->text().toDouble());
                 }
                 if (objName == "lineEditCircleDiameter") {
-                    obj->setObjectDiameter(lineEdits["circle_diameter"]->text().toDouble());
+                    obj->setObjectDiameter(lineEdits[ED_CIRCLE_DIAMETER]->text().toDouble());
                 }
                 if (objName == "lineEditCircleArea") {
-                    obj->setObjectArea(lineEdits["circle_area"]->text().toDouble());
+                    obj->setObjectArea(lineEdits[ED_CIRCLE_AREA]->text().toDouble());
                 }
                 if (objName == "lineEditCircleCircumference") {
-                    obj->setObjectCircumference(lineEdits["circle_circumference"]->text().toDouble());
+                    obj->setObjectCircumference(lineEdits[ED_CIRCLE_CIRCUMFERENCE]->text().toDouble());
                 }
                 break;
             case OBJ_TYPE_DIMALIGNED: // \todo field editing
@@ -3093,22 +3180,22 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
                 break;
             case OBJ_TYPE_ELLIPSE:
                 if (objName == "lineEditEllipseCenterX") {
-                    obj->setX(lineEdits["ellipse-center-x"]->text().toDouble());
+                    obj->setX(lineEdits[ED_ELLIPSE_CENTER_X]->text().toDouble());
                 }
                 if (objName == "lineEditEllipseCenterY") {
-                    obj->setY(-lineEdits["ellipse-center-y"]->text().toDouble());
+                    obj->setY(-lineEdits[ED_ELLIPSE_CENTER_Y]->text().toDouble());
                 }
                 if (objName == "lineEditEllipseRadiusMajor") {
-                    obj->setObjectRadiusMajor(lineEdits["ellipse-radius-major"]->text().toDouble());
+                    obj->setObjectRadiusMajor(lineEdits[ED_ELLIPSE_RADIUS_MAJOR]->text().toDouble());
                 }
                 if (objName == "lineEditEllipseRadiusMinor") {
-                    obj->setObjectRadiusMinor(lineEdits["ellipse-radius-minor"]->text().toDouble());
+                    obj->setObjectRadiusMinor(lineEdits[ED_ELLIPSE_RADIUS_MINOR]->text().toDouble());
                 }
                 if (objName == "lineEditEllipseDiameterMajor") {
-                    obj->setObjectDiameterMajor(lineEdits["ellipse-diameter-major"]->text().toDouble());
+                    obj->setObjectDiameterMajor(lineEdits[ED_ELLIPSE_DIAMETER_MAJOR]->text().toDouble());
                 }
                 if (objName == "lineEditEllipseDiameterMinor") {
-                    obj->setObjectDiameterMinor(lineEdits["ellipse-diameter-minor"]->text().toDouble());
+                    obj->setObjectDiameterMinor(lineEdits[ED_ELLIPSE_DIAMETER_MINOR]->text().toDouble());
                 }
                 break;
             case OBJ_TYPE_IMAGE: // \todo field editing
@@ -3118,22 +3205,22 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
             case OBJ_TYPE_LINE:
                 if (objName == "lineEditLineStartX") {
                     EmbVector v = to_EmbVector(obj->objectStartPoint());
-                    v.x = lineEdits["line-start-x"]->text().toDouble();
+                    v.x = lineEdits[ED_LINE_START_X]->text().toDouble();
                     obj->setObjectStartPoint(v);
                 }
                 if (objName == "lineEditLineStartY") {
                     EmbVector v = to_EmbVector(obj->objectStartPoint());
-                    v.y = -lineEdits["line-start-y"]->text().toDouble();
+                    v.y = -lineEdits[ED_LINE_START_Y]->text().toDouble();
                     obj->setObjectStartPoint(v);
                 }
                 if (objName == "lineEditLineEndX") {
                     EmbVector v = to_EmbVector(obj->objectStartPoint());
-                    v.x = lineEdits["line-end-x"]->text().toDouble();
+                    v.x = lineEdits[ED_LINE_END_X]->text().toDouble();
                     obj->setObjectEndPoint(v);
                 }
                 if (objName == "lineEditLineEndY") {
                     EmbVector v = to_EmbVector(obj->objectStartPoint());
-                    v.y = -lineEdits["line-end-y"]->text().toDouble();
+                    v.y = -lineEdits[ED_LINE_END_Y]->text().toDouble();
                     obj->setObjectEndPoint(v);
                 }
                 break;
@@ -3141,10 +3228,10 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
                 break;
             case OBJ_TYPE_POINT:
                 if (objName == "lineEditPointX") {
-                    obj->setX(lineEdits["point-x"]->text().toDouble());
+                    obj->setX(lineEdits[ED_POINT_X]->text().toDouble());
                 }
                 if (objName == "lineEditPointY") {
-                    obj->setY(-lineEdits["point-y"]->text().toDouble());
+                    obj->setY(-lineEdits[ED_POINT_Y]->text().toDouble());
                 }
                 break;
             case OBJ_TYPE_POLYGON: // \todo field editing
@@ -3159,7 +3246,7 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
                 break;
             case OBJ_TYPE_TEXTSINGLE: // \todo field editing
                 if (objName == "lineEditTextSingleContents") {
-                    obj->setObjectText(lineEdits["text-single-contents"]->text());
+                    obj->setObjectText(lineEdits[ED_TEXT_SINGLE_CONTENTS]->text());
                 }
                 if (objName == "comboBoxTextSingleFont") {
                     if (comboBoxTextSingleFont->currentText() == fieldVariesText) {
@@ -3168,34 +3255,34 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
                     obj->setObjectTextFont(comboBoxTextSingleFont->currentFont().family());
                 }
                 if (objName == "comboBoxTextSingleJustify") {
-                    if (comboBoxes["text-single-justify"]->currentText() == fieldVariesText) {
+                    if (comboBoxes[ED_TEXT_SINGLE_JUSTIFY]->currentText() == fieldVariesText) {
                         break;
                     }
-                    obj->setObjectTextJustify(comboBoxes["text-single-justify"]->itemData(comboBoxes["text-single-justify"]->currentIndex()).toString());
+                    obj->setObjectTextJustify(comboBoxes[ED_TEXT_SINGLE_JUSTIFY]->itemData(comboBoxes[ED_TEXT_SINGLE_JUSTIFY]->currentIndex()).toString());
                 }
                 if (objName == "lineEditTextSingleHeight") {
-                    obj->setObjectTextSize(lineEdits["text-single-height"]->text().toDouble());
+                    obj->setObjectTextSize(lineEdits[ED_TEXT_SINGLE_HEIGHT]->text().toDouble());
                 }
                 if (objName == "lineEditTextSingleRotation") {
-                    obj->setRotation(-lineEdits["text-single-rotation"]->text().toDouble());
+                    obj->setRotation(-lineEdits[ED_TEXT_SINGLE_ROTATION]->text().toDouble());
                 }
                 if (objName == "lineEditTextSingleX") {
-                    obj->setX(lineEdits["text-single-x"]->text().toDouble());
+                    obj->setX(lineEdits[ED_TEXT_SINGLE_X]->text().toDouble());
                 }
                 if (objName == "lineEditTextSingleY") {
-                    obj->setY(lineEdits["text-single-y"]->text().toDouble());
+                    obj->setY(lineEdits[ED_TEXT_SINGLE_Y]->text().toDouble());
                 }
                 if (objName == "comboBoxTextSingleBackward") {
-                    if (comboBoxes["text-single-backward"]->currentText() == fieldVariesText) {
+                    if (comboBoxes[ED_TEXT_SINGLE_BACKWARD]->currentText() == fieldVariesText) {
                         break;
                     }
-                    obj->setObjectTextBackward(comboBoxes["text-single-backward"]->itemData(comboBoxes["text-single-backward"]->currentIndex()).toBool());
+                    obj->setObjectTextBackward(comboBoxes[ED_TEXT_SINGLE_BACKWARD]->itemData(comboBoxes[ED_TEXT_SINGLE_BACKWARD]->currentIndex()).toBool());
                 }
                 if (objName == "comboBoxTextSingleUpsideDown") {
-                    if (comboBoxes["text-single-upside-down"]->currentText() == fieldVariesText) {
+                    if (comboBoxes[ED_TEXT_SINGLE_UPSIDE_DOWN]->currentText() == fieldVariesText) {
                         break;
                     }
-                    obj->setObjectTextUpsideDown(comboBoxes["text-single-upside-down"]->itemData(comboBoxes["text-single-upside-down"]->currentIndex()).toBool());
+                    obj->setObjectTextUpsideDown(comboBoxes[ED_TEXT_SINGLE_UPSIDE_DOWN]->itemData(comboBoxes[ED_TEXT_SINGLE_UPSIDE_DOWN]->currentIndex()).toBool());
                 }
                 break;
             default:

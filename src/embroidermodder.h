@@ -19,7 +19,6 @@
 #define __EMBROIDERMODDER_UTILITY_H__
 
 #include <vector>
-#include <unordered_map>
 #include <string>
 
 /* From this source code directory. */
@@ -29,7 +28,10 @@
 #include <QAction>
 #include <QApplication>
 
+#include <QOpenGLWidget>
 #include <QtPrintSupport>
+
+#define CSTR(str) ( (char*)((str).toStdString().c_str()) )
 
 class ImageWidget;
 class MdiArea;
@@ -42,9 +44,7 @@ class UndoEditor;
 class MainWindow;
 class Geometry;
 
-/* Global variables
- * ----------------
- */
+/* Global variables */
 extern MdiArea* mdiArea;
 extern MainWindow* _mainWin;
 extern CmdPrompt* prompt;
@@ -53,13 +53,13 @@ extern UndoEditor* dockUndoEdit;
 extern StatusBar* statusbar;
 extern QAction* actionHash[MAX_ACTIONS];
 
-/* Functions in the global namespace
- * ---------------------------------
- */
+/* Functions in the global namespace */
 QString translate_str(const char *str);
 bool contains(std::vector<std::string>, std::string);
 bool validFileFormat(std::string fileName);
 QString fileExtension(std::string fileName);
+
+QIcon swatch(int32_t c);
 
 std::string convert_args_to_type(
     std::string label,
@@ -782,7 +782,6 @@ public:
     std::vector<QGraphicsItem*> selectedItemList;
 
     QToolButton* createToolButton(QString iconName, QString txt);
-    QLineEdit* createLineEdit(QString validatorType = QString(), bool readOnly = false);
 
     int precisionAngle;
     int precisionLength;
@@ -808,24 +807,9 @@ public:
 
     //TODO: Alphabetic/Categorized TabWidget
 
-    std::unordered_map<std::string, QLineEdit *> lineEdits;
-    std::unordered_map<std::string, QToolButton *> toolButtons;
-    std::unordered_map<std::string, QSpinBox *> spinBoxes;
-    std::unordered_map<std::string, QDoubleSpinBox *> doubleSpinBoxes;
-    std::unordered_map<std::string, QComboBox *> comboBoxes;
-
-    // Used when checking if fields vary
-    QString fieldOldText;
-    QString fieldNewText;
-    QString fieldVariesText;
-    QString fieldYesText;
-    QString fieldNoText;
-    QString fieldOnText;
-    QString fieldOffText;
-
     QFontComboBox* comboBoxTextSingleFont;
 
-    QGroupBox *createGroupBox(const char *group_box_key, const char *title);
+    QGroupBox *createGroupBox(int group_box_key, const char *title);
 
     QGroupBox *groupBoxes[GB_TOTAL];
 
@@ -993,7 +977,7 @@ class StatusBar : public QStatusBar
 
 public:
     StatusBar(QWidget* parent = 0);
-    std::unordered_map<std::string, QToolButton*> buttons;
+    QToolButton *buttons[20];
     QLabel* statusBarMouseCoord;
     void setMouseCoord(EmbReal x, EmbReal y);
     void context_menu_action(QToolButton *button, const char *icon, const char *label, QMenu *menu, std::string setting_page);

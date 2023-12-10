@@ -39,6 +39,7 @@
 #define MAX_POSITIONS                           26
 #define MAX_EDITORS                            300
 #define MAX_ARGS                                20
+#define MAX_COMBOBOXES                         200
 
 /* Node types. */
 #define NODE_NULL                                0
@@ -584,12 +585,6 @@
 #define JUSTIFY_BOTTOM_RIGHT                    14
 #define TOTAL_JUSTIFY                           15
 
-/* Per object constants. */
-#define POINTS_PER_BASE_OBJECT                 100
-#define REALS_PER_BASE_OBJECT                  100
-#define BOOLS_PER_BASE_OBJECT                  100
-#define STRINGS_PER_BASE_OBJECT                 10
-
 /* User Interface Mode */
 #define MODE_ARC                                 0
 #define MODE_CIRCLE_1P_RAD                       1
@@ -646,7 +641,7 @@
 
 /* Groupboxen */
 #define GB_GENERAL                               0
-#define GB_GROUPBOX_ARC                          1
+#define GB_GEOM_ARC                              1
 #define GB_MISC_ARC                              2
 #define GB_GEOM_BLOCK                            3
 #define GB_GEOM_CIRCLE                           4
@@ -819,22 +814,6 @@
 
 #define SETTINGS_TOTAL                         114
 
-/* Line editors */
-#define LE_ARC_CENTER_X                          0
-#define LE_ARC_CENTER_Y                          1
-#define LE_ARC_RADIUS                            2
-#define LE_ARC_START_ANGLE                       3
-#define LE_ARC_END_ANGLE                         4
-#define LE_ARC_START_X                           5
-#define LE_ARC_START_Y                           6
-#define LE_ARC_END_X                             7
-#define LE_ARC_END_Y                             8
-#define LE_ARC_AREA                              9
-#define LE_ARC_LENGTH                           10
-#define LE_ARC_CHORD                            11
-#define LE_ARC_INC_ANGLE                        12
-#define LE_ARC_CLOCKWISE                        13
-
 /* Editor keys */
 #define ED_GENERAL_LAYER                         0
 #define ED_GENERAL_COLOR                         1
@@ -866,40 +845,42 @@
 #define ED_DIM_ANGULAR_X                        24
 #define ED_DIM_ARC_LENGTH_X                     25
 #define ED_DIM_DIAMETER_X                       26
-#define ED_ELLIPSE_CENTER_X                     27
-#define ED_ELLIPSE_CENTER_Y                     28
-#define ED_ELLIPSE_RADIUS_MAJOR                 29
-#define ED_ELLIPSE_RADIUS_MINOR                 30
-#define ED_ELLIPSE_DIAMETER_MAJOR               31
-#define ED_ELLIPSE_DIAMETER_MINOR               32
-#define ED_TEXT_SINGLE_HEIGHT                   33
-#define ED_TEXT_SINGLE_ROTATION                 34
-#define ED_TEXT_SINGLE_X                        35
-#define ED_TEXT_SINGLE_Y                        36
-#define ED_TEXT_SINGLE_BACKWARD                 37
-#define ED_TEXT_SINGLE_UPSIDE_DOWN              38
-#define ED_TEXT_MULTI_X                         39
-#define ED_TEXT_MULTI_Y                         40
-#define ED_LINE_START_X                         41
-#define ED_LINE_START_Y                         42
-#define ED_LINE_END_X                           43
-#define ED_LINE_END_Y                           44
-#define ED_LINE_POINT_X                         45
-#define ED_LINE_POINT_Y                         46
-#define ED_TEXT_SINGLE_CONTENTS                 47
-#define ED_TEXT_SINGLE_FONT                     48
-#define ED_TEXT_SINGLE_JUSTIFY                  49
-#define ED_RECTANGLE_CORNER1_X                  50
-#define ED_RECTANGLE_CORNER1_Y                  51
-#define ED_RECTANGLE_CORNER2_X                  52
-#define ED_RECTANGLE_CORNER2_Y                  53
-#define ED_RECTANGLE_CORNER3_X                  54
-#define ED_RECTANGLE_CORNER3_Y                  55
-#define ED_RECTANGLE_CORNER4_X                  56
-#define ED_RECTANGLE_CORNER4_Y                  57
+#define ED_DIM_LEADER_X                         27
+#define ED_DIM_LINEAR_X                         28
+#define ED_ELLIPSE_CENTER_X                     29
+#define ED_ELLIPSE_CENTER_Y                     30
+#define ED_ELLIPSE_RADIUS_MAJOR                 31
+#define ED_ELLIPSE_RADIUS_MINOR                 32
+#define ED_ELLIPSE_DIAMETER_MAJOR               33
+#define ED_ELLIPSE_DIAMETER_MINOR               34
+#define ED_TEXT_SINGLE_HEIGHT                   35
+#define ED_TEXT_SINGLE_ROTATION                 36
+#define ED_TEXT_SINGLE_X                        37
+#define ED_TEXT_SINGLE_Y                        38
+#define ED_TEXT_SINGLE_BACKWARD                 39
+#define ED_TEXT_SINGLE_UPSIDE_DOWN              40
+#define ED_TEXT_MULTI_X                         41
+#define ED_TEXT_MULTI_Y                         42
+#define ED_LINE_START_X                         43
+#define ED_LINE_START_Y                         44
+#define ED_LINE_END_X                           45
+#define ED_LINE_END_Y                           46
+#define ED_LINE_POINT_X                         47
+#define ED_LINE_POINT_Y                         48
+#define ED_TEXT_SINGLE_CONTENTS                 49
+#define ED_TEXT_SINGLE_FONT                     50
+#define ED_TEXT_SINGLE_JUSTIFY                  51
+#define ED_RECTANGLE_CORNER1_X                  52
+#define ED_RECTANGLE_CORNER1_Y                  53
+#define ED_RECTANGLE_CORNER2_X                  54
+#define ED_RECTANGLE_CORNER2_Y                  55
+#define ED_RECTANGLE_CORNER3_X                  56
+#define ED_RECTANGLE_CORNER3_Y                  57
+#define ED_RECTANGLE_CORNER4_X                  58
+#define ED_RECTANGLE_CORNER4_Y                  59
 #define ED_RECTANGLE_WIDTH                      58
 #define ED_RECTANGLE_HEIGHT                     59
-#define ED_RECTANGLE_AREA                       60
+#define ED_RECTANGLE_AREA                       50
 #define ED_RAY_X1                               61
 #define ED_RAY_Y1                               62
 #define ED_RAY_X2                               63
@@ -1066,8 +1047,7 @@ extern "C" {
 
 #include "../extern/libembroidery/src/embroidery.h"
 
-/*
- */
+/* . */
 typedef struct ActionData_ {
     int32_t id;
     char icon[MAX_STRING_LENGTH];
@@ -1077,8 +1057,7 @@ typedef struct ActionData_ {
     char shortcut[MAX_STRING_LENGTH];
 } ActionData;
 
-/*
- */
+/* . */
 typedef struct CommandData_ {
     int32_t id;
     char command[MAX_STRING_LENGTH];
@@ -1088,20 +1067,17 @@ typedef struct CommandData_ {
     int32_t undo;
 } CommandData;
 
-/*
- */
+/* . */
 typedef struct EditorData_ {
-    int32_t id;
-    char groupbox[MAX_STRING_LENGTH];
-    char key[MAX_STRING_LENGTH];
+    int32_t groupbox;
+    int32_t key;
     char icon[MAX_STRING_LENGTH];
     char label[MAX_STRING_LENGTH];
-    char type[MAX_STRING_LENGTH];
+    int32_t type;
     char map_signal[MAX_STRING_LENGTH];
 } EditorData;
 
-/*
- */
+/* . */
 typedef struct Setting_ {
     int32_t id;
     char key[MAX_STRING_LENGTH];
@@ -1119,8 +1095,7 @@ typedef struct Cvector_ {
     int32_t element_size;
 } Cvector;
 
-/*
- */
+/* . */
 typedef struct ToolbarData_ {
     int32_t id;
     const char key[MAX_STRING_LENGTH];
@@ -1128,20 +1103,36 @@ typedef struct ToolbarData_ {
     char horizontal;
 } ToolbarData;
 
-/*
- */
+/* . */
 typedef struct MenuData_ {
     int32_t id;
     const char key[MAX_STRING_LENGTH];
     int32_t entries[MAX_TOOLBAR_LENGTH];
 } MenuData;
 
+/* . */
+typedef struct ViewData_ {
+    uint8_t grippingActive;
+    uint8_t rapidMoveActive;
+    uint8_t previewActive;
+    uint8_t pastingActive;
+    uint8_t movingActive;
+    uint8_t selectingActive;
+    uint8_t zoomWindowActive;
+    uint8_t panningRealTimeActive;
+    uint8_t panningPointActive;
+    uint8_t panningActive;
+    uint8_t qSnapActive;
+} ViewData;
+
+/* . */
 typedef struct RubberPoint_ {
     char key[MAX_STRING_LENGTH];
     char text[MAX_STRING_LENGTH];
     EmbVector position;
 } RubberPoint;
 
+/* . */
 typedef struct GeometryData_ {
     int32_t mode;
     EmbArc arc;
@@ -1168,6 +1159,12 @@ typedef struct GeometryData_ {
 
     EmbReal text_size;
 } GeometryData;
+
+/* . */
+typedef struct UndoData_ {
+    EmbVector pivot;
+    EmbVector before;
+} UndoData;
 
 /*
  *
@@ -1211,7 +1208,6 @@ Node *create_and_add_leaf(Node *parent, char *key, char *value);
 int insert_node(Node *branch, char key[MAX_STRING_LENGTH], Node *node);
 
 const char *add_geometry(char argv[MAX_ARGS][MAX_STRING_LENGTH], int argc);
-const char *actuator(char *line);
 const char *run_script_file(char *fname);
 const char *run_script(char **script);
 const char *translate(char *str);
@@ -1240,6 +1236,9 @@ void geometry_context(
     void *m,
     GeometryData *geometry,
     char output[MAX_STRING_LENGTH]);
+void geometry_update(GeometryData *g);
+void geometry_set_flag(GeometryData *g, uint64_t flag);
+void geometry_unset_flag(GeometryData *g, uint64_t flag);
 
 /* The Settings System
  *
@@ -1258,14 +1257,25 @@ extern EditorData all_line_editors[MAX_EDITORS];
 extern EditorData all_spinbox_editors[MAX_EDITORS];
 extern Setting settings_data[];
 
-extern const char *version;
-extern const char *usage_msg;
-extern const char *extensions[];
+/* Properties */
 extern int general_props[];
 extern int display_props[];
 extern int prompt_props[];
 extern int quick_snap_props[];
 extern int opensave_props[];
+extern int selection_props[];
+extern int grid_ruler_props[];
+extern int accept_preview_props[];
+extern int accept_accept_props[];
+extern const char *load_from_file_enabled[];
+extern const char *grid_type_visibility_lattice[];
+extern const char *grid_type_visibility_circular[];
+extern const char *tab_names[];
+
+/* Other strings and string tables. */
+extern const char *version;
+extern const char *usage_msg;
+extern const char *extensions[];
 extern const char *default_prompt_style[];
 extern const char *details_labels[];
 extern const char *command_labels[];
@@ -1295,7 +1305,6 @@ extern int32_t side_toolbar_layout[];
 
 /* Property editor data */
 extern const char *group_box_data[];
-extern const char *group_box_types[];
 extern const int32_t group_box_ids[];
 
 extern char *coverage_test_script[];

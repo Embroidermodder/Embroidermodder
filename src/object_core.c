@@ -100,9 +100,9 @@ geometry_free(GeometryData *g)
 }
 
 void
-geometry_left_click(GeometryData *geometry, EmbVector v)
+geometry_left_click(GeometryData *g, EmbVector v)
 {
-    switch (geometry->mode) {
+    switch (g->mode) {
     case MODE_ARC:
         break;
 
@@ -140,8 +140,8 @@ geometry_left_click(GeometryData *geometry, EmbVector v)
 
     /*
     case MODE_STAR_CENTER_PT: {
-        geometry->center = v;
-        geometry->mode = MODE_STAR_RAD_OUTER;
+        g->center = v;
+        g->mode = MODE_STAR_RAD_OUTER;
         set_prompt_prefix(tr("Specify outer radius of star: ");
         addRubber("POLYGON");
         setRubberMode("POLYGON");
@@ -176,20 +176,20 @@ geometry_left_click(GeometryData *geometry, EmbVector v)
     }
 
     case MODE_POLYGON_CENTER_PT: {
-        geometry->center = v;
-        geometry->mode = MODE_POLYGON_POLYTYPE;
+        g->center = v;
+        g->mode = MODE_POLYGON_POLYTYPE;
         actuator("append-prompt-history");
         char msg[MAX_STRING_LENGTH];
         sprintf(msg, "set-prompt-prefix %s {%s}: ",
             translate("Specify polygon type [Inscribed in circle/Circumscribed around circle]"),
-            geometry->polyType);
+            g->polyType);
         actuator(msg);
         break;
     }
 
     case MODE_POLYGON_INSCRIBE: {
-        geometry->pointI = v;
-        /* setRubberPoint("POLYGON_INSCRIBE_POINT", geometry->pointI); */
+        g->pointI = v;
+        /* setRubberPoint("POLYGON_INSCRIBE_POINT", g->pointI); */
         actuator("vulcanize");
         actuator("append-prompt-history");
         actuator("end");
@@ -197,8 +197,8 @@ geometry_left_click(GeometryData *geometry, EmbVector v)
     }
 
     case MODE_POLYGON_CIRCUMSCRIBE: {
-        geometry->pointC = v;
-        /* setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", geometry->pointC); */
+        g->pointC = v;
+        /* setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", g->pointC); */
         actuator("vulcanize");
         actuator("append-prompt-history");
         actuator("end");
@@ -217,11 +217,11 @@ geometry_left_click(GeometryData *geometry, EmbVector v)
 
 void
 geometry_prompt(
-    GeometryData *geometry,
+    GeometryData *g,
     char input[MAX_STRING_LENGTH],
     char output[MAX_STRING_LENGTH])
 {
-    switch (geometry->mode) {
+    switch (g->mode) {
     case MODE_ARC:
         break;
 
@@ -293,10 +293,10 @@ geometry_prompt(
 void
 geometry_context(
     void *m,
-    GeometryData *geometry,
+    GeometryData *g,
     char output[MAX_STRING_LENGTH])
 {
-    switch (geometry->mode) {
+    switch (g->mode) {
     case MODE_ARC: {
         break;
     }
@@ -375,6 +375,77 @@ MODE_SINGLELINETEXT
         break;
     }
 }
+
+void
+geometry_update(GeometryData *g)
+{
+
+    switch (g->mode) {
+    case MODE_ARC: {
+        break;
+    }
+
+    case MODE_CIRCLE_1P_RAD:
+    case MODE_CIRCLE_1P_DIA:
+    case MODE_CIRCLE_2P:
+    case MODE_CIRCLE_3P:
+    case MODE_CIRCLE_TTR:
+    case MODE_CIRCLE_TTR_SET_POINT_2:
+    case MODE_CIRCLE_TTR_SET_POINT_3: {
+        break;
+    }
+
+    case MODE_DISTANCE: {
+        actuator("todo DISTANCE context()");
+        break;
+    }
+
+    case MODE_ELLIPSE: {
+        actuator("todo ELLIPSE context()");
+        break;
+    }
+
+    case MODE_RECTANGLE: {
+        actuator("todo RECTANGLE context()");
+        break;
+    }
+
+    case MODE_STAR_NUM_POINTS:
+    case MODE_STAR_CENTER_PT:
+    case MODE_STAR_RAD_INNER:
+    case MODE_STAR_RAD_OUTER: {
+        actuator("todo STAR context()");
+        break;
+    }
+
+    case MODE_POLYGON_NUM_SIDES:
+    case MODE_POLYGON_POLYTYPE:
+    case MODE_POLYGON_DISTANCE:
+    case MODE_POLYGON_CENTER_PT:
+    case MODE_POLYGON_INSCRIBE:
+    case MODE_POLYGON_CIRCUMSCRIBE:
+    case MODE_POLYGON_SIDE_LEN: {
+        actuator("todo POLYGON context()");
+        break;
+    }
+
+    default:
+        break;
+    }
+}
+
+void
+geometry_set_flag(GeometryData *g, uint64_t flag)
+{
+
+}
+
+void
+geometry_unset_flag(GeometryData *g, uint64_t flag)
+{
+
+}
+
 
 #if 0
 
@@ -2419,16 +2490,13 @@ Geometry::snowflake_main(void)
 void
 Geometry::update_snowflake(void)
 {
-    EmbVector scale;
-    scale.x = properties["scale.x"].r;
-    scale.y = properties["scale.y"].r;
     for (int i = 0; i <= numPoints; i++) {
         EmbReal t = (2.0*CONSTANT_PI) / numPoints*i;
         EmbVector v;
-        v.x = fourier_series(t, snowflake_x);
-        v.y = fourier_series(t, snowflake_y);
+        v.x = scale.x * fourier_series(t, snowflake_x);
+        v.y = scale.y * fourier_series(t, snowflake_y);
 
-        setRubberPoint("POLYGON_POINT_" + i.toString(), v.x*scale.x, v.y*scale.y);
+        setRubberPoint("POLYGON_POINT_" + i.toString(), v);
     }
 
     setRubberText("POLYGON_NUM_POINTS", numPoints.toString());
@@ -2440,13 +2508,10 @@ Geometry::star_main(void)
 {
     init();
     actuator("clear-selection");
-    numPoints = atof(5);
-    center.x = 0.0f;
-    center.y = 0.0f;
-    point1.x = atof(1.0f);
-    point1.y = atof(1.0f);
-    point2.x = atof(2.0f);
-    point2.y = atof(2.0f);
+    numPoints = 5;
+    center = {0.0f, 0.0f};
+    point1 = {1.0f, 1.0f};
+    point2 = {2.0f, 2.0f};
     mode = MODE_STAR_NUM_POINTS;
     set_prompt_prefix(tr("Enter number of star points {5}: ");
 }

@@ -550,40 +550,6 @@ const char *justify_options[] = {
 /* The group box list is not changeable at runtime, so it's fixed length
  * and a constant.
  */
-const char *group_box_types[] = {
-    "general",
-    "geometry_arc",
-    "misc_arc",
-    "geometry_block",
-    "geometry_circle",
-    "geometry_dim_aligned",
-    "geometry_dim_angular",
-    "geometry_dim_arc_length",
-    "geometry_dim_diameter",
-    "geometry_dim_leader",
-    "geometry_dim_linear",
-    "geometry_dim_ordinate",
-    "geometry_dim_radius",
-    "geometry_ellipse",
-    "geometry_image",
-    "misc_image",
-    "geometry_infinite_line",
-    "geometry_line",
-    "geometry_path",
-    "misc_path",
-    "geometry_point",
-    "geometry_polygon",
-    "geometry_polyline",
-    "misc_polyline",
-    "geometry_ray",
-    "geometry_rectangle",
-    "geometry_text_multi",
-    "text_text_single",
-    "geometry_text_single",
-    "misc_text_single",
-    "END"
-};
-
 const char *group_box_data[] = {
     "general", "General",
     "geometry_arc", "Geometry",

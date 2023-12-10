@@ -906,7 +906,7 @@ void
 MainWindow::toggleGrid()
 {
     debug_message("toggleGrid()");
-    statusbar->buttons["GRID"]->toggle();
+    statusbar->buttons[STATUSBAR_GRID]->toggle();
 }
 
 /* MainWindow::toggleRuler */
@@ -914,7 +914,7 @@ void
 MainWindow::toggleRuler()
 {
     debug_message("toggleRuler()");
-    statusbar->buttons["RULER"]->toggle();
+    statusbar->buttons[STATUSBAR_RULER]->toggle();
 }
 
 /* MainWindow::toggleLwt */
@@ -922,7 +922,7 @@ void
 MainWindow::toggleLwt()
 {
     debug_message("toggleLwt()");
-    statusbar->buttons["LWT"]->toggle();
+    statusbar->buttons[STATUSBAR_LWT]->toggle();
 }
 
 /* Prompt history appended. */
@@ -3138,7 +3138,7 @@ MainWindow::updateMenuToolbarStatusbar()
         statusbar->statusBarMouseCoord->show();
         int n = string_array_length(button_list);
         for (int i=0; i<n; i++) {
-            statusbar->buttons[button_list[i]]->show();
+            statusbar->buttons[i]->show();
         }
     }
     else {
@@ -3168,7 +3168,7 @@ MainWindow::updateMenuToolbarStatusbar()
         statusbar->statusBarMouseCoord->hide();
         int n = string_array_length(button_list);
         for (int i=0; i<n; i++) {
-            statusbar->buttons[button_list[i]]->hide();
+            statusbar->buttons[i]->hide();
         }
     }
     /* TODO: decide why this call was here */
