@@ -131,14 +131,13 @@ add_geometry(char **argv, int argc)
         if (argc < 7) {
             return "SUBCOMMAND_ARC requires 6 arguments";
         }
-		EmbArc arc;
-		arc.start.x = atof(argv[1]);
-		arc.start.x = -atof(argv[2]);
-		arc.mid.x = atof(argv[3]);
-		arc.mid.x = -atof(argv[4]);
-		arc.end.x = atof(argv[5]);
-		arc.end.x = -atof(argv[6]);
 		Geometry* arcObj = new Geometry(OBJ_TYPE_ARC);
+		arcObj->gdata.arc.start.x = atof(argv[1]);
+		arcObj->gdata.arc.start.x = -atof(argv[2]);
+		arcObj->gdata.arc.mid.x = atof(argv[3]);
+		arcObj->gdata.arc.mid.x = -atof(argv[4]);
+		arcObj->gdata.arc.end.x = atof(argv[5]);
+		arcObj->gdata.arc.end.x = -atof(argv[6]);
         /*
 		arcObj->setObjectRubberMode(rubberMode);
 		if (rubberMode != "OBJ_RUBBER_OFF") {
@@ -154,17 +153,14 @@ add_geometry(char **argv, int argc)
      * EmbReal centerX, EmbReal centerY, EmbReal radius, bool fill, std::string rubberMode
      */
     case SUBCOMMAND_CIRCLE: {
-		Geometry* circleObj = new Geometry(OBJ_TYPE_CIRCLE);
-		EmbCircle circle;
-		circle.center.x = atof(argv[1]);
-		circle.center.y = -atof(argv[2]);
-		circle.radius = atof(argv[3]);
+		Geometry* obj = new Geometry(OBJ_TYPE_CIRCLE);
+		obj->gdata.circle.center.x = atof(argv[1]);
+		obj->gdata.circle.center.y = -atof(argv[2]);
+		obj->gdata.circle.radius = atof(argv[3]);
 		bool fill = false;
-		std::string rubberMode = "OBJ_RUBBER_OFF";
+		obj->objRubberMode = "OBJ_RUBBER_OFF";
 
 		/*
-		Geometry* obj = new Geometry(circle, _mainWin->getCurrentColor(), Qt::SolidLine);
-		obj->objRubberMode = rubberMode;
 		//TODO: circle fill
 		if (rubberMode != "OBJ_RUBBER_OFF") {
 			gview->addToRubberRoom(obj);
@@ -182,6 +178,7 @@ add_geometry(char **argv, int argc)
     /* EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, std::string rubberMode
      */
     case SUBCOMMAND_DIM_LEADER: {
+		Geometry* obj = new Geometry(OBJ_TYPE_DIMLEADER);
         /*
         AddDimLeader(std::vector<Node> a)
         _mainWin->nativeAddDimLeader(a[0].r, a[1].r, a[2].r, a[3].r, a[4].r, OBJ_RUBBER_OFF);
@@ -207,6 +204,7 @@ add_geometry(char **argv, int argc)
      * EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, EmbReal rot, bool fill, std::string rubberMode
      */
     case SUBCOMMAND_ELLIPSE: {
+		Geometry* obj = new Geometry(OBJ_TYPE_ELLIPSE);
 		/*
 		Geometry* obj = new Geometry(centerX, -centerY, width, height,_mainWin->getCurrentColor());
 		obj->setRotation(-rot);
@@ -231,6 +229,7 @@ add_geometry(char **argv, int argc)
      */
     case SUBCOMMAND_HORIZONTAL_DIMENSION: {
         /*
+		Geometry* obj = new Geometry(OBJ_TYPE_HORIZONTAL_DIMENSION);
         AddHorizontalDimension(std::vector<Node> a)
         //TODO: Node error checking
         debug_message("TODO: finish addHorizontalDimension command");
@@ -694,15 +693,15 @@ Geometry::update(void)
 {
     switch (Type) {
     case OBJ_TYPE_ARC:
-        calculateArcData(arc);
+        calculateArcData(gdata.arc);
         break;
     case OBJ_TYPE_CIRCLE:
-        setObjectRadius(circle.radius);
-        setObjectCenter(circle.center);
+        setObjectRadius(gdata.circle.radius);
+        setObjectCenter(gdata.circle.center);
         break;
     case OBJ_TYPE_ELLIPSE:
-        setObjectSize(ellipse.radius.x, ellipse.radius.y);
-        setObjectCenter(ellipse.center);
+        setObjectSize(gdata.ellipse.radius.x, gdata.ellipse.radius.y);
+        setObjectCenter(gdata.ellipse.center);
         break;
     case OBJ_TYPE_DIMLEADER:
         setData(OBJ_NAME, "Dimension Leader");
@@ -808,78 +807,7 @@ Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(par
     Type = obj->Type;
     setRotation(obj->rotation());
     setScale(obj->scale());
-    switch (Type) {
-    case OBJ_TYPE_ARC: {
-        arc.start = to_EmbVector(obj->objectStartPoint());
-        arc.mid = to_EmbVector(obj->objectMidPoint());
-        arc.end = to_EmbVector(obj->objectEndPoint());
-        break;
-    }
-
-    case OBJ_TYPE_CIRCLE: {
-        circle.center = to_EmbVector(obj->scenePos());
-        circle.radius = obj->objectRadius();
-        break;
-    }
-
-    case OBJ_TYPE_DIMLEADER: {
-        EmbLine line;
-        line.start = to_EmbVector(obj->objectEndPoint1());
-        line.end = to_EmbVector(obj->objectEndPoint2());
-        init_line(line);
-        break;
-    }
-
-    case OBJ_TYPE_ELLIPSE: {
-        ellipse.center = to_EmbVector(obj->scenePos());
-        ellipse.radius.x = obj->objectWidth();
-        ellipse.radius.y = obj->objectHeight();
-        break;
-    }
-
-    case OBJ_TYPE_LINE: {
-        EmbLine line;
-        line.start = to_EmbVector(obj->objectEndPoint1());
-        line.end = to_EmbVector(obj->objectEndPoint2());
-        init_line(line);
-        break;
-    }
-
-    case OBJ_TYPE_POINT: {
-        init_point(to_EmbVector(obj->scenePos()));
-        break;
-    }
-
-    case OBJ_TYPE_POLYGON:
-    case OBJ_TYPE_POLYLINE: {
-        init_path(obj->objectCopyPath());
-        break;
-    }
-
-    case OBJ_TYPE_RECTANGLE: {
-        QPointF ptl = obj->objectTopLeft();
-        EmbRect rect;
-        rect.left = ptl.x();
-        rect.top = ptl.y();
-        rect.right = rect.left + obj->objectWidth();
-        rect.bottom = rect.top + obj->objectHeight();
-        init_rect(rect);
-        break;
-    }
-
-    case OBJ_TYPE_TEXTSINGLE: {
-        setObjectTextFont(obj->objTextFont);
-        setObjectTextSize(obj->text_size);
-        EmbVector v = to_EmbVector(obj->scenePos());
-        init_text_single(obj->objText, v);
-        setObjectText(obj->objText);
-        break;
-    }
-
-    default:
-        break;
-    }
-
+    memcpy(&gdata, &(obj->gdata), sizeof(GeometryData));
     update();
 }
 
@@ -1105,9 +1033,7 @@ Geometry::mouseSnapPoint(const QPointF& mousePoint)
     return closest_point(mousePoint, allGripPoints());
 }
 
-/* Geometry::setObjectEndPoint1
- * x1, y1
- */
+/* . */
 void
 Geometry::setObjectEndPoint1(EmbVector endPt1)
 {
@@ -1122,10 +1048,7 @@ Geometry::setObjectEndPoint1(EmbVector endPt1)
     }
 }
 
-/* Geometry::setObjectEndPoint2
- * x2
- * y2
- */
+/* . */
 void
 Geometry::setObjectEndPoint2(EmbVector endPt2)
 {
@@ -2132,12 +2055,11 @@ Geometry::setObjectRadius(EmbReal radius)
         arcStartPoint = startLine.p2();
         arcMidPoint = midLine.p2();
         arcEndPoint = endLine.p2();
-        EmbArc arc;
-        arc.start = to_EmbVector(arcStartPoint);
-        arc.mid = to_EmbVector(arcMidPoint);
-        arc.end = to_EmbVector(arcEndPoint);
+        gdata.arc.start = to_EmbVector(arcStartPoint);
+        gdata.arc.mid = to_EmbVector(arcMidPoint);
+        gdata.arc.end = to_EmbVector(arcEndPoint);
 
-        calculateArcData(arc);
+        calculateArcData(gdata.arc);
         break;
     }
 
@@ -2186,7 +2108,7 @@ void
 Geometry::setObjectPoint(EmbVector point, int64_t point_type)
 {
     switch (point_type) {
-    case ARC_START_POINT: {
+    case ARC_START_POINT: {;
         EmbArc arc;
         arc.start = point;
         arc.mid = to_EmbVector(objectMidPoint());
@@ -3135,12 +3057,7 @@ saveObject(int objType, View *view, Geometry *obj)
         break;
     }
     case OBJ_TYPE_CIRCLE: {
-        EmbCircle circle;
-        circle.center.x = (double)obj->scenePos().x();
-        circle.center.y = (double)obj->scenePos().y();
-        circle.radius = (double)obj->objectRadius();
-
-        embPattern_addCircleAbs(view->pattern, circle);
+        embPattern_addCircleAbs(view->pattern, obj->gdata.circle);
         break;
     }
     case OBJ_TYPE_DIMALIGNED: {
@@ -3176,13 +3093,7 @@ saveObject(int objType, View *view, Geometry *obj)
         break;
     }
     case OBJ_TYPE_ELLIPSE: {
-        EmbEllipse ellipse;
-        ellipse.center.x = (double)obj->scenePos().x();
-        ellipse.center.y = (double)obj->scenePos().y();
-        ellipse.radius.x = (double)obj->objectWidth()/2.0;
-        ellipse.radius.y = (double)obj->objectHeight()/2.0;
-        //TODO: ellipse rotation
-        embPattern_addEllipseAbs(view->pattern, ellipse);
+        embPattern_addEllipseAbs(view->pattern, obj->gdata.ellipse);
         break;
     }
     case OBJ_TYPE_ELLIPSEARC: {
@@ -3206,18 +3117,12 @@ saveObject(int objType, View *view, Geometry *obj)
         break;
     }
     case OBJ_TYPE_LINE: {
-        EmbLine line;
-        line.start = to_EmbVector(obj->objectEndPoint1());
-        line.end = to_EmbVector(obj->objectEndPoint2());
-        embPattern_addLineAbs(view->pattern, line);
+        embPattern_addLineAbs(view->pattern, obj->gdata.line);
         break;
     }
 
     case OBJ_TYPE_POINT: {
-        EmbPoint po;
-        po.position.x = (double)obj->scenePos().x();
-        po.position.y = (double)obj->scenePos().y();
-        embPattern_addPointAbs(view->pattern, po);
+        embPattern_addPointAbs(view->pattern, obj->gdata.point);
         break;
     }
 
@@ -3239,14 +3144,7 @@ saveObject(int objType, View *view, Geometry *obj)
     }
 
     case OBJ_TYPE_RECTANGLE: {
-        //TODO: Review this at some point
-        QPointF topLeft = obj->objectTopLeft();
-        EmbRect r;
-        r.top = topLeft.x();
-        r.left = topLeft.y();
-        r.right = r.left + (double)obj->objectWidth();
-        r.bottom = r.top + (double)obj->objectHeight();
-        embPattern_addRectAbs(view->pattern, r);
+        embPattern_addRectAbs(view->pattern, obj->gdata.rect);
         break;
     }
 

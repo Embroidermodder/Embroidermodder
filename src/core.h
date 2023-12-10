@@ -559,19 +559,21 @@
 #define MODE_CIRCLE_TTR                          5
 #define MODE_CIRCLE_TTR_SET_POINT_2              6
 #define MODE_CIRCLE_TTR_SET_POINT_3              7
-#define MODE_ELLIPSE                             8
-#define MODE_RECTANGLE                           9
-#define MODE_STAR_NUM_POINTS                    10
-#define MODE_STAR_CENTER_PT                     11
-#define MODE_STAR_RAD_INNER                     12
-#define MODE_STAR_RAD_OUTER                     13
-#define MODE_POLYGON_NUM_SIDES                  14
-#define MODE_POLYGON_POLYTYPE                   15
-#define MODE_POLYGON_DISTANCE                   16
-#define MODE_POLYGON_CENTER_PT                  17
-#define MODE_POLYGON_INSCRIBE                   18
-#define MODE_POLYGON_CIRCUMSCRIBE               19
-#define MODE_POLYGON_SIDE_LEN                   20
+#define MODE_DISTANCE                            8
+#define MODE_ELLIPSE                             9
+#define MODE_RECTANGLE                          10
+#define MODE_STAR_NUM_POINTS                    11
+#define MODE_STAR_CENTER_PT                     12
+#define MODE_STAR_RAD_INNER                     13
+#define MODE_STAR_RAD_OUTER                     14
+#define MODE_POLYGON_NUM_SIDES                  15
+#define MODE_POLYGON_POLYTYPE                   16
+#define MODE_POLYGON_DISTANCE                   17
+#define MODE_POLYGON_CENTER_PT                  18
+#define MODE_POLYGON_INSCRIBE                   19
+#define MODE_POLYGON_CIRCUMSCRIBE               20
+#define MODE_POLYGON_SIDE_LEN                   21
+#define N_MODES                                 22
 
 /* Object Properties: packed into the uint64_t flags variable. */
 #define PROP_BOLD                           0x0001
@@ -836,6 +838,14 @@
 #define TOOLBAR_PROMPT                          13
 #define TOTAL_TOOLBARS                          14
 
+#define CONSOLE_STYLE_COLOR                      0
+#define CONSOLE_STYLE_BG_COLOR                   1
+#define CONSOLE_STYLE_SELECTION_COLOR            2
+#define CONSOLE_STYLE_SELECTION_BG_COLOR         3
+#define CONSOLE_STYLE_FONT_FAMILY                4
+#define CONSOLE_STYLE_FONT_STYLE                 5
+#define CONSOLE_STYLE_FONT_SIZE                  6
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -915,12 +925,6 @@ typedef struct Setting_ {
     int type;
 } Setting;
 
-/*
- */
-typedef struct GeometryData_ {
-    EmbVector vector;
-} GeometryData;
-
 /* To allow us to resize general C arrays when necessary.
  * Note that for char arrays, the buffer is a normal c-style string.
  */
@@ -953,6 +957,20 @@ typedef struct RubberPoint_ {
     char text[MAX_STRING_LENGTH];
     EmbVector position;
 } RubberPoint;
+
+typedef struct GeometryData_ {
+    int32_t mode;
+    EmbArc arc;
+    EmbCircle circle;
+    EmbEllipse ellipse;
+    EmbLine line;
+    EmbPoint point;
+    EmbRect rect;
+    EmbVector center;
+    EmbVector pointI;
+    EmbVector pointC;
+    char polyType[MAX_STRING_LENGTH];
+} GeometryData;
 
 /*
  *
@@ -999,6 +1017,7 @@ const char *add_geometry(char argv[MAX_ARGS][MAX_STRING_LENGTH], int argc);
 const char *actuator(char *line);
 const char *run_script_file(char *fname);
 const char *run_script(char **script);
+const char *translate(char *str);
 
 /* Utility Functions. */
 unsigned char validRGB(int r, int g, int b);

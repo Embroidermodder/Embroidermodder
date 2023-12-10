@@ -99,6 +99,8 @@ QCheckBox *make_checkbox(QGroupBox *gb, std::string d,
 class Geometry : public QGraphicsPathItem
 {
 public:
+    GeometryData gdata;
+
     QPen objPen;
     QPen lwtPen;
     QLineF objLine;
@@ -108,11 +110,6 @@ public:
     QHash<QString, QString> objRubberTexts;
     int64_t objID;
     int64_t mode;
-
-    EmbArc arc;
-    EmbCircle circle;
-    EmbEllipse ellipse;
-    EmbLine line;
 
     QPointF arcStartPoint;
     QPointF arcMidPoint;
@@ -391,14 +388,6 @@ signals:
     void handleReleased(int y);
     void handleMoved(int y);
 };
-
-#define CONSOLE_STYLE_COLOR                 0
-#define CONSOLE_STYLE_BG_COLOR              1
-#define CONSOLE_STYLE_SELECTION_COLOR       2
-#define CONSOLE_STYLE_SELECTION_BG_COLOR    3
-#define CONSOLE_STYLE_FONT_FAMILY           4
-#define CONSOLE_STYLE_FONT_STYLE            5
-#define CONSOLE_STYLE_FONT_SIZE             6
 
 /* . */
 class CmdPrompt : public QWidget

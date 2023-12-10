@@ -23,6 +23,73 @@ GeometryData*
 geometry_init(int type)
 {
     GeometryData *g = malloc(sizeof(GeometryData));
+    switch (type) {
+    case MODE_ARC:
+        break;
+
+    case MODE_CIRCLE_1P_RAD:
+        break;
+
+    case MODE_CIRCLE_1P_DIA:
+        break;
+
+    case MODE_CIRCLE_2P:
+        break;
+
+    case MODE_CIRCLE_3P:
+        break;
+
+    case MODE_CIRCLE_TTR:
+        break;
+
+    case MODE_CIRCLE_TTR_SET_POINT_2:
+        break;
+
+    case MODE_CIRCLE_TTR_SET_POINT_3:
+        break;
+
+    case MODE_ELLIPSE:
+        break;
+
+    case MODE_RECTANGLE:
+        break;
+
+    case MODE_STAR_NUM_POINTS:
+        break;
+
+    case MODE_STAR_CENTER_PT:
+        break;
+
+    case MODE_STAR_RAD_INNER:
+        break;
+
+    case MODE_STAR_RAD_OUTER:
+        break;
+
+    case MODE_POLYGON_NUM_SIDES:
+        break;
+
+    case MODE_POLYGON_POLYTYPE:
+        break;
+
+    case MODE_POLYGON_DISTANCE:
+        break;
+
+    case MODE_POLYGON_CENTER_PT:
+        break;
+
+    case MODE_POLYGON_INSCRIBE:
+        break;
+
+    case MODE_POLYGON_CIRCUMSCRIBE:
+        break;
+
+    case MODE_POLYGON_SIDE_LEN:
+        break;
+
+    default:
+        break;
+    }
     return g;
 }
 
@@ -35,7 +102,117 @@ geometry_free(GeometryData *g)
 void
 geometry_left_click(GeometryData *geometry, EmbVector v)
 {
+    switch (geometry->mode) {
+    case MODE_ARC:
+        break;
 
+    case MODE_CIRCLE_1P_RAD:
+        break;
+
+    case MODE_CIRCLE_1P_DIA:
+        break;
+
+    case MODE_CIRCLE_2P:
+        break;
+
+    case MODE_CIRCLE_3P:
+        break;
+
+    case MODE_CIRCLE_TTR:
+        break;
+
+    case MODE_CIRCLE_TTR_SET_POINT_2:
+        break;
+
+    case MODE_CIRCLE_TTR_SET_POINT_3:
+        break;
+
+    case MODE_ELLIPSE:
+        break;
+
+    case MODE_RECTANGLE:
+        break;
+
+    case MODE_STAR_NUM_POINTS: {
+        /* Do nothing, the prompt controls this. */
+        break;
+    }
+
+    /*
+    case MODE_STAR_CENTER_PT: {
+        geometry->center = v;
+        geometry->mode = MODE_STAR_RAD_OUTER;
+        set_prompt_prefix(tr("Specify outer radius of star: ");
+        addRubber("POLYGON");
+        setRubberMode("POLYGON");
+        updateStar(properties, center);
+        actuator("enable move-rapid-fire");
+        break;
+    }
+
+    case MODE_STAR_RAD_OUTER: {
+        point1 = v;
+        mode.s = "MODE_RAD_INNER";
+        set_prompt_prefix(tr("Specify inner radius of star: ");
+        updateStar(point1);
+        break;
+    }
+
+    case MODE_STAR_RAD_INNER: {
+        point2 = v;
+        actuator("disable move-rapid-fire");
+        updateStar(point2);
+        spareRubber("POLYGON");
+        actuator("end");
+        break;
+    }
+    */
+
+    case MODE_POLYGON_NUM_SIDES:
+    case MODE_POLYGON_POLYTYPE:
+    case MODE_POLYGON_DISTANCE: {
+        //Do nothing, the prompt controls this.
+        break;
+    }
+
+    case MODE_POLYGON_CENTER_PT: {
+        geometry->center = v;
+        geometry->mode = POLYGON_MODE_POLYTYPE;
+        actuator("append-prompt-history");
+        char msg[MAX_STRING_LENGTH];
+        sprintf(msg, "set-prompt-prefix %s {%s}: ",
+            translate("Specify polygon type [Inscribed in circle/Circumscribed around circle]"),
+            geometry->polyType);
+        actuator(msg);
+        break;
+    }
+
+    case MODE_POLYGON_INSCRIBE: {
+        geometry->pointI = v;
+        /* setRubberPoint("POLYGON_INSCRIBE_POINT", geometry->pointI); */
+        actuator("vulcanize");
+        actuator("append-prompt-history");
+        actuator("end");
+        break;
+    }
+
+    case MODE_POLYGON_CIRCUMSCRIBE: {
+        geometry->pointC = v;
+        /* setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", geometry->pointC); */
+        actuator("vulcanize");
+        actuator("append-prompt-history");
+        actuator("end");
+        break;
+    }
+
+    case MODE_POLYGON_SIDE_LEN: {
+        actuator("todo POLYGON Sidelength mode");
+        break;
+    }
+
+    default:
+        break;
+    }
 }
 
 void
@@ -44,7 +221,73 @@ geometry_prompt(
     char input[MAX_STRING_LENGTH],
     char output[MAX_STRING_LENGTH])
 {
+    switch (geometry->mode) {
+    case MODE_ARC:
+        break;
 
+    case MODE_CIRCLE_1P_RAD:
+        break;
+
+    case MODE_CIRCLE_1P_DIA:
+        break;
+
+    case MODE_CIRCLE_2P:
+        break;
+
+    case MODE_CIRCLE_3P:
+        break;
+
+    case MODE_CIRCLE_TTR:
+        break;
+
+    case MODE_CIRCLE_TTR_SET_POINT_2:
+        break;
+
+    case MODE_CIRCLE_TTR_SET_POINT_3:
+        break;
+
+    case MODE_ELLIPSE:
+        break;
+
+    case MODE_RECTANGLE:
+        break;
+
+    case MODE_STAR_NUM_POINTS:
+        break;
+
+    case MODE_STAR_CENTER_PT:
+        break;
+
+    case MODE_STAR_RAD_INNER:
+        break;
+
+    case MODE_STAR_RAD_OUTER:
+        break;
+
+    case MODE_POLYGON_NUM_SIDES:
+        break;
+
+    case MODE_POLYGON_POLYTYPE:
+        break;
+
+    case MODE_POLYGON_DISTANCE:
+        break;
+
+    case MODE_POLYGON_CENTER_PT:
+        break;
+
+    case MODE_POLYGON_INSCRIBE:
+        break;
+
+    case MODE_POLYGON_CIRCUMSCRIBE:
+        break;
+
+    case MODE_POLYGON_SIDE_LEN:
+        break;
+
+    default:
+        break;
+    }
 }
 
 void
@@ -53,7 +296,84 @@ geometry_context(
     GeometryData *geometry,
     char output[MAX_STRING_LENGTH])
 {
+    switch (geometry->mode) {
+    case MODE_ARC: {
+        break;
+    }
 
+    case MODE_CIRCLE_1P_RAD:
+    case MODE_CIRCLE_1P_DIA:
+    case MODE_CIRCLE_2P:
+    case MODE_CIRCLE_3P:
+    case MODE_CIRCLE_TTR:
+    case MODE_CIRCLE_TTR_SET_POINT_2:
+    case MODE_CIRCLE_TTR_SET_POINT_3: {
+        break;
+    }
+
+    case MODE_DISTANCE: {
+        actuator("todo DISTANCE context()");
+        break;
+    }
+
+/*
+MODE_LINE
+MODE_LOCATEPOINT
+MODE_MOVE
+MODE_PATH
+MODE_POINT
+MODE_POLYLINE
+MODE_QUICKLEADER
+MODE_RGB
+MODE_ROTATE
+MODE_SCALE
+MODE_SINGLELINETEXT
+
+    actuator("todo LINE context()");
+    actuator("todo LOCATEPOINT context()");
+    actuator("todo MOVE context()");
+    actuator("todo PATH context()");
+    actuator("todo POINT context()");
+    actuator("todo POLYLINE context()");
+    actuator("todo QUICKLEADER context()");
+    actuator("todo RGB context()");
+    actuator("todo ROTATE context()");
+    actuator("todo SCALE context()");
+    actuator("todo SINGLELINETEXT context()");
+*/
+
+    case MODE_ELLIPSE: {
+        actuator("todo ELLIPSE context()");
+        break;
+    }
+
+    case MODE_RECTANGLE: {
+        actuator("todo RECTANGLE context()");
+        break;
+    }
+
+    case MODE_STAR_NUM_POINTS:
+    case MODE_STAR_CENTER_PT:
+    case MODE_STAR_RAD_INNER:
+    case MODE_STAR_RAD_OUTER: {
+        actuator("todo STAR context()");
+        break;
+    }
+
+    case MODE_POLYGON_NUM_SIDES:
+    case MODE_POLYGON_POLYTYPE:
+    case MODE_POLYGON_DISTANCE:
+    case MODE_POLYGON_CENTER_PT:
+    case MODE_POLYGON_INSCRIBE:
+    case MODE_POLYGON_CIRCUMSCRIBE:
+    case MODE_POLYGON_SIDE_LEN: {
+        actuator("todo POLYGON context()");
+        break;
+    }
+
+    default:
+        break;
+    }
 }
 
 #if 0
@@ -80,14 +400,7 @@ Geometry::distance_click(EmbVector v)
 
 /* . */
 void
-Geometry::distance_context(String args)
-{
-    actuator("todo DISTANCE context()");
-}
-
-/* . */
-void
-Geometry::distance_prompt(String args)
+Geometry::distance_prompt(char *args)
 {
     EmbReal strList = str.split(",");
     if (std::isnan(point1.x)) {
@@ -118,8 +431,7 @@ Geometry::distance_prompt(String args)
     }
 }
 
-/**
- * Cartesian Coordinate System reported:
+/* Cartesian Coordinate System reported:
  *
  *               (+)
  *               90
@@ -259,14 +571,7 @@ Geometry::ellipse_click(EmbVector v)
 
 /* . */
 void
-Geometry::ellipse_context(String args)
-{
-    debug_message("TODO ELLIPSE context()");
-}
-
-/* . */
-void
-Geometry::ellipse_prompt(String args)
+Geometry::ellipse_prompt(char *args)
 {
     switch (mode) {
     case MODE_MAJORDIAMETER_MINORRADIUS: {
@@ -464,7 +769,7 @@ Geometry::heart_main(void)
 
 /* . */
 void
-Geometry::updateHeart(String style, int numPoints, EmbReal xScale, EmbReal yScale)
+Geometry::updateHeart(char *style, int numPoints, EmbReal xScale, EmbReal yScale)
 {
     for (int i = 0; i <= numPoints; i++) {
         EmbReal xx, yy;
@@ -499,46 +804,32 @@ Geometry::line_main(void)
 
 /* . */
 void
-Geometry::line_click(EmbReal x, EmbReal y)
+Geometry::line_click(EmbVector v)
 {
     if (firstRun) {
         firstRun = false;
-        first.x = x;
-        first.y = y;
-        prev.x = x;
-        prev.y = y;
+        first = v;
+        prev = v;
         addRubber("LINE");
         setRubberMode("LINE");
-        setRubberPoint("LINE_START", firstX, first.y);
+        setRubberPoint("LINE_START", first);
         append_prompt_history();
         set_prompt_prefix(tr("Specify next point or [Undo]: ");
     }
     else {
-        setRubberPoint("LINE_END", x, y);
+        setRubberPoint("LINE_END", v);
         vulcanize();
         addRubber("LINE");
         setRubberMode("LINE");
-        setRubberPoint("LINE_START", x, y);
+        setRubberPoint("LINE_START", v);
         append_prompt_history();
-        prev.x = x;
-        prev.y = y;
+        prev = v;
     }
 }
 
-/**
- * .
- */
+/* . */
 void
-Geometry::line_context(String str)
-{
-    actuator("todo LINE context()");
-}
-
-/**
- * .
- */
-void
-Geometry::line_prompt(String args)
+Geometry::line_prompt(char *args)
 {
     if (firstRun) {
         EmbReal strList = str.split(",");
@@ -607,14 +898,7 @@ Geometry::locate_point_click(EmbVector v)
 
 /* . */
 void
-Geometry::locate_point_context(String str)
-{
-    actuator("todo LOCATEPOINT context()");
-}
-
-/* . */
-void
-Geometry::locate_point_prompt(String args)
+Geometry::locate_point_prompt(char *args)
 {
     std::vector<std::string> strList = tokenize(args, ',');
     if (std::isnan(strList[0]) || std::isnan(strList[1])) {
@@ -655,7 +939,7 @@ Geometry::move_main(void)
 
 /* . */
 void
-Geometry::move_click(EmbReal x, EmbReal y)
+Geometry::move_click(EmbVector v)
 {
     if (firstRun) {
         firstRun = false;
@@ -681,14 +965,7 @@ Geometry::move_click(EmbReal x, EmbReal y)
 
 /* . */
 void
-Geometry::move_context(String str)
-{
-    actuator("todo MOVE context()");
-}
-
-/* . */
-void
-Geometry::move_prompt(String str)
+Geometry::move_prompt(char *str)
 {
     if (firstRun.b) {
         EmbReal strList = str.split(",");
@@ -740,41 +1017,31 @@ Geometry::path_main(void)
 
 /* . */
 void
-Geometry::path_click(EmbReal x, EmbReal y)
+Geometry::path_click(EmbVector v)
 {
-    if (firstRun.b) {
+    if (firstRun) {
         firstRun = false;
-        first.x = x;
-        first.y = y;
-        prev.x = x;
-        prev.y = y;
-        addPath(x, y);
+        first = v;
+        prev = v;
+        addPath(v);
         append_prompt_history();
-        set_prompt_prefix(tr("Specify next point or [Arc/Undo]: ");
+        set_prompt_prefix(tr("Specify next point or [Arc/Undo]: "));
     }
     else {
         append_prompt_history();
-        appendLineToPath(x, y);
-        prev.x = x;
-        prev.y = y;
+        appendLineToPath(v);
+        prev = v;
     }
 }
 
 /* . */
 void
-Geometry::path_context(String str)
+Geometry::path_prompt(char *cmd)
 {
-    actuator("todo PATH context()");
-}
-
-/* . */
-void
-Geometry::path_prompt(String args)
-{
-    if (str == "A" || str == "ARC") {
+    if (string_equal(cmd, "A") || string_equal(cmd, "ARC")) {
         actuator("todo PATH prompt() for ARC");
     }
-    else if (str == "U" || str == "UNDO") {
+    else if (string_equal(cmd, "U") || string_equal(cmd, "UNDO")) {
         actuator("todo PATH prompt() for UNDO");
     }
     else {
@@ -831,17 +1098,10 @@ Geometry::point_click(EmbVector v)
 
 /* . */
 void
-Geometry::point_context(String str)
-{
-    actuator("todo POINT context()");
-}
-
-/* . */
-void
-Geometry::point_prompt(String str)
+Geometry::point_prompt(char *str)
 {
     if (firstRun) {
-        if (str == "M" || str == "MODE") {
+        if (string_equal(cmd, "M") || string_equal(cmd, "MODE")) {
             actuator("todo POINT prompt() for PDMODE");
         }
         else if (str == "S" || str == "SIZE") {
@@ -881,66 +1141,21 @@ Geometry::polygon_main(void)
 {
     init();
     actuator("clear-selection");
-    center = embVector(0.0f, 0.0f);
-    side1 = embVector(0.0f, 0.0f);
-    side2 = embVector(0.0f, 0.0f);
-    pointI = embVector(0.0f, 0.0f);
-    pointC = embVector(0.0f, 0.0f);
+    center = {0.0f, 0.0f};
+    side1 = {0.0f, 0.0f};
+    side2 = {0.0f, 0.0f};
+    pointI = {0.0f, 0.0f};
+    pointC = {0.0f, 0.0f};
     polyType = "Inscribed"; //Default
     numSides = 4;           //Default
-    mode = MODE_NUM_SIDES;
+    mode = MODE_POLYGON_NUM_SIDES;
     set_prompt_prefix(tr("Enter number of sides" + " {" + numSides.toString() + "}: ");
 }
 
-/* . */
-void
-Geometry::polygon_click(EmbVector v)
-{
-    switch (mode) {
-    case MODE_POLYGON_NUM_SIDES:
-    case MODE_POLYGON_POLYTYPE:
-    case MODE_POLYGON_DISTANCE:
-        //Do nothing, the prompt controls this.
-        break;
-    case MODE_POLYGON_CENTER_PT: {
-        center = v;
-        mode = POLYGON_MODE_POLYTYPE;
-        append_prompt_history();
-        set_prompt_prefix(tr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + polyType + "}: ");
-        break;
-    }
-    case MODE_POLYGON_INSCRIBE: {
-        pointI = v;
-        setRubberPoint("POLYGON_INSCRIBE_POINT", pointI.x, pointI.y);
-        vulcanize();
-        append_prompt_history();
-        end();
-        break;
-    }
-    case MODE_POLYGON_CIRCUMSCRIBE: {
-        pointC = v;
-        setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", properties["pointCX"], pointC.y);
-        vulcanize();
-        append_prompt_history();
-        end();
-        break;
-    }
-    case MODE_POLYGON_SIDE_LEN: {
-        actuator("todo POLYGON Sidelength mode");
-        break;
-    }
-}
 
 /* Polygon */
 void
-Geometry::polygon_context(String str)
-{
-    actuator("todo POLYGON context()");
-}
-
-/* Polygon */
-void
-Geometry::polygon_prompt(String str)
+Geometry::polygon_prompt(char *str)
 {
     case MODE_POLYGON_NUM_SIDES: {
         if (str == "" && numSides >= 3 && numSides <= 1024) {
@@ -1127,20 +1342,9 @@ Geometry::polyline_click(EmbVector v)
     }
 }
 
-/**
- * .
- */
+/* . */
 void
-Geometry::polyline_context(String str)
-{
-    actuator("todo POLYLINE context()");
-}
-
-/**
- * .
- */
-void
-Geometry::polyline_prompt(String str)
+Geometry::polyline_prompt(char *str)
 {
     if (firstRun.b) {
         EmbReal strList = str.split(",");
@@ -1221,14 +1425,7 @@ Geometry::quickleader_click(EmbVector v)
 
 /* . */
 void
-Geometry::quickleader_context(String str)
-{
-    actuator("todo QUICKLEADER context()");
-}
-
-/* . */
-void
-Geometry::quickleader_prompt(String str)
+Geometry::quickleader_prompt(char *str)
 {
     EmbReal strList = str.split(",");
     if (std::isnan(point1.x)) {
@@ -1262,35 +1459,25 @@ Geometry::quickleader_prompt(String str)
 
 /* . */
 const char rectangle_click_script[][MAX_STRING_LENGTH] = {
-    if (properties["newRect"].b) {
-        properties["newRect"].b = false;
-        point1.x = v.x;
-        point1.y = v.y;
+    if (newRect) {
+        newRect = false;
+        point1 = v;
         addRubber("RECTANGLE");
         setRubberMode("RECTANGLE");
-        setRubberPoint("RECTANGLE_START", x, y);
+        setRubberPoint("RECTANGLE_START", v);
         set_prompt_prefix(tr("Specify other corner point or [Dimensions]: "));
     }
     else {
-        newRect = true;
-        x2 = v.x;
-        y2 = v.y;
-        setRubberPoint RECTANGLE_END x y;
-        vulcanize;
-        end"
+        point2 = v;
+        setRubberPoint(RECTANGLE_END, v);
+        vulcanize();
+        end();
     }
 };
 
 /* . */
 void
-Geometry::rectangle_context(String str)
-{
-    actuator("todo RECTANGLE context()");
-}
-
-/* . */
-void
-Geometry::rectangle_prompt(String str)
+Geometry::rectangle_prompt(char *str)
 {
     if (str == "C" || str == "CHAMFER") {
         actuator("todo RECTANGLE prompt() for CHAMFER");
@@ -1350,16 +1537,7 @@ Geometry::rgb_click(EmbVector v)
 
 /* . */
 void
-Geometry::rgb_context(String str)
-{
-    actuator("todo RGB context()");
-}
-
-/**
- * .
- */
-void
-Geometry::rgb_prompt(String str)
+Geometry::rgb_prompt(char *str)
 {
     if (mode == "RGB_MODE_BACKGROUND") {
         if (str == "C" || str == "CROSSHAIR") {
@@ -1417,7 +1595,7 @@ Geometry::rgb_prompt(String str)
 
 /* . */
 void
-Geometry::rotate_main(String args)
+Geometry::rotate_main(char *args)
 {
     init();
     mode = ROTATE_MODE_NORMAL;
@@ -1495,14 +1673,7 @@ Geometry::rotate_click(EmbVector v)
 
 /* . */
 void
-Geometry::rotate_context(String str)
-{
-    actuator("todo ROTATE context()");
-}
-
-/* . */
-void
-Geometry::rotate_prompt(String str)
+Geometry::rotate_prompt(char *str)
 {
     if (mode == ROTATE_MODE_NORMAL) {
         if (firstRun) {
@@ -1630,14 +1801,14 @@ Geometry::rotate_prompt(String str)
 
 //Command: Sandbox
 
-/*String properties;
+/*char *properties;
 properties["test1"];
 properties["test2"];
 */
 
 /* . */
 void
-Geometry::sandbox_main(String str)
+Geometry::sandbox_main(char *str)
 {
     init();
 
@@ -1705,7 +1876,7 @@ Geometry::scale_main(void)
 {
     init();
 
-    mode = MODE_NORMAL;
+    mode = MODE_SCALE_NORMAL;
     firstRun = true;
     base = {0.0f, 0.0f};
     dest = {0.0f, 0.0f};
@@ -1732,7 +1903,7 @@ void
 Geometry::scale_click(EmbVector v)
 {
     switch (mode) {
-    case SCALE_MODE_NORMAL: {
+    case MODE_SCALE_NORMAL: {
         if (firstRun) {
             firstRun = false;
             base = v;
@@ -1753,7 +1924,7 @@ Geometry::scale_click(EmbVector v)
         }
         break;
     }
-    case "MODE_REFERENCE") {
+    case MODE_SCALE_REFERENCE: {
         if (std::isnan(properties["baseRX"])) {
             properties["baseR"] = v;
             append_prompt_history();
@@ -1798,14 +1969,7 @@ Geometry::scale_click(EmbVector v)
 
 /* . */
 void
-Geometry::scale_context(String str)
-{
-    actuator("todo SCALE context()");
-}
-
-/* . */
-void
-Geometry::scale_prompt(String str)
+Geometry::scale_prompt(char *str)
 {
     if (mode == MODE_NORMAL) {
         if (firstRun) {
@@ -2045,14 +2209,7 @@ Geometry::text_single_click(EmbVector v)
 
 /* . */
 void
-Geometry::text_single_context(String str)
-{
-    actuator("todo SINGLELINETEXT context()");
-}
-
-/* . */
-void
-Geometry::text_single_prompt(String str)
+Geometry::text_single_prompt(char *str)
 {
     if (mode == "MODE_JUSTIFY") {
         if (str == "C" || str == "CENTER") {
@@ -2239,7 +2396,7 @@ Geometry::text_single_prompt(String str)
             else {
                 vulcanize();
                 end();
-                /** TODO: Rather than ending the command, calculate where the
+                /* TODO: Rather than ending the command, calculate where the
                  * next line would be and modify the x/y to the new point.
                  */
             }
@@ -2295,52 +2452,6 @@ Geometry::star_main(void)
 }
 
 /* . */
-void
-Geometry::star_click(EmbReal mouse)
-{
-    switch (mode) {
-
-    case MODE_STAR_NUM_POINTS: {
-        /* Do nothing, the prompt controls this. */
-        break;
-    }
-
-    case MODE_STAR_CENTER_PT: {
-        center = mouse;
-        mode = STAR_MODE_RAD_OUTER;
-        set_prompt_prefix(tr("Specify outer radius of star: ");
-        addRubber("POLYGON");
-        setRubberMode("POLYGON");
-        updateStar(properties, center);
-        actuator("enable move-rapid-fire");
-        break;
-    }
-
-    case MODE_STAR_RAD_OUTER: {
-        point1 = mouse;
-        mode.s = "MODE_RAD_INNER";
-        set_prompt_prefix(tr("Specify inner radius of star: ");
-        updateStar(point1);
-        break;
-    }
-
-    case MODE_STAR_RAD_INNER: {
-        point2 = mouse;
-        actuator("disable move-rapid-fire");
-        updateStar(point2);
-        spareRubber("POLYGON");
-        end();
-        break;
-    }
-
-    default: {
-        break;
-    }
-
-    }
-}
-
-/* . */
 const char star_move[][] = {
     (EmbVector v)
     switch (mode) {
@@ -2364,14 +2475,7 @@ const char star_move[][] = {
 
 /* . */
 void
-Geometry::star_context(String str)
-{
-    actuator("todo STAR context()");
-}
-
-/* . */
-void
-Geometry::star_prompt(String str)
+Geometry::star_prompt(char *str)
 {
     switch (mode) {
     case STAR_MODE_NUM_POINTS: {

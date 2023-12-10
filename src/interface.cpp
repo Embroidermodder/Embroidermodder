@@ -42,6 +42,12 @@ translate_str(const char *str)
     return _mainWin->tr(str);
 }
 
+const char *
+translate(char *str)
+{
+    return _mainWin->tr(str).toStdString().c_str();
+}
+
 /* Tokenize our command using a 1 character deliminator. */
 int
 tokenize(char **argv, char *str, const char delim)
