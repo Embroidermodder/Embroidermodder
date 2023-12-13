@@ -63,25 +63,6 @@ translate(char *str)
     return _mainWin->tr(str).toStdString().c_str();
 }
 
-/* Tokenize our command using a 1 character deliminator. */
-int
-tokenize(char **argv, char *str, const char delim)
-{
-    int argc = 0;
-    argv[argc] = 0;
-    if (strlen(str) == 0) {
-        return 0;
-    }
-    for (int i=0; str[i]; i++) {
-        if (str[i] == delim) {
-            str[i] = 0;
-            argc++;
-            argv[argc] = str+i;
-        }
-    }
-    return argc;
-}
-
 /* Convert an EmbVector to a QPointF. */
 QPointF
 to_QPointF(EmbVector a)
@@ -107,35 +88,6 @@ swatch(int32_t c)
     QPixmap crosshairPix(16,16);
     crosshairPix.fill(QColor(c));
     return QIcon(crosshairPix);
-}
-
-/* Debug message wrapper for qDebug.
- *
- * For debugging code running on other machines append these messages to log
- * file.
- *
- * Timestamps are added to each message so we can trace in what order things
- * happen.
- */
-void
-debug_message(std::string msg)
-{
-    struct timespec ts;
-    clock_gettime(CLOCK_REALTIME, &ts);
-    qDebug(msg.c_str());
-    FILE *f = fopen("debug.txt", "a");
-    fprintf(f, "%.2ld:%.2ld:%.2ld.%.3ld> %s\n",
-        (ts.tv_sec/3600)%24, (ts.tv_sec%3600)/60, ts.tv_sec%60, ts.tv_nsec%1000, msg.c_str());
-    fclose(f);
-}
-
-/* Utility function for add_to_path. */
-void
-get_n_reals(float result[], char *argv[], int n, int offset)
-{
-    for (int i=0; i<n; i++) {
-        result[i] = atof(argv[offset+i]);
-    }
 }
 
 /* Render an SVG-like .
@@ -362,7 +314,7 @@ make_spinbox(QGroupBox *gb, std::string dictionary,
 /* Create the image widget for filename. */
 ImageWidget::ImageWidget(QString filename, QWidget* parent) : QWidget(parent)
 {
-    debug_message("ImageWidget Constructor");
+    debug_message_("ImageWidget Constructor");
 
     img.load(filename);
 
@@ -393,7 +345,7 @@ ImageWidget::save(QString fileName)
 /* Destroy image widget. */
 ImageWidget::~ImageWidget()
 {
-    debug_message("ImageWidget Destructor");
+    debug_message_("ImageWidget Destructor");
 }
 
 /* Paint the widget. */
@@ -797,7 +749,7 @@ StatusBar::context_menu_event(QContextMenuEvent *event, QToolButton *button)
 void
 StatusBar::toggle(std::string key, bool on)
 {
-    debug_message("StatusBarButton toggleSnap()");
+    debug_message_("StatusBarButton toggleSnap()");
     View* gview = activeView();
     if (!gview) {
         return;
@@ -839,7 +791,7 @@ StatusBar::toggle(std::string key, bool on)
 /* Create command prompt object. */
 CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
 {
-    debug_message("CmdPrompt Constructor");
+    debug_message_("CmdPrompt Constructor");
     setObjectName("Command Prompt");
 
     promptInput = new CmdPromptInput(this);
@@ -908,7 +860,7 @@ CmdPrompt::floatingChanged(bool isFloating)
 void
 CmdPrompt::saveHistory(QString  fileName, bool html)
 {
-    debug_message("CmdPrompt saveHistory");
+    debug_message_("CmdPrompt saveHistory");
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         return;
@@ -1015,7 +967,7 @@ CmdPrompt::appendHistory(QString  txt)
         emit appendTheHistory(promptInput->curText, promptInput->prefix.length());
         return;
     }
-    debug_message("CmdPrompt - appendHistory()");
+    debug_message_("CmdPrompt - appendHistory()");
     emit appendTheHistory(txt, promptInput->prefix.length());
 }
 
@@ -1031,7 +983,7 @@ CmdPrompt::setPrefix(QString txt)
 /* CmdPromptSplitter parent */
 CmdPromptSplitter::CmdPromptSplitter(QWidget* parent) : QSplitter(parent)
 {
-    debug_message("CmdPromptSplitter Constructor");
+    debug_message_("CmdPromptSplitter Constructor");
     setObjectName("Command Prompt Splitter");
 
     setOrientation(Qt::Vertical);
@@ -1052,7 +1004,7 @@ QSplitterHandle* CmdPromptSplitter::createHandle()
 /* Create command prompt handle object. */
 CmdPromptHandle::CmdPromptHandle(Qt::Orientation orientation, QSplitter* parent) : QSplitterHandle(orientation, parent)
 {
-    debug_message("CmdPromptHandle Constructor");
+    debug_message_("CmdPromptHandle Constructor");
     setObjectName("Command Prompt Handle");
 
     connect(this, SIGNAL(handlePressed(int)),  parent, SIGNAL(pressResizeHistory(int)));
@@ -1088,7 +1040,7 @@ CmdPromptHandle::mouseMoveEvent(QMouseEvent* e)
 /* CmdPromptHistory */
 CmdPromptHistory::CmdPromptHistory(QWidget* parent) : QTextBrowser(parent)
 {
-    debug_message("CmdPromptHistory Constructor");
+    debug_message_("CmdPromptHistory Constructor");
     setObjectName("Command Prompt History");
 
     int initHeight = 57; // 19*3 (approximately three lines of text)
@@ -1189,7 +1141,7 @@ CmdPromptHistory::contextMenuEvent(QContextMenuEvent* event)
  */
 CmdPromptInput::CmdPromptInput(QWidget* parent) : QLineEdit(parent)
 {
-    debug_message("CmdPromptInput Constructor");
+    debug_message_("CmdPromptInput Constructor");
     setObjectName("Command Prompt Input");
 
     defaultPrefix = tr("Command: ");
@@ -1225,7 +1177,7 @@ CmdPromptInput::CmdPromptInput(QWidget* parent) : QLineEdit(parent)
 void
 CmdPromptInput::endCommand()
 {
-    debug_message("CmdPromptInput endCommand");
+    debug_message_("CmdPromptInput endCommand");
     lastCmd = curCmd;
     cmdActive = false;
     rapidFireEnabled = false;
@@ -1239,7 +1191,7 @@ CmdPromptInput::endCommand()
 void
 CmdPromptInput::processInput()
 {
-    debug_message("CmdPromptInput::processInput");
+    debug_message_("CmdPromptInput::processInput");
 
     updateCurrentText(curText);
 
@@ -1295,7 +1247,7 @@ CmdPromptInput::processInput()
 void
 CmdPromptInput::checkSelection()
 {
-    debug_message("CmdPromptInput::checkSelection");
+    debug_message_("CmdPromptInput::checkSelection");
     if (this->hasSelectedText()) {
         this->deselect();
     }
@@ -1742,7 +1694,7 @@ EmbDetailsDialog::createMainWidget()
 void
 EmbDetailsDialog::getInfo(void)
 {
-    debug_message("designDetails()");
+    debug_message_("designDetails()");
 
     boundingRect.setRect(0, 0, 50, 100); //TODO: embPattern_calcBoundingBox(pattern);
 
@@ -1750,7 +1702,7 @@ EmbDetailsDialog::getInfo(void)
 
     EmbPattern* pattern = embPattern_create();
     if (!pattern) {
-        debug_message("Could not allocate memory for embroidery pattern\n");
+        debug_message_("Could not allocate memory for embroidery pattern\n");
         return;
     }
 
@@ -1993,7 +1945,7 @@ MdiWindow::MdiWindow(const int theIndex, QMdiArea* parent, Qt::WindowFlags wflag
 /* Destroy the MdiWindow object. */
 MdiWindow::~MdiWindow()
 {
-    debug_message("MdiWindow Destructor()");
+    debug_message_("MdiWindow Destructor()");
 }
 
 /* Save file to "fileName". */
@@ -2007,7 +1959,7 @@ MdiWindow::saveFile(std::string fileName)
 bool
 MdiWindow::loadFile(std::string fileName)
 {
-    debug_message("MdiWindow loadFile()");
+    debug_message_("MdiWindow loadFile()");
 
     QRgb tmpColor = curColor;
 
@@ -2036,18 +1988,18 @@ MdiWindow::loadFile(std::string fileName)
     if (reader < 0) {
         readSuccessful = 0;
         readError = "Unsupported read file type: " + fileName;
-        debug_message("Unsupported read file type: " + fileName);
+        debug_message_("Unsupported read file type: " + fileName);
     }
     else {
         readSuccessful = embPattern_readAuto(p, fileName.c_str());
         if (!readSuccessful) {
             readError = "Reading file was unsuccessful: " + fileName;
-            debug_message("Reading file was unsuccessful: " + fileName);
+            debug_message_("Reading file was unsuccessful: " + fileName);
         }
     }
 
     if (readSuccessful) {
-        debug_message("Starting to load the read file.");
+        debug_message_("Starting to load the read file.");
         //embPattern_moveStitchListToPolylines(p); //TODO: Test more
 
         int stitchCount = p->stitch_list->count;
@@ -2328,7 +2280,7 @@ fileExtension(std::string fileName)
 void
 MdiWindow::closeEvent(QCloseEvent* /*e*/)
 {
-    debug_message("MdiWindow closeEvent()");
+    debug_message_("MdiWindow closeEvent()");
     emit sendCloseMdiWin(this);
 }
 
@@ -2336,7 +2288,7 @@ MdiWindow::closeEvent(QCloseEvent* /*e*/)
 void
 MdiWindow::onWindowActivated()
 {
-    debug_message("MdiWindow onWindowActivated()");
+    debug_message_("MdiWindow onWindowActivated()");
     gview->undoStack->setActive(true);
     _mainWin->setUndoCleanIcon(fileWasLoaded);
     statusbar->buttons[STATUSBAR_SNAP]->setChecked(gscene->property("ENABLE_SNAP").toBool());
@@ -2354,7 +2306,7 @@ MdiWindow::onWindowActivated()
 QSize
 MdiWindow::sizeHint()
 {
-    debug_message("MdiWindow sizeHint()");
+    debug_message_("MdiWindow sizeHint()");
     return QSize(450, 300);
 }
 
@@ -2373,7 +2325,7 @@ MdiWindow::promptInputPrevNext(bool prev)
                 tr("Prompt Next Error"),
                 tr("The prompt input is empty! Please report this as a bug!"));
         }
-        debug_message("The prompt input is empty! Please report this as a bug!");
+        debug_message_("The prompt input is empty! Please report this as a bug!");
     }
     else {
         if (prev) {
@@ -3109,7 +3061,7 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
         return;
     }
 
-    debug_message("==========Field was Edited==========");
+    debug_message_("==========Field was Edited==========");
     QString objName = fieldObj->objectName();
     int objType = fieldObj->property(qPrintable(objName)).toInt();
 

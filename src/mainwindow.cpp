@@ -33,6 +33,11 @@ QMenu* menuHash[MAX_MENUS];
 QAction* actionHash[MAX_ACTIONS];
 QIcon icon_list[MAX_ICONS];
 
+void
+debug_message_(std::string str)
+{
+    debug_message((char*)str.c_str());
+}
 
 int
 string_equal(const char *a, const char *b)
@@ -78,7 +83,7 @@ create_menu(int32_t menu, const int32_t *def, bool topLevel)
 void
 MainWindow::createAllMenus()
 {
-    debug_message("MainWindow createAllMenus()");
+    debug_message_("MainWindow createAllMenus()");
 
     /* Populate menus. */
     create_menu(MENU_FILE, file_menu, true);
@@ -168,7 +173,7 @@ MainWindow::populate_toolbars(Qt::ToolBarArea area, int32_t toolbar_layout[])
 void
 MainWindow::createAllToolbars()
 {
-    debug_message("MainWindow createAllToolbars()");
+    debug_message_("MainWindow createAllToolbars()");
 
     for (int i=0; i<TOTAL_TOOLBARS; i++) {
         create_toolbar(toolbar_data[i]);
@@ -340,7 +345,7 @@ MainWindow::stub_testing()
 void
 MainWindow::quit()
 {
-    debug_message("quit()");
+    debug_message_("quit()");
     if (settings[ST_SAVE_HISTORY].i) {
         prompt->saveHistory("prompt.log", settings[ST_HTML_OUTPUT].i);
         //TODO: get filename from settings
@@ -354,7 +359,7 @@ MainWindow::quit()
 void
 MainWindow::checkForUpdates()
 {
-    debug_message("checkForUpdates()");
+    debug_message_("checkForUpdates()");
     //TODO: Check website for new versions, commands, etc...
 }
 
@@ -468,7 +473,7 @@ MainWindow::tipOfTheDay(void)
 void
 MainWindow::buttonTipOfTheDayClicked(int button)
 {
-    debug_message("buttonTipOfTheDayClicked(%d)" + std::to_string(button));
+    debug_message_("buttonTipOfTheDayClicked(%d)" + std::to_string(button));
     int n_tips = string_array_length(tips);
     if (button == QWizard::CustomButton1) {
         if (settings[ST_CURRENT_TIP].i > 0) {
@@ -536,7 +541,7 @@ MainWindow::iconResize(int iconSize)
 MdiWindow *
 MainWindow::activeMdiWindow()
 {
-    debug_message("activeMdiWindow()");
+    debug_message_("activeMdiWindow()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     return mdiWin;
 }
@@ -545,7 +550,7 @@ MainWindow::activeMdiWindow()
 View *
 activeView(void)
 {
-    debug_message("activeView()");
+    debug_message_("activeView()");
     MdiWindow* mdiWin = _mainWin->activeMdiWindow();
     if (mdiWin) {
         return mdiWin->gview;
@@ -557,7 +562,7 @@ activeView(void)
 QGraphicsScene *
 activeScene(void)
 {
-    debug_message("activeScene()");
+    debug_message_("activeScene()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
         return mdiWin->gscene;
@@ -569,7 +574,7 @@ activeScene(void)
 QUndoStack *
 MainWindow::activeUndoStack(void)
 {
-    debug_message("activeUndoStack()");
+    debug_message_("activeUndoStack()");
     View* v = activeView();
     if (v) {
         QUndoStack* u = v->undoStack;
@@ -687,7 +692,7 @@ MainWindow::pickAddModeToggled()
 std::string
 make_layer_active_action(std::string args)
 {
-    debug_message("TODO: Implement makeLayerActive.");
+    debug_message_("TODO: Implement makeLayerActive.");
     return "";
 }
 
@@ -695,7 +700,7 @@ make_layer_active_action(std::string args)
 std::string
 layer_manager_action(std::string args)
 {
-    debug_message("TODO: Implement layerManager.");
+    debug_message_("TODO: Implement layerManager.");
     LayerManager layman(_mainWin);
     layman.exec();
     return "";
@@ -705,7 +710,7 @@ layer_manager_action(std::string args)
 std::string
 layer_previous_action(std::string args)
 {
-    debug_message("TODO: Implement layerPrevious.");
+    debug_message_("TODO: Implement layerPrevious.");
     return "";
 }
 
@@ -713,14 +718,14 @@ layer_previous_action(std::string args)
 void
 MainWindow::layerSelectorIndexChanged(int index)
 {
-    debug_message("layerSelectorIndexChanged(%d)" + std::to_string(index));
+    debug_message_("layerSelectorIndexChanged(%d)" + std::to_string(index));
 }
 
 /* colorSelectorIndexChanged index */
 void
 MainWindow::colorSelectorIndexChanged(int index)
 {
-    debug_message("colorSelectorIndexChanged(%d)" + std::to_string(index));
+    debug_message_("colorSelectorIndexChanged(%d)" + std::to_string(index));
 
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
     QRgb newColor;
@@ -750,21 +755,21 @@ MainWindow::colorSelectorIndexChanged(int index)
 void
 MainWindow::linetypeSelectorIndexChanged(int index)
 {
-    debug_message("linetypeSelectorIndexChanged(%d)" + std::to_string(index));
+    debug_message_("linetypeSelectorIndexChanged(%d)" + std::to_string(index));
 }
 
 /* lineweightSelectorIndexChanged index */
 void
 MainWindow::lineweightSelectorIndexChanged(int index)
 {
-    debug_message("lineweightSelectorIndexChanged(%d)" + std::to_string(index));
+    debug_message_("lineweightSelectorIndexChanged(%d)" + std::to_string(index));
 }
 
 /* textFontSelectorCurrentFontChanged font */
 void
 MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
 {
-    debug_message("textFontSelectorCurrentFontChanged()");
+    debug_message_("textFontSelectorCurrentFontChanged()");
     strcpy(settings[ST_TEXT_FONT].s, font.family().toStdString().c_str());
 }
 
@@ -772,7 +777,7 @@ MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
 void
 MainWindow::textSizeSelectorIndexChanged(int index)
 {
-    debug_message("textSizeSelectorIndexChanged(%d)" + std::to_string(index));
+    debug_message_("textSizeSelectorIndexChanged(%d)" + std::to_string(index));
     settings[ST_TEXT_SIZE].r = (EmbReal)fabs(textSizeSelector->itemData(index).toReal()); //TODO: check that the toReal() conversion is ok
 }
 
@@ -848,7 +853,7 @@ MainWindow::getCurrentLineWeight()
 void
 MainWindow::deletePressed()
 {
-    debug_message("deletePressed()");
+    debug_message_("deletePressed()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
@@ -861,7 +866,7 @@ MainWindow::deletePressed()
 void
 MainWindow::escapePressed()
 {
-    debug_message("escapePressed()");
+    debug_message_("escapePressed()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
@@ -876,7 +881,7 @@ MainWindow::escapePressed()
 void
 MainWindow::toggleGrid()
 {
-    debug_message("toggleGrid()");
+    debug_message_("toggleGrid()");
     statusbar->buttons[STATUSBAR_GRID]->toggle();
 }
 
@@ -884,7 +889,7 @@ MainWindow::toggleGrid()
 void
 MainWindow::toggleRuler()
 {
-    debug_message("toggleRuler()");
+    debug_message_("toggleRuler()");
     statusbar->buttons[STATUSBAR_RULER]->toggle();
 }
 
@@ -892,7 +897,7 @@ MainWindow::toggleRuler()
 void
 MainWindow::toggleLwt()
 {
-    debug_message("toggleLwt()");
+    debug_message_("toggleLwt()");
     statusbar->buttons[STATUSBAR_LWT]->toggle();
 }
 
@@ -1097,7 +1102,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     }
 
     QString lang(settings[ST_LANGUAGE].s);
-    debug_message("language: " + lang.toStdString());
+    debug_message_("language: " + lang.toStdString());
     if (lang == "system") {
         lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
     }
@@ -1269,7 +1274,7 @@ MainWindow::MainWindow() : QMainWindow(0)
  */
 MainWindow::~MainWindow()
 {
-    debug_message("MainWindow::Destructor()");
+    debug_message_("MainWindow::Destructor()");
 
     //Prevent memory leaks by deleting any unpasted objects
     qDeleteAll(cutCopyObjectList.begin(), cutCopyObjectList.end());
@@ -1301,7 +1306,7 @@ ACTION->setWhatsThis(statusTip);
 void
 MainWindow::createAllActions()
 {
-    debug_message("Creating All Actions...");
+    debug_message_("Creating All Actions...");
 
     for (int i=0; i<N_ACTIONS; i++) {
         ActionData a = action_table[i];
@@ -1369,7 +1374,7 @@ run_script(char **script)
 {
     std::string output = "";
     for (int i=0; !string_equal(script[i], "END"); i++) {
-        debug_message(script[i]);
+        debug_message_(script[i]);
         output += actuator(script[i]);
     }
     return output.c_str();
@@ -1449,7 +1454,7 @@ actuator(char line[MAX_STRING_LENGTH])
 
     /* This could produce silly amounts of output, so watch this line. */
     sprintf(error_str, "action: %d\n", action_id);
-    debug_message(error_str);
+    debug_message_(error_str);
 
     if (action_id < 0) {
         char out[2*MAX_STRING_LENGTH];
@@ -2501,58 +2506,58 @@ actuator(char line[MAX_STRING_LENGTH])
             return "ERROR: no undo stack found.";
         }
         if (string_equal(argv[1], "realtime")) {
-            debug_message("zoomRealtime()");
-            debug_message("TODO: Implement zoomRealtime.");
+            debug_message_("zoomRealtime()");
+            debug_message_("TODO: Implement zoomRealtime.");
             return "";
         }
         if (string_equal(argv[1], "previous")) {
-            debug_message("zoomPrevious()");
-            debug_message("TODO: Implement zoomPrevious.");
+            debug_message_("zoomPrevious()");
+            debug_message_("TODO: Implement zoomPrevious.");
             return "";
         }
         if (string_equal(argv[1], "window")) {
-            debug_message("zoomWindow()");
+            debug_message_("zoomWindow()");
             gview->zoomWindow();
             return "";
         }
         if (string_equal(argv[1], "dynamic")) {
-            debug_message("zoomDynamic()");
-            debug_message("TODO: Implement zoomDynamic.");
+            debug_message_("zoomDynamic()");
+            debug_message_("TODO: Implement zoomDynamic.");
             return "";
         }
         if (string_equal(argv[1], "scale")) {
-            debug_message("zoomScale()");
-            debug_message("TODO: Implement zoomScale.");
+            debug_message_("zoomScale()");
+            debug_message_("TODO: Implement zoomScale.");
             return "";
         }
         if (string_equal(argv[1], "center")) {
-            debug_message("zoomCenter()");
-            debug_message("TODO: Implement zoomCenter.");
+            debug_message_("zoomCenter()");
+            debug_message_("TODO: Implement zoomCenter.");
             return "";
         }
         if (string_equal(argv[1], "in")) {
-            debug_message("zoomIn()");
+            debug_message_("zoomIn()");
             gview->zoomIn();
             return "";
         }
         if (string_equal(argv[1], "out")) {
-            debug_message("zoomOut()");
+            debug_message_("zoomOut()");
             gview->zoomOut();
             return "";
         }
         if (string_equal(argv[1], "selected")) {
-            debug_message("zoomSelected()");
+            debug_message_("zoomSelected()");
             UndoableCommand* cmd = new UndoableCommand("ZoomSelected", gview, 0);
             stack->push(cmd);
             return "";
         }
         if (string_equal(argv[1], "all")) {
-            debug_message("zoomAll()");
-            debug_message("TODO: Implement zoomAll.");
+            debug_message_("zoomAll()");
+            debug_message_("TODO: Implement zoomAll.");
             return "";
         }
         if (string_equal(argv[1], "extents")) {
-            debug_message("zoomExtents()");
+            debug_message_("zoomExtents()");
             UndoableCommand* cmd = new UndoableCommand("ZoomExtents", gview, 0);
             stack->push(cmd);
             return "";
@@ -2728,7 +2733,7 @@ SetTextAngle_action(std::string args)
 void
 MainWindow::recentMenuAboutToShow()
 {
-    debug_message("MainWindow::recentMenuAboutToShow()");
+    debug_message_("MainWindow::recentMenuAboutToShow()");
     menuHash[MENU_RECENT]->clear();
 
     QFileInfo recentFileInfo;
@@ -2778,7 +2783,7 @@ MainWindow::recentMenuAboutToShow()
 void
 MainWindow::windowMenuAboutToShow()
 {
-    debug_message("MainWindow::windowMenuAboutToShow()");
+    debug_message_("MainWindow::windowMenuAboutToShow()");
     menuHash[MENU_WINDOW]->clear();
     menuHash[MENU_WINDOW]->addAction(actionHash[ACTION_WINDOW_CLOSE]);
     menuHash[MENU_WINDOW]->addAction(actionHash[ACTION_WINDOW_CLOSE_ALL]);
@@ -2807,7 +2812,7 @@ MainWindow::windowMenuAboutToShow()
 void
 MainWindow::windowMenuActivated(bool checked)
 {
-    debug_message("MainWindow::windowMenuActivated()");
+    debug_message_("MainWindow::windowMenuActivated()");
     QAction* aSender = qobject_cast<QAction*>(sender());
     if (!aSender)
         return;
@@ -2821,7 +2826,7 @@ MainWindow::windowMenuActivated(bool checked)
 void
 MainWindow::newFile()
 {
-    debug_message("MainWindow::newFile()");
+    debug_message_("MainWindow::newFile()");
     docIndex++;
     numOfDocs++;
     MdiWindow* mdiWin = new MdiWindow(docIndex, mdiArea, Qt::SubWindow);
@@ -2844,7 +2849,7 @@ MainWindow::newFile()
 void
 MainWindow::openFile(bool recent, std::string recentFile)
 {
-    debug_message("MainWindow::openFile()");
+    debug_message_("MainWindow::openFile()");
 
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
@@ -2948,7 +2953,7 @@ MainWindow::openFilesSelected(QStringList filesToOpen)
 void
 MainWindow::openrecentfile()
 {
-    debug_message("MainWindow::openrecentfile()");
+    debug_message_("MainWindow::openrecentfile()");
 
     //Check to see if this from the recent files list
     QAction* recentSender = qobject_cast<QAction*>(sender());
@@ -2962,7 +2967,7 @@ MainWindow::openrecentfile()
 void
 MainWindow::savefile()
 {
-    debug_message("MainWindow::savefile()");
+    debug_message_("MainWindow::savefile()");
 }
 
 /* MainWindow::saveasfile
@@ -2970,7 +2975,7 @@ MainWindow::savefile()
 void
 MainWindow::saveasfile()
 {
-    debug_message("MainWindow::saveasfile()");
+    debug_message_("MainWindow::saveasfile()");
     // need to find the activeSubWindow before it loses focus to the FileDialog
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (!mdiWin) {
@@ -2989,7 +2994,7 @@ MainWindow::saveasfile()
 QMdiSubWindow *
 MainWindow::findMdiWindow(std::string fileName)
 {
-    debug_message("MainWindow::findMdiWindow(" + fileName + ")");
+    debug_message_("MainWindow::findMdiWindow(" + fileName + ")");
     QString canonicalFilePath = QFileInfo(QString::fromStdString(fileName)).canonicalFilePath();
 
     foreach(QMdiSubWindow* subWindow, mdiArea->subWindowList()) {
@@ -3019,7 +3024,7 @@ MainWindow::closeEvent(QCloseEvent* event)
 void
 MainWindow::onCloseWindow()
 {
-    debug_message("MainWindow::onCloseWindow()");
+    debug_message_("MainWindow::onCloseWindow()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
         onCloseMdiWin(mdiWin);
@@ -3032,7 +3037,7 @@ MainWindow::onCloseWindow()
 void
 MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
 {
-    debug_message("MainWindow::onCloseMdiWin()");
+    debug_message_("MainWindow::onCloseMdiWin()");
     numOfDocs--;
 
     bool keepMaximized;
@@ -3058,7 +3063,7 @@ MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
 void
 MainWindow::onWindowActivated(QMdiSubWindow* w)
 {
-    debug_message("MainWindow::onWindowActivated()");
+    debug_message_("MainWindow::onWindowActivated()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(w);
     if (mdiWin) {
         mdiWin->onWindowActivated();
@@ -3071,7 +3076,7 @@ MainWindow::onWindowActivated(QMdiSubWindow* w)
 void
 MainWindow::resizeEvent(QResizeEvent* e)
 {
-    debug_message("MainWindow::resizeEvent()");
+    debug_message_("MainWindow::resizeEvent()");
     QMainWindow::resizeEvent(e);
     statusBar()->setSizeGripEnabled(!isMaximized());
 }
@@ -3081,7 +3086,7 @@ MainWindow::resizeEvent(QResizeEvent* e)
 void
 MainWindow::updateMenuToolbarStatusbar()
 {
-    debug_message("MainWindow::updateMenuToolbarStatusbar()");
+    debug_message_("MainWindow::updateMenuToolbarStatusbar()");
 
     actionHash[ACTION_PRINT]->setEnabled(numOfDocs > 0);
     actionHash[ACTION_WINDOW_CLOSE]->setEnabled(numOfDocs > 0);
@@ -3143,7 +3148,7 @@ MainWindow::updateMenuToolbarStatusbar()
         }
     }
     /* TODO: decide why this call was here */
-    debug_message("MainWindow::hideUnimplemented()");
+    debug_message_("MainWindow::hideUnimplemented()");
 }
 
 /* MainWindow::validFileFormat
@@ -3241,7 +3246,7 @@ MainWindow::closeToolBar(QAction* action)
     if (action->objectName() == "toolbarclose") {
         QToolBar* tb = qobject_cast<QToolBar*>(sender());
         if (tb) {
-            debug_message(tb->objectName().toStdString() + "%s closed.");
+            debug_message_(tb->objectName().toStdString() + "%s closed.");
             tb->hide();
         }
     }

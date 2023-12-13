@@ -38,6 +38,8 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 add_subdirectory(extern/libembroidery)
+add_subdirectory(extern/SDL2-2.28.5)
+add_subdirectory(extern/freetype-2.13.2)
 
 qt_add_executable(embroidermodder2 WIN32 MACOSX_BUNDLE
     ${CMAKE_SOURCE_DIR}/src/interface.cpp
@@ -71,6 +73,8 @@ target_link_libraries(embroidermodder2 PRIVATE
     Qt6::Widgets
     Qt6::PrintSupport
     Qt6::OpenGLWidgets
+    SDL2-static
+    freetype
     embroidery_static)
 
 if (WIN32)

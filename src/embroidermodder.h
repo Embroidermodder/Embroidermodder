@@ -69,7 +69,7 @@ void add_polyline(QPainterPath p, std::string rubberMode);
 View *activeView(void);
 QGraphicsScene* activeScene();
 
-void debug_message(std::string msg);
+void debug_message_(std::string);
 void set_enabled(QObject *parent, const char *key, bool enabled);
 void set_visibility(QObject *parent, const char *name, bool visibility);
 QPainterPath add_to_path(QPainterPath path, EmbVector scale, std::string s);

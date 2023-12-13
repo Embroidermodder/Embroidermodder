@@ -41,6 +41,28 @@
 #define MAX_ARGS                                20
 #define MAX_COMBOBOXES                         200
 
+#define SUBCOMMAND_ARC                       0
+#define SUBCOMMAND_CIRCLE                    1
+#define SUBCOMMAND_ELLIPSE                   2
+#define SUBCOMMAND_HORIZONTAL_DIMENSION      3
+#define SUBCOMMAND_IMAGE                     4
+#define SUBCOMMAND_PATH                      5
+#define SUBCOMMAND_POLYGON                   6
+#define SUBCOMMAND_POLYLINE                  7
+#define SUBCOMMAND_RECTANGLE                 8
+#define SUBCOMMAND_REGULAR_POLYGON           9
+#define SUBCOMMAND_VERTICAL_DIMENSION       10
+#define SUBCOMMAND_DIM_LEADER               11
+#define SUBCOMMAND_INFINITE_LINE            12
+#define SUBCOMMAND_RAY                      13
+#define SUBCOMMAND_LINE                     14
+#define SUBCOMMAND_TRIANGLE                 15
+#define SUBCOMMAND_TEXT_MULTI               16
+#define SUBCOMMAND_TEXT_SINGLE              17
+#define SUBCOMMAND_ROUNDED_RECTANGLE        18
+#define SUBCOMMAND_POINT                    19
+#define SUBCOMMAND_SLOT                     20
+
 /* Actions.
  * These identifiers are subject to change since they are in alphabetical order
  * and the numbers are increasing.
@@ -1132,6 +1154,7 @@ typedef struct Node_ {
     EmbReal r;
 } Node;
 
+void debug_message(char *msg);
 int read_settings(void);
 void write_settings(void);
 EmbVector rotate_vector(EmbVector v, EmbReal alpha);
@@ -1156,6 +1179,8 @@ int roundToMultiple(bool roundUp, int numToRound, int multiple);
 int tokenize(char **argv, char *str, const char delim);
 void emb_sleep(int seconds);
 char *platformString(void);
+void debug_message(char *msg);
+void get_n_reals(float result[], char *argv[], int n, int offset);
 
 /* Geometry UI Processors */
 GeometryData *geometry_init(int type);
@@ -1241,6 +1266,7 @@ extern const char *group_box_data[];
 extern const int32_t group_box_ids[];
 
 extern char *coverage_test_script[];
+extern const char *geometry_subcommands[];
 
 #ifdef __cplusplus
 }

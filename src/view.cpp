@@ -62,7 +62,7 @@ View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, 
     //TODO: Review OpenGL for Qt5 later
     //if (settings.display_use_opengl)
     //{
-    //    debug_message("Using OpenGL...");
+    //    debug_message_("Using OpenGL...");
     //    setViewport(new QGLWidget(QGLFormat(QGL::DoubleBuffer)));
     //}
 
@@ -228,7 +228,7 @@ View::deleteObject(Geometry* obj)
 void
 View::previewOn(uint32_t clone, uint32_t mode, EmbVector v, EmbReal data)
 {
-    debug_message("View previewOn()");
+    debug_message_("View previewOn()");
     previewOff(); /* Free the old objects before creating new ones. */
 
     previewMode = mode;
@@ -423,7 +423,7 @@ View::setGridColor(QRgb color)
 {
     gridColor = QColor(color);
     if (!gscene) {
-        debug_message("ERROR: setGridColor has no gscene.");
+        debug_message_("ERROR: setGridColor has no gscene.");
         return;
     }
     gscene->setProperty("VIEW_COLOR_GRID", color);
@@ -1080,7 +1080,7 @@ View::setCornerButton()
 void
 View::cornerButtonClicked()
 {
-    debug_message("Corner Button Clicked.");
+    debug_message_("Corner Button Clicked.");
     //actionHash[settings.display_scrollbar_widget_num]->trigger();
 }
 
@@ -1090,7 +1090,7 @@ View::cornerButtonClicked()
 void
 View::zoomIn()
 {
-    debug_message("View zoomIn()");
+    debug_message_("View zoomIn()");
     if (!allowZoomIn()) {
         return;
     }
@@ -1109,7 +1109,7 @@ View::zoomIn()
 void
 View::zoomOut()
 {
-    debug_message("View zoomOut()");
+    debug_message_("View zoomOut()");
     if (!allowZoomOut()) { return; }
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QPointF cntr = mapToScene(QPoint(width()/2,height()/2));
@@ -1634,12 +1634,12 @@ View::mouseReleaseEvent(QMouseEvent* event)
         event->accept();
     }
     if (event->button() == Qt::XButton1) {
-        debug_message("XButton1");
+        debug_message_("XButton1");
         actuator("undo"); //TODO: Make this customizable
         event->accept();
     }
     if (event->button() == Qt::XButton2) {
-        debug_message("XButton2");
+        debug_message_("XButton2");
         actuator("redo"); //TODO: Make this customizable
         event->accept();
     }
@@ -1659,7 +1659,7 @@ View::allowZoomIn()
 
     EmbReal zoomInLimit = 0.0000000001;
     if (std::min(maxWidth, maxHeight) < zoomInLimit) {
-        debug_message("ZoomIn limit reached. (limit=" + std::to_string(zoomInLimit) + ")");
+        debug_message_("ZoomIn limit reached. (limit=" + std::to_string(zoomInLimit) + ")");
         return false;
     }
 
@@ -1679,7 +1679,7 @@ View::allowZoomOut()
 
     EmbReal zoomOutLimit = 10000000000000.0;
     if (std::max(maxWidth, maxHeight) > zoomOutLimit) {
-        debug_message("ZoomOut limit reached. (limit" + std::to_string(zoomOutLimit) + ")");
+        debug_message_("ZoomOut limit reached. (limit" + std::to_string(zoomOutLimit) + ")");
         return false;
     }
 
@@ -1813,7 +1813,7 @@ View::contextMenuEvent(QContextMenuEvent* event)
 void
 View::deletePressed()
 {
-    debug_message("View deletePressed()");
+    debug_message_("View deletePressed()");
     if (pastingActive) {
         gscene->removeItem(pasteObjectItemGroup);
         delete pasteObjectItemGroup;
@@ -1830,7 +1830,7 @@ View::deletePressed()
 void
 View::escapePressed()
 {
-    debug_message("View escapePressed()");
+    debug_message_("View escapePressed()");
     if (pastingActive) {
         gscene->removeItem(pasteObjectItemGroup);
         delete pasteObjectItemGroup;

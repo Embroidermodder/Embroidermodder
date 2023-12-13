@@ -37,53 +37,6 @@ void toPolyline(
 
 bool save(View *view, QString f);
 
-#define SUBCOMMAND_ARC                       0
-#define SUBCOMMAND_CIRCLE                    1
-#define SUBCOMMAND_ELLIPSE                   2
-#define SUBCOMMAND_HORIZONTAL_DIMENSION      3
-#define SUBCOMMAND_IMAGE                     4
-#define SUBCOMMAND_PATH                      5
-#define SUBCOMMAND_POLYGON                   6
-#define SUBCOMMAND_POLYLINE                  7
-#define SUBCOMMAND_RECTANGLE                 8
-#define SUBCOMMAND_REGULAR_POLYGON           9
-#define SUBCOMMAND_VERTICAL_DIMENSION       10
-#define SUBCOMMAND_DIM_LEADER               11
-#define SUBCOMMAND_INFINITE_LINE            12
-#define SUBCOMMAND_RAY                      13
-#define SUBCOMMAND_LINE                     14
-#define SUBCOMMAND_TRIANGLE                 15
-#define SUBCOMMAND_TEXT_MULTI               16
-#define SUBCOMMAND_TEXT_SINGLE              17
-#define SUBCOMMAND_ROUNDED_RECTANGLE        18
-#define SUBCOMMAND_POINT                    19
-#define SUBCOMMAND_SLOT                     20
-
-const char *geometry_subcommands[] = {
-	"arc",
-	"circle",
-	"ellipse",
-	"horizontal_dimension",
-	"image",
-	"path",
-	"point",
-	"polygon",
-	"polyline",
-	"rectangle",
-	"regular_polygon",
-	"vertical_dimension",
-	"dim_leader",
-	"infinite_line",
-	"ray",
-	"line",
-	"triangle",
-	"text_multi",
-	"text_single",
-	"rounded-rectangle",
-	"point",
-	"slot",
-    "END"
-};
 
 const CommandData subcommand_table[MAX_COMMANDS] = {
     {

@@ -31,6 +31,7 @@
 #include <windows.h>
 #else
 #include <unistd.h>
+#include <sys/syscall.h>
 #include <sys/utsname.h>
 #endif
 
@@ -754,6 +755,32 @@ int opensave_props[] = {
     -1
 };
 
+const char *geometry_subcommands[] = {
+	"arc",
+	"circle",
+	"ellipse",
+	"horizontal_dimension",
+	"image",
+	"path",
+	"point",
+	"polygon",
+	"polyline",
+	"rectangle",
+	"regular_polygon",
+	"vertical_dimension",
+	"dim_leader",
+	"infinite_line",
+	"ray",
+	"line",
+	"triangle",
+	"text_multi",
+	"text_single",
+	"rounded-rectangle",
+	"point",
+	"slot",
+    "END"
+};
+
 #if defined(WIN32)
 void
 emb_sleep(int seconds)
@@ -781,6 +808,60 @@ platformString(void)
     uname(&platform);
     return platform.sysname;
 #endif
+}
+
+/* Tokenize our command using a 1 character deliminator. */
+int
+tokenize(char **argv, char *str, const char delim)
+{
+    int argc = 0;
+    argv[argc] = 0;
+    if (strlen(str) == 0) {
+        return 0;
+    }
+    for (int i=0; str[i]; i++) {
+        if (str[i] == delim) {
+            str[i] = 0;
+            argc++;
+            argv[argc] = str+i;
+        }
+    }
+    return argc;
+}
+
+/* Debug message to logfile, append only.
+ *
+ * For debugging code running on other machines append these messages to log
+ * file.
+ *
+ * Timestamps are added to each message so we can trace in what order things
+ * happen.
+ */
+void
+debug_message(char *msg)
+{
+    char thread_file[MAX_STRING_LENGTH];
+    struct timespec ts;
+    clock_gettime(CLOCK_REALTIME, &ts);
+    sprintf(thread_file, "debug.txt");
+    /* An attempt at thread safety. */
+#if defined(SYS_gettid)
+    sprintf(thread_file, "debug-%ld.txt", (int64_t)syscall(SYS_gettid));
+#endif
+    FILE *f = fopen(thread_file, "a");
+    fprintf(f, "%.2ld:%.2ld:%.2ld.%.3ld> %s\n",
+        (ts.tv_sec/3600)%24, (ts.tv_sec%3600)/60, ts.tv_sec%60, ts.tv_nsec%1000,
+        msg);
+    fclose(f);
+}
+
+/* Utility function for add_to_path. */
+void
+get_n_reals(float result[], char *argv[], int n, int offset)
+{
+    for (int i=0; i<n; i++) {
+        result[i] = atof(argv[offset+i]);
+    }
 }
 
 /* Check that RBG values are in the range (0,255) inclusive. */
