@@ -906,68 +906,13 @@ public:
         int row);
     QCheckBox* create_checkbox(QGroupBox *groupbox, std::string label);
 
-private slots:
-    void comboBoxIconSizeCurrentIndexChanged(int);
-    void checkBoxGeneralMdiBGUseLogoStateChanged(int);
-    void chooseGeneralMdiBackgroundLogo();
-    void checkBoxGeneralMdiBGUseTextureStateChanged(int);
-    void chooseGeneralMdiBackgroundTexture();
-    void checkBoxGeneralMdiBGUseColorStateChanged(int);
-    void chooseGeneralMdiBackgroundColor();
-    void currentGeneralMdiBackgroundColorChanged(const QColor&);
-    void checkBoxShowScrollBarsStateChanged(int);
-    void comboBoxScrollBarWidgetCurrentIndexChanged(int);
-    void chooseDisplayCrossHairColor();
-    void currentDisplayCrossHairColorChanged(const QColor&);
-    void chooseDisplayBackgroundColor();
-    void currentDisplayBackgroundColorChanged(const QColor&);
-    void chooseDisplaySelectBoxLeftColor();
-    void currentDisplaySelectBoxLeftColorChanged(const QColor&);
-    void chooseDisplaySelectBoxLeftFill();
-    void currentDisplaySelectBoxLeftFillChanged(const QColor&);
-    void chooseDisplaySelectBoxRightColor();
-    void currentDisplaySelectBoxRightColorChanged(const QColor&);
-    void chooseDisplaySelectBoxRightFill();
-    void currentDisplaySelectBoxRightFillChanged(const QColor&);
-    void comboBoxSelectionCoolGripColorCurrentIndexChanged(int index);
-    void comboBoxSelectionHotGripColorCurrentIndexChanged(int index);
-    void spinBoxDisplaySelectBoxAlphaValueChanged(int);
-    void choosePromptTextColor();
-    void currentPromptTextColorChanged(const QColor&);
-    void choosePromptBackgroundColor();
-    void currentPromptBackgroundColorChanged(const QColor&);
-    void comboBoxPromptFontFamilyCurrentIndexChanged(QString );
-    void comboBoxPromptFontStyleCurrentIndexChanged(QString );
-    void spinBoxPromptFontSizeValueChanged(int);
-    void checkBoxPromptSaveHistoryAsHtmlStateChanged(int);
-    void checkBoxCustomFilterStateChanged(int);
-    void buttonCustomFilterSelectAllClicked();
-    void buttonCustomFilterClearAllClicked();
-    void checkBoxGridColorMatchCrossHairStateChanged(int);
-    void chooseGridColor();
-    void currentGridColorChanged(const QColor&);
-    void checkBoxGridLoadFromFileStateChanged(int);
-    void comboBoxGridTypeCurrentIndexChanged(QString );
-    void checkBoxGridCenterOnOriginStateChanged(int);
-    void checkBoxRulerShowOnLoadStateChanged(int);
-    void comboBoxRulerMetricCurrentIndexChanged(int);
-    void chooseRulerColor();
-    void currentRulerColorChanged(const QColor&);
-    void spinBoxRulerPixelSizeValueChanged(double);
-    void buttonQSnapSelectAllClicked();
-    void buttonQSnapClearAllClicked();
-    void comboBoxQSnapLocatorColorCurrentIndexChanged(int);
-    void checkBoxLwtShowLwtStateChanged(int);
-    void checkBoxLwtRealRenderStateChanged(int);
+    void chooseColor(int color_id);
+    void chooseIndex(int setting_id);
+    void currentColorChanged(const QColor& color, Node *d, int color_id);
+    void currentIndexChanged(int value, Node *d, int setting_id);
 
     void acceptChanges();
     void rejectChanges();
-
-signals:
-    void buttonCustomFilterSelectAll(bool);
-    void buttonCustomFilterClearAll(bool);
-    void buttonQSnapSelectAll(bool);
-    void buttonQSnapClearAll(bool);
 };
 
 /* . */

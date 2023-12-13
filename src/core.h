@@ -1166,23 +1166,12 @@ typedef struct UndoData_ {
     EmbVector before;
 } UndoData;
 
-/*
- *
- */
-struct Node_ {
-    struct Node_ **leaves;
-    int32_t n_leaves;
-    int32_t max_leaves;
-    char key[MAX_STRING_LENGTH];
-    char data[MAX_STRING_LENGTH];
+/* . */
+typedef struct Node_ {
     char s[MAX_STRING_LENGTH];
     int32_t i;
     EmbReal r;
-    Cvector *vec;
-    int32_t type;
-};
-
-typedef struct Node_ Node;
+} Node;
 
 int read_settings(void);
 void write_settings(void);
@@ -1190,22 +1179,7 @@ EmbVector rotate_vector(EmbVector v, EmbReal alpha);
 const char *actuator(char string[MAX_STRING_LENGTH]);
 int string_equal(const char *a, const char *b);
 void emb_sleep(int seconds);
-
-/* Memory management. */
-Cvector *cvector_create(size_t element_size);
-void cvector_append(Cvector *a, Cvector *b);
-void cvector_add_cstr(Cvector *a, char *b);
-Cvector *cvector_copy(Cvector *a);
-void cvector_free(Cvector *vector);
 int string_array_length(const char *list[]);
-
-Node *create_node(int type);
-int add_leaf(Node *branch, Node *leaf);
-void print_tree(Node *branch, int indent);
-Node *find_node(Node *branch, char key[MAX_STRING_LENGTH]);
-void free_node(Node *branch);
-Node *create_and_add_leaf(Node *parent, char *key, char *value);
-int insert_node(Node *branch, char key[MAX_STRING_LENGTH], Node *node);
 
 const char *add_geometry(char argv[MAX_ARGS][MAX_STRING_LENGTH], int argc);
 const char *run_script_file(char *fname);
@@ -1220,9 +1194,6 @@ bool willUnderflowInt32(int64_t a, int64_t b);
 bool willOverflowInt32(int64_t a, int64_t b);
 int roundToMultiple(bool roundUp, int numToRound, int multiple);
 int tokenize(char **argv, char *str, const char delim);
-
-/* Global memory. */
-extern Node *root;
 
 /* Geometry UI Processors */
 GeometryData *geometry_init(int type);
