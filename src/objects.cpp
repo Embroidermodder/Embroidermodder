@@ -548,12 +548,12 @@ add_geometry(char **argv, int argc)
 
 /* . */
 bool
-save_current_file(String fileName)
+save_current_file(const char *fileName)
 {
     View* view = activeView();
     QGraphicsScene* gscene = activeScene();
     view->formatType = EMBFORMAT_UNSUPPORTED;
-    return save(view, QString::fromStdString(fileName));
+    return save(view, QString(fileName));
 }
 
 /* Find closest point to "position" from the list of points given. */
@@ -1677,7 +1677,7 @@ Geometry::objectDiameter()
 EmbReal
 Geometry::objectCircumference()
 {
-    return CONSTANT_PI * objectDiameter();
+    return embConstantPi * objectDiameter();
 }
 
 /* QPointF. */
@@ -2280,7 +2280,7 @@ Geometry::objectArea()
         return ((r*r)/2)*(theta - std::sin(theta));
     }
     case OBJ_TYPE_CIRCLE:
-        return CONSTANT_PI*objectRadius()*objectRadius();
+        return embConstantPi * objectRadius() * objectRadius();
     default:
         break;
     }
@@ -2503,7 +2503,7 @@ Geometry::setObjectDiameter(EmbReal diameter)
 void
 Geometry::setObjectArea(EmbReal area)
 {
-    EmbReal radius = std::sqrt(area/CONSTANT_PI);
+    EmbReal radius = sqrt(area / embConstantPi);
     setObjectRadius(radius);
 }
 
@@ -2511,7 +2511,7 @@ Geometry::setObjectArea(EmbReal area)
 void
 Geometry::setObjectCircumference(EmbReal circumference)
 {
-    EmbReal diameter = circumference/CONSTANT_PI;
+    EmbReal diameter = circumference / embConstantPi;
     setObjectDiameter(diameter);
 }
 

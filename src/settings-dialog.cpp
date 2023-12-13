@@ -48,7 +48,7 @@ void
 copy_props(Node *a, Node *b, int *props)
 {
     for (int i=0; props[i]>=0; i++) {
-        memcpy(a+i, b+i, sizeof(Node));
+        memcpy(a+props[i], b+props[i], sizeof(Node));
     }
 }
 
@@ -59,6 +59,31 @@ make_editing_copy(int props[])
     copy_props(dialog, settings, props);
     copy_props(preview, settings, props);
     copy_props(accept_, settings, props);
+}
+
+void
+Settings_Dialog::chooseColor(int color_id)
+{
+    QPushButton* button = qobject_cast<QPushButton*>(sender());
+    if (!button) {
+        return;
+    }
+	QColorDialog* colorDialog = new QColorDialog(QColor(accept_[color_id].i), this);
+	connect(colorDialog, &QColorDialog::currentColorChanged, this,
+        [=](const QColor& color) {
+            colorChanged(color, preview, color_id);
+        }
+    );
+	colorDialog->exec();
+
+	if (colorDialog->result() == QDialog::Accepted) {
+		accept_[color_id].i = (colorDialog->selectedColor().rgb());
+		button->setIcon(swatch((accept_[color_id].i)));
+        colorChanged(colorDialog->selectedColor(), accept_, color_id);
+	}
+	else {
+        colorChanged(colorDialog->selectedColor(), dialog, color_id);
+	}
 }
 
 /* Read settings from file.
@@ -97,13 +122,13 @@ read_settings(void)
         for (int i=0; i<SETTINGS_TOTAL; i++) {
             Setting s = settings_data[i];
             switch (s.type) {
-            case NODE_INT:
+            case 'i':
                 settings[s.id].i = atoi(s.value);
                 break;
-            case NODE_REAL:
+            case 'r':
                 settings[s.id].r = atof(s.value);
                 break;
-            case NODE_STRING:
+            case 's':
                 strcpy(settings[s.id].s, s.value);
                 break;
             default:
@@ -144,13 +169,13 @@ read_settings(void)
             Setting s = settings_data[i];
             char *value = config[i] + eq_pos + 1;
             switch (s.type) {
-            case NODE_INT:
+            case 'i':
                 settings[s.id].i = atoi(value);
                 break;
-            case NODE_REAL:
+            case 'r':
                 settings[s.id].r = atof(value);
                 break;
-            case NODE_STRING:
+            case 's':
                 strcpy(settings[s.id].s, value);
                 break;
             default:
@@ -194,15 +219,15 @@ write_settings(void)
         char line[2*MAX_STRING_LENGTH];
         Setting s = settings_data[i];
         switch (s.type) {
-        case NODE_INT:
+        case 'i':
             fprintf(file, "%s=%d\n", s.key, settings[s.id].i);
             sprintf(line, "%s=%d\n", s.key, settings[s.id].i);
             debug_message(line);
             break;
-        case NODE_REAL:
+        case 'r':
             fprintf(file, "%s=%f\n", s.key, settings[s.id].r);
             break;
-        case NODE_STRING:
+        case 's':
             fprintf(file, "%s=%s\n", s.key, settings[s.id].s);
             break;
         default:
@@ -1588,7 +1613,7 @@ update_view_selectbox(Node *d)
 }
 
 void
-Settings_Dialog::currentColorChanged(const QColor& color, Node *d, int color_id)
+Settings_Dialog::colorChanged(const QColor& color, Node *d, int color_id)
 {
 	d[color_id].i = color.rgb();
     switch (color_id) {
@@ -1630,30 +1655,6 @@ Settings_Dialog::currentColorChanged(const QColor& color, Node *d, int color_id)
     }
 }
 
-void
-Settings_Dialog::chooseColor(int color_id)
-{
-    QPushButton* button = qobject_cast<QPushButton*>(sender());
-    if (!button) {
-        return;
-    }
-	QColorDialog* colorDialog = new QColorDialog(QColor(accept_[color_id].i), this);
-	connect(colorDialog, SIGNAL([=](const QColor& color) {
-        currentColorChanged(color, preview, color_id);
-    }
-    ), this,
-        SLOT(changedFunction(const QColor&)));
-	colorDialog->exec();
-
-	if (colorDialog->result() == QDialog::Accepted) {
-		accept_[color_id].i = (colorDialog->selectedColor().rgb());
-		button->setIcon(swatch((accept_[color_id].i)));
-        currentColorChanged(colorDialog->selectedColor(), accept_, color_id);
-	}
-	else {
-        currentColorChanged(colorDialog->selectedColor(), dialog, color_id);
-	}
-}
 
 /*
 void Settings_Dialog::comboBoxPromptFontFamilyCurrentIndexChanged(QString family)

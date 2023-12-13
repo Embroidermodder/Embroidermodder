@@ -15,8 +15,8 @@
  *  ------------------------------------------------------------
  */
 
-#ifndef __EMBROIDERMODDER_UTILITY_H__
-#define __EMBROIDERMODDER_UTILITY_H__
+#ifndef __EMBROIDERMODDER_H__
+#define __EMBROIDERMODDER_H__
 
 #include <vector>
 #include <string>
@@ -27,7 +27,6 @@
 /* Qt 6.0+ libraries. */
 #include <QAction>
 #include <QApplication>
-
 #include <QOpenGLWidget>
 #include <QtPrintSupport>
 
@@ -44,7 +43,7 @@ class UndoEditor;
 class MainWindow;
 class Geometry;
 
-/* Global variables */
+/* Global variables. */
 extern MdiArea* mdiArea;
 extern MainWindow* _mainWin;
 extern CmdPrompt* prompt;
@@ -58,8 +57,6 @@ QString translate_str(const char *str);
 bool contains(std::vector<std::string>, std::string);
 bool validFileFormat(std::string fileName);
 QString fileExtension(std::string fileName);
-
-QIcon swatch(int32_t c);
 
 std::string convert_args_to_type(
     std::string label,
@@ -80,7 +77,7 @@ QPainterPath add_to_path(QPainterPath path, EmbVector scale, std::string s);
 QPointF to_QPointF(EmbVector a);
 EmbVector to_EmbVector(QPointF a);
 
-bool save_current_file(std::string fileName);
+QIcon swatch(int32_t c);
 
 /* Interface creation functions.
  */
@@ -908,8 +905,8 @@ public:
 
     void chooseColor(int color_id);
     void chooseIndex(int setting_id);
-    void currentColorChanged(const QColor& color, Node *d, int color_id);
-    void currentIndexChanged(int value, Node *d, int setting_id);
+    void colorChanged(const QColor& color, Node *d, int color_id);
+    void indexChanged(int value, Node *d, int setting_id);
 
     void acceptChanges();
     void rejectChanges();

@@ -41,18 +41,6 @@
 #define MAX_ARGS                                20
 #define MAX_COMBOBOXES                         200
 
-/* Node types. */
-#define NODE_NULL                                0
-#define NODE_STRING                              1
-#define NODE_REAL                                2
-#define NODE_INT                                 3
-#define NODE_BOOL                                4
-#define NODE_FUNCTION                            5
-#define NODE_DICTIONARY                          6
-#define NODE_ARRAY                               7
-#define NODE_VECTOR                              8
-#define NODE_UNKNOWN                             9
-
 /* Actions.
  * These identifiers are subject to change since they are in alphabetical order
  * and the numbers are increasing.
@@ -496,11 +484,6 @@
 #define LINE_STYLE_NONE                          0
 #define LINE_STYLE_FLARED                        1
 #define LINE_STYLE_FLETCHING                     2
-
-/* Mathematical Constants. */
-#define CONSTANT_PI         3.14159265358979323846
-#define RADIANS_TO_DEGREES    (180.0f/CONSTANT_PI)
-#define DEGREES_TO_RADIANS    (CONSTANT_PI/180.0f)
 
 /* Point identifiers. */
 #define VECTOR_ARC_START_POINT                   0
@@ -1027,25 +1010,26 @@
 extern "C" {
 #endif
 
-/* C/C++ Standard Libraries. */
 #include <stdio.h>
-#include <math.h>
-#include <time.h>
-#include <inttypes.h>
-#include <stdarg.h>
 #include <stdbool.h>
-#include <assert.h>
-#include <errno.h>
-
-/* We assume here that all free systems and MacOS are POSIX compliant. */
-#if defined(WIN32)
-#include <windows.h>
-#else
-#include <unistd.h>
-#include <sys/utsname.h>
-#endif
+#include <inttypes.h>
 
 #include "../extern/libembroidery/src/embroidery.h"
+
+/* . */
+typedef struct MenuData_ {
+    int32_t id;
+    const char key[MAX_STRING_LENGTH];
+    int32_t entries[MAX_TOOLBAR_LENGTH];
+} MenuData;
+
+/* . */
+typedef struct ToolbarData_ {
+    int32_t id;
+    const char key[MAX_STRING_LENGTH];
+    int32_t entries[MAX_TOOLBAR_LENGTH];
+    char horizontal;
+} ToolbarData;
 
 /* . */
 typedef struct ActionData_ {
@@ -1084,31 +1068,6 @@ typedef struct Setting_ {
     char value[MAX_STRING_LENGTH];
     int type;
 } Setting;
-
-/* To allow us to resize general C arrays when necessary.
- * Note that for char arrays, the buffer is a normal c-style string.
- */
-typedef struct Cvector_ {
-    char *buffer;
-    int32_t size;
-    int32_t max_length;
-    int32_t element_size;
-} Cvector;
-
-/* . */
-typedef struct ToolbarData_ {
-    int32_t id;
-    const char key[MAX_STRING_LENGTH];
-    int32_t entries[MAX_TOOLBAR_LENGTH];
-    char horizontal;
-} ToolbarData;
-
-/* . */
-typedef struct MenuData_ {
-    int32_t id;
-    const char key[MAX_STRING_LENGTH];
-    int32_t entries[MAX_TOOLBAR_LENGTH];
-} MenuData;
 
 /* . */
 typedef struct ViewData_ {
@@ -1180,6 +1139,7 @@ const char *actuator(char string[MAX_STRING_LENGTH]);
 int string_equal(const char *a, const char *b);
 void emb_sleep(int seconds);
 int string_array_length(const char *list[]);
+bool save_current_file(const char *fileName);
 
 const char *add_geometry(char argv[MAX_ARGS][MAX_STRING_LENGTH], int argc);
 const char *run_script_file(char *fname);
@@ -1194,6 +1154,8 @@ bool willUnderflowInt32(int64_t a, int64_t b);
 bool willOverflowInt32(int64_t a, int64_t b);
 int roundToMultiple(bool roundUp, int numToRound, int multiple);
 int tokenize(char **argv, char *str, const char delim);
+void emb_sleep(int seconds);
+char *platformString(void);
 
 /* Geometry UI Processors */
 GeometryData *geometry_init(int type);

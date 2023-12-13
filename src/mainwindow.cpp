@@ -40,20 +40,6 @@ string_equal(const char *a, const char *b)
     return !strcmp(a, b);
 }
 
-#if defined(WIN32)
-void
-emb_sleep(int seconds)
-{
-    sleep(1);
-}
-#else
-void
-emb_sleep(int seconds)
-{
-    usleep(1000000);
-}
-#endif
-
 /* Create menu. */
 void
 create_menu(int32_t menu, const int32_t *def, bool topLevel)
@@ -370,21 +356,6 @@ MainWindow::checkForUpdates()
 {
     debug_message("checkForUpdates()");
     //TODO: Check website for new versions, commands, etc...
-}
-
-/* platformString.
- * TODO: Append QSysInfo to string where applicable.
- */
-char *
-platformString(void)
-{
-#if defined(WIN32)
-    return "Windows";
-#else
-    struct utsname platform;
-    uname(&platform);
-    return platform.sysname;
-#endif
 }
 
 /* The about dialog. */

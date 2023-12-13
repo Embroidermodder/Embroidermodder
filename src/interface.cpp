@@ -2000,7 +2000,7 @@ MdiWindow::~MdiWindow()
 bool
 MdiWindow::saveFile(std::string fileName)
 {
-    return save_current_file(fileName);
+    return save_current_file(fileName.c_str());
 }
 
 /* Load file to this subwindow. */

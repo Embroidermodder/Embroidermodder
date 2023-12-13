@@ -19,6 +19,8 @@
 
 #include "core.h"
 
+#include <stdlib.h>
+
 GeometryData*
 geometry_init(int type)
 {

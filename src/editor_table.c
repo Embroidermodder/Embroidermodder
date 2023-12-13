@@ -17,6 +17,76 @@
 
 #include "core.h"
 
+/* The group box list is not changeable at runtime, so it's fixed length
+ * and a constant.
+ */
+const char *group_box_data[] = {
+    "general", "General",
+    "geometry_arc", "Geometry",
+    "misc_arc", "Misc",
+    "geometry_block", "Geometry",
+    "geometry_circle", "Geometry",
+    "geometry_dim_aligned", "Geometry",
+    "geometry_dim_angular", "Geometry",
+    "geometry_dim_arc_length", "Geometry",
+    "geometry_dim_diameter", "Geometry",
+    "geometry_dim_leader", "Geometry",
+    "geometry_dim_linear", "Geometry",
+    "geometry_dim_ordinate", "Geometry",
+    "geometry_dim_radius", "Geometry",
+    "geometry_ellipse", "Geometry",
+    "geometry_image", "Geometry",
+    "misc_image", "Misc",
+    "geometry_infinite_line", "Geometry",
+    "geometry_line", "Geometry",
+    "geometry_path", "Geometry",
+    "misc_path", "Misc",
+    "geometry_point", "Geometry",
+    "geometry_polygon", "Geometry",
+    "geometry_polyline", "Geometry",
+    "misc_polyline", "Misc",
+    "geometry_ray", "Geometry",
+    "geometry_rectangle", "Geometry",
+    "geometry_text_multi", "Geometry",
+    "text_text_single", "Text",
+    "geometry_text_single", "Geometry",
+    "misc_text_single", "Misc",
+    "END", "END"
+};
+
+const int32_t group_box_ids[] = {
+    OBJ_TYPE_NULL,
+    OBJ_TYPE_ARC,
+    OBJ_TYPE_ARC,
+    OBJ_TYPE_BLOCK,
+    OBJ_TYPE_CIRCLE,
+    OBJ_TYPE_DIMALIGNED,
+    OBJ_TYPE_DIMANGULAR,
+    OBJ_TYPE_DIMARCLENGTH,
+    OBJ_TYPE_DIMDIAMETER,
+    OBJ_TYPE_DIMLEADER,
+    OBJ_TYPE_DIMLINEAR,
+    OBJ_TYPE_DIMORDINATE,
+    OBJ_TYPE_DIMRADIUS,
+    OBJ_TYPE_ELLIPSE,
+    OBJ_TYPE_IMAGE,
+    OBJ_TYPE_IMAGE,
+    OBJ_TYPE_INFINITELINE,
+    OBJ_TYPE_LINE,
+    OBJ_TYPE_PATH,
+    OBJ_TYPE_PATH,
+    OBJ_TYPE_POINT,
+    OBJ_TYPE_POLYGON,
+    OBJ_TYPE_POLYLINE,
+    OBJ_TYPE_POLYLINE,
+    OBJ_TYPE_RAY,
+    OBJ_TYPE_RECTANGLE,
+    OBJ_TYPE_TEXTMULTI,
+    OBJ_TYPE_TEXTSINGLE,
+    OBJ_TYPE_TEXTSINGLE,
+    OBJ_TYPE_TEXTSINGLE
+};
+
 /* . */
 EditorData all_line_editors[MAX_EDITORS] = {
     {
