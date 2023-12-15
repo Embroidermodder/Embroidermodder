@@ -166,6 +166,7 @@ public:
     QPointF objectEndPoint();
 
     QRectF rect();
+
     EmbReal objectWidth();
     EmbReal objectHeight();
     EmbReal objectRadiusMajor();

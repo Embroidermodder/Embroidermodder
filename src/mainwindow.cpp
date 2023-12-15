@@ -34,6 +34,16 @@ QAction* actionHash[MAX_ACTIONS];
 QIcon icon_list[MAX_ICONS];
 
 void
+clear_selection(void)
+{
+}
+
+void
+prompt_output(char *s)
+{
+}
+
+void
 debug_message_(std::string str)
 {
     debug_message((char*)str.c_str());
