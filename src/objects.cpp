@@ -19,8 +19,6 @@
 
 #include "embroidermodder.h"
 
-typedef std::string String;
-
 void addPath(View *view, Geometry *obj);
 void saveObject(int objType, View *view, Geometry *obj);
 void saveObjectAsStitches(int objType, View *view, Geometry *obj);
@@ -526,7 +524,7 @@ closest_point(QPointF position, std::vector<QPointF> points)
 
 /* Add_polyline. */
 void
-add_polyline(QPainterPath p, String rubberMode)
+add_polyline(QPainterPath p, std::string rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -844,7 +842,7 @@ Geometry::~Geometry()
 
 /* Set object line weight. */
 void
-Geometry::setObjectLineWeight(String lineWeight)
+Geometry::setObjectLineWeight(std::string lineWeight)
 {
     objPen.setWidthF(0); //NOTE: The objPen will always be cosmetic
 
@@ -1259,7 +1257,7 @@ Geometry::updateRubber(QPainter* painter)
     }
 
     case OBJ_TYPE_LINE: {
-        String rubberMode = objRubberMode;
+        std::string rubberMode = objRubberMode;
         if (rubberMode == "OBJ_RUBBER_LINE") {
             QPointF sceneStartPoint = objectRubberPoint("LINE_START");
             QPointF sceneQSnapPoint = objectRubberPoint("LINE_END");
@@ -1373,7 +1371,7 @@ Geometry::updateRubber(QPainter* painter)
     }
 
     case OBJ_TYPE_POLYGON: {
-        String rubberMode = objRubberMode;
+        std::string rubberMode = objRubberMode;
         if (rubberMode == "OBJ_RUBBER_POLYGON") {
             setObjectPos(objectRubberPoint("POLYGON_POINT_0"));
 
@@ -1482,7 +1480,7 @@ Geometry::updateRubber(QPainter* painter)
     }
 
     case OBJ_TYPE_POLYLINE: {
-        String rubberMode = objRubberMode;
+        std::string rubberMode = objRubberMode;
         if (rubberMode == "OBJ_RUBBER_POLYLINE") {
             setObjectPos(objectRubberPoint("POLYLINE_POINT_0"));
 
@@ -1543,7 +1541,7 @@ Geometry::updateRubber(QPainter* painter)
     }
 
     case OBJ_TYPE_RECTANGLE: {
-        String rubberMode = objRubberMode;
+        std::string rubberMode = objRubberMode;
         if (objRubberMode == "OBJ_RUBBER_RECTANGLE") {
             QPointF sceneStartPoint = objectRubberPoint("RECTANGLE_START");
             QPointF sceneEndPoint = objectRubberPoint("RECTANGLE_END");
@@ -1956,6 +1954,8 @@ Geometry::objectSavePath()
 
     return path;
 }
+
+typedef std::string String;
 
 /* Geometry::calculateArcData
  * arc
@@ -3579,7 +3579,7 @@ Geometry::script_main(void)
  * script.
  */
 void
-Geometry::script_context(String str)
+Geometry::script_context(std::string str)
 {
     switch (mode) {
 
@@ -3739,7 +3739,7 @@ Geometry::script_click(EmbVector v)
  * events for this object.
  */
 void
-Geometry::script_prompt(String str)
+Geometry::script_prompt(std::string str)
 {
     switch (mode) {
 

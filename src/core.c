@@ -15,16 +15,12 @@
 
 /* C/C++ Standard Libraries. */
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <stdarg.h>
 #include <stdbool.h>
 #include <string.h>
 #include <limits.h>
 #include <math.h>
 #include <time.h>
 #include <assert.h>
-#include <errno.h>
 
 /* We assume here that all free systems and MacOS are POSIX compliant. */
 #if defined(WIN32)
@@ -51,36 +47,6 @@ const char *version = "2.0.0-alpha4";
 Node settings[SETTINGS_TOTAL], dialog[SETTINGS_TOTAL],
     preview[SETTINGS_TOTAL], accept_[SETTINGS_TOTAL];
 
-/* . */
-const char *object_names[] = {
-    "Base",
-    "Arc",
-    "Block",
-    "Circle",
-    "Aligned Dimension",
-    "Angular Dimension",
-    "Arclength Dimension",
-    "Diameter Dimension",
-    "Leader Dimension",
-    "Linear Dimension",
-    "Ordinate Dimension",
-    "Radius Dimension",
-    "Ellipse",
-    "Image",
-    "Infinite Line",
-    "Line",
-    "Path",
-    "Point",
-    "Polygon",
-    "Polyline",
-    "Ray",
-    "Rectangle",
-    "Multiline Text",
-    "Text",
-    "Unknown",
-    "END"
-};
-
 char *coverage_test_script[] = {
     "new",
     "icon 16",
@@ -96,18 +62,6 @@ char *coverage_test_script[] = {
     "pan left",
     "quit",
     "END"
-};
-
-/* . */
-const char rectangle_main_script[][MAX_STRING_LENGTH] = {
-    "init",
-    "clear-selection",
-    "newRect = true",
-    "real x1 = 0.0f",
-    "real y1 = 0.0f",
-    "real x2 = 0.0f",
-    "real y2 = 0.0f",
-    "set-prompt-prefix-tr Specify first corner point or [Chamfer/Fillet]: "
 };
 
 const char *details_labels[] = {
@@ -536,29 +490,6 @@ ToolbarData toolbar_data[MAX_TOOLBARS] = {
     }
 };
 
-/* TODO: "Aligned"
- * TODO: "Fit"
- */
-const char *justify_options[] = {
-    "Left",
-    "Center",
-    "Right",
-    "Aligned",
-    "Middle",
-    "Fit",
-    "Top Left",
-    "Top Center",
-    "Top Right",
-    "Middle Left",
-    "Middle Center",
-    "Middle Right",
-    "Bottom Left",
-    "Bottom Center",
-    "Bottom Right",
-    "END"
-};
-
-
 /* . */
 const char *button_list[] = {
     "SNAP",
@@ -569,28 +500,6 @@ const char *button_list[] = {
     "QSNAP",
     "QTRACK",
     "LWT",
-    "END"
-};
-
-char rubber_modes[N_RUBBER_MODES][MAX_STRING_LENGTH] = {
-    "CIRCLE_1P_RAD",
-    "CIRCLE_1P_DIA",
-    "CIRCLE_2P",
-    "CIRCLE_3P",
-    "CIRCLE_TTR",
-    "CIRCLE_TTT",
-    "DIMLEADER_LINE",
-    "ELLIPSE_LINE",
-    "ELLIPSE_MAJORDIAMETER_MINORRADIUS",
-    "ELLIPSE_MAJORRADIUS_MINORRADIUS",
-    "ELLIPSE_ROTATION",
-    "LINE",
-    "POLYGON",
-    "POLYGON_INSCRIBE",
-    "POLYGON_CIRCUMSCRIBE",
-    "POLYLINE",
-    "RECTANGLE",
-    "TEXTSINGLE",
     "END"
 };
 
@@ -611,18 +520,6 @@ const char *tips[] = {
     "that you can use the 'DAY' and 'NIGHT' commands to quickly switch the view colors to commonly used white or black?",
     "that you can quickly change the background, crosshair and grid colors using the 'RGB' command?",
     "END"
-};
-
-const char types[][MAX_STRING_LENGTH] = {
-    "NULL",
-    "STRING",
-    "STRING_LIST",
-    "REAL",
-    "INT",
-    "BOOL",
-    "FUNCTION",
-    "VECTOR",
-    "UNKNOWN"
 };
 
 /**
@@ -753,32 +650,6 @@ int quick_snap_props[] = {
 int opensave_props[] = {
     ST_OPENSAVE_FILTER,
     -1
-};
-
-const char *geometry_subcommands[] = {
-	"arc",
-	"circle",
-	"ellipse",
-	"horizontal_dimension",
-	"image",
-	"path",
-	"point",
-	"polygon",
-	"polyline",
-	"rectangle",
-	"regular_polygon",
-	"vertical_dimension",
-	"dim_leader",
-	"infinite_line",
-	"ray",
-	"line",
-	"triangle",
-	"text_multi",
-	"text_single",
-	"rounded-rectangle",
-	"point",
-	"slot",
-    "END"
 };
 
 #if defined(WIN32)

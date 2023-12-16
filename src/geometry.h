@@ -87,6 +87,7 @@ extern "C" {
 typedef struct GeometryData_ {
     int32_t mode;
     int32_t numPoints;
+    int8_t preview;
     unsigned char firstRun;
 
     EmbArc arc;
