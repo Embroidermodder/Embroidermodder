@@ -410,7 +410,7 @@ Settings_Dialog::createTabGeneral()
         SLOT(setEnabled(bool)));
     */
 
-    QCheckBox* checkBoxMdiBGUseColor = make_checkbox(groupBoxMdiBG, "dialog",
+    QCheckBox* checkBoxMdiBGUseColor = make_checkbox(groupBoxMdiBG, dialog,
         "Use Color", "blank", ST_MDI_USE_COLOR);
 
     QPushButton* buttonMdiBGColor = new QPushButton(translate_str("Choose"), groupBoxMdiBG);
@@ -433,7 +433,7 @@ Settings_Dialog::createTabGeneral()
     /* Tips */
     QGroupBox* groupBoxTips = new QGroupBox(translate_str("Tips"), widget);
 
-    QCheckBox* checkBoxTipOfTheDay = make_checkbox(groupBoxTips, "dialog",
+    QCheckBox* checkBoxTipOfTheDay = make_checkbox(groupBoxTips, dialog,
         "Show Tip of the Day on startup", "blank", ST_TIP_OF_THE_DAY);
 
     QVBoxLayout* vboxLayoutTips = new QVBoxLayout(groupBoxTips);
@@ -495,17 +495,17 @@ Settings_Dialog::createTabDisplay()
 
     make_editing_copy(display_props);
 
-    QCheckBox* checkBoxUseOpenGL = make_checkbox(groupBoxRender, "dialog",
+    QCheckBox* checkBoxUseOpenGL = make_checkbox(groupBoxRender, dialog,
         "Use OpenGL", "blank", ST_USE_OPENGL);
-    QCheckBox* checkBoxRenderHintAA = make_checkbox(groupBoxRender, "dialog",
+    QCheckBox* checkBoxRenderHintAA = make_checkbox(groupBoxRender, dialog,
         "Antialias", "blank", ST_ANTI_ALIAS);
-    QCheckBox* checkBoxRenderHintTextAA = make_checkbox(groupBoxRender, "dialog",
+    QCheckBox* checkBoxRenderHintTextAA = make_checkbox(groupBoxRender, dialog,
         "Antialias Text", "blank", ST_TEXT_ANTI_ALIAS);
-    QCheckBox* checkBoxRenderHintSmoothPix = make_checkbox(groupBoxRender, "dialog",
+    QCheckBox* checkBoxRenderHintSmoothPix = make_checkbox(groupBoxRender, dialog,
         "Smooth Pixmap", "blank", ST_SMOOTH_PIXMAP);
-    QCheckBox* checkBoxRenderHintHighAA = make_checkbox(groupBoxRender, "dialog",
+    QCheckBox* checkBoxRenderHintHighAA = make_checkbox(groupBoxRender, dialog,
         "High Quality Antialiasing (OpenGL)", "blank", ST_HQ_ANTI_ALIAS);
-    QCheckBox* checkBoxRenderHintNonCosmetic = make_checkbox(groupBoxRender, "dialog",
+    QCheckBox* checkBoxRenderHintNonCosmetic = make_checkbox(groupBoxRender, dialog,
         "Non Cosmetic", "blank", ST_NON_COSMETIC);
 
     QVBoxLayout* vboxLayoutRender = new QVBoxLayout(groupBoxRender);
@@ -520,7 +520,7 @@ Settings_Dialog::createTabDisplay()
     //ScrollBars
     QGroupBox* groupBoxScrollBars = new QGroupBox(translate_str("ScrollBars"), widget);
 
-    QCheckBox* checkBoxShowScrollBars = make_checkbox(groupBoxScrollBars, "dialog",
+    QCheckBox* checkBoxShowScrollBars = make_checkbox(groupBoxScrollBars, dialog,
         "Show ScrollBars", "blank", ST_SHOW_SCROLLBARS);
 
     QLabel* labelScrollBarWidget = new QLabel(translate_str("Perform action when clicking corner widget"), groupBoxScrollBars);
@@ -724,9 +724,9 @@ Settings_Dialog::createTabPrompt()
     //History
     QGroupBox* groupBoxHistory = new QGroupBox(translate_str("History"), widget);
 
-    QCheckBox* checkBoxPromptSaveHistory = make_checkbox(groupBoxHistory, "dialog",
+    QCheckBox* checkBoxPromptSaveHistory = make_checkbox(groupBoxHistory, dialog,
         "Save History", "blank", ST_SAVE_HISTORY);
-    QCheckBox* checkBoxPromptSaveHistoryAsHtml = make_checkbox(groupBoxHistory, "dialog",
+    QCheckBox* checkBoxPromptSaveHistoryAsHtml = make_checkbox(groupBoxHistory, dialog,
         "Save As HTML", "blank", ST_HTML_OUTPUT);
 
     QVBoxLayout* vboxLayoutHistory = new QVBoxLayout(groupBoxHistory);
@@ -938,7 +938,7 @@ QWidget* Settings_Dialog::createTabPrinting()
 
     copy_node(dialog, settings, ST_PRINT_DISABLE_BG);
 
-    QCheckBox* checkBoxDisableBG = make_checkbox(groupBoxSaveInk, "dialog",
+    QCheckBox* checkBoxDisableBG = make_checkbox(groupBoxSaveInk, dialog,
         "Disable Background", "blank", ST_PRINT_DISABLE_BG);
 
     QVBoxLayout* vboxLayoutSaveInk = new QVBoxLayout(groupBoxSaveInk);
@@ -988,7 +988,7 @@ Settings_Dialog::create_float_spinbox(
     spinbox_object_name = "spinBox" + spinbox_object_name.simplified().remove(' ');
     QLabel* label = new QLabel(tr(label_in), gb);
     label->setObjectName(label_object_name);
-    QDoubleSpinBox* spinBox = make_spinbox(gb, "dialog", spinbox_object_name, single_step,
+    QDoubleSpinBox* spinBox = make_spinbox(gb, dialog, spinbox_object_name, single_step,
         lower, upper, key);
 
     label->setEnabled(!dialog[ST_GRID_LOAD_FROM_FILE].i);
@@ -1030,9 +1030,9 @@ QWidget* Settings_Dialog::createTabGridRuler()
 
     copy_node(dialog, settings, ST_RULER_SIZE);
 
-    QCheckBox* checkBoxGridShowOnLoad = make_checkbox(groupBoxGridMisc, "dialog",
+    QCheckBox* checkBoxGridShowOnLoad = make_checkbox(groupBoxGridMisc, dialog,
         "Initially show grid when loading a file", "blank", ST_GRID_ON_LOAD);
-    QCheckBox* checkBoxGridShowOrigin = make_checkbox(groupBoxGridMisc, "dialog",
+    QCheckBox* checkBoxGridShowOrigin = make_checkbox(groupBoxGridMisc, dialog,
         "Show the origin when the grid is enabled", "blank", ST_SHOW_ORIGIN);
 
     QGridLayout* gridLayoutGridMisc = new QGridLayout(widget);
@@ -1067,7 +1067,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     //Grid Geometry
     QGroupBox* groupBoxGridGeom = new QGroupBox(translate_str("Grid Geometry"), widget);
 
-    QCheckBox* checkBoxGridLoadFromFile = make_checkbox(groupBoxGridGeom, "dialog",
+    QCheckBox* checkBoxGridLoadFromFile = make_checkbox(groupBoxGridGeom, dialog,
         "Set grid size from opened file", "blank", ST_GRID_LOAD_FROM_FILE);
 
     QLabel* labelGridType = new QLabel(translate_str("Grid Type"), groupBoxGridGeom);
@@ -1082,7 +1082,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     connect(comboBoxGridType, SIGNAL(currentIndexChanged(QString)), this,
         SLOT(comboBoxGridTypeCurrentIndexChanged(QString)));
 
-    QCheckBox* checkBoxGridCenterOnOrigin = make_checkbox(groupBoxGridGeom, "dialog",
+    QCheckBox* checkBoxGridCenterOnOrigin = make_checkbox(groupBoxGridGeom, dialog,
         "Center the grid on the origin", "blank", ST_GRID_CENTER_ORIGIN);
     checkBoxGridCenterOnOrigin->setObjectName("checkBoxGridCenterOnOrigin");
 
@@ -1166,7 +1166,7 @@ QWidget* Settings_Dialog::createTabGridRuler()
     QLabel* labelRulerPixelSize = new QLabel(translate_str("Ruler Pixel Size"), groupBoxRulerGeom);
     labelRulerPixelSize->setObjectName("labelRulerPixelSize");
     QDoubleSpinBox* spinBoxRulerPixelSize = make_spinbox(groupBoxRulerGeom,
-        "dialog", "spinBoxRulerPixelSize", 1.0, 20.0, 100.0, ST_RULER_SIZE);
+        dialog, "spinBoxRulerPixelSize", 1.0, 20.0, 100.0, ST_RULER_SIZE);
 
     QGridLayout* gridLayoutRulerGeom = new QGridLayout(groupBoxRulerGeom);
     gridLayoutRulerGeom->addWidget(labelRulerPixelSize, 0, 0, Qt::AlignLeft);
@@ -1215,19 +1215,19 @@ Settings_Dialog::createTabQuickSnap()
     make_editing_copy(quick_snap_props);
 
     std::vector<QCheckBox*> checkboxes = {
-        make_checkbox(groupBoxQSnapLoc, "dialog", "Endpoint", "locator-snaptoendpoint", ST_QSNAP_ENDPOINT),
-        make_checkbox(groupBoxQSnapLoc, "dialog", "Midpoint", "locator-snaptomidpoint", ST_QSNAP_MIDPOINT),
-        make_checkbox(groupBoxQSnapLoc, "dialog", "Center", "locator-snaptocenter", ST_QSNAP_CENTER),
-        make_checkbox(groupBoxQSnapLoc, "dialog", "Node", "locator-snaptonode", ST_QSNAP_NODE),
-        make_checkbox(groupBoxQSnapLoc, "dialog", "Quadrant", "locator-snaptoquadrant", ST_QSNAP_QUADRANT),
-        make_checkbox(groupBoxQSnapLoc, "dialog", "Intersection", "locator-snaptointersection", ST_QSNAP_INTERSECTION),
-        make_checkbox(groupBoxQSnapLoc, "dialog", "Extension", "locator-snaptoextension", ST_QSNAP_EXTENSION),
-        make_checkbox(groupBoxQSnapLoc, "dialog", "Insertion", "locator-snaptoinsert", ST_QSNAP_INSERTION),
-        make_checkbox(groupBoxQSnapLoc, "dialog", "Perpendicular", "locator-snaptoperpendicular", ST_QSNAP_PERPENDICULAR),
-        make_checkbox(groupBoxQSnapLoc, "dialog", "Tangent", "locator-snaptotangent", ST_QSNAP_TANGENT),
-        make_checkbox(groupBoxQSnapLoc, "dialog", "Nearest", "locator-snaptonearest", ST_QSNAP_NEAREST),
-        make_checkbox(groupBoxQSnapLoc, "dialog", "Apparent Intersection", "locator-snaptoapparentintersection", ST_QSNAP_APPARENT),
-        make_checkbox(groupBoxQSnapLoc, "dialog", "Parallel", "locator-snaptoparallel", ST_QSNAP_PARALLEL)
+        make_checkbox(groupBoxQSnapLoc, dialog, "Endpoint", "locator-snaptoendpoint", ST_QSNAP_ENDPOINT),
+        make_checkbox(groupBoxQSnapLoc, dialog, "Midpoint", "locator-snaptomidpoint", ST_QSNAP_MIDPOINT),
+        make_checkbox(groupBoxQSnapLoc, dialog, "Center", "locator-snaptocenter", ST_QSNAP_CENTER),
+        make_checkbox(groupBoxQSnapLoc, dialog, "Node", "locator-snaptonode", ST_QSNAP_NODE),
+        make_checkbox(groupBoxQSnapLoc, dialog, "Quadrant", "locator-snaptoquadrant", ST_QSNAP_QUADRANT),
+        make_checkbox(groupBoxQSnapLoc, dialog, "Intersection", "locator-snaptointersection", ST_QSNAP_INTERSECTION),
+        make_checkbox(groupBoxQSnapLoc, dialog, "Extension", "locator-snaptoextension", ST_QSNAP_EXTENSION),
+        make_checkbox(groupBoxQSnapLoc, dialog, "Insertion", "locator-snaptoinsert", ST_QSNAP_INSERTION),
+        make_checkbox(groupBoxQSnapLoc, dialog, "Perpendicular", "locator-snaptoperpendicular", ST_QSNAP_PERPENDICULAR),
+        make_checkbox(groupBoxQSnapLoc, dialog, "Tangent", "locator-snaptotangent", ST_QSNAP_TANGENT),
+        make_checkbox(groupBoxQSnapLoc, dialog, "Nearest", "locator-snaptonearest", ST_QSNAP_NEAREST),
+        make_checkbox(groupBoxQSnapLoc, dialog, "Apparent Intersection", "locator-snaptoapparentintersection", ST_QSNAP_APPARENT),
+        make_checkbox(groupBoxQSnapLoc, dialog, "Parallel", "locator-snaptoparallel", ST_QSNAP_PARALLEL)
     };
     int n_checkboxes = (int)checkboxes.size();
 
@@ -1409,7 +1409,7 @@ Settings_Dialog::createTabSelection()
     connect(checkBoxSelectionModePickFirst, SIGNAL(stateChanged(int)), this,
         SLOT([=](int x) {dialog[ST_SELECTION_PICK_FIRST].i = x; } ));
 
-    QCheckBox* checkBoxSelectionModePickAdd = make_checkbox(groupBoxSelectionModes, "dialog",
+    QCheckBox* checkBoxSelectionModePickAdd = make_checkbox(groupBoxSelectionModes, dialog,
         "Add to Selection (PickAdd)", "blank", ST_SELECTION_PICK_ADD);
 
     QCheckBox* checkBoxSelectionModePickDrag = new QCheckBox(translate_str("Drag to Select (PickDrag)"), groupBoxSelectionModes);

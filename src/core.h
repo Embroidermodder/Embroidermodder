@@ -979,7 +979,6 @@ extern "C" {
 #include <inttypes.h>
 
 #include "geometry.h"
-#include "../extern/libembroidery/src/embroidery.h"
 
 /* . */
 typedef struct MenuData_ {
@@ -1069,7 +1068,7 @@ typedef struct Node_ {
     EmbReal r;
 } Node;
 
-void debug_message(char *msg);
+void debug_message(char *msg, ...);
 int read_settings(void);
 void write_settings(void);
 EmbVector rotate_vector(EmbVector v, EmbReal alpha);
@@ -1093,7 +1092,6 @@ int roundToMultiple(bool roundUp, int numToRound, int multiple);
 int tokenize(char **argv, char *str, const char delim);
 void emb_sleep(int seconds);
 char *platformString(void);
-void debug_message(char *msg);
 void get_n_reals(float result[], char *argv[], int n, int offset);
 void clear_selection(void);
 void prompt_output(char *s);

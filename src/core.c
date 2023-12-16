@@ -15,6 +15,7 @@
 
 /* C/C++ Standard Libraries. */
 #include <stdio.h>
+#include <stdarg.h>
 #include <stdbool.h>
 #include <string.h>
 #include <limits.h>
@@ -652,19 +653,15 @@ int opensave_props[] = {
     -1
 };
 
+void
+emb_sleep(int seconds)
+{
 #if defined(WIN32)
-void
-emb_sleep(int seconds)
-{
     sleep(1);
-}
 #else
-void
-emb_sleep(int seconds)
-{
     usleep(1000000);
-}
 #endif
+}
 
 /* platformString.
  * TODO: Append QSysInfo to string where applicable.
@@ -707,10 +704,15 @@ tokenize(char **argv, char *str, const char delim)
  *
  * Timestamps are added to each message so we can trace in what order things
  * happen.
+ *
+ * TODO: fix the thread safety on all systems, this may crash the program
+ * if there's two processes trying to write to the same file at the same time.
  */
 void
-debug_message(char *msg)
+debug_message(char *fmt, ...)
 {
+    va_list arg_list;
+    va_start(arg_list, fmt);
     char thread_file[MAX_STRING_LENGTH];
     struct timespec ts;
     clock_gettime(CLOCK_REALTIME, &ts);
@@ -720,10 +722,12 @@ debug_message(char *msg)
     sprintf(thread_file, "debug-%ld.txt", (int64_t)syscall(SYS_gettid));
 #endif
     FILE *f = fopen(thread_file, "a");
-    fprintf(f, "%.2ld:%.2ld:%.2ld.%.3ld> %s\n",
-        (ts.tv_sec/3600)%24, (ts.tv_sec%3600)/60, ts.tv_sec%60, ts.tv_nsec%1000,
-        msg);
+    fprintf(f, "%.2ld:%.2ld:%.2ld.%.3ld> ",
+        (ts.tv_sec/3600)%24, (ts.tv_sec%3600)/60, ts.tv_sec%60, ts.tv_nsec%1000);
+    vfprintf(f, fmt, arg_list);
+    fprintf(f, "\n");
     fclose(f);
+    va_end(arg_list);
 }
 
 /* Utility function for add_to_path. */

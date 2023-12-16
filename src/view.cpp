@@ -17,15 +17,16 @@
 
 #include "embroidermodder.h"
 
-/* #include <QtOpenGL> */
+#include <QtOpenGL>
 
 /* Convert from QList to std::vector. */
 std::vector<QGraphicsItem*>
 to_vector(QList<QGraphicsItem*> list)
 {
     std::vector<QGraphicsItem*> result;
-    foreach (QGraphicsItem *item , list) {
-        result.push_back(item);
+    int n = (int)list.size();
+    for (int i=0; i<n; i++) {
+        result.push_back(list[i]);
     }
     return result;
 }
@@ -35,7 +36,8 @@ QList<QGraphicsItem*>
 to_qlist(std::vector<QGraphicsItem*> list)
 {
     QList<QGraphicsItem*> result;
-    for (int i=0; i<(int)list.size(); i++) {
+    int n = (int)list.size();
+    for (int i=0; i<n; i++) {
         result << list[i];
     }
     return result;
@@ -58,11 +60,10 @@ View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, 
 
     setFrameShape(QFrame::NoFrame);
 
-    //NOTE: This has to be done before setting mouse tracking.
-    //TODO: Review OpenGL for Qt5 later
+    /* NOTE: This has to be done before setting mouse tracking. */
     //if (settings.display_use_opengl)
     //{
-    //    debug_message_("Using OpenGL...");
+    //    debug_message("Using OpenGL...");
     //    setViewport(new QGLWidget(QGLFormat(QGL::DoubleBuffer)));
     //}
 
@@ -228,7 +229,7 @@ View::deleteObject(Geometry* obj)
 void
 View::previewOn(uint32_t clone, uint32_t mode, EmbVector v, EmbReal data)
 {
-    debug_message_("View previewOn()");
+    debug_message("View previewOn()");
     previewOff(); /* Free the old objects before creating new ones. */
 
     previewMode = mode;
@@ -423,7 +424,7 @@ View::setGridColor(QRgb color)
 {
     gridColor = QColor(color);
     if (!gscene) {
-        debug_message_("ERROR: setGridColor has no gscene.");
+        debug_message("ERROR: setGridColor has no gscene.");
         return;
     }
     gscene->setProperty("VIEW_COLOR_GRID", color);
@@ -1080,7 +1081,7 @@ View::setCornerButton()
 void
 View::cornerButtonClicked()
 {
-    debug_message_("Corner Button Clicked.");
+    debug_message("Corner Button Clicked.");
     //actionHash[settings.display_scrollbar_widget_num]->trigger();
 }
 
@@ -1090,7 +1091,7 @@ View::cornerButtonClicked()
 void
 View::zoomIn()
 {
-    debug_message_("View zoomIn()");
+    debug_message("View zoomIn()");
     if (!allowZoomIn()) {
         return;
     }
@@ -1109,7 +1110,7 @@ View::zoomIn()
 void
 View::zoomOut()
 {
-    debug_message_("View zoomOut()");
+    debug_message("View zoomOut()");
     if (!allowZoomOut()) { return; }
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QPointF cntr = mapToScene(QPoint(width()/2,height()/2));
@@ -1634,12 +1635,12 @@ View::mouseReleaseEvent(QMouseEvent* event)
         event->accept();
     }
     if (event->button() == Qt::XButton1) {
-        debug_message_("XButton1");
+        debug_message("XButton1");
         actuator("undo"); //TODO: Make this customizable
         event->accept();
     }
     if (event->button() == Qt::XButton2) {
-        debug_message_("XButton2");
+        debug_message("XButton2");
         actuator("redo"); //TODO: Make this customizable
         event->accept();
     }
@@ -1659,7 +1660,7 @@ View::allowZoomIn()
 
     EmbReal zoomInLimit = 0.0000000001;
     if (std::min(maxWidth, maxHeight) < zoomInLimit) {
-        debug_message_("ZoomIn limit reached. (limit=" + std::to_string(zoomInLimit) + ")");
+        debug_message("ZoomIn limit reached. (limit=%d)", zoomInLimit);
         return false;
     }
 
@@ -1679,7 +1680,7 @@ View::allowZoomOut()
 
     EmbReal zoomOutLimit = 10000000000000.0;
     if (std::max(maxWidth, maxHeight) > zoomOutLimit) {
-        debug_message_("ZoomOut limit reached. (limit" + std::to_string(zoomOutLimit) + ")");
+        debug_message("ZoomOut limit reached. (limit=%d)", zoomOutLimit);
         return false;
     }
 
@@ -1813,7 +1814,7 @@ View::contextMenuEvent(QContextMenuEvent* event)
 void
 View::deletePressed()
 {
-    debug_message_("View deletePressed()");
+    debug_message("View deletePressed()");
     if (pastingActive) {
         gscene->removeItem(pasteObjectItemGroup);
         delete pasteObjectItemGroup;
@@ -1830,7 +1831,7 @@ View::deletePressed()
 void
 View::escapePressed()
 {
-    debug_message_("View escapePressed()");
+    debug_message("View escapePressed()");
     if (pastingActive) {
         gscene->removeItem(pasteObjectItemGroup);
         delete pasteObjectItemGroup;
