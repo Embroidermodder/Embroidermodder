@@ -1463,8 +1463,7 @@ actuator(char line[MAX_STRING_LENGTH])
     strcpy(args, line + strlen(command_table[action_id].command) + 1);
 
     /* This could produce silly amounts of output, so watch this line. */
-    sprintf(error_str, "action: %d\n", action_id);
-    debug_message(error_str);
+    debug_message("action: %d", action_id);
 
     if (action_id < 0) {
         char out[2*MAX_STRING_LENGTH];
@@ -1587,6 +1586,13 @@ actuator(char line[MAX_STRING_LENGTH])
         prompt->alert(QString::fromStdString(args));
         return "";
     }
+
+    /* Blink the command prompt. 
+    case COMMAND_BLINK: {
+        prompt->startBlinking();
+        return "";
+    }
+    */
 
     /* AllowRubber. */
     case COMMAND_ALLOW_RUBBER: {
@@ -2193,6 +2199,11 @@ actuator(char line[MAX_STRING_LENGTH])
         return "";
     }
 
+    /* Run the lines in another script before continuing.
+    case COMMAND_RUN: {
+        return run_script_file(argv[0]);
+    } */
+
     case COMMAND_SCALE_SELECTED: {
         EmbVector v;
         char *argv[5];
@@ -2635,26 +2646,22 @@ set_action(std::string args)
         return "";
     }
     if (command == "text_style_underline") {
-        settings["text_style_underline = value;
+        settings[text_style_underline] = value;
         return "";
     }
     if (command == "text_style_strikeout") {
-        settings["text_style_strikeout = value;
+        settings[text_style_strikeout] = value;
         return "";
     }
-    if (command == "text_style_overline") {
-        settings["text_style_overline = value;
+    if (string_equal(command, "text_style_overline")) {
+        settings[text_style_overline] = value;
+        return "";
+    }
+    if (string_equal(command, "text_angle")) {
+        _mainWin->setTextAngle(a[0].r);
         return "";
     }
     */
-    return "";
-}
-
-/* . */
-std::string
-blink_prompt_action(std::string args)
-{
-    prompt->startBlinking();
     return "";
 }
 
@@ -2714,27 +2721,6 @@ convert_args_to_type(
         }
     }
     /* Empty string meaning "passes". */
-    return "";
-}
-
-/* Run the lines in another script before continuing. */
-std::string
-include_action(std::string a)
-{
-/*
-    std::string file("commands/");
-    file += a[0].s;
-    return run_script_file(file);
-*/
-    return "";
-}
-
-std::string
-SetTextAngle_action(std::string args)
-{
-    /*
-    _mainWin->setTextAngle(a[0].r);
-    */
     return "";
 }
 

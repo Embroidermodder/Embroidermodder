@@ -19,6 +19,10 @@
 
 #include <QtOpenGL>
 
+extern "C" {
+EmbVector embVector_make(EmbReal x, EmbReal y);
+}
+
 /* Convert from QList to std::vector. */
 std::vector<QGraphicsItem*>
 to_vector(QList<QGraphicsItem*> list)
@@ -972,10 +976,11 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
         QPoint qsnapOffset(qsnapLocatorSize, qsnapLocatorSize);
 
         std::vector<QPointF> apertureSnapPoints;
-        std::vector<QGraphicsItem *> apertureItemList = to_vector(items(viewMousePoint.x()-qsnapApertureSize,
-                                                        viewMousePoint.y()-qsnapApertureSize,
-                                                        qsnapApertureSize*2,
-                                                                        qsnapApertureSize*2));
+        std::vector<QGraphicsItem *> apertureItemList = to_vector(
+            items(viewMousePoint.x()-qsnapApertureSize,
+			viewMousePoint.y()-qsnapApertureSize,
+			qsnapApertureSize*2,
+			qsnapApertureSize*2));
         for (int i=0; i<(int)apertureItemList.size(); i++) {
             QGraphicsItem* item = apertureItemList[i];
             if (item->type() >= OBJ_TYPE_BASE) {
@@ -985,9 +990,10 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                 }
             }
         }
+
         //TODO: Check for intersection snap points and add them to the list
-        foreach(QPointF asp, apertureSnapPoints)
-        {
+        for (int i=0; i<(int)apertureSnapPoints.size(); i++) {
+            QPointF asp = apertureSnapPoints[i];
             QPoint p1 = mapFromScene(asp) - qsnapOffset;
             QPoint q1 = mapFromScene(asp) + qsnapOffset;
             painter->drawRect(QRectF(mapToScene(p1), mapToScene(q1)));
@@ -1522,43 +1528,40 @@ View::mouseMoveEvent(QMouseEvent* event)
         }
     }
     if (previewActive) {
+		EmbVector preview_point = to_EmbVector(previewPoint);
         if (previewMode == PREVIEW_MODE_MOVE) {
             previewObjectItemGroup->setPos(sceneMousePoint - previewPoint);
         }
         else if (previewMode == PREVIEW_MODE_ROTATE) {
-            EmbReal x = previewPoint.x();
-            EmbReal y = previewPoint.y();
             EmbReal rot = previewData;
 
-            EmbReal mouseAngle = QLineF(x, y, sceneMousePoint.x(), sceneMousePoint.y()).angle();
+            EmbReal mouseAngle = QLineF(preview_point.x, preview_point.y,
+                sceneMousePoint.x(), sceneMousePoint.y()).angle();
 
             EmbReal rad = radians(rot-mouseAngle);
-            EmbReal cosRot = cos(rad);
-            EmbReal sinRot = sin(rad);
-            EmbReal px = 0;
-            EmbReal py = 0;
-            px -= x;
-            py -= y;
-            EmbReal rotX = px*cosRot - py*sinRot;
-            EmbReal rotY = px*sinRot + py*cosRot;
-            rotX += x;
-            rotY += y;
+            EmbVector u = embVector_unit(rad);
+            EmbVector rot_v;
+            EmbVector p = embVector_make(-preview_point.x, -preview_point.y);
+            rot_v.x = p.x*u.x - p.y*u.y;
+            rot_v.y = p.x*u.y + p.y*u.x;
+            rot_v.x += p.x;
+            rot_v.y += p.y;
 
-            previewObjectItemGroup->setPos(rotX, rotY);
+            previewObjectItemGroup->setPos(rot_v.x, rot_v.y);
             previewObjectItemGroup->setRotation(rot-mouseAngle);
         }
         else if (previewMode == PREVIEW_MODE_SCALE) {
-            EmbReal x = previewPoint.x();
-            EmbReal y = previewPoint.y();
             EmbReal scaleFactor = previewData;
 
-            EmbReal factor = QLineF(x, y, sceneMousePoint.x(), sceneMousePoint.y()).length()/scaleFactor;
+            EmbReal factor = QLineF(preview_point.x, preview_point.y,
+                sceneMousePoint.x(), sceneMousePoint.y()).length()/scaleFactor;
 
             previewObjectItemGroup->setScale(1);
-            previewObjectItemGroup->setPos(0,0);
+            previewObjectItemGroup->setPos(0, 0);
 
             if (scaleFactor <= 0.0) {
-                QMessageBox::critical(this, translate_str("ScaleFactor Error"),
+                QMessageBox::critical(this,
+                    translate_str("ScaleFactor Error"),
                     translate_str("Hi there. If you are not a developer, report this as a bug. "
                     "If you are a developer, your code needs examined, and possibly your head too."));
             }
@@ -1566,7 +1569,7 @@ View::mouseMoveEvent(QMouseEvent* event)
                 //Calculate the offset
                 EmbReal oldX = 0;
                 EmbReal oldY = 0;
-                QLineF scaleLine(x, y, oldX, oldY);
+                QLineF scaleLine(preview_point.x, preview_point.y, oldX, oldY);
                 scaleLine.setLength(scaleLine.length()*factor);
                 EmbReal newX = scaleLine.x2();
                 EmbReal newY = scaleLine.y2();

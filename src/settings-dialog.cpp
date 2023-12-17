@@ -221,8 +221,6 @@ write_settings(void)
         switch (s.type) {
         case 'i':
             fprintf(file, "%s=%d\n", s.key, settings[s.id].i);
-            sprintf(line, "%s=%d\n", s.key, settings[s.id].i);
-            debug_message(line);
             break;
         case 'r':
             fprintf(file, "%s=%f\n", s.key, settings[s.id].r);
