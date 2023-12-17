@@ -217,3 +217,28 @@ cat build/build.log
 If, after googling keywords from the errors you're still stuck
 post and issue on GitHub here: https://github.com/Embroidermodder/Embroidermodder/issues and supply the `build.log` file. If something
 comes up a lot then we can add advice here.
+
+## Development
+
+During the alpha phase we mainly need to focus on getting the C bedrock of this project stable before letting more people
+put their creations into it. In Beta, non-programming related contributions will be wecomed to the website and reference manual
+repositories.
+
+### Getting Involved
+
+Anyone interested in changing Embroidermodder or becoming a contributor should go read our
+[manuals](https://libembroidery.org/documentation), [make issues and submit patches](https://github.com/embroidermodder/refman)
+as you find them because the project is very weak here. It will also serve as training for submitting patches to the actual
+source code where changes are harder to critique and revise.
+
+As for helping with specific bugs submitting an issue on GitHub along with the `debug-####.txt` file generated during
+your test run would be the best approach. For longer term techniques see the next section.
+
+### Bug Hunting
+
+Long term we hope to develop a formalised bug hunting approach that involves writing a script of actions that are passed
+to the program using various builds on different machines to prove that the software is sound. This will likely be a
+task run on GitHub Actions (or another similar service) which will require some kind of human assessment of what
+new issues we have with the active development branch. For an early version, look at the `test` action and
+`coverage_test_script` string table.
+
