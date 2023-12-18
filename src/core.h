@@ -41,6 +41,18 @@
 #define MAX_ARGS                                20
 #define MAX_COMBOBOXES                         200
 
+#define WIDGET_GROUPBOX                          0
+#define WIDGET_LINEEDIT                          1
+#define WIDGET_CHECKBOX                          2
+#define WIDGET_SPINBOX                           3
+#define WIDGET_DOUBLE_SPINBOX                    4
+#define WIDGET_LABEL                             5
+#define WIDGET_COMBOBOX                          6
+#define WIDGET_TOOLBUTTON                        7
+#define WIDGET_ACTION                            8
+#define WIDGET_TOOLBAR                           9
+#define WIDGET_MENU                             10
+
 #define SUBCOMMAND_ARC                       0
 #define SUBCOMMAND_CIRCLE                    1
 #define SUBCOMMAND_ELLIPSE                   2
@@ -1068,6 +1080,18 @@ typedef struct Node_ {
     EmbReal r;
 } Node;
 
+/* . */
+typedef struct WidgetData_ {
+    int type;
+    char label[MAX_STRING_LENGTH];
+    char icon[MAX_STRING_LENGTH];
+    EmbReal single_step;
+    EmbReal lower;
+    EmbReal upper;
+    int key;
+    int position[2];
+} WidgetData;
+
 void debug_message(char *msg, ...);
 int read_settings(void);
 void write_settings(void);
@@ -1165,6 +1189,9 @@ extern const int32_t group_box_ids[];
 
 extern char *coverage_test_script[];
 extern const char *geometry_subcommands[];
+
+/* Widget data */
+extern WidgetData grid_geometry_widgets[];
 
 #ifdef __cplusplus
 }

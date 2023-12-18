@@ -53,6 +53,7 @@ qt_add_executable(embroidermodder2 WIN32 MACOSX_BUNDLE
     ${CMAKE_SOURCE_DIR}/src/geometry.h
 
     ${CMAKE_SOURCE_DIR}/src/core.c
+    ${CMAKE_SOURCE_DIR}/src/widgets.c
     ${CMAKE_SOURCE_DIR}/src/object_core.c
 
     ${CMAKE_SOURCE_DIR}/assets/assets.qrc

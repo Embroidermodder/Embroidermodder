@@ -198,44 +198,77 @@ set_visibility(QObject* parent, const char *key, bool visibility)
  *
  * This function should take a parent object to build...
  */
-void
-make_ui_element(
-    std::string element_type
-)
+QWidget *
+make_widget(QWidget *parent, WidgetData data)
 {
-    if (element_type == "groupBox") {
-
+    QWidget *obj = new QWidget(parent);
+    switch (data.type) {
+    case WIDGET_GROUPBOX: {
+        QLabel *label = qobject_cast<QLabel*>(obj);
+        break;
     }
-    else if (element_type == "lineEdit") {
 
+    case WIDGET_LINEEDIT: {
+        QLabel *label = qobject_cast<QLabel*>(obj);
+        break;
     }
-    else if (element_type == "checkBox") {
+
+    case WIDGET_CHECKBOX: {
+        QCheckBox *checkBox = qobject_cast<QCheckBox*>(obj);
         // make_checkbox(gb, description, label, icon, key);
+        break;
     }
-    else if (element_type == "spinBox") {
 
+    case WIDGET_SPINBOX: {
+        QLabel *label = qobject_cast<QLabel*>(obj);
+        break;
     }
-    else if (element_type == "doubleSpinBox") {
-        // make_spinbox(gb, description, object_name, single_step, lower, upper, key)
-    }
-    else if (element_type == "label") {
 
+    case WIDGET_DOUBLE_SPINBOX: {
+        QString spinbox_object_name(data.label);
+        spinbox_object_name = "spinBox" + spinbox_object_name.simplified().remove(' ');
+        QDoubleSpinBox* spinBox = make_spinbox(parent, dialog, spinbox_object_name,
+            data.single_step, data.lower, data.upper, data.key);
+        return spinBox;
     }
-    else if (element_type == "comboBox") {
 
+    case WIDGET_LABEL: {
+        QString label_object_name(data.label);
+        label_object_name = "label" + label_object_name.simplified().remove(' ');
+        QLabel* label = new QLabel(translate_str((char*)data.label), parent);
+        label->setObjectName(label_object_name);
+        return label;
     }
-    else if (element_type == "toolButton") {
 
+    case WIDGET_COMBOBOX: {
+        QLabel *label = qobject_cast<QLabel*>(obj);
+        break;
     }
-    else if (element_type == "action") {
 
+    case WIDGET_TOOLBUTTON: {
+        QLabel *label = qobject_cast<QLabel*>(obj);
+        break;
     }
-    else if (element_type == "toolbar") {
 
+    case WIDGET_ACTION: {
+        QLabel *label = qobject_cast<QLabel*>(obj);
+        break;
     }
-    else if (element_type == "menu") {
 
+    case WIDGET_TOOLBAR: {
+        QLabel *label = qobject_cast<QLabel*>(obj);
+        break;
     }
+
+    case WIDGET_MENU: {
+        QLabel *label = qobject_cast<QLabel*>(obj);
+        break;
+    }
+
+    default:
+        break;
+    }
+    return obj;
 }
 
 /* . */
@@ -272,7 +305,7 @@ make_checkbox(
  */
 QDoubleSpinBox *
 make_spinbox(
-    QGroupBox *gb,
+    QWidget *gb,
     Node *dictionary,
     QString object_name,
     EmbReal single_step,

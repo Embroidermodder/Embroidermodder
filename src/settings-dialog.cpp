@@ -968,38 +968,6 @@ QWidget* Settings_Dialog::createTabSnap()
     return scrollArea;
 }
 
-
-void
-Settings_Dialog::create_float_spinbox(
-    QGroupBox *gb,
-    QGridLayout* gridLayout,
-    const char *label_in,
-    EmbReal single_step,
-    EmbReal lower,
-    EmbReal upper,
-    int key,
-    int row)
-{
-    QString label_object_name(label_in);
-    QString spinbox_object_name(label_in);
-    label_object_name = "label" + label_object_name.simplified().remove(' ');
-    spinbox_object_name = "spinBox" + spinbox_object_name.simplified().remove(' ');
-    QLabel* label = new QLabel(tr(label_in), gb);
-    label->setObjectName(label_object_name);
-    QDoubleSpinBox* spinBox = make_spinbox(gb, dialog, spinbox_object_name, single_step,
-        lower, upper, key);
-
-    label->setEnabled(!dialog[ST_GRID_LOAD_FROM_FILE].i);
-    spinBox->setEnabled(!dialog[ST_GRID_LOAD_FROM_FILE].i);
-
-    bool visibility = !strcmp(dialog[ST_GRID_TYPE].s, "Circular");
-    label->setVisible(!visibility);
-    spinBox->setVisible(!visibility);
-
-    gridLayout->addWidget(label, row, 0, Qt::AlignLeft);
-    gridLayout->addWidget(spinBox, row, 1, Qt::AlignRight);
-}
-
 QWidget* Settings_Dialog::createTabGridRuler()
 {
     QWidget* widget = new QWidget(this);
@@ -1089,30 +1057,26 @@ QWidget* Settings_Dialog::createTabGridRuler()
     comboBoxGridType->setEnabled(!grid_load);
     checkBoxGridCenterOnOrigin->setEnabled(!grid_load);
 
-    QGridLayout* gridLayoutGridGeom = new QGridLayout(groupBoxGridGeom);
-    gridLayoutGridGeom->addWidget(checkBoxGridLoadFromFile, 0, 0, Qt::AlignLeft);
-    gridLayoutGridGeom->addWidget(labelGridType, 1, 0, Qt::AlignLeft);
-    gridLayoutGridGeom->addWidget(comboBoxGridType, 1, 1, Qt::AlignRight);
-    gridLayoutGridGeom->addWidget(checkBoxGridCenterOnOrigin, 2, 0, Qt::AlignLeft);
-    create_float_spinbox(groupBoxGridGeom, gridLayoutGridGeom,
-        "Grid Center X", 1.0, -1000.0, 1000.0, ST_GRID_CENTER_X, 3);
-    create_float_spinbox(groupBoxGridGeom, gridLayoutGridGeom,
-        "Grid Center Y", 1.0, -1000.0, 1000.0, ST_GRID_CENTER_Y, 4);
-    create_float_spinbox(groupBoxGridGeom, gridLayoutGridGeom,
-        "Grid Size X", 1.0, 1.0, 1000.0, ST_GRID_SIZE_X, 5);
-    create_float_spinbox(groupBoxGridGeom, gridLayoutGridGeom,
-        "Grid Size Y", 1.0, 1.0, 1000.0, ST_GRID_SIZE_Y, 6);
-    create_float_spinbox(groupBoxGridGeom, gridLayoutGridGeom,
-        "Grid Spacing X", 1.0, 0.001, 1000.0, ST_GRID_SPACING_X, 7);
-    create_float_spinbox(groupBoxGridGeom, gridLayoutGridGeom,
-        "Grid Spacing Y", 1.0, 0.001, 1000.0, ST_GRID_SPACING_Y, 8);
-    create_float_spinbox(groupBoxGridGeom, gridLayoutGridGeom,
-        "Grid Size Radius", 1.0, 1.0, 1000.0, ST_GRID_SIZE_RADIUS, 9);
-    create_float_spinbox(groupBoxGridGeom, gridLayoutGridGeom,
-        "Grid Spacing Radius", 1.0, 1.0, 1000.0, ST_GRID_SPACING_RADIUS, 10);
-    create_float_spinbox(groupBoxGridGeom, gridLayoutGridGeom,
-        "Grid Spacing Angle", 1.0, 0.001, 1000.0, ST_GRID_SPACING_ANGLE, 11);
-    groupBoxGridGeom->setLayout(gridLayoutGridGeom);
+    bool enabled = !dialog[ST_GRID_LOAD_FROM_FILE].i;
+    bool visible = !string_equal(dialog[ST_GRID_TYPE].s, "Circular");
+
+    QGridLayout* layoutGridGeom = new QGridLayout(groupBoxGridGeom);
+    layoutGridGeom->addWidget(checkBoxGridLoadFromFile, 0, 0, Qt::AlignLeft);
+    layoutGridGeom->addWidget(labelGridType, 1, 0, Qt::AlignLeft);
+    layoutGridGeom->addWidget(comboBoxGridType, 1, 1, Qt::AlignRight);
+    layoutGridGeom->addWidget(checkBoxGridCenterOnOrigin, 2, 0, Qt::AlignLeft);
+    for (int i=0; i<9; i++) {
+        QWidget *label = make_widget(groupBoxGridGeom, grid_geometry_widgets[2*i+0]);
+        label->setEnabled(enabled);
+        label->setVisible(visible);
+        layoutGridGeom->addWidget(label, 3+i, 0, Qt::AlignLeft);
+
+        QWidget *spinbox = make_widget(groupBoxGridGeom, grid_geometry_widgets[2*i+1]);
+        spinbox->setEnabled(enabled);
+        spinbox->setVisible(visible);
+        layoutGridGeom->addWidget(spinbox, 3+i, 1, Qt::AlignRight);
+    }
+    groupBoxGridGeom->setLayout(layoutGridGeom);
 
     //Ruler Misc
     QGroupBox* groupBoxRulerMisc = new QGroupBox(translate_str("Ruler Misc"), widget);
