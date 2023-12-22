@@ -3,7 +3,7 @@
  *
  *  ------------------------------------------------------------
  *
- *  Copyright 2013-2023 The Embroidermodder Team
+ *  Copyright 2013-2024 The Embroidermodder Team
  *  Embroidermodder 2 is Open Source Software.
  *  See LICENSE for licensing terms.
  *
@@ -30,8 +30,6 @@
 #include <QOpenGLWidget>
 #include <QtPrintSupport>
 
-#define CSTR(str) ( (char*)((str).toStdString().c_str()) )
-
 class ImageWidget;
 class MdiArea;
 class MdiWindow;
@@ -50,7 +48,7 @@ extern CmdPrompt* prompt;
 extern PropertyEditor* dockPropEdit;
 extern UndoEditor* dockUndoEdit;
 extern StatusBar* statusbar;
-extern QAction* actionHash[MAX_ACTIONS];
+extern QAction* actionHash[MAX_COMMANDS];
 
 /* Functions in the global namespace */
 QString translate_str(const char *str);
@@ -77,16 +75,7 @@ QPointF to_QPointF(EmbVector a);
 EmbVector to_EmbVector(QPointF a);
 
 QIcon swatch(int32_t c);
-
-/* Interface creation functions. */
-QWidget *make_widget(QWidget *parent, WidgetData data);
-QDoubleSpinBox *make_spinbox(QWidget *gb, Node *d,
-    QString object_name, EmbReal single_step, EmbReal lower, EmbReal upper,
-    int key);
-QCheckBox *make_checkbox(QGroupBox *gb, Node *d,
-    const char *label, const char *icon, int key);
-QLabel *create_label(QObject *gb, WidgetData data);
-QDoubleSpinBox *create_labelled_spinbox(QGroupBox *gb, WidgetData *widget);
+QWidget *make_widget(QWidget *parent, Node *d, WidgetData data);
 
 /* The Geometry class
  *
@@ -347,48 +336,6 @@ signals:
 };
 
 /* . */
-class CmdPromptSplitter : public QSplitter
-{
-    Q_OBJECT
-
-public:
-    CmdPromptSplitter(QWidget* parent = 0);
-    ~CmdPromptSplitter() {}
-
-protected:
-    QSplitterHandle* createHandle();
-
-signals:
-    void pressResizeHistory(int y);
-    void releaseResizeHistory(int y);
-    void moveResizeHistory(int y);
-};
-
-/* . */
-class CmdPromptHandle : public QSplitterHandle
-{
-    Q_OBJECT
-
-public:
-    CmdPromptHandle(Qt::Orientation orientation, QSplitter* parent);
-    ~CmdPromptHandle() {}
-
-    int pressY;
-    int releaseY;
-    int moveY;
-
-protected:
-    void mousePressEvent(QMouseEvent* e);
-    void mouseReleaseEvent(QMouseEvent* e);
-    void mouseMoveEvent(QMouseEvent* e);
-
-signals:
-    void handlePressed(int y);
-    void handleReleased(int y);
-    void handleMoved(int y);
-};
-
-/* . */
 class CmdPrompt : public QWidget
 {
     Q_OBJECT
@@ -401,8 +348,6 @@ public:
     CmdPromptHistory* promptHistory;
     QVBoxLayout* promptVBoxLayout;
     QFrame* promptDivider;
-
-    CmdPromptSplitter* promptSplitter;
 
     QString styleHash[10];
     void updateStyle();
@@ -431,8 +376,6 @@ public slots:
     void setPromptFontFamily(QString );
     void setPromptFontStyle(QString );
     void setPromptFontSize(int);
-
-    void floatingChanged(bool);
 
     void saveHistory(QString fileName, bool html);
 
@@ -528,6 +471,8 @@ public:
     void setUndoCleanIcon(bool opened);
 
     virtual void updateMenuToolbarStatusbar();
+
+    QAction *createAction(int32_t id);
 
     std::vector<QGraphicsItem*> cutCopyObjectList;
 
@@ -670,7 +615,7 @@ public:
     std::vector<QString> promptInputList;
     int promptInputNum;
 
-    QPrinter printer;
+    //QPrinter printer;
 
     QString curFile;
     void setCurrentFile(QString fileName);
@@ -1187,5 +1132,23 @@ protected:
     void drawForeground(QPainter* painter, const QRectF& rect);
     void enterEvent(QEvent* event);
 };
+
+
+void addPath(View *view, Geometry *obj);
+void saveObject(int objType, View *view, Geometry *obj);
+void saveObjectAsStitches(int objType, View *view, Geometry *obj);
+
+void toPolyline(
+    View* view,
+    QPointF objPos,
+    QPainterPath objPath,
+    QString layer,
+    QColor color,
+    QString lineType,
+    QString lineWeight);
+
+
+bool save(View *view, QString f);
+
 
 #endif

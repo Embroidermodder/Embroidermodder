@@ -1,4 +1,4 @@
-# License for Embroidermodder 2, libembroidery and the PET
+# zlib/libpng License
 
 Copyright (c) 2011-2023 Embroidermodder, Jonathan Greig, Josh Varga and all other contributers
 

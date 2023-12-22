@@ -3,7 +3,7 @@
  *
  * ------------------------------------------------------------
  *
- * Copyright 2013-2022 The Embroidermodder Team
+ * Copyright 2013-2024 The Embroidermodder Team
  * Embroidermodder 2 is Open Source Software.
  * See LICENSE for licensing terms.
  *
@@ -18,23 +18,6 @@
  */
 
 #include "embroidermodder.h"
-
-void addPath(View *view, Geometry *obj);
-void saveObject(int objType, View *view, Geometry *obj);
-void saveObjectAsStitches(int objType, View *view, Geometry *obj);
-
-void toPolyline(
-    View* view,
-    QPointF objPos,
-    QPainterPath objPath,
-    QString layer,
-    QColor color,
-    QString lineType,
-    QString lineWeight);
-
-
-bool save(View *view, QString f);
-
 
 const CommandData subcommand_table[MAX_COMMANDS] = {
     {
@@ -183,7 +166,7 @@ add_geometry(char **argv, int argc)
 		Geometry* obj = new Geometry(OBJ_TYPE_HORIZONTAL_DIMENSION);
         AddHorizontalDimension(std::vector<Node> a)
         //TODO: Node error checking
-        debug_message("TODO: finish addHorizontalDimension command");
+        DEBUG_MSG("TODO: finish addHorizontalDimension command");
         */
         return "";
     }
@@ -195,7 +178,7 @@ add_geometry(char **argv, int argc)
         /*
         AddImage(std::vector<Node> a)
         //TODO: Node error checking
-        debug_message("TODO: finish addImage command");
+        DEBUG_MSG("TODO: finish addImage command");
         */
         return "";
     }
@@ -206,7 +189,7 @@ add_geometry(char **argv, int argc)
     case SUBCOMMAND_INFINITE_LINE: {
         /*
         //TODO: Node error checking
-        debug_message("TODO: finish addInfiniteLine command");
+        DEBUG_MSG("TODO: finish addInfiniteLine command");
         */
         return "";
     }
@@ -250,7 +233,7 @@ add_geometry(char **argv, int argc)
         /*
         AddPath(std::vector<Node> a)
         // TODO: Node error checking
-        debug_message("TODO: finish addPath command");
+        DEBUG_MSG("TODO: finish addPath command");
         */
         return "";
     }
@@ -347,7 +330,7 @@ add_geometry(char **argv, int argc)
     case SUBCOMMAND_RAY: {
         /*
         //TODO: Node error checking
-        debug_message("TODO: finish addRay command");
+        DEBUG_MSG("TODO: finish addRay command");
         */
         return "";
     }
@@ -483,7 +466,7 @@ add_geometry(char **argv, int argc)
      */
     case SUBCOMMAND_VERTICAL_DIMENSION: {
         /*
-        debug_message("TODO: finish addVerticalDimension command");
+        DEBUG_MSG("TODO: finish addVerticalDimension command");
         */
         return "";
     }
@@ -561,7 +544,7 @@ add_polyline(QPainterPath p, std::string rubberMode)
 void
 Geometry::init(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent)
 {
-    debug_message("Geometry Constructor()");
+    DEBUG_MSG("Geometry Constructor()");
     Type = type_;
     setData(OBJ_TYPE, Type);
 
@@ -748,9 +731,9 @@ Geometry::init_text_single(QString str, EmbVector v)
 /* Geometry::Geometry *obj *parent. */
 Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
-    debug_message("Geometry Constructor()");
+    DEBUG_MSG("Geometry Constructor()");
     if (!obj) {
-        debug_message("ERROR: null obj pointer passed to Geometry contructor.");
+        DEBUG_MSG("ERROR: null obj pointer passed to Geometry contructor.");
         return;
     }
     init(obj->Type, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
@@ -837,7 +820,7 @@ Geometry::allGripPoints()
  */
 Geometry::~Geometry()
 {
-    debug_message("Geometry Destructor()");
+    DEBUG_MSG("Geometry Destructor()");
 }
 
 /* Set object line weight. */
@@ -860,7 +843,7 @@ Geometry::setObjectLineWeight(std::string lineWeight)
         QMessageBox::warning(0, translate_str("Error - Negative Lineweight"),
                                 translate_str("Lineweight: %1")
                                 .arg(QString().setNum(lineWeight)));
-        debug_message("Lineweight cannot be negative! Inverting sign.");
+        DEBUG_MSG("Lineweight cannot be negative! Inverting sign.");
         lwtPen.setWidthF(-lineWeight);
     }
     */
@@ -989,7 +972,7 @@ void
 Geometry::setObjectEndPoint1(EmbVector endPt1)
 {
     EmbVector endPt2 = to_EmbVector(objectEndPoint2());
-    EmbVector delta = embVector_subtract(endPt2, endPt1);
+    EmbVector delta = emb_vector_subtract(endPt2, endPt1);
     // setScale(1); ?
     setRotation(0);
     setLine(0, 0, delta.x, delta.y);
@@ -1004,7 +987,7 @@ void
 Geometry::setObjectEndPoint2(EmbVector endPt2)
 {
     EmbVector endPt1 = to_EmbVector(scenePos());
-    EmbVector delta = embVector_subtract(endPt2, endPt1);
+    EmbVector delta = emb_vector_subtract(endPt2, endPt1);
     setRotation(0);
     // setScale(1); ?
     setLine(0, 0, delta.x, delta.y);
@@ -1331,7 +1314,7 @@ Geometry::updateRubber(QPainter* painter)
             arc.start = to_EmbVector(sceneTan1Point);
             arc.mid = to_EmbVector(sceneTan2Point);
             arc.end = to_EmbVector(sceneTan3Point);
-            EmbVector sceneCenter = embArc_center(arc);
+            EmbVector sceneCenter = emb_arc_center(arc);
             QPointF sceneCenterPoint = to_QPointF(sceneCenter);
             QLineF sceneLine(sceneCenterPoint, sceneTan3Point);
             setObjectCenter(to_EmbVector(sceneCenterPoint));
@@ -1637,7 +1620,7 @@ Geometry::objectQuadrant0()
 {
     if (Type == OBJ_TYPE_ELLIPSE) {
         EmbReal rot = radians(rotation());
-        EmbVector v = embVector_scale(embVector_unit(rot), objectWidth()/2.0);
+        EmbVector v = emb_vector_scale(emb_vector_unit(rot), objectWidth()/2.0);
         return scenePos() + to_QPointF(v);
     }
     return scenePos() + QPointF(objectRadius(), 0);
@@ -1649,7 +1632,7 @@ Geometry::objectQuadrant90()
 {
     if (Type == OBJ_TYPE_ELLIPSE) {
         EmbReal rot = radians(rotation()+90.0);
-        EmbVector v = embVector_scale(embVector_unit(rot), objectHeight()/2.0);
+        EmbVector v = emb_vector_scale(emb_vector_unit(rot), objectHeight()/2.0);
         return scenePos() + to_QPointF(v);
     }
     return scenePos() + QPointF(0,-objectRadius());
@@ -1661,7 +1644,7 @@ Geometry::objectQuadrant180()
 {
     if (Type == OBJ_TYPE_ELLIPSE) {
         EmbReal rot = radians(rotation()+180.0);
-        EmbVector v = embVector_scale(embVector_unit(rot), objectWidth()/2.0);
+        EmbVector v = emb_vector_scale(emb_vector_unit(rot), objectWidth()/2.0);
         return scenePos() + to_QPointF(v);
     }
     return scenePos() + QPointF(-objectRadius(),0);
@@ -1673,7 +1656,7 @@ Geometry::objectQuadrant270()
 {
     if (Type == OBJ_TYPE_ELLIPSE) {
         EmbReal rot = radians(rotation()+270.0);
-        EmbVector v = embVector_scale(embVector_unit(rot), objectHeight()/2.0);
+        EmbVector v = emb_vector_scale(emb_vector_unit(rot), objectHeight()/2.0);
         return scenePos() + to_QPointF(v);
     }
     return scenePos() + QPointF(0, objectRadius());
@@ -1770,7 +1753,7 @@ Geometry::setLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 void
 Geometry::vulcanize(void)
 {
-    debug_message("DimLeaderObject vulcanize()");
+    DEBUG_MSG("DimLeaderObject vulcanize()");
     updateRubber();
 
     objRubberMode = "OBJ_RUBBER_OFF";
@@ -1955,8 +1938,6 @@ Geometry::objectSavePath()
     return path;
 }
 
-typedef std::string String;
-
 /* Geometry::calculateArcData
  * arc
  *
@@ -1964,15 +1945,15 @@ typedef std::string String;
  */
 void Geometry::calculateArcData(EmbArc arc)
 {
-    EmbVector center = embArc_center(arc);
+    EmbVector center = emb_arc_center(arc);
 
-    arcStartPoint = to_QPointF(embVector_subtract(arc.start, center));
-    arcMidPoint = to_QPointF(embVector_subtract(arc.mid, center));
-    arcEndPoint = to_QPointF(embVector_subtract(arc.end, center));
+    arcStartPoint = to_QPointF(emb_vector_subtract(arc.start, center));
+    arcMidPoint = to_QPointF(emb_vector_subtract(arc.mid, center));
+    arcEndPoint = to_QPointF(emb_vector_subtract(arc.end, center));
 
     setPos(center.x, center.y);
 
-    EmbReal radius = embVector_distance(center, arc.mid);
+    EmbReal radius = emb_vector_distance(center, arc.mid);
     updateArcRect(radius);
     updatePath();
     setRotation(0);
@@ -2171,7 +2152,7 @@ EmbVector
 rotate_vector(EmbVector v, EmbReal alpha)
 {
     EmbVector rotv;
-    EmbVector u = embVector_unit(alpha);
+    EmbVector u = emb_vector_unit(alpha);
     rotv.x = v.x*u.x - v.y*u.y;
     rotv.y = v.x*u.y + v.y*u.x;
     return rotv;
@@ -2186,7 +2167,7 @@ Geometry::objectStartPoint()
     if (Type == OBJ_TYPE_ARC) {
         start_point = arcMidPoint;
     }
-    EmbVector start = embVector_scale(to_EmbVector(start_point), scale());
+    EmbVector start = emb_vector_scale(to_EmbVector(start_point), scale());
     QPointF rotv = to_QPointF(rotate_vector(start, rot));
 
     return scenePos() + rotv;
@@ -2201,7 +2182,7 @@ Geometry::objectMidPoint()
     if (Type == OBJ_TYPE_ARC) {
         mid_point = arcMidPoint;
     }
-    EmbVector mid = embVector_scale(to_EmbVector(mid_point), scale());
+    EmbVector mid = emb_vector_scale(to_EmbVector(mid_point), scale());
     QPointF rotv = to_QPointF(rotate_vector(mid, rot));
 
     return scenePos() + rotv;
@@ -2215,7 +2196,7 @@ QPointF Geometry::objectEndPoint()
     if (Type == OBJ_TYPE_ARC) {
         end_point = arcEndPoint;
     }
-    EmbVector end = embVector_scale(to_EmbVector(end_point), scale());
+    EmbVector end = emb_vector_scale(to_EmbVector(end_point), scale());
     QPointF rotv = to_QPointF(rotate_vector(end, rot));
 
     return scenePos() + rotv;
@@ -2267,7 +2248,7 @@ Geometry::objectChord(void)
 {
     switch (Type) {
     case OBJ_TYPE_ARC: {
-        return embVector_distance(
+        return emb_vector_distance(
             to_EmbVector(objectStartPoint()),
             to_EmbVector(objectEndPoint()));
     }
@@ -2314,7 +2295,7 @@ Geometry::objectClockwise()
         arc.mid.y = -objectMidPoint().y();
         arc.end.x = objectEndPoint().x();
         arc.end.y = -objectEndPoint().y();
-        if (embArc_clockwise(arc)) {
+        if (emb_arc_clockwise(arc)) {
             return true;
         }
         break;
@@ -2522,13 +2503,13 @@ Geometry::setObjectDiameterMinor(EmbReal diameter)
 /*
 ImageObject::ImageObject(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, QGraphicsItem* parent) : Geometry(OBJ_TYPE_IMAGE, parent)
 {
-    debug_message("ImageObject Constructor()");
+    DEBUG_MSG("ImageObject Constructor()");
     init(x, y, w, h, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
 ImageObject::ImageObject(ImageObject* obj, QGraphicsItem* parent) : Geometry(OBJ_TYPE_IMAGE, parent)
 {
-    debug_message("ImageObject Constructor()");
+    DEBUG_MSG("ImageObject Constructor()");
     if (obj) {
         QPointF ptl = obj->objectTopLeft();
         init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
@@ -2572,7 +2553,7 @@ Geometry::objectTopLeft()
 {
     EmbReal rot = radians(rotation());
     QPointF tl = rect().topLeft();
-    EmbVector ptl = embVector_scale(to_EmbVector(tl), scale());
+    EmbVector ptl = emb_vector_scale(to_EmbVector(tl), scale());
     EmbVector ptlRot = rotate_vector(ptl, rot);
 
     return scenePos() + to_QPointF(ptlRot);
@@ -2584,7 +2565,7 @@ Geometry::objectTopRight()
 {
     EmbReal rot = radians(rotation());
     QPointF tr = rect().topRight();
-    EmbVector ptr = embVector_scale(to_EmbVector(tr), scale());
+    EmbVector ptr = emb_vector_scale(to_EmbVector(tr), scale());
     EmbVector ptrRot = rotate_vector(ptr, rot);
 
     return (scenePos() + QPointF(ptrRot.x, ptrRot.y));
@@ -2596,7 +2577,7 @@ Geometry::objectBottomLeft()
 {
     EmbReal rot = radians(rotation());
     QPointF bl = rect().bottomLeft();
-    EmbVector pbl = embVector_scale(to_EmbVector(bl), scale());
+    EmbVector pbl = emb_vector_scale(to_EmbVector(bl), scale());
     EmbVector pblRot = rotate_vector(pbl, rot);
 
     return scenePos() + to_QPointF(pblRot);
@@ -2608,7 +2589,7 @@ Geometry::objectBottomRight()
 {
     EmbReal rot = radians(rotation());
     QPointF br = rect().bottomRight();
-    EmbVector pbr = embVector_scale(to_EmbVector(br), scale());
+    EmbVector pbr = emb_vector_scale(to_EmbVector(br), scale());
     EmbVector pbrRot = rotate_vector(pbr, rot);
 
     return scenePos() + to_QPointF(pbrRot);
@@ -2617,13 +2598,13 @@ Geometry::objectBottomRight()
 /*
 PathObject::PathObject(EmbReal x, EmbReal y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent) : Geometry(OBJ_TYPE_PATH, parent)
 {
-    debug_message("PathObject Constructor()");
+    DEBUG_MSG("PathObject Constructor()");
     init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
 PathObject::PathObject(PathObject* obj, QGraphicsItem* parent) : Geometry(OBJ_TYPE_PATH, parent)
 {
-    debug_message("PathObject Constructor()");
+    DEBUG_MSG("PathObject Constructor()");
     if (obj) {
         init(obj->scenePos().x(), obj->scenePos().y(), obj->objectCopyPath(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
@@ -2811,9 +2792,9 @@ save(View* view, QString fileName)
         return false;
     }
 
-    EmbPattern* pattern = embPattern_create();
+    EmbPattern* pattern = emb_pattern_create();
     if (!pattern) {
-        debug_message("Could not allocate memory for embroidery pattern");
+        DEBUG_MSG("Could not allocate memory for embroidery pattern");
         return false;
     }
 
@@ -2836,17 +2817,17 @@ save(View* view, QString fileName)
     /*
     //TODO: handle EMBFORMAT_STCHANDOBJ also
     if (view->formatType == EMBFORMAT_STITCHONLY)
-        embPattern_movePolylinesToStitchList(pattern); //TODO: handle all objects like this
+        emb_pattern_movePolylinesToStitchList(pattern); //TODO: handle all objects like this
     */
 
     // TODO: check the embLog for errors and if any exist, report them.
-    writeSuccessful = embPattern_writeAuto(pattern, qPrintable(fileName));
+    writeSuccessful = emb_pattern_writeAuto(pattern, qPrintable(fileName));
     if (!writeSuccessful) {
         qDebug("Writing file %s was unsuccessful", qPrintable(fileName));
     }
 
     //TODO: check the embLog for errors and if any exist, report them.
-    embPattern_free(pattern);
+    emb_pattern_free(pattern);
 
     return writeSuccessful;
 }
@@ -2862,11 +2843,11 @@ saveObjectAsStitches(int objType, View *view, Geometry *obj)
     QColor color = obj->objPen.color();
     switch (objType) {
     case OBJ_TYPE_ARC: {
-        debug_message("TODO: save Arc object");
+        DEBUG_MSG("TODO: save Arc object");
         break;
     }
     case OBJ_TYPE_BLOCK: {
-        debug_message("TODO: save Block object");
+        DEBUG_MSG("TODO: save Block object");
         break;
     }
     case OBJ_TYPE_CIRCLE: {
@@ -2876,35 +2857,35 @@ saveObjectAsStitches(int objType, View *view, Geometry *obj)
         break;
     }
     case OBJ_TYPE_DIMALIGNED: {
-        debug_message("TODO: save DimAligned object");
+        DEBUG_MSG("TODO: save DimAligned object");
         break;
     }
     case OBJ_TYPE_DIMANGULAR: {
-        debug_message("TODO: save DimAngular object");
+        DEBUG_MSG("TODO: save DimAngular object");
         break;
     }
     case OBJ_TYPE_DIMARCLENGTH: {
-        debug_message("TODO: save DimArcLength object");
+        DEBUG_MSG("TODO: save DimArcLength object");
         break;
     }
     case OBJ_TYPE_DIMDIAMETER: {
-        debug_message("TODO: save DimDiameter object");
+        DEBUG_MSG("TODO: save DimDiameter object");
         break;
     }
     case OBJ_TYPE_DIMLEADER: {
-        debug_message("TODO: save DimLeader object");
+        DEBUG_MSG("TODO: save DimLeader object");
         break;
     }
     case OBJ_TYPE_DIMLINEAR: {
-        debug_message("TODO: save DimLinear object");
+        DEBUG_MSG("TODO: save DimLinear object");
         break;
     }
     case OBJ_TYPE_DIMORDINATE: {
-        debug_message("TODO: save DimOrdinate object");
+        DEBUG_MSG("TODO: save DimOrdinate object");
         break;
     }
     case OBJ_TYPE_DIMRADIUS: {
-        debug_message("TODO: save DimRadius object");
+        DEBUG_MSG("TODO: save DimRadius object");
         break;
     }
     case OBJ_TYPE_ELLIPSE: {
@@ -2914,23 +2895,23 @@ saveObjectAsStitches(int objType, View *view, Geometry *obj)
         break;
     }
     case OBJ_TYPE_ELLIPSEARC: {
-        debug_message("TODO: save EllipseArc object");
+        DEBUG_MSG("TODO: save EllipseArc object");
         break;
     }
     case OBJ_TYPE_GRID: {
-        debug_message("TODO: save Grid object");
+        DEBUG_MSG("TODO: save Grid object");
         break;
     }
     case OBJ_TYPE_HATCH: {
-        debug_message("TODO: save Hatch object");
+        DEBUG_MSG("TODO: save Hatch object");
         break;
     }
     case OBJ_TYPE_IMAGE: {
-        debug_message("TODO: save Image object");
+        DEBUG_MSG("TODO: save Image object");
         break;
     }
     case OBJ_TYPE_INFINITELINE: {
-        debug_message("TODO: save InfiniteLine object");
+        DEBUG_MSG("TODO: save InfiniteLine object");
         break;
     }
 
@@ -2957,7 +2938,7 @@ saveObjectAsStitches(int objType, View *view, Geometry *obj)
         break;
     }
     case OBJ_TYPE_RAY: {
-        debug_message("TODO: save Ray object");
+        DEBUG_MSG("TODO: save Ray object");
         break;
     }
 
@@ -2968,11 +2949,11 @@ saveObjectAsStitches(int objType, View *view, Geometry *obj)
     }
 
     case OBJ_TYPE_SPLINE: {
-        debug_message("TODO: save Spline object");
+        DEBUG_MSG("TODO: save Spline object");
         break;
     }
     case OBJ_TYPE_TEXTMULTI: {
-        debug_message("TODO: save TextMulti object");
+        DEBUG_MSG("TODO: save TextMulti object");
         break;
     }
 
@@ -3002,112 +2983,112 @@ saveObject(int objType, View *view, Geometry *obj)
 {
     switch (objType) {
     case OBJ_TYPE_ARC: {
-        debug_message("TODO: save Arc object");
+        DEBUG_MSG("TODO: save Arc object");
         break;
     }
     case OBJ_TYPE_BLOCK: {
-        debug_message("TODO: save Block object");
+        DEBUG_MSG("TODO: save Block object");
         break;
     }
     case OBJ_TYPE_CIRCLE: {
-        embPattern_addCircleAbs(view->pattern, obj->gdata.circle);
+        emb_pattern_addCircleAbs(view->pattern, obj->gdata.circle);
         break;
     }
     case OBJ_TYPE_DIMALIGNED: {
-        debug_message("TODO: save DimAligned object");
+        DEBUG_MSG("TODO: save DimAligned object");
         break;
     }
     case OBJ_TYPE_DIMANGULAR: {
-        debug_message("TODO: save DimAngular object");
+        DEBUG_MSG("TODO: save DimAngular object");
         break;
     }
     case OBJ_TYPE_DIMARCLENGTH: {
-        debug_message("TODO: save DimArcLength object");
+        DEBUG_MSG("TODO: save DimArcLength object");
         break;
     }
     case OBJ_TYPE_DIMDIAMETER: {
-        debug_message("TODO: save DimDiameter object");
+        DEBUG_MSG("TODO: save DimDiameter object");
         break;
     }
     case OBJ_TYPE_DIMLEADER: {
-        debug_message("TODO: save DimLeader object");
+        DEBUG_MSG("TODO: save DimLeader object");
         break;
     }
     case OBJ_TYPE_DIMLINEAR: {
-        debug_message("TODO: save DimLinear object");
+        DEBUG_MSG("TODO: save DimLinear object");
         break;
     }
     case OBJ_TYPE_DIMORDINATE: {
-        debug_message("TODO: save DimOrdinate object");
+        DEBUG_MSG("TODO: save DimOrdinate object");
         break;
     }
     case OBJ_TYPE_DIMRADIUS: {
-        debug_message("TODO: save DimRadius object");
+        DEBUG_MSG("TODO: save DimRadius object");
         break;
     }
     case OBJ_TYPE_ELLIPSE: {
-        embPattern_addEllipseAbs(view->pattern, obj->gdata.ellipse);
+        emb_pattern_addEllipseAbs(view->pattern, obj->gdata.ellipse);
         break;
     }
     case OBJ_TYPE_ELLIPSEARC: {
-        debug_message("TODO: save EllipseArc object");
+        DEBUG_MSG("TODO: save EllipseArc object");
         break;
     }
     case OBJ_TYPE_GRID: {
-        debug_message("TODO: save Grid object");
+        DEBUG_MSG("TODO: save Grid object");
         break;
     }
     case OBJ_TYPE_HATCH: {
-        debug_message("TODO: save Hatch object");
+        DEBUG_MSG("TODO: save Hatch object");
         break;
     }
     case OBJ_TYPE_IMAGE: {
-        debug_message("TODO: save Image object");
+        DEBUG_MSG("TODO: save Image object");
         break;
     }
     case OBJ_TYPE_INFINITELINE: {
-        debug_message("TODO: save InfiniteLine object");
+        DEBUG_MSG("TODO: save InfiniteLine object");
         break;
     }
     case OBJ_TYPE_LINE: {
-        embPattern_addLineAbs(view->pattern, obj->gdata.line);
+        emb_pattern_addLineAbs(view->pattern, obj->gdata.line);
         break;
     }
 
     case OBJ_TYPE_POINT: {
-        embPattern_addPointAbs(view->pattern, obj->gdata.point);
+        emb_pattern_addPointAbs(view->pattern, obj->gdata.point);
         break;
     }
 
     /* PATH? */
 
     case OBJ_TYPE_POLYGON: {
-        debug_message("TODO: save Polygon object");
+        DEBUG_MSG("TODO: save Polygon object");
         break;
     }
 
     case OBJ_TYPE_POLYLINE: {
-        debug_message("TODO: save Polyline object");
+        DEBUG_MSG("TODO: save Polyline object");
         break;
     }
 
     case OBJ_TYPE_RAY: {
-        debug_message("TODO: save Ray object");
+        DEBUG_MSG("TODO: save Ray object");
         break;
     }
 
     case OBJ_TYPE_RECTANGLE: {
-        embPattern_addRectAbs(view->pattern, obj->gdata.rect);
+        emb_pattern_addRectAbs(view->pattern, obj->gdata.rect);
         break;
     }
 
     case OBJ_TYPE_SPLINE: {
-        debug_message("TODO: save Spline object");
+        DEBUG_MSG("TODO: save Spline object");
         break;
     }
 
     case OBJ_TYPE_TEXTMULTI: {
-        debug_message("TODO: save TextMulti object");
+        DEBUG_MSG("TODO: save TextMulti object");
         break;
     }
 
@@ -3118,7 +3099,7 @@ saveObject(int objType, View *view, Geometry *obj)
      * TODO: This needs to work like a path, not a polyline. Improve this.
      */
     case OBJ_TYPE_TEXTSINGLE: {
-        debug_message("TODO: save TextMulti object as stitches");
+        DEBUG_MSG("TODO: save TextMulti object as stitches");
         break;
     }
 
@@ -3142,10 +3123,10 @@ addPath(View *view, Geometry *obj)
         QPainterPath::Element element = path.elementAt(i);
         /*
         if (element.isMoveTo()) {
-            embPattern_addStitchAbs(view->pattern, (element.x + start.x), -(element.y + start.y), TRIM);
+            emb_pattern_addStitchAbs(view->pattern, (element.x + start.x), -(element.y + start.y), TRIM);
         }
         else if (element.isLineTo()) {
-            embPattern_addStitchAbs(view->pattern, (element.x + start.x), -(element.y + start.y), NORMAL);
+            emb_pattern_addStitchAbs(view->pattern, (element.x + start.x), -(element.y + start.y), NORMAL);
         }
         else if (element.isCurveTo()) {
             QPainterPath::Element P1 = path.elementAt(i-1); // start point
@@ -3153,15 +3134,15 @@ addPath(View *view, Geometry *obj)
             QPainterPath::Element P3 = path.elementAt(i+1); // control point
             QPainterPath::Element P4 = path.elementAt(i+2); // end point
 
-            embPattern_addStitchAbs(P4.x, -P4.y, NORMAL); //TODO: This is temporary
+            emb_pattern_addStitchAbs(P4.x, -P4.y, NORMAL); //TODO: This is temporary
             //TODO: Curved Polyline segments are always arcs
         }
         */
     }
     /*
-    embPattern_addStitchRel(view->pattern, 0, 0, STOP);
+    emb_pattern_addStitchRel(view->pattern, 0, 0, STOP);
     QColor c = obj->pen().color();
-    embPattern_addThread(view->pattern, c.red(), c.green(), c.blue(), "", "");
+    emb_pattern_addThread(view->pattern, c.red(), c.green(), c.blue(), "", "");
     */
 }
 
@@ -3185,12 +3166,12 @@ toPolyline(
     for (int i = 0; i < objPath.elementCount(); ++i) {
         element = objPath.elementAt(i);
         if (!pointList) {
-            pointList = embArray_create(EMB_POINT);
+            pointList = emb_array_create(EMB_POINT);
         }
         EmbPoint po;
         po.position.x = element.x + objPos.x();
         po.position.y = -(element.y + objPos.y());
-        embArray_addPoint(pointList, po);
+        emb_array_addPoint(pointList, po);
     }
 
     EmbColor color_out;
@@ -3200,7 +3181,7 @@ toPolyline(
 
     /* TODO: FIX
     EmbPolyline* polyObject = embPolyline_init(pointList, color_out, 1); //TODO: proper lineType
-    embPattern_addPolylineAbs(view->pattern, polyObject);
+    emb_pattern_addPolylineAbs(view->pattern, polyObject);
     */
 }
 
@@ -3332,9 +3313,9 @@ void
 Geometry::setObjectTextJustify(QString justify)
 {
     objTextJustify = "Left";
-    String justify_ = justify.toStdString();
-    for (int i=0; strcmp(justify_options[i], "END"); i++) {
-        if (!strcmp(justify_.c_str(), justify_options[i])) {
+    std::string justify_ = justify.toStdString();
+    for (int i=0; justify_options->entries; i++) {
+        if (!strcmp(justify_.c_str(), justify_options->data[i]->data)) {
             objTextJustify = justify;
         }
     }

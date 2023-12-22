@@ -1,0 +1,221 @@
+#
+# Embroidermodder 2.
+#
+# ------------------------------------------------------------
+#
+# Copyright 2013-2023 The Embroidermodder Team
+# Embroidermodder 2 is Open Source Software.
+# See LICENSE for licensing terms.
+#
+# ------------------------------------------------------------
+#
+# This file is necessary for embroidermodder2 to boot.
+#
+# It should be placed in the same directory as the executable.
+#
+
+version = "2.0.0-alpha4"
+
+object_names = [
+    "Base",
+    "Arc",
+    "Block",
+    "Circle",
+    "Aligned Dimension",
+    "Angular Dimension",
+    "Arclength Dimension",
+    "Diameter Dimension",
+    "Leader Dimension",
+    "Linear Dimension",
+    "Ordinate Dimension",
+    "Radius Dimension",
+    "Ellipse",
+    "Image",
+    "Infinite Line",
+    "Line",
+    "Path",
+    "Point",
+    "Polygon",
+    "Polyline",
+    "Ray",
+    "Rectangle",
+    "Multiline Text",
+    "Text",
+    "Unknown",
+    "END"
+]
+
+coverage_test_script = [
+    "new",
+    "icon 16",
+    "icon 32",
+    "icon 64",
+    "icon 128",
+    "icon 24",
+    "zoom in",
+    "zoom extents",
+    "pan up",
+    "pan down",
+    "pan right",
+    "pan left",
+    "quit",
+    "END"
+]
+
+# TODO: "Aligned"
+# TODO: "Fit"
+justify_options = [
+    "Left",
+    "Center",
+    "Right",
+    "Aligned",
+    "Middle",
+    "Fit",
+    "Top Left",
+    "Top Center",
+    "Top Right",
+    "Middle Left",
+    "Middle Center",
+    "Middle Right",
+    "Bottom Left",
+    "Bottom Center",
+    "Bottom Right"
+]
+
+file_menu = [
+    "#File",
+    "new",
+    "---",
+    "open",
+    ">submenu", "recent",
+    "---",
+	"save",
+	"saveas",
+    "---",
+    "print",
+    "---",
+	"window-close",
+    "---",
+    "design-details",
+    "---",
+    "exit"
+]
+
+edit_menu = [
+    "#Edit",
+    "undo",
+    "redo",
+    "---",
+    "cut",
+    "copy",
+    "paste",
+    "---"
+]
+
+# MENU_ICON? "pan"
+pan_menu = [
+    "#Pan",
+    "pan-real-time",
+    "pan-point",
+    "---",
+    "pan-left",
+    "pan-right",
+    "pan-up",
+    "pan-down"
+]
+
+# MENU_ICON "zoom"
+zoom_menu = [
+    "#Zoom",
+    "zoom-real-time",
+    "zoom-previous",
+    "---",
+    "zoom-window",
+    "zoom-dynamic",
+    "zoom-scale",
+    "zoom-center",
+    "---",
+    "zoom-in",
+    "zoom-out",
+    "---",
+    "zoom-selected",
+    "zoom-all",
+    "zoom-extents",
+]
+
+view_menu = [
+    "#View",
+    "---",
+    ">submenu", "zoom",
+    ">submenu", "pan",
+    "---",
+    "day",
+    "night",
+    "---"
+]
+
+settings_menu = [
+    "#Settings",
+    "settings-dialog",
+    "---",
+    "test"
+]
+
+window_menu = [
+    "#Window",
+    "---"
+]
+
+help_menu = [
+    "#Help",
+    "help",
+    "---",
+    "changelog",
+    "---",
+    "tip-of-the-day",
+    "---",
+    "about",
+    "---",
+    "whats-this"
+]
+
+draw_menu = [
+    "#Draw",
+    "polyline",
+    "path",
+    "regular-polygon",
+    "polygon",
+    "---",
+    "arc",
+    "circle",
+    "ellipse",
+    "line",
+    "rectangle",
+    "rounded-rectangle",
+    "triangle",
+    "point",
+    "---",
+    "heart",
+    "dolphin",
+    "trebleclef",
+    "snowflake",
+    "---",
+    "single-line-text",
+    "multi-line-text",
+    "dim-leader",
+    "vertical-dimension",
+    "horizontal-dimension",
+    "image",
+    "infinite-line",
+    "ray",
+    "rubber",
+    "slot"
+]
+
+[action_table.about]
+id = 0
+icon = "about"
+command = "about"
+tooltip = "&About Embroidermodder 2"
+statustip = "Displays information about this product: ABOUT."
+shortcut = ""

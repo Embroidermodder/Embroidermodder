@@ -1,6 +1,51 @@
-# Embroidermodder 2.0.0-alpha
+<h1 align="center" style="display:block">
+<a name="logo" href="https://libembroidery.org"><img align="center" src="images/icons/app.png" alt="Embroidermodder 2.0"></img></a>
+  <br><br>
+  <em>EMBROIDERMODDER 2.0 (alpha)</em>
+</h1>
 
-( IN ALPHA DEVELOPMENT: NOT READY FOR SERIOUS USE. )
+<h3 align="center">
+  <svg width="100%" height="100%" viewBox="0 0 1000 400" version="1.1"
+     xmlns="http://www.w3.org/2000/svg">
+  <text x="0%" y="10%" >Build (main)</text>
+  <image x="0%" y="20%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_build_windows.yml/badge.svg" />
+  <image x="35%" y="20%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_build_macos.yml/badge.svg" />
+  <image x="70%" y="20%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_build_ubuntu.yml/badge.svg" />
+
+  <text x="0%" y="30%" >Test (main)</text>
+  <image x="0%" y="40%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_test_window.yml/badge.svg" />
+  <image x="35%" y="40%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_test_macos.yml/badge.svg" />
+  <image x="70%" y="40%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_test_ubuntu.yml/badge.svg" />
+
+  <text x="0%" y="50%" >Build (experimental)</text>
+  <image x="0%" y="60%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_build_windows.yml/badge.svg" />
+  <image x="35%" y="60%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_build_macos.yml/badge.svg" />
+  <image x="70%" y="60%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_build_ubuntu.yml/badge.svg" />
+
+  <text x="0%" y="70%" >Test (experimental)</text>
+  <image x="0%" y="80%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_test_windows.yml/badge.svg" />
+  <image x="35%" y="80%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_test_macos.yml/badge.svg" />
+  <image x="70%" y="80%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_test_ubuntu.yml/badge.svg" />
+</svg>
+<br>
+  <strong>
+  ( IN ALPHA DEVELOPMENT: NOT READY FOR SERIOUS USE. )
+</strong>
+</h3>
+
+<br>
 
 Embroidermodder is a free machine embroidery software program.
 The newest version, Embroidermodder 2 can:
@@ -112,10 +157,11 @@ A (no longer current) Embroidermodder 2 command excerpt:
 
 ![scripting screenshot](images/features-scripting-1.png)
 
-## Building
+## Dependencies
 
 To build Embroidermodder 2 from source you will need at least
-[the Embroidermodder 2 source code itself](https://github.com/Embroidermodder/Embroidermodder), a build environment including [CMake](https://cmake.org) and [Qt](http://www.qt-project.org) (version >= 6.0). For advice on how to get these,
+[the Embroidermodder 2 source code itself](https://github.com/Embroidermodder/Embroidermodder),
+a build environment including [CMake](https://cmake.org) and [Qt](http://www.qt-project.org) (version >= 6.0). For advice on how to get these,
 see the following subsections.
 
 You will also need the git submodules, which can be collected by running these lines
@@ -126,11 +172,6 @@ git submodule init
 git submodule update
 ```
 
-Optionally, you may want to add:
-
-- [KDE](http://www.kde.org) for thumbnailer
-- [Valgrind](http://www.valgrind.org) for debugging
-
 ### Debian/Ubuntu repository packages
 
 The Qt, KDE and Valgrind build dependencies can be installed easily by
@@ -138,7 +179,7 @@ opening a terminal and issuing these commands:
 
 ```
 sudo apt-get update
-sudo apt-get install qt6-base-dev libqt6gui6 libqt6widgets6 libqt6printsupport6 libqt6core6 libgl-dev libglx-dev libopengl-dev
+sudo apt-get install cmake build-essential qt6-base-dev libqt6gui6 libqt6widgets6 libqt6printsupport6 libqt6core6 libgl-dev libglx-dev libopengl-dev
 ```
 
 ### Fedora repository packages
@@ -152,28 +193,38 @@ by opening a terminal and issuing this command:
 sudo yum install git gdb gcc-c++ qt-devel kdelibs-devel valgrind
 ```
 
-### Windows Advice
+### Windows (MSYS2)
 
-On Windows, we recommend doing the same as Debian/Ubuntu in [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) although other
-options like [Cygwin](https://www.cygwin.com/)
-and [MSYS2](https://www.msys2.org/) are available.
+After installing [MSYS2](https://www.msys2.org), run this command in a MINGW64 shell:
 
-Our behind-the-scenes
-Windows build uses Python to get the Qt libraries [like this](https://github.com/Embroidermodder/testing-site/blob/main/scripts/package_em2_msi.sh).
+```sh
+pacman -S mingw-w64-clang-x86_64-qt6 cmake gcc make git
+```
 
-If you want to do this some other way, like in an IDE, run these
-installers (not recommended):
+At the time of writing, this will use around 2Gb of disk space. Then continue to [build](#build).
 
-* CMake: https://cmake.org/download/#latest
-* Qt: http://www.qt-project.org
-* Visual Studio Code: https://code.visualstudio.com/
-* Some version of MinGW for `gcc`:` https://www.mingw-w64.org/downloads/
-* Git Bash: https://gitforwindows.org/
-* A backend for CMake like Ninja: https://ninja-build.org/
+### Windows (Without MinGW or MSYS2)
 
-## Building
+If you have a development environment and for some reason want to use that over MSYS2 then ensure you run the installers for:
 
-On all systems with Bash, the following should work:
+1. CMake: https://cmake.org/download/#latest
+2. Qt: http://www.qt-project.org
+3. A Text Editor for Code like Visual Studio Code: https://code.visualstudio.com/
+4. A C compiler, like `gcc`, `cl`, `clang` or `tcc`.
+5. Git Bash: https://gitforwindows.org/
+6. A backend for CMake like Ninja: https://ninja-build.org/
+
+Remember to add these to your `PATH` for scripts to use them.
+
+This would give a similar build experience to standard development on Windows, but we recommend you use MSYS2.
+
+Note that our behind-the-scenes Windows build uses Python to get the Qt libraries
+[like this](https://github.com/Embroidermodder/libembroidery/blob/main/bin/build.sh).
+
+
+## Build
+
+Assuming you have the dependencies for your system, on all systems with Bash, the following should work:
 
 ```sh
 bash build.sh

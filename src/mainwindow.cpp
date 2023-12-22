@@ -30,30 +30,80 @@ QCheckBox* checkBoxTipOfTheDay;
 
 QToolBar* toolbarHash[MAX_TOOLBARS];
 QMenu* menuHash[MAX_MENUS];
-QAction* actionHash[MAX_ACTIONS];
+QAction* actionHash[MAX_COMMANDS];
 QIcon icon_list[MAX_ICONS];
+
+#include "macros.h"
 
 void
 clear_selection(void)
 {
 }
 
+/* Create menu from UI configuration.
+ *
+ * For example:
+ * 
+ * 
+
+file_menu = [
+    "#File",
+    "new",
+    "---",
+    "open",
+    ">submenu", "recent",
+    "---",
+	"save",
+	"saveas",
+    "---",
+    "print",
+    "---",
+	"window-close",
+    "---",
+    "design-details",
+    "---",
+    "exit"
+]
+
+ */
 void
-prompt_output(char *s)
+create_menu_from_string_table(
+    int32_t menu, StringTable *def, bool topLevel)
 {
+    if (topLevel) {
+        _mainWin->menuBar()->addMenu(menuHash[menu]);
+    }
+    for (int i=0; i<def->entries; i++) {
+		debug_message(def->data[i]->data);
+		char cmd = def->data[i]->data[0];
+		if (cmd == '#') {
+			continue;
+		}
+		if (cmd == '-') {
+            menuHash[menu]->addSeparator();
+			continue;
+		}
+		if (cmd == '>') {
+			/* FIXME */
+            //menuHash[menu]->addMenu(menuHash[atoi(def->data[i+1]->data)]);
+            i++;
+			continue;
+		}
+		if (cmd == '$') {
+			QIcon icon = _mainWin->create_icon(def->data[i+1]->data);
+            menuHash[menu]->setIcon(icon);
+            i++;
+			continue;
+		}
+
+		int j = find_command(def->data[i]->data);
+		menuHash[menu]->addAction(actionHash[j]);
+    }
+
+    /* Do not allow the Menus to be torn off. It's a pain in the ass to maintain. */
+    menuHash[menu]->setTearOffEnabled(false);
 }
 
-void
-debug_message(std::string str)
-{
-    debug_message((char*)str.c_str());
-}
-
-int
-string_equal(const char *a, const char *b)
-{
-    return !strcmp(a, b);
-}
 
 /* Create menu. */
 void
@@ -93,20 +143,20 @@ create_menu(int32_t menu, const int32_t *def, bool topLevel)
 void
 MainWindow::createAllMenus()
 {
-    debug_message("MainWindow createAllMenus()");
+    DEBUG_MSG("MainWindow createAllMenus()");
 
     /* Populate menus. */
-    create_menu(MENU_FILE, file_menu, true);
-    create_menu(MENU_EDIT, edit_menu, true);
-    create_menu(MENU_VIEW, view_menu, true);
-    create_menu(MENU_SETTINGS, settings_menu, true);
-    create_menu(MENU_WINDOW, window_menu, true);
-    create_menu(MENU_HELP, help_menu, true);
-    create_menu(MENU_DRAW, draw_menu, true);
+    create_menu_from_string_table(MENU_FILE, file_menu, true);
+    create_menu_from_string_table(MENU_EDIT, edit_menu, true);
+    create_menu_from_string_table(MENU_VIEW, view_menu, true);
+    create_menu_from_string_table(MENU_SETTINGS, settings_menu, true);
+    create_menu_from_string_table(MENU_WINDOW, window_menu, true);
+    create_menu_from_string_table(MENU_HELP, help_menu, true);
+    create_menu_from_string_table(MENU_DRAW, draw_menu, true);
 
     /* Populate submenus. */
-    create_menu(MENU_ZOOM, zoom_menu, false);
-    create_menu(MENU_PAN, pan_menu, false);
+    create_menu_from_string_table(MENU_ZOOM, zoom_menu, false);
+    create_menu_from_string_table(MENU_PAN, pan_menu, false);
 
     /* Connect dynamic menus. */
     connect(menuHash[MENU_RECENT], SIGNAL(aboutToShow()), this, SLOT(recentMenuAboutToShow()));
@@ -157,12 +207,12 @@ MainWindow::create_icon(int32_t stub)
     int i;
     QString appDir = qApp->applicationDirPath();
     QString icontheme(settings[ST_ICON_THEME].s);
-    for (i=0; i<N_ACTIONS; i++) {
-        if (action_table[i].id == stub) {
+    for (i=0; i<N_COMMANDS; i++) {
+        if (command_table[i].id == stub) {
             break;
         }
     }
-    QString stub_s(action_table[i].icon);
+    QString stub_s(command_table[i].icon);
     return QIcon(appDir + "/icons/" + icontheme + "/" + stub_s + ".png");
 }
 
@@ -183,7 +233,7 @@ MainWindow::populate_toolbars(Qt::ToolBarArea area, int32_t toolbar_layout[])
 void
 MainWindow::createAllToolbars()
 {
-    debug_message("MainWindow createAllToolbars()");
+    DEBUG_MSG("MainWindow createAllToolbars()");
 
     for (int i=0; i<TOTAL_TOOLBARS; i++) {
         create_toolbar(toolbar_data[i]);
@@ -204,7 +254,7 @@ MainWindow::createAllToolbars()
     toolbarHash[TOOLBAR_LAYER]->addWidget(layerSelector);
     connect(layerSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(layerSelectorIndexChanged(int)));
 
-    toolbarHash[TOOLBAR_LAYER]->addAction(actionHash[ACTION_LAYER_PREVIOUS]);
+    toolbarHash[TOOLBAR_LAYER]->addAction(actionHash[COMMAND_LAYER_PREVIOUS]);
 
     connect(toolbarHash[TOOLBAR_LAYER], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 
@@ -277,20 +327,20 @@ MainWindow::createAllToolbars()
     textFontSelector->setCurrentFont(QFont(font_));
     connect(textFontSelector, SIGNAL(currentFontChanged(QFont)), this, SLOT(textFontSelectorCurrentFontChanged(QFont)));
 
-    toolbarHash[TOOLBAR_TEXT]->addAction(actionHash[ACTION_TEXT_BOLD]);
-    actionHash[ACTION_TEXT_BOLD]->setChecked(settings[ST_TEXT_BOLD].i);
+    toolbarHash[TOOLBAR_TEXT]->addAction(actionHash[COMMAND_TEXT_BOLD]);
+    actionHash[COMMAND_TEXT_BOLD]->setChecked(settings[ST_TEXT_BOLD].i);
 
-    toolbarHash[TOOLBAR_TEXT]->addAction(actionHash[ACTION_TEXT_ITALIC]);
-    actionHash[ACTION_TEXT_ITALIC]->setChecked(settings[ST_TEXT_ITALIC].i);
+    toolbarHash[TOOLBAR_TEXT]->addAction(actionHash[COMMAND_TEXT_ITALIC]);
+    actionHash[COMMAND_TEXT_ITALIC]->setChecked(settings[ST_TEXT_ITALIC].i);
 
-    toolbarHash[TOOLBAR_TEXT]->addAction(actionHash[ACTION_TEXT_UNDERLINE]);
-    actionHash[ACTION_TEXT_UNDERLINE]->setChecked(settings[ST_TEXT_UNDERLINE].i);
+    toolbarHash[TOOLBAR_TEXT]->addAction(actionHash[COMMAND_TEXT_UNDERLINE]);
+    actionHash[COMMAND_TEXT_UNDERLINE]->setChecked(settings[ST_TEXT_UNDERLINE].i);
 
-    toolbarHash[TOOLBAR_TEXT]->addAction(actionHash[ACTION_TEXT_STRIKEOUT]);
-    actionHash[ACTION_TEXT_STRIKEOUT]->setChecked(settings[ST_TEXT_STRIKEOUT].i);
+    toolbarHash[TOOLBAR_TEXT]->addAction(actionHash[COMMAND_TEXT_STRIKEOUT]);
+    actionHash[COMMAND_TEXT_STRIKEOUT]->setChecked(settings[ST_TEXT_STRIKEOUT].i);
 
-    toolbarHash[TOOLBAR_TEXT]->addAction(actionHash[ACTION_TEXT_OVERLINE]);
-    actionHash[ACTION_TEXT_OVERLINE]->setChecked(settings[ST_TEXT_OVERLINE].i);
+    toolbarHash[TOOLBAR_TEXT]->addAction(actionHash[COMMAND_TEXT_OVERLINE]);
+    actionHash[COMMAND_TEXT_OVERLINE]->setChecked(settings[ST_TEXT_OVERLINE].i);
 
     textSizeSelector->setFocusProxy(prompt);
     textSizeSelector->addItem("6 pt",   6);
@@ -339,7 +389,8 @@ MainWindow::createAllToolbars()
 void
 MainWindow::settingsPrompt()
 {
-    actuator("settings-dialog Prompt");
+    std::string result;
+    ACTUATOR("settings-dialog Prompt", result);
 }
 
 /* stub_testing */
@@ -355,7 +406,7 @@ MainWindow::stub_testing()
 void
 MainWindow::quit()
 {
-    debug_message("quit()");
+    DEBUG_MSG("quit()");
     if (settings[ST_SAVE_HISTORY].i) {
         prompt->saveHistory("prompt.log", settings[ST_HTML_OUTPUT].i);
         //TODO: get filename from settings
@@ -369,7 +420,7 @@ MainWindow::quit()
 void
 MainWindow::checkForUpdates()
 {
-    debug_message("checkForUpdates()");
+    DEBUG_MSG("checkForUpdates()");
     //TODO: Check website for new versions, commands, etc...
 }
 
@@ -483,7 +534,7 @@ MainWindow::tipOfTheDay(void)
 void
 MainWindow::buttonTipOfTheDayClicked(int button)
 {
-    debug_message("buttonTipOfTheDayClicked(%d)" + std::to_string(button));
+    DEBUG_MSG("buttonTipOfTheDayClicked(%d)" + std::to_string(button));
     int n_tips = string_array_length(tips);
     if (button == QWizard::CustomButton1) {
         if (settings[ST_CURRENT_TIP].i > 0) {
@@ -551,7 +602,7 @@ MainWindow::iconResize(int iconSize)
 MdiWindow *
 MainWindow::activeMdiWindow()
 {
-    debug_message("activeMdiWindow()");
+    DEBUG_MSG("activeMdiWindow()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     return mdiWin;
 }
@@ -560,7 +611,7 @@ MainWindow::activeMdiWindow()
 View *
 activeView(void)
 {
-    debug_message("activeView()");
+    DEBUG_MSG("activeView()");
     MdiWindow* mdiWin = _mainWin->activeMdiWindow();
     if (mdiWin) {
         return mdiWin->gview;
@@ -572,7 +623,7 @@ activeView(void)
 QGraphicsScene *
 activeScene(void)
 {
-    debug_message("activeScene()");
+    DEBUG_MSG("activeScene()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
         return mdiWin->gscene;
@@ -584,7 +635,7 @@ activeScene(void)
 QUndoStack *
 MainWindow::activeUndoStack(void)
 {
-    debug_message("activeUndoStack()");
+    DEBUG_MSG("activeUndoStack()");
     View* v = activeView();
     if (v) {
         QUndoStack* u = v->undoStack;
@@ -702,7 +753,7 @@ MainWindow::pickAddModeToggled()
 std::string
 make_layer_active_action(std::string args)
 {
-    debug_message("TODO: Implement makeLayerActive.");
+    DEBUG_MSG("TODO: Implement makeLayerActive.");
     return "";
 }
 
@@ -710,7 +761,7 @@ make_layer_active_action(std::string args)
 std::string
 layer_manager_action(std::string args)
 {
-    debug_message("TODO: Implement layerManager.");
+    DEBUG_MSG("TODO: Implement layerManager.");
     LayerManager layman(_mainWin);
     layman.exec();
     return "";
@@ -720,7 +771,7 @@ layer_manager_action(std::string args)
 std::string
 layer_previous_action(std::string args)
 {
-    debug_message("TODO: Implement layerPrevious.");
+    DEBUG_MSG("TODO: Implement layerPrevious.");
     return "";
 }
 
@@ -728,17 +779,17 @@ layer_previous_action(std::string args)
 void
 MainWindow::layerSelectorIndexChanged(int index)
 {
-    debug_message("layerSelectorIndexChanged(%d)" + std::to_string(index));
+    DEBUG_MSG("layerSelectorIndexChanged(%d)" + std::to_string(index));
 }
 
 /* colorSelectorIndexChanged index */
 void
 MainWindow::colorSelectorIndexChanged(int index)
 {
-    debug_message("colorSelectorIndexChanged(%d)" + std::to_string(index));
+    DEBUG_MSG("colorSelectorIndexChanged(" + std::to_string(index) + ")");
 
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
-    QRgb newColor;
+    QRgb newColor = 0;
     if (comboBox) {
         bool ok = 0;
         //TODO: Handle ByLayer and ByBlock and Other...
@@ -765,21 +816,21 @@ MainWindow::colorSelectorIndexChanged(int index)
 void
 MainWindow::linetypeSelectorIndexChanged(int index)
 {
-    debug_message("linetypeSelectorIndexChanged(%d)" + std::to_string(index));
+    DEBUG_MSG("linetypeSelectorIndexChanged(%d)" + std::to_string(index));
 }
 
 /* lineweightSelectorIndexChanged index */
 void
 MainWindow::lineweightSelectorIndexChanged(int index)
 {
-    debug_message("lineweightSelectorIndexChanged(%d)" + std::to_string(index));
+    DEBUG_MSG("lineweightSelectorIndexChanged(%d)" + std::to_string(index));
 }
 
 /* textFontSelectorCurrentFontChanged font */
 void
 MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
 {
-    debug_message("textFontSelectorCurrentFontChanged()");
+    DEBUG_MSG("textFontSelectorCurrentFontChanged()");
     strcpy(settings[ST_TEXT_FONT].s, font.family().toStdString().c_str());
 }
 
@@ -787,7 +838,7 @@ MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
 void
 MainWindow::textSizeSelectorIndexChanged(int index)
 {
-    debug_message("textSizeSelectorIndexChanged(%d)" + std::to_string(index));
+    DEBUG_MSG("textSizeSelectorIndexChanged(%d)" + std::to_string(index));
     settings[ST_TEXT_SIZE].r = (EmbReal)fabs(textSizeSelector->itemData(index).toReal()); //TODO: check that the toReal() conversion is ok
 }
 
@@ -863,7 +914,7 @@ MainWindow::getCurrentLineWeight()
 void
 MainWindow::deletePressed()
 {
-    debug_message("deletePressed()");
+    DEBUG_MSG("deletePressed()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
@@ -876,7 +927,7 @@ MainWindow::deletePressed()
 void
 MainWindow::escapePressed()
 {
-    debug_message("escapePressed()");
+    DEBUG_MSG("escapePressed()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
@@ -884,14 +935,15 @@ MainWindow::escapePressed()
     }
     QApplication::restoreOverrideCursor();
 
-    actuator("end");
+    std::string result;
+    ACTUATOR("end", result);
 }
 
 /* MainWindow::toggleGrid */
 void
 MainWindow::toggleGrid()
 {
-    debug_message("toggleGrid()");
+    DEBUG_MSG("toggleGrid()");
     statusbar->buttons[STATUSBAR_GRID]->toggle();
 }
 
@@ -899,7 +951,7 @@ MainWindow::toggleGrid()
 void
 MainWindow::toggleRuler()
 {
-    debug_message("toggleRuler()");
+    DEBUG_MSG("toggleRuler()");
     statusbar->buttons[STATUSBAR_RULER]->toggle();
 }
 
@@ -907,7 +959,7 @@ MainWindow::toggleRuler()
 void
 MainWindow::toggleLwt()
 {
-    debug_message("toggleLwt()");
+    DEBUG_MSG("toggleLwt()");
     statusbar->buttons[STATUSBAR_LWT]->toggle();
 }
 
@@ -1091,6 +1143,7 @@ paste_selected_action(std::string args)
 MainWindow::MainWindow() : QMainWindow(0)
 {
     QString appDir = qApp->applicationDirPath();
+	
     read_settings();
 
     QString icon_theme(settings[ST_ICON_THEME].s);
@@ -1111,26 +1164,39 @@ MainWindow::MainWindow() : QMainWindow(0)
             translate_str("Cannot locate: ") + check.absoluteFilePath());
     }
 
+    bool result;
     QString lang(settings[ST_LANGUAGE].s);
-    debug_message("language: " + lang.toStdString());
+    DEBUG_MSG("language: " + lang.toStdString());
     if (lang == "system") {
         lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
     }
 
-    //Load translations for the Embroidermodder 2 GUI
+    /* Load translations for the Embroidermodder 2 GUI. */
     QTranslator translatorEmb;
-    translatorEmb.load(appDir + "/translations/" + lang + "/embroidermodder2_" + lang);
+    result = translatorEmb.load(appDir + "/translations/" + lang + "/embroidermodder2_" + lang);
     qApp->installTranslator(&translatorEmb);
+    if (!result) {
+        DEBUG_MSG("Failed to load translations for the GUI.");
+    }
 
-    //Load translations for the commands
+    /* Load translations for the commands. */
     QTranslator translatorCmd;
-    translatorCmd.load(appDir + "/translations/" + lang + "/commands_" + lang);
+    result = translatorCmd.load(appDir + "/translations/" + lang + "/commands_" + lang);
     qApp->installTranslator(&translatorCmd);
+    if (!result) {
+        DEBUG_MSG("Failed to load translations for the commands.");
+    }
 
-    //Load translations provided by Qt - this covers dialog buttons and other common things.
+    /* Load translations provided by Qt - this covers dialog buttons and other
+     * common things. */
     QTranslator translatorQt;
-    translatorQt.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath)); //TODO: ensure this always loads, ship a copy of this with the app
+    /* TODO: ensure this always loads, ship a copy of this with the app. */
+    QString location_str = QLibraryInfo::path(QLibraryInfo::TranslationsPath);
+    result = translatorQt.load("qt_" + QLocale::system().name(), location_str);
     qApp->installTranslator(&translatorQt);
+    if (!result) {
+        DEBUG_MSG("Failed to load in-built QT translations.");
+    }
 
     //Init
     _mainWin = this;
@@ -1276,7 +1342,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     showNormal();
 
     if (settings[ST_TIP_OF_THE_DAY].i) {
-        actuator("tips");
+        std::string result;
+        ACTUATOR("tips", result);
     }
 }
 
@@ -1284,11 +1351,46 @@ MainWindow::MainWindow() : QMainWindow(0)
  */
 MainWindow::~MainWindow()
 {
-    debug_message("MainWindow::Destructor()");
+    DEBUG_MSG("MainWindow::Destructor()");
 
     //Prevent memory leaks by deleting any unpasted objects
     qDeleteAll(cutCopyObjectList.begin(), cutCopyObjectList.end());
     cutCopyObjectList.clear();
+}
+
+/*
+ *
+ */
+QAction *
+MainWindow::createAction(int32_t i)
+{
+    CommandData a = command_table[i];
+
+    std::string icon_s(a.icon);
+    QString tooltip(a.tooltip);
+    QString statustip(a.statustip);
+    std::string shortcut(a.shortcut);
+    QIcon icon = create_icon(a.icon);
+
+    QAction *ACTION = new QAction(icon, tooltip, this);
+    ACTION->setStatusTip(statustip);
+    ACTION->setObjectName(QString::fromStdString(icon_s));
+    if (shortcut != "") {
+        ACTION->setShortcut(
+            QKeySequence(QString::fromStdString(shortcut))
+        );
+    }
+
+    if (   (icon_s == "textbold")
+        || (icon_s == "textitalic")
+        || (icon_s == "textunderline")
+        || (icon_s == "textstrikeout")
+        || (icon_s == "textoverline")) {
+        ACTION->setCheckable(true);
+    }
+
+    connect(ACTION, &QAction::triggered, this, [=](){ actuator((char*)a.command); });
+    return ACTION;
 }
 
 /* MainWindow::createAllActions
@@ -1316,40 +1418,14 @@ ACTION->setWhatsThis(statusTip);
 void
 MainWindow::createAllActions()
 {
-    debug_message("Creating All Actions...");
+    DEBUG_MSG("Creating All Actions...");
 
-    for (int i=0; i<N_ACTIONS; i++) {
-        ActionData a = action_table[i];
-
-        std::string icon_s(a.icon);
-        QString tooltip(a.tooltip);
-        QString statustip(a.statustip);
-        std::string shortcut(a.shortcut);
-        QIcon icon = create_icon(a.icon);
-
-        QAction *ACTION = new QAction(icon, tooltip, this);
-        ACTION->setStatusTip(statustip);
-        ACTION->setObjectName(icon_s);
-        if (shortcut != "") {
-            ACTION->setShortcut(
-                QKeySequence(QString::fromStdString(shortcut))
-            );
-        }
-
-        if (   (icon_s == "textbold")
-            || (icon_s == "textitalic")
-            || (icon_s == "textunderline")
-            || (icon_s == "textstrikeout")
-            || (icon_s == "textoverline")) {
-            ACTION->setCheckable(true);
-        }
-
-        connect(ACTION, &QAction::triggered, this, [=](){ actuator((char*)a.command); });
-        actionHash[a.id] = ACTION;
+    for (int i=0; i<N_COMMANDS; i++) {
+        actionHash[command_table[i].id] = createAction(i);
     }
 
-    actionHash[ACTION_WINDOW_CLOSE]->setEnabled(numOfDocs > 0);
-    actionHash[ACTION_DESIGN_DETAILS]->setEnabled(numOfDocs > 0);
+    actionHash[COMMAND_WINDOW_CLOSE]->setEnabled(numOfDocs > 0);
+    actionHash[COMMAND_DESIGN_DETAILS]->setEnabled(numOfDocs > 0);
 }
 
 /* A basic line-by-line script processor to allow for extensions to the program.
@@ -1380,12 +1456,14 @@ MainWindow::createAllActions()
  *     ------------------------------------------------------------------
  */
 const char *
-run_script(char **script)
+run_script(StringTable *script)
 {
     std::string output = "";
-    for (int i=0; !string_equal(script[i], "END"); i++) {
-        debug_message(script[i]);
-        output += actuator(script[i]);
+    for (int i=0; i<script->entries; i++) {
+        debug_message(script->data[i]->data);
+        std::string result;
+        ACTUATOR(script->data[i]->data, result);
+        output += result;
     }
     return output.c_str();
 }
@@ -1424,22 +1502,27 @@ run_script(char **script)
  * }
  */
 const char *
-actuator(char line[MAX_STRING_LENGTH])
+actuator(const char *line)
 {
     char argv[MAX_ARGS][MAX_STRING_LENGTH];
     char args[MAX_STRING_LENGTH];
     char command[MAX_STRING_LENGTH];
-    char error_str[MAX_STRING_LENGTH];
     int i, j, argc;
     View* gview = activeView();
     QUndoStack* stack = NULL;
+    
     if (gview) {
         stack = gview->undoStack;
     }
 
+    /* set all argv entries to empty strings as default */
+    for (i=0; i<MAX_ARGS; i++) {
+        argv[i][0] = 0;
+    }
+
     argc = 0;
     j = 0;
-    for (i=0; i<strlen(line); i++) {
+    for (i=0; i<(int)strlen(line); i++) {
         argv[argc][j] = line[i];
         if (line[i] == ' ') {
             argv[argc][j] = 0;
@@ -1451,27 +1534,28 @@ actuator(char line[MAX_STRING_LENGTH])
     }
     argv[argc][j] = 0;
 
-    int action_id = -1;
+    int command_id = -1;
 
     for (i=0; i<N_COMMANDS; i++) {
         if (string_equal(argv[0], command_table[i].command)) {
-            action_id = command_table[i].id;
+            command_id = command_table[i].id;
             break;
         }
     }
 
-    strcpy(args, line + strlen(command_table[action_id].command) + 1);
+    strcpy(args, line + strlen(command_table[command_id].command) + 1);
 
     /* This could produce silly amounts of output, so watch this line. */
-    debug_message("action: %d", action_id);
+    std::string str = "action: " + std::to_string(command_id);
+    debug_message((char*)str.c_str());
 
-    if (action_id < 0) {
-        char out[2*MAX_STRING_LENGTH];
-        sprintf(out, "<br/><font color=\"red\">Unknown command \"%s\". Press F1 for help.</font>", line);
-        return out;
+    if (command_id < 0) {
+        std::string out = std::string("<br/><font color=\"red\">Unknown command \"")
+            + line + std::string("\". Press F1 for help.</font>");
+        return out.c_str();
     }
 
-    switch (action_id) {
+    switch (command_id) {
 
     /* Open the about dialog. */
     case COMMAND_ABOUT: {
@@ -1479,7 +1563,7 @@ actuator(char line[MAX_STRING_LENGTH])
         return "";
     }
 
-    case COMMAND_ADD: {
+    case COMMAND_ADD_LINE: {
         return ""; // add_geometry(argv, argc);
     }
 
@@ -1546,10 +1630,10 @@ actuator(char line[MAX_STRING_LENGTH])
             _mainWin->nativeadd_line_action(mx, my, mx, my, 0, OBJ_RUBBER_ON);
         }
         else if (objType == "PATH") {
-            actuator("todo handle path type in add_rubber_action.);
+            ACTUATOR("todo handle path type in add_rubber_action.);
         }
         else if (objType == "POINT") {
-            actuator("todo handle point type in add_rubber_action.);
+            ACTUATOR("todo handle point type in add_rubber_action.);
         }
         else if (objType == "POLYGON") {
             _mainWin->nativeadd_polygon_action(mx, my, QPainterPath(), OBJ_RUBBER_ON);
@@ -1558,16 +1642,16 @@ actuator(char line[MAX_STRING_LENGTH])
             _mainWin->nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON);
         }
         else if (objType == "RAY") {
-            actuator("todo handle ray type in add_rubber_action.);
+            ACTUATOR("todo handle ray type in add_rubber_action.);
         }
         else if (objType == "RECTANGLE") {
             _mainWin->nativeadd_rectangle_action(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON);
         }
         else if (objType == "SPLINE") {
-            actuator("todo handle spline type in add_rubber_action.);
+            ACTUATOR("todo handle spline type in add_rubber_action.);
         }
         else if (objType == "TEXTMULTI") {
-            actuator("todo handle text multi type in add_rubber_action.);
+            ACTUATOR("todo handle text multi type in add_rubber_action.);
         }
         else if (objType == "TEXTSINGLE") {
             _mainWin->nativeadd_text_single_action("", mx, my, 0, false, OBJ_RUBBER_ON);
@@ -1691,8 +1775,9 @@ actuator(char line[MAX_STRING_LENGTH])
 
     /* Allows scripts to produce debug output similar to "echo". */
     case COMMAND_DEBUG: {
-        sprintf(command, "DEBUG: ", args);
-        return actuator(command);
+        sprintf(command, "DEBUG: %s", args);
+        DEBUG_MSG(command);
+        return "";
     }
 
     case COMMAND_DELETE_SELECTED: {
@@ -1813,8 +1898,9 @@ actuator(char line[MAX_STRING_LENGTH])
         /*
         _mainWin->setPromptPrefix("ERROR: (" + a[0].s + ") " + a[1].s);
         */
-        actuator("append-prompt-history");
-        actuator("end");
+        std::string result;
+        ACTUATOR("append-prompt-history", result);
+        ACTUATOR("end", result);
         return "";
     }
 
@@ -1833,13 +1919,33 @@ actuator(char line[MAX_STRING_LENGTH])
         return "";
     }
 
-    case COMMAND_ICON: {
-        if (strlen(args) == 0) {
-            return "ERROR: No argument passed to ICON command.";
-        }
-        int size = atoi(args);
-        /* TODO: check error code here */
-        _mainWin->iconResize(size);
+    case COMMAND_ICON16: {
+        _mainWin->iconResize(16);
+        return "";
+    }
+
+    case COMMAND_ICON24: {
+        _mainWin->iconResize(24);
+        return "";
+    }
+
+    case COMMAND_ICON32: {
+        _mainWin->iconResize(32);
+        return "";
+    }
+
+    case COMMAND_ICON48: {
+        _mainWin->iconResize(48);
+        return "";
+    }
+
+    case COMMAND_ICON64: {
+        _mainWin->iconResize(64);
+        return "";
+    }
+
+    case COMMAND_ICON128: {
+        _mainWin->iconResize(128);
         return "";
     }
 
@@ -1944,9 +2050,7 @@ actuator(char line[MAX_STRING_LENGTH])
      */
     case COMMAND_NUM_SELECTED: {
         if (gview) {
-            char cmd[MAX_STRING_LENGTH];
-            sprintf(cmd, "%d", gview->numSelected());
-            return cmd;
+            return std::to_string(gview->numSelected()).c_str();
         }
         return "0";
     }
@@ -1957,7 +2061,7 @@ actuator(char line[MAX_STRING_LENGTH])
     }
 
     /* Pan the current view using behaviour described by "mode". */
-    case COMMAND_PAN: {
+    case COMMAND_PAN_UP: {
         if (!gview) {
             return "ERROR: no active view found.";
         }
@@ -2056,8 +2160,10 @@ actuator(char line[MAX_STRING_LENGTH])
     case COMMAND_PRINT_AREA: {
         // qDebug("nativeprint_area_action(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
         // TODO: Print Setup Stuff
-        sprintf(command, "print %s", args);
-        return actuator(command);
+        std::string result;
+        std::string command = std::string("print ") + args;
+        ACTUATOR(command, result);
+        return result.c_str();
     }
 
     case COMMAND_TEXT: {
@@ -2100,9 +2206,8 @@ actuator(char line[MAX_STRING_LENGTH])
         QGraphicsScene* scene = activeScene();
         if (scene) {
             float x = scene->property("SCENE_QSNAP_POINT").toPointF().x();
-            char cmd[MAX_STRING_LENGTH];
-            sprintf(cmd, "%f", x);
-            return cmd;
+            std::string x_str = std::to_string(x);
+            return x_str.c_str();
         }
         return "0.0";
     }
@@ -2113,9 +2218,7 @@ actuator(char line[MAX_STRING_LENGTH])
         QGraphicsScene* scene = activeScene();
         if (scene) {
             float y = scene->property("SCENE_QSNAP_POINT").toPointF().y();
-            char cmd[MAX_STRING_LENGTH];
-            sprintf(cmd, "%f", y);
-            return cmd;
+            return std::to_string(y).c_str();
         }
         return "0.0";
     }
@@ -2131,19 +2234,19 @@ actuator(char line[MAX_STRING_LENGTH])
      * TODO: reference section.
      */
     case COMMAND_REDO: {
+        std::string result;
         QString prefix = prompt->promptInput->prefix;
         if (dockUndoEdit->canRedo()) {
-            char cmd[MAX_STRING_LENGTH];
-            sprintf(cmd, "set prompt-prefix Redo %s",
-                dockUndoEdit->redoText().toStdString().c_str());
-            actuator(cmd);
-            actuator("append-history ");
+            std::string cmd = std::string("set prompt-prefix Redo ")
+                + dockUndoEdit->redoText().toStdString();
+            ACTUATOR(cmd, result);
+            ACTUATOR("append-history ", result);
             dockUndoEdit->redo();
-            actuator("set prompt-prefix >");
+            ACTUATOR("set prompt-prefix >", result);
         }
         else {
             prompt->alert("Nothing to redo");
-            actuator("set prompt-prefix >");
+            ACTUATOR("set prompt-prefix >", result);
         }
         return "";
     }
@@ -2206,10 +2309,10 @@ actuator(char line[MAX_STRING_LENGTH])
 
     case COMMAND_SCALE_SELECTED: {
         EmbVector v;
-        char *argv[5];
+        EmbReal factor;
         v.x = atof(argv[0]);
         v.y = -atof(argv[1]);
-        EmbReal factor = atof(argv[2]);
+        factor = atof(argv[2]);
 
         if (factor <= 0.0) {
             QMessageBox::critical(_mainWin,
@@ -2353,7 +2456,8 @@ actuator(char line[MAX_STRING_LENGTH])
      * without updating all rubber objects at once
      */
     case COMMAND_SET_RUBBER_FILTER: {
-        return args;
+        /* return args; */
+        return "";
     }
 
     case COMMAND_SET_RUBBER_MODE: {
@@ -2451,7 +2555,9 @@ actuator(char line[MAX_STRING_LENGTH])
     /* TODO reminders for the developers. */
     case COMMAND_TODO: {
         sprintf(command, "TODO: %s", args);
-        return actuator(command);
+        std::string result;
+        ACTUATOR(command, result);
+        return result.c_str();
     }
 
     /* Undo the previous action as defined on the undo stack.
@@ -2459,27 +2565,29 @@ actuator(char line[MAX_STRING_LENGTH])
      * TODO: reference section.
      */
     case COMMAND_UNDO: {
-		char cmd[MAX_STRING_LENGTH];
         QString prefix = prompt->promptInput->prefix;
         if (dockUndoEdit->canUndo()) {
-			sprintf(cmd, "set prompt-prefix Undo %s", dockUndoEdit->undoText().toStdString().c_str());
-            actuator(cmd);
+			std::string cmd = std::string("set prompt-prefix Undo ")
+                + dockUndoEdit->undoText().toStdString();
+            std::string result;
+            ACTUATOR(cmd, result);
             /* \bug this won't append history because there's no mechanism
                for and empty string */
-            actuator("append-history ");
+            ACTUATOR("append-history ", result);
             dockUndoEdit->undo();
-            actuator("set prompt-prefix >");
+            ACTUATOR("set prompt-prefix >", result);
         }
         else {
+            std::string result;
             prompt->alert("Nothing to undo");
-            actuator("set prompt-prefix >");
+            ACTUATOR("set prompt-prefix >", result);
         }
         return "";
     }
 
     /* Return the version string to the user (for the CLI). */
     case COMMAND_VERSION: {
-        return version;
+        return version->data;
     }
 
     case COMMAND_VULCANIZE: {
@@ -2519,7 +2627,7 @@ actuator(char line[MAX_STRING_LENGTH])
     }
 
     /* Zoom the current view using behaviour described by "mode". */
-    case COMMAND_ZOOM: {
+    case COMMAND_ZOOM_IN: {
         if (!gview) {
             return "ERROR: no active view found.";
         }
@@ -2527,58 +2635,58 @@ actuator(char line[MAX_STRING_LENGTH])
             return "ERROR: no undo stack found.";
         }
         if (string_equal(argv[1], "realtime")) {
-            debug_message("zoomRealtime()");
-            debug_message("TODO: Implement zoomRealtime.");
+            DEBUG_MSG("zoomRealtime()");
+            DEBUG_MSG("TODO: Implement zoomRealtime.");
             return "";
         }
         if (string_equal(argv[1], "previous")) {
-            debug_message("zoomPrevious()");
-            debug_message("TODO: Implement zoomPrevious.");
+            DEBUG_MSG("zoomPrevious()");
+            DEBUG_MSG("TODO: Implement zoomPrevious.");
             return "";
         }
         if (string_equal(argv[1], "window")) {
-            debug_message("zoomWindow()");
+            DEBUG_MSG("zoomWindow()");
             gview->zoomWindow();
             return "";
         }
         if (string_equal(argv[1], "dynamic")) {
-            debug_message("zoomDynamic()");
-            debug_message("TODO: Implement zoomDynamic.");
+            DEBUG_MSG("zoomDynamic()");
+            DEBUG_MSG("TODO: Implement zoomDynamic.");
             return "";
         }
         if (string_equal(argv[1], "scale")) {
-            debug_message("zoomScale()");
-            debug_message("TODO: Implement zoomScale.");
+            DEBUG_MSG("zoomScale()");
+            DEBUG_MSG("TODO: Implement zoomScale.");
             return "";
         }
         if (string_equal(argv[1], "center")) {
-            debug_message("zoomCenter()");
-            debug_message("TODO: Implement zoomCenter.");
+            DEBUG_MSG("zoomCenter()");
+            DEBUG_MSG("TODO: Implement zoomCenter.");
             return "";
         }
         if (string_equal(argv[1], "in")) {
-            debug_message("zoomIn()");
+            DEBUG_MSG("zoomIn()");
             gview->zoomIn();
             return "";
         }
         if (string_equal(argv[1], "out")) {
-            debug_message("zoomOut()");
+            DEBUG_MSG("zoomOut()");
             gview->zoomOut();
             return "";
         }
         if (string_equal(argv[1], "selected")) {
-            debug_message("zoomSelected()");
+            DEBUG_MSG("zoomSelected()");
             UndoableCommand* cmd = new UndoableCommand("ZoomSelected", gview, 0);
             stack->push(cmd);
             return "";
         }
         if (string_equal(argv[1], "all")) {
-            debug_message("zoomAll()");
-            debug_message("TODO: Implement zoomAll.");
+            DEBUG_MSG("zoomAll()");
+            DEBUG_MSG("TODO: Implement zoomAll.");
             return "";
         }
         if (string_equal(argv[1], "extents")) {
-            debug_message("zoomExtents()");
+            DEBUG_MSG("zoomExtents()");
             UndoableCommand* cmd = new UndoableCommand("ZoomExtents", gview, 0);
             stack->push(cmd);
             return "";
@@ -2729,7 +2837,7 @@ convert_args_to_type(
 void
 MainWindow::recentMenuAboutToShow()
 {
-    debug_message("MainWindow::recentMenuAboutToShow()");
+    DEBUG_MSG("MainWindow::recentMenuAboutToShow()");
     menuHash[MENU_RECENT]->clear();
 
     QFileInfo recentFileInfo;
@@ -2779,16 +2887,16 @@ MainWindow::recentMenuAboutToShow()
 void
 MainWindow::windowMenuAboutToShow()
 {
-    debug_message("MainWindow::windowMenuAboutToShow()");
+    DEBUG_MSG("MainWindow::windowMenuAboutToShow()");
     menuHash[MENU_WINDOW]->clear();
-    menuHash[MENU_WINDOW]->addAction(actionHash[ACTION_WINDOW_CLOSE]);
-    menuHash[MENU_WINDOW]->addAction(actionHash[ACTION_WINDOW_CLOSE_ALL]);
+    menuHash[MENU_WINDOW]->addAction(actionHash[COMMAND_WINDOW_CLOSE]);
+    menuHash[MENU_WINDOW]->addAction(actionHash[COMMAND_WINDOW_CLOSE_ALL]);
     menuHash[MENU_WINDOW]->addSeparator();
-    menuHash[MENU_WINDOW]->addAction(actionHash[ACTION_WINDOW_CASCADE]);
-    menuHash[MENU_WINDOW]->addAction(actionHash[ACTION_WINDOW_TILE]);
+    menuHash[MENU_WINDOW]->addAction(actionHash[COMMAND_WINDOW_CASCADE]);
+    menuHash[MENU_WINDOW]->addAction(actionHash[COMMAND_WINDOW_TILE]);
     menuHash[MENU_WINDOW]->addSeparator();
-    menuHash[MENU_WINDOW]->addAction(actionHash[ACTION_WINDOW_NEXT]);
-    menuHash[MENU_WINDOW]->addAction(actionHash[ACTION_WINDOW_PREVIOUS]);
+    menuHash[MENU_WINDOW]->addAction(actionHash[COMMAND_WINDOW_NEXT]);
+    menuHash[MENU_WINDOW]->addAction(actionHash[COMMAND_WINDOW_PREVIOUS]);
 
     menuHash[MENU_WINDOW]->addSeparator();
     QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
@@ -2808,7 +2916,7 @@ MainWindow::windowMenuAboutToShow()
 void
 MainWindow::windowMenuActivated(bool checked)
 {
-    debug_message("MainWindow::windowMenuActivated()");
+    DEBUG_MSG("MainWindow::windowMenuActivated()");
     QAction* aSender = qobject_cast<QAction*>(sender());
     if (!aSender)
         return;
@@ -2822,7 +2930,7 @@ MainWindow::windowMenuActivated(bool checked)
 void
 MainWindow::newFile()
 {
-    debug_message("MainWindow::newFile()");
+    DEBUG_MSG("MainWindow::newFile()");
     docIndex++;
     numOfDocs++;
     MdiWindow* mdiWin = new MdiWindow(docIndex, mdiArea, Qt::SubWindow);
@@ -2845,7 +2953,7 @@ MainWindow::newFile()
 void
 MainWindow::openFile(bool recent, std::string recentFile)
 {
-    debug_message("MainWindow::openFile()");
+    DEBUG_MSG("MainWindow::openFile()");
 
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
@@ -2949,7 +3057,7 @@ MainWindow::openFilesSelected(QStringList filesToOpen)
 void
 MainWindow::openrecentfile()
 {
-    debug_message("MainWindow::openrecentfile()");
+    DEBUG_MSG("MainWindow::openrecentfile()");
 
     //Check to see if this from the recent files list
     QAction* recentSender = qobject_cast<QAction*>(sender());
@@ -2963,7 +3071,7 @@ MainWindow::openrecentfile()
 void
 MainWindow::savefile()
 {
-    debug_message("MainWindow::savefile()");
+    DEBUG_MSG("MainWindow::savefile()");
 }
 
 /* MainWindow::saveasfile
@@ -2971,7 +3079,7 @@ MainWindow::savefile()
 void
 MainWindow::saveasfile()
 {
-    debug_message("MainWindow::saveasfile()");
+    DEBUG_MSG("MainWindow::saveasfile()");
     // need to find the activeSubWindow before it loses focus to the FileDialog
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (!mdiWin) {
@@ -2990,7 +3098,7 @@ MainWindow::saveasfile()
 QMdiSubWindow *
 MainWindow::findMdiWindow(std::string fileName)
 {
-    debug_message("MainWindow::findMdiWindow(" + fileName + ")");
+    DEBUG_MSG("MainWindow::findMdiWindow(" + fileName + ")");
     QString canonicalFilePath = QFileInfo(QString::fromStdString(fileName)).canonicalFilePath();
 
     foreach(QMdiSubWindow* subWindow, mdiArea->subWindowList()) {
@@ -3020,7 +3128,7 @@ MainWindow::closeEvent(QCloseEvent* event)
 void
 MainWindow::onCloseWindow()
 {
-    debug_message("MainWindow::onCloseWindow()");
+    DEBUG_MSG("MainWindow::onCloseWindow()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
         onCloseMdiWin(mdiWin);
@@ -3033,11 +3141,13 @@ MainWindow::onCloseWindow()
 void
 MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
 {
-    debug_message("MainWindow::onCloseMdiWin()");
+    DEBUG_MSG("MainWindow::onCloseMdiWin()");
     numOfDocs--;
 
-    bool keepMaximized;
-    if (theMdiWin) { keepMaximized = theMdiWin->isMaximized(); }
+    bool keepMaximized = false;
+    if (theMdiWin) {
+        keepMaximized = theMdiWin->isMaximized();
+    }
 
     mdiArea->removeSubWindow(theMdiWin);
     theMdiWin->deleteLater();
@@ -3059,7 +3169,7 @@ MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
 void
 MainWindow::onWindowActivated(QMdiSubWindow* w)
 {
-    debug_message("MainWindow::onWindowActivated()");
+    DEBUG_MSG("MainWindow::onWindowActivated()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(w);
     if (mdiWin) {
         mdiWin->onWindowActivated();
@@ -3072,7 +3182,7 @@ MainWindow::onWindowActivated(QMdiSubWindow* w)
 void
 MainWindow::resizeEvent(QResizeEvent* e)
 {
-    debug_message("MainWindow::resizeEvent()");
+    DEBUG_MSG("MainWindow::resizeEvent()");
     QMainWindow::resizeEvent(e);
     statusBar()->setSizeGripEnabled(!isMaximized());
 }
@@ -3082,11 +3192,11 @@ MainWindow::resizeEvent(QResizeEvent* e)
 void
 MainWindow::updateMenuToolbarStatusbar()
 {
-    debug_message("MainWindow::updateMenuToolbarStatusbar()");
+    DEBUG_MSG("MainWindow::updateMenuToolbarStatusbar()");
 
-    actionHash[ACTION_PRINT]->setEnabled(numOfDocs > 0);
-    actionHash[ACTION_WINDOW_CLOSE]->setEnabled(numOfDocs > 0);
-    actionHash[ACTION_DESIGN_DETAILS]->setEnabled(numOfDocs > 0);
+    actionHash[COMMAND_PRINT]->setEnabled(numOfDocs > 0);
+    actionHash[COMMAND_WINDOW_CLOSE]->setEnabled(numOfDocs > 0);
+    actionHash[COMMAND_DESIGN_DETAILS]->setEnabled(numOfDocs > 0);
 
     if (numOfDocs) {
         for (int i=0; i<TOTAL_TOOLBARS; i++) {
@@ -3144,7 +3254,7 @@ MainWindow::updateMenuToolbarStatusbar()
         }
     }
     /* TODO: decide why this call was here */
-    debug_message("MainWindow::hideUnimplemented()");
+    DEBUG_MSG("MainWindow::hideUnimplemented()");
 }
 
 /* MainWindow::validFileFormat
@@ -3242,7 +3352,7 @@ MainWindow::closeToolBar(QAction* action)
     if (action->objectName() == "toolbarclose") {
         QToolBar* tb = qobject_cast<QToolBar*>(sender());
         if (tb) {
-            debug_message(tb->objectName().toStdString() + "%s closed.");
+            DEBUG_MSG(tb->objectName().toStdString() + "%s closed.");
             tb->hide();
         }
     }
@@ -3339,7 +3449,7 @@ UndoableCommand::UndoableCommand(
             new_.x = scaleLine.x2();
             new_.y = scaleLine.y2();
 
-            delta = embVector_subtract(new_, old);
+            delta = emb_vector_subtract(new_, old);
         }
     }
 }
@@ -3455,8 +3565,8 @@ void
 UndoableCommand::rotate(EmbVector pivot, EmbReal rot)
 {
     EmbReal rad = radians(rot);
-    EmbVector p = embVector_subtract(to_EmbVector(object->scenePos()), pivot);
-    EmbVector rotv = embVector_add(rotate_vector(p, rad), pivot);
+    EmbVector p = emb_vector_subtract(to_EmbVector(object->scenePos()), pivot);
+    EmbVector rotv = emb_vector_add(rotate_vector(p, rad), pivot);
 
     object->setPos(rotv.x, rotv.y);
     object->setRotation(object->rotation() + rot);
