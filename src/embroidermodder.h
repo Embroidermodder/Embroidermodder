@@ -338,48 +338,6 @@ signals:
 };
 
 /* . */
-class CmdPromptSplitter : public QSplitter
-{
-    Q_OBJECT
-
-public:
-    CmdPromptSplitter(QWidget* parent = 0);
-    ~CmdPromptSplitter() {}
-
-protected:
-    QSplitterHandle* createHandle();
-
-signals:
-    void pressResizeHistory(int y);
-    void releaseResizeHistory(int y);
-    void moveResizeHistory(int y);
-};
-
-/* . */
-class CmdPromptHandle : public QSplitterHandle
-{
-    Q_OBJECT
-
-public:
-    CmdPromptHandle(Qt::Orientation orientation, QSplitter* parent);
-    ~CmdPromptHandle() {}
-
-    int pressY;
-    int releaseY;
-    int moveY;
-
-protected:
-    void mousePressEvent(QMouseEvent* e);
-    void mouseReleaseEvent(QMouseEvent* e);
-    void mouseMoveEvent(QMouseEvent* e);
-
-signals:
-    void handlePressed(int y);
-    void handleReleased(int y);
-    void handleMoved(int y);
-};
-
-/* . */
 class CmdPrompt : public QWidget
 {
     Q_OBJECT
@@ -392,8 +350,6 @@ public:
     CmdPromptHistory* promptHistory;
     QVBoxLayout* promptVBoxLayout;
     QFrame* promptDivider;
-
-    CmdPromptSplitter* promptSplitter;
 
     QString styleHash[10];
     void updateStyle();
@@ -422,8 +378,6 @@ public slots:
     void setPromptFontFamily(QString );
     void setPromptFontStyle(QString );
     void setPromptFontSize(int);
-
-    void floatingChanged(bool);
 
     void saveHistory(QString fileName, bool html);
 

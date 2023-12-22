@@ -732,21 +732,12 @@ CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
 
     promptInput = new CmdPromptInput(this);
     promptHistory = new CmdPromptHistory();
-    promptDivider = new QFrame(this);
     promptVBoxLayout = new QVBoxLayout(this);
-
-    promptSplitter = new CmdPromptSplitter(this);
 
     this->setFocusProxy(promptInput);
     promptHistory->setFocusProxy(promptInput);
 
-    promptDivider->setLineWidth(1);
-    promptDivider->setFrameStyle(QFrame::HLine);
-    promptDivider->setMaximumSize(QWIDGETSIZE_MAX, 1);
-
-    promptVBoxLayout->addWidget(promptSplitter);
     promptVBoxLayout->addWidget(promptHistory);
-    promptVBoxLayout->addWidget(promptDivider);
     promptVBoxLayout->addWidget(promptInput);
 
     promptVBoxLayout->setSpacing(0);
@@ -777,19 +768,6 @@ CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
     connect(promptInput, SIGNAL(showSettings()), this, SIGNAL(showSettings()));
 
     connect(promptHistory, SIGNAL(historyAppended(QString)), this, SIGNAL(historyAppended(QString)));
-}
-
-/* . */
-void
-CmdPrompt::floatingChanged(bool isFloating)
-{
-    debug_message("CmdPrompt floatingChanged(%d)", isFloating);
-    if (isFloating) {
-        promptSplitter->hide();
-    }
-    else {
-        promptSplitter->show();
-    }
 }
 
 /* . */
@@ -916,63 +894,6 @@ CmdPrompt::setPrefix(QString txt)
     promptInput->setText(txt);
 }
 
-/* CmdPromptSplitter parent */
-CmdPromptSplitter::CmdPromptSplitter(QWidget* parent) : QSplitter(parent)
-{
-    debug_message("CmdPromptSplitter Constructor");
-    setObjectName("Command Prompt Splitter");
-
-    setOrientation(Qt::Vertical);
-    //NOTE: Add two empty widgets just so we have a handle to grab
-    addWidget(new QWidget(this)); addWidget(new QWidget(this));
-
-    connect(this, SIGNAL(pressResizeHistory(int)),   parent, SLOT(startResizingTheHistory(int)));
-    connect(this, SIGNAL(releaseResizeHistory(int)), parent, SLOT(stopResizingTheHistory(int)));
-    connect(this, SIGNAL(moveResizeHistory(int)),    parent, SLOT(resizeTheHistory(int)));
-}
-
-/* Create handle for this command prompt. */
-QSplitterHandle* CmdPromptSplitter::createHandle()
-{
-    return new CmdPromptHandle(orientation(), this);
-}
-
-/* Create command prompt handle object. */
-CmdPromptHandle::CmdPromptHandle(Qt::Orientation orientation, QSplitter* parent) : QSplitterHandle(orientation, parent)
-{
-    debug_message("CmdPromptHandle Constructor");
-    setObjectName("Command Prompt Handle");
-
-    connect(this, SIGNAL(handlePressed(int)),  parent, SIGNAL(pressResizeHistory(int)));
-    connect(this, SIGNAL(handleReleased(int)), parent, SIGNAL(releaseResizeHistory(int)));
-    connect(this, SIGNAL(handleMoved(int)),    parent, SIGNAL(moveResizeHistory(int)));
-}
-
-/* Process mouse press in the command prompt handle context. */
-void
-CmdPromptHandle::mousePressEvent(QMouseEvent* e)
-{
-    pressY = e->globalPosition().y();
-    emit handlePressed(pressY);
-}
-
-/* Process mouse release in the command prompt handle context. */
-void
-CmdPromptHandle::mouseReleaseEvent(QMouseEvent* e)
-{
-    releaseY = e->globalPosition().y();
-    emit handleReleased(releaseY);
-}
-
-/* Process mouse move in the command prompt handle context. */
-void
-CmdPromptHandle::mouseMoveEvent(QMouseEvent* e)
-{
-    moveY = e->globalPosition().y();
-    int dY = moveY - pressY;
-    emit handleMoved(dY);
-}
-
 /* CmdPromptHistory */
 CmdPromptHistory::CmdPromptHistory(QWidget* parent) : QTextBrowser(parent)
 {
@@ -988,64 +909,18 @@ CmdPromptHistory::CmdPromptHistory(QWidget* parent) : QTextBrowser(parent)
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 }
 
-/* ApplyFormatting txt prefixLength */
-QString CmdPromptHistory::applyFormatting(QString  txt, int prefixLength)
+QString
+CmdPromptHistory::applyFormatting(QString txt, int prefixLength)
 {
-    QString prefix = txt.left(prefixLength);
-    QString usrtxt = txt.right(txt.length()-prefixLength);
-
-    int start = -1;
-    int stop = -1;
-
-    //Bold Prefix
-    prefix.prepend("<b>");
-    prefix.append("</b>");
-
-    //Keywords
-    start = prefix.indexOf('[');
-    stop = prefix.lastIndexOf(']');
-    if (start != -1 && stop != -1 && start < stop) {
-        for (int i = stop; i >= start; i--) {
-            if (prefix.at(i) == ']') {
-                prefix.insert(i, "</font>");
-            }
-            if (prefix.at(i) == '[') {
-                prefix.insert(i+1, "<font color=\"#0095FF\">");
-            }
-            if (prefix.at(i) == '/') {
-                prefix.insert(i+1, "<font color=\"#0095FF\">");
-                prefix.insert(i, "</font>");
-            }
-        }
-    }
-
-    //Default Values
-    start = prefix.indexOf('{');
-    stop = prefix.lastIndexOf('}');
-    if (start != -1 && stop != -1 && start < stop) {
-        for (int i = stop; i >= start; i--) {
-            if (prefix.at(i) == '}') {
-                prefix.insert(i, "</font>");
-            }
-            if (prefix.at(i) == '{') {
-                prefix.insert(i+1, "<font color=\"#00AA00\">");
-            }
-        }
-    }
-
-    return prefix + usrtxt;
+    return txt;
 }
 
-/* CmdPromptHistory::appendHistory
- * txt
- * prefixLength
- */
+/* . */
 void
 CmdPromptHistory::appendHistory(QString txt, int prefixLength)
 {
-    QString formatStr = applyFormatting(txt, prefixLength);
-    this->append(formatStr);
-    emit historyAppended(formatStr);
+    this->append(txt);
+    emit historyAppended(txt);
     this->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
 }
 
