@@ -188,8 +188,7 @@ git submodule update
 
 cmake -S . -B"build" -G"Unix Makefiles" -DCMAKE_BUILD_TYPE="Debug"
 cd build
-cp ../ZLIB-LICENSE.txt .
-cp -r ../src/* .
+cp -r ../assets/* .
 cmake --build .
 cat build.log
 cd ..
