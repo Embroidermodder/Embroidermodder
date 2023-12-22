@@ -1192,6 +1192,7 @@ extern const char *geometry_subcommands[];
 
 /* Widget data */
 extern WidgetData grid_geometry_widgets[];
+extern WidgetData qsnap_mode_checkboxes[];
 
 #ifdef __cplusplus
 }

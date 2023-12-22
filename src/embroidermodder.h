@@ -77,16 +77,7 @@ QPointF to_QPointF(EmbVector a);
 EmbVector to_EmbVector(QPointF a);
 
 QIcon swatch(int32_t c);
-
-/* Interface creation functions. */
-QWidget *make_widget(QWidget *parent, WidgetData data);
-QDoubleSpinBox *make_spinbox(QWidget *gb, Node *d,
-    QString object_name, EmbReal single_step, EmbReal lower, EmbReal upper,
-    int key);
-QCheckBox *make_checkbox(QGroupBox *gb, Node *d,
-    const char *label, const char *icon, int key);
-QLabel *create_label(QObject *gb, WidgetData data);
-QDoubleSpinBox *create_labelled_spinbox(QGroupBox *gb, WidgetData *widget);
+QWidget *make_widget(QWidget *parent, Node *d, WidgetData data);
 
 /* The Geometry class
  *

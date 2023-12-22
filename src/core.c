@@ -2207,13 +2207,13 @@ Setting settings_data[SETTINGS_TOTAL] = {
         .id = ST_GRID_CENTER_X,
         .key = "grid_center_x",
         .value = "0.0",
-        .type = 'i'
+        .type = 'r'
     },
     {
         .id = ST_GRID_CENTER_Y,
         .key = "grid_center_y",
         .value = "0.0",
-        .type = 'i'
+        .type = 'r'
     },
     {
         .id = ST_GRID_SIZE_X,

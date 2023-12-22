@@ -135,34 +135,10 @@ add_to_path(QPainterPath path, EmbVector scale, std::string command)
 void
 set_enabled(QObject* parent, const char *key, bool enabled)
 {
-    if (!strncmp(key, "lineEdit", 8)) {
-        QLabel* label = parent->findChild<QLabel*>(key);
-        if (label) {
-            label->setEnabled(enabled);
-        }
-        return;
-    }
-    if (!strncmp(key, "comboBox", 8)) {
-        QComboBox* comboBox = parent->findChild<QComboBox*>(key);
-        if (comboBox) {
-            comboBox->setEnabled(enabled);
-        }
-        return;
-    }
-    if (!strncmp(key, "checkBox", 8)) {
-        QCheckBox* checkBox = parent->findChild<QCheckBox*>(key);
-        if (checkBox) {
-            checkBox->setEnabled(enabled);
-        }
-        return;
-    }
-    if (!strncmp(key, "button", 6)) {
-        QPushButton* button = parent->findChild<QPushButton*>(key);
-        if (button) {
-            button->setEnabled(enabled);
-        }
-        return;
-    }
+	QWidget* w = parent->findChild<QWidget*>(key);
+	if (w) {
+		w->setEnabled(enabled);
+	}
 }
 
 /* Set visibility of parent's object that has the name given by key to
@@ -173,20 +149,10 @@ set_enabled(QObject* parent, const char *key, bool enabled)
 void
 set_visibility(QObject* parent, const char *key, bool visibility)
 {
-    if (!strncmp(key, "lineEdit", 8)) {
-        QLabel* label = parent->findChild<QLabel*>(key);
-        if (label) {
-            label->setVisible(visibility);
-        }
-        return;
-    }
-    if (!strncmp(key, "spinBox", 7)) {
-        QDoubleSpinBox* spinbox = parent->findChild<QDoubleSpinBox*>(key);
-        if (spinbox) {
-            spinbox->setVisible(visibility);
-        }
-        return;
-    }
+	QWidget* w = parent->findChild<QWidget*>(key);
+	if (w) {
+		w->setVisible(visibility);
+	}
 }
 
 /* Turn our own markup in config.toml into the various UI elements.
@@ -199,7 +165,7 @@ set_visibility(QObject* parent, const char *key, bool visibility)
  * This function should take a parent object to build...
  */
 QWidget *
-make_widget(QWidget *parent, WidgetData data)
+make_widget(QWidget *parent, Node *d, WidgetData data)
 {
     QWidget *obj = new QWidget(parent);
     switch (data.type) {
@@ -214,29 +180,39 @@ make_widget(QWidget *parent, WidgetData data)
     }
 
     case WIDGET_CHECKBOX: {
-        QCheckBox *checkBox = qobject_cast<QCheckBox*>(obj);
-        // make_checkbox(gb, description, label, icon, key);
-        break;
+        QCheckBox *checkBox = new QCheckBox(translate_str(data.label), parent);
+        QString s = "checkbox";
+        s += data.label;
+        checkBox->setIcon(_mainWin->create_icon(data.icon));
+        checkBox->setObjectName(s);
+    	checkBox->setChecked(d[data.key].i);
+    	QObject::connect(checkBox, &QCheckBox::stateChanged, _mainWin,
+	    	[=](int x) { d[data.key].i = x; });
+        return checkBox;
     }
 
-    case WIDGET_SPINBOX: {
-        QLabel *label = qobject_cast<QLabel*>(obj);
-        break;
-    }
-
+    case WIDGET_SPINBOX:
     case WIDGET_DOUBLE_SPINBOX: {
-        QString spinbox_object_name(data.label);
-        spinbox_object_name = "spinBox" + spinbox_object_name.simplified().remove(' ');
-        QDoubleSpinBox* spinBox = make_spinbox(parent, dialog, spinbox_object_name,
-            data.single_step, data.lower, data.upper, data.key);
+        debug_message("SPINBOX %s %d", data.label, data.key);
+
+        QDoubleSpinBox* spinBox = new QDoubleSpinBox(parent);
+        QString s = "spinbox";
+        s += data.label;
+        spinBox->setObjectName(s);
+        spinBox->setSingleStep(data.single_step);
+        spinBox->setRange(data.lower, data.upper);
+    	//spinBox->setValue(d[data.key].r);
+        debug_message("Fix setValue bug");
+    	QObject::connect(spinBox, &QDoubleSpinBox::valueChanged, _mainWin,
+    		[=](double x){ d[data.key].r = (EmbReal)x; });
         return spinBox;
     }
 
     case WIDGET_LABEL: {
-        QString label_object_name(data.label);
-        label_object_name = "label" + label_object_name.simplified().remove(' ');
         QLabel* label = new QLabel(translate_str((char*)data.label), parent);
-        label->setObjectName(label_object_name);
+        QString s = "label";
+        s += data.label;
+        label->setObjectName(s);
         return label;
     }
 
@@ -269,58 +245,6 @@ make_widget(QWidget *parent, WidgetData data)
         break;
     }
     return obj;
-}
-
-/* . */
-QCheckBox *
-make_checkbox(
-    QGroupBox *gb,
-    Node *dictionary,
-    const char *label,
-    const char *icon,
-    int key)
-{
-    QCheckBox *checkBox = new QCheckBox(translate_str(label), gb);
-    checkBox->setIcon(_mainWin->create_icon(icon));
-    /* checkBox->setName(); */
-	checkBox->setChecked(dictionary[key].i);
-	QObject::connect(checkBox, &QCheckBox::stateChanged, _mainWin,
-		[=](int x) { dictionary[key].i = x; });
-    return checkBox;
-}
-
-/* TODO: Make spinbox using this toml syntax:
- *
- *     [zoom_level_spinbox]
- *     type = "doubleSpinBox"
- *     object_name = "Zoom Level"
- *     single_step = 0.1
- *     lower_bound = -10
- *     upper_bound = 10
- *     key = "settings.zoom_level"
- *
- * The content (not including):
- *
- *     QDoubleSpinBox *sb = make_spinbox(gb, desc);
- */
-QDoubleSpinBox *
-make_spinbox(
-    QWidget *gb,
-    Node *dictionary,
-    QString object_name,
-    EmbReal single_step,
-    EmbReal lower,
-    EmbReal upper,
-    int key)
-{
-    QDoubleSpinBox* spinBox = new QDoubleSpinBox(gb);
-    spinBox->setObjectName(object_name);
-    spinBox->setSingleStep(single_step);
-    spinBox->setRange(lower, upper);
-	spinBox->setValue(dictionary[key].r);
-	QObject::connect(spinBox, &QDoubleSpinBox::valueChanged, _mainWin,
-		[=](double x){ dictionary[key].r = (EmbReal)x; });
-    return spinBox;
 }
 
 /* Create the image widget for filename. */
