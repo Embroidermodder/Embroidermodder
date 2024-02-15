@@ -112,7 +112,7 @@ A (no longer current) Embroidermodder 2 command excerpt:
 
 ![scripting screenshot](images/features-scripting-1.png)
 
-## Building
+## Dependencies
 
 To build Embroidermodder 2 from source you will need at least
 [the Embroidermodder 2 source code itself](https://github.com/Embroidermodder/Embroidermodder), a build environment including [CMake](https://cmake.org) and [Qt](http://www.qt-project.org) (version >= 6.0). For advice on how to get these,
@@ -171,9 +171,19 @@ installers (not recommended):
 * Git Bash: https://gitforwindows.org/
 * A backend for CMake like Ninja: https://ninja-build.org/
 
-## Building
+#### MSYS2
 
-On all systems with Bash, the following should work:
+After installing [MSYS2](https://www.msys2.org), run this command in a MINGW64 shell:
+
+```sh
+pacman -S mingw-w64-clang-x86_64-qt6 cmake gcc make git
+```
+
+At the time of writing, this will use around 2Gb of disk space. Then continue to [build](#build).
+
+## Build
+
+Assuming you have the dependencies for your system, on all systems with Bash, the following should work:
 
 ```sh
 bash build.sh
