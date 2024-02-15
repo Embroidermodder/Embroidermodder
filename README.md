@@ -115,7 +115,8 @@ A (no longer current) Embroidermodder 2 command excerpt:
 ## Dependencies
 
 To build Embroidermodder 2 from source you will need at least
-[the Embroidermodder 2 source code itself](https://github.com/Embroidermodder/Embroidermodder), a build environment including [CMake](https://cmake.org) and [Qt](http://www.qt-project.org) (version >= 6.0). For advice on how to get these,
+[the Embroidermodder 2 source code itself](https://github.com/Embroidermodder/Embroidermodder),
+a build environment including [CMake](https://cmake.org) and [Qt](http://www.qt-project.org) (version >= 6.0). For advice on how to get these,
 see the following subsections.
 
 You will also need the git submodules, which can be collected by running these lines
@@ -125,11 +126,6 @@ from the embroidermodder source directory:
 git submodule init
 git submodule update
 ```
-
-Optionally, you may want to add:
-
-- [KDE](http://www.kde.org) for thumbnailer
-- [Valgrind](http://www.valgrind.org) for debugging
 
 ### Debian/Ubuntu repository packages
 
@@ -152,26 +148,7 @@ by opening a terminal and issuing this command:
 sudo yum install git gdb gcc-c++ qt-devel kdelibs-devel valgrind
 ```
 
-### Windows Advice
-
-On Windows, we recommend doing the same as Debian/Ubuntu in [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) although other
-options like [Cygwin](https://www.cygwin.com/)
-and [MSYS2](https://www.msys2.org/) are available.
-
-Our behind-the-scenes
-Windows build uses Python to get the Qt libraries [like this](https://github.com/Embroidermodder/testing-site/blob/main/scripts/package_em2_msi.sh).
-
-If you want to do this some other way, like in an IDE, run these
-installers (not recommended):
-
-* CMake: https://cmake.org/download/#latest
-* Qt: http://www.qt-project.org
-* Visual Studio Code: https://code.visualstudio.com/
-* Some version of MinGW for `gcc`:` https://www.mingw-w64.org/downloads/
-* Git Bash: https://gitforwindows.org/
-* A backend for CMake like Ninja: https://ninja-build.org/
-
-#### MSYS2
+### Windows (MSYS2)
 
 After installing [MSYS2](https://www.msys2.org), run this command in a MINGW64 shell:
 
@@ -180,6 +157,25 @@ pacman -S mingw-w64-clang-x86_64-qt6 cmake gcc make git
 ```
 
 At the time of writing, this will use around 2Gb of disk space. Then continue to [build](#build).
+
+### Windows (Without MinGW or MSYS2)
+
+If you have a development environment and for some reason want to use that over MSYS2 then ensure you run the installers for:
+
+1. CMake: https://cmake.org/download/#latest
+2. Qt: http://www.qt-project.org
+3. A Text Editor for Code like Visual Studio Code: https://code.visualstudio.com/
+4. A C compiler, like `gcc`, `cl`, `clang` or `tcc`.
+5. Git Bash: https://gitforwindows.org/
+6. A backend for CMake like Ninja: https://ninja-build.org/
+
+Remember to add these to your `PATH` for scripts to use them.
+
+This would give a similar build experience to standard development on Windows, but we recommend you use MSYS2.
+
+Note that our behind-the-scenes Windows build uses Python to get the Qt libraries
+[like this](https://github.com/Embroidermodder/libembroidery/blob/main/bin/build.sh).
+
 
 ## Build
 
