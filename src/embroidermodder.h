@@ -1133,4 +1133,22 @@ protected:
     void enterEvent(QEvent* event);
 };
 
+
+void addPath(View *view, Geometry *obj);
+void saveObject(int objType, View *view, Geometry *obj);
+void saveObjectAsStitches(int objType, View *view, Geometry *obj);
+
+void toPolyline(
+    View* view,
+    QPointF objPos,
+    QPainterPath objPath,
+    QString layer,
+    QColor color,
+    QString lineType,
+    QString lineWeight);
+
+
+bool save(View *view, QString f);
+
+
 #endif
