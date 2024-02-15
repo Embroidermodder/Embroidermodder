@@ -20,7 +20,7 @@
 #include <QtOpenGL>
 
 extern "C" {
-EmbVector embVector_make(EmbReal x, EmbReal y);
+EmbVector emb_vector_make(EmbReal x, EmbReal y);
 }
 
 /* Convert from QList to std::vector. */
@@ -526,7 +526,7 @@ View::createGridRect()
         EmbVector c;
         c.x = settings[ST_GRID_CENTER_X].r;
         c.y = -settings[ST_GRID_CENTER_Y].r;
-        EmbVector d = embVector_subtract(c, b);
+        EmbVector d = emb_vector_subtract(c, b);
         gridPath.translate(d.x, d.y);
     }
 }
@@ -1539,9 +1539,9 @@ View::mouseMoveEvent(QMouseEvent* event)
                 sceneMousePoint.x(), sceneMousePoint.y()).angle();
 
             EmbReal rad = radians(rot-mouseAngle);
-            EmbVector u = embVector_unit(rad);
+            EmbVector u = emb_vector_unit(rad);
             EmbVector rot_v;
-            EmbVector p = embVector_make(-preview_point.x, -preview_point.y);
+            EmbVector p = emb_vector_make(-preview_point.x, -preview_point.y);
             rot_v.x = p.x*u.x - p.y*u.y;
             rot_v.y = p.x*u.y + p.y*u.x;
             rot_v.x += p.x;
@@ -1623,7 +1623,7 @@ View::mouseReleaseEvent(QMouseEvent* event)
             delta.x = sceneMousePoint.x()-scenePressPoint.x();
             delta.y = sceneMousePoint.y()-scenePressPoint.y();
             /* Ensure that moving only happens if the mouse has moved. */
-            if (embVector_length(delta) > 0.01) {
+            if (emb_vector_length(delta) > 0.01) {
                 moveSelected(delta);
             }
             movingActive = false;

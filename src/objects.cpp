@@ -3,7 +3,7 @@
  *
  * ------------------------------------------------------------
  *
- * Copyright 2013-2022 The Embroidermodder Team
+ * Copyright 2013-2024 The Embroidermodder Team
  * Embroidermodder 2 is Open Source Software.
  * See LICENSE for licensing terms.
  *
@@ -989,7 +989,7 @@ void
 Geometry::setObjectEndPoint1(EmbVector endPt1)
 {
     EmbVector endPt2 = to_EmbVector(objectEndPoint2());
-    EmbVector delta = embVector_subtract(endPt2, endPt1);
+    EmbVector delta = emb_vector_subtract(endPt2, endPt1);
     // setScale(1); ?
     setRotation(0);
     setLine(0, 0, delta.x, delta.y);
@@ -1004,7 +1004,7 @@ void
 Geometry::setObjectEndPoint2(EmbVector endPt2)
 {
     EmbVector endPt1 = to_EmbVector(scenePos());
-    EmbVector delta = embVector_subtract(endPt2, endPt1);
+    EmbVector delta = emb_vector_subtract(endPt2, endPt1);
     setRotation(0);
     // setScale(1); ?
     setLine(0, 0, delta.x, delta.y);
@@ -1331,7 +1331,7 @@ Geometry::updateRubber(QPainter* painter)
             arc.start = to_EmbVector(sceneTan1Point);
             arc.mid = to_EmbVector(sceneTan2Point);
             arc.end = to_EmbVector(sceneTan3Point);
-            EmbVector sceneCenter = embArc_center(arc);
+            EmbVector sceneCenter = emb_arc_center(arc);
             QPointF sceneCenterPoint = to_QPointF(sceneCenter);
             QLineF sceneLine(sceneCenterPoint, sceneTan3Point);
             setObjectCenter(to_EmbVector(sceneCenterPoint));
@@ -1637,7 +1637,7 @@ Geometry::objectQuadrant0()
 {
     if (Type == OBJ_TYPE_ELLIPSE) {
         EmbReal rot = radians(rotation());
-        EmbVector v = embVector_scale(embVector_unit(rot), objectWidth()/2.0);
+        EmbVector v = emb_vector_scale(emb_vector_unit(rot), objectWidth()/2.0);
         return scenePos() + to_QPointF(v);
     }
     return scenePos() + QPointF(objectRadius(), 0);
@@ -1649,7 +1649,7 @@ Geometry::objectQuadrant90()
 {
     if (Type == OBJ_TYPE_ELLIPSE) {
         EmbReal rot = radians(rotation()+90.0);
-        EmbVector v = embVector_scale(embVector_unit(rot), objectHeight()/2.0);
+        EmbVector v = emb_vector_scale(emb_vector_unit(rot), objectHeight()/2.0);
         return scenePos() + to_QPointF(v);
     }
     return scenePos() + QPointF(0,-objectRadius());
@@ -1661,7 +1661,7 @@ Geometry::objectQuadrant180()
 {
     if (Type == OBJ_TYPE_ELLIPSE) {
         EmbReal rot = radians(rotation()+180.0);
-        EmbVector v = embVector_scale(embVector_unit(rot), objectWidth()/2.0);
+        EmbVector v = emb_vector_scale(emb_vector_unit(rot), objectWidth()/2.0);
         return scenePos() + to_QPointF(v);
     }
     return scenePos() + QPointF(-objectRadius(),0);
@@ -1673,7 +1673,7 @@ Geometry::objectQuadrant270()
 {
     if (Type == OBJ_TYPE_ELLIPSE) {
         EmbReal rot = radians(rotation()+270.0);
-        EmbVector v = embVector_scale(embVector_unit(rot), objectHeight()/2.0);
+        EmbVector v = emb_vector_scale(emb_vector_unit(rot), objectHeight()/2.0);
         return scenePos() + to_QPointF(v);
     }
     return scenePos() + QPointF(0, objectRadius());
@@ -1964,15 +1964,15 @@ typedef std::string String;
  */
 void Geometry::calculateArcData(EmbArc arc)
 {
-    EmbVector center = embArc_center(arc);
+    EmbVector center = emb_arc_center(arc);
 
-    arcStartPoint = to_QPointF(embVector_subtract(arc.start, center));
-    arcMidPoint = to_QPointF(embVector_subtract(arc.mid, center));
-    arcEndPoint = to_QPointF(embVector_subtract(arc.end, center));
+    arcStartPoint = to_QPointF(emb_vector_subtract(arc.start, center));
+    arcMidPoint = to_QPointF(emb_vector_subtract(arc.mid, center));
+    arcEndPoint = to_QPointF(emb_vector_subtract(arc.end, center));
 
     setPos(center.x, center.y);
 
-    EmbReal radius = embVector_distance(center, arc.mid);
+    EmbReal radius = emb_vector_distance(center, arc.mid);
     updateArcRect(radius);
     updatePath();
     setRotation(0);
@@ -2171,7 +2171,7 @@ EmbVector
 rotate_vector(EmbVector v, EmbReal alpha)
 {
     EmbVector rotv;
-    EmbVector u = embVector_unit(alpha);
+    EmbVector u = emb_vector_unit(alpha);
     rotv.x = v.x*u.x - v.y*u.y;
     rotv.y = v.x*u.y + v.y*u.x;
     return rotv;
@@ -2186,7 +2186,7 @@ Geometry::objectStartPoint()
     if (Type == OBJ_TYPE_ARC) {
         start_point = arcMidPoint;
     }
-    EmbVector start = embVector_scale(to_EmbVector(start_point), scale());
+    EmbVector start = emb_vector_scale(to_EmbVector(start_point), scale());
     QPointF rotv = to_QPointF(rotate_vector(start, rot));
 
     return scenePos() + rotv;
@@ -2201,7 +2201,7 @@ Geometry::objectMidPoint()
     if (Type == OBJ_TYPE_ARC) {
         mid_point = arcMidPoint;
     }
-    EmbVector mid = embVector_scale(to_EmbVector(mid_point), scale());
+    EmbVector mid = emb_vector_scale(to_EmbVector(mid_point), scale());
     QPointF rotv = to_QPointF(rotate_vector(mid, rot));
 
     return scenePos() + rotv;
@@ -2215,7 +2215,7 @@ QPointF Geometry::objectEndPoint()
     if (Type == OBJ_TYPE_ARC) {
         end_point = arcEndPoint;
     }
-    EmbVector end = embVector_scale(to_EmbVector(end_point), scale());
+    EmbVector end = emb_vector_scale(to_EmbVector(end_point), scale());
     QPointF rotv = to_QPointF(rotate_vector(end, rot));
 
     return scenePos() + rotv;
@@ -2267,7 +2267,7 @@ Geometry::objectChord(void)
 {
     switch (Type) {
     case OBJ_TYPE_ARC: {
-        return embVector_distance(
+        return emb_vector_distance(
             to_EmbVector(objectStartPoint()),
             to_EmbVector(objectEndPoint()));
     }
@@ -2314,7 +2314,7 @@ Geometry::objectClockwise()
         arc.mid.y = -objectMidPoint().y();
         arc.end.x = objectEndPoint().x();
         arc.end.y = -objectEndPoint().y();
-        if (embArc_clockwise(arc)) {
+        if (emb_arc_clockwise(arc)) {
             return true;
         }
         break;
@@ -2572,7 +2572,7 @@ Geometry::objectTopLeft()
 {
     EmbReal rot = radians(rotation());
     QPointF tl = rect().topLeft();
-    EmbVector ptl = embVector_scale(to_EmbVector(tl), scale());
+    EmbVector ptl = emb_vector_scale(to_EmbVector(tl), scale());
     EmbVector ptlRot = rotate_vector(ptl, rot);
 
     return scenePos() + to_QPointF(ptlRot);
@@ -2584,7 +2584,7 @@ Geometry::objectTopRight()
 {
     EmbReal rot = radians(rotation());
     QPointF tr = rect().topRight();
-    EmbVector ptr = embVector_scale(to_EmbVector(tr), scale());
+    EmbVector ptr = emb_vector_scale(to_EmbVector(tr), scale());
     EmbVector ptrRot = rotate_vector(ptr, rot);
 
     return (scenePos() + QPointF(ptrRot.x, ptrRot.y));
@@ -2596,7 +2596,7 @@ Geometry::objectBottomLeft()
 {
     EmbReal rot = radians(rotation());
     QPointF bl = rect().bottomLeft();
-    EmbVector pbl = embVector_scale(to_EmbVector(bl), scale());
+    EmbVector pbl = emb_vector_scale(to_EmbVector(bl), scale());
     EmbVector pblRot = rotate_vector(pbl, rot);
 
     return scenePos() + to_QPointF(pblRot);
@@ -2608,7 +2608,7 @@ Geometry::objectBottomRight()
 {
     EmbReal rot = radians(rotation());
     QPointF br = rect().bottomRight();
-    EmbVector pbr = embVector_scale(to_EmbVector(br), scale());
+    EmbVector pbr = emb_vector_scale(to_EmbVector(br), scale());
     EmbVector pbrRot = rotate_vector(pbr, rot);
 
     return scenePos() + to_QPointF(pbrRot);
@@ -2811,7 +2811,7 @@ save(View* view, QString fileName)
         return false;
     }
 
-    EmbPattern* pattern = embPattern_create();
+    EmbPattern* pattern = emb_pattern_create();
     if (!pattern) {
         debug_message("Could not allocate memory for embroidery pattern");
         return false;
@@ -2836,17 +2836,17 @@ save(View* view, QString fileName)
     /*
     //TODO: handle EMBFORMAT_STCHANDOBJ also
     if (view->formatType == EMBFORMAT_STITCHONLY)
-        embPattern_movePolylinesToStitchList(pattern); //TODO: handle all objects like this
+        emb_pattern_movePolylinesToStitchList(pattern); //TODO: handle all objects like this
     */
 
     // TODO: check the embLog for errors and if any exist, report them.
-    writeSuccessful = embPattern_writeAuto(pattern, qPrintable(fileName));
+    writeSuccessful = emb_pattern_writeAuto(pattern, qPrintable(fileName));
     if (!writeSuccessful) {
         qDebug("Writing file %s was unsuccessful", qPrintable(fileName));
     }
 
     //TODO: check the embLog for errors and if any exist, report them.
-    embPattern_free(pattern);
+    emb_pattern_free(pattern);
 
     return writeSuccessful;
 }
@@ -3010,7 +3010,7 @@ saveObject(int objType, View *view, Geometry *obj)
         break;
     }
     case OBJ_TYPE_CIRCLE: {
-        embPattern_addCircleAbs(view->pattern, obj->gdata.circle);
+        emb_pattern_addCircleAbs(view->pattern, obj->gdata.circle);
         break;
     }
     case OBJ_TYPE_DIMALIGNED: {
@@ -3046,7 +3046,7 @@ saveObject(int objType, View *view, Geometry *obj)
         break;
     }
     case OBJ_TYPE_ELLIPSE: {
-        embPattern_addEllipseAbs(view->pattern, obj->gdata.ellipse);
+        emb_pattern_addEllipseAbs(view->pattern, obj->gdata.ellipse);
         break;
     }
     case OBJ_TYPE_ELLIPSEARC: {
@@ -3070,12 +3070,12 @@ saveObject(int objType, View *view, Geometry *obj)
         break;
     }
     case OBJ_TYPE_LINE: {
-        embPattern_addLineAbs(view->pattern, obj->gdata.line);
+        emb_pattern_addLineAbs(view->pattern, obj->gdata.line);
         break;
     }
 
     case OBJ_TYPE_POINT: {
-        embPattern_addPointAbs(view->pattern, obj->gdata.point);
+        emb_pattern_addPointAbs(view->pattern, obj->gdata.point);
         break;
     }
 
@@ -3097,7 +3097,7 @@ saveObject(int objType, View *view, Geometry *obj)
     }
 
     case OBJ_TYPE_RECTANGLE: {
-        embPattern_addRectAbs(view->pattern, obj->gdata.rect);
+        emb_pattern_addRectAbs(view->pattern, obj->gdata.rect);
         break;
     }
 
@@ -3142,10 +3142,10 @@ addPath(View *view, Geometry *obj)
         QPainterPath::Element element = path.elementAt(i);
         /*
         if (element.isMoveTo()) {
-            embPattern_addStitchAbs(view->pattern, (element.x + start.x), -(element.y + start.y), TRIM);
+            emb_pattern_addStitchAbs(view->pattern, (element.x + start.x), -(element.y + start.y), TRIM);
         }
         else if (element.isLineTo()) {
-            embPattern_addStitchAbs(view->pattern, (element.x + start.x), -(element.y + start.y), NORMAL);
+            emb_pattern_addStitchAbs(view->pattern, (element.x + start.x), -(element.y + start.y), NORMAL);
         }
         else if (element.isCurveTo()) {
             QPainterPath::Element P1 = path.elementAt(i-1); // start point
@@ -3153,15 +3153,15 @@ addPath(View *view, Geometry *obj)
             QPainterPath::Element P3 = path.elementAt(i+1); // control point
             QPainterPath::Element P4 = path.elementAt(i+2); // end point
 
-            embPattern_addStitchAbs(P4.x, -P4.y, NORMAL); //TODO: This is temporary
+            emb_pattern_addStitchAbs(P4.x, -P4.y, NORMAL); //TODO: This is temporary
             //TODO: Curved Polyline segments are always arcs
         }
         */
     }
     /*
-    embPattern_addStitchRel(view->pattern, 0, 0, STOP);
+    emb_pattern_addStitchRel(view->pattern, 0, 0, STOP);
     QColor c = obj->pen().color();
-    embPattern_addThread(view->pattern, c.red(), c.green(), c.blue(), "", "");
+    emb_pattern_addThread(view->pattern, c.red(), c.green(), c.blue(), "", "");
     */
 }
 
@@ -3185,12 +3185,12 @@ toPolyline(
     for (int i = 0; i < objPath.elementCount(); ++i) {
         element = objPath.elementAt(i);
         if (!pointList) {
-            pointList = embArray_create(EMB_POINT);
+            pointList = emb_array_create(EMB_POINT);
         }
         EmbPoint po;
         po.position.x = element.x + objPos.x();
         po.position.y = -(element.y + objPos.y());
-        embArray_addPoint(pointList, po);
+        emb_array_addPoint(pointList, po);
     }
 
     EmbColor color_out;
@@ -3200,7 +3200,7 @@ toPolyline(
 
     /* TODO: FIX
     EmbPolyline* polyObject = embPolyline_init(pointList, color_out, 1); //TODO: proper lineType
-    embPattern_addPolylineAbs(view->pattern, polyObject);
+    emb_pattern_addPolylineAbs(view->pattern, polyObject);
     */
 }
 

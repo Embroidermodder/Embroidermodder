@@ -1507,11 +1507,11 @@ EmbDetailsDialog::getInfo(void)
 {
     debug_message("designDetails()");
 
-    boundingRect.setRect(0, 0, 50, 100); //TODO: embPattern_calcBoundingBox(pattern);
+    boundingRect.setRect(0, 0, 50, 100); //TODO: emb_pattern_calcBoundingBox(pattern);
 
     int bin[MAX_HISTOGRAM_BINS+1];
 
-    EmbPattern* pattern = embPattern_create();
+    EmbPattern* pattern = emb_pattern_create();
     if (!pattern) {
         debug_message("Could not allocate memory for embroidery pattern\n");
         return;
@@ -1520,7 +1520,7 @@ EmbDetailsDialog::getInfo(void)
     /* TODO: This is temporary. Generate actual pattern data from the scene. */
     /* TODO: This convenience function is messed up. */
 
-    //boundingRect = embPattern_calcBoundingBox(pattern);
+    //boundingRect = emb_pattern_calcBoundingBox(pattern);
 
     EmbVector minimum, maximum;
     EmbStitch last_pos;
@@ -1549,7 +1549,7 @@ EmbDetailsDialog::getInfo(void)
         QMessageBox::warning(_mainWin,
             translate_str("No Design Loaded"),
             translate_str("<b>A design needs to be loaded or created before details can be determined.</b>"));
-        embPattern_free(pattern);
+        emb_pattern_free(pattern);
         return;
     }
 
@@ -1561,7 +1561,7 @@ EmbDetailsDialog::getInfo(void)
         EmbStitch st = pattern->stitch_list->stitch[i];
         delta.x = st.x - last_pos.x;
         delta.y = st.y - last_pos.y;
-        length = embVector_length(delta);
+        length = emb_vector_length(delta);
         totalColorLength += length;
         // can't count first normal stitch
         if (last_pos.flags != NORMAL) {
@@ -1631,7 +1631,7 @@ EmbDetailsDialog::getInfo(void)
             EmbVector delta;
             delta.x = st.x - last_pos.x;
             delta.y = st.y - last_pos.y;
-            length = embVector_length(delta);
+            length = emb_vector_length(delta);
             bin[int(floor(num_bins*length/max_stitchlength))]++;
         }
         last_pos = st;
@@ -1788,7 +1788,7 @@ MdiWindow::loadFile(std::string fileName)
     qDebug("ext: %s", qPrintable(ext));
 
     // Read
-    EmbPattern* p = embPattern_create();
+    EmbPattern* p = emb_pattern_create();
     if (!p) {
         printf("Could not allocate memory for embroidery pattern\n");
         exit(1);
@@ -1802,7 +1802,7 @@ MdiWindow::loadFile(std::string fileName)
         debug_message("Unsupported read file type: %s", fileName);
     }
     else {
-        readSuccessful = embPattern_readAuto(p, fileName.c_str());
+        readSuccessful = emb_pattern_readAuto(p, fileName.c_str());
         if (!readSuccessful) {
             readError = "Reading file was unsuccessful: " + fileName;
             debug_message("Reading file was unsuccessful: %s", fileName);
@@ -1811,7 +1811,7 @@ MdiWindow::loadFile(std::string fileName)
 
     if (readSuccessful) {
         debug_message("Starting to load the read file.");
-        //embPattern_moveStitchListToPolylines(p); //TODO: Test more
+        //emb_pattern_moveStitchListToPolylines(p); //TODO: Test more
 
         int stitchCount = p->stitch_list->count;
         qDebug("%d", stitchCount);
@@ -1995,7 +1995,7 @@ MdiWindow::loadFile(std::string fileName)
         QApplication::restoreOverrideCursor();
         QMessageBox::warning(this, translate_str("Error reading pattern"), translate_str("Cannot read pattern"));
     }
-    embPattern_free(p);
+    emb_pattern_free(p);
 
     // Clear the undo stack so it is not possible to undo past this point.
     gview->undoStack->clear();

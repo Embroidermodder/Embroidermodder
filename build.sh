@@ -7,6 +7,8 @@ VERSION="2.0.0-alpha"
 GENERATOR="Unix Makefiles"
 PLATFORM="gnu-linux"
 
+mkdir -p $BUILD_DIR
+
 if [ "$1" = "debug" ]; then
   BUILD_TYPE="Debug"
   shift
@@ -27,7 +29,7 @@ fi
 if [ "$1" = "windows-latest" ]; then
   GENERATOR="MinGW Makefiles"
 
-  python -m pip install -U pip --upgrade pip || exit 1
+  pip install -U pip --upgrade pip || exit 1
   pip install aqtinstall || exit 1
   python -m aqt install-qt windows desktop 6.5.0 win64_mingw || exit 1
 
@@ -42,7 +44,7 @@ fi
 
 cd $BUILD_DIR || exit 1
 cp -r $SRC_DIR/assets/* . || exit 1
-cp $SRC_DIR/ZLIB-LICENSE.txt . || exit 1
+#cp $SRC_DIR/ZLIB-LICENSE.txt . || exit 1
 
 cmake -S"$SRC_DIR" -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE"  || exit 1
 cmake --build . &> build.log || exit 1

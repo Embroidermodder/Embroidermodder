@@ -209,7 +209,7 @@ vulcanize(void)
 
 /* . */
 EmbVector
-embVector_make(EmbReal x, EmbReal y)
+emb_vector_make(EmbReal x, EmbReal y)
 {
     EmbVector v;
     v.x = x;
@@ -240,9 +240,9 @@ void
 report_distance(EmbVector point1, EmbVector point2)
 {
     char output[MAX_STRING_LENGTH];
-    EmbVector delta = embVector_subtract(point2, point1);
-    EmbReal dist = embVector_length(delta);
-    EmbReal angle = embVector_angle(delta);
+    EmbVector delta = emb_vector_subtract(point2, point1);
+    EmbReal dist = emb_vector_length(delta);
+    EmbReal angle = emb_vector_angle(delta);
 
     sprintf(output, "%s = %f, %s = %f",
         translate("Distance"), dist, translate("Angle"), angle);
@@ -256,7 +256,7 @@ update_curve(int style, int numPoints, EmbVector scale)
 {
     EmbReal h = (2.0*embConstantPi) / numPoints;
     for (int i = 0; i <= numPoints; i++) {
-        EmbVector v = embVector_make(1.0f, 1.0f);
+        EmbVector v = emb_vector_make(1.0f, 1.0f);
         EmbReal t = h * i;
 
         switch (style) {
@@ -342,8 +342,8 @@ geometry_init(int type)
         init_command();
         clear_selection();
         firstRun = true;
-        first = embVector_make(0.0f, 0.0f);
-        prev = embVector_make(0.0f, 0.0f);
+        first = emb_vector_make(0.0f, 0.0f);
+        prev = emb_vector_make(0.0f, 0.0f);
         prompt_output(translate("Specify first point: "));
         break;
     }
@@ -351,11 +351,11 @@ geometry_init(int type)
     case MODE_POLYGON: {
         init_command();
         clear_selection();
-        center = embVector_make(0.0f, 0.0f);
-        side1 = embVector_make(0.0f, 0.0f);
-        side2 = embVector_make(0.0f, 0.0f);
-        pointI = embVector_make(0.0f, 0.0f);
-        pointC = embVector_make(0.0f, 0.0f);
+        center = emb_vector_make(0.0f, 0.0f);
+        side1 = emb_vector_make(0.0f, 0.0f);
+        side2 = emb_vector_make(0.0f, 0.0f);
+        pointI = emb_vector_make(0.0f, 0.0f);
+        pointC = emb_vector_make(0.0f, 0.0f);
         polyType = "Inscribed"; //Default
         numSides = 4;           //Default
         mode = MODE_POLYGON_NUM_SIDES;
@@ -405,9 +405,9 @@ geometry_init(int type)
     case MODE_STAR_INIT:
         clear_selection();
         g->numPoints = 5;
-        g->center = embVector_make(0.0f, 0.0f);
-        g->point1 = embVector_make(1.0f, 1.0f);
-        g->point2 = embVector_make(2.0f, 2.0f);
+        g->center = emb_vector_make(0.0f, 0.0f);
+        g->point1 = emb_vector_make(1.0f, 1.0f);
+        g->point2 = emb_vector_make(2.0f, 2.0f);
         g->mode = MODE_STAR_NUM_POINTS;
         prompt_output(translate("Enter number of star points {5}: "));
         break;
@@ -534,7 +534,7 @@ geometry_left_click(GeometryData *g, EmbVector v)
             prompt_output(translate("Specify text height" + " {" + textSize() + "}: ");
         }
         else if (std::isnan(g->textHeight)) {
-            g->textHeight = embVector_distance(g->position, v);
+            g->textHeight = emb_vector_distance(g->position, v);
             setTextSize(g->textHeight);
             prompt_output(translate("Specify text angle") + " {" + textAngle() + "}: ");
         }
@@ -701,7 +701,7 @@ geometry_left_click(GeometryData *g, EmbVector v)
         }
         else {
             g->dest = v;
-            g->delta = embVector_subtract(g->dest, g->base);
+            g->delta = emb_vector_subtract(g->dest, g->base);
             moveSelected(g->delta);
             g->preview = false;
             end_command();
@@ -922,9 +922,9 @@ geometry_prompt(
             }
             else {
                 point2 = v;
-                center = embVector_average(point1, point2);
-                width = embVector_distance(point1, point2);
-                rot = embVector_angle(point1, point2);
+                center = emb_vector_average(point1, point2);
+                width = emb_vector_distance(point1, point2);
+                rot = emb_vector_angle(point1, point2);
                 setRubberMode("ELLIPSE_MAJORDIAMETER_MINORRADIUS");
                 setRubberPoint("ELLIPSE_AXIS1_POINT1", point1);
                 setRubberPoint("ELLIPSE_AXIS1_POINT2", point2);
@@ -981,8 +981,8 @@ geometry_prompt(
             }
             else {
                 point2 = v;
-                width = embVector_distance(point1, point2)*2.0;
-                rot = embVector_angle(point1, point2);
+                width = emb_vector_distance(point1, point2)*2.0;
+                rot = emb_vector_angle(point1, point2);
                 setRubberMode("ELLIPSE_MAJORRADIUS_MINORRADIUS");
                 setRubberPoint("ELLIPSE_AXIS1_POINT2", point2);
                 setRubberPoint("ELLIPSE_WIDTH", width, 0);
@@ -1695,7 +1695,7 @@ move_main(void)
     init_command();
     /*
     g->firstRun = true;
-    g->base = embVector_make(0.0f, 0.0f);
+    g->base = emb_vector_make(0.0f, 0.0f);
     g->dest = g->base;
     g->delta = g->base;
 
@@ -1739,7 +1739,7 @@ move_prompt(char *str)
         }
         else {
             dest = v;
-            delta = embVector_subtract(dest, base);
+            delta = emb_vector_subtract(dest, base);
             moveSelected(delta);
             g->preview = false;
             end_command();
@@ -2065,8 +2065,8 @@ quickleader_main
     todo "Adding the text is not complete yet.";
     init_command();
     clear_selection();
-    point1 = embVector_make(0.0f, 0.0f);
-    point2 = embVector_make(0.0f, 0.0f);
+    point1 = emb_vector_make(0.0f, 0.0f);
+    point2 = emb_vector_make(0.0f, 0.0f);
     set-prompt-prefix-tr Specify first point: "
 
 void quickleader_prompt(char *str)
@@ -2199,12 +2199,12 @@ void rotate_main(char *args)
     geometry_init(g);
     g->mode = ROTATE_MODE_NORMAL;
     g->firstRun = true;
-    g->base = embVector_make(0.0f, 0.0f);
-    g->dest = embVector_make(0.0f, 0.0f);
+    g->base = emb_vector_make(0.0f, 0.0f);
+    g->dest = emb_vector_make(0.0f, 0.0f);
     g->angle = 0.0f;
 
-    g->baseR = embVector_make(0.0f, 0.0f);
-    g->destR = embVector_make(0.0f, 0.0f);
+    g->baseR = emb_vector_make(0.0f, 0.0f);
+    g->destR = emb_vector_make(0.0f, 0.0f);
     g->angleRef = 0.0f;
     g->angleNew = 0.0f;
 
@@ -2256,7 +2256,7 @@ void rotate_click(EmbVector v)
             prompt_output(translate("Specify the new angle: "));
         }
         else if (std::isnan(angleNew)) {
-            angleNew = embVector_angle(base, v);
+            angleNew = emb_vector_angle(base, v);
             rotateSelected(base, angleNew - angleRef);
             g->preview = false;
             end_command();
@@ -2451,8 +2451,8 @@ void scale_main(void)
 
     mode = MODE_SCALE_NORMAL;
     firstRun = true;
-    base = embVector_make(0.0f, 0.0f);
-    dest = embVector_make(0.0f, 0.0f);
+    base = emb_vector_make(0.0f, 0.0f);
+    dest = emb_vector_make(0.0f, 0.0f);
     factor = 0.0f;
 
     baseR = base;
@@ -2641,8 +2641,8 @@ void scale_prompt(char *str)
             }
             else {
                 //The base and dest values are only set here to advance the command.
-                g->baseR = embVector_make(0.0, 0.0);
-                g->destR = embVector_make(0.0, 0.0);
+                g->baseR = emb_vector_make(0.0, 0.0);
+                g->destR = emb_vector_make(0.0, 0.0);
                 // The reference length is what we will use later.
                 factorRef = atof(str);
                 if (factorRef <= 0.0) {
@@ -2702,7 +2702,7 @@ void text_single_main(void)
     init_command();
     clear_selection();
     strcpy(g->text, "");
-    g->position = embVector_make(0.0f, 0.0f);
+    g->position = emb_vector_make(0.0f, 0.0f);
     strcpy(g->justify, "Left");
     g->font = textFont();
     g->height = 0.0f;
@@ -2918,23 +2918,23 @@ void
 updateStar(EmbVector mouse)
 {
     /*
-    EmbVector v = embVector_subtract(mouse, center);
-    EmbReal angOuter = embVector_angle(v);
-    EmbReal distOuter = embVector_length(v);
+    EmbVector v = emb_vector_subtract(mouse, center);
+    EmbReal angOuter = emb_vector_angle(v);
+    EmbReal distOuter = emb_vector_length(v);
     EmbReal distInner = distOuter/2.0;
 
     if (mode == MODE_STAR_RAD_INNER) {
         EmbVector v = point1 - center;
-        angOuter = embVector_angle(v);
-        distOuter = embVector_length(v);
-        distInner = embVector_distance(center, mouse);
+        angOuter = emb_vector_angle(v);
+        distOuter = emb_vector_length(v);
+        distInner = emb_vector_distance(center, mouse);
     }
 
     // Calculate the Star Points
     EmbReal angInc = 360.0/(numPoints*2);
     for (int i = 0; i < numPoints*2; i++) {
         EmbReal angle = (angOuter + (angInc*i)) * CONSTANT_PI / 180.0;
-        EmbVector v = embVector_unit(angle);
+        EmbVector v = emb_vector_unit(angle);
         if (i%2 == 0) {
             v = v * distOuter;
         }

@@ -81,7 +81,7 @@
 extern "C" {
 #endif
 
-#include "../extern/libembroidery/src/embroidery.h"
+#include "../extern/libembroidery/embroidery.h"
 
 /* . */
 typedef struct GeometryData_ {

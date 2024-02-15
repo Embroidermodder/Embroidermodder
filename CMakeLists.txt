@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(embroidermodder VERSION 2.0.0 LANGUAGES C CXX)
 
-#include(config.cmake)
+include(config.cmake)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets PrintSupport OpenGLWidgets)
 
@@ -60,9 +60,7 @@ qt_add_executable(embroidermodder2 WIN32 MACOSX_BUNDLE
 )
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/extern/libembroidery/src
-    ${CMAKE_SOURCE_DIR}/extern/libembroidery/src/stb
-    ${CMAKE_SOURCE_DIR}/extern/libembroidery/src/nanosvg
+    ${CMAKE_SOURCE_DIR}/extern/libembroidery
     ${CMAKE_SOURCE_DIR}/src
 )
 
@@ -76,9 +74,9 @@ target_link_libraries(embroidermodder2 PRIVATE
     embroidery_static)
 
 if (WIN32)
-set_target_properties(embroidermodder2
-    WIN32_EXECUTIBLE ON
-    MACOS BUNDLE ON)
+#set_target_properties(embroidermodder2
+#    WIN32_EXECUTIBLE ON
+#    MACOS BUNDLE ON)
 else(WIN32)
 target_link_libraries(embroidermodder2 PRIVATE m)
 endif()
