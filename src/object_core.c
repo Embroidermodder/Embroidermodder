@@ -44,36 +44,6 @@ EmbReal snowflake_y[] = {
 };
 int32_t snowflake_terms = 2;
 
-/* . */
-const char *object_names[] = {
-    "Base",
-    "Arc",
-    "Block",
-    "Circle",
-    "Aligned Dimension",
-    "Angular Dimension",
-    "Arclength Dimension",
-    "Diameter Dimension",
-    "Leader Dimension",
-    "Linear Dimension",
-    "Ordinate Dimension",
-    "Radius Dimension",
-    "Ellipse",
-    "Image",
-    "Infinite Line",
-    "Line",
-    "Path",
-    "Point",
-    "Polygon",
-    "Polyline",
-    "Ray",
-    "Rectangle",
-    "Multiline Text",
-    "Text",
-    "Unknown",
-    "END"
-};
-
 /* TODO: "Aligned"
  * TODO: "Fit"
  */

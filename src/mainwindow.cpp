@@ -1091,6 +1091,13 @@ paste_selected_action(std::string args)
 MainWindow::MainWindow() : QMainWindow(0)
 {
     QString appDir = qApp->applicationDirPath();
+    const char *appDir_ = appDir.toStdString().c_str();
+
+	if (!load_ui(appDir_)) {
+		debug_message("ERROR: failed to load \"em2_ui.toml\".");
+		return;
+	}
+	
     read_settings();
 
     QString icon_theme(settings[ST_ICON_THEME].s);
@@ -1380,12 +1387,12 @@ MainWindow::createAllActions()
  *     ------------------------------------------------------------------
  */
 const char *
-run_script(char **script)
+run_script(StringTable *script)
 {
     std::string output = "";
-    for (int i=0; !string_equal(script[i], "END"); i++) {
-        debug_message(script[i]);
-        output += actuator(script[i]);
+    for (int i=0; i<script->entries; i++) {
+        debug_message(script->data[i]->data);
+        output += actuator(script->data[i]->data);
     }
     return output.c_str();
 }
@@ -2479,7 +2486,7 @@ actuator(char line[MAX_STRING_LENGTH])
 
     /* Return the version string to the user (for the CLI). */
     case COMMAND_VERSION: {
-        return version;
+        return version->data;
     }
 
     case COMMAND_VULCANIZE: {

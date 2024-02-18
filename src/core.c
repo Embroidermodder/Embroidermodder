@@ -38,8 +38,6 @@
  * before changing this file.
  */
 
-const char *version = "2.0.0-alpha4";
-
 /* The actuator changes the program state via these global variables.
  *
  * These copies of the settings struct are for restoring the state if
@@ -47,23 +45,6 @@ const char *version = "2.0.0-alpha4";
  */
 Node settings[SETTINGS_TOTAL], dialog[SETTINGS_TOTAL],
     preview[SETTINGS_TOTAL], accept_[SETTINGS_TOTAL];
-
-char *coverage_test_script[] = {
-    "new",
-    "icon 16",
-    "icon 32",
-    "icon 64",
-    "icon 128",
-    "icon 24",
-    "zoom in",
-    "zoom extents",
-    "pan up",
-    "pan down",
-    "pan right",
-    "pan left",
-    "quit",
-    "END"
-};
 
 const char *details_labels[] = {
     "Total Stitches:",

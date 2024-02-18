@@ -1938,8 +1938,6 @@ Geometry::objectSavePath()
     return path;
 }
 
-typedef std::string String;
-
 /* Geometry::calculateArcData
  * arc
  *
@@ -3315,7 +3313,7 @@ void
 Geometry::setObjectTextJustify(QString justify)
 {
     objTextJustify = "Left";
-    String justify_ = justify.toStdString();
+    std::string justify_ = justify.toStdString();
     for (int i=0; strcmp(justify_options[i], "END"); i++) {
         if (!strcmp(justify_.c_str(), justify_options[i])) {
             objTextJustify = justify;

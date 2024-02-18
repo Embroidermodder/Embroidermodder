@@ -2371,7 +2371,7 @@ PropertyEditor::setSelectedItems(std::vector<QGraphicsItem*> itemList)
     foreach(int objType, typeSet) {
         QString num = QString().setNum(numPerType[objType - OBJ_TYPE_BASE]);
         if ((objType > OBJ_TYPE_ARC) && (objType < OBJ_TYPE_UNKNOWN)) {
-            comboBoxStr = tr(object_names[objType - OBJ_TYPE_BASE]) + "(" + num + ")";
+            comboBoxStr = tr(object_names->data[objType - OBJ_TYPE_BASE]->data) + "(" + num + ")";
         }
         else {
             comboBoxStr = translate_str("Unknown") + " (" + QString().setNum(numPerType[objType - OBJ_TYPE_UNKNOWN]) + ")";
@@ -3097,6 +3097,8 @@ protected:
 
 static bool exitApp = false;
 
+#define VERSION__ "2.0.0-alpha4"
+
 int
 main(int argc, char* argv[])
 {
@@ -3106,7 +3108,7 @@ main(int argc, char* argv[])
     QApplication app(argc, argv);
 #endif
     app.setApplicationName("Embroidermodder");
-    app.setApplicationVersion(version);
+    app.setApplicationVersion(VERSION__);
 
     QStringList files;
 
@@ -3119,7 +3121,7 @@ main(int argc, char* argv[])
             exitApp = true;
         }
         else if ((arg == "-v") || (arg == "--version")) {
-            fprintf(stdout, "Embroidermodder %s\n", version);
+            fprintf(stdout, "Embroidermodder %s\n", VERSION__);
             exitApp = true;
         }
         else if (arg == "--cov") {

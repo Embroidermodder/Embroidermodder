@@ -991,6 +991,7 @@ extern "C" {
 #include <inttypes.h>
 
 #include "geometry.h"
+#include "data.h"
 
 /* . */
 typedef struct MenuData_ {
@@ -1153,14 +1154,12 @@ extern const char *grid_type_visibility_circular[];
 extern const char *tab_names[];
 
 /* Other strings and string tables. */
-extern const char *version;
 extern const char *usage_msg;
 extern const char *extensions[];
 extern const char *default_prompt_style[];
 extern const char *details_labels[];
 extern const char *command_labels[];
 extern const char *justify_options[];
-extern const char *object_names[];
 extern const char *button_list[];
 extern const char *tips[];
 
@@ -1187,7 +1186,6 @@ extern int32_t side_toolbar_layout[];
 extern const char *group_box_data[];
 extern const int32_t group_box_ids[];
 
-extern char *coverage_test_script[];
 extern const char *geometry_subcommands[];
 
 /* Widget data */

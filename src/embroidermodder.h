@@ -3,7 +3,7 @@
  *
  *  ------------------------------------------------------------
  *
- *  Copyright 2013-2023 The Embroidermodder Team
+ *  Copyright 2013-2024 The Embroidermodder Team
  *  Embroidermodder 2 is Open Source Software.
  *  See LICENSE for licensing terms.
  *
@@ -31,6 +31,8 @@
 #include <QtPrintSupport>
 
 #define CSTR(str) ( (char*)((str).toStdString().c_str()) )
+
+#define DEBUG(str) debug_message(CSTR(str));
 
 class ImageWidget;
 class MdiArea;
