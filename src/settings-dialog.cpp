@@ -1033,15 +1033,17 @@ QWidget* Settings_Dialog::createTabPrinting()
     QRadioButton* radioButtonUseLast = new QRadioButton(translate_str("Use last used device"), groupBoxDefaultPrinter);
     radioButtonUseLast->setChecked(settings[ST_USE_LAST_PRINTER].i);
 
+    /*
     QComboBox* comboBoxDefaultDevice = new QComboBox(groupBoxDefaultPrinter);
     QList<QPrinterInfo> listAvailPrinters = QPrinterInfo::availablePrinters();
     foreach (QPrinterInfo info, listAvailPrinters) {
         comboBoxDefaultDevice->addItem(_mainWin->create_icon("print"), info.printerName());
     }
+	*/
 
     QVBoxLayout* vboxLayoutDefaultPrinter = new QVBoxLayout(groupBoxDefaultPrinter);
     vboxLayoutDefaultPrinter->addWidget(radioButtonUseSame);
-    vboxLayoutDefaultPrinter->addWidget(comboBoxDefaultDevice);
+    //vboxLayoutDefaultPrinter->addWidget(comboBoxDefaultDevice);
     vboxLayoutDefaultPrinter->addWidget(radioButtonUseLast);
     groupBoxDefaultPrinter->setLayout(vboxLayoutDefaultPrinter);
 

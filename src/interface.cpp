@@ -2010,6 +2010,7 @@ MdiWindow::loadFile(std::string fileName)
 /* Print this subwindow. */
 void MdiWindow::print()
 {
+	/*
     QPrintDialog dialog(&printer, this);
     if (dialog.exec() == QDialog::Accepted) {
         QPainter painter(&printer);
@@ -2028,6 +2029,7 @@ void MdiWindow::print()
             gview->render(&painter);
         }
     }
+	*/
 }
 
 
@@ -3097,18 +3099,21 @@ protected:
 
 static bool exitApp = false;
 
-#define VERSION__ "2.0.0-alpha4"
-
 int
 main(int argc, char* argv[])
 {
+	if (!load_ui(".")) {
+		puts("ERROR: failed to load \"em2_ui.toml\".");
+		return 1;
+	}
+	
 #if defined(Q_OS_MAC)
     Application app(argc, argv);
 #else
     QApplication app(argc, argv);
 #endif
     app.setApplicationName("Embroidermodder");
-    app.setApplicationVersion(VERSION__);
+    app.setApplicationVersion(version->data);
 
     QStringList files;
 
@@ -3121,7 +3126,7 @@ main(int argc, char* argv[])
             exitApp = true;
         }
         else if ((arg == "-v") || (arg == "--version")) {
-            fprintf(stdout, "Embroidermodder %s\n", VERSION__);
+            fprintf(stdout, "Embroidermodder %s\n", version->data);
             exitApp = true;
         }
         else if (arg == "--cov") {

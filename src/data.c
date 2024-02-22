@@ -21,11 +21,13 @@
 
 #include "../extern/tomlc99/toml.h"
 
-#include "data.h"
+#include "core.h"
 
 String *version;
 StringTable *object_names;
 StringTable *coverage_test_script;
+
+StringTable *file_menu;
 
 /* . */
 String *
@@ -196,12 +198,14 @@ load_ui(const char *appDir)
     f = fopen(fname, "r");
     if (!f) {
         puts("Failed to open \"em2_ui.toml\".");
+        debug_message("Failed to open \"em2_ui.toml\".");
         return 0;
     }
 
     toml_table_t *conf = toml_parse_file(f, errbuf, sizeof(errbuf));
     if (!conf) {
         puts("Failed to parse \"em2_ui.toml\" as toml.");
+        debug_message("Failed to parse \"em2_ui.toml\" as toml.");
         toml_free(conf);
         return 0;
     }
@@ -210,14 +214,15 @@ load_ui(const char *appDir)
     version = create_string(200);
     object_names = create_string_table(100, 200);
     coverage_test_script = create_string_table(100, 200);
+    file_menu = create_string_table(100, 200);
 
     get_string(conf, "version", version);
     get_string_table(conf, "object_names", object_names);
     get_string_table(conf, "coverage_test_script", coverage_test_script);
+    get_string_table(conf, "file_menu", file_menu);
 	
-    printf("Booting Embroidermodder %s", version->data);
-    print_string_table(object_names);
-    print_string_table(coverage_test_script);
+    printf("Booting Embroidermodder %s...\n", version->data);
+    debug_message("Booting Embroidermodder %s...", version->data);
 
     toml_free(conf);
 	return 1;

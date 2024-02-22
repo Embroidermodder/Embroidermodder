@@ -61,3 +61,35 @@ coverage_test_script = [
     "quit",
     "END"
 ]
+
+file_menu = [
+    "#File",
+    "new",
+    "---",
+    "open",
+    ">submenu", "recent",
+    "---",
+	"save",
+	"saveas",
+    "---",
+    "print",
+    "---",
+	"window-close",
+    "---",
+    "design-details",
+    "---",
+    "exit"
+]
+
+# The id numbers are indexed against the "ACTION_" defines.
+action_table_order = [
+    "about"
+]
+
+[action_table.about]
+id = 0
+icon = "about"
+command = "about"
+tooltip = "&About Embroidermodder 2"
+statustip = "Displays information about this product: ABOUT."
+shortcut = ""

@@ -41,6 +41,7 @@ clear_selection(void)
 void
 prompt_output(char *s)
 {
+	debug_message(s);
 }
 
 void
@@ -54,6 +55,82 @@ string_equal(const char *a, const char *b)
 {
     return !strcmp(a, b);
 }
+
+int
+find_command(const char *command)
+{
+	for (int i=0; i<N_ACTIONS; i++) {
+		if (string_equal(action_table[i].command, command)) {
+			debug_message("found command %s %d", command, i);
+			return i;
+		}
+	}
+	return ACTION_DO_NOTHING;
+}
+
+/* Create menu from UI configuration.
+ *
+ * For example:
+ * 
+
+file_menu = [
+    "#File",
+    "new",
+    "---",
+    "open",
+    ">submenu", "recent",
+    "---",
+	"save",
+	"saveas",
+    "---",
+    "print",
+    "---",
+	"window-close",
+    "---",
+    "design-details",
+    "---",
+    "exit"
+]
+
+ */
+void
+create_menu_from_string_table(
+    int32_t menu, StringTable *def, bool topLevel)
+{
+    if (topLevel) {
+        _mainWin->menuBar()->addMenu(menuHash[menu]);
+    }
+    for (int i=0; i<def->entries; i++) {
+		debug_message(def->data[i]->data);
+		char cmd = def->data[i]->data[0];
+		if (cmd == '#') {
+			continue;
+		}
+		if (cmd == '-') {
+            menuHash[menu]->addSeparator();
+			continue;
+		}
+		if (cmd == '>') {
+			/* FIXME */
+            //menuHash[menu]->addMenu(menuHash[atoi(def->data[i+1]->data)]);
+            i++;
+			continue;
+		}
+		if (cmd == '$') {
+			QIcon icon = _mainWin->create_icon(def->data[i+1]->data);
+            menuHash[menu]->setIcon(icon);
+            i++;
+			continue;
+		}
+
+		int j = find_command(def->data[i]->data);
+		menuHash[menu]->addAction(actionHash[j]);
+    }
+
+    /* Do not allow the Menus to be torn off. It's a pain in the ass to maintain. */
+    menuHash[menu]->setTearOffEnabled(false);
+}
+
 
 /* Create menu. */
 void
@@ -96,7 +173,7 @@ MainWindow::createAllMenus()
     debug_message("MainWindow createAllMenus()");
 
     /* Populate menus. */
-    create_menu(MENU_FILE, file_menu, true);
+    create_menu_from_string_table(MENU_FILE, file_menu, true);
     create_menu(MENU_EDIT, edit_menu, true);
     create_menu(MENU_VIEW, view_menu, true);
     create_menu(MENU_SETTINGS, settings_menu, true);
@@ -1091,12 +1168,6 @@ paste_selected_action(std::string args)
 MainWindow::MainWindow() : QMainWindow(0)
 {
     QString appDir = qApp->applicationDirPath();
-    const char *appDir_ = appDir.toStdString().c_str();
-
-	if (!load_ui(appDir_)) {
-		debug_message("ERROR: failed to load \"em2_ui.toml\".");
-		return;
-	}
 	
     read_settings();
 

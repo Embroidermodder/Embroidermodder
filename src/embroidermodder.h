@@ -617,7 +617,7 @@ public:
     std::vector<QString> promptInputList;
     int promptInputNum;
 
-    QPrinter printer;
+    //QPrinter printer;
 
     QString curFile;
     void setCurrentFile(QString fileName);
