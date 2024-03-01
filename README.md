@@ -2,6 +2,8 @@
 
 ( IN ALPHA DEVELOPMENT: NOT READY FOR SERIOUS USE. )
 
+[![Build](https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build.yml/badge.svg)](https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build.yml)
+
 Embroidermodder is a free machine embroidery software program.
 The newest version, Embroidermodder 2 can:
 
