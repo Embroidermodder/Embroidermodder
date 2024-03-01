@@ -1,0 +1,26 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: "Build EM2 on major systems."
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      HOST_SYSTEM: ${{ matrix.os }}
+    steps:
+      - name: Get repository
+        run: git clone https://github.com/embroidermodder/embroidermodder
+      - name: Build
+        run: cd embroidermodder; ./build.sh ${{ matrix.os }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: embroidermodder-windows
+          path: ./embroidermodder
+
