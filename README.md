@@ -5,30 +5,52 @@
 </h1>
 
 <h3 align="center">
-<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_windows.yml">
-  <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_windows.yml/badge.svg"></img>
-</a>
-<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_macos.yml">
-  <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_macos.yml/badge.svg"></img>
-</a>
-<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_ubuntu.yml">
-  <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_ubuntu.yml/badge.svg"></img>
-</a>
-<br>
-<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/test_windows.yml">
+  <table>
+    <tr>
+      <td><strong>Build</strong></td>
+    <td>
+      <a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_windows.yml">
+        <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_windows.yml/badge.svg"></img>
+      </a>
+    </td>
+    <td>
+      <a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_macos.yml">
+        <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_macos.yml/badge.svg"></img>
+      </a>
+    </td>
+    <td>
+      <a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_ubuntu.yml">
+        <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_ubuntu.yml/badge.svg"></img>
+      </a>
+    </td>
+    </tr>
+    <tr>
+      <td><strong>Test</strong></td>
+    <td>
+ <a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/test_windows.yml">
   <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/test_windows.yml/badge.svg"></img>
 </a>
+    </td>
+    <td>
 <a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/test_macos.yml">
   <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/test_macos.yml/badge.svg"></img>
 </a>
+    </td>
+    <td>
 <a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/test_ubuntu.yml">
   <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/test_ubuntu.yml/badge.svg"></img>
 </a>
-  <br>
+    </td>
+    </tr>
+    <tr>
+      <td><strong>Quality Assurance</strong></td>
+    <td>
 <a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/codeql.yml">
   <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/codeql/badge.svg"></img>
 </a>
-  
+    </td>
+    </tr>
+  </table>
 <br>
   <strong>
   ( IN ALPHA DEVELOPMENT: NOT READY FOR SERIOUS USE. )
