@@ -4,6 +4,3 @@
 [submodule "extern/embroiderymobile"]
 	path = extern/embroiderymobile
 	url = git@github.com:embroidermodder/embroiderymobile
-[submodule "extern/pet"]
-	path = extern/pet
-	url = git@github.com:embroidermodder/pet
