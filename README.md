@@ -1,8 +1,41 @@
-# Embroidermodder 2.0.0-alpha
+<h1 align="center" style="display:block">
+<a name="logo" href="https://libembroidery.org"><img align="center" src="images/icons/app.png" alt="Embroidermodder 2.0"></img></a>
+  <br><br>
+  <em>EMBROIDERMODDER 2.0 (alpha)</em>
+</h1>
 
-( IN ALPHA DEVELOPMENT: NOT READY FOR SERIOUS USE. )
+<h3 align="center">
+<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_windows.yml">
+  <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_windows.yml/badge.svg"></img>
+</a>
+<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_macos.yml">
+  <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_macos.yml/badge.svg"></img>
+</a>
+<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_ubuntu.yml">
+  <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_ubuntu.yml/badge.svg"></img>
+</a>
+<br>
+<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/test_windows.yml">
+  <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/test_windows.yml/badge.svg"></img>
+</a>
+<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/test_macos.yml">
+  <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/test_macos.yml/badge.svg"></img>
+</a>
+<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/test_ubuntu.yml">
+  <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/test_ubuntu.yml/badge.svg"></img>
+</a>
+  <br>
+<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/codeql.yml">
+  <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/codeql/badge.svg"></img>
+</a>
+  
+<br>
+  <strong>
+  ( IN ALPHA DEVELOPMENT: NOT READY FOR SERIOUS USE. )
+</strong>
+</h3>
 
-[![Build](https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build.yml/badge.svg)](https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build.yml)
+<br>
 
 Embroidermodder is a free machine embroidery software program.
 The newest version, Embroidermodder 2 can:
