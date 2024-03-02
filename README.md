@@ -169,7 +169,7 @@ opening a terminal and issuing these commands:
 
 ```
 sudo apt-get update
-sudo apt-get install qt6-base-dev libqt6gui6 libqt6widgets6 libqt6printsupport6 libqt6core6 libgl-dev libglx-dev libopengl-dev
+sudo apt-get install cmake build-essential qt6-base-dev libqt6gui6 libqt6widgets6 libqt6printsupport6 libqt6core6 libgl-dev libglx-dev libopengl-dev
 ```
 
 ### Fedora repository packages
