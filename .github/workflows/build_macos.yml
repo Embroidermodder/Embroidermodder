@@ -1,4 +1,4 @@
-name: Windows
+name: Mac OS
 
 on:
   push:
@@ -7,14 +7,14 @@ on:
 
 jobs:
   build:
-    name: "Build on Windows"
-    runs-on: windows-latest
+    name: "Build on Mac OS"
+    runs-on: macos-latest
     steps:
       - name: Get repository
         run: git clone https://github.com/embroidermodder/embroidermodder
       - name: Build
-        run: cd embroidermodder; ./build.sh windows-latest
+        run: cd embroidermodder; ./build.sh macos-latest
       - uses: actions/upload-artifact@v4
         with:
-          name: embroidermodder-windows
+          name: embroidermodder-macos
           path: ./embroidermodder
