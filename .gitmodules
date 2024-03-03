@@ -3,4 +3,4 @@
 	url = https://github.com/embroidermodder/libembroidery
 [submodule "extern/embroiderymobile"]
 	path = extern/embroiderymobile
-	url = git@github.com:embroidermodder/embroiderymobile
+	url = https://github.com/embroidermodder/embroiderymobile
