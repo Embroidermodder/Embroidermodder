@@ -8,95 +8,10 @@ INCLUDEPATH += extern/tomlc99
 QT += core gui widgets printsupport opengl
 HEADERS += src/embroidermodder.h \
     extern/libembroidery/src/embroidery.h \
-    extern/libembroidery/src/embroidery_internal.h \
-    extern/libembroidery/src/nanosvg/src/nanosvg.h \
-    extern/libembroidery/src/nanosvg/src/nanosvgrast.h \
     extern/tomlc99/toml.h \
     src/core.h
 SOURCES += \
-    extern/libembroidery/src/array.c \
-    extern/libembroidery/src/compress.c \
-    extern/libembroidery/src/encoding.c \
-    extern/libembroidery/src/fill.c \
-    extern/libembroidery/src/formats.c \
-    extern/libembroidery/src/object_core.c \
-    extern/libembroidery/src/formats/format_100.c \
-    extern/libembroidery/src/formats/format_10o.c \
-    extern/libembroidery/src/formats/format_art.c \
-    extern/libembroidery/src/formats/format_bmc.c \
-    extern/libembroidery/src/formats/format_bro.c \
-    extern/libembroidery/src/formats/format_cnd.c \
-    extern/libembroidery/src/formats/format_col.c \
-    extern/libembroidery/src/formats/format_csd.c \
-    extern/libembroidery/src/formats/format_csv.c \
-    extern/libembroidery/src/formats/format_dat.c \
-    extern/libembroidery/src/formats/format_dem.c \
-    extern/libembroidery/src/formats/format_dsb.c \
-    extern/libembroidery/src/formats/format_dst.c \
-    extern/libembroidery/src/formats/format_dsz.c \
-    extern/libembroidery/src/formats/format_dxf.c \
-    extern/libembroidery/src/formats/format_edr.c \
-    extern/libembroidery/src/formats/format_emd.c \
-    extern/libembroidery/src/formats/format_exp.c \
-    extern/libembroidery/src/formats/format_exy.c \
-    extern/libembroidery/src/formats/format_eys.c \
-    extern/libembroidery/src/formats/format_fxy.c \
-    extern/libembroidery/src/formats/format_gc.c \
-    extern/libembroidery/src/formats/format_gnc.c \
-    extern/libembroidery/src/formats/format_gt.c \
-    extern/libembroidery/src/formats/format_hus.c \
-    extern/libembroidery/src/formats/format_inb.c \
-    extern/libembroidery/src/formats/format_inf.c \
-    extern/libembroidery/src/formats/format_jef.c \
-    extern/libembroidery/src/formats/format_ksm.c \
-    extern/libembroidery/src/formats/format_max.c \
-    extern/libembroidery/src/formats/format_mit.c \
-    extern/libembroidery/src/formats/format_new.c \
-    extern/libembroidery/src/formats/format_ofm.c \
-    extern/libembroidery/src/formats/format_pcd.c \
-    extern/libembroidery/src/formats/format_pcm.c \
-    extern/libembroidery/src/formats/format_pcq.c \
-    extern/libembroidery/src/formats/format_pcs.c \
-    extern/libembroidery/src/formats/format_pec.c \
-    extern/libembroidery/src/formats/format_pel.c \
-    extern/libembroidery/src/formats/format_pem.c \
-    extern/libembroidery/src/formats/format_pes.c \
-    extern/libembroidery/src/formats/format_phb.c \
-    extern/libembroidery/src/formats/format_phc.c \
-    extern/libembroidery/src/formats/format_plt.c \
-    extern/libembroidery/src/formats/format_rgb.c \
-    extern/libembroidery/src/formats/format_sew.c \
-    extern/libembroidery/src/formats/format_shv.c \
-    extern/libembroidery/src/formats/format_sst.c \
-    extern/libembroidery/src/formats/format_stx.c \
-    extern/libembroidery/src/formats/format_svg.c \
-    extern/libembroidery/src/formats/format_t01.c \
-    extern/libembroidery/src/formats/format_t09.c \
-    extern/libembroidery/src/formats/format_tap.c \
-    extern/libembroidery/src/formats/format_thr.c \
-    extern/libembroidery/src/formats/format_txt.c \
-    extern/libembroidery/src/formats/format_u00.c \
-    extern/libembroidery/src/formats/format_u01.c \
-    extern/libembroidery/src/formats/format_vip.c \
-    extern/libembroidery/src/formats/format_vp3.c \
-    extern/libembroidery/src/formats/format_xxx.c \
-    extern/libembroidery/src/formats/format_zsk.c \
-    extern/libembroidery/src/geometry.c \
-    extern/libembroidery/src/geometry/arc.c \
-    extern/libembroidery/src/geometry/circle.c \
-    extern/libembroidery/src/geometry/ellipse.c \
-    extern/libembroidery/src/geometry/functions.c \
-    extern/libembroidery/src/geometry/line.c \
-    extern/libembroidery/src/geometry/path.c \
-    extern/libembroidery/src/geometry/polygon.c \
-    extern/libembroidery/src/geometry/polyline.c \
-    extern/libembroidery/src/geometry/rect.c \
-    extern/libembroidery/src/geometry/text.c \
-    extern/libembroidery/src/geometry/vector.c \
-    extern/libembroidery/src/image.c \
-    extern/libembroidery/src/main.c \
-    extern/libembroidery/src/pattern.c \
-    extern/libembroidery/src/thread-color.c \
+    extern/libembroidery/src/embroidery.c \
     src/object_data.c \
     src/core.c \
     src/action_table.c \
