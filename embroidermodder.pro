@@ -7,11 +7,11 @@ INCLUDEPATH += extern/tomlc99
 
 QT += core gui widgets printsupport opengl
 HEADERS += src/embroidermodder.h \
-    extern/libembroidery/src/embroidery.h \
+    extern/libembroidery/embroidery.h \
     extern/tomlc99/toml.h \
     src/core.h
 SOURCES += \
-    extern/libembroidery/src/embroidery.c \
+    extern/libembroidery/embroidery.c \
     src/object_data.c \
     src/core.c \
     src/action_table.c \
