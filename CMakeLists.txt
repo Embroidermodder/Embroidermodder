@@ -15,7 +15,19 @@ execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
     RESULT_VARIABLE GIT_SUBMOD_RESULT)
 endif()
 
-qt_standard_project_setup()
+# Seeing if the lines below emulate this function well enough, since
+# current Ubuntu users can't rely on access to Qt 6.3
+# qt_standard_project_setup()
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+include(GNUInstallDirs)
+
+if(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+endif()
+
+set(USE_FOLDERS ON)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
