@@ -42,14 +42,6 @@
 </a>
     </td>
     </tr>
-    <tr>
-      <td><strong>Quality Assurance</strong></td>
-    <td>
-<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/codeql.yml">
-  <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/codeql/badge.svg"></img>
-</a>
-    </td>
-    </tr>
   </table>
 <br>
   <strong>
