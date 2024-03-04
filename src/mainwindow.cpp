@@ -30,7 +30,7 @@ QCheckBox* checkBoxTipOfTheDay;
 
 QToolBar* toolbarHash[MAX_TOOLBARS];
 QMenu* menuHash[MAX_MENUS];
-QAction* actionHash[MAX_ACTIONS];
+QAction* actionHash[MAX_COMMANDS];
 QIcon icon_list[MAX_ICONS];
 
 #include "macros.h"
@@ -55,15 +55,15 @@ string_equal(const char *a, const char *b)
 int
 find_command(const char *command)
 {
-	for (int i=0; i<N_ACTIONS; i++) {
-		if (string_equal(action_table[i].command, command)) {
+	for (int i=0; i<N_COMMANDS; i++) {
+		if (string_equal(command_table[i].command, command)) {
             char debug_m[200];
             sprintf(debug_m, "found command %s %d", command, i);
 			debug_message(debug_m);
 			return i;
 		}
 	}
-	return ACTION_DO_NOTHING;
+	return COMMAND_DO_NOTHING;
 }
 
 /* Create menu from UI configuration.
@@ -233,12 +233,12 @@ MainWindow::create_icon(int32_t stub)
     int i;
     QString appDir = qApp->applicationDirPath();
     QString icontheme(settings[ST_ICON_THEME].s);
-    for (i=0; i<N_ACTIONS; i++) {
-        if (action_table[i].id == stub) {
+    for (i=0; i<N_COMMANDS; i++) {
+        if (command_table[i].id == stub) {
             break;
         }
     }
-    QString stub_s(action_table[i].icon);
+    QString stub_s(command_table[i].icon);
     return QIcon(appDir + "/icons/" + icontheme + "/" + stub_s + ".png");
 }
 
@@ -280,7 +280,7 @@ MainWindow::createAllToolbars()
     toolbarHash[TOOLBAR_LAYER]->addWidget(layerSelector);
     connect(layerSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(layerSelectorIndexChanged(int)));
 
-    toolbarHash[TOOLBAR_LAYER]->addAction(actionHash[ACTION_LAYER_PREVIOUS]);
+    toolbarHash[TOOLBAR_LAYER]->addAction(actionHash[COMMAND_LAYER_PREVIOUS]);
 
     connect(toolbarHash[TOOLBAR_LAYER], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 
@@ -353,20 +353,20 @@ MainWindow::createAllToolbars()
     textFontSelector->setCurrentFont(QFont(font_));
     connect(textFontSelector, SIGNAL(currentFontChanged(QFont)), this, SLOT(textFontSelectorCurrentFontChanged(QFont)));
 
-    toolbarHash[TOOLBAR_TEXT]->addAction(actionHash[ACTION_TEXT_BOLD]);
-    actionHash[ACTION_TEXT_BOLD]->setChecked(settings[ST_TEXT_BOLD].i);
+    toolbarHash[TOOLBAR_TEXT]->addAction(actionHash[COMMAND_TEXT_BOLD]);
+    actionHash[COMMAND_TEXT_BOLD]->setChecked(settings[ST_TEXT_BOLD].i);
 
-    toolbarHash[TOOLBAR_TEXT]->addAction(actionHash[ACTION_TEXT_ITALIC]);
-    actionHash[ACTION_TEXT_ITALIC]->setChecked(settings[ST_TEXT_ITALIC].i);
+    toolbarHash[TOOLBAR_TEXT]->addAction(actionHash[COMMAND_TEXT_ITALIC]);
+    actionHash[COMMAND_TEXT_ITALIC]->setChecked(settings[ST_TEXT_ITALIC].i);
 
-    toolbarHash[TOOLBAR_TEXT]->addAction(actionHash[ACTION_TEXT_UNDERLINE]);
-    actionHash[ACTION_TEXT_UNDERLINE]->setChecked(settings[ST_TEXT_UNDERLINE].i);
+    toolbarHash[TOOLBAR_TEXT]->addAction(actionHash[COMMAND_TEXT_UNDERLINE]);
+    actionHash[COMMAND_TEXT_UNDERLINE]->setChecked(settings[ST_TEXT_UNDERLINE].i);
 
-    toolbarHash[TOOLBAR_TEXT]->addAction(actionHash[ACTION_TEXT_STRIKEOUT]);
-    actionHash[ACTION_TEXT_STRIKEOUT]->setChecked(settings[ST_TEXT_STRIKEOUT].i);
+    toolbarHash[TOOLBAR_TEXT]->addAction(actionHash[COMMAND_TEXT_STRIKEOUT]);
+    actionHash[COMMAND_TEXT_STRIKEOUT]->setChecked(settings[ST_TEXT_STRIKEOUT].i);
 
-    toolbarHash[TOOLBAR_TEXT]->addAction(actionHash[ACTION_TEXT_OVERLINE]);
-    actionHash[ACTION_TEXT_OVERLINE]->setChecked(settings[ST_TEXT_OVERLINE].i);
+    toolbarHash[TOOLBAR_TEXT]->addAction(actionHash[COMMAND_TEXT_OVERLINE]);
+    actionHash[COMMAND_TEXT_OVERLINE]->setChecked(settings[ST_TEXT_OVERLINE].i);
 
     textSizeSelector->setFocusProxy(prompt);
     textSizeSelector->addItem("6 pt",   6);
@@ -1384,6 +1384,41 @@ MainWindow::~MainWindow()
     cutCopyObjectList.clear();
 }
 
+/*
+ *
+ */
+QAction *
+MainWindow::createAction(int32_t i)
+{
+    CommandData a = command_table[i];
+
+    std::string icon_s(a.icon);
+    QString tooltip(a.tooltip);
+    QString statustip(a.statustip);
+    std::string shortcut(a.shortcut);
+    QIcon icon = create_icon(a.icon);
+
+    QAction *ACTION = new QAction(icon, tooltip, this);
+    ACTION->setStatusTip(statustip);
+    ACTION->setObjectName(QString::fromStdString(icon_s));
+    if (shortcut != "") {
+        ACTION->setShortcut(
+            QKeySequence(QString::fromStdString(shortcut))
+        );
+    }
+
+    if (   (icon_s == "textbold")
+        || (icon_s == "textitalic")
+        || (icon_s == "textunderline")
+        || (icon_s == "textstrikeout")
+        || (icon_s == "textoverline")) {
+        ACTION->setCheckable(true);
+    }
+
+    connect(ACTION, &QAction::triggered, this, [=](){ actuator((char*)a.command); });
+    return ACTION;
+}
+
 /* MainWindow::createAllActions
  *
  * \todo Set What's This Context Help to statusTip for now so there is some infos there.
@@ -1411,38 +1446,12 @@ MainWindow::createAllActions()
 {
     DEBUG_MSG("Creating All Actions...");
 
-    for (int i=0; i<N_ACTIONS; i++) {
-        ActionData a = action_table[i];
-
-        std::string icon_s(a.icon);
-        QString tooltip(a.tooltip);
-        QString statustip(a.statustip);
-        std::string shortcut(a.shortcut);
-        QIcon icon = create_icon(a.icon);
-
-        QAction *ACTION = new QAction(icon, tooltip, this);
-        ACTION->setStatusTip(statustip);
-        ACTION->setObjectName(icon_s);
-        if (shortcut != "") {
-            ACTION->setShortcut(
-                QKeySequence(QString::fromStdString(shortcut))
-            );
-        }
-
-        if (   (icon_s == "textbold")
-            || (icon_s == "textitalic")
-            || (icon_s == "textunderline")
-            || (icon_s == "textstrikeout")
-            || (icon_s == "textoverline")) {
-            ACTION->setCheckable(true);
-        }
-
-        connect(ACTION, &QAction::triggered, this, [=](){ actuator((char*)a.command); });
-        actionHash[a.id] = ACTION;
+    for (int i=0; i<N_COMMANDS; i++) {
+        actionHash[command_table[i].id] = createAction(i);
     }
 
-    actionHash[ACTION_WINDOW_CLOSE]->setEnabled(numOfDocs > 0);
-    actionHash[ACTION_DESIGN_DETAILS]->setEnabled(numOfDocs > 0);
+    actionHash[COMMAND_WINDOW_CLOSE]->setEnabled(numOfDocs > 0);
+    actionHash[COMMAND_DESIGN_DETAILS]->setEnabled(numOfDocs > 0);
 }
 
 /* A basic line-by-line script processor to allow for extensions to the program.
@@ -1551,28 +1560,28 @@ actuator(const char *line)
     }
     argv[argc][j] = 0;
 
-    int action_id = -1;
+    int command_id = -1;
 
     for (i=0; i<N_COMMANDS; i++) {
         if (string_equal(argv[0], command_table[i].command)) {
-            action_id = command_table[i].id;
+            command_id = command_table[i].id;
             break;
         }
     }
 
-    strcpy(args, line + strlen(command_table[action_id].command) + 1);
+    strcpy(args, line + strlen(command_table[command_id].command) + 1);
 
     /* This could produce silly amounts of output, so watch this line. */
-    std::string str = "action: " + std::to_string(action_id);
+    std::string str = "action: " + std::to_string(command_id);
     debug_message((char*)str.c_str());
 
-    if (action_id < 0) {
+    if (command_id < 0) {
         std::string out = std::string("<br/><font color=\"red\">Unknown command \"")
             + line + std::string("\". Press F1 for help.</font>");
         return out.c_str();
     }
 
-    switch (action_id) {
+    switch (command_id) {
 
     /* Open the about dialog. */
     case COMMAND_ABOUT: {
@@ -1580,7 +1589,7 @@ actuator(const char *line)
         return "";
     }
 
-    case COMMAND_ADD: {
+    case COMMAND_ADD_LINE: {
         return ""; // add_geometry(argv, argc);
     }
 
@@ -1936,13 +1945,33 @@ actuator(const char *line)
         return "";
     }
 
-    case COMMAND_ICON: {
-        if (strlen(args) == 0) {
-            return "ERROR: No argument passed to ICON command.";
-        }
-        int size = atoi(args);
-        /* TODO: check error code here */
-        _mainWin->iconResize(size);
+    case COMMAND_ICON16: {
+        _mainWin->iconResize(16);
+        return "";
+    }
+
+    case COMMAND_ICON24: {
+        _mainWin->iconResize(24);
+        return "";
+    }
+
+    case COMMAND_ICON32: {
+        _mainWin->iconResize(32);
+        return "";
+    }
+
+    case COMMAND_ICON48: {
+        _mainWin->iconResize(48);
+        return "";
+    }
+
+    case COMMAND_ICON64: {
+        _mainWin->iconResize(64);
+        return "";
+    }
+
+    case COMMAND_ICON128: {
+        _mainWin->iconResize(128);
         return "";
     }
 
@@ -2058,7 +2087,7 @@ actuator(const char *line)
     }
 
     /* Pan the current view using behaviour described by "mode". */
-    case COMMAND_PAN: {
+    case COMMAND_PAN_UP: {
         if (!gview) {
             return "ERROR: no active view found.";
         }
@@ -2624,7 +2653,7 @@ actuator(const char *line)
     }
 
     /* Zoom the current view using behaviour described by "mode". */
-    case COMMAND_ZOOM: {
+    case COMMAND_ZOOM_IN: {
         if (!gview) {
             return "ERROR: no active view found.";
         }
@@ -2886,14 +2915,14 @@ MainWindow::windowMenuAboutToShow()
 {
     DEBUG_MSG("MainWindow::windowMenuAboutToShow()");
     menuHash[MENU_WINDOW]->clear();
-    menuHash[MENU_WINDOW]->addAction(actionHash[ACTION_WINDOW_CLOSE]);
-    menuHash[MENU_WINDOW]->addAction(actionHash[ACTION_WINDOW_CLOSE_ALL]);
+    menuHash[MENU_WINDOW]->addAction(actionHash[COMMAND_WINDOW_CLOSE]);
+    menuHash[MENU_WINDOW]->addAction(actionHash[COMMAND_WINDOW_CLOSE_ALL]);
     menuHash[MENU_WINDOW]->addSeparator();
-    menuHash[MENU_WINDOW]->addAction(actionHash[ACTION_WINDOW_CASCADE]);
-    menuHash[MENU_WINDOW]->addAction(actionHash[ACTION_WINDOW_TILE]);
+    menuHash[MENU_WINDOW]->addAction(actionHash[COMMAND_WINDOW_CASCADE]);
+    menuHash[MENU_WINDOW]->addAction(actionHash[COMMAND_WINDOW_TILE]);
     menuHash[MENU_WINDOW]->addSeparator();
-    menuHash[MENU_WINDOW]->addAction(actionHash[ACTION_WINDOW_NEXT]);
-    menuHash[MENU_WINDOW]->addAction(actionHash[ACTION_WINDOW_PREVIOUS]);
+    menuHash[MENU_WINDOW]->addAction(actionHash[COMMAND_WINDOW_NEXT]);
+    menuHash[MENU_WINDOW]->addAction(actionHash[COMMAND_WINDOW_PREVIOUS]);
 
     menuHash[MENU_WINDOW]->addSeparator();
     QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
@@ -3191,9 +3220,9 @@ MainWindow::updateMenuToolbarStatusbar()
 {
     DEBUG_MSG("MainWindow::updateMenuToolbarStatusbar()");
 
-    actionHash[ACTION_PRINT]->setEnabled(numOfDocs > 0);
-    actionHash[ACTION_WINDOW_CLOSE]->setEnabled(numOfDocs > 0);
-    actionHash[ACTION_DESIGN_DETAILS]->setEnabled(numOfDocs > 0);
+    actionHash[COMMAND_PRINT]->setEnabled(numOfDocs > 0);
+    actionHash[COMMAND_WINDOW_CLOSE]->setEnabled(numOfDocs > 0);
+    actionHash[COMMAND_DESIGN_DETAILS]->setEnabled(numOfDocs > 0);
 
     if (numOfDocs) {
         for (int i=0; i<TOTAL_TOOLBARS; i++) {

@@ -1779,9 +1779,9 @@ View::contextMenuEvent(QContextMenuEvent* event)
     }
 
     menu.addSeparator();
-    menu.addAction(actionHash[ACTION_CUT]);
-    menu.addAction(actionHash[ACTION_COPY]);
-    menu.addAction(actionHash[ACTION_PASTE]);
+    menu.addAction(actionHash[COMMAND_CUT]);
+    menu.addAction(actionHash[COMMAND_COPY]);
+    menu.addAction(actionHash[COMMAND_PASTE]);
     menu.addSeparator();
 
     if (!selectionEmpty) {

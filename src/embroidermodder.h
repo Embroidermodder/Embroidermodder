@@ -48,7 +48,7 @@ extern CmdPrompt* prompt;
 extern PropertyEditor* dockPropEdit;
 extern UndoEditor* dockUndoEdit;
 extern StatusBar* statusbar;
-extern QAction* actionHash[MAX_ACTIONS];
+extern QAction* actionHash[MAX_COMMANDS];
 
 /* Functions in the global namespace */
 QString translate_str(const char *str);
@@ -471,6 +471,8 @@ public:
     void setUndoCleanIcon(bool opened);
 
     virtual void updateMenuToolbarStatusbar();
+
+    QAction *createAction(int32_t id);
 
     std::vector<QGraphicsItem*> cutCopyObjectList;
 

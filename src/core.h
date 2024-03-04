@@ -94,23 +94,18 @@ typedef struct ToolbarData_ {
 } ToolbarData;
 
 /* . */
-typedef struct ActionData_ {
+typedef struct CommandData_ {
     int32_t id;
     char icon[MAX_STRING_LENGTH];
     char command[MAX_STRING_LENGTH];
     char tooltip[MAX_STRING_LENGTH];
     char statustip[MAX_STRING_LENGTH];
     char shortcut[MAX_STRING_LENGTH];
-} ActionData;
-
-/* . */
-typedef struct CommandData_ {
-    int32_t id;
-    char command[MAX_STRING_LENGTH];
-    int32_t min_args;
-    int32_t gview;
-    int32_t gscene;
-    int32_t undo;
+    int8_t min_args;
+    int8_t gview;
+    int8_t gscene;
+    int8_t undo;
+    int32_t flags;
 } CommandData;
 
 /* . */
@@ -256,7 +251,6 @@ extern const char *settings_labels[];
 extern Node settings[SETTINGS_TOTAL], dialog[SETTINGS_TOTAL],
     preview[SETTINGS_TOTAL], accept_[SETTINGS_TOTAL];
 
-extern ActionData action_table[MAX_ACTIONS];
 extern CommandData command_table[MAX_COMMANDS];
 extern EditorData all_line_editors[MAX_EDITORS];
 extern EditorData all_spinbox_editors[MAX_EDITORS];

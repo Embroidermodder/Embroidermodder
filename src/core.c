@@ -146,46 +146,46 @@ int32_t side_toolbar_layout[] = {
 MenuData menu_data[MAX_MENUS];
 
 int32_t edit_menu[] = {
-    ACTION_UNDO,
-    ACTION_REDO,
+    COMMAND_UNDO,
+    COMMAND_REDO,
     MENU_SEPERATOR,
-    ACTION_CUT,
-    ACTION_COPY,
-    ACTION_PASTE,
+    COMMAND_CUT,
+    COMMAND_COPY,
+    COMMAND_PASTE,
     MENU_SEPERATOR,
     MENU_END
 };
 
 int32_t pan_menu[] = {
     MENU_ICON,
-    ACTION_PAN,
-    ACTION_PAN_REAL_TIME,
-    ACTION_PAN_POINT,
+/*    COMMAND_PAN, */
+    COMMAND_PAN_REAL_TIME,
+    COMMAND_PAN_POINT,
     MENU_SEPERATOR,
-    ACTION_PAN_LEFT,
-    ACTION_PAN_RIGHT,
-    ACTION_PAN_UP,
-    ACTION_PAN_DOWN,
+    COMMAND_PAN_LEFT,
+    COMMAND_PAN_RIGHT,
+    COMMAND_PAN_UP,
+    COMMAND_PAN_DOWN,
     MENU_END
 };
 
 int32_t zoom_menu[] = {
     MENU_ICON,
-    ACTION_ZOOM,
-    ACTION_ZOOM_REAL_TIME,
-    ACTION_ZOOM_PREVIOUS,
+    COMMAND_ZOOM,
+    COMMAND_ZOOM_REAL_TIME,
+    COMMAND_ZOOM_PREVIOUS,
     MENU_SEPERATOR,
-    ACTION_ZOOM_WINDOW,
-    ACTION_ZOOM_DYNAMIC,
-    ACTION_ZOOM_SCALE,
-    ACTION_ZOOM_CENTER,
+    COMMAND_ZOOM_WINDOW,
+    COMMAND_ZOOM_DYNAMIC,
+    COMMAND_ZOOM_SCALE,
+    COMMAND_ZOOM_CENTER,
     MENU_SEPERATOR,
-    ACTION_ZOOM_IN,
-    ACTION_ZOOM_OUT,
+    COMMAND_ZOOM_IN,
+    COMMAND_ZOOM_OUT,
     MENU_SEPERATOR,
-    ACTION_ZOOM_SELECTED,
-    ACTION_ZOOM_ALL,
-    ACTION_ZOOM_EXTENTS,
+    COMMAND_ZOOM_SELECTED,
+    COMMAND_ZOOM_ALL,
+    COMMAND_ZOOM_EXTENTS,
     MENU_END
 };
 
@@ -194,16 +194,16 @@ int32_t view_menu[] = {
     MENU_SUBMENU, MENU_ZOOM,
     MENU_SUBMENU, MENU_PAN,
     MENU_SEPERATOR,
-    ACTION_DAY,
-    ACTION_NIGHT,
+    COMMAND_DAY,
+    COMMAND_NIGHT,
     MENU_SEPERATOR,
     MENU_END
 };
 
 int32_t settings_menu[] = {
-    ACTION_SETTINGS_DIALOG,
+    COMMAND_SETTINGS_DIALOG,
     MENU_SEPERATOR,
-    ACTION_TEST,
+    COMMAND_TEST,
     MENU_END
 };
 
@@ -213,49 +213,49 @@ int32_t window_menu[] = {
 };
 
 int32_t help_menu[] = {
-    ACTION_HELP,
+    COMMAND_HELP,
     MENU_SEPERATOR,
-    ACTION_CHANGELOG,
+    COMMAND_CHANGELOG,
     MENU_SEPERATOR,
-    ACTION_TIP_OF_THE_DAY,
+    COMMAND_TIP_OF_THE_DAY,
     MENU_SEPERATOR,
-    ACTION_ABOUT,
+    COMMAND_ABOUT,
     MENU_SEPERATOR,
-    ACTION_WHATS_THIS,
+    COMMAND_WHATS_THIS,
     MENU_END
 };
 
 int32_t draw_menu[] = {
-    ACTION_ADD_POLYLINE,
-    ACTION_ADD_PATH,
-    ACTION_ADD_REGULAR_POLYGON,
-    ACTION_ADD_POLYGON,
+    COMMAND_ADD_POLYLINE,
+    COMMAND_ADD_PATH,
+    COMMAND_ADD_REGULAR_POLYGON,
+    COMMAND_ADD_POLYGON,
     MENU_SEPERATOR,
-    ACTION_ADD_ARC,
-    ACTION_ADD_CIRCLE,
-    ACTION_ADD_ELLIPSE,
-    ACTION_ADD_LINE,
-    ACTION_ADD_POINT,
+    COMMAND_ADD_ARC,
+    COMMAND_ADD_CIRCLE,
+    COMMAND_ADD_ELLIPSE,
+    COMMAND_ADD_LINE,
+    COMMAND_ADD_POINT,
     MENU_SEPERATOR,
-    ACTION_ADD_HEART,
-    ACTION_ADD_DOLPHIN,
-    ACTION_TREBLECLEF,
-    ACTION_ADD_SNOWFLAKE,
+    COMMAND_ADD_HEART,
+    COMMAND_ADD_DOLPHIN,
+    COMMAND_TREBLECLEF,
+    COMMAND_ADD_SNOWFLAKE,
     MENU_SEPERATOR,
-    ACTION_ADD_SINGLE_LINE_TEXT,
-    ACTION_ADD_TEXT_MULTI,
-    ACTION_ADD_TEXT_SINGLE,
-    ACTION_ADD_DIM_LEADER,
-    ACTION_ADD_VERTICAL_DIMENSION,
-    ACTION_ADD_HORIZONTAL_DIMENSION,
-    ACTION_ADD_IMAGE,
-    ACTION_ADD_INFINITE_LINE,
-    ACTION_ADD_RAY,
-    ACTION_ADD_RECTANGLE,
-    ACTION_ADD_ROUNDED_RECTANGLE,
-    ACTION_ADD_RUBBER,
-    ACTION_ADD_SLOT,
-    ACTION_ADD_TRIANGLE,
+    COMMAND_ADD_SINGLE_LINE_TEXT,
+    COMMAND_ADD_TEXT_MULTI,
+    COMMAND_ADD_TEXT_SINGLE,
+    COMMAND_ADD_DIM_LEADER,
+    COMMAND_ADD_VERTICAL_DIMENSION,
+    COMMAND_ADD_HORIZONTAL_DIMENSION,
+    COMMAND_ADD_IMAGE,
+    COMMAND_ADD_INFINITE_LINE,
+    COMMAND_ADD_RAY,
+    COMMAND_ADD_RECTANGLE,
+    COMMAND_ADD_ROUNDED_RECTANGLE,
+    COMMAND_ADD_RUBBER,
+    COMMAND_ADD_SLOT,
+    COMMAND_ADD_TRIANGLE,
     MENU_END
 };
 
@@ -264,17 +264,17 @@ ToolbarData toolbar_data[MAX_TOOLBARS] = {
         .id = TOOLBAR_FILE,
         .key = "File",
         .entries = {
-            ACTION_NEW,
-            ACTION_OPEN,
-            ACTION_SAVE,
-            ACTION_SAVEAS,
-            ACTION_PRINT,
-            ACTION_DESIGN_DETAILS,
+            COMMAND_NEW,
+            COMMAND_OPEN,
+            COMMAND_SAVE,
+            COMMAND_SAVEAS,
+            COMMAND_PRINT,
+            COMMAND_DESIGN_DETAILS,
             TOOLBAR_SEPERATOR,
-            ACTION_UNDO,
-            ACTION_REDO,
+            COMMAND_UNDO,
+            COMMAND_REDO,
             TOOLBAR_SEPERATOR,
-            ACTION_HELP,
+            COMMAND_HELP,
             TOOLBAR_END
         },
         .horizontal = 1
@@ -283,9 +283,9 @@ ToolbarData toolbar_data[MAX_TOOLBARS] = {
         .id = TOOLBAR_EDIT,
         .key = "Edit",
         .entries = {
-            ACTION_CUT,
-            ACTION_COPY,
-            ACTION_PASTE,
+            COMMAND_CUT,
+            COMMAND_COPY,
+            COMMAND_PASTE,
             TOOLBAR_END
         },
         .horizontal = 1
@@ -294,13 +294,13 @@ ToolbarData toolbar_data[MAX_TOOLBARS] = {
         .id = TOOLBAR_PAN,
         .key = "Pan",
         .entries = {
-            ACTION_PAN_REAL_TIME,
-            ACTION_PAN_POINT,
+            COMMAND_PAN_REAL_TIME,
+            COMMAND_PAN_POINT,
             TOOLBAR_SEPERATOR,
-            ACTION_PAN_LEFT,
-            ACTION_PAN_RIGHT,
-            ACTION_PAN_UP,
-            ACTION_PAN_DOWN,
+            COMMAND_PAN_LEFT,
+            COMMAND_PAN_RIGHT,
+            COMMAND_PAN_UP,
+            COMMAND_PAN_DOWN,
             TOOLBAR_END
         },
         .horizontal = 1
@@ -309,17 +309,17 @@ ToolbarData toolbar_data[MAX_TOOLBARS] = {
         .id = TOOLBAR_ZOOM,
         .key = "Zoom",
         .entries = {
-            ACTION_ZOOM_WINDOW,
-            ACTION_ZOOM_DYNAMIC,
-            ACTION_ZOOM_SCALE,
+            COMMAND_ZOOM_WINDOW,
+            COMMAND_ZOOM_DYNAMIC,
+            COMMAND_ZOOM_SCALE,
             TOOLBAR_SEPERATOR,
-            ACTION_ZOOM_CENTER,
-            ACTION_ZOOM_IN,
-            ACTION_ZOOM_OUT,
+            COMMAND_ZOOM_CENTER,
+            COMMAND_ZOOM_IN,
+            COMMAND_ZOOM_OUT,
             TOOLBAR_SEPERATOR,
-            ACTION_ZOOM_SELECTED,
-            ACTION_ZOOM_ALL,
-            ACTION_ZOOM_EXTENTS,
+            COMMAND_ZOOM_SELECTED,
+            COMMAND_ZOOM_ALL,
+            COMMAND_ZOOM_EXTENTS,
             TOOLBAR_END
         },
         .horizontal = 1
@@ -328,8 +328,8 @@ ToolbarData toolbar_data[MAX_TOOLBARS] = {
         .id = TOOLBAR_VIEW,
         .key = "View",
         .entries = {
-            ACTION_DAY,
-            ACTION_NIGHT,
+            COMMAND_DAY,
+            COMMAND_NIGHT,
             TOOLBAR_END
         },
         .horizontal = 1
@@ -354,13 +354,13 @@ ToolbarData toolbar_data[MAX_TOOLBARS] = {
         .id = TOOLBAR_HELP,
         .key = "Help",
         .entries = {
-            ACTION_HELP,
+            COMMAND_HELP,
             TOOLBAR_SEPERATOR,
-            ACTION_CHANGELOG,
+            COMMAND_CHANGELOG,
             TOOLBAR_SEPERATOR,
-            ACTION_ABOUT,
+            COMMAND_ABOUT,
             TOOLBAR_SEPERATOR,
-            ACTION_WHATS_THIS,
+            COMMAND_WHATS_THIS,
             TOOLBAR_END
         },
         .horizontal = 1
@@ -369,36 +369,36 @@ ToolbarData toolbar_data[MAX_TOOLBARS] = {
         .id = TOOLBAR_DRAW,
         .key = "Draw",
         .entries = {
-            ACTION_ADD_POLYLINE,
-            ACTION_ADD_PATH,
+            COMMAND_ADD_POLYLINE,
+            COMMAND_ADD_PATH,
             TOOLBAR_SEPERATOR,
-            ACTION_ADD_ARC,
-            ACTION_ADD_CIRCLE,
-            ACTION_ADD_ELLIPSE,
-            ACTION_ADD_LINE,
-            ACTION_ADD_POINT,
-            ACTION_ADD_REGULAR_POLYGON,
-            ACTION_ADD_POLYGON,
-            ACTION_ADD_TRIANGLE,
+            COMMAND_ADD_ARC,
+            COMMAND_ADD_CIRCLE,
+            COMMAND_ADD_ELLIPSE,
+            COMMAND_ADD_LINE,
+            COMMAND_ADD_POINT,
+            COMMAND_ADD_REGULAR_POLYGON,
+            COMMAND_ADD_POLYGON,
+            COMMAND_ADD_TRIANGLE,
             TOOLBAR_SEPERATOR,
-            ACTION_ADD_HEART,
-            ACTION_ADD_DOLPHIN,
-            ACTION_TREBLECLEF,
-            ACTION_ADD_SNOWFLAKE,
+            COMMAND_ADD_HEART,
+            COMMAND_ADD_DOLPHIN,
+            COMMAND_TREBLECLEF,
+            COMMAND_ADD_SNOWFLAKE,
             TOOLBAR_SEPERATOR,
-            ACTION_ADD_SINGLE_LINE_TEXT,
-            ACTION_ADD_TEXT_MULTI,
-            ACTION_ADD_TEXT_SINGLE,
-            ACTION_ADD_DIM_LEADER,
-            ACTION_ADD_VERTICAL_DIMENSION,
-            ACTION_ADD_HORIZONTAL_DIMENSION,
-            ACTION_ADD_IMAGE,
-            ACTION_ADD_INFINITE_LINE,
-            ACTION_ADD_RAY,
-            ACTION_ADD_RECTANGLE,
-            ACTION_ADD_ROUNDED_RECTANGLE,
-            ACTION_ADD_RUBBER,
-            ACTION_ADD_SLOT,
+            COMMAND_ADD_SINGLE_LINE_TEXT,
+            COMMAND_ADD_TEXT_MULTI,
+            COMMAND_ADD_TEXT_SINGLE,
+            COMMAND_ADD_DIM_LEADER,
+            COMMAND_ADD_VERTICAL_DIMENSION,
+            COMMAND_ADD_HORIZONTAL_DIMENSION,
+            COMMAND_ADD_IMAGE,
+            COMMAND_ADD_INFINITE_LINE,
+            COMMAND_ADD_RAY,
+            COMMAND_ADD_RECTANGLE,
+            COMMAND_ADD_ROUNDED_RECTANGLE,
+            COMMAND_ADD_RUBBER,
+            COMMAND_ADD_SLOT,
             TOOLBAR_END
         },
         .horizontal = 0
@@ -407,12 +407,12 @@ ToolbarData toolbar_data[MAX_TOOLBARS] = {
         .id = TOOLBAR_ICON,
         .key = "Icon",
         .entries = {
-            ACTION_ICON16,
-            ACTION_ICON24,
-            ACTION_ICON32,
-            ACTION_ICON48,
-            ACTION_ICON64,
-            ACTION_ICON128,
+            COMMAND_ICON16,
+            COMMAND_ICON24,
+            COMMAND_ICON32,
+            COMMAND_ICON48,
+            COMMAND_ICON64,
+            COMMAND_ICON128,
             TOOLBAR_END
         },
         .horizontal = 1
@@ -421,8 +421,8 @@ ToolbarData toolbar_data[MAX_TOOLBARS] = {
         .id = TOOLBAR_LAYER,
         .key = "Layer",
         .entries = {
-            ACTION_MAKE_LAYER_CURRENT,
-            ACTION_LAYER_EDITOR,
+            COMMAND_MAKE_LAYER_CURRENT,
+            COMMAND_LAYER_EDITOR,
             TOOLBAR_END
         },
         .horizontal = 1
@@ -2496,824 +2496,404 @@ Setting settings_data[SETTINGS_TOTAL] = {
     }
 };
 
+/* Possible flag system for commands. */
+
+#define CMD_NO_ARG                      0x00
+#define CMD_ONE_ARGS                    0x01
+#define CMD_TWO_ARGS                    0x02
+#define CMD_THREE_ARGS                  0x03
+#define CMD_FOUR_ARGS                   0x04
+#define CMD_FIVE_ARGS                   0x05
+#define CMD_SIX_ARGS                    0x06
+#define CMD_SEVEN_ARGS                  0x07
+#define CMD_EIGHT_ARGS                  0x08
+
+/* 0x08 = 0b1000, so other flags need to be 1 nibble over. */
+
+#define CMD_NEEDS_VIEW           (0x01 << 4)
+#define CMD_NEEDS_SCENE          (0x02 << 4)
+#define CMD_CAN_UNDO             (0x04 << 4)
+#define CMD_PATTERN              (0x07 << 4)
+#define CMD_BASIC                       0x00
+
 /* . */
 CommandData command_table[MAX_COMMANDS] = {
     {
-        .id = COMMAND_ABOUT,
-        .command = "about",
-        .min_args = 0,
-        .gview = 0,
-        .gscene = 0,
-        .undo = 0
-    },
-    {
-        .id = COMMAND_TREBLECLEF,
-        .command = "trebleclef",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_DO_NOTHING,
-        .command = "donothing",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_NEW,
-        .command = "new",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_OPEN,
-        .command = "open",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_SAVE,
-        .command = "save",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_SAVEAS,
-        .command = "saveas",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_PRINT,
-        .command = "print",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_DESIGN_DETAILS,
-        .command = "designdetails",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_EXIT,
-        .command = "exit",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_CUT,
-        .command = "cut",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_COPY,
-        .command = "copy",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_PASTE,
-        .command = "paste",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_UNDO,
-        .command = "undo",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_REDO,
-        .command = "redo",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_WINDOW,
-        .command = "window",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_HELP,
-        .command = "help",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_CHANGELOG,
-        .command = "changelog",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_TIP_OF_THE_DAY,
-        .command = "tips",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_WHATS_THIS,
-        .command = "whatsthis",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_ICON,
-        .command = "icon",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_SETTINGS_DIALOG,
-        .command = "settingsdialog",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_MAKE_LAYER_CURRENT,
-        .command = "makelayercurrent",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_LAYERS,
-        .command = "layers",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_LAYER_SELECTOR,
-        .command = "layerselector",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_LAYER_PREVIOUS,
-        .command = "layerprevious",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_COLOR_SELECTOR,
-        .command = "colorselector",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_LINE_TYPE_SELECTOR,
-        .command = "linetypeselector",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_LINE_WEIGHT_SELECTOR,
-        .command = "lineweightselector",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_HIDE_ALL_LAYERS,
-        .command = "hidealllayers",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_SHOW_ALL_LAYERS,
-        .command = "showalllayers",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_FREEZE_ALL_LAYERS,
-        .command = "freezealllayers",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_THAW_ALL_LAYERS,
-        .command = "thawalllayers",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_LOCK_ALL_LAYERS,
-        .command = "lockalllayers",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_UNLOCK_ALL_LAYERS,
-        .command = "unlockalllayers",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_TEXT,
-        .command = "text",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_ZOOM,
-        .command = "zoom",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_PAN,
-        .command = "pan",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_DAY,
-        .command = "day",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_NIGHT,
-        .command = "night",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_SPELLCHECK,
-        .command = "spellcheck",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_QUICKSELECT,
-        .command = "quickselect",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_DISTANCE,
-        .command = "distance",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_DELETE,
-        .command = "erase",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_MOVE,
-        .command = "move",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_PLATFORM,
-        .command = "platform",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_QUICKLEADER,
-        .command = "addquickleader",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_RGB,
-        .command = "rgb",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_ROTATE,
-        .command = "rotate",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_SANDBOX,
-        .command = "sandbox",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_SCALE,
-        .command = "scale",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_SELECT_ALL,
-        .command = "selectall",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_SINGLE_LINE_TEXT,
-        .command = "singlelinetext",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_SYSWINDOWS,
-        .command = "syswindows",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_EXIT,
-        .command = "exit",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_TEST,
-        .command = "test",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    },
-    {
-        .id = COMMAND_SLEEP,
-        .command = "sleep",
-        .min_args = 0,
-        .gview = 0,
-        .gscene = 0,
-        .undo = 0
-    },
-    {
-        .id = COMMAND_END,
-        .command = "END",
-        .min_args = 0,
-        .gview = 1,
-        .gscene = 1,
-        .undo = 1
-    }
-};
-
-/* . */
-ActionData action_table[MAX_ACTIONS] = {
-    {
-        .id = ACTION_ABOUT, /* 0 */
+        .id = COMMAND_ABOUT, /* 0 */
         .icon = "about",
         .command = "about",
         .tooltip = "&About Embroidermodder 2",
         .statustip = "Displays information about this product: ABOUT.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 0,
+        .gscene = 0,
+        .undo = 0
     },
     {
-        .id = ACTION_ADD_ARC, /* 1 */
+        .id = COMMAND_ADD_ARC, /* 1 */
         .icon = "arc",
         .command = "add-arc",
         .tooltip = "&Add Arc",
         .statustip = "Adds an arc to the vector layer.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
         /* .alias = "C", */
-        .id = ACTION_ADD_CIRCLE, /* 2 */
+        .id = COMMAND_ADD_CIRCLE, /* 2 */
         .icon = "circle",
         .command = "circle",
         .tooltip = "Circle",
         .statustip = "Creates a circle: CIRCLE",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
         /* .alias = "C", */
-        .id = ACTION_ADD_DIM_LEADER, /* 3 */
+        .id = COMMAND_ADD_DIM_LEADER, /* 3 */
         .icon = "circle",
         .command = "circle",
         .tooltip = "Circle",
         .statustip = "Creates a circle: CIRCLE",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ADD_ELLIPSE, /* 4 */
+        .id = COMMAND_ADD_ELLIPSE, /* 4 */
         .icon = "ellipse",
         .command = "ellipse",
         .tooltip = "Ellipse",
         .statustip = "Creates a ellipse: ELLIPSE",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ADD_GEOMETRY, /* 5 */
+        .id = COMMAND_ADD_GEOMETRY, /* 5 */
         .icon = "ellipse",
         .command = "ellipse",
         .tooltip = "Ellipse",
         .statustip = "Creates a ellipse: ELLIPSE",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ADD_HORIZONTAL_DIMENSION, /* 6 */
+        .id = COMMAND_ADD_HORIZONTAL_DIMENSION, /* 6 */
         .icon = "ellipse",
         .command = "ellipse",
         .tooltip = "Ellipse",
         .statustip = "Creates a ellipse: ELLIPSE",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ADD_IMAGE, /* 7 */
+        .id = COMMAND_ADD_IMAGE, /* 7 */
         .icon = "ellipse",
         .command = "ellipse",
         .tooltip = "Ellipse",
         .statustip = "Creates a ellipse: ELLIPSE",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ADD_INFINITE_LINE, /* 8 */
+        .id = COMMAND_ADD_INFINITE_LINE, /* 8 */
         .icon = "ellipse",
         .command = "ellipse",
         .tooltip = "Ellipse",
         .statustip = "Creates a ellipse: ELLIPSE",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ADD_LINE, /* 9 */
+        .id = COMMAND_ADD_LINE, /* 9 */
         .icon = "line",
         .command = "line",
         .tooltip = "&Line",
         .statustip = "Creates straight line segments: LINE.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        /*
-        menu = "Draw",
-        toolbar = "Draw"
-        */
-        .id = ACTION_ADD_PATH, /* 10 */
+        .id = COMMAND_ADD_PATH, /* 10 */
         .icon = "path",
         .command = "addpath",
         .tooltip = "&Path",
         .statustip = "Creates a 2D path: PATH.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ADD_POINT, /* 11 */
+        .id = COMMAND_ADD_POINT, /* 11 */
         .icon = "point",
-        .command = "addpoint",
+        .command = "point",
         .tooltip = "&Point",
         .statustip = "Creates multiple points: POINT.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ADD_POLYGON, /* 12 */
+        .id = COMMAND_ADD_POLYGON, /* 12 */
         .icon = "polygon",
-        .command = "addpolygon",
+        .command = "polygon",
         .tooltip = "Pol&ygon",
         .statustip = "Creates a regular polygon: POLYGON.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        /*
-        .menu = "Draw",
-        .toolbar = "Draw",
-        */
-        .id = ACTION_ADD_POLYLINE, /* 13 */
+        .id = COMMAND_ADD_POLYLINE, /* 13 */
         .icon = "polyline",
-        .command = "addpolyline",
+        .command = "polyline",
         .tooltip = "&Polyline",
         .statustip = "Creates a 2D polyline: PLINE.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        /*
-        .menu = "Draw",
-        .toolbar = "Draw",
-        */
-        .id = ACTION_ADD_RAY, /* 14 */
+        .id = COMMAND_ADD_RAY, /* 14 */
         .icon = "polyline",
-        .command = "addpolyline",
+        .command = "ray",
         .tooltip = "&Polyline",
         .statustip = "Creates a 2D polyline: PLINE.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ADD_RECTANGLE, /* 15 */
+        .id = COMMAND_ADD_RECTANGLE, /* 15 */
         .icon = "rectangle",
         .command = "rectangle",
         .tooltip = "&Rectangle",
         .statustip = "Creates a rectangular polyline: RECTANGLE.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ADD_REGULAR_POLYGON, /* 16 */
+        .id = COMMAND_ADD_REGULAR_POLYGON, /* 16 */
+        .icon = "rectangle",
+        .command = "regular-polygon",
+        .tooltip = "&Rectangle",
+        .statustip = "Creates a rectangular polyline: RECTANGLE.",
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
+    },
+    {
+        .id = COMMAND_ADD_ROUNDED_RECTANGLE, /* 17 */
+        .icon = "rectangle",
+        .command = "rounded-rectangle",
+        .tooltip = "&Rectangle",
+        .statustip = "Creates a rectangular polyline: RECTANGLE.",
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
+    },
+    {
+        .id = COMMAND_ADD_RUBBER, /* 18 */
+        .icon = "rectangle",
+        .command = "rubber",
+        .tooltip = "&Rectangle",
+        .statustip = "Creates a rectangular polyline: RECTANGLE.",
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
+    },
+    {
+        .id = COMMAND_ADD_SLOT, /* 19 */
+        .icon = "rectangle",
+        .command = "slot",
+        .tooltip = "&Rectangle",
+        .statustip = "Creates a rectangular polyline: RECTANGLE.",
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
+    },
+    {
+        .id = COMMAND_ADD_TEXT_MULTI, /* 20 */
+        .icon = "rectangle",
+        .command = "text",
+        .tooltip = "&Rectangle",
+        .statustip = "Creates a rectangular polyline: RECTANGLE.",
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
+    },
+    {
+        .id = COMMAND_ADD_TEXT_SINGLE, /* 21 */
+        .icon = "rectangle",
+        .command = "text-single",
+        .tooltip = "&Rectangle",
+        .statustip = "Creates a rectangular polyline: RECTANGLE.",
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
+    },
+    {
+        .id = COMMAND_ADD_TO_SELECTION, /* 22 */
+        .icon = "rectangle",
+        .command = "add-to-selection",
+        .tooltip = "&Rectangle",
+        .statustip = "Creates a rectangular polyline: RECTANGLE.",
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
+    },
+    {
+        .id = COMMAND_ADD_TRIANGLE, /* 23 */
         .icon = "rectangle",
         .command = "rectangle",
         .tooltip = "&Rectangle",
         .statustip = "Creates a rectangular polyline: RECTANGLE.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ADD_ROUNDED_RECTANGLE, /* 17 */
+        .id = COMMAND_ADD_VERTICAL_DIMENSION, /* 24 */
         .icon = "rectangle",
         .command = "rectangle",
         .tooltip = "&Rectangle",
         .statustip = "Creates a rectangular polyline: RECTANGLE.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ADD_RUBBER, /* 18 */
-        .icon = "rectangle",
-        .command = "rectangle",
-        .tooltip = "&Rectangle",
-        .statustip = "Creates a rectangular polyline: RECTANGLE.",
-        .shortcut = ""
-    },
-    {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ADD_SLOT, /* 19 */
-        .icon = "rectangle",
-        .command = "rectangle",
-        .tooltip = "&Rectangle",
-        .statustip = "Creates a rectangular polyline: RECTANGLE.",
-        .shortcut = ""
-    },
-    {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ADD_TEXT_MULTI, /* 20 */
-        .icon = "rectangle",
-        .command = "rectangle",
-        .tooltip = "&Rectangle",
-        .statustip = "Creates a rectangular polyline: RECTANGLE.",
-        .shortcut = ""
-    },
-    {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ADD_TEXT_SINGLE, /* 21 */
-        .icon = "rectangle",
-        .command = "rectangle",
-        .tooltip = "&Rectangle",
-        .statustip = "Creates a rectangular polyline: RECTANGLE.",
-        .shortcut = ""
-    },
-    {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ADD_TO_SELECTION, /* 22 */
-        .icon = "rectangle",
-        .command = "rectangle",
-        .tooltip = "&Rectangle",
-        .statustip = "Creates a rectangular polyline: RECTANGLE.",
-        .shortcut = ""
-    },
-    {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ADD_TRIANGLE, /* 23 */
-        .icon = "rectangle",
-        .command = "rectangle",
-        .tooltip = "&Rectangle",
-        .statustip = "Creates a rectangular polyline: RECTANGLE.",
-        .shortcut = ""
-    },
-    {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ADD_VERTICAL_DIMENSION, /* 24 */
-        .icon = "rectangle",
-        .command = "rectangle",
-        .tooltip = "&Rectangle",
-        .statustip = "Creates a rectangular polyline: RECTANGLE.",
-        .shortcut = ""
-    },
-    {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ALERT, /* 25 */
+        .id = COMMAND_ALERT, /* 25 */
         .icon = "warning",
         .command = "alert",
         .tooltip = "&Alert",
         .statustip = "Alert user of an issue.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ALLOW_RUBBER, /* 26 */
+        .id = COMMAND_ALLOW_RUBBER, /* 26 */
         .icon = "warning",
         .command = "alert",
         .tooltip = "&Alert",
         .statustip = "Alert user of an issue.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_APPEND_HISTORY, /* 27 */
+        .id = COMMAND_APPEND_HISTORY, /* 27 */
         .icon = "warning",
         .command = "alert",
         .tooltip = "&Alert",
         .statustip = "Alert user of an issue.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_CALCULATE_ANGLE, /* 28 */
+        .id = COMMAND_CALCULATE_ANGLE, /* 28 */
         .icon = "warning",
         .command = "alert",
         .tooltip = "&Alert",
         .statustip = "Alert user of an issue.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_CALCULATE_DISTANCE, /* 29 */
+        .id = COMMAND_CALCULATE_DISTANCE, /* 29 */
         .icon = "warning",
         .command = "alert",
         .tooltip = "&Alert",
         .statustip = "Alert user of an issue.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_CHANGELOG, /* 30 */
+        .id = COMMAND_CHANGELOG, /* 30 */
+        .icon = "changelog",
+        .command = "changelog",
+        .tooltip = "&Changelog",
+        .statustip = "Describes new features in this product.",
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 0,
+        .gscene = 0,
+        .undo = 0
+    },
+    {
+        .id = COMMAND_CLEAR_RUBBER, /* 31 */
         .icon = "changelog",
         .command = "changelog",
         .tooltip = "&Changelog",
@@ -3321,7 +2901,7 @@ ActionData action_table[MAX_ACTIONS] = {
         .shortcut = ""
     },
     {
-        .id = ACTION_CLEAR_RUBBER, /* 31 */
+        .id = COMMAND_CLEAR_SELECTION, /* 32 */
         .icon = "changelog",
         .command = "changelog",
         .tooltip = "&Changelog",
@@ -3329,15 +2909,19 @@ ActionData action_table[MAX_ACTIONS] = {
         .shortcut = ""
     },
     {
-        .id = ACTION_CLEAR_SELECTION, /* 32 */
-        .icon = "changelog",
-        .command = "changelog",
-        .tooltip = "&Changelog",
-        .statustip = "Describes new features in this product.",
-        .shortcut = ""
+        .id = COMMAND_COPY, /* 33 */
+        .icon = "copy",
+        .command = "copy",
+        .tooltip = "&Copy",
+        .statustip = "Copy the current selection's contents to the clipboard.",
+        .shortcut = "Ctrl+C",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_COPY, /* 33 */
+        .id = COMMAND_COPY_SELECTED, /* 34 */
         .icon = "copy",
         .command = "copy",
         .tooltip = "&Copy",
@@ -3345,15 +2929,19 @@ ActionData action_table[MAX_ACTIONS] = {
         .shortcut = "Ctrl+C"
     },
     {
-        .id = ACTION_COPY_SELECTED, /* 34 */
-        .icon = "copy",
-        .command = "copy",
-        .tooltip = "&Copy",
-        .statustip = "Copy the current selection's contents to the clipboard.",
-        .shortcut = "Ctrl+C"
+        .id = COMMAND_CUT, /* 35 */
+        .icon = "cut",
+        .command = "cut",
+        .tooltip = "Cu&t",
+        .statustip = "Cut the current selection's contents to the clipboard.",
+        .shortcut = "Ctrl+X",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_CUT, /* 35 */
+        .id = COMMAND_CUT_SELECTED, /* 36 */
         .icon = "cut",
         .command = "cut",
         .tooltip = "Cu&t",
@@ -3361,15 +2949,31 @@ ActionData action_table[MAX_ACTIONS] = {
         .shortcut = "Ctrl+X"
     },
     {
-        .id = ACTION_CUT_SELECTED, /* 36 */
-        .icon = "cut",
-        .command = "cut",
-        .tooltip = "Cu&t",
-        .statustip = "Cut the current selection's contents to the clipboard.",
-        .shortcut = "Ctrl+X"
+        .id = COMMAND_DAY, /* 37 */
+        .icon = "day",
+        .command = "day",
+        .tooltip = "&Day",
+        .statustip = "Updates the current view using day vision settings: DAY.",
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_DAY, /* 37 */
+        .id = COMMAND_DEBUG, /* 38 */
+        .icon = "day",
+        .command = "day",
+        .tooltip = "&Day",
+        .statustip = "Updates the current view using day vision settings: DAY.",
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 0,
+        .gscene = 0,
+        .undo = 0
+    },
+    {
+        .id = COMMAND_DELETE_SELECTED, /* 39 */
         .icon = "day",
         .command = "day",
         .tooltip = "&Day",
@@ -3377,39 +2981,31 @@ ActionData action_table[MAX_ACTIONS] = {
         .shortcut = ""
     },
     {
-        .id = ACTION_DEBUG, /* 38 */
-        .icon = "day",
-        .command = "day",
-        .tooltip = "&Day",
-        .statustip = "Updates the current view using day vision settings: DAY.",
-        .shortcut = ""
-    },
-    {
-        .id = ACTION_DELETE_SELECTED, /* 39 */
-        .icon = "day",
-        .command = "day",
-        .tooltip = "&Day",
-        .statustip = "Updates the current view using day vision settings: DAY.",
-        .shortcut = ""
-    },
-    {
-        .id = ACTION_DESIGN_DETAILS, /* 40 */
+        .id = COMMAND_DESIGN_DETAILS, /* 40 */
         .icon = "designdetails",
         .command = "designdetails",
         .tooltip = "&Details",
         .statustip = "Details of the current design.",
-        .shortcut = "Ctrl+D"
+        .shortcut = "Ctrl+D",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_DO_NOTHING, /* 41 */
+        .id = COMMAND_DO_NOTHING, /* 41 */
         .icon = "donothing",
         .command = "donothing",
         .tooltip = "&Do Nothing",
         .statustip = "Does Nothing",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 0,
+        .gscene = 0,
+        .undo = 0
     },
     {
-        .id = ACTION_END, /* 42 */
+        .id = COMMAND_END, /* 42 */
         .icon = "END",
         .command = "END",
         .tooltip = "END",
@@ -3417,7 +3013,7 @@ ActionData action_table[MAX_ACTIONS] = {
         .shortcut = "END"
     },
     {
-        .id = ACTION_ERROR, /* 43 */
+        .id = COMMAND_ERROR, /* 43 */
         .icon = "END",
         .command = "END",
         .tooltip = "END",
@@ -3425,7 +3021,7 @@ ActionData action_table[MAX_ACTIONS] = {
         .shortcut = "END"
     },
     {
-        .id = ACTION_HELP, /* 44 */
+        .id = COMMAND_HELP, /* 44 */
         .icon = "help",
         .command = "help",
         .tooltip = "&Help",
@@ -3433,1013 +3029,1511 @@ ActionData action_table[MAX_ACTIONS] = {
         .shortcut = ""
     },
     {
-        .id = ACTION_ICON, /* 45 */
+        .id = COMMAND_ICON16, /* 45 */
         .icon = "icon16",
         .command = "icon 16",
         .tooltip = "Icon&16",
         .statustip = "Sets the toolbar icon size to 16x16: ICON16",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_INIT, /* 46 */
+        .id = COMMAND_INIT, /* 46 */
         .icon = "init",
         .command = "init",
         .tooltip = "Icon&16",
         .statustip = "Sets the toolbar icon size to 16x16: ICON16",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_MESSAGEBOX, /* 47 */
+        .id = COMMAND_MESSAGEBOX, /* 47 */
         .icon = "init",
         .command = "init",
         .tooltip = "Icon&16",
         .statustip = "Sets the toolbar icon size to 16x16: ICON16",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_MIRROR_SELECTED, /* 48 */
+        .id = COMMAND_MIRROR_SELECTED, /* 48 */
         .icon = "init",
         .command = "init",
         .tooltip = "Icon&16",
         .statustip = "Sets the toolbar icon size to 16x16: ICON16",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_MOUSE_X, /* 49 */
+        .id = COMMAND_MOUSE_X, /* 49 */
         .icon = "init",
         .command = "init",
         .tooltip = "Icon&16",
         .statustip = "Sets the toolbar icon size to 16x16: ICON16",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_MOUSE_Y, /* 50 */
+        .id = COMMAND_MOUSE_Y, /* 50 */
         .icon = "init",
         .command = "init",
         .tooltip = "Icon&16",
         .statustip = "Sets the toolbar icon size to 16x16: ICON16",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_MOVE_SELECTED, /* 51 */
+        .id = COMMAND_MOVE_SELECTED, /* 51 */
         .icon = "init",
         .command = "init",
         .tooltip = "Icon&16",
         .statustip = "Sets the toolbar icon size to 16x16: ICON16",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_NEW, /* 52 */
+        .id = COMMAND_NEW, /* 52 */
         .icon = "new",
         .command = "new",
         .tooltip = "&New",
         .statustip = "Create a new file: NEW.",
-        .shortcut = "Ctrl+N"
+        .shortcut = "Ctrl+N",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_NIGHT, /* 53 */
+        .id = COMMAND_NIGHT, /* 53 */
         .icon = "night_vision",
         .command = "night",
         .tooltip = "&Night",
         .statustip = "Updates the current view using night vision settings: NIGHT",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_NUM_SELECTED, /* 54 */
+        .id = COMMAND_NUM_SELECTED, /* 54 */
         .icon = "night_vision",
         .command = "night",
         .tooltip = "&Night",
         .statustip = "Updates the current view using night vision settings: NIGHT",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_OPEN, /* 55 */
+        .id = COMMAND_OPEN, /* 55 */
         .icon = "open",
         .command = "open",
         .tooltip = "&Open",
         .statustip = "Open an existing file: OPEN",
-        .shortcut = "Ctrl+O"
+        .shortcut = "Ctrl+O",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_PAN, /* 56 */
-        .icon = "open",
-        .command = "open",
-        .tooltip = "&Open",
-        .statustip = "Open an existing file: OPEN",
-        .shortcut = "Ctrl+O"
+        .id = COMMAND_PAN_UP, /* 56 */
+        .icon = "pan-up",
+        .command = "pan up",
+        .tooltip = "Pan &Up",
+        .statustip = "Pan the current view up: PAN UP",
+        .shortcut = "up",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_PASTE, /* 57 */
+        .id = COMMAND_PASTE, /* 57 */
         .icon = "paste",
         .command = "paste",
         .tooltip = "&Paste",
         .statustip = "Paste the clipboard's contents into the current selection.",
-        .shortcut = "Ctrl+V"
+        .shortcut = "Ctrl+V",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_PASTE_SELECTED, /* 58 */
+        .id = COMMAND_PASTE_SELECTED, /* 58 */
         .icon = "paste",
         .command = "paste",
         .tooltip = "&Paste",
         .statustip = "Paste the clipboard's contents into the current selection.",
-        .shortcut = "Ctrl+V"
+        .shortcut = "Ctrl+V",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_PERPENDICULAR_DISTANCE, /* 59 */
+        .id = COMMAND_PERPENDICULAR_DISTANCE, /* 59 */
         .icon = "paste",
         .command = "paste",
         .tooltip = "&Paste",
         .statustip = "Paste the clipboard's contents into the current selection.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 2,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 0
     },
     {
-        .id = ACTION_PLATFORM, /* 60 */
+        .id = COMMAND_PLATFORM, /* 60 */
         .icon = "platform",
         .command = "platform",
         .tooltip = "&Platform",
         .statustip = "List which platform is in use: PLATFORM.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_PREVIEW_OFF, /* 61 */
+        .id = COMMAND_PREVIEW_OFF, /* 61 */
         .icon = "platform",
         .command = "platform",
         .tooltip = "&Platform",
         .statustip = "List which platform is in use: PLATFORM.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_PREVIEW_ON, /* 62 */
+        .id = COMMAND_PREVIEW_ON, /* 62 */
         .icon = "platform",
         .command = "platform",
         .tooltip = "&Platform",
         .statustip = "List which platform is in use: PLATFORM.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_PRINT, /* 63 */
+        .id = COMMAND_PRINT, /* 63 */
         .icon = "print",
         .command = "print",
         .tooltip = "&Print",
         .statustip = "Print the design.",
-        .shortcut = "Ctrl+P"
+        .shortcut = "Ctrl+P",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_PRINT_AREA, /* 64 */
+        .id = COMMAND_PRINT_AREA, /* 64 */
         .icon = "print",
         .command = "print",
         .tooltip = "&Print",
         .statustip = "Print the design.",
-        .shortcut = "Ctrl+P"
+        .shortcut = "Ctrl+P",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_QSNAP_X, /* 65 */
+        .id = COMMAND_QSNAP_X, /* 65 */
         .icon = "print",
         .command = "print",
         .tooltip = "&Print",
         .statustip = "Print the design.",
-        .shortcut = "Ctrl+P"
+        .shortcut = "Ctrl+P",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_QSNAP_Y, /* 66 */
+        .id = COMMAND_QSNAP_Y, /* 66 */
         .icon = "print",
         .command = "print",
         .tooltip = "&Print",
         .statustip = "Print the design.",
-        .shortcut = "Ctrl+P"
+        .shortcut = "Ctrl+P",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_EXIT, /* 67 */
+        .id = COMMAND_EXIT, /* 67 */
         .icon = "exit",
         .command = "exit",
         .tooltip = "E&xit",
         .statustip = "Exit the application: EXIT",
-        .shortcut = "Ctrl+Shift+Q"
+        .shortcut = "Ctrl+Shift+Q",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_REDO, /* 68 */
+        .id = COMMAND_REDO, /* 68 */
         .icon = "redo",
         .command = "redo",
         .tooltip = "&Redo",
         .statustip = "Reverses the effects of the previous undo action: REDO",
-        .shortcut = "Ctrl+Shift+Z"
+        .shortcut = "Ctrl+Shift+Z",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_ROTATE_SELECTED, /* 69 */
+        .id = COMMAND_ROTATE_SELECTED, /* 69 */
         .icon = "rotate",
         .command = "rotate",
         .tooltip = "&Redo",
         .statustip = "Reverses the effects of the previous undo action: REDO",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_RUBBER, /* 70 */
+        .id = COMMAND_RUBBER, /* 70 */
         .icon = "rotate",
         .command = "rotate",
         .tooltip = "&Redo",
         .statustip = "Reverses the effects of the previous undo action: REDO",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_SCALE_SELECTED, /* 71 */
+        .id = COMMAND_SCALE_SELECTED, /* 71 */
         .icon = "rotate",
         .command = "rotate",
         .tooltip = "&Redo",
         .statustip = "Reverses the effects of the previous undo action: REDO",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_SELECT_ALL, /* 72 */
+        .id = COMMAND_SELECT_ALL, /* 72 */
         .icon = "selectall",
         .command = "selectall",
         .tooltip = "&Select All",
         .statustip = "Selects all objects: SELECTALL.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_SETTINGS_DIALOG, /* 73 */
+        .id = COMMAND_SETTINGS_DIALOG, /* 73 */
         .icon = "settingsdialog",
         .command = "settingsdialog",
         .tooltip = "&Settings",
         .statustip = "Configure settings specific to this product.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_SET_BACKGROUND_COLOR, /* 74 */
+        .id = COMMAND_SET_BACKGROUND_COLOR, /* 74 */
         .icon = "settingsdialog",
         .command = "settingsdialog",
         .tooltip = "&Settings",
         .statustip = "Configure settings specific to this product.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_SET_CROSSHAIR_COLOR, /* 75 */
+        .id = COMMAND_SET_CROSSHAIR_COLOR, /* 75 */
         .icon = "settingsdialog",
         .command = "settingsdialog",
         .tooltip = "&Settings",
         .statustip = "Configure settings specific to this product.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_SET_CURSOR_SHAPE, /* 76 */
+        .id = COMMAND_SET_CURSOR_SHAPE, /* 76 */
         .icon = "settingsdialog",
         .command = "settingsdialog",
         .tooltip = "&Settings",
         .statustip = "Configure settings specific to this product.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_SET_GRID_COLOR, /* 77 */
+        .id = COMMAND_SET_GRID_COLOR, /* 77 */
         .icon = "settingsdialog",
         .command = "settingsdialog",
         .tooltip = "&Settings",
         .statustip = "Configure settings specific to this product.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_SET_PROMPT_PREFIX, /* 78 */
+        .id = COMMAND_SET_PROMPT_PREFIX, /* 78 */
         .icon = "settingsdialog",
         .command = "settingsdialog",
         .tooltip = "&Settings",
         .statustip = "Configure settings specific to this product.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_SET_RUBBER_FILTER, /* 79 */
+        .id = COMMAND_SET_RUBBER_FILTER, /* 79 */
         .icon = "settingsdialog",
         .command = "settingsdialog",
         .tooltip = "&Settings",
         .statustip = "Configure settings specific to this product.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_SET_RUBBER_MODE, /* 80 */
+        .id = COMMAND_SET_RUBBER_MODE, /* 80 */
         .icon = "settingsdialog",
         .command = "settingsdialog",
         .tooltip = "&Settings",
         .statustip = "Configure settings specific to this product.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_SET_RUBBER_POINT, /* 81 */
+        .id = COMMAND_SET_RUBBER_POINT, /* 81 */
         .icon = "settingsdialog",
         .command = "settingsdialog",
         .tooltip = "&Settings",
         .statustip = "Configure settings specific to this product.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_SET_RUBBER_TEXT, /* 82 */
+        .id = COMMAND_SET_RUBBER_TEXT, /* 82 */
         .icon = "settingsdialog",
         .command = "settingsdialog",
         .tooltip = "&Settings",
         .statustip = "Configure settings specific to this product.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_SPARE_RUBBER, /* 83 */
+        .id = COMMAND_SPARE_RUBBER, /* 83 */
         .icon = "settingsdialog",
         .command = "settingsdialog",
         .tooltip = "&Settings",
         .statustip = "Configure settings specific to this product.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_TIP_OF_THE_DAY, /* 84 */
+        .id = COMMAND_TIP_OF_THE_DAY, /* 84 */
         .icon = "tipoftheday",
         .command = "tips",
         .tooltip = "&Tip Of The Day",
         .statustip = "Displays a dialog with useful tips: TIPS",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_TODO, /* 85 */
+        .id = COMMAND_TODO, /* 85 */
         .icon = "tipoftheday",
         .command = "todo",
         .tooltip = "&To Do",
         .statustip = "Adds an item to the debug.txt log to tell developers to fix this.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_UNDO, /* 86 */
+        .id = COMMAND_UNDO, /* 86 */
         .icon = "undo",
         .command = "undo",
         .tooltip = "&Undo",
         .statustip = "Reverses the most recent action: UNDO",
-        .shortcut = "Ctrl+Z"
+        .shortcut = "Ctrl+Z",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_VERSION, /* 87 */
+        .id = COMMAND_VERSION, /* 87 */
         .icon = "undo",
         .command = "version",
         .tooltip = "&Version",
         .statustip = "Prints out the running version of Embroidermodder.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 0,
+        .gscene = 0,
+        .undo = 0
     },
     {
-        .id = ACTION_VULCANIZE, /* 88 */
+        .id = COMMAND_VULCANIZE, /* 88 */
         .icon = "undo",
         .command = "version",
         .tooltip = "&Version",
         .statustip = "Prints out the running version of Embroidermodder.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_WHATS_THIS, /* 89 */
+        .id = COMMAND_WHATS_THIS, /* 89 */
         .icon = "whatsthis",
         .command = "whatsthis",
         .tooltip = "&What's This?",
         .statustip = "What's This? Context Help!",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_WINDOW_CLOSE, /* 90 */
+        .id = COMMAND_WINDOW_CLOSE, /* 90 */
         .icon = "windowclose",
         .command = "window close",
         .tooltip = "Cl&ose",
         .statustip = "Close the active window: CLOSE",
-        .shortcut = "Ctrl+W"
+        .shortcut = "Ctrl+W",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_WINDOW_CLOSE_ALL, /* 91 */
+        .id = COMMAND_WINDOW_CLOSE_ALL, /* 91 */
         .icon = "windowcloseall",
         .command = "window closeall",
         .tooltip = "Close &All",
         .statustip = "Close all the windows: CLOSEALL",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_WINDOW_TILE, /* 92 */
+        .id = COMMAND_WINDOW_TILE, /* 92 */
         .icon = "windowtile",
         .command = "window tile",
         .tooltip = "&Tile",
         .statustip = "Tile the windows: TILE",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_WINDOW_CASCADE, /* 93 */
+        .id = COMMAND_WINDOW_CASCADE, /* 93 */
         .icon = "windowcascade",
         .command = "window cascade",
         .tooltip = "&Cascade",
         .statustip = "Cascade the windows: CASCADE",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_WINDOW_NEXT, /* 94 */
+        .id = COMMAND_WINDOW_NEXT, /* 94 */
         .icon = "windownext",
         .command = "window next",
         .tooltip = "Ne&xt",
         .statustip = "Move the focus to the next window: NEXT",
-        .shortcut = "Ctrl+Tab"
+        .shortcut = "Ctrl+Tab",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_WINDOW_PREVIOUS, /* 95 */
+        .id = COMMAND_WINDOW_PREVIOUS, /* 95 */
         .icon = "windowprevious",
         .command = "window previous",
         .tooltip = "Pre&vious",
         .statustip = "Move the focus to the previous window: PREVIOUS",
-        .shortcut = "Ctrl+Shift+Tab"
+        .shortcut = "Ctrl+Shift+Tab",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_ZOOM, /* 96 */
-        .icon = "windowprevious",
-        .command = "window previous",
-        .tooltip = "Pre&vious",
-        .statustip = "Move the focus to the previous window: PREVIOUS",
-        .shortcut = "Ctrl+Shift+Tab"
-    },
-    {
-        .id = ACTION_ZOOM_IN, /* 97 */
+        .id = COMMAND_ZOOM_IN, /* 97 */
         .icon = "zoomin",
         .command = "zoom in",
         .tooltip = "Zoom &In",
         .statustip = "Zooms to increase the apparent size of objects: ZOOMIN",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_TEST, /* 98 */
+        .id = COMMAND_TEST, /* 98 */
         .icon = "test",
         .command = "test",
         .tooltip = "Coverage Test",
         .statustip = "Run all commands at least once to test that nothing crashes.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 0,
+        .gscene = 0,
+        .undo = 0
     },
     {
-        .id = ACTION_SLEEP, /* 99 */
+        .id = COMMAND_SLEEP, /* 99 */
         .icon = "sleep",
         .command = "sleep",
         .tooltip = "Sleep for 1 second.",
         .statustip = "Sleep for 1 second.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 0,
+        .gscene = 0,
+        .undo = 0
     },
     {
-        .id = ACTION_LAYER_EDITOR, /* 100 */
+        .id = COMMAND_LAYER_EDITOR, /* 100 */
         .icon = "sleep",
         .command = "sleep",
         .tooltip = "Sleep for 1 second.",
         .statustip = "Sleep for 1 second.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_MAKE_LAYER_CURRENT, /* 101 */
+        .id = COMMAND_MAKE_LAYER_CURRENT, /* 101 */
         .icon = "makelayercurrent",
         .command = "makelayercurrent",
         .tooltip = "&Make Layer Active",
         .statustip = "Makes the layer of a selected object the active layer",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_TEXT_BOLD, /* 102 */
+        .id = COMMAND_TEXT_BOLD, /* 102 */
         .icon = "textbold",
         .command = "text bold",
         .tooltip = "&Bold Text",
         .statustip = "Sets text to be bold.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_TEXT_ITALIC, /* 103 */
+        .id = COMMAND_TEXT_ITALIC, /* 103 */
         .icon = "textitalic",
         .command = "text italic",
         .tooltip = "&Italic Text",
         .statustip = "Sets text to be italic.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_TEXT_UNDERLINE, /* 104 */
+        .id = COMMAND_TEXT_UNDERLINE, /* 104 */
         .icon = "textunderline",
         .command = "text underline",
         .tooltip = "&Underline Text",
         .statustip = "Sets text to be underlined.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_TEXT_STRIKEOUT, /* 105 */
+        .id = COMMAND_TEXT_STRIKEOUT, /* 105 */
         .icon = "textstrikeout",
         .command = "text strikeout",
         .tooltip = "&StrikeOut Text",
         .statustip = "Sets text to be striked out.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_TEXT_OVERLINE, /* 106 */
+        .id = COMMAND_TEXT_OVERLINE, /* 106 */
         .icon = "textoverline",
         .command = "text overline",
         .tooltip = "&Overline Text",
         .statustip = "Sets text to be overlined.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_LAYER_PREVIOUS, /* 107 */
+        .id = COMMAND_LAYER_PREVIOUS, /* 107 */
         .icon = "layerprevious",
         .command = "layerprevious",
         .tooltip = "&Layer Previous",
         .statustip = "Restores the previous layer settings: LAYERP",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_ICON16, /* 108 */
-        .icon = "icon16",
-        .command = "icon 16",
-        .tooltip = "Icon&16",
-        .statustip = "Sets the toolbar icon size to 16x16: ICON16",
-        .shortcut = ""
-    },
-    {
-        .id = ACTION_ICON24, /* 109 */
+        .id = COMMAND_ICON24, /* 109 */
         .icon = "icon24",
         .command = "icon 24",
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24: ICON24.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_BASIC
     },
     {
-        .id = ACTION_ICON32, /* 110 */
+        .id = COMMAND_ICON32, /* 110 */
         .icon = "icon32",
         .command = "icon 32",
         .tooltip = "Icon&32",
         .statustip = "Sets the toolbar icon size to 32x32: ICON32",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_BASIC
     },
     {
-        .id = ACTION_ICON48, /* 111 */
+        .id = COMMAND_ICON48, /* 111 */
         .icon = "icon48",
         .command = "icon 48",
         .tooltip = "Icon&48",
         .statustip = "Sets the toolbar icon size to 48x48: ICON48",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_BASIC
     },
     {
-        .id = ACTION_ICON64, /* 112 */
+        .id = COMMAND_ICON64, /* 112 */
         .icon = "icon64",
         .command = "icon 64",
         .tooltip = "Icon&64",
         .statustip = "Sets the toolbar icon size to 64x64: ICON64",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_BASIC
     },
     {
-        .id = ACTION_ICON128, /* 113 */
+        .id = COMMAND_ICON128, /* 113 */
         .icon = "icon128",
         .command = "icon 128",
         .tooltip = "Icon12&8",
         .statustip = "Sets the toolbar icon size to 128x128: ICON128",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_BASIC
     },
     {
-        .id = ACTION_SAVE, /* 114 */
+        .id = COMMAND_SAVE, /* 114 */
         .icon = "save",
         .command = "save",
         .tooltip = "&Save",
         .statustip = "Save the design to disk.",
-        .shortcut = "Ctrl+S"
+        .shortcut = "Ctrl+S",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_SAVEAS, /* 115 */
+        .id = COMMAND_SAVEAS, /* 115 */
         .icon = "saveas",
         .command = "saveas",
         .tooltip = "Save &As",
         .statustip = "Save the design under a new name and type.",
-        .shortcut = "Ctrl+Shift+S"
+        .shortcut = "Ctrl+Shift+S",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_PAN_REAL_TIME, /* 116 */
+        .id = COMMAND_PAN_REAL_TIME, /* 116 */
         .icon = "panrealtime",
         .command = "pan realtime",
         .tooltip = "&Pan Realtime",
         .statustip = "Moves the view in the current viewport.",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_PAN_POINT, /* 117 */
+        .id = COMMAND_PAN_POINT, /* 117 */
         .icon = "panpoint",
         .command = "pan point",
         .tooltip = "&Pan Point",
         .statustip = "Moves the view by the specified distance.",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_PAN_LEFT, /* 118 */
+        .id = COMMAND_PAN_LEFT, /* 118 */
         .icon = "panleft",
         .command = "pan left",
         .tooltip = "&Pan Left",
         .statustip = "Moves the view to the left: PANLEFT",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_PAN_RIGHT, /* 119 */
+        .id = COMMAND_PAN_RIGHT, /* 119 */
         .icon = "panright",
         .command = "pan right",
         .tooltip = "&Pan Right",
         .statustip = "Moves the view to the right: PANRIGHT",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_PAN_UP, /* 120 */
-        .icon = "panup",
-        .command = "pan up",
-        .tooltip = "&Pan Up",
-        .statustip = "Moves the view up: PANUP",
-        .shortcut = ""
-    },
-    {
-        .id = ACTION_PAN_DOWN, /* 121 */
+        .id = COMMAND_PAN_DOWN, /* 121 */
         .icon = "pandown",
         .command = "pan down",
         .tooltip = "&Pan Down",
         .statustip = "Moves the view down: PANDOWN",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_ZOOM_REAL_TIME, /* 122 */
+        .id = COMMAND_ZOOM_REAL_TIME, /* 122 */
         .icon = "zoomrealtime",
         .command = "zoom realtime",
         .tooltip = "Zoom &Realtime",
         .statustip = "Zooms to increase or decrease the apparent size of objects in the current viewport.",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_ZOOM_PREVIOUS, /* 123 */
+        .id = COMMAND_ZOOM_PREVIOUS, /* 123 */
         .icon = "zoomprevious",
         .command = "zoom previous",
         .tooltip = "Zoom &Previous",
         .statustip = "Zooms to display the previous view.",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_ZOOM_WINDOW, /* 124 */
+        .id = COMMAND_ZOOM_WINDOW, /* 124 */
         .icon = "zoomwindow",
         .command = "zoom window",
         .tooltip = "Zoom &Window",
         .statustip = "Zooms to display an area specified by a rectangular window.",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_ZOOM_DYNAMIC, /* 125 */
+        .id = COMMAND_ZOOM_DYNAMIC, /* 125 */
         .icon = "zoomdynamic",
         .command = "zoom dynamic",
         .tooltip = "Zoom &Dynamic",
         .statustip = "Zooms to display the generated portion of the drawing.",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_ZOOM_OUT, /* 126 */
+        .id = COMMAND_ZOOM_OUT, /* 126 */
         .icon = "zoomout",
         .command = "zoom out",
         .tooltip = "Zoom &Out",
         .statustip = "Zooms to decrease the apparent size of objects: ZOOMOUT",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_ZOOM_EXTENTS, /* 127 */
+        .id = COMMAND_ZOOM_EXTENTS, /* 127 */
         .icon = "zoomextents",
         .command = "zoom extents",
         .tooltip = "Zoom &Extents",
         .statustip = "Zooms to display the drawing extents: ZOOMEXTENTS",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_LAYERS, /* 128 */
+        .id = COMMAND_LAYERS, /* 128 */
         .icon = "layers",
         .command = "layers",
         .tooltip = "&Layers",
         .statustip = "Manages layers and layer properties:  LAYER",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_LAYER_SELECTOR, /* 129 */
+        .id = COMMAND_LAYER_SELECTOR, /* 129 */
         .icon = "layerselector",
         .command = "layerselector",
         .tooltip = "&Layer Selector",
         .statustip = "Dropdown selector for changing the current layer",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_TREBLECLEF, /* 130 */
+        .id = COMMAND_TREBLECLEF, /* 130 */
         .icon = "trebleclef",
         .command = "trebleclef",
         .tooltip = "Treble Clef",
         .statustip = "Adds a treble clef design to the vector layer.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_COLOR_SELECTOR, /* 131 */
+        .id = COMMAND_COLOR_SELECTOR, /* 131 */
         .icon = "colorselector",
         .command = "colorselector",
         .tooltip = "&Color Selector",
         .statustip = "Dropdown selector for changing the current thread color",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_LINE_TYPE_SELECTOR, /* 132 */
+        .id = COMMAND_LINE_TYPE_SELECTOR, /* 132 */
         .icon = "linetypeselector",
         .command = "linetypeselector",
         .tooltip = "&Stitchtype Selector",
         .statustip = "Dropdown selector for changing the current stitch type",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_LINE_WEIGHT_SELECTOR, /* 133 */
+        .id = COMMAND_LINE_WEIGHT_SELECTOR, /* 133 */
         .icon = "lineweightselector",
         .command = "lineweightselector",
         .tooltip = "&Threadweight Selector",
         .statustip = "Dropdown selector for changing the current thread weight",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_ZOOM_SCALE, /* 134 */
+        .id = COMMAND_ZOOM_SCALE, /* 134 */
         .icon = "zoomscale",
         .command = "zoom scale",
         .tooltip = "Zoom &Scale",
         .statustip = "Zooms the display using a specified scale factor.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_ZOOM_CENTER, /* 135 */
+        .id = COMMAND_ZOOM_CENTER, /* 135 */
         .icon = "zoomcenter",
         .command = "zoom center",
         .tooltip = "Zoom &Center",
         .statustip = "Zooms to display a view specified by a center point and magnification or height.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_HIDE_ALL_LAYERS, /* 136 */
+        .id = COMMAND_HIDE_ALL_LAYERS, /* 136 */
         .icon = "hidealllayers",
         .command = "hidealllayers",
         .tooltip = "&Hide All Layers",
         .statustip = "Turns the visibility off for all layers in the current drawing:  HIDEALL",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_ZOOM_SELECTED, /* 137 */
+        .id = COMMAND_ZOOM_SELECTED, /* 137 */
         .icon = "zoomselected",
         .command = "zoom selected",
         .tooltip = "Zoom Selec&ted",
         .statustip = "Zooms to display the selected objects.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_ZOOM_ALL, /* 138 */
+        .id = COMMAND_ZOOM_ALL, /* 138 */
         .icon = "zoomall",
         .command = "zoom all",
         .tooltip = "Zoom &All",
         .statustip = "Zooms to display the drawing extents or the grid limits.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ADD_HEART, /* 139 */
+        .id = COMMAND_ADD_HEART, /* 139 */
         .icon = "heart",
         .command = "heart",
         .tooltip = "&Heart",
         .statustip = "Creates a heart: HEART",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ADD_SINGLE_LINE_TEXT, /* 140 */
+        .id = COMMAND_ADD_SINGLE_LINE_TEXT, /* 140 */
         .icon = "heart",
         .command = "heart",
         .tooltip = "&Heart",
         .statustip = "Creates a heart: HEART",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_SHOW_ALL_LAYERS, /* 141 */
+        .id = COMMAND_SHOW_ALL_LAYERS, /* 141 */
         .icon = "showalllayers",
         .command = "showalllayers",
         .tooltip = "&Show All Layers",
         .statustip = "Turns the visibility on for all layers in the current drawing:  SHOWALL",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_FREEZE_ALL_LAYERS, /* 142 */
+        .id = COMMAND_FREEZE_ALL_LAYERS, /* 142 */
         .icon = "freezealllayers",
         .command = "freezealllayers",
         .tooltip = "&Freeze All Layers",
         .statustip = "Freezes all layers in the current drawing:  FREEZEALL",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_THAW_ALL_LAYERS, /* 143 */
+        .id = COMMAND_THAW_ALL_LAYERS, /* 143 */
         .icon = "thawlllayers",
         .command = "thawalllayers",
         .tooltip = "&Thaw All Layers",
         .statustip = "Thaws all layers in the current drawing:  THAWALL",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .gview = 1,
+        .gscene = 1,
+        .undo = 1
     },
     {
-        .id = ACTION_LOCK_ALL_LAYERS, /* 144 */
+        .id = COMMAND_LOCK_ALL_LAYERS, /* 144 */
         .icon = "lockalllayers",
         .command = "lockalllayers",
         .tooltip = "&Lock All Layers",
         .statustip = "Locks all layers in the current drawing:  LOCKALL",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_UNLOCK_ALL_LAYERS, /* 145 */
+        .id = COMMAND_UNLOCK_ALL_LAYERS, /* 145 */
         .icon = "unlockalllayers",
         .command = "unlockalllayers",
         .tooltip = "&Unlock All Layers",
         .statustip = "Unlocks all layers in the current drawing:  UNLOCKALL",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
+    },
+    {
+        .id = COMMAND_ADD_DOLPHIN, /* 146 */
+        .icon = "dolphin",
+        .command = "dolphin",
+        .tooltip = "&Dolphin",
+        .statustip = "Adds a dolphin design to the vector layer: DOLPHIN.",
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
         /*
         menu = "Draw",
         toolbar = "Draw",
         */
-        .id = ACTION_ADD_DOLPHIN, /* 146 */
+        .id = COMMAND_ADD_DISTANCE, /* 147 */
         .icon = "dolphin",
         .command = "dolphin",
         .tooltip = "&Dolphin",
         .statustip = "Adds a dolphin design to the vector layer: DOLPHIN.",
-        .shortcut = ""
-    },
-    {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ADD_DISTANCE, /* 147 */
-        .icon = "dolphin",
-        .command = "dolphin",
-        .tooltip = "&Dolphin",
-        .statustip = "Adds a dolphin design to the vector layer: DOLPHIN.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
         /*
         menu = "Tools",
         toolbar = "Inquiry",
         */
-        .id = ACTION_LOCATE_POINT, /* 148 */
+        .id = COMMAND_LOCATE_POINT, /* 148 */
         .icon = "locatepoint",
         .command = "locatepoint",
         .tooltip = "&Locate Point",
         .statustip = "Displays the coordinate values of a location: ID.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_QUICKSELECT, /* 149 */
+        .id = COMMAND_QUICKSELECT, /* 149 */
         .icon = "quickselect",
         .command = "quickselect",
         .tooltip = "",
         .statustip = "",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
         /* todo */
-        .id = ACTION_SPELLCHECK, /* 150 */
+        .id = COMMAND_SPELLCHECK, /* 150 */
         .icon = "spellcheck",
         .command = "spellcheck",
         .tooltip = "",
         .statustip = "",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
         /*
         menu = "Tools",
         toolbar = "Inquiry",
         */
-        .id = ACTION_DISTANCE, /* 151 */
+        .id = COMMAND_DISTANCE, /* 151 */
         .icon = "distance",
         .command = "distance",
         .tooltip = "&Distance",
         .statustip = "Measures the distance and angle between two points: DIST",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
         /*
         menu = "Modify",
         toolbar = "Modify"
         */
-        .id = ACTION_MOVE, /* 152 */
+        .id = COMMAND_MOVE, /* 152 */
         .icon = "move",
         .command = "move",
         .tooltip = "&Move",
         .statustip = "Displaces objects a specified distance in a specified direction: MOVE.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
         /*
         menu = "Dimension",
         toolbar = "Dimension",
         */
-        .id = ACTION_QUICKLEADER, /* 153 */
+        .id = COMMAND_QUICKLEADER, /* 153 */
         .icon = "quickleader",
         .command = "addquickleader",
         .tooltip = "&QuickLeader",
         .statustip = "Creates a leader and annotation: QUICKLEADER.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
         /*
         menu = "Sandbox"
         toolbar = "Sandbox"
         */
-        .id = ACTION_RGB, /* 154 */
+        .id = COMMAND_RGB, /* 154 */
         .icon =  "rgb",
         .command = "rgb",
         .tooltip =  "&RGB",
         .statustip = "Updates the current view colors: RGB.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
         /*
         menu = "Modify",
         toolbar = "Modify",
         */
-        .id = ACTION_ROTATE, /* 155 */
+        .id = COMMAND_ROTATE, /* 155 */
         .icon = "rotate",
         .command = "rotate",
         .tooltip = "&Rotate",
         .statustip = "Rotates objects about a base point: ROTATE.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
         /*
         menu = "Sandbox",
         toolbar = "Sandbox",
         */
-        .id = ACTION_SANDBOX, /* 156 */
+        .id = COMMAND_SANDBOX, /* 156 */
         .icon = "sandbox",
         .command = "sandbox",
         .tooltip = "Sandbox",
         .statustip = "A sandbox to play in: SANDBOX.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_ADD_SNOWFLAKE, /* 157 */
+        .id = COMMAND_ADD_SNOWFLAKE, /* 157 */
         .icon = "snowflake",
         .command = "snowflake",
         .tooltip = "&Snowflake",
         .statustip = "Creates a snowflake: SNOWFLAKE",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
-        /*
-        menu "Draw",
-        toolbar "Draw",
-        */
-        .id = ACTION_ADD_STAR, /* 158 */
+        .id = COMMAND_ADD_STAR, /* 158 */
         .icon = "star",
         .command = "star",
         .tooltip = "&Star",
         .statustip = "Creates a star: STAR",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
         /*
         menu = "Modify",
         toolbar = "Modify",
         */
-        .id = ACTION_DELETE, /* 159 */
+        .id = COMMAND_DELETE, /* 159 */
         .icon = "erase",
         .command = "erase",
         .tooltip = "D&elete",
         .statustip = "Removes objects from a drawing: DELETE.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
         /*
         menu = "Modify",
         toolbar = "Modify",
         */
-        .id = ACTION_SCALE, /* 160 */
+        .id = COMMAND_SCALE, /* 160 */
         .icon = "scale",
         .command = "scale",
         .tooltip = "Sca&le",
         .statustip = "Enlarges or reduces objects proportionally in the X, Y, and Z directions: SCALE.",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
-        /*
-        menu = "Draw",
-        toolbar = "Draw",
-        */
-        .id = ACTION_SINGLE_LINE_TEXT, /* 161 */
+        .id = COMMAND_SINGLE_LINE_TEXT, /* 161 */
         .icon = "single-line-text",
         .command = "singlelinetext",
         .tooltip = "&Single Line Text",
         .statustip = "Creates single-line text objects: TEXT",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     },
     {
-        .id = ACTION_SYSWINDOWS, /* 162 */
+        .id = COMMAND_SYSWINDOWS, /* 162 */
         .icon = "syswindows",
         .command = "syswindows",
         .tooltip = "&SysWindows",
         .statustip = "Arrange the windows: SYSWINDOWS",
-        .shortcut = ""
+        .shortcut = "",
+        .min_args = 0,
+        .flags = CMD_PATTERN
     }
-	/* ------------------ N_ACTIONS -------------------- */
+	/* ------------------ N_COMMANDS -------------------- */
 };
+
+
+WidgetData grid_geometry_widgets[] = {
+	{
+		.type = WIDGET_LABEL,
+		.label = "Grid Center X",
+        .position = {3, 0}
+	},
+	{
+		.type = WIDGET_DOUBLE_SPINBOX,
+		.label = "Grid Center X",
+		.single_step = 1.0,
+		.lower = -1000.0,
+		.upper = 1000.0,
+        .key = ST_GRID_CENTER_X,
+        .position = {3, 1}
+	},
+	{
+		.type = WIDGET_LABEL,
+		.label = "Grid Center Y"
+	},
+	{
+		.type = WIDGET_DOUBLE_SPINBOX,
+		.label = "Grid Center Y",
+		.single_step = 1.0,
+		.lower = -1000.0,
+		.upper = 1000.0,
+        .key = ST_GRID_CENTER_Y
+	},
+	{
+		.type = WIDGET_LABEL,
+		.label = "Grid Size X"
+	},
+	{
+		.type = WIDGET_DOUBLE_SPINBOX,
+		.label = "Grid Size X",
+		.single_step = 1.0,
+		.lower = 1.0,
+		.upper = 1000.0,
+        .key = ST_GRID_SIZE_X
+	},
+	{
+		.type = WIDGET_LABEL,
+		.label = "Grid Size Y"
+	},
+	{
+		.type = WIDGET_DOUBLE_SPINBOX,
+		.label = "Grid Size Y",
+		.single_step = 1.0,
+		.lower = 1.0,
+		.upper = 1000.0,
+        .key = ST_GRID_SIZE_Y
+	},
+    {
+		.type = WIDGET_LABEL,
+        .label = "Grid Spacing X"
+	},
+	{
+		.type = WIDGET_DOUBLE_SPINBOX,
+        .label = "Grid Spacing X",
+        .single_step = 1.0,
+        .lower = 1.0,
+        .upper = 1000.0,
+        .key = ST_GRID_SPACING_X
+	},
+	{
+		.type = WIDGET_LABEL,
+        .label = "Grid Spacing Y"
+	},
+	{
+		.type = WIDGET_DOUBLE_SPINBOX,
+        .label = "Grid Spacing Y",
+        .single_step = 1.0,
+        .lower = 0.001,
+        .upper = 1000.0,
+        .key = ST_GRID_SPACING_Y
+	},
+	{
+		.type = WIDGET_LABEL,
+        .label = "Grid Size Radius"
+	},
+	{
+		.type = WIDGET_DOUBLE_SPINBOX,
+        .label = "Grid Size Radius",
+        .single_step = 1.0,
+        .lower = 0.001,
+        .upper = 1000.0,
+        .key = ST_GRID_SIZE_RADIUS
+	},
+	{
+		.type = WIDGET_LABEL,
+        .label = "Grid Spacing Radius"
+	},
+	{
+		.type = WIDGET_DOUBLE_SPINBOX,
+        .label = "Grid Spacing Radius",
+        .single_step = 1.0,
+        .lower = 0.001,
+        .upper = 1000.0,
+        .key = ST_GRID_SPACING_RADIUS
+	},
+	{
+		.type = WIDGET_LABEL,
+        .label = "Grid Spacing Angle"
+	},
+	{
+		.type = WIDGET_DOUBLE_SPINBOX,
+        .label = "Grid Spacing Angle",
+        .single_step = 1.0,
+        .lower = 0.001,
+        .upper = 180.0,
+        .key = ST_GRID_SPACING_ANGLE
+	},
+    {
+        .type = -1
+    }
+};
+
+WidgetData qsnap_mode_checkboxes[] = {
+	{
+		.type = WIDGET_CHECKBOX,
+		.label = "Endpoint",
+		.key = ST_QSNAP_ENDPOINT
+	},
+	{
+		.type = WIDGET_CHECKBOX,
+        .label = "Midpoint",
+        .key = ST_QSNAP_MIDPOINT
+	},
+	{
+		.type = WIDGET_CHECKBOX,
+        .label = "Center",
+        .key = ST_QSNAP_CENTER
+	},
+	{
+		.type = WIDGET_CHECKBOX,
+        .label = "Node",
+        .key = ST_QSNAP_NODE
+	},
+	{
+		.type = WIDGET_CHECKBOX,
+        .label = "Quadrant",
+        .key = ST_QSNAP_QUADRANT
+	},
+	{
+		.type = WIDGET_CHECKBOX,
+		.label = "Intersection",
+		.key = ST_QSNAP_INTERSECTION
+	},
+	{
+		.type = WIDGET_CHECKBOX,
+		.label = "Extension",
+		.key = ST_QSNAP_EXTENSION
+	},
+	{
+		.type = WIDGET_CHECKBOX,
+        .label = "Insertion",
+        .key = ST_QSNAP_INSERTION
+	},
+	{
+		.type = WIDGET_CHECKBOX,
+        .label = "Perpendicular",
+        .key = ST_QSNAP_PERPENDICULAR
+	},
+	{
+		.type = WIDGET_CHECKBOX,
+        .label = "Tangent",
+        .key = ST_QSNAP_TANGENT
+	},
+	{
+		.type = WIDGET_CHECKBOX,
+        .label = "Nearest",
+        .key = ST_QSNAP_NEAREST
+	},
+	{
+		.type = WIDGET_CHECKBOX,
+        .label = "Apparent Intersection",
+        .key = ST_QSNAP_APPARENT
+	},
+	{
+		.type = WIDGET_CHECKBOX,
+		.label = "Parallel",
+		.key = ST_QSNAP_PARALLEL
+	},
+	{
+		.type = -1
+	}
+};
+
