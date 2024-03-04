@@ -632,7 +632,7 @@ void
 emb_sleep(int seconds)
 {
 #if defined(WIN32)
-    sleep(1);
+    Sleep(1000);
 #else
     usleep(1000000);
 #endif
@@ -694,11 +694,15 @@ debug_message(char *fmt, ...)
     sprintf(thread_file, "debug.txt");
     /* An attempt at thread safety. */
 #if defined(SYS_gettid)
-    sprintf(thread_file, "debug-%ld.txt", (int64_t)syscall(SYS_gettid));
+    int64_t id = (int64_t)syscall(SYS_gettid);
+    sprintf(thread_file, "debug-%ld.txt", id);
 #endif
     FILE *f = fopen(thread_file, "a");
-    fprintf(f, "%.2ld:%.2ld:%.2ld.%.3ld> ",
-        (ts.tv_sec/3600)%24, (ts.tv_sec%3600)/60, ts.tv_sec%60, ts.tv_nsec%1000);
+    int hours = (int)((ts.tv_sec/3600)%24);
+    int minutes = (int)((ts.tv_sec%3600)/60);
+    int seconds = (int)(ts.tv_sec%60);
+    int milliseconds = (int)(ts.tv_nsec%1000);
+    fprintf(f, "%2d:%2d:%2d.%3d> ",hours, minutes, seconds, milliseconds);
     vfprintf(f, fmt, arg_list);
     fprintf(f, "\n");
     fclose(f);

@@ -18,6 +18,7 @@
  */
 
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 
 #include "core.h"
@@ -1371,7 +1372,7 @@ get_vector(GeometryData *g, int64_t id)
 EmbReal
 get_real(GeometryData *g, int64_t id)
 {
-    EmbReal r;
+    EmbReal r = 0.0f;
     switch (id) {
     case REAL_ARC_RADIUS: {
         break;
@@ -1459,7 +1460,7 @@ get_real(GeometryData *g, int64_t id)
 int32_t
 get_int(GeometryData *g, int64_t id)
 {
-    int64_t i;
+    int64_t i = -1;
     switch (id) {
     case VECTOR_ARC_START_POINT: {
         break;
@@ -1480,10 +1481,9 @@ get_int(GeometryData *g, int64_t id)
 }
 
 /* . */
-char *
-get_str(GeometryData *g, int64_t id)
+void
+get_str(GeometryData *g, int64_t id, char *s)
 {
-    char s[MAX_STRING_LENGTH];
     s[0] = 0;
     switch (id) {
     case VECTOR_ARC_START_POINT: {
@@ -1501,7 +1501,6 @@ get_str(GeometryData *g, int64_t id)
     default:
         break;
     }
-    return s;
 }
 
 /* Set. */

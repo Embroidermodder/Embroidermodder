@@ -30,10 +30,6 @@
 #include <QOpenGLWidget>
 #include <QtPrintSupport>
 
-#define CSTR(str) ( (char*)((str).toStdString().c_str()) )
-
-#define DEBUG(str) debug_message(CSTR(str));
-
 class ImageWidget;
 class MdiArea;
 class MdiWindow;

@@ -15,11 +15,6 @@
 
 #include "embroidermodder.h"
 
-#define MAKE_SLOT(LINE) \
-    [=](void) { LINE; }
-
-#define MAX_FILE_TYPES  100
-
 QWidget *create_scrollarea(QWidget *parent, QWidget *widget);
 void set_vbox_layout(QWidget *parent, QWidget *entries[],
     int n_entries, int add_stretch);
@@ -150,12 +145,12 @@ Settings_Dialog::chooseColor(int color_id)
 int
 read_settings(void)
 {
-    debug_message("Reading Settings...");
+    DEBUG_MSG("Reading Settings...");
 
     /*
     layoutState = settingsfile.value("LayoutState").toByteArray();
     if (!restoreState(layoutState)) {
-        debug_message("LayoutState NOT restored! Setting Default Layout...");
+        DEBUG_MSG("LayoutState NOT restored! Setting Default Layout...");
         //someToolBar->setVisible(true);
      }
     */
@@ -238,7 +233,7 @@ read_settings(void)
         }
     }
 
-    debug_message("Configuration loaded.");
+    DEBUG_MSG("Configuration loaded.");
 
     return 1;
 }
@@ -250,7 +245,7 @@ read_settings(void)
 void
 write_settings(void)
 {
-    debug_message("Writing Settings...");
+    DEBUG_MSG("Writing Settings...");
 
     settings[ST_WINDOW_POS_X].i = (int)_mainWin->pos().x();
     settings[ST_WINDOW_POS_Y].i = (int)_mainWin->pos().y();
@@ -265,12 +260,11 @@ write_settings(void)
     FILE *file = fopen(settingsPath.c_str(), "w");
 
     if (!file) {
-        debug_message("ERROR: failed to open settings file for output.");
+        DEBUG_MSG("ERROR: failed to open settings file for output.");
         return;
     }
 
     for (int i=0; i<SETTINGS_TOTAL; i++) {
-        char line[2*MAX_STRING_LENGTH];
         Setting s = settings_data[i];
         switch (s.type) {
         case 'i':

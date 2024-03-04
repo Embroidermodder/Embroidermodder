@@ -166,7 +166,7 @@ add_geometry(char **argv, int argc)
 		Geometry* obj = new Geometry(OBJ_TYPE_HORIZONTAL_DIMENSION);
         AddHorizontalDimension(std::vector<Node> a)
         //TODO: Node error checking
-        debug_message("TODO: finish addHorizontalDimension command");
+        DEBUG_MSG("TODO: finish addHorizontalDimension command");
         */
         return "";
     }
@@ -178,7 +178,7 @@ add_geometry(char **argv, int argc)
         /*
         AddImage(std::vector<Node> a)
         //TODO: Node error checking
-        debug_message("TODO: finish addImage command");
+        DEBUG_MSG("TODO: finish addImage command");
         */
         return "";
     }
@@ -189,7 +189,7 @@ add_geometry(char **argv, int argc)
     case SUBCOMMAND_INFINITE_LINE: {
         /*
         //TODO: Node error checking
-        debug_message("TODO: finish addInfiniteLine command");
+        DEBUG_MSG("TODO: finish addInfiniteLine command");
         */
         return "";
     }
@@ -233,7 +233,7 @@ add_geometry(char **argv, int argc)
         /*
         AddPath(std::vector<Node> a)
         // TODO: Node error checking
-        debug_message("TODO: finish addPath command");
+        DEBUG_MSG("TODO: finish addPath command");
         */
         return "";
     }
@@ -330,7 +330,7 @@ add_geometry(char **argv, int argc)
     case SUBCOMMAND_RAY: {
         /*
         //TODO: Node error checking
-        debug_message("TODO: finish addRay command");
+        DEBUG_MSG("TODO: finish addRay command");
         */
         return "";
     }
@@ -466,7 +466,7 @@ add_geometry(char **argv, int argc)
      */
     case SUBCOMMAND_VERTICAL_DIMENSION: {
         /*
-        debug_message("TODO: finish addVerticalDimension command");
+        DEBUG_MSG("TODO: finish addVerticalDimension command");
         */
         return "";
     }
@@ -544,7 +544,7 @@ add_polyline(QPainterPath p, std::string rubberMode)
 void
 Geometry::init(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* parent)
 {
-    debug_message("Geometry Constructor()");
+    DEBUG_MSG("Geometry Constructor()");
     Type = type_;
     setData(OBJ_TYPE, Type);
 
@@ -731,9 +731,9 @@ Geometry::init_text_single(QString str, EmbVector v)
 /* Geometry::Geometry *obj *parent. */
 Geometry::Geometry(Geometry* obj, QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
-    debug_message("Geometry Constructor()");
+    DEBUG_MSG("Geometry Constructor()");
     if (!obj) {
-        debug_message("ERROR: null obj pointer passed to Geometry contructor.");
+        DEBUG_MSG("ERROR: null obj pointer passed to Geometry contructor.");
         return;
     }
     init(obj->Type, obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
@@ -820,7 +820,7 @@ Geometry::allGripPoints()
  */
 Geometry::~Geometry()
 {
-    debug_message("Geometry Destructor()");
+    DEBUG_MSG("Geometry Destructor()");
 }
 
 /* Set object line weight. */
@@ -843,7 +843,7 @@ Geometry::setObjectLineWeight(std::string lineWeight)
         QMessageBox::warning(0, translate_str("Error - Negative Lineweight"),
                                 translate_str("Lineweight: %1")
                                 .arg(QString().setNum(lineWeight)));
-        debug_message("Lineweight cannot be negative! Inverting sign.");
+        DEBUG_MSG("Lineweight cannot be negative! Inverting sign.");
         lwtPen.setWidthF(-lineWeight);
     }
     */
@@ -1753,7 +1753,7 @@ Geometry::setLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 void
 Geometry::vulcanize(void)
 {
-    debug_message("DimLeaderObject vulcanize()");
+    DEBUG_MSG("DimLeaderObject vulcanize()");
     updateRubber();
 
     objRubberMode = "OBJ_RUBBER_OFF";
@@ -2503,13 +2503,13 @@ Geometry::setObjectDiameterMinor(EmbReal diameter)
 /*
 ImageObject::ImageObject(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, QGraphicsItem* parent) : Geometry(OBJ_TYPE_IMAGE, parent)
 {
-    debug_message("ImageObject Constructor()");
+    DEBUG_MSG("ImageObject Constructor()");
     init(x, y, w, h, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
 ImageObject::ImageObject(ImageObject* obj, QGraphicsItem* parent) : Geometry(OBJ_TYPE_IMAGE, parent)
 {
-    debug_message("ImageObject Constructor()");
+    DEBUG_MSG("ImageObject Constructor()");
     if (obj) {
         QPointF ptl = obj->objectTopLeft();
         init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
@@ -2598,13 +2598,13 @@ Geometry::objectBottomRight()
 /*
 PathObject::PathObject(EmbReal x, EmbReal y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent) : Geometry(OBJ_TYPE_PATH, parent)
 {
-    debug_message("PathObject Constructor()");
+    DEBUG_MSG("PathObject Constructor()");
     init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
 PathObject::PathObject(PathObject* obj, QGraphicsItem* parent) : Geometry(OBJ_TYPE_PATH, parent)
 {
-    debug_message("PathObject Constructor()");
+    DEBUG_MSG("PathObject Constructor()");
     if (obj) {
         init(obj->scenePos().x(), obj->scenePos().y(), obj->objectCopyPath(), obj->objPen.color().rgb(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
@@ -2794,7 +2794,7 @@ save(View* view, QString fileName)
 
     EmbPattern* pattern = emb_pattern_create();
     if (!pattern) {
-        debug_message("Could not allocate memory for embroidery pattern");
+        DEBUG_MSG("Could not allocate memory for embroidery pattern");
         return false;
     }
 
@@ -2843,11 +2843,11 @@ saveObjectAsStitches(int objType, View *view, Geometry *obj)
     QColor color = obj->objPen.color();
     switch (objType) {
     case OBJ_TYPE_ARC: {
-        debug_message("TODO: save Arc object");
+        DEBUG_MSG("TODO: save Arc object");
         break;
     }
     case OBJ_TYPE_BLOCK: {
-        debug_message("TODO: save Block object");
+        DEBUG_MSG("TODO: save Block object");
         break;
     }
     case OBJ_TYPE_CIRCLE: {
@@ -2857,35 +2857,35 @@ saveObjectAsStitches(int objType, View *view, Geometry *obj)
         break;
     }
     case OBJ_TYPE_DIMALIGNED: {
-        debug_message("TODO: save DimAligned object");
+        DEBUG_MSG("TODO: save DimAligned object");
         break;
     }
     case OBJ_TYPE_DIMANGULAR: {
-        debug_message("TODO: save DimAngular object");
+        DEBUG_MSG("TODO: save DimAngular object");
         break;
     }
     case OBJ_TYPE_DIMARCLENGTH: {
-        debug_message("TODO: save DimArcLength object");
+        DEBUG_MSG("TODO: save DimArcLength object");
         break;
     }
     case OBJ_TYPE_DIMDIAMETER: {
-        debug_message("TODO: save DimDiameter object");
+        DEBUG_MSG("TODO: save DimDiameter object");
         break;
     }
     case OBJ_TYPE_DIMLEADER: {
-        debug_message("TODO: save DimLeader object");
+        DEBUG_MSG("TODO: save DimLeader object");
         break;
     }
     case OBJ_TYPE_DIMLINEAR: {
-        debug_message("TODO: save DimLinear object");
+        DEBUG_MSG("TODO: save DimLinear object");
         break;
     }
     case OBJ_TYPE_DIMORDINATE: {
-        debug_message("TODO: save DimOrdinate object");
+        DEBUG_MSG("TODO: save DimOrdinate object");
         break;
     }
     case OBJ_TYPE_DIMRADIUS: {
-        debug_message("TODO: save DimRadius object");
+        DEBUG_MSG("TODO: save DimRadius object");
         break;
     }
     case OBJ_TYPE_ELLIPSE: {
@@ -2895,23 +2895,23 @@ saveObjectAsStitches(int objType, View *view, Geometry *obj)
         break;
     }
     case OBJ_TYPE_ELLIPSEARC: {
-        debug_message("TODO: save EllipseArc object");
+        DEBUG_MSG("TODO: save EllipseArc object");
         break;
     }
     case OBJ_TYPE_GRID: {
-        debug_message("TODO: save Grid object");
+        DEBUG_MSG("TODO: save Grid object");
         break;
     }
     case OBJ_TYPE_HATCH: {
-        debug_message("TODO: save Hatch object");
+        DEBUG_MSG("TODO: save Hatch object");
         break;
     }
     case OBJ_TYPE_IMAGE: {
-        debug_message("TODO: save Image object");
+        DEBUG_MSG("TODO: save Image object");
         break;
     }
     case OBJ_TYPE_INFINITELINE: {
-        debug_message("TODO: save InfiniteLine object");
+        DEBUG_MSG("TODO: save InfiniteLine object");
         break;
     }
 
@@ -2938,7 +2938,7 @@ saveObjectAsStitches(int objType, View *view, Geometry *obj)
         break;
     }
     case OBJ_TYPE_RAY: {
-        debug_message("TODO: save Ray object");
+        DEBUG_MSG("TODO: save Ray object");
         break;
     }
 
@@ -2949,11 +2949,11 @@ saveObjectAsStitches(int objType, View *view, Geometry *obj)
     }
 
     case OBJ_TYPE_SPLINE: {
-        debug_message("TODO: save Spline object");
+        DEBUG_MSG("TODO: save Spline object");
         break;
     }
     case OBJ_TYPE_TEXTMULTI: {
-        debug_message("TODO: save TextMulti object");
+        DEBUG_MSG("TODO: save TextMulti object");
         break;
     }
 
@@ -2983,11 +2983,11 @@ saveObject(int objType, View *view, Geometry *obj)
 {
     switch (objType) {
     case OBJ_TYPE_ARC: {
-        debug_message("TODO: save Arc object");
+        DEBUG_MSG("TODO: save Arc object");
         break;
     }
     case OBJ_TYPE_BLOCK: {
-        debug_message("TODO: save Block object");
+        DEBUG_MSG("TODO: save Block object");
         break;
     }
     case OBJ_TYPE_CIRCLE: {
@@ -2995,35 +2995,35 @@ saveObject(int objType, View *view, Geometry *obj)
         break;
     }
     case OBJ_TYPE_DIMALIGNED: {
-        debug_message("TODO: save DimAligned object");
+        DEBUG_MSG("TODO: save DimAligned object");
         break;
     }
     case OBJ_TYPE_DIMANGULAR: {
-        debug_message("TODO: save DimAngular object");
+        DEBUG_MSG("TODO: save DimAngular object");
         break;
     }
     case OBJ_TYPE_DIMARCLENGTH: {
-        debug_message("TODO: save DimArcLength object");
+        DEBUG_MSG("TODO: save DimArcLength object");
         break;
     }
     case OBJ_TYPE_DIMDIAMETER: {
-        debug_message("TODO: save DimDiameter object");
+        DEBUG_MSG("TODO: save DimDiameter object");
         break;
     }
     case OBJ_TYPE_DIMLEADER: {
-        debug_message("TODO: save DimLeader object");
+        DEBUG_MSG("TODO: save DimLeader object");
         break;
     }
     case OBJ_TYPE_DIMLINEAR: {
-        debug_message("TODO: save DimLinear object");
+        DEBUG_MSG("TODO: save DimLinear object");
         break;
     }
     case OBJ_TYPE_DIMORDINATE: {
-        debug_message("TODO: save DimOrdinate object");
+        DEBUG_MSG("TODO: save DimOrdinate object");
         break;
     }
     case OBJ_TYPE_DIMRADIUS: {
-        debug_message("TODO: save DimRadius object");
+        DEBUG_MSG("TODO: save DimRadius object");
         break;
     }
     case OBJ_TYPE_ELLIPSE: {
@@ -3031,23 +3031,23 @@ saveObject(int objType, View *view, Geometry *obj)
         break;
     }
     case OBJ_TYPE_ELLIPSEARC: {
-        debug_message("TODO: save EllipseArc object");
+        DEBUG_MSG("TODO: save EllipseArc object");
         break;
     }
     case OBJ_TYPE_GRID: {
-        debug_message("TODO: save Grid object");
+        DEBUG_MSG("TODO: save Grid object");
         break;
     }
     case OBJ_TYPE_HATCH: {
-        debug_message("TODO: save Hatch object");
+        DEBUG_MSG("TODO: save Hatch object");
         break;
     }
     case OBJ_TYPE_IMAGE: {
-        debug_message("TODO: save Image object");
+        DEBUG_MSG("TODO: save Image object");
         break;
     }
     case OBJ_TYPE_INFINITELINE: {
-        debug_message("TODO: save InfiniteLine object");
+        DEBUG_MSG("TODO: save InfiniteLine object");
         break;
     }
     case OBJ_TYPE_LINE: {
@@ -3063,17 +3063,17 @@ saveObject(int objType, View *view, Geometry *obj)
     /* PATH? */
 
     case OBJ_TYPE_POLYGON: {
-        debug_message("TODO: save Polygon object");
+        DEBUG_MSG("TODO: save Polygon object");
         break;
     }
 
     case OBJ_TYPE_POLYLINE: {
-        debug_message("TODO: save Polyline object");
+        DEBUG_MSG("TODO: save Polyline object");
         break;
     }
 
     case OBJ_TYPE_RAY: {
-        debug_message("TODO: save Ray object");
+        DEBUG_MSG("TODO: save Ray object");
         break;
     }
 
@@ -3083,12 +3083,12 @@ saveObject(int objType, View *view, Geometry *obj)
     }
 
     case OBJ_TYPE_SPLINE: {
-        debug_message("TODO: save Spline object");
+        DEBUG_MSG("TODO: save Spline object");
         break;
     }
 
     case OBJ_TYPE_TEXTMULTI: {
-        debug_message("TODO: save TextMulti object");
+        DEBUG_MSG("TODO: save TextMulti object");
         break;
     }
 
@@ -3099,7 +3099,7 @@ saveObject(int objType, View *view, Geometry *obj)
      * TODO: This needs to work like a path, not a polyline. Improve this.
      */
     case OBJ_TYPE_TEXTSINGLE: {
-        debug_message("TODO: save TextMulti object as stitches");
+        DEBUG_MSG("TODO: save TextMulti object as stitches");
         break;
     }
 
