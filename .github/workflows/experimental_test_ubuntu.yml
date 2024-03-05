@@ -1,0 +1,20 @@
+name: Ubuntu
+
+on:
+  push:
+    branches:
+      - experimental
+
+jobs:
+  build:
+    name: "Build on Ubuntu"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get repository
+        run: git clone https://github.com/embroidermodder/embroidermodder
+      - name: Build
+        run: cd embroidermodder; ./build.sh ubuntu-latest
+      - uses: actions/upload-artifact@v4
+        with:
+          name: embroidermodder-ubuntu
+          path: ./embroidermodder

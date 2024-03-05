@@ -5,60 +5,40 @@
 </h1>
 
 <h3 align="center">
-  <table>
-    <tr>
-      <td><strong>Main</strong></td>
-    <td>
-      <a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_windows.yml">
-        <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_windows.yml/badge.svg"></img>
-      </a>
-    </td>
-    <td>
-      <a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_macos.yml">
-        <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_macos.yml/badge.svg"></img>
-      </a>
-    </td>
-    <td>
-      <a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_ubuntu.yml">
-        <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_ubuntu.yml/badge.svg"></img>
-      </a>
-    </td>
-    </tr>
-    <tr>
-      <td></td>
-    <td>
- <a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/test_windows.yml">
-  <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/test_windows.yml/badge.svg"></img>
-</a>
-    </td>
-    <td>
-<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/test_macos.yml">
-  <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/test_macos.yml/badge.svg"></img>
-</a>
-    </td>
-    <td>
-<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/test_ubuntu.yml">
-  <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/test_ubuntu.yml/badge.svg"></img>
-</a>
-    </td>
-    </tr>
-    <tr>
-      <td><strong>Experimental</strong></td>
-      <td>
-      <a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_experimental_windows.yml">
-        <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_experimental_windows.yml/badge.svg"></img>
-      </a>
-      </td>
-    </tr>
-    <tr>
-      <td><strong>Quality Assurance</strong></td>
-    <td>
-<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/codeql.yml">
-  <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/codeql/badge.svg"></img>
-</a>
-    </td>
-    </tr>
-  </table>
+  <svg width="100%" height="100%" viewBox="0 0 1000 400" version="1.1"
+     xmlns="http://www.w3.org/2000/svg">
+  <text x="0%" y="10%" >Build (main)</text>
+  <image x="0%" y="20%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_build_windows.yml/badge.svg" />
+  <image x="35%" y="20%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_build_macos.yml/badge.svg" />
+  <image x="70%" y="20%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_build_ubuntu.yml/badge.svg" />
+
+  <text x="0%" y="30%" >Test (main)</text>
+  <image x="0%" y="40%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_test_window.yml/badge.svg" />
+  <image x="35%" y="40%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_test_macos.yml/badge.svg" />
+  <image x="70%" y="40%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_test_ubuntu.yml/badge.svg" />
+
+  <text x="0%" y="50%" >Build (experimental)</text>
+  <image x="0%" y="60%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_build_windows.yml/badge.svg" />
+  <image x="35%" y="60%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_build_macos.yml/badge.svg" />
+  <image x="70%" y="60%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_build_ubuntu.yml/badge.svg" />
+
+  <text x="0%" y="70%" >Test (experimental)</text>
+  <image x="0%" y="80%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_test_windows.yml/badge.svg" />
+  <image x="35%" y="80%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_test_macos.yml/badge.svg" />
+  <image x="70%" y="80%" width="30%" height="10%"
+    href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_test_ubuntu.yml/badge.svg" />
+</svg>
 <br>
   <strong>
   ( IN ALPHA DEVELOPMENT: NOT READY FOR SERIOUS USE. )
