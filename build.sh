@@ -22,7 +22,7 @@ if [ "$1" = "ubuntu-latest" ]; then
 fi
 
 if [ "$1" = "macos-latest" ]; then
-  brew install qt6 qwt || exit 1
+  brew install gcc cmake qt6 qwt || exit 1
   PLATFORM="$1"
 fi
 
@@ -44,14 +44,13 @@ fi
 
 cd $BUILD_DIR || exit 1
 cp -r $SRC_DIR/assets/* . || exit 1
-#cp $SRC_DIR/ZLIB-LICENSE.txt . || exit 1
 
 cmake -S"$SRC_DIR" -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE"  || exit 1
-cmake --build . &> build.log || exit 1
-cat build.log || exit 1
-rm -fr CMake* src_autogen extern || exit 1
-#../6.5.0/mingw_64/bin/windeployqt embroidermodder2.exe || exit 1
-#cpack -G WIX
+cmake --build . || exit 1
+
+# rm -fr CMake* src_autogen extern || exit 1
+# ../6.5.0/mingw_64/bin/windeployqt embroidermodder2.exe || exit 1
+# cpack -G WIX
 
 if [ "$1" = "package" ]; then
   if [ "$PLATFORM" = "windows-latest" ]; then
