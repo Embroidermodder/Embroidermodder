@@ -1,9 +1,10 @@
-name: Ubuntu
+name: Build (Ubuntu)
 
 on:
   push:
     branches:
       - main
+      - experimental
 
 jobs:
   build:
