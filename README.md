@@ -7,7 +7,7 @@
 <h3 align="center">
   <table>
     <tr>
-      <td><strong>Build</strong></td>
+      <td><strong>Main</strong></td>
     <td>
       <a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_windows.yml">
         <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_windows.yml/badge.svg"></img>
@@ -25,7 +25,7 @@
     </td>
     </tr>
     <tr>
-      <td><strong>Test</strong></td>
+      <td></td>
     <td>
  <a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/test_windows.yml">
   <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/test_windows.yml/badge.svg"></img>
@@ -41,6 +41,14 @@
   <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/test_ubuntu.yml/badge.svg"></img>
 </a>
     </td>
+    </tr>
+    <tr>
+      <td><strong>Experimental</strong></td>
+      <td>
+      <a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_experimental_windows.yml">
+        <img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build_experimental_windows.yml/badge.svg"></img>
+      </a>
+      </td>
     </tr>
     <tr>
       <td><strong>Quality Assurance</strong></td>
