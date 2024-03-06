@@ -5,87 +5,18 @@
 </h1>
 
 <h3 align="center">
-  <strong>
-  ( IN ALPHA DEVELOPMENT: NOT READY FOR SERIOUS USE. )
-  </strong>
+<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_build_em2.yml">
+<img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_build_em2.yml/badge.svg"></img>
+</a>
+<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_test_em2.yml">
+<img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_test_em2.yml/badge.svg"></img>
+</a>
+<br>
+<strong>
+( IN ALPHA DEVELOPMENT: NOT READY FOR SERIOUS USE. )
+</strong>
 </h3>
 
-<table>
-<tr>
-<td>main-build</td>
-<td>
-<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_build_windows.yml">
-<img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_build_windows.yml/badge.svg"></img>
-</a>
-</td>
-<td>
-<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_build_macos.yml">
-<img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_build_macos.yml/badge.svg"></img>
-</a>
-</td>
-<td>
-<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_build_ubuntu.yml">
-<img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_build_ubuntu.yml/badge.svg"></img>
-</a>
-</td>
-</tr>
-<tr>
-<td>main-test</td>
-<td>
-<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_test_windows.yml">
-<img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_test_windows.yml/badge.svg"></img>
-</a>
-</td>
-<td>
-<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_test_macos.yml">
-<img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_test_macos.yml/badge.svg"></img>
-</a>
-</td>
-<td>
-<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_test_ubuntu.yml">
-<img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_test_ubuntu.yml/badge.svg"></img>
-</a>
-</td>
-</tr>
-<tr>
-<td>experimental-build</td>
-<td>
-<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_build_windows.yml">
-<img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_build_windows.yml/badge.svg"></img>
-</a>
-</td>
-<td>
-<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_build_macos.yml">
-<img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_build_macos.yml/badge.svg"></img>
-</a>
-</td>
-<td>
-<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_build_ubuntu.yml">
-<img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_build_ubuntu.yml/badge.svg"></img>
-</a>
-</td>
-</tr>
-<tr>
-<td>experimental-test</td>
-<td>
-<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_test_windows.yml">
-<img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_test_windows.yml/badge.svg"></img>
-</a>
-</td>
-<td>
-<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_test_macos.yml">
-<img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_test_macos.yml/badge.svg"></img>
-</a>
-</td>
-<td>
-<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_test_ubuntu.yml">
-<img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/experimental_test_ubuntu.yml/badge.svg"></img>
-</a>
-</td>
-</tr>
-</table>
-
-<br>
 
 Embroidermodder is a free machine embroidery software program.
 The newest version, Embroidermodder 2 can:
