@@ -5,11 +5,11 @@
 </h1>
 
 <h3 align="center">
-<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_build_em2.yml">
-<img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_build_em2.yml/badge.svg"></img>
+<a href="https://github.com/Embroidermodder/build-server/actions/workflows/main_build_em2.yml">
+<img src="https://github.com/Embroidermodder/build-server/actions/workflows/main_build_em2.yml/badge.svg"></img>
 </a>
-<a href="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_test_em2.yml">
-<img src="https://github.com/Embroidermodder/Embroidermodder/actions/workflows/main_test_em2.yml/badge.svg"></img>
+<a href="https://github.com/Embroidermodder/build-server/actions/workflows/main_test_em2.yml">
+<img src="https://github.com/Embroidermodder/build-server/actions/workflows/main_test_em2.yml/badge.svg"></img>
 </a>
 <br>
 <strong>
