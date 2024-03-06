@@ -1,4 +1,4 @@
-name: Windows
+name: Build (Windows, exp)
 
 on:
   push:
