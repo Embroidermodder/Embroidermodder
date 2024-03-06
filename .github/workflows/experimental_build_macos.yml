@@ -1,4 +1,4 @@
-name: Mac OS
+name: Build (Mac OS, exp)
 
 on:
   push:
