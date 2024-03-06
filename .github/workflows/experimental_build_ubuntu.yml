@@ -1,4 +1,4 @@
-name: Build (Ubuntu)
+name: Build (Ubuntu, exp)
 
 on:
   push:
