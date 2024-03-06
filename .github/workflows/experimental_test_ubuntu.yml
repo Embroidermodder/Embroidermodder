@@ -1,4 +1,4 @@
-name: Ubuntu
+name: Test (Ubuntu, exp)
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
       - name: Get repository
         run: git clone https://github.com/embroidermodder/embroidermodder
       - name: Build
-        run: cd embroidermodder; ./build.sh ubuntu-latest
+        run: cd embroidermodder; ./test.sh ubuntu-latest
       - uses: actions/upload-artifact@v4
         with:
           name: embroidermodder-ubuntu
