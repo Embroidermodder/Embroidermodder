@@ -222,7 +222,7 @@ load_ui(const char *appDir)
 
     debug_message("Booting Embroidermodder %s...", version->data);
 
-    toml_free(conf);
-    fclose(f);
+  toml_free(conf);
+  fclose(f);
 	return 1;
 }

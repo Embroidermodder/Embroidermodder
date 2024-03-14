@@ -37,7 +37,6 @@
 /* See the "Programming principles for the C core" in the reference manual
  * before changing this file.
  */
-
 int
 string_equal(const char *a, const char *b)
 {
@@ -3037,7 +3036,7 @@ CommandData command_table[MAX_COMMANDS] = {
         .min_args = 0,
         .gview = 1,
         .gscene = 1,
-        .undo = 1
+        .undo = 0
     },
     {
         .id = COMMAND_NUM_SELECTED, /* 54 */

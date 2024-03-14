@@ -920,7 +920,6 @@
 /* MACRO FUNCTIONS
  * ---------------
  */
-
 #define LOAD_STRING(name) \
     name = create_string(100); \
     get_string(conf, #name, name)

@@ -1,0 +1,20 @@
+name: Build (Mac OS, exp)
+
+on:
+  push:
+    branches:
+      - experimental
+
+jobs:
+  build:
+    name: "Build on Mac OS"
+    runs-on: macos-latest
+    steps:
+      - name: Get repository
+        run: git clone https://github.com/embroidermodder/embroidermodder
+      - name: Build
+        run: cd embroidermodder; ./build.sh macos-latest
+      - uses: actions/upload-artifact@v4
+        with:
+          name: embroidermodder-macos
+          path: ./embroidermodder

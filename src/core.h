@@ -279,6 +279,8 @@ extern const char *tab_names[];
 #undef STR
 
 extern const char *usage_msg;
+extern StringTable *object_names;
+extern StringTable *coverage_test_script;
 extern const char *extensions[];
 extern const char *default_prompt_style[];
 extern const char *details_labels[];
@@ -290,7 +292,7 @@ extern const char *tips[];
 extern MenuData menu_data[MAX_MENUS];
 extern int32_t menubar_order[];
 
-/* Toolbar data */
+ /* Toolbar data */
 extern ToolbarData toolbar_data[MAX_TOOLBARS];
 extern int32_t top_toolbar_layout[];
 extern int32_t bottom_toolbar_layout[];
