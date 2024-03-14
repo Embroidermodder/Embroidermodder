@@ -37,6 +37,22 @@
 /* See the "Programming principles for the C core" in the reference manual
  * before changing this file.
  */
+int
+string_equal(const char *a, const char *b)
+{
+    return !strcmp(a, b);
+}
+
+int
+find_command(const char *command)
+{
+	for (int i=0; i<N_COMMANDS; i++) {
+		if (string_equal(command_table[i].command, command)) {
+			return command_table[i].id;
+		}
+	}
+	return COMMAND_DO_NOTHING;
+}
 
 /* The actuator changes the program state via these global variables.
  *
@@ -144,120 +160,6 @@ int32_t side_toolbar_layout[] = {
 };
 
 MenuData menu_data[MAX_MENUS];
-
-int32_t edit_menu[] = {
-    COMMAND_UNDO,
-    COMMAND_REDO,
-    MENU_SEPERATOR,
-    COMMAND_CUT,
-    COMMAND_COPY,
-    COMMAND_PASTE,
-    MENU_SEPERATOR,
-    MENU_END
-};
-
-int32_t pan_menu[] = {
-    MENU_ICON,
-/*    COMMAND_PAN, */
-    COMMAND_PAN_REAL_TIME,
-    COMMAND_PAN_POINT,
-    MENU_SEPERATOR,
-    COMMAND_PAN_LEFT,
-    COMMAND_PAN_RIGHT,
-    COMMAND_PAN_UP,
-    COMMAND_PAN_DOWN,
-    MENU_END
-};
-
-int32_t zoom_menu[] = {
-    MENU_ICON,
-    COMMAND_ZOOM,
-    COMMAND_ZOOM_REAL_TIME,
-    COMMAND_ZOOM_PREVIOUS,
-    MENU_SEPERATOR,
-    COMMAND_ZOOM_WINDOW,
-    COMMAND_ZOOM_DYNAMIC,
-    COMMAND_ZOOM_SCALE,
-    COMMAND_ZOOM_CENTER,
-    MENU_SEPERATOR,
-    COMMAND_ZOOM_IN,
-    COMMAND_ZOOM_OUT,
-    MENU_SEPERATOR,
-    COMMAND_ZOOM_SELECTED,
-    COMMAND_ZOOM_ALL,
-    COMMAND_ZOOM_EXTENTS,
-    MENU_END
-};
-
-int32_t view_menu[] = {
-    MENU_SEPERATOR,
-    MENU_SUBMENU, MENU_ZOOM,
-    MENU_SUBMENU, MENU_PAN,
-    MENU_SEPERATOR,
-    COMMAND_DAY,
-    COMMAND_NIGHT,
-    MENU_SEPERATOR,
-    MENU_END
-};
-
-int32_t settings_menu[] = {
-    COMMAND_SETTINGS_DIALOG,
-    MENU_SEPERATOR,
-    COMMAND_TEST,
-    MENU_END
-};
-
-int32_t window_menu[] = {
-    MENU_SEPERATOR,
-    MENU_END
-};
-
-int32_t help_menu[] = {
-    COMMAND_HELP,
-    MENU_SEPERATOR,
-    COMMAND_CHANGELOG,
-    MENU_SEPERATOR,
-    COMMAND_TIP_OF_THE_DAY,
-    MENU_SEPERATOR,
-    COMMAND_ABOUT,
-    MENU_SEPERATOR,
-    COMMAND_WHATS_THIS,
-    MENU_END
-};
-
-int32_t draw_menu[] = {
-    COMMAND_ADD_POLYLINE,
-    COMMAND_ADD_PATH,
-    COMMAND_ADD_REGULAR_POLYGON,
-    COMMAND_ADD_POLYGON,
-    MENU_SEPERATOR,
-    COMMAND_ADD_ARC,
-    COMMAND_ADD_CIRCLE,
-    COMMAND_ADD_ELLIPSE,
-    COMMAND_ADD_LINE,
-    COMMAND_ADD_POINT,
-    MENU_SEPERATOR,
-    COMMAND_ADD_HEART,
-    COMMAND_ADD_DOLPHIN,
-    COMMAND_TREBLECLEF,
-    COMMAND_ADD_SNOWFLAKE,
-    MENU_SEPERATOR,
-    COMMAND_ADD_SINGLE_LINE_TEXT,
-    COMMAND_ADD_TEXT_MULTI,
-    COMMAND_ADD_TEXT_SINGLE,
-    COMMAND_ADD_DIM_LEADER,
-    COMMAND_ADD_VERTICAL_DIMENSION,
-    COMMAND_ADD_HORIZONTAL_DIMENSION,
-    COMMAND_ADD_IMAGE,
-    COMMAND_ADD_INFINITE_LINE,
-    COMMAND_ADD_RAY,
-    COMMAND_ADD_RECTANGLE,
-    COMMAND_ADD_ROUNDED_RECTANGLE,
-    COMMAND_ADD_RUBBER,
-    COMMAND_ADD_SLOT,
-    COMMAND_ADD_TRIANGLE,
-    MENU_END
-};
 
 ToolbarData toolbar_data[MAX_TOOLBARS] = {
     {
@@ -3134,7 +3036,7 @@ CommandData command_table[MAX_COMMANDS] = {
         .min_args = 0,
         .gview = 1,
         .gscene = 1,
-        .undo = 1
+        .undo = 0
     },
     {
         .id = COMMAND_NUM_SELECTED, /* 54 */

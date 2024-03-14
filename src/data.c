@@ -23,11 +23,11 @@
 
 #include "core.h"
 
-String *version;
-StringTable *object_names;
-StringTable *coverage_test_script;
-
-StringTable *file_menu;
+#define STR(A) String *A;
+#define TABLE(A) StringTable *A;
+#include "tables.h"
+#undef TABLE
+#undef STR
 
 /* . */
 String *
@@ -171,8 +171,11 @@ get_string_table(toml_table_t *conf, char *path, StringTable *data)
 void
 print_string_table(StringTable *v)
 {
-    for (int i=0; i<v->entries; i++) {
-        printf("%d: %s\n", i, v->data[i]->data);
+    int i;
+    for (i=0; i<v->entries; i++) {
+        char message[300];
+        sprintf(message, "%d: %s\n", i, v->data[i]->data);
+        debug_message(message);
     }
 }
 
@@ -207,23 +210,19 @@ load_ui(const char *appDir)
         puts("Failed to parse \"em2_ui.toml\" as toml.");
         debug_message("Failed to parse \"em2_ui.toml\" as toml.");
         toml_free(conf);
+        fclose(f);
         return 0;
     }
 
-    /* overriding */
-    version = create_string(200);
-    object_names = create_string_table(100, 200);
-    coverage_test_script = create_string_table(100, 200);
-    file_menu = create_string_table(100, 200);
+#define STR(A) LOAD_STRING(A);
+#define TABLE(A) LOAD_STRING_TABLE(A);
+#include "tables.h"
+#undef TABLE
+#undef STR
 
-    get_string(conf, "version", version);
-    get_string_table(conf, "object_names", object_names);
-    get_string_table(conf, "coverage_test_script", coverage_test_script);
-    get_string_table(conf, "file_menu", file_menu);
-	
-    printf("Booting Embroidermodder %s...\n", version->data);
     debug_message("Booting Embroidermodder %s...", version->data);
 
-    toml_free(conf);
+  toml_free(conf);
+  fclose(f);
 	return 1;
 }

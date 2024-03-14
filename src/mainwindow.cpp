@@ -40,32 +40,6 @@ clear_selection(void)
 {
 }
 
-void
-prompt_output(const char *s)
-{
-	DEBUG_MSG(s);
-}
-
-int
-string_equal(const char *a, const char *b)
-{
-    return !strcmp(a, b);
-}
-
-int
-find_command(const char *command)
-{
-	for (int i=0; i<N_COMMANDS; i++) {
-		if (string_equal(command_table[i].command, command)) {
-            char debug_m[200];
-            sprintf(debug_m, "found command %s %d", command, i);
-			debug_message(debug_m);
-			return i;
-		}
-	}
-	return COMMAND_DO_NOTHING;
-}
-
 /* Create menu from UI configuration.
  *
  * For example:
@@ -173,16 +147,16 @@ MainWindow::createAllMenus()
 
     /* Populate menus. */
     create_menu_from_string_table(MENU_FILE, file_menu, true);
-    create_menu(MENU_EDIT, edit_menu, true);
-    create_menu(MENU_VIEW, view_menu, true);
-    create_menu(MENU_SETTINGS, settings_menu, true);
-    create_menu(MENU_WINDOW, window_menu, true);
-    create_menu(MENU_HELP, help_menu, true);
-    create_menu(MENU_DRAW, draw_menu, true);
+    create_menu_from_string_table(MENU_EDIT, edit_menu, true);
+    create_menu_from_string_table(MENU_VIEW, view_menu, true);
+    create_menu_from_string_table(MENU_SETTINGS, settings_menu, true);
+    create_menu_from_string_table(MENU_WINDOW, window_menu, true);
+    create_menu_from_string_table(MENU_HELP, help_menu, true);
+    create_menu_from_string_table(MENU_DRAW, draw_menu, true);
 
     /* Populate submenus. */
-    create_menu(MENU_ZOOM, zoom_menu, false);
-    create_menu(MENU_PAN, pan_menu, false);
+    create_menu_from_string_table(MENU_ZOOM, zoom_menu, false);
+    create_menu_from_string_table(MENU_PAN, pan_menu, false);
 
     /* Connect dynamic menus. */
     connect(menuHash[MENU_RECENT], SIGNAL(aboutToShow()), this, SLOT(recentMenuAboutToShow()));

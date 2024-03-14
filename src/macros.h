@@ -920,8 +920,14 @@
 /* MACRO FUNCTIONS
  * ---------------
  */
+#define LOAD_STRING(name) \
+    name = create_string(100); \
+    get_string(conf, #name, name)
 
-
+#define LOAD_STRING_TABLE(name) \
+    name = create_string_table(100, 200); \
+    get_string_table(conf, #name, name); \
+    print_string_table(name)
 
 /* Explictly declare char string as std::string to use as char* function input.
  * Deals with "ISO C++ forbids converting a string constant to 'char*'".

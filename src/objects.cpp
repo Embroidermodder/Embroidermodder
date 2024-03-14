@@ -3314,8 +3314,8 @@ Geometry::setObjectTextJustify(QString justify)
 {
     objTextJustify = "Left";
     std::string justify_ = justify.toStdString();
-    for (int i=0; strcmp(justify_options[i], "END"); i++) {
-        if (!strcmp(justify_.c_str(), justify_options[i])) {
+    for (int i=0; justify_options->entries; i++) {
+        if (!strcmp(justify_.c_str(), justify_options->data[i]->data)) {
             objTextJustify = justify;
         }
     }

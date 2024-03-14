@@ -45,28 +45,6 @@ EmbReal snowflake_y[] = {
 };
 int32_t snowflake_terms = 2;
 
-/* TODO: "Aligned"
- * TODO: "Fit"
- */
-const char *justify_options[] = {
-    "Left",
-    "Center",
-    "Right",
-    "Aligned",
-    "Middle",
-    "Fit",
-    "Top Left",
-    "Top Center",
-    "Top Right",
-    "Middle Left",
-    "Middle Center",
-    "Middle Right",
-    "Bottom Left",
-    "Bottom Center",
-    "Bottom Right",
-    "END"
-};
-
 char rubber_modes[N_RUBBER_MODES][MAX_STRING_LENGTH] = {
     "CIRCLE_1P_RAD",
     "CIRCLE_1P_DIA",
@@ -133,7 +111,7 @@ EmbVector
 str_to_vector(char *str, int *error)
 {
     EmbVector v;
-    prompt_output("TODO: error checking in str_to_vector");
+    debug_message("TODO: error checking in str_to_vector");
     char *a = strtok(str, ",");
     v.x = atof(a);
     a = strtok(str, NULL);
@@ -147,7 +125,7 @@ int32_t
 str_to_color(char *str, int *error)
 {
     int32_t color = 0;
-    prompt_output("TODO: error checking in str_to_color");
+    debug_message("TODO: error checking in str_to_color");
     char *a = strtok(str, ",");
     color += atoi(a);
     a = strtok(str, NULL);
@@ -194,7 +172,7 @@ report_vector(char *label, EmbVector v)
 {
     char output[MAX_STRING_LENGTH];
     sprintf(output, "%s: x = %f, y = %f", translate(label), v.x, v.y);
-    prompt_output(output);
+    debug_message(output);
 }
 
 /* Cartesian Coordinate System reported:
@@ -217,7 +195,7 @@ report_distance(EmbVector point1, EmbVector point2)
 
     sprintf(output, "%s = %f, %s = %f",
         translate("Distance"), dist, translate("Angle"), angle);
-    prompt_output(output);
+    debug_message(output);
     report_vector("Delta", delta);
 }
 
@@ -305,7 +283,7 @@ geometry_init(int type)
     case MODE_LOCATE_POINT: {
         init_command();
         clear_selection();
-        prompt_output(translate("Specify point: "));
+        debug_message(translate("Specify point: "));
         break;
     }
 
@@ -315,7 +293,7 @@ geometry_init(int type)
         firstRun = true;
         first = emb_vector_make(0.0f, 0.0f);
         prev = emb_vector_make(0.0f, 0.0f);
-        prompt_output(translate("Specify first point: "));
+        debug_message(translate("Specify first point: "));
         break;
     }
 
@@ -330,7 +308,7 @@ geometry_init(int type)
         polyType = "Inscribed"; //Default
         numSides = 4;           //Default
         mode = MODE_POLYGON_NUM_SIDES;
-        prompt_output(translate("Enter number of sides" + " {" + numSides.toString() + "}: ");
+        debug_message(translate("Enter number of sides" + " {" + numSides.toString() + "}: ");
         break;
     }
 
@@ -359,7 +337,7 @@ geometry_init(int type)
 
         if (numSelected() <= 0) {
             //TODO: Prompt to select objects if nothing is preselected
-            prompt_output(translate("Preselect objects before invoking the delete command."));
+            debug_message(translate("Preselect objects before invoking the delete command."));
             end_command();
             messageBox("information", tr("Delete Preselect"), tr("Preselect objects before invoking the delete command."));
         }
@@ -380,7 +358,7 @@ geometry_init(int type)
         g->point1 = emb_vector_make(1.0f, 1.0f);
         g->point2 = emb_vector_make(2.0f, 2.0f);
         g->mode = MODE_STAR_NUM_POINTS;
-        prompt_output(translate("Enter number of star points {5}: "));
+        debug_message(translate("Enter number of star points {5}: "));
         break;
 
     case MODE_STAR_NUM_POINTS:
@@ -427,7 +405,7 @@ geometry_init(int type)
         prev = {0.0, 0.0};
         init_command();
         clear_selection();
-        prompt_output(translate("Specify start point: "));
+        debug_message(translate("Specify start point: "));
         break;
     }
     */
@@ -483,7 +461,7 @@ geometry_left_click(GeometryData *g, EmbVector v)
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", first);
-            prompt_output(translate("Specify next point or [Undo]: "));
+            debug_message(translate("Specify next point or [Undo]: "));
         }
         else {
             setRubberPoint("LINE_END", v);
@@ -502,17 +480,17 @@ geometry_left_click(GeometryData *g, EmbVector v)
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", v);
-            prompt_output(translate("Specify text height" + " {" + textSize() + "}: ");
+            debug_message(translate("Specify text height" + " {" + textSize() + "}: ");
         }
         else if (std::isnan(g->textHeight)) {
             g->textHeight = emb_vector_distance(g->position, v);
             setTextSize(g->textHeight);
-            prompt_output(translate("Specify text angle") + " {" + textAngle() + "}: ");
+            debug_message(translate("Specify text angle") + " {" + textAngle() + "}: ");
         }
         else if (std::isnan(g->textRotation)) {
             g->textRotation = calculateAngle(textX, textY, x, y);
             setTextAngle(g->textRotation);
-            prompt_output(translate("Enter text: "));
+            debug_message(translate("Enter text: "));
             mode = MODE_RAPID;
             prompt->enableRapidFire();
             clearRubber();
@@ -537,7 +515,7 @@ geometry_left_click(GeometryData *g, EmbVector v)
             addRubber("RECTANGLE");
             setRubberMode("RECTANGLE");
             setRubberPoint("RECTANGLE_START", v);
-            prompt_output(translate("Specify other corner point or [Dimensions]: "));
+            debug_message(translate("Specify other corner point or [Dimensions]: "));
         }
         else {
             point2 = v;
@@ -553,7 +531,7 @@ geometry_left_click(GeometryData *g, EmbVector v)
         addRubber("DIMLEADER");
         setRubberMode("DIMLEADER_LINE");
         setRubberPoint("DIMLEADER_LINE_START", g->point1);
-        prompt_output(translate("Specify second point: "));
+        debug_message(translate("Specify second point: "));
         break;
     }
 
@@ -570,7 +548,7 @@ geometry_left_click(GeometryData *g, EmbVector v)
         addRubber("LINE");
         setRubberMode("LINE");
         setRubberPoint("LINE_START", point1);
-        prompt_output(translate("Specify second point: "));
+        debug_message(translate("Specify second point: "));
         break;
     }
 
@@ -587,7 +565,7 @@ geometry_left_click(GeometryData *g, EmbVector v)
             addRubber("ELLIPSE");
             setRubberMode("ELLIPSE_LINE");
             setRubberPoint("ELLIPSE_LINE_POINT1", g->point1);
-            prompt_output(translate("Specify first axis end point: "));
+            debug_message(translate("Specify first axis end point: "));
         }
         else if (std::isnan(point2.x)) {
             point2 = v;
@@ -600,7 +578,7 @@ geometry_left_click(GeometryData *g, EmbVector v)
             setRubberPoint("ELLIPSE_CENTER", center.x, center.y);
             setRubberPoint("ELLIPSE_WIDTH", width, 0);
             setRubberPoint("ELLIPSE_ROT", rot, 0);
-            prompt_output(translate("Specify second axis end point or [Rotation]: ");
+            debug_message(translate("Specify second axis end point or [Rotation]: ");
         }
         else if (std::isnan(point3.x)) {
             point3.x = x;
@@ -622,7 +600,7 @@ geometry_left_click(GeometryData *g, EmbVector v)
             setRubberMode("ELLIPSE_LINE");
             setRubberPoint("ELLIPSE_LINE_POINT1", point1);
             setRubberPoint("ELLIPSE_CENTER", center);
-            prompt_output(translate("Specify first axis end point: ");
+            debug_message(translate("Specify first axis end point: ");
         }
         else if (std::isnan(point2.x)) {
             point2 = v;
@@ -632,7 +610,7 @@ geometry_left_click(GeometryData *g, EmbVector v)
             setRubberPoint("ELLIPSE_AXIS1_POINT2", point2);
             setRubberPoint("ELLIPSE_WIDTH", width, 0);
             setRubberPoint("ELLIPSE_ROT", rot, 0);
-            prompt_output(translate("Specify second axis end point or [Rotation]: ");
+            debug_message(translate("Specify second axis end point or [Rotation]: ");
         }
         else if (std::isnan(point3.x)) {
             point3 = v;
@@ -668,7 +646,7 @@ geometry_left_click(GeometryData *g, EmbVector v)
             setRubberMode(g, "LINE");
             setRubberPoint(g, "LINE_START", base);
             previewOn(g, "SELECTED", "MOVE", base, 0);
-            prompt_output(translate("Specify destination point: ");
+            debug_message(translate("Specify destination point: ");
         }
         else {
             g->dest = v;
@@ -712,7 +690,7 @@ geometry_left_click(GeometryData *g, EmbVector v)
     case MODE_STAR_CENTER_PT: {
         g->center = v;
         g->mode = MODE_STAR_RAD_OUTER;
-        prompt_output(translate("Specify outer radius of star: "));
+        debug_message(translate("Specify outer radius of star: "));
         addRubber("POLYGON");
         setRubberMode("POLYGON");
         updateStar(properties, center);
@@ -723,7 +701,7 @@ geometry_left_click(GeometryData *g, EmbVector v)
     case MODE_STAR_RAD_OUTER: {
         point1 = v;
         mode.s = "MODE_RAD_INNER";
-        prompt_output(translate("Specify inner radius of star: "));
+        debug_message(translate("Specify inner radius of star: "));
         updateStar(point1);
         break;
     }
@@ -742,7 +720,7 @@ geometry_left_click(GeometryData *g, EmbVector v)
         clear_selection();
         g->firstRun = true;
         setPromptPrefix("TODO: Current point settings: PDMODE=?  PDSIZE=?"); //TODO: tr needed here when complete
-        prompt_output(translate("Specify first point: "));
+        debug_message(translate("Specify first point: "));
         break;
     }
     */
@@ -761,7 +739,7 @@ geometry_left_click(GeometryData *g, EmbVector v)
         sprintf(msg, "%s {%s}: ",
             translate("Specify polygon type [Inscribed in circle/Circumscribed around circle]"),
             g->polyType);
-        prompt_output(msg);
+        debug_message(msg);
         break;
     }
 
@@ -782,7 +760,7 @@ geometry_left_click(GeometryData *g, EmbVector v)
     }
 
     case MODE_POLYGON_SIDE_LEN: {
-        prompt_output("TODO: POLYGON Sidelength mode");
+        debug_message("TODO: POLYGON Sidelength mode");
         break;
     }
 
@@ -836,15 +814,15 @@ geometry_prompt(
         int error = 0;
         EmbVector v = str_to_vector(str, &error);
         if (error) {
-            prompt_output(translate("Requires numeric distance or two points."));
-            prompt_output(translate("Specify first point: "));
+            debug_message(translate("Requires numeric distance or two points."));
+            debug_message(translate("Specify first point: "));
         }
         else {
             point1 = v;
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", point1);
-            prompt_output(translate("Specify second point: "));
+            debug_message(translate("Specify second point: "));
         }
         break;
     }
@@ -853,8 +831,8 @@ geometry_prompt(
         int error = 0;
         EmbVector v = str_to_vector(str, &error);
         if (error) {
-            prompt_output(translate("Requires numeric distance or two points."));
-            prompt_output(translate("Specify second point: "));
+            debug_message(translate("Requires numeric distance or two points."));
+            debug_message(translate("Specify second point: "));
         }
         else {
             point2 = v;
@@ -868,28 +846,28 @@ geometry_prompt(
         if (std::isnan(point1.x)) {
             if (str == "C" || str == "CENTER") {
                 mode = MODE_MAJORRADIUS_MINORRADIUS;
-                prompt_output(translate("Specify center point: "));
+                debug_message(translate("Specify center point: "));
             }
             else {
                 EmbVector v = str_to_vector(str, &error);
                 if (error) {
-                    prompt_output(translate("Point or option keyword required."));
-                    prompt_output(translate("Specify first axis start point or [Center]: "));
+                    debug_message(translate("Point or option keyword required."));
+                    debug_message(translate("Specify first axis start point or [Center]: "));
                 }
                 else {
                     point1 = v;
                     addRubber("ELLIPSE");
                     setRubberMode("ELLIPSE_LINE");
                     setRubberPoint("ELLIPSE_LINE_POINT1", point1);
-                    prompt_output(translate("Specify first axis end point: "));
+                    debug_message(translate("Specify first axis end point: "));
                 }
             }
         }
         else if (std::isnan(point2.x)) {
             EmbVector v = str_to_vector(str, &error);
             if (error) {
-                prompt_output(translate("Invalid point."));
-                prompt_output(translate("Specify first axis end point: "));
+                debug_message(translate("Invalid point."));
+                debug_message(translate("Specify first axis end point: "));
             }
             else {
                 point2 = v;
@@ -902,19 +880,19 @@ geometry_prompt(
                 setRubberPoint("ELLIPSE_CENTER", center);
                 setRubberPoint("ELLIPSE_WIDTH", width, 0);
                 setRubberPoint("ELLIPSE_ROT", rot, 0);
-                prompt_output(translate("Specify second axis end point or [Rotation]: "));
+                debug_message(translate("Specify second axis end point or [Rotation]: "));
             }
         }
         else if (std::isnan(point3.x)) {
             if (str == "R" || str == "ROTATION") {
                 mode = MODE_ELLIPSE_ROTATION;
-                prompt_output(translate("Specify rotation: ");
+                debug_message(translate("Specify rotation: ");
             }
             else {
                 EmbVector v = str_to_vector(str, &error);
                 if (error) {
-                    prompt_output(translate("Point or option keyword required."));
-                    prompt_output(translate("Specify second axis end point or [Rotation]: ");
+                    debug_message(translate("Point or option keyword required."));
+                    debug_message(translate("Specify second axis end point or [Rotation]: ");
                 }
                 else {
                     point3 = v;
@@ -931,8 +909,8 @@ geometry_prompt(
         if (std::isnan(point1.x)) {
             EmbVector v = str_to_vector(str, &error);
             if (error) {
-                prompt_output(translate("Invalid point."));
-                prompt_output(translate("Specify center point: ");
+                debug_message(translate("Invalid point."));
+                debug_message(translate("Specify center point: ");
             }
             else {
                 point1 = v;
@@ -941,14 +919,14 @@ geometry_prompt(
                 setRubberMode("ELLIPSE_LINE");
                 setRubberPoint("ELLIPSE_LINE_POINT1", point1);
                 setRubberPoint("ELLIPSE_CENTER", center);
-                prompt_output(translate("Specify first axis end point: ");
+                debug_message(translate("Specify first axis end point: ");
             }
         }
         else if (std::isnan(point2.x)) {
             EmbVector v = str_to_vector(str, &error);
             if (error) {
-                prompt_output(translate("Invalid point."));
-                prompt_output(translate("Specify first axis end point: "));
+                debug_message(translate("Invalid point."));
+                debug_message(translate("Specify first axis end point: "));
             }
             else {
                 point2 = v;
@@ -958,19 +936,19 @@ geometry_prompt(
                 setRubberPoint("ELLIPSE_AXIS1_POINT2", point2);
                 setRubberPoint("ELLIPSE_WIDTH", width, 0);
                 setRubberPoint("ELLIPSE_ROT", rot, 0);
-                prompt_output(translate("Specify second axis end point or [Rotation]: "));
+                debug_message(translate("Specify second axis end point or [Rotation]: "));
             }
         }
         else if (std::isnan(point3.x)) {
             if (str == "R" || str == "ROTATION") {
                 mode = MODE_ELLIPSE_ROTATION;
-                prompt_output(translate("Specify ellipse rotation: ");
+                debug_message(translate("Specify ellipse rotation: ");
             }
             else {
                 EmbVector v = str_to_vector(str, &error);
                 if (error) {
-                    prompt_output(translate("Point or option keyword required."));
-                    prompt_output(translate("Specify second axis end point or [Rotation]: ");
+                    debug_message(translate("Point or option keyword required."));
+                    debug_message(translate("Specify second axis end point or [Rotation]: ");
                 }
                 else {
                     point3 = v;
@@ -991,8 +969,8 @@ geometry_prompt(
         }
         else if (std::isnan(point3.x)) {
             if (std::isnan(str)) {
-                prompt_output(translate("Invalid angle. Input a numeric angle or pick a point."));
-                prompt_output(translate("Specify rotation: ");
+                debug_message(translate("Invalid angle. Input a numeric angle or pick a point."));
+                debug_message(translate("Specify rotation: ");
             }
             else {
                 EmbReal angle = atof(str);
@@ -1008,8 +986,8 @@ geometry_prompt(
         if (firstRun) {
             EmbVector v = str_to_vector(str, &error);
             if (error) {
-                prompt_output(translate("Invalid point."));
-                prompt_output(translate("Specify first point: "));
+                debug_message(translate("Invalid point."));
+                debug_message(translate("Specify first point: "));
             }
             else {
                 firstRun = false;
@@ -1018,7 +996,7 @@ geometry_prompt(
                 addRubber("LINE");
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", first);
-                prompt_output(translate("Specify next point or [Undo]: "));
+                debug_message(translate("Specify next point or [Undo]: "));
             }
         }
         else {
@@ -1028,8 +1006,8 @@ geometry_prompt(
             else {
                 EmbVector v = str_to_vector(str, &error);
                 if (error) {
-                    prompt_output(translate("Point or option keyword required."));
-                    prompt_output(translate("Specify next point or [Undo]: ");
+                    debug_message(translate("Point or option keyword required."));
+                    debug_message(translate("Specify next point or [Undo]: ");
                 }
                 else {
                     setRubberPoint(g, "LINE_END", v);
@@ -1038,7 +1016,7 @@ geometry_prompt(
                     setRubberMode(g, "LINE");
                     setRubberPoint(g, "LINE_START", v);
                     prev = v;
-                    prompt_output(translate("Specify next point or [Undo]: "));
+                    debug_message(translate("Specify next point or [Undo]: "));
                 }
              }
         }
@@ -1052,18 +1030,18 @@ geometry_prompt(
 /*
     case STAR_MODE_NUM_POINTS: {
         if (str == "" && numPoints >= 3 && numPoints <= 1024) {
-            prompt_output(translate("Specify center point: "));
+            debug_message(translate("Specify center point: "));
             mode = MODE_STAR_CENTER_PT;
         }
         else {
             EmbReal tmp = atof(str);
             if (std::isnan(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024) {
-                prompt_output(translate("Requires an integer between 3 and 1024."));
-                prompt_output(translate("Enter number of star points") + " {" + numPoints.toString() + "}: ");
+                debug_message(translate("Requires an integer between 3 and 1024."));
+                debug_message(translate("Enter number of star points") + " {" + numPoints.toString() + "}: ");
             }
             else {
                 numPoints = tmp;
-                prompt_output(translate("Specify center point: "));
+                debug_message(translate("Specify center point: "));
                 mode = MODE_STAR_CENTER_PT;
             }
         }
@@ -1074,13 +1052,13 @@ geometry_prompt(
         int error = 0;
         EmbVector v = str_to_vector(str, &error);
         if (error) {
-            prompt_output(translate("Invalid point."));
-            prompt_output(translate("Specify center point: "));
+            debug_message(translate("Invalid point."));
+            debug_message(translate("Specify center point: "));
         }
         else {
             g->center = v;
             g->mode = MODE_STAR_RAD_OUTER;
-            prompt_output(translate("Specify outer radius of star: "));
+            debug_message(translate("Specify outer radius of star: "));
             addRubber("POLYGON");
             setRubberMode("POLYGON");
             updateStar(qsnapX(), qsnapY());
@@ -1093,13 +1071,13 @@ geometry_prompt(
         int error = 0;
         EmbVector v = str_to_vector(str, &error);
         if (error) {
-            prompt_output(translate("Invalid point."));
-            prompt_output(translate("Specify outer radius of star: "));
+            debug_message(translate("Invalid point."));
+            debug_message(translate("Specify outer radius of star: "));
         }
         else {
             point1 = v;
             mode = MODE_RAD_INNER;
-            prompt_output(translate("Specify inner radius of star: "));
+            debug_message(translate("Specify inner radius of star: "));
             updateStar(qsnapX(), qsnapY());
         }
         break;
@@ -1109,8 +1087,8 @@ geometry_prompt(
         int error = 0;
         EmbVector v = str_to_vector(str, &error);
         if (error) {
-            prompt_output(translate("Invalid point."));
-            prompt_output(translate("Specify inner radius of star: "));
+            debug_message(translate("Invalid point."));
+            debug_message(translate("Specify inner radius of star: "));
         }
         else {
             point2 = v;
@@ -1183,53 +1161,53 @@ geometry_context(
     }
 
     case MODE_DISTANCE: {
-        prompt_output("todo DISTANCE context()");
+        debug_message("todo DISTANCE context()");
         break;
     }
 
     /*
     case MODE_LINE:
-        prompt_output("todo LINE context()");
+        debug_message("todo LINE context()");
         break;
 
     case MODE_LOCATEPOINT:
-        prompt_output("todo LOCATEPOINT context()");
+        debug_message("todo LOCATEPOINT context()");
         break;
 
     case MODE_MOVE:
-        prompt_output("todo MOVE context()");
+        debug_message("todo MOVE context()");
         break;
 
     case MODE_PATH:
-        prompt_output("todo PATH context()");
+        debug_message("todo PATH context()");
         break;
 
     case MODE_POINT:
-        prompt_output("todo POINT context()");
+        debug_message("todo POINT context()");
         break;
 
     case MODE_POLYLINE:
-        prompt_output("todo POLYLINE context()");
+        debug_message("todo POLYLINE context()");
         break;
 
     case MODE_QUICKLEADER:
-        prompt_output("todo QUICKLEADER context()");
+        debug_message("todo QUICKLEADER context()");
         break;
 
     case MODE_RGB:
-        prompt_output("todo RGB context()");
+        debug_message("todo RGB context()");
         break;
 
     case MODE_ROTATE:
-        prompt_output("todo ROTATE context()");
+        debug_message("todo ROTATE context()");
         break;
 
     case MODE_SCALE:
-        prompt_output("todo SCALE context()");
+        debug_message("todo SCALE context()");
         break;
 
     case MODE_SINGLELINETEXT:
-        prompt_output("todo SINGLELINETEXT context()");
+        debug_message("todo SINGLELINETEXT context()");
         break;
 
 */
@@ -1648,8 +1626,8 @@ locate_point_prompt(char *args)
     int error = 0;
     EmbVector v = str_to_vector(args, &error);
     if (error) {
-        prompt_output(translate("Invalid point."));
-        prompt_output(translate("Specify point: "));
+        debug_message(translate("Invalid point."));
+        debug_message(translate("Specify point: "));
     }
     else {
         report_vector("v", v);
@@ -1670,12 +1648,12 @@ move_main(void)
 
     if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
-        prompt_output(translate("Preselect objects before invoking the move command."));
+        debug_message(translate("Preselect objects before invoking the move command."));
         end_command();
         messageBox("information", tr("Move Preselect"), tr("Preselect objects before invoking the move command."));
     }
     else {
-        prompt_output(translate("Specify base point: "));
+        debug_message(translate("Specify base point: "));
     }
     */
 }
@@ -1687,8 +1665,8 @@ move_prompt(char *str)
     if (firstRun) {
         EmbVector v = str_to_vector(str, &error);
         if (error) {
-            prompt_output(translate("Invalid point."));
-            prompt_output(translate("Specify base point: "));
+            debug_message(translate("Invalid point."));
+            debug_message(translate("Specify base point: "));
         }
         else {
             firstRun = false;
@@ -1697,14 +1675,14 @@ move_prompt(char *str)
             setRubberMode("LINE");
             setRubberPoint("LINE_START", base);
             previewOn("SELECTED", "MOVE", base, 0);
-            prompt_output(translate("Specify destination point: "));
+            debug_message(translate("Specify destination point: "));
         }
     }
     else {
         EmbVector v = str_to_vector(str, &error);
         if (error) {
-            prompt_output(translate("Invalid point."));
-            prompt_output(translate("Specify destination point: "));
+            debug_message(translate("Invalid point."));
+            debug_message(translate("Specify destination point: "));
         }
         else {
             dest = v;
@@ -1727,7 +1705,7 @@ path_click(EmbVector v)
         first = v;
         prev = v;
         addPath(v);
-        prompt_output(translate("Specify next point or [Arc/Undo]: "));
+        debug_message(translate("Specify next point or [Arc/Undo]: "));
     }
     else {
         appendLineToPath(v);
@@ -1749,8 +1727,8 @@ path_prompt(char *cmd)
     else {
         EmbVector v = str_to_vector(str, &error);
         if (error) {
-            prompt_output(translate("Point or option keyword required."));
-            prompt_output(translate("Specify next point or [Arc/Undo]: ");
+            debug_message(translate("Point or option keyword required."));
+            debug_message(translate("Specify next point or [Arc/Undo]: ");
         }
         else {
             if (firstRun) {
@@ -1758,7 +1736,7 @@ path_prompt(char *cmd)
                 first = v;
                 prev = v;
                 addPath(x, y);
-                prompt_output(translate("Specify next point or [Arc/Undo]: "));
+                debug_message(translate("Specify next point or [Arc/Undo]: "));
             }
             else {
                 appendLineToPath(x, y);
@@ -1772,7 +1750,7 @@ void point_click(EmbVector v)
 {
     if (firstRun) {
         firstRun = false;
-        prompt_output(translate("Specify next point: "));
+        debug_message(translate("Specify next point: "));
         addPoint(v);
     }
     else {
@@ -1791,24 +1769,24 @@ void point_prompt(char *str)
         }
         EmbVector v = str_to_vector(str, &error);
         if (error) {
-            prompt_output(translate("Invalid point."));
-            prompt_output(translate("Specify first point: "));
+            debug_message(translate("Invalid point."));
+            debug_message(translate("Specify first point: "));
         }
         else {
             firstRun = false;
-            prompt_output(translate("Specify next point: "));
+            debug_message(translate("Specify next point: "));
             addPoint(v);
         }
     }
     else {
         EmbVector v = str_to_vector(str, &error);
         if (error) {
-            prompt_output(translate("Invalid point."));
+            debug_message(translate("Invalid point."));
         }
         else {
             addPoint(v);
         }
-		prompt_output(translate("Specify next point: "));
+		debug_message(translate("Specify next point: "));
     }
 }
 
@@ -1816,18 +1794,18 @@ void polygon_prompt(char *str)
 {
     case MODE_POLYGON_NUM_SIDES: {
         if (str == "" && numSides >= 3 && numSides <= 1024) {
-            prompt_output(translate("Specify center point or [Sidelength]: ");
+            debug_message(translate("Specify center point or [Sidelength]: ");
             mode = MODE_CENTER_PT;
         }
         else {
             EmbReal tmp = atof(str);
             if (std::isnan(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024) {
-                prompt_output(translate("Requires an integer between 3 and 1024."));
-                prompt_output(translate("Enter number of sides" + " {" + numSides.toString() + "}: ");
+                debug_message(translate("Requires an integer between 3 and 1024."));
+                debug_message(translate("Enter number of sides" + " {" + numSides.toString() + "}: ");
             }
             else {
                 numSides = tmp;
-                prompt_output(translate("Specify center point or [Sidelength]: "));
+                debug_message(translate("Specify center point or [Sidelength]: "));
                 mode = MODE_CENTER_PT;
             }
         }
@@ -1836,18 +1814,18 @@ void polygon_prompt(char *str)
     case MODE_POLYGON_CENTER_PT: {
         if (str == "S" || str == "SIDELENGTH") {
             mode = MODE_SIDE_LEN;
-            prompt_output(translate("Specify start point: "));
+            debug_message(translate("Specify start point: "));
         }
         else {
             EmbVector v = str_to_vector(str, &error);
             if (error) {
-                prompt_output(translate("Point or option keyword required."));
-                prompt_output(translate("Specify center point or [Sidelength]: "));
+                debug_message(translate("Point or option keyword required."));
+                debug_message(translate("Specify center point or [Sidelength]: "));
             }
             else {
                 center = v;
                 mode = MODE_POLYTYPE;
-                prompt_output(translate("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + g->polyType + "}: ");
+                debug_message(translate("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + g->polyType + "}: ");
             }
         }
     }
@@ -1855,7 +1833,7 @@ void polygon_prompt(char *str)
         if (str == "INSCRIBED") {
             mode = MODE_INSCRIBE;
             polyType = "Inscribed";
-            prompt_output(translate("Specify polygon corner point or [Distance]: ");
+            debug_message(translate("Specify polygon corner point or [Distance]: ");
             addRubber("POLYGON");
             setRubberMode("POLYGON_INSCRIBE");
             setRubberPoint("POLYGON_CENTER", center);
@@ -1864,7 +1842,7 @@ void polygon_prompt(char *str)
         else if (str == "CIRCUMSCRIBED") {
             mode = MODE_CIRCUMSCRIBE;
             polyType = "Circumscribed";
-            prompt_output(translate("Specify polygon side point or [Distance]: ");
+            debug_message(translate("Specify polygon side point or [Distance]: ");
             addRubber("POLYGON");
             setRubberMode("POLYGON_CIRCUMSCRIBE");
             setRubberPoint("POLYGON_CENTER", center.x, center.y);
@@ -1873,7 +1851,7 @@ void polygon_prompt(char *str)
         else if (str == "") {
             if (polyType == "Inscribed") {
                 mode = MODE_INSCRIBE;
-                prompt_output(translate("Specify polygon corner point or [Distance]: ");
+                debug_message(translate("Specify polygon corner point or [Distance]: ");
                 addRubber("POLYGON");
                 setRubberMode("POLYGON_INSCRIBE");
                 setRubberPoint("POLYGON_CENTER", center);
@@ -1881,7 +1859,7 @@ void polygon_prompt(char *str)
             }
             else if (polyType == "Circumscribed") {
                 mode = MODE_CIRCUMSCRIBE;
-                prompt_output(translate("Specify polygon side point or [Distance]: ");
+                debug_message(translate("Specify polygon side point or [Distance]: ");
                 addRubber("POLYGON");
                 setRubberMode("POLYGON_CIRCUMSCRIBE");
                 setRubberPoint("POLYGON_CENTER", center);
@@ -1892,20 +1870,20 @@ void polygon_prompt(char *str)
             }
         }
         else {
-            prompt_output(translate("Invalid option keyword."));
-            prompt_output(translate("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + polyType + "}: ");
+            debug_message(translate("Invalid option keyword."));
+            debug_message(translate("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + polyType + "}: ");
         }
     }
     case MODE_INSCRIBE: {
         if (str == "D" || str == "DISTANCE") {
             mode = MODE_DISTANCE;
-            prompt_output(translate("Specify distance: "));
+            debug_message(translate("Specify distance: "));
         }
         else {
             EmbVector v = str_to_vector(str, &error);
             if (error) {
-                prompt_output(translate("Point or option keyword required."));
-                prompt_output(translate("Specify polygon corner point or [Distance]: "));
+                debug_message(translate("Point or option keyword required."));
+                debug_message(translate("Specify polygon corner point or [Distance]: "));
             }
             else {
                 pointI = v;
@@ -1918,13 +1896,13 @@ void polygon_prompt(char *str)
     case MODE_CIRCUMSCRIBE) {
         if (str == "D" || str == "DISTANCE") {
             mode = MODE_DISTANCE;
-            prompt_output(translate("Specify distance: "));
+            debug_message(translate("Specify distance: "));
         }
         else {
             EmbVector v = str_to_vector(str, &error);
             if (error) {
-                prompt_output(translate("Point or option keyword required."));
-                prompt_output(translate("Specify polygon side point or [Distance]: "));
+                debug_message(translate("Point or option keyword required."));
+                debug_message(translate("Specify polygon side point or [Distance]: "));
             }
             else {
                 pointC = v;
@@ -1936,8 +1914,8 @@ void polygon_prompt(char *str)
     }
     case MODE_DISTANCE) {
         if (std::isnan(str)) {
-            prompt_output(translate("Requires valid numeric distance."));
-            prompt_output(translate("Specify distance: "));
+            debug_message(translate("Requires valid numeric distance."));
+            debug_message(translate("Specify distance: "));
         }
         else {
             if (polyType == "Inscribed") {
@@ -1979,7 +1957,7 @@ void polyline_click(EmbVector v)
         addRubber("POLYLINE");
         setRubberMode("POLYLINE");
         setRubberPoint("POLYLINE_POINT_0", first);
-        prompt_output(translate("Specify next point or [Undo]: ");
+        debug_message(translate("Specify next point or [Undo]: ");
     }
     else {
         num++;
@@ -1995,8 +1973,8 @@ void polyline_prompt(char *str)
     if (firstRun.b) {
         EmbVector v = str_to_vector(str, &error);
         if (error) {
-            prompt_output(translate("Invalid point."));
-            prompt_output(translate("Specify first point: "));
+            debug_message(translate("Invalid point."));
+            debug_message(translate("Specify first point: "));
         }
         else {
             firstRun = false;
@@ -2005,7 +1983,7 @@ void polyline_prompt(char *str)
             addRubber("POLYLINE");
             setRubberMode("POLYLINE");
             setRubberPoint("POLYLINE_POINT_0", first);
-            prompt_output(translate("Specify next point or [Undo]: ");
+            debug_message(translate("Specify next point or [Undo]: ");
         }
     }
     else {
@@ -2015,8 +1993,8 @@ void polyline_prompt(char *str)
         else {
             EmbVector v = str_to_vector(str, &error);
             if (error) {
-                prompt_output(translate("Point or option keyword required."));
-                prompt_output(translate("Specify next point or [Undo]: ");
+                debug_message(translate("Point or option keyword required."));
+                debug_message(translate("Specify next point or [Undo]: ");
             }
             else {
                 g->num = g->num + 1;
@@ -2024,7 +2002,7 @@ void polyline_prompt(char *str)
                 setRubberText("POLYLINE_NUM_POINTS", g->num);
                 spareRubber("POLYLINE");
                 prev = v;
-                prompt_output(translate("Specify next point or [Undo]: "));
+                debug_message(translate("Specify next point or [Undo]: "));
             }
         }
     }
@@ -2043,21 +2021,21 @@ void quickleader_prompt(char *str)
     EmbVector v = str_to_vector(str, &error);
     if (std::isnan(point1.x)) {
         if (error) {
-            prompt_output(translate("Requires two points."));
-            prompt_output(translate("Specify first point: "));
+            debug_message(translate("Requires two points."));
+            debug_message(translate("Specify first point: "));
         }
         else {
             point1 = v;
             addRubber("DIMLEADER");
             setRubberMode("DIMLEADER_LINE");
             setRubberPoint("DIMLEADER_LINE_START", point1);
-            prompt_output(translate("Specify second point: ");
+            debug_message(translate("Specify second point: ");
         }
     }
     else {
         if (error) {
-            prompt_output(translate("Requires two points."));
-            prompt_output(translate("Specify second point: ");
+            debug_message(translate("Requires two points."));
+            debug_message(translate("Specify second point: ");
         }
         else {
             point2 = v;
@@ -2082,8 +2060,8 @@ void rectangle_prompt(char *str)
     else {
         EmbVector v = str_to_vector(str, &error);
         if (error) {
-            prompt_output(translate("Invalid point."));
-            prompt_output(translate("Specify first point: "));
+            debug_message(translate("Invalid point."));
+            debug_message(translate("Specify first point: "));
         }
         else {
             if (g->firstRun) {
@@ -2092,7 +2070,7 @@ void rectangle_prompt(char *str)
                 addRubber("RECTANGLE");
                 setRubberMode("RECTANGLE");
                 setRubberPoint("RECTANGLE_START", v);
-                prompt_output(translate("Specify other corner point or [Dimensions]: "));
+                debug_message(translate("Specify other corner point or [Dimensions]: "));
             }
             else {
                 point2 = v;
@@ -2109,24 +2087,24 @@ void rgb_main(void)
     init_command();
     clear_selection();
     g->mode = MODE_RGB_BACKGROUND;
-    prompt_output(translate("Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: "));
+    debug_message(translate("Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: "));
 }
 
 void rgb_prompt(char *str)
     case MODE_RGB_BACKGROUND: {
         if (str == "C" || str == "CROSSHAIR") {
             g->mode = MODE_RGB_CROSSHAIR;
-            prompt_output(translate("Specify crosshair color: "));
+            debug_message(translate("Specify crosshair color: "));
         }
         else if (str == "G" || str == "GRID") {
             g->mode = MODE_RGB_GRID;
-            prompt_output(translate("Specify grid color: "));
+            debug_message(translate("Specify grid color: "));
         }
         else {
             int32_t color = str_to_color(str, &error);
             if (!validRGB(color)) {
-                prompt_output(translate("Invalid color. R,G,B values must be in the range of 0-255."));
-                prompt_output(translate("Specify background color: "));
+                debug_message(translate("Invalid color. R,G,B values must be in the range of 0-255."));
+                debug_message(translate("Specify background color: "));
             }
             else {
                 setBackgroundColor(color);
@@ -2139,8 +2117,8 @@ void rgb_prompt(char *str)
     case MODE_RGB_CROSSHAIR: {
 		int32_t color = str_to_color(str, &error);
 		if (!validRGB(color)) {
-            prompt_output(translate("Invalid color. R,G,B values must be in the range of 0-255."));
-            prompt_output(translate("Specify crosshair color: "));
+            debug_message(translate("Invalid color. R,G,B values must be in the range of 0-255."));
+            debug_message(translate("Specify crosshair color: "));
         }
         else {
             setCrossHairColor(color);
@@ -2152,8 +2130,8 @@ void rgb_prompt(char *str)
     case RGB_MODE_GRID: {
 		int32_t color = str_to_color(str, &error);
 		if (!validRGB(color)) {
-            prompt_output(translate("Invalid color. R,G,B values must be in the range of 0-255."));
-            prompt_output(translate("Specify grid color: "));
+            debug_message(translate("Invalid color. R,G,B values must be in the range of 0-255."));
+            debug_message(translate("Specify grid color: "));
         }
         else {
             setGridColor(color);
@@ -2179,12 +2157,12 @@ void rotate_main(char *args)
 
     if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
-        prompt_output(translate("Preselect objects before invoking the rotate command."));
+        debug_message(translate("Preselect objects before invoking the rotate command."));
         end_command();
         messageBox("information", tr("Rotate Preselect"), tr("Preselect objects before invoking the rotate command."));
     }
     else {
-        prompt_output(translate("Specify base point: "));
+        debug_message(translate("Specify base point: "));
     }
 }
 
@@ -2199,7 +2177,7 @@ void rotate_click(EmbVector v)
             setRubberMode("LINE");
             setRubberPoint("LINE_START", g->base);
             previewOn("SELECTED", "ROTATE", g->base, 0);
-            prompt_output(translate("Specify rotation angle or [Reference]: "));
+            debug_message(translate("Specify rotation angle or [Reference]: "));
         }
         else {
             g->dest = v;
@@ -2215,14 +2193,14 @@ void rotate_click(EmbVector v)
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", g->baseR);
-            prompt_output(translate("Specify second point: "));
+            debug_message(translate("Specify second point: "));
         }
         else if (std::isnan(destR.x)) {
             g->destR = v;
             angleRef = calculateAngle(g->baseR, g->destR);
             setRubberPoint("LINE_START", g->base);
             previewOn("SELECTED", "ROTATE", g->base, g->angleRef);
-            prompt_output(translate("Specify the new angle: "));
+            debug_message(translate("Specify the new angle: "));
         }
         else if (std::isnan(angleNew)) {
             angleNew = emb_vector_angle(base, v);
@@ -2239,8 +2217,8 @@ void rotate_prompt(char *str)
         if (firstRun) {
             EmbVector v = str_to_vector(str, &error);
             if (error) {
-                prompt_output(translate("Invalid point."));
-                prompt_output(translate("Specify base point: ");
+                debug_message(translate("Invalid point."));
+                debug_message(translate("Specify base point: ");
             }
             else {
                 firstRun = false;
@@ -2249,20 +2227,20 @@ void rotate_prompt(char *str)
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", base);
                 previewOn("SELECTED", "ROTATE", base, 0);
-                prompt_output(translate("Specify rotation angle or [Reference]: ");
+                debug_message(translate("Specify rotation angle or [Reference]: ");
             }
         }
         else {
             if (str == "R" || str == "REFERENCE") {
                 mode = MODE_REFERENCE;
-                prompt_output(translate("Specify the reference angle") + " {0.00}: ");
+                debug_message(translate("Specify the reference angle") + " {0.00}: ");
                 clearRubber();
                 g->preview = false;
             }
             else {
                 if (std::isnan(str)) {
-                    prompt_output(translate("Requires valid numeric angle, second point, or option keyword."));
-                    prompt_output(translate("Specify rotation angle or [Reference]: ");
+                    debug_message(translate("Requires valid numeric angle, second point, or option keyword."));
+                    debug_message(translate("Specify rotation angle or [Reference]: ");
                 }
                 else {
                     angle = atof(str);
@@ -2278,15 +2256,15 @@ void rotate_prompt(char *str)
             if (std::isnan(str)) {
                 EmbVector v = str_to_vector(str, &error);
                 if (error) {
-                    prompt_output(translate("Requires valid numeric angle or two points."));
-                    prompt_output(translate("Specify the reference angle {0.00}: ");
+                    debug_message(translate("Requires valid numeric angle or two points."));
+                    debug_message(translate("Specify the reference angle {0.00}: ");
                 }
                 else {
                     g->baseR = v;
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", g->baseR);
-                    prompt_output(translate("Specify second point: ");
+                    debug_message(translate("Specify second point: ");
                 }
             }
             else {
@@ -2301,22 +2279,22 @@ void rotate_prompt(char *str)
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", g->base);
                 previewOn("SELECTED", "ROTATE", g->base, angleRef);
-                prompt_output(translate("Specify the new angle: "));
+                debug_message(translate("Specify the new angle: "));
             }
         }
         else if (std::isnan(destRX)) {
             if (std::isnan(str)) {
                 EmbVector v = str_to_vector(str, &error);
                 if (error) {
-                    prompt_output(translate("Requires valid numeric angle or two points."));
-                    prompt_output(translate("Specify second point: "));
+                    debug_message(translate("Requires valid numeric angle or two points."));
+                    debug_message(translate("Specify second point: "));
                 }
                 else {
                     g->destR = v;
                     angleRef = calculateAngle(g->baseR, g->destR);
                     previewOn("SELECTED", "ROTATE", g->base, angleRef);
                     setRubberPoint("LINE_START", g->base);
-                    prompt_output(translate("Specify the new angle: "));
+                    debug_message(translate("Specify the new angle: "));
                 }
             }
             else {
@@ -2326,15 +2304,15 @@ void rotate_prompt(char *str)
                 // The reference angle is what we will use later.
                 angleRef = atof(str);
                 previewOn("SELECTED", "ROTATE", g->base, angleRef);
-                prompt_output(translate("Specify the new angle: "));
+                debug_message(translate("Specify the new angle: "));
             }
         }
         else if (std::isnan(angleNew)) {
             if (std::isnan(str)) {
                 EmbVector v = str_to_vector(str, &error);
                 if (error) {
-                    prompt_output(translate("Requires valid numeric angle or second point."));
-                    prompt_output(translate("Specify the new angle: ");
+                    debug_message(translate("Requires valid numeric angle or second point."));
+                    debug_message(translate("Specify the new angle: ");
                 }
                 else {
                     angleNew = calculateAngle(base, v);
@@ -2431,12 +2409,12 @@ void scale_main(void)
 
     if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
-        prompt_output(translate("Preselect objects before invoking the scale command."));
+        debug_message(translate("Preselect objects before invoking the scale command."));
         end_command();
         messageBox("information", tr("Scale Preselect"), tr("Preselect objects before invoking the scale command."));
     }
     else {
-        prompt_output(translate("Specify base point: "));
+        debug_message(translate("Specify base point: "));
     }
 }
 
@@ -2451,7 +2429,7 @@ void scale_click(EmbVector v)
             setRubberMode("LINE");
             setRubberPoint("LINE_START", base);
             previewOn("SELECTED", "SCALE", base, 1);
-            prompt_output(translate("Specify scale factor or [Reference]: "));
+            debug_message(translate("Specify scale factor or [Reference]: "));
         }
         else {
             dest = v;
@@ -2468,7 +2446,7 @@ void scale_click(EmbVector v)
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", g->baseR);
-            prompt_output(translate("Specify second point: "));
+            debug_message(translate("Specify second point: "));
         }
         else if (std::isnan(destRX)) {
             g->destR = v;
@@ -2477,21 +2455,21 @@ void scale_click(EmbVector v)
                 destRX = 0.0f;
                 destRY = 0.0f;
                 factorRef = 0.0f;
-                prompt_output(translate("Value must be positive and nonzero."));
-                prompt_output(translate("Specify second point: "));
+                debug_message(translate("Value must be positive and nonzero."));
+                debug_message(translate("Specify second point: "));
             }
             else {
                 setRubberPoint("LINE_START", baseX, baseY);
                 previewOn("SELECTED", "SCALE", baseX, baseY, factorRef);
-                prompt_output(translate("Specify new length: ");
+                debug_message(translate("Specify new length: ");
             }
         }
         else if (std::isnan(factorNew)) {
             factorNew = calculateDistance(baseX, baseY, x, y);
             if (factorNew <= 0.0) {
                 factorNew = 0.0f;
-                prompt_output(translate("Value must be positive and nonzero."));
-                prompt_output(translate("Specify new length: ");
+                debug_message(translate("Value must be positive and nonzero."));
+                debug_message(translate("Specify new length: ");
             }
             else {
                 scaleSelected(baseX, baseY, factorNew/factorRef);
@@ -2508,8 +2486,8 @@ void scale_prompt(char *str)
         if (firstRun) {
             EmbVector v = str_to_vector(str, &error);
             if (error) {
-                prompt_output(translate("Invalid point."));
-                prompt_output(translate("Specify base point: ");
+                debug_message(translate("Invalid point."));
+                debug_message(translate("Specify base point: ");
             }
             else {
                 firstRun = false;
@@ -2518,20 +2496,20 @@ void scale_prompt(char *str)
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", base);
                 previewOn("SELECTED", "SCALE", base, 1);
-                prompt_output(translate("Specify scale factor or [Reference]: "));
+                debug_message(translate("Specify scale factor or [Reference]: "));
             }
         }
         else {
             if (str == "R" || str == "REFERENCE") {
                 mode = MODE_REFERENCE;
-                prompt_output(translate("Specify reference length {1}: ");
+                debug_message(translate("Specify reference length {1}: ");
                 clearRubber();
                 g->preview = false;
             }
             else {
                 if (std::isnan(str)) {
-                    prompt_output(translate("Requires valid numeric distance, second point, or option keyword."));
-                    prompt_output(translate("Specify scale factor or [Reference]: "));
+                    debug_message(translate("Requires valid numeric distance, second point, or option keyword."));
+                    debug_message(translate("Specify scale factor or [Reference]: "));
                 }
                 else {
                     factor = atof(str);
@@ -2547,15 +2525,15 @@ void scale_prompt(char *str)
             if (std::isnan(str)) {
                 EmbVector v = str_to_vector(str, &error);
                 if (error) {
-                    prompt_output(translate("Requires valid numeric distance or two points."));
-                    prompt_output(translate("Specify reference length {1}: ");
+                    debug_message(translate("Requires valid numeric distance or two points."));
+                    debug_message(translate("Specify reference length {1}: ");
                 }
                 else {
                     g->baseR = v;
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", g->baseR);
-                    prompt_output(translate("Specify second point: "));
+                    debug_message(translate("Specify second point: "));
                 }
             }
             else {
@@ -2572,15 +2550,15 @@ void scale_prompt(char *str)
                     destRX = 0.0f;
                     destRY = 0.0f;
                     factorRef = 0.0f;
-                    prompt_output(translate("Value must be positive and nonzero."));
-                    prompt_output(translate("Specify reference length") + " {1}: ");
+                    debug_message(translate("Value must be positive and nonzero."));
+                    debug_message(translate("Specify reference length") + " {1}: ");
                 }
                 else {
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", g->base);
                     previewOn("SELECTED", "SCALE", g->base, g->factorRef);
-                    prompt_output(translate("Specify new length: "));
+                    debug_message(translate("Specify new length: "));
                 }
             }
         }
@@ -2588,8 +2566,8 @@ void scale_prompt(char *str)
             if (std::isnan(str)) {
                 EmbVector v = str_to_vector(str, &error);
                 if (error) {
-                    prompt_output(translate("Requires valid numeric distance or two points."));
-                    prompt_output(translate("Specify second point: "));
+                    debug_message(translate("Requires valid numeric distance or two points."));
+                    debug_message(translate("Specify second point: "));
                 }
                 else {
                     g->destR = v;
@@ -2598,13 +2576,13 @@ void scale_prompt(char *str)
                         destRX = 0.0f;
                         destRY = 0.0f;
                         factorRef = 0.0f;
-                        prompt_output(translate("Value must be positive and nonzero."));
-                        prompt_output(translate("Specify second point: "));
+                        debug_message(translate("Value must be positive and nonzero."));
+                        debug_message(translate("Specify second point: "));
                     }
                     else {
                         setRubberPoint("LINE_START", baseX, baseY);
                         previewOn("SELECTED", "SCALE", baseX, baseY, factorRef);
-                        prompt_output(translate("Specify new length: ");
+                        debug_message(translate("Specify new length: ");
                     }
                 }
             }
@@ -2618,13 +2596,13 @@ void scale_prompt(char *str)
                     destRX = 0.0f;
                     destRY = 0.0f;
                     factorRef = 0.0f;
-                    prompt_output(translate("Value must be positive and nonzero."));
-                    prompt_output(translate("Specify second point: "));
+                    debug_message(translate("Value must be positive and nonzero."));
+                    debug_message(translate("Specify second point: "));
                 }
                 else {
                     setRubberPoint("LINE_START", baseX, baseY);
                     previewOn("SELECTED", "SCALE", baseX, baseY, factorRef);
-                    prompt_output(translate("Specify new length: "));
+                    debug_message(translate("Specify new length: "));
                 }
             }
         }
@@ -2632,15 +2610,15 @@ void scale_prompt(char *str)
             if (std::isnan(str)) {
                 EmbVector v = str_to_vector(str, &error);
                 if (error) {
-                    prompt_output(translate("Requires valid numeric distance or second point."));
-                    prompt_output(translate("Specify new length: "));
+                    debug_message(translate("Requires valid numeric distance or second point."));
+                    debug_message(translate("Specify new length: "));
                 }
                 else {
                     factorNew = calculateDistance(base, v);
                     if (factorNew <= 0.0) {
                         factorNew = 0.0f;
-                        prompt_output(translate("Value must be positive and nonzero."));
-                        prompt_output(translate("Specify new length: "));
+                        debug_message(translate("Value must be positive and nonzero."));
+                        debug_message(translate("Specify new length: "));
                     }
                     else {
                         scaleSelected(base, factorNew/factorRef);
@@ -2653,8 +2631,8 @@ void scale_prompt(char *str)
                 factorNew = atof(str);
                 if (factorNew <= 0.0) {
                     factorNew = 0.0f;
-                    prompt_output(translate("Value must be positive and nonzero."));
-                    prompt_output(translate("Specify new length: "));
+                    debug_message(translate("Value must be positive and nonzero."));
+                    debug_message(translate("Specify new length: "));
                 }
                 else {
                     scaleSelected(g->base, g->factorNew / g->factorRef);
@@ -2677,8 +2655,8 @@ void text_single_main(void)
     g->height = 0.0f;
     g->rotation = 0.0f;
     g->mode = MODE_TEXT_SINGLE_SETGEOM;
-    prompt_output(translate("Current font: " + "{" + g->textFont + "} " + tr("Text height: ") + "{" +  textSize() + "}");
-    prompt_output(translate("Specify start point of text or [Justify/Setfont]: "));
+    debug_message(translate("Current font: " + "{" + g->textFont + "} " + tr("Text height: ") + "{" +  textSize() + "}");
+    debug_message(translate("Specify start point of text or [Justify/Setfont]: "));
 }
 
 void text_single_prompt(char *str)
@@ -2688,89 +2666,89 @@ void text_single_prompt(char *str)
             mode = MODE_SETGEOM;
             textJustify = node("Center");
             setRubberText("TEXT_JUSTIFY", textJustify);
-            prompt_output(translate("Specify center point of text or [Justify/Setfont]: ");
+            debug_message(translate("Specify center point of text or [Justify/Setfont]: ");
         }
         else if (str == "R" || str == "RIGHT") {
             mode = MODE_SETGEOM;
             textJustify = node("Right");
             setRubberText("TEXT_JUSTIFY", textJustify);
-            prompt_output(translate("Specify right-end point of text or [Justify/Setfont]: "));
+            debug_message(translate("Specify right-end point of text or [Justify/Setfont]: "));
         }
         else if (str == "A" || str == "ALIGN") {
             mode = MODE_SETGEOM;
             textJustify = "Aligned";
             setRubberText("TEXT_JUSTIFY", textJustify);
-            prompt_output(translate("Specify start point of text or [Justify/Setfont]: "));
+            debug_message(translate("Specify start point of text or [Justify/Setfont]: "));
         }
         else if (str == "M" || str == "MIDDLE") {
             mode = MODE_SETGEOM;
             textJustify = "Middle";
             setRubberText("TEXT_JUSTIFY", textJustify);
-            prompt_output(translate("Specify middle point of text or [Justify/Setfont]: ");
+            debug_message(translate("Specify middle point of text or [Justify/Setfont]: ");
         }
         else if (str == "F" || str == "FIT") {
             mode = MODE_SETGEOM;
             textJustify = "Fit";
             setRubberText("TEXT_JUSTIFY", textJustify);
-            prompt_output(translate("Specify start point of text or [Justify/Setfont]: "));
+            debug_message(translate("Specify start point of text or [Justify/Setfont]: "));
         }
         else if (str == "TL" || str == "TOPLEFT") {
             mode = MODE_SETGEOM;
             textJustify = "Top Left";
             setRubberText("TEXT_JUSTIFY", textJustify);
-            prompt_output(translate("Specify top-left point of text or [Justify/Setfont]: "));
+            debug_message(translate("Specify top-left point of text or [Justify/Setfont]: "));
         }
         else if (str == "TC" || str == "TOPCENTER") {
             mode = MODE_SETGEOM;
             textJustify = "Top Center";
             setRubberText("TEXT_JUSTIFY", textJustify);
-            prompt_output(translate("Specify top-center point of text or [Justify/Setfont]: "));
+            debug_message(translate("Specify top-center point of text or [Justify/Setfont]: "));
         }
         else if (str == "TR" || str == "TOPRIGHT") {
             mode = MODE_SETGEOM;
             textJustify = "Top Right";
             setRubberText("TEXT_JUSTIFY", textJustify);
-            prompt_output(translate("Specify top-right point of text or [Justify/Setfont]: "));
+            debug_message(translate("Specify top-right point of text or [Justify/Setfont]: "));
         }
         else if (str == "ML" || str == "MIDDLELEFT") {
             mode = MODE_SETGEOM;
             textJustify = "Middle Left";
             setRubberText("TEXT_JUSTIFY", textJustify);
-            prompt_output(translate("Specify middle-left point of text or [Justify/Setfont]: ");
+            debug_message(translate("Specify middle-left point of text or [Justify/Setfont]: ");
         }
         else if (str == "MC" || str == "MIDDLECENTER") {
             mode = MODE_SETGEOM;
             textJustify = "Middle Center";
             setRubberText("TEXT_JUSTIFY", textJustify);
-            prompt_output(translate("Specify middle-center point of text or [Justify/Setfont]: ");
+            debug_message(translate("Specify middle-center point of text or [Justify/Setfont]: ");
         }
         else if (str == "MR" || str == "MIDDLERIGHT") {
             mode = MODE_SETGEOM;
             textJustify = "Middle Right";
             setRubberText("TEXT_JUSTIFY", textJustify);
-            prompt_output(translate("Specify middle-right point of text or [Justify/Setfont]: ");
+            debug_message(translate("Specify middle-right point of text or [Justify/Setfont]: ");
         }
         else if (str == "BL" || str == "BOTTOMLEFT") {
             mode = MODE_SETGEOM;
             textJustify = "Bottom Left";
             setRubberText("TEXT_JUSTIFY", textJustify);
-            prompt_output(translate("Specify bottom-left point of text or [Justify/Setfont]: ");
+            debug_message(translate("Specify bottom-left point of text or [Justify/Setfont]: ");
         }
         else if (str == "BC" || str == "BOTTOMCENTER") {
             mode = MODE_SETGEOM;
             textJustify = "Bottom Center";
             setRubberText("TEXT_JUSTIFY", textJustify);
-            prompt_output(translate("Specify bottom-center point of text or [Justify/Setfont]: "));
+            debug_message(translate("Specify bottom-center point of text or [Justify/Setfont]: "));
         }
         else if (str == "BR" || str == "BOTTOMRIGHT") {
             mode = MODE_SETGEOM;
             textJustify = "Bottom Right";
             setRubberText("TEXT_JUSTIFY", textJustify);
-            prompt_output(translate("Specify bottom-right point of text or [Justify/Setfont]: "));
+            debug_message(translate("Specify bottom-right point of text or [Justify/Setfont]: "));
         }
         else {
-            prompt_output(translate("Invalid option keyword."));
-            prompt_output(translate("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: ");
+            debug_message(translate("Invalid option keyword."));
+            debug_message(translate("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: ");
         }
     }
     case MODE_SETFONT: {
@@ -2778,52 +2756,52 @@ void text_single_prompt(char *str)
         g->textFont = str;
         setRubberText("TEXT_FONT", g->textFont);
         setTextFont(g->textFont);
-        prompt_output(translate("Specify start point of text or [Justify/Setfont]: ");
+        debug_message(translate("Specify start point of text or [Justify/Setfont]: ");
     }
     case MODE_SETGEOM: {
         if (std::isnan(textX)) {
             if (str == "J" || str == "JUSTIFY") {
                 mode = MODE_JUSTIFY;
-                prompt_output(translate("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: ");
+                debug_message(translate("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: ");
             }
             else if (str == "S" || str == "SETFONT") {
                 mode = MODE_SETFONT;
-                prompt_output(translate("Specify font name: ");
+                debug_message(translate("Specify font name: ");
             }
             else {
                 EmbVector v = str_to_vector(str, &error);
                 if (error) {
-                    prompt_output(translate("Point or option keyword required."));
-                    prompt_output(translate("Specify start point of text or [Justify/Setfont]: ");
+                    debug_message(translate("Point or option keyword required."));
+                    debug_message(translate("Specify start point of text or [Justify/Setfont]: ");
                 }
                 else {
                     g->position = v;
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", textX, textY);
-                    prompt_output(translate("Specify text height") + " {" + textSize() + "}: ");
+                    debug_message(translate("Specify text height") + " {" + textSize() + "}: ");
                 }
             }
         }
         else if (std::isnan(g->textHeight)) {
             if (str == "") {
                 g->height = textSize();
-                prompt_output(translate("Specify text angle") + " {" + textAngle() + "}: ");
+                debug_message(translate("Specify text angle") + " {" + textAngle() + "}: ");
             }
             else if (std::isnan(str)) {
-                prompt_output(translate("Requires valid numeric distance or second point."));
-                prompt_output(translate("Specify text height") + " {" + textSize() + "}: ");
+                debug_message(translate("Requires valid numeric distance or second point."));
+                debug_message(translate("Specify text height") + " {" + textSize() + "}: ");
             }
             else {
                 g->textHeight = atof(str);
                 setTextSize(g->textHeight);
-                prompt_output(translate("Specify text angle") + " {" + textAngle() + "}: ");
+                debug_message(translate("Specify text angle") + " {" + textAngle() + "}: ");
             }
         }
         else if (std::isnan(g->textRotation)) {
             if (str == "") {
                 g->textRotation = textAngle();
-                prompt_output(translate("Enter text: ");
+                debug_message(translate("Enter text: ");
                 mode = "MODE_RAPID";
                 prompt->enableRapidFire();
                 clearRubber(g);
@@ -2836,13 +2814,13 @@ void text_single_prompt(char *str)
                 setRubberText("TEXT_RAPID", g->text);
             }
             else if (std::isnan(str)) {
-                prompt_output(translate("Requires valid numeric angle or second point."));
-                prompt_output(translate("Specify text angle") + " {" + textAngle() + "}: ");
+                debug_message(translate("Requires valid numeric angle or second point."));
+                debug_message(translate("Specify text angle") + " {" + textAngle() + "}: ");
             }
             else {
                 g->rotation = atof(str);
                 setTextAngle(g->rotation);
-                prompt_output(translate("Enter text: ");
+                debug_message(translate("Enter text: ");
                 mode = MODE_RAPID;
                 prompt->enableRapidFire();
                 clearRubber(g);

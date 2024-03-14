@@ -2654,9 +2654,8 @@ PropertyEditor::updateComboBoxStrIfVaries(QComboBox* comboBox, QString str, std:
     fieldNewText = str;
 
     if (fieldOldText.isEmpty()) {
-        int n = string_array_length(justify_options);
-        for (int i=0; i<n; i++) {
-            QString s(justify_options[i]);
+        for (int i=0; i<justify_options->entries; i++) {
+            QString s(justify_options->data[i]->data);
             comboBox->addItem(s, s);
         }
         comboBox->setCurrentIndex(comboBox->findText(fieldNewText));
@@ -3103,7 +3102,7 @@ int
 main(int argc, char* argv[])
 {
 	if (!load_ui(".")) {
-		puts("ERROR: failed to load \"em2_ui.toml\".");
+		DEBUG_MSG("ERROR: failed to load \"em2_ui.toml\".");
 		return 1;
 	}
 	

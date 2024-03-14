@@ -62,6 +62,26 @@ coverage_test_script = [
     "END"
 ]
 
+# TODO: "Aligned"
+# TODO: "Fit"
+justify_options = [
+    "Left",
+    "Center",
+    "Right",
+    "Aligned",
+    "Middle",
+    "Fit",
+    "Top Left",
+    "Top Center",
+    "Top Right",
+    "Middle Left",
+    "Middle Center",
+    "Middle Right",
+    "Bottom Left",
+    "Bottom Center",
+    "Bottom Right"
+]
+
 file_menu = [
     "#File",
     "new",
@@ -81,9 +101,115 @@ file_menu = [
     "exit"
 ]
 
-# The id numbers are indexed against the "ACTION_" defines.
-action_table_order = [
-    "about"
+edit_menu = [
+    "#Edit",
+    "undo",
+    "redo",
+    "---",
+    "cut",
+    "copy",
+    "paste",
+    "---"
+]
+
+# MENU_ICON? "pan"
+pan_menu = [
+    "#Pan",
+    "pan-real-time",
+    "pan-point",
+    "---",
+    "pan-left",
+    "pan-right",
+    "pan-up",
+    "pan-down"
+]
+
+# MENU_ICON "zoom"
+zoom_menu = [
+    "#Zoom",
+    "zoom-real-time",
+    "zoom-previous",
+    "---",
+    "zoom-window",
+    "zoom-dynamic",
+    "zoom-scale",
+    "zoom-center",
+    "---",
+    "zoom-in",
+    "zoom-out",
+    "---",
+    "zoom-selected",
+    "zoom-all",
+    "zoom-extents",
+]
+
+view_menu = [
+    "#View",
+    "---",
+    ">submenu", "zoom",
+    ">submenu", "pan",
+    "---",
+    "day",
+    "night",
+    "---"
+]
+
+settings_menu = [
+    "#Settings",
+    "settings-dialog",
+    "---",
+    "test"
+]
+
+window_menu = [
+    "#Window",
+    "---"
+]
+
+help_menu = [
+    "#Help",
+    "help",
+    "---",
+    "changelog",
+    "---",
+    "tip-of-the-day",
+    "---",
+    "about",
+    "---",
+    "whats-this"
+]
+
+draw_menu = [
+    "#Draw",
+    "polyline",
+    "path",
+    "regular-polygon",
+    "polygon",
+    "---",
+    "arc",
+    "circle",
+    "ellipse",
+    "line",
+    "rectangle",
+    "rounded-rectangle",
+    "triangle",
+    "point",
+    "---",
+    "heart",
+    "dolphin",
+    "trebleclef",
+    "snowflake",
+    "---",
+    "single-line-text",
+    "multi-line-text",
+    "dim-leader",
+    "vertical-dimension",
+    "horizontal-dimension",
+    "image",
+    "infinite-line",
+    "ray",
+    "rubber",
+    "slot"
 ]
 
 [action_table.about]

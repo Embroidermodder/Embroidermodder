@@ -210,6 +210,7 @@ int string_equal(const char *a, const char *b);
 void emb_sleep(int seconds);
 int string_array_length(const char *list[]);
 bool save_current_file(const char *fileName);
+int find_command(const char *command);
 
 const char *run_script_file(char *fname);
 const char *run_script(char **script);
@@ -227,7 +228,6 @@ void emb_sleep(int seconds);
 char *platformString(void);
 void get_n_reals(float result[], char *argv[], int n, int offset);
 void clear_selection(void);
-void prompt_output(const char *s);
 
 String *create_string(int length);
 void resize_string(String *s, int length);
@@ -272,7 +272,12 @@ extern const char *grid_type_visibility_circular[];
 extern const char *tab_names[];
 
 /* Other strings and string tables. */
-extern String *version;
+#define STR(A) extern String *A;
+#define TABLE(A) extern StringTable *A;
+#include "tables.h"
+#undef TABLE
+#undef STR
+
 extern const char *usage_msg;
 extern StringTable *object_names;
 extern StringTable *coverage_test_script;
@@ -280,24 +285,14 @@ extern const char *extensions[];
 extern const char *default_prompt_style[];
 extern const char *details_labels[];
 extern const char *command_labels[];
-extern const char *justify_options[];
 extern const char *button_list[];
 extern const char *tips[];
 
 /* Menus data */
 extern MenuData menu_data[MAX_MENUS];
 extern int32_t menubar_order[];
-extern StringTable *file_menu;
-extern int32_t edit_menu[];
-extern int32_t pan_menu[];
-extern int32_t zoom_menu[];
-extern int32_t view_menu[];
-extern int32_t settings_menu[];
-extern int32_t window_menu[];
-extern int32_t help_menu[];
-extern int32_t draw_menu[];
 
-/* Toolbar data */
+ /* Toolbar data */
 extern ToolbarData toolbar_data[MAX_TOOLBARS];
 extern int32_t top_toolbar_layout[];
 extern int32_t bottom_toolbar_layout[];
