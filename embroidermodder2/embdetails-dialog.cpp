@@ -7,8 +7,7 @@
 #include <QApplication>
 #include <QGroupBox>
 #include "embdetails-dialog.h"
-#include "emb-pattern.h"
-#include "emb-reader-writer.h"
+#include "../extern/libembroidery/embroidery.h"
 
 EmbDetailsDialog::EmbDetailsDialog(QGraphicsScene* theScene, QWidget* parent) : QDialog(parent)
 {

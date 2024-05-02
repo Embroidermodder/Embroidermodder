@@ -1,6 +1,6 @@
 #include "object-circle.h"
 #include "object-data.h"
-#include "geom-arc.h" //TODO: make a geom-circle.h that simply includes arc.h so it's more intuitive
+#include "../extern/libembroidery/embroidery.h" //TODO: make a geom-circle.h that simply includes arc.h so it's more intuitive
 
 #include <QPainter>
 #include <QStyleOption>
@@ -169,13 +169,15 @@ void CircleObject::updateRubber(QPainter* painter)
         QPointF sceneTan2Point = objectRubberPoint("CIRCLE_TAN2");
         QPointF sceneTan3Point = objectRubberPoint("CIRCLE_TAN3");
 
-        double sceneCenterX;
-        double sceneCenterY;
-        getArcCenter(sceneTan1Point.x(), sceneTan1Point.y(),
-                     sceneTan2Point.x(), sceneTan2Point.y(),
-                     sceneTan3Point.x(), sceneTan3Point.y(),
-                     &sceneCenterX, &sceneCenterY);
-        QPointF sceneCenterPoint(sceneCenterX, sceneCenterY);
+        EmbArc arc;
+        arc.start.x = sceneTan1Point.x();
+        arc.start.y = sceneTan1Point.y();
+        arc.mid.x = sceneTan2Point.x();
+        arc.mid.y = sceneTan2Point.y();
+        arc.end.x = sceneTan3Point.x();
+        arc.end.y = sceneTan3Point.y();
+        EmbVector sceneCenter = emb_arc_center(arc);
+        QPointF sceneCenterPoint(sceneCenter.x, sceneCenter.y);
         QLineF sceneLine(sceneCenterPoint, sceneTan3Point);
         setObjectCenter(sceneCenterPoint);
         qreal radius = sceneLine.length();

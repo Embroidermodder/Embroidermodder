@@ -19,9 +19,9 @@ QScriptValue javaError(QScriptContext* context, QScriptEngine* /*engine*/)
     QString strCmd = context->argument(0).toString();
     QString strErr = context->argument(1).toString();
 
-    mainWin()->nativeSetPromptPrefix("ERROR: (" + strCmd + ") " + strErr);
-    mainWin()->nativeAppendPromptHistory(QString());
-    mainWin()->nativeEndCommand();
+    _main->nativeSetPromptPrefix("ERROR: (" + strCmd + ") " + strErr);
+    _main->nativeAppendPromptHistory(QString());
+    _main->nativeEndCommand();
     return QScriptValue();
 }
 
@@ -34,8 +34,8 @@ QScriptValue javaTodo(QScriptContext* context, QScriptEngine* /*engine*/)
     QString strCmd  = context->argument(0).toString();
     QString strTodo = context->argument(1).toString();
 
-    mainWin()->nativeAlert("TODO: (" + strCmd + ") " + strTodo);
-    mainWin()->nativeEndCommand();
+    _main->nativeAlert("TODO: (" + strCmd + ") " + strTodo);
+    _main->nativeEndCommand();
     return QScriptValue();
 }
 
@@ -44,7 +44,7 @@ QScriptValue javaAlert(QScriptContext* context, QScriptEngine* /*engine*/)
     if(context->argumentCount() != 1)    return context->throwError("alert() requires one argument");
     if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "alert(): first argument is not a string");
 
-    mainWin()->nativeAlert(context->argument(0).toString());
+    _main->nativeAlert(context->argument(0).toString());
     return QScriptValue();
 }
 
@@ -52,7 +52,7 @@ QScriptValue javaBlinkPrompt(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("blinkPrompt() requires zero arguments");
 
-    mainWin()->nativeBlinkPrompt();
+    _main->nativeBlinkPrompt();
     return QScriptValue();
 }
 
@@ -61,7 +61,7 @@ QScriptValue javaSetPromptPrefix(QScriptContext* context, QScriptEngine* /*engin
     if(context->argumentCount() != 1)    return context->throwError("setPromptPrefix() requires one argument");
     if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "setPromptPrefix(): first argument is not a string");
 
-    mainWin()->nativeSetPromptPrefix(context->argument(0).toString());
+    _main->nativeSetPromptPrefix(context->argument(0).toString());
     return QScriptValue();
 }
 
@@ -70,11 +70,11 @@ QScriptValue javaAppendPromptHistory(QScriptContext* context, QScriptEngine* /*e
     int args = context->argumentCount();
     if(args == 0)
     {
-        mainWin()->nativeAppendPromptHistory(QString());
+        _main->nativeAppendPromptHistory(QString());
     }
     else if(args == 1)
     {
-        mainWin()->nativeAppendPromptHistory(context->argument(0).toString());
+        _main->nativeAppendPromptHistory(context->argument(0).toString());
     }
     else
     {
@@ -87,7 +87,7 @@ QScriptValue javaEnablePromptRapidFire(QScriptContext* context, QScriptEngine* /
 {
     if(context->argumentCount() != 0) return context->throwError("enablePromptRapidFire() requires zero arguments");
 
-    mainWin()->nativeEnablePromptRapidFire();
+    _main->nativeEnablePromptRapidFire();
     return QScriptValue();
 }
 
@@ -95,7 +95,7 @@ QScriptValue javaDisablePromptRapidFire(QScriptContext* context, QScriptEngine* 
 {
     if(context->argumentCount() != 0) return context->throwError("disablePromptRapidFire() requires zero arguments");
 
-    mainWin()->nativeDisablePromptRapidFire();
+    _main->nativeDisablePromptRapidFire();
     return QScriptValue();
 }
 
@@ -103,7 +103,7 @@ QScriptValue javaEnableMoveRapidFire(QScriptContext* context, QScriptEngine* /*e
 {
     if(context->argumentCount() != 0) return context->throwError("enableMoveRapidFire() requires zero arguments");
 
-    mainWin()->nativeEnableMoveRapidFire();
+    _main->nativeEnableMoveRapidFire();
     return QScriptValue();
 }
 
@@ -111,7 +111,7 @@ QScriptValue javaDisableMoveRapidFire(QScriptContext* context, QScriptEngine* /*
 {
     if(context->argumentCount() != 0) return context->throwError("disableMoveRapidFire() requires zero arguments");
 
-    mainWin()->nativeDisableMoveRapidFire();
+    _main->nativeDisableMoveRapidFire();
     return QScriptValue();
 }
 
@@ -119,7 +119,7 @@ QScriptValue javaInitCommand(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("initCommand() requires zero arguments");
 
-    mainWin()->nativeInitCommand();
+    _main->nativeInitCommand();
     return QScriptValue();
 }
 
@@ -127,7 +127,7 @@ QScriptValue javaEndCommand(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("endCommand() requires zero arguments");
 
-    mainWin()->nativeEndCommand();
+    _main->nativeEndCommand();
     return QScriptValue();
 }
 
@@ -135,7 +135,7 @@ QScriptValue javaNewFile(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("newFile() requires zero arguments");
 
-    mainWin()->nativeNewFile();
+    _main->nativeNewFile();
     return QScriptValue();
 }
 
@@ -143,7 +143,7 @@ QScriptValue javaOpenFile(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("openFile() requires zero arguments");
 
-    mainWin()->nativeOpenFile();
+    _main->nativeOpenFile();
     return QScriptValue();
 }
 
@@ -151,7 +151,7 @@ QScriptValue javaExit(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("exit() requires zero arguments");
 
-    mainWin()->nativeExit();
+    _main->nativeExit();
     return QScriptValue();
 }
 
@@ -159,7 +159,7 @@ QScriptValue javaHelp(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("help() requires zero arguments");
 
-    mainWin()->nativeHelp();
+    _main->nativeHelp();
     return QScriptValue();
 }
 
@@ -167,7 +167,7 @@ QScriptValue javaAbout(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("about() requires zero arguments");
 
-    mainWin()->nativeAbout();
+    _main->nativeAbout();
     return QScriptValue();
 }
 
@@ -175,7 +175,7 @@ QScriptValue javaTipOfTheDay(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("tipOfTheDay() requires zero arguments");
 
-    mainWin()->nativeTipOfTheDay();
+    _main->nativeTipOfTheDay();
     return QScriptValue();
 }
 
@@ -183,7 +183,7 @@ QScriptValue javaWindowCascade(QScriptContext* context, QScriptEngine* /*engine*
 {
     if(context->argumentCount() != 0) return context->throwError("windowCascade() requires zero arguments");
 
-    mainWin()->nativeWindowCascade();
+    _main->nativeWindowCascade();
     return QScriptValue();
 }
 
@@ -191,7 +191,7 @@ QScriptValue javaWindowTile(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("windowTile() requires zero arguments");
 
-    mainWin()->nativeWindowTile();
+    _main->nativeWindowTile();
     return QScriptValue();
 }
 
@@ -199,7 +199,7 @@ QScriptValue javaWindowClose(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("windowClose() requires zero arguments");
 
-    mainWin()->nativeWindowClose();
+    _main->nativeWindowClose();
     return QScriptValue();
 }
 
@@ -207,7 +207,7 @@ QScriptValue javaWindowCloseAll(QScriptContext* context, QScriptEngine* /*engine
 {
     if(context->argumentCount() != 0) return context->throwError("windowCloseAll() requires zero arguments");
 
-    mainWin()->nativeWindowCloseAll();
+    _main->nativeWindowCloseAll();
     return QScriptValue();
 }
 
@@ -215,7 +215,7 @@ QScriptValue javaWindowNext(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("windowNext() requires zero arguments");
 
-    mainWin()->nativeWindowNext();
+    _main->nativeWindowNext();
     return QScriptValue();
 }
 
@@ -223,14 +223,14 @@ QScriptValue javaWindowPrevious(QScriptContext* context, QScriptEngine* /*engine
 {
     if(context->argumentCount() != 0) return context->throwError("windowPrevious() requires zero arguments");
 
-    mainWin()->nativeWindowPrevious();
+    _main->nativeWindowPrevious();
     return QScriptValue();
 }
 
 QScriptValue javaPlatformString(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("platformString() requires zero arguments");
-    return QScriptValue(mainWin()->nativePlatformString());
+    return QScriptValue(_main->nativePlatformString());
 }
 
 QScriptValue javaMessageBox(QScriptContext* context, QScriptEngine* /*engine*/)
@@ -247,7 +247,7 @@ QScriptValue javaMessageBox(QScriptContext* context, QScriptEngine* /*engine*/)
     if(type != "critical" && type != "information" && type != "question" && type != "warning")
         return context->throwError(QScriptContext::UnknownError, "messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
 
-    mainWin()->nativeMessageBox(type, title, text);
+    _main->nativeMessageBox(type, title, text);
     return QScriptValue();
 }
 
@@ -270,7 +270,7 @@ QScriptValue javaUndo(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("undo() requires zero arguments");
 
-    mainWin()->nativeUndo();
+    _main->nativeUndo();
     return QScriptValue();
 }
 
@@ -278,7 +278,7 @@ QScriptValue javaRedo(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("redo() requires zero arguments");
 
-    mainWin()->nativeRedo();
+    _main->nativeRedo();
     return QScriptValue();
 }
 
@@ -286,7 +286,7 @@ QScriptValue javaIcon16(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("icon16() requires zero arguments");
 
-    mainWin()->nativeIcon16();
+    _main->nativeIcon16();
     return QScriptValue();
 }
 
@@ -294,7 +294,7 @@ QScriptValue javaIcon24(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("icon24() requires zero arguments");
 
-    mainWin()->nativeIcon24();
+    _main->nativeIcon24();
     return QScriptValue();
 }
 
@@ -302,7 +302,7 @@ QScriptValue javaIcon32(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("icon32() requires zero arguments");
 
-    mainWin()->nativeIcon32();
+    _main->nativeIcon32();
     return QScriptValue();
 }
 
@@ -310,7 +310,7 @@ QScriptValue javaIcon48(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("icon48() requires zero arguments");
 
-    mainWin()->nativeIcon48();
+    _main->nativeIcon48();
     return QScriptValue();
 }
 
@@ -318,7 +318,7 @@ QScriptValue javaIcon64(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("icon64() requires zero arguments");
 
-    mainWin()->nativeIcon64();
+    _main->nativeIcon64();
     return QScriptValue();
 }
 
@@ -326,7 +326,7 @@ QScriptValue javaIcon128(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("icon128() requires zero arguments");
 
-    mainWin()->nativeIcon128();
+    _main->nativeIcon128();
     return QScriptValue();
 }
 
@@ -334,7 +334,7 @@ QScriptValue javaPanLeft(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("panLeft() requires zero arguments");
 
-    mainWin()->nativePanLeft();
+    _main->nativePanLeft();
     return QScriptValue();
 }
 
@@ -342,7 +342,7 @@ QScriptValue javaPanRight(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("panRight() requires zero arguments");
 
-    mainWin()->nativePanRight();
+    _main->nativePanRight();
     return QScriptValue();
 }
 
@@ -350,7 +350,7 @@ QScriptValue javaPanUp(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("panUp() requires zero arguments");
 
-    mainWin()->nativePanUp();
+    _main->nativePanUp();
     return QScriptValue();
 }
 
@@ -358,7 +358,7 @@ QScriptValue javaPanDown(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("panDown() requires zero arguments");
 
-    mainWin()->nativePanDown();
+    _main->nativePanDown();
     return QScriptValue();
 }
 
@@ -366,7 +366,7 @@ QScriptValue javaZoomIn(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("zoomIn() requires zero arguments");
 
-    mainWin()->nativeZoomIn();
+    _main->nativeZoomIn();
     return QScriptValue();
 }
 
@@ -374,7 +374,7 @@ QScriptValue javaZoomOut(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("zoomOut() requires zero arguments");
 
-    mainWin()->nativeZoomOut();
+    _main->nativeZoomOut();
     return QScriptValue();
 }
 
@@ -382,7 +382,7 @@ QScriptValue javaZoomExtents(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("zoomExtents() requires zero arguments");
 
-    mainWin()->nativeZoomExtents();
+    _main->nativeZoomExtents();
     return QScriptValue();
 }
 
@@ -405,7 +405,7 @@ QScriptValue javaPrintArea(QScriptContext* context, QScriptEngine* /*engine*/)
     if(qIsNaN(w)) return context->throwError(QScriptContext::TypeError, "printArea(): third argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(h)) return context->throwError(QScriptContext::TypeError, "printArea(): fourth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativePrintArea(x, y, w, h);
+    _main->nativePrintArea(x, y, w, h);
     return QScriptValue();
 }
 
@@ -413,7 +413,7 @@ QScriptValue javaDayVision(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("dayVision() requires zero arguments");
 
-    mainWin()->nativeDayVision();
+    _main->nativeDayVision();
     return QScriptValue();
 }
 
@@ -421,7 +421,7 @@ QScriptValue javaNightVision(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("nightVision() requires zero arguments");
 
-    mainWin()->nativeNightVision();
+    _main->nativeNightVision();
     return QScriptValue();
 }
 
@@ -445,7 +445,7 @@ QScriptValue javaSetBackgroundColor(QScriptContext* context, QScriptEngine* /*en
     if(g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setBackgroundColor(): g value must be in range 0-255"); }
     if(b < 0 || b > 255) { return context->throwError(QScriptContext::UnknownError, "setBackgroundColor(): b value must be in range 0-255"); }
 
-    mainWin()->nativeSetBackgroundColor(r, g, b);
+    _main->nativeSetBackgroundColor(r, g, b);
     return QScriptValue();
 }
 
@@ -469,7 +469,7 @@ QScriptValue javaSetCrossHairColor(QScriptContext* context, QScriptEngine* /*eng
     if(g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setCrossHairColor(): g value must be in range 0-255"); }
     if(b < 0 || b > 255) { return context->throwError(QScriptContext::UnknownError, "setCrossHairColor(): b value must be in range 0-255"); }
 
-    mainWin()->nativeSetCrossHairColor(r, g, b);
+    _main->nativeSetCrossHairColor(r, g, b);
     return QScriptValue();
 }
 
@@ -493,56 +493,56 @@ QScriptValue javaSetGridColor(QScriptContext* context, QScriptEngine* /*engine*/
     if(g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setGridColor(): g value must be in range 0-255"); }
     if(b < 0 || b > 255) { return context->throwError(QScriptContext::UnknownError, "setGridColor(): b value must be in range 0-255"); }
 
-    mainWin()->nativeSetGridColor(r, g, b);
+    _main->nativeSetGridColor(r, g, b);
     return QScriptValue();
 }
 
 QScriptValue javaTextFont(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("textFont() requires zero arguments");
-    return QScriptValue(mainWin()->nativeTextFont());
+    return QScriptValue(_main->nativeTextFont());
 }
 
 QScriptValue javaTextSize(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("textSize() requires zero arguments");
-    return QScriptValue(mainWin()->nativeTextSize());
+    return QScriptValue(_main->nativeTextSize());
 }
 
 QScriptValue javaTextAngle(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("textAngle() requires zero arguments");
-    return QScriptValue(mainWin()->nativeTextAngle());
+    return QScriptValue(_main->nativeTextAngle());
 }
 
 QScriptValue javaTextBold(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("textBold() requires zero arguments");
-    return QScriptValue(mainWin()->nativeTextBold());
+    return QScriptValue(_main->nativeTextBold());
 }
 
 QScriptValue javaTextItalic(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("textItalic() requires zero arguments");
-    return QScriptValue(mainWin()->nativeTextItalic());
+    return QScriptValue(_main->nativeTextItalic());
 }
 
 QScriptValue javaTextUnderline(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("textUnderline() requires zero arguments");
-    return QScriptValue(mainWin()->nativeTextUnderline());
+    return QScriptValue(_main->nativeTextUnderline());
 }
 
 QScriptValue javaTextStrikeOut(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("textStrikeOut() requires zero arguments");
-    return QScriptValue(mainWin()->nativeTextStrikeOut());
+    return QScriptValue(_main->nativeTextStrikeOut());
 }
 
 QScriptValue javaTextOverline(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("textOverline() requires zero arguments");
-    return QScriptValue(mainWin()->nativeTextOverline());
+    return QScriptValue(_main->nativeTextOverline());
 }
 
 QScriptValue javaSetTextFont(QScriptContext* context, QScriptEngine* /*engine*/)
@@ -550,7 +550,7 @@ QScriptValue javaSetTextFont(QScriptContext* context, QScriptEngine* /*engine*/)
     if(context->argumentCount() != 1)    return context->throwError("setTextFont() requires one argument");
     if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "setTextFont(): first argument is not a string");
 
-    mainWin()->nativeSetTextFont(context->argument(0).toString());
+    _main->nativeSetTextFont(context->argument(0).toString());
     return QScriptValue();
 }
 
@@ -564,7 +564,7 @@ QScriptValue javaSetTextSize(QScriptContext* context, QScriptEngine* /*engine*/)
     //isNaN check
     if(qIsNaN(num)) return context->throwError(QScriptContext::TypeError, "setTextSize(): first argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeSetTextSize(num);
+    _main->nativeSetTextSize(num);
     return QScriptValue();
 }
 
@@ -578,7 +578,7 @@ QScriptValue javaSetTextAngle(QScriptContext* context, QScriptEngine* /*engine*/
     //isNaN check
     if(qIsNaN(num)) return context->throwError(QScriptContext::TypeError, "setTextAngle(): first argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeSetTextAngle(num);
+    _main->nativeSetTextAngle(num);
     return QScriptValue();
 }
 
@@ -587,7 +587,7 @@ QScriptValue javaSetTextBold(QScriptContext* context, QScriptEngine* /*engine*/)
     if(context->argumentCount() != 1)    return context->throwError("setTextBold() requires one argument");
     if(!context->argument(0).isBool()) return context->throwError(QScriptContext::TypeError, "setTextBold(): first argument is not a bool");
 
-    mainWin()->nativeSetTextBold(context->argument(0).toBool());
+    _main->nativeSetTextBold(context->argument(0).toBool());
     return QScriptValue();
 }
 
@@ -596,7 +596,7 @@ QScriptValue javaSetTextItalic(QScriptContext* context, QScriptEngine* /*engine*
     if(context->argumentCount() != 1)    return context->throwError("setTextItalic() requires one argument");
     if(!context->argument(0).isBool()) return context->throwError(QScriptContext::TypeError, "setTextItalic(): first argument is not a bool");
 
-    mainWin()->nativeSetTextItalic(context->argument(0).toBool());
+    _main->nativeSetTextItalic(context->argument(0).toBool());
     return QScriptValue();
 }
 
@@ -605,7 +605,7 @@ QScriptValue javaSetTextUnderline(QScriptContext* context, QScriptEngine* /*engi
     if(context->argumentCount() != 1)    return context->throwError("setTextUnderline() requires one argument");
     if(!context->argument(0).isBool()) return context->throwError(QScriptContext::TypeError, "setTextUnderline(): first argument is not a bool");
 
-    mainWin()->nativeSetTextUnderline(context->argument(0).toBool());
+    _main->nativeSetTextUnderline(context->argument(0).toBool());
     return QScriptValue();
 }
 
@@ -614,7 +614,7 @@ QScriptValue javaSetTextStrikeOut(QScriptContext* context, QScriptEngine* /*engi
     if(context->argumentCount() != 1)    return context->throwError("setTextStrikeOut() requires one argument");
     if(!context->argument(0).isBool()) return context->throwError(QScriptContext::TypeError, "setTextStrikeOut(): first argument is not a bool");
 
-    mainWin()->nativeSetTextStrikeOut(context->argument(0).toBool());
+    _main->nativeSetTextStrikeOut(context->argument(0).toBool());
     return QScriptValue();
 }
 
@@ -623,7 +623,7 @@ QScriptValue javaSetTextOverline(QScriptContext* context, QScriptEngine* /*engin
     if(context->argumentCount() != 1)    return context->throwError("setTextOverline() requires one argument");
     if(!context->argument(0).isBool()) return context->throwError(QScriptContext::TypeError, "setTextOverline(): first argument is not a bool");
 
-    mainWin()->nativeSetTextOverline(context->argument(0).toBool());
+    _main->nativeSetTextOverline(context->argument(0).toBool());
     return QScriptValue();
 }
 
@@ -658,7 +658,7 @@ QScriptValue javaPreviewOn(QScriptContext* context, QScriptEngine* /*engine*/)
     if(qIsNaN(y))    return context->throwError(QScriptContext::TypeError, "previewOn(): fourth argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(data)) return context->throwError(QScriptContext::TypeError, "previewOn(): fifth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativePreviewOn(clone, mode, x, y, data);
+    _main->nativePreviewOn(clone, mode, x, y, data);
     return QScriptValue();
 }
 
@@ -666,7 +666,7 @@ QScriptValue javaPreviewOff(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("previewOff() requires zero arguments");
 
-    mainWin()->nativePreviewOff();
+    _main->nativePreviewOff();
     return QScriptValue();
 }
 
@@ -674,7 +674,7 @@ QScriptValue javaVulcanize(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("vulcanize() requires zero arguments");
 
-    mainWin()->nativeVulcanize();
+    _main->nativeVulcanize();
     return QScriptValue();
 }
 
@@ -682,7 +682,7 @@ QScriptValue javaAllowRubber(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("allowRubber() requires zero arguments");
 
-    return QScriptValue(mainWin()->nativeAllowRubber());
+    return QScriptValue(_main->nativeAllowRubber());
 }
 
 QScriptValue javaSetRubberMode(QScriptContext* context, QScriptEngine* /*engine*/)
@@ -692,31 +692,31 @@ QScriptValue javaSetRubberMode(QScriptContext* context, QScriptEngine* /*engine*
 
     QString mode = context->argument(0).toString().toUpper();
 
-    if     (mode == "CIRCLE_1P_RAD")                     { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_RAD); }
-    else if(mode == "CIRCLE_1P_DIA")                     { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_DIA); }
-    else if(mode == "CIRCLE_2P")                         { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_2P); }
-    else if(mode == "CIRCLE_3P")                         { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_3P); }
-    else if(mode == "CIRCLE_TTR")                        { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTR); }
-    else if(mode == "CIRCLE_TTR")                        { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTT); }
+    if     (mode == "CIRCLE_1P_RAD")                     { _main->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_RAD); }
+    else if(mode == "CIRCLE_1P_DIA")                     { _main->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_DIA); }
+    else if(mode == "CIRCLE_2P")                         { _main->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_2P); }
+    else if(mode == "CIRCLE_3P")                         { _main->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_3P); }
+    else if(mode == "CIRCLE_TTR")                        { _main->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTR); }
+    else if(mode == "CIRCLE_TTR")                        { _main->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTT); }
 
-    else if(mode == "DIMLEADER_LINE")                    { mainWin()->nativeSetRubberMode(OBJ_RUBBER_DIMLEADER_LINE); }
+    else if(mode == "DIMLEADER_LINE")                    { _main->nativeSetRubberMode(OBJ_RUBBER_DIMLEADER_LINE); }
 
-    else if(mode == "ELLIPSE_LINE")                      { mainWin()->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_LINE); }
-    else if(mode == "ELLIPSE_MAJORDIAMETER_MINORRADIUS") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS); }
-    else if(mode == "ELLIPSE_MAJORRADIUS_MINORRADIUS")   { mainWin()->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS); }
-    else if(mode == "ELLIPSE_ROTATION")                  { mainWin()->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_ROTATION); }
+    else if(mode == "ELLIPSE_LINE")                      { _main->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_LINE); }
+    else if(mode == "ELLIPSE_MAJORDIAMETER_MINORRADIUS") { _main->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS); }
+    else if(mode == "ELLIPSE_MAJORRADIUS_MINORRADIUS")   { _main->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS); }
+    else if(mode == "ELLIPSE_ROTATION")                  { _main->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_ROTATION); }
 
-    else if(mode == "LINE")                              { mainWin()->nativeSetRubberMode(OBJ_RUBBER_LINE); }
+    else if(mode == "LINE")                              { _main->nativeSetRubberMode(OBJ_RUBBER_LINE); }
 
-    else if(mode == "POLYGON")                           { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYGON); }
-    else if(mode == "POLYGON_INSCRIBE")                  { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYGON_INSCRIBE); }
-    else if(mode == "POLYGON_CIRCUMSCRIBE")              { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYGON_CIRCUMSCRIBE); }
+    else if(mode == "POLYGON")                           { _main->nativeSetRubberMode(OBJ_RUBBER_POLYGON); }
+    else if(mode == "POLYGON_INSCRIBE")                  { _main->nativeSetRubberMode(OBJ_RUBBER_POLYGON_INSCRIBE); }
+    else if(mode == "POLYGON_CIRCUMSCRIBE")              { _main->nativeSetRubberMode(OBJ_RUBBER_POLYGON_CIRCUMSCRIBE); }
 
-    else if(mode == "POLYLINE")                          { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYLINE); }
+    else if(mode == "POLYLINE")                          { _main->nativeSetRubberMode(OBJ_RUBBER_POLYLINE); }
 
-    else if(mode == "RECTANGLE")                         { mainWin()->nativeSetRubberMode(OBJ_RUBBER_RECTANGLE); }
+    else if(mode == "RECTANGLE")                         { _main->nativeSetRubberMode(OBJ_RUBBER_RECTANGLE); }
 
-    else if(mode == "TEXTSINGLE")                        { mainWin()->nativeSetRubberMode(OBJ_RUBBER_TEXTSINGLE); }
+    else if(mode == "TEXTSINGLE")                        { _main->nativeSetRubberMode(OBJ_RUBBER_TEXTSINGLE); }
 
     else                                                 { return context->throwError(QScriptContext::UnknownError, "setRubberMode(): unknown rubberMode value"); }
 
@@ -738,7 +738,7 @@ QScriptValue javaSetRubberPoint(QScriptContext* context, QScriptEngine* /*engine
     if(qIsNaN(x)) return context->throwError(QScriptContext::TypeError, "setRubberPoint(): second argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(y)) return context->throwError(QScriptContext::TypeError, "setRubberPoint(): third argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeSetRubberPoint(key, x, y);
+    _main->nativeSetRubberPoint(key, x, y);
     return QScriptValue();
 }
 
@@ -751,7 +751,7 @@ QScriptValue javaSetRubberText(QScriptContext* context, QScriptEngine* /*engine*
     QString key = context->argument(0).toString().toUpper();
     QString txt = context->argument(1).toString();
 
-    mainWin()->nativeSetRubberText(key, txt);
+    _main->nativeSetRubberText(key, txt);
     return QScriptValue();
 }
 
@@ -762,38 +762,38 @@ QScriptValue javaAddRubber(QScriptContext* context, QScriptEngine* /*engine*/)
 
     QString objType = context->argument(0).toString().toUpper();
 
-    if(!mainWin()->nativeAllowRubber())
+    if(!_main->nativeAllowRubber())
         return context->throwError(QScriptContext::UnknownError, "addRubber(): You must use vulcanize() before you can add another rubber object.");
 
-    qreal mx = mainWin()->nativeMouseX();
-    qreal my = mainWin()->nativeMouseY();
+    qreal mx = _main->nativeMouseX();
+    qreal my = _main->nativeMouseY();
 
     if     (objType == "ARC")          {} //TODO: handle this type
     else if(objType == "BLOCK")        {} //TODO: handle this type
-    else if(objType == "CIRCLE")       { mainWin()->nativeAddCircle(mx, my, 0, false, OBJ_RUBBER_ON); }
+    else if(objType == "CIRCLE")       { _main->nativeAddCircle(mx, my, 0, false, OBJ_RUBBER_ON); }
     else if(objType == "DIMALIGNED")   {} //TODO: handle this type
     else if(objType == "DIMANGULAR")   {} //TODO: handle this type
     else if(objType == "DIMARCLENGTH") {} //TODO: handle this type
     else if(objType == "DIMDIAMETER")  {} //TODO: handle this type
-    else if(objType == "DIMLEADER")    { mainWin()->nativeAddDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
+    else if(objType == "DIMLEADER")    { _main->nativeAddDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
     else if(objType == "DIMLINEAR")    {} //TODO: handle this type
     else if(objType == "DIMORDINATE")  {} //TODO: handle this type
     else if(objType == "DIMRADIUS")    {} //TODO: handle this type
-    else if(objType == "ELLIPSE")      { mainWin()->nativeAddEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON); }
+    else if(objType == "ELLIPSE")      { _main->nativeAddEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON); }
     else if(objType == "ELLIPSEARC")   {} //TODO: handle this type
     else if(objType == "HATCH")        {} //TODO: handle this type
     else if(objType == "IMAGE")        {} //TODO: handle this type
     else if(objType == "INFINITELINE") {} //TODO: handle this type
-    else if(objType == "LINE")         { mainWin()->nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
+    else if(objType == "LINE")         { _main->nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
     else if(objType == "PATH")         {} //TODO: handle this type
     else if(objType == "POINT")        {} //TODO: handle this type
-    else if(objType == "POLYGON")      { mainWin()->nativeAddPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
-    else if(objType == "POLYLINE")     { mainWin()->nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
+    else if(objType == "POLYGON")      { _main->nativeAddPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
+    else if(objType == "POLYLINE")     { _main->nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
     else if(objType == "RAY")          {} //TODO: handle this type
-    else if(objType == "RECTANGLE")    { mainWin()->nativeAddRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }
+    else if(objType == "RECTANGLE")    { _main->nativeAddRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }
     else if(objType == "SPLINE")       {} //TODO: handle this type
     else if(objType == "TEXTMULTI")    {} //TODO: handle this type
-    else if(objType == "TEXTSINGLE")   { mainWin()->nativeAddTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON); }
+    else if(objType == "TEXTSINGLE")   { _main->nativeAddTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON); }
 
     return QScriptValue();
 }
@@ -802,7 +802,7 @@ QScriptValue javaClearRubber(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("clearRubber() requires zero arguments");
 
-    mainWin()->nativeClearRubber();
+    _main->nativeClearRubber();
     return QScriptValue();
 }
 
@@ -813,15 +813,15 @@ QScriptValue javaSpareRubber(QScriptContext* context, QScriptEngine* /*engine*/)
 
     QString objID = context->argument(0).toString().toUpper();
 
-    if     (objID == "PATH")     { mainWin()->nativeSpareRubber(SPARE_RUBBER_PATH);     }
-    else if(objID == "POLYGON")  { mainWin()->nativeSpareRubber(SPARE_RUBBER_POLYGON);  }
-    else if(objID == "POLYLINE") { mainWin()->nativeSpareRubber(SPARE_RUBBER_POLYLINE); }
+    if     (objID == "PATH")     { _main->nativeSpareRubber(SPARE_RUBBER_PATH);     }
+    else if(objID == "POLYGON")  { _main->nativeSpareRubber(SPARE_RUBBER_POLYGON);  }
+    else if(objID == "POLYLINE") { _main->nativeSpareRubber(SPARE_RUBBER_POLYLINE); }
     else
     {
         bool ok = false;
         qint64 id = objID.toLongLong(&ok);
         if(!ok) return context->throwError(QScriptContext::TypeError, "spareRubber(): error converting object ID into an int64");
-        mainWin()->nativeSpareRubber(id);
+        _main->nativeSpareRubber(id);
     }
 
     return QScriptValue();
@@ -847,7 +847,7 @@ QScriptValue javaAddTextMulti(QScriptContext* context, QScriptEngine* /*engine*/
     if(qIsNaN(y))   return context->throwError(QScriptContext::TypeError, "addTextMulti(): third argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "addTextMulti(): fourth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddTextMulti(str, x, y, rot, fill, OBJ_RUBBER_OFF);
+    _main->nativeAddTextMulti(str, x, y, rot, fill, OBJ_RUBBER_OFF);
     return QScriptValue();
 }
 
@@ -871,7 +871,7 @@ QScriptValue javaAddTextSingle(QScriptContext* context, QScriptEngine* /*engine*
     if(qIsNaN(y))   return context->throwError(QScriptContext::TypeError, "addTextSingle(): third argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "addTextSingle(): fourth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddTextSingle(str, x, y, rot, fill, OBJ_RUBBER_OFF);
+    _main->nativeAddTextSingle(str, x, y, rot, fill, OBJ_RUBBER_OFF);
     return QScriptValue();
 }
 
@@ -911,7 +911,7 @@ QScriptValue javaAddLine(QScriptContext* context, QScriptEngine* /*engine*/)
     if(qIsNaN(y2))  return context->throwError(QScriptContext::TypeError, "addLine(): fourth argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "addLine(): fifth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddLine(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
+    _main->nativeAddLine(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
     return QScriptValue();
 }
 
@@ -945,7 +945,7 @@ QScriptValue javaAddTriangle(QScriptContext* context, QScriptEngine* /*engine*/)
     if(qIsNaN(y3))  return context->throwError(QScriptContext::TypeError, "addTriangle(): sixth argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "addTriangle(): seventh argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddTriangle(x1, y1, x2, y2, x3, y3, rot, fill);
+    _main->nativeAddTriangle(x1, y1, x2, y2, x3, y3, rot, fill);
     return QScriptValue();
 }
 
@@ -973,7 +973,7 @@ QScriptValue javaAddRectangle(QScriptContext* context, QScriptEngine* /*engine*/
     if(qIsNaN(h))   return context->throwError(QScriptContext::TypeError, "addRectangle(): fourth argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "addRectangle(): fifth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
+    _main->nativeAddRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
     return QScriptValue();
 }
 
@@ -1004,7 +1004,7 @@ QScriptValue javaAddRoundedRectangle(QScriptContext* context, QScriptEngine* /*e
     if(qIsNaN(rad)) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): fifth argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): sixth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddRoundedRectangle(x, y, w, h, rad, rot, fill);
+    _main->nativeAddRoundedRectangle(x, y, w, h, rad, rot, fill);
     return QScriptValue();
 }
 
@@ -1033,7 +1033,7 @@ QScriptValue javaAddArc(QScriptContext* context, QScriptEngine* /*engine*/)
     if(qIsNaN(endX))   return context->throwError(QScriptContext::TypeError, "addArc(): fifth argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(endY))   return context->throwError(QScriptContext::TypeError, "addArc(): sixth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddArc(startX, startY, midX, midY, endX, endY, OBJ_RUBBER_OFF);
+    _main->nativeAddArc(startX, startY, midX, midY, endX, endY, OBJ_RUBBER_OFF);
     return QScriptValue();
 }
 
@@ -1055,7 +1055,7 @@ QScriptValue javaAddCircle(QScriptContext* context, QScriptEngine* /*engine*/)
     if(qIsNaN(centerY)) return context->throwError(QScriptContext::TypeError, "addCircle(): second argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(radius))  return context->throwError(QScriptContext::TypeError, "addCircle(): third argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddCircle(centerX, centerY, radius, fill, OBJ_RUBBER_OFF);
+    _main->nativeAddCircle(centerX, centerY, radius, fill, OBJ_RUBBER_OFF);
     return QScriptValue();
 }
 
@@ -1083,7 +1083,7 @@ QScriptValue javaAddSlot(QScriptContext* context, QScriptEngine* /*engine*/)
     if(qIsNaN(length))   return context->throwError(QScriptContext::TypeError, "addSlot(): fourth argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(rot))      return context->throwError(QScriptContext::TypeError, "addSlot(): fifth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddSlot(centerX, centerY, diameter, length, rot, fill, OBJ_RUBBER_OFF);
+    _main->nativeAddSlot(centerX, centerY, diameter, length, rot, fill, OBJ_RUBBER_OFF);
     return QScriptValue();
 }
 
@@ -1111,7 +1111,7 @@ QScriptValue javaAddEllipse(QScriptContext* context, QScriptEngine* /*engine*/)
     if(qIsNaN(radY))    return context->throwError(QScriptContext::TypeError, "addEllipse(): fourth argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(rot))     return context->throwError(QScriptContext::TypeError, "addEllipse(): fifth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddEllipse(centerX, centerY, radX, radY, rot, fill, OBJ_RUBBER_OFF);
+    _main->nativeAddEllipse(centerX, centerY, radX, radY, rot, fill, OBJ_RUBBER_OFF);
     return QScriptValue();
 }
 
@@ -1128,7 +1128,7 @@ QScriptValue javaAddPoint(QScriptContext* context, QScriptEngine* /*engine*/)
     if(qIsNaN(x)) return context->throwError(QScriptContext::TypeError, "addPoint(): first argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(y)) return context->throwError(QScriptContext::TypeError, "addPoint(): second argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddPoint(x,y);
+    _main->nativeAddPoint(x,y);
     return QScriptValue();
 }
 
@@ -1183,7 +1183,7 @@ QScriptValue javaAddPolygon(QScriptContext* context, QScriptEngine* /*engine*/)
 
     path.translate(-startX, -startY);
 
-    mainWin()->nativeAddPolygon(startX, startY, path, OBJ_RUBBER_OFF);
+    _main->nativeAddPolygon(startX, startY, path, OBJ_RUBBER_OFF);
     return QScriptValue();
 }
 
@@ -1228,7 +1228,7 @@ QScriptValue javaAddPolyline(QScriptContext* context, QScriptEngine* /*engine*/)
 
     path.translate(-startX, -startY);
 
-    mainWin()->nativeAddPolyline(startX, startY, path, OBJ_RUBBER_OFF);
+    _main->nativeAddPolyline(startX, startY, path, OBJ_RUBBER_OFF);
     return QScriptValue();
 }
 
@@ -1282,7 +1282,7 @@ QScriptValue javaAddDimLeader(QScriptContext* context, QScriptEngine* /*engine*/
     if(qIsNaN(y2))  return context->throwError(QScriptContext::TypeError, "addDimLeader(): fourth argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "addDimLeader(): fifth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddDimLeader(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
+    _main->nativeAddDimLeader(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
     return QScriptValue();
 }
 
@@ -1292,7 +1292,7 @@ QScriptValue javaSetCursorShape(QScriptContext* context, QScriptEngine* /*engine
     if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "setCursorShape(): first argument is not a string");
 
     QString shape = context->argument(0).toString();
-    mainWin()->nativeSetCursorShape(shape);
+    _main->nativeSetCursorShape(shape);
     return QScriptValue();
 }
 
@@ -1315,7 +1315,7 @@ QScriptValue javaCalculateAngle(QScriptContext* context, QScriptEngine* /*engine
     if(qIsNaN(x2))  return context->throwError(QScriptContext::TypeError, "calculateAngle(): third argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(y2))  return context->throwError(QScriptContext::TypeError, "calculateAngle(): fourth argument failed isNaN check. There is an error in your code.");
 
-    return QScriptValue(mainWin()->nativeCalculateAngle(x1, y1, x2, y2));
+    return QScriptValue(_main->nativeCalculateAngle(x1, y1, x2, y2));
 }
 
 QScriptValue javaCalculateDistance(QScriptContext* context, QScriptEngine* /*engine*/)
@@ -1337,7 +1337,7 @@ QScriptValue javaCalculateDistance(QScriptContext* context, QScriptEngine* /*eng
     if(qIsNaN(x2))  return context->throwError(QScriptContext::TypeError, "calculateDistance(): third argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(y2))  return context->throwError(QScriptContext::TypeError, "calculateDistance(): fourth argument failed isNaN check. There is an error in your code.");
 
-    return QScriptValue(mainWin()->nativeCalculateDistance(x1, y1, x2, y2));
+    return QScriptValue(_main->nativeCalculateDistance(x1, y1, x2, y2));
 }
 
 QScriptValue javaPerpendicularDistance(QScriptContext* context, QScriptEngine* /*engine*/)
@@ -1365,20 +1365,20 @@ QScriptValue javaPerpendicularDistance(QScriptContext* context, QScriptEngine* /
     if(qIsNaN(x2))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): fifth argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(y2))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): sixth argument failed isNaN check. There is an error in your code.");
 
-    return QScriptValue(mainWin()->nativePerpendicularDistance(px, py, x1, y1, x2, y2));
+    return QScriptValue(_main->nativePerpendicularDistance(px, py, x1, y1, x2, y2));
 }
 
 QScriptValue javaNumSelected(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("numSelected() requires zero arguments");
-    return QScriptValue(mainWin()->nativeNumSelected());
+    return QScriptValue(_main->nativeNumSelected());
 }
 
 QScriptValue javaSelectAll(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("selectAll() requires zero arguments");
 
-    mainWin()->nativeSelectAll();
+    _main->nativeSelectAll();
     return QScriptValue();
 }
 
@@ -1392,7 +1392,7 @@ QScriptValue javaClearSelection(QScriptContext* context, QScriptEngine* /*engine
 {
     if(context->argumentCount() != 0) return context->throwError("clearSelection() requires zero arguments");
 
-    mainWin()->nativeClearSelection();
+    _main->nativeClearSelection();
     return QScriptValue();
 }
 
@@ -1400,7 +1400,7 @@ QScriptValue javaDeleteSelected(QScriptContext* context, QScriptEngine* /*engine
 {
     if(context->argumentCount() != 0) return context->throwError("deleteSelected() requires zero arguments");
 
-    mainWin()->nativeDeleteSelected();
+    _main->nativeDeleteSelected();
     return QScriptValue();
 }
 
@@ -1417,7 +1417,7 @@ QScriptValue javaCutSelected(QScriptContext* context, QScriptEngine* /*engine*/)
     if(qIsNaN(x)) return context->throwError(QScriptContext::TypeError, "cutSelected(): first argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(y)) return context->throwError(QScriptContext::TypeError, "cutSelected(): second argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeCutSelected(x, y);
+    _main->nativeCutSelected(x, y);
     return QScriptValue();
 }
 
@@ -1434,7 +1434,7 @@ QScriptValue javaCopySelected(QScriptContext* context, QScriptEngine* /*engine*/
     if(qIsNaN(x)) return context->throwError(QScriptContext::TypeError, "copySelected(): first argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(y)) return context->throwError(QScriptContext::TypeError, "copySelected(): second argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeCopySelected(x, y);
+    _main->nativeCopySelected(x, y);
     return QScriptValue();
 }
 
@@ -1451,7 +1451,7 @@ QScriptValue javaPasteSelected(QScriptContext* context, QScriptEngine* /*engine*
     if(qIsNaN(x)) return context->throwError(QScriptContext::TypeError, "pasteSelected(): first argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(y)) return context->throwError(QScriptContext::TypeError, "pasteSelected(): second argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativePasteSelected(x, y);
+    _main->nativePasteSelected(x, y);
     return QScriptValue();
 }
 
@@ -1468,7 +1468,7 @@ QScriptValue javaMoveSelected(QScriptContext* context, QScriptEngine* /*engine*/
     if(qIsNaN(dx)) return context->throwError(QScriptContext::TypeError, "moveSelected(): first argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(dy)) return context->throwError(QScriptContext::TypeError, "moveSelected(): second argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeMoveSelected(dx, dy);
+    _main->nativeMoveSelected(dx, dy);
     return QScriptValue();
 }
 
@@ -1490,7 +1490,7 @@ QScriptValue javaScaleSelected(QScriptContext* context, QScriptEngine* /*engine*
 
     if(factor <= 0.0) return context->throwError(QScriptContext::UnknownError, "scaleSelected(): scale factor must be greater than zero");
 
-    mainWin()->nativeScaleSelected(x, y, factor);
+    _main->nativeScaleSelected(x, y, factor);
     return QScriptValue();
 }
 
@@ -1510,7 +1510,7 @@ QScriptValue javaRotateSelected(QScriptContext* context, QScriptEngine* /*engine
     if(qIsNaN(y))   return context->throwError(QScriptContext::TypeError, "rotateSelected(): second argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "rotateSelected(): third argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeRotateSelected(x, y, rot);
+    _main->nativeRotateSelected(x, y, rot);
     return QScriptValue();
 }
 
@@ -1533,32 +1533,32 @@ QScriptValue javaMirrorSelected(QScriptContext* context, QScriptEngine* /*engine
     if(qIsNaN(x2))  return context->throwError(QScriptContext::TypeError, "mirrorSelected(): third argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(y2))  return context->throwError(QScriptContext::TypeError, "mirrorSelected(): fourth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeMirrorSelected(x1, y1, x2, y2);
+    _main->nativeMirrorSelected(x1, y1, x2, y2);
     return QScriptValue();
 }
 
 QScriptValue javaQSnapX(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("qsnapX() requires zero arguments");
-    return QScriptValue(mainWin()->nativeQSnapX());
+    return QScriptValue(_main->nativeQSnapX());
 }
 
 QScriptValue javaQSnapY(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("qsnapY() requires zero arguments");
-    return QScriptValue(mainWin()->nativeQSnapY());
+    return QScriptValue(_main->nativeQSnapY());
 }
 
 QScriptValue javaMouseX(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("mouseX() requires zero arguments");
-    return QScriptValue(mainWin()->nativeMouseX());
+    return QScriptValue(_main->nativeMouseX());
 }
 
 QScriptValue javaMouseY(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("mouseY() requires zero arguments");
-    return QScriptValue(mainWin()->nativeMouseY());
+    return QScriptValue(_main->nativeMouseY());
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -1,6 +1,7 @@
 #include "object-arc.h"
 #include "object-data.h"
-#include "geom-arc.h"
+
+#include "../extern/libembroidery/embroidery.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -49,10 +50,14 @@ void ArcObject::calculateArcData(qreal startX, qreal startY, qreal midX, qreal m
 {
     double centerX;
     double centerY;
-    getArcCenter(startX,  startY,
-                 midX,    midY,
-                 endX,    endY,
-                 &centerX, &centerY);
+    EmbArc arc;
+    arc.start.x = startX;
+    arc.start.y = startY;
+    arc.mid.x = midX;
+    arc.mid.y = midY;
+    arc.end.x = endX;
+    arc.end.y = endY;
+    EmbVector center = emb_arc_center(arc);
 
     arcStartPoint = QPointF(startX - centerX, startY - centerY);
     arcMidPoint   = QPointF(midX   - centerX, midY   - centerY);
@@ -280,8 +285,16 @@ qreal ArcObject::objectIncludedAngle() const
 bool ArcObject::objectClockwise() const
 {
     //NOTE: Y values are inverted here on purpose
-    if(isArcClockwise(objectStartX(), -objectStartY(), objectMidX(), -objectMidY(), objectEndX(), -objectEndY()))
+    EmbArc arc;
+    arc.start.x = objectStartX();
+    arc.start.x = -objectStartY();
+    arc.mid.x = objectMidX();
+    arc.mid.x = -objectMidY();
+    arc.end.x = objectEndX();
+    arc.end.x = -objectEndY();
+    if (emb_arc_clockwise(arc)) {
         return true;
+    }
     return false;
 }
 

@@ -5,8 +5,8 @@
 #include <QList>
 #include <QHash>
 #include <QDir>
-//#include <QtScript>
-//#include <QtScriptTools>
+#include <QtScript>
+#include <QtScriptTools>
 
 #include "mdiarea.h"
 #include "mdiwindow.h"
@@ -795,5 +795,3 @@ public:
 };
 
 #endif
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

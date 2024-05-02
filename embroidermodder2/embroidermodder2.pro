@@ -19,8 +19,7 @@ ICON = embroidermodder2.icns
 
 TARGET = embroidermodder2
 
-QT += opengl
-#QT += script scripttools
+QT += opengl script scripttools
 
 #Qt5
 greaterThan(QT_MAJOR_VERSION, 4) {
@@ -63,8 +62,12 @@ TRANSLATIONS = translations/afrikaans/embroidermodder2_afrikaans.ts   \ #af
                translations/swedish/embroidermodder2_swedish.ts       \ #sv
                translations/turkish/embroidermodder2_turkish.ts       \ #tr
 
-#GUI
+FORMS = \
+    about.ui
 SOURCES += \
+    javascript/native-javascript-include.cpp \
+    javascript/native-javascript-init.cpp \
+    javascript/native-javascript.cpp \
 main.cpp \
 mainwindow.cpp \
 mainwindow-settings.cpp \
@@ -101,9 +104,11 @@ object-polygon.cpp \
 object-polyline.cpp \
 object-rect.cpp \
 object-textsingle.cpp \
-    application.cpp
+    application.cpp \
+    ../extern/libembroidery/embroidery.c
 
 HEADERS += \
+    javascript/native-javascript.h \
 mainwindow.h \
 mainwindow-actions.h \
 mdiarea.h \
@@ -136,7 +141,8 @@ object-polygon.h \
 object-polyline.h \
 object-rect.h \
 object-textsingle.h \
-    application.h
+    application.h \
+    ../extern/libembroidery/embroidery.h
 
 #SCRIPTING
 #SOURCES += \
@@ -148,8 +154,6 @@ object-textsingle.h \
 #HEADERS += \
 #native-scripting.h \
 #javascript/native-javascript.h \
-
-include( ../libembroidery/libembroidery.pri )
 
 #Linux/Unix: make install
 unix:!macx {

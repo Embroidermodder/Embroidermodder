@@ -10,12 +10,12 @@
 #include "property-editor.h"
 #include "undo-editor.h"
 
-//#include "native-scripting.h"
-//#include "native-javascript.h"
+#include "native-scripting.h"
+#include "native-javascript.h"
 
 #include "preview-dialog.h"
 
-#include "emb-format.h"
+#include "../extern/libembroidery/embroidery.h"
 
 #include <stdlib.h>
 
@@ -204,9 +204,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     //setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); //TODO: Load these from settings
     //tabifyDockWidget(dockPropEdit, dockUndoEdit); //TODO: load this from settings
 
-    /*
     //Javascript
-    initMainWinPointer(this);
+    //initMainWinPointer(this);
 
     engine = new QScriptEngine(this);
     engine->installTranslatorFunctions();
@@ -221,7 +220,6 @@ MainWindow::MainWindow() : QMainWindow(0)
     {
         javaLoadCommand(cmdName);
     }
-    */
 
     statusbar = new StatusBar(this, this);
     this->setStatusBar(statusbar);
@@ -691,8 +689,9 @@ void MainWindow::hideUnimplemented()
 
 bool MainWindow::validFileFormat(const QString& fileName)
 {
-    if(embFormat_typeFromName(qPrintable(fileName)))
+    if (emb_identify_format(qPrintable(fileName)) >= 0) {
         return true;
+    }
     return false;
 }
 
@@ -712,44 +711,28 @@ void MainWindow::loadFormats()
     //Stable + Unstable
     stable = 'S'; unstable = 'U';
 
-    const char* extension = 0;
-    const char* description = 0;
-    char readerState;
-    char writerState;
 
-    EmbFormatList* curFormat = 0;
-    EmbFormatList* formatList = embFormatList_create();
-    if(!formatList) { QMessageBox::critical(this, tr("Format Loading Error"), tr("Unable to load formats from libembroidery.")); return; }
-    curFormat = formatList;
-    while(curFormat)
-    {
-        extension = embFormat_extension(curFormat);
-        description = embFormat_description(curFormat);
-        readerState = embFormat_readerState(curFormat);
-        writerState = embFormat_writerState(curFormat);
+    for (int i=0; i<numberOfFormats; i++) {
+        const char* extension = formatTable[i].extension;
+        const char* description = formatTable[i].description;
+        char readerState = formatTable[i].reader_state;
+        char writerState = formatTable[i].writer_state;
 
         QString upperExt = QString(extension).toUpper();
         supportedStr = "*" + upperExt + " ";
         individualStr = upperExt.replace(".", "") + " - " + description + " (*" + extension + ");;";
-        if(readerState == stable || readerState == unstable)
-        {
+        if (readerState == stable || readerState == unstable) {
             //Exclude color file formats from open dialogs
-            if(upperExt != "COL" && upperExt != "EDR" && upperExt != "INF" && upperExt != "RGB")
-            {
+            if (upperExt != "COL" && upperExt != "EDR" && upperExt != "INF" && upperExt != "RGB") {
                 supportedReaders.append(supportedStr);
                 individualReaders.append(individualStr);
             }
         }
-        if(writerState == stable || writerState == unstable)
-        {
+        if (writerState == stable || writerState == unstable) {
             supportedWriters.append(supportedStr);
             individualWriters.append(individualStr);
         }
-
-        curFormat = curFormat->next;
     }
-    embFormatList_free(formatList);
-    formatList = 0;
 
     supportedReaders.append(");;");
     supportedWriters.append(");;");

@@ -5,6 +5,8 @@ const char* _appName_ = "Embroidermodder";
 const char* _appVer_  = "v2.0 alpha";
 bool exitApp = false;
 
+MainWindow *_main;
+
 static void usage(void)
 {
     fprintf(stderr,
@@ -69,16 +71,18 @@ int main(int argc, char* argv[])
     app.setMainWin(mainWin);
 #endif
 
+    _main = mainWin;
+
     QObject::connect(&app, SIGNAL(lastWindowClosed()), mainWin, SLOT(quit()));
 
     mainWin->setWindowTitle(app.applicationName() + " " + app.applicationVersion());
     mainWin->show();
 
-    //NOTE: If openFilesSelected() is called from within the mainWin constructor, slot commands wont work and the window menu will be screwed
-    if(!filesToOpen.isEmpty())
+    // NOTE: If openFilesSelected() is called from within the mainWin constructor,
+    // slot commands wont work and the window menu will be screwed
+    if (!filesToOpen.isEmpty()) {
         mainWin->openFilesSelected(filesToOpen);
+    }
 
     return app.exec();
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -17,11 +17,13 @@
 #include "object-polyline.h"
 #include "object-rect.h"
 #include "object-textsingle.h"
-#include "emb-rect.h"
+#include "../extern/libembroidery/embroidery.h"
 #include "property-editor.h"
 #include "undo-editor.h"
 #include "undo-commands.h"
 #include "embdetails-dialog.h"
+
+#include "ui_about.h"
 
 #include <QLabel>
 #include <QDesktopServices>
@@ -169,8 +171,7 @@ QString MainWindow::platformString()
 void MainWindow::designDetails()
 {
     QGraphicsScene* scene = activeScene();
-    if(scene)
-    {
+    if (scene) {
         EmbDetailsDialog dialog(scene, this);
         dialog.exec();
     }
@@ -181,6 +182,13 @@ void MainWindow::about()
     //TODO: QTabWidget for about dialog
     QApplication::setOverrideCursor(Qt::ArrowCursor);
     qDebug("about()");
+
+    QDialog wrapper_dialog(this);
+    Ui::About ui;
+    ui.setupUi(&wrapper_dialog);
+    wrapper_dialog.exec();
+
+    /*
     QString appDir = qApp->applicationDirPath();
     QString appName = QApplication::applicationName();
     QString title = "About " + appName;
@@ -222,6 +230,7 @@ void MainWindow::about()
     dialog.setMinimumHeight(img.minimumHeight()+50);
     dialog.setLayout(&layout);
     dialog.exec();
+    */
     QApplication::restoreOverrideCursor();
 }
 

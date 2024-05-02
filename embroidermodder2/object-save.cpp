@@ -12,8 +12,7 @@
 #include "object-rect.h"
 #include "object-textsingle.h"
 
-#include "emb-color.h"
-#include "emb-format.h"
+#include "../extern/libembroidery/embroidery.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsItem>
@@ -46,25 +45,18 @@ bool SaveObject::save(const QString &fileName)
     bool writeSuccessful = false;
     int i;
 
-    formatType = embFormat_typeFromName(qPrintable(fileName));
-    if(formatType == EMBFORMAT_UNSUPPORTED)
-    {
+    formatType = emb_identify_format(qPrintable(fileName));
+    if (formatType <= 0) { /* EMBFORMAT_UNSUPPORTED */
         return false;
     }
 
-    EmbPattern* pattern = 0;
-    EmbReaderWriter* writer = 0;
+    EmbPattern* pattern = emb_pattern_create();
+    if (!pattern) {
+        qDebug("Could not allocate memory for embroidery pattern");
+        return false;
+    }
 
-    pattern = embPattern_create();
-    if(!pattern) { qDebug("Could not allocate memory for embroidery pattern"); }
-
-    /* Write */
-    writer = embReaderWriter_getByFileName(qPrintable(fileName));
-    if(!writer) { qDebug("Unsupported write file type: %s", qPrintable(fileName)); }
-    else
-    {
-        foreach(QGraphicsItem* item, gscene->items(Qt::AscendingOrder))
-        {
+        foreach(QGraphicsItem* item, gscene->items(Qt::AscendingOrder)) {
             int objType = item->data(OBJ_TYPE).toInt();
 
             if     (objType == OBJ_TYPE_ARC)          { addArc(pattern, item);          }
@@ -95,18 +87,19 @@ bool SaveObject::save(const QString &fileName)
             else if(objType == OBJ_TYPE_TEXTSINGLE)   { addTextSingle(pattern, item);   }
         }
 
-        //TODO: handle EMBFORMAT_STCHANDOBJ also
-        if(formatType == EMBFORMAT_STITCHONLY)
-            embPattern_movePolylinesToStitchList(pattern); //TODO: handle all objects like this
+    //TODO: handle EMBFORMAT_STCHANDOBJ also
+    if (formatType == EMBFORMAT_STITCHONLY) {
+        //emb_pattern_movePolylinesToStitchList(pattern); //TODO: handle all objects like this
+    }
 
-        writeSuccessful = writer->writer(pattern, qPrintable(fileName));
-        if(!writeSuccessful) { qDebug("Writing file %s was unsuccessful", qPrintable(fileName)); }
+    writeSuccessful = emb_pattern_write(pattern, qPrintable(fileName), formatType);
+    if (!writeSuccessful) {
+        qDebug("Writing file %s was unsuccessful", qPrintable(fileName));
     }
 
     //TODO: check the embLog for errors and if any exist, report them.
 
-    free(writer);
-    embPattern_free(pattern);
+    emb_pattern_free(pattern);
 
     return writeSuccessful;
 }
@@ -122,16 +115,18 @@ void SaveObject::addBlock(EmbPattern* pattern, QGraphicsItem* item)
 void SaveObject::addCircle(EmbPattern* pattern, QGraphicsItem* item)
 {
     CircleObject* obj = static_cast<CircleObject*>(item);
-    if(obj)
-    {
+    if (obj) {
         if(formatType == EMBFORMAT_STITCHONLY)
         {
             QPainterPath path = obj->objectSavePath();
             toPolyline(pattern, obj->objectCenter(), path.simplified(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight //TODO: Improve precision, replace simplified
         }
-        else
-        {
-            embPattern_addCircleObjectAbs(pattern, (double)obj->objectCenterX(), (double)obj->objectCenterY(), (double)obj->objectRadius());
+        else {
+            EmbCircle circle;
+            circle.center.x = (double)obj->objectCenterX();
+            circle.center.y = (double)obj->objectCenterY();
+            circle.radius = (double)obj->objectRadius();
+            emb_pattern_addCircleAbs(pattern, circle);
         }
     }
 }
@@ -181,7 +176,12 @@ void SaveObject::addEllipse(EmbPattern* pattern, QGraphicsItem* item)
         else
         {
             //TODO: ellipse rotation
-            embPattern_addEllipseObjectAbs(pattern, (double)obj->objectCenterX(), (double)obj->objectCenterY(), (double)obj->objectWidth()/2.0, (double)obj->objectHeight()/2.0);
+            EmbEllipse ellipse;
+            ellipse.center.x = (double)obj->objectCenterX();
+            ellipse.center.y = (double)obj->objectCenterY();
+            ellipse.radius.x = (double)obj->objectWidth()/2.0;
+            ellipse.radius.y = (double)obj->objectHeight()/2.0;
+            emb_pattern_addEllipseAbs(pattern, ellipse);
         }
     }
 }
@@ -209,15 +209,17 @@ void SaveObject::addInfiniteLine(EmbPattern* pattern, QGraphicsItem* item)
 void SaveObject::addLine(EmbPattern* pattern, QGraphicsItem* item)
 {
     LineObject* obj = static_cast<LineObject*>(item);
-    if(obj)
-    {
-        if(formatType == EMBFORMAT_STITCHONLY)
-        {
+    if (obj) {
+        if (formatType == EMBFORMAT_STITCHONLY) {
             toPolyline(pattern, obj->objectEndPoint1(), obj->objectSavePath(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
         }
-        else
-        {
-            embPattern_addLineObjectAbs(pattern, (double)obj->objectX1(), (double)obj->objectY1(), (double)obj->objectX2(), (double)obj->objectY2());
+        else {
+            EmbLine line;
+            line.start.x = (double)obj->objectX1();
+            line.start.y = (double)obj->objectY1();
+            line.end.x = (double)obj->objectX2();
+            line.end.y = (double)obj->objectY2();
+            emb_pattern_addLineAbs(pattern, line);
         }
     }
 }
@@ -273,15 +275,16 @@ void SaveObject::addPath(EmbPattern* pattern, QGraphicsItem* item)
 void SaveObject::addPoint(EmbPattern* pattern, QGraphicsItem* item)
 {
     PointObject* obj = static_cast<PointObject*>(item);
-    if(obj)
-    {
+    if (obj) {
         if(formatType == EMBFORMAT_STITCHONLY)
         {
             toPolyline(pattern, obj->objectPos(), obj->objectSavePath(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
         }
-        else
-        {
-            embPattern_addPointObjectAbs(pattern, (double)obj->objectX(), (double)obj->objectY());
+        else {
+            EmbPoint p;
+            p.position.x = (double)obj->objectX();
+            p.position.y = (double)obj->objectY();
+            emb_pattern_addPointAbs(pattern, p);
         }
     }
 }
@@ -311,17 +314,19 @@ void SaveObject::addRay(EmbPattern* pattern, QGraphicsItem* item)
 void SaveObject::addRectangle(EmbPattern* pattern, QGraphicsItem* item)
 {
     RectObject* obj = static_cast<RectObject*>(item);
-    if(obj)
-    {
-        if(formatType == EMBFORMAT_STITCHONLY)
-        {
+    if(obj) {
+        if (formatType == EMBFORMAT_STITCHONLY) {
             toPolyline(pattern, obj->objectPos(), obj->objectSavePath(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
         }
-        else
-        {
+        else {
             //TODO: Review this at some point
+            EmbRect rect;
             QPointF topLeft = obj->objectTopLeft();
-            embPattern_addRectObjectAbs(pattern, (double)topLeft.x(), (double)topLeft.y(), (double)obj->objectWidth(), (double)obj->objectHeight());
+            rect.top = (double)topLeft.x();
+            rect.left = (double)topLeft.y();
+            rect.bottom = (double)topLeft.x() + (double)obj->objectWidth();
+            rect.right = (double)topLeft.y() + (double)obj->objectHeight();
+            emb_pattern_addRectAbs(pattern, rect);
         }
     }
 }
@@ -366,26 +371,21 @@ void SaveObject::addTextSingle(EmbPattern* pattern, QGraphicsItem* item)
 //NOTE: This function should be used to interpret various object types and save them as polylines for stitchOnly formats.
 void SaveObject::toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainterPath& objPath, const QString& layer, const QColor& color, const QString& lineType, const QString& lineWeight)
 {
-    qreal startX = objPos.x();
-    qreal startY = objPos.y();
-    EmbPointList* pointList = 0;
-    EmbPointList* lastPoint = 0;
+    EmbPoint p;
+    p.position.x = objPos.x();
+    p.position.y = objPos.y();
+    EmbArray* pointList = emb_array_create(EMB_POINT);
     QPainterPath::Element element;
-    for(int i = 0; i < objPath.elementCount(); ++i)
-    {
+    emb_array_addPoint(pointList, p);
+    for (int i = 0; i < objPath.elementCount(); ++i) {
         element = objPath.elementAt(i);
-        if(!pointList)
-        {
-            pointList = lastPoint = embPointList_create(element.x + startX, -(element.y + startY));
-        }
-        else
-        {
-            lastPoint = embPointList_add(lastPoint, embPoint_make(element.x + startX, -(element.y + startY)));
-        }
+        p.position.x += element.x;
+        p.position.y += element.y;
+        emb_array_addPoint(pointList, p);
     }
 
+    /* FIXME
     EmbPolylineObject* polyObject = embPolylineObject_create(pointList, embColor_make(color.red(), color.green(), color.blue()), 1); //TODO: proper lineType
     embPattern_addPolylineObjectAbs(pattern, polyObject);
+    */
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
