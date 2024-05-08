@@ -5,13 +5,12 @@
 #include <QList>
 #include <QHash>
 #include <QDir>
-#include <QtScript>
-#include <QtScriptTools>
 
 #include "mdiarea.h"
 #include "mdiwindow.h"
 #include "mainwindow-actions.h"
 #include "cmdprompt.h"
+#include "script.h"
 
 class MdiArea;
 class MdiWindow;
@@ -33,6 +32,8 @@ class QScriptEngineDebugger;
 class QScriptProgram;
 class QUndoStack;
 QT_END_NAMESPACE
+
+void debug_message(QString s);
 
 class MainWindow: public QMainWindow
 {
@@ -651,10 +652,8 @@ public slots:
     void doNothing();
 
 private:
-    QScriptEngine*         engine;
-    QScriptEngineDebugger* debugger;
     void                   javaInitNatives(QScriptEngine* engine);
-    void                   javaLoadCommand(const QString& cmdName);
+    void                   javaLoadCommands(void);
 
 public:
     //Natives

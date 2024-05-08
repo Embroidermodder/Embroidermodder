@@ -65,9 +65,61 @@ TRANSLATIONS = translations/afrikaans/embroidermodder2_afrikaans.ts   \ #af
 FORMS = \
     about.ui
 SOURCES += \
-    javascript/native-javascript-include.cpp \
-    javascript/native-javascript-init.cpp \
-    javascript/native-javascript.cpp \
+    commands.cpp \
+    commands/about.cpp \
+    commands/circle.cpp \
+    commands/day.cpp \
+    commands/distance.cpp \
+    commands/dolphin.cpp \
+    commands/ellipse.cpp \
+    commands/erase.cpp \
+    commands/exit.cpp \
+    commands/heart.cpp \
+    commands/help.cpp \
+    commands/icon128.cpp \
+    commands/icon16.cpp \
+    commands/icon24.cpp \
+    commands/icon32.cpp \
+    commands/icon48.cpp \
+    commands/icon64.cpp \
+    commands/line.cpp \
+    commands/locatepoint.cpp \
+    commands/move.cpp \
+    commands/new.cpp \
+    commands/night.cpp \
+    commands/open.cpp \
+    commands/pandown.cpp \
+    commands/panleft.cpp \
+    commands/panright.cpp \
+    commands/panup.cpp \
+    commands/path.cpp \
+    commands/platform.cpp \
+    commands/point.cpp \
+    commands/polygon.cpp \
+    commands/polyline.cpp \
+    commands/rectangle.cpp \
+    commands/redo.cpp \
+    commands/rgb.cpp \
+    commands/rotate.cpp \
+    commands/sandbox.cpp \
+    commands/scale.cpp \
+    commands/selectall.cpp \
+    commands/snowflake.cpp \
+    commands/star.cpp \
+    commands/syswindows.cpp \
+    commands/tipoftheday.cpp \
+    commands/undo.cpp \
+    commands/windownext.cpp \
+    commands/windowprevious.cpp \
+    commands/windowtile.cpp \
+    commands/zoomextents.cpp \
+    commands/zoomin.cpp \
+    commands/windowcascade.cpp \
+    commands/zoomout.cpp \
+    commands/windowclose.cpp \
+    commands/quickleader.cpp \
+    commands/singlelinetext.cpp \
+    commands/windowcloseall.cpp \
 main.cpp \
 mainwindow.cpp \
 mainwindow-settings.cpp \
@@ -108,11 +160,12 @@ object-textsingle.cpp \
     ../extern/libembroidery/embroidery.c
 
 HEADERS += \
-    javascript/native-javascript.h \
+    commands.h \
 mainwindow.h \
 mainwindow-actions.h \
 mdiarea.h \
 mdiwindow.h \
+    script.h \
 view.h \
 cmdprompt.h \
 embdetails-dialog.h \

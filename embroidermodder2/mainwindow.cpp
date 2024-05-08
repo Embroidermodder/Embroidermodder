@@ -1,3 +1,13 @@
+/*
+ * Embroidermodder 2.
+ *
+ * Copyright 2013-2024 The Embroidermodder Team
+ * Embroidermodder 2 is Open Source Software, see LICENSE for licensing terms.
+ * Read CODE-STANDARDS.txt for advice on altering this file.
+ *
+ * MainWindow
+ */
+
 #include "mainwindow.h"
 #include "mainwindow-actions.h"
 
@@ -10,8 +20,7 @@
 #include "property-editor.h"
 #include "undo-editor.h"
 
-#include "native-scripting.h"
-#include "native-javascript.h"
+#include "commands.h"
 
 #include "preview-dialog.h"
 
@@ -205,21 +214,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     //tabifyDockWidget(dockPropEdit, dockUndoEdit); //TODO: load this from settings
 
     //Javascript
-    //initMainWinPointer(this);
-
-    engine = new QScriptEngine(this);
-    engine->installTranslatorFunctions();
-    debugger = new QScriptEngineDebugger(this);
-    debugger->attachTo(engine);
-    javaInitNatives(engine);
-
-    //Load all commands in a loop
-    QDir commandDir(appDir + "/commands");
-    QStringList cmdList = commandDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-    foreach(QString cmdName, cmdList)
-    {
-        javaLoadCommand(cmdName);
-    }
+    javaLoadCommands();
 
     statusbar = new StatusBar(this, this);
     this->setStatusBar(statusbar);
@@ -240,20 +235,21 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     //Load tips from external file
     QFile tipFile(appDir + "/tips.txt");
-    if(tipFile.open(QFile::ReadOnly))
-    {
+    if (tipFile.open(QFile::ReadOnly)) {
         QTextStream stream(&tipFile);
         QString tipLine;
-        do
-        {
+        do {
             tipLine = stream.readLine();
-            if(!tipLine.isEmpty())
+            if (!tipLine.isEmpty()) {
                 listTipOfTheDay << tipLine;
-        }
-        while(!tipLine.isNull());
+            }
+        } while (!tipLine.isNull());
     }
-    if(getSettingsGeneralTipOfTheDay())
+    if (getSettingsGeneralTipOfTheDay()) {
         tipOfTheDay();
+    }
+
+    qDebug("Finished creating window.");
 }
 
 MainWindow::~MainWindow()
@@ -802,5 +798,3 @@ void MainWindow::floatingChangedToolBar(bool isFloating)
         }
     }
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

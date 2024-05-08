@@ -1,3 +1,13 @@
+/*
+ * Embroidermodder 2.
+ *
+ * Copyright 2013-2024 The Embroidermodder Team
+ * Embroidermodder 2 is Open Source Software, see LICENSE for licensing terms.
+ * Read CODE-STANDARDS.txt for advice on altering this file.
+ *
+ * MainWindow commands
+ */
+ 
 #include "mainwindow.h"
 #include "view.h"
 #include "statusbar.h"
@@ -1019,14 +1029,14 @@ void MainWindow::promptInputPrevious()
 void MainWindow::promptInputNext()
 {
     MdiWindow* mdiWin = activeMdiWindow();
-    if(mdiWin) mdiWin->promptInputNext();
+    if (mdiWin) mdiWin->promptInputNext();
 }
 
-void MainWindow::runCommand()
+void
+MainWindow::runCommand()
 {
     QAction* act = qobject_cast<QAction*>(sender());
-    if(act)
-    {
+    if (act) {
         qDebug("runCommand(%s)", qPrintable(act->objectName()));
         prompt->endCommand();
         prompt->setCurrentText(act->objectName());
@@ -1034,7 +1044,10 @@ void MainWindow::runCommand()
     }
 }
 
-void MainWindow::runCommandMain(const QString& cmd)
+/* FIXME: reconnect to new command system.
+ */
+void
+MainWindow::runCommandMain(const QString& cmd)
 {
     qDebug("runCommandMain(%s)", qPrintable(cmd));
     QString fileName = "commands/" + cmd + "/" + cmd + ".js";
@@ -1042,28 +1055,40 @@ void MainWindow::runCommandMain(const QString& cmd)
     //engine->evaluate(cmd + "_main()", fileName);
 }
 
-void MainWindow::runCommandClick(const QString& cmd, qreal x, qreal y)
+/* FIXME: reconnect to new command system.
+ */
+void
+MainWindow::runCommandClick(const QString& cmd, qreal x, qreal y)
 {
     qDebug("runCommandClick(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
     QString fileName = "commands/" + cmd + "/" + cmd + ".js";
     //engine->evaluate(cmd + "_click(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName);
 }
 
-void MainWindow::runCommandMove(const QString& cmd, qreal x, qreal y)
+/* FIXME: reconnect to new command system.
+ */
+void
+MainWindow::runCommandMove(const QString& cmd, qreal x, qreal y)
 {
     qDebug("runCommandMove(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
     QString fileName = "commands/" + cmd + "/" + cmd + ".js";
     //engine->evaluate(cmd + "_move(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName);
 }
 
-void MainWindow::runCommandContext(const QString& cmd, const QString& str)
+/* FIXME: reconnect to new command system.
+ */
+void
+MainWindow::runCommandContext(const QString& cmd, const QString& str)
 {
     qDebug("runCommandContext(%s, %s)", qPrintable(cmd), qPrintable(str));
     QString fileName = "commands/" + cmd + "/" + cmd + ".js";
     //engine->evaluate(cmd + "_context('" + str.toUpper() + "')", fileName);
 }
 
-void MainWindow::runCommandPrompt(const QString& cmd, const QString& str)
+/* FIXME: reconnect to new command system.
+ */
+void
+MainWindow::runCommandPrompt(const QString& cmd, const QString& str)
 {
     qDebug("runCommandPrompt(%s, %s)", qPrintable(cmd), qPrintable(str));
     QString fileName = "commands/" + cmd + "/" + cmd + ".js";
@@ -1899,5 +1924,3 @@ qreal MainWindow::nativeMouseY()
     if(scene) return -scene->property(SCENE_MOUSE_POINT).toPointF().y();
     return 0.0;
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
