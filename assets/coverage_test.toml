@@ -1,0 +1,9 @@
+
+coverage_test = [
+    "new",
+    "icon16",
+    "icon24",
+    "icon36",
+    "exit"
+]
+

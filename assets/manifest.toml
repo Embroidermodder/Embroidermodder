@@ -1,0 +1,33 @@
+
+# The list of all the asset files used by Embroidermodder.
+#
+# The manifest is fixed: user overrides to the set files are available
+# by adding to "overrides.toml" in the configuration folder (as opposed to
+# the shared asset folder). For testing purposes only we can change the
+# parent assets folder containing all these using the --assets flag.
+#
+manifest = [
+    "assets/data/versions.toml",
+    "assets/data/paths.toml",
+    "assets/ui/toolbars.toml"
+]
+
+variables = [
+    "manifest",
+
+    "file_toolbar",
+    "edit_toolbar",
+    "view_toolbar",
+    "icon_toolbar",
+    "help_toolbar",
+    "draw_toolbar",
+    "inquiry_toolbar",
+    "modify_toolbar",
+    "dimension_toolbar",
+    "sandbox_toolbar",
+    "layer_toolbar",
+    "properties_toolbar",
+    "text_toolbar",
+    "prompt_toolbar"
+]
+

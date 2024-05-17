@@ -1,0 +1,154 @@
+#
+# Embroidermodder 2.
+#
+# Copyright 2011-2025 The Embroidermodder Team
+# Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+#
+# Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
+# for advice on altering this file.
+#
+
+menu_list = [
+    "&File",
+    "&Edit",
+    "&View",
+    "&Draw",
+    "&Tools",
+    "&Modify",
+    "S&andbox",
+    "&Dimension",
+    "&Window",
+    "&Help",
+    "Open &Recent",
+    "&Zoom",
+    "&Pan"
+]
+
+file_menu = [
+    "new",
+    "---",
+    "open",
+    ">Open &Recent",
+    "---",
+    "save",
+    "saveas",
+    "---",
+    "print",
+    "---",
+    "windowclose",
+    "---",
+    "designdetails",
+    "---",
+    "exit"
+]
+
+edit_menu = [
+    "undo",
+    "redo",
+    "---",
+    "cut",
+    "copy",
+    "paste",
+    "---",
+    "settingsdialog"
+]
+
+view_menu = [
+    ">&Zoom",
+    ">&Pan",
+    "---",
+    "day",
+    "night",
+    "---"
+]
+
+zoom_menu = [
+    "zoomwindow",
+    "zoomdynamic",
+    "zoomscale",
+    "---",
+    "zoomcenter",
+    "zoomin",
+    "zoomout",
+    "---",
+    "zoomselected",
+    "zoomall",
+    "zoomextents"
+]
+
+pan_menu = [
+    "panrealtime",
+    "panpoint",
+    "---",
+    "panleft",
+    "panright",
+    "panup",
+    "pandown"
+]
+
+help_menu = [
+    "help",
+    "---",
+    "changelog",
+    "---",
+    "tipoftheday",
+    "---",
+    "about",
+    "---",
+    "whatsthis"
+]
+
+draw_menu = [
+    "path",
+    "polyline",
+    "---",
+    "arc",
+    "circle",
+    "ellipse",
+    "line",
+    "point",
+    "polygon",
+    "rectangle",
+    "singlelinetext",
+    "---",
+    "dolphin",
+    "heart",
+    "snowflake",
+    "star"
+]
+
+tools_menu = [
+    "distance",
+    "locatepoint",
+    "selectall"
+]
+
+modify_menu = [
+    "erase",
+    "move",
+    "rotate",
+    "scale"
+]
+
+dimension_menu = [
+    "quickleader"
+]
+
+sandbox_menu = [
+    "simulate",
+    "play",
+    "pause",
+    "rewind",
+    "fast-forward",
+    "stop",
+    "export-video",
+    "---",
+    "qr",
+    "lettering",
+    "pattern",
+    "design"
+]
+
+recent_menu = []
+window_menu = []
+
