@@ -12,8 +12,11 @@
 
 /* ICON16 is not context-dependant */
 ScriptValue
-icon16_generic(ScriptEnv * /* context */)
+icon16_generic(ScriptEnv *context)
 {
+    if (!argument_checks(context, "icon16_generic", "")) {
+        return script_false;
+    }
     _main->icon16();
     _main->nativeEndCommand();
     return script_null;
@@ -25,12 +28,16 @@ icon16_generic(ScriptEnv * /* context */)
 ScriptValue
 icon16_main(ScriptEnv *context)
 {
+    if (!argument_checks(context, "icon16_main", "")) {
+        return script_false;
+    }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
     return icon16_generic(context);
 }
 
 Command icon16_cmd = {
+    .id = -1,
     .main = icon16_main,
     .click = icon16_generic,
     .context = icon16_generic,

@@ -49,6 +49,7 @@ star_prompt(ScriptEnv * context)
 }
 
 Command star_cmd = {
+    .id = -1,
     .main = star_main,
     .click = star_click,
     .context = star_context,

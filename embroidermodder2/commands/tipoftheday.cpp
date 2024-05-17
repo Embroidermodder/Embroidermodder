@@ -49,6 +49,7 @@ tipoftheday_prompt(ScriptEnv * context)
 }
 
 Command tipoftheday_cmd = {
+    .id = -1,
     .main = tipoftheday_main,
     .click = tipoftheday_click,
     .context = tipoftheday_context,

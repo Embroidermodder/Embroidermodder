@@ -10,6 +10,7 @@
 
 #include "../commands.h"
 
+
 /* NOTE: main() is run every time the command is started.
  *       Use it to reset variables so they are ready to go.
  */
@@ -56,9 +57,11 @@ new_prompt(ScriptEnv * context)
     _main->nativeNewFile();
     _main->nativeEndCommand();
     return script_null;
+
 }
 
 Command new_cmd = {
+    .id = -1,
     .main = new_main,
     .click = new_click,
     .context = new_context,
@@ -69,6 +72,6 @@ Command new_cmd = {
     .toolbar_name = "None",
     .toolbar_position = 0,
     .tooltip = "&New",
-    .statustip = "Create a new file:  NEW",
+    .statustip = "Create a new file. Command: NEW.",
     .alias = "NEW"
 };

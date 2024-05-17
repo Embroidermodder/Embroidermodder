@@ -16,12 +16,6 @@
 ScriptValue
 line_main(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-    _main->nativeIcon128();
-    _main->nativeEndCommand();
     return script_null;
 }
 
@@ -32,10 +26,6 @@ line_main(ScriptEnv * context)
 ScriptValue
 line_click(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeIcon128();
-    _main->nativeEndCommand();
     return script_null;
 }
 
@@ -44,10 +34,6 @@ line_click(ScriptEnv * context)
 ScriptValue
 line_context(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeIcon128();
-    _main->nativeEndCommand();
     return script_null;
 }
 
@@ -59,14 +45,11 @@ line_context(ScriptEnv * context)
 ScriptValue
 line_prompt(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeIcon128();
-    _main->nativeEndCommand();
     return script_null;
 }
 
 Command line_cmd = {
+    .id = -1,
     .main = line_main,
     .click = line_click,
     .context = line_context,

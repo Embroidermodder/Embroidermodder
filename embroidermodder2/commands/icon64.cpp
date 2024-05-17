@@ -14,6 +14,9 @@
 ScriptValue
 icon64_generic(ScriptEnv * context)
 {
+    if (!argument_checks(context, "icon64_generic", "")) {
+        return script_false;
+    }
     _main->icon64();
     _main->nativeEndCommand();
     return script_null;
@@ -25,12 +28,16 @@ icon64_generic(ScriptEnv * context)
 ScriptValue
 icon64_main(ScriptEnv * context)
 {
+    if (!argument_checks(context, "icon64_main", "")) {
+        return script_false;
+    }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
     return icon64_generic(context);
 }
 
 Command icon64_cmd = {
+    .id = -1,
     .main = icon64_main,
     .click = icon64_generic,
     .context = icon64_generic,

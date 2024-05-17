@@ -31,6 +31,7 @@ zoomout_main(ScriptEnv *context)
 }
 
 Command zoomout_cmd = {
+    .id = -1,
     .main = zoomout_main,
     .click = zoomout_generic,
     .context = zoomout_generic,

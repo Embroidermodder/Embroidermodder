@@ -5,7 +5,7 @@
  * Embroidermodder 2 is Open Source Software.
  * See LICENSE for licensing terms.
  *
- * Command: about
+ * A Command is a bundle of actions and data: .
  */
 
 #include <QString>
@@ -14,11 +14,6 @@
 #include <string.h>
 
 #include "commands.h"
-
-#define REAL(i) context->argument[i].r
-#define INT(i) context->argument[i].i
-#define QSTR(i) context->argument[i].s
-#define BOOL(i) context->argument[i].b
 
 QString index_name[] = {
     "one",
@@ -91,12 +86,6 @@ argument_checks(ScriptEnv *context, QString function, const char *args)
 Command end_symbol_cmd = {
     .menu_position = -1
 };
-
-/*
-std::unordered_map<std::string, Command> command_map = {
-    {"ABOUT", about_cmd}
-};
-*/
 
 Command command_list[] = {
     about_cmd,
@@ -189,6 +178,18 @@ translate(QString msg)
     return msg;
 }
 
+ScriptEnv *
+create_script_env()
+{
+    return (ScriptEnv*)malloc(sizeof(ScriptEnv));
+}
+
+void
+free_script_env(ScriptEnv* context)
+{
+    free(context);
+}
+
 ScriptValue
 script_bool(bool b)
 {
@@ -221,7 +222,7 @@ script_string(QString s)
 {
     ScriptValue value;
     value.type = SCRIPT_STRING;
-    value.s = s;
+    strcpy(value.s, s.toStdString().c_str());
     return value;
 }
 
@@ -238,126 +239,51 @@ throwError(QString s)
     return script_false;
 }
 
-//NOTE: http://www.qtcentre.org/threads/20432-Can-I-include-a-script-from-script
-ScriptValue
-javaInclude(ScriptEnv* context)
+/* These pack the arguments for function calls in the command environment. */
+ScriptEnv *
+add_string_argument(ScriptEnv *context, const char *s)
 {
-    /*
-    QString fileName = context->argument[0].s;
-    QFile scriptFile("commands/" + fileName);
-
-    if (!scriptFile.open(QIODevice::ReadOnly)){
-        return -1;
-    }
-
-    QTextStream stream(&scriptFile);
-    QString s=stream.readAll();
-    scriptFile.close();
-
-    ScriptEnv* parent = context->parentContext();
-
-    if (parent!=0) {
-        context->setActivationObject(context->parentContext()->activationObject());
-        context->setThisObject(context->parentContext()->thisObject());
-    }
-
-    ScriptValue result = engine->evaluate(s);
-    */
-
-    return script_int(0);
+    strcpy(context->argument[context->argumentCount].s, s);
+    context->argument[context->argumentCount].type = SCRIPT_STRING;
+    context->argumentCount++;
 }
 
-/* For each Command in command_list, for each alias set up a map from
- * alias to the Command. Then for a given context the call doesn't have to loop?
- *
- * NOTE: Every QScriptProgram must have a unique function name to call. If every function was called main(), then
- *       the ScriptArgs would only call the last script evaluated (which happens to be main() in another script).
- *       Thus, by adding the cmdName before main(), it becomes line_main(), circle_main(), etc...
- *       Do not change this code unless you really know what you are doing. I mean it.
- *
- * Position currently comes from the order of the command_list.
+ScriptEnv *
+add_real_argument(ScriptEnv *context, double r)
+{
+    context->argument[context->argumentCount].r = r;
+    context->argument[context->argumentCount].type = SCRIPT_REAL;
+    context->argumentCount++;
+}
+
+ScriptEnv *
+add_int_argument(ScriptEnv *context, int i)
+{
+    context->argument[context->argumentCount].i = i;
+    context->argument[context->argumentCount].type = SCRIPT_INT;
+    context->argumentCount++;
+}
+
+ScriptValue
+do_nothing(ScriptEnv *context)
+{
+    if (!argument_checks(context, "do_nothing", "")) {
+        return script_false;
+    }
+    return script_true;
+}
+
+/* FIXME */
+ScriptValue
+stub_implement(const char *function)
+{
+
+    return script_true;
+}
+
+/* All of these need to be filed into the commands/ directory.
+ * -----------------------------------------------------------
  */
-void
-MainWindow::javaLoadCommands(void)
-{
-    qDebug("javaLoadCommand()");
-    QString appDir = qApp->applicationDirPath();
-
-    for (int i=0; command_list[i].menu_position >= 0; i++) {
-        QString icon(command_list[i].icon);
-        QString menuName(command_list[i].menu_name);
-        int menuPos = command_list[i].menu_position;
-        QString toolbarName(command_list[i].toolbar_name);
-        int toolbarPos = command_list[i].toolbar_position;
-        QString toolTip(command_list[i].tooltip);
-        QString statusTip(command_list[i].statustip);
-        QString alias_string(command_list[i].alias);
-        /* QStringList aliases = alias_string.toStringList(); */
-
-        QAction* ACTION = createAction(icon, toolTip, statusTip, true);
-
-        qDebug("COMMAND: %s", icon);
-
-        // load globals: engine->evaluate(script);
-
-        if (toolbarName.toUpper() != "NONE") {
-            //If the toolbar doesn't exist, create it.
-            if (!toolbarHash.value(toolbarName)) {
-                QToolBar* tb = new QToolBar(toolbarName, this);
-                tb->setObjectName("toolbar" + toolbarName);
-                connect(tb, SIGNAL(topLevelChanged(bool)), this,
-                    SLOT(floatingChangedToolBar(bool)));
-                addToolBar(Qt::LeftToolBarArea, tb);
-                addToolBarBreak(Qt::LeftToolBarArea);
-                toolbarHash.insert(toolbarName, tb);
-            }
-
-            //TODO: order actions position in toolbar based on .ini setting
-            toolbarHash.value(toolbarName)->addAction(ACTION);
-        }
-
-        if (menuName.toUpper() != "NONE") {
-            //If the menu doesn't exist, create it.
-            if (!menuHash.value(menuName)) {
-                QMenu* menu = new QMenu(menuName, this);
-                menu->setTearOffEnabled(true);
-                menuBar()->addMenu(menu);
-                menuHash.insert(menuName, menu);
-            }
-
-            //TODO: order actions position in menu based on .ini setting
-            menuHash.value(menuName)->addAction(ACTION);
-        }
-
-/*
-        foreach (QString alias, aliases) {
-            prompt->addCommand(alias, cmdName);
-        }
-*/
-    }
-}
-
-ScriptValue
-javaDebug(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "s")) {
-        return script_false;
-    }
-    debug_message(QSTR(0));
-    return script_null;
-}
-
-ScriptValue javaError(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "ss")) {
-        return script_false;
-    }
-    QString s = "ERROR: (" + context->argument[0].s + ") " + context->argument[1].s;
-    _main->nativeSetPromptPrefix(s);
-    _main->nativeAppendPromptHistory(QString());
-    _main->nativeEndCommand();
-    return script_null;
-}
 
 ScriptValue javaTodo(ScriptEnv* context)
 {
@@ -481,7 +407,7 @@ ScriptValue javaNewFile(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeNewFile();
+    _main->newFile();
     return script_null;
 }
 
@@ -491,7 +417,7 @@ ScriptValue javaOpenFile(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeOpenFile();
+    _main->openFile();
     return script_null;
 }
 
@@ -501,7 +427,7 @@ ScriptValue javaExit(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeExit();
+    _main->exit();
     return script_null;
 }
 
@@ -511,17 +437,7 @@ ScriptValue javaHelp(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeHelp();
-    return script_null;
-}
-
-ScriptValue javaAbout(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    _main->nativeAbout();
+    _main->help();
     return script_null;
 }
 
@@ -531,76 +447,67 @@ ScriptValue javaTipOfTheDay(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeTipOfTheDay();
+    _main->tipOfTheDay();
     return script_null;
 }
 
-ScriptValue javaWindowCascade(ScriptEnv* context)
+ScriptValue
+javaWindowCascade(ScriptEnv* context)
+{
+    if (!argument_checks(context, "windowCascade", "")) {
+        return script_false;
+    }
+    _main->mdiArea->cascade();
+    return script_null;
+}
+
+ScriptValue
+javaWindowClose(ScriptEnv* context)
+{
+    if (!argument_checks(context, "windowClose", "")) {
+        return script_false;
+    }
+    _main->onCloseWindow();
+    return script_null;
+}
+
+ScriptValue
+javaWindowCloseAll(ScriptEnv* context)
+{
+    if (!argument_checks(context, "windowCloseAll", "")) {
+        return script_false;
+    }
+    _main->mdiArea->closeAllSubWindows();
+    return script_null;
+}
+
+ScriptValue
+javaWindowNext(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
     }
-
-    _main->nativeWindowCascade();
+    _main->mdiArea->activateNextSubWindow();
     return script_null;
 }
 
-ScriptValue javaWindowTile(ScriptEnv* context)
+ScriptValue
+javaWindowPrevious(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
     }
-
-    _main->nativeWindowTile();
+    _main->mdiArea->activatePreviousSubWindow();
     return script_null;
 }
 
-ScriptValue javaWindowClose(ScriptEnv* context)
+ScriptValue
+javaPlatformString(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
     }
-
-    _main->nativeWindowClose();
-    return script_null;
-}
-
-ScriptValue javaWindowCloseAll(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    _main->nativeWindowCloseAll();
-    return script_null;
-}
-
-ScriptValue javaWindowNext(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    _main->nativeWindowNext();
-    return script_null;
-}
-
-ScriptValue javaWindowPrevious(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    _main->nativeWindowPrevious();
-    return script_null;
-}
-
-ScriptValue javaPlatformString(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-    return script_string(_main->nativePlatformString());
+    return script_string(_main->platformString());
 }
 
 ScriptValue javaMessageBox(ScriptEnv* context)
@@ -609,16 +516,16 @@ ScriptValue javaMessageBox(ScriptEnv* context)
         return script_false;
     }
 
-    QString type  = context->argument[0].s.toLower();
-    QString title = context->argument[1].s;
-    QString text  = context->argument[2].s;
+    QString type  = QSTR(0).toLower();
+    QString title = QSTR(1);
+    QString text  = QSTR(2);
 
     if (type != "critical" && type != "information" && type != "question" && type != "warning") {
         debug_message("UNKNOWN_ERROR messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
         return script_false;
     }
 
-    _main->nativeMessageBox(type, title, text);
+    _main->messageBox(type, title, text);
     return script_null;
 }
 
@@ -630,93 +537,13 @@ ScriptValue javaIsInt(ScriptEnv* context)
     return script_true;
 }
 
-ScriptValue javaUndo(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    _main->nativeUndo();
-    return script_null;
-}
-
-ScriptValue javaRedo(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    _main->nativeRedo();
-    return script_null;
-}
-
-ScriptValue javaIcon16(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    _main->nativeIcon16();
-    return script_null;
-}
-
-ScriptValue javaIcon24(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    _main->nativeIcon24();
-    return script_null;
-}
-
-ScriptValue javaIcon32(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    _main->nativeIcon32();
-    return script_null;
-}
-
-ScriptValue javaIcon48(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    _main->nativeIcon48();
-    return script_null;
-}
-
-ScriptValue javaIcon64(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    _main->nativeIcon64();
-    return script_null;
-}
-
-ScriptValue javaIcon128(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    _main->nativeIcon128();
-    return script_null;
-}
-
 ScriptValue javaPanLeft(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
     }
 
-    _main->nativePanLeft();
+    _main->panLeft();
     return script_null;
 }
 
@@ -725,8 +552,7 @@ ScriptValue javaPanRight(ScriptEnv* context)
     if (!argument_checks(context, "debug", "")) {
         return script_false;
     }
-
-    _main->nativePanRight();
+    _main->panRight();
     return script_null;
 }
 
@@ -735,8 +561,7 @@ ScriptValue javaPanUp(ScriptEnv* context)
     if (!argument_checks(context, "debug", "")) {
         return script_false;
     }
-
-    _main->nativePanUp();
+    _main->panUp();
     return script_null;
 }
 
@@ -745,8 +570,7 @@ ScriptValue javaPanDown(ScriptEnv* context)
     if (!argument_checks(context, "debug", "")) {
         return script_false;
     }
-
-    _main->nativePanDown();
+    _main->panDown();
     return script_null;
 }
 
@@ -755,8 +579,7 @@ ScriptValue javaZoomIn(ScriptEnv* context)
     if (!argument_checks(context, "debug", "")) {
         return script_false;
     }
-
-    _main->nativeZoomIn();
+    _main->zoomIn();
     return script_null;
 }
 
@@ -765,8 +588,7 @@ ScriptValue javaZoomOut(ScriptEnv* context)
     if (!argument_checks(context, "debug", "")) {
         return script_false;
     }
-
-    _main->nativeZoomOut();
+    _main->zoomOut();
     return script_null;
 }
 
@@ -775,38 +597,34 @@ ScriptValue javaZoomExtents(ScriptEnv* context)
     if (!argument_checks(context, "debug", "")) {
         return script_false;
     }
-
-    _main->nativeZoomExtents();
+    _main->zoomExtents();
     return script_null;
 }
 
 ScriptValue javaPrintArea(ScriptEnv* context)
 {
-    if (!argument_checks(context, "debug", "rrrr")) {
+    if (!argument_checks(context, "printArea", "rrrr")) {
         return script_false;
     }
-
     _main->nativePrintArea(REAL(0), REAL(1), REAL(2), REAL(3));
     return script_null;
 }
 
 ScriptValue javaDayVision(ScriptEnv* context)
 {
-    if (!argument_checks(context, "debug", "")) {
+    if (!argument_checks(context, "day", "")) {
         return script_false;
     }
-
-    _main->nativeDayVision();
+    _main->dayVision();
     return script_null;
 }
 
 ScriptValue javaNightVision(ScriptEnv* context)
 {
-    if (!argument_checks(context, "debug", "")) {
+    if (!argument_checks(context, "night", "")) {
         return script_false;
     }
-
-    _main->nativeNightVision();
+    _main->nightVision();
     return script_null;
 }
 
@@ -815,7 +633,6 @@ ScriptValue javaSetBackgroundColor(ScriptEnv* context)
     if (!argument_checks(context, "debug", "rrr")) {
         return script_false;
     }
-
     if (REAL(0) < 0 || REAL(0) > 255) {
         debug_message("UNKNOWN_ERROR setBackgroundColor(): r value must be in range 0-255");
         return script_false;
@@ -938,13 +755,6 @@ ScriptValue javaTextStrikeOut(ScriptEnv* context)
     return script_bool(_main->nativeTextStrikeOut());
 }
 
-ScriptValue javaTextOverline(ScriptEnv* context)
-{
-    if (!argument_checks(context, "textOverline", "")) {
-        return script_false;
-    }
-    return script_bool(_main->nativeTextOverline());
-}
 
 ScriptValue javaSetTextFont(ScriptEnv* context)
 {
@@ -956,147 +766,6 @@ ScriptValue javaSetTextFont(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaSetTextSize(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "r")) {
-        return script_false;
-    }
-
-    _main->nativeSetTextSize(context->argument[0].r);
-    return script_null;
-}
-
-ScriptValue javaSetTextAngle(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "r")) {
-        return script_false;
-    }
-
-    qreal num = context->argument[0].r;
-
-    _main->nativeSetTextAngle(num);
-    return script_null;
-}
-
-ScriptValue
-javaSetTextBold(ScriptEnv* context)
-{
-    if (!argument_checks(context, "textBold", "b")) {
-        return script_false;
-    }
-
-    _main->nativeSetTextBold(context->argument[0].b);
-    return script_null;
-}
-
-ScriptValue
-javaSetTextItalic(ScriptEnv* context)
-{
-    if (!argument_checks(context, "textItalic", "b")) {
-        return script_false;
-    }
-
-    _main->nativeSetTextItalic(context->argument[0].b);
-    return script_null;
-}
-
-ScriptValue
-javaSetTextUnderline(ScriptEnv* context)
-{
-    if (!argument_checks(context, "textUnderline", "b")) {
-        return script_false;
-    }
-
-    _main->nativeSetTextUnderline(context->argument[0].b);
-    return script_null;
-}
-
-ScriptValue
-javaSetTextStrikeOut(ScriptEnv* context)
-{
-    if (!argument_checks(context, "textStrikeOut", "b")) {
-        return script_false;
-    }
-
-    _main->nativeSetTextStrikeOut(context->argument[0].b);
-    return script_null;
-}
-
-ScriptValue
-javaSetTextOverline(ScriptEnv* context)
-{
-    if (!argument_checks(context, "textOverline", "b")) {
-        return script_false;
-    }
-
-    _main->nativeSetTextOverline(context->argument[0].b);
-    return script_null;
-}
-
-ScriptValue javaPreviewOn(ScriptEnv* context)
-{
-    if (!argument_checks(context, "textBold", "ssrrr")) {
-        return script_false;
-    }
-
-    QString cloneStr = context->argument[0].s.toUpper();
-    QString modeStr  = context->argument[1].s.toUpper();
-    qreal x          = context->argument[2].r;
-    qreal y          = context->argument[3].r;
-    qreal data       = context->argument[4].r;
-
-    int clone = PREVIEW_CLONE_NULL;
-    int mode = PREVIEW_MODE_NULL;
-    if (cloneStr == "SELECTED") {
-        clone = PREVIEW_CLONE_SELECTED;
-    }
-    else if (cloneStr == "RUBBER") {
-        clone = PREVIEW_CLONE_RUBBER;
-    }
-    else {
-        debug_message("UNKNOWN_ERROR previewOn(): first argument must be \"SELECTED\" or \"RUBBER\".");
-        return script_false;
-    }
-
-    if (modeStr == "MOVE") {
-        mode = PREVIEW_MODE_MOVE;
-    }
-    else if (modeStr == "ROTATE") {
-        mode = PREVIEW_MODE_ROTATE;
-    }
-    else if (modeStr == "SCALE") {
-        mode = PREVIEW_MODE_SCALE;
-    }
-    else {
-        debug_message("UNKNOWN_ERROR previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\".");
-        return script_false;
-    }
-
-    _main->nativePreviewOn(clone, mode, x, y, data);
-    return script_null;
-}
-
-ScriptValue
-javaPreviewOff(ScriptEnv* context)
-{
-    if (!argument_checks(context, "PreviewOff", "")) {
-        return script_false;
-    }
-
-    _main->nativePreviewOff();
-    return script_null;
-}
-
-ScriptValue
-javaVulcanize(ScriptEnv* context)
-{
-    if (!argument_checks(context, "Vulcanize", "")) {
-        return script_false;
-    }
-
-    _main->nativeVulcanize();
-    return script_null;
-}
 
 ScriptValue javaAllowRubber(ScriptEnv* context)
 {
@@ -1124,12 +793,18 @@ ScriptValue javaSetRubberMode(ScriptEnv* context)
     else if (mode == "CIRCLE_2P") {
         _main->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_2P);
     }
-    else if (mode == "CIRCLE_3P")                         { _main->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_3P); }
-    else if (mode == "CIRCLE_TTR")                        { _main->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTR); }
-    else if (mode == "CIRCLE_TTR")                        { _main->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTT); }
-
-    else if (mode == "DIMLEADER_LINE")                    { _main->nativeSetRubberMode(OBJ_RUBBER_DIMLEADER_LINE); }
-
+    else if (mode == "CIRCLE_3P") {
+        _main->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_3P);
+    }
+    else if (mode == "CIRCLE_TTR") {
+        _main->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTR);
+    }
+    else if (mode == "CIRCLE_TTT") {
+        _main->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTT);
+    }
+    else if (mode == "DIMLEADER_LINE") {
+        _main->nativeSetRubberMode(OBJ_RUBBER_DIMLEADER_LINE);
+    }
     else if (mode == "ELLIPSE_LINE")                      { _main->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_LINE); }
     else if (mode == "ELLIPSE_MAJORDIAMETER_MINORRADIUS") { _main->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS); }
     else if (mode == "ELLIPSE_MAJORRADIUS_MINORRADIUS")   { _main->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS); }
@@ -1158,7 +833,7 @@ ScriptValue javaSetRubberPoint(ScriptEnv* context)
         return script_false;
     }
 
-    QString key = context->argument[0].s.toUpper();
+    QString key = QSTR(0).toUpper();
     qreal x     = context->argument[1].r;
     qreal y     = context->argument[2].r;
 
@@ -1172,8 +847,8 @@ ScriptValue javaSetRubberText(ScriptEnv* context)
         return script_false;
     }
 
-    QString key = context->argument[0].s.toUpper();
-    QString txt = context->argument[1].s;
+    QString key = QSTR(0).toUpper();
+    QString txt = QSTR(1);
 
     _main->nativeSetRubberText(key, txt);
     return script_null;
@@ -1186,7 +861,7 @@ javaAddRubber(ScriptEnv* context)
         return script_false;
     }
 
-    QString objType = context->argument[0].s.toUpper();
+    QString objType = QSTR(0).toUpper();
 
     if (!_main->nativeAllowRubber()) {
         debug_message("UNKNOWN_ERROR addRubber(): You must use vulcanize() before you can add another rubber object.");
@@ -1727,22 +1402,4 @@ javaQSnapY(ScriptEnv* context)
     return script_real(r);
 }
 
-ScriptValue
-javaMouseX(ScriptEnv* context)
-{
-    if (!argument_checks(context, "mouseX", "")) {
-        return script_false;
-    }
-    qreal r = _main->nativeMouseX();
-    return script_real(r);
-}
 
-ScriptValue
-javaMouseY(ScriptEnv* context)
-{
-    if (!argument_checks(context, "mouseY", "")) {
-        return script_false;
-    }
-    qreal r = _main->nativeMouseY();
-    return script_real(r);
-}

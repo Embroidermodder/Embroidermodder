@@ -33,8 +33,6 @@
 #include "undo-commands.h"
 #include "embdetails-dialog.h"
 
-#include "ui_about.h"
-
 #include <QLabel>
 #include <QDesktopServices>
 #include <QApplication>
@@ -185,63 +183,6 @@ void MainWindow::designDetails()
         EmbDetailsDialog dialog(scene, this);
         dialog.exec();
     }
-}
-
-void MainWindow::about()
-{
-    //TODO: QTabWidget for about dialog
-    QApplication::setOverrideCursor(Qt::ArrowCursor);
-    qDebug("about()");
-
-    QDialog wrapper_dialog(this);
-    Ui::About ui;
-    ui.setupUi(&wrapper_dialog);
-    wrapper_dialog.exec();
-
-    /*
-    QString appDir = qApp->applicationDirPath();
-    QString appName = QApplication::applicationName();
-    QString title = "About " + appName;
-
-    QDialog dialog(this);
-    ImageWidget img(appDir + "/images/logo-small");
-    QLabel text(appName + tr("\n\n") +
-                          tr("http://embroidermodder.github.io") +
-                          tr("\n\n") +
-                          tr("Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi") +
-                          tr("\n\n") +
-                          tr("Embroidery formats by Josh Varga.") +
-                          tr("\n") +
-                          tr("User Interface by Jonathan Greig.") +
-                          tr("\n\n") +
-                          tr("Free under the zlib/libpng license.")
-                          #if defined(BUILD_GIT_HASH)
-                          + tr("\n\n") +
-                          tr("Build Hash: ") + qPrintable(BUILD_GIT_HASH)
-                          #endif
-                          );
-    text.setWordWrap(true);
-
-    QDialogButtonBox buttonbox(Qt::Horizontal, &dialog);
-    QPushButton button(&dialog);
-    button.setText("Oh, Yeah!");
-    buttonbox.addButton(&button, QDialogButtonBox::AcceptRole);
-    buttonbox.setCenterButtons(true);
-    connect(&buttonbox, SIGNAL(accepted()), &dialog, SLOT(accept()));
-
-    QVBoxLayout layout;
-    layout.setAlignment(Qt::AlignCenter);
-    layout.addWidget(&img);
-    layout.addWidget(&text);
-    layout.addWidget(&buttonbox);
-
-    dialog.setWindowTitle(title);
-    dialog.setMinimumWidth(img.minimumWidth()+30);
-    dialog.setMinimumHeight(img.minimumHeight()+50);
-    dialog.setLayout(&layout);
-    dialog.exec();
-    */
-    QApplication::restoreOverrideCursor();
 }
 
 void MainWindow::whatsThisContextHelp()
@@ -1049,10 +990,17 @@ MainWindow::runCommand()
 void
 MainWindow::runCommandMain(const QString& cmd)
 {
+    ScriptEnv *context = create_script_env();
     qDebug("runCommandMain(%s)", qPrintable(cmd));
-    QString fileName = "commands/" + cmd + "/" + cmd + ".js";
     //if(!getSettingsSelectionModePickFirst()) { nativeClearSelection(); } //TODO: Uncomment this line when post-selection is available
-    //engine->evaluate(cmd + "_main()", fileName);
+    if (command_map.contains(cmd)) {
+        command_map[cmd].main(context);
+        prompt->alert("COMMAND RAN.");
+    }
+    else {
+        qDebug("ERROR: %s not found in command_map.", qPrintable(cmd));
+    }
+    free_script_env(context);
 }
 
 /* FIXME: reconnect to new command system.
@@ -1060,9 +1008,12 @@ MainWindow::runCommandMain(const QString& cmd)
 void
 MainWindow::runCommandClick(const QString& cmd, qreal x, qreal y)
 {
+    ScriptEnv *context = NULL;
     qDebug("runCommandClick(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
-    QString fileName = "commands/" + cmd + "/" + cmd + ".js";
     //engine->evaluate(cmd + "_click(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName);
+    if (command_map.contains(cmd)) {
+        command_map[cmd].click(context);
+    }
 }
 
 /* FIXME: reconnect to new command system.
@@ -1070,9 +1021,12 @@ MainWindow::runCommandClick(const QString& cmd, qreal x, qreal y)
 void
 MainWindow::runCommandMove(const QString& cmd, qreal x, qreal y)
 {
+    ScriptEnv *context = NULL;
     qDebug("runCommandMove(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
-    QString fileName = "commands/" + cmd + "/" + cmd + ".js";
     //engine->evaluate(cmd + "_move(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName);
+    if (command_map.contains(cmd)) {
+        command_map[cmd].click(context);
+    }
 }
 
 /* FIXME: reconnect to new command system.
@@ -1080,28 +1034,34 @@ MainWindow::runCommandMove(const QString& cmd, qreal x, qreal y)
 void
 MainWindow::runCommandContext(const QString& cmd, const QString& str)
 {
+    ScriptEnv *context = NULL;
     qDebug("runCommandContext(%s, %s)", qPrintable(cmd), qPrintable(str));
-    QString fileName = "commands/" + cmd + "/" + cmd + ".js";
     //engine->evaluate(cmd + "_context('" + str.toUpper() + "')", fileName);
+    if (command_map.contains(cmd)) {
+        command_map[cmd].context(context);
+    }
 }
 
 /* FIXME: reconnect to new command system.
+ * NOTE: Replace any special characters that will cause a syntax error
  */
 void
 MainWindow::runCommandPrompt(const QString& cmd, const QString& str)
 {
+    ScriptEnv *context = NULL;
     qDebug("runCommandPrompt(%s, %s)", qPrintable(cmd), qPrintable(str));
-    QString fileName = "commands/" + cmd + "/" + cmd + ".js";
-    //NOTE: Replace any special characters that will cause a syntax error
-    QString safeStr = str;
-    safeStr.replace("\\", "\\\\");
-    safeStr.replace("\'", "\\\'");
-    /*
-    if (prompt->isRapidFireEnabled()) {
-        engine->evaluate(cmd + "_prompt('" + safeStr + "')", fileName);
+    if (command_map.contains(cmd)) {
+        QString safeStr = str;
+        safeStr.replace("\\", "\\\\");
+        safeStr.replace("\'", "\\\'");
+        if (prompt->isRapidFireEnabled()) {
+            command_map[cmd].prompt(context);
+        }
+        else {
+            /* Both branches run the same. */
+            command_map[cmd].prompt(context);
+        }
     }
-    else                             { engine->evaluate(cmd + "_prompt('" + safeStr.toUpper() + "')", fileName); }
-    */
 }
 
 void MainWindow::nativeAlert(const QString& txt)
@@ -1182,99 +1142,29 @@ void MainWindow::nativeHelp()
     help();
 }
 
-void MainWindow::nativeAbout()
-{
-    about();
-}
-
 void MainWindow::nativeTipOfTheDay()
 {
     tipOfTheDay();
 }
 
-void MainWindow::nativeWindowCascade()
-{
-    mdiArea->cascade();
-}
-
-void MainWindow::nativeWindowTile()
-{
-    mdiArea->tile();
-}
-
-void MainWindow::nativeWindowClose()
-{
-    onCloseWindow();
-}
-
-void MainWindow::nativeWindowCloseAll()
-{
-    mdiArea->closeAllSubWindows();
-}
-
-void MainWindow::nativeWindowNext()
-{
-    mdiArea->activateNextSubWindow();
-}
-
-void MainWindow::nativeWindowPrevious()
-{
-    mdiArea->activatePreviousSubWindow();
-}
-
-QString MainWindow::nativePlatformString()
-{
-    return platformString();
-}
-
-void MainWindow::nativeMessageBox(const QString& type, const QString& title, const QString& text)
+void MainWindow::messageBox(const QString& type, const QString& title, const QString& text)
 {
     QString msgType = type.toLower();
-    if     (msgType == "critical")    { QMessageBox::critical   (this, tr(qPrintable(title)), tr(qPrintable(text))); }
-    else if(msgType == "information") { QMessageBox::information(this, tr(qPrintable(title)), tr(qPrintable(text))); }
-    else if(msgType == "question")    { QMessageBox::question   (this, tr(qPrintable(title)), tr(qPrintable(text))); }
-    else if(msgType == "warning")     { QMessageBox::warning    (this, tr(qPrintable(title)), tr(qPrintable(text))); }
-    else                              { QMessageBox::critical   (this, tr("Native MessageBox Error"), tr("Incorrect use of the native messageBox function.")); }
-}
-
-void MainWindow::nativeUndo()
-{
-    undo();
-}
-
-void MainWindow::nativeRedo()
-{
-    redo();
-}
-
-void MainWindow::nativeIcon16()
-{
-    icon16();
-}
-
-void MainWindow::nativeIcon24()
-{
-    icon24();
-}
-
-void MainWindow::nativeIcon32()
-{
-    icon32();
-}
-
-void MainWindow::nativeIcon48()
-{
-    icon48();
-}
-
-void MainWindow::nativeIcon64()
-{
-    icon64();
-}
-
-void MainWindow::nativeIcon128()
-{
-    icon128();
+    if (msgType == "critical") {
+        QMessageBox::critical(this, tr(qPrintable(title)), tr(qPrintable(text)));
+    }
+    else if(msgType == "information") {
+        QMessageBox::information(this, tr(qPrintable(title)), tr(qPrintable(text)));
+    }
+    else if(msgType == "question") {
+        QMessageBox::question(this, tr(qPrintable(title)), tr(qPrintable(text)));
+    }
+    else if(msgType == "warning") {
+        QMessageBox::warning(this, tr(qPrintable(title)), tr(qPrintable(text)));
+    }
+    else {
+        QMessageBox::critical   (this, tr("Native MessageBox Error"), tr("Incorrect use of the native messageBox function."));
+    }
 }
 
 void MainWindow::nativePanLeft()
@@ -1442,26 +1332,26 @@ void MainWindow::nativePreviewOff()
 void MainWindow::nativeVulcanize()
 {
     View* gview = activeView();
-    if(gview) gview->vulcanizeRubberRoom();
+    if (gview) gview->vulcanizeRubberRoom();
 }
 
 void MainWindow::nativeClearRubber()
 {
     View* gview = activeView();
-    if(gview) gview->clearRubberRoom();
+    if (gview) gview->clearRubberRoom();
 }
 
 bool MainWindow::nativeAllowRubber()
 {
     View* gview = activeView();
-    if(gview) return gview->allowRubber();
+    if (gview) return gview->allowRubber();
     return false;
 }
 
 void MainWindow::nativeSpareRubber(qint64 id)
 {
     View* gview = activeView();
-    if(gview) gview->spareRubber(id);
+    if (gview) gview->spareRubber(id);
 }
 
 void MainWindow::nativeSetRubberMode(int mode)

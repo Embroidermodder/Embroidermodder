@@ -1,3 +1,12 @@
+/*
+ *  Embroidermodder 2.
+ *
+ *  Copyright 2013-2024 The Embroidermodder Team
+ *  Embroidermodder 2 is Open Source Software.
+ *  See LICENSE for licensing terms.
+ *
+ */
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -8,7 +17,6 @@
 
 #include "mdiarea.h"
 #include "mdiwindow.h"
-#include "mainwindow-actions.h"
 #include "cmdprompt.h"
 #include "script.h"
 
@@ -276,6 +284,7 @@ public:
     void setSettingsTextStyleOverline(bool newValue)                   { settings_text_style_overline            = newValue; }
 
     QHash<int, QAction*>            actionHash;
+    QHash<QString, Command>         command_map;
     QHash<QString, QToolBar*>       toolbarHash;
     QHash<QString, QMenu*>          menuHash;
 
@@ -300,7 +309,7 @@ public slots:
 
     void                            recentMenuAboutToShow();
 
-    void                            onWindowActivated (QMdiSubWindow* w);
+    void                            onWindowActivated(QMdiSubWindow* w);
     void                            windowMenuAboutToShow();
     void                            windowMenuActivated( bool checked/*int id*/ );
     QAction*                        getAction(int actionEnum);
@@ -459,6 +468,7 @@ private:
 
     void                            createAllActions();
     QAction*                        createAction(const QString icon, const QString toolTip, const QString statusTip, bool scripted = false);
+    QAction*                        createAction(Command command);
     //====================================================
     //Toolbars
     //====================================================
@@ -556,7 +566,6 @@ public slots:
     void checkBoxTipOfTheDayStateChanged(int);
     void help();
     void changelog();
-    void about();
     void whatsThisContextHelp();
 
     void cut();
@@ -651,146 +660,125 @@ public slots:
 
     void doNothing();
 
-private:
-    void                   javaInitNatives(QScriptEngine* engine);
-    void                   javaLoadCommands(void);
-
 public:
     //Natives
-    void nativeAlert                  (const QString& txt);
-    void nativeBlinkPrompt            ();
-    void nativeSetPromptPrefix        (const QString& txt);
-    void nativeAppendPromptHistory    (const QString& txt);
-    void nativeEnablePromptRapidFire  ();
-    void nativeDisablePromptRapidFire ();
-    void nativeInitCommand            ();
-    void nativeEndCommand             ();
+    void nativeAlert(const QString& txt);
+    void nativeBlinkPrompt();
+    void nativeSetPromptPrefix(const QString& txt);
+    void nativeAppendPromptHistory(const QString& txt);
+    void nativeEnablePromptRapidFire();
+    void nativeDisablePromptRapidFire();
+    void nativeInitCommand();
+    void nativeEndCommand();
 
-    void nativeEnableMoveRapidFire    ();
-    void nativeDisableMoveRapidFire   ();
+    void nativeEnableMoveRapidFire();
+    void nativeDisableMoveRapidFire();
 
-    void nativeNewFile                ();
-    void nativeOpenFile               ();
+    void nativeNewFile();
+    void nativeOpenFile();
 
-    void nativeExit                   ();
-    void nativeHelp                   ();
-    void nativeAbout                  ();
-    void nativeTipOfTheDay            ();
-    void nativeWindowCascade          ();
-    void nativeWindowTile             ();
-    void nativeWindowClose            ();
-    void nativeWindowCloseAll         ();
-    void nativeWindowNext             ();
-    void nativeWindowPrevious         ();
+    void nativeExit();
+    void nativeHelp();
+    void nativeTipOfTheDay();
 
-    QString nativePlatformString      ();
+    void messageBox(const QString& type, const QString& title, const QString& text);
 
-    void nativeMessageBox             (const QString& type, const QString& title, const QString& text);
+    void nativeRedo();
 
-    void nativeUndo                   ();
-    void nativeRedo                   ();
+    void nativePanLeft();
+    void nativePanRight();
+    void nativePanUp();
+    void nativePanDown();
 
-    void nativeIcon16                 ();
-    void nativeIcon24                 ();
-    void nativeIcon32                 ();
-    void nativeIcon48                 ();
-    void nativeIcon64                 ();
-    void nativeIcon128                ();
+    void nativeZoomIn();
+    void nativeZoomOut();
+    void nativeZoomExtents();
 
-    void nativePanLeft                ();
-    void nativePanRight               ();
-    void nativePanUp                  ();
-    void nativePanDown                ();
+    void nativePrintArea(qreal x, qreal y, qreal w, qreal h);
 
-    void nativeZoomIn                 ();
-    void nativeZoomOut                ();
-    void nativeZoomExtents            ();
+    void nativeDayVision();
+    void nativeNightVision();
 
-    void nativePrintArea              (qreal x, qreal y, qreal w, qreal h);
+    void nativeSetBackgroundColor(quint8 r, quint8 g, quint8 b);
+    void nativeSetCrossHairColor(quint8 r, quint8 g, quint8 b);
+    void nativeSetGridColor(quint8 r, quint8 g, quint8 b);
 
-    void nativeDayVision              ();
-    void nativeNightVision            ();
+    QString nativeTextFont();
+    qreal nativeTextSize();
+    qreal nativeTextAngle();
+    bool nativeTextBold();
+    bool nativeTextItalic();
+    bool nativeTextUnderline();
+    bool nativeTextStrikeOut();
+    bool nativeTextOverline();
 
-    void nativeSetBackgroundColor     (quint8 r, quint8 g, quint8 b);
-    void nativeSetCrossHairColor      (quint8 r, quint8 g, quint8 b);
-    void nativeSetGridColor           (quint8 r, quint8 g, quint8 b);
+    void nativeSetTextFont(const QString& str);
+    void nativeSetTextSize(qreal num);
+    void nativeSetTextAngle(qreal num);
+    void nativeSetTextBold(bool val);
+    void nativeSetTextItalic(bool val);
+    void nativeSetTextUnderline(bool val);
+    void nativeSetTextStrikeOut(bool val);
+    void nativeSetTextOverline(bool val);
 
-    QString nativeTextFont            ();
-    qreal   nativeTextSize            ();
-    qreal   nativeTextAngle           ();
-    bool    nativeTextBold            ();
-    bool    nativeTextItalic          ();
-    bool    nativeTextUnderline       ();
-    bool    nativeTextStrikeOut       ();
-    bool    nativeTextOverline        ();
+    void nativePreviewOn(int clone, int mode, qreal x, qreal y, qreal data);
+    void nativePreviewOff();
 
-    void nativeSetTextFont            (const QString& str);
-    void nativeSetTextSize            (qreal num);
-    void nativeSetTextAngle           (qreal num);
-    void nativeSetTextBold            (bool val);
-    void nativeSetTextItalic          (bool val);
-    void nativeSetTextUnderline       (bool val);
-    void nativeSetTextStrikeOut       (bool val);
-    void nativeSetTextOverline        (bool val);
-
-    void nativePreviewOn              (int clone, int mode, qreal x, qreal y, qreal data);
-    void nativePreviewOff             ();
-
-    void nativeVulcanize              ();
-    void nativeClearRubber            ();
-    bool nativeAllowRubber            ();
-    void nativeSpareRubber            (qint64 id);
+    void nativeVulcanize();
+    void nativeClearRubber();
+    bool nativeAllowRubber();
+    void nativeSpareRubber(qint64 id);
     //TODO: void nativeSetRubberFilter(qint64 id); //TODO: This is so more than 1 rubber object can exist at one time without updating all rubber objects at once
-    void nativeSetRubberMode          (int mode);
-    void nativeSetRubberPoint         (const QString& key, qreal x, qreal y);
-    void nativeSetRubberText          (const QString& key, const QString& txt);
+    void nativeSetRubberMode(int mode);
+    void nativeSetRubberPoint(const QString& key, qreal x, qreal y);
+    void nativeSetRubberText(const QString& key, const QString& txt);
 
-    void nativeAddTextMulti           (const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode);
-    void nativeAddTextSingle          (const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode);
+    void nativeAddTextMulti(const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode);
+    void nativeAddTextSingle(const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode);
 
-    void nativeAddInfiniteLine        (qreal x1, qreal y1, qreal x2, qreal y2, qreal rot);
-    void nativeAddRay                 (qreal x1, qreal y1, qreal x2, qreal y2, qreal rot);
-    void nativeAddLine                (qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode);
-    void nativeAddTriangle            (qreal x1, qreal y1, qreal x2, qreal y2, qreal x3, qreal y3, qreal rot, bool fill);
-    void nativeAddRectangle           (qreal x, qreal y, qreal w, qreal h, qreal rot, bool fill, int rubberMode);
-    void nativeAddRoundedRectangle    (qreal x, qreal y, qreal w, qreal h, qreal rad, qreal rot, bool fill);
-    void nativeAddArc                 (qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY, int rubberMode);
-    void nativeAddCircle              (qreal centerX, qreal centerY, qreal radius, bool fill, int rubberMode);
-    void nativeAddSlot                (qreal centerX, qreal centerY, qreal diameter, qreal length, qreal rot, bool fill, int rubberMode);
-    void nativeAddEllipse             (qreal centerX, qreal centerY, qreal width, qreal height, qreal rot, bool fill, int rubberMode);
-    void nativeAddPoint               (qreal x, qreal y);
-    void nativeAddRegularPolygon      (qreal centerX, qreal centerY, quint16 sides, quint8 mode, qreal rad, qreal rot, bool fill);
-    void nativeAddPolygon             (qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
-    void nativeAddPolyline            (qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
-    void nativeAddPath                (qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
-    void nativeAddHorizontalDimension (qreal x1, qreal y1, qreal x2, qreal y2, qreal legHeight);
-    void nativeAddVerticalDimension   (qreal x1, qreal y1, qreal x2, qreal y2, qreal legHeight);
-    void nativeAddImage               (const QString& img, qreal x, qreal y, qreal w, qreal h, qreal rot);
+    void nativeAddInfiniteLine(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot);
+    void nativeAddRay(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot);
+    void nativeAddLine(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode);
+    void nativeAddTriangle(qreal x1, qreal y1, qreal x2, qreal y2, qreal x3, qreal y3, qreal rot, bool fill);
+    void nativeAddRectangle(qreal x, qreal y, qreal w, qreal h, qreal rot, bool fill, int rubberMode);
+    void nativeAddRoundedRectangle(qreal x, qreal y, qreal w, qreal h, qreal rad, qreal rot, bool fill);
+    void nativeAddArc(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY, int rubberMode);
+    void nativeAddCircle(qreal centerX, qreal centerY, qreal radius, bool fill, int rubberMode);
+    void nativeAddSlot(qreal centerX, qreal centerY, qreal diameter, qreal length, qreal rot, bool fill, int rubberMode);
+    void nativeAddEllipse(qreal centerX, qreal centerY, qreal width, qreal height, qreal rot, bool fill, int rubberMode);
+    void nativeAddPoint(qreal x, qreal y);
+    void nativeAddRegularPolygon(qreal centerX, qreal centerY, quint16 sides, quint8 mode, qreal rad, qreal rot, bool fill);
+    void nativeAddPolygon(qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
+    void nativeAddPolyline(qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
+    void nativeAddPath(qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
+    void nativeAddHorizontalDimension(qreal x1, qreal y1, qreal x2, qreal y2, qreal legHeight);
+    void nativeAddVerticalDimension(qreal x1, qreal y1, qreal x2, qreal y2, qreal legHeight);
+    void nativeAddImage(const QString& img, qreal x, qreal y, qreal w, qreal h, qreal rot);
 
-    void nativeAddDimLeader           (qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode);
+    void nativeAddDimLeader(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode);
 
-    void  nativeSetCursorShape        (const QString& str);
-    qreal nativeCalculateAngle        (qreal x1, qreal y1, qreal x2, qreal y2);
-    qreal nativeCalculateDistance     (qreal x1, qreal y1, qreal x2, qreal y2);
-    qreal nativePerpendicularDistance (qreal px, qreal py, qreal x1, qreal y1, qreal x2, qreal y2);
+    void  nativeSetCursorShape(const QString& str);
+    qreal nativeCalculateAngle(qreal x1, qreal y1, qreal x2, qreal y2);
+    qreal nativeCalculateDistance(qreal x1, qreal y1, qreal x2, qreal y2);
+    qreal nativePerpendicularDistance(qreal px, qreal py, qreal x1, qreal y1, qreal x2, qreal y2);
 
-    int  nativeNumSelected            ();
-    void nativeSelectAll              ();
-    void nativeAddToSelection         (const QPainterPath path, Qt::ItemSelectionMode mode);
-    void nativeClearSelection         ();
-    void nativeDeleteSelected         ();
-    void nativeCutSelected            (qreal x, qreal y);
-    void nativeCopySelected           (qreal x, qreal y);
-    void nativePasteSelected          (qreal x, qreal y);
-    void nativeMoveSelected           (qreal dx, qreal dy);
-    void nativeScaleSelected          (qreal x, qreal y, qreal factor);
-    void nativeRotateSelected         (qreal x, qreal y, qreal rot);
-    void nativeMirrorSelected         (qreal x1, qreal y1, qreal x2, qreal y2);
+    int  nativeNumSelected();
+    void nativeSelectAll();
+    void nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
+    void nativeClearSelection();
+    void nativeDeleteSelected();
+    void nativeCutSelected(qreal x, qreal y);
+    void nativeCopySelected(qreal x, qreal y);
+    void nativePasteSelected(qreal x, qreal y);
+    void nativeMoveSelected(qreal dx, qreal dy);
+    void nativeScaleSelected(qreal x, qreal y, qreal factor);
+    void nativeRotateSelected(qreal x, qreal y, qreal rot);
+    void nativeMirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2);
 
-    qreal nativeQSnapX                ();
-    qreal nativeQSnapY                ();
-    qreal nativeMouseX                ();
-    qreal nativeMouseY                ();
+    qreal nativeQSnapX();
+    qreal nativeQSnapY();
+    qreal nativeMouseX();
+    qreal nativeMouseY();
 };
 
 #endif

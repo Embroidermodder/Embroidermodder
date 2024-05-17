@@ -18,7 +18,7 @@ rotate_main(ScriptEnv * context)
 {
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->nativeIcon128();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -30,7 +30,7 @@ rotate_main(ScriptEnv * context)
 ScriptValue
 rotate_click(ScriptEnv * context)
 {
-    _main->nativeIcon128();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -40,7 +40,7 @@ rotate_click(ScriptEnv * context)
 ScriptValue
 rotate_context(ScriptEnv * context)
 {
-    _main->nativeIcon128();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -53,12 +53,13 @@ rotate_context(ScriptEnv * context)
 ScriptValue
 rotate_prompt(ScriptEnv * context)
 {
-    _main->nativeIcon128();
+
     _main->nativeEndCommand();
     return script_null;
 }
 
 Command rotate_cmd = {
+    .id = -1,
     .main = rotate_main,
     .click = rotate_click,
     .context = rotate_context,

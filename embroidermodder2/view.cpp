@@ -1,3 +1,12 @@
+/*
+ *  Embroidermodder 2.
+ *
+ *  Copyright 2013-2024 The Embroidermodder Team
+ *  Embroidermodder 2 is Open Source Software.
+ *  See LICENSE for licensing terms.
+ *
+ */
+
 #include "view.h"
 #include "property-editor.h"
 #include "statusbar.h"
@@ -1097,12 +1106,14 @@ void View::setCrossHairSize(quint8 percent)
     /*
     //NOTE: crosshairSize is in pixels and is a percentage of your screen width
     //NOTE: Example: (1280*0.05)/2 = 32, thus 32 + 1 + 32 = 65 pixel wide crosshair
-    quint32 screenWidth = qApp->desktop()->width();
-    if(percent > 0 && percent < 100)
-        crosshairSize = (screenWidth*(percent/100.0))/2;
-    else
-        crosshairSize = screenWidth;
     */
+    quint32 screenWidth = qApp->desktop()->width();
+    if(percent > 0 && percent < 100) {
+        crosshairSize = (screenWidth*(percent/100.0))/2;
+    }
+    else {
+        crosshairSize = screenWidth;
+    }
 }
 
 void View::setCornerButton()
@@ -2288,5 +2299,3 @@ void View::setSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, 
 {
     selectBox->setColors(QColor(colorL), QColor(fillL), QColor(colorR), QColor(fillR), alpha);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -33,6 +33,7 @@ zoomextents_main(ScriptEnv *context)
 }
 
 Command zoomextents_cmd = {
+    .id = -1,
     .main = zoomextents_main,
     .click = zoomextents_generic,
     .context = zoomextents_generic,

@@ -59,6 +59,7 @@ panup_prompt(ScriptEnv * context)
 }
 
 Command panup_cmd = {
+    .id = -1,
     .main = panup_main,
     .click = panup_click,
     .context = panup_context,

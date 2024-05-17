@@ -10,65 +10,86 @@
 
 #include "../commands.h"
 
-/* NOTE: main() is run every time the command is started.
- *       Use it to reset variables so they are ready to go.
+#include "../ui_about.h"
+
+/* TODO: QTabWidget for about dialog
  */
 ScriptValue
-about_main(ScriptEnv *context)
+about_general(ScriptEnv *context)
 {
+    if (!argument_checks(context, "about", "")) {
+        return script_false;
+    }
+
     _main->nativeInitCommand();
-    _main->nativeClearSelection();
-    _main->nativeAbout();
-    _main->nativeEndCommand();
-    return script_null;
-}
 
-/* NOTE: click() is run only for left clicks.
- *       Middle clicks are used for panning.
- *       Right clicks bring up the context menu.
- */
-ScriptValue
-about_click(ScriptEnv *context)
-{
-    _main->nativeAbout();
-    _main->nativeEndCommand();
-    return script_null;
-}
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
+    qDebug("about()");
 
-/* NOTE: context() is run when a context menu entry is chosen.
- */
-ScriptValue
-about_context(ScriptEnv *context)
-{
-    _main->nativeAbout();
-    _main->nativeEndCommand();
-    return script_null;
-}
+    QDialog wrapper_dialog(_main);
+    Ui::About ui;
+    ui.setupUi(&wrapper_dialog);
+    wrapper_dialog.exec();
 
-/* NOTE: prompt() is run when Enter is pressed.
- *       appendPromptHistory is automatically called before prompt()
- *       is called so calling it is only needed for erroneous input.
- *       Any text is in the command prompt is sent as an uppercase string.
- */
-ScriptValue
-about_prompt(ScriptEnv *context)
-{
-    _main->nativeAbout();
+    /*
+    QString appDir = qApp->applicationDirPath();
+    QString appName = QApplication::applicationName();
+    QString title = "About " + appName;
+
+    QDialog dialog(this);
+    ImageWidget img(appDir + "/images/logo-small");
+    QLabel text(appName + tr("\n\n") +
+                          tr("http://embroidermodder.github.io") +
+                          tr("\n\n") +
+                          tr("Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi") +
+                          tr("\n\n") +
+                          tr("Embroidery formats by Josh Varga.") +
+                          tr("\n") +
+                          tr("User Interface by Jonathan Greig.") +
+                          tr("\n\n") +
+                          tr("Free under the zlib/libpng license.")
+                          #if defined(BUILD_GIT_HASH)
+                          + tr("\n\n") +
+                          tr("Build Hash: ") + qPrintable(BUILD_GIT_HASH)
+                          #endif
+                          );
+    text.setWordWrap(true);
+
+    QDialogButtonBox buttonbox(Qt::Horizontal, &dialog);
+    QPushButton button(&dialog);
+    button.setText("Oh, Yeah!");
+    buttonbox.addButton(&button, QDialogButtonBox::AcceptRole);
+    buttonbox.setCenterButtons(true);
+    connect(&buttonbox, SIGNAL(accepted()), &dialog, SLOT(accept()));
+
+    QVBoxLayout layout;
+    layout.setAlignment(Qt::AlignCenter);
+    layout.addWidget(&img);
+    layout.addWidget(&text);
+    layout.addWidget(&buttonbox);
+
+    dialog.setWindowTitle(title);
+    dialog.setMinimumWidth(img.minimumWidth()+30);
+    dialog.setMinimumHeight(img.minimumHeight()+50);
+    dialog.setLayout(&layout);
+    dialog.exec();
+    */
+    QApplication::restoreOverrideCursor();
     _main->nativeEndCommand();
-    return script_null;
 }
 
 Command about_cmd = {
-    .main = about_main,
-    .click = about_click,
-    .context = about_context,
-    .prompt = about_prompt,
+    .id = ACTION_about,
+    .main = about_general,
+    .click = about_general,
+    .context = about_general,
+    .prompt = about_general,
     .icon = "about",
     .menu_name = "None",
     .menu_position = 0,
     .toolbar_name = "None",
     .toolbar_position = 0,
-    .tooltip = "&About",
-    .statustip = "Displays information about this product:  ABOUT",
+    .tooltip = "&About Embroidermodder 2",
+    .statustip = "Displays information about this product. Command: ABOUT.",
     .alias = "ABOUT"
 };

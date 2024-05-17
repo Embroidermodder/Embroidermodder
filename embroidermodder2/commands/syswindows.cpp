@@ -49,6 +49,7 @@ syswindows_prompt(ScriptEnv * context)
 }
 
 Command syswindows_cmd = {
+    .id = -1,
     .main = syswindows_main,
     .click = syswindows_click,
     .context = syswindows_context,

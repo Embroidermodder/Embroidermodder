@@ -49,6 +49,7 @@ windownext_prompt(ScriptEnv * context)
 }
 
 Command windownext_cmd = {
+    .id = -1,
     .main = windownext_main,
     .click = windownext_click,
     .context = windownext_context,

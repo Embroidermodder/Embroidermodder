@@ -16,11 +16,9 @@
 ScriptValue
 polyline_main(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->nativeIcon128();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -32,9 +30,7 @@ polyline_main(ScriptEnv * context)
 ScriptValue
 polyline_click(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeIcon128();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -44,9 +40,7 @@ polyline_click(ScriptEnv * context)
 ScriptValue
 polyline_context(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeIcon128();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -59,14 +53,13 @@ polyline_context(ScriptEnv * context)
 ScriptValue
 polyline_prompt(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeIcon128();
+
     _main->nativeEndCommand();
     return script_null;
 }
 
 Command polyline_cmd = {
+    .id = -1,
     .main = polyline_main,
     .click = polyline_click,
     .context = polyline_context,

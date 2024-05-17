@@ -16,11 +16,9 @@
 ScriptValue
 quickleader_main(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->nativeIcon128();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -32,9 +30,7 @@ quickleader_main(ScriptEnv * context)
 ScriptValue
 quickleader_click(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeIcon128();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -44,9 +40,7 @@ quickleader_click(ScriptEnv * context)
 ScriptValue
 quickleader_context(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeIcon128();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -59,14 +53,13 @@ quickleader_context(ScriptEnv * context)
 ScriptValue
 quickleader_prompt(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeIcon128();
+
     _main->nativeEndCommand();
     return script_null;
 }
 
 Command quickleader_cmd = {
+    .id = -1,
     .main = quickleader_main,
     .click = quickleader_click,
     .context = quickleader_context,

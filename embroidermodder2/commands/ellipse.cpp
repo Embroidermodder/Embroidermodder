@@ -18,7 +18,7 @@ ellipse_main(ScriptEnv *context)
 {
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->nativeAbout();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -30,7 +30,7 @@ ellipse_main(ScriptEnv *context)
 ScriptValue
 ellipse_click(ScriptEnv* /* context */)
 {
-    _main->nativeAbout();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -40,7 +40,7 @@ ellipse_click(ScriptEnv* /* context */)
 ScriptValue
 ellipse_context(ScriptEnv* /* context */)
 {
-    _main->nativeAbout();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -53,12 +53,13 @@ ellipse_context(ScriptEnv* /* context */)
 ScriptValue
 ellipse_prompt(ScriptEnv* /* context */)
 {
-    _main->nativeAbout();
+
     _main->nativeEndCommand();
     return script_null;
 }
 
 Command ellipse_cmd = {
+    .id = -1,
     .main = ellipse_main,
     .click = ellipse_click,
     .context = ellipse_context,

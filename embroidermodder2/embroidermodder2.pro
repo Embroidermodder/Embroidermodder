@@ -36,8 +36,7 @@ OBJECTS_DIR = .obj
 MOC_DIR = .moc
 
 INCLUDEPATH += \
-$$PWD \
-javascript \
+$$PWD
 
 TRANSLATIONS = translations/afrikaans/embroidermodder2_afrikaans.ts   \ #af
                translations/arabic/embroidermodder2_arabic.ts         \ #ar
@@ -64,13 +63,16 @@ TRANSLATIONS = translations/afrikaans/embroidermodder2_afrikaans.ts   \ #af
 
 FORMS = \
     about.ui
+
 SOURCES += \
     commands.cpp \
     commands/about.cpp \
+    commands/alert.cpp \
     commands/circle.cpp \
     commands/day.cpp \
     commands/distance.cpp \
     commands/dolphin.cpp \
+    commands/donothing.cpp \
     commands/ellipse.cpp \
     commands/erase.cpp \
     commands/exit.cpp \
@@ -84,7 +86,11 @@ SOURCES += \
     commands/icon64.cpp \
     commands/line.cpp \
     commands/locatepoint.cpp \
+    commands/mirrorselected.cpp \
+    commands/mousex.cpp \
+    commands/mousey.cpp \
     commands/move.cpp \
+    commands/moveselected.cpp \
     commands/new.cpp \
     commands/night.cpp \
     commands/open.cpp \
@@ -97,18 +103,35 @@ SOURCES += \
     commands/point.cpp \
     commands/polygon.cpp \
     commands/polyline.cpp \
+    commands/previewoff.cpp \
+    commands/previewon.cpp \
+    commands/qsnapx.cpp \
+    commands/qsnapy.cpp \
     commands/rectangle.cpp \
     commands/redo.cpp \
     commands/rgb.cpp \
     commands/rotate.cpp \
     commands/sandbox.cpp \
+    commands/save.cpp \
     commands/scale.cpp \
+    commands/scaleselected.cpp \
     commands/selectall.cpp \
+    commands/set.cpp \
     commands/snowflake.cpp \
     commands/star.cpp \
     commands/syswindows.cpp \
+    commands/textangle.cpp \
+    commands/textbold.cpp \
+    commands/textitalic.cpp \
+    commands/textoverline.cpp \
+    commands/textsize.cpp \
+    commands/textstrikeout.cpp \
+    commands/textunderline.cpp \
     commands/tipoftheday.cpp \
     commands/undo.cpp \
+    commands/vulcanize.cpp \
+    commands/windowclose.cpp \
+    commands/windowcloseall.cpp \
     commands/windownext.cpp \
     commands/windowprevious.cpp \
     commands/windowtile.cpp \
@@ -116,97 +139,83 @@ SOURCES += \
     commands/zoomin.cpp \
     commands/windowcascade.cpp \
     commands/zoomout.cpp \
-    commands/windowclose.cpp \
     commands/quickleader.cpp \
     commands/singlelinetext.cpp \
-    commands/windowcloseall.cpp \
-main.cpp \
-mainwindow.cpp \
-mainwindow-settings.cpp \
-mainwindow-menus.cpp \
-mainwindow-toolbars.cpp \
-mainwindow-commands.cpp \
-mainwindow-actions.cpp \
-mdiarea.cpp \
-mdiwindow.cpp \
-view.cpp \
-cmdprompt.cpp \
-embdetails-dialog.cpp \
-settings-dialog.cpp \
-preview-dialog.cpp \
-layer-manager.cpp \
-selectbox.cpp \
-statusbar.cpp \
-statusbar-button.cpp \
-imagewidget.cpp \
-property-editor.cpp \
-undo-editor.cpp \
-undo-commands.cpp \
-object-save.cpp \
-object-base.cpp \
-object-arc.cpp \
-object-circle.cpp \
-object-dimleader.cpp \
-object-ellipse.cpp \
-object-image.cpp \
-object-line.cpp \
-object-path.cpp \
-object-point.cpp \
-object-polygon.cpp \
-object-polyline.cpp \
-object-rect.cpp \
-object-textsingle.cpp \
+    main.cpp \
+    mainwindow.cpp \
+    mainwindow-settings.cpp \
+    mainwindow-menus.cpp \
+    mainwindow-toolbars.cpp \
+    mainwindow-commands.cpp \
+    mainwindow-actions.cpp \
+    mdiarea.cpp \
+    mdiwindow.cpp \
+    view.cpp \
+    cmdprompt.cpp \
+    embdetails-dialog.cpp \
+    settings-dialog.cpp \
+    preview-dialog.cpp \
+    layer-manager.cpp \
+    selectbox.cpp \
+    statusbar.cpp \
+    statusbar-button.cpp \
+    imagewidget.cpp \
+    property-editor.cpp \
+    undo-editor.cpp \
+    undo-commands.cpp \
+    object-save.cpp \
+    object-base.cpp \
+    object-arc.cpp \
+    object-circle.cpp \
+    object-dimleader.cpp \
+    object-ellipse.cpp \
+    object-image.cpp \
+    object-line.cpp \
+    object-path.cpp \
+    object-point.cpp \
+    object-polygon.cpp \
+    object-polyline.cpp \
+    object-rect.cpp \
+    object-textsingle.cpp \
     application.cpp \
     ../extern/libembroidery/embroidery.c
 
 HEADERS += \
     commands.h \
-mainwindow.h \
-mainwindow-actions.h \
-mdiarea.h \
-mdiwindow.h \
+    mainwindow.h \
+    mdiarea.h \
+    mdiwindow.h \
     script.h \
-view.h \
-cmdprompt.h \
-embdetails-dialog.h \
-settings-dialog.h \
-preview-dialog.h \
-layer-manager.h \
-selectbox.h \
-statusbar.h \
-statusbar-button.h \
-imagewidget.h \
-property-editor.h \
-undo-editor.h \
-undo-commands.h \
-object-data.h \
-object-save.h \
-object-base.h \
-object-arc.h \
-object-circle.h \
-object-dimleader.h \
-object-ellipse.h \
-object-image.h \
-object-line.h \
-object-path.h \
-object-point.h \
-object-polygon.h \
-object-polyline.h \
-object-rect.h \
-object-textsingle.h \
+    view.h \
+    cmdprompt.h \
+    embdetails-dialog.h \
+    settings-dialog.h \
+    preview-dialog.h \
+    layer-manager.h \
+    selectbox.h \
+    statusbar.h \
+    statusbar-button.h \
+    imagewidget.h \
+    property-editor.h \
+    undo-editor.h \
+    undo-commands.h \
+    object-data.h \
+    object-save.h \
+    object-base.h \
+    object-arc.h \
+    object-circle.h \
+    object-dimleader.h \
+    object-ellipse.h \
+    object-image.h \
+    object-line.h \
+    object-path.h \
+    object-point.h \
+    object-polygon.h \
+    object-polyline.h \
+    object-rect.h \
+    object-textsingle.h \
     application.h \
     ../extern/libembroidery/embroidery.h
-
-#SCRIPTING
-#SOURCES += \
-#native-scripting.cpp \
-#javascript/native-javascript.cpp \
-#javascript/native-javascript-init.cpp \
-#javascript/native-javascript-include.cpp \
-
-#HEADERS += \
-#native-scripting.h \
-#javascript/native-javascript.h \
 
 #Linux/Unix: make install
 unix:!macx {

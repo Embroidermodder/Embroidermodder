@@ -18,7 +18,7 @@ sandbox_main(ScriptEnv * context)
 {
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->nativeIcon128();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -30,9 +30,6 @@ sandbox_main(ScriptEnv * context)
 ScriptValue
 sandbox_click(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeIcon128();
     _main->nativeEndCommand();
     return script_null;
 }
@@ -42,9 +39,6 @@ sandbox_click(ScriptEnv * context)
 ScriptValue
 sandbox_context(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeIcon128();
     _main->nativeEndCommand();
     return script_null;
 }
@@ -57,14 +51,12 @@ sandbox_context(ScriptEnv * context)
 ScriptValue
 sandbox_prompt(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeIcon128();
     _main->nativeEndCommand();
     return script_null;
 }
 
 Command sandbox_cmd = {
+    .id = -1,
     .main = sandbox_main,
     .click = sandbox_click,
     .context = sandbox_context,

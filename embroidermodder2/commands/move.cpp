@@ -16,10 +16,6 @@
 ScriptValue
 move_main(ScriptEnv * context)
 {
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-    _main->nativeIcon128();
-    _main->nativeEndCommand();
     return script_null;
 }
 
@@ -30,8 +26,6 @@ move_main(ScriptEnv * context)
 ScriptValue
 move_click(ScriptEnv * context)
 {
-    _main->nativeIcon128();
-    _main->nativeEndCommand();
     return script_null;
 }
 
@@ -40,8 +34,6 @@ move_click(ScriptEnv * context)
 ScriptValue
 move_context(ScriptEnv * context)
 {
-    _main->nativeIcon128();
-    _main->nativeEndCommand();
     return script_null;
 }
 
@@ -53,12 +45,11 @@ move_context(ScriptEnv * context)
 ScriptValue
 move_prompt(ScriptEnv * context)
 {
-    _main->nativeIcon128();
-    _main->nativeEndCommand();
     return script_null;
 }
 
 Command move_cmd = {
+    .id = -1,
     .main = move_main,
     .click = move_click,
     .context = move_context,

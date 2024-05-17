@@ -14,7 +14,10 @@
 ScriptValue
 icon128_generic(ScriptEnv *context)
 {
-    _main->nativeIcon128();
+    if (!argument_checks(context, "icon128_generic", "")) {
+        return script_false;
+    }
+    _main->icon128();
     _main->nativeEndCommand();
     return script_null;
 }
@@ -25,12 +28,16 @@ icon128_generic(ScriptEnv *context)
 ScriptValue
 icon128_main(ScriptEnv *context)
 {
+    if (!argument_checks(context, "icon128_main", "")) {
+        return script_false;
+    }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
     return icon128_generic(context);
 }
 
 Command icon128_cmd = {
+    .id = -1,
     .main = icon128_main,
     .click = icon128_generic,
     .context = icon128_generic,

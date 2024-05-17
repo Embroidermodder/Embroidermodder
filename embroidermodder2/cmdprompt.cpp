@@ -12,6 +12,8 @@
 #include <QTextStream>
 #include <QTimer>
 
+QHash<QString, QString>* aliasHash;
+
 CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
 {
     qDebug("CmdPrompt Constructor");
@@ -485,25 +487,21 @@ void CmdPromptInput::processInput(const QChar& rapidChar)
             emit runCommand(curCmd, cmdtxt);
         }
     }
-    else
-    {
-        if(aliasHash->contains(cmdtxt))
-        {
+    else {
+        if (aliasHash->contains(cmdtxt)) {
             cmdActive = true;
             lastCmd = curCmd;
             curCmd = aliasHash->value(cmdtxt);
             emit appendHistory(curText, prefix.length());
             emit startCommand(curCmd);
         }
-        else if(cmdtxt.isEmpty())
-        {
+        else if(cmdtxt.isEmpty()) {
             cmdActive = true;
             emit appendHistory(curText, prefix.length());
             //Rerun the last successful command
             emit startCommand(lastCmd);
         }
-        else
-        {
+        else {
             emit appendHistory(curText + "<br/><font color=\"red\">Unknown command \"" + cmdtxt + "\". Press F1 for help.</font>", prefix.length());
         }
     }

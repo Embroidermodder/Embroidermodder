@@ -16,10 +16,6 @@
 ScriptValue
 locatepoint_main(ScriptEnv * context)
 {
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-    _main->nativeIcon128();
-    _main->nativeEndCommand();
     return script_null;
 }
 
@@ -30,8 +26,6 @@ locatepoint_main(ScriptEnv * context)
 ScriptValue
 locatepoint_click(ScriptEnv * context)
 {
-    _main->nativeIcon128();
-    _main->nativeEndCommand();
     return script_null;
 }
 
@@ -40,10 +34,6 @@ locatepoint_click(ScriptEnv * context)
 ScriptValue
 locatepoint_context(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeIcon128();
-    _main->nativeEndCommand();
     return script_null;
 }
 
@@ -55,12 +45,11 @@ locatepoint_context(ScriptEnv * context)
 ScriptValue
 locatepoint_prompt(ScriptEnv * context)
 {
-    _main->nativeIcon128();
-    _main->nativeEndCommand();
     return script_null;
 }
 
 Command locatepoint_cmd = {
+    .id = -1,
     .main = locatepoint_main,
     .click = locatepoint_click,
     .context = locatepoint_context,

@@ -49,6 +49,7 @@ singlelinetext_prompt(ScriptEnv * /* context */)
 }
 
 Command singlelinetext_cmd = {
+    .id = -1,
     .main = singlelinetext_main,
     .click = singlelinetext_click,
     .context = singlelinetext_context,

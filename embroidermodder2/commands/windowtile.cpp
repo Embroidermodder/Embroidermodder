@@ -12,9 +12,12 @@
 
 /* WINDOWTILE is not context-dependant */
 ScriptValue
-windowtile_generic(ScriptEnv * /* context */)
+windowtile_generic(ScriptEnv *context)
 {
-    _main->nativeWindowTile();
+    if (!argument_checks(context, "windowTile", "")) {
+        return script_false;
+    }
+    _main->mdiArea->tile();
     _main->nativeEndCommand();
     return script_null;
 }
@@ -31,6 +34,7 @@ windowtile_main(ScriptEnv *context)
 }
 
 Command windowtile_cmd = {
+    .id = -1,
     .main = windowtile_main,
     .click = windowtile_generic,
     .context = windowtile_generic,

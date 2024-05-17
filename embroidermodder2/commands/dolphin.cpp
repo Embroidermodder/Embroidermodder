@@ -18,7 +18,7 @@ dolphin_main(ScriptEnv *context)
 {
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->nativeAbout();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -30,7 +30,7 @@ dolphin_main(ScriptEnv *context)
 ScriptValue
 dolphin_click(ScriptEnv *context)
 {
-    _main->nativeAbout();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -40,7 +40,7 @@ dolphin_click(ScriptEnv *context)
 ScriptValue
 dolphin_context(ScriptEnv *context)
 {
-    _main->nativeAbout();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -53,12 +53,13 @@ dolphin_context(ScriptEnv *context)
 ScriptValue
 dolphin_prompt(ScriptEnv *context)
 {
-    _main->nativeAbout();
+
     _main->nativeEndCommand();
     return script_null;
 }
 
 Command dolphin_cmd = {
+    .id = -1,
     .main = dolphin_main,
     .click = dolphin_click,
     .context = dolphin_context,

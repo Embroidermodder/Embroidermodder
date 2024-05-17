@@ -59,6 +59,7 @@ panleft_prompt(ScriptEnv * context)
 }
 
 Command panleft_cmd = {
+    .id = -1,
     .main = panleft_main,
     .click = panleft_click,
     .context = panleft_context,

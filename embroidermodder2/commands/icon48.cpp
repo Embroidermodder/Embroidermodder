@@ -12,9 +12,12 @@
 
 /* ICON48 is not context-dependant */
 ScriptValue
-icon48_generic(ScriptEnv */* context */)
+icon48_generic(ScriptEnv *context)
 {
-    _main->nativeIcon48();
+    if (!argument_checks(context, "icon48_generic", "")) {
+        return script_false;
+    }
+    _main->icon48();
     _main->nativeEndCommand();
     return script_null;
 }
@@ -25,12 +28,16 @@ icon48_generic(ScriptEnv */* context */)
 ScriptValue
 icon48_main(ScriptEnv * context)
 {
+    if (!argument_checks(context, "icon48_main", "")) {
+        return script_false;
+    }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
     return icon48_generic(context);
 }
 
 Command icon48_cmd = {
+    .id = -1,
     .main = icon48_main,
     .click = icon48_generic,
     .context = icon48_generic,

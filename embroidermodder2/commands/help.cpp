@@ -31,6 +31,7 @@ help_main(ScriptEnv *context)
 }
 
 Command help_cmd = {
+    .id = -1,
     .main = help_main,
     .click = help_generic,
     .context = help_generic,

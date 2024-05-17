@@ -14,7 +14,10 @@
 ScriptValue
 icon32_generic(ScriptEnv *context)
 {
-    _main->nativeIcon32();
+    if (!argument_checks(context, "icon32_generic", "")) {
+        return script_false;
+    }
+    _main->icon32();
     _main->nativeEndCommand();
     return script_null;
 }
@@ -25,12 +28,16 @@ icon32_generic(ScriptEnv *context)
 ScriptValue
 icon32_main(ScriptEnv *context)
 {
+    if (!argument_checks(context, "icon32_main", "")) {
+        return script_false;
+    }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
     return icon32_generic(context);
 }
 
 Command icon32_cmd = {
+    .id = -1,
     .main = icon32_main,
     .click = icon32_generic,
     .context = icon32_generic,

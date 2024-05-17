@@ -49,6 +49,7 @@ windowclose_prompt(ScriptEnv * context)
 }
 
 Command windowclose_cmd = {
+    .id = -1,
     .main = windowclose_main,
     .click = windowclose_click,
     .context = windowclose_context,

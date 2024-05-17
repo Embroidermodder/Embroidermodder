@@ -19,6 +19,8 @@ class QSplitter;
 class QTimer;
 QT_END_NAMESPACE
 
+extern QHash<QString, QString>* aliasHash;
+
 class CmdPromptInput : public QLineEdit
 {
     Q_OBJECT
@@ -92,7 +94,6 @@ private slots:
     void copyClip();
     void pasteClip();
 private:
-    QHash<QString, QString>*  aliasHash;
 
     void changeFormatting(const QList<QTextLayout::FormatRange>& formats);
     void clearFormatting();
@@ -181,6 +182,8 @@ public:
     CmdPrompt(QWidget* parent = 0);
     ~CmdPrompt();
 
+    CmdPromptInput*    promptInput;
+
 protected:
 
 public slots:
@@ -260,7 +263,6 @@ signals:
     void historyAppended(const QString& txt);
 
 private:
-    CmdPromptInput*    promptInput;
     CmdPromptHistory*  promptHistory;
     QVBoxLayout*       promptVBoxLayout;
     QFrame*            promptDivider;
@@ -274,5 +276,3 @@ private:
 };
 
 #endif
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

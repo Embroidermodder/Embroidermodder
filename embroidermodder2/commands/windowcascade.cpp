@@ -16,6 +16,10 @@
 ScriptValue
 windowcascade_main(ScriptEnv * context)
 {
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->mdiArea->cascade();
+    _main->nativeEndCommand();
     return script_null;
 }
 
@@ -26,6 +30,8 @@ windowcascade_main(ScriptEnv * context)
 ScriptValue
 windowcascade_click(ScriptEnv * context)
 {
+    _main->mdiArea->cascade();
+    _main->nativeEndCommand();
     return script_null;
 }
 
@@ -34,6 +40,8 @@ windowcascade_click(ScriptEnv * context)
 ScriptValue
 windowcascade_context(ScriptEnv * context)
 {
+    _main->mdiArea->cascade();
+    _main->nativeEndCommand();
     return script_null;
 }
 
@@ -45,74 +53,23 @@ windowcascade_context(ScriptEnv * context)
 ScriptValue
 windowcascade_prompt(ScriptEnv * context)
 {
+    _main->mdiArea->cascade();
+    _main->nativeEndCommand();
     return script_null;
 }
 
 Command windowcascade_cmd = {
+    .id = -1,
     .main = windowcascade_main,
     .click = windowcascade_click,
     .context = windowcascade_context,
     .prompt = windowcascade_prompt,
-    .icon = "about",
+    .icon = "windowcascade",
     .menu_name = "None",
     .menu_position = 0,
     .toolbar_name = "None",
     .toolbar_position = 0,
-    .tooltip = "Icon&24",
-    .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-    .alias = "ICON24"
+    .tooltip = "&Cascade",
+    .statustip = "Cascade the windows:  CASCADE",
+    .alias = "CASCADE, WINDOWCASCADE"
 };
-
-#if 0
-//Command: WindowCascade
-
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
-function main()
-{
-    initCommand();
-    clearSelection();
-    windowCascade();
-    endCommand();
-}
-
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
-function click(x, y)
-{
-    windowCascade();
-    endCommand();
-}
-
-//NOTE: context() is run when a context menu entry is chosen.
-function context(str)
-{
-    windowCascade();
-    endCommand();
-}
-
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text is in the command prompt is sent as an uppercase string.
-function prompt(str)
-{
-    windowCascade();
-    endCommand();
-}
-[Menu]
-Name=None
-Position=0
-
-[ToolBar]
-Name=None
-Position=0
-
-[Tips]
-ToolTip=&Cascade
-StatusTip=Cascade the windows:  CASCADE
-
-[Prompt]
-Alias=CASCADE, WINDOWCASCADE
-#endif

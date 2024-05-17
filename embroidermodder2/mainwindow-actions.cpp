@@ -12,28 +12,106 @@
 #include <QAction>
 #include <QApplication>
 #include <QMdiArea>
+#include "commands.h"
 
-void MainWindow::createAllActions()
+/* For each Command in command_list, for each alias set up a map from
+ * alias to the Command. Then for a given context the call doesn't have to loop?
+ *
+ * NOTE: Every QScriptProgram must have a unique function name to call. If every function was called main(), then
+ *       the ScriptArgs would only call the last script evaluated (which happens to be main() in another script).
+ *       Thus, by adding the cmdName before main(), it becomes line_main(), circle_main(), etc...
+ *       Do not change this code unless you really know what you are doing. I mean it.
+ *
+ * Position currently comes from the order of the command_list.
+ */
+void
+MainWindow::createAllActions()
 {
     qDebug("Creating All Actions...");
     QString appName = QApplication::applicationName();
+    QString appDir = qApp->applicationDirPath();
 
-    actionHash.insert(ACTION_donothing, createAction("donothing", tr("&Do Nothing"), tr("Does Nothing")));
+    for (int i=0; command_list[i].menu_position >= 0; i++) {
+        QString icon(command_list[i].icon);
+        QString menuName(command_list[i].menu_name);
+        int menuPos = command_list[i].menu_position;
+        QString toolbarName(command_list[i].toolbar_name);
+        int toolbarPos = command_list[i].toolbar_position;
+        QString toolTip(command_list[i].tooltip);
+        QString statusTip(command_list[i].statustip);
+        QString alias_string(command_list[i].alias);
+        /* QStringList aliases = alias_string.toStringList(); */
 
-    actionHash.insert(ACTION_windowcascade,  createAction("windowcascade",  tr("&Cascade"),   tr("Cascade the windows.")));
+        qDebug("COMMAND: %s", qPrintable(icon));
+
+        QAction* ACTION = createAction(command_list[i]);
+
+        if (!command_map.contains(icon)) {
+            command_map.insert(icon, command_list[i]);
+        }
+        else {
+            qDebug("ERROR: command_map key collision.");
+        }
+
+        if (command_list[i].id >= 0) {
+            aliasHash->insert(icon, icon);
+            actionHash.insert(command_list[i].id, createAction(icon, toolTip, statusTip, true));
+        }
+
+        // load globals: engine->evaluate(script);
+
+        if (toolbarName.toUpper() != "NONE") {
+            //If the toolbar doesn't exist, create it.
+            if (!toolbarHash.value(toolbarName)) {
+                QToolBar* tb = new QToolBar(toolbarName, this);
+                tb->setObjectName("toolbar" + toolbarName);
+                connect(tb, SIGNAL(topLevelChanged(bool)), this,
+                    SLOT(floatingChangedToolBar(bool)));
+                addToolBar(Qt::LeftToolBarArea, tb);
+                addToolBarBreak(Qt::LeftToolBarArea);
+                toolbarHash.insert(toolbarName, tb);
+            }
+
+            //TODO: order actions position in toolbar based on .ini setting
+            toolbarHash.value(toolbarName)->addAction(ACTION);
+        }
+
+        if (menuName.toUpper() != "NONE") {
+            //If the menu doesn't exist, create it.
+            if (!menuHash.value(menuName)) {
+                QMenu* menu = new QMenu(menuName, this);
+                menu->setTearOffEnabled(true);
+                menuBar()->addMenu(menu);
+                menuHash.insert(menuName, menu);
+            }
+
+            //TODO: order actions position in menu based on .ini setting
+            menuHash.value(menuName)->addAction(ACTION);
+        }
+
+        /*
+        foreach (QString alias, aliases) {
+            prompt->addCommand(alias, cmdName);
+        }
+        */
+    }
+
+    actionHash.insert(ACTION_donothing, createAction(donothing_cmd));
+
+    actionHash.insert(ACTION_windowcascade, createAction(windowcascade_cmd));
     actionHash.insert(ACTION_windowtile,     createAction("windowtile",     tr("&Tile"),      tr("Tile the windows.")));
     actionHash.insert(ACTION_windowclose,    createAction("windowclose",    tr("Cl&ose"),     tr("Close the active window.")));
     actionHash.insert(ACTION_windowcloseall, createAction("windowcloseall", tr("Close &All"), tr("Close all the windows.")));
     actionHash.insert(ACTION_windownext,     createAction("windownext",     tr("Ne&xt"),      tr("Move the focus to the next window.")));
     actionHash.insert(ACTION_windowprevious, createAction("windowprevious", tr("Pre&vious"),  tr("Move the focus to the previous window.")));
 
-    actionHash.insert(ACTION_new,           createAction("new",           tr("&New"),     tr("Create a new file.")));
-    actionHash.insert(ACTION_open,          createAction("open",          tr("&Open"),    tr("Open an existing file.")));
-    actionHash.insert(ACTION_save,          createAction("save",          tr("&Save"),    tr("Save the design to disk.")));
-    actionHash.insert(ACTION_saveas,        createAction("saveas",        tr("Save &As"), tr("Save the design under a new name.")));
-    actionHash.insert(ACTION_print,         createAction("print",         tr("&Print"),   tr("Print the design.")));
+    actionHash.insert(ACTION_new, createAction(new_cmd));
+    actionHash.insert(ACTION_open, createAction(open_cmd));
+    actionHash.insert(ACTION_save, createAction("save",          tr("&Save"),    tr("Save the design to disk.")));
+    actionHash.insert(ACTION_saveas, createAction("saveas",        tr("Save &As"), tr("Save the design under a new name.")));
+    actionHash.insert(ACTION_print, createAction("print",         tr("&Print"),   tr("Print the design.")));
     actionHash.insert(ACTION_designdetails, createAction("designdetails", tr("&Details"), tr("Details of the current design.")));
-    actionHash.insert(ACTION_exit,          createAction("exit",          tr("E&xit"),    tr("Exit the application.")));
+    actionHash.insert(ACTION_exit, createAction("exit",          tr("E&xit"),    tr("Exit the application.")));
 
     actionHash.insert(ACTION_cut,   createAction("cut",   tr("Cu&t"),   tr("Cut the current selection's contents to the clipboard.")));
     actionHash.insert(ACTION_copy,  createAction("copy",  tr("&Copy"),  tr("Copy the current selection's contents to the clipboard.")));
@@ -42,7 +120,6 @@ void MainWindow::createAllActions()
     actionHash.insert(ACTION_help,        createAction("help",        tr("&Help"),             tr("Displays help.")));
     actionHash.insert(ACTION_changelog,   createAction("changelog",   tr("&Changelog"),        tr("Describes new features in this product.")));
     actionHash.insert(ACTION_tipoftheday, createAction("tipoftheday", tr("&Tip Of The Day"),   tr("Displays a dialog with useful tips")));
-    actionHash.insert(ACTION_about,       createAction("about",       tr("&About ") + appName, tr("Displays information about this product.")));
     actionHash.insert(ACTION_whatsthis,   createAction("whatsthis",   tr("&What's This?"),     tr("What's This? Context Help!")));
 
     actionHash.insert(ACTION_undo, createAction("undo", tr("&Undo"),  tr("Reverses the most recent action.")));
@@ -103,19 +180,33 @@ void MainWindow::createAllActions()
     actionHash.value(ACTION_designdetails)->setEnabled(numOfDocs > 0);
 }
 
-QAction *MainWindow::createAction(const QString icon, const QString toolTip, const QString statusTip, bool scripted)
+QAction *
+MainWindow::createAction(Command command)
+{
+    QString icon(command.icon);
+    QString toolTip(command.tooltip);
+    QString statusTip(command.statustip);
+    return createAction(icon, toolTip, statusTip, true);
+}
+
+/*
+ * TODO: Set What's This Context Help to statusTip for now so there is some infos there.
+ *       Make custom whats this context help popup with more descriptive help than just
+ *       the status bar/tip one liner(short but not real long) with a hyperlink in the custom popup
+ *       at the bottom to open full help file description. Ex: like wxPython AGW's SuperToolTip.
+ *
+ * TODO: Finish All Commands ... <.<
+ */
+QAction *
+MainWindow::createAction(const QString icon, const QString toolTip, const QString statusTip, bool scripted)
 {
     QString appDir = qApp->applicationDirPath();
 
-    QAction *ACTION = new QAction(QIcon(appDir + "/icons/" + getSettingsGeneralIconTheme() + "/" + icon + ".png"), toolTip, this); //TODO: Qt4.7 wont load icons without an extension...
+    QString iconTheme = getSettingsGeneralIconTheme();
+    QAction *ACTION = new QAction(QIcon(appDir + "/icons/" + iconTheme + "/" + icon + ".png"), toolTip, this);
     ACTION->setStatusTip(statusTip);
     ACTION->setObjectName(icon);
-    // TODO: Set What's This Context Help to statusTip for now so there is some infos there.
-    // Make custom whats this context help popup with more descriptive help than just
-    // the status bar/tip one liner(short but not real long) with a hyperlink in the custom popup
-    // at the bottom to open full help file description. Ex: like wxPython AGW's SuperToolTip.
     ACTION->setWhatsThis(statusTip);
-    // TODO: Finish All Commands ... <.<
 
     if (icon == "donothing") {
         connect(ACTION, SIGNAL(triggered()), this, SLOT(doNothing()));
@@ -140,53 +231,124 @@ QAction *MainWindow::createAction(const QString icon, const QString toolTip, con
         ACTION->setShortcut(QKeySequence::Print);
         connect(ACTION, SIGNAL(triggered()), this, SLOT(print()));
     }
-    else if (icon == "designdetails")            { ACTION->setShortcut(QKeySequence("Ctrl+D")); connect(ACTION, SIGNAL(triggered()), this, SLOT(designDetails()));   }
-    else if (icon == "exit")                     { ACTION->setShortcut(QKeySequence("Ctrl+Q")); connect(ACTION, SIGNAL(triggered()), this, SLOT(exit()));            }
+    else if (icon == "designdetails") {
+        ACTION->setShortcut(QKeySequence("Ctrl+D"));
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(designDetails()));
+    }
+    else if (icon == "exit") {
+        ACTION->setShortcut(QKeySequence("Ctrl+Q"));
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(exit()));
+    }
+    else if (icon == "cut") {
+        ACTION->setShortcut(QKeySequence::Cut);
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(cut()));
+    }
+    else if (icon == "copy") {
+        ACTION->setShortcut(QKeySequence::Copy);
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(copy()));
+    }
+    else if (icon == "paste") {
+        ACTION->setShortcut(QKeySequence::Paste);
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(paste()));
+    }
+    else if (icon == "windowcascade") {
+        connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(cascade()));
+    }
+    else if (icon == "windowtile") {
+        connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(tile()));
+    }
+    else if (icon == "windowclose") {
+        ACTION->setShortcut(QKeySequence::Close);
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(onCloseWindow()));
+    }
+    else if (icon == "windowcloseall") {
+        connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(closeAllSubWindows()));
+    }
+    else if (icon == "windownext") {
+        ACTION->setShortcut(QKeySequence::NextChild);
+        connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(activateNextSubWindow()));
+    }
+    else if (icon == "windowprevious") {
+        ACTION->setShortcut(QKeySequence::PreviousChild);
+        connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(activatePreviousSubWindow()));
+    }
+    else if (icon == "help") {
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(help()));
+    }
+    else if (icon == "changelog") {
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(changelog()));
+    }
+    else if (icon == "tipoftheday") {
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(tipOfTheDay()));
+    }
+    else if (icon == "whatsthis") {
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(whatsThisContextHelp()));
+    }
+    else if (icon == "icon16") {
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(icon16()));
+    }
+    else if (icon == "icon24") {
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(icon24()));
+    }
+    else if (icon == "icon32") {
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(icon32()));
+    }
+    else if (icon == "icon48") {
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(icon48()));
+    }
+    else if (icon == "icon64") {
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(icon64()));
+    }
+    else if (icon == "icon128") {
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(icon128()));
+    }
+    else if (icon == "settingsdialog") {
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(settingsDialog()));
+    }
+    else if (icon == "undo") {
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(undo()));
+    }
+    else if (icon == "redo")
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(redo()));
 
-    else if (icon == "cut")                      { ACTION->setShortcut(QKeySequence::Cut);   connect(ACTION, SIGNAL(triggered()), this, SLOT(cut()));   }
-    else if (icon == "copy")                     { ACTION->setShortcut(QKeySequence::Copy);  connect(ACTION, SIGNAL(triggered()), this, SLOT(copy()));  }
-    else if (icon == "paste")                    { ACTION->setShortcut(QKeySequence::Paste); connect(ACTION, SIGNAL(triggered()), this, SLOT(paste())); }
+    else if (icon == "makelayercurrent")
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(makeLayerActive()));
+    else if (icon == "layers")
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(layerManager()));
+    else if (icon == "layerprevious")
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(layerPrevious()));
 
-    else if (icon == "windowcascade")              connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(cascade()));
-    else if (icon == "windowtile")                 connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(tile()));
-    else if (icon == "windowclose")              { ACTION->setShortcut(QKeySequence::Close);    connect(ACTION, SIGNAL(triggered()), this, SLOT(onCloseWindow()));   }
-    else if (icon == "windowcloseall")             connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(closeAllSubWindows()));
-    else if (icon == "windownext")               { ACTION->setShortcut(QKeySequence::NextChild);     connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(activateNextSubWindow()));     }
-    else if (icon == "windowprevious")           { ACTION->setShortcut(QKeySequence::PreviousChild); connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(activatePreviousSubWindow())); }
+    else if (icon == "textbold") {
+        ACTION->setCheckable(true);
+        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextBold(bool)));
+    }
+    else if (icon == "textitalic") {
+        ACTION->setCheckable(true);
+        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextItalic(bool)));
+    }
+    else if (icon == "textunderline") {
+        ACTION->setCheckable(true);
+        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextUnderline(bool)));
+    }
+    else if (icon == "textstrikeout") {
+        ACTION->setCheckable(true);
+        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextStrikeOut(bool)));
+    }
+    else if (icon == "textoverline") {
+        ACTION->setCheckable(true);
+        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextOverline(bool)));
+    }
 
-    else if (icon == "help")                       connect(ACTION, SIGNAL(triggered()), this, SLOT(help()));
-    else if (icon == "changelog")                  connect(ACTION, SIGNAL(triggered()), this, SLOT(changelog()));
-    else if (icon == "tipoftheday")                connect(ACTION, SIGNAL(triggered()), this, SLOT(tipOfTheDay()));
-    else if (icon == "about")                      connect(ACTION, SIGNAL(triggered()), this, SLOT(about()));
-    else if (icon == "whatsthis")                  connect(ACTION, SIGNAL(triggered()), this, SLOT(whatsThisContextHelp()));
-
-    else if (icon == "icon16")                     connect(ACTION, SIGNAL(triggered()), this, SLOT(icon16()));
-    else if (icon == "icon24")                     connect(ACTION, SIGNAL(triggered()), this, SLOT(icon24()));
-    else if (icon == "icon32")                     connect(ACTION, SIGNAL(triggered()), this, SLOT(icon32()));
-    else if (icon == "icon48")                     connect(ACTION, SIGNAL(triggered()), this, SLOT(icon48()));
-    else if (icon == "icon64")                     connect(ACTION, SIGNAL(triggered()), this, SLOT(icon64()));
-    else if (icon == "icon128")                    connect(ACTION, SIGNAL(triggered()), this, SLOT(icon128()));
-
-    else if (icon == "settingsdialog")             connect(ACTION, SIGNAL(triggered()), this, SLOT(settingsDialog()));
-
-    else if (icon == "undo")                       connect(ACTION, SIGNAL(triggered()), this, SLOT(undo()));
-    else if (icon == "redo")                       connect(ACTION, SIGNAL(triggered()), this, SLOT(redo()));
-
-    else if (icon == "makelayercurrent")           connect(ACTION, SIGNAL(triggered()), this, SLOT(makeLayerActive()));
-    else if (icon == "layers")                     connect(ACTION, SIGNAL(triggered()), this, SLOT(layerManager()));
-    else if (icon == "layerprevious")              connect(ACTION, SIGNAL(triggered()), this, SLOT(layerPrevious()));
-
-    else if (icon == "textbold")                 { ACTION->setCheckable(true); connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextBold(bool)));   }
-    else if (icon == "textitalic")               { ACTION->setCheckable(true); connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextItalic(bool))); }
-    else if (icon == "textunderline")            { ACTION->setCheckable(true); connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextUnderline(bool))); }
-    else if (icon == "textstrikeout")            { ACTION->setCheckable(true); connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextStrikeOut(bool))); }
-    else if (icon == "textoverline")             { ACTION->setCheckable(true); connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextOverline(bool))); }
-
-    else if (icon == "zoomrealtime")               connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomRealtime()));
-    else if (icon == "zoomprevious")               connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomPrevious()));
-    else if (icon == "zoomwindow")                 connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomWindow()));
-    else if (icon == "zoomdynamic")                connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomDynamic()));
-    else if (icon == "zoomscale")                  connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomScale()));
+    else if (icon == "zoomrealtime")
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomRealtime()));
+    else if (icon == "zoomprevious")
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomPrevious()));
+    else if (icon == "zoomwindow")
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomWindow()));
+    else if (icon == "zoomdynamic")
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomDynamic()));
+    else if (icon == "zoomscale")
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomScale()));
     else if (icon == "zoomcenter")                 connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomCenter()));
     else if (icon == "zoomin")                     connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomIn()));
     else if (icon == "zoomout")

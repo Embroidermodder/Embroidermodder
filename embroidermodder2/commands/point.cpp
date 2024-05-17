@@ -16,12 +16,6 @@
 ScriptValue
 point_main(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-    _main->nativeIcon128();
-    _main->nativeEndCommand();
     return script_null;
 }
 
@@ -32,10 +26,6 @@ point_main(ScriptEnv * context)
 ScriptValue
 point_click(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeIcon128();
-    _main->nativeEndCommand();
     return script_null;
 }
 
@@ -44,10 +34,6 @@ point_click(ScriptEnv * context)
 ScriptValue
 point_context(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeIcon128();
-    _main->nativeEndCommand();
     return script_null;
 }
 
@@ -59,14 +45,11 @@ point_context(ScriptEnv * context)
 ScriptValue
 point_prompt(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeIcon128();
-    _main->nativeEndCommand();
     return script_null;
 }
 
 Command point_cmd = {
+    .id = -1,
     .main = point_main,
     .click = point_click,
     .context = point_context,

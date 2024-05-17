@@ -59,6 +59,7 @@ panright_prompt(ScriptEnv * context)
 }
 
 Command panright_cmd = {
+    .id = -1,
     .main = panright_main,
     .click = panright_click,
     .context = panright_context,

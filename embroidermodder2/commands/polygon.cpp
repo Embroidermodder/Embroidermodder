@@ -16,11 +16,9 @@
 ScriptValue
 polygon_main(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->nativeIcon128();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -32,9 +30,7 @@ polygon_main(ScriptEnv * context)
 ScriptValue
 polygon_click(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeIcon128();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -44,9 +40,7 @@ polygon_click(ScriptEnv * context)
 ScriptValue
 polygon_context(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeIcon128();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -59,14 +53,13 @@ polygon_context(ScriptEnv * context)
 ScriptValue
 polygon_prompt(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeIcon128();
+
     _main->nativeEndCommand();
     return script_null;
 }
 
 Command polygon_cmd = {
+    .id = -1,
     .main = polygon_main,
     .click = polygon_click,
     .context = polygon_context,

@@ -49,6 +49,7 @@ platform_prompt(ScriptEnv * /* context */)
 }
 
 Command platform_cmd = {
+    .id = -1,
     .main = platform_main,
     .click = platform_click,
     .context = platform_context,

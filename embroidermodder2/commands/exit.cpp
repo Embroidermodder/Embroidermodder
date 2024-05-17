@@ -59,6 +59,7 @@ exit_prompt(ScriptEnv * /* context */)
 }
 
 Command exit_cmd = {
+    .id = -1,
     .main = exit_main,
     .click = exit_click,
     .context = exit_context,

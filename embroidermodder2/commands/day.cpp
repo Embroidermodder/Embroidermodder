@@ -59,6 +59,7 @@ day_prompt(ScriptEnv* /* context */)
 }
 
 Command day_cmd = {
+    .id = -1,
     .main = day_main,
     .click = day_click,
     .context = day_context,

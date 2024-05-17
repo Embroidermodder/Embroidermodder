@@ -10,6 +10,11 @@
 
 #include "../commands.h"
 
+#define MODE_NUM_POINTS   0
+#define MODE_STYLE        1
+#define MODE_XSCALE       2
+#define MODE_YSCALE       3
+
 /* NOTE: main() is run every time the command is started.
  *       Use it to reset variables so they are ready to go.
  */
@@ -18,7 +23,7 @@ heart_main(ScriptEnv * /* context */)
 {
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->nativeAbout();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -30,7 +35,7 @@ heart_main(ScriptEnv * /* context */)
 ScriptValue
 heart_click(ScriptEnv * /* context */)
 {
-    _main->nativeAbout();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -40,7 +45,7 @@ heart_click(ScriptEnv * /* context */)
 ScriptValue
 heart_context(ScriptEnv * /* context */)
 {
-    _main->nativeAbout();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -53,12 +58,13 @@ heart_context(ScriptEnv * /* context */)
 ScriptValue
 heart_prompt(ScriptEnv * /* context */)
 {
-    _main->nativeAbout();
+
     _main->nativeEndCommand();
     return script_null;
 }
 
 Command heart_cmd = {
+    .id = -1,
     .main = heart_main,
     .click = heart_click,
     .context = heart_context,
@@ -85,11 +91,6 @@ global.sy = 1.0;
 global.numPoints;
 global.mode;
 
-//enums
-global.mode_NUM_POINTS = 0;
-global.mode_STYLE      = 1;
-global.mode_XSCALE     = 2;
-global.mode_YSCALE     = 3;
 
 //NOTE: main() is run every time the command is started.
 //      Use it to reset variables so they are ready to go.

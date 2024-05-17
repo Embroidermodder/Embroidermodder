@@ -59,6 +59,7 @@ night_prompt(ScriptEnv * context)
 }
 
 Command night_cmd = {
+    .id = -1,
     .main = night_main,
     .click = night_click,
     .context = night_context,

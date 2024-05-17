@@ -49,6 +49,7 @@ scale_prompt(ScriptEnv * context)
 }
 
 Command scale_cmd = {
+    .id = -1,
     .main = scale_main,
     .click = scale_click,
     .context = scale_context,

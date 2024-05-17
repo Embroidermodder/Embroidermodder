@@ -9,7 +9,6 @@
  */
 
 #include "mainwindow.h"
-#include "mainwindow-actions.h"
 
 #include "statusbar.h"
 #include "statusbar-button.h"
@@ -213,9 +212,6 @@ MainWindow::MainWindow() : QMainWindow(0)
     //setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); //TODO: Load these from settings
     //tabifyDockWidget(dockPropEdit, dockUndoEdit); //TODO: load this from settings
 
-    //Javascript
-    javaLoadCommands();
-
     statusbar = new StatusBar(this, this);
     this->setStatusBar(statusbar);
 
@@ -369,7 +365,8 @@ void MainWindow::newFile()
     }
 }
 
-void MainWindow::openFile(bool recent, const QString& recentFile)
+void
+MainWindow::openFile(bool recent, const QString& recentFile)
 {
     qDebug("MainWindow::openFile()");
 
@@ -380,19 +377,16 @@ void MainWindow::openFile(bool recent, const QString& recentFile)
     openFilesPath = settings_opensave_recent_directory;
 
     //Check to see if this from the recent files list
-    if(recent)
-    {
+    if (recent) {
         files.append(recentFile);
         openFilesSelected(files);
     }
-    else if(!preview)
-    {
+    else if (!preview) {
         //TODO: set getOpenFileNames' selectedFilter parameter from settings_opensave_open_format
         files = QFileDialog::getOpenFileNames(this, tr("Open"), openFilesPath, formatFilterOpen);
         openFilesSelected(files);
     }
-    else if(preview)
-    {
+    else if (preview) {
         PreviewDialog* openDialog = new PreviewDialog(this, tr("Open w/Preview"), openFilesPath, formatFilterOpen);
         //TODO: set openDialog->selectNameFilter(const QString& filter) from settings_opensave_open_format
         connect(openDialog, SIGNAL(filesSelected(const QStringList&)), this, SLOT(openFilesSelected(const QStringList&)));
@@ -402,20 +396,22 @@ void MainWindow::openFile(bool recent, const QString& recentFile)
     QApplication::restoreOverrideCursor();
 }
 
-void MainWindow::openFilesSelected(const QStringList& filesToOpen)
+void
+MainWindow::openFilesSelected(const QStringList& filesToOpen)
 {
+    qDebug("MainWindow::openFileSelected()");
     bool doOnce = true;
 
-    if(filesToOpen.count())
-    {
-        for(int i = 0; i < filesToOpen.count(); i++)
-        {
-            if(!validFileFormat(filesToOpen[i]))
+    if (filesToOpen.count()) {
+        for (int i = 0; i < filesToOpen.count(); i++) {
+            qDebug("opening %s...", qPrintable(filesToOpen[i]));
+
+            if (!validFileFormat(filesToOpen[i])) {
                 continue;
+            }
 
             QMdiSubWindow* existing = findMdiWindow(filesToOpen[i]);
-            if(existing)
-            {
+            if (existing) {
                 mdiArea->setActiveSubWindow(existing);
                 continue;
             }
@@ -427,35 +423,35 @@ void MainWindow::openFilesSelected(const QStringList& filesToOpen)
             connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
 
             //Make sure the toolbars/etc... are shown before doing their zoomExtents
-            if(doOnce) { updateMenuToolbarStatusbar(); doOnce = false; }
+            if (doOnce) {
+                updateMenuToolbarStatusbar();
+                doOnce = false;
+            }
 
-            if(mdiWin->loadFile(filesToOpen.at(i)))
-            {
+            if (mdiWin->loadFile(filesToOpen.at(i))) {
                 statusbar->showMessage(tr("File(s) loaded"), 2000);
                 mdiWin->show();
                 mdiWin->showMaximized();
                 //Prevent duplicate entries in the recent files list
-                if(!settings_opensave_recent_list_of_files.contains(filesToOpen.at(i), Qt::CaseInsensitive))
-                {
+                if (!settings_opensave_recent_list_of_files.contains(filesToOpen.at(i), Qt::CaseInsensitive)) {
                     settings_opensave_recent_list_of_files.prepend(filesToOpen.at(i));
                 }
                 //Move the recent file to the top of the list
-                else
-                {
+                else {
                     settings_opensave_recent_list_of_files.removeAll(filesToOpen.at(i));
                     settings_opensave_recent_list_of_files.prepend(filesToOpen.at(i));
                 }
                 settings_opensave_recent_directory = QFileInfo(filesToOpen.at(i)).absolutePath();
 
                 View* v = mdiWin->getView();
-                if(v)
-                {
+                if (v) {
                     v->recalculateLimits();
                     v->zoomExtents();
                 }
             }
-            else
-            {
+            else {
+                messageBox("error", "Failed to load file", "Failed to load file.");
+                qDebug("Failed to load file.");
                 mdiWin->close();
             }
         }

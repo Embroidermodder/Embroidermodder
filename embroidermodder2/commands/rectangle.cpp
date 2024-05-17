@@ -16,11 +16,9 @@
 ScriptValue
 rectangle_main(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->nativeIcon128();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -32,9 +30,7 @@ rectangle_main(ScriptEnv * context)
 ScriptValue
 rectangle_click(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeIcon128();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -44,9 +40,7 @@ rectangle_click(ScriptEnv * context)
 ScriptValue
 rectangle_context(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeIcon128();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -59,14 +53,13 @@ rectangle_context(ScriptEnv * context)
 ScriptValue
 rectangle_prompt(ScriptEnv * context)
 {
-    ScriptValue a;
-    a.type = SCRIPT_NULL;
-    _main->nativeIcon128();
+
     _main->nativeEndCommand();
     return script_null;
 }
 
 Command rectangle_cmd = {
+    .id = -1,
     .main = rectangle_main,
     .click = rectangle_click,
     .context = rectangle_context,

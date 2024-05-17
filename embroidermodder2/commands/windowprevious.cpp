@@ -49,6 +49,7 @@ windowprevious_prompt(ScriptEnv * context)
 }
 
 Command windowprevious_cmd = {
+    .id = -1,
     .main = windowprevious_main,
     .click = windowprevious_click,
     .context = windowprevious_context,

@@ -49,6 +49,7 @@ path_prompt(ScriptEnv * /* context */)
 }
 
 Command path_cmd = {
+    .id = -1,
     .main = path_main,
     .click = path_click,
     .context = path_context,

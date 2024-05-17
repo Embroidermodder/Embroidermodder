@@ -49,6 +49,7 @@ snowflake_prompt(ScriptEnv * context)
 }
 
 Command snowflake_cmd = {
+    .id = -1,
     .main = snowflake_main,
     .click = snowflake_click,
     .context = snowflake_context,

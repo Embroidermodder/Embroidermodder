@@ -18,7 +18,7 @@ circle_main(ScriptEnv *context)
 {
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->nativeAbout();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -30,7 +30,7 @@ circle_main(ScriptEnv *context)
 ScriptValue
 circle_click(ScriptEnv *context)
 {
-    _main->nativeAbout();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -40,7 +40,7 @@ circle_click(ScriptEnv *context)
 ScriptValue
 circle_context(ScriptEnv *context)
 {
-    _main->nativeAbout();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -53,12 +53,13 @@ circle_context(ScriptEnv *context)
 ScriptValue
 circle_prompt(ScriptEnv *context)
 {
-    _main->nativeAbout();
+
     _main->nativeEndCommand();
     return script_null;
 }
 
 Command circle_cmd = {
+    .id = -1,
     .main = circle_main,
     .click = circle_click,
     .context = circle_context,

@@ -49,6 +49,7 @@ selectall_prompt(ScriptEnv * context)
 }
 
 Command selectall_cmd = {
+    .id = -1,
     .main = selectall_main,
     .click = selectall_click,
     .context = selectall_context,

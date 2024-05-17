@@ -14,7 +14,10 @@
 ScriptValue
 icon24_generic(ScriptEnv * context)
 {
-    _main->nativeIcon24();
+    if (!argument_checks(context, "icon24_generic", "")) {
+        return script_false;
+    }
+    _main->icon24();
     _main->nativeEndCommand();
     return script_null;
 }
@@ -25,12 +28,16 @@ icon24_generic(ScriptEnv * context)
 ScriptValue
 icon24_main(ScriptEnv *context)
 {
+    if (!argument_checks(context, "icon24_main", "")) {
+        return script_false;
+    }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
     return icon24_generic(context);
 }
 
 Command icon24_cmd = {
+    .id = -1,
     .main = icon24_main,
     .click = icon24_generic,
     .context = icon24_generic,

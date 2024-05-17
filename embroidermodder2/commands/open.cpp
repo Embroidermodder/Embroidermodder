@@ -59,6 +59,7 @@ open_prompt(ScriptEnv * context)
 }
 
 Command open_cmd = {
+    .id = -1,
     .main = open_main,
     .click = open_click,
     .context = open_context,
@@ -69,6 +70,6 @@ Command open_cmd = {
     .toolbar_name = "None",
     .toolbar_position = 0,
     .tooltip = "&Open",
-    .statustip = "Open an existing file:  OPEN",
+    .statustip = "Open an existing file. Command: OPEN.",
     .alias = "OPEN"
 };
