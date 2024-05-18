@@ -70,6 +70,7 @@ ScriptValue script_real(double r);
 ScriptValue script_string(const char *s);
 ScriptValue do_nothing(ScriptEnv *context);
 ScriptValue stub_implement(const char *function);
+ScriptValue command_prompt(const char *line);
 
 ScriptEnv *add_string_argument(ScriptEnv *context, const char *s);
 ScriptEnv *add_real_argument(ScriptEnv *context, double r);
@@ -78,6 +79,7 @@ ScriptEnv *add_int_argument(ScriptEnv *context, int i);
 extern Command about_cmd;
 extern Command alert_cmd;
 extern Command circle_cmd;
+extern Command clear_cmd;
 extern Command day_cmd;
 extern Command distance_cmd;
 extern Command dolphin_cmd;
@@ -87,6 +89,7 @@ extern Command erase_cmd;
 extern Command exit_cmd;
 extern Command heart_cmd;
 extern Command help_cmd;
+extern Command get_cmd;
 extern Command icon128_cmd;
 extern Command icon16_cmd;
 extern Command icon24_cmd;
@@ -116,6 +119,7 @@ extern Command rotate_cmd;
 extern Command sandbox_cmd;
 extern Command scale_cmd;
 extern Command selectall_cmd;
+extern Command set_cmd;
 extern Command singlelinetext_cmd;
 extern Command snowflake_cmd;
 extern Command star_cmd;
@@ -220,6 +224,14 @@ enum COMMAND_ACTIONS
 
     ACTION_day,
     ACTION_night,
+
+    /* Prompt. */
+    ACTION_ALERT,
+    ACTION_GET,
+    ACTION_SET,
+
+    /* Selection management. */
+    ACTION_CLEAR,
 
     //TODO: ACTION_spellcheck,
     //TODO: ACTION_quickselect,

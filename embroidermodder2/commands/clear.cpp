@@ -10,32 +10,31 @@
 
 #include "../commands.h"
 
-/* ACTION_ALERT is a prompt-only command. */
 ScriptValue
-alert_generic(ScriptEnv *context)
+clear_generic(ScriptEnv* context)
 {
-    if (!argument_checks(context, "alert", "s")) {
+    if (!argument_checks(context, "clear_generic", "")) {
         return script_false;
     }
 
     _main->nativeInitCommand();
-    _main->nativeAlert(QSTR(0));
+    _main->nativeClearSelection();
     _main->nativeEndCommand();
     return script_null;
 }
 
-Command alert_cmd = {
-    .id = ACTION_ALERT,
-    .main = do_nothing,
-    .click = do_nothing,
-    .context = do_nothing,
-    .prompt = alert_generic,
-    .icon = "warning",
+Command clear_cmd = {
+    .id = ACTION_CLEAR,
+    .main = clear_generic,
+    .click = clear_generic,
+    .context = clear_generic,
+    .prompt = clear_generic,
+    .icon = "donothing",
     .menu_name = "None",
     .menu_position = 0,
     .toolbar_name = "None",
     .toolbar_position = 0,
-    .tooltip = "&Alert",
-    .statustip = "Creates a dialog to alert the user.",
-    .alias = "ALERT"
+    .tooltip = "&Do Nothing",
+    .statustip = "Does Nothing.",
+    .alias = "DONOTHING"
 };

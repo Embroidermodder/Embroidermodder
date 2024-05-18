@@ -89,13 +89,16 @@ Command end_symbol_cmd = {
 
 Command command_list[] = {
     about_cmd,
+    alert_cmd,
     circle_cmd,
+    clear_cmd,
     day_cmd,
     distance_cmd,
     dolphin_cmd,
     ellipse_cmd,
     erase_cmd,
     exit_cmd,
+    get_cmd,
     heart_cmd,
     help_cmd,
     icon128_cmd,
@@ -127,6 +130,7 @@ Command command_list[] = {
     sandbox_cmd,
     scale_cmd,
     selectall_cmd,
+    set_cmd,
     singlelinetext_cmd,
     snowflake_cmd,
     star_cmd,
@@ -181,7 +185,10 @@ translate(QString msg)
 ScriptEnv *
 create_script_env()
 {
-    return (ScriptEnv*)malloc(sizeof(ScriptEnv));
+    ScriptEnv *context = (ScriptEnv*)malloc(sizeof(ScriptEnv));
+    context->argumentCount = 0;
+    context->n_commands = 0;
+    return context;
 }
 
 void
@@ -218,11 +225,11 @@ script_real(qreal r)
 }
 
 ScriptValue
-script_string(QString s)
+script_string(const char *s)
 {
     ScriptValue value;
     value.type = SCRIPT_STRING;
-    strcpy(value.s, s.toStdString().c_str());
+    strcpy(value.s, s);
     return value;
 }
 
@@ -507,7 +514,7 @@ javaPlatformString(ScriptEnv* context)
     if (!argument_checks(context, "debug", "")) {
         return script_false;
     }
-    return script_string(_main->platformString());
+    return script_string(qPrintable(_main->platformString()));
 }
 
 ScriptValue javaMessageBox(ScriptEnv* context)
@@ -696,77 +703,6 @@ ScriptValue javaSetGridColor(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaTextFont(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-    return script_string(_main->nativeTextFont());
-}
-
-ScriptValue javaTextSize(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-    return script_real(_main->nativeTextSize());
-}
-
-ScriptValue javaTextAngle(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-    return script_real(_main->nativeTextAngle());
-}
-
-ScriptValue
-javaTextBold(ScriptEnv* context)
-{
-    if (!argument_checks(context, "textBold", "")) {
-        return script_false;
-    }
-    return script_bool(_main->nativeTextBold());
-}
-
-ScriptValue
-javaTextItalic(ScriptEnv* context)
-{
-    if (!argument_checks(context, "textItalic", "")) {
-        return script_false;
-    }
-    return script_bool(_main->nativeTextItalic());
-}
-
-ScriptValue
-javaTextUnderline(ScriptEnv* context)
-{
-    if (!argument_checks(context, "textUnderline", "")) {
-        return script_false;
-    }
-    return script_bool(_main->nativeTextUnderline());
-}
-
-ScriptValue javaTextStrikeOut(ScriptEnv* context)
-{
-    if (!argument_checks(context, "textStrikeOut", "")) {
-        return script_false;
-    }
-    return script_bool(_main->nativeTextStrikeOut());
-}
-
-
-ScriptValue javaSetTextFont(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "s")) {
-        return script_false;
-    }
-
-    _main->nativeSetTextFont(context->argument[0].s);
-    return script_null;
-}
-
-
 ScriptValue javaAllowRubber(ScriptEnv* context)
 {
     if (!argument_checks(context, "allowRubber", "")) {
@@ -854,6 +790,29 @@ ScriptValue javaSetRubberText(ScriptEnv* context)
     return script_null;
 }
 
+/* FIXME: detect types.
+ */
+ScriptValue
+command_prompt(const char *line)
+{
+    QRegExp split_char(" ");
+    QStringList line_list = QString(line).split(split_char);
+    if (_main->command_map.contains(line_list[0])) {
+        ScriptEnv* context = create_script_env();
+        int i = 0;
+        for (QString argument : line_list) {
+            if (i > 0) {
+                strcpy(context->argument[i-1].s, qPrintable(argument));
+                context->argumentCount++;
+            }
+        }
+        ScriptValue result = _main->command_map[line_list[0]].prompt(context);
+        free_script_env(context);
+        return result;
+    }
+    return script_false;
+}
+
 ScriptValue
 javaAddRubber(ScriptEnv* context)
 {
@@ -868,13 +827,22 @@ javaAddRubber(ScriptEnv* context)
         return script_false;
     }
 
-    qreal mx = _main->nativeMouseX();
-    qreal my = _main->nativeMouseY();
+    /* FIXME: ERROR CHECKING */
+    qreal mx = command_prompt("mousex").r;
+    qreal my = command_prompt("mousey").r;
 
-    if     (objType == "ARC")          {} //TODO: handle this type
-    else if (objType == "BLOCK")        {} //TODO: handle this type
-    else if (objType == "CIRCLE")       { _main->nativeAddCircle(mx, my, 0, false, OBJ_RUBBER_ON); }
-    else if (objType == "DIMALIGNED")   {} //TODO: handle this type
+    if (objType == "ARC") {
+        // TODO: handle this type
+    }
+    else if (objType == "BLOCK") {
+        // TODO: handle this type
+    }
+    else if (objType == "CIRCLE") {
+        _main->nativeAddCircle(mx, my, 0, false, OBJ_RUBBER_ON);
+    }
+    else if (objType == "DIMALIGNED") {
+        // TODO: handle this type
+    }
     else if (objType == "DIMANGULAR")   {} //TODO: handle this type
     else if (objType == "DIMARCLENGTH") {} //TODO: handle this type
     else if (objType == "DIMDIAMETER")  {} //TODO: handle this type
@@ -913,10 +881,12 @@ javaClearRubber(ScriptEnv* context)
 ScriptValue
 javaSpareRubber(ScriptEnv* context)
 {
-    if (context->argumentCount != 1)
+    if (context->argumentCount != 1) {
         return throwError("spareRubber() requires one argument");
-    if (context->argument[0].type != SCRIPT_STRING)
+    }
+    if (context->argument[0].type != SCRIPT_STRING) {
         return throwError("TYPE_ERROR, spareRubber(): first argument is not a string");
+    }
 
     QString objID = QSTR(0).toUpper();
 
@@ -1275,17 +1245,6 @@ javaSelectAll(ScriptEnv* context)
 ScriptValue
 javaAddToSelection(ScriptEnv* context)
 {
-    return script_null;
-}
-
-ScriptValue
-javaClearSelection(ScriptEnv* context)
-{
-    if (!argument_checks(context, "clearSelected", "")) {
-        return script_false;
-    }
-
-    _main->nativeClearSelection();
     return script_null;
 }
 

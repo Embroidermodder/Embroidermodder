@@ -69,13 +69,17 @@ SOURCES += \
     commands/about.cpp \
     commands/alert.cpp \
     commands/circle.cpp \
+    commands/clear.cpp \
     commands/day.cpp \
+    commands/disable.cpp \
     commands/distance.cpp \
     commands/dolphin.cpp \
     commands/donothing.cpp \
     commands/ellipse.cpp \
+    commands/enable.cpp \
     commands/erase.cpp \
     commands/exit.cpp \
+    commands/get.cpp \
     commands/heart.cpp \
     commands/help.cpp \
     commands/icon128.cpp \
@@ -87,8 +91,6 @@ SOURCES += \
     commands/line.cpp \
     commands/locatepoint.cpp \
     commands/mirrorselected.cpp \
-    commands/mousex.cpp \
-    commands/mousey.cpp \
     commands/move.cpp \
     commands/moveselected.cpp \
     commands/new.cpp \
@@ -120,13 +122,6 @@ SOURCES += \
     commands/snowflake.cpp \
     commands/star.cpp \
     commands/syswindows.cpp \
-    commands/textangle.cpp \
-    commands/textbold.cpp \
-    commands/textitalic.cpp \
-    commands/textoverline.cpp \
-    commands/textsize.cpp \
-    commands/textstrikeout.cpp \
-    commands/textunderline.cpp \
     commands/tipoftheday.cpp \
     commands/undo.cpp \
     commands/vulcanize.cpp \

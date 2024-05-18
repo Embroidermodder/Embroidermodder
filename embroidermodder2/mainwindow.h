@@ -608,12 +608,6 @@ public slots:
 
     void setTextFont(const QString& str);
     void setTextSize(qreal num);
-    void setTextAngle(qreal num);
-    void setTextBold(bool val);
-    void setTextItalic(bool val);
-    void setTextUnderline(bool val);
-    void setTextStrikeOut(bool val);
-    void setTextOverline(bool val);
 
     QString getCurrentLayer();
     QRgb    getCurrentColor();
@@ -703,24 +697,6 @@ public:
     void nativeSetCrossHairColor(quint8 r, quint8 g, quint8 b);
     void nativeSetGridColor(quint8 r, quint8 g, quint8 b);
 
-    QString nativeTextFont();
-    qreal nativeTextSize();
-    qreal nativeTextAngle();
-    bool nativeTextBold();
-    bool nativeTextItalic();
-    bool nativeTextUnderline();
-    bool nativeTextStrikeOut();
-    bool nativeTextOverline();
-
-    void nativeSetTextFont(const QString& str);
-    void nativeSetTextSize(qreal num);
-    void nativeSetTextAngle(qreal num);
-    void nativeSetTextBold(bool val);
-    void nativeSetTextItalic(bool val);
-    void nativeSetTextUnderline(bool val);
-    void nativeSetTextStrikeOut(bool val);
-    void nativeSetTextOverline(bool val);
-
     void nativePreviewOn(int clone, int mode, qreal x, qreal y, qreal data);
     void nativePreviewOff();
 
@@ -777,8 +753,6 @@ public:
 
     qreal nativeQSnapX();
     qreal nativeQSnapY();
-    qreal nativeMouseX();
-    qreal nativeMouseY();
 };
 
 #endif

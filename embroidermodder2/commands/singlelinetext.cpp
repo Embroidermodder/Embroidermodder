@@ -129,11 +129,11 @@ function click(x, y)
         else if(isNaN(global.textRotation))
         {
             global.textRotation = calculateAngle(global.textX, global.textY, x, y);
-            setTextAngle(global.textRotation);
+            setSettingsTextAngle(global.textRotation);
             appendPromptHistory();
             setPromptPrefix(qsTr("Enter text: "));
             global.mode = global.mode_RAPID;
-            enablePromptRapidFire();
+            command_prompt("enable rapidfire");
             clearRubber();
             addRubber("TEXTSINGLE");
             setRubberMode("TEXTSINGLE");
@@ -353,10 +353,10 @@ function prompt(str)
             else
             {
                 global.textRotation = Number(str);
-                setTextAngle(global.textRotation);
+                setSettingsTextAngle(global.textRotation);
                 setPromptPrefix(qsTr("Enter text: "));
                 global.mode = global.mode_RAPID;
-                enablePromptRapidFire();
+                command_prompt("enable rapidfire");
                 clearRubber();
                 addRubber("TEXTSINGLE");
                 setRubberMode("TEXTSINGLE");

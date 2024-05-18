@@ -320,23 +320,23 @@ MainWindow::createAction(const QString icon, const QString toolTip, const QStrin
 
     else if (icon == "textbold") {
         ACTION->setCheckable(true);
-        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextBold(bool)));
+        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setSettingsTextStyleBold(bool)));
     }
     else if (icon == "textitalic") {
         ACTION->setCheckable(true);
-        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextItalic(bool)));
+        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setSettingsTextStyleItalic(bool)));
     }
     else if (icon == "textunderline") {
         ACTION->setCheckable(true);
-        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextUnderline(bool)));
+        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setSettingsTextStyleUnderline(bool)));
     }
     else if (icon == "textstrikeout") {
         ACTION->setCheckable(true);
-        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextStrikeOut(bool)));
+        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setSettingsTextStyleStrikeOut(bool)));
     }
     else if (icon == "textoverline") {
         ACTION->setCheckable(true);
-        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextOverline(bool)));
+        connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setSettingsTextStyleOverline(bool)));
     }
 
     else if (icon == "zoomrealtime")

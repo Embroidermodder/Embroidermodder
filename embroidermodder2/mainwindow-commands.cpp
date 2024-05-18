@@ -831,36 +831,6 @@ void MainWindow::setTextSize(qreal num)
         textSizeSelector->setCurrentIndex(index);
 }
 
-void MainWindow::setTextAngle(qreal num)
-{
-    setSettingsTextAngle(num);
-}
-
-void MainWindow::setTextBold(bool val)
-{
-    setSettingsTextStyleBold(val);
-}
-
-void MainWindow::setTextItalic(bool val)
-{
-    setSettingsTextStyleItalic(val);
-}
-
-void MainWindow::setTextUnderline(bool val)
-{
-    setSettingsTextStyleUnderline(val);
-}
-
-void MainWindow::setTextStrikeOut(bool val)
-{
-    setSettingsTextStyleStrikeOut(val);
-}
-
-void MainWindow::setTextOverline(bool val)
-{
-    setSettingsTextStyleOverline(val);
-}
-
 QString MainWindow::getCurrentLayer()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
@@ -1235,86 +1205,6 @@ void MainWindow::nativeSetGridColor(quint8 r, quint8 g, quint8 b)
 {
     setSettingsGridColor(qRgb(r,g,b));
     updateAllViewGridColors(qRgb(r,g,b));
-}
-
-QString MainWindow::nativeTextFont()
-{
-    return textFont();
-}
-
-qreal MainWindow::nativeTextSize()
-{
-    return textSize();
-}
-
-qreal MainWindow::nativeTextAngle()
-{
-    return textAngle();
-}
-
-bool MainWindow::nativeTextBold()
-{
-    return textBold();
-}
-
-bool MainWindow::nativeTextItalic()
-{
-    return textItalic();
-}
-
-bool MainWindow::nativeTextUnderline()
-{
-    return textUnderline();
-}
-
-bool MainWindow::nativeTextStrikeOut()
-{
-    return textStrikeOut();
-}
-
-bool MainWindow::nativeTextOverline()
-{
-    return textOverline();
-}
-
-void MainWindow::nativeSetTextFont(const QString& str)
-{
-    setTextFont(str);
-}
-
-void MainWindow::nativeSetTextSize(qreal num)
-{
-    setTextSize(num);
-}
-
-void MainWindow::nativeSetTextAngle(qreal num)
-{
-    setTextAngle(num);
-}
-
-void MainWindow::nativeSetTextBold(bool val)
-{
-    setTextBold(val);
-}
-
-void MainWindow::nativeSetTextItalic(bool val)
-{
-    setTextItalic(val);
-}
-
-void MainWindow::nativeSetTextUnderline(bool val)
-{
-    setTextUnderline(val);
-}
-
-void MainWindow::nativeSetTextStrikeOut(bool val)
-{
-    setTextStrikeOut(val);
-}
-
-void MainWindow::nativeSetTextOverline(bool val)
-{
-    setTextOverline(val);
 }
 
 void MainWindow::nativePreviewOn(int clone, int mode, qreal x, qreal y, qreal data)
@@ -1796,21 +1686,5 @@ qreal MainWindow::nativeQSnapY()
 {
     QGraphicsScene* scene = activeScene();
     if(scene) return -scene->property(SCENE_QSNAP_POINT).toPointF().y();
-    return 0.0;
-}
-
-qreal MainWindow::nativeMouseX()
-{
-    QGraphicsScene* scene = activeScene();
-    if(scene) qDebug("mouseX: %.50f", scene->property(SCENE_MOUSE_POINT).toPointF().x());
-    if(scene) return scene->property(SCENE_MOUSE_POINT).toPointF().x();
-    return 0.0;
-}
-
-qreal MainWindow::nativeMouseY()
-{
-    QGraphicsScene* scene = activeScene();
-    if(scene) qDebug("mouseY: %.50f", -scene->property(SCENE_MOUSE_POINT).toPointF().y());
-    if(scene) return -scene->property(SCENE_MOUSE_POINT).toPointF().y();
     return 0.0;
 }
