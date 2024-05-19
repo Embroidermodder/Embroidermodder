@@ -58,22 +58,6 @@ panup_prompt(ScriptEnv * context)
     return script_null;
 }
 
-Command panup_cmd = {
-    .id = -1,
-    .main = panup_main,
-    .click = panup_click,
-    .context = panup_context,
-    .prompt = panup_prompt,
-    .icon = "about",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "Icon&24",
-    .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-    .alias = "ICON24"
-};
-
 #if 0
 //Command: PanUp
 

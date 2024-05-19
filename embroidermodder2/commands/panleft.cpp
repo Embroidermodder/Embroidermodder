@@ -57,19 +57,3 @@ panleft_prompt(ScriptEnv * context)
     _main->nativeEndCommand();
     return script_null;
 }
-
-Command panleft_cmd = {
-    .id = -1,
-    .main = panleft_main,
-    .click = panleft_click,
-    .context = panleft_context,
-    .prompt = panleft_prompt,
-    .icon = "panleft",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&Pan Left",
-    .statustip = "Moves the view to the left:  PANLEFT",
-    .alias = "PANLEFT"
-};

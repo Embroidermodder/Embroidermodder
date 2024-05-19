@@ -48,22 +48,6 @@ locatepoint_prompt(ScriptEnv * context)
     return script_null;
 }
 
-Command locatepoint_cmd = {
-    .id = -1,
-    .main = locatepoint_main,
-    .click = locatepoint_click,
-    .context = locatepoint_context,
-    .prompt = locatepoint_prompt,
-    .icon = "about",
-    .menu_name = "Tools",
-    .menu_position = 11,
-    .toolbar_name = "Inquiry",
-    .toolbar_position = 0,
-    .tooltip = "&Locate Point",
-    .statustip = "Displays the coordinate values of a location:  ID",
-    .alias = "ID, LOCATEPOINT"
-};
-
 #if 0
 //Command: Locate Point
 

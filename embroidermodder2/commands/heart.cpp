@@ -63,22 +63,6 @@ heart_prompt(ScriptEnv * /* context */)
     return script_null;
 }
 
-Command heart_cmd = {
-    .id = -1,
-    .main = heart_main,
-    .click = heart_click,
-    .context = heart_context,
-    .prompt = heart_prompt,
-    .icon = "heart",
-    .menu_name = "Draw",
-    .menu_position = 100,
-    .toolbar_name = "Draw",
-    .toolbar_position = 100,
-    .tooltip = "&Heart",
-    .statustip = "Creates a heart:  HEART",
-    .alias = "HEART"
-};
-
 #if 0
 //Command: Heart
 

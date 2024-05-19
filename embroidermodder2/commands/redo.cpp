@@ -69,19 +69,3 @@ redo_prompt(ScriptEnv * context)
     _main->nativeEndCommand();
     return script_null;
 }
-
-Command redo_cmd = {
-    .id = -1,
-    .main = redo_main,
-    .click = redo_click,
-    .context = redo_context,
-    .prompt = redo_prompt,
-    .icon = "redo",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&Redo",
-    .statustip = "Reverses the effects of the previous undo action:  REDO",
-    .alias = "REDO"
-};

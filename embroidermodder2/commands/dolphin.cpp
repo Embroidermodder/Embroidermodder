@@ -58,22 +58,6 @@ dolphin_prompt(ScriptEnv *context)
     return script_null;
 }
 
-Command dolphin_cmd = {
-    .id = -1,
-    .main = dolphin_main,
-    .click = dolphin_click,
-    .context = dolphin_context,
-    .prompt = dolphin_prompt,
-    .icon = "dolphin",
-    .menu_name = "Draw",
-    .menu_position = 100,
-    .toolbar_name = "Draw",
-    .toolbar_position = 100,
-    .tooltip = "&Dolphin",
-    .statustip = "Creates a dolphin:  DOLPHIN",
-    .alias = "DOLPHIN"
-};
-
 #if 0
 //Command: Dolphin
 

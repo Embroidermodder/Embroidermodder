@@ -14,11 +14,11 @@
  *       Use it to reset variables so they are ready to go.
  */
 ScriptValue
-about_main(ScriptEnv *context)
+print_main(ScriptEnv *context)
 {
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->about();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -28,9 +28,9 @@ about_main(ScriptEnv *context)
  *       Right clicks bring up the context menu.
  */
 ScriptValue
-about_click(ScriptEnv *context)
+print_click(ScriptEnv *context)
 {
-    _main->about();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -38,9 +38,9 @@ about_click(ScriptEnv *context)
 /* NOTE: context() is run when a context menu entry is chosen.
  */
 ScriptValue
-about_context(ScriptEnv *context)
+print_context(ScriptEnv *context)
 {
-    _main->about();
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -51,24 +51,9 @@ about_context(ScriptEnv *context)
  *       Any text is in the command prompt is sent as an uppercase string.
  */
 ScriptValue
-about_prompt(ScriptEnv *context)
+print_prompt(ScriptEnv *context)
 {
-    _main->about();
+
     _main->nativeEndCommand();
     return script_null;
 }
-
-Command about_cmd = {
-    .main = about_main,
-    .click = about_click,
-    .context = about_context,
-    .prompt = about_prompt,
-    .icon = "about",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&About",
-    .statustip = "Displays information about this product:  ABOUT",
-    .alias = "ABOUT"
-};

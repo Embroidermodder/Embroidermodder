@@ -29,20 +29,3 @@ help_main(ScriptEnv *context)
     _main->nativeClearSelection();
     return help_generic(context);
 }
-
-Command help_cmd = {
-    .id = -1,
-    .main = help_main,
-    .click = help_generic,
-    .context = help_generic,
-    .prompt = help_generic,
-    .icon = "help",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&Help",
-    .statustip = "Displays the help file:  HELP",
-    .alias = "?, HELP"
-};
-

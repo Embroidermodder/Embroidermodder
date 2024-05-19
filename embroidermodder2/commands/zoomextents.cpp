@@ -31,19 +31,3 @@ zoomextents_main(ScriptEnv *context)
     _main->nativeClearSelection();
     return zoomextents_generic(context);
 }
-
-Command zoomextents_cmd = {
-    .id = -1,
-    .main = zoomextents_main,
-    .click = zoomextents_generic,
-    .context = zoomextents_generic,
-    .prompt = zoomextents_generic,
-    .icon = "zoomextents",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "Zoom &Extents",
-    .statustip = "Zooms to display the drawing extents:  ZOOMEXTENTS",
-    .alias = "ZOOMEXTENTS"
-};

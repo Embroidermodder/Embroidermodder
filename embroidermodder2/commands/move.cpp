@@ -48,22 +48,6 @@ move_prompt(ScriptEnv * context)
     return script_null;
 }
 
-Command move_cmd = {
-    .id = -1,
-    .main = move_main,
-    .click = move_click,
-    .context = move_context,
-    .prompt = move_prompt,
-    .icon = "move",
-    .menu_name = "Modify",
-    .menu_position = 10,
-    .toolbar_name = "Modify",
-    .toolbar_position = 5,
-    .tooltip = "&Move",
-    .statustip = "Displaces objects a specified distance in a specified direction:  MOVE",
-    .alias = "M, MOVE"
-};
-
 #if 0
 //Command: Move
 

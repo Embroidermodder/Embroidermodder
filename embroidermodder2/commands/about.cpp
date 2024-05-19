@@ -77,19 +77,3 @@ about_general(ScriptEnv *context)
     QApplication::restoreOverrideCursor();
     _main->nativeEndCommand();
 }
-
-Command about_cmd = {
-    .id = ACTION_about,
-    .main = about_general,
-    .click = about_general,
-    .context = about_general,
-    .prompt = about_general,
-    .icon = "about",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&About Embroidermodder 2",
-    .statustip = "Displays information about this product. Command: ABOUT.",
-    .alias = "ABOUT"
-};

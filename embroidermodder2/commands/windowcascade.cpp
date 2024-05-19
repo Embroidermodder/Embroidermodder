@@ -57,19 +57,3 @@ windowcascade_prompt(ScriptEnv * context)
     _main->nativeEndCommand();
     return script_null;
 }
-
-Command windowcascade_cmd = {
-    .id = -1,
-    .main = windowcascade_main,
-    .click = windowcascade_click,
-    .context = windowcascade_context,
-    .prompt = windowcascade_prompt,
-    .icon = "windowcascade",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&Cascade",
-    .statustip = "Cascade the windows:  CASCADE",
-    .alias = "CASCADE, WINDOWCASCADE"
-};

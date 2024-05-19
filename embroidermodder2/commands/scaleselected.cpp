@@ -51,19 +51,3 @@ scaleselected_prompt(ScriptEnv *context)
     _main->nativeEndCommand();
     return script_null;
 }
-
-Command scaleselected_cmd = {
-    .id = -1,
-    .main = scaleselected_main,
-    .click = scaleselected_click,
-    .context = scaleselected_context,
-    .prompt = scaleselected_prompt,
-    .icon = "donothing",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&Do Nothing",
-    .statustip = "Does Nothing.",
-    .alias = "DONOTHING"
-};

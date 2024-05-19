@@ -37,19 +37,3 @@ erase_main(ScriptEnv *context)
     _main->nativeInitCommand();
     return erase_generic(context);
 }
-
-Command erase_cmd = {
-    .id = -1,
-    .main = erase_main,
-    .click = erase_generic,
-    .context = erase_generic,
-    .prompt = erase_generic,
-    .icon = "erase",
-    .menu_name = "Modify",
-    .menu_position = 5,
-    .toolbar_name = "Modify",
-    .toolbar_position = 0,
-    .tooltip = "D&elete",
-    .statustip = "Removes objects from a drawing:  DELETE",
-    .alias = "E, ERASE, DEL, DELETE"
-};

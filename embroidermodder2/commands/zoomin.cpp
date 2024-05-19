@@ -29,19 +29,3 @@ zoomin_main(ScriptEnv *context)
     _main->nativeClearSelection();
     return zoomin_generic(context);
 }
-
-Command zoomin_cmd = {
-    .id = -1,
-    .main = zoomin_main,
-    .click = zoomin_generic,
-    .context = zoomin_generic,
-    .prompt = zoomin_generic,
-    .icon = "zoomin",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "Zoom &In",
-    .statustip = "Zooms to increase the apparent size of objects:  ZOOMIN",
-    .alias = "ZOOMIN"
-};

@@ -57,19 +57,3 @@ undo_prompt(ScriptEnv * context)
     _main->nativeEndCommand();
     return script_null;
 }
-
-Command undo_cmd = {
-    .id = -1,
-    .main = undo_main,
-    .click = undo_click,
-    .context = undo_context,
-    .prompt = undo_prompt,
-    .icon = "undo",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&Undo",
-    .statustip = "Reverses the most recent action:  UNDO",
-    .alias = "U, UNDO"
-};

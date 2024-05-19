@@ -58,22 +58,6 @@ rectangle_prompt(ScriptEnv * context)
     return script_null;
 }
 
-Command rectangle_cmd = {
-    .id = -1,
-    .main = rectangle_main,
-    .click = rectangle_click,
-    .context = rectangle_context,
-    .prompt = rectangle_prompt,
-    .icon = "about",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "Icon&24",
-    .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-    .alias = "ICON24"
-};
-
 #if 0
 //Command: Rectangle
 

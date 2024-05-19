@@ -65,35 +65,24 @@ FORMS = \
     about.ui
 
 SOURCES += \
+    command_data.cpp \
     commands.cpp \
     commands/about.cpp \
-    commands/alert.cpp \
     commands/circle.cpp \
-    commands/clear.cpp \
-    commands/day.cpp \
     commands/disable.cpp \
     commands/distance.cpp \
     commands/dolphin.cpp \
-    commands/donothing.cpp \
     commands/ellipse.cpp \
     commands/enable.cpp \
     commands/erase.cpp \
     commands/exit.cpp \
-    commands/get.cpp \
     commands/heart.cpp \
     commands/help.cpp \
-    commands/icon128.cpp \
-    commands/icon16.cpp \
-    commands/icon24.cpp \
-    commands/icon32.cpp \
-    commands/icon48.cpp \
-    commands/icon64.cpp \
     commands/line.cpp \
     commands/locatepoint.cpp \
     commands/mirrorselected.cpp \
     commands/move.cpp \
     commands/moveselected.cpp \
-    commands/new.cpp \
     commands/night.cpp \
     commands/open.cpp \
     commands/pandown.cpp \
@@ -107,6 +96,7 @@ SOURCES += \
     commands/polyline.cpp \
     commands/previewoff.cpp \
     commands/previewon.cpp \
+    commands/print.cpp \
     commands/qsnapx.cpp \
     commands/qsnapy.cpp \
     commands/rectangle.cpp \
@@ -123,6 +113,7 @@ SOURCES += \
     commands/star.cpp \
     commands/syswindows.cpp \
     commands/tipoftheday.cpp \
+    commands/todo.cpp \
     commands/undo.cpp \
     commands/vulcanize.cpp \
     commands/windowclose.cpp \
@@ -176,6 +167,7 @@ SOURCES += \
     ../extern/libembroidery/embroidery.c
 
 HEADERS += \
+    command_data.h \
     commands.h \
     mainwindow.h \
     mdiarea.h \

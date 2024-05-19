@@ -35,6 +35,33 @@ QString index_th_name[] = {
     "seventh"
 };
 
+ScriptValue script_null = {
+    .r = 0.0f,
+    .i = 0,
+    .b = false,
+    .s = "",
+    .label = "NULL",
+    .type = SCRIPT_NULL
+};
+
+ScriptValue script_true = {
+    .r = 0.0f,
+    .i = 1,
+    .b = true,
+    .s = "",
+    .label = "true",
+    .type = SCRIPT_BOOL
+};
+
+ScriptValue script_false = {
+    .r = 0.0f,
+    .i = 0,
+    .b = false,
+    .s = "",
+    .label = "false",
+    .type = SCRIPT_BOOL
+};
+
 int
 argument_checks(ScriptEnv *context, QString function, const char *args)
 {
@@ -82,99 +109,6 @@ argument_checks(ScriptEnv *context, QString function, const char *args)
     }
     return 1;
 }
-
-Command end_symbol_cmd = {
-    .menu_position = -1
-};
-
-Command command_list[] = {
-    about_cmd,
-    alert_cmd,
-    circle_cmd,
-    clear_cmd,
-    day_cmd,
-    distance_cmd,
-    dolphin_cmd,
-    ellipse_cmd,
-    erase_cmd,
-    exit_cmd,
-    get_cmd,
-    heart_cmd,
-    help_cmd,
-    icon128_cmd,
-    icon16_cmd,
-    icon24_cmd,
-    icon32_cmd,
-    icon48_cmd,
-    icon64_cmd,
-    line_cmd,
-    locatepoint_cmd,
-    move_cmd,
-    new_cmd,
-    night_cmd,
-    open_cmd,
-    pandown_cmd,
-    panleft_cmd,
-    panright_cmd,
-    panup_cmd,
-    path_cmd,
-    platform_cmd,
-    point_cmd,
-    polygon_cmd,
-    polyline_cmd,
-    quickleader_cmd,
-    rectangle_cmd,
-    redo_cmd,
-    rgb_cmd,
-    rotate_cmd,
-    sandbox_cmd,
-    scale_cmd,
-    selectall_cmd,
-    set_cmd,
-    singlelinetext_cmd,
-    snowflake_cmd,
-    star_cmd,
-    syswindows_cmd,
-    tipoftheday_cmd,
-    undo_cmd,
-    windowcascade_cmd,
-    windowclose_cmd,
-    windowcloseall_cmd,
-    windownext_cmd,
-    windowprevious_cmd,
-    windowtile_cmd,
-    zoomextents_cmd,
-    zoomin_cmd,
-    zoomout_cmd,
-    end_symbol_cmd
-};
-
-ScriptValue script_null = {
-    .r = 0.0f,
-    .i = 0,
-    .b = false,
-    .s = "",
-    .label = "NULL",
-    .type = SCRIPT_NULL
-};
-
-ScriptValue script_true = {
-    .r = 0.0f,
-    .i = 1,
-    .b = true,
-    .s = "",
-    .label = "true",
-    .type = SCRIPT_BOOL
-};
-
-ScriptValue script_false = {
-    .r = 0.0f,
-    .i = 0,
-    .b = false,
-    .s = "",
-    .label = "false",
-    .type = SCRIPT_BOOL
-};
 
 QString
 translate(QString msg)
@@ -271,6 +205,47 @@ add_int_argument(ScriptEnv *context, int i)
     context->argumentCount++;
 }
 
+/* Simple Context-Insensitive Commands
+ * -----------------------------------------------------------
+ */
+
+/* ACTION_ALERT is a prompt-only command. */
+ScriptValue
+alert_generic(ScriptEnv *context)
+{
+    if (!argument_checks(context, "alert", "s")) {
+        return script_false;
+    }
+
+    _main->nativeInitCommand();
+    _main->nativeAlert(QSTR(0));
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+ScriptValue
+clear_generic(ScriptEnv* context)
+{
+    if (!argument_checks(context, "clear_generic", "")) {
+        return script_false;
+    }
+
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+ScriptValue
+day_generic(ScriptEnv *context)
+{
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->nativeDayVision();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
 ScriptValue
 do_nothing(ScriptEnv *context)
 {
@@ -278,6 +253,157 @@ do_nothing(ScriptEnv *context)
         return script_false;
     }
     return script_true;
+}
+
+/* GET is a prompt-only Command. */
+ScriptValue
+get_prompt(ScriptEnv* context)
+{
+    if (!argument_checks(context, "get_prompt", "s")) {
+        return script_false;
+    }
+
+    QString value = QSTR(0);
+
+    _main->nativeInitCommand();
+
+    if (value == "MOUSEX") {
+        QGraphicsScene* scene = _main->activeScene();
+        if (!scene) {
+            _main->nativeEndCommand();
+            return script_false;
+        }
+        ScriptValue r = script_real(scene->property(SCENE_MOUSE_POINT).toPointF().x());
+        //_main->qDebug("mouseY: %.50f", r.r);
+        _main->nativeEndCommand();
+        return r;
+    }
+    else if (value == "MOUSEY") {
+        QGraphicsScene* scene = _main->activeScene();
+        if (!scene) {
+            _main->nativeEndCommand();
+            return script_false;
+        }
+        ScriptValue r = script_real(-scene->property(SCENE_MOUSE_POINT).toPointF().y());
+        //_main->qDebug("mouseY: %.50f", r.r);
+        _main->nativeEndCommand();
+        return r;
+    }
+    else if (value == "TEXTANGLE") {
+        return script_real(_main->textAngle());
+    }
+    else if (value == "TEXTBOLD") {
+        return script_bool(_main->textBold());
+    }
+    else if (value == "TEXTITALIC") {
+        return script_bool(_main->textItalic());
+    }
+    else if (value == "TEXTFONT") {
+        return script_string(qPrintable(_main->textFont()));
+    }
+    else if (value == "TEXTOVERLINE") {
+        return script_real(_main->textOverline());
+    }
+    else if (value == "TEXTSIZE") {
+        return script_real(_main->textSize());
+    }
+    else if (value == "TEXTSTRIKEOUT") {
+        return script_real(_main->textStrikeOut());
+    }
+    else if (value == "TEXTUNDERLINE") {
+        return script_bool(_main->textUnderline());
+    }
+
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+ScriptValue
+icon128_generic(ScriptEnv *context)
+{
+    if (!argument_checks(context, "icon128_generic", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->icon128();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+ScriptValue
+icon16_generic(ScriptEnv * context)
+{
+    if (!argument_checks(context, "icon16_generic", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->icon16();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+ScriptValue
+icon24_generic(ScriptEnv * context)
+{
+    if (!argument_checks(context, "icon24_generic", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->icon24();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+ScriptValue
+icon32_generic(ScriptEnv * context)
+{
+    if (!argument_checks(context, "icon32_generic", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->icon32();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+ScriptValue
+icon48_generic(ScriptEnv * context)
+{
+    if (!argument_checks(context, "icon48_generic", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->icon48();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+ScriptValue
+icon64_generic(ScriptEnv * context)
+{
+    if (!argument_checks(context, "icon64_generic", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->icon64();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+ScriptValue
+new_generic(ScriptEnv * context)
+{
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->nativeNewFile();
+    _main->nativeEndCommand();
+    return script_null;
 }
 
 /* FIXME */
@@ -292,7 +418,8 @@ stub_implement(const char *function)
  * -----------------------------------------------------------
  */
 
-ScriptValue javaTodo(ScriptEnv* context)
+ScriptValue
+javaTodo(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "ss")) {
         return script_false;
@@ -303,16 +430,8 @@ ScriptValue javaTodo(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaAlert(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "s")) {
-        return script_false;
-    }
-    _main->nativeAlert(QSTR(0));
-    return script_null;
-}
-
-ScriptValue javaBlinkPrompt(ScriptEnv* context)
+ScriptValue
+javaBlinkPrompt(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -322,7 +441,8 @@ ScriptValue javaBlinkPrompt(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaSetPromptPrefix(ScriptEnv* context)
+ScriptValue
+javaSetPromptPrefix(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "s")) {
         return script_false;
@@ -348,7 +468,8 @@ javaAppendPromptHistory(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaEnablePromptRapidFire(ScriptEnv* context)
+ScriptValue
+javaEnablePromptRapidFire(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -358,7 +479,8 @@ ScriptValue javaEnablePromptRapidFire(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaDisablePromptRapidFire(ScriptEnv* context)
+ScriptValue
+javaDisablePromptRapidFire(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -368,7 +490,8 @@ ScriptValue javaDisablePromptRapidFire(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaEnableMoveRapidFire(ScriptEnv* context)
+ScriptValue
+javaEnableMoveRapidFire(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -378,7 +501,8 @@ ScriptValue javaEnableMoveRapidFire(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaDisableMoveRapidFire(ScriptEnv* context)
+ScriptValue
+javaDisableMoveRapidFire(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -388,7 +512,8 @@ ScriptValue javaDisableMoveRapidFire(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaInitCommand(ScriptEnv* context)
+ScriptValue
+javaInitCommand(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -398,7 +523,8 @@ ScriptValue javaInitCommand(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaEndCommand(ScriptEnv* context)
+ScriptValue
+javaEndCommand(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -408,7 +534,8 @@ ScriptValue javaEndCommand(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaNewFile(ScriptEnv* context)
+ScriptValue
+javaNewFile(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -418,7 +545,8 @@ ScriptValue javaNewFile(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaOpenFile(ScriptEnv* context)
+ScriptValue
+javaOpenFile(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -428,7 +556,8 @@ ScriptValue javaOpenFile(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaExit(ScriptEnv* context)
+ScriptValue
+javaExit(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -438,7 +567,8 @@ ScriptValue javaExit(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaHelp(ScriptEnv* context)
+ScriptValue
+javaHelp(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -448,7 +578,8 @@ ScriptValue javaHelp(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaTipOfTheDay(ScriptEnv* context)
+ScriptValue
+javaTipOfTheDay(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -517,7 +648,8 @@ javaPlatformString(ScriptEnv* context)
     return script_string(qPrintable(_main->platformString()));
 }
 
-ScriptValue javaMessageBox(ScriptEnv* context)
+ScriptValue
+javaMessageBox(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "sss")) {
         return script_false;
@@ -536,7 +668,8 @@ ScriptValue javaMessageBox(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaIsInt(ScriptEnv* context)
+ScriptValue
+javaIsInt(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "i")) {
         return script_false;
@@ -544,7 +677,8 @@ ScriptValue javaIsInt(ScriptEnv* context)
     return script_true;
 }
 
-ScriptValue javaPanLeft(ScriptEnv* context)
+ScriptValue
+javaPanLeft(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -554,7 +688,8 @@ ScriptValue javaPanLeft(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaPanRight(ScriptEnv* context)
+ScriptValue
+javaPanRight(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -563,7 +698,8 @@ ScriptValue javaPanRight(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaPanUp(ScriptEnv* context)
+ScriptValue
+javaPanUp(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -572,7 +708,8 @@ ScriptValue javaPanUp(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaPanDown(ScriptEnv* context)
+ScriptValue
+javaPanDown(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -581,7 +718,8 @@ ScriptValue javaPanDown(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaZoomIn(ScriptEnv* context)
+ScriptValue
+javaZoomIn(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -590,7 +728,8 @@ ScriptValue javaZoomIn(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaZoomOut(ScriptEnv* context)
+ScriptValue
+javaZoomOut(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -599,7 +738,8 @@ ScriptValue javaZoomOut(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaZoomExtents(ScriptEnv* context)
+ScriptValue
+javaZoomExtents(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -608,7 +748,8 @@ ScriptValue javaZoomExtents(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaPrintArea(ScriptEnv* context)
+ScriptValue
+javaPrintArea(ScriptEnv* context)
 {
     if (!argument_checks(context, "printArea", "rrrr")) {
         return script_false;
@@ -617,7 +758,8 @@ ScriptValue javaPrintArea(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaDayVision(ScriptEnv* context)
+ScriptValue
+javaDayVision(ScriptEnv* context)
 {
     if (!argument_checks(context, "day", "")) {
         return script_false;
@@ -626,7 +768,8 @@ ScriptValue javaDayVision(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaNightVision(ScriptEnv* context)
+ScriptValue
+javaNightVision(ScriptEnv* context)
 {
     if (!argument_checks(context, "night", "")) {
         return script_false;
@@ -635,7 +778,8 @@ ScriptValue javaNightVision(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaSetBackgroundColor(ScriptEnv* context)
+ScriptValue
+javaSetBackgroundColor(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "rrr")) {
         return script_false;
@@ -657,7 +801,8 @@ ScriptValue javaSetBackgroundColor(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaSetCrossHairColor(ScriptEnv* context)
+ScriptValue
+javaSetCrossHairColor(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "rrr")) {
         return script_false;
@@ -680,7 +825,8 @@ ScriptValue javaSetCrossHairColor(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaSetGridColor(ScriptEnv* context)
+ScriptValue
+javaSetGridColor(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "rrr")) {
         return script_false;
@@ -703,7 +849,8 @@ ScriptValue javaSetGridColor(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaAllowRubber(ScriptEnv* context)
+ScriptValue
+javaAllowRubber(ScriptEnv* context)
 {
     if (!argument_checks(context, "allowRubber", "")) {
         return script_false;
@@ -712,7 +859,8 @@ ScriptValue javaAllowRubber(ScriptEnv* context)
     return script_bool(_main->nativeAllowRubber());
 }
 
-ScriptValue javaSetRubberMode(ScriptEnv* context)
+ScriptValue
+javaSetRubberMode(ScriptEnv* context)
 {
     if (!argument_checks(context, "allowRubber", "s")) {
         return script_false;
@@ -763,7 +911,8 @@ ScriptValue javaSetRubberMode(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaSetRubberPoint(ScriptEnv* context)
+ScriptValue
+javaSetRubberPoint(ScriptEnv* context)
 {
     if (!argument_checks(context, "SetRubberPoint", "srr")) {
         return script_false;
@@ -777,7 +926,8 @@ ScriptValue javaSetRubberPoint(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaSetRubberText(ScriptEnv* context)
+ScriptValue
+javaSetRubberText(ScriptEnv* context)
 {
     if (!argument_checks(context, "SetRubberPoint", "ss")) {
         return script_false;
@@ -965,7 +1115,8 @@ javaAddTriangle(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaAddRectangle(ScriptEnv* context)
+ScriptValue
+javaAddRectangle(ScriptEnv* context)
 {
     if (!argument_checks(context, "mouseX", "rrrrrb")) {
         return script_false;
@@ -1014,7 +1165,8 @@ javaAddSlot(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaAddEllipse(ScriptEnv* context)
+ScriptValue
+javaAddEllipse(ScriptEnv* context)
 {
     if (!argument_checks(context, "mouseX", "rrrrrb")) {
         return script_false;
@@ -1023,7 +1175,8 @@ ScriptValue javaAddEllipse(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaAddPoint(ScriptEnv* context)
+ScriptValue
+javaAddPoint(ScriptEnv* context)
 {
     if (!argument_checks(context, "mouseX", "rr")) {
         return script_false;
@@ -1032,14 +1185,16 @@ ScriptValue javaAddPoint(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaAddRegularPolygon(ScriptEnv* context)
+ScriptValue
+javaAddRegularPolygon(ScriptEnv* context)
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addRegularPolygon command");
     return script_null;
 }
 
-ScriptValue javaAddPolygon(ScriptEnv* context)
+ScriptValue
+javaAddPolygon(ScriptEnv* context)
 {
     #if 0
     if (context->argumentCount != 1)   return throwError("addPolygon() requires one argument");
@@ -1089,7 +1244,8 @@ ScriptValue javaAddPolygon(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue javaAddPolyline(ScriptEnv* context)
+ScriptValue
+javaAddPolyline(ScriptEnv* context)
 {
     #if 0
     if (context->argumentCount != 1)   return throwError("addPolyline() requires one argument");

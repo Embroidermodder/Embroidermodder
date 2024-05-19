@@ -57,19 +57,3 @@ night_prompt(ScriptEnv * context)
     _main->nativeEndCommand();
     return script_null;
 }
-
-Command night_cmd = {
-    .id = -1,
-    .main = night_main,
-    .click = night_click,
-    .context = night_context,
-    .prompt = night_prompt,
-    .icon = "night",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&Night",
-    .statustip = "Updates the current view using night vision settings:  NIGHT",
-    .alias = "NIGHT"
-};

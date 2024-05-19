@@ -57,19 +57,3 @@ open_prompt(ScriptEnv * context)
     _main->nativeEndCommand();
     return script_null;
 }
-
-Command open_cmd = {
-    .id = -1,
-    .main = open_main,
-    .click = open_click,
-    .context = open_context,
-    .prompt = open_prompt,
-    .icon = "open",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&Open",
-    .statustip = "Open an existing file. Command: OPEN.",
-    .alias = "OPEN"
-};

@@ -48,22 +48,6 @@ line_prompt(ScriptEnv * context)
     return script_null;
 }
 
-Command line_cmd = {
-    .id = -1,
-    .main = line_main,
-    .click = line_click,
-    .context = line_context,
-    .prompt = line_prompt,
-    .icon = "line",
-    .menu_name = "Draw",
-    .menu_position = 0,
-    .toolbar_name = "Draw",
-    .toolbar_position = 0,
-    .tooltip = "&Line",
-    .statustip = "Creates straight line segments:  LINE",
-    .alias = "L, LINE"
-};
-
 #if 0
 //Command: Line
 

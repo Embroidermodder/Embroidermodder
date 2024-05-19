@@ -32,19 +32,3 @@ windowtile_main(ScriptEnv *context)
     _main->nativeClearSelection();
     return windowtile_generic(context);
 }
-
-Command windowtile_cmd = {
-    .id = -1,
-    .main = windowtile_main,
-    .click = windowtile_generic,
-    .context = windowtile_generic,
-    .prompt = windowtile_generic,
-    .icon = "windowtile",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&Tile",
-    .statustip = "Tile the windows:  TILE",
-    .alias = "TILE, WINDOWTILE"
-};

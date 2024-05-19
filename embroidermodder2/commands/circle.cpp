@@ -58,22 +58,6 @@ circle_prompt(ScriptEnv *context)
     return script_null;
 }
 
-Command circle_cmd = {
-    .id = -1,
-    .main = circle_main,
-    .click = circle_click,
-    .context = circle_context,
-    .prompt = circle_prompt,
-    .icon = "circle",
-    .menu_name = "Draw",
-    .menu_position = 8,
-    .toolbar_name = "Draw",
-    .toolbar_position = 8,
-    .tooltip = "&Circle",
-    .statustip = "Creates a circle:  CIRCLE",
-    .alias = "C, CIRCLE"
-};
-
 #if 0
 //Command: Circle
 

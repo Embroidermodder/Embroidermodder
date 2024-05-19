@@ -48,22 +48,6 @@ singlelinetext_prompt(ScriptEnv * /* context */)
     return script_null;
 }
 
-Command singlelinetext_cmd = {
-    .id = -1,
-    .main = singlelinetext_main,
-    .click = singlelinetext_click,
-    .context = singlelinetext_context,
-    .prompt = singlelinetext_prompt,
-    .icon = "about",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "Icon&24",
-    .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-    .alias = "ICON24"
-};
-
 #if 0
 //Command: Single Line Text
 

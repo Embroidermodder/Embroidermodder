@@ -51,19 +51,3 @@ save_prompt(ScriptEnv *context)
     _main->nativeEndCommand();
     return script_null;
 }
-
-Command save_cmd = {
-    .id = -1,
-    .main = save_main,
-    .click = save_click,
-    .context = save_context,
-    .prompt = save_prompt,
-    .icon = "donothing",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&Do Nothing",
-    .statustip = "Does Nothing.",
-    .alias = "DONOTHING"
-};

@@ -29,19 +29,3 @@ pandown_main(ScriptEnv * context)
     _main->nativeClearSelection();
     return pandown_generic(context);
 }
-
-Command pandown_cmd = {
-    .id = -1,
-    .main = pandown_main,
-    .click = pandown_generic,
-    .context = pandown_generic,
-    .prompt = pandown_generic,
-    .icon = "pandown",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&Pan Down",
-    .statustip = "Moves the view down:  PANDOWN",
-    .alias = "PANDOWN"
-};

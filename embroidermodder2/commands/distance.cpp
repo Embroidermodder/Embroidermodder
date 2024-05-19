@@ -58,22 +58,6 @@ distance_prompt(ScriptEnv *context)
     return script_null;
 }
 
-Command distance_cmd = {
-    .id = -1,
-    .main = distance_main,
-    .click = distance_click,
-    .context = distance_context,
-    .prompt = distance_prompt,
-    .icon = "distance",
-    .menu_name = "Tools",
-    .menu_position = 7,
-    .toolbar_name = "Inquiry",
-    .toolbar_position = 0,
-    .tooltip = "&Distance",
-    .statustip = "Measures the distance and angle between two points:  DIST",
-    .alias = "DI, DIST, DISTANCE"
-};
-
 #if 0
 //Command: Distance
 

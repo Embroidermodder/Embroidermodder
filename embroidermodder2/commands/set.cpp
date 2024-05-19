@@ -76,19 +76,3 @@ set_prompt(ScriptEnv* context)
     _main->nativeEndCommand();
     return script_null;
 }
-
-Command set_cmd = {
-    .id = -1,
-    .main = do_nothing,
-    .click = do_nothing,
-    .context = do_nothing,
-    .prompt = set_prompt,
-    .icon = "set",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&Set",
-    .statustip = "Assign a value to one of the pre-defined global variables.",
-    .alias = "SET"
-};

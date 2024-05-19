@@ -61,19 +61,3 @@ vulcanize_prompt(ScriptEnv * context)
     _main->nativeEndCommand();
     return script_null;
 }
-
-Command vulcanize_cmd = {
-    .id = -1,
-    .main = vulcanize_main,
-    .click = vulcanize_click,
-    .context = vulcanize_context,
-    .prompt = vulcanize_prompt,
-    .icon = "undo",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&Undo",
-    .statustip = "Reverses the most recent action:  UNDO",
-    .alias = "U, UNDO"
-};

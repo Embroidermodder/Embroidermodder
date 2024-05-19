@@ -58,22 +58,6 @@ ellipse_prompt(ScriptEnv* /* context */)
     return script_null;
 }
 
-Command ellipse_cmd = {
-    .id = -1,
-    .main = ellipse_main,
-    .click = ellipse_click,
-    .context = ellipse_context,
-    .prompt = ellipse_prompt,
-    .icon = "ellipse",
-    .menu_name = "Draw",
-    .menu_position = 8,
-    .toolbar_name = "Draw",
-    .toolbar_position = 8,
-    .tooltip = "&Ellipse",
-    .statustip = "Creates an ellipse:  ELLIPSE",
-    .alias = "EL, ELLIPSE"
-};
-
 #if 0
 //Command: Ellipse
 

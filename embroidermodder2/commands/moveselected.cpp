@@ -51,19 +51,3 @@ moveselected_prompt(ScriptEnv *context)
     _main->nativeEndCommand();
     return script_null;
 }
-
-Command moveselected_cmd = {
-    .id = -1,
-    .main = moveselected_main,
-    .click = moveselected_click,
-    .context = moveselected_context,
-    .prompt = moveselected_prompt,
-    .icon = "donothing",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&Do Nothing",
-    .statustip = "Does Nothing.",
-    .alias = "DONOTHING"
-};

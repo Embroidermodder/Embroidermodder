@@ -29,19 +29,3 @@ zoomout_main(ScriptEnv *context)
     _main->nativeClearSelection();
     return zoomout_generic(context);
 }
-
-Command zoomout_cmd = {
-    .id = -1,
-    .main = zoomout_main,
-    .click = zoomout_generic,
-    .context = zoomout_generic,
-    .prompt = zoomout_generic,
-    .icon = "zoomout",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "Zoom &Out",
-    .statustip = "Zooms to decrease the apparent size of objects:  ZOOMOUT",
-    .alias = "ZOOMOUT"
-};

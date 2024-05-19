@@ -57,19 +57,3 @@ panright_prompt(ScriptEnv * context)
     _main->nativeEndCommand();
     return script_null;
 }
-
-Command panright_cmd = {
-    .id = -1,
-    .main = panright_main,
-    .click = panright_click,
-    .context = panright_context,
-    .prompt = panright_prompt,
-    .icon = "panright",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&Pan Right",
-    .statustip = "Moves the view to the right:  PANRIGHT",
-    .alias = "PANRIGHT"
-};

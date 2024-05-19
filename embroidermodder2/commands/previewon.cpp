@@ -85,19 +85,3 @@ previewon_prompt(ScriptEnv *context)
     _main->nativeEndCommand();
     return script_null;
 }
-
-Command previewon_cmd = {
-    .id = -1,
-    .main = previewon_main,
-    .click = previewon_click,
-    .context = previewon_context,
-    .prompt = previewon_prompt,
-    .icon = "donothing",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&Do Nothing",
-    .statustip = "Does Nothing.",
-    .alias = "DONOTHING"
-};

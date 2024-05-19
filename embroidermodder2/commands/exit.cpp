@@ -57,19 +57,3 @@ exit_prompt(ScriptEnv * /* context */)
     _main->nativeEndCommand();
     return script_null;
 }
-
-Command exit_cmd = {
-    .id = -1,
-    .main = exit_main,
-    .click = exit_click,
-    .context = exit_context,
-    .prompt = exit_prompt,
-    .icon = "exit",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "E&xit",
-    .statustip = "Exit the application:  EXIT",
-    .alias = "EXIT, QUIT"
-};
