@@ -67,13 +67,11 @@ FORMS = \
 SOURCES += \
     command_data.cpp \
     commands.cpp \
-    commands/about.cpp \
+    about.cpp \
     commands/circle.cpp \
-    commands/disable.cpp \
     commands/distance.cpp \
     commands/dolphin.cpp \
     commands/ellipse.cpp \
-    commands/enable.cpp \
     commands/erase.cpp \
     commands/exit.cpp \
     commands/heart.cpp \
@@ -83,12 +81,6 @@ SOURCES += \
     commands/mirrorselected.cpp \
     commands/move.cpp \
     commands/moveselected.cpp \
-    commands/night.cpp \
-    commands/open.cpp \
-    commands/pandown.cpp \
-    commands/panleft.cpp \
-    commands/panright.cpp \
-    commands/panup.cpp \
     commands/path.cpp \
     commands/platform.cpp \
     commands/point.cpp \
@@ -97,10 +89,7 @@ SOURCES += \
     commands/previewoff.cpp \
     commands/previewon.cpp \
     commands/print.cpp \
-    commands/qsnapx.cpp \
-    commands/qsnapy.cpp \
     commands/rectangle.cpp \
-    commands/redo.cpp \
     commands/rgb.cpp \
     commands/rotate.cpp \
     commands/sandbox.cpp \
@@ -112,19 +101,11 @@ SOURCES += \
     commands/snowflake.cpp \
     commands/star.cpp \
     commands/syswindows.cpp \
-    commands/tipoftheday.cpp \
-    commands/todo.cpp \
-    commands/undo.cpp \
-    commands/vulcanize.cpp \
     commands/windowclose.cpp \
     commands/windowcloseall.cpp \
     commands/windownext.cpp \
     commands/windowprevious.cpp \
-    commands/windowtile.cpp \
-    commands/zoomextents.cpp \
-    commands/zoomin.cpp \
     commands/windowcascade.cpp \
-    commands/zoomout.cpp \
     commands/quickleader.cpp \
     commands/singlelinetext.cpp \
     main.cpp \

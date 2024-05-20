@@ -14,7 +14,7 @@
  *       Use it to reset variables so they are ready to go.
  */
 ScriptValue
-ellipse_main(ScriptEnv *context)
+ellipse_command(ScriptEnv *context)
 {
     _main->nativeInitCommand();
     _main->nativeClearSelection();

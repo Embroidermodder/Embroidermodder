@@ -21,7 +21,7 @@
  *       Use it to reset variables so they are ready to go.
  */
 ScriptValue
-circle_main(ScriptEnv *context)
+circle_command(ScriptEnv *context)
 {
     _main->nativeInitCommand();
     _main->nativeClearSelection();

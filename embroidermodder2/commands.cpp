@@ -313,7 +313,7 @@ add_int_argument(ScriptEnv *context, int i)
 
 /* ACTION_ALERT is a prompt-only command. */
 ScriptValue
-alert_generic(ScriptEnv *context)
+alert_command(ScriptEnv *context)
 {
     if (!argument_checks(context, "alert", "s")) {
         return script_false;
@@ -326,9 +326,9 @@ alert_generic(ScriptEnv *context)
 }
 
 ScriptValue
-clear_generic(ScriptEnv* context)
+clear_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "clear_generic", "")) {
+    if (!argument_checks(context, "clear_command", "")) {
         return script_false;
     }
 
@@ -338,8 +338,9 @@ clear_generic(ScriptEnv* context)
     return script_null;
 }
 
+/* DAY is not context-dependant. */
 ScriptValue
-day_generic(ScriptEnv *context)
+day_command(ScriptEnv *context)
 {
     _main->nativeInitCommand();
     _main->nativeClearSelection();
@@ -348,6 +349,27 @@ day_generic(ScriptEnv *context)
     return script_null;
 }
 
+/* DISABLE is a prompt-only Command. */
+ScriptValue
+disable_command(ScriptEnv* context)
+{
+    if (!argument_checks(context, "disable_prompt", "s")) {
+        return script_false;
+    }
+
+    QString value = QSTR(0);
+
+    _main->nativeInitCommand();
+
+    if (value == "RAPIDFIRE") {
+        _main->disablePromptRapidFire();
+    }
+
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* DONOTHING is not context-dependant. */
 ScriptValue
 do_nothing(ScriptEnv *context)
 {
@@ -357,9 +379,29 @@ do_nothing(ScriptEnv *context)
     return script_true;
 }
 
+/* ENABLE is a prompt-only Command. */
+ScriptValue
+enable_command(ScriptEnv* context)
+{
+    if (context->argumentCount != 2) {
+        return script_false;
+    }
+
+    QString value = QSTR(0);
+
+    _main->nativeInitCommand();
+
+    if (value == "RAPIDFIRE") {
+        _main->enablePromptRapidFire();
+    }
+
+    _main->nativeEndCommand();
+    return script_null;
+}
+
 /* GET is a prompt-only Command. */
 ScriptValue
-get_prompt(ScriptEnv* context)
+get_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "get_prompt", "s")) {
         return script_false;
@@ -415,15 +457,21 @@ get_prompt(ScriptEnv* context)
     else if (value == "TEXTUNDERLINE") {
         return script_bool(_main->textUnderline());
     }
+    else if (value == "QSNAPX") {
+        return script_bool(_main->nativeQSnapX());
+    }
+    else if (value == "QSNAPY") {
+        return script_bool(_main->nativeQSnapY());
+    }
 
     _main->nativeEndCommand();
     return script_null;
 }
 
 ScriptValue
-icon128_generic(ScriptEnv *context)
+icon128_command(ScriptEnv *context)
 {
-    if (!argument_checks(context, "icon128_generic", "")) {
+    if (!argument_checks(context, "icon128_command", "")) {
         return script_false;
     }
     _main->nativeInitCommand();
@@ -434,9 +482,9 @@ icon128_generic(ScriptEnv *context)
 }
 
 ScriptValue
-icon16_generic(ScriptEnv * context)
+icon16_command(ScriptEnv * context)
 {
-    if (!argument_checks(context, "icon16_generic", "")) {
+    if (!argument_checks(context, "icon16_command", "")) {
         return script_false;
     }
     _main->nativeInitCommand();
@@ -447,9 +495,9 @@ icon16_generic(ScriptEnv * context)
 }
 
 ScriptValue
-icon24_generic(ScriptEnv * context)
+icon24_command(ScriptEnv * context)
 {
-    if (!argument_checks(context, "icon24_generic", "")) {
+    if (!argument_checks(context, "icon24_command", "")) {
         return script_false;
     }
     _main->nativeInitCommand();
@@ -460,9 +508,9 @@ icon24_generic(ScriptEnv * context)
 }
 
 ScriptValue
-icon32_generic(ScriptEnv * context)
+icon32_command(ScriptEnv * context)
 {
-    if (!argument_checks(context, "icon32_generic", "")) {
+    if (!argument_checks(context, "icon32_command", "")) {
         return script_false;
     }
     _main->nativeInitCommand();
@@ -473,9 +521,9 @@ icon32_generic(ScriptEnv * context)
 }
 
 ScriptValue
-icon48_generic(ScriptEnv * context)
+icon48_command(ScriptEnv * context)
 {
-    if (!argument_checks(context, "icon48_generic", "")) {
+    if (!argument_checks(context, "icon48_command", "")) {
         return script_false;
     }
     _main->nativeInitCommand();
@@ -486,9 +534,9 @@ icon48_generic(ScriptEnv * context)
 }
 
 ScriptValue
-icon64_generic(ScriptEnv * context)
+icon64_command(ScriptEnv * context)
 {
-    if (!argument_checks(context, "icon64_generic", "")) {
+    if (!argument_checks(context, "icon64_command", "")) {
         return script_false;
     }
     _main->nativeInitCommand();
@@ -498,12 +546,226 @@ icon64_generic(ScriptEnv * context)
     return script_null;
 }
 
+/* NEW is not context-dependant. */
 ScriptValue
-new_generic(ScriptEnv * context)
+new_command(ScriptEnv * context)
 {
     _main->nativeInitCommand();
     _main->nativeClearSelection();
     _main->nativeNewFile();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* NIGHT is not context-sensitive. */
+ScriptValue
+night_command(ScriptEnv * context)
+{
+    _main->nativeInitCommand();
+    _main->nativeNightVision();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* OPEN is not context-sensitive. */
+ScriptValue
+open_command(ScriptEnv * context)
+{
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->nativeOpenFile();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* PANDOWN is context-independant. */
+ScriptValue
+pandown_command(ScriptEnv * context)
+{
+    _main->nativeInitCommand();
+    _main->panDown();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* NOTE: main() is run every time the command is started.
+ *       Use it to reset variables so they are ready to go.
+ */
+ScriptValue
+panleft_command(ScriptEnv * context)
+{
+    _main->nativeInitCommand();
+    _main->panLeft();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* NOTE: main() is run every time the command is started.
+ *       Use it to reset variables so they are ready to go.
+ */
+ScriptValue
+panright_command(ScriptEnv * context)
+{
+    _main->nativeInitCommand();
+    _main->panRight();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* PANUP */
+ScriptValue
+panup_command(ScriptEnv * context)
+{
+    _main->nativeInitCommand();
+    _main->panUp();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+#if 0
+{
+    .id = -1,
+    .main = panup_command,
+    .menu_name = "None",
+    .menu_position = 0,
+    .toolbar_name = "None",
+    .toolbar_position = 0,
+    .tooltip = "&Pan Up",
+    .statustip = "Moves the view up:  PANUP",
+    .alias = "PANUP"
+}
+#endif
+
+/* REDO is not context-sensitive. */
+ScriptValue
+redo_command(ScriptEnv * context)
+{
+    if (!argument_checks(context, "redo_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->redo();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* TIPOFTHEDAY is not context-sensitive. */
+ScriptValue
+tipoftheday_command(ScriptEnv * context)
+{
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->nativeTipOfTheDay();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+#if 0
+{
+    .id = -1,
+    .main = tipoftheday_command,
+    .menu_name = "None",
+    .menu_position = 0,
+    .toolbar_name = "None",
+    .toolbar_position = 0,
+    .tooltip = "&Tip Of The Day",
+    .statustip = "Displays a dialog with useful tips:  TIPS",
+    .alias = "TIPS, TIPOFTHEDAY"
+},
+#endif
+
+/* TODO is not context-sensitive. */
+ScriptValue
+todo_command(ScriptEnv *context)
+{
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* NOTE: main() is run every time the command is started.
+ *       Use it to reset variables so they are ready to go.
+ */
+ScriptValue
+undo_command(ScriptEnv * context)
+{
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->undo();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* VULCANIZE is not context-sensitve. */
+ScriptValue
+vulcanize_command(ScriptEnv * context)
+{
+    if (!argument_checks(context, "vulcanize", "")) {
+        return script_false;
+    }
+
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->nativeVulcanize();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* WINDOWTILE is not context-dependant */
+ScriptValue
+windowtile_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "windowtile_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->mdiArea->tile();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* ZOOMEXTENTS is not context-dependant */
+ScriptValue
+zoomextents_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomextents_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->nativeZoomExtents();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* ZOOMIN is not context-dependant */
+ScriptValue
+zoomin_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomin_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->nativeZoomIn();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* ZOOMOUT is not context-dependant */
+ScriptValue
+zoomout_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomout_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->nativeZoomOut();
     _main->nativeEndCommand();
     return script_null;
 }
@@ -698,46 +960,6 @@ javaWindowCascade(ScriptEnv* context)
         return script_false;
     }
     _main->mdiArea->cascade();
-    return script_null;
-}
-
-ScriptValue
-javaWindowClose(ScriptEnv* context)
-{
-    if (!argument_checks(context, "windowClose", "")) {
-        return script_false;
-    }
-    _main->onCloseWindow();
-    return script_null;
-}
-
-ScriptValue
-javaWindowCloseAll(ScriptEnv* context)
-{
-    if (!argument_checks(context, "windowCloseAll", "")) {
-        return script_false;
-    }
-    _main->mdiArea->closeAllSubWindows();
-    return script_null;
-}
-
-ScriptValue
-javaWindowNext(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-    _main->mdiArea->activateNextSubWindow();
-    return script_null;
-}
-
-ScriptValue
-javaWindowPrevious(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-    _main->mdiArea->activatePreviousSubWindow();
     return script_null;
 }
 
@@ -1598,25 +1820,3 @@ javaMirrorSelected(ScriptEnv* context)
     _main->nativeMirrorSelected(REAL(0), REAL(1), REAL(2), REAL(3));
     return script_null;
 }
-
-ScriptValue
-javaQSnapX(ScriptEnv* context)
-{
-    if (!argument_checks(context, "QSnapX", "")) {
-        return script_false;
-    }
-    qreal r = _main->nativeQSnapX();
-    return script_real(r);
-}
-
-ScriptValue
-javaQSnapY(ScriptEnv* context)
-{
-    if (!argument_checks(context, "QSnapY", "")) {
-        return script_false;
-    }
-    qreal r = _main->nativeQSnapY();
-    return script_real(r);
-}
-
-

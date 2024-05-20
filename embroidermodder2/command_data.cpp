@@ -10,79 +10,80 @@
 
 #include "command_data.h"
 
-/* Context-insensitive commands. */
-ScriptValue about_general(ScriptEnv*);
-ScriptValue alert_generic(ScriptEnv*);
-ScriptValue circle_main(ScriptEnv*);
-ScriptValue clear_generic(ScriptEnv*);
-ScriptValue day_generic(ScriptEnv *);
-ScriptValue distance_main(ScriptEnv*);
-ScriptValue dolphin_main(ScriptEnv*);
-ScriptValue ellipse_main(ScriptEnv *);
-ScriptValue erase_main(ScriptEnv *);
-ScriptValue exit_main(ScriptEnv *);
-ScriptValue heart_generic(ScriptEnv *);
-ScriptValue heart_main(ScriptEnv*);
-ScriptValue help_main(ScriptEnv*);
-ScriptValue icon128_generic(ScriptEnv*);
-ScriptValue icon16_generic(ScriptEnv*);
-ScriptValue icon24_generic(ScriptEnv*);
-ScriptValue icon32_generic(ScriptEnv*);
-ScriptValue icon48_generic(ScriptEnv*);
-ScriptValue icon64_generic(ScriptEnv*);
-ScriptValue get_prompt(ScriptEnv*);
-ScriptValue line_main(ScriptEnv*);
-ScriptValue locatepoint_main(ScriptEnv*);
-ScriptValue move_main(ScriptEnv*);
-ScriptValue moveselected_main(ScriptEnv*);
-ScriptValue new_generic(ScriptEnv*);
-ScriptValue night_main(ScriptEnv*);
-ScriptValue open_main(ScriptEnv*);
-ScriptValue print_main(ScriptEnv*);
-ScriptValue redo_main(ScriptEnv*);
-ScriptValue pandown_main(ScriptEnv*);
-ScriptValue panleft_main(ScriptEnv*);
-ScriptValue panright_main(ScriptEnv*);
-ScriptValue panup_main(ScriptEnv*);
-ScriptValue path_main(ScriptEnv*);
-ScriptValue platform_main(ScriptEnv*);
-ScriptValue previewoff_main(ScriptEnv*);
-ScriptValue previewon_main(ScriptEnv*);
-ScriptValue point_main(ScriptEnv*);
-ScriptValue polygon_main(ScriptEnv*);
-ScriptValue polyline_main(ScriptEnv*);
-ScriptValue rectangle_main(ScriptEnv*);
-ScriptValue rotate_main(ScriptEnv*);
-ScriptValue rgb_main(ScriptEnv*);
-ScriptValue quickleader_main(ScriptEnv*);
-ScriptValue save_main(ScriptEnv*);
-ScriptValue sandbox_main(ScriptEnv*);
-ScriptValue scale_main(ScriptEnv*);
-ScriptValue scaleselected_main(ScriptEnv*);
-ScriptValue selectall_main(ScriptEnv*);
-ScriptValue singlelinetext_main(ScriptEnv*);
-ScriptValue set_prompt(ScriptEnv*);
-ScriptValue snowflake_main(ScriptEnv*);
-ScriptValue star_main(ScriptEnv*);
-ScriptValue syswindows_main(ScriptEnv*);
-ScriptValue tipoftheday_main(ScriptEnv*);
-ScriptValue todo_main(ScriptEnv*);
-ScriptValue undo_main(ScriptEnv*);
-ScriptValue vulcanize_main(ScriptEnv*);
-ScriptValue windowcascade_main(ScriptEnv*);
-ScriptValue windowclose_main(ScriptEnv*);
-ScriptValue windowcloseall_main(ScriptEnv*);
-ScriptValue windownext_main(ScriptEnv*);
-ScriptValue windowprevious_main(ScriptEnv*);
-ScriptValue windowtile_main(ScriptEnv*);
-ScriptValue zoomextents_main(ScriptEnv*);
-ScriptValue zoomin_main(ScriptEnv*);
-ScriptValue zoomout_main(ScriptEnv*);
+ScriptValue about_command(ScriptEnv*);
+ScriptValue alert_command(ScriptEnv*);
+ScriptValue circle_command(ScriptEnv*);
+ScriptValue clear_command(ScriptEnv*);
+ScriptValue day_command(ScriptEnv *);
+ScriptValue disable_command(ScriptEnv*);
+ScriptValue distance_command(ScriptEnv*);
+ScriptValue dolphin_command(ScriptEnv*);
+ScriptValue ellipse_command(ScriptEnv *);
+ScriptValue enable_command(ScriptEnv *);
+ScriptValue erase_command(ScriptEnv *);
+ScriptValue exit_command(ScriptEnv *);
+ScriptValue heart_command(ScriptEnv *);
+ScriptValue heart_command(ScriptEnv*);
+ScriptValue help_command(ScriptEnv*);
+ScriptValue icon128_command(ScriptEnv*);
+ScriptValue icon16_command(ScriptEnv*);
+ScriptValue icon24_command(ScriptEnv*);
+ScriptValue icon32_command(ScriptEnv*);
+ScriptValue icon48_command(ScriptEnv*);
+ScriptValue icon64_command(ScriptEnv*);
+ScriptValue get_command(ScriptEnv*);
+ScriptValue line_command(ScriptEnv*);
+ScriptValue locatepoint_command(ScriptEnv*);
+ScriptValue move_command(ScriptEnv*);
+ScriptValue moveselected_command(ScriptEnv*);
+ScriptValue new_command(ScriptEnv*);
+ScriptValue night_command(ScriptEnv*);
+ScriptValue open_command(ScriptEnv*);
+ScriptValue print_command(ScriptEnv*);
+ScriptValue redo_command(ScriptEnv*);
+ScriptValue pandown_command(ScriptEnv*);
+ScriptValue panleft_command(ScriptEnv*);
+ScriptValue panright_command(ScriptEnv*);
+ScriptValue panup_command(ScriptEnv*);
+ScriptValue path_command(ScriptEnv*);
+ScriptValue platform_command(ScriptEnv*);
+ScriptValue previewoff_command(ScriptEnv*);
+ScriptValue previewon_command(ScriptEnv*);
+ScriptValue point_command(ScriptEnv*);
+ScriptValue polygon_command(ScriptEnv*);
+ScriptValue polyline_command(ScriptEnv*);
+ScriptValue rectangle_command(ScriptEnv*);
+ScriptValue rotate_command(ScriptEnv*);
+ScriptValue rgb_command(ScriptEnv*);
+ScriptValue quickleader_command(ScriptEnv*);
+ScriptValue save_command(ScriptEnv*);
+ScriptValue sandbox_command(ScriptEnv*);
+ScriptValue scale_command(ScriptEnv*);
+ScriptValue scaleselected_command(ScriptEnv*);
+ScriptValue selectall_command(ScriptEnv*);
+ScriptValue singlelinetext_command(ScriptEnv*);
+ScriptValue set_command(ScriptEnv*);
+ScriptValue snowflake_command(ScriptEnv*);
+ScriptValue star_command(ScriptEnv*);
+ScriptValue syswindows_command(ScriptEnv*);
+ScriptValue tipoftheday_command(ScriptEnv*);
+ScriptValue todo_command(ScriptEnv*);
+ScriptValue undo_command(ScriptEnv*);
+ScriptValue vulcanize_command(ScriptEnv*);
+ScriptValue windowcascade_command(ScriptEnv*);
+ScriptValue windowclose_command(ScriptEnv*);
+ScriptValue windowcloseall_command(ScriptEnv*);
+ScriptValue windownext_command(ScriptEnv*);
+ScriptValue windowprevious_command(ScriptEnv*);
+ScriptValue windowtile_command(ScriptEnv*);
+ScriptValue zoomextents_command(ScriptEnv*);
+ScriptValue zoomin_command(ScriptEnv*);
+ScriptValue zoomout_command(ScriptEnv*);
 
 Command command_data[] = {
     {
         .id = ACTION_about,
-        .main = about_general,
+        .main = about_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -94,7 +95,7 @@ Command command_data[] = {
     },
     {
         .id = ACTION_ALERT,
-        .main = alert_generic,
+        .main = alert_command,
         .icon = "warning",
         .menu_name = "None",
         .menu_position = 0,
@@ -106,7 +107,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = circle_main,
+        .main = circle_command,
         .icon = "circle",
         .menu_name = "Draw",
         .menu_position = 8,
@@ -118,7 +119,7 @@ Command command_data[] = {
     },
     {
         .id = ACTION_CLEAR,
-        .main = clear_generic,
+        .main = clear_command,
         .icon = "donothing",
         .menu_name = "None",
         .menu_position = 0,
@@ -130,7 +131,7 @@ Command command_data[] = {
     },
     {
         .id = ACTION_day,
-        .main = day_generic,
+        .main = day_command,
         .icon = "day",
         .menu_name = "None",
         .menu_position = 0,
@@ -142,7 +143,19 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = distance_main,
+        .main = disable_command,
+        .icon = "disable",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "&Disable",
+        .statustip = "Disable one of the pre-defined global boolean variables.",
+        .alias = "DISABLE"
+    },
+    {
+        .id = -1,
+        .main = distance_command,
         .icon = "distance",
         .menu_name = "Tools",
         .menu_position = 7,
@@ -154,7 +167,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = dolphin_main,
+        .main = dolphin_command,
         .icon = "dolphin",
         .menu_name = "Draw",
         .menu_position = 100,
@@ -178,7 +191,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = ellipse_main,
+        .main = ellipse_command,
         .icon = "ellipse",
         .menu_name = "Draw",
         .menu_position = 8,
@@ -190,7 +203,19 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = erase_main,
+        .main = enable_command,
+        .icon = "enable",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "&Enable",
+        .statustip = "Enable a pre-defined global variables.",
+        .alias = "ENABLE"
+    },
+    {
+        .id = -1,
+        .main = erase_command,
         .icon = "erase",
         .menu_name = "Modify",
         .menu_position = 5,
@@ -202,7 +227,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = exit_main,
+        .main = exit_command,
         .icon = "exit",
         .menu_name = "None",
         .menu_position = 0,
@@ -214,7 +239,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = get_prompt,
+        .main = get_command,
         .icon = "get",
         .menu_name = "None",
         .menu_position = 0,
@@ -226,7 +251,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = heart_main,
+        .main = heart_command,
         .icon = "heart",
         .menu_name = "Draw",
         .menu_position = 100,
@@ -238,7 +263,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = help_main,
+        .main = help_command,
         .icon = "help",
         .menu_name = "None",
         .menu_position = 0,
@@ -250,7 +275,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = icon128_generic,
+        .main = icon128_command,
         .icon = "icon128",
         .menu_name = "None",
         .menu_position = 0,
@@ -262,7 +287,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = icon16_generic,
+        .main = icon16_command,
         .icon = "icon16",
         .menu_name = "None",
         .menu_position = 0,
@@ -274,7 +299,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = icon24_generic,
+        .main = icon24_command,
         .icon = "icon24",
         .menu_name = "None",
         .menu_position = 0,
@@ -286,7 +311,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = icon32_generic,
+        .main = icon32_command,
         .icon = "icon32",
         .menu_name = "None",
         .menu_position = 0,
@@ -298,7 +323,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = icon48_generic,
+        .main = icon48_command,
         .icon = "icon48",
         .menu_name = "None",
         .menu_position = 0,
@@ -310,7 +335,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = icon64_generic,
+        .main = icon64_command,
         .icon = "ICON64",
         .menu_name = "None",
         .menu_position = 0,
@@ -322,7 +347,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = line_main,
+        .main = line_command,
         .icon = "line",
         .menu_name = "Draw",
         .menu_position = 0,
@@ -334,7 +359,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = locatepoint_main,
+        .main = locatepoint_command,
         .icon = "about",
         .menu_name = "Tools",
         .menu_position = 11,
@@ -346,7 +371,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = move_main,
+        .main = move_command,
         .icon = "move",
         .menu_name = "Modify",
         .menu_position = 10,
@@ -358,7 +383,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = moveselected_main,
+        .main = moveselected_command,
         .icon = "donothing",
         .menu_name = "None",
         .menu_position = 0,
@@ -370,7 +395,7 @@ Command command_data[] = {
     },
     {
         .id = ACTION_new,
-        .main = new_generic,
+        .main = new_command,
         .icon = "new",
         .menu_name = "None",
         .menu_position = 0,
@@ -382,7 +407,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = night_main,
+        .main = night_command,
         .icon = "night",
         .menu_name = "None",
         .menu_position = 0,
@@ -394,7 +419,7 @@ Command command_data[] = {
     },
     {
         .id = ACTION_open,
-        .main = open_main,
+        .main = open_command,
         .icon = "open",
         .menu_name = "None",
         .menu_position = 0,
@@ -406,7 +431,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = pandown_main,
+        .main = pandown_command,
         .icon = "pandown",
         .menu_name = "None",
         .menu_position = 0,
@@ -418,7 +443,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = panleft_main,
+        .main = panleft_command,
         .icon = "panleft",
         .menu_name = "None",
         .menu_position = 0,
@@ -430,7 +455,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = panright_main,
+        .main = panright_command,
         .icon = "panright",
         .menu_name = "None",
         .menu_position = 0,
@@ -442,7 +467,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = panup_main,
+        .main = panup_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -454,7 +479,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = path_main,
+        .main = path_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -466,7 +491,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = platform_main,
+        .main = platform_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -478,7 +503,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = point_main,
+        .main = point_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -490,7 +515,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = polygon_main,
+        .main = polygon_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -502,7 +527,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = polyline_main,
+        .main = polyline_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -514,7 +539,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = previewoff_main,
+        .main = previewoff_command,
         .icon = "donothing",
         .menu_name = "None",
         .menu_position = 0,
@@ -526,7 +551,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = previewon_main,
+        .main = previewon_command,
         .icon = "donothing",
         .menu_name = "None",
         .menu_position = 0,
@@ -538,7 +563,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = print_main,
+        .main = print_command,
         .icon = "print",
         .menu_name = "None",
         .menu_position = 0,
@@ -550,7 +575,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = quickleader_main,
+        .main = quickleader_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -562,7 +587,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = rectangle_main,
+        .main = rectangle_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -574,7 +599,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = redo_main,
+        .main = redo_command,
         .icon = "redo",
         .menu_name = "None",
         .menu_position = 0,
@@ -586,7 +611,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = rgb_main,
+        .main = rgb_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -598,7 +623,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = rotate_main,
+        .main = rotate_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -610,7 +635,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = sandbox_main,
+        .main = sandbox_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -622,7 +647,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = save_main,
+        .main = save_command,
         .icon = "donothing",
         .menu_name = "None",
         .menu_position = 0,
@@ -634,7 +659,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = scale_main,
+        .main = scale_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -646,7 +671,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = scaleselected_main,
+        .main = scaleselected_command,
         .icon = "donothing",
         .menu_name = "None",
         .menu_position = 0,
@@ -658,7 +683,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = selectall_main,
+        .main = selectall_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -670,7 +695,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = set_prompt,
+        .main = set_command,
         .icon = "set",
         .menu_name = "None",
         .menu_position = 0,
@@ -682,7 +707,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = singlelinetext_main,
+        .main = singlelinetext_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -694,7 +719,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = snowflake_main,
+        .main = snowflake_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -706,7 +731,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = star_main,
+        .main = star_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -718,7 +743,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = syswindows_main,
+        .main = syswindows_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -730,7 +755,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = tipoftheday_main,
+        .main = tipoftheday_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -741,7 +766,7 @@ Command command_data[] = {
         .alias = "ICON24"
     },
     {
-        .main = todo_main,
+        .main = todo_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -753,7 +778,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = undo_main,
+        .main = undo_command,
         .icon = "undo",
         .menu_name = "None",
         .menu_position = 0,
@@ -765,7 +790,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = vulcanize_main,
+        .main = vulcanize_command,
         .icon = "undo",
         .menu_name = "None",
         .menu_position = 0,
@@ -777,7 +802,7 @@ Command command_data[] = {
     },
     {
         .id = ACTION_windowcascade,
-        .main = windowcascade_main,
+        .main = windowcascade_command,
         .icon = "windowcascade",
         .menu_name = "None",
         .menu_position = 0,
@@ -789,7 +814,7 @@ Command command_data[] = {
     },
     {
         .id = ACTION_windowclose,
-        .main = windowclose_main,
+        .main = windowclose_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -801,7 +826,7 @@ Command command_data[] = {
     },
     {
         .id = ACTION_windowcloseall,
-        .main = windowcloseall_main,
+        .main = windowcloseall_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -813,7 +838,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = windownext_main,
+        .main = windownext_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -825,7 +850,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = windowprevious_main,
+        .main = windowprevious_command,
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -837,7 +862,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = windowtile_main,
+        .main = windowtile_command,
         .icon = "windowtile",
         .menu_name = "None",
         .menu_position = 0,
@@ -849,7 +874,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = zoomextents_main,
+        .main = zoomextents_command,
         .icon = "zoomextents",
         .menu_name = "None",
         .menu_position = 0,
@@ -861,7 +886,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = zoomin_main,
+        .main = zoomin_command,
         .icon = "zoomin",
         .menu_name = "None",
         .menu_position = 0,
@@ -873,7 +898,7 @@ Command command_data[] = {
     },
     {
         .id = -1,
-        .main = zoomout_main,
+        .main = zoomout_command,
         .icon = "zoomout",
         .menu_name = "None",
         .menu_position = 0,

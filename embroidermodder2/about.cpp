@@ -15,7 +15,7 @@
 /* TODO: QTabWidget for about dialog
  */
 ScriptValue
-about_general(ScriptEnv *context)
+about_command(ScriptEnv *context)
 {
     if (!argument_checks(context, "about", "")) {
         return script_false;

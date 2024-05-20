@@ -12,7 +12,7 @@
 
 /* . */
 ScriptValue
-debug_generic(ScriptEnv *context)
+debug_command(ScriptEnv *context)
 {
     if (!argument_checks(context, "about", "s")) {
         return script_false;

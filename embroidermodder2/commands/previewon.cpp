@@ -14,9 +14,9 @@
 *       Use it to reset variables so they are ready to go.
 */
 ScriptValue
-previewon_main(ScriptEnv *context)
+previewon_command(ScriptEnv *context)
 {
-    if (!argument_checks(context, "textBold", "ssrrr")) {
+    if (!argument_checks(context, "previewon_command", "ssrrr")) {
         return script_false;
     }
 
@@ -50,38 +50,6 @@ previewon_main(ScriptEnv *context)
     }
 
     _main->nativePreviewOn(clone, mode, REAL(2), REAL(3), REAL(4));
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-/* NOTE: click() is run only for left clicks.
- *       Middle clicks are used for panning.
- *       Right clicks bring up the context menu.
- */
-ScriptValue
-previewon_click(ScriptEnv *context)
-{
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-/* NOTE: context() is run when a context menu entry is chosen.
- */
-ScriptValue
-previewon_context(ScriptEnv *context)
-{
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-/* NOTE: prompt() is run when Enter is pressed.
- *       appendPromptHistory is automatically called before prompt()
- *       is called so calling it is only needed for erroneous input.
- *       Any text is in the command prompt is sent as an uppercase string.
- */
-ScriptValue
-previewon_prompt(ScriptEnv *context)
-{
     _main->nativeEndCommand();
     return script_null;
 }

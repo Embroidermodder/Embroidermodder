@@ -13,7 +13,7 @@
  * We can't use the argument_checks function because the 2nd argument is a wildcard.
  */
 ScriptValue
-set_prompt(ScriptEnv* context)
+set_command(ScriptEnv* context)
 {
     if (context->argumentCount != 2) {
         return script_false;

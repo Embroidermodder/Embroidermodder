@@ -14,7 +14,7 @@
  *       Use it to reset variables so they are ready to go.
  */
 ScriptValue
-mirrorselected_main(ScriptEnv *context)
+mirrorselected_command(ScriptEnv *context)
 {
     _main->nativeEndCommand();
     return script_null;
@@ -22,7 +22,7 @@ mirrorselected_main(ScriptEnv *context)
 
 Command mirrorselected_cmd = {
     .id = -1,
-    .main = mirrorselected_main,
+    .main = mirrorselected_command,
     .icon = "donothing",
     .menu_name = "None",
     .menu_position = 0,

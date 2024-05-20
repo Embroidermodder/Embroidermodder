@@ -14,7 +14,7 @@
  *       Use it to reset variables so they are ready to go.
  */
 ScriptValue
-windowcascade_main(ScriptEnv * context)
+windowcascade_command(ScriptEnv * context)
 {
     _main->nativeInitCommand();
     _main->nativeClearSelection();

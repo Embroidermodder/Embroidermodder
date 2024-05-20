@@ -14,36 +14,7 @@
  *       Use it to reset variables so they are ready to go.
  */
 ScriptValue
-line_main(ScriptEnv * context)
-{
-    return script_null;
-}
-
-/* NOTE: click() is run only for left clicks.
- *       Middle clicks are used for panning.
- *       Right clicks bring up the context menu.
- */
-ScriptValue
-line_click(ScriptEnv * context)
-{
-    return script_null;
-}
-
-/* NOTE: context() is run when a context menu entry is chosen.
- */
-ScriptValue
-line_context(ScriptEnv * context)
-{
-    return script_null;
-}
-
-/* NOTE: prompt() is run when Enter is pressed.
- *       appendPromptHistory is automatically called before prompt()
- *       is called so calling it is only needed for erroneous input.
- *       Any text is in the command prompt is sent as an uppercase string.
- */
-ScriptValue
-line_prompt(ScriptEnv * context)
+line_command(ScriptEnv * context)
 {
     return script_null;
 }

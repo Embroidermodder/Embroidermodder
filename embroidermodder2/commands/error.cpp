@@ -12,11 +12,13 @@
 
 /* Error is not context-dependant. */
 ScriptValue
-error_generic(ScriptEnv *context)
+error_command(ScriptEnv *context)
 {
-    if (!argument_checks(context, "debug", "ss")) {
+    if (!argument_checks(context, "error_command", "ss")) {
         return script_false;
     }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
     QString s = "ERROR: (" + QSTR(0) + ") " + QSTR(1);
     _main->nativeSetPromptPrefix(s);
     _main->nativeAppendPromptHistory(QString());
@@ -24,25 +26,9 @@ error_generic(ScriptEnv *context)
     return script_null;
 }
 
-/* NOTE: main() is run every time the command is started.
- *       Use it to reset variables so they are ready to go.
- */
-ScriptValue
-error_main(ScriptEnv *context)
-{
-    if (!argument_checks(context, "debug", "ss")) {
-        return script_false;
-    }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-    return error_generic(context);
-}
-
 Command error_cmd = {
+    .id = -1,
     .main = error_main,
-    .click = error_generic,
-    .context = error_generic,
-    .prompt = error_generic,
     .icon = "error",
     .menu_name = "None",
     .menu_position = 0,
