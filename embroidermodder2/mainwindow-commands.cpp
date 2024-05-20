@@ -962,10 +962,9 @@ MainWindow::runCommandMain(const QString& cmd)
 {
     ScriptEnv *context = create_script_env();
     qDebug("runCommandMain(%s)", qPrintable(cmd));
-    //if(!getSettingsSelectionModePickFirst()) { nativeClearSelection(); } //TODO: Uncomment this line when post-selection is available
+    //if (!getSettingsSelectionModePickFirst()) { nativeClearSelection(); } //TODO: Uncomment this line when post-selection is available
     if (command_map.contains(cmd)) {
         command_map[cmd].main(context);
-        prompt->alert("COMMAND RAN.");
     }
     else {
         qDebug("ERROR: %s not found in command_map.", qPrintable(cmd));

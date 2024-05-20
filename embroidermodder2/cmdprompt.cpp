@@ -452,12 +452,12 @@ void CmdPromptInput::processInput(const QChar& rapidChar)
 
     QString cmdtxt(curText);
     cmdtxt.replace(0, prefix.length(), "");
-    if(!rapidFireEnabled) cmdtxt = cmdtxt.toLower();
+    if (!rapidFireEnabled) {
+        cmdtxt = cmdtxt.toLower();
+    }
 
-    if(cmdActive)
-    {
-        if(rapidFireEnabled)
-        {
+    if (cmdActive) {
+        if (rapidFireEnabled) {
             /**
             \todo sort Qt::Return
             if(rapidChar == Qt::Key_Enter || rapidChar == Qt::Key_Return)
@@ -481,8 +481,7 @@ void CmdPromptInput::processInput(const QChar& rapidChar)
             }
             */
         }
-        else
-        {
+        else {
             emit appendHistory(curText, prefix.length());
             emit runCommand(curCmd, cmdtxt);
         }
@@ -506,8 +505,9 @@ void CmdPromptInput::processInput(const QChar& rapidChar)
         }
     }
 
-    if(!rapidFireEnabled)
+    if (!rapidFireEnabled) {
         clear();
+    }
 }
 
 void CmdPromptInput::checkSelection()

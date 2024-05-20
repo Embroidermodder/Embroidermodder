@@ -39,8 +39,8 @@ typedef struct ScriptValue_ {
 } ScriptValue;
 
 typedef struct ScriptEnv_ {
-    ScriptValue *commands;
-    int n_commands;
+    ScriptValue *variable;
+    int n_variables;
     ScriptValue argument[MAX_ARGS];
     int argumentCount;
 } ScriptEnv;
@@ -75,6 +75,18 @@ ScriptValue command_prompt(const char *line);
 ScriptEnv *add_string_argument(ScriptEnv *context, const char *s);
 ScriptEnv *add_real_argument(ScriptEnv *context, double r);
 ScriptEnv *add_int_argument(ScriptEnv *context, int i);
+
+void add_string_variable(ScriptEnv *context, const char *label, const char *s);
+void add_int_variable(ScriptEnv *context, const char *label, int i);
+void add_real_variable(ScriptEnv *context, const char *label, double i);
+
+const char *script_get_string(ScriptEnv *context, const char *label);
+int script_get_int(ScriptEnv *context, const char *label);
+double script_get_real(ScriptEnv *context, const char *label);
+
+int script_set_string(ScriptEnv *context, const char *label, const char *s);
+int script_set_int(ScriptEnv *context, const char *label, int i);
+int script_set_real(ScriptEnv *context, const char *label, double r);
 
 extern ScriptValue script_null;
 extern ScriptValue script_true;
