@@ -27,6 +27,12 @@
 #define SCRIPT_STRING                  4
 #define SCRIPT_BOOL                    5
 
+#define CONTEXT_MAIN                   0
+#define CONTEXT_CLICK                  1
+#define CONTEXT_MOVE                   2
+#define CONTEXT_CONTEXT                3
+#define CONTEXT_PROMPT                 4
+
 typedef struct ScriptValue_ {
     double r;
     int i;
@@ -41,6 +47,7 @@ typedef struct ScriptValue_ {
 typedef struct ScriptEnv_ {
     ScriptValue *variable;
     int n_variables;
+    int context;
     ScriptValue argument[MAX_ARGS];
     int argumentCount;
 } ScriptEnv;
@@ -48,9 +55,6 @@ typedef struct ScriptEnv_ {
 typedef struct Command_ {
     int id;
     ScriptValue (*main)(ScriptEnv *context);
-    ScriptValue (*click)(ScriptEnv *context);
-    ScriptValue (*context)(ScriptEnv *context);
-    ScriptValue (*prompt)(ScriptEnv *context);
     const char *icon;
     const char *menu_name;
     int menu_position;

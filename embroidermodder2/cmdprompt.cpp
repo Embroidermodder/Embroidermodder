@@ -1,3 +1,13 @@
+/*
+ * Embroidermodder 2.
+ *
+ * Copyright 2013-2024 The Embroidermodder Team
+ * Embroidermodder 2 is Open Source Software, see LICENSE for licensing terms.
+ * Read CODE-STANDARDS.txt for advice on altering this file.
+ *
+ * MainWindow
+ */
+
 #include "cmdprompt.h"
 #include <QApplication>
 #include <QClipboard>
@@ -316,16 +326,15 @@ QString CmdPromptHistory::applyFormatting(const QString& txt, int prefixLength)
     //Keywords
     start = prefix.indexOf('[');
     stop = prefix.lastIndexOf(']');
-    if(start != -1 && stop != -1 && start < stop)
-    {
-        for(int i = stop; i >= start; i--)
-        {
-            if(prefix.at(i) == ']')
+    if (start != -1 && stop != -1 && start < stop) {
+        for (int i = stop; i >= start; i--) {
+            if (prefix.at(i) == ']') {
                 prefix.insert(i, "</font>");
-            if(prefix.at(i) == '[')
+            }
+            if (prefix.at(i) == '[') {
                 prefix.insert(i+1, "<font color=\"#0095FF\">");
-            if(prefix.at(i) == '/')
-            {
+            }
+            if (prefix.at(i) == '/') {
                 prefix.insert(i+1, "<font color=\"#0095FF\">");
                 prefix.insert(i, "</font>");
             }
@@ -335,14 +344,14 @@ QString CmdPromptHistory::applyFormatting(const QString& txt, int prefixLength)
     //Default Values
     start = prefix.indexOf('{');
     stop = prefix.lastIndexOf('}');
-    if(start != -1 && stop != -1 && start < stop)
-    {
-        for(int i = stop; i >= start; i--)
-        {
-            if(prefix.at(i) == '}')
+    if (start != -1 && stop != -1 && start < stop) {
+        for (int i = stop; i >= start; i--) {
+            if (prefix.at(i) == '}') {
                 prefix.insert(i, "</font>");
-            if(prefix.at(i) == '{')
+            }
+            if (prefix.at(i) == '{') {
                 prefix.insert(i+1, "<font color=\"#00AA00\">");
+            }
         }
     }
 
@@ -444,6 +453,8 @@ void CmdPromptInput::endCommand()
     clear();
 }
 
+/*
+ */
 void CmdPromptInput::processInput(const QChar& rapidChar)
 {
     qDebug("CmdPromptInput::processInput");
@@ -458,28 +469,22 @@ void CmdPromptInput::processInput(const QChar& rapidChar)
 
     if (cmdActive) {
         if (rapidFireEnabled) {
-            /**
-            \todo sort Qt::Return
-            if(rapidChar == Qt::Key_Enter || rapidChar == Qt::Key_Return)
-            {
+            if (rapidChar == Qt::Key_Enter || rapidChar == Qt::Key_Return) {
                 emit appendHistory(curText, prefix.length());
                 emit runCommand(curCmd, "RAPID_ENTER");
                 curText.clear();
                 clear();
                 return;
             }
-            else if(rapidChar == Qt::Key_Space)
-            {
+            else if (rapidChar == Qt::Key_Space) {
                 updateCurrentText(curText + " ");
                 emit runCommand(curCmd, cmdtxt + " ");
                 return;
             }
-            else
-            {
+            else {
                 emit runCommand(curCmd, cmdtxt);
                 return;
             }
-            */
         }
         else {
             emit appendHistory(curText, prefix.length());
@@ -872,5 +877,3 @@ bool CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
     }
     return QObject::eventFilter(obj, event);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

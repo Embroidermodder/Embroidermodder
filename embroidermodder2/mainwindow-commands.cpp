@@ -27,7 +27,8 @@
 #include "object-polyline.h"
 #include "object-rect.h"
 #include "object-textsingle.h"
-#include "../extern/libembroidery/embroidery.h"
+#include "commands.h"
+#include "script.h"
 #include "property-editor.h"
 #include "undo-editor.h"
 #include "undo-commands.h"
@@ -943,6 +944,18 @@ void MainWindow::promptInputNext()
     if (mdiWin) mdiWin->promptInputNext();
 }
 
+ScriptValue
+MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
+{
+    if (command_map.contains(cmd)) {
+        command_map[cmd].main(context);
+    }
+    else {
+        qDebug("ERROR: %s not found in command_map.", qPrintable(cmd));
+    }
+    return script_true;
+}
+
 void
 MainWindow::runCommand()
 {
@@ -961,14 +974,15 @@ void
 MainWindow::runCommandMain(const QString& cmd)
 {
     ScriptEnv *context = create_script_env();
+    context->context = CONTEXT_MAIN;
     qDebug("runCommandMain(%s)", qPrintable(cmd));
-    //if (!getSettingsSelectionModePickFirst()) { nativeClearSelection(); } //TODO: Uncomment this line when post-selection is available
-    if (command_map.contains(cmd)) {
-        command_map[cmd].main(context);
+    // TODO: Uncomment this when post-selection is available
+    /*
+    if (!getSettingsSelectionModePickFirst()) {
+        nativeClearSelection();
     }
-    else {
-        qDebug("ERROR: %s not found in command_map.", qPrintable(cmd));
-    }
+    */
+    runCommandCore(cmd, context);
     free_script_env(context);
 }
 
@@ -977,12 +991,12 @@ MainWindow::runCommandMain(const QString& cmd)
 void
 MainWindow::runCommandClick(const QString& cmd, qreal x, qreal y)
 {
-    ScriptEnv *context = NULL;
+    ScriptEnv *context = create_script_env();
+    context->context = CONTEXT_CLICK;
     qDebug("runCommandClick(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
     //engine->evaluate(cmd + "_click(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName);
-    if (command_map.contains(cmd)) {
-        command_map[cmd].click(context);
-    }
+    runCommandCore(cmd, context);
+    free_script_env(context);
 }
 
 /* FIXME: reconnect to new command system.
@@ -990,12 +1004,12 @@ MainWindow::runCommandClick(const QString& cmd, qreal x, qreal y)
 void
 MainWindow::runCommandMove(const QString& cmd, qreal x, qreal y)
 {
-    ScriptEnv *context = NULL;
+    ScriptEnv *context = create_script_env();
+    context->context = CONTEXT_MOVE;
     qDebug("runCommandMove(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
     //engine->evaluate(cmd + "_move(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName);
-    if (command_map.contains(cmd)) {
-        command_map[cmd].click(context);
-    }
+    runCommandCore(cmd, context);
+    free_script_env(context);
 }
 
 /* FIXME: reconnect to new command system.
@@ -1003,12 +1017,12 @@ MainWindow::runCommandMove(const QString& cmd, qreal x, qreal y)
 void
 MainWindow::runCommandContext(const QString& cmd, const QString& str)
 {
-    ScriptEnv *context = NULL;
+    ScriptEnv *context = create_script_env();
+    context->context = CONTEXT_CONTEXT;
     qDebug("runCommandContext(%s, %s)", qPrintable(cmd), qPrintable(str));
     //engine->evaluate(cmd + "_context('" + str.toUpper() + "')", fileName);
-    if (command_map.contains(cmd)) {
-        command_map[cmd].context(context);
-    }
+    runCommandCore(cmd, context);
+    free_script_env(context);
 }
 
 /* FIXME: reconnect to new command system.
@@ -1017,20 +1031,22 @@ MainWindow::runCommandContext(const QString& cmd, const QString& str)
 void
 MainWindow::runCommandPrompt(const QString& cmd, const QString& str)
 {
-    ScriptEnv *context = NULL;
+    ScriptEnv *context = create_script_env();
     qDebug("runCommandPrompt(%s, %s)", qPrintable(cmd), qPrintable(str));
+    context->context = CONTEXT_PROMPT;
     if (command_map.contains(cmd)) {
         QString safeStr = str;
         safeStr.replace("\\", "\\\\");
         safeStr.replace("\'", "\\\'");
         if (prompt->isRapidFireEnabled()) {
-            command_map[cmd].prompt(context);
+            runCommandCore(cmd, context);
         }
         else {
             /* Both branches run the same. */
-            command_map[cmd].prompt(context);
+            runCommandCore(cmd, context);
         }
     }
+    free_script_env(context);
 }
 
 void MainWindow::nativeAlert(const QString& txt)

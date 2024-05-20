@@ -543,6 +543,7 @@ public slots:
     void promptInputNext();
 
     void runCommand();
+    ScriptValue runCommandCore(const QString& cmd, ScriptEnv *context);
     void runCommandMain(const QString& cmd);
     void runCommandClick(const QString& cmd,  qreal x, qreal y);
     void runCommandMove(const QString& cmd,  qreal x, qreal y);

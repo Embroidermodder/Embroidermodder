@@ -30,10 +30,7 @@ enable_prompt(ScriptEnv* context)
 
 Command enable_cmd = {
     .id = -1,
-    .main = do_nothing,
-    .click = do_nothing,
-    .context = do_nothing,
-    .prompt = enable_prompt,
+    .main = enable_prompt,
     .icon = "enable",
     .menu_name = "None",
     .menu_position = 0,

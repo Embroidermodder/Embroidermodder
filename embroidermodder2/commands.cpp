@@ -1058,7 +1058,7 @@ command_prompt(const char *line)
                 context->argumentCount++;
             }
         }
-        ScriptValue result = _main->command_map[line_list[0]].prompt(context);
+        ScriptValue result = _main->command_map[line_list[0]].main(context);
         free_script_env(context);
         return result;
     }

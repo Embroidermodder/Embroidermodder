@@ -30,10 +30,7 @@ disable_prompt(ScriptEnv* context)
 
 Command disable_cmd = {
     .id = -1,
-    .main = do_nothing,
-    .click = do_nothing,
-    .context = do_nothing,
-    .prompt = disable_prompt,
+    .main = disable_prompt,
     .icon = "disable",
     .menu_name = "None",
     .menu_position = 0,

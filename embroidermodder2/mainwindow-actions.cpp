@@ -167,7 +167,6 @@ MainWindow::createAllActions()
     actionHash.insert(ACTION_panup,       createAction("panup", tr("&Pan Up"), tr("Moves the view up.")));
     actionHash.insert(ACTION_pandown,     createAction("pandown", tr("&Pan Down"), tr("Moves the view down.")));
 
-    actionHash.insert(ACTION_day,   createAction("day", tr("&Day"), tr("Updates the current view using day vision settings.")));
     actionHash.insert(ACTION_night, createAction("night", tr("&Night"), tr("Updates the current view using night vision settings.")));
 
     actionHash.value(ACTION_windowclose)->setEnabled(numOfDocs > 0);
@@ -368,8 +367,6 @@ MainWindow::createAction(const QString icon, const QString toolTip, const QStrin
         connect(ACTION, SIGNAL(triggered()), this, SLOT(panUp()));
     else if (icon == "pandown")
         connect(ACTION, SIGNAL(triggered()), this, SLOT(panDown()));
-    else if (icon == "day")
-        connect(ACTION, SIGNAL(triggered()), this, SLOT(dayVision()));
     else if (icon == "night")
         connect(ACTION, SIGNAL(triggered()), this, SLOT(nightVision()));
     else if (scripted) {
