@@ -1152,56 +1152,11 @@ void MainWindow::messageBox(const QString& type, const QString& title, const QSt
     }
 }
 
-void MainWindow::nativePanLeft()
-{
-    panLeft();
-}
-
-void MainWindow::nativePanRight()
-{
-    panRight();
-}
-
-void MainWindow::nativePanUp()
-{
-    panUp();
-}
-
-void MainWindow::nativePanDown()
-{
-    panDown();
-}
-
-void MainWindow::nativeZoomIn()
-{
-    zoomIn();
-}
-
-void MainWindow::nativeZoomOut()
-{
-    zoomOut();
-}
-
-void MainWindow::nativeZoomExtents()
-{
-    zoomExtents();
-}
-
 void MainWindow::nativePrintArea(qreal x, qreal y, qreal w, qreal h)
 {
     qDebug("nativePrintArea(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
     //TODO: Print Setup Stuff
     print();
-}
-
-void MainWindow::nativeDayVision()
-{
-    dayVision();
-}
-
-void MainWindow::nativeNightVision()
-{
-    nightVision();
 }
 
 void MainWindow::nativeSetBackgroundColor(quint8 r, quint8 g, quint8 b)

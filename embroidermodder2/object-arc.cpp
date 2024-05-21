@@ -1,11 +1,44 @@
+/*
+ * Embroidermodder 2.
+ *
+ * Copyright 2013-2024 The Embroidermodder Team
+ * Embroidermodder 2 is Open Source Software.
+ * See LICENSE for licensing terms.
+ */
+ 
 #include "object-arc.h"
 #include "object-data.h"
+#include "commands.h"
 
 #include "../extern/libembroidery/embroidery.h"
 
 #include <QPainter>
 #include <QStyleOption>
 #include <QGraphicsScene>
+
+/* . */
+ScriptValue
+arc_command(ScriptEnv *context)
+{
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+Command arc_cmd = {
+    .id = -1,
+    .main = arc_command,
+    .icon = "arc",
+    .menu_name = "None",
+    .menu_position = 0,
+    .toolbar_name = "None",
+    .toolbar_position = 0,
+    .tooltip = "&Arc",
+    .statustip = "Displays information about this product:  ARC",
+    .alias = "ARC"
+};
 
 ArcObject::ArcObject(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {

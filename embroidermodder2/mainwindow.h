@@ -680,19 +680,7 @@ public:
 
     void nativeRedo();
 
-    void nativePanLeft();
-    void nativePanRight();
-    void nativePanUp();
-    void nativePanDown();
-
-    void nativeZoomIn();
-    void nativeZoomOut();
-    void nativeZoomExtents();
-
     void nativePrintArea(qreal x, qreal y, qreal w, qreal h);
-
-    void nativeDayVision();
-    void nativeNightVision();
 
     void nativeSetBackgroundColor(quint8 r, quint8 g, quint8 b);
     void nativeSetCrossHairColor(quint8 r, quint8 g, quint8 b);

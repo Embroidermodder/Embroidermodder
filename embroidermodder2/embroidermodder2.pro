@@ -68,46 +68,27 @@ SOURCES += \
     command_data.cpp \
     commands.cpp \
     about.cpp \
-    commands/circle.cpp \
-    commands/distance.cpp \
-    commands/dolphin.cpp \
-    commands/ellipse.cpp \
-    commands/erase.cpp \
-    commands/exit.cpp \
-    commands/heart.cpp \
-    commands/help.cpp \
-    commands/line.cpp \
-    commands/locatepoint.cpp \
-    commands/mirrorselected.cpp \
-    commands/move.cpp \
-    commands/moveselected.cpp \
-    commands/path.cpp \
-    commands/platform.cpp \
-    commands/point.cpp \
-    commands/polygon.cpp \
-    commands/polyline.cpp \
-    commands/previewoff.cpp \
-    commands/previewon.cpp \
-    commands/print.cpp \
-    commands/rectangle.cpp \
-    commands/rgb.cpp \
-    commands/rotate.cpp \
-    commands/sandbox.cpp \
-    commands/save.cpp \
-    commands/scale.cpp \
-    commands/scaleselected.cpp \
-    commands/selectall.cpp \
-    commands/set.cpp \
-    commands/snowflake.cpp \
-    commands/star.cpp \
-    commands/syswindows.cpp \
-    commands/windowclose.cpp \
-    commands/windowcloseall.cpp \
-    commands/windownext.cpp \
-    commands/windowprevious.cpp \
-    commands/windowcascade.cpp \
-    commands/quickleader.cpp \
-    commands/singlelinetext.cpp \
+    distance.cpp \
+    dolphin.cpp \
+    ellipse.cpp \
+    heart.cpp \
+    line.cpp \
+    locatepoint.cpp \
+    move.cpp \
+    path.cpp \
+    point.cpp \
+    polygon.cpp \
+    polyline.cpp \
+    rectangle.cpp \
+    rgb.cpp \
+    rotate.cpp \
+    sandbox.cpp \
+    scale.cpp \
+    selectall.cpp \
+    snowflake.cpp \
+    star.cpp \
+    quickleader.cpp \
+    singlelinetext.cpp \
     main.cpp \
     mainwindow.cpp \
     mainwindow-settings.cpp \

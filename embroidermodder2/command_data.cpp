@@ -15,12 +15,14 @@ ScriptValue alert_command(ScriptEnv*);
 ScriptValue circle_command(ScriptEnv*);
 ScriptValue clear_command(ScriptEnv*);
 ScriptValue day_command(ScriptEnv *);
+ScriptValue debug_command(ScriptEnv *);
 ScriptValue disable_command(ScriptEnv*);
 ScriptValue distance_command(ScriptEnv*);
 ScriptValue dolphin_command(ScriptEnv*);
 ScriptValue ellipse_command(ScriptEnv *);
 ScriptValue enable_command(ScriptEnv *);
 ScriptValue erase_command(ScriptEnv *);
+ScriptValue error_command(ScriptEnv *);
 ScriptValue exit_command(ScriptEnv *);
 ScriptValue heart_command(ScriptEnv *);
 ScriptValue heart_command(ScriptEnv*);
@@ -79,6 +81,88 @@ ScriptValue windowtile_command(ScriptEnv*);
 ScriptValue zoomextents_command(ScriptEnv*);
 ScriptValue zoomin_command(ScriptEnv*);
 ScriptValue zoomout_command(ScriptEnv*);
+
+Command other_cmd[] = {
+    {
+        .id = -1,
+        .main = debug_command,
+        .icon = "about",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "Debug",
+        .statustip = "Displays information about this product:  ABOUT",
+        .alias = "DEBUG"
+    },
+    {
+        .id = -1,
+        .main = error_command,
+        .icon = "error",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "Error",
+        .statustip = "Sends an error message to the user. Command: ERROR",
+        .alias = "ERROR"
+    },
+    {
+        .id = -1,
+        .main = panup_command,
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "&Pan Up",
+        .statustip = "Moves the view up:  PANUP",
+        .alias = "PANUP"
+    },
+    {
+        .id = -1,
+        .main = windownext_command,
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "Ne&xt",
+        .statustip = "Move the focus to the next window:  NEXT",
+        .alias = "NEXT, WINDOWNEXT"
+    },
+    {
+        .id = -1,
+        .main = windowprevious_command,
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "Pre&vious",
+        .statustip = "Move the focus to the previous window:  PREVIOUS",
+        .alias = "PREV, PREVIOUS, WINDOWPREVIOUS"
+    },
+    {
+        .id = -1,
+        .main = windowcloseall_command,
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "Cl&ose",
+        .statustip = "Close the active window. Command: CLOSEALL.",
+        .alias = "CLOSEALL, WINDOWCLOSEALL"
+    },
+    {
+        .id = -1,
+        .main = windowclose_command,
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "Cl&ose",
+        .statustip = "Close the active window:  CLOSE.",
+        .alias = "CLOSE, WINDOWCLOSE"
+    }
+};
 
 Command command_data[] = {
     {

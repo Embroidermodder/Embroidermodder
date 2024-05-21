@@ -325,6 +325,31 @@ alert_command(ScriptEnv *context)
     return script_null;
 }
 
+/* . */
+ScriptValue
+angle_command(ScriptEnv *context)
+{
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+Command angle_cmd = {
+    .id = -1,
+    .main = angle_command,
+    .icon = "angle",
+    .menu_name = "None",
+    .menu_position = 0,
+    .toolbar_name = "None",
+    .toolbar_position = 0,
+    .tooltip = "&Angle",
+    .statustip = "Calculate the angle between two lines and display it. Command: ANGLE, CALCANGLE",
+    .alias = "ANGLE, CALCANGLE"
+};
+
+/* CLEAR is not context-dependant. */
 ScriptValue
 clear_command(ScriptEnv* context)
 {
@@ -342,9 +367,27 @@ clear_command(ScriptEnv* context)
 ScriptValue
 day_command(ScriptEnv *context)
 {
+    if (!argument_checks(context, "day_command", "")) {
+        return script_false;
+    }
+
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->nativeDayVision();
+    _main->dayVision();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* . */
+ScriptValue
+debug_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "about", "s")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->nativeAppendPromptHistory(QSTR(0));
     _main->nativeEndCommand();
     return script_null;
 }
@@ -395,6 +438,52 @@ enable_command(ScriptEnv* context)
         _main->enablePromptRapidFire();
     }
 
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* Erase is not context-dependant. */
+ScriptValue
+erase_command(ScriptEnv * /* context */)
+{
+    _main->nativeInitCommand();
+    if (_main->nativeNumSelected() <= 0) {
+        //TODO: Prompt to select objects if nothing is preselected
+        _main->nativeAlert(translate("Preselect objects before invoking the delete command."));
+        _main->nativeEndCommand();
+        _main->messageBox("information", translate("Delete Preselect"), translate("Preselect objects before invoking the delete command."));
+    }
+    else {
+        _main->nativeDeleteSelected();
+        _main->nativeEndCommand();
+    }
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* Error is not context-dependant. */
+ScriptValue
+error_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "error_command", "ss")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    QString s = "ERROR: (" + QSTR(0) + ") " + QSTR(1);
+    _main->nativeSetPromptPrefix(s);
+    _main->nativeAppendPromptHistory(QString());
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* . */
+ScriptValue
+exit_command(ScriptEnv * /* context */)
+{
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->nativeExit();
     _main->nativeEndCommand();
     return script_null;
 }
@@ -464,6 +553,17 @@ get_command(ScriptEnv* context)
         return script_bool(_main->nativeQSnapY());
     }
 
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* HELP is not context-dependent. */
+ScriptValue
+help_command(ScriptEnv * /* context */)
+{
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->nativeHelp();
     _main->nativeEndCommand();
     return script_null;
 }
@@ -546,13 +646,48 @@ icon64_command(ScriptEnv * context)
     return script_null;
 }
 
+/* MIRRORSELECTED */
+ScriptValue
+mirrorselected_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "mirrorSelected", "rrrr")) {
+        return script_false;
+    }
+
+    _main->nativeInitCommand();
+    _main->nativeMirrorSelected(REAL(0), REAL(1), REAL(2), REAL(3));
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+Command mirrorselected_cmd = {
+    .id = -1,
+    .main = mirrorselected_command,
+    .icon = "mirror",
+    .menu_name = "None",
+    .menu_position = 0,
+    .toolbar_name = "None",
+    .toolbar_position = 0,
+    .tooltip = "&Mirror Selected",
+    .statustip = "Command: MIRRORSELECTED.",
+    .alias = "MIRRORSELECTED"
+};
+
+/* MOVESELECTED */
+ScriptValue
+moveselected_command(ScriptEnv *context)
+{
+    _main->nativeEndCommand();
+    return script_null;
+}
+
 /* NEW is not context-dependant. */
 ScriptValue
 new_command(ScriptEnv * context)
 {
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->nativeNewFile();
+    _main->newFile();
     _main->nativeEndCommand();
     return script_null;
 }
@@ -562,7 +697,7 @@ ScriptValue
 night_command(ScriptEnv * context)
 {
     _main->nativeInitCommand();
-    _main->nativeNightVision();
+    _main->nightVision();
     _main->nativeEndCommand();
     return script_null;
 }
@@ -573,7 +708,7 @@ open_command(ScriptEnv * context)
 {
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->nativeOpenFile();
+    _main->openFile();
     _main->nativeEndCommand();
     return script_null;
 }
@@ -622,19 +757,110 @@ panup_command(ScriptEnv * context)
     return script_null;
 }
 
-#if 0
+/* PLATFORM is not context-sensitive. */
+ScriptValue
+platform_command(ScriptEnv * /* context */)
 {
-    .id = -1,
-    .main = panup_command,
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&Pan Up",
-    .statustip = "Moves the view up:  PANUP",
-    .alias = "PANUP"
+    _main->nativeInitCommand();
+//    _main->reportPlatform();
+    _main->nativeEndCommand();
+    return script_null;
 }
+
+#if 0
+function reportPlatform()
+{
+    setPromptPrefix(qsTr("Platform") + " = " + platformString());
+    appendPromptHistory();
+}
+[Menu]
+Name=None
+Position=0
+
+[ToolBar]
+Name=None
+Position=0
+
+[Tips]
+ToolTip=&Platform
+StatusTip=List which platform is in use:  PLATFORM
+
+[Prompt]
+Alias=PLATFORM
 #endif
+
+
+/* NOTE: main() is run every time the command is started.
+ *       Use it to reset variables so they are ready to go.
+ */
+ScriptValue
+previewoff_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "PreviewOff", "")) {
+        return script_false;
+    }
+
+    _main->nativePreviewOff();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* NOTE: main() is run every time the command is started.
+*       Use it to reset variables so they are ready to go.
+*/
+ScriptValue
+previewon_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "previewon_command", "ssrrr")) {
+        return script_false;
+    }
+
+    QString cloneStr = QSTR(0).toUpper();
+    int clone = PREVIEW_CLONE_NULL;
+    if (cloneStr == "SELECTED") {
+        clone = PREVIEW_CLONE_SELECTED;
+    }
+    else if (cloneStr == "RUBBER") {
+        clone = PREVIEW_CLONE_RUBBER;
+    }
+    else {
+        debug_message("UNKNOWN_ERROR previewOn(): first argument must be \"SELECTED\" or \"RUBBER\".");
+        return script_false;
+    }
+
+    QString modeStr  = QSTR(1).toUpper();
+    int mode = PREVIEW_MODE_NULL;
+    if (modeStr == "MOVE") {
+        mode = PREVIEW_MODE_MOVE;
+    }
+    else if (modeStr == "ROTATE") {
+        mode = PREVIEW_MODE_ROTATE;
+    }
+    else if (modeStr == "SCALE") {
+        mode = PREVIEW_MODE_SCALE;
+    }
+    else {
+        debug_message("UNKNOWN_ERROR previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\".");
+        return script_false;
+    }
+
+    _main->nativePreviewOn(clone, mode, REAL(2), REAL(3), REAL(4));
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* NOTE: main() is run every time the command is started.
+ *       Use it to reset variables so they are ready to go.
+ */
+ScriptValue
+print_command(ScriptEnv *context)
+{
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+
+    _main->nativeEndCommand();
+    return script_null;
+}
 
 /* REDO is not context-sensitive. */
 ScriptValue
@@ -649,6 +875,138 @@ redo_command(ScriptEnv * context)
     _main->nativeEndCommand();
     return script_null;
 }
+
+/* SAVE. */
+ScriptValue
+save_command(ScriptEnv *context)
+{
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* SCALESELECTED . */
+ScriptValue
+scaleselected_command(ScriptEnv *context)
+{
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* SET is a prompt-only Command.
+ *
+ * We can't use the argument_checks function because the 2nd argument is a wildcard.
+ */
+ScriptValue
+set_command(ScriptEnv* context)
+{
+    if (context->argumentCount != 2) {
+        return script_false;
+    }
+
+    QString value = QSTR(0);
+
+    _main->nativeInitCommand();
+
+    if (value == "TEXTANGLE") {
+        if (context->argument[1].type != SCRIPT_REAL) {
+            return script_false;
+        }
+        _main->setSettingsTextAngle(REAL(1));
+    }
+    else if (value == "TEXTBOLD") {
+        if (context->argument[1].type != SCRIPT_BOOL) {
+            return script_false;
+        }
+        _main->setSettingsTextStyleBold(BOOL(1));
+    }
+    else if (value == "TEXTITALIC") {
+        if (context->argument[1].type != SCRIPT_BOOL) {
+            return script_false;
+        }
+        _main->setSettingsTextStyleItalic(BOOL(1));
+    }
+    else if (value == "TEXTFONT") {
+        if (context->argument[1].type != SCRIPT_STRING) {
+            return script_false;
+        }
+        _main->setSettingsTextFont(context->argument[1].s);
+    }
+    else if (value == "TEXTOVERLINE") {
+        if (context->argument[1].type != SCRIPT_BOOL) {
+            return script_false;
+        }
+        _main->setSettingsTextStyleOverline(BOOL(1));
+    }
+    else if (value == "TEXTSIZE") {
+        if (context->argument[1].type != SCRIPT_REAL) {
+            return script_false;
+        }
+        _main->setSettingsTextSize(REAL(1));
+    }
+    else if (value == "TEXTSTRIKEOUT") {
+        if (context->argument[1].type != SCRIPT_BOOL) {
+            return script_false;
+        }
+        _main->setSettingsTextStyleStrikeOut(BOOL(1));
+    }
+    else if (value == "TEXTUNDERLINE") {
+        if (context->argument[1].type != SCRIPT_BOOL) {
+
+            return script_false;
+        }
+        _main->setSettingsTextStyleUnderline(BOOL(1));
+    }
+
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* NOTE: main() is run every time the command is started.
+ *       Use it to reset variables so they are ready to go.
+ */
+ScriptValue
+syswindows_command(ScriptEnv * context)
+{
+    /*
+    initCommand();
+    clearSelection();
+    setPromptPrefix(qsTr("Enter an option [Cascade/Tile]: "));
+    */
+
+    // Do nothing for click, context
+    
+    #if 0
+    if (str == "C" || str == "CASCADE") {
+        //TODO: Probably should add additional qsTr calls here.
+        _main->windowCascade();
+        _main->endCommand();
+    }
+    else if (str == "T" || str == "TILE") {
+        //TODO: Probably should add additional qsTr calls here.
+        _main->windowTile();
+        _main->endCommand();
+    }
+    else {
+        alert(qsTr("Invalid option keyword."));
+        setPromptPrefix(qsTr("Enter an option [Cascade/Tile]: "));
+    }
+    #endif
+    return script_null;
+}
+
+#if 0
+{
+    .id = -1,
+    .main = syswindows_command,
+    .menu_name = "None",
+    .menu_position = 0,
+    .toolbar_name = "None",
+    .toolbar_position = 0,
+    .tooltip = "&SysWindows",
+    .statustip = "Arrange the windows:  SYSWINDOWS",
+    .alias = "WINDOWS, SYSWINDOWS"
+},
+#endif
 
 /* TIPOFTHEDAY is not context-sensitive. */
 ScriptValue
@@ -679,9 +1037,12 @@ tipoftheday_command(ScriptEnv * context)
 ScriptValue
 todo_command(ScriptEnv *context)
 {
+    if (!argument_checks(context, "todo", "ss")) {
+        return script_false;
+    }
     _main->nativeInitCommand();
-    _main->nativeClearSelection();
-
+    QString s = "TODO: (" + QSTR(0) + ") " + QSTR(1);
+    _main->nativeAlert(s);
     _main->nativeEndCommand();
     return script_null;
 }
@@ -714,6 +1075,64 @@ vulcanize_command(ScriptEnv * context)
     return script_null;
 }
 
+/* WINDOWCASCADE is not context-dependant. */
+ScriptValue
+windowcascade_command(ScriptEnv * context)
+{
+    if (!argument_checks(context, "windowcascade_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->mdiArea->cascade();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* WINDOWCLOSE is not context-dependant. */
+ScriptValue
+windowclose_command(ScriptEnv * context)
+{
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->onCloseWindow();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* WINDOWCLOSEALL is not context-dependant. */
+ScriptValue
+windowcloseall_command(ScriptEnv * context)
+{
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->mdiArea->closeAllSubWindows();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* */
+ScriptValue
+windownext_command(ScriptEnv * context)
+{
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->mdiArea->activateNextSubWindow();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* WINDOWPREVIOUS is not context-sensitive. */
+ScriptValue
+windowprevious_command(ScriptEnv * context)
+{
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->mdiArea->activatePreviousSubWindow();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
 /* WINDOWTILE is not context-dependant */
 ScriptValue
 windowtile_command(ScriptEnv *context)
@@ -737,7 +1156,7 @@ zoomextents_command(ScriptEnv *context)
     }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->nativeZoomExtents();
+    _main->zoomExtents();
     _main->nativeEndCommand();
     return script_null;
 }
@@ -751,7 +1170,7 @@ zoomin_command(ScriptEnv *context)
     }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->nativeZoomIn();
+    _main->zoomIn();
     _main->nativeEndCommand();
     return script_null;
 }
@@ -765,7 +1184,7 @@ zoomout_command(ScriptEnv *context)
     }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->nativeZoomOut();
+    _main->zoomOut();
     _main->nativeEndCommand();
     return script_null;
 }
@@ -781,18 +1200,6 @@ stub_implement(const char *function)
 /* All of these need to be filed into the commands/ directory.
  * -----------------------------------------------------------
  */
-
-ScriptValue
-javaTodo(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "ss")) {
-        return script_false;
-    }
-    QString s = "TODO: (" + QSTR(0) + ") " + QSTR(1);
-    _main->nativeAlert(s);
-    _main->nativeEndCommand();
-    return script_null;
-}
 
 ScriptValue
 javaBlinkPrompt(ScriptEnv* context)
@@ -877,93 +1284,6 @@ javaDisableMoveRapidFire(ScriptEnv* context)
 }
 
 ScriptValue
-javaInitCommand(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    _main->nativeInitCommand();
-    return script_null;
-}
-
-ScriptValue
-javaEndCommand(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-ScriptValue
-javaNewFile(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    _main->newFile();
-    return script_null;
-}
-
-ScriptValue
-javaOpenFile(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    _main->openFile();
-    return script_null;
-}
-
-ScriptValue
-javaExit(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    _main->exit();
-    return script_null;
-}
-
-ScriptValue
-javaHelp(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    _main->help();
-    return script_null;
-}
-
-ScriptValue
-javaTipOfTheDay(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    _main->tipOfTheDay();
-    return script_null;
-}
-
-ScriptValue
-javaWindowCascade(ScriptEnv* context)
-{
-    if (!argument_checks(context, "windowCascade", "")) {
-        return script_false;
-    }
-    _main->mdiArea->cascade();
-    return script_null;
-}
-
-ScriptValue
 javaPlatformString(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
@@ -1002,103 +1322,12 @@ javaIsInt(ScriptEnv* context)
 }
 
 ScriptValue
-javaPanLeft(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    _main->panLeft();
-    return script_null;
-}
-
-ScriptValue
-javaPanRight(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-    _main->panRight();
-    return script_null;
-}
-
-ScriptValue
-javaPanUp(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-    _main->panUp();
-    return script_null;
-}
-
-ScriptValue
-javaPanDown(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-    _main->panDown();
-    return script_null;
-}
-
-ScriptValue
-javaZoomIn(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-    _main->zoomIn();
-    return script_null;
-}
-
-ScriptValue
-javaZoomOut(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-    _main->zoomOut();
-    return script_null;
-}
-
-ScriptValue
-javaZoomExtents(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-    _main->zoomExtents();
-    return script_null;
-}
-
-ScriptValue
 javaPrintArea(ScriptEnv* context)
 {
     if (!argument_checks(context, "printArea", "rrrr")) {
         return script_false;
     }
     _main->nativePrintArea(REAL(0), REAL(1), REAL(2), REAL(3));
-    return script_null;
-}
-
-ScriptValue
-javaDayVision(ScriptEnv* context)
-{
-    if (!argument_checks(context, "day", "")) {
-        return script_false;
-    }
-    _main->dayVision();
-    return script_null;
-}
-
-ScriptValue
-javaNightVision(ScriptEnv* context)
-{
-    if (!argument_checks(context, "night", "")) {
-        return script_false;
-    }
-    _main->nightVision();
     return script_null;
 }
 
@@ -1807,16 +2036,5 @@ javaRotateSelected(ScriptEnv* context)
     }
 
     _main->nativeRotateSelected(REAL(0), REAL(1), REAL(2));
-    return script_null;
-}
-
-ScriptValue
-javaMirrorSelected(ScriptEnv* context)
-{
-    if (!argument_checks(context, "mirrorSelected", "rrrr")) {
-        return script_false;
-    }
-
-    _main->nativeMirrorSelected(REAL(0), REAL(1), REAL(2), REAL(3));
     return script_null;
 }
