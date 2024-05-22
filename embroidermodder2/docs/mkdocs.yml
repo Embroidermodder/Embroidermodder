@@ -2,7 +2,7 @@ site_name: Embroidermodder 2.0.0-alpha
 site_description: Free machine embroidery software supporting a variety of formats.
 copyright: Copyright (C) 2013-2024 The Embroidermodder Team
 site_url: https://www.libembroidery.org/
-repo_url: https://github.com/Embroidermodder/docs
+repo_url: https://github.com/embroidermodder/embroidermodder
 edit_uri: edit/main/docs/
 nav:
   - Home: index.md
