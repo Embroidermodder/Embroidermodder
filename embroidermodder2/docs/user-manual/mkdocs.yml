@@ -1,0 +1,60 @@
+site_name: Embroidermodder User Manual
+site_description: The User Guide to all of the Embroidermodder Projects
+copyright: Copyright (C) 2013-2024 The Embroidermodder Team
+site_url: https://www.libembroidery.org/user-manual
+repo_url: https://github.com/Embroidermodder/docs
+nav:
+  - Home: index.md
+  - About: about.md
+  - Creating Designs: creating.md
+  - Editing Designs: editing-designs.md
+  - Converting Embroidery Files: converting.md
+  - Converting Images: image.md
+  - Appendix:
+    - License: license.md
+    - Contributing: contributing.md
+    - To Do: todo.md
+theme:
+  name: material
+plugins:
+  - search
+  - bibtex:
+      bib_file: "references.bib"
+  - with-pdf:
+      author: The Embroidermoder Team
+      copyright: Copyright (C) 2013-2024 The Embroidermodder Team
+
+      cover: true
+      back_cover: true
+      cover_title: Embroidermodder User Manual
+      cover_subtitle: 2.0.0-alpha
+      #custom_template_path: TEMPLATES PATH
+
+      toc_title: Contents
+      #heading_shift: false
+      toc_level: 2
+      #ordered_chapter_level: 2
+      #excludes_children:
+      #    - 'release-notes/:upgrading'
+      #    - 'release-notes/:changelog'
+
+      exclude_pages:
+        - 'posts/'
+      #convert_iframe:
+      #    - src: IFRAME SRC
+      #      img: POSTER IMAGE URL
+      #      text: ALTERNATE TEXT
+      #    - src: ...
+      #two_columns_level: 3
+
+      #render_js: true
+      #headless_chrome_path: headless-chromium
+
+      output_path: em2_user_manual.pdf
+      #enabled_if_env: ENABLE_PDF_EXPORT
+
+      #debug_html: true
+      #show_anchors: true
+      verbose: true
+markdown_extensions:
+  - footnotes

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>The Embroidermodder Project</title>
+<style>
+@font-face {
+    font-family: maintext;
+    src: url('https://www.libembroidery.org/fonts/SourceSerif4-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: title;
+    src: url('https://www.libembroidery.org/fonts/SourceSerif4-Black.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: sourcecode;
+    src: url('https://www.libembroidery.org/fonts/SourceCodePro-Regular.ttf') format('truetype');
+}
+
+body {
+    font-family: maintext, Times, serif;
+    font-size: 100%;
+}
+
+h1 {
+    font-family: title, Times, serif;
+    font-size: 140%;
+}
+
+pre {
+    font-family: sourcecode, monospace;
+    font-size: 90%;
+}
+  
+div.container {
+    margin: 1em;
+    width: 90%;
+}
+
+div.menu {
+    margin: 1em;
+    width: 14em;
+    display: block;
+    float: left;
+}
+
+div.content {
+    padding-left: 20em;
+    width: 50em;
+    display: block;
+    float: center;
+}
+
+.mainlogo {
+    width: 60%;
+}
+
+@media screen and (max-width:71em) {
+    div.container {
+        margin: 1em;
+        width: 100%;
+    }
+
+    div.content {
+        padding-left: auto;
+        padding-right: auto;
+        width: 100%;
+        display: block;
+        float: right;
+    }
+
+    div.menu {
+        margin: 1em;
+        width: 100%;
+        display: block;
+        float: center;
+    }
+  
+    .mainlogo {
+        width: 30%;
+    }
+}
+
+div.menu ul {
+    list-style: none;
+    padding-left: 0em;
+}
+
+div.menu ul ul {
+    list-style: square;
+    padding-left: 2em;
+}
+
+div.menu ul ul li a:visited {
+    color: blue;
+}
+
+div.menu ul ul li a:hover {
+    color: green;
+}
+
+div.menu ul li a:hover {
+    color: green;
+}
+
+div.menu ul li a:visited {
+    color: blue;
+}
+
+div.footer {
+    width: 100%;
+    display: block;
+}
+
+img {
+    width: 100%;
+}
+</style>
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.png" >
+</head>
+
+<body>
+<div class="container">
+    <div class="menu">
+    <h1 align="center" style="display:block">
+      <div class="mainlogo">
+        <a name="logo" href="https://www.libembroidery.org"><img width="100%" align="center" src="icons/app.png" alt="Embroidermodder 2.0"></img></a>
+      </div>
+      <br>
+      <em>Embroidermodder 2.0.0 (alpha)</em>
+    </h1>
+    <em>IN ACTIVE DEVELOPMENT: NOT INTENDED FOR SERIOUS USE.</em>
+    <br>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <!-- <li><a href="converter.html">Online Viewer and Converter</a></li> -->
+      <li><a href="downloads.html">Downloads</a></li>
+      <li>
+      <a href="documentation.html">Documentation</a>
+      <ul>
+        <li><a href="user-manual">User Manual</a> (<a href="user-manual/em2_user_manual.pdf">PDF</a>)</li>
+        <li><a href="refman">Reference Manual</a> (<a href="refman/emrm.pdf">PDF</a>)</li>
+        <li><a href="embroider.html">UNIX Manpage</a> (<a href="embroider.txt">txt</a>)</li>
+      </ul>
+      </li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="https://github.com/Embroidermodder/website">Improve this website</a></li>
+      <li><a href="https://opencollective.com/embroidermodder">Donate</a></li>
+      <li><a href="https://github.com/embroidermodder">Github</a></li>
+    </ul>
+    </div>
+
+    <div class="content">
+    <br>
+    <br>
+
+        <div class="footer">Copyright 2013-2024 The Embroidermodder Team</div>
+    </div>
+<br>
+<br>
+<br>
+</div>
+</body>
+</html>

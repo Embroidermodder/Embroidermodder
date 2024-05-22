@@ -1,0 +1,68 @@
+"Red","Green","Blue","Name","Index"
+  0,   0,   0, "Unknown",         0
+ 14,  31, 124, "Prussian Blue",   1
+ 10,  85, 163, "Blue",            2
+  0, 135, 119, "Teal Green",      3
+ 75, 107, 175, "Cornflower Blue", 4
+237,  23,  31, "Red",             5
+209,  92,   0, "Reddish Brown",   6
+145,  54, 151, "Magenta",         7
+228, 154, 203, "Light Lilac",     8
+145,  95, 172, "Lilac",           9
+158, 214, 125, "Mint Green",      10
+232, 169,   0, "Deep Gold",       11
+254, 186,  53, "Orange",          12
+255, 255,   0, "Yellow",          13
+112, 188,  31, "Lime Green",      14
+186, 152,   0, "Brass",           15
+168, 168, 168, "Silver",          16
+125, 111,   0, "Russet Brown",    17 TODO: Verify RGB value is correct
+255, 255, 179, "Cream Brown",     18
+ 79,  85,  86, "Pewter",          19
+  0,   0,   0, "Black",           "" ; Index 20
+ 11,  61, 145, "Ultramarine",     "" ; Index 21
+119,   1, 118, "Royal Purple",    "" ; Index 22
+ 41,  49,  51, "Dark Gray",       "" ; Index 23
+ 42,  19,   1, "Dark Brown",      "" ; Index 24
+246,  74, 138, "Deep Rose",       "" ; Index 25
+178, 118,  36, "Light Brown",     "" ; Index 26
+252, 187, 197, "Salmon Pink",     "" ; Index 27 TODO: Verify RGB value is correct
+254,  55,  15, "Vermillion",      "" ; Index 28
+240, 240, 240, "White",           "" ; Index 29
+106,  28, 138, "Violet",          "" ; Index 30
+168, 221, 196, "Seacrest",        "" ; Index 31
+ 37, 132, 187, "Sky Blue",        "" ; Index 32
+254, 179,  67, "Pumpkin",         "" ; Index 33
+255, 243, 107, "Cream Yellow",    "" ; Index 34
+208, 166,  96, "Khaki",           "" ; Index 35
+209,  84,   0, "Clay Brown",      "" ; Index 36
+102, 186,  73, "Leaf Green",      "" ; Index 37
+ 19,  74,  70, "Peacock Blue",    "" ; Index 38
+135, 135, 135, "Gray",            39
+216, 204, 198, "Warm Gray",       40 TODO: Verify RGB value is correct
+ 67,  86,   7, "Dark Olive",      41
+253, 217, 222, "Flesh Pink",      42 TODO: Verify RGB value is correct
+249, 147, 188, "Pink",            43
+  0,  56,  34, "Deep Green",      44
+178, 175, 212, "Lavender",        45
+104, 106, 176, "Wisteria Violet", 46
+239, 227, 185, "Beige",           47
+247,  56, 102, "Carmine",         48 TODO: Verify RGB value is correct
+181,  75, 100, "Amber Red",       "" ; Index 49
+ 19,  43,  26, "Olive Green",     "" ; Index 50
+; TODO: Verify RGB value is correct
+199,   1,  86, "Dark Fuschia",    "" ; Index 51
+254, 158,  50, "Tangerine",       "" ; Index 52
+168, 222, 235, "Light Blue",      "" ; Index 53
+; TODO: Verify RGB value is correct
+  0, 103,  62, "Emerald Green",   "" ; Index 54
+ 78,  41, 144, "Purple",          "" ; Index 55
+ 47, 126,  32, "Moss Green",      "" ; Index 56
+255, 204, 204, "Flesh Pink",      "" ; Index 57 TODO: Verify RGB value is correct TODO: Flesh Pink is Index 42, is this Index incorrect?
+255, 217,  17, "Harvest Gold",    "" ; Index 58
+  9,  91, 166, "Electric Blue",   "" ; Index 59
+240, 249, 112, "Lemon Yellow",    "" ; Index 60
+227, 243,  91, "Fresh Green",     "" ; Index 61
+255, 153,   0, "Orange",          "" ; Index 62 TODO: Verify RGB value is correct TODO: Orange is Index 12, is this Index incorrect?
+255, 240, 141, "Cream Yellow",    "" ; Index 63 TODO: Verify RGB value is correct TODO: Cream Yellow is Index 34, is this Index incorrect?
+255, 200, 200, "Applique",        ""  ; Index 64
