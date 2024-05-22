@@ -12,6 +12,7 @@
 
 ScriptValue about_command(ScriptEnv*);
 ScriptValue alert_command(ScriptEnv*);
+ScriptValue angle_command(ScriptEnv*);
 ScriptValue circle_command(ScriptEnv*);
 ScriptValue clear_command(ScriptEnv*);
 ScriptValue day_command(ScriptEnv *);
@@ -36,6 +37,7 @@ ScriptValue icon64_command(ScriptEnv*);
 ScriptValue get_command(ScriptEnv*);
 ScriptValue line_command(ScriptEnv*);
 ScriptValue locatepoint_command(ScriptEnv*);
+ScriptValue mirrorselected_command(ScriptEnv*);
 ScriptValue move_command(ScriptEnv*);
 ScriptValue moveselected_command(ScriptEnv*);
 ScriptValue new_command(ScriptEnv*);
@@ -82,88 +84,6 @@ ScriptValue zoomextents_command(ScriptEnv*);
 ScriptValue zoomin_command(ScriptEnv*);
 ScriptValue zoomout_command(ScriptEnv*);
 
-Command other_cmd[] = {
-    {
-        .id = -1,
-        .main = debug_command,
-        .icon = "about",
-        .menu_name = "None",
-        .menu_position = 0,
-        .toolbar_name = "None",
-        .toolbar_position = 0,
-        .tooltip = "Debug",
-        .statustip = "Displays information about this product:  ABOUT",
-        .alias = "DEBUG"
-    },
-    {
-        .id = -1,
-        .main = error_command,
-        .icon = "error",
-        .menu_name = "None",
-        .menu_position = 0,
-        .toolbar_name = "None",
-        .toolbar_position = 0,
-        .tooltip = "Error",
-        .statustip = "Sends an error message to the user. Command: ERROR",
-        .alias = "ERROR"
-    },
-    {
-        .id = -1,
-        .main = panup_command,
-        .menu_name = "None",
-        .menu_position = 0,
-        .toolbar_name = "None",
-        .toolbar_position = 0,
-        .tooltip = "&Pan Up",
-        .statustip = "Moves the view up:  PANUP",
-        .alias = "PANUP"
-    },
-    {
-        .id = -1,
-        .main = windownext_command,
-        .menu_name = "None",
-        .menu_position = 0,
-        .toolbar_name = "None",
-        .toolbar_position = 0,
-        .tooltip = "Ne&xt",
-        .statustip = "Move the focus to the next window:  NEXT",
-        .alias = "NEXT, WINDOWNEXT"
-    },
-    {
-        .id = -1,
-        .main = windowprevious_command,
-        .menu_name = "None",
-        .menu_position = 0,
-        .toolbar_name = "None",
-        .toolbar_position = 0,
-        .tooltip = "Pre&vious",
-        .statustip = "Move the focus to the previous window:  PREVIOUS",
-        .alias = "PREV, PREVIOUS, WINDOWPREVIOUS"
-    },
-    {
-        .id = -1,
-        .main = windowcloseall_command,
-        .menu_name = "None",
-        .menu_position = 0,
-        .toolbar_name = "None",
-        .toolbar_position = 0,
-        .tooltip = "Cl&ose",
-        .statustip = "Close the active window. Command: CLOSEALL.",
-        .alias = "CLOSEALL, WINDOWCLOSEALL"
-    },
-    {
-        .id = -1,
-        .main = windowclose_command,
-        .menu_name = "None",
-        .menu_position = 0,
-        .toolbar_name = "None",
-        .toolbar_position = 0,
-        .tooltip = "Cl&ose",
-        .statustip = "Close the active window:  CLOSE.",
-        .alias = "CLOSE, WINDOWCLOSE"
-    }
-};
-
 Command command_data[] = {
     {
         .id = ACTION_about,
@@ -191,6 +111,18 @@ Command command_data[] = {
     },
     {
         .id = -1,
+        .main = angle_command,
+        .icon = "angle",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "&Angle",
+        .statustip = "Calculate the angle between two lines and display it. Command: ANGLE, CALCANGLE",
+        .alias = "ANGLE, CALCANGLE"
+    },
+    {
+        .id = -1,
         .main = circle_command,
         .icon = "circle",
         .menu_name = "Draw",
@@ -204,7 +136,7 @@ Command command_data[] = {
     {
         .id = ACTION_CLEAR,
         .main = clear_command,
-        .icon = "donothing",
+        .icon = "clear",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
@@ -224,6 +156,18 @@ Command command_data[] = {
         .tooltip = "&Day",
         .statustip = "Updates the current view using day vision settings. Command: DAY",
         .alias = "DAY"
+    },
+    {
+        .id = -1,
+        .main = debug_command,
+        .icon = "about",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "Debug",
+        .statustip = "Displays information about this product:  ABOUT",
+        .alias = "DEBUG"
     },
     {
         .id = -1,
@@ -308,6 +252,18 @@ Command command_data[] = {
         .tooltip = "D&elete",
         .statustip = "Removes objects from a drawing. Command: DELETE.",
         .alias = "E, ERASE, DEL, DELETE"
+    },
+    {
+        .id = -1,
+        .main = error_command,
+        .icon = "error",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "Error",
+        .statustip = "Sends an error message to the user. Command: ERROR",
+        .alias = "ERROR"
     },
     {
         .id = -1,
@@ -444,7 +400,7 @@ Command command_data[] = {
     {
         .id = -1,
         .main = locatepoint_command,
-        .icon = "about",
+        .icon = "locatepoint",
         .menu_name = "Tools",
         .menu_position = 11,
         .toolbar_name = "Inquiry",
@@ -452,6 +408,18 @@ Command command_data[] = {
         .tooltip = "&Locate Point",
         .statustip = "Displays the coordinate values of a location:  ID",
         .alias = "ID, LOCATEPOINT"
+    },
+    {
+        .id = -1,
+        .main = mirrorselected_command,
+        .icon = "mirror",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "&Mirror Selected",
+        .statustip = "Command: MIRRORSELECTED.",
+        .alias = "MIRRORSELECTED"
     },
     {
         .id = -1,
@@ -468,7 +436,7 @@ Command command_data[] = {
     {
         .id = -1,
         .main = moveselected_command,
-        .icon = "donothing",
+        .icon = "moveselected",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
@@ -552,19 +520,19 @@ Command command_data[] = {
     {
         .id = -1,
         .main = panup_command,
-        .icon = "about",
+        .icon = "panup",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
         .toolbar_position = 0,
-        .tooltip = "Icon&24",
-        .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24"
+        .tooltip = "&Pan Up",
+        .statustip = "Moves the view up:  PANUP",
+        .alias = "PANUP"
     },
     {
         .id = -1,
         .main = path_command,
-        .icon = "about",
+        .icon = "path",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
@@ -576,19 +544,19 @@ Command command_data[] = {
     {
         .id = -1,
         .main = platform_command,
-        .icon = "about",
+        .icon = "platform",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
         .toolbar_position = 0,
-        .tooltip = "Icon&24",
-        .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24"
+        .tooltip = "&Platform",
+        .statustip = "List which platform is in use. Command: PLATFORM.",
+        .alias = "PLATFORM"
     },
     {
         .id = -1,
         .main = point_command,
-        .icon = "about",
+        .icon = "point",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
@@ -600,19 +568,19 @@ Command command_data[] = {
     {
         .id = -1,
         .main = polygon_command,
-        .icon = "about",
-        .menu_name = "None",
-        .menu_position = 0,
-        .toolbar_name = "None",
-        .toolbar_position = 0,
-        .tooltip = "Icon&24",
-        .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24"
+        .icon = "polygon",
+        .menu_name = "Draw",
+        .menu_position = 4,
+        .toolbar_name = "Draw",
+        .toolbar_position = 4,
+        .tooltip = "Pol&ygon",
+        .statustip = "Creates a regular polygon. Command: POLYGON.",
+        .alias = "POL, POLYGON"
     },
     {
         .id = -1,
         .main = polyline_command,
-        .icon = "about",
+        .icon = "polyline",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
@@ -624,7 +592,7 @@ Command command_data[] = {
     {
         .id = -1,
         .main = previewoff_command,
-        .icon = "donothing",
+        .icon = "previewoff",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
@@ -636,7 +604,7 @@ Command command_data[] = {
     {
         .id = -1,
         .main = previewon_command,
-        .icon = "donothing",
+        .icon = "previewon",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
@@ -660,7 +628,7 @@ Command command_data[] = {
     {
         .id = -1,
         .main = quickleader_command,
-        .icon = "about",
+        .icon = "quickleader",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
@@ -672,14 +640,14 @@ Command command_data[] = {
     {
         .id = -1,
         .main = rectangle_command,
-        .icon = "about",
-        .menu_name = "None",
-        .menu_position = 0,
-        .toolbar_name = "None",
-        .toolbar_position = 0,
-        .tooltip = "Icon&24",
-        .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24"
+        .icon = "rectangle",
+        .menu_name = "Draw",
+        .menu_position = 6,
+        .toolbar_name = "Draw",
+        .toolbar_position = 6,
+        .tooltip = "&Rectangle",
+        .statustip = "Creates a rectangular polyline. Command: RECTANGLE.",
+        .alias = "REC, RECT, RECTANG, RECTANGLE"
     },
     {
         .id = -1,
@@ -696,7 +664,7 @@ Command command_data[] = {
     {
         .id = -1,
         .main = rgb_command,
-        .icon = "about",
+        .icon = "rgb",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
@@ -708,7 +676,7 @@ Command command_data[] = {
     {
         .id = -1,
         .main = rotate_command,
-        .icon = "about",
+        .icon = "rotate",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
@@ -720,7 +688,7 @@ Command command_data[] = {
     {
         .id = -1,
         .main = sandbox_command,
-        .icon = "about",
+        .icon = "sandbox",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
@@ -732,7 +700,7 @@ Command command_data[] = {
     {
         .id = -1,
         .main = save_command,
-        .icon = "donothing",
+        .icon = "save",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
@@ -744,38 +712,38 @@ Command command_data[] = {
     {
         .id = -1,
         .main = scale_command,
-        .icon = "about",
+        .icon = "scale",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
         .toolbar_position = 0,
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24"
+        .alias = "SCALE"
     },
     {
         .id = -1,
         .main = scaleselected_command,
-        .icon = "donothing",
+        .icon = "scaleselected",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
         .toolbar_position = 0,
         .tooltip = "&Do Nothing",
         .statustip = "Does Nothing.",
-        .alias = "DONOTHING"
+        .alias = "SCALESELECTED"
     },
     {
         .id = -1,
         .main = selectall_command,
-        .icon = "about",
+        .icon = "selectall",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
         .toolbar_position = 0,
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24"
+        .alias = "SELECTALL, SELALL"
     },
     {
         .id = -1,
@@ -792,73 +760,73 @@ Command command_data[] = {
     {
         .id = -1,
         .main = singlelinetext_command,
-        .icon = "about",
+        .icon = "singlelinetext",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
         .toolbar_position = 0,
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24"
+        .alias = "SINGLELINETEXT"
     },
     {
         .id = -1,
         .main = snowflake_command,
-        .icon = "about",
+        .icon = "snowflake",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
         .toolbar_position = 0,
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24"
+        .alias = "SNOWFLAKE"
     },
     {
         .id = -1,
         .main = star_command,
-        .icon = "about",
+        .icon = "star",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
         .toolbar_position = 0,
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24"
+        .alias = "STAR"
     },
     {
         .id = -1,
         .main = syswindows_command,
-        .icon = "about",
+        .icon = "syswindows",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
         .toolbar_position = 0,
-        .tooltip = "Icon&24",
-        .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24"
+        .tooltip = "&SysWindows",
+        .statustip = "Arrange the windows. Command: SYSWINDOWS",
+        .alias = "WINDOWS, SYSWINDOWS"
     },
     {
         .id = -1,
         .main = tipoftheday_command,
-        .icon = "about",
+        .icon = "tipoftheday",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
         .toolbar_position = 0,
-        .tooltip = "Icon&24",
-        .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24"
+        .tooltip = "&Tip Of The Day",
+        .statustip = "Displays a dialog with useful tips:  TIPS",
+        .alias = "TIPS, TIPOFTHEDAY"
     },
     {
         .main = todo_command,
-        .icon = "about",
+        .icon = "todo",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
         .toolbar_position = 0,
         .tooltip = "&About",
         .statustip = "Displays information about this product:  ABOUT",
-        .alias = "ABOUT"
+        .alias = "TODO"
     },
     {
         .id = -1,
@@ -875,14 +843,14 @@ Command command_data[] = {
     {
         .id = -1,
         .main = vulcanize_command,
-        .icon = "undo",
+        .icon = "vulcanize",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
         .toolbar_position = 0,
         .tooltip = "&Undo",
         .statustip = "Reverses the most recent action:  UNDO",
-        .alias = "U, UNDO"
+        .alias = "VULCANIZE"
     },
     {
         .id = ACTION_windowcascade,
@@ -899,7 +867,7 @@ Command command_data[] = {
     {
         .id = ACTION_windowclose,
         .main = windowclose_command,
-        .icon = "about",
+        .icon = "windowcascade",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
@@ -911,7 +879,7 @@ Command command_data[] = {
     {
         .id = ACTION_windowcloseall,
         .main = windowcloseall_command,
-        .icon = "about",
+        .icon = "windowcloseall",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
@@ -923,26 +891,26 @@ Command command_data[] = {
     {
         .id = -1,
         .main = windownext_command,
-        .icon = "about",
+        .icon = "windownext",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
         .toolbar_position = 0,
-        .tooltip = "Icon&24",
-        .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24"
+        .tooltip = "Ne&xt",
+        .statustip = "Move the focus to the next window:  NEXT",
+        .alias = "NEXT, WINDOWNEXT"
     },
     {
         .id = -1,
         .main = windowprevious_command,
-        .icon = "about",
+        .icon = "windowprevious",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
         .toolbar_position = 0,
-        .tooltip = "Icon&24",
-        .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24"
+        .tooltip = "Pre&vious",
+        .statustip = "Move the focus to the previous window:  PREVIOUS",
+        .alias = "PREV, PREVIOUS, WINDOWPREVIOUS"
     },
     {
         .id = -1,
@@ -993,6 +961,15 @@ Command command_data[] = {
         .alias = "ZOOMOUT"
     },
     {
-        .menu_position = -1
+        .id = -1,
+        .main = do_nothing,
+        .icon = "blank",
+        .menu_name = "None",
+        .menu_position = -1,
+        .toolbar_name = "None",
+        .toolbar_position = -1,
+        .tooltip = "NULL",
+        .statustip = "NULL",
+        .alias = "NULL"
     }
 };

@@ -61,25 +61,15 @@ TRANSLATIONS = translations/afrikaans/embroidermodder2_afrikaans.ts   \ #af
                translations/swedish/embroidermodder2_swedish.ts       \ #sv
                translations/turkish/embroidermodder2_turkish.ts       \ #tr
 
-FORMS = \
-    about.ui
-
 SOURCES += \
+    script.cpp \
     command_data.cpp \
     commands.cpp \
-    about.cpp \
     distance.cpp \
     dolphin.cpp \
-    ellipse.cpp \
     heart.cpp \
-    line.cpp \
-    locatepoint.cpp \
+    tools.cpp \
     move.cpp \
-    path.cpp \
-    point.cpp \
-    polygon.cpp \
-    polyline.cpp \
-    rectangle.cpp \
     rgb.cpp \
     rotate.cpp \
     sandbox.cpp \
@@ -88,7 +78,6 @@ SOURCES += \
     snowflake.cpp \
     star.cpp \
     quickleader.cpp \
-    singlelinetext.cpp \
     main.cpp \
     mainwindow.cpp \
     mainwindow-settings.cpp \

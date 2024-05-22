@@ -10,306 +10,99 @@
 
 #include <QString>
 #include <QDebug>
-
-#include <string.h>
+#include <QWidget>
 
 #include "commands.h"
 
-QString index_name[] = {
-    "one",
-    "two",
-    "three",
-    "four",
-    "five",
-    "six",
-    "seven"
-};
-
-QString index_th_name[] = {
-    "first",
-    "second",
-    "third",
-    "fourth",
-    "fifth",
-    "sixth",
-    "seventh"
-};
-
-ScriptValue script_null = {
-    .r = 0.0f,
-    .i = 0,
-    .b = false,
-    .s = "",
-    .label = "NULL",
-    .type = SCRIPT_NULL
-};
-
-ScriptValue script_true = {
-    .r = 0.0f,
-    .i = 1,
-    .b = true,
-    .s = "",
-    .label = "true",
-    .type = SCRIPT_BOOL
-};
-
-ScriptValue script_false = {
-    .r = 0.0f,
-    .i = 0,
-    .b = false,
-    .s = "",
-    .label = "false",
-    .type = SCRIPT_BOOL
-};
-
-int
-argument_checks(ScriptEnv *context, QString function, const char *args)
+/* FIXME: detect types.
+ */
+ScriptValue
+command_prompt(const char *line)
 {
-    int i;
-    if (context->argumentCount != strlen(args)) {
-        QString s = function + "() requires " +  + " arguments";
-        debug_message(s);
-        return 0;
-    }
-    for (i=0; args[i]; i++) {
-        if (args[i] == 'r') {
-            if (context->argument[i].type != SCRIPT_REAL) {
-                QString s = "TYPE_ERROR, " + function + "(): " + index_th_name[i] + " argument is not a real number.";
-                debug_message(s);
-                return 0;
-            }
-            qreal variable = context->argument[i].r;
-            if (qIsNaN(variable)) {
-                QString s = "TYPE_ERROR, " + function + "(): " + index_th_name[i] + " argument is not a real number.";
-                debug_message(s);
-                return 0;
+    QRegExp split_char(" ");
+    QStringList line_list = QString(line).split(split_char);
+    if (_main->command_map.contains(line_list[0])) {
+        ScriptEnv* context = create_script_env();
+        int i = 0;
+        for (QString argument : line_list) {
+            if (i > 0) {
+                strcpy(context->argument[i-1].s, qPrintable(argument));
+                context->argumentCount++;
             }
         }
-        if (args[i] == 'i') {
-            if (context->argument[i].type != SCRIPT_INT) {
-                QString s = "TYPE_ERROR, " + function + "(): " + index_th_name[i] + " argument is not a integer.";
-                debug_message(s);
-                return 0;
-            }
-        }
-        if (args[i] == 'b') {
-            if (context->argument[i].type != SCRIPT_BOOL) {
-                QString s = "TYPE_ERROR, " + function + "(): " + index_th_name[i] + " argument is not a boolean.";
-                debug_message(s);
-                return 0;
-            }
-        }
-        if (args[i] == 's') {
-            if (context->argument[i].type != SCRIPT_STRING) {
-                QString s = "TYPE_ERROR, " + function + "(): " + index_th_name[i] + " argument is not a string.";
-                debug_message(s);
-                return 0;
-            }
-        }
+        ScriptValue result = _main->command_map[line_list[0]].main(context);
+        free_script_env(context);
+        return result;
     }
-    return 1;
-}
-
-QString
-translate(QString msg)
-{
-    return msg;
-}
-
-ScriptEnv *
-create_script_env()
-{
-    ScriptEnv *context = (ScriptEnv*)malloc(sizeof(ScriptEnv));
-    context->argumentCount = 0;
-    context->n_variables = 0;
-    return context;
-}
-
-void
-add_string_variable(ScriptEnv *context, const char *label, const char *s)
-{
-    strcpy(context->variable[context->n_variables].label, label);
-    strcpy(context->variable[context->n_variables].s, s);
-    context->variable[context->n_variables].type = SCRIPT_STRING;
-    context->n_variables++;
-}
-
-void
-add_int_variable(ScriptEnv *context, const char *label, int i)
-{
-    strcpy(context->variable[context->n_variables].label, label);
-    context->variable[context->n_variables].i = i;
-    context->variable[context->n_variables].type = SCRIPT_INT;
-    context->n_variables++;
-}
-
-void
-add_real_variable(ScriptEnv *context, const char *label, double r)
-{
-    strcpy(context->variable[context->n_variables].label, label);
-    context->variable[context->n_variables].r = r;
-    context->variable[context->n_variables].type = SCRIPT_REAL;
-    context->n_variables++;
-}
-
-const char *
-script_get_string(ScriptEnv *context, const char *label)
-{
-    int i;
-    for (i=0; i<context->n_variables; i++) {
-        if (!strcmp(context->variable[i].label, label)) {
-            return context->variable[i].s;
-        }
-    }
-    return "ERROR: string not found.";
-}
-
-int
-script_get_int(ScriptEnv *context, const char *label)
-{
-    int i;
-    for (i=0; i<context->n_variables; i++) {
-        if (!strcmp(context->variable[i].label, label)) {
-            return context->variable[i].i;
-        }
-    }
-    return -1;
-}
-
-double
-script_get_real(ScriptEnv *context, const char *label)
-{
-    int i;
-    for (i=0; i<context->n_variables; i++) {
-        if (!strcmp(context->variable[i].label, label)) {
-            return context->variable[i].r;
-        }
-    }
-    return -1.0;
-}
-
-int
-script_set_string(ScriptEnv *context, const char *label, const char *s)
-{
-    int i;
-    for (i=0; i<context->n_variables; i++) {
-        if (!strcmp(context->variable[i].label, label)) {
-            strcpy(context->variable[i].s, s);
-            return 1;
-        }
-    }
-    return 0;
-}
-
-int
-script_set_int(ScriptEnv *context, const char *label, int x)
-{
-    int i;
-    for (i=0; i<context->n_variables; i++) {
-        if (!strcmp(context->variable[i].label, label)) {
-            context->variable[i].i = x;
-            return 1;
-        }
-    }
-    return 0;
-}
-
-int
-script_set_real(ScriptEnv *context, const char *label, double r)
-{
-    int i;
-    for (i=0; i<context->n_variables; i++) {
-        if (!strcmp(context->variable[i].label, label)) {
-            context->variable[i].r = r;
-            return 1;
-        }
-    }
-    return 0;
-}
-
-void
-free_script_env(ScriptEnv* context)
-{
-    free(context);
-}
-
-ScriptValue
-script_bool(bool b)
-{
-    ScriptValue value;
-    value.type = SCRIPT_BOOL;
-    value.b = b;
-    return value;
-}
-
-ScriptValue
-script_int(int i)
-{
-    ScriptValue value;
-    value.type = SCRIPT_INT;
-    value.i = i;
-    return value;
-}
-
-ScriptValue
-script_real(qreal r)
-{
-    ScriptValue value;
-    value.type = SCRIPT_REAL;
-    value.r = r;
-    return value;
-}
-
-ScriptValue
-script_string(const char *s)
-{
-    ScriptValue value;
-    value.type = SCRIPT_STRING;
-    strcpy(value.s, s);
-    return value;
-}
-
-void
-debug_message(QString s)
-{
-    _main->nativeAppendPromptHistory(s);
-}
-
-ScriptValue
-throwError(QString s)
-{
-    debug_message(s);
     return script_false;
 }
 
-/* These pack the arguments for function calls in the command environment. */
-ScriptEnv *
-add_string_argument(ScriptEnv *context, const char *s)
-{
-    strcpy(context->argument[context->argumentCount].s, s);
-    context->argument[context->argumentCount].type = SCRIPT_STRING;
-    context->argumentCount++;
-}
-
-ScriptEnv *
-add_real_argument(ScriptEnv *context, double r)
-{
-    context->argument[context->argumentCount].r = r;
-    context->argument[context->argumentCount].type = SCRIPT_REAL;
-    context->argumentCount++;
-}
-
-ScriptEnv *
-add_int_argument(ScriptEnv *context, int i)
-{
-    context->argument[context->argumentCount].i = i;
-    context->argument[context->argumentCount].type = SCRIPT_INT;
-    context->argumentCount++;
-}
-
-/* Simple Context-Insensitive Commands
- * -----------------------------------------------------------
+/* Simple Commands (other commands, like circle_command are housed in their
+ * own file with their associated functions)
+ * ------------------------------------------------------------------------
  */
+
+/* TODO: QTabWidget for about dialog
+ */
+ScriptValue
+about_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "about", "")) {
+        return script_false;
+    }
+
+    _main->nativeInitCommand();
+
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
+    qDebug("about()");
+
+    QString appDir = qApp->applicationDirPath();
+    QString appName = QApplication::applicationName();
+    QString title = "About " + appName;
+
+    QDialog dialog(_main);
+    QLabel image_label;
+    QPixmap img(appDir + "/images/logo-small.png");
+    image_label.setPixmap(img);
+    QLabel text(appName + "\n\n" +
+        _main->tr("http://www.libembroidery.org") +
+        "\n\n" +
+        _main->tr("Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi") +
+        "\n\n" +
+        _main->tr("Embroidery formats by Josh Varga.") +
+        "\n" +
+        _main->tr("User Interface by Jonathan Greig.") +
+        "\n\n" +
+        _main->tr("Free under the zlib/libpng license.")
+        #if defined(BUILD_GIT_HASH)
+        + "\n\n" +
+        _main->tr("Build Hash: ") + qPrintable(BUILD_GIT_HASH)
+        #endif
+        );
+    text.setWordWrap(true);
+
+    QDialogButtonBox buttonbox(Qt::Horizontal, &dialog);
+    QPushButton button(&dialog);
+    button.setText("Oh, Yeah!");
+    buttonbox.addButton(&button, QDialogButtonBox::AcceptRole);
+    buttonbox.setCenterButtons(true);
+    _main->connect(&buttonbox, SIGNAL(accepted()), &dialog, SLOT(accept()));
+
+    QVBoxLayout layout;
+    layout.setAlignment(Qt::AlignCenter);
+    layout.addWidget(&image_label);
+    layout.addWidget(&text);
+    layout.addWidget(&buttonbox);
+
+    dialog.setWindowTitle(title);
+    dialog.setMinimumWidth(image_label.minimumWidth()+30);
+    dialog.setMinimumHeight(image_label.minimumHeight()+50);
+    dialog.setLayout(&layout);
+    dialog.exec();
+
+    QApplication::restoreOverrideCursor();
+    _main->nativeEndCommand();
+}
 
 /* ACTION_ALERT is a prompt-only command. */
 ScriptValue
@@ -335,19 +128,6 @@ angle_command(ScriptEnv *context)
     _main->nativeEndCommand();
     return script_null;
 }
-
-Command angle_cmd = {
-    .id = -1,
-    .main = angle_command,
-    .icon = "angle",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&Angle",
-    .statustip = "Calculate the angle between two lines and display it. Command: ANGLE, CALCANGLE",
-    .alias = "ANGLE, CALCANGLE"
-};
 
 /* CLEAR is not context-dependant. */
 ScriptValue
@@ -660,19 +440,6 @@ mirrorselected_command(ScriptEnv *context)
     return script_null;
 }
 
-Command mirrorselected_cmd = {
-    .id = -1,
-    .main = mirrorselected_command,
-    .icon = "mirror",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&Mirror Selected",
-    .statustip = "Command: MIRRORSELECTED.",
-    .alias = "MIRRORSELECTED"
-};
-
 /* MOVESELECTED */
 ScriptValue
 moveselected_command(ScriptEnv *context)
@@ -757,42 +524,24 @@ panup_command(ScriptEnv * context)
     return script_null;
 }
 
-/* PLATFORM is not context-sensitive. */
+/* PLATFORM is not context-sensitive.
+ * Should this display in the command prompt or just return like GET?
+ */
 ScriptValue
-platform_command(ScriptEnv * /* context */)
+platform_command(ScriptEnv *context)
 {
+    if (!argument_checks(context, "debug", "")) {
+        return script_false;
+    }
+
     _main->nativeInitCommand();
-//    _main->reportPlatform();
+//  setPromptPrefix(qsTr("Platform") + " = " + _main->platformString());
+//  appendPromptHistory();
     _main->nativeEndCommand();
     return script_null;
 }
 
-#if 0
-function reportPlatform()
-{
-    setPromptPrefix(qsTr("Platform") + " = " + platformString());
-    appendPromptHistory();
-}
-[Menu]
-Name=None
-Position=0
-
-[ToolBar]
-Name=None
-Position=0
-
-[Tips]
-ToolTip=&Platform
-StatusTip=List which platform is in use:  PLATFORM
-
-[Prompt]
-Alias=PLATFORM
-#endif
-
-
-/* NOTE: main() is run every time the command is started.
- *       Use it to reset variables so they are ready to go.
- */
+/* PREVIEWOFF . */
 ScriptValue
 previewoff_command(ScriptEnv *context)
 {
@@ -805,9 +554,7 @@ previewoff_command(ScriptEnv *context)
     return script_null;
 }
 
-/* NOTE: main() is run every time the command is started.
-*       Use it to reset variables so they are ready to go.
-*/
+/* PREVIEWON . */
 ScriptValue
 previewon_command(ScriptEnv *context)
 {
@@ -849,9 +596,7 @@ previewon_command(ScriptEnv *context)
     return script_null;
 }
 
-/* NOTE: main() is run every time the command is started.
- *       Use it to reset variables so they are ready to go.
- */
+/* PRINT . */
 ScriptValue
 print_command(ScriptEnv *context)
 {
@@ -994,20 +739,6 @@ syswindows_command(ScriptEnv * context)
     return script_null;
 }
 
-#if 0
-{
-    .id = -1,
-    .main = syswindows_command,
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&SysWindows",
-    .statustip = "Arrange the windows:  SYSWINDOWS",
-    .alias = "WINDOWS, SYSWINDOWS"
-},
-#endif
-
 /* TIPOFTHEDAY is not context-sensitive. */
 ScriptValue
 tipoftheday_command(ScriptEnv * context)
@@ -1018,20 +749,6 @@ tipoftheday_command(ScriptEnv * context)
     _main->nativeEndCommand();
     return script_null;
 }
-
-#if 0
-{
-    .id = -1,
-    .main = tipoftheday_command,
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&Tip Of The Day",
-    .statustip = "Displays a dialog with useful tips:  TIPS",
-    .alias = "TIPS, TIPOFTHEDAY"
-},
-#endif
 
 /* TODO is not context-sensitive. */
 ScriptValue
@@ -1284,15 +1001,6 @@ javaDisableMoveRapidFire(ScriptEnv* context)
 }
 
 ScriptValue
-javaPlatformString(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-    return script_string(qPrintable(_main->platformString()));
-}
-
-ScriptValue
 javaMessageBox(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "sss")) {
@@ -1459,7 +1167,10 @@ javaSetRubberMode(ScriptEnv* context)
 
     else if (mode == "TEXTSINGLE")                        { _main->nativeSetRubberMode(OBJ_RUBBER_TEXTSINGLE); }
 
-    else                                                 { return throwError("UNKNOWN_ERROR setRubberMode(): unknown rubberMode value"); }
+    else {
+        debug_message("UNKNOWN_ERROR setRubberMode(): unknown rubberMode value");
+        return script_false;
+    }
 
     return script_null;
 }
@@ -1491,29 +1202,6 @@ javaSetRubberText(ScriptEnv* context)
 
     _main->nativeSetRubberText(key, txt);
     return script_null;
-}
-
-/* FIXME: detect types.
- */
-ScriptValue
-command_prompt(const char *line)
-{
-    QRegExp split_char(" ");
-    QStringList line_list = QString(line).split(split_char);
-    if (_main->command_map.contains(line_list[0])) {
-        ScriptEnv* context = create_script_env();
-        int i = 0;
-        for (QString argument : line_list) {
-            if (i > 0) {
-                strcpy(context->argument[i-1].s, qPrintable(argument));
-                context->argumentCount++;
-            }
-        }
-        ScriptValue result = _main->command_map[line_list[0]].main(context);
-        free_script_env(context);
-        return result;
-    }
-    return script_false;
 }
 
 ScriptValue
@@ -1575,7 +1263,10 @@ javaAddRubber(ScriptEnv* context)
 ScriptValue
 javaClearRubber(ScriptEnv* context)
 {
-    if (context->argumentCount != 0) return throwError("clearRubber() requires zero arguments");
+    if (context->argumentCount != 0) {
+        debug_message("clearRubber() requires zero arguments");
+        return script_false;
+    }
 
     _main->nativeClearRubber();
     return script_null;
@@ -1585,10 +1276,12 @@ ScriptValue
 javaSpareRubber(ScriptEnv* context)
 {
     if (context->argumentCount != 1) {
-        return throwError("spareRubber() requires one argument");
+        debug_message("spareRubber() requires one argument");
+        return script_false;
     }
     if (context->argument[0].type != SCRIPT_STRING) {
-        return throwError("TYPE_ERROR, spareRubber(): first argument is not a string");
+        debug_message("TYPE_ERROR, spareRubber(): first argument is not a string");
+        return script_false;
     }
 
     QString objID = QSTR(0).toUpper();
@@ -1605,7 +1298,10 @@ javaSpareRubber(ScriptEnv* context)
     else {
         bool ok = false;
         qint64 id = objID.toLongLong(&ok);
-        if (!ok) return throwError("TYPE_ERROR, spareRubber(): error converting object ID into an int64");
+        if (!ok) {
+            debug_message("TYPE_ERROR, spareRubber(): error converting object ID into an int64");
+            return script_false;
+        }
         _main->nativeSpareRubber(id);
     }
 
@@ -1750,13 +1446,25 @@ ScriptValue
 javaAddPolygon(ScriptEnv* context)
 {
     #if 0
-    if (context->argumentCount != 1)   return throwError("addPolygon() requires one argument");
-    if (!context->argument[0].isArray()) return throwError("TYPE_ERROR, addPolygon(): first argument is not an array");
+    if (context->argumentCount != 1) {
+        debug_message("addPolygon() requires one argument");
+        return script_false;
+    }
+    if (!context->argument[0].isArray()) {
+        debug_message("TYPE_ERROR, addPolygon(): first argument is not an array");
+        return script_false;
+    }
 
     QVariantList varList = context->argument[0].toVariant().toList();
     int varSize = varList.size();
-    if (varSize < 2) return throwError("TYPE_ERROR, addPolygon(): array must contain at least two elements");
-    if (varSize % 2) return throwError("TYPE_ERROR, addPolygon(): array cannot contain an odd number of elements");
+    if (varSize < 2) {
+        debug_message("TYPE_ERROR, addPolygon(): array must contain at least two elements");
+        return script_false;
+    }
+    if (varSize % 2) {
+        debug_message("TYPE_ERROR, addPolygon(): array cannot contain an odd number of elements");
+        return script_false;
+    }
 
     bool lineTo = false;
     bool xCoord = true;
@@ -1783,8 +1491,10 @@ javaAddPolygon(ScriptEnv* context)
                 else       { path.moveTo(x,y); lineTo = true; startX = x; startY = y; }
             }
         }
-        else
-            return throwError("TYPE_ERROR, addPolygon(): array contains one or more invalid elements");
+        else {
+            debug_message("TYPE_ERROR, addPolygon(): array contains one or more invalid elements");
+            return script_false;
+        }
     }
 
     //Close the polygon
@@ -1801,13 +1511,25 @@ ScriptValue
 javaAddPolyline(ScriptEnv* context)
 {
     #if 0
-    if (context->argumentCount != 1)   return throwError("addPolyline() requires one argument");
-    if (!context->argument[0].isArray()) return throwError("TYPE_ERROR, addPolyline(): first argument is not an array");
+    if (context->argumentCount != 1) {
+        debug_message("addPolyline() requires one argument");
+        return script_false;
+    }
+    if (!context->argument[0].isArray()) {
+        debug_message("TYPE_ERROR, addPolyline(): first argument is not an array");
+        return script_false;
+    }
 
     QVariantList varList = context->argument[0].toVariant().toList();
     int varSize = varList.size();
-    if (varSize < 2) return throwError("TYPE_ERROR, addPolyline(): array must contain at least two elements");
-    if (varSize % 2) return throwError("TYPE_ERROR, addPolyline(): array cannot contain an odd number of elements");
+    if (varSize < 2) {
+        debug_message("TYPE_ERROR, addPolyline(): array must contain at least two elements");
+        return script_false;
+    }
+    if (varSize % 2) {
+        debug_message("TYPE_ERROR, addPolyline(): array cannot contain an odd number of elements");
+        return script_false;
+    }
 
     bool lineTo = false;
     bool xCoord = true;
@@ -1830,8 +1552,10 @@ javaAddPolyline(ScriptEnv* context)
                 else       { path.moveTo(x,y); lineTo = true; startX = x; startY = y; }
             }
         }
-        else
-            return throwError("TYPE_ERROR, addPolyline(): array contains one or more invalid elements");
+        else {
+            debug_message("TYPE_ERROR, addPolyline(): array contains one or more invalid elements");
+            return script_false;
+        }
     }
 
     path.translate(-startX, -startY);
@@ -2020,7 +1744,7 @@ javaScaleSelected(ScriptEnv* context)
     }
 
     if (REAL(2) <= 0.0) {
-        // throwError("UNKNOWN_ERROR scaleSelected(): scale factor must be greater than zero");
+        debug_message("UNKNOWN_ERROR scaleSelected(): scale factor must be greater than zero");
         return script_false;
     }
 
