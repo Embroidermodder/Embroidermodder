@@ -467,7 +467,6 @@ private:
     QStringList listTipOfTheDay;
 
     void                            createAllActions();
-    QAction*                        createAction(const QString icon, const QString toolTip, const QString statusTip, bool scripted = false);
     QAction*                        createAction(Command command);
     //====================================================
     //Toolbars
@@ -550,6 +549,8 @@ public slots:
     void runCommandContext(const QString& cmd, const QString& str);
     void runCommandPrompt(const QString& cmd, const QString& str);
 
+    void debug_message(const char *);
+
     void newFile();
     void openFile(bool recent = false, const QString& recentFile = "");
     void openFilesSelected(const QStringList&);
@@ -583,12 +584,6 @@ public slots:
 
     // Icons
     void iconResize(int iconSize);
-    void icon16();
-    void icon24();
-    void icon32();
-    void icon48();
-    void icon64();
-    void icon128();
 
     //Selectors
     void layerSelectorIndexChanged(int index);
@@ -637,7 +632,6 @@ public slots:
     void zoomDynamic();
     void zoomScale();
     void zoomCenter();
-    void zoomIn();
     void zoomOut();
     void zoomSelected();
     void zoomAll();

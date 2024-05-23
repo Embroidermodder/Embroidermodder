@@ -54,23 +54,20 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     QString appDir = qApp->applicationDirPath();
     //Verify that files/directories needed are actually present.
-    QFileInfo check(appDir + "/commands");
-    if(!check.exists())
-        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
-    check = QFileInfo(appDir + "/help");
-    if(!check.exists())
+    QFileInfo check(appDir + "/help");
+    if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     check = QFileInfo(appDir + "/icons");
-    if(!check.exists())
+    if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     check = QFileInfo(appDir + "/images");
-    if(!check.exists())
+    if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     check = QFileInfo(appDir + "/samples");
-    if(!check.exists())
+    if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     check = QFileInfo(appDir + "/translations");
-    if(!check.exists())
+    if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
 
     QString lang = getSettingsGeneralLanguage();
@@ -296,18 +293,24 @@ void MainWindow::recentMenuAboutToShow()
     }
 }
 
+void
+MainWindow::debug_message(const char *msg)
+{
+    qDebug(msg);
+}
+
 void MainWindow::windowMenuAboutToShow()
 {
     qDebug("MainWindow::windowMenuAboutToShow()");
     windowMenu->clear();
-    windowMenu->addAction(actionHash.value(ACTION_windowclose));
-    windowMenu->addAction(actionHash.value(ACTION_windowcloseall));
+    windowMenu->addAction(actionHash.value(ACTION_WINDOW_CLOSE));
+    windowMenu->addAction(actionHash.value(ACTION_WINDOW_CLOSE_ALL));
     windowMenu->addSeparator();
-    windowMenu->addAction(actionHash.value(ACTION_windowcascade));
-    windowMenu->addAction(actionHash.value(ACTION_windowtile));
+    windowMenu->addAction(actionHash.value(ACTION_WINDOW_CASCADE));
+    windowMenu->addAction(actionHash.value(ACTION_WINDOW_TILE));
     windowMenu->addSeparator();
-    windowMenu->addAction(actionHash.value(ACTION_windownext));
-    windowMenu->addAction(actionHash.value(ACTION_windowprevious));
+    windowMenu->addAction(actionHash.value(ACTION_WINDOW_NEXT));
+    windowMenu->addAction(actionHash.value(ACTION_WINDOW_PREVIOUS));
 
     windowMenu->addSeparator();
     QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
@@ -573,13 +576,12 @@ void MainWindow::updateMenuToolbarStatusbar()
 {
     qDebug("MainWindow::updateMenuToolbarStatusbar()");
 
-    actionHash.value(ACTION_print)->setEnabled(numOfDocs > 0);
-    actionHash.value(ACTION_windowclose)->setEnabled(numOfDocs > 0);
-    actionHash.value(ACTION_designdetails)->setEnabled(numOfDocs > 0);
+    actionHash.value(ACTION_PRINT)->setEnabled(numOfDocs > 0);
+    actionHash.value(ACTION_WINDOW_CLOSE)->setEnabled(numOfDocs > 0);
+    actionHash.value(ACTION_DESIGN_DETAILS)->setEnabled(numOfDocs > 0);
 
-    if(numOfDocs)
-    {
-        //Toolbars
+    if (numOfDocs) {
+        /* Toolbars */
         toolbarView->show();
         toolbarZoom->show();
         toolbarPan->show();

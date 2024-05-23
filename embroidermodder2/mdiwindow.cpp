@@ -264,6 +264,13 @@ bool MdiWindow::loadFile(const QString &fileName)
             }
         }
         /* NOTE: Polylines should only contain NORMAL stitches. */
+        QPainterPath polylinePath;
+        polylinePath.moveTo(0.0, 0.0);
+        polylinePath.lineTo(10.0, 0.0);
+        polylinePath.lineTo(10.0, 10.0);
+        polylinePath.lineTo(0.0, 10.0);
+        polylinePath.lineTo(0.0, 0.0);
+        mainWin->nativeAddPolyline(0.0, 0.0, polylinePath, OBJ_RUBBER_OFF);
         /*
         if(p->polylineObjList) {
             EmbPolylineObjectList* curPolylineObjList = p->polylineObjList;

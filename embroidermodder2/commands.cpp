@@ -12,6 +12,7 @@
 #include <QDebug>
 #include <QWidget>
 
+#include "view.h"
 #include "commands.h"
 
 /* FIXME: detect types.
@@ -129,6 +130,19 @@ angle_command(ScriptEnv *context)
     return script_null;
 }
 
+/* WINDOWTILE is not context-dependant */
+ScriptValue
+changelog_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "whats_this_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
 /* CLEAR is not context-dependant. */
 ScriptValue
 clear_command(ScriptEnv* context)
@@ -137,6 +151,32 @@ clear_command(ScriptEnv* context)
         return script_false;
     }
 
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* WINDOWTILE is not context-dependant */
+ScriptValue
+copy_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "whats_this_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* WINDOWTILE is not context-dependant */
+ScriptValue
+cut_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "whats_this_command", "")) {
+        return script_false;
+    }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
     _main->nativeEndCommand();
@@ -170,6 +210,19 @@ debug_command(ScriptEnv *context)
     _main->nativeAppendPromptHistory(QSTR(0));
     _main->nativeEndCommand();
     return script_null;
+}
+
+/* DONOTHING is not context-dependant. */
+ScriptValue
+design_details_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "design_details_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->nativeEndCommand();
+    return script_true;
 }
 
 /* DISABLE is a prompt-only Command. */
@@ -356,7 +409,7 @@ icon128_command(ScriptEnv *context)
     }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->icon128();
+    _main->iconResize(128);
     _main->nativeEndCommand();
     return script_null;
 }
@@ -369,7 +422,7 @@ icon16_command(ScriptEnv * context)
     }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->icon16();
+    _main->iconResize(16);
     _main->nativeEndCommand();
     return script_null;
 }
@@ -382,7 +435,7 @@ icon24_command(ScriptEnv * context)
     }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->icon24();
+    _main->iconResize(24);
     _main->nativeEndCommand();
     return script_null;
 }
@@ -395,7 +448,7 @@ icon32_command(ScriptEnv * context)
     }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->icon32();
+    _main->iconResize(32);
     _main->nativeEndCommand();
     return script_null;
 }
@@ -408,7 +461,7 @@ icon48_command(ScriptEnv * context)
     }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->icon48();
+    _main->iconResize(48);
     _main->nativeEndCommand();
     return script_null;
 }
@@ -421,7 +474,7 @@ icon64_command(ScriptEnv * context)
     }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->icon64();
+    _main->iconResize(64);
     _main->nativeEndCommand();
     return script_null;
 }
@@ -520,6 +573,19 @@ panup_command(ScriptEnv * context)
 {
     _main->nativeInitCommand();
     _main->panUp();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* WINDOWTILE is not context-dependant */
+ScriptValue
+paste_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "whats_this_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
     _main->nativeEndCommand();
     return script_null;
 }
@@ -706,6 +772,19 @@ set_command(ScriptEnv* context)
     return script_null;
 }
 
+/* WINDOWTILE is not context-dependant */
+ScriptValue
+settings_dialog_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "whats_this_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
 /* NOTE: main() is run every time the command is started.
  *       Use it to reset variables so they are ready to go.
  */
@@ -738,6 +817,76 @@ syswindows_command(ScriptEnv * context)
     #endif
     return script_null;
 }
+
+/* ZOOMIN is not context-dependant */
+ScriptValue
+text_bold_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomin_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* ZOOMIN is not context-dependant */
+ScriptValue
+text_italic_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomin_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* ZOOMIN is not context-dependant */
+ScriptValue
+text_underline_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomin_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+
+    _main->nativeEndCommand();
+    return script_null;
+}
+/* ZOOMIN is not context-dependant */
+ScriptValue
+text_overline_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomin_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* ZOOMIN is not context-dependant */
+ScriptValue
+text_strikeout_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomin_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+
+    _main->nativeEndCommand();
+    return script_null;
+}
+
 
 /* TIPOFTHEDAY is not context-sensitive. */
 ScriptValue
@@ -788,6 +937,19 @@ vulcanize_command(ScriptEnv * context)
     _main->nativeInitCommand();
     _main->nativeClearSelection();
     _main->nativeVulcanize();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* WINDOWTILE is not context-dependant */
+ScriptValue
+whats_this_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "whats_this_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
     _main->nativeEndCommand();
     return script_null;
 }
@@ -866,7 +1028,49 @@ windowtile_command(ScriptEnv *context)
 
 /* ZOOMEXTENTS is not context-dependant */
 ScriptValue
-zoomextents_command(ScriptEnv *context)
+zoom_all_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomextents_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->zoomExtents();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* ZOOMEXTENTS is not context-dependant */
+ScriptValue
+zoom_dynamic_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomextents_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->zoomExtents();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* ZOOMEXTENTS is not context-dependant */
+ScriptValue
+zoom_center_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomextents_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+    _main->zoomExtents();
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* ZOOMEXTENTS is not context-dependant */
+ScriptValue
+zoom_extents_command(ScriptEnv *context)
 {
     if (!argument_checks(context, "zoomextents_command", "")) {
         return script_false;
@@ -880,42 +1084,109 @@ zoomextents_command(ScriptEnv *context)
 
 /* ZOOMIN is not context-dependant */
 ScriptValue
-zoomin_command(ScriptEnv *context)
+zoom_in_command(ScriptEnv *context)
+{
+    _main->debug_message("zoomIn()");
+    if (!argument_checks(context, "zoom_in_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+
+    View* gview = _main->activeView();
+    if (gview) {
+        gview->zoomIn();
+    }
+
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* ZOOMIN is not context-dependant */
+ScriptValue
+zoom_previous_command(ScriptEnv *context)
 {
     if (!argument_checks(context, "zoomin_command", "")) {
         return script_false;
     }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->zoomIn();
+
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* ZOOMIN is not context-dependant */
+ScriptValue
+zoom_real_time_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomin_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+
     _main->nativeEndCommand();
     return script_null;
 }
 
 /* ZOOMOUT is not context-dependant */
 ScriptValue
-zoomout_command(ScriptEnv *context)
+zoom_out_command(ScriptEnv *context)
 {
     if (!argument_checks(context, "zoomout_command", "")) {
         return script_false;
     }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-    _main->zoomOut();
+
     _main->nativeEndCommand();
     return script_null;
 }
 
-/* FIXME */
+/* ZOOMIN is not context-dependant */
 ScriptValue
-stub_implement(const char *function)
+zoom_scale_command(ScriptEnv *context)
 {
+    if (!argument_checks(context, "zoomin_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
 
-    return script_true;
+    _main->nativeEndCommand();
+    return script_null;
 }
 
-/* All of these need to be filed into the commands/ directory.
- * -----------------------------------------------------------
+/* ZOOMIN is not context-dependant */
+ScriptValue
+zoom_selected_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomin_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* ZOOMIN is not context-dependant */
+ScriptValue
+zoom_window_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomin_command", "")) {
+        return script_false;
+    }
+    _main->nativeInitCommand();
+    _main->nativeClearSelection();
+
+    _main->nativeEndCommand();
+    return script_null;
+}
+
+/* --------------------------------------------------------------------------
  */
 
 ScriptValue
