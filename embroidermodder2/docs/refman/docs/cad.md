@@ -1,12 +1,16 @@
+# CAD Commands
 
 \newcommand{\indexi}[1]{\index{#1}#1}
 \newcommand{\indext}[1]{\index{#1}\texttt{#1}}
-
 
 A CAD command\indext{CAD}\indext{command} in Embroidermodder is referred to as
 an \emph{action}\indext{action} and the data needed for it to function is stored
 in the \indext{``action_table``}. For a regular user who wishes to use
 more shortcuts and macros
+
+| ID | Name | Arguments | Description                                        |
+|----|------|-----------|----------------------------------------------------|
+| 0  | NEW  | none      | Create a new EmbPattern with a new tab in the GUI. |
 
 \begin{longtable}{p{1cm} p{2.5cm} p{2cm} p{7cm}}
 \caption{Overview of the CAD commands available on all platorms but with
