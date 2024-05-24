@@ -22,14 +22,10 @@ rm -fr site
 
 mkdocs build
 
-for project in refman user-manual
-do
-	cd docs/$project
-		mkdocs build
-	cd ../..
-done
+cd docs
+	mkdocs build
+cd ..
 
-mv docs/user-manual/docs/site/em2*.pdf site
-mv docs/refman/docs/site/emrm*.pdf site
+mv docs/refman/site/emrm*.pdf site
 
 mv site _site
