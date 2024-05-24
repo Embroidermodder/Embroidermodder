@@ -23,9 +23,8 @@ rm -fr site
 mkdocs build
 
 cd docs
-	mkdocs build
+    mkdocs build
+    mv site/emrm*.pdf ../site
 cd ..
-
-mv docs/site/emrm*.pdf site
 
 mv site _site

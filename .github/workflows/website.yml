@@ -20,7 +20,6 @@ jobs:
         run: |
           cd embroidermodder2
           bash build_docs.sh
-          mv _site ..
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
 
