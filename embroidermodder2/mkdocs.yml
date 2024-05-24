@@ -11,7 +11,7 @@ nav:
   - User Manual:
     - Introduction: user/em2/index.md
     - UNIX Manpage: https://www.libembroidery.org/embroider
-  - Reference Manual: refman/README.md
+  - Reference Manual:
     - Home: index.md
     - Dedication: dedication.md
     - About: about.md
