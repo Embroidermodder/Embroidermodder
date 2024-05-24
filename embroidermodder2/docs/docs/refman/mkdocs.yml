@@ -47,7 +47,7 @@ plugins:
       #render_js: true
       #headless_chrome_path: headless-chromium
 
-      output_path: em2_user_manual.pdf
+      output_path: emrm_2_0_0-alpha4.pdf
       #enabled_if_env: ENABLE_PDF_EXPORT
 markdown_extensions:
   - footnotes

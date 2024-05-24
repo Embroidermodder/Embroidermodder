@@ -27,7 +27,9 @@ do
 	cd $project
 		mkdocs build
 	cd ..
-	cp -r $project/site site/$project
 done
+
+mv user_manual/docs/site/em2*.pdf site
+mv refman/docs/site/emrm*.pdf site
 
 mv site _site
