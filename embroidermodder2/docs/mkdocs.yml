@@ -3,6 +3,7 @@ site_description: The design, analysis and rationale of all Embroidermodder proj
 copyright: Copyright (C) 2013-2024 The Embroidermodder Team
 site_url: https://www.libembroidery.org/refman
 repo_url: https://github.com/Embroidermodder/embroidermodder
+docs_dir: refman
 nav:
   - Home: index.md
   - Dedication: dedication.md

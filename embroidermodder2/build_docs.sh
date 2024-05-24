@@ -26,6 +26,6 @@ cd docs
 	mkdocs build
 cd ..
 
-mv docs/refman/site/emrm*.pdf site
+mv docs/site/emrm*.pdf site
 
 mv site _site
