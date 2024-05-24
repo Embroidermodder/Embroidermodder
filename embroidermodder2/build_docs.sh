@@ -24,12 +24,12 @@ mkdocs build
 
 for project in refman user-manual
 do
-	cd $project
+	cd docs/$project
 		mkdocs build
-	cd ..
+	cd ../..
 done
 
-mv user_manual/docs/site/em2*.pdf site
-mv refman/docs/site/emrm*.pdf site
+mv docs/user-manual/docs/site/em2*.pdf site
+mv docs/refman/docs/site/emrm*.pdf site
 
 mv site _site

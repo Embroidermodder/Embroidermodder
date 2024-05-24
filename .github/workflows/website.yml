@@ -18,9 +18,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Build
         run: |
-          cd embroidermodder2/docs
-          bash build.sh
-          mv _site ../..
+          cd embroidermodder2
+          bash build_docs.sh
+          mv _site ..
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
 
