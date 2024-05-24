@@ -11,7 +11,13 @@ nav:
   - User Manual:
     - Introduction: user/em2/index.md
     - UNIX Manpage: https://www.libembroidery.org/embroider
-  - Reference Manual: https://www.libembroidery.org/refman
+  - Reference Manual: refman/README.md
+    - Home: index.md
+    - Dedication: dedication.md
+    - About: about.md
+    - To Do: todo.md
+    - CAD Commands: cad.md
+    - Thread Tables: thread_tables.md
   - Contact: contact.md
   - Donate: https://opencollective.com/embroidermodder
   - Github: https://github.com/Embroidermodder
