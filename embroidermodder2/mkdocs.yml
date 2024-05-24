@@ -5,20 +5,20 @@ site_url: https://www.libembroidery.org/
 repo_url: https://github.com/embroidermodder/embroidermodder
 edit_uri: edit/main/docs/
 nav:
-  - Home: index.md
-  - Downloads: downloads.md
-  - About: about.md
+  - Home: /
+  - Downloads: downloads
+  - About: about
   - User Manual:
-    - Introduction: user/em2/index.md
-    - UNIX Manpage: https://www.libembroidery.org/embroider
+    - Introduction: user/em2
+    - UNIX Manpage: user/embroider
   - Reference Manual:
-    - Home: index.md
-    - Dedication: dedication.md
-    - About: about.md
-    - To Do: todo.md
-    - CAD Commands: cad.md
-    - Thread Tables: thread_tables.md
-  - Contact: contact.md
+    - Home: refman
+    - Dedication: refman/dedication
+    - About: refman/about
+    - To Do: refman/todo
+    - CAD Commands: refman/cad
+    - Thread Tables: refman/thread_table
+  - Contact: contact
   - Donate: https://opencollective.com/embroidermodder
   - Github: https://github.com/Embroidermodder
 theme:
