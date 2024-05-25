@@ -277,8 +277,7 @@ If you use multiple operating systems, it's important to choose software that wo
 Embroidermodder 2 runs on Windows, Linux and Mac OS X. Let's not forget the  Raspberry
 Pi (https://www.raspberrypi.org).
 
-.. image::
-   images/features-platforms-1.png
+![Features: platforms](images/features-platforms-1.png){ align=right }
 
 ## Realistic Rendering
 
@@ -288,14 +287,11 @@ pseudo ``3D`` realistic rendering helps achieve this
 
 Real render examples.
 
-.. image::
-   images/features-realrender-1.png
+![Features: real render 1](images/features-realrender-1.png)
 
-.. image::
-   images/features-realrender-2.png
+![Features: real render 2](images/features-realrender-2.png)
 
-.. image::
-   images/features-realrender-3.png
+![Features: real render 3](images/features-realrender-3.png)
 
 ### Various grid types and auto-adjusting rulers
 
@@ -308,8 +304,7 @@ Multiple grids and rulers in action Figure ref fig grid-ruler.
 
 Grid and ruler examples.
 
-.. image::
-   images/features-grid-ruler-1.png
+![Features: grids and rulers](images/features-grid-ruler-1.png)
 
 ### Many measurement tools
 
@@ -320,8 +315,7 @@ locate individual points or find distances between any 2 points anywhere in the 
 
 Take quick and accurate measurements:
 
-.. image::
-   images/features-measure-1.png
+![Features: measurements](images/features-measure-1.png)
 
 ### Add text to any design
 
@@ -332,8 +326,7 @@ with the property editor.
 
 Add text and adjust its properties quickly:
 
-.. image::
-   images/features-text-1.png
+![Features: text](images/features-text-1.png)
 
 ### Supports many formats
 
@@ -350,8 +343,7 @@ line utility which supports batch file conversion.
 
 There are a multitude of formats to choose from:
 
-.. image::
-   images/features-formats-1.png
+![Features: formats](images/features-formats-1.png)
 
 ### Scripting API
 
@@ -364,8 +356,10 @@ us (contact.html) and we will review it for functionality, bugs, and finally inc
 
 An Embroidermodder 2 command excerpt:
 
-.. image::
-   images/features-scripting-1.png
+!!! warning
+    Scripting isn't Javascript-based any more. A more basic "run command" system is in development.
+
+![Features: script](images/features-scripting-1.png)
 
 % scripting screenshot
 
@@ -1485,29 +1479,25 @@ If you use multiple operating systems, it's important to choose software that wo
 
 Embroidermodder 2 runs on Windows, Linux and Mac OS X. Let's not forget the Raspberry Pi (http://www.raspberrypi.org).
 
-.. image::
-   images/features-platforms-1.png
+![Features: platforms](images/features-platforms-1.png)
 
 ### Realistic Rendering
 
 It is important to be able to visualize what a design will look like when stitched and our pseudo ``3D`` realistic rendering helps achieve this.
 
-Realistic rendering sample \#1:
+Realistic rendering sample #1:
 
-.. image::
-   images/features-realrender-1.png
+![Features: Real render](images/features-realrender-1.png)
 
-Realistic rendering sample \#2:
+Realistic rendering sample #2:
 
-.. image::
-   images/features-realrender-2.png
+![Features: Real render](images/features-realrender-2.png)
 
-Realistic rendering sample \#3:
+Realistic rendering sample #3:
 
-.. image::
-   images/features-realrender-3.png
+![Features: Real render](images/features-realrender-3.png)
 
-Various grid types and auto-adjusting rulers
+### Various grid types and auto-adjusting rulers
 
 Making use of the automatically adjusting ruler in conjunction with the grid will ensure your design is properly sized and fits within your embroidery hoop area.
 
@@ -1515,55 +1505,50 @@ Use rectangular, circular or isometric grids to construct your masterpiece!
 
 Multiple grids and rulers in action:
 
-.. image::
-   images/features-grid-ruler-1.png
+![Features: Real render](images/features-grid-ruler-1.png)
 
-### Many measurement tools}
+### Many measurement tools
 
 Taking measurements is a critical part of creating great designs. Whether you are designing mission critical embroidered space suits for NASA or some other far out design for your next meet-up, you will have precise measurement tools at your command to make it happen. You can locate individual points or find distances between any 2 points anywhere in the design!
 
 Take quick and accurate measurements:
 
-.. image::
-   images/features-measure-1.png
+![Features: measurement](images/features-measure-1.png)
 
-### Add text to any design}
+### Add text to any design
 
 Need to make company apparel for all of your employees with individual names on them? No sweat. Just simply add text to your existing design or create one from scratch, quickly and easily.
 Didn't get it the right size or made a typo? No problem. Just select the text and update it with the property editor.
 
 Add text and adjust its properties quickly:
 
-.. image::
-   images/features-text-1.png
+![Features: text](images/features-text-1.png)
 
-### Supports many formats}
+### Supports many formats
 
 Embroidery machines all accept different formats. There are so many formats available that it can sometimes be confusing whether a design will work with your machine.
 
 Embroidermodder 2 supports a wide variety of embroidery formats as well as several vector formats, such as SVG and DXF. This allows you to worry less about which designs you can use.
 
-### Batch Conversion}
+### Batch Conversion
 
 Need to send a client several different formats? Just use libembroidery-convert, our command line utility which supports batch file conversion.
 
 There are a multitude of formats to choose from:
 
-.. image::
-   images/features-formats-1.png
+![Features: batch conversion](images/features-formats-1.png)
 
-### Scripting API}
+### Scripting API
 
 If you've got programming skills and there is a feature that isn't currently available that you absolutely cannot live without, you have the capability to create your own custom commands for Embroidermodder 2. We provide an QtScript API which exposes various application functionality so that it is possible to extend the application without requiring a new release. If you have created a command that you think is worth including in the next release, just <a href=``contact.html``>contact us</a> and we will review it for functionality, bugs, and finally inclusion.
 
 An Embroidermodder 2 command excerpt:
 
-.. image::
-   images/features-scripting-1.png
+![Features: scripting](images/features-scripting-1.png)
 
-## Contributing}
+## Contributing
 
-### Version Control}
+### Version Control
 
 Being an open source project, developers can grab the latest code at any time
 and attempt to build it themselves. We try our best to ensure that it will build smoothly
@@ -1575,48 +1560,42 @@ Try to group commits based on what they are related to: features/bugs/comments/g
 
 See the coding style ref (coding-style)
 
-## Introduction}
+## Introduction
 
-### Basic Features}
+### Basic Features
 
-### Move a single stitch in an existing pattern}
+### Move a single stitch in an existing pattern
 
-\begin{enumerate}
-\item In the `File' menu, click `Open...'. When the open dialog appears find
- and select your file by double clicking the name of the file. Alternatively,
- left click the file once then click the `Open` button.
-\item
-\item In the `File' menu
-\end{enumerate}
+1. In the `File' menu, click `Open...'. When the open dialog appears find and select your file by double clicking the name of the file. Alternatively, left click the file once then click the `Open` button.
+2.
+3. In the `File' menu
 
-.. tip::
-   For users who prefer
+!!! tip
+    For users who prefer
 
-### Convert one pattern to another format}
+### Convert one pattern to another format
 
-\begin{enumerate}
 1. In the `File` menu, click `Open...`.
 2. The 
 3. In the dropdown menu within the save dialog select the 
-\end{enumerate}
 
-## Advanced Features}
+## Advanced Features
 
-## Other Projects}
+## Other Projects
 
-### Planning}
+### Planning
 
 To see what's planned open the [Projects](https://github.com/Embroidermodder/Embroidermodder/projects/1) tab which sorts all of the GitHub Issues into columns.
 
-### Format Support}
+### Format Support
 
 Support for Singer FHE, CHE (Compucon) formats?
 
-### Embroidermodder Project Coding Standards}
+### Embroidermodder Project Coding Standards
 
 A basic set of guidelines to use when submitting code.
 
-### Naming Conventions}
+### Naming Conventions
 
 Name variables and functions intelligently to minimize the need for comments.
 It should be immediately obvious what information it represents.
@@ -1628,29 +1607,29 @@ C Functions that attempt to simulate namespacing, should be `nameSpace\_camelCas
 
 All files and directories shall be lowercase and contain no spaces.
 
-### Code Style}
+### Code Style
 
 Tabs should not be used when indenting. Setup your IDE or text editor to use 4 spaces.
 
-### Braces}
+### Braces
 
 For functions: please put each brace on a new line.
 
-\begin{lstlisting}
+```
 void
 function_definition(int argument)
 {
     /* code block */
 }
-\end{lstlisting}
+```
 
 For control statements: please put the first brace on the same line.
 
-\begin{lstlisting}
+```
 if (condition) {
     /* code block */    
 }
-\end{lstlisting}
+```
 
 Use exceptions sparingly.
 
@@ -1687,9 +1666,9 @@ gcc. In any C code, you must use:
 /* TODO: This code clearly needs more work or further review. */
 /* BUG: This code is definitely wrong. It needs fixed. */
 /* HACK: This code shouldn't be written this way or I don't feel
-* right about it. There may a better solution */
+ * right about it. There may a better solution */
 /* WARNING: Think twice (or more times) before changing this code.
-* I put this here for a good reason. */
+ * I put this here for a good reason. */
 /* NOTE: This comment is much more important than lesser comments. */
 ```
 
@@ -1710,7 +1689,8 @@ development by donating to the project on Open Collective
 
 ## Introduction
 
-\emph{(UNDER MAJOR RESTRUCTURING, PLEASE WAIT FOR VERSION 2.)}
+!!! warning
+    (UNDER MAJOR RESTRUCTURING, PLEASE WAIT FOR VERSION 2.)
 
 Embroidermodder is a free machine embroidery application.
 The newest version, Embroidermodder 2 can:
@@ -1733,8 +1713,6 @@ formal way than a changelog (since this software is in development) and covers
 what we are about to try.
 
 To see what we're focussing on at the moment check this table.
-
-.. table:: Plan
 
 |           *Date* |                                    *Event* |
 |------------------|--------------------------------------------|
@@ -1762,7 +1740,7 @@ on Debian Linux/GNU use:
 
 ```
 $ sudo apt install git clang build-essential libsdl2-dev \
- libsdl2-images-dev libsdl2-ttf-dev
+      libsdl2-images-dev libsdl2-ttf-dev
 ```
 
 If you can't find a good fit for your system (on Windows use the section below),
@@ -1921,7 +1899,7 @@ packaging, it's just available as a single JSON style object
 called `settings` available with this import line:
 
 ```
-    from embroidermodder.config import settings
+from embroidermodder.config import settings
 ```
 
 In order to pass PyLint style guides this will be split up and
@@ -1945,8 +1923,7 @@ processor for these descriptions.
 Embroidermodder uses a list processor (a subset of the language
 Lisp which is short for LISt Processor) to accomplish this.
 
-For example the string: `(+ (* t 2) 5)`.
-is equivalent to the expression: $2*t + 5$.
+For example the string: `(+ (* t 2) 5)` is equivalent to the expression: $2*t + 5$.
 
 The benefit of not allowing this to simply be a Python expression
 is that it is safe against malicious use, or accidental misuse.
@@ -1954,8 +1931,7 @@ The program can identify whether the output is of the appropriate
 form and give finitely many calculations before declaring the
 function to have run too long (stopping equations that hang).
 
-To see examples of this see \texttt{parser.py} and
-\texttt{config/design\_primatives.py}.
+To see examples of this see `parser.py` and `config/design\_primatives.py`.
 
 It's also worth noting that we don't use the simpler reverse Polish
 notation (RPN) approach because:
@@ -1965,9 +1941,8 @@ notation (RPN) approach because:
 
 ### SVG Icons
 
-To make the images easier to alter and restyle we could
-switch to svg icons. There's some code in the git history
-to help with this.
+To make the images easier to alter and restyle we could switch to svg icons. There's some code in the
+git history to help with this.
 
 ### The Actions System
 
@@ -2338,27 +2313,27 @@ effect people who use our software.
 15. Stitching simulation
 16. User designed custom fill
 17. Keyboard zooming, panning
-\item Advanced printing
-\item Libembroidery 1.0
-\item Better integrated help: I don't think the help should backend to a html file somewhere on the user's system. A better system would be a custom widget within the program that's searchable.
-\item New embroidermodder2.ico 16x16 logo that looks good at that scale.
-\item saving dst, pes, jef
-\item Settings dialog: notify when the user is switching tabs that the setting has been changed, adding apply button is what would make sense for this to happen.
-\item Update language translations
-\item Replace KDE4 thumbnailer.
-\item Import raster image
-\item Statistics from 1.0, needs histogram.
-\item SNAP/ORTHO/POLAR
-\item Cut/copy allow post-selection
-\item Layout into config
-\item Notify user of data loss if not saving to an object format.
-1. Add which formats to work with to preferences.
-1. Cannot open file with \# in the name when opening multiple files but works with opening a single file.
-1. Closing settings dialog with the X in the window saves settings rather than discarding them.
-1. Otto theme icons: units, render, selectors, what's this icon doesn't  scale
-1. Layer manager and Layer switcher dock widget
-1. Test that all formats read data in correct scale (format details should match other programs).
-1. Custom filter bug -- doesn't save changes in some cases.
+18. Advanced printing
+19. Libembroidery 1.0
+20. Better integrated help: I don't think the help should backend to a html file somewhere on the user's system. A better system would be a custom widget within the program that's searchable.
+21. New embroidermodder2.ico 16x16 logo that looks good at that scale.
+22. saving dst, pes, jef
+23. Settings dialog: notify when the user is switching tabs that the setting has been changed, adding apply button is what would make sense for this to happen.
+24. Update language translations
+25. Replace KDE4 thumbnailer.
+26. Import raster image
+27. Statistics from 1.0, needs histogram.
+28. SNAP/ORTHO/POLAR
+29. Cut/copy allow post-selection
+30. Layout into config
+31. Notify user of data loss if not saving to an object format.
+32. Add which formats to work with to preferences.
+33. Cannot open file with \# in the name when opening multiple files but works with opening a single file.
+34. Closing settings dialog with the X in the window saves settings rather than discarding them.
+35. Otto theme icons: units, render, selectors, what's this icon doesn't  scale
+36. Layer manager and Layer switcher dock widget
+37. Test that all formats read data in correct scale (format details should match other programs).
+38. Custom filter bug -- doesn't save changes in some cases.
 
 ### Fix for Version 2.1
 
@@ -2399,13 +2374,13 @@ So:
    there's less junk in global variables. A structure similar to a
 5. Python dict that uses constants like the sketch below.
 
-### Why JSON over ini?}
+### Why JSON over ini?
 
 1. We need to hand-write \emph{a} system because the current system is Qt dependent anyway.
-2.  This way we can store more complex data structures in the same system including the layout of the widgets which may be user configured (see Blender and GIMP).
-3.  Also it's easier to share information formatted this way between systems because most systems us JSON or XML data: there's better support for converting complex data this way.
+2. This way we can store more complex data structures in the same system including the layout of the widgets which may be user configured (see Blender and GIMP).
+3. Also it's easier to share information formatted this way between systems because most systems us JSON or XML data: there's better support for converting complex data this way.
 
-### Sketch of a settings system}
+### Sketch of a settings system
 
 .. literalinclude:: examples/settings\_system.c
 
@@ -2413,17 +2388,14 @@ This would all be in C, and wouldn't rely on Qt at all. We already use a
 system like this in `libembroidery` so hopefully devs on both
 would get the pattern.
 
-### Design}
+### Design
 
-These are key bits of reasoning behind why the software is built the way
-it is.
+These are key bits of reasoning behind why the software is built the way it is.
 
-### Scripting Overhaul}
+### Scripting Overhaul
 
-Originally Embroidermodder had a terminal widget, this is why we removed
-it.
+Originally Embroidermodder had a terminal widget, this is why we removed it.
 
-```
 > ROBIN: I think supporting scripting within Embroidermodder doesn't make
 > sense.
 >
@@ -2443,13 +2415,12 @@ it.
 > I don't want to change this without Josh's support because it's a fairly
 > major change.
 >
->> JOSH: I totally agree.
->>
->> I like the idea of scripting just so people that know how to code could
->> write their own designs without needing to fully build the app.
->> Scripting would be a very advanced feature that most users would be
->> confused by. Libembroidery would be a good fit for advanced features.
-```
+> JOSH: I totally agree.
+>
+> I like the idea of scripting just so people that know how to code could
+> write their own designs without needing to fully build the app.
+> Scripting would be a very advanced feature that most users would be
+> confused by. Libembroidery would be a good fit for advanced features.
 
 ### Perennial Jobs
 
@@ -2518,12 +2489,11 @@ should be ``nameSpace\_camelCase``.
 
 All files and directories shall be lowercase and contain no spaces.
 
-### Code Style}
+### Code Style
 
-Tabs should not be used when indenting. Setup your IDE or text editor to
-use 4 spaces.
+Tabs should not be used when indenting. Setup your IDE or text editor to use 4 spaces.
 
-### Braces}
+### Braces
 
 For functions: please put each brace on a new line.
 
@@ -2941,15 +2911,11 @@ index & arguments & flags \\
 \end{tabular}
 \end{center}
 
-### ADD-ARC}
-\index{action}
+### ADD-ARC
 
-\begin{center}
-\begin{tabular}{l | l | l}
-index & arguments & flags \\
-1 & mouse co-ords & 
-\end{tabular}
-\end{center}
+| index | arguments | flags |
+|------|------|------|
+| 1 | mouse | co-ords |
 
 ### ADD-CIRCLE
 \index{ADD-CIRCLE}
