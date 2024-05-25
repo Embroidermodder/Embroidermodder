@@ -24,7 +24,11 @@ nav:
     - 'About': 'refman/about.md'
     - 'To Do': 'refman/todo.md'
     - 'CAD Commands': 'refman/cad.md'
-    - 'Thread Tables': 'refman/thread_table.md'
+    - 'Formats':
+      - '100': 'refman/formats/format_100.md'
+      - 'CSV': 'refman/formats/format_csv.md'
+      - 'SVG': 'refman/formats/format_svg.md'
+    - 'Thread Tables': 'refman/thread_tables.md'
   - 'Contact': 'contact.md'
   - 'Donate': https://opencollective.com/embroidermodder
   - 'Github': https://github.com/Embroidermodder
