@@ -9,10 +9,15 @@ nav:
   - 'Downloads': 'downloads/index.md'
   - 'About': 'about.md'
   - 'User Manual':
-    - 'Introduction': 'user/em2/intro.md'
-    - 'Tutorials':
-      - 'Alter A Single Stitch': 'user/em2/tutorials/alter-a-single-stitch.md'
+    - 'Introduction': 'user/intro.md'
+    - 'Editing Designs': 'user/editing-designs.md'
+    - 'Using Raster Images': 'user/image.md'
+    - 'Batch': 'user/batch.md'
+    - 'Mobile': 'user/mobile.md'
+    - 'PET': 'user/pet.md'
     - 'UNIX Manpage': 'user/embroider.md'
+    - 'Contributing': 'user/contributing.md'
+    - 'License': 'user/license.md'
   - 'Reference Manual':
     - 'Home': 'refman/index.md'
     - 'Dedication': 'refman/dedication.md'

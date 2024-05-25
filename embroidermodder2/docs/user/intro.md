@@ -1,8 +1,13 @@
-# Embroidermodder User Manual
+---
+title: Embroidermodder 2.0 User Manual
+---
+
+# Embroidermodder 2.0.0-alpha4  User Manual
 
 ## Introduction
 
-Warning: THIS MANUAL IS IN PROGRESS: PLEASE WAIT FOR THE BETA RELEASE.
+!!! warning
+    THIS MANUAL IS IN PROGRESS: PLEASE WAIT FOR THE BETA RELEASE.
 
 This manual is for the various ways of using the \embname tools for designing,
 editing and converting machine embroidery files. Most users should try loading and altering a design

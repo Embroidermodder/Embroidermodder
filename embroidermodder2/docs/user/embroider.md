@@ -1,9 +1,11 @@
+
+```
 EMBROIDER(1)                 General Commands Manual                EMBROIDER(1)
 
-NNAAMMEE
+NAME
        embroider - a command line program for machine embroidery
 
-SSYYNNOOPPSSIISS
+SYNOPSIS
        Copyright 2013-2023 The Embroidermodder Team Licensed under the terms of
        the zlib license.
 
@@ -58,3 +60,4 @@ SSYYNNOOPPSSIISS
                --full-test-suite  Run all tests, even those we expect to fail.
 
                                                                     EMBROIDER(1)
+```
