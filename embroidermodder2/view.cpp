@@ -1,7 +1,7 @@
 /*
  *  Embroidermodder 2.
  *
- *  Copyright 2013-2024 The Embroidermodder Team
+ *  Copyright 2011-2024 The Embroidermodder Team
  *  Embroidermodder 2 is Open Source Software.
  *  See LICENSE for licensing terms.
  *
@@ -127,6 +127,8 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     setBackgroundColor(mainWin->getSettingsDisplayBGColor());
     //TODO: wrap this with a setBackgroundPixmap() function: setBackgroundBrush(QPixmap("images/canvas.png"));
 
+    geometry = emb_array_create(EMB_POLYLINE);
+
     connect(gscene, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 }
 
@@ -135,6 +137,8 @@ View::~View()
     //Prevent memory leaks by deleting any objects that were removed from the scene
     qDeleteAll(hashDeletedObjects.begin(), hashDeletedObjects.end());
     hashDeletedObjects.clear();
+
+    emb_array_free(geometry);
 
     //Prevent memory leaks by deleting any unused instances
     qDeleteAll(previewObjectList.begin(), previewObjectList.end());
@@ -592,12 +596,72 @@ bool View::isRealEnabled()
     return gscene->property(ENABLE_REAL).toBool();
 }
 
+void
+View::drawArc(QPainter* painter, EmbArc arc)
+{
+    QPainterPath path;
+}
+
+void
+View::drawCircle(QPainter* painter, EmbCircle circle)
+{
+    QPainterPath path;
+    EmbVector p = circle.center;
+    qreal rad = circle.radius;
+    path.moveTo(p.x, p.y + rad);
+    path.arcTo(p.x-rad, p.y-rad, rad*2.0, rad*2.0, 90.0, 360.0);
+    path.arcTo(p.x-rad, p.y-rad, rad*2.0, rad*2.0, 90.0, -360.0);
+    path.closeSubpath();
+    painter->drawPath(path);
+}
+
+void
+View::drawEllipse(QPainter* painter, EmbEllipse ellipse)
+{
+    QPainterPath path;
+}
+
+void
+View::drawLine(QPainter* painter, EmbLine line)
+{
+    QPainterPath path;
+}
+
+void
+View::drawPolygon(QPainter* painter, EmbPolygon polygon)
+{
+    QPainterPath path;
+}
+
+void
+View::drawPolyline(QPainter* painter, EmbPolyline polyline)
+{
+    QPainterPath path;
+}
+
+void
+View::drawRect(QPainter* painter, EmbRect rect)
+{
+    QPainterPath path;
+    path.moveTo(rect.left, rect.top);
+    path.lineTo(rect.left, rect.bottom);
+    path.lineTo(rect.right, rect.bottom);
+    path.lineTo(rect.right, rect.top);
+    path.lineTo(rect.left, rect.top);
+    painter->drawPath(path);
+}
+
+void
+View::drawSpline(QPainter* painter, EmbSpline spline)
+{
+
+}
+
 void View::drawBackground(QPainter* painter, const QRectF& rect)
 {
     painter->fillRect(rect, backgroundBrush());
 
-    if(gscene->property(ENABLE_GRID).toBool() && rect.intersects(gridPath.controlPointRect()))
-    {
+    if (gscene->property(ENABLE_GRID).toBool() && rect.intersects(gridPath.controlPointRect())) {
         QPen gridPen(gridColor);
         gridPen.setJoinStyle(Qt::MiterJoin);
         gridPen.setCosmetic(true);
@@ -605,6 +669,46 @@ void View::drawBackground(QPainter* painter, const QRectF& rect)
         painter->drawPath(gridPath);
         painter->drawPath(originPath);
         painter->fillPath(originPath, gridColor);
+    }
+
+    for (int i = 0; i < geometry->count; i++) {
+        EmbGeometry g = geometry->geometry[i];
+        switch (g.type) {
+        case EMB_ARC: {
+            drawArc(painter, g.object.arc);
+            break;
+        }
+        case EMB_CIRCLE: {
+            drawCircle(painter, g.object.circle);
+            break;
+        }
+        case EMB_ELLIPSE: {
+            drawEllipse(painter, g.object.ellipse);
+            break;
+        }
+        case EMB_LINE: {
+            drawLine(painter, g.object.line);
+            break;
+        }
+        case EMB_POLYGON: {
+            drawPolygon(painter, g.object.polygon);
+            break;
+        }
+        case EMB_POLYLINE: {
+            drawPolyline(painter, g.object.polyline);
+            break;
+        }
+        case EMB_RECT: {
+            drawRect(painter, g.object.rect);
+            break;
+        }
+        case EMB_SPLINE: {
+            drawSpline(painter, g.object.spline);
+            break;
+        }
+        default:
+            break;
+        }
     }
 }
 

@@ -776,11 +776,12 @@ set_command(ScriptEnv* context)
 ScriptValue
 settings_dialog_command(ScriptEnv *context)
 {
-    if (!argument_checks(context, "whats_this_command", "")) {
+    if (!argument_checks(context, "settings_dialog_command", "")) {
         return script_false;
     }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
+    _main->settingsDialog();
     _main->nativeEndCommand();
     return script_null;
 }
@@ -1140,6 +1141,11 @@ zoom_out_command(ScriptEnv *context)
     _main->nativeInitCommand();
     _main->nativeClearSelection();
 
+    View* gview = _main->activeView();
+    if (gview) {
+        gview->zoomOut();
+    }
+
     _main->nativeEndCommand();
     return script_null;
 }
@@ -1421,13 +1427,21 @@ javaSetRubberMode(ScriptEnv* context)
     else if (mode == "DIMLEADER_LINE") {
         _main->nativeSetRubberMode(OBJ_RUBBER_DIMLEADER_LINE);
     }
-    else if (mode == "ELLIPSE_LINE")                      { _main->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_LINE); }
-    else if (mode == "ELLIPSE_MAJORDIAMETER_MINORRADIUS") { _main->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS); }
-    else if (mode == "ELLIPSE_MAJORRADIUS_MINORRADIUS")   { _main->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS); }
-    else if (mode == "ELLIPSE_ROTATION")                  { _main->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_ROTATION); }
-
-    else if (mode == "LINE")                              { _main->nativeSetRubberMode(OBJ_RUBBER_LINE); }
-
+    else if (mode == "ELLIPSE_LINE") {
+        _main->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_LINE);
+    }
+    else if (mode == "ELLIPSE_MAJORDIAMETER_MINORRADIUS") {
+        _main->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS);
+    }
+    else if (mode == "ELLIPSE_MAJORRADIUS_MINORRADIUS") {
+        _main->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS);
+    }
+    else if (mode == "ELLIPSE_ROTATION") {
+        _main->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_ROTATION);
+    }
+    else if (mode == "LINE") {
+        _main->nativeSetRubberMode(OBJ_RUBBER_LINE);
+    }
     else if (mode == "POLYGON")                           { _main->nativeSetRubberMode(OBJ_RUBBER_POLYGON); }
     else if (mode == "POLYGON_INSCRIBE")                  { _main->nativeSetRubberMode(OBJ_RUBBER_POLYGON_INSCRIBE); }
     else if (mode == "POLYGON_CIRCUMSCRIBE")              { _main->nativeSetRubberMode(OBJ_RUBBER_POLYGON_CIRCUMSCRIBE); }
@@ -1462,7 +1476,7 @@ javaSetRubberPoint(ScriptEnv* context)
 }
 
 ScriptValue
-javaSetRubberText(ScriptEnv* context)
+set_rubber_text_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "SetRubberPoint", "ss")) {
         return script_false;
@@ -1476,7 +1490,7 @@ javaSetRubberText(ScriptEnv* context)
 }
 
 ScriptValue
-javaAddRubber(ScriptEnv* context)
+add_Rubber(ScriptEnv* context)
 {
     if (!argument_checks(context, "SetRubberPoint", "s")) {
         return script_false;
@@ -1505,28 +1519,72 @@ javaAddRubber(ScriptEnv* context)
     else if (objType == "DIMALIGNED") {
         // TODO: handle this type
     }
-    else if (objType == "DIMANGULAR")   {} //TODO: handle this type
-    else if (objType == "DIMARCLENGTH") {} //TODO: handle this type
-    else if (objType == "DIMDIAMETER")  {} //TODO: handle this type
-    else if (objType == "DIMLEADER")    { _main->nativeAddDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
-    else if (objType == "DIMLINEAR")    {} //TODO: handle this type
-    else if (objType == "DIMORDINATE")  {} //TODO: handle this type
-    else if (objType == "DIMRADIUS")    {} //TODO: handle this type
-    else if (objType == "ELLIPSE")      { _main->nativeAddEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON); }
-    else if (objType == "ELLIPSEARC")   {} //TODO: handle this type
-    else if (objType == "HATCH")        {} //TODO: handle this type
-    else if (objType == "IMAGE")        {} //TODO: handle this type
-    else if (objType == "INFINITELINE") {} //TODO: handle this type
-    else if (objType == "LINE")         { _main->nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
-    else if (objType == "PATH")         {} //TODO: handle this type
-    else if (objType == "POINT")        {} //TODO: handle this type
-    else if (objType == "POLYGON")      { _main->nativeAddPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
-    else if (objType == "POLYLINE")     { _main->nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
-    else if (objType == "RAY")          {} //TODO: handle this type
-    else if (objType == "RECTANGLE")    { _main->nativeAddRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }
-    else if (objType == "SPLINE")       {} //TODO: handle this type
-    else if (objType == "TEXTMULTI")    {} //TODO: handle this type
-    else if (objType == "TEXTSINGLE")   { _main->nativeAddTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON); }
+    else if (objType == "DIMANGULAR") {
+        // TODO: handle this type
+    }
+    else if (objType == "DIMARCLENGTH") {
+        // TODO: handle this type
+    }
+    else if (objType == "DIMDIAMETER") {
+        // TODO: handle this type
+    }
+    else if (objType == "DIMLEADER") {
+        _main->nativeAddDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON);
+    }
+    else if (objType == "DIMLINEAR") {
+        // TODO: handle this type
+    }
+    else if (objType == "DIMORDINATE") {
+        // TODO: handle this type
+    }
+    else if (objType == "DIMRADIUS") {
+        // TODO: handle this type
+    }
+    else if (objType == "ELLIPSE") {
+        _main->nativeAddEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON);
+    }
+    else if (objType == "ELLIPSEARC") {
+        // TODO: handle this type
+    }
+    else if (objType == "HATCH") {
+        // TODO: handle this type
+    }
+    else if (objType == "IMAGE") {
+        // TODO: handle this type
+    }
+    else if (objType == "INFINITELINE") {
+        // TODO: handle this type
+    }
+    else if (objType == "LINE") {
+        _main->nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON);
+    }
+    else if (objType == "PATH") {
+        // TODO: handle this type
+    }
+    else if (objType == "POINT") {
+        // TODO: handle this type
+    }
+    else if (objType == "POLYGON") {
+        _main->nativeAddPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON);
+    }
+    else if (objType == "POLYLINE") {
+        _main->nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON);
+    }
+    else if (objType == "RAY") {
+        // TODO: handle this type
+    }
+    else if (objType == "RECTANGLE") {
+        _main->nativeAddRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON);
+    }
+    else if (objType == "SPLINE") {
+        // TODO: handle this type
+    }
+    else if (objType == "TEXTMULTI") {
+        // TODO: handle this type
+    }
+    else if (objType == "TEXTSINGLE") {
+        _main->nativeAddTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON);
+    }
 
     return script_null;
 }
@@ -1580,7 +1638,7 @@ javaSpareRubber(ScriptEnv* context)
 }
 
 ScriptValue
-javaAddTextMulti(ScriptEnv* context)
+add_TextMulti(ScriptEnv* context)
 {
     if (!argument_checks(context, "mouseX", "srrrb")) {
         return script_false;
@@ -1590,7 +1648,7 @@ javaAddTextMulti(ScriptEnv* context)
 }
 
 ScriptValue
-javaAddTextSingle(ScriptEnv* context)
+add_TextSingle(ScriptEnv* context)
 {
     if (!argument_checks(context, "mouseX", "srrrb")) {
         return script_false;
@@ -1600,7 +1658,7 @@ javaAddTextSingle(ScriptEnv* context)
 }
 
 ScriptValue
-javaAddInfiniteLine(ScriptEnv* context)
+add_InfiniteLine(ScriptEnv* context)
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addInfiniteLine command");
@@ -1608,7 +1666,7 @@ javaAddInfiniteLine(ScriptEnv* context)
 }
 
 ScriptValue
-javaAddRay(ScriptEnv* context)
+add_Ray(ScriptEnv* context)
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addRay command");
@@ -1616,7 +1674,7 @@ javaAddRay(ScriptEnv* context)
 }
 
 ScriptValue
-javaAddLine(ScriptEnv* context)
+add_Line(ScriptEnv* context)
 {
     if (!argument_checks(context, "mouseX", "rrrrr")) {
         return script_false;
@@ -1626,7 +1684,7 @@ javaAddLine(ScriptEnv* context)
 }
 
 ScriptValue
-javaAddTriangle(ScriptEnv* context)
+add_Triangle(ScriptEnv* context)
 {
     if (!argument_checks(context, "mouseX", "rrrrrrrb")) {
         return script_false;
@@ -1636,7 +1694,7 @@ javaAddTriangle(ScriptEnv* context)
 }
 
 ScriptValue
-javaAddRectangle(ScriptEnv* context)
+add_Rectangle(ScriptEnv* context)
 {
     if (!argument_checks(context, "mouseX", "rrrrrb")) {
         return script_false;
@@ -1646,7 +1704,7 @@ javaAddRectangle(ScriptEnv* context)
 }
 
 ScriptValue
-javaAddRoundedRectangle(ScriptEnv* context)
+add_RoundedRectangle(ScriptEnv* context)
 {
     if (!argument_checks(context, "mouseX", "rrrrrrb")) {
         return script_false;
@@ -1656,7 +1714,7 @@ javaAddRoundedRectangle(ScriptEnv* context)
 }
 
 ScriptValue
-javaAddArc(ScriptEnv* context)
+add_arc_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "mouseX", "rrrrrr")) {
         return script_false;
@@ -1666,7 +1724,7 @@ javaAddArc(ScriptEnv* context)
 }
 
 ScriptValue
-javaAddCircle(ScriptEnv* context)
+add_circle_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "mouseX", "rrrb")) {
         return script_false;
@@ -1676,7 +1734,7 @@ javaAddCircle(ScriptEnv* context)
 }
 
 ScriptValue
-javaAddSlot(ScriptEnv* context)
+add_slot_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "mouseX", "rrrrrb")) {
         return script_false;
@@ -1686,7 +1744,7 @@ javaAddSlot(ScriptEnv* context)
 }
 
 ScriptValue
-javaAddEllipse(ScriptEnv* context)
+add_Ellipse(ScriptEnv* context)
 {
     if (!argument_checks(context, "mouseX", "rrrrrb")) {
         return script_false;
@@ -1696,7 +1754,7 @@ javaAddEllipse(ScriptEnv* context)
 }
 
 ScriptValue
-javaAddPoint(ScriptEnv* context)
+add_Point(ScriptEnv* context)
 {
     if (!argument_checks(context, "mouseX", "rr")) {
         return script_false;
@@ -1706,7 +1764,7 @@ javaAddPoint(ScriptEnv* context)
 }
 
 ScriptValue
-javaAddRegularPolygon(ScriptEnv* context)
+add_RegularPolygon(ScriptEnv* context)
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addRegularPolygon command");
@@ -1714,7 +1772,7 @@ javaAddRegularPolygon(ScriptEnv* context)
 }
 
 ScriptValue
-javaAddPolygon(ScriptEnv* context)
+add_Polygon(ScriptEnv* context)
 {
     #if 0
     if (context->argumentCount != 1) {
@@ -1779,7 +1837,7 @@ javaAddPolygon(ScriptEnv* context)
 }
 
 ScriptValue
-javaAddPolyline(ScriptEnv* context)
+add_Polyline(ScriptEnv* context)
 {
     #if 0
     if (context->argumentCount != 1) {
@@ -1837,7 +1895,7 @@ javaAddPolyline(ScriptEnv* context)
 }
 
 ScriptValue
-javaAddPath(ScriptEnv* context)
+add_Path(ScriptEnv* context)
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addPath command");
@@ -1845,7 +1903,7 @@ javaAddPath(ScriptEnv* context)
 }
 
 ScriptValue
-javaAddHorizontalDimension(ScriptEnv* context)
+add_HorizontalDimension(ScriptEnv* context)
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addHorizontalDimension command");
@@ -1853,7 +1911,7 @@ javaAddHorizontalDimension(ScriptEnv* context)
 }
 
 ScriptValue
-javaAddVerticalDimension(ScriptEnv* context)
+add_VerticalDimension(ScriptEnv* context)
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addVerticalDimension command");
@@ -1861,7 +1919,7 @@ javaAddVerticalDimension(ScriptEnv* context)
 }
 
 ScriptValue
-javaAddImage(ScriptEnv* context)
+add_Image(ScriptEnv* context)
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addImage command");
@@ -1869,7 +1927,7 @@ javaAddImage(ScriptEnv* context)
 }
 
 ScriptValue
-javaAddDimLeader(ScriptEnv* context)
+add_DimLeader(ScriptEnv* context)
 {
     if (!argument_checks(context, "calculateAngle", "rrrrr")) {
         return script_false;
@@ -1947,7 +2005,7 @@ javaSelectAll(ScriptEnv* context)
 /* TODO: finish
  */
 ScriptValue
-javaAddToSelection(ScriptEnv* context)
+add_ToSelection(ScriptEnv* context)
 {
     return script_null;
 }

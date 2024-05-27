@@ -1,7 +1,7 @@
 /*
  *  Embroidermodder 2.
  *
- *  Copyright 2013-2024 The Embroidermodder Team
+ *  Copyright 2011-2024 The Embroidermodder Team
  *  Embroidermodder 2 is Open Source Software.
  *  See LICENSE for licensing terms.
  *

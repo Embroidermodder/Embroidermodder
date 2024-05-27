@@ -14,6 +14,9 @@ class QGraphicsScene;
 class QUndoStack;
 QT_END_NAMESPACE
 
+inline qreal pi() { return (qAtan(1.0)*4.0); };
+inline qreal radians(qreal degrees) { return (degrees*pi()/180.0); };
+
 class View : public QGraphicsView
 {
     Q_OBJECT
@@ -21,6 +24,8 @@ class View : public QGraphicsView
 public:
     View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent);
     ~View();
+    
+    EmbArray *geometry;
 
     bool allowZoomIn();
     bool allowZoomOut();
@@ -105,6 +110,15 @@ public slots:
     void setRubberMode(int mode);
     void setRubberPoint(const QString& key, const QPointF& point);
     void setRubberText(const QString& key, const QString& txt);
+
+    void drawArc(QPainter* painter, EmbArc arc);
+    void drawCircle(QPainter* painter, EmbCircle circle);
+    void drawEllipse(QPainter* painter, EmbEllipse ellipse);
+    void drawLine(QPainter* painter, EmbLine line);
+    void drawPolygon(QPainter* painter, EmbPolygon polygon);
+    void drawPolyline(QPainter* painter, EmbPolyline polyline);
+    void drawRect(QPainter* painter, EmbRect rect);
+    void drawSpline(QPainter* painter, EmbSpline spline);
 
 protected:
     void mouseDoubleClickEvent(QMouseEvent* event);
@@ -207,10 +221,6 @@ private:
 
     void alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& viewPoint);
 
-    inline qreal pi() { return (qAtan(1.0)*4.0); };
-    inline qreal radians(qreal degrees) { return (degrees*pi()/180.0); };
 };
 
 #endif
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

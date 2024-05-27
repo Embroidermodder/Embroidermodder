@@ -10,6 +10,7 @@
 
 #include "object-circle.h"
 #include "object-data.h"
+#include "view.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -24,15 +25,16 @@
 #define MODE_TTR       4
 #define MODE_TTT       5
 
-/* NOTE: main() is run every time the command is started.
- *       Use it to reset variables so they are ready to go.
- */
+/* . */
 ScriptValue
 circle_command(ScriptEnv *context)
 {
+    _main->debug_message("ADDING CIRCLE");
+    
     _main->nativeInitCommand();
     _main->nativeClearSelection();
 
+    /*
     add_real_variable(context, "x1", 0.0f);
     add_real_variable(context, "y1", 0.0f);
     add_real_variable(context, "x2", 0.0f);
@@ -45,7 +47,20 @@ circle_command(ScriptEnv *context)
     add_real_variable(context, "cy", 0.0f);
     add_int_variable(context, "mode", MODE_1P_RAD);
 
+
     _main->nativeAppendPromptHistory(translate("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
+    */
+    EmbCircle c;
+    c.center.x = 0.0;
+    c.center.y = 0.0;
+    c.radius = 10.0;
+    View *v = _main->activeView();
+    if (v) {
+        emb_array_addCircle(v->geometry, c);
+    }
+    // _main->nativeAddCircle(0.0, 0.0, 10.0, true, OBJ_RUBBER_CIRCLE_1P_DIA);
+   
+    _main->nativeEndCommand();
     return script_null;
 }
 

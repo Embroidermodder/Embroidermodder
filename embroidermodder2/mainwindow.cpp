@@ -1,7 +1,7 @@
 /*
  * Embroidermodder 2.
  *
- * Copyright 2013-2024 The Embroidermodder Team
+ * Copyright 2011-2024 The Embroidermodder Team
  * Embroidermodder 2 is Open Source Software, see LICENSE for licensing terms.
  * Read CODE-STANDARDS.txt for advice on altering this file.
  *
@@ -748,13 +748,12 @@ void MainWindow::loadFormats()
     */
 }
 
-void MainWindow::closeToolBar(QAction* action)
+void
+MainWindow::closeToolBar(QAction* action)
 {
-    if(action->objectName() == "toolbarclose")
-    {
+    if (action->objectName() == "toolbarclose") {
         QToolBar* tb = qobject_cast<QToolBar*>(sender());
-        if(tb)
-        {
+        if (tb) {
             qDebug("%s closed.", qPrintable(tb->objectName()));
             tb->hide();
         }

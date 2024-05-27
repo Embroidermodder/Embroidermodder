@@ -549,5 +549,3 @@ void MdiWindow::promptInputPrevNext(bool prev)
         else                              { mainWin->prompt->setCurrentText(promptInputList.at(promptInputNum)); }
     }
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

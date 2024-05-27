@@ -1311,19 +1311,16 @@ void MainWindow::nativeAddCircle(qreal centerX, qreal centerY, qreal radius, boo
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
-    if(gview && gscene && stack)
-    {
+    if (gview && gscene && stack) {
         CircleObject* obj = new CircleObject(centerX, -centerY, radius, getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
         //TODO: circle fill
-        if(rubberMode)
-        {
+        if (rubberMode) {
             gview->addToRubberRoom(obj);
             gscene->addItem(obj);
             gscene->update();
         }
-        else
-        {
+        else {
             UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
