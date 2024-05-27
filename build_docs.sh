@@ -18,13 +18,17 @@ pip install mkdocs-with-pdf
 pip install mkdocs-material
 pip install mkdocs-table-reader-plugin
 
-rm -fr site
+cd embroidermodder2
+
+rm -fr _site
 
 mkdocs build
 
-cd docs
-    mkdocs build
-    mv site/emrm*.pdf ../site
-cd ..
+#cd docs
+#    mkdocs build
+#    mv site/emrm*.pdf ../site
+#cd ..
 
 mv site ../_site
+
+cd ..
