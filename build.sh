@@ -80,9 +80,12 @@ function build_release () {
     git submodule init
     git submodule update
 
-    cmake -S . -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
-    cd $BUILD_DIR
-    cmake --build .
+#    cmake -S . -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
+#    cd $BUILD_DIR
+#    cmake --build .
+    cd embroidermodder2
+    qmake
+    make -j4
     cp ../LICENSE.md .
     cd ..
 
@@ -90,10 +93,10 @@ function build_release () {
 
 function assemble_release () {
 
-    rm -fr $BUILD_DIR/CMake* $BUILD_DIR/embroidermodder2_autogen $BUILD_DIR/extern
-    rm -fr embroidermodder2/*.cpp embroidermodder2/*.h
-    cp -r $BUILD_DIR/* embroidermodder2
-    mv *manual*pdf embroidermodder2
+#    rm -fr $BUILD_DIR/CMake* $BUILD_DIR/embroidermodder2_autogen $BUILD_DIR/extern
+#    rm -fr embroidermodder2/*.cpp embroidermodder2/*.h
+#    cp -r $BUILD_DIR/* embroidermodder2
+#    mv *manual*pdf embroidermodder2
 
 }
 
@@ -189,7 +192,7 @@ function package_macos () {
 function package_linux () {
 
     sudo apt update
-    sudo apt install qt6-base-dev libqt6gui6 libqt6widgets6 libqt6printsupport6 libqt6core6 libgl-dev libglx-dev libopengl-dev
+    sudo apt install qt5-base-dev libqt5gui5 libqt5widgets5 libqt5printsupport5 libqt5core5 libgl-dev libglx-dev libopengl-dev
     sudo apt upgrade
 
     git clone https://github.com/embroidermodder/embroidermodder
