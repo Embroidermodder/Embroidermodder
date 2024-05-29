@@ -17,7 +17,7 @@ jobs:
 
     - name: package
       run: |
-        curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/master/build.sh > build.sh
+        curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/main/build.sh > build.sh
         bash build.sh --package-msi
 
     - name: archive production artifacts
@@ -31,7 +31,7 @@ jobs:
     steps:
     - name: package
       run: |
-        curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/master/build.sh > build.sh
+        curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/main/build.sh > build.sh
         bash build.sh --package-macos
         
     - name: archive production artifacts
@@ -45,7 +45,7 @@ jobs:
     steps:
     - name: package
       run: |
-        curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/master/build.sh > build.sh
+        curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/main/build.sh > build.sh
         bash build.sh --package-linux
         
     - name: archive production artifacts
