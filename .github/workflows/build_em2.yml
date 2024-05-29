@@ -1,4 +1,4 @@
-name: Build (experimental)
+name: Build (main)
 
 on:
   push:
@@ -7,18 +7,50 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-em2:
-    strategy:
-      matrix:
-        os: ["windows-latest", "macos-latest", "ubuntu-latest"]
-    name: "Build on ${{ matrix.os }}"
-    runs-on: ${{ matrix.os }}
+  build_windows:
+    runs-on: windows-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Build main
-        run: ./build.sh ${{ matrix.os }} main
-      - uses: actions/upload-artifact@v4
-        with:
-          name: embroidermodder-${{ matrix.os }}-main
-          path: ./embroidermodder2
+    - name: Set up MinGW
+      uses: egor-tensin/setup-mingw@v2
+      with:
+        platform: x64     
+
+    - name: package
+      run: |
+        curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/master/build.sh > build.sh
+        bash build.sh --package-msi
+
+    - name: archive production artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: Windows Installer
+        path: embroidermodder_2.0.0-alpha_windows.zip
+
+  build_macos:
+    runs-on: macos-latest
+    steps:
+    - name: package
+      run: |
+        curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/master/build.sh > build.sh
+        bash build.sh --package-macos
+        
+    - name: archive production artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: MacOS Archive
+        path: embroidermodder_2.0.0-alpha_macos.tar
+
+  build_linux:
+    runs-on: ubuntu-latest
+    steps:
+    - name: package
+      run: |
+        curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/master/build.sh > build.sh
+        bash build.sh --package-linux
+        
+    - name: archive production artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: GNU Linux Archive
+        path: embroidermodder_2.0.0-alpha_linux.tar
+
