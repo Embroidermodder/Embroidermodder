@@ -83,7 +83,7 @@ function build_release () {
     cmake -S . -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
     cd $BUILD_DIR
     cmake --build .
-    cp ../ZLIB-LICENSE.txt .
+    cp ../LICENSE.md .
     cd ..
 
 }
