@@ -8,7 +8,7 @@
  * Command: icon24
  */
 
-#include "../commands.h"
+#include "embroidermodder.h"
 
 /* NOTE: main() is run every time the command is started.
  *       Use it to reset variables so they are ready to go.
@@ -603,8 +603,12 @@ void TextSingleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected) {
+        paintPen.setStyle(Qt::DashLine);
+    }
+    if (objScene->property("ENABLE_LWT").toBool()) {
+        paintPen = lineWeightPen();
+    }
     painter->setPen(paintPen);
 
     painter->drawPath(objTextPath);

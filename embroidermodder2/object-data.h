@@ -1,3 +1,14 @@
+/*
+ * Embroidermodder 2.
+ *
+ * Copyright 2011-2024 The Embroidermodder Team
+ * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+ * Visit https://www.libembroidery.org/refman for advice on altering this file,
+ * or read the markdown version in embroidermodder2/docs/refman.
+ *
+ * Objects
+ */
+
 #ifndef OBJECT_DATA_H
 #define OBJECT_DATA_H
 
@@ -204,16 +215,6 @@ PREVIEW_MODE_ROTATE,
 PREVIEW_MODE_SCALE
 };
 
-const char* const ENABLE_SNAP   = "ENABLE_SNAP";
-const char* const ENABLE_GRID   = "ENABLE_GRID";
-const char* const ENABLE_RULER  = "ENABLE_RULER";
-const char* const ENABLE_ORTHO  = "ENABLE_ORTHO";
-const char* const ENABLE_POLAR  = "ENABLE_POLAR";
-const char* const ENABLE_QSNAP  = "ENABLE_QSNAP";
-const char* const ENABLE_QTRACK = "ENABLE_QTRACK";
-const char* const ENABLE_LWT    = "ENABLE_LWT";
-const char* const ENABLE_REAL   = "ENABLE_REAL";
-
 const char* const SCENE_QSNAP_POINT = "SCENE_QSNAP_POINT";
 const char* const SCENE_MOUSE_POINT = "SCENE_MOUSE_POINT";
 const char* const VIEW_MOUSE_POINT  = "VIEW_MOUSE_POINT";
@@ -224,5 +225,3 @@ const char* const VIEW_COLOR_CROSSHAIR  = "VIEW_COLOR_CROSSHAIR";
 const char* const VIEW_COLOR_GRID       = "VIEW_COLOR_GRID";
 
 #endif
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

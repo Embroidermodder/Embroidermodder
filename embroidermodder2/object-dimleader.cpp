@@ -1,3 +1,14 @@
+/*
+ * Embroidermodder 2.
+ *
+ * Copyright 2011-2024 The Embroidermodder Team
+ * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+ * Visit https://www.libembroidery.org/refman for advice on altering this file,
+ * or read the markdown version in embroidermodder2/docs/refman.
+ *
+ * Dimension Leader
+ */
+
 #include "object-dimleader.h"
 #include "object-data.h"
 
@@ -214,20 +225,27 @@ void DimLeaderObject::updateLeader()
 void DimLeaderObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) {
+        return;
+    }
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected) {
+        paintPen.setStyle(Qt::DashLine);
+    }
+    if (objScene->property("ENABLE_LWT").toBool()) {
+        paintPen = lineWeightPen();
+    }
     painter->setPen(paintPen);
 
     painter->drawPath(lineStylePath);
     painter->drawPath(arrowStylePath);
 
-    if(filled)
+    if (filled) {
         painter->fillPath(arrowStylePath, objectColor());
+    }
 }
 
 void DimLeaderObject::updateRubber(QPainter* painter)

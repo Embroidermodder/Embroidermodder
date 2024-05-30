@@ -1,14 +1,15 @@
 /*
  * Embroidermodder 2.
  *
- * Copyright 2013-2024 The Embroidermodder Team
- * Embroidermodder 2 is Open Source Software, see LICENSE for licensing terms.
- * Read CODE-STANDARDS.txt for advice on altering this file.
+ * Copyright 2011-2024 The Embroidermodder Team
+ * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+ * Visit https://www.libembroidery.org/refman for advice on altering this file,
+ * or read the markdown version in embroidermodder2/docs/refman.
  *
  * Command Data
  */
 
-#include "command_data.h"
+#include "embroidermodder.h"
 
 ScriptValue about_command(ScriptEnv*);
 ScriptValue alert_command(ScriptEnv*);
@@ -50,10 +51,12 @@ ScriptValue open_command(ScriptEnv*);
 ScriptValue paste_command(ScriptEnv*);
 ScriptValue print_command(ScriptEnv*);
 ScriptValue redo_command(ScriptEnv*);
+
 ScriptValue pandown_command(ScriptEnv*);
 ScriptValue panleft_command(ScriptEnv*);
 ScriptValue panright_command(ScriptEnv*);
 ScriptValue panup_command(ScriptEnv*);
+
 ScriptValue path_command(ScriptEnv*);
 ScriptValue platform_command(ScriptEnv*);
 ScriptValue previewoff_command(ScriptEnv*);

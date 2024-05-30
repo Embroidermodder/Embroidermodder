@@ -8,7 +8,7 @@
  * Command: HEART
  */
 
-#include "../commands.h"
+#include "embroidermodder.h"
 
 #define MODE_NUM_POINTS   0
 #define MODE_STYLE        1

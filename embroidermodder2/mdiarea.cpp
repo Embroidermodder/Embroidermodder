@@ -1,5 +1,5 @@
 #include "mdiarea.h"
-#include "mainwindow.h"
+#include "embroidermodder.h"
 #include "view.h"
 
 MdiArea::MdiArea(MainWindow* mw, QWidget *parent) : QMdiArea(parent), mainWin(mw)

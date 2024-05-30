@@ -8,7 +8,7 @@
  * Command: SELECTALL
  */
 
-#include "../commands.h"
+#include "embroidermodder.h"
 
 /* NOTE: main() is run every time the command is started.
  *       Use it to reset variables so they are ready to go.

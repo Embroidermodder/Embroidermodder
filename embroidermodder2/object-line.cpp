@@ -8,7 +8,7 @@
  * Command: icon24
  */
 
-#include "../commands.h"
+#include "embroidermodder.h"
 
 /* NOTE: main() is run every time the command is started.
  *       Use it to reset variables so they are ready to go.
@@ -261,25 +261,34 @@ qreal LineObject::objectAngle() const
 void LineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) {
+        return;
+    }
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected) {
+        paintPen.setStyle(Qt::DashLine);
+    }
+    if (objScene->property("ENABLE_LWT").toBool()) {
+        paintPen = lineWeightPen();
+    }
     painter->setPen(paintPen);
 
-    if(objectRubberMode() != OBJ_RUBBER_LINE) painter->drawLine(line());
+    if (objectRubberMode() != OBJ_RUBBER_LINE)
+        painter->drawLine(line());
 
-    if(objScene->property(ENABLE_LWT).toBool() && objScene->property(ENABLE_REAL).toBool()) { realRender(painter, path()); }
+    if (objScene->property("ENABLE_LWT").toBool()
+        && objScene->property("ENABLE_REAL").toBool()) {
+            realRender(painter, path());
+    }
 }
 
 void LineObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if(rubberMode == OBJ_RUBBER_LINE)
-    {
+    if (rubberMode == OBJ_RUBBER_LINE) {
         QPointF sceneStartPoint = objectRubberPoint("LINE_START");
         QPointF sceneQSnapPoint = objectRubberPoint("LINE_END");
 

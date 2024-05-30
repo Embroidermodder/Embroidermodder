@@ -2,7 +2,7 @@
 #define SETTINGS_DIALOG_H
 
 #include <QDialog>
-#include "mainwindow.h"
+#include "embroidermodder.h"
 
 class MainWindow;
 

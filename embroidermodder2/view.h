@@ -3,7 +3,7 @@
 
 #include <QGraphicsView>
 #include <QGraphicsScene>
-#include "mainwindow.h"
+#include "embroidermodder.h"
 
 class MainWindow;
 class BaseObject;

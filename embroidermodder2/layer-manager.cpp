@@ -1,6 +1,6 @@
 #include <QtGui>
 #include "layer-manager.h"
-#include "mainwindow.h"
+#include "embroidermodder.h"
 
 LayerManager::LayerManager(MainWindow* mw, QWidget* parent) : QDialog(parent)
 {

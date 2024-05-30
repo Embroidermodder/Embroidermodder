@@ -9,8 +9,7 @@
  */
 
 #include "object-polygon.h"
-#include "object-data.h"
-#include "commands.h"
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -405,12 +404,15 @@ void PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected) {
+        paintPen.setStyle(Qt::DashLine);
+    }
+    if (objScene->property("ENABLE_LWT").toBool()) {
+        paintPen = lineWeightPen();
+    }
     painter->setPen(paintPen);
 
-    if(normalPath.elementCount())
-    {
+    if (normalPath.elementCount()) {
         painter->drawPath(normalPath);
         QPainterPath::Element zero = normalPath.elementAt(0);
         QPainterPath::Element last = normalPath.elementAt(normalPath.elementCount()-1);
@@ -421,8 +423,7 @@ void PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
 void PolygonObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if(rubberMode == OBJ_RUBBER_POLYGON)
-    {
+    if (rubberMode == OBJ_RUBBER_POLYGON) {
         setObjectPos(objectRubberPoint("POLYGON_POINT_0"));
 
         bool ok = false;
@@ -617,5 +618,3 @@ QPainterPath PolygonObject::objectSavePath() const
     trans.scale(s,s);
     return trans.map(closedPath);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

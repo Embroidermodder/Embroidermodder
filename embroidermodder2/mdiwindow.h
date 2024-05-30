@@ -16,7 +16,7 @@
 #endif
 
 
-#include "mainwindow.h"
+#include "embroidermodder.h"
 
 class MainWindow;
 class View;

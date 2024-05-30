@@ -2,13 +2,14 @@
  * Embroidermodder 2.
  *
  * Copyright 2011-2024 The Embroidermodder Team
- * Embroidermodder 2 is Open Source Software, see LICENSE for licensing terms.
- * Read CODE-STANDARDS.txt for advice on altering this file.
+ * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+ * Visit https://www.libembroidery.org/refman for advice on altering this file,
+ * or read the markdown version in embroidermodder2/docs/refman.
  *
  * MainWindow
  */
 
-#include "mainwindow.h"
+#include "embroidermodder.h"
 
 #include "statusbar.h"
 #include "statusbar-button.h"
@@ -19,11 +20,7 @@
 #include "property-editor.h"
 #include "undo-editor.h"
 
-#include "commands.h"
-
 #include "preview-dialog.h"
-
-#include "../extern/libembroidery/embroidery.h"
 
 #include <stdlib.h>
 

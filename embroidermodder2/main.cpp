@@ -1,5 +1,5 @@
 #include "application.h"
-#include "mainwindow.h"
+#include "embroidermodder.h"
 
 const char* _appName_ = "Embroidermodder";
 const char* _appVer_  = "v2.0 alpha";

@@ -1,3 +1,14 @@
+/*
+ * Embroidermodder 2.
+ *
+ * Copyright 2011-2024 The Embroidermodder Team
+ * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+ * Visit https://www.libembroidery.org/refman for advice on altering this file,
+ * or read the markdown version in embroidermodder2/docs/refman.
+ *
+ * Settings Dialog
+ */
+
 #include <QtGui>
 
 #include "settings-dialog.h"
@@ -1616,16 +1627,24 @@ QWidget* Settings_Dialog::createTabLineWeight()
     QGraphicsScene* s = mainWin->activeScene();
 
     QCheckBox* checkBoxShowLwt = new QCheckBox(tr("Show LineWeight"), groupBoxLwtMisc);
-    if(s) { dialog_lwt_show_lwt = s->property(ENABLE_LWT).toBool(); }
-    else  { dialog_lwt_show_lwt = mainWin->getSettingsLwtShowLwt(); }
+    if (s) {
+        dialog_lwt_show_lwt = s->property("ENABLE_LWT").toBool();
+    }
+    else {
+        dialog_lwt_show_lwt = mainWin->getSettingsLwtShowLwt();
+    }
     preview_lwt_show_lwt = dialog_lwt_show_lwt;
     checkBoxShowLwt->setChecked(preview_lwt_show_lwt);
     connect(checkBoxShowLwt, SIGNAL(stateChanged(int)), this, SLOT(checkBoxLwtShowLwtStateChanged(int)));
 
     QCheckBox* checkBoxRealRender = new QCheckBox(tr("RealRender"), groupBoxLwtMisc);
     checkBoxRealRender->setObjectName("checkBoxRealRender");
-    if(s) { dialog_lwt_real_render = s->property(ENABLE_REAL).toBool(); }
-    else  { dialog_lwt_real_render = mainWin->getSettingsLwtRealRender(); }
+    if (s) {
+        dialog_lwt_real_render = s->property("ENABLE_REAL").toBool();
+    }
+    else {
+        dialog_lwt_real_render = mainWin->getSettingsLwtRealRender();
+    }
     preview_lwt_real_render = dialog_lwt_real_render;
     checkBoxRealRender->setChecked(preview_lwt_real_render);
     connect(checkBoxRealRender, SIGNAL(stateChanged(int)), this, SLOT(checkBoxLwtRealRenderStateChanged(int)));

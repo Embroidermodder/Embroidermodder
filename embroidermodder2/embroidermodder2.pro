@@ -114,16 +114,14 @@ SOURCES += \
     object-polyline.cpp \
     object-rect.cpp \
     object-textsingle.cpp \
+    rubber.cpp \
     application.cpp \
     ../extern/libembroidery/embroidery.c
 
 HEADERS += \
-    command_data.h \
-    commands.h \
-    mainwindow.h \
+    embroidermodder.h \
     mdiarea.h \
     mdiwindow.h \
-    script.h \
     view.h \
     cmdprompt.h \
     embdetails-dialog.h \

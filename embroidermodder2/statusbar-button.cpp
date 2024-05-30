@@ -1,8 +1,9 @@
-#include "mainwindow.h"
+#include "embroidermodder.h"
 #include "mdiwindow.h"
 #include "view.h"
 #include "statusbar.h"
 #include "statusbar-button.h"
+
 #include <QMenu>
 #include <QMdiArea>
 #include <QApplication>

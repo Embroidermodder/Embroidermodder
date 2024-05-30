@@ -1,22 +1,21 @@
 /*
  * Embroidermodder 2.
  *
- * Copyright 2013-2024 The Embroidermodder Team
- * Embroidermodder 2 is Open Source Software.
- * See LICENSE for licensing terms.
+ * Copyright 2011-2024 The Embroidermodder Team
+ * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+ * Visit https://www.libembroidery.org/refman for advice on altering this file,
+ * or read the markdown version in embroidermodder2/docs/refman.
  *
- * Command: about
+ * Object Circle
  */
 
 #include "object-circle.h"
-#include "object-data.h"
+#include "embroidermodder.h"
 #include "view.h"
 
 #include <QPainter>
 #include <QStyleOption>
 #include <QGraphicsScene>
-
-#include "commands.h"
 
 #define MODE_1P_RAD    0
 #define MODE_1P_DIA    1
@@ -496,8 +495,12 @@ void CircleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* opti
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected) {
+        paintPen.setStyle(Qt::DashLine);
+    }
+    if (objScene->property("ENABLE_LWT").toBool()) {
+        paintPen = lineWeightPen();
+    }
     painter->setPen(paintPen);
 
     painter->drawEllipse(rect());

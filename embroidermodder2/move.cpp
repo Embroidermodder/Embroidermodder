@@ -5,10 +5,10 @@
  * Embroidermodder 2 is Open Source Software, see LICENSE for licensing terms.
  * Read CODE-STANDARDS.txt for advice on altering this file.
  *
- * Command: icon24
+ * MOVE
  */
 
-#include "../commands.h"
+#include "embroidermodder.h"
 
 /* NOTE: main() is run every time the command is started.
  *       Use it to reset variables so they are ready to go.

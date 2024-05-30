@@ -1,14 +1,15 @@
 /*
  * Embroidermodder 2.
  *
- * Copyright 2013-2024 The Embroidermodder Team
- * Embroidermodder 2 is Open Source Software, see LICENSE for licensing terms.
- * Read CODE-STANDARDS.txt for advice on altering this file.
+ * Copyright 2011-2024 The Embroidermodder Team
+ * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+ * Visit https://www.libembroidery.org/refman for advice on altering this file,
+ * or read the markdown version in embroidermodder2/docs/refman.
  *
- * MainWindow commands
+ * MainWindow Commands
  */
- 
-#include "mainwindow.h"
+
+#include "embroidermodder.h"
 #include "view.h"
 #include "statusbar.h"
 #include "statusbar-button.h"
@@ -27,8 +28,6 @@
 #include "object-polyline.h"
 #include "object-rect.h"
 #include "object-textsingle.h"
-#include "commands.h"
-#include "script.h"
 #include "property-editor.h"
 #include "undo-editor.h"
 #include "undo-commands.h"
@@ -1062,31 +1061,6 @@ void MainWindow::nativeEndCommand()
         gview->disableMoveRapidFire();
     }
     prompt->endCommand();
-}
-
-void MainWindow::nativeNewFile()
-{
-    newFile();
-}
-
-void MainWindow::nativeOpenFile()
-{
-    openFile();
-}
-
-void MainWindow::nativeExit()
-{
-    exit();
-}
-
-void MainWindow::nativeHelp()
-{
-    help();
-}
-
-void MainWindow::nativeTipOfTheDay()
-{
-    tipOfTheDay();
 }
 
 void MainWindow::messageBox(const QString& type, const QString& title, const QString& text)

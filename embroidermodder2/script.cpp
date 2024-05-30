@@ -1,15 +1,17 @@
 /*
  * Embroidermodder 2.
  *
- * Copyright 2013-2024 The Embroidermodder Team
- * Embroidermodder 2 is Open Source Software.
- * See LICENSE for licensing terms.
+ * Copyright 2011-2024 The Embroidermodder Team
+ * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+ * Visit https://www.libembroidery.org/refman for advice on altering this file,
+ * or read the markdown version in embroidermodder2/docs/refman.
  *
+ * Script
  */
 
 #include <string.h>
 
-#include "commands.h"
+#include "embroidermodder.h"
 
 QString index_name[] = {
     "one",

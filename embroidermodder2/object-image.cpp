@@ -14,8 +14,7 @@ ImageObject::ImageObject(qreal x, qreal y, qreal w, qreal h, QRgb rgb, QGraphics
 ImageObject::ImageObject(ImageObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("ImageObject Constructor()");
-    if(obj)
-    {
+    if (obj) {
         QPointF ptl = obj->objectTopLeft();
         init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
@@ -136,8 +135,12 @@ void ImageObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected) {
+        paintPen.setStyle(Qt::DashLine);
+    }
+    if (objScene->property("ENABLE_LWT").toBool()) {
+        paintPen = lineWeightPen();
+    }
     painter->setPen(paintPen);
 
     painter->drawRect(rect());

@@ -1,10 +1,12 @@
 /*
- *  Embroidermodder 2.
+ * Embroidermodder 2.
  *
- *  Copyright 2011-2024 The Embroidermodder Team
- *  Embroidermodder 2 is Open Source Software.
- *  See LICENSE for licensing terms.
+ * Copyright 2011-2024 The Embroidermodder Team
+ * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+ * Visit https://www.libembroidery.org/refman for advice on altering this file,
+ * or read the markdown version in embroidermodder2/docs/refman.
  *
+ * View
  */
 
 #include "view.h"
@@ -338,7 +340,7 @@ void View::setRubberText(const QString& key, const QString& txt)
 void View::setGridColor(QRgb color)
 {
     gridColor = QColor(color);
-    gscene->setProperty(VIEW_COLOR_GRID, color);
+    gscene->setProperty("VIEW_COLOR_GRID", color);
     if(gscene) gscene->update();
 }
 
@@ -350,10 +352,22 @@ void View::setRulerColor(QRgb color)
 
 void View::createGrid(const QString& gridType)
 {
-    if     (gridType == "Rectangular") { createGridRect();  gscene->setProperty(ENABLE_GRID, true); }
-    else if(gridType == "Circular")    { createGridPolar(); gscene->setProperty(ENABLE_GRID, true); }
-    else if(gridType == "Isometric")   { createGridIso();   gscene->setProperty(ENABLE_GRID, true); }
-    else                               { gridPath = QPainterPath(); gscene->setProperty(ENABLE_GRID, false); }
+    if (gridType == "Rectangular") {
+        createGridRect();
+        gscene->setProperty("ENABLE_GRID", true);
+    }
+    else if (gridType == "Circular") {
+        createGridPolar();
+        gscene->setProperty("ENABLE_GRID", true);
+    }
+    else if (gridType == "Isometric") {
+        createGridIso();
+        gscene->setProperty("ENABLE_GRID", true);
+    }
+    else {
+        gridPath = QPainterPath();
+        gscene->setProperty("ENABLE_GRID", false);
+    }
 
     createOrigin();
 
@@ -502,7 +516,7 @@ void View::toggleSnap(bool on)
     qDebug("View toggleSnap()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     //TODO: finish this
-    gscene->setProperty(ENABLE_SNAP, on);
+    gscene->setProperty("ENABLE_SNAP", on);
     gscene->update();
     QApplication::restoreOverrideCursor();
 }
@@ -516,11 +530,12 @@ void View::toggleGrid(bool on)
     QApplication::restoreOverrideCursor();
 }
 
-void View::toggleRuler(bool on)
+void
+View::toggleRuler(bool on)
 {
     qDebug("View toggleRuler()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    gscene->setProperty(ENABLE_RULER, on);
+    gscene->setProperty("ENABLE_RULER", on);
     rulerMetric = mainWin->getSettingsRulerMetric();
     rulerColor = QColor(mainWin->getSettingsRulerColor());
     rulerPixelSize = mainWin->getSettingsRulerPixelSize();
@@ -528,72 +543,78 @@ void View::toggleRuler(bool on)
     QApplication::restoreOverrideCursor();
 }
 
-void View::toggleOrtho(bool on)
+void
+View::toggleOrtho(bool on)
 {
     qDebug("View toggleOrtho()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     //TODO: finish this
-    gscene->setProperty(ENABLE_ORTHO, on);
+    gscene->setProperty("ENABLE_ORTHO", on);
     gscene->update();
     QApplication::restoreOverrideCursor();
 }
 
-void View::togglePolar(bool on)
+void
+View::togglePolar(bool on)
 {
     qDebug("View togglePolar()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     //TODO: finish this
-    gscene->setProperty(ENABLE_POLAR, on);
+    gscene->setProperty("ENABLE_POLAR", on);
     gscene->update();
     QApplication::restoreOverrideCursor();
 }
 
-void View::toggleQSnap(bool on)
+void
+View::toggleQSnap(bool on)
 {
     qDebug("View toggleQSnap()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     qSnapToggle = on;
-    gscene->setProperty(ENABLE_QSNAP, on);
+    gscene->setProperty("ENABLE_QSNAP", on);
     gscene->update();
     QApplication::restoreOverrideCursor();
 }
 
-void View::toggleQTrack(bool on)
+void
+View::toggleQTrack(bool on)
 {
     qDebug("View toggleQTrack()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     //TODO: finish this
-    gscene->setProperty(ENABLE_QTRACK, on);
+    gscene->setProperty("ENABLE_QTRACK", on);
     gscene->update();
     QApplication::restoreOverrideCursor();
 }
 
-void View::toggleLwt(bool on)
+void
+View::toggleLwt(bool on)
 {
     qDebug("View toggleLwt()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    gscene->setProperty(ENABLE_LWT, on);
+    gscene->setProperty("ENABLE_LWT", on);
     gscene->update();
     QApplication::restoreOverrideCursor();
 }
 
-void View::toggleReal(bool on)
+void
+View::toggleReal(bool on)
 {
     qDebug("View toggleReal()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    gscene->setProperty(ENABLE_REAL, on);
+    gscene->setProperty("ENABLE_REAL", on);
     gscene->update();
     QApplication::restoreOverrideCursor();
 }
 
 bool View::isLwtEnabled()
 {
-    return gscene->property(ENABLE_LWT).toBool();
+    return gscene->property("ENABLE_LWT").toBool();
 }
 
 bool View::isRealEnabled()
 {
-    return gscene->property(ENABLE_REAL).toBool();
+    return gscene->property("ENABLE_REAL").toBool();
 }
 
 void
@@ -661,7 +682,7 @@ void View::drawBackground(QPainter* painter, const QRectF& rect)
 {
     painter->fillRect(rect, backgroundBrush());
 
-    if (gscene->property(ENABLE_GRID).toBool() && rect.intersects(gridPath.controlPointRect())) {
+    if (gscene->property("ENABLE_GRID").toBool() && rect.intersects(gridPath.controlPointRect())) {
         QPen gridPen(gridColor);
         gridPen.setJoinStyle(Qt::MiterJoin);
         gridPen.setCosmetic(true);
@@ -789,8 +810,7 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
     //Draw horizontal and vertical rulers
     //==================================================
 
-    if(gscene->property(ENABLE_RULER).toBool())
-    {
+    if (gscene->property("ENABLE_RULER").toBool()) {
         bool proceed = true;
 
         int vw = width();  //View Width

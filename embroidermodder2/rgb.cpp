@@ -8,7 +8,7 @@
  * Command: RGB
  */
 
-#include "../commands.h"
+#include "embroidermodder.h"
 
 #define MODE_BACKGROUND   0
 #define MODE_CROSSHAIR    1
