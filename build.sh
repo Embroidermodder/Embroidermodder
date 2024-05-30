@@ -5,7 +5,9 @@ BUILD_TYPE="Release"
 VERSION="2.0.0-alpha"
 GENERATOR="Unix Makefiles"
 
-read -r -d '' FLAG_USAGE <<-'EOF'
+function help_message () {
+
+cat <<-'EOF'
 Usage: ./build.sh [options]
 A script to build, debug and package Embroidermodder 2 and its documentation.
 
@@ -23,6 +25,10 @@ Options:
      --linux-latest       Prepare GitHub artifact for GNU/Linux release.
   -G,--generator          Accepts argument to override the GENERATOR variable.
 EOF
+
+}
+
+function long_help_message () {
 
 read -r -d '' OVERVIEW <<-'EOF'
 
@@ -62,15 +68,6 @@ in order to fascilitate new developers joining the project.
 
 EOF
 
-
-function help_message () {
-
-    echo "$FLAG_USAGE"
-
-}
-
-function long_help_message () {
-
     echo "$OVERVIEW" | less
 
 }
@@ -86,7 +83,6 @@ function build_release () {
     cd embroidermodder2
     qmake
     make -j4
-    cp ../LICENSE.md .
     cd ..
 
 }
@@ -98,40 +94,67 @@ function assemble_release () {
 #    cp -r $BUILD_DIR/* embroidermodder2
 #    mv *manual*pdf embroidermodder2
 
+    cp ../LICENSE.md .
+
 }
 
 function build_docs () {
 
-    rm -fr embroidermodder2/help/latex assets/help/html
+# Lighter weight style static site generator for the main pages.
+#
+# build_emscripten_version
+#
+# git clone https://github.com/embroidermodder/libembroidery
+# cd libembroidery
+# emcc embroidery.c -o embroidery.wasm
+# mv embroidery.wasm ../downloads
+# cd ..
 
-    doxygen
+    python3 -m pip install --upgrade pip
 
-    cd embroidermodder2/help/latex
+    pip install mkdocs
+    pip install mkdocs-bibtex
+    pip install mkdocs-with-pdf
+    pip install mkdocs-material
+    pip install mkdocs-table-reader-plugin
 
-    pdflatex -interaction=nonstopmode refman.tex
-    makeindex refman.idx
-    bibtex refman.aux
-    pdflatex -interaction=nonstopmode refman.tex
-    pdflatex -interaction=nonstopmode refman.tex
-    pdflatex -interaction=nonstopmode refman.tex
+    cd embroidermodder2
 
-    mv refman.pdf ../../../embroidermodder_2.0.0-alpha_manual.pdf
+    rm -fr _site
 
+    mkdocs build
+
+    #cd docs
+    #    mkdocs build
+    #    mv site/emrm*.pdf ../site
+    #cd ..
+
+    mv site ../_site
+
+    cd ..
 }
 
 function build_debug () {
+    TEST_FILES="samples/spiral/spiral5.csv samples/spiral/spiral6.csv"
+    TEST_FILES="$TEST_FILES samples/embroidermodder_logo/conflicts/Embroidermodder.DST"
+    TEST_FILES="$TEST_FILES samples/shamrockin/shamrockin.dst"
 
     BUILD_DIR="build/debug"
     BUILD_TYPE="Debug"
     build_release
 
     cd embroidermodder2
-    gdb -q -ex r --args ./embroidermodder \
-      assets/samples/spiral/spiral5.csv \
-      assets/samples/spiral/spiral6.csv \
-      assets/samples/embroidermodder_logo/conflicts/Embroidermodder.DST \
-      assets/samples/shamrockin/shamrockin.dst
 
+    lcov -z
+
+    gdb -ex=run --ex=quit --args ./embroidermodder2 --cov $TEST_FILES
+
+    mkdir lcov
+    lcov -c -d build -o lcov/embroidermodder.info
+    cd lcov
+    genhtml embroidermodder.info
+
+    cd ..
 }
 
 function gcoverage () {
@@ -152,7 +175,7 @@ function gcoverage () {
 # etc.
 
 function package_msi () {
-    
+
     git clone https://github.com/embroidermodder/embroidermodder
     cd embroidermodder
 
@@ -169,7 +192,7 @@ function package_msi () {
     #cpack -G WIX
     cd ..
     assemble_release
-    powershell Compress-Archive embroidermodder2 embroidermodder_2.0.0-alpha_windows.zip 
+    powershell Compress-Archive embroidermodder2 embroidermodder_2.0.0-alpha_windows.zip
     mv *.zip ..
     cd ..
 
