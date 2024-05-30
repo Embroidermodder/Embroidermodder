@@ -9,8 +9,7 @@
  * Dimension Leader
  */
 
-#include "object-dimleader.h"
-#include "object-data.h"
+#include "object-base.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -101,8 +100,8 @@ QPointF DimLeaderObject::objectEndPoint2() const
 {
     QLineF lyne = line();
     qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
+    qreal cosRot = cos(rot);
+    qreal sinRot = sin(rot);
     qreal x2 = lyne.x2()*scale();
     qreal y2 = lyne.y2()*scale();
     qreal rotEnd2X = x2*cosRot - y2*sinRot;
@@ -116,8 +115,8 @@ QPointF DimLeaderObject::objectMidPoint() const
     QLineF lyne = line();
     QPointF mp = lyne.pointAt(0.5);
     qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
+    qreal cosRot = cos(rot);
+    qreal sinRot = sin(rot);
     qreal mx = mp.x()*scale();
     qreal my = mp.y()*scale();
     qreal rotMidX = mx*cosRot - my*sinRot;
@@ -317,5 +316,3 @@ void DimLeaderObject::gripEdit(const QPointF& before, const QPointF& after)
     else if(before == objectEndPoint2()) { setObjectEndPoint2(after); }
     else if(before == objectMidPoint())  { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

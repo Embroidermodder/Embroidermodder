@@ -15,19 +15,7 @@
 #include "statusbar-button.h"
 #include "imagewidget.h"
 #include "layer-manager.h"
-#include "object-data.h"
-#include "object-arc.h"
-#include "object-circle.h"
-#include "object-dimleader.h"
-#include "object-ellipse.h"
-#include "object-image.h"
-#include "object-line.h"
-#include "object-path.h"
-#include "object-point.h"
-#include "object-polygon.h"
-#include "object-polyline.h"
-#include "object-rect.h"
-#include "object-textsingle.h"
+#include "object-base.h"
 #include "property-editor.h"
 #include "undo-editor.h"
 #include "undo-commands.h"
@@ -383,36 +371,36 @@ MdiWindow* MainWindow::activeMdiWindow()
     return mdiWin;
 }
 
-View* MainWindow::activeView()
+View*
+activeView()
 {
-    qDebug("activeView()");
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin)
-    {
+    _main->debug_message("activeView()");
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(_main->mdiArea->activeSubWindow());
+    if (mdiWin) {
         View* v = mdiWin->getView();
         return v;
     }
     return 0;
 }
 
-QGraphicsScene* MainWindow::activeScene()
+QGraphicsScene*
+activeScene()
 {
-    qDebug("activeScene()");
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin)
-    {
+    _main->debug_message("activeScene()");
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(_main->mdiArea->activeSubWindow());
+    if (mdiWin) {
         QGraphicsScene* s = mdiWin->getScene();
         return s;
     }
     return 0;
 }
 
-QUndoStack* MainWindow::activeUndoStack()
+QUndoStack*
+activeUndoStack()
 {
-    qDebug("activeUndoStack()");
+    _main->debug_message("activeUndoStack()");
     View* v = activeView();
-    if(v)
-    {
+    if (v) {
         QUndoStack* u = v->getUndoStack();
         return u;
     }
@@ -1005,11 +993,6 @@ MainWindow::runCommandPrompt(const QString& cmd, const QString& str)
     free_script_env(context);
 }
 
-void MainWindow::nativeAlert(const QString& txt)
-{
-    prompt->alert(txt);
-}
-
 void MainWindow::nativeBlinkPrompt()
 {
     prompt->startBlinking();
@@ -1504,14 +1487,18 @@ qreal MainWindow::nativePerpendicularDistance(qreal px, qreal py, qreal x1, qrea
 int MainWindow::nativeNumSelected()
 {
     View* gview = activeView();
-    if(gview) { return gview->numSelected(); }
+    if (gview) {
+        return gview->numSelected();
+    }
     return 0;
 }
 
 void MainWindow::nativeSelectAll()
 {
     View* gview = activeView();
-    if(gview) { gview->selectAll(); }
+    if (gview) {
+        gview->selectAll();
+    }
 }
 
 void MainWindow::nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode)
@@ -1550,39 +1537,48 @@ void MainWindow::nativeMoveSelected(qreal dx, qreal dy)
 
 void MainWindow::nativeScaleSelected(qreal x, qreal y, qreal factor)
 {
-    if(factor <= 0.0)
-    {
+    if (factor <= 0.0) {
         QMessageBox::critical(this, tr("ScaleFactor Error"),
                                 tr("Hi there. If you are not a developer, report this as a bug. "
                                 "If you are a developer, your code needs examined, and possibly your head too."));
     }
 
     View* gview = activeView();
-    if(gview) { gview->scaleSelected(x, -y, factor); }
+    if (gview) {
+        gview->scaleSelected(x, -y, factor);
+    }
 }
 
 void MainWindow::nativeRotateSelected(qreal x, qreal y, qreal rot)
 {
     View* gview = activeView();
-    if(gview) { gview->rotateSelected(x, -y, -rot); }
+    if (gview) {
+        gview->rotateSelected(x, -y, -rot);
+    }
 }
 
 void MainWindow::nativeMirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2)
 {
     View* gview = activeView();
-    if(gview) { gview->mirrorSelected(x1, -y1, x2, -y2); }
+    if (gview) {
+        gview->mirrorSelected(x1, -y1, x2, -y2);
+    }
 }
 
 qreal MainWindow::nativeQSnapX()
 {
     QGraphicsScene* scene = activeScene();
-    if(scene) return scene->property(SCENE_QSNAP_POINT).toPointF().x();
+    if (scene) {
+        return scene->property(SCENE_QSNAP_POINT).toPointF().x();
+    }
     return 0.0;
 }
 
 qreal MainWindow::nativeQSnapY()
 {
     QGraphicsScene* scene = activeScene();
-    if(scene) return -scene->property(SCENE_QSNAP_POINT).toPointF().y();
+    if (scene) {
+        return -scene->property(SCENE_QSNAP_POINT).toPointF().y();
+    }
     return 0.0;
 }

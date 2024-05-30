@@ -67,9 +67,9 @@ MainWindow::MainWindow() : QMainWindow(0)
     if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
 
-    QString lang = getSettingsGeneralLanguage();
+    QString lang = settings_general_language;
     qDebug("language: %s", qPrintable(lang));
-    if(lang == "system")
+    if (lang == "system")
         lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
 
     //Load translations for the Embroidermodder 2 GUI
@@ -125,7 +125,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     shiftKeyPressedState = false;
 
-    setWindowIcon(QIcon(appDir + "/icons/" + getSettingsGeneralIconTheme() + "/" + "app" + ".png"));
+    setWindowIcon(QIcon(appDir + "/icons/" + settings_general_icon_theme + "/" + "app" + ".png"));
     setMinimumSize(800, 480); //Require Minimum WVGA
 
     loadFormats();
@@ -195,12 +195,12 @@ MainWindow::MainWindow() : QMainWindow(0)
             connect(prompt, SIGNAL(historyAppended(const QString&)), this, SLOT(promptHistoryAppended(const QString&)));
 
     //create the Object Property Editor
-    dockPropEdit = new PropertyEditor(appDir + "/icons/" + getSettingsGeneralIconTheme(), getSettingsSelectionModePickAdd(), prompt, this);
+    dockPropEdit = new PropertyEditor(appDir + "/icons/" + settings_general_icon_theme, getSettingsSelectionModePickAdd(), prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockPropEdit);
     connect(dockPropEdit, SIGNAL(pickAddModeToggled()), this, SLOT(pickAddModeToggled()));
 
     //create the Command History Undo Editor
-    dockUndoEdit = new UndoEditor(appDir + "/icons/" + getSettingsGeneralIconTheme(), prompt, this);
+    dockUndoEdit = new UndoEditor(appDir + "/icons/" + settings_general_icon_theme, prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockUndoEdit);
 
     //setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); //TODO: Load these from settings
@@ -213,7 +213,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     createAllMenus();
     createAllToolbars();
 
-    iconResize(getSettingsGeneralIconSize());
+    iconResize(settings_general_icon_size);
     updateMenuToolbarStatusbar();
 
     //Show date in statusbar after it has been updated
@@ -222,6 +222,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     statusbar->showMessage(datestr);
 
     showNormal();
+
+    toolbarPrompt->show();
 
     //Load tips from external file
     QFile tipFile(appDir + "/tips.txt");
@@ -627,9 +629,8 @@ void MainWindow::updateMenuToolbarStatusbar()
         statusbar->statusBarQTrackButton->show();
         statusbar->statusBarLwtButton->show();
     }
-    else
-    {
-        //Toolbars
+    else {
+        // Toolbars
         toolbarView->hide();
         toolbarZoom->hide();
         toolbarPan->hide();
@@ -638,9 +639,8 @@ void MainWindow::updateMenuToolbarStatusbar()
         toolbarLayer->hide();
         toolbarText->hide();
         toolbarProperties->hide();
-        toolbarPrompt->hide();
-        foreach(QToolBar* tb, toolbarHash)
-        {
+        toolbarPrompt->show();
+        foreach (QToolBar* tb, toolbarHash) {
             tb->hide();
         }
 

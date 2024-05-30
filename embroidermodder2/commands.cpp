@@ -17,29 +17,6 @@
 #include "undo-commands.h"
 #include "embroidermodder.h"
 
-/* FIXME: detect types.
- */
-ScriptValue
-command_prompt(const char *line)
-{
-    QRegExp split_char(" ");
-    QStringList line_list = QString(line).split(split_char);
-    if (_main->command_map.contains(line_list[0])) {
-        ScriptEnv* context = create_script_env();
-        int i = 0;
-        for (QString argument : line_list) {
-            if (i > 0) {
-                strcpy(context->argument[i-1].s, qPrintable(argument));
-                context->argumentCount++;
-            }
-        }
-        ScriptValue result = _main->command_map[line_list[0]].main(context);
-        free_script_env(context);
-        return result;
-    }
-    return script_false;
-}
-
 /* Simple Commands (other commands, like circle_command are housed in their
  * own file with their associated functions)
  * ------------------------------------------------------------------------
@@ -116,7 +93,7 @@ alert_command(ScriptEnv *context)
     }
 
     _main->nativeInitCommand();
-    _main->nativeAlert(QSTR(0));
+    _main->prompt->alert(QSTR(0));
     _main->nativeEndCommand();
     return script_null;
 }
@@ -284,7 +261,7 @@ erase_command(ScriptEnv * /* context */)
     _main->nativeInitCommand();
     if (_main->nativeNumSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
-        _main->nativeAlert(translate("Preselect objects before invoking the delete command."));
+        _main->prompt->alert(translate("Preselect objects before invoking the delete command."));
         _main->nativeEndCommand();
         _main->messageBox("information", translate("Delete Preselect"), translate("Preselect objects before invoking the delete command."));
     }
@@ -336,7 +313,7 @@ get_command(ScriptEnv* context)
     _main->nativeInitCommand();
 
     if (value == "MOUSEX") {
-        QGraphicsScene* scene = _main->activeScene();
+        QGraphicsScene* scene = activeScene();
         if (!scene) {
             _main->nativeEndCommand();
             return script_false;
@@ -347,7 +324,7 @@ get_command(ScriptEnv* context)
         return r;
     }
     else if (value == "MOUSEY") {
-        QGraphicsScene* scene = _main->activeScene();
+        QGraphicsScene* scene = activeScene();
         if (!scene) {
             _main->nativeEndCommand();
             return script_false;
@@ -578,7 +555,7 @@ panup_command(ScriptEnv * context)
         return script_false;
     }
     _main->nativeInitCommand();
-    View* gview = _main->activeView();
+    View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack) {
         UndoableNavCommand* cmd = new UndoableNavCommand("PanUp", gview, 0);
@@ -924,8 +901,7 @@ todo_command(ScriptEnv *context)
         return script_false;
     }
     _main->nativeInitCommand();
-    QString s = "TODO: (" + QSTR(0) + ") " + QSTR(1);
-    _main->nativeAlert(s);
+    _main->prompt->alert("TODO: (" + QSTR(0) + ") " + QSTR(1));
     _main->nativeEndCommand();
     return script_null;
 }
@@ -1110,7 +1086,7 @@ zoom_in_command(ScriptEnv *context)
     _main->nativeInitCommand();
     _main->nativeClearSelection();
 
-    View* gview = _main->activeView();
+    View* gview = activeView();
     if (gview) {
         gview->zoomIn();
     }
@@ -1157,7 +1133,7 @@ zoom_out_command(ScriptEnv *context)
     _main->nativeInitCommand();
     _main->nativeClearSelection();
 
-    View* gview = _main->activeView();
+    View* gview = activeView();
     if (gview) {
         gview->zoomOut();
     }

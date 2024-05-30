@@ -135,21 +135,8 @@ HEADERS += \
     property-editor.h \
     undo-editor.h \
     undo-commands.h \
-    object-data.h \
     object-save.h \
     object-base.h \
-    object-arc.h \
-    object-circle.h \
-    object-dimleader.h \
-    object-ellipse.h \
-    object-image.h \
-    object-line.h \
-    object-path.h \
-    object-point.h \
-    object-polygon.h \
-    object-polyline.h \
-    object-rect.h \
-    object-textsingle.h \
     application.h \
     ../extern/libembroidery/embroidery.h
 

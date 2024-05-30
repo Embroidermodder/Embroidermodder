@@ -9,6 +9,11 @@
  */
 
 #include "embroidermodder.h"
+#include "object-base.h"
+
+#include <QPainter>
+#include <QStyleOption>
+#include <QGraphicsScene>
 
 /* NOTE: main() is run every time the command is started.
  *       Use it to reset variables so they are ready to go.
@@ -364,12 +369,6 @@ StatusTip=Creates single-line text objects:  TEXT
 Alias=DT, DTEXT, TEXT, SINGLELINETEXT
 #endif
 
-#include "object-textsingle.h"
-#include "object-data.h"
-
-#include <QPainter>
-#include <QStyleOption>
-#include <QGraphicsScene>
 
 TextSingleObject::TextSingleObject(const QString& str, qreal x, qreal y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {

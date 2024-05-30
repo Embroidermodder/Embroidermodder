@@ -149,7 +149,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&About Embroidermodder 2",
         .statustip = "Displays information about this product. Command: ABOUT.",
-        .alias = "ABOUT"
+        .alias = "ABOUT",
+        .shortcut = ""
     },
     {
         .id = ACTION_ALERT,
@@ -161,7 +162,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Alert",
         .statustip = "Creates a dialog to alert the user. Command: ALERT.",
-        .alias = "ALERT"
+        .alias = "ALERT",
+        .shortcut = ""
     },
     {
         .id = ACTION_ANGLE,
@@ -173,7 +175,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Angle",
         .statustip = "Calculate the angle between two lines and display it. Command: ANGLE, CALCANGLE",
-        .alias = "ANGLE, CALCANGLE"
+        .alias = "ANGLE, CALCANGLE",
+        .shortcut = ""
     },
     {
         .id = ACTION_CIRCLE,
@@ -185,7 +188,8 @@ Command command_data[] = {
         .toolbar_position = 8,
         .tooltip = "&Circle",
         .statustip = "Creates a circle. Command: CIRCLE.",
-        .alias = "C, CIRCLE"
+        .alias = "C, CIRCLE",
+        .shortcut = ""
     },
     {
         .id = ACTION_CHANGELOG,
@@ -197,7 +201,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Changelog",
         .statustip = "Describes new features in this product. Command: CHANGELOG.",
-        .alias = "CHANGELOG"
+        .alias = "CHANGELOG",
+        .shortcut = ""
     },
     {
         .id = ACTION_CLEAR,
@@ -209,7 +214,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Do Nothing",
         .statustip = "Does Nothing. Command: DONOTHING.",
-        .alias = "DONOTHING"
+        .alias = "DONOTHING",
+        .shortcut = ""
     },
     {
         .id = ACTION_COPY,
@@ -221,7 +227,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Copy",
         .statustip = "Copy the current selection's contents to the clipboard. Command: COPY.",
-        .alias = "COPY"
+        .alias = "COPY",
+        .shortcut = ""
     },
     {
         .id = ACTION_CUT,
@@ -233,7 +240,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Cu&t",
         .statustip = "Cut the current selection's contents to the clipboard. Command: CUT.",
-        .alias = "CUT"
+        .alias = "CUT",
+        .shortcut = ""
     },
     {
         .id = ACTION_DAY,
@@ -245,7 +253,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Day",
         .statustip = "Updates the current view using day vision settings. Command: DAY",
-        .alias = "DAY"
+        .alias = "DAY",
+        .shortcut = ""
     },
     {
         .id = ACTION_DEBUG,
@@ -257,7 +266,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Debug",
         .statustip = "Displays information about this product:  ABOUT",
-        .alias = "DEBUG"
+        .alias = "DEBUG",
+        .shortcut = ""
     },
     {
         .id = ACTION_DESIGN_DETAILS,
@@ -269,7 +279,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Details",
         .statustip = "Details of the current design. Command: DETAILS",
-        .alias = "DESIGNDETAILS, DETAILS"
+        .alias = "DESIGNDETAILS, DETAILS",
+        .shortcut = ""
     },
     {
         .id = ACTION_DISABLE,
@@ -281,7 +292,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Disable",
         .statustip = "Disable one of the pre-defined global boolean variables.",
-        .alias = "DISABLE"
+        .alias = "DISABLE",
+        .shortcut = ""
     },
     {
         .id = ACTION_DISTANCE,
@@ -293,7 +305,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Distance",
         .statustip = "Measures the distance and angle between two points. Command: DIST",
-        .alias = "DI, DIST, DISTANCE"
+        .alias = "DI, DIST, DISTANCE",
+        .shortcut = ""
     },
     {
         .id = ACTION_DOLPHIN,
@@ -305,7 +318,8 @@ Command command_data[] = {
         .toolbar_position = 100,
         .tooltip = "&Dolphin",
         .statustip = "Creates a dolphin. Command: DOLPHIN.",
-        .alias = "DOLPHIN"
+        .alias = "DOLPHIN",
+        .shortcut = ""
     },
     {
         .id = ACTION_DO_NOTHING,
@@ -317,7 +331,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Do Nothing",
         .statustip = "Does Nothing. Command: DONOTHING.",
-        .alias = "DONOTHING"
+        .alias = "DONOTHING",
+        .shortcut = ""
     },
     {
         .id = ACTION_ELLIPSE,
@@ -329,7 +344,8 @@ Command command_data[] = {
         .toolbar_position = 8,
         .tooltip = "&Ellipse",
         .statustip = "Creates an ellipse. Command: ELLIPSE.",
-        .alias = "EL, ELLIPSE"
+        .alias = "EL, ELLIPSE",
+        .shortcut = ""
     },
     {
         .id = ACTION_ENABLE,
@@ -341,7 +357,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Enable",
         .statustip = "Enable a pre-defined global variables.",
-        .alias = "ENABLE"
+        .alias = "ENABLE",
+        .shortcut = ""
     },
     {
         .id = ACTION_ERASE,
@@ -353,7 +370,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "D&elete",
         .statustip = "Removes objects from a drawing. Command: DELETE.",
-        .alias = "E, ERASE, DEL, DELETE"
+        .alias = "E, ERASE, DEL, DELETE",
+        .shortcut = ""
     },
     {
         .id = ACTION_ERROR,
@@ -365,7 +383,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Error",
         .statustip = "Sends an error message to the user. Command: ERROR",
-        .alias = "ERROR"
+        .alias = "ERROR",
+        .shortcut = ""
     },
     {
         .id = ACTION_EXIT,
@@ -377,7 +396,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "E&xit",
         .statustip = "Exit the application:  EXIT",
-        .alias = "EXIT, QUIT"
+        .alias = "EXIT, QUIT",
+        .shortcut = ""
     },
     {
         .id = ACTION_GET,
@@ -389,7 +409,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Get",
         .statustip = "Print a value to one of the pre-defined global variables.",
-        .alias = "SET"
+        .alias = "GET",
+        .shortcut = ""
     },
     {
         .id = ACTION_HEART,
@@ -401,7 +422,8 @@ Command command_data[] = {
         .toolbar_position = 100,
         .tooltip = "&Heart",
         .statustip = "Creates a heart:  HEART",
-        .alias = "HEART"
+        .alias = "HEART",
+        .shortcut = ""
     },
     {
         .id = ACTION_HELP,
@@ -413,7 +435,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Help",
         .statustip = "Displays help. Command: HELP",
-        .alias = "?, HELP"
+        .alias = "?, HELP",
+        .shortcut = ""
     },
     {
         .id = ACTION_ICON_128,
@@ -425,7 +448,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Icon12&8",
         .statustip = "Sets the toolbar icon size to 128x128:  ICON128",
-        .alias = "ICON128"
+        .alias = "ICON128",
+        .shortcut = ""
     },
     {
         .id = ACTION_ICON_16,
@@ -437,7 +461,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Icon&16",
         .statustip = "Sets the toolbar icon size to 16x16:  ICON16",
-        .alias = "ICON16"
+        .alias = "ICON16",
+        .shortcut = ""
     },
     {
         .id = ACTION_ICON_24,
@@ -449,7 +474,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24"
+        .alias = "ICON24",
+        .shortcut = ""
     },
     {
         .id = ACTION_ICON_32,
@@ -461,7 +487,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Icon&32",
         .statustip = "Sets the toolbar icon size to 32x32:  ICON32",
-        .alias = "ICON32"
+        .alias = "ICON32",
+        .shortcut = ""
     },
     {
         .id = ACTION_ICON_48,
@@ -473,7 +500,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Icon&48",
         .statustip = "Sets the toolbar icon size to 48x48:  ICON48",
-        .alias = "ICON48"
+        .alias = "ICON48",
+        .shortcut = ""
     },
     {
         .id = ACTION_ICON_64,
@@ -485,7 +513,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Icon&64",
         .statustip = "Sets the toolbar icon size to 64x64:  ICON64",
-        .alias = "ICON64"
+        .alias = "ICON64",
+        .shortcut = ""
     },
     {
         .id = ACTION_LINE,
@@ -497,7 +526,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Line",
         .statustip = "Creates straight line segments:  LINE",
-        .alias = "L, LINE"
+        .alias = "L, LINE",
+        .shortcut = ""
     },
     {
         .id = ACTION_LOCATE_POINT,
@@ -509,7 +539,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Locate Point",
         .statustip = "Displays the coordinate values of a location:  ID",
-        .alias = "ID, LOCATEPOINT"
+        .alias = "ID, LOCATEPOINT",
+        .shortcut = ""
     },
     {
         .id = ACTION_MIRROR_SELECTED,
@@ -521,7 +552,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Mirror Selected",
         .statustip = "Command: MIRRORSELECTED.",
-        .alias = "MIRRORSELECTED"
+        .alias = "MIRRORSELECTED",
+        .shortcut = ""
     },
     {
         .id = ACTION_MOVE,
@@ -533,7 +565,8 @@ Command command_data[] = {
         .toolbar_position = 5,
         .tooltip = "&Move",
         .statustip = "Displaces objects a specified distance in a specified direction:  MOVE",
-        .alias = "M, MOVE"
+        .alias = "M, MOVE",
+        .shortcut = ""
     },
     {
         .id = ACTION_MOVE_SELECTED,
@@ -545,7 +578,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Do Nothing",
         .statustip = "Does Nothing.",
-        .alias = "DONOTHING"
+        .alias = "DONOTHING",
+        .shortcut = ""
     },
     {
         .id = ACTION_NEW,
@@ -557,7 +591,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&New",
         .statustip = "Create a new file. Command: NEW.",
-        .alias = "NEW"
+        .alias = "NEW",
+        .shortcut = ""
     },
     {
         .id = ACTION_NIGHT,
@@ -569,7 +604,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Night",
         .statustip = "Updates the current view using night vision settings. Command: NIGHT.",
-        .alias = "NIGHT"
+        .alias = "NIGHT",
+        .shortcut = ""
     },
     {
         .id = ACTION_OPEN,
@@ -581,7 +617,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Open",
         .statustip = "Open an existing file. Command: OPEN.",
-        .alias = "OPEN"
+        .alias = "OPEN",
+        .shortcut = ""
     },
     {
         .id = ACTION_PAN_DOWN,
@@ -593,7 +630,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Pan Down",
         .statustip = "Moves the view down:  PANDOWN",
-        .alias = "PANDOWN"
+        .alias = "PANDOWN",
+        .shortcut = ""
     },
     {
         .id = ACTION_PAN_LEFT,
@@ -605,7 +643,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Pan Left",
         .statustip = "Moves the view to the left:  PANLEFT",
-        .alias = "PANLEFT"
+        .alias = "PANLEFT",
+        .shortcut = ""
     },
     {
         .id = ACTION_PAN_RIGHT,
@@ -617,7 +656,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Pan Right",
         .statustip = "Moves the view to the right:  PANRIGHT",
-        .alias = "PANRIGHT"
+        .alias = "PANRIGHT",
+        .shortcut = ""
     },
     {
         .id = ACTION_PAN_UP,
@@ -629,7 +669,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Pan Up",
         .statustip = "Moves the view up:  PANUP",
-        .alias = "PANUP"
+        .alias = "PANUP",
+        .shortcut = ""
     },
     {
         .id = ACTION_PASTE,
@@ -641,7 +682,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Paste",
         .statustip = "Paste the clipboard's contents into the current selection. Command: PASTE.",
-        .alias = "PASTE"
+        .alias = "PASTE",
+        .shortcut = ""
     },
     {
         .id = ACTION_PATH,
@@ -653,7 +695,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "PATH"
+        .alias = "PATH",
+        .shortcut = ""
     },
     {
         .id = ACTION_PLATFORM,
@@ -665,7 +708,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Platform",
         .statustip = "List which platform is in use. Command: PLATFORM.",
-        .alias = "PLATFORM"
+        .alias = "PLATFORM",
+        .shortcut = ""
     },
     {
         .id = ACTION_POINT,
@@ -677,7 +721,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24"
+        .alias = "ICON24",
+        .shortcut = ""
     },
     {
         .id = ACTION_POLYGON,
@@ -689,7 +734,8 @@ Command command_data[] = {
         .toolbar_position = 4,
         .tooltip = "Pol&ygon",
         .statustip = "Creates a regular polygon. Command: POLYGON.",
-        .alias = "POL, POLYGON"
+        .alias = "POL, POLYGON",
+        .shortcut = ""
     },
     {
         .id = ACTION_POLYLINE,
@@ -701,7 +747,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24"
+        .alias = "ICON24",
+        .shortcut = ""
     },
     {
         .id = ACTION_PREVIEW_OFF,
@@ -713,7 +760,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Do Nothing",
         .statustip = "Does Nothing.",
-        .alias = "DONOTHING"
+        .alias = "DONOTHING",
+        .shortcut = ""
     },
     {
         .id = ACTION_PREVIEW_ON,
@@ -725,7 +773,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Do Nothing",
         .statustip = "Does Nothing.",
-        .alias = "DONOTHING"
+        .alias = "DONOTHING",
+        .shortcut = ""
     },
     {
         .id = ACTION_PRINT,
@@ -737,7 +786,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Print",
         .statustip = "Displays information about this product:  ABOUT",
-        .alias = "ABOUT"
+        .alias = "ABOUT",
+        .shortcut = ""
     },
     {
         .id = ACTION_QUICKLEADER,
@@ -749,7 +799,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24"
+        .alias = "ICON24",
+        .shortcut = ""
     },
     {
         .id = ACTION_RECTANGLE,
@@ -761,7 +812,8 @@ Command command_data[] = {
         .toolbar_position = 6,
         .tooltip = "&Rectangle",
         .statustip = "Creates a rectangular polyline. Command: RECTANGLE.",
-        .alias = "REC, RECT, RECTANG, RECTANGLE"
+        .alias = "REC, RECT, RECTANG, RECTANGLE",
+        .shortcut = ""
     },
     {
         .id = ACTION_REDO,
@@ -773,7 +825,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Redo",
         .statustip = "Reverses the effects of the previous undo action. Command: REDO.",
-        .alias = "REDO"
+        .alias = "REDO",
+        .shortcut = ""
     },
     {
         .id = ACTION_RGB,
@@ -785,7 +838,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24"
+        .alias = "ICON24",
+        .shortcut = ""
     },
     {
         .id = ACTION_ROTATE,
@@ -797,7 +851,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24"
+        .alias = "ICON24",
+        .shortcut = ""
     },
     {
         .id = ACTION_SANDBOX,
@@ -809,7 +864,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24"
+        .alias = "ICON24",
+        .shortcut = ""
     },
     {
         .id = ACTION_SAVE,
@@ -821,7 +877,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Save",
         .statustip = "Save the design to disk. Command: SAVE.",
-        .alias = "SAVE"
+        .alias = "SAVE",
+        .shortcut = ""
     },
     {
         .id = ACTION_SAVE_AS,
@@ -833,7 +890,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Save &As",
         .statustip = "Save the design under a new name. Command: SAVEAS.",
-        .alias = "SAVEAS"
+        .alias = "SAVEAS",
+        .shortcut = ""
     },
     {
         .id = ACTION_SCALE,
@@ -845,7 +903,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "SCALE"
+        .alias = "SCALE",
+        .shortcut = ""
     },
     {
         .id = ACTION_SCALE_SELECTED,
@@ -857,7 +916,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Do Nothing",
         .statustip = "Does Nothing.",
-        .alias = "SCALESELECTED"
+        .alias = "SCALESELECTED",
+        .shortcut = ""
     },
     {
         .id = ACTION_SELECT_ALL,
@@ -869,7 +929,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "SELECTALL, SELALL"
+        .alias = "SELECTALL, SELALL",
+        .shortcut = ""
     },
     {
         .id = ACTION_SET,
@@ -881,7 +942,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Set",
         .statustip = "Assign a value to one of the pre-defined global variables.",
-        .alias = "SET"
+        .alias = "SET",
+        .shortcut = ""
     },
     {
         .id = ACTION_SETTINGS_DIALOG,
@@ -893,7 +955,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Settings",
         .statustip = "Configure settings specific to this product. Command: SETTINGS.",
-        .alias = "SETTINGS"
+        .alias = "SETTINGS",
+        .shortcut = ""
     },
     {
         .id = ACTION_SINGLE_LINE_TEXT,
@@ -905,7 +968,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "SINGLELINETEXT"
+        .alias = "SINGLELINETEXT",
+        .shortcut = ""
     },
     {
         .id = ACTION_SNOWFLAKE,
@@ -917,7 +981,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "SNOWFLAKE"
+        .alias = "SNOWFLAKE",
+        .shortcut = ""
     },
     {
         .id = ACTION_STAR,
@@ -929,7 +994,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "STAR"
+        .alias = "STAR",
+        .shortcut = ""
     },
     {
         .id = ACTION_SYSWINDOWS,
@@ -941,7 +1007,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&SysWindows",
         .statustip = "Arrange the windows. Command: SYSWINDOWS",
-        .alias = "WINDOWS, SYSWINDOWS"
+        .alias = "WINDOWS, SYSWINDOWS",
+        .shortcut = ""
     },
     {
         .id = ACTION_TEXT_BOLD,
@@ -953,7 +1020,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Bold Text",
         .statustip = "Sets text to be bold. Command: BOLD.",
-        .alias = "BOLD"
+        .alias = "BOLD",
+        .shortcut = ""
     },
     {
         .id = ACTION_TEXT_ITALIC,
@@ -977,7 +1045,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Underline Text",
         .statustip = "Sets text to be underlined. Command: UNDERLINE.",
-        .alias = "UNDERLINE"
+        .alias = "UNDERLINE",
+        .shortcut = ""
     },
     {
         .id = ACTION_TEXT_STRIKEOUT,
@@ -989,7 +1058,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&StrikeOut Text",
         .statustip = "Sets text to be striked out. Command: STRIKEOUT.",
-        .alias = "STRIKEOUT"
+        .alias = "STRIKEOUT",
+        .shortcut = ""
     },
     {
         .id = ACTION_TEXT_OVERLINE,
@@ -1013,7 +1083,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Tip Of The Day",
         .statustip = "Displays a dialog with useful tips:  TIPS",
-        .alias = "TIPS, TIPOFTHEDAY"
+        .alias = "TIPS, TIPOFTHEDAY",
+        .shortcut = ""
     },
     {
         .id = ACTION_TODO,
@@ -1025,7 +1096,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&About",
         .statustip = "Displays information about this product:  ABOUT",
-        .alias = "TODO"
+        .alias = "TODO",
+        .shortcut = ""
     },
     {
         .id = ACTION_UNDO,
@@ -1037,7 +1109,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Undo",
         .statustip = "Reverses the most recent action. Command: UNDO.",
-        .alias = "U, UNDO"
+        .alias = "U, UNDO",
+        .shortcut = ""
     },
     {
         .id = ACTION_VULCANIZE,
@@ -1049,7 +1122,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Undo",
         .statustip = "Reverses the most recent action:  UNDO",
-        .alias = "VULCANIZE"
+        .alias = "VULCANIZE",
+        .shortcut = ""
     },
     {
         .id = ACTION_WINDOW_CASCADE,
@@ -1061,7 +1135,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Cascade",
         .statustip = "Cascade the windows. Command: CASCADE.",
-        .alias = "CASCADE, WINDOWCASCADE"
+        .alias = "CASCADE, WINDOWCASCADE",
+        .shortcut = ""
     },
     {
         .id = ACTION_WHATS_THIS,
@@ -1073,7 +1148,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&What's This?",
         .statustip = "What's This? Context Help! Command: WHATSTHIS.",
-        .alias = "WHATSTHIS"
+        .alias = "WHATSTHIS",
+        .shortcut = ""
     },
     {
         .id = ACTION_WINDOW_CLOSE,
@@ -1085,7 +1161,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Cl&ose",
         .statustip = "Close the active window. Command: CLOSE.",
-        .alias = "CLOSE, WINDOWCLOSE"
+        .alias = "CLOSE, WINDOWCLOSE",
+        .shortcut = ""
     },
     {
         .id = ACTION_WINDOW_CLOSE_ALL,
@@ -1097,7 +1174,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Close &All",
         .statustip = "Close all the windows. Command: CLOSEALL",
-        .alias = "CLOSEALL, WINDOWCLOSEALL"
+        .alias = "CLOSEALL, WINDOWCLOSEALL",
+        .shortcut = ""
     },
     {
         .id = ACTION_WINDOW_NEXT,
@@ -1109,7 +1187,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Ne&xt",
         .statustip = "Move the focus to the next window:  NEXT",
-        .alias = "NEXT, WINDOWNEXT"
+        .alias = "NEXT, WINDOWNEXT",
+        .shortcut = ""
     },
     {
         .id = ACTION_WINDOW_PREVIOUS,
@@ -1121,7 +1200,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Pre&vious",
         .statustip = "Move the focus to the previous window:  PREVIOUS",
-        .alias = "PREV, PREVIOUS, WINDOWPREVIOUS"
+        .alias = "PREV, PREVIOUS, WINDOWPREVIOUS",
+        .shortcut = ""
     },
     {
         .id = ACTION_WINDOW_TILE,
@@ -1133,7 +1213,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Tile",
         .statustip = "Tile the windows:  TILE",
-        .alias = "TILE, WINDOWTILE"
+        .alias = "TILE, WINDOWTILE",
+        .shortcut = ""
     },
     {
         .id = ACTION_ZOOM_ALL,
@@ -1145,7 +1226,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Zoom &All",
         .statustip = "Zooms to display the drawing extents or the grid limits. Command: ZOOMALL.",
-        .alias = "ZOOMALL"
+        .alias = "ZOOMALL",
+        .shortcut = ""
     },
     {
         .id = ACTION_ZOOM_CENTER,
@@ -1157,7 +1239,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Zoom &Center",
         .statustip = "Zooms to display a view specified by a center point and magnification or height. Command: ZOOMCENTER.",
-        .alias = "ZOOMCENTER"
+        .alias = "ZOOMCENTER",
+        .shortcut = ""
     },
     {
         .id = ACTION_ZOOM_DYNAMIC,
@@ -1169,7 +1252,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Zoom &Dynamic",
         .statustip = "Zooms to display the generated portion of the drawing. Command: ZOOMDYNAMIC.",
-        .alias = "ZOOMDYNAMIC"
+        .alias = "ZOOMDYNAMIC",
+        .shortcut = ""
     },
     {
         .id = ACTION_ZOOM_EXTENTS,
@@ -1181,7 +1265,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Zoom &Extents",
         .statustip = "Zooms to display the drawing extents. Command: ZOOMEXTENTS",
-        .alias = "ZOOMEXTENTS"
+        .alias = "ZOOMEXTENTS",
+        .shortcut = ""
     },
     {
         .id = ACTION_ZOOM_IN,
@@ -1193,7 +1278,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Zoom &In",
         .statustip = "Zooms to increase the apparent size of objects. Command: ZOOMIN",
-        .alias = "ZOOMIN"
+        .alias = "ZOOMIN",
+        .shortcut = ""
     },
     {
         .id = ACTION_ZOOM_OUT,
@@ -1205,7 +1291,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Zoom &Out",
         .statustip = "Zooms to decrease the apparent size of objects. Command: ZOOMOUT",
-        .alias = "ZOOMOUT"
+        .alias = "ZOOMOUT",
+        .shortcut = ""
     },
     {
         .id = ACTION_ZOOM_PREVIOUS,
@@ -1217,7 +1304,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Zoom &Previous",
         .statustip = "Zooms to display the previous view. Command: ZOOMPREVIOUS.",
-        .alias = "ZOOMPREVIOUS"
+        .alias = "ZOOMPREVIOUS",
+        .shortcut = ""
     },
     {
         .id = ACTION_ZOOM_REAL_TIME,
@@ -1229,7 +1317,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Zoom &Real Time",
         .statustip = "Zooms to increase or decrease the apparent size of objects in the current viewport. Command: ZOOMREALTIME",
-        .alias = "ZOOMREALTIME"
+        .alias = "ZOOMREALTIME",
+        .shortcut = ""
     },
     {
         .id = ACTION_ZOOM_SCALE,
@@ -1241,7 +1330,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Zoom &Scale",
         .statustip = "Zooms the display using a specified scale factor. Command: ZOOMSCALE.",
-        .alias = "ZOOMSCALE"
+        .alias = "ZOOMSCALE",
+        .shortcut = ""
     },
     {
         .id = ACTION_ZOOM_SELECTED,
@@ -1253,7 +1343,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Zoom Selec&ted",
         .statustip = "Zooms to display the selected objects. Command: ZOOMSELECTED.",
-        .alias = "ZOOMSELECTED"
+        .alias = "ZOOMSELECTED",
+        .shortcut = ""
     },
     {
         .id = ACTION_ZOOM_WINDOW,
@@ -1265,7 +1356,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "Zoom &Window",
         .statustip = "Zooms to display an area specified by a rectangular window. Command: ZOOMIN",
-        .alias = "ZOOMWINDOW"
+        .alias = "ZOOMWINDOW",
+        .shortcut = ""
     },
     {
         .id = ACTION_DO_NOTHING,
@@ -1277,6 +1369,7 @@ Command command_data[] = {
         .toolbar_position = -1,
         .tooltip = "NULL",
         .statustip = "NULL",
-        .alias = "NULL"
+        .alias = "NULL",
+        .shortcut = ""
     }
 };

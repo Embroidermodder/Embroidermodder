@@ -14,10 +14,7 @@
 #include "statusbar.h"
 #include "statusbar-button.h"
 #include "object-save.h"
-#include "object-data.h"
-#include "object-path.h"
-#include "object-polygon.h"
-#include "object-polyline.h"
+#include "object-base.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -53,7 +50,7 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     curFile = aName.asprintf("Untitled%d.dst", myIndex);
     this->setWindowTitle(curFile);
 
-    this->setWindowIcon(QIcon("icons/" + mainWin->getSettingsGeneralIconTheme() + "/" + "app" + ".png"));
+    this->setWindowIcon(QIcon("icons/" + mainWin->settings_general_icon_theme + "/" + "app" + ".png"));
 
     gscene = new QGraphicsScene(0,0,0,0, this);
     gview = new View(mainWin, gscene, this);

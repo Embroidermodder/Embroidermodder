@@ -122,7 +122,7 @@ void MainWindow::createLayerToolbar()
     toolbarLayer->addAction(actionHash.value(ACTION_LAYERS));
 
     QString appDir = qApp->applicationDirPath();
-    QString icontheme = getSettingsGeneralIconTheme();
+    QString icontheme = settings_general_icon_theme;
 
     layerSelector->setFocusProxy(prompt);
     //NOTE: Qt4.7 wont load icons without an extension...
@@ -152,7 +152,7 @@ void MainWindow::createPropertiesToolbar()
     toolbarProperties->setObjectName("toolbarProperties");
 
     QString appDir = qApp->applicationDirPath();
-    QString icontheme = getSettingsGeneralIconTheme();
+    QString icontheme = settings_general_icon_theme;
 
     colorSelector->setFocusProxy(prompt);
     //NOTE: Qt4.7 wont load icons without an extension...

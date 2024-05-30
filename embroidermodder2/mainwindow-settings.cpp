@@ -310,5 +310,3 @@ void MainWindow::settingsDialog(const QString& showTab)
     Settings_Dialog dialog(this, showTab, this);
     dialog.exec();
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

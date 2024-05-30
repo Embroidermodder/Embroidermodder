@@ -9,7 +9,7 @@
  * Object Circle
  */
 
-#include "object-circle.h"
+#include "object-base.h"
 #include "embroidermodder.h"
 #include "view.h"
 
@@ -53,7 +53,7 @@ circle_command(ScriptEnv *context)
     c.center.x = 0.0;
     c.center.y = 0.0;
     c.radius = 10.0;
-    View *v = _main->activeView();
+    View *v = activeView();
     if (v) {
         emb_array_addCircle(v->geometry, c);
     }
@@ -649,5 +649,3 @@ QPainterPath CircleObject::objectSavePath() const
     trans.scale(s,s);
     return trans.map(path);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

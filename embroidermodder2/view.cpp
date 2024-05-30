@@ -12,25 +12,11 @@
 #include "view.h"
 #include "property-editor.h"
 #include "statusbar.h"
-#include "object-data.h"
 #include "object-base.h"
 #include "undo-editor.h"
 #include "undo-commands.h"
 
 #include "selectbox.h"
-
-#include "object-arc.h"
-#include "object-circle.h"
-#include "object-dimleader.h"
-#include "object-ellipse.h"
-#include "object-image.h"
-#include "object-line.h"
-#include "object-path.h"
-#include "object-point.h"
-#include "object-polygon.h"
-#include "object-polyline.h"
-#include "object-rect.h"
-#include "object-textsingle.h"
 
 #include <QtGui>
 #include <QGraphicsScene>
@@ -1885,9 +1871,10 @@ void View::zoomToPoint(const QPoint& mousePoint, int zoomDir)
     gscene->update();
 }
 
-void View::contextMenuEvent(QContextMenuEvent* event)
+void
+View::contextMenuEvent(QContextMenuEvent* event)
 {
-    QString iconTheme = mainWin->getSettingsGeneralIconTheme();
+    QString iconTheme = mainWin->settings_general_icon_theme;
 
     QMenu menu;
     QList<QGraphicsItem*> itemList = gscene->selectedItems();

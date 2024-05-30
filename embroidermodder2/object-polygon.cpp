@@ -8,7 +8,7 @@
  * Command: POLYGON
  */
 
-#include "object-polygon.h"
+#include "object-base.h"
 #include "embroidermodder.h"
 
 #include <QPainter>

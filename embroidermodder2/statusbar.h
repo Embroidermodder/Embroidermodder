@@ -29,15 +29,6 @@ public:
     QLabel* statusBarMouseCoord;
 
     void setMouseCoord(qreal x, qreal y);
-
-protected:
-
-private slots:
-
-private:
-
 };
 
 #endif
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

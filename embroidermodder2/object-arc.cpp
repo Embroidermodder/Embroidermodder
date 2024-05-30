@@ -9,8 +9,7 @@
  * Arc
  */
 
-#include "object-arc.h"
-#include "object-data.h"
+#include "object-base.h"
 #include "embroidermodder.h"
 
 #include <QPainter>

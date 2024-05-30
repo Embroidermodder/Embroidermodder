@@ -12,7 +12,7 @@
 #include <QtGui>
 
 #include "settings-dialog.h"
-#include "object-data.h"
+#include "object-base.h"
 #include "statusbar.h"
 #include "statusbar-button.h"
 
@@ -85,7 +85,7 @@ QWidget* Settings_Dialog::createTabGeneral()
 
     QLabel* labelLanguage = new QLabel(tr("Language (Requires Restart)"), groupBoxLanguage);
     QComboBox* comboBoxLanguage = new QComboBox(groupBoxLanguage);
-    dialog_general_language = mainWin->getSettingsGeneralLanguage().toLower();
+    dialog_general_language = mainWin->settings_general_language.toLower();
     comboBoxLanguage->addItem("Default");
     comboBoxLanguage->addItem("System");
     comboBoxLanguage->insertSeparator(2);
@@ -113,7 +113,7 @@ QWidget* Settings_Dialog::createTabGeneral()
     QComboBox* comboBoxIconTheme = new QComboBox(groupBoxIcon);
     QDir dir(qApp->applicationDirPath());
     dir.cd("icons");
-    dialog_general_icon_theme = mainWin->getSettingsGeneralIconTheme();
+    dialog_general_icon_theme = mainWin->settings_general_icon_theme;
     foreach(QString dirName, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
     {
         comboBoxIconTheme->addItem(QIcon("icons/" + dirName + "/" + "theme" + ".png"), dirName);
@@ -129,7 +129,7 @@ QWidget* Settings_Dialog::createTabGeneral()
     comboBoxIconSize->addItem(QIcon("icons/" + dialog_general_icon_theme + "/" + "icon48"  + ".png"), "Large",      48);
     comboBoxIconSize->addItem(QIcon("icons/" + dialog_general_icon_theme + "/" + "icon64"  + ".png"), "Very Large", 64);
     comboBoxIconSize->addItem(QIcon("icons/" + dialog_general_icon_theme + "/" + "icon128" + ".png"), "I'm Blind", 128);
-    dialog_general_icon_size = mainWin->getSettingsGeneralIconSize();
+    dialog_general_icon_size = mainWin->settings_general_icon_size;
     comboBoxIconSize->setCurrentIndex(comboBoxIconSize->findData(dialog_general_icon_size));
     connect(comboBoxIconSize, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxIconSizeCurrentIndexChanged(int)));
 
@@ -1044,9 +1044,8 @@ QWidget* Settings_Dialog::createTabPrinting()
 
     QComboBox* comboBoxDefaultDevice = new QComboBox(groupBoxDefaultPrinter);
     QList<QPrinterInfo> listAvailPrinters = QPrinterInfo::availablePrinters();
-    foreach(QPrinterInfo info, listAvailPrinters)
-    {
-        comboBoxDefaultDevice->addItem(QIcon("icons/" + mainWin->getSettingsGeneralIconTheme() + "/" + "print" + ".png"), info.printerName());
+    foreach (QPrinterInfo info, listAvailPrinters) {
+        comboBoxDefaultDevice->addItem(QIcon("icons/" + mainWin->settings_general_icon_theme + "/" + "print" + ".png"), info.printerName());
     }
 
     QVBoxLayout* vboxLayoutDefaultPrinter = new QVBoxLayout(groupBoxDefaultPrinter);
@@ -1416,7 +1415,7 @@ QWidget* Settings_Dialog::createTabQuickSnap()
 {
     QWidget* widget = new QWidget(this);
 
-    QString iconTheme = mainWin->getSettingsGeneralIconTheme();
+    QString iconTheme = mainWin->settings_general_icon_theme;
 
     //QSnap Locators
     QGroupBox* groupBoxQSnapLoc = new QGroupBox(tr("Locators Used"), widget);
@@ -1624,7 +1623,7 @@ QWidget* Settings_Dialog::createTabLineWeight()
     //Misc
     QGroupBox* groupBoxLwtMisc = new QGroupBox(tr("LineWeight Misc"), widget);
 
-    QGraphicsScene* s = mainWin->activeScene();
+    QGraphicsScene* s = activeScene();
 
     QCheckBox* checkBoxShowLwt = new QCheckBox(tr("Show LineWeight"), groupBoxLwtMisc);
     if (s) {
@@ -1771,7 +1770,7 @@ QWidget* Settings_Dialog::createTabSelection()
 
 void Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
 {
-    QString iconTheme = mainWin->getSettingsGeneralIconTheme();
+    QString iconTheme = mainWin->settings_general_icon_theme;
 
     comboBox->addItem(QIcon("icons/" + iconTheme + "/" + "colorred" + ".png"),     tr("Red"),     qRgb(255,  0,  0));
     comboBox->addItem(QIcon("icons/" + iconTheme + "/" + "coloryellow" + ".png"),  tr("Yellow"),  qRgb(255,255,  0));
@@ -2577,16 +2576,14 @@ void Settings_Dialog::chooseRulerColor()
         connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentRulerColorChanged(const QColor&)));
         colorDialog->exec();
 
-        if(colorDialog->result() == QDialog::Accepted)
-        {
+        if (colorDialog->result() == QDialog::Accepted) {
             accept_ruler_color = colorDialog->selectedColor().rgb();
             QPixmap pix(16,16);
             pix.fill(QColor(accept_ruler_color));
             button->setIcon(QIcon(pix));
             mainWin->updateAllViewRulerColors(accept_ruler_color);
         }
-        else
-        {
+        else {
             mainWin->updateAllViewRulerColors(dialog_ruler_color);
         }
     }
@@ -2975,12 +2972,18 @@ void Settings_Dialog::rejectChanges()
     mainWin->prompt->setPromptFontSize(dialog_prompt_font_size);
     mainWin->updateAllViewGridColors(dialog_grid_color);
     mainWin->updateAllViewRulerColors(dialog_ruler_color);
-    if(dialog_lwt_show_lwt) { mainWin->statusbar->statusBarLwtButton->enableLwt(); }
-    else                    { mainWin->statusbar->statusBarLwtButton->disableLwt(); }
-    if(dialog_lwt_real_render) { mainWin->statusbar->statusBarLwtButton->enableReal(); }
-    else                       { mainWin->statusbar->statusBarLwtButton->disableReal(); }
+    if (dialog_lwt_show_lwt) {
+        mainWin->statusbar->statusBarLwtButton->enableLwt();
+    }
+    else {
+        mainWin->statusbar->statusBarLwtButton->disableLwt();
+    }
+    if (dialog_lwt_real_render) {
+        mainWin->statusbar->statusBarLwtButton->enableReal();
+    }
+    else {
+        mainWin->statusbar->statusBarLwtButton->disableReal();
+    }
 
     reject();
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

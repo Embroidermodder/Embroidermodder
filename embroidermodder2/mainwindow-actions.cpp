@@ -115,7 +115,7 @@ MainWindow::createAction(Command command)
     QString statusTip(command.statustip);
     QString appDir = qApp->applicationDirPath();
 
-    QString iconTheme = getSettingsGeneralIconTheme();
+    QString iconTheme = settings_general_icon_theme;
     QAction *ACTION = new QAction(QIcon(appDir + "/icons/" + iconTheme + "/" + icon + ".png"), toolTip, this);
     ACTION->setStatusTip(statusTip);
     ACTION->setObjectName(icon);

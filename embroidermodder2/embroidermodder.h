@@ -23,7 +23,7 @@
 
 #include "../extern/libembroidery/embroidery.h"
 
-#include "object-data.h"
+#include "object-base.h"
 
 #define REAL(i)             context->argument[i].r
 #define INT(i)              context->argument[i].i
@@ -76,38 +76,9 @@ typedef struct Command_ {
     const char *tooltip;
     const char *statustip;
     const char *alias;
+    const char *shortcut;
 } Command;
 
-ScriptEnv *create_script_env();
-void free_script_env(ScriptEnv *);
-
-ScriptValue script_bool(bool b);
-ScriptValue script_int(int i);
-ScriptValue script_real(double r);
-ScriptValue script_string(const char *s);
-ScriptValue do_nothing(ScriptEnv *context);
-ScriptValue stub_implement(const char *function);
-ScriptValue command_prompt(const char *line);
-
-ScriptEnv *add_string_argument(ScriptEnv *context, const char *s);
-ScriptEnv *add_real_argument(ScriptEnv *context, double r);
-ScriptEnv *add_int_argument(ScriptEnv *context, int i);
-
-void add_string_variable(ScriptEnv *context, const char *label, const char *s);
-void add_int_variable(ScriptEnv *context, const char *label, int i);
-void add_real_variable(ScriptEnv *context, const char *label, double i);
-
-const char *script_get_string(ScriptEnv *context, const char *label);
-int script_get_int(ScriptEnv *context, const char *label);
-double script_get_real(ScriptEnv *context, const char *label);
-
-int script_set_string(ScriptEnv *context, const char *label, const char *s);
-int script_set_int(ScriptEnv *context, const char *label, int i);
-int script_set_real(ScriptEnv *context, const char *label, double r);
-
-extern ScriptValue script_null;
-extern ScriptValue script_true;
-extern ScriptValue script_false;
 
 enum COMMAND_ACTIONS
 {
@@ -272,8 +243,6 @@ class QScriptProgram;
 class QUndoStack;
 QT_END_NAMESPACE
 
-void debug_message(QString s);
-
 class MainWindow: public QMainWindow
 {
     Q_OBJECT
@@ -285,9 +254,6 @@ public:
     MdiArea*                        getMdiArea();
     MainWindow*                     getApplication();
     MdiWindow*                      activeMdiWindow();
-    View*                           activeView();
-    QGraphicsScene*                 activeScene();
-    QUndoStack*                     activeUndoStack();
 
     void                            setUndoCleanIcon(bool opened);
 
@@ -302,9 +268,6 @@ public:
 
     QList<QGraphicsItem*> cutCopyObjectList;
 
-    QString getSettingsGeneralLanguage()              { return settings_general_language;               }
-    QString getSettingsGeneralIconTheme()             { return settings_general_icon_theme;             }
-    int     getSettingsGeneralIconSize()              { return settings_general_icon_size;              }
     bool    getSettingsGeneralMdiBGUseLogo()          { return settings_general_mdi_bg_use_logo;        }
     bool    getSettingsGeneralMdiBGUseTexture()       { return settings_general_mdi_bg_use_texture;     }
     bool    getSettingsGeneralMdiBGUseColor()         { return settings_general_mdi_bg_use_color;       }
@@ -569,7 +532,7 @@ protected:
     QAction*                        getFileSeparator();
     void                            loadFormats();
 
-private:
+public:
 
     QString                         settings_general_language;
     QString                         settings_general_icon_theme;
@@ -686,6 +649,7 @@ private:
     int                             numOfDocs;
     int                             docIndex;
 
+private:
     QList<MdiWindow*>               listMdiWin;
     QMdiSubWindow*                  findMdiWindow(const QString &fileName);
     QString                         openFilesPath;
@@ -962,12 +926,47 @@ public:
     qreal nativeQSnapY();
 };
 
+void debug_message(QString s);
+View* activeView();
+QGraphicsScene* activeScene();
+QUndoStack* activeUndoStack();
+
+ScriptEnv *create_script_env();
+void free_script_env(ScriptEnv *);
+
+ScriptValue script_bool(bool b);
+ScriptValue script_int(int i);
+ScriptValue script_real(double r);
+ScriptValue script_string(const char *s);
+ScriptValue do_nothing(ScriptEnv *context);
+ScriptValue stub_implement(const char *function);
+ScriptValue command_prompt(const char *line);
+
+ScriptEnv *add_string_argument(ScriptEnv *context, const char *s);
+ScriptEnv *add_real_argument(ScriptEnv *context, double r);
+ScriptEnv *add_int_argument(ScriptEnv *context, int i);
+
+void add_string_variable(ScriptEnv *context, const char *label, const char *s);
+void add_int_variable(ScriptEnv *context, const char *label, int i);
+void add_real_variable(ScriptEnv *context, const char *label, double i);
+
+const char *script_get_string(ScriptEnv *context, const char *label);
+int script_get_int(ScriptEnv *context, const char *label);
+double script_get_real(ScriptEnv *context, const char *label);
+
+int script_set_string(ScriptEnv *context, const char *label, const char *s);
+int script_set_int(ScriptEnv *context, const char *label, int i);
+int script_set_real(ScriptEnv *context, const char *label, double r);
 
 QString translate(QString msg);
+
+int argument_checks(ScriptEnv *context, QString function, const char *args);
 
 extern MainWindow *_main;
 extern Command command_data[];
 
-int argument_checks(ScriptEnv *context, QString function, const char *args);
+extern ScriptValue script_null;
+extern ScriptValue script_true;
+extern ScriptValue script_false;
 
 #endif

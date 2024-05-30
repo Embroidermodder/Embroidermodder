@@ -9,6 +9,12 @@
  */
 
 #include "embroidermodder.h"
+#include "object-base.h"
+
+#include <QPainter>
+#include <QStyleOption>
+#include <QGraphicsScene>
+#include <QMessageBox>
 
 /* NOTE: main() is run every time the command is started.
  *       Use it to reset variables so they are ready to go.
@@ -156,14 +162,6 @@ StatusTip=Creates a 2D polyline:  PLINE
 [Prompt]
 Alias=PL, PLINE, POLYLINE
 #endif
-
-#include "object-polyline.h"
-#include "object-data.h"
-
-#include <QPainter>
-#include <QStyleOption>
-#include <QGraphicsScene>
-#include <QMessageBox>
 
 PolylineObject::PolylineObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {

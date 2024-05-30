@@ -297,3 +297,26 @@ add_int_argument(ScriptEnv *context, int i)
     context->argument[context->argumentCount].type = SCRIPT_INT;
     context->argumentCount++;
 }
+
+/* FIXME: detect types.
+ */
+ScriptValue
+command_prompt(const char *line)
+{
+    QRegExp split_char(" ");
+    QStringList line_list = QString(line).split(split_char);
+    if (_main->command_map.contains(line_list[0])) {
+        ScriptEnv* context = create_script_env();
+        int i = 0;
+        for (QString argument : line_list) {
+            if (i > 0) {
+                strcpy(context->argument[i-1].s, qPrintable(argument));
+                context->argumentCount++;
+            }
+        }
+        ScriptValue result = _main->command_map[line_list[0]].main(context);
+        free_script_env(context);
+        return result;
+    }
+    return script_false;
+}

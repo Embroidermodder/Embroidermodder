@@ -9,6 +9,11 @@
  */
 
 #include "embroidermodder.h"
+#include "object-base.h"
+
+#include <QPainter>
+#include <QStyleOption>
+#include <QGraphicsScene>
 
 /* NOTE: main() is run every time the command is started.
  *       Use it to reset variables so they are ready to go.
@@ -401,13 +406,6 @@ function prompt(str)
 }
 #endif
 
-#include "object-ellipse.h"
-#include "object-data.h"
-
-#include <QPainter>
-#include <QStyleOption>
-#include <QGraphicsScene>
-
 EllipseObject::EllipseObject(qreal centerX, qreal centerY, qreal width, qreal height, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("EllipseObject Constructor()");
@@ -718,5 +716,3 @@ QPainterPath EllipseObject::objectSavePath() const
     trans.scale(s,s);
     return trans.map(path);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

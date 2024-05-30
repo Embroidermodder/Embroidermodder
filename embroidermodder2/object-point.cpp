@@ -9,6 +9,11 @@
  */
 
 #include "embroidermodder.h"
+#include "object-base.h"
+
+#include <QPainter>
+#include <QStyleOption>
+#include <QGraphicsScene>
 
 /* NOTE: main() is run every time the command is started.
  *       Use it to reset variables so they are ready to go.
@@ -126,12 +131,6 @@ StatusTip=Creates multiple points:  POINT
 Alias=PO, POINT
 #endif
 
-#include "object-point.h"
-#include "object-data.h"
-
-#include <QPainter>
-#include <QStyleOption>
-#include <QGraphicsScene>
 
 PointObject::PointObject(qreal x, qreal y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {

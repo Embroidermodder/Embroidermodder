@@ -1,5 +1,13 @@
-#include "object-image.h"
-#include "object-data.h"
+/*
+ * Embroidermodder 2.
+ *
+ * Copyright 2013-2024 The Embroidermodder Team
+ * Embroidermodder 2 is Open Source Software, see LICENSE for licensing terms.
+ * Read CODE-STANDARDS.txt for advice on altering this file.
+ *
+ */
+
+#include "object-base.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -53,8 +61,8 @@ void ImageObject::setObjectRect(qreal x, qreal y, qreal w, qreal h)
 QPointF ImageObject::objectTopLeft() const
 {
     qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
+    qreal cosRot = cos(rot);
+    qreal sinRot = sin(rot);
 
     QPointF tl = rect().topLeft();
     qreal ptlX = tl.x()*scale();
@@ -68,8 +76,8 @@ QPointF ImageObject::objectTopLeft() const
 QPointF ImageObject::objectTopRight() const
 {
     qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
+    qreal cosRot = cos(rot);
+    qreal sinRot = sin(rot);
 
     QPointF tr = rect().topRight();
     qreal ptrX = tr.x()*scale();
@@ -83,8 +91,8 @@ QPointF ImageObject::objectTopRight() const
 QPointF ImageObject::objectBottomLeft() const
 {
     qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
+    qreal cosRot = cos(rot);
+    qreal sinRot = sin(rot);
 
     QPointF bl = rect().bottomLeft();
     qreal pblX = bl.x()*scale();
@@ -98,8 +106,8 @@ QPointF ImageObject::objectBottomLeft() const
 QPointF ImageObject::objectBottomRight() const
 {
     qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
+    qreal cosRot = cos(rot);
+    qreal sinRot = sin(rot);
 
     QPointF br = rect().bottomRight();
     qreal pbrX = br.x()*scale();
