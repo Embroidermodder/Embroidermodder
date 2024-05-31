@@ -7,6 +7,9 @@
  * or read the markdown version in embroidermodder2/docs/refman.
  *
  * Command Data
+ *
+ * Shortcuts should match: https://doc.qt.io/qt-6/qkeysequence.html#standard-shortcuts
+ * Apple platforms may need an additional argument like .apple_shortcut
  */
 
 #include "embroidermodder.h"
@@ -52,6 +55,7 @@ ScriptValue paste_command(ScriptEnv*);
 ScriptValue print_command(ScriptEnv*);
 ScriptValue redo_command(ScriptEnv*);
 
+ScriptValue panrealtime_command(ScriptEnv*);
 ScriptValue pandown_command(ScriptEnv*);
 ScriptValue panleft_command(ScriptEnv*);
 ScriptValue panright_command(ScriptEnv*);
@@ -112,31 +116,20 @@ ScriptValue zoom_scale_command(ScriptEnv*);
 ScriptValue zoom_selected_command(ScriptEnv*);
 ScriptValue zoom_window_command(ScriptEnv*);
 
-#if 0
-    createAction("windowtile", tr("&Tile"), tr("Tile the windows.")));
-    createAction("windownext", tr("Ne&xt"), tr("Move the focus to the next window.")));
-    createAction("windowprevious", tr("Pre&vious"), tr("Move the focus to the previous window.")));
-
-    createAction("print", tr("&Print"), tr("Print the design.")));
-    createAction("exit", tr("E&xit"), tr("Exit the application.")));
-
-    createAction("makelayercurrent", tr("&Make Layer Active"), tr("Makes the layer of a selected object the active layer")));
-    createAction("layers", tr("&Layers"), tr("Manages layers and layer properties:  LAYER")));
-    createAction("layerselector", tr("&Layer Selector"), tr("Dropdown selector for changing the current layer")));
-    createAction("layerprevious", tr("&Layer Previous"), tr("Restores the previous layer settings:  LAYERP")));
-    createAction("colorselector", tr("&Color Selector"), tr("Dropdown selector for changing the current thread color")));
-    createAction("linetypeselector", tr("&Stitchtype Selector"), tr("Dropdown selector for changing the current stitch type")));
-    createAction("lineweightselector", tr("&Threadweight Selector"), tr("Dropdown selector for changing the current thread weight")));
-    createAction("hidealllayers", tr("&Hide All Layers"), tr("Turns the visibility off for all layers in the current drawing:  HIDEALL")));
-    createAction("showalllayers", tr("&Show All Layers"), tr("Turns the visibility on for all layers in the current drawing:  SHOWALL")));
-    createAction("freezealllayers", tr("&Freeze All Layers"), tr("Freezes all layers in the current drawing:  FREEZEALL")));
-    createAction("thawalllayers", tr("&Thaw All Layers"), tr("Thaws all layers in the current drawing:  THAWALL")));
-    createAction("lockalllayers", tr("&Lock All Layers"), tr("Locks all layers in the current drawing:  LOCKALL")));
-    createAction("unlockalllayers", tr("&Unlock All Layers"), tr("Unlocks all layers in the current drawing:  UNLOCKALL")));
-
-    createAction("panrealtime", tr("&Pan Realtime"), tr("Moves the view in the current viewport.")));
-    createAction("panpoint", tr("&Pan Point"), tr("Moves the view by the specified distance.")));
-#endif
+ScriptValue colorselector_command(ScriptEnv*);
+ScriptValue hidealllayers_command(ScriptEnv*);
+ScriptValue freezealllayers_command(ScriptEnv*);
+ScriptValue layers_command(ScriptEnv*);
+ScriptValue layerprevious_command(ScriptEnv*);
+ScriptValue layerselector_command(ScriptEnv*);
+ScriptValue linetypeselector_command(ScriptEnv*);
+ScriptValue lineweightselector_command(ScriptEnv*);
+ScriptValue lockalllayers_command(ScriptEnv*);
+ScriptValue makelayercurrent_command(ScriptEnv*);
+ScriptValue panpoint_command(ScriptEnv*);
+ScriptValue showalllayers_command(ScriptEnv*);
+ScriptValue thawalllayers_command(ScriptEnv*);
+ScriptValue unlockalllayers_command(ScriptEnv*);
 
 Command command_data[] = {
     {
@@ -218,6 +211,19 @@ Command command_data[] = {
         .shortcut = ""
     },
     {
+        .id = ACTION_COLOR_SELECTOR,
+        .main = colorselector_command,
+        .icon = "colorselector",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "&Color Selector",
+        .statustip = "Dropdown selector for changing the current thread color",
+        .alias = "COLORSELECTOR",
+        .shortcut = ""
+    },
+    {
         .id = ACTION_COPY,
         .main = copy_command,
         .icon = "copy",
@@ -228,7 +234,7 @@ Command command_data[] = {
         .tooltip = "&Copy",
         .statustip = "Copy the current selection's contents to the clipboard. Command: COPY.",
         .alias = "COPY",
-        .shortcut = ""
+        .shortcut = "Ctrl+C"
     },
     {
         .id = ACTION_CUT,
@@ -241,7 +247,7 @@ Command command_data[] = {
         .tooltip = "Cu&t",
         .statustip = "Cut the current selection's contents to the clipboard. Command: CUT.",
         .alias = "CUT",
-        .shortcut = ""
+        .shortcut = "Ctrl+X"
     },
     {
         .id = ACTION_DAY,
@@ -280,7 +286,7 @@ Command command_data[] = {
         .tooltip = "&Details",
         .statustip = "Details of the current design. Command: DETAILS",
         .alias = "DESIGNDETAILS, DETAILS",
-        .shortcut = ""
+        .shortcut = "Ctrl+D"
     },
     {
         .id = ACTION_DISABLE,
@@ -397,7 +403,7 @@ Command command_data[] = {
         .tooltip = "E&xit",
         .statustip = "Exit the application:  EXIT",
         .alias = "EXIT, QUIT",
-        .shortcut = ""
+        .shortcut = "Ctrl+Q"
     },
     {
         .id = ACTION_GET,
@@ -436,6 +442,19 @@ Command command_data[] = {
         .tooltip = "&Help",
         .statustip = "Displays help. Command: HELP",
         .alias = "?, HELP",
+        .shortcut = "F1"
+    },
+    {
+        .id = ACTION_HIDE_ALL_LAYERS,
+        .main = hidealllayers_command,
+        .icon = "hidealllayers",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "&Hide All Layers",
+        .statustip = "Turns the visibility off for all layers in the current drawing:  HIDEALL",
+        .alias = "HIDEALLLAYERS",
         .shortcut = ""
     },
     {
@@ -517,6 +536,58 @@ Command command_data[] = {
         .shortcut = ""
     },
     {
+        .id = ACTION_FREEZE_ALL_LAYERS,
+        .main = freezealllayers_command,
+        .icon = "freezealllayers",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "&Freeze All Layers",
+        .statustip = "Freezes all layers in the current drawing:  FREEZEALL",
+        .alias = "FREEZEALLLAYERS",
+        .shortcut = ""
+    },
+    {
+        .id = ACTION_LAYERS,
+        .main = layers_command,
+        .icon = "layers",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "&Layers",
+        .statustip = "Manages layers and layer properties:  LAYER",
+        .alias = "LAYER",
+        .shortcut = ""
+    },
+    {
+        .id = ACTION_LAYER_PREVIOUS,
+        .main = layerprevious_command,
+        .icon = "layerprevious",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "&Layer Previous",
+        .statustip = "Restores the previous layer settings:  LAYERP",
+        .alias = "LAYERP",
+        .shortcut = ""
+    },
+    {
+        .id = ACTION_LAYER_SELECTOR,
+        .main = layerselector_command,
+        .icon = "layerselector",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "&Layer Selector",
+        .statustip = "Dropdown selector for changing the current layer",
+        .alias = "LAYERSELECTOR",
+        .shortcut = ""
+    },
+    {
         .id = ACTION_LINE,
         .main = line_command,
         .icon = "line",
@@ -530,6 +601,32 @@ Command command_data[] = {
         .shortcut = ""
     },
     {
+        .id = ACTION_LINE_TYPE_SELECTOR,
+        .main = linetypeselector_command,
+        .icon = "linetypeselector",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "&Stitchtype Selector",
+        .statustip = "Dropdown selector for changing the current stitch type",
+        .alias = "LINETYPESELECTOR",
+        .shortcut = ""
+    },
+    {
+        .id = ACTION_LINE_WEIGHT_SELECTOR,
+        .main = lineweightselector_command,
+        .icon = "lineweightselector",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "&Threadweight Selector",
+        .statustip = "Dropdown selector for changing the current thread weight",
+        .alias = "LINEWEIGHTSELECTOR",
+        .shortcut = ""
+    },
+    {
         .id = ACTION_LOCATE_POINT,
         .main = locatepoint_command,
         .icon = "locatepoint",
@@ -540,6 +637,32 @@ Command command_data[] = {
         .tooltip = "&Locate Point",
         .statustip = "Displays the coordinate values of a location:  ID",
         .alias = "ID, LOCATEPOINT",
+        .shortcut = ""
+    },
+    {
+        .id = ACTION_LOCK_ALL_LAYERS,
+        .main = lockalllayers_command,
+        .icon = "lockalllayers",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "&Lock All Layers",
+        .statustip = "Locks all layers in the current drawing:  LOCKALL",
+        .alias = "LOCKALL",
+        .shortcut = ""
+    },
+    {
+        .id = ACTION_MAKE_LAYER_CURRENT,
+        .main = makelayercurrent_command,
+        .icon = "makelayercurrent",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "&Make Layer Active",
+        .statustip = "Makes the layer of a selected object the active layer",
+        .alias = "MAKELAYERCURRENT",
         .shortcut = ""
     },
     {
@@ -592,7 +715,7 @@ Command command_data[] = {
         .tooltip = "&New",
         .statustip = "Create a new file. Command: NEW.",
         .alias = "NEW",
-        .shortcut = ""
+        .shortcut = "Ctrl+N"
     },
     {
         .id = ACTION_NIGHT,
@@ -618,7 +741,7 @@ Command command_data[] = {
         .tooltip = "&Open",
         .statustip = "Open an existing file. Command: OPEN.",
         .alias = "OPEN",
-        .shortcut = ""
+        .shortcut = "Ctrl+O"
     },
     {
         .id = ACTION_PAN_DOWN,
@@ -644,6 +767,32 @@ Command command_data[] = {
         .tooltip = "&Pan Left",
         .statustip = "Moves the view to the left:  PANLEFT",
         .alias = "PANLEFT",
+        .shortcut = ""
+    },
+    {
+        .id = ACTION_PAN_POINT,
+        .main = panpoint_command,
+        .icon = "panpoint",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "&Pan Point",
+        .statustip = "Moves the view by the specified distance.",
+        .alias = "PANPOINT",
+        .shortcut = ""
+    },
+    {
+        .id = ACTION_PAN_REAL_TIME,
+        .main = panrealtime_command,
+        .icon = "panrealtime",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "&Pan Realtime",
+        .statustip = "Moves the view in the current viewport. Command: PANREALTIME",
+        .alias = "PANREALTIME",
         .shortcut = ""
     },
     {
@@ -683,7 +832,7 @@ Command command_data[] = {
         .tooltip = "&Paste",
         .statustip = "Paste the clipboard's contents into the current selection. Command: PASTE.",
         .alias = "PASTE",
-        .shortcut = ""
+        .shortcut = "Ctrl+V"
     },
     {
         .id = ACTION_PATH,
@@ -746,8 +895,8 @@ Command command_data[] = {
         .toolbar_name = "None",
         .toolbar_position = 0,
         .tooltip = "Icon&24",
-        .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24",
+        .statustip = "Sets the toolbar icon size to 24x24: POLYLINE",
+        .alias = "POLYLINE",
         .shortcut = ""
     },
     {
@@ -771,9 +920,9 @@ Command command_data[] = {
         .menu_position = 0,
         .toolbar_name = "None",
         .toolbar_position = 0,
-        .tooltip = "&Do Nothing",
-        .statustip = "Does Nothing.",
-        .alias = "DONOTHING",
+        .tooltip = "&Preview On",
+        .statustip = "Preview on.",
+        .alias = "PREVIEWON",
         .shortcut = ""
     },
     {
@@ -785,9 +934,9 @@ Command command_data[] = {
         .toolbar_name = "None",
         .toolbar_position = 0,
         .tooltip = "&Print",
-        .statustip = "Displays information about this product:  ABOUT",
-        .alias = "ABOUT",
-        .shortcut = ""
+        .statustip = "Print the design. Command: PRINT.",
+        .alias = "PRINT",
+        .shortcut = "Ctrl+P"
     },
     {
         .id = ACTION_QUICKLEADER,
@@ -826,7 +975,7 @@ Command command_data[] = {
         .tooltip = "&Redo",
         .statustip = "Reverses the effects of the previous undo action. Command: REDO.",
         .alias = "REDO",
-        .shortcut = ""
+        .shortcut = "Ctrl+Shift+Z"
     },
     {
         .id = ACTION_RGB,
@@ -878,7 +1027,7 @@ Command command_data[] = {
         .tooltip = "&Save",
         .statustip = "Save the design to disk. Command: SAVE.",
         .alias = "SAVE",
-        .shortcut = ""
+        .shortcut = "Ctrl+S"
     },
     {
         .id = ACTION_SAVE_AS,
@@ -891,7 +1040,7 @@ Command command_data[] = {
         .tooltip = "Save &As",
         .statustip = "Save the design under a new name. Command: SAVEAS.",
         .alias = "SAVEAS",
-        .shortcut = ""
+        .shortcut = "Ctrl+Shift+S"
     },
     {
         .id = ACTION_SCALE,
@@ -956,6 +1105,19 @@ Command command_data[] = {
         .tooltip = "&Settings",
         .statustip = "Configure settings specific to this product. Command: SETTINGS.",
         .alias = "SETTINGS",
+        .shortcut = ""
+    },
+    {
+        .id = ACTION_SHOW_ALL_LAYERS,
+        .main = showalllayers_command,
+        .icon = "showalllayers",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "&Show All Layers",
+        .statustip = "Turns the visibility on for all layers in the current drawing:  SHOWALL",
+        .alias = "SHOWALLLAYERS",
         .shortcut = ""
     },
     {
@@ -1033,7 +1195,8 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Italic Text",
         .statustip = "Sets text to be italic. Command: ITALIC.",
-        .alias = "ITALIC"
+        .alias = "ITALIC",
+        .shortcut = ""
     },
     {
         .id = ACTION_TEXT_UNDERLINE,
@@ -1071,7 +1234,21 @@ Command command_data[] = {
         .toolbar_position = 0,
         .tooltip = "&Overline Text",
         .statustip = "Sets text to be overlined. Command: OVERLINE.",
-        .alias = "OVERLINE"
+        .alias = "OVERLINE",
+        .shortcut = ""
+    },
+    {
+        .id = ACTION_THAW_ALL_LAYERS,
+        .main = thawalllayers_command,
+        .icon = "thawalllayers",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "&Thaw All Layers",
+        .statustip = "Thaws all layers in the current drawing:  THAWALL",
+        .alias = "THAWALL",
+        .shortcut = ""
     },
     {
         .id = ACTION_TIP_OF_THE_DAY,
@@ -1110,6 +1287,19 @@ Command command_data[] = {
         .tooltip = "&Undo",
         .statustip = "Reverses the most recent action. Command: UNDO.",
         .alias = "U, UNDO",
+        .shortcut = "Ctrl+Z"
+    },
+    {
+        .id = ACTION_UNLOCK_ALL_LAYERS,
+        .main = unlockalllayers_command,
+        .icon = "unlockalllayers",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "&Unlock All Layers",
+        .statustip = "Unlocks all layers in the current drawing:  UNLOCKALL",
+        .alias = "UNLOCKALL",
         .shortcut = ""
     },
     {
@@ -1162,7 +1352,7 @@ Command command_data[] = {
         .tooltip = "Cl&ose",
         .statustip = "Close the active window. Command: CLOSE.",
         .alias = "CLOSE, WINDOWCLOSE",
-        .shortcut = ""
+        .shortcut = "Ctrl+W"
     },
     {
         .id = ACTION_WINDOW_CLOSE_ALL,
@@ -1188,7 +1378,7 @@ Command command_data[] = {
         .tooltip = "Ne&xt",
         .statustip = "Move the focus to the next window:  NEXT",
         .alias = "NEXT, WINDOWNEXT",
-        .shortcut = ""
+        .shortcut = "Ctrl+Tab"
     },
     {
         .id = ACTION_WINDOW_PREVIOUS,
@@ -1201,7 +1391,7 @@ Command command_data[] = {
         .tooltip = "Pre&vious",
         .statustip = "Move the focus to the previous window:  PREVIOUS",
         .alias = "PREV, PREVIOUS, WINDOWPREVIOUS",
-        .shortcut = ""
+        .shortcut = "Ctrl+Shift+Tab"
     },
     {
         .id = ACTION_WINDOW_TILE,
@@ -1279,7 +1469,7 @@ Command command_data[] = {
         .tooltip = "Zoom &In",
         .statustip = "Zooms to increase the apparent size of objects. Command: ZOOMIN",
         .alias = "ZOOMIN",
-        .shortcut = ""
+        .shortcut = "Ctrl+Plus"
     },
     {
         .id = ACTION_ZOOM_OUT,
@@ -1292,7 +1482,7 @@ Command command_data[] = {
         .tooltip = "Zoom &Out",
         .statustip = "Zooms to decrease the apparent size of objects. Command: ZOOMOUT",
         .alias = "ZOOMOUT",
-        .shortcut = ""
+        .shortcut = "Ctrl+Minus"
     },
     {
         .id = ACTION_ZOOM_PREVIOUS,

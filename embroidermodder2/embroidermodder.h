@@ -836,7 +836,6 @@ public slots:
     void panpoint();
     void panLeft();
     void panRight();
-    void panUp();
     void panDown();
 
     void dayVision();
@@ -867,9 +866,6 @@ public:
     void nativeSetBackgroundColor(quint8 r, quint8 g, quint8 b);
     void nativeSetCrossHairColor(quint8 r, quint8 g, quint8 b);
     void nativeSetGridColor(quint8 r, quint8 g, quint8 b);
-
-    void nativePreviewOn(int clone, int mode, qreal x, qreal y, qreal data);
-    void nativePreviewOff();
 
     void nativeVulcanize();
     void nativeClearRubber();

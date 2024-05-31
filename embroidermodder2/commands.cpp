@@ -162,6 +162,113 @@ cut_command(ScriptEnv *context)
     return script_null;
 }
 
+/* . */
+ScriptValue
+colorselector_command(ScriptEnv*)
+{
+    return script_null;
+}
+
+/* . */
+ScriptValue
+hidealllayers_command(ScriptEnv*)
+{
+    return script_null;
+}
+
+/* . */
+ScriptValue
+freezealllayers_command(ScriptEnv*)
+{
+    return script_null;
+}
+
+/* . */
+ScriptValue
+layers_command(ScriptEnv*)
+{
+    /* layerManager(); */
+    return script_null;
+}
+
+/* . */
+ScriptValue
+layerprevious_command(ScriptEnv*)
+{
+    return script_null;
+}
+
+/* . */
+ScriptValue
+layerselector_command(ScriptEnv*)
+{
+    return script_null;
+}
+
+/* . */
+ScriptValue
+linetypeselector_command(ScriptEnv*)
+{
+    return script_null;
+}
+
+/* . */
+ScriptValue
+lineweightselector_command(ScriptEnv*)
+{
+    return script_null;
+}
+
+/* . */
+ScriptValue
+lockalllayers_command(ScriptEnv*)
+{
+    return script_null;
+}
+
+/* . */
+ScriptValue
+makelayercurrent_command(ScriptEnv*)
+{
+    /* makeLayerActive(); */
+    return script_null;
+}
+
+/* . */
+ScriptValue
+panpoint_command(ScriptEnv*)
+{
+    return script_null;
+}
+
+/* . */
+ScriptValue
+panrealtime_command(ScriptEnv*)
+{
+    return script_null;
+}
+
+/* . */
+ScriptValue
+showalllayers_command(ScriptEnv*)
+{
+    return script_null;
+}
+
+/* . */
+ScriptValue
+thawalllayers_command(ScriptEnv*)
+{
+    return script_null;
+}
+
+/* . */
+ScriptValue
+unlockalllayers_command(ScriptEnv*)
+{
+    return script_null;
+}
+
 /* DAY is not context-dependant. */
 ScriptValue
 day_command(ScriptEnv *context)
@@ -603,7 +710,10 @@ previewoff_command(ScriptEnv *context)
         return script_false;
     }
 
-    _main->nativePreviewOff();
+    View* gview = activeView();
+    if (gview) {
+        gview->previewOff();
+    }
     _main->nativeEndCommand();
     return script_null;
 }
@@ -645,7 +755,13 @@ previewon_command(ScriptEnv *context)
         return script_false;
     }
 
-    _main->nativePreviewOn(clone, mode, REAL(2), REAL(3), REAL(4));
+    View* gview = activeView();
+    if (gview) {
+        gview->previewOn(clone, mode, REAL(2), -REAL(3), REAL(4));
+    }
+    else {
+        debug_message("Preview on requires an active view.");
+    }
     _main->nativeEndCommand();
     return script_null;
 }
@@ -821,7 +937,7 @@ text_bold_command(ScriptEnv *context)
     }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-
+    /* _main->setSettingsTextStyleBold(); */
     _main->nativeEndCommand();
     return script_null;
 }
@@ -835,7 +951,7 @@ text_italic_command(ScriptEnv *context)
     }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-
+    /* _main->setSettingsTextStyleItalic(); */
     _main->nativeEndCommand();
     return script_null;
 }
@@ -849,10 +965,11 @@ text_underline_command(ScriptEnv *context)
     }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-
+    /* _main->setSettingsTextStyleUnderline(); */
     _main->nativeEndCommand();
     return script_null;
 }
+
 /* ZOOMIN is not context-dependant */
 ScriptValue
 text_overline_command(ScriptEnv *context)
@@ -862,7 +979,7 @@ text_overline_command(ScriptEnv *context)
     }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-
+    /* _main->setSettingsTextStyleOverline(); */
     _main->nativeEndCommand();
     return script_null;
 }
@@ -876,7 +993,7 @@ text_strikeout_command(ScriptEnv *context)
     }
     _main->nativeInitCommand();
     _main->nativeClearSelection();
-
+    /* _main->setSettingsTextStyleStrikeOut(); */
     _main->nativeEndCommand();
     return script_null;
 }

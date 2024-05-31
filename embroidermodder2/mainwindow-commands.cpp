@@ -618,18 +618,6 @@ void MainWindow::panRight()
     }
 }
 
-void MainWindow::panUp()
-{
-    qDebug("panUp()");
-    View* gview = activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if(gview && stack)
-    {
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanUp", gview, 0);
-        stack->push(cmd);
-    }
-}
-
 void MainWindow::panDown()
 {
     qDebug("panDown()");
@@ -1089,18 +1077,6 @@ void MainWindow::nativeSetGridColor(quint8 r, quint8 g, quint8 b)
 {
     setSettingsGridColor(qRgb(r,g,b));
     updateAllViewGridColors(qRgb(r,g,b));
-}
-
-void MainWindow::nativePreviewOn(int clone, int mode, qreal x, qreal y, qreal data)
-{
-    View* gview = activeView();
-    if(gview) gview->previewOn(clone, mode, x, -y, data);
-}
-
-void MainWindow::nativePreviewOff()
-{
-    View* gview = activeView();
-    if(gview) gview->previewOff();
 }
 
 void MainWindow::nativeVulcanize()
