@@ -10,16 +10,6 @@
  */
 
 #include "embroidermodder.h"
-#include "view.h"
-#include "statusbar.h"
-#include "statusbar-button.h"
-#include "imagewidget.h"
-#include "layer-manager.h"
-#include "object-base.h"
-#include "property-editor.h"
-#include "undo-editor.h"
-#include "undo-commands.h"
-#include "embdetails-dialog.h"
 
 #include <QLabel>
 #include <QDesktopServices>
@@ -207,7 +197,7 @@ void MainWindow::tipOfTheDay()
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("&Show tips on startup"), wizardTipOfTheDay);
-    settings_general_tip_of_the_day = mainWin->getSettingsGeneralTipOfTheDay();
+    settings_general_tip_of_the_day = _main->getSettingsGeneralTipOfTheDay();
     checkBoxTipOfTheDay->setChecked(settings_general_tip_of_the_day);
     connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), this, SLOT(checkBoxTipOfTheDayStateChanged(int)));
 
@@ -503,13 +493,6 @@ void MainWindow::layerPrevious()
 {
     qDebug("layerPrevious()");
     stub_implement("Implement layerPrevious.");
-}
-
-// Zoom ToolBar
-void MainWindow::zoomRealtime()
-{
-    qDebug("zoomRealtime()");
-    stub_implement("Implement zoomRealtime.");
 }
 
 void MainWindow::zoomPrevious()

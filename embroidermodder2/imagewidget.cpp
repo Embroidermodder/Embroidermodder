@@ -1,5 +1,6 @@
 #include <QDebug>
-#include "imagewidget.h"
+
+#include "embroidermodder.h"
 
 ImageWidget::ImageWidget(const QString &filename, QWidget* parent) : QWidget(parent)
 {
@@ -39,5 +40,3 @@ void ImageWidget::paintEvent(QPaintEvent*)
     painter.setWindow(0, 0, width(), height());
     painter.drawImage(0, 0, img);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -13,8 +13,6 @@
 #include <QDebug>
 #include <QWidget>
 
-#include "view.h"
-#include "undo-commands.h"
 #include "embroidermodder.h"
 
 /* Simple Commands (other commands, like circle_command are housed in their
@@ -84,7 +82,7 @@ about_command(ScriptEnv *context)
     _main->nativeEndCommand();
 }
 
-/* ACTION_ALERT is a prompt-only command. */
+/* ALERT is a prompt-only command. */
 ScriptValue
 alert_command(ScriptEnv *context)
 {
@@ -98,7 +96,7 @@ alert_command(ScriptEnv *context)
     return script_null;
 }
 
-/* . */
+/* ANGLE. */
 ScriptValue
 angle_command(ScriptEnv *context)
 {
@@ -109,7 +107,7 @@ angle_command(ScriptEnv *context)
     return script_null;
 }
 
-/* WINDOWTILE is not context-dependant */
+/* CHANGELOG is not context-dependant */
 ScriptValue
 changelog_command(ScriptEnv *context)
 {
@@ -136,7 +134,7 @@ clear_command(ScriptEnv* context)
     return script_null;
 }
 
-/* WINDOWTILE is not context-dependant */
+/* COPY is not context-dependant */
 ScriptValue
 copy_command(ScriptEnv *context)
 {
@@ -149,7 +147,7 @@ copy_command(ScriptEnv *context)
     return script_null;
 }
 
-/* WINDOWTILE is not context-dependant */
+/* CUT is not context-dependant */
 ScriptValue
 cut_command(ScriptEnv *context)
 {
@@ -166,121 +164,6 @@ cut_command(ScriptEnv *context)
 ScriptValue
 colorselector_command(ScriptEnv*)
 {
-    return script_null;
-}
-
-/* . */
-ScriptValue
-hidealllayers_command(ScriptEnv*)
-{
-    return script_null;
-}
-
-/* . */
-ScriptValue
-freezealllayers_command(ScriptEnv*)
-{
-    return script_null;
-}
-
-/* . */
-ScriptValue
-layers_command(ScriptEnv*)
-{
-    /* layerManager(); */
-    return script_null;
-}
-
-/* . */
-ScriptValue
-layerprevious_command(ScriptEnv*)
-{
-    return script_null;
-}
-
-/* . */
-ScriptValue
-layerselector_command(ScriptEnv*)
-{
-    return script_null;
-}
-
-/* . */
-ScriptValue
-linetypeselector_command(ScriptEnv*)
-{
-    return script_null;
-}
-
-/* . */
-ScriptValue
-lineweightselector_command(ScriptEnv*)
-{
-    return script_null;
-}
-
-/* . */
-ScriptValue
-lockalllayers_command(ScriptEnv*)
-{
-    return script_null;
-}
-
-/* . */
-ScriptValue
-makelayercurrent_command(ScriptEnv*)
-{
-    /* makeLayerActive(); */
-    return script_null;
-}
-
-/* . */
-ScriptValue
-panpoint_command(ScriptEnv*)
-{
-    return script_null;
-}
-
-/* . */
-ScriptValue
-panrealtime_command(ScriptEnv*)
-{
-    return script_null;
-}
-
-/* . */
-ScriptValue
-showalllayers_command(ScriptEnv*)
-{
-    return script_null;
-}
-
-/* . */
-ScriptValue
-thawalllayers_command(ScriptEnv*)
-{
-    return script_null;
-}
-
-/* . */
-ScriptValue
-unlockalllayers_command(ScriptEnv*)
-{
-    return script_null;
-}
-
-/* DAY is not context-dependant. */
-ScriptValue
-day_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "day_command", "")) {
-        return script_false;
-    }
-
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-    _main->dayVision();
-    _main->nativeEndCommand();
     return script_null;
 }
 
@@ -598,16 +481,6 @@ new_command(ScriptEnv * context)
     return script_null;
 }
 
-/* NIGHT is not context-sensitive. */
-ScriptValue
-night_command(ScriptEnv * context)
-{
-    _main->nativeInitCommand();
-    _main->nightVision();
-    _main->nativeEndCommand();
-    return script_null;
-}
-
 /* OPEN is not context-sensitive. */
 ScriptValue
 open_command(ScriptEnv * context)
@@ -619,58 +492,6 @@ open_command(ScriptEnv * context)
     return script_null;
 }
 
-/* PANDOWN is context-independant. */
-ScriptValue
-pandown_command(ScriptEnv * context)
-{
-    _main->nativeInitCommand();
-    _main->panDown();
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-/* NOTE: main() is run every time the command is started.
- *       Use it to reset variables so they are ready to go.
- */
-ScriptValue
-panleft_command(ScriptEnv * context)
-{
-    _main->nativeInitCommand();
-    _main->panLeft();
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-/* NOTE: main() is run every time the command is started.
- *       Use it to reset variables so they are ready to go.
- */
-ScriptValue
-panright_command(ScriptEnv * context)
-{
-    _main->nativeInitCommand();
-    _main->panRight();
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-/* PANUP */
-ScriptValue
-panup_command(ScriptEnv * context)
-{
-    _main->debug_message("panUp()");
-    if (!argument_checks(context, "panup_command", "")) {
-        return script_false;
-    }
-    _main->nativeInitCommand();
-    View* gview = activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack) {
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanUp", gview, 0);
-        stack->push(cmd);
-    }
-    _main->nativeEndCommand();
-    return script_null;
-}
 
 /* WINDOWTILE is not context-dependant */
 ScriptValue
@@ -1064,242 +885,6 @@ whats_this_command(ScriptEnv *context)
     return script_null;
 }
 
-/* WINDOWCASCADE is not context-dependant. */
-ScriptValue
-windowcascade_command(ScriptEnv * context)
-{
-    if (!argument_checks(context, "windowcascade_command", "")) {
-        return script_false;
-    }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-    _main->mdiArea->cascade();
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-/* WINDOWCLOSE is not context-dependant. */
-ScriptValue
-windowclose_command(ScriptEnv * context)
-{
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-    _main->onCloseWindow();
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-/* WINDOWCLOSEALL is not context-dependant. */
-ScriptValue
-windowcloseall_command(ScriptEnv * context)
-{
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-    _main->mdiArea->closeAllSubWindows();
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-/* */
-ScriptValue
-windownext_command(ScriptEnv * context)
-{
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-    _main->mdiArea->activateNextSubWindow();
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-/* WINDOWPREVIOUS is not context-sensitive. */
-ScriptValue
-windowprevious_command(ScriptEnv * context)
-{
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-    _main->mdiArea->activatePreviousSubWindow();
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-/* WINDOWTILE is not context-dependant */
-ScriptValue
-windowtile_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "windowtile_command", "")) {
-        return script_false;
-    }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-    _main->mdiArea->tile();
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-/* ZOOMEXTENTS is not context-dependant */
-ScriptValue
-zoom_all_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "zoomextents_command", "")) {
-        return script_false;
-    }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-    _main->zoomExtents();
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-/* ZOOMEXTENTS is not context-dependant */
-ScriptValue
-zoom_dynamic_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "zoomextents_command", "")) {
-        return script_false;
-    }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-    _main->zoomExtents();
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-/* ZOOMEXTENTS is not context-dependant */
-ScriptValue
-zoom_center_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "zoomextents_command", "")) {
-        return script_false;
-    }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-    _main->zoomExtents();
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-/* ZOOMEXTENTS is not context-dependant */
-ScriptValue
-zoom_extents_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "zoomextents_command", "")) {
-        return script_false;
-    }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-    _main->zoomExtents();
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-/* ZOOMIN is not context-dependant */
-ScriptValue
-zoom_in_command(ScriptEnv *context)
-{
-    _main->debug_message("zoomIn()");
-    if (!argument_checks(context, "zoom_in_command", "")) {
-        return script_false;
-    }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-
-    View* gview = activeView();
-    if (gview) {
-        gview->zoomIn();
-    }
-
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-/* ZOOMIN is not context-dependant */
-ScriptValue
-zoom_previous_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "zoomin_command", "")) {
-        return script_false;
-    }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-/* ZOOMIN is not context-dependant */
-ScriptValue
-zoom_real_time_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "zoomin_command", "")) {
-        return script_false;
-    }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-/* ZOOMOUT is not context-dependant */
-ScriptValue
-zoom_out_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "zoomout_command", "")) {
-        return script_false;
-    }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-
-    View* gview = activeView();
-    if (gview) {
-        gview->zoomOut();
-    }
-
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-/* ZOOMIN is not context-dependant */
-ScriptValue
-zoom_scale_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "zoomin_command", "")) {
-        return script_false;
-    }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-/* ZOOMIN is not context-dependant */
-ScriptValue
-zoom_selected_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "zoomin_command", "")) {
-        return script_false;
-    }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-
-    _main->nativeEndCommand();
-    return script_null;
-}
-
-/* ZOOMIN is not context-dependant */
-ScriptValue
-zoom_window_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "zoomin_command", "")) {
-        return script_false;
-    }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
-
-    _main->nativeEndCommand();
-    return script_null;
-}
 
 /* --------------------------------------------------------------------------
  */

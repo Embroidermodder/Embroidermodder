@@ -1,11 +1,6 @@
-#include "undo-commands.h"
+#include "embroidermodder.h"
 
-#include "object-base.h"
-#include "view.h"
-
-//==================================================
-// Add
-//==================================================
+/* Add */
 
 UndoableAddCommand::UndoableAddCommand(const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
@@ -24,9 +19,7 @@ void UndoableAddCommand::redo()
     gview->addObject(object);
 }
 
-//==================================================
-// Delete
-//==================================================
+/* Delete */
 
 UndoableDeleteCommand::UndoableDeleteCommand(const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
@@ -45,9 +38,7 @@ void UndoableDeleteCommand::redo()
     gview->deleteObject(object);
 }
 
-//==================================================
-// Move
-//==================================================
+/* Move */
 
 UndoableMoveCommand::UndoableMoveCommand(qreal deltaX, qreal deltaY, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
@@ -68,9 +59,7 @@ void UndoableMoveCommand::redo()
     object->moveBy(dx, dy);
 }
 
-//==================================================
-// Rotate
-//==================================================
+/* Rotate */
 
 UndoableRotateCommand::UndoableRotateCommand(qreal pivotPointX, qreal pivotPointY, qreal rotAngle, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
@@ -110,9 +99,7 @@ void UndoableRotateCommand::rotate(qreal x, qreal y, qreal rot)
     object->setRotation(object->rotation()+rot);
 }
 
-//==================================================
-// Scale
-//==================================================
+/* Scale */
 
 UndoableScaleCommand::UndoableScaleCommand(qreal x, qreal y, qreal scaleFactor, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
@@ -158,9 +145,7 @@ void UndoableScaleCommand::redo()
     object->moveBy(dx, dy);
 }
 
-//==================================================
-// Navigation
-//==================================================
+/* Navigation */
 
 UndoableNavCommand::UndoableNavCommand(const QString& type, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
@@ -222,9 +207,7 @@ void UndoableNavCommand::redo()
     }
 }
 
-//==================================================
-// Grip Edit
-//==================================================
+/* Grip Edit */
 
 UndoableGripEditCommand::UndoableGripEditCommand(const QPointF beforePoint, const QPointF afterPoint, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
@@ -245,9 +228,7 @@ void UndoableGripEditCommand::redo()
     object->gripEdit(before, after);
 }
 
-//==================================================
-// Mirror
-//==================================================
+/* Mirror */
 
 UndoableMirrorCommand::UndoableMirrorCommand(qreal x1, qreal y1, qreal x2, qreal y2, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
@@ -271,5 +252,3 @@ void UndoableMirrorCommand::mirror()
 {
     //TODO: finish undoable mirror
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

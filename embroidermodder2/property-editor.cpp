@@ -10,8 +10,35 @@
 #include <QToolButton>
 #include <QWidget>
 
-#include "property-editor.h"
-#include "object-base.h"
+#include "embroidermodder.h"
+
+QToolButton* toolButtonArcCenterX;
+QToolButton* toolButtonArcCenterY;
+QToolButton* toolButtonArcRadius;
+QToolButton* toolButtonArcStartAngle;
+QToolButton* toolButtonArcEndAngle;
+QToolButton* toolButtonArcStartX;
+QToolButton* toolButtonArcStartY;
+QToolButton* toolButtonArcEndX;
+QToolButton* toolButtonArcEndY;
+QToolButton* toolButtonArcArea;
+QToolButton* toolButtonArcLength;
+QToolButton* toolButtonArcChord;
+QToolButton* toolButtonArcIncAngle;
+
+QLineEdit*   lineEditArcCenterX;
+QLineEdit*   lineEditArcCenterY;
+QLineEdit*   lineEditArcRadius;
+QLineEdit*   lineEditArcStartAngle;
+QLineEdit*   lineEditArcEndAngle;
+QLineEdit*   lineEditArcStartX;
+QLineEdit*   lineEditArcStartY;
+QLineEdit*   lineEditArcEndX;
+QLineEdit*   lineEditArcEndY;
+QLineEdit*   lineEditArcArea;
+QLineEdit*   lineEditArcLength;
+QLineEdit*   lineEditArcChord;
+QLineEdit*   lineEditArcIncAngle;
 
 PropertyEditor::PropertyEditor(const QString& iconDirectory, bool pickAddMode, QWidget* widgetToFocus, QWidget* parent) : QDockWidget(parent)
 {
@@ -1744,5 +1771,3 @@ void PropertyEditor::fieldEdited(QObject* fieldObj)
 
     blockSignals = false;
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

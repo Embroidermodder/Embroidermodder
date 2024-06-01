@@ -9,7 +9,7 @@
  * Dimension Leader
  */
 
-#include "object-base.h"
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>

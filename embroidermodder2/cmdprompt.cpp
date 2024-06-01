@@ -9,7 +9,8 @@
  * MainWindow
  */
 
-#include "cmdprompt.h"
+#include "embroidermodder.h"
+
 #include <QApplication>
 #include <QClipboard>
 #include <QString>

@@ -1,8 +1,17 @@
-#include "mdiarea.h"
-#include "embroidermodder.h"
-#include "view.h"
+/*
+ * Embroidermodder 2.
+ *
+ * Copyright 2011-2024 The Embroidermodder Team
+ * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+ * Visit https://www.libembroidery.org/refman for advice on altering this file,
+ * or read the markdown version in embroidermodder2/docs/refman.
+ *
+ * View Commands
+ */
 
-MdiArea::MdiArea(MainWindow* mw, QWidget *parent) : QMdiArea(parent), mainWin(mw)
+#include "embroidermodder.h"
+
+MdiArea::MdiArea(MainWindow* mw, QWidget *parent) : QMdiArea(parent)
 {
     #if QT_VERSION >= 0x040800
         setTabsClosable(true);
@@ -61,7 +70,7 @@ void MdiArea::setBackgroundColor(const QColor& color)
 
 void MdiArea::mouseDoubleClickEvent(QMouseEvent* /*e*/)
 {
-    mainWin->openFile();
+    _main->openFile();
 }
 
 void MdiArea::paintEvent(QPaintEvent* /*e*/)
@@ -129,5 +138,3 @@ void MdiArea::forceRepaint()
     resize(hack + QSize(1,1));
     resize(hack);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

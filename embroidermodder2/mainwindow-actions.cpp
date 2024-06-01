@@ -49,7 +49,7 @@ MainWindow::createAllActions()
         QString toolTip(command_data[i].tooltip);
         QString statusTip(command_data[i].statustip);
         QString alias_string(command_data[i].alias);
-        /* QStringList aliases = alias_string.toStringList(); */
+        QStringList aliases = alias_string.split(", ");
 
         qDebug("COMMAND: %s", qPrintable(icon));
 
@@ -78,8 +78,6 @@ MainWindow::createAllActions()
 
         aliasHash->insert(icon, icon);
         actionHash.insert(command_data[i].id, ACTION);
-
-        // load globals: engine->evaluate(script);
 
         if (toolbarName.toUpper() != "NONE") {
             //If the toolbar doesn't exist, create it.
@@ -110,11 +108,9 @@ MainWindow::createAllActions()
             menuHash.value(menuName)->addAction(ACTION);
         }
 
-        /*
         foreach (QString alias, aliases) {
-            prompt->addCommand(alias, cmdName);
+            prompt->addCommand(alias, icon);
         }
-        */
     }
 
     actionHash.value(ACTION_WINDOW_CLOSE)->setEnabled(numOfDocs > 0);

@@ -116,28 +116,13 @@ SOURCES += \
     object-textsingle.cpp \
     rubber.cpp \
     application.cpp \
-    ../extern/libembroidery/embroidery.c
+    ../extern/libembroidery/embroidery.c \
+    view-commands.cpp \
+    layer-commands.cpp \
+    window-commands.cpp
 
 HEADERS += \
     embroidermodder.h \
-    mdiarea.h \
-    mdiwindow.h \
-    view.h \
-    cmdprompt.h \
-    embdetails-dialog.h \
-    settings-dialog.h \
-    preview-dialog.h \
-    layer-manager.h \
-    selectbox.h \
-    statusbar.h \
-    statusbar-button.h \
-    imagewidget.h \
-    property-editor.h \
-    undo-editor.h \
-    undo-commands.h \
-    object-save.h \
-    object-base.h \
-    application.h \
     ../extern/libembroidery/embroidery.h
 
 #Linux/Unix: make install

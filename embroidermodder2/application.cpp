@@ -9,7 +9,6 @@
  * Application
  */
 
-#include "application.h"
 #include "embroidermodder.h"
 
 Application::Application(int argc, char **argv) : QApplication(argc, argv), _mainWin(NULL)
@@ -20,8 +19,8 @@ bool Application::event(QEvent *event)
 {
     switch (event->type()) {
     case QEvent::FileOpen:
-        if (_mainWin) {
-            _mainWin->openFilesSelected(QStringList(static_cast<QFileOpenEvent *>(event)->file()));
+        if (_main) {
+            _main->openFilesSelected(QStringList(static_cast<QFileOpenEvent *>(event)->file()));
             return true;
         }
         // Fall through

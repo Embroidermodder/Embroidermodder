@@ -11,17 +11,6 @@
 
 #include "embroidermodder.h"
 
-#include "statusbar.h"
-#include "statusbar-button.h"
-
-#include "view.h"
-#include "cmdprompt.h"
-
-#include "property-editor.h"
-#include "undo-editor.h"
-
-#include "preview-dialog.h"
-
 #include <stdlib.h>
 
 #include <QDebug>
@@ -88,7 +77,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     qApp->installTranslator(&translatorQt);
 
     //Init
-    mainWin = this;
+    _main = this;
     //Menus
     fileMenu     = new QMenu(tr("&File"),     this);
     editMenu     = new QMenu(tr("&Edit"),     this);
@@ -344,7 +333,7 @@ MdiArea* MainWindow::getMdiArea()
 MainWindow* MainWindow::getApplication()
 {
     qDebug("MainWindow::getApplication()");
-    return mainWin;
+    return _main;
 }
 
 void MainWindow::newFile()
@@ -352,7 +341,7 @@ void MainWindow::newFile()
     qDebug("MainWindow::newFile()");
     docIndex++;
     numOfDocs++;
-    MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
+    MdiWindow* mdiWin = new MdiWindow(docIndex, _main, mdiArea, Qt::SubWindow);
     connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
     connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
 
@@ -420,7 +409,7 @@ MainWindow::openFilesSelected(const QStringList& filesToOpen)
 
             //The docIndex doesn't need increased as it is only used for unnamed files
             numOfDocs++;
-            MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
+            MdiWindow* mdiWin = new MdiWindow(docIndex, _main, mdiArea, Qt::SubWindow);
             connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
             connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
 

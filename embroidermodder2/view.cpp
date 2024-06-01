@@ -9,14 +9,7 @@
  * View
  */
 
-#include "view.h"
-#include "property-editor.h"
-#include "statusbar.h"
-#include "object-base.h"
-#include "undo-editor.h"
-#include "undo-commands.h"
-
-#include "selectbox.h"
+#include "embroidermodder.h"
 
 #include <QtGui>
 #include <QGraphicsScene>
@@ -24,25 +17,24 @@
 
 View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
 {
-    mainWin = mw;
     gscene = theScene;
 
     setFrameShape(QFrame::NoFrame);
 
     //NOTE: This has to be done before setting mouse tracking.
     //TODO: Review OpenGL for Qt5 later
-    //if(mainWin->getSettingsDisplayUseOpenGL())
+    //if(_main->getSettingsDisplayUseOpenGL())
     //{
     //    qDebug("Using OpenGL...");
     //    setViewport(new QGLWidget(QGLFormat(QGL::DoubleBuffer)));
     //}
 
     //TODO: Review RenderHints later
-    //setRenderHint(QPainter::Antialiasing,            mainWin->getSettingsDisplayRenderHintAA());
-    //setRenderHint(QPainter::TextAntialiasing,        mainWin->getSettingsDisplayRenderHintTextAA());
-    //setRenderHint(QPainter::SmoothPixmapTransform,   mainWin->getSettingsDisplayRenderHintSmoothPix());
-    //setRenderHint(QPainter::HighQualityAntialiasing, mainWin->getSettingsDisplayRenderHintHighAA());
-    //setRenderHint(QPainter::NonCosmeticDefaultPen,   mainWin->getSettingsDisplayRenderHintNonCosmetic());
+    //setRenderHint(QPainter::Antialiasing,            _main->getSettingsDisplayRenderHintAA());
+    //setRenderHint(QPainter::TextAntialiasing,        _main->getSettingsDisplayRenderHintTextAA());
+    //setRenderHint(QPainter::SmoothPixmapTransform,   _main->getSettingsDisplayRenderHintSmoothPix());
+    //setRenderHint(QPainter::HighQualityAntialiasing, _main->getSettingsDisplayRenderHintHighAA());
+    //setRenderHint(QPainter::NonCosmeticDefaultPen,   _main->getSettingsDisplayRenderHintNonCosmetic());
 
     //NOTE: FullViewportUpdate MUST be used for both the GL and Qt renderers.
     //NOTE: Qt renderer will not draw the foreground properly if it isnt set.
@@ -53,23 +45,23 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     setCursor(Qt::BlankCursor);
     horizontalScrollBar()->setCursor(Qt::ArrowCursor);
     verticalScrollBar()->setCursor(Qt::ArrowCursor);
-    qsnapLocatorColor = mainWin->getSettingsQSnapLocatorColor();
-    qsnapLocatorSize = mainWin->getSettingsQSnapLocatorSize();
-    qsnapApertureSize = mainWin->getSettingsQSnapApertureSize();
-    gripColorCool = mainWin->getSettingsSelectionCoolGripColor();
-    gripColorHot = mainWin->getSettingsSelectionHotGripColor();
-    gripSize = mainWin->getSettingsSelectionGripSize();
-    pickBoxSize = mainWin->getSettingsSelectionPickBoxSize();
-    setCrossHairColor(mainWin->getSettingsDisplayCrossHairColor());
-    setCrossHairSize(mainWin->getSettingsDisplayCrossHairPercent());
-    setGridColor(mainWin->getSettingsGridColor());
+    qsnapLocatorColor = _main->getSettingsQSnapLocatorColor();
+    qsnapLocatorSize = _main->getSettingsQSnapLocatorSize();
+    qsnapApertureSize = _main->getSettingsQSnapApertureSize();
+    gripColorCool = _main->getSettingsSelectionCoolGripColor();
+    gripColorHot = _main->getSettingsSelectionHotGripColor();
+    gripSize = _main->getSettingsSelectionGripSize();
+    pickBoxSize = _main->getSettingsSelectionPickBoxSize();
+    setCrossHairColor(_main->getSettingsDisplayCrossHairColor());
+    setCrossHairSize(_main->getSettingsDisplayCrossHairPercent());
+    setGridColor(_main->getSettingsGridColor());
 
-    if(mainWin->getSettingsGridShowOnLoad())
-        createGrid(mainWin->getSettingsGridType());
+    if(_main->getSettingsGridShowOnLoad())
+        createGrid(_main->getSettingsGridType());
     else
         createGrid("");
 
-    toggleRuler(mainWin->getSettingsRulerShowOnLoad());
+    toggleRuler(_main->getSettingsRulerShowOnLoad());
     toggleReal(true); //TODO: load this from file, else settings with default being true
 
     grippingActive = false;
@@ -97,22 +89,22 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     tempBaseObj = 0;
 
     selectBox = new SelectBox(QRubberBand::Rectangle, this);
-    selectBox->setColors(QColor(mainWin->getSettingsDisplaySelectBoxLeftColor()),
-                         QColor(mainWin->getSettingsDisplaySelectBoxLeftFill()),
-                         QColor(mainWin->getSettingsDisplaySelectBoxRightColor()),
-                         QColor(mainWin->getSettingsDisplaySelectBoxRightFill()),
-                         mainWin->getSettingsDisplaySelectBoxAlpha());
+    selectBox->setColors(QColor(_main->getSettingsDisplaySelectBoxLeftColor()),
+                         QColor(_main->getSettingsDisplaySelectBoxLeftFill()),
+                         QColor(_main->getSettingsDisplaySelectBoxRightColor()),
+                         QColor(_main->getSettingsDisplaySelectBoxRightFill()),
+                         _main->getSettingsDisplaySelectBoxAlpha());
 
-    showScrollBars(mainWin->getSettingsDisplayShowScrollBars());
+    showScrollBars(_main->getSettingsDisplayShowScrollBars());
     setCornerButton();
 
     undoStack = new QUndoStack(this);
-    mainWin->dockUndoEdit->addStack(undoStack);
+    _main->dockUndoEdit->addStack(undoStack);
 
     installEventFilter(this);
 
     setMouseTracking(true);
-    setBackgroundColor(mainWin->getSettingsDisplayBGColor());
+    setBackgroundColor(_main->getSettingsDisplayBGColor());
     //TODO: wrap this with a setBackgroundPixmap() function: setBackgroundBrush(QPixmap("images/canvas.png"));
 
     geometry = emb_array_create(EMB_POLYLINE);
@@ -136,7 +128,7 @@ View::~View()
 void View::enterEvent(QEvent* /*event*/)
 {
     QMdiSubWindow* mdiWin = qobject_cast<QMdiSubWindow*>(parent());
-    if(mdiWin) mainWin->getMdiArea()->setActiveSubWindow(mdiWin);
+    if(mdiWin) _main->getMdiArea()->setActiveSubWindow(mdiWin);
 }
 
 void View::addObject(BaseObject* obj)
@@ -364,7 +356,7 @@ void View::createOrigin() //TODO: Make Origin Customizable
 {
     originPath = QPainterPath();
 
-    if(mainWin->getSettingsGridShowOrigin())
+    if(_main->getSettingsGridShowOrigin())
     {
         //originPath.addEllipse(QPointF(0,0), 0.5, 0.5); //TODO: Make Origin Customizable
         qreal rad = 0.5;
@@ -381,10 +373,10 @@ void View::createOrigin() //TODO: Make Origin Customizable
 
 void View::createGridRect()
 {
-    qreal xSpacing = mainWin->getSettingsGridSpacingX();
-    qreal ySpacing = mainWin->getSettingsGridSpacingY();
+    qreal xSpacing = _main->getSettingsGridSpacingX();
+    qreal ySpacing = _main->getSettingsGridSpacingY();
 
-    QRectF gr(0, 0, mainWin->getSettingsGridSizeX(), -mainWin->getSettingsGridSizeY());
+    QRectF gr(0, 0, _main->getSettingsGridSizeX(), -_main->getSettingsGridSizeY());
     //Ensure the loop will work correctly with negative numbers
     qreal x1 = qMin(gr.left(), gr.right());
     qreal y1 = qMin(gr.top(), gr.bottom());
@@ -408,12 +400,12 @@ void View::createGridRect()
     QRectF gridRect = gridPath.boundingRect();
     qreal bx = gridRect.width()/2.0;
     qreal by = -gridRect.height()/2.0;
-    qreal cx = mainWin->getSettingsGridCenterX();
-    qreal cy = -mainWin->getSettingsGridCenterY();
+    qreal cx = _main->getSettingsGridCenterX();
+    qreal cy = -_main->getSettingsGridCenterY();
     qreal dx = cx - bx;
     qreal dy = cy - by;
 
-    if(mainWin->getSettingsGridCenterOnOrigin())
+    if(_main->getSettingsGridCenterOnOrigin())
         gridPath.translate(-bx, -by);
     else
         gridPath.translate(dx, dy);
@@ -421,10 +413,10 @@ void View::createGridRect()
 
 void View::createGridPolar()
 {
-    qreal radSpacing = mainWin->getSettingsGridSpacingRadius();
-    qreal angSpacing = mainWin->getSettingsGridSpacingAngle();
+    qreal radSpacing = _main->getSettingsGridSpacingRadius();
+    qreal angSpacing = _main->getSettingsGridSpacingAngle();
 
-    qreal rad = mainWin->getSettingsGridSizeRadius();
+    qreal rad = _main->getSettingsGridSizeRadius();
 
     gridPath = QPainterPath();
     gridPath.addEllipse(QPointF(0,0), rad, rad);
@@ -438,21 +430,21 @@ void View::createGridPolar()
         gridPath.lineTo(QLineF::fromPolar(rad, ang).p2());
     }
 
-    qreal cx = mainWin->getSettingsGridCenterX();
-    qreal cy = mainWin->getSettingsGridCenterY();
+    qreal cx = _main->getSettingsGridCenterX();
+    qreal cy = _main->getSettingsGridCenterY();
 
-    if(!mainWin->getSettingsGridCenterOnOrigin())
+    if(!_main->getSettingsGridCenterOnOrigin())
         gridPath.translate(cx, -cy);
 }
 
 void View::createGridIso()
 {
-    qreal xSpacing = mainWin->getSettingsGridSpacingX();
-    qreal ySpacing = mainWin->getSettingsGridSpacingY();
+    qreal xSpacing = _main->getSettingsGridSpacingX();
+    qreal ySpacing = _main->getSettingsGridSpacingY();
 
     //Ensure the loop will work correctly with negative numbers
-    qreal isoW = qAbs(mainWin->getSettingsGridSizeX());
-    qreal isoH = qAbs(mainWin->getSettingsGridSizeY());
+    qreal isoW = qAbs(_main->getSettingsGridSizeX());
+    qreal isoH = qAbs(_main->getSettingsGridSizeY());
 
     QPointF p1 = QPointF(0,0);
     QPointF p2 = QLineF::fromPolar(isoW,  30).p2();
@@ -485,10 +477,10 @@ void View::createGridIso()
     QRectF gridRect = gridPath.boundingRect();
     // bx is unused
     qreal by = -gridRect.height()/2.0;
-    qreal cx = mainWin->getSettingsGridCenterX();
-    qreal cy = -mainWin->getSettingsGridCenterY();
+    qreal cx = _main->getSettingsGridCenterX();
+    qreal cy = -_main->getSettingsGridCenterY();
 
-    if(mainWin->getSettingsGridCenterOnOrigin())
+    if(_main->getSettingsGridCenterOnOrigin())
         gridPath.translate(0, -by);
     else
     {
@@ -511,7 +503,7 @@ void View::toggleGrid(bool on)
 {
     qDebug("View toggleGrid()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    if(on) { createGrid(mainWin->getSettingsGridType()); }
+    if(on) { createGrid(_main->getSettingsGridType()); }
     else   { createGrid(""); }
     QApplication::restoreOverrideCursor();
 }
@@ -522,9 +514,9 @@ View::toggleRuler(bool on)
     qDebug("View toggleRuler()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     gscene->setProperty("ENABLE_RULER", on);
-    rulerMetric = mainWin->getSettingsRulerMetric();
-    rulerColor = QColor(mainWin->getSettingsRulerColor());
-    rulerPixelSize = mainWin->getSettingsRulerPixelSize();
+    rulerMetric = _main->getSettingsRulerMetric();
+    rulerColor = QColor(_main->getSettingsRulerColor());
+    rulerPixelSize = _main->getSettingsRulerPixelSize();
     gscene->update();
     QApplication::restoreOverrideCursor();
 }
@@ -1208,7 +1200,7 @@ void View::updateMouseCoords(int x, int y)
     gscene->setProperty(SCENE_QSNAP_POINT, sceneMousePoint); //TODO: if qsnap functionality is enabled, use it rather than the mouse point
     gscene->setProperty(SCENE_MOUSE_POINT, sceneMousePoint);
     gscene->setProperty(VIEW_MOUSE_POINT, viewMousePoint);
-    mainWin->statusbar->setMouseCoord(sceneMousePoint.x(), -sceneMousePoint.y());
+    _main->statusbar->setMouseCoord(sceneMousePoint.x(), -sceneMousePoint.y());
 }
 
 void View::setCrossHairSize(quint8 percent)
@@ -1228,12 +1220,12 @@ void View::setCrossHairSize(quint8 percent)
 
 void View::setCornerButton()
 {
-    int num = mainWin->getSettingsDisplayScrollBarWidgetNum();
+    int num = _main->getSettingsDisplayScrollBarWidgetNum();
     if(num)
     {
         QPushButton* cornerButton = new QPushButton(this);
         cornerButton->setFlat(true);
-        QAction* act = mainWin->actionHash.value(num);
+        QAction* act = _main->actionHash.value(num);
         //NOTE: Prevent crashing if the action is NULL.
         if(!act)
         {
@@ -1257,7 +1249,7 @@ void View::setCornerButton()
 void View::cornerButtonClicked()
 {
     qDebug("Corner Button Clicked.");
-    mainWin->actionHash.value(mainWin->getSettingsDisplayScrollBarWidgetNum())->trigger();
+    _main->actionHash.value(_main->getSettingsDisplayScrollBarWidgetNum())->trigger();
 }
 
 void View::zoomIn()
@@ -1266,7 +1258,7 @@ void View::zoomIn()
     if(!allowZoomIn()) { return; }
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QPointF cntr = mapToScene(QPoint(width()/2,height()/2));
-    qreal s = mainWin->getSettingsDisplayZoomScaleIn();
+    qreal s = _main->getSettingsDisplayZoomScaleIn();
     scale(s, s);
 
     centerOn(cntr);
@@ -1279,7 +1271,7 @@ void View::zoomOut()
     if(!allowZoomOut()) { return; }
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QPointF cntr = mapToScene(QPoint(width()/2,height()/2));
-    qreal s = mainWin->getSettingsDisplayZoomScaleOut();
+    qreal s = _main->getSettingsDisplayZoomScaleOut();
     scale(s, s);
 
     centerOn(cntr);
@@ -1318,8 +1310,8 @@ void View::zoomExtents()
     QRectF extents = gscene->itemsBoundingRect();
     if(extents.isNull())
     {
-        extents.setWidth(mainWin->getSettingsGridSizeX());
-        extents.setHeight(mainWin->getSettingsGridSizeY());
+        extents.setWidth(_main->getSettingsGridSizeX());
+        extents.setHeight(_main->getSettingsGridSizeY());
         extents.moveCenter(QPointF(0,0));
     }
     fitInView(extents, Qt::KeepAspectRatio);
@@ -1373,9 +1365,9 @@ void View::selectAll()
 
 void View::selectionChanged()
 {
-    if(mainWin->dockPropEdit->isVisible())
+    if(_main->dockPropEdit->isVisible())
     {
-        mainWin->dockPropEdit->setSelectedItems(gscene->selectedItems());
+        _main->dockPropEdit->setSelectedItems(gscene->selectedItems());
     }
 }
 
@@ -1386,7 +1378,7 @@ void View::mouseDoubleClickEvent(QMouseEvent* event)
         QGraphicsItem* item = gscene->itemAt(mapToScene(event->pos()), QTransform());
         if(item)
         {
-            mainWin->dockPropEdit->show();
+            _main->dockPropEdit->show();
         }
     }
 }
@@ -1396,10 +1388,10 @@ void View::mousePressEvent(QMouseEvent* event)
     updateMouseCoords(event->x(), event->y());
     if(event->button() == Qt::LeftButton)
     {
-        if(mainWin->isCommandActive())
+        if(_main->isCommandActive())
         {
             QPointF cmdPoint = mapToScene(event->pos());
-            mainWin->runCommandClick(mainWin->activeCommand(), cmdPoint.x(), cmdPoint.y());
+            _main->runCommandClick(_main->activeCommand(), cmdPoint.x(), cmdPoint.y());
             return;
         }
         QPainterPath path;
@@ -1469,9 +1461,9 @@ void View::mousePressEvent(QMouseEvent* event)
             path.addPolygon(mapToScene(selectBox->geometry()));
             if(sceneReleasePoint.x() > scenePressPoint.x())
             {
-                if(mainWin->getSettingsSelectionModePickAdd())
+                if(_main->getSettingsSelectionModePickAdd())
                 {
-                    if(mainWin->isShiftPressed())
+                    if(_main->isShiftPressed())
                     {
                         QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
                         foreach(QGraphicsItem* item, itemList)
@@ -1486,7 +1478,7 @@ void View::mousePressEvent(QMouseEvent* event)
                 }
                 else
                 {
-                    if(mainWin->isShiftPressed())
+                    if(_main->isShiftPressed())
                     {
                         QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
                         if(!itemList.size())
@@ -1508,9 +1500,9 @@ void View::mousePressEvent(QMouseEvent* event)
             }
             else
             {
-                if(mainWin->getSettingsSelectionModePickAdd())
+                if(_main->getSettingsSelectionModePickAdd())
                 {
-                    if(mainWin->isShiftPressed())
+                    if(_main->isShiftPressed())
                     {
                         QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
                         foreach(QGraphicsItem* item, itemList)
@@ -1525,7 +1517,7 @@ void View::mousePressEvent(QMouseEvent* event)
                 }
                 else
                 {
-                    if(mainWin->isShiftPressed())
+                    if(_main->isShiftPressed())
                     {
                         QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
                         if(!itemList.size())
@@ -1645,11 +1637,11 @@ void View::mouseMoveEvent(QMouseEvent* event)
     movePoint = event->pos();
     sceneMovePoint = mapToScene(movePoint);
 
-    if(mainWin->isCommandActive())
+    if(_main->isCommandActive())
     {
         if(rapidMoveActive)
         {
-            mainWin->runCommandMove(mainWin->activeCommand(), sceneMovePoint.x(), sceneMovePoint.y());
+            _main->runCommandMove(_main->activeCommand(), sceneMovePoint.x(), sceneMovePoint.y());
         }
     }
     if(previewActive)
@@ -1771,13 +1763,13 @@ void View::mouseReleaseEvent(QMouseEvent* event)
     if(event->button() == Qt::XButton1)
     {
         qDebug("XButton1");
-        mainWin->undo(); //TODO: Make this customizable
+        _main->undo(); //TODO: Make this customizable
         event->accept();
     }
     if(event->button() == Qt::XButton2)
     {
         qDebug("XButton2");
-        mainWin->redo(); //TODO: Make this customizable
+        _main->redo(); //TODO: Make this customizable
         event->accept();
     }
     gscene->update();
@@ -1846,12 +1838,12 @@ void View::zoomToPoint(const QPoint& mousePoint, int zoomDir)
     if(zoomDir > 0)
     {
         if(!allowZoomIn()) { return; }
-        s = mainWin->getSettingsDisplayZoomScaleIn();
+        s = _main->getSettingsDisplayZoomScaleIn();
     }
     else
     {
         if(!allowZoomOut()) { return; }
-        s = mainWin->getSettingsDisplayZoomScaleOut();
+        s = _main->getSettingsDisplayZoomScaleOut();
     }
 
     scale(s, s);
@@ -1874,7 +1866,7 @@ void View::zoomToPoint(const QPoint& mousePoint, int zoomDir)
 void
 View::contextMenuEvent(QContextMenuEvent* event)
 {
-    QString iconTheme = mainWin->settings_general_icon_theme;
+    QString iconTheme = _main->settings_general_icon_theme;
 
     QMenu menu;
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
@@ -1893,9 +1885,9 @@ View::contextMenuEvent(QContextMenuEvent* event)
     {
         return;
     }
-    if(!mainWin->prompt->isCommandActive())
+    if(!_main->prompt->isCommandActive())
     {
-        QString lastCmd = mainWin->prompt->lastCommand();
+        QString lastCmd = _main->prompt->lastCommand();
         QAction* repeatAction = new QAction(QIcon("icons/" + iconTheme + "/" + lastCmd + ".png"), "Repeat " + lastCmd, this);
         repeatAction->setStatusTip("Repeats the previously issued command.");
         connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()));
@@ -1910,9 +1902,9 @@ View::contextMenuEvent(QContextMenuEvent* event)
     }
 
     menu.addSeparator();
-    menu.addAction(mainWin->actionHash.value(ACTION_CUT));
-    menu.addAction(mainWin->actionHash.value(ACTION_COPY));
-    menu.addAction(mainWin->actionHash.value(ACTION_PASTE));
+    menu.addAction(_main->actionHash.value(ACTION_CUT));
+    menu.addAction(_main->actionHash.value(ACTION_COPY));
+    menu.addAction(_main->actionHash.value(ACTION_PASTE));
     menu.addSeparator();
 
     if(!selectionEmpty)
@@ -2067,13 +2059,13 @@ void View::copySelected()
     QList<QGraphicsItem*> selectedList = gscene->selectedItems();
 
     //Prevent memory leaks by deleting any unpasted instances
-    qDeleteAll(mainWin->cutCopyObjectList.begin(), mainWin->cutCopyObjectList.end());
-    mainWin->cutCopyObjectList.clear();
+    qDeleteAll(_main->cutCopyObjectList.begin(), _main->cutCopyObjectList.end());
+    _main->cutCopyObjectList.clear();
 
     //Create new objects but do not add them to the scene just yet.
     //By creating them now, ensures that pasting will still work
     //if the original objects are deleted before the paste occurs.
-    mainWin->cutCopyObjectList = createObjectList(selectedList);
+    _main->cutCopyObjectList = createObjectList(selectedList);
 }
 
 void View::paste()
@@ -2084,13 +2076,13 @@ void View::paste()
         delete pasteObjectItemGroup;
     }
 
-    pasteObjectItemGroup = gscene->createItemGroup(mainWin->cutCopyObjectList);
+    pasteObjectItemGroup = gscene->createItemGroup(_main->cutCopyObjectList);
     pasteDelta = pasteObjectItemGroup->boundingRect().bottomLeft();
     pasteObjectItemGroup->setPos(sceneMousePoint - pasteDelta);
     pastingActive = true;
 
     //Re-create the list in case of multiple pastes
-    mainWin->cutCopyObjectList = createObjectList(mainWin->cutCopyObjectList);
+    _main->cutCopyObjectList = createObjectList(_main->cutCopyObjectList);
 }
 
 QList<QGraphicsItem*> View::createObjectList(QList<QGraphicsItem*> list)
@@ -2259,16 +2251,16 @@ QList<QGraphicsItem*> View::createObjectList(QList<QGraphicsItem*> list)
 
 void View::repeatAction()
 {
-    mainWin->prompt->endCommand();
-    mainWin->prompt->setCurrentText(mainWin->prompt->lastCommand());
-    mainWin->prompt->processInput();
+    _main->prompt->endCommand();
+    _main->prompt->setCurrentText(_main->prompt->lastCommand());
+    _main->prompt->processInput();
 }
 
 void View::moveAction()
 {
-    mainWin->prompt->endCommand();
-    mainWin->prompt->setCurrentText("move");
-    mainWin->prompt->processInput();
+    _main->prompt->endCommand();
+    _main->prompt->setCurrentText("move");
+    _main->prompt->processInput();
 }
 
 void View::moveSelected(qreal dx, qreal dy)
@@ -2295,9 +2287,9 @@ void View::moveSelected(qreal dx, qreal dy)
 
 void View::rotateAction()
 {
-    mainWin->prompt->endCommand();
-    mainWin->prompt->setCurrentText("rotate");
-    mainWin->prompt->processInput();
+    _main->prompt->endCommand();
+    _main->prompt->setCurrentText("rotate");
+    _main->prompt->processInput();
 }
 
 void View::rotateSelected(qreal x, qreal y, qreal rot)
@@ -2346,9 +2338,9 @@ void View::mirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2)
 
 void View::scaleAction()
 {
-    mainWin->prompt->endCommand();
-    mainWin->prompt->setCurrentText("scale");
-    mainWin->prompt->processInput();
+    _main->prompt->endCommand();
+    _main->prompt->setCurrentText("scale");
+    _main->prompt->processInput();
 }
 
 void View::scaleSelected(qreal x, qreal y, qreal factor)

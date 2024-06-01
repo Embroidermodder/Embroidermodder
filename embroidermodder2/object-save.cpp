@@ -9,8 +9,7 @@
  * Save
  */
 
-#include "object-base.h"
-#include "object-save.h"
+#include "embroidermodder.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsItem>

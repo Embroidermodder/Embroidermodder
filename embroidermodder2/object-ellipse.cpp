@@ -9,7 +9,6 @@
  */
 
 #include "embroidermodder.h"
-#include "object-base.h"
 
 #include <QPainter>
 #include <QStyleOption>

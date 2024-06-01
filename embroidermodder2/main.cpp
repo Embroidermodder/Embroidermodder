@@ -1,4 +1,14 @@
-#include "application.h"
+/*
+ * Embroidermodder 2.
+ *
+ * Copyright 2011-2024 The Embroidermodder Team
+ * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+ * Visit https://www.libembroidery.org/refman for advice on altering this file,
+ * or read the markdown version in embroidermodder2/docs/refman.
+ *
+ * View Commands
+ */
+
 #include "embroidermodder.h"
 
 const char* _appName_ = "Embroidermodder";
@@ -66,22 +76,20 @@ int main(int argc, char* argv[])
     if(exitApp)
         return 1;
 
-    MainWindow* mainWin = new MainWindow();
+    _main = new MainWindow();
 #if defined(Q_OS_MAC)
-    app.setMainWin(mainWin);
+    app.setMainWin(_main);
 #endif
 
-    _main = mainWin;
+    QObject::connect(&app, SIGNAL(lastWindowClosed()), _main, SLOT(quit()));
 
-    QObject::connect(&app, SIGNAL(lastWindowClosed()), mainWin, SLOT(quit()));
+    _main->setWindowTitle(app.applicationName() + " " + app.applicationVersion());
+    _main->show();
 
-    mainWin->setWindowTitle(app.applicationName() + " " + app.applicationVersion());
-    mainWin->show();
-
-    // NOTE: If openFilesSelected() is called from within the mainWin constructor,
+    // NOTE: If openFilesSelected() is called from within the _main constructor,
     // slot commands wont work and the window menu will be screwed
     if (!filesToOpen.isEmpty()) {
-        mainWin->openFilesSelected(filesToOpen);
+        _main->openFilesSelected(filesToOpen);
     }
 
     return app.exec();

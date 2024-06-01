@@ -9,9 +9,7 @@
  * Object Circle
  */
 
-#include "object-base.h"
 #include "embroidermodder.h"
-#include "view.h"
 
 #include <QPainter>
 #include <QStyleOption>

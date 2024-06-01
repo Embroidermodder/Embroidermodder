@@ -265,7 +265,7 @@ Command command_data[] = {
     {
         .id = ACTION_DEBUG,
         .main = debug_command,
-        .icon = "about",
+        .icon = "debug",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
@@ -1344,7 +1344,7 @@ Command command_data[] = {
     {
         .id = ACTION_WINDOW_CLOSE,
         .main = windowclose_command,
-        .icon = "windowcascade",
+        .icon = "windowclose",
         .menu_name = "None",
         .menu_position = 0,
         .toolbar_name = "None",
