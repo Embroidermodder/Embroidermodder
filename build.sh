@@ -115,8 +115,6 @@ function build_docs () {
     pip install mkdocs-material
     pip install mkdocs-table-reader-plugin
 
-    cd embroidermodder2
-
     rm -fr _site
 
     mkdocs build
@@ -128,7 +126,6 @@ function build_docs () {
 
     mv site ../_site
 
-    cd ..
 }
 
 function build_debug () {

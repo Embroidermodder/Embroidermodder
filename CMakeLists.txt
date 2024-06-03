@@ -50,7 +50,7 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/extern/libembroidery)
 
 set(SRC_ASSETS ${CMAKE_SOURCE_DIR}/assets)
 
-set(SRC ${CMAKE_SOURCE_DIR}/embroidermodder2)
+set(SRC ${CMAKE_SOURCE_DIR}/src)
 
 qt_add_executable(embroidermodder
 	${SRC}/application.cpp
