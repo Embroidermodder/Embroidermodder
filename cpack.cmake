@@ -14,7 +14,7 @@ set(CPACK_SOURCE_IGNORE_FILES .git .github)
 
 set(CPACK_WIX_PRODUCT_ICON assets/embroidermodder2.ico)
 
-set(CPACK_RESOURCE_FILE_LICENSE LICENSE.md)
+set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/LICENSE.md)
 
 
 include(CPack)

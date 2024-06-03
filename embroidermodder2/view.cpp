@@ -1209,7 +1209,7 @@ void View::setCrossHairSize(quint8 percent)
     //NOTE: crosshairSize is in pixels and is a percentage of your screen width
     //NOTE: Example: (1280*0.05)/2 = 32, thus 32 + 1 + 32 = 65 pixel wide crosshair
     */
-    quint32 screenWidth = qApp->desktop()->width();
+    quint32 screenWidth = QGuiApplication::primaryScreen()->geometry().width();
     if(percent > 0 && percent < 100) {
         crosshairSize = (screenWidth*(percent/100.0))/2;
     }

@@ -77,12 +77,9 @@ function build_release () {
     git submodule init
     git submodule update
 
-#    cmake -S . -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
-#    cd $BUILD_DIR
-#    cmake --build .
-    cd embroidermodder2
-    qmake
-    make -j4
+    cmake -S . -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
+    cd $BUILD_DIR
+    cmake --build .
     cd ..
 
 }

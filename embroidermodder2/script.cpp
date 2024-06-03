@@ -13,6 +13,8 @@
 
 #include "embroidermodder.h"
 
+#include <QRegularExpression>
+
 QString index_name[] = {
     "one",
     "two",
@@ -303,7 +305,7 @@ add_int_argument(ScriptEnv *context, int i)
 ScriptValue
 command_prompt(const char *line)
 {
-    QRegExp split_char(" ");
+    QRegularExpression split_char(" ");
     QStringList line_list = QString(line).split(split_char);
     if (_main->command_map.contains(line_list[0])) {
         ScriptEnv* context = create_script_env();

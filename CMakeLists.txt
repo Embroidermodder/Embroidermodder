@@ -4,18 +4,17 @@ project(embroidermodder VERSION 2.0.0 LANGUAGES C CXX)
 
 find_package(OpenGL REQUIRED)
 
-set(CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/extern/glew/include)
-set(CMAKE_LIBRARY_PATH ${CMAKE_SOURCE_DIR}/extern/glew/lib/Release/x64)
-find_package(GLEW REQUIRED)
-
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED True)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
 
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 add_compile_options(
 	-g
 	-O2
@@ -29,7 +28,6 @@ add_link_options(
 	-fprofile-arcs
 	-ftest-coverage
 )
-
 else()
 add_compile_options(
 	-g
@@ -38,14 +36,9 @@ add_compile_options(
 )
 endif()
 
-set(GLFW_BUILD_EXAMPLES OFF)
-set(GLFW_BUILD_TESTS OFF)
-set(GLFW_BUILD_DOCS OFF)
-set(GLFW_INSTALL OFF)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets PrintSupport)
 
-add_subdirectory(${CMAKE_SOURCE_DIR}/extern/glfw)
 add_subdirectory(${CMAKE_SOURCE_DIR}/extern/libembroidery)
-add_subdirectory(${CMAKE_SOURCE_DIR}/extern/imgui)
 
 # The makers of CMake advise that you do not glob source files.
 #
@@ -57,41 +50,86 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/extern/imgui)
 
 set(SRC_ASSETS ${CMAKE_SOURCE_DIR}/assets)
 
-add_executable(embroidermodder
-	${CMAKE_SOURCE_DIR}/src/gui_backend.cpp
-	${CMAKE_SOURCE_DIR}/src/main.c
+set(SRC ${CMAKE_SOURCE_DIR}/embroidermodder2)
 
-	${CMAKE_SOURCE_DIR}/extern/tomlc99/toml.c
+qt_add_executable(embroidermodder
+	${SRC}/application.cpp
+	${SRC}/cmdprompt.cpp
+	${SRC}/command_data.cpp
+	${SRC}/commands.cpp
+	${SRC}/distance.cpp
+	${SRC}/dolphin.cpp
+	${SRC}/embdetails-dialog.cpp
+	${SRC}/heart.cpp
+	${SRC}/imagewidget.cpp
+	${SRC}/layer-commands.cpp
+	${SRC}/layer-manager.cpp
+	${SRC}/main.cpp
+	${SRC}/mainwindow.cpp
+	${SRC}/mainwindow-actions.cpp
+	${SRC}/mainwindow-commands.cpp
+	${SRC}/mainwindow-menus.cpp
+	${SRC}/mainwindow-settings.cpp
+	${SRC}/mainwindow-toolbars.cpp
+	${SRC}/mdiarea.cpp
+	${SRC}/mdiwindow.cpp
+	${SRC}/move.cpp
+	${SRC}/object-arc.cpp
+	${SRC}/object-base.cpp
+	${SRC}/object-circle.cpp
+	${SRC}/object-dimleader.cpp
+	${SRC}/object-ellipse.cpp
+	${SRC}/object-image.cpp
+	${SRC}/object-line.cpp
+	${SRC}/object-path.cpp
+	${SRC}/object-point.cpp
+	${SRC}/object-polygon.cpp
+	${SRC}/object-polyline.cpp
+	${SRC}/object-rect.cpp
+	${SRC}/object-save.cpp
+	${SRC}/object-textsingle.cpp
+	${SRC}/preview-dialog.cpp
+	${SRC}/property-editor.cpp
+	${SRC}/quickleader.cpp
+	${SRC}/rgb.cpp
+	${SRC}/rotate.cpp
+	${SRC}/rubber.cpp
+	${SRC}/sandbox.cpp
+	${SRC}/scale.cpp
+	${SRC}/script.cpp
+	${SRC}/selectall.cpp
+	${SRC}/selectbox.cpp
+	${SRC}/snowflake.cpp
+	${SRC}/settings-dialog.cpp
+	${SRC}/star.cpp
+	${SRC}/statusbar.cpp
+	${SRC}/statusbar-button.cpp
+	${SRC}/tools.cpp
+	${SRC}/undo-commands.cpp
+	${SRC}/undo-editor.cpp
+	${SRC}/view.cpp
+	${SRC}/view-commands.cpp
+	${SRC}/window-commands.cpp
+
+	${SRC}/embroidermodder.h
 )
 
-# if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-# target_compile_options(embroidermodder
-# 	PRIVATE
-# 	-Werror
-# )
-# endif()
-
 include_directories(
-	${CMAKE_SOURCE_DIR}/extern/glew/include
-	${CMAKE_SOURCE_DIR}/extern/glfw/include
-	${CMAKE_SOURCE_DIR}/extern/imgui
-	${CMAKE_SOURCE_DIR}/extern/tinydir
-	${CMAKE_SOURCE_DIR}/extern/libembroidery/src
-	${CMAKE_SOURCE_DIR}/extern/libembroidery/src/stb
-	${CMAKE_SOURCE_DIR}/extern/tomlc99
+	${CMAKE_SOURCE_DIR}/extern/libembroidery
 	${CMAKE_SOURCE_DIR}/src
 )
 
-set_target_properties(embroidermodder PROPERTIES
-    WIN32_EXECUTABLE ON
-    MACOSX_BUNDLE ON
+target_link_libraries(embroidermodder PRIVATE
+	embroidery_static
+	Qt6::Core
+	Qt6::Widgets
+	Qt6::PrintSupport
 )
 
-target_link_libraries(embroidermodder PRIVATE
-	glfw
-	embroidery_static
-	imgui_static
-	${OPENGL_LIBRARIES})
+set_target_properties(embroidermodder PROPERTIES
+	WIN32_EXECUTABLE ON
+	MACOSX_BUNDLE ON
+)
 
 if (WIN32)
 set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder.exe)

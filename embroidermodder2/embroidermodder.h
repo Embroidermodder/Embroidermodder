@@ -427,9 +427,6 @@ private:
     StatusBar*  statusbar;
 };
 
-inline qreal pi() { return (atan(1.0)*4.0); };
-inline qreal radians(qreal degrees) { return (degrees*pi()/180.0); };
-
 class View : public QGraphicsView
 {
     Q_OBJECT
@@ -685,9 +682,6 @@ public:
 
 private:
     void rotate(qreal x, qreal y, qreal rot);
-
-    inline qreal pi() { return (qAtan(1.0)*4.0); };
-    inline qreal radians(qreal degrees) { return (degrees*pi()/180.0); };
 
     BaseObject* object;
     View*       gview;
@@ -1010,6 +1004,9 @@ const char* const VIEW_COLOR_BACKGROUND = "VIEW_COLOR_BACKGROUND";
 const char* const VIEW_COLOR_CROSSHAIR  = "VIEW_COLOR_CROSSHAIR";
 const char* const VIEW_COLOR_GRID       = "VIEW_COLOR_GRID";
 
+inline qreal pi() { return (atan(1.0)*4.0); }
+inline qreal radians(qreal degree) { return (degree*pi()/180.0); }
+inline qreal degrees(qreal radian) { return (radian*180.0/pi()); }
 
 class BaseObject : public QGraphicsPathItem
 {
@@ -1058,9 +1055,6 @@ public:
     virtual void gripEdit(const QPointF& before, const QPointF& after) = 0;
 protected:
     QPen lineWeightPen() const { return lwtPen; }
-    inline qreal pi() const { return (atan(1.0)*4.0); }
-    inline qreal radians(qreal degree) const { return (degree*pi()/180.0); }
-    inline qreal degrees(qreal radian) const { return (radian*180.0/pi()); }
     void realRender(QPainter* painter, const QPainterPath& renderPath);
 private:
     QPen objPen;
@@ -1798,355 +1792,36 @@ private:
 
     //TODO: Alphabetic/Categorized TabWidget
 
-    /* General */
     QGroupBox*   createGroupBoxGeneral();
-    QGroupBox*   groupBoxGeneral;
-
-    QToolButton* toolButtonGeneralLayer;
-    QToolButton* toolButtonGeneralColor;
-    QToolButton* toolButtonGeneralLineType;
-    QToolButton* toolButtonGeneralLineWeight;
-
-    QComboBox*   comboBoxGeneralLayer;
-    QComboBox*   comboBoxGeneralColor;
-    QComboBox*   comboBoxGeneralLineType;
-    QComboBox*   comboBoxGeneralLineWeight;
-
-    /* Geometry */
-
-    //Arc
     QGroupBox*   createGroupBoxGeometryArc();
-    QGroupBox*   groupBoxGeometryArc;
-
     QGroupBox*   createGroupBoxMiscArc();
-    QGroupBox*   groupBoxMiscArc;
-
-    QToolButton* toolButtonArcClockwise;
-
-    QComboBox*   comboBoxArcClockwise;
-
-    //Block
     QGroupBox*   createGroupBoxGeometryBlock();
-    QGroupBox*   groupBoxGeometryBlock;
-
-    QToolButton* toolButtonBlockX;
-    QToolButton* toolButtonBlockY;
-
-    QLineEdit*   lineEditBlockX;
-    QLineEdit*   lineEditBlockY;
-
-    //Circle
     QGroupBox*   createGroupBoxGeometryCircle();
-    QGroupBox*   groupBoxGeometryCircle;
-
-    QToolButton* toolButtonCircleCenterX;
-    QToolButton* toolButtonCircleCenterY;
-    QToolButton* toolButtonCircleRadius;
-    QToolButton* toolButtonCircleDiameter;
-    QToolButton* toolButtonCircleArea;
-    QToolButton* toolButtonCircleCircumference;
-
-    QLineEdit*   lineEditCircleCenterX;
-    QLineEdit*   lineEditCircleCenterY;
-    QLineEdit*   lineEditCircleRadius;
-    QLineEdit*   lineEditCircleDiameter;
-    QLineEdit*   lineEditCircleArea;
-    QLineEdit*   lineEditCircleCircumference;
-
-    //DimAligned
     QGroupBox*   createGroupBoxGeometryDimAligned();
-    QGroupBox*   groupBoxGeometryDimAligned;
-
-    //TODO: toolButtons and lineEdits for DimAligned
-
-    //DimAngular
     QGroupBox*   createGroupBoxGeometryDimAngular();
-    QGroupBox*   groupBoxGeometryDimAngular;
-
-    //TODO: toolButtons and lineEdits for DimAngular
-
-    //DimArcLength
     QGroupBox*   createGroupBoxGeometryDimArcLength();
-    QGroupBox*   groupBoxGeometryDimArcLength;
-
-    //TODO: toolButtons and lineEdits for DimArcLength
-
-    //DimDiameter
     QGroupBox*   createGroupBoxGeometryDimDiameter();
-    QGroupBox*   groupBoxGeometryDimDiameter;
-
-    //TODO: toolButtons and lineEdits for DimDiameter
-
-    //DimLeader
     QGroupBox*   createGroupBoxGeometryDimLeader();
-    QGroupBox*   groupBoxGeometryDimLeader;
-
-    //TODO: toolButtons and lineEdits for DimLeader
-
-    //DimLinear
     QGroupBox*   createGroupBoxGeometryDimLinear();
-    QGroupBox*   groupBoxGeometryDimLinear;
-
-    //TODO: toolButtons and lineEdits for DimLinear
-
-    //DimOrdinate
     QGroupBox*   createGroupBoxGeometryDimOrdinate();
-    QGroupBox*   groupBoxGeometryDimOrdinate;
-
-    //TODO: toolButtons and lineEdits for DimOrdinate
-
-    //DimRadius
     QGroupBox*   createGroupBoxGeometryDimRadius();
-    QGroupBox*   groupBoxGeometryDimRadius;
-
-    //TODO: toolButtons and lineEdits for DimRadius
-
-    //Ellipse
     QGroupBox*   createGroupBoxGeometryEllipse();
-    QGroupBox*   groupBoxGeometryEllipse;
-
-    QToolButton* toolButtonEllipseCenterX;
-    QToolButton* toolButtonEllipseCenterY;
-    QToolButton* toolButtonEllipseRadiusMajor;
-    QToolButton* toolButtonEllipseRadiusMinor;
-    QToolButton* toolButtonEllipseDiameterMajor;
-    QToolButton* toolButtonEllipseDiameterMinor;
-
-    QLineEdit*   lineEditEllipseCenterX;
-    QLineEdit*   lineEditEllipseCenterY;
-    QLineEdit*   lineEditEllipseRadiusMajor;
-    QLineEdit*   lineEditEllipseRadiusMinor;
-    QLineEdit*   lineEditEllipseDiameterMajor;
-    QLineEdit*   lineEditEllipseDiameterMinor;
-
-    //Image
     QGroupBox*   createGroupBoxGeometryImage();
-    QGroupBox*   groupBoxGeometryImage;
-
-    QToolButton* toolButtonImageX;
-    QToolButton* toolButtonImageY;
-    QToolButton* toolButtonImageWidth;
-    QToolButton* toolButtonImageHeight;
-
-    QLineEdit*   lineEditImageX;
-    QLineEdit*   lineEditImageY;
-    QLineEdit*   lineEditImageWidth;
-    QLineEdit*   lineEditImageHeight;
-
     QGroupBox*   createGroupBoxMiscImage();
-    QGroupBox*   groupBoxMiscImage;
-
-    QToolButton* toolButtonImageName;
-    QToolButton* toolButtonImagePath;
-
-    QLineEdit*   lineEditImageName;
-    QLineEdit*   lineEditImagePath;
-
-    //Infinite Line
     QGroupBox*   createGroupBoxGeometryInfiniteLine();
-    QGroupBox*   groupBoxGeometryInfiniteLine;
-
-    QToolButton* toolButtonInfiniteLineX1;
-    QToolButton* toolButtonInfiniteLineY1;
-    QToolButton* toolButtonInfiniteLineX2;
-    QToolButton* toolButtonInfiniteLineY2;
-    QToolButton* toolButtonInfiniteLineVectorX;
-    QToolButton* toolButtonInfiniteLineVectorY;
-
-    QLineEdit*   lineEditInfiniteLineX1;
-    QLineEdit*   lineEditInfiniteLineY1;
-    QLineEdit*   lineEditInfiniteLineX2;
-    QLineEdit*   lineEditInfiniteLineY2;
-    QLineEdit*   lineEditInfiniteLineVectorX;
-    QLineEdit*   lineEditInfiniteLineVectorY;
-
-    //Line
     QGroupBox*   createGroupBoxGeometryLine();
-    QGroupBox*   groupBoxGeometryLine;
-
-    QToolButton* toolButtonLineStartX;
-    QToolButton* toolButtonLineStartY;
-    QToolButton* toolButtonLineEndX;
-    QToolButton* toolButtonLineEndY;
-    QToolButton* toolButtonLineDeltaX;
-    QToolButton* toolButtonLineDeltaY;
-    QToolButton* toolButtonLineAngle;
-    QToolButton* toolButtonLineLength;
-
-    QLineEdit*   lineEditLineStartX;
-    QLineEdit*   lineEditLineStartY;
-    QLineEdit*   lineEditLineEndX;
-    QLineEdit*   lineEditLineEndY;
-    QLineEdit*   lineEditLineDeltaX;
-    QLineEdit*   lineEditLineDeltaY;
-    QLineEdit*   lineEditLineAngle;
-    QLineEdit*   lineEditLineLength;
-
-    //Path
     QGroupBox*   createGroupBoxGeometryPath();
-    QGroupBox*   groupBoxGeometryPath;
-
-    QToolButton* toolButtonPathVertexNum;
-    QToolButton* toolButtonPathVertexX;
-    QToolButton* toolButtonPathVertexY;
-    QToolButton* toolButtonPathArea;
-    QToolButton* toolButtonPathLength;
-
-    QComboBox*   comboBoxPathVertexNum;
-    QLineEdit*   lineEditPathVertexX;
-    QLineEdit*   lineEditPathVertexY;
-    QLineEdit*   lineEditPathArea;
-    QLineEdit*   lineEditPathLength;
-
     QGroupBox*   createGroupBoxMiscPath();
-    QGroupBox*   groupBoxMiscPath;
-
-    QToolButton* toolButtonPathClosed;
-
-    QComboBox*   comboBoxPathClosed;
-
-    //Point
     QGroupBox*   createGroupBoxGeometryPoint();
-    QGroupBox*   groupBoxGeometryPoint;
-
-    QToolButton* toolButtonPointX;
-    QToolButton* toolButtonPointY;
-
-    QLineEdit*   lineEditPointX;
-    QLineEdit*   lineEditPointY;
-
-    //Polygon
     QGroupBox*   createGroupBoxGeometryPolygon();
-    QGroupBox*   groupBoxGeometryPolygon;
-
-    QToolButton* toolButtonPolygonCenterX;
-    QToolButton* toolButtonPolygonCenterY;
-    QToolButton* toolButtonPolygonRadiusVertex;
-    QToolButton* toolButtonPolygonRadiusSide;
-    QToolButton* toolButtonPolygonDiameterVertex;
-    QToolButton* toolButtonPolygonDiameterSide;
-    QToolButton* toolButtonPolygonInteriorAngle;
-
-    QLineEdit*   lineEditPolygonCenterX;
-    QLineEdit*   lineEditPolygonCenterY;
-    QLineEdit*   lineEditPolygonRadiusVertex;
-    QLineEdit*   lineEditPolygonRadiusSide;
-    QLineEdit*   lineEditPolygonDiameterVertex;
-    QLineEdit*   lineEditPolygonDiameterSide;
-    QLineEdit*   lineEditPolygonInteriorAngle;
-
-    //Polyline
     QGroupBox*   createGroupBoxGeometryPolyline();
-    QGroupBox*   groupBoxGeometryPolyline;
-
-    QToolButton* toolButtonPolylineVertexNum;
-    QToolButton* toolButtonPolylineVertexX;
-    QToolButton* toolButtonPolylineVertexY;
-    QToolButton* toolButtonPolylineArea;
-    QToolButton* toolButtonPolylineLength;
-
-    QComboBox*   comboBoxPolylineVertexNum;
-    QLineEdit*   lineEditPolylineVertexX;
-    QLineEdit*   lineEditPolylineVertexY;
-    QLineEdit*   lineEditPolylineArea;
-    QLineEdit*   lineEditPolylineLength;
-
     QGroupBox*   createGroupBoxMiscPolyline();
-    QGroupBox*   groupBoxMiscPolyline;
-
-    QToolButton* toolButtonPolylineClosed;
-
-    QComboBox*   comboBoxPolylineClosed;
-
-    //Ray
     QGroupBox*   createGroupBoxGeometryRay();
-    QGroupBox*   groupBoxGeometryRay;
-
-    QToolButton* toolButtonRayX1;
-    QToolButton* toolButtonRayY1;
-    QToolButton* toolButtonRayX2;
-    QToolButton* toolButtonRayY2;
-    QToolButton* toolButtonRayVectorX;
-    QToolButton* toolButtonRayVectorY;
-
-    QLineEdit*   lineEditRayX1;
-    QLineEdit*   lineEditRayY1;
-    QLineEdit*   lineEditRayX2;
-    QLineEdit*   lineEditRayY2;
-    QLineEdit*   lineEditRayVectorX;
-    QLineEdit*   lineEditRayVectorY;
-
-    //Rectangle
     QGroupBox*   createGroupBoxGeometryRectangle();
-    QGroupBox*   groupBoxGeometryRectangle;
-
-    QToolButton* toolButtonRectangleCorner1X;
-    QToolButton* toolButtonRectangleCorner1Y;
-    QToolButton* toolButtonRectangleCorner2X;
-    QToolButton* toolButtonRectangleCorner2Y;
-    QToolButton* toolButtonRectangleCorner3X;
-    QToolButton* toolButtonRectangleCorner3Y;
-    QToolButton* toolButtonRectangleCorner4X;
-    QToolButton* toolButtonRectangleCorner4Y;
-    QToolButton* toolButtonRectangleWidth;
-    QToolButton* toolButtonRectangleHeight;
-    QToolButton* toolButtonRectangleArea;
-
-    QLineEdit*   lineEditRectangleCorner1X;
-    QLineEdit*   lineEditRectangleCorner1Y;
-    QLineEdit*   lineEditRectangleCorner2X;
-    QLineEdit*   lineEditRectangleCorner2Y;
-    QLineEdit*   lineEditRectangleCorner3X;
-    QLineEdit*   lineEditRectangleCorner3Y;
-    QLineEdit*   lineEditRectangleCorner4X;
-    QLineEdit*   lineEditRectangleCorner4Y;
-    QLineEdit*   lineEditRectangleWidth;
-    QLineEdit*   lineEditRectangleHeight;
-    QLineEdit*   lineEditRectangleArea;
-
-    //Text Multi
     QGroupBox*   createGroupBoxGeometryTextMulti();
-    QGroupBox*   groupBoxGeometryTextMulti;
-
-    QToolButton* toolButtonTextMultiX;
-    QToolButton* toolButtonTextMultiY;
-
-    QLineEdit*   lineEditTextMultiX;
-    QLineEdit*   lineEditTextMultiY;
-
-    //Text Single
     QGroupBox*   createGroupBoxTextTextSingle();
-    QGroupBox*   groupBoxTextTextSingle;
-
-    QToolButton* toolButtonTextSingleContents;
-    QToolButton* toolButtonTextSingleFont;
-    QToolButton* toolButtonTextSingleJustify;
-    QToolButton* toolButtonTextSingleHeight;
-    QToolButton* toolButtonTextSingleRotation;
-
-    QLineEdit*     lineEditTextSingleContents;
-    QFontComboBox* comboBoxTextSingleFont;
-    QComboBox*     comboBoxTextSingleJustify;
-    QLineEdit*     lineEditTextSingleHeight;
-    QLineEdit*     lineEditTextSingleRotation;
-
     QGroupBox*   createGroupBoxGeometryTextSingle();
-    QGroupBox*   groupBoxGeometryTextSingle;
-
-    QToolButton* toolButtonTextSingleX;
-    QToolButton* toolButtonTextSingleY;
-
-    QLineEdit*   lineEditTextSingleX;
-    QLineEdit*   lineEditTextSingleY;
-
     QGroupBox*   createGroupBoxMiscTextSingle();
-    QGroupBox*   groupBoxMiscTextSingle;
-
-    QToolButton* toolButtonTextSingleBackward;
-    QToolButton* toolButtonTextSingleUpsideDown;
-
-    QComboBox*   comboBoxTextSingleBackward;
-    QComboBox*   comboBoxTextSingleUpsideDown;
 };
 
 class Settings_Dialog : public QDialog
@@ -2178,148 +1853,6 @@ private:
 
     void addColorsToComboBox(QComboBox* comboBox);
 
-    //Temporary for instant preview
-    bool preview_general_mdi_bg_use_logo;
-    bool preview_general_mdi_bg_use_texture;
-    bool preview_general_mdi_bg_use_color;
-
-    QString accept_general_mdi_bg_logo;
-    QString accept_general_mdi_bg_texture;
-    QRgb preview_general_mdi_bg_color;
-    QRgb accept_general_mdi_bg_color;
-
-    bool preview_display_show_scrollbars;
-
-    QRgb preview_display_crosshair_color;
-    QRgb accept_display_crosshair_color;
-    QRgb preview_display_bg_color;
-    QRgb accept_display_bg_color;
-
-    QRgb preview_display_selectbox_left_color;
-    QRgb accept_display_selectbox_left_color;
-    QRgb preview_display_selectbox_left_fill;
-    QRgb accept_display_selectbox_left_fill;
-    QRgb preview_display_selectbox_right_color;
-    QRgb accept_display_selectbox_right_color;
-    QRgb preview_display_selectbox_right_fill;
-    QRgb accept_display_selectbox_right_fill;
-    quint8 preview_display_selectbox_alpha;
-
-    QRgb preview_prompt_text_color;
-    QRgb accept_prompt_text_color;
-
-    QRgb preview_prompt_bg_color;
-    QRgb accept_prompt_bg_color;
-
-    QString preview_prompt_font_family;
-    QString preview_prompt_font_style;
-    quint8 preview_prompt_font_size;
-
-    QRgb preview_grid_color;
-    QRgb accept_grid_color;
-
-    QRgb preview_ruler_color;
-    QRgb accept_ruler_color;
-
-    bool preview_lwt_show_lwt;
-    bool preview_lwt_real_render;
-
-    //Temporary until changes are accepted
-    QString dialog_general_language;
-    QString dialog_general_icon_theme;
-    int dialog_general_icon_size;
-    bool dialog_general_mdi_bg_use_logo;
-    bool dialog_general_mdi_bg_use_texture;
-    bool dialog_general_mdi_bg_use_color;
-    QString dialog_general_mdi_bg_logo;
-    QString dialog_general_mdi_bg_texture;
-    QRgb dialog_general_mdi_bg_color;
-    bool dialog_general_tip_of_the_day;
-    bool dialog_general_system_help_browser;
-    bool dialog_display_use_opengl;
-    bool dialog_display_renderhint_aa;
-    bool dialog_display_renderhint_text_aa;
-    bool dialog_display_renderhint_smooth_pix;
-    bool dialog_display_renderhint_high_aa;
-    bool dialog_display_renderhint_noncosmetic;
-    bool dialog_display_show_scrollbars;
-    int dialog_display_scrollbar_widget_num;
-    QRgb dialog_display_crosshair_color;
-    QRgb dialog_display_bg_color;
-    QRgb dialog_display_selectbox_left_color;
-    QRgb dialog_display_selectbox_left_fill;
-    QRgb dialog_display_selectbox_right_color;
-    QRgb dialog_display_selectbox_right_fill;
-    quint8 dialog_display_selectbox_alpha;
-    qreal dialog_display_zoomscale_in;
-    qreal dialog_display_zoomscale_out;
-    quint8 dialog_display_crosshair_percent;
-    QString dialog_display_units;
-    QRgb dialog_prompt_text_color;
-    QRgb dialog_prompt_bg_color;
-    QString dialog_prompt_font_family;
-    QString dialog_prompt_font_style;
-    quint8 dialog_prompt_font_size;
-    bool dialog_prompt_save_history;
-    bool dialog_prompt_save_history_as_html;
-    QString dialog_prompt_save_history_filename;
-    QString dialog_opensave_custom_filter;
-    QString dialog_opensave_open_format;
-    bool dialog_opensave_open_thumbnail;
-    QString dialog_opensave_save_format;
-    bool dialog_opensave_save_thumbnail;
-    quint8 dialog_opensave_recent_max_files;
-    quint8 dialog_opensave_trim_dst_num_jumps;
-    QString dialog_printing_default_device;
-    bool dialog_printing_use_last_device;
-    bool dialog_printing_disable_bg;
-    bool dialog_grid_show_on_load;
-    bool dialog_grid_show_origin;
-    bool dialog_grid_color_match_crosshair;
-    QRgb dialog_grid_color;
-    bool dialog_grid_load_from_file;
-    QString dialog_grid_type;
-    bool dialog_grid_center_on_origin;
-    qreal dialog_grid_center_x;
-    qreal dialog_grid_center_y;
-    qreal dialog_grid_size_x;
-    qreal dialog_grid_size_y;
-    qreal dialog_grid_spacing_x;
-    qreal dialog_grid_spacing_y;
-    qreal dialog_grid_size_radius;
-    qreal dialog_grid_spacing_radius;
-    qreal dialog_grid_spacing_angle;
-    bool dialog_ruler_show_on_load;
-    bool dialog_ruler_metric;
-    QRgb dialog_ruler_color;
-    quint8 dialog_ruler_pixel_size;
-    bool dialog_qsnap_enabled;
-    QRgb dialog_qsnap_locator_color;
-    quint8 dialog_qsnap_locator_size;
-    quint8 dialog_qsnap_aperture_size;
-    bool dialog_qsnap_endpoint;
-    bool dialog_qsnap_midpoint;
-    bool dialog_qsnap_center;
-    bool dialog_qsnap_node;
-    bool dialog_qsnap_quadrant;
-    bool dialog_qsnap_intersection;
-    bool dialog_qsnap_extension;
-    bool dialog_qsnap_insertion;
-    bool dialog_qsnap_perpendicular;
-    bool dialog_qsnap_tangent;
-    bool dialog_qsnap_nearest;
-    bool dialog_qsnap_apparent;
-    bool dialog_qsnap_parallel;
-    bool dialog_lwt_show_lwt;
-    bool dialog_lwt_real_render;
-    qreal dialog_lwt_default_lwt;
-    bool dialog_selection_mode_pickfirst;
-    bool dialog_selection_mode_pickadd;
-    bool dialog_selection_mode_pickdrag;
-    QRgb dialog_selection_coolgrip_color;
-    QRgb dialog_selection_hotgrip_color;
-    quint8 dialog_selection_grip_size;
-    quint8 dialog_selection_pickbox_size;
 
 private slots:
     void comboBoxLanguageCurrentIndexChanged(const QString&);
@@ -3146,7 +2679,7 @@ public slots:
     void onWindowActivated(QMdiSubWindow* w);
     void windowMenuAboutToShow();
     void windowMenuActivated( bool checked/*int id*/ );
-    QAction*                        getAction(int actionEnum);
+    QAction* getAction(int actionEnum);
 
     void updateAllViewScrollBars(bool val);
     void updateAllViewCrossHairColors(QRgb color);
@@ -3169,7 +2702,7 @@ public slots:
 protected:
     virtual void resizeEvent(QResizeEvent*);
     void closeEvent(QCloseEvent *event);
-    QAction*                        getFileSeparator();
+    QAction* getFileSeparator();
     void loadFormats();
 
 public:
@@ -3294,7 +2827,7 @@ private:
     QMdiSubWindow*                  findMdiWindow(const QString &fileName);
     QString openFilesPath;
 
-    QAction*                        myFileSeparator;
+    QAction* myFileSeparator;
 
     QWizard*    wizardTipOfTheDay;
     QLabel*     labelTipOfTheDay;
@@ -3302,7 +2835,7 @@ private:
     QStringList listTipOfTheDay;
 
     void createAllActions();
-    QAction*                        createAction(Command command);
+    QAction* createAction(Command command);
 
     /* Toolbars */
     void createAllToolbars();
@@ -3337,9 +2870,8 @@ private:
     QComboBox*     lineweightSelector;
     QFontComboBox* textFontSelector;
     QComboBox*     textSizeSelector;
-    //====================================================
-    //Menus
-    //====================================================
+
+    /* Menus */
     void createAllMenus();
     void createFileMenu();
     void createEditMenu();
@@ -3354,9 +2886,8 @@ private:
     QMenu* settingsMenu;
     QMenu* windowMenu;
     QMenu* helpMenu;
-    //====================================================
-    //SubMenus
-    //====================================================
+
+    /* SubMenus */
     QMenu* recentMenu;
     QMenu* zoomMenu;
     QMenu* panMenu;
