@@ -56,7 +56,6 @@ set(SRC ${CMAKE_SOURCE_DIR}/src)
 qt_add_executable(embroidermodder2
 	${SRC}/application.cpp
 	${SRC}/cmdprompt.cpp
-	${SRC}/command_data.cpp
 	${SRC}/commands.cpp
 	${SRC}/designs.cpp
 	${SRC}/embdetails-dialog.cpp
@@ -102,9 +101,11 @@ qt_add_executable(embroidermodder2
 	${SRC}/view-commands.cpp
 	${SRC}/window-commands.cpp
 
+	${SRC}/command_data.c
         ${SRC}/testing.c
 
 	${SRC}/embroidermodder.h
+	${SRC}/core.h
 )
 
 include_directories(

@@ -13,8 +13,6 @@
 
 #include "embroidermodder.h"
 
-#include <QRegularExpression>
-
 const char *index_name[] = {
     "one",
     "two",
@@ -317,7 +315,7 @@ ScriptValue
 command_prompt(const char *line)
 {
     ScriptEnv* context = create_script_env();
-    _main->runCommandCore(line, context);
+    ScriptValue v = _main->runCommandCore(line, context);
     free_script_env(context);
-    return script_false;
+    return v;
 }
