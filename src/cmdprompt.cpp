@@ -758,13 +758,16 @@ bool CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
         }
 
         int key = pressedKey->key();
-        switch(key)
-        {
+        switch (key) {
             case Qt::Key_Enter:
             case Qt::Key_Return:
+                pressedKey->accept();
+                processInput(QChar('\n'));
+                return true;
+                break;
             case Qt::Key_Space:
                 pressedKey->accept();
-                processInput(QChar(key));
+                processInput(QChar(' '));
                 return true;
                 break;
             case Qt::Key_Delete:

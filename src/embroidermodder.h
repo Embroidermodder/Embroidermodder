@@ -48,6 +48,8 @@
 
 #include <QtPrintSupport>
 
+#include <QTimer>
+
 #include <math.h>
 
 #include "../extern/libembroidery/embroidery.h"
@@ -247,6 +249,12 @@ enum COMMAND_ACTIONS
 
     ACTION_NULL
 };
+
+extern "C" {
+extern const char *coverage_test[];
+}
+
+extern int testing_mode;
 
 class ArcObject;
 class BaseObject;
@@ -2438,6 +2446,7 @@ public:
     PropertyEditor* dockPropEdit;
     UndoEditor*     dockUndoEdit;
     StatusBar*      statusbar;
+    QTimer*         testing_timer;
 
     QList<QGraphicsItem*> cutCopyObjectList;
 
@@ -2651,7 +2660,6 @@ public:
     void setSettingsTextStyleOverline(bool newValue)                   { settings_text_style_overline            = newValue; }
 
     QHash<int, QAction*>            actionHash;
-    QHash<QString, Command>         command_map;
     QHash<QString, QToolBar*>       toolbarHash;
     QHash<QString, QMenu*>          menuHash;
 
@@ -2899,6 +2907,8 @@ public slots:
     void stub_implement(QString txt);
     void stub_testing();
 
+    static void run_testing();
+
     void promptHistoryAppended(const QString& txt);
     void logPromptInput(const QString& txt);
     void promptInputPrevious();
@@ -3126,12 +3136,14 @@ int script_set_real(ScriptEnv *context, const char *label, double r);
 
 QString translate(QString msg);
 
-int argument_checks(ScriptEnv *context, QString function, const char *args);
+int argument_checks(ScriptEnv *context, char *function, const char *args);
 
 extern Command command_data[];
 
 extern ScriptValue script_null;
 extern ScriptValue script_true;
 extern ScriptValue script_false;
+
+extern QHash<QString, Command> command_map;
 
 #endif

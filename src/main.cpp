@@ -14,6 +14,7 @@
 const char* _appName_ = "Embroidermodder";
 const char* _appVer_  = "v2.0 alpha";
 bool exitApp = false;
+int testing_mode = 0;
 
 MainWindow *_main;
 
@@ -40,7 +41,8 @@ static void usage(void)
     exitApp = true;
 }
 
-static void version()
+static void
+version(void)
 {
     fprintf(stdout, "%s %s\n", _appName_, _appVer_);
     exitApp = true;
@@ -58,23 +60,27 @@ int main(int argc, char* argv[])
 
     QStringList filesToOpen;
 
-    for(int i = 1; i < argc; i++)
-    {
-        if     (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--debug")  ) {  }
-        else if(!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")   ) { usage(); }
-        else if(!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) { version(); }
-        else if(QFile::exists(argv[i]) && MainWindow::validFileFormat(argv[i]))
-        {
+    for (int i = 1; i < argc; i++) {
+        if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--debug")  ) {
+            testing_mode = 1;
+        }
+        else if(!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")   ) {
+            usage();
+        }
+        else if(!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
+            version();
+        }
+        else if(QFile::exists(argv[i]) && MainWindow::validFileFormat(argv[i])) {
             filesToOpen << argv[i];
         }
-        else
-        {
+        else {
             usage();
         }
     }
 
-    if(exitApp)
+    if (exitApp) {
         return 1;
+    }
 
     _main = new MainWindow();
 #if defined(Q_OS_MAC)

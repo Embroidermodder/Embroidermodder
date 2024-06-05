@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(embroidermodder VERSION 2.0.0 LANGUAGES C CXX)
+project(embroidermodder2 VERSION 2.0.0 LANGUAGES C CXX)
 
 find_package(OpenGL REQUIRED)
 
@@ -16,6 +16,7 @@ set(CMAKE_AUTOUIC ON)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 add_compile_options(
+	--coverage
 	-g
 	-O2
 	-Wall
@@ -52,7 +53,7 @@ set(SRC_ASSETS ${CMAKE_SOURCE_DIR}/assets)
 
 set(SRC ${CMAKE_SOURCE_DIR}/src)
 
-qt_add_executable(embroidermodder
+qt_add_executable(embroidermodder2
 	${SRC}/application.cpp
 	${SRC}/cmdprompt.cpp
 	${SRC}/command_data.cpp
@@ -111,6 +112,8 @@ qt_add_executable(embroidermodder
 	${SRC}/view-commands.cpp
 	${SRC}/window-commands.cpp
 
+        ${SRC}/testing.c
+
 	${SRC}/embroidermodder.h
 )
 
@@ -119,24 +122,29 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/src
 )
 
-target_link_libraries(embroidermodder PRIVATE
+qt_add_resources(embroidermodder2 imageresources
+    PREFIX "/icons/default"
+    FILES assets/icons/default/about.png
+)
+
+target_link_libraries(embroidermodder2 PRIVATE
 	embroidery_static
 	Qt6::Core
 	Qt6::Widgets
 	Qt6::PrintSupport
 )
 
-set_target_properties(embroidermodder PROPERTIES
+set_target_properties(embroidermodder2 PROPERTIES
 	WIN32_EXECUTABLE ON
 	MACOSX_BUNDLE ON
 )
 
 if (WIN32)
-set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder.exe)
+set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder2.exe)
 
 else(WIN32)
-target_link_libraries(embroidermodder PRIVATE m)
-set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder)
+target_link_libraries(embroidermodder2 PRIVATE m)
+set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder2)
 
 endif()
 

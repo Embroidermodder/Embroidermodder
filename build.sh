@@ -133,20 +133,22 @@ function build_debug () {
     TEST_FILES="$TEST_FILES samples/embroidermodder_logo/conflicts/Embroidermodder.DST"
     TEST_FILES="$TEST_FILES samples/shamrockin/shamrockin.dst"
 
-    BUILD_DIR="build/debug"
+    BUILD_DIR="debug"
     BUILD_TYPE="Debug"
-    build_release
 
-    cd embroidermodder2
+    git submodule init
+    git submodule update
 
-    lcov -z
+    cmake -S . -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
 
+    cd $BUILD_DIR
+    cp -R ../assets/* .
+
+    cmake --build .
+
+    lcov --directory . --capture --output-file em2.info
     gdb -ex=run --ex=quit --args ./embroidermodder2 --cov $TEST_FILES
-
-    mkdir lcov
-    lcov -c -d build -o lcov/embroidermodder.info
-    cd lcov
-    genhtml embroidermodder.info
+    genhtml em2.info
 
     cd ..
 }
@@ -209,7 +211,8 @@ function package_macos () {
 function package_linux () {
 
     sudo apt update
-    sudo apt install qt5-base-dev libqt5gui5 libqt5widgets5 libqt5printsupport5 libqt5core5 libgl-dev libglx-dev libopengl-dev
+    sudo apt install build-essential cmake qt6-base-dev libqt6gui6 libqt6widgets6 \
+        libqt6printsupport6 libqt6core6 libgl-dev libglx-dev libopengl-dev
     sudo apt upgrade
 
     git clone https://github.com/embroidermodder/embroidermodder

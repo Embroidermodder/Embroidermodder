@@ -15,7 +15,7 @@
 
 #include <QRegularExpression>
 
-QString index_name[] = {
+const char *index_name[] = {
     "one",
     "two",
     "three",
@@ -25,7 +25,7 @@ QString index_name[] = {
     "seven"
 };
 
-QString index_th_name[] = {
+const char *index_th_name[] = {
     "first",
     "second",
     "third",
@@ -63,45 +63,56 @@ ScriptValue script_false = {
 };
 
 int
-argument_checks(ScriptEnv *context, QString function, const char *args)
+argument_checks(ScriptEnv *context, char *function, const char *args)
 {
+    char s[200];
     int i;
     if (context->argumentCount != strlen(args)) {
-        QString s = function + "() requires " +  + " arguments";
+        sprintf(s, "%s() requires %s arguments.", function, index_name[i]);
         debug_message(s);
         return 0;
     }
     for (i=0; args[i]; i++) {
         if (args[i] == 'r') {
             if (context->argument[i].type != SCRIPT_REAL) {
-                QString s = "TYPE_ERROR, " + function + "(): " + index_th_name[i] + " argument is not a real number.";
+                sprintf(s,
+                    "TYPE_ERROR, %s(): %s argument is not a real number.",
+                    function, index_th_name[i]);
                 debug_message(s);
                 return 0;
             }
-            qreal variable = context->argument[i].r;
+            float variable = context->argument[i].r;
             if (qIsNaN(variable)) {
-                QString s = "TYPE_ERROR, " + function + "(): " + index_th_name[i] + " argument is not a real number.";
+                sprintf(s,
+                    "TYPE_ERROR, %s(): %s argument is not a real number.",
+                    function, index_th_name[i]);
                 debug_message(s);
                 return 0;
             }
         }
         if (args[i] == 'i') {
             if (context->argument[i].type != SCRIPT_INT) {
-                QString s = "TYPE_ERROR, " + function + "(): " + index_th_name[i] + " argument is not a integer.";
+                sprintf(s,
+                    "TYPE_ERROR, %s(): %s argument is not an integer.",
+                    function, index_th_name[i]);
                 debug_message(s);
                 return 0;
             }
         }
         if (args[i] == 'b') {
             if (context->argument[i].type != SCRIPT_BOOL) {
-                QString s = "TYPE_ERROR, " + function + "(): " + index_th_name[i] + " argument is not a boolean.";
+                sprintf(s,
+                    "TYPE_ERROR, %s(): %s argument is not a boolean.",
+                    function, index_th_name[i]);
                 debug_message(s);
                 return 0;
             }
         }
         if (args[i] == 's') {
             if (context->argument[i].type != SCRIPT_STRING) {
-                QString s = "TYPE_ERROR, " + function + "(): " + index_th_name[i] + " argument is not a string.";
+                sprintf(s,
+                    "TYPE_ERROR, %s(): %s argument is not a string.",
+                    function, index_th_name[i]);
                 debug_message(s);
                 return 0;
             }
@@ -305,20 +316,8 @@ add_int_argument(ScriptEnv *context, int i)
 ScriptValue
 command_prompt(const char *line)
 {
-    QRegularExpression split_char(" ");
-    QStringList line_list = QString(line).split(split_char);
-    if (_main->command_map.contains(line_list[0])) {
-        ScriptEnv* context = create_script_env();
-        int i = 0;
-        for (QString argument : line_list) {
-            if (i > 0) {
-                strcpy(context->argument[i-1].s, qPrintable(argument));
-                context->argumentCount++;
-            }
-        }
-        ScriptValue result = _main->command_map[line_list[0]].main(context);
-        free_script_env(context);
-        return result;
-    }
+    ScriptEnv* context = create_script_env();
+    _main->runCommandCore(line, context);
+    free_script_env(context);
     return script_false;
 }
