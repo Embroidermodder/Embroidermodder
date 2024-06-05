@@ -58,10 +58,8 @@ qt_add_executable(embroidermodder2
 	${SRC}/cmdprompt.cpp
 	${SRC}/command_data.cpp
 	${SRC}/commands.cpp
-	${SRC}/distance.cpp
-	${SRC}/dolphin.cpp
+	${SRC}/designs.cpp
 	${SRC}/embdetails-dialog.cpp
-	${SRC}/heart.cpp
 	${SRC}/imagewidget.cpp
 	${SRC}/layer-commands.cpp
 	${SRC}/layer-manager.cpp
@@ -74,7 +72,6 @@ qt_add_executable(embroidermodder2
 	${SRC}/mainwindow-toolbars.cpp
 	${SRC}/mdiarea.cpp
 	${SRC}/mdiwindow.cpp
-	${SRC}/move.cpp
 	${SRC}/object-arc.cpp
 	${SRC}/object-base.cpp
 	${SRC}/object-circle.cpp
@@ -92,17 +89,10 @@ qt_add_executable(embroidermodder2
 	${SRC}/preview-dialog.cpp
 	${SRC}/property-editor.cpp
 	${SRC}/quickleader.cpp
-	${SRC}/rgb.cpp
-	${SRC}/rotate.cpp
 	${SRC}/rubber.cpp
-	${SRC}/sandbox.cpp
-	${SRC}/scale.cpp
 	${SRC}/script.cpp
-	${SRC}/selectall.cpp
 	${SRC}/selectbox.cpp
-	${SRC}/snowflake.cpp
 	${SRC}/settings-dialog.cpp
-	${SRC}/star.cpp
 	${SRC}/statusbar.cpp
 	${SRC}/statusbar-button.cpp
 	${SRC}/tools.cpp
