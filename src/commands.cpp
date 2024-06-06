@@ -15,6 +15,37 @@
 
 #include "embroidermodder.h"
 
+/* Compatibility layer for C files */
+void
+init_command(void)
+{
+    _main->nativeInitCommand();
+}
+
+void
+clear_selection(void)
+{
+    _main->nativeClearSelection();
+}
+
+void
+debug_message(const char *s)
+{
+    _main->nativeAppendPromptHistory(s);
+}
+
+void
+append_history(char *line)
+{
+    _main->nativeAppendPromptHistory(line);
+}
+
+void
+end_command(void)
+{
+    _main->nativeEndCommand();
+}
+
 /* Simple Commands (other commands, like circle_command are housed in their
  * own file with their associated functions)
  * ------------------------------------------------------------------------
@@ -29,7 +60,7 @@ about_command(ScriptEnv *context)
         return script_false;
     }
 
-    _main->nativeInitCommand();
+    init_command();
 
     QApplication::setOverrideCursor(Qt::ArrowCursor);
     qDebug("about()");
@@ -90,7 +121,7 @@ alert_command(ScriptEnv *context)
         return script_false;
     }
 
-    _main->nativeInitCommand();
+    init_command();
     _main->prompt->alert(QSTR(0));
     _main->nativeEndCommand();
     return script_null;
@@ -100,7 +131,7 @@ alert_command(ScriptEnv *context)
 ScriptValue
 angle_command(ScriptEnv *context)
 {
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
 
     _main->nativeEndCommand();
@@ -114,7 +145,7 @@ changelog_command(ScriptEnv *context)
     if (!argument_checks(context, "whats_this_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->nativeEndCommand();
     return script_null;
@@ -128,7 +159,7 @@ clear_command(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->nativeEndCommand();
     return script_null;
@@ -141,7 +172,7 @@ copy_command(ScriptEnv *context)
     if (!argument_checks(context, "whats_this_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->nativeEndCommand();
     return script_null;
@@ -154,7 +185,7 @@ cut_command(ScriptEnv *context)
     if (!argument_checks(context, "whats_this_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->nativeEndCommand();
     return script_null;
@@ -174,7 +205,7 @@ debug_command(ScriptEnv *context)
     if (!argument_checks(context, "about", "s")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->nativeAppendPromptHistory(QSTR(0));
     _main->nativeEndCommand();
@@ -188,7 +219,7 @@ design_details_command(ScriptEnv *context)
     if (!argument_checks(context, "design_details_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->nativeEndCommand();
     return script_true;
@@ -204,7 +235,7 @@ disable_command(ScriptEnv* context)
 
     QString value = QSTR(0);
 
-    _main->nativeInitCommand();
+    init_command();
 
     if (value == "RAPIDFIRE") {
         _main->disablePromptRapidFire();
@@ -234,7 +265,7 @@ enable_command(ScriptEnv* context)
 
     QString value = QSTR(0);
 
-    _main->nativeInitCommand();
+    init_command();
 
     if (value == "RAPIDFIRE") {
         _main->enablePromptRapidFire();
@@ -248,7 +279,7 @@ enable_command(ScriptEnv* context)
 ScriptValue
 erase_command(ScriptEnv * /* context */)
 {
-    _main->nativeInitCommand();
+    init_command();
     if (_main->nativeNumSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
         _main->prompt->alert(translate("Preselect objects before invoking the delete command."));
@@ -270,7 +301,7 @@ error_command(ScriptEnv *context)
     if (!argument_checks(context, "error_command", "ss")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     QString s = "ERROR: (" + QSTR(0) + ") " + QSTR(1);
     _main->nativeSetPromptPrefix(s);
@@ -283,7 +314,7 @@ error_command(ScriptEnv *context)
 ScriptValue
 exit_command(ScriptEnv * /* context */)
 {
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->exit();
     _main->nativeEndCommand();
@@ -300,7 +331,7 @@ get_command(ScriptEnv* context)
 
     QString value = QSTR(0);
 
-    _main->nativeInitCommand();
+    init_command();
 
     if (value == "MOUSEX") {
         QGraphicsScene* scene = activeScene();
@@ -363,7 +394,7 @@ get_command(ScriptEnv* context)
 ScriptValue
 help_command(ScriptEnv * /* context */)
 {
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->help();
     _main->nativeEndCommand();
@@ -376,7 +407,7 @@ icon128_command(ScriptEnv *context)
     if (!argument_checks(context, "icon128_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->iconResize(128);
     _main->nativeEndCommand();
@@ -389,7 +420,7 @@ icon16_command(ScriptEnv * context)
     if (!argument_checks(context, "icon16_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->iconResize(16);
     _main->nativeEndCommand();
@@ -402,7 +433,7 @@ icon24_command(ScriptEnv * context)
     if (!argument_checks(context, "icon24_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->iconResize(24);
     _main->nativeEndCommand();
@@ -415,7 +446,7 @@ icon32_command(ScriptEnv * context)
     if (!argument_checks(context, "icon32_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->iconResize(32);
     _main->nativeEndCommand();
@@ -428,7 +459,7 @@ icon48_command(ScriptEnv * context)
     if (!argument_checks(context, "icon48_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->iconResize(48);
     _main->nativeEndCommand();
@@ -441,7 +472,7 @@ icon64_command(ScriptEnv * context)
     if (!argument_checks(context, "icon64_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->iconResize(64);
     _main->nativeEndCommand();
@@ -456,7 +487,7 @@ mirrorselected_command(ScriptEnv *context)
         return script_false;
     }
 
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeMirrorSelected(REAL(0), REAL(1), REAL(2), REAL(3));
     _main->nativeEndCommand();
     return script_null;
@@ -474,7 +505,7 @@ moveselected_command(ScriptEnv *context)
 ScriptValue
 new_command(ScriptEnv * context)
 {
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->newFile();
     _main->nativeEndCommand();
@@ -485,7 +516,7 @@ new_command(ScriptEnv * context)
 ScriptValue
 open_command(ScriptEnv * context)
 {
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->openFile();
     _main->nativeEndCommand();
@@ -500,7 +531,7 @@ paste_command(ScriptEnv *context)
     if (!argument_checks(context, "whats_this_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->nativeEndCommand();
     return script_null;
@@ -516,7 +547,7 @@ platform_command(ScriptEnv *context)
         return script_false;
     }
 
-    _main->nativeInitCommand();
+    init_command();
 //  setPromptPrefix(qsTr("Platform") + " = " + _main->platformString());
 //  appendPromptHistory();
     _main->nativeEndCommand();
@@ -591,7 +622,7 @@ previewon_command(ScriptEnv *context)
 ScriptValue
 print_command(ScriptEnv *context)
 {
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
 
     _main->nativeEndCommand();
@@ -605,7 +636,7 @@ redo_command(ScriptEnv * context)
     if (!argument_checks(context, "redo_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->redo();
     _main->nativeEndCommand();
@@ -619,7 +650,7 @@ save_command(ScriptEnv *context)
     if (!argument_checks(context, "redo_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->nativeEndCommand();
     return script_null;
@@ -646,7 +677,7 @@ set_command(ScriptEnv* context)
 
     QString value = QSTR(0);
 
-    _main->nativeInitCommand();
+    init_command();
 
     if (value == "TEXTANGLE") {
         if (context->argument[1].type != SCRIPT_REAL) {
@@ -709,7 +740,7 @@ settings_dialog_command(ScriptEnv *context)
     if (!argument_checks(context, "settings_dialog_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->settingsDialog();
     _main->nativeEndCommand();
@@ -756,7 +787,7 @@ text_bold_command(ScriptEnv *context)
     if (!argument_checks(context, "zoomin_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     /* _main->setSettingsTextStyleBold(); */
     _main->nativeEndCommand();
@@ -770,7 +801,7 @@ text_italic_command(ScriptEnv *context)
     if (!argument_checks(context, "zoomin_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     /* _main->setSettingsTextStyleItalic(); */
     _main->nativeEndCommand();
@@ -784,7 +815,7 @@ text_underline_command(ScriptEnv *context)
     if (!argument_checks(context, "zoomin_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     /* _main->setSettingsTextStyleUnderline(); */
     _main->nativeEndCommand();
@@ -798,7 +829,7 @@ text_overline_command(ScriptEnv *context)
     if (!argument_checks(context, "zoomin_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     /* _main->setSettingsTextStyleOverline(); */
     _main->nativeEndCommand();
@@ -812,7 +843,7 @@ text_strikeout_command(ScriptEnv *context)
     if (!argument_checks(context, "zoomin_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     /* _main->setSettingsTextStyleStrikeOut(); */
     _main->nativeEndCommand();
@@ -824,7 +855,7 @@ text_strikeout_command(ScriptEnv *context)
 ScriptValue
 tipoftheday_command(ScriptEnv * context)
 {
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->tipOfTheDay();
     _main->nativeEndCommand();
@@ -838,7 +869,7 @@ todo_command(ScriptEnv *context)
     if (!argument_checks(context, "todo", "ss")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->prompt->alert("TODO: (" + QSTR(0) + ") " + QSTR(1));
     _main->nativeEndCommand();
     return script_null;
@@ -850,7 +881,7 @@ todo_command(ScriptEnv *context)
 ScriptValue
 undo_command(ScriptEnv * context)
 {
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->undo();
     _main->nativeEndCommand();
@@ -865,7 +896,7 @@ vulcanize_command(ScriptEnv * context)
         return script_false;
     }
 
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->nativeVulcanize();
     _main->nativeEndCommand();
@@ -879,7 +910,7 @@ whats_this_command(ScriptEnv *context)
     if (!argument_checks(context, "whats_this_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     _main->nativeClearSelection();
     _main->nativeEndCommand();
     return script_null;
@@ -1011,7 +1042,7 @@ javaPrintArea(ScriptEnv* context)
 }
 
 ScriptValue
-javaSetBackgroundColor(ScriptEnv* context)
+set_background_color(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "rrr")) {
         return script_false;
@@ -1034,7 +1065,7 @@ javaSetBackgroundColor(ScriptEnv* context)
 }
 
 ScriptValue
-javaSetCrossHairColor(ScriptEnv* context)
+set_crosshair_color_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "rrr")) {
         return script_false;
@@ -1058,7 +1089,7 @@ javaSetCrossHairColor(ScriptEnv* context)
 }
 
 ScriptValue
-javaSetGridColor(ScriptEnv* context)
+set_grid_color_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "rrr")) {
         return script_false;
@@ -1082,7 +1113,7 @@ javaSetGridColor(ScriptEnv* context)
 }
 
 ScriptValue
-add_TextMulti(ScriptEnv* context)
+add_text_multi_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "mouseX", "srrrb")) {
         return script_false;
@@ -1092,7 +1123,7 @@ add_TextMulti(ScriptEnv* context)
 }
 
 ScriptValue
-add_TextSingle(ScriptEnv* context)
+add_text_single_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "mouseX", "srrrb")) {
         return script_false;
@@ -1102,7 +1133,7 @@ add_TextSingle(ScriptEnv* context)
 }
 
 ScriptValue
-add_InfiniteLine(ScriptEnv* context)
+add_infinite_line(ScriptEnv* context)
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addInfiniteLine command");
@@ -1110,7 +1141,7 @@ add_InfiniteLine(ScriptEnv* context)
 }
 
 ScriptValue
-add_Ray(ScriptEnv* context)
+add_ray_command(ScriptEnv* context)
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addRay command");
@@ -1208,7 +1239,7 @@ add_Point(ScriptEnv* context)
 }
 
 ScriptValue
-add_RegularPolygon(ScriptEnv* context)
+add_regular_polygon_command(ScriptEnv* context)
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addRegularPolygon command");
@@ -1216,7 +1247,7 @@ add_RegularPolygon(ScriptEnv* context)
 }
 
 ScriptValue
-add_Polygon(ScriptEnv* context)
+add_polygon_command(ScriptEnv* context)
 {
     #if 0
     if (context->argumentCount != 1) {
@@ -1281,7 +1312,7 @@ add_Polygon(ScriptEnv* context)
 }
 
 ScriptValue
-add_Polyline(ScriptEnv* context)
+add_polyline_command(ScriptEnv* context)
 {
     #if 0
     if (context->argumentCount != 1) {
@@ -1339,7 +1370,7 @@ add_Polyline(ScriptEnv* context)
 }
 
 ScriptValue
-add_Path(ScriptEnv* context)
+add_path_command(ScriptEnv* context)
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addPath command");
@@ -1347,7 +1378,7 @@ add_Path(ScriptEnv* context)
 }
 
 ScriptValue
-add_HorizontalDimension(ScriptEnv* context)
+add_horizontal_dimension_command(ScriptEnv* context)
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addHorizontalDimension command");
@@ -1355,7 +1386,7 @@ add_HorizontalDimension(ScriptEnv* context)
 }
 
 ScriptValue
-add_VerticalDimension(ScriptEnv* context)
+add_vertical_dimension_command(ScriptEnv* context)
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addVerticalDimension command");
@@ -1363,7 +1394,7 @@ add_VerticalDimension(ScriptEnv* context)
 }
 
 ScriptValue
-add_Image(ScriptEnv* context)
+add_image_command(ScriptEnv* context)
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addImage command");
@@ -1371,7 +1402,7 @@ add_Image(ScriptEnv* context)
 }
 
 ScriptValue
-add_DimLeader(ScriptEnv* context)
+add_dimleader_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "calculateAngle", "rrrrr")) {
         return script_false;
@@ -1382,7 +1413,7 @@ add_DimLeader(ScriptEnv* context)
 }
 
 ScriptValue
-javaSetCursorShape(ScriptEnv* context)
+set_cursor_shape_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "calculateAngle", "s")) {
         return script_false;
@@ -1393,7 +1424,7 @@ javaSetCursorShape(ScriptEnv* context)
 }
 
 ScriptValue
-javaCalculateAngle(ScriptEnv* context)
+calculate_angle_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "calculateAngle", "rrrr")) {
         return script_false;
@@ -1404,7 +1435,7 @@ javaCalculateAngle(ScriptEnv* context)
 }
 
 ScriptValue
-javaCalculateDistance(ScriptEnv* context)
+calculate_distance_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "numSelected", "rrrr")) {
         return script_false;
@@ -1415,7 +1446,7 @@ javaCalculateDistance(ScriptEnv* context)
 }
 
 ScriptValue
-javaPerpendicularDistance(ScriptEnv* context)
+perpendicular_distance_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "numSelected", "rrrrrr")) {
         return script_false;
@@ -1426,7 +1457,7 @@ javaPerpendicularDistance(ScriptEnv* context)
 }
 
 ScriptValue
-javaNumSelected(ScriptEnv* context)
+num_selected_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "numSelected", "")) {
         return script_false;
@@ -1436,7 +1467,7 @@ javaNumSelected(ScriptEnv* context)
 }
 
 ScriptValue
-javaSelectAll(ScriptEnv* context)
+select_all_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "selectAll", "")) {
         return script_false;
@@ -1449,13 +1480,13 @@ javaSelectAll(ScriptEnv* context)
 /* TODO: finish
  */
 ScriptValue
-add_ToSelection(ScriptEnv* context)
+add_to_selection_command(ScriptEnv* context)
 {
     return script_null;
 }
 
 ScriptValue
-javaDeleteSelected(ScriptEnv* context)
+delete_selected_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "deleteSelected", "")) {
         return script_false;
@@ -1466,7 +1497,7 @@ javaDeleteSelected(ScriptEnv* context)
 }
 
 ScriptValue
-javaCutSelected(ScriptEnv* context)
+cut_selected_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "scaleSelected", "rr")) {
         return script_false;
@@ -1477,7 +1508,7 @@ javaCutSelected(ScriptEnv* context)
 }
 
 ScriptValue
-javaCopySelected(ScriptEnv* context)
+copy_selected_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "scaleSelected", "rr")) {
         return script_false;
@@ -1488,7 +1519,7 @@ javaCopySelected(ScriptEnv* context)
 }
 
 ScriptValue
-javaPasteSelected(ScriptEnv* context)
+paste_selected_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "scaleSelected", "rr")) {
         return script_false;
@@ -1499,7 +1530,7 @@ javaPasteSelected(ScriptEnv* context)
 }
 
 ScriptValue
-javaMoveSelected(ScriptEnv* context)
+move_selected_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "scaleSelected", "rr")) {
         return script_false;

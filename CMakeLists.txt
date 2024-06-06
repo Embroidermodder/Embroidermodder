@@ -89,7 +89,6 @@ qt_add_executable(embroidermodder2
 	${SRC}/property-editor.cpp
 	${SRC}/quickleader.cpp
 	${SRC}/rubber.cpp
-	${SRC}/script.cpp
 	${SRC}/selectbox.cpp
 	${SRC}/settings-dialog.cpp
 	${SRC}/statusbar.cpp
@@ -103,6 +102,7 @@ qt_add_executable(embroidermodder2
 
 	${SRC}/command_data.c
         ${SRC}/testing.c
+	${SRC}/script.c
 
 	${SRC}/embroidermodder.h
 	${SRC}/core.h

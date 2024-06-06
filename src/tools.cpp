@@ -1,9 +1,10 @@
 /*
  * Embroidermodder 2.
  *
- * Copyright 2013-2024 The Embroidermodder Team
- * Embroidermodder 2 is Open Source Software, see LICENSE for licensing terms.
- * Read CODE-STANDARDS.txt for advice on altering this file.
+ * Copyright 2011-2024 The Embroidermodder Team
+ * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+ * Visit https://www.libembroidery.org/refman for advice on altering this file,
+ * or read the markdown version in embroidermodder2/docs/refman.
  *
  * Commands: LOCATEPOINT, DISTANCE, MOVE
  */
@@ -154,12 +155,22 @@ distance_command(ScriptEnv *context)
 ScriptValue
 move_command(ScriptEnv * context)
 {
+    switch (context->context) {
+    case CONTEXT_MAIN:
+        break;
+    case CONTEXT_CLICK:
+        break;
+    case CONTEXT_CONTEXT:
+        break;
+    case CONTEXT_PROMPT:
+        break;
+    default:
+        break;
+    }
     return script_null;
 }
 
 #if 0
-//Command: Move
-
 var global = {}; //Required
 global.firstRun;
 global.baseX;
@@ -272,6 +283,18 @@ function prompt(str)
 ScriptValue
 scale_command(ScriptEnv * context)
 {
+    switch (context->context) {
+    case CONTEXT_MAIN:
+        break;
+    case CONTEXT_CLICK:
+        break;
+    case CONTEXT_CONTEXT:
+        break;
+    case CONTEXT_PROMPT:
+        break;
+    default:
+        break;
+    }
     return script_null;
 }
 
@@ -584,20 +607,6 @@ function prompt(str)
         }
     }
 }
-[Menu]
-Name=Modify
-Position=12
-
-[ToolBar]
-Name=Modify
-Position=7
-
-[Tips]
-ToolTip=Sca&le
-StatusTip=Enlarges or reduces objects proportionally in the X, Y, and Z directions:  SCALE
-
-[Prompt]
-Alias=SC, SCALE
 #endif
 
 /* SANDBOX . */
@@ -606,6 +615,19 @@ sandbox_command(ScriptEnv * context)
 {
     _main->nativeInitCommand();
     _main->nativeClearSelection();
+
+    switch (context->context) {
+    case CONTEXT_MAIN:
+        break;
+    case CONTEXT_CLICK:
+        break;
+    case CONTEXT_CONTEXT:
+        break;
+    case CONTEXT_PROMPT:
+        break;
+    default:
+        break;
+    }
 
     _main->nativeEndCommand();
     return script_null;
@@ -995,20 +1017,6 @@ function prompt(str)
         }
     }
 }
-[Menu]
-Name=Modify
-Position=11
-
-[ToolBar]
-Name=Modify
-Position=6
-
-[Tips]
-ToolTip=&Rotate
-StatusTip=Rotates objects about a base point:  ROTATE
-
-[Prompt]
-Alias=RO, ROTATE
 #endif
 
 /* NOTE: main() is run every time the command is started.
@@ -1123,18 +1131,6 @@ function validRGB(r, g, b)
     if (g < 0 || g > 255) return false;
     if (b < 0 || b > 255) return false;
     return true;
-}[Menu]
-Name=Sandbox
-Position=4
+}
 
-[ToolBar]
-Name=Sandbox
-Position=3
-
-[Tips]
-ToolTip=&RGB
-StatusTip=Updates the current view colors:  RGB
-
-[Prompt]
-Alias=RGB
 #endif

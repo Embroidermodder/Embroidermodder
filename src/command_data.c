@@ -18,6 +18,7 @@ Command command_data[] = {
     {
         .id = ACTION_ABOUT,
         .main = about_command,
+        .arguments = "",
         .icon = "about",
         .menu_name = "None",
         .menu_position = 0,
@@ -31,6 +32,7 @@ Command command_data[] = {
     {
         .id = ACTION_ALERT,
         .main = alert_command,
+        .arguments = "ss",
         .icon = "warning",
         .menu_name = "None",
         .menu_position = 0,
@@ -44,6 +46,7 @@ Command command_data[] = {
     {
         .id = ACTION_ANGLE,
         .main = angle_command,
+        .arguments = "rrr",
         .icon = "angle",
         .menu_name = "None",
         .menu_position = 0,
@@ -57,6 +60,7 @@ Command command_data[] = {
     {
         .id = ACTION_CIRCLE,
         .main = circle_command,
+        .arguments = "rrr",
         .icon = "circle",
         .menu_name = "Draw",
         .menu_position = 8,
@@ -70,6 +74,7 @@ Command command_data[] = {
     {
         .id = ACTION_CHANGELOG,
         .main = changelog_command,
+        .arguments = "",
         .icon = "changelog",
         .menu_name = "None",
         .menu_position = 0,
@@ -83,6 +88,7 @@ Command command_data[] = {
     {
         .id = ACTION_CLEAR,
         .main = clear_command,
+        .arguments = "",
         .icon = "clear",
         .menu_name = "None",
         .menu_position = 0,
@@ -96,6 +102,7 @@ Command command_data[] = {
     {
         .id = ACTION_COLOR_SELECTOR,
         .main = colorselector_command,
+        .arguments = "",
         .icon = "colorselector",
         .menu_name = "None",
         .menu_position = 0,
@@ -109,6 +116,7 @@ Command command_data[] = {
     {
         .id = ACTION_COPY,
         .main = copy_command,
+        .arguments = "",
         .icon = "copy",
         .menu_name = "None",
         .menu_position = 0,
@@ -122,6 +130,7 @@ Command command_data[] = {
     {
         .id = ACTION_CUT,
         .main = cut_command,
+        .arguments = "",
         .icon = "cut",
         .menu_name = "None",
         .menu_position = 0,
@@ -135,6 +144,7 @@ Command command_data[] = {
     {
         .id = ACTION_DAY,
         .main = day_command,
+        .arguments = "",
         .icon = "day",
         .menu_name = "None",
         .menu_position = 0,
@@ -148,6 +158,7 @@ Command command_data[] = {
     {
         .id = ACTION_DEBUG,
         .main = debug_command,
+        .arguments = "",
         .icon = "debug",
         .menu_name = "None",
         .menu_position = 0,
@@ -161,6 +172,7 @@ Command command_data[] = {
     {
         .id = ACTION_DESIGN_DETAILS,
         .main = design_details_command,
+        .arguments = "",
         .icon = "designdetails",
         .menu_name = "None",
         .menu_position = 0,
@@ -174,6 +186,7 @@ Command command_data[] = {
     {
         .id = ACTION_DISABLE,
         .main = disable_command,
+        .arguments = "",
         .icon = "disable",
         .menu_name = "None",
         .menu_position = 0,
@@ -187,6 +200,7 @@ Command command_data[] = {
     {
         .id = ACTION_DISTANCE,
         .main = distance_command,
+        .arguments = "rrrr",
         .icon = "distance",
         .menu_name = "Tools",
         .menu_position = 7,
@@ -200,6 +214,7 @@ Command command_data[] = {
     {
         .id = ACTION_DOLPHIN,
         .main = dolphin_command,
+        .arguments = "",
         .icon = "dolphin",
         .menu_name = "Draw",
         .menu_position = 100,
@@ -213,6 +228,7 @@ Command command_data[] = {
     {
         .id = ACTION_DO_NOTHING,
         .main = do_nothing,
+        .arguments = "",
         .icon = "donothing",
         .menu_name = "None",
         .menu_position = 0,
@@ -226,6 +242,7 @@ Command command_data[] = {
     {
         .id = ACTION_ELLIPSE,
         .main = ellipse_command,
+        .arguments = "",
         .icon = "ellipse",
         .menu_name = "Draw",
         .menu_position = 8,
@@ -239,6 +256,7 @@ Command command_data[] = {
     {
         .id = ACTION_ENABLE,
         .main = enable_command,
+        .arguments = "",
         .icon = "enable",
         .menu_name = "None",
         .menu_position = 0,
@@ -252,6 +270,7 @@ Command command_data[] = {
     {
         .id = ACTION_ERASE,
         .main = erase_command,
+        .arguments = "",
         .icon = "erase",
         .menu_name = "Modify",
         .menu_position = 5,
@@ -265,6 +284,7 @@ Command command_data[] = {
     {
         .id = ACTION_ERROR,
         .main = error_command,
+        .arguments = "",
         .icon = "error",
         .menu_name = "None",
         .menu_position = 0,
@@ -278,6 +298,7 @@ Command command_data[] = {
     {
         .id = ACTION_EXIT,
         .main = exit_command,
+        .arguments = "",
         .icon = "exit",
         .menu_name = "None",
         .menu_position = 0,
@@ -291,6 +312,7 @@ Command command_data[] = {
     {
         .id = ACTION_GET,
         .main = get_command,
+        .arguments = "",
         .icon = "get",
         .menu_name = "None",
         .menu_position = 0,
@@ -304,6 +326,7 @@ Command command_data[] = {
     {
         .id = ACTION_HEART,
         .main = heart_command,
+        .arguments = "",
         .icon = "heart",
         .menu_name = "Draw",
         .menu_position = 100,
@@ -317,6 +340,7 @@ Command command_data[] = {
     {
         .id = ACTION_HELP,
         .main = help_command,
+        .arguments = "",
         .icon = "help",
         .menu_name = "None",
         .menu_position = 0,
@@ -330,6 +354,7 @@ Command command_data[] = {
     {
         .id = ACTION_HIDE_ALL_LAYERS,
         .main = hidealllayers_command,
+        .arguments = "",
         .icon = "hidealllayers",
         .menu_name = "None",
         .menu_position = 0,
@@ -343,6 +368,7 @@ Command command_data[] = {
     {
         .id = ACTION_ICON_128,
         .main = icon128_command,
+        .arguments = "",
         .icon = "icon128",
         .menu_name = "None",
         .menu_position = 0,
@@ -356,6 +382,7 @@ Command command_data[] = {
     {
         .id = ACTION_ICON_16,
         .main = icon16_command,
+        .arguments = "",
         .icon = "icon16",
         .menu_name = "None",
         .menu_position = 0,
@@ -369,6 +396,7 @@ Command command_data[] = {
     {
         .id = ACTION_ICON_24,
         .main = icon24_command,
+        .arguments = "",
         .icon = "icon24",
         .menu_name = "None",
         .menu_position = 0,
@@ -382,6 +410,7 @@ Command command_data[] = {
     {
         .id = ACTION_ICON_32,
         .main = icon32_command,
+        .arguments = "",
         .icon = "icon32",
         .menu_name = "None",
         .menu_position = 0,
@@ -395,6 +424,7 @@ Command command_data[] = {
     {
         .id = ACTION_ICON_48,
         .main = icon48_command,
+        .arguments = "",
         .icon = "icon48",
         .menu_name = "None",
         .menu_position = 0,
@@ -408,6 +438,7 @@ Command command_data[] = {
     {
         .id = ACTION_ICON_64,
         .main = icon64_command,
+        .arguments = "",
         .icon = "icon64",
         .menu_name = "None",
         .menu_position = 0,
@@ -421,6 +452,7 @@ Command command_data[] = {
     {
         .id = ACTION_FREEZE_ALL_LAYERS,
         .main = freezealllayers_command,
+        .arguments = "",
         .icon = "freezealllayers",
         .menu_name = "None",
         .menu_position = 0,
@@ -434,6 +466,7 @@ Command command_data[] = {
     {
         .id = ACTION_LAYERS,
         .main = layers_command,
+        .arguments = "",
         .icon = "layers",
         .menu_name = "None",
         .menu_position = 0,
@@ -447,6 +480,7 @@ Command command_data[] = {
     {
         .id = ACTION_LAYER_PREVIOUS,
         .main = layerprevious_command,
+        .arguments = "",
         .icon = "layerprevious",
         .menu_name = "None",
         .menu_position = 0,
@@ -460,6 +494,7 @@ Command command_data[] = {
     {
         .id = ACTION_LAYER_SELECTOR,
         .main = layerselector_command,
+        .arguments = "",
         .icon = "layerselector",
         .menu_name = "None",
         .menu_position = 0,
@@ -473,6 +508,7 @@ Command command_data[] = {
     {
         .id = ACTION_LINE,
         .main = line_command,
+        .arguments = "",
         .icon = "line",
         .menu_name = "Draw",
         .menu_position = 0,
@@ -486,6 +522,7 @@ Command command_data[] = {
     {
         .id = ACTION_LINE_TYPE_SELECTOR,
         .main = linetypeselector_command,
+        .arguments = "",
         .icon = "linetypeselector",
         .menu_name = "None",
         .menu_position = 0,
@@ -499,6 +536,7 @@ Command command_data[] = {
     {
         .id = ACTION_LINE_WEIGHT_SELECTOR,
         .main = lineweightselector_command,
+        .arguments = "",
         .icon = "lineweightselector",
         .menu_name = "None",
         .menu_position = 0,
@@ -512,6 +550,7 @@ Command command_data[] = {
     {
         .id = ACTION_LOCATE_POINT,
         .main = locatepoint_command,
+        .arguments = "",
         .icon = "locatepoint",
         .menu_name = "Tools",
         .menu_position = 11,
@@ -525,6 +564,7 @@ Command command_data[] = {
     {
         .id = ACTION_LOCK_ALL_LAYERS,
         .main = lockalllayers_command,
+        .arguments = "",
         .icon = "lockalllayers",
         .menu_name = "None",
         .menu_position = 0,
@@ -538,6 +578,7 @@ Command command_data[] = {
     {
         .id = ACTION_MAKE_LAYER_CURRENT,
         .main = makelayercurrent_command,
+        .arguments = "",
         .icon = "makelayercurrent",
         .menu_name = "None",
         .menu_position = 0,
@@ -551,6 +592,7 @@ Command command_data[] = {
     {
         .id = ACTION_MIRROR_SELECTED,
         .main = mirrorselected_command,
+        .arguments = "",
         .icon = "mirror",
         .menu_name = "None",
         .menu_position = 0,
@@ -564,6 +606,7 @@ Command command_data[] = {
     {
         .id = ACTION_MOVE,
         .main = move_command,
+        .arguments = "",
         .icon = "move",
         .menu_name = "Modify",
         .menu_position = 10,
@@ -577,6 +620,7 @@ Command command_data[] = {
     {
         .id = ACTION_MOVE_SELECTED,
         .main = moveselected_command,
+        .arguments = "",
         .icon = "moveselected",
         .menu_name = "None",
         .menu_position = 0,
@@ -590,6 +634,7 @@ Command command_data[] = {
     {
         .id = ACTION_NEW,
         .main = new_command,
+        .arguments = "",
         .icon = "new",
         .menu_name = "None",
         .menu_position = 0,
@@ -603,6 +648,7 @@ Command command_data[] = {
     {
         .id = ACTION_NIGHT,
         .main = night_command,
+        .arguments = "",
         .icon = "night",
         .menu_name = "None",
         .menu_position = 0,
@@ -616,6 +662,7 @@ Command command_data[] = {
     {
         .id = ACTION_OPEN,
         .main = open_command,
+        .arguments = "",
         .icon = "open",
         .menu_name = "None",
         .menu_position = 0,
@@ -629,6 +676,7 @@ Command command_data[] = {
     {
         .id = ACTION_PAN_DOWN,
         .main = pandown_command,
+        .arguments = "",
         .icon = "pandown",
         .menu_name = "None",
         .menu_position = 0,
@@ -642,6 +690,7 @@ Command command_data[] = {
     {
         .id = ACTION_PAN_LEFT,
         .main = panleft_command,
+        .arguments = "",
         .icon = "panleft",
         .menu_name = "None",
         .menu_position = 0,
@@ -655,6 +704,7 @@ Command command_data[] = {
     {
         .id = ACTION_PAN_POINT,
         .main = panpoint_command,
+        .arguments = "",
         .icon = "panpoint",
         .menu_name = "None",
         .menu_position = 0,
@@ -668,6 +718,7 @@ Command command_data[] = {
     {
         .id = ACTION_PAN_REAL_TIME,
         .main = panrealtime_command,
+        .arguments = "",
         .icon = "panrealtime",
         .menu_name = "None",
         .menu_position = 0,
@@ -681,6 +732,7 @@ Command command_data[] = {
     {
         .id = ACTION_PAN_RIGHT,
         .main = panright_command,
+        .arguments = "",
         .icon = "panright",
         .menu_name = "None",
         .menu_position = 0,
@@ -694,6 +746,7 @@ Command command_data[] = {
     {
         .id = ACTION_PAN_UP,
         .main = panup_command,
+        .arguments = "",
         .icon = "panup",
         .menu_name = "None",
         .menu_position = 0,
@@ -707,6 +760,7 @@ Command command_data[] = {
     {
         .id = ACTION_PASTE,
         .main = paste_command,
+        .arguments = "",
         .icon = "paste",
         .menu_name = "None",
         .menu_position = 0,
@@ -720,6 +774,7 @@ Command command_data[] = {
     {
         .id = ACTION_PATH,
         .main = path_command,
+        .arguments = "",
         .icon = "path",
         .menu_name = "None",
         .menu_position = 0,
@@ -733,6 +788,7 @@ Command command_data[] = {
     {
         .id = ACTION_PLATFORM,
         .main = platform_command,
+        .arguments = "",
         .icon = "platform",
         .menu_name = "None",
         .menu_position = 0,
@@ -746,6 +802,7 @@ Command command_data[] = {
     {
         .id = ACTION_POINT,
         .main = point_command,
+        .arguments = "",
         .icon = "point",
         .menu_name = "None",
         .menu_position = 0,
@@ -759,6 +816,7 @@ Command command_data[] = {
     {
         .id = ACTION_POLYGON,
         .main = polygon_command,
+        .arguments = "",
         .icon = "polygon",
         .menu_name = "Draw",
         .menu_position = 4,
@@ -772,6 +830,7 @@ Command command_data[] = {
     {
         .id = ACTION_POLYLINE,
         .main = polyline_command,
+        .arguments = "",
         .icon = "polyline",
         .menu_name = "None",
         .menu_position = 0,
@@ -785,6 +844,7 @@ Command command_data[] = {
     {
         .id = ACTION_PREVIEW_OFF,
         .main = previewoff_command,
+        .arguments = "",
         .icon = "previewoff",
         .menu_name = "None",
         .menu_position = 0,
@@ -798,6 +858,7 @@ Command command_data[] = {
     {
         .id = ACTION_PREVIEW_ON,
         .main = previewon_command,
+        .arguments = "",
         .icon = "previewon",
         .menu_name = "None",
         .menu_position = 0,
@@ -811,6 +872,7 @@ Command command_data[] = {
     {
         .id = ACTION_PRINT,
         .main = print_command,
+        .arguments = "",
         .icon = "print",
         .menu_name = "None",
         .menu_position = 0,
@@ -824,6 +886,7 @@ Command command_data[] = {
     {
         .id = ACTION_QUICKLEADER,
         .main = quickleader_command,
+        .arguments = "",
         .icon = "quickleader",
         .menu_name = "None",
         .menu_position = 0,
@@ -837,6 +900,7 @@ Command command_data[] = {
     {
         .id = ACTION_RECTANGLE,
         .main = rectangle_command,
+        .arguments = "",
         .icon = "rectangle",
         .menu_name = "Draw",
         .menu_position = 6,
@@ -850,6 +914,7 @@ Command command_data[] = {
     {
         .id = ACTION_REDO,
         .main = redo_command,
+        .arguments = "",
         .icon = "redo",
         .menu_name = "None",
         .menu_position = 0,
@@ -863,6 +928,7 @@ Command command_data[] = {
     {
         .id = ACTION_RGB,
         .main = rgb_command,
+        .arguments = "",
         .icon = "rgb",
         .menu_name = "None",
         .menu_position = 0,
@@ -876,32 +942,35 @@ Command command_data[] = {
     {
         .id = ACTION_ROTATE,
         .main = rotate_command,
+        .arguments = "",
         .icon = "rotate",
-        .menu_name = "None",
-        .menu_position = 0,
-        .toolbar_name = "None",
-        .toolbar_position = 0,
-        .tooltip = "Icon&24",
-        .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24",
+        .menu_name = "Modify",
+        .menu_position = 11,
+        .toolbar_name = "Modify",
+        .toolbar_position = 6,
+        .tooltip = "&Rotate",
+        .statustip = "Rotates objects about a base point:  ROTATE",
+        .alias = "RO, ROTATE",
         .shortcut = ""
     },
     {
         .id = ACTION_SANDBOX,
         .main = sandbox_command,
+        .arguments = "",
         .icon = "sandbox",
-        .menu_name = "None",
-        .menu_position = 0,
-        .toolbar_name = "None",
-        .toolbar_position = 0,
-        .tooltip = "Icon&24",
-        .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24",
+        .menu_name = "Sandbox",
+        .menu_position = 4,
+        .toolbar_name = "Sandbox",
+        .toolbar_position = 3,
+        .tooltip = "&Sandbox",
+        .statustip = "A sandbox to play in: SANDBOX",
+        .alias = "SANDBOX",
         .shortcut = ""
     },
     {
         .id = ACTION_SAVE,
         .main = save_command,
+        .arguments = "",
         .icon = "save",
         .menu_name = "None",
         .menu_position = 0,
@@ -915,6 +984,7 @@ Command command_data[] = {
     {
         .id = ACTION_SAVE_AS,
         .main = save_command,
+        .arguments = "",
         .icon = "saveas",
         .menu_name = "None",
         .menu_position = 0,
@@ -928,19 +998,21 @@ Command command_data[] = {
     {
         .id = ACTION_SCALE,
         .main = scale_command,
+        .arguments = "",
         .icon = "scale",
-        .menu_name = "None",
-        .menu_position = 0,
-        .toolbar_name = "None",
-        .toolbar_position = 0,
-        .tooltip = "Icon&24",
-        .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "SCALE",
+        .menu_name = "Modify",
+        .menu_position = 12,
+        .toolbar_name = "Modify",
+        .toolbar_position = 7,
+        .tooltip = "Sca&le",
+        .statustip = "Enlarges or reduces objects proportionally in the X, Y, and Z directions:  SCALE",
+        .alias = "SC, SCALE",
         .shortcut = ""
     },
     {
         .id = ACTION_SCALE_SELECTED,
         .main = scaleselected_command,
+        .arguments = "",
         .icon = "scaleselected",
         .menu_name = "None",
         .menu_position = 0,
@@ -954,6 +1026,7 @@ Command command_data[] = {
     {
         .id = ACTION_SELECT_ALL,
         .main = selectall_command,
+        .arguments = "",
         .icon = "selectall",
         .menu_name = "None",
         .menu_position = 0,
@@ -967,6 +1040,7 @@ Command command_data[] = {
     {
         .id = ACTION_SET,
         .main = set_command,
+        .arguments = "",
         .icon = "set",
         .menu_name = "None",
         .menu_position = 0,
@@ -980,6 +1054,7 @@ Command command_data[] = {
     {
         .id = ACTION_SETTINGS_DIALOG,
         .main = settings_dialog_command,
+        .arguments = "",
         .icon = "settingsdialog",
         .menu_name = "None",
         .menu_position = 0,
@@ -993,6 +1068,7 @@ Command command_data[] = {
     {
         .id = ACTION_SHOW_ALL_LAYERS,
         .main = showalllayers_command,
+        .arguments = "",
         .icon = "showalllayers",
         .menu_name = "None",
         .menu_position = 0,
@@ -1006,6 +1082,7 @@ Command command_data[] = {
     {
         .id = ACTION_SINGLE_LINE_TEXT,
         .main = singlelinetext_command,
+        .arguments = "",
         .icon = "singlelinetext",
         .menu_name = "None",
         .menu_position = 0,
@@ -1019,32 +1096,35 @@ Command command_data[] = {
     {
         .id = ACTION_SNOWFLAKE,
         .main = snowflake_command,
+        .arguments = "",
         .icon = "snowflake",
-        .menu_name = "None",
-        .menu_position = 0,
-        .toolbar_name = "None",
-        .toolbar_position = 0,
-        .tooltip = "Icon&24",
-        .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
+        .menu_name = "Draw",
+        .menu_position = 100,
+        .toolbar_name = "Draw",
+        .toolbar_position = 100,
+        .tooltip = "&Snowflake",
+        .statustip = "Creates a snowflake:  SNOWFLAKE",
         .alias = "SNOWFLAKE",
         .shortcut = ""
     },
     {
         .id = ACTION_STAR,
         .main = star_command,
+        .arguments = "",
         .icon = "star",
-        .menu_name = "None",
-        .menu_position = 0,
-        .toolbar_name = "None",
-        .toolbar_position = 0,
-        .tooltip = "Icon&24",
-        .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
+        .menu_name = "Draw",
+        .menu_position = 100,
+        .toolbar_name = "Draw",
+        .toolbar_position = 100,
+        .tooltip = "&Star",
+        .statustip = "Creates a star:  STAR",
         .alias = "STAR",
         .shortcut = ""
     },
     {
         .id = ACTION_SYSWINDOWS,
         .main = syswindows_command,
+        .arguments = "",
         .icon = "syswindows",
         .menu_name = "None",
         .menu_position = 0,
@@ -1058,6 +1138,7 @@ Command command_data[] = {
     {
         .id = ACTION_TEXT_BOLD,
         .main = text_bold_command,
+        .arguments = "",
         .icon = "textbold",
         .menu_name = "None",
         .menu_position = 0,
@@ -1071,6 +1152,7 @@ Command command_data[] = {
     {
         .id = ACTION_TEXT_ITALIC,
         .main = text_italic_command,
+        .arguments = "",
         .icon = "textitalic",
         .menu_name = "None",
         .menu_position = 0,
@@ -1084,6 +1166,7 @@ Command command_data[] = {
     {
         .id = ACTION_TEXT_UNDERLINE,
         .main = text_underline_command,
+        .arguments = "",
         .icon = "textunderline",
         .menu_name = "None",
         .menu_position = 0,
@@ -1097,6 +1180,7 @@ Command command_data[] = {
     {
         .id = ACTION_TEXT_STRIKEOUT,
         .main = text_strikeout_command,
+        .arguments = "",
         .icon = "textstrikeout",
         .menu_name = "None",
         .menu_position = 0,
@@ -1110,6 +1194,7 @@ Command command_data[] = {
     {
         .id = ACTION_TEXT_OVERLINE,
         .main = text_overline_command,
+        .arguments = "",
         .icon = "textoverline",
         .menu_name = "None",
         .menu_position = 0,
@@ -1123,6 +1208,7 @@ Command command_data[] = {
     {
         .id = ACTION_THAW_ALL_LAYERS,
         .main = thawalllayers_command,
+        .arguments = "",
         .icon = "thawalllayers",
         .menu_name = "None",
         .menu_position = 0,
@@ -1136,6 +1222,7 @@ Command command_data[] = {
     {
         .id = ACTION_TIP_OF_THE_DAY,
         .main = tipoftheday_command,
+        .arguments = "",
         .icon = "tipoftheday",
         .menu_name = "None",
         .menu_position = 0,
@@ -1149,6 +1236,7 @@ Command command_data[] = {
     {
         .id = ACTION_TODO,
         .main = todo_command,
+        .arguments = "",
         .icon = "todo",
         .menu_name = "None",
         .menu_position = 0,
@@ -1162,6 +1250,7 @@ Command command_data[] = {
     {
         .id = ACTION_UNDO,
         .main = undo_command,
+        .arguments = "",
         .icon = "undo",
         .menu_name = "None",
         .menu_position = 0,
@@ -1175,6 +1264,7 @@ Command command_data[] = {
     {
         .id = ACTION_UNLOCK_ALL_LAYERS,
         .main = unlockalllayers_command,
+        .arguments = "",
         .icon = "unlockalllayers",
         .menu_name = "None",
         .menu_position = 0,
@@ -1188,6 +1278,7 @@ Command command_data[] = {
     {
         .id = ACTION_VULCANIZE,
         .main = vulcanize_command,
+        .arguments = "",
         .icon = "vulcanize",
         .menu_name = "None",
         .menu_position = 0,
@@ -1201,6 +1292,7 @@ Command command_data[] = {
     {
         .id = ACTION_WINDOW_CASCADE,
         .main = windowcascade_command,
+        .arguments = "",
         .icon = "windowcascade",
         .menu_name = "None",
         .menu_position = 0,
@@ -1214,6 +1306,7 @@ Command command_data[] = {
     {
         .id = ACTION_WHATS_THIS,
         .main = whats_this_command,
+        .arguments = "",
         .icon = "whatsthis",
         .menu_name = "None",
         .menu_position = 0,
@@ -1227,6 +1320,7 @@ Command command_data[] = {
     {
         .id = ACTION_WINDOW_CLOSE,
         .main = windowclose_command,
+        .arguments = "",
         .icon = "windowclose",
         .menu_name = "None",
         .menu_position = 0,
@@ -1240,6 +1334,7 @@ Command command_data[] = {
     {
         .id = ACTION_WINDOW_CLOSE_ALL,
         .main = windowcloseall_command,
+        .arguments = "",
         .icon = "windowcloseall",
         .menu_name = "None",
         .menu_position = 0,
@@ -1253,6 +1348,7 @@ Command command_data[] = {
     {
         .id = ACTION_WINDOW_NEXT,
         .main = windownext_command,
+        .arguments = "",
         .icon = "windownext",
         .menu_name = "None",
         .menu_position = 0,
@@ -1266,6 +1362,7 @@ Command command_data[] = {
     {
         .id = ACTION_WINDOW_PREVIOUS,
         .main = windowprevious_command,
+        .arguments = "",
         .icon = "windowprevious",
         .menu_name = "None",
         .menu_position = 0,
@@ -1279,6 +1376,7 @@ Command command_data[] = {
     {
         .id = ACTION_WINDOW_TILE,
         .main = windowtile_command,
+        .arguments = "",
         .icon = "windowtile",
         .menu_name = "None",
         .menu_position = 0,
@@ -1292,6 +1390,7 @@ Command command_data[] = {
     {
         .id = ACTION_ZOOM_ALL,
         .main = zoom_all_command,
+        .arguments = "",
         .icon = "zoomall",
         .menu_name = "None",
         .menu_position = 0,
@@ -1305,6 +1404,7 @@ Command command_data[] = {
     {
         .id = ACTION_ZOOM_CENTER,
         .main = zoom_center_command,
+        .arguments = "",
         .icon = "zoomcenter",
         .menu_name = "None",
         .menu_position = 0,
@@ -1318,6 +1418,7 @@ Command command_data[] = {
     {
         .id = ACTION_ZOOM_DYNAMIC,
         .main = zoom_dynamic_command,
+        .arguments = "",
         .icon = "zoomdynamic",
         .menu_name = "None",
         .menu_position = 0,
@@ -1331,6 +1432,7 @@ Command command_data[] = {
     {
         .id = ACTION_ZOOM_EXTENTS,
         .main = zoom_extents_command,
+        .arguments = "",
         .icon = "zoomextents",
         .menu_name = "None",
         .menu_position = 0,
@@ -1344,6 +1446,7 @@ Command command_data[] = {
     {
         .id = ACTION_ZOOM_IN,
         .main = zoom_in_command,
+        .arguments = "",
         .icon = "zoomin",
         .menu_name = "None",
         .menu_position = 0,
@@ -1357,6 +1460,7 @@ Command command_data[] = {
     {
         .id = ACTION_ZOOM_OUT,
         .main = zoom_out_command,
+        .arguments = "",
         .icon = "zoomout",
         .menu_name = "None",
         .menu_position = 0,
@@ -1370,6 +1474,7 @@ Command command_data[] = {
     {
         .id = ACTION_ZOOM_PREVIOUS,
         .main = zoom_previous_command,
+        .arguments = "",
         .icon = "zoomprevious",
         .menu_name = "None",
         .menu_position = 0,
@@ -1383,6 +1488,7 @@ Command command_data[] = {
     {
         .id = ACTION_ZOOM_REAL_TIME,
         .main = zoom_real_time_command,
+        .arguments = "",
         .icon = "zoomrealtime",
         .menu_name = "None",
         .menu_position = 0,
@@ -1396,6 +1502,7 @@ Command command_data[] = {
     {
         .id = ACTION_ZOOM_SCALE,
         .main = zoom_scale_command,
+        .arguments = "",
         .icon = "zoomscale",
         .menu_name = "None",
         .menu_position = 0,
@@ -1409,6 +1516,7 @@ Command command_data[] = {
     {
         .id = ACTION_ZOOM_SELECTED,
         .main = zoom_selected_command,
+        .arguments = "",
         .icon = "zoomselected",
         .menu_name = "None",
         .menu_position = 0,
@@ -1422,6 +1530,7 @@ Command command_data[] = {
     {
         .id = ACTION_ZOOM_WINDOW,
         .main = zoom_window_command,
+        .arguments = "",
         .icon = "zoomwindow",
         .menu_name = "None",
         .menu_position = 0,
@@ -1435,6 +1544,7 @@ Command command_data[] = {
     {
         .id = ACTION_DO_NOTHING,
         .main = do_nothing,
+        .arguments = "",
         .icon = "blank",
         .menu_name = "None",
         .menu_position = -1,

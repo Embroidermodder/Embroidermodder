@@ -10,8 +10,10 @@
  */
 
 #include <string.h>
+#include <stdlib.h>
+#include <stdarg.h>
 
-#include "embroidermodder.h"
+#include "core.h"
 
 const char *index_name[] = {
     "one",
@@ -80,7 +82,7 @@ argument_checks(ScriptEnv *context, char *function, const char *args)
                 return 0;
             }
             float variable = context->argument[i].r;
-            if (qIsNaN(variable)) {
+            if (isnan(variable)) {
                 sprintf(s,
                     "TYPE_ERROR, %s(): %s argument is not a real number.",
                     function, index_th_name[i]);
@@ -119,8 +121,8 @@ argument_checks(ScriptEnv *context, char *function, const char *args)
     return 1;
 }
 
-QString
-translate(QString msg)
+char *
+translate(char *msg)
 {
     return msg;
 }
@@ -261,7 +263,7 @@ script_int(int i)
 }
 
 ScriptValue
-script_real(qreal r)
+script_real(double r)
 {
     ScriptValue value;
     value.type = SCRIPT_REAL;
@@ -276,12 +278,6 @@ script_string(const char *s)
     value.type = SCRIPT_STRING;
     strcpy(value.s, s);
     return value;
-}
-
-void
-debug_message(QString s)
-{
-    _main->nativeAppendPromptHistory(s);
 }
 
 /* These pack the arguments for function calls in the command environment. */
@@ -314,8 +310,55 @@ add_int_argument(ScriptEnv *context, int i)
 ScriptValue
 command_prompt(const char *line)
 {
+    int i;
+    char args[10][MAX_STRING_LENGTH];
+    char *c;
+    int n_args = 0;
+    int str_pos = 0;
+    for (c=(char*)line; *c; c++) {
+        args[n_args][str_pos] = *c;
+        if (*c == ' ') {
+            args[n_args][str_pos] = 0;
+            n_args++;
+            str_pos = 0;
+        }
+        else {
+            str_pos++;
+        }
+    }
+    args[n_args][str_pos] = 0;
+
+    int function = -1;
+    for (i=0; command_data[i].menu_position >= 0; i++) {
+        if (!strcmp(command_data[i].icon, args[0])) {
+            function = i;
+            break;
+        }
+    }
+    if (function < 0) {
+        return script_false;
+    }
+
     ScriptEnv* context = create_script_env();
-    ScriptValue v = _main->runCommandCore(line, context);
+    if (n_args > 1) {
+        for (i=1; i<n_args; i++) {
+            switch (command_data[function].arguments[i]) {
+            case 'i':
+            case 'b':
+                context = add_int_argument(context, atoi(args[i-1]));
+                break;
+            case 's':
+                context = add_string_argument(context, args[i-1]);
+                break;
+            case 'r':
+                context = add_real_argument(context, atof(args[i-1]));
+                break;
+            default:
+                break;
+            }
+        }
+    }
+    ScriptValue v = command_data[function].main(context);
     free_script_env(context);
     return v;
 }
