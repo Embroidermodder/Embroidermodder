@@ -1584,6 +1584,8 @@ public:
     MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags);
     ~MdiWindow();
 
+    EmbPattern* pattern;
+
     virtual QSize              sizeHint() const;
     QString getCurrentFile()   { return curFile; }
     QString getShortCurrentFile();

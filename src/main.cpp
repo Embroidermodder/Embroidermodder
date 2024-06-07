@@ -18,7 +18,8 @@ int testing_mode = 0;
 
 MainWindow *_main;
 
-static void usage(void)
+static void
+usage(void)
 {
     fprintf(stderr,
     " ___ _____ ___  ___   __  _ ___  ___ ___   _____  __  ___  ___  ___ ___    ___ "           "\n"

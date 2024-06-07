@@ -11,9 +11,14 @@
 
 #include "embroidermodder.h"
 
-#define RGB_MODE_BACKGROUND   0
-#define RGB_MODE_CROSSHAIR    1
-#define RGB_MODE_GRID         2
+#define RGB_MODE_BACKGROUND     0
+#define RGB_MODE_CROSSHAIR      1
+#define RGB_MODE_GRID           2
+
+#define ROTATE_MODE_NORMAL      0
+#define ROTATE_MODE_REFERENCE   1
+
+bool validRGB(float r, float g, float b);
 
 /* LOCATEPOINT */
 ScriptValue
@@ -789,8 +794,6 @@ global.angleNew;
 global.mode;
 
 //enums
-global.mode_NORMAL    = 0;
-global.mode_REFERENCE = 1;
 
 //NOTE: main() is run every time the command is started.
 //      Use it to reset variables so they are ready to go.
@@ -1117,20 +1120,33 @@ function prompt(str)
         }
         else {
             setGridColor(r,g,b);
-            _main->nativeEndCommand();
+            end_command();
         }
     }
 }
 
-function validRGB(r, g, b)
+#endif
+
+bool
+validRGB(float r, float g, float b)
 {
-    if (isNaN(r)) return false;
-    if (isNaN(g)) return false;
-    if (isNaN(b)) return false;
-    if (r < 0 || r > 255) return false;
-    if (g < 0 || g > 255) return false;
-    if (b < 0 || b > 255) return false;
+    if (isnan(r)) {
+        return false;
+    }
+    if (isnan(g)) {
+        return false;
+    }
+    if (isnan(b)) {
+        return false;
+    }
+    if (r < 0 || r > 255) {
+        return false;
+    }
+    if (g < 0 || g > 255) {
+        return false;
+    }
+    if (b < 0 || b > 255) {
+        return false;
+    }
     return true;
 }
-
-#endif

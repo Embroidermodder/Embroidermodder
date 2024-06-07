@@ -636,6 +636,12 @@ void
 View::drawPolyline(QPainter* painter, EmbPolyline polyline)
 {
     QPainterPath path;
+    EmbGeometry *geometry = polyline.pointList->geometry;
+    path.moveTo(geometry[0].object.vector.x, geometry[0].object.vector.y);
+    for (int i=0; i<polyline.pointList->count; i++) {
+        path.lineTo(geometry[i].object.vector.x, geometry[i].object.vector.y);
+    }
+    painter->drawPath(path);
 }
 
 void
@@ -670,8 +676,9 @@ void View::drawBackground(QPainter* painter, const QRectF& rect)
         painter->fillPath(originPath, gridColor);
     }
 
-    for (int i = 0; i < geometry->count; i++) {
-        EmbGeometry g = geometry->geometry[i];
+    EmbPattern *pattern = _main->activeMdiWindow()->pattern;
+    for (int i = 0; i < pattern->geometry->count; i++) {
+        EmbGeometry g = pattern->geometry->geometry[i];
         switch (g.type) {
         case EMB_ARC: {
             drawArc(painter, g.object.arc);

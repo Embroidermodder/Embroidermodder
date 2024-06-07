@@ -305,11 +305,20 @@ add_int_argument(ScriptEnv *context, int i)
     context->argumentCount++;
 }
 
-/* FIXME: detect types.
+/* FIXME: parse strings arguments with quotes.
+ *
+ * There are 5 steps to the parsing algorithm:
+ *     1. Split the string into string arguments in the style of "argc, argv".
+ *     2. Identify the command by the first argument.
+ *     3. Process arguments into ScriptValues.
+ *     4. Check that the arguments parsed matched the required arguments for that
+ *        commands.
+ *     5. Call the main function.
  */
 ScriptValue
-command_prompt(const char *line)
+command_prompt(ScriptEnv *context, const char *line)
 {
+    /* Split arguments into seperate strings. */
     int i;
     char args[10][MAX_STRING_LENGTH];
     char *c;
@@ -328,6 +337,7 @@ command_prompt(const char *line)
     }
     args[n_args][str_pos] = 0;
 
+    /* Identify function. */
     int function = -1;
     for (i=0; command_data[i].menu_position >= 0; i++) {
         if (!strcmp(command_data[i].icon, args[0])) {
@@ -339,7 +349,12 @@ command_prompt(const char *line)
         return script_false;
     }
 
-    ScriptEnv* context = create_script_env();
+    /* Check there are enough arguments. */
+    if (strlen(command_data[function].arguments[i]) != n_args) {
+        return script_false;
+    }
+
+    /* Parse arguments into ScriptValues. */
     if (n_args > 1) {
         for (i=1; i<n_args; i++) {
             switch (command_data[function].arguments[i]) {
@@ -358,7 +373,7 @@ command_prompt(const char *line)
             }
         }
     }
-    ScriptValue v = command_data[function].main(context);
-    free_script_env(context);
-    return v;
+
+    /* Call command's main. */
+    return command_data[function].main(context);
 }

@@ -11,15 +11,23 @@
 
 #include "embroidermodder.h"
 
-#define HEART_MODE_NUM_POINTS   0
-#define HEART_MODE_STYLE        1
-#define HEART_MODE_XSCALE       2
-#define HEART_MODE_YSCALE       3
+#define HEART_MODE_NUM_POINTS     0
+#define HEART_MODE_STYLE          1
+#define HEART_MODE_XSCALE         2
+#define HEART_MODE_YSCALE         3
 
-#define STAR_MODE_NUM_POINTS   0
-#define STAR_MODE_CENTER_PT    1
-#define STAR_MODE_RAD_OUTER    2
-#define STAR_MODE_RAD_INNER    3
+#define STAR_MODE_NUM_POINTS      0
+#define STAR_MODE_CENTER_PT       1
+#define STAR_MODE_RAD_OUTER       2
+#define STAR_MODE_RAD_INNER       3
+
+#define DOLPHIN_MODE_NUM_POINTS   0
+#define DOLPHIN_MODE_XSCALE       1
+#define DOLPHIN_MODE_YSCALE       2
+
+#define SNOWFLAKE_MODE_NUM_POINTS   0
+#define SNOWFLAKE_MODE_XSCALE       1
+#define SNOWFLAKE_MODE_YSCALE       2
 
 /* DOLPHIN . */
 ScriptValue
@@ -44,17 +52,11 @@ global.sy = 0.04; //Default
 global.numPoints;
 global.mode;
 
-//enums
-global.mode_NUM_POINTS = 0;
-global.mode_XSCALE     = 1;
-global.mode_YSCALE     = 2;
-
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
+/* DOLPHIN . */
 function main()
 {
-    initCommand();
-    clearSelection();
+    init_command();
+    clear_selection();
     global.cx = NaN;
     global.cy = NaN;
     global.mode = global.mode_NUM_POINTS;
@@ -63,34 +65,22 @@ function main()
     setRubberMode("POLYGON");
     updateDolphin(global.numPoints, global.sx, global.sy);
     spareRubber("POLYGON");
-    endCommand();
+    end_command();
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
 function click(x, y)
 {
 }
 
-//NOTE: move() is optional. It is run only after
-//      enableMoveRapidFire() is called. It
-//      will be called every time the mouse moves until
-//      disableMoveRapidFire() is called.
 function move(x, y)
 {
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("DOLPHIN", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
 }
@@ -99,13 +89,11 @@ function updateDolphin(numPts, xScale, yScale)
 {
     var i;
     var t;
-    var xx = NaN;
-    var yy = NaN;
-    var two_pi = 2*Math.PI;
+    float xx = 0.0;
+    float yy = 0.0;
 
-    for(i = 0; i <= numPts; i++)
-    {
-        t = two_pi/numPts*i; 
+    for(i = 0; i <= numPts; i++) {
+        t = (2 * embConstantPi) / numPts * i; 
 
         xx = 4/23*sin(62/33-58*t)+
         8/11*sin(10/9-56*t)+
@@ -240,10 +228,10 @@ function updateDolphin(numPts, xScale, yScale)
 ScriptValue
 heart_command(ScriptEnv * /* context */)
 {
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
 
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -260,9 +248,6 @@ global.sy = 1.0;
 global.numPoints;
 global.mode;
 
-
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
 function main()
 {
     init_command();
@@ -281,31 +266,19 @@ function main()
     end_command();
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
 function click(x, y)
 {
 }
 
-//NOTE: move() is optional. It is run only after
-//      enableMoveRapidFire() is called. It
-//      will be called every time the mouse moves until
-//      disableMoveRapidFire() is called.
 function move(x, y)
 {
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("HEART", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
 }
@@ -359,13 +332,6 @@ global.sy = 0.04; //Default
 global.numPoints;
 global.mode;
 
-//enums
-global.mode_NUM_POINTS = 0;
-global.mode_XSCALE     = 1;
-global.mode_YSCALE     = 2;
-
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
 function main()
 {
     initCommand();
@@ -381,31 +347,19 @@ function main()
     endCommand();
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
 function click(x, y)
 {
 }
 
-//NOTE: move() is optional. It is run only after
-//      enableMoveRapidFire() is called. It
-//      will be called every time the mouse moves until
-//      disableMoveRapidFire() is called.
 function move(x, y)
 {
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("SNOWFLAKE", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
 }
@@ -1069,9 +1023,7 @@ sin(263*t+2/7)-
 }
 #endif
 
-/* NOTE: main() is run every time the command is started.
- *       Use it to reset variables so they are ready to go.
- */
+/* STAR . */
 ScriptValue
 star_command(ScriptEnv * context)
 {
@@ -1091,9 +1043,6 @@ global.x2;
 global.y2;
 global.mode;
 
-
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
 function main()
 {
     init_command();
@@ -1108,9 +1057,6 @@ function main()
     setPromptPrefix(qsTr("Enter number of star points") + " {" + global.numPoints.toString() + "}: ");
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
 function click(x, y)
 {
     if (global.mode == global.mode_NUM_POINTS)
@@ -1147,10 +1093,6 @@ function click(x, y)
     }
 }
 
-//NOTE: move() is optional. It is run only after
-//      enableMoveRapidFire() is called. It
-//      will be called every time the mouse moves until
-//      disableMoveRapidFire() is called.
 function move(x, y)
 {
     if (global.mode == global.mode_NUM_POINTS)
@@ -1171,16 +1113,11 @@ function move(x, y)
     }
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("STAR", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
 function
 prompt(char *str)
 {

@@ -128,8 +128,8 @@ add_Rubber(ScriptEnv* context)
     }
 
     /* FIXME: ERROR CHECKING */
-    qreal mx = command_prompt("mousex").r;
-    qreal my = command_prompt("mousey").r;
+    qreal mx = command_prompt(context, "get mousex").r;
+    qreal my = command_prompt(context, "get mousey").r;
 
     if (objType == "ARC") {
         // TODO: handle this type

@@ -78,32 +78,38 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     setFocus();
 
     onWindowActivated();
+
+    pattern = emb_pattern_create();
+    if (!pattern) {
+        printf("Could not allocate memory for embroidery pattern\n");
+        exit(1);
+    }
 }
 
 MdiWindow::~MdiWindow()
 {
     qDebug("MdiWindow Destructor()");
+    emb_pattern_free(pattern);
 }
 
-bool MdiWindow::saveFile(const QString &fileName)
+bool
+MdiWindow::saveFile(const QString &fileName)
 {
     SaveObject saveObj(gscene, this);
     return saveObj.save(fileName);
 }
 
-bool MdiWindow::loadFile(const QString &fileName)
+bool
+MdiWindow::loadFile(const QString &fileName)
 {
     qDebug("MdiWindow loadFile()");
 
     QRgb tmpColor = getCurrentColor();
 
     QFile file(fileName);
-    if(!file.open(QFile::ReadOnly | QFile::Text))
-    {
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
         QMessageBox::warning(this, tr("Error reading file"),
-                             tr("Cannot read file %1:\n%2.")
-                             .arg(fileName)
-                             .arg(file.errorString()));
+            tr("Cannot read file %1:\n%2.").arg(fileName).arg(file.errorString()));
         return false;
     }
 
@@ -113,220 +119,49 @@ bool MdiWindow::loadFile(const QString &fileName)
     qDebug("ext: %s", qPrintable(ext));
 
     //Read
-    EmbPattern* p = emb_pattern_create();
-    if (!p) {
-        printf("Could not allocate memory for embroidery pattern\n");
-        exit(1);
-    }
-    int readSuccessful = 0;
-    QString readError;
-    int format = emb_identify_format(qPrintable(fileName));
+    int format = EMB_FORMAT_CSV; //emb_identify_format(qPrintable(fileName));
     if (format <= 0) {
-        readSuccessful = 0;
-        readError = "Unsupported read file type: " + fileName;
         qDebug("Unsupported read file type: %s\n", qPrintable(fileName));
+        QApplication::restoreOverrideCursor();
+        QMessageBox::warning(this, tr("Error reading pattern"),
+            tr("Unsupported read file type: ") + qPrintable(fileName));
+        return false;
     }
-    else {
-        readSuccessful = emb_pattern_read(p, qPrintable(fileName), format);
-        if (!readSuccessful) {
-            readError = "Reading file was unsuccessful: " + fileName;
-            qDebug("Reading file was unsuccessful: %s\n", qPrintable(fileName));
-        }
-    }
+
+    int readSuccessful = emb_pattern_read(pattern, qPrintable(fileName), format);
     if (!readSuccessful) {
-        QMessageBox::warning(this, tr("Error reading pattern"), tr(qPrintable(readError)));
-    }
-
-    if (readSuccessful) {
-        //emb_pattern_moveStitchListToPolylines(p); //TODO: Test more
-        int stitchCount = p->stitch_list->length;
-        QPainterPath path;
-
-        /*
-        if (p->circleObjList) {
-            EmbArray *curCircleObj = p->circleObjList;
-            while (curCircleObj) {
-                EmbCircle c = curCircleObj->circleObj.circle;
-                EmbColor thisColor = curCircleObj->circleObj.color;
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
-                //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                _main->nativeAddCircle(embCircle_centerX(c), embCircle_centerY(c), embCircle_radius(c), false, OBJ_RUBBER_OFF); //TODO: fill
-                curCircleObj = curCircleObj->next;
-            }
-        }
-        if(p->ellipseObjList) {
-            EmbEllipseObjectList* curEllipseObj = p->ellipseObjList;
-            while(curEllipseObj)
-            {
-                EmbEllipse e = curEllipseObj->ellipseObj.ellipse;
-                EmbColor thisColor = curEllipseObj->ellipseObj.color;
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
-                //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                _main->nativeAddEllipse(embEllipse_centerX(e), embEllipse_centerY(e), embEllipse_width(e), embEllipse_height(e), 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
-                curEllipseObj = curEllipseObj->next;
-            }
-        }
-        if(p->lineObjList)
-        {
-            EmbLineObjectList* curLineObj = p->lineObjList;
-            while(curLineObj)
-            {
-                EmbLine li = curLineObj->lineObj.line;
-                EmbColor thisColor = curLineObj->lineObj.color;
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
-                //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                _main->nativeAddLine(embLine_x1(li), embLine_y1(li), embLine_x2(li), embLine_y2(li), 0, OBJ_RUBBER_OFF); //TODO: rotation
-                curLineObj = curLineObj->next;
-            }
-        }
-        if(p->pathObjList)
-        {
-            //TODO: This is unfinished. It needs more work
-            EmbPathObjectList* curPathObjList = p->pathObjList;
-            while(curPathObjList)
-            {
-                QPainterPath pathPath;
-                EmbPointList* curPointList = curPathObjList->pathObj->pointList;
-                EmbColor thisColor = curPathObjList->pathObj->color;
-                if(curPointList)
-                {
-                    EmbPoint pp = curPointList->point;
-                    pathPath.moveTo(embPoint_x(pp), -embPoint_y(pp)); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
-                    curPointList = curPointList->next;
-                }
-                while(curPointList)
-                {
-                    EmbPoint pp = curPointList->point;
-                    pathPath.lineTo(embPoint_x(pp), -embPoint_y(pp)); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
-                    curPointList = curPointList->next;
-                }
-
-                QPen loadPen(qRgb(thisColor.r, thisColor.g, thisColor.b));
-                loadPen.setWidthF(0.35);
-                loadPen.setCapStyle(Qt::RoundCap);
-                loadPen.setJoinStyle(Qt::RoundJoin);
-
-                PathObject* obj = new PathObject(0,0, pathPath, loadPen.color().rgb());
-                obj->setObjectRubberMode(OBJ_RUBBER_OFF);
-                gscene->addItem(obj);
-
-                curPathObjList = curPathObjList->next;
-            }
-        }
-        if(p->pointObjList)
-        {
-            EmbPointObjectList* curPointObj = p->pointObjList;
-            while(curPointObj)
-            {
-                EmbPoint po = curPointObj->pointObj.point;
-                EmbColor thisColor = curPointObj->pointObj.color;
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
-                //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                _main->nativeAddPoint(embPoint_x(po), embPoint_y(po));
-                curPointObj = curPointObj->next;
-            }
-        }
-        if(p->polygonObjList)
-        {
-            EmbPolygonObjectList* curPolygonObjList = p->polygonObjList;
-            while(curPolygonObjList)
-            {
-                QPainterPath polygonPath;
-                bool firstPoint = false;
-                qreal startX = 0, startY = 0;
-                qreal x = 0, y = 0;
-                EmbPointList* curPointList = curPolygonObjList->polygonObj->pointList;
-                EmbColor thisColor = curPolygonObjList->polygonObj->color;
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
-                while(curPointList)
-                {
-                    EmbPoint pp = curPointList->point;
-                    x = embPoint_x(pp);
-                    y = -embPoint_y(pp); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
-
-                    if(firstPoint) { polygonPath.lineTo(x,y); }
-                    else           { polygonPath.moveTo(x,y); firstPoint = true; startX = x; startY = y; }
-
-                    curPointList = curPointList->next;
-                }
-
-                polygonPath.translate(-startX, -startY);
-                _main->nativeAddPolygon(startX, startY, polygonPath, OBJ_RUBBER_OFF);
-
-                curPolygonObjList = curPolygonObjList->next;
-            }
-        }
-        /* NOTE: Polylines should only contain NORMAL stitches. */
-        QPainterPath polylinePath;
-        polylinePath.moveTo(0.0, 0.0);
-        polylinePath.lineTo(10.0, 0.0);
-        polylinePath.lineTo(10.0, 10.0);
-        polylinePath.lineTo(0.0, 10.0);
-        polylinePath.lineTo(0.0, 0.0);
-        _main->nativeAddPolyline(0.0, 0.0, polylinePath, OBJ_RUBBER_OFF);
-        /*
-        if(p->polylineObjList) {
-            EmbPolylineObjectList* curPolylineObjList = p->polylineObjList;
-            while(curPolylineObjList)
-            {
-                QPainterPath polylinePath;
-                bool firstPoint = false;
-                qreal startX = 0, startY = 0;
-                qreal x = 0, y = 0;
-                EmbPointList* curPointList = curPolylineObjList->polylineObj->pointList;
-                EmbColor thisColor = curPolylineObjList->polylineObj->color;
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
-                while(curPointList)
-                {
-                    EmbPoint pp = curPointList->point;
-                    x = embPoint_x(pp);
-                    y = -embPoint_y(pp); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
-
-                    if(firstPoint) { polylinePath.lineTo(x,y); }
-                    else           { polylinePath.moveTo(x,y); firstPoint = true; startX = x; startY = y; }
-
-                    curPointList = curPointList->next;
-                }
-
-                polylinePath.translate(-startX, -startY);
-                _main->nativeAddPolyline(startX, startY, polylinePath, OBJ_RUBBER_OFF);
-
-                curPolylineObjList = curPolylineObjList->next;
-            }
-        }
-        if(p->rectObjList)
-        {
-            EmbRectObjectList* curRectObj = p->rectObjList;
-            while(curRectObj)
-            {
-                EmbRect r = curRectObj->rectObj.rect;
-                EmbColor thisColor = curRectObj->rectObj.color;
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
-                //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                _main->nativeAddRectangle(embRect_x(r), embRect_y(r), embRect_width(r), embRect_height(r), 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
-                curRectObj = curRectObj->next;
-            }
-        }
-        */
-
-        setCurrentFile(fileName);
-        _main->statusbar->showMessage("File loaded.");
-        QString stitches;
-        stitches.setNum(stitchCount);
-
-        if(_main->getSettingsGridLoadFromFile())
-        {
-            //TODO: Josh, provide me a hoop size and/or grid spacing from the pattern.
-        }
-
+        qDebug("Reading file was unsuccessful: %s\n", qPrintable(fileName));
         QApplication::restoreOverrideCursor();
+        QMessageBox::warning(this, tr("Error reading pattern"),
+            tr("Reading file was unsuccessful: ") + qPrintable(fileName));
+        return false;
     }
-    else
-    {
-        QApplication::restoreOverrideCursor();
-        QMessageBox::warning(this, tr("Error reading pattern"), tr("Cannot read pattern"));
+
+    qDebug("Read successful.\n");
+    //emb_pattern_moveStitchListToPolylines(pattern); //TODO: Test more
+    EmbPolyline polyline;
+    polyline.pointList = emb_array_create(EMB_VECTOR);
+    polyline.flagList = emb_array_create(EMB_FLAG);
+    polyline.lineType = 0;
+    polyline.color.r = 0;
+    polyline.color.g = 0;
+    polyline.color.b = 0;
+    for (int i=1; i<pattern->stitch_list->count; i++) {
+        EmbVector v;
+        v.x = pattern->stitch_list->stitch[i].x;
+        v.y = pattern->stitch_list->stitch[i].y;
+        emb_array_addVector(polyline.pointList, v);
     }
-    emb_pattern_free(p);
+    emb_array_addPolyline(pattern->geometry, polyline);
+
+    setCurrentFile(fileName);
+    _main->statusbar->showMessage("File loaded.");
+
+    if (_main->getSettingsGridLoadFromFile()) {
+        //TODO: Josh, provide me a hoop size and/or grid spacing from the pattern.
+    }
+
+    QApplication::restoreOverrideCursor();
 
     //Clear the undo stack so it is not possible to undo past this point.
     gview->getUndoStack()->clear();

@@ -31,10 +31,26 @@ extern "C" {
 #define SCRIPT_STRING                  4
 #define SCRIPT_BOOL                    5
 
+/* main() is run every time the command is started.
+ * Use it to reset variables so they are ready to go.
+ */
 #define CONTEXT_MAIN                   0
+/* click() is run only for left clicks. Middle clicks are used for
+ * panning. Right clicks bring up the context menu.
+ */
 #define CONTEXT_CLICK                  1
+/* move() is optional. It is run only after enableMoveRapidFire() is
+ * called. It will be called every time the mouse moves until
+ * disableMoveRapidFire() is called.
+ */
 #define CONTEXT_MOVE                   2
+/* context() is run when a context menu entry is chosen. */
 #define CONTEXT_CONTEXT                3
+/* prompt() is run when Enter is pressed.
+ * appendPromptHistory is automatically called before prompt()
+ * is called so calling it is only needed for erroneous input.
+ * Any text in the command prompt is sent as an uppercase string.
+ */
 #define CONTEXT_PROMPT                 4
 
 enum COMMAND_ACTIONS
@@ -434,7 +450,7 @@ ScriptValue script_real(double r);
 ScriptValue script_string(const char *s);
 ScriptValue do_nothing(ScriptEnv *context);
 ScriptValue stub_implement(const char *function);
-ScriptValue command_prompt(const char *line);
+ScriptValue command_prompt(ScriptEnv *context, const char *line);
 
 ScriptEnv *add_string_argument(ScriptEnv *context, const char *s);
 ScriptEnv *add_real_argument(ScriptEnv *context, double r);
@@ -461,16 +477,6 @@ void init_command(void);
 void clear_selection(void);
 void append_history(char *line);
 void end_command(void);
-
-/* Global variables with c linkage. */
-extern Command command_data[];
-
-extern ScriptValue script_null;
-extern ScriptValue script_true;
-extern ScriptValue script_false;
-
-extern const char *coverage_test[];
-extern int testing_mode;
 
 /* Commands */
 ScriptValue about_command(ScriptEnv*);
@@ -589,6 +595,16 @@ ScriptValue panpoint_command(ScriptEnv*);
 ScriptValue showalllayers_command(ScriptEnv*);
 ScriptValue thawalllayers_command(ScriptEnv*);
 ScriptValue unlockalllayers_command(ScriptEnv*);
+
+/* Global variables with c linkage. */
+extern Command command_data[];
+
+extern ScriptValue script_null;
+extern ScriptValue script_true;
+extern ScriptValue script_false;
+
+extern const char *coverage_test[];
+extern int testing_mode;
 
 #ifdef __cplusplus
 }

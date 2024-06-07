@@ -429,12 +429,9 @@ MainWindow::openFilesSelected(const QStringList& filesToOpen)
         for (int i = 0; i < filesToOpen.count(); i++) {
             qDebug("opening %s...", qPrintable(filesToOpen[i]));
 
-            if (!validFileFormat(filesToOpen[i])) {
-                continue;
-            }
-
             QMdiSubWindow* existing = findMdiWindow(filesToOpen[i]);
             if (existing) {
+                qDebug("File already exists, switching to it.");
                 mdiArea->setActiveSubWindow(existing);
                 continue;
             }
