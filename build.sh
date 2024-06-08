@@ -209,11 +209,8 @@ function assemble_release () {
 
 	get_dependancies $1
 
-	git clone https://github.com/embroidermodder/embroidermodder
-	cd embroidermodder
-
 	run_cmake
-	# build_docs
+	build_docs
 	mkdir em2
 	cp $BUILD_DIR/embroidermodder2 em2
 	cp LICENSE.md em2
@@ -223,12 +220,10 @@ function assemble_release () {
 		cd em2
 		../6.5.0/mingw_64/bin/windeployqt embroidermodder2.exe
 		cd ..
-		powershell Compress-Archive em2 ../embroidermodder_${VERSION}_windows.zip
+		powershell Compress-Archive em2 embroidermodder_${VERSION}_windows.zip
 	else
-		tar cf ../embroidermodder_${VERSION}_$1.tar em2
+		tar cf embroidermodder_${VERSION}_$1.tar em2
 	fi
-
-	cd ..
 
 }
 

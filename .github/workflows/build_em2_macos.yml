@@ -10,14 +10,13 @@ jobs:
   build_macos:
     runs-on: macos-latest
     steps:
-    - name: package
-      run: |
-        curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/main/build.sh > build.sh
-        bash build.sh --package-macos
-
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Build
+      run: bash build.sh --macos
     - name: archive production artifacts
       uses: actions/upload-artifact@v3
       with:
         name: MacOS Archive
-        path: embroidermodder/em2
+        path: em2
 
