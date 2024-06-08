@@ -199,7 +199,7 @@ function build_docs () {
 	#    mv site/emrm*.pdf ../site
 	#cd ..
 
-	mv site ../_site
+	mv site _site
 
 }
 
