@@ -4,6 +4,66 @@ BUILD_DIR="build"
 BUILD_TYPE="Release"
 VERSION="2.0.0-alpha"
 GENERATOR="Unix Makefiles"
+SYSTEM="linux"
+VERSION="2_0_0-alpha"
+
+function todo_category () {
+
+	echo "==================================================" >> $2
+	echo $1 >> $2
+	echo "==================================================" >> $2
+	# include the line number in output
+	# do not search temporary, object, and moc files
+	grep --line-number --recursive --exclude=*.*~ --exclude=*.o \
+		--exclude=moc*.cpp --exclude=*Makefile* --exclude=*TODO* \
+		--exclude=*generate-todo* --exclude=*_memleak*" $1 src >> $2
+	echo "" >> $2
+
+}
+
+function todo_report () {
+
+	OUTPUTFILE="TODO"
+
+	rm -f ${OUTPUTFILE}
+	echo "==================================================" >> ${OUTPUTFILE}
+	echo "This list was generated on:" >> ${OUTPUTFILE}
+	date >> ${OUTPUTFILE}
+	echo "==================================================" >> ${OUTPUTFILE}
+	echo "" >> ${OUTPUTFILE}
+
+	todo_category "TODO" ${OUTPUTFILE}
+	todo_category "BUG" ${OUTPUTFILE}
+	todo_category "HACK" ${OUTPUTFILE}
+	todo_category "WARNING" ${OUTPUTFILE}
+	todo_category "NOTE" ${OUTPUTFILE}
+
+}
+
+function valgrind_run () {
+
+	valgrind --leak-check=full --show-reachable=yes --error-limit=no \
+		--suppressions=valgrind-supp/valgrind-qt.supp \
+		--suppressions=valgrind-supp/valgrind-misc.supp \
+		--gen-suppressions=all --log-file=_memleak.txt -v ./embroidermodder2 "$@"
+	cat ./_memleak.txt | ./valgrind-supp/valgrind-create-suppressions.sh > _memleak.supp
+
+	MEMORYLEAKS=$(cat "_memleak.txt" | grep "All heap blocks were freed -- no leaks are possible")
+
+	echo "=============================="
+	if [[ -z "$MEMORYLEAKS" ]]; then
+	    echo $(cat "_memleak.txt" | grep "LEAK SUMMARY:")
+	    echo $(cat "_memleak.txt" | grep "definitely lost:")
+	    echo $(cat "_memleak.txt" | grep "indirectly lost:")
+	    echo $(cat "_memleak.txt" | grep "possibly lost:")
+	    echo $(cat "_memleak.txt" | grep "still reachable:")
+	    echo "Review _memleak.txt for more information."
+	else
+	    echo "No memory leaks found :D"
+	fi
+	echo "=============================="
+
+}
 
 function help_message () {
 
@@ -15,7 +75,6 @@ Options:
   -D,--docs               Run doxygen and build pdf docs.
   -d,--debug              Build embroidermodder with warnings as errors
                           and run in a debugger.
-  -g,--gcov               Compile together gcov output for optimization analysis.
   -b,--dependencies-brew  Install dependencies for Mac OS.
   -a,--dependencies-apt   Install dependencies for systems with the
                           aptitude package manager.
@@ -72,30 +131,45 @@ EOF
 
 }
 
-function build_release () {
+function run_cmake () {
 
-    git submodule init
-    git submodule update
+	git submodule init
+	git submodule update
 
-    cmake -S . -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
-    cd $BUILD_DIR
-    cmake --build .
-    cd ..
-
-}
-
-function assemble_release () {
-
-#    rm -fr $BUILD_DIR/CMake* $BUILD_DIR/embroidermodder2_autogen $BUILD_DIR/extern
-#    rm -fr embroidermodder2/*.cpp embroidermodder2/*.h
-#    cp -r $BUILD_DIR/* embroidermodder2
-#    mv *manual*pdf embroidermodder2
-
-    cp ../LICENSE.md .
+	cmake -S . -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
+	cd $BUILD_DIR
+	cmake --build .
+	cd ..
 
 }
 
-function build_docs () {
+# Run packagers with
+# curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/main/build.sh
+# bash build.sh --package-windows
+# etc.
+
+function get_dependancies () {
+
+	if [[ $1 = "windows" ]]; then
+		python -m pip install -U pip --upgrade pip
+	 	pip install aqtinstall
+		python -m aqt install-qt windows desktop 6.5.0 win64_mingw
+
+		echo "set (CMAKE_PREFIX_PATH \"6.5.0/mingw_64\")" >> config.cmake
+	fi
+
+	if [[ $1 = "macos" ]]; then
+		brew install qt6 qwt
+	fi
+
+	if [[ $1 = "linux" ]]; then
+		sudo apt update
+		sudo apt install build-essential cmake qt6-base-dev libqt6gui6 libqt6widgets6 \
+			libqt6printsupport6 libqt6core6 libgl-dev libglx-dev libopengl-dev
+		sudo apt upgrade
+	fi
+
+}
 
 # Lighter weight style static site generator for the main pages.
 #
@@ -106,127 +180,85 @@ function build_docs () {
 # emcc embroidery.c -o embroidery.wasm
 # mv embroidery.wasm ../downloads
 # cd ..
+function build_docs () {
 
-    python3 -m pip install --upgrade pip
+	python3 -m pip install --upgrade pip
 
-    pip install mkdocs
-    pip install mkdocs-bibtex
-    pip install mkdocs-with-pdf
-    pip install mkdocs-material
-    pip install mkdocs-table-reader-plugin
+	pip install mkdocs
+	pip install mkdocs-bibtex
+	pip install mkdocs-with-pdf
+	pip install mkdocs-material
+	pip install mkdocs-table-reader-plugin
 
-    rm -fr _site
+	rm -fr _site
 
-    mkdocs build
+	mkdocs build
 
-    #cd docs
-    #    mkdocs build
-    #    mv site/emrm*.pdf ../site
-    #cd ..
+	#cd docs
+	#    mkdocs build
+	#    mv site/emrm*.pdf ../site
+	#cd ..
 
-    mv site ../_site
+	mv site ../_site
+
+}
+
+function assemble_release () {
+
+	rm -fr em2
+
+	get_dependancies $1
+
+	git clone https://github.com/embroidermodder/embroidermodder
+	cd embroidermodder
+
+	run_cmake
+	# build_docs
+	mkdir em2
+	cp $BUILD_DIR/embroidermodder2 em2
+	cp LICENSE.md em2
+	cp -r docs/ em2
+	if [[ $1 = "windows" ]]; then
+		GENERATOR="MinGW Makefiles"
+		cd em2
+		../6.5.0/mingw_64/bin/windeployqt embroidermodder2.exe
+		cd ..
+		powershell Compress-Archive em2 ../embroidermodder_${VERSION}_windows.zip
+	else
+		tar cf ../embroidermodder_${VERSION}_$1.tar em2
+	fi
+
+	cd ..
 
 }
 
 function build_debug () {
-    TEST_FILES="samples/spiral/spiral5.csv samples/spiral/spiral6.csv"
-    TEST_FILES="$TEST_FILES samples/embroidermodder_logo/conflicts/Embroidermodder.DST"
-    TEST_FILES="$TEST_FILES samples/shamrockin/shamrockin.dst"
 
-    BUILD_DIR="debug"
-    BUILD_TYPE="Debug"
+	TEST_FILES="samples/spiral/spiral5.csv samples/spiral/spiral6.csv"
+	TEST_FILES="$TEST_FILES samples/embroidermodder_logo/conflicts/Embroidermodder.DST"
+	TEST_FILES="$TEST_FILES samples/shamrockin/shamrockin.dst"
 
-    git submodule init
-    git submodule update
+	BUILD_DIR="debug"
+	BUILD_TYPE="Debug"
 
-    cmake -S . -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
+	git submodule init
+	git submodule update
 
-    cd $BUILD_DIR
-    cp -R ../assets/* .
+	run_cmake
 
-    cmake --build .
+	cd $BUILD_DIR
+	cp -R ../assets/* .
 
-    lcov --directory . --capture --output-file em2.info
-    gdb -ex=run --ex=quit --args ./embroidermodder2 --cov $TEST_FILES
-    genhtml em2.info
+	lcov --directory . --capture --output-file em2.info
+	gdb -ex=run --ex=quit --args ./embroidermodder2 --cov $TEST_FILES
+	genhtml em2.info
 
-    cd ..
-}
-
-function gcoverage () {
-
-    cd build/debug/CMakeFiles/embroidermodder.dir/
-
-    gcov src/*.gcno
-
-    mkdir results
-    mv *.gcov results
-    mv results ../../../..
-
-}
-
-# Run packagers with
-# curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/master/build.sh
-# bash build.sh --package-msi
-# etc.
-
-function package_msi () {
-
-    git clone https://github.com/embroidermodder/embroidermodder
-    cd embroidermodder
-
-    python -m pip install -U pip --upgrade pip
-    pip install aqtinstall
-    python -m aqt install-qt windows desktop 6.5.0 win64_mingw
-
-    ls 6.5.0/mingw_64
-    echo "set (CMAKE_PREFIX_PATH \"6.5.0/mingw_64\")" >> config.cmake
-
-    GENERATOR="MinGW Makefiles" build_release
-    cd $BUILD_DIR
-    ../6.5.0/mingw_64/bin/windeployqt embroidermodder2.exe
-    #cpack -G WIX
-    cd ..
-    assemble_release
-    powershell Compress-Archive embroidermodder2 embroidermodder_2.0.0-alpha_windows.zip
-    mv *.zip ..
-    cd ..
-
-}
-
-function package_macos () {
-
-    brew install qt6 qwt
-
-    git clone https://github.com/embroidermodder/embroidermodder
-    cd embroidermodder
-    build_release
-    assemble_release
-    tar cf embroidermodder_2.0.0-alpha_macos.tar embroidermodder2
-    mv *.tar ..
-    cd ..
-
-}
-
-function package_linux () {
-
-    sudo apt update
-    sudo apt install build-essential cmake qt6-base-dev libqt6gui6 libqt6widgets6 \
-        libqt6printsupport6 libqt6core6 libgl-dev libglx-dev libopengl-dev
-    sudo apt upgrade
-
-    git clone https://github.com/embroidermodder/embroidermodder
-    cd embroidermodder
-    build_release
-    assemble_release
-    tar cf embroidermodder_2.0.0-alpha_linux.tar embroidermodder2
-    mv *.tar ..
-    cd ..
+	cd ..
 
 }
 
 if [[ "$#" -eq 0 ]]; then
-  help_message
+	help_message
 fi
 
 for arg in $@
@@ -237,18 +269,15 @@ do
       # GENERATOR="$OPTARG"
       echo "This is currently broken: please change the script variable directly."
       ;;
+    -b | --build) run_cmake;;
     -D | --docs) build_docs;;
     -d | --debug) build_debug;;
-    -g | --gcov) gcoverage;;
-    --gnu-linux | --linux | --ubuntu | --ubuntu-latest) build_release;;
-    --macos | --macos-latest) build_release;;
-    --windows | --windows-latest) GENERATOR="MinGW Makefiles" build_release;;
-    --package-msi) package_msi;;
-    --package-macos) package_macos;;
-    --package-linux) package_linux;;
-    --package) cd build && cpack;;
+    --gnu-linux | --linux | --ubuntu | --ubuntu-latest | --package-linux) assemble_release "linux";;
+    --macos | --macos-latest | --package-macos) assemble_release "macos";;
+    --windows | --windows-latest | --package-windows) assemble_release "linux";;
+    --package) assemble_release "linux";;
     -h | --help) long_help_message;;
-    -c | --clean) rm -fr build;;
+    -c | --clean) rm -fr ${BUILD_DIR};;
     build.sh) ;;
     *) help_message;;
   esac

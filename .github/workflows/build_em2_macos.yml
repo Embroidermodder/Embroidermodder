@@ -1,0 +1,23 @@
+name: Build (Mac OS)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build_macos:
+    runs-on: macos-latest
+    steps:
+    - name: package
+      run: |
+        curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/main/build.sh > build.sh
+        bash build.sh --package-macos
+
+    - name: archive production artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: MacOS Archive
+        path: embroidermodder/em2
+

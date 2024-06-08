@@ -1,0 +1,23 @@
+name: Build (GNU/Linux)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build_gnu_linux:
+    runs-on: ubuntu-latest
+    steps:
+    - name: package
+      run: |
+        curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/main/build.sh > build.sh
+        bash build.sh --gnu-linux
+
+    - name: archive production artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: GNU/Linux Archive
+        path: embroidermodder/em2
+
