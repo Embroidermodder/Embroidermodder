@@ -16,7 +16,7 @@ function todo_category () {
 	# do not search temporary, object, and moc files
 	grep --line-number --recursive --exclude=*.*~ --exclude=*.o \
 		--exclude=moc*.cpp --exclude=*Makefile* --exclude=*TODO* \
-		--exclude=*generate-todo* --exclude=*_memleak*" $1 src >> $2
+		--exclude=*generate-todo* --exclude=*_memleak* $1 src >> $2
 	echo "" >> $2
 
 }
