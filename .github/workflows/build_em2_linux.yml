@@ -17,6 +17,6 @@ jobs:
     - name: archive production artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: GNU/Linux Archive
+        name: GNU-Linux Archive
         path: em2
 
