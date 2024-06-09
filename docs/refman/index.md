@@ -39,20 +39,16 @@ The full list is actively maintained below.
 
 Embroidermodder 2:
 
-\begin{itemize}
-\item Jonathan Greig (\url{https://github.com/redteam316})
-\item Josh Varga (\url{https://github.com/JoshVarga})
-\item Robin Swift (\url{https://github.com/robin-swift})
-\end{itemize}
+* Jonathan Greig ([https://github.com/redteam316](https://github.com/redteam316))
+* Josh Varga ([https://github.com/JoshVarga](https://github.com/JoshVarga))
+* Robin Swift ([https://github.com/robin-swift](https://github.com/robin-swift))
 
 Embroidermodder 1:
 
-\begin{itemize}
-\item Josh Varga (\url{https://github.com/JoshVarga})
-\item Mark Pontius (\url{http://sourceforge.net/u/mpontius/profile})
-\end{itemize}
+* Josh Varga ([https://github.com/JoshVarga](https://github.com/JoshVarga))
+* Mark Pontius ([http://sourceforge.net/u/mpontius/profile](http://sourceforge.net/u/mpontius/profile))
 
-\subsection{Credits for Embroidermodder 2, libembroidery and all other related code}
+## Credits for Embroidermodder 2, libembroidery and all other related code
 
 If you have contributed and wish to be added to this list, alter the  README on Embroidermodder
 github page (https://github.com/Embroidermodder/Embroidermodder) and we'll copy it to the
@@ -60,9 +56,9 @@ libembroidery source code since that is credited to ``The Embroidermodder Team``
 
 \include{sections/credits.tex}
 
-\section{History}
+# History
 
-\subsection{Embroidermodder 1}
+## Embroidermodder 1
 
 The Embroidermodder Team is also inspired by the original Embroidermodder that
 was built by Mark Pontius and the same Josh Varga on SourceForge which

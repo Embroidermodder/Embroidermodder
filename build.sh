@@ -189,6 +189,7 @@ function build_docs () {
 	pip install mkdocs-with-pdf
 	pip install mkdocs-material
 	pip install mkdocs-table-reader-plugin
+	pip install markdown-grid-tables
 
 	rm -fr _site
 

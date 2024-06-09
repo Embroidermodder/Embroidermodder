@@ -1,892 +1,1377 @@
 # CAD Command Overview
 
-A _CAD command_ in Embroidermodder is referred to as an action and the data needed for it
-to function is stored in the `command_data`. For a regular user who wishes to use
-more shortcuts and macros: a list of commands can be fed into the prompt similar to
-a `GCODE` file.
+A _CAD command_ in Embroidermodder is referred to as an action and the data
+needed for it to function is stored in the `command_data`. For a regular user
+who wishes to use more shortcuts and macros: a list of commands can be fed into
+the prompt similar to a `GCODE` file.
 
-## CAD Command Table
+These are available on all platorms but with various levels of support and
+applicability.
 
-These are available on all platorms but with various levels of support and applicability.
+* [ABOUT](refman/commands/about)
+* [ADD-ARC](refman/commands/add-arc)
+* [ADD-CIRCLE](refman/commands/add-circle)
+* [ADD-DIM-LEADER](refman/commands/add-dim-leader)
+* [ADD-ELLIPSE](refman/commands/add-ellipse)
 
-| ID | Name | Arguments  | Description                                            |
-|----|------|------------|--------------------------------------------------------|
-| 0  | `NEW`  | none       | Create a new EmbPattern with a new tab in the GUI.     |
-| 1  | `OPEN` | char array | Open an EmbPattern with the supplied filename in argument 0. |
-| 2  | `SAVE` | char array | Save the current loaded EmbPattern to the supplied filename in argument 0. |
-| 3 | `SCALE` | selected objects, 1 float | Scale all selected objects by the number supplied, without selection scales the entire design. |
-| 4 | `CIRCLE` | mouse co-ords | Adds a circle to the design based on the supplied numbers, converts to stitches on save for stitch only formats. |
-| 5 | `OFFSET` | mouse co-ords | Shifts the selected objects by the amount given by the mouse co-ordinates. |
-| 6 | `EXTEND` | | |
-| 7 | `TRIM` | selected stitches | Sets the flag for the stitches selected to `TRIM`. |
-| 8 | `break_at_point` | | |
-| 9 | `break_2_points` | | |
-| 10 | `FILLET` | | |
-| 11 | `STAR` | mouse co-ords | Adds a star to the vector layer at the mouse co-ords. |
-| 12 | `TEXTSINGLE` | | |
-| 13 | `CHAMFER` | | |
-| 14 | `SPLIT` | A selected line in the vector layer. Otherwise 2 mouse co-ords in sequence. | Seperates stitch blocks by cutting threads between those either side of a line supplied by the user then rerouting the stitches. |
-| 15 | `AREA` | Selected objects | |
-| 16 | `TIME` | None | Prints the current time as ISO formatted UTC to the console. |
-| 17 | `PICKADD` | None | |
-| 16 | `ZOOMFACTOR` | float | Sets the zoom factor to the supplied argument. |
-| 17 | `PRODUCT` | None | Prints the name and build code of the running version of Embroidermodder to disambiguate between forks and build versions. The string may only start with \texttt{embroidermodder} if the build is from the official Embroidermodder project under the terms of the license. |
-| 18 | `PROGRAM/PROG` | | |
-| 19 | `ZOOMWINDOW` | | |
-| 20 | \indext{DIVIDE} | | |
-| 21 | \indext{FIND} | int | Select the stitch at the index given and center the view on it. |
-| 22 | \indext{RECORD} | None | Start recording all user input that passes through the actuator (i.e. actions from this table, with all the data passed as arguments) for forming macros. Stop recording if RECORD/PLAYBACK/END is issued. |
-| 23 | \indext{PLAYBACK} | None | |
-| 24 | \indext{ROTATE} | | |
-| 25 | \indext{RGB} | | |
-| 26 | \indext{move} | | |
-| 27 | \indext{grid} | | |
-| 28 | \indext{griphot} | | |
-| 29 | \indext{gripcolor} | | |
-| 30 | \indext{gripcool} | | |
-| 31 | \indext{gripsize} | | |
-| 32 | \indext{highlight} | | |
-| 33 | \indext{units} | | |
-| 34 | \indext{locatepoint} | | |
-| 35 | \indext{distance} | | |
-| 36 | `ARC` | | |
-| 37 | `ELLIPSE` | | |
-| 38 | `ARRAY` | | |
-| 39 | `POINT` | | |
-| 40 | `POLYLINE` | | |
-| 41 | `POLYGON` | | |
-| 42 | `rectangle` | | |
-| 43 | `line` | | |
-| 44 | `arc-rt` | | |
-| 45 | `dolphin` | | |
-| 46 | `heart` | | |
+[TOC]
 
-## Actions
+## ADD-GEOMETRY
 
-### ABOUT
++---------------+--------------------------------------------------------------+
+| **index**     | 5                                                            |
++---------------+--------------------------------------------------------------+
+| **main**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **arguments** | none                                                         |
++---------------+--------------------------------------------------------------+
+| **menu**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **toolbar**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **tooltip**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **statustip** |                                                              |
++---------------+--------------------------------------------------------------+
+| **alias**     |                                                              |
++---------------+--------------------------------------------------------------+
+| **shortcut**  |                                                              |
++---------------+--------------------------------------------------------------+
 
-| index | arguments | flags |
-|------|------|------|
-| 0 | none | |
+## ADD-HORIZONTAL-DIMENSION
 
-### ADD-ARC
++---------------+--------------------------------------------------------------+
+| **index**     | 6                                                            |
++---------------+--------------------------------------------------------------+
+| **main**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **arguments** | none                                                         |
++---------------+--------------------------------------------------------------+
+| **menu**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **toolbar**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **tooltip**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **statustip** |                                                              |
++---------------+--------------------------------------------------------------+
+| **alias**     |                                                              |
++---------------+--------------------------------------------------------------+
+| **shortcut**  |                                                              |
++---------------+--------------------------------------------------------------+
 
-| index | arguments | flags |
-|------|------|------|
-| 1 | mouse co-ords | |
 
-### ADD-CIRCLE
+## ADD-IMAGE
 
-| index | arguments | flags |
-|------|------|------|
-| 2 | mouse co-ords | |
++---------------+--------------------------------------------------------------+
+| **index**     | 7                                                            |
++---------------+--------------------------------------------------------------+
+| **main**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **arguments** | none                                                         |
++---------------+--------------------------------------------------------------+
+| **menu**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **toolbar**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **tooltip**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **statustip** |                                                              |
++---------------+--------------------------------------------------------------+
+| **alias**     |                                                              |
++---------------+--------------------------------------------------------------+
+| **shortcut**  |                                                              |
++---------------+--------------------------------------------------------------+
 
-### ADD-DIM-LEADER
+## ADD-INFINITE-LINE
 
-| index | arguments | flags |
-|------|------|------|
-| 3 | none | |
++---------------+--------------------------------------------------------------+
+| **index**     | 8                                                            |
++---------------+--------------------------------------------------------------+
+| **main**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **arguments** | none                                                         |
++---------------+--------------------------------------------------------------+
+| **menu**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **toolbar**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **tooltip**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **statustip** |                                                              |
++---------------+--------------------------------------------------------------+
+| **alias**     |                                                              |
++---------------+--------------------------------------------------------------+
+| **shortcut**  |                                                              |
++---------------+--------------------------------------------------------------+
 
-### ADD-ELLIPSE
 
-| index | arguments | flags |
-|------|------|------|
-4 & none & 
+## ADD-LINE
 
-### ADD-GEOMETRY
++---------------+--------------------------------------------------------------+
+| **index**     | 9                                                            |
++---------------+--------------------------------------------------------------+
+| **main**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **arguments** | none                                                         |
++---------------+--------------------------------------------------------------+
+| **menu**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **toolbar**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **tooltip**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **statustip** |                                                              |
++---------------+--------------------------------------------------------------+
+| **alias**     |                                                              |
++---------------+--------------------------------------------------------------+
+| **shortcut**  |                                                              |
++---------------+--------------------------------------------------------------+
 
-| index | arguments | flags |
-|------|------|------|
-5 & none & 
+## ADD-PATH
 
-### ADD-HORIZONTAL-DIMENSION
++---------------+--------------------------------------------------------------+
+| **index**     | 10                                                           |
++---------------+--------------------------------------------------------------+
+| **main**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **arguments** | none                                                         |
++---------------+--------------------------------------------------------------+
+| **menu**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **toolbar**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **tooltip**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **statustip** |                                                              |
++---------------+--------------------------------------------------------------+
+| **alias**     |                                                              |
++---------------+--------------------------------------------------------------+
+| **shortcut**  |                                                              |
++---------------+--------------------------------------------------------------+
 
-| index | arguments | flags |
-|------|------|------|
-6 & none & 
+## ADD-POINT
 
-### ADD-IMAGE
++---------------+--------------------------------------------------------------+
+| **index**     | 11                                                           |
++---------------+--------------------------------------------------------------+
+| **main**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **arguments** | none                                                         |
++---------------+--------------------------------------------------------------+
+| **menu**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **toolbar**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **tooltip**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **statustip** |                                                              |
++---------------+--------------------------------------------------------------+
+| **alias**     |                                                              |
++---------------+--------------------------------------------------------------+
+| **shortcut**  |                                                              |
++---------------+--------------------------------------------------------------+
 
-| index | arguments | flags |
-|------|------|------|
-7 & none & 
+## ADD-POLYGON
 
-### ADD-INFINITE-LINE
++---------------+--------------------------------------------------------------+
+| **index**     | 12                                                           |
++---------------+--------------------------------------------------------------+
+| **main**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **arguments** | none                                                         |
++---------------+--------------------------------------------------------------+
+| **menu**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **toolbar**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **tooltip**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **statustip** |                                                              |
++---------------+--------------------------------------------------------------+
+| **alias**     |                                                              |
++---------------+--------------------------------------------------------------+
+| **shortcut**  |                                                              |
++---------------+--------------------------------------------------------------+
 
-| index | arguments | flags |
-|------|------|------|
-8 & none & 
 
-### ADD-LINE
+## ADD-POLYLINE
 
-| index | arguments | flags |
-|------|------|------|
-| 9 | none | |
++---------------+--------------------------------------------------------------+
+| **index**     | 13                                                           |
++---------------+--------------------------------------------------------------+
+| **main**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **arguments** | none                                                         |
++---------------+--------------------------------------------------------------+
+| **menu**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **toolbar**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **tooltip**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **statustip** |                                                              |
++---------------+--------------------------------------------------------------+
+| **alias**     |                                                              |
++---------------+--------------------------------------------------------------+
+| **shortcut**  |                                                              |
++---------------+--------------------------------------------------------------+
 
-### ADD-PATH
 
-| index | arguments | flags |
-|------|------|------|
-| 10 | none | |
+## ADD-RAY
 
-### ADD-POINT
++---------------+--------------------------------------------------------------+
+| **index**     | 14                                                           |
++---------------+--------------------------------------------------------------+
+| **main**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **arguments** | none                                                         |
++---------------+--------------------------------------------------------------+
+| **menu**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **toolbar**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **tooltip**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **statustip** |                                                              |
++---------------+--------------------------------------------------------------+
+| **alias**     |                                                              |
++---------------+--------------------------------------------------------------+
+| **shortcut**  |                                                              |
++---------------+--------------------------------------------------------------+
 
-\index{ADD-POINT}
 
-index 11
+## ADD-RECTANGLE
 
-### ADD-POLYGON
++---------------+--------------------------------------------------------------+
+| **index**     | 15                                                           |
++---------------+--------------------------------------------------------------+
+| **main**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **arguments** | none                                                         |
++---------------+--------------------------------------------------------------+
+| **menu**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **toolbar**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **tooltip**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **statustip** |                                                              |
++---------------+--------------------------------------------------------------+
+| **alias**     |                                                              |
++---------------+--------------------------------------------------------------+
+| **shortcut**  |                                                              |
++---------------+--------------------------------------------------------------+
 
-\index{ADD-POLYGON}
 
-index 12
+## ADD-REGULAR-POLYGON
 
-### ADD-POLYLINE}
-\index{ADD-POLYLINE}
++---------------+--------------------------------------------------------------+
+| **index**     | 16                                                           |
++---------------+--------------------------------------------------------------+
+| **main**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **arguments** | none                                                         |
++---------------+--------------------------------------------------------------+
+| **menu**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **toolbar**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **tooltip**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **statustip** |                                                              |
++---------------+--------------------------------------------------------------+
+| **alias**     |                                                              |
++---------------+--------------------------------------------------------------+
+| **shortcut**  |                                                              |
++---------------+--------------------------------------------------------------+
 
-index 13
 
-### ADD-RAY}
-\index{ADD-RAY}
+## ADD-ROUNDED-RECTANGLE
 
-index 14
++---------------+--------------------------------------------------------------+
+| **index**     | 17                                                           |
++---------------+--------------------------------------------------------------+
+| **main**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **arguments** | none                                                         |
++---------------+--------------------------------------------------------------+
+| **menu**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **toolbar**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **tooltip**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **statustip** |                                                              |
++---------------+--------------------------------------------------------------+
+| **alias**     |                                                              |
++---------------+--------------------------------------------------------------+
+| **shortcut**  |                                                              |
++---------------+--------------------------------------------------------------+
 
-### ADD-RECTANGLE}
-\index{ADD-RECTANGLE}
+## ADD-RUBBER
 
-index 15
++---------------+--------------------------------------------------------------+
+| **index**     | 18                                                           |
++---------------+--------------------------------------------------------------+
+| **main**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **arguments** | none                                                         |
++---------------+--------------------------------------------------------------+
+| **menu**      |                                                              |
++---------------+--------------------------------------------------------------+
+| **toolbar**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **tooltip**   |                                                              |
++---------------+--------------------------------------------------------------+
+| **statustip** |                                                              |
++---------------+--------------------------------------------------------------+
+| **alias**     |                                                              |
++---------------+--------------------------------------------------------------+
+| **shortcut**  |                                                              |
++---------------+--------------------------------------------------------------+
 
-### ADD-REGULAR-POLYGON}
-\index{ADD-REGULAR-POLYGON}
 
-index 16
-
-### ADD-ROUNDED-RECTANGLE}
-\index{action}
-
-index 17
-
-### ADD-RUBBER}
-\index{ADD-RUBBER}
-
-index 18
-
-### ADD-SLOT}
-\index{action}
+## ADD-SLOT
 
 index 19
 
-### ADD-TEXT-MULTI}
-\index{action}
+
+
+## ADD-TEXT-MULTI
 
 index 20
 
-### ADD-TEXT-SINGLE}
-\index{action}
+
+
+## ADD-TEXT-SINGLE
 
 index 21
 
-### ADD-TO-SELECTION}
-\index{action}
+
+
+## ADD-TO-SELECTION
 
 index 22
 
-### ADD-TRIANGLE}
-\index{action}
+
+
+## ADD-TRIANGLE
 
 index 23
 
-### ADD-VERTICAL-DIMENSION}
-\index{action}
+
+
+## ADD-VERTICAL-DIMENSION
 
 index 24
 
-### ALERT}
-\index{action}
+
+
+## ALERT
 
 index 25
 
-### ALLOW-RUBBER}
-\index{action}
+
+
+## ALLOW-RUBBER
 
 index 26
 
-### APPEND-HISTORY}
-\index{action}
+
+
+## APPEND-HISTORY
 
 index 27
 
-### CALCULATE-ANGLE}
-\index{action}
+
+
+## CALCULATE-ANGLE
 
 index 28
 
-### CALCULATE-DISTANCE}
-\index{action}
+
+
+## CALCULATE-DISTANCE
 
 index 29
 
-### CHANGELOG}
-\index{action}
+
+
+## CHANGELOG
 
 index 30
 
-### CLEAR-RUBBER}
-\index{action}
+
+
+## CLEAR-RUBBER
 
 index 31
 
-### CLEAR-SELECTION}
-\index{action}
+
+
+## CLEAR-SELECTION
 
 index 32
 
-### COPY}
-\index{action}
+
+
+## COPY
 
 index 33
 
-### COPY-SELECTED}
-\index{action}
+
+
+## COPY-SELECTED
 
 index 34
 
-### CUT}
-\index{action}
+
+
+## CUT
 
 index 35
 
-### CUT-SELECTED}
-\index{action}
+
+
+## CUT-SELECTED
 
 index 36
 
-### DAY}
-\index{action}
+
+
+## DAY
 
 index 37
 
-### DEBUG}
-\index{action}
+
+
+## DEBUG
 
 index 38
 
-### DELETE-SELECTED}
-\index{action}
+
+
+## DELETE-SELECTED
 
 index 39
 
-### DESIGN-DETAILS}
-\index{action}
+
+
+## DESIGN-DETAILS
 
 index 40
 
-### DO-NOTHING}
-\index{action}
+
+
+## DO-NOTHING
 
 index 41
 
-### END}
-\index{action}
+
+
+## END
 
 index 42
 
-### ERROR}
-\index{action}
+
+
+## ERROR
 
 index 43
 
-### HELP}
-\index{action}
+
+
+## HELP
 
 index 44
 
-### ICON}
-\index{action}
+
+
+## ICON
 
 index 45
 
-### INIT}
-\index{action}
+Example Call
+
+```
+ICON 32
+```
+
+## INIT
 
 index 46
 
-### MESSAGEBOX}
-\index{action}
+
+
+## MESSAGEBOX
 
 index 47, 3 char arrays deliminated by quotes Example Call
 
-### MIRROR-SELECTED}
-\index{action}
+Example Call
+
+```
+> MESSAGEBOX "alert" "" ""
+```
+
+## MIRROR-SELECTED
 
 index 48
 
-### MOUSE-X}
-\index{action}
+## MOUSE-X
 
 index 49
 
-### MOUSE-Y}
-\index{action}
+Example Call
+
+```
+> MOUSE-X
+321
+```
+
+## MOUSE-Y
 
 index 50
 
-### MOVE-SELECTED}
-\index{action}
+```
+> MOUSE-Y
+221
+```
+
+## MOVE-SELECTED
 
 index 51
 
-### NEW}
-\index{action}
+Example
 
-index 52
+```
+> 
+```
 
-### NIGHT}
-\index{action}
+## NEW
 
-index 53
+| index | arguments | flags |
+|------|------|------|
+| 52 | none | |
 
-### NUM-SELECTED}
-\index{action}
+Create a new EmbPattern with a new tab in the GUI.
 
-index 54
+## NIGHT
 
-### OPEN}
-\index{action}
+| index | arguments | flags |
+|------|------|------|
+| 53 | none | |
 
-index 55
 
-### PAN}
-\index{action}
+
+## NUM-SELECTED
+
+| index | arguments | flags |
+|------|------|------|
+| 54 | none | |
+
+```
+> NUM-SELECTED
+12
+```
+
+## OPEN
+
+| index | arguments | flags |
+|------|------|------|
+| 54 | string | |
+
+Open an EmbPattern with the supplied filename in argument 0.
+
+```
+> OPEN designs/flower.pes
+12
+```
+
+## PAN
 
 index 56
 
-### PASTE}
-\index{PASTE}
+
+
+## PASTE
 
 index 57
 
-### PASTE-SELECTED}
-\index{PASTE-SELECTED}
+
+
+## PASTE-SELECTED
 
 index 58
 
-### PERPENDICULAR-DISTANCE}
-\index{PERPENDICULAR-DISTANCE}
+
+
+## PERPENDICULAR-DISTANCE
 
 index 59
 
-### PLATFORM}
-\index{PLATFORM}
+
+
+## PLATFORM
 
 index 60
 
-### PREVIEW-OFF}
-\index{PREVIEW-OFF}
+
+
+## PREVIEW-OFF
 
 index 61
 
-### PREVIEW-ON}
-\index{PREVIEW-ON}
+
+
+## PREVIEW-ON
 
 index 62
 
-### PRINT}
-\index{PRINT}
+
+
+## PRINT
 
 index 63
 
-### PRINT-AREA}
-\index{PRINT-AREA}
+
+
+## PRINT-AREA
 
 index 64
 
-### QSNAP-X}
-\index{QSNAP-X}
+
+
+## QSNAP-X
 
 index 65
 
-### QSNAP-Y}
-\index{QSNAP-Y}
+
+
+## QSNAP-Y
 
 index 66
 
-### EXIT}
-\index{EXIT}
+
+
+## EXIT
 
  index 67
 
-### REDO}
-\index{REDO}
+
+
+## REDO
 
 index 68
 
-### ROTATE-SELECTED}
-\index{ROTATE-SELECTED}
+
+
+## ROTATE-SELECTED
 
 index 69
 
-### RUBBER}
-\index{RUBBER}
+
+
+## RUBBER
 
 index 70
 
-### SCALE-SELECTED}
-\index{SCALE-SELECTED}
+
+
+## SCALE-SELECTED
 
 index 71
 
-### SELECT-ALL}
-\index{SELECT-ALL}
+
+
+## SELECT-ALL
 
 index 72
 
-### SETTINGS-DIALOG}
-\index{action}
+
+
+## SETTINGS-DIALOG
 
 index 73
 
-### SET-BACKGROUND-COLOR}
-\index{action}
+
+
+## SET-BACKGROUND-COLOR
 
 index 74
 
-### SET-CROSSHAIR-COLOR}
-\index{action}
+
+
+## SET-CROSSHAIR-COLOR
 
 index 75
 
-### SET-CURSOR-SHAPE}
-\index{action}
+
+
+## SET-CURSOR-SHAPE
 
 index 76
 
-### SET-GRID-COLOR}
-\index{action}
+
+
+## SET-GRID-COLOR
 
 index 77
 
-### SET-PROMPT-PREFIX}
-\index{action}
+
+
+## SET-PROMPT-PREFIX
 
 index 78
 
-### SET-RUBBER-FILTER}
-\index{action}
+
+
+## SET-RUBBER-FILTER
 
 index 79
 
-### SET-RUBBER-MODE}
-\index{action}
+
+
+## SET-RUBBER-MODE
 
 index 80
 
-### SET-RUBBER-POINT}
-\index{action}
+
+
+## SET-RUBBER-POINT
 
 index 81
 
-### SET-RUBBER-TEXT}
-\index{action}
+
+
+## SET-RUBBER-TEXT
 
 index 82
 
-### SPARE-RUBBER}
-\index{action}
+
+
+## SPARE-RUBBER
 
 index 83
 
-### TIP-OF-THE-DAY}
-\index{action}
+
+
+## TIP-OF-THE-DAY
 
 index 84
 
-### TODO}
-\index{action}
+
+
+## TODO
 
  index 85
 
-### UNDO}
-\index{action}
+
+
+## UNDO
 
  index 86
 
-### VERSION}
-\index{action}
+
+
+## VERSION
 
 index 87
 
-### VULCANIZE}
-\index{action}
+
+
+## VULCANIZE
 
 index 88
 
-### WHATS-THIS}
-\index{action}
+
+
+## WHATS-THIS
 
 index 89
 
-### WINDOW-CLOSE}
-\index{action}
+
+
+## WINDOW-CLOSE
 
 index 90
 
-### WINDOW-CLOSE-ALL}
-\index{action}
+
+
+## WINDOW-CLOSE-ALL
 
 index 91
 
-### WINDOW-TILE}
-\index{action}
+
+
+## WINDOW-TILE
 
 index 92
 
-### WINDOW-CASCADE}
-\index{action}
+
+
+## WINDOW-CASCADE
 
 index 93
 
-### WINDOW-NEXT}
-\index{action}
+
+
+## WINDOW-NEXT
 
 index 94
 
-### WINDOW-PREVIOUS}
-\index{action}
+
+
+## WINDOW-PREVIOUS
 
 index 95
 
-### ZOOM}
-\index{action}
+
+
+## ZOOM
 
  index 96
 
-### ZOOM-IN}
-\index{action}
+
+
+## ZOOM-IN
 
 index 97
 
-### TEST}
-\index{action}
+
+
+## TEST
 
  index 98
 
-### SLEEP}
-\index{action}
+
+
+## SLEEP
 
 index 99
 
-### LAYER-EDITOR}
-\index{action}
+
+
+## LAYER-EDITOR
 
 index 100
 
-### MAKE-LAYER-CURRENT}
-\index{action}
+
+
+## MAKE-LAYER-CURRENT
 
 index 101
 
-### TEXT-BOLD}
-\index{action}
+
+
+## TEXT-BOLD
 
 index 102
 
-### TEXT-ITALIC}
-\index{action}
+
+
+## TEXT-ITALIC
 
 index 103
 
-### TEXT-UNDERLINE}
-\index{action}
+
+
+## TEXT-UNDERLINE
 
 index 104
 
-### TEXT-STRIKEOUT}
-\index{action}
+
+
+## TEXT-STRIKEOUT
 
 index 105
 
-### TEXT-OVERLINE}
-\index{action}
+
+
+## TEXT-OVERLINE
 
 index 106
 
-### LAYER-PREVIOUS}
-\index{action}
+
+
+## LAYER-PREVIOUS
 
 index 107
 
-### ICON16}
-\index{action}
+
+
+## ICON16
 
 index 108
 
-### ICON24}
-\index{action}
+
+
+## ICON24
 
 index 109
 
-### ICON32}
-\index{action}
+
+
+## ICON32
 
 index 110
 
-### ICON48}
-\index{action}
+
+
+## ICON48
 
 index 111
 
-### ICON64}
-\index{action}
+
+
+## ICON64
 
 index 112
 
-### ICON128}
-\index{action}
+
+
+## ICON128
 
 index 113
 
-### SAVE}
-\index{action}
 
-index 114
 
-### SAVEAS}
-\index{action}
+## SAVE
 
-index 115
+| index | arguments | flags |
+|------|------|------|
+| 114 | none | |
 
-### PAN-REAL-TIME}
-\index{action}
+Save the current loaded EmbPattern to the current filename.
+
+## SAVEAS
+
+| index | arguments | flags |
+|------|------|------|
+| 115 | string | |
+
+Save the current loaded EmbPattern to the supplied filename in argument 0.
+
+## PAN-REAL-TIME
 
 index 116
 
-### PAN-POINT}
-\index{action}
+
+
+## PAN-POINT
 
 index 117
 
-### PAN-LEFT}
-\index{action}
+
+
+## PAN-LEFT
 
 index 118
 
-### PAN-RIGHT}
-\index{action}
+
+
+## PAN-RIGHT
 
 index 119
 
-### PAN-UP}
-\index{action}
+
+
+## PAN-UP
 
 index 120
 
-### PAN-DOWN}
-\index{action}
+
+
+## PAN-DOWN
 
 index 121
 
-### ZOOM-REAL-TIME}
-\index{action}
+
+
+## ZOOM-REAL-TIME
 
 index 122
 
-### ZOOM-PREVIOUS}
-\index{action}
+
+
+## ZOOM-PREVIOUS
 
 index 123
 
-### ZOOM-WINDOW}
-\index{action}
+
+
+## ZOOM-WINDOW
 
 index 124
 
-### ZOOM-DYNAMIC}
-\index{action}
+
+
+## ZOOM-DYNAMIC
 
 index 125
 
-### ZOOM-OUT}
-\index{action}
+
+
+## ZOOM-OUT
 
 index 126
 
-### ZOOM-EXTENTS}
-\index{action}
+
+
+## ZOOM-EXTENTS
 
 index 127
 
-### LAYERS}
-\index{action}
+
+
+## LAYERS
 
 index 128
 
-### LAYER-SELECTOR}
-\index{action}
+
+
+## LAYER-SELECTOR
 
 index 129
 
-### TREBLECLEF}
-\index{action}
+
+
+## TREBLECLEF
 
 index 130
 
-### COLOR-SELECTOR}
-\index{action}
+
+
+## COLOR-SELECTOR
 
 index 131
 
-### LINE-TYPE-SELECTOR}
-\index{action}
+
+
+## LINE-TYPE-SELECTOR
 
 index 132
 
-### LINE-WEIGHT-SELECTOR}
-\index{action}
+
+
+## LINE-WEIGHT-SELECTOR
 
 index 133
 
-### ZOOM-SCALE}
-\index{action}
+
+
+## ZOOM-SCALE
 
 index 134
 
-### ZOOM-CENTER}
-\index{action}
+
+
+## ZOOM-CENTER
 
 index 135
 
-### HIDE-ALL-LAYERS}
-\index{action}
+
+
+## HIDE-ALL-LAYERS
 
 index 136
 
-### ZOOM-SELECTED}
-\index{action}
+
+
+## ZOOM-SELECTED
 
 index 137
 
-### ZOOM-ALL}
-\index{action}
+
+
+## ZOOM-ALL
 
 index 138
 
-### ADD-HEART}
-\index{action}
+
+
+## ADD-HEART
 
 index 139
 
-### ADD-SINGLE-LINE-TEXT}
-\index{action}
+
+
+## ADD-SINGLE-LINE-TEXT
 
 index 140
 
-### SHOW-ALL-LAYERS}
-\index{action}
+
+
+## SHOW-ALL-LAYERS
 
 index 141
 
-### FREEZE-ALL-LAYERS}
-\index{action}
+
+
+## FREEZE-ALL-LAYERS
 
 index 142
 
-### THAW-ALL-LAYERS}
-\index{action}
+
+
+## THAW-ALL-LAYERS
 
 index 143
 
-### LOCK-ALL-LAYERS}
-\index{action}
+
+
+## LOCK-ALL-LAYERS
 
 index 144
 
-### UNLOCK-ALL-LAYERS}
-\index{UNLOCK-ALL-LAYERS}
+
+
+## UNLOCK-ALL-LAYERS
 
 index 145
 
-### ADD-DOLPHIN}
-\index{ADD-DOLPHIN}
+
+
+## ADD-DOLPHIN
 
 index 146
 
-### ADD-DISTANCE}
-\index{ADD-DISTANCE}
+
+
+## ADD-DISTANCE
 
 index 147
 
-### LOCATE-POINT}
-\index{LOCATE-POINT}
+
+
+## LOCATE-POINT
 
 index 148
 
-### QUICKSELECT}
-\index{QUICKSELECT}
+
+
+## QUICKSELECT
 
 index 149
 
-### SPELLCHECK}
-\index{SPELLCHECK}
+
+
+## SPELLCHECK
 
 index 150
 
-### DISTANCE}
-\index{DISTANCE}
+
+
+## DISTANCE
 
 index 151
 
-### MOVE}
-\index{MOVE}
+
+
+## MOVE
 
 index 152
 
-### QUICKLEADER}
-\index{QUICKLEADER}
+
+
+## QUICKLEADER
 
 index 153
 
-### RGB}
-\index{RGB}
+
+
+## RGB
 
  index 154
 
-### ROTATE}
-\index{ROTATE}
+
+
+## ROTATE
 
 index 155
 
-### SANDBOX}
-\index{SANDBOX}
+
+
+## SANDBOX
 
 index 156
 
-### ADD-SNOWFLAKE}
-\index{ADD-SNOWFLAKE}
+
+
+## ADD-SNOWFLAKE
 
 index 157
 
-### ADD-STAR}
-\index{ADD-STAR}
 
-index 158
 
-### DELETE}
-\index{DELETE}
+## ADD-STAR
+
+| 158 | `STAR` | mouse co-ords |
+
+Adds a star to the vector layer at the mouse co-ords.
+
+## DELETE
 
 index 159
 
-### SCALE}
-\index{SCALE}
 
-index 160
 
-### SINGLE-LINE-TEXT}
-\index{SINGLE-LINE-TEXT}
+## SCALE
+
+| index | arguments | flags |
+|------|------|------|
+| 160 | selected objects, real number | |
+
+Scale all selected objects by the number supplied, without selection scales the
+entire design.
+
+## SINGLE-LINE-TEXT
 
 index 161
 
-### SYSWINDOWS}
-\index{SYSWINDOWS}
+
+
+## SYSWINDOWS
 
 index 162
+
+
+## TRIM
+
+index 163
+selected stitches 
+
+Sets the flag for the stitches selected to `TRIM`.
+
+## SPLIT
+
+index 164
+A selected line in the vector layer. Otherwise 2 mouse co-ords in sequence.
+
+Seperates stitch blocks by cutting threads between those either side of a line
+supplied by the user then rerouting the stitches.
+
+## TIME
+
+index 165
+
+Prints the current time as ISO formatted UTC to the console.
+
+## ZOOMFACTOR
+
+index 166 argument real number
+
+Sets the zoom factor to the supplied argument.
+
+## PRODUCT
+
+index 167
+
+Prints the name and build code of the running version of Embroidermodder to
+disambiguate between forks and build versions. The string may only start with
+`embroidermodder` if the build is from the official Embroidermodder project
+under the terms of the license.
+
+## OFFSET
+
+| index | arguments | flags |
+|------|------|------|
+| 168 | mouse co-ords | |
+
+Shifts the selected objects by the amount given by the mouse co-ordinates.
+
+## FIND
+
+index 169 argument int
+
+Select the stitch at the index given and center the view on it.
+
+## RECORD
+
+index 170
+
+Start recording all user input that passes through the actuator (i.e. actions
+from this table, with all the data passed as arguments) for forming macros. Stop
+recording if RECORD/PLAYBACK/END is issued.
+
+## BREAK_AT_POINT
+
+index 171
+
+## BREAK_2_POINTS
+
+index 172
+
+## UNITS
+
+index 173
+
+## DIVIDE
+
+index 174
+
+## GRID
+
+index 175
+
+## GRIPHOT
+
+index 176
+
+## GRIPCOLOR
+
+index 177
+
+## GRIPCOOL
+
+index 178
+
+## GRIPSIZE
+
+index 179
+
+## AREA
+
+index 180
+
+| 15 | `AREA` | Selected objects |
+
+## CHAMFER
+
+index 181
+
+## PICK-ADD
+
+index 182
+
+## FILLET
+
+index 182
+
+## EXTEND
+
+index 183
+
+## PROGRAM
+
+index 184
+
+Aliases PROG
+
+## PLAYBACK
+
+index 185
+
+## HIGHLIGHT
+
+index 186
+
+## ARRAY
+
+index 187
+
+## ARC-RT
+
+index 188
+
+FIXME: Not sure what this one means.
