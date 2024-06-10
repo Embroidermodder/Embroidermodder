@@ -28,8 +28,6 @@
 #include <QGraphicsView>
 #include <QGraphicsItem>
 
-#include "../extern/libembroidery/embroidery.h"
-
 MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags) : QMdiSubWindow(parent, wflags)
 {
     mdiArea = parent;
@@ -157,7 +155,7 @@ MdiWindow::loadFile(const QString &fileName)
     setCurrentFile(fileName);
     _main->statusbar->showMessage("File loaded.");
 
-    if (_main->getSettingsGridLoadFromFile()) {
+    if (_main->settings_grid_load_from_file) {
         //TODO: Josh, provide me a hoop size and/or grid spacing from the pattern.
     }
 
@@ -173,14 +171,13 @@ MdiWindow::loadFile(const QString &fileName)
     return fileWasLoaded;
 }
 
-void MdiWindow::print()
+void
+MdiWindow::print()
 {
     QPrintDialog dialog(&printer, this);
-    if(dialog.exec() == QDialog::Accepted)
-    {
+    if (dialog.exec() == QDialog::Accepted) {
         QPainter painter(&printer);
-        if(_main->getSettingsPrintingDisableBG())
-        {
+        if (_main->settings_printing_disable_bg) {
             //Save current bg
             QBrush brush = gview->backgroundBrush();
             //Save ink by not printing the bg at all
@@ -190,8 +187,7 @@ void MdiWindow::print()
             //Restore the bg
             gview->setBackgroundBrush(brush);
         }
-        else
-        {
+        else {
             //Print, fitting the viewport contents into a full page
             gview->render(&painter);
         }
@@ -203,7 +199,8 @@ void MdiWindow::print()
 //TODO: Should BMC be limited to ~32KB or is this a mix up with Bitmap Cache?
 //TODO: Is there/should there be other embedded data in the bitmap besides the image itself?
 //NOTE: Can save a Singer BMC image (An 8bpp, 130x113 pixel colored bitmap image)
-void MdiWindow::saveBMC()
+void
+MdiWindow::saveBMC()
 {
     //TODO: figure out how to center the image, right now it just plops it to the left side.
     QImage img(150, 150, QImage::Format_ARGB32_Premultiplied);
@@ -212,16 +209,15 @@ void MdiWindow::saveBMC()
 
     QPainter painter(&img);
     QRectF targetRect(0,0,150,150);
-    if(_main->getSettingsPrintingDisableBG()) //TODO: Make BMC background into it's own setting?
-    {
+    if(_main->settings_printing_disable_bg) {
+        //TODO: Make BMC background into it's own setting?
         QBrush brush = gscene->backgroundBrush();
         gscene->setBackgroundBrush(Qt::NoBrush);
         gscene->update();
         gscene->render(&painter, targetRect, extents, Qt::KeepAspectRatio);
         gscene->setBackgroundBrush(brush);
     }
-    else
-    {
+    else {
         gscene->update();
         gscene->render(&painter, targetRect, extents, Qt::KeepAspectRatio);
     }
@@ -229,14 +225,16 @@ void MdiWindow::saveBMC()
     img.convertToFormat(QImage::Format_Indexed8, Qt::ThresholdDither|Qt::AvoidDither).save("test.bmc", "BMP");
 }
 
-void MdiWindow::setCurrentFile(const QString &fileName)
+void
+MdiWindow::setCurrentFile(const QString &fileName)
 {
     curFile = QFileInfo(fileName).canonicalFilePath();
     setWindowModified(false);
     setWindowTitle(getShortCurrentFile());
 }
 
-QString MdiWindow::getShortCurrentFile()
+QString
+MdiWindow::getShortCurrentFile()
 {
     return QFileInfo(curFile).fileName();
 }

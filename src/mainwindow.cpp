@@ -127,12 +127,12 @@ MainWindow::MainWindow() : QMainWindow(0)
     toolbarText       = addToolBar(tr("Text"));
     toolbarPrompt     = addToolBar(tr("Command Prompt"));
     //Selectors
-    layerSelector      = new QComboBox(this);
-    colorSelector      = new QComboBox(this);
-    linetypeSelector   = new QComboBox(this);
+    layerSelector = new QComboBox(this);
+    colorSelector = new QComboBox(this);
+    linetypeSelector = new QComboBox(this);
     lineweightSelector = new QComboBox(this);
-    textFontSelector   = new QFontComboBox(this);
-    textSizeSelector   = new QComboBox(this);
+    textFontSelector = new QFontComboBox(this);
+    textSizeSelector = new QComboBox(this);
 
     numOfDocs = 0;
     docIndex = 0;
@@ -150,12 +150,12 @@ MainWindow::MainWindow() : QMainWindow(0)
     //layout->setMargin(0);
     vbox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     mdiArea = new MdiArea(this, vbox);
-    mdiArea->useBackgroundLogo(getSettingsGeneralMdiBGUseLogo());
-    mdiArea->useBackgroundTexture(getSettingsGeneralMdiBGUseTexture());
-    mdiArea->useBackgroundColor(getSettingsGeneralMdiBGUseColor());
-    mdiArea->setBackgroundLogo(getSettingsGeneralMdiBGLogo());
-    mdiArea->setBackgroundTexture(getSettingsGeneralMdiBGTexture());
-    mdiArea->setBackgroundColor(QColor(getSettingsGeneralMdiBGColor()));
+    mdiArea->useBackgroundLogo(settings_general_mdi_bg_use_logo);
+    mdiArea->useBackgroundTexture(settings_general_mdi_bg_use_texture);
+    mdiArea->useBackgroundColor(settings_general_mdi_bg_use_color);
+    mdiArea->setBackgroundLogo(settings_general_mdi_bg_logo);
+    mdiArea->setBackgroundTexture(settings_general_mdi_bg_texture);
+    mdiArea->setBackgroundColor(QColor(settings_general_mdi_bg_color));
     mdiArea->setViewMode(QMdiArea::TabbedView);
     mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -169,8 +169,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     this->setFocusProxy(prompt);
     mdiArea->setFocusProxy(prompt);
 
-    prompt->setPromptTextColor(QColor(getSettingsPromptTextColor()));
-    prompt->setPromptBackgroundColor(QColor(getSettingsPromptBGColor()));
+    prompt->setPromptTextColor(QColor(settings_prompt_text_color));
+    prompt->setPromptBackgroundColor(QColor(settings_prompt_bg_color));
 
     connect(prompt, SIGNAL(startCommand(const QString&)), this, SLOT(logPromptInput(const QString&)));
 
@@ -209,7 +209,7 @@ MainWindow::MainWindow() : QMainWindow(0)
             connect(prompt, SIGNAL(historyAppended(const QString&)), this, SLOT(promptHistoryAppended(const QString&)));
 
     //create the Object Property Editor
-    dockPropEdit = new PropertyEditor(appDir + "/icons/" + settings_general_icon_theme, getSettingsSelectionModePickAdd(), prompt, this);
+    dockPropEdit = new PropertyEditor(appDir + "/icons/" + settings_general_icon_theme, settings_selection_mode_pickadd, prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockPropEdit);
     connect(dockPropEdit, SIGNAL(pickAddModeToggled()), this, SLOT(pickAddModeToggled()));
 
@@ -252,7 +252,7 @@ MainWindow::MainWindow() : QMainWindow(0)
         } while (!tipLine.isNull());
     }
 
-    if (getSettingsGeneralTipOfTheDay() && (!testing_mode)) {
+    if (settings_general_tip_of_the_day && (!testing_mode)) {
         tipOfTheDay();
     }
 
@@ -362,13 +362,8 @@ MdiArea* MainWindow::getMdiArea()
     return mdiArea;
 }
 
-MainWindow* MainWindow::getApplication()
-{
-    qDebug("MainWindow::getApplication()");
-    return _main;
-}
-
-void MainWindow::newFile()
+void
+MainWindow::newFile()
 {
     qDebug("MainWindow::newFile()");
     docIndex++;
@@ -381,8 +376,7 @@ void MainWindow::newFile()
     windowMenuAboutToShow();
 
     View* v = mdiWin->getView();
-    if(v)
-    {
+    if (v) {
         v->recalculateLimits();
         v->zoomExtents();
     }
@@ -396,7 +390,7 @@ MainWindow::openFile(bool recent, const QString& recentFile)
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
     QStringList files;
-    bool preview = getSettingsOpenThumbnail();
+    bool preview = settings_opensave_open_thumbnail;
     openFilesPath = settings_opensave_recent_directory;
 
     //Check to see if this from the recent files list
@@ -480,30 +474,33 @@ MainWindow::openFilesSelected(const QStringList& filesToOpen)
     windowMenuAboutToShow();
 }
 
-void MainWindow::openrecentfile()
+void
+MainWindow::openrecentfile()
 {
     qDebug("MainWindow::openrecentfile()");
 
     //Check to see if this from the recent files list
     QAction* recentSender = qobject_cast<QAction*>(sender());
-    if(recentSender)
-    {
+    if (recentSender) {
         openFile(true, recentSender->data().toString());
     }
 }
 
-void MainWindow::savefile()
+void
+MainWindow::savefile()
 {
     qDebug("MainWindow::savefile()");
 }
 
-void MainWindow::saveasfile()
+void
+MainWindow::saveasfile()
 {
     qDebug("MainWindow::saveasfile()");
     // need to find the activeSubWindow before it loses focus to the FileDialog
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(!mdiWin)
+    if (!mdiWin) {
         return;
+    }
 
     QString file;
     openFilesPath = settings_opensave_recent_directory;
@@ -517,13 +514,10 @@ QMdiSubWindow* MainWindow::findMdiWindow(const QString& fileName)
     qDebug("MainWindow::findMdiWindow(%s)", qPrintable(fileName));
     QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
 
-    foreach(QMdiSubWindow* subWindow, mdiArea->subWindowList())
-    {
+    foreach (QMdiSubWindow* subWindow, mdiArea->subWindowList()) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(subWindow);
-        if(mdiWin)
-        {
-            if(mdiWin->getCurrentFile() == canonicalFilePath)
-            {
+        if (mdiWin) {
+            if (mdiWin->getCurrentFile() == canonicalFilePath) {
                 return subWindow;
             }
         }
@@ -751,7 +745,7 @@ void MainWindow::loadFormats()
 
     //TODO: Fixup custom filter
     /*
-    QString custom = getSettingsCustomFilter();
+    QString custom = settings_custom_filter;
     if(custom.contains("supported", Qt::CaseInsensitive))
         custom = ""; //This will hide it
     else if(!custom.contains("*", Qt::CaseInsensitive))

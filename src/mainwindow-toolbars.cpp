@@ -1,3 +1,14 @@
+/*
+ * Embroidermodder 2.
+ *
+ * Copyright 2011-2024 The Embroidermodder Team
+ * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+ * Visit https://www.libembroidery.org/refman for advice on altering this file,
+ * or read the markdown version in embroidermodder2/docs/refman.
+ *
+ * Toolbars
+ */
+
 #include "embroidermodder.h"
 #include <QAction>
 #include <QToolBar>
@@ -226,19 +237,19 @@ void MainWindow::createTextToolbar()
     toolbarText->setObjectName("toolbarText");
 
     toolbarText->addWidget(textFontSelector);
-    textFontSelector->setCurrentFont(QFont(getSettingsTextFont()));
+    textFontSelector->setCurrentFont(QFont(settings_text_font));
     connect(textFontSelector, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(textFontSelectorCurrentFontChanged(const QFont&)));
 
     toolbarText->addAction(actionHash.value(ACTION_TEXT_BOLD));
-    actionHash.value(ACTION_TEXT_BOLD)->setChecked(getSettingsTextStyleBold());
+    actionHash.value(ACTION_TEXT_BOLD)->setChecked(settings_text_style_bold);
     toolbarText->addAction(actionHash.value(ACTION_TEXT_ITALIC));
-    actionHash.value(ACTION_TEXT_ITALIC)->setChecked(getSettingsTextStyleItalic());
+    actionHash.value(ACTION_TEXT_ITALIC)->setChecked(settings_text_style_italic);
     toolbarText->addAction(actionHash.value(ACTION_TEXT_UNDERLINE));
-    actionHash.value(ACTION_TEXT_UNDERLINE)->setChecked(getSettingsTextStyleUnderline());
+    actionHash.value(ACTION_TEXT_UNDERLINE)->setChecked(settings_text_style_underline);
     toolbarText->addAction(actionHash.value(ACTION_TEXT_STRIKEOUT));
-    actionHash.value(ACTION_TEXT_STRIKEOUT)->setChecked(getSettingsTextStyleStrikeOut());
+    actionHash.value(ACTION_TEXT_STRIKEOUT)->setChecked(settings_text_style_strikeout);
     toolbarText->addAction(actionHash.value(ACTION_TEXT_OVERLINE));
-    actionHash.value(ACTION_TEXT_OVERLINE)->setChecked(getSettingsTextStyleOverline());
+    actionHash.value(ACTION_TEXT_OVERLINE)->setChecked(settings_text_style_overline);
 
     textSizeSelector->setFocusProxy(prompt);
     textSizeSelector->addItem("6 pt",   6);
@@ -255,7 +266,7 @@ void MainWindow::createTextToolbar()
     textSizeSelector->addItem("48 pt", 48);
     textSizeSelector->addItem("60 pt", 60);
     textSizeSelector->addItem("72 pt", 72);
-    setTextSize(getSettingsTextSize());
+    setTextSize(settings_text_size);
     toolbarText->addWidget(textSizeSelector);
     connect(textSizeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(textSizeSelectorIndexChanged(int)));
 

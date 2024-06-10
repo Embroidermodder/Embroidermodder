@@ -683,50 +683,50 @@ set_command(ScriptEnv* context)
         if (context->argument[1].type != SCRIPT_REAL) {
             return script_false;
         }
-        _main->setSettingsTextAngle(REAL(1));
+        _main->settings_text_angle = REAL(1);
     }
     else if (value == "TEXTBOLD") {
         if (context->argument[1].type != SCRIPT_BOOL) {
             return script_false;
         }
-        _main->setSettingsTextStyleBold(BOOL(1));
+        _main->settings_text_style_bold = BOOL(1);
     }
     else if (value == "TEXTITALIC") {
         if (context->argument[1].type != SCRIPT_BOOL) {
             return script_false;
         }
-        _main->setSettingsTextStyleItalic(BOOL(1));
+        _main->settings_text_style_italic = BOOL(1);
     }
     else if (value == "TEXTFONT") {
         if (context->argument[1].type != SCRIPT_STRING) {
             return script_false;
         }
-        _main->setSettingsTextFont(context->argument[1].s);
+        _main->settings_text_font = QSTR(1);
     }
     else if (value == "TEXTOVERLINE") {
         if (context->argument[1].type != SCRIPT_BOOL) {
             return script_false;
         }
-        _main->setSettingsTextStyleOverline(BOOL(1));
+        _main->settings_text_style_overline = BOOL(1);
     }
     else if (value == "TEXTSIZE") {
         if (context->argument[1].type != SCRIPT_REAL) {
             return script_false;
         }
-        _main->setSettingsTextSize(REAL(1));
+        _main->settings_text_size = REAL(1);
     }
     else if (value == "TEXTSTRIKEOUT") {
         if (context->argument[1].type != SCRIPT_BOOL) {
             return script_false;
         }
-        _main->setSettingsTextStyleStrikeOut(BOOL(1));
+        _main->settings_text_style_strikeout = BOOL(1);
     }
     else if (value == "TEXTUNDERLINE") {
         if (context->argument[1].type != SCRIPT_BOOL) {
 
             return script_false;
         }
-        _main->setSettingsTextStyleUnderline(BOOL(1));
+        _main->settings_text_style_underline = BOOL(1);
     }
 
     _main->nativeEndCommand();
@@ -789,7 +789,7 @@ text_bold_command(ScriptEnv *context)
     }
     init_command();
     _main->nativeClearSelection();
-    /* _main->setSettingsTextStyleBold(); */
+    /* _main->settings_text_style_bold; */
     _main->nativeEndCommand();
     return script_null;
 }
@@ -803,7 +803,7 @@ text_italic_command(ScriptEnv *context)
     }
     init_command();
     _main->nativeClearSelection();
-    /* _main->setSettingsTextStyleItalic(); */
+    /* _main->settings_text_style_italic; */
     _main->nativeEndCommand();
     return script_null;
 }
@@ -817,7 +817,7 @@ text_underline_command(ScriptEnv *context)
     }
     init_command();
     _main->nativeClearSelection();
-    /* _main->setSettingsTextStyleUnderline(); */
+    /* _main->settings_text_style_underline; */
     _main->nativeEndCommand();
     return script_null;
 }
@@ -831,7 +831,7 @@ text_overline_command(ScriptEnv *context)
     }
     init_command();
     _main->nativeClearSelection();
-    /* _main->setSettingsTextStyleOverline(); */
+    /* _main->settings_text_style_overline; */
     _main->nativeEndCommand();
     return script_null;
 }
@@ -845,7 +845,7 @@ text_strikeout_command(ScriptEnv *context)
     }
     init_command();
     _main->nativeClearSelection();
-    /* _main->setSettingsTextStyleStrikeOut(); */
+    /* _main->settings_text_style_strikeout; */
     _main->nativeEndCommand();
     return script_null;
 }

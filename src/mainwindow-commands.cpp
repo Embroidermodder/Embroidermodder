@@ -37,9 +37,8 @@ void MainWindow::stub_testing()
 void MainWindow::exit()
 {
     qDebug("exit()");
-    if(getSettingsPromptSaveHistory())
-    {
-        prompt->saveHistory("prompt.log", getSettingsPromptSaveHistoryAsHtml()); //TODO: get filename from settings
+    if (settings_prompt_save_history) {
+        prompt->saveHistory("prompt.log", settings_prompt_save_history_as_html); //TODO: get filename from settings
     }
     qApp->closeAllWindows();
     this->deleteLater(); //Force the MainWindow destructor to run before exiting. Makes Valgrind "still reachable" happy :)
@@ -197,7 +196,7 @@ void MainWindow::tipOfTheDay()
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("&Show tips on startup"), wizardTipOfTheDay);
-    settings_general_tip_of_the_day = _main->getSettingsGeneralTipOfTheDay();
+    settings_general_tip_of_the_day = _main->settings_general_tip_of_the_day;
     checkBoxTipOfTheDay->setChecked(settings_general_tip_of_the_day);
     connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), this, SLOT(checkBoxTipOfTheDayStateChanged(int)));
 
@@ -349,9 +348,9 @@ void MainWindow::iconResize(int iconSize)
     linetypeSelector->  setMinimumWidth(iconSize*4);
     lineweightSelector->setMinimumWidth(iconSize*4);
 
-    //TODO: low-priority: open app with iconSize set to 128. resize the icons to a smaller size.
+    // TODO: low-priority: open app with iconSize set to 128. resize the icons to a smaller size.
 
-    setSettingsGeneralIconSize(iconSize);
+    settings_general_icon_size = iconSize;
 }
 
 MdiWindow* MainWindow::activeMdiWindow()
@@ -455,22 +454,23 @@ void MainWindow::updateAllViewGridColors(QRgb color)
 void MainWindow::updateAllViewRulerColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
-    for(int i = 0; i < windowList.count(); ++i)
-    {
+    for (int i = 0; i < windowList.count(); ++i) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if(mdiWin) { mdiWin->setViewRulerColor(color); }
+        if(mdiWin) {
+            mdiWin->setViewRulerColor(color);
+        }
     }
 }
 
 void MainWindow::updatePickAddMode(bool val)
 {
-    setSettingsSelectionModePickAdd(val);
+    settings_selection_mode_pickadd = val;
     dockPropEdit->updatePickAddModeButton(val);
 }
 
 void MainWindow::pickAddModeToggled()
 {
-    bool val = !getSettingsSelectionModePickAdd();
+    bool val = !settings_selection_mode_pickadd;
     updatePickAddMode(val);
 }
 
@@ -686,58 +686,59 @@ void MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
 void MainWindow::textSizeSelectorIndexChanged(int index)
 {
     qDebug("textSizeSelectorIndexChanged(%d)", index);
-    setSettingsTextSize(qFabs(textSizeSelector->itemData(index).toReal())); //TODO: check that the toReal() conversion is ok
+    // TODO: check that the toReal() conversion is ok
+    settings_text_size = qFabs(textSizeSelector->itemData(index).toReal());
 }
 
 QString MainWindow::textFont()
 {
-    return getSettingsTextFont();
+    return settings_text_font;
 }
 
 qreal MainWindow::textSize()
 {
-    return getSettingsTextSize();
+    return settings_text_size;
 }
 
 qreal MainWindow::textAngle()
 {
-    return getSettingsTextAngle();
+    return settings_text_angle;
 }
 
 bool MainWindow::textBold()
 {
-    return getSettingsTextStyleBold();
+    return settings_text_style_bold;
 }
 
 bool MainWindow::textItalic()
 {
-    return getSettingsTextStyleItalic();
+    return settings_text_style_italic;
 }
 
 bool MainWindow::textUnderline()
 {
-    return getSettingsTextStyleUnderline();
+    return settings_text_style_underline;
 }
 
 bool MainWindow::textStrikeOut()
 {
-    return getSettingsTextStyleStrikeOut();
+    return settings_text_style_strikeout;
 }
 
 bool MainWindow::textOverline()
 {
-    return getSettingsTextStyleOverline();
+    return settings_text_style_overline;
 }
 
 void MainWindow::setTextFont(const QString& str)
 {
     textFontSelector->setCurrentFont(QFont(str));
-    setSettingsTextFont(str);
+    settings_text_font = str;
 }
 
 void MainWindow::setTextSize(qreal num)
 {
-    setSettingsTextSize(qFabs(num));
+    settings_text_size = qFabs(num);
     int index = textSizeSelector->findText("Custom", Qt::MatchContains);
     if(index != -1)
         textSizeSelector->removeItem(index);
@@ -893,7 +894,7 @@ MainWindow::runCommandMain(const QString& cmd)
     qDebug("runCommandMain(%s)", qPrintable(cmd));
     // TODO: Uncomment this when post-selection is available
     /*
-    if (!getSettingsSelectionModePickFirst()) {
+    if (!settings_selection_mode_pick_first) {
         nativeClearSelection();
     }
     */
@@ -1046,45 +1047,58 @@ void MainWindow::nativePrintArea(qreal x, qreal y, qreal w, qreal h)
 
 void MainWindow::nativeSetBackgroundColor(quint8 r, quint8 g, quint8 b)
 {
-    setSettingsDisplayBGColor(qRgb(r,g,b));
+    settings_display_bg_color = qRgb(r,g,b);
     updateAllViewBackgroundColors(qRgb(r,g,b));
 }
 
 void MainWindow::nativeSetCrossHairColor(quint8 r, quint8 g, quint8 b)
 {
-    setSettingsDisplayCrossHairColor(qRgb(r,g,b));
+    settings_display_crosshair_color = qRgb(r,g,b);
     updateAllViewCrossHairColors(qRgb(r,g,b));
 }
 
-void MainWindow::nativeSetGridColor(quint8 r, quint8 g, quint8 b)
+void
+MainWindow::nativeSetGridColor(quint8 r, quint8 g, quint8 b)
 {
-    setSettingsGridColor(qRgb(r,g,b));
+    settings_grid_color = qRgb(r,g,b);
     updateAllViewGridColors(qRgb(r,g,b));
 }
 
-void MainWindow::nativeVulcanize()
+void
+MainWindow::nativeVulcanize()
 {
     View* gview = activeView();
-    if (gview) gview->vulcanizeRubberRoom();
+    if (gview) {
+        gview->vulcanizeRubberRoom();
+    }
 }
 
-void MainWindow::nativeClearRubber()
+void
+MainWindow::nativeClearRubber()
 {
     View* gview = activeView();
-    if (gview) gview->clearRubberRoom();
+    if (gview) {
+        gview->clearRubberRoom();
+    }
 }
 
-bool MainWindow::nativeAllowRubber()
+bool
+MainWindow::nativeAllowRubber()
 {
     View* gview = activeView();
-    if (gview) return gview->allowRubber();
+    if (gview) {
+        return gview->allowRubber();
+    }
     return false;
 }
 
-void MainWindow::nativeSpareRubber(qint64 id)
+void
+MainWindow::nativeSpareRubber(qint64 id)
 {
     View* gview = activeView();
-    if (gview) gview->spareRubber(id);
+    if (gview) {
+        gview->spareRubber(id);
+    }
 }
 
 void MainWindow::nativeSetRubberMode(int mode)
@@ -1117,13 +1131,13 @@ void MainWindow::nativeAddTextSingle(const QString& str, qreal x, qreal y, qreal
     if(gview && gscene && stack)
     {
         TextSingleObject* obj = new TextSingleObject(str, x, -y, getCurrentColor());
-        obj->setObjectTextFont(getSettingsTextFont());
-        obj->setObjectTextSize(getSettingsTextSize());
-        obj->setObjectTextStyle(getSettingsTextStyleBold(),
-                                getSettingsTextStyleItalic(),
-                                getSettingsTextStyleUnderline(),
-                                getSettingsTextStyleStrikeOut(),
-                                getSettingsTextStyleOverline());
+        obj->setObjectTextFont(settings_text_font);
+        obj->setObjectTextSize(settings_text_size);
+        obj->setObjectTextStyle(settings_text_style_bold,
+                                settings_text_style_italic,
+                                settings_text_style_underline,
+                                settings_text_style_strikeout,
+                                settings_text_style_overline);
         obj->setObjectTextBackward(false);
         obj->setObjectTextUpsideDown(false);
         obj->setRotation(-rot);

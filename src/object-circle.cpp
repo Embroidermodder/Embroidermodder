@@ -51,9 +51,9 @@ circle_command(ScriptEnv *context)
     c.center.x = 0.0;
     c.center.y = 0.0;
     c.radius = 10.0;
-    View *v = activeView();
-    if (v) {
-        emb_array_addCircle(v->geometry, c);
+    MdiWindow *window = _main->activeMdiWindow();
+    if (window) {
+        emb_array_addCircle(window->pattern->geometry, c);
     }
     // _main->nativeAddCircle(0.0, 0.0, 10.0, true, OBJ_RUBBER_CIRCLE_1P_DIA);
    
@@ -461,13 +461,13 @@ void CircleObject::setObjectDiameter(qreal diameter)
 
 void CircleObject::setObjectArea(qreal area)
 {
-    qreal radius = qSqrt(area/pi());
+    qreal radius = sqrt(area/embConstantPi);
     setObjectRadius(radius);
 }
 
 void CircleObject::setObjectCircumference(qreal circumference)
 {
-    qreal diameter = circumference/pi();
+    qreal diameter = circumference/embConstantPi;
     setObjectDiameter(diameter);
 }
 
