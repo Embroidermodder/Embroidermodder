@@ -77,7 +77,7 @@ javaSetRubberMode(ScriptEnv* context)
     else if (mode == "TEXTSINGLE")                        { _main->nativeSetRubberMode(OBJ_RUBBER_TEXTSINGLE); }
 
     else {
-        debug_message("UNKNOWN_ERROR setRubberMode(): unknown rubberMode value");
+        prompt_output("UNKNOWN_ERROR setRubberMode(): unknown rubberMode value");
         return script_false;
     }
 
@@ -123,7 +123,7 @@ add_Rubber(ScriptEnv* context)
     QString objType = QSTR(0).toUpper();
 
     if (!_main->nativeAllowRubber()) {
-        debug_message("UNKNOWN_ERROR addRubber(): You must use vulcanize() before you can add another rubber object.");
+        prompt_output("UNKNOWN_ERROR addRubber(): You must use vulcanize() before you can add another rubber object.");
         return script_false;
     }
 
@@ -217,7 +217,7 @@ ScriptValue
 javaClearRubber(ScriptEnv* context)
 {
     if (context->argumentCount != 0) {
-        debug_message("clearRubber() requires zero arguments");
+        prompt_output("clearRubber() requires zero arguments");
         return script_false;
     }
 
@@ -229,11 +229,11 @@ ScriptValue
 javaSpareRubber(ScriptEnv* context)
 {
     if (context->argumentCount != 1) {
-        debug_message("spareRubber() requires one argument");
+        prompt_output("spareRubber() requires one argument");
         return script_false;
     }
     if (context->argument[0].type != SCRIPT_STRING) {
-        debug_message("TYPE_ERROR, spareRubber(): first argument is not a string");
+        prompt_output("TYPE_ERROR, spareRubber(): first argument is not a string");
         return script_false;
     }
 
@@ -252,7 +252,7 @@ javaSpareRubber(ScriptEnv* context)
         bool ok = false;
         qint64 id = objID.toLongLong(&ok);
         if (!ok) {
-            debug_message("TYPE_ERROR, spareRubber(): error converting object ID into an int64");
+            prompt_output("TYPE_ERROR, spareRubber(): error converting object ID into an int64");
             return script_false;
         }
         _main->nativeSpareRubber(id);

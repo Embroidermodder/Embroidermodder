@@ -54,7 +54,6 @@ set(SRC_ASSETS ${CMAKE_SOURCE_DIR}/assets)
 set(SRC ${CMAKE_SOURCE_DIR}/src)
 
 qt_add_executable(embroidermodder2
-	${SRC}/application.cpp
 	${SRC}/cmdprompt.cpp
 	${SRC}/commands.cpp
 	${SRC}/designs.cpp

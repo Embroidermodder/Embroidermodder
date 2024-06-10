@@ -24,7 +24,8 @@
 #include <QComboBox>
 #include <QWhatsThis>
 
-void MainWindow::stub_implement(QString txt)
+void
+MainWindow::stub_implement(QString txt)
 {
     qDebug("TODO: %s", qPrintable(txt));
 }
@@ -44,12 +45,6 @@ void MainWindow::exit()
     this->deleteLater(); //Force the MainWindow destructor to run before exiting. Makes Valgrind "still reachable" happy :)
 }
 
-void MainWindow::quit()
-{
-    qDebug("quit()");
-    exit();
-}
-
 void MainWindow::checkForUpdates()
 {
     qDebug("checkForUpdates()");
@@ -60,21 +55,27 @@ void MainWindow::cut()
 {
     qDebug("cut()");
     View* gview = activeView();
-    if(gview) { gview->cut(); }
+    if (gview) {
+        gview->cut();
+    }
 }
 
 void MainWindow::copy()
 {
     qDebug("copy()");
     View* gview = activeView();
-    if(gview) { gview->copy(); }
+    if (gview) {
+        gview->copy();
+    }
 }
 
 void MainWindow::paste()
 {
     qDebug("paste()");
     View* gview = activeView();
-    if(gview) { gview->paste(); }
+    if (gview) {
+        gview->paste();
+    }
 }
 
 void MainWindow::selectAll()
@@ -790,10 +791,12 @@ void MainWindow::escapePressed()
     qDebug("escapePressed()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin) { mdiWin->escapePressed(); }
+    if (mdiWin) {
+        mdiWin->escapePressed();
+    }
     QApplication::restoreOverrideCursor();
 
-    nativeEndCommand();
+    end_command();
 }
 
 void MainWindow::toggleGrid()
@@ -827,19 +830,25 @@ void MainWindow::disablePromptRapidFire()
 void MainWindow::enableMoveRapidFire()
 {
     View* gview = activeView();
-    if(gview) gview->enableMoveRapidFire();
+    if (gview) {
+        gview->enableMoveRapidFire();
+    }
 }
 
 void MainWindow::disableMoveRapidFire()
 {
     View* gview = activeView();
-    if(gview) gview->disableMoveRapidFire();
+    if (gview) {
+        gview->disableMoveRapidFire();
+    }
 }
 
 void MainWindow::promptHistoryAppended(const QString& txt)
 {
     MdiWindow* mdiWin = activeMdiWindow();
-    if(mdiWin) mdiWin->promptHistoryAppended(txt);
+    if (mdiWin) {
+        mdiWin->promptHistoryAppended(txt);
+    }
 }
 
 void MainWindow::logPromptInput(const QString& txt)
@@ -998,24 +1007,6 @@ void MainWindow::nativeEnableMoveRapidFire()
 void MainWindow::nativeDisableMoveRapidFire()
 {
     disableMoveRapidFire();
-}
-
-void MainWindow::nativeInitCommand()
-{
-    View* gview = activeView();
-    if(gview) gview->clearRubberRoom();
-}
-
-void MainWindow::nativeEndCommand()
-{
-    View* gview = activeView();
-    if(gview)
-    {
-        gview->clearRubberRoom();
-        gview->previewOff();
-        gview->disableMoveRapidFire();
-    }
-    prompt->endCommand();
 }
 
 void MainWindow::messageBox(const QString& type, const QString& title, const QString& text)
@@ -1481,13 +1472,17 @@ void MainWindow::nativeAddToSelection(const QPainterPath path, Qt::ItemSelection
 void MainWindow::nativeClearSelection()
 {
     View* gview = activeView();
-    if(gview) { gview->clearSelection(); }
+    if (gview) {
+        gview->clearSelection();
+    }
 }
 
 void MainWindow::nativeDeleteSelected()
 {
     View* gview = activeView();
-    if(gview) { gview->deleteSelected(); }
+    if (gview) {
+        gview->deleteSelected();
+    }
 }
 
 void MainWindow::nativeCutSelected(qreal x, qreal y)

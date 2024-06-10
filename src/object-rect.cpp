@@ -21,10 +21,10 @@
 ScriptValue
 rectangle_command(ScriptEnv * context)
 {
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
 
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -186,62 +186,22 @@ void RectObject::setObjectRect(qreal x, qreal y, qreal w, qreal h)
 
 QPointF RectObject::objectTopLeft() const
 {
-    qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
-
-    QPointF tl = rect().topLeft();
-    qreal ptlX = tl.x()*scale();
-    qreal ptlY = tl.y()*scale();
-    qreal ptlXrot = ptlX*cosRot - ptlY*sinRot;
-    qreal ptlYrot = ptlX*sinRot + ptlY*cosRot;
-
-    return (scenePos() + QPointF(ptlXrot, ptlYrot));
+    return scenePos() + scale_and_rotate(rect().topLeft(), scale(), rotation());
 }
 
 QPointF RectObject::objectTopRight() const
 {
-    qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
-
-    QPointF tr = rect().topRight();
-    qreal ptrX = tr.x()*scale();
-    qreal ptrY = tr.y()*scale();
-    qreal ptrXrot = ptrX*cosRot - ptrY*sinRot;
-    qreal ptrYrot = ptrX*sinRot + ptrY*cosRot;
-
-    return (scenePos() + QPointF(ptrXrot, ptrYrot));
+    return scenePos() + scale_and_rotate(rect().topRight(), scale(), rotation());
 }
 
 QPointF RectObject::objectBottomLeft() const
 {
-    qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
-
-    QPointF bl = rect().bottomLeft();
-    qreal pblX = bl.x()*scale();
-    qreal pblY = bl.y()*scale();
-    qreal pblXrot = pblX*cosRot - pblY*sinRot;
-    qreal pblYrot = pblX*sinRot + pblY*cosRot;
-
-    return (scenePos() + QPointF(pblXrot, pblYrot));
+    return scenePos() + scale_and_rotate(rect().bottomLeft(), scale(), rotation());
 }
 
 QPointF RectObject::objectBottomRight() const
 {
-    qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
-
-    QPointF br = rect().bottomRight();
-    qreal pbrX = br.x()*scale();
-    qreal pbrY = br.y()*scale();
-    qreal pbrXrot = pbrX*cosRot - pbrY*sinRot;
-    qreal pbrYrot = pbrX*sinRot + pbrY*cosRot;
-
-    return (scenePos() + QPointF(pbrXrot, pbrYrot));
+    return scenePos() + scale_and_rotate(rect().bottomRight(), scale(), rotation());
 }
 
 void RectObject::updatePath()

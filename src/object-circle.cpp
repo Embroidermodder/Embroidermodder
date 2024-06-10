@@ -28,8 +28,8 @@ circle_command(ScriptEnv *context)
 {
     _main->debug_message("ADDING CIRCLE");
     
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
 
     /*
     add_real_variable(context, "x1", 0.0f);
@@ -57,7 +57,7 @@ circle_command(ScriptEnv *context)
     }
     // _main->nativeAddCircle(0.0, 0.0, 10.0, true, OBJ_RUBBER_CIRCLE_1P_DIA);
    
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -187,7 +187,7 @@ circle_click(ScriptEnv *context)
         break;
     }
     #endif
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -197,7 +197,7 @@ ScriptValue
 circle_context(ScriptEnv *context)
 {
     // todo("CIRCLE", "context()");
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -380,7 +380,7 @@ circle_prompt(ScriptEnv *context)
     }
     #endif
 
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 

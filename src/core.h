@@ -421,6 +421,7 @@ typedef struct ScriptEnv_ {
     ScriptValue *variable;
     int n_variables;
     int context;
+    int mode;
     ScriptValue argument[MAX_ARGS];
     int argumentCount;
 } ScriptEnv;
@@ -468,21 +469,19 @@ int script_set_string(ScriptEnv *context, const char *label, const char *s);
 int script_set_int(ScriptEnv *context, const char *label, int i);
 int script_set_real(ScriptEnv *context, const char *label, double r);
 
-void debug_message(const char *);
+void prompt_output(const char *);
 int argument_checks(ScriptEnv *context, char *function, const char *args);
 char *translate(char *msg);
 
 /* MainWindow calls */
 void init_command(void);
 void clear_selection(void);
-void append_history(char *line);
 void end_command(void);
 
 /* Commands */
 ScriptValue about_command(ScriptEnv*);
 ScriptValue alert_command(ScriptEnv*);
 ScriptValue angle_command(ScriptEnv*);
-ScriptValue circle_command(ScriptEnv*);
 ScriptValue changelog_command(ScriptEnv*);
 ScriptValue clear_command(ScriptEnv*);
 ScriptValue copy_command(ScriptEnv*);
@@ -492,14 +491,10 @@ ScriptValue debug_command(ScriptEnv *);
 ScriptValue design_details_command(ScriptEnv *);
 ScriptValue disable_command(ScriptEnv*);
 ScriptValue distance_command(ScriptEnv*);
-ScriptValue dolphin_command(ScriptEnv*);
-ScriptValue ellipse_command(ScriptEnv *);
 ScriptValue enable_command(ScriptEnv *);
 ScriptValue erase_command(ScriptEnv *);
 ScriptValue error_command(ScriptEnv *);
 ScriptValue exit_command(ScriptEnv *);
-ScriptValue heart_command(ScriptEnv *);
-ScriptValue heart_command(ScriptEnv*);
 ScriptValue help_command(ScriptEnv*);
 ScriptValue icon128_command(ScriptEnv*);
 ScriptValue icon16_command(ScriptEnv*);
@@ -508,7 +503,6 @@ ScriptValue icon32_command(ScriptEnv*);
 ScriptValue icon48_command(ScriptEnv*);
 ScriptValue icon64_command(ScriptEnv*);
 ScriptValue get_command(ScriptEnv*);
-ScriptValue line_command(ScriptEnv*);
 ScriptValue locatepoint_command(ScriptEnv*);
 ScriptValue mirrorselected_command(ScriptEnv*);
 ScriptValue move_command(ScriptEnv*);
@@ -520,6 +514,24 @@ ScriptValue paste_command(ScriptEnv*);
 ScriptValue print_command(ScriptEnv*);
 ScriptValue redo_command(ScriptEnv*);
 
+/* Designs */
+ScriptValue dolphin_command(ScriptEnv*);
+ScriptValue heart_command(ScriptEnv*);
+ScriptValue snowflake_command(ScriptEnv*);
+ScriptValue star_command(ScriptEnv*);
+
+/* Geometry Primatives */
+ScriptValue arc_command(ScriptEnv *context);
+ScriptValue circle_command(ScriptEnv*);
+ScriptValue ellipse_command(ScriptEnv *);
+ScriptValue line_command(ScriptEnv*);
+ScriptValue quickleader_command(ScriptEnv*);
+ScriptValue point_command(ScriptEnv*);
+ScriptValue polygon_command(ScriptEnv*);
+ScriptValue polyline_command(ScriptEnv*);
+ScriptValue rectangle_command(ScriptEnv*);
+
+/* Pan */
 ScriptValue panrealtime_command(ScriptEnv*);
 ScriptValue pandown_command(ScriptEnv*);
 ScriptValue panleft_command(ScriptEnv*);
@@ -530,13 +542,8 @@ ScriptValue path_command(ScriptEnv*);
 ScriptValue platform_command(ScriptEnv*);
 ScriptValue previewoff_command(ScriptEnv*);
 ScriptValue previewon_command(ScriptEnv*);
-ScriptValue point_command(ScriptEnv*);
-ScriptValue polygon_command(ScriptEnv*);
-ScriptValue polyline_command(ScriptEnv*);
-ScriptValue rectangle_command(ScriptEnv*);
 ScriptValue rotate_command(ScriptEnv*);
 ScriptValue rgb_command(ScriptEnv*);
-ScriptValue quickleader_command(ScriptEnv*);
 ScriptValue save_command(ScriptEnv*);
 ScriptValue sandbox_command(ScriptEnv*);
 ScriptValue scale_command(ScriptEnv*);
@@ -545,8 +552,6 @@ ScriptValue selectall_command(ScriptEnv*);
 ScriptValue settings_dialog_command(ScriptEnv*);
 ScriptValue singlelinetext_command(ScriptEnv*);
 ScriptValue set_command(ScriptEnv*);
-ScriptValue snowflake_command(ScriptEnv*);
-ScriptValue star_command(ScriptEnv*);
 ScriptValue syswindows_command(ScriptEnv*);
 
 ScriptValue text_bold_command(ScriptEnv*);

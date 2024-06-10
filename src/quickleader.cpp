@@ -16,10 +16,10 @@
 ScriptValue
 quickleader_command(ScriptEnv * context)
 {
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
 
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -120,18 +120,4 @@ function prompt(str)
         }
     }
 }
-[Menu]
-Name=Dimension
-Position=12
-
-[ToolBar]
-Name=Dimension
-Position=12
-
-[Tips]
-ToolTip=&QuickLeader
-StatusTip=Creates a leader and annotation:  QUICKLEADER
-
-[Prompt]
-Alias=LE, LEADER, QLEADER, QUICKLEADER
 #endif

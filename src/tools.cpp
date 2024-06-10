@@ -19,6 +19,7 @@
 #define ROTATE_MODE_REFERENCE   1
 
 bool validRGB(float r, float g, float b);
+void reportDistance(EmbVector a, EmbVector b);
 
 /* LOCATEPOINT */
 ScriptValue
@@ -26,33 +27,34 @@ locatepoint_command(ScriptEnv *context)
 {
     switch (context->context) {
     case CONTEXT_MAIN:
-        _main->nativeInitCommand();
-        _main->nativeClearSelection();
-       // setPromptPrefix(qsTr("Specify point: "));
+        init_command();
+        clear_selection();
+        prompt_output(translate("Specify point: "));
         break;
-    case CONTEXT_CLICK:
-        /*
-        appendPromptHistory();
-        setPromptPrefix("X = " + x.toString() + ", Y = " + y.toString());
-        appendPromptHistory();
-        _main->nativeEndCommand();
-        */
+    case CONTEXT_CLICK: {
+        char output[200];
+        float x = 0.0f;
+        float y = 0.0f;
+        sprintf(output, "X = %f, Y = %f", x, y);
+        prompt_output(output);
+        end_command();
         break;
+    }
     case CONTEXT_CONTEXT:
-        /* todo("LOCATEPOINT", "context()"); */
+        command_prompt(context, "todo LOCATEPOINT context()");
         break;
     case CONTEXT_PROMPT:
         /*
         var strList = str.split(",");
         if (isnan(strList[0]) || isnan(strList[1])) {
-            alert(qsTr("Invalid point."));
-            setPromptPrefix(qsTr("Specify point: "));
+            alert(translate("Invalid point."));
+            setPromptPrefix(translate("Specify point: "));
         }
         else {
             appendPromptHistory();
             setPromptPrefix("X = " + strList[0].toString() + ", Y = " + strList[1].toString());
             appendPromptHistory();
-            _main->nativeEndCommand();
+            end_command();
         }
         */
         break;
@@ -64,20 +66,20 @@ locatepoint_command(ScriptEnv *context)
 
 /* Cartesian Coordinate System reported: anticlockwise angle from x-axis. */
 void
-reportDistance(void)
+reportDistance(EmbVector a, EmbVector b)
 {
-    /*
-    var dx = global.x2 - global.x1;
-    var dy = global.y2 - global.y1;
+    char output[200];
+    EmbVector delta = emb_vector_subtract(b, a);
 
-    var dist = calculateDistance(global.x1,global.y1,global.x2, global.y2);
-    var angle = calculateAngle(global.x1,global.y1,global.x2, global.y2);
+    EmbReal distance = emb_vector_length(delta);
+    EmbReal angle = emb_vector_angle(delta);
 
-    setPromptPrefix(qsTr("Distance") + " = " + dist.toString() + ", " + qsTr("Angle") + " = " + angle.toString());
-    appendPromptHistory();
-    setPromptPrefix(qsTr("Delta X") + " = " + dx.toString() + ", " + qsTr("Delta Y") + " = " + dy.toString());
-    appendPromptHistory();
-    */
+    sprintf(output, "%s = %d, %s = %d",
+        translate("Distance"), distance, translate("Angle"), angle);
+    prompt_output(output);
+    sprintf(output, "%s = %d, %s = %d",
+        translate("Delta X"), delta.x, translate("Delta Y"), delta.y);
+    prompt_output(output);
 }
 
 /* DISTANCE. */
@@ -86,15 +88,15 @@ distance_command(ScriptEnv *context)
 {
     switch (context->context) {
     case CONTEXT_MAIN:
+        init_command();
+        clear_selection();
         /*
-        _main->nativeInitCommand();
-        _main->nativeClearSelection();
         global.x1 = NaN;
         global.y1 = NaN;
         global.x2 = NaN;
         global.y2 = NaN;
-        setPromptPrefix(qsTr("Specify first point: "));
         */
+        prompt_output(translate("Specify first point: "));
         break;
     case CONTEXT_CLICK:
         /*
@@ -104,15 +106,14 @@ distance_command(ScriptEnv *context)
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.x1, global.y1);
-            appendPromptHistory();
-            setPromptPrefix(qsTr("Specify second point: "));
+            prompt_output(translate("Specify second point: "));
         }
         else {
             appendPromptHistory();
             global.x2 = x;
             global.y2 = y;
             reportDistance();
-            endCommand();
+            end_command();
         }
         */
         break;
@@ -124,8 +125,8 @@ distance_command(ScriptEnv *context)
         var strList = str.split(",");
         if (isNaN(global.x1)) {
             if (isNaN(strList[0]) || isNaN(strList[1])) {
-                alert(qsTr("Requires numeric distance or two points."));
-                setPromptPrefix(qsTr("Specify first point: "));
+                alert(translate("Requires numeric distance or two points."));
+                setPromptPrefix(translate("Specify first point: "));
             }
             else {
                 global.x1 = Number(strList[0]);
@@ -133,19 +134,19 @@ distance_command(ScriptEnv *context)
                 addRubber("LINE");
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", global.x1, global.y1);
-                setPromptPrefix(qsTr("Specify second point: "));
+                setPromptPrefix(translate("Specify second point: "));
             }
         }
         else {
             if (isNaN(strList[0]) || isNaN(strList[1])) {
-                alert(qsTr("Requires numeric distance or two points."));
-                setPromptPrefix(qsTr("Specify second point: "));
+                alert(translate("Requires numeric distance or two points."));
+                prompt_output(translate("Specify second point: "));
             }
             else {
                 global.x2 = Number(strList[0]);
                 global.y2 = Number(strList[1]);
                 reportDistance();
-                endCommand();
+                end_command();
             }
         }
         */
@@ -185,11 +186,9 @@ global.destY;
 global.deltaX;
 global.deltaY;
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
 function main()
 {
-    _main->nativeInitCommand();
+    init_command();
     global.firstRun = true;
     global.baseX  = NaN;
     global.baseY  = NaN;
@@ -200,18 +199,15 @@ function main()
 
     if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
-        alert(qsTr("Preselect objects before invoking the move command."));
-        _main->nativeEndCommand();
-        messageBox("information", qsTr("Move Preselect"), qsTr("Preselect objects before invoking the move command."));
+        alert(translate("Preselect objects before invoking the move command."));
+        end_command();
+        messageBox("information", translate("Move Preselect"), translate("Preselect objects before invoking the move command."));
     }
     else {
-        setPromptPrefix(qsTr("Specify base point: "));
+        setPromptPrefix(translate("Specify base point: "));
     }
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
 function click(x, y)
 {
     if (global.firstRun) {
@@ -222,8 +218,7 @@ function click(x, y)
         setRubberMode("LINE");
         setRubberPoint("LINE_START", global.baseX, global.baseY);
         previewOn("SELECTED", "MOVE", global.baseX, global.baseY, 0);
-        appendPromptHistory();
-        setPromptPrefix(qsTr("Specify destination point: "));
+        prompt_output(translate("Specify destination point: "));
     }
     else {
         global.destX = x;
@@ -232,27 +227,22 @@ function click(x, y)
         global.deltaY = global.destY - global.baseY;
         moveSelected(global.deltaX, global.deltaY);
         previewOff();
-        _main->nativeEndCommand();
+        end_command();
     }
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("MOVE", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
     if (global.firstRun) {
         var strList = str.split(",");
         if (isNaN(strList[0]) || isNaN(strList[1])) {
-            alert(qsTr("Invalid point."));
-            setPromptPrefix(qsTr("Specify base point: "));
+            alert(translate("Invalid point."));
+            prompt_output(translate("Specify base point: "));
         }
         else {
             global.firstRun = false;
@@ -262,14 +252,14 @@ function prompt(str)
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.baseX, global.baseY);
             previewOn("SELECTED", "MOVE", global.baseX, global.baseY, 0);
-            setPromptPrefix(qsTr("Specify destination point: "));
+            prompt_output(translate("Specify destination point: "));
         }
     }
     else {
         var strList = str.split(",");
         if (isNaN(strList[0]) || isNaN(strList[1])) {
-            alert(qsTr("Invalid point."));
-            setPromptPrefix(qsTr("Specify destination point: "));
+            alert(translate("Invalid point."));
+            prompt_output(translate("Specify destination point: "));
         }
         else {
             global.destX = Number(strList[0]);
@@ -278,7 +268,7 @@ function prompt(str)
             global.deltaY = global.destY - global.baseY;
             moveSelected(global.deltaX, global.deltaY);
             previewOff();
-            _main->nativeEndCommand();
+            end_command();
         }
     }
 }
@@ -327,8 +317,6 @@ global.mode;
 global.mode_NORMAL    = 0;
 global.mode_REFERENCE = 1;
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
 function main()
 {
     initCommand();
@@ -349,18 +337,15 @@ function main()
 
     if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
-        alert(qsTr("Preselect objects before invoking the scale command."));
+        alert(translate("Preselect objects before invoking the scale command."));
         endCommand();
-        messageBox("information", qsTr("Scale Preselect"), qsTr("Preselect objects before invoking the scale command."));
+        messageBox("information", translate("Scale Preselect"), translate("Preselect objects before invoking the scale command."));
     }
     else {
-        setPromptPrefix(qsTr("Specify base point: "));
+        setPromptPrefix(translate("Specify base point: "));
     }
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
 function click(x, y)
 {
     if (global.mode == global.mode_NORMAL) {
@@ -372,8 +357,7 @@ function click(x, y)
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.baseX, global.baseY);
             previewOn("SELECTED", "SCALE", global.baseX, global.baseY, 1);
-            appendPromptHistory();
-            setPromptPrefix(qsTr("Specify scale factor or [Reference]: "));
+            prompt_output(translate("Specify scale factor or [Reference]: "));
         }
         else {
             global.destX = x;
@@ -393,62 +377,56 @@ function click(x, y)
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.baseRX, global.baseRY);
-            setPromptPrefix(qsTr("Specify second point: "));
+            prompt_output(translate("Specify second point: "));
         }
         else if (isNaN(global.destRX)) {
             global.destRX = x;
             global.destRY = y;
             global.factorRef = calculateDistance(global.baseRX, global.baseRY, global.destRX, global.destRY);
-            if (global.factorRef <= 0.0)
-            {
+            if (global.factorRef <= 0.0) {
                 global.destRX    = NaN;
                 global.destRY    = NaN;
                 global.factorRef = NaN;
-                alert(qsTr("Value must be positive and nonzero."));
-                setPromptPrefix(qsTr("Specify second point: "));
+                alert(translate("Value must be positive and nonzero."));
+                prompt_output(translate("Specify second point: "));
             }
             else {
                 appendPromptHistory();
                 setRubberPoint("LINE_START", global.baseX, global.baseY);
                 previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
-                setPromptPrefix(qsTr("Specify new length: "));
+                prompt_output(translate("Specify new length: "));
             }
         }
         else if (isNaN(global.factorNew)) {
             global.factorNew = calculateDistance(global.baseX, global.baseY, x, y);
             if (global.factorNew <= 0.0) {
                 global.factorNew = NaN;
-                alert(qsTr("Value must be positive and nonzero."));
-                setPromptPrefix(qsTr("Specify new length: "));
+                alert(translate("Value must be positive and nonzero."));
+                prompt_output(translate("Specify new length: "));
             }
             else {
                 appendPromptHistory();
                 scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
                 previewOff();
-                endCommand();
+                end_command();
             }
         }
     }
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("SCALE", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
     if (global.mode == global.mode_NORMAL) {
         if (global.firstRun) {
             var strList = str.split(",");
             if (isNaN(strList[0]) || isNaN(strList[1])) {
-                alert(qsTr("Invalid point."));
-                setPromptPrefix(qsTr("Specify base point: "));
+                alert(translate("Invalid point."));
+                prompt_output(translate("Specify base point: "));
             }
             else {
                 global.firstRun = false;
@@ -458,21 +436,21 @@ function prompt(str)
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", global.baseX, global.baseY);
                 previewOn("SELECTED", "SCALE", global.baseX, global.baseY, 1);
-                setPromptPrefix(qsTr("Specify scale factor or [Reference]: "));
+                prompt_output(translate("Specify scale factor or [Reference]: "));
             }
         }
         else {
-            if (str == "R" || str == "REFERENCE") //TODO: Probably should add additional qsTr calls here.
-            {
+            if (str == "R" || str == "REFERENCE") {
+                //TODO: Probably should add additional qsTr calls here.
                 global.mode = global.mode_REFERENCE;
-                setPromptPrefix(qsTr("Specify reference length") + " {1}: ");
+                prompt_output(translate("Specify reference length") + " {1}: ");
                 clearRubber();
                 previewOff();
             }
             else {
                 if (isNaN(str)) {
-                    alert(qsTr("Requires valid numeric distance, second point, or option keyword."));
-                    setPromptPrefix(qsTr("Specify scale factor or [Reference]: "));
+                    alert(translate("Requires valid numeric distance, second point, or option keyword."));
+                    prompt_output(translate("Specify scale factor or [Reference]: "));
                 }
                 else {
                     global.factor = Number(str);
@@ -488,8 +466,8 @@ function prompt(str)
             if (isNaN(str)) {
                 var strList = str.split(",");
                 if (isNaN(strList[0]) || isNaN(strList[1])) {
-                    alert(qsTr("Requires valid numeric distance or two points."));
-                    setPromptPrefix(qsTr("Specify reference length") + " {1}: ");
+                    alert(translate("Requires valid numeric distance or two points."));
+                    setPromptPrefix(translate("Specify reference length") + " {1}: ");
                 }
                 else {
                     global.baseRX = Number(strList[0]);
@@ -497,7 +475,7 @@ function prompt(str)
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", global.baseRX, global.baseRY);
-                    setPromptPrefix(qsTr("Specify second point: "));
+                    setPromptPrefix(translate("Specify second point: "));
                 }
             }
             else {
@@ -514,15 +492,15 @@ function prompt(str)
                     global.destRX    = NaN;
                     global.destRY    = NaN;
                     global.factorRef = NaN;
-                    alert(qsTr("Value must be positive and nonzero."));
-                    setPromptPrefix(qsTr("Specify reference length") + " {1}: ");
+                    alert(translate("Value must be positive and nonzero."));
+                    setPromptPrefix(translate("Specify reference length") + " {1}: ");
                 }
                 else {
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", global.baseX, global.baseY);
                     previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
-                    setPromptPrefix(qsTr("Specify new length: "));
+                    setPromptPrefix(translate("Specify new length: "));
                 }
             }
         }
@@ -530,8 +508,8 @@ function prompt(str)
             if (isNaN(str)) {
                 var strList = str.split(",");
                 if (isNaN(strList[0]) || isNaN(strList[1])) {
-                    alert(qsTr("Requires valid numeric distance or two points."));
-                    setPromptPrefix(qsTr("Specify second point: "));
+                    alert(translate("Requires valid numeric distance or two points."));
+                    setPromptPrefix(translate("Specify second point: "));
                 }
                 else {
                     global.destRX = Number(strList[0]);
@@ -541,13 +519,13 @@ function prompt(str)
                         global.destRX    = NaN;
                         global.destRY    = NaN;
                         global.factorRef = NaN;
-                        alert(qsTr("Value must be positive and nonzero."));
-                        setPromptPrefix(qsTr("Specify second point: "));
+                        alert(translate("Value must be positive and nonzero."));
+                        setPromptPrefix(translate("Specify second point: "));
                     }
                     else {
                         setRubberPoint("LINE_START", global.baseX, global.baseY);
                         previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
-                        setPromptPrefix(qsTr("Specify new length: "));
+                        setPromptPrefix(translate("Specify new length: "));
                     }
                 }
             }
@@ -563,13 +541,13 @@ function prompt(str)
                     global.destRX    = NaN;
                     global.destRY    = NaN;
                     global.factorRef = NaN;
-                    alert(qsTr("Value must be positive and nonzero."));
-                    setPromptPrefix(qsTr("Specify second point: "));
+                    alert(translate("Value must be positive and nonzero."));
+                    setPromptPrefix(translate("Specify second point: "));
                 }
                 else {
                     setRubberPoint("LINE_START", global.baseX, global.baseY);
                     previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
-                    setPromptPrefix(qsTr("Specify new length: "));
+                    setPromptPrefix(translate("Specify new length: "));
                 }
             }
         }
@@ -577,8 +555,8 @@ function prompt(str)
             if (isNaN(str)) {
                 var strList = str.split(",");
                 if (isNaN(strList[0]) || isNaN(strList[1])) {
-                    alert(qsTr("Requires valid numeric distance or second point."));
-                    setPromptPrefix(qsTr("Specify new length: "));
+                    alert(translate("Requires valid numeric distance or second point."));
+                    setPromptPrefix(translate("Specify new length: "));
                 }
                 else {
                     var x = Number(strList[0]);
@@ -586,8 +564,8 @@ function prompt(str)
                     global.factorNew = calculateDistance(global.baseX, global.baseY, x, y);
                     if (global.factorNew <= 0.0) {
                         global.factorNew = NaN;
-                        alert(qsTr("Value must be positive and nonzero."));
-                        setPromptPrefix(qsTr("Specify new length: "));
+                        alert(translate("Value must be positive and nonzero."));
+                        setPromptPrefix(translate("Specify new length: "));
                     }
                     else {
                         scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
@@ -600,8 +578,8 @@ function prompt(str)
                 global.factorNew = Number(str);
                 if (global.factorNew <= 0.0) {
                     global.factorNew = NaN;
-                    alert(qsTr("Value must be positive and nonzero."));
-                    setPromptPrefix(qsTr("Specify new length: "));
+                    alert(translate("Value must be positive and nonzero."));
+                    setPromptPrefix(translate("Specify new length: "));
                 }
                 else {
                     scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
@@ -618,8 +596,8 @@ function prompt(str)
 ScriptValue
 sandbox_command(ScriptEnv * context)
 {
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
 
     switch (context->context) {
     case CONTEXT_MAIN:
@@ -634,7 +612,7 @@ sandbox_command(ScriptEnv * context)
         break;
     }
 
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -645,11 +623,9 @@ var global = {}; //Required
 global.test1;
 global.test2;
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
 function main()
 {
-    _main->nativeInitCommand();
+    init_command();
     
     //Report number of pre-selected objects
     setPromptPrefix("Number of Objects Selected: " + numSelected().toString());
@@ -707,58 +683,17 @@ function main()
     addPolygon(polygonArray);
     
 
-    _main->nativeEndCommand();
+    end_command();
 }
-
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
-function click(x, y)
-{
-}
-
-//NOTE: context() is run when a context menu entry is chosen.
-function context(str)
-{
-}
-
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
-function prompt(str)
-{
-}
-
-    {
-        .icon = "sandbox",
-        .menu_name = "Sandbox",
-        .menu_position = 100,
-        .toolbar_name = "Sandbox",
-        .toolbar_position = 100,
-        .tooltip = "Sandbox",
-        .statustip = "A sandbox to play in:  SANDBOX",
-        .alias = "SAND, SANDBOX"
-    },
-    {
-        .icon = "selectall",
-        .menu_name = "None",
-        .menu_position = 100,
-        .toolbar_name = "None",
-        .toolbar_position = 100,
-        .tooltip = "&Select All",
-        .statustip = "Selects all objects:  SELECTALL",
-        .alias = "AI_SELALL, SELALL, SELECTALL"
-    }
 #endif
 
 /* SELECTALL . */
 ScriptValue
 selectall_command(ScriptEnv * context)
 {
-    _main->nativeInitCommand();
+    init_command();
     _main->selectAll();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -766,10 +701,10 @@ selectall_command(ScriptEnv * context)
 ScriptValue
 rotate_command(ScriptEnv * context)
 {
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
 
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -793,13 +728,9 @@ global.angleNew;
 
 global.mode;
 
-//enums
-
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
 function main()
 {
-    _main->nativeInitCommand();
+    init_command();
     global.mode = global.mode_NORMAL;
     global.firstRun = true;
     global.baseX = NaN;
@@ -815,22 +746,17 @@ function main()
     global.angleRef = NaN;
     global.angleNew = NaN;
 
-    if (numSelected() <= 0)
-    {
+    if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
-        alert(qsTr("Preselect objects before invoking the rotate command."));
-        _main->nativeEndCommand();
-        messageBox("information", qsTr("Rotate Preselect"), qsTr("Preselect objects before invoking the rotate command."));
+        alert(translate("Preselect objects before invoking the rotate command."));
+        end_command();
+        messageBox("information", translate("Rotate Preselect"), translate("Preselect objects before invoking the rotate command."));
     }
-    else
-    {
-        setPromptPrefix(qsTr("Specify base point: "));
+    else {
+        setPromptPrefix(translate("Specify base point: "));
     }
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
 function click(x, y)
 {
     if (global.mode == global.mode_NORMAL) {
@@ -842,8 +768,7 @@ function click(x, y)
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.baseX, global.baseY);
             previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, 0);
-            appendPromptHistory();
-            setPromptPrefix(qsTr("Specify rotation angle or [Reference]: "));
+            prompt_output(translate("Specify rotation angle or [Reference]: "));
         }
         else {
             global.destX = x;
@@ -852,7 +777,7 @@ function click(x, y)
             appendPromptHistory();
             rotateSelected(global.baseX, global.baseY, global.angle);
             previewOff();
-            _main->nativeEndCommand();
+            end_command();
         }
     }
     else if (global.mode == global.mode_REFERENCE) {
@@ -863,7 +788,7 @@ function click(x, y)
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.baseRX, global.baseRY);
-            setPromptPrefix(qsTr("Specify second point: "));
+            prompt_output(translate("Specify second point: "));
         }
         else if (isNaN(global.destRX)) {
             global.destRX = x;
@@ -871,36 +796,30 @@ function click(x, y)
             global.angleRef = calculateAngle(global.baseRX, global.baseRY, global.destRX, global.destRY);
             setRubberPoint("LINE_START", global.baseX, global.baseY);
             previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
-            appendPromptHistory();
-            setPromptPrefix(qsTr("Specify the new angle: "));
+            prompt_output(translate("Specify the new angle: "));
         }
         else if (isNaN(global.angleNew)) {
             global.angleNew = calculateAngle(global.baseX, global.baseY, x, y);
             rotateSelected(global.baseX, global.baseY, global.angleNew - global.angleRef);
             previewOff();
-            _main->nativeEndCommand();
+            end_command();
         }
     }
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("ROTATE", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
     if (global.mode == global.mode_NORMAL) {
         if (global.firstRun) {
             var strList = str.split(",");
             if (isNaN(strList[0]) || isNaN(strList[1])) {
-                alert(qsTr("Invalid point."));
-                setPromptPrefix(qsTr("Specify base point: "));
+                alert(translate("Invalid point."));
+                prompt_output(translate("Specify base point: "));
             }
             else {
                 global.firstRun = false;
@@ -910,27 +829,27 @@ function prompt(str)
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", global.baseX, global.baseY);
                 previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, 0);
-                setPromptPrefix(qsTr("Specify rotation angle or [Reference]: "));
+                prompt_output(translate("Specify rotation angle or [Reference]: "));
             }
         }
         else {
             if (str == "R" || str == "REFERENCE") //TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_REFERENCE;
-                setPromptPrefix(qsTr("Specify the reference angle") + " {0.00}: ");
+                prompt_output(translate("Specify the reference angle") + " {0.00}: ");
                 clearRubber();
                 previewOff();
             }
             else {
                 if (isNaN(str)) {
-                    alert(qsTr("Requires valid numeric angle, second point, or option keyword."));
-                    setPromptPrefix(qsTr("Specify rotation angle or [Reference]: "));
+                    alert(translate("Requires valid numeric angle, second point, or option keyword."));
+                    setPromptPrefix(translate("Specify rotation angle or [Reference]: "));
                 }
                 else {
                     global.angle = Number(str);
                     rotateSelected(global.baseX, global.baseY, global.angle);
                     previewOff();
-                    _main->nativeEndCommand();
+                    end_command();
                 }
             }
         }
@@ -940,8 +859,8 @@ function prompt(str)
             if (isNaN(str)) {
                 var strList = str.split(",");
                 if (isNaN(strList[0]) || isNaN(strList[1])) {
-                    alert(qsTr("Requires valid numeric angle or two points."));
-                    setPromptPrefix(qsTr("Specify the reference angle") + " {0.00}: ");
+                    alert(translate("Requires valid numeric angle or two points."));
+                    setPromptPrefix(translate("Specify the reference angle") + " {0.00}: ");
                 }
                 else {
                     global.baseRX = Number(strList[0]);
@@ -949,7 +868,7 @@ function prompt(str)
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", global.baseRX, global.baseRY);
-                    setPromptPrefix(qsTr("Specify second point: "));
+                    setPromptPrefix(translate("Specify second point: "));
                 }
             }
             else {
@@ -964,15 +883,15 @@ function prompt(str)
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", global.baseX, global.baseY);
                 previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
-                setPromptPrefix(qsTr("Specify the new angle: "));
+                setPromptPrefix(translate("Specify the new angle: "));
             }
         }
         else if (isNaN(global.destRX)) {
             if (isNaN(str)) {
                 var strList = str.split(",");
                 if (isNaN(strList[0]) || isNaN(strList[1])) {
-                    alert(qsTr("Requires valid numeric angle or two points."));
-                    setPromptPrefix(qsTr("Specify second point: "));
+                    alert(translate("Requires valid numeric angle or two points."));
+                    setPromptPrefix(translate("Specify second point: "));
                 }
                 else {
                     global.destRX = Number(strList[0]);
@@ -980,7 +899,7 @@ function prompt(str)
                     global.angleRef = calculateAngle(global.baseRX, global.baseRY, global.destRX, global.destRY);
                     previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
                     setRubberPoint("LINE_START", global.baseX, global.baseY);
-                    setPromptPrefix(qsTr("Specify the new angle: "));
+                    setPromptPrefix(translate("Specify the new angle: "));
                 }
             }
             else {
@@ -992,15 +911,15 @@ function prompt(str)
                 //The reference angle is what we will use later.
                 global.angleRef = Number(str);
                 previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
-                setPromptPrefix(qsTr("Specify the new angle: "));
+                setPromptPrefix(translate("Specify the new angle: "));
             }
         }
         else if (isNaN(global.angleNew)) {
             if (isNaN(str)) {
                 var strList = str.split(",");
                 if (isNaN(strList[0]) || isNaN(strList[1])) {
-                    alert(qsTr("Requires valid numeric angle or second point."));
-                    setPromptPrefix(qsTr("Specify the new angle: "));
+                    alert(translate("Requires valid numeric angle or second point."));
+                    setPromptPrefix(translate("Specify the new angle: "));
                 }
                 else {
                     var x = Number(strList[0]);
@@ -1008,30 +927,28 @@ function prompt(str)
                     global.angleNew = calculateAngle(global.baseX, global.baseY, x, y);
                     rotateSelected(global.baseX, global.baseY, global.angleNew - global.angleRef);
                     previewOff();
-                    _main->nativeEndCommand();
+                    end_command();
                 }
             }
             else {
                 global.angleNew = Number(str);
                 rotateSelected(global.baseX, global.baseY, global.angleNew - global.angleRef);
                 previewOff();
-                _main->nativeEndCommand();
+                end_command();
             }
         }
     }
 }
 #endif
 
-/* NOTE: main() is run every time the command is started.
- *       Use it to reset variables so they are ready to go.
- */
+/* RGB */
 ScriptValue
 rgb_command(ScriptEnv *context)
 {
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
 
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -1039,46 +956,36 @@ rgb_command(ScriptEnv *context)
 var global = {}; //Required
 global.mode;
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
 function main()
 {
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
     global.mode = global.mode_BACKGROUND;
-    setPromptPrefix(translate("Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: "));
+    prompt_output(translate("Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: "));
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
 function click(x, y)
 {
     //Do Nothing, prompt only command.
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("RGB", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text is in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
-    if (global.mode == global.mode_BACKGROUND) {
-        if (str == "C" || str == "CROSSHAIR") //TODO: Probably should add additional translate calls here.
-        {
+    if (global.mode == RGB_MODE_BACKGROUND) {
+        if (str == "C" || str == "CROSSHAIR") {
+            //TODO: Probably should add additional translate calls here.
             global.mode = global.mode_CROSSHAIR;
-            setPromptPrefix(translate("Specify crosshair color: "));
+            prompt_output(translate("Specify crosshair color: "));
         }
-        else if (str == "G" || str == "GRID") //TODO: Probably should add additional translate calls here.
-        {
+        else if (str == "G" || str == "GRID") {
+            //TODO: Probably should add additional translate calls here.
             global.mode = global.mode_GRID;
-            setPromptPrefix(translate("Specify grid color: "));
+            prompt_output(translate("Specify grid color: "));
         }
         else {
             var strList = str.split(",");
@@ -1091,7 +998,7 @@ function prompt(str)
             }
             else {
                 setBackgroundColor(r,g,b);
-                _main->nativeEndCommand();
+                end_command();
             }
         }
     }
@@ -1106,7 +1013,7 @@ function prompt(str)
         }
         else {
             setCrossHairColor(r,g,b);
-            _main->nativeEndCommand();
+            end_command();
         }
     }
     else if (global.mode == global.mode_GRID) {

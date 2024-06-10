@@ -22,10 +22,10 @@
 ScriptValue
 polygon_command(ScriptEnv * context)
 {
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
 
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 

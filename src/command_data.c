@@ -14,6 +14,8 @@
 
 #include "core.h"
 
+ScriptValue arc_command(ScriptEnv *);
+
 Command command_data[] = {
     {
         .id = ACTION_ABOUT,
@@ -27,6 +29,19 @@ Command command_data[] = {
         .tooltip = "&About Embroidermodder 2",
         .statustip = "Displays information about this product. Command: ABOUT.",
         .alias = "ABOUT",
+        .shortcut = ""
+    },
+    {
+        .id = -1,
+        .main = arc_command,
+        .icon = "arc",
+        .menu_name = "Draw",
+        .menu_position = 1,
+        .toolbar_name = "Draw",
+        .toolbar_position = 1,
+        .tooltip = "&Arc",
+        .statustip = "Displays information about this product:  ARC",
+        .alias = "ARC",
         .shortcut = ""
     },
     {
@@ -776,13 +791,13 @@ Command command_data[] = {
         .main = path_command,
         .arguments = "",
         .icon = "path",
-        .menu_name = "None",
-        .menu_position = 0,
-        .toolbar_name = "None",
-        .toolbar_position = 0,
-        .tooltip = "Icon&24",
-        .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "PATH",
+        .menu_name = "Draw",
+        .menu_position = 4,
+        .toolbar_name = "Draw",
+        .toolbar_position = 4,
+        .tooltip = "&Path",
+        .statustip = "Creates a 2D path:  PATH",
+        .alias = "PA, PATH",
         .shortcut = ""
     },
     {
@@ -804,13 +819,13 @@ Command command_data[] = {
         .main = point_command,
         .arguments = "",
         .icon = "point",
-        .menu_name = "None",
-        .menu_position = 0,
-        .toolbar_name = "None",
-        .toolbar_position = 0,
-        .tooltip = "Icon&24",
-        .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24",
+        .menu_name = "Draw",
+        .menu_position = 10,
+        .toolbar_name = "Draw",
+        .toolbar_position = 10,
+        .tooltip = "&Point",
+        .statustip = "Creates multiple points:  POINT",
+        .alias = "PO, POINT",
         .shortcut = ""
     },
     {
@@ -832,13 +847,13 @@ Command command_data[] = {
         .main = polyline_command,
         .arguments = "",
         .icon = "polyline",
-        .menu_name = "None",
-        .menu_position = 0,
-        .toolbar_name = "None",
-        .toolbar_position = 0,
-        .tooltip = "Icon&24",
-        .statustip = "Sets the toolbar icon size to 24x24: POLYLINE",
-        .alias = "POLYLINE",
+        .menu_name = "Draw",
+        .menu_position = 4,
+        .toolbar_name = "Draw",
+        .toolbar_position = 4,
+        .tooltip = "&Polyline",
+        .statustip = "Creates a 2D polyline:  PLINE",
+        .alias = "PL, PLINE, POLYLINE",
         .shortcut = ""
     },
     {
@@ -888,13 +903,13 @@ Command command_data[] = {
         .main = quickleader_command,
         .arguments = "",
         .icon = "quickleader",
-        .menu_name = "None",
-        .menu_position = 0,
-        .toolbar_name = "None",
-        .toolbar_position = 0,
-        .tooltip = "Icon&24",
-        .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "ICON24",
+        .menu_name = "Dimension",
+        .menu_position = 12,
+        .toolbar_name = "Dimension",
+        .toolbar_position = 12,
+        .tooltip = "&QuickLeader",
+        .statustip = "Creates a leader and annotation:  QUICKLEADER",
+        .alias = "LE, LEADER, QLEADER, QUICKLEADER",
         .shortcut = ""
     },
     {
@@ -959,12 +974,12 @@ Command command_data[] = {
         .arguments = "",
         .icon = "sandbox",
         .menu_name = "Sandbox",
-        .menu_position = 4,
+        .menu_position = 100,
         .toolbar_name = "Sandbox",
-        .toolbar_position = 3,
+        .toolbar_position = 100,
         .tooltip = "&Sandbox",
         .statustip = "A sandbox to play in: SANDBOX",
-        .alias = "SANDBOX",
+        .alias = "SAND, SANDBOX",
         .shortcut = ""
     },
     {
@@ -1029,12 +1044,12 @@ Command command_data[] = {
         .arguments = "",
         .icon = "selectall",
         .menu_name = "None",
-        .menu_position = 0,
+        .menu_position = 100,
         .toolbar_name = "None",
-        .toolbar_position = 0,
-        .tooltip = "Icon&24",
-        .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "SELECTALL, SELALL",
+        .toolbar_position = 100,
+        .tooltip = "&Select All",
+        .statustip = "Selects all objects:  SELECTALL",
+        .alias = "AI_SELALL, SELALL, SELECTALL",
         .shortcut = ""
     },
     {
@@ -1084,13 +1099,13 @@ Command command_data[] = {
         .main = singlelinetext_command,
         .arguments = "",
         .icon = "singlelinetext",
-        .menu_name = "None",
-        .menu_position = 0,
-        .toolbar_name = "None",
-        .toolbar_position = 0,
-        .tooltip = "Icon&24",
-        .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
-        .alias = "SINGLELINETEXT",
+        .menu_name = "Draw",
+        .menu_position = 18,
+        .toolbar_name = "Draw",
+        .toolbar_position = 16,
+        .tooltip = "&Single Line Text",
+        .statustip = "Creates single-line text objects:  TEXT",
+        .alias = "DT, DTEXT, TEXT, SINGLELINETEXT",
         .shortcut = ""
     },
     {

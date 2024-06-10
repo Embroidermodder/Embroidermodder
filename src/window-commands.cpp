@@ -18,10 +18,10 @@ windowcascade_command(ScriptEnv * context)
     if (!argument_checks(context, "windowcascade_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
     _main->mdiArea->cascade();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -32,10 +32,10 @@ windowclose_command(ScriptEnv * context)
     if (!argument_checks(context, "windowclose_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
     _main->onCloseWindow();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -46,10 +46,10 @@ windowcloseall_command(ScriptEnv * context)
     if (!argument_checks(context, "windowcloseall_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
     _main->mdiArea->closeAllSubWindows();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -60,10 +60,10 @@ windownext_command(ScriptEnv * context)
     if (!argument_checks(context, "windownext_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
     _main->mdiArea->activateNextSubWindow();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -74,10 +74,10 @@ windowprevious_command(ScriptEnv * context)
     if (!argument_checks(context, "windowprevious_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
     _main->mdiArea->activatePreviousSubWindow();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -88,9 +88,9 @@ windowtile_command(ScriptEnv *context)
     if (!argument_checks(context, "windowtile_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
     _main->mdiArea->tile();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }

@@ -99,30 +99,15 @@ QPointF DimLeaderObject::objectEndPoint1() const
 QPointF DimLeaderObject::objectEndPoint2() const
 {
     QLineF lyne = line();
-    qreal rot = radians(rotation());
-    qreal cosRot = cos(rot);
-    qreal sinRot = sin(rot);
-    qreal x2 = lyne.x2()*scale();
-    qreal y2 = lyne.y2()*scale();
-    qreal rotEnd2X = x2*cosRot - y2*sinRot;
-    qreal rotEnd2Y = x2*sinRot + y2*cosRot;
-
-    return (scenePos() + QPointF(rotEnd2X, rotEnd2Y));
+    QPointF endPoint2(lyne.x2(), lyne.y2());
+    return scenePos() + scale_and_rotate(endPoint2, scale(), rotation());
 }
 
 QPointF DimLeaderObject::objectMidPoint() const
 {
     QLineF lyne = line();
     QPointF mp = lyne.pointAt(0.5);
-    qreal rot = radians(rotation());
-    qreal cosRot = cos(rot);
-    qreal sinRot = sin(rot);
-    qreal mx = mp.x()*scale();
-    qreal my = mp.y()*scale();
-    qreal rotMidX = mx*cosRot - my*sinRot;
-    qreal rotMidY = mx*sinRot + my*cosRot;
-
-    return (scenePos() + QPointF(rotMidX, rotMidY));
+    return scenePos() + scale_and_rotate(mp, scale(), rotation());
 }
 
 qreal DimLeaderObject::objectAngle() const

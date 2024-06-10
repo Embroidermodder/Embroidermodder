@@ -6,7 +6,7 @@
  * Visit https://www.libembroidery.org/refman for advice on altering this file,
  * or read the markdown version in embroidermodder2/docs/refman.
  *
- * View Commands
+ * Main
  */
 
 #include "embroidermodder.h"
@@ -17,6 +17,24 @@ bool exitApp = false;
 int testing_mode = 0;
 
 MainWindow *_main;
+
+Application::Application(int argc, char **argv) : QApplication(argc, argv), _mainWin(NULL)
+{
+}
+
+bool Application::event(QEvent *event)
+{
+    switch (event->type()) {
+    case QEvent::FileOpen:
+        if (_main) {
+            _main->openFilesSelected(QStringList(static_cast<QFileOpenEvent *>(event)->file()));
+            return true;
+        }
+        // Fall through
+    default:
+        return QApplication::event(event);
+    }
+}
 
 static void
 usage(void)

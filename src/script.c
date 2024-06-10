@@ -62,6 +62,8 @@ ScriptValue script_false = {
     .type = SCRIPT_BOOL
 };
 
+/* TODO: remove args command, use the command_data table
+ */
 int
 argument_checks(ScriptEnv *context, char *function, const char *args)
 {
@@ -69,7 +71,7 @@ argument_checks(ScriptEnv *context, char *function, const char *args)
     int i;
     if (context->argumentCount != strlen(args)) {
         sprintf(s, "%s() requires %s arguments.", function, index_name[i]);
-        debug_message(s);
+        prompt_output(s);
         return 0;
     }
     for (i=0; args[i]; i++) {
@@ -78,7 +80,7 @@ argument_checks(ScriptEnv *context, char *function, const char *args)
                 sprintf(s,
                     "TYPE_ERROR, %s(): %s argument is not a real number.",
                     function, index_th_name[i]);
-                debug_message(s);
+                prompt_output(s);
                 return 0;
             }
             float variable = context->argument[i].r;
@@ -86,7 +88,7 @@ argument_checks(ScriptEnv *context, char *function, const char *args)
                 sprintf(s,
                     "TYPE_ERROR, %s(): %s argument is not a real number.",
                     function, index_th_name[i]);
-                debug_message(s);
+                prompt_output(s);
                 return 0;
             }
         }
@@ -95,7 +97,7 @@ argument_checks(ScriptEnv *context, char *function, const char *args)
                 sprintf(s,
                     "TYPE_ERROR, %s(): %s argument is not an integer.",
                     function, index_th_name[i]);
-                debug_message(s);
+                prompt_output(s);
                 return 0;
             }
         }
@@ -104,7 +106,7 @@ argument_checks(ScriptEnv *context, char *function, const char *args)
                 sprintf(s,
                     "TYPE_ERROR, %s(): %s argument is not a boolean.",
                     function, index_th_name[i]);
-                debug_message(s);
+                prompt_output(s);
                 return 0;
             }
         }
@@ -113,7 +115,7 @@ argument_checks(ScriptEnv *context, char *function, const char *args)
                 sprintf(s,
                     "TYPE_ERROR, %s(): %s argument is not a string.",
                     function, index_th_name[i]);
-                debug_message(s);
+                prompt_output(s);
                 return 0;
             }
         }

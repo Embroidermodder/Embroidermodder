@@ -127,20 +127,6 @@ function prompt(str)
         }
     }
 }
-[Menu]
-Name=Draw
-Position=4
-
-[ToolBar]
-Name=Draw
-Position=4
-
-[Tips]
-ToolTip=&Path
-StatusTip=Creates a 2D path:  PATH
-
-[Prompt]
-Alias=PA, PATH
 #endif
 
 PathObject::PathObject(qreal x, qreal y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
@@ -260,5 +246,3 @@ QPainterPath PathObject::objectSavePath() const
     trans.scale(s,s);
     return trans.map(normalPath);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

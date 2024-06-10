@@ -55,6 +55,7 @@
 #define REAL(i)             context->argument[i].r
 #define INT(i)              context->argument[i].i
 #define QSTR(i)    QString(context->argument[i].s)
+#define STR(i)              context->argument[i].s
 #define BOOL(i)             context->argument[i].b
 
 class ArcObject;
@@ -1123,17 +1124,18 @@ public:
     QList<QPainterPath> objectSavePathList() const { return subPathList(); }
     QList<QPainterPath> subPathList() const;
 
-    QString objectText()           const { return objText; }
-    QString objectTextFont()       const { return objTextFont; }
-    QString objectTextJustify()    const { return objTextJustify; }
-    qreal objectTextSize()       const { return objTextSize; }
-    bool objectTextBold()       const { return objTextBold; }
-    bool objectTextItalic()     const { return objTextItalic; }
-    bool objectTextUnderline()  const { return objTextUnderline; }
-    bool objectTextStrikeOut()  const { return objTextStrikeOut; }
-    bool objectTextOverline()   const { return objTextOverline; }
-    bool objectTextBackward()   const { return objTextBackward; }
-    bool objectTextUpsideDown() const { return objTextUpsideDown; }
+    QString objText;
+    QString objTextFont;
+    QString objTextJustify;
+    qreal objTextSize;
+    bool objTextBold;
+    bool objTextItalic;
+    bool objTextUnderline;
+    bool objTextStrikeOut;
+    bool objTextOverline;
+    bool objTextBackward;
+    bool objTextUpsideDown;
+    QPainterPath objTextPath;
     QPointF objectPos()            const { return scenePos(); }
     qreal objectX()              const { return scenePos().x(); }
     qreal objectY()              const { return scenePos().y(); }
@@ -1166,19 +1168,6 @@ protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
     void init(const QString& str, qreal x, qreal y, QRgb rgb, Qt::PenStyle lineType);
-
-    QString objText;
-    QString objTextFont;
-    QString objTextJustify;
-    qreal objTextSize;
-    bool objTextBold;
-    bool objTextItalic;
-    bool objTextUnderline;
-    bool objTextStrikeOut;
-    bool objTextOverline;
-    bool objTextBackward;
-    bool objTextUpsideDown;
-    QPainterPath objTextPath;
 };
 
 
@@ -1958,9 +1947,9 @@ signals:
     void historyAppended(const QString& txt);
 
 private:
-    CmdPromptHistory*  promptHistory;
-    QVBoxLayout*       promptVBoxLayout;
-    QFrame*            promptDivider;
+    CmdPromptHistory* promptHistory;
+    QVBoxLayout* promptVBoxLayout;
+    QFrame* promptDivider;
 
     CmdPromptSplitter* promptSplitter;
 
@@ -1978,20 +1967,19 @@ public:
     MainWindow();
     ~MainWindow();
 
-    MdiArea*                        getMdiArea();
-    MainWindow*                     getApplication();
+    MdiArea* getMdiArea();
     MdiWindow* activeMdiWindow();
 
     void setUndoCleanIcon(bool opened);
 
     virtual void updateMenuToolbarStatusbar();
 
-    MdiArea*        mdiArea;
-    CmdPrompt*      prompt;
+    MdiArea* mdiArea;
+    CmdPrompt* prompt;
     PropertyEditor* dockPropEdit;
-    UndoEditor*     dockUndoEdit;
-    StatusBar*      statusbar;
-    QTimer*         testing_timer;
+    UndoEditor* dockUndoEdit;
+    StatusBar* statusbar;
+    QTimer* testing_timer;
 
     QList<QGraphicsItem*> cutCopyObjectList;
 
@@ -2269,7 +2257,6 @@ public slots:
     void print();
     void designDetails();
     void exit();
-    void quit();
     void checkForUpdates();
 
     // Help Menu
@@ -2367,8 +2354,6 @@ public:
     void nativeAppendPromptHistory(const QString& txt);
     void nativeEnablePromptRapidFire();
     void nativeDisablePromptRapidFire();
-    void nativeInitCommand();
-    void nativeEndCommand();
 
     void nativeEnableMoveRapidFire();
     void nativeDisableMoveRapidFire();
@@ -2441,6 +2426,8 @@ public:
 View* activeView();
 QGraphicsScene* activeScene();
 QUndoStack* activeUndoStack();
+
+QPointF scale_and_rotate(QPointF v, qreal angle, qreal scale);
 
 extern QHash<QString, Command> command_map;
 extern QHash<QString, QString>* aliasHash;

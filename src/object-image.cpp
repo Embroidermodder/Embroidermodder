@@ -62,62 +62,22 @@ void ImageObject::setObjectRect(qreal x, qreal y, qreal w, qreal h)
 
 QPointF ImageObject::objectTopLeft() const
 {
-    qreal rot = radians(rotation());
-    qreal cosRot = cos(rot);
-    qreal sinRot = sin(rot);
-
-    QPointF tl = rect().topLeft();
-    qreal ptlX = tl.x()*scale();
-    qreal ptlY = tl.y()*scale();
-    qreal ptlXrot = ptlX*cosRot - ptlY*sinRot;
-    qreal ptlYrot = ptlX*sinRot + ptlY*cosRot;
-
-    return (scenePos() + QPointF(ptlXrot, ptlYrot));
+    return scenePos() + scale_and_rotate(rect().topLeft(), scale(), rotation());
 }
 
 QPointF ImageObject::objectTopRight() const
 {
-    qreal rot = radians(rotation());
-    qreal cosRot = cos(rot);
-    qreal sinRot = sin(rot);
-
-    QPointF tr = rect().topRight();
-    qreal ptrX = tr.x()*scale();
-    qreal ptrY = tr.y()*scale();
-    qreal ptrXrot = ptrX*cosRot - ptrY*sinRot;
-    qreal ptrYrot = ptrX*sinRot + ptrY*cosRot;
-
-    return (scenePos() + QPointF(ptrXrot, ptrYrot));
+    return scenePos() + scale_and_rotate(rect().topRight(), scale(), rotation());
 }
 
 QPointF ImageObject::objectBottomLeft() const
 {
-    qreal rot = radians(rotation());
-    qreal cosRot = cos(rot);
-    qreal sinRot = sin(rot);
-
-    QPointF bl = rect().bottomLeft();
-    qreal pblX = bl.x()*scale();
-    qreal pblY = bl.y()*scale();
-    qreal pblXrot = pblX*cosRot - pblY*sinRot;
-    qreal pblYrot = pblX*sinRot + pblY*cosRot;
-
-    return (scenePos() + QPointF(pblXrot, pblYrot));
+    return scenePos() + scale_and_rotate(rect().bottomLeft(), scale(), rotation());
 }
 
 QPointF ImageObject::objectBottomRight() const
 {
-    qreal rot = radians(rotation());
-    qreal cosRot = cos(rot);
-    qreal sinRot = sin(rot);
-
-    QPointF br = rect().bottomRight();
-    qreal pbrX = br.x()*scale();
-    qreal pbrY = br.y()*scale();
-    qreal pbrXrot = pbrX*cosRot - pbrY*sinRot;
-    qreal pbrYrot = pbrX*sinRot + pbrY*cosRot;
-
-    return (scenePos() + QPointF(pbrXrot, pbrYrot));
+    return scenePos() + scale_and_rotate(rect().bottomRight(), scale(), rotation());
 }
 
 void ImageObject::updatePath()
@@ -218,5 +178,3 @@ void ImageObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     //TODO: gripEdit() for ImageObject
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

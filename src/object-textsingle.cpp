@@ -353,20 +353,6 @@ function prompt(str)
         }
     }
 }
-[Menu]
-Name=Draw
-Position=18
-
-[ToolBar]
-Name=Draw
-Position=16
-
-[Tips]
-ToolTip=&Single Line Text
-StatusTip=Creates single-line text objects:  TEXT
-
-[Prompt]
-Alias=DT, DTEXT, TEXT, SINGLELINETEXT
 #endif
 
 
@@ -379,15 +365,15 @@ TextSingleObject::TextSingleObject(const QString& str, qreal x, qreal y, QRgb rg
 TextSingleObject::TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("TextSingleObject Constructor()");
-    if(obj)
-    {
-        setObjectTextFont(obj->objectTextFont());
-        setObjectTextSize(obj->objectTextSize());
+    if (obj) {
+        setObjectTextFont(obj->objTextFont);
+        setObjectTextSize(obj->objTextSize);
         setRotation(obj->rotation());
-        setObjectTextBackward(obj->objectTextBackward());
-        setObjectTextUpsideDown(obj->objectTextUpsideDown());
-        setObjectTextStyle(obj->objectTextBold(), obj->objectTextItalic(), obj->objectTextUnderline(), obj->objectTextStrikeOut(), obj->objectTextOverline());
-        init(obj->objectText(), obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        setObjectTextBackward(obj->objTextBackward);
+        setObjectTextUpsideDown(obj->objTextUpsideDown);
+        setObjectTextStyle(obj->objTextBold, obj->objTextItalic,
+            obj->objTextUnderline, obj->objTextStrikeOut, obj->objTextOverline);
+        init(obj->objText, obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setScale(obj->scale());
     }
 }

@@ -18,10 +18,10 @@ day_command(ScriptEnv *context)
     if (!argument_checks(context, "day_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
     _main->dayVision();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -32,10 +32,10 @@ night_command(ScriptEnv * context)
     if (!argument_checks(context, "night_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
     _main->nightVision();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -57,9 +57,9 @@ panrealtime_command(ScriptEnv*)
 ScriptValue
 pandown_command(ScriptEnv * context)
 {
-    _main->nativeInitCommand();
+    init_command();
     _main->panDown();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -69,9 +69,9 @@ pandown_command(ScriptEnv * context)
 ScriptValue
 panleft_command(ScriptEnv * context)
 {
-    _main->nativeInitCommand();
+    init_command();
     _main->panLeft();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -81,9 +81,9 @@ panleft_command(ScriptEnv * context)
 ScriptValue
 panright_command(ScriptEnv * context)
 {
-    _main->nativeInitCommand();
+    init_command();
     _main->panRight();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -95,14 +95,14 @@ panup_command(ScriptEnv * context)
     if (!argument_checks(context, "panup_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
+    init_command();
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack) {
         UndoableNavCommand* cmd = new UndoableNavCommand("PanUp", gview, 0);
         stack->push(cmd);
     }
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -113,10 +113,10 @@ zoom_all_command(ScriptEnv *context)
     if (!argument_checks(context, "zoomextents_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
     _main->zoomExtents();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -127,10 +127,10 @@ zoom_dynamic_command(ScriptEnv *context)
     if (!argument_checks(context, "zoomextents_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
     _main->zoomExtents();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -141,10 +141,10 @@ zoom_center_command(ScriptEnv *context)
     if (!argument_checks(context, "zoomextents_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
     _main->zoomExtents();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -155,10 +155,10 @@ zoom_extents_command(ScriptEnv *context)
     if (!argument_checks(context, "zoomextents_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
     _main->zoomExtents();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -170,15 +170,15 @@ zoom_in_command(ScriptEnv *context)
     if (!argument_checks(context, "zoom_in_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
 
     View* gview = activeView();
     if (gview) {
         gview->zoomIn();
     }
 
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -189,10 +189,10 @@ zoom_previous_command(ScriptEnv *context)
     if (!argument_checks(context, "zoomin_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
 
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -204,10 +204,10 @@ zoom_real_time_command(ScriptEnv *context)
     if (!argument_checks(context, "zoom_real_time_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
     _main->stub_implement("Implement zoomRealtime.");
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -218,15 +218,15 @@ zoom_out_command(ScriptEnv *context)
     if (!argument_checks(context, "zoomout_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
 
     View* gview = activeView();
     if (gview) {
         gview->zoomOut();
     }
 
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -237,10 +237,10 @@ zoom_scale_command(ScriptEnv *context)
     if (!argument_checks(context, "zoomin_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
 
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -251,10 +251,10 @@ zoom_selected_command(ScriptEnv *context)
     if (!argument_checks(context, "zoomin_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
 
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -265,9 +265,9 @@ zoom_window_command(ScriptEnv *context)
     if (!argument_checks(context, "zoomin_command", "")) {
         return script_false;
     }
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
 
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }

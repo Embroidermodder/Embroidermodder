@@ -19,31 +19,37 @@
 void
 init_command(void)
 {
-    _main->nativeInitCommand();
+    View* gview = activeView();
+    if (gview) {
+        gview->clearRubberRoom();
+    }
 }
 
 void
 clear_selection(void)
 {
-    _main->nativeClearSelection();
+    View* gview = activeView();
+    if (gview) {
+        gview->clearSelection();
+    }
 }
 
 void
-debug_message(const char *s)
+prompt_output(const char *txt)
 {
-    _main->nativeAppendPromptHistory(s);
-}
-
-void
-append_history(char *line)
-{
-    _main->nativeAppendPromptHistory(line);
+    _main->prompt->appendHistory(QString(txt));
 }
 
 void
 end_command(void)
 {
-    _main->nativeEndCommand();
+    View* gview = activeView();
+    if (gview) {
+        gview->clearRubberRoom();
+        gview->previewOff();
+        gview->disableMoveRapidFire();
+    }
+    _main->prompt->endCommand();
 }
 
 /* Simple Commands (other commands, like circle_command are housed in their
@@ -110,7 +116,7 @@ about_command(ScriptEnv *context)
     dialog.exec();
 
     QApplication::restoreOverrideCursor();
-    _main->nativeEndCommand();
+    end_command();
 }
 
 /* ALERT is a prompt-only command. */
@@ -123,7 +129,7 @@ alert_command(ScriptEnv *context)
 
     init_command();
     _main->prompt->alert(QSTR(0));
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -132,9 +138,9 @@ ScriptValue
 angle_command(ScriptEnv *context)
 {
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
 
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -146,8 +152,8 @@ changelog_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    _main->nativeClearSelection();
-    _main->nativeEndCommand();
+    clear_selection();
+    end_command();
     return script_null;
 }
 
@@ -160,8 +166,8 @@ clear_command(ScriptEnv* context)
     }
 
     init_command();
-    _main->nativeClearSelection();
-    _main->nativeEndCommand();
+    clear_selection();
+    end_command();
     return script_null;
 }
 
@@ -173,8 +179,8 @@ copy_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    _main->nativeClearSelection();
-    _main->nativeEndCommand();
+    clear_selection();
+    end_command();
     return script_null;
 }
 
@@ -186,15 +192,20 @@ cut_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    _main->nativeClearSelection();
-    _main->nativeEndCommand();
+    clear_selection();
+    end_command();
     return script_null;
 }
 
 /* . */
 ScriptValue
-colorselector_command(ScriptEnv*)
+colorselector_command(ScriptEnv* context)
 {
+    if (!argument_checks(context, "color_selector_command", "")) {
+        return script_false;
+    }
+    init_command();
+    end_command();
     return script_null;
 }
 
@@ -206,9 +217,9 @@ debug_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
     _main->nativeAppendPromptHistory(QSTR(0));
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -220,8 +231,8 @@ design_details_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    _main->nativeClearSelection();
-    _main->nativeEndCommand();
+    clear_selection();
+    end_command();
     return script_true;
 }
 
@@ -241,7 +252,7 @@ disable_command(ScriptEnv* context)
         _main->disablePromptRapidFire();
     }
 
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -271,7 +282,7 @@ enable_command(ScriptEnv* context)
         _main->enablePromptRapidFire();
     }
 
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -283,14 +294,14 @@ erase_command(ScriptEnv * /* context */)
     if (_main->nativeNumSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
         _main->prompt->alert(translate("Preselect objects before invoking the delete command."));
-        _main->nativeEndCommand();
+        end_command();
         _main->messageBox("information", translate("Delete Preselect"), translate("Preselect objects before invoking the delete command."));
     }
     else {
         _main->nativeDeleteSelected();
-        _main->nativeEndCommand();
+        end_command();
     }
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -302,11 +313,11 @@ error_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
     QString s = "ERROR: (" + QSTR(0) + ") " + QSTR(1);
     _main->nativeSetPromptPrefix(s);
     _main->nativeAppendPromptHistory(QString());
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -315,9 +326,9 @@ ScriptValue
 exit_command(ScriptEnv * /* context */)
 {
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
     _main->exit();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -336,23 +347,23 @@ get_command(ScriptEnv* context)
     if (value == "MOUSEX") {
         QGraphicsScene* scene = activeScene();
         if (!scene) {
-            _main->nativeEndCommand();
+            end_command();
             return script_false;
         }
         ScriptValue r = script_real(scene->property(SCENE_MOUSE_POINT).toPointF().x());
         //_main->qDebug("mouseY: %.50f", r.r);
-        _main->nativeEndCommand();
+        end_command();
         return r;
     }
     else if (value == "MOUSEY") {
         QGraphicsScene* scene = activeScene();
         if (!scene) {
-            _main->nativeEndCommand();
+            end_command();
             return script_false;
         }
         ScriptValue r = script_real(-scene->property(SCENE_MOUSE_POINT).toPointF().y());
         //_main->qDebug("mouseY: %.50f", r.r);
-        _main->nativeEndCommand();
+        end_command();
         return r;
     }
     else if (value == "TEXTANGLE") {
@@ -386,7 +397,7 @@ get_command(ScriptEnv* context)
         return script_bool(_main->nativeQSnapY());
     }
 
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -395,9 +406,9 @@ ScriptValue
 help_command(ScriptEnv * /* context */)
 {
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
     _main->help();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -408,9 +419,9 @@ icon128_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
     _main->iconResize(128);
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -421,9 +432,9 @@ icon16_command(ScriptEnv * context)
         return script_false;
     }
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
     _main->iconResize(16);
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -434,9 +445,9 @@ icon24_command(ScriptEnv * context)
         return script_false;
     }
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
     _main->iconResize(24);
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -447,9 +458,9 @@ icon32_command(ScriptEnv * context)
         return script_false;
     }
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
     _main->iconResize(32);
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -460,9 +471,9 @@ icon48_command(ScriptEnv * context)
         return script_false;
     }
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
     _main->iconResize(48);
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -473,9 +484,9 @@ icon64_command(ScriptEnv * context)
         return script_false;
     }
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
     _main->iconResize(64);
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -489,7 +500,7 @@ mirrorselected_command(ScriptEnv *context)
 
     init_command();
     _main->nativeMirrorSelected(REAL(0), REAL(1), REAL(2), REAL(3));
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -497,7 +508,7 @@ mirrorselected_command(ScriptEnv *context)
 ScriptValue
 moveselected_command(ScriptEnv *context)
 {
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -506,9 +517,9 @@ ScriptValue
 new_command(ScriptEnv * context)
 {
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
     _main->newFile();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -517,9 +528,9 @@ ScriptValue
 open_command(ScriptEnv * context)
 {
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
     _main->openFile();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -532,8 +543,8 @@ paste_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    _main->nativeClearSelection();
-    _main->nativeEndCommand();
+    clear_selection();
+    end_command();
     return script_null;
 }
 
@@ -550,7 +561,7 @@ platform_command(ScriptEnv *context)
     init_command();
 //  setPromptPrefix(qsTr("Platform") + " = " + _main->platformString());
 //  appendPromptHistory();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -566,7 +577,7 @@ previewoff_command(ScriptEnv *context)
     if (gview) {
         gview->previewOff();
     }
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -587,7 +598,7 @@ previewon_command(ScriptEnv *context)
         clone = PREVIEW_CLONE_RUBBER;
     }
     else {
-        debug_message("UNKNOWN_ERROR previewOn(): first argument must be \"SELECTED\" or \"RUBBER\".");
+        prompt_output("UNKNOWN_ERROR previewOn(): first argument must be \"SELECTED\" or \"RUBBER\".");
         return script_false;
     }
 
@@ -603,7 +614,7 @@ previewon_command(ScriptEnv *context)
         mode = PREVIEW_MODE_SCALE;
     }
     else {
-        debug_message("UNKNOWN_ERROR previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\".");
+        prompt_output("UNKNOWN_ERROR previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\".");
         return script_false;
     }
 
@@ -612,9 +623,9 @@ previewon_command(ScriptEnv *context)
         gview->previewOn(clone, mode, REAL(2), -REAL(3), REAL(4));
     }
     else {
-        debug_message("Preview on requires an active view.");
+        prompt_output("Preview on requires an active view.");
     }
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -623,9 +634,9 @@ ScriptValue
 print_command(ScriptEnv *context)
 {
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
 
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -637,9 +648,9 @@ redo_command(ScriptEnv * context)
         return script_false;
     }
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
     _main->redo();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -651,8 +662,8 @@ save_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    _main->nativeClearSelection();
-    _main->nativeEndCommand();
+    clear_selection();
+    end_command();
     return script_null;
 }
 
@@ -660,7 +671,7 @@ save_command(ScriptEnv *context)
 ScriptValue
 scaleselected_command(ScriptEnv *context)
 {
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -729,7 +740,7 @@ set_command(ScriptEnv* context)
         _main->settings_text_style_underline = BOOL(1);
     }
 
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -741,9 +752,9 @@ settings_dialog_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
     _main->settingsDialog();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -753,9 +764,9 @@ settings_dialog_command(ScriptEnv *context)
 ScriptValue
 syswindows_command(ScriptEnv * context)
 {
+    init_command();
+    clear_selection();
     /*
-    initCommand();
-    clearSelection();
     setPromptPrefix(qsTr("Enter an option [Cascade/Tile]: "));
     */
 
@@ -765,12 +776,12 @@ syswindows_command(ScriptEnv * context)
     if (str == "C" || str == "CASCADE") {
         //TODO: Probably should add additional qsTr calls here.
         _main->windowCascade();
-        _main->endCommand();
+        end_command();
     }
     else if (str == "T" || str == "TILE") {
         //TODO: Probably should add additional qsTr calls here.
         _main->windowTile();
-        _main->endCommand();
+        end_command();
     }
     else {
         alert(qsTr("Invalid option keyword."));
@@ -784,13 +795,13 @@ syswindows_command(ScriptEnv * context)
 ScriptValue
 text_bold_command(ScriptEnv *context)
 {
-    if (!argument_checks(context, "zoomin_command", "")) {
+    if (!argument_checks(context, "text_bold_command", "")) {
         return script_false;
     }
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
     /* _main->settings_text_style_bold; */
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -798,13 +809,13 @@ text_bold_command(ScriptEnv *context)
 ScriptValue
 text_italic_command(ScriptEnv *context)
 {
-    if (!argument_checks(context, "zoomin_command", "")) {
+    if (!argument_checks(context, "text_italic_command", "")) {
         return script_false;
     }
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
     /* _main->settings_text_style_italic; */
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -812,13 +823,13 @@ text_italic_command(ScriptEnv *context)
 ScriptValue
 text_underline_command(ScriptEnv *context)
 {
-    if (!argument_checks(context, "zoomin_command", "")) {
+    if (!argument_checks(context, "text_underline_command", "")) {
         return script_false;
     }
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
     /* _main->settings_text_style_underline; */
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -826,13 +837,13 @@ text_underline_command(ScriptEnv *context)
 ScriptValue
 text_overline_command(ScriptEnv *context)
 {
-    if (!argument_checks(context, "zoomin_command", "")) {
+    if (!argument_checks(context, "text_overline_command", "")) {
         return script_false;
     }
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
     /* _main->settings_text_style_overline; */
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -840,13 +851,13 @@ text_overline_command(ScriptEnv *context)
 ScriptValue
 text_strikeout_command(ScriptEnv *context)
 {
-    if (!argument_checks(context, "zoomin_command", "")) {
+    if (!argument_checks(context, "text_strikeout_command", "")) {
         return script_false;
     }
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
     /* _main->settings_text_style_strikeout; */
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -856,9 +867,9 @@ ScriptValue
 tipoftheday_command(ScriptEnv * context)
 {
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
     _main->tipOfTheDay();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -871,7 +882,7 @@ todo_command(ScriptEnv *context)
     }
     init_command();
     _main->prompt->alert("TODO: (" + QSTR(0) + ") " + QSTR(1));
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -882,9 +893,9 @@ ScriptValue
 undo_command(ScriptEnv * context)
 {
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
     _main->undo();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -897,9 +908,9 @@ vulcanize_command(ScriptEnv * context)
     }
 
     init_command();
-    _main->nativeClearSelection();
+    clear_selection();
     _main->nativeVulcanize();
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -911,8 +922,8 @@ whats_this_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    _main->nativeClearSelection();
-    _main->nativeEndCommand();
+    clear_selection();
+    end_command();
     return script_null;
 }
 
@@ -921,7 +932,7 @@ whats_this_command(ScriptEnv *context)
  */
 
 ScriptValue
-javaBlinkPrompt(ScriptEnv* context)
+blink_prompt_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -932,7 +943,7 @@ javaBlinkPrompt(ScriptEnv* context)
 }
 
 ScriptValue
-javaSetPromptPrefix(ScriptEnv* context)
+set_prompt_prefix_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "s")) {
         return script_false;
@@ -942,24 +953,24 @@ javaSetPromptPrefix(ScriptEnv* context)
 }
 
 ScriptValue
-javaAppendPromptHistory(ScriptEnv* context)
+append_prompt_history(ScriptEnv* context)
 {
     int args = context->argumentCount;
     if (args == 0) {
-        _main->nativeAppendPromptHistory(QString());
+        prompt_output("");
     }
     else if (args == 1) {
-        _main->nativeAppendPromptHistory(QSTR(0));
+        prompt_output(STR(0));
     }
     else {
-        debug_message("appendPromptHistory() requires one or zero arguments");
+        prompt_output("appendPromptHistory() requires one or zero arguments");
         return script_false;
     }
     return script_null;
 }
 
 ScriptValue
-javaEnablePromptRapidFire(ScriptEnv* context)
+enable_prompt_rapid_fire(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -970,7 +981,7 @@ javaEnablePromptRapidFire(ScriptEnv* context)
 }
 
 ScriptValue
-javaDisablePromptRapidFire(ScriptEnv* context)
+disable_prompt_rapid_fire(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -981,7 +992,7 @@ javaDisablePromptRapidFire(ScriptEnv* context)
 }
 
 ScriptValue
-javaEnableMoveRapidFire(ScriptEnv* context)
+enable_move_rapid_fire(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -992,7 +1003,7 @@ javaEnableMoveRapidFire(ScriptEnv* context)
 }
 
 ScriptValue
-javaDisableMoveRapidFire(ScriptEnv* context)
+disable_move_rapid_fire(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "")) {
         return script_false;
@@ -1003,7 +1014,7 @@ javaDisableMoveRapidFire(ScriptEnv* context)
 }
 
 ScriptValue
-javaMessageBox(ScriptEnv* context)
+messagebox(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "sss")) {
         return script_false;
@@ -1014,7 +1025,7 @@ javaMessageBox(ScriptEnv* context)
     QString text  = QSTR(2);
 
     if (type != "critical" && type != "information" && type != "question" && type != "warning") {
-        debug_message("UNKNOWN_ERROR messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
+        prompt_output("UNKNOWN_ERROR messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
         return script_false;
     }
 
@@ -1023,7 +1034,7 @@ javaMessageBox(ScriptEnv* context)
 }
 
 ScriptValue
-javaIsInt(ScriptEnv* context)
+is_int_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "i")) {
         return script_false;
@@ -1032,7 +1043,7 @@ javaIsInt(ScriptEnv* context)
 }
 
 ScriptValue
-javaPrintArea(ScriptEnv* context)
+print_area_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "printArea", "rrrr")) {
         return script_false;
@@ -1042,21 +1053,21 @@ javaPrintArea(ScriptEnv* context)
 }
 
 ScriptValue
-set_background_color(ScriptEnv* context)
+set_background_color_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "debug", "rrr")) {
         return script_false;
     }
     if (REAL(0) < 0 || REAL(0) > 255) {
-        debug_message("UNKNOWN_ERROR setBackgroundColor(): r value must be in range 0-255");
+        prompt_output("UNKNOWN_ERROR setBackgroundColor(): r value must be in range 0-255");
         return script_false;
     }
     if (REAL(1) < 0 || REAL(1) > 255) {
-        debug_message("UNKNOWN_ERROR setBackgroundColor(): g value must be in range 0-255");
+        prompt_output("UNKNOWN_ERROR setBackgroundColor(): g value must be in range 0-255");
         return script_false;
     }
     if (REAL(2) < 0 || REAL(2) > 255) {
-        debug_message("UNKNOWN_ERROR setBackgroundColor(): b value must be in range 0-255");
+        prompt_output("UNKNOWN_ERROR setBackgroundColor(): b value must be in range 0-255");
         return script_false;
     }
 
@@ -1072,15 +1083,15 @@ set_crosshair_color_command(ScriptEnv* context)
     }
 
     if (REAL(0) < 0 || REAL(0) > 255) {
-        debug_message("UNKNOWN_ERROR setCrossHairColor(): r value must be in range 0-255");
+        prompt_output("UNKNOWN_ERROR setCrossHairColor(): r value must be in range 0-255");
         return script_false;
     }
     if (REAL(1) < 0 || REAL(1) > 255) {
-        debug_message("UNKNOWN_ERROR setCrossHairColor(): g value must be in range 0-255");
+        prompt_output("UNKNOWN_ERROR setCrossHairColor(): g value must be in range 0-255");
         return script_false;
     }
     if (REAL(2) < 0 || REAL(2) > 255) {
-        debug_message("UNKNOWN_ERROR setCrossHairColor(): b value must be in range 0-255");
+        prompt_output("UNKNOWN_ERROR setCrossHairColor(): b value must be in range 0-255");
         return script_false;
     }
 
@@ -1096,15 +1107,15 @@ set_grid_color_command(ScriptEnv* context)
     }
 
     if (REAL(0) < 0 || REAL(0) > 255) {
-        debug_message("UNKNOWN_ERROR setGridColor(): r value must be in range 0-255");
+        prompt_output("UNKNOWN_ERROR setGridColor(): r value must be in range 0-255");
         return script_false;
     }
     if (REAL(1) < 0 || REAL(1) > 255) {
-        debug_message("UNKNOWN_ERROR setGridColor(): g value must be in range 0-255");
+        prompt_output("UNKNOWN_ERROR setGridColor(): g value must be in range 0-255");
         return script_false;
     }
     if (REAL(2) < 0 || REAL(2) > 255) {
-        debug_message("UNKNOWN_ERROR setGridColor(): b value must be in range 0-255");
+        prompt_output("UNKNOWN_ERROR setGridColor(): b value must be in range 0-255");
         return script_false;
     }
 
@@ -1136,7 +1147,7 @@ ScriptValue
 add_infinite_line(ScriptEnv* context)
 {
     //TODO: parameter error checking
-    debug_message("TODO: finish addInfiniteLine command");
+    prompt_output("TODO: finish addInfiniteLine command");
     return script_null;
 }
 
@@ -1144,7 +1155,7 @@ ScriptValue
 add_ray_command(ScriptEnv* context)
 {
     //TODO: parameter error checking
-    debug_message("TODO: finish addRay command");
+    prompt_output("TODO: finish addRay command");
     return script_null;
 }
 
@@ -1219,7 +1230,7 @@ add_slot_command(ScriptEnv* context)
 }
 
 ScriptValue
-add_Ellipse(ScriptEnv* context)
+add_ellipse_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "mouseX", "rrrrrb")) {
         return script_false;
@@ -1229,7 +1240,7 @@ add_Ellipse(ScriptEnv* context)
 }
 
 ScriptValue
-add_Point(ScriptEnv* context)
+add_point_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "mouseX", "rr")) {
         return script_false;
@@ -1242,7 +1253,7 @@ ScriptValue
 add_regular_polygon_command(ScriptEnv* context)
 {
     //TODO: parameter error checking
-    debug_message("TODO: finish addRegularPolygon command");
+    prompt_output("TODO: finish addRegularPolygon command");
     return script_null;
 }
 
@@ -1251,22 +1262,22 @@ add_polygon_command(ScriptEnv* context)
 {
     #if 0
     if (context->argumentCount != 1) {
-        debug_message("addPolygon() requires one argument");
+        prompt_output("addPolygon() requires one argument");
         return script_false;
     }
     if (!context->argument[0].isArray()) {
-        debug_message("TYPE_ERROR, addPolygon(): first argument is not an array");
+        prompt_output("TYPE_ERROR, addPolygon(): first argument is not an array");
         return script_false;
     }
 
     QVariantList varList = context->argument[0].toVariant().toList();
     int varSize = varList.size();
     if (varSize < 2) {
-        debug_message("TYPE_ERROR, addPolygon(): array must contain at least two elements");
+        prompt_output("TYPE_ERROR, addPolygon(): array must contain at least two elements");
         return script_false;
     }
     if (varSize % 2) {
-        debug_message("TYPE_ERROR, addPolygon(): array cannot contain an odd number of elements");
+        prompt_output("TYPE_ERROR, addPolygon(): array cannot contain an odd number of elements");
         return script_false;
     }
 
@@ -1277,17 +1288,13 @@ add_polygon_command(ScriptEnv* context)
     qreal startX = 0;
     qreal startY = 0;
     QPainterPath path;
-    foreach(QVariant var, varList)
-    {
-        if (var.canConvert(QVariant::Double))
-        {
-            if (xCoord)
-            {
+    foreach (QVariant var, varList) {
+        if (var.canConvert(QVariant::Double)) {
+            if (xCoord) {
                 xCoord = false;
                 x = var.toReal();
             }
-            else
-            {
+            else {
                 xCoord = true;
                 y = -var.toReal();
 
@@ -1296,7 +1303,7 @@ add_polygon_command(ScriptEnv* context)
             }
         }
         else {
-            debug_message("TYPE_ERROR, addPolygon(): array contains one or more invalid elements");
+            prompt_output("TYPE_ERROR, addPolygon(): array contains one or more invalid elements");
             return script_false;
         }
     }
@@ -1316,22 +1323,22 @@ add_polyline_command(ScriptEnv* context)
 {
     #if 0
     if (context->argumentCount != 1) {
-        debug_message("addPolyline() requires one argument");
+        prompt_output("addPolyline() requires one argument");
         return script_false;
     }
     if (!context->argument[0].isArray()) {
-        debug_message("TYPE_ERROR, addPolyline(): first argument is not an array");
+        prompt_output("TYPE_ERROR, addPolyline(): first argument is not an array");
         return script_false;
     }
 
     QVariantList varList = context->argument[0].toVariant().toList();
     int varSize = varList.size();
     if (varSize < 2) {
-        debug_message("TYPE_ERROR, addPolyline(): array must contain at least two elements");
+        prompt_output("TYPE_ERROR, addPolyline(): array must contain at least two elements");
         return script_false;
     }
     if (varSize % 2) {
-        debug_message("TYPE_ERROR, addPolyline(): array cannot contain an odd number of elements");
+        prompt_output("TYPE_ERROR, addPolyline(): array cannot contain an odd number of elements");
         return script_false;
     }
 
@@ -1357,7 +1364,7 @@ add_polyline_command(ScriptEnv* context)
             }
         }
         else {
-            debug_message("TYPE_ERROR, addPolyline(): array contains one or more invalid elements");
+            prompt_output("TYPE_ERROR, addPolyline(): array contains one or more invalid elements");
             return script_false;
         }
     }
@@ -1373,7 +1380,7 @@ ScriptValue
 add_path_command(ScriptEnv* context)
 {
     //TODO: parameter error checking
-    debug_message("TODO: finish addPath command");
+    prompt_output("TODO: finish addPath command");
     return script_null;
 }
 
@@ -1381,7 +1388,7 @@ ScriptValue
 add_horizontal_dimension_command(ScriptEnv* context)
 {
     //TODO: parameter error checking
-    debug_message("TODO: finish addHorizontalDimension command");
+    prompt_output("TODO: finish addHorizontalDimension command");
     return script_null;
 }
 
@@ -1389,7 +1396,7 @@ ScriptValue
 add_vertical_dimension_command(ScriptEnv* context)
 {
     //TODO: parameter error checking
-    debug_message("TODO: finish addVerticalDimension command");
+    prompt_output("TODO: finish addVerticalDimension command");
     return script_null;
 }
 
@@ -1397,7 +1404,7 @@ ScriptValue
 add_image_command(ScriptEnv* context)
 {
     //TODO: parameter error checking
-    debug_message("TODO: finish addImage command");
+    prompt_output("TODO: finish addImage command");
     return script_null;
 }
 
@@ -1548,7 +1555,7 @@ scale_selected_command(ScriptEnv* context)
     }
 
     if (REAL(2) <= 0.0) {
-        debug_message("UNKNOWN_ERROR scaleSelected(): scale factor must be greater than zero");
+        prompt_output("UNKNOWN_ERROR scaleSelected(): scale factor must be greater than zero");
         return script_false;
     }
 

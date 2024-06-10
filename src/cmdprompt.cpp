@@ -182,31 +182,34 @@ void CmdPrompt::setPromptBackgroundColor(const QColor& color)
     updateStyle();
 }
 
-void CmdPrompt::setPromptFontFamily(const QString& family)
+void
+CmdPrompt::setPromptFontFamily(const QString& family)
 {
     styleHash->insert("font-family", family);
     updateStyle();
 }
 
-void CmdPrompt::setPromptFontStyle(const QString& style)
+void
+CmdPrompt::setPromptFontStyle(const QString& style)
 {
     styleHash->insert("font-style", style);
     updateStyle();
 }
 
-void CmdPrompt::setPromptFontSize(int size)
+void
+CmdPrompt::setPromptFontSize(int size)
 {
     styleHash->insert("font-size", QString().setNum(size).append("px"));
     updateStyle();
 }
 
-void CmdPrompt::updateStyle()
+void
+CmdPrompt::updateStyle()
 {
     QString style = "QTextBrowser,QLineEdit{";
 
     QHashIterator<QString, QString> i(*styleHash);
-    while(i.hasNext())
-    {
+    while (i.hasNext()) {
         i.next();
         style.append(i.key() + ":" + i.value() + ";");
     }
@@ -215,10 +218,10 @@ void CmdPrompt::updateStyle()
     this->setStyleSheet(style);
 }
 
-void CmdPrompt::appendHistory(const QString& txt)
+void
+CmdPrompt::appendHistory(const QString& txt)
 {
-    if(txt.isNull())
-    {
+    if (txt.isNull()) {
         emit appendTheHistory(promptInput->curText, promptInput->prefix.length());
         return;
     }
@@ -360,7 +363,8 @@ QString CmdPromptHistory::applyFormatting(const QString& txt, int prefixLength)
     return prefix + usrtxt;
 }
 
-void CmdPromptHistory::appendHistory(const QString& txt, int prefixLength)
+void
+CmdPromptHistory::appendHistory(const QString& txt, int prefixLength)
 {
     QString formatStr = applyFormatting(txt, prefixLength);
     this->append(formatStr);
@@ -368,12 +372,14 @@ void CmdPromptHistory::appendHistory(const QString& txt, int prefixLength)
     this->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
 }
 
-void CmdPromptHistory::startResizeHistory(int /*y*/)
+void
+CmdPromptHistory::startResizeHistory(int /*y*/)
 {
     tmpHeight = height();
 }
 
-void CmdPromptHistory::stopResizeHistory(int /*y*/)
+void
+CmdPromptHistory::stopResizeHistory(int /*y*/)
 {
     tmpHeight = height();
 }

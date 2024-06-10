@@ -19,25 +19,12 @@
 ScriptValue
 arc_command(ScriptEnv *context)
 {
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
 
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
-
-Command arc_cmd = {
-    .id = -1,
-    .main = arc_command,
-    .icon = "arc",
-    .menu_name = "None",
-    .menu_position = 0,
-    .toolbar_name = "None",
-    .toolbar_position = 0,
-    .tooltip = "&Arc",
-    .statustip = "Displays information about this product:  ARC",
-    .alias = "ARC"
-};
 
 ArcObject::ArcObject(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -213,17 +200,22 @@ qreal ArcObject::objectEndAngle() const
     return angle;
 }
 
-QPointF ArcObject::objectStartPoint() const
+QPointF
+scale_and_rotate(QPointF v, qreal scale, qreal angle)
 {
-    qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
-    qreal x = arcStartPoint.x()*scale();
-    qreal y = arcStartPoint.y()*scale();
+    qreal rot = radians(angle);
+    qreal cosRot = cos(rot);
+    qreal sinRot = sin(rot);
+    qreal x = v.x() * scale;
+    qreal y = v.y() * scale;
     qreal rotX = x*cosRot - y*sinRot;
     qreal rotY = x*sinRot + y*cosRot;
+    return QPointF(rotX, rotY);    
+}
 
-    return (scenePos() + QPointF(rotX, rotY));
+QPointF ArcObject::objectStartPoint() const
+{
+    return scenePos() + scale_and_rotate(arcStartPoint, scale(), rotation());
 }
 
 qreal ArcObject::objectStartX() const
@@ -238,15 +230,7 @@ qreal ArcObject::objectStartY() const
 
 QPointF ArcObject::objectMidPoint() const
 {
-    qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
-    qreal x = arcMidPoint.x()*scale();
-    qreal y = arcMidPoint.y()*scale();
-    qreal rotX = x*cosRot - y*sinRot;
-    qreal rotY = x*sinRot + y*cosRot;
-
-    return (scenePos() + QPointF(rotX, rotY));
+    return scenePos() + scale_and_rotate(arcMidPoint, scale(), rotation());
 }
 
 qreal ArcObject::objectMidX() const
@@ -261,15 +245,7 @@ qreal ArcObject::objectMidY() const
 
 QPointF ArcObject::objectEndPoint() const
 {
-    qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
-    qreal x = arcEndPoint.x()*scale();
-    qreal y = arcEndPoint.y()*scale();
-    qreal rotX = x*cosRot - y*sinRot;
-    qreal rotY = x*sinRot + y*cosRot;
-
-    return (scenePos() + QPointF(rotX, rotY));
+    return scenePos() + scale_and_rotate(arcEndPoint, scale(), rotation());
 }
 
 qreal ArcObject::objectEndX() const
@@ -287,12 +263,12 @@ qreal ArcObject::objectArea() const
     //Area of a circular segment
     qreal r = objectRadius();
     qreal theta = radians(objectIncludedAngle());
-    return ((r*r)/2)*(theta - qSin(theta));
+    return ((r*r)/2)*(theta - sin(theta));
 }
 
 qreal ArcObject::objectArcLength() const
 {
-    return radians(objectIncludedAngle())*objectRadius();
+    return radians(objectIncludedAngle()) * objectRadius();
 }
 
 qreal ArcObject::objectChord() const
@@ -423,5 +399,3 @@ void ArcObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     //TODO: gripEdit() for ArcObject
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

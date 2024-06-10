@@ -22,10 +22,10 @@
 ScriptValue
 polyline_command(ScriptEnv * context)
 {
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
 
-    _main->nativeEndCommand();
+    end_command();
     return script_null;
 }
 
@@ -147,20 +147,6 @@ function prompt(str)
         }
     }
 }
-[Menu]
-Name=Draw
-Position=4
-
-[ToolBar]
-Name=Draw
-Position=4
-
-[Tips]
-ToolTip=&Polyline
-StatusTip=Creates a 2D polyline:  PLINE
-
-[Prompt]
-Alias=PL, PLINE, POLYLINE
 #endif
 
 PolylineObject::PolylineObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
