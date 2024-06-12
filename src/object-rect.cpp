@@ -275,24 +275,7 @@ void RectObject::vulcanize()
 // Returns the closest snap point to the mouse point
 QPointF RectObject::mouseSnapPoint(const QPointF& mousePoint)
 {
-    QPointF ptl = objectTopLeft();     //Top Left Corner QSnap
-    QPointF ptr = objectTopRight();    //Top Right Corner QSnap
-    QPointF pbl = objectBottomLeft();  //Bottom Left Corner QSnap
-    QPointF pbr = objectBottomRight(); //Bottom Right Corner QSnap
-
-    qreal ptlDist = QLineF(mousePoint, ptl).length();
-    qreal ptrDist = QLineF(mousePoint, ptr).length();
-    qreal pblDist = QLineF(mousePoint, pbl).length();
-    qreal pbrDist = QLineF(mousePoint, pbr).length();
-
-    qreal minDist = qMin(qMin(ptlDist, ptrDist), qMin(pblDist, pbrDist));
-
-    if     (minDist == ptlDist) return ptl;
-    else if (minDist == ptrDist) return ptr;
-    else if (minDist == pblDist) return pbl;
-    else if (minDist == pbrDist) return pbr;
-
-    return scenePos();
+    return find_mouse_snap_point(allGripPoints(), mousePoint);
 }
 
 QList<QPointF> RectObject::allGripPoints()

@@ -24,8 +24,7 @@ DimLeaderObject::DimLeaderObject(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rg
 DimLeaderObject::DimLeaderObject(DimLeaderObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("DimLeaderObject Constructor()");
-    if (obj)
-    {
+    if (obj) {
         init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
     }
 }
@@ -113,8 +112,12 @@ QPointF DimLeaderObject::objectMidPoint() const
 qreal DimLeaderObject::objectAngle() const
 {
     qreal angle = line().angle() - rotation();
-    while(angle >= 360.0) { angle -= 360.0; }
-    while(angle < 0.0)    { angle += 360.0; }
+    while (angle >= 360.0) {
+        angle -= 360.0;
+    }
+    while (angle < 0.0) {
+        angle += 360.0;
+    }
     return angle;
 }
 
@@ -261,27 +264,7 @@ void DimLeaderObject::vulcanize()
 // Returns the closest snap point to the mouse point
 QPointF DimLeaderObject::mouseSnapPoint(const QPointF& mousePoint)
 {
-    QPointF endPoint1 = objectEndPoint1();
-    QPointF endPoint2 = objectEndPoint2();
-    QPointF midPoint  = objectMidPoint();
-
-    qreal end1Dist = QLineF(mousePoint, endPoint1).length();
-    qreal end2Dist = QLineF(mousePoint, endPoint2).length();
-    qreal midDist  = QLineF(mousePoint, midPoint).length();
-
-    qreal minDist = qMin(end1Dist, end2Dist);
-
-    if (curved)
-        minDist = qMin(minDist, midDist);
-
-    if (minDist == end1Dist)
-        return endPoint1;
-    else if (minDist == end2Dist)
-        return endPoint2;
-    else if (minDist == midDist)
-        return midPoint;
-
-    return scenePos();
+    return find_mouse_snap_point(allGripPoints(), mousePoint);
 }
 
 QList<QPointF> DimLeaderObject::allGripPoints()

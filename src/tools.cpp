@@ -86,15 +86,15 @@ locatepoint_command(ScriptEnv *context)
         break;
     case CONTEXT_PROMPT:
         /*
-        var strList = str.split(",");
-        if (isnan(strList[0]) || isnan(strList[1])) {
+        EmbVector v;
+        if (!parse_vector(str, &v)) {
             alert(translate("Invalid point."));
-            setPromptPrefix(translate("Specify point: "));
+            prompt_output(translate("Specify point: "));
         }
         else {
-            appendPromptHistory();
-            setPromptPrefix("X = " + strList[0].toString() + ", Y = " + strList[1].toString());
-            appendPromptHistory();
+            char output[200];
+            sprintf(output, "X = %f, Y = %f", v.x, v.y);
+            prompt_output(output);
             end_command();
         }
         */
@@ -744,16 +744,12 @@ rotate_command(ScriptEnv * context)
 
 var global = {}; //Required
 global.firstRun;
-global.baseX;
-global.baseY;
-global.destX;
-global.destY;
+global.base;
+global.dest;
 global.angle;
 
-global.baseRX;
-global.baseRY;
-global.destRX;
-global.destRY;
+global.baseR;
+global.destR;
 global.angleRef;
 global.angleNew;
 
@@ -862,8 +858,7 @@ function prompt(str)
             }
         }
         else {
-            if (str == "R" || str == "REFERENCE") //TODO: Probably should add additional qsTr calls here.
-            {
+            if (str == "R" || str == "REFERENCE") {
                 global.mode = global.mode_REFERENCE;
                 prompt_output(translate("Specify the reference angle") + " {0.00}: ");
                 clearRubber();

@@ -142,27 +142,26 @@ void ImageObject::vulcanize()
     setObjectRubberMode(OBJ_RUBBER_OFF);
 }
 
+QPointF
+find_mouse_snap_point(QList<QPointF> snap_points, const QPointF& mouse_point)
+{
+    float closest = 1.0e10;
+    QPointF result = snap_points[0];
+    int i;
+    for (i=0; i<snap_point.count(); i++) {
+        float distance = QLineF(snap_points[i], mouse_point).length();
+        if (distance < closest) {
+            closest = distance;
+            result = snap_points[i];
+        }
+    }
+    return result;
+}
+
 // Returns the closest snap point to the mouse point
 QPointF ImageObject::mouseSnapPoint(const QPointF& mousePoint)
 {
-    QPointF ptl = objectTopLeft();     //Top Left Corner QSnap
-    QPointF ptr = objectTopRight();    //Top Right Corner QSnap
-    QPointF pbl = objectBottomLeft();  //Bottom Left Corner QSnap
-    QPointF pbr = objectBottomRight(); //Bottom Right Corner QSnap
-
-    qreal ptlDist = QLineF(mousePoint, ptl).length();
-    qreal ptrDist = QLineF(mousePoint, ptr).length();
-    qreal pblDist = QLineF(mousePoint, pbl).length();
-    qreal pbrDist = QLineF(mousePoint, pbr).length();
-
-    qreal minDist = qMin(qMin(ptlDist, ptrDist), qMin(pblDist, pbrDist));
-
-    if     (minDist == ptlDist) return ptl;
-    else if (minDist == ptrDist) return ptr;
-    else if (minDist == pblDist) return pbl;
-    else if (minDist == pbrDist) return pbr;
-
-    return scenePos();
+    return find_mouse_snap_point(allGripPoints(), mousePoint);
 }
 
 QList<QPointF> ImageObject::allGripPoints()

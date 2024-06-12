@@ -111,8 +111,7 @@ PathObject::PathObject(qreal x, qreal y, const QPainterPath p, QRgb rgb, QGraphi
 PathObject::PathObject(PathObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("PathObject Constructor()");
-    if (obj)
-    {
+    if (obj) {
         init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
         setScale(obj->scale());

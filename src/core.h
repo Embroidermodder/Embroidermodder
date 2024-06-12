@@ -422,6 +422,7 @@ typedef struct ScriptEnv_ {
     int n_variables;
     int context;
     int mode;
+    bool firstRun;
     ScriptValue argument[MAX_ARGS];
     int argumentCount;
 } ScriptEnv;

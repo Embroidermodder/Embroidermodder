@@ -48,8 +48,6 @@ char *polyType = "Inscribed"; //Default
 int numSides = 4;           //Default
 int mode;
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
 function
 main()
 {
@@ -120,7 +118,8 @@ function
 prompt(char *str)
 {
     EmbVector v;
-    if (global.mode == POLYGON_MODE_NUM_SIDES) {
+    switch (global->mode) {
+    case POLYGON_MODE_NUM_SIDES: {
         if (str == "" && global.numSides >= 3 && global.numSides <= 1024) {
             prompt_output(translate("Specify center point or [Sidelength]: "));
             global.mode = POLYGON_MODE_CENTER_PT;
@@ -137,8 +136,9 @@ prompt(char *str)
                 global.mode = POLYGON_MODE_CENTER_PT;
             }
         }
+        break;
     }
-    else if (global.mode == POLYGON_MODE_CENTER_PT) {
+    case POLYGON_MODE_CENTER_PT: {
         if (str == "S" || str == "SIDELENGTH") {
             /* TODO: Probably should add additional qsTr calls here. */
             global.mode = POLYGON_MODE_SIDE_LEN;
@@ -155,17 +155,10 @@ prompt(char *str)
                 prompt_output(translate("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
             }
         }
+        break;
     }
-    else if (global.mode == POLYGON_MODE_POLYTYPE) {
-        if (str == "I"        ||
-           str == "IN"       ||
-           str == "INS"      ||
-           str == "INSC"     ||
-           str == "INSCR"    ||
-           str == "INSCRI"   ||
-           str == "INSCRIB"  ||
-           str == "INSCRIBE" ||
-           str == "INSCRIBED") {
+    case POLYGON_MODE_POLYTYPE: {
+        if (str == "I" || str == "INSCRIBED") {
             /* TODO: Probably should add additional translate calls here. */
             global.mode = POLYGON_MODE_INSCRIBE;
             global.polyType = "Inscribed";
@@ -175,19 +168,7 @@ prompt(char *str)
             setRubberPoint("POLYGON_CENTER", global.centerX, global.centerY);
             setRubberPoint("POLYGON_NUM_SIDES", global.numSides, 0);
         }
-        else if (str == "C"            ||
-                str == "CI"           ||
-                str == "CIR"          ||
-                str == "CIRC"         ||
-                str == "CIRCU"        ||
-                str == "CIRCUM"       ||
-                str == "CIRCUMS"      ||
-                str == "CIRCUMSC"     ||
-                str == "CIRCUMSCR"    ||
-                str == "CIRCUMSCRI"   ||
-                str == "CIRCUMSCRIB"  ||
-                str == "CIRCUMSCRIBE" ||
-                str == "CIRCUMSCRIBED") {
+        else if (str == "C" || str == "CIRCUMSCRIBED") {
             /* TODO: Probably should add additional translate calls here. */
             global.mode = POLYGON_MODE_CIRCUMSCRIBE;
             global.polyType = "Circumscribed";
@@ -222,10 +203,10 @@ prompt(char *str)
             alert(translate("Invalid option keyword."));
             prompt_output(translate("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
         }
+        break;
     }
-    else if (global.mode == POLYGON_MODE_INSCRIBE) {
-        if (str == "D" || str == "DISTANCE") //TODO: Probably should add additional qsTr calls here.
-        {
+    case POLYGON_MODE_INSCRIBE: {
+        if (str == "D" || str == "DISTANCE") {
             global.mode = POLYGON_MODE_DISTANCE;
             prompt_output(translate("Specify distance: "));
         }
@@ -241,10 +222,10 @@ prompt(char *str)
                 end_command();
             }
         }
+        break;
     }
-    else if (global.mode == POLYGON_MODE_CIRCUMSCRIBE) {
-        if (str == "D" || str == "DISTANCE") //TODO: Probably should add additional qsTr calls here.
-        {
+    case POLYGON_MODE_CIRCUMSCRIBE: {
+        if (str == "D" || str == "DISTANCE") {
             global.mode = POLYGON_MODE_DISTANCE;
             prompt_output(translate("Specify distance: "));
         }
@@ -260,8 +241,9 @@ prompt(char *str)
                 end_command();
             }
         }
+        break;
     }
-    else if (global.mode == POLYGON_MODE_DISTANCE) {
+    case POLYGON_MODE_DISTANCE: {
         if (isNaN(str)) {
             alert(translate("Requires valid numeric distance."));
             prompt_output(translate("Specify distance: "));
@@ -285,9 +267,14 @@ prompt(char *str)
                 error("POLYGON", translate("Polygon type is not Inscribed or Circumscribed."));
             }
         }
+        break;
     }
-    else if (global.mode == POLYGON_MODE_SIDE_LEN) {
+    case POLYGON_MODE_SIDE_LEN: {
         todo("POLYGON", "Sidelength mode");
+        break;
+    }
+    default:
+        break;
     }
 }
 #endif
@@ -512,20 +499,7 @@ void PolygonObject::vulcanize()
 // Returns the closest snap point to the mouse point
 QPointF PolygonObject::mouseSnapPoint(const QPointF& mousePoint)
 {
-    QPainterPath::Element element = normalPath.elementAt(0);
-    QPointF closestPoint = mapToScene(QPointF(element.x, element.y));
-    qreal closestDist = QLineF(mousePoint, closestPoint).length();
-    int elemCount = normalPath.elementCount();
-    for (int i = 0; i < elemCount; ++i) {
-        element = normalPath.elementAt(i);
-        QPointF elemPoint = mapToScene(element.x, element.y);
-        qreal elemDist = QLineF(mousePoint, elemPoint).length();
-        if (elemDist < closestDist) {
-            closestPoint = elemPoint;
-            closestDist = elemDist;
-        }
-    }
-    return closestPoint;
+    return find_mouse_snap_point(allGripPoints(), mousePoint);
 }
 
 QList<QPointF> PolygonObject::allGripPoints()

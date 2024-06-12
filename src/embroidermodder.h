@@ -2427,6 +2427,8 @@ QUndoStack* activeUndoStack();
 
 QPointF scale_and_rotate(QPointF v, qreal angle, qreal scale);
 
+QPointF find_mouse_snap_point(QList<QPointF> snap_points, const QPointF& mouse_point);
+
 extern QHash<QString, Command> command_map;
 extern QHash<QString, QString>* aliasHash;
 

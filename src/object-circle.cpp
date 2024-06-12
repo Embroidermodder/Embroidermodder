@@ -587,27 +587,7 @@ void CircleObject::vulcanize()
 // Returns the closest snap point to the mouse point
 QPointF CircleObject::mouseSnapPoint(const QPointF& mousePoint)
 {
-    QPointF center  = objectCenter();
-    QPointF quad0   = objectQuadrant0();
-    QPointF quad90  = objectQuadrant90();
-    QPointF quad180 = objectQuadrant180();
-    QPointF quad270 = objectQuadrant270();
-
-    qreal cntrDist = QLineF(mousePoint, center).length();
-    qreal q0Dist   = QLineF(mousePoint, quad0).length();
-    qreal q90Dist  = QLineF(mousePoint, quad90).length();
-    qreal q180Dist = QLineF(mousePoint, quad180).length();
-    qreal q270Dist = QLineF(mousePoint, quad270).length();
-
-    qreal minDist = qMin(qMin(qMin(q0Dist, q90Dist), qMin(q180Dist, q270Dist)), cntrDist);
-
-    if     (minDist == cntrDist) return center;
-    else if (minDist == q0Dist)   return quad0;
-    else if (minDist == q90Dist)  return quad90;
-    else if (minDist == q180Dist) return quad180;
-    else if (minDist == q270Dist) return quad270;
-
-    return scenePos();
+    return find_mouse_snap_point(allGripPoints(), mousePoint);
 }
 
 QList<QPointF> CircleObject::allGripPoints()

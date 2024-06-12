@@ -84,8 +84,8 @@ void UndoableRotateCommand::redo()
 void UndoableRotateCommand::rotate(qreal x, qreal y, qreal rot)
 {
     qreal rad = radians(rot);
-    qreal cosRot = qCos(rad);
-    qreal sinRot = qSin(rad);
+    qreal cosRot = cos(rad);
+    qreal sinRot = sin(rad);
     qreal px = object->scenePos().x();
     qreal py = object->scenePos().y();
     px -= x;
@@ -100,7 +100,6 @@ void UndoableRotateCommand::rotate(qreal x, qreal y, qreal rot)
 }
 
 /* Scale */
-
 UndoableScaleCommand::UndoableScaleCommand(qreal x, qreal y, qreal scaleFactor, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
@@ -108,8 +107,7 @@ UndoableScaleCommand::UndoableScaleCommand(qreal x, qreal y, qreal scaleFactor, 
     setText(text);
 
     //Prevent division by zero and other wacky behavior
-    if (scaleFactor <= 0.0)
-    {
+    if (scaleFactor <= 0.0) {
         dx = 0.0;
         dy = 0.0;
         factor = 1.0;
@@ -117,8 +115,7 @@ UndoableScaleCommand::UndoableScaleCommand(qreal x, qreal y, qreal scaleFactor, 
                               QObject::tr("Hi there. If you are not a developer, report this as a bug. "
                               "If you are a developer, your code needs examined, and possibly your head too."));
     }
-    else
-    {
+    else {
         //Calculate the offset
         qreal oldX = object->x();
         qreal oldY = object->y();
@@ -171,8 +168,7 @@ bool UndoableNavCommand::mergeWith(const QUndoCommand* newest)
 
 void UndoableNavCommand::undo()
 {
-    if (!done)
-    {
+    if (!done) {
         toTransform = gview->transform();
         toCenter = gview->center();
     }
@@ -185,23 +181,41 @@ void UndoableNavCommand::undo()
 void UndoableNavCommand::redo()
 {
 
-    if (!done)
-    {
-        if     (navType == "ZoomInToPoint")  { gview->zoomToPoint(gview->scene()->property(VIEW_MOUSE_POINT).toPoint(), +1); }
-        else if (navType == "ZoomOutToPoint") { gview->zoomToPoint(gview->scene()->property(VIEW_MOUSE_POINT).toPoint(), -1); }
-        else if (navType == "ZoomExtents")    { gview->zoomExtents(); }
-        else if (navType == "ZoomSelected")   { gview->zoomSelected(); }
-        else if (navType == "PanStart")       { /* Do Nothing. We are just recording the spot where the pan started. */  }
-        else if (navType == "PanStop")        { /* Do Nothing. We are just recording the spot where the pan stopped. */  }
-        else if (navType == "PanLeft")        { gview->panLeft();  }
-        else if (navType == "PanRight")       { gview->panRight(); }
-        else if (navType == "PanUp")          { gview->panUp();    }
-        else if (navType == "PanDown")        { gview->panDown();  }
+    if (!done) {
+        if (navType == "ZoomInToPoint") {
+            gview->zoomToPoint(gview->scene()->property(VIEW_MOUSE_POINT).toPoint(), +1);
+        }
+        else if (navType == "ZoomOutToPoint") {
+            gview->zoomToPoint(gview->scene()->property(VIEW_MOUSE_POINT).toPoint(), -1);
+        }
+        else if (navType == "ZoomExtents") {
+            gview->zoomExtents();
+        }
+        else if (navType == "ZoomSelected") {
+            gview->zoomSelected();
+        }
+        else if (navType == "PanStart") {
+            /* Do Nothing. We are just recording the spot where the pan started. */
+        }
+        else if (navType == "PanStop") {
+            /* Do Nothing. We are just recording the spot where the pan stopped. */
+        }
+        else if (navType == "PanLeft") {
+            gview->panLeft();
+        }
+        else if (navType == "PanRight") {
+            gview->panRight();
+        }
+        else if (navType == "PanUp") {
+            gview->panUp();
+        }
+        else if (navType == "PanDown") {
+            gview->panDown();
+        }
         toTransform = gview->transform();
         toCenter = gview->center();
     }
-    else
-    {
+    else {
         gview->setTransform(toTransform);
         gview->centerAt(toCenter);
     }

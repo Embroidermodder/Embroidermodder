@@ -57,32 +57,27 @@ void StatusBarButton::contextMenuEvent(QContextMenuEvent *event)
 {
     QApplication::setOverrideCursor(Qt::ArrowCursor);
     QMenu menu(this);
-    if (objectName() == "StatusBarButtonSNAP")
-    {
+    if (objectName() == "StatusBarButtonSNAP") {
         QAction* settingsSnapAction = new QAction(QIcon("icons/" + _main->settings_general_icon_theme + "/" + "gridsnapsettings" + ".png"), "&Settings...", &menu);
         connect(settingsSnapAction, SIGNAL(triggered()), this, SLOT(settingsSnap()));
         menu.addAction(settingsSnapAction);
     }
-    else if (objectName() == "StatusBarButtonGRID")
-    {
+    else if (objectName() == "StatusBarButtonGRID") {
         QAction* settingsGridAction = new QAction(QIcon("icons/" + _main->settings_general_icon_theme + "/" + "gridsettings" + ".png"), "&Settings...", &menu);
         connect(settingsGridAction, SIGNAL(triggered()), this, SLOT(settingsGrid()));
         menu.addAction(settingsGridAction);
     }
-    else if (objectName() == "StatusBarButtonRULER")
-    {
+    else if (objectName() == "StatusBarButtonRULER") {
         QAction* settingsRulerAction = new QAction(QIcon("icons/" + _main->settings_general_icon_theme + "/" + "rulersettings" + ".png"), "&Settings...", &menu);
         connect(settingsRulerAction, SIGNAL(triggered()), this, SLOT(settingsRuler()));
         menu.addAction(settingsRulerAction);
     }
-    else if (objectName() == "StatusBarButtonORTHO")
-    {
+    else if (objectName() == "StatusBarButtonORTHO") {
         QAction* settingsOrthoAction = new QAction(QIcon("icons/" + _main->settings_general_icon_theme + "/" + "orthosettings" + ".png"), "&Settings...", &menu);
         connect(settingsOrthoAction, SIGNAL(triggered()), this, SLOT(settingsOrtho()));
         menu.addAction(settingsOrthoAction);
     }
-    else if (objectName() == "StatusBarButtonPOLAR")
-    {
+    else if (objectName() == "StatusBarButtonPOLAR") {
         QAction* settingsPolarAction = new QAction(QIcon("icons/" + _main->settings_general_icon_theme + "/" + "polarsettings" + ".png"), "&Settings...", &menu);
         connect(settingsPolarAction, SIGNAL(triggered()), this, SLOT(settingsPolar()));
         menu.addAction(settingsPolarAction);
@@ -164,21 +159,27 @@ void StatusBarButton::toggleSnap(bool on)
 {
     qDebug("StatusBarButton toggleSnap()");
     View* gview = activeView();
-    if (gview) { gview->toggleSnap(on); }
+    if (gview) {
+        gview->toggleSnap(on);
+    }
 }
 
 void StatusBarButton::toggleGrid(bool on)
 {
     qDebug("StatusBarButton toggleGrid()");
     View* gview = activeView();
-    if (gview) { gview->toggleGrid(on); }
+    if (gview) {
+        gview->toggleGrid(on);
+    }
 }
 
 void StatusBarButton::toggleRuler(bool on)
 {
     qDebug("StatusBarButton toggleRuler()");
     View* gview = activeView();
-    if (gview) { gview->toggleRuler(on); }
+    if (gview) {
+        gview->toggleRuler(on);
+    }
 }
 
 void StatusBarButton::toggleOrtho(bool on)

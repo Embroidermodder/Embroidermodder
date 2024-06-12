@@ -25,25 +25,15 @@ point_command(ScriptEnv * context)
 }
 
 #if 0
-//Command: Point
-
-var global = {}; //Required
-global.firstRun;
-
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
 function main()
 {
     init_command();
     clear_selection();
-    global.firstRun = true;
+    global->firstRun = true;
     prompt_output("TODO: Current point settings: PDMODE=?  PDSIZE=?"); //TODO: qsTr needed here when complete
     prompt_output(qsTr("Specify first point: "));
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
 function click(x, y)
 {
     if (global.firstRun) {
@@ -58,20 +48,15 @@ function click(x, y)
     }
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("POINT", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
     EmbVector v;
-    if (global.firstRun) {
+    if (global->firstRun) {
         if (str == "M" || str == "MODE") {
             //TODO: Probably should add additional qsTr calls here.
             todo("POINT", "prompt() for PDMODE");
@@ -113,8 +98,7 @@ PointObject::PointObject(qreal x, qreal y, QRgb rgb, QGraphicsItem* parent) : Ba
 PointObject::PointObject(PointObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("PointObject Constructor()");
-    if (obj)
-    {
+    if (obj) {
         init(obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
     }

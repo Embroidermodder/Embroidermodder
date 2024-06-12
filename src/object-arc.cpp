@@ -368,24 +368,7 @@ void ArcObject::vulcanize()
 // Returns the closest snap point to the mouse point
 QPointF ArcObject::mouseSnapPoint(const QPointF& mousePoint)
 {
-    QPointF center = objectCenter();
-    QPointF start  = objectStartPoint();
-    QPointF mid    = objectMidPoint();
-    QPointF end    = objectEndPoint();
-
-    qreal cntrDist  = QLineF(mousePoint, center).length();
-    qreal startDist = QLineF(mousePoint, start).length();
-    qreal midDist   = QLineF(mousePoint, mid).length();
-    qreal endDist   = QLineF(mousePoint, end).length();
-
-    qreal minDist = qMin(qMin(cntrDist, startDist), qMin(midDist, endDist));
-
-    if     (minDist == cntrDist)  return center;
-    else if (minDist == startDist) return start;
-    else if (minDist == midDist)   return mid;
-    else if (minDist == endDist)   return end;
-
-    return scenePos();
+    return find_mouse_snap_point(allGripPoints(), mousePoint);
 }
 
 QList<QPointF> ArcObject::allGripPoints()

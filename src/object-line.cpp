@@ -29,17 +29,13 @@ line_command(ScriptEnv * context)
 
 var global = {}; //Required
 global.firstRun;
-global.firstX;
-global.firstY;
-global.prevX;
-global.prevY;
+global.first;
+global.prev;
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
 function main()
 {
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
     global.firstRun = true;
     global.firstX = NaN;
     global.firstY = NaN;
@@ -195,37 +191,26 @@ void LineObject::setObjectEndPoint2(qreal x2, qreal y2)
 QPointF LineObject::objectEndPoint2() const
 {
     QLineF lyne = line();
-    qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
-    qreal x2 = lyne.x2()*scale();
-    qreal y2 = lyne.y2()*scale();
-    qreal rotEnd2X = x2*cosRot - y2*sinRot;
-    qreal rotEnd2Y = x2*sinRot + y2*cosRot;
-
-    return (scenePos() + QPointF(rotEnd2X, rotEnd2Y));
+    QPointF endPoint2(lyne.x2(), lyne.y2());
+    return scenePos() + scale_and_rotate(endPoint2, scale(), rotation());
 }
 
 QPointF LineObject::objectMidPoint() const
 {
     QLineF lyne = line();
     QPointF mp = lyne.pointAt(0.5);
-    qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
-    qreal mx = mp.x()*scale();
-    qreal my = mp.y()*scale();
-    qreal rotMidX = mx*cosRot - my*sinRot;
-    qreal rotMidY = mx*sinRot + my*cosRot;
-
-    return (scenePos() + QPointF(rotMidX, rotMidY));
+    return scenePos() + scale_and_rotate(mp, scale(), rotation());
 }
 
 qreal LineObject::objectAngle() const
 {
     qreal angle = line().angle() - rotation();
-    while(angle >= 360.0) { angle -= 360.0; }
-    while(angle < 0.0)    { angle += 360.0; }
+    while (angle >= 360.0) {
+        angle -= 360.0;
+    }
+    while (angle < 0.0) {
+        angle += 360.0;
+    }
     return angle;
 }
 
@@ -296,24 +281,7 @@ void LineObject::vulcanize()
 QPointF
 LineObject::mouseSnapPoint(const QPointF& mousePoint)
 {
-    QPointF endPoint1 = objectEndPoint1();
-    QPointF endPoint2 = objectEndPoint2();
-    QPointF midPoint  = objectMidPoint();
-
-    qreal end1Dist = QLineF(mousePoint, endPoint1).length();
-    qreal end2Dist = QLineF(mousePoint, endPoint2).length();
-    qreal midDist  = QLineF(mousePoint, midPoint).length();
-
-    qreal minDist = qMin(qMin(end1Dist, end2Dist), midDist);
-
-    if (minDist == end1Dist)
-        return endPoint1;
-    else if (minDist == end2Dist)
-        return endPoint2;
-    else if (minDist == midDist)
-        return midPoint;
-
-    return scenePos();
+    return find_mouse_snap_point(allGripPoints(), mousePoint);
 }
 
 QList<QPointF> LineObject::allGripPoints()

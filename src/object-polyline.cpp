@@ -34,16 +34,14 @@ polyline_command(ScriptEnv * context)
 
 var global = {}; //Required
 global.firstRun;
-global.firstX;
-global.firstY;
-global.prevX;
-global.prevY;
+global.first;
+global.prev;
 global.num;
 
 function main()
 {
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
     global.firstRun = true;
     global.firstX = NaN;
     global.firstY = NaN;
@@ -268,20 +266,7 @@ void PolylineObject::vulcanize()
 // Returns the closest snap point to the mouse point
 QPointF PolylineObject::mouseSnapPoint(const QPointF& mousePoint)
 {
-    QPainterPath::Element element = normalPath.elementAt(0);
-    QPointF closestPoint = mapToScene(QPointF(element.x, element.y));
-    qreal closestDist = QLineF(mousePoint, closestPoint).length();
-    int elemCount = normalPath.elementCount();
-    for (int i = 0; i < elemCount; ++i) {
-        element = normalPath.elementAt(i);
-        QPointF elemPoint = mapToScene(element.x, element.y);
-        qreal elemDist = QLineF(mousePoint, elemPoint).length();
-        if (elemDist < closestDist) {
-            closestPoint = elemPoint;
-            closestDist = elemDist;
-        }
-    }
-    return closestPoint;
+    return find_mouse_snap_point(allGripPoints(), mousePoint);
 }
 
 QList<QPointF> PolylineObject::allGripPoints()
@@ -311,7 +296,9 @@ int PolylineObject::findIndex(const QPointF& point)
 void PolylineObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     gripIndex = findIndex(before);
-    if (gripIndex == -1) return;
+    if (gripIndex == -1) {
+        return;
+    }
     QPointF a = mapFromScene(after);
     normalPath.setElementPositionAt(gripIndex, a.x(), a.y());
     updatePath(normalPath);
