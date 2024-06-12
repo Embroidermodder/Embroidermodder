@@ -1298,8 +1298,15 @@ add_polygon_command(ScriptEnv* context)
                 xCoord = true;
                 y = -var.toReal();
 
-                if (lineTo) { path.lineTo(x,y); }
-                else       { path.moveTo(x,y); lineTo = true; startX = x; startY = y; }
+                if (lineTo) {
+                    path.lineTo(x,y);
+                }
+                else {
+                    path.moveTo(x,y);
+                    lineTo = true;
+                    startX = x;
+                    startY = y;
+                }
             }
         }
         else {
@@ -1359,8 +1366,15 @@ add_polyline_command(ScriptEnv* context)
                 xCoord = true;
                 y = -var.toReal();
 
-                if (lineTo) { path.lineTo(x,y); }
-                else       { path.moveTo(x,y); lineTo = true; startX = x; startY = y; }
+                if (lineTo) {
+                    path.lineTo(x,y);
+                }
+                else {
+                    path.moveTo(x,y);
+                    lineTo = true;
+                    startX = x;
+                    startY = y;
+                }
             }
         }
         else {

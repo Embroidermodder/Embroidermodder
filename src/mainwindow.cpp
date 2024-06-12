@@ -45,7 +45,7 @@ MainWindow::run_testing(void)
     int i;
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_MAIN;
-    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+    std::this_thread::sleep_for (std::chrono::milliseconds(2000));
     for (i=0; strcmp(coverage_test[i], "END"); i++) {
         QString cmd(coverage_test[i]);
         if (command_map.contains(cmd)) {
@@ -54,7 +54,7 @@ MainWindow::run_testing(void)
         else {
             qDebug("ERROR: %s not found in command_map.", qPrintable(cmd));
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for (std::chrono::milliseconds(1000));
     }        
     free_script_env(context);
 }
@@ -286,19 +286,19 @@ void MainWindow::recentMenuAboutToShow()
 
     QFileInfo recentFileInfo;
     QString recentValue;
-    for(int i = 0; i < settings_opensave_recent_list_of_files.size(); ++i)
-    {
+    for (int i = 0; i < settings_opensave_recent_list_of_files.size(); ++i) {
         //If less than the max amount of entries add to menu
-        if(i < settings_opensave_recent_max_files)
-        {
+        if (i < settings_opensave_recent_max_files) {
             recentFileInfo = QFileInfo(settings_opensave_recent_list_of_files.at(i));
-            if(recentFileInfo.exists() && validFileFormat(recentFileInfo.fileName()))
-            {
+            if (recentFileInfo.exists() && validFileFormat(recentFileInfo.fileName())) {
                 recentValue.setNum(i+1);
                 QAction* rAction;
-                if     (recentValue.toInt() >= 1 && recentValue.toInt() <= 9) rAction = new QAction("&" + recentValue + " " + recentFileInfo.fileName(), this);
-                else if(recentValue.toInt() == 10)                            rAction = new QAction("1&0 "                  + recentFileInfo.fileName(), this);
-                else                                                          rAction = new QAction(      recentValue + " " + recentFileInfo.fileName(), this);
+                if (recentValue.toInt() >= 1 && recentValue.toInt() <= 9)
+                    rAction = new QAction("&" + recentValue + " " + recentFileInfo.fileName(), this);
+                else if (recentValue.toInt() == 10)
+                    rAction = new QAction("1&0 "                  + recentFileInfo.fileName(), this);
+                else
+                    rAction = new QAction(      recentValue + " " + recentFileInfo.fileName(), this);
                 rAction->setCheckable(false);
                 rAction->setData(settings_opensave_recent_list_of_files.at(i));
                 recentMenu->addAction(rAction);
@@ -307,8 +307,7 @@ void MainWindow::recentMenuAboutToShow()
         }
     }
     //Ensure the list only has max amount of entries
-    while(settings_opensave_recent_list_of_files.size() > settings_opensave_recent_max_files)
-    {
+    while (settings_opensave_recent_list_of_files.size() > settings_opensave_recent_max_files) {
         settings_opensave_recent_list_of_files.removeLast();
     }
 }
@@ -334,8 +333,7 @@ void MainWindow::windowMenuAboutToShow()
 
     windowMenu->addSeparator();
     QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
-    for(int i = 0; i < windows.count(); ++i)
-    {
+    for (int i = 0; i < windows.count(); ++i) {
         QAction* aAction = new QAction(windows.at(i)->windowTitle(), this);
         aAction->setCheckable(true);
         aAction->setData(i);
@@ -349,10 +347,10 @@ void MainWindow::windowMenuActivated(bool checked)
 {
     qDebug("MainWindow::windowMenuActivated()");
     QAction* aSender = qobject_cast<QAction*>(sender());
-    if(!aSender)
+    if (!aSender)
         return;
     QWidget* w = mdiArea->subWindowList().at(aSender->data().toInt());
-    if(w && checked)
+    if (w && checked)
         w->setFocus();
 }
 
@@ -536,8 +534,7 @@ void MainWindow::onCloseWindow()
 {
     qDebug("MainWindow::onCloseWindow()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin)
-    {
+    if (mdiWin) {
         onCloseMdiWin(mdiWin);
     }
 }
@@ -548,7 +545,9 @@ void MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
     numOfDocs--;
 
     bool keepMaximized;
-    if(theMdiWin) { keepMaximized = theMdiWin->isMaximized(); }
+    if (theMdiWin) {
+        keepMaximized = theMdiWin->isMaximized();
+    }
 
     mdiArea->removeSubWindow(theMdiWin);
     theMdiWin->deleteLater();
@@ -556,10 +555,11 @@ void MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
     updateMenuToolbarStatusbar();
     windowMenuAboutToShow();
 
-    if(keepMaximized)
-    {
+    if (keepMaximized) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-        if(mdiWin) { mdiWin->showMaximized(); }
+        if (mdiWin) {
+            mdiWin->showMaximized();
+        }
     }
 }
 
@@ -567,7 +567,7 @@ void MainWindow::onWindowActivated(QMdiSubWindow* w)
 {
     qDebug("MainWindow::onWindowActivated()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(w);
-    if(mdiWin) { mdiWin->onWindowActivated(); }
+    if (mdiWin) { mdiWin->onWindowActivated(); }
 }
 
 void MainWindow::resizeEvent(QResizeEvent* e)
@@ -603,8 +603,7 @@ void MainWindow::updateMenuToolbarStatusbar()
         toolbarProperties->show();
         toolbarPrompt->show();
 
-        foreach(QToolBar* tb, toolbarHash)
-        {
+        foreach(QToolBar* tb, toolbarHash) {
             tb->show();
         }
 
@@ -618,8 +617,7 @@ void MainWindow::updateMenuToolbarStatusbar()
         menuBar()->addMenu(editMenu);
         menuBar()->addMenu(viewMenu);
 
-        foreach(QMenu* menu, menuHash)
-        {
+        foreach (QMenu* menu, menuHash) {
             menuBar()->addMenu(menu);
         }
 
@@ -746,9 +744,9 @@ void MainWindow::loadFormats()
     //TODO: Fixup custom filter
     /*
     QString custom = settings_custom_filter;
-    if(custom.contains("supported", Qt::CaseInsensitive))
+    if (custom.contains("supported", Qt::CaseInsensitive))
         custom = ""; //This will hide it
-    else if(!custom.contains("*", Qt::CaseInsensitive))
+    else if (!custom.contains("*", Qt::CaseInsensitive))
         custom = ""; //This will hide it
     else
         custom = "Custom Filter(" + custom + ");;";
@@ -772,10 +770,8 @@ MainWindow::closeToolBar(QAction* action)
 void MainWindow::floatingChangedToolBar(bool isFloating)
 {
     QToolBar* tb = qobject_cast<QToolBar*>(sender());
-    if(tb)
-    {
-        if(isFloating)
-        {
+    if (tb) {
+        if (isFloating) {
             /*
             //TODO: Determine best suited close button on various platforms.
             QStyle::SP_DockWidgetCloseButton
@@ -788,14 +784,11 @@ void MainWindow::floatingChangedToolBar(bool isFloating)
             tb->addAction(ACTION);
             connect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));
         }
-        else
-        {
+        else {
             QList<QAction*> actList = tb->actions();
-            for(int i = 0; i < actList.size(); ++i)
-            {
+            for (int i = 0; i < actList.size(); ++i) {
                 QAction* ACTION = actList.value(i);
-                if(ACTION->objectName() == "toolbarclose")
-                {
+                if (ACTION->objectName() == "toolbarclose") {
                     tb->removeAction(ACTION);
                     disconnect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));
                     delete ACTION;

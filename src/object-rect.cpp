@@ -42,14 +42,14 @@ global.y2;
 //      Use it to reset variables so they are ready to go.
 function main()
 {
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
     global.newRect = true;
-    global.x1 = NaN;
-    global.y1 = NaN;
-    global.x2 = NaN;
-    global.y2 = NaN;
-    setPromptPrefix(qsTr("Specify first corner point or [Chamfer/Fillet]: "));
+    global.point1.x = NaN;
+    global.point1.y = NaN;
+    global.point2.x = NaN;
+    global.point2.y = NaN;
+    prompt_output(translate("Specify first corner point or [Chamfer/Fillet]: "));
 }
 
 //NOTE: click() is run only for left clicks.
@@ -57,24 +57,20 @@ function main()
 //      Right clicks bring up the context menu.
 function click(x, y)
 {
-    if(global.newRect)
-    {
+    if (global.newRect) {
         global.newRect = false;
-        global.x1 = x;
-        global.y1 = y;
+        global.point1 = v;
         addRubber("RECTANGLE");
         setRubberMode("RECTANGLE");
-        setRubberPoint("RECTANGLE_START", x, y);
-        setPromptPrefix(qsTr("Specify other corner point or [Dimensions]: "));
+        setRubberPoint("RECTANGLE_START", v.x, v.y);
+        prompt_output(translate("Specify other corner point or [Dimensions]: "));
     }
-    else
-    {
+    else {
         global.newRect = true;
-        global.x2 = x;
-        global.y2 = y;
-        setRubberPoint("RECTANGLE_END", x, y);
+        global.point2 = v;
+        setRubberPoint("RECTANGLE_END", v.x, v.y);
         vulcanize();
-        _main->nativeEndCommand();
+        end_command();
     }
 }
 
@@ -90,48 +86,38 @@ function context(str)
 //      Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
-    if(str == "C" || str == "CHAMFER") //TODO: Probably should add additional qsTr calls here.
-    {
+    if (str == "C" || str == "CHAMFER") {
+        //TODO: Probably should add additional qsTr calls here.
         todo("RECTANGLE", "prompt() for CHAMFER");
     }
-    else if(str == "D" || str == "DIMENSIONS") //TODO: Probably should add additional qsTr calls here.
-    {
+    else if (str == "D" || str == "DIMENSIONS") {
+        //TODO: Probably should add additional qsTr calls here.
         todo("RECTANGLE", "prompt() for DIMENSIONS");
     }
-    else if(str == "F" || str == "FILLET") //TODO: Probably should add additional qsTr calls here.
-    {
+    else if (str == "F" || str == "FILLET") {
+        //TODO: Probably should add additional qsTr calls here.
         todo("RECTANGLE", "prompt() for FILLET");
     }
-    else
-    {
-        var strList = str.split(",");
-        if(isNaN(strList[0]) || isNaN(strList[1]))
-        {
-            alert(qsTr("Invalid point."));
-            setPromptPrefix(qsTr("Specify first point: "));
+    else {
+        if (!parse_vector(str, &v)) {
+            alert(translate("Invalid point."));
+            prompt_output(translate("Specify first point: "));
         }
-        else
-        {
-            var x = Number(strList[0]);
-            var y = Number(strList[1]);
-            if(global.newRect)
-            {
+        else {
+            if (global.newRect) {
                 global.newRect = false;
-                global.x1 = x;
-                global.y1 = y;
+                global.point1 = v;
                 addRubber("RECTANGLE");
                 setRubberMode("RECTANGLE");
-                setRubberPoint("RECTANGLE_START", x, y);
-                setPromptPrefix(qsTr("Specify other corner point or [Dimensions]: "));
+                setRubberPoint("RECTANGLE_START", v.x, v.y);
+                prompt_output(translate("Specify other corner point or [Dimensions]: "));
             }
-            else
-            {
+            else {
                 global.newRect = true;
-                global.x2 = x;
-                global.y2 = y;
-                setRubberPoint("RECTANGLE_END", x, y);
+                global.point2 = v;
+                setRubberPoint("RECTANGLE_END", v.x, v.y);
                 vulcanize();
-                _main->nativeEndCommand();
+                end_command();
             }
         }
     }
@@ -147,8 +133,7 @@ RectObject::RectObject(qreal x, qreal y, qreal w, qreal h, QRgb rgb, QGraphicsIt
 RectObject::RectObject(RectObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("RectObject Constructor()");
-    if(obj)
-    {
+    if (obj) {
         QPointF ptl = obj->objectTopLeft();
         init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
@@ -224,7 +209,7 @@ void RectObject::updatePath()
 void RectObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) return;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
@@ -243,8 +228,7 @@ void RectObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
 void RectObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if(rubberMode == OBJ_RUBBER_RECTANGLE)
-    {
+    if (rubberMode == OBJ_RUBBER_RECTANGLE) {
         QPointF sceneStartPoint = objectRubberPoint("RECTANGLE_START");
         QPointF sceneEndPoint = objectRubberPoint("RECTANGLE_END");
         qreal x = sceneStartPoint.x();
@@ -254,19 +238,17 @@ void RectObject::updateRubber(QPainter* painter)
         setObjectRect(x,y,w,h);
         updatePath();
     }
-    else if(rubberMode == OBJ_RUBBER_GRIP)
-    {
-        if(painter)
-        {
+    else if (rubberMode == OBJ_RUBBER_GRIP) {
+        if (painter) {
             //TODO: Make this work with rotation & scaling
             /*
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
             QPointF after = objectRubberPoint(QString());
             QPointF delta = after-gripPoint;
             if     (gripPoint == objectTopLeft())     { painter->drawPolygon(mapFromScene(QRectF(after.x(), after.y(), objectWidth()-delta.x(), objectHeight()-delta.y()))); }
-            else if(gripPoint == objectTopRight())    { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y()))); }
-            else if(gripPoint == objectBottomLeft())  { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y()))); }
-            else if(gripPoint == objectBottomRight()) { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()))); }
+            else if (gripPoint == objectTopRight())    { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y()))); }
+            else if (gripPoint == objectBottomLeft())  { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y()))); }
+            else if (gripPoint == objectBottomRight()) { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()))); }
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
             drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
@@ -306,9 +288,9 @@ QPointF RectObject::mouseSnapPoint(const QPointF& mousePoint)
     qreal minDist = qMin(qMin(ptlDist, ptrDist), qMin(pblDist, pbrDist));
 
     if     (minDist == ptlDist) return ptl;
-    else if(minDist == ptrDist) return ptr;
-    else if(minDist == pblDist) return pbl;
-    else if(minDist == pbrDist) return pbr;
+    else if (minDist == ptrDist) return ptr;
+    else if (minDist == pblDist) return pbl;
+    else if (minDist == pbrDist) return pbr;
 
     return scenePos();
 }
@@ -323,10 +305,22 @@ QList<QPointF> RectObject::allGripPoints()
 void RectObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     QPointF delta = after-before;
-    if     (before == objectTopLeft())     { setObjectRect(after.x(), after.y(), objectWidth()-delta.x(), objectHeight()-delta.y()); }
-    else if(before == objectTopRight())    { setObjectRect(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y()); }
-    else if(before == objectBottomLeft())  { setObjectRect(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y()); }
-    else if(before == objectBottomRight()) { setObjectRect(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()); }
+    if (before == objectTopLeft()) {
+        setObjectRect(after.x(), after.y(), objectWidth()-delta.x(),
+            objectHeight()-delta.y());
+    }
+    else if (before == objectTopRight()) {
+        setObjectRect(objectTopLeft().x(), objectTopLeft().y()+delta.y(),
+            objectWidth()+delta.x(), objectHeight()-delta.y());
+    }
+    else if (before == objectBottomLeft()) {
+        setObjectRect(objectTopLeft().x()+delta.x(), objectTopLeft().y(),
+            objectWidth()-delta.x(), objectHeight()+delta.y());
+    }
+    else if (before == objectBottomRight()) {
+        setObjectRect(objectTopLeft().x(), objectTopLeft().y(),
+            objectWidth()+delta.x(), objectHeight()+delta.y());
+    }
 }
 
 QPainterPath RectObject::objectSavePath() const

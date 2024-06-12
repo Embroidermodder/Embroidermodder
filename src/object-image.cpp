@@ -100,7 +100,7 @@ void ImageObject::updatePath()
 void ImageObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) return;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
@@ -119,8 +119,7 @@ void ImageObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
 void ImageObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if(rubberMode == OBJ_RUBBER_IMAGE)
-    {
+    if (rubberMode == OBJ_RUBBER_IMAGE) {
         QPointF sceneStartPoint = objectRubberPoint("IMAGE_START");
         QPointF sceneEndPoint = objectRubberPoint("IMAGE_END");
         qreal x = sceneStartPoint.x();
@@ -130,8 +129,7 @@ void ImageObject::updateRubber(QPainter* painter)
         setObjectRect(x,y,w,h);
         updatePath();
     }
-    else if(rubberMode == OBJ_RUBBER_GRIP)
-    {
+    else if (rubberMode == OBJ_RUBBER_GRIP) {
         //TODO: updateRubber() gripping for ImageObject
     }
 }
@@ -160,9 +158,9 @@ QPointF ImageObject::mouseSnapPoint(const QPointF& mousePoint)
     qreal minDist = qMin(qMin(ptlDist, ptrDist), qMin(pblDist, pbrDist));
 
     if     (minDist == ptlDist) return ptl;
-    else if(minDist == ptrDist) return ptr;
-    else if(minDist == pblDist) return pbl;
-    else if(minDist == pbrDist) return pbr;
+    else if (minDist == ptrDist) return ptr;
+    else if (minDist == pblDist) return pbl;
+    else if (minDist == pbrDist) return pbr;
 
     return scenePos();
 }

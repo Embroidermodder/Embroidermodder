@@ -209,7 +209,7 @@ MdiWindow::saveBMC()
 
     QPainter painter(&img);
     QRectF targetRect(0,0,150,150);
-    if(_main->settings_printing_disable_bg) {
+    if (_main->settings_printing_disable_bg) {
         //TODO: Make BMC background into it's own setting?
         QBrush brush = gscene->backgroundBrush();
         gscene->setBackgroundBrush(Qt::NoBrush);
@@ -359,19 +359,33 @@ void MdiWindow::promptInputNext()
 
 void MdiWindow::promptInputPrevNext(bool prev)
 {
-    if(promptInputList.isEmpty())
-    {
-        if(prev) QMessageBox::critical(this, tr("Prompt Previous Error"), tr("The prompt input is empty! Please report this as a bug!"));
-        else     QMessageBox::critical(this, tr("Prompt Next Error"),     tr("The prompt input is empty! Please report this as a bug!"));
+    if (promptInputList.isEmpty()) {
+        if (prev) {
+            QMessageBox::critical(this, tr("Prompt Previous Error"), tr("The prompt input is empty! Please report this as a bug!"));
+        }
+        else {
+            QMessageBox::critical(this, tr("Prompt Next Error"),     tr("The prompt input is empty! Please report this as a bug!"));
+        }
         qDebug("The prompt input is empty! Please report this as a bug!");
     }
-    else
-    {
-        if(prev) promptInputNum--;
-        else     promptInputNum++;
+    else {
+        if (prev) {
+            promptInputNum--;
+        }
+        else {
+            promptInputNum++;
+        }
         int maxNum = promptInputList.size();
-        if     (promptInputNum < 0)       { promptInputNum = 0;      _main->prompt->setCurrentText(""); }
-        else if(promptInputNum >= maxNum) { promptInputNum = maxNum; _main->prompt->setCurrentText(""); }
-        else                              { _main->prompt->setCurrentText(promptInputList.at(promptInputNum)); }
+        if (promptInputNum < 0) {
+            promptInputNum = 0;
+            _main->prompt->setCurrentText("");
+        }
+        else if (promptInputNum >= maxNum) {
+            promptInputNum = maxNum;
+            _main->prompt->setCurrentText("");
+        }
+        else {
+            _main->prompt->setCurrentText(promptInputList.at(promptInputNum));
+        }
     }
 }

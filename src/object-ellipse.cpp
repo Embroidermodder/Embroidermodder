@@ -14,9 +14,11 @@
 #include <QStyleOption>
 #include <QGraphicsScene>
 
-/* NOTE: main() is run every time the command is started.
- *       Use it to reset variables so they are ready to go.
- */
+#define ELLIPSE_MODE_MAJORDIAMETER_MINORRADIUS  0
+#define ELLIPSE_MODE_MAJORRADIUS_MINORRADIUS    1
+#define ELLIPSE_MODE_ELLIPSE_ROTATION           2
+
+/* ELLIPSE */
 ScriptValue
 ellipse_command(ScriptEnv *context)
 {
@@ -27,10 +29,6 @@ ellipse_command(ScriptEnv *context)
     return script_null;
 }
 
-/* NOTE: click() is run only for left clicks.
- *       Middle clicks are used for panning.
- *       Right clicks bring up the context menu.
- */
 ScriptValue
 ellipse_click(ScriptEnv* /* context */)
 {
@@ -39,8 +37,6 @@ ellipse_click(ScriptEnv* /* context */)
     return script_null;
 }
 
-/* NOTE: context() is run when a context menu entry is chosen.
- */
 ScriptValue
 ellipse_context(ScriptEnv* /* context */)
 {
@@ -49,11 +45,6 @@ ellipse_context(ScriptEnv* /* context */)
     return script_null;
 }
 
-/* NOTE: prompt() is run when Enter is pressed.
- *       appendPromptHistory is automatically called before prompt()
- *       is called so calling it is only needed for erroneous input.
- *       Any text is in the command prompt is sent as an uppercase string.
- */
 ScriptValue
 ellipse_prompt(ScriptEnv* /* context */)
 {
@@ -63,8 +54,6 @@ ellipse_prompt(ScriptEnv* /* context */)
 }
 
 #if 0
-//Command: Ellipse
-
 var global = {}; //Required
 global.x1;
 global.y1;
@@ -79,13 +68,6 @@ global.height;
 global.rot;
 global.mode;
 
-//enums
-global.mode_MAJORDIAMETER_MINORRADIUS = 0;
-global.mode_MAJORRADIUS_MINORRADIUS   = 1;
-global.mode_ELLIPSE_ROTATION          = 2;
-
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
 function main()
 {
     initCommand();
@@ -100,15 +82,10 @@ function main()
     setPromptPrefix(qsTr("Specify first axis start point or [Center]: "));
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
 function click(x, y)
 {
-    if(global.mode == global.mode_MAJORDIAMETER_MINORRADIUS)
-    {
-        if(isNaN(global.x1))
-        {
+    if (global.mode == global.mode_MAJORDIAMETER_MINORRADIUS) {
+        if (isNaN(global.x1)) {
             global.x1 = x;
             global.y1 = y;
             addRubber("ELLIPSE");
@@ -117,8 +94,7 @@ function click(x, y)
             appendPromptHistory();
             setPromptPrefix(qsTr("Specify first axis end point: "));
         }
-        else if(isNaN(global.x2))
-        {
+        else if (isNaN(global.x2)) {
             global.x2 = x;
             global.y2 = y;
             global.cx = (global.x1 + global.x2)/2.0;
@@ -134,8 +110,7 @@ function click(x, y)
             appendPromptHistory();
             setPromptPrefix(qsTr("Specify second axis end point or [Rotation]: "));
         }
-        else if(isNaN(global.x3))
-        {
+        else if (isNaN(global.x3)) {
             global.x3 = x;
             global.y3 = y;
             global.height = perpendicularDistance(global.x3, global.y3, global.x1, global.y1, global.x2, global.y2)*2.0;
@@ -144,15 +119,12 @@ function click(x, y)
             appendPromptHistory();
             endCommand();
         }
-        else
-        {
+        else {
             error("ELLIPSE", qsTr("This should never happen."));
         }
     }
-    else if(global.mode == global.mode_MAJORRADIUS_MINORRADIUS)
-    {
-        if(isNaN(global.x1))
-        {
+    else if (global.mode == global.mode_MAJORRADIUS_MINORRADIUS) {
+        if (isNaN(global.x1)) {
             global.x1 = x;
             global.y1 = y;
             global.cx = global.x1;
@@ -164,8 +136,7 @@ function click(x, y)
             appendPromptHistory();
             setPromptPrefix(qsTr("Specify first axis end point: "));
         }
-        else if(isNaN(global.x2))
-        {
+        else if (isNaN(global.x2)) {
             global.x2 = x;
             global.y2 = y;
             global.width = calculateDistance(global.cx, global.cy, global.x2, global.y2)*2.0;
@@ -177,8 +148,7 @@ function click(x, y)
             appendPromptHistory();
             setPromptPrefix(qsTr("Specify second axis end point or [Rotation]: "));
         }
-        else if(isNaN(global.x3))
-        {
+        else if (isNaN(global.x3)) {
             global.x3 = x;
             global.y3 = y;
             global.height = perpendicularDistance(global.x3, global.y3, global.cx, global.cy, global.x2, global.y2)*2.0;
@@ -187,22 +157,19 @@ function click(x, y)
             appendPromptHistory();
             endCommand();
         }
-        else
-        {
+        else {
             error("ELLIPSE", qsTr("This should never happen."));
         }
     }
-    else if(global.mode == global.mode_ELLIPSE_ROTATION)
-    {
-        if(isNaN(global.x1))
+    else if (global.mode == global.mode_ELLIPSE_ROTATION) {
+        if (isNaN(global.x1)) {
+            error("ELLIPSE", qsTr("This should never happen."));
+        }
+        else if (isNaN(global.x2))
         {
             error("ELLIPSE", qsTr("This should never happen."));
         }
-        else if(isNaN(global.x2))
-        {
-            error("ELLIPSE", qsTr("This should never happen."));
-        }
-        else if(isNaN(global.x3))
+        else if (isNaN(global.x3))
         {
             var angle = calculateAngle(global.cx, global.cy, x, y);
             global.height = Math.cos(angle*Math.PI/180.0)*global.width;
@@ -213,37 +180,27 @@ function click(x, y)
     }
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("ELLIPSE", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
-    if(global.mode == global.mode_MAJORDIAMETER_MINORRADIUS)
-    {
-        if(isNaN(global.x1))
-        {
-            if(str == "C" || str == "CENTER") //TODO: Probably should add additional qsTr calls here.
+    if (global.mode == global.mode_MAJORDIAMETER_MINORRADIUS) {
+        if (isNaN(global.x1)) {
+            if (str == "C" || str == "CENTER") //TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_MAJORRADIUS_MINORRADIUS;
                 setPromptPrefix(qsTr("Specify center point: "));
             }
-            else
-            {
+            else {
                 var strList = str.split(",");
-                if(isNaN(strList[0]) || isNaN(strList[1]))
-                {
+                if (isNaN(strList[0]) || isNaN(strList[1])) {
                     alert(qsTr("Point or option keyword required."));
                     setPromptPrefix(qsTr("Specify first axis start point or [Center]: "));
                 }
-                else
-                {
+                else {
                     global.x1 = Number(strList[0]);
                     global.y1 = Number(strList[1]);
                     addRubber("ELLIPSE");
@@ -253,16 +210,13 @@ function prompt(str)
                 }
             }
         }
-        else if(isNaN(global.x2))
-        {
+        else if (isNaN(global.x2)) {
             var strList = str.split(",");
-            if(isNaN(strList[0]) || isNaN(strList[1]))
-            {
+            if (isNaN(strList[0]) || isNaN(strList[1])) {
                 alert(qsTr("Invalid point."));
                 setPromptPrefix(qsTr("Specify first axis end point: "));
             }
-            else
-            {
+            else {
                 global.x2 = Number(strList[0]);
                 global.y2 = Number(strList[1]);
                 global.cx = (global.x1 + global.x2)/2.0;
@@ -278,23 +232,19 @@ function prompt(str)
                 setPromptPrefix(qsTr("Specify second axis end point or [Rotation]: "));
             }
         }
-        else if(isNaN(global.x3))
-        {
-            if(str == "R" || str == "ROTATION") //TODO: Probably should add additional qsTr calls here.
+        else if (isNaN(global.x3)) {
+            if (str == "R" || str == "ROTATION") //TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_ELLIPSE_ROTATION;
                 setPromptPrefix(qsTr("Specify rotation: "));
             }
-            else
-            {
+            else {
                 var strList = str.split(",");
-                if(isNaN(strList[0]) || isNaN(strList[1]))
-                {
+                if (isNaN(strList[0]) || isNaN(strList[1])) {
                     alert(qsTr("Point or option keyword required."));
                     setPromptPrefix(qsTr("Specify second axis end point or [Rotation]: "));
                 }
-                else
-                {
+                else {
                     global.x3 = Number(strList[0]);
                     global.y3 = Number(strList[1]);
                     global.height = perpendicularDistance(global.x3, global.y3, global.x1, global.y1, global.x2, global.y2)*2.0;
@@ -305,18 +255,14 @@ function prompt(str)
             }
         }
     }
-    else if(global.mode == global.mode_MAJORRADIUS_MINORRADIUS)
-    {
-        if(isNaN(global.x1))
-        {
+    else if (global.mode == global.mode_MAJORRADIUS_MINORRADIUS) {
+        if (isNaN(global.x1)) {
             var strList = str.split(",");
-            if(isNaN(strList[0]) || isNaN(strList[1]))
-            {
+            if (isNaN(strList[0]) || isNaN(strList[1])) {
                 alert(qsTr("Invalid point."));
                 setPromptPrefix(qsTr("Specify center point: "));
             }
-            else
-            {
+            else {
                 global.x1 = Number(strList[0]);
                 global.y1 = Number(strList[1]);
                 global.cx = global.x1;
@@ -328,16 +274,13 @@ function prompt(str)
                 setPromptPrefix(qsTr("Specify first axis end point: "));
             }
         }
-        else if(isNaN(global.x2))
-        {
+        else if (isNaN(global.x2)) {
             var strList = str.split(",");
-            if(isNaN(strList[0]) || isNaN(strList[1]))
-            {
+            if (isNaN(strList[0]) || isNaN(strList[1])) {
                 alert(qsTr("Invalid point."));
                 setPromptPrefix(qsTr("Specify first axis end point: "));
             }
-            else
-            {
+            else {
                 global.x2 = Number(strList[0]);
                 global.y2 = Number(strList[1]);
                 global.width = calculateDistance(global.x1, global.y1, global.x2, global.y2)*2.0;
@@ -349,23 +292,19 @@ function prompt(str)
                 setPromptPrefix(qsTr("Specify second axis end point or [Rotation]: "));
             }
         }
-        else if(isNaN(global.x3))
-        {
-            if(str == "R" || str == "ROTATION") //TODO: Probably should add additional qsTr calls here.
+        else if (isNaN(global.x3)) {
+            if (str == "R" || str == "ROTATION") //TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_ELLIPSE_ROTATION;
                 setPromptPrefix(qsTr("Specify ellipse rotation: "));
             }
-            else
-            {
+            else {
                 var strList = str.split(",");
-                if(isNaN(strList[0]) || isNaN(strList[1]))
-                {
+                if (isNaN(strList[0]) || isNaN(strList[1])) {
                     alert(qsTr("Point or option keyword required."));
                     setPromptPrefix(qsTr("Specify second axis end point or [Rotation]: "));
                 }
-                else
-                {
+                else {
                     global.x3 = Number(strList[0]);
                     global.y3 = Number(strList[1]);
                     global.height = perpendicularDistance(global.x3, global.y3, global.x1, global.y1, global.x2, global.y2)*2.0;
@@ -376,25 +315,19 @@ function prompt(str)
             }
         }
     }
-    else if(global.mode == global.mode_ELLIPSE_ROTATION)
-    {
-        if(isNaN(global.x1))
-        {
+    else if (global.mode == global.mode_ELLIPSE_ROTATION) {
+        if (isNaN(global.x1)) {
             error("ELLIPSE", qsTr("This should never happen."));
         }
-        else if(isNaN(global.x2))
-        {
+        else if (isNaN(global.x2)) {
             error("ELLIPSE", qsTr("This should never happen."));
         }
-        else if(isNaN(global.x3))
-        {
-            if(isNaN(str))
-            {
+        else if (isNaN(global.x3)) {
+            if (isNaN(str)) {
                 alert(qsTr("Invalid angle. Input a numeric angle or pick a point."));
                 setPromptPrefix(qsTr("Specify rotation: "));
             }
-            else
-            {
+            else {
                 var angle = Number(str);
                 global.height = Math.cos(angle*Math.PI/180.0)*global.width;
                 addEllipse(global.cx, global.cy, global.width, global.height, global.rot, false);
@@ -414,7 +347,7 @@ EllipseObject::EllipseObject(qreal centerX, qreal centerY, qreal width, qreal he
 EllipseObject::EllipseObject(EllipseObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("EllipseObject Constructor()");
-    if(obj)
+    if (obj)
     {
         init(obj->objectCenterX(), obj->objectCenterY(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
@@ -487,7 +420,7 @@ void EllipseObject::setObjectRadiusMinor(qreal radius)
 void EllipseObject::setObjectDiameterMajor(qreal diameter)
 {
     QRectF elRect = rect();
-    if(elRect.width() > elRect.height())
+    if (elRect.width() > elRect.height())
         elRect.setWidth(diameter);
     else
         elRect.setHeight(diameter);
@@ -498,7 +431,7 @@ void EllipseObject::setObjectDiameterMajor(qreal diameter)
 void EllipseObject::setObjectDiameterMinor(qreal diameter)
 {
     QRectF elRect = rect();
-    if(elRect.width() < elRect.height())
+    if (elRect.width() < elRect.height())
         elRect.setWidth(diameter);
     else
         elRect.setHeight(diameter);
@@ -556,7 +489,7 @@ void EllipseObject::updatePath()
 void EllipseObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) return;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
@@ -575,17 +508,17 @@ void EllipseObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
 void EllipseObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if(rubberMode == OBJ_RUBBER_ELLIPSE_LINE)
+    if (rubberMode == OBJ_RUBBER_ELLIPSE_LINE)
     {
         QPointF sceneLinePoint1 = objectRubberPoint("ELLIPSE_LINE_POINT1");
         QPointF sceneLinePoint2 = objectRubberPoint("ELLIPSE_LINE_POINT2");
         QPointF itemLinePoint1  = mapFromScene(sceneLinePoint1);
         QPointF itemLinePoint2  = mapFromScene(sceneLinePoint2);
         QLineF itemLine(itemLinePoint1, itemLinePoint2);
-        if(painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+        if (painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
         updatePath();
     }
-    else if(rubberMode == OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS)
+    else if (rubberMode == OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS)
     {
         QPointF sceneAxis1Point1 = objectRubberPoint("ELLIPSE_AXIS1_POINT1");
         QPointF sceneAxis1Point2 = objectRubberPoint("ELLIPSE_AXIS1_POINT2");
@@ -615,10 +548,10 @@ void EllipseObject::updateRubber(QPainter* painter)
         QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
         QPointF itemAxis2Point2 = mapFromScene(sceneAxis2Point2);
         QLineF itemLine(itemCenterPoint, itemAxis2Point2);
-        if(painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+        if (painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
         updatePath();
     }
-    else if(rubberMode == OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS)
+    else if (rubberMode == OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS)
     {
         QPointF sceneAxis1Point2 = objectRubberPoint("ELLIPSE_AXIS1_POINT2");
         QPointF sceneCenterPoint = objectRubberPoint("ELLIPSE_CENTER");
@@ -647,10 +580,10 @@ void EllipseObject::updateRubber(QPainter* painter)
         QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
         QPointF itemAxis2Point2 = mapFromScene(sceneAxis2Point2);
         QLineF itemLine(itemCenterPoint, itemAxis2Point2);
-        if(painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+        if (painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
         updatePath();
     }
-    else if(rubberMode == OBJ_RUBBER_GRIP)
+    else if (rubberMode == OBJ_RUBBER_GRIP)
     {
         //TODO: updateRubber() gripping for EllipseObject
     }
@@ -682,10 +615,10 @@ QPointF EllipseObject::mouseSnapPoint(const QPointF& mousePoint)
     qreal minDist = qMin(qMin(qMin(q0Dist, q90Dist), qMin(q180Dist, q270Dist)), cntrDist);
 
     if     (minDist == cntrDist) return center;
-    else if(minDist == q0Dist)   return quad0;
-    else if(minDist == q90Dist)  return quad90;
-    else if(minDist == q180Dist) return quad180;
-    else if(minDist == q270Dist) return quad270;
+    else if (minDist == q0Dist)   return quad0;
+    else if (minDist == q90Dist)  return quad90;
+    else if (minDist == q180Dist) return quad180;
+    else if (minDist == q270Dist) return quad270;
 
     return scenePos();
 }

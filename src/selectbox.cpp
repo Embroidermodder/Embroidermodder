@@ -10,7 +10,7 @@ SelectBox::SelectBox(Shape s, QWidget* parent) : QRubberBand(s, parent)
 
 void SelectBox::setDirection(int dir)
 {
-    if(!dir) { dirPen = leftPen;  dirBrush = leftBrush;  }
+    if (!dir) { dirPen = leftPen;  dirBrush = leftBrush;  }
     else     { dirPen = rightPen; dirBrush = rightBrush; }
     boxDir = dir;
 }
@@ -35,7 +35,7 @@ void SelectBox::setColors(const QColor& colorL, const QColor& fillL, const QColo
     rightBrush.setStyle(Qt::SolidPattern);
     rightBrush.setColor(rightBrushColor);
 
-    if(!boxDir) { dirPen = leftPen;  dirBrush = leftBrush;  }
+    if (!boxDir) { dirPen = leftPen;  dirBrush = leftBrush;  }
     else        { dirPen = rightPen; dirBrush = rightBrush; }
 
     forceRepaint();

@@ -61,10 +61,6 @@ circle_command(ScriptEnv *context)
     return script_null;
 }
 
-/* NOTE: click() is run only for left clicks.
- *       Middle clicks are used for panning.
- *       Right clicks bring up the context menu.
- */
 ScriptValue
 circle_click(ScriptEnv *context)
 {
@@ -191,8 +187,6 @@ circle_click(ScriptEnv *context)
     return script_null;
 }
 
-/* NOTE: context() is run when a context menu entry is chosen.
- */
 ScriptValue
 circle_context(ScriptEnv *context)
 {
@@ -201,11 +195,6 @@ circle_context(ScriptEnv *context)
     return script_null;
 }
 
-/* NOTE: prompt() is run when Enter is pressed.
- *       appendPromptHistory is automatically called before prompt()
- *       is called so calling it is only needed for erroneous input.
- *       Any text is in the command prompt is sent as an uppercase string.
- */
 ScriptValue
 circle_prompt(ScriptEnv *context)
 {
@@ -393,7 +382,7 @@ CircleObject::CircleObject(qreal centerX, qreal centerY, qreal radius, QRgb rgb,
 CircleObject::CircleObject(CircleObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("CircleObject Constructor()");
-    if(obj)
+    if (obj)
     {
         init(obj->objectCenterX(), obj->objectCenterY(), obj->objectRadius(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
@@ -488,7 +477,7 @@ void CircleObject::updatePath()
 void CircleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) return;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
@@ -507,7 +496,7 @@ void CircleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* opti
 void CircleObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if(rubberMode == OBJ_RUBBER_CIRCLE_1P_RAD)
+    if (rubberMode == OBJ_RUBBER_CIRCLE_1P_RAD)
     {
         QPointF sceneCenterPoint = objectRubberPoint("CIRCLE_CENTER");
         QPointF sceneQSnapPoint = objectRubberPoint("CIRCLE_RADIUS");
@@ -518,10 +507,10 @@ void CircleObject::updateRubber(QPainter* painter)
         QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
         qreal radius = sceneLine.length();
         setObjectRadius(radius);
-        if(painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+        if (painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
         updatePath();
     }
-    else if(rubberMode == OBJ_RUBBER_CIRCLE_1P_DIA)
+    else if (rubberMode == OBJ_RUBBER_CIRCLE_1P_DIA)
     {
         QPointF sceneCenterPoint = objectRubberPoint("CIRCLE_CENTER");
         QPointF sceneQSnapPoint = objectRubberPoint("CIRCLE_DIAMETER");
@@ -532,10 +521,10 @@ void CircleObject::updateRubber(QPainter* painter)
         QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
         qreal diameter = sceneLine.length();
         setObjectDiameter(diameter);
-        if(painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+        if (painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
         updatePath();
     }
-    else if(rubberMode == OBJ_RUBBER_CIRCLE_2P)
+    else if (rubberMode == OBJ_RUBBER_CIRCLE_2P)
     {
         QPointF sceneTan1Point = objectRubberPoint("CIRCLE_TAN1");
         QPointF sceneQSnapPoint = objectRubberPoint("CIRCLE_TAN2");
@@ -545,7 +534,7 @@ void CircleObject::updateRubber(QPainter* painter)
         setObjectDiameter(diameter);
         updatePath();
     }
-    else if(rubberMode == OBJ_RUBBER_CIRCLE_3P)
+    else if (rubberMode == OBJ_RUBBER_CIRCLE_3P)
     {
         QPointF sceneTan1Point = objectRubberPoint("CIRCLE_TAN1");
         QPointF sceneTan2Point = objectRubberPoint("CIRCLE_TAN2");
@@ -566,12 +555,12 @@ void CircleObject::updateRubber(QPainter* painter)
         setObjectRadius(radius);
         updatePath();
     }
-    else if(rubberMode == OBJ_RUBBER_GRIP)
+    else if (rubberMode == OBJ_RUBBER_GRIP)
     {
-        if(painter)
+        if (painter)
         {
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if(gripPoint == objectCenter())
+            if (gripPoint == objectCenter())
             {
                 painter->drawEllipse(rect().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
             }
@@ -613,10 +602,10 @@ QPointF CircleObject::mouseSnapPoint(const QPointF& mousePoint)
     qreal minDist = qMin(qMin(qMin(q0Dist, q90Dist), qMin(q180Dist, q270Dist)), cntrDist);
 
     if     (minDist == cntrDist) return center;
-    else if(minDist == q0Dist)   return quad0;
-    else if(minDist == q90Dist)  return quad90;
-    else if(minDist == q180Dist) return quad180;
-    else if(minDist == q270Dist) return quad270;
+    else if (minDist == q0Dist)   return quad0;
+    else if (minDist == q90Dist)  return quad90;
+    else if (minDist == q180Dist) return quad180;
+    else if (minDist == q270Dist) return quad270;
 
     return scenePos();
 }
@@ -630,7 +619,7 @@ QList<QPointF> CircleObject::allGripPoints()
 
 void CircleObject::gripEdit(const QPointF& before, const QPointF& after)
 {
-    if(before == objectCenter()) { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
+    if (before == objectCenter()) { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
     else                         { setObjectRadius(QLineF(objectCenter(), after).length()); }
 }
 

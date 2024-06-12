@@ -15,9 +15,12 @@
 #include <QStyleOption>
 #include <QGraphicsScene>
 
-/* NOTE: main() is run every time the command is started.
- *       Use it to reset variables so they are ready to go.
- */
+#define TEXTSINGLE_MODE_JUSTIFY   0
+#define TEXTSINGLE_MODE_SETFONT   1
+#define TEXTSINGLE_MODE_SETGEOM   2
+#define TEXTSINGLE_MODE_RAPID     3
+
+/* SINGLELINETEXT */
 ScriptValue
 singlelinetext_command(ScriptEnv * /* context */)
 {
@@ -25,8 +28,6 @@ singlelinetext_command(ScriptEnv * /* context */)
 }
 
 #if 0
-//Command: Single Line Text
-
 var global = {}; //Required
 global.text;
 global.textX;
@@ -37,15 +38,8 @@ global.textHeight;
 global.textRotation;
 global.mode;
 
-//enums
-global.mode_JUSTIFY = 0;
-global.mode_SETFONT = 1;
-global.mode_SETGEOM = 2;
-global.mode_RAPID   = 3;
-
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
-function main()
+function
+main()
 {
     initCommand();
     clearSelection();
@@ -56,43 +50,37 @@ function main()
     global.textFont = textFont();
     global.textHeight = NaN;
     global.textRotation = NaN;
-    global.mode = global.mode_SETGEOM;
-    setPromptPrefix(qsTr("Current font: ") + "{" + global.textFont + "} " + qsTr("Text height: ") + "{" +  textSize() + "}");
+    global.mode = TEXTSINGLE_MODE_SETGEOM;
+    prompt_output(qsTr("Current font: ") + "{" + global.textFont + "} " + qsTr("Text height: ") + "{" +  textSize() + "}");
     appendPromptHistory();
-    setPromptPrefix(qsTr("Specify start point of text or [Justify/Setfont]: "));
+    prompt_output(qsTr("Specify start point of text or [Justify/Setfont]: "));
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
-function click(x, y)
+function
+click(EmbVector v)
 {
-    if(global.mode == global.mode_SETGEOM)
-    {
-        if(isNaN(global.textX))
-        {
+    if (global.mode == TEXTSINGLE_MODE_SETGEOM) {
+        if (isNaN(global.textX)) {
             global.textX = x;
             global.textY = y;
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.textX, global.textY);
             appendPromptHistory();
-            setPromptPrefix(qsTr("Specify text height") + " {" + textSize() + "}: ");
+            prompt_output(qsTr("Specify text height") + " {" + textSize() + "}: ");
         }
-        else if(isNaN(global.textHeight))
-        {
+        else if (isNaN(global.textHeight)) {
             global.textHeight = calculateDistance(global.textX, global.textY, x, y);
             setTextSize(global.textHeight);
             appendPromptHistory();
-            setPromptPrefix(qsTr("Specify text angle") + " {" + textAngle() + "}: ");
+            prompt_output(qsTr("Specify text angle") + " {" + textAngle() + "}: ");
         }
-        else if(isNaN(global.textRotation))
-        {
+        else if (isNaN(global.textRotation)) {
             global.textRotation = calculateAngle(global.textX, global.textY, x, y);
             setSettingsTextAngle(global.textRotation);
             appendPromptHistory();
-            setPromptPrefix(qsTr("Enter text: "));
-            global.mode = global.mode_RAPID;
+            prompt_output(qsTr("Enter text: "));
+            global.mode = TEXTSINGLE_MODE_RAPID;
             command_prompt("enable rapidfire");
             clearRubber();
             addRubber("TEXTSINGLE");
@@ -103,198 +91,165 @@ function click(x, y)
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             setRubberText("TEXT_RAPID", global.text);
         }
-        else
-        {
+        else {
             //Do nothing, as we are in rapidFire mode now.
         }
     }
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("SINGLELINETEXT", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
+//TODO: Probably should add additional qsTr calls here.
 function prompt(str)
 {
-    if(global.mode == global.mode_JUSTIFY)
-    {
-        if(str == "C" || str == "CENTER") //TODO: Probably should add additional qsTr calls here.
-        {
-            global.mode = global.mode_SETGEOM;
+    if (global.mode == TEXTSINGLE_MODE_JUSTIFY) {
+        if (str == "C" || str == "CENTER") {
+            global.mode = TEXTSINGLE_MODE_SETGEOM;
             global.textJustify = "Center";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify center point of text or [Justify/Setfont]: "));
+            prompt_output(qsTr("Specify center point of text or [Justify/Setfont]: "));
         }
-        else if(str == "R" || str == "RIGHT") //TODO: Probably should add additional qsTr calls here.
-        {
-            global.mode = global.mode_SETGEOM;
+        else if (str == "R" || str == "RIGHT") {
+            global.mode = TEXTSINGLE_MODE_SETGEOM;
             global.textJustify = "Right";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify right-end point of text or [Justify/Setfont]: "));
+            prompt_output(qsTr("Specify right-end point of text or [Justify/Setfont]: "));
         }
-        else if(str == "A" || str == "ALIGN") //TODO: Probably should add additional qsTr calls here.
-        {
-            global.mode = global.mode_SETGEOM;
+        else if (str == "A" || str == "ALIGN") {
+            global.mode = TEXTSINGLE_MODE_SETGEOM;
             global.textJustify = "Aligned";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify start point of text or [Justify/Setfont]: "));
+            prompt_output(qsTr("Specify start point of text or [Justify/Setfont]: "));
         }
-        else if(str == "M" || str == "MIDDLE") //TODO: Probably should add additional qsTr calls here.
-        {
-            global.mode = global.mode_SETGEOM;
+        else if (str == "M" || str == "MIDDLE") {
+            global.mode = TEXTSINGLE_MODE_SETGEOM;
             global.textJustify = "Middle";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify middle point of text or [Justify/Setfont]: "));
+            prompt_output(qsTr("Specify middle point of text or [Justify/Setfont]: "));
         }
-        else if(str == "F" || str == "FIT") //TODO: Probably should add additional qsTr calls here.
-        {
-            global.mode = global.mode_SETGEOM;
+        else if (str == "F" || str == "FIT") {
+            global.mode = TEXTSINGLE_MODE_SETGEOM;
             global.textJustify = "Fit";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify start point of text or [Justify/Setfont]: "));
+            prompt_output(qsTr("Specify start point of text or [Justify/Setfont]: "));
         }
-        else if(str == "TL" || str == "TOPLEFT") //TODO: Probably should add additional qsTr calls here.
-        {
-            global.mode = global.mode_SETGEOM;
+        else if (str == "TL" || str == "TOPLEFT") {
+            global.mode = TEXTSINGLE_MODE_SETGEOM;
             global.textJustify = "Top Left";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify top-left point of text or [Justify/Setfont]: "));
+            prompt_output(qsTr("Specify top-left point of text or [Justify/Setfont]: "));
         }
-        else if(str == "TC" || str == "TOPCENTER") //TODO: Probably should add additional qsTr calls here.
-        {
-            global.mode = global.mode_SETGEOM;
+        else if (str == "TC" || str == "TOPCENTER") {
+            global.mode = TEXTSINGLE_MODE_SETGEOM;
             global.textJustify = "Top Center";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify top-center point of text or [Justify/Setfont]: "));
+            prompt_output(qsTr("Specify top-center point of text or [Justify/Setfont]: "));
         }
-        else if(str == "TR" || str == "TOPRIGHT") //TODO: Probably should add additional qsTr calls here.
-        {
-            global.mode = global.mode_SETGEOM;
+        else if (str == "TR" || str == "TOPRIGHT") {
+            global.mode = TEXTSINGLE_MODE_SETGEOM;
             global.textJustify = "Top Right";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify top-right point of text or [Justify/Setfont]: "));
+            prompt_output(qsTr("Specify top-right point of text or [Justify/Setfont]: "));
         }
-        else if(str == "ML" || str == "MIDDLELEFT") //TODO: Probably should add additional qsTr calls here.
-        {
-            global.mode = global.mode_SETGEOM;
+        else if (str == "ML" || str == "MIDDLELEFT") {
+            global.mode = TEXTSINGLE_MODE_SETGEOM;
             global.textJustify = "Middle Left";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify middle-left point of text or [Justify/Setfont]: "));
+            prompt_output(qsTr("Specify middle-left point of text or [Justify/Setfont]: "));
         }
-        else if(str == "MC" || str == "MIDDLECENTER") //TODO: Probably should add additional qsTr calls here.
-        {
-            global.mode = global.mode_SETGEOM;
+        else if (str == "MC" || str == "MIDDLECENTER") {
+            global.mode = TEXTSINGLE_MODE_SETGEOM;
             global.textJustify = "Middle Center";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify middle-center point of text or [Justify/Setfont]: "));
+            prompt_output(qsTr("Specify middle-center point of text or [Justify/Setfont]: "));
         }
-        else if(str == "MR" || str == "MIDDLERIGHT") //TODO: Probably should add additional qsTr calls here.
-        {
-            global.mode = global.mode_SETGEOM;
+        else if (str == "MR" || str == "MIDDLERIGHT") {
+            global.mode = TEXTSINGLE_MODE_SETGEOM;
             global.textJustify = "Middle Right";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify middle-right point of text or [Justify/Setfont]: "));
+            prompt_output(qsTr("Specify middle-right point of text or [Justify/Setfont]: "));
         }
-        else if(str == "BL" || str == "BOTTOMLEFT") //TODO: Probably should add additional qsTr calls here.
-        {
-            global.mode = global.mode_SETGEOM;
+        else if (str == "BL" || str == "BOTTOMLEFT") {
+            global.mode = TEXTSINGLE_MODE_SETGEOM;
             global.textJustify = "Bottom Left";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify bottom-left point of text or [Justify/Setfont]: "));
+            prompt_output(qsTr("Specify bottom-left point of text or [Justify/Setfont]: "));
         }
-        else if(str == "BC" || str == "BOTTOMCENTER") //TODO: Probably should add additional qsTr calls here.
-        {
-            global.mode = global.mode_SETGEOM;
+        else if (str == "BC" || str == "BOTTOMCENTER") {
+            global.mode = TEXTSINGLE_MODE_SETGEOM;
             global.textJustify = "Bottom Center";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify bottom-center point of text or [Justify/Setfont]: "));
+            prompt_output(qsTr("Specify bottom-center point of text or [Justify/Setfont]: "));
         }
-        else if(str == "BR" || str == "BOTTOMRIGHT") //TODO: Probably should add additional qsTr calls here.
-        {
-            global.mode = global.mode_SETGEOM;
+        else if (str == "BR" || str == "BOTTOMRIGHT") {
+            global.mode = TEXTSINGLE_MODE_SETGEOM;
             global.textJustify = "Bottom Right";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix(qsTr("Specify bottom-right point of text or [Justify/Setfont]: "));
+            prompt_output(qsTr("Specify bottom-right point of text or [Justify/Setfont]: "));
         }
-        else
-        {
+        else {
             alert(qsTr("Invalid option keyword."));
-            setPromptPrefix(qsTr("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "));
+            prompt_output(qsTr("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "));
         }
     }
-    else if(global.mode == global.mode_SETFONT)
-    {
-        global.mode = global.mode_SETGEOM;
+    else if (global.mode == TEXTSINGLE_MODE_SETFONT) {
+        global.mode = TEXTSINGLE_MODE_SETGEOM;
         global.textFont = str;
         setRubberText("TEXT_FONT", global.textFont);
         setTextFont(global.textFont);
-        setPromptPrefix(qsTr("Specify start point of text or [Justify/Setfont]: "));
+        prompt_output(qsTr("Specify start point of text or [Justify/Setfont]: "));
     }
-    else if(global.mode == global.mode_SETGEOM)
-    {
-        if(isNaN(global.textX))
-        {
-            if(str == "J" || str == "JUSTIFY") //TODO: Probably should add additional qsTr calls here.
+    else if (global.mode == TEXTSINGLE_MODE_SETGEOM) {
+        if (isNaN(global.textX)) {
+            if (str == "J" || str == "JUSTIFY") //TODO: Probably should add additional qsTr calls here.
             {
-                global.mode = global.mode_JUSTIFY;
-                setPromptPrefix(qsTr("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "));
+                global.mode = TEXTSINGLE_MODE_JUSTIFY;
+                prompt_output(qsTr("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "));
             }
-            else if(str == "S" || str == "SETFONT") //TODO: Probably should add additional qsTr calls here.
+            else if (str == "S" || str == "SETFONT") //TODO: Probably should add additional qsTr calls here.
             {
-                global.mode = global.mode_SETFONT;
-                setPromptPrefix(qsTr("Specify font name: "));
+                global.mode = TEXTSINGLE_MODE_SETFONT;
+                prompt_output(qsTr("Specify font name: "));
             }
-            else
-            {
+            else {
                 var strList = str.split(",");
-                if(isNaN(strList[0]) || isNaN(strList[1]))
-                {
+                if (isNaN(strList[0]) || isNaN(strList[1])) {
                     alert(qsTr("Point or option keyword required."));
-                    setPromptPrefix(qsTr("Specify start point of text or [Justify/Setfont]: "));
+                    prompt_output(qsTr("Specify start point of text or [Justify/Setfont]: "));
                 }
-                else
-                {
+                else {
                     global.textX = Number(strList[0]);
                     global.textY = Number(strList[1]);
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", global.textX, global.textY);
-                    setPromptPrefix(qsTr("Specify text height") + " {" + textSize() + "}: ");
+                    prompt_output(qsTr("Specify text height") + " {" + textSize() + "}: ");
                 }
             }
         }
-        else if(isNaN(global.textHeight))
-        {
-            if(str == "")
-            {
+        else if (isNaN(global.textHeight)) {
+            if (str == "") {
                 global.textHeight = textSize();
-                setPromptPrefix(qsTr("Specify text angle") + " {" + textAngle() + "}: ");
+                prompt_output(qsTr("Specify text angle") + " {" + textAngle() + "}: ");
             }
-            else if(isNaN(str))
-            {
+            else if (isNaN(str)) {
                 alert(qsTr("Requires valid numeric distance or second point."));
-                setPromptPrefix(qsTr("Specify text height") + " {" + textSize() + "}: ");
+                prompt_output(qsTr("Specify text height") + " {" + textSize() + "}: ");
             }
-            else
-            {
+            else {
                 global.textHeight = Number(str);
                 setTextSize(global.textHeight);
-                setPromptPrefix(qsTr("Specify text angle") + " {" + textAngle() + "}: ");
+                prompt_output(qsTr("Specify text angle") + " {" + textAngle() + "}: ");
             }
         }
-        else if(isNaN(global.textRotation))
-        {
-            if(str == "")
-            {
+        else if (isNaN(global.textRotation)) {
+            if (str == "") {
                 global.textRotation = textAngle();
-                setPromptPrefix(qsTr("Enter text: "));
-                global.mode = global.mode_RAPID;
+                prompt_output(qsTr("Enter text: "));
+                global.mode = TEXTSINGLE_MODE_RAPID;
                 enablePromptRapidFire();
                 clearRubber();
                 addRubber("TEXTSINGLE");
@@ -305,17 +260,15 @@ function prompt(str)
                 setRubberText("TEXT_JUSTIFY", global.textJustify);
                 setRubberText("TEXT_RAPID", global.text);
             }
-            else if(isNaN(str))
-            {
+            else if (isNaN(str)) {
                 alert(qsTr("Requires valid numeric angle or second point."));
-                setPromptPrefix(qsTr("Specify text angle") + " {" + textAngle() + "}: ");
+                prompt_output(qsTr("Specify text angle") + " {" + textAngle() + "}: ");
             }
-            else
-            {
+            else {
                 global.textRotation = Number(str);
                 setSettingsTextAngle(global.textRotation);
-                setPromptPrefix(qsTr("Enter text: "));
-                global.mode = global.mode_RAPID;
+                prompt_output(qsTr("Enter text: "));
+                global.mode = TEXTSINGLE_MODE_RAPID;
                 command_prompt("enable rapidfire");
                 clearRubber();
                 addRubber("TEXTSINGLE");
@@ -327,16 +280,15 @@ function prompt(str)
                 setRubberText("TEXT_RAPID", global.text);
             }
         }
-        else
-        {
+        else {
             //Do nothing, as we are in rapidFire mode now.
         }
     }
-    else if(global.mode == global.mode_RAPID)
+    else if (global.mode == TEXTSINGLE_MODE_RAPID)
     {
-        if(str == "RAPID_ENTER")
+        if (str == "RAPID_ENTER")
         {
-            if(global.text == "")
+            if (global.text == "")
             {
                 endCommand();
             }
@@ -429,29 +381,58 @@ void TextSingleObject::setObjectText(const QString& str)
 
     //Translate the path based on the justification
     QRectF jRect = textPath.boundingRect();
-    if     (objTextJustify == "Left")          { textPath.translate(-jRect.left(), 0); }
-    else if(objTextJustify == "Center")        { textPath.translate(-jRect.center().x(), 0); }
-    else if(objTextJustify == "Right")         { textPath.translate(-jRect.right(), 0); }
-    else if(objTextJustify == "Aligned")       { } //TODO: TextSingleObject Aligned Justification
-    else if(objTextJustify == "Middle")        { textPath.translate(-jRect.center()); }
-    else if(objTextJustify == "Fit")           { } //TODO: TextSingleObject Fit Justification
-    else if(objTextJustify == "Top Left")      { textPath.translate(-jRect.topLeft()); }
-    else if(objTextJustify == "Top Center")    { textPath.translate(-jRect.center().x(), -jRect.top()); }
-    else if(objTextJustify == "Top Right")     { textPath.translate(-jRect.topRight()); }
-    else if(objTextJustify == "Middle Left")   { textPath.translate(-jRect.left(), -jRect.top()/2.0); }
-    else if(objTextJustify == "Middle Center") { textPath.translate(-jRect.center().x(), -jRect.top()/2.0); }
-    else if(objTextJustify == "Middle Right")  { textPath.translate(-jRect.right(), -jRect.top()/2.0); }
-    else if(objTextJustify == "Bottom Left")   { textPath.translate(-jRect.bottomLeft()); }
-    else if(objTextJustify == "Bottom Center") { textPath.translate(-jRect.center().x(), -jRect.bottom()); }
-    else if(objTextJustify == "Bottom Right")  { textPath.translate(-jRect.bottomRight()); }
+    if     (objTextJustify == "Left") {
+        textPath.translate(-jRect.left(), 0);
+    }
+    else if (objTextJustify == "Center") {
+        textPath.translate(-jRect.center().x(), 0);
+    }
+    else if (objTextJustify == "Right") {
+        textPath.translate(-jRect.right(), 0);
+    }
+    else if (objTextJustify == "Aligned") {
+        // TODO: TextSingleObject Aligned Justification
+    }
+    else if (objTextJustify == "Middle") {
+        textPath.translate(-jRect.center());
+    }
+    else if (objTextJustify == "Fit") {
+        // TODO: TextSingleObject Fit Justification
+    }
+    else if (objTextJustify == "Top Left") {
+        textPath.translate(-jRect.topLeft());
+    }
+    else if (objTextJustify == "Top Center") {
+        textPath.translate(-jRect.center().x(), -jRect.top());
+    }
+    else if (objTextJustify == "Top Right") {
+        textPath.translate(-jRect.topRight());
+    }
+    else if (objTextJustify == "Middle Left") {
+        textPath.translate(-jRect.left(), -jRect.top()/2.0);
+    }
+    else if (objTextJustify == "Middle Center") {
+        textPath.translate(-jRect.center().x(), -jRect.top()/2.0);
+    }
+    else if (objTextJustify == "Middle Right") {
+        textPath.translate(-jRect.right(), -jRect.top()/2.0);
+    }
+    else if (objTextJustify == "Bottom Left") {
+        textPath.translate(-jRect.bottomLeft());
+    }
+    else if (objTextJustify == "Bottom Center") {
+        textPath.translate(-jRect.center().x(), -jRect.bottom());
+    }
+    else if (objTextJustify == "Bottom Right") {
+        textPath.translate(-jRect.bottomRight());
+    }
 
     //Backward or Upside Down
-    if(objTextBackward || objTextUpsideDown)
-    {
+    if (objTextBackward || objTextUpsideDown) {
         qreal horiz = 1.0;
         qreal vert = 1.0;
-        if(objTextBackward) horiz = -1.0;
-        if(objTextUpsideDown) vert = -1.0;
+        if (objTextBackward) horiz = -1.0;
+        if (objTextUpsideDown) vert = -1.0;
 
         QPainterPath flippedPath;
 
@@ -459,19 +440,15 @@ void TextSingleObject::setObjectText(const QString& str)
         QPainterPath::Element P2;
         QPainterPath::Element P3;
         QPainterPath::Element P4;
-        for(int i = 0; i < textPath.elementCount(); ++i)
-        {
+        for (int i = 0; i < textPath.elementCount(); ++i) {
             element = textPath.elementAt(i);
-            if(element.isMoveTo())
-            {
+            if (element.isMoveTo()) {
                 flippedPath.moveTo(horiz * element.x, vert * element.y);
             }
-            else if(element.isLineTo())
-            {
+            else if (element.isLineTo()) {
                 flippedPath.lineTo(horiz * element.x, vert * element.y);
             }
-            else if(element.isCurveTo())
-            {
+            else if (element.isCurveTo()) {
                                               // start point P1 is not needed
                 P2 = textPath.elementAt(i);   // control point
                 P3 = textPath.elementAt(i+1); // control point
@@ -503,22 +480,55 @@ void TextSingleObject::setObjectTextFont(const QString& font)
 void TextSingleObject::setObjectTextJustify(const QString& justify)
 {
     //Verify the string is a valid option
-    if     (justify == "Left")          { objTextJustify = justify; }
-    else if(justify == "Center")        { objTextJustify = justify; }
-    else if(justify == "Right")         { objTextJustify = justify; }
-    else if(justify == "Aligned")       { objTextJustify = justify; }
-    else if(justify == "Middle")        { objTextJustify = justify; }
-    else if(justify == "Fit")           { objTextJustify = justify; }
-    else if(justify == "Top Left")      { objTextJustify = justify; }
-    else if(justify == "Top Center")    { objTextJustify = justify; }
-    else if(justify == "Top Right")     { objTextJustify = justify; }
-    else if(justify == "Middle Left")   { objTextJustify = justify; }
-    else if(justify == "Middle Center") { objTextJustify = justify; }
-    else if(justify == "Middle Right")  { objTextJustify = justify; }
-    else if(justify == "Bottom Left")   { objTextJustify = justify; }
-    else if(justify == "Bottom Center") { objTextJustify = justify; }
-    else if(justify == "Bottom Right")  { objTextJustify = justify; }
-    else                                { objTextJustify = "Left";  } //Default
+    if (justify == "Left") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Center") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Right") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Aligned") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Middle") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Fit") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Top Left") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Top Center") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Top Right") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Middle Left") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Middle Center") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Middle Right") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Bottom Left") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Bottom Center") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Bottom Right") {
+        objTextJustify = justify;
+    }
+    else {
+        // Default
+        objTextJustify = "Left";
+    }
     setObjectText(objText);
 }
 
@@ -583,7 +593,7 @@ void TextSingleObject::setObjectTextUpsideDown(bool val)
 void TextSingleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) return;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
@@ -602,8 +612,7 @@ void TextSingleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 void TextSingleObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if(rubberMode == OBJ_RUBBER_TEXTSINGLE)
-    {
+    if (rubberMode == OBJ_RUBBER_TEXTSINGLE) {
         setObjectTextFont(objectRubberText("TEXT_FONT"));
         setObjectTextJustify(objectRubberText("TEXT_JUSTIFY"));
         setObjectPos(objectRubberPoint("TEXT_POINT"));
@@ -612,13 +621,10 @@ void TextSingleObject::updateRubber(QPainter* painter)
         setRotation(hr.y());
         setObjectText(objectRubberText("TEXT_RAPID"));
     }
-    else if(rubberMode == OBJ_RUBBER_GRIP)
-    {
-        if(painter)
-        {
+    else if (rubberMode == OBJ_RUBBER_GRIP) {
+        if (painter) {
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if(gripPoint == scenePos())
-            {
+            if (gripPoint == scenePos()) {
                 painter->drawPath(objectPath().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
             }
 
@@ -651,7 +657,10 @@ QList<QPointF> TextSingleObject::allGripPoints()
 
 void TextSingleObject::gripEdit(const QPointF& before, const QPointF& after)
 {
-    if(before == scenePos()) { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
+    if (before == scenePos()) {
+        QPointF delta = after-before;
+        moveBy(delta.x(), delta.y());
+    }
 }
 
 QList<QPainterPath> TextSingleObject::subPathList() const
@@ -669,11 +678,9 @@ QList<QPainterPath> TextSingleObject::subPathList() const
     QList<int> pathMoves;
     int numMoves = 0;
 
-    for(int i = 0; i < path.elementCount(); i++)
-    {
+    for (int i = 0; i < path.elementCount(); i++) {
         element = path.elementAt(i);
-        if(element.isMoveTo())
-        {
+        if (element.isMoveTo()) {
             pathMoves << i;
             numMoves++;
         }
@@ -681,22 +688,17 @@ QList<QPainterPath> TextSingleObject::subPathList() const
 
     pathMoves << path.elementCount();
 
-    for(int p = 0; p < pathMoves.size()-1 && p < numMoves; p++)
-    {
+    for (int p = 0; p < pathMoves.size()-1 && p < numMoves; p++) {
         QPainterPath subPath;
-        for(int i = pathMoves.value(p); i < pathMoves.value(p+1); i++)
-        {
+        for (int i = pathMoves.value(p); i < pathMoves.value(p+1); i++) {
             element = path.elementAt(i);
-            if(element.isMoveTo())
-            {
+            if (element.isMoveTo()) {
                 subPath.moveTo(element.x, element.y);
             }
-            else if(element.isLineTo())
-            {
+            else if (element.isLineTo()) {
                 subPath.lineTo(element.x, element.y);
             }
-            else if(element.isCurveTo())
-            {
+            else if (element.isCurveTo()) {
                 subPath.cubicTo(path.elementAt(i  ).x, path.elementAt(i  ).y,  //control point 1
                                 path.elementAt(i+1).x, path.elementAt(i+1).y,  //control point 2
                                 path.elementAt(i+2).x, path.elementAt(i+2).y); //end point
@@ -707,5 +709,3 @@ QList<QPainterPath> TextSingleObject::subPathList() const
 
     return pathList;
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -29,13 +29,10 @@ path_command(ScriptEnv * /* context */)
 //Command: Path
 
 //TODO: The path command is currently broken
-
 var global = {}; //Required
-global.firstRun;
-global.firstX;
-global.firstY;
-global.prevX;
-global.prevY;
+bool firstRun;
+EmbVector first;
+EmbVector prev;
 
 //NOTE: main() is run every time the command is started.
 //      Use it to reset variables so they are ready to go.
@@ -48,81 +45,57 @@ function main()
     global.firstY = NaN;
     global.prevX = NaN;
     global.prevY = NaN;
-    setPromptPrefix(qsTr("Specify start point: "));
+    prompt_output(qsTr("Specify start point: "));
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
-function click(x, y)
+function click(EmbVector v)
 {
-    if(global.firstRun)
-    {
+    if (global.firstRun) {
         global.firstRun = false;
-        global.firstX = x;
-        global.firstY = y;
-        global.prevX = x;
-        global.prevY = y;
-        addPath(x,y);
-        appendPromptHistory();
-        setPromptPrefix(qsTr("Specify next point or [Arc/Undo]: "));
+        global.first = v;
+        global.prev = v;
+        addPath(v.x, v.y);
+        prompt_output(qsTr("Specify next point or [Arc/Undo]: "));
     }
-    else
-    {
-        appendPromptHistory();
+    else {
         appendLineToPath(x,y);
-        global.prevX = x;
-        global.prevY = y;
+        global.prev = v;
     }
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
-function context(str)
+function
+context(str)
 {
     todo("PATH", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
-function prompt(str)
+function
+prompt(str)
 {
-    if(str == "A" || str == "ARC")//TODO: Probably should add additional qsTr calls here.
-    {
+    if (str == "A" || str == "ARC") {
+        //TODO: Probably should add additional qsTr calls here.
         todo("PATH", "prompt() for ARC");
     }
-    else if(str == "U" || str == "UNDO") //TODO: Probably should add additional qsTr calls here.
-    {
+    else if (str == "U" || str == "UNDO") {
+        //TODO: Probably should add additional qsTr calls here.
         todo("PATH", "prompt() for UNDO");
     }
-    else
-    {
-        var strList = str.split(",");
-        if(isNaN(strList[0]) || isNaN(strList[1]))
-        {
+    else {
+        if (!parse_vector(str, &v)) {
             alert(qsTr("Point or option keyword required."));
-            setPromptPrefix(qsTr("Specify next point or [Arc/Undo]: "));
+            prompt_output(qsTr("Specify next point or [Arc/Undo]: "));
         }
-        else
-        {
-            var x = Number(strList[0]);
-            var y = Number(strList[1]);
-            if(global.firstRun)
-            {
+        else {
+            if (global.firstRun) {
                 global.firstRun = false;
-                global.firstX = x;
-                global.firstY = y;
-                global.prevX = x;
-                global.prevY = y;
-                addPath(x,y);
-                setPromptPrefix(qsTr("Specify next point or [Arc/Undo]: "));
+                global.first = v;
+                global.prev = v;
+                addPath(v.x, v.y);
+                prompt_output(qsTr("Specify next point or [Arc/Undo]: "));
             }
-            else
-            {
-                appendLineToPath(x,y);
-                global.prevX = x;
-                global.prevY = y;
+            else {
+                appendLineToPath(v.x, v.y);
+                global.prev = v;
             }
         }
     }
@@ -138,7 +111,7 @@ PathObject::PathObject(qreal x, qreal y, const QPainterPath p, QRgb rgb, QGraphi
 PathObject::PathObject(PathObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("PathObject Constructor()");
-    if(obj)
+    if (obj)
     {
         init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
@@ -180,7 +153,7 @@ void PathObject::updatePath(const QPainterPath& p)
 void PathObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) return;
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
@@ -211,7 +184,7 @@ void PathObject::vulcanize()
 
     setObjectRubberMode(OBJ_RUBBER_OFF);
 
-    if(!normalPath.elementCount())
+    if (!normalPath.elementCount())
         QMessageBox::critical(0, QObject::tr("Empty Path Error"), QObject::tr("The path added contains no points. The command that created this object has flawed logic."));
 }
 

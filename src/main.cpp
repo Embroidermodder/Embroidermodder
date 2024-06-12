@@ -83,13 +83,13 @@ int main(int argc, char* argv[])
         if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--debug")  ) {
             testing_mode = 1;
         }
-        else if(!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")   ) {
+        else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")   ) {
             usage();
         }
-        else if(!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
+        else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
             version();
         }
-        else if(QFile::exists(argv[i]) && MainWindow::validFileFormat(argv[i])) {
+        else if (QFile::exists(argv[i]) && MainWindow::validFileFormat(argv[i])) {
             filesToOpen << argv[i];
         }
         else {

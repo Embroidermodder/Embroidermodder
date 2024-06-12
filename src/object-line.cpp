@@ -45,99 +45,74 @@ function main()
     global.firstY = NaN;
     global.prevX = NaN;
     global.prevY = NaN;
-    setPromptPrefix(qsTr("Specify first point: "));
+    prompt_output(translate("Specify first point: "));
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
-function click(x, y)
+function
+click(EmbVector v)
 {
-    if(global.firstRun)
-    {
+    if (global.firstRun) {
         global.firstRun = false;
-        global.firstX = x;
-        global.firstY = y;
-        global.prevX = x;
-        global.prevY = y;
+        global.first = v;
+        global.prev = v;
         addRubber("LINE");
         setRubberMode("LINE");
-        setRubberPoint("LINE_START", global.firstX, global.firstY);
+        setRubberPoint("LINE_START", global.first.x, global.first.y);
         appendPromptHistory();
-        setPromptPrefix(qsTr("Specify next point or [Undo]: "));
+        prompt_output(translate("Specify next point or [Undo]: "));
     }
-    else
-    {
-        setRubberPoint("LINE_END", x, y);
+    else {
+        setRubberPoint("LINE_END", v.x, v.y);
         vulcanize();
         addRubber("LINE");
         setRubberMode("LINE");
-        setRubberPoint("LINE_START", x, y);
+        setRubberPoint("LINE_START", v.x, v.y);
         appendPromptHistory();
-        global.prevX = x;
-        global.prevY = y;
+        global.prev = v;
     }
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("LINE", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
-    if(global.firstRun)
-    {
-        var strList = str.split(",");
-        if(isNaN(strList[0]) || isNaN(strList[1]))
-        {
-            alert(qsTr("Invalid point."));
-            setPromptPrefix(qsTr("Specify first point: "));
+    EmbVector v;
+    if (global.firstRun) {
+        if (!parse_vector(str, &v)) {
+            alert(translate("Invalid point."));
+            prompt_output(translate("Specify first point: "));
         }
-        else
-        {
+        else {
             global.firstRun = false;
-            global.firstX = Number(strList[0]);
-            global.firstY = Number(strList[1]);
-            global.prevX = global.firstX;
-            global.prevY = global.firstY;
+            global.first = v;
+            global.prev = global.first;
             addRubber("LINE");
             setRubberMode("LINE");
-            setRubberPoint("LINE_START", global.firstX, global.firstY);
-            setPromptPrefix(qsTr("Specify next point or [Undo]: "));
+            setRubberPoint("LINE_START", global.first.x, global.first.y);
+            prompt_output(translate("Specify next point or [Undo]: "));
         }
     }
-    else
-    {
-        if(str == "U" || str == "UNDO") //TODO: Probably should add additional qsTr calls here.
-        {
+    else {
+        if (str == "U" || str == "UNDO") {
+            /* TODO: Probably should add additional qsTr calls here. */
             todo("LINE", "prompt() for UNDO");
         }
-        else
-        {
-            var strList = str.split(",");
-            if(isNaN(strList[0]) || isNaN(strList[1]))
-            {
-                alert(qsTr("Point or option keyword required."));
-                setPromptPrefix(qsTr("Specify next point or [Undo]: "));
+        else {
+            if (!parse_vector(str, &v)) {
+                alert(translate("Point or option keyword required."));
+                prompt_output(translate("Specify next point or [Undo]: "));
             }
-            else
-            {
-                var x = Number(strList[0]);
-                var y = Number(strList[1]);
-                setRubberPoint("LINE_END", x, y);
+            else {
+                setRubberPoint("LINE_END", v.x, v.y);
                 vulcanize();
                 addRubber("LINE");
                 setRubberMode("LINE");
-                setRubberPoint("LINE_START", x, y);
-                global.prevX = x;
-                global.prevY = y;
-                setPromptPrefix(qsTr("Specify next point or [Undo]: "));
+                setRubberPoint("LINE_START", v.x, v.y);
+                global.prev = v;
+                prompt_output(translate("Specify next point or [Undo]: "));
             }
         }
     }
@@ -153,8 +128,7 @@ LineObject::LineObject(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rgb, QGraphi
 LineObject::LineObject(LineObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("LineObject Constructor()");
-    if(obj)
-    {
+    if (obj) {
         init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
     }
 }
@@ -294,14 +268,15 @@ void LineObject::updateRubber(QPainter* painter)
 
         drawRubberLine(line(), painter, VIEW_COLOR_CROSSHAIR);
     }
-    else if(rubberMode == OBJ_RUBBER_GRIP)
-    {
-        if(painter)
-        {
+    else if (rubberMode == OBJ_RUBBER_GRIP) {
+        if (painter) {
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if     (gripPoint == objectEndPoint1()) painter->drawLine(line().p2(), mapFromScene(objectRubberPoint(QString())));
-            else if(gripPoint == objectEndPoint2()) painter->drawLine(line().p1(), mapFromScene(objectRubberPoint(QString())));
-            else if(gripPoint == objectMidPoint())  painter->drawLine(line().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
+            if (gripPoint == objectEndPoint1())
+                painter->drawLine(line().p2(), mapFromScene(objectRubberPoint(QString())));
+            else if (gripPoint == objectEndPoint2())
+                painter->drawLine(line().p1(), mapFromScene(objectRubberPoint(QString())));
+            else if (gripPoint == objectMidPoint())
+                painter->drawLine(line().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
             drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
@@ -317,8 +292,9 @@ void LineObject::vulcanize()
     setObjectRubberMode(OBJ_RUBBER_OFF);
 }
 
-// Returns the closest snap point to the mouse point
-QPointF LineObject::mouseSnapPoint(const QPointF& mousePoint)
+/* Returns the closest snap point to the mouse point. */
+QPointF
+LineObject::mouseSnapPoint(const QPointF& mousePoint)
 {
     QPointF endPoint1 = objectEndPoint1();
     QPointF endPoint2 = objectEndPoint2();
@@ -330,9 +306,12 @@ QPointF LineObject::mouseSnapPoint(const QPointF& mousePoint)
 
     qreal minDist = qMin(qMin(end1Dist, end2Dist), midDist);
 
-    if     (minDist == end1Dist) return endPoint1;
-    else if(minDist == end2Dist) return endPoint2;
-    else if(minDist == midDist)  return midPoint;
+    if (minDist == end1Dist)
+        return endPoint1;
+    else if (minDist == end2Dist)
+        return endPoint2;
+    else if (minDist == midDist)
+        return midPoint;
 
     return scenePos();
 }
@@ -347,8 +326,8 @@ QList<QPointF> LineObject::allGripPoints()
 void LineObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     if     (before == objectEndPoint1()) { setObjectEndPoint1(after); }
-    else if(before == objectEndPoint2()) { setObjectEndPoint2(after); }
-    else if(before == objectMidPoint())  { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
+    else if (before == objectEndPoint2()) { setObjectEndPoint2(after); }
+    else if (before == objectMidPoint())  { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
 }
 
 QPainterPath LineObject::objectSavePath() const
@@ -357,5 +336,3 @@ QPainterPath LineObject::objectSavePath() const
     path.lineTo(objectDeltaX(), objectDeltaY());
     return path;
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

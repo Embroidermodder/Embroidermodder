@@ -92,7 +92,7 @@ function updateDolphin(numPts, xScale, yScale)
     float xx = 0.0;
     float yy = 0.0;
 
-    for(i = 0; i <= numPts; i++) {
+    for (i = 0; i <= numPts; i++) {
         t = (2 * embConstantPi) / numPts * i; 
 
         xx = 4/23*sin(62/33-58*t)+
@@ -285,24 +285,20 @@ function prompt(str)
 
 function updateHeart(style, numPts, xScale, yScale)
 {
-    var i;
-    var t;
-    var xx = NaN;
-    var yy = NaN;
-    var two_pi = 2*Math.PI;
+    int i;
+    float t;
+    float xx = NaN;
+    float yy = NaN;
 
-    for(i = 0; i <= numPts; i++)
-    {
-        t = two_pi/numPts*i; 
+    for (i = 0; i <= numPts; i++) {
+        t = (2 * embConstantPi) / numPts*i; 
 
-        if (style == "HEART4")
-        {
-            xx = cos(t)*((sin(t)*Math.sqrt(Math.abs(cos(t))))/(sin(t)+7/5) - 2*sin(t) + 2);
-            yy = sin(t)*((sin(t)*Math.sqrt(Math.abs(cos(t))))/(sin(t)+7/5) - 2*sin(t) + 2);
+        if (style == "HEART4") {
+            xx = cos(t)*((sin(t)*sqrt(abs(cos(t))))/(sin(t)+7/5) - 2*sin(t) + 2);
+            yy = sin(t)*((sin(t)*sqrt(abs(cos(t))))/(sin(t)+7/5) - 2*sin(t) + 2);
         }
-        else if (style == "HEART5")
-        {
-            xx = 16*Math.pow(sin(t), 3);
+        else if (style == "HEART5") {
+            xx = 16*pow(sin(t), 3);
             yy = 13*cos(t) - 5*cos(2*t) - 2*cos(3*t) - cos(4*t);
         }
 
@@ -344,14 +340,14 @@ function main()
     setRubberMode("POLYGON");
     updateSnowflake(global.numPoints, global.sx, global.sy);
     spareRubber("POLYGON");
-    endCommand();
+    end_command();
 }
 
-function click(x, y)
+void click(EmbVector v)
 {
 }
 
-function move(x, y)
+void move(EmbVector v)
 {
 }
 
@@ -360,21 +356,20 @@ function context(str)
     todo("SNOWFLAKE", "context()");
 }
 
-function prompt(str)
+void
+prompt(str)
 {
 }
 
-function updateSnowflake(numPts, xScale, yScale)
+void
+updateSnowflake(int numPts, float xScale, float yScale)
 {
-    var i;
-    var t;
-    var xx = NaN;
-    var yy = NaN;
-    var two_pi = 2*Math.PI;
+    int i;
+    float xx = NaN;
+    float yy = NaN;
 
-    for(i = 0; i <= numPts; i++)
-    {
-        t = two_pi/numPts*i; 
+    for (i = 0; i <= numPts; i++) {
+        float t = (2 * embConstantPi) / numPts * i; 
 
 //Snowflake Curve with t [0,2pi]
 
@@ -1059,12 +1054,10 @@ function main()
 
 function click(x, y)
 {
-    if (global.mode == global.mode_NUM_POINTS)
-    {
+    if (global.mode == global.mode_NUM_POINTS) {
         //Do nothing, the prompt controls this.
     }
-    else if (global.mode == global.mode_CENTER_PT)
-    {
+    else if (global.mode == global.mode_CENTER_PT) {
         global.cx = x;
         global.cy = y;
         global.mode = global.mode_RAD_OUTER;
@@ -1074,16 +1067,14 @@ function click(x, y)
         updateStar(global.cx, global.cy);
         enableMoveRapidFire();
     }
-    else if (global.mode == global.mode_RAD_OUTER)
-    {
+    else if (global.mode == global.mode_RAD_OUTER) {
         global.x1 = x;
         global.y1 = y;
         global.mode = global.mode_RAD_INNER;
         setPromptPrefix(qsTr("Specify inner radius of star: "));
         updateStar(global.x1, global.y1);
     }
-    else if (global.mode == global.mode_RAD_INNER)
-    {
+    else if (global.mode == global.mode_RAD_INNER) {
         global.x2 = x;
         global.y2 = y;
         disableMoveRapidFire();
@@ -1095,20 +1086,16 @@ function click(x, y)
 
 function move(x, y)
 {
-    if (global.mode == global.mode_NUM_POINTS)
-    {
+    if (global.mode == global.mode_NUM_POINTS) {
         //Do nothing, the prompt controls this.
     }
-    else if (global.mode == global.mode_CENTER_PT)
-    {
+    else if (global.mode == global.mode_CENTER_PT) {
         //Do nothing, prompt and click controls this.
     }
-    else if (global.mode == global.mode_RAD_OUTER)
-    {
+    else if (global.mode == global.mode_RAD_OUTER) {
         updateStar(x, y);
     }
-    else if (global.mode == global.mode_RAD_INNER)
-    {
+    else if (global.mode == global.mode_RAD_INNER) {
         updateStar(x, y);
     }
 }

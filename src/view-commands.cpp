@@ -41,46 +41,63 @@ night_command(ScriptEnv * context)
 
 /* PANPOINT. */
 ScriptValue
-panpoint_command(ScriptEnv*)
+panpoint_command(ScriptEnv *context)
 {
+    if (!argument_checks(context, "panpoint_command", "")) {
+        return script_false;
+    }
+    init_command();
+
+    end_command();
     return script_null;
 }
 
 /* PANREALTIME. */
 ScriptValue
-panrealtime_command(ScriptEnv*)
+panrealtime_command(ScriptEnv *context)
 {
+    if (!argument_checks(context, "panrealtime_command", "")) {
+        return script_false;
+    }
+    init_command();
+
+    end_command();
     return script_null;
 }
 
 /* PANDOWN is context-independant. */
 ScriptValue
-pandown_command(ScriptEnv * context)
+pandown_command(ScriptEnv *context)
 {
+    if (!argument_checks(context, "pandown_command", "")) {
+        return script_false;
+    }
     init_command();
     _main->panDown();
     end_command();
     return script_null;
 }
 
-/* NOTE: main() is run every time the command is started.
- *       Use it to reset variables so they are ready to go.
- */
+/* PANLEFT */
 ScriptValue
-panleft_command(ScriptEnv * context)
+panleft_command(ScriptEnv *context)
 {
+    if (!argument_checks(context, "panleft_command", "")) {
+        return script_false;
+    }
     init_command();
     _main->panLeft();
     end_command();
     return script_null;
 }
 
-/* NOTE: main() is run every time the command is started.
- *       Use it to reset variables so they are ready to go.
- */
+/* PANRIGHT */
 ScriptValue
-panright_command(ScriptEnv * context)
+panright_command(ScriptEnv *context)
 {
+    if (!argument_checks(context, "panright_command", "")) {
+        return script_false;
+    }
     init_command();
     _main->panRight();
     end_command();
@@ -89,7 +106,7 @@ panright_command(ScriptEnv * context)
 
 /* PANUP */
 ScriptValue
-panup_command(ScriptEnv * context)
+panup_command(ScriptEnv *context)
 {
     _main->debug_message("panUp()");
     if (!argument_checks(context, "panup_command", "")) {
@@ -128,7 +145,6 @@ zoom_dynamic_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    clear_selection();
     _main->zoomExtents();
     end_command();
     return script_null;
@@ -142,7 +158,6 @@ zoom_center_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    clear_selection();
     _main->zoomExtents();
     end_command();
     return script_null;
@@ -156,7 +171,6 @@ zoom_extents_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    clear_selection();
     _main->zoomExtents();
     end_command();
     return script_null;
@@ -171,7 +185,6 @@ zoom_in_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    clear_selection();
 
     View* gview = activeView();
     if (gview) {
@@ -190,7 +203,6 @@ zoom_previous_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    clear_selection();
 
     end_command();
     return script_null;
@@ -205,7 +217,6 @@ zoom_real_time_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    clear_selection();
     _main->stub_implement("Implement zoomRealtime.");
     end_command();
     return script_null;
@@ -219,7 +230,6 @@ zoom_out_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    clear_selection();
 
     View* gview = activeView();
     if (gview) {
@@ -238,7 +248,6 @@ zoom_scale_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    clear_selection();
 
     end_command();
     return script_null;
@@ -252,7 +261,6 @@ zoom_selected_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    clear_selection();
 
     end_command();
     return script_null;
@@ -266,7 +274,6 @@ zoom_window_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    clear_selection();
 
     end_command();
     return script_null;

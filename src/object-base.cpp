@@ -56,18 +56,14 @@ void BaseObject::setObjectLineWeight(qreal lineWeight)
 {
     objPen.setWidthF(0); //NOTE: The objPen will always be cosmetic
 
-    if(lineWeight < 0)
-    {
-        if(lineWeight == OBJ_LWT_BYLAYER)
-        {
+    if (lineWeight < 0) {
+        if (lineWeight == OBJ_LWT_BYLAYER) {
             lwtPen.setWidthF(0.35); //TODO: getLayerLineWeight
         }
-        else if(lineWeight == OBJ_LWT_BYBLOCK)
-        {
+        else if (lineWeight == OBJ_LWT_BYBLOCK) {
             lwtPen.setWidthF(0.35); //TODO: getBlockLineWeight
         }
-        else
-        {
+        else {
             QMessageBox::warning(0, QObject::tr("Error - Negative Lineweight"),
                                     QObject::tr("Lineweight: %1")
                                     .arg(QString().setNum(lineWeight)));
@@ -75,44 +71,52 @@ void BaseObject::setObjectLineWeight(qreal lineWeight)
             lwtPen.setWidthF(-lineWeight);
         }
     }
-    else
-    {
+    else {
         lwtPen.setWidthF(lineWeight);
     }
 }
 
-QPointF BaseObject::objectRubberPoint(const QString& key) const
+QPointF
+BaseObject::objectRubberPoint(const QString& key) const
 {
-    if(objRubberPoints.contains(key))
+    if (objRubberPoints.contains(key)) {
         return objRubberPoints.value(key);
+    }
 
     QGraphicsScene* gscene = scene();
-    if(gscene)
+    if (gscene) {
         return scene()->property(SCENE_QSNAP_POINT).toPointF();
+    }
     return QPointF();
 }
 
-QString BaseObject::objectRubberText(const QString& key) const
+QString
+BaseObject::objectRubberText(const QString& key) const
 {
-    if(objRubberTexts.contains(key))
+    if (objRubberTexts.contains(key)) {
         return objRubberTexts.value(key);
+    }
     return QString();
 }
 
-QRectF BaseObject::boundingRect() const
+QRectF
+BaseObject::boundingRect() const
 {
-    //If gripped, force this object to be drawn even if it is offscreen
-    if(objectRubberMode() == OBJ_RUBBER_GRIP)
+    /* If gripped, force this object to be drawn even if it is offscreen. */
+    if (objectRubberMode() == OBJ_RUBBER_GRIP) {
         return scene()->sceneRect();
+    }
     return path().boundingRect();
 }
 
-void BaseObject::drawRubberLine(const QLineF& rubLine, QPainter* painter, const char* colorFromScene)
+void
+BaseObject::drawRubberLine(const QLineF& rubLine, QPainter* painter, const char* colorFromScene)
 {
-    if(painter)
-    {
+    if (painter) {
         QGraphicsScene* objScene = scene();
-        if(!objScene) return;
+        if (!objScene) {
+            return;
+        }
         QPen colorPen = objPen;
         colorPen.setColor(QColor(objScene->property(colorFromScene).toUInt()));
         painter->setPen(colorPen);
@@ -129,20 +133,24 @@ void BaseObject::realRender(QPainter* painter, const QPainterPath& renderPath)
     //If we have a dark color, lighten it
     int darkness = color1.lightness();
     int threshold = 32; //TODO: This number may need adjusted or maybe just add it to settings.
-    if(darkness < threshold)
-    {
+    if (darkness < threshold) {
         color2 = color1;
-        if(!darkness) { color1 = QColor(threshold, threshold, threshold); } //lighter() does not affect pure black
-        else          { color1 = color2.lighter(100 + threshold); }
+        if (!darkness) {
+            color1 = QColor(threshold, threshold, threshold);
+        } //lighter() does not affect pure black
+        else {
+            color1 = color2.lighter(100 + threshold);
+        }
     }
 
     int count = renderPath.elementCount();
-    for(int i = 0; i < count-1; ++i)
-    {
+    for (int i = 0; i < count-1; ++i) {
         QPainterPath::Element elem = renderPath.elementAt(i);
         QPainterPath::Element next = renderPath.elementAt(i+1);
 
-        if(next.isMoveTo()) continue;
+        if (next.isMoveTo()) {
+            continue;
+        }
 
         QPainterPath elemPath;
         elemPath.moveTo(elem.x, elem.y);
@@ -166,5 +174,3 @@ void BaseObject::realRender(QPainter* painter, const QPainterPath& renderPath)
         painter->fillPath(realPath, QBrush(grad));
     }
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

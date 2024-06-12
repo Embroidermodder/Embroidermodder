@@ -150,23 +150,20 @@ void MainWindow::designDetails()
     QString tmpFileName = "/mydata/embroidery-designs/KDE.EXP";
 
     pattern = embPattern_create();
-    if(!pattern) { printf("Could not allocate memory for embroidery pattern\n"); }
+    if (!pattern) { printf("Could not allocate memory for embroidery pattern\n"); }
 
     readSuccessful = 0;
     reader = embReaderWriter_getByFileName(qPrintable(tmpFileName));
-    if(!reader)
-    {
+    if (!reader) {
         readSuccessful = 0;
         printf("Unsupported read file type\n");
     }
-    else
-    {
+    else {
         readSuccessful = reader->reader(pattern, qPrintable(tmpFileName));
-        if(!readSuccessful) printf("Reading file was unsuccessful\n");
+        if (!readSuccessful) printf("Reading file was unsuccessful\n");
     }
     free(reader);
-    if(!readSuccessful)
-    {
+    if (!readSuccessful) {
         embPattern_free(pattern);
     }
     //======================================================
@@ -194,57 +191,55 @@ void MainWindow::designDetails()
 
     num_colors = embThreadList_count(pattern->threadList);
     num_stitches = embStitchList_count(pattern->stitchList);
-    if(num_stitches == 0)
-    {
+    if (num_stitches == 0) {
         QMessageBox::warning(this, tr("No Design Loaded"), tr("<b>A design needs to be loaded or created before details can be determined.</b>"));
         return;
     }
     QVector<double> stitchLengths;
 
     double totalColorLength = 0.0;
-    for(int i = 0; i < num_stitches; i++)
-    {
+    for (int i = 0; i < num_stitches; i++) {
         dx = embStitchList_getAt(pattern->stitchList, i).xx - xx;
         dy = embStitchList_getAt(pattern->stitchList, i).yy - yy;
         xx = embStitchList_getAt(pattern->stitchList, i).xx;
         yy = embStitchList_getAt(pattern->stitchList, i).yy;
         length=sqrt(dx * dx + dy * dy);
         totalColorLength += length;
-        if(i > 0 && embStitchList_getAt(pattern->stitchList, i-1).flags != NORMAL)
+        if (i > 0 && embStitchList_getAt(pattern->stitchList, i-1).flags != NORMAL) {
             length = 0.0; //can't count first normal stitch;
-        if(!(embStitchList_getAt(pattern->stitchList, i).flags & (JUMP | TRIM)))
-        {
+        }
+        if (!(embStitchList_getAt(pattern->stitchList, i).flags & (JUMP | TRIM))) {
             real_stitches++;
-            if(length > max_stitchlength) { max_stitchlength = length; number_of_maxlength_stitches = 0; }
-            if(length == max_stitchlength) number_of_maxlength_stitches++;
-            if(length > 0 && length < min_stitchlength)
-            {
+            if (length > max_stitchlength) {
+                max_stitchlength = length;
+                number_of_maxlength_stitches = 0;
+            }
+            if (length == max_stitchlength) {
+                number_of_maxlength_stitches++;
+            }
+            if (length > 0 && length < min_stitchlength) {
                 min_stitchlength = length;
                 number_of_minlength_stitches = 0;
             }
-            if(length == min_stitchlength) number_of_minlength_stitches++;
+            if (length == min_stitchlength) number_of_minlength_stitches++;
             total_stitchlength += length;
-            if(xx < minx) minx = xx;
-            if(xx > maxx) maxx = xx;
-            if(yy < miny) miny = yy;
-            if(yy > maxy) maxy = yy;
+            if (xx < minx) minx = xx;
+            if (xx > maxx) maxx = xx;
+            if (yy < miny) miny = yy;
+            if (yy > maxy) maxy = yy;
         }
-        if(embStitchList_getAt(pattern->stitchList, i).flags & JUMP)
-        {
+        if (embStitchList_getAt(pattern->stitchList, i).flags & JUMP) {
             jump_stitches++;
         }
-        if(embStitchList_getAt(pattern->stitchList, i).flags & TRIM)
-        {
+        if (embStitchList_getAt(pattern->stitchList, i).flags & TRIM) {
             trim_stitches++;
         }
-        if(embStitchList_getAt(pattern->stitchList, i).flags & STOP)
-        {
+        if (embStitchList_getAt(pattern->stitchList, i).flags & STOP) {
             stitchLengths.push_back(totalColorLength);
             totalColorLength = 0;
             colors++;
         }
-        if(embStitchList_getAt(pattern->stitchList, i).flags & END)
-        {
+        if (embStitchList_getAt(pattern->stitchList, i).flags & END) {
             stitchLengths.push_back(totalColorLength);
         }
     }
@@ -252,19 +247,16 @@ void MainWindow::designDetails()
     //second pass to fill bins now that we know max stitch length
 #define NUMBINS 10
     int bin[NUMBINS+1];
-    for(int i = 0; i <= NUMBINS; i++)
-    {
+    for (int i = 0; i <= NUMBINS; i++) {
         bin[i]=0;
     }
 
-    for(int i = 0; i < num_stitches; i++)
-    {
+    for (int i = 0; i < num_stitches; i++) {
         dx = embStitchList_getAt(pattern->stitchList, i).xx - xx;
         dy = embStitchList_getAt(pattern->stitchList, i).yy - yy;
         xx = embStitchList_getAt(pattern->stitchList, i).xx;
         yy = embStitchList_getAt(pattern->stitchList, i).yy;
-        if(i > 0 && embStitchList_getAt(pattern->stitchList, i-1).flags == NORMAL && embStitchList_getAt(pattern->stitchList, i).flags == NORMAL)
-        {
+        if (i > 0 && embStitchList_getAt(pattern->stitchList, i-1).flags == NORMAL && embStitchList_getAt(pattern->stitchList, i).flags == NORMAL) {
             length=sqrt(dx * dx + dy * dy);
             bin[int(floor(NUMBINS*length/max_stitchlength))]++;
         }
@@ -273,8 +265,7 @@ void MainWindow::designDetails()
     double binSize = max_stitchlength / NUMBINS;
 
     QString str;
-    for(int i = 0; i < NUMBINS; i++)
-    {
+    for (int i = 0; i < NUMBINS; i++) {
         str += QString::number(binSize * (i), 'f', 1) + " - " + QString::number(binSize * (i+1), 'f', 1) + " mm: " +  QString::number(bin[i]) + "\n\n";
     }
 
@@ -307,8 +298,7 @@ void MainWindow::designDetails()
     int currentRow = 12;
 */
 /*
-    for(int i = 0; i < num_colors; i++)
-    {
+    for (int i = 0; i < num_colors; i++) {
         QFrame *frame = new QFrame();
         frame->setGeometry(0,0,30,30);
         QPalette palette = frame->palette();
@@ -341,6 +331,3 @@ void MainWindow::designDetails()
 
 }
 */
-
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

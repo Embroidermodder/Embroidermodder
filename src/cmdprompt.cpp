@@ -119,21 +119,30 @@ CmdPrompt::~CmdPrompt()
 void CmdPrompt::floatingChanged(bool isFloating)
 {
     qDebug("CmdPrompt floatingChanged(%d)", isFloating);
-    if(isFloating) promptSplitter->hide();
-    else           promptSplitter->show();
+    if (isFloating) {
+        promptSplitter->hide();
+    }
+    else {
+        promptSplitter->show();
+    }
 }
 
 void CmdPrompt::saveHistory(const QString& fileName, bool html)
 {
     qDebug("CmdPrompt saveHistory");
     QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         return;
+    }
 
     //TODO: save during input in case of crash
     QTextStream output(&file);
-    if(html) { output << promptHistory->toHtml();      }
-    else     { output << promptHistory->toPlainText(); }
+    if (html) {
+        output << promptHistory->toHtml();
+    }
+    else {
+        output << promptHistory->toPlainText();
+    }
 }
 
 void CmdPrompt::alert(const QString& txt)
@@ -158,12 +167,10 @@ void CmdPrompt::stopBlinking()
 void CmdPrompt::blink()
 {
     blinkState = !blinkState;
-    if(blinkState)
-    {
+    if (blinkState) {
         qDebug("CmdPrompt blink1");
     }
-    else
-    {
+    else {
         qDebug("CmdPrompt blink0");
     }
 }
@@ -387,7 +394,7 @@ CmdPromptHistory::stopResizeHistory(int /*y*/)
 void CmdPromptHistory::resizeHistory(int y)
 {
     int newHeight = tmpHeight - y;
-    if(newHeight < 0)
+    if (newHeight < 0)
         newHeight = 0;
     setMaximumHeight(newHeight);
 }
@@ -509,7 +516,7 @@ void CmdPromptInput::processInput(const QChar& rapidChar)
             emit appendHistory(curText, prefix.length());
             emit startCommand(curCmd);
         }
-        else if(cmdtxt.isEmpty()) {
+        else if (cmdtxt.isEmpty()) {
             cmdActive = true;
             emit appendHistory(curText, prefix.length());
             //Rerun the last successful command
@@ -528,24 +535,25 @@ void CmdPromptInput::processInput(const QChar& rapidChar)
 void CmdPromptInput::checkSelection()
 {
     //qDebug("CmdPromptInput::checkSelection");
-    if(this->hasSelectedText())
+    if (this->hasSelectedText())
         this->deselect();
 }
 
 void CmdPromptInput::checkCursorPosition(int /*oldpos*/, int newpos)
 {
     //qDebug("CmdPromptInput::checkCursorPosition - %d %d", oldpos, newpos);
-    if(this->hasSelectedText())
+    if (this->hasSelectedText()) {
         this->deselect();
-    if(newpos < prefix.length())
+    }
+    if (newpos < prefix.length()) {
         this->setCursorPosition(prefix.length());
+    }
 }
 
 void CmdPromptInput::changeFormatting(const QList<QTextLayout::FormatRange>& formats)
 {
     QList<QInputMethodEvent::Attribute> attributes;
-    foreach(const QTextLayout::FormatRange& range, formats)
-    {
+    foreach(const QTextLayout::FormatRange& range, formats) {
         QInputMethodEvent::AttributeType type = QInputMethodEvent::TextFormat;
         int start = range.start - this->cursorPosition();
         int length = range.length;
@@ -570,7 +578,7 @@ void CmdPromptInput::applyFormatting()
 
     QList<QTextLayout::FormatRange> formats;
 
-    //Bold Prefix
+    /* Bold Prefix */
     QTextCharFormat formatPrefix;
     formatPrefix.setFontWeight(QFont::Bold);
     QTextLayout::FormatRange rangePrefix;
@@ -579,25 +587,21 @@ void CmdPromptInput::applyFormatting()
     rangePrefix.format = formatPrefix;
     formats.append(rangePrefix);
 
-    //Keywords
+    /* Keywords */
     start = prefix.indexOf('[');
     stop = prefix.lastIndexOf(']');
-    if(start != -1 && stop != -1 && start < stop)
-    {
+    if (start != -1 && stop != -1 && start < stop) {
         QTextCharFormat formatKeyword;
         formatKeyword.setFontWeight(QFont::Bold);
         formatKeyword.setForeground(QColor("#0095FF"));
 
         int rangeStart = -1;
         int rangeStop = -1;
-        for(int i = stop; i >= start; i--)
-        {
-            if(prefix.at(i) == ']')
-            {
+        for (int i = stop; i >= start; i--) {
+            if (prefix.at(i) == ']') {
                 rangeStop = i;
             }
-            if(prefix.at(i) == '[' || prefix.at(i) == '/')
-            {
+            if (prefix.at(i) == '[' || prefix.at(i) == '/') {
                 rangeStart = i;
 
                 QTextLayout::FormatRange rangeKeyword;
@@ -614,22 +618,18 @@ void CmdPromptInput::applyFormatting()
     //Default Values
     start = prefix.indexOf('{');
     stop = prefix.lastIndexOf('}');
-    if(start != -1 && stop != -1 && start < stop)
-    {
+    if (start != -1 && stop != -1 && start < stop) {
         QTextCharFormat formatKeyword;
         formatKeyword.setFontWeight(QFont::Bold);
         formatKeyword.setForeground(QColor("#00AA00"));
 
         int rangeStart = -1;
         int rangeStop = -1;
-        for(int i = stop; i >= start; i--)
-        {
-            if(prefix.at(i) == '}')
-            {
+        for (int i = stop; i >= start; i--) {
+            if (prefix.at(i) == '}') {
                 rangeStop = i;
             }
-            if(prefix.at(i) == '{')
-            {
+            if (prefix.at(i) == '{') {
                 rangeStart = i;
 
                 QTextLayout::FormatRange rangeKeyword;
@@ -649,17 +649,15 @@ void CmdPromptInput::applyFormatting()
 void CmdPromptInput::updateCurrentText(const QString& txt)
 {
     int cursorPos = cursorPosition();
-    if(!txt.startsWith(prefix))
-    {
-        if(txt.length() < prefix.length())
+    if (!txt.startsWith(prefix)) {
+        if (txt.length() < prefix.length())
             this->setText(prefix);
-        else if(txt.length() != prefix.length())
+        else if (txt.length() != prefix.length())
             this->setText(prefix + txt);
         else
             this->setText(curText);
     }
-    else
-    {
+    else {
         // input is okay so update curText
         curText = txt;
         this->setText(curText);
@@ -673,7 +671,7 @@ void CmdPromptInput::checkEditedText(const QString& txt)
 {
     updateCurrentText(txt);
 
-    if(rapidFireEnabled)
+    if (rapidFireEnabled)
         processInput();
 }
 
@@ -719,45 +717,40 @@ void CmdPromptInput::contextMenuEvent(QContextMenuEvent* event)
 
 bool CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
 {
-    if(event->type() == QEvent::KeyPress)
-    {
-        if(isBlinking) emit stopBlinking();
+    if (event->type() == QEvent::KeyPress) {
+        if (isBlinking) {
+            emit stopBlinking();
+        }
 
         QKeyEvent* pressedKey = (QKeyEvent*)event;
 
         //NOTE: These shortcuts need to be caught since QLineEdit uses them
-        if(pressedKey->matches(QKeySequence::Cut))
-        {
+        if (pressedKey->matches(QKeySequence::Cut)) {
             pressedKey->accept();
             emit cutPressed();
             return true;
         }
-        else if(pressedKey->matches(QKeySequence::Copy))
-        {
+        else if (pressedKey->matches(QKeySequence::Copy)) {
             pressedKey->accept();
             emit copyPressed();
             return true;
         }
-        else if(pressedKey->matches(QKeySequence::Paste))
-        {
+        else if (pressedKey->matches(QKeySequence::Paste)) {
             pressedKey->accept();
             emit pastePressed();
             return true;
         }
-        else if(pressedKey->matches(QKeySequence::SelectAll))
-        {
+        else if (pressedKey->matches(QKeySequence::SelectAll)) {
             pressedKey->accept();
             emit selectAllPressed();
             return true;
         }
-        else if(pressedKey->matches(QKeySequence::Undo))
-        {
+        else if (pressedKey->matches(QKeySequence::Undo)) {
             pressedKey->accept();
             emit undoPressed();
             return true;
         }
-        else if(pressedKey->matches(QKeySequence::Redo))
-        {
+        else if (pressedKey->matches(QKeySequence::Redo)) {
             pressedKey->accept();
             emit redoPressed();
             return true;
@@ -874,18 +867,16 @@ bool CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
         }
     }
 
-    if(event->type() == QEvent::KeyRelease)
-    {
+    if (event->type() == QEvent::KeyRelease) {
         QKeyEvent* releasedKey = (QKeyEvent*)event;
         int key = releasedKey->key();
-        switch(key)
-        {
-            case Qt::Key_Shift:
-                releasedKey->ignore(); //we don't want to eat it, we just want to keep track of it
-                emit shiftReleased();
-                break;
-            default:
-                releasedKey->ignore();
+        switch(key) {
+        case Qt::Key_Shift:
+            releasedKey->ignore(); //we don't want to eat it, we just want to keep track of it
+            emit shiftReleased();
+            break;
+        default:
+            releasedKey->ignore();
         }
     }
     return QObject::eventFilter(obj, event);

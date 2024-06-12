@@ -52,7 +52,7 @@ function main()
 //      Right clicks bring up the context menu.
 function click(x, y)
 {
-    if(isNaN(global.x1))
+    if (isNaN(global.x1))
     {
         global.x1 = x;
         global.y1 = y;
@@ -86,9 +86,9 @@ function context(str)
 function prompt(str)
 {
     var strList = str.split(",");
-    if(isNaN(global.x1))
+    if (isNaN(global.x1))
     {
-        if(isNaN(strList[0]) || isNaN(strList[1]))
+        if (isNaN(strList[0]) || isNaN(strList[1]))
         {
             alert(qsTr("Requires two points."));
             setPromptPrefix(qsTr("Specify first point: "));
@@ -105,7 +105,7 @@ function prompt(str)
     }
     else
     {
-        if(isNaN(strList[0]) || isNaN(strList[1]))
+        if (isNaN(strList[0]) || isNaN(strList[1]))
         {
             alert(qsTr("Requires two points."));
             setPromptPrefix(qsTr("Specify second point: "));

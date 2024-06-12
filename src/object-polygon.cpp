@@ -6,7 +6,7 @@
  * Visit https://www.libembroidery.org/refman for advice on altering this file,
  * or read the markdown version in embroidermodder2/docs/refman.
  *
- * View Commands
+ * Polygon Commands
  */
 
 #include "embroidermodder.h"
@@ -16,9 +16,15 @@
 #include <QGraphicsScene>
 #include <QMessageBox>
 
-/* NOTE: main() is run every time the command is started.
- *       Use it to reset variables so they are ready to go.
- */
+#define POLYGON_MODE_NUM_SIDES      0
+#define POLYGON_MODE_CENTER_PT      1
+#define POLYGON_MODE_POLYTYPE       2
+#define POLYGON_MODE_INSCRIBE       3
+#define POLYGON_MODE_CIRCUMSCRIBE   4
+#define POLYGON_MODE_DISTANCE       5
+#define POLYGON_MODE_SIDE_LEN       6
+
+/* POLYGON */
 ScriptValue
 polygon_command(ScriptEnv * context)
 {
@@ -33,35 +39,22 @@ polygon_command(ScriptEnv * context)
 //Command: Polygon
 
 var global = {}; //Required
-global.centerX;
-global.centerY;
-global.sideX1;
-global.sideY1;
-global.sideX2;
-global.sideY2;
-global.pointIX;
-global.pointIY;
-global.pointCX;
-global.pointCY;
-global.polyType = "Inscribed"; //Default
-global.numSides = 4;           //Default
-global.mode;
-
-//enums
-global.mode_NUM_SIDES    = 0;
-global.mode_CENTER_PT    = 1;
-global.mode_POLYTYPE     = 2;
-global.mode_INSCRIBE     = 3;
-global.mode_CIRCUMSCRIBE = 4;
-global.mode_DISTANCE     = 5;
-global.mode_SIDE_LEN     = 6;
+EmbVector center;
+EmbVector side1;
+EmbVector side2;
+EmbVector pointI;
+EmbVector pointC;
+char *polyType = "Inscribed"; //Default
+int numSides = 4;           //Default
+int mode;
 
 //NOTE: main() is run every time the command is started.
 //      Use it to reset variables so they are ready to go.
-function main()
+function
+main()
 {
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
     global.centerX = NaN;
     global.centerY = NaN;
     global.sideX1  = NaN;
@@ -72,121 +65,99 @@ function main()
     global.pointIY = NaN;
     global.pointCX = NaN;
     global.pointCY = NaN;
-    global.mode = global.mode_NUM_SIDES;
-    setPromptPrefix(qsTr("Enter number of sides") + " {" + global.numSides.toString() + "}: ");
+    global.mode = POLYGON_MODE_NUM_SIDES;
+    prompt_output(translate("Enter number of sides") + " {" + global.numSides.toString() + "}: ");
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
-function click(x, y)
+function
+click(EmbVector v)
 {
-    if(global.mode == global.mode_NUM_SIDES)
-    {
-        //Do nothing, the prompt controls this.
+    switch (global.mode) {
+    default:
+    case POLYGON_MODE_NUM_SIDES:
+    case POLYGON_MODE_POLYTYPE:
+    case POLYGON_MODE_DISTANCE: {
+        //Do nothing, the prompt controls these.
+        break;
     }
-    else if(global.mode == global.mode_CENTER_PT)
-    {
-        global.centerX = x;
-        global.centerY = y;
-        global.mode = global.mode_POLYTYPE;
+    case POLYGON_MODE_CENTER_PT: {
+        global.center = v;
+        global.mode = POLYGON_MODE_POLYTYPE;
         appendPromptHistory();
-        setPromptPrefix(qsTr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
+        prompt_output(translate("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
+        break;
     }
-    else if(global.mode == global.mode_POLYTYPE)
-    {
-        //Do nothing, the prompt controls this.
-    }
-    else if(global.mode == global.mode_INSCRIBE)
-    {
-        global.pointIX = x;
-        global.pointIY = y;
+    case POLYGON_MODE_INSCRIBE: {
+        global.pointI = v;
         setRubberPoint("POLYGON_INSCRIBE_POINT", global.pointIX, global.pointIY);
         vulcanize();
         appendPromptHistory();
-        _main->nativeEndCommand();
+        end_command();
+        break;
     }
-    else if(global.mode == global.mode_CIRCUMSCRIBE)
-    {
-        global.pointCX = x;
-        global.pointCY = y;
+    case POLYGON_MODE_CIRCUMSCRIBE: {
+        global.pointC = v;
         setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", global.pointCX, global.pointCY);
         vulcanize();
         appendPromptHistory();
-        _main->nativeEndCommand();
+        end_command();
+        break;
     }
-    else if(global.mode == global.mode_DISTANCE)
-    {
-        //Do nothing, the prompt controls this.
-    }
-    else if(global.mode == global.mode_SIDE_LEN)
-    {
+    case POLYGON_MODE_SIDE_LEN: {
         todo("POLYGON", "Sidelength mode");
+        break;
+    }
     }
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
-function context(str)
+function
+context(char *str)
 {
     todo("POLYGON", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
-function prompt(str)
+function
+prompt(char *str)
 {
-    if(global.mode == global.mode_NUM_SIDES)
-    {
-        if(str == "" && global.numSides >= 3 && global.numSides <= 1024)
-        {
-            setPromptPrefix(qsTr("Specify center point or [Sidelength]: "));
-            global.mode = global.mode_CENTER_PT;
+    EmbVector v;
+    if (global.mode == POLYGON_MODE_NUM_SIDES) {
+        if (str == "" && global.numSides >= 3 && global.numSides <= 1024) {
+            prompt_output(translate("Specify center point or [Sidelength]: "));
+            global.mode = POLYGON_MODE_CENTER_PT;
         }
-        else
-        {
+        else {
             var tmp = Number(str);
-            if(isNaN(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024)
-            {
-                alert(qsTr("Requires an integer between 3 and 1024."));
-                setPromptPrefix(qsTr("Enter number of sides") + " {" + global.numSides.toString() + "}: ");
+            if (isNaN(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024) {
+                alert(translate("Requires an integer between 3 and 1024."));
+                prompt_output(translate("Enter number of sides") + " {" + global.numSides.toString() + "}: ");
             }
-            else
-            {
+            else {
                 global.numSides = tmp;
-                setPromptPrefix(qsTr("Specify center point or [Sidelength]: "));
-                global.mode = global.mode_CENTER_PT;
+                prompt_output(translate("Specify center point or [Sidelength]: "));
+                global.mode = POLYGON_MODE_CENTER_PT;
             }
         }
     }
-    else if(global.mode == global.mode_CENTER_PT)
-    {
-        if(str == "S" || str == "SIDELENGTH") //TODO: Probably should add additional qsTr calls here.
-        {
-            global.mode = global.mode_SIDE_LEN;
-            setPromptPrefix(qsTr("Specify start point: "));
+    else if (global.mode == POLYGON_MODE_CENTER_PT) {
+        if (str == "S" || str == "SIDELENGTH") {
+            /* TODO: Probably should add additional qsTr calls here. */
+            global.mode = POLYGON_MODE_SIDE_LEN;
+            prompt_output(translate("Specify start point: "));
         }
-        else
-        {
-            var strList = str.split(",");
-            if(isNaN(strList[0]) || isNaN(strList[1]))
-            {
-                alert(qsTr("Point or option keyword required."));
-                setPromptPrefix(qsTr("Specify center point or [Sidelength]: "));
+        else {
+            if (!parse_vector(str, &v)) {
+                alert(translate("Point or option keyword required."));
+                prompt_output(translate("Specify center point or [Sidelength]: "));
             }
-            else
-            {
-                global.centerX = Number(strList[0]);
-                global.centerY = Number(strList[1]);
-                global.mode = global.mode_POLYTYPE;
-                setPromptPrefix(qsTr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
+            else {
+                global.center = v;
+                global.mode = POLYGON_MODE_POLYTYPE;
+                prompt_output(translate("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
             }
         }
     }
-    else if(global.mode == global.mode_POLYTYPE)
-    {
-        if(str == "I"        ||
+    else if (global.mode == POLYGON_MODE_POLYTYPE) {
+        if (str == "I"        ||
            str == "IN"       ||
            str == "INS"      ||
            str == "INSC"     ||
@@ -194,17 +165,17 @@ function prompt(str)
            str == "INSCRI"   ||
            str == "INSCRIB"  ||
            str == "INSCRIBE" ||
-           str == "INSCRIBED") //TODO: Probably should add additional qsTr calls here.
-        {
-            global.mode = global.mode_INSCRIBE;
+           str == "INSCRIBED") {
+            /* TODO: Probably should add additional translate calls here. */
+            global.mode = POLYGON_MODE_INSCRIBE;
             global.polyType = "Inscribed";
-            setPromptPrefix(qsTr("Specify polygon corner point or [Distance]: "));
+            prompt_output(translate("Specify polygon corner point or [Distance]: "));
             addRubber("POLYGON");
             setRubberMode("POLYGON_INSCRIBE");
             setRubberPoint("POLYGON_CENTER", global.centerX, global.centerY);
             setRubberPoint("POLYGON_NUM_SIDES", global.numSides, 0);
         }
-        else if(str == "C"            ||
+        else if (str == "C"            ||
                 str == "CI"           ||
                 str == "CIR"          ||
                 str == "CIRC"         ||
@@ -216,130 +187,106 @@ function prompt(str)
                 str == "CIRCUMSCRI"   ||
                 str == "CIRCUMSCRIB"  ||
                 str == "CIRCUMSCRIBE" ||
-                str == "CIRCUMSCRIBED") //TODO: Probably should add additional qsTr calls here.
-        {
-            global.mode = global.mode_CIRCUMSCRIBE;
+                str == "CIRCUMSCRIBED") {
+            /* TODO: Probably should add additional translate calls here. */
+            global.mode = POLYGON_MODE_CIRCUMSCRIBE;
             global.polyType = "Circumscribed";
-            setPromptPrefix(qsTr("Specify polygon side point or [Distance]: "));
+            prompt_output(translate("Specify polygon side point or [Distance]: "));
             addRubber("POLYGON");
             setRubberMode("POLYGON_CIRCUMSCRIBE");
             setRubberPoint("POLYGON_CENTER", global.centerX, global.centerY);
             setRubberPoint("POLYGON_NUM_SIDES", global.numSides, 0);
         }
-        else if(str == "")
-        {
-            if(global.polyType == "Inscribed")
-            {
-                global.mode = global.mode_INSCRIBE;
-                setPromptPrefix(qsTr("Specify polygon corner point or [Distance]: "));
+        else if (str == "") {
+            if (global.polyType == "Inscribed") {
+                global.mode = POLYGON_MODE_INSCRIBE;
+                prompt_output(translate("Specify polygon corner point or [Distance]: "));
                 addRubber("POLYGON");
                 setRubberMode("POLYGON_INSCRIBE");
                 setRubberPoint("POLYGON_CENTER", global.centerX, global.centerY);
                 setRubberPoint("POLYGON_NUM_SIDES", global.numSides, 0);
             }
-            else if(global.polyType == "Circumscribed")
-            {
-                global.mode = global.mode_CIRCUMSCRIBE;
-                setPromptPrefix(qsTr("Specify polygon side point or [Distance]: "));
+            else if (global.polyType == "Circumscribed") {
+                global.mode = POLYGON_MODE_CIRCUMSCRIBE;
+                prompt_output(translate("Specify polygon side point or [Distance]: "));
                 addRubber("POLYGON");
                 setRubberMode("POLYGON_CIRCUMSCRIBE");
                 setRubberPoint("POLYGON_CENTER", global.centerX, global.centerY);
                 setRubberPoint("POLYGON_NUM_SIDES", global.numSides, 0);
             }
-            else
-            {
-                error("POLYGON", qsTr("Polygon type is not Inscribed or Circumscribed."));
+            else {
+                error("POLYGON", translate("Polygon type is not Inscribed or Circumscribed."));
             }
         }
-        else
-        {
-            alert(qsTr("Invalid option keyword."));
-            setPromptPrefix(qsTr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
+        else {
+            alert(translate("Invalid option keyword."));
+            prompt_output(translate("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
         }
     }
-    else if(global.mode == global.mode_INSCRIBE)
-    {
-        if(str == "D" || str == "DISTANCE") //TODO: Probably should add additional qsTr calls here.
+    else if (global.mode == POLYGON_MODE_INSCRIBE) {
+        if (str == "D" || str == "DISTANCE") //TODO: Probably should add additional qsTr calls here.
         {
-            global.mode = global.mode_DISTANCE;
-            setPromptPrefix(qsTr("Specify distance: "));
+            global.mode = POLYGON_MODE_DISTANCE;
+            prompt_output(translate("Specify distance: "));
         }
-        else
-        {
-            var strList = str.split(",");
-            if(isNaN(strList[0]) || isNaN(strList[1]))
-            {
-                alert(qsTr("Point or option keyword required."));
-                setPromptPrefix(qsTr("Specify polygon corner point or [Distance]: "));
+        else {
+            if (!parse_vector(str, &v)) {
+                alert(translate("Point or option keyword required."));
+                prompt_output(translate("Specify polygon corner point or [Distance]: "));
             }
-            else
-            {
-                global.pointIX = Number(strList[0]);
-                global.pointIY = Number(strList[1]);
+            else {
+                global.pointI = v;
                 setRubberPoint("POLYGON_INSCRIBE_POINT", global.pointIX, global.pointIY);
                 vulcanize();
-                _main->nativeEndCommand();
+                end_command();
             }
         }
     }
-    else if(global.mode == global.mode_CIRCUMSCRIBE)
-    {
-        if(str == "D" || str == "DISTANCE") //TODO: Probably should add additional qsTr calls here.
+    else if (global.mode == POLYGON_MODE_CIRCUMSCRIBE) {
+        if (str == "D" || str == "DISTANCE") //TODO: Probably should add additional qsTr calls here.
         {
-            global.mode = global.mode_DISTANCE;
-            setPromptPrefix(qsTr("Specify distance: "));
+            global.mode = POLYGON_MODE_DISTANCE;
+            prompt_output(translate("Specify distance: "));
         }
-        else
-        {
-            var strList = str.split(",");
-            if(isNaN(strList[0]) || isNaN(strList[1]))
-            {
-                alert(qsTr("Point or option keyword required."));
-                setPromptPrefix(qsTr("Specify polygon side point or [Distance]: "));
+        else {
+            if (!parse_vector(str, &v)) {
+                alert(translate("Point or option keyword required."));
+                prompt_output(translate("Specify polygon side point or [Distance]: "));
             }
-            else
-            {
-                global.pointCX = Number(strList[0]);
-                global.pointCY = Number(strList[1]);
+            else {
+                global.pointC = v;
                 setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", global.pointCX, global.pointCY);
                 vulcanize();
-                _main->nativeEndCommand();
+                end_command();
             }
         }
     }
-    else if(global.mode == global.mode_DISTANCE)
-    {
-        if(isNaN(str))
-        {
-            alert(qsTr("Requires valid numeric distance."));
-            setPromptPrefix(qsTr("Specify distance: "));
+    else if (global.mode == POLYGON_MODE_DISTANCE) {
+        if (isNaN(str)) {
+            alert(translate("Requires valid numeric distance."));
+            prompt_output(translate("Specify distance: "));
         }
-        else
-        {
-            if(global.polyType == "Inscribed")
-            {
-                global.pointIX = global.centerX;
-                global.pointIY = global.centerY + Number(str);
+        else {
+            if (global.polyType == "Inscribed") {
+                global.pointI.x = global.center.x;
+                global.pointI.y = global.center.y + Number(str);
                 setRubberPoint("POLYGON_INSCRIBE_POINT", global.pointIX, global.pointIY);
                 vulcanize();
-                _main->nativeEndCommand();
+                end_command();
             }
-            else if(global.polyType == "Circumscribed")
-            {
-                global.pointCX = global.centerX;
-                global.pointCY = global.centerY + Number(str);
+            else if (global.polyType == "Circumscribed") {
+                global.pointC.x = global.center.x;
+                global.pointC.y = global.center.y + Number(str);
                 setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", global.pointCX, global.pointCY);
                 vulcanize();
-                _main->nativeEndCommand();
+                end_command();
             }
-            else
-            {
-                error("POLYGON", qsTr("Polygon type is not Inscribed or Circumscribed."));
+            else {
+                error("POLYGON", translate("Polygon type is not Inscribed or Circumscribed."));
             }
         }
     }
-    else if(global.mode == global.mode_SIDE_LEN)
-    {
+    else if (global.mode == POLYGON_MODE_SIDE_LEN) {
         todo("POLYGON", "Sidelength mode");
     }
 }
@@ -354,8 +301,7 @@ PolygonObject::PolygonObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb, 
 PolygonObject::PolygonObject(PolygonObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("PolygonObject Constructor()");
-    if(obj)
-    {
+    if (obj) {
         init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
         setScale(obj->scale());
@@ -396,10 +342,13 @@ void PolygonObject::updatePath(const QPainterPath& p)
     setObjectPath(reversePath);
 }
 
-void PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+void
+PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) {
+        return;
+    }
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
@@ -420,7 +369,8 @@ void PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     }
 }
 
-void PolygonObject::updateRubber(QPainter* painter)
+void
+PolygonObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
     if (rubberMode == OBJ_RUBBER_POLYGON) {
@@ -428,15 +378,18 @@ void PolygonObject::updateRubber(QPainter* painter)
 
         bool ok = false;
         QString numStr = objectRubberText("POLYGON_NUM_POINTS");
-        if(numStr.isNull()) return;
+        if (numStr.isNull()) {
+            return;
+        }
         int num = numStr.toInt(&ok);
-        if(!ok) return;
+        if (!ok) {
+            return;
+        }
 
         QString appendStr;
         QPainterPath rubberPath;
         rubberPath.moveTo(mapFromScene(objectRubberPoint("POLYGON_POINT_0")));
-        for(int i = 1; i <= num; i++)
-        {
+        for (int i = 1; i <= num; i++) {
             appendStr = "POLYGON_POINT_" + QString().setNum(i);
             QPointF appendPoint = mapFromScene(objectRubberPoint(appendStr));
             rubberPath.lineTo(appendPoint);
@@ -447,8 +400,7 @@ void PolygonObject::updateRubber(QPainter* painter)
         //Ensure the path isn't updated until the number of points is changed again
         setObjectRubberText("POLYGON_NUM_POINTS", QString());
     }
-    else if(rubberMode == OBJ_RUBBER_POLYGON_INSCRIBE)
-    {
+    else if (rubberMode == OBJ_RUBBER_POLYGON_INSCRIBE) {
         setObjectPos(objectRubberPoint("POLYGON_CENTER"));
 
         quint16 numSides = objectRubberPoint("POLYGON_NUM_SIDES").x();
@@ -458,21 +410,21 @@ void PolygonObject::updateRubber(QPainter* painter)
         qreal inscribeAngle = inscribeLine.angle();
         qreal inscribeInc = 360.0/numSides;
 
-        if(painter) drawRubberLine(inscribeLine, painter, VIEW_COLOR_CROSSHAIR);
+        if (painter) {
+            drawRubberLine(inscribeLine, painter, VIEW_COLOR_CROSSHAIR);
+        }
 
         QPainterPath inscribePath;
         //First Point
         inscribePath.moveTo(inscribePoint);
         //Remaining Points
-        for(int i = 1; i < numSides; i++)
-        {
+        for (int i = 1; i < numSides; i++) {
             inscribeLine.setAngle(inscribeAngle + inscribeInc*i);
             inscribePath.lineTo(inscribeLine.p2());
         }
         updatePath(inscribePath);
     }
-    else if(rubberMode == OBJ_RUBBER_POLYGON_CIRCUMSCRIBE)
-    {
+    else if (rubberMode == OBJ_RUBBER_POLYGON_CIRCUMSCRIBE) {
         setObjectPos(objectRubberPoint("POLYGON_CENTER"));
 
         quint16 numSides = objectRubberPoint("POLYGON_NUM_SIDES").x();
@@ -482,7 +434,9 @@ void PolygonObject::updateRubber(QPainter* painter)
         qreal circumscribeAngle = circumscribeLine.angle();
         qreal circumscribeInc = 360.0/numSides;
 
-        if(painter) drawRubberLine(circumscribeLine, painter, VIEW_COLOR_CROSSHAIR);
+        if (painter) {
+            drawRubberLine(circumscribeLine, painter, VIEW_COLOR_CROSSHAIR);
+        }
 
         QPainterPath circumscribePath;
         //First Point
@@ -495,8 +449,7 @@ void PolygonObject::updateRubber(QPainter* painter)
         perp.intersects(prev, &iPoint);
         circumscribePath.moveTo(iPoint);
         //Remaining Points
-        for(int i = 2; i <= numSides; i++)
-        {
+        for (int i = 2; i <= numSides; i++) {
             prev = perp;
             circumscribeLine.setAngle(circumscribeAngle + circumscribeInc*i);
             perp = QLineF(circumscribeLine.p2(), QPointF(0,0));
@@ -506,21 +459,32 @@ void PolygonObject::updateRubber(QPainter* painter)
         }
         updatePath(circumscribePath);
     }
-    else if(rubberMode == OBJ_RUBBER_GRIP)
-    {
-        if(painter)
-        {
+    else if (rubberMode == OBJ_RUBBER_GRIP) {
+        if (painter) {
             int elemCount = normalPath.elementCount();
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if(gripIndex == -1) gripIndex = findIndex(gripPoint);
-            if(gripIndex == -1) return;
+            if (gripIndex == -1) {
+                gripIndex = findIndex(gripPoint);
+                if (gripIndex == -1) {
+                    return;
+                }
+            }
 
             int m = 0;
             int n = 0;
 
-            if(!gripIndex)                    { m = elemCount-1; n = 1; }
-            else if(gripIndex == elemCount-1) { m = elemCount-2; n = 0; }
-            else                              { m = gripIndex-1; n = gripIndex+1; }
+            if (!gripIndex) {
+                m = elemCount - 1;
+                n = 1;
+            }
+            else if (gripIndex == elemCount-1) {
+                m = elemCount - 2;
+                n = 0;
+            }
+            else {
+                m = gripIndex - 1;
+                n = gripIndex + 1;
+            }
             QPainterPath::Element em = normalPath.elementAt(m);
             QPainterPath::Element en = normalPath.elementAt(n);
             QPointF emPoint = QPointF(em.x, em.y);
@@ -541,7 +505,7 @@ void PolygonObject::vulcanize()
 
     setObjectRubberMode(OBJ_RUBBER_OFF);
 
-    if(!normalPath.elementCount())
+    if (!normalPath.elementCount())
         QMessageBox::critical(0, QObject::tr("Empty Polygon Error"), QObject::tr("The polygon added contains no points. The command that created this object has flawed logic."));
 }
 
@@ -552,13 +516,11 @@ QPointF PolygonObject::mouseSnapPoint(const QPointF& mousePoint)
     QPointF closestPoint = mapToScene(QPointF(element.x, element.y));
     qreal closestDist = QLineF(mousePoint, closestPoint).length();
     int elemCount = normalPath.elementCount();
-    for(int i = 0; i < elemCount; ++i)
-    {
+    for (int i = 0; i < elemCount; ++i) {
         element = normalPath.elementAt(i);
         QPointF elemPoint = mapToScene(element.x, element.y);
         qreal elemDist = QLineF(mousePoint, elemPoint).length();
-        if(elemDist < closestDist)
-        {
+        if (elemDist < closestDist) {
             closestPoint = elemPoint;
             closestDist = elemDist;
         }
@@ -570,8 +532,7 @@ QList<QPointF> PolygonObject::allGripPoints()
 {
     QList<QPointF> gripPoints;
     QPainterPath::Element element;
-    for(int i = 0; i < normalPath.elementCount(); ++i)
-    {
+    for (int i = 0; i < normalPath.elementCount(); ++i) {
         element = normalPath.elementAt(i);
         gripPoints << mapToScene(element.x, element.y);
     }
@@ -584,26 +545,31 @@ int PolygonObject::findIndex(const QPointF& point)
     int elemCount = normalPath.elementCount();
     //NOTE: Points here are in item coordinates
     QPointF itemPoint = mapFromScene(point);
-    for(i = 0; i < elemCount; i++)
-    {
+    for (i = 0; i < elemCount; i++) {
         QPainterPath::Element e = normalPath.elementAt(i);
         QPointF elemPoint = QPointF(e.x, e.y);
-        if(itemPoint == elemPoint) return i;
+        if (itemPoint == elemPoint) {
+            return i;
+        }
     }
     return -1;
 }
 
-void PolygonObject::gripEdit(const QPointF& before, const QPointF& after)
+void
+PolygonObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     gripIndex = findIndex(before);
-    if(gripIndex == -1) return;
+    if (gripIndex == -1) {
+        return;
+    }
     QPointF a = mapFromScene(after);
     normalPath.setElementPositionAt(gripIndex, a.x(), a.y());
     updatePath(normalPath);
     gripIndex = -1;
 }
 
-QPainterPath PolygonObject::objectCopyPath() const
+QPainterPath
+PolygonObject::objectCopyPath() const
 {
     return normalPath;
 }

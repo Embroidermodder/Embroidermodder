@@ -34,12 +34,11 @@ global.firstRun;
 //      Use it to reset variables so they are ready to go.
 function main()
 {
-    _main->nativeInitCommand();
-    _main->nativeClearSelection();
+    init_command();
+    clear_selection();
     global.firstRun = true;
-    setPromptPrefix("TODO: Current point settings: PDMODE=?  PDSIZE=?"); //TODO: qsTr needed here when complete
-    appendPromptHistory();
-    setPromptPrefix(qsTr("Specify first point: "));
+    prompt_output("TODO: Current point settings: PDMODE=?  PDSIZE=?"); //TODO: qsTr needed here when complete
+    prompt_output(qsTr("Specify first point: "));
 }
 
 //NOTE: click() is run only for left clicks.
@@ -47,15 +46,13 @@ function main()
 //      Right clicks bring up the context menu.
 function click(x, y)
 {
-    if(global.firstRun)
-    {
+    if (global.firstRun) {
         global.firstRun = false;
         appendPromptHistory();
-        setPromptPrefix(qsTr("Specify next point: "));
+        prompt_output(qsTr("Specify next point: "));
         addPoint(x,y);
     }
-    else
-    {
+    else {
         appendPromptHistory();
         addPoint(x,y);
     }
@@ -73,45 +70,34 @@ function context(str)
 //      Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
-    if(global.firstRun)
-    {
-        if(str == "M" || str == "MODE") //TODO: Probably should add additional qsTr calls here.
-        {
+    EmbVector v;
+    if (global.firstRun) {
+        if (str == "M" || str == "MODE") {
+            //TODO: Probably should add additional qsTr calls here.
             todo("POINT", "prompt() for PDMODE");
         }
-        else if(str == "S" || str == "SIZE") //TODO: Probably should add additional qsTr calls here.
-        {
+        else if (str == "S" || str == "SIZE") {
+            //TODO: Probably should add additional qsTr calls here.
             todo("POINT", "prompt() for PDSIZE");
         }
-        var strList = str.split(",");
-        if(isNaN(strList[0]) || isNaN(strList[1]))
-        {
+        if (!parse_vector(str, v)) {
             alert(qsTr("Invalid point."));
-            setPromptPrefix(qsTr("Specify first point: "));
+            prompt_output(qsTr("Specify first point: "));
         }
-        else
-        {
+        else {
             global.firstRun = false;
-            var x = Number(strList[0]);
-            var y = Number(strList[1]);
-            setPromptPrefix(qsTr("Specify next point: "));
-            addPoint(x,y);
+            prompt_output(qsTr("Specify next point: "));
+            addPoint(v.x, v.y);
         }
     }
-    else
-    {
-        var strList = str.split(",");
-        if(isNaN(strList[0]) || isNaN(strList[1]))
-        {
+    else {
+        if (!parse_vector(str, v)) {
             alert(qsTr("Invalid point."));
-            setPromptPrefix(qsTr("Specify next point: "));
+            prompt_output(qsTr("Specify next point: "));
         }
-        else
-        {
-            var x = Number(strList[0]);
-            var y = Number(strList[1]);
-            setPromptPrefix(qsTr("Specify next point: "));
-            addPoint(x,y);
+        else {
+            prompt_output(qsTr("Specify next point: "));
+            addPoint(v.x, v.y);
         }
     }
 }
@@ -127,7 +113,7 @@ PointObject::PointObject(qreal x, qreal y, QRgb rgb, QGraphicsItem* parent) : Ba
 PointObject::PointObject(PointObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("PointObject Constructor()");
-    if(obj)
+    if (obj)
     {
         init(obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
@@ -181,13 +167,10 @@ void PointObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
 void PointObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if(rubberMode == OBJ_RUBBER_GRIP)
-    {
-        if(painter)
-        {
+    if (rubberMode == OBJ_RUBBER_GRIP) {
+        if (painter) {
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if(gripPoint == scenePos())
-            {
+            if (gripPoint == scenePos()) {
                 QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
                 drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
             }
@@ -218,7 +201,7 @@ QList<QPointF> PointObject::allGripPoints()
 
 void PointObject::gripEdit(const QPointF& before, const QPointF& after)
 {
-    if(before == scenePos()) { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
+    if (before == scenePos()) { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
 }
 
 QPainterPath PointObject::objectSavePath() const
@@ -227,5 +210,3 @@ QPainterPath PointObject::objectSavePath() const
     path.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
     return path;
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

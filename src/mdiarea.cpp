@@ -60,10 +60,12 @@ void MdiArea::setBackgroundTexture(const QString& fileName)
 
 void MdiArea::setBackgroundColor(const QColor& color)
 {
-    if(!color.isValid())
+    if (!color.isValid()) {
         bgColor = background().color();
-    else
+    }
+    else {
         bgColor = color;
+    }
 
     forceRepaint();
 }
@@ -82,19 +84,21 @@ void MdiArea::paintEvent(QPaintEvent* /*e*/)
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
 
     //Always fill with a solid color first
-    if(useColor) painter.fillRect(rect, bgColor);
-    else         painter.fillRect(rect, background());
+    if (useColor) {
+        painter.fillRect(rect, bgColor);
+    }
+    else {
+        painter.fillRect(rect, background());
+    }
 
     //Then overlay the texture
-    if(useTexture)
-    {
+    if (useTexture) {
         QBrush bgBrush(bgTexture);
         painter.fillRect(rect, bgBrush);
     }
 
     //Overlay the logo last
-    if(useLogo)
-    {
+    if (useLogo) {
         //Center the pixmap
         int dx = (rect.width()-bgLogo.width())/2;
         int dy = (rect.height()-bgLogo.height())/2;
@@ -116,14 +120,11 @@ void MdiArea::tile()
 
 void MdiArea::zoomExtentsAllSubWindows()
 {
-    foreach(QMdiSubWindow* window, subWindowList())
-    {
+    foreach(QMdiSubWindow* window, subWindowList()) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(window);
-        if(mdiWin)
-        {
+        if (mdiWin) {
             View* v = mdiWin->getView();
-            if(v)
-            {
+            if (v) {
                 v->recalculateLimits();
                 v->zoomExtents();
             }

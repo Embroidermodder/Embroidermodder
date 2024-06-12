@@ -48,8 +48,7 @@ void MainWindow::readSettings()
     QSize size = settings.value("Window/Size", QSize(800, 600)).toSize();
 
     layoutState = settings.value("LayoutState").toByteArray();
-    if(!restoreState(layoutState))
-    {
+    if (!restoreState(layoutState)) {
         qDebug("LayoutState NOT restored! Setting Default Layout...");
         //someToolBar->setVisible(true);
     }

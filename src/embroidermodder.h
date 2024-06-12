@@ -738,8 +738,7 @@ public:
     DimLeaderObject(DimLeaderObject* obj, QGraphicsItem* parent = 0);
     ~DimLeaderObject();
 
-    enum ArrowStyle
-    {
+    enum ArrowStyle {
         NoArrow, //NOTE: Allow this enum to evaluate false
         Open,
         Closed,
@@ -748,8 +747,7 @@ public:
         Tick
     };
 
-    enum lineStyle
-    {
+    enum lineStyle {
         NoLine, //NOTE: Allow this enum to evaluate false
         Flared,
         Fletching
