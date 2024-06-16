@@ -191,6 +191,8 @@ enum COMMAND_ACTIONS
     ACTION_TODO,
     ACTION_VULCANIZE,
 
+    ACTION_TEST,
+
     ACTION_NULL
 };
 
@@ -611,6 +613,12 @@ extern ScriptValue script_false;
 
 extern const char *coverage_test[];
 extern int testing_mode;
+
+extern const char *file_menu[];
+extern const char *edit_menu[];
+
+extern const char *file_toolbar[];
+extern const char *edit_toolbar[];
 
 #ifdef __cplusplus
 }

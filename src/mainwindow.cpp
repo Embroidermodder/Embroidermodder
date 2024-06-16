@@ -43,20 +43,12 @@ void
 MainWindow::run_testing(void)
 {
     int i;
-    ScriptEnv *context = create_script_env();
-    context->context = CONTEXT_MAIN;
     std::this_thread::sleep_for (std::chrono::milliseconds(2000));
     for (i=0; strcmp(coverage_test[i], "END"); i++) {
         QString cmd(coverage_test[i]);
-        if (command_map.contains(cmd)) {
-            command_map[cmd].main(context);
-        }
-        else {
-            qDebug("ERROR: %s not found in command_map.", qPrintable(cmd));
-        }
+        runCommandMain(cmd);
         std::this_thread::sleep_for (std::chrono::milliseconds(1000));
     }        
-    free_script_env(context);
 }
 
 MainWindow::MainWindow() : QMainWindow(0)
@@ -256,11 +248,13 @@ MainWindow::MainWindow() : QMainWindow(0)
         tipOfTheDay();
     }
 
+    /*
     if (testing_mode) {
         testing_timer = new QTimer();
         connect(testing_timer, &QTimer::timeout, this, run_testing);
         testing_timer->start(100);
     }
+    */
 
     qDebug("Finished creating window.");
 }

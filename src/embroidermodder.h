@@ -1168,54 +1168,6 @@ private:
     void init(const QString& str, qreal x, qreal y, QRgb rgb, Qt::PenStyle lineType);
 };
 
-
-class SaveObject : public QObject
-{
-    Q_OBJECT
-
-public:
-    SaveObject(QGraphicsScene* theScene, QObject* parent = 0);
-    ~SaveObject();
-
-    bool save(const QString &fileName);
-
-    void addArc          (EmbPattern* pattern, QGraphicsItem* item);
-    void addBlock        (EmbPattern* pattern, QGraphicsItem* item);
-    void addCircle       (EmbPattern* pattern, QGraphicsItem* item);
-    void addDimAligned   (EmbPattern* pattern, QGraphicsItem* item);
-    void addDimAngular   (EmbPattern* pattern, QGraphicsItem* item);
-    void addDimArcLength (EmbPattern* pattern, QGraphicsItem* item);
-    void addDimDiameter  (EmbPattern* pattern, QGraphicsItem* item);
-    void addDimLeader    (EmbPattern* pattern, QGraphicsItem* item);
-    void addDimLinear    (EmbPattern* pattern, QGraphicsItem* item);
-    void addDimOrdinate  (EmbPattern* pattern, QGraphicsItem* item);
-    void addDimRadius    (EmbPattern* pattern, QGraphicsItem* item);
-    void addEllipse      (EmbPattern* pattern, QGraphicsItem* item);
-    void addEllipseArc   (EmbPattern* pattern, QGraphicsItem* item);
-    void addGrid         (EmbPattern* pattern, QGraphicsItem* item);
-    void addHatch        (EmbPattern* pattern, QGraphicsItem* item);
-    void addImage        (EmbPattern* pattern, QGraphicsItem* item);
-    void addInfiniteLine (EmbPattern* pattern, QGraphicsItem* item);
-    void addLine         (EmbPattern* pattern, QGraphicsItem* item);
-    void addPath         (EmbPattern* pattern, QGraphicsItem* item);
-    void addPoint (EmbPattern* pattern, QGraphicsItem* item);
-    void addPolygon      (EmbPattern* pattern, QGraphicsItem* item);
-    void addPolyline     (EmbPattern* pattern, QGraphicsItem* item);
-    void addRay          (EmbPattern* pattern, QGraphicsItem* item);
-    void addRectangle    (EmbPattern* pattern, QGraphicsItem* item);
-    void addSlot         (EmbPattern* pattern, QGraphicsItem* item);
-    void addSpline       (EmbPattern* pattern, QGraphicsItem* item);
-    void addTextMulti    (EmbPattern* pattern, QGraphicsItem* item);
-    void addTextSingle   (EmbPattern* pattern, QGraphicsItem* item);
-
-private:
-    QGraphicsScene* gscene;
-    int formatType;
-
-    void toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainterPath& objPath, const QString& layer, const QColor& color, const QString& lineType, const QString& lineWeight);
-};
-
-
 class PreviewDialog : public QFileDialog
 {
     Q_OBJECT
@@ -2194,12 +2146,12 @@ private:
     QToolBar* toolbarPrompt;
 
     /* Selectors */
-    QComboBox*     layerSelector;
-    QComboBox*     colorSelector;
-    QComboBox*     linetypeSelector;
-    QComboBox*     lineweightSelector;
+    QComboBox* layerSelector;
+    QComboBox* colorSelector;
+    QComboBox* linetypeSelector;
+    QComboBox* lineweightSelector;
     QFontComboBox* textFontSelector;
-    QComboBox*     textSizeSelector;
+    QComboBox* textSizeSelector;
 
     /* Menus */
     void createAllMenus();
@@ -2229,7 +2181,7 @@ public slots:
     void stub_implement(QString txt);
     void stub_testing();
 
-    static void run_testing();
+    void run_testing();
 
     void promptHistoryAppended(const QString& txt);
     void logPromptInput(const QString& txt);
@@ -2428,6 +2380,8 @@ QUndoStack* activeUndoStack();
 QPointF scale_and_rotate(QPointF v, qreal angle, qreal scale);
 
 QPointF find_mouse_snap_point(QList<QPointF> snap_points, const QPointF& mouse_point);
+
+bool pattern_save(EmbPattern *pattern, const char *fileName);
 
 extern QHash<QString, Command> command_map;
 extern QHash<QString, QString>* aliasHash;

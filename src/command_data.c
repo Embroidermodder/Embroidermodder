@@ -15,6 +15,9 @@
 #include "core.h"
 
 ScriptValue arc_command(ScriptEnv *);
+ScriptValue test_command(ScriptEnv *);
+
+ScriptValue test_command(ScriptEnv *) {return script_true;}
 
 Command command_data[] = {
     {
@@ -1162,6 +1165,20 @@ Command command_data[] = {
         .tooltip = "&Bold Text",
         .statustip = "Sets text to be bold. Command: BOLD.",
         .alias = "BOLD",
+        .shortcut = ""
+    },
+    {
+        .id = ACTION_TEST,
+        .main = test_command,
+        .arguments = "",
+        .icon = "test",
+        .menu_name = "None",
+        .menu_position = 0,
+        .toolbar_name = "None",
+        .toolbar_position = 0,
+        .tooltip = "&Test",
+        .statustip = "Run a sequence of commands for QA. Command: TEST.",
+        .alias = "TEST",
         .shortcut = ""
     },
     {

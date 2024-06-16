@@ -53,7 +53,8 @@ global.numPoints;
 global.mode;
 
 /* DOLPHIN . */
-function main()
+void
+main()
 {
     init_command();
     clear_selection();
@@ -68,24 +69,29 @@ function main()
     end_command();
 }
 
-function click(x, y)
+void
+click(x, y)
 {
 }
 
-function move(x, y)
+void
+move(x, y)
 {
 }
 
-function context(str)
+void
+context(str)
 {
     todo("DOLPHIN", "context()");
 }
 
-function prompt(str)
+void
+prompt(str)
 {
 }
 
-function updateDolphin(numPts, xScale, yScale)
+void
+updateDolphin(numPts, xScale, yScale)
 {
     var i;
     var t;
@@ -248,7 +254,8 @@ global.sy = 1.0;
 global.numPoints;
 global.mode;
 
-function main()
+void
+main()
 {
     init_command();
     clear_selection();
@@ -266,43 +273,47 @@ function main()
     end_command();
 }
 
-function click(x, y)
+void
+click(x, y)
 {
 }
 
-function move(x, y)
+void
+move(x, y)
 {
 }
 
-function context(str)
+void
+context(str)
 {
     todo("HEART", "context()");
 }
 
-function prompt(str)
+void
+prompt(str)
 {
 }
 
-function updateHeart(style, numPts, xScale, yScale)
+function
+updateHeart(int style, int numPts, float xScale, float yScale)
 {
     int i;
-    float t;
-    float xx = NaN;
-    float yy = NaN;
-
     for (i = 0; i <= numPts; i++) {
-        t = (2 * embConstantPi) / numPts*i; 
+        EmbVector v;
+        float t = (2 * embConstantPi) / numPts*i; 
+        v.x = 0.0f;
+        v.y = 0.0f;
 
         if (style == "HEART4") {
-            xx = cos(t)*((sin(t)*sqrt(abs(cos(t))))/(sin(t)+7/5) - 2*sin(t) + 2);
-            yy = sin(t)*((sin(t)*sqrt(abs(cos(t))))/(sin(t)+7/5) - 2*sin(t) + 2);
+            v.x = cos(t)*((sin(t)*sqrt(abs(cos(t))))/(sin(t)+7/5) - 2*sin(t) + 2);
+            v.y = sin(t)*((sin(t)*sqrt(abs(cos(t))))/(sin(t)+7/5) - 2*sin(t) + 2);
         }
         else if (style == "HEART5") {
-            xx = 16*pow(sin(t), 3);
-            yy = 13*cos(t) - 5*cos(2*t) - 2*cos(3*t) - cos(4*t);
+            v.x = 16*pow(sin(t), 3);
+            v.y = 13*cos(t) - 5*cos(2*t) - 2*cos(3*t) - cos(4*t);
         }
 
-        setRubberPoint("POLYGON_POINT_" + i.toString(), xx*xScale, yy*yScale);
+        setRubberPoint("POLYGON_POINT_" + i.toString(), v.x*xScale, v.y*yScale);
     }
 
     setRubberText("POLYGON_NUM_POINTS", numPts.toString());
@@ -328,7 +339,8 @@ global.sy = 0.04; //Default
 global.numPoints;
 global.mode;
 
-function main()
+void
+main()
 {
     initCommand();
     clearSelection();
@@ -351,7 +363,8 @@ void move(EmbVector v)
 {
 }
 
-function context(str)
+void
+context(str)
 {
     todo("SNOWFLAKE", "context()");
 }
@@ -1038,7 +1051,8 @@ global.x2;
 global.y2;
 global.mode;
 
-function main()
+void
+main()
 {
     init_command();
     clear_selection();
@@ -1052,7 +1066,8 @@ function main()
     setPromptPrefix(qsTr("Enter number of star points") + " {" + global.numPoints.toString() + "}: ");
 }
 
-function click(x, y)
+void
+click(x, y)
 {
     if (global.mode == global.mode_NUM_POINTS) {
         //Do nothing, the prompt controls this.
@@ -1084,7 +1099,8 @@ function click(x, y)
     }
 }
 
-function move(x, y)
+void
+move(x, y)
 {
     if (global.mode == global.mode_NUM_POINTS) {
         //Do nothing, the prompt controls this.
@@ -1100,7 +1116,8 @@ function move(x, y)
     }
 }
 
-function context(str)
+void
+context(str)
 {
     todo("STAR", "context()");
 }

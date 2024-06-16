@@ -93,8 +93,7 @@ MdiWindow::~MdiWindow()
 bool
 MdiWindow::saveFile(const QString &fileName)
 {
-    SaveObject saveObj(gscene, this);
-    return saveObj.save(fileName);
+    return pattern_save(pattern, qPrintable(fileName));
 }
 
 bool

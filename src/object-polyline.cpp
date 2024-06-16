@@ -48,7 +48,7 @@ function main()
     global.prevX = NaN;
     global.prevY = NaN;
     global.num = 0;
-    setPromptPrefix(qsTr("Specify first point: "));
+    prompt_output(qsTr("Specify first point: "));
 }
 
 function click(EmbVector v)
@@ -61,7 +61,7 @@ function click(EmbVector v)
         setRubberMode("POLYLINE");
         setRubberPoint("POLYLINE_POINT_0", global.first.x, global.first.y);
         appendPromptHistory();
-        setPromptPrefix(qsTr("Specify next point or [Undo]: "));
+        prompt_output(qsTr("Specify next point or [Undo]: "));
     }
     else {
         global.num++;
@@ -83,7 +83,7 @@ function prompt(str)
     if (global.firstRun) {
         if (!parse_vector(str, v)) {
             alert(qsTr("Invalid point."));
-            setPromptPrefix(qsTr("Specify first point: "));
+            prompt_output(qsTr("Specify first point: "));
         }
         else {
             global.firstRun = false;
@@ -92,7 +92,7 @@ function prompt(str)
             addRubber("POLYLINE");
             setRubberMode("POLYLINE");
             setRubberPoint("POLYLINE_POINT_0", global.first.x, global.first.y);
-            setPromptPrefix(qsTr("Specify next point or [Undo]: "));
+            prompt_output(qsTr("Specify next point or [Undo]: "));
         }
     }
     else {
@@ -103,7 +103,7 @@ function prompt(str)
         else {
             if (!parse_vector(str, v)) {
                 alert(qsTr("Point or option keyword required."));
-                setPromptPrefix(qsTr("Specify next point or [Undo]: "));
+                prompt_output(qsTr("Specify next point or [Undo]: "));
             }
             else {
                 global.num++;
@@ -111,7 +111,7 @@ function prompt(str)
                 setRubberText("POLYLINE_NUM_POINTS", global.num.toString());
                 spareRubber("POLYLINE");
                 global.prev = v;
-                setPromptPrefix(qsTr("Specify next point or [Undo]: "));
+                prompt_output(qsTr("Specify next point or [Undo]: "));
             }
         }
     }

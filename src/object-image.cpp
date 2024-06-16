@@ -148,7 +148,7 @@ find_mouse_snap_point(QList<QPointF> snap_points, const QPointF& mouse_point)
     float closest = 1.0e10;
     QPointF result = snap_points[0];
     int i;
-    for (i=0; i<snap_point.count(); i++) {
+    for (i=0; i<snap_points.count(); i++) {
         float distance = QLineF(snap_points[i], mouse_point).length();
         if (distance < closest) {
             closest = distance;
