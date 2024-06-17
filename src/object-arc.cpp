@@ -26,18 +26,17 @@ arc_command(ScriptEnv *context)
     return script_null;
 }
 
-ArcObject::ArcObject(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+ArcObject::ArcObject(EmbArc arc, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("ArcObject Constructor()");
-    init(startX, startY, midX, midY, endX, endY, rgb, Qt::SolidLine); //TODO: getCurrentLineType
+    init(arc, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
 ArcObject::ArcObject(ArcObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("ArcObject Constructor()");
-    if (obj)
-    {
-        init(obj->objectStartX(), obj->objectStartY(), obj->objectMidX(), obj->objectMidY(), obj->objectEndX(), obj->objectEndY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+    if (obj) {
+        init(arc, obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
     }
 }
@@ -47,7 +46,7 @@ ArcObject::~ArcObject()
     qDebug("ArcObject Destructor()");
 }
 
-void ArcObject::init(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY, QRgb rgb, Qt::PenStyle lineType)
+void ArcObject::init(EmbArc arc, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_ARC);
@@ -57,7 +56,7 @@ void ArcObject::init(qreal startX, qreal startY, qreal midX, qreal midY, qreal e
     //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
-    calculateArcData(startX, startY, midX, midY, endX, endY);
+    calculateArcData(arc);
 
     setObjectColor(rgb);
     setObjectLineType(lineType);
@@ -65,26 +64,17 @@ void ArcObject::init(qreal startX, qreal startY, qreal midX, qreal midY, qreal e
     setPen(objectPen());
 }
 
-void ArcObject::calculateArcData(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY)
+void ArcObject::calculateArcData(EmbArc arc)
 {
-    double centerX;
-    double centerY;
-    EmbArc arc;
-    arc.start.x = startX;
-    arc.start.y = startY;
-    arc.mid.x = midX;
-    arc.mid.y = midY;
-    arc.end.x = endX;
-    arc.end.y = endY;
     EmbVector center = emb_arc_center(arc);
 
-    arcStartPoint = QPointF(startX - centerX, startY - centerY);
-    arcMidPoint   = QPointF(midX   - centerX, midY   - centerY);
-    arcEndPoint   = QPointF(endX   - centerX, endY   - centerY);
+    arcStartPoint = to_qpointf(emb_vector_subtract(arc.start, center));
+    arcMidPoint = to_qpointf(emb_vector_subtract(arc.mid, center));
+    arcEndPoint = to_qpointf(emb_vector_subtract(arc.end, center));
 
-    setPos(centerX, centerY);
+    setPos(center.x, center.y);
 
-    qreal radius = QLineF(centerX, centerY, midX, midY).length();
+    qreal radius = emb_vector_distance(center, arc.mid);
     updateArcRect(radius);
     updatePath();
     setRotation(0);
@@ -110,25 +100,9 @@ void ArcObject::setObjectCenter(qreal pointX, qreal pointY)
     setPos(pointX, pointY);
 }
 
-void ArcObject::setObjectCenterX(qreal pointX)
-{
-    setX(pointX);
-}
-
-void ArcObject::setObjectCenterY(qreal pointY)
-{
-    setY(pointY);
-}
-
 void ArcObject::setObjectRadius(qreal radius)
 {
-    qreal rad;
-    if (radius <= 0)
-    {
-        rad = 0.0000001;
-    }
-    else
-        rad = radius;
+    qreal rad = EMB_MAX(radius, 0.0000001);
 
     QPointF center = scenePos();
     QLineF startLine = QLineF(center, objectStartPoint());
@@ -140,8 +114,12 @@ void ArcObject::setObjectRadius(qreal radius)
     arcStartPoint = startLine.p2();
     arcMidPoint = midLine.p2();
     arcEndPoint = endLine.p2();
+    EmbArc arc;
+    arc.start = to_emb_vector(arcStartPoint);
+    arc.mid = to_emb_vector(arcMidPoint);
+    arc.end = to_emb_vector(arcEndPoint);
 
-    calculateArcData(arcStartPoint.x(), arcStartPoint.y(), arcMidPoint.x(), arcMidPoint.y(), arcEndPoint.x(), arcEndPoint.y());
+    calculateArcData(arc);
 }
 
 void ArcObject::setObjectStartAngle(qreal angle)
@@ -161,7 +139,11 @@ void ArcObject::setObjectStartPoint(const QPointF& point)
 
 void ArcObject::setObjectStartPoint(qreal pointX, qreal pointY)
 {
-    calculateArcData(pointX, pointY, arcMidPoint.x(), arcMidPoint.y(), arcEndPoint.x(), arcEndPoint.y());
+    arc.start.x = pointX;
+    arc.start.y = pointY;
+    arc.mid = to_emb_vector(arcMidPoint);
+    arc.end = to_emb_vector(arcEndPoint);
+    calculateArcData(arc);
 }
 
 void ArcObject::setObjectMidPoint(const QPointF& point)
@@ -171,7 +153,11 @@ void ArcObject::setObjectMidPoint(const QPointF& point)
 
 void ArcObject::setObjectMidPoint(qreal pointX, qreal pointY)
 {
-    calculateArcData(arcStartPoint.x(), arcStartPoint.y(), pointX, pointY, arcEndPoint.x(), arcEndPoint.y());
+    arc.start = to_emb_vector(arcStartPoint);
+    arc.mid.x = pointX;
+    arc.mid.y = pointY;
+    arc.end = to_emb_vector(arcEndPoint);
+    calculateArcData(arc);
 }
 
 void ArcObject::setObjectEndPoint(const QPointF& point)
@@ -181,36 +167,23 @@ void ArcObject::setObjectEndPoint(const QPointF& point)
 
 void ArcObject::setObjectEndPoint(qreal pointX, qreal pointY)
 {
-    calculateArcData(arcStartPoint.x(), arcStartPoint.y(), arcMidPoint.x(), arcMidPoint.y(), pointX, pointY);
+    arc.start = to_emb_vector(arcStartPoint);
+    arc.mid = to_emb_vector(arcMidPoint);
+    arc.end.x = pointX;
+    arc.end.y = pointY;
+    calculateArcData(arc);
 }
 
 qreal ArcObject::objectStartAngle() const
 {
     qreal angle = QLineF(scenePos(), objectStartPoint()).angle();
-    while(angle >= 360.0) { angle -= 360.0; }
-    while(angle < 0.0)    { angle += 360.0; }
-    return angle;
+    return fmod(angle+360.0, 360.0);
 }
 
 qreal ArcObject::objectEndAngle() const
 {
     qreal angle = QLineF(scenePos(), objectEndPoint()).angle();
-    while(angle >= 360.0) { angle -= 360.0; }
-    while(angle < 0.0)    { angle += 360.0; }
-    return angle;
-}
-
-QPointF
-scale_and_rotate(QPointF v, qreal scale, qreal angle)
-{
-    qreal rot = radians(angle);
-    qreal cosRot = cos(rot);
-    qreal sinRot = sin(rot);
-    qreal x = v.x() * scale;
-    qreal y = v.y() * scale;
-    qreal rotX = x*cosRot - y*sinRot;
-    qreal rotY = x*sinRot + y*cosRot;
-    return QPointF(rotX, rotY);    
+    return fmod(angle+360.0, 360.0);
 }
 
 QPointF ArcObject::objectStartPoint() const
@@ -218,44 +191,14 @@ QPointF ArcObject::objectStartPoint() const
     return scenePos() + scale_and_rotate(arcStartPoint, scale(), rotation());
 }
 
-qreal ArcObject::objectStartX() const
-{
-    return objectStartPoint().x();
-}
-
-qreal ArcObject::objectStartY() const
-{
-    return objectStartPoint().y();
-}
-
 QPointF ArcObject::objectMidPoint() const
 {
     return scenePos() + scale_and_rotate(arcMidPoint, scale(), rotation());
 }
 
-qreal ArcObject::objectMidX() const
-{
-    return objectMidPoint().x();
-}
-
-qreal ArcObject::objectMidY() const
-{
-    return objectMidPoint().y();
-}
-
 QPointF ArcObject::objectEndPoint() const
 {
     return scenePos() + scale_and_rotate(arcEndPoint, scale(), rotation());
-}
-
-qreal ArcObject::objectEndX() const
-{
-    return objectEndPoint().x();
-}
-
-qreal ArcObject::objectEndY() const
-{
-    return objectEndPoint().y();
 }
 
 qreal ArcObject::objectArea() const
@@ -273,7 +216,7 @@ qreal ArcObject::objectArcLength() const
 
 qreal ArcObject::objectChord() const
 {
-    return QLineF(objectStartX(), objectStartY(), objectEndX(), objectEndY()).length();
+    return QLineF(objectStartPoint(), objectEndPoint()).length();
 }
 
 qreal ArcObject::objectIncludedAngle() const
@@ -285,8 +228,8 @@ qreal ArcObject::objectIncludedAngle() const
     //NOTE: Due to floating point rounding errors, we need to clamp the quotient so it is in the range [-1, 1]
     //      If the quotient is out of that range, then the result of asin() will be NaN.
     qreal quotient = chord/(2.0*rad);
-    if (quotient > 1.0) quotient = 1.0;
-    if (quotient < 0.0) quotient = 0.0; //NOTE: 0 rather than -1 since we are enforcing a positive chord and radius
+    quotient = EMB_MIN(1.0, quotient);
+    quotient = EMB_MAX(0.0, quotient); //NOTE: 0 rather than -1 since we are enforcing a positive chord and radius
     return degrees(2.0*asin(quotient)); //Properties of a Circle - Get the Included Angle - Reference: ASD9
 }
 
@@ -294,12 +237,12 @@ bool ArcObject::objectClockwise() const
 {
     //NOTE: Y values are inverted here on purpose
     EmbArc arc;
-    arc.start.x = objectStartX();
-    arc.start.x = -objectStartY();
-    arc.mid.x = objectMidX();
-    arc.mid.x = -objectMidY();
-    arc.end.x = objectEndX();
-    arc.end.x = -objectEndY();
+    arc.start = to_emb_vector(objectStartPoint());
+    arc.start.y = -arc.start.y;
+    arc.mid = to_emb_vector(objectMidPoint());
+    arc.mid.y = -arc.start.y;
+    arc.end = to_emb_vector(objectEndPoint());
+    arc.end.y = -arc.end.y;
     if (emb_arc_clockwise(arc)) {
         return true;
     }

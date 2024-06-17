@@ -6,7 +6,7 @@
  * Visit https://www.libembroidery.org/refman for advice on altering this file,
  * or read the markdown version in embroidermodder2/docs/refman.
  *
- * View Commands
+ * POLYLINE Command
  */
 
 #include "embroidermodder.h"
@@ -16,9 +16,7 @@
 #include <QGraphicsScene>
 #include <QMessageBox>
 
-/* NOTE: main() is run every time the command is started.
- *       Use it to reset variables so they are ready to go.
- */
+/* POLYLINE. */
 ScriptValue
 polyline_command(ScriptEnv * context)
 {
@@ -48,7 +46,7 @@ function main()
     global.prevX = NaN;
     global.prevY = NaN;
     global.num = 0;
-    prompt_output(qsTr("Specify first point: "));
+    prompt_output(translate("Specify first point: "));
 }
 
 function click(EmbVector v)
@@ -60,15 +58,13 @@ function click(EmbVector v)
         addRubber("POLYLINE");
         setRubberMode("POLYLINE");
         setRubberPoint("POLYLINE_POINT_0", global.first.x, global.first.y);
-        appendPromptHistory();
-        prompt_output(qsTr("Specify next point or [Undo]: "));
+        prompt_output(translate("Specify next point or [Undo]: "));
     }
     else {
         global.num++;
         setRubberPoint("POLYLINE_POINT_" + global.num.toString(), v.x, v.y);
         setRubberText("POLYLINE_NUM_POINTS", global.num.toString());
         spareRubber("POLYLINE");
-        appendPromptHistory();
         global.prev = v;
     }
 }
@@ -82,8 +78,8 @@ function prompt(str)
 {
     if (global.firstRun) {
         if (!parse_vector(str, v)) {
-            alert(qsTr("Invalid point."));
-            prompt_output(qsTr("Specify first point: "));
+            alert(translate("Invalid point."));
+            prompt_output(translate("Specify first point: "));
         }
         else {
             global.firstRun = false;
@@ -92,18 +88,18 @@ function prompt(str)
             addRubber("POLYLINE");
             setRubberMode("POLYLINE");
             setRubberPoint("POLYLINE_POINT_0", global.first.x, global.first.y);
-            prompt_output(qsTr("Specify next point or [Undo]: "));
+            prompt_output(translate("Specify next point or [Undo]: "));
         }
     }
     else {
         if (str == "U" || str == "UNDO") {
-            /* TODO: Probably should add additional qsTr calls here. */
+            /* TODO: Probably should add additional translate calls here. */
             todo("POLYLINE", "prompt() for UNDO");
         }
         else {
             if (!parse_vector(str, v)) {
-                alert(qsTr("Point or option keyword required."));
-                prompt_output(qsTr("Specify next point or [Undo]: "));
+                alert(translate("Point or option keyword required."));
+                prompt_output(translate("Specify next point or [Undo]: "));
             }
             else {
                 global.num++;
@@ -111,7 +107,7 @@ function prompt(str)
                 setRubberText("POLYLINE_NUM_POINTS", global.num.toString());
                 spareRubber("POLYLINE");
                 global.prev = v;
-                prompt_output(qsTr("Specify next point or [Undo]: "));
+                prompt_output(translate("Specify next point or [Undo]: "));
             }
         }
     }

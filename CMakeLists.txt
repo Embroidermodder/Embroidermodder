@@ -61,6 +61,7 @@ qt_add_executable(embroidermodder2
 	${SRC}/imagewidget.cpp
 	${SRC}/layer-commands.cpp
 	${SRC}/layer-manager.cpp
+	${SRC}/geometry.cpp
 	${SRC}/main.cpp
 	${SRC}/mainwindow.cpp
 	${SRC}/mainwindow-actions.cpp

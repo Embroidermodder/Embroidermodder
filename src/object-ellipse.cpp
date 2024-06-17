@@ -14,100 +14,80 @@
 #include <QStyleOption>
 #include <QGraphicsScene>
 
-#define ELLIPSE_MODE_MAJORDIAMETER_MINORRADIUS  0
-#define ELLIPSE_MODE_MAJORRADIUS_MINORRADIUS    1
-#define ELLIPSE_MODE_ELLIPSE_ROTATION           2
+#define ELLIPSE_MODE_MAJDIA_MINRAD_ONE     0
+#define ELLIPSE_MODE_MAJDIA_MINRAD_TWO     1
+#define ELLIPSE_MODE_MAJDIA_MINRAD_THREE   2
+#define ELLIPSE_MODE_MAJRAD_MINRAD_ONE     3
+#define ELLIPSE_MODE_MAJRAD_MINRAD_TWO     4
+#define ELLIPSE_MODE_MAJRAD_MINRAD_THREE   5
+#define ELLIPSE_MODE_ROTATION              6
+#define ELLIPSE_MODE_NEUTRAL               7
 
 /* ELLIPSE */
 ScriptValue
 ellipse_command(ScriptEnv *context)
 {
-    init_command();
-    clear_selection();
+    switch (context->mode) {
+    default:
+    case CONTEXT_MAIN:
+        init_command();
+        clear_selection();
 
-    end_command();
-    return script_null;
-}
-
-ScriptValue
-ellipse_click(ScriptEnv* /* context */)
-{
-
-    end_command();
-    return script_null;
-}
-
-ScriptValue
-ellipse_context(ScriptEnv* /* context */)
-{
-
-    end_command();
-    return script_null;
-}
-
-ScriptValue
-ellipse_prompt(ScriptEnv* /* context */)
-{
-
-    end_command();
+        end_command();
+        break;
+    case CONTEXT_PROMPT:
+        end_command();
+        break;
+    case CONTEXT_CONTEXT:
+        end_command();
+        break;
+    case CONTEXT_CLICK:
+        end_command();
+        break;
+    }
     return script_null;
 }
 
 #if 0
-var global = {}; //Required
-global.x1;
-global.y1;
-global.x2;
-global.y2;
-global.x3;
-global.y3;
-global.cx;
-global.cy;
-global.width;
-global.height;
+global.ellipse;
 global.rot;
 global.mode;
 
 function main()
 {
-    initCommand();
-    clearSelection();
-    global.mode = global.mode_MAJORDIAMETER_MINORRADIUS;
-    global.x1      = NaN;
-    global.y1      = NaN;
-    global.x2      = NaN;
-    global.y2      = NaN;
-    global.x3      = NaN;
-    global.y3      = NaN;
-    prompt_output(qsTr("Specify first axis start point or [Center]: "));
+    init_command();
+    clear_selection();
+    global.mode = ELLIPSE_MODE_MAJDIA_MINRAD_ONE;
+    global.point1 = zero_vector;
+    global.point2 = zero_vector;
+    global.point3 = zero_vector;
+    prompt_output(translate("Specify first axis start point or [Center]: "));
 }
 
-function click(x, y)
+function click(EmbVector v)
 {
-    if (global.mode == global.mode_MAJORDIAMETER_MINORRADIUS) {
+    switch (global.mode) {
+    case ELLIPSE_MODE_MAJDIA_MINRAD: {
         if (isNaN(global.x1)) {
-            global.x1 = x;
-            global.y1 = y;
+            global.point1 = v;
             addRubber("ELLIPSE");
             setRubberMode("ELLIPSE_LINE");
             setRubberPoint("ELLIPSE_LINE_POINT1", global.x1, global.y1);
-            appendPromptHistory();
-            prompt_output(qsTr("Specify first axis end point: "));
+            prompt_output(translate("Specify first axis end point: "));
         }
         else if (isNaN(global.x2)) {
-            global.x2 = x;
-            global.y2 = y;
+            global.point2 = v;
             global.cx = (global.x1 + global.x2)/2.0;
             global.cy = (global.y1 + global.y2)/2.0;
             global.width = calculateDistance(global.x1, global.y1, global.x2, global.y2);
             global.rot = calculateAngle(global.x1, global.y1, global.x2, global.y2);
-            setRubberMode("ELLIPSE_MAJORDIAMETER_MINORRADIUS");
+            setRubberMode("ELLIPSE_MAJDIA_MINRAD");
             setRubberPoint("ELLIPSE_AXIS1_POINT1", global.x1, global.y1);
             setRubberPoint("ELLIPSE_AXIS1_POINT2", global.x2, global.y2);
             setRubberPoint("ELLIPSE_CENTER", global.cx, global.cy);
             setRubberPoint("ELLIPSE_WIDTH", global.width, 0);
             setRubberPoint("ELLIPSE_ROT", global.rot, 0);
-            prompt_output(qsTr("Specify second axis end point or [Rotation]: "));
+            prompt_output(translate("Specify second axis end point or [Rotation]: "));
         }
         else if (isNaN(global.x3)) {
             global.x3 = x;
@@ -118,61 +98,59 @@ function click(x, y)
             end_command();
         }
         else {
-            error("ELLIPSE", qsTr("This should never happen."));
+            error("ELLIPSE", translate("This should never happen."));
         }
+        break;
     }
-    else if (global.mode == global.mode_MAJORRADIUS_MINORRADIUS) {
+    case ELLIPSE_MODE_MAJRAD_MINRAD: {
         if (isNaN(global.x1)) {
-            global.x1 = x;
-            global.y1 = y;
-            global.cx = global.x1;
-            global.cy = global.y1;
+            global.point1 = v;
+            global.center = global.point1;
             addRubber("ELLIPSE");
             setRubberMode("ELLIPSE_LINE");
             setRubberPoint("ELLIPSE_LINE_POINT1", global.x1, global.y1);
             setRubberPoint("ELLIPSE_CENTER", global.cx, global.cy);
-            appendPromptHistory();
-            prompt_output(qsTr("Specify first axis end point: "));
+            prompt_output(translate("Specify first axis end point: "));
         }
         else if (isNaN(global.x2)) {
-            global.x2 = x;
-            global.y2 = y;
+            global.point2 = v;
             global.width = calculateDistance(global.cx, global.cy, global.x2, global.y2)*2.0;
             global.rot = calculateAngle(global.x1, global.y1, global.x2, global.y2);
-            setRubberMode("ELLIPSE_MAJORRADIUS_MINORRADIUS");
+            setRubberMode("ELLIPSE_MAJRAD_MINRAD");
             setRubberPoint("ELLIPSE_AXIS1_POINT2", global.x2, global.y2);
             setRubberPoint("ELLIPSE_WIDTH", global.width, 0);
             setRubberPoint("ELLIPSE_ROT", global.rot, 0);
-            appendPromptHistory();
-            prompt_output(qsTr("Specify second axis end point or [Rotation]: "));
+            prompt_output(translate("Specify second axis end point or [Rotation]: "));
         }
         else if (isNaN(global.x3)) {
-            global.x3 = x;
-            global.y3 = y;
+            global.point3 = v;
             global.height = perpendicularDistance(global.x3, global.y3, global.cx, global.cy, global.x2, global.y2)*2.0;
             setRubberPoint("ELLIPSE_AXIS2_POINT2", global.x3, global.y3);
             vulcanize();
-            appendPromptHistory();
-            endCommand();
+            end_command();
         }
         else {
-            error("ELLIPSE", qsTr("This should never happen."));
+            error("ELLIPSE", translate("This should never happen."));
         }
+        break;
     }
-    else if (global.mode == global.mode_ELLIPSE_ROTATION) {
+    case ELLIPSE_MODE_ROTATION: {
         if (isNaN(global.x1)) {
-            error("ELLIPSE", qsTr("This should never happen."));
+            error("ELLIPSE", translate("This should never happen."));
         }
         else if (isNaN(global.x2)) {
-            error("ELLIPSE", qsTr("This should never happen."));
+            error("ELLIPSE", translate("This should never happen."));
         }
         else if (isNaN(global.x3)) {
             var angle = calculateAngle(global.cx, global.cy, x, y);
             global.height = Math.cos(angle*Math.PI/180.0)*global.width;
             addEllipse(global.cx, global.cy, global.width, global.height, global.rot, false);
-            appendPromptHistory();
-            endCommand();
+            end_command();
         }
+        break;
+    }
+    default:
+        break;
     }
 }
 
@@ -183,150 +161,139 @@ function context(str)
 
 function prompt(str)
 {
-    if (global.mode == global.mode_MAJORDIAMETER_MINORRADIUS) {
-        if (isNaN(global.x1)) {
-            if (str == "C" || str == "CENTER") {
-                global.mode = global.mode_MAJORRADIUS_MINORRADIUS;
-                prompt_output(qsTr("Specify center point: "));
-            }
-            else {
-                var strList = str.split(",");
-                if (isNaN(strList[0]) || isNaN(strList[1])) {
-                    alert(qsTr("Point or option keyword required."));
-                    prompt_output(qsTr("Specify first axis start point or [Center]: "));
-                }
-                else {
-                    global.x1 = Number(strList[0]);
-                    global.y1 = Number(strList[1]);
-                    addRubber("ELLIPSE");
-                    setRubberMode("ELLIPSE_LINE");
-                    setRubberPoint("ELLIPSE_LINE_POINT1", global.x1, global.y1);
-                    prompt_output(qsTr("Specify first axis end point: "));
-                }
-            }
+    EmbVector v;
+    switch (global.mode) {
+    case ELLIPSE_MODE_MAJDIA_MINRAD_ONE: {
+        if (str == "C" || str == "CENTER") {
+            global.mode = ELLIPSE_MODE_MAJRAD_MINRAD;
+            prompt_output(translate("Specify center point: "));
+            break;
         }
-        else if (isNaN(global.x2)) {
-            var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1])) {
-                alert(qsTr("Invalid point."));
-                prompt_output(qsTr("Specify first axis end point: "));
-            }
-            else {
-                global.x2 = Number(strList[0]);
-                global.y2 = Number(strList[1]);
-                global.cx = (global.x1 + global.x2)/2.0;
-                global.cy = (global.y1 + global.y2)/2.0;
-                global.width = calculateDistance(global.x1, global.y1, global.x2, global.y2);
-                global.rot = calculateAngle(global.x1, global.y1, global.x2, global.y2);
-                setRubberMode("ELLIPSE_MAJORDIAMETER_MINORRADIUS");
-                setRubberPoint("ELLIPSE_AXIS1_POINT1", global.x1, global.y1);
-                setRubberPoint("ELLIPSE_AXIS1_POINT2", global.x2, global.y2);
-                setRubberPoint("ELLIPSE_CENTER", global.cx, global.cy);
-                setRubberPoint("ELLIPSE_WIDTH", global.width, 0);
-                setRubberPoint("ELLIPSE_ROT", global.rot, 0);
-                prompt_output(qsTr("Specify second axis end point or [Rotation]: "));
-            }
+
+        if (parse_vector(str, &v)) {
+            alert(translate("Point or option keyword required."));
+            prompt_output(translate("Specify first axis start point or [Center]: "));
         }
-        else if (isNaN(global.x3)) {
-            if (str == "R" || str == "ROTATION") {
-                global.mode = global.mode_ELLIPSE_ROTATION;
-                prompt_output(qsTr("Specify rotation: "));
-            }
-            else {
-                var strList = str.split(",");
-                if (isNaN(strList[0]) || isNaN(strList[1])) {
-                    alert(qsTr("Point or option keyword required."));
-                    prompt_output(qsTr("Specify second axis end point or [Rotation]: "));
-                }
-                else {
-                    global.x3 = Number(strList[0]);
-                    global.y3 = Number(strList[1]);
-                    global.height = perpendicularDistance(global.x3, global.y3, global.x1, global.y1, global.x2, global.y2)*2.0;
-                    setRubberPoint("ELLIPSE_AXIS2_POINT2", global.x3, global.y3);
-                    vulcanize();
-                    endCommand();
-                }
-            }
+        else {
+            global.point1 = v;
+            addRubber("ELLIPSE");
+            setRubberMode("ELLIPSE_LINE");
+            setRubberPoint("ELLIPSE_LINE_POINT1", global.x1, global.y1);
+            prompt_output(translate("Specify first axis end point: "));
+            mode = ELLIPSE_MODE_MAJDIA_MINRAD_TWO;
         }
+        break;
     }
-    else if (global.mode == global.mode_MAJORRADIUS_MINORRADIUS) {
-        if (isNaN(global.x1)) {
-            var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1])) {
-                alert(qsTr("Invalid point."));
-                prompt_output(qsTr("Specify center point: "));
-            }
-            else {
-                global.x1 = Number(strList[0]);
-                global.y1 = Number(strList[1]);
-                global.cx = global.x1;
-                global.cy = global.y1;
-                addRubber("ELLIPSE");
-                setRubberMode("ELLIPSE_LINE");
-                setRubberPoint("ELLIPSE_LINE_POINT1", global.x1, global.y1);
-                setRubberPoint("ELLIPSE_CENTER", global.cx, global.cy);
-                prompt_output(qsTr("Specify first axis end point: "));
-            }
+    case ELLIPSE_MODE_MAJDIA_MINRAD_TWO: {
+        if (parse_vector(str, &v)) {
+            alert(translate("Invalid point."));
+            prompt_output(translate("Specify first axis end point: "));
         }
-        else if (isNaN(global.x2)) {
-            var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1])) {
-                alert(qsTr("Invalid point."));
-                prompt_output(qsTr("Specify first axis end point: "));
-            }
-            else {
-                global.x2 = Number(strList[0]);
-                global.y2 = Number(strList[1]);
-                global.width = calculateDistance(global.x1, global.y1, global.x2, global.y2)*2.0;
-                global.rot = calculateAngle(global.x1, global.y1, global.x2, global.y2);
-                setRubberMode("ELLIPSE_MAJORRADIUS_MINORRADIUS");
-                setRubberPoint("ELLIPSE_AXIS1_POINT2", global.x2, global.y2);
-                setRubberPoint("ELLIPSE_WIDTH", global.width, 0);
-                setRubberPoint("ELLIPSE_ROT", global.rot, 0);
-                prompt_output(qsTr("Specify second axis end point or [Rotation]: "));
-            }
+        else {
+            global.point2 = v;
+            global.center = emb_vector_average(global.point1, global.point2);
+            global.width = calculateDistance(global.point1, global.point2);
+            global.rot = calculateAngle(global.point1, global.point2);
+            setRubberMode("ELLIPSE_MAJDIA_MINRAD");
+            setRubberPoint("ELLIPSE_AXIS1_POINT1", global.x1, global.y1);
+            setRubberPoint("ELLIPSE_AXIS1_POINT2", global.x2, global.y2);
+            setRubberPoint("ELLIPSE_CENTER", global.cx, global.cy);
+            setRubberPoint("ELLIPSE_WIDTH", global.width, 0);
+            setRubberPoint("ELLIPSE_ROT", global.rot, 0);
+            prompt_output(translate("Specify second axis end point or [Rotation]: "));
+            mode = ELLIPSE_MODE_MAJDIA_MINRAD_THREE;
         }
-        else if (isNaN(global.x3)) {
-            if (str == "R" || str == "ROTATION") {
-                global.mode = global.mode_ELLIPSE_ROTATION;
-                prompt_output(qsTr("Specify ellipse rotation: "));
-            }
-            else {
-                var strList = str.split(",");
-                if (isNaN(strList[0]) || isNaN(strList[1])) {
-                    alert(qsTr("Point or option keyword required."));
-                    prompt_output(qsTr("Specify second axis end point or [Rotation]: "));
-                }
-                else {
-                    global.x3 = Number(strList[0]);
-                    global.y3 = Number(strList[1]);
-                    global.height = perpendicularDistance(global.x3, global.y3, global.x1, global.y1, global.x2, global.y2)*2.0;
-                    setRubberPoint("ELLIPSE_AXIS2_POINT2", global.x3, global.y3);
-                    vulcanize();
-                    endCommand();
-                }
-            }
-        }
+        break;
     }
-    else if (global.mode == global.mode_ELLIPSE_ROTATION) {
-        if (isNaN(global.x1)) {
-            error("ELLIPSE", qsTr("This should never happen."));
+    case ELLIPSE_MODE_MAJDIA_MINRAD_THREE: {
+        if (str == "R" || str == "ROTATION") {
+            global.mode = ELLIPSE_MODE_ROTATION;
+            prompt_output(translate("Specify rotation: "));
+            break;
         }
-        else if (isNaN(global.x2)) {
-            error("ELLIPSE", qsTr("This should never happen."));
+
+        if (parse_vector(str, &v)) {
+            alert(translate("Point or option keyword required."));
+            prompt_output(translate("Specify second axis end point or [Rotation]: "));
         }
-        else if (isNaN(global.x3)) {
-            if (isNaN(str)) {
-                alert(qsTr("Invalid angle. Input a numeric angle or pick a point."));
-                prompt_output(qsTr("Specify rotation: "));
+        else {
+            global.point3 = v;
+            global.height = perpendicularDistance(global.x3, global.y3, global.x1, global.y1, global.x2, global.y2)*2.0;
+            setRubberPoint("ELLIPSE_AXIS2_POINT2", global.x3, global.y3);
+            vulcanize();
+            end_command();
+            global.mode = ELLIPSE_MODE_NEUTRAL;
+        }
+        break;
+    }
+    case ELLIPSE_MODE_MAJRAD_MINRAD_ONE: {
+        if (parse_vector(str, &v)) {
+            alert(translate("Invalid point."));
+            prompt_output(translate("Specify center point: "));
+        }
+        else {
+            global.point1 = v;
+            global.center = global.point1;
+            addRubber("ELLIPSE");
+            setRubberMode("ELLIPSE_LINE");
+            setRubberPoint("ELLIPSE_LINE_POINT1", global.x1, global.y1);
+            setRubberPoint("ELLIPSE_CENTER", global.cx, global.cy);
+            prompt_output(translate("Specify first axis end point: "));
+        }
+        break;
+    }
+    case ELLIPSE_MODE_MAJRAD_MINRAD_TWO: {
+        if (parse_vector(str, &v)) {
+            alert(translate("Invalid point."));
+            prompt_output(translate("Specify first axis end point: "));
+        }
+        else {
+            global.point2 = v;
+            global.width = calculateDistance(global.x1, global.y1, global.x2, global.y2)*2.0;
+            global.rot = calculateAngle(global.x1, global.y1, global.x2, global.y2);
+            setRubberMode("ELLIPSE_MAJRAD_MINRAD");
+            setRubberPoint("ELLIPSE_AXIS1_POINT2", global.x2, global.y2);
+            setRubberPoint("ELLIPSE_WIDTH", global.width, 0);
+            setRubberPoint("ELLIPSE_ROT", global.rot, 0);
+            prompt_output(translate("Specify second axis end point or [Rotation]: "));
+        }
+        break;
+    }
+    case ELLIPSE_MODE_MAJRAD_MINRAD_THREE: {
+        if (str == "R" || str == "ROTATION") {
+            global.mode = ELLIPSE_MODE_ROTATION;
+            prompt_output(translate("Specify ellipse rotation: "));
+        }
+        else {
+            if (parse_vector(str, &v)) {
+                alert(translate("Point or option keyword required."));
+                prompt_output(translate("Specify second axis end point or [Rotation]: "));
             }
             else {
-                var angle = Number(str);
-                global.height = Math.cos(angle*Math.PI/180.0)*global.width;
-                addEllipse(global.cx, global.cy, global.width, global.height, global.rot, false);
-                endCommand();
+                global.point3 = v;
+                global.height = perpendicularDistance(global.x3, global.y3, global.x1, global.y1, global.x2, global.y2)*2.0;
+                setRubberPoint("ELLIPSE_AXIS2_POINT2", global.x3, global.y3);
+                vulcanize();
+                end_command();
             }
         }
+        break;
+    }
+    case ELLIPSE_MODE_ROTATION: {
+        if (isNaN(str)) {
+            alert(translate("Invalid angle. Input a numeric angle or pick a point."));
+            prompt_output(translate("Specify rotation: "));
+        }
+        else {
+            var angle = Number(str);
+            global.height = cos(angle * embConstantPi / 180.0) * global.width;
+            addEllipse(global.center, global.width, global.height, global.rot, false);
+            end_command();
+        }
+        break;
+    }
+    default:
+        break;
     }
 }
 #endif
@@ -412,10 +379,12 @@ void EllipseObject::setObjectRadiusMinor(qreal radius)
 void EllipseObject::setObjectDiameterMajor(qreal diameter)
 {
     QRectF elRect = rect();
-    if (elRect.width() > elRect.height())
+    if (elRect.width() > elRect.height()) {
         elRect.setWidth(diameter);
-    else
+    }
+    else {
         elRect.setHeight(diameter);
+    }
     elRect.moveCenter(QPointF(0,0));
     setRect(elRect);
 }
@@ -435,8 +404,8 @@ QPointF EllipseObject::objectQuadrant0() const
 {
     qreal halfW = objectWidth()/2.0;
     qreal rot = radians(rotation());
-    qreal x = halfW*qCos(rot);
-    qreal y = halfW*qSin(rot);
+    qreal x = halfW * cos(rot);
+    qreal y = halfW * sin(rot);
     return objectCenter() + QPointF(x,y);
 }
 
@@ -444,8 +413,8 @@ QPointF EllipseObject::objectQuadrant90() const
 {
     qreal halfH = objectHeight()/2.0;
     qreal rot = radians(rotation()+90.0);
-    qreal x = halfH*qCos(rot);
-    qreal y = halfH*qSin(rot);
+    qreal x = halfH * cos(rot);
+    qreal y = halfH * sin(rot);
     return objectCenter() + QPointF(x,y);
 }
 
@@ -453,8 +422,8 @@ QPointF EllipseObject::objectQuadrant180() const
 {
     qreal halfW = objectWidth()/2.0;
     qreal rot = radians(rotation()+180.0);
-    qreal x = halfW*qCos(rot);
-    qreal y = halfW*qSin(rot);
+    qreal x = halfW * cos(rot);
+    qreal y = halfW * sin(rot);
     return objectCenter() + QPointF(x,y);
 }
 
@@ -462,8 +431,8 @@ QPointF EllipseObject::objectQuadrant270() const
 {
     qreal halfH = objectHeight()/2.0;
     qreal rot = radians(rotation()+270.0);
-    qreal x = halfH*qCos(rot);
-    qreal y = halfH*qSin(rot);
+    qreal x = halfH * cos(rot);
+    qreal y = halfH * sin(rot);
     return objectCenter() + QPointF(x,y);
 }
 
@@ -500,16 +469,20 @@ void EllipseObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
 void EllipseObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if (rubberMode == OBJ_RUBBER_ELLIPSE_LINE) {
+    switch (rubberMode) {
+    case OBJ_RUBBER_ELLIPSE_LINE: {
         QPointF sceneLinePoint1 = objectRubberPoint("ELLIPSE_LINE_POINT1");
         QPointF sceneLinePoint2 = objectRubberPoint("ELLIPSE_LINE_POINT2");
         QPointF itemLinePoint1  = mapFromScene(sceneLinePoint1);
         QPointF itemLinePoint2  = mapFromScene(sceneLinePoint2);
         QLineF itemLine(itemLinePoint1, itemLinePoint2);
-        if (painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+        if (painter) {
+            drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+        }
         updatePath();
+        break;
     }
-    else if (rubberMode == OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS) {
+    case OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS: {
         QPointF sceneAxis1Point1 = objectRubberPoint("ELLIPSE_AXIS1_POINT1");
         QPointF sceneAxis1Point2 = objectRubberPoint("ELLIPSE_AXIS1_POINT2");
         QPointF sceneCenterPoint = objectRubberPoint("ELLIPSE_CENTER");
@@ -538,10 +511,13 @@ void EllipseObject::updateRubber(QPainter* painter)
         QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
         QPointF itemAxis2Point2 = mapFromScene(sceneAxis2Point2);
         QLineF itemLine(itemCenterPoint, itemAxis2Point2);
-        if (painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+        if (painter) {
+            drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+        }
         updatePath();
+        break;
     }
-    else if (rubberMode == OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS) {
+    case OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS: {
         QPointF sceneAxis1Point2 = objectRubberPoint("ELLIPSE_AXIS1_POINT2");
         QPointF sceneCenterPoint = objectRubberPoint("ELLIPSE_CENTER");
         QPointF sceneAxis2Point2 = objectRubberPoint("ELLIPSE_AXIS2_POINT2");
@@ -569,11 +545,18 @@ void EllipseObject::updateRubber(QPainter* painter)
         QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
         QPointF itemAxis2Point2 = mapFromScene(sceneAxis2Point2);
         QLineF itemLine(itemCenterPoint, itemAxis2Point2);
-        if (painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+        if (painter) {
+            drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+        }
         updatePath();
+        break;
     }
-    else if (rubberMode == OBJ_RUBBER_GRIP) {
+    case OBJ_RUBBER_GRIP: {
         //TODO: updateRubber() gripping for EllipseObject
+        break;
+    }
+    default:
+        break;
     }
 }
 

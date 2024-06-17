@@ -233,14 +233,16 @@ void DimLeaderObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
 void DimLeaderObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if (rubberMode == OBJ_RUBBER_DIMLEADER_LINE) {
+    switch (rubberMode) {
+    case OBJ_RUBBER_DIMLEADER_LINE: {
         QPointF sceneStartPoint = objectRubberPoint("DIMLEADER_LINE_START");
         QPointF sceneQSnapPoint = objectRubberPoint("DIMLEADER_LINE_END");
 
         setObjectEndPoint1(sceneStartPoint);
         setObjectEndPoint2(sceneQSnapPoint);
+        break;
     }
-    else if (rubberMode == OBJ_RUBBER_GRIP) {
+    case OBJ_RUBBER_GRIP: {
         if (painter) {
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
             if (gripPoint == objectEndPoint1())
@@ -250,6 +252,10 @@ void DimLeaderObject::updateRubber(QPainter* painter)
             else if (gripPoint == objectMidPoint())
                 painter->drawLine(line().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
         }
+        break;
+    }
+    default:
+        break;
     }
 }
 

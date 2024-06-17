@@ -15,9 +15,7 @@
 #include <QStyleOption>
 #include <QGraphicsScene>
 
-/* NOTE: main() is run every time the command is started.
- *       Use it to reset variables so they are ready to go.
- */
+/* POINT */
 ScriptValue
 point_command(ScriptEnv * context)
 {
@@ -30,20 +28,19 @@ function main()
     init_command();
     clear_selection();
     global->firstRun = true;
-    prompt_output("TODO: Current point settings: PDMODE=?  PDSIZE=?"); //TODO: qsTr needed here when complete
-    prompt_output(qsTr("Specify first point: "));
+    prompt_output("TODO: Current point settings: PDMODE=?  PDSIZE=?"); //TODO: translate needed here when complete
+    prompt_output(translate("Specify first point: "));
 }
 
-function click(x, y)
+void
+click(EmbVector v)
 {
     if (global.firstRun) {
         global.firstRun = false;
-        appendPromptHistory();
-        prompt_output(qsTr("Specify next point: "));
+        prompt_output(translate("Specify next point: "));
         addPoint(x,y);
     }
     else {
-        appendPromptHistory();
         addPoint(x,y);
     }
 }
@@ -58,30 +55,30 @@ function prompt(str)
     EmbVector v;
     if (global->firstRun) {
         if (str == "M" || str == "MODE") {
-            //TODO: Probably should add additional qsTr calls here.
+            //TODO: Probably should add additional translate calls here.
             todo("POINT", "prompt() for PDMODE");
         }
         else if (str == "S" || str == "SIZE") {
-            //TODO: Probably should add additional qsTr calls here.
+            //TODO: Probably should add additional translate calls here.
             todo("POINT", "prompt() for PDSIZE");
         }
         if (!parse_vector(str, v)) {
-            alert(qsTr("Invalid point."));
-            prompt_output(qsTr("Specify first point: "));
+            alert(translate("Invalid point."));
+            prompt_output(translate("Specify first point: "));
         }
         else {
             global.firstRun = false;
-            prompt_output(qsTr("Specify next point: "));
+            prompt_output(translate("Specify next point: "));
             addPoint(v.x, v.y);
         }
     }
     else {
         if (!parse_vector(str, v)) {
-            alert(qsTr("Invalid point."));
-            prompt_output(qsTr("Specify next point: "));
+            alert(translate("Invalid point."));
+            prompt_output(translate("Specify next point: "));
         }
         else {
-            prompt_output(qsTr("Specify next point: "));
+            prompt_output(translate("Specify next point: "));
             addPoint(v.x, v.y);
         }
     }
@@ -185,7 +182,9 @@ QList<QPointF> PointObject::allGripPoints()
 
 void PointObject::gripEdit(const QPointF& before, const QPointF& after)
 {
-    if (before == scenePos()) { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
+    if (before == scenePos()) {
+        QPointF delta = after-before; moveBy(delta.x(), delta.y());
+    }
 }
 
 QPainterPath PointObject::objectSavePath() const

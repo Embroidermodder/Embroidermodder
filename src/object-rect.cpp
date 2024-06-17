@@ -15,9 +15,7 @@
 #include <QStyleOption>
 #include <QGraphicsScene>
 
-/* NOTE: main() is run every time the command is started.
- *       Use it to reset variables so they are ready to go.
- */
+/* RECTANGLE */
 ScriptValue
 rectangle_command(ScriptEnv * context)
 {
@@ -38,8 +36,6 @@ global.y1;
 global.x2;
 global.y2;
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
 function main()
 {
     init_command();
@@ -52,10 +48,8 @@ function main()
     prompt_output(translate("Specify first corner point or [Chamfer/Fillet]: "));
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
-function click(x, y)
+void
+click(EmbVector v)
 {
     if (global.newRect) {
         global.newRect = false;
@@ -74,28 +68,23 @@ function click(x, y)
     }
 }
 
-//NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
     todo("RECTANGLE", "context()");
 }
 
-//NOTE: prompt() is run when Enter is pressed.
-//      appendPromptHistory is automatically called before prompt()
-//      is called so calling it is only needed for erroneous input.
-//      Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
     if (str == "C" || str == "CHAMFER") {
-        //TODO: Probably should add additional qsTr calls here.
+        //TODO: Probably should add additional translate calls here.
         todo("RECTANGLE", "prompt() for CHAMFER");
     }
     else if (str == "D" || str == "DIMENSIONS") {
-        //TODO: Probably should add additional qsTr calls here.
+        //TODO: Probably should add additional translate calls here.
         todo("RECTANGLE", "prompt() for DIMENSIONS");
     }
     else if (str == "F" || str == "FILLET") {
-        //TODO: Probably should add additional qsTr calls here.
+        //TODO: Probably should add additional translate calls here.
         todo("RECTANGLE", "prompt() for FILLET");
     }
     else {

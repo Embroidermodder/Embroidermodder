@@ -81,7 +81,6 @@ click(EmbVector v)
     case POLYGON_MODE_CENTER_PT: {
         global.center = v;
         global.mode = POLYGON_MODE_POLYTYPE;
-        appendPromptHistory();
         prompt_output(translate("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
         break;
     }
@@ -89,7 +88,6 @@ click(EmbVector v)
         global.pointI = v;
         setRubberPoint("POLYGON_INSCRIBE_POINT", global.pointIX, global.pointIY);
         vulcanize();
-        appendPromptHistory();
         end_command();
         break;
     }
@@ -97,7 +95,6 @@ click(EmbVector v)
         global.pointC = v;
         setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", global.pointCX, global.pointCY);
         vulcanize();
-        appendPromptHistory();
         end_command();
         break;
     }
@@ -140,7 +137,7 @@ prompt(char *str)
     }
     case POLYGON_MODE_CENTER_PT: {
         if (str == "S" || str == "SIDELENGTH") {
-            /* TODO: Probably should add additional qsTr calls here. */
+            /* TODO: Probably should add additional translate calls here. */
             global.mode = POLYGON_MODE_SIDE_LEN;
             prompt_output(translate("Specify start point: "));
         }

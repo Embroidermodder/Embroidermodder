@@ -307,6 +307,45 @@ add_int_argument(ScriptEnv *context, int i)
     context->argumentCount++;
 }
 
+int
+parse_floats(char *line, float result[], int n)
+{
+    char substring[100];
+    char *c;
+    int i = 0;
+    int pos = 0;
+    for (c=line; *c; c++) {
+        substring[pos] = *c;
+        if (*c == ',' || *c == ' ') {
+            substring[pos] = 0;
+            result[i] = atof(substring);
+            pos = 0;
+            i++;
+            if (i > n-1) {
+                return -1;
+            }
+        }
+        else {
+            pos++;
+        }
+    }
+    substring[pos] = 0;
+    result[i] = atof(substring);
+    return i+1;
+}
+
+int
+parse_vector(char *line, EmbVector *v)
+{
+    float v_[2];
+    if (parse_floats(line, v_, 2) == 2) {
+        return 0;
+    }
+    v->x = v_[0];
+    v->y = v_[1];
+    return 1;
+}
+
 /* FIXME: parse strings arguments with quotes.
  *
  * There are 5 steps to the parsing algorithm:
@@ -378,4 +417,28 @@ command_prompt(ScriptEnv *context, const char *line)
 
     /* Call command's main. */
     return command_data[function].main(context);
+}
+
+bool
+validRGB(float r, float g, float b)
+{
+    if (isnan(r)) {
+        return false;
+    }
+    if (isnan(g)) {
+        return false;
+    }
+    if (isnan(b)) {
+        return false;
+    }
+    if (r < 0 || r > 255) {
+        return false;
+    }
+    if (g < 0 || g > 255) {
+        return false;
+    }
+    if (b < 0 || b > 255) {
+        return false;
+    }
+    return true;
 }

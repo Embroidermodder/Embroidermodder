@@ -228,9 +228,7 @@ updateDolphin(numPts, xScale, yScale)
 }
 #endif
 
-/* NOTE: main() is run every time the command is started.
- *       Use it to reset variables so they are ready to go.
- */
+/* HEART */
 ScriptValue
 heart_command(ScriptEnv * /* context */)
 {
@@ -243,24 +241,16 @@ heart_command(ScriptEnv * /* context */)
 
 
 #if 0
-//Command: Heart
-
-var global = {}; //Required
-global.numPoints = 512; //Default //TODO: min:64 max:8192
-global.cx;
-global.cy;
-global.sx = 1.0;
-global.sy = 1.0;
-global.numPoints;
-global.mode;
-
 void
 main()
 {
     init_command();
     clear_selection();
-    global.cx = NaN;
-    global.cy = NaN;
+    global.numPoints = 512; //Default //TODO: min:64 max:8192
+    global.center.x = NaN;
+    global.center.y = NaN;
+    global.scale.x = 1.0;
+    global.scale.y = 1.0;
     global.mode = global.mode_NUM_POINTS;
 
     //Heart4: 10.0 / 512
@@ -294,7 +284,7 @@ prompt(str)
 {
 }
 
-function
+void
 updateHeart(int style, int numPts, float xScale, float yScale)
 {
     int i;
@@ -1039,16 +1029,10 @@ star_command(ScriptEnv * context)
 }
 
 #if 0
-//Command: Star
-
-var global = {}; //Required
 global.numPoints = 5; //Default
-global.cx;
-global.cy;
-global.x1;
-global.y1;
-global.x2;
-global.y2;
+global.center;
+global.point1;
+global.point2;
 global.mode;
 
 void
@@ -1056,46 +1040,47 @@ main()
 {
     init_command();
     clear_selection();
-    global.cx       = NaN;
-    global.cy       = NaN;
-    global.x1       = NaN;
-    global.y1       = NaN;
-    global.x2       = NaN;
-    global.y2       = NaN;
+    global.center = NaN;
+    global.point1 = NaN;
+    global.point2 = NaN;
     global.mode = STAR_MODE_NUM_POINTS;
-    setPromptPrefix(qsTr("Enter number of star points") + " {" + global.numPoints.toString() + "}: ");
+    prompt_output(translate("Enter number of star points") + " {" + global.numPoints.toString() + "}: ");
 }
 
 void
-click(x, y)
+click(EmbVector v)
 {
-    if (global.mode == global.mode_NUM_POINTS) {
+    switch (global.mode) {
+    default:
+    case STAR_MODE_NUM_POINTS: {
         //Do nothing, the prompt controls this.
+        break;
     }
-    else if (global.mode == global.mode_CENTER_PT) {
-        global.cx = x;
-        global.cy = y;
+    case STAR_MODE_CENTER_PT: {
+        global.center = v;
         global.mode = global.mode_RAD_OUTER;
-        setPromptPrefix(qsTr("Specify outer radius of star: "));
+        prompt_output(translate("Specify outer radius of star: "));
         addRubber("POLYGON");
         setRubberMode("POLYGON");
         updateStar(global.cx, global.cy);
         enableMoveRapidFire();
+        break;
     }
-    else if (global.mode == global.mode_RAD_OUTER) {
-        global.x1 = x;
-        global.y1 = y;
+    case STAR_MODE_RAD_OUTER: {
+        global.point1 = v;
         global.mode = global.mode_RAD_INNER;
-        setPromptPrefix(qsTr("Specify inner radius of star: "));
+        prompt_output(translate("Specify inner radius of star: "));
         updateStar(global.x1, global.y1);
+        break;
     }
-    else if (global.mode == global.mode_RAD_INNER) {
-        global.x2 = x;
-        global.y2 = y;
+    case STAR_MODE_RAD_INNER: {
+        global.point2 = v;
         disableMoveRapidFire();
         updateStar(global.x2, global.y2);
         spareRubber("POLYGON");
-        endCommand();
+        end_command();
+        break;
+    }
     }
 }
 
@@ -1128,34 +1113,32 @@ prompt(char *str)
     switch (global.mode) {
     case STAR_MODE_NUM_POINTS: {
         if (str == "" && global.numPoints >= 3 && global.numPoints <= 1024) {
-            setPromptPrefix(qsTr("Specify center point: "));
+            prompt_output(translate("Specify center point: "));
             global.mode = global.mode_CENTER_PT;
         }
         else {
             var tmp = Number(str);
             if (isNaN(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024) {
-                alert(qsTr("Requires an integer between 3 and 1024."));
-                setPromptPrefix(qsTr("Enter number of star points") + " {" + global.numPoints.toString() + "}: ");
+                alert(translate("Requires an integer between 3 and 1024."));
+                prompt_output(translate("Enter number of star points") + " {" + global.numPoints.toString() + "}: ");
             }
             else {
                 global.numPoints = tmp;
-                setPromptPrefix(qsTr("Specify center point: "));
+                prompt_output(translate("Specify center point: "));
                 global.mode = global.mode_CENTER_PT;
             }
         }
         break;
     }
     case STAR_MODE_CENTER_PT: {
-        var strList = str.split(",");
-        if (isNaN(strList[0]) || isNaN(strList[1])) {
-            alert(qsTr("Invalid point."));
-            setPromptPrefix(qsTr("Specify center point: "));
+        if (!parse_vector(str, &v)) {
+            alert(translate("Invalid point."));
+            prompt_output(translate("Specify center point: "));
         }
         else {
-            global.cx = Number(strList[0]);
-            global.cy = Number(strList[1]);
+            global.center = v;
             global.mode = global.mode_RAD_OUTER;
-            setPromptPrefix(qsTr("Specify outer radius of star: "));
+            prompt_output(translate("Specify outer radius of star: "));
             addRubber("POLYGON");
             setRubberMode("POLYGON");
             updateStar(qsnapX(), qsnapY());
@@ -1164,29 +1147,25 @@ prompt(char *str)
         break;
     }
     case STAR_MODE_RAD_OUTER: {
-        var strList = str.split(",");
-        if (isNaN(strList[0]) || isNaN(strList[1])) {
-            alert(qsTr("Invalid point."));
-            setPromptPrefix(qsTr("Specify outer radius of star: "));
+        if (!parse_vector(str, &v)) {
+            alert(translate("Invalid point."));
+            prompt_output(translate("Specify outer radius of star: "));
         }
         else {
-            global.x1 = Number(strList[0]);
-            global.y1 = Number(strList[1]);
+            global.point1 = v;
             global.mode = global.mode_RAD_INNER;
-            setPromptPrefix(qsTr("Specify inner radius of star: "));
+            prompt_output(translate("Specify inner radius of star: "));
             updateStar(qsnapX(), qsnapY());
         }
         break;
     }
     case STAR_MODE_RAD_INNER: {
-        var strList = str.split(",");
-        if (isNaN(strList[0]) || isNaN(strList[1])) {
-            alert(qsTr("Invalid point."));
-            setPromptPrefix(qsTr("Specify inner radius of star: "));
+        if (!parse_vector(str, &v)) {
+            alert(translate("Invalid point."));
+            prompt_output(translate("Specify inner radius of star: "));
         }
         else {
-            global.x2 = Number(strList[0]);
-            global.y2 = Number(strList[1]);
+            global.point2 = v;
             disableMoveRapidFire();
             updateStar(global.x2, global.y2);
             spareRubber("POLYGON");

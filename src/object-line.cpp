@@ -15,9 +15,7 @@
 #include <QStyleOption>
 #include <QGraphicsScene>
 
-/* NOTE: main() is run every time the command is started.
- *       Use it to reset variables so they are ready to go.
- */
+/* LINE */
 ScriptValue
 line_command(ScriptEnv * context)
 {
@@ -37,10 +35,8 @@ function main()
     init_command();
     clear_selection();
     global.firstRun = true;
-    global.firstX = NaN;
-    global.firstY = NaN;
-    global.prevX = NaN;
-    global.prevY = NaN;
+    global.first = zero_vector;
+    global.prev = zero_vector;
     prompt_output(translate("Specify first point: "));
 }
 
@@ -54,7 +50,6 @@ click(EmbVector v)
         addRubber("LINE");
         setRubberMode("LINE");
         setRubberPoint("LINE_START", global.first.x, global.first.y);
-        appendPromptHistory();
         prompt_output(translate("Specify next point or [Undo]: "));
     }
     else {
@@ -63,7 +58,6 @@ click(EmbVector v)
         addRubber("LINE");
         setRubberMode("LINE");
         setRubberPoint("LINE_START", v.x, v.y);
-        appendPromptHistory();
         global.prev = v;
     }
 }
@@ -93,7 +87,7 @@ function prompt(str)
     }
     else {
         if (str == "U" || str == "UNDO") {
-            /* TODO: Probably should add additional qsTr calls here. */
+            /* TODO: Probably should add additional translate calls here. */
             todo("LINE", "prompt() for UNDO");
         }
         else {
@@ -293,9 +287,16 @@ QList<QPointF> LineObject::allGripPoints()
 
 void LineObject::gripEdit(const QPointF& before, const QPointF& after)
 {
-    if     (before == objectEndPoint1()) { setObjectEndPoint1(after); }
-    else if (before == objectEndPoint2()) { setObjectEndPoint2(after); }
-    else if (before == objectMidPoint())  { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
+    if (before == objectEndPoint1()) {
+        setObjectEndPoint1(after);
+    }
+    else if (before == objectEndPoint2()) {
+        setObjectEndPoint2(after);
+    }
+    else if (before == objectMidPoint()) {
+        QPointF delta = after-before;
+        moveBy(delta.x(), delta.y());
+    }
 }
 
 QPainterPath LineObject::objectSavePath() const

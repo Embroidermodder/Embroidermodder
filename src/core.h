@@ -247,7 +247,8 @@ OBJ_TYPE_RECTANGLE    = 100025,
 OBJ_TYPE_SLOT         = 100026,
 OBJ_TYPE_SPLINE       = 100027,
 OBJ_TYPE_TEXTMULTI    = 100028,
-OBJ_TYPE_TEXTSINGLE   = 100029
+OBJ_TYPE_TEXTSINGLE   = 100029,
+OBJ_TYPE_UNKNOWN      = 100029
 };
 
 //OBJ_NAME_VALUES
@@ -475,6 +476,11 @@ int script_set_real(ScriptEnv *context, const char *label, double r);
 void prompt_output(const char *);
 int argument_checks(ScriptEnv *context, char *function, const char *args);
 char *translate(char *msg);
+
+int parse_floats(char *line, float result[], int n);
+int parse_vector(char *line, EmbVector *v);
+bool validRGB(float r, float g, float b);
+void reportDistance(EmbVector a, EmbVector b);
 
 /* MainWindow calls */
 void init_command(void);

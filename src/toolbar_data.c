@@ -10,10 +10,16 @@
  */
 
 const char *toolbars_show_no_files[] = {
+    "File",
+    "Edit",
     "END"
 };
 
 const char *toolbars_show_with_files[] = {
+    "File",
+    "Edit",
+    "View",
+    "Draw",
     "END"
 };
 
@@ -22,5 +28,13 @@ const char *file_toolbar[] = {
 };
 
 const char *edit_toolbar[] = {
+    "END"
+};
+
+const char *view_toolbar[] = {
+    "END"
+};
+
+const char *draw_toolbar[] = {
     "END"
 };

@@ -16,9 +16,7 @@
 #include <QGraphicsScene>
 #include <QMessageBox>
 
-/* NOTE: main() is run every time the command is started.
- *       Use it to reset variables so they are ready to go.
- */
+/* PATH */
 ScriptValue
 path_command(ScriptEnv * /* context */)
 {
@@ -34,8 +32,6 @@ bool firstRun;
 EmbVector first;
 EmbVector prev;
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
 function main()
 {
     initCommand();
@@ -45,7 +41,7 @@ function main()
     global.firstY = NaN;
     global.prevX = NaN;
     global.prevY = NaN;
-    prompt_output(qsTr("Specify start point: "));
+    prompt_output(translate("Specify start point: "));
 }
 
 function click(EmbVector v)
@@ -55,7 +51,7 @@ function click(EmbVector v)
         global.first = v;
         global.prev = v;
         addPath(v.x, v.y);
-        prompt_output(qsTr("Specify next point or [Arc/Undo]: "));
+        prompt_output(translate("Specify next point or [Arc/Undo]: "));
     }
     else {
         appendLineToPath(x,y);
@@ -73,17 +69,17 @@ function
 prompt(str)
 {
     if (str == "A" || str == "ARC") {
-        //TODO: Probably should add additional qsTr calls here.
+        //TODO: Probably should add additional translate calls here.
         todo("PATH", "prompt() for ARC");
     }
     else if (str == "U" || str == "UNDO") {
-        //TODO: Probably should add additional qsTr calls here.
+        //TODO: Probably should add additional translate calls here.
         todo("PATH", "prompt() for UNDO");
     }
     else {
         if (!parse_vector(str, &v)) {
-            alert(qsTr("Point or option keyword required."));
-            prompt_output(qsTr("Specify next point or [Arc/Undo]: "));
+            alert(translate("Point or option keyword required."));
+            prompt_output(translate("Specify next point or [Arc/Undo]: "));
         }
         else {
             if (global.firstRun) {
@@ -91,7 +87,7 @@ prompt(str)
                 global.first = v;
                 global.prev = v;
                 addPath(v.x, v.y);
-                prompt_output(qsTr("Specify next point or [Arc/Undo]: "));
+                prompt_output(translate("Specify next point or [Arc/Undo]: "));
             }
             else {
                 appendLineToPath(v.x, v.y);

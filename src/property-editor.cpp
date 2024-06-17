@@ -1,3 +1,14 @@
+/*
+ * Embroidermodder 2.
+ *
+ * Copyright 2011-2024 The Embroidermodder Team
+ * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+ * Visit https://www.libembroidery.org/refman for advice on altering this file,
+ * or read the markdown version in embroidermodder2/docs/refman.
+ *
+ * PropertyEditor
+ */
+
 #include <QApplication>
 #include <QComboBox>
 #include <QFontComboBox>
@@ -451,19 +462,19 @@ PropertyEditor::~PropertyEditor()
 
 bool PropertyEditor::eventFilter(QObject *obj, QEvent *event)
 {
-    if (event->type() == QEvent::KeyPress)
-    {
+    if (event->type() == QEvent::KeyPress) {
         QKeyEvent* pressedKey = (QKeyEvent*)event;
         int key = pressedKey->key();
-        switch(key)
-        {
-            case Qt::Key_Escape:
-                if (focusWidget)
-                    focusWidget->setFocus(Qt::OtherFocusReason);
-                return true;
-                break;
-            default:
-                pressedKey->ignore();
+        switch(key) {
+        case Qt::Key_Escape:
+            if (focusWidget) {
+                focusWidget->setFocus(Qt::OtherFocusReason);
+            }
+            return true;
+        default: {
+            pressedKey->ignore();
+            break;
+        }
         }
     }
     return QObject::eventFilter(obj, event);
@@ -499,16 +510,14 @@ QToolButton* PropertyEditor::createToolButtonPickAdd()
 void PropertyEditor::updatePickAddModeButton(bool pickAddMode)
 {
     pickAdd = pickAddMode;
-    if (pickAdd)
-    {
+    if (pickAdd) {
         toolButtonPickAdd->setIcon(QIcon(iconDir + "/" + "pickadd" + ".png"));
         toolButtonPickAdd->setIconSize(QSize(iconSize, iconSize));
         toolButtonPickAdd->setText("PickAdd");
         toolButtonPickAdd->setToolTip("PickAdd Mode - Add to current selection.\nClick to switch to PickNew Mode.");
         toolButtonPickAdd->setToolButtonStyle(Qt::ToolButtonIconOnly);
     }
-    else
-    {
+    else {
         toolButtonPickAdd->setIcon(QIcon(iconDir + "/" + "picknew" + ".png"));
         toolButtonPickAdd->setIconSize(QSize(iconSize, iconSize));
         toolButtonPickAdd->setText("PickNew");
@@ -521,6 +530,39 @@ void PropertyEditor::togglePickAddMode()
 {
     emit pickAddModeToggled();
 }
+
+const char *objectNames[32] = {
+    "Arc",
+    "Block",
+    "Circle",
+    "Aligned Dimension",
+    "Angular Dimension",
+    "Arclength Dimension",
+    "Diameter Dimension",
+    "Leader Dimension",
+    "Linear Dimension",
+    "Ordinate Dimension",
+    "Radius Dimension",
+    "Ellipse",
+    "Elliptical Arc",
+    "Rubber",
+    "Grid",
+    "Hatch",
+    "Image",
+    "Infinite Line",
+    "Line",
+    "Path",
+    "Point",
+    "Polygon",
+    "Polyline",
+    "Ray",
+    "Rectangle",
+    "Slot",
+    "Spline",
+    "Multiline Text",
+    "Single Line Text",
+    "Unknown"
+};
 
 void PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
 {
@@ -537,30 +579,10 @@ void PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
     QSet<int> typeSet;
 
     int numAll = itemList.size();
-    int numArc        = 0;
-    int numBlock      = 0;
-    int numCircle     = 0;
-    int numDimAlign   = 0;
-    int numDimAngular = 0;
-    int numDimArcLen  = 0;
-    int numDimDiam    = 0;
-    int numDimLeader  = 0;
-    int numDimLinear  = 0;
-    int numDimOrd     = 0;
-    int numDimRadius  = 0;
-    int numEllipse    = 0;
-    int numImage      = 0;
-    int numInfLine    = 0;
-    int numLine       = 0;
-    int numPath       = 0;
-    int numPoint      = 0;
-    int numPolygon    = 0;
-    int numPolyline   = 0;
-    int numRay        = 0;
-    int numRect       = 0;
-    int numTextMulti  = 0;
-    int numTextSingle = 0;
-    int numUnknown    = 0;
+    int object_counts[50];
+    for (int i=0; i<50; i++) {
+        object_counts[i] = 0;
+    }
 
     foreach (QGraphicsItem* item, itemList) {
         if (!item) {
@@ -570,30 +592,12 @@ void PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
         int objType = item->type();
         typeSet.insert(objType);
 
-        if     (objType == OBJ_TYPE_ARC)          numArc++;
-        else if (objType == OBJ_TYPE_BLOCK)        numBlock++;
-        else if (objType == OBJ_TYPE_CIRCLE)       numCircle++;
-        else if (objType == OBJ_TYPE_DIMALIGNED)   numDimAlign++;
-        else if (objType == OBJ_TYPE_DIMANGULAR)   numDimAngular++;
-        else if (objType == OBJ_TYPE_DIMARCLENGTH) numDimArcLen++;
-        else if (objType == OBJ_TYPE_DIMDIAMETER)  numDimDiam++;
-        else if (objType == OBJ_TYPE_DIMLEADER)    numDimLeader++;
-        else if (objType == OBJ_TYPE_DIMLINEAR)    numDimLinear++;
-        else if (objType == OBJ_TYPE_DIMORDINATE)  numDimOrd++;
-        else if (objType == OBJ_TYPE_DIMRADIUS)    numDimRadius++;
-        else if (objType == OBJ_TYPE_ELLIPSE)      numEllipse++;
-        else if (objType == OBJ_TYPE_IMAGE)        numImage++;
-        else if (objType == OBJ_TYPE_INFINITELINE) numInfLine++;
-        else if (objType == OBJ_TYPE_LINE)         numLine++;
-        else if (objType == OBJ_TYPE_PATH)         numPath++;
-        else if (objType == OBJ_TYPE_POINT)        numPoint++;
-        else if (objType == OBJ_TYPE_POLYGON)      numPolygon++;
-        else if (objType == OBJ_TYPE_POLYLINE)     numPolyline++;
-        else if (objType == OBJ_TYPE_RAY)          numRay++;
-        else if (objType == OBJ_TYPE_RECTANGLE)    numRect++;
-        else if (objType == OBJ_TYPE_TEXTMULTI)    numTextMulti++;
-        else if (objType == OBJ_TYPE_TEXTSINGLE)   numTextSingle++;
-        else                                      numUnknown++;
+        if ((objType > OBJ_TYPE_BASE) && (objType < OBJ_TYPE_UNKNOWN)) {
+            object_counts[objType-OBJ_TYPE_ARC]++;
+        }
+        else {
+            object_counts[OBJ_TYPE_UNKNOWN-OBJ_TYPE_ARC]++;
+        }
     }
 
     int numTypes = typeSet.size();
@@ -604,62 +608,13 @@ void PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
         connect(comboBoxSelected, SIGNAL(currentIndexChanged(int)), this, SLOT(showOneType(int)));
     }
 
-    QString comboBoxStr;
     foreach (int objType, typeSet) {
-        if (objType == OBJ_TYPE_ARC) {
-            comboBoxStr = tr("Arc") + " (" + QString().setNum(numArc) + ")";
+        if ((objType > OBJ_TYPE_BASE) && (objType <= OBJ_TYPE_UNKNOWN)) {
+            int index = objType-OBJ_TYPE_ARC;
+            QString comboBoxStr = tr(objectNames[index]);
+            comboBoxStr += " (" + QString().setNum(object_counts[index]) + ")";
+            comboBoxSelected->addItem(comboBoxStr, objType);
         }
-        else if (objType == OBJ_TYPE_BLOCK) {
-            comboBoxStr = tr("Block") + " (" + QString().setNum(numBlock) + ")";
-        }
-        else if (objType == OBJ_TYPE_CIRCLE) {
-            comboBoxStr = tr("Circle") + " (" + QString().setNum(numCircle) + ")";
-        }
-        else if (objType == OBJ_TYPE_DIMALIGNED) {
-            comboBoxStr = tr("Aligned Dimension") + " (" + QString().setNum(numDimAlign) + ")";
-        }
-        else if (objType == OBJ_TYPE_DIMANGULAR)
-            comboBoxStr = tr("Angular Dimension") + " (" + QString().setNum(numDimAngular) + ")";
-        else if (objType == OBJ_TYPE_DIMARCLENGTH)
-            comboBoxStr = tr("Arclength Dimension") + " (" + QString().setNum(numDimArcLen) + ")";
-        else if (objType == OBJ_TYPE_DIMDIAMETER)
-            comboBoxStr = tr("Diameter Dimension") + " (" + QString().setNum(numDimDiam) + ")";
-        else if (objType == OBJ_TYPE_DIMLEADER)
-            comboBoxStr = tr("Leader Dimension") + " (" + QString().setNum(numDimLeader) + ")";
-        else if (objType == OBJ_TYPE_DIMLINEAR)
-            comboBoxStr = tr("Linear Dimension") + " (" + QString().setNum(numDimLinear) + ")";
-        else if (objType == OBJ_TYPE_DIMORDINATE)
-            comboBoxStr = tr("Ordinate Dimension") + " (" + QString().setNum(numDimOrd) + ")";
-        else if (objType == OBJ_TYPE_DIMRADIUS)
-            comboBoxStr = tr("Radius Dimension") + " (" + QString().setNum(numDimRadius) + ")";
-        else if (objType == OBJ_TYPE_ELLIPSE)
-            comboBoxStr = tr("Ellipse") + " (" + QString().setNum(numEllipse) + ")";
-        else if (objType == OBJ_TYPE_IMAGE)
-            comboBoxStr = tr("Image") + " (" + QString().setNum(numImage) + ")";
-        else if (objType == OBJ_TYPE_INFINITELINE)
-            comboBoxStr = tr("Infinite Line") + " (" + QString().setNum(numInfLine) + ")";
-        else if (objType == OBJ_TYPE_LINE)
-            comboBoxStr = tr("Line") + " (" + QString().setNum(numLine) + ")";
-        else if (objType == OBJ_TYPE_PATH)
-            comboBoxStr = tr("Path") + " (" + QString().setNum(numPath) + ")";
-        else if (objType == OBJ_TYPE_POINT)
-            comboBoxStr = tr("Point") + " (" + QString().setNum(numPoint) + ")";
-        else if (objType == OBJ_TYPE_POLYGON)
-            comboBoxStr = tr("Polygon") + " (" + QString().setNum(numPolygon) + ")";
-        else if (objType == OBJ_TYPE_POLYLINE)
-            comboBoxStr = tr("Polyline") + " (" + QString().setNum(numPolyline) + ")";
-        else if (objType == OBJ_TYPE_RAY)
-            comboBoxStr = tr("Ray") + " (" + QString().setNum(numRay) + ")";
-        else if (objType == OBJ_TYPE_RECTANGLE)
-            comboBoxStr = tr("Rectangle") + " (" + QString().setNum(numRect) + ")";
-        else if (objType == OBJ_TYPE_TEXTMULTI)
-            comboBoxStr = tr("Multiline Text") + " (" + QString().setNum(numTextMulti) + ")";
-        else if (objType == OBJ_TYPE_TEXTSINGLE)
-            comboBoxStr = tr("Text") + " (" + QString().setNum(numTextSingle) + ")";
-        else
-            comboBoxStr = tr("Unknown") + " (" + QString().setNum(numUnknown) + ")";
-
-        comboBoxSelected->addItem(comboBoxStr, objType);
     }
 
     /* Load Data into the fields. */
@@ -678,15 +633,15 @@ void PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
         if (objType == OBJ_TYPE_ARC) {
             ArcObject* obj = static_cast<ArcObject*>(item);
             if (obj) {
-                updateLineEditNumIfVaries(lineEditArcCenterX,    obj->objectCenterX(),       false);
-                updateLineEditNumIfVaries(lineEditArcCenterY,   -obj->objectCenterY(),       false);
+                updateLineEditNumIfVaries(lineEditArcCenterX,    obj->objectCenter().x(),       false);
+                updateLineEditNumIfVaries(lineEditArcCenterY,   -obj->objectCenter().y(),       false);
                 updateLineEditNumIfVaries(lineEditArcRadius,     obj->objectRadius(),        false);
                 updateLineEditNumIfVaries(lineEditArcStartAngle, obj->objectStartAngle(),     true);
                 updateLineEditNumIfVaries(lineEditArcEndAngle,   obj->objectEndAngle(),       true);
-                updateLineEditNumIfVaries(lineEditArcStartX,     obj->objectStartX(),        false);
-                updateLineEditNumIfVaries(lineEditArcStartY,    -obj->objectStartY(),        false);
-                updateLineEditNumIfVaries(lineEditArcEndX,       obj->objectEndX(),          false);
-                updateLineEditNumIfVaries(lineEditArcEndY,      -obj->objectEndY(),          false);
+                updateLineEditNumIfVaries(lineEditArcStartX,     obj->objectStartPoint().x(),        false);
+                updateLineEditNumIfVaries(lineEditArcStartY,    -obj->objectStartPoint().y(),        false);
+                updateLineEditNumIfVaries(lineEditArcEndX,       obj->objectEndPoint().x(),          false);
+                updateLineEditNumIfVaries(lineEditArcEndY,      -obj->objectEndPoint().y(),          false);
                 updateLineEditNumIfVaries(lineEditArcArea,       obj->objectArea(),          false);
                 updateLineEditNumIfVaries(lineEditArcLength,     obj->objectArcLength(),     false);
                 updateLineEditNumIfVaries(lineEditArcChord,      obj->objectChord(),         false);
@@ -700,8 +655,8 @@ void PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
         else if (objType == OBJ_TYPE_CIRCLE) {
             CircleObject* obj = static_cast<CircleObject*>(item);
             if (obj) {
-                updateLineEditNumIfVaries(lineEditCircleCenterX,       obj->objectCenterX(),       false);
-                updateLineEditNumIfVaries(lineEditCircleCenterY,      -obj->objectCenterY(),       false);
+                updateLineEditNumIfVaries(lineEditCircleCenterX,       obj->objectCenter().x(),       false);
+                updateLineEditNumIfVaries(lineEditCircleCenterY,      -obj->objectCenter().y(),       false);
                 updateLineEditNumIfVaries(lineEditCircleRadius,        obj->objectRadius(),        false);
                 updateLineEditNumIfVaries(lineEditCircleDiameter,      obj->objectDiameter(),      false);
                 updateLineEditNumIfVaries(lineEditCircleArea,          obj->objectArea(),          false);
@@ -917,33 +872,27 @@ void PropertyEditor::updateComboBoxStrIfVaries(QComboBox* comboBox, const QStrin
 void PropertyEditor::updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, bool yesOrNoText)
 {
     fieldOldText = comboBox->currentText();
-    if (yesOrNoText)
-    {
+    if (yesOrNoText) {
         if (val) fieldNewText = fieldYesText;
         else    fieldNewText = fieldNoText;
     }
-    else
-    {
+    else {
         if (val) fieldNewText = fieldOnText;
         else    fieldNewText = fieldOffText;
     }
 
-    if (fieldOldText.isEmpty())
-    {
-        if (yesOrNoText)
-        {
+    if (fieldOldText.isEmpty()) {
+        if (yesOrNoText) {
             comboBox->addItem(fieldYesText, true);
             comboBox->addItem(fieldNoText, false);
         }
-        else
-        {
+        else {
             comboBox->addItem(fieldOnText, true);
             comboBox->addItem(fieldOffText, false);
         }
         comboBox->setCurrentIndex(comboBox->findText(fieldNewText));
     }
-    else if (fieldOldText != fieldNewText)
-    {
+    else if (fieldOldText != fieldNewText) {
         if (comboBox->findText(fieldVariesText) == -1) //Prevent multiple entries
             comboBox->addItem(fieldVariesText);
         comboBox->setCurrentIndex(comboBox->findText(fieldVariesText));
@@ -957,28 +906,77 @@ PropertyEditor::showGroups(int objType)
         groupBoxGeometryArc->show();
         groupBoxMiscArc->show();
     }
-    else if (objType == OBJ_TYPE_BLOCK)        { groupBoxGeometryBlock->show(); }
-    else if (objType == OBJ_TYPE_CIRCLE)       { groupBoxGeometryCircle->show(); }
-    else if (objType == OBJ_TYPE_DIMALIGNED)   { groupBoxGeometryDimAligned->show(); }
-    else if (objType == OBJ_TYPE_DIMANGULAR)   { groupBoxGeometryDimAngular->show(); }
-    else if (objType == OBJ_TYPE_DIMARCLENGTH) { groupBoxGeometryDimArcLength->show(); }
-    else if (objType == OBJ_TYPE_DIMDIAMETER)  { groupBoxGeometryDimDiameter->show(); }
-    else if (objType == OBJ_TYPE_DIMLEADER)    { groupBoxGeometryDimLeader->show(); }
-    else if (objType == OBJ_TYPE_DIMLINEAR)    { groupBoxGeometryDimLinear->show(); }
-    else if (objType == OBJ_TYPE_DIMORDINATE)  { groupBoxGeometryDimOrdinate->show(); }
-    else if (objType == OBJ_TYPE_DIMRADIUS)    { groupBoxGeometryDimRadius->show(); }
-    else if (objType == OBJ_TYPE_ELLIPSE)      { groupBoxGeometryEllipse->show(); }
-    else if (objType == OBJ_TYPE_IMAGE)        { groupBoxGeometryImage->show(); groupBoxMiscImage->show(); }
-    else if (objType == OBJ_TYPE_INFINITELINE) { groupBoxGeometryInfiniteLine->show(); }
-    else if (objType == OBJ_TYPE_LINE)         { groupBoxGeometryLine->show(); }
-    else if (objType == OBJ_TYPE_PATH)         { groupBoxGeometryPath->show(); groupBoxMiscPath->show(); }
-    else if (objType == OBJ_TYPE_POINT)        { groupBoxGeometryPoint->show(); }
-    else if (objType == OBJ_TYPE_POLYGON)      { groupBoxGeometryPolygon->show(); }
-    else if (objType == OBJ_TYPE_POLYLINE)     { groupBoxGeometryPolyline->show(); groupBoxMiscPolyline->show(); }
-    else if (objType == OBJ_TYPE_RAY)          { groupBoxGeometryRay->show(); }
-    else if (objType == OBJ_TYPE_RECTANGLE)    { groupBoxGeometryRectangle->show(); }
-    else if (objType == OBJ_TYPE_TEXTMULTI)    { groupBoxGeometryTextMulti->show(); }
-    else if (objType == OBJ_TYPE_TEXTSINGLE)   { groupBoxTextTextSingle->show(); groupBoxGeometryTextSingle->show(); groupBoxMiscTextSingle->show(); }
+    else if (objType == OBJ_TYPE_BLOCK) {
+        groupBoxGeometryBlock->show();
+    }
+    else if (objType == OBJ_TYPE_CIRCLE) {
+        groupBoxGeometryCircle->show();
+    }
+    else if (objType == OBJ_TYPE_DIMALIGNED) {
+        groupBoxGeometryDimAligned->show();
+    }
+    else if (objType == OBJ_TYPE_DIMANGULAR) {
+        groupBoxGeometryDimAngular->show();
+    }
+    else if (objType == OBJ_TYPE_DIMARCLENGTH) {
+        groupBoxGeometryDimArcLength->show();
+    }
+    else if (objType == OBJ_TYPE_DIMDIAMETER) {
+        groupBoxGeometryDimDiameter->show();
+    }
+    else if (objType == OBJ_TYPE_DIMLEADER) {
+        groupBoxGeometryDimLeader->show();
+    }
+    else if (objType == OBJ_TYPE_DIMLINEAR) {
+        groupBoxGeometryDimLinear->show();
+    }
+    else if (objType == OBJ_TYPE_DIMORDINATE) {
+        groupBoxGeometryDimOrdinate->show();
+    }
+    else if (objType == OBJ_TYPE_DIMRADIUS) {
+        groupBoxGeometryDimRadius->show();
+    }
+    else if (objType == OBJ_TYPE_ELLIPSE) {
+        groupBoxGeometryEllipse->show();
+    }
+    else if (objType == OBJ_TYPE_IMAGE) {
+        groupBoxGeometryImage->show();
+        groupBoxMiscImage->show();
+    }
+    else if (objType == OBJ_TYPE_INFINITELINE) {
+        groupBoxGeometryInfiniteLine->show();
+    }
+    else if (objType == OBJ_TYPE_LINE) {
+        groupBoxGeometryLine->show();
+    }
+    else if (objType == OBJ_TYPE_PATH) {
+        groupBoxGeometryPath->show();
+        groupBoxMiscPath->show();
+    }
+    else if (objType == OBJ_TYPE_POINT) {
+        groupBoxGeometryPoint->show();
+    }
+    else if (objType == OBJ_TYPE_POLYGON) {
+        groupBoxGeometryPolygon->show();
+    }
+    else if (objType == OBJ_TYPE_POLYLINE) {
+        groupBoxGeometryPolyline->show();
+        groupBoxMiscPolyline->show();
+    }
+    else if (objType == OBJ_TYPE_RAY) {
+        groupBoxGeometryRay->show();
+    }
+    else if (objType == OBJ_TYPE_RECTANGLE) {
+        groupBoxGeometryRectangle->show();
+    }
+    else if (objType == OBJ_TYPE_TEXTMULTI) {
+        groupBoxGeometryTextMulti->show();
+    }
+    else if (objType == OBJ_TYPE_TEXTSINGLE) {
+        groupBoxTextTextSingle->show();
+        groupBoxGeometryTextSingle->show();
+        groupBoxMiscTextSingle->show();
+    }
 }
 
 void PropertyEditor::showOneType(int index)
@@ -1929,22 +1927,31 @@ void PropertyEditor::fieldEdited(QObject* fieldObj)
     QString objName = fieldObj->objectName();
     int objType = fieldObj->property(qPrintable(objName)).toInt();
 
-    foreach(QGraphicsItem* item, selectedItemList)
-    {
+    foreach(QGraphicsItem* item, selectedItemList) {
         if (item->type() != objType) continue;
 
-        switch(objType)
-        {
+        switch(objType) {
             case OBJ_TYPE_ARC:
                 if (objName == "lineEditArcCenterX") {
                     tempArcObj = static_cast<ArcObject*>(item);
-                    if (tempArcObj) { tempArcObj->setObjectCenterX(lineEditArcCenterX->text().toDouble()); } }
+                    if (tempArcObj) {
+                        QPointF arc = tempArcObj->objectCenter();
+                        tempArcObj->setObjectCenter(lineEditArcCenterX->text().toDouble(), arc.y());
+                    }
+                }
                 if (objName == "lineEditArcCenterY") {
                     tempArcObj = static_cast<ArcObject*>(item);
-                    if (tempArcObj) { tempArcObj->setObjectCenterY(-lineEditArcCenterY->text().toDouble()); } }
+                    if (tempArcObj) {
+                        QPointF arc = tempArcObj->objectCenter();
+                        tempArcObj->setObjectCenter(arc.x(), -lineEditArcCenterY->text().toDouble());
+                    }
+                }
                 if (objName == "lineEditArcRadius") {
                     tempArcObj = static_cast<ArcObject*>(item);
-                    if (tempArcObj) { tempArcObj->setObjectRadius(lineEditArcRadius->text().toDouble()); } }
+                    if (tempArcObj) {
+                        tempArcObj->setObjectRadius(lineEditArcRadius->text().toDouble());
+                    }
+                }
                 if (objName == "lineEditArcStartAngle") {
                     tempArcObj = static_cast<ArcObject*>(item);
                     if (tempArcObj) { tempArcObj->setObjectStartAngle(lineEditArcStartAngle->text().toDouble()); } }

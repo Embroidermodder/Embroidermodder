@@ -1193,12 +1193,15 @@ void MainWindow::nativeAddRoundedRectangle(qreal x, qreal y, qreal w, qreal h, q
 {
 }
 
-void MainWindow::nativeAddArc(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY, int rubberMode)
+void MainWindow::nativeAddArc(EmbArc arc, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* scene = activeScene();
     if (gview && scene) {
-        ArcObject* arcObj = new ArcObject(startX, -startY, midX, -midY, endX, -endY, getCurrentColor());
+        arc.start.y = -arc.start.y;
+        arc.mid.y = -arc.mid.y;
+        arc.end.y = -arc.end.y;
+        ArcObject* arcObj = new ArcObject(arc, getCurrentColor());
         arcObj->setObjectRubberMode(rubberMode);
         if (rubberMode) {
             gview->addToRubberRoom(arcObj);

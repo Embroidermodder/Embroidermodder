@@ -18,50 +18,6 @@
 #define ROTATE_MODE_NORMAL      0
 #define ROTATE_MODE_REFERENCE   1
 
-bool validRGB(float r, float g, float b);
-void reportDistance(EmbVector a, EmbVector b);
-int parse_floats(char *line, float result[], int n);
-int parse_vector(char *line, EmbVector *v);
-
-int
-parse_floats(char *line, float result[], int n)
-{
-    char substring[100];
-    char *c;
-    int i = 0;
-    int pos = 0;
-    for (c=line; *c; c++) {
-        substring[pos] = *c;
-        if (*c == ',' || *c == ' ') {
-            substring[pos] = 0;
-            result[i] = atof(substring);
-            pos = 0;
-            i++;
-            if (i > n-1) {
-                return -1;
-            }
-        }
-        else {
-            pos++;
-        }
-    }
-    substring[pos] = 0;
-    result[i] = atof(substring);
-    return i+1;
-}
-
-int
-parse_vector(char *line, EmbVector *v)
-{
-    float v_[2];
-    if (parse_floats(line, v_, 2) == 2) {
-        return 0;
-    }
-    v->x = v_[0];
-    v->y = v_[1];
-    return 1;
-}
-
 /* LOCATEPOINT */
 ScriptValue
 locatepoint_command(ScriptEnv *context)
@@ -150,7 +106,6 @@ distance_command(ScriptEnv *context)
             prompt_output(translate("Specify second point: "));
         }
         else {
-            appendPromptHistory();
             global.x2 = x;
             global.y2 = y;
             reportDistance();
@@ -167,7 +122,7 @@ distance_command(ScriptEnv *context)
         if (isNaN(global.x1)) {
             if (isNaN(strList[0]) || isNaN(strList[1])) {
                 alert(translate("Requires numeric distance or two points."));
-                setPromptPrefix(translate("Specify first point: "));
+                prompt_output(translate("Specify first point: "));
             }
             else {
                 global.x1 = Number(strList[0]);
@@ -175,7 +130,7 @@ distance_command(ScriptEnv *context)
                 addRubber("LINE");
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", global.x1, global.y1);
-                setPromptPrefix(translate("Specify second point: "));
+                prompt_output(translate("Specify second point: "));
             }
         }
         else {
@@ -245,11 +200,12 @@ function main()
         messageBox("information", translate("Move Preselect"), translate("Preselect objects before invoking the move command."));
     }
     else {
-        setPromptPrefix(translate("Specify base point: "));
+        prompt_output(translate("Specify base point: "));
     }
 }
 
-function click(x, y)
+void
+click(EmbVector v)
 {
     if (global.firstRun) {
         global.firstRun = false;
@@ -379,7 +335,7 @@ function main()
         messageBox("information", translate("Scale Preselect"), translate("Preselect objects before invoking the scale command."));
     }
     else {
-        setPromptPrefix(translate("Specify base point: "));
+        prompt_output(translate("Specify base point: "));
     }
 }
 
@@ -400,7 +356,6 @@ click(EmbVector position)
             global.destX = x;
             global.destY = y;
             global.factor = calculateDistance(global.baseX, global.baseY, global.destX, global.destY);
-            appendPromptHistory();
             scaleSelected(global.baseX, global.baseY, global.factor);
             previewOff();
             endCommand();
@@ -410,7 +365,6 @@ click(EmbVector position)
         if (isNaN(global.baseRX)) {
             global.baseRX = x;
             global.baseRY = y;
-            appendPromptHistory();
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.baseRX, global.baseRY);
@@ -428,7 +382,6 @@ click(EmbVector position)
                 prompt_output(translate("Specify second point: "));
             }
             else {
-                appendPromptHistory();
                 setRubberPoint("LINE_START", global.baseX, global.baseY);
                 previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
                 prompt_output(translate("Specify new length: "));
@@ -442,7 +395,6 @@ click(EmbVector position)
                 prompt_output(translate("Specify new length: "));
             }
             else {
-                appendPromptHistory();
                 scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
                 previewOff();
                 end_command();
@@ -478,7 +430,7 @@ function prompt(str)
         }
         else {
             if (str == "R" || str == "REFERENCE") {
-                //TODO: Probably should add additional qsTr calls here.
+                //TODO: Probably should add additional translate calls here.
                 global.mode = global.mode_REFERENCE;
                 prompt_output(translate("Specify reference length") + " {1}: ");
                 clearRubber();
@@ -503,15 +455,14 @@ function prompt(str)
             if (isNaN(str)) {
                 if (!parse_vector(str, &v)) {
                     alert(translate("Requires valid numeric distance or two points."));
-                    setPromptPrefix(translate("Specify reference length") + " {1}: ");
+                    prompt_output(translate("Specify reference length") + " {1}: ");
                 }
                 else {
-                    global.baseRX = v[0];
-                    global.baseRY = v[1];
+                    global.baseR = v;
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", global.baseRX, global.baseRY);
-                    setPromptPrefix(translate("Specify second point: "));
+                    prompt_output(translate("Specify second point: "));
                 }
             }
             else {
@@ -529,14 +480,14 @@ function prompt(str)
                     global.destRY    = NaN;
                     global.factorRef = NaN;
                     alert(translate("Value must be positive and nonzero."));
-                    setPromptPrefix(translate("Specify reference length") + " {1}: ");
+                    prompt_output(translate("Specify reference length") + " {1}: ");
                 }
                 else {
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", global.baseX, global.baseY);
                     previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
-                    setPromptPrefix(translate("Specify new length: "));
+                    prompt_output(translate("Specify new length: "));
                 }
             }
         }
@@ -544,7 +495,7 @@ function prompt(str)
             if (isNaN(str)) {
                 if (!parse_vector(str, &v)) {
                     alert(translate("Requires valid numeric distance or two points."));
-                    setPromptPrefix(translate("Specify second point: "));
+                    prompt_output(translate("Specify second point: "));
                 }
                 else {
                     global.destR = v;
@@ -554,12 +505,12 @@ function prompt(str)
                         global.destRY    = NaN;
                         global.factorRef = NaN;
                         alert(translate("Value must be positive and nonzero."));
-                        setPromptPrefix(translate("Specify second point: "));
+                        prompt_output(translate("Specify second point: "));
                     }
                     else {
                         setRubberPoint("LINE_START", global.baseX, global.baseY);
                         previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
-                        setPromptPrefix(translate("Specify new length: "));
+                        prompt_output(translate("Specify new length: "));
                     }
                 }
             }
@@ -576,12 +527,12 @@ function prompt(str)
                     global.destRY    = NaN;
                     global.factorRef = NaN;
                     alert(translate("Value must be positive and nonzero."));
-                    setPromptPrefix(translate("Specify second point: "));
+                    prompt_output(translate("Specify second point: "));
                 }
                 else {
                     setRubberPoint("LINE_START", global.baseX, global.baseY);
                     previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
-                    setPromptPrefix(translate("Specify new length: "));
+                    prompt_output(translate("Specify new length: "));
                 }
             }
         }
@@ -589,14 +540,14 @@ function prompt(str)
             if (isNaN(str)) {
                 if (!parse_vector(str, &v)) {
                     alert(translate("Requires valid numeric distance or second point."));
-                    setPromptPrefix(translate("Specify new length: "));
+                    prompt_output(translate("Specify new length: "));
                 }
                 else {
                     global.factorNew = embVector(global.base, v);
                     if (global.factorNew <= 0.0) {
                         global.factorNew = NaN;
                         alert(translate("Value must be positive and nonzero."));
-                        setPromptPrefix(translate("Specify new length: "));
+                        prompt_output(translate("Specify new length: "));
                     }
                     else {
                         scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
@@ -610,7 +561,7 @@ function prompt(str)
                 if (global.factorNew <= 0.0) {
                     global.factorNew = NaN;
                     alert(translate("Value must be positive and nonzero."));
-                    setPromptPrefix(translate("Specify new length: "));
+                    prompt_output(translate("Specify new length: "));
                 }
                 else {
                     scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
@@ -659,8 +610,7 @@ function main()
     init_command();
     
     //Report number of pre-selected objects
-    setPromptPrefix("Number of Objects Selected: " + numSelected().toString());
-    appendPromptHistory();
+    prompt_output("Number of Objects Selected: " + numSelected().toString());
     
     mirrorSelected(0,0,0,1);
     
@@ -760,18 +710,14 @@ function main()
     init_command();
     global.mode = global.mode_NORMAL;
     global.firstRun = true;
-    global.baseX = NaN;
-    global.baseY = NaN;
-    global.destX = NaN;
-    global.destY = NaN;
-    global.angle = NaN;
+    global.base = zero_vector;
+    global.dest = zero_vector;
+    global.angle = 0.0f;
 
-    global.baseRX   = NaN;
-    global.baseRY   = NaN;
-    global.destRX   = NaN;
-    global.destRY   = NaN;
-    global.angleRef = NaN;
-    global.angleNew = NaN;
+    global.baseR   = zero_vector;
+    global.destR   = zero_vector;
+    global.angleRef = 0.0f;
+    global.angleNew = 0.0f;
 
     if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
@@ -780,7 +726,7 @@ function main()
         messageBox("information", translate("Rotate Preselect"), translate("Preselect objects before invoking the rotate command."));
     }
     else {
-        setPromptPrefix(translate("Specify base point: "));
+        prompt_output(translate("Specify base point: "));
     }
 }
 
@@ -800,7 +746,6 @@ click(EmbVector v)
         else {
             global.dest = v;
             global.angle = emb_vector_angle(global.base, global.dest);
-            appendPromptHistory();
             rotateSelected(global.baseX, global.baseY, global.angle);
             previewOff();
             end_command();
@@ -808,17 +753,14 @@ click(EmbVector v)
     }
     else if (global.mode == global.mode_REFERENCE) {
         if (isNaN(global.baseRX)) {
-            global.baseRX = x;
-            global.baseRY = y;
-            appendPromptHistory();
+            global.baseR = v;
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.baseRX, global.baseRY);
             prompt_output(translate("Specify second point: "));
         }
         else if (isNaN(global.destRX)) {
-            global.destRX = x;
-            global.destRY = y;
+            global.destR = v;
             global.angleRef = calculateAngle(global.baseRX, global.baseRY, global.destRX, global.destRY);
             setRubberPoint("LINE_START", global.baseX, global.baseY);
             previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
@@ -867,7 +809,7 @@ function prompt(str)
             else {
                 if (isNaN(str)) {
                     alert(translate("Requires valid numeric angle, second point, or option keyword."));
-                    setPromptPrefix(translate("Specify rotation angle or [Reference]: "));
+                    prompt_output(translate("Specify rotation angle or [Reference]: "));
                 }
                 else {
                     global.angle = Number(str);
@@ -883,14 +825,14 @@ function prompt(str)
             if (isNaN(str)) {
                 if (!parse_vector(str, &v)) {
                     alert(translate("Requires valid numeric angle or two points."));
-                    setPromptPrefix(translate("Specify the reference angle") + " {0.00}: ");
+                    prompt_output(translate("Specify the reference angle") + " {0.00}: ");
                 }
                 else {
                     global.baseR = v;
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", global.baseR.x, global.baseR.y);
-                    setPromptPrefix(translate("Specify second point: "));
+                    prompt_output(translate("Specify second point: "));
                 }
             }
             else {
@@ -905,21 +847,21 @@ function prompt(str)
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", global.base.x, global.base.y);
                 previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
-                setPromptPrefix(translate("Specify the new angle: "));
+                prompt_output(translate("Specify the new angle: "));
             }
         }
         else if (isNaN(global.destRX)) {
             if (isNaN(str)) {
                 if (!parse_vector(str, &v)) {
                     alert(translate("Requires valid numeric angle or two points."));
-                    setPromptPrefix(translate("Specify second point: "));
+                    prompt_output(translate("Specify second point: "));
                 }
                 else {
                     global.destR = v;
                     global.angleRef = calculateAngle(global.baseRX, global.baseRY, global.destRX, global.destRY);
                     previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
                     setRubberPoint("LINE_START", global.baseX, global.baseY);
-                    setPromptPrefix(translate("Specify the new angle: "));
+                    prompt_output(translate("Specify the new angle: "));
                 }
             }
             else {
@@ -931,14 +873,14 @@ function prompt(str)
                 //The reference angle is what we will use later.
                 global.angleRef = Number(str);
                 previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
-                setPromptPrefix(translate("Specify the new angle: "));
+                prompt_output(translate("Specify the new angle: "));
             }
         }
         else if (isNaN(global.angleNew)) {
             if (isNaN(str)) {
                 if (!parse_vector(str, &v)) {
                     alert(translate("Requires valid numeric angle or second point."));
-                    setPromptPrefix(translate("Specify the new angle: "));
+                    prompt_output(translate("Specify the new angle: "));
                 }
                 else {
                     global.angleNew = emb_vector_angle(global.base, v);
@@ -963,35 +905,26 @@ function prompt(str)
 ScriptValue
 rgb_command(ScriptEnv *context)
 {
-    init_command();
-    clear_selection();
+    switch (context->context) {
+    default:
+    case CONTEXT_MAIN:
+        init_command();
+        clear_selection();
+        context->mode = RGB_MODE_BACKGROUND;
+        prompt_output(translate("Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: "));
+        break;
+    case CONTEXT_CLICK:
+        /* Do Nothing, prompt only command. */
+        break;
+    case CONTEXT_CONTEXT:
+        /* todo("RGB", "context()"); */
+        break;
+    }
 
-    end_command();
     return script_null;
 }
 
 #if 0
-var global = {}; //Required
-global.mode;
-
-function main()
-{
-    init_command();
-    clear_selection();
-    global.mode = RGB_MODE_BACKGROUND;
-    prompt_output(translate("Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: "));
-}
-
-function click(x, y)
-{
-    //Do Nothing, prompt only command.
-}
-
-function context(str)
-{
-    todo("RGB", "context()");
-}
-
 function prompt(str)
 {
     float v[3];
@@ -1012,7 +945,7 @@ function prompt(str)
             parse_floats(str, v, 3);
             if (!validRGB(v[0], v[1], v[2])) {
                 alert(translate("Invalid color. R,G,B values must be in the range of 0-255."));
-                setPromptPrefix(translate("Specify background color: "));
+                prompt_output(translate("Specify background color: "));
             }
             else {
                 setBackgroundColor(v[0], v[1], v[2]);
@@ -1025,7 +958,7 @@ function prompt(str)
         parse_floats(str, v, 3);
         if (!validRGB(v[0], v[1], v[2])) {
             alert(translate("Invalid color. R,G,B values must be in the range of 0-255."));
-            setPromptPrefix(translate("Specify crosshair color: "));
+            prompt_output(translate("Specify crosshair color: "));
         }
         else {
             setCrossHairColor(v[0], v[1], v[2]);
@@ -1037,7 +970,7 @@ function prompt(str)
         parse_floats(str, v, 3);
         if (!validRGB(v[0], v[1], v[2])) {
             alert(translate("Invalid color. R,G,B values must be in the range of 0-255."));
-            setPromptPrefix(translate("Specify grid color: "));
+            prompt_output(translate("Specify grid color: "));
         }
         else {
             setGridColor(v[0], v[1], v[2]);
@@ -1049,27 +982,3 @@ function prompt(str)
 }
 
 #endif
-
-bool
-validRGB(float r, float g, float b)
-{
-    if (isnan(r)) {
-        return false;
-    }
-    if (isnan(g)) {
-        return false;
-    }
-    if (isnan(b)) {
-        return false;
-    }
-    if (r < 0 || r > 255) {
-        return false;
-    }
-    if (g < 0 || g > 255) {
-        return false;
-    }
-    if (b < 0 || b > 255) {
-        return false;
-    }
-    return true;
-}

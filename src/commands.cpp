@@ -559,8 +559,7 @@ platform_command(ScriptEnv *context)
     }
 
     init_command();
-//  setPromptPrefix(qsTr("Platform") + " = " + _main->platformString());
-//  appendPromptHistory();
+//  prompt_output(translate("Platform") + " = " + _main->platformString());
     end_command();
     return script_null;
 }
@@ -758,34 +757,30 @@ settings_dialog_command(ScriptEnv *context)
     return script_null;
 }
 
-/* NOTE: main() is run every time the command is started.
- *       Use it to reset variables so they are ready to go.
- */
+/* SYSWINDOWS */
 ScriptValue
 syswindows_command(ScriptEnv * context)
 {
     init_command();
     clear_selection();
-    /*
-    setPromptPrefix(qsTr("Enter an option [Cascade/Tile]: "));
-    */
+    prompt_output(translate("Enter an option [Cascade/Tile]: "));
 
     // Do nothing for click, context
     
     #if 0
     if (str == "C" || str == "CASCADE") {
-        //TODO: Probably should add additional qsTr calls here.
+        //TODO: Probably should add additional translate calls here.
         _main->windowCascade();
         end_command();
     }
     else if (str == "T" || str == "TILE") {
-        //TODO: Probably should add additional qsTr calls here.
+        //TODO: Probably should add additional translate calls here.
         _main->windowTile();
         end_command();
     }
     else {
-        alert(qsTr("Invalid option keyword."));
-        setPromptPrefix(qsTr("Enter an option [Cascade/Tile]: "));
+        alert(translate("Invalid option keyword."));
+        prompt_output(translate("Enter an option [Cascade/Tile]: "));
     }
     #endif
     return script_null;
@@ -886,9 +881,7 @@ todo_command(ScriptEnv *context)
     return script_null;
 }
 
-/* NOTE: main() is run every time the command is started.
- *       Use it to reset variables so they are ready to go.
- */
+/* UNDO */
 ScriptValue
 undo_command(ScriptEnv * context)
 {
@@ -1205,7 +1198,14 @@ add_arc_command(ScriptEnv* context)
     if (!argument_checks(context, "mouseX", "rrrrrr")) {
         return script_false;
     }
-    _main->nativeAddArc(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), REAL(5), OBJ_RUBBER_OFF);
+    EmbArc arc;
+    arc.start.x = REAL(0);
+    arc.start.y = REAL(1);
+    arc.mid.x = REAL(2);
+    arc.mid.y = REAL(3);
+    arc.end.x = REAL(4);
+    arc.end.y = REAL(5);
+    _main->nativeAddArc(arc, OBJ_RUBBER_OFF);
     return script_null;
 }
 
