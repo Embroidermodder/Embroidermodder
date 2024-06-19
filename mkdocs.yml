@@ -31,6 +31,13 @@ nav:
   - 'Github': https://github.com/Embroidermodder
 theme:
   name: material
+  language: en
+  favicon: "assets/icons/default/app.png"
+  logo: "assets/icons/default/app.png"
+  features:
+    - navigation.tabs
+    - navigation.indexes
+    - navigation.top
   custom_dir: theme
   font:
     text: 'Source Serif 4'
