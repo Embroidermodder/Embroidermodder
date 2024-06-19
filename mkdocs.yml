@@ -32,8 +32,8 @@ nav:
 theme:
   name: material
   language: en
-  favicon: "assets/icons/default/app.png"
-  logo: "assets/icons/default/app.png"
+  favicon: "refman/icons/app.png"
+  logo: "refman/icons/app.png"
   features:
     - navigation.tabs
     - navigation.indexes
