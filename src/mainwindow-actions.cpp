@@ -40,12 +40,8 @@ MainWindow::createAllActions()
     QString appDir = qApp->applicationDirPath();
     QString iconTheme = settings_general_icon_theme;
 
-    for (int i=0; command_data[i].menu_position >= 0; i++) {
+    for (int i=0; command_data[i].id != -2; i++) {
         QString icon(command_data[i].icon);
-        QString menuName(command_data[i].menu_name);
-        int menuPos = command_data[i].menu_position;
-        QString toolbarName(command_data[i].toolbar_name);
-        int toolbarPos = command_data[i].toolbar_position;
         QString toolTip(command_data[i].tooltip);
         QString statusTip(command_data[i].statustip);
         QString alias_string(command_data[i].alias);
@@ -78,35 +74,6 @@ MainWindow::createAllActions()
 
         aliasHash->insert(icon, icon);
         actionHash.insert(command_data[i].id, ACTION);
-
-        if (toolbarName.toUpper() != "NONE") {
-            //If the toolbar doesn't exist, create it.
-            if (!toolbarHash.value(toolbarName)) {
-                QToolBar* tb = new QToolBar(toolbarName, this);
-                tb->setObjectName("toolbar" + toolbarName);
-                connect(tb, SIGNAL(topLevelChanged(bool)), this,
-                    SLOT(floatingChangedToolBar(bool)));
-                addToolBar(Qt::LeftToolBarArea, tb);
-                addToolBarBreak(Qt::LeftToolBarArea);
-                toolbarHash.insert(toolbarName, tb);
-            }
-
-            //TODO: order actions position in toolbar based on .ini setting
-            toolbarHash.value(toolbarName)->addAction(ACTION);
-        }
-
-        if (menuName.toUpper() != "NONE") {
-            //If the menu doesn't exist, create it.
-            if (!menuHash.value(menuName)) {
-                QMenu* menu = new QMenu(menuName, this);
-                menu->setTearOffEnabled(true);
-                menuBar()->addMenu(menu);
-                menuHash.insert(menuName, menu);
-            }
-
-            //TODO: order actions position in menu based on .ini setting
-            menuHash.value(menuName)->addAction(ACTION);
-        }
 
         foreach (QString alias, aliases) {
             prompt->addCommand(alias, icon);

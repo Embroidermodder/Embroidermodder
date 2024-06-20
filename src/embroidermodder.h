@@ -1943,10 +1943,6 @@ public:
 
     QList<QGraphicsItem*> cutCopyObjectList;
 
-    QHash<int, QAction*>            actionHash;
-    QHash<QString, QToolBar*>       toolbarHash;
-    QHash<QString, QMenu*>          menuHash;
-
     QString formatFilterOpen;
     QString formatFilterSave;
 
@@ -1971,7 +1967,6 @@ public slots:
     void onWindowActivated(QMdiSubWindow* w);
     void windowMenuAboutToShow();
     void windowMenuActivated( bool checked/*int id*/ );
-    QAction* getAction(int actionEnum);
 
     void updateAllViewScrollBars(bool val);
     void updateAllViewCrossHairColors(QRgb color);
@@ -2143,18 +2138,6 @@ private:
     void createTextToolbar();
     void createPromptToolbar();
 
-    QToolBar* toolbarFile;
-    QToolBar* toolbarEdit;
-    QToolBar* toolbarView;
-    QToolBar* toolbarZoom;
-    QToolBar* toolbarPan;
-    QToolBar* toolbarIcon;
-    QToolBar* toolbarHelp;
-    QToolBar* toolbarLayer;
-    QToolBar* toolbarText;
-    QToolBar* toolbarProperties;
-    QToolBar* toolbarPrompt;
-
     /* Selectors */
     QComboBox* layerSelector;
     QComboBox* colorSelector;
@@ -2165,24 +2148,6 @@ private:
 
     /* Menus */
     void createAllMenus();
-    void createFileMenu();
-    void createEditMenu();
-    void createViewMenu();
-    void createSettingsMenu();
-    void createWindowMenu();
-    void createHelpMenu();
-
-    QMenu* fileMenu;
-    QMenu* editMenu;
-    QMenu* viewMenu;
-    QMenu* settingsMenu;
-    QMenu* windowMenu;
-    QMenu* helpMenu;
-
-    /* SubMenus */
-    QMenu* recentMenu;
-    QMenu* zoomMenu;
-    QMenu* panMenu;
 
 private slots:
     void hideUnimplemented();
@@ -2387,6 +2352,9 @@ View* activeView();
 QGraphicsScene* activeScene();
 QUndoStack* activeUndoStack();
 
+QAction *get_action_by_icon(const char *icon);
+void add_to_menu(QMenu *menu, const char *menu_data[]);
+
 EmbVector to_emb_vector(QPointF p);
 QPointF to_qpointf(EmbVector v);
 QPointF scale_and_rotate(QPointF v, qreal angle, qreal scale);
@@ -2396,5 +2364,8 @@ bool pattern_save(EmbPattern *pattern, const char *fileName);
 
 extern QHash<QString, Command> command_map;
 extern QHash<QString, QString>* aliasHash;
+extern QHash<int, QAction*> actionHash;
+extern QHash<QString, QToolBar*> toolbarHash;
+extern QHash<QString, QMenu*> menuHash;
 
 #endif

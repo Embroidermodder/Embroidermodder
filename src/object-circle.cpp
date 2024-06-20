@@ -68,7 +68,7 @@ circle_click(ScriptEnv *context)
     #if 0
     switch (mode) {
     case MODE_1P_RAD: {
-        if (isNaN(global.x1)) {
+        if (isNaN(context->x1)) {
             script_set_real(context, "x1", x);
             script_set_real(context, "y1", y);
             script_set_real(context, "cx", x);
@@ -81,35 +81,35 @@ circle_click(ScriptEnv *context)
         else {
             script_set_real(context, "x2", x);
             script_set_real(context, "y2", y);
-            setRubberPoint("CIRCLE_RADIUS", global.x2, global.y2);
+            setRubberPoint("CIRCLE_RADIUS", context->x2, context->y2);
             vulcanize();
             end_command();
         }
         break;
     }
     case MODE_1P_DIA: {
-        if (isNaN(global.x1)) {
+        if (isNaN(context->x1)) {
             error("CIRCLE", translate("This should never happen."));
         }
         else {
             script_set_real(context, "x2", x);
             script_set_real(context, "y2", y);
-            setRubberPoint("CIRCLE_DIAMETER", global.x2, global.y2);
+            setRubberPoint("CIRCLE_DIAMETER", context->x2, context->y2);
             vulcanize();
             endCommand();
         }
         break;
     }
     case MODE_2P: {
-        if (isNaN(global.x1)) {
-            global.point1 = v;
+        if (isNaN(context->x1)) {
+            context->point1 = v;
             addRubber("CIRCLE");
             setRubberMode("CIRCLE_2P");
             setRubberPoint("CIRCLE_TAN1", x, y);
             prompt_output(translate("Specify second end point of circle's diameter: "));
         }
-        else if (isNaN(global.x2)) {
-            global.point2 = v;
+        else if (isNaN(context->x2)) {
+            context->point2 = v;
             setRubberPoint("CIRCLE_TAN2", x, y);
             vulcanize();
             end_command();
@@ -120,21 +120,21 @@ circle_click(ScriptEnv *context)
         break;
     }
     case MODE_3P: {
-        if (isNaN(global.x1)) {
-            global.point1 = v;
+        if (isNaN(context->x1)) {
+            context->point1 = v;
             prompt_output(translate("Specify second point on circle: "));
         }
-        else if (isNaN(global.x2)) {
-            global.point2 = v;
+        else if (isNaN(context->x2)) {
+            context->point2 = v;
             addRubber("CIRCLE");
             setRubberMode("CIRCLE_3P");
-            setRubberPoint("CIRCLE_TAN1", global.x1, global.y1);
-            setRubberPoint("CIRCLE_TAN2", global.x2, global.y2);
+            setRubberPoint("CIRCLE_TAN1", context->x1, context->y1);
+            setRubberPoint("CIRCLE_TAN2", context->x2, context->y2);
             prompt_output(translate("Specify third point on circle: "));
         }
-        else if (isNaN(global.x3)) {
-            global.point3 = v;
-            setRubberPoint("CIRCLE_TAN3", global.x3, global.y3);
+        else if (isNaN(context->x3)) {
+            context->point3 = v;
+            setRubberPoint("CIRCLE_TAN3", context->x3, context->y3);
             vulcanize();
             end_command();
         }
@@ -144,16 +144,16 @@ circle_click(ScriptEnv *context)
         break;
     }
     case MODE_TTR: {
-        if (isNaN(global.x1)) {
-            global.point1 = v;
+        if (isNaN(context->x1)) {
+            context->point1 = v;
             prompt_output(translate("Specify point on object for second tangent of circle: "));
         }
-        else if (isNaN(global.x2)) {
-            global.point2 = v;
+        else if (isNaN(context->x2)) {
+            context->point2 = v;
             prompt_output(translate("Specify radius of circle: "));
         }
-        else if (isNaN(global.x3)) {
-            global.point3 = v;
+        else if (isNaN(context->x3)) {
+            context->point3 = v;
             prompt_output(translate("Specify second point: "));
         }
         else {
@@ -179,23 +179,23 @@ circle_context(ScriptEnv *context)
 ScriptValue
 circle_prompt(ScriptEnv *context)
 {
-    int mode = script_get_int(context, "mode");
     #if 0
-    if (global.mode == MODE_1P_RAD) {
-        if (isNaN(global.x1)) {
+    switch (context->mode) {
+    case MODE_1P_RAD: {
+        if (isNaN(context->x1)) {
             if (str == "2P") //TODO: Probably should add additional translate calls here.
             {
-                global.mode = global.mode_2P;
+                context->mode = context->mode_2P;
                 prompt_output(translate("Specify first end point of circle's diameter: "));
             }
             else if (str == "3P") //TODO: Probably should add additional translate calls here.
             {
-                global.mode = global.mode_3P;
+                context->mode = context->mode_3P;
                 prompt_output(translate("Specify first point of circle: "));
             }
             else if (str == "T" || str == "TTR") //TODO: Probably should add additional translate calls here.
             {
-                global.mode = global.mode_TTR;
+                context->mode = context->mode_TTR;
                 prompt_output(translate("Specify point on object for first tangent of circle: "));
             }
             else {
@@ -205,13 +205,13 @@ circle_prompt(ScriptEnv *context)
                     prompt_output(translate("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
                 }
                 else {
-                    global.x1 = Number(strList[0]);
-                    global.y1 = Number(strList[1]);
-                    global.cx = global.x1;
-                    global.cy = global.y1;
+                    context->x1 = Number(strList[0]);
+                    context->y1 = Number(strList[1]);
+                    context->cx = context->x1;
+                    context->cy = context->y1;
                     addRubber("CIRCLE");
                     setRubberMode("CIRCLE_1P_RAD");
-                    setRubberPoint("CIRCLE_CENTER", global.cx, global.cy);
+                    setRubberPoint("CIRCLE_CENTER", context->cx, context->cy);
                     prompt_output(translate("Specify radius of circle or [Diameter]: "));
                 }
             }
@@ -219,7 +219,7 @@ circle_prompt(ScriptEnv *context)
         else {
             if (str == "D" || str == "DIAMETER") //TODO: Probably should add additional translate calls here.
             {
-                global.mode = global.mode_1P_DIA;
+                context->mode = context->mode_1P_DIA;
                 setRubberMode("CIRCLE_1P_DIA");
                 prompt_output(translate("Specify diameter of circle: "));
             }
@@ -230,31 +230,31 @@ circle_prompt(ScriptEnv *context)
                     prompt_output(translate("Specify radius of circle or [Diameter]: "));
                 }
                 else {
-                    global.rad = num;
-                    global.x2 = global.x1 + global.rad;
-                    global.y2 = global.y1;
-                    setRubberPoint("CIRCLE_RADIUS", global.x2, global.y2);
+                    context->rad = num;
+                    context->x2 = context->x1 + context->rad;
+                    context->y2 = context->y1;
+                    setRubberPoint("CIRCLE_RADIUS", context->x2, context->y2);
                     vulcanize();
                     endCommand();
                 }
             }
         }
     }
-    else if (global.mode == MODE_1P_DIA) {
-        if (isNaN(global.x1)) {
+    case MODE_1P_DIA: {
+        if (isNaN(context->x1)) {
             error("CIRCLE", translate("This should never happen."));
         }
-        if (isNaN(global.x2)) {
+        if (isNaN(context->x2)) {
             var num = Number(str);
             if (isNaN(num)) {
                 alert(translate("Requires numeric distance or second point."));
                 prompt_output(translate("Specify diameter of circle: "));
             }
             else {
-                global.dia = num;
-                global.x2 = global.x1 + global.dia;
-                global.y2 = global.y1;
-                setRubberPoint("CIRCLE_DIAMETER", global.x2, global.y2);
+                context->dia = num;
+                context->x2 = context->x1 + context->dia;
+                context->y2 = context->y1;
+                setRubberPoint("CIRCLE_DIAMETER", context->x2, context->y2);
                 vulcanize();
                 endCommand();
             }
@@ -262,80 +262,74 @@ circle_prompt(ScriptEnv *context)
         else {
             error("CIRCLE", translate("This should never happen."));
         }
+        break;
     }
-    else if (global.mode == MODE_2P) {
-        if (isNaN(global.x1)) {
+    case MODE_2P: {
+        if (isNaN(context->x1)) {
             var strList = str.split(",");
             if (isNaN(strList[0]) || isNaN(strList[1])) {
                 alert(translate("Invalid point."));
                 prompt_output(translate("Specify first end point of circle's diameter: "));
             }
             else {
-                global.x1 = Number(strList[0]);
-                global.y1 = Number(strList[1]);
+                context->x1 = Number(strList[0]);
+                context->y1 = Number(strList[1]);
                 addRubber("CIRCLE");
                 setRubberMode("CIRCLE_2P");
-                setRubberPoint("CIRCLE_TAN1", global.x1, global.y1);
+                setRubberPoint("CIRCLE_TAN1", context->x1, context->y1);
                 prompt_output(translate("Specify second end point of circle's diameter: "));
             }
         }
-        else if (isNaN(global.x2)) {
+        else if (isNaN(context->x2)) {
             var strList = str.split(",");
             if (isNaN(strList[0]) || isNaN(strList[1])) {
                 alert(translate("Invalid point."));
                 prompt_output(translate("Specify second end point of circle's diameter: "));
             }
             else {
-                global.x2 = Number(strList[0]);
-                global.y2 = Number(strList[1]);
-                setRubberPoint("CIRCLE_TAN2", global.x2, global.y2);
+                context->point2 = v;
+                setRubberPoint("CIRCLE_TAN2", context->x2, context->y2);
                 vulcanize();
-                endCommand();
+                end_command();
             }
         }
         else {
             error("CIRCLE", translate("This should never happen."));
         }
     }
-    else if (global.mode == MODE_3P) {
-        if (isNaN(global.x1)) {
-            var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1])) {
+    case MODE_3P: {
+        if (isNaN(context->x1)) {
+            if (!parse_vector(str, &v)) {
                 alert(translate("Invalid point."));
                 prompt_output(translate("Specify first point of circle: "));
             }
             else {
-                global.x1 = Number(strList[0]);
-                global.y1 = Number(strList[1]);
+                context->point1 = v;
                 prompt_output(translate("Specify second point of circle: "));
             }
         }
-        else if (isNaN(global.x2)) {
-            var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1])) {
+        else if (isNaN(context->x2)) {
+            if (!parse_vector(str, &v)) {
                 alert(translate("Invalid point."));
                 prompt_output(translate("Specify second point of circle: "));
             }
             else {
-                global.x2 = Number(strList[0]);
-                global.y2 = Number(strList[1]);
+                context->point2 = v;
                 addRubber("CIRCLE");
                 setRubberMode("CIRCLE_3P");
-                setRubberPoint("CIRCLE_TAN1", global.x1, global.y1);
-                setRubberPoint("CIRCLE_TAN2", global.x2, global.y2);
+                setRubberPoint("CIRCLE_TAN1", context->x1, context->y1);
+                setRubberPoint("CIRCLE_TAN2", context->x2, context->y2);
                 prompt_output(translate("Specify third point of circle: "));
             }
         }
-        else if (isNaN(global.x3)) {
-            var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1])) {
+        else if (isNaN(context->x3)) {
+            if (!parse_vector(str, &v)) {
                 alert(translate("Invalid point."));
                 prompt_output(translate("Specify third point of circle: "));
             }
             else {
-                global.x3 = Number(strList[0]);
-                global.y3 = Number(strList[1]);
-                setRubberPoint("CIRCLE_TAN3", global.x3, global.y3);
+                context->point3 = v;
+                setRubberPoint("CIRCLE_TAN3", context->x3, context->y3);
                 vulcanize();
                 endCommand();
             }
@@ -345,7 +339,7 @@ circle_prompt(ScriptEnv *context)
         }
         
     }
-    else if (global.mode == global.mode_TTR) {
+    else if (context->mode == context->mode_TTR) {
         todo("CIRCLE", "prompt() for TTR");
     }
     #endif
@@ -458,7 +452,9 @@ void CircleObject::updatePath()
 void CircleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if (!objScene) return;
+    if (!objScene) {
+        return;
+    }
 
     QPen paintPen = pen();
     painter->setPen(paintPen);

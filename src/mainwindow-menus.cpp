@@ -15,135 +15,107 @@
 #include <QMenuBar>
 #include <QAction>
 
-void MainWindow::createFileMenu()
+/* */
+QAction*
+get_action_by_icon(const char *icon)
 {
-    qDebug("MainWindow createFileMenu()");
-    menuBar()->addMenu(fileMenu);
-    fileMenu->addAction(actionHash.value(ACTION_NEW));
-    fileMenu->addSeparator();
-    fileMenu->addAction(actionHash.value(ACTION_OPEN));
-
-    fileMenu->addMenu(recentMenu);
-    connect(recentMenu, SIGNAL(aboutToShow()), this, SLOT(recentMenuAboutToShow()));
-    //Do not allow the Recent Menu to be torn off. It's a pain in the ass to maintain.
-    recentMenu->setTearOffEnabled(false);
-
-    fileMenu->addSeparator();
-    fileMenu->addAction(actionHash.value(ACTION_SAVE));
-    fileMenu->addAction(actionHash.value(ACTION_SAVE_AS));
-    fileMenu->addSeparator();
-    fileMenu->addAction(actionHash.value(ACTION_PRINT));
-    fileMenu->addSeparator();
-    fileMenu->addAction(actionHash.value(ACTION_WINDOW_CLOSE));
-    fileMenu->addSeparator();
-    fileMenu->addAction(actionHash.value(ACTION_DESIGN_DETAILS));
-    fileMenu->addSeparator();
-
-    fileMenu->addAction(actionHash.value(ACTION_EXIT));
-    fileMenu->setTearOffEnabled(false);
+    int i;
+    for (i=0; command_data[i].id != -2; i++) {
+        if (!strcmp(command_data[i].icon, icon)) {
+            return actionHash.value(command_data[i].id);
+        }
+    }
+    return actionHash.value(ACTION_DO_NOTHING);
 }
 
-void MainWindow::createEditMenu()
+/* */
+void
+add_to_menu(QMenu *menu, const char *menu_data[])
 {
-    qDebug("MainWindow createEditMenu()");
-    menuBar()->addMenu(editMenu);
-    editMenu->addAction(actionHash.value(ACTION_UNDO));
-    editMenu->addAction(actionHash.value(ACTION_REDO));
-    editMenu->addSeparator();
-    editMenu->addAction(actionHash.value(ACTION_CUT));
-    editMenu->addAction(actionHash.value(ACTION_COPY));
-    editMenu->addAction(actionHash.value(ACTION_PASTE));
-    editMenu->addSeparator();
-    editMenu->setTearOffEnabled(true);
-}
-
-void MainWindow::createViewMenu()
-{
-    qDebug("MainWindow createViewMenu()");
-
-    QString appDir = qApp->applicationDirPath();
-    QString icontheme = settings_general_icon_theme;
-
-    menuBar()->addMenu(viewMenu);
-    viewMenu->addSeparator();
-    viewMenu->addMenu(zoomMenu);
-    zoomMenu->setIcon(QIcon(appDir + "/icons/" + icontheme + "/zoom" + ".png"));
-    zoomMenu->addAction(actionHash.value(ACTION_ZOOM_REAL_TIME));
-    zoomMenu->addAction(actionHash.value(ACTION_ZOOM_PREVIOUS));
-    zoomMenu->addSeparator();
-    zoomMenu->addAction(actionHash.value(ACTION_ZOOM_WINDOW));
-    zoomMenu->addAction(actionHash.value(ACTION_ZOOM_DYNAMIC));
-    zoomMenu->addAction(actionHash.value(ACTION_ZOOM_SCALE));
-    zoomMenu->addAction(actionHash.value(ACTION_ZOOM_CENTER));
-    zoomMenu->addSeparator();
-    zoomMenu->addAction(actionHash.value(ACTION_ZOOM_IN));
-    zoomMenu->addAction(actionHash.value(ACTION_ZOOM_OUT));
-    zoomMenu->addSeparator();
-    zoomMenu->addAction(actionHash.value(ACTION_ZOOM_SELECTED));
-    zoomMenu->addAction(actionHash.value(ACTION_ZOOM_ALL));
-    zoomMenu->addAction(actionHash.value(ACTION_ZOOM_EXTENTS));
-    viewMenu->addMenu(panMenu);
-    panMenu->setIcon(QIcon(appDir + "/icons/" + icontheme + "/pan" + ".png"));
-    panMenu->addAction(actionHash.value(ACTION_PAN_REAL_TIME));
-    panMenu->addAction(actionHash.value(ACTION_PAN_POINT));
-    panMenu->addSeparator();
-    panMenu->addAction(actionHash.value(ACTION_PAN_LEFT));
-    panMenu->addAction(actionHash.value(ACTION_PAN_RIGHT));
-    panMenu->addAction(actionHash.value(ACTION_PAN_UP));
-    panMenu->addAction(actionHash.value(ACTION_PAN_DOWN));
-    viewMenu->addSeparator();
-    viewMenu->addAction(actionHash.value(ACTION_DAY));
-    viewMenu->addAction(actionHash.value(ACTION_NIGHT));
-    viewMenu->addSeparator();
-
-    viewMenu->setTearOffEnabled(true);
-    zoomMenu->setTearOffEnabled(true);
-    panMenu->setTearOffEnabled(true);
-}
-
-void MainWindow::createSettingsMenu()
-{
-    qDebug("MainWindow createSettingsMenu()");
-    menuBar()->addMenu(settingsMenu);
-    settingsMenu->addAction(actionHash.value(ACTION_SETTINGS_DIALOG));
-    settingsMenu->addSeparator();
-    settingsMenu->setTearOffEnabled(true);
-}
-
-void MainWindow::createWindowMenu()
-{
-    qDebug("MainWindow createWindowMenu()");
-    menuBar()->addMenu(windowMenu);
-    connect(windowMenu, SIGNAL(aboutToShow()), this, SLOT(windowMenuAboutToShow()));
-    //Do not allow the Window Menu to be torn off. It's a pain in the ass to maintain.
-    windowMenu->setTearOffEnabled(false);
-
-}
-
-void MainWindow::createHelpMenu()
-{
-    qDebug("MainWindow createHelpMenu()");
-    menuBar()->addMenu(helpMenu);
-    helpMenu->addAction(actionHash.value(ACTION_HELP));
-    helpMenu->addSeparator();
-    helpMenu->addAction(actionHash.value(ACTION_CHANGELOG));
-    helpMenu->addSeparator();
-    helpMenu->addAction(actionHash.value(ACTION_TIP_OF_THE_DAY));
-    helpMenu->addSeparator();
-    helpMenu->addAction(actionHash.value(ACTION_ABOUT));
-    helpMenu->addSeparator();
-    helpMenu->addAction(actionHash.value(ACTION_WHATS_THIS));
-    helpMenu->setTearOffEnabled(true);
+    for (int i=0; strcmp(menu_data[i], "END"); i++) {
+        if (menu_data[i][0] == '-') {
+            menu->addSeparator();
+        }
+        else if (menu_data[i][0] == '>') {
+            menu->addMenu(menuHash[menu_data[i]+1]);
+        }
+        else if (menu_data[i][0] == '+') {
+            QString appDir = qApp->applicationDirPath();
+            QString icontheme = _main->settings_general_icon_theme;
+            QString s = appDir + "/icons/" + icontheme + "/" + QString(menu_data[i]+1) + ".png";
+            menu->setIcon(QIcon(s));
+        }
+        else {
+            menu->addAction(get_action_by_icon(menu_data[i]));
+        }
+    }
+    menu->setTearOffEnabled(false);
 }
 
 void MainWindow::createAllMenus()
 {
     qDebug("MainWindow createAllMenus()");
-    createFileMenu();
-    createEditMenu();
-    createViewMenu();
-    createSettingsMenu();
-    createWindowMenu();
-    createHelpMenu();
 
+    QString appDir = qApp->applicationDirPath();
+    QString icontheme = settings_general_icon_theme;
+
+    menuBar()->addMenu(menuHash["File"]);
+    menuHash["File"]->addAction(actionHash.value(ACTION_NEW));
+    menuHash["File"]->addSeparator();
+    menuHash["File"]->addAction(actionHash.value(ACTION_OPEN));
+
+    menuHash["File"]->addMenu(menuHash["Recent"]);
+    connect(menuHash["Recent"], SIGNAL(aboutToShow()), this, SLOT(recentMenuAboutToShow()));
+    //Do not allow the Recent Menu to be torn off. It's a pain in the ass to maintain.
+    menuHash["Recent"]->setTearOffEnabled(false);
+
+    menuHash["File"]->addSeparator();
+    menuHash["File"]->addAction(actionHash.value(ACTION_SAVE));
+    menuHash["File"]->addAction(actionHash.value(ACTION_SAVE_AS));
+    menuHash["File"]->addSeparator();
+    menuHash["File"]->addAction(actionHash.value(ACTION_PRINT));
+    menuHash["File"]->addSeparator();
+    menuHash["File"]->addAction(actionHash.value(ACTION_WINDOW_CLOSE));
+    menuHash["File"]->addSeparator();
+    menuHash["File"]->addAction(actionHash.value(ACTION_DESIGN_DETAILS));
+    menuHash["File"]->addSeparator();
+
+    menuHash["File"]->addAction(actionHash.value(ACTION_EXIT));
+    menuHash["File"]->setTearOffEnabled(false);
+
+    menuBar()->addMenu(menuHash["Edit"]);
+    add_to_menu(menuHash["Edit"], edit_menu);
+
+    menuBar()->addMenu(menuHash["View"]);
+    add_to_menu(menuHash["View"], view_menu);
+    add_to_menu(menuHash["Zoom"], zoom_menu);
+    add_to_menu(menuHash["Pan"], pan_menu);
+
+    menuBar()->addMenu(menuHash["Tools"]);
+    add_to_menu(menuHash["Tools"], tools_menu);
+
+    menuBar()->addMenu(menuHash["Draw"]);
+    add_to_menu(menuHash["Draw"], draw_menu);
+
+    menuBar()->addMenu(menuHash["Dimension"]);
+    add_to_menu(menuHash["Dimension"], dimension_menu);
+
+    menuBar()->addMenu(menuHash["Modify"]);
+    add_to_menu(menuHash["Modify"], modify_menu);
+
+    menuBar()->addMenu(menuHash["Sandbox"]);
+    add_to_menu(menuHash["Sandbox"], sandbox_menu);
+
+    menuBar()->addMenu(menuHash["Settings"]);
+    menuHash["Settings"]->addAction(actionHash.value(ACTION_SETTINGS_DIALOG));
+    menuHash["Settings"]->addSeparator();
+    menuHash["Settings"]->setTearOffEnabled(false);
+
+    menuBar()->addMenu(menuHash["Window"]);
+    connect(menuHash["Window"], SIGNAL(aboutToShow()), this, SLOT(windowMenuAboutToShow()));
+    /* Do not allow the Window Menu to be torn off. It's a pain in the ass to maintain. */
+    menuHash["Window"]->setTearOffEnabled(false);
+
+    menuBar()->addMenu(menuHash["Help"]);
+    add_to_menu(menuHash["Help"], help_menu);
 }

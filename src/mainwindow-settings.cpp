@@ -15,26 +15,24 @@
 #include <QtGlobal>
 #include <QSettings>
 
-namespace {
-
-// Note: on Unix we include the trailing separator. For Windows compatibility we omit it.
+/* Note: on Unix we include the trailing separator. For Windows compatibility we
+ * omit it.
+ */
 QString SettingsDir()
 {
 #if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
-  QString homePath = QDir::homePath();
-  return homePath + "/.embroidermodder2/";
+    QString homePath = QDir::homePath();
+    return homePath + "/.embroidermodder2/";
 #else
-  return "";
+    return "";
 #endif
 }
 
 QString SettingsPath()
 {
-  QString settingsPath = SettingsDir() + "settings.ini";
-  return settingsPath;
+    QString settingsPath = SettingsDir() + "settings.ini";
+    return settingsPath;
 }
-
-} // end anonymous namespace
 
 void MainWindow::readSettings()
 {

@@ -435,10 +435,6 @@ typedef struct Command_ {
     ScriptValue (*main)(ScriptEnv *context);
     const char *arguments;
     const char *icon;
-    const char *menu_name;
-    int menu_position;
-    const char *toolbar_name;
-    int toolbar_position;
     const char *tooltip;
     const char *statustip;
     const char *alias;
@@ -477,10 +473,13 @@ void prompt_output(const char *);
 int argument_checks(ScriptEnv *context, char *function, const char *args);
 char *translate(char *msg);
 
+int string_array_length(const char *s[]);
 int parse_floats(char *line, float result[], int n);
 int parse_vector(char *line, EmbVector *v);
 bool validRGB(float r, float g, float b);
 void reportDistance(EmbVector a, EmbVector b);
+
+void add_to_toolbar(const char *toolbar_name, const char *toolbar_data[]);
 
 /* MainWindow calls */
 void init_command(void);
@@ -530,6 +529,7 @@ ScriptValue snowflake_command(ScriptEnv*);
 ScriptValue star_command(ScriptEnv*);
 
 /* Geometry Primatives */
+ScriptValue arc_command(ScriptEnv *);
 ScriptValue arc_command(ScriptEnv *context);
 ScriptValue circle_command(ScriptEnv*);
 ScriptValue ellipse_command(ScriptEnv *);
@@ -569,6 +569,7 @@ ScriptValue text_underline_command(ScriptEnv*);
 ScriptValue text_overline_command(ScriptEnv*);
 ScriptValue text_strikeout_command(ScriptEnv*);
 
+ScriptValue test_command(ScriptEnv *);
 ScriptValue tipoftheday_command(ScriptEnv*);
 ScriptValue todo_command(ScriptEnv*);
 ScriptValue undo_command(ScriptEnv*);
@@ -620,11 +621,33 @@ extern ScriptValue script_false;
 extern const char *coverage_test[];
 extern int testing_mode;
 
+extern const char *menubar_full_list[];
+extern const char *menubar_no_docs[];
 extern const char *file_menu[];
 extern const char *edit_menu[];
+extern const char *view_menu[];
+extern const char *zoom_menu[];
+extern const char *pan_menu[];
+extern const char *draw_menu[];
+extern const char *tools_menu[];
+extern const char *modify_menu[];
+extern const char *dimension_menu[];
+extern const char *sandbox_menu[];
+extern const char *help_menu[];
 
+extern const char *toolbars_when_docs[];
 extern const char *file_toolbar[];
 extern const char *edit_toolbar[];
+extern const char *view_toolbar[];
+extern const char *zoom_toolbar[];
+extern const char *pan_toolbar[];
+extern const char *icon_toolbar[];
+extern const char *help_toolbar[];
+extern const char *draw_toolbar[];
+extern const char *inquiry_toolbar[];
+extern const char *modify_toolbar[];
+extern const char *dimension_toolbar[];
+extern const char *sandbox_toolbar[];
 
 #ifdef __cplusplus
 }

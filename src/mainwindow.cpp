@@ -38,6 +38,9 @@
 #include <thread>
 
 QHash<QString, Command> command_map;
+QHash<int, QAction*> actionHash;
+QHash<QString, QToolBar*> toolbarHash;
+QHash<QString, QMenu*> menuHash;
 
 void
 MainWindow::run_testing(void)
@@ -96,28 +99,39 @@ MainWindow::MainWindow() : QMainWindow(0)
     //Init
     _main = this;
     //Menus
-    fileMenu     = new QMenu(tr("&File"),     this);
-    editMenu     = new QMenu(tr("&Edit"),     this);
-    viewMenu     = new QMenu(tr("&View"),     this);
-    settingsMenu = new QMenu(tr("&Settings"), this);
-    windowMenu   = new QMenu(tr("&Window"),   this);
-    helpMenu     = new QMenu(tr("&Help"),     this);
+    menuHash["File"] = new QMenu(tr("&File"), this);
+    menuHash["Edit"] = new QMenu(tr("&Edit"), this);
+    menuHash["View"] = new QMenu(tr("&View"), this);
+    menuHash["Draw"] = new QMenu(tr("&Draw"), this);
+    menuHash["Tools"] = new QMenu(tr("&Tools"), this);
+    menuHash["Modify"] = new QMenu(tr("&Modify"), this);
+    menuHash["Sandbox"] = new QMenu(tr("S&andbox"), this);
+    menuHash["Dimension"] = new QMenu(tr("&Dimension"), this);
+    menuHash["Settings"] = new QMenu(tr("&Settings"), this);
+    menuHash["Window"] = new QMenu(tr("&Window"), this);
+    menuHash["Help"] = new QMenu(tr("&Help"), this);
     //SubMenus
-    recentMenu   = new QMenu(tr("Open &Recent"), this);
-    zoomMenu     = new QMenu(tr("&Zoom"),        this);
-    panMenu      = new QMenu(tr("&Pan"),         this);
+    menuHash["Recent"] = new QMenu(tr("Open &Recent"), this);
+    menuHash["Zoom"] = new QMenu(tr("&Zoom"), this);
+    menuHash["Pan"] = new QMenu(tr("&Pan"), this);
     //Toolbars
-    toolbarFile       = addToolBar(tr("File"));
-    toolbarEdit       = addToolBar(tr("Edit"));
-    toolbarView       = addToolBar(tr("View"));
-    toolbarZoom       = addToolBar(tr("Zoom"));
-    toolbarPan        = addToolBar(tr("Pan"));
-    toolbarIcon       = addToolBar(tr("Icon"));
-    toolbarHelp       = addToolBar(tr("Help"));
-    toolbarLayer      = addToolBar(tr("Layer"));
-    toolbarProperties = addToolBar(tr("Properties"));
-    toolbarText       = addToolBar(tr("Text"));
-    toolbarPrompt     = addToolBar(tr("Command Prompt"));
+    toolbarHash["File"] = addToolBar(tr("File"));
+    toolbarHash["Edit"] = addToolBar(tr("Edit"));
+    toolbarHash["View"] = addToolBar(tr("View"));
+    toolbarHash["Zoom"] = addToolBar(tr("Zoom"));
+    toolbarHash["Pan"] = addToolBar(tr("Pan"));
+    toolbarHash["Icon"] = addToolBar(tr("Icon"));
+    toolbarHash["Help"] = addToolBar(tr("Help"));
+    toolbarHash["Layer"] = addToolBar(tr("Layer"));
+    toolbarHash["Properties"] = addToolBar(tr("Properties"));
+    toolbarHash["Text"] = addToolBar(tr("Text"));
+    toolbarHash["Prompt"] = addToolBar(tr("Command Prompt"));
+
+    toolbarHash["Draw"] = new QToolBar("toolbarDraw", this);
+    toolbarHash["Modify"] = new QToolBar("toolbarModify", this);
+    toolbarHash["Inquiry"] = new QToolBar("toolbarInquiry", this);
+    toolbarHash["Dimension"] = new QToolBar("toolbarDimension", this);
+    toolbarHash["Sandbox"] = new QToolBar("toolbarSandbox", this);
     //Selectors
     layerSelector = new QComboBox(this);
     colorSelector = new QComboBox(this);
@@ -229,7 +243,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     showNormal();
 
-    toolbarPrompt->show();
+    toolbarHash["Prompt"]->show();
 
     //Load tips from external file
     QFile tipFile(appDir + "/tips.txt");
@@ -268,15 +282,10 @@ MainWindow::~MainWindow()
     cutCopyObjectList.clear();
 }
 
-QAction* MainWindow::getAction(int actionEnum)
-{
-    return actionHash.value(actionEnum);
-}
-
 void MainWindow::recentMenuAboutToShow()
 {
     qDebug("MainWindow::recentMenuAboutToShow()");
-    recentMenu->clear();
+    menuHash["Recent"]->clear();
 
     QFileInfo recentFileInfo;
     QString recentValue;
@@ -295,7 +304,7 @@ void MainWindow::recentMenuAboutToShow()
                     rAction = new QAction(      recentValue + " " + recentFileInfo.fileName(), this);
                 rAction->setCheckable(false);
                 rAction->setData(settings_opensave_recent_list_of_files.at(i));
-                recentMenu->addAction(rAction);
+                menuHash["Recent"]->addAction(rAction);
                 connect(rAction, SIGNAL(triggered()), this, SLOT(openrecentfile()));
             }
         }
@@ -315,24 +324,24 @@ MainWindow::debug_message(const char *msg)
 void MainWindow::windowMenuAboutToShow()
 {
     qDebug("MainWindow::windowMenuAboutToShow()");
-    windowMenu->clear();
-    windowMenu->addAction(actionHash.value(ACTION_WINDOW_CLOSE));
-    windowMenu->addAction(actionHash.value(ACTION_WINDOW_CLOSE_ALL));
-    windowMenu->addSeparator();
-    windowMenu->addAction(actionHash.value(ACTION_WINDOW_CASCADE));
-    windowMenu->addAction(actionHash.value(ACTION_WINDOW_TILE));
-    windowMenu->addSeparator();
-    windowMenu->addAction(actionHash.value(ACTION_WINDOW_NEXT));
-    windowMenu->addAction(actionHash.value(ACTION_WINDOW_PREVIOUS));
+    menuHash["Window"]->clear();
+    menuHash["Window"]->addAction(actionHash.value(ACTION_WINDOW_CLOSE));
+    menuHash["Window"]->addAction(actionHash.value(ACTION_WINDOW_CLOSE_ALL));
+    menuHash["Window"]->addSeparator();
+    menuHash["Window"]->addAction(actionHash.value(ACTION_WINDOW_CASCADE));
+    menuHash["Window"]->addAction(actionHash.value(ACTION_WINDOW_TILE));
+    menuHash["Window"]->addSeparator();
+    menuHash["Window"]->addAction(actionHash.value(ACTION_WINDOW_NEXT));
+    menuHash["Window"]->addAction(actionHash.value(ACTION_WINDOW_PREVIOUS));
 
-    windowMenu->addSeparator();
+    menuHash["Window"]->addSeparator();
     QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
     for (int i = 0; i < windows.count(); ++i) {
         QAction* aAction = new QAction(windows.at(i)->windowTitle(), this);
         aAction->setCheckable(true);
         aAction->setData(i);
-        windowMenu->addAction(aAction);
-        connect(aAction, SIGNAL(toggled(bool)), this, SLOT(windowMenuActivated(bool)));
+        menuHash["Window"]->addAction(aAction);
+        connect(aAction, SIGNAL(toggled(bool)), this, SLOT(menuHash["Window"]Activated(bool)));
         aAction->setChecked(mdiArea->activeSubWindow() == windows.at(i));
     }
 }
@@ -587,39 +596,24 @@ void MainWindow::updateMenuToolbarStatusbar()
 
     if (numOfDocs) {
         /* Toolbars */
-        toolbarView->show();
-        toolbarZoom->show();
-        toolbarPan->show();
-        toolbarIcon->show();
-        toolbarHelp->show();
-        toolbarLayer->show();
-        toolbarText->show();
-        toolbarProperties->show();
-        toolbarPrompt->show();
-
-        foreach(QToolBar* tb, toolbarHash) {
-            tb->show();
+        int n = string_array_length(toolbars_when_docs);
+        for (int i=0; i<n; i++) {
+            QString s(toolbars_when_docs[i]);
+            toolbarHash[s]->show();
         }
 
-        //DockWidgets
+        /* DockWidgets */
         dockPropEdit->show();
         dockUndoEdit->show();
 
-        //Menus
+        /* Menus */
         menuBar()->clear();
-        menuBar()->addMenu(fileMenu);
-        menuBar()->addMenu(editMenu);
-        menuBar()->addMenu(viewMenu);
-
-        foreach (QMenu* menu, menuHash) {
-            menuBar()->addMenu(menu);
+        n = string_array_length(menubar_full_list);
+        for (int i=0; i<n; i++) {
+            QString s(menubar_full_list[i]);
+            menuBar()->addMenu(menuHash[s]);
         }
-
-        menuBar()->addMenu(settingsMenu);
-        menuBar()->addMenu(windowMenu);
-        menuBar()->addMenu(helpMenu);
-
-        windowMenu->setEnabled(true);
+        menuHash["Window"]->setEnabled(true);
 
         //Statusbar
         statusbar->clearMessage();
@@ -634,33 +628,25 @@ void MainWindow::updateMenuToolbarStatusbar()
         statusbar->statusBarLwtButton->show();
     }
     else {
-        // Toolbars
-        toolbarView->hide();
-        toolbarZoom->hide();
-        toolbarPan->hide();
-        toolbarIcon->hide();
-        toolbarHelp->hide();
-        toolbarLayer->hide();
-        toolbarText->hide();
-        toolbarProperties->hide();
-        toolbarPrompt->show();
-        foreach (QToolBar* tb, toolbarHash) {
-            tb->hide();
+        /* Toolbars */
+        int n = string_array_length(toolbars_when_docs);
+        for (int i=0; i<n; i++) {
+            QString s(toolbars_when_docs[i]);
+            toolbarHash[s]->hide();
         }
 
-        //DockWidgets
+        /* DockWidgets */
         dockPropEdit->hide();
         dockUndoEdit->hide();
 
-        //Menus
+        /* Menus */
         menuBar()->clear();
-        menuBar()->addMenu(fileMenu);
-        menuBar()->addMenu(editMenu);
-        menuBar()->addMenu(settingsMenu);
-        menuBar()->addMenu(windowMenu);
-        menuBar()->addMenu(helpMenu);
-
-        windowMenu->setEnabled(false);
+        n = string_array_length(menubar_no_docs);
+        for (int i=0; i<n; i++) {
+            QString s(menubar_no_docs[i]);
+            menuBar()->addMenu(menuHash[s]);
+        }
+        menuHash["Window"]->setEnabled(false);
 
         //Statusbar
         statusbar->clearMessage();

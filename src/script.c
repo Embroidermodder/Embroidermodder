@@ -380,7 +380,7 @@ command_prompt(ScriptEnv *context, const char *line)
 
     /* Identify function. */
     int function = -1;
-    for (i=0; command_data[i].menu_position >= 0; i++) {
+    for (i=0; command_data[i].id != -2; i++) {
         if (!strcmp(command_data[i].icon, args[0])) {
             function = i;
             break;
@@ -441,4 +441,18 @@ validRGB(float r, float g, float b)
         return false;
     }
     return true;
+}
+
+int
+string_array_length(const char *s[])
+{
+    int i;
+    int max_length = 1000;
+    for (i=0; i<max_length; i++) {
+        if (!strcmp(s[i], "END")) {
+            return i;
+        }
+    }
+    prompt_output("END symbol missing from string array.");
+    return max_length;
 }
