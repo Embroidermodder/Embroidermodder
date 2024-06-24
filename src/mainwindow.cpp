@@ -357,10 +357,11 @@ void MainWindow::windowMenuActivated(bool checked)
         w->setFocus();
 }
 
-MdiArea* MainWindow::getMdiArea()
+MdiArea*
+getMdiArea()
 {
     qDebug("MainWindow::getMdiArea()");
-    return mdiArea;
+    return _main->mdiArea;
 }
 
 void

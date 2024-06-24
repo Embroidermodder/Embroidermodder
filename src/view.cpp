@@ -125,14 +125,16 @@ View::~View()
 void View::enterEvent(QEvent* /*event*/)
 {
     QMdiSubWindow* mdiWin = qobject_cast<QMdiSubWindow*>(parent());
-    if (mdiWin) _main->getMdiArea()->setActiveSubWindow(mdiWin);
+    if (mdiWin) {
+        getMdiArea()->setActiveSubWindow(mdiWin);
+    }
 }
 
 void View::addObject(BaseObject* obj)
 {
     gscene->addItem(obj);
     gscene->update();
-    hashDeletedObjects.remove(obj->objectID());
+    hashDeletedObjects.remove(obj->objID);
 }
 
 void View::deleteObject(BaseObject* obj)
@@ -141,7 +143,7 @@ void View::deleteObject(BaseObject* obj)
     obj->setSelected(false);
     gscene->removeItem(obj);
     gscene->update();
-    hashDeletedObjects.insert(obj->objectID(), obj);
+    hashDeletedObjects.insert(obj->objID, obj);
 }
 
 void View::previewOn(int clone, int mode, qreal x, qreal y, qreal data)
@@ -244,7 +246,7 @@ void View::clearRubberRoom()
             if ((type == OBJ_TYPE_PATH     && spareRubberList.contains(SPARE_RUBBER_PATH))     ||
                (type == OBJ_TYPE_POLYGON  && spareRubberList.contains(SPARE_RUBBER_POLYGON))  ||
                (type == OBJ_TYPE_POLYLINE && spareRubberList.contains(SPARE_RUBBER_POLYLINE)) ||
-               (spareRubberList.contains(base->objectID()))) {
+               (spareRubberList.contains(base->objID))) {
                 if (!base->objectPath().elementCount()) {
                     QMessageBox::critical(this, tr("Empty Rubber Object Error"),
                                           tr("The rubber object added contains no points. "
@@ -664,7 +666,7 @@ void View::drawBackground(QPainter* painter, const QRectF& rect)
         painter->fillPath(originPath, gridColor);
     }
 
-    EmbPattern *pattern = _main->activeMdiWindow()->pattern;
+    EmbPattern *pattern = activeMdiWindow()->pattern;
     for (int i = 0; i < pattern->geometry->count; i++) {
         EmbGeometry g = pattern->geometry->geometry[i];
         switch (g.type) {

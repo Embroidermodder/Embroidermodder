@@ -27,8 +27,6 @@ for easier reading such as a block of one liner if/else statements.
 
 Use exceptions sparingly.
 
-if/else is preferred over switch/case.
-
 Do not use ternary operator (?:) in place of if/else.
 
 Do not repeat a variable name that already occurs in an outer scope.
@@ -50,20 +48,8 @@ incomplete or need special clarification. In these cases, use the types of
 comments shown below. They are pretty standard and are highlighted by many editors to
 make reviewing code easier. We also use shell scripts to parse the code to find
 all of these occurances so someone wanting to go on a bug hunt will be able to
-easily see which areas of the code need more love.
-
-```
-//C++ Style Comments
-//TODO: This code clearly needs more work or further review.
-//BUG: This code is definitely wrong. It needs fixed.
-//HACK: This code shouldn't be written this way or I don't feel right about it. There may a better solution.
-//WARNING: Think twice (or more times) before changing this code. I put this here for a good reason.
-//NOTE: This comment is much more important than lesser comments.
-```
-
-libembroidery is written in C and adheres to C89 standards. This means
-that any C99 or C++ comments will show up as errors when compiling with
-gcc. In any C code, you must use:
+easily see which areas of the code need more love. Use C style comments for
+both C and C++ code.
 
 ```
 /* C Style Comments */
@@ -73,4 +59,3 @@ gcc. In any C code, you must use:
 /* WARNING: Think twice (or more times) before changing this code. I put this here for a good reason. */
 /* NOTE: This comment is much more important than lesser comments. */
 ```
-

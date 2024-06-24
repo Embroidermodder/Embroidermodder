@@ -50,6 +50,13 @@
 
 #include <QTimer>
 
+/* C++ */
+#include <string>
+#include <vector>
+#include <unordered_map>
+
+#include <inttypes.h>
+
 #include "core.h"
 
 #define REAL(i)             context->argument[i].r
@@ -566,13 +573,15 @@ inline qreal degrees(qreal radian) { return (radian * 180.0 / embConstantPi); }
 class BaseObject : public QGraphicsPathItem
 {
 public:
+    EmbGeometry *geometry;
+
     QPen objPen;
     QPen lwtPen;
     QLineF objLine;
     int objRubberMode;
     QHash<QString, QPointF> objRubberPoints;
     QHash<QString, QString> objRubberTexts;
-    qint64 objID;
+    int64_t objID;
 
     BaseObject(QGraphicsItem* parent = 0);
     virtual ~BaseObject();
@@ -580,9 +589,7 @@ public:
     enum { Type = OBJ_TYPE_BASE };
     virtual int type() const { return Type; }
 
-    qint64 objectID() const { return objID; }
-    QPen objectPen() const { return objPen; }
-    QColor objectColor() const { return objPen.color(); }
+//    QColor objectColor() const { return objPen.color(); }
     QRgb objectColorRGB() const { return objPen.color().rgb(); }
     Qt::PenStyle objectLineType() const { return objPen.style(); }
     qreal  objectLineWeight() const { return lwtPen.widthF(); }
@@ -624,8 +631,6 @@ protected:
 class ArcObject : public BaseObject
 {
 public:
-    EmbArc arc;
-
     ArcObject(EmbArc arc, QRgb rgb, QGraphicsItem* parent = 0);
     ArcObject(ArcObject* obj, QGraphicsItem* parent = 0);
     ~ArcObject();
@@ -646,17 +651,13 @@ public:
     qreal objectIncludedAngle() const;
     bool objectClockwise() const;
 
-    void setObjectCenter(const QPointF& point);
-    void setObjectCenter(qreal pointX, qreal pointY);
+    void setObjectCenter(EmbVector point);
     void setObjectRadius(qreal radius);
     void setObjectStartAngle(qreal angle);
     void setObjectEndAngle(qreal angle);
-    void setObjectStartPoint(const QPointF& point);
-    void setObjectStartPoint(qreal pointX, qreal pointY);
-    void setObjectMidPoint(const QPointF& point);
-    void setObjectMidPoint(qreal pointX, qreal pointY);
-    void setObjectEndPoint(const QPointF& point);
-    void setObjectEndPoint(qreal pointX, qreal pointY);
+    void setObjectStartPoint(EmbVector point);
+    void setObjectMidPoint(EmbVector point);
+    void setObjectEndPoint(EmbVector point);
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
@@ -671,17 +672,11 @@ private:
 
     void calculateArcData(EmbArc arc);
     void updateArcRect(qreal radius);
-
-    QPointF arcStartPoint;
-    QPointF arcMidPoint;
-    QPointF arcEndPoint;
 };
 
 class CircleObject : public BaseObject
 {
 public:
-    EmbCircle circle;
-
     CircleObject(qreal centerX, qreal centerY, qreal radius, QRgb rgb, QGraphicsItem* parent = 0);
     CircleObject(CircleObject* obj, QGraphicsItem* parent = 0);
     ~CircleObject();
@@ -701,8 +696,7 @@ public:
     QPointF objectQuadrant180() const { return objectCenter() + QPointF(-objectRadius(),0); }
     QPointF objectQuadrant270() const { return objectCenter() + QPointF(0, objectRadius()); }
 
-    void setObjectCenter(const QPointF& center);
-    void setObjectCenter(qreal centerX, qreal centerY);
+    void setObjectCenter(EmbVector centerY);
     void setObjectCenterX(qreal centerX);
     void setObjectCenterY(qreal centerY);
     void setObjectRadius(qreal radius);
@@ -726,8 +720,6 @@ private:
 class DimLeaderObject : public BaseObject
 {
 public:
-    /* EmbDimLeader dim_leader; */
-
     DimLeaderObject(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rgb, QGraphicsItem* parent = 0);
     DimLeaderObject(DimLeaderObject* obj, QGraphicsItem* parent = 0);
     ~DimLeaderObject();
@@ -796,8 +788,6 @@ private:
 class EllipseObject : public BaseObject
 {
 public:
-    EmbEllipse ellipse;
-
     EllipseObject(qreal centerX, qreal centerY, qreal width, qreal height, QRgb rgb, QGraphicsItem* parent = 0);
     EllipseObject(EllipseObject* obj, QGraphicsItem* parent = 0);
     ~EllipseObject();
@@ -880,8 +870,6 @@ private:
 class LineObject : public BaseObject
 {
 public:
-    EmbLine line_;
-
     LineObject(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rgb, QGraphicsItem* parent = 0);
     LineObject(LineObject* obj, QGraphicsItem* parent = 0);
     ~LineObject();
@@ -927,8 +915,6 @@ private:
 class PathObject : public BaseObject
 {
 public:
-    EmbPath path;
-
     PathObject(qreal x, qreal y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent = 0);
     PathObject(PathObject* obj, QGraphicsItem* parent = 0);
     ~PathObject();
@@ -966,8 +952,6 @@ private:
 class PointObject : public BaseObject
 {
 public:
-    EmbPoint point;
-
     PointObject(qreal x, qreal y, QRgb rgb, QGraphicsItem* parent = 0);
     PointObject(PointObject* obj, QGraphicsItem* parent = 0);
     ~PointObject();
@@ -1001,8 +985,6 @@ private:
 class PolygonObject : public BaseObject
 {
 public:
-    EmbPolygon polygon;
-
     PolygonObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent = 0);
     PolygonObject(PolygonObject* obj, QGraphicsItem* parent = 0);
     ~PolygonObject();
@@ -1041,8 +1023,6 @@ private:
 class PolylineObject : public BaseObject
 {
 public:
-    EmbPolyline polyline;
-
     PolylineObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent = 0);
     PolylineObject(PolylineObject* obj, QGraphicsItem* parent = 0);
     ~PolylineObject();
@@ -1081,8 +1061,6 @@ private:
 class RectObject : public BaseObject
 {
 public:
-    EmbRect rectangle;
-
     RectObject(qreal x, qreal y, qreal w, qreal h, QRgb rgb, QGraphicsItem* parent = 0);
     RectObject(RectObject* obj, QGraphicsItem* parent = 0);
     ~RectObject();
@@ -1120,8 +1098,6 @@ private:
 class TextSingleObject : public BaseObject
 {
 public:
-    EmbTextSingle text_single;
-
     TextSingleObject(const QString& str, qreal x, qreal y, QRgb rgb, QGraphicsItem* parent = 0);
     TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent = 0);
     ~TextSingleObject();
@@ -1632,24 +1608,6 @@ class EmbDetailsDialog : public QDialog
 public:
     EmbDetailsDialog(QGraphicsScene* theScene, QWidget *parent = 0);
     ~EmbDetailsDialog();
-
-private:
-    QWidget* mainWidget;
-
-    void getInfo();
-    QWidget* createMainWidget();
-    QWidget* createHistogram();
-
-    QDialogButtonBox* buttonBox;
-
-    quint32 stitchesTotal;
-    quint32 stitchesReal;
-    quint32 stitchesJump;
-    quint32 stitchesTrim;
-    quint32 colorTotal;
-    quint32 colorChanges;
-
-    QRectF boundingRect;
 };
 
 // On Mac, if the user drops a file on the app's Dock icon, or uses Open As, then this is how the app actually opens the file.
@@ -1926,9 +1884,6 @@ class MainWindow: public QMainWindow
 public:
     MainWindow();
     ~MainWindow();
-
-    MdiArea* getMdiArea();
-    MdiWindow* activeMdiWindow();
 
     void setUndoCleanIcon(bool opened);
 
@@ -2348,6 +2303,8 @@ public:
     qreal nativeQSnapY();
 };
 
+MdiArea* getMdiArea();
+MdiWindow* activeMdiWindow();
 View* activeView();
 QGraphicsScene* activeScene();
 QUndoStack* activeUndoStack();

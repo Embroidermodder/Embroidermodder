@@ -232,6 +232,7 @@ design_details_command(ScriptEnv *context)
     }
     init_command();
     clear_selection();
+    _main->designDetails();
     end_command();
     return script_true;
 }

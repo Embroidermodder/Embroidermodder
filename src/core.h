@@ -441,6 +441,14 @@ typedef struct Command_ {
     const char *shortcut;
 } Command;
 
+typedef struct EmbDimLeader_ {
+    EmbVector start;
+    EmbVector end;
+    int arrow_style;
+    int line_style;
+    EmbColor color;
+} EmbDimLeader;
+
 /* Scripting functions */
 ScriptEnv *create_script_env();
 void free_script_env(ScriptEnv *);
@@ -480,6 +488,9 @@ bool validRGB(float r, float g, float b);
 void reportDistance(EmbVector a, EmbVector b);
 
 void add_to_toolbar(const char *toolbar_name, const char *toolbar_data[]);
+
+/* Geometry */
+EmbArc emb_arc_set_radius(EmbArc a, EmbReal radius);
 
 /* MainWindow calls */
 void init_command(void);

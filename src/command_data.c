@@ -14,8 +14,6 @@
 
 #include "core.h"
 
-ScriptValue test_command(ScriptEnv *) {return script_true;}
-
 Command command_data[] = {
     {
         .id = ACTION_ABOUT,

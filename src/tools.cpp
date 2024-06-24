@@ -88,26 +88,24 @@ distance_command(ScriptEnv *context)
         init_command();
         clear_selection();
         /*
-        global.x1 = NaN;
-        global.y1 = NaN;
-        global.x2 = NaN;
-        global.y2 = NaN;
+        global.point1.x = 0.0f;
+        global.point1.y = 0.0f;
+        global.point2.x = 0.0f;
+        global.point2.y = 0.0f;
         */
         prompt_output(translate("Specify first point: "));
         break;
     case CONTEXT_CLICK:
         /*
         if (isNaN(global.x1)) {
-            global.x1 = x;
-            global.y1 = y;
+            global.point1 = v;
             addRubber("LINE");
             setRubberMode("LINE");
-            setRubberPoint("LINE_START", global.x1, global.y1);
+            setRubberPoint("LINE_START", global.point1.x, global.point1.y);
             prompt_output(translate("Specify second point: "));
         }
         else {
-            global.x2 = x;
-            global.y2 = y;
+            global.point2 = v;
             reportDistance();
             end_command();
         }
@@ -419,8 +417,7 @@ function prompt(str)
             }
             else {
                 global.firstRun = false;
-                global.baseX = v[0];
-                global.baseY = v[1];
+                global.base = v;
                 addRubber("LINE");
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", global.baseX, global.baseY);

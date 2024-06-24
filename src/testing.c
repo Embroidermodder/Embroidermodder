@@ -9,6 +9,8 @@
  * Testing script.
  */
 
+#include "core.h"
+
 const char *coverage_test[] = {
     "new",
     "icon16",
@@ -17,3 +19,9 @@ const char *coverage_test[] = {
     "exit",
     "END"
 };
+
+ScriptValue
+test_command(ScriptEnv *context)
+{
+    return script_true;
+}

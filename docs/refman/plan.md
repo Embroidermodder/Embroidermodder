@@ -41,7 +41,7 @@ and then dump them all back into the pattern to save.
 
 The main rule here is to reduce the amount of code necessary to achieve what we want,
 seperate code from data to allow alterations to happen entirely in data and reduce the amount of
-dependancy that creates on libraries.
+dependancy that creates on libraries. The overview goes like this:
 
 1. Don't use a Qt function when a C++ will do: it makes us work to Qt's intended style and makes code harder to read for non-Qt favouring developers. (Don't use `qMax`, `qCos` etc.)
 2. Don't use a C++ function when a C one will do, it makes the interfacing between C and C++ parts of the source more complicated. (Don't use the `std::` copies.)
@@ -51,6 +51,7 @@ dependancy that creates on libraries.
 6. Don't create a class for data that isn't dynamically allocated, for functions that don't use the private data.
 7. Avoid using set/get for class data when the data can be public.
 8. Reduce the amount of dynamically allocated memory, every allocation creates an oppertunity for invalid memory.
+9. Manage enums by setting DEFINEs for consistency.
 
 ## Compilation Speed
 
@@ -66,7 +67,7 @@ real    9m14.716s
 user    8m39.204s
 sys     0m28.895s
 $ make clean
-$ time `make &> build.log`
+$ time `make -j4 &> build.log`
 
 real    4m30.748s
 user    15m5.793s
@@ -78,7 +79,8 @@ as setup. If you made an alteration in `src/core.h` and wanted to test it, it wo
 take you a 4m 30s turnaround. Waiting this long makes the development cycle pretty slow,
 if we could cut this in half then that would help.
 
-# Bugs
+## Bugs
 
-* `icon24` is being interpreted as `rgb`
-* "Oh Yeah!" button causes crash
+* `icon24` is being interpreted as `rgb`.
+* "Oh Yeah!" button causes crash.
+* Other than `zoomin` and `zoomout` zoom commands don't work.

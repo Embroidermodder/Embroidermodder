@@ -71,20 +71,7 @@ qt_add_executable(embroidermodder2
 	${SRC}/mainwindow-toolbars.cpp
 	${SRC}/mdiarea.cpp
 	${SRC}/mdiwindow.cpp
-	${SRC}/object-arc.cpp
-	${SRC}/object-base.cpp
-	${SRC}/object-circle.cpp
-	${SRC}/object-dimleader.cpp
-	${SRC}/object-ellipse.cpp
-	${SRC}/object-image.cpp
-	${SRC}/object-line.cpp
-	${SRC}/object-path.cpp
-	${SRC}/object-point.cpp
-	${SRC}/object-polygon.cpp
-	${SRC}/object-polyline.cpp
-	${SRC}/object-rect.cpp
-	${SRC}/object-save.cpp
-	${SRC}/object-textsingle.cpp
+	${SRC}/object.cpp
 	${SRC}/preview-dialog.cpp
 	${SRC}/property-editor.cpp
 	${SRC}/quickleader.cpp

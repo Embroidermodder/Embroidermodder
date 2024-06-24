@@ -55,3 +55,24 @@ find_mouse_snap_point(QList<QPointF> snap_points, const QPointF& mouse_point)
     }
     return result;
 }
+
+EmbArc
+emb_arc_set_radius(EmbArc arc, EmbReal radius)
+{
+    radius = EMB_MAX(radius, 0.0000001);
+    EmbVector center = emb_arc_center(arc);
+
+    EmbVector start = emb_vector_subtract(center, arc.start);
+    start = emb_vector_scale(start, radius/emb_vector_length(start));
+    arc.start = emb_vector_add(center, start);
+
+    EmbVector mid = emb_vector_subtract(center, arc.mid);
+    mid = emb_vector_scale(mid, radius/emb_vector_length(mid));
+    arc.mid = emb_vector_add(center, mid);
+
+    EmbVector end = emb_vector_subtract(center, arc.end);
+    end = emb_vector_scale(start, radius/emb_vector_length(end));
+    arc.end = emb_vector_add(center, end);
+
+    return arc;
+}

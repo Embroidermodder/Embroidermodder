@@ -347,10 +347,11 @@ void MainWindow::iconResize(int iconSize)
     settings_general_icon_size = iconSize;
 }
 
-MdiWindow* MainWindow::activeMdiWindow()
+MdiWindow*
+activeMdiWindow()
 {
     qDebug("activeMdiWindow()");
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(_main->mdiArea->activeSubWindow());
     return mdiWin;
 }
 

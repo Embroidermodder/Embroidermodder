@@ -1907,18 +1907,24 @@ QFontComboBox* PropertyEditor::createFontComboBox(bool disable)
     return fcb;
 }
 
-void PropertyEditor::mapSignal(QObject* fieldObj, const QString& name, QVariant value)
+void
+PropertyEditor::mapSignal(QObject* fieldObj, const QString& name, QVariant value)
 {
     fieldObj->setObjectName(name);
     fieldObj->setProperty(qPrintable(name), value);
 
-    if     (name.startsWith("lineEdit")) connect(fieldObj, SIGNAL(editingFinished()), signalMapper, SLOT(map()));
-    else if (name.startsWith("comboBox")) connect(fieldObj, SIGNAL(activated(const QString&)), signalMapper, SLOT(map()));
+    if (name.startsWith("lineEdit")) {
+        connect(fieldObj, SIGNAL(editingFinished()), signalMapper, SLOT(map()));
+    }
+    else if (name.startsWith("comboBox")) {
+        connect(fieldObj, SIGNAL(activated(const QString&)), signalMapper, SLOT(map()));
+    }
 
     signalMapper->setMapping(fieldObj, fieldObj);
 }
 
-void PropertyEditor::fieldEdited(QObject* fieldObj)
+void
+PropertyEditor::fieldEdited(QObject* fieldObj)
 {
     static bool blockSignals = false;
     if (blockSignals) return;
@@ -1928,186 +1934,268 @@ void PropertyEditor::fieldEdited(QObject* fieldObj)
     int objType = fieldObj->property(qPrintable(objName)).toInt();
 
     foreach(QGraphicsItem* item, selectedItemList) {
-        if (item->type() != objType) continue;
+        if (item->type() != objType) {
+            continue;
+        }
 
         switch(objType) {
-            case OBJ_TYPE_ARC:
-                if (objName == "lineEditArcCenterX") {
-                    tempArcObj = static_cast<ArcObject*>(item);
-                    if (tempArcObj) {
-                        QPointF arc = tempArcObj->objectCenter();
-                        tempArcObj->setObjectCenter(lineEditArcCenterX->text().toDouble(), arc.y());
-                    }
-                }
-                if (objName == "lineEditArcCenterY") {
-                    tempArcObj = static_cast<ArcObject*>(item);
-                    if (tempArcObj) {
-                        QPointF arc = tempArcObj->objectCenter();
-                        tempArcObj->setObjectCenter(arc.x(), -lineEditArcCenterY->text().toDouble());
-                    }
-                }
-                if (objName == "lineEditArcRadius") {
-                    tempArcObj = static_cast<ArcObject*>(item);
-                    if (tempArcObj) {
-                        tempArcObj->setObjectRadius(lineEditArcRadius->text().toDouble());
-                    }
-                }
-                if (objName == "lineEditArcStartAngle") {
-                    tempArcObj = static_cast<ArcObject*>(item);
-                    if (tempArcObj) { tempArcObj->setObjectStartAngle(lineEditArcStartAngle->text().toDouble()); } }
-                if (objName == "lineEditArcEndAngle") {
-                    tempArcObj = static_cast<ArcObject*>(item);
-                    if (tempArcObj) { tempArcObj->setObjectEndAngle(lineEditArcEndAngle->text().toDouble()); } }
+        case OBJ_TYPE_ARC: {
+            tempArcObj = static_cast<ArcObject*>(item);
+            if (tempArcObj) {
+                /* TODO: Error message. */
                 break;
-            case OBJ_TYPE_BLOCK: //TODO: field editing
+            }
+            if (objName == "lineEditArcCenterX") {
+                QPointF arc = tempArcObj->objectCenter();
+                EmbVector center;
+                center.x = lineEditArcCenterX->text().toDouble();
+                center.y = arc.y();
+                tempArcObj->setObjectCenter(center);
+            }
+            if (objName == "lineEditArcCenterY") {
+                QPointF arc = tempArcObj->objectCenter();
+                EmbVector center;
+                center.x = arc.x();
+                center.y = -lineEditArcCenterY->text().toDouble();
+                tempArcObj->setObjectCenter(center);
+            }
+            if (objName == "lineEditArcRadius") {
+                tempArcObj->setObjectRadius(lineEditArcRadius->text().toDouble());
+            }
+            if (objName == "lineEditArcStartAngle") {
+                tempArcObj->setObjectStartAngle(lineEditArcStartAngle->text().toDouble());
+            }
+            if (objName == "lineEditArcEndAngle") {
+                tempArcObj->setObjectEndAngle(lineEditArcEndAngle->text().toDouble());
+            }
+            break;
+        }
+        case OBJ_TYPE_BLOCK: {
+            /* TODO: field editing. */
+            break;
+        }
+        case OBJ_TYPE_CIRCLE: {
+            tempCircleObj = static_cast<CircleObject*>(item);
+            if (!tempCircleObj) {
                 break;
-            case OBJ_TYPE_CIRCLE:
-                if (objName == "lineEditCircleCenterX") {
-                    tempCircleObj = static_cast<CircleObject*>(item);
-                    if (tempCircleObj) { tempCircleObj->setObjectCenterX(lineEditCircleCenterX->text().toDouble()); } }
-                if (objName == "lineEditCircleCenterY") {
-                    tempCircleObj = static_cast<CircleObject*>(item);
-                    if (tempCircleObj) { tempCircleObj->setObjectCenterY(-lineEditCircleCenterY->text().toDouble()); } }
-                if (objName == "lineEditCircleRadius") {
-                    tempCircleObj = static_cast<CircleObject*>(item);
-                    if (tempCircleObj) { tempCircleObj->setObjectRadius(lineEditCircleRadius->text().toDouble()); } }
-                if (objName == "lineEditCircleDiameter") {
-                    tempCircleObj = static_cast<CircleObject*>(item);
-                    if (tempCircleObj) { tempCircleObj->setObjectDiameter(lineEditCircleDiameter->text().toDouble()); } }
-                if (objName == "lineEditCircleArea") {
-                    tempCircleObj = static_cast<CircleObject*>(item);
-                    if (tempCircleObj) { tempCircleObj->setObjectArea(lineEditCircleArea->text().toDouble()); } }
-                if (objName == "lineEditCircleCircumference") {
-                    tempCircleObj = static_cast<CircleObject*>(item);
-                    if (tempCircleObj) { tempCircleObj->setObjectCircumference(lineEditCircleCircumference->text().toDouble()); } }
+            }
+            if (objName == "lineEditCircleCenterX") {
+                tempCircleObj->setObjectCenterX(lineEditCircleCenterX->text().toDouble());
+            }
+            if (objName == "lineEditCircleCenterY") {
+                tempCircleObj->setObjectCenterY(-lineEditCircleCenterY->text().toDouble());
+            }
+            if (objName == "lineEditCircleRadius") {
+                tempCircleObj->setObjectRadius(lineEditCircleRadius->text().toDouble());
+            }
+            if (objName == "lineEditCircleDiameter") {
+                tempCircleObj->setObjectDiameter(lineEditCircleDiameter->text().toDouble());
+            }
+            if (objName == "lineEditCircleArea") {
+                tempCircleObj->setObjectArea(lineEditCircleArea->text().toDouble());
+            }
+            if (objName == "lineEditCircleCircumference") {
+                tempCircleObj->setObjectCircumference(lineEditCircleCircumference->text().toDouble());
+            }
+            break;
+        }
+        case OBJ_TYPE_DIMALIGNED: {
+            /* TODO: field editing. */
+            break;
+        }
+        case OBJ_TYPE_DIMANGULAR: {
+            /* TODO: field editing. */
+            break;
+        }
+        case OBJ_TYPE_DIMARCLENGTH: {
+            /* TODO: field editing. */
+            break;
+        }
+        case OBJ_TYPE_DIMDIAMETER: {
+            /* TODO: field editing. */
+            break;
+        }
+        case OBJ_TYPE_DIMLEADER: {
+            /* TODO: field editing. */
+            break;
+        }
+        case OBJ_TYPE_DIMLINEAR: {
+            /* TODO: field editing. */
+            break;
+        }
+        case OBJ_TYPE_DIMORDINATE: {
+            /* TODO: field editing. */
+            break;
+        }
+        case OBJ_TYPE_DIMRADIUS: {
+            /* TODO: field editing. */
+            break;
+        }
+        case OBJ_TYPE_ELLIPSE: {
+            tempEllipseObj = static_cast<EllipseObject*>(item);
+            if (!tempEllipseObj) {
                 break;
-            case OBJ_TYPE_DIMALIGNED: //TODO: field editing
-                break;
-            case OBJ_TYPE_DIMANGULAR: //TODO: field editing
-                break;
-            case OBJ_TYPE_DIMARCLENGTH: //TODO: field editing
-                break;
-            case OBJ_TYPE_DIMDIAMETER: //TODO: field editing
-                break;
-            case OBJ_TYPE_DIMLEADER: //TODO: field editing
-                break;
-            case OBJ_TYPE_DIMLINEAR: //TODO: field editing
-                break;
-            case OBJ_TYPE_DIMORDINATE: //TODO: field editing
-                break;
-            case OBJ_TYPE_DIMRADIUS: //TODO: field editing
-                break;
-            case OBJ_TYPE_ELLIPSE:
-                if (objName == "lineEditEllipseCenterX") {
-                    tempEllipseObj = static_cast<EllipseObject*>(item);
-                    if (tempEllipseObj) { tempEllipseObj->setObjectCenterX(lineEditEllipseCenterX->text().toDouble()); } }
-                if (objName == "lineEditEllipseCenterY") {
-                    tempEllipseObj = static_cast<EllipseObject*>(item);
-                    if (tempEllipseObj) { tempEllipseObj->setObjectCenterY(-lineEditEllipseCenterY->text().toDouble()); } }
-                if (objName == "lineEditEllipseRadiusMajor") {
-                    tempEllipseObj = static_cast<EllipseObject*>(item);
-                    if (tempEllipseObj) { tempEllipseObj->setObjectRadiusMajor(lineEditEllipseRadiusMajor->text().toDouble()); } }
-                if (objName == "lineEditEllipseRadiusMinor") {
-                    tempEllipseObj = static_cast<EllipseObject*>(item);
-                    if (tempEllipseObj) { tempEllipseObj->setObjectRadiusMinor(lineEditEllipseRadiusMinor->text().toDouble()); } }
-                if (objName == "lineEditEllipseDiameterMajor") {
-                    tempEllipseObj = static_cast<EllipseObject*>(item);
-                    if (tempEllipseObj) { tempEllipseObj->setObjectDiameterMajor(lineEditEllipseDiameterMajor->text().toDouble()); } }
-                if (objName == "lineEditEllipseDiameterMinor") {
-                    tempEllipseObj = static_cast<EllipseObject*>(item);
-                    if (tempEllipseObj) { tempEllipseObj->setObjectDiameterMinor(lineEditEllipseDiameterMinor->text().toDouble()); } }
-                break;
-            case OBJ_TYPE_IMAGE: //TODO: field editing
-                break;
-            case OBJ_TYPE_INFINITELINE: //TODO: field editing
-                break;
-            case OBJ_TYPE_LINE:
+            }
+            if (objName == "lineEditEllipseCenterX") {
+                tempEllipseObj->setObjectCenterX(lineEditEllipseCenterX->text().toDouble());
+            }
+            if (objName == "lineEditEllipseCenterY") {
+                tempEllipseObj->setObjectCenterY(-lineEditEllipseCenterY->text().toDouble());
+            }
+            if (objName == "lineEditEllipseRadiusMajor") {
+                tempEllipseObj->setObjectRadiusMajor(lineEditEllipseRadiusMajor->text().toDouble());
+            }
+            if (objName == "lineEditEllipseRadiusMinor") {
+                tempEllipseObj->setObjectRadiusMinor(lineEditEllipseRadiusMinor->text().toDouble());
+            }
+            if (objName == "lineEditEllipseDiameterMajor") {
+                tempEllipseObj->setObjectDiameterMajor(lineEditEllipseDiameterMajor->text().toDouble());
+            }
+            if (objName == "lineEditEllipseDiameterMinor") {
+                tempEllipseObj->setObjectDiameterMinor(lineEditEllipseDiameterMinor->text().toDouble());
+            }
+            break;
+        }
+        case OBJ_TYPE_IMAGE: {
+            /* TODO: field editing. */
+            break;
+        }
+        case OBJ_TYPE_INFINITELINE: {
+            /* TODO: field editing. */
+            break;
+        }
+        case OBJ_TYPE_LINE: {
+            tempLineObj = static_cast<LineObject*>(item);
+            if (!tempLineObj) { 
                 if (objName == "lineEditLineStartX") {
-                    tempLineObj = static_cast<LineObject*>(item);
-                    if (tempLineObj) { tempLineObj->setObjectX1(lineEditLineStartX->text().toDouble()); } }
+                    tempLineObj->setObjectX1(lineEditLineStartX->text().toDouble());
+                }
                 if (objName == "lineEditLineStartY") {
-                    tempLineObj = static_cast<LineObject*>(item);
-                    if (tempLineObj) { tempLineObj->setObjectY1(-lineEditLineStartY->text().toDouble()); } }
+                    tempLineObj->setObjectY1(-lineEditLineStartY->text().toDouble());
+                }
                 if (objName == "lineEditLineEndX") {
-                    tempLineObj = static_cast<LineObject*>(item);
-                    if (tempLineObj) { tempLineObj->setObjectX2(lineEditLineEndX->text().toDouble()); } }
+                    tempLineObj->setObjectX2(lineEditLineEndX->text().toDouble());
+                }
                 if (objName == "lineEditLineEndY") {
-                    tempLineObj = static_cast<LineObject*>(item);
-                    if (tempLineObj) { tempLineObj->setObjectY2(-lineEditLineEndY->text().toDouble()); } }
-                break;
-            case OBJ_TYPE_PATH: //TODO: field editing
-                break;
-            case OBJ_TYPE_POINT:
-                if (objName == "lineEditPointX") {
-                    tempPointObj = static_cast<PointObject*>(item);
-                    if (tempPointObj) { tempPointObj->setObjectX(lineEditPointX->text().toDouble()); } }
-                if (objName == "lineEditPointY") {
-                    tempPointObj = static_cast<PointObject*>(item);
-                    if (tempPointObj) { tempPointObj->setObjectY(-lineEditPointY->text().toDouble()); } }
-                break;
-            case OBJ_TYPE_POLYGON: //TODO: field editing
-                break;
-            case OBJ_TYPE_POLYLINE: //TODO: field editing
-                break;
-            case OBJ_TYPE_RAY: //TODO: field editing
-                break;
-            case OBJ_TYPE_RECTANGLE: //TODO: field editing
-                break;
-            case OBJ_TYPE_TEXTMULTI: //TODO: field editing
-                break;
-            case OBJ_TYPE_TEXTSINGLE: //TODO: field editing
-                if (objName == "lineEditTextSingleContents") {
-                    tempTextSingleObj = static_cast<TextSingleObject*>(item);
-                    if (tempTextSingleObj) {
-                        tempTextSingleObj->setObjectText(lineEditTextSingleContents->text());
-                    }
+                    tempLineObj->setObjectY2(-lineEditLineEndY->text().toDouble());
                 }
-                if (objName == "comboBoxTextSingleFont") {
-                    if (comboBoxTextSingleFont->currentText() == fieldVariesText) {
-                        break;
-                    }
-                    tempTextSingleObj = static_cast<TextSingleObject*>(item);
-                    if (tempTextSingleObj) {
-                        tempTextSingleObj->setObjectTextFont(comboBoxTextSingleFont->currentFont().family());
-                    }
+            }
+            break;
+        }
+        case OBJ_TYPE_PATH: {
+            /* TODO: field editing. */
+            break;
+        }
+        case OBJ_TYPE_POINT: {
+            if (objName == "lineEditPointX") {
+                tempPointObj = static_cast<PointObject*>(item);
+                if (tempPointObj) {
+                    tempPointObj->setObjectX(lineEditPointX->text().toDouble());
                 }
-                if (objName == "comboBoxTextSingleJustify") {
-                    if (comboBoxTextSingleJustify->currentText() == fieldVariesText) {
-                        break;
-                    }
-                    tempTextSingleObj = static_cast<TextSingleObject*>(item);
-                    if (tempTextSingleObj) {
-                        int index = comboBoxTextSingleJustify->currentIndex();
-                        tempTextSingleObj->setObjectTextJustify(
-                            comboBoxTextSingleJustify->itemData(index).toString());
-                    }
+            }
+            if (objName == "lineEditPointY") {
+                tempPointObj = static_cast<PointObject*>(item);
+                if (tempPointObj) {
+                    tempPointObj->setObjectY(-lineEditPointY->text().toDouble());
                 }
-                if (objName == "lineEditTextSingleHeight") {
-                    tempTextSingleObj = static_cast<TextSingleObject*>(item);
-                    if (tempTextSingleObj) {
-                        tempTextSingleObj->setObjectTextSize(lineEditTextSingleHeight->text().toDouble());
-                    }
+            }
+            break;
+        }
+        case OBJ_TYPE_POLYGON: {
+            /* TODO: field editing. */
+            break;
+        }
+        case OBJ_TYPE_POLYLINE: {
+            /* TODO: field editing. */
+            break;
+        }
+        case OBJ_TYPE_RAY: {
+            /* TODO: field editing. */
+            break;
+        }
+        case OBJ_TYPE_RECTANGLE: {
+            /* TODO: field editing. */
+            break;
+        }
+        case OBJ_TYPE_TEXTMULTI: {
+            /* TODO: field editing. */
+            break;
+        }
+        case OBJ_TYPE_TEXTSINGLE: {
+            //TODO: field editing
+            if (objName == "lineEditTextSingleContents") {
+                tempTextSingleObj = static_cast<TextSingleObject*>(item);
+                if (tempTextSingleObj) {
+                    tempTextSingleObj->setObjectText(lineEditTextSingleContents->text());
                 }
-                if (objName == "lineEditTextSingleRotation") {
-                    tempTextSingleObj = static_cast<TextSingleObject*>(item);
-                    if (tempTextSingleObj) { tempTextSingleObj->setRotation(-lineEditTextSingleRotation->text().toDouble()); } }
-                if (objName == "lineEditTextSingleX") {
-                    tempTextSingleObj = static_cast<TextSingleObject*>(item);
-                    if (tempTextSingleObj) { tempTextSingleObj->setObjectX(lineEditTextSingleX->text().toDouble()); } }
-                if (objName == "lineEditTextSingleY") {
-                    tempTextSingleObj = static_cast<TextSingleObject*>(item);
-                    if (tempTextSingleObj) { tempTextSingleObj->setObjectY(lineEditTextSingleY->text().toDouble()); } }
-                if (objName == "comboBoxTextSingleBackward") {
-                    if (comboBoxTextSingleBackward->currentText() == fieldVariesText) { break; }
-                    tempTextSingleObj = static_cast<TextSingleObject*>(item);
-                    if (tempTextSingleObj) { tempTextSingleObj->setObjectTextBackward(comboBoxTextSingleBackward->itemData(comboBoxTextSingleBackward->currentIndex()).toBool()); } }
-                if (objName == "comboBoxTextSingleUpsideDown") {
-                    if (comboBoxTextSingleUpsideDown->currentText() == fieldVariesText) { break; }
-                    tempTextSingleObj = static_cast<TextSingleObject*>(item);
-                    if (tempTextSingleObj) { tempTextSingleObj->setObjectTextUpsideDown(comboBoxTextSingleUpsideDown->itemData(comboBoxTextSingleUpsideDown->currentIndex()).toBool()); } }
-                break;
-            default:
-                break;
+            }
+            if (objName == "comboBoxTextSingleFont") {
+                if (comboBoxTextSingleFont->currentText() == fieldVariesText) {
+                    break;
+                }
+                tempTextSingleObj = static_cast<TextSingleObject*>(item);
+                if (tempTextSingleObj) {
+                    tempTextSingleObj->setObjectTextFont(comboBoxTextSingleFont->currentFont().family());
+                }
+            }
+            if (objName == "comboBoxTextSingleJustify") {
+                if (comboBoxTextSingleJustify->currentText() == fieldVariesText) {
+                    break;
+                }
+                tempTextSingleObj = static_cast<TextSingleObject*>(item);
+                if (tempTextSingleObj) {
+                    int index = comboBoxTextSingleJustify->currentIndex();
+                    tempTextSingleObj->setObjectTextJustify(
+                        comboBoxTextSingleJustify->itemData(index).toString());
+                }
+            }
+            if (objName == "lineEditTextSingleHeight") {
+                tempTextSingleObj = static_cast<TextSingleObject*>(item);
+                if (tempTextSingleObj) {
+                    double height = lineEditTextSingleHeight->text().toDouble();
+                    tempTextSingleObj->setObjectTextSize(height);
+                }
+            }
+            if (objName == "lineEditTextSingleRotation") {
+                tempTextSingleObj = static_cast<TextSingleObject*>(item);
+                if (tempTextSingleObj) {
+                    tempTextSingleObj->setRotation(-lineEditTextSingleRotation->text().toDouble());
+                }
+            }
+            if (objName == "lineEditTextSingleX") {
+                tempTextSingleObj = static_cast<TextSingleObject*>(item);
+                if (tempTextSingleObj) {
+                    tempTextSingleObj->setObjectX(lineEditTextSingleX->text().toDouble());
+                }
+            }
+            if (objName == "lineEditTextSingleY") {
+                tempTextSingleObj = static_cast<TextSingleObject*>(item);
+                if (tempTextSingleObj) {
+                    tempTextSingleObj->setObjectY(lineEditTextSingleY->text().toDouble());
+                }
+            }
+            if (objName == "comboBoxTextSingleBackward") {
+                if (comboBoxTextSingleBackward->currentText() == fieldVariesText) {
+                    break;
+                }
+                tempTextSingleObj = static_cast<TextSingleObject*>(item);
+                if (tempTextSingleObj) {
+                    tempTextSingleObj->setObjectTextBackward(comboBoxTextSingleBackward->itemData(comboBoxTextSingleBackward->currentIndex()).toBool());
+                }
+            }
+            if (objName == "comboBoxTextSingleUpsideDown") {
+                if (comboBoxTextSingleUpsideDown->currentText() == fieldVariesText) {
+                    break;
+                }
+                tempTextSingleObj = static_cast<TextSingleObject*>(item);
+                if (tempTextSingleObj) {
+                    tempTextSingleObj->setObjectTextUpsideDown(comboBoxTextSingleUpsideDown->itemData(comboBoxTextSingleUpsideDown->currentIndex()).toBool());
+                }
+            }
+            break;
+        }
+        default:
+            break;
         }
 
     }

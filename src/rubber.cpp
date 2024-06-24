@@ -12,7 +12,7 @@
 #include "embroidermodder.h"
 
 ScriptValue
-javaAllowRubber(ScriptEnv* context)
+allow_rubber_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "allowRubber", "")) {
         return script_false;
@@ -22,7 +22,7 @@ javaAllowRubber(ScriptEnv* context)
 }
 
 ScriptValue
-javaSetRubberMode(ScriptEnv* context)
+set_rubber_mode_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "allowRubber", "s")) {
         return script_false;
@@ -85,7 +85,7 @@ javaSetRubberMode(ScriptEnv* context)
 }
 
 ScriptValue
-javaSetRubberPoint(ScriptEnv* context)
+set_rubber_point_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "SetRubberPoint", "srr")) {
         return script_false;
@@ -114,7 +114,7 @@ set_rubber_text_command(ScriptEnv* context)
 }
 
 ScriptValue
-add_Rubber(ScriptEnv* context)
+add_rubber_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "SetRubberPoint", "s")) {
         return script_false;
@@ -214,7 +214,7 @@ add_Rubber(ScriptEnv* context)
 }
 
 ScriptValue
-javaClearRubber(ScriptEnv* context)
+clear_rubber_command(ScriptEnv* context)
 {
     if (context->argumentCount != 0) {
         prompt_output("clearRubber() requires zero arguments");
@@ -226,7 +226,7 @@ javaClearRubber(ScriptEnv* context)
 }
 
 ScriptValue
-javaSpareRubber(ScriptEnv* context)
+spare_rubber_command(ScriptEnv* context)
 {
     if (context->argumentCount != 1) {
         prompt_output("spareRubber() requires one argument");
