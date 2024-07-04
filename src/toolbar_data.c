@@ -9,7 +9,9 @@
  * Toolbar Data
  */
 
-const char *toolbars_when_docs[] = {
+#include "core.h"
+
+string_table toolbars_when_docs = {
     "View",
     "Zoom",
     "Pan",
@@ -22,7 +24,7 @@ const char *toolbars_when_docs[] = {
     "END"
 };
 
-const char *file_toolbar[] = {
+string_table file_toolbar = {
     "new",
     "open",
     "save",
@@ -37,20 +39,20 @@ const char *file_toolbar[] = {
     "END"
 };
 
-const char *edit_toolbar[] = {
+string_table edit_toolbar = {
     "cut",
     "copy",
     "paste",
     "END"
 };
 
-const char *view_toolbar[] = {
+string_table view_toolbar = {
     "day",
     "night",
     "END"
 };
 
-const char *zoom_toolbar[] = {
+string_table zoom_toolbar = {
     "zoomwindow",
     "zoomdynamic",
     "zoomscale",
@@ -65,7 +67,7 @@ const char *zoom_toolbar[] = {
     "END"
 };
 
-const char *pan_toolbar[] = {
+string_table pan_toolbar = {
     "panrealtime",
     "panpoint",
     "---",
@@ -76,7 +78,7 @@ const char *pan_toolbar[] = {
     "END"
 };
 
-const char *icon_toolbar[] = {
+string_table icon_toolbar = {
     "icon16",
     "icon24",
     "icon32",
@@ -86,7 +88,7 @@ const char *icon_toolbar[] = {
     "END"
 };
 
-const char *help_toolbar[] = {
+string_table help_toolbar = {
     "help",
     "---",
     "changelog",
@@ -97,7 +99,7 @@ const char *help_toolbar[] = {
     "END"
 };
 
-const char *draw_toolbar[] = {
+string_table draw_toolbar = {
     "path",
     "polyline",
     "---",
@@ -117,13 +119,13 @@ const char *draw_toolbar[] = {
     "END"
 };
 
-const char *inquiry_toolbar[] = {
+string_table inquiry_toolbar = {
     "distance",
     "locatepoint",
     "END"
 };
 
-const char *modify_toolbar[] = {
+string_table modify_toolbar = {
     "erase",
     "move",
     "rotate",
@@ -132,12 +134,12 @@ const char *modify_toolbar[] = {
     "END"
 };
 
-const char *dimension_toolbar[] = {
+string_table dimension_toolbar = {
     "quickleader",
     "END"
 };
 
-const char *sandbox_toolbar[] = {
+string_table sandbox_toolbar = {
     "sandbox",
     "END"
 };

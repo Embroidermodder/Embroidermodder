@@ -5,6 +5,7 @@ These should be sorted into relevant code sections.
 ## Finished (abbreviate for changelog)
 
 * The `EmbPattern *pattern` as a variable in the `View` class.
+* Load/Save Menu/Toolbars configurations to data files.
 
 ## Current work
 
@@ -66,7 +67,6 @@ These should be sorted into relevant code sections.
 ## 2.0 alpha4
 
 * WIP - CAD Command: Arc (rt)
-* Load/Save Menu/Toolbars configurations into settings.ini
 
 ## 2.0 beta1
 

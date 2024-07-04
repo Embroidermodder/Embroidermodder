@@ -30,7 +30,7 @@ get_action_by_icon(const char *icon)
 
 /* */
 void
-add_to_menu(QMenu *menu, const char *menu_data[])
+add_to_menu(QMenu *menu, string_table menu_data)
 {
     for (int i=0; strcmp(menu_data[i], "END"); i++) {
         if (menu_data[i][0] == '-') {

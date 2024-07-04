@@ -12,6 +12,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <errno.h>
 
 #include "core.h"
 
@@ -70,7 +71,7 @@ argument_checks(ScriptEnv *context, char *function, const char *args)
     char s[200];
     int i;
     if (context->argumentCount != strlen(args)) {
-        sprintf(s, "%s() requires %s arguments.", function, index_name[i]);
+        sprintf(s, "%s() requires %d arguments.", function, context->argumentCount);
         prompt_output(s);
         return 0;
     }
@@ -289,6 +290,7 @@ add_string_argument(ScriptEnv *context, const char *s)
     strcpy(context->argument[context->argumentCount].s, s);
     context->argument[context->argumentCount].type = SCRIPT_STRING;
     context->argumentCount++;
+    return context;
 }
 
 ScriptEnv *
@@ -297,6 +299,7 @@ add_real_argument(ScriptEnv *context, double r)
     context->argument[context->argumentCount].r = r;
     context->argument[context->argumentCount].type = SCRIPT_REAL;
     context->argumentCount++;
+    return context;
 }
 
 ScriptEnv *
@@ -305,6 +308,7 @@ add_int_argument(ScriptEnv *context, int i)
     context->argument[context->argumentCount].i = i;
     context->argument[context->argumentCount].type = SCRIPT_INT;
     context->argumentCount++;
+    return context;
 }
 
 int
@@ -391,7 +395,7 @@ command_prompt(ScriptEnv *context, const char *line)
     }
 
     /* Check there are enough arguments. */
-    if (strlen(command_data[function].arguments[i]) != n_args) {
+    if (strlen(command_data[function].arguments) != n_args) {
         return script_false;
     }
 
@@ -444,15 +448,64 @@ validRGB(float r, float g, float b)
 }
 
 int
-string_array_length(const char *s[])
+string_array_length(string_table s)
 {
     int i;
     int max_length = 1000;
     for (i=0; i<max_length; i++) {
-        if (!strcmp(s[i], "END")) {
+        if (!strncmp(s[i], "END", MAX_COMMAND_LENGTH)) {
             return i;
         }
     }
     prompt_output("END symbol missing from string array.");
     return max_length;
+}
+
+int
+load_string_table(char *fname, char *table_name, string_table table)
+{
+    FILE* file;
+    char error_buffer[200];
+    toml_table_t *conf;
+
+    file = fopen(fname, "r");
+    if (!file) {
+        printf("ERROR: Failed to open \"%s\".\n", table_name);
+        return 0;
+    }
+
+    conf = toml_parse_file(file, error_buffer, sizeof(error_buffer));
+    fclose(file);
+
+    if (!conf) {
+        printf("ERROR: Failed to parse \"%s\".\n", table_name);
+        printf("    %s\n", error_buffer);
+        return 0;
+    }
+
+    toml_array_t* str_table = toml_array_in(conf, table_name);
+    toml_datum_t str;
+    for (int i=0; ; i++) {
+        str = toml_string_at(str_table, i);
+        if (!str.ok) {
+            strncpy(menubar_full_list[i], "END", MAX_COMMAND_LENGTH);
+            break;
+        }
+        else {
+            strncpy(menubar_full_list[i], str.u.s, MAX_COMMAND_LENGTH);
+        }
+    }
+
+    free(str.u.s);
+    toml_free(conf);
+    return 1;
+}
+
+int
+load_data(void)
+{
+    if (!load_string_table("data/menus.toml", "menubar_full_list", menubar_full_list)) {
+        return 0;
+    }
+    return 1;
 }

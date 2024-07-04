@@ -56,6 +56,11 @@ MainWindow::run_testing(void)
 
 MainWindow::MainWindow() : QMainWindow(0)
 {
+    if (!load_data()) {
+        QMessageBox::critical(this, tr("Path Error"),
+            tr("Cannot locate data."));
+        return;
+    }
     readSettings();
 
     QString appDir = qApp->applicationDirPath();

@@ -14,7 +14,7 @@
 #include <QToolBar>
 
 void
-add_to_toolbar(const char *toolbar_name, const char *toolbar_data[])
+add_to_toolbar(const char *toolbar_name, string_table toolbar_data)
 {
     QString s(toolbar_name);
     toolbarHash[s]->setObjectName("toolbar" + s);

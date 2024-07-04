@@ -21,8 +21,13 @@ extern "C" {
 
 #include "../extern/libembroidery/embroidery.h"
 
+#include "toml.h"
+
 #define MAX_ARGS                      10
 #define MAX_STRING_LENGTH            200
+#define MAX_COMMAND_LENGTH            30
+#define MAX_MENU_LENGTH               30
+#define MAX_TOOLBAR_LENGTH            30
 
 #define SCRIPT_NULL                    0
 #define SCRIPT_INT                     1
@@ -449,6 +454,8 @@ typedef struct EmbDimLeader_ {
     EmbColor color;
 } EmbDimLeader;
 
+typedef char string_table[MAX_MENU_LENGTH][MAX_COMMAND_LENGTH];
+
 /* Scripting functions */
 ScriptEnv *create_script_env();
 void free_script_env(ScriptEnv *);
@@ -481,13 +488,15 @@ void prompt_output(const char *);
 int argument_checks(ScriptEnv *context, char *function, const char *args);
 char *translate(char *msg);
 
-int string_array_length(const char *s[]);
+int string_array_length(string_table s);
 int parse_floats(char *line, float result[], int n);
 int parse_vector(char *line, EmbVector *v);
 bool validRGB(float r, float g, float b);
 void reportDistance(EmbVector a, EmbVector b);
 
 void add_to_toolbar(const char *toolbar_name, const char *toolbar_data[]);
+
+int load_data(void);
 
 /* Geometry */
 EmbArc emb_arc_set_radius(EmbArc a, EmbReal radius);
@@ -632,33 +641,33 @@ extern ScriptValue script_false;
 extern const char *coverage_test[];
 extern int testing_mode;
 
-extern const char *menubar_full_list[];
-extern const char *menubar_no_docs[];
-extern const char *file_menu[];
-extern const char *edit_menu[];
-extern const char *view_menu[];
-extern const char *zoom_menu[];
-extern const char *pan_menu[];
-extern const char *draw_menu[];
-extern const char *tools_menu[];
-extern const char *modify_menu[];
-extern const char *dimension_menu[];
-extern const char *sandbox_menu[];
-extern const char *help_menu[];
+extern string_table menubar_full_list;
+extern string_table menubar_no_docs;
+extern string_table file_menu;
+extern string_table edit_menu;
+extern string_table view_menu;
+extern string_table zoom_menu;
+extern string_table pan_menu;
+extern string_table draw_menu;
+extern string_table tools_menu;
+extern string_table modify_menu;
+extern string_table dimension_menu;
+extern string_table sandbox_menu;
+extern string_table help_menu;
 
-extern const char *toolbars_when_docs[];
-extern const char *file_toolbar[];
-extern const char *edit_toolbar[];
-extern const char *view_toolbar[];
-extern const char *zoom_toolbar[];
-extern const char *pan_toolbar[];
-extern const char *icon_toolbar[];
-extern const char *help_toolbar[];
-extern const char *draw_toolbar[];
-extern const char *inquiry_toolbar[];
-extern const char *modify_toolbar[];
-extern const char *dimension_toolbar[];
-extern const char *sandbox_toolbar[];
+extern string_table toolbars_when_docs;
+extern string_table file_toolbar;
+extern string_table edit_toolbar;
+extern string_table view_toolbar;
+extern string_table zoom_toolbar;
+extern string_table pan_toolbar;
+extern string_table icon_toolbar;
+extern string_table help_toolbar;
+extern string_table draw_toolbar;
+extern string_table inquiry_toolbar;
+extern string_table modify_toolbar;
+extern string_table dimension_toolbar;
+extern string_table sandbox_toolbar;
 
 #ifdef __cplusplus
 }

@@ -9,22 +9,11 @@
  * Menu Data
  */
 
-const char *menubar_full_list[] = {
-    "File",
-    "Edit",
-    "View",
-    "Draw",
-    "Tools",
-    "Modify",
-    "Dimension",
-    "Sandbox",
-    "Settings",
-    "Window",
-    "Help",
-    "END"
-};
+#include "core.h"
 
-const char *menubar_no_docs[] = {
+string_table menubar_full_list;
+
+string_table menubar_no_docs = {
     "File",
     "Edit",
     "Settings",
@@ -33,11 +22,11 @@ const char *menubar_no_docs[] = {
     "END"
 };
 
-const char *file_menu[] = {
+string_table file_menu = {
     "END"
 };
 
-const char *edit_menu[] = {
+string_table edit_menu = {
     "undo",
     "redo",
     "---",
@@ -48,7 +37,7 @@ const char *edit_menu[] = {
     "END"
 };
 
-const char *view_menu[] = {
+string_table view_menu = {
     ">Zoom",
     ">Pan",
     "---",
@@ -58,7 +47,7 @@ const char *view_menu[] = {
     "END"
 };
 
-const char *zoom_menu[] = {
+string_table zoom_menu = {
     "zoomwindow",
     "zoomdynamic",
     "zoomscale",
@@ -73,7 +62,7 @@ const char *zoom_menu[] = {
     "END"
 };
 
-const char *pan_menu[] = {
+string_table pan_menu = {
     "panrealtime",
     "panpoint",
     "---",
@@ -84,7 +73,7 @@ const char *pan_menu[] = {
     "END"
 };
 
-const char *help_menu[] = {
+string_table help_menu = {
     "help",
     "---",
     "changelog",
@@ -97,7 +86,7 @@ const char *help_menu[] = {
     "END"
 };
 
-const char *draw_menu[] = {
+string_table draw_menu = {
     "path",
     "polyline",
     "---",
@@ -117,14 +106,14 @@ const char *draw_menu[] = {
     "END"
 };
 
-const char *tools_menu[] = {
+string_table tools_menu = {
     "distance",
     "locatepoint",
     "selectall",
     "END"
 };
 
-const char *modify_menu[] = {
+string_table modify_menu = {
     "erase",
     "move",
     "rotate",
@@ -132,12 +121,12 @@ const char *modify_menu[] = {
     "END"
 };
 
-const char *dimension_menu[] = {
+string_table dimension_menu = {
     "quickleader",
     "END"
 };
 
-const char *sandbox_menu[] = {
+string_table sandbox_menu = {
     "sandbox",
     "END"
 };

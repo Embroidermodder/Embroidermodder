@@ -39,8 +39,6 @@ endif()
 
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets PrintSupport)
 
-add_subdirectory(${CMAKE_SOURCE_DIR}/extern/libembroidery)
-
 # The makers of CMake advise that you do not glob source files.
 #
 # https://cmake.org/cmake/help/latest/command/file.html?highlight=glob#glob
@@ -52,8 +50,15 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/extern/libembroidery)
 set(SRC_ASSETS ${CMAKE_SOURCE_DIR}/assets)
 
 set(SRC ${CMAKE_SOURCE_DIR}/src)
+set(EXTERN ${CMAKE_SOURCE_DIR}/extern)
 
 qt_add_executable(embroidermodder2
+	${EXTERN}/libembroidery/embroidery.c
+	${EXTERN}/libembroidery/embroidery.h
+
+	${EXTERN}/tomlc99/toml.c
+	${EXTERN}/tomlc99/toml.h
+
 	${SRC}/cmdprompt.cpp
 	${SRC}/commands.cpp
 	${SRC}/designs.cpp
@@ -97,8 +102,9 @@ qt_add_executable(embroidermodder2
 )
 
 include_directories(
-	${CMAKE_SOURCE_DIR}/extern/libembroidery
-	${CMAKE_SOURCE_DIR}/src
+	${EXTERN}/libembroidery
+	${EXTERN}/tomlc99
+	${SRC}
 )
 
 qt_add_resources(embroidermodder2 imageresources
@@ -107,7 +113,6 @@ qt_add_resources(embroidermodder2 imageresources
 )
 
 target_link_libraries(embroidermodder2 PRIVATE
-	embroidery_static
 	Qt6::Core
 	Qt6::Widgets
 	Qt6::PrintSupport
