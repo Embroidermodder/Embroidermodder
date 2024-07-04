@@ -28,15 +28,15 @@ to_qpointf(EmbVector v)
 }
 
 QPointF
-scale_and_rotate(QPointF v, qreal scale, qreal angle)
+scale_and_rotate(QPointF v, double scale, double angle)
 {
-    qreal rot = radians(angle);
-    qreal cosRot = cos(rot);
-    qreal sinRot = sin(rot);
-    qreal x = v.x() * scale;
-    qreal y = v.y() * scale;
-    qreal rotX = x*cosRot - y*sinRot;
-    qreal rotY = x*sinRot + y*cosRot;
+    double rot = radians(angle);
+    double cosRot = cos(rot);
+    double sinRot = sin(rot);
+    double x = v.x() * scale;
+    double y = v.y() * scale;
+    double rotX = x*cosRot - y*sinRot;
+    double rotY = x*sinRot + y*cosRot;
     return QPointF(rotX, rotY);    
 }
 

@@ -16,6 +16,36 @@
 
 #include "core.h"
 
+string_table coverage_test;
+
+string_table menubar_full_list;
+string_table menubar_no_docs;
+string_table file_menu;
+string_table edit_menu;
+string_table view_menu;
+string_table zoom_menu;
+string_table pan_menu;
+string_table help_menu;
+string_table draw_menu;
+string_table tools_menu;
+string_table modify_menu;
+string_table dimension_menu;
+string_table sandbox_menu;
+
+string_table toolbars_when_docs;
+string_table file_toolbar;
+string_table edit_toolbar;
+string_table view_toolbar;
+string_table zoom_toolbar;
+string_table pan_toolbar;
+string_table icon_toolbar;
+string_table help_toolbar;
+string_table draw_toolbar;
+string_table inquiry_toolbar;
+string_table modify_toolbar;
+string_table dimension_toolbar;
+string_table sandbox_toolbar;
+
 const char *index_name[] = {
     "one",
     "two",
@@ -62,6 +92,12 @@ ScriptValue script_false = {
     .label = "false",
     .type = SCRIPT_BOOL
 };
+
+ScriptValue
+test_command(ScriptEnv *context)
+{
+    return script_true;
+}
 
 /* TODO: remove args command, use the command_data table
  */
@@ -462,7 +498,27 @@ string_array_length(string_table s)
 }
 
 int
-load_string_table(char *fname, char *table_name, string_table table)
+load_string_table(toml_table_t* conf, char *table_name, string_table table)
+{
+    toml_array_t* str_table = toml_array_in(conf, table_name);
+    toml_datum_t str;
+    for (int i=0; ; i++) {
+        str = toml_string_at(str_table, i);
+        if (!str.ok) {
+            strncpy(table[i], "END", MAX_COMMAND_LENGTH);
+            break;
+        }
+        else {
+            strncpy(table[i], str.u.s, MAX_COMMAND_LENGTH);
+        }
+    }
+
+    free(str.u.s);
+    return 1;
+}
+
+toml_table_t *
+load_data_file(char *fname)
 {
     FILE* file;
     char error_buffer[200];
@@ -470,42 +526,128 @@ load_string_table(char *fname, char *table_name, string_table table)
 
     file = fopen(fname, "r");
     if (!file) {
-        printf("ERROR: Failed to open \"%s\".\n", table_name);
-        return 0;
+        printf("ERROR: Failed to open \"%s\".\n", fname);
+        return NULL;
     }
 
     conf = toml_parse_file(file, error_buffer, sizeof(error_buffer));
     fclose(file);
 
     if (!conf) {
-        printf("ERROR: Failed to parse \"%s\".\n", table_name);
+        printf("ERROR: Failed to parse \"%s\".\n", fname);
         printf("    %s\n", error_buffer);
-        return 0;
+        return NULL;
     }
-
-    toml_array_t* str_table = toml_array_in(conf, table_name);
-    toml_datum_t str;
-    for (int i=0; ; i++) {
-        str = toml_string_at(str_table, i);
-        if (!str.ok) {
-            strncpy(menubar_full_list[i], "END", MAX_COMMAND_LENGTH);
-            break;
-        }
-        else {
-            strncpy(menubar_full_list[i], str.u.s, MAX_COMMAND_LENGTH);
-        }
-    }
-
-    free(str.u.s);
-    toml_free(conf);
-    return 1;
+    return conf;
 }
 
 int
 load_data(void)
 {
-    if (!load_string_table("data/menus.toml", "menubar_full_list", menubar_full_list)) {
+    toml_table_t *conf = load_data_file("data/menus.toml");
+    if (!conf) {
         return 0;
     }
+    if (!load_string_table(conf, "menubar_full_list", menubar_full_list)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "menubar_no_docs", menubar_no_docs)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "file_menu", file_menu)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "edit_menu", edit_menu)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "view_menu", view_menu)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "zoom_menu", zoom_menu)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "pan_menu", pan_menu)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "help_menu", help_menu)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "draw_menu", draw_menu)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "tools_menu", tools_menu)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "modify_menu", modify_menu)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "dimension_menu", dimension_menu)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "sandbox_menu", sandbox_menu)) {
+        return 0;
+    }
+    toml_free(conf);
+
+    conf = load_data_file("data/toolbars.toml");
+    if (!conf) {
+        return 0;
+    }
+    if (!load_string_table(conf, "toolbars_when_docs", toolbars_when_docs)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "file_toolbar", file_toolbar)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "edit_toolbar", edit_toolbar)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "view_toolbar", view_toolbar)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "zoom_toolbar", zoom_toolbar)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "pan_toolbar", pan_toolbar)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "icon_toolbar", icon_toolbar)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "help_toolbar", help_toolbar)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "draw_toolbar", draw_toolbar)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "inquiry_toolbar", inquiry_toolbar)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "modify_toolbar", modify_toolbar)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "dimension_toolbar", dimension_toolbar)) {
+        return 0;
+    }
+    if (!load_string_table(conf, "sandbox_toolbar", sandbox_toolbar)) {
+        return 0;
+    }
+    toml_free(conf);
+
+    conf = load_data_file("data/testing.toml");
+    if (!conf) {
+        return 0;
+    }
+    if (!load_string_table(conf, "coverage_test", coverage_test)) {
+        return 0;
+    }
+    toml_free(conf);
+
+    conf = load_data_file("data/commands.toml");
+    if (!conf) {
+        return 0;
+    }
+
+    toml_free(conf);
     return 1;
 }

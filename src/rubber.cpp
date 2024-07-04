@@ -92,8 +92,8 @@ set_rubber_point_command(ScriptEnv* context)
     }
 
     QString key = QSTR(0).toUpper();
-    qreal x     = context->argument[1].r;
-    qreal y     = context->argument[2].r;
+    double x     = context->argument[1].r;
+    double y     = context->argument[2].r;
 
     _main->nativeSetRubberPoint(key, x, y);
     return script_null;
@@ -128,8 +128,8 @@ add_rubber_command(ScriptEnv* context)
     }
 
     /* FIXME: ERROR CHECKING */
-    qreal mx = command_prompt(context, "get mousex").r;
-    qreal my = command_prompt(context, "get mousey").r;
+    double mx = command_prompt(context, "get mousex").r;
+    double my = command_prompt(context, "get mousey").r;
 
     if (objType == "ARC") {
         // TODO: handle this type
@@ -250,7 +250,7 @@ spare_rubber_command(ScriptEnv* context)
     }
     else {
         bool ok = false;
-        qint64 id = objID.toLongLong(&ok);
+        int64_t id = objID.toLongLong(&ok);
         if (!ok) {
             prompt_output("TYPE_ERROR, spareRubber(): error converting object ID into an int64");
             return script_false;

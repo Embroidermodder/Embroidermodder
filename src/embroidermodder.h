@@ -117,7 +117,7 @@ public:
     void addLayer(const QString& name,
         const bool visible,
         const bool frozen,
-        const qreal zValue,
+        const double zValue,
         const QRgb color,
         const QString& lineType,
         const QString& lineWeight,
@@ -241,17 +241,17 @@ public slots:
     void selectionChanged();
     void clearSelection();
     void deleteSelected();
-    void moveSelected(qreal dx, qreal dy);
+    void moveSelected(double dx, double dy);
     void cut();
     void copy();
     void paste();
     void repeatAction();
     void moveAction();
     void scaleAction();
-    void scaleSelected(qreal x, qreal y, qreal factor);
+    void scaleSelected(double x, double y, double factor);
     void rotateAction();
-    void rotateSelected(qreal x, qreal y, qreal rot);
-    void mirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2);
+    void rotateSelected(double x, double y, double rot);
+    void mirrorSelected(double x1, double y1, double x2, double y2);
     int numSelected();
 
     void deletePressed();
@@ -262,7 +262,7 @@ public slots:
     void showScrollBars(bool val);
     void setCornerButton();
     void setCrossHairColor(QRgb color);
-    void setCrossHairSize(quint8 percent);
+    void setCrossHairSize(uint8_t percent);
     void setBackgroundColor(QRgb color);
     void setSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
     void toggleSnap(bool on);
@@ -281,7 +281,7 @@ public slots:
     void createGrid(const QString& gridType);
     void setRulerColor(QRgb color);
 
-    void previewOn(int clone, int mode, qreal x, qreal y, qreal data);
+    void previewOn(int clone, int mode, double x, double y, double data);
     void previewOff();
 
     void enableMoveRapidFire();
@@ -291,7 +291,7 @@ public slots:
     void addToRubberRoom(QGraphicsItem* item);
     void vulcanizeRubberRoom();
     void clearRubberRoom();
-    void spareRubber(qint64 id);
+    void spareRubber(int64_t id);
     void setRubberMode(int mode);
     void setRubberPoint(const QString& key, const QPointF& point);
     void setRubberText(const QString& key, const QString& txt);
@@ -317,9 +317,9 @@ protected:
     void enterEvent(QEvent* event);
 
 private:
-    QHash<qint64, QGraphicsItem*> hashDeletedObjects;
+    QHash<int64_t, QGraphicsItem*> hashDeletedObjects;
 
-    QList<qint64> spareRubberList;
+    QList<int64_t> spareRubberList;
 
     QColor gridColor;
     QPainterPath gridPath;
@@ -331,18 +331,18 @@ private:
 
     bool rulerMetric;
     QColor rulerColor;
-    quint8 rulerPixelSize;
+    uint8_t rulerPixelSize;
     void loadRulerSettings();
 
-    bool willUnderflowInt32(qint64 a, qint64 b);
-    bool willOverflowInt32(qint64 a, qint64 b);
+    bool willUnderflowInt32(int64_t a, int64_t b);
+    bool willOverflowInt32(int64_t a, int64_t b);
     int roundToMultiple(bool roundUp, int numToRound, int multiple);
     QPainterPath createRulerTextPath(float x, float y, QString str, float height);
 
     QList<QGraphicsItem*> previewObjectList;
     QGraphicsItemGroup* previewObjectItemGroup;
     QPointF previewPoint;
-    qreal previewData;
+    double previewData;
     int previewMode;
 
     QList<QGraphicsItem*> createObjectList(QList<QGraphicsItem*> list);
@@ -389,14 +389,14 @@ private:
     QPoint viewMousePoint;
     QPointF sceneMousePoint;
     QRgb qsnapLocatorColor;
-    quint8 qsnapLocatorSize;
-    quint8 qsnapApertureSize;
+    uint8_t qsnapLocatorSize;
+    uint8_t qsnapApertureSize;
     QRgb gripColorCool;
     QRgb gripColorHot;
-    quint8 gripSize;
-    quint8 pickBoxSize;
+    uint8_t gripSize;
+    uint8_t pickBoxSize;
     QRgb crosshairColor;
-    quint32 crosshairSize;
+    uint32_t crosshairSize;
 
     void panStart(const QPoint& point);
     int panDistance;
@@ -435,7 +435,7 @@ private:
 class UndoableMoveCommand : public QUndoCommand
 {
 public:
-    UndoableMoveCommand(qreal deltaX, qreal deltaY, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+    UndoableMoveCommand(double deltaX, double deltaY, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
@@ -443,32 +443,32 @@ public:
 private:
     BaseObject* object;
     View* gview;
-    qreal dx;
-    qreal dy;
+    double dx;
+    double dy;
 };
 
 class UndoableRotateCommand : public QUndoCommand
 {
 public:
-    UndoableRotateCommand(qreal pivotPointX, qreal pivotPointY, qreal rotAngle, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+    UndoableRotateCommand(double pivotPointX, double pivotPointY, double rotAngle, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
 
 private:
-    void rotate(qreal x, qreal y, qreal rot);
+    void rotate(double x, double y, double rot);
 
     BaseObject* object;
     View* gview;
-    qreal pivotX;
-    qreal pivotY;
-    qreal angle;
+    double pivotX;
+    double pivotY;
+    double angle;
 };
 
 class UndoableScaleCommand : public QUndoCommand
 {
 public:
-    UndoableScaleCommand(qreal x, qreal y, qreal scaleFactor, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+    UndoableScaleCommand(double x, double y, double scaleFactor, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
@@ -476,9 +476,9 @@ public:
 private:
     BaseObject* object;
     View* gview;
-    qreal dx;
-    qreal dy;
-    qreal factor;
+    double dx;
+    double dy;
+    double factor;
 };
 
 class UndoableNavCommand : public QUndoCommand
@@ -520,7 +520,7 @@ private:
 class UndoableMirrorCommand : public QUndoCommand
 {
 public:
-    UndoableMirrorCommand(qreal x1, qreal y1, qreal x2, qreal y2, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+    UndoableMirrorCommand(double x1, double y1, double x2, double y2, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
@@ -567,8 +567,8 @@ private:
     QUndoView*  undoView;
 };
 
-inline qreal radians(qreal degree) { return (degree * embConstantPi / 180.0); }
-inline qreal degrees(qreal radian) { return (radian * 180.0 / embConstantPi); }
+inline double radians(double degree) { return (degree * embConstantPi / 180.0); }
+inline double degrees(double radian) { return (radian * 180.0 / embConstantPi); }
 
 class BaseObject : public QGraphicsPathItem
 {
@@ -592,7 +592,7 @@ public:
 //    QColor objectColor() const { return objPen.color(); }
     QRgb objectColorRGB() const { return objPen.color().rgb(); }
     Qt::PenStyle objectLineType() const { return objPen.style(); }
-    qreal  objectLineWeight() const { return lwtPen.widthF(); }
+    double  objectLineWeight() const { return lwtPen.widthF(); }
     QPainterPath objectPath() const { return path(); }
     int objectRubberMode() const { return objRubberMode; }
     QPointF objectRubberPoint(const QString& key) const;
@@ -600,15 +600,15 @@ public:
 
     QRectF rect() const { return path().boundingRect(); }
     void setRect(const QRectF& r) { QPainterPath p; p.addRect(r); setPath(p); }
-    void setRect(qreal x, qreal y, qreal w, qreal h) { QPainterPath p; p.addRect(x,y,w,h); setPath(p); }
+    void setRect(double x, double y, double w, double h) { QPainterPath p; p.addRect(x,y,w,h); setPath(p); }
     QLineF line() const { return objLine; }
     void setLine(const QLineF& li) { QPainterPath p; p.moveTo(li.p1()); p.lineTo(li.p2()); setPath(p); objLine = li; }
-    void setLine(qreal x1, qreal y1, qreal x2, qreal y2) { QPainterPath p; p.moveTo(x1,y1); p.lineTo(x2,y2); setPath(p); objLine.setLine(x1,y1,x2,y2); }
+    void setLine(double x1, double y1, double x2, double y2) { QPainterPath p; p.moveTo(x1,y1); p.lineTo(x2,y2); setPath(p); objLine.setLine(x1,y1,x2,y2); }
 
     void setObjectColor(const QColor& color);
     void setObjectColorRGB(QRgb rgb);
     void setObjectLineType(Qt::PenStyle lineType);
-    void setObjectLineWeight(qreal lineWeight);
+    void setObjectLineWeight(double lineWeight);
     void setObjectPath(const QPainterPath& p) { setPath(p); }
     void setObjectRubberMode(int mode) { objRubberMode = mode; }
     void setObjectRubberPoint(const QString& key, const QPointF& point) { objRubberPoints.insert(key, point); }
@@ -639,22 +639,22 @@ public:
     virtual int type() const { return Type; }
 
     QPointF objectCenter() const { return scenePos(); }
-    qreal objectRadius() const { return rect().width()/2.0*scale(); }
-    qreal objectStartAngle() const;
-    qreal objectEndAngle() const;
+    double objectRadius() const { return rect().width()/2.0*scale(); }
+    double objectStartAngle() const;
+    double objectEndAngle() const;
     QPointF objectStartPoint() const;
     QPointF objectMidPoint() const;
     QPointF objectEndPoint() const;
-    qreal objectArea() const;
-    qreal objectArcLength() const;
-    qreal objectChord() const;
-    qreal objectIncludedAngle() const;
+    double objectArea() const;
+    double objectArcLength() const;
+    double objectChord() const;
+    double objectIncludedAngle() const;
     bool objectClockwise() const;
 
     void setObjectCenter(EmbVector point);
-    void setObjectRadius(qreal radius);
-    void setObjectStartAngle(qreal angle);
-    void setObjectEndAngle(qreal angle);
+    void setObjectRadius(double radius);
+    void setObjectStartAngle(double angle);
+    void setObjectEndAngle(double angle);
     void setObjectStartPoint(EmbVector point);
     void setObjectMidPoint(EmbVector point);
     void setObjectEndPoint(EmbVector point);
@@ -671,13 +671,13 @@ private:
     void updatePath();
 
     void calculateArcData(EmbArc arc);
-    void updateArcRect(qreal radius);
+    void updateArcRect(double radius);
 };
 
 class CircleObject : public BaseObject
 {
 public:
-    CircleObject(qreal centerX, qreal centerY, qreal radius, QRgb rgb, QGraphicsItem* parent = 0);
+    CircleObject(double centerX, double centerY, double radius, QRgb rgb, QGraphicsItem* parent = 0);
     CircleObject(CircleObject* obj, QGraphicsItem* parent = 0);
     ~CircleObject();
 
@@ -687,22 +687,22 @@ public:
     QPainterPath objectSavePath() const;
 
     QPointF objectCenter() const { return scenePos(); }
-    qreal objectRadius() const { return rect().width()/2.0*scale(); }
-    qreal objectDiameter() const { return rect().width()*scale(); }
-    qreal objectArea() const { return embConstantPi*objectRadius()*objectRadius(); }
-    qreal objectCircumference() const { return embConstantPi*objectDiameter(); }
+    double objectRadius() const { return rect().width()/2.0*scale(); }
+    double objectDiameter() const { return rect().width()*scale(); }
+    double objectArea() const { return embConstantPi*objectRadius()*objectRadius(); }
+    double objectCircumference() const { return embConstantPi*objectDiameter(); }
     QPointF objectQuadrant0() const { return objectCenter() + QPointF(objectRadius(), 0); }
     QPointF objectQuadrant90() const { return objectCenter() + QPointF(0,-objectRadius()); }
     QPointF objectQuadrant180() const { return objectCenter() + QPointF(-objectRadius(),0); }
     QPointF objectQuadrant270() const { return objectCenter() + QPointF(0, objectRadius()); }
 
     void setObjectCenter(EmbVector centerY);
-    void setObjectCenterX(qreal centerX);
-    void setObjectCenterY(qreal centerY);
-    void setObjectRadius(qreal radius);
-    void setObjectDiameter(qreal diameter);
-    void setObjectArea(qreal area);
-    void setObjectCircumference(qreal circumference);
+    void setObjectCenterX(double centerX);
+    void setObjectCenterY(double centerY);
+    void setObjectRadius(double radius);
+    void setObjectDiameter(double diameter);
+    void setObjectArea(double area);
+    void setObjectCircumference(double circumference);
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
@@ -712,7 +712,7 @@ public:
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
-    void init(qreal centerX, qreal centerY, qreal radius, QRgb rgb, Qt::PenStyle lineType);
+    void init(double centerX, double centerY, double radius, QRgb rgb, Qt::PenStyle lineType);
     void updatePath();
 };
 
@@ -720,7 +720,7 @@ private:
 class DimLeaderObject : public BaseObject
 {
 public:
-    DimLeaderObject(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rgb, QGraphicsItem* parent = 0);
+    DimLeaderObject(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsItem* parent = 0);
     DimLeaderObject(DimLeaderObject* obj, QGraphicsItem* parent = 0);
     ~DimLeaderObject();
 
@@ -745,23 +745,23 @@ public:
     QPointF objectEndPoint1() const;
     QPointF objectEndPoint2() const;
     QPointF objectMidPoint() const;
-    qreal objectX1() const { return objectEndPoint1().x(); }
-    qreal objectY1() const { return objectEndPoint1().y(); }
-    qreal objectX2() const { return objectEndPoint2().x(); }
-    qreal objectY2() const { return objectEndPoint2().y(); }
-    qreal objectDeltaX() const { return (objectX2() - objectX1()); }
-    qreal objectDeltaY() const { return (objectY2() - objectY1()); }
-    qreal objectAngle() const;
-    qreal objectLength() const { return line().length(); }
+    double objectX1() const { return objectEndPoint1().x(); }
+    double objectY1() const { return objectEndPoint1().y(); }
+    double objectX2() const { return objectEndPoint2().x(); }
+    double objectY2() const { return objectEndPoint2().y(); }
+    double objectDeltaX() const { return (objectX2() - objectX1()); }
+    double objectDeltaY() const { return (objectY2() - objectY1()); }
+    double objectAngle() const;
+    double objectLength() const { return line().length(); }
 
     void setObjectEndPoint1(const QPointF& endPt1);
-    void setObjectEndPoint1(qreal x1, qreal y1);
+    void setObjectEndPoint1(double x1, double y1);
     void setObjectEndPoint2(const QPointF& endPt2);
-    void setObjectEndPoint2(qreal x2, qreal y2);
-    void setObjectX1(qreal x) { setObjectEndPoint1(x, objectY1()); }
-    void setObjectY1(qreal y) { setObjectEndPoint1(objectX1(), y); }
-    void setObjectX2(qreal x) { setObjectEndPoint2(x, objectY2()); }
-    void setObjectY2(qreal y) { setObjectEndPoint2(objectX2(), y); }
+    void setObjectEndPoint2(double x2, double y2);
+    void setObjectX1(double x) { setObjectEndPoint1(x, objectY1()); }
+    void setObjectY1(double y) { setObjectEndPoint1(objectX1(), y); }
+    void setObjectX2(double x) { setObjectEndPoint2(x, objectY2()); }
+    void setObjectY2(double y) { setObjectEndPoint2(objectX2(), y); }
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
@@ -771,24 +771,24 @@ public:
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
-    void init(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rgb, Qt::PenStyle lineType);
+    void init(double x1, double y1, double x2, double y2, QRgb rgb, Qt::PenStyle lineType);
 
     bool curved;
     bool filled;
     void updateLeader();
     QPainterPath lineStylePath;
     QPainterPath arrowStylePath;
-    qreal arrowStyleAngle;
-    qreal arrowStyleLength;
-    qreal lineStyleAngle;
-    qreal lineStyleLength;
+    double arrowStyleAngle;
+    double arrowStyleLength;
+    double lineStyleAngle;
+    double lineStyleLength;
 };
 
 
 class EllipseObject : public BaseObject
 {
 public:
-    EllipseObject(qreal centerX, qreal centerY, qreal width, qreal height, QRgb rgb, QGraphicsItem* parent = 0);
+    EllipseObject(double centerX, double centerY, double width, double height, QRgb rgb, QGraphicsItem* parent = 0);
     EllipseObject(EllipseObject* obj, QGraphicsItem* parent = 0);
     ~EllipseObject();
 
@@ -798,28 +798,28 @@ public:
     QPainterPath objectSavePath() const;
 
     QPointF objectCenter() const { return scenePos(); }
-    qreal objectCenterX() const { return scenePos().x(); }
-    qreal objectCenterY() const { return scenePos().y(); }
-    qreal objectRadiusMajor() const { return qMax(rect().width(), rect().height())/2.0*scale(); }
-    qreal objectRadiusMinor() const { return qMin(rect().width(), rect().height())/2.0*scale(); }
-    qreal objectDiameterMajor() const { return qMax(rect().width(), rect().height())*scale(); }
-    qreal objectDiameterMinor() const { return qMin(rect().width(), rect().height())*scale(); }
-    qreal objectWidth() const { return rect().width()*scale(); }
-    qreal objectHeight() const { return rect().height()*scale(); }
+    double objectCenterX() const { return scenePos().x(); }
+    double objectCenterY() const { return scenePos().y(); }
+    double objectRadiusMajor() const { return qMax(rect().width(), rect().height())/2.0*scale(); }
+    double objectRadiusMinor() const { return qMin(rect().width(), rect().height())/2.0*scale(); }
+    double objectDiameterMajor() const { return qMax(rect().width(), rect().height())*scale(); }
+    double objectDiameterMinor() const { return qMin(rect().width(), rect().height())*scale(); }
+    double objectWidth() const { return rect().width()*scale(); }
+    double objectHeight() const { return rect().height()*scale(); }
     QPointF objectQuadrant0() const;
     QPointF objectQuadrant90() const;
     QPointF objectQuadrant180() const;
     QPointF objectQuadrant270() const;
 
-    void setObjectSize(qreal width, qreal height);
+    void setObjectSize(double width, double height);
     void setObjectCenter(const QPointF& center);
-    void setObjectCenter(qreal centerX, qreal centerY);
-    void setObjectCenterX(qreal centerX);
-    void setObjectCenterY(qreal centerY);
-    void setObjectRadiusMajor(qreal radius);
-    void setObjectRadiusMinor(qreal radius);
-    void setObjectDiameterMajor(qreal diameter);
-    void setObjectDiameterMinor(qreal diameter);
+    void setObjectCenter(double centerX, double centerY);
+    void setObjectCenterX(double centerX);
+    void setObjectCenterY(double centerY);
+    void setObjectRadiusMajor(double radius);
+    void setObjectRadiusMinor(double radius);
+    void setObjectDiameterMajor(double diameter);
+    void setObjectDiameterMinor(double diameter);
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
@@ -829,7 +829,7 @@ public:
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
-    void init(qreal centerX, qreal centerY, qreal width, qreal height, QRgb rgb, Qt::PenStyle lineType);
+    void init(double centerX, double centerY, double width, double height, QRgb rgb, Qt::PenStyle lineType);
     void updatePath();
 };
 
@@ -837,7 +837,7 @@ private:
 class ImageObject : public BaseObject
 {
 public:
-    ImageObject(qreal x, qreal y, qreal w, qreal h, QRgb rgb, QGraphicsItem* parent = 0);
+    ImageObject(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* parent = 0);
     ImageObject(ImageObject* obj, QGraphicsItem* parent = 0);
     ~ImageObject();
 
@@ -848,11 +848,11 @@ public:
     QPointF objectTopRight() const;
     QPointF objectBottomLeft() const;
     QPointF objectBottomRight() const;
-    qreal objectWidth() const { return rect().width()*scale(); }
-    qreal objectHeight() const { return rect().height()*scale(); }
-    qreal objectArea() const { return qAbs(objectWidth()*objectHeight()); }
+    double objectWidth() const { return rect().width()*scale(); }
+    double objectHeight() const { return rect().height()*scale(); }
+    double objectArea() const { return qAbs(objectWidth()*objectHeight()); }
 
-    void setObjectRect(qreal x, qreal y, qreal w, qreal h);
+    void setObjectRect(double x, double y, double w, double h);
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
@@ -862,7 +862,7 @@ public:
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
-    void init(qreal x, qreal y, qreal w, qreal h, QRgb rgb, Qt::PenStyle lineType);
+    void init(double x, double y, double w, double h, QRgb rgb, Qt::PenStyle lineType);
     void updatePath();
 };
 
@@ -870,7 +870,7 @@ private:
 class LineObject : public BaseObject
 {
 public:
-    LineObject(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rgb, QGraphicsItem* parent = 0);
+    LineObject(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsItem* parent = 0);
     LineObject(LineObject* obj, QGraphicsItem* parent = 0);
     ~LineObject();
 
@@ -882,23 +882,23 @@ public:
     QPointF objectEndPoint1() const { return scenePos(); }
     QPointF objectEndPoint2() const;
     QPointF objectMidPoint() const;
-    qreal objectX1() const { return objectEndPoint1().x(); }
-    qreal objectY1() const { return objectEndPoint1().y(); }
-    qreal objectX2() const { return objectEndPoint2().x(); }
-    qreal objectY2() const { return objectEndPoint2().y(); }
-    qreal objectDeltaX() const { return (objectX2() - objectX1()); }
-    qreal objectDeltaY() const { return (objectY2() - objectY1()); }
-    qreal objectAngle() const;
-    qreal objectLength() const { return line().length()*scale(); }
+    double objectX1() const { return objectEndPoint1().x(); }
+    double objectY1() const { return objectEndPoint1().y(); }
+    double objectX2() const { return objectEndPoint2().x(); }
+    double objectY2() const { return objectEndPoint2().y(); }
+    double objectDeltaX() const { return (objectX2() - objectX1()); }
+    double objectDeltaY() const { return (objectY2() - objectY1()); }
+    double objectAngle() const;
+    double objectLength() const { return line().length()*scale(); }
 
     void setObjectEndPoint1(const QPointF& endPt1);
-    void setObjectEndPoint1(qreal x1, qreal y1);
+    void setObjectEndPoint1(double x1, double y1);
     void setObjectEndPoint2(const QPointF& endPt2);
-    void setObjectEndPoint2(qreal x2, qreal y2);
-    void setObjectX1(qreal x) { setObjectEndPoint1(x, objectY1()); }
-    void setObjectY1(qreal y) { setObjectEndPoint1(objectX1(), y); }
-    void setObjectX2(qreal x) { setObjectEndPoint2(x, objectY2()); }
-    void setObjectY2(qreal y) { setObjectEndPoint2(objectX2(), y); }
+    void setObjectEndPoint2(double x2, double y2);
+    void setObjectX1(double x) { setObjectEndPoint1(x, objectY1()); }
+    void setObjectY1(double y) { setObjectEndPoint1(objectX1(), y); }
+    void setObjectX2(double x) { setObjectEndPoint2(x, objectY2()); }
+    void setObjectY2(double y) { setObjectEndPoint2(objectX2(), y); }
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
@@ -908,14 +908,14 @@ public:
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
-    void init(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rgb, Qt::PenStyle lineType);
+    void init(double x1, double y1, double x2, double y2, QRgb rgb, Qt::PenStyle lineType);
 };
 
 
 class PathObject : public BaseObject
 {
 public:
-    PathObject(qreal x, qreal y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent = 0);
+    PathObject(double x, double y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent = 0);
     PathObject(PathObject* obj, QGraphicsItem* parent = 0);
     ~PathObject();
 
@@ -926,13 +926,13 @@ public:
     QPainterPath objectSavePath() const;
 
     QPointF objectPos() const { return scenePos(); }
-    qreal objectX() const { return scenePos().x(); }
-    qreal objectY() const { return scenePos().y(); }
+    double objectX() const { return scenePos().x(); }
+    double objectY() const { return scenePos().y(); }
 
     void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
-    void setObjectPos(qreal x, qreal y) { setPos(x, y); }
-    void setObjectX(qreal x) { setObjectPos(x, objectY()); }
-    void setObjectY(qreal y) { setObjectPos(objectX(), y); }
+    void setObjectPos(double x, double y) { setPos(x, y); }
+    void setObjectX(double x) { setObjectPos(x, objectY()); }
+    void setObjectY(double y) { setObjectPos(objectX(), y); }
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
@@ -942,7 +942,7 @@ public:
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
-    void init(qreal x, qreal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
+    void init(double x, double y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
     void updatePath(const QPainterPath& p);
     QPainterPath normalPath;
     //TODO: make paths similar to polylines. Review and implement any missing functions/members.
@@ -952,7 +952,7 @@ private:
 class PointObject : public BaseObject
 {
 public:
-    PointObject(qreal x, qreal y, QRgb rgb, QGraphicsItem* parent = 0);
+    PointObject(double x, double y, QRgb rgb, QGraphicsItem* parent = 0);
     PointObject(PointObject* obj, QGraphicsItem* parent = 0);
     ~PointObject();
 
@@ -962,13 +962,13 @@ public:
     QPainterPath objectSavePath() const;
 
     QPointF objectPos() const { return scenePos(); }
-    qreal objectX() const { return scenePos().x(); }
-    qreal objectY() const { return scenePos().y(); }
+    double objectX() const { return scenePos().x(); }
+    double objectY() const { return scenePos().y(); }
 
     void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
-    void setObjectPos(qreal x, qreal y) { setPos(x, y); }
-    void setObjectX(qreal x) { setObjectPos(x, objectY()); }
-    void setObjectY(qreal y) { setObjectPos(objectX(), y); }
+    void setObjectPos(double x, double y) { setPos(x, y); }
+    void setObjectX(double x) { setObjectPos(x, objectY()); }
+    void setObjectY(double y) { setObjectPos(objectX(), y); }
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
@@ -978,14 +978,14 @@ public:
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
-    void init(qreal x, qreal y, QRgb rgb, Qt::PenStyle lineType);
+    void init(double x, double y, QRgb rgb, Qt::PenStyle lineType);
 };
 
 
 class PolygonObject : public BaseObject
 {
 public:
-    PolygonObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent = 0);
+    PolygonObject(double x, double y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent = 0);
     PolygonObject(PolygonObject* obj, QGraphicsItem* parent = 0);
     ~PolygonObject();
 
@@ -996,13 +996,13 @@ public:
     QPainterPath objectSavePath() const;
 
     QPointF objectPos() const { return scenePos(); }
-    qreal objectX() const { return scenePos().x(); }
-    qreal objectY() const { return scenePos().y(); }
+    double objectX() const { return scenePos().x(); }
+    double objectY() const { return scenePos().y(); }
 
     void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
-    void setObjectPos(qreal x, qreal y) { setPos(x, y); }
-    void setObjectX(qreal x) { setObjectPos(x, objectY()); }
-    void setObjectY(qreal y) { setObjectPos(objectX(), y); }
+    void setObjectPos(double x, double y) { setPos(x, y); }
+    void setObjectX(double x) { setObjectPos(x, objectY()); }
+    void setObjectY(double y) { setObjectPos(objectX(), y); }
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
@@ -1012,7 +1012,7 @@ public:
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
-    void init(qreal x, qreal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
+    void init(double x, double y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
     void updatePath(const QPainterPath& p);
     QPainterPath normalPath;
     int findIndex(const QPointF& point);
@@ -1023,7 +1023,7 @@ private:
 class PolylineObject : public BaseObject
 {
 public:
-    PolylineObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent = 0);
+    PolylineObject(double x, double y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent = 0);
     PolylineObject(PolylineObject* obj, QGraphicsItem* parent = 0);
     ~PolylineObject();
 
@@ -1034,13 +1034,13 @@ public:
     QPainterPath objectSavePath() const;
 
     QPointF objectPos() const { return scenePos(); }
-    qreal objectX() const { return scenePos().x(); }
-    qreal objectY() const { return scenePos().y(); }
+    double objectX() const { return scenePos().x(); }
+    double objectY() const { return scenePos().y(); }
 
     void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
-    void setObjectPos(qreal x, qreal y) { setPos(x, y); }
-    void setObjectX(qreal x) { setObjectPos(x, objectY()); }
-    void setObjectY(qreal y) { setObjectPos(objectX(), y); }
+    void setObjectPos(double x, double y) { setPos(x, y); }
+    void setObjectX(double x) { setObjectPos(x, objectY()); }
+    void setObjectY(double y) { setObjectPos(objectX(), y); }
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
@@ -1050,7 +1050,7 @@ public:
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
-    void init(qreal x, qreal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
+    void init(double x, double y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
     void updatePath(const QPainterPath& p);
     QPainterPath normalPath;
     int findIndex(const QPointF& point);
@@ -1061,7 +1061,7 @@ private:
 class RectObject : public BaseObject
 {
 public:
-    RectObject(qreal x, qreal y, qreal w, qreal h, QRgb rgb, QGraphicsItem* parent = 0);
+    RectObject(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* parent = 0);
     RectObject(RectObject* obj, QGraphicsItem* parent = 0);
     ~RectObject();
 
@@ -1076,11 +1076,11 @@ public:
     QPointF objectTopRight() const;
     QPointF objectBottomLeft() const;
     QPointF objectBottomRight() const;
-    qreal objectWidth() const { return rect().width()*scale(); }
-    qreal objectHeight() const { return rect().height()*scale(); }
-    qreal objectArea() const { return qAbs(objectWidth()*objectHeight()); }
+    double objectWidth() const { return rect().width()*scale(); }
+    double objectHeight() const { return rect().height()*scale(); }
+    double objectArea() const { return qAbs(objectWidth()*objectHeight()); }
 
-    void setObjectRect(qreal x, qreal y, qreal w, qreal h);
+    void setObjectRect(double x, double y, double w, double h);
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
@@ -1090,7 +1090,7 @@ public:
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
-    void init(qreal x, qreal y, qreal w, qreal h, QRgb rgb, Qt::PenStyle lineType);
+    void init(double x, double y, double w, double h, QRgb rgb, Qt::PenStyle lineType);
     void updatePath();
 };
 
@@ -1098,7 +1098,7 @@ private:
 class TextSingleObject : public BaseObject
 {
 public:
-    TextSingleObject(const QString& str, qreal x, qreal y, QRgb rgb, QGraphicsItem* parent = 0);
+    TextSingleObject(const QString& str, double x, double y, QRgb rgb, QGraphicsItem* parent = 0);
     TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent = 0);
     ~TextSingleObject();
 
@@ -1111,7 +1111,7 @@ public:
     QString objText;
     QString objTextFont;
     QString objTextJustify;
-    qreal objTextSize;
+    double objTextSize;
     bool objTextBold;
     bool objTextItalic;
     bool objTextUnderline;
@@ -1121,15 +1121,15 @@ public:
     bool objTextUpsideDown;
     QPainterPath objTextPath;
     QPointF objectPos() const { return scenePos(); }
-    qreal objectX() const { return scenePos().x(); }
-    qreal objectY() const { return scenePos().y(); }
+    double objectX() const { return scenePos().x(); }
+    double objectY() const { return scenePos().y(); }
 
     QStringList objectTextJustifyList() const;
 
     void setObjectText(const QString& str);
     void setObjectTextFont(const QString& font);
     void setObjectTextJustify(const QString& justify);
-    void setObjectTextSize(qreal size);
+    void setObjectTextSize(double size);
     void setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bool over);
     void setObjectTextBold(bool val);
     void setObjectTextItalic(bool val);
@@ -1139,9 +1139,9 @@ public:
     void setObjectTextBackward(bool val);
     void setObjectTextUpsideDown(bool val);
     void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
-    void setObjectPos(qreal x, qreal y) { setPos(x, y); }
-    void setObjectX(qreal x) { setObjectPos(x, objectY()); }
-    void setObjectY(qreal y) { setObjectPos(objectX(), y); }
+    void setObjectPos(double x, double y) { setPos(x, y); }
+    void setObjectX(double x) { setObjectPos(x, objectY()); }
+    void setObjectY(double y) { setObjectPos(objectX(), y); }
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
@@ -1151,7 +1151,7 @@ public:
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
-    void init(const QString& str, qreal x, qreal y, QRgb rgb, Qt::PenStyle lineType);
+    void init(const QString& str, double x, double y, QRgb rgb, Qt::PenStyle lineType);
 };
 
 class PreviewDialog : public QFileDialog
@@ -1252,7 +1252,7 @@ private:
     QString fieldOffText;
 
     void updateLineEditStrIfVaries(QLineEdit* lineEdit, const QString& str);
-    void updateLineEditNumIfVaries(QLineEdit* lineEdit, qreal num, bool useAnglePrecision);
+    void updateLineEditNumIfVaries(QLineEdit* lineEdit, double num, bool useAnglePrecision);
     void updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, const QString& str);
     void updateComboBoxStrIfVaries(QComboBox* comboBox, const QString& str, const QStringList& strList);
     void updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, bool yesOrNoText);
@@ -1459,7 +1459,7 @@ public:
     StatusBarButton* statusBarLwtButton;
     QLabel* statusBarMouseCoord;
 
-    void setMouseCoord(qreal x, qreal y);
+    void setMouseCoord(double x, double y);
 };
 
 class SelectBox : public QRubberBand
@@ -1481,7 +1481,7 @@ private:
     QColor rightBrushColor;
     QColor leftPenColor;
     QColor rightPenColor;
-    quint8 alpha;
+    uint8_t alpha;
 
     QBrush dirBrush;
     QBrush leftBrush;
@@ -1507,19 +1507,28 @@ public:
 
     EmbPattern* pattern;
 
+    QMdiArea* mdiArea;
+    QGraphicsScene* gscene;
+    View* gview;
+
+    bool fileWasLoaded;
+
+    QString promptHistory;
+    QList<QString> promptInputList;
+    int promptInputNum;
+
+    QPrinter printer;
+
+    int myIndex;
+
+    QString curFile;
+    QString curLayer;
+    QRgb curColor;
+    QString curLineType;
+    QString curLineWeight;
+
     virtual QSize              sizeHint() const;
-    QString getCurrentFile()   { return curFile; }
     QString getShortCurrentFile();
-    View*                      getView() { return gview; }
-    QGraphicsScene*            getScene() { return gscene; }
-    QString getCurrentLayer() { return curLayer; }
-    QRgb getCurrentColor() { return curColor; }
-    QString getCurrentLineType() { return curLineType; }
-    QString getCurrentLineWeight() { return curLineWeight; }
-    void setCurrentLayer(const QString& layer) { curLayer = layer; }
-    void setCurrentColor(const QRgb& color) { curColor = color; }
-    void setCurrentLineType(const QString& lineType) { curLineType = lineType; }
-    void setCurrentLineWeight(const QString& lineWeight) { curLineWeight = lineWeight; }
     void designDetails();
     bool loadFile(const QString &fileName);
     bool saveFile(const QString &fileName);
@@ -1554,31 +1563,9 @@ public slots:
     void promptInputPrevious();
     void promptInputNext();
 
-protected:
-
 private:
-    QMdiArea*                  mdiArea;
-    QGraphicsScene*            gscene;
-    View*                      gview;
-
-    bool fileWasLoaded;
-
-    QString promptHistory;
-    QList<QString> promptInputList;
-    int promptInputNum;
-
-    QPrinter printer;
-
-    QString curFile;
     void setCurrentFile(const QString& fileName);
     QString fileExtension(const QString& fileName);
-
-    int myIndex;
-
-    QString curLayer;
-    QRgb curColor;
-    QString curLineType;
-    QString curLineWeight;
 
     void promptInputPrevNext(bool prev);
 };
@@ -1976,16 +1963,16 @@ public:
     QRgb settings_display_selectbox_left_fill;
     QRgb settings_display_selectbox_right_color;
     QRgb settings_display_selectbox_right_fill;
-    quint8 settings_display_selectbox_alpha;
-    qreal settings_display_zoomscale_in;
-    qreal settings_display_zoomscale_out;
-    quint8 settings_display_crosshair_percent;
+    uint8_t settings_display_selectbox_alpha;
+    double settings_display_zoomscale_in;
+    double settings_display_zoomscale_out;
+    uint8_t settings_display_crosshair_percent;
     QString settings_display_units;
     QRgb settings_prompt_text_color;
     QRgb settings_prompt_bg_color;
     QString settings_prompt_font_family;
     QString settings_prompt_font_style;
-    quint8 settings_prompt_font_size;
+    uint8_t settings_prompt_font_size;
     bool settings_prompt_save_history;
     bool settings_prompt_save_history_as_html;
     QString settings_prompt_save_history_filename;
@@ -1994,10 +1981,10 @@ public:
     bool settings_opensave_open_thumbnail;
     QString settings_opensave_save_format;
     bool settings_opensave_save_thumbnail;
-    quint8 settings_opensave_recent_max_files;
+    uint8_t settings_opensave_recent_max_files;
     QStringList settings_opensave_recent_list_of_files;
     QString settings_opensave_recent_directory;
-    quint8 settings_opensave_trim_dst_num_jumps;
+    uint8_t settings_opensave_trim_dst_num_jumps;
     QString settings_printing_default_device;
     bool settings_printing_use_last_device;
     bool settings_printing_disable_bg;
@@ -2008,23 +1995,23 @@ public:
     bool settings_grid_load_from_file;
     QString settings_grid_type;
     bool settings_grid_center_on_origin;
-    qreal settings_grid_center_x;
-    qreal settings_grid_center_y;
-    qreal settings_grid_size_x;
-    qreal settings_grid_size_y;
-    qreal settings_grid_spacing_x;
-    qreal settings_grid_spacing_y;
-    qreal settings_grid_size_radius;
-    qreal settings_grid_spacing_radius;
-    qreal settings_grid_spacing_angle;
+    double settings_grid_center_x;
+    double settings_grid_center_y;
+    double settings_grid_size_x;
+    double settings_grid_size_y;
+    double settings_grid_spacing_x;
+    double settings_grid_spacing_y;
+    double settings_grid_size_radius;
+    double settings_grid_spacing_radius;
+    double settings_grid_spacing_angle;
     bool settings_ruler_show_on_load;
     bool settings_ruler_metric;
     QRgb settings_ruler_color;
-    quint8 settings_ruler_pixel_size;
+    uint8_t settings_ruler_pixel_size;
     bool settings_qsnap_enabled;
     QRgb settings_qsnap_locator_color;
-    quint8 settings_qsnap_locator_size;
-    quint8 settings_qsnap_aperture_size;
+    uint8_t settings_qsnap_locator_size;
+    uint8_t settings_qsnap_aperture_size;
     bool settings_qsnap_endpoint;
     bool settings_qsnap_midpoint;
     bool settings_qsnap_center;
@@ -2040,17 +2027,17 @@ public:
     bool settings_qsnap_parallel;
     bool settings_lwt_show_lwt;
     bool settings_lwt_real_render;
-    qreal settings_lwt_default_lwt;
+    double settings_lwt_default_lwt;
     bool settings_selection_mode_pickfirst;
     bool settings_selection_mode_pickadd;
     bool settings_selection_mode_pickdrag;
     QRgb settings_selection_coolgrip_color;
     QRgb settings_selection_hotgrip_color;
-    quint8 settings_selection_grip_size;
-    quint8 settings_selection_pickbox_size;
+    uint8_t settings_selection_grip_size;
+    uint8_t settings_selection_pickbox_size;
     QString settings_text_font;
-    qreal settings_text_size;
-    qreal settings_text_angle;
+    double settings_text_size;
+    double settings_text_angle;
     bool settings_text_style_bold;
     bool settings_text_style_italic;
     bool settings_text_style_underline;
@@ -2121,8 +2108,8 @@ public slots:
     void runCommand();
     ScriptValue runCommandCore(const QString& cmd, ScriptEnv *context);
     void runCommandMain(const QString& cmd);
-    void runCommandClick(const QString& cmd,  qreal x, qreal y);
-    void runCommandMove(const QString& cmd,  qreal x, qreal y);
+    void runCommandClick(const QString& cmd,  double x, double y);
+    void runCommandMove(const QString& cmd,  double x, double y);
     void runCommandContext(const QString& cmd, const QString& str);
     void runCommandPrompt(const QString& cmd, const QString& str);
 
@@ -2171,8 +2158,8 @@ public slots:
     void textSizeSelectorIndexChanged(int index);
 
     QString textFont();
-    qreal textSize();
-    qreal textAngle();
+    double textSize();
+    double textAngle();
     bool textBold();
     bool textItalic();
     bool textUnderline();
@@ -2180,7 +2167,7 @@ public slots:
     bool textOverline();
 
     void setTextFont(const QString& str);
-    void setTextSize(qreal num);
+    void setTextSize(double num);
 
     QString getCurrentLayer();
     QRgb getCurrentColor();
@@ -2242,65 +2229,65 @@ public:
 
     void nativeRedo();
 
-    void nativePrintArea(qreal x, qreal y, qreal w, qreal h);
+    void nativePrintArea(double x, double y, double w, double h);
 
-    void nativeSetBackgroundColor(quint8 r, quint8 g, quint8 b);
-    void nativeSetCrossHairColor(quint8 r, quint8 g, quint8 b);
-    void nativeSetGridColor(quint8 r, quint8 g, quint8 b);
+    void nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b);
+    void nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b);
+    void nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b);
 
     void nativeVulcanize();
     void nativeClearRubber();
     bool nativeAllowRubber();
-    void nativeSpareRubber(qint64 id);
-    //TODO: void nativeSetRubberFilter(qint64 id); //TODO: This is so more than 1 rubber object can exist at one time without updating all rubber objects at once
+    void nativeSpareRubber(int64_t id);
+    //TODO: void nativeSetRubberFilter(int64_t id); //TODO: This is so more than 1 rubber object can exist at one time without updating all rubber objects at once
     void nativeSetRubberMode(int mode);
-    void nativeSetRubberPoint(const QString& key, qreal x, qreal y);
+    void nativeSetRubberPoint(const QString& key, double x, double y);
     void nativeSetRubberText(const QString& key, const QString& txt);
 
-    void nativeAddTextMulti(const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode);
-    void nativeAddTextSingle(const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode);
+    void nativeAddTextMulti(const QString& str, double x, double y, double rot, bool fill, int rubberMode);
+    void nativeAddTextSingle(const QString& str, double x, double y, double rot, bool fill, int rubberMode);
 
-    void nativeAddInfiniteLine(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot);
-    void nativeAddRay(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot);
-    void nativeAddLine(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode);
-    void nativeAddTriangle(qreal x1, qreal y1, qreal x2, qreal y2, qreal x3, qreal y3, qreal rot, bool fill);
-    void nativeAddRectangle(qreal x, qreal y, qreal w, qreal h, qreal rot, bool fill, int rubberMode);
-    void nativeAddRoundedRectangle(qreal x, qreal y, qreal w, qreal h, qreal rad, qreal rot, bool fill);
+    void nativeAddInfiniteLine(double x1, double y1, double x2, double y2, double rot);
+    void nativeAddRay(double x1, double y1, double x2, double y2, double rot);
+    void nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubberMode);
+    void nativeAddTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double rot, bool fill);
+    void nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode);
+    void nativeAddRoundedRectangle(double x, double y, double w, double h, double rad, double rot, bool fill);
     void nativeAddArc(EmbArc arc, int rubberMode);
-    void nativeAddCircle(qreal centerX, qreal centerY, qreal radius, bool fill, int rubberMode);
-    void nativeAddSlot(qreal centerX, qreal centerY, qreal diameter, qreal length, qreal rot, bool fill, int rubberMode);
-    void nativeAddEllipse(qreal centerX, qreal centerY, qreal width, qreal height, qreal rot, bool fill, int rubberMode);
-    void nativeAddPoint(qreal x, qreal y);
-    void nativeAddRegularPolygon(qreal centerX, qreal centerY, quint16 sides, quint8 mode, qreal rad, qreal rot, bool fill);
-    void nativeAddPolygon(qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
-    void nativeAddPolyline(qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
-    void nativeAddPath(qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
-    void nativeAddHorizontalDimension(qreal x1, qreal y1, qreal x2, qreal y2, qreal legHeight);
-    void nativeAddVerticalDimension(qreal x1, qreal y1, qreal x2, qreal y2, qreal legHeight);
-    void nativeAddImage(const QString& img, qreal x, qreal y, qreal w, qreal h, qreal rot);
+    void nativeAddCircle(double centerX, double centerY, double radius, bool fill, int rubberMode);
+    void nativeAddSlot(double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode);
+    void nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode);
+    void nativeAddPoint(double x, double y);
+    void nativeAddRegularPolygon(double centerX, double centerY, quint16 sides, uint8_t mode, double rad, double rot, bool fill);
+    void nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode);
+    void nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubberMode);
+    void nativeAddPath(double startX, double startY, const QPainterPath& p, int rubberMode);
+    void nativeAddHorizontalDimension(double x1, double y1, double x2, double y2, double legHeight);
+    void nativeAddVerticalDimension(double x1, double y1, double x2, double y2, double legHeight);
+    void nativeAddImage(const QString& img, double x, double y, double w, double h, double rot);
 
-    void nativeAddDimLeader(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode);
+    void nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode);
 
     void nativeSetCursorShape(const QString& str);
-    qreal nativeCalculateAngle(qreal x1, qreal y1, qreal x2, qreal y2);
-    qreal nativeCalculateDistance(qreal x1, qreal y1, qreal x2, qreal y2);
-    qreal nativePerpendicularDistance(qreal px, qreal py, qreal x1, qreal y1, qreal x2, qreal y2);
+    double nativeCalculateAngle(double x1, double y1, double x2, double y2);
+    double nativeCalculateDistance(double x1, double y1, double x2, double y2);
+    double nativePerpendicularDistance(double px, double py, double x1, double y1, double x2, double y2);
 
     int nativeNumSelected();
     void nativeSelectAll();
     void nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
     void nativeClearSelection();
     void nativeDeleteSelected();
-    void nativeCutSelected(qreal x, qreal y);
-    void nativeCopySelected(qreal x, qreal y);
-    void nativePasteSelected(qreal x, qreal y);
-    void nativeMoveSelected(qreal dx, qreal dy);
-    void nativeScaleSelected(qreal x, qreal y, qreal factor);
-    void nativeRotateSelected(qreal x, qreal y, qreal rot);
-    void nativeMirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2);
+    void nativeCutSelected(double x, double y);
+    void nativeCopySelected(double x, double y);
+    void nativePasteSelected(double x, double y);
+    void nativeMoveSelected(double dx, double dy);
+    void nativeScaleSelected(double x, double y, double factor);
+    void nativeRotateSelected(double x, double y, double rot);
+    void nativeMirrorSelected(double x1, double y1, double x2, double y2);
 
-    qreal nativeQSnapX();
-    qreal nativeQSnapY();
+    double nativeQSnapX();
+    double nativeQSnapY();
 };
 
 MdiArea* getMdiArea();
@@ -2314,7 +2301,7 @@ void add_to_menu(QMenu *menu, const char *menu_data[]);
 
 EmbVector to_emb_vector(QPointF p);
 QPointF to_qpointf(EmbVector v);
-QPointF scale_and_rotate(QPointF v, qreal angle, qreal scale);
+QPointF scale_and_rotate(QPointF v, double angle, double scale);
 QPointF find_mouse_snap_point(QList<QPointF> snap_points, const QPointF& mouse_point);
 
 bool pattern_save(EmbPattern *pattern, const char *fileName);

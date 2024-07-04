@@ -92,9 +92,6 @@ qt_add_executable(embroidermodder2
 	${SRC}/window-commands.cpp
 
 	${SRC}/command_data.c
-	${SRC}/toolbar_data.c
-	${SRC}/menu_data.c
-        ${SRC}/testing.c
 	${SRC}/script.c
 
 	${SRC}/embroidermodder.h

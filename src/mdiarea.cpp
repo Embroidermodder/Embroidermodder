@@ -123,7 +123,7 @@ void MdiArea::zoomExtentsAllSubWindows()
     foreach(QMdiSubWindow* window, subWindowList()) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(window);
         if (mdiWin) {
-            View* v = mdiWin->getView();
+            View* v = mdiWin->gview;
             if (v) {
                 v->recalculateLimits();
                 v->zoomExtents();

@@ -1284,10 +1284,10 @@ add_polygon_command(ScriptEnv* context)
 
     bool lineTo = false;
     bool xCoord = true;
-    qreal x = 0;
-    qreal y = 0;
-    qreal startX = 0;
-    qreal startY = 0;
+    double x = 0;
+    double y = 0;
+    double startX = 0;
+    double startY = 0;
     QPainterPath path;
     foreach (QVariant var, varList) {
         if (var.canConvert(QVariant::Double)) {
@@ -1352,10 +1352,10 @@ add_polyline_command(ScriptEnv* context)
 
     bool lineTo = false;
     bool xCoord = true;
-    qreal x = 0;
-    qreal y = 0;
-    qreal startX = 0;
-    qreal startY = 0;
+    double x = 0;
+    double y = 0;
+    double startX = 0;
+    double startY = 0;
     QPainterPath path;
     foreach(QVariant var, varList) {
         if (var.canConvert(QVariant::Double)) {
@@ -1452,7 +1452,7 @@ calculate_angle_command(ScriptEnv* context)
         return script_false;
     }
 
-    qreal r = _main->nativeCalculateAngle(REAL(0), REAL(1), REAL(2), REAL(3));
+    double r = _main->nativeCalculateAngle(REAL(0), REAL(1), REAL(2), REAL(3));
     return script_real(r);
 }
 
@@ -1463,7 +1463,7 @@ calculate_distance_command(ScriptEnv* context)
         return script_false;
     }
 
-    qreal r = _main->nativeCalculateDistance(REAL(0), REAL(1), REAL(2), REAL(3));
+    double r = _main->nativeCalculateDistance(REAL(0), REAL(1), REAL(2), REAL(3));
     return script_real(r);
 }
 
@@ -1474,7 +1474,7 @@ perpendicular_distance_command(ScriptEnv* context)
         return script_false;
     }
 
-    qreal r = _main->nativePerpendicularDistance(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), REAL(5));
+    double r = _main->nativePerpendicularDistance(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), REAL(5));
     return script_real(r);
 }
 

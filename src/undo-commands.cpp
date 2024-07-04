@@ -51,7 +51,7 @@ void UndoableDeleteCommand::redo()
 
 /* Move */
 
-UndoableMoveCommand::UndoableMoveCommand(qreal deltaX, qreal deltaY, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableMoveCommand::UndoableMoveCommand(double deltaX, double deltaY, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
     object = obj;
@@ -72,7 +72,7 @@ void UndoableMoveCommand::redo()
 
 /* Rotate */
 
-UndoableRotateCommand::UndoableRotateCommand(qreal pivotPointX, qreal pivotPointY, qreal rotAngle, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableRotateCommand::UndoableRotateCommand(double pivotPointX, double pivotPointY, double rotAngle, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
     object = obj;
@@ -92,17 +92,17 @@ void UndoableRotateCommand::redo()
     rotate(pivotX, pivotY, angle);
 }
 
-void UndoableRotateCommand::rotate(qreal x, qreal y, qreal rot)
+void UndoableRotateCommand::rotate(double x, double y, double rot)
 {
-    qreal rad = radians(rot);
-    qreal cosRot = cos(rad);
-    qreal sinRot = sin(rad);
-    qreal px = object->scenePos().x();
-    qreal py = object->scenePos().y();
+    double rad = radians(rot);
+    double cosRot = cos(rad);
+    double sinRot = sin(rad);
+    double px = object->scenePos().x();
+    double py = object->scenePos().y();
     px -= x;
     py -= y;
-    qreal rotX = px*cosRot - py*sinRot;
-    qreal rotY = px*sinRot + py*cosRot;
+    double rotX = px*cosRot - py*sinRot;
+    double rotY = px*sinRot + py*cosRot;
     rotX += x;
     rotY += y;
 
@@ -111,7 +111,7 @@ void UndoableRotateCommand::rotate(qreal x, qreal y, qreal rot)
 }
 
 /* Scale */
-UndoableScaleCommand::UndoableScaleCommand(qreal x, qreal y, qreal scaleFactor, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableScaleCommand::UndoableScaleCommand(double x, double y, double scaleFactor, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
     object = obj;
@@ -128,12 +128,12 @@ UndoableScaleCommand::UndoableScaleCommand(qreal x, qreal y, qreal scaleFactor, 
     }
     else {
         //Calculate the offset
-        qreal oldX = object->x();
-        qreal oldY = object->y();
+        double oldX = object->x();
+        double oldY = object->y();
         QLineF scaleLine(x, y, oldX, oldY);
         scaleLine.setLength(scaleLine.length()*scaleFactor);
-        qreal newX = scaleLine.x2();
-        qreal newY = scaleLine.y2();
+        double newX = scaleLine.x2();
+        double newY = scaleLine.y2();
 
         dx = newX - oldX;
         dy = newY - oldY;
@@ -255,7 +255,7 @@ void UndoableGripEditCommand::redo()
 
 /* Mirror */
 
-UndoableMirrorCommand::UndoableMirrorCommand(qreal x1, qreal y1, qreal x2, qreal y2, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableMirrorCommand::UndoableMirrorCommand(double x1, double y1, double x2, double y2, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
     object = obj;

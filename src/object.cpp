@@ -115,7 +115,7 @@ ArcObject::calculateArcData(EmbArc arc)
 {
     EmbVector center = emb_arc_center(arc);
 
-    qreal radius = emb_vector_distance(center, arc.mid);
+    double radius = emb_vector_distance(center, arc.mid);
     updateArcRect(radius);
     updatePath();
     setRotation(0);
@@ -123,7 +123,7 @@ ArcObject::calculateArcData(EmbArc arc)
 }
 
 void
-ArcObject::updateArcRect(qreal radius)
+ArcObject::updateArcRect(double radius)
 {
     QRectF arcRect;
     arcRect.setWidth(radius*2.0);
@@ -139,20 +139,20 @@ ArcObject::setObjectCenter(EmbVector point)
 }
 
 void
-ArcObject::setObjectRadius(qreal radius)
+ArcObject::setObjectRadius(double radius)
 {
     geometry->object.arc = emb_arc_set_radius(geometry->object.arc, radius);
     calculateArcData(geometry->object.arc);
 }
 
 void
-ArcObject::setObjectStartAngle(qreal angle)
+ArcObject::setObjectStartAngle(double angle)
 {
     //TODO: ArcObject setObjectStartAngle
 }
 
 void
-ArcObject::setObjectEndAngle(qreal angle)
+ArcObject::setObjectEndAngle(double angle)
 {
     //TODO: ArcObject setObjectEndAngle
 }
@@ -178,15 +178,15 @@ ArcObject::setObjectEndPoint(EmbVector point)
     calculateArcData(geometry->object.arc);
 }
 
-qreal ArcObject::objectStartAngle() const
+double ArcObject::objectStartAngle() const
 {
-    qreal angle = QLineF(scenePos(), objectStartPoint()).angle();
+    double angle = QLineF(scenePos(), objectStartPoint()).angle();
     return fmod(angle+360.0, 360.0);
 }
 
-qreal ArcObject::objectEndAngle() const
+double ArcObject::objectEndAngle() const
 {
-    qreal angle = QLineF(scenePos(), objectEndPoint()).angle();
+    double angle = QLineF(scenePos(), objectEndPoint()).angle();
     return fmod(angle+360.0, 360.0);
 }
 
@@ -205,28 +205,28 @@ QPointF ArcObject::objectEndPoint() const
     return to_qpointf(geometry->object.arc.end);
 }
 
-qreal ArcObject::objectArea() const
+double ArcObject::objectArea() const
 {
     //Area of a circular segment
-    qreal r = objectRadius();
-    qreal theta = radians(objectIncludedAngle());
+    double r = objectRadius();
+    double theta = radians(objectIncludedAngle());
     return ((r*r)/2)*(theta - sin(theta));
 }
 
-qreal ArcObject::objectArcLength() const
+double ArcObject::objectArcLength() const
 {
     return radians(objectIncludedAngle()) * objectRadius();
 }
 
-qreal ArcObject::objectChord() const
+double ArcObject::objectChord() const
 {
     return QLineF(objectStartPoint(), objectEndPoint()).length();
 }
 
-qreal ArcObject::objectIncludedAngle() const
+double ArcObject::objectIncludedAngle() const
 {
-    qreal chord = objectChord();
-    qreal rad = objectRadius();
+    double chord = objectChord();
+    double rad = objectRadius();
     if (chord <= 0 || rad <= 0) {
         /* Prevents division by zero and non-existant circles. */
         return 0;
@@ -234,7 +234,7 @@ qreal ArcObject::objectIncludedAngle() const
 
     //NOTE: Due to floating point rounding errors, we need to clamp the quotient so it is in the range [-1, 1]
     //      If the quotient is out of that range, then the result of asin() will be NaN.
-    qreal quotient = chord/(2.0*rad);
+    double quotient = chord/(2.0*rad);
     quotient = EMB_MIN(1.0, quotient);
     quotient = EMB_MAX(0.0, quotient); //NOTE: 0 rather than -1 since we are enforcing a positive chord and radius
     return degrees(2.0*asin(quotient)); //Properties of a Circle - Get the Included Angle - Reference: ASD9
@@ -256,8 +256,8 @@ bool ArcObject::objectClockwise() const
 void
 ArcObject::updatePath()
 {
-    qreal startAngle = (objectStartAngle() + rotation());
-    qreal spanAngle = objectIncludedAngle();
+    double startAngle = (objectStartAngle() + rotation());
+    double spanAngle = objectIncludedAngle();
 
     if (objectClockwise()) {
         spanAngle = -spanAngle;
@@ -288,13 +288,13 @@ ArcObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWid
     }
     painter->setPen(paintPen);
 
-    qreal startAngle = (objectStartAngle() + rotation())*16;
-    qreal spanAngle = objectIncludedAngle()*16;
+    double startAngle = (objectStartAngle() + rotation())*16;
+    double spanAngle = objectIncludedAngle()*16;
 
     if (objectClockwise())
         spanAngle = -spanAngle;
 
-    qreal rad = objectRadius();
+    double rad = objectRadius();
     QRectF paintRect(-rad, -rad, rad*2.0, rad*2.0);
     painter->drawArc(paintRect, startAngle, spanAngle);
 }
@@ -378,7 +378,7 @@ BaseObject::setObjectLineType(Qt::PenStyle lineType)
 }
 
 void
-BaseObject::setObjectLineWeight(qreal lineWeight)
+BaseObject::setObjectLineWeight(double lineWeight)
 {
     objPen.setWidthF(0); //NOTE: The objPen will always be cosmetic
 
@@ -823,7 +823,7 @@ circle_prompt(ScriptEnv *context)
     return script_null;
 }
 
-CircleObject::CircleObject(qreal centerX, qreal centerY, qreal radius, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+CircleObject::CircleObject(double centerX, double centerY, double radius, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("CircleObject Constructor()");
     init(centerX, centerY, radius, rgb, Qt::SolidLine); //TODO: getCurrentLineType
@@ -845,7 +845,7 @@ CircleObject::~CircleObject()
 }
 
 void
-CircleObject::init(qreal centerX, qreal centerY, qreal radius, QRgb rgb, Qt::PenStyle lineType)
+CircleObject::init(double centerX, double centerY, double radius, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_CIRCLE);
@@ -874,25 +874,25 @@ CircleObject::setObjectCenter(EmbVector center)
 }
 
 void
-CircleObject::setObjectCenterX(qreal centerX)
+CircleObject::setObjectCenterX(double centerX)
 {
     setX(centerX);
 }
 
 void
-CircleObject::setObjectCenterY(qreal centerY)
+CircleObject::setObjectCenterY(double centerY)
 {
     setY(centerY);
 }
 
 void
-CircleObject::setObjectRadius(qreal radius)
+CircleObject::setObjectRadius(double radius)
 {
     setObjectDiameter(radius*2.0);
 }
 
 void
-CircleObject::setObjectDiameter(qreal diameter)
+CircleObject::setObjectDiameter(double diameter)
 {
     QRectF circRect;
     circRect.setWidth(diameter);
@@ -903,16 +903,16 @@ CircleObject::setObjectDiameter(qreal diameter)
 }
 
 void
-CircleObject::setObjectArea(qreal area)
+CircleObject::setObjectArea(double area)
 {
-    qreal radius = sqrt(area / embConstantPi);
+    double radius = sqrt(area / embConstantPi);
     setObjectRadius(radius);
 }
 
 void
-CircleObject::setObjectCircumference(qreal circumference)
+CircleObject::setObjectCircumference(double circumference)
 {
-    qreal diameter = circumference / embConstantPi;
+    double diameter = circumference / embConstantPi;
     setObjectDiameter(diameter);
 }
 
@@ -966,7 +966,7 @@ CircleObject::updateRubber(QPainter* painter)
         QLineF itemLine(itemCenterPoint, itemQSnapPoint);
         setObjectCenter(to_emb_vector(sceneCenterPoint));
         QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
-        qreal radius = sceneLine.length();
+        double radius = sceneLine.length();
         setObjectRadius(radius);
         if (painter) {
             drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
@@ -982,7 +982,7 @@ CircleObject::updateRubber(QPainter* painter)
         QLineF itemLine(itemCenterPoint, itemQSnapPoint);
         setObjectCenter(to_emb_vector(sceneCenterPoint));
         QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
-        qreal diameter = sceneLine.length();
+        double diameter = sceneLine.length();
         setObjectDiameter(diameter);
         if (painter) {
             drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
@@ -995,7 +995,7 @@ CircleObject::updateRubber(QPainter* painter)
         QPointF sceneQSnapPoint = objectRubberPoint("CIRCLE_TAN2");
         QLineF sceneLine(sceneTan1Point, sceneQSnapPoint);
         setObjectCenter(to_emb_vector(sceneLine.pointAt(0.5)));
-        qreal diameter = sceneLine.length();
+        double diameter = sceneLine.length();
         setObjectDiameter(diameter);
         updatePath();
         break;
@@ -1011,7 +1011,7 @@ CircleObject::updateRubber(QPainter* painter)
         arc.end = to_emb_vector(sceneTan3Point);
         EmbVector center = emb_arc_center(arc);
         setObjectCenter(center);
-        qreal radius = emb_vector_distance(center, to_emb_vector(sceneTan3Point));
+        double radius = emb_vector_distance(center, to_emb_vector(sceneTan3Point));
         setObjectRadius(radius);
         updatePath();
         break;
@@ -1023,7 +1023,7 @@ CircleObject::updateRubber(QPainter* painter)
                 painter->drawEllipse(rect().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
             }
             else {
-                qreal gripRadius = QLineF(objectCenter(), objectRubberPoint(QString())).length();
+                double gripRadius = QLineF(objectCenter(), objectRubberPoint(QString())).length();
                 painter->drawEllipse(QPointF(), gripRadius, gripRadius);
             }
 
@@ -1078,14 +1078,14 @@ QPainterPath CircleObject::objectSavePath() const
     path.arcMoveTo(r, 0);
     path.arcTo(r, 0, 360);
 
-    qreal s = scale();
+    double s = scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);
     return trans.map(path);
 }
 
-DimLeaderObject::DimLeaderObject(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+DimLeaderObject::DimLeaderObject(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("DimLeaderObject Constructor()");
     init(x1, y1, x2, y2, rgb, Qt::SolidLine); //TODO: getCurrentLineType
@@ -1105,7 +1105,7 @@ DimLeaderObject::~DimLeaderObject()
 }
 
 void
-DimLeaderObject::init(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rgb, Qt::PenStyle lineType)
+DimLeaderObject::init(double x1, double y1, double x2, double y2, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_DIMLEADER);
@@ -1132,13 +1132,13 @@ DimLeaderObject::setObjectEndPoint1(const QPointF& endPt1)
 }
 
 void
-DimLeaderObject::setObjectEndPoint1(qreal x1, qreal y1)
+DimLeaderObject::setObjectEndPoint1(double x1, double y1)
 {
     QPointF endPt2 = objectEndPoint2();
-    qreal x2 = endPt2.x();
-    qreal y2 = endPt2.y();
-    qreal dx = x2 - x1;
-    qreal dy = y2 - y1;
+    double x2 = endPt2.x();
+    double y2 = endPt2.y();
+    double dx = x2 - x1;
+    double dy = y2 - y1;
     setRotation(0);
     setLine(0, 0, dx, dy);
     setPos(x1, y1);
@@ -1152,13 +1152,13 @@ DimLeaderObject::setObjectEndPoint2(const QPointF& endPt2)
 }
 
 void
-DimLeaderObject::setObjectEndPoint2(qreal x2, qreal y2)
+DimLeaderObject::setObjectEndPoint2(double x2, double y2)
 {
     QPointF endPt1 = scenePos();
-    qreal x1 = endPt1.x();
-    qreal y1 = endPt1.y();
-    qreal dx = x2 - x1;
-    qreal dy = y2 - y1;
+    double x1 = endPt1.x();
+    double y1 = endPt1.y();
+    double dx = x2 - x1;
+    double dy = y2 - y1;
     setRotation(0);
     setLine(0, 0, dx, dy);
     setPos(x1, y1);
@@ -1184,9 +1184,9 @@ QPointF DimLeaderObject::objectMidPoint() const
     return scenePos() + scale_and_rotate(mp, scale(), rotation());
 }
 
-qreal DimLeaderObject::objectAngle() const
+double DimLeaderObject::objectAngle() const
 {
-    qreal angle = line().angle() - rotation();
+    double angle = line().angle() - rotation();
     while (angle >= 360.0) {
         angle -= 360.0;
     }
@@ -1200,13 +1200,13 @@ void
 DimLeaderObject::updateLeader()
 {
     int arrowStyle = Closed; //TODO: Make this customizable
-    qreal arrowStyleAngle = 15.0; //TODO: Make this customizable
-    qreal arrowStyleLength = 1.0; //TODO: Make this customizable
-    qreal lineStyleAngle = 45.0; //TODO: Make this customizable
-    qreal lineStyleLength = 1.0; //TODO: Make this customizable
+    double arrowStyleAngle = 15.0; //TODO: Make this customizable
+    double arrowStyleLength = 1.0; //TODO: Make this customizable
+    double lineStyleAngle = 45.0; //TODO: Make this customizable
+    double lineStyleLength = 1.0; //TODO: Make this customizable
 
     QLineF lyne = line();
-    qreal angle = lyne.angle();
+    double angle = lyne.angle();
     QPointF ap0 = lyne.p1();
     QPointF lp0 = lyne.p2();
 
@@ -1267,7 +1267,7 @@ DimLeaderObject::updateLeader()
     }
     else if (arrowStyle == Box) {
         arrowStylePath = QPainterPath();
-        qreal side = QLineF(ap1, ap2).length();
+        double side = QLineF(ap1, ap2).length();
         QRectF ar0(0, 0, side, side);
         ar0.moveCenter(ap0);
         arrowStylePath.addRect(ar0);
@@ -1652,7 +1652,7 @@ function prompt(str)
 }
 #endif
 
-EllipseObject::EllipseObject(qreal centerX, qreal centerY, qreal width, qreal height, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+EllipseObject::EllipseObject(double centerX, double centerY, double width, double height, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("EllipseObject Constructor()");
     init(centerX, centerY, width, height, rgb, Qt::SolidLine); //TODO: getCurrentLineType
@@ -1673,7 +1673,7 @@ EllipseObject::~EllipseObject()
 }
 
 void
-EllipseObject::init(qreal centerX, qreal centerY, qreal width, qreal height, QRgb rgb, Qt::PenStyle lineType)
+EllipseObject::init(double centerX, double centerY, double width, double height, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_ELLIPSE);
@@ -1693,7 +1693,7 @@ EllipseObject::init(qreal centerX, qreal centerY, qreal width, qreal height, QRg
 }
 
 void
-EllipseObject::setObjectSize(qreal width, qreal height)
+EllipseObject::setObjectSize(double width, double height)
 {
     QRectF elRect = rect();
     elRect.setWidth(width);
@@ -1709,37 +1709,37 @@ EllipseObject::setObjectCenter(const QPointF& center)
 }
 
 void
-EllipseObject::setObjectCenter(qreal centerX, qreal centerY)
+EllipseObject::setObjectCenter(double centerX, double centerY)
 {
     setPos(centerX, centerY);
 }
 
 void
-EllipseObject::setObjectCenterX(qreal centerX)
+EllipseObject::setObjectCenterX(double centerX)
 {
     setX(centerX);
 }
 
 void
-EllipseObject::setObjectCenterY(qreal centerY)
+EllipseObject::setObjectCenterY(double centerY)
 {
     setY(centerY);
 }
 
 void
-EllipseObject::setObjectRadiusMajor(qreal radius)
+EllipseObject::setObjectRadiusMajor(double radius)
 {
     setObjectDiameterMajor(radius*2.0);
 }
 
 void
-EllipseObject::setObjectRadiusMinor(qreal radius)
+EllipseObject::setObjectRadiusMinor(double radius)
 {
     setObjectDiameterMinor(radius*2.0);
 }
 
 void
-EllipseObject::setObjectDiameterMajor(qreal diameter)
+EllipseObject::setObjectDiameterMajor(double diameter)
 {
     QRectF elRect = rect();
     if (elRect.width() > elRect.height()) {
@@ -1753,7 +1753,7 @@ EllipseObject::setObjectDiameterMajor(qreal diameter)
 }
 
 void
-EllipseObject::setObjectDiameterMinor(qreal diameter)
+EllipseObject::setObjectDiameterMinor(double diameter)
 {
     QRectF elRect = rect();
     if (elRect.width() < elRect.height())
@@ -1766,37 +1766,37 @@ EllipseObject::setObjectDiameterMinor(qreal diameter)
 
 QPointF EllipseObject::objectQuadrant0() const
 {
-    qreal halfW = objectWidth()/2.0;
-    qreal rot = radians(rotation());
-    qreal x = halfW * cos(rot);
-    qreal y = halfW * sin(rot);
+    double halfW = objectWidth()/2.0;
+    double rot = radians(rotation());
+    double x = halfW * cos(rot);
+    double y = halfW * sin(rot);
     return objectCenter() + QPointF(x,y);
 }
 
 QPointF EllipseObject::objectQuadrant90() const
 {
-    qreal halfH = objectHeight()/2.0;
-    qreal rot = radians(rotation()+90.0);
-    qreal x = halfH * cos(rot);
-    qreal y = halfH * sin(rot);
+    double halfH = objectHeight()/2.0;
+    double rot = radians(rotation()+90.0);
+    double x = halfH * cos(rot);
+    double y = halfH * sin(rot);
     return objectCenter() + QPointF(x,y);
 }
 
 QPointF EllipseObject::objectQuadrant180() const
 {
-    qreal halfW = objectWidth()/2.0;
-    qreal rot = radians(rotation()+180.0);
-    qreal x = halfW * cos(rot);
-    qreal y = halfW * sin(rot);
+    double halfW = objectWidth()/2.0;
+    double rot = radians(rotation()+180.0);
+    double x = halfW * cos(rot);
+    double y = halfW * sin(rot);
     return objectCenter() + QPointF(x,y);
 }
 
 QPointF EllipseObject::objectQuadrant270() const
 {
-    qreal halfH = objectHeight()/2.0;
-    qreal rot = radians(rotation()+270.0);
-    qreal x = halfH * cos(rot);
-    qreal y = halfH * sin(rot);
+    double halfH = objectHeight()/2.0;
+    double rot = radians(rotation()+270.0);
+    double x = halfH * cos(rot);
+    double y = halfH * sin(rot);
     return objectCenter() + QPointF(x,y);
 }
 
@@ -1854,22 +1854,22 @@ EllipseObject::updateRubber(QPainter* painter)
         QPointF sceneAxis1Point2 = objectRubberPoint("ELLIPSE_AXIS1_POINT2");
         QPointF sceneCenterPoint = objectRubberPoint("ELLIPSE_CENTER");
         QPointF sceneAxis2Point2 = objectRubberPoint("ELLIPSE_AXIS2_POINT2");
-        qreal ellipseWidth = objectRubberPoint("ELLIPSE_WIDTH").x();
-        qreal ellipseRot = objectRubberPoint("ELLIPSE_ROT").x();
+        double ellipseWidth = objectRubberPoint("ELLIPSE_WIDTH").x();
+        double ellipseRot = objectRubberPoint("ELLIPSE_ROT").x();
 
         //TODO: incorporate perpendicularDistance() into libcgeometry
-        qreal px = sceneAxis2Point2.x();
-        qreal py = sceneAxis2Point2.y();
-        qreal x1 = sceneAxis1Point1.x();
-        qreal y1 = sceneAxis1Point1.y();
+        double px = sceneAxis2Point2.x();
+        double py = sceneAxis2Point2.y();
+        double x1 = sceneAxis1Point1.x();
+        double y1 = sceneAxis1Point1.y();
         QLineF line(sceneAxis1Point1, sceneAxis1Point2);
         QLineF norm = line.normalVector();
-        qreal dx = px-x1;
-        qreal dy = py-y1;
+        double dx = px-x1;
+        double dy = py-y1;
         norm.translate(dx, dy);
         QPointF iPoint;
         norm.intersects(line, &iPoint);
-        qreal ellipseHeight = QLineF(px, py, iPoint.x(), iPoint.y()).length()*2.0;
+        double ellipseHeight = QLineF(px, py, iPoint.x(), iPoint.y()).length()*2.0;
 
         setObjectCenter(sceneCenterPoint);
         setObjectSize(ellipseWidth, ellipseHeight);
@@ -1888,22 +1888,22 @@ EllipseObject::updateRubber(QPainter* painter)
         QPointF sceneAxis1Point2 = objectRubberPoint("ELLIPSE_AXIS1_POINT2");
         QPointF sceneCenterPoint = objectRubberPoint("ELLIPSE_CENTER");
         QPointF sceneAxis2Point2 = objectRubberPoint("ELLIPSE_AXIS2_POINT2");
-        qreal ellipseWidth = objectRubberPoint("ELLIPSE_WIDTH").x();
-        qreal ellipseRot = objectRubberPoint("ELLIPSE_ROT").x();
+        double ellipseWidth = objectRubberPoint("ELLIPSE_WIDTH").x();
+        double ellipseRot = objectRubberPoint("ELLIPSE_ROT").x();
 
         //TODO: incorporate perpendicularDistance() into libcgeometry
-        qreal px = sceneAxis2Point2.x();
-        qreal py = sceneAxis2Point2.y();
-        qreal x1 = sceneCenterPoint.x();
-        qreal y1 = sceneCenterPoint.y();
+        double px = sceneAxis2Point2.x();
+        double py = sceneAxis2Point2.y();
+        double x1 = sceneCenterPoint.x();
+        double y1 = sceneCenterPoint.y();
         QLineF line(sceneCenterPoint, sceneAxis1Point2);
         QLineF norm = line.normalVector();
-        qreal dx = px-x1;
-        qreal dy = py-y1;
+        double dx = px-x1;
+        double dy = py-y1;
         norm.translate(dx, dy);
         QPointF iPoint;
         norm.intersects(line, &iPoint);
-        qreal ellipseHeight = QLineF(px, py, iPoint.x(), iPoint.y()).length()*2.0;
+        double ellipseHeight = QLineF(px, py, iPoint.x(), iPoint.y()).length()*2.0;
 
         setObjectCenter(sceneCenterPoint);
         setObjectSize(ellipseWidth, ellipseHeight);
@@ -1962,14 +1962,14 @@ QPainterPath EllipseObject::objectSavePath() const
     path.arcMoveTo(r, 0);
     path.arcTo(r, 0, 360);
 
-    qreal s = scale();
+    double s = scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);
     return trans.map(path);
 }
 
-ImageObject::ImageObject(qreal x, qreal y, qreal w, qreal h, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+ImageObject::ImageObject(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("ImageObject Constructor()");
     init(x, y, w, h, rgb, Qt::SolidLine); //TODO: getCurrentLineType
@@ -1991,7 +1991,7 @@ ImageObject::~ImageObject()
 }
 
 void
-ImageObject::init(qreal x, qreal y, qreal w, qreal h, QRgb rgb, Qt::PenStyle lineType)
+ImageObject::init(double x, double y, double w, double h, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_IMAGE);
@@ -2009,7 +2009,7 @@ ImageObject::init(qreal x, qreal y, qreal w, qreal h, QRgb rgb, Qt::PenStyle lin
 }
 
 void
-ImageObject::setObjectRect(qreal x, qreal y, qreal w, qreal h)
+ImageObject::setObjectRect(double x, double y, double w, double h)
 {
     setPos(x, y);
     setRect(0, 0, w, h);
@@ -2081,10 +2081,10 @@ ImageObject::updateRubber(QPainter* painter)
     if (rubberMode == OBJ_RUBBER_IMAGE) {
         QPointF sceneStartPoint = objectRubberPoint("IMAGE_START");
         QPointF sceneEndPoint = objectRubberPoint("IMAGE_END");
-        qreal x = sceneStartPoint.x();
-        qreal y = sceneStartPoint.y();
-        qreal w = sceneEndPoint.x() - sceneStartPoint.x();
-        qreal h = sceneEndPoint.y() - sceneStartPoint.y();
+        double x = sceneStartPoint.x();
+        double y = sceneStartPoint.y();
+        double w = sceneEndPoint.x() - sceneStartPoint.x();
+        double h = sceneEndPoint.y() - sceneStartPoint.y();
         setObjectRect(x,y,w,h);
         updatePath();
     }
@@ -2224,7 +2224,7 @@ function prompt(str)
 }
 #endif
 
-LineObject::LineObject(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+LineObject::LineObject(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("LineObject Constructor()");
     init(x1, y1, x2, y2, rgb, Qt::SolidLine); //TODO: getCurrentLineType
@@ -2244,7 +2244,7 @@ LineObject::~LineObject()
 }
 
 void
-LineObject::init(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rgb, Qt::PenStyle lineType)
+LineObject::init(double x1, double y1, double x2, double y2, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_LINE);
@@ -2269,13 +2269,13 @@ LineObject::setObjectEndPoint1(const QPointF& endPt1)
 }
 
 void
-LineObject::setObjectEndPoint1(qreal x1, qreal y1)
+LineObject::setObjectEndPoint1(double x1, double y1)
 {
     QPointF endPt2 = objectEndPoint2();
-    qreal x2 = endPt2.x();
-    qreal y2 = endPt2.y();
-    qreal dx = x2 - x1;
-    qreal dy = y2 - y1;
+    double x2 = endPt2.x();
+    double y2 = endPt2.y();
+    double dx = x2 - x1;
+    double dy = y2 - y1;
     setRotation(0);
     setScale(1);
     setLine(0, 0, dx, dy);
@@ -2289,13 +2289,13 @@ LineObject::setObjectEndPoint2(const QPointF& endPt2)
 }
 
 void
-LineObject::setObjectEndPoint2(qreal x2, qreal y2)
+LineObject::setObjectEndPoint2(double x2, double y2)
 {
     QPointF endPt1 = scenePos();
-    qreal x1 = endPt1.x();
-    qreal y1 = endPt1.y();
-    qreal dx = x2 - x1;
-    qreal dy = y2 - y1;
+    double x1 = endPt1.x();
+    double y1 = endPt1.y();
+    double dx = x2 - x1;
+    double dy = y2 - y1;
     setRotation(0);
     setScale(1);
     setLine(0, 0, dx, dy);
@@ -2316,9 +2316,9 @@ QPointF LineObject::objectMidPoint() const
     return scenePos() + scale_and_rotate(mp, scale(), rotation());
 }
 
-qreal LineObject::objectAngle() const
+double LineObject::objectAngle() const
 {
-    qreal angle = line().angle() - rotation();
+    double angle = line().angle() - rotation();
     while (angle >= 360.0) {
         angle -= 360.0;
     }
@@ -2512,7 +2512,7 @@ prompt(str)
 }
 #endif
 
-PathObject::PathObject(qreal x, qreal y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+PathObject::PathObject(double x, double y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("PathObject Constructor()");
     init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
@@ -2534,7 +2534,7 @@ PathObject::~PathObject()
 }
 
 void
-PathObject::init(qreal x, qreal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
+PathObject::init(double x, double y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_PATH);
@@ -2628,7 +2628,7 @@ QPainterPath PathObject::objectCopyPath() const
 
 QPainterPath PathObject::objectSavePath() const
 {
-    qreal s = scale();
+    double s = scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);
@@ -2706,7 +2706,7 @@ function prompt(str)
 #endif
 
 
-PointObject::PointObject(qreal x, qreal y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+PointObject::PointObject(double x, double y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("PointObject Constructor()");
     init(x, y, rgb, Qt::SolidLine); //TODO: getCurrentLineType
@@ -2727,7 +2727,7 @@ PointObject::~PointObject()
 }
 
 void
-PointObject::init(qreal x, qreal y, QRgb rgb, Qt::PenStyle lineType)
+PointObject::init(double x, double y, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_POINT);
@@ -3071,7 +3071,7 @@ prompt(char *str)
 }
 #endif
 
-PolygonObject::PolygonObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+PolygonObject::PolygonObject(double x, double y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("PolygonObject Constructor()");
     init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
@@ -3093,7 +3093,7 @@ PolygonObject::~PolygonObject()
 }
 
 void
-PolygonObject::init(qreal x, qreal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
+PolygonObject::init(double x, double y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_POLYGON);
@@ -3188,8 +3188,8 @@ PolygonObject::updateRubber(QPainter* painter)
 
         QPointF inscribePoint = mapFromScene(objectRubberPoint("POLYGON_INSCRIBE_POINT"));
         QLineF inscribeLine = QLineF(QPointF(0,0), inscribePoint);
-        qreal inscribeAngle = inscribeLine.angle();
-        qreal inscribeInc = 360.0/numSides;
+        double inscribeAngle = inscribeLine.angle();
+        double inscribeInc = 360.0/numSides;
 
         if (painter) {
             drawRubberLine(inscribeLine, painter, VIEW_COLOR_CROSSHAIR);
@@ -3212,8 +3212,8 @@ PolygonObject::updateRubber(QPainter* painter)
 
         QPointF circumscribePoint = mapFromScene(objectRubberPoint("POLYGON_CIRCUMSCRIBE_POINT"));
         QLineF circumscribeLine = QLineF(QPointF(0,0), circumscribePoint);
-        qreal circumscribeAngle = circumscribeLine.angle();
-        qreal circumscribeInc = 360.0/numSides;
+        double circumscribeAngle = circumscribeLine.angle();
+        double circumscribeInc = 360.0/numSides;
 
         if (painter) {
             drawRubberLine(circumscribeLine, painter, VIEW_COLOR_CROSSHAIR);
@@ -3347,7 +3347,7 @@ QPainterPath PolygonObject::objectSavePath() const
 {
     QPainterPath closedPath = normalPath;
     closedPath.closeSubpath();
-    qreal s = scale();
+    double s = scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);
@@ -3452,7 +3452,7 @@ function prompt(str)
 }
 #endif
 
-PolylineObject::PolylineObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+PolylineObject::PolylineObject(double x, double y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("PolylineObject Constructor()");
     init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
@@ -3474,7 +3474,7 @@ PolylineObject::~PolylineObject()
 }
 
 void
-PolylineObject::init(qreal x, qreal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
+PolylineObject::init(double x, double y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_POLYLINE);
@@ -3652,7 +3652,7 @@ QPainterPath PolylineObject::objectCopyPath() const
 
 QPainterPath PolylineObject::objectSavePath() const
 {
-    qreal s = scale();
+    double s = scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);
@@ -3757,7 +3757,7 @@ function prompt(str)
 }
 #endif
 
-RectObject::RectObject(qreal x, qreal y, qreal w, qreal h, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+RectObject::RectObject(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("RectObject Constructor()");
     init(x, y, w, h, rgb, Qt::SolidLine); //TODO: getCurrentLineType
@@ -3779,7 +3779,7 @@ RectObject::~RectObject()
 }
 
 void
-RectObject::init(qreal x, qreal y, qreal w, qreal h, QRgb rgb, Qt::PenStyle lineType)
+RectObject::init(double x, double y, double w, double h, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_RECTANGLE);
@@ -3797,7 +3797,7 @@ RectObject::init(qreal x, qreal y, qreal w, qreal h, QRgb rgb, Qt::PenStyle line
 }
 
 void
-RectObject::setObjectRect(qreal x, qreal y, qreal w, qreal h)
+RectObject::setObjectRect(double x, double y, double w, double h)
 {
     setPos(x, y);
     setRect(0, 0, w, h);
@@ -3869,10 +3869,10 @@ RectObject::updateRubber(QPainter* painter)
     if (rubberMode == OBJ_RUBBER_RECTANGLE) {
         QPointF sceneStartPoint = objectRubberPoint("RECTANGLE_START");
         QPointF sceneEndPoint = objectRubberPoint("RECTANGLE_END");
-        qreal x = sceneStartPoint.x();
-        qreal y = sceneStartPoint.y();
-        qreal w = sceneEndPoint.x() - sceneStartPoint.x();
-        qreal h = sceneEndPoint.y() - sceneStartPoint.y();
+        double x = sceneStartPoint.x();
+        double y = sceneStartPoint.y();
+        double w = sceneEndPoint.x() - sceneStartPoint.x();
+        double h = sceneEndPoint.y() - sceneStartPoint.y();
         setObjectRect(x,y,w,h);
         updatePath();
     }
@@ -3956,7 +3956,7 @@ QPainterPath RectObject::objectSavePath() const
     path.lineTo(r.topLeft());
     path.lineTo(r.bottomLeft());
 
-    qreal s = scale();
+    double s = scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);
@@ -4310,7 +4310,7 @@ function prompt(str)
 #endif
 
 
-TextSingleObject::TextSingleObject(const QString& str, qreal x, qreal y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+TextSingleObject::TextSingleObject(const QString& str, double x, double y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("TextSingleObject Constructor()");
     init(str, x, y, rgb, Qt::SolidLine); //TODO: getCurrentLineType
@@ -4338,7 +4338,7 @@ TextSingleObject::~TextSingleObject()
 }
 
 void
-TextSingleObject::init(const QString& str, qreal x, qreal y, QRgb rgb, Qt::PenStyle lineType)
+TextSingleObject::init(const QString& str, double x, double y, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_TEXTSINGLE);
@@ -4433,8 +4433,8 @@ TextSingleObject::setObjectText(const QString& str)
 
     //Backward or Upside Down
     if (objTextBackward || objTextUpsideDown) {
-        qreal horiz = 1.0;
-        qreal vert = 1.0;
+        double horiz = 1.0;
+        double vert = 1.0;
         if (objTextBackward) horiz = -1.0;
         if (objTextUpsideDown) vert = -1.0;
 
@@ -4539,7 +4539,7 @@ TextSingleObject::setObjectTextJustify(const QString& justify)
 }
 
 void
-TextSingleObject::setObjectTextSize(qreal size)
+TextSingleObject::setObjectTextSize(double size)
 {
     objTextSize = size;
     setObjectText(objText);
@@ -4684,7 +4684,7 @@ TextSingleObject::gripEdit(const QPointF& before, const QPointF& after)
 
 QList<QPainterPath> TextSingleObject::subPathList() const
 {
-    qreal s = scale();
+    double s = scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);

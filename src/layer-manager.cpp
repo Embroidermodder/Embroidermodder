@@ -69,7 +69,7 @@ LayerManager::~LayerManager()
 void LayerManager::addLayer(const QString& name,
                             const bool visible,
                             const bool frozen,
-                            const qreal zValue,
+                            const double zValue,
                             const QRgb color,
                             const QString& lineType,
                             const QString& lineWeight,

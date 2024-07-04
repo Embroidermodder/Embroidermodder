@@ -638,7 +638,7 @@ extern ScriptValue script_null;
 extern ScriptValue script_true;
 extern ScriptValue script_false;
 
-extern const char *coverage_test[];
+extern string_table coverage_test;
 extern int testing_mode;
 
 extern string_table menubar_full_list;

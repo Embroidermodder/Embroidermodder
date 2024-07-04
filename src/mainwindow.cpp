@@ -382,7 +382,7 @@ MainWindow::newFile()
     updateMenuToolbarStatusbar();
     windowMenuAboutToShow();
 
-    View* v = mdiWin->getView();
+    View* v = mdiWin->gview;
     if (v) {
         v->recalculateLimits();
         v->zoomExtents();
@@ -464,7 +464,7 @@ MainWindow::openFilesSelected(const QStringList& filesToOpen)
                 }
                 settings_opensave_recent_directory = QFileInfo(filesToOpen.at(i)).absolutePath();
 
-                View* v = mdiWin->getView();
+                View* v = mdiWin->gview;
                 if (v) {
                     v->recalculateLimits();
                     v->zoomExtents();
@@ -524,7 +524,7 @@ QMdiSubWindow* MainWindow::findMdiWindow(const QString& fileName)
     foreach (QMdiSubWindow* subWindow, mdiArea->subWindowList()) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(subWindow);
         if (mdiWin) {
-            if (mdiWin->getCurrentFile() == canonicalFilePath) {
+            if (mdiWin->curFile == canonicalFilePath) {
                 return subWindow;
             }
         }

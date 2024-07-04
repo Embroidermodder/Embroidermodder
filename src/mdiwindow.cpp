@@ -101,7 +101,7 @@ MdiWindow::loadFile(const QString &fileName)
 {
     qDebug("MdiWindow loadFile()");
 
-    QRgb tmpColor = getCurrentColor();
+    QRgb tmpColor = curColor;
 
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
@@ -163,7 +163,7 @@ MdiWindow::loadFile(const QString &fileName)
     //Clear the undo stack so it is not possible to undo past this point.
     gview->getUndoStack()->clear();
 
-    setCurrentColor(tmpColor);
+    curColor = tmpColor;
 
     fileWasLoaded = true;
     _main->setUndoCleanIcon(fileWasLoaded);

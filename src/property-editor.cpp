@@ -800,7 +800,7 @@ PropertyEditor::updateLineEditStrIfVaries(QLineEdit* lineEdit, const QString& st
 }
 
 void
-PropertyEditor::updateLineEditNumIfVaries(QLineEdit* lineEdit, qreal num, bool useAnglePrecision)
+PropertyEditor::updateLineEditNumIfVaries(QLineEdit* lineEdit, double num, bool useAnglePrecision)
 {
     int precision = 0;
     if (useAnglePrecision) {

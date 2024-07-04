@@ -361,7 +361,7 @@ activeView()
     _main->debug_message("activeView()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(_main->mdiArea->activeSubWindow());
     if (mdiWin) {
-        View* v = mdiWin->getView();
+        View* v = mdiWin->gview;
         return v;
     }
     return 0;
@@ -373,7 +373,7 @@ activeScene()
     _main->debug_message("activeScene()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(_main->mdiArea->activeSubWindow());
     if (mdiWin) {
-        QGraphicsScene* s = mdiWin->getScene();
+        QGraphicsScene* s = mdiWin->gscene;
         return s;
     }
     return 0;
@@ -686,12 +686,12 @@ QString MainWindow::textFont()
     return settings_text_font;
 }
 
-qreal MainWindow::textSize()
+double MainWindow::textSize()
 {
     return settings_text_size;
 }
 
-qreal MainWindow::textAngle()
+double MainWindow::textAngle()
 {
     return settings_text_angle;
 }
@@ -727,7 +727,7 @@ void MainWindow::setTextFont(const QString& str)
     settings_text_font = str;
 }
 
-void MainWindow::setTextSize(qreal num)
+void MainWindow::setTextSize(double num)
 {
     settings_text_size = qFabs(num);
     int index = textSizeSelector->findText("Custom", Qt::MatchContains);
@@ -739,31 +739,42 @@ void MainWindow::setTextSize(qreal num)
         textSizeSelector->setCurrentIndex(index);
 }
 
-QString MainWindow::getCurrentLayer()
+QString
+MainWindow::getCurrentLayer()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) { return mdiWin->getCurrentLayer(); }
+    if (mdiWin) {
+        return mdiWin->curLayer;
+    }
     return "0";
 }
 
-QRgb MainWindow::getCurrentColor()
+QRgb
+MainWindow::getCurrentColor()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) { return mdiWin->getCurrentColor(); }
+    if (mdiWin) {
+        return mdiWin->curColor;
+    }
     return 0; //TODO: return color ByLayer
 }
 
-QString MainWindow::getCurrentLineType()
+QString
+MainWindow::getCurrentLineType()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) { return mdiWin->getCurrentLineType(); }
+    if (mdiWin) {
+        return mdiWin->curLineType;
+    }
     return "ByLayer";
 }
 
 QString MainWindow::getCurrentLineWeight()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) { return mdiWin->getCurrentLineWeight(); }
+    if (mdiWin) {
+        return mdiWin->curLineWeight;
+    }
     return "ByLayer";
 }
 
@@ -772,7 +783,9 @@ void MainWindow::deletePressed()
     qDebug("deletePressed()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) { mdiWin->deletePressed(); }
+    if (mdiWin) {
+        mdiWin->deletePressed();
+    }
     QApplication::restoreOverrideCursor();
 }
 
@@ -904,7 +917,7 @@ MainWindow::runCommandMain(const QString& cmd)
 /* FIXME: reconnect to new command system.
  */
 void
-MainWindow::runCommandClick(const QString& cmd, qreal x, qreal y)
+MainWindow::runCommandClick(const QString& cmd, double x, double y)
 {
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_CLICK;
@@ -917,7 +930,7 @@ MainWindow::runCommandClick(const QString& cmd, qreal x, qreal y)
 /* FIXME: reconnect to new command system.
  */
 void
-MainWindow::runCommandMove(const QString& cmd, qreal x, qreal y)
+MainWindow::runCommandMove(const QString& cmd, double x, double y)
 {
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_MOVE;
@@ -1019,27 +1032,27 @@ void MainWindow::messageBox(const QString& type, const QString& title, const QSt
     }
 }
 
-void MainWindow::nativePrintArea(qreal x, qreal y, qreal w, qreal h)
+void MainWindow::nativePrintArea(double x, double y, double w, double h)
 {
     qDebug("nativePrintArea(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
     //TODO: Print Setup Stuff
     print();
 }
 
-void MainWindow::nativeSetBackgroundColor(quint8 r, quint8 g, quint8 b)
+void MainWindow::nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b)
 {
     settings_display_bg_color = qRgb(r,g,b);
     updateAllViewBackgroundColors(qRgb(r,g,b));
 }
 
-void MainWindow::nativeSetCrossHairColor(quint8 r, quint8 g, quint8 b)
+void MainWindow::nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b)
 {
     settings_display_crosshair_color = qRgb(r,g,b);
     updateAllViewCrossHairColors(qRgb(r,g,b));
 }
 
 void
-MainWindow::nativeSetGridColor(quint8 r, quint8 g, quint8 b)
+MainWindow::nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b)
 {
     settings_grid_color = qRgb(r,g,b);
     updateAllViewGridColors(qRgb(r,g,b));
@@ -1074,7 +1087,7 @@ MainWindow::nativeAllowRubber()
 }
 
 void
-MainWindow::nativeSpareRubber(qint64 id)
+MainWindow::nativeSpareRubber(int64_t id)
 {
     View* gview = activeView();
     if (gview) {
@@ -1088,7 +1101,7 @@ void MainWindow::nativeSetRubberMode(int mode)
     if (gview) gview->setRubberMode(mode);
 }
 
-void MainWindow::nativeSetRubberPoint(const QString& key, qreal x, qreal y)
+void MainWindow::nativeSetRubberPoint(const QString& key, double x, double y)
 {
     View* gview = activeView();
     if (gview) gview->setRubberPoint(key, QPointF(x, -y));
@@ -1100,11 +1113,11 @@ void MainWindow::nativeSetRubberText(const QString& key, const QString& txt)
     if (gview) gview->setRubberText(key, txt);
 }
 
-void MainWindow::nativeAddTextMulti(const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode)
+void MainWindow::nativeAddTextMulti(const QString& str, double x, double y, double rot, bool fill, int rubberMode)
 {
 }
 
-void MainWindow::nativeAddTextSingle(const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode)
+void MainWindow::nativeAddTextSingle(const QString& str, double x, double y, double rot, bool fill, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1135,15 +1148,15 @@ void MainWindow::nativeAddTextSingle(const QString& str, qreal x, qreal y, qreal
     }
 }
 
-void MainWindow::nativeAddInfiniteLine(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot)
+void MainWindow::nativeAddInfiniteLine(double x1, double y1, double x2, double y2, double rot)
 {
 }
 
-void MainWindow::nativeAddRay(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot)
+void MainWindow::nativeAddRay(double x1, double y1, double x2, double y2, double rot)
 {
 }
 
-void MainWindow::nativeAddLine(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode)
+void MainWindow::nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1164,11 +1177,11 @@ void MainWindow::nativeAddLine(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot
     }
 }
 
-void MainWindow::nativeAddTriangle(qreal x1, qreal y1, qreal x2, qreal y2, qreal x3, qreal y3, qreal rot, bool fill)
+void MainWindow::nativeAddTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double rot, bool fill)
 {
 }
 
-void MainWindow::nativeAddRectangle(qreal x, qreal y, qreal w, qreal h, qreal rot, bool fill, int rubberMode)
+void MainWindow::nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1190,7 +1203,7 @@ void MainWindow::nativeAddRectangle(qreal x, qreal y, qreal w, qreal h, qreal ro
     }
 }
 
-void MainWindow::nativeAddRoundedRectangle(qreal x, qreal y, qreal w, qreal h, qreal rad, qreal rot, bool fill)
+void MainWindow::nativeAddRoundedRectangle(double x, double y, double w, double h, double rad, double rot, bool fill)
 {
 }
 
@@ -1212,7 +1225,7 @@ void MainWindow::nativeAddArc(EmbArc arc, int rubberMode)
     }
 }
 
-void MainWindow::nativeAddCircle(qreal centerX, qreal centerY, qreal radius, bool fill, int rubberMode)
+void MainWindow::nativeAddCircle(double centerX, double centerY, double radius, bool fill, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1233,7 +1246,7 @@ void MainWindow::nativeAddCircle(qreal centerX, qreal centerY, qreal radius, boo
     }
 }
 
-void MainWindow::nativeAddSlot(qreal centerX, qreal centerY, qreal diameter, qreal length, qreal rot, bool fill, int rubberMode)
+void MainWindow::nativeAddSlot(double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode)
 {
     //TODO: Use UndoableAddCommand for slots
     /*
@@ -1247,7 +1260,7 @@ void MainWindow::nativeAddSlot(qreal centerX, qreal centerY, qreal diameter, qre
     */
 }
 
-void MainWindow::nativeAddEllipse(qreal centerX, qreal centerY, qreal width, qreal height, qreal rot, bool fill, int rubberMode)
+void MainWindow::nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1269,7 +1282,7 @@ void MainWindow::nativeAddEllipse(qreal centerX, qreal centerY, qreal width, qre
     }
 }
 
-void MainWindow::nativeAddPoint(qreal x, qreal y)
+void MainWindow::nativeAddPoint(double x, double y)
 {
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
@@ -1280,12 +1293,12 @@ void MainWindow::nativeAddPoint(qreal x, qreal y)
     }
 }
 
-void MainWindow::nativeAddRegularPolygon(qreal centerX, qreal centerY, quint16 sides, quint8 mode, qreal rad, qreal rot, bool fill)
+void MainWindow::nativeAddRegularPolygon(double centerX, double centerY, quint16 sides, uint8_t mode, double rad, double rot, bool fill)
 {
 }
 
 //NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
-void MainWindow::nativeAddPolygon(qreal startX, qreal startY, const QPainterPath& p, int rubberMode)
+void MainWindow::nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1306,7 +1319,7 @@ void MainWindow::nativeAddPolygon(qreal startX, qreal startY, const QPainterPath
 }
 
 //NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
-void MainWindow::nativeAddPolyline(qreal startX, qreal startY, const QPainterPath& p, int rubberMode)
+void MainWindow::nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1327,23 +1340,23 @@ void MainWindow::nativeAddPolyline(qreal startX, qreal startY, const QPainterPat
 }
 
 //NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
-void MainWindow::nativeAddPath(qreal startX, qreal startY, const QPainterPath& p, int rubberMode)
+void MainWindow::nativeAddPath(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
 }
 
-void MainWindow::nativeAddHorizontalDimension(qreal x1, qreal y1, qreal x2, qreal y2, qreal legHeight)
+void MainWindow::nativeAddHorizontalDimension(double x1, double y1, double x2, double y2, double legHeight)
 {
 }
 
-void MainWindow::nativeAddVerticalDimension(qreal x1, qreal y1, qreal x2, qreal y2, qreal legHeight)
+void MainWindow::nativeAddVerticalDimension(double x1, double y1, double x2, double y2, double legHeight)
 {
 }
 
-void MainWindow::nativeAddImage(const QString& img, qreal x, qreal y, qreal w, qreal h, qreal rot)
+void MainWindow::nativeAddImage(const QString& img, double x, double y, double w, double h, double rot)
 {
 }
 
-void MainWindow::nativeAddDimLeader(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode)
+void MainWindow::nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1401,22 +1414,22 @@ void MainWindow::nativeSetCursorShape(const QString& str)
     }
 }
 
-qreal MainWindow::nativeCalculateAngle(qreal x1, qreal y1, qreal x2, qreal y2)
+double MainWindow::nativeCalculateAngle(double x1, double y1, double x2, double y2)
 {
     return QLineF(x1, -y1, x2, -y2).angle();
 }
 
-qreal MainWindow::nativeCalculateDistance(qreal x1, qreal y1, qreal x2, qreal y2)
+double MainWindow::nativeCalculateDistance(double x1, double y1, double x2, double y2)
 {
     return QLineF(x1, y1, x2, y2).length();
 }
 
-qreal MainWindow::nativePerpendicularDistance(qreal px, qreal py, qreal x1, qreal y1, qreal x2, qreal y2)
+double MainWindow::nativePerpendicularDistance(double px, double py, double x1, double y1, double x2, double y2)
 {
     QLineF line(x1, y1, x2, y2);
     QLineF norm = line.normalVector();
-    qreal dx = px-x1;
-    qreal dy = py-y1;
+    double dx = px-x1;
+    double dy = py-y1;
     norm.translate(dx, dy);
     QPointF iPoint;
     norm.intersects(line, &iPoint);
@@ -1460,25 +1473,25 @@ void MainWindow::nativeDeleteSelected()
     }
 }
 
-void MainWindow::nativeCutSelected(qreal x, qreal y)
+void MainWindow::nativeCutSelected(double x, double y)
 {
 }
 
-void MainWindow::nativeCopySelected(qreal x, qreal y)
+void MainWindow::nativeCopySelected(double x, double y)
 {
 }
 
-void MainWindow::nativePasteSelected(qreal x, qreal y)
+void MainWindow::nativePasteSelected(double x, double y)
 {
 }
 
-void MainWindow::nativeMoveSelected(qreal dx, qreal dy)
+void MainWindow::nativeMoveSelected(double dx, double dy)
 {
     View* gview = activeView();
     if (gview) { gview->moveSelected(dx, -dy); }
 }
 
-void MainWindow::nativeScaleSelected(qreal x, qreal y, qreal factor)
+void MainWindow::nativeScaleSelected(double x, double y, double factor)
 {
     if (factor <= 0.0) {
         QMessageBox::critical(this, tr("ScaleFactor Error"),
@@ -1492,7 +1505,7 @@ void MainWindow::nativeScaleSelected(qreal x, qreal y, qreal factor)
     }
 }
 
-void MainWindow::nativeRotateSelected(qreal x, qreal y, qreal rot)
+void MainWindow::nativeRotateSelected(double x, double y, double rot)
 {
     View* gview = activeView();
     if (gview) {
@@ -1500,7 +1513,7 @@ void MainWindow::nativeRotateSelected(qreal x, qreal y, qreal rot)
     }
 }
 
-void MainWindow::nativeMirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2)
+void MainWindow::nativeMirrorSelected(double x1, double y1, double x2, double y2)
 {
     View* gview = activeView();
     if (gview) {
@@ -1508,7 +1521,7 @@ void MainWindow::nativeMirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2)
     }
 }
 
-qreal MainWindow::nativeQSnapX()
+double MainWindow::nativeQSnapX()
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {
@@ -1517,7 +1530,7 @@ qreal MainWindow::nativeQSnapX()
     return 0.0;
 }
 
-qreal MainWindow::nativeQSnapY()
+double MainWindow::nativeQSnapY()
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {
