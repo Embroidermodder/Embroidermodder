@@ -197,7 +197,6 @@ void MainWindow::tipOfTheDay()
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("&Show tips on startup"), wizardTipOfTheDay);
-    settings_general_tip_of_the_day = _main->settings_general_tip_of_the_day;
     checkBoxTipOfTheDay->setChecked(settings_general_tip_of_the_day);
     connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), this, SLOT(checkBoxTipOfTheDayStateChanged(int)));
 
@@ -681,50 +680,10 @@ void MainWindow::textSizeSelectorIndexChanged(int index)
     settings_text_size = qFabs(textSizeSelector->itemData(index).toReal());
 }
 
-QString MainWindow::textFont()
-{
-    return settings_text_font;
-}
-
-double MainWindow::textSize()
-{
-    return settings_text_size;
-}
-
-double MainWindow::textAngle()
-{
-    return settings_text_angle;
-}
-
-bool MainWindow::textBold()
-{
-    return settings_text_style_bold;
-}
-
-bool MainWindow::textItalic()
-{
-    return settings_text_style_italic;
-}
-
-bool MainWindow::textUnderline()
-{
-    return settings_text_style_underline;
-}
-
-bool MainWindow::textStrikeOut()
-{
-    return settings_text_style_strikeout;
-}
-
-bool MainWindow::textOverline()
-{
-    return settings_text_style_overline;
-}
-
 void MainWindow::setTextFont(const QString& str)
 {
     textFontSelector->setCurrentFont(QFont(str));
-    settings_text_font = str;
+    strcpy(settings_text_font, qPrintable(str));
 }
 
 void MainWindow::setTextSize(double num)

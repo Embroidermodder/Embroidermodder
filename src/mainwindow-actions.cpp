@@ -36,10 +36,6 @@ void
 MainWindow::createAllActions()
 {
     qDebug("Creating All Actions...");
-    QString appName = QApplication::applicationName();
-    QString appDir = qApp->applicationDirPath();
-    QString iconTheme = settings_general_icon_theme;
-
     for (int i=0; command_data[i].id != -2; i++) {
         QString icon(command_data[i].icon);
         QString toolTip(command_data[i].tooltip);
@@ -56,7 +52,7 @@ MainWindow::createAllActions()
             qDebug("ERROR: command_map key collision.");
         }
 
-        QAction *ACTION = new QAction(QIcon(appDir + "/icons/" + iconTheme + "/" + icon + ".png"), toolTip, this);
+        QAction *ACTION = new QAction(create_icon(icon), toolTip, this);
         ACTION->setStatusTip(statusTip);
         ACTION->setObjectName(icon);
         ACTION->setWhatsThis(statusTip);

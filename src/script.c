@@ -16,6 +16,8 @@
 
 #include "core.h"
 
+#include "toml.h"
+
 string_table coverage_test;
 
 string_table menubar_full_list;
@@ -45,6 +47,114 @@ string_table inquiry_toolbar;
 string_table modify_toolbar;
 string_table dimension_toolbar;
 string_table sandbox_toolbar;
+
+char settings_general_language[MAX_STRING_LENGTH];
+char settings_general_icon_theme[MAX_STRING_LENGTH];
+int settings_general_icon_size;
+bool settings_general_mdi_bg_use_logo;
+bool settings_general_mdi_bg_use_texture;
+bool settings_general_mdi_bg_use_color;
+char settings_general_mdi_bg_logo[MAX_STRING_LENGTH];
+char settings_general_mdi_bg_texture[MAX_STRING_LENGTH];
+int32_t settings_general_mdi_bg_color;
+bool settings_general_tip_of_the_day;
+uint16_t settings_general_current_tip;
+bool settings_general_system_help_browser;
+bool settings_general_check_for_updates;
+bool settings_display_use_opengl;
+bool settings_display_renderhint_aa;
+bool settings_display_renderhint_text_aa;
+bool settings_display_renderhint_smooth_pix;
+bool settings_display_renderhint_high_aa;
+bool settings_display_renderhint_noncosmetic;
+bool settings_display_show_scrollbars;
+int settings_display_scrollbar_widget_num;
+int32_t settings_display_crosshair_color;
+int32_t settings_display_bg_color;
+int32_t settings_display_selectbox_left_color;
+int32_t settings_display_selectbox_left_fill;
+int32_t settings_display_selectbox_right_color;
+int32_t settings_display_selectbox_right_fill;
+uint8_t settings_display_selectbox_alpha;
+double settings_display_zoomscale_in;
+double settings_display_zoomscale_out;
+uint8_t settings_display_crosshair_percent;
+char settings_display_units[MAX_STRING_LENGTH];
+int32_t settings_prompt_text_color;
+int32_t settings_prompt_bg_color;
+char settings_prompt_font_family[MAX_STRING_LENGTH];
+char settings_prompt_font_style[MAX_STRING_LENGTH];
+uint8_t settings_prompt_font_size;
+bool settings_prompt_save_history;
+bool settings_prompt_save_history_as_html;
+char settings_prompt_save_history_filename[MAX_STRING_LENGTH];
+char settings_opensave_custom_filter[MAX_STRING_LENGTH];
+char settings_opensave_open_format[MAX_STRING_LENGTH];
+bool settings_opensave_open_thumbnail;
+char settings_opensave_save_format[MAX_STRING_LENGTH];
+bool settings_opensave_save_thumbnail;
+uint8_t settings_opensave_recent_max_files;
+char settings_opensave_recent_list_of_files[MAX_FILES][MAX_STRING_LENGTH];
+char settings_opensave_recent_directory[MAX_STRING_LENGTH];
+uint8_t settings_opensave_trim_dst_num_jumps;
+char settings_printing_default_device[MAX_STRING_LENGTH];
+bool settings_printing_use_last_device;
+bool settings_printing_disable_bg;
+bool settings_grid_show_on_load;
+bool settings_grid_show_origin;
+bool settings_grid_color_match_crosshair;
+int32_t settings_grid_color;
+bool settings_grid_load_from_file;
+char settings_grid_type[MAX_STRING_LENGTH];
+bool settings_grid_center_on_origin;
+double settings_grid_center_x;
+double settings_grid_center_y;
+double settings_grid_size_x;
+double settings_grid_size_y;
+double settings_grid_spacing_x;
+double settings_grid_spacing_y;
+double settings_grid_size_radius;
+double settings_grid_spacing_radius;
+double settings_grid_spacing_angle;
+bool settings_ruler_show_on_load;
+bool settings_ruler_metric;
+int32_t settings_ruler_color;
+uint8_t settings_ruler_pixel_size;
+bool settings_qsnap_enabled;
+int32_t settings_qsnap_locator_color;
+uint8_t settings_qsnap_locator_size;
+uint8_t settings_qsnap_aperture_size;
+bool settings_qsnap_endpoint;
+bool settings_qsnap_midpoint;
+bool settings_qsnap_center;
+bool settings_qsnap_node;
+bool settings_qsnap_quadrant;
+bool settings_qsnap_intersection;
+bool settings_qsnap_extension;
+bool settings_qsnap_insertion;
+bool settings_qsnap_perpendicular;
+bool settings_qsnap_tangent;
+bool settings_qsnap_nearest;
+bool settings_qsnap_apparent;
+bool settings_qsnap_parallel;
+bool settings_lwt_show_lwt;
+bool settings_lwt_real_render;
+double settings_lwt_default_lwt;
+bool settings_selection_mode_pickfirst;
+bool settings_selection_mode_pickadd;
+bool settings_selection_mode_pickdrag;
+int32_t settings_selection_coolgrip_color;
+int32_t settings_selection_hotgrip_color;
+uint8_t settings_selection_grip_size;
+uint8_t settings_selection_pickbox_size;
+char settings_text_font[MAX_STRING_LENGTH];
+double settings_text_size;
+double settings_text_angle;
+bool settings_text_style_bold;
+bool settings_text_style_italic;
+bool settings_text_style_underline;
+bool settings_text_style_overline;
+bool settings_text_style_strikeout;
 
 const char *index_name[] = {
     "one",
@@ -649,5 +759,34 @@ load_data(void)
     }
 
     toml_free(conf);
+    return 1;
+}
+
+int
+load_settings(char *appDir, char *configDir)
+{
+    char fname[200];
+    sprintf(fname, "%s/settings.toml", configDir);
+    toml_table_t *conf = load_data_file(fname);
+    if (!conf) {
+        toml_free(conf);
+        return 0;
+    }
+
+    toml_free(conf);
+    return 1;
+}
+
+int
+save_settings(char *appDir, char *configDir)
+{
+    char fname[200];
+    sprintf(fname, "%s/settings.toml", configDir);
+    FILE *f = fopen(fname, "w");
+    if (!f) {
+        return 0;
+    }
+
+    fclose(f);
     return 1;
 }

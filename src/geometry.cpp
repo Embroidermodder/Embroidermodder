@@ -76,3 +76,12 @@ emb_arc_set_radius(EmbArc arc, EmbReal radius)
 
     return arc;
 }
+
+QIcon
+create_icon(QString icon)
+{
+    QString fname = qApp->applicationDirPath() + "/icons/";
+    fname += settings_general_icon_theme;
+    fname += "/" + icon + ".png";
+    return QIcon(fname);
+}

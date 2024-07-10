@@ -17,14 +17,14 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
+#include <inttypes.h>
 #include <math.h>
 
 #include "../extern/libembroidery/embroidery.h"
 
-#include "toml.h"
-
 #define MAX_ARGS                      10
-#define MAX_STRING_LENGTH            200
+#define MAX_FILES                     30
+#define MAX_STRING_LENGTH           1000
 #define MAX_COMMAND_LENGTH            30
 #define MAX_MENU_LENGTH               30
 #define MAX_TOOLBAR_LENGTH            30
@@ -498,6 +498,9 @@ void add_to_toolbar(const char *toolbar_name, const char *toolbar_data[]);
 
 int load_data(void);
 
+int load_settings(char *appDir, char *configDir);
+int save_settings(char *appDir, char *configDir);
+
 /* Geometry */
 EmbArc emb_arc_set_radius(EmbArc a, EmbReal radius);
 
@@ -668,6 +671,114 @@ extern string_table inquiry_toolbar;
 extern string_table modify_toolbar;
 extern string_table dimension_toolbar;
 extern string_table sandbox_toolbar;
+
+extern char settings_general_language[MAX_STRING_LENGTH];
+extern char settings_general_icon_theme[MAX_STRING_LENGTH];
+extern int settings_general_icon_size;
+extern bool settings_general_mdi_bg_use_logo;
+extern bool settings_general_mdi_bg_use_texture;
+extern bool settings_general_mdi_bg_use_color;
+extern char settings_general_mdi_bg_logo[MAX_STRING_LENGTH];
+extern char settings_general_mdi_bg_texture[MAX_STRING_LENGTH];
+extern int32_t settings_general_mdi_bg_color;
+extern bool settings_general_tip_of_the_day;
+extern uint16_t settings_general_current_tip;
+extern bool settings_general_system_help_browser;
+extern bool settings_general_check_for_updates;
+extern bool settings_display_use_opengl;
+extern bool settings_display_renderhint_aa;
+extern bool settings_display_renderhint_text_aa;
+extern bool settings_display_renderhint_smooth_pix;
+extern bool settings_display_renderhint_high_aa;
+extern bool settings_display_renderhint_noncosmetic;
+extern bool settings_display_show_scrollbars;
+extern int settings_display_scrollbar_widget_num;
+extern int32_t settings_display_crosshair_color;
+extern int32_t settings_display_bg_color;
+extern int32_t settings_display_selectbox_left_color;
+extern int32_t settings_display_selectbox_left_fill;
+extern int32_t settings_display_selectbox_right_color;
+extern int32_t settings_display_selectbox_right_fill;
+extern uint8_t settings_display_selectbox_alpha;
+extern double settings_display_zoomscale_in;
+extern double settings_display_zoomscale_out;
+extern uint8_t settings_display_crosshair_percent;
+extern char settings_display_units[MAX_STRING_LENGTH];
+extern int32_t settings_prompt_text_color;
+extern int32_t settings_prompt_bg_color;
+extern char settings_prompt_font_family[MAX_STRING_LENGTH];
+extern char settings_prompt_font_style[MAX_STRING_LENGTH];
+extern uint8_t settings_prompt_font_size;
+extern bool settings_prompt_save_history;
+extern bool settings_prompt_save_history_as_html;
+extern char settings_prompt_save_history_filename[MAX_STRING_LENGTH];
+extern char settings_opensave_custom_filter[MAX_STRING_LENGTH];
+extern char settings_opensave_open_format[MAX_STRING_LENGTH];
+extern bool settings_opensave_open_thumbnail;
+extern char settings_opensave_save_format[MAX_STRING_LENGTH];
+extern bool settings_opensave_save_thumbnail;
+extern uint8_t settings_opensave_recent_max_files;
+extern char settings_opensave_recent_list_of_files[MAX_FILES][MAX_STRING_LENGTH];
+extern char settings_opensave_recent_directory[MAX_STRING_LENGTH];
+extern uint8_t settings_opensave_trim_dst_num_jumps;
+extern char settings_printing_default_device[MAX_STRING_LENGTH];
+extern bool settings_printing_use_last_device;
+extern bool settings_printing_disable_bg;
+extern bool settings_grid_show_on_load;
+extern bool settings_grid_show_origin;
+extern bool settings_grid_color_match_crosshair;
+extern int32_t settings_grid_color;
+extern bool settings_grid_load_from_file;
+extern char settings_grid_type[MAX_STRING_LENGTH];
+extern bool settings_grid_center_on_origin;
+extern double settings_grid_center_x;
+extern double settings_grid_center_y;
+extern double settings_grid_size_x;
+extern double settings_grid_size_y;
+extern double settings_grid_spacing_x;
+extern double settings_grid_spacing_y;
+extern double settings_grid_size_radius;
+extern double settings_grid_spacing_radius;
+extern double settings_grid_spacing_angle;
+extern bool settings_ruler_show_on_load;
+extern bool settings_ruler_metric;
+extern int32_t settings_ruler_color;
+extern uint8_t settings_ruler_pixel_size;
+extern bool settings_qsnap_enabled;
+extern int32_t settings_qsnap_locator_color;
+extern uint8_t settings_qsnap_locator_size;
+extern uint8_t settings_qsnap_aperture_size;
+extern bool settings_qsnap_endpoint;
+extern bool settings_qsnap_midpoint;
+extern bool settings_qsnap_center;
+extern bool settings_qsnap_node;
+extern bool settings_qsnap_quadrant;
+extern bool settings_qsnap_intersection;
+extern bool settings_qsnap_extension;
+extern bool settings_qsnap_insertion;
+extern bool settings_qsnap_perpendicular;
+extern bool settings_qsnap_tangent;
+extern bool settings_qsnap_nearest;
+extern bool settings_qsnap_apparent;
+extern bool settings_qsnap_parallel;
+extern bool settings_lwt_show_lwt;
+extern bool settings_lwt_real_render;
+extern double settings_lwt_default_lwt;
+extern bool settings_selection_mode_pickfirst;
+extern bool settings_selection_mode_pickadd;
+extern bool settings_selection_mode_pickdrag;
+extern int32_t settings_selection_coolgrip_color;
+extern int32_t settings_selection_hotgrip_color;
+extern uint8_t settings_selection_grip_size;
+extern uint8_t settings_selection_pickbox_size;
+extern char settings_text_font[MAX_STRING_LENGTH];
+extern double settings_text_size;
+extern double settings_text_angle;
+extern bool settings_text_style_bold;
+extern bool settings_text_style_italic;
+extern bool settings_text_style_underline;
+extern bool settings_text_style_overline;
+extern bool settings_text_style_strikeout;
 
 #ifdef __cplusplus
 }

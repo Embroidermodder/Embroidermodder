@@ -294,29 +294,42 @@ void MainWindow::recentMenuAboutToShow()
 
     QFileInfo recentFileInfo;
     QString recentValue;
-    for (int i = 0; i < settings_opensave_recent_list_of_files.size(); ++i) {
+    for (int i = 0; i<MAX_FILES; ++i) {
+        if (!strcmp(settings_opensave_recent_list_of_files[i], "END")) {
+            break;
+        }
         //If less than the max amount of entries add to menu
         if (i < settings_opensave_recent_max_files) {
-            recentFileInfo = QFileInfo(settings_opensave_recent_list_of_files.at(i));
+            recentFileInfo = QFileInfo(settings_opensave_recent_list_of_files[i]);
             if (recentFileInfo.exists() && validFileFormat(recentFileInfo.fileName())) {
                 recentValue.setNum(i+1);
                 QAction* rAction;
-                if (recentValue.toInt() >= 1 && recentValue.toInt() <= 9)
+                if (recentValue.toInt() >= 1 && recentValue.toInt() <= 9) {
                     rAction = new QAction("&" + recentValue + " " + recentFileInfo.fileName(), this);
-                else if (recentValue.toInt() == 10)
-                    rAction = new QAction("1&0 "                  + recentFileInfo.fileName(), this);
-                else
-                    rAction = new QAction(      recentValue + " " + recentFileInfo.fileName(), this);
+                }
+                else if (recentValue.toInt() == 10) {
+                    rAction = new QAction("1&0 " + recentFileInfo.fileName(), this);
+                }
+                else {
+                    rAction = new QAction(recentValue + " " + recentFileInfo.fileName(), this);
+                }
                 rAction->setCheckable(false);
-                rAction->setData(settings_opensave_recent_list_of_files.at(i));
+                rAction->setData(settings_opensave_recent_list_of_files[i]);
                 menuHash["Recent"]->addAction(rAction);
                 connect(rAction, SIGNAL(triggered()), this, SLOT(openrecentfile()));
             }
         }
+        else {
+            break;
+        }
     }
-    //Ensure the list only has max amount of entries
-    while (settings_opensave_recent_list_of_files.size() > settings_opensave_recent_max_files) {
-        settings_opensave_recent_list_of_files.removeLast();
+    /* Ensure the list only has max amount of entries. */
+    if (settings_opensave_recent_max_files < MAX_FILES) {
+        strcpy(settings_opensave_recent_list_of_files[settings_opensave_recent_max_files], "END");
+    }
+    else {
+        settings_opensave_recent_max_files = MAX_FILES-1;
+        strcpy(settings_opensave_recent_list_of_files[settings_opensave_recent_max_files], "END");
     }
 }
 
@@ -420,6 +433,20 @@ MainWindow::openFile(bool recent, const QString& recentFile)
     QApplication::restoreOverrideCursor();
 }
 
+int
+string_list_contains(char list[MAX_FILES][MAX_STRING_LENGTH], const char *entry)
+{
+    for (int i=0; i<MAX_FILES; i++) {
+        if (!strcmp(list[i], "END")) {
+            break;
+        }
+        if (!strncmp(list[i], entry, MAX_STRING_LENGTH)) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 void
 MainWindow::openFilesSelected(const QStringList& filesToOpen)
 {
@@ -454,15 +481,23 @@ MainWindow::openFilesSelected(const QStringList& filesToOpen)
                 mdiWin->show();
                 mdiWin->showMaximized();
                 //Prevent duplicate entries in the recent files list
-                if (!settings_opensave_recent_list_of_files.contains(filesToOpen.at(i), Qt::CaseInsensitive)) {
-                    settings_opensave_recent_list_of_files.prepend(filesToOpen.at(i));
+                if (!string_list_contains(settings_opensave_recent_list_of_files,
+                    qPrintable(filesToOpen.at(i)))) {
+                    for (int j=0; j<MAX_FILES-1; j++) {
+                        strcpy(settings_opensave_recent_list_of_files[j],
+                            settings_opensave_recent_list_of_files[j+1]);
+                    }
+                    strcpy(settings_opensave_recent_list_of_files[0],
+                        qPrintable(filesToOpen.at(i)));
                 }
                 //Move the recent file to the top of the list
                 else {
-                    settings_opensave_recent_list_of_files.removeAll(filesToOpen.at(i));
-                    settings_opensave_recent_list_of_files.prepend(filesToOpen.at(i));
+                    strcpy(settings_opensave_recent_list_of_files[0],
+                        qPrintable(filesToOpen.at(i)));
+                    strcpy(settings_opensave_recent_list_of_files[1], "END");
                 }
-                settings_opensave_recent_directory = QFileInfo(filesToOpen.at(i)).absolutePath();
+                strcpy(settings_opensave_recent_directory,
+                    qPrintable(QFileInfo(filesToOpen.at(i)).absolutePath()));
 
                 View* v = mdiWin->gview;
                 if (v) {

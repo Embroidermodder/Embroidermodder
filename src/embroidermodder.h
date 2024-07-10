@@ -55,8 +55,6 @@
 #include <vector>
 #include <unordered_map>
 
-#include <inttypes.h>
-
 #include "core.h"
 
 #define REAL(i)             context->argument[i].r
@@ -1935,115 +1933,6 @@ protected:
     void loadFormats();
 
 public:
-
-    QString settings_general_language;
-    QString settings_general_icon_theme;
-    int settings_general_icon_size;
-    bool settings_general_mdi_bg_use_logo;
-    bool settings_general_mdi_bg_use_texture;
-    bool settings_general_mdi_bg_use_color;
-    QString settings_general_mdi_bg_logo;
-    QString settings_general_mdi_bg_texture;
-    QRgb settings_general_mdi_bg_color;
-    bool settings_general_tip_of_the_day;
-    quint16 settings_general_current_tip;
-    bool settings_general_system_help_browser;
-    bool settings_general_check_for_updates;
-    bool settings_display_use_opengl;
-    bool settings_display_renderhint_aa;
-    bool settings_display_renderhint_text_aa;
-    bool settings_display_renderhint_smooth_pix;
-    bool settings_display_renderhint_high_aa;
-    bool settings_display_renderhint_noncosmetic;
-    bool settings_display_show_scrollbars;
-    int settings_display_scrollbar_widget_num;
-    QRgb settings_display_crosshair_color;
-    QRgb settings_display_bg_color;
-    QRgb settings_display_selectbox_left_color;
-    QRgb settings_display_selectbox_left_fill;
-    QRgb settings_display_selectbox_right_color;
-    QRgb settings_display_selectbox_right_fill;
-    uint8_t settings_display_selectbox_alpha;
-    double settings_display_zoomscale_in;
-    double settings_display_zoomscale_out;
-    uint8_t settings_display_crosshair_percent;
-    QString settings_display_units;
-    QRgb settings_prompt_text_color;
-    QRgb settings_prompt_bg_color;
-    QString settings_prompt_font_family;
-    QString settings_prompt_font_style;
-    uint8_t settings_prompt_font_size;
-    bool settings_prompt_save_history;
-    bool settings_prompt_save_history_as_html;
-    QString settings_prompt_save_history_filename;
-    QString settings_opensave_custom_filter;
-    QString settings_opensave_open_format;
-    bool settings_opensave_open_thumbnail;
-    QString settings_opensave_save_format;
-    bool settings_opensave_save_thumbnail;
-    uint8_t settings_opensave_recent_max_files;
-    QStringList settings_opensave_recent_list_of_files;
-    QString settings_opensave_recent_directory;
-    uint8_t settings_opensave_trim_dst_num_jumps;
-    QString settings_printing_default_device;
-    bool settings_printing_use_last_device;
-    bool settings_printing_disable_bg;
-    bool settings_grid_show_on_load;
-    bool settings_grid_show_origin;
-    bool settings_grid_color_match_crosshair;
-    QRgb settings_grid_color;
-    bool settings_grid_load_from_file;
-    QString settings_grid_type;
-    bool settings_grid_center_on_origin;
-    double settings_grid_center_x;
-    double settings_grid_center_y;
-    double settings_grid_size_x;
-    double settings_grid_size_y;
-    double settings_grid_spacing_x;
-    double settings_grid_spacing_y;
-    double settings_grid_size_radius;
-    double settings_grid_spacing_radius;
-    double settings_grid_spacing_angle;
-    bool settings_ruler_show_on_load;
-    bool settings_ruler_metric;
-    QRgb settings_ruler_color;
-    uint8_t settings_ruler_pixel_size;
-    bool settings_qsnap_enabled;
-    QRgb settings_qsnap_locator_color;
-    uint8_t settings_qsnap_locator_size;
-    uint8_t settings_qsnap_aperture_size;
-    bool settings_qsnap_endpoint;
-    bool settings_qsnap_midpoint;
-    bool settings_qsnap_center;
-    bool settings_qsnap_node;
-    bool settings_qsnap_quadrant;
-    bool settings_qsnap_intersection;
-    bool settings_qsnap_extension;
-    bool settings_qsnap_insertion;
-    bool settings_qsnap_perpendicular;
-    bool settings_qsnap_tangent;
-    bool settings_qsnap_nearest;
-    bool settings_qsnap_apparent;
-    bool settings_qsnap_parallel;
-    bool settings_lwt_show_lwt;
-    bool settings_lwt_real_render;
-    double settings_lwt_default_lwt;
-    bool settings_selection_mode_pickfirst;
-    bool settings_selection_mode_pickadd;
-    bool settings_selection_mode_pickdrag;
-    QRgb settings_selection_coolgrip_color;
-    QRgb settings_selection_hotgrip_color;
-    uint8_t settings_selection_grip_size;
-    uint8_t settings_selection_pickbox_size;
-    QString settings_text_font;
-    double settings_text_size;
-    double settings_text_angle;
-    bool settings_text_style_bold;
-    bool settings_text_style_italic;
-    bool settings_text_style_underline;
-    bool settings_text_style_overline;
-    bool settings_text_style_strikeout;
-
     bool shiftKeyPressedState;
 
     QByteArray                      layoutState;
@@ -2156,15 +2045,6 @@ public slots:
     void lineweightSelectorIndexChanged(int index);
     void textFontSelectorCurrentFontChanged(const QFont& font);
     void textSizeSelectorIndexChanged(int index);
-
-    QString textFont();
-    double textSize();
-    double textAngle();
-    bool textBold();
-    bool textItalic();
-    bool textUnderline();
-    bool textStrikeOut();
-    bool textOverline();
 
     void setTextFont(const QString& str);
     void setTextSize(double num);
@@ -2295,6 +2175,8 @@ MdiWindow* activeMdiWindow();
 View* activeView();
 QGraphicsScene* activeScene();
 QUndoStack* activeUndoStack();
+
+QIcon create_icon(QString icon);
 
 QAction *get_action_by_icon(const char *icon);
 void add_to_menu(QMenu *menu, const char *menu_data[]);
