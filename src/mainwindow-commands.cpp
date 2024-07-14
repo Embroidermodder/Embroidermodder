@@ -30,28 +30,36 @@ MainWindow::stub_implement(QString txt)
     qDebug("TODO: %s", qPrintable(txt));
 }
 
-void MainWindow::stub_testing()
+void
+MainWindow::stub_testing()
 {
     QMessageBox::warning(this, tr("Testing Feature"), tr("<b>This feature is in testing.</b>"));
 }
 
-void MainWindow::exit()
+void
+MainWindow::exit()
 {
     qDebug("exit()");
-    if (settings_prompt_save_history) {
-        prompt->saveHistory("prompt.log", settings_prompt_save_history_as_html); //TODO: get filename from settings
+    if (prompt_save_history.setting) {
+        prompt->saveHistory("prompt.log", prompt_save_history_as_html.setting);
+        /* TODO: get filename from settings */
     }
     qApp->closeAllWindows();
-    this->deleteLater(); //Force the MainWindow destructor to run before exiting. Makes Valgrind "still reachable" happy :)
+    /* Force the MainWindow destructor to run before exiting.
+     * Makes Valgrind "still reachable" happy :)
+     */
+    this->deleteLater();
 }
 
-void MainWindow::checkForUpdates()
+void
+MainWindow::checkForUpdates()
 {
     qDebug("checkForUpdates()");
     //TODO: Check website for new versions, commands, etc...
 }
 
-void MainWindow::cut()
+void
+MainWindow::cut()
 {
     qDebug("cut()");
     View* gview = activeView();
@@ -60,7 +68,8 @@ void MainWindow::cut()
     }
 }
 
-void MainWindow::copy()
+void
+MainWindow::copy()
 {
     qDebug("copy()");
     View* gview = activeView();
@@ -69,7 +78,8 @@ void MainWindow::copy()
     }
 }
 
-void MainWindow::paste()
+void
+MainWindow::paste()
 {
     qDebug("paste()");
     View* gview = activeView();
@@ -78,7 +88,8 @@ void MainWindow::paste()
     }
 }
 
-void MainWindow::selectAll()
+void
+MainWindow::selectAll()
 {
     qDebug("selectAll()");
     View* gview = activeView();
@@ -154,7 +165,8 @@ QString MainWindow::platformString()
     return os;
 }
 
-void MainWindow::designDetails()
+void
+MainWindow::designDetails()
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {
@@ -163,20 +175,23 @@ void MainWindow::designDetails()
     }
 }
 
-void MainWindow::whatsThisContextHelp()
+void
+MainWindow::whatsThisContextHelp()
 {
     qDebug("whatsThisContextHelp()");
     QWhatsThis::enterWhatsThisMode();
 }
 
-void MainWindow::print()
+void
+MainWindow::print()
 {
     qDebug("print()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) { mdiWin->print(); }
 }
 
-void MainWindow::tipOfTheDay()
+void
+MainWindow::tipOfTheDay()
 {
     qDebug("tipOfTheDay()");
 
@@ -191,13 +206,14 @@ void MainWindow::tipOfTheDay()
 
     ImageWidget* imgBanner = new ImageWidget(appDir + "/images/did-you-know.png", wizardTipOfTheDay);
 
-    if (settings_general_current_tip >= listTipOfTheDay.size())
-        settings_general_current_tip = 0;
-    labelTipOfTheDay = new QLabel(listTipOfTheDay.value(settings_general_current_tip), wizardTipOfTheDay);
+    if (general_current_tip.setting >= listTipOfTheDay.size()) {
+        general_current_tip.setting = 0;
+    }
+    labelTipOfTheDay = new QLabel(listTipOfTheDay.value(general_current_tip.setting), wizardTipOfTheDay);
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("&Show tips on startup"), wizardTipOfTheDay);
-    checkBoxTipOfTheDay->setChecked(settings_general_tip_of_the_day);
+    checkBoxTipOfTheDay->setChecked(general_tip_of_the_day.setting);
     connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), this, SLOT(checkBoxTipOfTheDayStateChanged(int)));
 
     QVBoxLayout* layout = new QVBoxLayout(wizardTipOfTheDay);
@@ -223,39 +239,43 @@ void MainWindow::tipOfTheDay()
     connect(wizardTipOfTheDay, SIGNAL(customButtonClicked(int)), this, SLOT(buttonTipOfTheDayClicked(int)));
 
     QList<QWizard::WizardButton> listTipOfTheDayButtons;
-    listTipOfTheDayButtons << QWizard::Stretch << QWizard::CustomButton1 << QWizard::CustomButton2 << QWizard::CustomButton3;
+    listTipOfTheDayButtons << QWizard::Stretch << QWizard::CustomButton1
+        << QWizard::CustomButton2 << QWizard::CustomButton3;
     wizardTipOfTheDay->setButtonLayout(listTipOfTheDayButtons);
 
     wizardTipOfTheDay->exec();
 }
 
-void MainWindow::checkBoxTipOfTheDayStateChanged(int checked)
+void
+MainWindow::checkBoxTipOfTheDayStateChanged(int checked)
 {
-    settings_general_tip_of_the_day = checked;
+    general_tip_of_the_day.setting = checked;
 }
 
-void MainWindow::buttonTipOfTheDayClicked(int button)
+void
+MainWindow::buttonTipOfTheDayClicked(int button)
 {
     qDebug("buttonTipOfTheDayClicked(%d)", button);
     if (button == QWizard::CustomButton1) {
-        if (settings_general_current_tip > 0)
-            settings_general_current_tip--;
+        if (general_current_tip.setting > 0)
+            general_current_tip.setting--;
         else
-            settings_general_current_tip = listTipOfTheDay.size()-1;
-        labelTipOfTheDay->setText(listTipOfTheDay.value(settings_general_current_tip));
+            general_current_tip.setting = listTipOfTheDay.size()-1;
+        labelTipOfTheDay->setText(listTipOfTheDay.value(general_current_tip.setting));
     }
     else if (button == QWizard::CustomButton2) {
-        settings_general_current_tip++;
-        if (settings_general_current_tip >= listTipOfTheDay.size())
-            settings_general_current_tip = 0;
-        labelTipOfTheDay->setText(listTipOfTheDay.value(settings_general_current_tip));
+        general_current_tip.setting++;
+        if (general_current_tip.setting >= listTipOfTheDay.size())
+            general_current_tip.setting = 0;
+        labelTipOfTheDay->setText(listTipOfTheDay.value(general_current_tip.setting));
     }
     else if (button == QWizard::CustomButton3) {
         wizardTipOfTheDay->close();
     }
 }
 
-void MainWindow::help()
+void
+MainWindow::help()
 {
     qDebug("help()");
 
@@ -271,7 +291,8 @@ void MainWindow::help()
     //myProcess->start(program, arguments);
 }
 
-void MainWindow::changelog()
+void
+MainWindow::changelog()
 {
     qDebug("changelog()");
 
@@ -280,7 +301,8 @@ void MainWindow::changelog()
 }
 
 // Standard Slots
-void MainWindow::undo()
+void
+MainWindow::undo()
 {
     qDebug("undo()");
     QString prefix = prompt->getPrefix();
@@ -296,7 +318,8 @@ void MainWindow::undo()
     }
 }
 
-void MainWindow::redo()
+void
+MainWindow::redo()
 {
     qDebug("redo()");
     QString prefix = prompt->getPrefix();
@@ -317,18 +340,21 @@ bool MainWindow::isShiftPressed()
     return shiftKeyPressedState;
 }
 
-void MainWindow::setShiftPressed()
+void
+MainWindow::setShiftPressed()
 {
     shiftKeyPressedState = true;
 }
 
-void MainWindow::setShiftReleased()
+void
+MainWindow::setShiftReleased()
 {
     shiftKeyPressedState = false;
 }
 
 // Icons
-void MainWindow::iconResize(int iconSize)
+void
+MainWindow::iconResize(int iconSize)
 {
     this->setIconSize(QSize(iconSize, iconSize));
     layerSelector->     setIconSize(QSize(iconSize*4, iconSize));
@@ -343,7 +369,7 @@ void MainWindow::iconResize(int iconSize)
 
     // TODO: low-priority: open app with iconSize set to 128. resize the icons to a smaller size.
 
-    settings_general_icon_size = iconSize;
+    general_icon_size.setting = iconSize;
 }
 
 MdiWindow*
@@ -390,12 +416,14 @@ activeUndoStack()
     return 0;
 }
 
-void MainWindow::setUndoCleanIcon(bool opened)
+void
+MainWindow::setUndoCleanIcon(bool opened)
 {
     dockUndoEdit->updateCleanIcon(opened);
 }
 
-void MainWindow::updateAllViewScrollBars(bool val)
+void
+MainWindow::updateAllViewScrollBars(bool val)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
@@ -404,7 +432,8 @@ void MainWindow::updateAllViewScrollBars(bool val)
     }
 }
 
-void MainWindow::updateAllViewCrossHairColors(QRgb color)
+void
+MainWindow::updateAllViewCrossHairColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
@@ -413,7 +442,8 @@ void MainWindow::updateAllViewCrossHairColors(QRgb color)
     }
 }
 
-void MainWindow::updateAllViewBackgroundColors(QRgb color)
+void
+MainWindow::updateAllViewBackgroundColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
@@ -422,7 +452,8 @@ void MainWindow::updateAllViewBackgroundColors(QRgb color)
     }
 }
 
-void MainWindow::updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
+void
+MainWindow::updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
@@ -433,7 +464,8 @@ void MainWindow::updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colo
     }
 }
 
-void MainWindow::updateAllViewGridColors(QRgb color)
+void
+MainWindow::updateAllViewGridColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
@@ -444,7 +476,8 @@ void MainWindow::updateAllViewGridColors(QRgb color)
     }
 }
 
-void MainWindow::updateAllViewRulerColors(QRgb color)
+void
+MainWindow::updateAllViewRulerColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
@@ -455,26 +488,30 @@ void MainWindow::updateAllViewRulerColors(QRgb color)
     }
 }
 
-void MainWindow::updatePickAddMode(bool val)
+void
+MainWindow::updatePickAddMode(bool val)
 {
-    settings_selection_mode_pickadd = val;
+    selection_mode_pickadd.setting = val;
     dockPropEdit->updatePickAddModeButton(val);
 }
 
-void MainWindow::pickAddModeToggled()
+void
+MainWindow::pickAddModeToggled()
 {
-    bool val = !settings_selection_mode_pickadd;
+    bool val = !selection_mode_pickadd.setting;
     updatePickAddMode(val);
 }
 
 // Layer ToolBar
-void MainWindow::makeLayerActive()
+void
+MainWindow::makeLayerActive()
 {
     qDebug("makeLayerActive()");
     stub_implement("Implement makeLayerActive.");
 }
 
-void MainWindow::layerManager()
+void
+MainWindow::layerManager()
 {
     qDebug("layerManager()");
     stub_implement("Implement layerManager.");
@@ -482,51 +519,59 @@ void MainWindow::layerManager()
     layman.exec();
 }
 
-void MainWindow::layerPrevious()
+void
+MainWindow::layerPrevious()
 {
     qDebug("layerPrevious()");
     stub_implement("Implement layerPrevious.");
 }
 
-void MainWindow::zoomPrevious()
+void
+MainWindow::zoomPrevious()
 {
     qDebug("zoomPrevious()");
     stub_implement("Implement zoomPrevious.");
 }
 
-void MainWindow::zoomWindow()
+void
+MainWindow::zoomWindow()
 {
     qDebug("zoomWindow()");
     View* gview = activeView();
     if (gview) { gview->zoomWindow(); }
 }
 
-void MainWindow::zoomDynamic()
+void
+MainWindow::zoomDynamic()
 {
     qDebug("zoomDynamic()");
     stub_implement("Implement zoomDynamic.");
 }
 
-void MainWindow::zoomScale()
+void
+MainWindow::zoomScale()
 {
     qDebug("zoomScale()");
     stub_implement("Implement zoomScale.");
 }
 
-void MainWindow::zoomCenter()
+void
+MainWindow::zoomCenter()
 {
     qDebug("zoomCenter()");
     stub_implement("Implement zoomCenter.");
 }
 
-void MainWindow::zoomOut()
+void
+MainWindow::zoomOut()
 {
     qDebug("zoomOut()");
     View* gview = activeView();
     if (gview) { gview->zoomOut(); }
 }
 
-void MainWindow::zoomSelected()
+void
+MainWindow::zoomSelected()
 {
     qDebug("zoomSelected()");
     View* gview = activeView();
@@ -537,13 +582,15 @@ void MainWindow::zoomSelected()
     }
 }
 
-void MainWindow::zoomAll()
+void
+MainWindow::zoomAll()
 {
     qDebug("zoomAll()");
     stub_implement("Implement zoomAll.");
 }
 
-void MainWindow::zoomExtents()
+void
+MainWindow::zoomExtents()
 {
     qDebug("zoomExtents()");
     View* gview = activeView();
@@ -554,7 +601,8 @@ void MainWindow::zoomExtents()
     }
 }
 // Pan SubMenu
-void MainWindow::panrealtime()
+void
+MainWindow::panrealtime()
 {
     qDebug("panrealtime()");
     View* gview = activeView();
@@ -563,7 +611,8 @@ void MainWindow::panrealtime()
     }
 }
 
-void MainWindow::panpoint()
+void
+MainWindow::panpoint()
 {
     qDebug("panpoint()");
     View* gview = activeView();
@@ -572,7 +621,8 @@ void MainWindow::panpoint()
     }
 }
 
-void MainWindow::panLeft()
+void
+MainWindow::panLeft()
 {
     qDebug("panLeft()");
     View* gview = activeView();
@@ -583,7 +633,8 @@ void MainWindow::panLeft()
     }
 }
 
-void MainWindow::panRight()
+void
+MainWindow::panRight()
 {
     qDebug("panRight()");
     View* gview = activeView();
@@ -594,7 +645,8 @@ void MainWindow::panRight()
     }
 }
 
-void MainWindow::panDown()
+void
+MainWindow::panDown()
 {
     qDebug("panDown()");
     View* gview = activeView();
@@ -605,7 +657,8 @@ void MainWindow::panDown()
     }
 }
 
-void MainWindow::dayVision()
+void
+MainWindow::dayVision()
 {
     View* gview = activeView();
     if (gview) {
@@ -615,7 +668,8 @@ void MainWindow::dayVision()
     }
 }
 
-void MainWindow::nightVision()
+void
+MainWindow::nightVision()
 {
     View* gview = activeView();
     if (gview) {
@@ -625,18 +679,21 @@ void MainWindow::nightVision()
     }
 }
 
-void MainWindow::doNothing()
+void
+MainWindow::doNothing()
 {
     //This function intentionally does nothing.
     qDebug("doNothing()");
 }
 
-void MainWindow::layerSelectorIndexChanged(int index)
+void
+MainWindow::layerSelectorIndexChanged(int index)
 {
     qDebug("layerSelectorIndexChanged(%d)", index);
 }
 
-void MainWindow::colorSelectorIndexChanged(int index)
+void
+MainWindow::colorSelectorIndexChanged(int index)
 {
     qDebug("colorSelectorIndexChanged(%d)", index);
 
@@ -657,45 +714,53 @@ void MainWindow::colorSelectorIndexChanged(int index)
     if (mdiWin) { mdiWin->currentColorChanged(newColor); }
 }
 
-void MainWindow::linetypeSelectorIndexChanged(int index)
+void
+MainWindow::linetypeSelectorIndexChanged(int index)
 {
     qDebug("linetypeSelectorIndexChanged(%d)", index);
 }
 
-void MainWindow::lineweightSelectorIndexChanged(int index)
+void
+MainWindow::lineweightSelectorIndexChanged(int index)
 {
     qDebug("lineweightSelectorIndexChanged(%d)", index);
 }
 
-void MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
+void
+MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
 {
     qDebug("textFontSelectorCurrentFontChanged()");
     setTextFont(font.family());
 }
 
-void MainWindow::textSizeSelectorIndexChanged(int index)
+void
+MainWindow::textSizeSelectorIndexChanged(int index)
 {
     qDebug("textSizeSelectorIndexChanged(%d)", index);
     // TODO: check that the toReal() conversion is ok
-    settings_text_size = qFabs(textSizeSelector->itemData(index).toReal());
+    text_size.setting = qFabs(textSizeSelector->itemData(index).toReal());
 }
 
-void MainWindow::setTextFont(const QString& str)
+void
+MainWindow::setTextFont(const QString& str)
 {
     textFontSelector->setCurrentFont(QFont(str));
-    strcpy(settings_text_font, qPrintable(str));
+    strcpy(text_font.setting, qPrintable(str));
 }
 
-void MainWindow::setTextSize(double num)
+void
+MainWindow::setTextSize(double num)
 {
-    settings_text_size = qFabs(num);
+    text_size.setting = qFabs(num);
     int index = textSizeSelector->findText("Custom", Qt::MatchContains);
-    if (index != -1)
+    if (index != -1) {
         textSizeSelector->removeItem(index);
+    }
     textSizeSelector->addItem("Custom " + QString().setNum(num, 'f', 2) + " pt", num);
     index = textSizeSelector->findText("Custom", Qt::MatchContains);
-    if (index != -1)
+    if (index != -1) {
         textSizeSelector->setCurrentIndex(index);
+    }
 }
 
 QString
@@ -737,7 +802,8 @@ QString MainWindow::getCurrentLineWeight()
     return "ByLayer";
 }
 
-void MainWindow::deletePressed()
+void
+MainWindow::deletePressed()
 {
     qDebug("deletePressed()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -748,7 +814,8 @@ void MainWindow::deletePressed()
     QApplication::restoreOverrideCursor();
 }
 
-void MainWindow::escapePressed()
+void
+MainWindow::escapePressed()
 {
     qDebug("escapePressed()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -761,35 +828,41 @@ void MainWindow::escapePressed()
     end_command();
 }
 
-void MainWindow::toggleGrid()
+void
+MainWindow::toggleGrid()
 {
     qDebug("toggleGrid()");
     statusbar->statusBarGridButton->toggle();
 }
 
-void MainWindow::toggleRuler()
+void
+MainWindow::toggleRuler()
 {
     qDebug("toggleRuler()");
     statusbar->statusBarRulerButton->toggle();
 }
 
-void MainWindow::toggleLwt()
+void
+MainWindow::toggleLwt()
 {
     qDebug("toggleLwt()");
     statusbar->statusBarLwtButton->toggle();
 }
 
-void MainWindow::enablePromptRapidFire()
+void
+MainWindow::enablePromptRapidFire()
 {
     prompt->enableRapidFire();
 }
 
-void MainWindow::disablePromptRapidFire()
+void
+MainWindow::disablePromptRapidFire()
 {
     prompt->disableRapidFire();
 }
 
-void MainWindow::enableMoveRapidFire()
+void
+MainWindow::enableMoveRapidFire()
 {
     View* gview = activeView();
     if (gview) {
@@ -797,7 +870,8 @@ void MainWindow::enableMoveRapidFire()
     }
 }
 
-void MainWindow::disableMoveRapidFire()
+void
+MainWindow::disableMoveRapidFire()
 {
     View* gview = activeView();
     if (gview) {
@@ -805,7 +879,8 @@ void MainWindow::disableMoveRapidFire()
     }
 }
 
-void MainWindow::promptHistoryAppended(const QString& txt)
+void
+MainWindow::promptHistoryAppended(const QString& txt)
 {
     MdiWindow* mdiWin = activeMdiWindow();
     if (mdiWin) {
@@ -813,19 +888,22 @@ void MainWindow::promptHistoryAppended(const QString& txt)
     }
 }
 
-void MainWindow::logPromptInput(const QString& txt)
+void
+MainWindow::logPromptInput(const QString& txt)
 {
     MdiWindow* mdiWin = activeMdiWindow();
     if (mdiWin) mdiWin->logPromptInput(txt);
 }
 
-void MainWindow::promptInputPrevious()
+void
+MainWindow::promptInputPrevious()
 {
     MdiWindow* mdiWin = activeMdiWindow();
     if (mdiWin) mdiWin->promptInputPrevious();
 }
 
-void MainWindow::promptInputNext()
+void
+MainWindow::promptInputNext()
 {
     MdiWindow* mdiWin = activeMdiWindow();
     if (mdiWin) mdiWin->promptInputNext();
@@ -865,7 +943,7 @@ MainWindow::runCommandMain(const QString& cmd)
     qDebug("runCommandMain(%s)", qPrintable(cmd));
     // TODO: Uncomment this when post-selection is available
     /*
-    if (!settings_selection_mode_pick_first) {
+    if (!selection_mode_pick_first.setting) {
         nativeClearSelection();
     }
     */
@@ -936,42 +1014,50 @@ MainWindow::runCommandPrompt(const QString& cmd, const QString& str)
     free_script_env(context);
 }
 
-void MainWindow::nativeBlinkPrompt()
+void
+MainWindow::nativeBlinkPrompt()
 {
     prompt->startBlinking();
 }
 
-void MainWindow::nativeSetPromptPrefix(const QString& txt)
+void
+MainWindow::nativeSetPromptPrefix(const QString& txt)
 {
     prompt->setPrefix(txt);
 }
 
-void MainWindow::nativeAppendPromptHistory(const QString& txt)
+void
+MainWindow::nativeAppendPromptHistory(const QString& txt)
 {
     prompt->appendHistory(txt);
 }
 
-void MainWindow::nativeEnablePromptRapidFire()
+void
+MainWindow::nativeEnablePromptRapidFire()
 {
     enablePromptRapidFire();
 }
 
-void MainWindow::nativeDisablePromptRapidFire()
+void
+MainWindow::nativeDisablePromptRapidFire()
 {
     disablePromptRapidFire();
 }
 
-void MainWindow::nativeEnableMoveRapidFire()
+void
+MainWindow::nativeEnableMoveRapidFire()
 {
     enableMoveRapidFire();
 }
 
-void MainWindow::nativeDisableMoveRapidFire()
+void
+MainWindow::nativeDisableMoveRapidFire()
 {
     disableMoveRapidFire();
 }
 
-void MainWindow::messageBox(const QString& type, const QString& title, const QString& text)
+void
+MainWindow::messageBox(const QString& type, const QString& title, const QString& text)
 {
     QString msgType = type.toLower();
     if (msgType == "critical") {
@@ -991,29 +1077,32 @@ void MainWindow::messageBox(const QString& type, const QString& title, const QSt
     }
 }
 
-void MainWindow::nativePrintArea(double x, double y, double w, double h)
+void
+MainWindow::nativePrintArea(double x, double y, double w, double h)
 {
     qDebug("nativePrintArea(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
     //TODO: Print Setup Stuff
     print();
 }
 
-void MainWindow::nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b)
+void
+MainWindow::nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b)
 {
-    settings_display_bg_color = qRgb(r,g,b);
+    display_bg_color.setting = qRgb(r,g,b);
     updateAllViewBackgroundColors(qRgb(r,g,b));
 }
 
-void MainWindow::nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b)
+void
+MainWindow::nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b)
 {
-    settings_display_crosshair_color = qRgb(r,g,b);
+    display_crosshair_color.setting = qRgb(r,g,b);
     updateAllViewCrossHairColors(qRgb(r,g,b));
 }
 
 void
 MainWindow::nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b)
 {
-    settings_grid_color = qRgb(r,g,b);
+    grid_color.setting = qRgb(r,g,b);
     updateAllViewGridColors(qRgb(r,g,b));
 }
 
@@ -1054,42 +1143,47 @@ MainWindow::nativeSpareRubber(int64_t id)
     }
 }
 
-void MainWindow::nativeSetRubberMode(int mode)
+void
+MainWindow::nativeSetRubberMode(int mode)
 {
     View* gview = activeView();
     if (gview) gview->setRubberMode(mode);
 }
 
-void MainWindow::nativeSetRubberPoint(const QString& key, double x, double y)
+void
+MainWindow::nativeSetRubberPoint(const QString& key, double x, double y)
 {
     View* gview = activeView();
     if (gview) gview->setRubberPoint(key, QPointF(x, -y));
 }
 
-void MainWindow::nativeSetRubberText(const QString& key, const QString& txt)
+void
+MainWindow::nativeSetRubberText(const QString& key, const QString& txt)
 {
     View* gview = activeView();
     if (gview) gview->setRubberText(key, txt);
 }
 
-void MainWindow::nativeAddTextMulti(const QString& str, double x, double y, double rot, bool fill, int rubberMode)
+void
+MainWindow::nativeAddTextMulti(const QString& str, double x, double y, double rot, bool fill, int rubberMode)
 {
 }
 
-void MainWindow::nativeAddTextSingle(const QString& str, double x, double y, double rot, bool fill, int rubberMode)
+void
+MainWindow::nativeAddTextSingle(const QString& str, double x, double y, double rot, bool fill, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
         TextSingleObject* obj = new TextSingleObject(str, x, -y, getCurrentColor());
-        obj->setObjectTextFont(settings_text_font);
-        obj->setObjectTextSize(settings_text_size);
-        obj->setObjectTextStyle(settings_text_style_bold,
-                                settings_text_style_italic,
-                                settings_text_style_underline,
-                                settings_text_style_strikeout,
-                                settings_text_style_overline);
+        obj->setObjectTextFont(text_font.setting);
+        obj->setObjectTextSize(text_size.setting);
+        obj->setObjectTextStyle(text_style_bold.setting,
+                                text_style_italic.setting,
+                                text_style_underline.setting,
+                                text_style_strikeout.setting,
+                                text_style_overline.setting);
         obj->setObjectTextBackward(false);
         obj->setObjectTextUpsideDown(false);
         obj->setRotation(-rot);
@@ -1107,15 +1201,18 @@ void MainWindow::nativeAddTextSingle(const QString& str, double x, double y, dou
     }
 }
 
-void MainWindow::nativeAddInfiniteLine(double x1, double y1, double x2, double y2, double rot)
+void
+MainWindow::nativeAddInfiniteLine(double x1, double y1, double x2, double y2, double rot)
 {
 }
 
-void MainWindow::nativeAddRay(double x1, double y1, double x2, double y2, double rot)
+void
+MainWindow::nativeAddRay(double x1, double y1, double x2, double y2, double rot)
 {
 }
 
-void MainWindow::nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubberMode)
+void
+MainWindow::nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1136,11 +1233,13 @@ void MainWindow::nativeAddLine(double x1, double y1, double x2, double y2, doubl
     }
 }
 
-void MainWindow::nativeAddTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double rot, bool fill)
+void
+MainWindow::nativeAddTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double rot, bool fill)
 {
 }
 
-void MainWindow::nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode)
+void
+MainWindow::nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1162,11 +1261,13 @@ void MainWindow::nativeAddRectangle(double x, double y, double w, double h, doub
     }
 }
 
-void MainWindow::nativeAddRoundedRectangle(double x, double y, double w, double h, double rad, double rot, bool fill)
+void
+MainWindow::nativeAddRoundedRectangle(double x, double y, double w, double h, double rad, double rot, bool fill)
 {
 }
 
-void MainWindow::nativeAddArc(EmbArc arc, int rubberMode)
+void
+MainWindow::nativeAddArc(EmbArc arc, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* scene = activeScene();
@@ -1184,7 +1285,8 @@ void MainWindow::nativeAddArc(EmbArc arc, int rubberMode)
     }
 }
 
-void MainWindow::nativeAddCircle(double centerX, double centerY, double radius, bool fill, int rubberMode)
+void
+MainWindow::nativeAddCircle(double centerX, double centerY, double radius, bool fill, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1205,7 +1307,8 @@ void MainWindow::nativeAddCircle(double centerX, double centerY, double radius, 
     }
 }
 
-void MainWindow::nativeAddSlot(double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode)
+void
+MainWindow::nativeAddSlot(double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode)
 {
     //TODO: Use UndoableAddCommand for slots
     /*
@@ -1219,7 +1322,8 @@ void MainWindow::nativeAddSlot(double centerX, double centerY, double diameter, 
     */
 }
 
-void MainWindow::nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode)
+void
+MainWindow::nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1241,7 +1345,8 @@ void MainWindow::nativeAddEllipse(double centerX, double centerY, double width, 
     }
 }
 
-void MainWindow::nativeAddPoint(double x, double y)
+void
+MainWindow::nativeAddPoint(double x, double y)
 {
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
@@ -1252,12 +1357,14 @@ void MainWindow::nativeAddPoint(double x, double y)
     }
 }
 
-void MainWindow::nativeAddRegularPolygon(double centerX, double centerY, quint16 sides, uint8_t mode, double rad, double rot, bool fill)
+void
+MainWindow::nativeAddRegularPolygon(double centerX, double centerY, quint16 sides, uint8_t mode, double rad, double rot, bool fill)
 {
 }
 
 //NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
-void MainWindow::nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode)
+void
+MainWindow::nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1278,7 +1385,8 @@ void MainWindow::nativeAddPolygon(double startX, double startY, const QPainterPa
 }
 
 //NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
-void MainWindow::nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubberMode)
+void
+MainWindow::nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1299,23 +1407,28 @@ void MainWindow::nativeAddPolyline(double startX, double startY, const QPainterP
 }
 
 //NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
-void MainWindow::nativeAddPath(double startX, double startY, const QPainterPath& p, int rubberMode)
+void
+MainWindow::nativeAddPath(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
 }
 
-void MainWindow::nativeAddHorizontalDimension(double x1, double y1, double x2, double y2, double legHeight)
+void
+MainWindow::nativeAddHorizontalDimension(double x1, double y1, double x2, double y2, double legHeight)
 {
 }
 
-void MainWindow::nativeAddVerticalDimension(double x1, double y1, double x2, double y2, double legHeight)
+void
+MainWindow::nativeAddVerticalDimension(double x1, double y1, double x2, double y2, double legHeight)
 {
 }
 
-void MainWindow::nativeAddImage(const QString& img, double x, double y, double w, double h, double rot)
+void
+MainWindow::nativeAddImage(const QString& img, double x, double y, double w, double h, double rot)
 {
 }
 
-void MainWindow::nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode)
+void
+MainWindow::nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1336,7 +1449,8 @@ void MainWindow::nativeAddDimLeader(double x1, double y1, double x2, double y2, 
     }
 }
 
-void MainWindow::nativeSetCursorShape(const QString& str)
+void
+MainWindow::nativeSetCursorShape(const QString& str)
 {
     View* gview = activeView();
     if (gview) {
@@ -1404,7 +1518,8 @@ int MainWindow::nativeNumSelected()
     return 0;
 }
 
-void MainWindow::nativeSelectAll()
+void
+MainWindow::nativeSelectAll()
 {
     View* gview = activeView();
     if (gview) {
@@ -1412,11 +1527,13 @@ void MainWindow::nativeSelectAll()
     }
 }
 
-void MainWindow::nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode)
+void
+MainWindow::nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode)
 {
 }
 
-void MainWindow::nativeClearSelection()
+void
+MainWindow::nativeClearSelection()
 {
     View* gview = activeView();
     if (gview) {
@@ -1424,7 +1541,8 @@ void MainWindow::nativeClearSelection()
     }
 }
 
-void MainWindow::nativeDeleteSelected()
+void
+MainWindow::nativeDeleteSelected()
 {
     View* gview = activeView();
     if (gview) {
@@ -1432,25 +1550,30 @@ void MainWindow::nativeDeleteSelected()
     }
 }
 
-void MainWindow::nativeCutSelected(double x, double y)
+void
+MainWindow::nativeCutSelected(double x, double y)
 {
 }
 
-void MainWindow::nativeCopySelected(double x, double y)
+void
+MainWindow::nativeCopySelected(double x, double y)
 {
 }
 
-void MainWindow::nativePasteSelected(double x, double y)
+void
+MainWindow::nativePasteSelected(double x, double y)
 {
 }
 
-void MainWindow::nativeMoveSelected(double dx, double dy)
+void
+MainWindow::nativeMoveSelected(double dx, double dy)
 {
     View* gview = activeView();
     if (gview) { gview->moveSelected(dx, -dy); }
 }
 
-void MainWindow::nativeScaleSelected(double x, double y, double factor)
+void
+MainWindow::nativeScaleSelected(double x, double y, double factor)
 {
     if (factor <= 0.0) {
         QMessageBox::critical(this, tr("ScaleFactor Error"),
@@ -1464,7 +1587,8 @@ void MainWindow::nativeScaleSelected(double x, double y, double factor)
     }
 }
 
-void MainWindow::nativeRotateSelected(double x, double y, double rot)
+void
+MainWindow::nativeRotateSelected(double x, double y, double rot)
 {
     View* gview = activeView();
     if (gview) {
@@ -1472,7 +1596,8 @@ void MainWindow::nativeRotateSelected(double x, double y, double rot)
     }
 }
 
-void MainWindow::nativeMirrorSelected(double x1, double y1, double x2, double y2)
+void
+MainWindow::nativeMirrorSelected(double x1, double y1, double x2, double y2)
 {
     View* gview = activeView();
     if (gview) {
@@ -1480,7 +1605,8 @@ void MainWindow::nativeMirrorSelected(double x1, double y1, double x2, double y2
     }
 }
 
-double MainWindow::nativeQSnapX()
+double
+MainWindow::nativeQSnapX()
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {
@@ -1489,7 +1615,8 @@ double MainWindow::nativeQSnapX()
     return 0.0;
 }
 
-double MainWindow::nativeQSnapY()
+double
+MainWindow::nativeQSnapY()
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {

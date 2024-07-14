@@ -43,7 +43,7 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     this->setWindowTitle(curFile);
 
     QString icon("icons/");
-    this->setWindowIcon(QIcon(icon + settings_general_icon_theme + "/" + "app" + ".png"));
+    this->setWindowIcon(QIcon(icon + general_icon_theme.setting + "/" + "app" + ".png"));
 
     gscene = new QGraphicsScene(0,0,0,0, this);
     gview = new View(_main, gscene, this);
@@ -155,7 +155,7 @@ MdiWindow::loadFile(const QString &fileName)
     setCurrentFile(fileName);
     _main->statusbar->showMessage("File loaded.");
 
-    if (settings_grid_load_from_file) {
+    if (grid_load_from_file.setting) {
         //TODO: Josh, provide me a hoop size and/or grid spacing from the pattern.
     }
 
@@ -177,7 +177,7 @@ MdiWindow::print()
     QPrintDialog dialog(&printer, this);
     if (dialog.exec() == QDialog::Accepted) {
         QPainter painter(&printer);
-        if (settings_printing_disable_bg) {
+        if (printing_disable_bg.setting) {
             //Save current bg
             QBrush brush = gview->backgroundBrush();
             //Save ink by not printing the bg at all
@@ -209,7 +209,7 @@ MdiWindow::saveBMC()
 
     QPainter painter(&img);
     QRectF targetRect(0,0,150,150);
-    if (settings_printing_disable_bg) {
+    if (printing_disable_bg.setting) {
         //TODO: Make BMC background into it's own setting?
         QBrush brush = gscene->backgroundBrush();
         gscene->setBackgroundBrush(Qt::NoBrush);

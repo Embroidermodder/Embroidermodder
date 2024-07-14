@@ -81,7 +81,7 @@ QIcon
 create_icon(QString icon)
 {
     QString fname = qApp->applicationDirPath() + "/icons/";
-    fname += settings_general_icon_theme;
+    fname += general_icon_theme.setting;
     fname += "/" + icon + ".png";
     return QIcon(fname);
 }

@@ -41,7 +41,7 @@ add_to_menu(QMenu *menu, string_table menu_data)
         }
         else if (menu_data[i][0] == '+') {
             QString appDir = qApp->applicationDirPath();
-            QString icontheme = settings_general_icon_theme;
+            QString icontheme = general_icon_theme.setting;
             QString s = appDir + "/icons/" + icontheme + "/" + QString(menu_data[i]+1) + ".png";
             menu->setIcon(QIcon(s));
         }
@@ -57,7 +57,7 @@ void MainWindow::createAllMenus()
     qDebug("MainWindow createAllMenus()");
 
     QString appDir = qApp->applicationDirPath();
-    QString icontheme = settings_general_icon_theme;
+    QString icontheme = general_icon_theme.setting;
 
     menuBar()->addMenu(menuHash["File"]);
     menuHash["File"]->addAction(actionHash.value(ACTION_NEW));
