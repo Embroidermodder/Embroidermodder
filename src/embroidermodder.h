@@ -12,56 +12,101 @@
 #ifndef EMBROIDERMODDER_H
 #define EMBROIDERMODDER_H
 
+/* Qt Headers */
+#include <QAction>
 #include <QApplication>
 #include <QBrush>
+#include <QClipboard>
+#include <QCloseEvent>
+#include <QColor>
+#include <QComboBox>
+#include <QContextMenuEvent>
+#include <QDate>
+#include <QDateTime>
+#include <QDebug>
+#include <QDesktopServices>
 #include <QDialog>
+#include <QDialogButtonBox>
 #include <QDir>
 #include <QDockWidget>
+#include <QFile>
 #include <QFileDialog>
+#include <QFileInfo>
+#include <QFontComboBox>
+#include <QFormLayout>
+#include <QFrame>
+#include <QGraphicsItem>
 #include <QGraphicsPathItem>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGridLayout>
+#include <QGroupBox>
 #include <QHash>
 #include <QImage>
+#include <QKeyEvent>
+#include <QLabel>
 #include <QLineEdit>
 #include <QList>
+#include <QLocale>
 #include <QMainWindow>
 #include <QMdiArea>
 #include <QMdiSubWindow>
+#include <QMenu>
+#include <QMenuBar>
+#include <QMessageBox>
+#include <QMetaObject>
 #include <QObject>
 #include <QPainter>
 #include <QPainterPath>
 #include <QPen>
 #include <QPixmap>
 #include <QPointF>
+#include <QProcess>
+#include <QPushButton>
 #include <QRubberBand>
+#include <QScrollArea>
 #include <QScrollBar>
+#include <QSettings>
+#include <QSignalMapper>
 #include <QSplitter>
+#include <QStandardPaths>
 #include <QStatusBar>
+#include <QString>
+#include <QStyleOption>
 #include <QTextBrowser>
 #include <QTextLayout>
+#include <QTextStream>
+#include <QTimer>
+#include <QToolBar>
 #include <QToolButton>
 #include <QTransform>
 #include <QUndoCommand>
+#include <QUndoGroup>
+#include <QUndoStack>
+#include <QUndoView>
+#include <QUrl>
+#include <QVBoxLayout>
+#include <QWhatsThis>
 #include <QWidget>
-
+#include <QtGlobal>
+#include <QtGui>
 #include <QtPrintSupport>
+
+/* #include <QOpenGLWidget> */
 
 #include <QTimer>
 
-/* C++ */
+/* C++ Headers */
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <chrono>
+#include <thread>
 
+/* C Headers */
 #include "core.h"
 
-#define REAL(i)             context->argument[i].r
-#define INT(i)              context->argument[i].i
-#define QSTR(i)    QString(context->argument[i].s)
-#define STR(i)              context->argument[i].s
-#define BOOL(i)             context->argument[i].b
+#define QSTR(A) QString(STR(A))
 
 class ArcObject;
 class BaseObject;
@@ -1687,8 +1732,6 @@ private:
     void applyFormatting();
 };
 
-//==========================================================================
-
 class CmdPromptHistory : public QTextBrowser
 {
     Q_OBJECT
@@ -1714,8 +1757,6 @@ private:
     QString applyFormatting(const QString& txt, int prefixLength);
 };
 
-//==========================================================================
-
 class CmdPromptSplitter : public QSplitter
 {
     Q_OBJECT
@@ -1732,8 +1773,6 @@ signals:
     void releaseResizeHistory(int y);
     void moveResizeHistory(int y);
 };
-
-//==========================================================================
 
 class CmdPromptHandle : public QSplitterHandle
 {
@@ -1758,8 +1797,6 @@ private:
     int releaseY;
     int moveY;
 };
-
-//==========================================================================
 
 class CmdPrompt : public QWidget
 {
@@ -2054,7 +2091,7 @@ public slots:
     QString getCurrentLineType();
     QString getCurrentLineWeight();
 
-    // Standard Slots
+    /* Standard Slots */
     void undo();
     void redo();
 
@@ -2065,12 +2102,12 @@ public slots:
     void deletePressed();
     void escapePressed();
 
-    // Layer Toolbar
+    /* Layer Toolbar */
     void makeLayerActive();
     void layerManager();
     void layerPrevious();
 
-    // Zoom Toolbar
+    /* Zoom Toolbar */
     void zoomPrevious();
     void zoomWindow();
     void zoomDynamic();
@@ -2188,7 +2225,6 @@ QPointF find_mouse_snap_point(QList<QPointF> snap_points, const QPointF& mouse_p
 
 bool pattern_save(EmbPattern *pattern, const char *fileName);
 
-extern QHash<QString, Command> command_map;
 extern QHash<QString, QString>* aliasHash;
 extern QHash<int, QAction*> actionHash;
 extern QHash<QString, QToolBar*> toolbarHash;

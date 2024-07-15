@@ -11,9 +11,6 @@
 
 #include "embroidermodder.h"
 
-#include <QDebug>
-#include <QGridLayout>
-
 PreviewDialog::PreviewDialog(QWidget* parent,
                              const QString& caption,
                              const QString& dir,

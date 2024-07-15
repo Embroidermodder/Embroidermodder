@@ -790,3 +790,17 @@ save_settings(char *appDir, char *configDir)
     fclose(f);
     return 1;
 }
+
+int
+get_command_id(const char *name)
+{
+    for (int i=0; i<MAX_COMMANDS; i++) {
+        if (command_data[i].id == -2) {
+            break;
+        }
+        if (!strcmp(command_data[i].icon, name)) {
+            return i;
+        }
+    }
+    return -2;
+}

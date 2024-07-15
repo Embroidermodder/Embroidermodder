@@ -11,16 +11,6 @@
 
 #include "embroidermodder.h"
 
-#include <QDebug>
-#include <QGraphicsScene>
-#include <QMessageBox>
-#include <QDateTime>
-#include <QPainter>
-#include <QStyleOption>
-#include <QMessageBox>
-
-#include <stdlib.h>
-
 #define CIRCLE_MODE_1P_RAD_ONE    0
 #define CIRCLE_MODE_1P_RAD_TWO    1
 #define CIRCLE_MODE_1P_DIA_ONE    2
@@ -411,7 +401,7 @@ BaseObject::objectRubberPoint(const QString& key) const
 
     QGraphicsScene* gscene = scene();
     if (gscene) {
-        return scene()->property(SCENE_QSNAP_POINT).toPointF();
+        return scene()->property("SCENE_QSNAP_POINT").toPointF();
     }
     return QPointF();
 }
@@ -969,7 +959,7 @@ CircleObject::updateRubber(QPainter* painter)
         double radius = sceneLine.length();
         setObjectRadius(radius);
         if (painter) {
-            drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+            drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
         updatePath();
         break;
@@ -985,7 +975,7 @@ CircleObject::updateRubber(QPainter* painter)
         double diameter = sceneLine.length();
         setObjectDiameter(diameter);
         if (painter) {
-            drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+            drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
         updatePath();
         break;
@@ -1028,7 +1018,7 @@ CircleObject::updateRubber(QPainter* painter)
             }
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
+            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
         break;
     }
@@ -1844,7 +1834,7 @@ EllipseObject::updateRubber(QPainter* painter)
         QPointF itemLinePoint2  = mapFromScene(sceneLinePoint2);
         QLineF itemLine(itemLinePoint1, itemLinePoint2);
         if (painter) {
-            drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+            drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
         updatePath();
         break;
@@ -1879,7 +1869,7 @@ EllipseObject::updateRubber(QPainter* painter)
         QPointF itemAxis2Point2 = mapFromScene(sceneAxis2Point2);
         QLineF itemLine(itemCenterPoint, itemAxis2Point2);
         if (painter) {
-            drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+            drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
         updatePath();
         break;
@@ -1913,7 +1903,7 @@ EllipseObject::updateRubber(QPainter* painter)
         QPointF itemAxis2Point2 = mapFromScene(sceneAxis2Point2);
         QLineF itemLine(itemCenterPoint, itemAxis2Point2);
         if (painter) {
-            drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+            drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
         updatePath();
         break;
@@ -2367,7 +2357,7 @@ LineObject::updateRubber(QPainter* painter)
         setObjectEndPoint1(sceneStartPoint);
         setObjectEndPoint2(sceneQSnapPoint);
 
-        drawRubberLine(line(), painter, VIEW_COLOR_CROSSHAIR);
+        drawRubberLine(line(), painter, "VIEW_COLOR_CROSSHAIR");
     }
     else if (rubberMode == OBJ_RUBBER_GRIP) {
         if (painter) {
@@ -2380,7 +2370,7 @@ LineObject::updateRubber(QPainter* painter)
                 painter->drawLine(line().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
+            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
     }
 }
@@ -2776,7 +2766,7 @@ PointObject::updateRubber(QPainter* painter)
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
             if (gripPoint == scenePos()) {
                 QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-                drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
+                drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
             }
         }
     }
@@ -3192,7 +3182,7 @@ PolygonObject::updateRubber(QPainter* painter)
         double inscribeInc = 360.0/numSides;
 
         if (painter) {
-            drawRubberLine(inscribeLine, painter, VIEW_COLOR_CROSSHAIR);
+            drawRubberLine(inscribeLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
 
         QPainterPath inscribePath;
@@ -3216,7 +3206,7 @@ PolygonObject::updateRubber(QPainter* painter)
         double circumscribeInc = 360.0/numSides;
 
         if (painter) {
-            drawRubberLine(circumscribeLine, painter, VIEW_COLOR_CROSSHAIR);
+            drawRubberLine(circumscribeLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
 
         QPainterPath circumscribePath;
@@ -3274,7 +3264,7 @@ PolygonObject::updateRubber(QPainter* painter)
             painter->drawLine(enPoint, mapFromScene(objectRubberPoint(QString())));
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
+            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
     }
 }
@@ -3535,7 +3525,7 @@ PolylineObject::updateRubber(QPainter* painter)
         setObjectPos(objectRubberPoint("POLYLINE_POINT_0"));
 
         QLineF rubberLine(normalPath.currentPosition(), mapFromScene(objectRubberPoint(QString())));
-        if (painter) drawRubberLine(rubberLine, painter, VIEW_COLOR_CROSSHAIR);
+        if (painter) drawRubberLine(rubberLine, painter, "VIEW_COLOR_CROSSHAIR");
 
         bool ok = false;
         QString numStr = objectRubberText("POLYLINE_NUM_POINTS");
@@ -3585,7 +3575,7 @@ PolylineObject::updateRubber(QPainter* painter)
             }
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
+            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
     }
 }
@@ -3889,7 +3879,7 @@ RectObject::updateRubber(QPainter* painter)
             else if (gripPoint == objectBottomRight()) { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()))); }
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
+            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
             */
 
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
@@ -3897,7 +3887,7 @@ RectObject::updateRubber(QPainter* painter)
             QPointF delta = after-gripPoint;
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
+            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
     }
 }
@@ -4646,7 +4636,7 @@ TextSingleObject::updateRubber(QPainter* painter)
             }
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
+            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
     }
 }

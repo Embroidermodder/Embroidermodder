@@ -191,13 +191,12 @@ void UndoableNavCommand::undo()
 
 void UndoableNavCommand::redo()
 {
-
     if (!done) {
         if (navType == "ZoomInToPoint") {
-            gview->zoomToPoint(gview->scene()->property(VIEW_MOUSE_POINT).toPoint(), +1);
+            gview->zoomToPoint(gview->scene()->property("VIEW_MOUSE_POINT").toPoint(), +1);
         }
         else if (navType == "ZoomOutToPoint") {
-            gview->zoomToPoint(gview->scene()->property(VIEW_MOUSE_POINT).toPoint(), -1);
+            gview->zoomToPoint(gview->scene()->property("VIEW_MOUSE_POINT").toPoint(), -1);
         }
         else if (navType == "ZoomExtents") {
             gview->zoomExtents();

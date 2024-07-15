@@ -11,10 +11,6 @@
 
 #include "embroidermodder.h"
 
-#include <QtGui>
-#include <QGraphicsScene>
-//#include <QOpenGLWidget>
-
 View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
 {
     gscene = theScene;
@@ -1161,9 +1157,9 @@ void View::updateMouseCoords(int x, int y)
 {
     viewMousePoint = QPoint(x, y);
     sceneMousePoint = mapToScene(viewMousePoint);
-    gscene->setProperty(SCENE_QSNAP_POINT, sceneMousePoint); //TODO: if qsnap functionality is enabled, use it rather than the mouse point
-    gscene->setProperty(SCENE_MOUSE_POINT, sceneMousePoint);
-    gscene->setProperty(VIEW_MOUSE_POINT, viewMousePoint);
+    gscene->setProperty("SCENE_QSNAP_POINT", sceneMousePoint); //TODO: if qsnap functionality is enabled, use it rather than the mouse point
+    gscene->setProperty("SCENE_MOUSE_POINT", sceneMousePoint);
+    gscene->setProperty("VIEW_MOUSE_POINT", viewMousePoint);
     _main->statusbar->setMouseCoord(sceneMousePoint.x(), -sceneMousePoint.y());
 }
 
@@ -2241,15 +2237,19 @@ void View::showScrollBars(bool val)
 void View::setCrossHairColor(QRgb color)
 {
     crosshairColor = color;
-    gscene->setProperty(VIEW_COLOR_CROSSHAIR, color);
-    if (gscene) gscene->update();
+    gscene->setProperty("VIEW_COLOR_CROSSHAIR", color);
+    if (gscene) {
+        gscene->update();
+    }
 }
 
 void View::setBackgroundColor(QRgb color)
 {
     setBackgroundBrush(QColor(color));
-    gscene->setProperty(VIEW_COLOR_BACKGROUND, color);
-    if (gscene) gscene->update();
+    gscene->setProperty("VIEW_COLOR_BACKGROUND", color);
+    if (gscene) {
+        gscene->update();
+    }
 }
 
 void View::setSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)

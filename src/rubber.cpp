@@ -6,7 +6,7 @@
  * Visit https://www.libembroidery.org/refman for advice on altering this file,
  * or read the markdown version in embroidermodder2/docs/refman.
  *
- * View
+ * Rubber
  */
 
 #include "embroidermodder.h"

@@ -16,18 +16,26 @@
 extern "C" {
 #endif
 
+#include <stdlib.h>
 #include <stdbool.h>
 #include <inttypes.h>
 #include <math.h>
 
 #include "../extern/libembroidery/embroidery.h"
 
+#define REAL(i)             context->argument[i].r
+#define INT(i)              context->argument[i].i
+#define STR(i)              context->argument[i].s
+#define BOOL(i)             context->argument[i].b
+
 #define MAX_ARGS                      10
 #define MAX_FILES                     30
 #define MAX_STRING_LENGTH           1000
+#define MAX_COMMANDS                 300
 #define MAX_COMMAND_LENGTH            30
 #define MAX_MENU_LENGTH               30
 #define MAX_TOOLBAR_LENGTH            30
+#define MAX_ALIASES                  500
 
 #define SCRIPT_NULL                    0
 #define SCRIPT_INT                     1
@@ -405,15 +413,6 @@ PREVIEW_MODE_ROTATE,
 PREVIEW_MODE_SCALE
 };
 
-#define SCENE_QSNAP_POINT  "SCENE_QSNAP_POINT"
-#define SCENE_MOUSE_POINT  "SCENE_MOUSE_POINT"
-#define VIEW_MOUSE_POINT    "VIEW_MOUSE_POINT"
-#define RUBBER_ROOM              "RUBBER_ROOM"
-
-#define VIEW_COLOR_BACKGROUND  "VIEW_COLOR_BACKGROUND"
-#define VIEW_COLOR_CROSSHAIR   "VIEW_COLOR_CROSSHAIR"
-#define VIEW_COLOR_GRID        "VIEW_COLOR_GRID"
-
 typedef struct ScriptValue_ {
     double r;
     int i;
@@ -489,6 +488,11 @@ typedef struct StringTableSetting_ {
     char preview[MAX_FILES][MAX_STRING_LENGTH];
 } StringTableSetting;
 
+typedef struct StringMap_ {
+    char key[MAX_STRING_LENGTH];
+    char value[MAX_STRING_LENGTH];
+} StringMap;
+
 typedef char string_table[MAX_MENU_LENGTH][MAX_COMMAND_LENGTH];
 
 /* Scripting functions */
@@ -535,6 +539,8 @@ int load_data(void);
 
 int load_settings(char *appDir, char *configDir);
 int save_settings(char *appDir, char *configDir);
+
+int get_command_id(const char *);
 
 /* Geometry */
 EmbArc emb_arc_set_radius(EmbArc a, EmbReal radius);
@@ -670,7 +676,8 @@ ScriptValue thawalllayers_command(ScriptEnv*);
 ScriptValue unlockalllayers_command(ScriptEnv*);
 
 /* Global variables with c linkage. */
-extern Command command_data[];
+extern Command command_data[MAX_COMMANDS];
+extern StringMap aliases[MAX_ALIASES];
 
 extern ScriptValue script_null;
 extern ScriptValue script_true;

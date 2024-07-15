@@ -11,23 +11,6 @@
 
 #include "embroidermodder.h"
 
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QApplication>
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
-#include <QMainWindow>
-#include <QMdiArea>
-#include <QMdiSubWindow>
-#include <QStatusBar>
-#include <QColor>
-#include <QUndoStack>
-
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QGraphicsItem>
-
 MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags) : QMdiSubWindow(parent, wflags)
 {
     mdiArea = parent;

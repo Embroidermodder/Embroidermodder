@@ -9,18 +9,6 @@
  * PropertyEditor
  */
 
-#include <QApplication>
-#include <QComboBox>
-#include <QFontComboBox>
-#include <QFormLayout>
-#include <QGroupBox>
-#include <QKeyEvent>
-#include <QLineEdit>
-#include <QScrollArea>
-#include <QSignalMapper>
-#include <QToolButton>
-#include <QWidget>
-
 #include "embroidermodder.h"
 
 /* General */

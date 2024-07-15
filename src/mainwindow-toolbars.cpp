@@ -10,8 +10,6 @@
  */
 
 #include "embroidermodder.h"
-#include <QAction>
-#include <QToolBar>
 
 void
 add_to_toolbar(const char *toolbar_name, string_table toolbar_data)

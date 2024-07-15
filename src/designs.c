@@ -9,12 +9,15 @@
  * Command: DOLPHIN, HEART, SNOWFLAKE, STAR
  */
 
-#include "embroidermodder.h"
+#include "core.h"
 
 #define HEART_MODE_NUM_POINTS     0
 #define HEART_MODE_STYLE          1
 #define HEART_MODE_XSCALE         2
 #define HEART_MODE_YSCALE         3
+
+#define HEART_STYLE_4             0
+#define HEART_STYLE_5             1
 
 #define STAR_MODE_NUM_POINTS      0
 #define STAR_MODE_CENTER_PT       1
@@ -29,79 +32,57 @@
 #define SNOWFLAKE_MODE_XSCALE       1
 #define SNOWFLAKE_MODE_YSCALE       2
 
-/* DOLPHIN . */
+/* Command: DOLPHIN.
+ * TODO: min:64 max:8192
+ */
 ScriptValue
 dolphin_command(ScriptEnv *context)
 {
     init_command();
     clear_selection();
 
-    end_command();
-    return script_null;
-}
-
-#if 0
-//Command: Dolphin
-
-var global = {}; //Required
-global.numPoints = 512; //Default //TODO: min:64 max:8192
-global.cx;
-global.cy;
-global.sx = 0.04; //Default
-global.sy = 0.04; //Default
-global.numPoints;
-global.mode;
-
-/* DOLPHIN . */
-void
-main()
-{
-    init_command();
-    clear_selection();
+    /*
+    global.numPoints = 512;
     global.cx = NaN;
     global.cy = NaN;
-    global.mode = global.mode_NUM_POINTS;
+    global.sx = 0.04;
+    global.sy = 0.04;
+    global.mode = DOLPHIN_MODE_NUM_POINTS;
 
     addRubber("POLYGON");
     setRubberMode("POLYGON");
     updateDolphin(global.numPoints, global.sx, global.sy);
     spareRubber("POLYGON");
+    
+    switch (context->context) {
+    case CONTEXT_MAIN:
+        break;
+    case CONTEXT_CLICK:
+        break;
+    case CONTEXT_MOVE:
+        break;
+    case CONTEXT_CONTEXT:
+        todo("DOLPHIN", "context()");
+        break;
+    case CONTEXT_PROMPT:
+        break;
+    default:
+        break;
+    }
+    */
+
     end_command();
+    return script_null;
 }
 
 void
-click(x, y)
+updateDolphin(int numPts, float xScale, float yScale)
 {
-}
-
-void
-move(x, y)
-{
-}
-
-void
-context(str)
-{
-    todo("DOLPHIN", "context()");
-}
-
-void
-prompt(str)
-{
-}
-
-void
-updateDolphin(numPts, xScale, yScale)
-{
-    var i;
-    var t;
-    float xx = 0.0;
-    float yy = 0.0;
-
+    int i;
     for (i = 0; i <= numPts; i++) {
-        t = (2 * embConstantPi) / numPts * i; 
+        float t = (2 * embConstantPi) / numPts * i; 
 
-        xx = 4/23*sin(62/33-58*t)+
+        float xx = 4/23*sin(62/33-58*t)+
         8/11*sin(10/9-56*t)+
         17/24*sin(38/35-55*t)+
         30/89*sin(81/23-54*t)+
@@ -161,7 +142,7 @@ updateDolphin(numPts, xScale, yScale)
         17/32*sin(57*t+11/28)-
         5/16*sin(59*t+32/39);
 
-        yy = 5/11*sin(163/37-59*t)+
+        float yy = 5/11*sin(163/37-59*t)+
         7/22*sin(19/41-58*t)+
         30/41*sin(1-57*t)+
         37/29*sin(137/57-56*t)+
@@ -221,67 +202,56 @@ updateDolphin(numPts, xScale, yScale)
         19/14*sin(53*t+61/48)+
         34/25*sin(54*t+37/26);
 
-        setRubberPoint("POLYGON_POINT_" + i.toString(), xx*xScale, yy*yScale);
+        /* setRubberPoint("POLYGON_POINT_" + i.toString(), xx*xScale, yy*yScale); */
     }
 
-    setRubberText("POLYGON_NUM_POINTS", numPts.toString());
+    /* setRubberText("POLYGON_NUM_POINTS", numPts.toString()); */
 }
-#endif
 
-/* HEART */
+/* Command: HEART
+ * TODO: min:64 max:8192
+ *
+ * Heart4: 10.0 / 512
+ * Heart5: 1.0 / 512
+ */
 ScriptValue
-heart_command(ScriptEnv * /* context */)
+heart_command(ScriptEnv *context)
 {
     init_command();
     clear_selection();
 
-    end_command();
-    return script_null;
-}
-
-
-#if 0
-void
-main()
-{
-    init_command();
-    clear_selection();
-    global.numPoints = 512; //Default //TODO: min:64 max:8192
+    /*
+    global.numPoints = 512;
     global.center.x = NaN;
     global.center.y = NaN;
     global.scale.x = 1.0;
     global.scale.y = 1.0;
-    global.mode = global.mode_NUM_POINTS;
-
-    //Heart4: 10.0 / 512
-    //Heart5: 1.0 / 512
+    global.mode = HEART_MODE_NUM_POINTS;
 
     addRubber("POLYGON");
     setRubberMode("POLYGON");
     updateHeart("HEART5", global.numPoints, global.sx, global.sy);
     spareRubber("POLYGON");
+
+    switch (context->context) {
+    case CONTEXT_MAIN:
+        break;
+    case CONTEXT_CLICK:
+        break;
+    case CONTEXT_MOVE:
+        break;
+    case CONTEXT_CONTEXT:
+        todo("HEART", "context()");
+        break;
+    case CONTEXT_PROMPT:
+        break;
+    default:
+        break;
+    }
+    */
+
     end_command();
-}
-
-void
-click(x, y)
-{
-}
-
-void
-move(x, y)
-{
-}
-
-void
-context(str)
-{
-    todo("HEART", "context()");
-}
-
-void
-prompt(str)
-{
+    return script_null;
 }
 
 void
@@ -290,66 +260,65 @@ updateHeart(int style, int numPts, float xScale, float yScale)
     int i;
     for (i = 0; i <= numPts; i++) {
         EmbVector v;
-        float t = (2 * embConstantPi) / numPts*i; 
+        float t = ((2.0f * embConstantPi) / numPts) * i; 
         v.x = 0.0f;
         v.y = 0.0f;
 
-        if (style == "HEART4") {
+        switch (style) {
+        case HEART_STYLE_4: {
             v.x = cos(t)*((sin(t)*sqrt(abs(cos(t))))/(sin(t)+7/5) - 2*sin(t) + 2);
             v.y = sin(t)*((sin(t)*sqrt(abs(cos(t))))/(sin(t)+7/5) - 2*sin(t) + 2);
+            break;
         }
-        else if (style == "HEART5") {
+        default:
+        case HEART_STYLE_5: {
             v.x = 16*pow(sin(t), 3);
             v.y = 13*cos(t) - 5*cos(2*t) - 2*cos(3*t) - cos(4*t);
+            break;
+        }
         }
 
-        setRubberPoint("POLYGON_POINT_" + i.toString(), v.x*xScale, v.y*yScale);
+        /* setRubberPoint("POLYGON_POINT_" + i.toString(), v.x*xScale, v.y*yScale); */
     }
 
-    setRubberText("POLYGON_NUM_POINTS", numPts.toString());
+    /* setRubberText("POLYGON_NUM_POINTS", numPts.toString()); */
 }
-#endif
 
-/* SNOWFLAKE. */
+/* Command: SNOWFLAKE.
+ * TODO: min:64 max:8192
+ */
 ScriptValue
 snowflake_command(ScriptEnv * context)
 {
-    return script_null;
-}
+    init_command();
+    clear_selection();
 
-#if 0
-//Command: Snowflake
-
-var global = {}; //Required
-global.numPoints = 2048; //Default //TODO: min:64 max:8192
-global.cx;
-global.cy;
-global.sx = 0.04; //Default
-global.sy = 0.04; //Default
-global.numPoints;
-global.mode;
-
-void
-main()
-{
-    initCommand();
-    clearSelection();
+    /*
+    global.numPoints = 2048;
     global.cx = NaN;
     global.cy = NaN;
+    global.sx = 0.04;
+    global.sy = 0.04;
     global.mode = global.mode_NUM_POINTS;
 
     addRubber("POLYGON");
     setRubberMode("POLYGON");
     updateSnowflake(global.numPoints, global.sx, global.sy);
     spareRubber("POLYGON");
+    */
+
     end_command();
+    return script_null;
 }
 
-void click(EmbVector v)
+#if 0
+void
+click(EmbVector v)
 {
 }
 
-void move(EmbVector v)
+void
+move(EmbVector v)
 {
 }
 
@@ -368,10 +337,9 @@ void
 updateSnowflake(int numPts, float xScale, float yScale)
 {
     int i;
-    float xx = NaN;
-    float yy = NaN;
-
     for (i = 0; i <= numPts; i++) {
+        float xx = 0.0f;
+        float yy = 0.0f;
         float t = (2 * embConstantPi) / numPts * i; 
 
 //Snowflake Curve with t [0,2pi]
@@ -1029,7 +997,7 @@ star_command(ScriptEnv * context)
 }
 
 #if 0
-global.numPoints = 5; //Default
+global.numPoints = 5; /* Default */
 global.center;
 global.point1;
 global.point2;
@@ -1053,7 +1021,7 @@ click(EmbVector v)
     switch (global.mode) {
     default:
     case STAR_MODE_NUM_POINTS: {
-        //Do nothing, the prompt controls this.
+        /* Do nothing, the prompt controls this. */
         break;
     }
     case STAR_MODE_CENTER_PT: {
@@ -1085,19 +1053,19 @@ click(EmbVector v)
 }
 
 void
-move(x, y)
+move(EmbVector mouse)
 {
     if (global.mode == global.mode_NUM_POINTS) {
-        //Do nothing, the prompt controls this.
+        /* Do nothing, the prompt controls this. */
     }
     else if (global.mode == global.mode_CENTER_PT) {
-        //Do nothing, prompt and click controls this.
+        /* Do nothing, prompt and click controls this. */
     }
     else if (global.mode == global.mode_RAD_OUTER) {
-        updateStar(x, y);
+        updateStar(mouse);
     }
     else if (global.mode == global.mode_RAD_INNER) {
-        updateStar(x, y);
+        updateStar(mouse);
     }
 }
 
@@ -1179,21 +1147,21 @@ prompt(char *str)
 }
 
 void
-updateStar(float x, float y)
+updateStar(EmbVector v)
 {
     float distOuter;
     float distInner;
     float angOuter;
 
     if (global.mode == STAR_MODE_RAD_OUTER) {
-        angOuter = calculateAngle(global.cx, global.cy, x, y);
-        distOuter = calculateDistance(global.cx, global.cy, x, y);
+        angOuter = calculateAngle(global.cx, global.cy, v.x, v.y);
+        distOuter = calculateDistance(global.cx, global.cy, v.x, v.y);
         distInner = distOuter/2.0;
     }
     else if (global.mode == STAR_MODE_RAD_INNER) {
         angOuter = calculateAngle(global.cx, global.cy, global.x1, global.y1);
         distOuter = calculateDistance(global.cx, global.cy, global.x1, global.y1);
-        distInner = calculateDistance(global.cx, global.cy, x, y);
+        distInner = calculateDistance(global.cx, global.cy, v.x, v.y);
     }
 
     //Calculate the Star Points

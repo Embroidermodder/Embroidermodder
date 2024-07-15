@@ -9,14 +9,6 @@
  * EmbDetailsDialog
  */
 
-#include <QApplication>
-#include <QtGui>
-#include <QGridLayout>
-#include <QLabel>
-#include <QDialogButtonBox>
-#include <QScrollArea>
-#include <QGroupBox>
-
 #include "embroidermodder.h"
 
 #define NUMBINS 10

@@ -9,10 +9,6 @@
  * Commands
  */
 
-#include <QString>
-#include <QDebug>
-#include <QWidget>
-
 #include "embroidermodder.h"
 
 /* Compatibility layer for C files */
@@ -293,7 +289,7 @@ erase_command(ScriptEnv * /* context */)
 {
     init_command();
     if (_main->nativeNumSelected() <= 0) {
-        //TODO: Prompt to select objects if nothing is preselected
+        /* TODO: Prompt to select objects if nothing is preselected. */
         _main->prompt->alert(translate("Preselect objects before invoking the delete command."));
         end_command();
         _main->messageBox("information", translate("Delete Preselect"), translate("Preselect objects before invoking the delete command."));
@@ -351,8 +347,8 @@ get_command(ScriptEnv* context)
             end_command();
             return script_false;
         }
-        ScriptValue r = script_real(scene->property(SCENE_MOUSE_POINT).toPointF().x());
-        //_main->qDebug("mouseY: %.50f", r.r);
+        ScriptValue r = script_real(scene->property("SCENE_MOUSE_POINT").toPointF().x());
+        /* _main->qDebug("mouseY: %.50f", r.r); */
         end_command();
         return r;
     }
@@ -362,7 +358,7 @@ get_command(ScriptEnv* context)
             end_command();
             return script_false;
         }
-        ScriptValue r = script_real(-scene->property(SCENE_MOUSE_POINT).toPointF().y());
+        ScriptValue r = script_real(-scene->property("SCENE_MOUSE_POINT").toPointF().y());
         //_main->qDebug("mouseY: %.50f", r.r);
         end_command();
         return r;
@@ -1139,7 +1135,7 @@ add_text_single_command(ScriptEnv* context)
 ScriptValue
 add_infinite_line(ScriptEnv* context)
 {
-    //TODO: parameter error checking
+    /* TODO: parameter error checking */
     prompt_output("TODO: finish addInfiniteLine command");
     return script_null;
 }
@@ -1147,7 +1143,7 @@ add_infinite_line(ScriptEnv* context)
 ScriptValue
 add_ray_command(ScriptEnv* context)
 {
-    //TODO: parameter error checking
+    /* TODO: parameter error checking */
     prompt_output("TODO: finish addRay command");
     return script_null;
 }
@@ -1252,7 +1248,7 @@ add_point_command(ScriptEnv* context)
 ScriptValue
 add_regular_polygon_command(ScriptEnv* context)
 {
-    //TODO: parameter error checking
+    /* TODO: parameter error checking */
     prompt_output("TODO: finish addRegularPolygon command");
     return script_null;
 }
@@ -1390,26 +1386,29 @@ add_polyline_command(ScriptEnv* context)
     return script_null;
 }
 
+/* . */
 ScriptValue
 add_path_command(ScriptEnv* context)
 {
-    //TODO: parameter error checking
+    /* TODO: parameter error checking */
     prompt_output("TODO: finish addPath command");
     return script_null;
 }
 
+/* . */
 ScriptValue
 add_horizontal_dimension_command(ScriptEnv* context)
 {
-    //TODO: parameter error checking
+    /* TODO: parameter error checking */
     prompt_output("TODO: finish addHorizontalDimension command");
     return script_null;
 }
 
+/* . */
 ScriptValue
 add_vertical_dimension_command(ScriptEnv* context)
 {
-    //TODO: parameter error checking
+    /* TODO: parameter error checking */
     prompt_output("TODO: finish addVerticalDimension command");
     return script_null;
 }
@@ -1417,7 +1416,7 @@ add_vertical_dimension_command(ScriptEnv* context)
 ScriptValue
 add_image_command(ScriptEnv* context)
 {
-    //TODO: parameter error checking
+    /* TODO: parameter error checking */
     prompt_output("TODO: finish addImage command");
     return script_null;
 }

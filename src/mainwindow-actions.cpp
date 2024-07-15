@@ -11,10 +11,6 @@
 
 #include "embroidermodder.h"
 
-#include <QAction>
-#include <QApplication>
-#include <QMdiArea>
-
 /* For each Command in command_data, for each alias set up a map from
  * alias to the Command. Then for a given context the call doesn't have to loop?
  *
@@ -44,13 +40,6 @@ MainWindow::createAllActions()
         QStringList aliases = alias_string.split(", ");
 
         qDebug("COMMAND: %s", qPrintable(icon));
-
-        if (!command_map.contains(icon)) {
-            command_map.insert(icon, command_data[i]);
-        }
-        else {
-            qDebug("ERROR: command_map key collision.");
-        }
 
         QAction *ACTION = new QAction(create_icon(icon), toolTip, this);
         ACTION->setStatusTip(statusTip);

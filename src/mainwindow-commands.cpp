@@ -11,19 +11,6 @@
 
 #include "embroidermodder.h"
 
-#include <QLabel>
-#include <QDesktopServices>
-#include <QApplication>
-#include <QUrl>
-#include <QProcess>
-#include <QMessageBox>
-#include <QDialogButtonBox>
-#include <QPushButton>
-#include <QMdiArea>
-#include <QGraphicsScene>
-#include <QComboBox>
-#include <QWhatsThis>
-
 void
 MainWindow::stub_implement(QString txt)
 {
@@ -912,12 +899,11 @@ MainWindow::promptInputNext()
 ScriptValue
 MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
 {
-    if (command_map.contains(cmd)) {
-        command_map[cmd].main(context);
+    int id = get_command_id(qPrintable(cmd));
+    if (id >= 0) {
+        return command_data[id].main(context);
     }
-    else {
-        qDebug("ERROR: %s not found in command_map.", qPrintable(cmd));
-    }
+    qDebug("ERROR: %s not found in command_data.", qPrintable(cmd));
     return script_true;
 }
 
@@ -999,7 +985,8 @@ MainWindow::runCommandPrompt(const QString& cmd, const QString& str)
     ScriptEnv *context = create_script_env();
     qDebug("runCommandPrompt(%s, %s)", qPrintable(cmd), qPrintable(str));
     context->context = CONTEXT_PROMPT;
-    if (command_map.contains(cmd)) {
+    int id = get_command_id(qPrintable(cmd));
+    if (id >= 0) {
         QString safeStr = str;
         safeStr.replace("\\", "\\\\");
         safeStr.replace("\'", "\\\'");
@@ -1610,7 +1597,7 @@ MainWindow::nativeQSnapX()
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {
-        return scene->property(SCENE_QSNAP_POINT).toPointF().x();
+        return scene->property("SCENE_QSNAP_POINT").toPointF().x();
     }
     return 0.0;
 }
@@ -1620,7 +1607,7 @@ MainWindow::nativeQSnapY()
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {
-        return -scene->property(SCENE_QSNAP_POINT).toPointF().y();
+        return -scene->property("SCENE_QSNAP_POINT").toPointF().y();
     }
     return 0.0;
 }

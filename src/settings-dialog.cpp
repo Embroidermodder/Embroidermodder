@@ -9,9 +9,6 @@
  * Settings Dialog
  */
 
-#include <QtGui>
-#include <QStandardPaths>
-
 #include "embroidermodder.h"
 
 QStringList extensions = {
@@ -212,9 +209,8 @@ QWidget* Settings_Dialog::createTabGeneral()
     vboxLayoutIcon->addWidget(comboBoxIconSize);
     groupBoxIcon->setLayout(vboxLayoutIcon);
 
-    //Mdi Background
+    /* Mdi Background */
     QGroupBox* groupBoxMdiBG = new QGroupBox(tr("Background"), widget);
-
 
     QCheckBox* checkBoxMdiBGUseLogo = new QCheckBox(tr("Use Logo"), groupBoxMdiBG);
     general_mdi_bg_use_logo.dialog = general_mdi_bg_use_logo.setting;
@@ -266,7 +262,7 @@ QWidget* Settings_Dialog::createTabGeneral()
     gridLayoutMdiBG->addWidget(buttonMdiBGColor, 2, 1, Qt::AlignRight);
     groupBoxMdiBG->setLayout(gridLayoutMdiBG);
 
-    //Tips
+    /* Tips */
     QGroupBox* groupBoxTips = new QGroupBox(tr("Tips"), widget);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("Show Tip of the Day on startup"), groupBoxTips);

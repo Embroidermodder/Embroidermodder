@@ -14,7 +14,7 @@
 
 #include "core.h"
 
-Command command_data[] = {
+Command command_data[MAX_COMMANDS] = {
     {
         .id = ACTION_ABOUT,
         .main = about_command,

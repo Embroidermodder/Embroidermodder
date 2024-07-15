@@ -61,7 +61,6 @@ qt_add_executable(embroidermodder2
 
 	${SRC}/cmdprompt.cpp
 	${SRC}/commands.cpp
-	${SRC}/designs.cpp
 	${SRC}/embdetails-dialog.cpp
 	${SRC}/imagewidget.cpp
 	${SRC}/layer-commands.cpp
@@ -92,6 +91,7 @@ qt_add_executable(embroidermodder2
 	${SRC}/window-commands.cpp
 
 	${SRC}/command_data.c
+	${SRC}/designs.c
 	${SRC}/script.c
 
 	${SRC}/embroidermodder.h

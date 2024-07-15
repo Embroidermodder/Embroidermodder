@@ -11,12 +11,6 @@
 
 #include "embroidermodder.h"
 
-#include <QLabel>
-#include <QMenu>
-#include <QMdiArea>
-#include <QApplication>
-#include <QContextMenuEvent>
-
 StatusBarButton::StatusBarButton(QString buttonText, MainWindow* mw, StatusBar* statbar, QWidget *parent) : QToolButton(parent)
 {
     statusbar = statbar;

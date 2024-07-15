@@ -10,10 +10,6 @@
  */
 
 #include "embroidermodder.h"
-#include <QDebug>
-#include <QMenu>
-#include <QMenuBar>
-#include <QAction>
 
 /* */
 QAction*

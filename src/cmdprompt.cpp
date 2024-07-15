@@ -11,19 +11,7 @@
 
 #include "embroidermodder.h"
 
-#include <QApplication>
-#include <QClipboard>
-#include <QString>
-#include <QAction>
-#include <QMenu>
-#include <QFile>
-#include <QFrame>
-#include <QVBoxLayout>
-#include <QContextMenuEvent>
-#include <QSplitter>
-#include <QTextStream>
-#include <QTimer>
-
+StringMap aliases[MAX_ALIASES];
 QHash<QString, QString>* aliasHash;
 
 CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
@@ -268,8 +256,6 @@ QSplitterHandle* CmdPromptSplitter::createHandle()
     return new CmdPromptHandle(orientation(), this);
 }
 
-//============================================================================================================
-
 CmdPromptHandle::CmdPromptHandle(Qt::Orientation orientation, QSplitter* parent) : QSplitterHandle(orientation, parent)
 {
     qDebug("CmdPromptHandle Constructor");
@@ -302,8 +288,6 @@ void CmdPromptHandle::mouseMoveEvent(QMouseEvent* e)
     int dY = moveY - pressY;
     emit handleMoved(dY);
 }
-
-//============================================================================================================
 
 CmdPromptHistory::CmdPromptHistory(QWidget* parent) : QTextBrowser(parent)
 {
@@ -408,7 +392,6 @@ void CmdPromptHistory::contextMenuEvent(QContextMenuEvent* event)
     delete menu;
 }
 
-//============================================================================================================
 CmdPromptInput::CmdPromptInput(QWidget* parent) : QLineEdit(parent)
 {
     qDebug("CmdPromptInput Constructor");
@@ -615,7 +598,7 @@ void CmdPromptInput::applyFormatting()
         }
     }
 
-    //Default Values
+    /* Default Values */
     start = prefix.indexOf('{');
     stop = prefix.lastIndexOf('}');
     if (start != -1 && stop != -1 && start < stop) {

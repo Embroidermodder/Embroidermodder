@@ -11,10 +11,6 @@
 
 #include "embroidermodder.h"
 
-#include <QDebug>
-#include <QtGlobal>
-#include <QSettings>
-
 /* Note: on Unix we include the trailing separator. For Windows compatibility we
  * omit it.
  */
@@ -34,7 +30,8 @@ QString SettingsPath()
     return settingsPath;
 }
 
-void MainWindow::readSettings()
+void
+MainWindow::readSettings()
 {
     qDebug("Reading Settings...");
     // This file needs to be read from the users home directory to ensure it is writable
@@ -111,7 +108,7 @@ void MainWindow::readSettings()
         qPrintable(settings.value("OpenSave/SaveFormat", "*.*").toString()));
     opensave_save_thumbnail.setting = settings.value("OpenSave/SaveThumbnail", false).toBool();
 
-    //Recent
+    /* Recent */
     opensave_recent_max_files.setting = settings.value("OpenSave/RecentMax", 10).toInt();
     QStringList sl = settings.value("OpenSave/RecentFiles").toStringList();
     /*
@@ -152,12 +149,14 @@ void MainWindow::readSettings()
     grid_size_radius.setting = settings.value("Grid/SizeRadius", 50.0).toFloat();
     grid_spacing_radius.setting = settings.value("Grid/SpacingRadius", 25.0).toFloat();
     grid_spacing_angle.setting = settings.value("Grid/SpacingAngle", 45.0).toFloat();
-    //Ruler
+
+    /* Ruler */
     ruler_show_on_load.setting = settings.value("Ruler/ShowOnLoad", true).toBool();
     ruler_metric.setting = settings.value("Ruler/Metric", true).toBool();
     ruler_color.setting = settings.value("Ruler/Color", qRgb(210,210, 50)).toInt();
     ruler_pixel_size.setting = settings.value("Ruler/PixelSize", 20).toInt();
-    //Quick Snap
+
+    /* Quick Snap */
     qsnap_enabled.setting = settings.value("QuickSnap/Enabled", true).toBool();
     qsnap_locator_color.setting = settings.value("QuickSnap/LocatorColor", qRgb(255,255, 0)).toInt();
     qsnap_locator_size.setting = settings.value("QuickSnap/LocatorSize", 4).toInt();
@@ -176,12 +175,12 @@ void MainWindow::readSettings()
     qsnap_apparent.setting = settings.value("QuickSnap/Apparent", false).toBool();
     qsnap_parallel.setting = settings.value("QuickSnap/Parallel", false).toBool();
 
-    //LineWeight
+    /* LineWeight */
     lwt_show_lwt.setting = settings.value("LineWeight/ShowLineWeight", false).toBool();
     lwt_real_render.setting = settings.value("LineWeight/RealRender", true).toBool();
     lwt_default_lwt.setting = settings.value("LineWeight/DefaultLineWeight", 0).toReal();
 
-    //Selection
+    /* Selection */
     selection_mode_pickfirst.setting = settings.value("Selection/PickFirst", true).toBool();
     selection_mode_pickadd.setting = settings.value("Selection/PickAdd", true).toBool();
     selection_mode_pickdrag.setting = settings.value("Selection/PickDrag", false).toBool();
@@ -190,7 +189,7 @@ void MainWindow::readSettings()
     selection_grip_size.setting = settings.value("Selection/GripSize", 4).toInt();
     selection_pickbox_size.setting = settings.value("Selection/PickBoxSize", 4).toInt();
 
-    //Text
+    /* Text */
     strcpy(text_font.setting, qPrintable(settings.value("Text/Font", "Arial").toString()));
     text_size.setting = settings.value("Text/Size", 12).toReal();
     text_angle.setting = settings.value("Text/Angle", 0).toReal();
@@ -204,18 +203,19 @@ void MainWindow::readSettings()
     resize(size);
 }
 
-void MainWindow::writeSettings()
+void
+MainWindow::writeSettings()
 {
     qDebug("Writing Settings...");
     QString settingsPath = SettingsPath();
-    // This file needs to be read from the users home directory to ensure it is writable
+    /* This file needs to be read from the users home directory to ensure it is writable. */
     QSettings settings(settingsPath, QSettings::IniFormat);
     QString tmp;
     //save_settings(qPrintable(appDir), qPrintable(SettingsDir()));
     settings.setValue("Window/Position", pos());
     settings.setValue("Window/Size", size());
 
-    //General
+    /* General */
     settings.setValue("LayoutState", layoutState);
     settings.setValue("Language", general_language.setting);
     settings.setValue("IconTheme", general_icon_theme.setting);
@@ -229,7 +229,8 @@ void MainWindow::writeSettings()
     settings.setValue("TipOfTheDay", general_tip_of_the_day.setting);
     settings.setValue("CurrentTip", tmp.setNum(general_current_tip.setting + 1));
     settings.setValue("SystemHelpBrowser", general_system_help_browser.setting);
-    //Display
+
+    /* Display */
     settings.setValue("Display/UseOpenGL", display_use_opengl.setting);
     settings.setValue("Display/RenderHintAntiAlias", display_renderhint_aa.setting);
     settings.setValue("Display/RenderHintTextAntiAlias", display_renderhint_text_aa.setting);
@@ -260,14 +261,14 @@ void MainWindow::writeSettings()
     settings.setValue("Prompt/SaveHistoryAsHtml", prompt_save_history_as_html.setting);
     settings.setValue("Prompt/SaveHistoryFilename", prompt_save_history_filename.setting);
 
-    //OpenSave
+    /* OpenSave */
     settings.setValue("OpenSave/CustomFilter", opensave_custom_filter.setting);
     settings.setValue("OpenSave/OpenFormat", opensave_open_format.setting);
     settings.setValue("OpenSave/OpenThumbnail", opensave_open_thumbnail.setting);
     settings.setValue("OpenSave/SaveFormat", opensave_save_format.setting);
     settings.setValue("OpenSave/SaveThumbnail", opensave_save_thumbnail.setting);
 
-    //Recent
+    /* Recent */
     settings.setValue("OpenSave/RecentMax", tmp.setNum(opensave_recent_max_files.setting));
     QStringList sl;
     for (int i=0; i<MAX_FILES; i++) {
@@ -279,13 +280,15 @@ void MainWindow::writeSettings()
     settings.setValue("OpenSave/RecentFiles", sl);
     settings.setValue("OpenSave/RecentDirectory", opensave_recent_directory.setting);
 
-    //Trimming
+    /* Trimming */
     settings.setValue("OpenSave/TrimDstNumJumps", tmp.setNum(opensave_trim_dst_num_jumps.setting));
-    //Printing
+
+    /* Printing */
     settings.setValue("Printing/DefaultDevice", printing_default_device.setting);
     settings.setValue("Printing/UseLastDevice", printing_use_last_device.setting);
     settings.setValue("Printing/DisableBG", printing_disable_bg.setting);
-    //Grid
+
+    /* Grid */
     settings.setValue("Grid/ShowOnLoad", grid_show_on_load.setting);
     settings.setValue("Grid/ShowOrigin", grid_show_origin.setting);
     settings.setValue("Grid/ColorMatchCrossHair", grid_color_match_crosshair.setting);
@@ -302,12 +305,14 @@ void MainWindow::writeSettings()
     settings.setValue("Grid/SizeRadius", tmp.setNum(grid_size_radius.setting));
     settings.setValue("Grid/SpacingRadius", tmp.setNum(grid_spacing_radius.setting));
     settings.setValue("Grid/SpacingAngle", tmp.setNum(grid_spacing_angle.setting));
-    //Ruler
+
+    /* Ruler */
     settings.setValue("Ruler/ShowOnLoad", ruler_show_on_load.setting);
     settings.setValue("Ruler/Metric", ruler_metric.setting);
     settings.setValue("Ruler/Color", tmp.setNum(ruler_color.setting));
     settings.setValue("Ruler/PixelSize", tmp.setNum(ruler_pixel_size.setting));
-    //Quick Snap
+
+    /* Quick Snap */
     settings.setValue("QuickSnap/Enabled", qsnap_enabled.setting);
     settings.setValue("QuickSnap/LocatorColor", tmp.setNum(qsnap_locator_color.setting));
     settings.setValue("QuickSnap/LocatorSize", tmp.setNum(qsnap_locator_size.setting));
@@ -325,11 +330,13 @@ void MainWindow::writeSettings()
     settings.setValue("QuickSnap/Nearest", qsnap_nearest.setting);
     settings.setValue("QuickSnap/Apparent", qsnap_apparent.setting);
     settings.setValue("QuickSnap/Parallel", qsnap_parallel.setting);
-    //LineWeight
+
+    /* LineWeight */
     settings.setValue("LineWeight/ShowLineWeight", lwt_show_lwt.setting);
     settings.setValue("LineWeight/RealRender", lwt_real_render.setting);
     settings.setValue("LineWeight/DefaultLineWeight", tmp.setNum(lwt_default_lwt.setting));
-    //Selection
+
+    /* Selection */
     settings.setValue("Selection/PickFirst", selection_mode_pickfirst.setting);
     settings.setValue("Selection/PickAdd", selection_mode_pickadd.setting);
     settings.setValue("Selection/PickDrag", selection_mode_pickdrag.setting);
@@ -337,7 +344,8 @@ void MainWindow::writeSettings()
     settings.setValue("Selection/HotGripColor", tmp.setNum(selection_hotgrip_color.setting));
     settings.setValue("Selection/GripSize", tmp.setNum(selection_grip_size.setting));
     settings.setValue("Selection/PickBoxSize", tmp.setNum(selection_pickbox_size.setting));
-    //Text
+
+    /* Text */
     settings.setValue("Text/Font", text_font.setting);
     settings.setValue("Text/Size", tmp.setNum(text_size.setting));
     settings.setValue("Text/Angle", tmp.setNum(text_angle.setting));
@@ -348,12 +356,14 @@ void MainWindow::writeSettings()
     settings.setValue("Text/StyleOverline", text_style_overline.setting);
 }
 
-void MainWindow::settingsPrompt()
+void
+MainWindow::settingsPrompt()
 {
     settingsDialog("Prompt");
 }
 
-void MainWindow::settingsDialog(const QString& showTab)
+void
+MainWindow::settingsDialog(const QString& showTab)
 {
     Settings_Dialog dialog(this, showTab, this);
     dialog.exec();

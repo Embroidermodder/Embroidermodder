@@ -11,33 +11,6 @@
 
 #include "embroidermodder.h"
 
-#include <stdlib.h>
-
-#include <QDebug>
-#include <QFrame>
-#include <QVBoxLayout>
-#include <QMenu>
-#include <QMenuBar>
-#include <QStatusBar>
-#include <QMdiArea>
-#include <QWidget>
-#include <QMdiSubWindow>
-#include <QMessageBox>
-#include <QToolBar>
-#include <QFileDialog>
-#include <QApplication>
-#include <QDate>
-#include <QFileInfo>
-#include <QLabel>
-#include <QComboBox>
-#include <QCloseEvent>
-#include <QMetaObject>
-#include <QLocale>
-
-#include <chrono>
-#include <thread>
-
-QHash<QString, Command> command_map;
 QHash<int, QAction*> actionHash;
 QHash<QString, QToolBar*> toolbarHash;
 QHash<QString, QMenu*> menuHash;
@@ -86,24 +59,24 @@ MainWindow::MainWindow() : QMainWindow(0)
     if (lang == "system")
         lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
 
-    //Load translations for the Embroidermodder 2 GUI
+    /* Load translations for the Embroidermodder 2 GUI. */
     QTranslator translatorEmb;
     translatorEmb.load(appDir + "/translations/" + lang + "/embroidermodder2_" + lang);
     qApp->installTranslator(&translatorEmb);
 
-    //Load translations for the commands
+    /* Load translations for the commands */
     QTranslator translatorCmd;
     translatorCmd.load(appDir + "/translations/" + lang + "/commands_" + lang);
     qApp->installTranslator(&translatorCmd);
 
-    //Load translations provided by Qt - this covers dialog buttons and other common things.
+    /* Load translations provided by Qt - this covers dialog buttons and other common things. */
     QTranslator translatorQt;
-    translatorQt.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath)); //TODO: ensure this always loads, ship a copy of this with the app
+    translatorQt.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath)); /* TODO: ensure this always loads, ship a copy of this with the app. */
     qApp->installTranslator(&translatorQt);
 
-    //Init
+    /* Init */
     _main = this;
-    //Menus
+    /* Menus */
     menuHash["File"] = new QMenu(tr("&File"), this);
     menuHash["Edit"] = new QMenu(tr("&Edit"), this);
     menuHash["View"] = new QMenu(tr("&View"), this);
@@ -115,11 +88,12 @@ MainWindow::MainWindow() : QMainWindow(0)
     menuHash["Settings"] = new QMenu(tr("&Settings"), this);
     menuHash["Window"] = new QMenu(tr("&Window"), this);
     menuHash["Help"] = new QMenu(tr("&Help"), this);
-    //SubMenus
+    /* SubMenus */
     menuHash["Recent"] = new QMenu(tr("Open &Recent"), this);
     menuHash["Zoom"] = new QMenu(tr("&Zoom"), this);
     menuHash["Pan"] = new QMenu(tr("&Pan"), this);
-    //Toolbars
+
+    /* Toolbars */
     toolbarHash["File"] = addToolBar(tr("File"));
     toolbarHash["Edit"] = addToolBar(tr("Edit"));
     toolbarHash["View"] = addToolBar(tr("View"));
@@ -137,7 +111,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     toolbarHash["Inquiry"] = new QToolBar("toolbarInquiry", this);
     toolbarHash["Dimension"] = new QToolBar("toolbarDimension", this);
     toolbarHash["Sandbox"] = new QToolBar("toolbarSandbox", this);
-    //Selectors
+
+    /* Selectors */
     layerSelector = new QComboBox(this);
     colorSelector = new QComboBox(this);
     linetypeSelector = new QComboBox(this);
@@ -151,11 +126,11 @@ MainWindow::MainWindow() : QMainWindow(0)
     shiftKeyPressedState = false;
 
     setWindowIcon(create_icon("app"));
-    setMinimumSize(800, 480); //Require Minimum WVGA
+    setMinimumSize(800, 480); /* Require Minimum WVGA */
 
     loadFormats();
 
-    //create the mdiArea
+    /* create the mdiArea */
     QFrame* vbox = new QFrame(this);
     QVBoxLayout* layout = new QVBoxLayout(vbox);
     //layout->setMargin(0);
