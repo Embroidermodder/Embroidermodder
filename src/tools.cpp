@@ -18,6 +18,9 @@
 #define ROTATE_MODE_NORMAL      0
 #define ROTATE_MODE_REFERENCE   1
 
+#define SCALE_MODE_NORMAL       0
+#define SCALE_MODE_REFERENCE    1
+
 /* LOCATEPOINT */
 ScriptValue
 locatepoint_command(ScriptEnv *context)
@@ -171,31 +174,24 @@ move_command(ScriptEnv * context)
 }
 
 #if 0
-var global = {}; //Required
-global.firstRun;
-global.baseX;
-global.baseY;
-global.destX;
-global.destY;
-global.deltaX;
-global.deltaY;
-
-function main()
+void
+main(void)
 {
     init_command();
     global.firstRun = true;
-    global.baseX  = NaN;
-    global.baseY  = NaN;
-    global.destX  = NaN;
-    global.destY  = NaN;
-    global.deltaX = NaN;
-    global.deltaY = NaN;
+    global.base.x = NaN;
+    global.base.y = NaN;
+    global.dest.x = NaN;
+    global.dest.y = NaN;
+    global.delta.x = NaN;
+    global.delta.y = NaN;
 
-    if (numSelected() <= 0) {
-        //TODO: Prompt to select objects if nothing is preselected
+    if (num_selected() <= 0) {
+        /* TODO: Prompt to select objects if nothing is preselected. */
         alert(translate("Preselect objects before invoking the move command."));
         end_command();
-        messageBox("information", translate("Move Preselect"), translate("Preselect objects before invoking the move command."));
+        messageBox("information", translate("Move Preselect"),
+            translate("Preselect objects before invoking the move command."));
     }
     else {
         prompt_output(translate("Specify base point: "));
@@ -205,33 +201,30 @@ function main()
 void
 click(EmbVector v)
 {
-    if (global.firstRun) {
-        global.firstRun = false;
-        global.baseX = x;
-        global.baseY = y;
+    if (global->firstRun) {
+        global->firstRun = false;
+        global->base = v;
         addRubber("LINE");
         setRubberMode("LINE");
-        setRubberPoint("LINE_START", global.baseX, global.baseY);
-        previewOn("SELECTED", "MOVE", global.baseX, global.baseY, 0);
+        setRubberPoint("LINE_START", global->base);
+        previewOn("SELECTED", "MOVE", global->base, 0);
         prompt_output(translate("Specify destination point: "));
     }
     else {
-        global.destX = x;
-        global.destY = y;
-        global.deltaX = global.destX - global.baseX;
-        global.deltaY = global.destY - global.baseY;
-        moveSelected(global.deltaX, global.deltaY);
+        global.dest = v;
+        global.delta = emb_vector_subtract(global.dest, global.base);
+        moveSelected(global.delta);
         previewOff();
         end_command();
     }
 }
 
-function context(str)
+void context(str)
 {
     todo("MOVE", "context()");
 }
 
-function prompt(str)
+void prompt(str)
 {
     EmbVector v;
     if (global.firstRun) {
@@ -285,48 +278,26 @@ scale_command(ScriptEnv * context)
 }
 
 #if 0
-//Command: Scale
-
-var global = {}; //Required
-global.firstRun;
-global.baseX;
-global.baseY;
-global.destX;
-global.destY;
-global.factor;
-
-global.baseRX;
-global.baseRY;
-global.destRX;
-global.destRY;
-global.factorRef;
-global.factorNew;
-
-global.mode;
-
-//enums
-global.mode_NORMAL    = 0;
-global.mode_REFERENCE = 1;
-
-function main()
+void
+main(void)
 {
-    initCommand();
+    init_command();
     global.mode = global.mode_NORMAL;
     global.firstRun = true;
-    global.baseX  = NaN;
-    global.baseY  = NaN;
-    global.destX  = NaN;
-    global.destY  = NaN;
+    global.baseX = NaN;
+    global.baseY = NaN;
+    global.destX = NaN;
+    global.destY = NaN;
     global.factor = NaN;
 
-    global.baseRX    = NaN;
-    global.baseRY    = NaN;
-    global.destRX    = NaN;
-    global.destRY    = NaN;
+    global.baseRX = NaN;
+    global.baseRY = NaN;
+    global.destRX = NaN;
+    global.destRY = NaN;
     global.factorRef = NaN;
     global.factorNew = NaN;
 
-    if (numSelected() <= 0) {
+    if (num_selected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
         alert(translate("Preselect objects before invoking the scale command."));
         endCommand();
@@ -337,7 +308,7 @@ function main()
     }
 }
 
-function
+void
 click(EmbVector position)
 {
     if (global.mode == global.mode_NORMAL) {
@@ -385,15 +356,15 @@ click(EmbVector position)
                 prompt_output(translate("Specify new length: "));
             }
         }
-        else if (isNaN(global.factorNew)) {
-            global.factorNew = calculateDistance(global.baseX, global.baseY, x, y);
-            if (global.factorNew <= 0.0) {
-                global.factorNew = NaN;
+        else if (isNaN(global->factorNew)) {
+            global->factorNew = calculateDistance(global->base, x, y);
+            if (global->factorNew <= 0.0) {
+                global->factorNew = NaN;
                 alert(translate("Value must be positive and nonzero."));
                 prompt_output(translate("Specify new length: "));
             }
             else {
-                scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
+                scaleSelected(global->base, global.factorNew/global.factorRef);
                 previewOff();
                 end_command();
             }
@@ -401,23 +372,25 @@ click(EmbVector position)
     }
 }
 
-function context(str)
+void context(str)
 {
     todo("SCALE", "context()");
 }
 
-function prompt(str)
+void prompt(str)
 {
     EmbVector v;
-    if (global.mode == global.mode_NORMAL) {
-        if (global.firstRun) {
+    switch (global->mode) {
+    default:
+    case SCALE_MODE_NORMAL: {
+        if (global->firstRun) {
             if (!parse_vector(str, &v)) {
                 alert(translate("Invalid point."));
                 prompt_output(translate("Specify base point: "));
             }
             else {
-                global.firstRun = false;
-                global.base = v;
+                global->firstRun = false;
+                global->base = v;
                 addRubber("LINE");
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", global.baseX, global.baseY);
@@ -446,8 +419,9 @@ function prompt(str)
                 }
             }
         }
+        break;
     }
-    else if (global.mode == global.mode_REFERENCE) {
+    case SCALE_MODE_REFERENCE: {
         if (isNaN(global.baseRX)) {
             if (isNaN(str)) {
                 if (!parse_vector(str, &v)) {
@@ -567,6 +541,8 @@ function prompt(str)
                 }
             }
         }
+        break;
+    }
     }
 }
 #endif
@@ -602,7 +578,7 @@ var global = {}; //Required
 global.test1;
 global.test2;
 
-function main()
+void main()
 {
     init_command();
     
@@ -670,7 +646,7 @@ ScriptValue
 selectall_command(ScriptEnv * context)
 {
     init_command();
-    _main->selectAll();
+    select_all();
     end_command();
     return script_null;
 }
@@ -687,22 +663,8 @@ rotate_command(ScriptEnv * context)
 }
 
 #if 0
-//Command: Rotate
-
-var global = {}; //Required
-global.firstRun;
-global.base;
-global.dest;
-global.angle;
-
-global.baseR;
-global.destR;
-global.angleRef;
-global.angleNew;
-
-global.mode;
-
-function main()
+void
+main()
 {
     init_command();
     global.mode = global.mode_NORMAL;
@@ -711,13 +673,13 @@ function main()
     global.dest = zero_vector;
     global.angle = 0.0f;
 
-    global.baseR   = zero_vector;
-    global.destR   = zero_vector;
+    global.baseR = zero_vector;
+    global.destR = zero_vector;
     global.angleRef = 0.0f;
     global.angleNew = 0.0f;
 
-    if (numSelected() <= 0) {
-        //TODO: Prompt to select objects if nothing is preselected
+    if (num_selected() <= 0) {
+        /* TODO: Prompt to select objects if nothing is preselected. */
         alert(translate("Preselect objects before invoking the rotate command."));
         end_command();
         messageBox("information", translate("Rotate Preselect"), translate("Preselect objects before invoking the rotate command."));
@@ -727,7 +689,7 @@ function main()
     }
 }
 
-function
+void
 click(EmbVector v)
 {
     if (global.mode == global.mode_NORMAL) {
@@ -772,12 +734,12 @@ click(EmbVector v)
     }
 }
 
-function context(str)
+void context(str)
 {
     todo("ROTATE", "context()");
 }
 
-function prompt(str)
+void prompt(str)
 {
     EmbVector v;
     if (global.mode == global.mode_NORMAL) {
@@ -863,10 +825,8 @@ function prompt(str)
             }
             else {
                 //The base and dest values are only set here to advance the command.
-                global.baseRX = 0.0;
-                global.baseRY = 0.0;
-                global.destRX = 0.0;
-                global.destRY = 0.0;
+                global.baseR = zero_vector;
+                global.destR = zero_vector;
                 //The reference angle is what we will use later.
                 global.angleRef = Number(str);
                 previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
@@ -922,7 +882,7 @@ rgb_command(ScriptEnv *context)
 }
 
 #if 0
-function prompt(str)
+void prompt(str)
 {
     float v[3];
     switch (global.mode) {

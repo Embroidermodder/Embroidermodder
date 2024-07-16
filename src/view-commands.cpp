@@ -20,7 +20,14 @@ day_command(ScriptEnv *context)
     }
     init_command();
     clear_selection();
-    _main->dayVision();
+
+    View* gview = activeView();
+    if (gview) {
+        gview->setBackgroundColor(qRgb(255,255,255)); //TODO: Make day vision color settings.
+        gview->setCrossHairColor(qRgb(0,0,0));        //TODO: Make day vision color settings.
+        gview->setGridColor(qRgb(0,0,0));             //TODO: Make day vision color settings.
+    }
+
     end_command();
     return script_null;
 }
@@ -34,7 +41,14 @@ night_command(ScriptEnv * context)
     }
     init_command();
     clear_selection();
-    _main->nightVision();
+
+    View* gview = activeView();
+    if (gview) {
+        gview->setBackgroundColor(qRgb(0,0,0));      //TODO: Make night vision color settings.
+        gview->setCrossHairColor(qRgb(255,255,255)); //TODO: Make night vision color settings.
+        gview->setGridColor(qRgb(255,255,255));      //TODO: Make night vision color settings.
+    }
+
     end_command();
     return script_null;
 }
@@ -47,6 +61,11 @@ panpoint_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
+
+    View* gview = activeView();
+    if (gview) {
+        gview->panPoint();
+    }
 
     end_command();
     return script_null;
@@ -61,6 +80,11 @@ panrealtime_command(ScriptEnv *context)
     }
     init_command();
 
+    View* gview = activeView();
+    if (gview) {
+        gview->panRealTime();
+    }
+
     end_command();
     return script_null;
 }
@@ -73,7 +97,14 @@ pandown_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    _main->panDown();
+
+    View* gview = activeView();
+    QUndoStack* stack = gview->getUndoStack();
+    if (gview && stack) {
+        UndoableNavCommand* cmd = new UndoableNavCommand("PanDown", gview, 0);
+        stack->push(cmd);
+    }
+
     end_command();
     return script_null;
 }
@@ -86,7 +117,14 @@ panleft_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    _main->panLeft();
+
+    View* gview = activeView();
+    QUndoStack* stack = gview->getUndoStack();
+    if (gview && stack) {
+        UndoableNavCommand* cmd = new UndoableNavCommand("PanLeft", gview, 0);
+        stack->push(cmd);
+    }
+
     end_command();
     return script_null;
 }
@@ -99,7 +137,14 @@ panright_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    _main->panRight();
+
+    View* gview = activeView();
+    QUndoStack* stack = gview->getUndoStack();
+    if (gview && stack) {
+        UndoableNavCommand* cmd = new UndoableNavCommand("PanRight", gview, 0);
+        stack->push(cmd);
+    }
+
     end_command();
     return script_null;
 }

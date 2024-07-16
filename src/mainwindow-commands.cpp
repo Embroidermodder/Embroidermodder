@@ -45,44 +45,6 @@ MainWindow::checkForUpdates()
     //TODO: Check website for new versions, commands, etc...
 }
 
-void
-MainWindow::cut()
-{
-    qDebug("cut()");
-    View* gview = activeView();
-    if (gview) {
-        gview->cut();
-    }
-}
-
-void
-MainWindow::copy()
-{
-    qDebug("copy()");
-    View* gview = activeView();
-    if (gview) {
-        gview->copy();
-    }
-}
-
-void
-MainWindow::paste()
-{
-    qDebug("paste()");
-    View* gview = activeView();
-    if (gview) {
-        gview->paste();
-    }
-}
-
-void
-MainWindow::selectAll()
-{
-    qDebug("selectAll()");
-    View* gview = activeView();
-    if (gview) { gview->selectAll(); }
-}
-
 QString MainWindow::platformString()
 {
     //TODO: Append QSysInfo to string where applicable.
@@ -525,7 +487,9 @@ MainWindow::zoomWindow()
 {
     qDebug("zoomWindow()");
     View* gview = activeView();
-    if (gview) { gview->zoomWindow(); }
+    if (gview) {
+        gview->zoomWindow();
+    }
 }
 
 void
@@ -554,7 +518,9 @@ MainWindow::zoomOut()
 {
     qDebug("zoomOut()");
     View* gview = activeView();
-    if (gview) { gview->zoomOut(); }
+    if (gview) {
+        gview->zoomOut();
+    }
 }
 
 void
@@ -585,84 +551,6 @@ MainWindow::zoomExtents()
     if (gview && stack) {
         UndoableNavCommand* cmd = new UndoableNavCommand("ZoomExtents", gview, 0);
         stack->push(cmd);
-    }
-}
-// Pan SubMenu
-void
-MainWindow::panrealtime()
-{
-    qDebug("panrealtime()");
-    View* gview = activeView();
-    if (gview) {
-        gview->panRealTime();
-    }
-}
-
-void
-MainWindow::panpoint()
-{
-    qDebug("panpoint()");
-    View* gview = activeView();
-    if (gview) {
-        gview->panPoint();
-    }
-}
-
-void
-MainWindow::panLeft()
-{
-    qDebug("panLeft()");
-    View* gview = activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack) {
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanLeft", gview, 0);
-        stack->push(cmd);
-    }
-}
-
-void
-MainWindow::panRight()
-{
-    qDebug("panRight()");
-    View* gview = activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack) {
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanRight", gview, 0);
-        stack->push(cmd);
-    }
-}
-
-void
-MainWindow::panDown()
-{
-    qDebug("panDown()");
-    View* gview = activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack) {
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanDown", gview, 0);
-        stack->push(cmd);
-    }
-}
-
-void
-MainWindow::dayVision()
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->setBackgroundColor(qRgb(255,255,255)); //TODO: Make day vision color settings.
-        gview->setCrossHairColor(qRgb(0,0,0));        //TODO: Make day vision color settings.
-        gview->setGridColor(qRgb(0,0,0));             //TODO: Make day vision color settings.
-    }
-}
-
-void
-MainWindow::nightVision()
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->setBackgroundColor(qRgb(0,0,0));      //TODO: Make night vision color settings.
-        gview->setCrossHairColor(qRgb(255,255,255)); //TODO: Make night vision color settings.
-        gview->setGridColor(qRgb(255,255,255));      //TODO: Make night vision color settings.
     }
 }
 
@@ -1496,36 +1384,9 @@ double MainWindow::nativePerpendicularDistance(double px, double py, double x1, 
     return QLineF(px, py, iPoint.x(), iPoint.y()).length();
 }
 
-int MainWindow::nativeNumSelected()
-{
-    View* gview = activeView();
-    if (gview) {
-        return gview->numSelected();
-    }
-    return 0;
-}
-
-void
-MainWindow::nativeSelectAll()
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->selectAll();
-    }
-}
-
 void
 MainWindow::nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode)
 {
-}
-
-void
-MainWindow::nativeClearSelection()
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->clearSelection();
-    }
 }
 
 void

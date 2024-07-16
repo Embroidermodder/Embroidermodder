@@ -527,6 +527,8 @@ void prompt_output(const char *);
 int argument_checks(ScriptEnv *context, char *function, const char *args);
 char *translate(char *msg);
 
+bool pattern_save(EmbPattern *pattern, const char *fileName);
+
 int string_array_length(string_table s);
 int parse_floats(char *line, float result[], int n);
 int parse_vector(char *line, EmbVector *v);
@@ -547,8 +549,15 @@ EmbArc emb_arc_set_radius(EmbArc a, EmbReal radius);
 
 /* MainWindow calls */
 void init_command(void);
-void clear_selection(void);
 void end_command(void);
+
+void clear_selection(void);
+int num_selected(void);
+void select_all(void);
+
+void cut(void);
+void copy(void);
+void paste(void);
 
 /* Commands */
 ScriptValue about_command(ScriptEnv*);

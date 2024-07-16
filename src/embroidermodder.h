@@ -2060,11 +2060,6 @@ public slots:
     void changelog();
     void whatsThisContextHelp();
 
-    void cut();
-    void copy();
-    void paste();
-    void selectAll();
-
     void closeToolBar(QAction*);
     void floatingChangedToolBar(bool);
 
@@ -2117,16 +2112,6 @@ public slots:
     void zoomSelected();
     void zoomAll();
     void zoomExtents();
-
-    // Pan SubMenu
-    void panrealtime();
-    void panpoint();
-    void panLeft();
-    void panRight();
-    void panDown();
-
-    void dayVision();
-    void nightVision();
 
     void doNothing();
 
@@ -2190,10 +2175,7 @@ public:
     double nativeCalculateDistance(double x1, double y1, double x2, double y2);
     double nativePerpendicularDistance(double px, double py, double x1, double y1, double x2, double y2);
 
-    int nativeNumSelected();
-    void nativeSelectAll();
     void nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
-    void nativeClearSelection();
     void nativeDeleteSelected();
     void nativeCutSelected(double x, double y);
     void nativeCopySelected(double x, double y);
@@ -2222,8 +2204,6 @@ EmbVector to_emb_vector(QPointF p);
 QPointF to_qpointf(EmbVector v);
 QPointF scale_and_rotate(QPointF v, double angle, double scale);
 QPointF find_mouse_snap_point(QList<QPointF> snap_points, const QPointF& mouse_point);
-
-bool pattern_save(EmbPattern *pattern, const char *fileName);
 
 extern QHash<QString, QString>* aliasHash;
 extern QHash<int, QAction*> actionHash;

@@ -31,9 +31,55 @@ clear_selection(void)
 }
 
 void
+select_all(void)
+{
+    View* gview = activeView();
+    if (gview) {
+        gview->selectAll();
+    }
+}
+
+int
+num_selected(void)
+{
+    View* gview = activeView();
+    if (gview) {
+        return gview->numSelected();
+    }
+    return 0;
+}
+
+void
 prompt_output(const char *txt)
 {
     _main->prompt->appendHistory(QString(txt));
+}
+
+void
+cut(void)
+{
+    View* gview = activeView();
+    if (gview) {
+        gview->cut();
+    }
+}
+
+void
+copy(void)
+{
+    View* gview = activeView();
+    if (gview) {
+        gview->copy();
+    }
+}
+
+void
+paste(void)
+{
+    View* gview = activeView();
+    if (gview) {
+        gview->paste();
+    }
 }
 
 void
@@ -288,7 +334,7 @@ ScriptValue
 erase_command(ScriptEnv * /* context */)
 {
     init_command();
-    if (_main->nativeNumSelected() <= 0) {
+    if (num_selected() <= 0) {
         /* TODO: Prompt to select objects if nothing is preselected. */
         _main->prompt->alert(translate("Preselect objects before invoking the delete command."));
         end_command();
@@ -1483,7 +1529,7 @@ num_selected_command(ScriptEnv* context)
         return script_false;
     }
 
-    return script_int(_main->nativeNumSelected());
+    return script_int(num_selected());
 }
 
 ScriptValue
@@ -1493,7 +1539,7 @@ select_all_command(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeSelectAll();
+    select_all();
     return script_null;
 }
 
