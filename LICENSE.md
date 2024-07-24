@@ -1,6 +1,9 @@
-# Embroidermodder 2, libembroidery and all other related code 
+zlib/libpng License
+=======================
 
-Copyright (c) 2011-2024 Embroidermodder, Jonathan Greig, Josh Varga and all other contributers
+Embroidermodder 2, libembroidery and all other related code 
+
+Copyright (c) 2011-2024 Embroidermodder, Jonathan Greig, Josh Varga and all other contributors
 
 This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.
 
