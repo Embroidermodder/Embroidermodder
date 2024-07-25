@@ -294,7 +294,8 @@ void MainWindow::recentMenuAboutToShow()
                     rAction = new QAction(recentValue + " " + recentFileInfo.fileName(), this);
                 }
                 rAction->setCheckable(false);
-                rAction->setData(opensave_recent_list_of_files.setting[i]);
+                QString fname(opensave_recent_list_of_files.setting[i]);
+                rAction->setData(fname);
                 menuHash["Recent"]->addAction(rAction);
                 connect(rAction, SIGNAL(triggered()), this, SLOT(openrecentfile()));
             }

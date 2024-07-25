@@ -11,23 +11,42 @@
 
 #include "embroidermodder.h"
 
+const char *settings_file = "settings.toml";
+
 /* Note: on Unix we include the trailing separator. For Windows compatibility we
  * omit it.
  */
-QString SettingsDir()
+QString
+SettingsDir()
 {
 #if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
-    QString homePath = QDir::homePath();
-    return homePath + "/.embroidermodder2/";
+    return QDir::homePath() + "/.embroidermodder2/";
 #else
     return "";
 #endif
 }
 
-QString SettingsPath()
+void
+get_setting(QSettings *settings, const char *key, const char *value, StringSetting *s)
 {
-    QString settingsPath = SettingsDir() + "settings.ini";
-    return settingsPath;
+    QString k(key);
+    QString v(value);
+    strcpy(s->key, key);
+    strcpy(s->setting, qPrintable(settings->value(k, v).toString()));
+}
+
+void
+get_setting(QSettings *settings, const char *key, int value, IntSetting *i)
+{
+    strcpy(i->key, key);
+    i->setting = settings->value(key, value).toInt();
+}
+
+void
+get_setting(QSettings *settings, const char *key, bool value, BoolSetting *b)
+{
+    strcpy(b->key, key);
+    b->setting = settings->value(key, value).toBool();
 }
 
 void
@@ -35,12 +54,11 @@ MainWindow::readSettings()
 {
     qDebug("Reading Settings...");
     // This file needs to be read from the users home directory to ensure it is writable
-    QString settingsPath = SettingsPath();
     QString settingsDir = SettingsDir();
     QString appDir = qApp->applicationDirPath();
     //load_settings(qPrintable(appDir), qPrintable(SettingsDir()));
 
-    QSettings settings(settingsPath, QSettings::IniFormat);
+    QSettings settings(SettingsDir() + settings_file, QSettings::IniFormat);
     QPoint pos = settings.value("Window/Position", QPoint(0, 0)).toPoint();
     QSize size = settings.value("Window/Size", QSize(800, 600)).toSize();
 
@@ -51,22 +69,22 @@ MainWindow::readSettings()
     }
 
     /* General */
-    strcpy(general_language.setting, qPrintable(settings.value("Language", "default").toString()));
-    strcpy(general_icon_theme.setting, qPrintable(settings.value("IconTheme", "default").toString()));
-    general_icon_size.setting = settings.value("IconSize", 16).toInt();
-    general_mdi_bg_use_logo.setting = settings.value("MdiBGUseLogo", true).toBool();
-    general_mdi_bg_use_texture.setting = settings.value("MdiBGUseTexture", true).toBool();
-    general_mdi_bg_use_color.setting = settings.value("MdiBGUseColor", true).toBool();
-    strcpy(general_mdi_bg_logo.setting, qPrintable(settings.value("MdiBGLogo", appDir + "/images/logo-spirals.png").toString()));
-    strcpy(general_mdi_bg_texture.setting, qPrintable(settings.value("MdiBGTexture", appDir + "/images/texture-spirals.png").toString()));
-    general_mdi_bg_color.setting = settings.value("MdiBGColor", qRgb(192,192,192)).toInt();
-    general_tip_of_the_day.setting = settings.value("TipOfTheDay", true).toBool();
-    general_current_tip.setting = settings.value("CurrentTip", 0).toInt();
-    general_system_help_browser.setting = settings.value("SystemHelpBrowser", true).toBool();
+    get_setting(&settings, "Language", "default", &general_language);
+    get_setting(&settings, "IconTheme", "default", &general_icon_theme);
+    get_setting(&settings, "IconSize", 16, &general_icon_size);
+    get_setting(&settings, "MdiBGUseLogo", true, &general_mdi_bg_use_logo);
+    get_setting(&settings, "MdiBGUseTexture", true, &general_mdi_bg_use_texture);
+    get_setting(&settings, "MdiBGUseColor", true, &general_mdi_bg_use_color);
+    get_setting(&settings, "MdiBGLogo", qPrintable(appDir + "/images/logo-spirals.png"), &general_mdi_bg_logo);
+    get_setting(&settings, "MdiBGTexture", qPrintable(appDir + "/images/texture-spirals.png"), &general_mdi_bg_texture);
+    get_setting(&settings, "MdiBGColor", qRgb(192,192,192), &general_mdi_bg_color);
+    get_setting(&settings, "TipOfTheDay", true, &general_tip_of_the_day);
+    get_setting(&settings, "CurrentTip", 0, &general_current_tip);
+    get_setting(&settings, "SystemHelpBrowser", true, &general_system_help_browser);
 
     /* Display */
-    display_use_opengl.setting = settings.value("Display/UseOpenGL", false).toBool();
-    display_renderhint_aa.setting = settings.value("Display/RenderHintAntiAlias", false).toBool();
+    get_setting(&settings, "Display/UseOpenGL", false, &display_use_opengl);
+    get_setting(&settings, "Display/RenderHintAntiAlias", false, &display_renderhint_aa);
     display_renderhint_text_aa.setting = settings.value("Display/RenderHintTextAntiAlias", false).toBool();
     display_renderhint_smooth_pix.setting = settings.value("Display/RenderHintSmoothPixmap", false).toBool();
     display_renderhint_high_aa.setting = settings.value("Display/RenderHintHighQualityAntiAlias", false).toBool();
@@ -207,153 +225,7 @@ void
 MainWindow::writeSettings()
 {
     qDebug("Writing Settings...");
-    QString settingsPath = SettingsPath();
-    /* This file needs to be read from the users home directory to ensure it is writable. */
-    QSettings settings(settingsPath, QSettings::IniFormat);
-    QString tmp;
-    //save_settings(qPrintable(appDir), qPrintable(SettingsDir()));
-    settings.setValue("Window/Position", pos());
-    settings.setValue("Window/Size", size());
-
-    /* General */
-    settings.setValue("LayoutState", layoutState);
-    settings.setValue("Language", general_language.setting);
-    settings.setValue("IconTheme", general_icon_theme.setting);
-    settings.setValue("IconSize", tmp.setNum(general_icon_size.setting));
-    settings.setValue("MdiBGUseLogo", general_mdi_bg_use_logo.setting);
-    settings.setValue("MdiBGUseTexture", general_mdi_bg_use_texture.setting);
-    settings.setValue("MdiBGUseColor", general_mdi_bg_use_color.setting);
-    settings.setValue("MdiBGLogo", general_mdi_bg_logo.setting);
-    settings.setValue("MdiBGTexture", general_mdi_bg_texture.setting);
-    settings.setValue("MdiBGColor", tmp.setNum(general_mdi_bg_color.setting));
-    settings.setValue("TipOfTheDay", general_tip_of_the_day.setting);
-    settings.setValue("CurrentTip", tmp.setNum(general_current_tip.setting + 1));
-    settings.setValue("SystemHelpBrowser", general_system_help_browser.setting);
-
-    /* Display */
-    settings.setValue("Display/UseOpenGL", display_use_opengl.setting);
-    settings.setValue("Display/RenderHintAntiAlias", display_renderhint_aa.setting);
-    settings.setValue("Display/RenderHintTextAntiAlias", display_renderhint_text_aa.setting);
-    settings.setValue("Display/RenderHintSmoothPixmap", display_renderhint_smooth_pix.setting);
-    settings.setValue("Display/RenderHintHighQualityAntiAlias", display_renderhint_high_aa.setting);
-    settings.setValue("Display/RenderHintNonCosmetic", display_renderhint_noncosmetic.setting);
-    settings.setValue("Display/ShowScrollBars", display_show_scrollbars.setting);
-    settings.setValue("Display/ScrollBarWidgetNum", tmp.setNum(display_scrollbar_widget_num.setting));
-    settings.setValue("Display/CrossHairColor", tmp.setNum(display_crosshair_color.setting));
-    settings.setValue("Display/BackgroundColor", tmp.setNum(display_bg_color.setting));
-    settings.setValue("Display/SelectBoxLeftColor", tmp.setNum(display_selectbox_left_color.setting));
-    settings.setValue("Display/SelectBoxLeftFill", tmp.setNum(display_selectbox_left_fill.setting));
-    settings.setValue("Display/SelectBoxRightColor", tmp.setNum(display_selectbox_right_color.setting));
-    settings.setValue("Display/SelectBoxRightFill", tmp.setNum(display_selectbox_right_fill.setting));
-    settings.setValue("Display/SelectBoxAlpha", tmp.setNum(display_selectbox_alpha.setting));
-    settings.setValue("Display/ZoomScaleIn", tmp.setNum(display_zoomscale_in.setting));
-    settings.setValue("Display/ZoomScaleOut", tmp.setNum(display_zoomscale_out.setting));
-    settings.setValue("Display/CrossHairPercent", tmp.setNum(display_crosshair_percent.setting));
-    settings.setValue("Display/Units", display_units.setting);
-
-    //Prompt
-    settings.setValue("Prompt/TextColor", tmp.setNum(prompt_text_color.setting));
-    settings.setValue("Prompt/BackgroundColor", tmp.setNum(prompt_bg_color.setting));
-    settings.setValue("Prompt/FontFamily", prompt_font_family.setting);
-    settings.setValue("Prompt/FontStyle", prompt_font_style.setting);
-    settings.setValue("Prompt/FontSize", tmp.setNum(prompt_font_size.setting));
-    settings.setValue("Prompt/SaveHistory", prompt_save_history.setting);
-    settings.setValue("Prompt/SaveHistoryAsHtml", prompt_save_history_as_html.setting);
-    settings.setValue("Prompt/SaveHistoryFilename", prompt_save_history_filename.setting);
-
-    /* OpenSave */
-    settings.setValue("OpenSave/CustomFilter", opensave_custom_filter.setting);
-    settings.setValue("OpenSave/OpenFormat", opensave_open_format.setting);
-    settings.setValue("OpenSave/OpenThumbnail", opensave_open_thumbnail.setting);
-    settings.setValue("OpenSave/SaveFormat", opensave_save_format.setting);
-    settings.setValue("OpenSave/SaveThumbnail", opensave_save_thumbnail.setting);
-
-    /* Recent */
-    settings.setValue("OpenSave/RecentMax", tmp.setNum(opensave_recent_max_files.setting));
-    QStringList sl;
-    for (int i=0; i<MAX_FILES; i++) {
-        if (!strcmp(opensave_recent_list_of_files.setting[i], "END")) {
-            break;
-        }
-        sl << QString(opensave_recent_list_of_files.setting[i]);
-    }
-    settings.setValue("OpenSave/RecentFiles", sl);
-    settings.setValue("OpenSave/RecentDirectory", opensave_recent_directory.setting);
-
-    /* Trimming */
-    settings.setValue("OpenSave/TrimDstNumJumps", tmp.setNum(opensave_trim_dst_num_jumps.setting));
-
-    /* Printing */
-    settings.setValue("Printing/DefaultDevice", printing_default_device.setting);
-    settings.setValue("Printing/UseLastDevice", printing_use_last_device.setting);
-    settings.setValue("Printing/DisableBG", printing_disable_bg.setting);
-
-    /* Grid */
-    settings.setValue("Grid/ShowOnLoad", grid_show_on_load.setting);
-    settings.setValue("Grid/ShowOrigin", grid_show_origin.setting);
-    settings.setValue("Grid/ColorMatchCrossHair", grid_color_match_crosshair.setting);
-    settings.setValue("Grid/Color", tmp.setNum(grid_color.setting));
-    settings.setValue("Grid/LoadFromFile", grid_load_from_file.setting);
-    settings.setValue("Grid/Type", grid_type.setting);
-    settings.setValue("Grid/CenterOnOrigin", grid_center_on_origin.setting);
-    settings.setValue("Grid/CenterX", tmp.setNum(grid_center_x.setting));
-    settings.setValue("Grid/CenterY", tmp.setNum(grid_center_y.setting));
-    settings.setValue("Grid/SizeX", tmp.setNum(grid_size_x.setting));
-    settings.setValue("Grid/SizeY", tmp.setNum(grid_size_y.setting));
-    settings.setValue("Grid/SpacingX", tmp.setNum(grid_spacing_x.setting));
-    settings.setValue("Grid/SpacingY", tmp.setNum(grid_spacing_y.setting));
-    settings.setValue("Grid/SizeRadius", tmp.setNum(grid_size_radius.setting));
-    settings.setValue("Grid/SpacingRadius", tmp.setNum(grid_spacing_radius.setting));
-    settings.setValue("Grid/SpacingAngle", tmp.setNum(grid_spacing_angle.setting));
-
-    /* Ruler */
-    settings.setValue("Ruler/ShowOnLoad", ruler_show_on_load.setting);
-    settings.setValue("Ruler/Metric", ruler_metric.setting);
-    settings.setValue("Ruler/Color", tmp.setNum(ruler_color.setting));
-    settings.setValue("Ruler/PixelSize", tmp.setNum(ruler_pixel_size.setting));
-
-    /* Quick Snap */
-    settings.setValue("QuickSnap/Enabled", qsnap_enabled.setting);
-    settings.setValue("QuickSnap/LocatorColor", tmp.setNum(qsnap_locator_color.setting));
-    settings.setValue("QuickSnap/LocatorSize", tmp.setNum(qsnap_locator_size.setting));
-    settings.setValue("QuickSnap/ApertureSize", tmp.setNum(qsnap_aperture_size.setting));
-    settings.setValue("QuickSnap/EndPoint", qsnap_endpoint.setting);
-    settings.setValue("QuickSnap/MidPoint", qsnap_midpoint.setting);
-    settings.setValue("QuickSnap/Center", qsnap_center.setting);
-    settings.setValue("QuickSnap/Node", qsnap_node.setting);
-    settings.setValue("QuickSnap/Quadrant", qsnap_quadrant.setting);
-    settings.setValue("QuickSnap/Intersection", qsnap_intersection.setting);
-    settings.setValue("QuickSnap/Extension", qsnap_extension.setting);
-    settings.setValue("QuickSnap/Insertion", qsnap_insertion.setting);
-    settings.setValue("QuickSnap/Perpendicular", qsnap_perpendicular.setting);
-    settings.setValue("QuickSnap/Tangent", qsnap_tangent.setting);
-    settings.setValue("QuickSnap/Nearest", qsnap_nearest.setting);
-    settings.setValue("QuickSnap/Apparent", qsnap_apparent.setting);
-    settings.setValue("QuickSnap/Parallel", qsnap_parallel.setting);
-
-    /* LineWeight */
-    settings.setValue("LineWeight/ShowLineWeight", lwt_show_lwt.setting);
-    settings.setValue("LineWeight/RealRender", lwt_real_render.setting);
-    settings.setValue("LineWeight/DefaultLineWeight", tmp.setNum(lwt_default_lwt.setting));
-
-    /* Selection */
-    settings.setValue("Selection/PickFirst", selection_mode_pickfirst.setting);
-    settings.setValue("Selection/PickAdd", selection_mode_pickadd.setting);
-    settings.setValue("Selection/PickDrag", selection_mode_pickdrag.setting);
-    settings.setValue("Selection/CoolGripColor", tmp.setNum(selection_coolgrip_color.setting));
-    settings.setValue("Selection/HotGripColor", tmp.setNum(selection_hotgrip_color.setting));
-    settings.setValue("Selection/GripSize", tmp.setNum(selection_grip_size.setting));
-    settings.setValue("Selection/PickBoxSize", tmp.setNum(selection_pickbox_size.setting));
-
-    /* Text */
-    settings.setValue("Text/Font", text_font.setting);
-    settings.setValue("Text/Size", tmp.setNum(text_size.setting));
-    settings.setValue("Text/Angle", tmp.setNum(text_angle.setting));
-    settings.setValue("Text/StyleBold", text_style_bold.setting);
-    settings.setValue("Text/StyleItalic", text_style_italic.setting);
-    settings.setValue("Text/StyleUnderline", text_style_underline.setting);
-    settings.setValue("Text/StyleStrikeOut", text_style_strikeout.setting);
-    settings.setValue("Text/StyleOverline", text_style_overline.setting);
+    save_settings("", qPrintable(SettingsDir() + settings_file));
 }
 
 void

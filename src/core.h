@@ -454,6 +454,7 @@ typedef struct EmbDimLeader_ {
 } EmbDimLeader;
 
 typedef struct RealSetting_ {
+    char key[MAX_STRING_LENGTH];
     double setting;
     double dialog;
     double accept;
@@ -461,6 +462,7 @@ typedef struct RealSetting_ {
 } RealSetting;
 
 typedef struct BoolSetting_ {
+    char key[MAX_STRING_LENGTH];
     bool setting;
     bool dialog;
     bool accept;
@@ -468,6 +470,7 @@ typedef struct BoolSetting_ {
 } BoolSetting;
 
 typedef struct IntSetting_ {
+    char key[MAX_STRING_LENGTH];
     int32_t setting;
     int32_t dialog;
     int32_t accept;
@@ -475,6 +478,7 @@ typedef struct IntSetting_ {
 } IntSetting;
 
 typedef struct StringSetting_ {
+    char key[MAX_STRING_LENGTH];
     char setting[MAX_STRING_LENGTH];
     char dialog[MAX_STRING_LENGTH];
     char accept[MAX_STRING_LENGTH];
@@ -482,6 +486,7 @@ typedef struct StringSetting_ {
 } StringSetting;
 
 typedef struct StringTableSetting_ {
+    char key[MAX_STRING_LENGTH];
     char setting[MAX_FILES][MAX_STRING_LENGTH];
     char dialog[MAX_FILES][MAX_STRING_LENGTH];
     char accept[MAX_FILES][MAX_STRING_LENGTH];
@@ -540,7 +545,7 @@ void add_to_toolbar(const char *toolbar_name, const char *toolbar_data[]);
 int load_data(void);
 
 int load_settings(char *appDir, char *configDir);
-int save_settings(char *appDir, char *configDir);
+int save_settings(const char *appDir, const char *configDir);
 
 int get_command_id(const char *);
 

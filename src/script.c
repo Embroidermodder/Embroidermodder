@@ -61,6 +61,7 @@ BoolSetting general_tip_of_the_day;
 IntSetting general_current_tip;
 BoolSetting general_system_help_browser;
 BoolSetting general_check_for_updates;
+
 BoolSetting display_use_opengl;
 BoolSetting display_renderhint_aa;
 BoolSetting display_renderhint_text_aa;
@@ -80,6 +81,7 @@ RealSetting display_zoomscale_in;
 RealSetting display_zoomscale_out;
 IntSetting display_crosshair_percent;
 StringSetting display_units;
+
 IntSetting prompt_text_color;
 IntSetting prompt_bg_color;
 StringSetting prompt_font_family;
@@ -88,6 +90,7 @@ IntSetting prompt_font_size;
 BoolSetting prompt_save_history;
 BoolSetting prompt_save_history_as_html;
 StringSetting prompt_save_history_filename;
+
 StringSetting opensave_custom_filter;
 StringSetting opensave_open_format;
 BoolSetting opensave_open_thumbnail;
@@ -97,9 +100,11 @@ IntSetting opensave_recent_max_files;
 StringTableSetting opensave_recent_list_of_files;
 StringSetting opensave_recent_directory;
 IntSetting opensave_trim_dst_num_jumps;
+
 StringSetting printing_default_device;
 BoolSetting printing_use_last_device;
 BoolSetting printing_disable_bg;
+
 BoolSetting grid_show_on_load;
 BoolSetting grid_show_origin;
 BoolSetting grid_color_match_crosshair;
@@ -116,10 +121,12 @@ RealSetting grid_spacing_y;
 RealSetting grid_size_radius;
 RealSetting grid_spacing_radius;
 RealSetting grid_spacing_angle;
+
 BoolSetting ruler_show_on_load;
 BoolSetting ruler_metric;
 IntSetting ruler_color;
 IntSetting ruler_pixel_size;
+
 BoolSetting qsnap_enabled;
 IntSetting qsnap_locator_color;
 IntSetting qsnap_locator_size;
@@ -137,9 +144,11 @@ BoolSetting qsnap_tangent;
 BoolSetting qsnap_nearest;
 BoolSetting qsnap_apparent;
 BoolSetting qsnap_parallel;
+
 BoolSetting lwt_show_lwt;
 BoolSetting lwt_real_render;
 RealSetting lwt_default_lwt;
+
 BoolSetting selection_mode_pickfirst;
 BoolSetting selection_mode_pickadd;
 BoolSetting selection_mode_pickdrag;
@@ -147,6 +156,7 @@ IntSetting selection_coolgrip_color;
 IntSetting selection_hotgrip_color;
 IntSetting selection_grip_size;
 IntSetting selection_pickbox_size;
+
 StringSetting text_font;
 RealSetting text_size;
 RealSetting text_angle;
@@ -762,11 +772,34 @@ load_data(void)
     return 1;
 }
 
-int
-load_settings(char *appDir, char *configDir)
+void
+read_toml_str(toml_table_t *table, char *label, StringSetting *s)
 {
-    char fname[200];
-    sprintf(fname, "%s/settings.toml", configDir);
+}
+
+void
+read_toml_int(toml_table_t *table, char *label, IntSetting *s)
+{
+}
+
+void
+read_toml_strtable(toml_table_t *table, char *label, StringTableSetting *s)
+{
+}
+
+void
+read_toml_bool(toml_table_t *table, char *label, BoolSetting *s)
+{
+}
+
+void
+read_toml_real(FILE *file, char *label, RealSetting r)
+{
+}
+
+int
+load_settings(char *appDir, char *fname)
+{
     toml_table_t *conf = load_data_file(fname);
     if (!conf) {
         toml_free(conf);
@@ -777,17 +810,217 @@ load_settings(char *appDir, char *configDir)
     return 1;
 }
 
-int
-save_settings(char *appDir, char *configDir)
+void
+write_toml_str(FILE *file, char *label, StringSetting s)
 {
-    char fname[200];
-    sprintf(fname, "%s/settings.toml", configDir);
-    FILE *f = fopen(fname, "w");
-    if (!f) {
+    fprintf(file, "%s = \"%s\"\r\n", label, s.setting);
+}
+
+void
+write_toml_int(FILE *file, char *label, IntSetting i)
+{
+    fprintf(file, "%s = %d\r\n", label, i.setting);
+}
+
+void
+write_toml_strtable(FILE *file, char *label, StringTableSetting table)
+{
+    fprintf(file, "%s = [", label);
+    for (int i=0; i<MAX_FILES; i++) {
+        if (!strcmp(table.setting[i], "END")) {
+            break;
+        }
+        fprintf(file, "\"%s\"", table.setting[i]);
+        if (strcmp(table.setting[i+1], "END")) {
+            fprintf(file, ", ");
+        }
+    }
+    fprintf(file, "]\r\n");
+}
+
+void
+write_toml_bool(FILE *file, char *label, BoolSetting i)
+{
+    fprintf(file, "%s = %d\r\n", label, i.setting);
+}
+
+void
+write_toml_real(FILE *file, char *label, RealSetting r)
+{
+    fprintf(file, "%s = %f\r\n", label, r.setting);
+}
+
+/* The file fname needs to be read from the users home directory to ensure it is writable.
+ */
+int
+save_settings(const char *appDir, const char *fname)
+{
+    FILE *file = fopen(fname, "w");
+    if (!file) {
         return 0;
     }
 
-    fclose(f);
+    /*
+    QSettings settings(settingsPath, QSettings::IniFormat);
+    QString tmp;
+    //save_settings(qPrintable(appDir), qPrintable(SettingsDir()));
+
+    fprintf(file, "\r\n[Window]\r\n");
+    write_toml_bool(file, "Window/Position", pos());
+    write_toml_int(file, "PositionX", pos.x);
+    write_toml_int(file, "PositionY", pos.y);
+    write_toml_bool(file, "Window/Size", size());
+    write_toml_int(file, "SizeX", size.x);
+    write_toml_int(file, "SizeY", size.y);
+    */
+
+    /* General */
+    /* write_toml_int(file, "LayoutState", layoutState); */
+    write_toml_str(file, "Language", general_language);
+    write_toml_str(file, "IconTheme", general_icon_theme);
+    write_toml_int(file, "IconSize", general_icon_size);
+    write_toml_bool(file, "MdiBGUseLogo", general_mdi_bg_use_logo);
+    write_toml_bool(file, "MdiBGUseTexture", general_mdi_bg_use_texture);
+    write_toml_bool(file, "MdiBGUseColor", general_mdi_bg_use_color);
+    write_toml_str(file, "MdiBGLogo", general_mdi_bg_logo);
+    write_toml_str(file, "MdiBGTexture", general_mdi_bg_texture);
+    write_toml_int(file, "MdiBGColor", general_mdi_bg_color);
+    write_toml_bool(file, "TipOfTheDay", general_tip_of_the_day);
+    general_current_tip.setting++;
+    write_toml_int(file, "CurrentTip", general_current_tip);
+    write_toml_bool(file, "SystemHelpBrowser", general_system_help_browser);
+
+    /* Display */
+    fprintf(file, "\r\n[Display]\r\n");
+    write_toml_bool(file, "UseOpenGL", display_use_opengl);
+    write_toml_bool(file, "RenderHintAntiAlias", display_renderhint_aa);
+    write_toml_bool(file, "RenderHintTextAntiAlias", display_renderhint_text_aa);
+    write_toml_bool(file, "RenderHintSmoothPixmap", display_renderhint_smooth_pix);
+    write_toml_bool(file, "RenderHintHighQualityAntiAlias", display_renderhint_high_aa);
+    write_toml_bool(file, "RenderHintNonCosmetic", display_renderhint_noncosmetic);
+    write_toml_bool(file, "ShowScrollBars", display_show_scrollbars);
+    write_toml_int(file, "ScrollBarWidgetNum", display_scrollbar_widget_num);
+    write_toml_int(file, "CrossHairColor", display_crosshair_color);
+    write_toml_int(file, "BackgroundColor", display_bg_color);
+    write_toml_int(file, "SelectBoxLeftColor", display_selectbox_left_color);
+    write_toml_int(file, "SelectBoxLeftFill", display_selectbox_left_fill);
+    write_toml_int(file, "SelectBoxRightColor", display_selectbox_right_color);
+    write_toml_int(file, "SelectBoxRightFill", display_selectbox_right_fill);
+    write_toml_int(file, "SelectBoxAlpha", display_selectbox_alpha);
+    write_toml_real(file, "ZoomScaleIn", display_zoomscale_in);
+    write_toml_real(file, "ZoomScaleOut", display_zoomscale_out);
+    write_toml_int(file, "CrossHairPercent", display_crosshair_percent);
+    write_toml_str(file, "Units", display_units);
+
+    /* Prompt */
+    fprintf(file, "\r\n[Prompt]\r\n");
+    write_toml_int(file, "TextColor", prompt_text_color);
+    write_toml_int(file, "BackgroundColor", prompt_bg_color);
+    write_toml_str(file, "FontFamily", prompt_font_family);
+    write_toml_str(file, "FontStyle", prompt_font_style);
+    write_toml_int(file, "FontSize", prompt_font_size);
+    write_toml_bool(file, "SaveHistory", prompt_save_history);
+    write_toml_bool(file, "SaveHistoryAsHtml", prompt_save_history_as_html);
+    write_toml_str(file, "SaveHistoryFilename", prompt_save_history_filename);
+
+    /* OpenSave */
+    fprintf(file, "\r\n[OpenSave]\r\n");
+    write_toml_str(file, "CustomFilter", opensave_custom_filter);
+    write_toml_str(file, "OpenFormat", opensave_open_format);
+    write_toml_bool(file, "OpenThumbnail", opensave_open_thumbnail);
+    write_toml_str(file, "SaveFormat", opensave_save_format);
+    write_toml_bool(file, "SaveThumbnail", opensave_save_thumbnail);
+
+    /* Recent */
+    fprintf(file, "\r\n[Recent]\r\n");
+    write_toml_int(file, "RecentMax", opensave_recent_max_files);
+    write_toml_strtable(file, "RecentFiles", opensave_recent_list_of_files);
+    write_toml_str(file, "RecentDirectory", opensave_recent_directory);
+
+    /* Trimming */
+    fprintf(file, "\r\n[Trimming]\r\n");
+    write_toml_int(file, "TrimDstNumJumps", opensave_trim_dst_num_jumps);
+
+    /* Printing */
+    fprintf(file, "\r\n[Printing]\r\n");
+    write_toml_str(file, "DefaultDevice", printing_default_device);
+    write_toml_bool(file, "UseLastDevice", printing_use_last_device);
+    write_toml_bool(file, "DisableBG", printing_disable_bg);
+
+    /* Grid */
+    fprintf(file, "\r\n[Grid]\r\n");
+    write_toml_bool(file, "ShowOnLoad", grid_show_on_load);
+    write_toml_bool(file, "ShowOrigin", grid_show_origin);
+    write_toml_bool(file, "ColorMatchCrossHair", grid_color_match_crosshair);
+    write_toml_int(file, "Color", grid_color);
+    write_toml_bool(file, "LoadFromFile", grid_load_from_file);
+    write_toml_str(file, "Type", grid_type);
+    write_toml_bool(file, "CenterOnOrigin", grid_center_on_origin);
+    write_toml_real(file, "CenterX", grid_center_x);
+    write_toml_real(file, "CenterY", grid_center_y);
+    write_toml_real(file, "SizeX", grid_size_x);
+    write_toml_real(file, "SizeY", grid_size_y);
+    write_toml_real(file, "SpacingX", grid_spacing_x);
+    write_toml_real(file, "SpacingY", grid_spacing_y);
+    write_toml_real(file, "SizeRadius", grid_size_radius);
+    write_toml_real(file, "SpacingRadius", grid_spacing_radius);
+    write_toml_real(file, "SpacingAngle", grid_spacing_angle);
+
+    /* Ruler */
+    fprintf(file, "\r\n[Ruler]\r\n");
+    write_toml_bool(file, "ShowOnLoad", ruler_show_on_load);
+    write_toml_bool(file, "Metric", ruler_metric);
+    write_toml_int(file, "Color", ruler_color);
+    write_toml_int(file, "PixelSize", ruler_pixel_size);
+
+    /* Quick Snap */
+    fprintf(file, "\r\n[QuickSnap]\r\n");
+    write_toml_bool(file, "Enabled", qsnap_enabled);
+    write_toml_int(file, "LocatorColor", qsnap_locator_color);
+    write_toml_int(file, "LocatorSize", qsnap_locator_size);
+    write_toml_int(file, "ApertureSize", qsnap_aperture_size);
+    write_toml_bool(file, "EndPoint", qsnap_endpoint);
+    write_toml_bool(file, "MidPoint", qsnap_midpoint);
+    write_toml_bool(file, "Center", qsnap_center);
+    write_toml_bool(file, "Node", qsnap_node);
+    write_toml_bool(file, "Quadrant", qsnap_quadrant);
+    write_toml_bool(file, "Intersection", qsnap_intersection);
+    write_toml_bool(file, "Extension", qsnap_extension);
+    write_toml_bool(file, "Insertion", qsnap_insertion);
+    write_toml_bool(file, "Perpendicular", qsnap_perpendicular);
+    write_toml_bool(file, "Tangent", qsnap_tangent);
+    write_toml_bool(file, "Nearest", qsnap_nearest);
+    write_toml_bool(file, "Apparent", qsnap_apparent);
+    write_toml_bool(file, "Parallel", qsnap_parallel);
+
+    /* LineWeight */
+    fprintf(file, "\r\n[LineWeight]\r\n");
+    write_toml_bool(file, "ShowLineWeight", lwt_show_lwt);
+    write_toml_bool(file, "RealRender", lwt_real_render);
+    write_toml_real(file, "DefaultLineWeight", lwt_default_lwt);
+
+    /* Selection */
+    fprintf(file, "\r\n[Selection]\r\n");
+    write_toml_bool(file, "PickFirst", selection_mode_pickfirst);
+    write_toml_bool(file, "PickAdd", selection_mode_pickadd);
+    write_toml_bool(file, "PickDrag", selection_mode_pickdrag);
+    write_toml_int(file, "CoolGripColor", selection_coolgrip_color);
+    write_toml_int(file, "HotGripColor", selection_hotgrip_color);
+    write_toml_int(file, "GripSize", selection_grip_size);
+    write_toml_int(file, "PickBoxSize", selection_pickbox_size);
+
+    /* Text */
+    fprintf(file, "\r\n[Text]\r\n");
+    write_toml_str(file, "Font", text_font);
+    write_toml_real(file, "Size", text_size);
+    write_toml_real(file, "Angle", text_angle);
+    write_toml_bool(file, "StyleBold", text_style_bold);
+    write_toml_bool(file, "StyleItalic", text_style_italic);
+    write_toml_bool(file, "StyleUnderline", text_style_underline);
+    write_toml_bool(file, "StyleStrikeOut", text_style_strikeout);
+    write_toml_bool(file, "StyleOverline", text_style_overline);
+
+    fclose(file);
     return 1;
 }
 
