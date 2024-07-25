@@ -613,6 +613,69 @@ private:
 inline double radians(double degree) { return (degree * embConstantPi / 180.0); }
 inline double degrees(double radian) { return (radian * 180.0 / embConstantPi); }
 
+class Object : public QGraphicsPathItem
+{
+public:
+    EmbGeometry *geometry;
+
+    QPen objPen;
+    QPen lwtPen;
+    QLineF objLine;
+    int objRubberMode;
+    QHash<QString, QPointF> objRubberPoints;
+    QHash<QString, QString> objRubberTexts;
+    int64_t objID;
+
+    enum { Type = OBJ_TYPE_BASE };
+    virtual int type() const { return Type; }
+
+    Object(EmbArc arc, QRgb rgb, QGraphicsItem* parent = 0);
+    Object(Object* obj, QGraphicsItem* parent = 0);
+    ~Object();
+    
+    void setObjectRect(double x1, double y1, double x2, double y2);
+    void setObjectRadius(double radius);
+    void setObjectEndPoint1(QPointF point);
+    void setObjectEndPoint2(QPointF point);
+
+    void setObjectRubberMode(int mode);
+    void updateRubber(void);
+
+    QPointF objectEndPoint1();
+    QPointF objectEndPoint2();
+    QPointF objectStartPoint();
+    QPointF objectMidPoint();
+    QPointF objectEndPoint();
+
+    QPointF objectTopLeft();
+    QPointF objectTopRight();
+    QPointF objectBottomLeft();
+    QPointF objectBottomRight();
+    QPointF objectCenter();
+    double objectWidth();
+    double objectHeight();
+
+    QPointF objectQuadrant0();
+    QPointF objectQuadrant90();
+    QPointF objectQuadrant180();
+    QPointF objectQuadrant270();
+
+    int findIndex(QPointF);
+
+    void updatePath(QPainterPath path);
+
+    virtual void vulcanize();
+    virtual QList<QPointF> allGripPoints();
+    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
+    virtual void gripEdit(const QPointF& before, const QPointF& after);
+protected:
+
+private:
+    QPainterPath normalPath;
+    int gripIndex;
+    int curved;
+};
+
 class BaseObject : public QGraphicsPathItem
 {
 public:
@@ -660,12 +723,11 @@ public:
     virtual QRectF boundingRect() const;
     virtual QPainterPath shape() const { return path(); }
 
+    virtual void vulcanize() {};
+    virtual QList<QPointF> allGripPoints(void) {return {};};
+    virtual QPointF mouseSnapPoint(const QPointF& before) {return before;};
+    virtual void gripEdit(const QPointF& before, const QPointF& after) {};
     void drawRubberLine(const QLineF& rubLine, QPainter* painter = 0, const char* colorFromScene = 0);
-
-    virtual void vulcanize() = 0;
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint) = 0;
-    virtual QList<QPointF> allGripPoints() = 0;
-    virtual void gripEdit(const QPointF& before, const QPointF& after) = 0;
 protected:
     QPen lineWeightPen() const { return lwtPen; }
     void realRender(QPainter* painter, const QPainterPath& renderPath);
@@ -703,10 +765,6 @@ public:
     void setObjectEndPoint(EmbVector point);
 
     void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
@@ -748,10 +806,6 @@ public:
     void setObjectCircumference(double circumference);
 
     void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
@@ -807,10 +861,6 @@ public:
     void setObjectY2(double y) { setObjectEndPoint2(objectX2(), y); }
 
     void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
@@ -865,10 +915,6 @@ public:
     void setObjectDiameterMinor(double diameter);
 
     void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
@@ -898,10 +944,6 @@ public:
     void setObjectRect(double x, double y, double w, double h);
 
     void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
@@ -944,10 +986,6 @@ public:
     void setObjectY2(double y) { setObjectEndPoint2(objectX2(), y); }
 
     void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
@@ -978,10 +1016,6 @@ public:
     void setObjectY(double y) { setObjectPos(objectX(), y); }
 
     void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
@@ -1014,10 +1048,6 @@ public:
     void setObjectY(double y) { setObjectPos(objectX(), y); }
 
     void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
@@ -1048,10 +1078,6 @@ public:
     void setObjectY(double y) { setObjectPos(objectX(), y); }
 
     void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
@@ -1086,10 +1112,6 @@ public:
     void setObjectY(double y) { setObjectPos(objectX(), y); }
 
     void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
@@ -1126,10 +1148,6 @@ public:
     void setObjectRect(double x, double y, double w, double h);
 
     void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
@@ -1187,10 +1205,6 @@ public:
     void setObjectY(double y) { setObjectPos(objectX(), y); }
 
     void updateRubber(QPainter* painter = 0);
-    virtual void vulcanize();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual QList<QPointF> allGripPoints();
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:

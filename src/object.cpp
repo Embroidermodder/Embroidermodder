@@ -298,34 +298,6 @@ ArcObject::updateRubber(QPainter* painter)
 
 }
 
-void
-ArcObject::vulcanize()
-{
-    qDebug("ArcObject vulcanize()");
-    updateRubber();
-
-    setObjectRubberMode(OBJ_RUBBER_OFF);
-}
-
-// Returns the closest snap point to the mouse point
-QPointF ArcObject::mouseSnapPoint(const QPointF& mousePoint)
-{
-    return find_mouse_snap_point(allGripPoints(), mousePoint);
-}
-
-QList<QPointF> ArcObject::allGripPoints()
-{
-    QList<QPointF> gripPoints;
-    gripPoints << objectCenter() << objectStartPoint() << objectMidPoint() << objectEndPoint();
-    return gripPoints;
-}
-
-void
-ArcObject::gripEdit(const QPointF& before, const QPointF& after)
-{
-    //TODO: gripEdit() for ArcObject
-}
-
 BaseObject::BaseObject(QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
     qDebug("BaseObject Constructor()");
@@ -1027,40 +999,6 @@ CircleObject::updateRubber(QPainter* painter)
     }
 }
 
-void
-CircleObject::vulcanize()
-{
-    qDebug("CircleObject vulcanize()");
-    updateRubber();
-
-    setObjectRubberMode(OBJ_RUBBER_OFF);
-}
-
-// Returns the closest snap point to the mouse point
-QPointF CircleObject::mouseSnapPoint(const QPointF& mousePoint)
-{
-    return find_mouse_snap_point(allGripPoints(), mousePoint);
-}
-
-QList<QPointF> CircleObject::allGripPoints()
-{
-    QList<QPointF> gripPoints;
-    gripPoints << objectCenter() << objectQuadrant0() << objectQuadrant90() << objectQuadrant180() << objectQuadrant270();
-    return gripPoints;
-}
-
-void
-CircleObject::gripEdit(const QPointF& before, const QPointF& after)
-{
-    if (before == objectCenter()) {
-        QPointF delta = after-before;
-        moveBy(delta.x(), delta.y());
-    }
-    else {
-        setObjectRadius(QLineF(objectCenter(), after).length());
-    }
-}
-
 QPainterPath CircleObject::objectSavePath() const
 {
     QPainterPath path;
@@ -1324,46 +1262,6 @@ DimLeaderObject::updateRubber(QPainter* painter)
     }
     default:
         break;
-    }
-}
-
-void
-DimLeaderObject::vulcanize()
-{
-    qDebug("DimLeaderObject vulcanize()");
-    updateRubber();
-
-    setObjectRubberMode(OBJ_RUBBER_OFF);
-}
-
-// Returns the closest snap point to the mouse point
-QPointF DimLeaderObject::mouseSnapPoint(const QPointF& mousePoint)
-{
-    return find_mouse_snap_point(allGripPoints(), mousePoint);
-}
-
-QList<QPointF> DimLeaderObject::allGripPoints()
-{
-    QList<QPointF> gripPoints;
-    gripPoints << objectEndPoint1() << objectEndPoint2();
-    if (curved) {
-        gripPoints << objectMidPoint();
-    }
-    return gripPoints;
-}
-
-void
-DimLeaderObject::gripEdit(const QPointF& before, const QPointF& after)
-{
-    if (before == objectEndPoint1()) {
-        setObjectEndPoint1(after);
-    }
-    else if (before == objectEndPoint2()) {
-        setObjectEndPoint2(after);
-    }
-    else if (before == objectMidPoint()) {
-        QPointF delta = after-before;
-        moveBy(delta.x(), delta.y());
     }
 }
 
@@ -1917,34 +1815,6 @@ EllipseObject::updateRubber(QPainter* painter)
     }
 }
 
-void
-EllipseObject::vulcanize()
-{
-    qDebug("EllipseObject vulcanize()");
-    updateRubber();
-
-    setObjectRubberMode(OBJ_RUBBER_OFF);
-}
-
-// Returns the closest snap point to the mouse point
-QPointF EllipseObject::mouseSnapPoint(const QPointF& mousePoint)
-{
-    return find_mouse_snap_point(allGripPoints(), mousePoint);
-}
-
-QList<QPointF> EllipseObject::allGripPoints()
-{
-    QList<QPointF> gripPoints;
-    gripPoints << objectCenter() << objectQuadrant0() << objectQuadrant90() << objectQuadrant180() << objectQuadrant270();
-    return gripPoints;
-}
-
-void
-EllipseObject::gripEdit(const QPointF& before, const QPointF& after)
-{
-    //TODO: gripEdit() for EllipseObject
-}
-
 QPainterPath EllipseObject::objectSavePath() const
 {
     QPainterPath path;
@@ -2081,34 +1951,6 @@ ImageObject::updateRubber(QPainter* painter)
     else if (rubberMode == OBJ_RUBBER_GRIP) {
         //TODO: updateRubber() gripping for ImageObject
     }
-}
-
-void
-ImageObject::vulcanize()
-{
-    qDebug("ImageObject vulcanize()");
-    updateRubber();
-
-    setObjectRubberMode(OBJ_RUBBER_OFF);
-}
-
-// Returns the closest snap point to the mouse point
-QPointF ImageObject::mouseSnapPoint(const QPointF& mousePoint)
-{
-    return find_mouse_snap_point(allGripPoints(), mousePoint);
-}
-
-QList<QPointF> ImageObject::allGripPoints()
-{
-    QList<QPointF> gripPoints;
-    gripPoints << objectTopLeft() << objectTopRight() << objectBottomLeft() << objectBottomRight();
-    return gripPoints;
-}
-
-void
-ImageObject::gripEdit(const QPointF& before, const QPointF& after)
-{
-    //TODO: gripEdit() for ImageObject
 }
 
 /* LINE */
@@ -2375,44 +2217,6 @@ LineObject::updateRubber(QPainter* painter)
     }
 }
 
-void
-LineObject::vulcanize()
-{
-    qDebug("LineObject vulcanize()");
-    updateRubber();
-
-    setObjectRubberMode(OBJ_RUBBER_OFF);
-}
-
-/* Returns the closest snap point to the mouse point. */
-QPointF
-LineObject::mouseSnapPoint(const QPointF& mousePoint)
-{
-    return find_mouse_snap_point(allGripPoints(), mousePoint);
-}
-
-QList<QPointF> LineObject::allGripPoints()
-{
-    QList<QPointF> gripPoints;
-    gripPoints << objectEndPoint1() << objectEndPoint2() << objectMidPoint();
-    return gripPoints;
-}
-
-void
-LineObject::gripEdit(const QPointF& before, const QPointF& after)
-{
-    if (before == objectEndPoint1()) {
-        setObjectEndPoint1(after);
-    }
-    else if (before == objectEndPoint2()) {
-        setObjectEndPoint2(after);
-    }
-    else if (before == objectMidPoint()) {
-        QPointF delta = after-before;
-        moveBy(delta.x(), delta.y());
-    }
-}
-
 QPainterPath LineObject::objectSavePath() const
 {
     QPainterPath path;
@@ -2580,37 +2384,6 @@ PathObject::updateRubber(QPainter* painter)
 
 }
 
-void
-PathObject::vulcanize()
-{
-    qDebug("PathObject vulcanize()");
-    updateRubber();
-
-    setObjectRubberMode(OBJ_RUBBER_OFF);
-
-    if (!normalPath.elementCount())
-        QMessageBox::critical(0, QObject::tr("Empty Path Error"), QObject::tr("The path added contains no points. The command that created this object has flawed logic."));
-}
-
-// Returns the closest snap point to the mouse point
-QPointF PathObject::mouseSnapPoint(const QPointF& mousePoint)
-{
-    return scenePos();
-}
-
-QList<QPointF> PathObject::allGripPoints()
-{
-    QList<QPointF> gripPoints;
-    gripPoints << scenePos(); //TODO: loop thru all path Elements and return their points
-    return gripPoints;
-}
-
-void
-PathObject::gripEdit(const QPointF& before, const QPointF& after)
-{
-    //TODO: gripEdit() for PathObject
-}
-
 QPainterPath PathObject::objectCopyPath() const
 {
     return normalPath;
@@ -2769,36 +2542,6 @@ PointObject::updateRubber(QPainter* painter)
                 drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
             }
         }
-    }
-}
-
-void
-PointObject::vulcanize()
-{
-    qDebug("PointObject vulcanize()");
-    updateRubber();
-
-    setObjectRubberMode(OBJ_RUBBER_OFF);
-}
-
-// Returns the closest snap point to the mouse point
-QPointF PointObject::mouseSnapPoint(const QPointF& mousePoint)
-{
-    return scenePos();
-}
-
-QList<QPointF> PointObject::allGripPoints()
-{
-    QList<QPointF> gripPoints;
-    gripPoints << scenePos();
-    return gripPoints;
-}
-
-void
-PointObject::gripEdit(const QPointF& before, const QPointF& after)
-{
-    if (before == scenePos()) {
-        QPointF delta = after-before; moveBy(delta.x(), delta.y());
     }
 }
 
@@ -3269,35 +3012,6 @@ PolygonObject::updateRubber(QPainter* painter)
     }
 }
 
-void
-PolygonObject::vulcanize()
-{
-    qDebug("PolygonObject vulcanize()");
-    updateRubber();
-
-    setObjectRubberMode(OBJ_RUBBER_OFF);
-
-    if (!normalPath.elementCount())
-        QMessageBox::critical(0, QObject::tr("Empty Polygon Error"), QObject::tr("The polygon added contains no points. The command that created this object has flawed logic."));
-}
-
-// Returns the closest snap point to the mouse point
-QPointF PolygonObject::mouseSnapPoint(const QPointF& mousePoint)
-{
-    return find_mouse_snap_point(allGripPoints(), mousePoint);
-}
-
-QList<QPointF> PolygonObject::allGripPoints()
-{
-    QList<QPointF> gripPoints;
-    QPainterPath::Element element;
-    for (int i = 0; i < normalPath.elementCount(); ++i) {
-        element = normalPath.elementAt(i);
-        gripPoints << mapToScene(element.x, element.y);
-    }
-    return gripPoints;
-}
-
 int PolygonObject::findIndex(const QPointF& point)
 {
     int i = 0;
@@ -3312,19 +3026,6 @@ int PolygonObject::findIndex(const QPointF& point)
         }
     }
     return -1;
-}
-
-void
-PolygonObject::gripEdit(const QPointF& before, const QPointF& after)
-{
-    gripIndex = findIndex(before);
-    if (gripIndex == -1) {
-        return;
-    }
-    QPointF a = mapFromScene(after);
-    normalPath.setElementPositionAt(gripIndex, a.x(), a.y());
-    updatePath(normalPath);
-    gripIndex = -1;
 }
 
 QPainterPath
@@ -3580,35 +3281,6 @@ PolylineObject::updateRubber(QPainter* painter)
     }
 }
 
-void
-PolylineObject::vulcanize()
-{
-    qDebug("PolylineObject vulcanize()");
-    updateRubber();
-
-    setObjectRubberMode(OBJ_RUBBER_OFF);
-
-    if (!normalPath.elementCount())
-        QMessageBox::critical(0, QObject::tr("Empty Polyline Error"), QObject::tr("The polyline added contains no points. The command that created this object has flawed logic."));
-}
-
-// Returns the closest snap point to the mouse point
-QPointF PolylineObject::mouseSnapPoint(const QPointF& mousePoint)
-{
-    return find_mouse_snap_point(allGripPoints(), mousePoint);
-}
-
-QList<QPointF> PolylineObject::allGripPoints()
-{
-    QList<QPointF> gripPoints;
-    QPainterPath::Element element;
-    for (int i = 0; i < normalPath.elementCount(); ++i) {
-        element = normalPath.elementAt(i);
-        gripPoints << mapToScene(element.x, element.y);
-    }
-    return gripPoints;
-}
-
 int PolylineObject::findIndex(const QPointF& point)
 {
     int elemCount = normalPath.elementCount();
@@ -3620,19 +3292,6 @@ int PolylineObject::findIndex(const QPointF& point)
         if (itemPoint == elemPoint) return i;
     }
     return -1;
-}
-
-void
-PolylineObject::gripEdit(const QPointF& before, const QPointF& after)
-{
-    gripIndex = findIndex(before);
-    if (gripIndex == -1) {
-        return;
-    }
-    QPointF a = mapFromScene(after);
-    normalPath.setElementPositionAt(gripIndex, a.x(), a.y());
-    updatePath(normalPath);
-    gripIndex = -1;
 }
 
 QPainterPath PolylineObject::objectCopyPath() const
@@ -3889,50 +3548,6 @@ RectObject::updateRubber(QPainter* painter)
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
             drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
-    }
-}
-
-void
-RectObject::vulcanize()
-{
-    qDebug("RectObject vulcanize()");
-    updateRubber();
-
-    setObjectRubberMode(OBJ_RUBBER_OFF);
-}
-
-// Returns the closest snap point to the mouse point
-QPointF RectObject::mouseSnapPoint(const QPointF& mousePoint)
-{
-    return find_mouse_snap_point(allGripPoints(), mousePoint);
-}
-
-QList<QPointF> RectObject::allGripPoints()
-{
-    QList<QPointF> gripPoints;
-    gripPoints << objectTopLeft() << objectTopRight() << objectBottomLeft() << objectBottomRight();
-    return gripPoints;
-}
-
-void
-RectObject::gripEdit(const QPointF& before, const QPointF& after)
-{
-    QPointF delta = after-before;
-    if (before == objectTopLeft()) {
-        setObjectRect(after.x(), after.y(), objectWidth()-delta.x(),
-            objectHeight()-delta.y());
-    }
-    else if (before == objectTopRight()) {
-        setObjectRect(objectTopLeft().x(), objectTopLeft().y()+delta.y(),
-            objectWidth()+delta.x(), objectHeight()-delta.y());
-    }
-    else if (before == objectBottomLeft()) {
-        setObjectRect(objectTopLeft().x()+delta.x(), objectTopLeft().y(),
-            objectWidth()-delta.x(), objectHeight()+delta.y());
-    }
-    else if (before == objectBottomRight()) {
-        setObjectRect(objectTopLeft().x(), objectTopLeft().y(),
-            objectWidth()+delta.x(), objectHeight()+delta.y());
     }
 }
 
@@ -4638,37 +4253,6 @@ TextSingleObject::updateRubber(QPainter* painter)
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
             drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
-    }
-}
-
-void
-TextSingleObject::vulcanize()
-{
-    qDebug("TextSingleObject vulcanize()");
-    updateRubber();
-
-    setObjectRubberMode(OBJ_RUBBER_OFF);
-}
-
-// Returns the closest snap point to the mouse point
-QPointF TextSingleObject::mouseSnapPoint(const QPointF& mousePoint)
-{
-    return scenePos();
-}
-
-QList<QPointF> TextSingleObject::allGripPoints()
-{
-    QList<QPointF> gripPoints;
-    gripPoints << scenePos();
-    return gripPoints;
-}
-
-void
-TextSingleObject::gripEdit(const QPointF& before, const QPointF& after)
-{
-    if (before == scenePos()) {
-        QPointF delta = after-before;
-        moveBy(delta.x(), delta.y());
     }
 }
 

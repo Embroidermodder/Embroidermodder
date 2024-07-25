@@ -76,6 +76,7 @@ qt_add_executable(embroidermodder2
 	${SRC}/mdiarea.cpp
 	${SRC}/mdiwindow.cpp
 	${SRC}/object.cpp
+	${SRC}/base-object.cpp
 	${SRC}/preview-dialog.cpp
 	${SRC}/property-editor.cpp
 	${SRC}/quickleader.cpp
