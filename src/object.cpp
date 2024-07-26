@@ -3,8 +3,9 @@
  *
  * Copyright 2011-2024 The Embroidermodder Team
  * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
- * Visit https://www.libembroidery.org/refman for advice on altering this file,
- * or read the markdown version in embroidermodder2/docs/refman.
+ *
+ * Download the docs at https://www.libembroidery.org/downloads/emrm_current.pdf
+ * for advice on altering this file.
  *
  * Objects: EmbArc, EmbCircle, EmbEllipse, 
  */
@@ -53,13 +54,16 @@ arc_command(ScriptEnv *context)
     return script_null;
 }
 
-ArcObject::ArcObject(EmbArc arc, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+#if 0
+
+Object::Object(EmbArc arc, QRgb rgb, QGraphicsItem* parent)
 {
     qDebug("ArcObject Constructor()");
     init(arc, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
+#endif
 
-ArcObject::ArcObject(ArcObject* obj, QGraphicsItem* parent) : BaseObject(parent)
+Object::Object(Object* obj, QGraphicsItem* parent)
 {
     qDebug("ArcObject Constructor()");
     if (obj) {
@@ -69,17 +73,13 @@ ArcObject::ArcObject(ArcObject* obj, QGraphicsItem* parent) : BaseObject(parent)
     }
 }
 
-ArcObject::~ArcObject()
-{
-    qDebug("ArcObject Destructor()");
-}
-
+#if 0
 /* WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
  * and the item is double clicked, the scene will erratically move the item while zooming.
  * All movement has to be handled explicitly by us, not by the scene.
  */
 void
-ArcObject::init(EmbArc arc, QRgb rgb, Qt::PenStyle lineType)
+Object::init(EmbArc arc, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_ARC);
@@ -96,12 +96,12 @@ ArcObject::init(EmbArc arc, QRgb rgb, Qt::PenStyle lineType)
     calculateArcData(geometry->object.arc);
 
     setPos(arc.start.x, arc.start.y);
-    setObjectLineWeight(0.35); //TODO: pass in proper lineweight
+    setObjectLineWeight(0.35); /* TODO: pass in proper lineweight */
     setPen(objPen);
 }
 
 void
-ArcObject::calculateArcData(EmbArc arc)
+Object::calculateArcData(EmbArc arc)
 {
     EmbVector center = emb_arc_center(arc);
 
@@ -113,7 +113,7 @@ ArcObject::calculateArcData(EmbArc arc)
 }
 
 void
-ArcObject::updateArcRect(double radius)
+Object::updateArcRect(double radius)
 {
     QRectF arcRect;
     arcRect.setWidth(radius*2.0);
@@ -123,7 +123,7 @@ ArcObject::updateArcRect(double radius)
 }
 
 void
-ArcObject::setObjectCenter(EmbVector point)
+Object::setObjectCenter(EmbVector point)
 {
     setPos(point.x, point.y);
 }
@@ -207,13 +207,16 @@ double ArcObject::objectArcLength() const
 {
     return radians(objectIncludedAngle()) * objectRadius();
 }
+#endif
 
-double ArcObject::objectChord() const
+double
+Object::objectChord() const
 {
     return QLineF(objectStartPoint(), objectEndPoint()).length();
 }
 
-double ArcObject::objectIncludedAngle() const
+double
+Object::objectIncludedAngle() const
 {
     double chord = objectChord();
     double rad = objectRadius();
@@ -230,7 +233,8 @@ double ArcObject::objectIncludedAngle() const
     return degrees(2.0*asin(quotient)); //Properties of a Circle - Get the Included Angle - Reference: ASD9
 }
 
-bool ArcObject::objectClockwise() const
+bool
+Object::objectClockwise() const
 {
     //NOTE: Y values are inverted here on purpose
     EmbArc arc;
@@ -244,7 +248,7 @@ bool ArcObject::objectClockwise() const
 }
 
 void
-ArcObject::updatePath()
+Object::updatePath()
 {
     double startAngle = (objectStartAngle() + rotation());
     double spanAngle = objectIncludedAngle();
@@ -261,43 +265,7 @@ ArcObject::updatePath()
     setObjectPath(path);
 }
 
-void
-ArcObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
-{
-    QGraphicsScene* objScene = scene();
-    if (!objScene) return;
-
-    QPen paintPen = pen();
-    painter->setPen(paintPen);
-    updateRubber(painter);
-    if (option->state & QStyle::State_Selected) {
-        paintPen.setStyle(Qt::DashLine);
-    }
-    if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = lineWeightPen();
-    }
-    painter->setPen(paintPen);
-
-    double startAngle = (objectStartAngle() + rotation())*16;
-    double spanAngle = objectIncludedAngle()*16;
-
-    if (objectClockwise())
-        spanAngle = -spanAngle;
-
-    double rad = objectRadius();
-    QRectF paintRect(-rad, -rad, rad*2.0, rad*2.0);
-    painter->drawArc(paintRect, startAngle, spanAngle);
-}
-
-void
-ArcObject::updateRubber(QPainter* painter)
-{
-    //TODO: Arc Rubber Modes
-
-    //TODO: updateRubber() gripping for ArcObject
-
-}
-
+#if 0
 BaseObject::BaseObject(QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
     qDebug("BaseObject Constructor()");
@@ -463,6 +431,7 @@ BaseObject::realRender(QPainter* painter, const QPainterPath& renderPath)
         painter->fillPath(realPath, QBrush(grad));
     }
 }
+#endif
 
 /* . */
 ScriptValue
@@ -785,6 +754,7 @@ circle_prompt(ScriptEnv *context)
     return script_null;
 }
 
+#if 0
 CircleObject::CircleObject(double centerX, double centerY, double radius, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("CircleObject Constructor()");
@@ -799,11 +769,6 @@ CircleObject::CircleObject(CircleObject* obj, QGraphicsItem* parent) : BaseObjec
         /* TODO: getCurrentLineType. */
         setRotation(obj->rotation());
     }
-}
-
-CircleObject::~CircleObject()
-{
-    qDebug("CircleObject Destructor()");
 }
 
 void
@@ -828,56 +793,58 @@ CircleObject::init(double centerX, double centerY, double radius, QRgb rgb, Qt::
     setPen(objPen);
     updatePath();
 }
+#endif
 
 void
-CircleObject::setObjectCenter(EmbVector center)
+Object::setObjectCenter(EmbVector center)
 {
     setPos(center.x, center.y);
 }
 
 void
-CircleObject::setObjectCenterX(double centerX)
+Object::setObjectCenterX(double centerX)
 {
     setX(centerX);
 }
 
 void
-CircleObject::setObjectCenterY(double centerY)
+Object::setObjectCenterY(double centerY)
 {
     setY(centerY);
 }
 
 void
-CircleObject::setObjectRadius(double radius)
+Object::setObjectRadius(double radius)
 {
     setObjectDiameter(radius*2.0);
 }
 
 void
-CircleObject::setObjectDiameter(double diameter)
+Object::setObjectDiameter(double diameter)
 {
     QRectF circRect;
     circRect.setWidth(diameter);
     circRect.setHeight(diameter);
     circRect.moveCenter(QPointF(0,0));
     setRect(circRect);
-    updatePath();
+    //FIXME: updatePath();
 }
 
 void
-CircleObject::setObjectArea(double area)
+Object::setObjectArea(double area)
 {
     double radius = sqrt(area / embConstantPi);
     setObjectRadius(radius);
 }
 
 void
-CircleObject::setObjectCircumference(double circumference)
+Object::setObjectCircumference(double circumference)
 {
     double diameter = circumference / embConstantPi;
     setObjectDiameter(diameter);
 }
 
+#if 0
 void
 CircleObject::updatePath()
 {
@@ -891,28 +858,6 @@ CircleObject::updatePath()
     //NOTE: Reverse the path so that the inside area isn't considered part of the circle
     path.arcTo(r, 0, -360);
     setObjectPath(path);
-}
-
-void
-CircleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
-{
-    QGraphicsScene* objScene = scene();
-    if (!objScene) {
-        return;
-    }
-
-    QPen paintPen = pen();
-    painter->setPen(paintPen);
-    updateRubber(painter);
-    if (option->state & QStyle::State_Selected) {
-        paintPen.setStyle(Qt::DashLine);
-    }
-    if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = lineWeightPen();
-    }
-    painter->setPen(paintPen);
-
-    painter->drawEllipse(rect());
 }
 
 void
@@ -1027,11 +972,6 @@ DimLeaderObject::DimLeaderObject(DimLeaderObject* obj, QGraphicsItem* parent) : 
     }
 }
 
-DimLeaderObject::~DimLeaderObject()
-{
-    qDebug("DimLeaderObject Destructor()");
-}
-
 void
 DimLeaderObject::init(double x1, double y1, double x2, double y2, QRgb rgb, Qt::PenStyle lineType)
 {
@@ -1097,14 +1037,17 @@ QPointF DimLeaderObject::objectEndPoint1() const
 {
     return scenePos();
 }
+#endif 
 
-QPointF DimLeaderObject::objectEndPoint2() const
+QPointF
+Object::objectEndPoint2() const
 {
     QLineF lyne = line();
     QPointF endPoint2(lyne.x2(), lyne.y2());
     return scenePos() + scale_and_rotate(endPoint2, scale(), rotation());
 }
 
+#if 0
 QPointF DimLeaderObject::objectMidPoint() const
 {
     QLineF lyne = line();
@@ -1209,33 +1152,6 @@ DimLeaderObject::updateLeader()
 }
 
 void
-DimLeaderObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
-{
-    QGraphicsScene* objScene = scene();
-    if (!objScene) {
-        return;
-    }
-
-    QPen paintPen = pen();
-    painter->setPen(paintPen);
-    updateRubber(painter);
-    if (option->state & QStyle::State_Selected) {
-        paintPen.setStyle(Qt::DashLine);
-    }
-    if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = lineWeightPen();
-    }
-    painter->setPen(paintPen);
-
-    painter->drawPath(lineStylePath);
-    painter->drawPath(arrowStylePath);
-
-    if (filled) {
-        painter->fillPath(arrowStylePath, objPen.color());
-    }
-}
-
-void
 DimLeaderObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
@@ -1264,6 +1180,7 @@ DimLeaderObject::updateRubber(QPainter* painter)
         break;
     }
 }
+#endif
 
 /* ELLIPSE */
 ScriptValue
@@ -1538,7 +1455,6 @@ function prompt(str)
         break;
     }
 }
-#endif
 
 EllipseObject::EllipseObject(double centerX, double centerY, double width, double height, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -1553,11 +1469,6 @@ EllipseObject::EllipseObject(EllipseObject* obj, QGraphicsItem* parent) : BaseOb
         init(obj->objectCenterX(), obj->objectCenterY(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
     }
-}
-
-EllipseObject::~EllipseObject()
-{
-    qDebug("EllipseObject Destructor()");
 }
 
 void
@@ -1613,21 +1524,22 @@ EllipseObject::setObjectCenterY(double centerY)
 {
     setY(centerY);
 }
+#endif
 
 void
-EllipseObject::setObjectRadiusMajor(double radius)
+Object::setObjectRadiusMajor(double radius)
 {
     setObjectDiameterMajor(radius*2.0);
 }
 
 void
-EllipseObject::setObjectRadiusMinor(double radius)
+Object::setObjectRadiusMinor(double radius)
 {
     setObjectDiameterMinor(radius*2.0);
 }
 
 void
-EllipseObject::setObjectDiameterMajor(double diameter)
+Object::setObjectDiameterMajor(double diameter)
 {
     QRectF elRect = rect();
     if (elRect.width() > elRect.height()) {
@@ -1641,7 +1553,7 @@ EllipseObject::setObjectDiameterMajor(double diameter)
 }
 
 void
-EllipseObject::setObjectDiameterMinor(double diameter)
+Object::setObjectDiameterMinor(double diameter)
 {
     QRectF elRect = rect();
     if (elRect.width() < elRect.height())
@@ -1652,6 +1564,7 @@ EllipseObject::setObjectDiameterMinor(double diameter)
     setRect(elRect);
 }
 
+#if 0
 QPointF EllipseObject::objectQuadrant0() const
 {
     double halfW = objectWidth()/2.0;
@@ -1698,26 +1611,6 @@ EllipseObject::updatePath()
     //NOTE: Reverse the path so that the inside area isn't considered part of the ellipse
     path.arcTo(r, 0, -360);
     setObjectPath(path);
-}
-
-void
-EllipseObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
-{
-    QGraphicsScene* objScene = scene();
-    if (!objScene) return;
-
-    QPen paintPen = pen();
-    painter->setPen(paintPen);
-    updateRubber(painter);
-    if (option->state & QStyle::State_Selected) {
-        paintPen.setStyle(Qt::DashLine);
-    }
-    if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = lineWeightPen();
-    }
-    painter->setPen(paintPen);
-
-    painter->drawEllipse(rect());
 }
 
 void
@@ -1845,11 +1738,6 @@ ImageObject::ImageObject(ImageObject* obj, QGraphicsItem* parent) : BaseObject(p
     }
 }
 
-ImageObject::~ImageObject()
-{
-    qDebug("ImageObject Destructor()");
-}
-
 void
 ImageObject::init(double x, double y, double w, double h, QRgb rgb, Qt::PenStyle lineType)
 {
@@ -1915,26 +1803,6 @@ ImageObject::updatePath()
 }
 
 void
-ImageObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
-{
-    QGraphicsScene* objScene = scene();
-    if (!objScene) return;
-
-    QPen paintPen = pen();
-    painter->setPen(paintPen);
-    updateRubber(painter);
-    if (option->state & QStyle::State_Selected) {
-        paintPen.setStyle(Qt::DashLine);
-    }
-    if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = lineWeightPen();
-    }
-    painter->setPen(paintPen);
-
-    painter->drawRect(rect());
-}
-
-void
 ImageObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
@@ -1952,6 +1820,7 @@ ImageObject::updateRubber(QPainter* painter)
         //TODO: updateRubber() gripping for ImageObject
     }
 }
+#endif
 
 /* LINE */
 ScriptValue
@@ -2054,7 +1923,6 @@ function prompt(str)
         }
     }
 }
-#endif
 
 LineObject::LineObject(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -2068,11 +1936,6 @@ LineObject::LineObject(LineObject* obj, QGraphicsItem* parent) : BaseObject(pare
     if (obj) {
         init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
     }
-}
-
-LineObject::~LineObject()
-{
-    qDebug("LineObject Destructor()");
 }
 
 void
@@ -2161,34 +2024,6 @@ double LineObject::objectAngle() const
 }
 
 void
-LineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
-{
-    QGraphicsScene* objScene = scene();
-    if (!objScene) {
-        return;
-    }
-
-    QPen paintPen = pen();
-    painter->setPen(paintPen);
-    updateRubber(painter);
-    if (option->state & QStyle::State_Selected) {
-        paintPen.setStyle(Qt::DashLine);
-    }
-    if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = lineWeightPen();
-    }
-    painter->setPen(paintPen);
-
-    if (objectRubberMode() != OBJ_RUBBER_LINE)
-        painter->drawLine(line());
-
-    if (objScene->property("ENABLE_LWT").toBool()
-        && objScene->property("ENABLE_REAL").toBool()) {
-            realRender(painter, path());
-    }
-}
-
-void
 LineObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
@@ -2223,6 +2058,7 @@ QPainterPath LineObject::objectSavePath() const
     path.lineTo(objectDeltaX(), objectDeltaY());
     return path;
 }
+#endif
 
 /* PATH */
 ScriptValue
@@ -2304,7 +2140,6 @@ prompt(str)
         }
     }
 }
-#endif
 
 PathObject::PathObject(double x, double y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -2320,11 +2155,6 @@ PathObject::PathObject(PathObject* obj, QGraphicsItem* parent) : BaseObject(pare
         setRotation(obj->rotation());
         setScale(obj->scale());
     }
-}
-
-PathObject::~PathObject()
-{
-    qDebug("PathObject Destructor()");
 }
 
 void
@@ -2356,26 +2186,6 @@ PathObject::updatePath(const QPainterPath& p)
 }
 
 void
-PathObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
-{
-    QGraphicsScene* objScene = scene();
-    if (!objScene) return;
-
-    QPen paintPen = pen();
-    painter->setPen(paintPen);
-    updateRubber(painter);
-    if (option->state & QStyle::State_Selected) {
-        paintPen.setStyle(Qt::DashLine);
-    }
-    if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = lineWeightPen();
-    }
-    painter->setPen(paintPen);
-
-    painter->drawPath(objectPath());
-}
-
-void
 PathObject::updateRubber(QPainter* painter)
 {
     //TODO: Path Rubber Modes
@@ -2397,6 +2207,7 @@ QPainterPath PathObject::objectSavePath() const
     trans.scale(s,s);
     return trans.map(normalPath);
 }
+#endif
 
 /* POINT */
 ScriptValue
@@ -2466,8 +2277,6 @@ function prompt(str)
         }
     }
 }
-#endif
-
 
 PointObject::PointObject(double x, double y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -2482,11 +2291,6 @@ PointObject::PointObject(PointObject* obj, QGraphicsItem* parent) : BaseObject(p
         init(obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
     }
-}
-
-PointObject::~PointObject()
-{
-    qDebug("PointObject Destructor()");
 }
 
 void
@@ -2506,28 +2310,6 @@ PointObject::init(double x, double y, QRgb rgb, Qt::PenStyle lineType)
     setObjectLineType(lineType);
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
     setPen(objPen);
-}
-
-void
-PointObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
-{
-    QGraphicsScene* objScene = scene();
-    if (!objScene) {
-        return;
-    }
-
-    QPen paintPen = pen();
-    painter->setPen(paintPen);
-    updateRubber(painter);
-    if (option->state & QStyle::State_Selected) {
-        paintPen.setStyle(Qt::DashLine);
-    }
-    if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = lineWeightPen();
-    }
-    painter->setPen(paintPen);
-
-    painter->drawPoint(0,0);
 }
 
 void
@@ -2551,6 +2333,7 @@ QPainterPath PointObject::objectSavePath() const
     path.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
     return path;
 }
+#endif
 
 /* POLYGON */
 ScriptValue
@@ -2802,7 +2585,6 @@ prompt(char *str)
         break;
     }
 }
-#endif
 
 PolygonObject::PolygonObject(double x, double y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -2818,11 +2600,6 @@ PolygonObject::PolygonObject(PolygonObject* obj, QGraphicsItem* parent) : BaseOb
         setRotation(obj->rotation());
         setScale(obj->scale());
     }
-}
-
-PolygonObject::~PolygonObject()
-{
-    qDebug("PolygonObject Destructor()");
 }
 
 void
@@ -2854,33 +2631,6 @@ PolygonObject::updatePath(const QPainterPath& p)
     QPainterPath reversePath = closedPath.toReversed();
     reversePath.connectPath(closedPath);
     setObjectPath(reversePath);
-}
-
-void
-PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
-{
-    QGraphicsScene* objScene = scene();
-    if (!objScene) {
-        return;
-    }
-
-    QPen paintPen = pen();
-    painter->setPen(paintPen);
-    updateRubber(painter);
-    if (option->state & QStyle::State_Selected) {
-        paintPen.setStyle(Qt::DashLine);
-    }
-    if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = lineWeightPen();
-    }
-    painter->setPen(paintPen);
-
-    if (normalPath.elementCount()) {
-        painter->drawPath(normalPath);
-        QPainterPath::Element zero = normalPath.elementAt(0);
-        QPainterPath::Element last = normalPath.elementAt(normalPath.elementCount()-1);
-        painter->drawLine(QPointF(zero.x, zero.y), QPointF(last.x, last.y));
-    }
 }
 
 void
@@ -3044,6 +2794,7 @@ QPainterPath PolygonObject::objectSavePath() const
     trans.scale(s,s);
     return trans.map(closedPath);
 }
+#endif
 
 /* POLYLINE. */
 ScriptValue
@@ -3141,7 +2892,6 @@ function prompt(str)
         }
     }
 }
-#endif
 
 PolylineObject::PolylineObject(double x, double y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -3157,11 +2907,6 @@ PolylineObject::PolylineObject(PolylineObject* obj, QGraphicsItem* parent) : Bas
         setRotation(obj->rotation());
         setScale(obj->scale());
     }
-}
-
-PolylineObject::~PolylineObject()
-{
-    qDebug("PolylineObject Destructor()");
 }
 
 void
@@ -3191,31 +2936,6 @@ PolylineObject::updatePath(const QPainterPath& p)
     QPainterPath reversePath = normalPath.toReversed();
     reversePath.connectPath(normalPath);
     setObjectPath(reversePath);
-}
-
-void
-PolylineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
-{
-    QGraphicsScene* objScene = scene();
-    if (!objScene) return;
-
-    QPen paintPen = pen();
-    painter->setPen(paintPen);
-    updateRubber(painter);
-    if (option->state & QStyle::State_Selected) {
-        paintPen.setStyle(Qt::DashLine);
-    }
-    if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = lineWeightPen();
-    }
-    painter->setPen(paintPen);
-
-    painter->drawPath(normalPath);
-
-    if (objScene->property("ENABLE_LWT").toBool()
-        && objScene->property("ENABLE_REAL").toBool()) {
-        realRender(painter, normalPath);
-    }
 }
 
 void
@@ -3307,6 +3027,7 @@ QPainterPath PolylineObject::objectSavePath() const
     trans.scale(s,s);
     return trans.map(normalPath);
 }
+#endif
 
 /* RECTANGLE */
 ScriptValue
@@ -3404,7 +3125,6 @@ function prompt(str)
         }
     }
 }
-#endif
 
 RectObject::RectObject(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -3420,11 +3140,6 @@ RectObject::RectObject(RectObject* obj, QGraphicsItem* parent) : BaseObject(pare
         init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
     }
-}
-
-RectObject::~RectObject()
-{
-    qDebug("RectObject Destructor()");
 }
 
 void
@@ -3492,26 +3207,6 @@ RectObject::updatePath()
 }
 
 void
-RectObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
-{
-    QGraphicsScene* objScene = scene();
-    if (!objScene) return;
-
-    QPen paintPen = pen();
-    painter->setPen(paintPen);
-    updateRubber(painter);
-    if (option->state & QStyle::State_Selected) {
-        paintPen.setStyle(Qt::DashLine);
-    }
-    if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = lineWeightPen();
-    }
-    painter->setPen(paintPen);
-
-    painter->drawRect(rect());
-}
-
-void
 RectObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
@@ -3567,6 +3262,7 @@ QPainterPath RectObject::objectSavePath() const
     trans.scale(s,s);
     return trans.map(path);
 }
+#endif
 
 /* TODO: Before saving to a stitch only format, Embroidermodder needs
  *       to calculate the optimal path to minimize jump stitches. Also
@@ -3912,8 +3608,6 @@ function prompt(str)
         }
     }
 }
-#endif
-
 
 TextSingleObject::TextSingleObject(const QString& str, double x, double y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -3937,11 +3631,6 @@ TextSingleObject::TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent)
     }
 }
 
-TextSingleObject::~TextSingleObject()
-{
-    qDebug("TextSingleObject Destructor()");
-}
-
 void
 TextSingleObject::init(const QString& str, double x, double y, QRgb rgb, Qt::PenStyle lineType)
 {
@@ -3962,8 +3651,10 @@ TextSingleObject::init(const QString& str, double x, double y, QRgb rgb, Qt::Pen
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
     setPen(objPen);
 }
+#endif
 
-QStringList TextSingleObject::objectTextJustifyList() const
+QStringList
+Object::objectTextJustifyList() const
 {
     QStringList justifyList;
     justifyList << "Left" << "Center" << "Right" /* TODO: << "Aligned" */ << "Middle" /* TODO: << "Fit" */ ;
@@ -3974,7 +3665,7 @@ QStringList TextSingleObject::objectTextJustifyList() const
 }
 
 void
-TextSingleObject::setObjectText(const QString& str)
+Object::setObjectText(const QString& str)
 {
     objText = str;
     QPainterPath textPath;
@@ -4081,14 +3772,14 @@ TextSingleObject::setObjectText(const QString& str)
 }
 
 void
-TextSingleObject::setObjectTextFont(const QString& font)
+Object::setObjectTextFont(const QString& font)
 {
     objTextFont = font;
     setObjectText(objText);
 }
 
 void
-TextSingleObject::setObjectTextJustify(const QString& justify)
+Object::setObjectTextJustify(const QString& justify)
 {
     //Verify the string is a valid option
     if (justify == "Left") {
@@ -4144,14 +3835,14 @@ TextSingleObject::setObjectTextJustify(const QString& justify)
 }
 
 void
-TextSingleObject::setObjectTextSize(double size)
+Object::setObjectTextSize(double size)
 {
     objTextSize = size;
     setObjectText(objText);
 }
 
 void
-TextSingleObject::setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bool over)
+Object::setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bool over)
 {
     objTextBold = bold;
     objTextItalic = italic;
@@ -4162,74 +3853,55 @@ TextSingleObject::setObjectTextStyle(bool bold, bool italic, bool under, bool st
 }
 
 void
-TextSingleObject::setObjectTextBold(bool val)
+Object::setObjectTextBold(bool val)
 {
     objTextBold = val;
     setObjectText(objText);
 }
 
 void
-TextSingleObject::setObjectTextItalic(bool val)
+Object::setObjectTextItalic(bool val)
 {
     objTextItalic = val;
     setObjectText(objText);
 }
 
 void
-TextSingleObject::setObjectTextUnderline(bool val)
+Object::setObjectTextUnderline(bool val)
 {
     objTextUnderline = val;
     setObjectText(objText);
 }
 
 void
-TextSingleObject::setObjectTextStrikeOut(bool val)
+Object::setObjectTextStrikeOut(bool val)
 {
     objTextStrikeOut = val;
     setObjectText(objText);
 }
 
 void
-TextSingleObject::setObjectTextOverline(bool val)
+Object::setObjectTextOverline(bool val)
 {
     objTextOverline = val;
     setObjectText(objText);
 }
 
 void
-TextSingleObject::setObjectTextBackward(bool val)
+Object::setObjectTextBackward(bool val)
 {
     objTextBackward = val;
     setObjectText(objText);
 }
 
 void
-TextSingleObject::setObjectTextUpsideDown(bool val)
+Object::setObjectTextUpsideDown(bool val)
 {
     objTextUpsideDown = val;
     setObjectText(objText);
 }
 
-void
-TextSingleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
-{
-    QGraphicsScene* objScene = scene();
-    if (!objScene) return;
-
-    QPen paintPen = pen();
-    painter->setPen(paintPen);
-    updateRubber(painter);
-    if (option->state & QStyle::State_Selected) {
-        paintPen.setStyle(Qt::DashLine);
-    }
-    if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = lineWeightPen();
-    }
-    painter->setPen(paintPen);
-
-    painter->drawPath(objTextPath);
-}
-
+#if 0
 void
 TextSingleObject::updateRubber(QPainter* painter)
 {
@@ -4302,3 +3974,5 @@ QList<QPainterPath> TextSingleObject::subPathList() const
 
     return pathList;
 }
+#endif
+

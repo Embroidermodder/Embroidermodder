@@ -13,7 +13,7 @@
 
 /* Add */
 
-UndoableAddCommand::UndoableAddCommand(const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableAddCommand::UndoableAddCommand(const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
     object = obj;
@@ -32,7 +32,7 @@ void UndoableAddCommand::redo()
 
 /* Delete */
 
-UndoableDeleteCommand::UndoableDeleteCommand(const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableDeleteCommand::UndoableDeleteCommand(const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
     object = obj;
@@ -51,7 +51,7 @@ void UndoableDeleteCommand::redo()
 
 /* Move */
 
-UndoableMoveCommand::UndoableMoveCommand(double deltaX, double deltaY, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableMoveCommand::UndoableMoveCommand(double deltaX, double deltaY, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
     object = obj;
@@ -72,7 +72,7 @@ void UndoableMoveCommand::redo()
 
 /* Rotate */
 
-UndoableRotateCommand::UndoableRotateCommand(double pivotPointX, double pivotPointY, double rotAngle, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableRotateCommand::UndoableRotateCommand(double pivotPointX, double pivotPointY, double rotAngle, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
     object = obj;
@@ -111,7 +111,7 @@ void UndoableRotateCommand::rotate(double x, double y, double rot)
 }
 
 /* Scale */
-UndoableScaleCommand::UndoableScaleCommand(double x, double y, double scaleFactor, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableScaleCommand::UndoableScaleCommand(double x, double y, double scaleFactor, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
     object = obj;
@@ -233,7 +233,7 @@ void UndoableNavCommand::redo()
 
 /* Grip Edit */
 
-UndoableGripEditCommand::UndoableGripEditCommand(const QPointF beforePoint, const QPointF afterPoint, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableGripEditCommand::UndoableGripEditCommand(const QPointF beforePoint, const QPointF afterPoint, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
     object = obj;
@@ -254,7 +254,7 @@ void UndoableGripEditCommand::redo()
 
 /* Mirror */
 
-UndoableMirrorCommand::UndoableMirrorCommand(double x1, double y1, double x2, double y2, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableMirrorCommand::UndoableMirrorCommand(double x1, double y1, double x2, double y2, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
     object = obj;

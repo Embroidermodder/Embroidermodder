@@ -1051,7 +1051,7 @@ MainWindow::nativeAddTextSingle(const QString& str, double x, double y, double r
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
-        TextSingleObject* obj = new TextSingleObject(str, x, -y, getCurrentColor());
+        Object* obj = new Object(str, x, -y, getCurrentColor());
         obj->setObjectTextFont(text_font.setting);
         obj->setObjectTextSize(text_size.setting);
         obj->setObjectTextStyle(text_style_bold.setting,
@@ -1093,7 +1093,7 @@ MainWindow::nativeAddLine(double x1, double y1, double x2, double y2, double rot
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
-        LineObject* obj = new LineObject(x1, -y1, x2, -y2, getCurrentColor());
+        Object* obj = new Object(x1, -y1, x2, -y2, getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
         if (rubberMode) {
@@ -1120,7 +1120,7 @@ MainWindow::nativeAddRectangle(double x, double y, double w, double h, double ro
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
-        RectObject* obj = new RectObject(x, -y, w, -h, getCurrentColor());
+        Object* obj = new Object(x, -y, w, -h, getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
         //TODO: rect fill
@@ -1150,7 +1150,7 @@ MainWindow::nativeAddArc(EmbArc arc, int rubberMode)
         arc.start.y = -arc.start.y;
         arc.mid.y = -arc.mid.y;
         arc.end.y = -arc.end.y;
-        ArcObject* arcObj = new ArcObject(arc, getCurrentColor());
+        Object* arcObj = new Object(arc, getCurrentColor());
         arcObj->setObjectRubberMode(rubberMode);
         if (rubberMode) {
             gview->addToRubberRoom(arcObj);
@@ -1167,7 +1167,11 @@ MainWindow::nativeAddCircle(double centerX, double centerY, double radius, bool 
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
-        CircleObject* obj = new CircleObject(centerX, -centerY, radius, getCurrentColor());
+        EmbCircle circle;
+        circle.center.x = centerX;
+        circle.center.y = -centerY;
+        circle.radius = radius;
+        Object* obj = new Object(circle, getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
         //TODO: circle fill
         if (rubberMode) {
@@ -1187,7 +1191,7 @@ MainWindow::nativeAddSlot(double centerX, double centerY, double diameter, doubl
 {
     //TODO: Use UndoableAddCommand for slots
     /*
-    SlotObject* slotObj = new SlotObject(centerX, -centerY, diameter, length, getCurrentColor());
+    Object* slotObj = new Object(centerX, -centerY, diameter, length, getCurrentColor());
     slotObj->setRotation(-rot);
     slotObj->setObjectRubberMode(rubberMode);
     if (rubberMode) gview->addToRubberRoom(slotObj);
@@ -1204,7 +1208,12 @@ MainWindow::nativeAddEllipse(double centerX, double centerY, double width, doubl
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
-        EllipseObject* obj = new EllipseObject(centerX, -centerY, width, height, getCurrentColor());
+        EmbEllipse ellipse;
+        ellipse.center.x = centerX;
+        ellipse.center.y = -centerY;
+        ellipse.radius.x = width/2.0;
+        ellipse.radius.y = height/2.0;
+        Object* obj = new Object(ellipse, getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
         //TODO: ellipse fill
@@ -1226,7 +1235,10 @@ MainWindow::nativeAddPoint(double x, double y)
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack) {
-        PointObject* obj = new PointObject(x, -y, getCurrentColor());
+        EmbPoint point;
+        point.position.x = x;
+        point.position.y = -y;
+        Object* obj = new Object(point, getCurrentColor());
         UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
         stack->push(cmd);
     }
@@ -1245,7 +1257,8 @@ MainWindow::nativeAddPolygon(double startX, double startY, const QPainterPath& p
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
-        PolygonObject* obj = new PolygonObject(startX, startY, p, getCurrentColor());
+        EmbPolygon polygon;
+        Object* obj = new Object(polygon, OBJ_TYPE_POLYGON, p, getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
         if (rubberMode) {
             gview->addToRubberRoom(obj);
@@ -1267,7 +1280,8 @@ MainWindow::nativeAddPolyline(double startX, double startY, const QPainterPath& 
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
-        PolylineObject* obj = new PolylineObject(startX, startY, p, getCurrentColor());
+        EmbPath path;
+        Object* obj = new Object(path, OBJ_TYPE_POLYLINE, p, getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
         if (rubberMode) {
             gview->addToRubberRoom(obj);
@@ -1309,7 +1323,7 @@ MainWindow::nativeAddDimLeader(double x1, double y1, double x2, double y2, doubl
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
-        DimLeaderObject* obj = new DimLeaderObject(x1, -y1, x2, -y2, getCurrentColor());
+        Object* obj = new Object(x1, -y1, x2, -y2, getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
         if (rubberMode) {
