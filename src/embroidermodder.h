@@ -584,22 +584,6 @@ private:
     QUndoView*  undoView;
 };
 
-inline double radians(double degree) { return (degree * embConstantPi / 180.0); }
-inline double degrees(double radian) { return (radian * 180.0 / embConstantPi); }
-
-/* NOTE: Allow this enum to evaluate false */
-#define ARROW_STYLE_NO_ARROW 0
-#define ARROW_STYLE_OPEN     1
-#define ARROW_STYLE_CLOSED   2
-#define ARROW_STYLE_DOT      3
-#define ARROW_STYLE_BOX      4
-#define ARROW_STYLE_TICK     5
-
-/* NOTE: Allow this enum to evaluate false */
-#define LINE_STYLE_NO_LINE    0
-#define LINE_STYLE_FLARED     1
-#define LINE_STYLE_FLETCHING  2
-
 class Object : public QGraphicsPathItem
 {
 public:

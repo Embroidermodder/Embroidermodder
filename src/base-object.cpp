@@ -13,45 +13,46 @@
 
 #include "embroidermodder.h"
 
+/* . */
 Object::Object(EmbArc arc, QRgb rgb, QGraphicsItem *item)
 {
+    qDebug("ArcObject Constructor()");
     TYPE = OBJ_TYPE_ARC;
     curved = 0;
     geometry->object.arc = arc;
+    init(arc, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
+/* . */
 Object::Object(EmbCircle circle, QRgb rgb, QGraphicsItem *item)
 {
     TYPE = OBJ_TYPE_CIRCLE;
     geometry->object.circle = circle;
 }
 
+/* . */
 Object::Object(EmbEllipse ellipse, QRgb rgb, QGraphicsItem *item)
 {
     TYPE = OBJ_TYPE_ELLIPSE;
     geometry->object.ellipse = ellipse;
 }
 
-/*
-Object::Object(Object *obj)
+/* . */
+Object::Object(Object* obj, QGraphicsItem* parent)
 {
-    switch (TYPE) {
-    case OBJ_TYPE_LINE:
-        break;
-    default:
-        break;
+    qDebug("ArcObject Constructor()");
+    if (obj) {
+        init(obj->geometry->object.arc, obj->objectColorRGB(), Qt::SolidLine);
+        //TODO: getCurrentLineType
+        setRotation(obj->rotation());
     }
 }
-*/
 
+/* . */
 Object::~Object()
 {
-    switch (TYPE) {
-    case OBJ_TYPE_LINE:
-        break;
-    default:
-        break;
-    }
+    qDebug("ArcObject Destructor()");
+    free(geometry);
 }
 
 /*
@@ -68,24 +69,55 @@ Object::objectEndPoint2() const
 }
 */
 
+/* . */
 QPointF
 Object::objectStartPoint() const
 {
-    return QPointF(0.0f, 0.0f);
+    switch (geometry->type) {
+    case EMB_ARC: {
+        return to_qpointf(geometry->object.arc.start);
+    }
+    default:
+        break;
+    }
+    return scenePos();
 }
 
+/* . */
 QPointF
 Object::objectMidPoint() const
 {
-    return QPointF(0.0f, 0.0f);
+    switch (geometry->type) {
+    case EMB_ARC: {
+        return to_qpointf(geometry->object.arc.mid);
+    }
+    case EMB_LINE:
+    case EMB_DIM_LEADER: {
+        QLineF lyne = line();
+        QPointF mp = lyne.pointAt(0.5);
+        return scenePos() + scale_and_rotate(mp, scale(), rotation());
+    }
+    default:
+        break;
+    }
+    return scenePos();
 }
 
+/* . */
 QPointF
 Object::objectEndPoint() const
 {
-    return QPointF(0.0f, 0.0f);
+    switch (geometry->type) {
+    case EMB_ARC: {
+        return to_qpointf(geometry->object.arc.end);
+    }
+    default:
+        break;
+    }
+    return scenePos();
 }
 
+/* . */
 QPointF
 Object::objectQuadrant0()
 {
@@ -134,28 +166,32 @@ Object::objectQuadrant270()
     return objectCenter();
 }
 
+/* . */
 QPointF
 Object::objectTopLeft() const
 {
-    return QPointF(0.0f, 0.0f);
+    return scenePos() + scale_and_rotate(rect().topLeft(), scale(), rotation());
 }
 
+/* . */
 QPointF
 Object::objectTopRight() const
 {
-    return QPointF(0.0f, 0.0f);
+    return scenePos() + scale_and_rotate(rect().topRight(), scale(), rotation());
 }
 
+/* . */
 QPointF
 Object::objectBottomLeft() const
 {
-    return QPointF(0.0f, 0.0f);
+    return scenePos() + scale_and_rotate(rect().bottomLeft(), scale(), rotation());
 }
 
+/* . */
 QPointF
 Object::objectBottomRight() const
 {
-    return QPointF(0.0f, 0.0f);
+    return scenePos() + scale_and_rotate(rect().bottomRight(), scale(), rotation());
 }
 
 /*
@@ -180,27 +216,269 @@ Object::objectHeight()
 Object::Object(QString const&, double, double, unsigned int, QGraphicsItem*)
 {
 }
+*/
 
-Object::setObjectTextFont(QString const&)
+/* . */
+QStringList
+Object::objectTextJustifyList() const
 {
+    QStringList justifyList;
+    justifyList << "Left" << "Center" << "Right" /* TODO: << "Aligned" */ << "Middle" /* TODO: << "Fit" */ ;
+    justifyList << "Top Left" << "Top Center" << "Top Right";
+    justifyList << "Middle Left" << "Middle Center" << "Middle Right";
+    justifyList << "Bottom Left" << "Bottom Center" << "Bottom Right";
+    return justifyList;
 }
 
-Object::setObjectTextSize(double)
+/* . */
+void
+Object::setObjectText(const QString& str)
 {
+    objText = str;
+    QPainterPath textPath;
+    QFont font;
+    font.setFamily(objTextFont);
+    font.setPointSizeF(objTextSize);
+    font.setBold(objTextBold);
+    font.setItalic(objTextItalic);
+    font.setUnderline(objTextUnderline);
+    font.setStrikeOut(objTextStrikeOut);
+    font.setOverline(objTextOverline);
+    textPath.addText(0, 0, font, str);
+
+    //Translate the path based on the justification
+    QRectF jRect = textPath.boundingRect();
+    if     (objTextJustify == "Left") {
+        textPath.translate(-jRect.left(), 0);
+    }
+    else if (objTextJustify == "Center") {
+        textPath.translate(-jRect.center().x(), 0);
+    }
+    else if (objTextJustify == "Right") {
+        textPath.translate(-jRect.right(), 0);
+    }
+    else if (objTextJustify == "Aligned") {
+        // TODO: TextSingleObject Aligned Justification
+    }
+    else if (objTextJustify == "Middle") {
+        textPath.translate(-jRect.center());
+    }
+    else if (objTextJustify == "Fit") {
+        // TODO: TextSingleObject Fit Justification
+    }
+    else if (objTextJustify == "Top Left") {
+        textPath.translate(-jRect.topLeft());
+    }
+    else if (objTextJustify == "Top Center") {
+        textPath.translate(-jRect.center().x(), -jRect.top());
+    }
+    else if (objTextJustify == "Top Right") {
+        textPath.translate(-jRect.topRight());
+    }
+    else if (objTextJustify == "Middle Left") {
+        textPath.translate(-jRect.left(), -jRect.top()/2.0);
+    }
+    else if (objTextJustify == "Middle Center") {
+        textPath.translate(-jRect.center().x(), -jRect.top()/2.0);
+    }
+    else if (objTextJustify == "Middle Right") {
+        textPath.translate(-jRect.right(), -jRect.top()/2.0);
+    }
+    else if (objTextJustify == "Bottom Left") {
+        textPath.translate(-jRect.bottomLeft());
+    }
+    else if (objTextJustify == "Bottom Center") {
+        textPath.translate(-jRect.center().x(), -jRect.bottom());
+    }
+    else if (objTextJustify == "Bottom Right") {
+        textPath.translate(-jRect.bottomRight());
+    }
+
+    //Backward or Upside Down
+    if (objTextBackward || objTextUpsideDown) {
+        double horiz = 1.0;
+        double vert = 1.0;
+        if (objTextBackward) horiz = -1.0;
+        if (objTextUpsideDown) vert = -1.0;
+
+        QPainterPath flippedPath;
+
+        QPainterPath::Element element;
+        QPainterPath::Element P2;
+        QPainterPath::Element P3;
+        QPainterPath::Element P4;
+        for (int i = 0; i < textPath.elementCount(); ++i) {
+            element = textPath.elementAt(i);
+            if (element.isMoveTo()) {
+                flippedPath.moveTo(horiz * element.x, vert * element.y);
+            }
+            else if (element.isLineTo()) {
+                flippedPath.lineTo(horiz * element.x, vert * element.y);
+            }
+            else if (element.isCurveTo()) {
+                                              // start point P1 is not needed
+                P2 = textPath.elementAt(i);   // control point
+                P3 = textPath.elementAt(i+1); // control point
+                P4 = textPath.elementAt(i+2); // end point
+
+                flippedPath.cubicTo(horiz * P2.x, vert * P2.y,
+                                    horiz * P3.x, vert * P3.y,
+                                    horiz * P4.x, vert * P4.y);
+            }
+        }
+        objTextPath = flippedPath;
+    }
+    else
+        objTextPath = textPath;
+
+    //Add the grip point to the shape path
+    QPainterPath gripPath = objTextPath;
+    gripPath.connectPath(objTextPath);
+    gripPath.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
+    setObjectPath(gripPath);
 }
 
-Object::setObjectTextStyle(bool, bool, bool, bool, bool)
+/* . */
+void
+Object::setObjectTextFont(const QString& font)
 {
+    objTextFont = font;
+    setObjectText(objText);
 }
 
-Object::setObjectTextBackward(bool)
+/* . */
+void
+Object::setObjectTextJustify(const QString& justify)
 {
+    //Verify the string is a valid option
+    if (justify == "Left") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Center") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Right") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Aligned") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Middle") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Fit") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Top Left") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Top Center") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Top Right") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Middle Left") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Middle Center") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Middle Right") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Bottom Left") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Bottom Center") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Bottom Right") {
+        objTextJustify = justify;
+    }
+    else {
+        // Default
+        objTextJustify = "Left";
+    }
+    setObjectText(objText);
 }
 
-Object::setObjectTextUpsideDown(bool)
+/* . */
+void
+Object::setObjectTextSize(double size)
 {
+    objTextSize = size;
+    setObjectText(objText);
 }
 
+/* . */
+void
+Object::setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bool over)
+{
+    objTextBold = bold;
+    objTextItalic = italic;
+    objTextUnderline = under;
+    objTextStrikeOut = strike;
+    objTextOverline = over;
+    setObjectText(objText);
+}
+
+void
+Object::setObjectTextBold(bool val)
+{
+    objTextBold = val;
+    setObjectText(objText);
+}
+
+/* . */
+void
+Object::setObjectTextItalic(bool val)
+{
+    objTextItalic = val;
+    setObjectText(objText);
+}
+
+/* . */
+void
+Object::setObjectTextUnderline(bool val)
+{
+    objTextUnderline = val;
+    setObjectText(objText);
+}
+
+/* . */
+void
+Object::setObjectTextStrikeOut(bool val)
+{
+    objTextStrikeOut = val;
+    setObjectText(objText);
+}
+
+/* . */
+void
+Object::setObjectTextOverline(bool val)
+{
+    objTextOverline = val;
+    setObjectText(objText);
+}
+
+/* . */
+void
+Object::setObjectTextBackward(bool val)
+{
+    objTextBackward = val;
+    setObjectText(objText);
+}
+
+/* . */
+void
+Object::setObjectTextUpsideDown(bool val)
+{
+    objTextUpsideDown = val;
+    setObjectText(objText);
+}
+
+/*
 Object::Object(double, double, double, double, unsigned int, QGraphicsItem*)
 {
 }
@@ -218,10 +496,6 @@ Object::Object(EmbPath_, int, QPainterPath const&, unsigned int, QGraphicsItem*)
 }
 
 Object::Object(EmbPath_, int, QPainterPath const&, unsigned int, QGraphicsItem*)'
-{
-}
-
-Object::objectStartAngle() const
 {
 }
 
@@ -258,92 +532,524 @@ Object::objectEndPoint2()
     return QPointF(0.0, 0.0);
 }
 
+/* . */
 void
-Object::setObjectEndPoint1(QPointF const&)
+Object::setObjectEndPoint1(const QPointF& endPt1)
 {
+    setObjectEndPoint1(endPt1.x(), endPt1.y());
 }
 
+/* . */
 void
-Object::setObjectEndPoint2(QPointF const&)
+Object::setObjectEndPoint1(double x1, double y1)
 {
+    QPointF endPt2 = objectEndPoint2();
+    double x2 = endPt2.x();
+    double y2 = endPt2.y();
+    double dx = x2 - x1;
+    double dy = y2 - y1;
+    setRotation(0);
+    setScale(1);
+    setLine(0, 0, dx, dy);
+    setPos(x1, y1);
 }
 
-/*
-Object::boundingRect() const
-{
-}
-
-Object::objectTextJustifyList() const
-{
-}
-
-Object::objectEndPoint2() const
-{
-}
-*/
-
+/* . */
 double
 Object::objectAngle() const
 {
-    return 0.0;
+    double angle = line().angle() - rotation();
+    while (angle >= 360.0) {
+        angle -= 360.0;
+    }
+    while (angle < 0.0) {
+        angle += 360.0;
+    }
+    return angle;
 }
 
+/* . */
 double
 Object::objectStartAngle() const
 {
-    return 0.0;
+    switch (geometry->type) {
+    case EMB_ARC: {
+        double angle = QLineF(scenePos(), objectStartPoint()).angle();
+        return fmod(angle+360.0, 360.0);
+    }
+    default:
+        break;
+    }
+    return 0.0f;
 }
 
+/* . */
 double
 Object::objectEndAngle() const
 {
-    return 0.0;
+    switch (geometry->type) {
+    case EMB_ARC: {
+        double angle = QLineF(scenePos(), objectEndPoint()).angle();
+        return fmod(angle+360.0, 360.0);
+    }
+    default:
+        break;
+    }
+    return 0.0f;
 }
 
+/* . */
 double
 Object::objectArcLength() const
 {
+    switch (geometry->type) {
+    case EMB_ARC: {
+        return radians(objectIncludedAngle()) * objectRadius();
+    }
+    default:
+        break;
+    }
     return 0.0;
 }
 
+
+/* . */
+void
+Object::setObjectStartAngle(double angle)
+{
+    switch (geometry->type) {
+    case EMB_ARC: {
+        //TODO: ArcObject setObjectStartAngle
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+Object::setObjectEndAngle(double angle)
+{
+    switch (geometry->type) {
+    case EMB_ARC: {
+        //TODO: ArcObject setObjectEndAngle
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+Object::setObjectStartPoint(EmbVector point)
+{
+    switch (geometry->type) {
+    case EMB_ARC: {
+        geometry->object.arc.start = point;
+        calculateArcData(geometry->object.arc);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+Object::setObjectMidPoint(EmbVector point)
+{
+    switch (geometry->type) {
+    case EMB_ARC: {
+        geometry->object.arc.mid = point;
+        calculateArcData(geometry->object.arc);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+Object::setObjectEndPoint(EmbVector point)
+{
+    switch (geometry->type) {
+    case EMB_ARC: {
+        geometry->object.arc.end = point;
+        calculateArcData(geometry->object.arc);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/*
+double
+Object::objectArea() const
+{
+    switch (geometry->type) {
+    case EMB_ARC: {
+        //Area of a circular segment
+        double r = objectRadius();
+        double theta = radians(objectIncludedAngle());
+        return ((r*r)/2)*(theta - sin(theta));
+    }
+    default:
+        break;
+    }
+    return 0.0;
+}
+*/
+
+/* . */
+double
+Object::objectChord() const
+{
+    switch (geometry->type) {
+    case EMB_ARC: {
+        return QLineF(objectStartPoint(), objectEndPoint()).length();
+    }
+    default:
+        break;
+    }
+    return 0.0;
+}
+
+/* . */
+double
+Object::objectIncludedAngle() const
+{
+    switch (geometry->type) {
+    case EMB_ARC: {
+        double chord = objectChord();
+        double rad = objectRadius();
+        if (chord <= 0 || rad <= 0) {
+            /* Prevents division by zero and non-existant circles. */
+            return 0;
+        }
+
+        //NOTE: Due to floating point rounding errors, we need to clamp the quotient so it is in the range [-1, 1]
+        //      If the quotient is out of that range, then the result of asin() will be NaN.
+        double quotient = chord/(2.0*rad);
+        quotient = EMB_MIN(1.0, quotient);
+        quotient = EMB_MAX(0.0, quotient); //NOTE: 0 rather than -1 since we are enforcing a positive chord and radius
+        return degrees(2.0*asin(quotient)); //Properties of a Circle - Get the Included Angle - Reference: ASD9
+    }
+    default:
+        break;
+    }
+    return 0.0;
+}
+
+/* . */
+bool
+Object::objectClockwise() const
+{
+    switch (geometry->type) {
+    case EMB_ARC: {
+        //NOTE: Y values are inverted here on purpose
+        EmbArc arc;
+        geometry->object.arc.start.y = -geometry->object.arc.start.y;
+        geometry->object.arc.mid.y = -geometry->object.arc.start.y;
+        geometry->object.arc.end.y = -geometry->object.arc.end.y;
+        if (emb_arc_clockwise(arc)) {
+            return true;
+        }
+        break;
+    }
+    default:
+        break;
+    }
+    return false;
+}
+
+/* . */
+void
+Object::updatePath()
+{
+    switch (geometry->type) {
+    case EMB_ARC: {
+        double startAngle = (objectStartAngle() + rotation());
+        double spanAngle = objectIncludedAngle();
+
+        if (objectClockwise()) {
+            spanAngle = -spanAngle;
+        }
+
+        QPainterPath path;
+        path.arcMoveTo(rect(), startAngle);
+        path.arcTo(rect(), startAngle, spanAngle);
+        //NOTE: Reverse the path so that the inside area isn't considered part of the arc
+        path.arcTo(rect(), startAngle+spanAngle, -spanAngle);
+        setObjectPath(path);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/* . */
 Object::Object(QString const&, double, double, unsigned int, QGraphicsItem*)
 {
 }
 
+/* . */
 Object::Object(double, double, double, double, unsigned int, QGraphicsItem*)
 {
 }
 
+/* . */
 Object::Object(EmbPoint_, unsigned int, QGraphicsItem*)
 {
 }
 
+/* . */
 Object::Object(EmbPath_, int, QPainterPath const&, unsigned int, QGraphicsItem*)
 {
 }
 
+/* WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+ * and the item is double clicked, the scene will erratically move the item while zooming.
+ * All movement has to be handled explicitly by us, not by the scene.
+ */
 void
-Object::init(EmbArc_, unsigned int, Qt::PenStyle)
+Object::init(EmbArc arc, QRgb rgb, Qt::PenStyle lineType)
 {
+    setData(OBJ_TYPE, type());
+    setData(OBJ_NAME, OBJ_NAME_ARC);
+
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
+
+    geometry->object.arc = arc;
+    geometry->object.color.r = qRed(rgb);
+    geometry->object.color.g = qGreen(rgb);
+    geometry->object.color.b = qBlue(rgb);
+    geometry->lineType = lineType;
+    geometry->type = EMB_ARC;
+
+    calculateArcData(geometry->object.arc);
+
+    setPos(arc.start.x, arc.start.y);
+    setObjectLineWeight(0.35); /* TODO: pass in proper lineweight */
+    setPen(objPen);
 }
 
+/* . */
+void
+Object::calculateArcData(EmbArc arc)
+{
+    EmbVector center = emb_arc_center(arc);
+
+    double radius = emb_vector_distance(center, arc.mid);
+    updateArcRect(radius);
+    updatePath();
+    setRotation(0);
+    setScale(1);
+}
+
+/* . */
+void
+Object::updateArcRect(double radius)
+{
+    QRectF arcRect;
+    arcRect.setWidth(radius*2.0);
+    arcRect.setHeight(radius*2.0);
+    arcRect.moveCenter(QPointF(0,0));
+    setRect(arcRect);
+}
+
+/* . */
+void
+Object::setObjectLineWeight(double lineWeight)
+{
+    objPen.setWidthF(0); //NOTE: The objPen will always be cosmetic
+
+    if (lineWeight < 0) {
+        if (lineWeight == OBJ_LWT_BYLAYER) {
+            lwtPen.setWidthF(0.35); //TODO: getLayerLineWeight
+        }
+        else if (lineWeight == OBJ_LWT_BYBLOCK) {
+            lwtPen.setWidthF(0.35); //TODO: getBlockLineWeight
+        }
+        else {
+            QMessageBox::warning(0, QObject::tr("Error - Negative Lineweight"),
+                                    QObject::tr("Lineweight: %1")
+                                    .arg(QString().setNum(lineWeight)));
+            qDebug("Lineweight cannot be negative! Inverting sign.");
+            lwtPen.setWidthF(-lineWeight);
+        }
+    }
+    else {
+        lwtPen.setWidthF(lineWeight);
+    }
+}
+
+/* . */
 void
 Object::realRender(QPainter*, QPainterPath const&)
 {
 
 }
 
+/* . */
 void
-Object::updatePath(QPainterPath const&)
+Object::updatePath(QPainterPath const& p)
 {
 }
 
+/* . */
+void
+Object::setObjectColor(const QColor& color)
+{
+    objPen.setColor(color);
+    lwtPen.setColor(color);
+}
+
+/* . */
+void
+Object::setObjectColorRGB(QRgb rgb)
+{
+    objPen.setColor(QColor(rgb));
+    lwtPen.setColor(QColor(rgb));
+}
+
+/* . */
+void
+Object::setObjectLineType(Qt::PenStyle lineType)
+{
+    objPen.setStyle(lineType);
+    lwtPen.setStyle(lineType);
+}
+
+/* . */
+QPointF
+Object::objectRubberPoint(const QString& key) const
+{
+    if (objRubberPoints.contains(key)) {
+        return objRubberPoints.value(key);
+    }
+
+    QGraphicsScene* gscene = scene();
+    if (gscene) {
+        return scene()->property("SCENE_QSNAP_POINT").toPointF();
+    }
+    return QPointF();
+}
+
+/* . */
+QString
+Object::objectRubberText(const QString& key) const
+{
+    if (objRubberTexts.contains(key)) {
+        return objRubberTexts.value(key);
+    }
+    return QString();
+}
+
+/* . */
 QRectF
 Object::boundingRect() const
 {
-    return QRectF(1.0, 1.0, 1.0, 1.0);
+    /* If gripped, force this object to be drawn even if it is offscreen. */
+    if (objectRubberMode() == OBJ_RUBBER_GRIP) {
+        return scene()->sceneRect();
+    }
+    return path().boundingRect();
 }
 
+/* . */
+void
+Object::setObjectCenter(EmbVector center)
+{
+    setPos(center.x, center.y);
+}
+
+/* . */
+void
+Object::setObjectCenterX(double centerX)
+{
+    setX(centerX);
+}
+
+/* . */
+void
+Object::setObjectCenterY(double centerY)
+{
+    setY(centerY);
+}
+
+/* . */
+void
+Object::setObjectRadius(double radius)
+{
+    switch (geometry->type) {
+    case EMB_ARC: {
+        geometry->object.arc = emb_arc_set_radius(geometry->object.arc, radius);
+        calculateArcData(geometry->object.arc);
+        break;
+    }
+    case EMB_CIRCLE:
+        setObjectDiameter(radius*2.0);
+        break;
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+Object::setObjectDiameter(double diameter)
+{
+    switch (geometry->type) {
+    case EMB_CIRCLE: {
+        QRectF circRect;
+        circRect.setWidth(diameter);
+        circRect.setHeight(diameter);
+        circRect.moveCenter(QPointF(0,0));
+        setRect(circRect);
+        //FIXME: updatePath();
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+Object::setObjectArea(double area)
+{
+    switch (geometry->type) {
+    case EMB_CIRCLE: {
+        double radius = sqrt(area / embConstantPi);
+        setObjectRadius(radius);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+Object::setObjectCircumference(double circumference)
+{
+    switch (geometry->type) {
+    case EMB_CIRCLE: {
+        double diameter = circumference / embConstantPi;
+        setObjectDiameter(diameter);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/* . */
 int
 Object::findIndex(const QPointF& position)
 {
@@ -364,16 +1070,13 @@ Object::updateRubber(QPainter* painter)
     }
 }
 
-/*
+/* . */
 void
-Object::updatePath(QPainterPath path)
+Object::setObjectRect(double x, double y, double w, double h)
 {
-}
-*/
-
-void
-Object::setObjectRect(double x1, double y1, double x2, double y2)
-{
+    setPos(x, y);
+    setRect(0, 0, w, h);
+    updatePath();
 }
 
 /*
@@ -381,13 +1084,40 @@ void
 Object::setObjectEndPoint1(QPointF point)
 {
 }
-
-void
-Object::setObjectEndPoint2(QPointF point)
-{
-}
 */
 
+/* . */
+QPointF
+Object::objectEndPoint2() const
+{
+    QLineF lyne = line();
+    QPointF endPoint2(lyne.x2(), lyne.y2());
+    return scenePos() + scale_and_rotate(endPoint2, scale(), rotation());
+}
+
+/* . */
+void
+Object::setObjectEndPoint2(const QPointF& endPt2)
+{
+    setObjectEndPoint2(endPt2.x(), endPt2.y());
+}
+
+/* . */
+void
+Object::setObjectEndPoint2(double x2, double y2)
+{
+    QPointF endPt1 = scenePos();
+    double x1 = endPt1.x();
+    double y1 = endPt1.y();
+    double dx = x2 - x1;
+    double dy = y2 - y1;
+    setRotation(0);
+    setScale(1);
+    setLine(0, 0, dx, dy);
+    setPos(x1, y1);
+}
+
+/* . */
 void
 Object::vulcanize()
 {

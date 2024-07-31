@@ -209,6 +209,50 @@ enum COMMAND_ACTIONS
     ACTION_NULL
 };
 
+#define CIRCLE_MODE_1P_RAD_ONE    0
+#define CIRCLE_MODE_1P_RAD_TWO    1
+#define CIRCLE_MODE_1P_DIA_ONE    2
+#define CIRCLE_MODE_1P_DIA_TWO    3
+#define CIRCLE_MODE_2P            4
+#define CIRCLE_MODE_3P            5
+#define CIRCLE_MODE_TTR           6
+#define CIRCLE_MODE_TTT           7
+
+#define ELLIPSE_MODE_MAJDIA_MINRAD_ONE     0
+#define ELLIPSE_MODE_MAJDIA_MINRAD_TWO     1
+#define ELLIPSE_MODE_MAJDIA_MINRAD_THREE   2
+#define ELLIPSE_MODE_MAJRAD_MINRAD_ONE     3
+#define ELLIPSE_MODE_MAJRAD_MINRAD_TWO     4
+#define ELLIPSE_MODE_MAJRAD_MINRAD_THREE   5
+#define ELLIPSE_MODE_ROTATION              6
+#define ELLIPSE_MODE_NEUTRAL               7
+
+#define POLYGON_MODE_NUM_SIDES      0
+#define POLYGON_MODE_CENTER_PT      1
+#define POLYGON_MODE_POLYTYPE       2
+#define POLYGON_MODE_INSCRIBE       3
+#define POLYGON_MODE_CIRCUMSCRIBE   4
+#define POLYGON_MODE_DISTANCE       5
+#define POLYGON_MODE_SIDE_LEN       6
+
+#define TEXTSINGLE_MODE_JUSTIFY   0
+#define TEXTSINGLE_MODE_SETFONT   1
+#define TEXTSINGLE_MODE_SETGEOM   2
+#define TEXTSINGLE_MODE_RAPID     3
+
+/* NOTE: Allow this enum to evaluate false */
+#define ARROW_STYLE_NO_ARROW 0
+#define ARROW_STYLE_OPEN     1
+#define ARROW_STYLE_CLOSED   2
+#define ARROW_STYLE_DOT      3
+#define ARROW_STYLE_BOX      4
+#define ARROW_STYLE_TICK     5
+
+/* NOTE: Allow this enum to evaluate false */
+#define LINE_STYLE_NO_LINE    0
+#define LINE_STYLE_FLARED     1
+#define LINE_STYLE_FLETCHING  2
+
 //Custom Data used in QGraphicsItems
 
 //                   (     int, const QVariant)
