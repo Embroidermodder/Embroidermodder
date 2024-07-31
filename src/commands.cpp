@@ -1632,3 +1632,768 @@ rotate_selected_command(ScriptEnv* context)
     _main->nativeRotateSelected(REAL(0), REAL(1), REAL(2));
     return script_null;
 }
+
+/*
+ * View Commands
+ */
+
+/* . */
+ScriptValue
+hidealllayers_command(ScriptEnv*)
+{
+    return script_null;
+}
+
+/* . */
+ScriptValue
+freezealllayers_command(ScriptEnv*)
+{
+    return script_null;
+}
+
+/* . */
+ScriptValue
+layers_command(ScriptEnv*)
+{
+    /* layerManager(); */
+    return script_null;
+}
+
+/* . */
+ScriptValue
+layerprevious_command(ScriptEnv*)
+{
+    return script_null;
+}
+
+/* . */
+ScriptValue
+layerselector_command(ScriptEnv*)
+{
+    return script_null;
+}
+
+/* . */
+ScriptValue
+linetypeselector_command(ScriptEnv*)
+{
+    return script_null;
+}
+
+/* . */
+ScriptValue
+lineweightselector_command(ScriptEnv*)
+{
+    return script_null;
+}
+
+/* . */
+ScriptValue
+lockalllayers_command(ScriptEnv*)
+{
+    return script_null;
+}
+
+/* . */
+ScriptValue
+makelayercurrent_command(ScriptEnv*)
+{
+    /* makeLayerActive(); */
+    return script_null;
+}
+
+/* . */
+ScriptValue
+showalllayers_command(ScriptEnv*)
+{
+    return script_null;
+}
+
+/* . */
+ScriptValue
+thawalllayers_command(ScriptEnv*)
+{
+    return script_null;
+}
+
+/* . */
+ScriptValue
+unlockalllayers_command(ScriptEnv*)
+{
+    return script_null;
+}
+
+/*
+ * Undo
+ */
+
+/* Add */
+
+UndoableAddCommand::UndoableAddCommand(const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+{
+    gview = v;
+    object = obj;
+    setText(text);
+}
+
+void UndoableAddCommand::undo()
+{
+    gview->deleteObject(object);
+}
+
+void UndoableAddCommand::redo()
+{
+    gview->addObject(object);
+}
+
+/* Delete */
+
+UndoableDeleteCommand::UndoableDeleteCommand(const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+{
+    gview = v;
+    object = obj;
+    setText(text);
+}
+
+void UndoableDeleteCommand::undo()
+{
+    gview->addObject(object);
+}
+
+void UndoableDeleteCommand::redo()
+{
+    gview->deleteObject(object);
+}
+
+/* Move */
+
+UndoableMoveCommand::UndoableMoveCommand(double deltaX, double deltaY, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+{
+    gview = v;
+    object = obj;
+    setText(text);
+    dx = deltaX;
+    dy = deltaY;
+}
+
+void UndoableMoveCommand::undo()
+{
+    object->moveBy(-dx, -dy);
+}
+
+void UndoableMoveCommand::redo()
+{
+    object->moveBy(dx, dy);
+}
+
+/* Rotate */
+
+UndoableRotateCommand::UndoableRotateCommand(double pivotPointX, double pivotPointY, double rotAngle, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+{
+    gview = v;
+    object = obj;
+    setText(text);
+    pivotX = pivotPointX;
+    pivotY = pivotPointY;
+    angle = rotAngle;
+}
+
+void UndoableRotateCommand::undo()
+{
+    rotate(pivotX, pivotY, -angle);
+}
+
+void UndoableRotateCommand::redo()
+{
+    rotate(pivotX, pivotY, angle);
+}
+
+void UndoableRotateCommand::rotate(double x, double y, double rot)
+{
+    double rad = radians(rot);
+    double cosRot = cos(rad);
+    double sinRot = sin(rad);
+    double px = object->scenePos().x();
+    double py = object->scenePos().y();
+    px -= x;
+    py -= y;
+    double rotX = px*cosRot - py*sinRot;
+    double rotY = px*sinRot + py*cosRot;
+    rotX += x;
+    rotY += y;
+
+    object->setPos(rotX, rotY);
+    object->setRotation(object->rotation()+rot);
+}
+
+/* Scale */
+UndoableScaleCommand::UndoableScaleCommand(double x, double y, double scaleFactor, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+{
+    gview = v;
+    object = obj;
+    setText(text);
+
+    //Prevent division by zero and other wacky behavior
+    if (scaleFactor <= 0.0) {
+        dx = 0.0;
+        dy = 0.0;
+        factor = 1.0;
+        QMessageBox::critical(0, QObject::tr("ScaleFactor Error"),
+                              QObject::tr("Hi there. If you are not a developer, report this as a bug. "
+                              "If you are a developer, your code needs examined, and possibly your head too."));
+    }
+    else {
+        //Calculate the offset
+        double oldX = object->x();
+        double oldY = object->y();
+        QLineF scaleLine(x, y, oldX, oldY);
+        scaleLine.setLength(scaleLine.length()*scaleFactor);
+        double newX = scaleLine.x2();
+        double newY = scaleLine.y2();
+
+        dx = newX - oldX;
+        dy = newY - oldY;
+        factor = scaleFactor;
+    }
+}
+
+void UndoableScaleCommand::undo()
+{
+    object->setScale(object->scale()*(1/factor));
+    object->moveBy(-dx, -dy);
+}
+
+void UndoableScaleCommand::redo()
+{
+    object->setScale(object->scale()*factor);
+    object->moveBy(dx, dy);
+}
+
+/* Navigation */
+
+UndoableNavCommand::UndoableNavCommand(const QString& type, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+{
+    gview = v;
+    navType = type;
+    setText(QObject::tr("Navigation"));
+    done = false;
+    fromTransform = gview->transform();
+    fromCenter = gview->center();
+}
+
+bool UndoableNavCommand::mergeWith(const QUndoCommand* newest)
+{
+    if (newest->id() != id()) // make sure other is also an UndoableNavCommand
+         return false;
+
+    const UndoableNavCommand* cmd = static_cast<const UndoableNavCommand*>(newest);
+    toTransform = cmd->toTransform;
+    toCenter = cmd->toCenter;
+
+    return true;
+}
+
+void UndoableNavCommand::undo()
+{
+    if (!done) {
+        toTransform = gview->transform();
+        toCenter = gview->center();
+    }
+    done = true;
+
+    gview->setTransform(fromTransform);
+    gview->centerAt(fromCenter);
+}
+
+void UndoableNavCommand::redo()
+{
+    if (!done) {
+        if (navType == "ZoomInToPoint") {
+            gview->zoomToPoint(gview->scene()->property("VIEW_MOUSE_POINT").toPoint(), +1);
+        }
+        else if (navType == "ZoomOutToPoint") {
+            gview->zoomToPoint(gview->scene()->property("VIEW_MOUSE_POINT").toPoint(), -1);
+        }
+        else if (navType == "ZoomExtents") {
+            gview->zoomExtents();
+        }
+        else if (navType == "ZoomSelected") {
+            gview->zoomSelected();
+        }
+        else if (navType == "PanStart") {
+            /* Do Nothing. We are just recording the spot where the pan started. */
+        }
+        else if (navType == "PanStop") {
+            /* Do Nothing. We are just recording the spot where the pan stopped. */
+        }
+        else if (navType == "PanLeft") {
+            gview->panLeft();
+        }
+        else if (navType == "PanRight") {
+            gview->panRight();
+        }
+        else if (navType == "PanUp") {
+            gview->panUp();
+        }
+        else if (navType == "PanDown") {
+            gview->panDown();
+        }
+        toTransform = gview->transform();
+        toCenter = gview->center();
+    }
+    else {
+        gview->setTransform(toTransform);
+        gview->centerAt(toCenter);
+    }
+}
+
+/* Grip Edit */
+
+UndoableGripEditCommand::UndoableGripEditCommand(const QPointF beforePoint, const QPointF afterPoint, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+{
+    gview = v;
+    object = obj;
+    setText(text);
+    before = beforePoint;
+    after = afterPoint;
+}
+
+void UndoableGripEditCommand::undo()
+{
+    object->gripEdit(after, before);
+}
+
+void UndoableGripEditCommand::redo()
+{
+    object->gripEdit(before, after);
+}
+
+/* Mirror */
+
+UndoableMirrorCommand::UndoableMirrorCommand(double x1, double y1, double x2, double y2, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+{
+    gview = v;
+    object = obj;
+    setText(text);
+    mirrorLine = QLineF(x1, y1, x2, y2);
+}
+
+void UndoableMirrorCommand::undo()
+{
+    mirror();
+}
+
+void UndoableMirrorCommand::redo()
+{
+    mirror();
+}
+
+void UndoableMirrorCommand::mirror()
+{
+    //TODO: finish undoable mirror
+}
+
+/*
+ * View Commands
+ */
+
+/* DAY is not context-dependant. */
+ScriptValue
+day_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "day_command", "")) {
+        return script_false;
+    }
+    init_command();
+    clear_selection();
+
+    View* gview = activeView();
+    if (gview) {
+        gview->setBackgroundColor(qRgb(255,255,255)); //TODO: Make day vision color settings.
+        gview->setCrossHairColor(qRgb(0,0,0));        //TODO: Make day vision color settings.
+        gview->setGridColor(qRgb(0,0,0));             //TODO: Make day vision color settings.
+    }
+
+    end_command();
+    return script_null;
+}
+
+/* NIGHT is not context-sensitive. */
+ScriptValue
+night_command(ScriptEnv * context)
+{
+    if (!argument_checks(context, "night_command", "")) {
+        return script_false;
+    }
+    init_command();
+    clear_selection();
+
+    View* gview = activeView();
+    if (gview) {
+        gview->setBackgroundColor(qRgb(0,0,0));      //TODO: Make night vision color settings.
+        gview->setCrossHairColor(qRgb(255,255,255)); //TODO: Make night vision color settings.
+        gview->setGridColor(qRgb(255,255,255));      //TODO: Make night vision color settings.
+    }
+
+    end_command();
+    return script_null;
+}
+
+/* PANPOINT. */
+ScriptValue
+panpoint_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "panpoint_command", "")) {
+        return script_false;
+    }
+    init_command();
+
+    View* gview = activeView();
+    if (gview) {
+        gview->panPoint();
+    }
+
+    end_command();
+    return script_null;
+}
+
+/* PANREALTIME. */
+ScriptValue
+panrealtime_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "panrealtime_command", "")) {
+        return script_false;
+    }
+    init_command();
+
+    View* gview = activeView();
+    if (gview) {
+        gview->panRealTime();
+    }
+
+    end_command();
+    return script_null;
+}
+
+/* PANDOWN is context-independant. */
+ScriptValue
+pandown_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "pandown_command", "")) {
+        return script_false;
+    }
+    init_command();
+
+    View* gview = activeView();
+    QUndoStack* stack = gview->getUndoStack();
+    if (gview && stack) {
+        UndoableNavCommand* cmd = new UndoableNavCommand("PanDown", gview, 0);
+        stack->push(cmd);
+    }
+
+    end_command();
+    return script_null;
+}
+
+/* PANLEFT */
+ScriptValue
+panleft_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "panleft_command", "")) {
+        return script_false;
+    }
+    init_command();
+
+    View* gview = activeView();
+    QUndoStack* stack = gview->getUndoStack();
+    if (gview && stack) {
+        UndoableNavCommand* cmd = new UndoableNavCommand("PanLeft", gview, 0);
+        stack->push(cmd);
+    }
+
+    end_command();
+    return script_null;
+}
+
+/* PANRIGHT */
+ScriptValue
+panright_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "panright_command", "")) {
+        return script_false;
+    }
+    init_command();
+
+    View* gview = activeView();
+    QUndoStack* stack = gview->getUndoStack();
+    if (gview && stack) {
+        UndoableNavCommand* cmd = new UndoableNavCommand("PanRight", gview, 0);
+        stack->push(cmd);
+    }
+
+    end_command();
+    return script_null;
+}
+
+/* PANUP */
+ScriptValue
+panup_command(ScriptEnv *context)
+{
+    _main->debug_message("panUp()");
+    if (!argument_checks(context, "panup_command", "")) {
+        return script_false;
+    }
+    init_command();
+    View* gview = activeView();
+    QUndoStack* stack = gview->getUndoStack();
+    if (gview && stack) {
+        UndoableNavCommand* cmd = new UndoableNavCommand("PanUp", gview, 0);
+        stack->push(cmd);
+    }
+    end_command();
+    return script_null;
+}
+
+/* ZOOMALL is not context-dependant */
+ScriptValue
+zoom_all_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomextents_command", "")) {
+        return script_false;
+    }
+    init_command();
+    clear_selection();
+    _main->zoomExtents();
+    end_command();
+    return script_null;
+}
+
+/* ZOOMDYNAMIC is not context-dependant */
+ScriptValue
+zoom_dynamic_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomextents_command", "")) {
+        return script_false;
+    }
+    init_command();
+    _main->zoomExtents();
+    end_command();
+    return script_null;
+}
+
+/* ZOOMCENTER is not context-dependant */
+ScriptValue
+zoom_center_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomextents_command", "")) {
+        return script_false;
+    }
+    init_command();
+    _main->zoomExtents();
+    end_command();
+    return script_null;
+}
+
+/* ZOOMEXTENTS is not context-dependant */
+ScriptValue
+zoom_extents_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomextents_command", "")) {
+        return script_false;
+    }
+    init_command();
+    _main->zoomExtents();
+    end_command();
+    return script_null;
+}
+
+/* ZOOMIN is not context-dependant */
+ScriptValue
+zoom_in_command(ScriptEnv *context)
+{
+    _main->debug_message("zoomIn()");
+    if (!argument_checks(context, "zoom_in_command", "")) {
+        return script_false;
+    }
+    init_command();
+
+    View* gview = activeView();
+    if (gview) {
+        gview->zoomIn();
+    }
+
+    end_command();
+    return script_null;
+}
+
+/* ZOOMPREVIOUS is not context-dependant */
+ScriptValue
+zoom_previous_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomin_command", "")) {
+        return script_false;
+    }
+    init_command();
+
+    end_command();
+    return script_null;
+}
+
+/* ZOOMREALTIME is not context-dependant */
+ScriptValue
+zoom_real_time_command(ScriptEnv *context)
+{
+    _main->debug_message("zoomRealtime()");
+    if (!argument_checks(context, "zoom_real_time_command", "")) {
+        return script_false;
+    }
+    init_command();
+    _main->stub_implement("Implement zoomRealtime.");
+    end_command();
+    return script_null;
+}
+
+/* ZOOMOUT is not context-dependant */
+ScriptValue
+zoom_out_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomout_command", "")) {
+        return script_false;
+    }
+    init_command();
+
+    View* gview = activeView();
+    if (gview) {
+        gview->zoomOut();
+    }
+
+    end_command();
+    return script_null;
+}
+
+/* ZOOMSCALE is not context-dependant */
+ScriptValue
+zoom_scale_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomin_command", "")) {
+        return script_false;
+    }
+    init_command();
+
+    end_command();
+    return script_null;
+}
+
+/* ZOOMSELECTED is not context-dependant */
+ScriptValue
+zoom_selected_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomin_command", "")) {
+        return script_false;
+    }
+    init_command();
+
+    end_command();
+    return script_null;
+}
+
+/* ZOOMWINDOW is not context-dependant */
+ScriptValue
+zoom_window_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "zoomin_command", "")) {
+        return script_false;
+    }
+    init_command();
+
+    end_command();
+    return script_null;
+}
+
+/*
+ * Window Commands
+ */
+
+/* WINDOWCASCADE is not context-dependant. */
+ScriptValue
+windowcascade_command(ScriptEnv * context)
+{
+    if (!argument_checks(context, "windowcascade_command", "")) {
+        return script_false;
+    }
+    init_command();
+    clear_selection();
+    _main->mdiArea->cascade();
+    end_command();
+    return script_null;
+}
+
+/* WINDOWCLOSE is not context-dependant. */
+ScriptValue
+windowclose_command(ScriptEnv * context)
+{
+    if (!argument_checks(context, "windowclose_command", "")) {
+        return script_false;
+    }
+    init_command();
+    clear_selection();
+    _main->onCloseWindow();
+    end_command();
+    return script_null;
+}
+
+/* WINDOWCLOSEALL is not context-dependant. */
+ScriptValue
+windowcloseall_command(ScriptEnv * context)
+{
+    if (!argument_checks(context, "windowcloseall_command", "")) {
+        return script_false;
+    }
+    init_command();
+    clear_selection();
+    _main->mdiArea->closeAllSubWindows();
+    end_command();
+    return script_null;
+}
+
+/* */
+ScriptValue
+windownext_command(ScriptEnv * context)
+{
+    if (!argument_checks(context, "windownext_command", "")) {
+        return script_false;
+    }
+    init_command();
+    clear_selection();
+    _main->mdiArea->activateNextSubWindow();
+    end_command();
+    return script_null;
+}
+
+/* WINDOWPREVIOUS is not context-sensitive. */
+ScriptValue
+windowprevious_command(ScriptEnv * context)
+{
+    if (!argument_checks(context, "windowprevious_command", "")) {
+        return script_false;
+    }
+    init_command();
+    clear_selection();
+    _main->mdiArea->activatePreviousSubWindow();
+    end_command();
+    return script_null;
+}
+
+/* WINDOWTILE is not context-dependant */
+ScriptValue
+windowtile_command(ScriptEnv *context)
+{
+    if (!argument_checks(context, "windowtile_command", "")) {
+        return script_false;
+    }
+    init_command();
+    clear_selection();
+    _main->mdiArea->tile();
+    end_command();
+    return script_null;
+}

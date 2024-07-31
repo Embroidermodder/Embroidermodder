@@ -1037,3 +1037,51 @@ get_command_id(const char *name)
     }
     return -2;
 }
+
+
+/* TODO: Before saving to a stitch only format, Embroidermodder needs
+ *       to calculate the optimal path to minimize jump stitches. Also
+ *       based upon which layer needs to be stitched first,
+ *       the path to the next object needs to be hidden beneath fills
+ *       that will come later. When finding the optimal path, we need
+ *       to take into account the color of the thread, as we do not want
+ *       to try to hide dark colored stitches beneath light colored fills.
+ */
+bool pattern_save(EmbPattern *pattern, const char *fileName)
+{
+    char message[200];
+    sprintf(message, "SaveObject save(%s)", fileName);
+    prompt_output(message);
+
+    bool writeSuccessful = false;
+    int i;
+
+    int formatType = emb_identify_format(fileName);
+    if (formatType <= 0) { /* EMBFORMAT_UNSUPPORTED */
+        return false;
+    }
+
+    if (!pattern) {
+        prompt_output("The EmbPattern has not been allocated.");
+        return false;
+    }
+
+    // TODO: handle EMBFORMAT_STCHANDOBJ also
+    if (formatType == EMBFORMAT_STITCHONLY) {
+        // emb_pattern_movePolylinesToStitchList(pattern);
+        // TODO: handle all objects like this
+    }
+
+    writeSuccessful = emb_pattern_write(pattern, fileName, formatType);
+    if (!writeSuccessful) {
+        sprintf(message, "Writing file %s was unsuccessful", fileName);
+        prompt_output(message);
+    }
+
+    //TODO: check the embLog for errors and if any exist, report them.
+
+    emb_pattern_free(pattern);
+
+    return writeSuccessful;
+}
+
