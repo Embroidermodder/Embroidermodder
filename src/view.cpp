@@ -229,8 +229,10 @@ void View::vulcanizeObject(Object* obj)
     gscene->removeItem(obj); //Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene
     obj->vulcanize();
 
-    UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, this, 0);
-    if (cmd) undoStack->push(cmd);
+    UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, this, 0);
+    if (cmd) {
+        undoStack->push(cmd);
+    }
 }
 
 void View::clearRubberRoom()
@@ -1481,7 +1483,7 @@ void View::mousePressEvent(QMouseEvent* event)
             foreach(QGraphicsItem* item, itemList) {
                 Object* base = static_cast<Object*>(item);
                 if (base) {
-                    UndoableAddCommand* cmd = new UndoableAddCommand(base->data(OBJ_NAME).toString(), base, this, 0);
+                    UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, base->data(OBJ_NAME).toString(), base, this, 0);
                     if (cmd) {
                         undoStack->push(cmd);
                     }
@@ -1500,7 +1502,7 @@ void View::mousePressEvent(QMouseEvent* event)
     if (event->button() == Qt::MiddleButton) {
         panStart(event->pos());
         //The Undo command will record the spot where the pan started.
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanStart", this, 0);
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanStart", this, 0);
         undoStack->push(cmd);
         event->accept();
     }
@@ -1670,7 +1672,7 @@ void View::mouseReleaseEvent(QMouseEvent* event)
     if (event->button() == Qt::MiddleButton) {
         panningActive = false;
         //The Undo command will record the spot where the pan completed.
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanStop", this, 0);
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanStop", this, 0);
         undoStack->push(cmd);
         event->accept();
     }
@@ -1888,7 +1890,7 @@ void View::stopGripping(bool accept)
     if (gripBaseObj) {
         gripBaseObj->vulcanize();
         if (accept) {
-            UndoableGripEditCommand* cmd = new UndoableGripEditCommand(sceneGripPoint, sceneMousePoint, tr("Grip Edit ") + gripBaseObj->data(OBJ_NAME).toString(), gripBaseObj, this, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_GRIP_EDIT, sceneGripPoint, sceneMousePoint, tr("Grip Edit ") + gripBaseObj->data(OBJ_NAME).toString(), gripBaseObj, this, 0);
             if (cmd) undoStack->push(cmd);
             selectionChanged(); //Update the Property Editor
         }
@@ -1914,9 +1916,10 @@ void View::deleteSelected()
         if (itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL) {
             Object* base = static_cast<Object*>(itemList.at(i));
             if (base) {
-                UndoableDeleteCommand* cmd = new UndoableDeleteCommand(tr("Delete 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
-                if (cmd)
-                undoStack->push(cmd);
+                UndoableCommand* cmd = new UndoableCommand(ACTION_DELETE, tr("Delete 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+                if (cmd) {
+                    undoStack->push(cmd);
+                }
             }
         }
     }
@@ -2132,12 +2135,13 @@ void View::moveSelected(double dx, double dy)
     foreach(QGraphicsItem* item, itemList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
-            UndoableMoveCommand* cmd = new UndoableMoveCommand(dx, dy, tr("Move 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_MOVE, dx, dy, tr("Move 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
             if (cmd) undoStack->push(cmd);
         }
     }
-    if (numSelected > 1)
+    if (numSelected > 1) {
         undoStack->endMacro();
+    }
 
     //Always clear the selection after a move
     gscene->clearSelection();
@@ -2159,8 +2163,10 @@ void View::rotateSelected(double x, double y, double rot)
     foreach(QGraphicsItem* item, itemList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
-            UndoableRotateCommand* cmd = new UndoableRotateCommand(x, y, rot, tr("Rotate 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
-            if (cmd) undoStack->push(cmd);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ROTATE, x, y, rot, tr("Rotate 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+            if (cmd) {
+                undoStack->push(cmd);
+            }
         }
     }
     if (numSelected > 1)
@@ -2179,7 +2185,7 @@ void View::mirrorSelected(double x1, double y1, double x2, double y2)
     foreach(QGraphicsItem* item, itemList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
-            UndoableMirrorCommand* cmd = new UndoableMirrorCommand(x1, y1, x2, y2, tr("Mirror 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_MIRROR, x1, y1, x2, y2, tr("Mirror 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
             if (cmd) undoStack->push(cmd);
         }
     }
@@ -2206,12 +2212,15 @@ void View::scaleSelected(double x, double y, double factor)
     foreach(QGraphicsItem* item, itemList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
-            UndoableScaleCommand* cmd = new UndoableScaleCommand(x, y, factor, tr("Scale 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
-            if (cmd) undoStack->push(cmd);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_SCALE, x, y, factor, tr("Scale 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+            if (cmd) {
+                undoStack->push(cmd);
+            }
         }
     }
-    if (numSelected > 1)
+    if (numSelected > 1) {
         undoStack->endMacro();
+    }
 
     //Always clear the selection after a scale
     gscene->clearSelection();

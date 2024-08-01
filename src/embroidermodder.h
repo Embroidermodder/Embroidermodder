@@ -423,132 +423,42 @@ private:
     void alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& viewPoint);
 };
 
-class UndoableAddCommand : public QUndoCommand
+class UndoableCommand : public QUndoCommand
 {
 public:
-    UndoableAddCommand(const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, double deltaX, double deltaY, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, double pivotPointX, double pivotPointY, double rotAngle, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, const QString& type, View* v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, const QPointF beforePoint, const QPointF afterPoint, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, double x1, double y1, double x2, double y2, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
+    void rotate(double x, double y, double rot);
+    int id() const { return 1234; }
+    bool mergeWith(const QUndoCommand* command);
+    void mirror();
 
 private:
-    Object* object;
-    View* gview;
-};
-
-class UndoableDeleteCommand : public QUndoCommand
-{
-public:
-    UndoableDeleteCommand(const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
-
-    void undo();
-    void redo();
-
-private:
-    Object* object;
-    View* gview;
-};
-
-class UndoableMoveCommand : public QUndoCommand
-{
-public:
-    UndoableMoveCommand(double deltaX, double deltaY, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
-
-    void undo();
-    void redo();
-
-private:
+    int type;
     Object* object;
     View* gview;
     double dx;
     double dy;
-};
-
-class UndoableRotateCommand : public QUndoCommand
-{
-public:
-    UndoableRotateCommand(double pivotPointX, double pivotPointY, double rotAngle, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
-
-    void undo();
-    void redo();
-
-private:
-    void rotate(double x, double y, double rot);
-
-    Object* object;
-    View* gview;
     double pivotX;
     double pivotY;
     double angle;
-};
-
-class UndoableScaleCommand : public QUndoCommand
-{
-public:
-    UndoableScaleCommand(double x, double y, double scaleFactor, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
-
-    void undo();
-    void redo();
-
-private:
-    Object* object;
-    View* gview;
-    double dx;
-    double dy;
     double factor;
-};
-
-class UndoableNavCommand : public QUndoCommand
-{
-public:
-    UndoableNavCommand(const QString& type, View* v, QUndoCommand* parent = 0);
-
-    int id() const { return 1234; }
-    bool mergeWith(const QUndoCommand* command);
-    void undo();
-    void redo();
-
-private:
     QString navType;
     QTransform fromTransform;
     QTransform toTransform;
     QPointF fromCenter;
     QPointF toCenter;
     bool done;
-    View*   gview;
-};
-
-class UndoableGripEditCommand : public QUndoCommand
-{
-public:
-    UndoableGripEditCommand(const QPointF beforePoint, const QPointF afterPoint, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
-
-    void undo();
-    void redo();
-
-private:
-    Object* object;
-    View* gview;
-    QPointF     before;
-    QPointF     after;
-};
-
-
-class UndoableMirrorCommand : public QUndoCommand
-{
-public:
-    UndoableMirrorCommand(double x1, double y1, double x2, double y2, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
-
-    void undo();
-    void redo();
-
-private:
-    void mirror();
-
-    Object* object;
-    View* gview;
+    QPointF before;
+    QPointF after;
     QLineF mirrorLine;
-
 };
 
 class UndoEditor : public QDockWidget

@@ -1726,49 +1726,18 @@ unlockalllayers_command(ScriptEnv*)
 /*
  * Undo
  */
-
-/* Add */
-
-UndoableAddCommand::UndoableAddCommand(const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableCommand::UndoableCommand(int type_, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
+    type = type_;
     gview = v;
     object = obj;
     setText(text);
-}
-
-void UndoableAddCommand::undo()
-{
-    gview->deleteObject(object);
-}
-
-void UndoableAddCommand::redo()
-{
-    gview->addObject(object);
-}
-
-/* Delete */
-
-UndoableDeleteCommand::UndoableDeleteCommand(const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
-{
-    gview = v;
-    object = obj;
-    setText(text);
-}
-
-void UndoableDeleteCommand::undo()
-{
-    gview->addObject(object);
-}
-
-void UndoableDeleteCommand::redo()
-{
-    gview->deleteObject(object);
 }
 
 /* Move */
-
-UndoableMoveCommand::UndoableMoveCommand(double deltaX, double deltaY, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableCommand::UndoableCommand(int type_, double deltaX, double deltaY, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
+    type = type_;
     gview = v;
     object = obj;
     setText(text);
@@ -1776,137 +1745,145 @@ UndoableMoveCommand::UndoableMoveCommand(double deltaX, double deltaY, const QSt
     dy = deltaY;
 }
 
-void UndoableMoveCommand::undo()
+/* Rotate or scale */
+UndoableCommand::UndoableCommand(int type_, double x, double y, double scaleFactor, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
-    object->moveBy(-dx, -dy);
-}
-
-void UndoableMoveCommand::redo()
-{
-    object->moveBy(dx, dy);
-}
-
-/* Rotate */
-
-UndoableRotateCommand::UndoableRotateCommand(double pivotPointX, double pivotPointY, double rotAngle, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
-{
+    type = type_;
     gview = v;
     object = obj;
     setText(text);
-    pivotX = pivotPointX;
-    pivotY = pivotPointY;
-    angle = rotAngle;
-}
+    if (type == ACTION_SCALE) {
+        //Prevent division by zero and other wacky behavior
+        if (scaleFactor <= 0.0) {
+            dx = 0.0;
+            dy = 0.0;
+            factor = 1.0;
+            QMessageBox::critical(0,
+                QObject::tr("ScaleFactor Error"),
+                QObject::tr("Hi there. If you are not a developer, report this as a bug. "
+               "If you are a developer, your code needs examined, and possibly your head too."));
+        }
+        else {
+            //Calculate the offset
+            double oldX = object->x();
+            double oldY = object->y();
+            QLineF scaleLine(x, y, oldX, oldY);
+            scaleLine.setLength(scaleLine.length()*scaleFactor);
+            double newX = scaleLine.x2();
+            double newY = scaleLine.y2();
 
-void UndoableRotateCommand::undo()
-{
-    rotate(pivotX, pivotY, -angle);
-}
-
-void UndoableRotateCommand::redo()
-{
-    rotate(pivotX, pivotY, angle);
-}
-
-void UndoableRotateCommand::rotate(double x, double y, double rot)
-{
-    double rad = radians(rot);
-    double cosRot = cos(rad);
-    double sinRot = sin(rad);
-    double px = object->scenePos().x();
-    double py = object->scenePos().y();
-    px -= x;
-    py -= y;
-    double rotX = px*cosRot - py*sinRot;
-    double rotY = px*sinRot + py*cosRot;
-    rotX += x;
-    rotY += y;
-
-    object->setPos(rotX, rotY);
-    object->setRotation(object->rotation()+rot);
-}
-
-/* Scale */
-UndoableScaleCommand::UndoableScaleCommand(double x, double y, double scaleFactor, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
-{
-    gview = v;
-    object = obj;
-    setText(text);
-
-    //Prevent division by zero and other wacky behavior
-    if (scaleFactor <= 0.0) {
-        dx = 0.0;
-        dy = 0.0;
-        factor = 1.0;
-        QMessageBox::critical(0, QObject::tr("ScaleFactor Error"),
-                              QObject::tr("Hi there. If you are not a developer, report this as a bug. "
-                              "If you are a developer, your code needs examined, and possibly your head too."));
+            dx = newX - oldX;
+            dy = newY - oldY;
+            factor = scaleFactor;
+        }
     }
     else {
-        //Calculate the offset
-        double oldX = object->x();
-        double oldY = object->y();
-        QLineF scaleLine(x, y, oldX, oldY);
-        scaleLine.setLength(scaleLine.length()*scaleFactor);
-        double newX = scaleLine.x2();
-        double newY = scaleLine.y2();
-
-        dx = newX - oldX;
-        dy = newY - oldY;
-        factor = scaleFactor;
+        pivotX = x;
+        pivotY = y;
+        angle = scaleFactor;
     }
-}
-
-void UndoableScaleCommand::undo()
-{
-    object->setScale(object->scale()*(1/factor));
-    object->moveBy(-dx, -dy);
-}
-
-void UndoableScaleCommand::redo()
-{
-    object->setScale(object->scale()*factor);
-    object->moveBy(dx, dy);
 }
 
 /* Navigation */
-
-UndoableNavCommand::UndoableNavCommand(const QString& type, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableCommand::UndoableCommand(int type_, const QString& type_name, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
+    type = type_;
     gview = v;
-    navType = type;
+    navType = type_name;
     setText(QObject::tr("Navigation"));
     done = false;
     fromTransform = gview->transform();
     fromCenter = gview->center();
 }
 
-bool UndoableNavCommand::mergeWith(const QUndoCommand* newest)
+/* Grip Edit */
+UndoableCommand::UndoableCommand(int type_, const QPointF beforePoint, const QPointF afterPoint, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
-    if (newest->id() != id()) // make sure other is also an UndoableNavCommand
-         return false;
-
-    const UndoableNavCommand* cmd = static_cast<const UndoableNavCommand*>(newest);
-    toTransform = cmd->toTransform;
-    toCenter = cmd->toCenter;
-
-    return true;
+    type = type_;
+    gview = v;
+    object = obj;
+    setText(text);
+    before = beforePoint;
+    after = afterPoint;
 }
 
-void UndoableNavCommand::undo()
+/* Mirror */
+UndoableCommand::UndoableCommand(int type_, double x1, double y1, double x2, double y2, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
-    if (!done) {
-        toTransform = gview->transform();
-        toCenter = gview->center();
+    gview = v;
+    object = obj;
+    setText(text);
+    mirrorLine = QLineF(x1, y1, x2, y2);
+}
+
+/* . */
+void
+UndoableCommand::undo()
+{
+    switch (type) {
+    case ACTION_ADD:
+        gview->deleteObject(object);
+        break;
+    case ACTION_DELETE:
+        gview->addObject(object);
+        break;
+    case ACTION_MOVE:
+        object->moveBy(-dx, -dy);
+        break;
+    case ACTION_ROTATE:
+        rotate(pivotX, pivotY, -angle);
+        break;
+    case ACTION_GRIP_EDIT:
+        object->gripEdit(after, before);
+        break;
+    case ACTION_SCALE:
+        object->setScale(object->scale()*(1/factor));
+        object->moveBy(-dx, -dy);
+        break;
+    case ACTION_NAV: {
+        if (!done) {
+            toTransform = gview->transform();
+            toCenter = gview->center();
+        }
+        done = true;
+
+        gview->setTransform(fromTransform);
+        gview->centerAt(fromCenter);
+        break;
     }
-    done = true;
-
-    gview->setTransform(fromTransform);
-    gview->centerAt(fromCenter);
+    case ACTION_MIRROR:
+        mirror();
+        break;
+    default:
+        break;
+    }
 }
 
-void UndoableNavCommand::redo()
+/* . */
+void
+UndoableCommand::redo()
 {
+    switch (type) {
+    case ACTION_ADD:
+        gview->addObject(object);
+        break;
+    case ACTION_DELETE:
+        gview->deleteObject(object);
+        break;
+    case ACTION_MOVE:
+        object->moveBy(dx, dy);
+        break;
+    case ACTION_ROTATE:
+        rotate(pivotX, pivotY, angle);
+        break;
+    case ACTION_GRIP_EDIT:
+        object->gripEdit(before, after);
+        break;
+    case ACTION_SCALE:
+        object->setScale(object->scale()*factor);
+        object->moveBy(dx, dy);
+        break;
+    case ACTION_NAV: {
     if (!done) {
         if (navType == "ZoomInToPoint") {
             gview->zoomToPoint(gview->scene()->property("VIEW_MOUSE_POINT").toPoint(), +1);
@@ -1945,50 +1922,55 @@ void UndoableNavCommand::redo()
         gview->setTransform(toTransform);
         gview->centerAt(toCenter);
     }
+        break;
+    }
+    case ACTION_MIRROR:
+        mirror();
+        break;
+    default:
+        break;
+    }
 }
 
-/* Grip Edit */
-
-UndoableGripEditCommand::UndoableGripEditCommand(const QPointF beforePoint, const QPointF afterPoint, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+/* Rotate */
+void
+UndoableCommand::rotate(double x, double y, double rot)
 {
-    gview = v;
-    object = obj;
-    setText(text);
-    before = beforePoint;
-    after = afterPoint;
+    double rad = radians(rot);
+    double cosRot = cos(rad);
+    double sinRot = sin(rad);
+    double px = object->scenePos().x();
+    double py = object->scenePos().y();
+    px -= x;
+    py -= y;
+    double rotX = px*cosRot - py*sinRot;
+    double rotY = px*sinRot + py*cosRot;
+    rotX += x;
+    rotY += y;
+
+    object->setPos(rotX, rotY);
+    object->setRotation(object->rotation()+rot);
 }
 
-void UndoableGripEditCommand::undo()
+/* . */
+bool
+UndoableCommand::mergeWith(const QUndoCommand* newest)
 {
-    object->gripEdit(after, before);
+    if (newest->id() != id()) {
+         // make sure other is also an UndoableNavCommand
+         return false;
+    }
+
+    const UndoableCommand* cmd = static_cast<const UndoableCommand*>(newest);
+    toTransform = cmd->toTransform;
+    toCenter = cmd->toCenter;
+
+    return true;
 }
 
-void UndoableGripEditCommand::redo()
-{
-    object->gripEdit(before, after);
-}
-
-/* Mirror */
-
-UndoableMirrorCommand::UndoableMirrorCommand(double x1, double y1, double x2, double y2, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
-{
-    gview = v;
-    object = obj;
-    setText(text);
-    mirrorLine = QLineF(x1, y1, x2, y2);
-}
-
-void UndoableMirrorCommand::undo()
-{
-    mirror();
-}
-
-void UndoableMirrorCommand::redo()
-{
-    mirror();
-}
-
-void UndoableMirrorCommand::mirror()
+/* . */
+void
+UndoableCommand::mirror()
 {
     //TODO: finish undoable mirror
 }
@@ -2087,7 +2069,7 @@ pandown_command(ScriptEnv *context)
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack) {
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanDown", gview, 0);
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanDown", gview, 0);
         stack->push(cmd);
     }
 
@@ -2107,7 +2089,7 @@ panleft_command(ScriptEnv *context)
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack) {
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanLeft", gview, 0);
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanLeft", gview, 0);
         stack->push(cmd);
     }
 
@@ -2127,7 +2109,7 @@ panright_command(ScriptEnv *context)
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack) {
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanRight", gview, 0);
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanRight", gview, 0);
         stack->push(cmd);
     }
 
@@ -2147,7 +2129,7 @@ panup_command(ScriptEnv *context)
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack) {
-        UndoableNavCommand* cmd = new UndoableNavCommand("PanUp", gview, 0);
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanUp", gview, 0);
         stack->push(cmd);
     }
     end_command();

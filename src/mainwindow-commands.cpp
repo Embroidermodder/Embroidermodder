@@ -530,7 +530,7 @@ MainWindow::zoomSelected()
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack) {
-        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomSelected", gview, 0);
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomSelected", gview, 0);
         stack->push(cmd);
     }
 }
@@ -549,7 +549,7 @@ MainWindow::zoomExtents()
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && stack) {
-        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomExtents", gview, 0);
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomExtents", gview, 0);
         stack->push(cmd);
     }
 }
@@ -1070,7 +1070,7 @@ MainWindow::nativeAddTextSingle(const QString& str, double x, double y, double r
             gscene->update();
         }
         else {
-            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
     }
@@ -1102,7 +1102,7 @@ MainWindow::nativeAddLine(double x1, double y1, double x2, double y2, double rot
             gscene->update();
         }
         else {
-            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
     }
@@ -1130,7 +1130,7 @@ MainWindow::nativeAddRectangle(double x, double y, double w, double h, double ro
             gscene->update();
         }
         else {
-            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
     }
@@ -1180,7 +1180,7 @@ MainWindow::nativeAddCircle(double centerX, double centerY, double radius, bool 
             gscene->update();
         }
         else {
-            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
     }
@@ -1189,7 +1189,7 @@ MainWindow::nativeAddCircle(double centerX, double centerY, double radius, bool 
 void
 MainWindow::nativeAddSlot(double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode)
 {
-    //TODO: Use UndoableAddCommand for slots
+    //TODO: Use UndoableCommand for slots
     /*
     Object* slotObj = new Object(centerX, -centerY, diameter, length, getCurrentColor());
     slotObj->setRotation(-rot);
@@ -1223,7 +1223,7 @@ MainWindow::nativeAddEllipse(double centerX, double centerY, double width, doubl
             gscene->update();
         }
         else {
-            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
     }
@@ -1239,7 +1239,7 @@ MainWindow::nativeAddPoint(double x, double y)
         point.position.x = x;
         point.position.y = -y;
         Object* obj = new Object(point, getCurrentColor());
-        UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+        UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, gview, 0);
         stack->push(cmd);
     }
 }
@@ -1266,7 +1266,7 @@ MainWindow::nativeAddPolygon(double startX, double startY, const QPainterPath& p
             gscene->update();
         }
         else {
-            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
     }
@@ -1289,7 +1289,7 @@ MainWindow::nativeAddPolyline(double startX, double startY, const QPainterPath& 
             gscene->update();
         }
         else {
-            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
     }
@@ -1332,7 +1332,7 @@ MainWindow::nativeAddDimLeader(double x1, double y1, double x2, double y2, doubl
             gscene->update();
         }
         else {
-            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, gview, 0);
             stack->push(cmd);
         }
     }
