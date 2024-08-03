@@ -3,8 +3,9 @@
  *
  * Copyright 2011-2024 The Embroidermodder Team
  * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
- * Visit https://www.libembroidery.org/refman for advice on altering this file,
- * or read the markdown version in embroidermodder2/docs/refman.
+ *
+ * Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
+ * for advice on altering this file.
  *
  * Rubber
  */
@@ -18,7 +19,7 @@ allow_rubber_command(ScriptEnv* context)
         return script_false;
     }
 
-    return script_bool(_main->nativeAllowRubber());
+    return script_bool(nativeAllowRubber());
 }
 
 ScriptValue
@@ -28,54 +29,62 @@ set_rubber_mode_command(ScriptEnv* context)
         return script_false;
     }
 
-    QString mode = QSTR(0).toUpper();
+    std::string mode(STR(0));
 
     if (mode == "CIRCLE_1P_RAD") {
-        _main->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_RAD);
+        nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_RAD);
     }
     else if (mode == "CIRCLE_1P_DIA") {
-        _main->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_DIA);
+        nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_DIA);
     }
     else if (mode == "CIRCLE_2P") {
-        _main->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_2P);
+        nativeSetRubberMode(OBJ_RUBBER_CIRCLE_2P);
     }
     else if (mode == "CIRCLE_3P") {
-        _main->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_3P);
+        nativeSetRubberMode(OBJ_RUBBER_CIRCLE_3P);
     }
     else if (mode == "CIRCLE_TTR") {
-        _main->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTR);
+        nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTR);
     }
     else if (mode == "CIRCLE_TTT") {
-        _main->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTT);
+        nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTT);
     }
     else if (mode == "DIMLEADER_LINE") {
-        _main->nativeSetRubberMode(OBJ_RUBBER_DIMLEADER_LINE);
+        nativeSetRubberMode(OBJ_RUBBER_DIMLEADER_LINE);
     }
     else if (mode == "ELLIPSE_LINE") {
-        _main->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_LINE);
+        nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_LINE);
     }
     else if (mode == "ELLIPSE_MAJORDIAMETER_MINORRADIUS") {
-        _main->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS);
+        nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS);
     }
     else if (mode == "ELLIPSE_MAJORRADIUS_MINORRADIUS") {
-        _main->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS);
+        nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS);
     }
     else if (mode == "ELLIPSE_ROTATION") {
-        _main->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_ROTATION);
+        nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_ROTATION);
     }
     else if (mode == "LINE") {
-        _main->nativeSetRubberMode(OBJ_RUBBER_LINE);
+        nativeSetRubberMode(OBJ_RUBBER_LINE);
     }
-    else if (mode == "POLYGON")                           { _main->nativeSetRubberMode(OBJ_RUBBER_POLYGON); }
-    else if (mode == "POLYGON_INSCRIBE")                  { _main->nativeSetRubberMode(OBJ_RUBBER_POLYGON_INSCRIBE); }
-    else if (mode == "POLYGON_CIRCUMSCRIBE")              { _main->nativeSetRubberMode(OBJ_RUBBER_POLYGON_CIRCUMSCRIBE); }
-
-    else if (mode == "POLYLINE")                          { _main->nativeSetRubberMode(OBJ_RUBBER_POLYLINE); }
-
-    else if (mode == "RECTANGLE")                         { _main->nativeSetRubberMode(OBJ_RUBBER_RECTANGLE); }
-
-    else if (mode == "TEXTSINGLE")                        { _main->nativeSetRubberMode(OBJ_RUBBER_TEXTSINGLE); }
-
+    else if (mode == "POLYGON") {
+        nativeSetRubberMode(OBJ_RUBBER_POLYGON);
+    }
+    else if (mode == "POLYGON_INSCRIBE") {
+        nativeSetRubberMode(OBJ_RUBBER_POLYGON_INSCRIBE);
+    }
+    else if (mode == "POLYGON_CIRCUMSCRIBE") {
+        nativeSetRubberMode(OBJ_RUBBER_POLYGON_CIRCUMSCRIBE);
+    }
+    else if (mode == "POLYLINE") {
+        nativeSetRubberMode(OBJ_RUBBER_POLYLINE);
+    }
+    else if (mode == "RECTANGLE") {
+        nativeSetRubberMode(OBJ_RUBBER_RECTANGLE);
+    }
+    else if (mode == "TEXTSINGLE") {
+        nativeSetRubberMode(OBJ_RUBBER_TEXTSINGLE);
+    }
     else {
         prompt_output("UNKNOWN_ERROR setRubberMode(): unknown rubberMode value");
         return script_false;
@@ -91,11 +100,8 @@ set_rubber_point_command(ScriptEnv* context)
         return script_false;
     }
 
-    QString key = QSTR(0).toUpper();
-    double x     = context->argument[1].r;
-    double y     = context->argument[2].r;
-
-    _main->nativeSetRubberPoint(key, x, y);
+    std::string key(STR(0));
+    nativeSetRubberPoint(key, REAL(1), REAL(2));
     return script_null;
 }
 
@@ -106,10 +112,10 @@ set_rubber_text_command(ScriptEnv* context)
         return script_false;
     }
 
-    QString key = QSTR(0).toUpper();
-    QString txt = QSTR(1);
+    std::string key(STR(0));
+    std::string txt(STR(1));
 
-    _main->nativeSetRubberText(key, txt);
+    nativeSetRubberText(key, txt);
     return script_null;
 }
 
@@ -120,9 +126,9 @@ add_rubber_command(ScriptEnv* context)
         return script_false;
     }
 
-    QString objType = QSTR(0).toUpper();
+    std::string objType(STR(0));
 
-    if (!_main->nativeAllowRubber()) {
+    if (!nativeAllowRubber()) {
         prompt_output("UNKNOWN_ERROR addRubber(): You must use vulcanize() before you can add another rubber object.");
         return script_false;
     }
@@ -138,7 +144,7 @@ add_rubber_command(ScriptEnv* context)
         // TODO: handle this type
     }
     else if (objType == "CIRCLE") {
-        _main->nativeAddCircle(mx, my, 0, false, OBJ_RUBBER_ON);
+        nativeAddCircle(mx, my, 0, false, OBJ_RUBBER_ON);
     }
     else if (objType == "DIMALIGNED") {
         // TODO: handle this type
@@ -153,7 +159,7 @@ add_rubber_command(ScriptEnv* context)
         // TODO: handle this type
     }
     else if (objType == "DIMLEADER") {
-        _main->nativeAddDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON);
+        nativeAddDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON);
     }
     else if (objType == "DIMLINEAR") {
         // TODO: handle this type
@@ -165,7 +171,7 @@ add_rubber_command(ScriptEnv* context)
         // TODO: handle this type
     }
     else if (objType == "ELLIPSE") {
-        _main->nativeAddEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON);
+        nativeAddEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON);
     }
     else if (objType == "ELLIPSEARC") {
         // TODO: handle this type
@@ -180,7 +186,7 @@ add_rubber_command(ScriptEnv* context)
         // TODO: handle this type
     }
     else if (objType == "LINE") {
-        _main->nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON);
+        nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON);
     }
     else if (objType == "PATH") {
         // TODO: handle this type
@@ -189,16 +195,16 @@ add_rubber_command(ScriptEnv* context)
         // TODO: handle this type
     }
     else if (objType == "POLYGON") {
-        _main->nativeAddPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON);
+        nativeAddPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON);
     }
     else if (objType == "POLYLINE") {
-        _main->nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON);
+        nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON);
     }
     else if (objType == "RAY") {
         // TODO: handle this type
     }
     else if (objType == "RECTANGLE") {
-        _main->nativeAddRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON);
+        nativeAddRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON);
     }
     else if (objType == "SPLINE") {
         // TODO: handle this type
@@ -207,7 +213,7 @@ add_rubber_command(ScriptEnv* context)
         // TODO: handle this type
     }
     else if (objType == "TEXTSINGLE") {
-        _main->nativeAddTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON);
+        nativeAddTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON);
     }
 
     return script_null;
@@ -221,7 +227,7 @@ clear_rubber_command(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeClearRubber();
+    nativeClearRubber();
     return script_null;
 }
 
@@ -237,16 +243,16 @@ spare_rubber_command(ScriptEnv* context)
         return script_false;
     }
 
-    QString objID = QSTR(0).toUpper();
+    QString objID(STR(0));
 
     if (objID == "PATH") {
-        _main->nativeSpareRubber(SPARE_RUBBER_PATH);
+        nativeSpareRubber(SPARE_RUBBER_PATH);
     }
-    else if (objID == "POLYGON")  {
-        _main->nativeSpareRubber(SPARE_RUBBER_POLYGON);
+    else if (objID == "POLYGON") {
+        nativeSpareRubber(SPARE_RUBBER_POLYGON);
     }
     else if (objID == "POLYLINE") {
-        _main->nativeSpareRubber(SPARE_RUBBER_POLYLINE);
+        nativeSpareRubber(SPARE_RUBBER_POLYLINE);
     }
     else {
         bool ok = false;
@@ -255,7 +261,7 @@ spare_rubber_command(ScriptEnv* context)
             prompt_output("TYPE_ERROR, spareRubber(): error converting object ID into an int64");
             return script_false;
         }
-        _main->nativeSpareRubber(id);
+        nativeSpareRubber(id);
     }
 
     return script_null;

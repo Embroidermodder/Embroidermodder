@@ -579,8 +579,8 @@ int script_set_int(ScriptEnv *context, const char *label, int i);
 int script_set_real(ScriptEnv *context, const char *label, double r);
 
 void prompt_output(const char *);
-int argument_checks(ScriptEnv *context, char *function, const char *args);
-char *translate(char *msg);
+int argument_checks(ScriptEnv *context, const char *function, const char *args);
+char *translate(const char *msg);
 
 bool pattern_save(EmbPattern *pattern, const char *fileName);
 
@@ -605,6 +605,7 @@ EmbArc emb_arc_set_radius(EmbArc a, EmbReal radius);
 /* MainWindow calls */
 void init_command(void);
 void end_command(void);
+void debug_message(const char *msg);
 
 void clear_selection(void);
 int num_selected(void);
@@ -885,6 +886,60 @@ extern BoolSetting text_style_italic;
 extern BoolSetting text_style_underline;
 extern BoolSetting text_style_overline;
 extern BoolSetting text_style_strikeout;
+
+/* Natives */
+void nativeBlinkPrompt();
+void nativeEnablePromptRapidFire();
+void nativeDisablePromptRapidFire();
+
+void nativeAddInfiniteLine(double x1, double y1, double x2, double y2, double rot);
+void nativeAddRay(double x1, double y1, double x2, double y2, double rot);
+void nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubberMode);
+void nativeAddTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double rot, bool fill);
+void nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode);
+void nativeAddRoundedRectangle(double x, double y, double w, double h, double rad, double rot, bool fill);
+void nativeAddArc(EmbArc arc, int rubberMode);
+void nativeAddCircle(double centerX, double centerY, double radius, bool fill, int rubberMode);
+void nativeAddSlot(double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode);
+void nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode);
+void nativeAddPoint(double x, double y);
+void nativeAddRegularPolygon(double centerX, double centerY, uint16_t sides, uint8_t mode, double rad, double rot, bool fill);
+void nativeAddHorizontalDimension(double x1, double y1, double x2, double y2, double legHeight);
+void nativeAddVerticalDimension(double x1, double y1, double x2, double y2, double legHeight);
+void nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode);
+
+void nativeEnableMoveRapidFire();
+void nativeDisableMoveRapidFire();
+
+void nativeRedo();
+
+void nativePrintArea(double x, double y, double w, double h);
+
+void nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b);
+void nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b);
+void nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b);
+
+void nativeVulcanize();
+void nativeClearRubber();
+bool nativeAllowRubber();
+void nativeSpareRubber(int64_t id);
+
+void nativeDeleteSelected();
+void nativeCutSelected(double x, double y);
+void nativeCopySelected(double x, double y);
+void nativePasteSelected(double x, double y);
+void nativeMoveSelected(double dx, double dy);
+void nativeScaleSelected(double x, double y, double factor);
+void nativeRotateSelected(double x, double y, double rot);
+void nativeMirrorSelected(double x1, double y1, double x2, double y2);
+
+void nativeSetCursorShape(char str[MAX_STRING_LENGTH]);
+double nativeCalculateAngle(double x1, double y1, double x2, double y2);
+double nativeCalculateDistance(double x1, double y1, double x2, double y2);
+double nativePerpendicularDistance(double px, double py, double x1, double y1, double x2, double y2);
+
+double nativeQSnapX();
+double nativeQSnapY();
 
 #ifdef __cplusplus
 }

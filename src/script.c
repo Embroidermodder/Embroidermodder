@@ -3,8 +3,9 @@
  *
  * Copyright 2011-2024 The Embroidermodder Team
  * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
- * Visit https://www.libembroidery.org/refman for advice on altering this file,
- * or read the markdown version in embroidermodder2/docs/refman.
+ *
+ * Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
+ * for advice on altering this file.
  *
  * Script
  */
@@ -222,7 +223,7 @@ test_command(ScriptEnv *context)
 /* TODO: remove args command, use the command_data table
  */
 int
-argument_checks(ScriptEnv *context, char *function, const char *args)
+argument_checks(ScriptEnv *context, const char *function, const char *args)
 {
     char s[200];
     int i;
@@ -281,7 +282,7 @@ argument_checks(ScriptEnv *context, char *function, const char *args)
 }
 
 char *
-translate(char *msg)
+translate(const char *msg)
 {
     return msg;
 }

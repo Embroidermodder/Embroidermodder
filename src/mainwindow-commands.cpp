@@ -890,99 +890,103 @@ MainWindow::runCommandPrompt(const QString& cmd, const QString& str)
 }
 
 void
-MainWindow::nativeBlinkPrompt()
+nativeBlinkPrompt()
 {
-    prompt->startBlinking();
+    _main->prompt->startBlinking();
 }
 
 void
-MainWindow::nativeSetPromptPrefix(const QString& txt)
+nativeSetPromptPrefix(std::string txt)
 {
-    prompt->setPrefix(txt);
+    _main->prompt->setPrefix(QString(txt.c_str()));
 }
 
 void
-MainWindow::nativeAppendPromptHistory(const QString& txt)
+nativeAppendPromptHistory(std::string txt)
 {
-    prompt->appendHistory(txt);
+    _main->prompt->appendHistory(QString(txt.c_str()));
 }
 
 void
-MainWindow::nativeEnablePromptRapidFire()
+nativeEnablePromptRapidFire()
 {
-    enablePromptRapidFire();
+    _main->enablePromptRapidFire();
 }
 
 void
-MainWindow::nativeDisablePromptRapidFire()
+nativeDisablePromptRapidFire()
 {
-    disablePromptRapidFire();
+    _main->disablePromptRapidFire();
 }
 
 void
-MainWindow::nativeEnableMoveRapidFire()
+nativeEnableMoveRapidFire()
 {
-    enableMoveRapidFire();
+    _main->enableMoveRapidFire();
 }
 
 void
-MainWindow::nativeDisableMoveRapidFire()
+nativeDisableMoveRapidFire()
 {
-    disableMoveRapidFire();
+    _main->disableMoveRapidFire();
 }
 
 void
-MainWindow::messageBox(const QString& type, const QString& title, const QString& text)
+messageBox(std::string msgType, std::string title, std::string text)
 {
-    QString msgType = type.toLower();
     if (msgType == "critical") {
-        QMessageBox::critical(this, tr(qPrintable(title)), tr(qPrintable(text)));
+        QMessageBox::critical(_main,
+            translate(title.c_str()), translate(text.c_str()));
     }
     else if (msgType == "information") {
-        QMessageBox::information(this, tr(qPrintable(title)), tr(qPrintable(text)));
+        QMessageBox::information(_main,
+            translate(title.c_str()), translate(text.c_str()));
     }
     else if (msgType == "question") {
-        QMessageBox::question(this, tr(qPrintable(title)), tr(qPrintable(text)));
+        QMessageBox::question(_main,
+            translate(title.c_str()), translate(text.c_str()));
     }
     else if (msgType == "warning") {
-        QMessageBox::warning(this, tr(qPrintable(title)), tr(qPrintable(text)));
+        QMessageBox::warning(_main,
+            translate(title.c_str()), translate(text.c_str()));
     }
     else {
-        QMessageBox::critical   (this, tr("Native MessageBox Error"), tr("Incorrect use of the native messageBox function."));
+        QMessageBox::critical(_main,
+            translate(title.c_str()), translate(text.c_str()));
     }
 }
 
 void
-MainWindow::nativePrintArea(double x, double y, double w, double h)
+nativePrintArea(double x, double y, double w, double h)
 {
     qDebug("nativePrintArea(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
     //TODO: Print Setup Stuff
-    print();
+    _main->print();
 }
 
 void
-MainWindow::nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b)
+nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b)
 {
     display_bg_color.setting = qRgb(r,g,b);
-    updateAllViewBackgroundColors(qRgb(r,g,b));
+    _main->updateAllViewBackgroundColors(qRgb(r,g,b));
 }
 
 void
-MainWindow::nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b)
+nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b)
 {
     display_crosshair_color.setting = qRgb(r,g,b);
-    updateAllViewCrossHairColors(qRgb(r,g,b));
+    _main->updateAllViewCrossHairColors(qRgb(r,g,b));
 }
 
 void
-MainWindow::nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b)
+nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b)
 {
     grid_color.setting = qRgb(r,g,b);
-    updateAllViewGridColors(qRgb(r,g,b));
+    _main->updateAllViewGridColors(qRgb(r,g,b));
 }
 
 void
-MainWindow::nativeVulcanize()
+nativeVulcanize()
 {
     View* gview = activeView();
     if (gview) {
@@ -991,7 +995,7 @@ MainWindow::nativeVulcanize()
 }
 
 void
-MainWindow::nativeClearRubber()
+nativeClearRubber()
 {
     View* gview = activeView();
     if (gview) {
@@ -1000,7 +1004,7 @@ MainWindow::nativeClearRubber()
 }
 
 bool
-MainWindow::nativeAllowRubber()
+nativeAllowRubber()
 {
     View* gview = activeView();
     if (gview) {
@@ -1010,7 +1014,7 @@ MainWindow::nativeAllowRubber()
 }
 
 void
-MainWindow::nativeSpareRubber(int64_t id)
+nativeSpareRubber(int64_t id)
 {
     View* gview = activeView();
     if (gview) {
@@ -1018,40 +1022,51 @@ MainWindow::nativeSpareRubber(int64_t id)
     }
 }
 
+/* . */
 void
-MainWindow::nativeSetRubberMode(int mode)
+nativeSetRubberMode(int mode)
 {
     View* gview = activeView();
-    if (gview) gview->setRubberMode(mode);
+    if (gview) {
+        gview->setRubberMode(mode);
+    }
 }
 
+/* . */
 void
-MainWindow::nativeSetRubberPoint(const QString& key, double x, double y)
+nativeSetRubberPoint(std::string key, double x, double y)
 {
     View* gview = activeView();
-    if (gview) gview->setRubberPoint(key, QPointF(x, -y));
+    if (gview) {
+        gview->setRubberPoint(QString(key.c_str()), QPointF(x, -y));
+    }
 }
 
+/* . */
 void
-MainWindow::nativeSetRubberText(const QString& key, const QString& txt)
+nativeSetRubberText(std::string key, std::string txt)
 {
     View* gview = activeView();
-    if (gview) gview->setRubberText(key, txt);
+    if (gview) {
+        gview->setRubberText(QString(key.c_str()), QString(txt.c_str()));
+    }
 }
 
+/* . */
 void
-MainWindow::nativeAddTextMulti(const QString& str, double x, double y, double rot, bool fill, int rubberMode)
+nativeAddTextMulti(std::string str, double x, double y, double rot, bool fill, int rubberMode)
 {
 }
 
+/* . */
 void
-MainWindow::nativeAddTextSingle(const QString& str, double x, double y, double rot, bool fill, int rubberMode)
+nativeAddTextSingle(std::string str, double x, double y, double rot, bool fill, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
-        Object* obj = new Object(str, x, -y, getCurrentColor());
+        Object* obj = new Object(QString(str.c_str()), x, -y, _main->getCurrentColor());
         obj->setObjectTextFont(text_font.setting);
         obj->setObjectTextSize(text_size.setting);
         obj->setObjectTextStyle(text_style_bold.setting,
@@ -1076,24 +1091,27 @@ MainWindow::nativeAddTextSingle(const QString& str, double x, double y, double r
     }
 }
 
+/* . */
 void
-MainWindow::nativeAddInfiniteLine(double x1, double y1, double x2, double y2, double rot)
+nativeAddInfiniteLine(double x1, double y1, double x2, double y2, double rot)
 {
 }
 
+/* . */
 void
-MainWindow::nativeAddRay(double x1, double y1, double x2, double y2, double rot)
+nativeAddRay(double x1, double y1, double x2, double y2, double rot)
 {
 }
 
+/* . */
 void
-MainWindow::nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubberMode)
+nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
-        Object* obj = new Object(x1, -y1, x2, -y2, getCurrentColor());
+        Object* obj = new Object(x1, -y1, x2, -y2, _main->getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
         if (rubberMode) {
@@ -1108,41 +1126,45 @@ MainWindow::nativeAddLine(double x1, double y1, double x2, double y2, double rot
     }
 }
 
+/* . */
 void
-MainWindow::nativeAddTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double rot, bool fill)
+nativeAddTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double rot, bool fill)
 {
 }
 
+/* . */
 void
-MainWindow::nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode)
+nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
-    if (gview && gscene && stack) {
-        Object* obj = new Object(x, -y, w, -h, getCurrentColor());
-        obj->setRotation(-rot);
-        obj->setObjectRubberMode(rubberMode);
-        //TODO: rect fill
-        if (rubberMode) {
-            gview->addToRubberRoom(obj);
-            gscene->addItem(obj);
-            gscene->update();
-        }
-        else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, gview, 0);
-            stack->push(cmd);
-        }
+    if (!(gview && gscene && stack)) {
+        return;
+    }
+    Object* obj = new Object(x, -y, w, -h, _main->getCurrentColor());
+    obj->setRotation(-rot);
+    obj->setObjectRubberMode(rubberMode);
+    //TODO: rect fill
+    if (rubberMode) {
+        gview->addToRubberRoom(obj);
+        gscene->addItem(obj);
+        gscene->update();
+    }
+    else {
+        UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, gview, 0);
+        stack->push(cmd);
     }
 }
 
+/* . */
 void
-MainWindow::nativeAddRoundedRectangle(double x, double y, double w, double h, double rad, double rot, bool fill)
+nativeAddRoundedRectangle(double x, double y, double w, double h, double rad, double rot, bool fill)
 {
 }
 
 void
-MainWindow::nativeAddArc(EmbArc arc, int rubberMode)
+nativeAddArc(EmbArc arc, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* scene = activeScene();
@@ -1150,7 +1172,7 @@ MainWindow::nativeAddArc(EmbArc arc, int rubberMode)
         arc.start.y = -arc.start.y;
         arc.mid.y = -arc.mid.y;
         arc.end.y = -arc.end.y;
-        Object* arcObj = new Object(arc, getCurrentColor());
+        Object* arcObj = new Object(arc, _main->getCurrentColor());
         arcObj->setObjectRubberMode(rubberMode);
         if (rubberMode) {
             gview->addToRubberRoom(arcObj);
@@ -1161,7 +1183,7 @@ MainWindow::nativeAddArc(EmbArc arc, int rubberMode)
 }
 
 void
-MainWindow::nativeAddCircle(double centerX, double centerY, double radius, bool fill, int rubberMode)
+nativeAddCircle(double centerX, double centerY, double radius, bool fill, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1171,7 +1193,7 @@ MainWindow::nativeAddCircle(double centerX, double centerY, double radius, bool 
         circle.center.x = centerX;
         circle.center.y = -centerY;
         circle.radius = radius;
-        Object* obj = new Object(circle, getCurrentColor());
+        Object* obj = new Object(circle, _main->getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
         //TODO: circle fill
         if (rubberMode) {
@@ -1187,11 +1209,11 @@ MainWindow::nativeAddCircle(double centerX, double centerY, double radius, bool 
 }
 
 void
-MainWindow::nativeAddSlot(double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode)
+nativeAddSlot(double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode)
 {
     //TODO: Use UndoableCommand for slots
     /*
-    Object* slotObj = new Object(centerX, -centerY, diameter, length, getCurrentColor());
+    Object* slotObj = new Object(centerX, -centerY, diameter, length, _main->getCurrentColor());
     slotObj->setRotation(-rot);
     slotObj->setObjectRubberMode(rubberMode);
     if (rubberMode) gview->addToRubberRoom(slotObj);
@@ -1202,7 +1224,7 @@ MainWindow::nativeAddSlot(double centerX, double centerY, double diameter, doubl
 }
 
 void
-MainWindow::nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode)
+nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1213,7 +1235,7 @@ MainWindow::nativeAddEllipse(double centerX, double centerY, double width, doubl
         ellipse.center.y = -centerY;
         ellipse.radius.x = width/2.0;
         ellipse.radius.y = height/2.0;
-        Object* obj = new Object(ellipse, getCurrentColor());
+        Object* obj = new Object(ellipse, _main->getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
         //TODO: ellipse fill
@@ -1230,7 +1252,7 @@ MainWindow::nativeAddEllipse(double centerX, double centerY, double width, doubl
 }
 
 void
-MainWindow::nativeAddPoint(double x, double y)
+nativeAddPoint(double x, double y)
 {
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
@@ -1238,27 +1260,27 @@ MainWindow::nativeAddPoint(double x, double y)
         EmbPoint point;
         point.position.x = x;
         point.position.y = -y;
-        Object* obj = new Object(point, getCurrentColor());
+        Object* obj = new Object(point, _main->getCurrentColor());
         UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, gview, 0);
         stack->push(cmd);
     }
 }
 
 void
-MainWindow::nativeAddRegularPolygon(double centerX, double centerY, quint16 sides, uint8_t mode, double rad, double rot, bool fill)
+nativeAddRegularPolygon(double centerX, double centerY, quint16 sides, uint8_t mode, double rad, double rot, bool fill)
 {
 }
 
 //NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
 void
-MainWindow::nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode)
+nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
         EmbPolygon polygon;
-        Object* obj = new Object(polygon, OBJ_TYPE_POLYGON, p, getCurrentColor());
+        Object* obj = new Object(polygon, OBJ_TYPE_POLYGON, p, _main->getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
         if (rubberMode) {
             gview->addToRubberRoom(obj);
@@ -1274,14 +1296,14 @@ MainWindow::nativeAddPolygon(double startX, double startY, const QPainterPath& p
 
 //NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
 void
-MainWindow::nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubberMode)
+nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
         EmbPath path;
-        Object* obj = new Object(path, OBJ_TYPE_POLYLINE, p, getCurrentColor());
+        Object* obj = new Object(path, OBJ_TYPE_POLYLINE, p, _main->getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
         if (rubberMode) {
             gview->addToRubberRoom(obj);
@@ -1297,33 +1319,33 @@ MainWindow::nativeAddPolyline(double startX, double startY, const QPainterPath& 
 
 //NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
 void
-MainWindow::nativeAddPath(double startX, double startY, const QPainterPath& p, int rubberMode)
+nativeAddPath(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
 }
 
 void
-MainWindow::nativeAddHorizontalDimension(double x1, double y1, double x2, double y2, double legHeight)
+nativeAddHorizontalDimension(double x1, double y1, double x2, double y2, double legHeight)
 {
 }
 
 void
-MainWindow::nativeAddVerticalDimension(double x1, double y1, double x2, double y2, double legHeight)
+nativeAddVerticalDimension(double x1, double y1, double x2, double y2, double legHeight)
 {
 }
 
 void
-MainWindow::nativeAddImage(const QString& img, double x, double y, double w, double h, double rot)
+nativeAddImage(const QString& img, double x, double y, double w, double h, double rot)
 {
 }
 
 void
-MainWindow::nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode)
+nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->getUndoStack();
     if (gview && gscene && stack) {
-        Object* obj = new Object(x1, -y1, x2, -y2, getCurrentColor());
+        Object* obj = new Object(x1, -y1, x2, -y2, _main->getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
         if (rubberMode) {
@@ -1339,54 +1361,68 @@ MainWindow::nativeAddDimLeader(double x1, double y1, double x2, double y2, doubl
 }
 
 void
-MainWindow::nativeSetCursorShape(const QString& str)
+nativeSetCursorShape(char shape[MAX_STRING_LENGTH])
 {
     View* gview = activeView();
     if (gview) {
-        QString shape = str.toLower();
-        if (shape == "arrow")
+        if (!strcmp(shape, "arrow"))
             gview->setCursor(QCursor(Qt::ArrowCursor));
-        else if (shape == "uparrow")
+        else if (!strcmp(shape, "uparrow"))
             gview->setCursor(QCursor(Qt::UpArrowCursor));
-        else if (shape == "cross")
+        else if (!strcmp(shape, "cross"))
             gview->setCursor(QCursor(Qt::CrossCursor));
-        else if (shape == "wait")
+        else if (!strcmp(shape, "wait"))
             gview->setCursor(QCursor(Qt::WaitCursor));
-        else if (shape == "ibeam")           gview->setCursor(QCursor(Qt::IBeamCursor));
-        else if (shape == "resizevert")      gview->setCursor(QCursor(Qt::SizeVerCursor));
-        else if (shape == "resizehoriz")     gview->setCursor(QCursor(Qt::SizeHorCursor));
-        else if (shape == "resizediagleft")  gview->setCursor(QCursor(Qt::SizeBDiagCursor));
-        else if (shape == "resizediagright") gview->setCursor(QCursor(Qt::SizeFDiagCursor));
-        else if (shape == "move")            gview->setCursor(QCursor(Qt::SizeAllCursor));
-        else if (shape == "blank")           gview->setCursor(QCursor(Qt::BlankCursor));
-        else if (shape == "splitvert")       gview->setCursor(QCursor(Qt::SplitVCursor));
-        else if (shape == "splithoriz")      gview->setCursor(QCursor(Qt::SplitHCursor));
-        else if (shape == "handpointing")    gview->setCursor(QCursor(Qt::PointingHandCursor));
-        else if (shape == "forbidden")       gview->setCursor(QCursor(Qt::ForbiddenCursor));
-        else if (shape == "handopen")        gview->setCursor(QCursor(Qt::OpenHandCursor));
-        else if (shape == "handclosed")      gview->setCursor(QCursor(Qt::ClosedHandCursor));
-        else if (shape == "whatsthis")       gview->setCursor(QCursor(Qt::WhatsThisCursor));
-        else if (shape == "busy")            gview->setCursor(QCursor(Qt::BusyCursor));
-        #if QT_VERSION >= 0x040700
-        else if (shape == "dragmove")        gview->setCursor(QCursor(Qt::DragMoveCursor));
-        else if (shape == "dragcopy")        gview->setCursor(QCursor(Qt::DragCopyCursor));
-        else if (shape == "draglink")        gview->setCursor(QCursor(Qt::DragLinkCursor));
-        #endif
-
+        else if (!strcmp(shape, "ibeam"))
+            gview->setCursor(QCursor(Qt::IBeamCursor));
+        else if (!strcmp(shape, "resizevert"))
+            gview->setCursor(QCursor(Qt::SizeVerCursor));
+        else if (!strcmp(shape, "resizehoriz"))
+            gview->setCursor(QCursor(Qt::SizeHorCursor));
+        else if (!strcmp(shape, "resizediagleft"))
+            gview->setCursor(QCursor(Qt::SizeBDiagCursor));
+        else if (!strcmp(shape, "resizediagright"))
+            gview->setCursor(QCursor(Qt::SizeFDiagCursor));
+        else if (!strcmp(shape, "move"))
+            gview->setCursor(QCursor(Qt::SizeAllCursor));
+        else if (!strcmp(shape, "blank"))
+            gview->setCursor(QCursor(Qt::BlankCursor));
+        else if (!strcmp(shape, "splitvert"))
+            gview->setCursor(QCursor(Qt::SplitVCursor));
+        else if (!strcmp(shape, "splithoriz"))
+            gview->setCursor(QCursor(Qt::SplitHCursor));
+        else if (!strcmp(shape, "handpointing"))
+            gview->setCursor(QCursor(Qt::PointingHandCursor));
+        else if (!strcmp(shape, "forbidden"))
+            gview->setCursor(QCursor(Qt::ForbiddenCursor));
+        else if (!strcmp(shape, "handopen"))
+            gview->setCursor(QCursor(Qt::OpenHandCursor));
+        else if (!strcmp(shape, "handclosed"))
+            gview->setCursor(QCursor(Qt::ClosedHandCursor));
+        else if (!strcmp(shape, "whatsthis"))
+            gview->setCursor(QCursor(Qt::WhatsThisCursor));
+        else if (!strcmp(shape, "busy"))
+            gview->setCursor(QCursor(Qt::BusyCursor));
+        else if (!strcmp(shape, "dragmove"))
+            gview->setCursor(QCursor(Qt::DragMoveCursor));
+        else if (!strcmp(shape, "dragcopy"))
+            gview->setCursor(QCursor(Qt::DragCopyCursor));
+        else if (!strcmp(shape, "draglink"))
+            gview->setCursor(QCursor(Qt::DragLinkCursor));
     }
 }
 
-double MainWindow::nativeCalculateAngle(double x1, double y1, double x2, double y2)
+double nativeCalculateAngle(double x1, double y1, double x2, double y2)
 {
     return QLineF(x1, -y1, x2, -y2).angle();
 }
 
-double MainWindow::nativeCalculateDistance(double x1, double y1, double x2, double y2)
+double nativeCalculateDistance(double x1, double y1, double x2, double y2)
 {
     return QLineF(x1, y1, x2, y2).length();
 }
 
-double MainWindow::nativePerpendicularDistance(double px, double py, double x1, double y1, double x2, double y2)
+double nativePerpendicularDistance(double px, double py, double x1, double y1, double x2, double y2)
 {
     QLineF line(x1, y1, x2, y2);
     QLineF norm = line.normalVector();
@@ -1399,12 +1435,12 @@ double MainWindow::nativePerpendicularDistance(double px, double py, double x1, 
 }
 
 void
-MainWindow::nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode)
+nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode)
 {
 }
 
 void
-MainWindow::nativeDeleteSelected()
+nativeDeleteSelected()
 {
     View* gview = activeView();
     if (gview) {
@@ -1413,34 +1449,35 @@ MainWindow::nativeDeleteSelected()
 }
 
 void
-MainWindow::nativeCutSelected(double x, double y)
+nativeCutSelected(double x, double y)
 {
 }
 
 void
-MainWindow::nativeCopySelected(double x, double y)
+nativeCopySelected(double x, double y)
 {
 }
 
 void
-MainWindow::nativePasteSelected(double x, double y)
+nativePasteSelected(double x, double y)
 {
 }
 
 void
-MainWindow::nativeMoveSelected(double dx, double dy)
+nativeMoveSelected(double dx, double dy)
 {
     View* gview = activeView();
     if (gview) { gview->moveSelected(dx, -dy); }
 }
 
 void
-MainWindow::nativeScaleSelected(double x, double y, double factor)
+nativeScaleSelected(double x, double y, double factor)
 {
     if (factor <= 0.0) {
-        QMessageBox::critical(this, tr("ScaleFactor Error"),
-                                tr("Hi there. If you are not a developer, report this as a bug. "
-                                "If you are a developer, your code needs examined, and possibly your head too."));
+        QMessageBox::critical(_main,
+            QString(translate("ScaleFactor Error")),
+            QString(translate("Hi there. If you are not a developer, report this as a bug. "
+            "If you are a developer, your code needs examined, and possibly your head too.")));
     }
 
     View* gview = activeView();
@@ -1450,7 +1487,7 @@ MainWindow::nativeScaleSelected(double x, double y, double factor)
 }
 
 void
-MainWindow::nativeRotateSelected(double x, double y, double rot)
+nativeRotateSelected(double x, double y, double rot)
 {
     View* gview = activeView();
     if (gview) {
@@ -1459,7 +1496,7 @@ MainWindow::nativeRotateSelected(double x, double y, double rot)
 }
 
 void
-MainWindow::nativeMirrorSelected(double x1, double y1, double x2, double y2)
+nativeMirrorSelected(double x1, double y1, double x2, double y2)
 {
     View* gview = activeView();
     if (gview) {
@@ -1468,7 +1505,7 @@ MainWindow::nativeMirrorSelected(double x1, double y1, double x2, double y2)
 }
 
 double
-MainWindow::nativeQSnapX()
+nativeQSnapX()
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {
@@ -1478,7 +1515,7 @@ MainWindow::nativeQSnapX()
 }
 
 double
-MainWindow::nativeQSnapY()
+nativeQSnapY()
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {

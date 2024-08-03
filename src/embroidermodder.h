@@ -106,8 +106,6 @@
 /* C Headers */
 #include "core.h"
 
-#define QSTR(A) QString(STR(A))
-
 class CmdPrompt;
 class ImageWidget;
 class MainWindow;
@@ -466,7 +464,7 @@ class UndoEditor : public QDockWidget
     Q_OBJECT
 
 public:
-    UndoEditor(const QString& iconDirectory = QString(), QWidget* widgetToFocus = 0, QWidget* parent = 0); //, Qt::WindowFlags flags = 0);
+    UndoEditor(const QString& iconDirectory = QString(), QWidget* widgetToFocus = 0, QWidget* parent = 0); /*, Qt::WindowFlags flags = 0); */
     ~UndoEditor();
 
     void addStack(QUndoStack* stack);
@@ -520,7 +518,7 @@ public:
     void init(EmbPath path, int type_, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
     void init(const QString& str, double x, double y, QRgb rgb, Qt::PenStyle lineType);
 
-    //    QColor objectColor() const { return objPen.color(); }
+    /* QColor objectColor() const { return objPen.color(); } */
     QRgb objectColorRGB() const { return objPen.color().rgb(); }
     Qt::PenStyle objectLineType() const { return objPen.style(); }
     double  objectLineWeight() const { return lwtPen.widthF(); }
@@ -751,7 +749,7 @@ class PropertyEditor : public QDockWidget
     Q_OBJECT
 
 public:
-    PropertyEditor(const QString& iconDirectory = QString(), bool pickAddMode = true, QWidget* widgetToFocus = 0, QWidget* parent = 0); //, Qt::WindowFlags flags = 0);
+    PropertyEditor(const QString& iconDirectory = QString(), bool pickAddMode = true, QWidget* widgetToFocus = 0, QWidget* parent = 0); /*, Qt::WindowFlags flags = 0); */
     ~PropertyEditor();
 
 protected:
@@ -785,16 +783,16 @@ private:
 
     Object* tempObj;
 
-    //Helper functions
-    QToolButton*   createToolButton(const QString& iconName, const QString& txt);
-    QLineEdit*     createLineEdit(const QString& validatorType = QString(), bool readOnly = false);
-    QComboBox*     createComboBox(bool disable = false);
+    /* Helper functions */
+    QToolButton* createToolButton(const QString& iconName, const QString& txt);
+    QLineEdit* createLineEdit(const QString& validatorType = QString(), bool readOnly = false);
+    QComboBox* createComboBox(bool disable = false);
     QFontComboBox* createFontComboBox(bool disable = false);
 
     int precisionAngle;
     int precisionLength;
 
-    //Used when checking if fields vary
+    /* Used when checking if fields vary. */
     QString fieldOldText;
     QString fieldNewText;
     QString fieldVariesText;
@@ -1481,7 +1479,7 @@ protected:
 public:
     bool shiftKeyPressedState;
 
-    QByteArray                      layoutState;
+    QByteArray layoutState;
 
     int numOfDocs;
     int docIndex;
@@ -1561,7 +1559,7 @@ public slots:
     void exit();
     void checkForUpdates();
 
-    // Help Menu
+    /* Help Menu */
     void tipOfTheDay();
     void buttonTipOfTheDayClicked(int);
     void checkBoxTipOfTheDayStateChanged(int);
@@ -1576,10 +1574,10 @@ public slots:
     void toggleRuler();
     void toggleLwt();
 
-    // Icons
+    /* Icons */
     void iconResize(int iconSize);
 
-    //Selectors
+    /* Selectors */
     void layerSelectorIndexChanged(int index);
     void colorSelectorIndexChanged(int index);
     void linetypeSelectorIndexChanged(int index);
@@ -1623,79 +1621,6 @@ public slots:
     void zoomExtents();
 
     void doNothing();
-
-public:
-    //Natives
-    void nativeAlert(const QString& txt);
-    void nativeBlinkPrompt();
-    void nativeSetPromptPrefix(const QString& txt);
-    void nativeAppendPromptHistory(const QString& txt);
-    void nativeEnablePromptRapidFire();
-    void nativeDisablePromptRapidFire();
-
-    void nativeEnableMoveRapidFire();
-    void nativeDisableMoveRapidFire();
-
-    void messageBox(const QString& type, const QString& title, const QString& text);
-
-    void nativeRedo();
-
-    void nativePrintArea(double x, double y, double w, double h);
-
-    void nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b);
-    void nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b);
-    void nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b);
-
-    void nativeVulcanize();
-    void nativeClearRubber();
-    bool nativeAllowRubber();
-    void nativeSpareRubber(int64_t id);
-    //TODO: void nativeSetRubberFilter(int64_t id); //TODO: This is so more than 1 rubber object can exist at one time without updating all rubber objects at once
-    void nativeSetRubberMode(int mode);
-    void nativeSetRubberPoint(const QString& key, double x, double y);
-    void nativeSetRubberText(const QString& key, const QString& txt);
-
-    void nativeAddTextMulti(const QString& str, double x, double y, double rot, bool fill, int rubberMode);
-    void nativeAddTextSingle(const QString& str, double x, double y, double rot, bool fill, int rubberMode);
-
-    void nativeAddInfiniteLine(double x1, double y1, double x2, double y2, double rot);
-    void nativeAddRay(double x1, double y1, double x2, double y2, double rot);
-    void nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubberMode);
-    void nativeAddTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double rot, bool fill);
-    void nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode);
-    void nativeAddRoundedRectangle(double x, double y, double w, double h, double rad, double rot, bool fill);
-    void nativeAddArc(EmbArc arc, int rubberMode);
-    void nativeAddCircle(double centerX, double centerY, double radius, bool fill, int rubberMode);
-    void nativeAddSlot(double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode);
-    void nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode);
-    void nativeAddPoint(double x, double y);
-    void nativeAddRegularPolygon(double centerX, double centerY, quint16 sides, uint8_t mode, double rad, double rot, bool fill);
-    void nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode);
-    void nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubberMode);
-    void nativeAddPath(double startX, double startY, const QPainterPath& p, int rubberMode);
-    void nativeAddHorizontalDimension(double x1, double y1, double x2, double y2, double legHeight);
-    void nativeAddVerticalDimension(double x1, double y1, double x2, double y2, double legHeight);
-    void nativeAddImage(const QString& img, double x, double y, double w, double h, double rot);
-
-    void nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode);
-
-    void nativeSetCursorShape(const QString& str);
-    double nativeCalculateAngle(double x1, double y1, double x2, double y2);
-    double nativeCalculateDistance(double x1, double y1, double x2, double y2);
-    double nativePerpendicularDistance(double px, double py, double x1, double y1, double x2, double y2);
-
-    void nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
-    void nativeDeleteSelected();
-    void nativeCutSelected(double x, double y);
-    void nativeCopySelected(double x, double y);
-    void nativePasteSelected(double x, double y);
-    void nativeMoveSelected(double dx, double dy);
-    void nativeScaleSelected(double x, double y, double factor);
-    void nativeRotateSelected(double x, double y, double rot);
-    void nativeMirrorSelected(double x1, double y1, double x2, double y2);
-
-    double nativeQSnapX();
-    double nativeQSnapY();
 };
 
 MdiArea* getMdiArea();
@@ -1705,6 +1630,28 @@ QGraphicsScene* activeScene();
 QUndoStack* activeUndoStack();
 
 QIcon create_icon(QString icon);
+
+void nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode);
+void nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubberMode);
+void nativeAddPath(double startX, double startY, const QPainterPath& p, int rubberMode);
+
+void nativeAlert(std::string txt);
+void nativeSetPromptPrefix(std::string txt);
+void nativeAppendPromptHistory(std::string txt);
+void messageBox(std::string type, std::string title, std::string text);
+
+/* TODO: void nativeSetRubberFilter(int64_t id); */
+/* TODO: This is so more than 1 rubber object can exist at one time without updating all rubber objects at once. */
+void nativeSetRubberMode(int mode);
+void nativeSetRubberPoint(std::string key, double x, double y);
+void nativeSetRubberText(std::string key, std::string txt);
+
+void nativeAddTextMulti(std::string str, double x, double y, double rot, bool fill, int rubberMode);
+void nativeAddTextSingle(std::string str, double x, double y, double rot, bool fill, int rubberMode);
+
+void nativeAddImage(std::string img, double x, double y, double w, double h, double rot);
+
+void nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
 
 QAction *get_action_by_icon(const char *icon);
 void add_to_menu(QMenu *menu, const char *menu_data[]);

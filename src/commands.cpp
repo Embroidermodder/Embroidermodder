@@ -94,6 +94,12 @@ end_command(void)
     _main->prompt->endCommand();
 }
 
+void
+debug_message(const char *msg)
+{
+    _main->debug_message(msg);
+}
+
 /* Simple Commands (other commands, like circle_command are housed in their
  * own file with their associated functions)
  * ------------------------------------------------------------------------
@@ -170,7 +176,7 @@ alert_command(ScriptEnv *context)
     }
 
     init_command();
-    _main->prompt->alert(QSTR(0));
+    _main->prompt->alert(STR(0));
     end_command();
     return script_null;
 }
@@ -260,7 +266,7 @@ debug_command(ScriptEnv *context)
     }
     init_command();
     clear_selection();
-    _main->nativeAppendPromptHistory(QSTR(0));
+    nativeAppendPromptHistory(STR(0));
     end_command();
     return script_null;
 }
@@ -287,7 +293,7 @@ disable_command(ScriptEnv* context)
         return script_false;
     }
 
-    QString value = QSTR(0);
+    QString value(STR(0));
 
     init_command();
 
@@ -317,7 +323,7 @@ enable_command(ScriptEnv* context)
         return script_false;
     }
 
-    QString value = QSTR(0);
+    QString value(STR(0));
 
     init_command();
 
@@ -336,12 +342,14 @@ erase_command(ScriptEnv * /* context */)
     init_command();
     if (num_selected() <= 0) {
         /* TODO: Prompt to select objects if nothing is preselected. */
-        _main->prompt->alert(translate("Preselect objects before invoking the delete command."));
+        _main->prompt->alert(
+            translate("Preselect objects before invoking the delete command."));
         end_command();
-        _main->messageBox("information", translate("Delete Preselect"), translate("Preselect objects before invoking the delete command."));
+        messageBox("information", translate("Delete Preselect"),
+            translate("Preselect objects before invoking the delete command."));
     }
     else {
-        _main->nativeDeleteSelected();
+        nativeDeleteSelected();
         end_command();
     }
     end_command();
@@ -357,9 +365,12 @@ error_command(ScriptEnv *context)
     }
     init_command();
     clear_selection();
-    QString s = "ERROR: (" + QSTR(0) + ") " + QSTR(1);
-    _main->nativeSetPromptPrefix(s);
-    _main->nativeAppendPromptHistory(QString());
+    std::string s = "ERROR: (";
+    s += STR(0);
+    s += ") ";
+    s += STR(1);
+    nativeSetPromptPrefix(s);
+    nativeAppendPromptHistory("");
     end_command();
     return script_null;
 }
@@ -383,7 +394,7 @@ get_command(ScriptEnv* context)
         return script_false;
     }
 
-    QString value = QSTR(0);
+    QString value(STR(0));
 
     init_command();
 
@@ -434,10 +445,10 @@ get_command(ScriptEnv* context)
         return script_bool(text_style_underline.setting);
     }
     else if (value == "QSNAPX") {
-        return script_bool(_main->nativeQSnapX());
+        return script_bool(nativeQSnapX());
     }
     else if (value == "QSNAPY") {
-        return script_bool(_main->nativeQSnapY());
+        return script_bool(nativeQSnapY());
     }
 
     end_command();
@@ -542,7 +553,7 @@ mirrorselected_command(ScriptEnv *context)
     }
 
     init_command();
-    _main->nativeMirrorSelected(REAL(0), REAL(1), REAL(2), REAL(3));
+    nativeMirrorSelected(REAL(0), REAL(1), REAL(2), REAL(3));
     end_command();
     return script_null;
 }
@@ -631,7 +642,7 @@ previewon_command(ScriptEnv *context)
         return script_false;
     }
 
-    QString cloneStr = QSTR(0).toUpper();
+    QString cloneStr = QString(STR(0)).toUpper();
     int clone = PREVIEW_CLONE_NULL;
     if (cloneStr == "SELECTED") {
         clone = PREVIEW_CLONE_SELECTED;
@@ -644,7 +655,7 @@ previewon_command(ScriptEnv *context)
         return script_false;
     }
 
-    QString modeStr  = QSTR(1).toUpper();
+    QString modeStr  = QString(STR(1)).toUpper();
     int mode = PREVIEW_MODE_NULL;
     if (modeStr == "MOVE") {
         mode = PREVIEW_MODE_MOVE;
@@ -728,7 +739,7 @@ set_command(ScriptEnv* context)
         return script_false;
     }
 
-    QString value = QSTR(0);
+    QString value(STR(0));
 
     init_command();
 
@@ -918,7 +929,8 @@ todo_command(ScriptEnv *context)
         return script_false;
     }
     init_command();
-    _main->prompt->alert("TODO: (" + QSTR(0) + ") " + QSTR(1));
+    QString s = "TODO: (" + QString(STR(0)) + ") " + QString(STR(1));
+    _main->prompt->alert(s);
     end_command();
     return script_null;
 }
@@ -944,7 +956,7 @@ vulcanize_command(ScriptEnv * context)
 
     init_command();
     clear_selection();
-    _main->nativeVulcanize();
+    nativeVulcanize();
     end_command();
     return script_null;
 }
@@ -973,7 +985,7 @@ blink_prompt_command(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeBlinkPrompt();
+    nativeBlinkPrompt();
     return script_null;
 }
 
@@ -983,7 +995,7 @@ set_prompt_prefix_command(ScriptEnv* context)
     if (!argument_checks(context, "debug", "s")) {
         return script_false;
     }
-    _main->nativeSetPromptPrefix(QSTR(0));
+    nativeSetPromptPrefix(STR(0));
     return script_null;
 }
 
@@ -1011,7 +1023,7 @@ enable_prompt_rapid_fire(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeEnablePromptRapidFire();
+    nativeEnablePromptRapidFire();
     return script_null;
 }
 
@@ -1022,7 +1034,7 @@ disable_prompt_rapid_fire(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeDisablePromptRapidFire();
+    nativeDisablePromptRapidFire();
     return script_null;
 }
 
@@ -1033,7 +1045,7 @@ enable_move_rapid_fire(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeEnableMoveRapidFire();
+    nativeEnableMoveRapidFire();
     return script_null;
 }
 
@@ -1044,10 +1056,11 @@ disable_move_rapid_fire(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeDisableMoveRapidFire();
+    nativeDisableMoveRapidFire();
     return script_null;
 }
 
+/* . */
 ScriptValue
 messagebox(ScriptEnv* context)
 {
@@ -1055,19 +1068,20 @@ messagebox(ScriptEnv* context)
         return script_false;
     }
 
-    QString type  = QSTR(0).toLower();
-    QString title = QSTR(1);
-    QString text  = QSTR(2);
+    std::string type(STR(0));
+    std::string title(STR(1));
+    std::string text(STR(2));
 
     if (type != "critical" && type != "information" && type != "question" && type != "warning") {
         prompt_output("UNKNOWN_ERROR messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
         return script_false;
     }
 
-    _main->messageBox(type, title, text);
+    messageBox(type, title, text);
     return script_null;
 }
 
+/* . */
 ScriptValue
 is_int_command(ScriptEnv* context)
 {
@@ -1083,7 +1097,7 @@ print_area_command(ScriptEnv* context)
     if (!argument_checks(context, "printArea", "rrrr")) {
         return script_false;
     }
-    _main->nativePrintArea(REAL(0), REAL(1), REAL(2), REAL(3));
+    nativePrintArea(REAL(0), REAL(1), REAL(2), REAL(3));
     return script_null;
 }
 
@@ -1106,7 +1120,7 @@ set_background_color_command(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeSetBackgroundColor(REAL(0), REAL(1), REAL(2));
+    nativeSetBackgroundColor(REAL(0), REAL(1), REAL(2));
     return script_null;
 }
 
@@ -1130,7 +1144,7 @@ set_crosshair_color_command(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeSetCrossHairColor(REAL(0), REAL(1), REAL(2));
+    nativeSetCrossHairColor(REAL(0), REAL(1), REAL(2));
     return script_null;
 }
 
@@ -1154,7 +1168,7 @@ set_grid_color_command(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeSetGridColor(REAL(0), REAL(1), REAL(2));
+    nativeSetGridColor(REAL(0), REAL(1), REAL(2));
     return script_null;
 }
 
@@ -1164,7 +1178,8 @@ add_text_multi_command(ScriptEnv* context)
     if (!argument_checks(context, "mouseX", "srrrb")) {
         return script_false;
     }
-    _main->nativeAddTextMulti(QSTR(0), REAL(1), REAL(2), REAL(3), BOOL(4), OBJ_RUBBER_OFF);
+    nativeAddTextMulti(std::string(STR(0)), REAL(1), REAL(2), REAL(3),
+        BOOL(4), OBJ_RUBBER_OFF);
     return script_null;
 }
 
@@ -1174,7 +1189,8 @@ add_text_single_command(ScriptEnv* context)
     if (!argument_checks(context, "mouseX", "srrrb")) {
         return script_false;
     }
-    _main->nativeAddTextSingle(QSTR(0), REAL(1), REAL(2), REAL(3), BOOL(4), OBJ_RUBBER_OFF);
+    nativeAddTextSingle(std::string(STR(0)), REAL(1), REAL(2), REAL(3),
+        BOOL(4), OBJ_RUBBER_OFF);
     return script_null;
 }
 
@@ -1200,7 +1216,7 @@ add_line_command(ScriptEnv* context)
     if (!argument_checks(context, "add_line_command", "rrrrr")) {
         return script_false;
     }
-    _main->nativeAddLine(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), OBJ_RUBBER_OFF);
+    nativeAddLine(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), OBJ_RUBBER_OFF);
     return script_null;
 }
 
@@ -1210,7 +1226,7 @@ add_triangle_command(ScriptEnv* context)
     if (!argument_checks(context, "add_triangle_command", "rrrrrrrb")) {
         return script_false;
     }
-    _main->nativeAddTriangle(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), REAL(5), REAL(6), BOOL(7));
+    nativeAddTriangle(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), REAL(5), REAL(6), BOOL(7));
     return script_null;
 }
 
@@ -1220,7 +1236,7 @@ add_rectangle_command(ScriptEnv* context)
     if (!argument_checks(context, "add_rectangle_command", "rrrrrb")) {
         return script_false;
     }
-    _main->nativeAddRectangle(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), OBJ_RUBBER_OFF);
+    nativeAddRectangle(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), OBJ_RUBBER_OFF);
     return script_null;
 }
 
@@ -1230,7 +1246,7 @@ add_rounded_rectangle_command(ScriptEnv* context)
     if (!argument_checks(context, "add_rounded_rectangle", "rrrrrrb")) {
         return script_false;
     }
-    _main->nativeAddRoundedRectangle(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), REAL(5), BOOL(6));
+    nativeAddRoundedRectangle(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), REAL(5), BOOL(6));
     return script_null;
 }
 
@@ -1247,7 +1263,7 @@ add_arc_command(ScriptEnv* context)
     arc.mid.y = REAL(3);
     arc.end.x = REAL(4);
     arc.end.y = REAL(5);
-    _main->nativeAddArc(arc, OBJ_RUBBER_OFF);
+    nativeAddArc(arc, OBJ_RUBBER_OFF);
     return script_null;
 }
 
@@ -1257,7 +1273,7 @@ add_circle_command(ScriptEnv* context)
     if (!argument_checks(context, "mouseX", "rrrb")) {
         return script_false;
     }
-    _main->nativeAddCircle(REAL(0), REAL(1), REAL(2), BOOL(4), OBJ_RUBBER_OFF);
+    nativeAddCircle(REAL(0), REAL(1), REAL(2), BOOL(4), OBJ_RUBBER_OFF);
     return script_null;
 }
 
@@ -1267,7 +1283,7 @@ add_slot_command(ScriptEnv* context)
     if (!argument_checks(context, "mouseX", "rrrrrb")) {
         return script_false;
     }
-    _main->nativeAddSlot(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), OBJ_RUBBER_OFF);
+    nativeAddSlot(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), OBJ_RUBBER_OFF);
     return script_null;
 }
 
@@ -1277,7 +1293,7 @@ add_ellipse_command(ScriptEnv* context)
     if (!argument_checks(context, "mouseX", "rrrrrb")) {
         return script_false;
     }
-    _main->nativeAddEllipse(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), OBJ_RUBBER_OFF);
+    nativeAddEllipse(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), OBJ_RUBBER_OFF);
     return script_null;
 }
 
@@ -1287,7 +1303,7 @@ add_point_command(ScriptEnv* context)
     if (!argument_checks(context, "mouseX", "rr")) {
         return script_false;
     }
-    _main->nativeAddPoint(REAL(0), REAL(1));
+    nativeAddPoint(REAL(0), REAL(1));
     return script_null;
 }
 
@@ -1362,7 +1378,7 @@ add_polygon_command(ScriptEnv* context)
 
     path.translate(-startX, -startY);
 
-    _main->nativeAddPolygon(startX, startY, path, OBJ_RUBBER_OFF);
+    nativeAddPolygon(startX, startY, path, OBJ_RUBBER_OFF);
     #endif
     return script_null;
 }
@@ -1427,7 +1443,7 @@ add_polyline_command(ScriptEnv* context)
 
     path.translate(-startX, -startY);
 
-    _main->nativeAddPolyline(startX, startY, path, OBJ_RUBBER_OFF);
+    nativeAddPolyline(startX, startY, path, OBJ_RUBBER_OFF);
     #endif
     return script_null;
 }
@@ -1474,7 +1490,7 @@ add_dimleader_command(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeAddDimLeader(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), OBJ_RUBBER_OFF);
+    nativeAddDimLeader(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), OBJ_RUBBER_OFF);
     return script_null;
 }
 
@@ -1485,7 +1501,7 @@ set_cursor_shape_command(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeSetCursorShape(QSTR(0));
+    nativeSetCursorShape(STR(0));
     return script_null;
 }
 
@@ -1496,7 +1512,7 @@ calculate_angle_command(ScriptEnv* context)
         return script_false;
     }
 
-    double r = _main->nativeCalculateAngle(REAL(0), REAL(1), REAL(2), REAL(3));
+    double r = nativeCalculateAngle(REAL(0), REAL(1), REAL(2), REAL(3));
     return script_real(r);
 }
 
@@ -1507,7 +1523,7 @@ calculate_distance_command(ScriptEnv* context)
         return script_false;
     }
 
-    double r = _main->nativeCalculateDistance(REAL(0), REAL(1), REAL(2), REAL(3));
+    double r = nativeCalculateDistance(REAL(0), REAL(1), REAL(2), REAL(3));
     return script_real(r);
 }
 
@@ -1518,7 +1534,7 @@ perpendicular_distance_command(ScriptEnv* context)
         return script_false;
     }
 
-    double r = _main->nativePerpendicularDistance(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), REAL(5));
+    double r = nativePerpendicularDistance(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), REAL(5));
     return script_real(r);
 }
 
@@ -1558,7 +1574,7 @@ delete_selected_command(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeDeleteSelected();
+    nativeDeleteSelected();
     return script_null;
 }
 
@@ -1569,7 +1585,7 @@ cut_selected_command(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeCutSelected(REAL(0), REAL(1));
+    nativeCutSelected(REAL(0), REAL(1));
     return script_null;
 }
 
@@ -1580,7 +1596,7 @@ copy_selected_command(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeCopySelected(REAL(0), REAL(1));
+    nativeCopySelected(REAL(0), REAL(1));
     return script_null;
 }
 
@@ -1591,7 +1607,7 @@ paste_selected_command(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativePasteSelected(REAL(0), REAL(1));
+    nativePasteSelected(REAL(0), REAL(1));
     return script_null;
 }
 
@@ -1602,7 +1618,7 @@ move_selected_command(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeMoveSelected(REAL(0), REAL(1));
+    nativeMoveSelected(REAL(0), REAL(1));
     return script_null;
 }
 
@@ -1618,7 +1634,7 @@ scale_selected_command(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeScaleSelected(REAL(0), REAL(1), REAL(2));
+    nativeScaleSelected(REAL(0), REAL(1), REAL(2));
     return script_null;
 }
 
@@ -1629,7 +1645,7 @@ rotate_selected_command(ScriptEnv* context)
         return script_false;
     }
 
-    _main->nativeRotateSelected(REAL(0), REAL(1), REAL(2));
+    nativeRotateSelected(REAL(0), REAL(1), REAL(2));
     return script_null;
 }
 

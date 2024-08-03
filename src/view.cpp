@@ -396,7 +396,8 @@ void View::createGridRect()
     }
 }
 
-void View::createGridPolar()
+void
+View::createGridPolar()
 {
     double radSpacing = grid_spacing_radius.setting;
     double angSpacing = grid_spacing_angle.setting;
