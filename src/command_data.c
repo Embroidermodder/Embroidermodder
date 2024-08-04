@@ -3,13 +3,26 @@
  *
  * Copyright 2011-2024 The Embroidermodder Team
  * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
- * Visit https://www.libembroidery.org/refman for advice on altering this file,
- * or read the markdown version in embroidermodder2/docs/refman.
+ *
+ * Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
+ * for advice on altering this file.
  *
  * Command Data
  *
  * Shortcuts should match: https://doc.qt.io/qt-6/qkeysequence.html#standard-shortcuts
  * Apple platforms may need an additional argument like .apple_shortcut
+ *
+ * Long term this file will become "command_data.toml" with the format:
+ *
+ * # No arguments, shortcut or flags arguments because they're implicitly
+ * # empty strings.
+ * [about]
+ * id = 0 # Will this have to be a magic number to allow for a jump table?
+ * command = "about"
+ * icon = "about"
+ * tooltip = "&About Embroidermodder 2",
+ * statustip = "Displays information about this product. Command: ABOUT.",
+ * alias = "ABOUT",
  */
 
 #include "core.h"
@@ -17,1121 +30,1233 @@
 Command command_data[MAX_COMMANDS] = {
     {
         .id = ACTION_ABOUT,
-        .main = about_command,
+        .command = "about",
         .arguments = "",
         .icon = "about",
         .tooltip = "&About Embroidermodder 2",
         .statustip = "Displays information about this product. Command: ABOUT.",
         .alias = "ABOUT",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = CONTEXT_FREE
     },
     {
         .id = -1,
-        .main = arc_command,
+        .command = "arc",
         .icon = "arc",
         .tooltip = "&Arc",
         .statustip = "Displays information about this product:  ARC",
         .alias = "ARC",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ALERT,
-        .main = alert_command,
-        .arguments = "ss",
+        .command = "alert",
+        .arguments = "s",
         .icon = "warning",
         .tooltip = "&Alert",
         .statustip = "Creates a dialog to alert the user. Command: ALERT.",
         .alias = "ALERT",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ANGLE,
-        .main = angle_command,
+        .command = "angle",
         .arguments = "rrr",
         .icon = "angle",
         .tooltip = "&Angle",
         .statustip = "Calculate the angle between two lines and display it. Command: ANGLE, CALCANGLE",
         .alias = "ANGLE, CALCANGLE",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW | CLEAR_SELECTION
     },
     {
         .id = ACTION_CIRCLE,
-        .main = circle_command,
+        .command = "circle",
         .arguments = "rrr",
         .icon = "circle",
         .tooltip = "&Circle",
         .statustip = "Creates a circle. Command: CIRCLE.",
         .alias = "C, CIRCLE",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_CHANGELOG,
-        .main = changelog_command,
+        .command = "changelog",
         .arguments = "",
         .icon = "changelog",
         .tooltip = "&Changelog",
         .statustip = "Describes new features in this product. Command: CHANGELOG.",
         .alias = "CHANGELOG",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_CLEAR,
-        .main = clear_command,
+        .command = "clear",
         .arguments = "",
         .icon = "clear",
         .tooltip = "&Do Nothing",
         .statustip = "Does Nothing. Command: DONOTHING.",
         .alias = "DONOTHING",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW | CLEAR_SELECTION
     },
     {
         .id = ACTION_COLOR_SELECTOR,
-        .main = colorselector_command,
+        .command = "colorselector",
         .arguments = "",
         .icon = "colorselector",
         .tooltip = "&Color Selector",
         .statustip = "Dropdown selector for changing the current thread color",
         .alias = "COLORSELECTOR",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_COPY,
-        .main = copy_command,
+        .command = "copy",
         .arguments = "",
         .icon = "copy",
         .tooltip = "&Copy",
         .statustip = "Copy the current selection's contents to the clipboard. Command: COPY.",
         .alias = "COPY",
-        .shortcut = "Ctrl+C"
+        .shortcut = "Ctrl+C",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_CUT,
-        .main = cut_command,
+        .command = "cut",
         .arguments = "",
         .icon = "cut",
         .tooltip = "Cu&t",
         .statustip = "Cut the current selection's contents to the clipboard. Command: CUT.",
         .alias = "CUT",
-        .shortcut = "Ctrl+X"
+        .shortcut = "Ctrl+X",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_DAY,
-        .main = day_command,
+        .command = "day",
         .arguments = "",
         .icon = "day",
         .tooltip = "&Day",
         .statustip = "Updates the current view using day vision settings. Command: DAY",
         .alias = "DAY",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_DEBUG,
-        .main = debug_command,
-        .arguments = "",
+        .command = "debug",
+        .arguments = "s",
         .icon = "debug",
         .tooltip = "Debug",
         .statustip = "Displays information about this product:  ABOUT",
         .alias = "DEBUG",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_DESIGN_DETAILS,
-        .main = design_details_command,
+        .command = "designdetails",
         .arguments = "",
         .icon = "designdetails",
         .tooltip = "&Details",
         .statustip = "Details of the current design. Command: DETAILS",
         .alias = "DESIGNDETAILS, DETAILS",
-        .shortcut = "Ctrl+D"
+        .shortcut = "Ctrl+D",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_DISABLE,
-        .main = disable_command,
+        .command = "disable",
         .arguments = "",
         .icon = "disable",
         .tooltip = "&Disable",
         .statustip = "Disable one of the pre-defined global boolean variables.",
         .alias = "DISABLE",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_DISTANCE,
-        .main = distance_command,
+        .command = "distance",
         .arguments = "rrrr",
         .icon = "distance",
         .tooltip = "&Distance",
         .statustip = "Measures the distance and angle between two points. Command: DIST",
         .alias = "DI, DIST, DISTANCE",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_DOLPHIN,
-        .main = dolphin_command,
+        .command = "dolphin",
         .arguments = "",
         .icon = "dolphin",
         .tooltip = "&Dolphin",
         .statustip = "Creates a dolphin. Command: DOLPHIN.",
         .alias = "DOLPHIN",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_DO_NOTHING,
-        .main = do_nothing,
+        .command = "donothing",
         .arguments = "",
         .icon = "donothing",
         .tooltip = "&Do Nothing",
         .statustip = "Does Nothing. Command: DONOTHING.",
         .alias = "DONOTHING",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = CONTEXT_FREE
     },
     {
         .id = ACTION_ELLIPSE,
-        .main = ellipse_command,
+        .command = "ellipse",
         .arguments = "",
         .icon = "ellipse",
         .tooltip = "&Ellipse",
         .statustip = "Creates an ellipse. Command: ELLIPSE.",
         .alias = "EL, ELLIPSE",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ENABLE,
-        .main = enable_command,
+        .command = "enable",
         .arguments = "",
         .icon = "enable",
         .tooltip = "&Enable",
         .statustip = "Enable a pre-defined global variables.",
         .alias = "ENABLE",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ERASE,
-        .main = erase_command,
+        .command = "erase",
         .arguments = "",
         .icon = "erase",
         .tooltip = "D&elete",
         .statustip = "Removes objects from a drawing. Command: DELETE.",
         .alias = "E, ERASE, DEL, DELETE",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ERROR,
-        .main = error_command,
+        .command = "error",
         .arguments = "",
         .icon = "error",
         .tooltip = "Error",
         .statustip = "Sends an error message to the user. Command: ERROR",
         .alias = "ERROR",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_EXIT,
-        .main = exit_command,
+        .command = "exit",
         .arguments = "",
         .icon = "exit",
         .tooltip = "E&xit",
         .statustip = "Exit the application:  EXIT",
         .alias = "EXIT, QUIT",
-        .shortcut = "Ctrl+Q"
+        .shortcut = "Ctrl+Q",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_GET,
-        .main = get_command,
+        .command = "get",
         .arguments = "",
         .icon = "get",
         .tooltip = "&Get",
         .statustip = "Print a value to one of the pre-defined global variables.",
         .alias = "GET",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_HEART,
-        .main = heart_command,
+        .command = "heart",
         .arguments = "",
         .icon = "heart",
         .tooltip = "&Heart",
         .statustip = "Creates a heart:  HEART",
         .alias = "HEART",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_HELP,
-        .main = help_command,
+        .command = "help",
         .arguments = "",
         .icon = "help",
         .tooltip = "&Help",
         .statustip = "Displays help. Command: HELP",
         .alias = "?, HELP",
-        .shortcut = "F1"
+        .shortcut = "F1",
+        .flags = CONTEXT_FREE
     },
     {
         .id = ACTION_HIDE_ALL_LAYERS,
-        .main = hidealllayers_command,
+        .command = "hidealllayers",
         .arguments = "",
         .icon = "hidealllayers",
         .tooltip = "&Hide All Layers",
         .statustip = "Turns the visibility off for all layers in the current drawing:  HIDEALL",
         .alias = "HIDEALLLAYERS",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ICON_128,
-        .main = icon128_command,
+        .command = "icon128",
         .arguments = "",
         .icon = "icon128",
         .tooltip = "Icon12&8",
         .statustip = "Sets the toolbar icon size to 128x128:  ICON128",
         .alias = "ICON128",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ICON_16,
-        .main = icon16_command,
+        .command = "icon16",
         .arguments = "",
         .icon = "icon16",
         .tooltip = "Icon&16",
         .statustip = "Sets the toolbar icon size to 16x16:  ICON16",
         .alias = "ICON16",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ICON_24,
-        .main = icon24_command,
+        .command = "icon24",
         .arguments = "",
         .icon = "icon24",
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
         .alias = "ICON24",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ICON_32,
-        .main = icon32_command,
+        .command = "icon32",
         .arguments = "",
         .icon = "icon32",
         .tooltip = "Icon&32",
         .statustip = "Sets the toolbar icon size to 32x32:  ICON32",
         .alias = "ICON32",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ICON_48,
-        .main = icon48_command,
+        .command = "icon48",
         .arguments = "",
         .icon = "icon48",
         .tooltip = "Icon&48",
         .statustip = "Sets the toolbar icon size to 48x48:  ICON48",
         .alias = "ICON48",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ICON_64,
-        .main = icon64_command,
+        .command = "icon64",
         .arguments = "",
         .icon = "icon64",
         .tooltip = "Icon&64",
         .statustip = "Sets the toolbar icon size to 64x64:  ICON64",
         .alias = "ICON64",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_FREEZE_ALL_LAYERS,
-        .main = freezealllayers_command,
+        .command = "freezealllayers",
         .arguments = "",
         .icon = "freezealllayers",
         .tooltip = "&Freeze All Layers",
         .statustip = "Freezes all layers in the current drawing:  FREEZEALL",
         .alias = "FREEZEALLLAYERS",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_LAYERS,
-        .main = layers_command,
+        .command = "layers",
         .arguments = "",
         .icon = "layers",
         .tooltip = "&Layers",
         .statustip = "Manages layers and layer properties:  LAYER",
         .alias = "LAYER",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_LAYER_PREVIOUS,
-        .main = layerprevious_command,
+        .command = "layerprevious",
         .arguments = "",
         .icon = "layerprevious",
         .tooltip = "&Layer Previous",
         .statustip = "Restores the previous layer settings:  LAYERP",
         .alias = "LAYERP",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_LAYER_SELECTOR,
-        .main = layerselector_command,
+        .command = "layerselector",
         .arguments = "",
         .icon = "layerselector",
         .tooltip = "&Layer Selector",
         .statustip = "Dropdown selector for changing the current layer",
         .alias = "LAYERSELECTOR",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_LINE,
-        .main = line_command,
+        .command = "line",
         .arguments = "",
         .icon = "line",
         .tooltip = "&Line",
         .statustip = "Creates straight line segments:  LINE",
         .alias = "L, LINE",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_LINE_TYPE_SELECTOR,
-        .main = linetypeselector_command,
+        .command = "linetypeselector",
         .arguments = "",
         .icon = "linetypeselector",
         .tooltip = "&Stitchtype Selector",
         .statustip = "Dropdown selector for changing the current stitch type",
         .alias = "LINETYPESELECTOR",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_LINE_WEIGHT_SELECTOR,
-        .main = lineweightselector_command,
+        .command = "lineweightselector",
         .arguments = "",
         .icon = "lineweightselector",
         .tooltip = "&Threadweight Selector",
         .statustip = "Dropdown selector for changing the current thread weight",
         .alias = "LINEWEIGHTSELECTOR",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_LOCATE_POINT,
-        .main = locatepoint_command,
+        .command = "locatepoint",
         .arguments = "",
         .icon = "locatepoint",
         .tooltip = "&Locate Point",
         .statustip = "Displays the coordinate values of a location:  ID",
         .alias = "ID, LOCATEPOINT",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_LOCK_ALL_LAYERS,
-        .main = lockalllayers_command,
+        .command = "lockalllayers",
         .arguments = "",
         .icon = "lockalllayers",
         .tooltip = "&Lock All Layers",
         .statustip = "Locks all layers in the current drawing:  LOCKALL",
         .alias = "LOCKALL",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_MAKE_LAYER_CURRENT,
-        .main = makelayercurrent_command,
+        .command = "makelayercurrent",
         .arguments = "",
         .icon = "makelayercurrent",
         .tooltip = "&Make Layer Active",
         .statustip = "Makes the layer of a selected object the active layer",
         .alias = "MAKELAYERCURRENT",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_MIRROR_SELECTED,
-        .main = mirrorselected_command,
+        .command = "mirrorselected",
         .arguments = "",
         .icon = "mirror",
         .tooltip = "&Mirror Selected",
         .statustip = "Command: MIRRORSELECTED.",
         .alias = "MIRRORSELECTED",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_MOVE,
-        .main = move_command,
+        .command = "move",
         .arguments = "",
         .icon = "move",
         .tooltip = "&Move",
         .statustip = "Displaces objects a specified distance in a specified direction:  MOVE",
         .alias = "M, MOVE",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_MOVE_SELECTED,
-        .main = moveselected_command,
+        .command = "moveselected",
         .arguments = "",
         .icon = "moveselected",
         .tooltip = "&Do Nothing",
         .statustip = "Does Nothing.",
         .alias = "DONOTHING",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_NEW,
-        .main = new_command,
+        .command = "new",
         .arguments = "",
         .icon = "new",
         .tooltip = "&New",
         .statustip = "Create a new file. Command: NEW.",
         .alias = "NEW",
-        .shortcut = "Ctrl+N"
+        .shortcut = "Ctrl+N",
+        .flags = CONTEXT_FREE | CLEAR_SELECTION
     },
     {
         .id = ACTION_NIGHT,
-        .main = night_command,
+        .command = "night",
         .arguments = "",
         .icon = "night",
         .tooltip = "&Night",
         .statustip = "Updates the current view using night vision settings. Command: NIGHT.",
         .alias = "NIGHT",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_OPEN,
-        .main = open_command,
+        .command = "open",
         .arguments = "",
         .icon = "open",
         .tooltip = "&Open",
         .statustip = "Open an existing file. Command: OPEN.",
         .alias = "OPEN",
-        .shortcut = "Ctrl+O"
+        .shortcut = "Ctrl+O",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_PAN_DOWN,
-        .main = pandown_command,
+        .command = "pandown",
         .arguments = "",
         .icon = "pandown",
         .tooltip = "&Pan Down",
         .statustip = "Moves the view down:  PANDOWN",
         .alias = "PANDOWN",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_PAN_LEFT,
-        .main = panleft_command,
+        .command = "panleft",
         .arguments = "",
         .icon = "panleft",
         .tooltip = "&Pan Left",
         .statustip = "Moves the view to the left:  PANLEFT",
         .alias = "PANLEFT",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_PAN_POINT,
-        .main = panpoint_command,
+        .command = "panpoint",
         .arguments = "",
         .icon = "panpoint",
         .tooltip = "&Pan Point",
         .statustip = "Moves the view by the specified distance.",
         .alias = "PANPOINT",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_PAN_REAL_TIME,
-        .main = panrealtime_command,
+        .command = "panrealtime",
         .arguments = "",
         .icon = "panrealtime",
         .tooltip = "&Pan Realtime",
         .statustip = "Moves the view in the current viewport. Command: PANREALTIME",
         .alias = "PANREALTIME",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_PAN_RIGHT,
-        .main = panright_command,
+        .command = "panright",
         .arguments = "",
         .icon = "panright",
         .tooltip = "&Pan Right",
         .statustip = "Moves the view to the right:  PANRIGHT",
         .alias = "PANRIGHT",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_PAN_UP,
-        .main = panup_command,
+        .command = "panup",
         .arguments = "",
         .icon = "panup",
         .tooltip = "&Pan Up",
         .statustip = "Moves the view up:  PANUP",
         .alias = "PANUP",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_PASTE,
-        .main = paste_command,
+        .command = "paste",
         .arguments = "",
         .icon = "paste",
         .tooltip = "&Paste",
         .statustip = "Paste the clipboard's contents into the current selection. Command: PASTE.",
         .alias = "PASTE",
-        .shortcut = "Ctrl+V"
+        .shortcut = "Ctrl+V",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_PATH,
-        .main = path_command,
+        .command = "path",
         .arguments = "",
         .icon = "path",
         .tooltip = "&Path",
         .statustip = "Creates a 2D path:  PATH",
         .alias = "PA, PATH",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_PLATFORM,
-        .main = platform_command,
+        .command = "platform",
         .arguments = "",
         .icon = "platform",
         .tooltip = "&Platform",
         .statustip = "List which platform is in use. Command: PLATFORM.",
         .alias = "PLATFORM",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_POINT,
-        .main = point_command,
+        .command = "point",
         .arguments = "",
         .icon = "point",
         .tooltip = "&Point",
         .statustip = "Creates multiple points:  POINT",
         .alias = "PO, POINT",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_POLYGON,
-        .main = polygon_command,
+        .command = "polygon",
         .arguments = "",
         .icon = "polygon",
         .tooltip = "Pol&ygon",
         .statustip = "Creates a regular polygon. Command: POLYGON.",
         .alias = "POL, POLYGON",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_POLYLINE,
-        .main = polyline_command,
+        .command = "polyline",
         .arguments = "",
         .icon = "polyline",
         .tooltip = "&Polyline",
         .statustip = "Creates a 2D polyline:  PLINE",
         .alias = "PL, PLINE, POLYLINE",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_PREVIEW_OFF,
-        .main = previewoff_command,
+        .command = "previewoff",
         .arguments = "",
         .icon = "previewoff",
         .tooltip = "&Do Nothing",
         .statustip = "Does Nothing.",
         .alias = "DONOTHING",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_PREVIEW_ON,
-        .main = previewon_command,
+        .command = "previewon",
         .arguments = "",
         .icon = "previewon",
         .tooltip = "&Preview On",
         .statustip = "Preview on.",
         .alias = "PREVIEWON",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_PRINT,
-        .main = print_command,
+        .command = "print",
         .arguments = "",
         .icon = "print",
         .tooltip = "&Print",
         .statustip = "Print the design. Command: PRINT.",
         .alias = "PRINT",
-        .shortcut = "Ctrl+P"
+        .shortcut = "Ctrl+P",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_QUICKLEADER,
-        .main = quickleader_command,
+        .command = "quickleader",
         .arguments = "",
         .icon = "quickleader",
         .tooltip = "&QuickLeader",
         .statustip = "Creates a leader and annotation:  QUICKLEADER",
         .alias = "LE, LEADER, QLEADER, QUICKLEADER",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_RECTANGLE,
-        .main = rectangle_command,
+        .command = "rectangle",
         .arguments = "",
         .icon = "rectangle",
         .tooltip = "&Rectangle",
         .statustip = "Creates a rectangular polyline. Command: RECTANGLE.",
         .alias = "REC, RECT, RECTANG, RECTANGLE",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_REDO,
-        .main = redo_command,
+        .command = "redo",
         .arguments = "",
         .icon = "redo",
         .tooltip = "&Redo",
         .statustip = "Reverses the effects of the previous undo action. Command: REDO.",
         .alias = "REDO",
-        .shortcut = "Ctrl+Shift+Z"
+        .shortcut = "Ctrl+Shift+Z",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_RGB,
-        .main = rgb_command,
+        .command = "rgb",
         .arguments = "",
         .icon = "rgb",
         .tooltip = "Icon&24",
         .statustip = "Sets the toolbar icon size to 24x24:  ICON24",
         .alias = "ICON24",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ROTATE,
-        .main = rotate_command,
+        .command = "rotate",
         .arguments = "",
         .icon = "rotate",
         .tooltip = "&Rotate",
         .statustip = "Rotates objects about a base point:  ROTATE",
         .alias = "RO, ROTATE",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_SANDBOX,
-        .main = sandbox_command,
+        .command = "sandbox",
         .arguments = "",
         .icon = "sandbox",
         .tooltip = "&Sandbox",
         .statustip = "A sandbox to play in: SANDBOX",
         .alias = "SAND, SANDBOX",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_SAVE,
-        .main = save_command,
+        .command = "save",
         .arguments = "",
         .icon = "save",
         .tooltip = "&Save",
         .statustip = "Save the design to disk. Command: SAVE.",
         .alias = "SAVE",
-        .shortcut = "Ctrl+S"
+        .shortcut = "Ctrl+S",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_SAVE_AS,
-        .main = save_command,
+        .command = "saveas",
         .arguments = "",
         .icon = "saveas",
         .tooltip = "Save &As",
         .statustip = "Save the design under a new name. Command: SAVEAS.",
         .alias = "SAVEAS",
-        .shortcut = "Ctrl+Shift+S"
+        .shortcut = "Ctrl+Shift+S",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_SCALE,
-        .main = scale_command,
+        .command = "scale",
         .arguments = "",
         .icon = "scale",
         .tooltip = "Sca&le",
         .statustip = "Enlarges or reduces objects proportionally in the X, Y, and Z directions:  SCALE",
         .alias = "SC, SCALE",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_SCALE_SELECTED,
-        .main = scaleselected_command,
+        .command = "scaleselected",
         .arguments = "",
         .icon = "scaleselected",
         .tooltip = "&Do Nothing",
         .statustip = "Does Nothing.",
         .alias = "SCALESELECTED",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_SELECT_ALL,
-        .main = selectall_command,
+        .command = "selectall",
         .arguments = "",
         .icon = "selectall",
         .tooltip = "&Select All",
         .statustip = "Selects all objects:  SELECTALL",
         .alias = "AI_SELALL, SELALL, SELECTALL",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_SET,
-        .main = set_command,
+        .command = "set",
         .arguments = "",
         .icon = "set",
         .tooltip = "&Set",
         .statustip = "Assign a value to one of the pre-defined global variables.",
         .alias = "SET",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_SETTINGS_DIALOG,
-        .main = settings_dialog_command,
+        .command = "settingsdialog",
         .arguments = "",
         .icon = "settingsdialog",
         .tooltip = "&Settings",
         .statustip = "Configure settings specific to this product. Command: SETTINGS.",
         .alias = "SETTINGS",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_SHOW_ALL_LAYERS,
-        .main = showalllayers_command,
+        .command = "showalllayers",
         .arguments = "",
         .icon = "showalllayers",
         .tooltip = "&Show All Layers",
         .statustip = "Turns the visibility on for all layers in the current drawing:  SHOWALL",
         .alias = "SHOWALLLAYERS",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_SINGLE_LINE_TEXT,
-        .main = singlelinetext_command,
+        .command = "singlelinetext",
         .arguments = "",
         .icon = "singlelinetext",
         .tooltip = "&Single Line Text",
         .statustip = "Creates single-line text objects:  TEXT",
         .alias = "DT, DTEXT, TEXT, SINGLELINETEXT",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_SNOWFLAKE,
-        .main = snowflake_command,
+        .command = "snowflake",
         .arguments = "",
         .icon = "snowflake",
         .tooltip = "&Snowflake",
         .statustip = "Creates a snowflake:  SNOWFLAKE",
         .alias = "SNOWFLAKE",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_STAR,
-        .main = star_command,
+        .command = "star",
         .arguments = "",
         .icon = "star",
         .tooltip = "&Star",
         .statustip = "Creates a star:  STAR",
         .alias = "STAR",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_SYSWINDOWS,
-        .main = syswindows_command,
+        .command = "syswindows",
         .arguments = "",
         .icon = "syswindows",
         .tooltip = "&SysWindows",
         .statustip = "Arrange the windows. Command: SYSWINDOWS",
         .alias = "WINDOWS, SYSWINDOWS",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_TEXT_BOLD,
-        .main = text_bold_command,
+        .command = "textbold",
         .arguments = "",
         .icon = "textbold",
         .tooltip = "&Bold Text",
         .statustip = "Sets text to be bold. Command: BOLD.",
         .alias = "BOLD",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_TEST,
-        .main = test_command,
+        .command = "test",
         .arguments = "",
         .icon = "test",
         .tooltip = "&Test",
         .statustip = "Run a sequence of commands for QA. Command: TEST.",
         .alias = "TEST",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_TEXT_ITALIC,
-        .main = text_italic_command,
+        .command = "testitalic",
         .arguments = "",
         .icon = "textitalic",
         .tooltip = "&Italic Text",
         .statustip = "Sets text to be italic. Command: ITALIC.",
         .alias = "ITALIC",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_TEXT_UNDERLINE,
-        .main = text_underline_command,
+        .command = "testunderline",
         .arguments = "",
         .icon = "textunderline",
         .tooltip = "&Underline Text",
         .statustip = "Sets text to be underlined. Command: UNDERLINE.",
         .alias = "UNDERLINE",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_TEXT_STRIKEOUT,
-        .main = text_strikeout_command,
+        .command = "teststrikeout",
         .arguments = "",
         .icon = "textstrikeout",
         .tooltip = "&StrikeOut Text",
         .statustip = "Sets text to be striked out. Command: STRIKEOUT.",
         .alias = "STRIKEOUT",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_TEXT_OVERLINE,
-        .main = text_overline_command,
+        .command = "testoverline",
         .arguments = "",
         .icon = "textoverline",
         .tooltip = "&Overline Text",
         .statustip = "Sets text to be overlined. Command: OVERLINE.",
         .alias = "OVERLINE",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_THAW_ALL_LAYERS,
-        .main = thawalllayers_command,
+        .command = "thawalllayers",
         .arguments = "",
         .icon = "thawalllayers",
         .tooltip = "&Thaw All Layers",
         .statustip = "Thaws all layers in the current drawing:  THAWALL",
         .alias = "THAWALL",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_TIP_OF_THE_DAY,
-        .main = tipoftheday_command,
+        .command = "tipoftheday",
         .arguments = "",
         .icon = "tipoftheday",
         .tooltip = "&Tip Of The Day",
         .statustip = "Displays a dialog with useful tips:  TIPS",
         .alias = "TIPS, TIPOFTHEDAY",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_TODO,
-        .main = todo_command,
+        .command = "todo",
         .arguments = "",
         .icon = "todo",
         .tooltip = "&About",
         .statustip = "Displays information about this product:  ABOUT",
         .alias = "TODO",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_UNDO,
-        .main = undo_command,
+        .command = "undo",
         .arguments = "",
         .icon = "undo",
         .tooltip = "&Undo",
         .statustip = "Reverses the most recent action. Command: UNDO.",
         .alias = "U, UNDO",
-        .shortcut = "Ctrl+Z"
+        .shortcut = "Ctrl+Z",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_UNLOCK_ALL_LAYERS,
-        .main = unlockalllayers_command,
+        .command = "unlockalllayers",
         .arguments = "",
         .icon = "unlockalllayers",
         .tooltip = "&Unlock All Layers",
         .statustip = "Unlocks all layers in the current drawing:  UNLOCKALL",
         .alias = "UNLOCKALL",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_VULCANIZE,
-        .main = vulcanize_command,
+        .command = "vulcanize",
         .arguments = "",
         .icon = "vulcanize",
         .tooltip = "&Undo",
         .statustip = "Reverses the most recent action:  UNDO",
         .alias = "VULCANIZE",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_WINDOW_CASCADE,
-        .main = windowcascade_command,
+        .command = "windowcascade",
         .arguments = "",
         .icon = "windowcascade",
         .tooltip = "&Cascade",
         .statustip = "Cascade the windows. Command: CASCADE.",
         .alias = "CASCADE, WINDOWCASCADE",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_WHATS_THIS,
-        .main = whats_this_command,
+        .command = "whatsthis",
         .arguments = "",
         .icon = "whatsthis",
         .tooltip = "&What's This?",
         .statustip = "What's This? Context Help! Command: WHATSTHIS.",
         .alias = "WHATSTHIS",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_WINDOW_CLOSE,
-        .main = windowclose_command,
+        .command = "windowclose",
         .arguments = "",
         .icon = "windowclose",
         .tooltip = "Cl&ose",
         .statustip = "Close the active window. Command: CLOSE.",
         .alias = "CLOSE, WINDOWCLOSE",
-        .shortcut = "Ctrl+W"
+        .shortcut = "Ctrl+W",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_WINDOW_CLOSE_ALL,
-        .main = windowcloseall_command,
+        .command = "windowcloseall",
         .arguments = "",
         .icon = "windowcloseall",
         .tooltip = "Close &All",
         .statustip = "Close all the windows. Command: CLOSEALL",
         .alias = "CLOSEALL, WINDOWCLOSEALL",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_WINDOW_NEXT,
-        .main = windownext_command,
+        .command = "windownext",
         .arguments = "",
         .icon = "windownext",
         .tooltip = "Ne&xt",
         .statustip = "Move the focus to the next window:  NEXT",
         .alias = "NEXT, WINDOWNEXT",
-        .shortcut = "Ctrl+Tab"
+        .shortcut = "Ctrl+Tab",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_WINDOW_PREVIOUS,
-        .main = windowprevious_command,
+        .command = "windowprevious",
         .arguments = "",
         .icon = "windowprevious",
         .tooltip = "Pre&vious",
         .statustip = "Move the focus to the previous window:  PREVIOUS",
         .alias = "PREV, PREVIOUS, WINDOWPREVIOUS",
-        .shortcut = "Ctrl+Shift+Tab"
+        .shortcut = "Ctrl+Shift+Tab",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_WINDOW_TILE,
-        .main = windowtile_command,
+        .command = "windowtile",
         .arguments = "",
         .icon = "windowtile",
         .tooltip = "&Tile",
         .statustip = "Tile the windows:  TILE",
         .alias = "TILE, WINDOWTILE",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ZOOM_ALL,
-        .main = zoom_all_command,
+        .command = "zoomall",
         .arguments = "",
         .icon = "zoomall",
         .tooltip = "Zoom &All",
         .statustip = "Zooms to display the drawing extents or the grid limits. Command: ZOOMALL.",
         .alias = "ZOOMALL",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ZOOM_CENTER,
-        .main = zoom_center_command,
+        .command = "zoomcenter",
         .arguments = "",
         .icon = "zoomcenter",
         .tooltip = "Zoom &Center",
         .statustip = "Zooms to display a view specified by a center point and magnification or height. Command: ZOOMCENTER.",
         .alias = "ZOOMCENTER",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ZOOM_DYNAMIC,
-        .main = zoom_dynamic_command,
+        .command = "zoomdynamic",
         .arguments = "",
         .icon = "zoomdynamic",
         .tooltip = "Zoom &Dynamic",
         .statustip = "Zooms to display the generated portion of the drawing. Command: ZOOMDYNAMIC.",
         .alias = "ZOOMDYNAMIC",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ZOOM_EXTENTS,
-        .main = zoom_extents_command,
+        .command = "zoomextents",
         .arguments = "",
         .icon = "zoomextents",
         .tooltip = "Zoom &Extents",
         .statustip = "Zooms to display the drawing extents. Command: ZOOMEXTENTS",
         .alias = "ZOOMEXTENTS",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ZOOM_IN,
-        .main = zoom_in_command,
+        .command = "zoomin",
         .arguments = "",
         .icon = "zoomin",
         .tooltip = "Zoom &In",
         .statustip = "Zooms to increase the apparent size of objects. Command: ZOOMIN",
         .alias = "ZOOMIN",
-        .shortcut = "Ctrl+Plus"
+        .shortcut = "Ctrl+Plus",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ZOOM_OUT,
-        .main = zoom_out_command,
+        .command = "zoomout",
         .arguments = "",
         .icon = "zoomout",
         .tooltip = "Zoom &Out",
         .statustip = "Zooms to decrease the apparent size of objects. Command: ZOOMOUT",
         .alias = "ZOOMOUT",
-        .shortcut = "Ctrl+Minus"
+        .shortcut = "Ctrl+Minus",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ZOOM_PREVIOUS,
-        .main = zoom_previous_command,
+        .command = "zoomprevious",
         .arguments = "",
         .icon = "zoomprevious",
         .tooltip = "Zoom &Previous",
         .statustip = "Zooms to display the previous view. Command: ZOOMPREVIOUS.",
         .alias = "ZOOMPREVIOUS",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ZOOM_REAL_TIME,
-        .main = zoom_real_time_command,
+        .command = "zoomrealtime",
         .arguments = "",
         .icon = "zoomrealtime",
         .tooltip = "Zoom &Real Time",
         .statustip = "Zooms to increase or decrease the apparent size of objects in the current viewport. Command: ZOOMREALTIME",
         .alias = "ZOOMREALTIME",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ZOOM_SCALE,
-        .main = zoom_scale_command,
+        .command = "zoomscale",
         .arguments = "",
         .icon = "zoomscale",
         .tooltip = "Zoom &Scale",
         .statustip = "Zooms the display using a specified scale factor. Command: ZOOMSCALE.",
         .alias = "ZOOMSCALE",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ZOOM_SELECTED,
-        .main = zoom_selected_command,
+        .command = "zoomselected",
         .arguments = "",
         .icon = "zoomselected",
         .tooltip = "Zoom Selec&ted",
         .statustip = "Zooms to display the selected objects. Command: ZOOMSELECTED.",
         .alias = "ZOOMSELECTED",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = ACTION_ZOOM_WINDOW,
-        .main = zoom_window_command,
+        .command = "zoomwindow",
         .arguments = "",
         .icon = "zoomwindow",
         .tooltip = "Zoom &Window",
         .statustip = "Zooms to display an area specified by a rectangular window. Command: ZOOMIN",
         .alias = "ZOOMWINDOW",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = REQUIRED_VIEW
     },
     {
         .id = -2,
-        .main = do_nothing,
+        .command = "blank",
         .arguments = "",
         .icon = "blank",
         .tooltip = "NULL",
         .statustip = "NULL",
         .alias = "NULL",
-        .shortcut = ""
+        .shortcut = "",
+        .flags = CONTEXT_FREE
     }
 };

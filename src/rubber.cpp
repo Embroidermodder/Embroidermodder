@@ -134,8 +134,8 @@ add_rubber_command(ScriptEnv* context)
     }
 
     /* FIXME: ERROR CHECKING */
-    double mx = command_prompt(context, "get mousex").r;
-    double my = command_prompt(context, "get mousey").r;
+    double mx = _main->runCommandCore("get mousex", context).r;
+    double my = _main->runCommandCore("get mousey", context).r;
 
     if (objType == "ARC") {
         // TODO: handle this type

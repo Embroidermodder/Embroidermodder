@@ -41,7 +41,7 @@ locatepoint_command(ScriptEnv *context)
         break;
     }
     case CONTEXT_CONTEXT:
-        command_prompt(context, "todo LOCATEPOINT context()");
+        _main->runCommandCore("todo LOCATEPOINT context()", context);
         break;
     case CONTEXT_PROMPT:
         /*
@@ -74,10 +74,10 @@ reportDistance(EmbVector a, EmbVector b)
     EmbReal distance = emb_vector_length(delta);
     EmbReal angle = emb_vector_angle(delta);
 
-    sprintf(output, "%s = %d, %s = %d",
+    sprintf(output, "%s = %f, %s = %f",
         translate("Distance"), distance, translate("Angle"), angle);
     prompt_output(output);
-    sprintf(output, "%s = %d, %s = %d",
+    sprintf(output, "%s = %f, %s = %f",
         translate("Delta X"), delta.x, translate("Delta Y"), delta.y);
     prompt_output(output);
 }

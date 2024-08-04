@@ -517,6 +517,7 @@ parse_vector(char *line, EmbVector *v)
  *        commands.
  *     5. Call the main function.
  */
+ #if 0
 ScriptValue
 command_prompt(ScriptEnv *context, const char *line)
 {
@@ -579,6 +580,7 @@ command_prompt(ScriptEnv *context, const char *line)
     /* Call command's main. */
     return command_data[function].main(context);
 }
+#endif
 
 bool
 validRGB(float r, float g, float b)

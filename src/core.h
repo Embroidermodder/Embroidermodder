@@ -3,8 +3,9 @@
  *
  * Copyright 2011-2024 The Embroidermodder Team
  * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
- * Visit https://www.libembroidery.org/refman for advice on altering this file,
- * or read the markdown version in embroidermodder2/docs/refman.
+ *
+ * Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
+ * for advice on altering this file.
  *
  * C Core
  */
@@ -65,6 +66,15 @@ extern "C" {
  * Any text in the command prompt is sent as an uppercase string.
  */
 #define CONTEXT_PROMPT                 4
+
+/* Command requirements. */
+#define CONTEXT_FREE                0x00
+#define REQUIRED_VIEW               0x01
+#define REQUIRED_SCENE              0x02
+#define REQUIRED_UNDO               0x04
+#define DONT_INITIALIZE             0x08
+#define CLEAR_SELECTION             0x10
+#define DONT_END_COMMAND            0x20
 
 enum COMMAND_ACTIONS
 {
@@ -485,14 +495,15 @@ typedef struct ScriptEnv_ {
 } ScriptEnv;
 
 typedef struct Command_ {
-    int id;
-    ScriptValue (*main)(ScriptEnv *context);
-    const char *arguments;
-    const char *icon;
-    const char *tooltip;
-    const char *statustip;
-    const char *alias;
-    const char *shortcut;
+    int32_t id;
+    char command[MAX_STRING_LENGTH];
+    char arguments[MAX_STRING_LENGTH];
+    char icon[MAX_STRING_LENGTH];
+    char tooltip[MAX_STRING_LENGTH];
+    char statustip[MAX_STRING_LENGTH];
+    char alias[MAX_STRING_LENGTH];
+    char shortcut[MAX_STRING_LENGTH];
+    int32_t flags;
 } Command;
 
 typedef struct EmbDimLeader_ {
@@ -558,7 +569,6 @@ ScriptValue script_bool(bool b);
 ScriptValue script_int(int i);
 ScriptValue script_real(double r);
 ScriptValue script_string(const char *s);
-ScriptValue do_nothing(ScriptEnv *context);
 ScriptValue stub_implement(const char *function);
 ScriptValue command_prompt(ScriptEnv *context, const char *line);
 
@@ -615,130 +625,7 @@ void cut(void);
 void copy(void);
 void paste(void);
 
-/* Commands */
-ScriptValue about_command(ScriptEnv*);
-ScriptValue alert_command(ScriptEnv*);
-ScriptValue angle_command(ScriptEnv*);
-ScriptValue changelog_command(ScriptEnv*);
-ScriptValue clear_command(ScriptEnv*);
-ScriptValue copy_command(ScriptEnv*);
-ScriptValue cut_command(ScriptEnv*);
-ScriptValue day_command(ScriptEnv *);
-ScriptValue debug_command(ScriptEnv *);
-ScriptValue design_details_command(ScriptEnv *);
-ScriptValue disable_command(ScriptEnv*);
-ScriptValue distance_command(ScriptEnv*);
-ScriptValue enable_command(ScriptEnv *);
-ScriptValue erase_command(ScriptEnv *);
-ScriptValue error_command(ScriptEnv *);
-ScriptValue exit_command(ScriptEnv *);
-ScriptValue help_command(ScriptEnv*);
-ScriptValue icon128_command(ScriptEnv*);
-ScriptValue icon16_command(ScriptEnv*);
-ScriptValue icon24_command(ScriptEnv*);
-ScriptValue icon32_command(ScriptEnv*);
-ScriptValue icon48_command(ScriptEnv*);
-ScriptValue icon64_command(ScriptEnv*);
-ScriptValue get_command(ScriptEnv*);
-ScriptValue locatepoint_command(ScriptEnv*);
-ScriptValue mirrorselected_command(ScriptEnv*);
-ScriptValue move_command(ScriptEnv*);
-ScriptValue moveselected_command(ScriptEnv*);
-ScriptValue new_command(ScriptEnv*);
-ScriptValue night_command(ScriptEnv*);
-ScriptValue open_command(ScriptEnv*);
-ScriptValue paste_command(ScriptEnv*);
-ScriptValue print_command(ScriptEnv*);
-ScriptValue redo_command(ScriptEnv*);
-
-/* Designs */
-ScriptValue dolphin_command(ScriptEnv*);
-ScriptValue heart_command(ScriptEnv*);
-ScriptValue snowflake_command(ScriptEnv*);
-ScriptValue star_command(ScriptEnv*);
-
-/* Geometry Primatives */
-ScriptValue arc_command(ScriptEnv *);
-ScriptValue arc_command(ScriptEnv *context);
-ScriptValue circle_command(ScriptEnv*);
-ScriptValue ellipse_command(ScriptEnv *);
-ScriptValue line_command(ScriptEnv*);
-ScriptValue quickleader_command(ScriptEnv*);
-ScriptValue point_command(ScriptEnv*);
-ScriptValue polygon_command(ScriptEnv*);
-ScriptValue polyline_command(ScriptEnv*);
-ScriptValue rectangle_command(ScriptEnv*);
-
-/* Pan */
-ScriptValue panrealtime_command(ScriptEnv*);
-ScriptValue pandown_command(ScriptEnv*);
-ScriptValue panleft_command(ScriptEnv*);
-ScriptValue panright_command(ScriptEnv*);
-ScriptValue panup_command(ScriptEnv*);
-
-ScriptValue path_command(ScriptEnv*);
-ScriptValue platform_command(ScriptEnv*);
-ScriptValue previewoff_command(ScriptEnv*);
-ScriptValue previewon_command(ScriptEnv*);
-ScriptValue rotate_command(ScriptEnv*);
-ScriptValue rgb_command(ScriptEnv*);
-ScriptValue save_command(ScriptEnv*);
-ScriptValue sandbox_command(ScriptEnv*);
-ScriptValue scale_command(ScriptEnv*);
-ScriptValue scaleselected_command(ScriptEnv*);
-ScriptValue selectall_command(ScriptEnv*);
-ScriptValue settings_dialog_command(ScriptEnv*);
-ScriptValue singlelinetext_command(ScriptEnv*);
-ScriptValue set_command(ScriptEnv*);
-ScriptValue syswindows_command(ScriptEnv*);
-
-ScriptValue text_bold_command(ScriptEnv*);
-ScriptValue text_italic_command(ScriptEnv*);
-ScriptValue text_underline_command(ScriptEnv*);
-ScriptValue text_overline_command(ScriptEnv*);
-ScriptValue text_strikeout_command(ScriptEnv*);
-
-ScriptValue test_command(ScriptEnv *);
-ScriptValue tipoftheday_command(ScriptEnv*);
-ScriptValue todo_command(ScriptEnv*);
-ScriptValue undo_command(ScriptEnv*);
-ScriptValue vulcanize_command(ScriptEnv*);
-
-ScriptValue whats_this_command(ScriptEnv*);
-
-ScriptValue windowcascade_command(ScriptEnv*);
-ScriptValue windowclose_command(ScriptEnv*);
-ScriptValue windowcloseall_command(ScriptEnv*);
-ScriptValue windownext_command(ScriptEnv*);
-ScriptValue windowprevious_command(ScriptEnv*);
-ScriptValue windowtile_command(ScriptEnv*);
-
-ScriptValue zoom_all_command(ScriptEnv*);
-ScriptValue zoom_center_command(ScriptEnv*);
-ScriptValue zoom_dynamic_command(ScriptEnv*);
-ScriptValue zoom_extents_command(ScriptEnv*);
-ScriptValue zoom_in_command(ScriptEnv*);
-ScriptValue zoom_out_command(ScriptEnv*);
-ScriptValue zoom_previous_command(ScriptEnv*);
-ScriptValue zoom_real_time_command(ScriptEnv*);
-ScriptValue zoom_scale_command(ScriptEnv*);
-ScriptValue zoom_selected_command(ScriptEnv*);
-ScriptValue zoom_window_command(ScriptEnv*);
-
-ScriptValue colorselector_command(ScriptEnv*);
-ScriptValue hidealllayers_command(ScriptEnv*);
-ScriptValue freezealllayers_command(ScriptEnv*);
-ScriptValue layers_command(ScriptEnv*);
-ScriptValue layerprevious_command(ScriptEnv*);
-ScriptValue layerselector_command(ScriptEnv*);
-ScriptValue linetypeselector_command(ScriptEnv*);
-ScriptValue lineweightselector_command(ScriptEnv*);
-ScriptValue lockalllayers_command(ScriptEnv*);
-ScriptValue makelayercurrent_command(ScriptEnv*);
-ScriptValue panpoint_command(ScriptEnv*);
-ScriptValue showalllayers_command(ScriptEnv*);
-ScriptValue thawalllayers_command(ScriptEnv*);
-ScriptValue unlockalllayers_command(ScriptEnv*);
+void about_dialog(void);
 
 /* Global variables with c linkage. */
 extern Command command_data[MAX_COMMANDS];
@@ -888,9 +775,13 @@ extern BoolSetting text_style_overline;
 extern BoolSetting text_style_strikeout;
 
 /* Natives */
+void about_dialog(void);
+
 void nativeBlinkPrompt();
 void nativeEnablePromptRapidFire();
 void nativeDisablePromptRapidFire();
+void nativeEnableMoveRapidFire();
+void nativeDisableMoveRapidFire();
 
 void nativeAddInfiniteLine(double x1, double y1, double x2, double y2, double rot);
 void nativeAddRay(double x1, double y1, double x2, double y2, double rot);
@@ -907,9 +798,6 @@ void nativeAddRegularPolygon(double centerX, double centerY, uint16_t sides, uin
 void nativeAddHorizontalDimension(double x1, double y1, double x2, double y2, double legHeight);
 void nativeAddVerticalDimension(double x1, double y1, double x2, double y2, double legHeight);
 void nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode);
-
-void nativeEnableMoveRapidFire();
-void nativeDisableMoveRapidFire();
 
 void nativeRedo();
 

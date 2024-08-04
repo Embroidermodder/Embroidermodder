@@ -107,15 +107,9 @@ debug_message(const char *msg)
 
 /* TODO: QTabWidget for about dialog
  */
-ScriptValue
-about_command(ScriptEnv *context)
+void
+about_dialog(void)
 {
-    if (!argument_checks(context, "about", "")) {
-        return script_false;
-    }
-
-    init_command();
-
     QApplication::setOverrideCursor(Qt::ArrowCursor);
     qDebug("about()");
 
@@ -164,125 +158,6 @@ about_command(ScriptEnv *context)
     dialog.exec();
 
     QApplication::restoreOverrideCursor();
-    end_command();
-}
-
-/* ALERT is a prompt-only command. */
-ScriptValue
-alert_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "alert", "s")) {
-        return script_false;
-    }
-
-    init_command();
-    _main->prompt->alert(STR(0));
-    end_command();
-    return script_null;
-}
-
-/* ANGLE. */
-ScriptValue
-angle_command(ScriptEnv *context)
-{
-    init_command();
-    clear_selection();
-
-    end_command();
-    return script_null;
-}
-
-/* CHANGELOG is not context-dependant */
-ScriptValue
-changelog_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "whats_this_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    end_command();
-    return script_null;
-}
-
-/* CLEAR is not context-dependant. */
-ScriptValue
-clear_command(ScriptEnv* context)
-{
-    if (!argument_checks(context, "clear_command", "")) {
-        return script_false;
-    }
-
-    init_command();
-    clear_selection();
-    end_command();
-    return script_null;
-}
-
-/* COPY is not context-dependant */
-ScriptValue
-copy_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "whats_this_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    end_command();
-    return script_null;
-}
-
-/* CUT is not context-dependant */
-ScriptValue
-cut_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "whats_this_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    end_command();
-    return script_null;
-}
-
-/* . */
-ScriptValue
-colorselector_command(ScriptEnv* context)
-{
-    if (!argument_checks(context, "color_selector_command", "")) {
-        return script_false;
-    }
-    init_command();
-    end_command();
-    return script_null;
-}
-
-/* . */
-ScriptValue
-debug_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "about", "s")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    nativeAppendPromptHistory(STR(0));
-    end_command();
-    return script_null;
-}
-
-/* DONOTHING is not context-dependant. */
-ScriptValue
-design_details_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "design_details_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    _main->designDetails();
-    end_command();
-    return script_true;
 }
 
 /* DISABLE is a prompt-only Command. */
@@ -303,16 +178,6 @@ disable_command(ScriptEnv* context)
 
     end_command();
     return script_null;
-}
-
-/* DONOTHING is not context-dependant. */
-ScriptValue
-do_nothing(ScriptEnv *context)
-{
-    if (!argument_checks(context, "do_nothing", "")) {
-        return script_false;
-    }
-    return script_true;
 }
 
 /* ENABLE is a prompt-only Command. */
@@ -371,17 +236,6 @@ error_command(ScriptEnv *context)
     s += STR(1);
     nativeSetPromptPrefix(s);
     nativeAppendPromptHistory("");
-    end_command();
-    return script_null;
-}
-
-/* . */
-ScriptValue
-exit_command(ScriptEnv * /* context */)
-{
-    init_command();
-    clear_selection();
-    _main->exit();
     end_command();
     return script_null;
 }
@@ -455,109 +309,6 @@ get_command(ScriptEnv* context)
     return script_null;
 }
 
-/* HELP is not context-dependent. */
-ScriptValue
-help_command(ScriptEnv * /* context */)
-{
-    init_command();
-    clear_selection();
-    _main->help();
-    end_command();
-    return script_null;
-}
-
-ScriptValue
-icon128_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "icon128_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    _main->iconResize(128);
-    end_command();
-    return script_null;
-}
-
-ScriptValue
-icon16_command(ScriptEnv * context)
-{
-    if (!argument_checks(context, "icon16_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    _main->iconResize(16);
-    end_command();
-    return script_null;
-}
-
-ScriptValue
-icon24_command(ScriptEnv * context)
-{
-    if (!argument_checks(context, "icon24_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    _main->iconResize(24);
-    end_command();
-    return script_null;
-}
-
-ScriptValue
-icon32_command(ScriptEnv * context)
-{
-    if (!argument_checks(context, "icon32_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    _main->iconResize(32);
-    end_command();
-    return script_null;
-}
-
-ScriptValue
-icon48_command(ScriptEnv * context)
-{
-    if (!argument_checks(context, "icon48_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    _main->iconResize(48);
-    end_command();
-    return script_null;
-}
-
-ScriptValue
-icon64_command(ScriptEnv * context)
-{
-    if (!argument_checks(context, "icon64_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    _main->iconResize(64);
-    end_command();
-    return script_null;
-}
-
-/* MIRRORSELECTED */
-ScriptValue
-mirrorselected_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "mirrorSelected", "rrrr")) {
-        return script_false;
-    }
-
-    init_command();
-    nativeMirrorSelected(REAL(0), REAL(1), REAL(2), REAL(3));
-    end_command();
-    return script_null;
-}
-
 /* MOVESELECTED */
 ScriptValue
 moveselected_command(ScriptEnv *context)
@@ -565,29 +316,6 @@ moveselected_command(ScriptEnv *context)
     end_command();
     return script_null;
 }
-
-/* NEW is not context-dependant. */
-ScriptValue
-new_command(ScriptEnv * context)
-{
-    init_command();
-    clear_selection();
-    _main->newFile();
-    end_command();
-    return script_null;
-}
-
-/* OPEN is not context-sensitive. */
-ScriptValue
-open_command(ScriptEnv * context)
-{
-    init_command();
-    clear_selection();
-    _main->openFile();
-    end_command();
-    return script_null;
-}
-
 
 /* WINDOWTILE is not context-dependant */
 ScriptValue
@@ -598,22 +326,6 @@ paste_command(ScriptEnv *context)
     }
     init_command();
     clear_selection();
-    end_command();
-    return script_null;
-}
-
-/* PLATFORM is not context-sensitive.
- * Should this display in the command prompt or just return like GET?
- */
-ScriptValue
-platform_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    init_command();
-//  prompt_output(translate("Platform") + " = " + _main->platformString());
     end_command();
     return script_null;
 }
@@ -693,41 +405,6 @@ print_command(ScriptEnv *context)
     return script_null;
 }
 
-/* REDO is not context-sensitive. */
-ScriptValue
-redo_command(ScriptEnv * context)
-{
-    if (!argument_checks(context, "redo_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    _main->redo();
-    end_command();
-    return script_null;
-}
-
-/* SAVE. */
-ScriptValue
-save_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "redo_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    end_command();
-    return script_null;
-}
-
-/* SCALESELECTED . */
-ScriptValue
-scaleselected_command(ScriptEnv *context)
-{
-    end_command();
-    return script_null;
-}
-
 /* SET is a prompt-only Command.
  *
  * We can't use the argument_checks function because the 2nd argument is a wildcard.
@@ -796,20 +473,6 @@ set_command(ScriptEnv* context)
     return script_null;
 }
 
-/* WINDOWTILE is not context-dependant */
-ScriptValue
-settings_dialog_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "settings_dialog_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    _main->settingsDialog();
-    end_command();
-    return script_null;
-}
-
 /* SYSWINDOWS */
 ScriptValue
 syswindows_command(ScriptEnv * context)
@@ -836,128 +499,6 @@ syswindows_command(ScriptEnv * context)
         prompt_output(translate("Enter an option [Cascade/Tile]: "));
     }
     #endif
-    return script_null;
-}
-
-/* ZOOMIN is not context-dependant */
-ScriptValue
-text_bold_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "text_bold_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    /* text_style_bold.setting; */
-    end_command();
-    return script_null;
-}
-
-/* ZOOMIN is not context-dependant */
-ScriptValue
-text_italic_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "text_italic_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    /* text_style_italic.setting; */
-    end_command();
-    return script_null;
-}
-
-/* ZOOMIN is not context-dependant */
-ScriptValue
-text_underline_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "text_underline_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    /* text_style_underline.setting; */
-    end_command();
-    return script_null;
-}
-
-/* ZOOMIN is not context-dependant */
-ScriptValue
-text_overline_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "text_overline_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    /* text_style_overline.setting; */
-    end_command();
-    return script_null;
-}
-
-/* ZOOMIN is not context-dependant */
-ScriptValue
-text_strikeout_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "text_strikeout_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    /* text_style_strikeout.setting; */
-    end_command();
-    return script_null;
-}
-
-
-/* TIPOFTHEDAY is not context-sensitive. */
-ScriptValue
-tipoftheday_command(ScriptEnv * context)
-{
-    init_command();
-    clear_selection();
-    _main->tipOfTheDay();
-    end_command();
-    return script_null;
-}
-
-/* TODO is not context-sensitive. */
-ScriptValue
-todo_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "todo", "ss")) {
-        return script_false;
-    }
-    init_command();
-    QString s = "TODO: (" + QString(STR(0)) + ") " + QString(STR(1));
-    _main->prompt->alert(s);
-    end_command();
-    return script_null;
-}
-
-/* UNDO */
-ScriptValue
-undo_command(ScriptEnv * context)
-{
-    init_command();
-    clear_selection();
-    _main->undo();
-    end_command();
-    return script_null;
-}
-
-/* VULCANIZE is not context-sensitve. */
-ScriptValue
-vulcanize_command(ScriptEnv * context)
-{
-    if (!argument_checks(context, "vulcanize", "")) {
-        return script_false;
-    }
-
-    init_command();
-    clear_selection();
-    nativeVulcanize();
-    end_command();
     return script_null;
 }
 

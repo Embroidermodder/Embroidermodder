@@ -3,8 +3,9 @@
  *
  * Copyright 2011-2024 The Embroidermodder Team
  * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
- * Visit https://www.libembroidery.org/refman for advice on altering this file,
- * or read the markdown version in embroidermodder2/docs/refman.
+ *
+ * Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
+ * for advice on altering this file.
  *
  * MainWindow Commands
  */
@@ -788,11 +789,261 @@ ScriptValue
 MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
 {
     int id = get_command_id(qPrintable(cmd));
-    if (id >= 0) {
-        return command_data[id].main(context);
+    qDebug("runCommandCore(%s) %d", qPrintable(cmd), id);
+    if (id < 0) {
+        qDebug("ERROR: %s not found in command_data.", qPrintable(cmd));
+        return script_false;
     }
-    qDebug("ERROR: %s not found in command_data.", qPrintable(cmd));
-    return script_true;
+
+    if (!argument_checks(context, command_data[id].command, command_data[id].arguments)) {
+        /* TODO: error */
+        return script_false;
+    }
+
+    if (!(command_data[id].flags & DONT_INITIALIZE)) {
+        init_command();
+    }
+    if (command_data[id].flags & CLEAR_SELECTION) {
+        clear_selection();
+    }
+
+    ScriptValue value = script_true;
+
+    qDebug("switch");
+    switch (command_data[id].id) {
+    case ACTION_ABOUT:
+        about_dialog();
+        break;
+    case ACTION_ALERT:
+        prompt->alert(STR(0));
+        break;
+    case ACTION_ANGLE:
+        prompt->alert("TODO: ANGLE");
+        break;
+    case ACTION_CHANGELOG:
+        prompt->alert("TODO: CHANGELOG");
+        break;
+    case ACTION_CLEAR:
+        /* This is covered by the flags. */
+        break;
+    case ACTION_COPY:
+        prompt->alert("TODO: COPY");
+        break;
+    case ACTION_COLOR_SELECTOR:
+        prompt->alert("TODO: COLORSELECTOR");
+        break;
+    case ACTION_CUT:
+        prompt->alert("TODO: CUT");
+        break;
+    case ACTION_DEBUG:
+        nativeAppendPromptHistory(STR(0));
+        break;
+    case ACTION_DESIGN_DETAILS:
+        designDetails();
+        break;
+    case ACTION_DO_NOTHING:
+        break;
+    case ACTION_EXIT:
+        exit();
+        break;
+    case ACTION_HELP:
+        help();
+        break;
+    case ACTION_ICON_128:
+        iconResize(128);
+        break;
+    case ACTION_ICON_16:
+        iconResize(16);
+        break;
+    case ACTION_ICON_24:
+        iconResize(24);
+        break;
+    case ACTION_ICON_32:
+        iconResize(32);
+        break;
+    case ACTION_ICON_48:
+        iconResize(48);
+        break;
+    case ACTION_ICON_64:
+        iconResize(64);
+        break;
+    case ACTION_MIRROR_SELECTED:
+        nativeMirrorSelected(REAL(0), REAL(1), REAL(2), REAL(3));
+        break;
+    case ACTION_NEW:
+        newFile();
+        break;
+    case ACTION_OPEN:
+        openFile();
+        break;
+    case ACTION_PASTE:
+        break;
+    case ACTION_PLATFORM:
+        /* Should this display in the command prompt or just return like GET? */
+        // prompt_output(translate("Platform") + " = " + _main->platformString());
+        break;
+    case ACTION_REDO:
+        redo();
+        break;
+    case ACTION_SAVE:
+        /* save(); */
+        break;
+    case ACTION_SAVE_AS:
+        /* save(); */
+        break;
+    case ACTION_SCALE_SELECTED:
+        /*  */
+        break;
+    case ACTION_SETTINGS_DIALOG:
+        settingsDialog();
+        break;
+    case ACTION_TEXT_BOLD:
+        text_style_bold.setting = !text_style_bold.setting;
+        break;
+    case ACTION_TEXT_ITALIC:
+        text_style_italic.setting = !text_style_italic.setting;
+        break;
+    case ACTION_TEXT_UNDERLINE:
+        text_style_underline.setting = !text_style_underline.setting;
+        break;
+    case ACTION_TEXT_STRIKEOUT:
+        text_style_strikeout.setting = !text_style_strikeout.setting;
+        break;
+    case ACTION_TEXT_OVERLINE:
+        text_style_overline.setting = !text_style_overline.setting;
+        break;
+    case ACTION_TIP_OF_THE_DAY:
+        tipOfTheDay();
+        break;
+    case ACTION_TODO: {
+        QString s = "TODO: (" + QString(STR(0)) + ") " + QString(STR(1));
+        _main->prompt->alert(s);
+        break;
+    }
+    case ACTION_UNDO:
+        undo();
+        break;
+    case ACTION_VULCANIZE:
+        nativeVulcanize();
+        break;
+    
+/*
+    case ACTION_DO_NOTHING:
+
+    case ACTION_DESIGN_DETAILS:
+    case ACTION_PRINT:
+
+    case ACTION_WINDOW_CLOSE:
+    case ACTION_WINDOW_CLOSE_ALL:
+    case ACTION_WINDOW_CASCADE:
+    case ACTION_WINDOW_TILE:
+    case ACTION_WINDOW_NEXT:
+    case ACTION_WINDOW_PREVIOUS:
+
+    case ACTION_HELP:
+    case ACTION_CHANGELOG:
+    case ACTION_ABOUT:
+    case ACTION_WHATS_THIS:
+
+    case ACTION_SETTINGS_DIALOG:
+
+    case ACTION_MAKE_LAYER_CURRENT:
+    case ACTION_LAYERS:
+    case ACTION_LAYER_SELECTOR:
+    case ACTION_LAYER_PREVIOUS:
+    case ACTION_COLOR_SELECTOR:
+    case ACTION_LINE_TYPE_SELECTOR:
+    case ACTION_LINE_WEIGHT_SELECTOR:
+    case ACTION_HIDE_ALL_LAYERS:
+    case ACTION_SHOW_ALL_LAYERS:
+    case ACTION_FREEZE_ALL_LAYERS:
+    case ACTION_THAW_ALL_LAYERS:
+    case ACTION_LOCK_ALL_LAYERS:
+    case ACTION_UNLOCK_ALL_LAYERS:
+
+    case ACTION_ZOOM_REAL_TIME:
+    case ACTION_ZOOM_PREVIOUS:
+    case ACTION_ZOOM_WINDOW:
+    case ACTION_ZOOM_DYNAMIC:
+    case ACTION_ZOOM_SCALE:
+    case ACTION_ZOOM_CENTER:
+    case ACTION_ZOOM_IN:
+    case ACTION_ZOOM_OUT:
+    case ACTION_ZOOM_SELECTED:
+    case ACTION_ZOOM_ALL:
+    case ACTION_ZOOM_EXTENTS:
+
+    case ACTION_PAN_REAL_TIME:
+    case ACTION_PAN_POINT:
+    case ACTION_PAN_LEFT:
+    case ACTION_PAN_RIGHT:
+    case ACTION_PAN_UP:
+    case ACTION_PAN_DOWN:
+
+    case ACTION_DAY:
+    case ACTION_NIGHT:
+
+    case ACTION_ALERT:
+    case ACTION_GET:
+    case ACTION_SET:
+
+    case ACTION_CLEAR:
+
+    case ACTION_ANGLE:
+    case ACTION_CIRCLE:
+    case ACTION_DEBUG:
+    case ACTION_DISABLE:
+    case ACTION_DISTANCE:
+    case ACTION_DOLPHIN:
+    case ACTION_ELLIPSE:
+    case ACTION_ENABLE:
+    case ACTION_ERASE:
+    case ACTION_ERROR:
+    case ACTION_HEART:
+    case ACTION_LINE:
+    case ACTION_LOCATE_POINT:
+    case ACTION_MIRROR_SELECTED:
+    case ACTION_MOVE:
+    case ACTION_MOVE_SELECTED:
+    case ACTION_PATH:
+    case ACTION_PLATFORM:
+    case ACTION_POINT:
+    case ACTION_POLYGON:
+    case ACTION_POLYLINE:
+    case ACTION_PREVIEW_OFF:
+    case ACTION_PREVIEW_ON:
+    case ACTION_QUICKLEADER:
+    case ACTION_RECTANGLE:
+    case ACTION_RGB:
+    case ACTION_ROTATE:
+    case ACTION_SANDBOX:
+    case ACTION_SCALE:
+    case ACTION_SCALE_SELECTED,
+    case ACTION_SELECT_ALL:
+    case ACTION_SINGLE_LINE_TEXT:
+    case ACTION_SNOWFLAKE:
+    case ACTION_STAR:
+    case ACTION_SYSWINDOWS:
+    case ACTION_TODO:
+    case ACTION_VULCANIZE:
+
+    case ACTION_ADD:
+    case ACTION_DELETE:
+    case ACTION_GRIP_EDIT:
+    case ACTION_NAV:
+    case ACTION_MIRROR:
+
+    case ACTION_TEST:
+
+    */
+    default:
+        break;
+    }
+
+    if (!(command_data[id].flags & DONT_END_COMMAND)) {
+        end_command();
+    }
+    return value;
 }
 
 void
@@ -868,23 +1119,17 @@ MainWindow::runCommandContext(const QString& cmd, const QString& str)
  * NOTE: Replace any special characters that will cause a syntax error
  */
 void
-MainWindow::runCommandPrompt(const QString& cmd, const QString& str)
+MainWindow::runCommandPrompt(const QString& cmd)
 {
     ScriptEnv *context = create_script_env();
-    qDebug("runCommandPrompt(%s, %s)", qPrintable(cmd), qPrintable(str));
+    qDebug("runCommandPrompt(%s)", qPrintable(cmd));
     context->context = CONTEXT_PROMPT;
-    int id = get_command_id(qPrintable(cmd));
-    if (id >= 0) {
-        QString safeStr = str;
-        safeStr.replace("\\", "\\\\");
-        safeStr.replace("\'", "\\\'");
-        if (prompt->isRapidFireEnabled()) {
-            runCommandCore(cmd, context);
-        }
-        else {
-            /* Both branches run the same. */
-            runCommandCore(cmd, context);
-        }
+    if (prompt->isRapidFireEnabled()) {
+        runCommandCore(cmd, context);
+    }
+    else {
+        /* Both branches run the same. */
+        runCommandCore(cmd, context);
     }
     free_script_env(context);
 }

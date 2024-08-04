@@ -1544,7 +1544,7 @@ public slots:
     void runCommandClick(const QString& cmd,  double x, double y);
     void runCommandMove(const QString& cmd,  double x, double y);
     void runCommandContext(const QString& cmd, const QString& str);
-    void runCommandPrompt(const QString& cmd, const QString& str);
+    void runCommandPrompt(const QString& cmd);
 
     void debug_message(const char *);
 
