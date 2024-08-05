@@ -582,6 +582,7 @@ command_prompt(ScriptEnv *context, const char *line)
 }
 #endif
 
+/* . */
 bool
 validRGB(float r, float g, float b)
 {
@@ -606,6 +607,7 @@ validRGB(float r, float g, float b)
     return true;
 }
 
+/* . */
 int
 string_array_length(string_table s)
 {
@@ -620,6 +622,7 @@ string_array_length(string_table s)
     return max_length;
 }
 
+/* . */
 int
 load_string_table(toml_table_t* conf, char *table_name, string_table table)
 {

@@ -11,61 +11,13 @@
 
 #include "embroidermodder.h"
 
-QStringList extensions = {
-    "100",
-    "10o",
-    "ART",
-    "BMC",
-    "BRO",
-    "CND",
-    "COL",
-    "CSD",
-    "CSV",
-    "DAT",
-    "DEM",
-    "DSB",
-    "DST",
-    "DSZ",
-    "DXF",
-    "EDR",
-    "EMD",
-    "EXP",
-    "EXY",
-    "EYS",
-    "FXY",
-    "GNC",
-    "GT",
-    "HUS",
-    "INB",
-    "JEF",
-    "KSM",
-    "PCD",
-    "PCM",
-    "PCQ",
-    "PCS",
-    "PEC",
-    "PEL",
-    "PEM",
-    "PES",
-    "PHB",
-    "PHC",
-    "RGB",
-    "SEW",
-    "SHV",
-    "SST",
-    "STX",
-    "SVG",
-    "T09",
-    "TAP",
-    "THR",
-    "TXT",
-    "U00",
-    "U01",
-    "VIP",
-    "VP3",
-    "XXX",
-    "ZSK"
-};
+void set_visibility(QObject *senderObj, const char *key, bool visibility);
+void set_enabled(QObject *senderObj, const char *key, bool visibility);
+void set_visibility_group(QObject *senderObj, const char **key, bool visibility);
+void set_enabled_group(QObject *senderObj, const char **key, bool visibility);
+
+extern const char *extensions[MAX_STRING_LENGTH];
+extern const char *center_on_origin_group[MAX_STRING_LENGTH];
 
 QIcon
 create_swatch(int32_t color)
@@ -180,9 +132,8 @@ QWidget* Settings_Dialog::createTabGeneral()
     QDir dir(qApp->applicationDirPath());
     dir.cd("icons");
     strcpy(general_icon_theme.dialog, general_icon_theme.setting);
-    foreach(QString dirName, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
-    {
-        comboBoxIconTheme->addItem(QIcon("icons/" + dirName + "/" + "theme" + ".png"), dirName);
+    foreach(QString dirName, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+        comboBoxIconTheme->addItem(QIcon("icons/" + dirName + "/theme.png"), dirName);
     }
     comboBoxIconTheme->setCurrentIndex(comboBoxIconTheme->findText(general_icon_theme.dialog));
     connect(comboBoxIconTheme, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboBoxIconThemeCurrentIndexChanged(const QString&)));
@@ -192,12 +143,12 @@ QWidget* Settings_Dialog::createTabGeneral()
     QString dialog_icon("icons/");
     dialog_icon += general_icon_theme.dialog;
     dialog_icon += "/";
-    comboBoxIconSize->addItem(QIcon(dialog_icon + "icon16"  + ".png"), "Very Small", 16);
-    comboBoxIconSize->addItem(QIcon(dialog_icon + "icon24"  + ".png"), "Small", 24);
-    comboBoxIconSize->addItem(QIcon(dialog_icon + "icon32"  + ".png"), "Medium", 32);
-    comboBoxIconSize->addItem(QIcon(dialog_icon + "icon48"  + ".png"), "Large", 48);
-    comboBoxIconSize->addItem(QIcon(dialog_icon + "icon64"  + ".png"), "Very Large", 64);
-    comboBoxIconSize->addItem(QIcon(dialog_icon + "icon128" + ".png"), "I'm Blind", 128);
+    comboBoxIconSize->addItem(QIcon(dialog_icon + "icon16.png"), "Very Small", 16);
+    comboBoxIconSize->addItem(QIcon(dialog_icon + "icon24.png"), "Small", 24);
+    comboBoxIconSize->addItem(QIcon(dialog_icon + "icon32.png"), "Medium", 32);
+    comboBoxIconSize->addItem(QIcon(dialog_icon + "icon48.png"), "Large", 48);
+    comboBoxIconSize->addItem(QIcon(dialog_icon + "icon64.png"), "Very Large", 64);
+    comboBoxIconSize->addItem(QIcon(dialog_icon + "icon128.png"), "I'm Blind", 128);
     general_icon_size.dialog = general_icon_size.setting;
     comboBoxIconSize->setCurrentIndex(comboBoxIconSize->findData(general_icon_size.dialog));
     connect(comboBoxIconSize, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxIconSizeCurrentIndexChanged(int)));
@@ -597,23 +548,22 @@ QWidget* Settings_Dialog::createTabOpenSave()
 
     QHash<QString, QCheckBox*> custom_filter;
 
-    foreach (QString extension, extensions) {
-        custom_filter[extension] = new QCheckBox(extension, groupBoxCustomFilter);
-        custom_filter[extension]->setChecked(QString(opensave_custom_filter.dialog).contains("*." + extension, Qt::CaseInsensitive));
-        connect(custom_filter[extension], SIGNAL(stateChanged(int)), this,
-            SLOT(checkBoxCustomFilterStateChanged(int)));
-    }
-
     QPushButton* buttonCustomFilterSelectAll = new QPushButton(tr("Select All"), widget);
     connect(buttonCustomFilterSelectAll, SIGNAL(clicked()), this, SLOT(buttonCustomFilterSelectAllClicked()));
-    foreach (QString extension, extensions) {
-        connect(this, SIGNAL(buttonCustomFilterSelectAll(bool)),
-            custom_filter[extension], SLOT(setChecked(bool)));
-    }
-
     QPushButton* buttonCustomFilterClearAll = new QPushButton("Clear All", widget);
     connect(buttonCustomFilterClearAll, SIGNAL(clicked()), this, SLOT(buttonCustomFilterClearAllClicked()));
-    foreach (QString extension, extensions) {
+
+    int i;
+    for (i=0; strcmp(extensions[i], "END"); i++) {
+        const char *extension = extensions[i];
+        custom_filter[extension] = new QCheckBox(extension, groupBoxCustomFilter);
+        custom_filter[extension]->setChecked(QString(opensave_custom_filter.dialog).contains("*." + QString(extension), Qt::CaseInsensitive));
+        connect(custom_filter[extension], SIGNAL(stateChanged(int)), this,
+            SLOT(checkBoxCustomFilterStateChanged(int)));
+
+        connect(this, SIGNAL(buttonCustomFilterSelectAll(bool)),
+            custom_filter[extension], SLOT(setChecked(bool)));
+
         connect(this, SIGNAL(buttonCustomFilterClearAll(bool)),
             custom_filter[extension], SLOT(setChecked(bool)));
     }
@@ -621,8 +571,8 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QGridLayout* gridLayoutCustomFilter = new QGridLayout(groupBoxCustomFilter);
     int row = 0;
     int column = 0;
-    foreach (QString extension, extensions) {
-        gridLayoutCustomFilter->addWidget(custom_filter[extension], row, column, Qt::AlignLeft);
+    for (i=0; strcmp(extensions[i], "END"); i++) {
+        gridLayoutCustomFilter->addWidget(custom_filter[extensions[i]], row, column, Qt::AlignLeft);
         row++;
         if (row == 10) {
             row = 0;
@@ -2099,6 +2049,11 @@ Settings_Dialog::currentGridColorChanged(const QColor& color)
     _main->updateAllViewGridColors(grid_color.preview);
 }
 
+const char *grid_load_from_file_group[MAX_STRING_LENGTH] = {
+    "labelGridType",
+    "END"
+};
+
 void
 Settings_Dialog::checkBoxGridLoadFromFileStateChanged(int checked)
 {
@@ -2212,7 +2167,9 @@ Settings_Dialog::comboBoxGridTypeCurrentIndexChanged(const QString& type)
         return;
     }
     bool visibility = false;
-    if (type == "Circular") visibility = true;
+    if (type == "Circular") {
+        visibility = true;
+    }
 
     QLabel* labelGridSizeX = parent->findChild<QLabel*>("labelGridSizeX");
     if (labelGridSizeX) labelGridSizeX->setVisible(!visibility);
@@ -2250,20 +2207,8 @@ Settings_Dialog::checkBoxGridCenterOnOriginStateChanged(int checked)
     grid_center_on_origin.dialog = checked;
 
     QObject* senderObj = sender();
-    if (senderObj)
-    {
-        QObject* parent = senderObj->parent();
-        if (parent)
-        {
-            QLabel* labelGridCenterX = parent->findChild<QLabel*>("labelGridCenterX");
-            if (labelGridCenterX) labelGridCenterX->setEnabled(!grid_center_on_origin.dialog);
-            QDoubleSpinBox* spinBoxGridCenterX = parent->findChild<QDoubleSpinBox*>("spinBoxGridCenterX");
-            if (spinBoxGridCenterX) spinBoxGridCenterX->setEnabled(!grid_center_on_origin.dialog);
-            QLabel* labelGridCenterY = parent->findChild<QLabel*>("labelGridCenterY");
-            if (labelGridCenterY) labelGridCenterY->setEnabled(!grid_center_on_origin.dialog);
-            QDoubleSpinBox* spinBoxGridCenterY = parent->findChild<QDoubleSpinBox*>("spinBoxGridCenterY");
-            if (spinBoxGridCenterY) spinBoxGridCenterY->setEnabled(!grid_center_on_origin.dialog);
-        }
+    if (senderObj) {
+        set_enabled_group(senderObj, center_on_origin_group, !grid_center_on_origin.dialog);
     }
 }
 
@@ -2344,8 +2289,7 @@ void
 Settings_Dialog::chooseRulerColor()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
-    if (button)
-    {
+    if (button) {
         QColorDialog* colorDialog = new QColorDialog(QColor(ruler_color.accept), this);
         connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentRulerColorChanged(const QColor&)));
         colorDialog->exec();

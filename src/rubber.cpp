@@ -12,6 +12,7 @@
 
 #include "embroidermodder.h"
 
+/* . */
 ScriptValue
 allow_rubber_command(ScriptEnv* context)
 {
@@ -22,6 +23,7 @@ allow_rubber_command(ScriptEnv* context)
     return script_bool(nativeAllowRubber());
 }
 
+/* . */
 ScriptValue
 set_rubber_mode_command(ScriptEnv* context)
 {
@@ -93,6 +95,7 @@ set_rubber_mode_command(ScriptEnv* context)
     return script_null;
 }
 
+/* . */
 ScriptValue
 set_rubber_point_command(ScriptEnv* context)
 {
@@ -105,6 +108,7 @@ set_rubber_point_command(ScriptEnv* context)
     return script_null;
 }
 
+/* . */
 ScriptValue
 set_rubber_text_command(ScriptEnv* context)
 {

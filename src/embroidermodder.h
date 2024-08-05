@@ -1661,7 +1661,7 @@ QPointF to_qpointf(EmbVector v);
 QPointF scale_and_rotate(QPointF v, double angle, double scale);
 QPointF find_mouse_snap_point(QList<QPointF> snap_points, const QPointF& mouse_point);
 
-extern QHash<QString, QString>* aliasHash;
+extern QHash<std::string, std::string>* aliasHash;
 extern QHash<int, QAction*> actionHash;
 extern QHash<QString, QToolBar*> toolbarHash;
 extern QHash<QString, QMenu*> menuHash;

@@ -14,6 +14,7 @@
 QHash<int, QAction*> actionHash;
 QHash<QString, QToolBar*> toolbarHash;
 QHash<QString, QMenu*> menuHash;
+const char *settings_file = "settings.toml";
 
 void
 MainWindow::run_testing(void)
@@ -798,4 +799,652 @@ void MainWindow::floatingChangedToolBar(bool isFloating)
             }
         }
     }
+}
+
+/* */
+QAction*
+get_action_by_icon(const char *icon)
+{
+    int i;
+    for (i=0; command_data[i].id != -2; i++) {
+        if (!strcmp(command_data[i].icon, icon)) {
+            return actionHash.value(command_data[i].id);
+        }
+    }
+    return actionHash.value(ACTION_DO_NOTHING);
+}
+
+/* . */
+void
+add_to_menu(QMenu *menu, string_table menu_data)
+{
+    for (int i=0; strcmp(menu_data[i], "END"); i++) {
+        if (menu_data[i][0] == '-') {
+            menu->addSeparator();
+        }
+        else if (menu_data[i][0] == '>') {
+            menu->addMenu(menuHash[menu_data[i]+1]);
+        }
+        else if (menu_data[i][0] == '+') {
+            QString appDir = qApp->applicationDirPath();
+            QString icontheme = general_icon_theme.setting;
+            QString s = appDir + "/icons/" + icontheme + "/" + QString(menu_data[i]+1) + ".png";
+            menu->setIcon(QIcon(s));
+        }
+        else {
+            menu->addAction(get_action_by_icon(menu_data[i]));
+        }
+    }
+    menu->setTearOffEnabled(false);
+}
+
+/* . */
+void
+MainWindow::createAllMenus()
+{
+    qDebug("MainWindow createAllMenus()");
+
+    QString appDir = qApp->applicationDirPath();
+    QString icontheme = general_icon_theme.setting;
+
+    menuBar()->addMenu(menuHash["File"]);
+    menuHash["File"]->addAction(actionHash.value(ACTION_NEW));
+    menuHash["File"]->addSeparator();
+    menuHash["File"]->addAction(actionHash.value(ACTION_OPEN));
+
+    menuHash["File"]->addMenu(menuHash["Recent"]);
+    connect(menuHash["Recent"], SIGNAL(aboutToShow()), this, SLOT(recentMenuAboutToShow()));
+    //Do not allow the Recent Menu to be torn off. It's a pain in the ass to maintain.
+    menuHash["Recent"]->setTearOffEnabled(false);
+
+    menuHash["File"]->addSeparator();
+    menuHash["File"]->addAction(actionHash.value(ACTION_SAVE));
+    menuHash["File"]->addAction(actionHash.value(ACTION_SAVE_AS));
+    menuHash["File"]->addSeparator();
+    menuHash["File"]->addAction(actionHash.value(ACTION_PRINT));
+    menuHash["File"]->addSeparator();
+    menuHash["File"]->addAction(actionHash.value(ACTION_WINDOW_CLOSE));
+    menuHash["File"]->addSeparator();
+    menuHash["File"]->addAction(actionHash.value(ACTION_DESIGN_DETAILS));
+    menuHash["File"]->addSeparator();
+
+    menuHash["File"]->addAction(actionHash.value(ACTION_EXIT));
+    menuHash["File"]->setTearOffEnabled(false);
+
+    menuBar()->addMenu(menuHash["Edit"]);
+    add_to_menu(menuHash["Edit"], edit_menu);
+
+    menuBar()->addMenu(menuHash["View"]);
+    add_to_menu(menuHash["View"], view_menu);
+    add_to_menu(menuHash["Zoom"], zoom_menu);
+    add_to_menu(menuHash["Pan"], pan_menu);
+
+    menuBar()->addMenu(menuHash["Tools"]);
+    add_to_menu(menuHash["Tools"], tools_menu);
+
+    menuBar()->addMenu(menuHash["Draw"]);
+    add_to_menu(menuHash["Draw"], draw_menu);
+
+    menuBar()->addMenu(menuHash["Dimension"]);
+    add_to_menu(menuHash["Dimension"], dimension_menu);
+
+    menuBar()->addMenu(menuHash["Modify"]);
+    add_to_menu(menuHash["Modify"], modify_menu);
+
+    menuBar()->addMenu(menuHash["Sandbox"]);
+    add_to_menu(menuHash["Sandbox"], sandbox_menu);
+
+    menuBar()->addMenu(menuHash["Settings"]);
+    menuHash["Settings"]->addAction(actionHash.value(ACTION_SETTINGS_DIALOG));
+    menuHash["Settings"]->addSeparator();
+    menuHash["Settings"]->setTearOffEnabled(false);
+
+    menuBar()->addMenu(menuHash["Window"]);
+    connect(menuHash["Window"], SIGNAL(aboutToShow()), this, SLOT(windowMenuAboutToShow()));
+    /* Do not allow the Window Menu to be torn off. It's a pain in the ass to maintain. */
+    menuHash["Window"]->setTearOffEnabled(false);
+
+    menuBar()->addMenu(menuHash["Help"]);
+    add_to_menu(menuHash["Help"], help_menu);
+}
+
+/* Note: on Unix we include the trailing separator. For Windows compatibility we
+ * omit it.
+ */
+QString
+SettingsDir()
+{
+#if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
+    return QDir::homePath() + "/.embroidermodder2/";
+#else
+    return "";
+#endif
+}
+
+void
+get_setting(QSettings *settings, const char *key, const char *value, StringSetting *s)
+{
+    QString k(key);
+    QString v(value);
+    strcpy(s->key, key);
+    strcpy(s->setting, qPrintable(settings->value(k, v).toString()));
+}
+
+void
+get_setting(QSettings *settings, const char *key, int value, IntSetting *i)
+{
+    strcpy(i->key, key);
+    i->setting = settings->value(key, value).toInt();
+}
+
+void
+get_setting(QSettings *settings, const char *key, bool value, BoolSetting *b)
+{
+    strcpy(b->key, key);
+    b->setting = settings->value(key, value).toBool();
+}
+
+void
+MainWindow::readSettings()
+{
+    qDebug("Reading Settings...");
+    // This file needs to be read from the users home directory to ensure it is writable
+    QString settingsDir = SettingsDir();
+    QString appDir = qApp->applicationDirPath();
+    //load_settings(qPrintable(appDir), qPrintable(SettingsDir()));
+
+    QSettings settings(SettingsDir() + settings_file, QSettings::IniFormat);
+    QPoint pos = settings.value("Window/Position", QPoint(0, 0)).toPoint();
+    QSize size = settings.value("Window/Size", QSize(800, 600)).toSize();
+
+    layoutState = settings.value("LayoutState").toByteArray();
+    if (!restoreState(layoutState)) {
+        qDebug("LayoutState NOT restored! Setting Default Layout...");
+        //someToolBar->setVisible(true);
+    }
+
+    /* General */
+    get_setting(&settings, "Language", "default", &general_language);
+    get_setting(&settings, "IconTheme", "default", &general_icon_theme);
+    get_setting(&settings, "IconSize", 16, &general_icon_size);
+    get_setting(&settings, "MdiBGUseLogo", true, &general_mdi_bg_use_logo);
+    get_setting(&settings, "MdiBGUseTexture", true, &general_mdi_bg_use_texture);
+    get_setting(&settings, "MdiBGUseColor", true, &general_mdi_bg_use_color);
+    get_setting(&settings, "MdiBGLogo", qPrintable(appDir + "/images/logo-spirals.png"), &general_mdi_bg_logo);
+    get_setting(&settings, "MdiBGTexture", qPrintable(appDir + "/images/texture-spirals.png"), &general_mdi_bg_texture);
+    get_setting(&settings, "MdiBGColor", qRgb(192,192,192), &general_mdi_bg_color);
+    get_setting(&settings, "TipOfTheDay", true, &general_tip_of_the_day);
+    get_setting(&settings, "CurrentTip", 0, &general_current_tip);
+    get_setting(&settings, "SystemHelpBrowser", true, &general_system_help_browser);
+
+    /* Display */
+    get_setting(&settings, "Display/UseOpenGL", false, &display_use_opengl);
+    get_setting(&settings, "Display/RenderHintAntiAlias", false, &display_renderhint_aa);
+    display_renderhint_text_aa.setting = settings.value("Display/RenderHintTextAntiAlias", false).toBool();
+    display_renderhint_smooth_pix.setting = settings.value("Display/RenderHintSmoothPixmap", false).toBool();
+    display_renderhint_high_aa.setting = settings.value("Display/RenderHintHighQualityAntiAlias", false).toBool();
+    display_renderhint_noncosmetic.setting = settings.value("Display/RenderHintNonCosmetic", false).toBool();
+    display_show_scrollbars.setting = settings.value("Display/ShowScrollBars", true).toBool();
+    display_scrollbar_widget_num.setting = settings.value("Display/ScrollBarWidgetNum", 0).toInt();
+    display_crosshair_color.setting = settings.value("Display/CrossHairColor", qRgb(  0, 0, 0)).toInt();
+    display_bg_color.setting = settings.value("Display/BackgroundColor", qRgb(235,235,235)).toInt();
+    display_selectbox_left_color.setting = settings.value("Display/SelectBoxLeftColor", qRgb(  0,128, 0)).toInt();
+    display_selectbox_left_fill.setting = settings.value("Display/SelectBoxLeftFill", qRgb(  0,255, 0)).toInt();
+    display_selectbox_right_color.setting = settings.value("Display/SelectBoxRightColor", qRgb(  0, 0,128)).toInt();
+    display_selectbox_right_fill.setting = settings.value("Display/SelectBoxRightFill", qRgb(  0, 0,255)).toInt();
+    display_selectbox_alpha.setting = settings.value("Display/SelectBoxAlpha", 32).toInt();
+    display_zoomscale_in.setting = settings.value("Display/ZoomScaleIn", 2.0).toFloat();
+    display_zoomscale_out.setting = settings.value("Display/ZoomScaleOut", 0.5).toFloat();
+    display_crosshair_percent.setting = settings.value("Display/CrossHairPercent", 5).toInt();
+    strcpy(display_units.setting, qPrintable(settings.value("Display/Units", "mm").toString()));
+
+    /* Prompt */
+    prompt_text_color.setting = settings.value("Prompt/TextColor", qRgb(0, 0, 0)).toInt();
+    prompt_bg_color.setting = settings.value("Prompt/BackgroundColor", qRgb(255, 255, 255)).toInt();
+    strcpy(prompt_font_family.setting,
+        qPrintable(settings.value("Prompt/FontFamily", "Monospace").toString()));
+    strcpy(prompt_font_style.setting,
+        qPrintable(settings.value("Prompt/FontStyle", "normal").toString()));
+    prompt_font_size.setting = settings.value("Prompt/FontSize", 12).toInt();
+    prompt_save_history.setting = settings.value("Prompt/SaveHistory", true).toBool();
+    prompt_save_history_as_html.setting = settings.value("Prompt/SaveHistoryAsHtml", false).toBool();
+    strcpy(prompt_save_history_filename.setting,
+        qPrintable(settings.value("Prompt/SaveHistoryFilename", settingsDir + "prompt.log").toString()));
+
+    /* OpenSave */
+    strcpy(opensave_custom_filter.setting,
+        qPrintable(settings.value("OpenSave/CustomFilter", "supported").toString()));
+    strcpy(opensave_open_format.setting,
+        qPrintable(settings.value("OpenSave/OpenFormat", "*.*").toString()));
+    opensave_open_thumbnail.setting = settings.value("OpenSave/OpenThumbnail", false).toBool();
+    strcpy(opensave_save_format.setting,
+        qPrintable(settings.value("OpenSave/SaveFormat", "*.*").toString()));
+    opensave_save_thumbnail.setting = settings.value("OpenSave/SaveThumbnail", false).toBool();
+
+    /* Recent */
+    opensave_recent_max_files.setting = settings.value("OpenSave/RecentMax", 10).toInt();
+    QStringList sl = settings.value("OpenSave/RecentFiles").toStringList();
+    /*
+    int i;
+    for (i=0; i<MAX_FILES-1; i++) {
+        strncpy(opensave_recent_list_of_files.setting[i], qPrintable(sl[i]),
+            MAX_STRING_LENGTH);
+    }
+    strncpy(opensave_recent_list_of_files.setting[i], "END", MAX_STRING_LENGTH);
+    strncpy(opensave_recent_directory.setting,
+        qPrintable(settings.value("OpenSave/RecentDirectory", appDir + "/samples").toString()),
+        MAX_STRING_LENGTH);
+    */
+    strncpy(opensave_recent_list_of_files.setting[0], "END", MAX_STRING_LENGTH);
+
+    /* Trimming */
+    opensave_trim_dst_num_jumps.setting = settings.value("OpenSave/TrimDstNumJumps", 5).toInt();
+
+    /* Printing */
+    strcpy(printing_default_device.setting, qPrintable(settings.value("Printing/DefaultDevice", "").toString()));
+    printing_use_last_device.setting = settings.value("Printing/UseLastDevice", false).toBool();
+    printing_disable_bg.setting = settings.value("Printing/DisableBG", true).toBool();
+
+    /* Grid */
+    grid_show_on_load.setting = settings.value("Grid/ShowOnLoad", true).toBool();
+    grid_show_origin.setting = settings.value("Grid/ShowOrigin", true).toBool();
+    grid_color_match_crosshair.setting = settings.value("Grid/ColorMatchCrossHair", true).toBool();
+    grid_color.setting = settings.value("Grid/Color", qRgb(  0, 0, 0)).toInt();
+    grid_load_from_file.setting = settings.value("Grid/LoadFromFile", true).toBool();
+    strcpy(grid_type.setting, qPrintable(settings.value("Grid/Type", "Rectangular").toString()));
+    grid_center_on_origin.setting = settings.value("Grid/CenterOnOrigin", true).toBool();
+    grid_center_x.setting = settings.value("Grid/CenterX", 0.0).toFloat();
+    grid_center_y.setting = settings.value("Grid/CenterY", 0.0).toFloat();
+    grid_size_x.setting = settings.value("Grid/SizeX", 100.0).toFloat();
+    grid_size_y.setting = settings.value("Grid/SizeY", 100.0).toFloat();
+    grid_spacing_x.setting = settings.value("Grid/SpacingX", 25.0).toFloat();
+    grid_spacing_y.setting = settings.value("Grid/SpacingY", 25.0).toFloat();
+    grid_size_radius.setting = settings.value("Grid/SizeRadius", 50.0).toFloat();
+    grid_spacing_radius.setting = settings.value("Grid/SpacingRadius", 25.0).toFloat();
+    grid_spacing_angle.setting = settings.value("Grid/SpacingAngle", 45.0).toFloat();
+
+    /* Ruler */
+    ruler_show_on_load.setting = settings.value("Ruler/ShowOnLoad", true).toBool();
+    ruler_metric.setting = settings.value("Ruler/Metric", true).toBool();
+    ruler_color.setting = settings.value("Ruler/Color", qRgb(210,210, 50)).toInt();
+    ruler_pixel_size.setting = settings.value("Ruler/PixelSize", 20).toInt();
+
+    /* Quick Snap */
+    qsnap_enabled.setting = settings.value("QuickSnap/Enabled", true).toBool();
+    qsnap_locator_color.setting = settings.value("QuickSnap/LocatorColor", qRgb(255,255, 0)).toInt();
+    qsnap_locator_size.setting = settings.value("QuickSnap/LocatorSize", 4).toInt();
+    qsnap_aperture_size.setting = settings.value("QuickSnap/ApertureSize", 10).toInt();
+    qsnap_endpoint.setting = settings.value("QuickSnap/EndPoint", true).toBool();
+    qsnap_midpoint.setting = settings.value("QuickSnap/MidPoint", true).toBool();
+    qsnap_center.setting = settings.value("QuickSnap/Center", true).toBool();
+    qsnap_node.setting = settings.value("QuickSnap/Node", true).toBool();
+    qsnap_quadrant.setting = settings.value("QuickSnap/Quadrant", true).toBool();
+    qsnap_intersection.setting = settings.value("QuickSnap/Intersection", true).toBool();
+    qsnap_extension.setting = settings.value("QuickSnap/Extension", true).toBool();
+    qsnap_insertion.setting = settings.value("QuickSnap/Insertion", false).toBool();
+    qsnap_perpendicular.setting = settings.value("QuickSnap/Perpendicular", true).toBool();
+    qsnap_tangent.setting = settings.value("QuickSnap/Tangent", true).toBool();
+    qsnap_nearest.setting = settings.value("QuickSnap/Nearest", false).toBool();
+    qsnap_apparent.setting = settings.value("QuickSnap/Apparent", false).toBool();
+    qsnap_parallel.setting = settings.value("QuickSnap/Parallel", false).toBool();
+
+    /* LineWeight */
+    lwt_show_lwt.setting = settings.value("LineWeight/ShowLineWeight", false).toBool();
+    lwt_real_render.setting = settings.value("LineWeight/RealRender", true).toBool();
+    lwt_default_lwt.setting = settings.value("LineWeight/DefaultLineWeight", 0).toReal();
+
+    /* Selection */
+    selection_mode_pickfirst.setting = settings.value("Selection/PickFirst", true).toBool();
+    selection_mode_pickadd.setting = settings.value("Selection/PickAdd", true).toBool();
+    selection_mode_pickdrag.setting = settings.value("Selection/PickDrag", false).toBool();
+    selection_coolgrip_color.setting = settings.value("Selection/CoolGripColor", qRgb(  0, 0,255)).toInt();
+    selection_hotgrip_color.setting = settings.value("Selection/HotGripColor", qRgb(255, 0, 0)).toInt();
+    selection_grip_size.setting = settings.value("Selection/GripSize", 4).toInt();
+    selection_pickbox_size.setting = settings.value("Selection/PickBoxSize", 4).toInt();
+
+    /* Text */
+    strcpy(text_font.setting, qPrintable(settings.value("Text/Font", "Arial").toString()));
+    text_size.setting = settings.value("Text/Size", 12).toReal();
+    text_angle.setting = settings.value("Text/Angle", 0).toReal();
+    text_style_bold.setting = settings.value("Text/StyleBold", false).toBool();
+    text_style_italic.setting = settings.value("Text/StyleItalic", false).toBool();
+    text_style_underline.setting = settings.value("Text/StyleUnderline", false).toBool();
+    text_style_strikeout.setting = settings.value("Text/StyleStrikeOut", false).toBool();
+    text_style_overline.setting = settings.value("Text/StyleOverline", false).toBool();
+
+    move(pos);
+    resize(size);
+}
+
+void
+MainWindow::writeSettings()
+{
+    qDebug("Writing Settings...");
+    save_settings("", qPrintable(SettingsDir() + settings_file));
+}
+
+void
+MainWindow::settingsPrompt()
+{
+    settingsDialog("Prompt");
+}
+
+void
+MainWindow::settingsDialog(const QString& showTab)
+{
+    Settings_Dialog dialog(this, showTab, this);
+    dialog.exec();
+}
+/*
+ * Embroidermodder 2.
+ *
+ * Copyright 2011-2024 The Embroidermodder Team
+ * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+ * Visit https://www.libembroidery.org/refman for advice on altering this file,
+ * or read the markdown version in embroidermodder2/docs/refman.
+ *
+ * Toolbars
+ */
+
+#include "embroidermodder.h"
+
+void
+add_to_toolbar(const char *toolbar_name, string_table toolbar_data)
+{
+    QString s(toolbar_name);
+    toolbarHash[s]->setObjectName("toolbar" + s);
+
+    int n = string_array_length(toolbar_data);
+    for (int i=0; i<n; i++) {
+        if (toolbar_data[i][0] == '-') {
+            toolbarHash[s]->addSeparator();
+        }
+        else {
+            QAction *action = get_action_by_icon(toolbar_data[i]);
+            toolbarHash[s]->addAction(action);
+        }
+    }
+
+    QAction::connect(toolbarHash[s], SIGNAL(topLevelChanged(bool)), _main,
+        SLOT(floatingChangedToolBar(bool)));
+}
+
+void MainWindow::createLayerToolbar()
+{
+    qDebug("MainWindow createLayerToolbar()");
+
+    toolbarHash["Layer"]->setObjectName("toolbarLayer");
+    toolbarHash["Layer"]->addAction(actionHash.value(ACTION_MAKE_LAYER_CURRENT));
+    toolbarHash["Layer"]->addAction(actionHash.value(ACTION_LAYERS));
+
+    QString appDir = qApp->applicationDirPath();
+    QString icontheme = general_icon_theme.setting;
+
+    layerSelector->setFocusProxy(prompt);
+    //NOTE: Qt4.7 wont load icons without an extension...
+    //TODO: Create layer pixmaps by concatenating several icons
+    layerSelector->addItem(create_icon("linetypebylayer"), "0");
+    layerSelector->addItem(create_icon("linetypebylayer"), "1");
+    layerSelector->addItem(create_icon("linetypebylayer"), "2");
+    layerSelector->addItem(create_icon("linetypebylayer"), "3");
+    layerSelector->addItem(create_icon("linetypebylayer"), "4");
+    layerSelector->addItem(create_icon("linetypebylayer"), "5");
+    layerSelector->addItem(create_icon("linetypebylayer"), "6");
+    layerSelector->addItem(create_icon("linetypebylayer"), "7");
+    layerSelector->addItem(create_icon("linetypebylayer"), "8");
+    layerSelector->addItem(create_icon("linetypebylayer"), "9");
+    toolbarHash["Layer"]->addWidget(layerSelector);
+    connect(layerSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(layerSelectorIndexChanged(int)));
+
+    toolbarHash["Layer"]->addAction(actionHash.value(ACTION_LAYER_PREVIOUS));
+
+    connect(toolbarHash["Layer"], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+}
+
+void MainWindow::createPropertiesToolbar()
+{
+    qDebug("MainWindow createPropertiesToolbar()");
+
+    toolbarHash["Properties"]->setObjectName("toolbarProperties");
+
+    colorSelector->setFocusProxy(prompt);
+    //NOTE: Qt4.7 wont load icons without an extension...
+    colorSelector->addItem(create_icon("colorbylayer"), "ByLayer");
+    colorSelector->addItem(create_icon("colorbyblock"), "ByBlock");
+    colorSelector->addItem(create_icon("colorred"), tr("Red"), qRgb(255, 0, 0));
+    colorSelector->addItem(create_icon("coloryellow"), tr("Yellow"), qRgb(255, 255, 0));
+    colorSelector->addItem(create_icon("colorgreen"), tr("Green"),   qRgb(  0,255,  0));
+    colorSelector->addItem(create_icon("colorcyan"), tr("Cyan"),    qRgb(  0,255,255));
+    colorSelector->addItem(create_icon("colorblue"), tr("Blue"),    qRgb(  0,  0,255));
+    colorSelector->addItem(create_icon("colormagenta"), tr("Magenta"), qRgb(255,  0,255));
+    colorSelector->addItem(create_icon("colorwhite"), tr("White"),   qRgb(255,255,255));
+    colorSelector->addItem(create_icon("colorother"), tr("Other..."));
+    toolbarHash["Properties"]->addWidget(colorSelector);
+    connect(colorSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(colorSelectorIndexChanged(int)));
+
+    toolbarHash["Properties"]->addSeparator();
+    linetypeSelector->setFocusProxy(prompt);
+    //NOTE: Qt4.7 wont load icons without an extension...
+    linetypeSelector->addItem(create_icon("linetypebylayer"   ), "ByLayer");
+    linetypeSelector->addItem(create_icon("linetypebyblock"   ), "ByBlock");
+    linetypeSelector->addItem(create_icon("linetypecontinuous"), "Continuous");
+    linetypeSelector->addItem(create_icon("linetypehidden"    ), "Hidden");
+    linetypeSelector->addItem(create_icon("linetypecenter"    ), "Center");
+    linetypeSelector->addItem(create_icon("linetypeother"     ), "Other...");
+    toolbarHash["Properties"]->addWidget(linetypeSelector);
+    connect(linetypeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(linetypeSelectorIndexChanged(int)));
+
+    toolbarHash["Properties"]->addSeparator();
+    lineweightSelector->setFocusProxy(prompt);
+    //NOTE: Qt4.7 wont load icons without an extension...
+    lineweightSelector->addItem(create_icon("lineweightbylayer"), "ByLayer", -2.00);
+    lineweightSelector->addItem(create_icon("lineweightbyblock"), "ByBlock", -1.00);
+    lineweightSelector->addItem(create_icon("lineweightdefault"), "Default",  0.00);
+    //TODO: Thread weight is weird. See http://en.wikipedia.org/wiki/Thread_(yarn)#Weight
+    lineweightSelector->addItem(create_icon("lineweight01"), "0.00 mm", 0.00);
+    lineweightSelector->addItem(create_icon("lineweight02"), "0.05 mm", 0.05);
+    lineweightSelector->addItem(create_icon("lineweight03"), "0.15 mm", 0.15);
+    lineweightSelector->addItem(create_icon("lineweight04"), "0.20 mm", 0.20);
+    lineweightSelector->addItem(create_icon("lineweight05"), "0.25 mm", 0.25);
+    lineweightSelector->addItem(create_icon("lineweight06"), "0.30 mm", 0.30);
+    lineweightSelector->addItem(create_icon("lineweight07"), "0.35 mm", 0.35);
+    lineweightSelector->addItem(create_icon("lineweight08"), "0.40 mm", 0.40);
+    lineweightSelector->addItem(create_icon("lineweight09"), "0.45 mm", 0.45);
+    lineweightSelector->addItem(create_icon("lineweight10"), "0.50 mm", 0.50);
+    lineweightSelector->addItem(create_icon("lineweight11"), "0.55 mm", 0.55);
+    lineweightSelector->addItem(create_icon("lineweight12"), "0.60 mm", 0.60);
+    lineweightSelector->addItem(create_icon("lineweight13"), "0.65 mm", 0.65);
+    lineweightSelector->addItem(create_icon("lineweight14"), "0.70 mm", 0.70);
+    lineweightSelector->addItem(create_icon("lineweight15"), "0.75 mm", 0.75);
+    lineweightSelector->addItem(create_icon("lineweight16"), "0.80 mm", 0.80);
+    lineweightSelector->addItem(create_icon("lineweight17"), "0.85 mm", 0.85);
+    lineweightSelector->addItem(create_icon("lineweight18"), "0.90 mm", 0.90);
+    lineweightSelector->addItem(create_icon("lineweight19"), "0.95 mm", 0.95);
+    lineweightSelector->addItem(create_icon("lineweight20"), "1.00 mm", 1.00);
+    lineweightSelector->addItem(create_icon("lineweight21"), "1.05 mm", 1.05);
+    lineweightSelector->addItem(create_icon("lineweight22"), "1.10 mm", 1.10);
+    lineweightSelector->addItem(create_icon("lineweight23"), "1.15 mm", 1.15);
+    lineweightSelector->addItem(create_icon("lineweight24"), "1.20 mm", 1.20);
+    lineweightSelector->setMinimumContentsLength(8); // Prevent dropdown text readability being squish...d.
+    toolbarHash["Properties"]->addWidget(lineweightSelector);
+    connect(lineweightSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(lineweightSelectorIndexChanged(int)));
+
+    connect(toolbarHash["Properties"], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+}
+
+void MainWindow::createTextToolbar()
+{
+    qDebug("MainWindow createTextToolbar()");
+
+    toolbarHash["Text"]->setObjectName("toolbarText");
+
+    toolbarHash["Text"]->addWidget(textFontSelector);
+    textFontSelector->setCurrentFont(QFont(text_font.setting));
+    connect(textFontSelector, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(textFontSelectorCurrentFontChanged(const QFont&)));
+
+    toolbarHash["Text"]->addAction(actionHash.value(ACTION_TEXT_BOLD));
+    actionHash.value(ACTION_TEXT_BOLD)->setChecked(text_style_bold.setting);
+    toolbarHash["Text"]->addAction(actionHash.value(ACTION_TEXT_ITALIC));
+    actionHash.value(ACTION_TEXT_ITALIC)->setChecked(text_style_italic.setting);
+    toolbarHash["Text"]->addAction(actionHash.value(ACTION_TEXT_UNDERLINE));
+    actionHash.value(ACTION_TEXT_UNDERLINE)->setChecked(text_style_underline.setting);
+    toolbarHash["Text"]->addAction(actionHash.value(ACTION_TEXT_STRIKEOUT));
+    actionHash.value(ACTION_TEXT_STRIKEOUT)->setChecked(text_style_strikeout.setting);
+    toolbarHash["Text"]->addAction(actionHash.value(ACTION_TEXT_OVERLINE));
+    actionHash.value(ACTION_TEXT_OVERLINE)->setChecked(text_style_overline.setting);
+
+    textSizeSelector->setFocusProxy(prompt);
+    textSizeSelector->addItem("6 pt",   6);
+    textSizeSelector->addItem("8 pt",   8);
+    textSizeSelector->addItem("9 pt",   9);
+    textSizeSelector->addItem("10 pt", 10);
+    textSizeSelector->addItem("11 pt", 11);
+    textSizeSelector->addItem("12 pt", 12);
+    textSizeSelector->addItem("14 pt", 14);
+    textSizeSelector->addItem("18 pt", 18);
+    textSizeSelector->addItem("24 pt", 24);
+    textSizeSelector->addItem("30 pt", 30);
+    textSizeSelector->addItem("36 pt", 36);
+    textSizeSelector->addItem("48 pt", 48);
+    textSizeSelector->addItem("60 pt", 60);
+    textSizeSelector->addItem("72 pt", 72);
+    setTextSize(text_size.setting);
+    toolbarHash["Text"]->addWidget(textSizeSelector);
+    connect(textSizeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(textSizeSelectorIndexChanged(int)));
+
+    connect(toolbarHash["Text"], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+}
+
+void MainWindow::createPromptToolbar()
+{
+    qDebug("MainWindow createPromptToolbar()");
+
+    toolbarHash["Prompt"]->setObjectName("toolbarPrompt");
+    toolbarHash["Prompt"]->addWidget(prompt);
+    toolbarHash["Prompt"]->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
+    connect(toolbarHash["Prompt"], SIGNAL(topLevelChanged(bool)), prompt, SLOT(floatingChanged(bool)));
+}
+
+void MainWindow::createAllToolbars()
+{
+    qDebug("MainWindow createAllToolbars()");
+
+    add_to_toolbar("File", file_toolbar);
+    add_to_toolbar("Edit", edit_toolbar);
+    add_to_toolbar("Zoom", zoom_toolbar);
+    add_to_toolbar("Pan", pan_toolbar);
+    add_to_toolbar("View", view_toolbar);
+    add_to_toolbar("Icon", icon_toolbar);
+    add_to_toolbar("Help", help_toolbar);
+
+    createLayerToolbar();
+    createPropertiesToolbar();
+    createTextToolbar();
+    createPromptToolbar();
+
+    add_to_toolbar("Draw", draw_toolbar);
+    add_to_toolbar("Modify", modify_toolbar);
+
+    /* Horizontal */
+    toolbarHash["View"]->setOrientation(Qt::Horizontal);
+    toolbarHash["Zoom"]->setOrientation(Qt::Horizontal);
+    toolbarHash["Layer"]->setOrientation(Qt::Horizontal);
+    toolbarHash["Properties"]->setOrientation(Qt::Horizontal);
+    toolbarHash["Text"]->setOrientation(Qt::Horizontal);
+    toolbarHash["Prompt"]->setOrientation(Qt::Horizontal);
+
+    /* Top */
+    addToolBarBreak(Qt::TopToolBarArea);
+    addToolBar(Qt::TopToolBarArea, toolbarHash["File"]);
+    addToolBar(Qt::TopToolBarArea, toolbarHash["Edit"]);
+    addToolBar(Qt::TopToolBarArea, toolbarHash["Help"]);
+    addToolBar(Qt::TopToolBarArea, toolbarHash["Icon"]);
+    addToolBarBreak(Qt::TopToolBarArea);
+    addToolBar(Qt::TopToolBarArea, toolbarHash["Zoom"]);
+    addToolBar(Qt::TopToolBarArea, toolbarHash["Pan"]);
+    addToolBar(Qt::TopToolBarArea, toolbarHash["View"]);
+    addToolBarBreak(Qt::TopToolBarArea);
+    addToolBar(Qt::TopToolBarArea, toolbarHash["Layer"]);
+    addToolBar(Qt::TopToolBarArea, toolbarHash["Properties"]);
+    addToolBarBreak(Qt::TopToolBarArea);
+    addToolBar(Qt::TopToolBarArea, toolbarHash["Text"]);
+    /* Bottom */
+    addToolBar(Qt::BottomToolBarArea, toolbarHash["Prompt"]);
+
+    /* Left */
+    addToolBar(Qt::LeftToolBarArea, toolbarHash["Draw"]);
+    addToolBar(Qt::LeftToolBarArea, toolbarHash["Modify"]);
+    addToolBarBreak(Qt::LeftToolBarArea);
+
+    //zoomToolBar->setToolButtonStyle(Qt::ToolButtonTextOnly);
+}
+/*
+ * Embroidermodder 2.
+ *
+ * Copyright 2011-2024 The Embroidermodder Team
+ * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+ * Visit https://www.libembroidery.org/refman for advice on altering this file,
+ * or read the markdown version in embroidermodder2/docs/refman.
+ *
+ * MainWindow Actions
+ */
+
+#include "embroidermodder.h"
+
+/* For each Command in command_data, for each alias set up a map from
+ * alias to the Command. Then for a given context the call doesn't have to loop?
+ *
+ * NOTE: Every QScriptProgram must have a unique function name to call. If every function was called main(), then
+ *       the ScriptArgs would only call the last script evaluated (which happens to be main() in another script).
+ *       Thus, by adding the cmdName before main(), it becomes line_main(), circle_main(), etc...
+ *       Do not change this code unless you really know what you are doing. I mean it.
+ *
+ * Position currently comes from the order of the command_data.
+ *
+ * TODO: Set What's This Context Help to statusTip for now so there is some infos there.
+ *       Make custom whats this context help popup with more descriptive help than just
+ *       the status bar/tip one liner(short but not real long) with a hyperlink in the custom popup
+ *       at the bottom to open full help file description. Ex: like wxPython AGW's SuperToolTip.
+ *
+ * TODO: Finish All Commands ... <.<
+ */
+void
+MainWindow::createAllActions()
+{
+    qDebug("Creating All Actions...");
+    for (int i=0; command_data[i].id != -2; i++) {
+        QString icon(command_data[i].icon);
+        QString toolTip(command_data[i].tooltip);
+        QString statusTip(command_data[i].statustip);
+        QString alias_string(command_data[i].alias);
+        QStringList aliases = alias_string.split(", ");
+
+        qDebug("COMMAND: %s", qPrintable(icon));
+
+        QAction *ACTION = new QAction(create_icon(icon), toolTip, this);
+        ACTION->setStatusTip(statusTip);
+        ACTION->setObjectName(icon);
+        ACTION->setWhatsThis(statusTip);
+
+        if (strcmp(command_data[i].shortcut, "")) {
+            ACTION->setShortcut(QKeySequence(command_data[i].shortcut));
+        }
+
+        if (icon == "textbold" || icon == "textitalic" || icon == "textunderline"
+            || icon == "textstrikeout" || icon == "textoverline") {
+            ACTION->setCheckable(true);
+        }
+
+        connect(ACTION, SIGNAL(triggered()), this, SLOT(runCommand()));
+
+        aliasHash->insert(icon.toStdString(), icon.toStdString());
+        actionHash.insert(command_data[i].id, ACTION);
+
+        foreach (QString alias, aliases) {
+            prompt->addCommand(alias, icon);
+        }
+    }
+
+    actionHash.value(ACTION_WINDOW_CLOSE)->setEnabled(numOfDocs > 0);
+    actionHash.value(ACTION_DESIGN_DETAILS)->setEnabled(numOfDocs > 0);
 }

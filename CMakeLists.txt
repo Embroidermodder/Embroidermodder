@@ -62,29 +62,21 @@ qt_add_executable(embroidermodder2
 	${SRC}/cmdprompt.cpp
 	${SRC}/commands.cpp
 	${SRC}/embdetails-dialog.cpp
-	${SRC}/imagewidget.cpp
-	${SRC}/layer-manager.cpp
 	${SRC}/main.cpp
 	${SRC}/mainwindow.cpp
-	${SRC}/mainwindow-actions.cpp
-	${SRC}/mainwindow-commands.cpp
-	${SRC}/mainwindow-menus.cpp
-	${SRC}/mainwindow-settings.cpp
-	${SRC}/mainwindow-toolbars.cpp
 	${SRC}/mdiarea.cpp
 	${SRC}/mdiwindow.cpp
 	${SRC}/object.cpp
 	${SRC}/preview-dialog.cpp
 	${SRC}/property-editor.cpp
 	${SRC}/rubber.cpp
-	${SRC}/selectbox.cpp
 	${SRC}/settings-dialog.cpp
-	${SRC}/statusbar.cpp
-	${SRC}/tools.cpp
-	${SRC}/undo-editor.cpp
 	${SRC}/view.cpp
+	${SRC}/widgets.cpp
+	${SRC}/wrapper.cpp
 
 	${SRC}/command_data.c
+	${SRC}/settings_data.c
 	${SRC}/designs.c
 	${SRC}/script.c
 
