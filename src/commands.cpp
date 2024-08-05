@@ -12,6 +12,16 @@
 
 #include "embroidermodder.h"
 
+#define RGB_MODE_BACKGROUND     0
+#define RGB_MODE_CROSSHAIR      1
+#define RGB_MODE_GRID           2
+
+#define ROTATE_MODE_NORMAL      0
+#define ROTATE_MODE_REFERENCE   1
+
+#define SCALE_MODE_NORMAL       0
+#define SCALE_MODE_REFERENCE    1
+
 void
 MainWindow::stub_implement(QString txt)
 {
@@ -477,92 +487,6 @@ MainWindow::layerPrevious()
 }
 
 void
-MainWindow::zoomPrevious()
-{
-    qDebug("zoomPrevious()");
-    stub_implement("Implement zoomPrevious.");
-}
-
-void
-MainWindow::zoomWindow()
-{
-    qDebug("zoomWindow()");
-    View* gview = activeView();
-    if (gview) {
-        gview->zoomWindow();
-    }
-}
-
-void
-MainWindow::zoomDynamic()
-{
-    qDebug("zoomDynamic()");
-    stub_implement("Implement zoomDynamic.");
-}
-
-void
-MainWindow::zoomScale()
-{
-    qDebug("zoomScale()");
-    stub_implement("Implement zoomScale.");
-}
-
-void
-MainWindow::zoomCenter()
-{
-    qDebug("zoomCenter()");
-    stub_implement("Implement zoomCenter.");
-}
-
-void
-MainWindow::zoomOut()
-{
-    qDebug("zoomOut()");
-    View* gview = activeView();
-    if (gview) {
-        gview->zoomOut();
-    }
-}
-
-void
-MainWindow::zoomSelected()
-{
-    qDebug("zoomSelected()");
-    View* gview = activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack) {
-        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomSelected", gview, 0);
-        stack->push(cmd);
-    }
-}
-
-void
-MainWindow::zoomAll()
-{
-    qDebug("zoomAll()");
-    stub_implement("Implement zoomAll.");
-}
-
-void
-MainWindow::zoomExtents()
-{
-    qDebug("zoomExtents()");
-    View* gview = activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack) {
-        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomExtents", gview, 0);
-        stack->push(cmd);
-    }
-}
-
-void
-MainWindow::doNothing()
-{
-    //This function intentionally does nothing.
-    qDebug("doNothing()");
-}
-
-void
 MainWindow::layerSelectorIndexChanged(int index)
 {
     qDebug("layerSelectorIndexChanged(%d)", index);
@@ -708,51 +632,21 @@ void
 MainWindow::toggleGrid()
 {
     qDebug("toggleGrid()");
-    statusbar->statusBarGridButton->toggle();
+    statusBarGridButton->toggle();
 }
 
 void
 MainWindow::toggleRuler()
 {
     qDebug("toggleRuler()");
-    statusbar->statusBarRulerButton->toggle();
+    statusBarRulerButton->toggle();
 }
 
 void
 MainWindow::toggleLwt()
 {
     qDebug("toggleLwt()");
-    statusbar->statusBarLwtButton->toggle();
-}
-
-void
-MainWindow::enablePromptRapidFire()
-{
-    prompt->enableRapidFire();
-}
-
-void
-MainWindow::disablePromptRapidFire()
-{
-    prompt->disableRapidFire();
-}
-
-void
-MainWindow::enableMoveRapidFire()
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->enableMoveRapidFire();
-    }
-}
-
-void
-MainWindow::disableMoveRapidFire()
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->disableMoveRapidFire();
-    }
+    statusBarLwtButton->toggle();
 }
 
 void
@@ -768,21 +662,27 @@ void
 MainWindow::logPromptInput(const QString& txt)
 {
     MdiWindow* mdiWin = activeMdiWindow();
-    if (mdiWin) mdiWin->logPromptInput(txt);
+    if (mdiWin) {
+        mdiWin->logPromptInput(txt);
+    }
 }
 
 void
 MainWindow::promptInputPrevious()
 {
     MdiWindow* mdiWin = activeMdiWindow();
-    if (mdiWin) mdiWin->promptInputPrevious();
+    if (mdiWin) {
+        mdiWin->promptInputPrevious();
+    }
 }
 
 void
 MainWindow::promptInputNext()
 {
     MdiWindow* mdiWin = activeMdiWindow();
-    if (mdiWin) mdiWin->promptInputNext();
+    if (mdiWin) {
+        mdiWin->promptInputNext();
+    }
 }
 
 ScriptValue
@@ -818,7 +718,7 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         prompt->alert(STR(0));
         break;
     case ACTION_ANGLE:
-        prompt->alert("TODO: ANGLE");
+        value = script_real(QLineF(REAL(0), -REAL(1), REAL(2), -REAL(3)).angle());
         break;
     case ACTION_CHANGELOG:
         prompt->alert("TODO: CHANGELOG");
@@ -826,9 +726,17 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
     case ACTION_CLEAR:
         /* This is covered by the flags. */
         break;
-    case ACTION_COPY:
-        prompt->alert("TODO: COPY");
+    case ACTION_COPY: {
+        View* gview = activeView();
+        if (gview) {
+            gview->copy();
+        }
         break;
+    }
+    case ACTION_COPY_SELECTED: {
+        // nativeCopySelected(REAL(0), REAL(1));
+        break;
+    }
     case ACTION_COLOR_SELECTOR:
         prompt->alert("TODO: COLORSELECTOR");
         break;
@@ -836,13 +744,39 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         prompt->alert("TODO: CUT");
         break;
     case ACTION_DEBUG:
-        nativeAppendPromptHistory(STR(0));
+        prompt->appendHistory(QString(STR(0)));
         break;
     case ACTION_DESIGN_DETAILS:
         designDetails();
         break;
+    case ACTION_DISABLE: {
+        QString value(STR(0));
+        if (value == "MOVERAPIDFIRE") {
+            View* gview = activeView();
+            if (gview) {
+                gview->disableMoveRapidFire();
+            }
+        }
+        if (value == "PROMPTRAPIDFIRE") {
+            prompt->disableRapidFire();
+        }
+        break;
+    }
     case ACTION_DO_NOTHING:
         break;
+    case ACTION_ENABLE: {
+        QString value(STR(0));
+        if (value == "MOVERAPIDFIRE") {
+            View* gview = activeView();
+            if (gview) {
+                gview->enableMoveRapidFire();
+            }
+        }
+        if (value == "PROMPTRAPIDFIRE") {
+            prompt->enableRapidFire();
+        }
+        break;
+    }
     case ACTION_EXIT:
         exit();
         break;
@@ -867,17 +801,31 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
     case ACTION_ICON_64:
         iconResize(64);
         break;
-    case ACTION_MIRROR_SELECTED:
-        nativeMirrorSelected(REAL(0), REAL(1), REAL(2), REAL(3));
+    case ACTION_MIRROR_SELECTED: {
+        View* gview = activeView();
+        if (gview) {
+            gview->mirrorSelected(REAL(0), -REAL(1), REAL(2), -REAL(3));
+        }
         break;
+    }
     case ACTION_NEW:
         newFile();
         break;
     case ACTION_OPEN:
         openFile();
         break;
-    case ACTION_PASTE:
+    case ACTION_PASTE: {
+        View* gview = activeView();
+        if (gview) {
+            gview->paste();
+        }
         break;
+    }
+    case ACTION_PASTE_SELECTED: {
+        /* Paste with location x,y */
+        // nativePasteSelected(REAL(0), REAL(1));
+        break;
+    }
     case ACTION_PLATFORM:
         /* Should this display in the command prompt or just return like GET? */
         // prompt_output(translate("Platform") + " = " + _main->platformString());
@@ -923,22 +871,17 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
     case ACTION_UNDO:
         undo();
         break;
-    case ACTION_VULCANIZE:
-        nativeVulcanize();
+    case ACTION_VULCANIZE: {
+        View* gview = activeView();
+        if (gview) {
+            gview->vulcanizeRubberRoom();
+        }
         break;
+    }
     
 /*
-    case ACTION_DO_NOTHING:
-
     case ACTION_DESIGN_DETAILS:
     case ACTION_PRINT:
-
-    case ACTION_WINDOW_CLOSE:
-    case ACTION_WINDOW_CLOSE_ALL:
-    case ACTION_WINDOW_CASCADE:
-    case ACTION_WINDOW_TILE:
-    case ACTION_WINDOW_NEXT:
-    case ACTION_WINDOW_PREVIOUS:
 
     case ACTION_HELP:
     case ACTION_CHANGELOG:
@@ -961,42 +904,20 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
     case ACTION_LOCK_ALL_LAYERS:
     case ACTION_UNLOCK_ALL_LAYERS:
 
-    case ACTION_ZOOM_REAL_TIME:
-    case ACTION_ZOOM_PREVIOUS:
-    case ACTION_ZOOM_WINDOW:
-    case ACTION_ZOOM_DYNAMIC:
-    case ACTION_ZOOM_SCALE:
-    case ACTION_ZOOM_CENTER:
-    case ACTION_ZOOM_IN:
-    case ACTION_ZOOM_OUT:
-    case ACTION_ZOOM_SELECTED:
-    case ACTION_ZOOM_ALL:
-    case ACTION_ZOOM_EXTENTS:
-
-    case ACTION_PAN_REAL_TIME:
-    case ACTION_PAN_POINT:
-    case ACTION_PAN_LEFT:
-    case ACTION_PAN_RIGHT:
-    case ACTION_PAN_UP:
-    case ACTION_PAN_DOWN:
-
     case ACTION_DAY:
+        break;
     case ACTION_NIGHT:
+        break;
 
-    case ACTION_ALERT:
     case ACTION_GET:
     case ACTION_SET:
 
-    case ACTION_CLEAR:
-
-    case ACTION_ANGLE:
     case ACTION_CIRCLE:
     case ACTION_DEBUG:
-    case ACTION_DISABLE:
     case ACTION_DISTANCE:
     case ACTION_DOLPHIN:
     case ACTION_ELLIPSE:
-    case ACTION_ENABLE:
+
     case ACTION_ERASE:
     case ACTION_ERROR:
     case ACTION_HEART:
@@ -1025,7 +946,6 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
     case ACTION_STAR:
     case ACTION_SYSWINDOWS:
     case ACTION_TODO:
-    case ACTION_VULCANIZE:
 
     case ACTION_ADD:
     case ACTION_DELETE:
@@ -1034,8 +954,145 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
     case ACTION_MIRROR:
 
     case ACTION_TEST:
+*/
 
-    */
+    case ACTION_PAN_REAL_TIME: {
+        View* gview = activeView();
+        if (gview) {
+            gview->panRealTime();
+        }
+        break;
+    }
+    case ACTION_PAN_POINT: {
+        View* gview = activeView();
+        if (gview) {
+            gview->panPoint();
+        }
+        break;
+    }
+    case ACTION_PAN_LEFT: {
+        View* gview = activeView();
+        QUndoStack* stack = gview->getUndoStack();
+        if (gview && stack) {
+            UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanLeft", gview, 0);
+            stack->push(cmd);
+        }
+        break;
+    }
+    case ACTION_PAN_RIGHT: {
+        View* gview = activeView();
+        QUndoStack* stack = gview->getUndoStack();
+        if (gview && stack) {
+            UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanRight", gview, 0);
+            stack->push(cmd);
+        }
+        break;
+    }
+    case ACTION_PAN_UP: {
+        View* gview = activeView();
+        QUndoStack* stack = gview->getUndoStack();
+        if (gview && stack) {
+            UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanUp", gview, 0);
+            stack->push(cmd);
+        }
+        break;
+    }
+    case ACTION_PAN_DOWN: {
+        View* gview = activeView();
+        QUndoStack* stack = gview->getUndoStack();
+        if (gview && stack) {
+            UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanDown", gview, 0);
+            stack->push(cmd);
+        }
+        break;
+    }
+    case ACTION_WINDOW_CLOSE: {
+        onCloseWindow();
+        break;
+    }
+    case ACTION_WINDOW_CLOSE_ALL: {
+        mdiArea->closeAllSubWindows();
+        break;
+    }
+    case ACTION_WINDOW_CASCADE: {
+        mdiArea->cascade();
+        break;
+    }
+    case ACTION_WINDOW_TILE: {
+        mdiArea->tile();
+        break;
+    }
+    case ACTION_WINDOW_NEXT: {
+        mdiArea->activateNextSubWindow();
+        break;
+    }
+    case ACTION_WINDOW_PREVIOUS: {
+        mdiArea->activatePreviousSubWindow();
+        break;
+    }
+    case ACTION_ZOOM_ALL: {
+        stub_implement("Implement zoomAll.");
+        break;
+    }
+    case ACTION_ZOOM_CENTER: {
+        stub_implement("Implement zoomCenter.");
+        break;
+    }
+    case ACTION_ZOOM_DYNAMIC: {
+        stub_implement("Implement zoomDynamic.");
+        break;
+    }
+    case ACTION_ZOOM_EXTENTS: {
+        View* gview = activeView();
+        QUndoStack* stack = gview->getUndoStack();
+        if (gview && stack) {
+            UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomExtents", gview, 0);
+            stack->push(cmd);
+        }
+        break;
+    }
+    case ACTION_ZOOM_IN: {
+        View* gview = activeView();
+        if (gview) {
+            gview->zoomIn();
+        }
+        break;
+    }
+    case ACTION_ZOOM_OUT: {
+        View* gview = activeView();
+        if (gview) {
+            gview->zoomOut();
+        }
+        break;
+    }
+    case ACTION_ZOOM_PREVIOUS: {
+        stub_implement("Implement zoomPrevious.");
+        break;
+    }
+    case ACTION_ZOOM_REAL_TIME: {
+        stub_implement("Implement zoomRealtime.");
+        break;
+    }
+    case ACTION_ZOOM_SCALE: {
+        stub_implement("Implement zoomScale.");
+        break;
+    }
+    case ACTION_ZOOM_SELECTED: {
+        View* gview = activeView();
+        QUndoStack* stack = gview->getUndoStack();
+        if (gview && stack) {
+            UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomSelected", gview, 0);
+            stack->push(cmd);
+        }
+        break;
+    }
+    case ACTION_ZOOM_WINDOW: {
+        View* gview = activeView();
+        if (gview) {
+            gview->zoomWindow();
+        }
+        break;
+    }
     default:
         break;
     }
@@ -1069,7 +1126,7 @@ MainWindow::runCommandMain(const QString& cmd)
     // TODO: Uncomment this when post-selection is available
     /*
     if (!selection_mode_pick_first.setting) {
-        nativeClearSelection();
+        clear_selection();
     }
     */
     runCommandCore(cmd, context);
@@ -1135,48 +1192,6 @@ MainWindow::runCommandPrompt(const QString& cmd)
 }
 
 void
-nativeBlinkPrompt()
-{
-    _main->prompt->startBlinking();
-}
-
-void
-nativeSetPromptPrefix(std::string txt)
-{
-    _main->prompt->setPrefix(QString(txt.c_str()));
-}
-
-void
-nativeAppendPromptHistory(std::string txt)
-{
-    _main->prompt->appendHistory(QString(txt.c_str()));
-}
-
-void
-nativeEnablePromptRapidFire()
-{
-    _main->enablePromptRapidFire();
-}
-
-void
-nativeDisablePromptRapidFire()
-{
-    _main->disablePromptRapidFire();
-}
-
-void
-nativeEnableMoveRapidFire()
-{
-    _main->enableMoveRapidFire();
-}
-
-void
-nativeDisableMoveRapidFire()
-{
-    _main->disableMoveRapidFire();
-}
-
-void
 messageBox(std::string msgType, std::string title, std::string text)
 {
     if (msgType == "critical") {
@@ -1202,14 +1217,6 @@ messageBox(std::string msgType, std::string title, std::string text)
 }
 
 void
-nativePrintArea(double x, double y, double w, double h)
-{
-    qDebug("nativePrintArea(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
-    //TODO: Print Setup Stuff
-    _main->print();
-}
-
-void
 nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b)
 {
     display_bg_color.setting = qRgb(r,g,b);
@@ -1228,15 +1235,6 @@ nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b)
 {
     grid_color.setting = qRgb(r,g,b);
     _main->updateAllViewGridColors(qRgb(r,g,b));
-}
-
-void
-nativeVulcanize()
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->vulcanizeRubberRoom();
-    }
 }
 
 void
@@ -1657,28 +1655,6 @@ nativeSetCursorShape(char shape[MAX_STRING_LENGTH])
     }
 }
 
-double nativeCalculateAngle(double x1, double y1, double x2, double y2)
-{
-    return QLineF(x1, -y1, x2, -y2).angle();
-}
-
-double nativeCalculateDistance(double x1, double y1, double x2, double y2)
-{
-    return QLineF(x1, y1, x2, y2).length();
-}
-
-double nativePerpendicularDistance(double px, double py, double x1, double y1, double x2, double y2)
-{
-    QLineF line(x1, y1, x2, y2);
-    QLineF norm = line.normalVector();
-    double dx = px-x1;
-    double dy = py-y1;
-    norm.translate(dx, dy);
-    QPointF iPoint;
-    norm.intersects(line, &iPoint);
-    return QLineF(px, py, iPoint.x(), iPoint.y()).length();
-}
-
 void
 nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode)
 {
@@ -1695,16 +1671,6 @@ nativeDeleteSelected()
 
 void
 nativeCutSelected(double x, double y)
-{
-}
-
-void
-nativeCopySelected(double x, double y)
-{
-}
-
-void
-nativePasteSelected(double x, double y)
 {
 }
 
@@ -1737,15 +1703,6 @@ nativeRotateSelected(double x, double y, double rot)
     View* gview = activeView();
     if (gview) {
         gview->rotateSelected(x, -y, -rot);
-    }
-}
-
-void
-nativeMirrorSelected(double x1, double y1, double x2, double y2)
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->mirrorSelected(x1, -y1, x2, -y2);
     }
 }
 
@@ -1819,24 +1776,6 @@ cut(void)
     View* gview = activeView();
     if (gview) {
         gview->cut();
-    }
-}
-
-void
-copy(void)
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->copy();
-    }
-}
-
-void
-paste(void)
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->paste();
     }
 }
 
@@ -1918,46 +1857,6 @@ about_dialog(void)
     QApplication::restoreOverrideCursor();
 }
 
-/* DISABLE is a prompt-only Command. */
-ScriptValue
-disable_command(ScriptEnv* context)
-{
-    if (!argument_checks(context, "disable_prompt", "s")) {
-        return script_false;
-    }
-
-    QString value(STR(0));
-
-    init_command();
-
-    if (value == "RAPIDFIRE") {
-        _main->disablePromptRapidFire();
-    }
-
-    end_command();
-    return script_null;
-}
-
-/* ENABLE is a prompt-only Command. */
-ScriptValue
-enable_command(ScriptEnv* context)
-{
-    if (context->argumentCount != 2) {
-        return script_false;
-    }
-
-    QString value(STR(0));
-
-    init_command();
-
-    if (value == "RAPIDFIRE") {
-        _main->enablePromptRapidFire();
-    }
-
-    end_command();
-    return script_null;
-}
-
 /* Erase is not context-dependant. */
 ScriptValue
 erase_command(ScriptEnv * /* context */)
@@ -1992,8 +1891,8 @@ error_command(ScriptEnv *context)
     s += STR(0);
     s += ") ";
     s += STR(1);
-    nativeSetPromptPrefix(s);
-    nativeAppendPromptHistory("");
+    _main->prompt->setPrefix(QString(s.c_str()));
+    _main->prompt->appendHistory("");
     end_command();
     return script_null;
 }
@@ -2071,19 +1970,6 @@ get_command(ScriptEnv* context)
 ScriptValue
 moveselected_command(ScriptEnv *context)
 {
-    end_command();
-    return script_null;
-}
-
-/* WINDOWTILE is not context-dependant */
-ScriptValue
-paste_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "whats_this_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
     end_command();
     return script_null;
 }
@@ -2284,7 +2170,7 @@ blink_prompt_command(ScriptEnv* context)
         return script_false;
     }
 
-    nativeBlinkPrompt();
+    _main->prompt->startBlinking();
     return script_null;
 }
 
@@ -2294,7 +2180,7 @@ set_prompt_prefix_command(ScriptEnv* context)
     if (!argument_checks(context, "debug", "s")) {
         return script_false;
     }
-    nativeSetPromptPrefix(STR(0));
+    _main->prompt->setPrefix(QString(STR(0)));
     return script_null;
 }
 
@@ -2312,50 +2198,6 @@ append_prompt_history(ScriptEnv* context)
         prompt_output("appendPromptHistory() requires one or zero arguments");
         return script_false;
     }
-    return script_null;
-}
-
-ScriptValue
-enable_prompt_rapid_fire(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    nativeEnablePromptRapidFire();
-    return script_null;
-}
-
-ScriptValue
-disable_prompt_rapid_fire(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    nativeDisablePromptRapidFire();
-    return script_null;
-}
-
-ScriptValue
-enable_move_rapid_fire(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    nativeEnableMoveRapidFire();
-    return script_null;
-}
-
-ScriptValue
-disable_move_rapid_fire(ScriptEnv* context)
-{
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
-    nativeDisableMoveRapidFire();
     return script_null;
 }
 
@@ -2396,7 +2238,11 @@ print_area_command(ScriptEnv* context)
     if (!argument_checks(context, "printArea", "rrrr")) {
         return script_false;
     }
-    nativePrintArea(REAL(0), REAL(1), REAL(2), REAL(3));
+    qDebug("nativePrintArea(%.2f, %.2f, %.2f, %.2f)", REAL(0), REAL(1), REAL(2), REAL(3));
+    /* TODO: Print Setup Stuff
+        nativePrintArea(REAL(0), REAL(1), REAL(2), REAL(3));
+    */
+    _main->print();
     return script_null;
 }
 
@@ -2805,24 +2651,13 @@ set_cursor_shape_command(ScriptEnv* context)
 }
 
 ScriptValue
-calculate_angle_command(ScriptEnv* context)
-{
-    if (!argument_checks(context, "calculateAngle", "rrrr")) {
-        return script_false;
-    }
-
-    double r = nativeCalculateAngle(REAL(0), REAL(1), REAL(2), REAL(3));
-    return script_real(r);
-}
-
-ScriptValue
 calculate_distance_command(ScriptEnv* context)
 {
     if (!argument_checks(context, "numSelected", "rrrr")) {
         return script_false;
     }
 
-    double r = nativeCalculateDistance(REAL(0), REAL(1), REAL(2), REAL(3));
+    double r = QLineF(REAL(0), REAL(1), REAL(2), REAL(3)).length();
     return script_real(r);
 }
 
@@ -2833,7 +2668,14 @@ perpendicular_distance_command(ScriptEnv* context)
         return script_false;
     }
 
-    double r = nativePerpendicularDistance(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), REAL(5));
+    QLineF line(REAL(0), REAL(1), REAL(2), REAL(3));
+    QLineF norm = line.normalVector();
+    double dx = REAL(4) - REAL(0);
+    double dy = REAL(5) - REAL(1);
+    norm.translate(dx, dy);
+    QPointF iPoint;
+    norm.intersects(line, &iPoint);
+    double r = QLineF(REAL(4), REAL(5), iPoint.x(), iPoint.y()).length();
     return script_real(r);
 }
 
@@ -2885,28 +2727,6 @@ cut_selected_command(ScriptEnv* context)
     }
 
     nativeCutSelected(REAL(0), REAL(1));
-    return script_null;
-}
-
-ScriptValue
-copy_selected_command(ScriptEnv* context)
-{
-    if (!argument_checks(context, "scaleSelected", "rr")) {
-        return script_false;
-    }
-
-    nativeCopySelected(REAL(0), REAL(1));
-    return script_null;
-}
-
-ScriptValue
-paste_selected_command(ScriptEnv* context)
-{
-    if (!argument_checks(context, "scaleSelected", "rr")) {
-        return script_false;
-    }
-
-    nativePasteSelected(REAL(0), REAL(1));
     return script_null;
 }
 
@@ -3354,291 +3174,9 @@ panpoint_command(ScriptEnv *context)
     return script_null;
 }
 
-/* PANREALTIME. */
-ScriptValue
-panrealtime_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "panrealtime_command", "")) {
-        return script_false;
-    }
-    init_command();
-
-    View* gview = activeView();
-    if (gview) {
-        gview->panRealTime();
-    }
-
-    end_command();
-    return script_null;
-}
-
-/* PANDOWN is context-independant. */
-ScriptValue
-pandown_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "pandown_command", "")) {
-        return script_false;
-    }
-    init_command();
-
-    View* gview = activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack) {
-        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanDown", gview, 0);
-        stack->push(cmd);
-    }
-
-    end_command();
-    return script_null;
-}
-
-/* PANLEFT */
-ScriptValue
-panleft_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "panleft_command", "")) {
-        return script_false;
-    }
-    init_command();
-
-    View* gview = activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack) {
-        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanLeft", gview, 0);
-        stack->push(cmd);
-    }
-
-    end_command();
-    return script_null;
-}
-
-/* PANRIGHT */
-ScriptValue
-panright_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "panright_command", "")) {
-        return script_false;
-    }
-    init_command();
-
-    View* gview = activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack) {
-        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanRight", gview, 0);
-        stack->push(cmd);
-    }
-
-    end_command();
-    return script_null;
-}
-
-/* PANUP */
-ScriptValue
-panup_command(ScriptEnv *context)
-{
-    _main->debug_message("panUp()");
-    if (!argument_checks(context, "panup_command", "")) {
-        return script_false;
-    }
-    init_command();
-    View* gview = activeView();
-    QUndoStack* stack = gview->getUndoStack();
-    if (gview && stack) {
-        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanUp", gview, 0);
-        stack->push(cmd);
-    }
-    end_command();
-    return script_null;
-}
-
-/* ZOOMALL is not context-dependant */
-ScriptValue
-zoom_all_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "zoomextents_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    _main->zoomExtents();
-    end_command();
-    return script_null;
-}
-
-/* ZOOMDYNAMIC is not context-dependant */
-ScriptValue
-zoom_dynamic_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "zoomextents_command", "")) {
-        return script_false;
-    }
-    init_command();
-    _main->zoomExtents();
-    end_command();
-    return script_null;
-}
-
-/* ZOOMCENTER is not context-dependant */
-ScriptValue
-zoom_center_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "zoomextents_command", "")) {
-        return script_false;
-    }
-    init_command();
-    _main->zoomExtents();
-    end_command();
-    return script_null;
-}
-
-/* ZOOMEXTENTS is not context-dependant */
-ScriptValue
-zoom_extents_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "zoomextents_command", "")) {
-        return script_false;
-    }
-    init_command();
-    _main->zoomExtents();
-    end_command();
-    return script_null;
-}
-
-/* ZOOMIN is not context-dependant */
-ScriptValue
-zoom_in_command(ScriptEnv *context)
-{
-    _main->debug_message("zoomIn()");
-    if (!argument_checks(context, "zoom_in_command", "")) {
-        return script_false;
-    }
-    init_command();
-
-    View* gview = activeView();
-    if (gview) {
-        gview->zoomIn();
-    }
-
-    end_command();
-    return script_null;
-}
-
-/* ZOOMPREVIOUS is not context-dependant */
-ScriptValue
-zoom_previous_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "zoomin_command", "")) {
-        return script_false;
-    }
-    init_command();
-
-    end_command();
-    return script_null;
-}
-
-/* ZOOMREALTIME is not context-dependant */
-ScriptValue
-zoom_real_time_command(ScriptEnv *context)
-{
-    _main->debug_message("zoomRealtime()");
-    if (!argument_checks(context, "zoom_real_time_command", "")) {
-        return script_false;
-    }
-    init_command();
-    _main->stub_implement("Implement zoomRealtime.");
-    end_command();
-    return script_null;
-}
-
-/* ZOOMOUT is not context-dependant */
-ScriptValue
-zoom_out_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "zoomout_command", "")) {
-        return script_false;
-    }
-    init_command();
-
-    View* gview = activeView();
-    if (gview) {
-        gview->zoomOut();
-    }
-
-    end_command();
-    return script_null;
-}
-
-/* ZOOMSCALE is not context-dependant */
-ScriptValue
-zoom_scale_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "zoomin_command", "")) {
-        return script_false;
-    }
-    init_command();
-
-    end_command();
-    return script_null;
-}
-
-/* ZOOMSELECTED is not context-dependant */
-ScriptValue
-zoom_selected_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "zoomin_command", "")) {
-        return script_false;
-    }
-    init_command();
-
-    end_command();
-    return script_null;
-}
-
-/* ZOOMWINDOW is not context-dependant */
-ScriptValue
-zoom_window_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "zoomin_command", "")) {
-        return script_false;
-    }
-    init_command();
-
-    end_command();
-    return script_null;
-}
-
 /*
  * Window Commands
  */
-
-/* WINDOWCASCADE is not context-dependant. */
-ScriptValue
-windowcascade_command(ScriptEnv * context)
-{
-    if (!argument_checks(context, "windowcascade_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    _main->mdiArea->cascade();
-    end_command();
-    return script_null;
-}
-
-/* WINDOWCLOSE is not context-dependant. */
-ScriptValue
-windowclose_command(ScriptEnv * context)
-{
-    if (!argument_checks(context, "windowclose_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    _main->onCloseWindow();
-    end_command();
-    return script_null;
-}
-
 /* WINDOWCLOSEALL is not context-dependant. */
 ScriptValue
 windowcloseall_command(ScriptEnv * context)
@@ -3648,74 +3186,9 @@ windowcloseall_command(ScriptEnv * context)
     }
     init_command();
     clear_selection();
-    _main->mdiArea->closeAllSubWindows();
     end_command();
     return script_null;
 }
-
-/* */
-ScriptValue
-windownext_command(ScriptEnv * context)
-{
-    if (!argument_checks(context, "windownext_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    _main->mdiArea->activateNextSubWindow();
-    end_command();
-    return script_null;
-}
-
-/* WINDOWPREVIOUS is not context-sensitive. */
-ScriptValue
-windowprevious_command(ScriptEnv * context)
-{
-    if (!argument_checks(context, "windowprevious_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    _main->mdiArea->activatePreviousSubWindow();
-    end_command();
-    return script_null;
-}
-
-/* WINDOWTILE is not context-dependant */
-ScriptValue
-windowtile_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "windowtile_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    _main->mdiArea->tile();
-    end_command();
-    return script_null;
-}
-/*
- * Embroidermodder 2.
- *
- * Copyright 2011-2024 The Embroidermodder Team
- * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
- * Visit https://www.libembroidery.org/refman for advice on altering this file,
- * or read the markdown version in embroidermodder2/docs/refman.
- *
- * Commands: LOCATEPOINT, DISTANCE, MOVE
- */
-
-#include "embroidermodder.h"
-
-#define RGB_MODE_BACKGROUND     0
-#define RGB_MODE_CROSSHAIR      1
-#define RGB_MODE_GRID           2
-
-#define ROTATE_MODE_NORMAL      0
-#define ROTATE_MODE_REFERENCE   1
-
-#define SCALE_MODE_NORMAL       0
-#define SCALE_MODE_REFERENCE    1
 
 /* LOCATEPOINT */
 ScriptValue

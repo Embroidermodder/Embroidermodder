@@ -29,6 +29,27 @@ Editor lineStartX = {
     .object = OBJ_TYPE_LINE
 };
 
+QWidget* focusWidget_;
+
+QString iconDir;
+int iconSize;
+
+bool pickAdd;
+
+Object* tempObj;
+
+int precisionAngle;
+int precisionLength;
+
+/* Used when checking if fields vary. */
+QString fieldOldText;
+QString fieldNewText;
+QString fieldVariesText;
+QString fieldYesText;
+QString fieldNoText;
+QString fieldOnText;
+QString fieldOffText;
+
 /* General */
 QGroupBox*   groupBoxGeneral;
 
@@ -458,7 +479,7 @@ PropertyEditor::PropertyEditor(const QString& iconDirectory, bool pickAddMode, Q
 
     connect(signalMapper, SIGNAL(mapped(QObject*)), this, SLOT(fieldEdited(QObject*)));
 
-    focusWidget = widgetToFocus;
+    focusWidget_ = widgetToFocus;
     this->installEventFilter(this);
 }
 
@@ -473,8 +494,8 @@ bool PropertyEditor::eventFilter(QObject *obj, QEvent *event)
         int key = pressedKey->key();
         switch(key) {
         case Qt::Key_Escape:
-            if (focusWidget) {
-                focusWidget->setFocus(Qt::OtherFocusReason);
+            if (focusWidget_) {
+                focusWidget_->setFocus(Qt::OtherFocusReason);
             }
             return true;
         default: {

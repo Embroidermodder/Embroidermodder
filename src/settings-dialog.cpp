@@ -15,6 +15,8 @@ void set_visibility(QObject *senderObj, const char *key, bool visibility);
 void set_enabled(QObject *senderObj, const char *key, bool visibility);
 void set_visibility_group(QObject *senderObj, const char **key, bool visibility);
 void set_enabled_group(QObject *senderObj, const char **key, bool visibility);
+QIcon create_swatch(int32_t color);
+QPushButton *choose_color_button(QGroupBox* groupbox, IntSetting* color_setting);
 
 extern const char *extensions[MAX_STRING_LENGTH];
 extern const char *center_on_origin_group[MAX_STRING_LENGTH];
@@ -2452,15 +2454,17 @@ void
 Settings_Dialog::checkBoxLwtShowLwtStateChanged(int checked)
 {
     lwt_show_lwt.preview = checked;
-    if (lwt_show_lwt.preview) { _main->statusbar->statusBarLwtButton->enableLwt(); }
-    else                     { _main->statusbar->statusBarLwtButton->disableLwt(); }
+    if (lwt_show_lwt.preview) {
+        enableLwt();
+    }
+    else {
+        disableLwt();
+    }
 
     QObject* senderObj = sender();
-    if (senderObj)
-    {
+    if (senderObj) {
         QObject* parent = senderObj->parent();
-        if (parent)
-        {
+        if (parent) {
             QCheckBox* checkBoxRealRender = parent->findChild<QCheckBox*>("checkBoxRealRender");
             if (checkBoxRealRender) checkBoxRealRender->setEnabled(lwt_show_lwt.preview);
         }
@@ -2472,10 +2476,10 @@ Settings_Dialog::checkBoxLwtRealRenderStateChanged(int checked)
 {
     lwt_real_render.preview = checked;
     if (lwt_real_render.preview) {
-        _main->statusbar->statusBarLwtButton->enableReal();
+        enableReal();
     }
     else {
-        _main->statusbar->statusBarLwtButton->disableReal();
+        disableReal();
     }
 }
 
@@ -2701,16 +2705,16 @@ Settings_Dialog::acceptChanges()
     _main->updateAllViewGridColors(grid_color.dialog);
     _main->updateAllViewRulerColors(ruler_color.dialog);
     if (lwt_show_lwt.dialog) {
-        _main->statusbar->statusBarLwtButton->enableLwt();
+        enableLwt();
     }
     else {
-        _main->statusbar->statusBarLwtButton->disableLwt();
+        disableLwt();
     }
     if (lwt_real_render.dialog) {
-        _main->statusbar->statusBarLwtButton->enableReal();
+        enableReal();
     }
     else {
-        _main->statusbar->statusBarLwtButton->disableReal();
+        disableReal();
     }
     _main->updatePickAddMode(selection_mode_pickadd.dialog);
 
@@ -2747,16 +2751,16 @@ Settings_Dialog::rejectChanges()
     _main->updateAllViewGridColors(grid_color.dialog);
     _main->updateAllViewRulerColors(ruler_color.dialog);
     if (lwt_show_lwt.dialog) {
-        _main->statusbar->statusBarLwtButton->enableLwt();
+        enableLwt();
     }
     else {
-        _main->statusbar->statusBarLwtButton->disableLwt();
+        disableLwt();
     }
     if (lwt_real_render.dialog) {
-        _main->statusbar->statusBarLwtButton->enableReal();
+        enableReal();
     }
     else {
-        _main->statusbar->statusBarLwtButton->disableReal();
+        disableReal();
     }
 
     reject();

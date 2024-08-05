@@ -114,8 +114,6 @@ class MdiWindow;
 class Object;
 class PropertyEditor;
 class SelectBox;
-class StatusBar;
-class StatusBarButton;
 class UndoEditor;
 class View;
 
@@ -182,43 +180,6 @@ private:
     void forceRepaint();
 };
 
-class StatusBarButton : public QToolButton
-{
-    Q_OBJECT
-
-public:
-    StatusBarButton(QString buttonText, MainWindow* mw, StatusBar* statbar, QWidget *parent = 0);
-
-protected:
-    void contextMenuEvent(QContextMenuEvent *event = 0);
-
-private slots:
-    void settingsSnap();
-    void settingsGrid();
-    void settingsRuler();
-    void settingsOrtho();
-    void settingsPolar();
-    void settingsQSnap();
-    void settingsQTrack();
-    void settingsLwt();
-    void toggleSnap(bool on);
-    void toggleGrid(bool on);
-    void toggleRuler(bool on);
-    void toggleOrtho(bool on);
-    void togglePolar(bool on);
-    void toggleQSnap(bool on);
-    void toggleQTrack(bool on);
-    void toggleLwt(bool on);
-public slots:
-    void enableLwt();
-    void disableLwt();
-    void enableReal();
-    void disableReal();
-
-private:
-    StatusBar*  statusbar;
-};
-
 class View : public QGraphicsView
 {
     Q_OBJECT
@@ -226,6 +187,8 @@ class View : public QGraphicsView
 public:
     View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent);
     ~View();
+
+    ViewData data;
 
     bool allowZoomIn();
     bool allowZoomOut();
@@ -368,19 +331,6 @@ private:
     QList<QGraphicsItem*> rubberRoomList;
 
     void copySelected();
-
-    bool grippingActive;
-    bool rapidMoveActive;
-    bool previewActive;
-    bool pastingActive;
-    bool movingActive;
-    bool selectingActive;
-    bool zoomWindowActive;
-    bool panningRealTimeActive;
-    bool panningPointActive;
-    bool panningActive;
-    bool qSnapActive;
-    bool qSnapToggle;
 
     void startGripping(Object* obj);
     void stopGripping(bool accept = false);
@@ -771,35 +721,15 @@ private slots:
     void togglePickAddMode();
 
 private:
-    QWidget*     focusWidget;
-
-    QString iconDir;
-    int iconSize;
     Qt::ToolButtonStyle propertyEditorButtonStyle;
 
-    bool pickAdd;
-
     QList<QGraphicsItem*> selectedItemList;
-
-    Object* tempObj;
 
     /* Helper functions */
     QToolButton* createToolButton(const QString& iconName, const QString& txt);
     QLineEdit* createLineEdit(const QString& validatorType = QString(), bool readOnly = false);
     QComboBox* createComboBox(bool disable = false);
     QFontComboBox* createFontComboBox(bool disable = false);
-
-    int precisionAngle;
-    int precisionLength;
-
-    /* Used when checking if fields vary. */
-    QString fieldOldText;
-    QString fieldNewText;
-    QString fieldVariesText;
-    QString fieldYesText;
-    QString fieldNoText;
-    QString fieldOnText;
-    QString fieldOffText;
 
     void updateLineEditStrIfVaries(QLineEdit* lineEdit, const QString& str);
     void updateLineEditNumIfVaries(QLineEdit* lineEdit, double num, bool useAnglePrecision);
@@ -990,26 +920,6 @@ signals:
     void buttonCustomFilterClearAll(bool);
     void buttonQSnapSelectAll(bool);
     void buttonQSnapClearAll(bool);
-};
-
-class StatusBar : public QStatusBar
-{
-    Q_OBJECT
-
-public:
-    StatusBar(MainWindow* mw, QWidget* parent = 0);
-
-    StatusBarButton* statusBarSnapButton;
-    StatusBarButton* statusBarGridButton;
-    StatusBarButton* statusBarRulerButton;
-    StatusBarButton* statusBarOrthoButton;
-    StatusBarButton* statusBarPolarButton;
-    StatusBarButton* statusBarQSnapButton;
-    StatusBarButton* statusBarQTrackButton;
-    StatusBarButton* statusBarLwtButton;
-    QLabel* statusBarMouseCoord;
-
-    void setMouseCoord(double x, double y);
 };
 
 class SelectBox : public QRubberBand
@@ -1422,7 +1332,6 @@ public:
     CmdPrompt* prompt;
     PropertyEditor* dockPropEdit;
     UndoEditor* dockUndoEdit;
-    StatusBar* statusbar;
     QTimer* testing_timer;
 
     QList<QGraphicsItem*> cutCopyObjectList;
@@ -1436,13 +1345,6 @@ public:
     QString platformString();
 
 public slots:
-
-    void enablePromptRapidFire();
-    void disablePromptRapidFire();
-
-    void enableMoveRapidFire();
-    void disableMoveRapidFire();
-
     void onCloseWindow();
     virtual void onCloseMdiWin(MdiWindow*);
 
@@ -1608,19 +1510,6 @@ public slots:
     void makeLayerActive();
     void layerManager();
     void layerPrevious();
-
-    /* Zoom Toolbar */
-    void zoomPrevious();
-    void zoomWindow();
-    void zoomDynamic();
-    void zoomScale();
-    void zoomCenter();
-    void zoomOut();
-    void zoomSelected();
-    void zoomAll();
-    void zoomExtents();
-
-    void doNothing();
 };
 
 MdiArea* getMdiArea();
@@ -1629,6 +1518,7 @@ View* activeView();
 QGraphicsScene* activeScene();
 QUndoStack* activeUndoStack();
 
+QToolButton *create_statusbarbutton(QString buttonText, MainWindow* mw);
 QIcon create_icon(QString icon);
 
 void nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode);
@@ -1665,5 +1555,16 @@ extern QHash<std::string, std::string>* aliasHash;
 extern QHash<int, QAction*> actionHash;
 extern QHash<QString, QToolBar*> toolbarHash;
 extern QHash<QString, QMenu*> menuHash;
+extern QToolButton* statusBarSnapButton;
+extern QToolButton* statusBarGridButton;
+extern QToolButton* statusBarRulerButton;
+extern QToolButton* statusBarOrthoButton;
+extern QToolButton* statusBarPolarButton;
+extern QToolButton* statusBarQSnapButton;
+extern QToolButton* statusBarQTrackButton;
+extern QToolButton* statusBarLwtButton;
+extern QLabel* statusBarMouseCoord;
+extern QStatusBar* statusbar;
 
 #endif
+

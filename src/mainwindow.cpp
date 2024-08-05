@@ -15,6 +15,9 @@ QHash<int, QAction*> actionHash;
 QHash<QString, QToolBar*> toolbarHash;
 QHash<QString, QMenu*> menuHash;
 const char *settings_file = "settings.toml";
+void create_statusbar(MainWindow* mw);
+
+QStatusBar* statusbar;
 
 void
 MainWindow::run_testing(void)
@@ -212,7 +215,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     //setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); //TODO: Load these from settings
     //tabifyDockWidget(dockPropEdit, dockUndoEdit); //TODO: load this from settings
 
-    statusbar = new StatusBar(this, this);
+    create_statusbar(this);
     this->setStatusBar(statusbar);
 
     createAllActions();
@@ -640,15 +643,15 @@ void MainWindow::updateMenuToolbarStatusbar()
 
         //Statusbar
         statusbar->clearMessage();
-        statusbar->statusBarMouseCoord->show();
-        statusbar->statusBarSnapButton->show();
-        statusbar->statusBarGridButton->show();
-        statusbar->statusBarRulerButton->show();
-        statusbar->statusBarOrthoButton->show();
-        statusbar->statusBarPolarButton->show();
-        statusbar->statusBarQSnapButton->show();
-        statusbar->statusBarQTrackButton->show();
-        statusbar->statusBarLwtButton->show();
+        statusBarMouseCoord->show();
+        statusBarSnapButton->show();
+        statusBarGridButton->show();
+        statusBarRulerButton->show();
+        statusBarOrthoButton->show();
+        statusBarPolarButton->show();
+        statusBarQSnapButton->show();
+        statusBarQTrackButton->show();
+        statusBarLwtButton->show();
     }
     else {
         /* Toolbars */
@@ -673,15 +676,15 @@ void MainWindow::updateMenuToolbarStatusbar()
 
         //Statusbar
         statusbar->clearMessage();
-        statusbar->statusBarMouseCoord->hide();
-        statusbar->statusBarSnapButton->hide();
-        statusbar->statusBarGridButton->hide();
-        statusbar->statusBarRulerButton->hide();
-        statusbar->statusBarOrthoButton->hide();
-        statusbar->statusBarPolarButton->hide();
-        statusbar->statusBarQSnapButton->hide();
-        statusbar->statusBarQTrackButton->hide();
-        statusbar->statusBarLwtButton->hide();
+        statusBarMouseCoord->hide();
+        statusBarSnapButton->hide();
+        statusBarGridButton->hide();
+        statusBarRulerButton->hide();
+        statusBarOrthoButton->hide();
+        statusBarPolarButton->hide();
+        statusBarQSnapButton->hide();
+        statusBarQTrackButton->hide();
+        statusBarLwtButton->hide();
     }
     hideUnimplemented();
 }

@@ -62,22 +62,22 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     toggleRuler(ruler_show_on_load.setting);
     toggleReal(true); //TODO: load this from file, else settings with default being true
 
-    grippingActive = false;
-    rapidMoveActive = false;
+    data.grippingActive = false;
+    data.rapidMoveActive = false;
     previewMode = PREVIEW_MODE_NULL;
     previewData = 0;
     previewObjectItemGroup = 0;
     pasteObjectItemGroup = 0;
-    previewActive = false;
-    pastingActive = false;
-    movingActive = false;
-    selectingActive = false;
-    zoomWindowActive = false;
-    panningRealTimeActive = false;
-    panningPointActive = false;
-    panningActive = false;
-    qSnapActive = false;
-    qSnapToggle = false;
+    data.previewActive = false;
+    data.pastingActive = false;
+    data.movingActive = false;
+    data.selectingActive = false;
+    data.zoomWindowActive = false;
+    data.panningRealTimeActive = false;
+    data.panningPointActive = false;
+    data.panningActive = false;
+    data.qSnapActive = false;
+    data.qSnapToggle = false;
 
     //Randomize the hot grip location initially so it's not located at (0,0)
     srand(QDateTime::currentMSecsSinceEpoch());
@@ -143,7 +143,7 @@ void View::deleteObject(Object* obj)
     hashDeletedObjects.insert(obj->objID, obj);
 }
 
-void View::previewOn(int clone, int mode, double x, double y, double data)
+void View::previewOn(int clone, int mode, double x, double y, double data_)
 {
     qDebug("View previewOn()");
     previewOff(); //Free the old objects before creating new ones
@@ -160,14 +160,14 @@ void View::previewOn(int clone, int mode, double x, double y, double data)
        previewMode == PREVIEW_MODE_ROTATE ||
        previewMode == PREVIEW_MODE_SCALE) {
         previewPoint = QPointF(x, y); //NOTE: Move: basePt; Rotate: basePt;   Scale: basePt;
-        previewData = data;           //NOTE: Move: unused; Rotate: refAngle; Scale: refFactor;
-        previewActive = true;
+        previewData = data_;           //NOTE: Move: unused; Rotate: refAngle; Scale: refFactor;
+        data.previewActive = true;
     }
     else {
         previewMode = PREVIEW_MODE_NULL;
         previewPoint = QPointF();
         previewData = 0;
-        previewActive = false;
+        data.previewActive = false;
     }
 
     gscene->update();
@@ -185,36 +185,46 @@ void View::previewOff()
         previewObjectItemGroup = 0;
     }
 
-    previewActive = false;
+    data.previewActive = false;
 
     gscene->update();
 }
 
-void View::enableMoveRapidFire()
+/* . */
+void
+View::enableMoveRapidFire()
 {
-    rapidMoveActive = true;
+    data.rapidMoveActive = true;
 }
 
-void View::disableMoveRapidFire()
+/* . */
+void
+View::disableMoveRapidFire()
 {
-    rapidMoveActive = false;
+    data.rapidMoveActive = false;
 }
 
-bool View::allowRubber()
+/* . */
+bool
+View::allowRubber()
 {
     //if (!rubberRoomList.size()) //TODO: this check should be removed later
         return true;
     return false;
 }
 
-void View::addToRubberRoom(QGraphicsItem* item)
+/* . */
+void
+View::addToRubberRoom(QGraphicsItem* item)
 {
     rubberRoomList.append(item);
     item->show();
     gscene->update();
 }
 
-void View::vulcanizeRubberRoom()
+/* . */
+void
+View::vulcanizeRubberRoom()
 {
     foreach(QGraphicsItem* item, rubberRoomList) {
         Object* base = static_cast<Object*>(item);
@@ -224,7 +234,9 @@ void View::vulcanizeRubberRoom()
     gscene->update();
 }
 
-void View::vulcanizeObject(Object* obj)
+/* . */
+void
+View::vulcanizeObject(Object* obj)
 {
     if (!obj) return;
     gscene->removeItem(obj); //Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene
@@ -537,17 +549,19 @@ View::togglePolar(bool on)
     QApplication::restoreOverrideCursor();
 }
 
+/* . */
 void
 View::toggleQSnap(bool on)
 {
     qDebug("View toggleQSnap()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    qSnapToggle = on;
+    data.qSnapToggle = on;
     gscene->setProperty("ENABLE_QSNAP", on);
     gscene->update();
     QApplication::restoreOverrideCursor();
 }
 
+/* . */
 void
 View::toggleQTrack(bool on)
 {
@@ -559,6 +573,7 @@ View::toggleQTrack(bool on)
     QApplication::restoreOverrideCursor();
 }
 
+/* . */
 void
 View::toggleLwt(bool on)
 {
@@ -749,7 +764,7 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
     //==================================================
 
     // TODO: && findClosestSnapPoint == true
-    if (!selectingActive) {
+    if (!data.selectingActive) {
         QPen qsnapPen(QColor::fromRgb(qsnapLocatorColor));
         qsnapPen.setWidth(2);
         qsnapPen.setJoinStyle(Qt::MiterJoin);
@@ -1014,9 +1029,8 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
         }
     }
 
-    //Draw the crosshair
-
-    if (!selectingActive) {
+    /* Draw the crosshair */
+    if (!data.selectingActive) {
         //painter->setBrush(Qt::NoBrush);
         QPen crosshairPen(QColor::fromRgb(crosshairColor));
         crosshairPen.setCosmetic(true);
@@ -1168,7 +1182,7 @@ void View::updateMouseCoords(int x, int y)
     gscene->setProperty("SCENE_QSNAP_POINT", sceneMousePoint); //TODO: if qsnap functionality is enabled, use it rather than the mouse point
     gscene->setProperty("SCENE_MOUSE_POINT", sceneMousePoint);
     gscene->setProperty("VIEW_MOUSE_POINT", viewMousePoint);
-    _main->statusbar->setMouseCoord(sceneMousePoint.x(), -sceneMousePoint.y());
+    setMouseCoord(sceneMousePoint.x(), -sceneMousePoint.y());
 }
 
 void View::setCrossHairSize(uint8_t percent)
@@ -1245,8 +1259,8 @@ void View::zoomOut()
 
 void View::zoomWindow()
 {
-    zoomWindowActive = true;
-    selectingActive = false;
+    data.zoomWindowActive = true;
+    data.selectingActive = false;
     clearSelection();
 }
 
@@ -1280,14 +1294,16 @@ void View::zoomExtents()
     QApplication::restoreOverrideCursor();
 }
 
-void View::panRealTime()
+void
+View::panRealTime()
 {
-    panningRealTimeActive = true;
+    data.panningRealTimeActive = true;
 }
 
-void View::panPoint()
+void
+View::panPoint()
 {
-    panningPointActive = true;
+    data.panningPointActive = true;
 }
 
 void View::panLeft()
@@ -1342,9 +1358,10 @@ void View::mouseDoubleClickEvent(QMouseEvent* event)
     }
 }
 
-void View::mousePressEvent(QMouseEvent* event)
+void
+View::mousePressEvent(QMouseEvent* event)
 {
-    updateMouseCoords(event->x(), event->y());
+    updateMouseCoords(event->position().x(), event->position().y());
     if (event->button() == Qt::LeftButton) {
         if (_main->isCommandActive()) {
             QPointF cmdPoint = mapToScene(event->pos());
@@ -1356,7 +1373,7 @@ void View::mousePressEvent(QMouseEvent* event)
                                                               mapToScene(viewMousePoint.x()+pickBoxSize, viewMousePoint.y()+pickBoxSize)));
 
         bool itemsInPickBox = pickList.size();
-        if (itemsInPickBox && !selectingActive && !grippingActive) {
+        if (itemsInPickBox && !data.selectingActive && !data.grippingActive) {
             bool itemsAlreadySelected = pickList.at(0)->isSelected();
             if (!itemsAlreadySelected) {
                 pickList.at(0)->setSelected(true);
@@ -1379,23 +1396,23 @@ void View::mousePressEvent(QMouseEvent* event)
                     foundGrip = true;
                 }
 
-                //If the pick point is within the item's grip box, start gripping
+                /* If the pick point is within the item's grip box, start gripping */
                 if (foundGrip) {
                     startGripping(base);
                 }
                 else {
-                    //start moving
-                    movingActive = true;
+                    /* start moving */
+                    data.movingActive = true;
                     pressPoint = event->pos();
                     scenePressPoint = mapToScene(pressPoint);
                 }
             }
         }
-        else if (grippingActive) {
+        else if (data.grippingActive) {
             stopGripping(true);
         }
-        else if (!selectingActive) {
-            selectingActive = true;
+        else if (!data.selectingActive) {
+            data.selectingActive = true;
             pressPoint = event->pos();
             scenePressPoint = mapToScene(pressPoint);
 
@@ -1406,7 +1423,7 @@ void View::mousePressEvent(QMouseEvent* event)
             selectBox->show();
         }
         else {
-            selectingActive = false;
+            data.selectingActive = false;
             selectBox->hide();
             releasePoint = event->pos();
             sceneReleasePoint = mapToScene(releasePoint);
@@ -1478,7 +1495,7 @@ void View::mousePressEvent(QMouseEvent* event)
             //End SelectBox Code
         }
 
-        if (pastingActive) {
+        if (data.pastingActive) {
             QList<QGraphicsItem*> itemList = pasteObjectItemGroup->childItems();
             gscene->destroyItemGroup(pasteObjectItemGroup);
             foreach(QGraphicsItem* item, itemList) {
@@ -1497,10 +1514,10 @@ void View::mousePressEvent(QMouseEvent* event)
             }
             undoStack->endMacro();
 
-            pastingActive = false;
-            selectingActive = false;
+            data.pastingActive = false;
+            data.selectingActive = false;
         }
-        if (zoomWindowActive) {
+        if (data.zoomWindowActive) {
             fitInView(path.boundingRect(), Qt::KeepAspectRatio);
             clearSelection();
         }
@@ -1521,7 +1538,7 @@ void View::panStart(const QPoint& point)
 
     alignScenePointWithViewPoint(mapToScene(point), point);
 
-    panningActive = true;
+    data.panningActive = true;
     panStartX = point.x();
     panStartY = point.y();
 }
@@ -1564,18 +1581,19 @@ void View::alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint&
     centerOn(newCenter);
 }
 
-void View::mouseMoveEvent(QMouseEvent* event)
+void
+View::mouseMoveEvent(QMouseEvent* event)
 {
-    updateMouseCoords(event->x(), event->y());
+    updateMouseCoords(event->position().x(), event->position().y());
     movePoint = event->pos();
     sceneMovePoint = mapToScene(movePoint);
 
     if (_main->isCommandActive()) {
-        if (rapidMoveActive) {
+        if (data.rapidMoveActive) {
             _main->runCommandMove(_main->activeCommand(), sceneMovePoint.x(), sceneMovePoint.y());
         }
     }
-    if (previewActive) {
+    if (data.previewActive) {
         if (previewMode == PREVIEW_MODE_MOVE) {
             previewObjectItemGroup->setPos(sceneMousePoint - previewPoint);
         }
@@ -1633,15 +1651,15 @@ void View::mouseMoveEvent(QMouseEvent* event)
             }
         }
     }
-    if (pastingActive) {
+    if (data.pastingActive) {
         pasteObjectItemGroup->setPos(sceneMousePoint - pasteDelta);
     }
-    if (movingActive) {
+    if (data.movingActive) {
         //Ensure that the preview is only shown if the mouse has moved.
-        if (!previewActive)
+        if (!data.previewActive)
             previewOn(PREVIEW_CLONE_SELECTED, PREVIEW_MODE_MOVE, scenePressPoint.x(), scenePressPoint.y(), 0);
     }
-    if (selectingActive) {
+    if (data.selectingActive) {
         if (sceneMovePoint.x() >= scenePressPoint.x()) {
             selectBox->setDirection(1);
         }
@@ -1651,11 +1669,13 @@ void View::mouseMoveEvent(QMouseEvent* event)
         selectBox->setGeometry(QRect(mapFromScene(scenePressPoint), event->pos()).normalized());
         event->accept();
     }
-    if (panningActive) {
-        horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (event->x() - panStartX));
-        verticalScrollBar()->setValue(verticalScrollBar()->value() - (event->y() - panStartY));
-        panStartX = event->x();
-        panStartY = event->y();
+    if (data.panningActive) {
+        horizontalScrollBar()->setValue(
+            horizontalScrollBar()->value() - (event->position().x() - panStartX));
+        verticalScrollBar()->setValue(
+            verticalScrollBar()->value() - (event->position().y() - panStartY));
+        panStartX = event->position().x();
+        panStartY = event->position().y();
         event->accept();
     }
     gscene->update();
@@ -1663,20 +1683,20 @@ void View::mouseMoveEvent(QMouseEvent* event)
 
 void View::mouseReleaseEvent(QMouseEvent* event)
 {
-    updateMouseCoords(event->x(), event->y());
+    updateMouseCoords(event->position().x(), event->position().y());
     if (event->button() == Qt::LeftButton) {
-        if (movingActive) {
+        if (data.movingActive) {
             previewOff();
             double dx = sceneMousePoint.x()-scenePressPoint.x();
             double dy = sceneMousePoint.y()-scenePressPoint.y();
             //Ensure that moving only happens if the mouse has moved.
             if (dx || dy) moveSelected(dx, dy);
-            movingActive = false;
+            data.movingActive = false;
         }
         event->accept();
     }
     if (event->button() == Qt::MiddleButton) {
-        panningActive = false;
+        data.panningActive = false;
         //The Undo command will record the spot where the pan completed.
         UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanStop", this, 0);
         undoStack->push(cmd);
@@ -1770,10 +1790,10 @@ void View::zoomToPoint(const QPoint& mousePoint, int zoomDir)
     alignScenePointWithViewPoint(pointBeforeScale, mousePoint);
 
     updateMouseCoords(mousePoint.x(), mousePoint.y());
-    if (pastingActive) {
+    if (data.pastingActive) {
         pasteObjectItemGroup->setPos(sceneMousePoint - pasteDelta);
     }
-    if (selectingActive) {
+    if (data.selectingActive) {
         selectBox->setGeometry(QRect(mapFromScene(scenePressPoint), mousePoint).normalized());
     }
     gscene->update();
@@ -1793,7 +1813,7 @@ View::contextMenuEvent(QContextMenuEvent* event)
         }
     }
 
-    if (pastingActive) {
+    if (data.pastingActive) {
         return;
     }
     if (!_main->prompt->isCommandActive()) {
@@ -1803,7 +1823,7 @@ View::contextMenuEvent(QContextMenuEvent* event)
         connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()));
         menu.addAction(repeatAction);
     }
-    if (zoomWindowActive) {
+    if (data.zoomWindowActive) {
         QAction* cancelZoomWinAction = new QAction("&Cancel (ZoomWindow)", this);
         cancelZoomWinAction->setStatusTip("Cancels the ZoomWindow Command.");
         connect(cancelZoomWinAction, SIGNAL(triggered()), this, SLOT(escapePressed()));
@@ -1851,13 +1871,13 @@ View::contextMenuEvent(QContextMenuEvent* event)
 void View::deletePressed()
 {
     qDebug("View deletePressed()");
-    if (pastingActive) {
+    if (data.pastingActive) {
         gscene->removeItem(pasteObjectItemGroup);
         delete pasteObjectItemGroup;
     }
-    pastingActive = false;
-    zoomWindowActive = false;
-    selectingActive = false;
+    data.pastingActive = false;
+    data.zoomWindowActive = false;
+    data.selectingActive = false;
     selectBox->hide();
     stopGripping(false);
     deleteSelected();
@@ -1866,16 +1886,20 @@ void View::deletePressed()
 void View::escapePressed()
 {
     qDebug("View escapePressed()");
-    if (pastingActive) {
+    if (data.pastingActive) {
         gscene->removeItem(pasteObjectItemGroup);
         delete pasteObjectItemGroup;
     }
-    pastingActive = false;
-    zoomWindowActive = false;
-    selectingActive = false;
+    data.pastingActive = false;
+    data.zoomWindowActive = false;
+    data.selectingActive = false;
     selectBox->hide();
-    if (grippingActive) stopGripping(false);
-    else clearSelection();
+    if (data.grippingActive) {
+        stopGripping(false);
+    }
+    else {
+        clearSelection();
+    }
 }
 
 void View::startGripping(Object* obj)
@@ -1883,7 +1907,7 @@ void View::startGripping(Object* obj)
     if (!obj) {
         return;
     }
-    grippingActive = true;
+    data.grippingActive = true;
     gripBaseObj = obj;
     sceneGripPoint = gripBaseObj->mouseSnapPoint(sceneMousePoint);
     gripBaseObj->setObjectRubberPoint("GRIP_POINT", sceneGripPoint);
@@ -1892,7 +1916,7 @@ void View::startGripping(Object* obj)
 
 void View::stopGripping(bool accept)
 {
-    grippingActive = false;
+    data.grippingActive = false;
     if (gripBaseObj) {
         gripBaseObj->vulcanize();
         if (accept) {
@@ -1972,9 +1996,10 @@ void View::copySelected()
     _main->cutCopyObjectList = createObjectList(selectedList);
 }
 
-void View::paste()
+void
+View::paste()
 {
-    if (pastingActive) {
+    if (data.pastingActive) {
         gscene->removeItem(pasteObjectItemGroup);
         delete pasteObjectItemGroup;
     }
@@ -1982,7 +2007,7 @@ void View::paste()
     pasteObjectItemGroup = gscene->createItemGroup(_main->cutCopyObjectList);
     pasteDelta = pasteObjectItemGroup->boundingRect().bottomLeft();
     pasteObjectItemGroup->setPos(sceneMousePoint - pasteDelta);
-    pastingActive = true;
+    data.pastingActive = true;
 
     //Re-create the list in case of multiple pastes
     _main->cutCopyObjectList = createObjectList(_main->cutCopyObjectList);

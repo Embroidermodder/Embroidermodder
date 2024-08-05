@@ -89,7 +89,9 @@ enum COMMAND_ACTIONS
     ACTION_EXIT,
     ACTION_CUT,
     ACTION_COPY,
+    ACTION_COPY_SELECTED,
     ACTION_PASTE,
+    ACTION_PASTE_SELECTED,
 
     ACTION_UNDO,
     ACTION_REDO,
@@ -561,6 +563,21 @@ typedef struct StringMap_ {
 
 typedef char string_table[MAX_MENU_LENGTH][MAX_COMMAND_LENGTH];
 
+typedef struct ViewData_ {
+    bool grippingActive;
+    bool rapidMoveActive;
+    bool previewActive;
+    bool pastingActive;
+    bool movingActive;
+    bool selectingActive;
+    bool zoomWindowActive;
+    bool panningRealTimeActive;
+    bool panningPointActive;
+    bool panningActive;
+    bool qSnapActive;
+    bool qSnapToggle;
+} ViewData;
+
 /* Scripting functions */
 ScriptEnv *create_script_env();
 void free_script_env(ScriptEnv *);
@@ -622,8 +639,6 @@ int num_selected(void);
 void select_all(void);
 
 void cut(void);
-void copy(void);
-void paste(void);
 
 void about_dialog(void);
 
@@ -778,10 +793,6 @@ extern BoolSetting text_style_strikeout;
 void about_dialog(void);
 
 void nativeBlinkPrompt();
-void nativeEnablePromptRapidFire();
-void nativeDisablePromptRapidFire();
-void nativeEnableMoveRapidFire();
-void nativeDisableMoveRapidFire();
 
 void nativeAddInfiniteLine(double x1, double y1, double x2, double y2, double rot);
 void nativeAddRay(double x1, double y1, double x2, double y2, double rot);
@@ -801,13 +812,14 @@ void nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, 
 
 void nativeRedo();
 
+void setMouseCoord(double x, double y);
+
 void nativePrintArea(double x, double y, double w, double h);
 
 void nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b);
 void nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b);
 void nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b);
 
-void nativeVulcanize();
 void nativeClearRubber();
 bool nativeAllowRubber();
 void nativeSpareRubber(int64_t id);
@@ -822,12 +834,16 @@ void nativeRotateSelected(double x, double y, double rot);
 void nativeMirrorSelected(double x1, double y1, double x2, double y2);
 
 void nativeSetCursorShape(char str[MAX_STRING_LENGTH]);
-double nativeCalculateAngle(double x1, double y1, double x2, double y2);
 double nativeCalculateDistance(double x1, double y1, double x2, double y2);
 double nativePerpendicularDistance(double px, double py, double x1, double y1, double x2, double y2);
 
 double nativeQSnapX();
 double nativeQSnapY();
+
+void enableLwt();
+void disableLwt();
+void enableReal();
+void disableReal();
 
 #ifdef __cplusplus
 }

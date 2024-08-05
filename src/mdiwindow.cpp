@@ -136,7 +136,7 @@ MdiWindow::loadFile(const QString &fileName)
     emb_array_addPolyline(pattern->geometry, polyline);
 
     setCurrentFile(fileName);
-    _main->statusbar->showMessage("File loaded.");
+    statusbar->showMessage("File loaded.");
 
     if (grid_load_from_file.setting) {
         //TODO: Josh, provide me a hoop size and/or grid spacing from the pattern.
@@ -233,23 +233,25 @@ void MdiWindow::closeEvent(QCloseEvent* /*e*/)
     emit sendCloseMdiWin(this);
 }
 
-void MdiWindow::onWindowActivated()
+void
+MdiWindow::onWindowActivated()
 {
     qDebug("MdiWindow onWindowActivated()");
     gview->getUndoStack()->setActive(true);
     _main->setUndoCleanIcon(fileWasLoaded);
-    _main->statusbar->statusBarSnapButton->setChecked(gscene->property("ENABLE_SNAP").toBool());
-    _main->statusbar->statusBarGridButton->setChecked(gscene->property("ENABLE_GRID").toBool());
-    _main->statusbar->statusBarRulerButton->setChecked(gscene->property("ENABLE_RULER").toBool());
-    _main->statusbar->statusBarOrthoButton->setChecked(gscene->property("ENABLE_ORTHO").toBool());
-    _main->statusbar->statusBarPolarButton->setChecked(gscene->property("ENABLE_POLAR").toBool());
-    _main->statusbar->statusBarQSnapButton->setChecked(gscene->property("ENABLE_QSNAP").toBool());
-    _main->statusbar->statusBarQTrackButton->setChecked(gscene->property("ENABLE_QTRACK").toBool());
-    _main->statusbar->statusBarLwtButton->setChecked(gscene->property("ENABLE_LWT").toBool());
+    statusBarSnapButton->setChecked(gscene->property("ENABLE_SNAP").toBool());
+    statusBarGridButton->setChecked(gscene->property("ENABLE_GRID").toBool());
+    statusBarRulerButton->setChecked(gscene->property("ENABLE_RULER").toBool());
+    statusBarOrthoButton->setChecked(gscene->property("ENABLE_ORTHO").toBool());
+    statusBarPolarButton->setChecked(gscene->property("ENABLE_POLAR").toBool());
+    statusBarQSnapButton->setChecked(gscene->property("ENABLE_QSNAP").toBool());
+    statusBarQTrackButton->setChecked(gscene->property("ENABLE_QTRACK").toBool());
+    statusBarLwtButton->setChecked(gscene->property("ENABLE_LWT").toBool());
     _main->prompt->setHistory(promptHistory);
 }
 
-QSize MdiWindow::sizeHint() const
+QSize
+MdiWindow::sizeHint() const
 {
     qDebug("MdiWindow sizeHint()");
     return QSize(450, 300);

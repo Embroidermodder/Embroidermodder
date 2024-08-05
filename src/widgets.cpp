@@ -12,6 +12,27 @@
 
 #include "embroidermodder.h"
 
+QToolButton* statusBarSnapButton;
+QToolButton* statusBarGridButton;
+QToolButton* statusBarRulerButton;
+QToolButton* statusBarOrthoButton;
+QToolButton* statusBarPolarButton;
+QToolButton* statusBarQSnapButton;
+QToolButton* statusBarQTrackButton;
+QToolButton* statusBarLwtButton;
+QLabel* statusBarMouseCoord;
+
+QStringList button_list = {
+    "SNAP",
+    "GRID",
+    "RULER",
+    "ORTHO",
+    "POLAR",
+    "QSNAP",
+    "QTRACK",
+    "LWT"
+};
+
 UndoEditor::UndoEditor(const QString& iconDirectory, QWidget* widgetToFocus, QWidget* parent) : QDockWidget(parent)
 {
     iconDir = iconDirectory;
@@ -122,217 +143,109 @@ void ImageWidget::paintEvent(QPaintEvent*)
     painter.drawImage(0, 0, img);
 }
 
-StatusBarButton::StatusBarButton(QString buttonText, MainWindow* mw, StatusBar* statbar, QWidget *parent) : QToolButton(parent)
-{
-    statusbar = statbar;
-
-    this->setObjectName("StatusBarButton" + buttonText);
-
-    this->setText(buttonText);
-    this->setAutoRaise(true);
-    this->setCheckable(true);
-
-    if (objectName() == "StatusBarButtonSNAP") {
-        connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleSnap(bool)));
-    }
-    else if (objectName() == "StatusBarButtonGRID") {
-        connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleGrid(bool)));
-    }
-    else if (objectName() == "StatusBarButtonRULER") {
-        connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleRuler(bool)));
-    }
-    else if (objectName() == "StatusBarButtonORTHO") {
-        connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleOrtho(bool)));
-    }
-    else if (objectName() == "StatusBarButtonPOLAR") {
-        connect(this, SIGNAL(toggled(bool)), this, SLOT(togglePolar(bool)));
-    }
-    else if (objectName() == "StatusBarButtonQSNAP") {
-        connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleQSnap(bool)));
-    }
-    else if (objectName() == "StatusBarButtonQTRACK") {
-        connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleQTrack(bool)));
-    }
-    else if (objectName() == "StatusBarButtonLWT") {
-        connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleLwt(bool)));
-    }
-}
-
-void StatusBarButton::contextMenuEvent(QContextMenuEvent *event)
+void
+contextMenuEvent(QObject* object, QContextMenuEvent *event)
 {
     QApplication::setOverrideCursor(Qt::ArrowCursor);
-    QMenu menu(this);
-    if (objectName() == "StatusBarButtonSNAP") {
-        QAction* settingsSnapAction = new QAction(create_icon("gridsnapsettings"), "&Settings...", &menu);
-        connect(settingsSnapAction, SIGNAL(triggered()), this, SLOT(settingsSnap()));
-        menu.addAction(settingsSnapAction);
+    QMenu menu(statusbar);
+    if (object->objectName() == "StatusBarButtonSNAP") {
+        QAction* action = new QAction(create_icon("gridsnapsettings"), "&Settings...", &menu);
+        QObject::connect(action, &QAction::trigger,
+            _main, [](void) { _main->settingsDialog("Snap"); });
+        menu.addAction(action);
     }
-    else if (objectName() == "StatusBarButtonGRID") {
-        QAction* settingsGridAction = new QAction(create_icon("gridsettings"), "&Settings...", &menu);
-        connect(settingsGridAction, SIGNAL(triggered()), this, SLOT(settingsGrid()));
-        menu.addAction(settingsGridAction);
+    else if (object->objectName() == "StatusBarButtonGRID") {
+        QAction* action = new QAction(create_icon("gridsettings"), "&Settings...", &menu);
+        QObject::connect(action, &QAction::trigger,
+            _main, [](void) { _main->settingsDialog("Grid/Ruler"); });
+        menu.addAction(action);
     }
-    else if (objectName() == "StatusBarButtonRULER") {
-        QAction* settingsRulerAction = new QAction(create_icon("rulersettings"), "&Settings...", &menu);
-        connect(settingsRulerAction, SIGNAL(triggered()), this, SLOT(settingsRuler()));
-        menu.addAction(settingsRulerAction);
+    else if (object->objectName() == "StatusBarButtonRULER") {
+        QAction* action = new QAction(create_icon("rulersettings"), "&Settings...", &menu);
+        QObject::connect(action, &QAction::trigger,
+            _main, [](void) { _main->settingsDialog("Grid/Ruler"); });
+        menu.addAction(action);
     }
-    else if (objectName() == "StatusBarButtonORTHO") {
-        QAction* settingsOrthoAction = new QAction(create_icon("orthosettings"), "&Settings...", &menu);
-        connect(settingsOrthoAction, SIGNAL(triggered()), this, SLOT(settingsOrtho()));
-        menu.addAction(settingsOrthoAction);
+    else if (object->objectName() == "StatusBarButtonORTHO") {
+        QAction* action = new QAction(create_icon("orthosettings"), "&Settings...", &menu);
+        QObject::connect(action, &QAction::trigger,
+            _main, [](void) { _main->settingsDialog("Ortho/Polar"); });
+        menu.addAction(action);
     }
-    else if (objectName() == "StatusBarButtonPOLAR") {
-        QAction* settingsPolarAction = new QAction(create_icon("polarsettings"), "&Settings...", &menu);
-        connect(settingsPolarAction, SIGNAL(triggered()), this, SLOT(settingsPolar()));
-        menu.addAction(settingsPolarAction);
+    else if (object->objectName() == "StatusBarButtonPOLAR") {
+        QAction* action = new QAction(create_icon("polarsettings"), "&Settings...", &menu);
+        QObject::connect(action, &QAction::trigger,
+            _main, [](void) { _main->settingsDialog("Ortho/Polar"); });
+        menu.addAction(action);
     }
-    else if (objectName() == "StatusBarButtonQSNAP") {
-        QAction* settingsQSnapAction = new QAction(create_icon("qsnapsettings"), "&Settings...", &menu);
-        connect(settingsQSnapAction, SIGNAL(triggered()), this, SLOT(settingsQSnap()));
-        menu.addAction(settingsQSnapAction);
+    else if (object->objectName() == "StatusBarButtonQSNAP") {
+        QAction* action = new QAction(create_icon("qsnapsettings"), "&Settings...", &menu);
+        QObject::connect(action, &QAction::trigger,
+            _main, [](void) { _main->settingsDialog("QuickSnap"); });
+        menu.addAction(action);
     }
-    else if (objectName() == "StatusBarButtonQTRACK") {
-        QAction* settingsQTrackAction = new QAction(create_icon("qtracksettings"), "&Settings...", &menu);
-        connect(settingsQTrackAction, SIGNAL(triggered()), this, SLOT(settingsQTrack()));
-        menu.addAction(settingsQTrackAction);
+    else if (object->objectName() == "StatusBarButtonQTRACK") {
+        QAction* action = new QAction(create_icon("qtracksettings"), "&Settings...", &menu);
+        QObject::connect(action, &QAction::trigger,
+            _main, [](void) { _main->settingsDialog("QuickTrack"); });
+        menu.addAction(action);
     }
-    else if (objectName() == "StatusBarButtonLWT") {
+    else if (object->objectName() == "StatusBarButtonLWT") {
         View* gview = activeView();
         if (gview) {
             QAction* enableRealAction = new QAction(create_icon("realrender"), "&RealRender On", &menu);
             enableRealAction->setEnabled(!gview->isRealEnabled());
-            connect(enableRealAction, SIGNAL(triggered()), this, SLOT(enableReal()));
+            QObject::connect(enableRealAction, &QAction::triggered, _main, enableReal);
             menu.addAction(enableRealAction);
 
             QAction* disableRealAction = new QAction(create_icon("realrender"), "&RealRender Off", &menu);
             disableRealAction->setEnabled(gview->isRealEnabled());
-            connect(disableRealAction, SIGNAL(triggered()), this, SLOT(disableReal()));
+            QObject::connect(disableRealAction, &QAction::triggered, _main, disableReal);
             menu.addAction(disableRealAction);
         }
 
-        QAction* settingsLwtAction = new QAction(create_icon("lineweightsettings"), "&Settings...", &menu);
-        connect(settingsLwtAction, SIGNAL(triggered()), this, SLOT(settingsLwt()));
-        menu.addAction(settingsLwtAction);
+        QAction* action = new QAction(create_icon("lineweightsettings"), "&Settings...", &menu);
+        QObject::connect(action, &QAction::trigger,
+            _main, [](void) { _main->settingsDialog("LineWeight"); });
+        menu.addAction(action);
     }
     menu.exec(event->globalPos());
     QApplication::restoreOverrideCursor();
     statusbar->clearMessage();
 }
 
-void StatusBarButton::settingsSnap()
-{
-    _main->settingsDialog("Snap");
-}
-
-void StatusBarButton::settingsGrid()
-{
-    _main->settingsDialog("Grid/Ruler");
-}
-
-void StatusBarButton::settingsRuler()
-{
-    _main->settingsDialog("Grid/Ruler");
-}
-
-void StatusBarButton::settingsOrtho()
-{
-    _main->settingsDialog("Ortho/Polar");
-}
-
-void StatusBarButton::settingsPolar()
-{
-    _main->settingsDialog("Ortho/Polar");
-}
-
-void StatusBarButton::settingsQSnap()
-{
-    _main->settingsDialog("QuickSnap");
-}
-
-void StatusBarButton::settingsQTrack()
-{
-    _main->settingsDialog("QuickTrack");
-}
-
-void StatusBarButton::settingsLwt()
-{
-    _main->settingsDialog("LineWeight");
-}
-
-void StatusBarButton::toggleSnap(bool on)
+void
+statusbar_toggle(QString key, bool on)
 {
     qDebug("StatusBarButton toggleSnap()");
     View* gview = activeView();
     if (gview) {
-        gview->toggleSnap(on);
+        if (key == "SNAP") {
+            gview->toggleSnap(on);
+        }
+        else if (key == "GRID") {
+            gview->toggleGrid(on);
+        }
+        else if (key == "RULER") {
+            gview->toggleRuler(on);
+        }
+        else if (key == "ORTHO") {
+            gview->toggleOrtho(on);
+        }
+        else if (key == "POLAR") {
+            gview->togglePolar(on);
+        }
+        else if (key == "QSNAP") {
+            gview->toggleQSnap(on);
+        }
+        else if (key == "LWT") {
+            gview->toggleLwt(on);
+        }
     }
 }
 
-void StatusBarButton::toggleGrid(bool on)
-{
-    qDebug("StatusBarButton toggleGrid()");
-    View* gview = activeView();
-    if (gview) {
-        gview->toggleGrid(on);
-    }
-}
-
-void StatusBarButton::toggleRuler(bool on)
-{
-    qDebug("StatusBarButton toggleRuler()");
-    View* gview = activeView();
-    if (gview) {
-        gview->toggleRuler(on);
-    }
-}
-
-void StatusBarButton::toggleOrtho(bool on)
-{
-    qDebug("StatusBarButton toggleOrtho()");
-    View* gview = activeView();
-    if (gview) {
-        gview->toggleOrtho(on);
-    }
-}
-
-void StatusBarButton::togglePolar(bool on)
-{
-    qDebug("StatusBarButton togglePolar()");
-    View* gview = activeView();
-    if (gview) {
-        gview->togglePolar(on);
-    }
-}
-
-void StatusBarButton::toggleQSnap(bool on)
-{
-    qDebug("StatusBarButton toggleQSnap()");
-    View* gview = activeView();
-    if (gview) {
-        gview->toggleQSnap(on);
-    }
-}
-
-void StatusBarButton::toggleQTrack(bool on)
-{
-    qDebug("StatusBarButton toggleQTrack()");
-    View* gview = activeView();
-    if (gview) {
-        gview->toggleQTrack(on);
-    }
-}
-
-void StatusBarButton::toggleLwt(bool on)
-{
-    qDebug("StatusBarButton toggleLwt()");
-    View* gview = activeView();
-    if (gview) {
-        gview->toggleLwt(on);
-    }
-}
-
-void StatusBarButton::enableLwt()
+void
+enableLwt()
 {
     qDebug("StatusBarButton enableLwt()");
     View* gview = activeView();
@@ -343,7 +256,8 @@ void StatusBarButton::enableLwt()
     }
 }
 
-void StatusBarButton::disableLwt()
+void
+disableLwt()
 {
     qDebug("StatusBarButton disableLwt()");
     View* gview = activeView();
@@ -354,7 +268,8 @@ void StatusBarButton::disableLwt()
     }
 }
 
-void StatusBarButton::enableReal()
+void
+enableReal()
 {
     qDebug("StatusBarButton enableReal()");
     View* gview = activeView();
@@ -363,7 +278,8 @@ void StatusBarButton::enableReal()
     }
 }
 
-void StatusBarButton::disableReal()
+void
+disableReal()
 {
     qDebug("StatusBarButton disableReal()");
     View* gview = activeView();
@@ -372,35 +288,59 @@ void StatusBarButton::disableReal()
     }
 }
 
-StatusBar::StatusBar(MainWindow* mw, QWidget *parent) : QStatusBar(parent)
+void
+create_statusbar(MainWindow* mw)
 {
-    this->setObjectName("StatusBar");
+    statusbar = new QStatusBar(mw);
+    statusbar->setObjectName("StatusBar");
 
-    statusBarSnapButton   = new StatusBarButton("SNAP", mw, this, this);
-    statusBarGridButton   = new StatusBarButton("GRID", mw, this, this);
-    statusBarRulerButton  = new StatusBarButton("RULER", mw, this, this);
-    statusBarOrthoButton  = new StatusBarButton("ORTHO", mw, this, this);
-    statusBarPolarButton  = new StatusBarButton("POLAR", mw, this, this);
-    statusBarQSnapButton  = new StatusBarButton("QSNAP", mw, this, this);
-    statusBarQTrackButton = new StatusBarButton("QTRACK", mw, this, this);
-    statusBarLwtButton    = new StatusBarButton("LWT", mw, this, this);
-    statusBarMouseCoord   = new QLabel(this);
+    statusBarSnapButton = new QToolButton(mw);
+    statusBarGridButton = new QToolButton(mw);
+    statusBarRulerButton = new QToolButton(mw);
+    statusBarOrthoButton = new QToolButton(mw);
+    statusBarPolarButton = new QToolButton(mw);
+    statusBarQSnapButton = new QToolButton(mw);
+    statusBarQTrackButton = new QToolButton(mw);
+    statusBarLwtButton = new QToolButton(mw);
+
+    QHash<QString, QToolButton*> toolbuttons;
+    toolbuttons["SNAP"] = statusBarSnapButton;
+    toolbuttons["GRID"] = statusBarGridButton;
+    toolbuttons["RULER"] = statusBarRulerButton;
+    toolbuttons["ORTHO"] = statusBarOrthoButton;
+    toolbuttons["POLAR"] = statusBarPolarButton;
+    toolbuttons["QSNAP"] = statusBarQSnapButton;
+    toolbuttons["QTRACK"] = statusBarQTrackButton;
+    toolbuttons["LWT"] = statusBarLwtButton;
+
+    foreach (QString name, button_list) {
+        toolbuttons[name]->setText(name);
+        toolbuttons[name]->setObjectName("StatusBarButton" + name);
+        toolbuttons[name]->setAutoRaise(true);
+        toolbuttons[name]->setCheckable(true);
+        QObject::connect(toolbuttons[name], &QAbstractButton::toggled,
+            toolbuttons[name], [name] (bool b) { statusbar_toggle(name, b); });
+    }
+
+
+    statusBarMouseCoord = new QLabel(statusbar);
 
     statusBarMouseCoord->setMinimumWidth(300); // Must fit this text always
     statusBarMouseCoord->setMaximumWidth(300); // "+1.2345E+99, +1.2345E+99, +1.2345E+99"
 
-    this->addWidget(statusBarMouseCoord);
-    this->addWidget(statusBarSnapButton);
-    this->addWidget(statusBarGridButton);
-    this->addWidget(statusBarRulerButton);
-    this->addWidget(statusBarOrthoButton);
-    this->addWidget(statusBarPolarButton);
-    this->addWidget(statusBarQSnapButton);
-    this->addWidget(statusBarQTrackButton);
-    this->addWidget(statusBarLwtButton);
+    statusbar->addWidget(statusBarMouseCoord);
+    statusbar->addWidget(statusBarSnapButton);
+    statusbar->addWidget(statusBarGridButton);
+    statusbar->addWidget(statusBarRulerButton);
+    statusbar->addWidget(statusBarOrthoButton);
+    statusbar->addWidget(statusBarPolarButton);
+    statusbar->addWidget(statusBarQSnapButton);
+    statusbar->addWidget(statusBarQTrackButton);
+    statusbar->addWidget(statusBarLwtButton);
 }
 
-void StatusBar::setMouseCoord(double x, double y)
+void
+setMouseCoord(double x, double y)
 {
     //TODO: set format from settings (Architectural, Decimal, Engineering, Fractional, Scientific)
 
