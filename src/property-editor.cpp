@@ -789,15 +789,15 @@ void PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
         else if (objType == OBJ_TYPE_TEXTSINGLE) {
             Object* obj = static_cast<Object*>(item);
             if (obj) {
-                updateLineEditStrIfVaries(lineEditTextSingleContents, obj->objText);
-                updateFontComboBoxStrIfVaries(comboBoxTextSingleFont, obj->objTextFont);
-                updateComboBoxStrIfVaries(comboBoxTextSingleJustify, obj->objTextJustify, obj->objectTextJustifyList());
-                updateLineEditNumIfVaries(lineEditTextSingleHeight, obj->objTextSize, false);
+                updateLineEditStrIfVaries(lineEditTextSingleContents, obj->data.objText);
+                updateFontComboBoxStrIfVaries(comboBoxTextSingleFont, obj->data.objTextFont);
+                updateComboBoxStrIfVaries(comboBoxTextSingleJustify, obj->data.objTextJustify, obj->objectTextJustifyList());
+                updateLineEditNumIfVaries(lineEditTextSingleHeight, obj->data.objTextSize, false);
                 updateLineEditNumIfVaries(lineEditTextSingleRotation, -obj->rotation(), true);
                 updateLineEditNumIfVaries(lineEditTextSingleX, obj->objectX(), false);
                 updateLineEditNumIfVaries(lineEditTextSingleY, -obj->objectY(), false);
-                updateComboBoxBoolIfVaries(comboBoxTextSingleBackward, obj->objTextBackward, true);
-                updateComboBoxBoolIfVaries(comboBoxTextSingleUpsideDown, obj->objTextUpsideDown, true);
+                updateComboBoxBoolIfVaries(comboBoxTextSingleBackward, obj->data.objTextBackward, true);
+                updateComboBoxBoolIfVaries(comboBoxTextSingleUpsideDown, obj->data.objTextUpsideDown, true);
             }
         }
     }

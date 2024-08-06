@@ -36,12 +36,12 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     //WARNING: DO NOT SET THE QMDISUBWINDOW (this) FOCUSPROXY TO THE PROMPT
     //WARNING: AS IT WILL CAUSE THE WINDOW MENU TO NOT SWITCH WINDOWS PROPERLY!
     //WARNING: ALTHOUGH IT SEEMS THAT SETTING INTERNAL WIDGETS FOCUSPROXY IS OK.
-    gview->setFocusProxy(_main->prompt);
+    gview->setFocusProxy(prompt);
 
     resize(sizeHint());
 
     promptHistory = "Welcome to Embroidermodder 2!<br/>Open some of our sample files. Many formats are supported.<br/>For help, press F1.";
-    _main->prompt->setHistory(promptHistory);
+    prompt->setHistory(promptHistory);
     promptInputList << "";
     promptInputNum = 0;
 
@@ -247,7 +247,7 @@ MdiWindow::onWindowActivated()
     statusBarQSnapButton->setChecked(gscene->property("ENABLE_QSNAP").toBool());
     statusBarQTrackButton->setChecked(gscene->property("ENABLE_QTRACK").toBool());
     statusBarLwtButton->setChecked(gscene->property("ENABLE_LWT").toBool());
-    _main->prompt->setHistory(promptHistory);
+    prompt->setHistory(promptHistory);
 }
 
 QSize
@@ -363,14 +363,14 @@ void MdiWindow::promptInputPrevNext(bool prev)
         int maxNum = promptInputList.size();
         if (promptInputNum < 0) {
             promptInputNum = 0;
-            _main->prompt->setCurrentText("");
+            prompt->setCurrentText("");
         }
         else if (promptInputNum >= maxNum) {
             promptInputNum = maxNum;
-            _main->prompt->setCurrentText("");
+            prompt->setCurrentText("");
         }
         else {
-            _main->prompt->setCurrentText(promptInputList.at(promptInputNum));
+            prompt->setCurrentText(promptInputList.at(promptInputNum));
         }
     }
 }

@@ -1459,7 +1459,7 @@ void
 Settings_Dialog::checkBoxGeneralMdiBGUseLogoStateChanged(int checked)
 {
     general_mdi_bg_use_logo.preview = checked;
-    _main->mdiArea->useBackgroundLogo(checked);
+    mdiArea->useBackgroundLogo(checked);
 }
 
 void
@@ -1477,7 +1477,7 @@ Settings_Dialog::chooseGeneralMdiBackgroundLogo()
         }
 
         //Update immediately so it can be previewed
-        _main->mdiArea->setBackgroundLogo(general_mdi_bg_logo.accept);
+        mdiArea->setBackgroundLogo(general_mdi_bg_logo.accept);
     }
 }
 
@@ -1485,7 +1485,7 @@ void
 Settings_Dialog::checkBoxGeneralMdiBGUseTextureStateChanged(int checked)
 {
     general_mdi_bg_use_texture.preview = checked;
-    _main->mdiArea->useBackgroundTexture(checked);
+    mdiArea->useBackgroundTexture(checked);
 }
 
 void
@@ -1503,7 +1503,7 @@ Settings_Dialog::chooseGeneralMdiBackgroundTexture()
         }
 
         //Update immediately so it can be previewed
-        _main->mdiArea->setBackgroundTexture(general_mdi_bg_texture.accept);
+        mdiArea->setBackgroundTexture(general_mdi_bg_texture.accept);
     }
 }
 
@@ -1511,7 +1511,7 @@ void
 Settings_Dialog::checkBoxGeneralMdiBGUseColorStateChanged(int checked)
 {
     general_mdi_bg_use_color.preview = checked;
-    _main->mdiArea->useBackgroundColor(checked);
+    mdiArea->useBackgroundColor(checked);
 }
 
 void
@@ -1529,11 +1529,11 @@ Settings_Dialog::chooseGeneralMdiBackgroundColor()
             QPixmap pix(16,16);
             pix.fill(QColor(general_mdi_bg_color.accept));
             button->setIcon(QIcon(pix));
-            _main->mdiArea->setBackgroundColor(QColor(general_mdi_bg_color.accept));
+            mdiArea->setBackgroundColor(QColor(general_mdi_bg_color.accept));
         }
         else
         {
-            _main->mdiArea->setBackgroundColor(QColor(general_mdi_bg_color.dialog));
+            mdiArea->setBackgroundColor(QColor(general_mdi_bg_color.dialog));
         }
     }
 }
@@ -1542,7 +1542,7 @@ void
 Settings_Dialog::currentGeneralMdiBackgroundColorChanged(const QColor& color)
 {
     general_mdi_bg_color.preview = color.rgb();
-    _main->mdiArea->setBackgroundColor(QColor(general_mdi_bg_color.preview));
+    mdiArea->setBackgroundColor(QColor(general_mdi_bg_color.preview));
 }
 
 void
@@ -1868,10 +1868,10 @@ Settings_Dialog::choosePromptTextColor()
         if (colorDialog->result() == QDialog::Accepted) {
             prompt_text_color.accept = colorDialog->selectedColor().rgb();
             button->setIcon(create_swatch(prompt_text_color.accept));
-            _main->prompt->setPromptTextColor(QColor(prompt_text_color.accept));
+            prompt->setPromptTextColor(QColor(prompt_text_color.accept));
         }
         else {
-            _main->prompt->setPromptTextColor(QColor(prompt_text_color.dialog));
+            prompt->setPromptTextColor(QColor(prompt_text_color.dialog));
         }
     }
 }
@@ -1880,7 +1880,7 @@ void
 Settings_Dialog::currentPromptTextColorChanged(const QColor& color)
 {
     prompt_text_color.preview = color.rgb();
-    _main->prompt->setPromptTextColor(QColor(prompt_text_color.preview));
+    prompt->setPromptTextColor(QColor(prompt_text_color.preview));
 }
 
 void
@@ -1897,10 +1897,10 @@ Settings_Dialog::choosePromptBackgroundColor()
             QPixmap pix(16,16);
             pix.fill(QColor(prompt_bg_color.accept));
             button->setIcon(QIcon(pix));
-            _main->prompt->setPromptBackgroundColor(QColor(prompt_bg_color.accept));
+            prompt->setPromptBackgroundColor(QColor(prompt_bg_color.accept));
         }
         else {
-            _main->prompt->setPromptBackgroundColor(QColor(prompt_bg_color.dialog));
+            prompt->setPromptBackgroundColor(QColor(prompt_bg_color.dialog));
         }
     }
 }
@@ -1909,28 +1909,28 @@ void
 Settings_Dialog::currentPromptBackgroundColorChanged(const QColor& color)
 {
     prompt_bg_color.preview = color.rgb();
-    _main->prompt->setPromptBackgroundColor(QColor(prompt_bg_color.preview));
+    prompt->setPromptBackgroundColor(QColor(prompt_bg_color.preview));
 }
 
 void
 Settings_Dialog::comboBoxPromptFontFamilyCurrentIndexChanged(const QString& family)
 {
     strcpy(prompt_font_family.preview, qPrintable(family));
-    _main->prompt->setPromptFontFamily(prompt_font_family.preview);
+    prompt->setPromptFontFamily(prompt_font_family.preview);
 }
 
 void
 Settings_Dialog::comboBoxPromptFontStyleCurrentIndexChanged(const QString& style)
 {
     strcpy(prompt_font_style.preview, qPrintable(style));
-    _main->prompt->setPromptFontStyle(prompt_font_style.preview);
+    prompt->setPromptFontStyle(prompt_font_style.preview);
 }
 
 void
 Settings_Dialog::spinBoxPromptFontSizeValueChanged(int value)
 {
     prompt_font_size.preview = value;
-    _main->prompt->setPromptFontSize(prompt_font_size.preview);
+    prompt->setPromptFontSize(prompt_font_size.preview);
 }
 
 void
@@ -2681,12 +2681,12 @@ Settings_Dialog::acceptChanges()
     selection_pickbox_size.setting = selection_pickbox_size.dialog;
 
     //Make sure the user sees the changes applied immediately
-    _main->mdiArea->useBackgroundLogo(general_mdi_bg_use_logo.dialog);
-    _main->mdiArea->useBackgroundTexture(general_mdi_bg_use_texture.dialog);
-    _main->mdiArea->useBackgroundColor(general_mdi_bg_use_color.dialog);
-    _main->mdiArea->setBackgroundLogo(general_mdi_bg_logo.dialog);
-    _main->mdiArea->setBackgroundTexture(general_mdi_bg_texture.dialog);
-    _main->mdiArea->setBackgroundColor(general_mdi_bg_color.dialog);
+    mdiArea->useBackgroundLogo(general_mdi_bg_use_logo.dialog);
+    mdiArea->useBackgroundTexture(general_mdi_bg_use_texture.dialog);
+    mdiArea->useBackgroundColor(general_mdi_bg_use_color.dialog);
+    mdiArea->setBackgroundLogo(general_mdi_bg_logo.dialog);
+    mdiArea->setBackgroundTexture(general_mdi_bg_texture.dialog);
+    mdiArea->setBackgroundColor(general_mdi_bg_color.dialog);
     _main->iconResize(general_icon_size.dialog);
     _main->updateAllViewScrollBars(display_show_scrollbars.dialog);
     _main->updateAllViewCrossHairColors(display_crosshair_color.dialog);
@@ -2697,11 +2697,11 @@ Settings_Dialog::acceptChanges()
         display_selectbox_right_color.dialog,
         display_selectbox_right_fill.dialog,
         display_selectbox_alpha.dialog);
-    _main->prompt->setPromptTextColor(QColor(prompt_text_color.dialog));
-    _main->prompt->setPromptBackgroundColor(QColor(prompt_bg_color.dialog));
-    _main->prompt->setPromptFontFamily(prompt_font_family.dialog);
-    _main->prompt->setPromptFontStyle(prompt_font_style.dialog);
-    _main->prompt->setPromptFontSize(prompt_font_size.dialog);
+    prompt->setPromptTextColor(QColor(prompt_text_color.dialog));
+    prompt->setPromptBackgroundColor(QColor(prompt_bg_color.dialog));
+    prompt->setPromptFontFamily(prompt_font_family.dialog);
+    prompt->setPromptFontStyle(prompt_font_style.dialog);
+    prompt->setPromptFontSize(prompt_font_size.dialog);
     _main->updateAllViewGridColors(grid_color.dialog);
     _main->updateAllViewRulerColors(ruler_color.dialog);
     if (lwt_show_lwt.dialog) {
@@ -2728,12 +2728,12 @@ Settings_Dialog::rejectChanges()
     //TODO: inform the user if they have changed settings
 
     //Update the view since the user must accept the preview
-    _main->mdiArea->useBackgroundLogo(general_mdi_bg_use_logo.dialog);
-    _main->mdiArea->useBackgroundTexture(general_mdi_bg_use_texture.dialog);
-    _main->mdiArea->useBackgroundColor(general_mdi_bg_use_color.dialog);
-    _main->mdiArea->setBackgroundLogo(general_mdi_bg_logo.dialog);
-    _main->mdiArea->setBackgroundTexture(general_mdi_bg_texture.dialog);
-    _main->mdiArea->setBackgroundColor(general_mdi_bg_color.dialog);
+    mdiArea->useBackgroundLogo(general_mdi_bg_use_logo.dialog);
+    mdiArea->useBackgroundTexture(general_mdi_bg_use_texture.dialog);
+    mdiArea->useBackgroundColor(general_mdi_bg_use_color.dialog);
+    mdiArea->setBackgroundLogo(general_mdi_bg_logo.dialog);
+    mdiArea->setBackgroundTexture(general_mdi_bg_texture.dialog);
+    mdiArea->setBackgroundColor(general_mdi_bg_color.dialog);
     _main->updateAllViewScrollBars(display_show_scrollbars.dialog);
     _main->updateAllViewCrossHairColors(display_crosshair_color.dialog);
     _main->updateAllViewBackgroundColors(display_bg_color.dialog);
@@ -2743,11 +2743,11 @@ Settings_Dialog::rejectChanges()
         display_selectbox_right_color.dialog,
         display_selectbox_right_fill.dialog,
         display_selectbox_alpha.dialog);
-    _main->prompt->setPromptTextColor(QColor(prompt_text_color.dialog));
-    _main->prompt->setPromptBackgroundColor(QColor(prompt_bg_color.dialog));
-    _main->prompt->setPromptFontFamily(prompt_font_family.dialog);
-    _main->prompt->setPromptFontStyle(prompt_font_style.dialog);
-    _main->prompt->setPromptFontSize(prompt_font_size.dialog);
+    prompt->setPromptTextColor(QColor(prompt_text_color.dialog));
+    prompt->setPromptBackgroundColor(QColor(prompt_bg_color.dialog));
+    prompt->setPromptFontFamily(prompt_font_family.dialog);
+    prompt->setPromptFontStyle(prompt_font_style.dialog);
+    prompt->setPromptFontSize(prompt_font_size.dialog);
     _main->updateAllViewGridColors(grid_color.dialog);
     _main->updateAllViewRulerColors(ruler_color.dialog);
     if (lwt_show_lwt.dialog) {

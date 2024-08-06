@@ -307,7 +307,7 @@ CmdPromptHandle::~CmdPromptHandle()
 void
 CmdPromptHandle::mousePressEvent(QMouseEvent* e)
 {
-    pressY = e->globalY();
+    pressY = e->globalPosition().y();
     emit handlePressed(pressY);
 }
 
@@ -315,7 +315,7 @@ CmdPromptHandle::mousePressEvent(QMouseEvent* e)
 void
 CmdPromptHandle::mouseReleaseEvent(QMouseEvent* e)
 {
-    releaseY = e->globalY();
+    releaseY = e->globalPosition().y();
     emit handleReleased(releaseY);
 }
 
@@ -323,7 +323,7 @@ CmdPromptHandle::mouseReleaseEvent(QMouseEvent* e)
 void
 CmdPromptHandle::mouseMoveEvent(QMouseEvent* e)
 {
-    moveY = e->globalY();
+    moveY = e->globalPosition().y();
     int dY = moveY - pressY;
     emit handleMoved(dY);
 }

@@ -1764,8 +1764,8 @@ PathObject::init(double x, double y, const QPainterPath& p, QRgb rgb, Qt::PenSty
 void
 PathObject::updatePath(const QPainterPath& p)
 {
-    normalPath = p;
-    QPainterPath reversePath = normalPath.toReversed();
+    data.normalPath = p;
+    QPainterPath reversePath = data.normalPath.toReversed();
     reversePath.connectPath(normalPath);
     setObjectPath(reversePath);
 }
@@ -2178,8 +2178,8 @@ PolygonObject::init(double x, double y, const QPainterPath& p, QRgb rgb, Qt::Pen
 void
 PolygonObject::updatePath(const QPainterPath& p)
 {
-    normalPath = p;
-    QPainterPath closedPath = normalPath;
+    data.normalPath = p;
+    QPainterPath closedPath = data.normalPath;
     closedPath.closeSubpath();
     QPainterPath reversePath = closedPath.toReversed();
     reversePath.connectPath(closedPath);
@@ -2278,7 +2278,7 @@ PolygonObject::updateRubber(QPainter* painter)
     }
     else if (rubberMode == OBJ_RUBBER_GRIP) {
         if (painter) {
-            int elemCount = normalPath.elementCount();
+            int elemCount = data.normalPath.elementCount();
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
             if (gripIndex == -1) {
                 gripIndex = findIndex(gripPoint);
@@ -2302,8 +2302,8 @@ PolygonObject::updateRubber(QPainter* painter)
                 m = gripIndex - 1;
                 n = gripIndex + 1;
             }
-            QPainterPath::Element em = normalPath.elementAt(m);
-            QPainterPath::Element en = normalPath.elementAt(n);
+            QPainterPath::Element em = data.normalPath.elementAt(m);
+            QPainterPath::Element en = data.normalPath.elementAt(n);
             QPointF emPoint = QPointF(em.x, em.y);
             QPointF enPoint = QPointF(en.x, en.y);
             painter->drawLine(emPoint, mapFromScene(objectRubberPoint(QString())));
@@ -2442,9 +2442,9 @@ PolylineObject::init(double x, double y, const QPainterPath& p, QRgb rgb, Qt::Pe
 void
 PolylineObject::updatePath(const QPainterPath& p)
 {
-    normalPath = p;
-    QPainterPath reversePath = normalPath.toReversed();
-    reversePath.connectPath(normalPath);
+    data.normalPath = p;
+    QPainterPath reversePath = data.normalPath.toReversed();
+    reversePath.connectPath(data.normalPath);
     setObjectPath(reversePath);
 }
 
@@ -2478,27 +2478,27 @@ PolylineObject::updateRubber(QPainter* painter)
     }
     else if (rubberMode == OBJ_RUBBER_GRIP) {
         if (painter) {
-            int elemCount = normalPath.elementCount();
+            int elemCount = data.normalPath.elementCount();
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
             if (gripIndex == -1) gripIndex = findIndex(gripPoint);
             if (gripIndex == -1) return;
 
             if (!gripIndex) {
                 //First
-                QPainterPath::Element ef = normalPath.elementAt(1);
+                QPainterPath::Element ef = data.normalPath.elementAt(1);
                 QPointF efPoint = QPointF(ef.x, ef.y);
                 painter->drawLine(efPoint, mapFromScene(objectRubberPoint(QString())));
             }
             else if (gripIndex == elemCount-1) {
                 //Last
-                QPainterPath::Element el = normalPath.elementAt(gripIndex-1);
+                QPainterPath::Element el = data.normalPath.elementAt(gripIndex-1);
                 QPointF elPoint = QPointF(el.x, el.y);
                 painter->drawLine(elPoint, mapFromScene(objectRubberPoint(QString())));
             }
             else {
                 //Middle
-                QPainterPath::Element em = normalPath.elementAt(gripIndex-1);
-                QPainterPath::Element en = normalPath.elementAt(gripIndex+1);
+                QPainterPath::Element em = data.normalPath.elementAt(gripIndex-1);
+                QPainterPath::Element en = data.normalPath.elementAt(gripIndex+1);
                 QPointF emPoint = QPointF(em.x, em.y);
                 QPointF enPoint = QPointF(en.x, en.y);
                 painter->drawLine(emPoint, mapFromScene(objectRubberPoint(QString())));
@@ -3212,8 +3212,8 @@ prompt(str)
 Object::Object(EmbArc arc, QRgb rgb, QGraphicsItem *item)
 {
     qDebug("ArcObject Constructor()");
-    TYPE = OBJ_TYPE_ARC;
-    curved = 0;
+    geometry->type = OBJ_TYPE_ARC;
+    data.curved = 0;
     geometry->object.arc = arc;
     init(arc, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
@@ -3221,14 +3221,14 @@ Object::Object(EmbArc arc, QRgb rgb, QGraphicsItem *item)
 /* . */
 Object::Object(EmbCircle circle, QRgb rgb, QGraphicsItem *item)
 {
-    TYPE = OBJ_TYPE_CIRCLE;
+    geometry->type = OBJ_TYPE_CIRCLE;
     geometry->object.circle = circle;
 }
 
 /* . */
 Object::Object(EmbEllipse ellipse, QRgb rgb, QGraphicsItem *item)
 {
-    TYPE = OBJ_TYPE_ELLIPSE;
+    geometry->type = OBJ_TYPE_ELLIPSE;
     geometry->object.ellipse = ellipse;
 }
 
@@ -3415,72 +3415,76 @@ Object::objectTextJustifyList() const
 void
 Object::setObjectText(const QString& str)
 {
-    objText = str;
+    data.objText = str;
     QPainterPath textPath;
     QFont font;
-    font.setFamily(objTextFont);
-    font.setPointSizeF(objTextSize);
-    font.setBold(objTextBold);
-    font.setItalic(objTextItalic);
-    font.setUnderline(objTextUnderline);
-    font.setStrikeOut(objTextStrikeOut);
-    font.setOverline(objTextOverline);
+    font.setFamily(data.objTextFont);
+    font.setPointSizeF(data.objTextSize);
+    font.setBold(data.objTextBold);
+    font.setItalic(data.objTextItalic);
+    font.setUnderline(data.objTextUnderline);
+    font.setStrikeOut(data.objTextStrikeOut);
+    font.setOverline(data.objTextOverline);
     textPath.addText(0, 0, font, str);
 
     //Translate the path based on the justification
     QRectF jRect = textPath.boundingRect();
-    if     (objTextJustify == "Left") {
+    if (data.objTextJustify == "Left") {
         textPath.translate(-jRect.left(), 0);
     }
-    else if (objTextJustify == "Center") {
+    else if (data.objTextJustify == "Center") {
         textPath.translate(-jRect.center().x(), 0);
     }
-    else if (objTextJustify == "Right") {
+    else if (data.objTextJustify == "Right") {
         textPath.translate(-jRect.right(), 0);
     }
-    else if (objTextJustify == "Aligned") {
+    else if (data.objTextJustify == "Aligned") {
         // TODO: TextSingleObject Aligned Justification
     }
-    else if (objTextJustify == "Middle") {
+    else if (data.objTextJustify == "Middle") {
         textPath.translate(-jRect.center());
     }
-    else if (objTextJustify == "Fit") {
+    else if (data.objTextJustify == "Fit") {
         // TODO: TextSingleObject Fit Justification
     }
-    else if (objTextJustify == "Top Left") {
+    else if (data.objTextJustify == "Top Left") {
         textPath.translate(-jRect.topLeft());
     }
-    else if (objTextJustify == "Top Center") {
+    else if (data.objTextJustify == "Top Center") {
         textPath.translate(-jRect.center().x(), -jRect.top());
     }
-    else if (objTextJustify == "Top Right") {
+    else if (data.objTextJustify == "Top Right") {
         textPath.translate(-jRect.topRight());
     }
-    else if (objTextJustify == "Middle Left") {
+    else if (data.objTextJustify == "Middle Left") {
         textPath.translate(-jRect.left(), -jRect.top()/2.0);
     }
-    else if (objTextJustify == "Middle Center") {
+    else if (data.objTextJustify == "Middle Center") {
         textPath.translate(-jRect.center().x(), -jRect.top()/2.0);
     }
-    else if (objTextJustify == "Middle Right") {
+    else if (data.objTextJustify == "Middle Right") {
         textPath.translate(-jRect.right(), -jRect.top()/2.0);
     }
-    else if (objTextJustify == "Bottom Left") {
+    else if (data.objTextJustify == "Bottom Left") {
         textPath.translate(-jRect.bottomLeft());
     }
-    else if (objTextJustify == "Bottom Center") {
+    else if (data.objTextJustify == "Bottom Center") {
         textPath.translate(-jRect.center().x(), -jRect.bottom());
     }
-    else if (objTextJustify == "Bottom Right") {
+    else if (data.objTextJustify == "Bottom Right") {
         textPath.translate(-jRect.bottomRight());
     }
 
     //Backward or Upside Down
-    if (objTextBackward || objTextUpsideDown) {
+    if (data.objTextBackward || data.objTextUpsideDown) {
         double horiz = 1.0;
         double vert = 1.0;
-        if (objTextBackward) horiz = -1.0;
-        if (objTextUpsideDown) vert = -1.0;
+        if (data.objTextBackward) {
+            horiz = -1.0;
+        }
+        if (data.objTextUpsideDown) {
+            vert = -1.0;
+        }
 
         QPainterPath flippedPath;
 
@@ -3507,14 +3511,15 @@ Object::setObjectText(const QString& str)
                                     horiz * P4.x, vert * P4.y);
             }
         }
-        objTextPath = flippedPath;
+        data.objTextPath = flippedPath;
     }
-    else
-        objTextPath = textPath;
+    else {
+        data.objTextPath = textPath;
+    }
 
     //Add the grip point to the shape path
-    QPainterPath gripPath = objTextPath;
-    gripPath.connectPath(objTextPath);
+    QPainterPath gripPath = data.objTextPath;
+    gripPath.connectPath(data.objTextPath);
     gripPath.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
     setObjectPath(gripPath);
 }
@@ -3523,8 +3528,8 @@ Object::setObjectText(const QString& str)
 void
 Object::setObjectTextFont(const QString& font)
 {
-    objTextFont = font;
-    setObjectText(objText);
+    data.objTextFont = font;
+    setObjectText(data.objText);
 }
 
 /* . */
@@ -3533,130 +3538,130 @@ Object::setObjectTextJustify(const QString& justify)
 {
     //Verify the string is a valid option
     if (justify == "Left") {
-        objTextJustify = justify;
+        data.objTextJustify = justify;
     }
     else if (justify == "Center") {
-        objTextJustify = justify;
+        data.objTextJustify = justify;
     }
     else if (justify == "Right") {
-        objTextJustify = justify;
+        data.objTextJustify = justify;
     }
     else if (justify == "Aligned") {
-        objTextJustify = justify;
+        data.objTextJustify = justify;
     }
     else if (justify == "Middle") {
-        objTextJustify = justify;
+        data.objTextJustify = justify;
     }
     else if (justify == "Fit") {
-        objTextJustify = justify;
+        data.objTextJustify = justify;
     }
     else if (justify == "Top Left") {
-        objTextJustify = justify;
+        data.objTextJustify = justify;
     }
     else if (justify == "Top Center") {
-        objTextJustify = justify;
+        data.objTextJustify = justify;
     }
     else if (justify == "Top Right") {
-        objTextJustify = justify;
+        data.objTextJustify = justify;
     }
     else if (justify == "Middle Left") {
-        objTextJustify = justify;
+        data.objTextJustify = justify;
     }
     else if (justify == "Middle Center") {
-        objTextJustify = justify;
+        data.objTextJustify = justify;
     }
     else if (justify == "Middle Right") {
-        objTextJustify = justify;
+        data.objTextJustify = justify;
     }
     else if (justify == "Bottom Left") {
-        objTextJustify = justify;
+        data.objTextJustify = justify;
     }
     else if (justify == "Bottom Center") {
-        objTextJustify = justify;
+        data.objTextJustify = justify;
     }
     else if (justify == "Bottom Right") {
-        objTextJustify = justify;
+        data.objTextJustify = justify;
     }
     else {
         // Default
-        objTextJustify = "Left";
+        data.objTextJustify = "Left";
     }
-    setObjectText(objText);
+    setObjectText(data.objText);
 }
 
 /* . */
 void
 Object::setObjectTextSize(double size)
 {
-    objTextSize = size;
-    setObjectText(objText);
+    data.objTextSize = size;
+    setObjectText(data.objText);
 }
 
 /* . */
 void
 Object::setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bool over)
 {
-    objTextBold = bold;
-    objTextItalic = italic;
-    objTextUnderline = under;
-    objTextStrikeOut = strike;
-    objTextOverline = over;
-    setObjectText(objText);
+    data.objTextBold = bold;
+    data.objTextItalic = italic;
+    data.objTextUnderline = under;
+    data.objTextStrikeOut = strike;
+    data.objTextOverline = over;
+    setObjectText(data.objText);
 }
 
 void
 Object::setObjectTextBold(bool val)
 {
-    objTextBold = val;
-    setObjectText(objText);
+    data.objTextBold = val;
+    setObjectText(data.objText);
 }
 
 /* . */
 void
 Object::setObjectTextItalic(bool val)
 {
-    objTextItalic = val;
-    setObjectText(objText);
+    data.objTextItalic = val;
+    setObjectText(data.objText);
 }
 
 /* . */
 void
 Object::setObjectTextUnderline(bool val)
 {
-    objTextUnderline = val;
-    setObjectText(objText);
+    data.objTextUnderline = val;
+    setObjectText(data.objText);
 }
 
 /* . */
 void
 Object::setObjectTextStrikeOut(bool val)
 {
-    objTextStrikeOut = val;
-    setObjectText(objText);
+    data.objTextStrikeOut = val;
+    setObjectText(data.objText);
 }
 
 /* . */
 void
 Object::setObjectTextOverline(bool val)
 {
-    objTextOverline = val;
-    setObjectText(objText);
+    data.objTextOverline = val;
+    setObjectText(data.objText);
 }
 
 /* . */
 void
 Object::setObjectTextBackward(bool val)
 {
-    objTextBackward = val;
-    setObjectText(objText);
+    data.objTextBackward = val;
+    setObjectText(data.objText);
 }
 
 /* . */
 void
 Object::setObjectTextUpsideDown(bool val)
 {
-    objTextUpsideDown = val;
-    setObjectText(objText);
+    data.objTextUpsideDown = val;
+    setObjectText(data.objText);
 }
 
 /*
@@ -4016,7 +4021,7 @@ Object::init(EmbArc arc, QRgb rgb, Qt::PenStyle lineType)
 
     setPos(arc.start.x, arc.start.y);
     setObjectLineWeight(0.35); /* TODO: pass in proper lineweight */
-    setPen(objPen);
+    setPen(data.objPen);
 }
 
 /* . */
@@ -4047,25 +4052,25 @@ Object::updateArcRect(double radius)
 void
 Object::setObjectLineWeight(double lineWeight)
 {
-    objPen.setWidthF(0); //NOTE: The objPen will always be cosmetic
+    data.objPen.setWidthF(0); //NOTE: The objPen will always be cosmetic
 
     if (lineWeight < 0) {
         if (lineWeight == OBJ_LWT_BYLAYER) {
-            lwtPen.setWidthF(0.35); //TODO: getLayerLineWeight
+            data.lwtPen.setWidthF(0.35); //TODO: getLayerLineWeight
         }
         else if (lineWeight == OBJ_LWT_BYBLOCK) {
-            lwtPen.setWidthF(0.35); //TODO: getBlockLineWeight
+            data.lwtPen.setWidthF(0.35); //TODO: getBlockLineWeight
         }
         else {
             QMessageBox::warning(0, QObject::tr("Error - Negative Lineweight"),
                                     QObject::tr("Lineweight: %1")
                                     .arg(QString().setNum(lineWeight)));
             qDebug("Lineweight cannot be negative! Inverting sign.");
-            lwtPen.setWidthF(-lineWeight);
+            data.lwtPen.setWidthF(-lineWeight);
         }
     }
     else {
-        lwtPen.setWidthF(lineWeight);
+        data.lwtPen.setWidthF(lineWeight);
     }
 }
 
@@ -4086,32 +4091,32 @@ Object::updatePath(QPainterPath const& p)
 void
 Object::setObjectColor(const QColor& color)
 {
-    objPen.setColor(color);
-    lwtPen.setColor(color);
+    data.objPen.setColor(color);
+    data.lwtPen.setColor(color);
 }
 
 /* . */
 void
 Object::setObjectColorRGB(QRgb rgb)
 {
-    objPen.setColor(QColor(rgb));
-    lwtPen.setColor(QColor(rgb));
+    data.objPen.setColor(QColor(rgb));
+    data.lwtPen.setColor(QColor(rgb));
 }
 
 /* . */
 void
 Object::setObjectLineType(Qt::PenStyle lineType)
 {
-    objPen.setStyle(lineType);
-    lwtPen.setStyle(lineType);
+    data.objPen.setStyle(lineType);
+    data.lwtPen.setStyle(lineType);
 }
 
 /* . */
 QPointF
 Object::objectRubberPoint(const QString& key) const
 {
-    if (objRubberPoints.contains(key)) {
-        return objRubberPoints.value(key);
+    if (data.objRubberPoints.contains(key)) {
+        return data.objRubberPoints.value(key);
     }
 
     QGraphicsScene* gscene = scene();
@@ -4125,10 +4130,10 @@ Object::objectRubberPoint(const QString& key) const
 QString
 Object::objectRubberText(const QString& key) const
 {
-    if (objRubberTexts.contains(key)) {
-        return objRubberTexts.value(key);
+    if (data.objRubberTexts.contains(key)) {
+        return data.objRubberTexts.value(key);
     }
-    return QString();
+    return "";
 }
 
 /* . */
@@ -4234,11 +4239,11 @@ Object::setObjectCircumference(double circumference)
 int
 Object::findIndex(const QPointF& point)
 {
-    int elemCount = normalPath.elementCount();
+    int elemCount = data.normalPath.elementCount();
     //NOTE: Points here are in item coordinates
     QPointF itemPoint = mapFromScene(point);
     for (int i = 0; i < elemCount; i++) {
-        QPainterPath::Element e = normalPath.elementAt(i);
+        QPainterPath::Element e = data.normalPath.elementAt(i);
         QPointF elemPoint = QPointF(e.x, e.y);
         if (itemPoint == elemPoint) return i;
     }
@@ -4310,21 +4315,21 @@ Object::vulcanize()
 
     switch (geometry->type) {
     case EMB_POLYLINE:
-        if (!normalPath.elementCount()) {
+        if (!data.normalPath.elementCount()) {
             QMessageBox::critical(0,
                 QObject::tr("Empty Polyline Error"),
                 QObject::tr("The polyline added contains no points. The command that created this object has flawed logic."));
         }
         break;
     case EMB_POLYGON:
-        if (!normalPath.elementCount()) {
+        if (!data.normalPath.elementCount()) {
             QMessageBox::critical(0,
                 QObject::tr("Empty Polygon Error"),
                 QObject::tr("The polygon added contains no points. The command that created this object has flawed logic."));
         }
         break;
     case EMB_PATH:
-        if (!normalPath.elementCount()) {
+        if (!data.normalPath.elementCount()) {
             QMessageBox::critical(0,
                 QObject::tr("Empty Path Error"),
                 QObject::tr("The path added contains no points. The command that created this object has flawed logic."));
@@ -4358,7 +4363,7 @@ Object::allGripPoints()
     }
     case EMB_DIM_LEADER: {
         gripPoints << objectEndPoint1() << objectEndPoint2();
-        if (curved) {
+        if (data.curved) {
             gripPoints << objectMidPoint();
         }
         break;
@@ -4381,8 +4386,8 @@ Object::allGripPoints()
     case EMB_POLYGON:
     case EMB_POLYLINE: {
         QPainterPath::Element element;
-        for (int i = 0; i < normalPath.elementCount(); ++i) {
-            element = normalPath.elementAt(i);
+        for (int i = 0; i < data.normalPath.elementCount(); ++i) {
+            element = data.normalPath.elementAt(i);
             gripPoints << mapToScene(element.x, element.y);
         }
         break;
@@ -4466,14 +4471,14 @@ Object::gripEdit(const QPointF& before, const QPointF& after)
     }
     case EMB_POLYGON:
     case EMB_POLYLINE: {
-        gripIndex = findIndex(before);
-        if (gripIndex == -1) {
+        data.gripIndex = findIndex(before);
+        if (data.gripIndex == -1) {
             return;
         }
         QPointF a = mapFromScene(after);
-        normalPath.setElementPositionAt(gripIndex, a.x(), a.y());
-        updatePath(normalPath);
-        gripIndex = -1;
+        data.normalPath.setElementPositionAt(data.gripIndex, a.x(), a.y());
+        updatePath(data.normalPath);
+        data.gripIndex = -1;
         break;
     }
     case EMB_TEXT_SINGLE:
@@ -4527,11 +4532,11 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
         break;
     }
     case EMB_DIM_LEADER: {
-        painter->drawPath(lineStylePath);
-        painter->drawPath(arrowStylePath);
+        painter->drawPath(data.lineStylePath);
+        painter->drawPath(data.arrowStylePath);
 
-        if (filled) {
-            painter->fillPath(arrowStylePath, objPen.color());
+        if (data.filled) {
+            painter->fillPath(data.arrowStylePath, data.objPen.color());
         }
         break;
     }
@@ -4542,7 +4547,7 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
 
         if (objScene->property("ENABLE_LWT").toBool()
             && objScene->property("ENABLE_REAL").toBool()) {
-                realRender(painter, path());
+            realRender(painter, path());
         }
         break;
     }
@@ -4559,25 +4564,25 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
         break;
     }
     case EMB_POLYGON: {
-        if (normalPath.elementCount()) {
-            painter->drawPath(normalPath);
-            QPainterPath::Element zero = normalPath.elementAt(0);
-            QPainterPath::Element last = normalPath.elementAt(normalPath.elementCount()-1);
+        if (data.normalPath.elementCount()) {
+            painter->drawPath(data.normalPath);
+            QPainterPath::Element zero = data.normalPath.elementAt(0);
+            QPainterPath::Element last = data.normalPath.elementAt(data.normalPath.elementCount()-1);
             painter->drawLine(QPointF(zero.x, zero.y), QPointF(last.x, last.y));
         }
         break;
     }
     case EMB_POLYLINE: {
-        painter->drawPath(normalPath);
+        painter->drawPath(data.normalPath);
 
         if (objScene->property("ENABLE_LWT").toBool()
             && objScene->property("ENABLE_REAL").toBool()) {
-            realRender(painter, normalPath);
+            realRender(painter, data.normalPath);
         }
         break;
     }
     case EMB_TEXT_SINGLE: {
-        painter->drawPath(objTextPath);
+        painter->drawPath(data.objTextPath);
         break;
     }
     default:
@@ -4591,7 +4596,7 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
 QPainterPath
 Object::objectCopyPath() const
 {
-    return normalPath;
+    return data.normalPath;
 }
 
 QPainterPath
@@ -4604,10 +4609,10 @@ Object::objectSavePath() const
         QTransform trans;
         trans.rotate(rotation());
         trans.scale(s,s);
-        return trans.map(normalPath);
+        return trans.map(data.normalPath);
     }
     case EMB_POLYGON: {
-        QPainterPath closedPath = normalPath;
+        QPainterPath closedPath = data.normalPath;
         closedPath.closeSubpath();
         double s = scale();
         QTransform trans;
@@ -4618,5 +4623,5 @@ Object::objectSavePath() const
     default:
         break;
     }
-    return normalPath;
+    return data.normalPath;
 }

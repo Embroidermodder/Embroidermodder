@@ -130,8 +130,7 @@ MainWindow::designDetails()
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {
-        EmbDetailsDialog dialog(scene, this);
-        dialog.exec();
+        create_details_dialog();
     }
 }
 
@@ -336,7 +335,7 @@ MdiWindow*
 activeMdiWindow()
 {
     qDebug("activeMdiWindow()");
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(_main->mdiArea->activeSubWindow());
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     return mdiWin;
 }
 
@@ -344,7 +343,7 @@ View*
 activeView()
 {
     _main->debug_message("activeView()");
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(_main->mdiArea->activeSubWindow());
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
         View* v = mdiWin->gview;
         return v;
@@ -356,7 +355,7 @@ QGraphicsScene*
 activeScene()
 {
     _main->debug_message("activeScene()");
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(_main->mdiArea->activeSubWindow());
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
         QGraphicsScene* s = mdiWin->gscene;
         return s;
@@ -865,7 +864,7 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         break;
     case ACTION_TODO: {
         QString s = "TODO: (" + QString(STR(0)) + ") " + QString(STR(1));
-        _main->prompt->alert(s);
+        prompt->alert(s);
         break;
     }
     case ACTION_UNDO:
@@ -1328,7 +1327,7 @@ nativeAddTextSingle(std::string str, double x, double y, double rot, bool fill, 
             gscene->update();
         }
         else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data.OBJ_NAME, obj, gview, 0);
             stack->push(cmd);
         }
     }
@@ -1363,7 +1362,7 @@ nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubber
             gscene->update();
         }
         else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data.OBJ_NAME, obj, gview, 0);
             stack->push(cmd);
         }
     }
@@ -1395,7 +1394,7 @@ nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill
         gscene->update();
     }
     else {
-        UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, gview, 0);
+        UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data.OBJ_NAME, obj, gview, 0);
         stack->push(cmd);
     }
 }
@@ -1445,7 +1444,7 @@ nativeAddCircle(double centerX, double centerY, double radius, bool fill, int ru
             gscene->update();
         }
         else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data.OBJ_NAME, obj, gview, 0);
             stack->push(cmd);
         }
     }
@@ -1488,7 +1487,7 @@ nativeAddEllipse(double centerX, double centerY, double width, double height, do
             gscene->update();
         }
         else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data.OBJ_NAME, obj, gview, 0);
             stack->push(cmd);
         }
     }
@@ -1504,7 +1503,7 @@ nativeAddPoint(double x, double y)
         point.position.x = x;
         point.position.y = -y;
         Object* obj = new Object(point, _main->getCurrentColor());
-        UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, gview, 0);
+        UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data.OBJ_NAME, obj, gview, 0);
         stack->push(cmd);
     }
 }
@@ -1531,7 +1530,7 @@ nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubber
             gscene->update();
         }
         else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data.OBJ_NAME, obj, gview, 0);
             stack->push(cmd);
         }
     }
@@ -1554,7 +1553,7 @@ nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubbe
             gscene->update();
         }
         else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data.OBJ_NAME, obj, gview, 0);
             stack->push(cmd);
         }
     }
@@ -1597,7 +1596,7 @@ nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int r
             gscene->update();
         }
         else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data.OBJ_NAME, obj, gview, 0);
             stack->push(cmd);
         }
     }
@@ -1678,7 +1677,9 @@ void
 nativeMoveSelected(double dx, double dy)
 {
     View* gview = activeView();
-    if (gview) { gview->moveSelected(dx, -dy); }
+    if (gview) {
+        gview->moveSelected(dx, -dy);
+    }
 }
 
 void
@@ -1767,7 +1768,7 @@ num_selected(void)
 void
 prompt_output(const char *txt)
 {
-    _main->prompt->appendHistory(QString(txt));
+    prompt->appendHistory(QString(txt));
 }
 
 void
@@ -1788,7 +1789,7 @@ end_command(void)
         gview->previewOff();
         gview->disableMoveRapidFire();
     }
-    _main->prompt->endCommand();
+    prompt->endCommand();
 }
 
 void
@@ -1864,7 +1865,7 @@ erase_command(ScriptEnv * /* context */)
     init_command();
     if (num_selected() <= 0) {
         /* TODO: Prompt to select objects if nothing is preselected. */
-        _main->prompt->alert(
+        prompt->alert(
             translate("Preselect objects before invoking the delete command."));
         end_command();
         messageBox("information", translate("Delete Preselect"),
@@ -1891,8 +1892,8 @@ error_command(ScriptEnv *context)
     s += STR(0);
     s += ") ";
     s += STR(1);
-    _main->prompt->setPrefix(QString(s.c_str()));
-    _main->prompt->appendHistory("");
+    prompt->setPrefix(QString(s.c_str()));
+    prompt->appendHistory("");
     end_command();
     return script_null;
 }
@@ -2170,7 +2171,7 @@ blink_prompt_command(ScriptEnv* context)
         return script_false;
     }
 
-    _main->prompt->startBlinking();
+    prompt->startBlinking();
     return script_null;
 }
 
@@ -2180,7 +2181,7 @@ set_prompt_prefix_command(ScriptEnv* context)
     if (!argument_checks(context, "debug", "s")) {
         return script_false;
     }
-    _main->prompt->setPrefix(QString(STR(0)));
+    prompt->setPrefix(QString(STR(0)));
     return script_null;
 }
 
@@ -2863,36 +2864,36 @@ unlockalllayers_command(ScriptEnv*)
  */
 UndoableCommand::UndoableCommand(int type_, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
-    type = type_;
-    gview = v;
-    object = obj;
+    data.type = type_;
+    data.gview = v;
+    data.object = obj;
     setText(text);
 }
 
 /* Move */
 UndoableCommand::UndoableCommand(int type_, double deltaX, double deltaY, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
-    type = type_;
-    gview = v;
-    object = obj;
+    data.type = type_;
+    data.gview = v;
+    data.object = obj;
     setText(text);
-    dx = deltaX;
-    dy = deltaY;
+    data.dx = deltaX;
+    data.dy = deltaY;
 }
 
 /* Rotate or scale */
 UndoableCommand::UndoableCommand(int type_, double x, double y, double scaleFactor, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
-    type = type_;
-    gview = v;
-    object = obj;
+    data.type = type_;
+    data.gview = v;
+    data.object = obj;
     setText(text);
-    if (type == ACTION_SCALE) {
+    if (data.type == ACTION_SCALE) {
         //Prevent division by zero and other wacky behavior
         if (scaleFactor <= 0.0) {
-            dx = 0.0;
-            dy = 0.0;
-            factor = 1.0;
+            data.dx = 0.0;
+            data.dy = 0.0;
+            data.factor = 1.0;
             QMessageBox::critical(0,
                 QObject::tr("ScaleFactor Error"),
                 QObject::tr("Hi there. If you are not a developer, report this as a bug. "
@@ -2900,90 +2901,90 @@ UndoableCommand::UndoableCommand(int type_, double x, double y, double scaleFact
         }
         else {
             //Calculate the offset
-            double oldX = object->x();
-            double oldY = object->y();
+            double oldX = data.object->x();
+            double oldY = data.object->y();
             QLineF scaleLine(x, y, oldX, oldY);
             scaleLine.setLength(scaleLine.length()*scaleFactor);
             double newX = scaleLine.x2();
             double newY = scaleLine.y2();
 
-            dx = newX - oldX;
-            dy = newY - oldY;
-            factor = scaleFactor;
+            data.dx = newX - oldX;
+            data.dy = newY - oldY;
+            data.factor = scaleFactor;
         }
     }
     else {
-        pivotX = x;
-        pivotY = y;
-        angle = scaleFactor;
+        data.pivotX = x;
+        data.pivotY = y;
+        data.angle = scaleFactor;
     }
 }
 
 /* Navigation */
 UndoableCommand::UndoableCommand(int type_, const QString& type_name, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
-    type = type_;
-    gview = v;
-    navType = type_name;
+    data.type = type_;
+    data.gview = v;
+    data.navType = type_name;
     setText(QObject::tr("Navigation"));
-    done = false;
-    fromTransform = gview->transform();
-    fromCenter = gview->center();
+    data.done = false;
+    data.fromTransform = data.gview->transform();
+    data.fromCenter = data.gview->center();
 }
 
 /* Grip Edit */
 UndoableCommand::UndoableCommand(int type_, const QPointF beforePoint, const QPointF afterPoint, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
-    type = type_;
-    gview = v;
-    object = obj;
+    data.type = type_;
+    data.gview = v;
+    data.object = obj;
     setText(text);
-    before = beforePoint;
-    after = afterPoint;
+    data.before = beforePoint;
+    data.after = afterPoint;
 }
 
 /* Mirror */
 UndoableCommand::UndoableCommand(int type_, double x1, double y1, double x2, double y2, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
-    gview = v;
-    object = obj;
+    data.gview = v;
+    data.object = obj;
     setText(text);
-    mirrorLine = QLineF(x1, y1, x2, y2);
+    data.mirrorLine = QLineF(x1, y1, x2, y2);
 }
 
 /* . */
 void
 UndoableCommand::undo()
 {
-    switch (type) {
+    switch (data.type) {
     case ACTION_ADD:
-        gview->deleteObject(object);
+        data.gview->deleteObject(data.object);
         break;
     case ACTION_DELETE:
-        gview->addObject(object);
+        data.gview->addObject(data.object);
         break;
     case ACTION_MOVE:
-        object->moveBy(-dx, -dy);
+        data.object->moveBy(-data.dx, -data.dy);
         break;
     case ACTION_ROTATE:
-        rotate(pivotX, pivotY, -angle);
+        rotate(data.pivotX, data.pivotY, -data.angle);
         break;
     case ACTION_GRIP_EDIT:
-        object->gripEdit(after, before);
+        data.object->gripEdit(data.after, data.before);
         break;
     case ACTION_SCALE:
-        object->setScale(object->scale()*(1/factor));
-        object->moveBy(-dx, -dy);
+        data.object->setScale(data.object->scale()*(1/data.factor));
+        data.object->moveBy(-data.dx, -data.dy);
         break;
     case ACTION_NAV: {
-        if (!done) {
-            toTransform = gview->transform();
-            toCenter = gview->center();
+        if (!data.done) {
+            data.toTransform = data.gview->transform();
+            data.toCenter = data.gview->center();
+            data.done = true;
         }
-        done = true;
 
-        gview->setTransform(fromTransform);
-        gview->centerAt(fromCenter);
+        data.gview->setTransform(data.fromTransform);
+        data.gview->centerAt(data.fromCenter);
         break;
     }
     case ACTION_MIRROR:
@@ -2998,65 +2999,64 @@ UndoableCommand::undo()
 void
 UndoableCommand::redo()
 {
-    switch (type) {
+    switch (data.type) {
     case ACTION_ADD:
-        gview->addObject(object);
+        data.gview->addObject(data.object);
         break;
     case ACTION_DELETE:
-        gview->deleteObject(object);
+        data.gview->deleteObject(data.object);
         break;
     case ACTION_MOVE:
-        object->moveBy(dx, dy);
+        data.object->moveBy(data.dx, data.dy);
         break;
     case ACTION_ROTATE:
-        rotate(pivotX, pivotY, angle);
+        rotate(data.pivotX, data.pivotY, data.angle);
         break;
     case ACTION_GRIP_EDIT:
-        object->gripEdit(before, after);
+        data.object->gripEdit(data.before, data.after);
         break;
     case ACTION_SCALE:
-        object->setScale(object->scale()*factor);
-        object->moveBy(dx, dy);
+        data.object->setScale(data.object->scale()*data.factor);
+        data.object->moveBy(data.dx, data.dy);
         break;
     case ACTION_NAV: {
-    if (!done) {
-        if (navType == "ZoomInToPoint") {
-            gview->zoomToPoint(gview->scene()->property("VIEW_MOUSE_POINT").toPoint(), +1);
+        if (data.done) {
+            data.gview->setTransform(data.toTransform);
+            data.gview->centerAt(data.toCenter);
+            break;
         }
-        else if (navType == "ZoomOutToPoint") {
-            gview->zoomToPoint(gview->scene()->property("VIEW_MOUSE_POINT").toPoint(), -1);
+        if (data.navType == "ZoomInToPoint") {
+            data.gview->zoomToPoint(data.gview->scene()->property("VIEW_MOUSE_POINT").toPoint(), +1);
         }
-        else if (navType == "ZoomExtents") {
-            gview->zoomExtents();
+        else if (data.navType == "ZoomOutToPoint") {
+            data.gview->zoomToPoint(data.gview->scene()->property("VIEW_MOUSE_POINT").toPoint(), -1);
         }
-        else if (navType == "ZoomSelected") {
-            gview->zoomSelected();
+        else if (data.navType == "ZoomExtents") {
+            data.gview->zoomExtents();
         }
-        else if (navType == "PanStart") {
+        else if (data.navType == "ZoomSelected") {
+            data.gview->zoomSelected();
+        }
+        else if (data.navType == "PanStart") {
             /* Do Nothing. We are just recording the spot where the pan started. */
         }
-        else if (navType == "PanStop") {
+        else if (data.navType == "PanStop") {
             /* Do Nothing. We are just recording the spot where the pan stopped. */
         }
-        else if (navType == "PanLeft") {
-            gview->panLeft();
+        else if (data.navType == "PanLeft") {
+            data.gview->panLeft();
         }
-        else if (navType == "PanRight") {
-            gview->panRight();
+        else if (data.navType == "PanRight") {
+            data.gview->panRight();
         }
-        else if (navType == "PanUp") {
-            gview->panUp();
+        else if (data.navType == "PanUp") {
+            data.gview->panUp();
         }
-        else if (navType == "PanDown") {
-            gview->panDown();
+        else if (data.navType == "PanDown") {
+            data.gview->panDown();
         }
-        toTransform = gview->transform();
-        toCenter = gview->center();
-    }
-    else {
-        gview->setTransform(toTransform);
-        gview->centerAt(toCenter);
-    }
+        data.toTransform = data.gview->transform();
+        data.toCenter = data.gview->center();
         break;
     }
     case ACTION_MIRROR:
@@ -3074,8 +3074,8 @@ UndoableCommand::rotate(double x, double y, double rot)
     double rad = radians(rot);
     double cosRot = cos(rad);
     double sinRot = sin(rad);
-    double px = object->scenePos().x();
-    double py = object->scenePos().y();
+    double px = data.object->scenePos().x();
+    double py = data.object->scenePos().y();
     px -= x;
     py -= y;
     double rotX = px*cosRot - py*sinRot;
@@ -3083,8 +3083,8 @@ UndoableCommand::rotate(double x, double y, double rot)
     rotX += x;
     rotY += y;
 
-    object->setPos(rotX, rotY);
-    object->setRotation(object->rotation()+rot);
+    data.object->setPos(rotX, rotY);
+    data.object->setRotation(data.object->rotation() + rot);
 }
 
 /* . */
@@ -3097,8 +3097,8 @@ UndoableCommand::mergeWith(const QUndoCommand* newest)
     }
 
     const UndoableCommand* cmd = static_cast<const UndoableCommand*>(newest);
-    toTransform = cmd->toTransform;
-    toCenter = cmd->toCenter;
+    data.toTransform = cmd->data.toTransform;
+    data.toCenter = cmd->data.toCenter;
 
     return true;
 }

@@ -13,9 +13,7 @@
 
 MdiArea::MdiArea(MainWindow* mw, QWidget *parent) : QMdiArea(parent)
 {
-    #if QT_VERSION >= 0x040800
-        setTabsClosable(true);
-    #endif
+    setTabsClosable(true);
 
     useLogo = false;
     useTexture = false;
@@ -26,13 +24,15 @@ MdiArea::~MdiArea()
 {
 }
 
-void MdiArea::useBackgroundLogo(bool use)
+void
+MdiArea::useBackgroundLogo(bool use)
 {
     useLogo = use;
     forceRepaint();
 }
 
-void MdiArea::useBackgroundTexture(bool use)
+void
+MdiArea::useBackgroundTexture(bool use)
 {
     useTexture = use;
     forceRepaint();

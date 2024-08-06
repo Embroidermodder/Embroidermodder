@@ -845,6 +845,8 @@ void disableLwt();
 void enableReal();
 void disableReal();
 
+void create_details_dialog(void);
+
 #ifdef __cplusplus
 }
 #endif

@@ -15,11 +15,13 @@
 #define NUMBINS 10
 
 /* TODO: Move majority of this code into libembroidery. */
-EmbDetailsDialog::EmbDetailsDialog(QGraphicsScene* theScene, QWidget* parent) : QDialog(parent)
+void
+create_details_dialog(void)
 {
+    QDialog *dialog = new QDialog();
     QRectF boundingRect;
 
-    setMinimumSize(750, 550);
+    dialog->setMinimumSize(750, 550);
 
     qDebug("EmbDetailsDialog()");
     QApplication::setOverrideCursor(Qt::ArrowCursor);
@@ -46,7 +48,9 @@ EmbDetailsDialog::EmbDetailsDialog(QGraphicsScene* theScene, QWidget* parent) : 
     EmbRect bounds = emb_pattern_calcBoundingBox(pattern);
 
     if (pattern->stitch_list->count == 0) {
-        QMessageBox::warning(this, tr("No Design Loaded"), tr("<b>A design needs to be loaded or created before details can be determined.</b>"));
+        QMessageBox::warning(dialog,
+            translate("No Design Loaded"),
+            translate("<b>A design needs to be loaded or created before details can be determined.</b>"));
         return;
     }
     QVector<double> stitchLengths;
@@ -150,9 +154,9 @@ EmbDetailsDialog::EmbDetailsDialog(QGraphicsScene* theScene, QWidget* parent) : 
     }
 
     /*
-    grid->addWidget(new QLabel(tr("\nStitch Distribution: \n")), 9, 0, 1, 2);
+    grid->addWidget(new QLabel(translate("\nStitch Distribution: \n")), 9, 0, 1, 2);
     grid->addWidget(new QLabel(str), 10, 0, 1, 1);
-    grid->addWidget(new QLabel(tr("\nThread Length By Color: \n")), 11, 0, 1, 2);
+    grid->addWidget(new QLabel(translate("\nThread Length By Color: \n")), 11, 0, 1, 2);
     */
     int currentRow = 12;
 
@@ -174,36 +178,36 @@ EmbDetailsDialog::EmbDetailsDialog(QGraphicsScene* theScene, QWidget* parent) : 
 
     boundingRect.setRect(bounds.left, bounds.top, bounds.right, bounds.bottom);
 
-    QWidget* widget = new QWidget(this);
+    QWidget* widget = new QWidget(dialog);
 
     //Misc
-    QGroupBox* groupBoxMisc = new QGroupBox(tr("General Information"), widget);
+    QGroupBox* groupBoxMisc = new QGroupBox(translate("General Information"), widget);
 
-    QLabel* labelStitchesTotal = new QLabel(tr("Total Stitches:"), this);
-    QLabel* labelStitchesReal  = new QLabel(tr("Real Stitches:"),  this);
-    QLabel* labelStitchesJump  = new QLabel(tr("Jump Stitches:"),  this);
-    QLabel* labelStitchesTrim  = new QLabel(tr("Trim Stitches:"),  this);
-    QLabel* labelColorTotal    = new QLabel(tr("Total Colors:"),   this);
-    QLabel* labelColorChanges  = new QLabel(tr("Color Changes:"),  this);
-    QLabel* labelRectLeft      = new QLabel(tr("Left:"),           this);
-    QLabel* labelRectTop       = new QLabel(tr("Top:"),            this);
-    QLabel* labelRectRight     = new QLabel(tr("Right:"),          this);
-    QLabel* labelRectBottom    = new QLabel(tr("Bottom:"),         this);
-    QLabel* labelRectWidth     = new QLabel(tr("Width:"),          this);
-    QLabel* labelRectHeight    = new QLabel(tr("Height:"),         this);
+    QLabel* labelStitchesTotal = new QLabel(translate("Total Stitches:"), dialog);
+    QLabel* labelStitchesReal  = new QLabel(translate("Real Stitches:"),  dialog);
+    QLabel* labelStitchesJump  = new QLabel(translate("Jump Stitches:"),  dialog);
+    QLabel* labelStitchesTrim  = new QLabel(translate("Trim Stitches:"),  dialog);
+    QLabel* labelColorTotal    = new QLabel(translate("Total Colors:"),   dialog);
+    QLabel* labelColorChanges  = new QLabel(translate("Color Changes:"),  dialog);
+    QLabel* labelRectLeft      = new QLabel(translate("Left:"),           dialog);
+    QLabel* labelRectTop       = new QLabel(translate("Top:"),            dialog);
+    QLabel* labelRectRight     = new QLabel(translate("Right:"),          dialog);
+    QLabel* labelRectBottom    = new QLabel(translate("Bottom:"),         dialog);
+    QLabel* labelRectWidth     = new QLabel(translate("Width:"),          dialog);
+    QLabel* labelRectHeight    = new QLabel(translate("Height:"),         dialog);
 
-    QLabel* fieldStitchesTotal = new QLabel(QString::number(stitchesTotal), this);
-    QLabel* fieldStitchesReal  = new QLabel(QString::number(stitchesReal),  this);
-    QLabel* fieldStitchesJump  = new QLabel(QString::number(stitchesJump),  this);
-    QLabel* fieldStitchesTrim  = new QLabel(QString::number(stitchesTrim),  this);
-    QLabel* fieldColorTotal    = new QLabel(QString::number(colorTotal),    this);
-    QLabel* fieldColorChanges  = new QLabel(QString::number(colorChanges),  this);
-    QLabel* fieldRectLeft      = new QLabel(QString::number(boundingRect.left())   + " mm", this);
-    QLabel* fieldRectTop       = new QLabel(QString::number(boundingRect.top())    + " mm", this);
-    QLabel* fieldRectRight     = new QLabel(QString::number(boundingRect.right())  + " mm", this);
-    QLabel* fieldRectBottom    = new QLabel(QString::number(boundingRect.bottom()) + " mm", this);
-    QLabel* fieldRectWidth     = new QLabel(QString::number(boundingRect.width())  + " mm", this);
-    QLabel* fieldRectHeight    = new QLabel(QString::number(boundingRect.height()) + " mm", this);
+    QLabel* fieldStitchesTotal = new QLabel(QString::number(stitchesTotal), dialog);
+    QLabel* fieldStitchesReal  = new QLabel(QString::number(stitchesReal),  dialog);
+    QLabel* fieldStitchesJump  = new QLabel(QString::number(stitchesJump),  dialog);
+    QLabel* fieldStitchesTrim  = new QLabel(QString::number(stitchesTrim),  dialog);
+    QLabel* fieldColorTotal    = new QLabel(QString::number(colorTotal),    dialog);
+    QLabel* fieldColorChanges  = new QLabel(QString::number(colorChanges),  dialog);
+    QLabel* fieldRectLeft      = new QLabel(QString::number(boundingRect.left())   + " mm", dialog);
+    QLabel* fieldRectTop       = new QLabel(QString::number(boundingRect.top())    + " mm", dialog);
+    QLabel* fieldRectRight     = new QLabel(QString::number(boundingRect.right())  + " mm", dialog);
+    QLabel* fieldRectBottom    = new QLabel(QString::number(boundingRect.bottom()) + " mm", dialog);
+    QLabel* fieldRectWidth     = new QLabel(QString::number(boundingRect.width())  + " mm", dialog);
+    QLabel* fieldRectHeight    = new QLabel(QString::number(boundingRect.height()) + " mm", dialog);
 
     QGridLayout* gridLayoutMisc = new QGridLayout(groupBoxMisc);
     gridLayoutMisc->addWidget(labelStitchesTotal,  0, 0, Qt::AlignLeft);
@@ -236,17 +240,17 @@ EmbDetailsDialog::EmbDetailsDialog(QGraphicsScene* theScene, QWidget* parent) : 
     /* TODO: Color Histogram. */
 
     /* Stitch Distribution */
-    QGroupBox* groupBoxDist = new QGroupBox(tr("Stitch Distribution"), widget);
+    QGroupBox* groupBoxDist = new QGroupBox(translate("Stitch Distribution"), widget);
 
     /* TODO: Stitch Distribution Histogram */
 
     /* Widget Layout
-    QScrollArea* scrollArea = new QScrollArea(this);
+    QScrollArea* scrollArea = new QScrollArea(dialog);
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(widget); */
 
     QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    QObject::connect(buttonBox, SIGNAL(accepted()), dialog, SLOT(accept()));
 
     QVBoxLayout *vboxLayoutMain = new QVBoxLayout(widget);
     vboxLayoutMain->addWidget(groupBoxMisc);
@@ -255,12 +259,10 @@ EmbDetailsDialog::EmbDetailsDialog(QGraphicsScene* theScene, QWidget* parent) : 
     vboxLayoutMain->addStretch(1);
     widget->setLayout(vboxLayoutMain);
 
-    setWindowTitle(tr("Embroidery Design Details"));
+    dialog->setWindowTitle(translate("Embroidery Design Details"));
+
+    dialog->exec();
 
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
-EmbDetailsDialog::~EmbDetailsDialog()
-{
-    QApplication::restoreOverrideCursor();
-}

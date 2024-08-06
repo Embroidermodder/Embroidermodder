@@ -118,6 +118,37 @@ class UndoEditor;
 class View;
 
 extern MainWindow *_main;
+extern QHash<std::string, std::string>* aliasHash;
+extern QHash<int, QAction*> actionHash;
+extern QHash<QString, QToolBar*> toolbarHash;
+extern QHash<QString, QMenu*> menuHash;
+extern QToolButton* statusBarSnapButton;
+extern QToolButton* statusBarGridButton;
+extern QToolButton* statusBarRulerButton;
+extern QToolButton* statusBarOrthoButton;
+extern QToolButton* statusBarPolarButton;
+extern QToolButton* statusBarQSnapButton;
+extern QToolButton* statusBarQTrackButton;
+extern QToolButton* statusBarLwtButton;
+extern QLabel* statusBarMouseCoord;
+extern QStatusBar* statusbar;
+extern MdiArea* mdiArea;
+extern CmdPrompt* prompt;
+extern PropertyEditor* dockPropEdit;
+extern UndoEditor* dockUndoEdit;
+extern QTimer* testing_timer;
+extern QAction* myFileSeparator;
+extern QWizard* wizardTipOfTheDay;
+extern QLabel* labelTipOfTheDay;
+extern QCheckBox* checkBoxTipOfTheDay;
+extern QStringList listTipOfTheDay;
+extern QComboBox* layerSelector;
+extern QComboBox* colorSelector;
+extern QComboBox* linetypeSelector;
+extern QComboBox* lineweightSelector;
+extern QFontComboBox* textFontSelector;
+extern QComboBox* textSizeSelector;
+extern bool shiftKeyPressedState;
 
 class LayerManager : public QDialog
 {
@@ -136,9 +167,6 @@ public:
         const QString& lineWeight,
         const bool print);
 
-private slots:
-
-private:
     QStandardItemModel*    layerModel;
     QSortFilterProxyModel* layerModelSorted;
     QTreeView*             treeView;
@@ -160,14 +188,6 @@ public:
     void setBackgroundTexture(const QString& fileName);
     void setBackgroundColor(const QColor& color);
 
-public slots:
-    void cascade();
-    void tile();
-protected:
-    virtual void mouseDoubleClickEvent(QMouseEvent* e);
-    virtual void paintEvent(QPaintEvent* e);
-
-private:
     bool useLogo;
     bool useTexture;
     bool useColor;
@@ -178,6 +198,13 @@ private:
 
     void zoomExtentsAllSubWindows();
     void forceRepaint();
+
+public slots:
+    void cascade();
+    void tile();
+protected:
+    virtual void mouseDoubleClickEvent(QMouseEvent* e);
+    virtual void paintEvent(QPaintEvent* e);
 };
 
 class View : public QGraphicsView
@@ -371,24 +398,7 @@ private:
     void alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& viewPoint);
 };
 
-class UndoableCommand : public QUndoCommand
-{
-public:
-    UndoableCommand(int type_, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, double deltaX, double deltaY, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, double pivotPointX, double pivotPointY, double rotAngle, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, const QString& type, View* v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, const QPointF beforePoint, const QPointF afterPoint, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, double x1, double y1, double x2, double y2, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
-
-    void undo();
-    void redo();
-    void rotate(double x, double y, double rot);
-    int id() const { return 1234; }
-    bool mergeWith(const QUndoCommand* command);
-    void mirror();
-
-private:
+typedef struct UndoData_ {
     int type;
     Object* object;
     View* gview;
@@ -407,6 +417,26 @@ private:
     QPointF before;
     QPointF after;
     QLineF mirrorLine;
+} UndoData;
+
+class UndoableCommand : public QUndoCommand
+{
+public:
+    UndoableCommand(int type_, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, double deltaX, double deltaY, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, double pivotPointX, double pivotPointY, double rotAngle, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, const QString& type, View* v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, const QPointF beforePoint, const QPointF afterPoint, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, double x1, double y1, double x2, double y2, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
+
+    void undo();
+    void redo();
+    void rotate(double x, double y, double rot);
+    int id() const { return 1234; }
+    bool mergeWith(const QUndoCommand* command);
+    void mirror();
+
+    UndoData data;
 };
 
 class UndoEditor : public QDockWidget
@@ -442,9 +472,49 @@ private:
     QUndoView*  undoView;
 };
 
+typedef struct ObjectData_ {
+    int32_t TYPE;
+    QString OBJ_NAME;
+    QPen objPen;
+    QPen lwtPen;
+    QLineF objLine;
+    int objRubberMode;
+    QHash<QString, QPointF> objRubberPoints;
+    QHash<QString, QString> objRubberTexts;
+    int64_t objID;
+
+    QString objText;
+    QString objTextFont;
+    QString objTextJustify;
+    double objTextSize;
+    bool objTextBold;
+    bool objTextItalic;
+    bool objTextUnderline;
+    bool objTextStrikeOut;
+    bool objTextOverline;
+    bool objTextBackward;
+    bool objTextUpsideDown;
+    QPainterPath objTextPath;
+
+    bool curved;
+    bool filled;
+    QPainterPath lineStylePath;
+    QPainterPath arrowStylePath;
+    double arrowStyleAngle;
+    double arrowStyleLength;
+    double lineStyleAngle;
+    double lineStyleLength;
+
+    QPainterPath normalPath;
+    int gripIndex;
+} ObjectData;
+
 class Object : public QGraphicsPathItem
 {
 public:
+    EmbGeometry *geometry;
+    ObjectData data;
+
     Object(EmbArc arc, QRgb rgb, QGraphicsItem* parent = 0);
     Object(EmbCircle circle, QRgb rgb, QGraphicsItem *item = 0);
     Object(EmbEllipse ellipse, QRgb rgb, QGraphicsItem *item = 0);
@@ -468,50 +538,14 @@ public:
     void init(EmbPath path, int type_, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
     void init(const QString& str, double x, double y, QRgb rgb, Qt::PenStyle lineType);
 
-    /* QColor objectColor() const { return objPen.color(); } */
-    QRgb objectColorRGB() const { return objPen.color().rgb(); }
-    Qt::PenStyle objectLineType() const { return objPen.style(); }
-    double  objectLineWeight() const { return lwtPen.widthF(); }
+    /* QColor objectColor() const { return data.objPen.color(); } */
+    QRgb objectColorRGB() const { return data.objPen.color().rgb(); }
+    Qt::PenStyle objectLineType() const { return data.objPen.style(); }
+    double  objectLineWeight() const { return data.lwtPen.widthF(); }
     QPainterPath objectPath() const { return path(); }
-    int objectRubberMode() const { return objRubberMode; }
+    int objectRubberMode() const { return data.objRubberMode; }
     QPointF objectRubberPoint(const QString& key) const;
     QString objectRubberText(const QString& key) const;
-
-    EmbGeometry *geometry;
-
-    int32_t TYPE;
-    QPen objPen;
-    QPen lwtPen;
-    QLineF objLine;
-    int objRubberMode;
-    QHash<QString, QPointF> objRubberPoints;
-    QHash<QString, QString> objRubberTexts;
-    int64_t objID;
-
-    enum { Type = OBJ_TYPE_BASE };
-    virtual int type() const { return Type; }
-
-    QString objText;
-    QString objTextFont;
-    QString objTextJustify;
-    double objTextSize;
-    bool objTextBold;
-    bool objTextItalic;
-    bool objTextUnderline;
-    bool objTextStrikeOut;
-    bool objTextOverline;
-    bool objTextBackward;
-    bool objTextUpsideDown;
-    QPainterPath objTextPath;
-
-    bool curved;
-    bool filled;
-    QPainterPath lineStylePath;
-    QPainterPath arrowStylePath;
-    double arrowStyleAngle;
-    double arrowStyleLength;
-    double lineStyleAngle;
-    double lineStyleLength;
 
     double objectRadiusMajor() const { return EMB_MAX(rect().width(), rect().height())/2.0*scale(); }
     double objectRadiusMinor() const { return EMB_MIN(rect().width(), rect().height())/2.0*scale(); }
@@ -590,9 +624,9 @@ public:
     QRectF rect() const { return path().boundingRect(); }
     void setRect(const QRectF& r) { QPainterPath p; p.addRect(r); setPath(p); }
     void setRect(double x, double y, double w, double h) { QPainterPath p; p.addRect(x,y,w,h); setPath(p); }
-    QLineF line() const { return objLine; }
-    void setLine(const QLineF& li) { QPainterPath p; p.moveTo(li.p1()); p.lineTo(li.p2()); setPath(p); objLine = li; }
-    void setLine(double x1, double y1, double x2, double y2) { QPainterPath p; p.moveTo(x1,y1); p.lineTo(x2,y2); setPath(p); objLine.setLine(x1,y1,x2,y2); }
+    QLineF line() const { return data.objLine; }
+    void setLine(const QLineF& li) { QPainterPath p; p.moveTo(li.p1()); p.lineTo(li.p2()); setPath(p); data.objLine = li; }
+    void setLine(double x1, double y1, double x2, double y2) { QPainterPath p; p.moveTo(x1,y1); p.lineTo(x2,y2); setPath(p); data.objLine.setLine(x1,y1,x2,y2); }
 
     void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
     void setObjectPos(double x, double y) { setPos(x, y); }
@@ -612,12 +646,12 @@ public:
     void setObjectLineType(Qt::PenStyle lineType);
     void setObjectLineWeight(double lineWeight);
     void setObjectPath(const QPainterPath& p) { setPath(p); }
-    void setObjectRubberMode(int mode) { objRubberMode = mode; }
-    void setObjectRubberPoint(const QString& key, const QPointF& point) { objRubberPoints.insert(key, point); }
-    void setObjectRubberText(const QString& key, const QString& txt) { objRubberTexts.insert(key, txt); }
+    void setObjectRubberMode(int mode) { data.objRubberMode = mode; }
+    void setObjectRubberPoint(const QString& key, const QPointF& point) { data.objRubberPoints.insert(key, point); }
+    void setObjectRubberText(const QString& key, const QString& txt) { data.objRubberTexts.insert(key, txt); }
 
     void drawRubberLine(const QLineF& rubLine, QPainter* painter = 0, const char* colorFromScene = 0);
-    QPen lineWeightPen() const { return lwtPen; }
+    QPen lineWeightPen() const { return data.lwtPen; }
     void realRender(QPainter* painter, const QPainterPath& renderPath);
     double objectStartAngle() const;
     double objectEndAngle() const;
@@ -655,10 +689,8 @@ public:
     QList<QPainterPath> objectSavePathList() const { return subPathList(); }
     QList<QPainterPath> subPathList() const;
 
-    QPainterPath normalPath;
     /* TODO: make paths similar to polylines. Review and implement any missing functions/members. */
     int findIndex(const QPointF& point);
-    int gripIndex;
 
     QStringList objectTextJustifyList() const;
 
@@ -1048,15 +1080,6 @@ private:
     QImage img;
 };
 
-class EmbDetailsDialog : public QDialog
-{
-    Q_OBJECT
-
-public:
-    EmbDetailsDialog(QGraphicsScene* theScene, QWidget *parent = 0);
-    ~EmbDetailsDialog();
-};
-
 // On Mac, if the user drops a file on the app's Dock icon, or uses Open As, then this is how the app actually opens the file.
 class Application : public QApplication
 {
@@ -1328,12 +1351,6 @@ public:
 
     virtual void updateMenuToolbarStatusbar();
 
-    MdiArea* mdiArea;
-    CmdPrompt* prompt;
-    PropertyEditor* dockPropEdit;
-    UndoEditor* dockUndoEdit;
-    QTimer* testing_timer;
-
     QList<QGraphicsItem*> cutCopyObjectList;
 
     QString formatFilterOpen;
@@ -1378,25 +1395,9 @@ protected:
     QAction* getFileSeparator();
     void loadFormats();
 
-public:
-    bool shiftKeyPressedState;
-
-    QByteArray layoutState;
-
-    int numOfDocs;
-    int docIndex;
-
 private:
-    QList<MdiWindow*> listMdiWin;
+
     QMdiSubWindow* findMdiWindow(const QString &fileName);
-    QString openFilesPath;
-
-    QAction* myFileSeparator;
-
-    QWizard*    wizardTipOfTheDay;
-    QLabel*     labelTipOfTheDay;
-    QCheckBox*  checkBoxTipOfTheDay;
-    QStringList listTipOfTheDay;
 
     void createAllActions();
     QAction* createAction(Command command);
@@ -1414,14 +1415,6 @@ private:
     void createPropertiesToolbar();
     void createTextToolbar();
     void createPromptToolbar();
-
-    /* Selectors */
-    QComboBox* layerSelector;
-    QComboBox* colorSelector;
-    QComboBox* linetypeSelector;
-    QComboBox* lineweightSelector;
-    QFontComboBox* textFontSelector;
-    QComboBox* textSizeSelector;
 
     /* Menus */
     void createAllMenus();
@@ -1512,7 +1505,6 @@ public slots:
     void layerPrevious();
 };
 
-MdiArea* getMdiArea();
 MdiWindow* activeMdiWindow();
 View* activeView();
 QGraphicsScene* activeScene();
@@ -1551,20 +1543,6 @@ QPointF to_qpointf(EmbVector v);
 QPointF scale_and_rotate(QPointF v, double angle, double scale);
 QPointF find_mouse_snap_point(QList<QPointF> snap_points, const QPointF& mouse_point);
 
-extern QHash<std::string, std::string>* aliasHash;
-extern QHash<int, QAction*> actionHash;
-extern QHash<QString, QToolBar*> toolbarHash;
-extern QHash<QString, QMenu*> menuHash;
-extern QToolButton* statusBarSnapButton;
-extern QToolButton* statusBarGridButton;
-extern QToolButton* statusBarRulerButton;
-extern QToolButton* statusBarOrthoButton;
-extern QToolButton* statusBarPolarButton;
-extern QToolButton* statusBarQSnapButton;
-extern QToolButton* statusBarQTrackButton;
-extern QToolButton* statusBarLwtButton;
-extern QLabel* statusBarMouseCoord;
-extern QStatusBar* statusbar;
 
 #endif
 

@@ -97,7 +97,7 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     setCornerButton();
 
     undoStack = new QUndoStack(this);
-    _main->dockUndoEdit->addStack(undoStack);
+    dockUndoEdit->addStack(undoStack);
 
     installEventFilter(this);
 
@@ -123,27 +123,32 @@ void View::enterEvent(QEvent* /*event*/)
 {
     QMdiSubWindow* mdiWin = qobject_cast<QMdiSubWindow*>(parent());
     if (mdiWin) {
-        getMdiArea()->setActiveSubWindow(mdiWin);
+        if (mdiArea) {
+            mdiArea->setActiveSubWindow(mdiWin);
+        }
     }
 }
 
-void View::addObject(Object* obj)
+void
+View::addObject(Object* obj)
 {
     gscene->addItem(obj);
     gscene->update();
-    hashDeletedObjects.remove(obj->objID);
+    hashDeletedObjects.remove(obj->data.objID);
 }
 
-void View::deleteObject(Object* obj)
+void
+View::deleteObject(Object* obj)
 {
     //NOTE: We really just remove the objects from the scene. deletion actually occurs in the destructor.
     obj->setSelected(false);
     gscene->removeItem(obj);
     gscene->update();
-    hashDeletedObjects.insert(obj->objID, obj);
+    hashDeletedObjects.insert(obj->data.objID, obj);
 }
 
-void View::previewOn(int clone, int mode, double x, double y, double data_)
+void
+View::previewOn(int clone, int mode, double x, double y, double data_)
 {
     qDebug("View previewOn()");
     previewOff(); //Free the old objects before creating new ones
@@ -242,7 +247,7 @@ View::vulcanizeObject(Object* obj)
     gscene->removeItem(obj); //Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene
     obj->vulcanize();
 
-    UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data(OBJ_NAME).toString(), obj, this, 0);
+    UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data.OBJ_NAME, obj, this, 0);
     if (cmd) {
         undoStack->push(cmd);
     }
@@ -257,7 +262,7 @@ void View::clearRubberRoom()
             if ((type == OBJ_TYPE_PATH     && spareRubberList.contains(SPARE_RUBBER_PATH))     ||
                (type == OBJ_TYPE_POLYGON  && spareRubberList.contains(SPARE_RUBBER_POLYGON))  ||
                (type == OBJ_TYPE_POLYLINE && spareRubberList.contains(SPARE_RUBBER_POLYLINE)) ||
-               (spareRubberList.contains(base->objID))) {
+               (spareRubberList.contains(base->data.objID))) {
                 if (!base->objectPath().elementCount()) {
                     QMessageBox::critical(this, tr("Empty Rubber Object Error"),
                                           tr("The rubber object added contains no points. "
@@ -1343,8 +1348,8 @@ void View::selectAll()
 
 void View::selectionChanged()
 {
-    if (_main->dockPropEdit->isVisible()) {
-        _main->dockPropEdit->setSelectedItems(gscene->selectedItems());
+    if (dockPropEdit->isVisible()) {
+        dockPropEdit->setSelectedItems(gscene->selectedItems());
     }
 }
 
@@ -1353,7 +1358,7 @@ void View::mouseDoubleClickEvent(QMouseEvent* event)
     if (event->button() == Qt::LeftButton) {
         QGraphicsItem* item = gscene->itemAt(mapToScene(event->pos()), QTransform());
         if (item) {
-            _main->dockPropEdit->show();
+            dockPropEdit->show();
         }
     }
 }
@@ -1506,7 +1511,7 @@ View::mousePressEvent(QMouseEvent* event)
             foreach(QGraphicsItem* item, itemList) {
                 Object* base = static_cast<Object*>(item);
                 if (base) {
-                    UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, base->data(OBJ_NAME).toString(), base, this, 0);
+                    UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, base->data.OBJ_NAME, base, this, 0);
                     if (cmd) {
                         undoStack->push(cmd);
                     }
@@ -1816,8 +1821,8 @@ View::contextMenuEvent(QContextMenuEvent* event)
     if (data.pastingActive) {
         return;
     }
-    if (!_main->prompt->isCommandActive()) {
-        QString lastCmd = _main->prompt->lastCommand();
+    if (!prompt->isCommandActive()) {
+        QString lastCmd = prompt->lastCommand();
         QAction* repeatAction = new QAction(create_icon(lastCmd), "Repeat " + lastCmd, this);
         repeatAction->setStatusTip("Repeats the previously issued command.");
         connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()));
@@ -1920,7 +1925,7 @@ void View::stopGripping(bool accept)
     if (gripBaseObj) {
         gripBaseObj->vulcanize();
         if (accept) {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_GRIP_EDIT, sceneGripPoint, sceneMousePoint, tr("Grip Edit ") + gripBaseObj->data(OBJ_NAME).toString(), gripBaseObj, this, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_GRIP_EDIT, sceneGripPoint, sceneMousePoint, tr("Grip Edit ") + gripBaseObj->data.OBJ_NAME, gripBaseObj, this, 0);
             if (cmd) undoStack->push(cmd);
             selectionChanged(); //Update the Property Editor
         }
@@ -1946,7 +1951,7 @@ void View::deleteSelected()
         if (itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL) {
             Object* base = static_cast<Object*>(itemList.at(i));
             if (base) {
-                UndoableCommand* cmd = new UndoableCommand(ACTION_DELETE, tr("Delete 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+                UndoableCommand* cmd = new UndoableCommand(ACTION_DELETE, tr("Delete 1 ") + base->data.OBJ_NAME, base, this, 0);
                 if (cmd) {
                     undoStack->push(cmd);
                 }
@@ -2145,16 +2150,16 @@ QList<QGraphicsItem*> View::createObjectList(QList<QGraphicsItem*> list)
 
 void View::repeatAction()
 {
-    _main->prompt->endCommand();
-    _main->prompt->setCurrentText(_main->prompt->lastCommand());
-    _main->prompt->processInput();
+    prompt->endCommand();
+    prompt->setCurrentText(prompt->lastCommand());
+    prompt->processInput();
 }
 
 void View::moveAction()
 {
-    _main->prompt->endCommand();
-    _main->prompt->setCurrentText("move");
-    _main->prompt->processInput();
+    prompt->endCommand();
+    prompt->setCurrentText("move");
+    prompt->processInput();
 }
 
 void View::moveSelected(double dx, double dy)
@@ -2166,7 +2171,7 @@ void View::moveSelected(double dx, double dy)
     foreach(QGraphicsItem* item, itemList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_MOVE, dx, dy, tr("Move 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_MOVE, dx, dy, tr("Move 1 ") + base->data.OBJ_NAME, base, this, 0);
             if (cmd) undoStack->push(cmd);
         }
     }
@@ -2180,9 +2185,9 @@ void View::moveSelected(double dx, double dy)
 
 void View::rotateAction()
 {
-    _main->prompt->endCommand();
-    _main->prompt->setCurrentText("rotate");
-    _main->prompt->processInput();
+    prompt->endCommand();
+    prompt->setCurrentText("rotate");
+    prompt->processInput();
 }
 
 void View::rotateSelected(double x, double y, double rot)
@@ -2194,7 +2199,7 @@ void View::rotateSelected(double x, double y, double rot)
     foreach(QGraphicsItem* item, itemList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ROTATE, x, y, rot, tr("Rotate 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ROTATE, x, y, rot, tr("Rotate 1 ") + base->data.OBJ_NAME, base, this, 0);
             if (cmd) {
                 undoStack->push(cmd);
             }
@@ -2216,7 +2221,7 @@ void View::mirrorSelected(double x1, double y1, double x2, double y2)
     foreach(QGraphicsItem* item, itemList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_MIRROR, x1, y1, x2, y2, tr("Mirror 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_MIRROR, x1, y1, x2, y2, tr("Mirror 1 ") + base->data.OBJ_NAME, base, this, 0);
             if (cmd) undoStack->push(cmd);
         }
     }
@@ -2229,9 +2234,9 @@ void View::mirrorSelected(double x1, double y1, double x2, double y2)
 
 void View::scaleAction()
 {
-    _main->prompt->endCommand();
-    _main->prompt->setCurrentText("scale");
-    _main->prompt->processInput();
+    prompt->endCommand();
+    prompt->setCurrentText("scale");
+    prompt->processInput();
 }
 
 void View::scaleSelected(double x, double y, double factor)
@@ -2243,7 +2248,7 @@ void View::scaleSelected(double x, double y, double factor)
     foreach(QGraphicsItem* item, itemList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_SCALE, x, y, factor, tr("Scale 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_SCALE, x, y, factor, tr("Scale 1 ") + base->data.OBJ_NAME, base, this, 0);
             if (cmd) {
                 undoStack->push(cmd);
             }

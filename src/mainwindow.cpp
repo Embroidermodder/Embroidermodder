@@ -18,6 +18,36 @@ const char *settings_file = "settings.toml";
 void create_statusbar(MainWindow* mw);
 
 QStatusBar* statusbar;
+MdiArea* mdiArea;
+CmdPrompt* prompt;
+PropertyEditor* dockPropEdit;
+UndoEditor* dockUndoEdit;
+QTimer* testing_timer;
+
+QList<MdiWindow*> listMdiWin;
+QString openFilesPath;
+
+QAction* myFileSeparator;
+
+QWizard* wizardTipOfTheDay;
+QLabel* labelTipOfTheDay;
+QCheckBox* checkBoxTipOfTheDay;
+QStringList listTipOfTheDay;
+
+/* Selectors */
+QComboBox* layerSelector;
+QComboBox* colorSelector;
+QComboBox* linetypeSelector;
+QComboBox* lineweightSelector;
+QFontComboBox* textFontSelector;
+QComboBox* textSizeSelector;
+
+bool shiftKeyPressedState;
+
+QByteArray layoutState;
+
+int numOfDocs;
+int docIndex;
 
 void
 MainWindow::run_testing(void)
@@ -358,13 +388,6 @@ void MainWindow::windowMenuActivated(bool checked)
     QWidget* w = mdiArea->subWindowList().at(aSender->data().toInt());
     if (w && checked)
         w->setFocus();
-}
-
-MdiArea*
-getMdiArea()
-{
-    qDebug("MainWindow::getMdiArea()");
-    return _main->mdiArea;
 }
 
 void
