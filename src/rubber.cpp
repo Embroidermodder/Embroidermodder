@@ -103,8 +103,7 @@ set_rubber_point_command(ScriptEnv* context)
         return script_false;
     }
 
-    std::string key(STR(0));
-    nativeSetRubberPoint(key, REAL(1), REAL(2));
+    nativeSetRubberPoint(STR(0), REAL(1), REAL(2));
     return script_null;
 }
 
@@ -116,10 +115,7 @@ set_rubber_text_command(ScriptEnv* context)
         return script_false;
     }
 
-    std::string key(STR(0));
-    std::string txt(STR(1));
-
-    nativeSetRubberText(key, txt);
+    nativeSetRubberText(STR(0), STR(1));
     return script_null;
 }
 

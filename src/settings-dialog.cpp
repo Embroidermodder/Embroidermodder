@@ -21,6 +21,7 @@ QPushButton *choose_color_button(QGroupBox* groupbox, IntSetting* color_setting)
 extern const char *extensions[MAX_STRING_LENGTH];
 extern const char *center_on_origin_group[MAX_STRING_LENGTH];
 
+/* . */
 QIcon
 create_swatch(int32_t color)
 {
@@ -29,6 +30,7 @@ create_swatch(int32_t color)
     return QIcon(pixmap); 
 }
 
+/* . */
 QPushButton *
 choose_color_button(QGroupBox* groupbox, IntSetting* color_setting)
 {
@@ -40,6 +42,7 @@ choose_color_button(QGroupBox* groupbox, IntSetting* color_setting)
     return button;
 }
 
+/* . */
 Settings_Dialog::Settings_Dialog(MainWindow* mw, const QString& showTab, QWidget* parent) : QDialog(parent)
 {
     setMinimumSize(750,550);
@@ -90,12 +93,15 @@ Settings_Dialog::Settings_Dialog(MainWindow* mw, const QString& showTab, QWidget
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
+/* . */
 Settings_Dialog::~Settings_Dialog()
 {
     QApplication::restoreOverrideCursor();
 }
 
-QWidget* Settings_Dialog::createTabGeneral()
+/* . */
+QWidget*
+Settings_Dialog::createTabGeneral()
 {
     QWidget* widget = new QWidget(this);
 

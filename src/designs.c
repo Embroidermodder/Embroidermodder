@@ -12,27 +12,6 @@
 
 #include "core.h"
 
-#define HEART_MODE_NUM_POINTS     0
-#define HEART_MODE_STYLE          1
-#define HEART_MODE_XSCALE         2
-#define HEART_MODE_YSCALE         3
-
-#define HEART_STYLE_4             0
-#define HEART_STYLE_5             1
-
-#define STAR_MODE_NUM_POINTS      0
-#define STAR_MODE_CENTER_PT       1
-#define STAR_MODE_RAD_OUTER       2
-#define STAR_MODE_RAD_INNER       3
-
-#define DOLPHIN_MODE_NUM_POINTS   0
-#define DOLPHIN_MODE_XSCALE       1
-#define DOLPHIN_MODE_YSCALE       2
-
-#define SNOWFLAKE_MODE_NUM_POINTS   0
-#define SNOWFLAKE_MODE_XSCALE       1
-#define SNOWFLAKE_MODE_YSCALE       2
-
 /* Command: DOLPHIN.
  * TODO: min:64 max:8192
  */

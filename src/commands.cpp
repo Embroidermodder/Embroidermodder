@@ -12,30 +12,27 @@
 
 #include "embroidermodder.h"
 
-#define RGB_MODE_BACKGROUND     0
-#define RGB_MODE_CROSSHAIR      1
-#define RGB_MODE_GRID           2
+void checkBoxTipOfTheDayStateChanged(int checked);
+void buttonTipOfTheDayClicked(int button);
 
-#define ROTATE_MODE_NORMAL      0
-#define ROTATE_MODE_REFERENCE   1
-
-#define SCALE_MODE_NORMAL       0
-#define SCALE_MODE_REFERENCE    1
-
+/* . */
 void
 MainWindow::stub_implement(QString txt)
 {
     qDebug("TODO: %s", qPrintable(txt));
 }
 
+/* . */
 void
 MainWindow::stub_testing()
 {
-    QMessageBox::warning(this, tr("Testing Feature"), tr("<b>This feature is in testing.</b>"));
+    QMessageBox::warning(this, translate("Testing Feature"),
+        translate("<b>This feature is in testing.</b>"));
 }
 
+/* . */
 void
-MainWindow::exit()
+MainWindow::exit(void)
 {
     qDebug("exit()");
     if (prompt_save_history.setting) {
@@ -49,14 +46,17 @@ MainWindow::exit()
     this->deleteLater();
 }
 
+/* . */
 void
-MainWindow::checkForUpdates()
+MainWindow::checkForUpdates(void)
 {
     qDebug("checkForUpdates()");
     //TODO: Check website for new versions, commands, etc...
 }
 
-QString MainWindow::platformString()
+/* . */
+QString
+platformString(void)
 {
     //TODO: Append QSysInfo to string where applicable.
     QString os;
@@ -125,38 +125,34 @@ QString MainWindow::platformString()
     return os;
 }
 
+/* . */
 void
-MainWindow::designDetails()
+whatsThisContextHelp(void)
 {
-    QGraphicsScene* scene = activeScene();
-    if (scene) {
-        create_details_dialog();
-    }
-}
-
-void
-MainWindow::whatsThisContextHelp()
-{
-    qDebug("whatsThisContextHelp()");
+    debug_message("whatsThisContextHelp()");
     QWhatsThis::enterWhatsThisMode();
 }
 
+/* . */
 void
 MainWindow::print()
 {
     qDebug("print()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) { mdiWin->print(); }
+    if (mdiWin) {
+        mdiWin->print();
+    }
 }
 
+/* . */
 void
-MainWindow::tipOfTheDay()
+tipOfTheDay()
 {
     qDebug("tipOfTheDay()");
 
     QString appDir = qApp->applicationDirPath();
 
-    wizardTipOfTheDay = new QWizard(this);
+    wizardTipOfTheDay = new QWizard(_main);
     wizardTipOfTheDay->setAttribute(Qt::WA_DeleteOnClose);
     wizardTipOfTheDay->setWizardStyle(QWizard::ModernStyle);
     wizardTipOfTheDay->setMinimumSize(550, 400);
@@ -171,9 +167,9 @@ MainWindow::tipOfTheDay()
     labelTipOfTheDay = new QLabel(listTipOfTheDay.value(general_current_tip.setting), wizardTipOfTheDay);
     labelTipOfTheDay->setWordWrap(true);
 
-    QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("&Show tips on startup"), wizardTipOfTheDay);
+    QCheckBox* checkBoxTipOfTheDay = new QCheckBox(translate("&Show tips on startup"), wizardTipOfTheDay);
     checkBoxTipOfTheDay->setChecked(general_tip_of_the_day.setting);
-    connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), this, SLOT(checkBoxTipOfTheDayStateChanged(int)));
+    QObject::connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), _main, SLOT(checkBoxTipOfTheDayStateChanged(int)));
 
     QVBoxLayout* layout = new QVBoxLayout(wizardTipOfTheDay);
     layout->addWidget(imgBanner);
@@ -189,13 +185,13 @@ MainWindow::tipOfTheDay()
     //TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonPrevious)
     //TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonNext)
     //TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonClose)
-    wizardTipOfTheDay->setButtonText(QWizard::CustomButton1, tr("&Previous"));
-    wizardTipOfTheDay->setButtonText(QWizard::CustomButton2, tr("&Next"));
-    wizardTipOfTheDay->setButtonText(QWizard::CustomButton3, tr("&Close"));
+    wizardTipOfTheDay->setButtonText(QWizard::CustomButton1, translate("&Previous"));
+    wizardTipOfTheDay->setButtonText(QWizard::CustomButton2, translate("&Next"));
+    wizardTipOfTheDay->setButtonText(QWizard::CustomButton3, translate("&Close"));
     wizardTipOfTheDay->setOption(QWizard::HaveCustomButton1, true);
     wizardTipOfTheDay->setOption(QWizard::HaveCustomButton2, true);
     wizardTipOfTheDay->setOption(QWizard::HaveCustomButton3, true);
-    connect(wizardTipOfTheDay, SIGNAL(customButtonClicked(int)), this, SLOT(buttonTipOfTheDayClicked(int)));
+    QObject::connect(wizardTipOfTheDay, SIGNAL(customButtonClicked(int)), _main, SLOT(buttonTipOfTheDayClicked(int)));
 
     QList<QWizard::WizardButton> listTipOfTheDayButtons;
     listTipOfTheDayButtons << QWizard::Stretch << QWizard::CustomButton1
@@ -206,26 +202,30 @@ MainWindow::tipOfTheDay()
 }
 
 void
-MainWindow::checkBoxTipOfTheDayStateChanged(int checked)
+checkBoxTipOfTheDayStateChanged(int checked)
 {
     general_tip_of_the_day.setting = checked;
 }
 
+/* . */
 void
-MainWindow::buttonTipOfTheDayClicked(int button)
+buttonTipOfTheDayClicked(int button)
 {
     qDebug("buttonTipOfTheDayClicked(%d)", button);
     if (button == QWizard::CustomButton1) {
-        if (general_current_tip.setting > 0)
+        if (general_current_tip.setting > 0) {
             general_current_tip.setting--;
-        else
+        }
+        else {
             general_current_tip.setting = listTipOfTheDay.size()-1;
+        }
         labelTipOfTheDay->setText(listTipOfTheDay.value(general_current_tip.setting));
     }
     else if (button == QWizard::CustomButton2) {
         general_current_tip.setting++;
-        if (general_current_tip.setting >= listTipOfTheDay.size())
+        if (general_current_tip.setting >= listTipOfTheDay.size()) {
             general_current_tip.setting = 0;
+        }
         labelTipOfTheDay->setText(listTipOfTheDay.value(general_current_tip.setting));
     }
     else if (button == QWizard::CustomButton3) {
@@ -233,10 +233,11 @@ MainWindow::buttonTipOfTheDayClicked(int button)
     }
 }
 
+/* . */
 void
-MainWindow::help()
+help(void)
 {
-    qDebug("help()");
+    debug_message("help()");
 
     // Open the HTML Help in the default browser
     QUrl helpURL("file:///" + qApp->applicationDirPath() + "/help/doc-index.html");
@@ -250,10 +251,11 @@ MainWindow::help()
     //myProcess->start(program, arguments);
 }
 
+/* . */
 void
-MainWindow::changelog()
+changelog(void)
 {
-    qDebug("changelog()");
+    debug_message("changelog()");
 
     QUrl changelogURL("help/changelog.html");
     QDesktopServices::openUrl(changelogURL);
@@ -397,7 +399,9 @@ MainWindow::updateAllViewCrossHairColors(QRgb color)
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if (mdiWin) { mdiWin->setViewCrossHairColor(color); }
+        if (mdiWin) {
+            mdiWin->setViewCrossHairColor(color);
+        }
     }
 }
 
@@ -407,7 +411,9 @@ MainWindow::updateAllViewBackgroundColors(QRgb color)
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if (mdiWin) { mdiWin->setViewBackgroundColor(color); }
+        if (mdiWin) {
+            mdiWin->setViewBackgroundColor(color);
+        }
     }
 }
 
@@ -502,15 +508,20 @@ MainWindow::colorSelectorIndexChanged(int index)
         bool ok = 0;
         //TODO: Handle ByLayer and ByBlock and Other...
         newColor = comboBox->itemData(index).toUInt(&ok);
-        if (!ok)
-            QMessageBox::warning(this, tr("Color Selector Conversion Error"), tr("<b>An error has occured while changing colors.</b>"));
+        if (!ok) {
+            QMessageBox::warning(this, translate("Color Selector Conversion Error"),
+                translate("<b>An error has occured while changing colors.</b>"));
+        }
     }
     else {
-        QMessageBox::warning(this, tr("Color Selector Pointer Error"), tr("<b>An error has occured while changing colors.</b>"));
+        QMessageBox::warning(this, translate("Color Selector Pointer Error"),
+            translate("<b>An error has occured while changing colors.</b>"));
     }
 
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) { mdiWin->currentColorChanged(newColor); }
+    if (mdiWin) {
+        mdiWin->currentColorChanged(newColor);
+    }
 }
 
 void
@@ -627,27 +638,31 @@ MainWindow::escapePressed()
     end_command();
 }
 
+/* . */
 void
-MainWindow::toggleGrid()
+toggleGrid(void)
 {
-    qDebug("toggleGrid()");
+    debug_message("toggleGrid()");
     statusBarGridButton->toggle();
 }
 
+/* . */
 void
-MainWindow::toggleRuler()
+toggleRuler(void)
 {
-    qDebug("toggleRuler()");
+    debug_message("toggleRuler()");
     statusBarRulerButton->toggle();
 }
 
+/* . */
 void
-MainWindow::toggleLwt()
+toggleLwt(void)
 {
-    qDebug("toggleLwt()");
+    debug_message("toggleLwt()");
     statusBarLwtButton->toggle();
 }
 
+/* . */
 void
 MainWindow::promptHistoryAppended(const QString& txt)
 {
@@ -746,7 +761,7 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         prompt->appendHistory(QString(STR(0)));
         break;
     case ACTION_DESIGN_DETAILS:
-        designDetails();
+        create_details_dialog();
         break;
     case ACTION_DISABLE: {
         QString value(STR(0));
@@ -877,6 +892,24 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         }
         break;
     }
+    case ACTION_DAY: {
+        View* gview = activeView();
+        if (gview) {
+            gview->setBackgroundColor(qRgb(255,255,255)); //TODO: Make day vision color settings.
+            gview->setCrossHairColor(qRgb(0,0,0));        //TODO: Make day vision color settings.
+            gview->setGridColor(qRgb(0,0,0));             //TODO: Make day vision color settings.
+        }
+        break;
+    }
+    case ACTION_NIGHT: {
+        View* gview = activeView();
+        if (gview) {
+            gview->setBackgroundColor(qRgb(0,0,0));      //TODO: Make night vision color settings.
+            gview->setCrossHairColor(qRgb(255,255,255)); //TODO: Make night vision color settings.
+            gview->setGridColor(qRgb(255,255,255));      //TODO: Make night vision color settings.
+        }
+        break;
+    }
     
 /*
     case ACTION_DESIGN_DETAILS:
@@ -903,10 +936,6 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
     case ACTION_LOCK_ALL_LAYERS:
     case ACTION_UNLOCK_ALL_LAYERS:
 
-    case ACTION_DAY:
-        break;
-    case ACTION_NIGHT:
-        break;
 
     case ACTION_GET:
     case ACTION_SET:
@@ -1276,21 +1305,21 @@ nativeSetRubberMode(int mode)
 
 /* . */
 void
-nativeSetRubberPoint(std::string key, double x, double y)
+nativeSetRubberPoint(char key[MAX_STRING_LENGTH], double x, double y)
 {
     View* gview = activeView();
     if (gview) {
-        gview->setRubberPoint(QString(key.c_str()), QPointF(x, -y));
+        gview->setRubberPoint(key, QPointF(x, -y));
     }
 }
 
 /* . */
 void
-nativeSetRubberText(std::string key, std::string txt)
+nativeSetRubberText(char key[MAX_STRING_LENGTH], char txt[MAX_STRING_LENGTH])
 {
     View* gview = activeView();
     if (gview) {
-        gview->setRubberText(QString(key.c_str()), QString(txt.c_str()));
+        gview->setRubberText(key, txt);
     }
 }
 
@@ -3108,86 +3137,6 @@ void
 UndoableCommand::mirror()
 {
     //TODO: finish undoable mirror
-}
-
-/*
- * View Commands
- */
-
-/* DAY is not context-dependant. */
-ScriptValue
-day_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "day_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-
-    View* gview = activeView();
-    if (gview) {
-        gview->setBackgroundColor(qRgb(255,255,255)); //TODO: Make day vision color settings.
-        gview->setCrossHairColor(qRgb(0,0,0));        //TODO: Make day vision color settings.
-        gview->setGridColor(qRgb(0,0,0));             //TODO: Make day vision color settings.
-    }
-
-    end_command();
-    return script_null;
-}
-
-/* NIGHT is not context-sensitive. */
-ScriptValue
-night_command(ScriptEnv * context)
-{
-    if (!argument_checks(context, "night_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-
-    View* gview = activeView();
-    if (gview) {
-        gview->setBackgroundColor(qRgb(0,0,0));      //TODO: Make night vision color settings.
-        gview->setCrossHairColor(qRgb(255,255,255)); //TODO: Make night vision color settings.
-        gview->setGridColor(qRgb(255,255,255));      //TODO: Make night vision color settings.
-    }
-
-    end_command();
-    return script_null;
-}
-
-/* PANPOINT. */
-ScriptValue
-panpoint_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "panpoint_command", "")) {
-        return script_false;
-    }
-    init_command();
-
-    View* gview = activeView();
-    if (gview) {
-        gview->panPoint();
-    }
-
-    end_command();
-    return script_null;
-}
-
-/*
- * Window Commands
- */
-/* WINDOWCLOSEALL is not context-dependant. */
-ScriptValue
-windowcloseall_command(ScriptEnv * context)
-{
-    if (!argument_checks(context, "windowcloseall_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    end_command();
-    return script_null;
 }
 
 /* LOCATEPOINT */

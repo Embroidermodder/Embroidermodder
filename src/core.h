@@ -259,17 +259,48 @@ enum COMMAND_ACTIONS
 #define TEXTSINGLE_MODE_RAPID     3
 
 /* NOTE: Allow this enum to evaluate false */
-#define ARROW_STYLE_NO_ARROW 0
-#define ARROW_STYLE_OPEN     1
-#define ARROW_STYLE_CLOSED   2
-#define ARROW_STYLE_DOT      3
-#define ARROW_STYLE_BOX      4
-#define ARROW_STYLE_TICK     5
+#define ARROW_STYLE_NO_ARROW    0
+#define ARROW_STYLE_OPEN        1
+#define ARROW_STYLE_CLOSED      2
+#define ARROW_STYLE_DOT         3
+#define ARROW_STYLE_BOX         4
+#define ARROW_STYLE_TICK        5
 
 /* NOTE: Allow this enum to evaluate false */
-#define LINE_STYLE_NO_LINE    0
-#define LINE_STYLE_FLARED     1
-#define LINE_STYLE_FLETCHING  2
+#define LINE_STYLE_NO_LINE      0
+#define LINE_STYLE_FLARED       1
+#define LINE_STYLE_FLETCHING    2
+
+#define RGB_MODE_BACKGROUND     0
+#define RGB_MODE_CROSSHAIR      1
+#define RGB_MODE_GRID           2
+
+#define ROTATE_MODE_NORMAL      0
+#define ROTATE_MODE_REFERENCE   1
+
+#define SCALE_MODE_NORMAL       0
+#define SCALE_MODE_REFERENCE    1
+
+#define HEART_MODE_NUM_POINTS     0
+#define HEART_MODE_STYLE          1
+#define HEART_MODE_XSCALE         2
+#define HEART_MODE_YSCALE         3
+
+#define HEART_STYLE_4             0
+#define HEART_STYLE_5             1
+
+#define STAR_MODE_NUM_POINTS      0
+#define STAR_MODE_CENTER_PT       1
+#define STAR_MODE_RAD_OUTER       2
+#define STAR_MODE_RAD_INNER       3
+
+#define DOLPHIN_MODE_NUM_POINTS   0
+#define DOLPHIN_MODE_XSCALE       1
+#define DOLPHIN_MODE_YSCALE       2
+
+#define SNOWFLAKE_MODE_NUM_POINTS   0
+#define SNOWFLAKE_MODE_XSCALE       1
+#define SNOWFLAKE_MODE_YSCALE       2
 
 //Custom Data used in QGraphicsItems
 
@@ -563,21 +594,6 @@ typedef struct StringMap_ {
 
 typedef char string_table[MAX_MENU_LENGTH][MAX_COMMAND_LENGTH];
 
-typedef struct ViewData_ {
-    bool grippingActive;
-    bool rapidMoveActive;
-    bool previewActive;
-    bool pastingActive;
-    bool movingActive;
-    bool selectingActive;
-    bool zoomWindowActive;
-    bool panningRealTimeActive;
-    bool panningPointActive;
-    bool panningActive;
-    bool qSnapActive;
-    bool qSnapToggle;
-} ViewData;
-
 /* Scripting functions */
 ScriptEnv *create_script_env();
 void free_script_env(ScriptEnv *);
@@ -846,6 +862,25 @@ void enableReal();
 void disableReal();
 
 void create_details_dialog(void);
+
+void nativeSetPromptPrefix(char txt[MAX_STRING_LENGTH]);
+/* TODO: void nativeSetRubberFilter(int64_t id); */
+/* TODO: This is so more than 1 rubber object can exist at one time without updating all rubber objects at once. */
+void nativeSetRubberMode(int mode);
+void nativeSetRubberPoint(char key[MAX_STRING_LENGTH], double x, double y);
+void nativeSetRubberText(char key[MAX_STRING_LENGTH], char txt[MAX_STRING_LENGTH]);
+
+void toggleGrid(void);
+void toggleRuler(void);
+void toggleLwt(void);
+
+/* Help Menu */
+void tipOfTheDay();
+void buttonTipOfTheDayClicked(int);
+void checkBoxTipOfTheDayStateChanged(int);
+void help();
+void changelog();
+void whatsThisContextHelp();
 
 #ifdef __cplusplus
 }

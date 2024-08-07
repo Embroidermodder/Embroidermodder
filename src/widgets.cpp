@@ -33,6 +33,7 @@ QStringList button_list = {
     "LWT"
 };
 
+/* . */
 UndoEditor::UndoEditor(const QString& iconDirectory, QWidget* widgetToFocus, QWidget* parent) : QDockWidget(parent)
 {
     iconDir = iconDirectory;
@@ -51,59 +52,75 @@ UndoEditor::UndoEditor(const QString& iconDirectory, QWidget* widgetToFocus, QWi
     undoView->setFocusProxy(widgetToFocus);
 }
 
+/* . */
 UndoEditor::~UndoEditor()
 {
 }
 
-void UndoEditor::updateCleanIcon(bool opened)
+/* . */
+void
+UndoEditor::updateCleanIcon(bool opened)
 {
-    if (opened)
-    {
+    if (opened) {
         undoView->setEmptyLabel(tr("Open"));
         undoView->setCleanIcon(QIcon(iconDir + "/" + "open" + ".png"));
     }
-    else
-    {
+    else {
         undoView->setEmptyLabel(tr("New"));
         undoView->setCleanIcon(QIcon(iconDir + "/" + "new" + ".png"));
     }
 }
 
-void UndoEditor::addStack(QUndoStack* stack)
+/* . */
+void
+UndoEditor::addStack(QUndoStack* stack)
 {
     undoGroup->addStack(stack);
 }
 
-bool UndoEditor::canUndo() const
+/* . */
+bool
+UndoEditor::canUndo() const
 {
     return undoGroup->canUndo();
 }
 
-bool UndoEditor::canRedo() const
+/* . */
+bool
+UndoEditor::canRedo() const
 {
     return undoGroup->canRedo();
 }
 
-QString UndoEditor::undoText() const
+/* . */
+QString
+UndoEditor::undoText() const
 {
     return undoGroup->undoText();
 }
 
-QString UndoEditor::redoText() const
+/* . */
+QString
+UndoEditor::redoText() const
 {
     return undoGroup->redoText();
 }
 
-void UndoEditor::undo()
+/* . */
+void
+UndoEditor::undo()
 {
     undoGroup->undo();
 }
 
-void UndoEditor::redo()
+/* . */
+void
+UndoEditor::redo()
 {
     undoGroup->redo();
 }
 
+/* . */
 ImageWidget::ImageWidget(const QString &filename, QWidget* parent) : QWidget(parent)
 {
     qDebug("ImageWidget Constructor");
@@ -118,24 +135,30 @@ ImageWidget::ImageWidget(const QString &filename, QWidget* parent) : QWidget(par
     this->show();
 }
 
-bool ImageWidget::load(const QString &fileName)
+/* . */
+bool
+ImageWidget::load(const QString &fileName)
 {
     img.load(fileName);
     return true;
 }
 
-bool ImageWidget::save(const QString &fileName)
+/* . */
+bool
+ImageWidget::save(const QString &fileName)
 {
     img.save(fileName, "PNG");
     return true;
 }
 
+/* . */
 ImageWidget::~ImageWidget()
 {
     qDebug("ImageWidget Destructor");
 }
 
-void ImageWidget::paintEvent(QPaintEvent*)
+void
+ImageWidget::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
     painter.setViewport(0, 0, width(), height());
@@ -470,12 +493,15 @@ LayerManager::LayerManager(MainWindow* mw, QWidget* parent) : QDialog(parent)
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
+/* . */
 LayerManager::~LayerManager()
 {
     QApplication::restoreOverrideCursor();
 }
 
-void LayerManager::addLayer(const QString& name,
+/* . */
+void
+LayerManager::addLayer(const QString& name,
                             const bool visible,
                             const bool frozen,
                             const double zValue,

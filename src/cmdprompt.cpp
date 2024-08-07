@@ -14,6 +14,7 @@
 
 StringMap aliases[MAX_ALIASES];
 QHash<std::string, std::string>* aliasHash;
+QHash<QString, QString>* styleHash;
 
 /* . */
 CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)

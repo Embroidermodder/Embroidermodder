@@ -17,6 +17,11 @@ QHash<QString, QMenu*> menuHash;
 const char *settings_file = "settings.toml";
 void create_statusbar(MainWindow* mw);
 
+QList<QGraphicsItem*> cutCopyObjectList;
+
+QString formatFilterOpen;
+QString formatFilterSave;
+
 QStatusBar* statusbar;
 MdiArea* mdiArea;
 CmdPrompt* prompt;
@@ -784,6 +789,7 @@ void MainWindow::loadFormats()
     */
 }
 
+/* . */
 void
 MainWindow::closeToolBar(QAction* action)
 {
@@ -796,7 +802,9 @@ MainWindow::closeToolBar(QAction* action)
     }
 }
 
-void MainWindow::floatingChangedToolBar(bool isFloating)
+/* . */
+void
+MainWindow::floatingChangedToolBar(bool isFloating)
 {
     QToolBar* tb = qobject_cast<QToolBar*>(sender());
     if (tb) {
@@ -947,6 +955,7 @@ SettingsDir()
 #endif
 }
 
+/* . */
 void
 get_setting(QSettings *settings, const char *key, const char *value, StringSetting *s)
 {
@@ -956,6 +965,7 @@ get_setting(QSettings *settings, const char *key, const char *value, StringSetti
     strcpy(s->setting, qPrintable(settings->value(k, v).toString()));
 }
 
+/* . */
 void
 get_setting(QSettings *settings, const char *key, int value, IntSetting *i)
 {
@@ -963,6 +973,7 @@ get_setting(QSettings *settings, const char *key, int value, IntSetting *i)
     i->setting = settings->value(key, value).toInt();
 }
 
+/* . */
 void
 get_setting(QSettings *settings, const char *key, bool value, BoolSetting *b)
 {
@@ -970,6 +981,7 @@ get_setting(QSettings *settings, const char *key, bool value, BoolSetting *b)
     b->setting = settings->value(key, value).toBool();
 }
 
+/* . */
 void
 MainWindow::readSettings()
 {
@@ -1142,6 +1154,7 @@ MainWindow::readSettings()
     resize(size);
 }
 
+/* . */
 void
 MainWindow::writeSettings()
 {
@@ -1149,31 +1162,22 @@ MainWindow::writeSettings()
     save_settings("", qPrintable(SettingsDir() + settings_file));
 }
 
+/* . */
 void
 MainWindow::settingsPrompt()
 {
     settingsDialog("Prompt");
 }
 
+/* . */
 void
 MainWindow::settingsDialog(const QString& showTab)
 {
     Settings_Dialog dialog(this, showTab, this);
     dialog.exec();
 }
-/*
- * Embroidermodder 2.
- *
- * Copyright 2011-2024 The Embroidermodder Team
- * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
- * Visit https://www.libembroidery.org/refman for advice on altering this file,
- * or read the markdown version in embroidermodder2/docs/refman.
- *
- * Toolbars
- */
 
-#include "embroidermodder.h"
-
+/* . */
 void
 add_to_toolbar(const char *toolbar_name, string_table toolbar_data)
 {
@@ -1404,18 +1408,6 @@ void MainWindow::createAllToolbars()
 
     //zoomToolBar->setToolButtonStyle(Qt::ToolButtonTextOnly);
 }
-/*
- * Embroidermodder 2.
- *
- * Copyright 2011-2024 The Embroidermodder Team
- * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
- * Visit https://www.libembroidery.org/refman for advice on altering this file,
- * or read the markdown version in embroidermodder2/docs/refman.
- *
- * MainWindow Actions
- */
-
-#include "embroidermodder.h"
 
 /* For each Command in command_data, for each alias set up a map from
  * alias to the Command. Then for a given context the call doesn't have to loop?

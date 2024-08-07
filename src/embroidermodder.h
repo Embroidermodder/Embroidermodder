@@ -149,6 +149,135 @@ extern QComboBox* lineweightSelector;
 extern QFontComboBox* textFontSelector;
 extern QComboBox* textSizeSelector;
 extern bool shiftKeyPressedState;
+extern QList<QGraphicsItem*> cutCopyObjectList;
+
+/* . */
+typedef struct ViewData_ {
+    QHash<int64_t, QGraphicsItem*> hashDeletedObjects;
+
+    QList<int64_t> spareRubberList;
+
+    QColor gridColor;
+    QPainterPath gridPath;
+    QPainterPath originPath;
+
+    bool grippingActive;
+    bool rapidMoveActive;
+    bool previewActive;
+    bool pastingActive;
+    bool movingActive;
+    bool selectingActive;
+    bool zoomWindowActive;
+    bool panningRealTimeActive;
+    bool panningPointActive;
+    bool panningActive;
+    bool qSnapActive;
+    bool qSnapToggle;
+
+    QGraphicsItemGroup* previewObjectItemGroup;
+    QPointF previewPoint;
+    double previewData;
+    int previewMode;
+
+    QPoint viewMousePoint;
+    QPointF sceneMousePoint;
+    QRgb qsnapLocatorColor;
+    uint8_t qsnapLocatorSize;
+    uint8_t qsnapApertureSize;
+    QRgb gripColorCool;
+    QRgb gripColorHot;
+    uint8_t gripSize;
+    uint8_t pickBoxSize;
+    QRgb crosshairColor;
+    uint32_t crosshairSize;
+
+    Object* gripBaseObj;
+    Object* tempBaseObj;
+
+    QGraphicsScene* gscene;
+    QUndoStack* undoStack;
+
+    SelectBox* selectBox;
+    QPointF scenePressPoint;
+    QPoint pressPoint;
+    QPointF sceneMovePoint;
+    QPoint movePoint;
+    QPointF sceneReleasePoint;
+    QPoint releasePoint;
+    QPointF sceneGripPoint;
+
+    QPointF cutCopyMousePoint;
+    QGraphicsItemGroup* pasteObjectItemGroup;
+    QPointF pasteDelta;
+
+    QList<QGraphicsItem*> rubberRoomList;
+    int panDistance;
+    int panStartX;
+    int panStartY;
+
+    QList<QGraphicsItem*> previewObjectList;
+    bool rulerMetric;
+    QColor rulerColor;
+    uint8_t rulerPixelSize;
+} ViewData;
+
+typedef struct UndoData_ {
+    int type;
+    Object* object;
+    View* gview;
+    double dx;
+    double dy;
+    double pivotX;
+    double pivotY;
+    double angle;
+    double factor;
+    QString navType;
+    QTransform fromTransform;
+    QTransform toTransform;
+    QPointF fromCenter;
+    QPointF toCenter;
+    bool done;
+    QPointF before;
+    QPointF after;
+    QLineF mirrorLine;
+} UndoData;
+
+typedef struct ObjectData_ {
+    int32_t TYPE;
+    QString OBJ_NAME;
+    QPen objPen;
+    QPen lwtPen;
+    QLineF objLine;
+    int objRubberMode;
+    QHash<QString, QPointF> objRubberPoints;
+    QHash<QString, QString> objRubberTexts;
+    int64_t objID;
+
+    QString objText;
+    QString objTextFont;
+    QString objTextJustify;
+    double objTextSize;
+    bool objTextBold;
+    bool objTextItalic;
+    bool objTextUnderline;
+    bool objTextStrikeOut;
+    bool objTextOverline;
+    bool objTextBackward;
+    bool objTextUpsideDown;
+    QPainterPath objTextPath;
+
+    bool curved;
+    bool filled;
+    QPainterPath lineStylePath;
+    QPainterPath arrowStylePath;
+    double arrowStyleAngle;
+    double arrowStyleLength;
+    double lineStyleAngle;
+    double lineStyleLength;
+
+    QPainterPath normalPath;
+    int gripIndex;
+} ObjectData;
 
 class LayerManager : public QDialog
 {
@@ -225,7 +354,7 @@ public:
     void centerAt(const QPointF& centerPoint);
     QPointF center() { return mapToScene(rect().center()); }
 
-    QUndoStack* getUndoStack() { return undoStack; }
+    QUndoStack* getUndoStack() { return data.undoStack; }
     void addObject(Object* obj);
     void deleteObject(Object* obj);
     void vulcanizeObject(Object* obj);
@@ -322,21 +451,11 @@ protected:
     void enterEvent(QEvent* event);
 
 private:
-    QHash<int64_t, QGraphicsItem*> hashDeletedObjects;
-
-    QList<int64_t> spareRubberList;
-
-    QColor gridColor;
-    QPainterPath gridPath;
     void createGridRect();
     void createGridPolar();
     void createGridIso();
-    QPainterPath originPath;
     void createOrigin();
 
-    bool rulerMetric;
-    QColor rulerColor;
-    uint8_t rulerPixelSize;
     void loadRulerSettings();
 
     bool willUnderflowInt32(int64_t a, int64_t b);
@@ -344,80 +463,19 @@ private:
     int roundToMultiple(bool roundUp, int numToRound, int multiple);
     QPainterPath createRulerTextPath(float x, float y, QString str, float height);
 
-    QList<QGraphicsItem*> previewObjectList;
-    QGraphicsItemGroup* previewObjectItemGroup;
-    QPointF previewPoint;
-    double previewData;
-    int previewMode;
-
     QList<QGraphicsItem*> createObjectList(QList<QGraphicsItem*> list);
-    QPointF cutCopyMousePoint;
-    QGraphicsItemGroup* pasteObjectItemGroup;
-    QPointF pasteDelta;
-
-    QList<QGraphicsItem*> rubberRoomList;
 
     void copySelected();
 
     void startGripping(Object* obj);
     void stopGripping(bool accept = false);
 
-    Object* gripBaseObj;
-    Object* tempBaseObj;
-
-    QGraphicsScene* gscene;
-    QUndoStack* undoStack;
-
-    SelectBox* selectBox;
-    QPointF scenePressPoint;
-    QPoint pressPoint;
-    QPointF sceneMovePoint;
-    QPoint movePoint;
-    QPointF sceneReleasePoint;
-    QPoint releasePoint;
-    QPointF sceneGripPoint;
-
     void updateMouseCoords(int x, int y);
-    QPoint viewMousePoint;
-    QPointF sceneMousePoint;
-    QRgb qsnapLocatorColor;
-    uint8_t qsnapLocatorSize;
-    uint8_t qsnapApertureSize;
-    QRgb gripColorCool;
-    QRgb gripColorHot;
-    uint8_t gripSize;
-    uint8_t pickBoxSize;
-    QRgb crosshairColor;
-    uint32_t crosshairSize;
 
     void panStart(const QPoint& point);
-    int panDistance;
-    int panStartX;
-    int panStartY;
 
     void alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& viewPoint);
 };
-
-typedef struct UndoData_ {
-    int type;
-    Object* object;
-    View* gview;
-    double dx;
-    double dy;
-    double pivotX;
-    double pivotY;
-    double angle;
-    double factor;
-    QString navType;
-    QTransform fromTransform;
-    QTransform toTransform;
-    QPointF fromCenter;
-    QPointF toCenter;
-    bool done;
-    QPointF before;
-    QPointF after;
-    QLineF mirrorLine;
-} UndoData;
 
 class UndoableCommand : public QUndoCommand
 {
@@ -471,43 +529,6 @@ private:
     QUndoGroup* undoGroup;
     QUndoView*  undoView;
 };
-
-typedef struct ObjectData_ {
-    int32_t TYPE;
-    QString OBJ_NAME;
-    QPen objPen;
-    QPen lwtPen;
-    QLineF objLine;
-    int objRubberMode;
-    QHash<QString, QPointF> objRubberPoints;
-    QHash<QString, QString> objRubberTexts;
-    int64_t objID;
-
-    QString objText;
-    QString objTextFont;
-    QString objTextJustify;
-    double objTextSize;
-    bool objTextBold;
-    bool objTextItalic;
-    bool objTextUnderline;
-    bool objTextStrikeOut;
-    bool objTextOverline;
-    bool objTextBackward;
-    bool objTextUpsideDown;
-    QPainterPath objTextPath;
-
-    bool curved;
-    bool filled;
-    QPainterPath lineStylePath;
-    QPainterPath arrowStylePath;
-    double arrowStyleAngle;
-    double arrowStyleLength;
-    double lineStyleAngle;
-    double lineStyleLength;
-
-    QPainterPath normalPath;
-    int gripIndex;
-} ObjectData;
 
 class Object : public QGraphicsPathItem
 {
@@ -717,9 +738,9 @@ class PreviewDialog : public QFileDialog
 
 public:
     PreviewDialog(QWidget* parent = 0,
- const QString& caption = QString(),
- const QString& directory = QString(),
- const QString& filter = QString());
+        const QString& caption = "",
+        const QString& directory = "",
+        const QString& filter = "");
     ~PreviewDialog();
 
 private:
@@ -753,66 +774,17 @@ private slots:
     void togglePickAddMode();
 
 private:
-    Qt::ToolButtonStyle propertyEditorButtonStyle;
-
-    QList<QGraphicsItem*> selectedItemList;
-
     /* Helper functions */
-    QToolButton* createToolButton(const QString& iconName, const QString& txt);
-    QLineEdit* createLineEdit(const QString& validatorType = QString(), bool readOnly = false);
-    QComboBox* createComboBox(bool disable = false);
-    QFontComboBox* createFontComboBox(bool disable = false);
-
     void updateLineEditStrIfVaries(QLineEdit* lineEdit, const QString& str);
     void updateLineEditNumIfVaries(QLineEdit* lineEdit, double num, bool useAnglePrecision);
     void updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, const QString& str);
     void updateComboBoxStrIfVaries(QComboBox* comboBox, const QString& str, const QStringList& strList);
     void updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, bool yesOrNoText);
 
-    QSignalMapper* signalMapper;
-    void mapSignal(QObject* fieldObj, const QString& name, QVariant value);
-
     /* Selection */
-    QComboBox*   createComboBoxSelected();
+    QComboBox* createComboBoxSelected();
     QToolButton* createToolButtonQSelect();
     QToolButton* createToolButtonPickAdd();
-
-    QComboBox*   comboBoxSelected;
-    QToolButton* toolButtonQSelect;
-    QToolButton* toolButtonPickAdd;
-
-    //TODO: Alphabetic/Categorized TabWidget
-
-    QGroupBox*   createGroupBoxGeneral();
-    QGroupBox*   createGroupBoxGeometryArc();
-    QGroupBox*   createGroupBoxMiscArc();
-    QGroupBox*   createGroupBoxGeometryBlock();
-    QGroupBox*   createGroupBoxGeometryCircle();
-    QGroupBox*   createGroupBoxGeometryDimAligned();
-    QGroupBox*   createGroupBoxGeometryDimAngular();
-    QGroupBox*   createGroupBoxGeometryDimArcLength();
-    QGroupBox*   createGroupBoxGeometryDimDiameter();
-    QGroupBox*   createGroupBoxGeometryDimLeader();
-    QGroupBox*   createGroupBoxGeometryDimLinear();
-    QGroupBox*   createGroupBoxGeometryDimOrdinate();
-    QGroupBox*   createGroupBoxGeometryDimRadius();
-    QGroupBox*   createGroupBoxGeometryEllipse();
-    QGroupBox*   createGroupBoxGeometryImage();
-    QGroupBox*   createGroupBoxMiscImage();
-    QGroupBox*   createGroupBoxGeometryInfiniteLine();
-    QGroupBox*   createGroupBoxGeometryLine();
-    QGroupBox*   createGroupBoxGeometryPath();
-    QGroupBox*   createGroupBoxMiscPath();
-    QGroupBox*   createGroupBoxGeometryPoint();
-    QGroupBox*   createGroupBoxGeometryPolygon();
-    QGroupBox*   createGroupBoxGeometryPolyline();
-    QGroupBox*   createGroupBoxMiscPolyline();
-    QGroupBox*   createGroupBoxGeometryRay();
-    QGroupBox*   createGroupBoxGeometryRectangle();
-    QGroupBox*   createGroupBoxGeometryTextMulti();
-    QGroupBox*   createGroupBoxTextTextSingle();
-    QGroupBox*   createGroupBoxGeometryTextSingle();
-    QGroupBox*   createGroupBoxMiscTextSingle();
 };
 
 class Settings_Dialog : public QDialog
@@ -1019,9 +991,8 @@ public:
     QString curLineType;
     QString curLineWeight;
 
-    virtual QSize              sizeHint() const;
+    virtual QSize sizeHint() const;
     QString getShortCurrentFile();
-    void designDetails();
     bool loadFile(const QString &fileName);
     bool saveFile(const QString &fileName);
 signals:
@@ -1248,8 +1219,6 @@ public:
 
     CmdPromptInput*    promptInput;
 
-protected:
-
 public slots:
     QString getHistory() { return promptHistory->toHtml(); }
     QString getPrefix() { return promptInput->prefix; }
@@ -1286,8 +1255,6 @@ public slots:
     void floatingChanged(bool);
 
     void saveHistory(const QString& fileName, bool html);
-
-private slots:
 
 signals:
     void appendTheHistory(const QString& txt, int prefixLength);
@@ -1333,7 +1300,6 @@ private:
 
     CmdPromptSplitter* promptSplitter;
 
-    QHash<QString, QString>*  styleHash;
     void updateStyle();
     QTimer* blinkTimer;
     bool blinkState;
@@ -1351,15 +1317,8 @@ public:
 
     virtual void updateMenuToolbarStatusbar();
 
-    QList<QGraphicsItem*> cutCopyObjectList;
-
-    QString formatFilterOpen;
-    QString formatFilterSave;
-
     bool isCommandActive() { return prompt->isCommandActive(); }
     QString activeCommand() { return prompt->activeCommand(); }
-
-    QString platformString();
 
 public slots:
     void onCloseWindow();
@@ -1396,7 +1355,6 @@ protected:
     void loadFormats();
 
 private:
-
     QMdiSubWindow* findMdiWindow(const QString &fileName);
 
     void createAllActions();
@@ -1450,24 +1408,11 @@ public slots:
     void savefile();
     void saveasfile();
     void print();
-    void designDetails();
     void exit();
     void checkForUpdates();
 
-    /* Help Menu */
-    void tipOfTheDay();
-    void buttonTipOfTheDayClicked(int);
-    void checkBoxTipOfTheDayStateChanged(int);
-    void help();
-    void changelog();
-    void whatsThisContextHelp();
-
     void closeToolBar(QAction*);
     void floatingChangedToolBar(bool);
-
-    void toggleGrid();
-    void toggleRuler();
-    void toggleLwt();
 
     /* Icons */
     void iconResize(int iconSize);
@@ -1509,6 +1454,7 @@ MdiWindow* activeMdiWindow();
 View* activeView();
 QGraphicsScene* activeScene();
 QUndoStack* activeUndoStack();
+QString platformString();
 
 QToolButton *create_statusbarbutton(QString buttonText, MainWindow* mw);
 QIcon create_icon(QString icon);
@@ -1518,15 +1464,8 @@ void nativeAddPolyline(double startX, double startY, const QPainterPath& p, int 
 void nativeAddPath(double startX, double startY, const QPainterPath& p, int rubberMode);
 
 void nativeAlert(std::string txt);
-void nativeSetPromptPrefix(std::string txt);
 void nativeAppendPromptHistory(std::string txt);
 void messageBox(std::string type, std::string title, std::string text);
-
-/* TODO: void nativeSetRubberFilter(int64_t id); */
-/* TODO: This is so more than 1 rubber object can exist at one time without updating all rubber objects at once. */
-void nativeSetRubberMode(int mode);
-void nativeSetRubberPoint(std::string key, double x, double y);
-void nativeSetRubberText(std::string key, std::string txt);
 
 void nativeAddTextMulti(std::string str, double x, double y, double rot, bool fill, int rubberMode);
 void nativeAddTextSingle(std::string str, double x, double y, double rot, bool fill, int rubberMode);
@@ -1542,7 +1481,6 @@ EmbVector to_emb_vector(QPointF p);
 QPointF to_qpointf(EmbVector v);
 QPointF scale_and_rotate(QPointF v, double angle, double scale);
 QPointF find_mouse_snap_point(QList<QPointF> snap_points, const QPointF& mouse_point);
-
 
 #endif
 
