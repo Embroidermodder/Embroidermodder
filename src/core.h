@@ -37,6 +37,9 @@ extern "C" {
 #define MAX_MENU_LENGTH               30
 #define MAX_TOOLBAR_LENGTH            30
 #define MAX_ALIASES                  500
+#define MAX_STATE_VARIABLES          500
+#define MAX_STATE_STRING_LENGTH      200
+#define MAX_LABEL_LENGTH              50
 
 #define SCRIPT_NULL                    0
 #define SCRIPT_INT                     1
@@ -510,9 +513,8 @@ typedef struct ScriptValue_ {
     double r;
     int i;
     bool b;
-    char s[MAX_STRING_LENGTH];
-    char label[MAX_STRING_LENGTH];
-    struct ScriptValue_ *leaf;
+    char s[MAX_STATE_STRING_LENGTH];
+    char label[MAX_LABEL_LENGTH];
     int n_leaves;
     char type;
 } ScriptValue;
@@ -627,7 +629,7 @@ char *translate(const char *msg);
 
 bool pattern_save(EmbPattern *pattern, const char *fileName);
 
-int string_array_length(string_table s);
+int string_array_length(const char *s);
 int parse_floats(char *line, float result[], int n);
 int parse_vector(char *line, EmbVector *v);
 bool validRGB(float r, float g, float b);
@@ -641,6 +643,7 @@ int load_settings(char *appDir, char *configDir);
 int save_settings(const char *appDir, const char *configDir);
 
 int get_command_id(const char *);
+int get_state_variable(const char *key);
 
 /* Geometry */
 EmbArc emb_arc_set_radius(EmbArc a, EmbReal radius);
@@ -666,36 +669,7 @@ extern ScriptValue script_null;
 extern ScriptValue script_true;
 extern ScriptValue script_false;
 
-extern string_table coverage_test;
 extern int testing_mode;
-
-extern string_table menubar_full_list;
-extern string_table menubar_no_docs;
-extern string_table file_menu;
-extern string_table edit_menu;
-extern string_table view_menu;
-extern string_table zoom_menu;
-extern string_table pan_menu;
-extern string_table draw_menu;
-extern string_table tools_menu;
-extern string_table modify_menu;
-extern string_table dimension_menu;
-extern string_table sandbox_menu;
-extern string_table help_menu;
-
-extern string_table toolbars_when_docs;
-extern string_table file_toolbar;
-extern string_table edit_toolbar;
-extern string_table view_toolbar;
-extern string_table zoom_toolbar;
-extern string_table pan_toolbar;
-extern string_table icon_toolbar;
-extern string_table help_toolbar;
-extern string_table draw_toolbar;
-extern string_table inquiry_toolbar;
-extern string_table modify_toolbar;
-extern string_table dimension_toolbar;
-extern string_table sandbox_toolbar;
 
 extern StringSetting general_language;
 extern StringSetting general_icon_theme;
@@ -804,6 +778,8 @@ extern BoolSetting text_style_italic;
 extern BoolSetting text_style_underline;
 extern BoolSetting text_style_overline;
 extern BoolSetting text_style_strikeout;
+
+extern ScriptValue state[MAX_STATE_VARIABLES];
 
 /* Natives */
 void about_dialog(void);

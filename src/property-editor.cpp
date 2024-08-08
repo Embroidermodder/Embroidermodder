@@ -29,6 +29,39 @@ Editor lineStartX = {
     .object = OBJ_TYPE_LINE
 };
 
+const char *objectNames[32] = {
+    "Arc",
+    "Block",
+    "Circle",
+    "Aligned Dimension",
+    "Angular Dimension",
+    "Arclength Dimension",
+    "Diameter Dimension",
+    "Leader Dimension",
+    "Linear Dimension",
+    "Ordinate Dimension",
+    "Radius Dimension",
+    "Ellipse",
+    "Elliptical Arc",
+    "Rubber",
+    "Grid",
+    "Hatch",
+    "Image",
+    "Infinite Line",
+    "Line",
+    "Path",
+    "Point",
+    "Polygon",
+    "Polyline",
+    "Ray",
+    "Rectangle",
+    "Slot",
+    "Spline",
+    "Multiline Text",
+    "Single Line Text",
+    "Unknown"
+};
+
 QWidget* focusWidget_;
 
 QString iconDir;
@@ -428,39 +461,6 @@ PropertyEditor::togglePickAddMode()
 {
     emit pickAddModeToggled();
 }
-
-const char *objectNames[32] = {
-    "Arc",
-    "Block",
-    "Circle",
-    "Aligned Dimension",
-    "Angular Dimension",
-    "Arclength Dimension",
-    "Diameter Dimension",
-    "Leader Dimension",
-    "Linear Dimension",
-    "Ordinate Dimension",
-    "Radius Dimension",
-    "Ellipse",
-    "Elliptical Arc",
-    "Rubber",
-    "Grid",
-    "Hatch",
-    "Image",
-    "Infinite Line",
-    "Line",
-    "Path",
-    "Point",
-    "Polygon",
-    "Polyline",
-    "Ray",
-    "Rectangle",
-    "Slot",
-    "Spline",
-    "Multiline Text",
-    "Single Line Text",
-    "Unknown"
-};
 
 /* . */
 void

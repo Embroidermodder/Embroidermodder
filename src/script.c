@@ -19,35 +19,8 @@
 
 #include "toml.h"
 
-string_table coverage_test;
-
-string_table menubar_full_list;
-string_table menubar_no_docs;
-string_table file_menu;
-string_table edit_menu;
-string_table view_menu;
-string_table zoom_menu;
-string_table pan_menu;
-string_table help_menu;
-string_table draw_menu;
-string_table tools_menu;
-string_table modify_menu;
-string_table dimension_menu;
-string_table sandbox_menu;
-
-string_table toolbars_when_docs;
-string_table file_toolbar;
-string_table edit_toolbar;
-string_table view_toolbar;
-string_table zoom_toolbar;
-string_table pan_toolbar;
-string_table icon_toolbar;
-string_table help_toolbar;
-string_table draw_toolbar;
-string_table inquiry_toolbar;
-string_table modify_toolbar;
-string_table dimension_toolbar;
-string_table sandbox_toolbar;
+ScriptValue state[MAX_STATE_VARIABLES];
+int state_length = 0;
 
 StringSetting general_language;
 StringSetting general_icon_theme;
@@ -385,6 +358,7 @@ script_set_int(ScriptEnv *context, const char *label, int x)
     return 0;
 }
 
+/* . */
 int
 script_set_real(ScriptEnv *context, const char *label, double r)
 {
@@ -398,12 +372,14 @@ script_set_real(ScriptEnv *context, const char *label, double r)
     return 0;
 }
 
+/* . */
 void
 free_script_env(ScriptEnv* context)
 {
     free(context);
 }
 
+/* . */
 ScriptValue
 script_bool(bool b)
 {
@@ -413,6 +389,7 @@ script_bool(bool b)
     return value;
 }
 
+/* . */
 ScriptValue
 script_int(int i)
 {
@@ -422,6 +399,7 @@ script_int(int i)
     return value;
 }
 
+/* . */
 ScriptValue
 script_real(double r)
 {
@@ -431,6 +409,7 @@ script_real(double r)
     return value;
 }
 
+/* . */
 ScriptValue
 script_string(const char *s)
 {
@@ -607,35 +586,120 @@ validRGB(float r, float g, float b)
     return true;
 }
 
-/* . */
+/* Within the state, if a table starts on index i then the end of the table
+ * is at index i + state[i].n_leaves - 1.
+ *
+ * For regular lookups that are expensive we can keep the state variable's index
+ * in another variable.
+ */
 int
-string_array_length(string_table s)
+string_array_length(const char *s)
 {
-    int i;
-    int max_length = 1000;
-    for (i=0; i<max_length; i++) {
-        if (!strncmp(s[i], "END", MAX_COMMAND_LENGTH)) {
-            return i;
-        }
-    }
-    prompt_output("END symbol missing from string array.");
-    return max_length;
+    int key = get_state_variable(s);
+    /* printf("array_length call: %s %d\n", s, state[key].n_leaves); */
+    return state[key].n_leaves;
 }
 
 /* . */
 int
-load_string_table(toml_table_t* conf, char *table_name, string_table table)
+get_state_variable(const char *key)
 {
+    int i;
+    for (i=0; i<state_length; i++) {
+        if (!strcmp(state[i].label, key)) {
+            /* printf("get_state_variable call: %s %s\n", state[i].label, state[i].s); */
+            return i;
+        }
+    }
+    return -1;
+}
+
+/* TODO: error reporting. */
+void
+add_state_int_variable(char *label, int i)
+{
+    strncpy(state[state_length].label, label, MAX_STRING_LENGTH);
+    state[state_length].i = i;
+    state[state_length].type = SCRIPT_INT;
+    state_length++;
+}
+
+/* TODO: error reporting. */
+void
+add_state_string_variable(char *label, char *s)
+{
+    strncpy(state[state_length].label, label, MAX_STRING_LENGTH);
+    strncpy(state[state_length].s, s, MAX_STRING_LENGTH);
+    state[state_length].type = SCRIPT_STRING;
+    state_length++;
+}
+
+/* TODO: error reporting. */
+void
+add_state_real_variable(char *label, double r)
+{
+    strncpy(state[state_length].label, label, MAX_STRING_LENGTH);
+    state[state_length].r = r;
+    state[state_length].type = SCRIPT_REAL;
+    state_length++;
+}
+
+/* . */
+int
+get_state_element_from_table(char *table_name, int position)
+{
+    char key[MAX_STRING_LENGTH];
+    sprintf(key, "%s.%d", table_name, position);
+    return get_state_variable(key);
+}
+
+/* . */
+char *
+get_state_string_from_table(char *table_name, int position)
+{
+    int i = get_state_element_from_table(table_name, position);
+    if (i>=0) {
+        return state[i].s;
+    }
+    return "END";
+}
+
+/* . */
+char *
+get_state_int_from_table(char *table_name, int position)
+{
+    int i = get_state_element_from_table(table_name, position);
+    if (i>=0) {
+        return state[i].i;
+    }
+    return -1;
+}
+
+/* table_name is stored at global scope in state,
+ * so in order to access the 3rd element of table_name="array"
+ *
+ */
+int
+load_string_table(toml_table_t* conf, char *table_name)
+{
+    int table_index = state_length;
     toml_array_t* str_table = toml_array_in(conf, table_name);
     toml_datum_t str;
     for (int i=0; ; i++) {
         str = toml_string_at(str_table, i);
         if (!str.ok) {
-            strncpy(table[i], "END", MAX_COMMAND_LENGTH);
+            state[table_index].n_leaves = i;
             break;
         }
         else {
-            strncpy(table[i], str.u.s, MAX_COMMAND_LENGTH);
+            if (i>0) {
+                char label[MAX_STRING_LENGTH];
+                sprintf(label, "%s.%d", table_name, i);
+                add_state_string_variable(label, str.u.s);
+            }
+            else {
+                add_state_string_variable(table_name, str.u.s);
+            }
         }
     }
 
@@ -643,9 +707,11 @@ load_string_table(toml_table_t* conf, char *table_name, string_table table)
     return 1;
 }
 
-toml_table_t *
-load_data_file(char *fname)
+/* . */
+int
+load_file(char *fname)
 {
+    int i;
     FILE* file;
     char error_buffer[200];
     toml_table_t *conf;
@@ -653,7 +719,7 @@ load_data_file(char *fname)
     file = fopen(fname, "r");
     if (!file) {
         printf("ERROR: Failed to open \"%s\".\n", fname);
-        return NULL;
+        return 0;
     }
 
     conf = toml_parse_file(file, error_buffer, sizeof(error_buffer));
@@ -662,177 +728,106 @@ load_data_file(char *fname)
     if (!conf) {
         printf("ERROR: Failed to parse \"%s\".\n", fname);
         printf("    %s\n", error_buffer);
-        return NULL;
-    }
-    return conf;
-}
-
-int
-load_data(void)
-{
-    toml_table_t *conf = load_data_file("data/menus.toml");
-    if (!conf) {
-        return 0;
-    }
-    if (!load_string_table(conf, "menubar_full_list", menubar_full_list)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "menubar_no_docs", menubar_no_docs)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "file_menu", file_menu)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "edit_menu", edit_menu)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "view_menu", view_menu)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "zoom_menu", zoom_menu)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "pan_menu", pan_menu)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "help_menu", help_menu)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "draw_menu", draw_menu)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "tools_menu", tools_menu)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "modify_menu", modify_menu)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "dimension_menu", dimension_menu)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "sandbox_menu", sandbox_menu)) {
-        return 0;
-    }
-    toml_free(conf);
-
-    conf = load_data_file("data/toolbars.toml");
-    if (!conf) {
-        return 0;
-    }
-    if (!load_string_table(conf, "toolbars_when_docs", toolbars_when_docs)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "file_toolbar", file_toolbar)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "edit_toolbar", edit_toolbar)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "view_toolbar", view_toolbar)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "zoom_toolbar", zoom_toolbar)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "pan_toolbar", pan_toolbar)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "icon_toolbar", icon_toolbar)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "help_toolbar", help_toolbar)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "draw_toolbar", draw_toolbar)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "inquiry_toolbar", inquiry_toolbar)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "modify_toolbar", modify_toolbar)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "dimension_toolbar", dimension_toolbar)) {
-        return 0;
-    }
-    if (!load_string_table(conf, "sandbox_toolbar", sandbox_toolbar)) {
-        return 0;
-    }
-    toml_free(conf);
-
-    conf = load_data_file("data/testing.toml");
-    if (!conf) {
-        return 0;
-    }
-    if (!load_string_table(conf, "coverage_test", coverage_test)) {
-        return 0;
-    }
-    toml_free(conf);
-
-    conf = load_data_file("data/commands.toml");
-    if (!conf) {
         return 0;
     }
 
+    for (i=0; ; i++) {
+        const char *key = toml_key_in(conf, i);
+        if (!key) {
+            break;
+        }
+        if (!load_string_table(conf, key)) {
+            return 0;
+        }
+    }
     toml_free(conf);
     return 1;
 }
 
+/* . */
+int
+load_data(void)
+{
+    int i;
+    /* load manifest */
+    if (!load_file("data/toolbars.toml")) {
+        return 0;
+    }
+    if (!load_file("data/testing.toml")) {
+        return 0;
+    }
+    if (!load_file("data/commands.toml")) {
+        return 0;
+    }
+    if (!load_file("data/menus.toml")) {
+        return 0;
+    }
+
+    /* Confirm load. */
+    for (i=0; i<state_length; i++) {
+        printf("%d: %s %d\n", i, state[i].label, state[i].type);
+    }
+    return 1;
+}
+
+/* . */
 void
 read_toml_str(toml_table_t *table, char *label, StringSetting *s)
 {
 }
 
+/* . */
 void
 read_toml_int(toml_table_t *table, char *label, IntSetting *s)
 {
 }
 
+/* . */
 void
 read_toml_strtable(toml_table_t *table, char *label, StringTableSetting *s)
 {
 }
 
+/* . */
 void
 read_toml_bool(toml_table_t *table, char *label, BoolSetting *s)
 {
 }
 
+/* . */
 void
 read_toml_real(FILE *file, char *label, RealSetting r)
 {
 }
 
+/* . */
 int
 load_settings(char *appDir, char *fname)
 {
-    toml_table_t *conf = load_data_file(fname);
-    if (!conf) {
-        toml_free(conf);
-        return 0;
-    }
-
-    toml_free(conf);
     return 1;
 }
 
+/* . */
 void
 write_toml_str(FILE *file, char *label, StringSetting s)
 {
     fprintf(file, "%s = \"%s\"\r\n", label, s.setting);
 }
 
+/* . */
 void
 write_toml_int(FILE *file, char *label, IntSetting i)
 {
     fprintf(file, "%s = %d\r\n", label, i.setting);
 }
 
+/* . */
 void
 write_toml_strtable(FILE *file, char *label, StringTableSetting table)
 {
     fprintf(file, "%s = [", label);
-    for (int i=0; i<MAX_FILES; i++) {
+    int i;
+    for (i=0; i<MAX_FILES; i++) {
         if (!strcmp(table.setting[i], "END")) {
             break;
         }
@@ -844,12 +839,14 @@ write_toml_strtable(FILE *file, char *label, StringTableSetting table)
     fprintf(file, "]\r\n");
 }
 
+/* . */
 void
 write_toml_bool(FILE *file, char *label, BoolSetting i)
 {
     fprintf(file, "%s = %d\r\n", label, i.setting);
 }
 
+/* . */
 void
 write_toml_real(FILE *file, char *label, RealSetting r)
 {
@@ -1030,6 +1027,7 @@ save_settings(const char *appDir, const char *fname)
     return 1;
 }
 
+/* . */
 int
 get_command_id(const char *name)
 {
