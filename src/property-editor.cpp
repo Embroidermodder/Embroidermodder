@@ -62,6 +62,9 @@ const char *objectNames[32] = {
     "Unknown"
 };
 
+QHash<QString, QToolButton*> tool_buttons;
+QHash<QString, QLineEdit*> line_edits;
+
 QWidget* focusWidget_;
 
 QString iconDir;

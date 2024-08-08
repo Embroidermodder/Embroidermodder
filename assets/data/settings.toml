@@ -1,18 +1,5 @@
-/*
- * Embroidermodder 2.
- *
- * Copyright 2011-2024 The Embroidermodder Team
- * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
- *
- * Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
- * for advice on altering this file.
- *
- * Settings Data
- */
 
-#include "core.h"
-
-const char *extensions[MAX_STRING_LENGTH] = {
+extensions = [
     "100",
     "10o",
     "ART",
@@ -65,15 +52,13 @@ const char *extensions[MAX_STRING_LENGTH] = {
     "VIP",
     "VP3",
     "XXX",
-    "ZSK",
-    "END"
-};
+    "ZSK"
+]
 
-const char *center_on_origin_group[MAX_STRING_LENGTH] = {
+center_on_origin_group = [
     "labelGridCenterX",
     "spinBoxGridCenterX",
     "labelGridCenterY",
-    "spinBoxGridCenterY",
-    "END"
-};
+    "spinBoxGridCenterY"
+]
 

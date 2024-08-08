@@ -594,8 +594,6 @@ typedef struct StringMap_ {
     char value[MAX_STRING_LENGTH];
 } StringMap;
 
-typedef char string_table[MAX_MENU_LENGTH][MAX_COMMAND_LENGTH];
-
 /* Scripting functions */
 ScriptEnv *create_script_env();
 void free_script_env(ScriptEnv *);

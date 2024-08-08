@@ -41,11 +41,13 @@ set_visibility(QObject *senderObj, const char *key, bool visibility)
 }
 
 void
-set_visibility_group(QObject *senderObj, const char **keylist, bool visibility)
+set_visibility_group(QObject *senderObj, const char *keylist, bool visibility)
 {
     int i;
-    for (i=0; strcmp(keylist[i], "END"); i++) {
-         set_visibility(senderObj, keylist[i], visibility);
+    int n = string_array_length(keylist);
+    int start = get_state_variable(keylist);
+    for (i=0; i<n; i++) {
+         set_visibility(senderObj, state[i].s, visibility);
     }
 }
 
@@ -78,11 +80,13 @@ set_enabled(QObject *senderObj, const char *key, bool enabled)
 }
 
 void
-set_enabled_group(QObject *senderObj, const char **keylist, bool enabled)
+set_enabled_group(QObject *senderObj, const char *keylist, bool enabled)
 {
     int i;
-    for (i=0; strcmp(keylist[i], "END"); i++) {
-         set_enabled(senderObj, keylist[i], enabled);
+    int n = string_array_length(keylist);
+    int start = get_state_variable(keylist);
+    for (i=0; i<n; i++) {
+         set_enabled(senderObj, state[i].s, enabled);
     }
 }
 

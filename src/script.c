@@ -618,7 +618,7 @@ get_state_variable(const char *key)
 void
 add_state_int_variable(char *label, int i)
 {
-    strncpy(state[state_length].label, label, MAX_STRING_LENGTH);
+    strncpy(state[state_length].label, label, MAX_LABEL_LENGTH);
     state[state_length].i = i;
     state[state_length].type = SCRIPT_INT;
     state_length++;
@@ -628,8 +628,8 @@ add_state_int_variable(char *label, int i)
 void
 add_state_string_variable(char *label, char *s)
 {
-    strncpy(state[state_length].label, label, MAX_STRING_LENGTH);
-    strncpy(state[state_length].s, s, MAX_STRING_LENGTH);
+    strncpy(state[state_length].label, label, MAX_LABEL_LENGTH);
+    strncpy(state[state_length].s, s, MAX_STATE_STRING_LENGTH);
     state[state_length].type = SCRIPT_STRING;
     state_length++;
 }
@@ -638,7 +638,7 @@ add_state_string_variable(char *label, char *s)
 void
 add_state_real_variable(char *label, double r)
 {
-    strncpy(state[state_length].label, label, MAX_STRING_LENGTH);
+    strncpy(state[state_length].label, label, MAX_LABEL_LENGTH);
     state[state_length].r = r;
     state[state_length].type = SCRIPT_REAL;
     state_length++;
@@ -737,6 +737,7 @@ load_file(char *fname)
             break;
         }
         if (!load_string_table(conf, key)) {
+            printf("ERROR: failed to load string table %s\n", key);
             return 0;
         }
     }
@@ -751,6 +752,7 @@ load_data(void)
     int i;
     /* load manifest */
     if (!load_file("data/toolbars.toml")) {
+        printf("ERROR: failed to load file %s\n", "data/toolbars.toml");
         return 0;
     }
     if (!load_file("data/testing.toml")) {
@@ -760,6 +762,9 @@ load_data(void)
         return 0;
     }
     if (!load_file("data/menus.toml")) {
+        return 0;
+    }
+    if (!load_file("data/settings.toml")) {
         return 0;
     }
 

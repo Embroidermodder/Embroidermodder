@@ -752,7 +752,7 @@ class PropertyEditor : public QDockWidget
     Q_OBJECT
 
 public:
-    PropertyEditor(const QString& iconDirectory = QString(), bool pickAddMode = true, QWidget* widgetToFocus = 0, QWidget* parent = 0); /*, Qt::WindowFlags flags = 0); */
+    PropertyEditor(const QString& iconDirectory = "", bool pickAddMode = true, QWidget* widgetToFocus = 0, QWidget* parent = 0); /*, Qt::WindowFlags flags = 0); */
     ~PropertyEditor();
 
 protected:
@@ -792,7 +792,7 @@ class Settings_Dialog : public QDialog
     Q_OBJECT
 
 public:
-    Settings_Dialog(MainWindow* mw, const QString& showTab = QString(), QWidget *parent = 0);
+    Settings_Dialog(MainWindow* mw, const QString& showTab = "", QWidget *parent = 0);
     ~Settings_Dialog();
 
 private:
@@ -888,19 +888,6 @@ private slots:
     void chooseRulerColor();
     void currentRulerColorChanged(const QColor&);
     void spinBoxRulerPixelSizeValueChanged(double);
-    void checkBoxQSnapEndPointStateChanged(int);
-    void checkBoxQSnapMidPointStateChanged(int);
-    void checkBoxQSnapCenterStateChanged(int);
-    void checkBoxQSnapNodeStateChanged(int);
-    void checkBoxQSnapQuadrantStateChanged(int);
-    void checkBoxQSnapIntersectionStateChanged(int);
-    void checkBoxQSnapExtensionStateChanged(int);
-    void checkBoxQSnapInsertionStateChanged(int);
-    void checkBoxQSnapPerpendicularStateChanged(int);
-    void checkBoxQSnapTangentStateChanged(int);
-    void checkBoxQSnapNearestStateChanged(int);
-    void checkBoxQSnapApparentStateChanged(int);
-    void checkBoxQSnapParallelStateChanged(int);
     void buttonQSnapSelectAllClicked();
     void buttonQSnapClearAllClicked();
     void comboBoxQSnapLocatorColorCurrentIndexChanged(int);

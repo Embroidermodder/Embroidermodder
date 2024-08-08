@@ -13,13 +13,24 @@
 
 void set_visibility(QObject *senderObj, const char *key, bool visibility);
 void set_enabled(QObject *senderObj, const char *key, bool visibility);
-void set_visibility_group(QObject *senderObj, const char **key, bool visibility);
-void set_enabled_group(QObject *senderObj, const char **key, bool visibility);
+void set_visibility_group(QObject *senderObj, const char *key, bool visibility);
+void set_enabled_group(QObject *senderObj, const char *key, bool visibility);
 QIcon create_swatch(int32_t color);
 QPushButton *choose_color_button(QGroupBox* groupbox, IntSetting* color_setting);
 
-extern const char *extensions[MAX_STRING_LENGTH];
-extern const char *center_on_origin_group[MAX_STRING_LENGTH];
+void checkBoxQSnapEndPointStateChanged(int);
+void checkBoxQSnapMidPointStateChanged(int);
+void checkBoxQSnapCenterStateChanged(int);
+void checkBoxQSnapNodeStateChanged(int);
+void checkBoxQSnapQuadrantStateChanged(int);
+void checkBoxQSnapIntersectionStateChanged(int);
+void checkBoxQSnapExtensionStateChanged(int);
+void checkBoxQSnapInsertionStateChanged(int);
+void checkBoxQSnapPerpendicularStateChanged(int);
+void checkBoxQSnapTangentStateChanged(int);
+void checkBoxQSnapNearestStateChanged(int);
+void checkBoxQSnapApparentStateChanged(int);
+void checkBoxQSnapParallelStateChanged(int);
 
 /* . */
 QIcon
@@ -562,8 +573,10 @@ QWidget* Settings_Dialog::createTabOpenSave()
     connect(buttonCustomFilterClearAll, SIGNAL(clicked()), this, SLOT(buttonCustomFilterClearAllClicked()));
 
     int i;
-    for (i=0; strcmp(extensions[i], "END"); i++) {
-        const char *extension = extensions[i];
+    int n = string_array_length("extensions");
+    int start = get_state_variable("extensions");
+    for (i=0; i<n; i++) {
+        const char *extension = state[start+i].s;
         custom_filter[extension] = new QCheckBox(extension, groupBoxCustomFilter);
         custom_filter[extension]->setChecked(QString(opensave_custom_filter.dialog).contains("*." + QString(extension), Qt::CaseInsensitive));
         connect(custom_filter[extension], SIGNAL(stateChanged(int)), this,
@@ -579,8 +592,9 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QGridLayout* gridLayoutCustomFilter = new QGridLayout(groupBoxCustomFilter);
     int row = 0;
     int column = 0;
-    for (i=0; strcmp(extensions[i], "END"); i++) {
-        gridLayoutCustomFilter->addWidget(custom_filter[extensions[i]], row, column, Qt::AlignLeft);
+    for (i=0; i<n; i++) {
+        const char *extension = state[start+i].s;
+        gridLayoutCustomFilter->addWidget(custom_filter[extension], row, column, Qt::AlignLeft);
         row++;
         if (row == 10) {
             row = 0;
@@ -2216,7 +2230,7 @@ Settings_Dialog::checkBoxGridCenterOnOriginStateChanged(int checked)
 
     QObject* senderObj = sender();
     if (senderObj) {
-        set_enabled_group(senderObj, center_on_origin_group, !grid_center_on_origin.dialog);
+        set_enabled_group(senderObj, "center_on_origin_group", !grid_center_on_origin.dialog);
     }
 }
 
@@ -2284,13 +2298,12 @@ void
 Settings_Dialog::comboBoxRulerMetricCurrentIndexChanged(int index)
 {
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
-    if (comboBox)
-    {
-        bool ok = 0;
+    if (comboBox) {
         ruler_metric.dialog = comboBox->itemData(index).toBool();
     }
-    else
+    else {
         ruler_metric.dialog = true;
+    }
 }
 
 void
@@ -2329,79 +2342,79 @@ Settings_Dialog::spinBoxRulerPixelSizeValueChanged(double value)
 }
 
 void
-Settings_Dialog::checkBoxQSnapEndPointStateChanged(int checked)
+checkBoxQSnapEndPointStateChanged(int checked)
 {
     qsnap_endpoint.dialog = checked;
 }
 
 void
-Settings_Dialog::checkBoxQSnapMidPointStateChanged(int checked)
+checkBoxQSnapMidPointStateChanged(int checked)
 {
     qsnap_midpoint.dialog = checked;
 }
 
 void
-Settings_Dialog::checkBoxQSnapCenterStateChanged(int checked)
+checkBoxQSnapCenterStateChanged(int checked)
 {
     qsnap_center.dialog = checked;
 }
 
 void
-Settings_Dialog::checkBoxQSnapNodeStateChanged(int checked)
+checkBoxQSnapNodeStateChanged(int checked)
 {
     qsnap_node.dialog = checked;
 }
 
 void
-Settings_Dialog::checkBoxQSnapQuadrantStateChanged(int checked)
+checkBoxQSnapQuadrantStateChanged(int checked)
 {
     qsnap_quadrant.dialog = checked;
 }
 
 void
-Settings_Dialog::checkBoxQSnapIntersectionStateChanged(int checked)
+checkBoxQSnapIntersectionStateChanged(int checked)
 {
     qsnap_intersection.dialog = checked;
 }
 
 void
-Settings_Dialog::checkBoxQSnapExtensionStateChanged(int checked)
+checkBoxQSnapExtensionStateChanged(int checked)
 {
     qsnap_extension.dialog = checked;
 }
 
 void
-Settings_Dialog::checkBoxQSnapInsertionStateChanged(int checked)
+checkBoxQSnapInsertionStateChanged(int checked)
 {
     qsnap_insertion.dialog = checked;
 }
 
 void
-Settings_Dialog::checkBoxQSnapPerpendicularStateChanged(int checked)
+checkBoxQSnapPerpendicularStateChanged(int checked)
 {
     qsnap_perpendicular.dialog = checked;
 }
 
 void
-Settings_Dialog::checkBoxQSnapTangentStateChanged(int checked)
+checkBoxQSnapTangentStateChanged(int checked)
 {
     qsnap_tangent.dialog = checked;
 }
 
 void
-Settings_Dialog::checkBoxQSnapNearestStateChanged(int checked)
+checkBoxQSnapNearestStateChanged(int checked)
 {
     qsnap_nearest.dialog = checked;
 }
 
 void
-Settings_Dialog::checkBoxQSnapApparentStateChanged(int checked)
+checkBoxQSnapApparentStateChanged(int checked)
 {
     qsnap_apparent.dialog = checked;
 }
 
 void
-Settings_Dialog::checkBoxQSnapParallelStateChanged(int checked)
+checkBoxQSnapParallelStateChanged(int checked)
 {
     qsnap_parallel.dialog = checked;
 }
