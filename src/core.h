@@ -184,6 +184,7 @@ enum COMMAND_ACTIONS
     ACTION_ANGLE,
     ACTION_CIRCLE,
     ACTION_DEBUG,
+    ACTION_DIM_LEADER,
     ACTION_DISABLE,
     ACTION_DISTANCE,
     ACTION_DOLPHIN,
@@ -622,7 +623,7 @@ int script_set_int(ScriptEnv *context, const char *label, int i);
 int script_set_real(ScriptEnv *context, const char *label, double r);
 
 void prompt_output(const char *);
-int argument_checks(ScriptEnv *context, const char *function, const char *args);
+int argument_checks(ScriptEnv *context, int id);
 char *translate(const char *msg);
 
 bool pattern_save(EmbPattern *pattern, const char *fileName);
@@ -790,7 +791,7 @@ void nativeAddLine(double x1, double y1, double x2, double y2, double rot, int r
 void nativeAddTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double rot, bool fill);
 void nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode);
 void nativeAddRoundedRectangle(double x, double y, double w, double h, double rad, double rot, bool fill);
-void nativeAddArc(EmbArc arc, int rubberMode);
+void nativeAddArc(double x1, double y1, double x2, double y2, double x3, double y3, int rubberMode);
 void nativeAddCircle(double centerX, double centerY, double radius, bool fill, int rubberMode);
 void nativeAddSlot(double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode);
 void nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode);

@@ -196,10 +196,12 @@ test_command(ScriptEnv *context)
 /* TODO: remove args command, use the command_data table
  */
 int
-argument_checks(ScriptEnv *context, const char *function, const char *args)
+argument_checks(ScriptEnv *context, int id)
 {
     char s[200];
     int i;
+    const char *function = command_data[id].command;
+    const char *args = command_data[id].arguments;
     if (context->argumentCount != strlen(args)) {
         sprintf(s, "%s() requires %d arguments.", function, context->argumentCount);
         prompt_output(s);

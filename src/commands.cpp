@@ -15,6 +15,12 @@
 void checkBoxTipOfTheDayStateChanged(int checked);
 void buttonTipOfTheDayClicked(int button);
 
+ScriptValue previewon_command(ScriptEnv *context);
+ScriptValue get_command(ScriptEnv *context);
+ScriptValue set_command(ScriptEnv *context);
+ScriptValue move_command(ScriptEnv *context);
+ScriptValue sandbox_command(ScriptEnv *context);
+
 /* . */
 void
 MainWindow::stub_implement(QString txt)
@@ -123,14 +129,6 @@ platformString(void)
     #endif
     qDebug("Platform: %s", qPrintable(os));
     return os;
-}
-
-/* . */
-void
-whatsThisContextHelp(void)
-{
-    debug_message("whatsThisContextHelp()");
-    QWhatsThis::enterWhatsThisMode();
 }
 
 /* . */
@@ -703,13 +701,15 @@ ScriptValue
 MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
 {
     int id = get_command_id(qPrintable(cmd));
+    View* gview = NULL;
+    ScriptValue value = script_true;
     qDebug("runCommandCore(%s) %d", qPrintable(cmd), id);
     if (id < 0) {
         qDebug("ERROR: %s not found in command_data.", qPrintable(cmd));
         return script_false;
     }
 
-    if (!argument_checks(context, command_data[id].command, command_data[id].arguments)) {
+    if (!argument_checks(context, id)) {
         /* TODO: error */
         return script_false;
     }
@@ -720,8 +720,12 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
     if (command_data[id].flags & CLEAR_SELECTION) {
         clear_selection();
     }
-
-    ScriptValue value = script_true;
+    if (command_data[id].flags & REQUIRED_VIEW) {
+        gview = activeView();
+        if (!gview) {
+            return value;
+        }
+    }
 
     qDebug("switch");
     switch (command_data[id].id) {
@@ -755,45 +759,51 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         prompt->alert("TODO: COLORSELECTOR");
         break;
     case ACTION_CUT:
-        prompt->alert("TODO: CUT");
+        nativeCutSelected(REAL(0), REAL(1));
         break;
+
     case ACTION_DEBUG:
         prompt->appendHistory(QString(STR(0)));
         break;
+
     case ACTION_DESIGN_DETAILS:
         create_details_dialog();
         break;
+
+    case ACTION_DIM_LEADER: {
+        nativeAddDimLeader(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), OBJ_RUBBER_OFF);
+        break;
+    }
+
     case ACTION_DISABLE: {
         QString value(STR(0));
         if (value == "MOVERAPIDFIRE") {
-            View* gview = activeView();
-            if (gview) {
-                gview->disableMoveRapidFire();
-            }
+            gview->disableMoveRapidFire();
         }
         if (value == "PROMPTRAPIDFIRE") {
             prompt->disableRapidFire();
         }
         break;
     }
+
     case ACTION_DO_NOTHING:
         break;
+
     case ACTION_ENABLE: {
         QString value(STR(0));
         if (value == "MOVERAPIDFIRE") {
-            View* gview = activeView();
-            if (gview) {
-                gview->enableMoveRapidFire();
-            }
+            gview->enableMoveRapidFire();
         }
         if (value == "PROMPTRAPIDFIRE") {
             prompt->enableRapidFire();
         }
         break;
     }
+
     case ACTION_EXIT:
         exit();
         break;
+
     case ACTION_HELP:
         help();
         break;
@@ -816,10 +826,7 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         iconResize(64);
         break;
     case ACTION_MIRROR_SELECTED: {
-        View* gview = activeView();
-        if (gview) {
-            gview->mirrorSelected(REAL(0), -REAL(1), REAL(2), -REAL(3));
-        }
+        gview->mirrorSelected(REAL(0), -REAL(1), REAL(2), -REAL(3));
         break;
     }
     case ACTION_NEW:
@@ -828,13 +835,12 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
     case ACTION_OPEN:
         openFile();
         break;
+
     case ACTION_PASTE: {
-        View* gview = activeView();
-        if (gview) {
-            gview->paste();
-        }
+        gview->paste();
         break;
     }
+
     case ACTION_PASTE_SELECTED: {
         /* Paste with location x,y */
         // nativePasteSelected(REAL(0), REAL(1));
@@ -850,41 +856,54 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
     case ACTION_SAVE:
         /* save(); */
         break;
+
     case ACTION_SAVE_AS:
         /* save(); */
         break;
+
     case ACTION_SCALE_SELECTED:
         /*  */
         break;
-    case ACTION_SETTINGS_DIALOG:
+
+    case ACTION_SETTINGS_DIALOG: {
         settingsDialog();
         break;
+    }
+
     case ACTION_TEXT_BOLD:
         text_style_bold.setting = !text_style_bold.setting;
         break;
+
     case ACTION_TEXT_ITALIC:
         text_style_italic.setting = !text_style_italic.setting;
         break;
+
     case ACTION_TEXT_UNDERLINE:
         text_style_underline.setting = !text_style_underline.setting;
         break;
+
     case ACTION_TEXT_STRIKEOUT:
         text_style_strikeout.setting = !text_style_strikeout.setting;
         break;
+
     case ACTION_TEXT_OVERLINE:
         text_style_overline.setting = !text_style_overline.setting;
         break;
+
     case ACTION_TIP_OF_THE_DAY:
         tipOfTheDay();
         break;
+
     case ACTION_TODO: {
         QString s = "TODO: (" + QString(STR(0)) + ") " + QString(STR(1));
         prompt->alert(s);
         break;
     }
+
     case ACTION_UNDO:
         undo();
         break;
+
     case ACTION_VULCANIZE: {
         View* gview = activeView();
         if (gview) {
@@ -892,143 +911,255 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         }
         break;
     }
+
     case ACTION_DAY: {
-        View* gview = activeView();
-        if (gview) {
-            gview->setBackgroundColor(qRgb(255,255,255)); //TODO: Make day vision color settings.
-            gview->setCrossHairColor(qRgb(0,0,0));        //TODO: Make day vision color settings.
-            gview->setGridColor(qRgb(0,0,0));             //TODO: Make day vision color settings.
-        }
+        gview->setBackgroundColor(qRgb(255,255,255)); //TODO: Make day vision color settings.
+        gview->setCrossHairColor(qRgb(0,0,0));        //TODO: Make day vision color settings.
+        gview->setGridColor(qRgb(0,0,0));             //TODO: Make day vision color settings.
         break;
     }
     case ACTION_NIGHT: {
-        View* gview = activeView();
-        if (gview) {
-            gview->setBackgroundColor(qRgb(0,0,0));      //TODO: Make night vision color settings.
-            gview->setCrossHairColor(qRgb(255,255,255)); //TODO: Make night vision color settings.
-            gview->setGridColor(qRgb(255,255,255));      //TODO: Make night vision color settings.
+        gview->setBackgroundColor(qRgb(0,0,0));      //TODO: Make night vision color settings.
+        gview->setCrossHairColor(qRgb(255,255,255)); //TODO: Make night vision color settings.
+        gview->setGridColor(qRgb(255,255,255));      //TODO: Make night vision color settings.
+        break;
+    }
+
+    case ACTION_PRINT: {
+        /* TODO: print action */
+        break;
+    }
+
+    case ACTION_WHATS_THIS: {
+        debug_message("whatsThisContextHelp()");
+        QWhatsThis::enterWhatsThisMode();
+        break;
+    }
+
+    case ACTION_MAKE_LAYER_CURRENT:
+        /* makeLayerActive(); */
+        break;
+    case ACTION_LAYERS:
+        /* layerManager(); */
+        break;
+    case ACTION_LAYER_SELECTOR:
+        /* TODO: layer_selector */
+        break;
+    case ACTION_LAYER_PREVIOUS:
+        /* TODO: layer_previous */
+        break;
+    case ACTION_LINE_TYPE_SELECTOR:
+        /* TODO: line_type_selector */
+        break;
+    case ACTION_LINE_WEIGHT_SELECTOR:
+        /* TODO: line_weight_selector */
+        break;
+    case ACTION_HIDE_ALL_LAYERS:
+        /* TODO: hide_all_layers */
+        break;
+    case ACTION_SHOW_ALL_LAYERS:
+        /* TODO: show_all_layers */
+        break;
+    case ACTION_FREEZE_ALL_LAYERS:
+        /* TODO: freeze_all_layers */
+        break;
+    case ACTION_THAW_ALL_LAYERS:
+        /* TODO: thaw_all_layers */
+        break;
+    case ACTION_LOCK_ALL_LAYERS:
+        /* TODO: lock_all_layers */
+        break;
+    case ACTION_UNLOCK_ALL_LAYERS:
+        /* TODO: unlock_all_layers */
+        break;
+
+    case ACTION_GET: {
+        value = get_command(context);
+        break;
+    }
+
+    case ACTION_SET: {
+        set_command(context);
+        break;
+    }
+
+    case ACTION_CIRCLE: {
+        nativeAddCircle(REAL(0), REAL(1), REAL(2), BOOL(4), OBJ_RUBBER_OFF);
+        break;
+    }
+
+    case ACTION_DISTANCE:
+        break;
+
+    case ACTION_DOLPHIN:
+        break;
+
+    case ACTION_ELLIPSE: {
+        nativeAddEllipse(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), OBJ_RUBBER_OFF);
+        break;
+    }
+
+    case ACTION_ERASE: {
+        if (num_selected() <= 0) {
+            /* TODO: Prompt to select objects if nothing is preselected. */
+            prompt->alert(
+            translate("Preselect objects before invoking the delete command."));
+            messageBox("information", translate("Delete Preselect"),
+                translate("Preselect objects before invoking the delete command."));
+        }
+        else {
+            gview->deleteSelected();
         }
         break;
     }
-    
-/*
-    case ACTION_DESIGN_DETAILS:
-    case ACTION_PRINT:
 
-    case ACTION_HELP:
-    case ACTION_CHANGELOG:
-    case ACTION_ABOUT:
-    case ACTION_WHATS_THIS:
+    case ACTION_ERROR: {
+        std::string s = "ERROR: (";
+        s += STR(0);
+        s += ") ";
+        s += STR(1);
+        prompt->setPrefix(QString(s.c_str()));
+        prompt->appendHistory("");
+        break;
+    }
 
-    case ACTION_SETTINGS_DIALOG:
-
-    case ACTION_MAKE_LAYER_CURRENT:
-    case ACTION_LAYERS:
-    case ACTION_LAYER_SELECTOR:
-    case ACTION_LAYER_PREVIOUS:
-    case ACTION_COLOR_SELECTOR:
-    case ACTION_LINE_TYPE_SELECTOR:
-    case ACTION_LINE_WEIGHT_SELECTOR:
-    case ACTION_HIDE_ALL_LAYERS:
-    case ACTION_SHOW_ALL_LAYERS:
-    case ACTION_FREEZE_ALL_LAYERS:
-    case ACTION_THAW_ALL_LAYERS:
-    case ACTION_LOCK_ALL_LAYERS:
-    case ACTION_UNLOCK_ALL_LAYERS:
-
-
-    case ACTION_GET:
-    case ACTION_SET:
-
-    case ACTION_CIRCLE:
-    case ACTION_DEBUG:
-    case ACTION_DISTANCE:
-    case ACTION_DOLPHIN:
-    case ACTION_ELLIPSE:
-
-    case ACTION_ERASE:
-    case ACTION_ERROR:
     case ACTION_HEART:
-    case ACTION_LINE:
+        break;
+
+    case ACTION_LINE: {
+        nativeAddLine(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), OBJ_RUBBER_OFF);
+        break;
+    }
+
     case ACTION_LOCATE_POINT:
-    case ACTION_MIRROR_SELECTED:
+        break;
+
     case ACTION_MOVE:
-    case ACTION_MOVE_SELECTED:
+        move_command(context);
+        break;
+
+    case ACTION_MOVE_SELECTED: {
+        gview->moveSelected(REAL(0), -REAL(1));
+        break;
+    }
+
     case ACTION_PATH:
-    case ACTION_PLATFORM:
+        break;
     case ACTION_POINT:
+        break;
     case ACTION_POLYGON:
+        break;
     case ACTION_POLYLINE:
-    case ACTION_PREVIEW_OFF:
-    case ACTION_PREVIEW_ON:
+        break;
+
+    case ACTION_PREVIEW_OFF: {
+        gview->previewOff();
+        break;
+    }
+
+    case ACTION_PREVIEW_ON: {
+        value = previewon_command(context);
+        break;
+    }
+
     case ACTION_QUICKLEADER:
-    case ACTION_RECTANGLE:
+        break;
+
+    case ACTION_RECTANGLE: {
+        nativeAddRectangle(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), OBJ_RUBBER_OFF);
+        break;
+    }
+
     case ACTION_RGB:
-    case ACTION_ROTATE:
-    case ACTION_SANDBOX:
-    case ACTION_SCALE:
-    case ACTION_SCALE_SELECTED,
-    case ACTION_SELECT_ALL:
+        break;
+
+    case ACTION_ROTATE: {
+        gview->rotateSelected(REAL(0), -REAL(1), -REAL(2));
+        break;
+    }
+
+    case ACTION_SANDBOX: {
+        value = sandbox_command(context);
+        break;
+    }
+
+    case ACTION_SCALE: {
+        break;
+    }
+
+    case ACTION_SELECT_ALL: {
+        gview->selectAll();
+        break;
+    }
+
     case ACTION_SINGLE_LINE_TEXT:
+        break;
+
     case ACTION_SNOWFLAKE:
+        break;
+
     case ACTION_STAR:
+        break;
+
     case ACTION_SYSWINDOWS:
-    case ACTION_TODO:
+        break;
 
     case ACTION_ADD:
-    case ACTION_DELETE:
+        break;
+
+    /* ACTION_DELETE_SELECTED? */
+    case ACTION_DELETE: {
+        gview->deleteSelected();
+        break;
+    }
+
     case ACTION_GRIP_EDIT:
+        break;
+
     case ACTION_NAV:
+        break;
+
     case ACTION_MIRROR:
+        break;
 
     case ACTION_TEST:
-*/
+        break;
 
     case ACTION_PAN_REAL_TIME: {
-        View* gview = activeView();
-        if (gview) {
-            gview->panRealTime();
-        }
+        gview->panRealTime();
         break;
     }
     case ACTION_PAN_POINT: {
-        View* gview = activeView();
-        if (gview) {
-            gview->panPoint();
-        }
+        gview->panPoint();
         break;
     }
     case ACTION_PAN_LEFT: {
-        View* gview = activeView();
         QUndoStack* stack = gview->getUndoStack();
-        if (gview && stack) {
+        if (stack) {
             UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanLeft", gview, 0);
             stack->push(cmd);
         }
         break;
     }
     case ACTION_PAN_RIGHT: {
-        View* gview = activeView();
         QUndoStack* stack = gview->getUndoStack();
-        if (gview && stack) {
+        if (stack) {
             UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanRight", gview, 0);
             stack->push(cmd);
         }
         break;
     }
     case ACTION_PAN_UP: {
-        View* gview = activeView();
         QUndoStack* stack = gview->getUndoStack();
-        if (gview && stack) {
+        if (stack) {
             UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanUp", gview, 0);
             stack->push(cmd);
         }
         break;
     }
     case ACTION_PAN_DOWN: {
-        View* gview = activeView();
         QUndoStack* stack = gview->getUndoStack();
-        if (gview && stack) {
+        if (stack) {
             UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanDown", gview, 0);
             stack->push(cmd);
         }
@@ -1071,26 +1202,19 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         break;
     }
     case ACTION_ZOOM_EXTENTS: {
-        View* gview = activeView();
         QUndoStack* stack = gview->getUndoStack();
-        if (gview && stack) {
+        if (stack) {
             UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomExtents", gview, 0);
             stack->push(cmd);
         }
         break;
     }
     case ACTION_ZOOM_IN: {
-        View* gview = activeView();
-        if (gview) {
-            gview->zoomIn();
-        }
+        gview->zoomIn();
         break;
     }
     case ACTION_ZOOM_OUT: {
-        View* gview = activeView();
-        if (gview) {
-            gview->zoomOut();
-        }
+        gview->zoomOut();
         break;
     }
     case ACTION_ZOOM_PREVIOUS: {
@@ -1106,19 +1230,15 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         break;
     }
     case ACTION_ZOOM_SELECTED: {
-        View* gview = activeView();
         QUndoStack* stack = gview->getUndoStack();
-        if (gview && stack) {
+        if (stack) {
             UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomSelected", gview, 0);
             stack->push(cmd);
         }
         break;
     }
     case ACTION_ZOOM_WINDOW: {
-        View* gview = activeView();
-        if (gview) {
-            gview->zoomWindow();
-        }
+        gview->zoomWindow();
         break;
     }
     default:
@@ -1263,15 +1383,6 @@ nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b)
 {
     grid_color.setting = qRgb(r,g,b);
     _main->updateAllViewGridColors(qRgb(r,g,b));
-}
-
-void
-nativeClearRubber()
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->clearRubberRoom();
-    }
 }
 
 bool
@@ -1435,14 +1546,18 @@ nativeAddRoundedRectangle(double x, double y, double w, double h, double rad, do
 }
 
 void
-nativeAddArc(EmbArc arc, int rubberMode)
+nativeAddArc(double x1, double y1, double x2, double y2, double x3, double y3, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* scene = activeScene();
     if (gview && scene) {
-        arc.start.y = -arc.start.y;
-        arc.mid.y = -arc.mid.y;
-        arc.end.y = -arc.end.y;
+        EmbArc arc;
+        arc.start.x = x1;
+        arc.start.y = -y1;
+        arc.mid.y = x2;
+        arc.mid.y = -y2;
+        arc.end.y = x3;
+        arc.end.y = -y3;
         Object* arcObj = new Object(arc, _main->getCurrentColor());
         arcObj->setObjectRubberMode(rubberMode);
         if (rubberMode) {
@@ -1689,26 +1804,8 @@ nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode)
 }
 
 void
-nativeDeleteSelected()
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->deleteSelected();
-    }
-}
-
-void
 nativeCutSelected(double x, double y)
 {
-}
-
-void
-nativeMoveSelected(double dx, double dy)
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->moveSelected(dx, -dy);
-    }
 }
 
 void
@@ -1724,15 +1821,6 @@ nativeScaleSelected(double x, double y, double factor)
     View* gview = activeView();
     if (gview) {
         gview->scaleSelected(x, -y, factor);
-    }
-}
-
-void
-nativeRotateSelected(double x, double y, double rot)
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->rotateSelected(x, -y, -rot);
     }
 }
 
@@ -1772,15 +1860,6 @@ clear_selection(void)
     View* gview = activeView();
     if (gview) {
         gview->clearSelection();
-    }
-}
-
-void
-select_all(void)
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->selectAll();
     }
 }
 
@@ -1887,78 +1966,28 @@ about_dialog(void)
     QApplication::restoreOverrideCursor();
 }
 
-/* Erase is not context-dependant. */
-ScriptValue
-erase_command(ScriptEnv * /* context */)
-{
-    init_command();
-    if (num_selected() <= 0) {
-        /* TODO: Prompt to select objects if nothing is preselected. */
-        prompt->alert(
-            translate("Preselect objects before invoking the delete command."));
-        end_command();
-        messageBox("information", translate("Delete Preselect"),
-            translate("Preselect objects before invoking the delete command."));
-    }
-    else {
-        nativeDeleteSelected();
-        end_command();
-    }
-    end_command();
-    return script_null;
-}
-
-/* Error is not context-dependant. */
-ScriptValue
-error_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "error_command", "ss")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    std::string s = "ERROR: (";
-    s += STR(0);
-    s += ") ";
-    s += STR(1);
-    prompt->setPrefix(QString(s.c_str()));
-    prompt->appendHistory("");
-    end_command();
-    return script_null;
-}
-
 /* GET is a prompt-only Command. */
 ScriptValue
 get_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "get_prompt", "s")) {
-        return script_false;
-    }
-
     QString value(STR(0));
-
-    init_command();
 
     if (value == "MOUSEX") {
         QGraphicsScene* scene = activeScene();
         if (!scene) {
-            end_command();
             return script_false;
         }
         ScriptValue r = script_real(scene->property("SCENE_MOUSE_POINT").toPointF().x());
         /* _main->qDebug("mouseY: %.50f", r.r); */
-        end_command();
         return r;
     }
     else if (value == "MOUSEY") {
         QGraphicsScene* scene = activeScene();
         if (!scene) {
-            end_command();
             return script_false;
         }
         ScriptValue r = script_real(-scene->property("SCENE_MOUSE_POINT").toPointF().y());
         //_main->qDebug("mouseY: %.50f", r.r);
-        end_command();
         return r;
     }
     else if (value == "TEXTANGLE") {
@@ -1992,31 +2021,6 @@ get_command(ScriptEnv* context)
         return script_bool(nativeQSnapY());
     }
 
-    end_command();
-    return script_null;
-}
-
-/* MOVESELECTED */
-ScriptValue
-moveselected_command(ScriptEnv *context)
-{
-    end_command();
-    return script_null;
-}
-
-/* PREVIEWOFF . */
-ScriptValue
-previewoff_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "PreviewOff", "")) {
-        return script_false;
-    }
-
-    View* gview = activeView();
-    if (gview) {
-        gview->previewOff();
-    }
-    end_command();
     return script_null;
 }
 
@@ -2024,10 +2028,6 @@ previewoff_command(ScriptEnv *context)
 ScriptValue
 previewon_command(ScriptEnv *context)
 {
-    if (!argument_checks(context, "previewon_command", "ssrrr")) {
-        return script_false;
-    }
-
     QString cloneStr = QString(STR(0)).toUpper();
     int clone = PREVIEW_CLONE_NULL;
     if (cloneStr == "SELECTED") {
@@ -2064,24 +2064,13 @@ previewon_command(ScriptEnv *context)
     else {
         prompt_output("Preview on requires an active view.");
     }
-    end_command();
-    return script_null;
-}
-
-/* PRINT . */
-ScriptValue
-print_command(ScriptEnv *context)
-{
-    init_command();
-    clear_selection();
-
-    end_command();
     return script_null;
 }
 
 /* SET is a prompt-only Command.
  *
  * We can't use the argument_checks function because the 2nd argument is a wildcard.
+ * we need an override for the argument_checks call
  */
 ScriptValue
 set_command(ScriptEnv* context)
@@ -2091,8 +2080,6 @@ set_command(ScriptEnv* context)
     }
 
     QString value(STR(0));
-
-    init_command();
 
     if (value == "TEXTANGLE") {
         if (context->argument[1].type != SCRIPT_REAL) {
@@ -2143,7 +2130,6 @@ set_command(ScriptEnv* context)
         text_style_underline.setting = BOOL(1);
     }
 
-    end_command();
     return script_null;
 }
 
@@ -2151,8 +2137,6 @@ set_command(ScriptEnv* context)
 ScriptValue
 syswindows_command(ScriptEnv * context)
 {
-    init_command();
-    clear_selection();
     prompt_output(translate("Enter an option [Cascade/Tile]: "));
 
     // Do nothing for click, context
@@ -2176,30 +2160,12 @@ syswindows_command(ScriptEnv * context)
     return script_null;
 }
 
-/* WINDOWTILE is not context-dependant */
-ScriptValue
-whats_this_command(ScriptEnv *context)
-{
-    if (!argument_checks(context, "whats_this_command", "")) {
-        return script_false;
-    }
-    init_command();
-    clear_selection();
-    end_command();
-    return script_null;
-}
-
-
 /* --------------------------------------------------------------------------
  */
 
 ScriptValue
 blink_prompt_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "debug", "")) {
-        return script_false;
-    }
-
     prompt->startBlinking();
     return script_null;
 }
@@ -2207,9 +2173,6 @@ blink_prompt_command(ScriptEnv* context)
 ScriptValue
 set_prompt_prefix_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "debug", "s")) {
-        return script_false;
-    }
     prompt->setPrefix(QString(STR(0)));
     return script_null;
 }
@@ -2235,10 +2198,6 @@ append_prompt_history(ScriptEnv* context)
 ScriptValue
 messagebox(ScriptEnv* context)
 {
-    if (!argument_checks(context, "debug", "sss")) {
-        return script_false;
-    }
-
     std::string type(STR(0));
     std::string title(STR(1));
     std::string text(STR(2));
@@ -2256,18 +2215,12 @@ messagebox(ScriptEnv* context)
 ScriptValue
 is_int_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "debug", "i")) {
-        return script_false;
-    }
     return script_true;
 }
 
 ScriptValue
 print_area_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "printArea", "rrrr")) {
-        return script_false;
-    }
     qDebug("nativePrintArea(%.2f, %.2f, %.2f, %.2f)", REAL(0), REAL(1), REAL(2), REAL(3));
     /* TODO: Print Setup Stuff
         nativePrintArea(REAL(0), REAL(1), REAL(2), REAL(3));
@@ -2279,9 +2232,6 @@ print_area_command(ScriptEnv* context)
 ScriptValue
 set_background_color_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "debug", "rrr")) {
-        return script_false;
-    }
     if (REAL(0) < 0 || REAL(0) > 255) {
         prompt_output("UNKNOWN_ERROR setBackgroundColor(): r value must be in range 0-255");
         return script_false;
@@ -2302,10 +2252,6 @@ set_background_color_command(ScriptEnv* context)
 ScriptValue
 set_crosshair_color_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "debug", "rrr")) {
-        return script_false;
-    }
-
     if (REAL(0) < 0 || REAL(0) > 255) {
         prompt_output("UNKNOWN_ERROR setCrossHairColor(): r value must be in range 0-255");
         return script_false;
@@ -2326,10 +2272,6 @@ set_crosshair_color_command(ScriptEnv* context)
 ScriptValue
 set_grid_color_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "debug", "rrr")) {
-        return script_false;
-    }
-
     if (REAL(0) < 0 || REAL(0) > 255) {
         prompt_output("UNKNOWN_ERROR setGridColor(): r value must be in range 0-255");
         return script_false;
@@ -2350,9 +2292,6 @@ set_grid_color_command(ScriptEnv* context)
 ScriptValue
 add_text_multi_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "mouseX", "srrrb")) {
-        return script_false;
-    }
     nativeAddTextMulti(std::string(STR(0)), REAL(1), REAL(2), REAL(3),
         BOOL(4), OBJ_RUBBER_OFF);
     return script_null;
@@ -2361,9 +2300,6 @@ add_text_multi_command(ScriptEnv* context)
 ScriptValue
 add_text_single_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "mouseX", "srrrb")) {
-        return script_false;
-    }
     nativeAddTextSingle(std::string(STR(0)), REAL(1), REAL(2), REAL(3),
         BOOL(4), OBJ_RUBBER_OFF);
     return script_null;
@@ -2386,41 +2322,15 @@ add_ray_command(ScriptEnv* context)
 }
 
 ScriptValue
-add_line_command(ScriptEnv* context)
-{
-    if (!argument_checks(context, "add_line_command", "rrrrr")) {
-        return script_false;
-    }
-    nativeAddLine(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), OBJ_RUBBER_OFF);
-    return script_null;
-}
-
-ScriptValue
 add_triangle_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "add_triangle_command", "rrrrrrrb")) {
-        return script_false;
-    }
     nativeAddTriangle(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), REAL(5), REAL(6), BOOL(7));
-    return script_null;
-}
-
-ScriptValue
-add_rectangle_command(ScriptEnv* context)
-{
-    if (!argument_checks(context, "add_rectangle_command", "rrrrrb")) {
-        return script_false;
-    }
-    nativeAddRectangle(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), OBJ_RUBBER_OFF);
     return script_null;
 }
 
 ScriptValue
 add_rounded_rectangle_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "add_rounded_rectangle", "rrrrrrb")) {
-        return script_false;
-    }
     nativeAddRoundedRectangle(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), REAL(5), BOOL(6));
     return script_null;
 }
@@ -2428,56 +2338,20 @@ add_rounded_rectangle_command(ScriptEnv* context)
 ScriptValue
 add_arc_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "mouseX", "rrrrrr")) {
-        return script_false;
-    }
-    EmbArc arc;
-    arc.start.x = REAL(0);
-    arc.start.y = REAL(1);
-    arc.mid.x = REAL(2);
-    arc.mid.y = REAL(3);
-    arc.end.x = REAL(4);
-    arc.end.y = REAL(5);
-    nativeAddArc(arc, OBJ_RUBBER_OFF);
-    return script_null;
-}
-
-ScriptValue
-add_circle_command(ScriptEnv* context)
-{
-    if (!argument_checks(context, "mouseX", "rrrb")) {
-        return script_false;
-    }
-    nativeAddCircle(REAL(0), REAL(1), REAL(2), BOOL(4), OBJ_RUBBER_OFF);
+    nativeAddArc(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), REAL(5), OBJ_RUBBER_OFF);
     return script_null;
 }
 
 ScriptValue
 add_slot_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "mouseX", "rrrrrb")) {
-        return script_false;
-    }
     nativeAddSlot(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), OBJ_RUBBER_OFF);
-    return script_null;
-}
-
-ScriptValue
-add_ellipse_command(ScriptEnv* context)
-{
-    if (!argument_checks(context, "mouseX", "rrrrrb")) {
-        return script_false;
-    }
-    nativeAddEllipse(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), OBJ_RUBBER_OFF);
     return script_null;
 }
 
 ScriptValue
 add_point_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "mouseX", "rr")) {
-        return script_false;
-    }
     nativeAddPoint(REAL(0), REAL(1));
     return script_null;
 }
@@ -2623,59 +2497,9 @@ add_polyline_command(ScriptEnv* context)
     return script_null;
 }
 
-/* . */
-ScriptValue
-add_path_command(ScriptEnv* context)
-{
-    /* TODO: parameter error checking */
-    prompt_output("TODO: finish addPath command");
-    return script_null;
-}
-
-/* . */
-ScriptValue
-add_horizontal_dimension_command(ScriptEnv* context)
-{
-    /* TODO: parameter error checking */
-    prompt_output("TODO: finish addHorizontalDimension command");
-    return script_null;
-}
-
-/* . */
-ScriptValue
-add_vertical_dimension_command(ScriptEnv* context)
-{
-    /* TODO: parameter error checking */
-    prompt_output("TODO: finish addVerticalDimension command");
-    return script_null;
-}
-
-ScriptValue
-add_image_command(ScriptEnv* context)
-{
-    /* TODO: parameter error checking */
-    prompt_output("TODO: finish addImage command");
-    return script_null;
-}
-
-ScriptValue
-add_dimleader_command(ScriptEnv* context)
-{
-    if (!argument_checks(context, "calculateAngle", "rrrrr")) {
-        return script_false;
-    }
-
-    nativeAddDimLeader(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), OBJ_RUBBER_OFF);
-    return script_null;
-}
-
 ScriptValue
 set_cursor_shape_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "calculateAngle", "s")) {
-        return script_false;
-    }
-
     nativeSetCursorShape(STR(0));
     return script_null;
 }
@@ -2683,10 +2507,6 @@ set_cursor_shape_command(ScriptEnv* context)
 ScriptValue
 calculate_distance_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "numSelected", "rrrr")) {
-        return script_false;
-    }
-
     double r = QLineF(REAL(0), REAL(1), REAL(2), REAL(3)).length();
     return script_real(r);
 }
@@ -2694,10 +2514,6 @@ calculate_distance_command(ScriptEnv* context)
 ScriptValue
 perpendicular_distance_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "numSelected", "rrrrrr")) {
-        return script_false;
-    }
-
     QLineF line(REAL(0), REAL(1), REAL(2), REAL(3));
     QLineF norm = line.normalVector();
     double dx = REAL(4) - REAL(0);
@@ -2712,22 +2528,7 @@ perpendicular_distance_command(ScriptEnv* context)
 ScriptValue
 num_selected_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "numSelected", "")) {
-        return script_false;
-    }
-
     return script_int(num_selected());
-}
-
-ScriptValue
-select_all_command(ScriptEnv* context)
-{
-    if (!argument_checks(context, "selectAll", "")) {
-        return script_false;
-    }
-
-    select_all();
-    return script_null;
 }
 
 /* TODO: finish
@@ -2739,152 +2540,14 @@ add_to_selection_command(ScriptEnv* context)
 }
 
 ScriptValue
-delete_selected_command(ScriptEnv* context)
-{
-    if (!argument_checks(context, "deleteSelected", "")) {
-        return script_false;
-    }
-
-    nativeDeleteSelected();
-    return script_null;
-}
-
-ScriptValue
-cut_selected_command(ScriptEnv* context)
-{
-    if (!argument_checks(context, "scaleSelected", "rr")) {
-        return script_false;
-    }
-
-    nativeCutSelected(REAL(0), REAL(1));
-    return script_null;
-}
-
-ScriptValue
-move_selected_command(ScriptEnv* context)
-{
-    if (!argument_checks(context, "scaleSelected", "rr")) {
-        return script_false;
-    }
-
-    nativeMoveSelected(REAL(0), REAL(1));
-    return script_null;
-}
-
-ScriptValue
 scale_selected_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "scaleSelected", "rrr")) {
-        return script_false;
-    }
-
     if (REAL(2) <= 0.0) {
         prompt_output("UNKNOWN_ERROR scaleSelected(): scale factor must be greater than zero");
         return script_false;
     }
 
     nativeScaleSelected(REAL(0), REAL(1), REAL(2));
-    return script_null;
-}
-
-ScriptValue
-rotate_selected_command(ScriptEnv* context)
-{
-    if (!argument_checks(context, "rotate_selected_command", "rrr")) {
-        return script_false;
-    }
-
-    nativeRotateSelected(REAL(0), REAL(1), REAL(2));
-    return script_null;
-}
-
-/*
- * View Commands
- */
-
-/* . */
-ScriptValue
-hidealllayers_command(ScriptEnv*)
-{
-    return script_null;
-}
-
-/* . */
-ScriptValue
-freezealllayers_command(ScriptEnv*)
-{
-    return script_null;
-}
-
-/* . */
-ScriptValue
-layers_command(ScriptEnv*)
-{
-    /* layerManager(); */
-    return script_null;
-}
-
-/* . */
-ScriptValue
-layerprevious_command(ScriptEnv*)
-{
-    return script_null;
-}
-
-/* . */
-ScriptValue
-layerselector_command(ScriptEnv*)
-{
-    return script_null;
-}
-
-/* . */
-ScriptValue
-linetypeselector_command(ScriptEnv*)
-{
-    return script_null;
-}
-
-/* . */
-ScriptValue
-lineweightselector_command(ScriptEnv*)
-{
-    return script_null;
-}
-
-/* . */
-ScriptValue
-lockalllayers_command(ScriptEnv*)
-{
-    return script_null;
-}
-
-/* . */
-ScriptValue
-makelayercurrent_command(ScriptEnv*)
-{
-    /* makeLayerActive(); */
-    return script_null;
-}
-
-/* . */
-ScriptValue
-showalllayers_command(ScriptEnv*)
-{
-    return script_null;
-}
-
-/* . */
-ScriptValue
-thawalllayers_command(ScriptEnv*)
-{
-    return script_null;
-}
-
-/* . */
-ScriptValue
-unlockalllayers_command(ScriptEnv*)
-{
     return script_null;
 }
 
@@ -3274,7 +2937,7 @@ distance_command(ScriptEnv *context)
 
 /* MOVE . */
 ScriptValue
-move_command(ScriptEnv * context)
+move_command(ScriptEnv *context)
 {
     switch (context->context) {
     case CONTEXT_MAIN:
@@ -3295,7 +2958,6 @@ move_command(ScriptEnv * context)
 void
 main(void)
 {
-    init_command();
     global.firstRun = true;
     global.base.x = NaN;
     global.base.y = NaN;
@@ -3418,7 +3080,7 @@ main(void)
     if (num_selected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
         alert(translate("Preselect objects before invoking the scale command."));
-        endCommand();
+        end_command();
         messageBox("information", translate("Scale Preselect"), translate("Preselect objects before invoking the scale command."));
     }
     else {
@@ -3445,7 +3107,7 @@ click(EmbVector position)
             global.factor = calculateDistance(global.baseX, global.baseY, global.destX, global.destY);
             scaleSelected(global.baseX, global.baseY, global.factor);
             previewOff();
-            endCommand();
+            end_command();
         }
     }
     else if (global.mode == global.mode_REFERENCE) {
@@ -3533,7 +3195,7 @@ void prompt(str)
                     global.factor = Number(str);
                     scaleSelected(global.baseX, global.baseY, global.factor);
                     previewOff();
-                    endCommand();
+                    end_command();
                 }
             }
         }
@@ -3641,7 +3303,7 @@ void prompt(str)
                     else {
                         scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
                         previewOff();
-                        endCommand();
+                        end_command();
                     }
                 }
             }
@@ -3655,7 +3317,7 @@ void prompt(str)
                 else {
                     scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
                     previewOff();
-                    endCommand();
+                    end_command();
                 }
             }
         }
@@ -3669,11 +3331,63 @@ void prompt(str)
 ScriptValue
 sandbox_command(ScriptEnv * context)
 {
-    init_command();
-    clear_selection();
-
     switch (context->context) {
     case CONTEXT_MAIN:
+        /*
+        //Report number of pre-selected objects
+        prompt_output("Number of Objects Selected: " + numSelected().toString());
+    
+        mirrorSelected(0,0,0,1);
+    
+        //selectAll();
+        //rotateSelected(0,0,90);
+    
+        //Polyline & Polygon Testing
+    
+        var offsetX = 0.0;
+        var offsetY = 0.0;
+    
+        var polylineArray = [];
+        polylineArray.push(1.0 + offsetX);
+        polylineArray.push(1.0 + offsetY);
+        polylineArray.push(1.0 + offsetX);
+        polylineArray.push(2.0 + offsetY);
+        polylineArray.push(2.0 + offsetX);
+        polylineArray.push(2.0 + offsetY);
+        polylineArray.push(2.0 + offsetX);
+        polylineArray.push(3.0 + offsetY);
+        polylineArray.push(3.0 + offsetX);
+        polylineArray.push(3.0 + offsetY);
+        polylineArray.push(3.0 + offsetX);
+        polylineArray.push(2.0 + offsetY);
+        polylineArray.push(4.0 + offsetX);
+        polylineArray.push(2.0 + offsetY);
+        polylineArray.push(4.0 + offsetX);
+        polylineArray.push(1.0 + offsetY);
+        addPolyline(polylineArray);
+    
+        offsetX = 5.0;
+        offsetY = 0.0;
+    
+        var polygonArray = [];
+        polygonArray.push(1.0 + offsetX);
+        polygonArray.push(1.0 + offsetY);
+        polygonArray.push(1.0 + offsetX);
+        polygonArray.push(2.0 + offsetY);
+        polygonArray.push(2.0 + offsetX);
+        polygonArray.push(2.0 + offsetY);
+        polygonArray.push(2.0 + offsetX);
+        polygonArray.push(3.0 + offsetY);
+        polygonArray.push(3.0 + offsetX);
+        polygonArray.push(3.0 + offsetY);
+        polygonArray.push(3.0 + offsetX);
+        polygonArray.push(2.0 + offsetY);
+        polygonArray.push(4.0 + offsetX);
+        polygonArray.push(2.0 + offsetY);
+        polygonArray.push(4.0 + offsetX);
+        polygonArray.push(1.0 + offsetY);
+        addPolygon(polygonArray);
+        */
         break;
     case CONTEXT_CLICK:
         break;
@@ -3684,88 +3398,6 @@ sandbox_command(ScriptEnv * context)
     default:
         break;
     }
-
-    end_command();
-    return script_null;
-}
-
-#if 0
-//Command: Sandbox
-
-var global = {}; //Required
-global.test1;
-global.test2;
-
-void main()
-{
-    init_command();
-    
-    //Report number of pre-selected objects
-    prompt_output("Number of Objects Selected: " + numSelected().toString());
-    
-    mirrorSelected(0,0,0,1);
-    
-    //selectAll();
-    //rotateSelected(0,0,90);
-    
-    //Polyline & Polygon Testing
-    
-    var offsetX = 0.0;
-    var offsetY = 0.0;
-    
-    var polylineArray = [];
-    polylineArray.push(1.0 + offsetX);
-    polylineArray.push(1.0 + offsetY);
-    polylineArray.push(1.0 + offsetX);
-    polylineArray.push(2.0 + offsetY);
-    polylineArray.push(2.0 + offsetX);
-    polylineArray.push(2.0 + offsetY);
-    polylineArray.push(2.0 + offsetX);
-    polylineArray.push(3.0 + offsetY);
-    polylineArray.push(3.0 + offsetX);
-    polylineArray.push(3.0 + offsetY);
-    polylineArray.push(3.0 + offsetX);
-    polylineArray.push(2.0 + offsetY);
-    polylineArray.push(4.0 + offsetX);
-    polylineArray.push(2.0 + offsetY);
-    polylineArray.push(4.0 + offsetX);
-    polylineArray.push(1.0 + offsetY);
-    addPolyline(polylineArray);
-    
-    offsetX = 5.0;
-    offsetY = 0.0;
-    
-    var polygonArray = [];
-    polygonArray.push(1.0 + offsetX);
-    polygonArray.push(1.0 + offsetY);
-    polygonArray.push(1.0 + offsetX);
-    polygonArray.push(2.0 + offsetY);
-    polygonArray.push(2.0 + offsetX);
-    polygonArray.push(2.0 + offsetY);
-    polygonArray.push(2.0 + offsetX);
-    polygonArray.push(3.0 + offsetY);
-    polygonArray.push(3.0 + offsetX);
-    polygonArray.push(3.0 + offsetY);
-    polygonArray.push(3.0 + offsetX);
-    polygonArray.push(2.0 + offsetY);
-    polygonArray.push(4.0 + offsetX);
-    polygonArray.push(2.0 + offsetY);
-    polygonArray.push(4.0 + offsetX);
-    polygonArray.push(1.0 + offsetY);
-    addPolygon(polygonArray);
-    
-
-    end_command();
-}
-#endif
-
-/* SELECTALL . */
-ScriptValue
-selectall_command(ScriptEnv * context)
-{
-    init_command();
-    select_all();
-    end_command();
     return script_null;
 }
 
@@ -3773,10 +3405,6 @@ selectall_command(ScriptEnv * context)
 ScriptValue
 rotate_command(ScriptEnv * context)
 {
-    init_command();
-    clear_selection();
-
-    end_command();
     return script_null;
 }
 
@@ -4062,10 +3690,6 @@ void prompt(str)
 ScriptValue
 allow_rubber_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "allowRubber", "")) {
-        return script_false;
-    }
-
     return script_bool(nativeAllowRubber());
 }
 
@@ -4073,10 +3697,6 @@ allow_rubber_command(ScriptEnv* context)
 ScriptValue
 set_rubber_mode_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "allowRubber", "s")) {
-        return script_false;
-    }
-
     std::string mode(STR(0));
 
     if (mode == "CIRCLE_1P_RAD") {
@@ -4145,10 +3765,6 @@ set_rubber_mode_command(ScriptEnv* context)
 ScriptValue
 set_rubber_point_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "SetRubberPoint", "srr")) {
-        return script_false;
-    }
-
     nativeSetRubberPoint(STR(0), REAL(1), REAL(2));
     return script_null;
 }
@@ -4157,10 +3773,6 @@ set_rubber_point_command(ScriptEnv* context)
 ScriptValue
 set_rubber_text_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "SetRubberPoint", "ss")) {
-        return script_false;
-    }
-
     nativeSetRubberText(STR(0), STR(1));
     return script_null;
 }
@@ -4168,10 +3780,6 @@ set_rubber_text_command(ScriptEnv* context)
 ScriptValue
 add_rubber_command(ScriptEnv* context)
 {
-    if (!argument_checks(context, "SetRubberPoint", "s")) {
-        return script_false;
-    }
-
     std::string objType(STR(0));
 
     if (!nativeAllowRubber()) {
@@ -4268,12 +3876,10 @@ add_rubber_command(ScriptEnv* context)
 ScriptValue
 clear_rubber_command(ScriptEnv* context)
 {
-    if (context->argumentCount != 0) {
-        prompt_output("clearRubber() requires zero arguments");
-        return script_false;
+    View* gview = activeView();
+    if (gview) {
+        gview->clearRubberRoom();
     }
-
-    nativeClearRubber();
     return script_null;
 }
 
