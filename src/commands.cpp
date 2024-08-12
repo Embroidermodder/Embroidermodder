@@ -57,14 +57,14 @@ void
 MainWindow::checkForUpdates(void)
 {
     qDebug("checkForUpdates()");
-    //TODO: Check website for new versions, commands, etc...
+    /* TODO: Check website for new versions, commands, etc... */
 }
 
 /* . */
 QString
 platformString(void)
 {
-    //TODO: Append QSysInfo to string where applicable.
+    /* TODO: Append QSysInfo to string where applicable. */
     QString os;
     #if   defined(Q_OS_AIX)
     os = "AIX";
@@ -180,9 +180,9 @@ tipOfTheDay()
 
     wizardTipOfTheDay->setWindowTitle("Tip of the Day");
 
-    //TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonPrevious)
-    //TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonNext)
-    //TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonClose)
+    /* TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonPrevious) */
+    /* TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonNext) */
+    /* TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonClose) */
     wizardTipOfTheDay->setButtonText(QWizard::CustomButton1, translate("&Previous"));
     wizardTipOfTheDay->setButtonText(QWizard::CustomButton2, translate("&Next"));
     wizardTipOfTheDay->setButtonText(QWizard::CustomButton3, translate("&Close"));
@@ -237,16 +237,17 @@ help(void)
 {
     debug_message("help()");
 
-    // Open the HTML Help in the default browser
+    /* Open the HTML Help in the default browser. */
     QUrl helpURL("file:///" + qApp->applicationDirPath() + "/help/doc-index.html");
     QDesktopServices::openUrl(helpURL);
 
-    //TODO: This is how to start an external program. Use this elsewhere...
-    //QString program = "firefox";
-    //QStringList arguments;
-    //arguments << "help/commands.html";
-    //QProcess *myProcess = new QProcess(this);
-    //myProcess->start(program, arguments);
+    /* TODO: This is how to start an external program. Use this elsewhere...
+     * QString program = "firefox";
+     * QStringList arguments;
+     * arguments << "help/commands.html";
+     * QProcess *myProcess = new QProcess(this);
+     * myProcess->start(program, arguments);
+     */
 }
 
 /* . */
@@ -259,7 +260,7 @@ changelog(void)
     QDesktopServices::openUrl(changelogURL);
 }
 
-// Standard Slots
+/* Standard Slots */
 void
 MainWindow::undo()
 {
@@ -311,22 +312,22 @@ MainWindow::setShiftReleased()
     shiftKeyPressedState = false;
 }
 
-// Icons
+/* Icons */
 void
 MainWindow::iconResize(int iconSize)
 {
     this->setIconSize(QSize(iconSize, iconSize));
     layerSelector->     setIconSize(QSize(iconSize*4, iconSize));
-    colorSelector->     setIconSize(QSize(iconSize,   iconSize));
+    colorSelector->     setIconSize(QSize(iconSize, iconSize));
     linetypeSelector->  setIconSize(QSize(iconSize*4, iconSize));
     lineweightSelector->setIconSize(QSize(iconSize*4, iconSize));
-    //set the minimum combobox width so the text is always readable
+    /* set the minimum combobox width so the text is always readable */
     layerSelector->     setMinimumWidth(iconSize*4);
     colorSelector->     setMinimumWidth(iconSize*2);
     linetypeSelector->  setMinimumWidth(iconSize*4);
     lineweightSelector->setMinimumWidth(iconSize*4);
 
-    // TODO: low-priority: open app with iconSize set to 128. resize the icons to a smaller size.
+    /* TODO: low-priority: open app with iconSize set to 128. resize the icons to a smaller size. */
 
     general_icon_size.setting = iconSize;
 }
@@ -465,7 +466,7 @@ MainWindow::pickAddModeToggled()
     updatePickAddMode(val);
 }
 
-// Layer ToolBar
+/* Layer ToolBar */
 void
 MainWindow::makeLayerActive()
 {
@@ -504,7 +505,7 @@ MainWindow::colorSelectorIndexChanged(int index)
     QRgb newColor;
     if (comboBox) {
         bool ok = 0;
-        //TODO: Handle ByLayer and ByBlock and Other...
+        /* TODO: Handle ByLayer and ByBlock and Other... */
         newColor = comboBox->itemData(index).toUInt(&ok);
         if (!ok) {
             QMessageBox::warning(this, translate("Color Selector Conversion Error"),
@@ -545,7 +546,7 @@ void
 MainWindow::textSizeSelectorIndexChanged(int index)
 {
     qDebug("textSizeSelectorIndexChanged(%d)", index);
-    // TODO: check that the toReal() conversion is ok
+    /* TODO: check that the toReal() conversion is ok. */
     text_size.setting = qFabs(textSizeSelector->itemData(index).toReal());
 }
 
@@ -588,7 +589,7 @@ MainWindow::getCurrentColor()
     if (mdiWin) {
         return mdiWin->curColor;
     }
-    return 0; //TODO: return color ByLayer
+    return 0; /* TODO: return color ByLayer */
 }
 
 QString
@@ -727,7 +728,6 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         }
     }
 
-    qDebug("switch");
     switch (command_data[id].id) {
     case ACTION_ABOUT:
         about_dialog();
@@ -745,14 +745,11 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         /* This is covered by the flags. */
         break;
     case ACTION_COPY: {
-        View* gview = activeView();
-        if (gview) {
-            gview->copy();
-        }
+        gview->copy();
         break;
     }
     case ACTION_COPY_SELECTED: {
-        // nativeCopySelected(REAL(0), REAL(1));
+        /* nativeCopySelected(REAL(0), REAL(1)); */
         break;
     }
     case ACTION_COLOR_SELECTOR:
@@ -843,12 +840,12 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
 
     case ACTION_PASTE_SELECTED: {
         /* Paste with location x,y */
-        // nativePasteSelected(REAL(0), REAL(1));
+        /* nativePasteSelected(REAL(0), REAL(1)); */
         break;
     }
     case ACTION_PLATFORM:
         /* Should this display in the command prompt or just return like GET? */
-        // prompt_output(translate("Platform") + " = " + _main->platformString());
+        /* prompt_output(translate("Platform") + " = " + _main->platformString()); */
         break;
     case ACTION_REDO:
         redo();
@@ -905,23 +902,22 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         break;
 
     case ACTION_VULCANIZE: {
-        View* gview = activeView();
-        if (gview) {
-            gview->vulcanizeRubberRoom();
-        }
+        gview->vulcanizeRubberRoom();
         break;
     }
 
     case ACTION_DAY: {
-        gview->setBackgroundColor(qRgb(255,255,255)); //TODO: Make day vision color settings.
-        gview->setCrossHairColor(qRgb(0,0,0));        //TODO: Make day vision color settings.
-        gview->setGridColor(qRgb(0,0,0));             //TODO: Make day vision color settings.
+        /* TODO: Make day vision color settings. */
+        gview->setBackgroundColor(qRgb(255,255,255)); 
+        gview->setCrossHairColor(qRgb(0,0,0));
+        gview->setGridColor(qRgb(0,0,0));
         break;
     }
     case ACTION_NIGHT: {
-        gview->setBackgroundColor(qRgb(0,0,0));      //TODO: Make night vision color settings.
-        gview->setCrossHairColor(qRgb(255,255,255)); //TODO: Make night vision color settings.
-        gview->setGridColor(qRgb(255,255,255));      //TODO: Make night vision color settings.
+        /* TODO: Make night vision color settings. */
+        gview->setBackgroundColor(qRgb(0,0,0));
+        gview->setCrossHairColor(qRgb(255,255,255));
+        gview->setGridColor(qRgb(255,255,255));
         break;
     }
 
@@ -1271,7 +1267,7 @@ MainWindow::runCommandMain(const QString& cmd)
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_MAIN;
     qDebug("runCommandMain(%s)", qPrintable(cmd));
-    // TODO: Uncomment this when post-selection is available
+    /* TODO: Uncomment this when post-selection is available. */
     /*
     if (!selection_mode_pick_first.setting) {
         clear_selection();
@@ -1289,7 +1285,7 @@ MainWindow::runCommandClick(const QString& cmd, double x, double y)
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_CLICK;
     qDebug("runCommandClick(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
-    //engine->evaluate(cmd + "_click(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName);
+    /* engine->evaluate(cmd + "_click(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName); */
     runCommandCore(cmd, context);
     free_script_env(context);
 }
@@ -1302,7 +1298,7 @@ MainWindow::runCommandMove(const QString& cmd, double x, double y)
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_MOVE;
     qDebug("runCommandMove(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
-    //engine->evaluate(cmd + "_move(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName);
+    /* engine->evaluate(cmd + "_move(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName); */
     runCommandCore(cmd, context);
     free_script_env(context);
 }
@@ -1315,7 +1311,7 @@ MainWindow::runCommandContext(const QString& cmd, const QString& str)
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_CONTEXT;
     qDebug("runCommandContext(%s, %s)", qPrintable(cmd), qPrintable(str));
-    //engine->evaluate(cmd + "_context('" + str.toUpper() + "')", fileName);
+    /* engine->evaluate(cmd + "_context('" + str.toUpper() + "')", fileName); */
     runCommandCore(cmd, context);
     free_script_env(context);
 }
@@ -1459,7 +1455,7 @@ nativeAddTextSingle(std::string str, double x, double y, double rot, bool fill, 
         obj->setObjectTextBackward(false);
         obj->setObjectTextUpsideDown(false);
         obj->setRotation(-rot);
-        //TODO: single line text fill
+        /* TODO: single line text fill. */
         obj->setObjectRubberMode(rubberMode);
         if (rubberMode) {
             gview->addToRubberRoom(obj);
@@ -1527,7 +1523,7 @@ nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill
     Object* obj = new Object(x, -y, w, -h, _main->getCurrentColor());
     obj->setRotation(-rot);
     obj->setObjectRubberMode(rubberMode);
-    //TODO: rect fill
+    /* TODO: rect fill */
     if (rubberMode) {
         gview->addToRubberRoom(obj);
         gscene->addItem(obj);
@@ -1581,7 +1577,7 @@ nativeAddCircle(double centerX, double centerY, double radius, bool fill, int ru
         circle.radius = radius;
         Object* obj = new Object(circle, _main->getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
-        //TODO: circle fill
+        /* TODO: circle fill. */
         if (rubberMode) {
             gview->addToRubberRoom(obj);
             gscene->addItem(obj);
@@ -1597,14 +1593,14 @@ nativeAddCircle(double centerX, double centerY, double radius, bool fill, int ru
 void
 nativeAddSlot(double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode)
 {
-    //TODO: Use UndoableCommand for slots
+    /* TODO: Use UndoableCommand for slots */
     /*
     Object* slotObj = new Object(centerX, -centerY, diameter, length, _main->getCurrentColor());
     slotObj->setRotation(-rot);
     slotObj->setObjectRubberMode(rubberMode);
     if (rubberMode) gview->addToRubberRoom(slotObj);
-    scene->addItem(slotObj);
-    //TODO: slot fill
+    scene->addItem(slotObj); */
+    /* TODO: slot fill */ /*
     scene->update();
     */
 }
@@ -1624,7 +1620,7 @@ nativeAddEllipse(double centerX, double centerY, double width, double height, do
         Object* obj = new Object(ellipse, _main->getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
-        //TODO: ellipse fill
+        /* TODO: ellipse fill */
         if (rubberMode) {
             gview->addToRubberRoom(obj);
             gscene->addItem(obj);
@@ -1657,7 +1653,9 @@ nativeAddRegularPolygon(double centerX, double centerY, quint16 sides, uint8_t m
 {
 }
 
-//NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
+/* NOTE: This native is different than the rest in that the Y+ is down
+ * (scripters need not worry about this)
+ */
 void
 nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
@@ -1680,7 +1678,9 @@ nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubber
     }
 }
 
-//NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
+/* NOTE: This native is different than the rest in that the Y+ is down
+ * (scripters need not worry about this)
+ */
 void
 nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
@@ -1703,7 +1703,9 @@ nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubbe
     }
 }
 
-//NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
+/* NOTE: This native is different than the rest in that the Y+ is down
+ * (scripters need not worry about this)
+ */
 void
 nativeAddPath(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
@@ -1987,7 +1989,7 @@ get_command(ScriptEnv* context)
             return script_false;
         }
         ScriptValue r = script_real(-scene->property("SCENE_MOUSE_POINT").toPointF().y());
-        //_main->qDebug("mouseY: %.50f", r.r);
+        /* _main->qDebug("mouseY: %.50f", r.r); */
         return r;
     }
     else if (value == "TEXTANGLE") {
@@ -2139,16 +2141,16 @@ syswindows_command(ScriptEnv * context)
 {
     prompt_output(translate("Enter an option [Cascade/Tile]: "));
 
-    // Do nothing for click, context
+    /* Do nothing for click, context. */
     
     #if 0
     if (str == "C" || str == "CASCADE") {
-        //TODO: Probably should add additional translate calls here.
+        /* TODO: Probably should add additional translate calls here. */
         _main->windowCascade();
         end_command();
     }
     else if (str == "T" || str == "TILE") {
-        //TODO: Probably should add additional translate calls here.
+        /* TODO: Probably should add additional translate calls here. */
         _main->windowTile();
         end_command();
     }
@@ -2422,7 +2424,7 @@ add_polygon_command(ScriptEnv* context)
         }
     }
 
-    //Close the polygon
+    /* Close the polygon. */
     path.closeSubpath();
 
     path.translate(-startX, -startY);
@@ -2581,7 +2583,7 @@ UndoableCommand::UndoableCommand(int type_, double x, double y, double scaleFact
     data.object = obj;
     setText(text);
     if (data.type == ACTION_SCALE) {
-        //Prevent division by zero and other wacky behavior
+        /* Prevent division by zero and other wacky behavior. */
         if (scaleFactor <= 0.0) {
             data.dx = 0.0;
             data.dy = 0.0;
@@ -2592,7 +2594,7 @@ UndoableCommand::UndoableCommand(int type_, double x, double y, double scaleFact
                "If you are a developer, your code needs examined, and possibly your head too."));
         }
         else {
-            //Calculate the offset
+            /* Calculate the offset */
             double oldX = data.object->x();
             double oldY = data.object->y();
             QLineF scaleLine(x, y, oldX, oldY);
@@ -2784,7 +2786,7 @@ bool
 UndoableCommand::mergeWith(const QUndoCommand* newest)
 {
     if (newest->id() != id()) {
-         // make sure other is also an UndoableNavCommand
+         /* make sure other is also an UndoableNavCommand */
          return false;
     }
 
@@ -2795,11 +2797,10 @@ UndoableCommand::mergeWith(const QUndoCommand* newest)
     return true;
 }
 
-/* . */
+/* TODO: finish undoable mirror */
 void
 UndoableCommand::mirror()
 {
-    //TODO: finish undoable mirror
 }
 
 /* LOCATEPOINT */
@@ -3078,7 +3079,7 @@ main(void)
     global.factorNew = NaN;
 
     if (num_selected() <= 0) {
-        //TODO: Prompt to select objects if nothing is preselected
+        /* TODO: Prompt to select objects if nothing is preselected */
         alert(translate("Preselect objects before invoking the scale command."));
         end_command();
         messageBox("information", translate("Scale Preselect"), translate("Preselect objects before invoking the scale command."));
@@ -3180,7 +3181,7 @@ void prompt(str)
         }
         else {
             if (str == "R" || str == "REFERENCE") {
-                //TODO: Probably should add additional translate calls here.
+                /* TODO: Probably should add additional translate calls here. */
                 global.mode = global.mode_REFERENCE;
                 prompt_output(translate("Specify reference length") + " {1}: ");
                 clearRubber();
@@ -3217,18 +3218,18 @@ void prompt(str)
                 }
             }
             else {
-                //The base and dest values are only set here to advance the command.
+                /* The base and dest values are only set here to advance the command. */
                 global.baseRX = 0.0;
                 global.baseRY = 0.0;
                 global.destRX = 0.0;
                 global.destRY = 0.0;
-                //The reference length is what we will use later.
+                /* The reference length is what we will use later. */
                 global.factorRef = Number(str);
                 if (global.factorRef <= 0.0) {
-                    global.baseRX    = NaN;
-                    global.baseRY    = NaN;
-                    global.destRX    = NaN;
-                    global.destRY    = NaN;
+                    global.baseRX = NaN;
+                    global.baseRY = NaN;
+                    global.destRX = NaN;
+                    global.destRY = NaN;
                     global.factorRef = NaN;
                     alert(translate("Value must be positive and nonzero."));
                     prompt_output(translate("Specify reference length") + " {1}: ");
@@ -3266,16 +3267,16 @@ void prompt(str)
                 }
             }
             else {
-                //The base and dest values are only set here to advance the command.
+                /* The base and dest values are only set here to advance the command. */
                 global.baseRX = 0.0;
                 global.baseRY = 0.0;
                 global.destRX = 0.0;
                 global.destRY = 0.0;
-                //The reference length is what we will use later.
+                /* The reference length is what we will use later. */
                 global.factorRef = Number(str);
                 if (global.factorRef <= 0.0) {
-                    global.destRX    = NaN;
-                    global.destRY    = NaN;
+                    global.destRX = NaN;
+                    global.destRY = NaN;
                     global.factorRef = NaN;
                     alert(translate("Value must be positive and nonzero."));
                     prompt_output(translate("Specify second point: "));
@@ -3333,20 +3334,22 @@ sandbox_command(ScriptEnv * context)
 {
     switch (context->context) {
     case CONTEXT_MAIN:
-        /*
-        //Report number of pre-selected objects
-        prompt_output("Number of Objects Selected: " + numSelected().toString());
+        /* Report number of pre-selected objects. */
+        char msg[200];
+        sprintf(msg, "Number of Objects Selected: %d", num_selected());
+        prompt_output(msg);
+        /* mirrorSelected(0,0,0,1); */
     
-        mirrorSelected(0,0,0,1);
+        /* selectAll(); */
+        /* rotateSelected(0,0,90); */
+
+        /* Polyline & Polygon Testing */
     
-        //selectAll();
-        //rotateSelected(0,0,90);
-    
-        //Polyline & Polygon Testing
-    
-        var offsetX = 0.0;
-        var offsetY = 0.0;
-    
+        EmbVector offset;
+        offset.x = 0.0;
+        offset.y = 0.0;
+
+        /*    
         var polylineArray = [];
         polylineArray.push(1.0 + offsetX);
         polylineArray.push(1.0 + offsetY);
@@ -3541,12 +3544,12 @@ void prompt(str)
                 }
             }
             else {
-                //The base and dest values are only set here to advance the command.
+                /* The base and dest values are only set here to advance the command. */
                 global.baseRX = 0.0;
                 global.baseRY = 0.0;
                 global.destRX = 0.0;
                 global.destRY = 0.0;
-                //The reference angle is what we will use later.
+                /* The reference angle is what we will use later. */
                 global.angleRef = Number(str);
                 addRubber("LINE");
                 setRubberMode("LINE");
@@ -3570,10 +3573,10 @@ void prompt(str)
                 }
             }
             else {
-                //The base and dest values are only set here to advance the command.
+                /* The base and dest values are only set here to advance the command. */
                 global.baseR = zero_vector;
                 global.destR = zero_vector;
-                //The reference angle is what we will use later.
+                /* The reference angle is what we will use later. */
                 global.angleRef = Number(str);
                 previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
                 prompt_output(translate("Specify the new angle: "));
@@ -3792,61 +3795,61 @@ add_rubber_command(ScriptEnv* context)
     double my = _main->runCommandCore("get mousey", context).r;
 
     if (objType == "ARC") {
-        // TODO: handle this type
+        /* TODO: handle this type */
     }
     else if (objType == "BLOCK") {
-        // TODO: handle this type
+        /* TODO: handle this type */
     }
     else if (objType == "CIRCLE") {
         nativeAddCircle(mx, my, 0, false, OBJ_RUBBER_ON);
     }
     else if (objType == "DIMALIGNED") {
-        // TODO: handle this type
+        /* TODO: handle this type */
     }
     else if (objType == "DIMANGULAR") {
-        // TODO: handle this type
+        /* TODO: handle this type */
     }
     else if (objType == "DIMARCLENGTH") {
-        // TODO: handle this type
+        /* TODO: handle this type */
     }
     else if (objType == "DIMDIAMETER") {
-        // TODO: handle this type
+        /* TODO: handle this type */
     }
     else if (objType == "DIMLEADER") {
         nativeAddDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON);
     }
     else if (objType == "DIMLINEAR") {
-        // TODO: handle this type
+        /* TODO: handle this type */
     }
     else if (objType == "DIMORDINATE") {
-        // TODO: handle this type
+        /* TODO: handle this type */
     }
     else if (objType == "DIMRADIUS") {
-        // TODO: handle this type
+        /* TODO: handle this type */
     }
     else if (objType == "ELLIPSE") {
         nativeAddEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON);
     }
     else if (objType == "ELLIPSEARC") {
-        // TODO: handle this type
+        /* TODO: handle this type */
     }
     else if (objType == "HATCH") {
-        // TODO: handle this type
+        /* TODO: handle this type */
     }
     else if (objType == "IMAGE") {
-        // TODO: handle this type
+        /* TODO: handle this type */
     }
     else if (objType == "INFINITELINE") {
-        // TODO: handle this type
+        /* TODO: handle this type */
     }
     else if (objType == "LINE") {
         nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON);
     }
     else if (objType == "PATH") {
-        // TODO: handle this type
+        /* TODO: handle this type */
     }
     else if (objType == "POINT") {
-        // TODO: handle this type
+        /* TODO: handle this type */
     }
     else if (objType == "POLYGON") {
         nativeAddPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON);
@@ -3855,16 +3858,16 @@ add_rubber_command(ScriptEnv* context)
         nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON);
     }
     else if (objType == "RAY") {
-        // TODO: handle this type
+        /* TODO: handle this type */
     }
     else if (objType == "RECTANGLE") {
         nativeAddRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON);
     }
     else if (objType == "SPLINE") {
-        // TODO: handle this type
+        /* TODO: handle this type */
     }
     else if (objType == "TEXTMULTI") {
-        // TODO: handle this type
+        /* TODO: handle this type */
     }
     else if (objType == "TEXTSINGLE") {
         nativeAddTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON);

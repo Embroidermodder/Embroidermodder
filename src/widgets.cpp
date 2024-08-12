@@ -698,24 +698,24 @@ create_details_dialog(void)
     QGroupBox* groupBoxMisc = new QGroupBox(translate("General Information"), widget);
 
     QLabel* labelStitchesTotal = new QLabel(translate("Total Stitches:"), dialog);
-    QLabel* labelStitchesReal  = new QLabel(translate("Real Stitches:"),  dialog);
-    QLabel* labelStitchesJump  = new QLabel(translate("Jump Stitches:"),  dialog);
-    QLabel* labelStitchesTrim  = new QLabel(translate("Trim Stitches:"),  dialog);
-    QLabel* labelColorTotal    = new QLabel(translate("Total Colors:"),   dialog);
-    QLabel* labelColorChanges  = new QLabel(translate("Color Changes:"),  dialog);
-    QLabel* labelRectLeft      = new QLabel(translate("Left:"),           dialog);
-    QLabel* labelRectTop       = new QLabel(translate("Top:"),            dialog);
-    QLabel* labelRectRight     = new QLabel(translate("Right:"),          dialog);
-    QLabel* labelRectBottom    = new QLabel(translate("Bottom:"),         dialog);
-    QLabel* labelRectWidth     = new QLabel(translate("Width:"),          dialog);
-    QLabel* labelRectHeight    = new QLabel(translate("Height:"),         dialog);
+    QLabel* labelStitchesReal  = new QLabel(translate("Real Stitches:"), dialog);
+    QLabel* labelStitchesJump  = new QLabel(translate("Jump Stitches:"), dialog);
+    QLabel* labelStitchesTrim  = new QLabel(translate("Trim Stitches:"), dialog);
+    QLabel* labelColorTotal    = new QLabel(translate("Total Colors:"), dialog);
+    QLabel* labelColorChanges  = new QLabel(translate("Color Changes:"), dialog);
+    QLabel* labelRectLeft      = new QLabel(translate("Left:"), dialog);
+    QLabel* labelRectTop       = new QLabel(translate("Top:"), dialog);
+    QLabel* labelRectRight     = new QLabel(translate("Right:"), dialog);
+    QLabel* labelRectBottom    = new QLabel(translate("Bottom:"), dialog);
+    QLabel* labelRectWidth     = new QLabel(translate("Width:"), dialog);
+    QLabel* labelRectHeight    = new QLabel(translate("Height:"), dialog);
 
     QLabel* fieldStitchesTotal = new QLabel(QString::number(stitchesTotal), dialog);
-    QLabel* fieldStitchesReal  = new QLabel(QString::number(stitchesReal),  dialog);
-    QLabel* fieldStitchesJump  = new QLabel(QString::number(stitchesJump),  dialog);
-    QLabel* fieldStitchesTrim  = new QLabel(QString::number(stitchesTrim),  dialog);
-    QLabel* fieldColorTotal    = new QLabel(QString::number(colorTotal),    dialog);
-    QLabel* fieldColorChanges  = new QLabel(QString::number(colorChanges),  dialog);
+    QLabel* fieldStitchesReal  = new QLabel(QString::number(stitchesReal), dialog);
+    QLabel* fieldStitchesJump  = new QLabel(QString::number(stitchesJump), dialog);
+    QLabel* fieldStitchesTrim  = new QLabel(QString::number(stitchesTrim), dialog);
+    QLabel* fieldColorTotal    = new QLabel(QString::number(colorTotal), dialog);
+    QLabel* fieldColorChanges  = new QLabel(QString::number(colorChanges), dialog);
     QLabel* fieldRectLeft      = new QLabel(QString::number(boundingRect.left())   + " mm", dialog);
     QLabel* fieldRectTop       = new QLabel(QString::number(boundingRect.top())    + " mm", dialog);
     QLabel* fieldRectRight     = new QLabel(QString::number(boundingRect.right())  + " mm", dialog);
@@ -724,30 +724,30 @@ create_details_dialog(void)
     QLabel* fieldRectHeight    = new QLabel(QString::number(boundingRect.height()) + " mm", dialog);
 
     QGridLayout* gridLayoutMisc = new QGridLayout(groupBoxMisc);
-    gridLayoutMisc->addWidget(labelStitchesTotal,  0, 0, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(labelStitchesReal,   1, 0, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(labelStitchesJump,   2, 0, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(labelStitchesTrim,   3, 0, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(labelColorTotal,     4, 0, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(labelColorChanges,   5, 0, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(labelRectLeft,       6, 0, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(labelRectTop,        7, 0, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(labelRectRight,      8, 0, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(labelRectBottom,     9, 0, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(labelRectWidth,     10, 0, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(labelRectHeight,    11, 0, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(fieldStitchesTotal,  0, 1, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(fieldStitchesReal,   1, 1, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(fieldStitchesJump,   2, 1, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(fieldStitchesTrim,   3, 1, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(fieldColorTotal,     4, 1, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(fieldColorChanges,   5, 1, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(fieldRectLeft,       6, 1, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(fieldRectTop,        7, 1, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(fieldRectRight,      8, 1, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(fieldRectBottom,     9, 1, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(fieldRectWidth,     10, 1, Qt::AlignLeft);
-    gridLayoutMisc->addWidget(fieldRectHeight,    11, 1, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(labelStitchesTotal, 0, 0, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(labelStitchesReal, 1, 0, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(labelStitchesJump, 2, 0, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(labelStitchesTrim, 3, 0, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(labelColorTotal, 4, 0, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(labelColorChanges, 5, 0, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(labelRectLeft, 6, 0, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(labelRectTop, 7, 0, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(labelRectRight, 8, 0, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(labelRectBottom, 9, 0, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(labelRectWidth, 10, 0, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(labelRectHeight, 11, 0, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(fieldStitchesTotal, 0, 1, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(fieldStitchesReal, 1, 1, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(fieldStitchesJump, 2, 1, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(fieldStitchesTrim, 3, 1, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(fieldColorTotal, 4, 1, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(fieldColorChanges, 5, 1, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(fieldRectLeft, 6, 1, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(fieldRectTop, 7, 1, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(fieldRectRight, 8, 1, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(fieldRectBottom, 9, 1, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(fieldRectWidth, 10, 1, Qt::AlignLeft);
+    gridLayoutMisc->addWidget(fieldRectHeight, 11, 1, Qt::AlignLeft);
     gridLayoutMisc->setColumnStretch(1,1);
     groupBoxMisc->setLayout(gridLayoutMisc);
 
@@ -954,8 +954,7 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     curFile = aName.asprintf("Untitled%d.dst", myIndex);
     this->setWindowTitle(curFile);
 
-    QString icon("icons/");
-    this->setWindowIcon(QIcon(icon + general_icon_theme.setting + "/" + "app" + ".png"));
+    this->setWindowIcon(create_icon("app"));
 
     gscene = new QGraphicsScene(0,0,0,0, this);
     gview = new View(_main, gscene, this);
@@ -1278,7 +1277,7 @@ void MdiWindow::promptInputPrevNext(bool prev)
             QMessageBox::critical(this, tr("Prompt Previous Error"), tr("The prompt input is empty! Please report this as a bug!"));
         }
         else {
-            QMessageBox::critical(this, tr("Prompt Next Error"),     tr("The prompt input is empty! Please report this as a bug!"));
+            QMessageBox::critical(this, tr("Prompt Next Error"), tr("The prompt input is empty! Please report this as a bug!"));
         }
         qDebug("The prompt input is empty! Please report this as a bug!");
     }

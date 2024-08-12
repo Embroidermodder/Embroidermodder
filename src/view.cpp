@@ -26,11 +26,11 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     //}
 
     //TODO: Review RenderHints later
-    //setRenderHint(QPainter::Antialiasing,            display_renderhint_aa.setting);
-    //setRenderHint(QPainter::TextAntialiasing,        display_renderhint_text_aa.setting);
-    //setRenderHint(QPainter::SmoothPixmapTransform,   settings_display_renderhint_smoothpix);
+    //setRenderHint(QPainter::Antialiasing, display_renderhint_aa.setting);
+    //setRenderHint(QPainter::TextAntialiasing, display_renderhint_text_aa.setting);
+    //setRenderHint(QPainter::SmoothPixmapTransform, settings_display_renderhint_smoothpix);
     //setRenderHint(QPainter::HighQualityAntialiasing, display_renderhint_high_aa.setting);
-    //setRenderHint(QPainter::NonCosmeticDefaultPen,   display_renderhint_noncosmetic.setting);
+    //setRenderHint(QPainter::NonCosmeticDefaultPen, display_renderhint_noncosmetic.setting);
 
     //NOTE: FullViewportUpdate MUST be used for both the GL and Qt renderers.
     //NOTE: Qt renderer will not draw the foreground properly if it isnt set.
@@ -484,7 +484,7 @@ View::createGridIso()
     double isoH = qAbs(grid_size_y.setting);
 
     QPointF p1 = QPointF(0,0);
-    QPointF p2 = QLineF::fromPolar(isoW,  30).p2();
+    QPointF p2 = QLineF::fromPolar(isoW, 30).p2();
     QPointF p3 = QLineF::fromPolar(isoH, 150).p2();
     QPointF p4 = p2 + p3;
 
@@ -497,7 +497,7 @@ View::createGridIso()
 
     for (double x = 0; x < isoW; x += xSpacing) {
         for (double y = 0; y < isoH; y += ySpacing) {
-            QPointF px = QLineF::fromPolar(x,  30).p2();
+            QPointF px = QLineF::fromPolar(x, 30).p2();
             QPointF py = QLineF::fromPolar(y, 150).p2();
 
             data.gridPath.moveTo(px);
@@ -972,7 +972,7 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                         lines.append(QLineF(x, rhy, x, oy));
                         if (data.rulerMetric) {
                             lines.append(QLineF(x, rhy, x, oy));
-                            lines.append(QLineF(x+fraction  , rhy, x+fraction,   rhy-rhh*little));
+                            lines.append(QLineF(x+fraction  , rhy, x+fraction, rhy-rhh*little));
                             lines.append(QLineF(x+fraction*2, rhy, x+fraction*2, rhy-rhh*little));
                             lines.append(QLineF(x+fraction*3, rhy, x+fraction*3, rhy-rhh*little));
                             lines.append(QLineF(x+fraction*4, rhy, x+fraction*4, rhy-rhh*little));
@@ -989,7 +989,7 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                                 }
                             }
                             else {
-                                lines.append(QLineF(x+fraction   , rhy, x+fraction,    rhy-rhh*little));
+                                lines.append(QLineF(x+fraction   , rhy, x+fraction, rhy-rhh*little));
                                 lines.append(QLineF(x+fraction* 2, rhy, x+fraction* 2, rhy-rhh*little));
                                 lines.append(QLineF(x+fraction* 3, rhy, x+fraction* 3, rhy-rhh*little));
                                 lines.append(QLineF(x+fraction* 4, rhy, x+fraction* 4, rhy-rhh*medium)); //Quarter
@@ -1178,7 +1178,7 @@ View::createRulerTextPath(float x, float y, QString str, float height)
             path.lineTo(x+0.00*xScale, y-0.25*yScale);
             path.arcTo(x+0.00*xScale, y-0.50*yScale, 0.50*xScale, 0.50*yScale, 180.00, 180.00);
             path.lineTo(x+0.50*xScale, y-0.75*yScale);
-            path.arcTo(x+0.00*xScale, y-1.00*yScale, 0.50*xScale, 0.50*yScale,   0.00, 180.00);
+            path.arcTo(x+0.00*xScale, y-1.00*yScale, 0.50*xScale, 0.50*yScale, 0.00, 180.00);
         }
         else if (str[i] == QChar('-')) {
             path.moveTo(x+0.00*xScale, y-0.50*yScale);

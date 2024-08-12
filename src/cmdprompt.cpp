@@ -47,13 +47,13 @@ CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
     this->setLayout(promptVBoxLayout);
 
     styleHash = new QHash<QString, QString>();
-    styleHash->insert("color",                      "#000000"); // Match -------|
-    styleHash->insert("background-color",           "#FFFFFF"); //              |
-    styleHash->insert("selection-color",            "#FFFFFF"); //              |
-    styleHash->insert("selection-background-color", "#000000"); // Match -------|
-    styleHash->insert("font-family",              "Monospace");
-    styleHash->insert("font-style",                  "normal");
-    styleHash->insert("font-size",                     "12px");
+    styleHash->insert("color", "#000000"); /* Match ----------------------------| */
+    styleHash->insert("selection-background-color", "#000000"); /* Match -------| */
+    styleHash->insert("background-color", "#FFFFFF");
+    styleHash->insert("selection-color", "#FFFFFF");
+    styleHash->insert("font-family", "Monospace");
+    styleHash->insert("font-style", "normal");
+    styleHash->insert("font-size", "12px");
 
     updateStyle();
 
@@ -67,7 +67,7 @@ CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
     connect(promptInput, SIGNAL(appendHistory(const QString&, int)), promptHistory, SLOT(appendHistory(const QString&, int)));
     connect(this, SIGNAL(appendTheHistory(const QString&, int)), promptHistory, SLOT(appendHistory(const QString&, int)));
 
-    //For use outside of command prompt
+    /* For use outside of command prompt. */
     connect(promptInput, SIGNAL(startCommand(const QString&)), this, SIGNAL(startCommand(const QString&)));
     connect(promptInput, SIGNAL(runCommand(const QString&, const QString&)), this, SIGNAL(runCommand(const QString&, const QString&)));
     connect(promptInput, SIGNAL(deletePressed()), this, SIGNAL(deletePressed()));
@@ -146,7 +146,7 @@ void
 CmdPrompt::alert(const QString& txt)
 {
     QString alertTxt = "<font color=\"red\">" + txt + "</font>";
-    // TODO: Make the alert color customizable
+    /* TODO: Make the alert color customizable. */
     setPrefix(alertTxt);
     appendHistory(QString());
 }
@@ -259,8 +259,6 @@ CmdPrompt::setPrefix(const QString& txt)
     promptInput->setText(txt);
 }
 
-//============================================================================================================
-
 /* . */
 CmdPromptSplitter::CmdPromptSplitter(QWidget* parent) : QSplitter(parent)
 {
@@ -268,17 +266,12 @@ CmdPromptSplitter::CmdPromptSplitter(QWidget* parent) : QSplitter(parent)
     setObjectName("Command Prompt Splitter");
 
     setOrientation(Qt::Vertical);
-    //NOTE: Add two empty widgets just so we have a handle to grab
+    /* NOTE: Add two empty widgets just so we have a handle to grab. */
     addWidget(new QWidget(this)); addWidget(new QWidget(this));
 
-    connect(this, SIGNAL(pressResizeHistory(int)),   parent, SLOT(startResizingTheHistory(int)));
+    connect(this, SIGNAL(pressResizeHistory(int)), parent, SLOT(startResizingTheHistory(int)));
     connect(this, SIGNAL(releaseResizeHistory(int)), parent, SLOT(stopResizingTheHistory(int)));
-    connect(this, SIGNAL(moveResizeHistory(int)),    parent, SLOT(resizeTheHistory(int)));
-}
-
-/* . */
-CmdPromptSplitter::~CmdPromptSplitter()
-{
+    connect(this, SIGNAL(moveResizeHistory(int)), parent, SLOT(resizeTheHistory(int)));
 }
 
 /* . */
@@ -294,14 +287,9 @@ CmdPromptHandle::CmdPromptHandle(Qt::Orientation orientation, QSplitter* parent)
     qDebug("CmdPromptHandle Constructor");
     setObjectName("Command Prompt Handle");
 
-    connect(this, SIGNAL(handlePressed(int)),  parent, SIGNAL(pressResizeHistory(int)));
+    connect(this, SIGNAL(handlePressed(int)), parent, SIGNAL(pressResizeHistory(int)));
     connect(this, SIGNAL(handleReleased(int)), parent, SIGNAL(releaseResizeHistory(int)));
-    connect(this, SIGNAL(handleMoved(int)),    parent, SIGNAL(moveResizeHistory(int)));
-}
-
-/* . */
-CmdPromptHandle::~CmdPromptHandle()
-{
+    connect(this, SIGNAL(handleMoved(int)), parent, SIGNAL(moveResizeHistory(int)));
 }
 
 /* . */
@@ -335,18 +323,13 @@ CmdPromptHistory::CmdPromptHistory(QWidget* parent) : QTextBrowser(parent)
     qDebug("CmdPromptHistory Constructor");
     setObjectName("Command Prompt History");
 
-    int initHeight = 57; // 19*3 (approximately three lines of text)
+    int initHeight = 19*3; /* (approximately three lines of text) */
 
     this->setFrameStyle(QFrame::NoFrame);
     this->setMaximumHeight(initHeight);
-    this->setMinimumWidth(200); // TODO: use float/dock events to set minimum size so when floating, it isn't smooshed.
+    this->setMinimumWidth(200); /* TODO: use float/dock events to set minimum size so when floating, it isn't smooshed. */
 
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-}
-
-/* . */
-CmdPromptHistory::~CmdPromptHistory()
-{
 }
 
 /* . */
@@ -359,11 +342,11 @@ CmdPromptHistory::applyFormatting(const QString& txt, int prefixLength)
     int start = -1;
     int stop = -1;
 
-    //Bold Prefix
+    /* Bold Prefix */
     prefix.prepend("<b>");
     prefix.append("</b>");
 
-    //Keywords
+    /* Keywords */
     start = prefix.indexOf('[');
     stop = prefix.lastIndexOf(']');
     if (start != -1 && stop != -1 && start < stop) {
@@ -381,7 +364,7 @@ CmdPromptHistory::applyFormatting(const QString& txt, int prefixLength)
         }
     }
 
-    //Default Values
+    /* Default Values */
     start = prefix.indexOf('{');
     stop = prefix.lastIndexOf('}');
     if (start != -1 && stop != -1 && start < stop) {
@@ -427,8 +410,9 @@ void
 CmdPromptHistory::resizeHistory(int y)
 {
     int newHeight = tmpHeight - y;
-    if (newHeight < 0)
+    if (newHeight < 0) {
         newHeight = 0;
+    }
     setMaximumHeight(newHeight);
 }
 
@@ -438,7 +422,7 @@ CmdPromptHistory::contextMenuEvent(QContextMenuEvent* event)
 {
     QMenu* menu = createStandardContextMenu();
     menu->addSeparator();
-    //TODO: Extra stuff
+    /* TODO: Extra stuff */
     menu->exec(event->globalPos());
     delete menu;
 }
@@ -537,11 +521,10 @@ void CmdPromptInput::processInput(const QChar& rapidChar)
                 emit runCommand(curCmd, cmdtxt + " ");
                 return;
             }
-            else {
-                */
+            else */ {
                 emit runCommand(curCmd, cmdtxt);
                 return;
-            //}
+            }
         }
         else {
             emit appendHistory(curText, prefix.length());
@@ -559,7 +542,7 @@ void CmdPromptInput::processInput(const QChar& rapidChar)
         else if (cmdtxt.isEmpty()) {
             cmdActive = true;
             emit appendHistory(curText, prefix.length());
-            //Rerun the last successful command
+            /* Rerun the last successful command. */
             emit startCommand(lastCmd);
         }
         else {
@@ -576,7 +559,7 @@ void CmdPromptInput::processInput(const QChar& rapidChar)
 void
 CmdPromptInput::checkSelection()
 {
-    //qDebug("CmdPromptInput::checkSelection");
+    /* qDebug("CmdPromptInput::checkSelection"); */
     if (this->hasSelectedText()) {
         this->deselect();
     }
@@ -586,7 +569,7 @@ CmdPromptInput::checkSelection()
 void
 CmdPromptInput::checkCursorPosition(int /*oldpos*/, int newpos)
 {
-    //qDebug("CmdPromptInput::checkCursorPosition - %d %d", oldpos, newpos);
+    /* qDebug("CmdPromptInput::checkCursorPosition - %d %d", oldpos, newpos); */
     if (this->hasSelectedText()) {
         this->deselect();
     }
@@ -711,7 +694,7 @@ CmdPromptInput::updateCurrentText(const QString& txt)
             this->setText(curText);
     }
     else {
-        // input is okay so update curText
+        /* input is okay so update curText */
         curText = txt;
         this->setText(curText);
     }
@@ -778,6 +761,7 @@ CmdPromptInput::contextMenuEvent(QContextMenuEvent* event)
     menu.exec(event->globalPos());
 }
 
+/* . */
 bool
 CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
 {
@@ -788,7 +772,7 @@ CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
 
         QKeyEvent* pressedKey = (QKeyEvent*)event;
 
-        //NOTE: These shortcuts need to be caught since QLineEdit uses them
+        /* NOTE: These shortcuts need to be caught since QLineEdit uses them. */
         if (pressedKey->matches(QKeySequence::Cut)) {
             pressedKey->accept();
             emit cutPressed();
@@ -827,23 +811,19 @@ CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
                 pressedKey->accept();
                 processInput(QChar('\n'));
                 return true;
-                break;
             case Qt::Key_Space:
                 pressedKey->accept();
                 processInput(QChar(' '));
                 return true;
-                break;
             case Qt::Key_Delete:
                 pressedKey->accept();
                 del();
                 emit deletePressed();
                 return true;
-                break;
             case Qt::Key_Tab:
                 pressedKey->accept();
                 emit tabPressed();
                 return true;
-                break;
             case Qt::Key_Escape:
                 pressedKey->accept();
                 prefix = defaultPrefix;
@@ -851,83 +831,72 @@ CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
                 emit appendHistory(curText + tr("*Cancel*"), prefix.length());
                 emit escapePressed();
                 return true;
-                break;
             case Qt::Key_Up:
                 pressedKey->accept();
                 emit upPressed();
                 return true;
-                break;
             case Qt::Key_Down:
                 pressedKey->accept();
                 emit downPressed();
                 return true;
-                break;
             case Qt::Key_F1:
                 pressedKey->accept();
                 emit F1Pressed();
                 return true;
-                break;
             case Qt::Key_F2:
                 pressedKey->accept();
                 emit F2Pressed();
                 return true;
-                break;
             case Qt::Key_F3:
                 pressedKey->accept();
                 emit F3Pressed();
                 return true;
-                break;
             case Qt::Key_F4:
                 pressedKey->accept();
                 emit F4Pressed();
                 return true;
-                break;
             case Qt::Key_F5:
                 emit F5Pressed();
                 pressedKey->accept();
                 return true;
-                break;
             case Qt::Key_F6:
                 pressedKey->accept();
                 emit F6Pressed();
                 return true;
-                break;
             case Qt::Key_F7:
                 pressedKey->accept();
                 emit F7Pressed();
                 return true;
-                break;
             case Qt::Key_F8:
                 pressedKey->accept();
                 emit F8Pressed();
                 return true;
-                break;
             case Qt::Key_F9:
                 pressedKey->accept();
                 emit F9Pressed();
                 return true;
-                break;
             case Qt::Key_F10:
                 pressedKey->accept();
                 emit F10Pressed();
                 return true;
-                break;
             case Qt::Key_F11:
                 pressedKey->accept();
                 emit F11Pressed();
                 return true;
-                break;
             case Qt::Key_F12:
                 pressedKey->accept();
                 emit F12Pressed();
                 return true;
-                break;
-            case Qt::Key_Shift:
-                pressedKey->ignore(); //we don't want to eat it, we just want to keep track of it
+            case Qt::Key_Shift: {
+                /* we don't want to eat it, we just want to keep track of it */
+                pressedKey->ignore();
                 emit shiftPressed();
                 break;
-            default:
+            }
+            default: {
                 pressedKey->ignore();
+                break;
+            }
         }
     }
 
@@ -936,11 +905,13 @@ CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
         int key = releasedKey->key();
         switch(key) {
         case Qt::Key_Shift:
-            releasedKey->ignore(); //we don't want to eat it, we just want to keep track of it
+            /* we don't want to eat it, we just want to keep track of it. */
+            releasedKey->ignore();
             emit shiftReleased();
             break;
         default:
             releasedKey->ignore();
+            break;
         }
     }
     return QObject::eventFilter(obj, event);

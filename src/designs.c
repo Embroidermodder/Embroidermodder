@@ -322,7 +322,7 @@ updateSnowflake(int numPts, float xScale, float yScale)
         float yy = 0.0f;
         float t = (2 * embConstantPi) / numPts * i; 
 
-//Snowflake Curve with t [0,2pi]
+/* Snowflake Curve with t [0,2pi] */
 
 xx = 4/7*sin(20/11-318*t)+
 3/13*sin(19/11-317*t)+
@@ -1144,7 +1144,7 @@ updateStar(EmbVector v)
         distInner = calculateDistance(global.cx, global.cy, v.x, v.y);
     }
 
-    //Calculate the Star Points
+    /* Calculate the Star Points */
     float angInc = 360.0 / (global.numPoints * 2);
     bool odd = true;
     for (var i = 0; i < global.numPoints*2; i++) {

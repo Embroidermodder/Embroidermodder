@@ -3,8 +3,9 @@
  *
  * Copyright 2011-2024 The Embroidermodder Team
  * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
- * Visit https://www.libembroidery.org/refman for advice on altering this file,
- * or read the markdown version in embroidermodder2/docs/refman.
+ *
+ * Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
+ * for advice on altering this file.
  *
  * Main
  */
@@ -30,7 +31,7 @@ bool Application::event(QEvent *event)
             _main->openFilesSelected(QStringList(static_cast<QFileOpenEvent *>(event)->file()));
             return true;
         }
-        // Fall through
+        /* Fall through */
     default:
         return QApplication::event(event);
     }
@@ -46,11 +47,11 @@ usage(void)
     "|___|_|_|_|___/|_|\\_\\\\__/|_|___/|___|_|\\_\\|_|_|_|\\__/|___/|___/|___|_|\\_\\ |___|"   "\n"
     " _____________________________________________________________________________ "           "\n"
     "|                                                                             | "          "\n"
-    "|                   http://embroidermodder.github.io                          | "          "\n"
+    "|                   https://www.libembroidery.org                             | "          "\n"
     "|_____________________________________________________________________________| "          "\n"
     "                                                                               "           "\n"
     "Usage: embroidermodder [options] files ..."                                      "\n"
-   //80CHARS======================================================================MAX
+/*   80CHARS======================================================================MAX */
     "Options:"                                                                        "\n"
     "  -d, --debug      Print lots of debugging information."                         "\n"
     "  -h, --help       Print this message and exit."                                 "\n"
@@ -111,8 +112,9 @@ int main(int argc, char* argv[])
     _main->setWindowTitle(app.applicationName() + " " + app.applicationVersion());
     _main->show();
 
-    // NOTE: If openFilesSelected() is called from within the _main constructor,
-    // slot commands wont work and the window menu will be screwed
+    /* NOTE: If openFilesSelected() is called from within the _main constructor,
+     * slot commands wont work and the window menu will be screwed
+     */
     if (!filesToOpen.isEmpty()) {
         _main->openFilesSelected(filesToOpen);
     }

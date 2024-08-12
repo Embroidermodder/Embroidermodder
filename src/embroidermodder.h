@@ -3,8 +3,9 @@
  *
  * Copyright 2011-2024 The Embroidermodder Team
  * Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
- * Visit https://www.libembroidery.org/refman for advice on altering this file,
- * or read the markdown version in embroidermodder2/docs/refman.
+ *
+ * Read the reference manual (https://www.libembroidery.org/downloads/emrm.pdf)
+ * for advice on altering this file.
  *
  * Main Embroidermodder Header
  */
@@ -536,6 +537,8 @@ public:
     EmbGeometry *geometry;
     ObjectData data;
 
+    void init_geometry(int type_, QRgb rgb, Qt::PenStyle lineType);
+
     Object(EmbArc arc, QRgb rgb, QGraphicsItem* parent = 0);
     Object(EmbCircle circle, QRgb rgb, QGraphicsItem *item = 0);
     Object(EmbEllipse ellipse, QRgb rgb, QGraphicsItem *item = 0);
@@ -549,15 +552,6 @@ public:
 
     Object(Object* obj, QGraphicsItem* parent = 0);
     ~Object();
-
-    void init(EmbArc arc, QRgb rgb, Qt::PenStyle lineType);
-    void init(EmbCircle circle, QRgb rgb, Qt::PenStyle lineType);
-    void init(EmbEllipse ellipse, QRgb rgb, Qt::PenStyle lineType);
-    void init(EmbLine line, int type_, QRgb rgb, Qt::PenStyle lineType);
-    void init(EmbRect rect, QRgb rgb, Qt::PenStyle lineType);
-    void init(EmbPoint point, QRgb rgb, Qt::PenStyle lineType);
-    void init(EmbPath path, int type_, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
-    void init(const QString& str, double x, double y, QRgb rgb, Qt::PenStyle lineType);
 
     /* QColor objectColor() const { return data.objPen.color(); } */
     QRgb objectColorRGB() const { return data.objPen.color().rgb(); }
@@ -583,17 +577,7 @@ public:
 
     double objectRadius() const { return rect().width()/2.0*scale(); }
     double objectDiameter() const { return rect().width()*scale(); }
-    double objectArea() const
-    {
-        switch (type()) {
-        case OBJ_TYPE_CIRCLE:
-            return embConstantPi*objectRadius()*objectRadius();
-        case OBJ_TYPE_IMAGE:
-        case OBJ_TYPE_RECTANGLE:
-        default:
-            return qAbs(objectWidth()*objectHeight());
-        }
-    }
+    double objectArea() const;
     double objectCircumference() const { return embConstantPi*objectDiameter(); }
 
     QPointF objectQuadrant0();
@@ -603,17 +587,12 @@ public:
 
     void updateRubber(void);
 
-    QPointF objectEndPoint1();
-    QPointF objectEndPoint2();
+    QPointF objectEndPoint1() const;
+    QPointF objectEndPoint2() const;
     QPointF objectStartPoint() const;
     QPointF objectMidPoint() const;
     QPointF objectEndPoint() const;
-    double objectX1() const { return objectEndPoint1().x(); }
-    double objectY1() const { return objectEndPoint1().y(); }
-    double objectX2() const { return objectEndPoint2().x(); }
-    double objectY2() const { return objectEndPoint2().y(); }
-    double objectDeltaX() const { return (objectX2() - objectX1()); }
-    double objectDeltaY() const { return (objectY2() - objectY1()); }
+    QPointF objectDelta() const { return objectEndPoint2() - objectEndPoint1(); }
 
     QPointF objectTopLeft() const;
     QPointF objectTopRight() const;
@@ -628,8 +607,6 @@ public:
     void updatePath(const QPainterPath& p);
     void updateArcRect(double radius);
 
-    QPointF objectEndPoint1() const { return scenePos(); }
-    QPointF objectEndPoint2() const;
     double objectAngle() const;
     double objectLength() const { return line().length()*scale(); }
 
@@ -637,10 +614,10 @@ public:
     void setObjectEndPoint1(double x1, double y1);
     void setObjectEndPoint2(const QPointF& endPt2);
     void setObjectEndPoint2(double x2, double y2);
-    void setObjectX1(double x) { setObjectEndPoint1(x, objectY1()); }
-    void setObjectY1(double y) { setObjectEndPoint1(objectX1(), y); }
-    void setObjectX2(double x) { setObjectEndPoint2(x, objectY2()); }
-    void setObjectY2(double y) { setObjectEndPoint2(objectX2(), y); }
+    void setObjectX1(double x) { setObjectEndPoint1(x, objectEndPoint1().y()); }
+    void setObjectY1(double y) { setObjectEndPoint1(objectEndPoint1().x(), y); }
+    void setObjectX2(double x) { setObjectEndPoint2(x, objectEndPoint2().y()); }
+    void setObjectY2(double y) { setObjectEndPoint2(objectEndPoint2().x(), y); }
 
     QRectF rect() const { return path().boundingRect(); }
     void setRect(const QRectF& r) { QPainterPath p; p.addRect(r); setPath(p); }
@@ -683,7 +660,6 @@ public:
 
     void setObjectCenter(EmbVector point);
     void setObjectCenter(const QPointF& center);
-    void setObjectCenter(double centerX, double centerY);
     void setObjectCenterX(double centerX);
     void setObjectCenterY(double centerY);
     void setObjectRadius(double radius);
@@ -815,7 +791,6 @@ private:
     QDialogButtonBox* buttonBox;
 
     void addColorsToComboBox(QComboBox* comboBox);
-
 
 private slots:
     void comboBoxLanguageCurrentIndexChanged(const QString&);
@@ -1038,7 +1013,9 @@ private:
     QImage img;
 };
 
-// On Mac, if the user drops a file on the app's Dock icon, or uses Open As, then this is how the app actually opens the file.
+/* On Mac, if the user drops a file on the app's Dock icon, or uses Open As,
+ * then this is how the app actually opens the file.
+ */
 class Application : public QApplication
 {
     Q_OBJECT
@@ -1136,7 +1113,7 @@ class CmdPromptHistory : public QTextBrowser
 
 public:
     CmdPromptHistory(QWidget* parent = 0);
-    ~CmdPromptHistory();
+    ~CmdPromptHistory() {}
 
 protected:
     void contextMenuEvent(QContextMenuEvent* event);
@@ -1161,7 +1138,7 @@ class CmdPromptSplitter : public QSplitter
 
 public:
     CmdPromptSplitter(QWidget* parent = 0);
-    ~CmdPromptSplitter();
+    ~CmdPromptSplitter() {}
 
 protected:
     QSplitterHandle* createHandle();
@@ -1178,7 +1155,7 @@ class CmdPromptHandle : public QSplitterHandle
 
 public:
     CmdPromptHandle(Qt::Orientation orientation, QSplitter* parent);
-    ~CmdPromptHandle();
+    ~CmdPromptHandle() {}
 
 protected:
     void mousePressEvent(QMouseEvent* e);
@@ -1381,8 +1358,8 @@ public slots:
     void runCommand();
     ScriptValue runCommandCore(const QString& cmd, ScriptEnv *context);
     void runCommandMain(const QString& cmd);
-    void runCommandClick(const QString& cmd,  double x, double y);
-    void runCommandMove(const QString& cmd,  double x, double y);
+    void runCommandClick(const QString& cmd, double x, double y);
+    void runCommandMove(const QString& cmd, double x, double y);
     void runCommandContext(const QString& cmd, const QString& str);
     void runCommandPrompt(const QString& cmd);
 
