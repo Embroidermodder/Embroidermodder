@@ -918,7 +918,9 @@ void MdiArea::tile()
     zoomExtentsAllSubWindows();
 }
 
-void MdiArea::zoomExtentsAllSubWindows()
+/* . */
+void
+MdiArea::zoomExtentsAllSubWindows()
 {
     foreach(QMdiSubWindow* window, subWindowList()) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(window);
@@ -932,7 +934,9 @@ void MdiArea::zoomExtentsAllSubWindows()
     }
 }
 
-void MdiArea::forceRepaint()
+/* . */
+void
+MdiArea::forceRepaint()
 {
     //HACK: Take that QMdiArea!
     QSize hack = size();
@@ -940,6 +944,7 @@ void MdiArea::forceRepaint()
     resize(hack);
 }
 
+/* . */
 MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags) : QMdiSubWindow(parent, wflags)
 {
     mdiArea = parent;
@@ -961,9 +966,10 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
 
     setWidget(gview);
 
-    //WARNING: DO NOT SET THE QMDISUBWINDOW (this) FOCUSPROXY TO THE PROMPT
-    //WARNING: AS IT WILL CAUSE THE WINDOW MENU TO NOT SWITCH WINDOWS PROPERLY!
-    //WARNING: ALTHOUGH IT SEEMS THAT SETTING INTERNAL WIDGETS FOCUSPROXY IS OK.
+    /* WARNING: DO NOT SET THE QMDISUBWINDOW (this) FOCUSPROXY TO THE PROMPT
+     * WARNING: AS IT WILL CAUSE THE WINDOW MENU TO NOT SWITCH WINDOWS PROPERLY!
+     * WARNING: ALTHOUGH IT SEEMS THAT SETTING INTERNAL WIDGETS FOCUSPROXY IS OK.
+     */
     gview->setFocusProxy(prompt);
 
     resize(sizeHint());

@@ -12,6 +12,7 @@
 
 #include "embroidermodder.h"
 
+/* . */
 EmbVector
 to_emb_vector(QPointF p)
 {
@@ -21,6 +22,7 @@ to_emb_vector(QPointF p)
     return v;
 }
 
+/* . */
 QPointF
 to_qpointf(EmbVector v)
 {
@@ -28,6 +30,7 @@ to_qpointf(EmbVector v)
     return p;
 }
 
+/* . */
 QPointF
 scale_and_rotate(QPointF v, double scale, double angle)
 {
@@ -41,6 +44,7 @@ scale_and_rotate(QPointF v, double scale, double angle)
     return QPointF(rotX, rotY);    
 }
 
+/* . */
 QPointF
 find_mouse_snap_point(QList<QPointF> snap_points, const QPointF& mouse_point)
 {
@@ -57,6 +61,7 @@ find_mouse_snap_point(QList<QPointF> snap_points, const QPointF& mouse_point)
     return result;
 }
 
+/* . */
 EmbArc
 emb_arc_set_radius(EmbArc arc, EmbReal radius)
 {
@@ -78,6 +83,7 @@ emb_arc_set_radius(EmbArc arc, EmbReal radius)
     return arc;
 }
 
+/* . */
 QIcon
 create_icon(QString icon)
 {
@@ -87,31 +93,68 @@ create_icon(QString icon)
     return QIcon(fname);
 }
 
+/* . */
+QIcon
+create_swatch(int32_t color)
+{
+    QPixmap pixmap(16, 16);
+    pixmap.fill(QColor(color));
+    return QIcon(pixmap); 
+}
+
+/* . */
+QPushButton *
+choose_color_button(QGroupBox* groupbox, IntSetting* color_setting)
+{
+    QPushButton* button = new QPushButton(_main->tr("Choose"), groupbox);
+    color_setting->dialog = color_setting->setting;
+    color_setting->preview = color_setting->dialog;
+    color_setting->accept = color_setting->dialog;
+    button->setIcon(create_swatch(color_setting->preview));
+    return button;
+}
+
+/* . */
 void
 set_visibility(QObject *senderObj, const char *key, bool visibility)
 {
     QObject* parent = senderObj->parent();
     if (!parent) {
-        // Error reporting.
+        debug_message("set_visibility called from sender without a parent object");
         return;
     }
+    int error = 1;
     if (!strncmp(key, "label", 5)) {
         QLabel* label = parent->findChild<QLabel*>(key);
         if (label) {
             label->setVisible(visibility);
-        }
-        else {
-            // Error reporting.
+            error = 0;
         }
     }
     if (!strncmp(key, "spinBox", 7)) {
         QDoubleSpinBox* spinbox = parent->findChild<QDoubleSpinBox*>(key);
         if (spinbox) {
             spinbox->setVisible(visibility);
+            error = 0;
         }
-        else {
-            // Error reporting.
+    }
+    if (!strncmp(key, "checkBox", 8)) {
+        QCheckBox* checkbox = parent->findChild<QCheckBox*>(key);
+        if (checkbox) {
+            checkbox->setVisible(visibility);
+            error = 0;
         }
+    }
+    if (!strncmp(key, "comboBox", 8)) {
+        QComboBox* combobox = parent->findChild<QComboBox*>(key);
+        if (combobox) {
+            combobox->setVisible(visibility);
+            error = 0;
+        }
+    }
+    if (error) {
+        debug_message("Failed to enable/disable the variable");
+        debug_message(key);
     }
 }
 
@@ -134,23 +177,38 @@ set_enabled(QObject *senderObj, const char *key, bool enabled)
         // Error reporting.
         return;
     }
+    int error = 1;
     if (!strncmp(key, "label", 5)) {
         QLabel* label = parent->findChild<QLabel*>(key);
         if (label) {
             label->setEnabled(enabled);
-        }
-        else {
-            // Error reporting.
+            error = 0;
         }
     }
     if (!strncmp(key, "spinBox", 7)) {
         QDoubleSpinBox* spinbox = parent->findChild<QDoubleSpinBox*>(key);
         if (spinbox) {
             spinbox->setEnabled(enabled);
+            error = 0;
         }
-        else {
-            // Error reporting.
+    }
+    if (!strncmp(key, "checkBox", 8)) {
+        QCheckBox* checkbox = parent->findChild<QCheckBox*>(key);
+        if (checkbox) {
+            checkbox->setEnabled(enabled);
+            error = 0;
         }
+    }
+    if (!strncmp(key, "comboBox", 8)) {
+        QComboBox* combobox = parent->findChild<QComboBox*>(key);
+        if (combobox) {
+            combobox->setEnabled(enabled);
+            error = 0;
+        }
+    }
+    if (error) {
+        debug_message("Failed to enable/disable the variable");
+        debug_message(key);
     }
 }
 

@@ -11,46 +11,60 @@
 
 #include "embroidermodder.h"
 
-void set_visibility(QObject *senderObj, const char *key, bool visibility);
-void set_enabled(QObject *senderObj, const char *key, bool visibility);
-void set_visibility_group(QObject *senderObj, const char *key, bool visibility);
-void set_enabled_group(QObject *senderObj, const char *key, bool visibility);
-QIcon create_swatch(int32_t color);
-QPushButton *choose_color_button(QGroupBox* groupbox, IntSetting* color_setting);
-
-void checkBoxQSnapEndPointStateChanged(int);
-void checkBoxQSnapMidPointStateChanged(int);
-void checkBoxQSnapCenterStateChanged(int);
-void checkBoxQSnapNodeStateChanged(int);
-void checkBoxQSnapQuadrantStateChanged(int);
-void checkBoxQSnapIntersectionStateChanged(int);
-void checkBoxQSnapExtensionStateChanged(int);
-void checkBoxQSnapInsertionStateChanged(int);
-void checkBoxQSnapPerpendicularStateChanged(int);
-void checkBoxQSnapTangentStateChanged(int);
-void checkBoxQSnapNearestStateChanged(int);
-void checkBoxQSnapApparentStateChanged(int);
-void checkBoxQSnapParallelStateChanged(int);
-
-/* . */
-QIcon
-create_swatch(int32_t color)
+QCheckBox*
+Settings_Dialog::create_checkbox(
+    QGroupBox* groupbox, QString label, BoolSetting *setting, QString icon)
 {
-    QPixmap pixmap(16, 16);
-    pixmap.fill(QColor(color));
-    return QIcon(pixmap); 
+    QCheckBox* checkBox = new QCheckBox(tr(qPrintable(label)), groupbox);
+    setting->dialog = setting->setting;
+    setting->preview = setting->dialog;
+    checkBox->setChecked(setting->dialog);
+    connect(checkBox, &QCheckBox::stateChanged, this,
+        [=](int checked) { setting->dialog = checked; preview_update(); });
+    if (icon != "") {
+        checkBox->setIcon(create_icon(icon));
+    }
+    return checkBox;
 }
 
-/* . */
-QPushButton *
-choose_color_button(QGroupBox* groupbox, IntSetting* color_setting)
+QDoubleSpinBox*
+Settings_Dialog::create_spinbox(
+    QGroupBox* groupbox,
+    QString label,
+    RealSetting *setting,
+    double single_step,
+    double lower_bound,
+    double upper_bound)
 {
-    QPushButton* button = new QPushButton(_main->tr("Choose"), groupbox);
-    color_setting->dialog = color_setting->setting;
-    color_setting->preview = color_setting->dialog;
-    color_setting->accept = color_setting->dialog;
-    button->setIcon(create_swatch(color_setting->preview));
-    return button;
+    QDoubleSpinBox* spinbox = new QDoubleSpinBox(groupbox);
+    spinbox->setObjectName(label);
+    setting->dialog = setting->setting;
+    spinbox->setSingleStep(single_step);
+    spinbox->setRange(lower_bound, upper_bound);
+    spinbox->setValue(setting->dialog);
+    connect(spinbox, &QDoubleSpinBox::valueChanged, this,
+        [=](double value) { setting->dialog = value; });
+    return spinbox;
+}
+
+QSpinBox*
+Settings_Dialog::create_int_spinbox(
+    QGroupBox* groupbox,
+    QString label,
+    IntSetting *setting,
+    int single_step,
+    int lower_bound,
+    int upper_bound)
+{
+    QSpinBox* spinbox = new QSpinBox(groupbox);
+    spinbox->setObjectName(label);
+    setting->dialog = setting->setting;
+    spinbox->setSingleStep(single_step);
+    spinbox->setRange(lower_bound, upper_bound);
+    spinbox->setValue(setting->dialog);
+    connect(spinbox, &QSpinBox::valueChanged, this,
+        [=](int value) { setting->dialog = value; });
+    return spinbox;
 }
 
 /* . */
@@ -182,11 +196,12 @@ Settings_Dialog::createTabGeneral()
     /* Mdi Background */
     QGroupBox* groupBoxMdiBG = new QGroupBox(tr("Background"), widget);
 
-    QCheckBox* checkBoxMdiBGUseLogo = new QCheckBox(tr("Use Logo"), groupBoxMdiBG);
-    general_mdi_bg_use_logo.dialog = general_mdi_bg_use_logo.setting;
-    general_mdi_bg_use_logo.preview = general_mdi_bg_use_logo.dialog;
-    checkBoxMdiBGUseLogo->setChecked(general_mdi_bg_use_logo.preview);
-    connect(checkBoxMdiBGUseLogo, SIGNAL(stateChanged(int)), this, SLOT(checkBoxGeneralMdiBGUseLogoStateChanged(int)));
+    QCheckBox* checkBoxMdiBGUseLogo = create_checkbox(groupBoxMdiBG, "Use Logo",
+        &general_mdi_bg_use_logo);
+    QCheckBox* checkBoxMdiBGUseTexture = create_checkbox(groupBoxMdiBG, "Use Texture",
+        &general_mdi_bg_use_texture);
+    QCheckBox* checkBoxMdiBGUseColor = create_checkbox(groupBoxMdiBG, "Use Color",
+        &general_mdi_bg_use_color);
 
     QPushButton* buttonMdiBGLogo = new QPushButton(tr("Choose"), groupBoxMdiBG);
     buttonMdiBGLogo->setEnabled(general_mdi_bg_use_logo.dialog);
@@ -195,12 +210,6 @@ Settings_Dialog::createTabGeneral()
     connect(buttonMdiBGLogo, SIGNAL(clicked()), this, SLOT(chooseGeneralMdiBackgroundLogo()));
     connect(checkBoxMdiBGUseLogo, SIGNAL(toggled(bool)), buttonMdiBGLogo, SLOT(setEnabled(bool)));
 
-    QCheckBox* checkBoxMdiBGUseTexture = new QCheckBox(tr("Use Texture"), groupBoxMdiBG);
-    general_mdi_bg_use_texture.dialog = general_mdi_bg_use_texture.setting;
-    general_mdi_bg_use_texture.preview = general_mdi_bg_use_texture.dialog;
-    checkBoxMdiBGUseTexture->setChecked(general_mdi_bg_use_texture.preview);
-    connect(checkBoxMdiBGUseTexture, SIGNAL(stateChanged(int)), this, SLOT(checkBoxGeneralMdiBGUseTextureStateChanged(int)));
-
     QPushButton* buttonMdiBGTexture = new QPushButton(tr("Choose"), groupBoxMdiBG);
     buttonMdiBGTexture->setEnabled(general_mdi_bg_use_texture.dialog);
     strcpy(general_mdi_bg_texture.dialog, general_mdi_bg_texture.setting);
@@ -208,18 +217,9 @@ Settings_Dialog::createTabGeneral()
     connect(buttonMdiBGTexture, SIGNAL(clicked()), this, SLOT(chooseGeneralMdiBackgroundTexture()));
     connect(checkBoxMdiBGUseTexture, SIGNAL(toggled(bool)), buttonMdiBGTexture, SLOT(setEnabled(bool)));
 
-    QCheckBox* checkBoxMdiBGUseColor = new QCheckBox(tr("Use Color"), groupBoxMdiBG);
-    general_mdi_bg_use_color.dialog = general_mdi_bg_color.setting;
-    general_mdi_bg_use_color.preview = general_mdi_bg_use_color.dialog;
-    checkBoxMdiBGUseColor->setChecked(general_mdi_bg_use_color.preview);
-    connect(checkBoxMdiBGUseColor, SIGNAL(stateChanged(int)), this, SLOT(checkBoxGeneralMdiBGUseColorStateChanged(int)));
-
-    QPushButton* buttonMdiBGColor = new QPushButton(tr("Choose"), groupBoxMdiBG);
+    QPushButton* buttonMdiBGColor = choose_color_button(groupBoxMdiBG,
+        &general_mdi_bg_color);
     buttonMdiBGColor->setEnabled(general_mdi_bg_use_color.dialog);
-    general_mdi_bg_color.dialog  = general_mdi_bg_color.setting;
-    general_mdi_bg_color.preview = general_mdi_bg_color.dialog;
-    general_mdi_bg_color.accept  = general_mdi_bg_color.dialog;
-    buttonMdiBGColor->setIcon(create_swatch(general_mdi_bg_color.preview));
     connect(buttonMdiBGColor, SIGNAL(clicked()), this, SLOT(chooseGeneralMdiBackgroundColor()));
     connect(checkBoxMdiBGUseColor, SIGNAL(toggled(bool)), buttonMdiBGColor, SLOT(setEnabled(bool)));
 
@@ -235,10 +235,8 @@ Settings_Dialog::createTabGeneral()
     /* Tips */
     QGroupBox* groupBoxTips = new QGroupBox(tr("Tips"), widget);
 
-    QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("Show Tip of the Day on startup"), groupBoxTips);
-    general_tip_of_the_day.dialog = general_tip_of_the_day.setting;
-    checkBoxTipOfTheDay->setChecked(general_tip_of_the_day.dialog);
-    connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), this, SLOT(checkBoxTipOfTheDayStateChanged(int)));
+    QCheckBox* checkBoxTipOfTheDay = create_checkbox(groupBoxTips,
+        "Show Tip of the Day on startup", &general_tip_of_the_day);
 
     QVBoxLayout* vboxLayoutTips = new QVBoxLayout(groupBoxTips);
     vboxLayoutTips->addWidget(checkBoxTipOfTheDay);
@@ -288,39 +286,22 @@ QWidget* Settings_Dialog::createTabDisplay()
 {
     QWidget* widget = new QWidget(this);
 
-    //Rendering
-    //TODO: Review OpenGL and Rendering settings for future inclusion
+    /* Rendering */
+    /* TODO: Review OpenGL and Rendering settings for future inclusion */
     QGroupBox* groupBoxRender = new QGroupBox(tr("Rendering"), widget);
 
-    QCheckBox* checkBoxUseOpenGL = new QCheckBox(tr("Use OpenGL"), groupBoxRender);
-    display_use_opengl.dialog = display_use_opengl.setting;
-    checkBoxUseOpenGL->setChecked(display_use_opengl.dialog);
-    connect(checkBoxUseOpenGL, SIGNAL(stateChanged(int)), this, SLOT(checkBoxUseOpenGLStateChanged(int)));
-
-    QCheckBox* checkBoxRenderHintAA = new QCheckBox(tr("Antialias"), groupBoxRender);
-    display_renderhint_aa.dialog = display_renderhint_aa.setting;
-    checkBoxRenderHintAA->setChecked(display_renderhint_aa.dialog);
-    connect(checkBoxRenderHintAA, SIGNAL(stateChanged(int)), this, SLOT(checkBoxRenderHintAAStateChanged(int)));
-
-    QCheckBox* checkBoxRenderHintTextAA = new QCheckBox(tr("Antialias Text"), groupBoxRender);
-    display_renderhint_text_aa.dialog = display_renderhint_text_aa.setting;
-    checkBoxRenderHintTextAA->setChecked(display_renderhint_text_aa.dialog);
-    connect(checkBoxRenderHintTextAA, SIGNAL(stateChanged(int)), this, SLOT(checkBoxRenderHintTextAAStateChanged(int)));
-
-    QCheckBox* checkBoxRenderHintSmoothPix = new QCheckBox(tr("Smooth Pixmap"), groupBoxRender);
-    display_renderhint_smooth_pix.dialog = display_renderhint_smooth_pix.setting;
-    checkBoxRenderHintSmoothPix->setChecked(display_renderhint_smooth_pix.dialog);
-    connect(checkBoxRenderHintSmoothPix, SIGNAL(stateChanged(int)), this, SLOT(checkBoxRenderHintSmoothPixStateChanged(int)));
-
-    QCheckBox* checkBoxRenderHintHighAA = new QCheckBox(tr("High Quality Antialiasing (OpenGL)"), groupBoxRender);
-    display_renderhint_high_aa.dialog = display_renderhint_high_aa.setting;
-    checkBoxRenderHintHighAA->setChecked(display_renderhint_high_aa.dialog);
-    connect(checkBoxRenderHintHighAA, SIGNAL(stateChanged(int)), this, SLOT(checkBoxRenderHintHighAAStateChanged(int)));
-
-    QCheckBox* checkBoxRenderHintNonCosmetic = new QCheckBox(tr("Non Cosmetic"), groupBoxRender);
-    display_renderhint_noncosmetic.dialog = display_renderhint_noncosmetic.setting;
-    checkBoxRenderHintNonCosmetic->setChecked(display_renderhint_noncosmetic.dialog);
-    connect(checkBoxRenderHintNonCosmetic, SIGNAL(stateChanged(int)), this, SLOT(checkBoxRenderHintNonCosmeticStateChanged(int)));
+    QCheckBox* checkBoxUseOpenGL = create_checkbox(groupBoxRender, "Use OpenGL",
+        &display_use_opengl);
+    QCheckBox* checkBoxRenderHintAA = create_checkbox(groupBoxRender, "Antialias",
+        &display_renderhint_aa);
+    QCheckBox* checkBoxRenderHintTextAA = create_checkbox(groupBoxRender, "Antialias Text",
+        &display_renderhint_text_aa);
+    QCheckBox* checkBoxRenderHintSmoothPix = create_checkbox(groupBoxRender, "Smooth Pixmap",
+        &display_renderhint_smooth_pix);
+    QCheckBox* checkBoxRenderHintHighAA = create_checkbox(groupBoxRender, "High Quality Antialiasing (OpenGL)",
+        &display_renderhint_high_aa);
+    QCheckBox* checkBoxRenderHintNonCosmetic = create_checkbox(groupBoxRender, "Non Cosmetic",
+        &display_renderhint_noncosmetic);
 
     QVBoxLayout* vboxLayoutRender = new QVBoxLayout(groupBoxRender);
     vboxLayoutRender->addWidget(checkBoxUseOpenGL);
@@ -427,20 +408,12 @@ QWidget* Settings_Dialog::createTabDisplay()
     QGroupBox* groupBoxZoom = new QGroupBox(tr("Zoom"), widget);
 
     QLabel* labelZoomScaleIn = new QLabel(tr("Zoom In Scale"), groupBoxZoom);
-    QDoubleSpinBox* spinBoxZoomScaleIn = new QDoubleSpinBox(groupBoxZoom);
-    display_zoomscale_in.dialog = display_zoomscale_in.setting;
-    spinBoxZoomScaleIn->setValue(display_zoomscale_in.dialog);
-    spinBoxZoomScaleIn->setSingleStep(0.01);
-    spinBoxZoomScaleIn->setRange(1.01, 10.00);
-    connect(spinBoxZoomScaleIn, SIGNAL(valueChanged(double)), this, SLOT(spinBoxZoomScaleInValueChanged(double)));
+    QDoubleSpinBox* spinBoxZoomScaleIn = create_spinbox(
+        groupBoxZoom, "spinBoxZoomInScale", &display_zoomscale_in, 0.01, 1.01, 10.00);
 
     QLabel* labelZoomScaleOut = new QLabel(tr("Zoom Out Scale"), groupBoxZoom);
-    QDoubleSpinBox* spinBoxZoomScaleOut = new QDoubleSpinBox(groupBoxZoom);
-    display_zoomscale_out.dialog = display_zoomscale_out.setting;
-    spinBoxZoomScaleOut->setValue(display_zoomscale_out.dialog);
-    spinBoxZoomScaleOut->setSingleStep(0.01);
-    spinBoxZoomScaleOut->setRange(0.01, 0.99);
-    connect(spinBoxZoomScaleOut, SIGNAL(valueChanged(double)), this, SLOT(spinBoxZoomScaleOutValueChanged(double)));
+    QDoubleSpinBox* spinBoxZoomScaleOut = create_spinbox(
+        groupBoxZoom, "spinBoxZoomOutScale", &display_zoomscale_out, 0.01, 0.01, 0.99);
 
     QGridLayout* gridLayoutZoom = new QGridLayout(groupBoxZoom);
     gridLayoutZoom->addWidget(labelZoomScaleIn, 0, 0, Qt::AlignLeft);
@@ -752,30 +725,25 @@ QWidget* Settings_Dialog::createTabSnap()
     return scrollArea;
 }
 
-QWidget* Settings_Dialog::createTabGridRuler()
+QWidget*
+Settings_Dialog::createTabGridRuler()
 {
     QWidget* widget = new QWidget(this);
 
-    //Grid Misc
+    /* Grid Misc */
     QGroupBox* groupBoxGridMisc = new QGroupBox(tr("Grid Misc"), widget);
 
-    QCheckBox* checkBoxGridShowOnLoad = new QCheckBox(tr("Initially show grid when loading a file"), groupBoxGridMisc);
-    grid_show_on_load.dialog = grid_show_on_load.setting;
-    checkBoxGridShowOnLoad->setChecked(grid_show_on_load.dialog);
-    connect(checkBoxGridShowOnLoad, &QCheckBox::stateChanged, this,
-        [=](int x) { grid_show_on_load.dialog = x; });
-
-    QCheckBox* checkBoxGridShowOrigin = new QCheckBox(tr("Show the origin when the grid is enabled"), groupBoxGridMisc);
-    grid_show_origin.dialog = grid_show_origin.setting;
-    checkBoxGridShowOrigin->setChecked(grid_show_origin.dialog);
-    connect(checkBoxGridShowOrigin, SIGNAL(stateChanged(int)), this, SLOT(checkBoxGridShowOriginStateChanged(int)));
+    QCheckBox* checkBoxGridShowOnLoad = create_checkbox(groupBoxGridMisc,
+        "Initially show grid when loading a file", &grid_show_on_load);
+    QCheckBox* checkBoxGridShowOrigin = create_checkbox(groupBoxGridMisc,
+        "Show the origin when the grid is enabled", &grid_show_origin);
 
     QGridLayout* gridLayoutGridMisc = new QGridLayout(widget);
     gridLayoutGridMisc->addWidget(checkBoxGridShowOnLoad, 0, 0, Qt::AlignLeft);
     gridLayoutGridMisc->addWidget(checkBoxGridShowOrigin, 1, 0, Qt::AlignLeft);
     groupBoxGridMisc->setLayout(gridLayoutGridMisc);
 
-    //Grid Color
+    /* Grid Color */
     QGroupBox* groupBoxGridColor = new QGroupBox(tr("Grid Color"), widget);
 
     QCheckBox* checkBoxGridColorMatchCrossHair = new QCheckBox(tr("Match grid color to crosshair color"), groupBoxGridColor);
@@ -836,93 +804,57 @@ QWidget* Settings_Dialog::createTabGridRuler()
 
     QLabel* labelGridCenterX = new QLabel(tr("Grid Center X"), groupBoxGridGeom);
     labelGridCenterX->setObjectName("labelGridCenterX");
-    QDoubleSpinBox* spinBoxGridCenterX = new QDoubleSpinBox(groupBoxGridGeom);
-    spinBoxGridCenterX->setObjectName("spinBoxGridCenterX");
-    grid_center_x.dialog = grid_center_x.setting;
-    spinBoxGridCenterX->setSingleStep(1.000);
-    spinBoxGridCenterX->setRange(-1000.000, 1000.000);
-    spinBoxGridCenterX->setValue(grid_center_x.dialog);
-    connect(spinBoxGridCenterX, SIGNAL(valueChanged(double)), this, SLOT(spinBoxGridCenterXValueChanged(double)));
+    QDoubleSpinBox* spinBoxGridCenterX = create_spinbox(
+        groupBoxGridGeom, "spinBoxGridCenterX", &grid_center_x,
+        1.000, -1000.000, 1000.000);
 
     QLabel* labelGridCenterY = new QLabel(tr("Grid Center Y"), groupBoxGridGeom);
     labelGridCenterY->setObjectName("labelGridCenterY");
-    QDoubleSpinBox* spinBoxGridCenterY = new QDoubleSpinBox(groupBoxGridGeom);
-    spinBoxGridCenterY->setObjectName("spinBoxGridCenterY");
-    grid_center_y.dialog = grid_center_y.setting;
-    spinBoxGridCenterY->setSingleStep(1.000);
-    spinBoxGridCenterY->setRange(-1000.000, 1000.000);
-    spinBoxGridCenterY->setValue(grid_center_y.dialog);
-    connect(spinBoxGridCenterY, SIGNAL(valueChanged(double)), this, SLOT(spinBoxGridCenterYValueChanged(double)));
+    QDoubleSpinBox* spinBoxGridCenterY = create_spinbox(
+        groupBoxGridGeom, "spinBoxGridCenterY", &grid_center_y,
+        1.000, -1000.000, 1000.000);
 
     QLabel* labelGridSizeX = new QLabel(tr("Grid Size X"), groupBoxGridGeom);
     labelGridSizeX->setObjectName("labelGridSizeX");
-    QDoubleSpinBox* spinBoxGridSizeX = new QDoubleSpinBox(groupBoxGridGeom);
-    spinBoxGridSizeX->setObjectName("spinBoxGridSizeX");
-    grid_size_x.dialog = grid_size_x.setting;
-    spinBoxGridSizeX->setSingleStep(1.000);
-    spinBoxGridSizeX->setRange(1.000, 1000.000);
-    spinBoxGridSizeX->setValue(grid_size_x.dialog);
-    connect(spinBoxGridSizeX, SIGNAL(valueChanged(double)), this, SLOT(spinBoxGridSizeXValueChanged(double)));
+    QDoubleSpinBox* spinBoxGridSizeX = create_spinbox(
+        groupBoxGridGeom, "spinBoxGridSizeX", &grid_size_x,
+        1.000, 1.000, 1000.000);
 
     QLabel* labelGridSizeY = new QLabel(tr("Grid Size Y"), groupBoxGridGeom);
     labelGridSizeY->setObjectName("labelGridSizeY");
-    QDoubleSpinBox* spinBoxGridSizeY = new QDoubleSpinBox(groupBoxGridGeom);
-    spinBoxGridSizeY->setObjectName("spinBoxGridSizeY");
-    grid_size_y.dialog = grid_size_y.setting;
-    spinBoxGridSizeY->setSingleStep(1.000);
-    spinBoxGridSizeY->setRange(1.000, 1000.000);
-    spinBoxGridSizeY->setValue(grid_size_y.dialog);
-    connect(spinBoxGridSizeY, SIGNAL(valueChanged(double)), this, SLOT(spinBoxGridSizeYValueChanged(double)));
+    QDoubleSpinBox* spinBoxGridSizeY = create_spinbox(
+        groupBoxGridGeom, "spinBoxGridSizeY", &grid_size_y,
+        1.000, 1.000, 1000.000);
 
     QLabel* labelGridSpacingX = new QLabel(tr("Grid Spacing X"), groupBoxGridGeom);
     labelGridSpacingX->setObjectName("labelGridSpacingX");
-    QDoubleSpinBox* spinBoxGridSpacingX = new QDoubleSpinBox(groupBoxGridGeom);
-    spinBoxGridSpacingX->setObjectName("spinBoxGridSpacingX");
-    grid_spacing_x.dialog = grid_spacing_x.setting;
-    spinBoxGridSpacingX->setSingleStep(1.000);
-    spinBoxGridSpacingX->setRange(0.001, 1000.000);
-    spinBoxGridSpacingX->setValue(grid_spacing_x.dialog);
-    connect(spinBoxGridSpacingX, SIGNAL(valueChanged(double)), this, SLOT(spinBoxGridSpacingXValueChanged(double)));
+    QDoubleSpinBox* spinBoxGridSpacingX = create_spinbox(
+        groupBoxGridGeom, "spinBoxGridSpacingX", &grid_spacing_x,
+        1.000, 0.001, 1000.000);
 
     QLabel* labelGridSpacingY = new QLabel(tr("Grid Spacing Y"), groupBoxGridGeom);
     labelGridSpacingY->setObjectName("labelGridSpacingY");
-    QDoubleSpinBox* spinBoxGridSpacingY = new QDoubleSpinBox(groupBoxGridGeom);
-    spinBoxGridSpacingY->setObjectName("spinBoxGridSpacingY");
-    grid_spacing_y.dialog = grid_spacing_y.setting;
-    spinBoxGridSpacingY->setSingleStep(1.000);
-    spinBoxGridSpacingY->setRange(0.001, 1000.000);
-    spinBoxGridSpacingY->setValue(grid_spacing_y.dialog);
-    connect(spinBoxGridSpacingY, SIGNAL(valueChanged(double)), this, SLOT(spinBoxGridSpacingYValueChanged(double)));
+    QDoubleSpinBox* spinBoxGridSpacingY = create_spinbox(
+        groupBoxGridGeom, "spinBoxGridSpacingY", &grid_spacing_y,
+        1.000, 0.001, 1000.000);
 
     QLabel* labelGridSizeRadius = new QLabel(tr("Grid Size Radius"), groupBoxGridGeom);
     labelGridSizeRadius->setObjectName("labelGridSizeRadius");
-    QDoubleSpinBox* spinBoxGridSizeRadius = new QDoubleSpinBox(groupBoxGridGeom);
-    spinBoxGridSizeRadius->setObjectName("spinBoxGridSizeRadius");
-    grid_size_radius.dialog = grid_size_radius.setting;
-    spinBoxGridSizeRadius->setSingleStep(1.000);
-    spinBoxGridSizeRadius->setRange(1.000, 1000.000);
-    spinBoxGridSizeRadius->setValue(grid_size_radius.dialog);
-    connect(spinBoxGridSizeRadius, SIGNAL(valueChanged(double)), this, SLOT(spinBoxGridSizeRadiusValueChanged(double)));
+    QDoubleSpinBox* spinBoxGridSizeRadius = create_spinbox(
+        groupBoxGridGeom, "spinBoxGridSizeRadius", &grid_size_radius,
+        1.000, 1.000, 1000.000);
 
     QLabel* labelGridSpacingRadius = new QLabel(tr("Grid Spacing Radius"), groupBoxGridGeom);
     labelGridSpacingRadius->setObjectName("labelGridSpacingRadius");
-    QDoubleSpinBox* spinBoxGridSpacingRadius = new QDoubleSpinBox(groupBoxGridGeom);
-    spinBoxGridSpacingRadius->setObjectName("spinBoxGridSpacingRadius");
-    grid_spacing_radius.dialog = grid_spacing_radius.setting;
-    spinBoxGridSpacingRadius->setSingleStep(1.000);
-    spinBoxGridSpacingRadius->setRange(0.001, 1000.000);
-    spinBoxGridSpacingRadius->setValue(grid_spacing_radius.dialog);
-    connect(spinBoxGridSpacingRadius, SIGNAL(valueChanged(double)), this, SLOT(spinBoxGridSpacingRadiusValueChanged(double)));
+    QDoubleSpinBox* spinBoxGridSpacingRadius = create_spinbox(
+        groupBoxGridGeom, "spinBoxGridSpacingRadius", &grid_spacing_radius,
+        1.000, 0.001, 1000.000);
 
     QLabel* labelGridSpacingAngle = new QLabel(tr("Grid Spacing Angle"), groupBoxGridGeom);
     labelGridSpacingAngle->setObjectName("labelGridSpacingAngle");
-    QDoubleSpinBox* spinBoxGridSpacingAngle = new QDoubleSpinBox(groupBoxGridGeom);
-    spinBoxGridSpacingAngle->setObjectName("spinBoxGridSpacingAngle");
-    grid_spacing_angle.dialog = grid_spacing_angle.setting;
-    spinBoxGridSpacingAngle->setSingleStep(1.000);
-    spinBoxGridSpacingAngle->setRange(0.001, 1000.000);
-    spinBoxGridSpacingAngle->setValue(grid_spacing_angle.dialog);
-    connect(spinBoxGridSpacingAngle, SIGNAL(valueChanged(double)), this, SLOT(spinBoxGridSpacingAngleValueChanged(double)));
+    QDoubleSpinBox* spinBoxGridSpacingAngle = create_spinbox(
+        groupBoxGridGeom, "spinBoxGridSpacingAngle", &grid_spacing_angle,
+        1.000, 0.001, 1000.000);
 
     labelGridType->setEnabled(!grid_load_from_file.dialog);
     comboBoxGridType->setEnabled(!grid_load_from_file.dialog);
@@ -1032,25 +964,20 @@ QWidget* Settings_Dialog::createTabGridRuler()
     gridLayoutRulerColor->addWidget(buttonRulerColor, 1, 1, Qt::AlignRight);
     groupBoxRulerColor->setLayout(gridLayoutRulerColor);
 
-    //Ruler Geometry
+    /* Ruler Geometry */
     QGroupBox* groupBoxRulerGeom = new QGroupBox(tr("Ruler Geometry"), widget);
 
     QLabel* labelRulerPixelSize = new QLabel(tr("Ruler Pixel Size"), groupBoxRulerGeom);
     labelRulerPixelSize->setObjectName("labelRulerPixelSize");
-    QDoubleSpinBox* spinBoxRulerPixelSize = new QDoubleSpinBox(groupBoxRulerGeom);
-    spinBoxRulerPixelSize->setObjectName("spinBoxRulerPixelSize");
-    ruler_pixel_size.dialog = ruler_pixel_size.setting;
-    spinBoxRulerPixelSize->setSingleStep(1.000);
-    spinBoxRulerPixelSize->setRange(20.000, 100.000);
-    spinBoxRulerPixelSize->setValue(ruler_pixel_size.dialog);
-    connect(spinBoxRulerPixelSize, SIGNAL(valueChanged(double)), this, SLOT(spinBoxRulerPixelSizeValueChanged(double)));
+    QSpinBox* spinBoxRulerPixelSize = create_int_spinbox(
+        groupBoxRulerGeom, "spinBoxRulerPixelSize", &ruler_pixel_size, 1, 20, 100);
 
     QGridLayout* gridLayoutRulerGeom = new QGridLayout(groupBoxRulerGeom);
     gridLayoutRulerGeom->addWidget(labelRulerPixelSize, 0, 0, Qt::AlignLeft);
     gridLayoutRulerGeom->addWidget(spinBoxRulerPixelSize, 0, 1, Qt::AlignRight);
     groupBoxRulerGeom->setLayout(gridLayoutRulerGeom);
 
-    //Widget Layout
+    /* Widget Layout */
     QVBoxLayout *vboxLayoutMain = new QVBoxLayout(widget);
     vboxLayoutMain->addWidget(groupBoxGridMisc);
     vboxLayoutMain->addWidget(groupBoxGridColor);
@@ -1079,90 +1006,40 @@ QWidget* Settings_Dialog::createTabOrthoPolar()
     return scrollArea;
 }
 
-QWidget* Settings_Dialog::createTabQuickSnap()
+QWidget*
+Settings_Dialog::createTabQuickSnap()
 {
     QWidget* widget = new QWidget(this);
 
-    //QSnap Locators
+    /* QSnap Locators */
     QGroupBox* groupBoxQSnapLoc = new QGroupBox(tr("Locators Used"), widget);
 
-    QCheckBox* checkBoxQSnapEndPoint = new QCheckBox(tr("Endpoint"), groupBoxQSnapLoc);
-    qsnap_endpoint.dialog = qsnap_endpoint.setting;
-    checkBoxQSnapEndPoint->setChecked(qsnap_endpoint.dialog);
-    checkBoxQSnapEndPoint->setIcon(create_icon("locator-snaptoendpoint"));
-    connect(checkBoxQSnapEndPoint, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapEndPointStateChanged(int)));
-
-    QCheckBox* checkBoxQSnapMidPoint = new QCheckBox(tr("Midpoint"), groupBoxQSnapLoc);
-    qsnap_midpoint.dialog = qsnap_midpoint.setting;
-    checkBoxQSnapMidPoint->setChecked(qsnap_midpoint.dialog);
-    checkBoxQSnapMidPoint->setIcon(create_icon("locator-snaptomidpoint"));
-    connect(checkBoxQSnapMidPoint, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapMidPointStateChanged(int)));
-
-    QCheckBox* checkBoxQSnapCenter = new QCheckBox(tr("Center"), groupBoxQSnapLoc);
-    qsnap_center.dialog = qsnap_center.setting;
-    checkBoxQSnapCenter->setChecked(qsnap_center.dialog);
-    checkBoxQSnapCenter->setIcon(create_icon("locator-snaptocenter"));
-    connect(checkBoxQSnapCenter, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapCenterStateChanged(int)));
-
-    QCheckBox* checkBoxQSnapNode = new QCheckBox(tr("Node"), groupBoxQSnapLoc);
-    qsnap_node.dialog = qsnap_node.setting;
-    checkBoxQSnapNode->setChecked(qsnap_node.dialog);
-    checkBoxQSnapNode->setIcon(create_icon("locator-snaptonode"));
-    connect(checkBoxQSnapNode, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapNodeStateChanged(int)));
-
-    QCheckBox* checkBoxQSnapQuadrant = new QCheckBox(tr("Quadrant"), groupBoxQSnapLoc);
-    qsnap_quadrant.dialog = qsnap_quadrant.setting;
-    checkBoxQSnapQuadrant->setChecked(qsnap_quadrant.dialog);
-    checkBoxQSnapQuadrant->setIcon(create_icon("locator-snaptoquadrant"));
-    connect(checkBoxQSnapQuadrant, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapQuadrantStateChanged(int)));
-
-    QCheckBox* checkBoxQSnapIntersection = new QCheckBox(tr("Intersection"), groupBoxQSnapLoc);
-    qsnap_intersection.dialog = qsnap_intersection.setting;
-    checkBoxQSnapIntersection->setChecked(qsnap_intersection.dialog);
-    checkBoxQSnapIntersection->setIcon(create_icon("locator-snaptointersection"));
-    connect(checkBoxQSnapIntersection, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapIntersectionStateChanged(int)));
-
-    QCheckBox* checkBoxQSnapExtension = new QCheckBox(tr("Extension"), groupBoxQSnapLoc);
-    qsnap_extension.dialog = qsnap_extension.setting;
-    checkBoxQSnapExtension->setChecked(qsnap_extension.dialog);
-    checkBoxQSnapExtension->setIcon(create_icon("locator-snaptoextension"));
-    connect(checkBoxQSnapExtension, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapExtensionStateChanged(int)));
-
-    QCheckBox* checkBoxQSnapInsertion = new QCheckBox(tr("Insertion"), groupBoxQSnapLoc);
-    qsnap_insertion.dialog = qsnap_insertion.setting;
-    checkBoxQSnapInsertion->setChecked(qsnap_insertion.dialog);
-    checkBoxQSnapInsertion->setIcon(create_icon("locator-snaptoinsert"));
-    connect(checkBoxQSnapInsertion, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapInsertionStateChanged(int)));
-
-    QCheckBox* checkBoxQSnapPerpendicular = new QCheckBox(tr("Perpendicular"), groupBoxQSnapLoc);
-    qsnap_perpendicular.dialog = qsnap_perpendicular.setting;
-    checkBoxQSnapPerpendicular->setChecked(qsnap_perpendicular.dialog);
-    checkBoxQSnapPerpendicular->setIcon(create_icon("locator-snaptoperpendicular"));
-    connect(checkBoxQSnapPerpendicular, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapPerpendicularStateChanged(int)));
-
-    QCheckBox* checkBoxQSnapTangent = new QCheckBox(tr("Tangent"), groupBoxQSnapLoc);
-    qsnap_tangent.dialog = qsnap_tangent.setting;
-    checkBoxQSnapTangent->setChecked(qsnap_tangent.dialog);
-    checkBoxQSnapTangent->setIcon(create_icon("locator-snaptotangent"));
-    connect(checkBoxQSnapTangent, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapTangentStateChanged(int)));
-
-    QCheckBox* checkBoxQSnapNearest = new QCheckBox(tr("Nearest"), groupBoxQSnapLoc);
-    qsnap_nearest.dialog = qsnap_nearest.setting;
-    checkBoxQSnapNearest->setChecked(qsnap_nearest.dialog);
-    checkBoxQSnapNearest->setIcon(create_icon("locator-snaptonearest"));
-    connect(checkBoxQSnapNearest, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapNearestStateChanged(int)));
-
-    QCheckBox* checkBoxQSnapApparent = new QCheckBox(tr("Apparent Intersection"), groupBoxQSnapLoc);
-    qsnap_apparent.dialog = qsnap_apparent.setting;
-    checkBoxQSnapApparent->setChecked(qsnap_apparent.dialog);
-    checkBoxQSnapApparent->setIcon(create_icon("locator-snaptoapparentintersection"));
-    connect(checkBoxQSnapApparent, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapApparentStateChanged(int)));
-
-    QCheckBox* checkBoxQSnapParallel = new QCheckBox(tr("Parallel"), groupBoxQSnapLoc);
-    qsnap_parallel.dialog = qsnap_parallel.setting;
-    checkBoxQSnapParallel->setChecked(qsnap_parallel.dialog);
-    checkBoxQSnapParallel->setIcon(create_icon("locator-snaptoparallel"));
-    connect(checkBoxQSnapParallel, SIGNAL(stateChanged(int)), this, SLOT(checkBoxQSnapParallelStateChanged(int)));
+    QCheckBox* checkBoxQSnapEndPoint = create_checkbox(groupBoxQSnapLoc,
+        "Endpoint", &qsnap_endpoint, "locator-snaptoendpoint");
+    QCheckBox* checkBoxQSnapMidPoint = create_checkbox(groupBoxQSnapLoc,
+        "Midpoint", &qsnap_midpoint, "locator-snaptomidpoint");
+    QCheckBox* checkBoxQSnapCenter = create_checkbox(groupBoxQSnapLoc,
+        "Center", &qsnap_center, "locator-snaptocenter");
+    QCheckBox* checkBoxQSnapNode = create_checkbox(groupBoxQSnapLoc,
+        "Node", &qsnap_node, "locator-snaptonode");
+    QCheckBox* checkBoxQSnapQuadrant = create_checkbox(groupBoxQSnapLoc,
+        "Quadrant", &qsnap_quadrant, "locator-snaptoquadrant");
+    QCheckBox* checkBoxQSnapIntersection = create_checkbox(groupBoxQSnapLoc,
+        "Intersection", &qsnap_intersection, "locator-snaptointersection");
+    QCheckBox* checkBoxQSnapExtension = create_checkbox(groupBoxQSnapLoc,
+        "Extension", &qsnap_extension, "locator-snaptoextension");
+    QCheckBox* checkBoxQSnapInsertion = create_checkbox(groupBoxQSnapLoc,
+        "Insertion", &qsnap_insertion, "locator-snaptoinsert");
+    QCheckBox* checkBoxQSnapPerpendicular = create_checkbox(groupBoxQSnapLoc,
+        "Perpendicular", &qsnap_perpendicular, "locator-snaptoperpendicular");
+    QCheckBox* checkBoxQSnapTangent = create_checkbox(groupBoxQSnapLoc,
+        "Tangent", &qsnap_tangent, "locator-snaptotangent");
+    QCheckBox* checkBoxQSnapNearest = create_checkbox(groupBoxQSnapLoc,
+        "Nearest", &qsnap_nearest, "locator-snaptonearest");
+    QCheckBox* checkBoxQSnapApparent = create_checkbox(groupBoxQSnapLoc,
+        "Apparent Intersection", &qsnap_apparent, "locator-snaptoapparentintersection");
+    QCheckBox* checkBoxQSnapParallel = create_checkbox(groupBoxQSnapLoc,
+        "Parallel", &qsnap_parallel, "locator-snaptoparallel");
 
     QPushButton* buttonQSnapSelectAll = new QPushButton(tr("Select All"), groupBoxQSnapLoc);
     connect(buttonQSnapSelectAll, SIGNAL(clicked()), this, SLOT(buttonQSnapSelectAllClicked()));
@@ -1268,7 +1145,8 @@ QWidget* Settings_Dialog::createTabQuickSnap()
     return scrollArea;
 }
 
-QWidget* Settings_Dialog::createTabQuickTrack()
+QWidget*
+Settings_Dialog::createTabQuickTrack()
 {
     QWidget* widget = new QWidget(this);
 
@@ -1280,7 +1158,8 @@ QWidget* Settings_Dialog::createTabQuickTrack()
     return scrollArea;
 }
 
-QWidget* Settings_Dialog::createTabLineWeight()
+QWidget*
+Settings_Dialog::createTabLineWeight()
 {
     QWidget* widget = new QWidget(this);
 
@@ -1352,8 +1231,9 @@ QWidget* Settings_Dialog::createTabSelection()
     QCheckBox* checkBoxSelectionModePickFirst = new QCheckBox(tr("Allow Preselection (PickFirst)"), groupBoxSelectionModes);
     selection_mode_pickfirst.dialog = selection_mode_pickfirst.setting;
     checkBoxSelectionModePickFirst->setChecked(selection_mode_pickfirst.dialog);
-    checkBoxSelectionModePickFirst->setChecked(true); checkBoxSelectionModePickFirst->setEnabled(false); //TODO: Remove this line when Post-selection is available
+    checkBoxSelectionModePickFirst->setChecked(true);
     connect(checkBoxSelectionModePickFirst, SIGNAL(stateChanged(int)), this, SLOT(checkBoxSelectionModePickFirstStateChanged(int)));
+    checkBoxSelectionModePickFirst->setEnabled(false); //TODO: Remove this line when Post-selection is available
 
     QCheckBox* checkBoxSelectionModePickAdd = new QCheckBox(tr("Add to Selection (PickAdd)"), groupBoxSelectionModes);
     selection_mode_pickadd.dialog = selection_mode_pickadd.setting;
@@ -1476,10 +1356,11 @@ Settings_Dialog::comboBoxIconSizeCurrentIndexChanged(int index)
 }
 
 void
-Settings_Dialog::checkBoxGeneralMdiBGUseLogoStateChanged(int checked)
+Settings_Dialog::preview_update(void)
 {
-    general_mdi_bg_use_logo.preview = checked;
-    mdiArea->useBackgroundLogo(checked);
+    mdiArea->useBackgroundLogo(general_mdi_bg_use_logo.preview);
+    mdiArea->useBackgroundColor(general_mdi_bg_use_color.preview);
+    mdiArea->useBackgroundTexture(general_mdi_bg_use_texture.preview);
 }
 
 void
@@ -1502,13 +1383,6 @@ Settings_Dialog::chooseGeneralMdiBackgroundLogo()
 }
 
 void
-Settings_Dialog::checkBoxGeneralMdiBGUseTextureStateChanged(int checked)
-{
-    general_mdi_bg_use_texture.preview = checked;
-    mdiArea->useBackgroundTexture(checked);
-}
-
-void
 Settings_Dialog::chooseGeneralMdiBackgroundTexture()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
@@ -1525,13 +1399,6 @@ Settings_Dialog::chooseGeneralMdiBackgroundTexture()
         //Update immediately so it can be previewed
         mdiArea->setBackgroundTexture(general_mdi_bg_texture.accept);
     }
-}
-
-void
-Settings_Dialog::checkBoxGeneralMdiBGUseColorStateChanged(int checked)
-{
-    general_mdi_bg_use_color.preview = checked;
-    mdiArea->useBackgroundColor(checked);
 }
 
 void
@@ -1566,48 +1433,6 @@ Settings_Dialog::currentGeneralMdiBackgroundColorChanged(const QColor& color)
 }
 
 void
-Settings_Dialog::checkBoxTipOfTheDayStateChanged(int checked)
-{
-    general_tip_of_the_day.dialog = checked;
-}
-
-void
-Settings_Dialog::checkBoxUseOpenGLStateChanged(int checked)
-{
-    display_use_opengl.dialog = checked;
-}
-
-void
-Settings_Dialog::checkBoxRenderHintAAStateChanged(int checked)
-{
-    display_renderhint_aa.dialog = checked;
-}
-
-void
-Settings_Dialog::checkBoxRenderHintTextAAStateChanged(int checked)
-{
-    display_renderhint_text_aa.dialog = checked;
-}
-
-void
-Settings_Dialog::checkBoxRenderHintSmoothPixStateChanged(int checked)
-{
-    display_renderhint_smooth_pix.dialog = checked;
-}
-
-void
-Settings_Dialog::checkBoxRenderHintHighAAStateChanged(int checked)
-{
-    display_renderhint_high_aa.dialog = checked;
-}
-
-void
-Settings_Dialog::checkBoxRenderHintNonCosmeticStateChanged(int checked)
-{
-    display_renderhint_noncosmetic.dialog = checked;
-}
-
-void
 Settings_Dialog::checkBoxShowScrollBarsStateChanged(int checked)
 {
     display_show_scrollbars.preview = checked;
@@ -1618,18 +1443,6 @@ void
 Settings_Dialog::comboBoxScrollBarWidgetCurrentIndexChanged(int index)
 {
     display_scrollbar_widget_num.dialog = index;
-}
-
-void
-Settings_Dialog::spinBoxZoomScaleInValueChanged(double value)
-{
-    display_zoomscale_in.dialog = value;
-}
-
-void
-Settings_Dialog::spinBoxZoomScaleOutValueChanged(double value)
-{
-    display_zoomscale_out.dialog = value;
 }
 
 void
@@ -2012,12 +1825,6 @@ Settings_Dialog::spinBoxTrimDstNumJumpsValueChanged(int value)
 }
 
 void
-Settings_Dialog::checkBoxGridShowOriginStateChanged(int checked)
-{
-    grid_show_origin.dialog = checked;
-}
-
-void
 Settings_Dialog::checkBoxGridColorMatchCrossHairStateChanged(int checked)
 {
     grid_color_match_crosshair.dialog = checked;
@@ -2071,11 +1878,6 @@ Settings_Dialog::currentGridColorChanged(const QColor& color)
     _main->updateAllViewGridColors(grid_color.preview);
 }
 
-const char *grid_load_from_file_group[MAX_STRING_LENGTH] = {
-    "labelGridType",
-    "END"
-};
-
 void
 Settings_Dialog::checkBoxGridLoadFromFileStateChanged(int checked)
 {
@@ -2085,94 +1887,12 @@ Settings_Dialog::checkBoxGridLoadFromFileStateChanged(int checked)
     if (!senderObj) {
         return;
     }
-    QObject* parent = senderObj->parent();
-    if (!parent) {
-        return;
-    }
-    QLabel* labelGridType = parent->findChild<QLabel*>("labelGridType");
-    if (labelGridType) {
-        labelGridType->setEnabled(!grid_load_from_file.dialog);
-    }
-    QComboBox* comboBoxGridType = parent->findChild<QComboBox*>("comboBoxGridType");
-    if (comboBoxGridType) {
-        comboBoxGridType->setEnabled(!grid_load_from_file.dialog);
-    }
-    QCheckBox* checkBoxGridCenterOnOrigin = parent->findChild<QCheckBox*>("checkBoxGridCenterOnOrigin");
-    if (checkBoxGridCenterOnOrigin) {
-        checkBoxGridCenterOnOrigin->setEnabled(!grid_load_from_file.dialog);
-    }
-    QLabel* labelGridCenterX = parent->findChild<QLabel*>("labelGridCenterX");
-    if (labelGridCenterX) {
-        labelGridCenterX->setEnabled(!grid_load_from_file.dialog && !grid_center_on_origin.dialog);
-    }
-    QDoubleSpinBox* spinBoxGridCenterX = parent->findChild<QDoubleSpinBox*>("spinBoxGridCenterX");
-    if (spinBoxGridCenterX) {
-        spinBoxGridCenterX->setEnabled(!grid_load_from_file.dialog && !grid_center_on_origin.dialog);
-    }
-    QLabel* labelGridCenterY = parent->findChild<QLabel*>("labelGridCenterY");
-    if (labelGridCenterY) {
-        labelGridCenterY->setEnabled(!grid_load_from_file.dialog && !grid_center_on_origin.dialog);
-    }
-    QDoubleSpinBox* spinBoxGridCenterY = parent->findChild<QDoubleSpinBox*>("spinBoxGridCenterY");
-    if (spinBoxGridCenterY) {
-        spinBoxGridCenterY->setEnabled(!grid_load_from_file.dialog && !grid_center_on_origin.dialog);
-    }
-    QLabel* labelGridSizeX = parent->findChild<QLabel*>("labelGridSizeX");
-    if (labelGridSizeX) {
-        labelGridSizeX->setEnabled(!grid_load_from_file.dialog);
-    }
-    QDoubleSpinBox* spinBoxGridSizeX = parent->findChild<QDoubleSpinBox*>("spinBoxGridSizeX");
-    if (spinBoxGridSizeX) {
-        spinBoxGridSizeX->setEnabled(!grid_load_from_file.dialog);
-    }
-    QLabel* labelGridSizeY = parent->findChild<QLabel*>("labelGridSizeY");
-    if (labelGridSizeY) {
-        labelGridSizeY->setEnabled(!grid_load_from_file.dialog);
-    }
-    QDoubleSpinBox* spinBoxGridSizeY = parent->findChild<QDoubleSpinBox*>("spinBoxGridSizeY");
-    if (spinBoxGridSizeY) {
-        spinBoxGridSizeY->setEnabled(!grid_load_from_file.dialog);
-    }
-    QLabel* labelGridSpacingX = parent->findChild<QLabel*>("labelGridSpacingX");
-    if (labelGridSpacingX) {
-        labelGridSpacingX->setEnabled(!grid_load_from_file.dialog);
-    }
-    QDoubleSpinBox* spinBoxGridSpacingX = parent->findChild<QDoubleSpinBox*>("spinBoxGridSpacingX");
-    if (spinBoxGridSpacingX) {
-        spinBoxGridSpacingX->setEnabled(!grid_load_from_file.dialog);
-    }
-    QLabel* labelGridSpacingY = parent->findChild<QLabel*>("labelGridSpacingY");
-    if (labelGridSpacingY) {
-        labelGridSpacingY->setEnabled(!grid_load_from_file.dialog);
-    }
-    QDoubleSpinBox* spinBoxGridSpacingY = parent->findChild<QDoubleSpinBox*>("spinBoxGridSpacingY");
-    if (spinBoxGridSpacingY) {
-        spinBoxGridSpacingY->setEnabled(!grid_load_from_file.dialog);
-    }
-    QLabel* labelGridSizeRadius = parent->findChild<QLabel*>("labelGridSizeRadius");
-    if (labelGridSizeRadius) {
-        labelGridSizeRadius->setEnabled(!grid_load_from_file.dialog);
-    }
-    QDoubleSpinBox* spinBoxGridSizeRadius = parent->findChild<QDoubleSpinBox*>("spinBoxGridSizeRadius");
-    if (spinBoxGridSizeRadius) {
-        spinBoxGridSizeRadius->setEnabled(!grid_load_from_file.dialog);
-    }
-    QLabel* labelGridSpacingRadius = parent->findChild<QLabel*>("labelGridSpacingRadius");
-    if (labelGridSpacingRadius) {
-        labelGridSpacingRadius->setEnabled(!grid_load_from_file.dialog);
-    }
-    QDoubleSpinBox* spinBoxGridSpacingRadius = parent->findChild<QDoubleSpinBox*>("spinBoxGridSpacingRadius");
-    if (spinBoxGridSpacingRadius) {
-        spinBoxGridSpacingRadius->setEnabled(!grid_load_from_file.dialog);
-    }
-    QLabel* labelGridSpacingAngle = parent->findChild<QLabel*>("labelGridSpacingAngle");
-    if (labelGridSpacingAngle) {
-        labelGridSpacingAngle->setEnabled(!grid_load_from_file.dialog);
-    }
-    QDoubleSpinBox* spinBoxGridSpacingAngle = parent->findChild<QDoubleSpinBox*>("spinBoxGridSpacingAngle");
-    if (spinBoxGridSpacingAngle) {
-        spinBoxGridSpacingAngle->setEnabled(!grid_load_from_file.dialog);
-    }
+
+    bool dont_load = !grid_load_from_file.dialog;
+    set_enabled_group(senderObj, "grid_load_from_file_group", dont_load);
+
+    bool use_this_origin = !grid_load_from_file.dialog && !grid_center_on_origin.dialog;
+    set_enabled_group(senderObj, "defined_origin_group", use_this_origin);
 }
 
 void
@@ -2184,43 +1904,9 @@ Settings_Dialog::comboBoxGridTypeCurrentIndexChanged(const QString& type)
     if (!senderObj) {
         return;
     }
-    QObject* parent = senderObj->parent();
-    if (!parent) {
-        return;
-    }
-    bool visibility = false;
-    if (type == "Circular") {
-        visibility = true;
-    }
-
-    QLabel* labelGridSizeX = parent->findChild<QLabel*>("labelGridSizeX");
-    if (labelGridSizeX) labelGridSizeX->setVisible(!visibility);
-    QDoubleSpinBox* spinBoxGridSizeX = parent->findChild<QDoubleSpinBox*>("spinBoxGridSizeX");
-    if (spinBoxGridSizeX) spinBoxGridSizeX->setVisible(!visibility);
-    QLabel* labelGridSizeY = parent->findChild<QLabel*>("labelGridSizeY");
-    if (labelGridSizeY) labelGridSizeY->setVisible(!visibility);
-    QDoubleSpinBox* spinBoxGridSizeY = parent->findChild<QDoubleSpinBox*>("spinBoxGridSizeY");
-    if (spinBoxGridSizeY) spinBoxGridSizeY->setVisible(!visibility);
-    QLabel* labelGridSpacingX = parent->findChild<QLabel*>("labelGridSpacingX");
-    if (labelGridSpacingX) labelGridSpacingX->setVisible(!visibility);
-    QDoubleSpinBox* spinBoxGridSpacingX = parent->findChild<QDoubleSpinBox*>("spinBoxGridSpacingX");
-    if (spinBoxGridSpacingX) spinBoxGridSpacingX->setVisible(!visibility);
-    QLabel* labelGridSpacingY = parent->findChild<QLabel*>("labelGridSpacingY");
-    if (labelGridSpacingY) labelGridSpacingY->setVisible(!visibility);
-    QDoubleSpinBox* spinBoxGridSpacingY = parent->findChild<QDoubleSpinBox*>("spinBoxGridSpacingY");
-    if (spinBoxGridSpacingY) spinBoxGridSpacingY->setVisible(!visibility);
-    QLabel* labelGridSizeRadius = parent->findChild<QLabel*>("labelGridSizeRadius");
-    if (labelGridSizeRadius) labelGridSizeRadius->setVisible(visibility);
-    QDoubleSpinBox* spinBoxGridSizeRadius = parent->findChild<QDoubleSpinBox*>("spinBoxGridSizeRadius");
-    if (spinBoxGridSizeRadius) spinBoxGridSizeRadius->setVisible(visibility);
-    QLabel* labelGridSpacingRadius = parent->findChild<QLabel*>("labelGridSpacingRadius");
-    if (labelGridSpacingRadius) labelGridSpacingRadius->setVisible(visibility);
-    QDoubleSpinBox* spinBoxGridSpacingRadius = parent->findChild<QDoubleSpinBox*>("spinBoxGridSpacingRadius");
-    if (spinBoxGridSpacingRadius) spinBoxGridSpacingRadius->setVisible(visibility);
-    QLabel* labelGridSpacingAngle = parent->findChild<QLabel*>("labelGridSpacingAngle");
-    if (labelGridSpacingAngle) labelGridSpacingAngle->setVisible(visibility);
-    QDoubleSpinBox* spinBoxGridSpacingAngle = parent->findChild<QDoubleSpinBox*>("spinBoxGridSpacingAngle");
-    if (spinBoxGridSpacingAngle) spinBoxGridSpacingAngle->setVisible(visibility);
+    bool visibility = (type == "Circular");
+    set_visibility_group(senderObj, "rectangular_grid_group", visibility);
+    set_visibility_group(senderObj, "circular_grid_group", visibility);
 }
 
 void
@@ -2232,60 +1918,6 @@ Settings_Dialog::checkBoxGridCenterOnOriginStateChanged(int checked)
     if (senderObj) {
         set_enabled_group(senderObj, "center_on_origin_group", !grid_center_on_origin.dialog);
     }
-}
-
-void
-Settings_Dialog::spinBoxGridCenterXValueChanged(double value)
-{
-    grid_center_x.dialog = value;
-}
-
-void
-Settings_Dialog::spinBoxGridCenterYValueChanged(double value)
-{
-    grid_center_y.dialog = value;
-}
-
-void
-Settings_Dialog::spinBoxGridSizeXValueChanged(double value)
-{
-    grid_size_x.dialog = value;
-}
-
-void
-Settings_Dialog::spinBoxGridSizeYValueChanged(double value)
-{
-    grid_size_y.dialog = value;
-}
-
-void
-Settings_Dialog::spinBoxGridSpacingXValueChanged(double value)
-{
-    grid_spacing_x.dialog = value;
-}
-
-void
-Settings_Dialog::spinBoxGridSpacingYValueChanged(double value)
-{
-    grid_spacing_y.dialog = value;
-}
-
-void
-Settings_Dialog::spinBoxGridSizeRadiusValueChanged(double value)
-{
-    grid_size_radius.dialog = value;
-}
-
-void
-Settings_Dialog::spinBoxGridSpacingRadiusValueChanged(double value)
-{
-    grid_spacing_radius.dialog = value;
-}
-
-void
-Settings_Dialog::spinBoxGridSpacingAngleValueChanged(double value)
-{
-    grid_spacing_angle.dialog = value;
 }
 
 void
@@ -2339,84 +1971,6 @@ void
 Settings_Dialog::spinBoxRulerPixelSizeValueChanged(double value)
 {
     ruler_pixel_size.dialog = value;
-}
-
-void
-checkBoxQSnapEndPointStateChanged(int checked)
-{
-    qsnap_endpoint.dialog = checked;
-}
-
-void
-checkBoxQSnapMidPointStateChanged(int checked)
-{
-    qsnap_midpoint.dialog = checked;
-}
-
-void
-checkBoxQSnapCenterStateChanged(int checked)
-{
-    qsnap_center.dialog = checked;
-}
-
-void
-checkBoxQSnapNodeStateChanged(int checked)
-{
-    qsnap_node.dialog = checked;
-}
-
-void
-checkBoxQSnapQuadrantStateChanged(int checked)
-{
-    qsnap_quadrant.dialog = checked;
-}
-
-void
-checkBoxQSnapIntersectionStateChanged(int checked)
-{
-    qsnap_intersection.dialog = checked;
-}
-
-void
-checkBoxQSnapExtensionStateChanged(int checked)
-{
-    qsnap_extension.dialog = checked;
-}
-
-void
-checkBoxQSnapInsertionStateChanged(int checked)
-{
-    qsnap_insertion.dialog = checked;
-}
-
-void
-checkBoxQSnapPerpendicularStateChanged(int checked)
-{
-    qsnap_perpendicular.dialog = checked;
-}
-
-void
-checkBoxQSnapTangentStateChanged(int checked)
-{
-    qsnap_tangent.dialog = checked;
-}
-
-void
-checkBoxQSnapNearestStateChanged(int checked)
-{
-    qsnap_nearest.dialog = checked;
-}
-
-void
-checkBoxQSnapApparentStateChanged(int checked)
-{
-    qsnap_apparent.dialog = checked;
-}
-
-void
-checkBoxQSnapParallelStateChanged(int checked)
-{
-    qsnap_parallel.dialog = checked;
 }
 
 void

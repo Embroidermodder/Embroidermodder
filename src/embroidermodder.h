@@ -280,6 +280,45 @@ typedef struct ObjectData_ {
     int gripIndex;
 } ObjectData;
 
+MdiWindow* activeMdiWindow();
+View* activeView();
+QGraphicsScene* activeScene();
+QUndoStack* activeUndoStack();
+QString platformString();
+
+QToolButton *create_statusbarbutton(QString buttonText, MainWindow* mw);
+QIcon create_icon(QString icon);
+
+void nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode);
+void nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubberMode);
+void nativeAddPath(double startX, double startY, const QPainterPath& p, int rubberMode);
+
+void nativeAlert(std::string txt);
+void nativeAppendPromptHistory(std::string txt);
+void messageBox(std::string type, std::string title, std::string text);
+
+void nativeAddTextMulti(std::string str, double x, double y, double rot, bool fill, int rubberMode);
+void nativeAddTextSingle(std::string str, double x, double y, double rot, bool fill, int rubberMode);
+
+void nativeAddImage(std::string img, double x, double y, double w, double h, double rot);
+
+void nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
+
+QAction *get_action_by_icon(const char *icon);
+void add_to_menu(QMenu *menu, const char *menu_data[]);
+
+EmbVector to_emb_vector(QPointF p);
+QPointF to_qpointf(EmbVector v);
+QPointF scale_and_rotate(QPointF v, double angle, double scale);
+QPointF find_mouse_snap_point(QList<QPointF> snap_points, const QPointF& mouse_point);
+
+void set_visibility(QObject *senderObj, const char *key, bool visibility);
+void set_enabled(QObject *senderObj, const char *key, bool visibility);
+void set_visibility_group(QObject *senderObj, const char *key, bool visibility);
+void set_enabled_group(QObject *senderObj, const char *key, bool visibility);
+QIcon create_swatch(int32_t color);
+QPushButton *choose_color_button(QGroupBox* groupbox, IntSetting* color_setting);
+
 class LayerManager : public QDialog
 {
     Q_OBJECT
@@ -771,8 +810,27 @@ public:
     Settings_Dialog(MainWindow* mw, const QString& showTab = "", QWidget *parent = 0);
     ~Settings_Dialog();
 
+    QCheckBox* create_checkbox(QGroupBox* groupbox, QString label, BoolSetting *setting,
+        QString icon="");
+    QDoubleSpinBox* create_spinbox(
+        QGroupBox* groupbox,
+        QString label,
+        RealSetting *setting,
+        double single_step,
+        double lower_bound,
+        double upper_bound);
+    QSpinBox* create_int_spinbox(
+        QGroupBox* groupbox,
+        QString label,
+        IntSetting *setting,
+        int single_step,
+        int lower_bound,
+        int upper_bound);
+
+    void preview_update(void);
+
 private:
-    QTabWidget*       tabWidget;
+    QTabWidget* tabWidget;
 
     QWidget* createTabGeneral();
     QWidget* createTabFilesPaths();
@@ -796,24 +854,12 @@ private slots:
     void comboBoxLanguageCurrentIndexChanged(const QString&);
     void comboBoxIconThemeCurrentIndexChanged(const QString&);
     void comboBoxIconSizeCurrentIndexChanged(int);
-    void checkBoxGeneralMdiBGUseLogoStateChanged(int);
     void chooseGeneralMdiBackgroundLogo();
-    void checkBoxGeneralMdiBGUseTextureStateChanged(int);
     void chooseGeneralMdiBackgroundTexture();
-    void checkBoxGeneralMdiBGUseColorStateChanged(int);
     void chooseGeneralMdiBackgroundColor();
     void currentGeneralMdiBackgroundColorChanged(const QColor&);
-    void checkBoxTipOfTheDayStateChanged(int);
-    void checkBoxUseOpenGLStateChanged(int);
-    void checkBoxRenderHintAAStateChanged(int);
-    void checkBoxRenderHintTextAAStateChanged(int);
-    void checkBoxRenderHintSmoothPixStateChanged(int);
-    void checkBoxRenderHintHighAAStateChanged(int);
-    void checkBoxRenderHintNonCosmeticStateChanged(int);
     void checkBoxShowScrollBarsStateChanged(int);
     void comboBoxScrollBarWidgetCurrentIndexChanged(int);
-    void spinBoxZoomScaleInValueChanged(double);
-    void spinBoxZoomScaleOutValueChanged(double);
     void checkBoxDisableBGStateChanged(int);
     void chooseDisplayCrossHairColor();
     void currentDisplayCrossHairColorChanged(const QColor&);
@@ -842,22 +888,12 @@ private slots:
     void buttonCustomFilterClearAllClicked();
     void spinBoxRecentMaxFilesValueChanged(int);
     void spinBoxTrimDstNumJumpsValueChanged(int);
-    void checkBoxGridShowOriginStateChanged(int);
     void checkBoxGridColorMatchCrossHairStateChanged(int);
     void chooseGridColor();
     void currentGridColorChanged(const QColor&);
     void checkBoxGridLoadFromFileStateChanged(int);
     void comboBoxGridTypeCurrentIndexChanged(const QString&);
     void checkBoxGridCenterOnOriginStateChanged(int);
-    void spinBoxGridCenterXValueChanged(double);
-    void spinBoxGridCenterYValueChanged(double);
-    void spinBoxGridSizeXValueChanged(double);
-    void spinBoxGridSizeYValueChanged(double);
-    void spinBoxGridSpacingXValueChanged(double);
-    void spinBoxGridSpacingYValueChanged(double);
-    void spinBoxGridSizeRadiusValueChanged(double);
-    void spinBoxGridSpacingRadiusValueChanged(double);
-    void spinBoxGridSpacingAngleValueChanged(double);
     void checkBoxRulerShowOnLoadStateChanged(int);
     void comboBoxRulerMetricCurrentIndexChanged(int);
     void chooseRulerColor();
@@ -1413,38 +1449,6 @@ public slots:
     void layerManager();
     void layerPrevious();
 };
-
-MdiWindow* activeMdiWindow();
-View* activeView();
-QGraphicsScene* activeScene();
-QUndoStack* activeUndoStack();
-QString platformString();
-
-QToolButton *create_statusbarbutton(QString buttonText, MainWindow* mw);
-QIcon create_icon(QString icon);
-
-void nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode);
-void nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubberMode);
-void nativeAddPath(double startX, double startY, const QPainterPath& p, int rubberMode);
-
-void nativeAlert(std::string txt);
-void nativeAppendPromptHistory(std::string txt);
-void messageBox(std::string type, std::string title, std::string text);
-
-void nativeAddTextMulti(std::string str, double x, double y, double rot, bool fill, int rubberMode);
-void nativeAddTextSingle(std::string str, double x, double y, double rot, bool fill, int rubberMode);
-
-void nativeAddImage(std::string img, double x, double y, double w, double h, double rot);
-
-void nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
-
-QAction *get_action_by_icon(const char *icon);
-void add_to_menu(QMenu *menu, const char *menu_data[]);
-
-EmbVector to_emb_vector(QPointF p);
-QPointF to_qpointf(EmbVector v);
-QPointF scale_and_rotate(QPointF v, double angle, double scale);
-QPointF find_mouse_snap_point(QList<QPointF> snap_points, const QPointF& mouse_point);
 
 #endif
 

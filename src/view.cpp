@@ -2004,7 +2004,7 @@ View::stopGripping(bool accept)
         }
         data.gripBaseObj = 0;
     }
-    //Move the data.sceneGripPoint to a place where it will never be hot
+    /* Move the data.sceneGripPoint to a place where it will never be hot. */
     data.sceneGripPoint = sceneRect().topLeft();
 }
 
