@@ -646,10 +646,10 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
         else if (objType == OBJ_TYPE_RECTANGLE) {
             Object* obj = static_cast<Object*>(item);
             if (obj) {
-                QPointF corn1 = obj->objectTopLeft();
-                QPointF corn2 = obj->objectTopRight();
-                QPointF corn3 = obj->objectBottomLeft();
-                QPointF corn4 = obj->objectBottomRight();
+                QPointF corn1 = obj->topLeft();
+                QPointF corn2 = obj->topRight();
+                QPointF corn3 = obj->bottomLeft();
+                QPointF corn4 = obj->bottomRight();
 
                 updateLineEditNumIfVaries(lineEditRectangleCorner1X, corn1.x(), false);
                 updateLineEditNumIfVaries(lineEditRectangleCorner1Y, -corn1.y(), false);
@@ -1960,13 +1960,13 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
                 tempObj->setObjectCenter(center);
             }
             if (objName == "lineEditArcRadius") {
-                tempObj->setObjectRadius(lineEditArcRadius->text().toDouble());
+                set_radius(tempObj->geometry, lineEditArcRadius->text().toDouble());
             }
             if (objName == "lineEditArcStartAngle") {
-                tempObj->setObjectStartAngle(lineEditArcStartAngle->text().toDouble());
+                set_start_angle(tempObj->geometry, lineEditArcStartAngle->text().toDouble());
             }
             if (objName == "lineEditArcEndAngle") {
-                tempObj->setObjectEndAngle(lineEditArcEndAngle->text().toDouble());
+                set_end_angle(tempObj->geometry, lineEditArcEndAngle->text().toDouble());
             }
             break;
         }
@@ -1986,16 +1986,16 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
                 tempObj->setObjectCenterY(-lineEditCircleCenterY->text().toDouble());
             }
             if (objName == "lineEditCircleRadius") {
-                tempObj->setObjectRadius(lineEditCircleRadius->text().toDouble());
+                set_radius(tempObj->geometry, lineEditCircleRadius->text().toDouble());
             }
             if (objName == "lineEditCircleDiameter") {
-                tempObj->setObjectDiameter(lineEditCircleDiameter->text().toDouble());
+                set_diameter(tempObj->geometry, lineEditCircleDiameter->text().toDouble());
             }
             if (objName == "lineEditCircleArea") {
-                tempObj->setObjectArea(lineEditCircleArea->text().toDouble());
+                set_area(tempObj->geometry, lineEditCircleArea->text().toDouble());
             }
             if (objName == "lineEditCircleCircumference") {
-                tempObj->setObjectCircumference(lineEditCircleCircumference->text().toDouble());
+                set_circumference(tempObj->geometry, lineEditCircleCircumference->text().toDouble());
             }
             break;
         }
@@ -2043,16 +2043,16 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
                 tempObj->setObjectCenterY(-lineEditEllipseCenterY->text().toDouble());
             }
             if (objName == "lineEditEllipseRadiusMajor") {
-                tempObj->setObjectRadiusMajor(lineEditEllipseRadiusMajor->text().toDouble());
+                set_radius_major(tempObj->geometry, lineEditEllipseRadiusMajor->text().toDouble());
             }
             if (objName == "lineEditEllipseRadiusMinor") {
-                tempObj->setObjectRadiusMinor(lineEditEllipseRadiusMinor->text().toDouble());
+                set_radius_minor(tempObj->geometry, lineEditEllipseRadiusMinor->text().toDouble());
             }
             if (objName == "lineEditEllipseDiameterMajor") {
-                tempObj->setObjectDiameterMajor(lineEditEllipseDiameterMajor->text().toDouble());
+                set_diameter_major(tempObj->geometry, lineEditEllipseDiameterMajor->text().toDouble());
             }
             if (objName == "lineEditEllipseDiameterMinor") {
-                tempObj->setObjectDiameterMinor(lineEditEllipseDiameterMinor->text().toDouble());
+                set_diameter_minor(tempObj->geometry, lineEditEllipseDiameterMinor->text().toDouble());
             }
             break;
         }

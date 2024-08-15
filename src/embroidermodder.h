@@ -244,6 +244,7 @@ typedef struct UndoData_ {
 } UndoData;
 
 typedef struct ObjectData_ {
+    QGraphicsPathItem path;
     int32_t TYPE;
     QString OBJ_NAME;
     QPen objPen;
@@ -610,7 +611,7 @@ public:
     double objectX() const { return scenePos().x(); }
     double objectY() const { return scenePos().y(); }
 
-    QPointF objectCenter() const { return scenePos(); }
+    QPointF objectCenter() const;
     double objectCenterX() const { return scenePos().x(); }
     double objectCenterY() const { return scenePos().y(); }
 
@@ -618,11 +619,6 @@ public:
     double objectDiameter() const { return rect().width()*scale(); }
     double objectArea() const;
     double objectCircumference() const { return embConstantPi*objectDiameter(); }
-
-    QPointF objectQuadrant0();
-    QPointF objectQuadrant90();
-    QPointF objectQuadrant180();
-    QPointF objectQuadrant270();
 
     void updateRubber(void);
 
@@ -633,12 +629,12 @@ public:
     QPointF objectEndPoint() const;
     QPointF objectDelta() const { return objectEndPoint2() - objectEndPoint1(); }
 
-    QPointF objectTopLeft() const;
-    QPointF objectTopRight() const;
-    QPointF objectBottomLeft() const;
-    QPointF objectBottomRight() const;
-    double objectWidth() const { return rect().width()*scale(); }
-    double objectHeight() const { return rect().height()*scale(); }
+    QPointF topLeft() const;
+    QPointF topRight() const;
+    QPointF bottomLeft() const;
+    QPointF bottomRight() const;
+    double objectWidth() const;
+    double objectHeight() const;
 
     void updateRubber(QPainter* painter = 0);
     void updateLeader();
@@ -701,22 +697,8 @@ public:
     void setObjectCenter(const QPointF& center);
     void setObjectCenterX(double centerX);
     void setObjectCenterY(double centerY);
-    void setObjectRadius(double radius);
-    void setObjectRadiusMajor(double radius);
-    void setObjectRadiusMinor(double radius);
-    void setObjectDiameterMajor(double diameter);
-    void setObjectDiameterMinor(double diameter);
-    void setObjectStartAngle(double angle);
-    void setObjectEndAngle(double angle);
-    void setObjectStartPoint(EmbVector point);
-    void setObjectMidPoint(EmbVector point);
-    void setObjectEndPoint(EmbVector point);
 
-    void calculateArcData(void);
-
-    void setObjectDiameter(double diameter);
-    void setObjectArea(double area);
-    void setObjectCircumference(double circumference);
+    void calculateData(void);
 
     void setObjectSize(double width, double height);
 

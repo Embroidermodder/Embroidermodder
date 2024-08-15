@@ -1096,3 +1096,213 @@ bool pattern_save(EmbPattern *pattern, const char *fileName)
     return writeSuccessful;
 }
 
+/* GEOMETRY */
+
+/* . */
+EmbVector
+quadrant(EmbGeometry geometry, int degrees)
+{
+    EmbVector v;
+    EmbReal radius;
+    v.x = 0.0;
+    v.y = 0.0;
+    switch (geometry.type) {
+    case EMB_CIRCLE: {
+        v = geometry.object.circle.center;
+        radius = geometry.object.circle.radius;
+    }
+    case EMB_ELLIPSE: {
+        v = geometry.object.ellipse.center;
+        if (degrees % 180 == 0) {
+            radius = geometry.object.ellipse.radius.x;
+        }
+        else {
+            radius = geometry.object.ellipse.radius.y;
+        }
+    }
+    default:
+        break;
+    }
+    double rot = radians(/* rotation() + */ degrees);
+    v.x += radius * cos(rot);
+    v.y += radius * sin(rot);
+    return v;
+}
+
+/* . */
+void
+set_start_angle(EmbGeometry *geometry, double angle)
+{
+    switch (geometry->type) {
+    case EMB_ARC: {
+        //TODO: ArcObject setObjectStartAngle
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+set_end_angle(EmbGeometry *geometry, double angle)
+{
+    switch (geometry->type) {
+    case EMB_ARC: {
+        //TODO: ArcObject setObjectEndAngle
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+set_start_point(EmbGeometry *geometry, EmbVector point)
+{
+    switch (geometry->type) {
+    case EMB_ARC: {
+        geometry->object.arc.start = point;
+        //calculateData();
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+set_mid_point(EmbGeometry *geometry, EmbVector point)
+{
+    switch (geometry->type) {
+    case EMB_ARC: {
+        geometry->object.arc.mid = point;
+        //calculateData();
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+set_end_point(EmbGeometry *geometry, EmbVector point)
+{
+    switch (geometry->type) {
+    case EMB_ARC: {
+        geometry->object.arc.end = point;
+        //calculateData();
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+set_radius(EmbGeometry *geometry, double radius)
+{
+    switch (geometry->type) {
+    case EMB_ARC: {
+        geometry->object.arc = emb_arc_set_radius(geometry->object.arc, radius);
+        break;
+    }
+    case EMB_CIRCLE:
+        geometry->object.circle.radius = radius;
+        break;
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+set_diameter(EmbGeometry *geometry, double diameter)
+{
+    switch (geometry->type) {
+    case EMB_CIRCLE: {
+        geometry->object.circle.radius = diameter / 2.0;
+        //FIXME: updatePath();
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+set_area(EmbGeometry *geometry, double area)
+{
+    switch (geometry->type) {
+    case EMB_CIRCLE: {
+        double radius = sqrt(area / embConstantPi);
+        set_radius(geometry, radius);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+set_circumference(EmbGeometry *geometry, double circumference)
+{
+    switch (geometry->type) {
+    case EMB_CIRCLE: {
+        double diameter = circumference / embConstantPi;
+        set_diameter(geometry, diameter);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+set_radius_major(EmbGeometry *geometry, double radius)
+{
+    set_diameter_major(geometry, radius*2.0);
+}
+
+/* . */
+void
+set_radius_minor(EmbGeometry *geometry, double radius)
+{
+    set_diameter_minor(geometry, radius*2.0);
+}
+
+/* . */
+void
+set_diameter_major(EmbGeometry *geometry, double diameter)
+{
+    switch (geometry->type) {
+    case EMB_ELLIPSE:
+        /* FIXME: Identify longer axis and replace. */
+        geometry->object.ellipse.radius.x = diameter;
+        break;
+    default:
+        break;
+    }
+}
+
+/* . */
+void
+set_diameter_minor(EmbGeometry *geometry, double diameter)
+{
+    switch (geometry->type) {
+    case EMB_ELLIPSE:
+        /* FIXME: Identify longer axis and replace. */
+        geometry->object.ellipse.radius.x = diameter;
+        break;
+    default:
+        break;
+    }
+}
+

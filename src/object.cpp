@@ -20,7 +20,7 @@ Object::Object(EmbArc arc, QRgb rgb, QGraphicsItem *item)
     init_geometry(EMB_ARC, rgb, Qt::SolidLine);
     geometry->object.arc = arc;
     //TODO: getCurrentLineType
-    calculateArcData();
+    calculateData();
     setPos(arc.start.x, arc.start.y);
 }
 
@@ -51,6 +51,78 @@ Object::Object(Object* obj, QGraphicsItem* parent)
         geometry->object.arc = obj->geometry->object.arc;
         //TODO: getCurrentLineType
         setRotation(obj->rotation());
+        break;
+    case EMB_CIRCLE:
+        geometry->object.circle = obj->geometry->object.circle;
+        /* TODO: getCurrentLineType. */
+        setRotation(obj->rotation());
+        break;
+    case EMB_DIM_LEADER:
+        geometry->object.line = obj->geometry->object.line;
+        // init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        break;
+    case EMB_ELLIPSE:
+        geometry->object.ellipse = obj->geometry->object.ellipse;
+        // init(obj->objectCenterX(), obj->objectCenterY(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine);
+        /* TODO: getCurrentLineType */
+        setRotation(obj->rotation());
+        break;
+    case EMB_IMAGE: {
+        geometry->object.ellipse = obj->geometry->object.ellipse;
+        //QPointF ptl = obj->objectTopLeft();
+        //init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        setRotation(obj->rotation());
+        break;
+    }
+    case EMB_LINE: {
+        geometry->object.line = obj->geometry->object.line;
+        //init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        break;
+    }
+    case EMB_PATH: {
+        geometry->object.path = obj->geometry->object.path;
+        //init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        //setRotation(obj->rotation());
+        //setScale(obj->scale());
+        break;
+    }
+    case EMB_POINT: {
+        geometry->object.point = obj->geometry->object.point;
+        //init(obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        setRotation(obj->rotation());
+        break;
+    }
+    case EMB_POLYGON: {
+        geometry->object.polygon = obj->geometry->object.polygon;
+        //init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        //setRotation(obj->rotation());
+        //setScale(obj->scale());
+        break;
+    }
+    case EMB_POLYLINE: {
+        geometry->object.polyline = obj->geometry->object.polyline;
+        //init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        setRotation(obj->rotation());
+        setScale(obj->scale());
+        break;
+    }
+    case EMB_RECT: {
+        geometry->object.rect = obj->geometry->object.rect;
+        //QPointF ptl = obj->objectTopLeft();
+        //init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        setRotation(obj->rotation());
+        break;
+    }
+    case EMB_TEXT_SINGLE:
+        setObjectTextFont(obj->data.objTextFont);
+        setObjectTextSize(obj->data.objTextSize);
+        setRotation(obj->rotation());
+        setObjectTextBackward(obj->data.objTextBackward);
+        setObjectTextUpsideDown(obj->data.objTextUpsideDown);
+        setObjectTextStyle(obj->data.objTextBold, obj->data.objTextItalic,
+            obj->data.objTextUnderline, obj->data.objTextStrikeOut, obj->data.objTextOverline);
+        //init(obj->objText, obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        setScale(obj->scale());
         break;
     default:
         break;
@@ -549,20 +621,9 @@ Object::Object(double centerX, double centerY, double radius, QRgb rgb, QGraphic
     EmbVector center;
     center.x = centerX;
     center.y = centerY;
-    setObjectRadius(radius);
-    setObjectCenter(center);
+    set_radius(geometry, radius);
+    set_center(geometry, center);
     updatePath();
-}
-
-/* . */
-Object::Object(CircleObject* obj, QGraphicsItem* parent)
-{
-    debug_message("CircleObject Constructor()");
-    if (obj) {
-        init(obj->objectCenter().x(), obj->objectCenter().y(), obj->objectRadius(), obj->objectColorRGB(), Qt::SolidLine);
-        /* TODO: getCurrentLineType. */
-        setRotation(obj->rotation());
-    }
 }
 
 void
@@ -579,7 +640,7 @@ CircleObject::updateRubber(QPainter* painter)
         setObjectCenter(to_emb_vector(sceneCenterPoint));
         QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
         double radius = sceneLine.length();
-        setObjectRadius(radius);
+        set_radius(geometry, radius);
         if (painter) {
             drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
@@ -624,7 +685,7 @@ CircleObject::updateRubber(QPainter* painter)
         EmbVector center = emb_arc_center(*arc);
         setObjectCenter(center);
         double radius = emb_vector_distance(center, to_emb_vector(sceneTan3Point));
-        setObjectRadius(radius);
+        set_radius(geometry, radius);
         updatePath();
         break;
     }
@@ -659,14 +720,6 @@ Object::Object(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsIt
     filled = true;
     setObjectEndPoint1(x1, y1);
     setObjectEndPoint2(x2, y2);
-}
-
-DimLeaderObject::DimLeaderObject(DimLeaderObject* obj, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("DimLeaderObject Constructor()");
-    if (obj) {
-        init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
-    }
 }
 
 QPointF DimLeaderObject::objectMidPoint() const
@@ -1078,16 +1131,6 @@ Object::Object(double centerX, double centerY, double width, double height, QRgb
     updatePath();
 }
 
-Object::Object(EllipseObject* obj, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("EllipseObject Constructor()");
-    if (obj) {
-        init(obj->objectCenterX(), obj->objectCenterY(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine);
-        /* TODO: getCurrentLineType */
-        setRotation(obj->rotation());
-    }
-}
-
 void
 EllipseObject::setObjectSize(double width, double height)
 {
@@ -1097,47 +1140,6 @@ EllipseObject::setObjectSize(double width, double height)
     elRect.moveCenter(QPointF(0,0));
     setRect(elRect);
 }
-#endif
-
-void
-Object::setObjectRadiusMajor(double radius)
-{
-    setObjectDiameterMajor(radius*2.0);
-}
-
-void
-Object::setObjectRadiusMinor(double radius)
-{
-    setObjectDiameterMinor(radius*2.0);
-}
-
-void
-Object::setObjectDiameterMajor(double diameter)
-{
-    QRectF elRect = rect();
-    if (elRect.width() > elRect.height()) {
-        elRect.setWidth(diameter);
-    }
-    else {
-        elRect.setHeight(diameter);
-    }
-    elRect.moveCenter(QPointF(0,0));
-    setRect(elRect);
-}
-
-void
-Object::setObjectDiameterMinor(double diameter)
-{
-    QRectF elRect = rect();
-    if (elRect.width() < elRect.height())
-        elRect.setWidth(diameter);
-    else
-        elRect.setHeight(diameter);
-    elRect.moveCenter(QPointF(0,0));
-    setRect(elRect);
-}
-
-#if 0
 
 void
 EllipseObject::updateRubber(QPainter* painter)
@@ -1240,57 +1242,6 @@ Object::Object(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* 
     /* TODO: getCurrentLineType */
     init_geometry(EMB_IMAGE, rgb, Qt::SolidLine);
     setObjectRect(x, y, w, h);
-}
-
-Object::Object(Object* obj, QGraphicsItem* parent)
-{
-    debug_message("Object Constructor()");
-    if (!obj) {
-        return;
-    }
-    switch (geometry->type) {
-    case EMB_IMAGE: {
-        QPointF ptl = obj->objectTopLeft();
-        init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
-        setRotation(obj->rotation());
-        break;
-    }
-    case EMB_LINE: {
-        init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
-        break;
-    }
-    case EMB_PATH: {
-        init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
-        setRotation(obj->rotation());
-        setScale(obj->scale());
-        break;
-    }
-    case EMB_POINT: {
-        init(obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
-        setRotation(obj->rotation());
-        break;
-    }
-    case EMB_POLYGON: {
-        init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
-        setRotation(obj->rotation());
-        setScale(obj->scale());
-        break;
-    }
-    case EMB_POLYLINE: {
-        init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
-        setRotation(obj->rotation());
-        setScale(obj->scale());
-        break;
-    }
-    case EMB_RECT: {
-        QPointF ptl = obj->objectTopLeft();
-        init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
-        setRotation(obj->rotation());
-        break;
-    }
-    default:
-        break;
-    }
 }
 
 void
@@ -2336,12 +2287,18 @@ RectObject::updateRubber(QPainter* painter)
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
             QPointF after = objectRubberPoint(QString());
             QPointF delta = after-gripPoint;
-            if (gripPoint == objectTopLeft()) {
+            if (gripPoint == topLeft()) {
                 painter->drawPolygon(mapFromScene(QRectF(after.x(), after.y(), objectWidth()-delta.x(), objectHeight()-delta.y())));
             }
-            else if (gripPoint == objectTopRight())    { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y()))); }
-            else if (gripPoint == objectBottomLeft())  { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y()))); }
-            else if (gripPoint == objectBottomRight()) { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()))); }
+            else if (gripPoint == topRight()) {
+                painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y())));
+            }
+            else if (gripPoint == bottomLeft()) {
+                painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y())));
+            }
+            else if (gripPoint == bottomRight()) {
+                painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y())));
+            }
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
             drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
@@ -2666,22 +2623,6 @@ Object::Object(const QString& str, double x, double y, QRgb rgb, QGraphicsItem* 
     setObjectPos(x,y);
 }
 
-TextSingleObject::TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("TextSingleObject Constructor()");
-    if (obj) {
-        setObjectTextFont(obj->objTextFont);
-        setObjectTextSize(obj->objTextSize);
-        setRotation(obj->rotation());
-        setObjectTextBackward(obj->objTextBackward);
-        setObjectTextUpsideDown(obj->objTextUpsideDown);
-        setObjectTextStyle(obj->objTextBold, obj->objTextItalic,
-            obj->objTextUnderline, obj->objTextStrikeOut, obj->objTextOverline);
-        init(obj->objText, obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
-        setScale(obj->scale());
-    }
-}
-
 void
 TextSingleObject::updateRubber(QPainter* painter)
 {
@@ -2886,128 +2827,54 @@ Object::objectEndPoint() const
 
 /* . */
 QPointF
-Object::objectQuadrant0()
-{
-    switch (geometry->type) {
-    case EMB_CIRCLE:
-        return objectCenter() + QPointF(objectRadius(), 0);
-    case EMB_ELLIPSE: {
-        double halfW = objectWidth()/2.0;
-        double rot = radians(rotation());
-        double x = halfW * cos(rot);
-        double y = halfW * sin(rot);
-        return objectCenter() + QPointF(x,y);
-    }
-    default:
-        break;
-    }
-    return objectCenter();
-}
-
-QPointF
-Object::objectQuadrant90()
-{
-    switch (geometry->type) {
-    case OBJ_TYPE_CIRCLE:
-        return objectCenter() + QPointF(0, -objectRadius());
-    case EMB_ELLIPSE: {
-        double halfW = objectWidth()/2.0;
-        double rot = radians(rotation() + 90.0);
-        double x = halfW * cos(rot);
-        double y = halfW * sin(rot);
-        return objectCenter() + QPointF(x,y);
-    }
-    default:
-        break;
-    }
-    return objectCenter();
-}
-
-QPointF
-Object::objectQuadrant180()
-{
-    switch (geometry->type) {
-    case EMB_CIRCLE:
-        return objectCenter() + QPointF(-objectRadius(),0);
-    case EMB_ELLIPSE: {
-        double halfW = objectWidth()/2.0;
-        double rot = radians(rotation() + 180.0);
-        double x = halfW * cos(rot);
-        double y = halfW * sin(rot);
-        return objectCenter() + QPointF(x,y);
-    }
-    default:
-        break;
-    }
-    return objectCenter();
-}
-
-QPointF
-Object::objectQuadrant270()
-{
-    switch (geometry->type) {
-    case EMB_CIRCLE:
-        return objectCenter() + QPointF(0, objectRadius());
-    case EMB_ELLIPSE: {
-        double halfW = objectWidth()/2.0;
-        double rot = radians(rotation() + 270.0);
-        double x = halfW * cos(rot);
-        double y = halfW * sin(rot);
-        return objectCenter() + QPointF(x,y);
-    }
-    default:
-        break;
-    }
-    return objectCenter();
-}
-
-/* . */
-QPointF
-Object::objectTopLeft() const
+Object::topLeft() const
 {
     return scenePos() + scale_and_rotate(rect().topLeft(), scale(), rotation());
 }
 
 /* . */
 QPointF
-Object::objectTopRight() const
+Object::topRight() const
 {
     return scenePos() + scale_and_rotate(rect().topRight(), scale(), rotation());
 }
 
 /* . */
 QPointF
-Object::objectBottomLeft() const
+Object::bottomLeft() const
 {
     return scenePos() + scale_and_rotate(rect().bottomLeft(), scale(), rotation());
 }
 
 /* . */
 QPointF
-Object::objectBottomRight() const
+Object::bottomRight() const
 {
     return scenePos() + scale_and_rotate(rect().bottomRight(), scale(), rotation());
 }
 
-/*
+/* . */
 QPointF
-Object::objectCenter()
+Object::objectCenter() const
 {
-    return QPointF(0.0f, 0.0f);
+    return scenePos();
 }
 
+/* . */
 double
-Object::objectWidth()
+Object::objectWidth() const
 {
-    return 0.0f;
+    return rect().width()*scale();
 }
 
+/* . */
 double
-Object::objectHeight()
+Object::objectHeight() const
 {
-    return 0.0f;
+    return rect().height()*scale();
 }
 
+/*
 Object::Object(QString const&, double, double, unsigned int, QGraphicsItem*)
 {
 }
@@ -3365,80 +3232,6 @@ Object::objectArcLength() const
     return 0.0;
 }
 
-
-/* . */
-void
-Object::setObjectStartAngle(double angle)
-{
-    switch (geometry->type) {
-    case EMB_ARC: {
-        //TODO: ArcObject setObjectStartAngle
-        break;
-    }
-    default:
-        break;
-    }
-}
-
-/* . */
-void
-Object::setObjectEndAngle(double angle)
-{
-    switch (geometry->type) {
-    case EMB_ARC: {
-        //TODO: ArcObject setObjectEndAngle
-        break;
-    }
-    default:
-        break;
-    }
-}
-
-/* . */
-void
-Object::setObjectStartPoint(EmbVector point)
-{
-    switch (geometry->type) {
-    case EMB_ARC: {
-        geometry->object.arc.start = point;
-        calculateArcData();
-        break;
-    }
-    default:
-        break;
-    }
-}
-
-/* . */
-void
-Object::setObjectMidPoint(EmbVector point)
-{
-    switch (geometry->type) {
-    case EMB_ARC: {
-        geometry->object.arc.mid = point;
-        calculateArcData();
-        break;
-    }
-    default:
-        break;
-    }
-}
-
-/* . */
-void
-Object::setObjectEndPoint(EmbVector point)
-{
-    switch (geometry->type) {
-    case EMB_ARC: {
-        geometry->object.arc.end = point;
-        calculateArcData();
-        break;
-    }
-    default:
-        break;
-    }
-}
-
 /* . */
 double
 Object::objectArea() const
@@ -3610,7 +3403,7 @@ Object::Object(EmbPath_, int, QPainterPath const&, unsigned int, QGraphicsItem*)
 
 /* . */
 void
-Object::calculateArcData(void)
+Object::calculateData(void)
 {
     EmbVector center = emb_arc_center(*geometry);
 
@@ -3773,73 +3566,6 @@ Object::setObjectCenterY(double centerY)
 }
 
 /* . */
-void
-Object::setObjectRadius(double radius)
-{
-    switch (geometry->type) {
-    case EMB_ARC: {
-        geometry->object.arc = emb_arc_set_radius(geometry->object.arc, radius);
-        calculateArcData();
-        break;
-    }
-    case EMB_CIRCLE:
-        setObjectDiameter(radius*2.0);
-        break;
-    default:
-        break;
-    }
-}
-
-/* . */
-void
-Object::setObjectDiameter(double diameter)
-{
-    switch (geometry->type) {
-    case EMB_CIRCLE: {
-        QRectF circRect;
-        circRect.setWidth(diameter);
-        circRect.setHeight(diameter);
-        circRect.moveCenter(QPointF(0,0));
-        setRect(circRect);
-        //FIXME: updatePath();
-        break;
-    }
-    default:
-        break;
-    }
-}
-
-/* . */
-void
-Object::setObjectArea(double area)
-{
-    switch (geometry->type) {
-    case EMB_CIRCLE: {
-        double radius = sqrt(area / embConstantPi);
-        setObjectRadius(radius);
-        break;
-    }
-    default:
-        break;
-    }
-}
-
-/* . */
-void
-Object::setObjectCircumference(double circumference)
-{
-    switch (geometry->type) {
-    case EMB_CIRCLE: {
-        double diameter = circumference / embConstantPi;
-        setObjectDiameter(diameter);
-        break;
-    }
-    default:
-        break;
-    }
-}
-
-/* . */
 int
 Object::findIndex(const QPointF& point)
 {
@@ -3959,10 +3685,10 @@ Object::allGripPoints()
     case EMB_CIRCLE:
     case EMB_ELLIPSE: {
         gripPoints << objectCenter()
-            << objectQuadrant0()
-            << objectQuadrant90()
-            << objectQuadrant180()
-            << objectQuadrant270();
+            << to_qpointf(quadrant(*geometry, 0))
+            << to_qpointf(quadrant(*geometry, 90))
+            << to_qpointf(quadrant(*geometry, 180))
+            << to_qpointf(quadrant(*geometry, 270));
         break;
     }
     case EMB_DIM_LEADER: {
@@ -3973,10 +3699,10 @@ Object::allGripPoints()
         break;
     }
     case EMB_IMAGE: {
-        gripPoints << objectTopLeft()
-             << objectTopRight()
-             << objectBottomLeft()
-             << objectBottomRight();
+        gripPoints << topLeft()
+             << topRight()
+             << bottomLeft()
+             << bottomRight();
         break;
     }
     case EMB_LINE: {
@@ -4026,7 +3752,7 @@ Object::gripEdit(const QPointF& before, const QPointF& after)
             moveBy(delta.x(), delta.y());
         }
         else {
-            setObjectRadius(QLineF(objectCenter(), after).length());
+            set_radius(geometry, QLineF(objectCenter(), after).length());
         }
         break;
     }
@@ -4051,20 +3777,20 @@ Object::gripEdit(const QPointF& before, const QPointF& after)
     case EMB_IMAGE:
     case EMB_RECT: {
         QPointF delta = after-before;
-        if (before == objectTopLeft()) {
+        if (before == topLeft()) {
             setObjectRect(after.x(), after.y(), objectWidth()-delta.x(),
                 objectHeight()-delta.y());
         }
-        else if (before == objectTopRight()) {
-            setObjectRect(objectTopLeft().x(), objectTopLeft().y()+delta.y(),
+        else if (before == topRight()) {
+            setObjectRect(topLeft().x(), topLeft().y()+delta.y(),
                 objectWidth()+delta.x(), objectHeight()-delta.y());
         }
-        else if (before == objectBottomLeft()) {
-            setObjectRect(objectTopLeft().x()+delta.x(), objectTopLeft().y(),
+        else if (before == bottomLeft()) {
+            setObjectRect(topLeft().x()+delta.x(), topLeft().y(),
                 objectWidth()-delta.x(), objectHeight()+delta.y());
         }
-        else if (before == objectBottomRight()) {
-            setObjectRect(objectTopLeft().x(), objectTopLeft().y(),
+        else if (before == bottomRight()) {
+            setObjectRect(topLeft().x(), topLeft().y(),
                 objectWidth()+delta.x(), objectHeight()+delta.y());
         }
         break;

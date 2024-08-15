@@ -866,6 +866,23 @@ void help();
 void changelog();
 void whatsThisContextHelp();
 
+/* Geometry */
+EmbVector quadrant(EmbGeometry geometry, int degrees);
+
+void set_start_angle(EmbGeometry *geometry, double angle);
+void set_end_angle(EmbGeometry *geometry, double angle);
+void set_start_point(EmbGeometry *geometry, EmbVector point);
+void set_mid_point(EmbGeometry *geometry, EmbVector point);
+void set_end_point(EmbGeometry *geometry, EmbVector point);
+void set_diameter(EmbGeometry *geometry, double diameter);
+void set_area(EmbGeometry *geometry, double area);
+void set_circumference(EmbGeometry *geometry, double circumference);
+void set_radius(EmbGeometry *geometry, double radius);
+void set_radius_major(EmbGeometry *geometry, double radius);
+void set_radius_minor(EmbGeometry *geometry, double radius);
+void set_diameter_major(EmbGeometry *geometry, double diameter);
+void set_diameter_minor(EmbGeometry *geometry, double diameter);
+
 #ifdef __cplusplus
 }
 #endif
