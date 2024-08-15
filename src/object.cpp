@@ -1280,27 +1280,8 @@ line_command(ScriptEnv *context)
         prompt_output(translate("Specify first point: "));
         break;
     }
-    default:
-        break;
-    }
-    return script_null;
-}
-
-#if 0
-//Command: Line
-
-var global = {}; //Required
-context->firstRun;
-context->first;
-context->prev;
-
-function main()
-{
-}
-
-function
-click(EmbVector v)
-{
+    case CONTEXT_CLICK: {
+    /*
     if (context->firstRun) {
         context->firstRun = false;
         context->first = v;
@@ -1318,13 +1299,21 @@ click(EmbVector v)
         setRubberPoint("LINE_START", v.x, v.y);
         context->prev = v;
     }
+    */
+        break;
+    }
+    case CONTEXT_CONTEXT: {
+        /* todo("LINE", "context()"); */
+        break;
+    }
+    default:
+        break;
+    }
+    return script_null;
 }
 
-function context(str)
-{
-    todo("LINE", "context()");
-}
-
+#if 0
+//Command: Line
 function prompt(str)
 {
     EmbVector v;
@@ -2860,20 +2849,6 @@ Object::objectCenter() const
     return scenePos();
 }
 
-/* . */
-double
-Object::objectWidth() const
-{
-    return rect().width()*scale();
-}
-
-/* . */
-double
-Object::objectHeight() const
-{
-    return rect().height()*scale();
-}
-
 /*
 Object::Object(QString const&, double, double, unsigned int, QGraphicsItem*)
 {
@@ -2881,16 +2856,23 @@ Object::Object(QString const&, double, double, unsigned int, QGraphicsItem*)
 */
 
 /* . */
-QStringList
-Object::objectTextJustifyList() const
-{
-    QStringList justifyList;
-    justifyList << "Left" << "Center" << "Right" /* TODO: << "Aligned" */ << "Middle" /* TODO: << "Fit" */ ;
-    justifyList << "Top Left" << "Top Center" << "Top Right";
-    justifyList << "Middle Left" << "Middle Center" << "Middle Right";
-    justifyList << "Bottom Left" << "Bottom Center" << "Bottom Right";
-    return justifyList;
-}
+QStringList objectTextJustifyList = {
+    "Left",
+    "Center",
+    "Right",
+    /* TODO: << "Aligned" */
+    "Middle",
+    /* TODO: << "Fit" */
+    "Top Left",
+    "Top Center",
+    "Top Right",
+    "Middle Left",
+    "Middle Center",
+    "Middle Right",
+    "Bottom Left",
+    "Bottom Center",
+    "Bottom Right"
+};
 
 /* . */
 void
@@ -3175,156 +3157,15 @@ Object::setObjectEndPoint1(double x1, double y1)
 }
 
 /* . */
-double
-Object::objectAngle() const
-{
-    double angle = line().angle() - rotation();
-    while (angle >= 360.0) {
-        angle -= 360.0;
-    }
-    while (angle < 0.0) {
-        angle += 360.0;
-    }
-    return angle;
-}
-
-/* . */
-double
-Object::objectStartAngle() const
-{
-    switch (geometry->type) {
-    case EMB_ARC: {
-        double angle = QLineF(scenePos(), objectStartPoint()).angle();
-        return fmod(angle+360.0, 360.0);
-    }
-    default:
-        break;
-    }
-    return 0.0f;
-}
-
-/* . */
-double
-Object::objectEndAngle() const
-{
-    switch (geometry->type) {
-    case EMB_ARC: {
-        double angle = QLineF(scenePos(), objectEndPoint()).angle();
-        return fmod(angle+360.0, 360.0);
-    }
-    default:
-        break;
-    }
-    return 0.0f;
-}
-
-/* . */
-double
-Object::objectArcLength() const
-{
-    switch (geometry->type) {
-    case EMB_ARC: {
-        return radians(objectIncludedAngle()) * objectRadius();
-    }
-    default:
-        break;
-    }
-    return 0.0;
-}
-
-/* . */
-double
-Object::objectArea() const
-{
-    switch (geometry->type) {
-    case EMB_ARC: {
-        /* Area of a circular segment */
-        double r = objectRadius();
-        double theta = radians(objectIncludedAngle());
-        return ((r*r)/2) * (theta - sin(theta));
-    }
-    case OBJ_TYPE_CIRCLE: {
-        return embConstantPi*objectRadius()*objectRadius();
-    }
-    case OBJ_TYPE_IMAGE:
-    case OBJ_TYPE_RECTANGLE:
-    default:
-        break;
-    }
-    return fabs(objectWidth()*objectHeight());
-}
-
-/* . */
-double
-Object::objectChord() const
-{
-    switch (geometry->type) {
-    case EMB_ARC: {
-        return QLineF(objectStartPoint(), objectEndPoint()).length();
-    }
-    default:
-        break;
-    }
-    return 0.0;
-}
-
-/* . */
-double
-Object::objectIncludedAngle() const
-{
-    switch (geometry->type) {
-    case EMB_ARC: {
-        double chord = objectChord();
-        double rad = objectRadius();
-        if (chord <= 0 || rad <= 0) {
-            /* Prevents division by zero and non-existant circles. */
-            return 0;
-        }
-
-        //NOTE: Due to floating point rounding errors, we need to clamp the quotient so it is in the range [-1, 1]
-        //      If the quotient is out of that range, then the result of asin() will be NaN.
-        double quotient = chord/(2.0*rad);
-        quotient = EMB_MIN(1.0, quotient);
-        quotient = EMB_MAX(0.0, quotient); //NOTE: 0 rather than -1 since we are enforcing a positive chord and radius
-        return degrees(2.0*asin(quotient)); //Properties of a Circle - Get the Included Angle - Reference: ASD9
-    }
-    default:
-        break;
-    }
-    return 0.0;
-}
-
-/* . */
-bool
-Object::objectClockwise() const
-{
-    switch (geometry->type) {
-    case EMB_ARC: {
-        //NOTE: Y values are inverted here on purpose
-        geometry->object.arc.start.y = -geometry->object.arc.start.y;
-        geometry->object.arc.mid.y = -geometry->object.arc.start.y;
-        geometry->object.arc.end.y = -geometry->object.arc.end.y;
-        if (emb_arc_clockwise(*geometry)) {
-            return true;
-        }
-        break;
-    }
-    default:
-        break;
-    }
-    return false;
-}
-
-/* . */
 void
 Object::updatePath()
 {
     switch (geometry->type) {
     case EMB_ARC: {
-        double startAngle = (objectStartAngle() + rotation());
-        double spanAngle = objectIncludedAngle();
+        double startAngle = (get_start_angle(*geometry) + rotation());
+        double spanAngle = get_included_angle(*geometry);
 
-        if (objectClockwise()) {
+        if (get_clockwise(*geometry)) {
             spanAngle = -spanAngle;
         }
 
@@ -3685,10 +3526,10 @@ Object::allGripPoints()
     case EMB_CIRCLE:
     case EMB_ELLIPSE: {
         gripPoints << objectCenter()
-            << to_qpointf(quadrant(*geometry, 0))
-            << to_qpointf(quadrant(*geometry, 90))
-            << to_qpointf(quadrant(*geometry, 180))
-            << to_qpointf(quadrant(*geometry, 270));
+            << to_qpointf(get_quadrant(*geometry, 0))
+            << to_qpointf(get_quadrant(*geometry, 90))
+            << to_qpointf(get_quadrant(*geometry, 180))
+            << to_qpointf(get_quadrant(*geometry, 270));
         break;
     }
     case EMB_DIM_LEADER: {
@@ -3777,21 +3618,23 @@ Object::gripEdit(const QPointF& before, const QPointF& after)
     case EMB_IMAGE:
     case EMB_RECT: {
         QPointF delta = after-before;
+        double height = get_height(*geometry);
+        double width = get_width(*geometry);
         if (before == topLeft()) {
-            setObjectRect(after.x(), after.y(), objectWidth()-delta.x(),
-                objectHeight()-delta.y());
+            setObjectRect(after.x(), after.y(),
+                width - delta.x(), height - delta.y());
         }
         else if (before == topRight()) {
             setObjectRect(topLeft().x(), topLeft().y()+delta.y(),
-                objectWidth()+delta.x(), objectHeight()-delta.y());
+                width + delta.x(), height - delta.y());
         }
         else if (before == bottomLeft()) {
             setObjectRect(topLeft().x()+delta.x(), topLeft().y(),
-                objectWidth()-delta.x(), objectHeight()+delta.y());
+                width - delta.x(), height + delta.y());
         }
         else if (before == bottomRight()) {
             setObjectRect(topLeft().x(), topLeft().y(),
-                objectWidth()+delta.x(), objectHeight()+delta.y());
+                width + delta.x(), height + delta.y());
         }
         break;
     }
@@ -3844,10 +3687,10 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
 
     switch (geometry->type) {
     case EMB_ARC: {
-        double startAngle = (objectStartAngle() + rotation())*16;
-        double spanAngle = objectIncludedAngle()*16;
+        double startAngle = (get_start_angle(*geometry) + rotation())*16;
+        double spanAngle = get_included_angle(*geometry)*16;
 
-        if (objectClockwise()) {
+        if (get_clockwise(*geometry)) {
             spanAngle = -spanAngle;
         }
 

@@ -604,6 +604,14 @@ typedef struct StringMap_ {
     char value[MAX_LABEL_LENGTH];
 } StringMap;
 
+typedef struct Editor_ {
+    char icon[MAX_STRING_LENGTH];
+    char label[MAX_STRING_LENGTH];
+    char data_type[MAX_STRING_LENGTH];
+    char signal[MAX_STRING_LENGTH];
+    int object;
+} Editor;
+
 /* Scripting functions */
 ScriptEnv *create_script_env();
 void free_script_env(ScriptEnv *);
@@ -789,6 +797,8 @@ extern BoolSetting text_style_strikeout;
 
 extern ScriptValue state[MAX_STATE_VARIABLES];
 
+extern Editor editor_data[];
+
 /* Natives */
 void about_dialog(void);
 
@@ -867,7 +877,18 @@ void changelog();
 void whatsThisContextHelp();
 
 /* Geometry */
-EmbVector quadrant(EmbGeometry geometry, int degrees);
+double get_width(EmbGeometry geometry);
+double get_height(EmbGeometry geometry);
+double get_radius(EmbGeometry geometry);
+EmbVector get_quadrant(EmbGeometry geometry, int degrees);
+double get_angle(EmbGeometry geometry);
+double get_start_angle(EmbGeometry geometry);
+double get_end_angle(EmbGeometry geometry);
+double get_arc_length(EmbGeometry geometry);
+double get_area(EmbGeometry geometry);
+double get_chord(EmbGeometry geometry);
+double get_included_angle(EmbGeometry geometry);
+bool get_clockwise(EmbGeometry geometry);
 
 void set_start_angle(EmbGeometry *geometry, double angle);
 void set_end_angle(EmbGeometry *geometry, double angle);

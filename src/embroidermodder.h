@@ -151,6 +151,7 @@ extern QFontComboBox* textFontSelector;
 extern QComboBox* textSizeSelector;
 extern bool shiftKeyPressedState;
 extern QList<QGraphicsItem*> cutCopyObjectList;
+extern QStringList objectTextJustifyList;
 
 /* . */
 typedef struct ViewData_ {
@@ -617,7 +618,6 @@ public:
 
     double objectRadius() const { return rect().width()/2.0*scale(); }
     double objectDiameter() const { return rect().width()*scale(); }
-    double objectArea() const;
     double objectCircumference() const { return embConstantPi*objectDiameter(); }
 
     void updateRubber(void);
@@ -633,8 +633,6 @@ public:
     QPointF topRight() const;
     QPointF bottomLeft() const;
     QPointF bottomRight() const;
-    double objectWidth() const;
-    double objectHeight() const;
 
     void updateRubber(QPainter* painter = 0);
     void updateLeader();
@@ -642,7 +640,6 @@ public:
     void updatePath(const QPainterPath& p);
     void updateArcRect(double radius);
 
-    double objectAngle() const;
     double objectLength() const { return line().length()*scale(); }
 
     void setObjectEndPoint1(const QPointF& endPt1);
@@ -686,12 +683,6 @@ public:
     void drawRubberLine(const QLineF& rubLine, QPainter* painter = 0, const char* colorFromScene = 0);
     QPen lineWeightPen() const { return data.lwtPen; }
     void realRender(QPainter* painter, const QPainterPath& renderPath);
-    double objectStartAngle() const;
-    double objectEndAngle() const;
-    double objectArcLength() const;
-    double objectChord() const;
-    double objectIncludedAngle() const;
-    bool objectClockwise() const;
 
     void setObjectCenter(EmbVector point);
     void setObjectCenter(const QPointF& center);
@@ -709,8 +700,6 @@ public:
 
     /* TODO: make paths similar to polylines. Review and implement any missing functions/members. */
     int findIndex(const QPointF& point);
-
-    QStringList objectTextJustifyList() const;
 
     void setObjectText(const QString& str);
     void setObjectTextFont(const QString& font);

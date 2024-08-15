@@ -140,6 +140,23 @@ BoolSetting text_style_underline;
 BoolSetting text_style_overline;
 BoolSetting text_style_strikeout;
 
+Editor editor_data[] = {
+    {
+        .icon = "blank",
+        .label = "Start X",
+        .data_type = "double",
+        .signal = "LineStartX",
+        .object = OBJ_TYPE_LINE
+    },
+    {
+        .icon = "END",
+        .label = "END",
+        .data_type = "END",
+        .signal = "END",
+        .object = -1
+    }
+};
+
 const char *index_name[] = {
     "one",
     "two",
@@ -1098,9 +1115,30 @@ bool pattern_save(EmbPattern *pattern, const char *fileName)
 
 /* GEOMETRY */
 
+/* FIXME */
+double
+get_width(EmbGeometry geometry)
+{
+    return 1.0;
+}
+
+/* FIXME */
+double
+get_height(EmbGeometry geometry)
+{
+    return 1.0;
+}
+
+/* FIXME */
+double
+get_radius(EmbGeometry geometry)
+{
+    return 1.0;
+}
+
 /* . */
 EmbVector
-quadrant(EmbGeometry geometry, int degrees)
+get_quadrant(EmbGeometry geometry, int degrees)
 {
     EmbVector v;
     EmbReal radius;
@@ -1127,6 +1165,147 @@ quadrant(EmbGeometry geometry, int degrees)
     v.x += radius * cos(rot);
     v.y += radius * sin(rot);
     return v;
+}
+
+/* . */
+double
+get_angle(EmbGeometry geometry)
+{
+    EmbVector v = emb_vector_subtract(geometry.object.line.end, geometry.object.line.start);
+    double angle = emb_vector_angle(v) /* - rotation() */;
+    return fmod(angle+360.0, 360.0);
+}
+
+/* . */
+double
+get_start_angle(EmbGeometry geometry)
+{
+    switch (geometry.type) {
+    case EMB_ARC: {
+        EmbVector center = emb_arc_center(geometry);
+        EmbVector v = emb_vector_subtract(center, geometry.object.arc.start);
+        double angle = emb_vector_angle(v) /* - rotation() */;
+        return fmod(angle+360.0, 360.0);
+    }
+    default:
+        break;
+    }
+    return 0.0f;
+}
+
+/* . */
+double
+get_end_angle(EmbGeometry geometry)
+{
+    switch (geometry.type) {
+    case EMB_ARC: {
+        EmbVector center = emb_arc_center(geometry);
+        EmbVector v = emb_vector_subtract(center, geometry.object.arc.end);
+        double angle = emb_vector_angle(v) /* - rotation() */;
+        return fmod(angle+360.0, 360.0);
+    }
+    default:
+        break;
+    }
+    return 0.0f;
+}
+
+/* . */
+double
+get_arc_length(EmbGeometry geometry)
+{
+    switch (geometry.type) {
+    case EMB_ARC: {
+        return radians(get_included_angle(geometry)) * get_radius(geometry);
+    }
+    default:
+        break;
+    }
+    return 0.0;
+}
+
+/* . */
+double
+get_area(EmbGeometry geometry)
+{
+    switch (geometry.type) {
+    case EMB_ARC: {
+        /* Area of a circular segment */
+        double r = get_radius(geometry);
+        double theta = radians(get_included_angle(geometry));
+        return ((r*r)/2) * (theta - sin(theta));
+    }
+    case OBJ_TYPE_CIRCLE: {
+        double r = geometry.object.circle.radius;
+        return embConstantPi * r * r;
+    }
+    case OBJ_TYPE_IMAGE:
+    case OBJ_TYPE_RECTANGLE:
+    default:
+        break;
+    }
+    return fabs(get_width(geometry)*get_height(geometry));
+}
+
+/* . */
+double
+get_chord(EmbGeometry geometry)
+{
+    switch (geometry.type) {
+    case EMB_ARC: {
+        return emb_vector_distance(geometry.object.arc.start, geometry.object.arc.end);
+    }
+    default:
+        break;
+    }
+    return 0.0;
+}
+
+/* . */
+double
+get_included_angle(EmbGeometry geometry)
+{
+    switch (geometry.type) {
+    case EMB_ARC: {
+        double chord = get_chord(geometry);
+        double rad = get_radius(geometry);
+        if (chord <= 0 || rad <= 0) {
+            /* Prevents division by zero and non-existant circles. */
+            return 0;
+        }
+
+        //NOTE: Due to floating point rounding errors, we need to clamp the quotient so it is in the range [-1, 1]
+        //      If the quotient is out of that range, then the result of asin() will be NaN.
+        double quotient = chord/(2.0*rad);
+        quotient = EMB_MIN(1.0, quotient);
+        quotient = EMB_MAX(0.0, quotient); //NOTE: 0 rather than -1 since we are enforcing a positive chord and radius
+        return degrees(2.0*asin(quotient)); //Properties of a Circle - Get the Included Angle - Reference: ASD9
+    }
+    default:
+        break;
+    }
+    return 0.0;
+}
+
+/* . */
+bool
+get_clockwise(EmbGeometry geometry)
+{
+    switch (geometry.type) {
+    case EMB_ARC: {
+        /* NOTE: Y values are inverted here on purpose. */
+        geometry.object.arc.start.y = -geometry.object.arc.start.y;
+        geometry.object.arc.mid.y = -geometry.object.arc.start.y;
+        geometry.object.arc.end.y = -geometry.object.arc.end.y;
+        if (emb_arc_clockwise(geometry)) {
+            return true;
+        }
+        break;
+    }
+    default:
+        break;
+    }
+    return false;
 }
 
 /* . */

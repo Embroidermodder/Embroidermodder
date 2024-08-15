@@ -12,23 +12,13 @@
 
 #include "embroidermodder.h"
 
-typedef struct Editor_ {
-    char icon[MAX_STRING_LENGTH];
-    char label[MAX_STRING_LENGTH];
-    char data_type[MAX_STRING_LENGTH];
-    char signal[MAX_STRING_LENGTH];
-    bool editable;
-    int object;
-} Editor;
+QGroupBox* createGroupBox__(const char *name, int filter);
 
-Editor lineStartX = {
-    .icon = "blank",
-    .label = "Start X",
-    .data_type = "double",
-    .signal = "lineEditLineStartX",
-    .editable = false,
-    .object = OBJ_TYPE_LINE
-};
+QHash<QString, QGroupBox*> group_boxes;
+QHash<QString, QToolButton*> tool_buttons;
+QHash<QString, QLineEdit*> line_edits;
+QHash<QString, QComboBox*> combo_boxes;
+QComboBox* comboBoxSelected;
 
 const char *objectNames[32] = {
     "Arc",
@@ -63,8 +53,111 @@ const char *objectNames[32] = {
     "Unknown"
 };
 
-QHash<QString, QToolButton*> tool_buttons;
-QHash<QString, QLineEdit*> line_edits;
+QStringList editor_list = {
+    "ArcCenterX",
+    "ArcCenterY",
+    "ArcRadius",
+    "ArcStartAngle",
+    "ArcEndAngle",
+    "ArcStartX",
+    "ArcStartY",
+    "ArcEndX",
+    "ArcEndY",
+    "ArcArea",
+    "ArcLength",
+    "ArcChord",
+    "ArcIncAngle"
+    "BlockPositionX",
+    "BlockPositionY",
+    "CircleCenterX",
+    "CircleCenterY",
+    "CircleRadius",
+    "CircleDiameter",
+    "CircleArea",
+    "CircleCircumference",
+    "EllipseCenterX",
+    "EllipseCenterY",
+    "EllipseRadiusMajor",
+    "EllipseRadiusMinor",
+    "EllipseDiameterMajor",
+    "EllipseDiameterMinor",
+    "ImageX",
+    "ImageY",
+    "ImageWidth",
+    "ImageHeight",
+    "InfiniteLineX1",
+    "InfiniteLineY1",
+    "InfiniteLineX2",
+    "InfiniteLineY2",
+    "InfiniteLineVectorX",
+    "InfiniteLineVectorY",
+    "LineStartX",
+    "LineStartY",
+    "LineEndX",
+    "LineEndY",
+    "LineDeltaX",
+    "LineDeltaY",
+    "LineAngle",
+    "LineLength",
+    "PathVertexX",
+    "PathVertexY",
+    "PathArea",
+    "PathLength",
+    "PointX",
+    "PointY",
+    "PolygonCenterX",
+    "PolygonCenterY",
+    "PolygonRadiusVertex",
+    "PolygonRadiusSide",
+    "PolygonDiameterVertex",
+    "PolygonDiameterSide",
+    "PolygonInteriorAngle",
+    "PolylineVertexX",
+    "PolylineVertexY",
+    "PolylineArea",
+    "PolylineLength",
+    "RayX1",
+    "RayY1",
+    "RayX2",
+    "RayY2",
+    "RayVectorX",
+    "RayVectorY",
+    "RectangleCorner1X",
+    "RectangleCorner1Y",
+    "RectangleCorner2X",
+    "RectangleCorner2Y",
+    "RectangleCorner3X",
+    "RectangleCorner3Y",
+    "RectangleCorner4X",
+    "RectangleCorner4Y",
+    "RectangleWidth",
+    "RectangleHeight",
+    "RectangleArea",
+    "TextMultiX",
+    "TextMultiY",
+    "TextSingleHeight",
+    "TextSingleRotation",
+    "TextSingleX",
+    "TextSingleY",
+    "TextSingleContents",
+    "TextSingleHeight",
+    "TextSingleRotation"
+};
+
+QStringList combobox_list = {
+    "GeneralLayer",
+    "GeneralColor",
+    "GeneralLineType",
+    "GeneralLineWeight",
+    "ArcClockwise",
+    "PathVertexNum",
+    "PathClosed",
+    "PolylineVertexNum",
+    "PolylineClosed",
+    "TextSingleJustify",
+    "TextSingleBackward",
+    "TextSingleUpsideDown"
+};
 
 QWidget* focusWidget_;
 
@@ -88,12 +181,7 @@ QString fieldOnText;
 QString fieldOffText;
 
 /* General */
-QGroupBox*   groupBoxGeneral;
-
-QComboBox*   comboBoxGeneralLayer;
-QComboBox*   comboBoxGeneralColor;
-QComboBox*   comboBoxGeneralLineType;
-QComboBox*   comboBoxGeneralLineWeight;
+QGroupBox* groupBoxGeneral;
 
 /* Geometry */
 QGroupBox* groupBoxGeometryArc;
@@ -126,143 +214,26 @@ QGroupBox* groupBoxTextTextSingle;
 QGroupBox* groupBoxGeometryTextSingle;
 QGroupBox* groupBoxMiscTextSingle;
 
-QLineEdit* lineEditArcCenterX;
-QLineEdit* lineEditArcCenterY;
-QLineEdit* lineEditArcRadius;
-QLineEdit* lineEditArcStartAngle;
-QLineEdit* lineEditArcEndAngle;
-QLineEdit* lineEditArcStartX;
-QLineEdit* lineEditArcStartY;
-QLineEdit* lineEditArcEndX;
-QLineEdit* lineEditArcEndY;
-QLineEdit* lineEditArcArea;
-QLineEdit* lineEditArcLength;
-QLineEdit* lineEditArcChord;
-QLineEdit* lineEditArcIncAngle;
-
-QComboBox* comboBoxArcClockwise;
-
-QLineEdit* lineEditBlockX;
-QLineEdit* lineEditBlockY;
-
-QLineEdit* lineEditCircleCenterX;
-QLineEdit* lineEditCircleCenterY;
-QLineEdit* lineEditCircleRadius;
-QLineEdit* lineEditCircleDiameter;
-QLineEdit* lineEditCircleArea;
-QLineEdit* lineEditCircleCircumference;
-
 /* TODO: toolButtons and lineEdits for DimAligned
  * DimAngular, DimArcLength, DimDiameter, DimLeader, DimLinear
  * DimOrdinate, DimRadius
  */
 
-QLineEdit* lineEditEllipseCenterX;
-QLineEdit* lineEditEllipseCenterY;
-QLineEdit* lineEditEllipseRadiusMajor;
-QLineEdit* lineEditEllipseRadiusMinor;
-QLineEdit* lineEditEllipseDiameterMajor;
-QLineEdit* lineEditEllipseDiameterMinor;
-
-QLineEdit* lineEditImageX;
-QLineEdit* lineEditImageY;
-QLineEdit* lineEditImageWidth;
-QLineEdit* lineEditImageHeight;
-
 QLineEdit* lineEditImageName;
 QLineEdit* lineEditImagePath;
 
-QLineEdit* lineEditInfiniteLineX1;
-QLineEdit* lineEditInfiniteLineY1;
-QLineEdit* lineEditInfiniteLineX2;
-QLineEdit* lineEditInfiniteLineY2;
-QLineEdit* lineEditInfiniteLineVectorX;
-QLineEdit* lineEditInfiniteLineVectorY;
-
-QLineEdit* lineEditLineStartX;
-QLineEdit* lineEditLineStartY;
-QLineEdit* lineEditLineEndX;
-QLineEdit* lineEditLineEndY;
-QLineEdit* lineEditLineDeltaX;
-QLineEdit* lineEditLineDeltaY;
-QLineEdit* lineEditLineAngle;
-QLineEdit* lineEditLineLength;
-
-QComboBox* comboBoxPathVertexNum;
-QLineEdit* lineEditPathVertexX;
-QLineEdit* lineEditPathVertexY;
-QLineEdit* lineEditPathArea;
-QLineEdit* lineEditPathLength;
-
-QComboBox* comboBoxPathClosed;
-
-QLineEdit* lineEditPointX;
-QLineEdit* lineEditPointY;
-
-QLineEdit*   lineEditPolygonCenterX;
-QLineEdit*   lineEditPolygonCenterY;
-QLineEdit*   lineEditPolygonRadiusVertex;
-QLineEdit*   lineEditPolygonRadiusSide;
-QLineEdit*   lineEditPolygonDiameterVertex;
-QLineEdit*   lineEditPolygonDiameterSide;
-QLineEdit*   lineEditPolygonInteriorAngle;
-
-QComboBox*   comboBoxPolylineVertexNum;
-QLineEdit*   lineEditPolylineVertexX;
-QLineEdit*   lineEditPolylineVertexY;
-QLineEdit*   lineEditPolylineArea;
-QLineEdit*   lineEditPolylineLength;
-
-QComboBox*   comboBoxPolylineClosed;
-
-QLineEdit*   lineEditRayX1;
-QLineEdit*   lineEditRayY1;
-QLineEdit*   lineEditRayX2;
-QLineEdit*   lineEditRayY2;
-QLineEdit*   lineEditRayVectorX;
-QLineEdit*   lineEditRayVectorY;
-
-QLineEdit*   lineEditRectangleCorner1X;
-QLineEdit*   lineEditRectangleCorner1Y;
-QLineEdit*   lineEditRectangleCorner2X;
-QLineEdit*   lineEditRectangleCorner2Y;
-QLineEdit*   lineEditRectangleCorner3X;
-QLineEdit*   lineEditRectangleCorner3Y;
-QLineEdit*   lineEditRectangleCorner4X;
-QLineEdit*   lineEditRectangleCorner4Y;
-QLineEdit*   lineEditRectangleWidth;
-QLineEdit*   lineEditRectangleHeight;
-QLineEdit*   lineEditRectangleArea;
-
-QLineEdit* lineEditTextMultiX;
-QLineEdit* lineEditTextMultiY;
-
-QLineEdit* lineEditTextSingleContents;
 QFontComboBox* comboBoxTextSingleFont;
-QComboBox* comboBoxTextSingleJustify;
-QLineEdit* lineEditTextSingleHeight;
-QLineEdit* lineEditTextSingleRotation;
-
-QLineEdit* lineEditTextSingleX;
-QLineEdit* lineEditTextSingleY;
-
-QComboBox* comboBoxTextSingleBackward;
-QComboBox* comboBoxTextSingleUpsideDown;
 
 QSignalMapper* signalMapper;
 Qt::ToolButtonStyle propertyEditorButtonStyle;
 
 QList<QGraphicsItem*> selectedItemList;
 
-QComboBox*   comboBoxSelected;
 QToolButton* toolButtonQSelect;
 QToolButton* toolButtonPickAdd;
 
-QLineEdit* createLineEdit(const QString& validatorType, bool readOnly);
 void mapSignal(QObject* fieldObj, const QString& name, QVariant value);
 QToolButton* createToolButton(const QString& iconName, const QString& txt);
-QComboBox* createComboBox(bool disable);
-QFontComboBox* createFontComboBox(bool disable);
 
 // TODO: Alphabetic/Categorized TabWidget
 
@@ -534,152 +505,163 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
 
         /* TODO: load data into the General field */
         int objType = item->type();
-        if (objType == OBJ_TYPE_ARC) {
-            Object* obj = static_cast<Object*>(item);
-            if (obj) {
-                updateLineEditNumIfVaries(lineEditArcCenterX, obj->objectCenter().x(), false);
-                updateLineEditNumIfVaries(lineEditArcCenterY, -obj->objectCenter().y(), false);
-                updateLineEditNumIfVaries(lineEditArcRadius, obj->objectRadius(), false);
-                updateLineEditNumIfVaries(lineEditArcStartAngle, obj->objectStartAngle(), true);
-                updateLineEditNumIfVaries(lineEditArcEndAngle, obj->objectEndAngle(), true);
-                updateLineEditNumIfVaries(lineEditArcStartX, obj->objectStartPoint().x(), false);
-                updateLineEditNumIfVaries(lineEditArcStartY, -obj->objectStartPoint().y(), false);
-                updateLineEditNumIfVaries(lineEditArcEndX, obj->objectEndPoint().x(), false);
-                updateLineEditNumIfVaries(lineEditArcEndY, -obj->objectEndPoint().y(), false);
-                updateLineEditNumIfVaries(lineEditArcArea, obj->objectArea(), false);
-                updateLineEditNumIfVaries(lineEditArcLength, obj->objectArcLength(), false);
-                updateLineEditNumIfVaries(lineEditArcChord, obj->objectChord(), false);
-                updateLineEditNumIfVaries(lineEditArcIncAngle, obj->objectIncludedAngle(), true);
-                updateComboBoxBoolIfVaries(comboBoxArcClockwise, obj->objectClockwise(), true);
-            }
+        Object* obj = static_cast<Object*>(item);
+        if (!obj) {
+            continue;
         }
-        else if (objType == OBJ_TYPE_BLOCK) {
+        EmbGeometry *g = obj->geometry;
+        switch (objType) {
+        case OBJ_TYPE_ARC: {
+            updateLineEditNumIfVaries(line_edits["ArcCenterX"], obj->objectCenter().x(), false);
+            updateLineEditNumIfVaries(line_edits["ArcCenterY"], -obj->objectCenter().y(), false);
+            updateLineEditNumIfVaries(line_edits["ArcRadius"], obj->objectRadius(), false);
+            updateLineEditNumIfVaries(line_edits["ArcStartAngle"], get_start_angle(*g), true);
+            updateLineEditNumIfVaries(line_edits["ArcEndAngle"], get_end_angle(*g), true);
+            updateLineEditNumIfVaries(line_edits["ArcStartX"], obj->objectStartPoint().x(), false);
+            updateLineEditNumIfVaries(line_edits["ArcStartY"], -obj->objectStartPoint().y(), false);
+            updateLineEditNumIfVaries(line_edits["ArcEndX"], obj->objectEndPoint().x(), false);
+            updateLineEditNumIfVaries(line_edits["ArcEndY"], -obj->objectEndPoint().y(), false);
+            updateLineEditNumIfVaries(line_edits["ArcArea"], get_area(*g), false);
+            updateLineEditNumIfVaries(line_edits["ArcLength"], get_arc_length(*g), false);
+            updateLineEditNumIfVaries(line_edits["ArcChord"], get_chord(*g), false);
+            updateLineEditNumIfVaries(line_edits["ArcIncAngle"], get_included_angle(*g), true);
+            updateComboBoxBoolIfVaries(combo_boxes["ArcClockwise"], get_clockwise(*g), true);
+            break;
+        }
+        case OBJ_TYPE_BLOCK: {
             //TODO: load block data
+            break;
         }
-        else if (objType == OBJ_TYPE_CIRCLE) {
-            Object* obj = static_cast<Object*>(item);
-            if (obj) {
-                updateLineEditNumIfVaries(lineEditCircleCenterX, obj->objectCenter().x(), false);
-                updateLineEditNumIfVaries(lineEditCircleCenterY, -obj->objectCenter().y(), false);
-                updateLineEditNumIfVaries(lineEditCircleRadius, obj->objectRadius(), false);
-                updateLineEditNumIfVaries(lineEditCircleDiameter, obj->objectDiameter(), false);
-                updateLineEditNumIfVaries(lineEditCircleArea, obj->objectArea(), false);
-                updateLineEditNumIfVaries(lineEditCircleCircumference, obj->objectCircumference(), false);
-            }
+        case OBJ_TYPE_CIRCLE: {
+            updateLineEditNumIfVaries(line_edits["CircleCenterX"], obj->objectCenter().x(), false);
+            updateLineEditNumIfVaries(line_edits["CircleCenterY"], -obj->objectCenter().y(), false);
+            updateLineEditNumIfVaries(line_edits["CircleRadius"], obj->objectRadius(), false);
+            updateLineEditNumIfVaries(line_edits["CircleDiameter"], obj->objectDiameter(), false);
+            updateLineEditNumIfVaries(line_edits["CircleArea"], get_area(*g), false);
+            updateLineEditNumIfVaries(line_edits["CircleCircumference"], obj->objectCircumference(), false);
+            break;
         }
-        else if (objType == OBJ_TYPE_DIMALIGNED) {
+        case OBJ_TYPE_DIMALIGNED: {
             //TODO: load aligned dimension data
+            break;
         }
-        else if (objType == OBJ_TYPE_DIMANGULAR) {
+        case OBJ_TYPE_DIMANGULAR: {
             //TODO: load angular dimension data
+            break;
         }
-        else if (objType == OBJ_TYPE_DIMARCLENGTH) {
+        case OBJ_TYPE_DIMARCLENGTH: {
             //TODO: load arclength dimension data
+            break;
         }
-        else if (objType == OBJ_TYPE_DIMDIAMETER) {
+        case OBJ_TYPE_DIMDIAMETER: {
             //TODO: load diameter dimension data
+            break;
         }
-        else if (objType == OBJ_TYPE_DIMLEADER) {
+        case OBJ_TYPE_DIMLEADER: {
             //TODO: load leader dimension data
+            break;
         }
-        else if (objType == OBJ_TYPE_DIMLINEAR) {
+        case OBJ_TYPE_DIMLINEAR: {
             //TODO: load linear dimension data
+            break;
         }
-        else if (objType == OBJ_TYPE_DIMORDINATE) {
+        case OBJ_TYPE_DIMORDINATE: {
             //TODO: load ordinate dimension data
+            break;
         }
-        else if (objType == OBJ_TYPE_DIMRADIUS) {
+        case OBJ_TYPE_DIMRADIUS: {
             //TODO: load radius dimension data
+            break;
         }
-        else if (objType == OBJ_TYPE_ELLIPSE) {
-            Object* obj = static_cast<Object*>(item);
-            if (obj) {
-                updateLineEditNumIfVaries(lineEditEllipseCenterX, obj->objectCenterX(), false);
-                updateLineEditNumIfVaries(lineEditEllipseCenterY, -obj->objectCenterY(), false);
-                updateLineEditNumIfVaries(lineEditEllipseRadiusMajor, obj->objectRadiusMajor(), false);
-                updateLineEditNumIfVaries(lineEditEllipseRadiusMinor, obj->objectRadiusMinor(), false);
-                updateLineEditNumIfVaries(lineEditEllipseDiameterMajor, obj->objectDiameterMajor(), false);
-                updateLineEditNumIfVaries(lineEditEllipseDiameterMinor, obj->objectDiameterMinor(), false);
-            }
+        case OBJ_TYPE_ELLIPSE: {
+            updateLineEditNumIfVaries(line_edits["EllipseCenterX"], obj->objectCenterX(), false);
+            updateLineEditNumIfVaries(line_edits["EllipseCenterY"], -obj->objectCenterY(), false);
+            updateLineEditNumIfVaries(line_edits["EllipseRadiusMajor"], obj->objectRadiusMajor(), false);
+            updateLineEditNumIfVaries(line_edits["EllipseRadiusMinor"], obj->objectRadiusMinor(), false);
+            updateLineEditNumIfVaries(line_edits["EllipseDiameterMajor"], obj->objectDiameterMajor(), false);
+            updateLineEditNumIfVaries(line_edits["EllipseDiameterMinor"], obj->objectDiameterMinor(), false);
+            break;
         }
-        else if (objType == OBJ_TYPE_IMAGE) {
+        case OBJ_TYPE_IMAGE: {
             //TODO: load image data
+            break;
         }
-        else if (objType == OBJ_TYPE_INFINITELINE) {
+        case OBJ_TYPE_INFINITELINE: {
             //TODO: load infinite line data
+            break;
         }
-        else if (objType == OBJ_TYPE_LINE) {
-            Object* obj = static_cast<Object*>(item);
-            if (obj) {
-                QPointF point1 = obj->objectEndPoint1();
-                QPointF point2 = obj->objectEndPoint2();
-                QPointF delta = point2 - point1;
-                updateLineEditNumIfVaries(lineEditLineStartX, point1.x(), false);
-                updateLineEditNumIfVaries(lineEditLineStartY, -point1.y(), false);
-                updateLineEditNumIfVaries(lineEditLineEndX, point2.x(), false);
-                updateLineEditNumIfVaries(lineEditLineEndY, -point2.y(), false);
-                updateLineEditNumIfVaries(lineEditLineDeltaX, delta.x(), false);
-                updateLineEditNumIfVaries(lineEditLineDeltaY, -delta.y(), false);
-                updateLineEditNumIfVaries(lineEditLineAngle, obj->objectAngle(), true);
-                updateLineEditNumIfVaries(lineEditLineLength, obj->objectLength(), false);
-            }
+        case OBJ_TYPE_LINE: {
+            QPointF point1 = obj->objectEndPoint1();
+            QPointF point2 = obj->objectEndPoint2();
+            QPointF delta = point2 - point1;
+            updateLineEditNumIfVaries(line_edits["LineStartX"], point1.x(), false);
+            updateLineEditNumIfVaries(line_edits["LineStartY"], -point1.y(), false);
+            updateLineEditNumIfVaries(line_edits["LineEndX"], point2.x(), false);
+            updateLineEditNumIfVaries(line_edits["LineEndY"], -point2.y(), false);
+            updateLineEditNumIfVaries(line_edits["LineDeltaX"], delta.x(), false);
+            updateLineEditNumIfVaries(line_edits["LineDeltaY"], -delta.y(), false);
+            updateLineEditNumIfVaries(line_edits["LineAngle"], get_angle(*g), true);
+            updateLineEditNumIfVaries(line_edits["LineLength"], obj->objectLength(), false);
+            break;
         }
-        else if (objType == OBJ_TYPE_PATH) {
+        case OBJ_TYPE_PATH: {
             //TODO: load path data
+            break;
         }
-        else if (objType == OBJ_TYPE_POINT) {
-            Object* obj = static_cast<Object*>(item);
-            if (obj) {
-                updateLineEditNumIfVaries(lineEditPointX, obj->objectX(), false);
-                updateLineEditNumIfVaries(lineEditPointY, -obj->objectY(), false);
-            }
+        case OBJ_TYPE_POINT: {
+            updateLineEditNumIfVaries(line_edits["PointX"], obj->objectX(), false);
+            updateLineEditNumIfVaries(line_edits["PointY"], -obj->objectY(), false);
+            break;
         }
-        else if (objType == OBJ_TYPE_POLYGON) {
+        case OBJ_TYPE_POLYGON: {
             //TODO: load polygon data
+            break;
         }
-        else if (objType == OBJ_TYPE_POLYLINE) {
+        case OBJ_TYPE_POLYLINE: {
             //TODO: load polyline data
+            break;
         }
-        else if (objType == OBJ_TYPE_RAY) {
+        case OBJ_TYPE_RAY: {
             //TODO: load ray data
+            break;
         }
-        else if (objType == OBJ_TYPE_RECTANGLE) {
-            Object* obj = static_cast<Object*>(item);
-            if (obj) {
-                QPointF corn1 = obj->topLeft();
-                QPointF corn2 = obj->topRight();
-                QPointF corn3 = obj->bottomLeft();
-                QPointF corn4 = obj->bottomRight();
+        case OBJ_TYPE_RECTANGLE: {
+            QPointF corn1 = obj->topLeft();
+            QPointF corn2 = obj->topRight();
+            QPointF corn3 = obj->bottomLeft();
+            QPointF corn4 = obj->bottomRight();
 
-                updateLineEditNumIfVaries(lineEditRectangleCorner1X, corn1.x(), false);
-                updateLineEditNumIfVaries(lineEditRectangleCorner1Y, -corn1.y(), false);
-                updateLineEditNumIfVaries(lineEditRectangleCorner2X, corn2.x(), false);
-                updateLineEditNumIfVaries(lineEditRectangleCorner2Y, -corn2.y(), false);
-                updateLineEditNumIfVaries(lineEditRectangleCorner3X, corn3.x(), false);
-                updateLineEditNumIfVaries(lineEditRectangleCorner3Y, -corn3.y(), false);
-                updateLineEditNumIfVaries(lineEditRectangleCorner4X, corn4.x(), false);
-                updateLineEditNumIfVaries(lineEditRectangleCorner4Y, -corn4.y(), false);
-                updateLineEditNumIfVaries(lineEditRectangleWidth, obj->objectWidth(), false);
-                updateLineEditNumIfVaries(lineEditRectangleHeight, -obj->objectHeight(), false);
-                updateLineEditNumIfVaries(lineEditRectangleArea, obj->objectArea(), false);
-            }
+            updateLineEditNumIfVaries(line_edits["RectangleCorner1X"], corn1.x(), false);
+            updateLineEditNumIfVaries(line_edits["RectangleCorner1Y"], -corn1.y(), false);
+            updateLineEditNumIfVaries(line_edits["RectangleCorner2X"], corn2.x(), false);
+            updateLineEditNumIfVaries(line_edits["RectangleCorner2Y"], -corn2.y(), false);
+            updateLineEditNumIfVaries(line_edits["RectangleCorner3X"], corn3.x(), false);
+            updateLineEditNumIfVaries(line_edits["RectangleCorner3Y"], -corn3.y(), false);
+            updateLineEditNumIfVaries(line_edits["RectangleCorner4X"], corn4.x(), false);
+            updateLineEditNumIfVaries(line_edits["RectangleCorner4Y"], -corn4.y(), false);
+            updateLineEditNumIfVaries(line_edits["RectangleWidth"], get_width(*g), false);
+            updateLineEditNumIfVaries(line_edits["RectangleHeight"], -get_height(*g), false);
+            updateLineEditNumIfVaries(line_edits["RectangleArea"], get_area(*g), false);
+            break;
         }
-        else if (objType == OBJ_TYPE_TEXTMULTI) {
+        case OBJ_TYPE_TEXTMULTI: {
             //TODO: load multiline text data
+            break;
         }
-        else if (objType == OBJ_TYPE_TEXTSINGLE) {
-            Object* obj = static_cast<Object*>(item);
-            if (obj) {
-                updateLineEditStrIfVaries(lineEditTextSingleContents, obj->data.objText);
+        case OBJ_TYPE_TEXTSINGLE: {
+            updateLineEditStrIfVaries(line_edits["TextSingleContents"], obj->data.objText);
                 updateFontComboBoxStrIfVaries(comboBoxTextSingleFont, obj->data.objTextFont);
-                updateComboBoxStrIfVaries(comboBoxTextSingleJustify, obj->data.objTextJustify, obj->objectTextJustifyList());
-                updateLineEditNumIfVaries(lineEditTextSingleHeight, obj->data.objTextSize, false);
-                updateLineEditNumIfVaries(lineEditTextSingleRotation, -obj->rotation(), true);
-                updateLineEditNumIfVaries(lineEditTextSingleX, obj->objectX(), false);
-                updateLineEditNumIfVaries(lineEditTextSingleY, -obj->objectY(), false);
-                updateComboBoxBoolIfVaries(comboBoxTextSingleBackward, obj->data.objTextBackward, true);
-                updateComboBoxBoolIfVaries(comboBoxTextSingleUpsideDown, obj->data.objTextUpsideDown, true);
-            }
+                updateComboBoxStrIfVaries(combo_boxes["TextSingleJustify"], obj->data.objTextJustify, objectTextJustifyList);
+                updateLineEditNumIfVaries(line_edits["TextSingleHeight"], obj->data.objTextSize, false);
+                updateLineEditNumIfVaries(line_edits["TextSingleRotation"], -obj->rotation(), true);
+                updateLineEditNumIfVaries(line_edits["TextSingleX"], obj->objectX(), false);
+                updateLineEditNumIfVaries(line_edits["TextSingleY"], -obj->objectY(), false);
+                updateComboBoxBoolIfVaries(combo_boxes["TextSingleBackward"], obj->data.objTextBackward, true);
+                updateComboBoxBoolIfVaries(combo_boxes["TextSingleUpsideDown"], obj->data.objTextUpsideDown, true);
+            break;
+        }
+        default:
+            break;
         }
     }
 
@@ -945,146 +927,65 @@ PropertyEditor::hideAllGroups()
 void
 PropertyEditor::clearAllFields()
 {
-    //General
-    comboBoxGeneralLayer->clear();
-    comboBoxGeneralColor->clear();
-    comboBoxGeneralLineType->clear();
-    comboBoxGeneralLineWeight->clear();
+    foreach (QString editor, editor_list) {
+        line_edits[editor]->clear();
+    }
+    foreach (QString editor, combobox_list) {
+        combo_boxes[editor]->clear();
+    }
 
-    //Arc
-    lineEditArcCenterX->clear();
-    lineEditArcCenterY->clear();
-    lineEditArcRadius->clear();
-    lineEditArcStartAngle->clear();
-    lineEditArcEndAngle->clear();
-    lineEditArcStartX->clear();
-    lineEditArcStartY->clear();
-    lineEditArcEndX->clear();
-    lineEditArcEndY->clear();
-    lineEditArcArea->clear();
-    lineEditArcLength->clear();
-    lineEditArcChord->clear();
-    lineEditArcIncAngle->clear();
-    comboBoxArcClockwise->clear();
-
-    //Block
-    lineEditBlockX->clear();
-    lineEditBlockY->clear();
-
-    //Circle
-    lineEditCircleCenterX->clear();
-    lineEditCircleCenterY->clear();
-    lineEditCircleRadius->clear();
-    lineEditCircleDiameter->clear();
-    lineEditCircleArea->clear();
-    lineEditCircleCircumference->clear();
-
-    //TODO: DimAligned
-    //TODO: DimAngular
-    //TODO: DimArcLength
-    //TODO: DimDiameter
-    //TODO: DimLeader
-    //TODO: DimLinear
-    //TODO: DimOrdinate
-    //TODO: DimRadius
-
-    //Ellipse
-    lineEditEllipseCenterX->clear();
-    lineEditEllipseCenterY->clear();
-    lineEditEllipseRadiusMajor->clear();
-    lineEditEllipseRadiusMinor->clear();
-    lineEditEllipseDiameterMajor->clear();
-    lineEditEllipseDiameterMinor->clear();
-
-    //Image
-    lineEditImageX->clear();
-    lineEditImageY->clear();
-    lineEditImageWidth->clear();
-    lineEditImageHeight->clear();
-
-    //Infinite Line
-    lineEditInfiniteLineX1->clear();
-    lineEditInfiniteLineY1->clear();
-    lineEditInfiniteLineX2->clear();
-    lineEditInfiniteLineY2->clear();
-    lineEditInfiniteLineVectorX->clear();
-    lineEditInfiniteLineVectorY->clear();
-
-    //Line
-    lineEditLineStartX->clear();
-    lineEditLineStartY->clear();
-    lineEditLineEndX->clear();
-    lineEditLineEndY->clear();
-    lineEditLineDeltaX->clear();
-    lineEditLineDeltaY->clear();
-    lineEditLineAngle->clear();
-    lineEditLineLength->clear();
-
-    //Path
-    comboBoxPathVertexNum->clear();
-    lineEditPathVertexX->clear();
-    lineEditPathVertexY->clear();
-    lineEditPathArea->clear();
-    lineEditPathLength->clear();
-    comboBoxPathClosed->clear();
-
-    //Point
-    lineEditPointX->clear();
-    lineEditPointY->clear();
-
-    //Polygon
-    lineEditPolygonCenterX->clear();
-    lineEditPolygonCenterY->clear();
-    lineEditPolygonRadiusVertex->clear();
-    lineEditPolygonRadiusSide->clear();
-    lineEditPolygonDiameterVertex->clear();
-    lineEditPolygonDiameterSide->clear();
-    lineEditPolygonInteriorAngle->clear();
-
-    //Polyline
-    comboBoxPolylineVertexNum->clear();
-    lineEditPolylineVertexX->clear();
-    lineEditPolylineVertexY->clear();
-    lineEditPolylineArea->clear();
-    lineEditPolylineLength->clear();
-    comboBoxPolylineClosed->clear();
-
-    //Ray
-    lineEditRayX1->clear();
-    lineEditRayY1->clear();
-    lineEditRayX2->clear();
-    lineEditRayY2->clear();
-    lineEditRayVectorX->clear();
-    lineEditRayVectorY->clear();
-
-    //Rectangle
-    lineEditRectangleCorner1X->clear();
-    lineEditRectangleCorner1Y->clear();
-    lineEditRectangleCorner2X->clear();
-    lineEditRectangleCorner2Y->clear();
-    lineEditRectangleCorner3X->clear();
-    lineEditRectangleCorner3Y->clear();
-    lineEditRectangleCorner4X->clear();
-    lineEditRectangleCorner4Y->clear();
-    lineEditRectangleWidth->clear();
-    lineEditRectangleHeight->clear();
-    lineEditRectangleArea->clear();
-
-    //Text Multi
-    lineEditTextMultiX->clear();
-    lineEditTextMultiY->clear();
-
-    //Text Single
-    lineEditTextSingleContents->clear();
-    comboBoxTextSingleFont->removeItem(comboBoxTextSingleFont->findText(fieldVariesText)); //NOTE: Do not clear comboBoxTextSingleFont
+    comboBoxTextSingleFont->removeItem(comboBoxTextSingleFont->findText(fieldVariesText)); /* NOTE: Do not clear comboBoxTextSingleFont. */
     comboBoxTextSingleFont->setProperty("FontFamily", "");
-    comboBoxTextSingleJustify->clear();
-    lineEditTextSingleHeight->clear();
-    lineEditTextSingleRotation->clear();
-    lineEditTextSingleX->clear();
-    lineEditTextSingleY->clear();
-    comboBoxTextSingleBackward->clear();
-    comboBoxTextSingleUpsideDown->clear();
+}
+
+/* . */
+void
+create_editor(
+    QFormLayout *layout,
+    const char *icon,
+    const char *label,
+    const char *type_label,
+    const char *signal_name,
+    int obj_type)
+{
+    char signal[200];
+    QToolButton *toolButton = createToolButton(icon, translate(label));
+    QString s(signal_name);
+    if (!strcmp(signal_name, "combobox")) {
+        sprintf(signal, "comboBox%s", signal_name);
+        combo_boxes[s] = new QComboBox(dockPropEdit);
+        if (signal_name[0] == 0) {
+            combo_boxes[s]->setDisabled(true);
+        }
+        else {
+            combo_boxes[s]->setDisabled(false);
+            mapSignal(combo_boxes[s], signal, obj_type);
+        }
+        layout->addRow(toolButton, combo_boxes[s]);
+        return;
+    }
+
+    sprintf(signal, "lineEdit%s", signal_name);
+
+    line_edits[s] = new QLineEdit(dockPropEdit);
+    if (!strcmp(type_label, "int")) {
+        line_edits[s]->setValidator(new QIntValidator(line_edits[s]));
+    }
+    else if (!strcmp(type_label, "double")) {
+        line_edits[s]->setValidator(new QDoubleValidator(line_edits[s]));
+    }
+    else if (!strcmp(type_label, "string")) {
+    }
+
+    if (signal_name[0] != 0) {
+        line_edits[s]->setReadOnly(true);
+    }
+    else {
+        line_edits[s]->setReadOnly(false);
+        mapSignal(line_edits[s], signal, obj_type);
+    }
+
+    layout->addRow(toolButton, line_edits[s]);
 }
 
 /* TODO: Use proper icons for tool buttons. */
@@ -1093,24 +994,34 @@ createGroupBoxGeneral(void)
 {
     groupBoxGeneral = new QGroupBox(translate("General"), dockPropEdit);
 
-    QToolButton *toolButtonGeneralLayer = createToolButton("blank", translate("Layer"));
-    QToolButton *toolButtonGeneralColor = createToolButton("blank", translate("Color"));
-    QToolButton *toolButtonGeneralLineType = createToolButton("blank", translate("LineType"));
-    QToolButton *toolButtonGeneralLineWeight = createToolButton("blank", translate("LineWeight"));
-
-    comboBoxGeneralLayer = createComboBox(false);
-    comboBoxGeneralColor = createComboBox(false);
-    comboBoxGeneralLineType = createComboBox(false);
-    comboBoxGeneralLineWeight = createComboBox(false);
-
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    formLayout->addRow(toolButtonGeneralLayer, comboBoxGeneralLayer);
-    formLayout->addRow(toolButtonGeneralColor, comboBoxGeneralColor);
-    formLayout->addRow(toolButtonGeneralLineType, comboBoxGeneralLineType);
-    formLayout->addRow(toolButtonGeneralLineWeight, comboBoxGeneralLineWeight);
+    create_editor(formLayout, "blank", "Layer", "combobox", "GeneralLayer", 0);
+    create_editor(formLayout, "blank", "Color", "combobox", "GeneralColor", 0);
+    create_editor(formLayout, "blank", "LineType", "combobox", "GeneralLineType", 0);
+    create_editor(formLayout, "blank", "LineWeight", "combobox", "GeneralLineWeight", 0);
     groupBoxGeneral->setLayout(formLayout);
 
     return groupBoxGeneral;
+}
+
+
+/* TODO: Use proper icons for tool buttons. */
+QGroupBox*
+createGroupBox__(const char *name, int filter)
+{
+    QGroupBox* groupBox = new QGroupBox(translate(name), dockPropEdit);
+
+    QFormLayout* formLayout = new QFormLayout(dockPropEdit);
+    for (int i=0; strcmp(editor_data[i].icon, "END"); i++) {
+        Editor editor = editor_data[i];
+        if (filter == editor.object) {
+            create_editor(formLayout, editor.icon, editor.label, editor.data_type,
+                editor.signal, filter);
+        }
+    }
+    groupBox->setLayout(formLayout);
+
+    return groupBox;
 }
 
 /* TODO: Use proper icons for tool buttons. */
@@ -1119,54 +1030,20 @@ createGroupBoxGeometryArc(void)
 {
     groupBoxGeometryArc = new QGroupBox(translate("Geometry"), dockPropEdit);
 
-    QToolButton *toolButtonArcCenterX = createToolButton("blank", translate("Center X"));
-    QToolButton *toolButtonArcCenterY = createToolButton("blank", translate("Center Y"));
-    QToolButton *toolButtonArcRadius = createToolButton("blank", translate("Radius"));
-    QToolButton *toolButtonArcStartAngle = createToolButton("blank", translate("Start Angle"));
-    QToolButton *toolButtonArcEndAngle = createToolButton("blank", translate("End Angle"));
-    QToolButton *toolButtonArcStartX = createToolButton("blank", translate("Start X"));
-    QToolButton *toolButtonArcStartY = createToolButton("blank", translate("Start Y"));
-    QToolButton *toolButtonArcEndX = createToolButton("blank", translate("End X"));
-    QToolButton *toolButtonArcEndY = createToolButton("blank", translate("End Y"));
-    QToolButton *toolButtonArcArea = createToolButton("blank", translate("Area"));
-    QToolButton *toolButtonArcLength = createToolButton("blank", translate("Arc Length"));
-    QToolButton *toolButtonArcChord = createToolButton("blank", translate("Chord"));
-    QToolButton *toolButtonArcIncAngle = createToolButton("blank", translate("Included Angle"));
-
-    lineEditArcCenterX = createLineEdit("double", false);
-    lineEditArcCenterY = createLineEdit("double", false);
-    lineEditArcRadius = createLineEdit("double", false);
-    lineEditArcStartAngle = createLineEdit("double", false);
-    lineEditArcEndAngle = createLineEdit("double", false);
-    lineEditArcStartX = createLineEdit("double", true);
-    lineEditArcStartY = createLineEdit("double", true);
-    lineEditArcEndX = createLineEdit("double", true);
-    lineEditArcEndY = createLineEdit("double", true);
-    lineEditArcArea = createLineEdit("double", true);
-    lineEditArcLength = createLineEdit("double", true);
-    lineEditArcChord = createLineEdit("double", true);
-    lineEditArcIncAngle = createLineEdit("double", true);
-
-    mapSignal(lineEditArcCenterX, "lineEditArcCenterX", OBJ_TYPE_ARC);
-    mapSignal(lineEditArcCenterY, "lineEditArcCenterY", OBJ_TYPE_ARC);
-    mapSignal(lineEditArcRadius, "lineEditArcRadius", OBJ_TYPE_ARC);
-    mapSignal(lineEditArcStartAngle, "lineEditArcStartAngle", OBJ_TYPE_ARC);
-    mapSignal(lineEditArcEndAngle, "lineEditArcEndAngle", OBJ_TYPE_ARC);
-
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    formLayout->addRow(toolButtonArcCenterX, lineEditArcCenterX);
-    formLayout->addRow(toolButtonArcCenterY, lineEditArcCenterY);
-    formLayout->addRow(toolButtonArcRadius, lineEditArcRadius);
-    formLayout->addRow(toolButtonArcStartAngle, lineEditArcStartAngle);
-    formLayout->addRow(toolButtonArcEndAngle, lineEditArcEndAngle);
-    formLayout->addRow(toolButtonArcStartX, lineEditArcStartX);
-    formLayout->addRow(toolButtonArcStartY, lineEditArcStartY);
-    formLayout->addRow(toolButtonArcEndX, lineEditArcEndX);
-    formLayout->addRow(toolButtonArcEndY, lineEditArcEndY);
-    formLayout->addRow(toolButtonArcArea, lineEditArcArea);
-    formLayout->addRow(toolButtonArcLength, lineEditArcLength);
-    formLayout->addRow(toolButtonArcChord, lineEditArcChord);
-    formLayout->addRow(toolButtonArcIncAngle, lineEditArcIncAngle);
+    create_editor(formLayout, "blank", "Center X", "double", "ArcCenterX", OBJ_TYPE_ARC);
+    create_editor(formLayout, "blank", "Center Y", "double", "ArcCenterY", OBJ_TYPE_ARC);
+    create_editor(formLayout, "blank", "Radius", "double", "ArcRadius", OBJ_TYPE_ARC);
+    create_editor(formLayout, "blank", "Start Angle", "double", "ArcStartAngle", OBJ_TYPE_ARC);
+    create_editor(formLayout, "blank", "End Angle", "double", "ArcEndAngle", OBJ_TYPE_ARC);
+    create_editor(formLayout, "blank", "Start X", "double", "", OBJ_TYPE_ARC);
+    create_editor(formLayout, "blank", "Start Y", "double", "", OBJ_TYPE_ARC);
+    create_editor(formLayout, "blank", "End X", "double", "", OBJ_TYPE_ARC);
+    create_editor(formLayout, "blank", "End Y", "double", "", OBJ_TYPE_ARC);
+    create_editor(formLayout, "blank", "Area", "double", "", OBJ_TYPE_ARC);
+    create_editor(formLayout, "blank", "Arc Length", "double", "", OBJ_TYPE_ARC);
+    create_editor(formLayout, "blank", "Chord", "double", "", OBJ_TYPE_ARC);
+    create_editor(formLayout, "blank", "Included Angle", "double", "", OBJ_TYPE_ARC);
     groupBoxGeometryArc->setLayout(formLayout);
 
     return groupBoxGeometryArc;
@@ -1178,12 +1055,8 @@ createGroupBoxMiscArc()
 {
     groupBoxMiscArc = new QGroupBox(translate("Misc"), dockPropEdit);
 
-    QToolButton *toolButtonArcClockwise = createToolButton("blank", translate("Clockwise"));
-
-    comboBoxArcClockwise = createComboBox(true);
-
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    formLayout->addRow(toolButtonArcClockwise, comboBoxArcClockwise);
+    create_editor(formLayout, "blank", "Clockwise", "combobox", "ArcClockwise", OBJ_TYPE_ARC);
     groupBoxMiscArc->setLayout(formLayout);
 
     return groupBoxMiscArc;
@@ -1195,17 +1068,9 @@ createGroupBoxGeometryBlock(void)
 {
     groupBoxGeometryBlock = new QGroupBox(translate("Geometry"), dockPropEdit);
 
-    QToolButton *toolButtonBlockX = createToolButton("blank", translate("Position X"));
-    QToolButton *toolButtonBlockY = createToolButton("blank", translate("Position Y"));
-
-    lineEditBlockX = createLineEdit("double", false);
-    lineEditBlockY = createLineEdit("double", false);
-
-    //TODO: mapSignal for blocks
-
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    formLayout->addRow(toolButtonBlockX, lineEditBlockX);
-    formLayout->addRow(toolButtonBlockY, lineEditBlockY);
+    create_editor(formLayout, "blank", "Position X", "double", "BlockPositionX", OBJ_TYPE_BLOCK);
+    create_editor(formLayout, "blank", "Position Y", "double", "BlockPositionY", OBJ_TYPE_BLOCK);
     groupBoxGeometryBlock->setLayout(formLayout);
 
     return groupBoxGeometryBlock;
@@ -1217,34 +1082,13 @@ createGroupBoxGeometryCircle(void)
 {
     groupBoxGeometryCircle = new QGroupBox(translate("Geometry"), dockPropEdit);
 
-    QToolButton *toolButtonCircleCenterX = createToolButton("blank", translate("Center X"));
-    QToolButton *toolButtonCircleCenterY = createToolButton("blank", translate("Center Y"));
-    QToolButton *toolButtonCircleRadius = createToolButton("blank", translate("Radius"));
-    QToolButton *toolButtonCircleDiameter = createToolButton("blank", translate("Diameter"));
-    QToolButton *toolButtonCircleArea = createToolButton("blank", translate("Area"));
-    QToolButton *toolButtonCircleCircumference = createToolButton("blank", translate("Circumference"));
-
-    lineEditCircleCenterX = createLineEdit("double", false);
-    lineEditCircleCenterY = createLineEdit("double", false);
-    lineEditCircleRadius = createLineEdit("double", false);
-    lineEditCircleDiameter = createLineEdit("double", false);
-    lineEditCircleArea = createLineEdit("double", false);
-    lineEditCircleCircumference = createLineEdit("double", false);
-
-    mapSignal(lineEditCircleCenterX, "lineEditCircleCenterX", OBJ_TYPE_CIRCLE);
-    mapSignal(lineEditCircleCenterY, "lineEditCircleCenterY", OBJ_TYPE_CIRCLE);
-    mapSignal(lineEditCircleRadius, "lineEditCircleRadius", OBJ_TYPE_CIRCLE);
-    mapSignal(lineEditCircleDiameter, "lineEditCircleDiameter", OBJ_TYPE_CIRCLE);
-    mapSignal(lineEditCircleArea, "lineEditCircleArea", OBJ_TYPE_CIRCLE);
-    mapSignal(lineEditCircleCircumference, "lineEditCircleCircumference", OBJ_TYPE_CIRCLE);
-
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    formLayout->addRow(toolButtonCircleCenterX, lineEditCircleCenterX);
-    formLayout->addRow(toolButtonCircleCenterY, lineEditCircleCenterY);
-    formLayout->addRow(toolButtonCircleRadius, lineEditCircleRadius);
-    formLayout->addRow(toolButtonCircleDiameter, lineEditCircleDiameter);
-    formLayout->addRow(toolButtonCircleArea, lineEditCircleArea);
-    formLayout->addRow(toolButtonCircleCircumference, lineEditCircleCircumference);
+    create_editor(formLayout, "blank", "Center X", "double", "CircleCenterX", OBJ_TYPE_CIRCLE);
+    create_editor(formLayout, "blank", "Center Y", "double", "CircleCenterY", OBJ_TYPE_CIRCLE);
+    create_editor(formLayout, "blank", "Radius", "double", "CircleRadius", OBJ_TYPE_CIRCLE);
+    create_editor(formLayout, "blank", "Diameter", "double", "CircleDiameter", OBJ_TYPE_CIRCLE);
+    create_editor(formLayout, "blank", "Area", "double", "CircleArea", OBJ_TYPE_CIRCLE);
+    create_editor(formLayout, "blank", "Circumference", "double", "CircleCircumference", OBJ_TYPE_CIRCLE);
     groupBoxGeometryCircle->setLayout(formLayout);
 
     return groupBoxGeometryCircle;
@@ -1344,34 +1188,13 @@ createGroupBoxGeometryEllipse()
 {
     groupBoxGeometryEllipse = new QGroupBox(translate("Geometry"), dockPropEdit);
 
-    QToolButton *toolButtonEllipseCenterX = createToolButton("blank", translate("Center X"));
-    QToolButton *toolButtonEllipseCenterY = createToolButton("blank", translate("Center Y"));
-    QToolButton *toolButtonEllipseRadiusMajor = createToolButton("blank", translate("Major Radius"));
-    QToolButton *toolButtonEllipseRadiusMinor = createToolButton("blank", translate("Minor Radius"));
-    QToolButton *toolButtonEllipseDiameterMajor = createToolButton("blank", translate("Major Diameter"));
-    QToolButton *toolButtonEllipseDiameterMinor = createToolButton("blank", translate("Minor Diameter"));
-
-    lineEditEllipseCenterX = createLineEdit("double", false);
-    lineEditEllipseCenterY = createLineEdit("double", false);
-    lineEditEllipseRadiusMajor = createLineEdit("double", false);
-    lineEditEllipseRadiusMinor = createLineEdit("double", false);
-    lineEditEllipseDiameterMajor = createLineEdit("double", false);
-    lineEditEllipseDiameterMinor = createLineEdit("double", false);
-
-    mapSignal(lineEditEllipseCenterX, "lineEditEllipseCenterX", OBJ_TYPE_ELLIPSE);
-    mapSignal(lineEditEllipseCenterY, "lineEditEllipseCenterY", OBJ_TYPE_ELLIPSE);
-    mapSignal(lineEditEllipseRadiusMajor, "lineEditEllipseRadiusMajor", OBJ_TYPE_ELLIPSE);
-    mapSignal(lineEditEllipseRadiusMinor, "lineEditEllipseRadiusMinor", OBJ_TYPE_ELLIPSE);
-    mapSignal(lineEditEllipseDiameterMajor, "lineEditEllipseDiameterMajor", OBJ_TYPE_ELLIPSE);
-    mapSignal(lineEditEllipseDiameterMinor, "lineEditEllipseDiameterMinor", OBJ_TYPE_ELLIPSE);
-
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    formLayout->addRow(toolButtonEllipseCenterX, lineEditEllipseCenterX);
-    formLayout->addRow(toolButtonEllipseCenterY, lineEditEllipseCenterY);
-    formLayout->addRow(toolButtonEllipseRadiusMajor, lineEditEllipseRadiusMajor);
-    formLayout->addRow(toolButtonEllipseRadiusMinor, lineEditEllipseRadiusMinor);
-    formLayout->addRow(toolButtonEllipseDiameterMajor, lineEditEllipseDiameterMajor);
-    formLayout->addRow(toolButtonEllipseDiameterMinor, lineEditEllipseDiameterMinor);
+    create_editor(formLayout, "blank", "Center X", "double", "EllipseCenterX", OBJ_TYPE_ELLIPSE);
+    create_editor(formLayout, "blank", "Center Y", "double", "EllipseCenterY", OBJ_TYPE_ELLIPSE);
+    create_editor(formLayout, "blank", "Major Radius", "double", "EllipseRadiusMajor", OBJ_TYPE_ELLIPSE);
+    create_editor(formLayout, "blank", "Minor Radius", "double", "EllipseRadiusMinor", OBJ_TYPE_ELLIPSE);
+    create_editor(formLayout, "blank", "Major Diameter", "double", "EllipseDiameterMajor", OBJ_TYPE_ELLIPSE);
+    create_editor(formLayout, "blank", "Minor Diameter", "double", "EllipseDiameterMinor", OBJ_TYPE_ELLIPSE);
     groupBoxGeometryEllipse->setLayout(formLayout);
 
     return groupBoxGeometryEllipse;
@@ -1383,23 +1206,11 @@ createGroupBoxGeometryImage()
 {
     groupBoxGeometryImage = new QGroupBox(translate("Geometry"), dockPropEdit);
 
-    QToolButton *toolButtonImageX = createToolButton("blank", translate("Position X"));
-    QToolButton *toolButtonImageY = createToolButton("blank", translate("Position Y"));
-    QToolButton *toolButtonImageWidth = createToolButton("blank", translate("Width"));
-    QToolButton *toolButtonImageHeight = createToolButton("blank", translate("Height"));
-
-    lineEditImageX = createLineEdit("double", false);
-    lineEditImageY = createLineEdit("double", false);
-    lineEditImageWidth = createLineEdit("double", false);
-    lineEditImageHeight = createLineEdit("double", false);
-
-    //TODO: mapSignal for images
-
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    formLayout->addRow(toolButtonImageX, lineEditImageX);
-    formLayout->addRow(toolButtonImageY, lineEditImageY);
-    formLayout->addRow(toolButtonImageWidth, lineEditImageWidth);
-    formLayout->addRow(toolButtonImageHeight, lineEditImageHeight);
+    create_editor(formLayout, "blank", "Position X", "double", "ImagePositionX", OBJ_TYPE_IMAGE);
+    create_editor(formLayout, "blank", "Position Y", "double", "ImagePositionY", OBJ_TYPE_IMAGE);
+    create_editor(formLayout, "blank", "Width", "double", "ImageWidth", OBJ_TYPE_IMAGE);
+    create_editor(formLayout, "blank", "Height", "double", "ImageHeight", OBJ_TYPE_IMAGE);
     groupBoxGeometryImage->setLayout(formLayout);
 
     return groupBoxGeometryImage;
@@ -1411,15 +1222,9 @@ createGroupBoxMiscImage()
 {
     groupBoxMiscImage = new QGroupBox(translate("Misc"), dockPropEdit);
 
-    QToolButton *toolButtonImageName = createToolButton("blank", translate("Name"));
-    QToolButton *toolButtonImagePath = createToolButton("blank", translate("Path"));
-
-    lineEditImageName = createLineEdit("double", true);
-    lineEditImagePath = createLineEdit("double", true);
-
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    formLayout->addRow(toolButtonImageName, lineEditImageName);
-    formLayout->addRow(toolButtonImagePath, lineEditImagePath);
+    create_editor(formLayout, "blank", "Name", "double", "", OBJ_TYPE_IMAGE);
+    create_editor(formLayout, "blank", "Path", "double", "", OBJ_TYPE_IMAGE);
     groupBoxMiscImage->setLayout(formLayout);
 
     return groupBoxMiscImage;
@@ -1431,29 +1236,13 @@ createGroupBoxGeometryInfiniteLine()
 {
     groupBoxGeometryInfiniteLine = new QGroupBox(translate("Geometry"), dockPropEdit);
 
-    QToolButton *toolButtonInfiniteLineX1 = createToolButton("blank", translate("Start X"));
-    QToolButton *toolButtonInfiniteLineY1 = createToolButton("blank", translate("Start Y"));
-    QToolButton *toolButtonInfiniteLineX2 = createToolButton("blank", translate("2nd X"));
-    QToolButton *toolButtonInfiniteLineY2 = createToolButton("blank", translate("2nd Y"));
-    QToolButton *toolButtonInfiniteLineVectorX = createToolButton("blank", translate("Vector X"));
-    QToolButton *toolButtonInfiniteLineVectorY = createToolButton("blank", translate("Vector Y"));
-
-    lineEditInfiniteLineX1 = createLineEdit("double", false);
-    lineEditInfiniteLineY1 = createLineEdit("double", false);
-    lineEditInfiniteLineX2 = createLineEdit("double", false);
-    lineEditInfiniteLineY2 = createLineEdit("double", false);
-    lineEditInfiniteLineVectorX = createLineEdit("double", true);
-    lineEditInfiniteLineVectorY = createLineEdit("double", true);
-
-    //TODO: mapSignal for infinite lines
-
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    formLayout->addRow(toolButtonInfiniteLineX1, lineEditInfiniteLineX1);
-    formLayout->addRow(toolButtonInfiniteLineY1, lineEditInfiniteLineY1);
-    formLayout->addRow(toolButtonInfiniteLineX2, lineEditInfiniteLineX2);
-    formLayout->addRow(toolButtonInfiniteLineY2, lineEditInfiniteLineY2);
-    formLayout->addRow(toolButtonInfiniteLineVectorX, lineEditInfiniteLineVectorX);
-    formLayout->addRow(toolButtonInfiniteLineVectorY, lineEditInfiniteLineVectorY);
+    create_editor(formLayout, "blank", "Start X", "double", "InfiniteLineX1", OBJ_TYPE_INFINITELINE);
+    create_editor(formLayout, "blank", "Start Y", "double", "InfiniteLineY1", OBJ_TYPE_INFINITELINE);
+    create_editor(formLayout, "blank", "2nd X", "double", "InfiniteLineX2", OBJ_TYPE_INFINITELINE);
+    create_editor(formLayout, "blank", "2nd Y", "double", "InfiniteLineY2", OBJ_TYPE_INFINITELINE);
+    create_editor(formLayout, "blank", "Vector X", "double", "InfiniteLineVectorX", OBJ_TYPE_INFINITELINE);
+    create_editor(formLayout, "blank", "Vector Y", "double", "InfiniteLineVectorY", OBJ_TYPE_INFINITELINE);
     groupBoxGeometryInfiniteLine->setLayout(formLayout);
 
     return groupBoxGeometryInfiniteLine;
@@ -1465,38 +1254,15 @@ createGroupBoxGeometryLine(void)
 {
     groupBoxGeometryLine = new QGroupBox(translate("Geometry"), dockPropEdit);
 
-    QToolButton *toolButtonLineStartX = createToolButton("blank", translate("Start X"));
-    QToolButton *toolButtonLineStartY = createToolButton("blank", translate("Start Y"));
-    QToolButton *toolButtonLineEndX = createToolButton("blank", translate("End X"));
-    QToolButton *toolButtonLineEndY = createToolButton("blank", translate("End Y"));
-    QToolButton *toolButtonLineDeltaX = createToolButton("blank", translate("Delta X"));
-    QToolButton *toolButtonLineDeltaY = createToolButton("blank", translate("Delta Y"));
-    QToolButton *toolButtonLineAngle = createToolButton("blank", translate("Angle"));
-    QToolButton *toolButtonLineLength = createToolButton("blank", translate("Length"));
-
-    lineEditLineStartX = createLineEdit("double", false);
-    lineEditLineStartY = createLineEdit("double", false);
-    lineEditLineEndX = createLineEdit("double", false);
-    lineEditLineEndY = createLineEdit("double", false);
-    lineEditLineDeltaX = createLineEdit("double", true);
-    lineEditLineDeltaY = createLineEdit("double", true);
-    lineEditLineAngle = createLineEdit("double", true);
-    lineEditLineLength = createLineEdit("double", true);
-
-    mapSignal(lineEditLineStartX, "lineEditLineStartX", OBJ_TYPE_LINE);
-    mapSignal(lineEditLineStartY, "lineEditLineStartY", OBJ_TYPE_LINE);
-    mapSignal(lineEditLineEndX, "lineEditLineEndX", OBJ_TYPE_LINE);
-    mapSignal(lineEditLineEndY, "lineEditLineEndY", OBJ_TYPE_LINE);
-
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    formLayout->addRow(toolButtonLineStartX, lineEditLineStartX);
-    formLayout->addRow(toolButtonLineStartY, lineEditLineStartY);
-    formLayout->addRow(toolButtonLineEndX, lineEditLineEndX);
-    formLayout->addRow(toolButtonLineEndY, lineEditLineEndY);
-    formLayout->addRow(toolButtonLineDeltaX, lineEditLineDeltaX);
-    formLayout->addRow(toolButtonLineDeltaY, lineEditLineDeltaY);
-    formLayout->addRow(toolButtonLineAngle, lineEditLineAngle);
-    formLayout->addRow(toolButtonLineLength, lineEditLineLength);
+    create_editor(formLayout, "blank", "Start X", "double", "LineStartX", OBJ_TYPE_LINE);
+    create_editor(formLayout, "blank", "Start Y", "double", "LineStartY", OBJ_TYPE_LINE);
+    create_editor(formLayout, "blank", "End X", "double", "LineEndX", OBJ_TYPE_LINE);
+    create_editor(formLayout, "blank", "End Y", "double", "LineEndY", OBJ_TYPE_LINE);
+    create_editor(formLayout, "blank", "Delta X", "double", "", OBJ_TYPE_LINE);
+    create_editor(formLayout, "blank", "Delta Y", "double", "", OBJ_TYPE_LINE);
+    create_editor(formLayout, "blank", "Angle", "double", "", OBJ_TYPE_LINE);
+    create_editor(formLayout, "blank", "Length", "double", "", OBJ_TYPE_LINE);
     groupBoxGeometryLine->setLayout(formLayout);
 
     return groupBoxGeometryLine;
@@ -1508,26 +1274,12 @@ createGroupBoxGeometryPath(void)
 {
     groupBoxGeometryPath = new QGroupBox(translate("Geometry"), dockPropEdit);
 
-    QToolButton *toolButtonPathVertexNum = createToolButton("blank", translate("Vertex #"));
-    QToolButton *toolButtonPathVertexX = createToolButton("blank", translate("Vertex X"));
-    QToolButton *toolButtonPathVertexY = createToolButton("blank", translate("Vertex Y"));
-    QToolButton *toolButtonPathArea = createToolButton("blank", translate("Area"));
-    QToolButton *toolButtonPathLength = createToolButton("blank", translate("Length"));
-
-    comboBoxPathVertexNum = createComboBox(false);
-    lineEditPathVertexX = createLineEdit("double", false);
-    lineEditPathVertexY = createLineEdit("double", false);
-    lineEditPathArea = createLineEdit("double", true);
-    lineEditPathLength = createLineEdit("double", true);
-
-    //TODO: mapSignal for paths
-
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    formLayout->addRow(toolButtonPathVertexNum, comboBoxPathVertexNum);
-    formLayout->addRow(toolButtonPathVertexX, lineEditPathVertexX);
-    formLayout->addRow(toolButtonPathVertexY, lineEditPathVertexY);
-    formLayout->addRow(toolButtonPathArea, lineEditPathArea);
-    formLayout->addRow(toolButtonPathLength, lineEditPathLength);
+    create_editor(formLayout, "blank", "Vertex #", "combobox", "PathVertexNumber", OBJ_TYPE_PATH);
+    create_editor(formLayout, "blank", "Vertex X", "double", "PathVertexX", OBJ_TYPE_PATH);
+    create_editor(formLayout, "blank", "Vertex Y", "double", "PathVertexY", OBJ_TYPE_PATH);
+    create_editor(formLayout, "blank", "Area", "double", "", OBJ_TYPE_PATH);
+    create_editor(formLayout, "blank", "Length", "double", "", OBJ_TYPE_PATH);
     groupBoxGeometryPath->setLayout(formLayout);
 
     return groupBoxGeometryPath;
@@ -1539,14 +1291,8 @@ createGroupBoxMiscPath(void)
 {
     groupBoxMiscPath = new QGroupBox(translate("Misc"), dockPropEdit);
 
-    QToolButton *toolButtonPathClosed = createToolButton("blank", translate("Closed")); //TODO: use proper icon
-
-    comboBoxPathClosed = createComboBox(false);
-
-    //TODO: mapSignal for paths
-
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    formLayout->addRow(toolButtonPathClosed, comboBoxPathClosed);
+    create_editor(formLayout, "blank", "Closed", "combobox", "PathClosed", OBJ_TYPE_PATH);
     groupBoxMiscPath->setLayout(formLayout);
 
     return groupBoxMiscPath;
@@ -1558,18 +1304,9 @@ createGroupBoxGeometryPoint(void)
 {
     groupBoxGeometryPoint = new QGroupBox(translate("Geometry"), dockPropEdit);
 
-    QToolButton *toolButtonPointX = createToolButton("blank", translate("Position X")); //TODO: use proper icon
-    QToolButton *toolButtonPointY = createToolButton("blank", translate("Position Y")); //TODO: use proper icon
-
-    lineEditPointX = createLineEdit("double", false);
-    lineEditPointY = createLineEdit("double", false);
-
-    mapSignal(lineEditPointX, "lineEditPointX", OBJ_TYPE_POINT);
-    mapSignal(lineEditPointY, "lineEditPointY", OBJ_TYPE_POINT);
-
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    formLayout->addRow(toolButtonPointX, lineEditPointX);
-    formLayout->addRow(toolButtonPointY, lineEditPointY);
+    create_editor(formLayout, "blank", "Position X", "double", "PointX", OBJ_TYPE_POINT);
+    create_editor(formLayout, "blank", "Position Y", "double", "PointY", OBJ_TYPE_POINT);
     groupBoxGeometryPoint->setLayout(formLayout);
 
     return groupBoxGeometryPoint;
@@ -1581,32 +1318,14 @@ createGroupBoxGeometryPolygon(void)
 {
     groupBoxGeometryPolygon = new QGroupBox(translate("Geometry"), dockPropEdit);
 
-    QToolButton *toolButtonPolygonCenterX = createToolButton("blank", translate("Center X"));        //TODO: use proper icon
-    QToolButton *toolButtonPolygonCenterY = createToolButton("blank", translate("Center Y"));        //TODO: use proper icon
-    QToolButton *toolButtonPolygonRadiusVertex = createToolButton("blank", translate("Vertex Radius"));   //TODO: use proper icon
-    QToolButton *toolButtonPolygonRadiusSide = createToolButton("blank", translate("Side Radius"));     //TODO: use proper icon
-    QToolButton *toolButtonPolygonDiameterVertex = createToolButton("blank", translate("Vertex Diameter")); //TODO: use proper icon
-    QToolButton *toolButtonPolygonDiameterSide = createToolButton("blank", translate("Side Diameter"));   //TODO: use proper icon
-    QToolButton *toolButtonPolygonInteriorAngle = createToolButton("blank", translate("Interior Angle"));  //TODO: use proper icon
-
-    lineEditPolygonCenterX = createLineEdit("double", false);
-    lineEditPolygonCenterY = createLineEdit("double", false);
-    lineEditPolygonRadiusVertex = createLineEdit("double", false);
-    lineEditPolygonRadiusSide = createLineEdit("double", false);
-    lineEditPolygonDiameterVertex = createLineEdit("double", false);
-    lineEditPolygonDiameterSide = createLineEdit("double", false);
-    lineEditPolygonInteriorAngle = createLineEdit("double", true);
-
-    //TODO: mapSignal for polygons
-
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    formLayout->addRow(toolButtonPolygonCenterX, lineEditPolygonCenterX);
-    formLayout->addRow(toolButtonPolygonCenterY, lineEditPolygonCenterY);
-    formLayout->addRow(toolButtonPolygonRadiusVertex, lineEditPolygonRadiusVertex);
-    formLayout->addRow(toolButtonPolygonRadiusSide, lineEditPolygonRadiusSide);
-    formLayout->addRow(toolButtonPolygonDiameterVertex, lineEditPolygonDiameterVertex);
-    formLayout->addRow(toolButtonPolygonDiameterSide, lineEditPolygonDiameterSide);
-    formLayout->addRow(toolButtonPolygonInteriorAngle, lineEditPolygonInteriorAngle);
+    create_editor(formLayout, "blank", "Center X", "double", "PolygonCenterX", OBJ_TYPE_POLYGON);
+    create_editor(formLayout, "blank", "Center Y", "double", "PolygonCenterY", OBJ_TYPE_POLYGON);
+    create_editor(formLayout, "blank", "Vertex Radius", "double", "PolygonVertexRadius", OBJ_TYPE_POLYGON);
+    create_editor(formLayout, "blank", "Side Radius", "double", "PolygonSideRadius", OBJ_TYPE_POLYGON);
+    create_editor(formLayout, "blank", "Vertex Diameter", "double", "PolygonVertexDiameter", OBJ_TYPE_POLYGON);
+    create_editor(formLayout, "blank", "Side Diameter", "double", "PolygonSideDiameter", OBJ_TYPE_POLYGON);
+    create_editor(formLayout, "blank", "Interior Angle", "double", "", OBJ_TYPE_POLYGON);
     groupBoxGeometryPolygon->setLayout(formLayout);
 
     return groupBoxGeometryPolygon;
@@ -1618,26 +1337,12 @@ createGroupBoxGeometryPolyline(void)
 {
     groupBoxGeometryPolyline = new QGroupBox(translate("Geometry"), dockPropEdit);
 
-    QToolButton *toolButtonPolylineVertexNum = createToolButton("blank", translate("Vertex #")); //TODO: use proper icon
-    QToolButton *toolButtonPolylineVertexX = createToolButton("blank", translate("Vertex X")); //TODO: use proper icon
-    QToolButton *toolButtonPolylineVertexY = createToolButton("blank", translate("Vertex Y")); //TODO: use proper icon
-    QToolButton *toolButtonPolylineArea = createToolButton("blank", translate("Area"));     //TODO: use proper icon
-    QToolButton *toolButtonPolylineLength = createToolButton("blank", translate("Length"));   //TODO: use proper icon
-
-    comboBoxPolylineVertexNum = createComboBox(false);
-    lineEditPolylineVertexX = createLineEdit("double", false);
-    lineEditPolylineVertexY = createLineEdit("double", false);
-    lineEditPolylineArea = createLineEdit("double", true);
-    lineEditPolylineLength = createLineEdit("double", true);
-
-    //TODO: mapSignal for polylines
-
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    formLayout->addRow(toolButtonPolylineVertexNum, comboBoxPolylineVertexNum);
-    formLayout->addRow(toolButtonPolylineVertexX, lineEditPolylineVertexX);
-    formLayout->addRow(toolButtonPolylineVertexY, lineEditPolylineVertexY);
-    formLayout->addRow(toolButtonPolylineArea, lineEditPolylineArea);
-    formLayout->addRow(toolButtonPolylineLength, lineEditPolylineLength);
+    create_editor(formLayout, "blank", "Vertex #", "combobox", "PolylineVertexNum", OBJ_TYPE_POLYLINE);
+    create_editor(formLayout, "blank", "Vertex X", "double", "PolylineVertexX", OBJ_TYPE_POLYLINE);
+    create_editor(formLayout, "blank", "Vertex Y", "double", "PolylineVertexX", OBJ_TYPE_POLYLINE);
+    create_editor(formLayout, "blank", "Area", "double", "", OBJ_TYPE_POLYLINE);
+    create_editor(formLayout, "blank", "Length", "double", "", OBJ_TYPE_POLYLINE);
     groupBoxGeometryPolyline->setLayout(formLayout);
 
     return groupBoxGeometryPolyline;
@@ -1649,14 +1354,8 @@ createGroupBoxMiscPolyline(void)
 {
     groupBoxMiscPolyline = new QGroupBox(translate("Misc"), dockPropEdit);
 
-    QToolButton *toolButtonPolylineClosed = createToolButton("blank", translate("Closed")); //TODO: use proper icon
-
-    comboBoxPolylineClosed = createComboBox(false);
-
-    //TODO: mapSignal for polylines
-
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    formLayout->addRow(toolButtonPolylineClosed, comboBoxPolylineClosed);
+    create_editor(formLayout, "blank", "Closed", "combobox", "PolylineClosed", OBJ_TYPE_POLYLINE);
     groupBoxMiscPolyline->setLayout(formLayout);
 
     return groupBoxMiscPolyline;
@@ -1668,29 +1367,13 @@ createGroupBoxGeometryRay(void)
 {
     groupBoxGeometryRay = new QGroupBox(translate("Geometry"), dockPropEdit);
 
-    QToolButton *toolButtonRayX1 = createToolButton("blank", translate("Start X"));  //TODO: use proper icon
-    QToolButton *toolButtonRayY1 = createToolButton("blank", translate("Start Y"));  //TODO: use proper icon
-    QToolButton *toolButtonRayX2 = createToolButton("blank", translate("2nd X"));    //TODO: use proper icon
-    QToolButton *toolButtonRayY2 = createToolButton("blank", translate("2nd Y"));    //TODO: use proper icon
-    QToolButton *toolButtonRayVectorX = createToolButton("blank", translate("Vector X")); //TODO: use proper icon
-    QToolButton *toolButtonRayVectorY = createToolButton("blank", translate("Vector Y")); //TODO: use proper icon
-
-    lineEditRayX1 = createLineEdit("double", false);
-    lineEditRayY1 = createLineEdit("double", false);
-    lineEditRayX2 = createLineEdit("double", false);
-    lineEditRayY2 = createLineEdit("double", false);
-    lineEditRayVectorX = createLineEdit("double", true);
-    lineEditRayVectorY = createLineEdit("double", true);
-
-    //TODO: mapSignal for rays
-
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    formLayout->addRow(toolButtonRayX1, lineEditRayX1);
-    formLayout->addRow(toolButtonRayY1, lineEditRayY1);
-    formLayout->addRow(toolButtonRayX2, lineEditRayX2);
-    formLayout->addRow(toolButtonRayY2, lineEditRayY2);
-    formLayout->addRow(toolButtonRayVectorX, lineEditRayVectorX);
-    formLayout->addRow(toolButtonRayVectorY, lineEditRayVectorY);
+    create_editor(formLayout, "blank", "Start X", "double", "RayStartX", OBJ_TYPE_RAY);
+    create_editor(formLayout, "blank", "Start Y", "double", "RayStartY", OBJ_TYPE_RAY);
+    create_editor(formLayout, "blank", "2nd X", "double", "RayEndX", OBJ_TYPE_RAY);
+    create_editor(formLayout, "blank", "2nd Y", "double", "RayEndY", OBJ_TYPE_RAY);
+    create_editor(formLayout, "blank", "Vector X", "double", "", OBJ_TYPE_RAY);
+    create_editor(formLayout, "blank", "Vector Y", "double", "", OBJ_TYPE_RAY);
     groupBoxGeometryRay->setLayout(formLayout);
 
     return groupBoxGeometryRay;
@@ -1702,53 +1385,18 @@ createGroupBoxGeometryRectangle()
 {
     groupBoxGeometryRectangle = new QGroupBox(translate("Geometry"), dockPropEdit);
 
-    QToolButton *toolButtonRectangleCorner1X = createToolButton("blank", translate("Corner 1 X"));
-    QToolButton *toolButtonRectangleCorner1Y = createToolButton("blank", translate("Corner 1 Y"));
-    QToolButton *toolButtonRectangleCorner2X = createToolButton("blank", translate("Corner 2 X"));
-    QToolButton *toolButtonRectangleCorner2Y = createToolButton("blank", translate("Corner 2 Y"));
-    QToolButton *toolButtonRectangleCorner3X = createToolButton("blank", translate("Corner 3 X"));
-    QToolButton *toolButtonRectangleCorner3Y = createToolButton("blank", translate("Corner 3 Y"));
-    QToolButton *toolButtonRectangleCorner4X = createToolButton("blank", translate("Corner 4 X"));
-    QToolButton *toolButtonRectangleCorner4Y = createToolButton("blank", translate("Corner 4 Y"));
-    QToolButton *toolButtonRectangleWidth = createToolButton("blank", translate("Width"));
-    QToolButton *toolButtonRectangleHeight = createToolButton("blank", translate("Height"));
-    QToolButton *toolButtonRectangleArea = createToolButton("blank", translate("Area"));
-
-    lineEditRectangleCorner1X = createLineEdit("double", false);
-    lineEditRectangleCorner1Y = createLineEdit("double", false);
-    lineEditRectangleCorner2X = createLineEdit("double", false);
-    lineEditRectangleCorner2Y = createLineEdit("double", false);
-    lineEditRectangleCorner3X = createLineEdit("double", false);
-    lineEditRectangleCorner3Y = createLineEdit("double", false);
-    lineEditRectangleCorner4X = createLineEdit("double", false);
-    lineEditRectangleCorner4Y = createLineEdit("double", false);
-    lineEditRectangleWidth = createLineEdit("double", false);
-    lineEditRectangleHeight = createLineEdit("double", false);
-    lineEditRectangleArea = createLineEdit("double", true);
-
-    mapSignal(lineEditRectangleCorner1X, "lineEditRectangleCorner1X", OBJ_TYPE_RECTANGLE);
-    mapSignal(lineEditRectangleCorner1Y, "lineEditRectangleCorner1Y", OBJ_TYPE_RECTANGLE);
-    mapSignal(lineEditRectangleCorner2X, "lineEditRectangleCorner2X", OBJ_TYPE_RECTANGLE);
-    mapSignal(lineEditRectangleCorner2Y, "lineEditRectangleCorner2Y", OBJ_TYPE_RECTANGLE);
-    mapSignal(lineEditRectangleCorner3X, "lineEditRectangleCorner3X", OBJ_TYPE_RECTANGLE);
-    mapSignal(lineEditRectangleCorner3Y, "lineEditRectangleCorner3Y", OBJ_TYPE_RECTANGLE);
-    mapSignal(lineEditRectangleCorner4X, "lineEditRectangleCorner4X", OBJ_TYPE_RECTANGLE);
-    mapSignal(lineEditRectangleCorner4Y, "lineEditRectangleCorner4Y", OBJ_TYPE_RECTANGLE);
-    mapSignal(lineEditRectangleWidth, "lineEditRectangleWidth", OBJ_TYPE_RECTANGLE);
-    mapSignal(lineEditRectangleHeight, "lineEditRectangleHeight", OBJ_TYPE_RECTANGLE);
-
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    formLayout->addRow(toolButtonRectangleCorner1X, lineEditRectangleCorner1X);
-    formLayout->addRow(toolButtonRectangleCorner1Y, lineEditRectangleCorner1Y);
-    formLayout->addRow(toolButtonRectangleCorner2X, lineEditRectangleCorner2X);
-    formLayout->addRow(toolButtonRectangleCorner2Y, lineEditRectangleCorner2Y);
-    formLayout->addRow(toolButtonRectangleCorner3X, lineEditRectangleCorner3X);
-    formLayout->addRow(toolButtonRectangleCorner3Y, lineEditRectangleCorner3Y);
-    formLayout->addRow(toolButtonRectangleCorner4X, lineEditRectangleCorner4X);
-    formLayout->addRow(toolButtonRectangleCorner4Y, lineEditRectangleCorner4Y);
-    formLayout->addRow(toolButtonRectangleWidth, lineEditRectangleWidth);
-    formLayout->addRow(toolButtonRectangleHeight, lineEditRectangleHeight);
-    formLayout->addRow(toolButtonRectangleArea, lineEditRectangleArea);
+    create_editor(formLayout, "blank", "Corner 1 X", "double", "RectangleCorner1X", OBJ_TYPE_RECTANGLE);
+    create_editor(formLayout, "blank", "Corner 1 Y", "double", "RectangleCorner1Y", OBJ_TYPE_RECTANGLE);
+    create_editor(formLayout, "blank", "Corner 2 X", "double", "RectangleCorner2X", OBJ_TYPE_RECTANGLE);
+    create_editor(formLayout, "blank", "Corner 2 Y", "double", "RectangleCorner2Y", OBJ_TYPE_RECTANGLE);
+    create_editor(formLayout, "blank", "Corner 3 X", "double", "RectangleCorner3X", OBJ_TYPE_RECTANGLE);
+    create_editor(formLayout, "blank", "Corner 3 Y", "double", "RectangleCorner3Y", OBJ_TYPE_RECTANGLE);
+    create_editor(formLayout, "blank", "Corner 4 X", "double", "RectangleCorner4X", OBJ_TYPE_RECTANGLE);
+    create_editor(formLayout, "blank", "Corner 4 Y", "double", "RectangleCorner4Y", OBJ_TYPE_RECTANGLE);
+    create_editor(formLayout, "blank", "Width", "double", "RectangleWidth", OBJ_TYPE_RECTANGLE);
+    create_editor(formLayout, "blank", "Height", "double", "RectangleHeight", OBJ_TYPE_RECTANGLE); 
+    create_editor(formLayout, "blank", "Area", "double", "", OBJ_TYPE_RECTANGLE);
     groupBoxGeometryRectangle->setLayout(formLayout);
 
     return groupBoxGeometryRectangle;
@@ -1760,17 +1408,9 @@ createGroupBoxGeometryTextMulti()
 {
     groupBoxGeometryTextMulti = new QGroupBox(translate("Geometry"), dockPropEdit);
 
-    QToolButton *toolButtonTextMultiX = createToolButton("blank", translate("Position X"));
-    QToolButton *toolButtonTextMultiY = createToolButton("blank", translate("Position Y"));
-
-    lineEditTextMultiX = createLineEdit("double", false);
-    lineEditTextMultiY = createLineEdit("double", false);
-
-    //TODO: mapSignal for multiline text
-
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    formLayout->addRow(toolButtonTextMultiX, lineEditTextMultiX);
-    formLayout->addRow(toolButtonTextMultiY, lineEditTextMultiY);
+    create_editor(formLayout, "blank", "Position X", "double", "TextPositionX", OBJ_TYPE_TEXTMULTI);
+    create_editor(formLayout, "blank", "Position Y", "double", "TextPositionX", OBJ_TYPE_TEXTMULTI);
     groupBoxGeometryTextMulti->setLayout(formLayout);
 
     return groupBoxGeometryTextMulti;
@@ -1782,30 +1422,19 @@ createGroupBoxTextTextSingle(void)
 {
     groupBoxTextTextSingle = new QGroupBox(translate("Text"), dockPropEdit);
 
-    QToolButton* toolButtonTextSingleContents = createToolButton("blank", translate("Contents"));
     QToolButton* toolButtonTextSingleFont = createToolButton("blank", translate("Font"));
-    QToolButton* toolButtonTextSingleJustify = createToolButton("blank", translate("Justify"));
-    QToolButton* toolButtonTextSingleHeight = createToolButton("blank", translate("Height"));
-    QToolButton* toolButtonTextSingleRotation = createToolButton("blank", translate("Rotation"));
 
-    lineEditTextSingleContents = createLineEdit("string", false);
-    comboBoxTextSingleFont = createFontComboBox(false);
-    comboBoxTextSingleJustify = createComboBox(false);
-    lineEditTextSingleHeight = createLineEdit("double", false);
-    lineEditTextSingleRotation = createLineEdit("double", false);
+    comboBoxTextSingleFont = new QFontComboBox(dockPropEdit);
+    comboBoxTextSingleFont->setDisabled(false);
 
-    mapSignal(lineEditTextSingleContents, "lineEditTextSingleContents", OBJ_TYPE_TEXTSINGLE);
     mapSignal(comboBoxTextSingleFont, "comboBoxTextSingleFont", OBJ_TYPE_TEXTSINGLE);
-    mapSignal(comboBoxTextSingleJustify, "comboBoxTextSingleJustify", OBJ_TYPE_TEXTSINGLE);
-    mapSignal(lineEditTextSingleHeight, "lineEditTextSingleHeight", OBJ_TYPE_TEXTSINGLE);
-    mapSignal(lineEditTextSingleRotation, "lineEditTextSingleRotation", OBJ_TYPE_TEXTSINGLE);
 
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    formLayout->addRow(toolButtonTextSingleContents, lineEditTextSingleContents);
+    create_editor(formLayout, "blank", "Contents", "string", "TextContents", OBJ_TYPE_TEXTSINGLE);
     formLayout->addRow(toolButtonTextSingleFont, comboBoxTextSingleFont);
-    formLayout->addRow(toolButtonTextSingleJustify, comboBoxTextSingleJustify);
-    formLayout->addRow(toolButtonTextSingleHeight, lineEditTextSingleHeight);
-    formLayout->addRow(toolButtonTextSingleRotation, lineEditTextSingleRotation);
+    create_editor(formLayout, "blank", "Justify", "combobox", "TextJustify", OBJ_TYPE_TEXTSINGLE);
+    create_editor(formLayout, "blank", "Height", "double", "TextHeight", OBJ_TYPE_TEXTSINGLE);
+    create_editor(formLayout, "blank", "Rotation", "double", "TextRotation", OBJ_TYPE_TEXTSINGLE);
     groupBoxTextTextSingle->setLayout(formLayout);
 
     return groupBoxTextTextSingle;
@@ -1817,18 +1446,9 @@ createGroupBoxGeometryTextSingle(void)
 {
     groupBoxGeometryTextSingle = new QGroupBox(translate("Geometry"), dockPropEdit);
 
-    QToolButton *toolButtonTextSingleX = createToolButton("blank", translate("Position X"));
-    QToolButton *toolButtonTextSingleY = createToolButton("blank", translate("Position Y"));
-
-    lineEditTextSingleX = createLineEdit("double", false);
-    lineEditTextSingleY = createLineEdit("double", false);
-
-    mapSignal(lineEditTextSingleX, "lineEditTextSingleX", OBJ_TYPE_TEXTSINGLE);
-    mapSignal(lineEditTextSingleY, "lineEditTextSingleY", OBJ_TYPE_TEXTSINGLE);
-
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    formLayout->addRow(toolButtonTextSingleX, lineEditTextSingleX);
-    formLayout->addRow(toolButtonTextSingleY, lineEditTextSingleY);
+    create_editor(formLayout, "blank", "Position X", "double", "TextSingleX", OBJ_TYPE_TEXTSINGLE);
+    create_editor(formLayout, "blank", "Position Y", "double", "TextSingleY", OBJ_TYPE_TEXTSINGLE);
     groupBoxGeometryTextSingle->setLayout(formLayout);
 
     return groupBoxGeometryTextSingle;
@@ -1840,18 +1460,9 @@ createGroupBoxMiscTextSingle(void)
 {
     groupBoxMiscTextSingle = new QGroupBox(translate("Misc"), dockPropEdit);
 
-    QToolButton *toolButtonTextSingleBackward = createToolButton("blank", translate("Backward"));
-    QToolButton *toolButtonTextSingleUpsideDown = createToolButton("blank", translate("UpsideDown"));
-
-    comboBoxTextSingleBackward = createComboBox(false);
-    comboBoxTextSingleUpsideDown = createComboBox(false);
-
-    mapSignal(comboBoxTextSingleBackward, "comboBoxTextSingleBackward", OBJ_TYPE_TEXTSINGLE);
-    mapSignal(comboBoxTextSingleUpsideDown, "comboBoxTextSingleUpsideDown", OBJ_TYPE_TEXTSINGLE);
-
     QFormLayout* formLayout = new QFormLayout(dockPropEdit);
-    formLayout->addRow(toolButtonTextSingleBackward, comboBoxTextSingleBackward);
-    formLayout->addRow(toolButtonTextSingleUpsideDown, comboBoxTextSingleUpsideDown);
+    create_editor(formLayout, "blank", "Backward", "combobox", "TextSingleBackward", OBJ_TYPE_POLYLINE);
+    create_editor(formLayout, "blank", "Upside Down", "combobox", "TextSingleUpsideDown", OBJ_TYPE_POLYLINE);
     groupBoxMiscTextSingle->setLayout(formLayout);
 
     return groupBoxMiscTextSingle;
@@ -1868,39 +1479,6 @@ createToolButton(const QString& iconName, const QString& txt)
     tb->setToolButtonStyle(propertyEditorButtonStyle);
     tb->setStyleSheet("border:none;");
     return tb;
-}
-
-/* . */
-QLineEdit*
-createLineEdit(const QString& validatorType, bool readOnly)
-{
-    QLineEdit* le = new QLineEdit(dockPropEdit);
-    if (validatorType == "int") {
-       le->setValidator(new QIntValidator(le));
-    }
-    else if (validatorType == "double") {
-        le->setValidator(new QDoubleValidator(le));
-    }
-    le->setReadOnly(readOnly);
-    return le;
-}
-
-/* . */
-QComboBox*
-createComboBox(bool disable)
-{
-    QComboBox* cb = new QComboBox(dockPropEdit);
-    cb->setDisabled(disable);
-    return cb;
-}
-
-/* . */
-QFontComboBox*
-createFontComboBox(bool disable)
-{
-    QFontComboBox* fcb = new QFontComboBox(dockPropEdit);
-    fcb->setDisabled(disable);
-    return fcb;
 }
 
 /* . */
@@ -1948,7 +1526,7 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
             if (objName == "lineEditArcCenterX") {
                 QPointF arc = tempObj->objectCenter();
                 EmbVector center;
-                center.x = lineEditArcCenterX->text().toDouble();
+                center.x = line_edits["ArcCenterX"]->text().toDouble();
                 center.y = arc.y();
                 tempObj->setObjectCenter(center);
             }
@@ -1956,17 +1534,17 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
                 QPointF arc = tempObj->objectCenter();
                 EmbVector center;
                 center.x = arc.x();
-                center.y = -lineEditArcCenterY->text().toDouble();
+                center.y = -line_edits["ArcCenterY"]->text().toDouble();
                 tempObj->setObjectCenter(center);
             }
             if (objName == "lineEditArcRadius") {
-                set_radius(tempObj->geometry, lineEditArcRadius->text().toDouble());
+                set_radius(tempObj->geometry, line_edits["ArcRadius"]->text().toDouble());
             }
             if (objName == "lineEditArcStartAngle") {
-                set_start_angle(tempObj->geometry, lineEditArcStartAngle->text().toDouble());
+                set_start_angle(tempObj->geometry, line_edits["ArcStartAngle"]->text().toDouble());
             }
             if (objName == "lineEditArcEndAngle") {
-                set_end_angle(tempObj->geometry, lineEditArcEndAngle->text().toDouble());
+                set_end_angle(tempObj->geometry, line_edits["ArcEndAngle"]->text().toDouble());
             }
             break;
         }
@@ -1980,22 +1558,22 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
                 break;
             }
             if (objName == "lineEditCircleCenterX") {
-                tempObj->setObjectCenterX(lineEditCircleCenterX->text().toDouble());
+                tempObj->setObjectCenterX(line_edits["CircleCenterX"]->text().toDouble());
             }
             if (objName == "lineEditCircleCenterY") {
-                tempObj->setObjectCenterY(-lineEditCircleCenterY->text().toDouble());
+                tempObj->setObjectCenterY(-line_edits["CircleCenterY"]->text().toDouble());
             }
             if (objName == "lineEditCircleRadius") {
-                set_radius(tempObj->geometry, lineEditCircleRadius->text().toDouble());
+                set_radius(tempObj->geometry, line_edits["CircleRadius"]->text().toDouble());
             }
             if (objName == "lineEditCircleDiameter") {
-                set_diameter(tempObj->geometry, lineEditCircleDiameter->text().toDouble());
+                set_diameter(tempObj->geometry, line_edits["CircleDiameter"]->text().toDouble());
             }
             if (objName == "lineEditCircleArea") {
-                set_area(tempObj->geometry, lineEditCircleArea->text().toDouble());
+                set_area(tempObj->geometry, line_edits["CircleArea"]->text().toDouble());
             }
             if (objName == "lineEditCircleCircumference") {
-                set_circumference(tempObj->geometry, lineEditCircleCircumference->text().toDouble());
+                set_circumference(tempObj->geometry, line_edits["CircleCircumference"]->text().toDouble());
             }
             break;
         }
@@ -2037,22 +1615,22 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
                 break;
             }
             if (objName == "lineEditEllipseCenterX") {
-                tempObj->setObjectCenterX(lineEditEllipseCenterX->text().toDouble());
+                tempObj->setObjectCenterX(line_edits["EllipseCenterX"]->text().toDouble());
             }
             if (objName == "lineEditEllipseCenterY") {
-                tempObj->setObjectCenterY(-lineEditEllipseCenterY->text().toDouble());
+                tempObj->setObjectCenterY(-line_edits["EllipseCenterY"]->text().toDouble());
             }
             if (objName == "lineEditEllipseRadiusMajor") {
-                set_radius_major(tempObj->geometry, lineEditEllipseRadiusMajor->text().toDouble());
+                set_radius_major(tempObj->geometry, line_edits["EllipseRadiusMajor"]->text().toDouble());
             }
             if (objName == "lineEditEllipseRadiusMinor") {
-                set_radius_minor(tempObj->geometry, lineEditEllipseRadiusMinor->text().toDouble());
+                set_radius_minor(tempObj->geometry, line_edits["EllipseRadiusMinor"]->text().toDouble());
             }
             if (objName == "lineEditEllipseDiameterMajor") {
-                set_diameter_major(tempObj->geometry, lineEditEllipseDiameterMajor->text().toDouble());
+                set_diameter_major(tempObj->geometry, line_edits["EllipseDiameterMajor"]->text().toDouble());
             }
             if (objName == "lineEditEllipseDiameterMinor") {
-                set_diameter_minor(tempObj->geometry, lineEditEllipseDiameterMinor->text().toDouble());
+                set_diameter_minor(tempObj->geometry, line_edits["EllipseDiameterMinor"]->text().toDouble());
             }
             break;
         }
@@ -2068,16 +1646,16 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
             tempObj = static_cast<Object*>(item);
             if (!tempObj) { 
                 if (objName == "lineEditLineStartX") {
-                    tempObj->setObjectX1(lineEditLineStartX->text().toDouble());
+                    tempObj->setObjectX1(line_edits["LineStartX"]->text().toDouble());
                 }
                 if (objName == "lineEditLineStartY") {
-                    tempObj->setObjectY1(-lineEditLineStartY->text().toDouble());
+                    tempObj->setObjectY1(-line_edits["LineStartY"]->text().toDouble());
                 }
                 if (objName == "lineEditLineEndX") {
-                    tempObj->setObjectX2(lineEditLineEndX->text().toDouble());
+                    tempObj->setObjectX2(line_edits["LineEndX"]->text().toDouble());
                 }
                 if (objName == "lineEditLineEndY") {
-                    tempObj->setObjectY2(-lineEditLineEndY->text().toDouble());
+                    tempObj->setObjectY2(-line_edits["LineEndY"]->text().toDouble());
                 }
             }
             break;
@@ -2090,13 +1668,13 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
             if (objName == "lineEditPointX") {
                 tempObj = static_cast<Object*>(item);
                 if (tempObj) {
-                    tempObj->setObjectX(lineEditPointX->text().toDouble());
+                    tempObj->setObjectX(line_edits["PointX"]->text().toDouble());
                 }
             }
             if (objName == "lineEditPointY") {
                 tempObj = static_cast<Object*>(item);
                 if (tempObj) {
-                    tempObj->setObjectY(-lineEditPointY->text().toDouble());
+                    tempObj->setObjectY(-line_edits["PointY"]->text().toDouble());
                 }
             }
             break;
@@ -2126,7 +1704,7 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
             tempObj = static_cast<Object*>(item);
             if (objName == "lineEditTextSingleContents") {
                 if (tempObj) {
-                    tempObj->setObjectText(lineEditTextSingleContents->text());
+                    tempObj->setObjectText(line_edits["TextSingleContents"]->text());
                 }
             }
             if (objName == "comboBoxTextSingleFont") {
@@ -2138,50 +1716,50 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
                 }
             }
             if (objName == "comboBoxTextSingleJustify") {
-                if (comboBoxTextSingleJustify->currentText() == fieldVariesText) {
+                if (combo_boxes["TextSingleJustify"]->currentText() == fieldVariesText) {
                     break;
                 }
                 if (tempObj) {
-                    int index = comboBoxTextSingleJustify->currentIndex();
+                    int index = combo_boxes["TextSingleJustify"]->currentIndex();
                     tempObj->setObjectTextJustify(
-                        comboBoxTextSingleJustify->itemData(index).toString());
+                        combo_boxes["TextSingleJustify"]->itemData(index).toString());
                 }
             }
             if (objName == "lineEditTextSingleHeight") {
                 if (tempObj) {
-                    double height = lineEditTextSingleHeight->text().toDouble();
+                    double height = line_edits["TextSingleHeight"]->text().toDouble();
                     tempObj->setObjectTextSize(height);
                 }
             }
             if (objName == "lineEditTextSingleRotation") {
                 if (tempObj) {
-                    tempObj->setRotation(-lineEditTextSingleRotation->text().toDouble());
+                    tempObj->setRotation(-line_edits["TextSingleRotation"]->text().toDouble());
                 }
             }
             if (objName == "lineEditTextSingleX") {
                 if (tempObj) {
-                    tempObj->setObjectX(lineEditTextSingleX->text().toDouble());
+                    tempObj->setObjectX(line_edits["TextSingleX"]->text().toDouble());
                 }
             }
             if (objName == "lineEditTextSingleY") {
                 if (tempObj) {
-                    tempObj->setObjectY(lineEditTextSingleY->text().toDouble());
+                    tempObj->setObjectY(line_edits["TextSingleY"]->text().toDouble());
                 }
             }
             if (objName == "comboBoxTextSingleBackward") {
-                if (comboBoxTextSingleBackward->currentText() == fieldVariesText) {
+                if (combo_boxes["TextSingleBackward"]->currentText() == fieldVariesText) {
                     break;
                 }
                 if (tempObj) {
-                    tempObj->setObjectTextBackward(comboBoxTextSingleBackward->itemData(comboBoxTextSingleBackward->currentIndex()).toBool());
+                    tempObj->setObjectTextBackward(combo_boxes["TextSingleBackward"]->itemData(combo_boxes["TextSingleBackward"]->currentIndex()).toBool());
                 }
             }
             if (objName == "comboBoxTextSingleUpsideDown") {
-                if (comboBoxTextSingleUpsideDown->currentText() == fieldVariesText) {
+                if (combo_boxes["TextSingleUpsideDown"]->currentText() == fieldVariesText) {
                     break;
                 }
                 if (tempObj) {
-                    tempObj->setObjectTextUpsideDown(comboBoxTextSingleUpsideDown->itemData(comboBoxTextSingleUpsideDown->currentIndex()).toBool());
+                    tempObj->setObjectTextUpsideDown(combo_boxes["TextSingleUpsideDown"]->itemData(combo_boxes["TextSingleUpsideDown"]->currentIndex()).toBool());
                 }
             }
             break;
