@@ -65,8 +65,10 @@ find_mouse_snap_point(QList<QPointF> snap_points, const QPointF& mouse_point)
 EmbArc
 emb_arc_set_radius(EmbArc arc, EmbReal radius)
 {
+    EmbGeometry geometry;
+    geometry.object.arc = arc;
     radius = EMB_MAX(radius, 0.0000001);
-    EmbVector center = emb_arc_center(arc);
+    EmbVector center = emb_arc_center(geometry);
 
     EmbVector start = emb_vector_subtract(center, arc.start);
     start = emb_vector_scale(start, radius/emb_vector_length(start));

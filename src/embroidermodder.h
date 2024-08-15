@@ -712,7 +712,7 @@ public:
     void setObjectMidPoint(EmbVector point);
     void setObjectEndPoint(EmbVector point);
 
-    void calculateArcData(EmbArc arc);
+    void calculateArcData(void);
 
     void setObjectDiameter(double diameter);
     void setObjectArea(double area);

@@ -414,10 +414,10 @@ View::createGridRect()
 
     QRectF gr(0, 0, grid_size_x.setting, -grid_size_y.setting);
     //Ensure the loop will work correctly with negative numbers
-    double x1 = qMin(gr.left(), gr.right());
-    double y1 = qMin(gr.top(), gr.bottom());
-    double x2 = qMax(gr.left(), gr.right());
-    double y2 = qMax(gr.top(), gr.bottom());
+    double x1 = EMB_MIN(gr.left(), gr.right());
+    double y1 = EMB_MIN(gr.top(), gr.bottom());
+    double x2 = EMB_MAX(gr.left(), gr.right());
+    double y2 = EMB_MAX(gr.top(), gr.bottom());
 
     data.gridPath = QPainterPath();
     data.gridPath.addRect(gr);
@@ -694,11 +694,10 @@ void
 View::drawRect(QPainter* painter, EmbRect rect)
 {
     QPainterPath path;
-    path.moveTo(rect.left, rect.top);
-    path.lineTo(rect.left, rect.bottom);
-    path.lineTo(rect.right, rect.bottom);
-    path.lineTo(rect.right, rect.top);
-    path.lineTo(rect.left, rect.top);
+    path.moveTo(rect.x, rect.y);
+    path.lineTo(rect.x + rect.w, rect.y + rect.h);
+    path.lineTo(rect.x + rect.w, rect.y);
+    path.lineTo(rect.x, rect.y);
     painter->drawPath(path);
 }
 

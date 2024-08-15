@@ -20,7 +20,7 @@ Object::Object(EmbArc arc, QRgb rgb, QGraphicsItem *item)
     init_geometry(EMB_ARC, rgb, Qt::SolidLine);
     geometry->object.arc = arc;
     //TODO: getCurrentLineType
-    calculateArcData(geometry->object.arc);
+    calculateArcData();
     setPos(arc.start.x, arc.start.y);
 }
 
@@ -249,7 +249,7 @@ circle_command(ScriptEnv *context)
     c.radius = 10.0;
     MdiWindow *window = activeMdiWindow();
     if (window) {
-        emb_array_addCircle(window->pattern->geometry, c);
+        emb_array_add_circle(window->pattern->geometry, c);
     }
     // _main->nativeAddCircle(0.0, 0.0, 10.0, true, OBJ_RUBBER_CIRCLE_1P_DIA);
    
@@ -617,11 +617,11 @@ CircleObject::updateRubber(QPainter* painter)
         QPointF sceneTan2Point = objectRubberPoint("CIRCLE_TAN2");
         QPointF sceneTan3Point = objectRubberPoint("CIRCLE_TAN3");
 
-        EmbArc arc;
+        EmbGeometry arc;
         arc.start = to_emb_vector(sceneTan1Point);
         arc.mid = to_emb_vector(sceneTan2Point);
         arc.end = to_emb_vector(sceneTan3Point);
-        EmbVector center = emb_arc_center(arc);
+        EmbVector center = emb_arc_center(*arc);
         setObjectCenter(center);
         double radius = emb_vector_distance(center, to_emb_vector(sceneTan3Point));
         setObjectRadius(radius);
@@ -3401,7 +3401,7 @@ Object::setObjectStartPoint(EmbVector point)
     switch (geometry->type) {
     case EMB_ARC: {
         geometry->object.arc.start = point;
-        calculateArcData(geometry->object.arc);
+        calculateArcData();
         break;
     }
     default:
@@ -3416,7 +3416,7 @@ Object::setObjectMidPoint(EmbVector point)
     switch (geometry->type) {
     case EMB_ARC: {
         geometry->object.arc.mid = point;
-        calculateArcData(geometry->object.arc);
+        calculateArcData();
         break;
     }
     default:
@@ -3431,7 +3431,7 @@ Object::setObjectEndPoint(EmbVector point)
     switch (geometry->type) {
     case EMB_ARC: {
         geometry->object.arc.end = point;
-        calculateArcData(geometry->object.arc);
+        calculateArcData();
         break;
     }
     default:
@@ -3508,11 +3508,10 @@ Object::objectClockwise() const
     switch (geometry->type) {
     case EMB_ARC: {
         //NOTE: Y values are inverted here on purpose
-        EmbArc arc;
         geometry->object.arc.start.y = -geometry->object.arc.start.y;
         geometry->object.arc.mid.y = -geometry->object.arc.start.y;
         geometry->object.arc.end.y = -geometry->object.arc.end.y;
-        if (emb_arc_clockwise(arc)) {
+        if (emb_arc_clockwise(*geometry)) {
             return true;
         }
         break;
@@ -3611,11 +3610,11 @@ Object::Object(EmbPath_, int, QPainterPath const&, unsigned int, QGraphicsItem*)
 
 /* . */
 void
-Object::calculateArcData(EmbArc arc)
+Object::calculateArcData(void)
 {
-    EmbVector center = emb_arc_center(arc);
+    EmbVector center = emb_arc_center(*geometry);
 
-    double radius = emb_vector_distance(center, arc.mid);
+    double radius = emb_vector_distance(center, geometry->object.arc.mid);
     updateArcRect(radius);
     updatePath();
     setRotation(0);
@@ -3780,7 +3779,7 @@ Object::setObjectRadius(double radius)
     switch (geometry->type) {
     case EMB_ARC: {
         geometry->object.arc = emb_arc_set_radius(geometry->object.arc, radius);
-        calculateArcData(geometry->object.arc);
+        calculateArcData();
         break;
     }
     case EMB_CIRCLE:

@@ -690,7 +690,7 @@ create_details_dialog(void)
         currentRow++;
     }
 
-    boundingRect.setRect(bounds.left, bounds.top, bounds.right, bounds.bottom);
+    boundingRect.setRect(bounds.x, bounds.y, bounds.x + bounds.w, bounds.y + bounds.h);
 
     QWidget* widget = new QWidget(dialog);
 
