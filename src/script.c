@@ -12,6 +12,8 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
+#include <limits.h>
 #include <stdarg.h>
 #include <errno.h>
 
@@ -786,6 +788,10 @@ load_data(void)
     if (!load_file("data/settings.toml")) {
         return 0;
     }
+    if (!load_file("data/properties.toml")) {
+        printf("ERROR: failed to load file %s\n", "data/properties.toml");
+        return 0;
+    }
 
     /* Confirm load. */
     for (i=0; i<state_length; i++) {
@@ -1111,6 +1117,30 @@ bool pattern_save(EmbPattern *pattern, const char *fileName)
     emb_pattern_free(pattern);
 
     return writeSuccessful;
+}
+
+bool
+willUnderflowInt32(int64_t a, int64_t b)
+{
+    int64_t c;
+    assert(LLONG_MAX>INT_MAX);
+    c = (int64_t)a-b;
+    if (c < INT_MIN || c > INT_MAX) {
+        return true;
+    }
+    return false;
+}
+
+bool
+willOverflowInt32(int64_t a, int64_t b)
+{
+    int64_t c;
+    assert(LLONG_MAX>INT_MAX);
+    c = (int64_t)a+b;
+    if (c < INT_MIN || c > INT_MAX) {
+        return true;
+    }
+    return false;
 }
 
 /* GEOMETRY */

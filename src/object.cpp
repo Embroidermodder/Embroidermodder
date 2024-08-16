@@ -217,10 +217,7 @@ Object::init_geometry(int type_, QRgb rgb, Qt::PenStyle lineType)
 ScriptValue
 arc_command(ScriptEnv *context)
 {
-    init_command();
-    clear_selection();
 
-    end_command();
     return script_null;
 }
 
@@ -298,9 +295,6 @@ ScriptValue
 circle_command(ScriptEnv *context)
 {
     _main->debug_message("ADDING CIRCLE");
-    
-    init_command();
-    clear_selection();
 
     /*
     context->point1.x = 0.0f;
@@ -851,8 +845,6 @@ ellipse_command(ScriptEnv *context)
     switch (context->mode) {
     default:
     case CONTEXT_MAIN:
-        init_command();
-        clear_selection();
 
         end_command();
         break;
@@ -876,8 +868,6 @@ context->mode;
 
 function main()
 {
-    init_command();
-    clear_selection();
     context->mode = ELLIPSE_MODE_MAJDIA_MINRAD_ONE;
     context->point1 = zero_vector;
     context->point2 = zero_vector;
@@ -1270,8 +1260,6 @@ line_command(ScriptEnv *context)
 {
     switch (context->context) {
     case CONTEXT_MAIN: {
-        init_command();
-        clear_selection();
         /*
         context->firstRun = true;
         context->first = zero_vector;
@@ -1506,8 +1494,6 @@ point_command(ScriptEnv * context)
 #if 0
 function main()
 {
-    init_command();
-    clear_selection();
     global->firstRun = true;
     prompt_output("TODO: Current point settings: PDMODE=?  PDSIZE=?"); //TODO: translate needed here when complete
     prompt_output(translate("Specify first point: "));
@@ -1594,8 +1580,6 @@ PointObject::updateRubber(QPainter* painter)
 ScriptValue
 polygon_command(ScriptEnv * context)
 {
-    init_command();
-    clear_selection();
 
     end_command();
     return script_null;
@@ -1617,8 +1601,6 @@ int mode;
 function
 main()
 {
-    init_command();
-    clear_selection();
     context->centerX = NaN;
     context->centerY = NaN;
     context->sideX1  = NaN;
@@ -1984,8 +1966,6 @@ PolygonObject::updateRubber(QPainter* painter)
 ScriptValue
 polyline_command(ScriptEnv * context)
 {
-    init_command();
-    clear_selection();
 
     end_command();
     return script_null;
@@ -2002,8 +1982,6 @@ context->num;
 
 function main()
 {
-    init_command();
-    clear_selection();
     context->firstRun = true;
     context->firstX = NaN;
     context->firstY = NaN;
@@ -2154,8 +2132,6 @@ PolylineObject::updateRubber(QPainter* painter)
 ScriptValue
 rectangle_command(ScriptEnv * context)
 {
-    init_command();
-    clear_selection();
 
     end_command();
     return script_null;
@@ -2173,8 +2149,6 @@ context->y2;
 
 function main()
 {
-    init_command();
-    clear_selection();
     context->newRect = true;
     context->point1.x = NaN;
     context->point1.y = NaN;
@@ -2345,8 +2319,6 @@ context->mode;
 function
 main()
 {
-    initCommand();
-    clearSelection();
     context->text = "";
     context->textX = NaN;
     context->textY = NaN;
@@ -2691,8 +2663,6 @@ TextSingleObject::subPathList() const
 ScriptValue
 quickleader_command(ScriptEnv * context)
 {
-    init_command();
-    clear_selection();
 
     end_command();
     return script_null;
@@ -2703,8 +2673,6 @@ quickleader_command(ScriptEnv * context)
 
 function main()
 {
-    init_command();
-    clear_selection();
     global.point1 = zero_vector;
     global.point2 = zero_vector;
     prompt_output(translate("Specify first point: "));

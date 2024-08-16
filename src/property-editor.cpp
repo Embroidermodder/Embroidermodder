@@ -20,145 +20,6 @@ QHash<QString, QLineEdit*> line_edits;
 QHash<QString, QComboBox*> combo_boxes;
 QComboBox* comboBoxSelected;
 
-const char *objectNames[32] = {
-    "Arc",
-    "Block",
-    "Circle",
-    "Aligned Dimension",
-    "Angular Dimension",
-    "Arclength Dimension",
-    "Diameter Dimension",
-    "Leader Dimension",
-    "Linear Dimension",
-    "Ordinate Dimension",
-    "Radius Dimension",
-    "Ellipse",
-    "Elliptical Arc",
-    "Rubber",
-    "Grid",
-    "Hatch",
-    "Image",
-    "Infinite Line",
-    "Line",
-    "Path",
-    "Point",
-    "Polygon",
-    "Polyline",
-    "Ray",
-    "Rectangle",
-    "Slot",
-    "Spline",
-    "Multiline Text",
-    "Single Line Text",
-    "Unknown"
-};
-
-QStringList editor_list = {
-    "ArcCenterX",
-    "ArcCenterY",
-    "ArcRadius",
-    "ArcStartAngle",
-    "ArcEndAngle",
-    "ArcStartX",
-    "ArcStartY",
-    "ArcEndX",
-    "ArcEndY",
-    "ArcArea",
-    "ArcLength",
-    "ArcChord",
-    "ArcIncAngle"
-    "BlockPositionX",
-    "BlockPositionY",
-    "CircleCenterX",
-    "CircleCenterY",
-    "CircleRadius",
-    "CircleDiameter",
-    "CircleArea",
-    "CircleCircumference",
-    "EllipseCenterX",
-    "EllipseCenterY",
-    "EllipseRadiusMajor",
-    "EllipseRadiusMinor",
-    "EllipseDiameterMajor",
-    "EllipseDiameterMinor",
-    "ImageX",
-    "ImageY",
-    "ImageWidth",
-    "ImageHeight",
-    "InfiniteLineX1",
-    "InfiniteLineY1",
-    "InfiniteLineX2",
-    "InfiniteLineY2",
-    "InfiniteLineVectorX",
-    "InfiniteLineVectorY",
-    "LineStartX",
-    "LineStartY",
-    "LineEndX",
-    "LineEndY",
-    "LineDeltaX",
-    "LineDeltaY",
-    "LineAngle",
-    "LineLength",
-    "PathVertexX",
-    "PathVertexY",
-    "PathArea",
-    "PathLength",
-    "PointX",
-    "PointY",
-    "PolygonCenterX",
-    "PolygonCenterY",
-    "PolygonRadiusVertex",
-    "PolygonRadiusSide",
-    "PolygonDiameterVertex",
-    "PolygonDiameterSide",
-    "PolygonInteriorAngle",
-    "PolylineVertexX",
-    "PolylineVertexY",
-    "PolylineArea",
-    "PolylineLength",
-    "RayX1",
-    "RayY1",
-    "RayX2",
-    "RayY2",
-    "RayVectorX",
-    "RayVectorY",
-    "RectangleCorner1X",
-    "RectangleCorner1Y",
-    "RectangleCorner2X",
-    "RectangleCorner2Y",
-    "RectangleCorner3X",
-    "RectangleCorner3Y",
-    "RectangleCorner4X",
-    "RectangleCorner4Y",
-    "RectangleWidth",
-    "RectangleHeight",
-    "RectangleArea",
-    "TextMultiX",
-    "TextMultiY",
-    "TextSingleHeight",
-    "TextSingleRotation",
-    "TextSingleX",
-    "TextSingleY",
-    "TextSingleContents",
-    "TextSingleHeight",
-    "TextSingleRotation"
-};
-
-QStringList combobox_list = {
-    "GeneralLayer",
-    "GeneralColor",
-    "GeneralLineType",
-    "GeneralLineWeight",
-    "ArcClockwise",
-    "PathVertexNum",
-    "PathClosed",
-    "PolylineVertexNum",
-    "PolylineClosed",
-    "TextSingleJustify",
-    "TextSingleBackward",
-    "TextSingleUpsideDown"
-};
-
 QWidget* focusWidget_;
 
 QString iconDir;
@@ -213,14 +74,6 @@ QGroupBox* groupBoxGeometryTextMulti;
 QGroupBox* groupBoxTextTextSingle;
 QGroupBox* groupBoxGeometryTextSingle;
 QGroupBox* groupBoxMiscTextSingle;
-
-/* TODO: toolButtons and lineEdits for DimAligned
- * DimAngular, DimArcLength, DimDiameter, DimLeader, DimLinear
- * DimOrdinate, DimRadius
- */
-
-QLineEdit* lineEditImageName;
-QLineEdit* lineEditImagePath;
 
 QFontComboBox* comboBoxTextSingleFont;
 
@@ -392,7 +245,7 @@ QToolButton*
 PropertyEditor::createToolButtonQSelect()
 {
     toolButtonQSelect = new QToolButton(dockPropEdit);
-    toolButtonQSelect->setIcon(QIcon(iconDir + "/" + "quickselect" + ".png"));
+    toolButtonQSelect->setIcon(create_icon("quickselect"));
     toolButtonQSelect->setIconSize(QSize(iconSize, iconSize));
     toolButtonQSelect->setText("QSelect");
     toolButtonQSelect->setToolTip("QSelect"); //TODO: Better Description
@@ -416,14 +269,14 @@ PropertyEditor::updatePickAddModeButton(bool pickAddMode)
 {
     pickAdd = pickAddMode;
     if (pickAdd) {
-        toolButtonPickAdd->setIcon(QIcon(iconDir + "/" + "pickadd" + ".png"));
+        toolButtonPickAdd->setIcon(create_icon("pickadd"));
         toolButtonPickAdd->setIconSize(QSize(iconSize, iconSize));
         toolButtonPickAdd->setText("PickAdd");
         toolButtonPickAdd->setToolTip("PickAdd Mode - Add to current selection.\nClick to switch to PickNew Mode.");
         toolButtonPickAdd->setToolButtonStyle(Qt::ToolButtonIconOnly);
     }
     else {
-        toolButtonPickAdd->setIcon(QIcon(iconDir + "/" + "picknew" + ".png"));
+        toolButtonPickAdd->setIcon(create_icon("picknew"));
         toolButtonPickAdd->setIconSize(QSize(iconSize, iconSize));
         toolButtonPickAdd->setText("PickNew");
         toolButtonPickAdd->setToolTip("PickNew Mode - Replace current selection.\nClick to switch to PickAdd Mode.");
@@ -486,8 +339,9 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
 
     foreach (int objType, typeSet) {
         if ((objType > OBJ_TYPE_BASE) && (objType <= OBJ_TYPE_UNKNOWN)) {
-            int index = objType-OBJ_TYPE_ARC;
-            QString comboBoxStr = translate(objectNames[index]);
+            int start = get_state_variable("objectNames");
+            int index = objType - OBJ_TYPE_ARC;
+            QString comboBoxStr = translate(state[start + index].s);
             comboBoxStr += " (" + QString().setNum(object_counts[index]) + ")";
             comboBoxSelected->addItem(comboBoxStr, objType);
         }
@@ -927,11 +781,15 @@ PropertyEditor::hideAllGroups()
 void
 PropertyEditor::clearAllFields()
 {
-    foreach (QString editor, editor_list) {
-        line_edits[editor]->clear();
+    int n = string_array_length("editor_list");
+    int start = get_state_variable("editor_list");
+    for (int i=0; i<n; i++) {
+        line_edits[state[start+i].s]->clear();
     }
-    foreach (QString editor, combobox_list) {
-        combo_boxes[editor]->clear();
+    n = string_array_length("combobox_list");
+    start = get_state_variable("combobox_list");
+    for (int i=0; i<n; i++) {
+        combo_boxes[state[start+i].s]->clear();
     }
 
     comboBoxTextSingleFont->removeItem(comboBoxTextSingleFont->findText(fieldVariesText)); /* NOTE: Do not clear comboBoxTextSingleFont. */
@@ -1473,7 +1331,7 @@ QToolButton*
 createToolButton(const QString& iconName, const QString& txt)
 {
     QToolButton* tb = new QToolButton(dockPropEdit);
-    tb->setIcon(QIcon(iconDir + "/" + iconName + ".png"));
+    tb->setIcon(create_icon(iconName));
     tb->setIconSize(QSize(iconSize, iconSize));
     tb->setText(txt);
     tb->setToolButtonStyle(propertyEditorButtonStyle);

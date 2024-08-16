@@ -153,6 +153,15 @@ extern bool shiftKeyPressedState;
 extern QList<QGraphicsItem*> cutCopyObjectList;
 extern QStringList objectTextJustifyList;
 
+extern QString curText;
+extern QString defaultPrefix;
+extern QString prefix;
+extern QString lastCmd;
+extern QString curCmd;
+extern bool cmdActive;
+extern bool rapidFireEnabled;
+extern bool isBlinking;
+
 /* . */
 typedef struct ViewData_ {
     QHash<int64_t, QGraphicsItem*> hashDeletedObjects;
@@ -500,8 +509,6 @@ private:
 
     void loadRulerSettings();
 
-    bool willUnderflowInt32(int64_t a, int64_t b);
-    bool willOverflowInt32(int64_t a, int64_t b);
     int roundToMultiple(bool roundUp, int numToRound, int multiple);
     QPainterPath createRulerTextPath(float x, float y, QString str, float height);
 
@@ -1043,17 +1050,6 @@ public:
     CmdPromptInput(QWidget* parent = 0);
     ~CmdPromptInput();
 
-    QString curText;
-    QString defaultPrefix;
-    QString prefix;
-
-    QString lastCmd;
-    QString curCmd;
-    bool cmdActive;
-
-    bool rapidFireEnabled;
-    bool isBlinking;
-
 protected:
     void contextMenuEvent(QContextMenuEvent *event);
     bool eventFilter(QObject *obj, QEvent *event);
@@ -1191,11 +1187,16 @@ public:
     CmdPromptInput*    promptInput;
 
 public slots:
-    QString getHistory() { return promptHistory->toHtml(); }
-    QString getPrefix() { return promptInput->prefix; }
-    QString getCurrentText() { return promptInput->curText; }
-    void setCurrentText(const QString& txt) { promptInput->curText = promptInput->prefix + txt; promptInput->setText(promptInput->curText); }
-    void setHistory(const QString& txt) { promptHistory->setHtml(txt); promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor); }
+    void setCurrentText(const QString& txt)
+    {
+        curText = prefix + txt;
+        promptInput->setText(curText);
+    }
+    void setHistory(const QString& txt)
+    {
+        promptHistory->setHtml(txt);
+        promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+    }
     void setPrefix(const QString& txt);
     void appendHistory(const QString& txt);
     void startResizingTheHistory(int y) { promptHistory->startResizeHistory(y); }
@@ -1203,13 +1204,10 @@ public slots:
     void resizeTheHistory(int y) { promptHistory->resizeHistory(y); }
     void addCommand(const QString& alias, const QString& cmd) { promptInput->addCommand(alias, cmd); }
     void endCommand() { promptInput->endCommand(); }
-    bool isCommandActive() { return promptInput->cmdActive; }
-    QString activeCommand() { return promptInput->curCmd; }
-    QString lastCommand() { return promptInput->lastCmd; }
     void processInput() { promptInput->processInput(); }
-    void enableRapidFire() { promptInput->rapidFireEnabled = true; }
-    void disableRapidFire() { promptInput->rapidFireEnabled = false; }
-    bool isRapidFireEnabled() { return promptInput->rapidFireEnabled; }
+    void enableRapidFire() { rapidFireEnabled = true; }
+    void disableRapidFire() { rapidFireEnabled = false; }
+    bool isRapidFireEnabled() { return rapidFireEnabled; }
 
     void alert(const QString& txt);
 
@@ -1288,9 +1286,6 @@ public:
 
     virtual void updateMenuToolbarStatusbar();
 
-    bool isCommandActive() { return prompt->isCommandActive(); }
-    QString activeCommand() { return prompt->activeCommand(); }
-
 public slots:
     void onCloseWindow();
     virtual void onCloseMdiWin(MdiWindow*);
@@ -1330,20 +1325,6 @@ private:
 
     void createAllActions();
     QAction* createAction(Command command);
-
-    /* Toolbars */
-    void createAllToolbars();
-    void createFileToolbar();
-    void createEditToolbar();
-    void createViewToolbar();
-    void createZoomToolbar();
-    void createPanToolbar();
-    void createIconToolbar();
-    void createHelpToolbar();
-    void createLayerToolbar();
-    void createPropertiesToolbar();
-    void createTextToolbar();
-    void createPromptToolbar();
 
     /* Menus */
     void createAllMenus();

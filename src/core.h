@@ -651,7 +651,7 @@ int parse_vector(char *line, EmbVector *v);
 bool validRGB(float r, float g, float b);
 void reportDistance(EmbVector a, EmbVector b);
 
-void add_to_toolbar(const char *toolbar_name, const char *toolbar_data[]);
+void add_to_toolbar(const char *toolbar_name, const char *toolbar_data);
 
 int load_data(void);
 
@@ -661,17 +661,14 @@ int save_settings(const char *appDir, const char *configDir);
 int get_command_id(const char *);
 int get_state_variable(const char *key);
 
-/* Geometry */
 EmbArc emb_arc_set_radius(EmbArc a, EmbReal radius);
 
+bool willUnderflowInt32(int64_t a, int64_t b);
+bool willOverflowInt32(int64_t a, int64_t b);
+
 /* MainWindow calls */
-void init_command(void);
 void end_command(void);
 void debug_message(const char *msg);
-
-void clear_selection(void);
-int num_selected(void);
-void select_all(void);
 
 void cut(void);
 

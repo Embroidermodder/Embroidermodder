@@ -1905,7 +1905,7 @@ Settings_Dialog::comboBoxGridTypeCurrentIndexChanged(const QString& type)
         return;
     }
     bool visibility = (type == "Circular");
-    set_visibility_group(senderObj, "rectangular_grid_group", visibility);
+    set_visibility_group(senderObj, "rectangular_grid_group", !visibility);
     set_visibility_group(senderObj, "circular_grid_group", visibility);
 }
 

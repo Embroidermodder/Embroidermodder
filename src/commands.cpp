@@ -265,7 +265,6 @@ void
 MainWindow::undo()
 {
     qDebug("undo()");
-    QString prefix = prompt->getPrefix();
     if (dockUndoEdit->canUndo()) {
         prompt->setPrefix("Undo " + dockUndoEdit->undoText());
         prompt->appendHistory(QString());
@@ -282,7 +281,6 @@ void
 MainWindow::redo()
 {
     qDebug("redo()");
-    QString prefix = prompt->getPrefix();
     if (dockUndoEdit->canRedo()) {
         prompt->setPrefix("Redo " + dockUndoEdit->redoText());
         prompt->appendHistory(QString());
@@ -715,16 +713,22 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         return script_false;
     }
 
-    if (!(command_data[id].flags & DONT_INITIALIZE)) {
-        init_command();
-    }
-    if (command_data[id].flags & CLEAR_SELECTION) {
-        clear_selection();
-    }
     if (command_data[id].flags & REQUIRED_VIEW) {
         gview = activeView();
         if (!gview) {
             return value;
+        }
+    }
+    if (!(command_data[id].flags & DONT_INITIALIZE)) {
+        gview = activeView();
+        if (gview) {
+            gview->clearRubberRoom();
+        }
+    }
+    if (command_data[id].flags & CLEAR_SELECTION) {
+        gview = activeView();
+        if (gview) {
+            gview->clearSelection();
         }
     }
 
@@ -826,9 +830,18 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         gview->mirrorSelected(REAL(0), -REAL(1), REAL(2), -REAL(3));
         break;
     }
+
     case ACTION_NEW:
         newFile();
         break;
+
+/*
+    case ACTION_NUM_SELECTED: {
+        
+        break;
+    }
+ */
+
     case ACTION_OPEN:
         openFile();
         break;
@@ -935,18 +948,23 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
     case ACTION_MAKE_LAYER_CURRENT:
         /* makeLayerActive(); */
         break;
+
     case ACTION_LAYERS:
         /* layerManager(); */
         break;
+
     case ACTION_LAYER_SELECTOR:
         /* TODO: layer_selector */
         break;
+
     case ACTION_LAYER_PREVIOUS:
         /* TODO: layer_previous */
         break;
+
     case ACTION_LINE_TYPE_SELECTOR:
         /* TODO: line_type_selector */
         break;
+
     case ACTION_LINE_WEIGHT_SELECTOR:
         /* TODO: line_weight_selector */
         break;
@@ -996,7 +1014,7 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
     }
 
     case ACTION_ERASE: {
-        if (num_selected() <= 0) {
+        if (gview->numSelected() <= 0) {
             /* TODO: Prompt to select objects if nothing is preselected. */
             prompt->alert(
             translate("Preselect objects before invoking the delete command."));
@@ -1848,34 +1866,6 @@ nativeQSnapY()
 
 /* Compatibility layer for C files */
 void
-init_command(void)
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->clearRubberRoom();
-    }
-}
-
-void
-clear_selection(void)
-{
-    View* gview = activeView();
-    if (gview) {
-        gview->clearSelection();
-    }
-}
-
-int
-num_selected(void)
-{
-    View* gview = activeView();
-    if (gview) {
-        return gview->numSelected();
-    }
-    return 0;
-}
-
-void
 prompt_output(const char *txt)
 {
     prompt->appendHistory(QString(txt));
@@ -2527,12 +2517,6 @@ perpendicular_distance_command(ScriptEnv* context)
     return script_real(r);
 }
 
-ScriptValue
-num_selected_command(ScriptEnv* context)
-{
-    return script_int(num_selected());
-}
-
 /* TODO: finish
  */
 ScriptValue
@@ -2808,11 +2792,10 @@ ScriptValue
 locatepoint_command(ScriptEnv *context)
 {
     switch (context->context) {
-    case CONTEXT_MAIN:
-        init_command();
-        clear_selection();
+    case CONTEXT_MAIN: {
         prompt_output(translate("Specify point: "));
         break;
+    }
     case CONTEXT_CLICK: {
         char output[200];
         float x = 0.0f;
@@ -2870,8 +2853,6 @@ distance_command(ScriptEnv *context)
 {
     switch (context->context) {
     case CONTEXT_MAIN:
-        init_command();
-        clear_selection();
         /*
         global.point1.x = 0.0f;
         global.point1.y = 0.0f;
@@ -2967,7 +2948,7 @@ main(void)
     global.delta.x = NaN;
     global.delta.y = NaN;
 
-    if (num_selected() <= 0) {
+    if (gview->numSelected() <= 0) {
         /* TODO: Prompt to select objects if nothing is preselected. */
         alert(translate("Preselect objects before invoking the move command."));
         end_command();
@@ -3062,7 +3043,6 @@ scale_command(ScriptEnv * context)
 void
 main(void)
 {
-    init_command();
     global.mode = global.mode_NORMAL;
     global.firstRun = true;
     global.baseX = NaN;
@@ -3078,7 +3058,7 @@ main(void)
     global.factorRef = NaN;
     global.factorNew = NaN;
 
-    if (num_selected() <= 0) {
+    if (gview->numSelected() <= 0) {
         /* TODO: Prompt to select objects if nothing is preselected */
         alert(translate("Preselect objects before invoking the scale command."));
         end_command();
@@ -3336,8 +3316,8 @@ sandbox_command(ScriptEnv * context)
     case CONTEXT_MAIN:
         /* Report number of pre-selected objects. */
         char msg[200];
-        sprintf(msg, "Number of Objects Selected: %d", num_selected());
-        prompt_output(msg);
+        //sprintf(msg, "Number of Objects Selected: %d", gview->numSelected());
+        //prompt_output(msg);
         /* mirrorSelected(0,0,0,1); */
     
         /* selectAll(); */
@@ -3415,7 +3395,6 @@ rotate_command(ScriptEnv * context)
 void
 main()
 {
-    init_command();
     global.mode = global.mode_NORMAL;
     global.firstRun = true;
     global.base = zero_vector;
@@ -3427,7 +3406,7 @@ main()
     global.angleRef = 0.0f;
     global.angleNew = 0.0f;
 
-    if (num_selected() <= 0) {
+    if (gview->numSelected() <= 0) {
         /* TODO: Prompt to select objects if nothing is preselected. */
         alert(translate("Preselect objects before invoking the rotate command."));
         end_command();
@@ -3613,12 +3592,11 @@ rgb_command(ScriptEnv *context)
 {
     switch (context->context) {
     default:
-    case CONTEXT_MAIN:
-        init_command();
-        clear_selection();
+    case CONTEXT_MAIN: {
         context->mode = RGB_MODE_BACKGROUND;
         prompt_output(translate("Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: "));
         break;
+    }
     case CONTEXT_CLICK:
         /* Do Nothing, prompt only command. */
         break;

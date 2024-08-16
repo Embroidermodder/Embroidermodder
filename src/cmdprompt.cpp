@@ -16,6 +16,17 @@ StringMap aliases[MAX_ALIASES];
 QHash<std::string, std::string>* aliasHash;
 QHash<QString, QString>* styleHash;
 
+QString curText;
+QString defaultPrefix;
+QString prefix;
+
+QString lastCmd;
+QString curCmd;
+bool cmdActive;
+
+bool rapidFireEnabled;
+bool isBlinking;
+
 /* . */
 CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
 {
@@ -156,7 +167,7 @@ void
 CmdPrompt::startBlinking()
 {
     blinkTimer->start(750);
-    promptInput->isBlinking = true;
+    isBlinking = true;
 }
 
 /* . */
@@ -164,7 +175,7 @@ void
 CmdPrompt::stopBlinking()
 {
     blinkTimer->stop();
-    promptInput->isBlinking = false;
+    isBlinking = false;
 }
 
 /* . */
@@ -243,19 +254,19 @@ void
 CmdPrompt::appendHistory(const QString& txt)
 {
     if (txt.isNull()) {
-        emit appendTheHistory(promptInput->curText, promptInput->prefix.length());
+        emit appendTheHistory(curText, prefix.length());
         return;
     }
     qDebug("CmdPrompt - appendHistory()");
-    emit appendTheHistory(txt, promptInput->prefix.length());
+    emit appendTheHistory(txt, prefix.length());
 }
 
 /* . */
 void
 CmdPrompt::setPrefix(const QString& txt)
 {
-    promptInput->prefix = txt;
-    promptInput->curText = txt;
+    prefix = txt;
+    curText = txt;
     promptInput->setText(txt);
 }
 

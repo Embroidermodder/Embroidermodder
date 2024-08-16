@@ -71,7 +71,6 @@ qt_add_executable(embroidermodder2
 	${SRC}/wrapper.cpp
 
 	${SRC}/command_data.c
-	${SRC}/designs.c
 	${SRC}/script.c
 
 	${SRC}/embroidermodder.h

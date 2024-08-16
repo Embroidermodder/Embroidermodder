@@ -797,11 +797,11 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
         }
     }
 
-    //==================================================
-    //Draw the closest qsnap point
-    //==================================================
+    /* ================================================== */
+    /* Draw the closest qsnap point */
+    /* ================================================== */
 
-    // TODO: && findClosestSnapPoint == true
+    /* TODO: && findClosestSnapPoint == true */
     if (!data.selectingActive) {
         QPen qsnapPen(QColor::fromRgb(data.qsnapLocatorColor));
         qsnapPen.setWidth(2);
@@ -823,7 +823,7 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                 }
             }
         }
-        //TODO: Check for intersection snap points and add them to the list
+        /* TODO: Check for intersection snap points and add them to the list */
         foreach(QPointF asp, apertureSnapPoints) {
             QPoint p1 = mapFromScene(asp) - qsnapOffset;
             QPoint q1 = mapFromScene(asp) + qsnapOffset;
@@ -831,13 +831,13 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
         }
     }
 
-    //Draw horizontal and vertical rulers
+    /* Draw horizontal and vertical rulers */
 
     if (data.gscene->property("ENABLE_RULER").toBool()) {
         bool proceed = true;
 
-        int vw = width();  //View Width
-        int vh = height(); //View Height
+        int vw = width();  /* View Width */
+        int vh = height(); /* View Height */
         QPointF origin = mapToScene(0,0);
         QPointF rulerHoriz = mapToScene(vw, data.rulerPixelSize);
         QPointF rulerVert  = mapToScene(data.rulerPixelSize, vh);
@@ -971,7 +971,7 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                         lines.append(QLineF(x, rhy, x, oy));
                         if (data.rulerMetric) {
                             lines.append(QLineF(x, rhy, x, oy));
-                            lines.append(QLineF(x+fraction  , rhy, x+fraction, rhy-rhh*little));
+                            lines.append(QLineF(x+fraction, rhy, x+fraction, rhy-rhh*little));
                             lines.append(QLineF(x+fraction*2, rhy, x+fraction*2, rhy-rhh*little));
                             lines.append(QLineF(x+fraction*3, rhy, x+fraction*3, rhy-rhh*little));
                             lines.append(QLineF(x+fraction*4, rhy, x+fraction*4, rhy-rhh*little));
@@ -988,7 +988,7 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                                 }
                             }
                             else {
-                                lines.append(QLineF(x+fraction   , rhy, x+fraction, rhy-rhh*little));
+                                lines.append(QLineF(x+fraction, rhy, x+fraction, rhy-rhh*little));
                                 lines.append(QLineF(x+fraction* 2, rhy, x+fraction* 2, rhy-rhh*little));
                                 lines.append(QLineF(x+fraction* 3, rhy, x+fraction* 3, rhy-rhh*little));
                                 lines.append(QLineF(x+fraction* 4, rhy, x+fraction* 4, rhy-rhh*medium)); //Quarter
@@ -1024,7 +1024,7 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
 
                         lines.append(QLineF(rvx, y, ox, y));
                         if (data.rulerMetric) {
-                            lines.append(QLineF(rvx, y+fraction  , rvx-rvw*little, y+fraction));
+                            lines.append(QLineF(rvx, y+fraction, rvx-rvw*little, y+fraction));
                             lines.append(QLineF(rvx, y+fraction*2, rvx-rvw*little, y+fraction*2));
                             lines.append(QLineF(rvx, y+fraction*3, rvx-rvw*little, y+fraction*3));
                             lines.append(QLineF(rvx, y+fraction*4, rvx-rvw*little, y+fraction*4));
@@ -1041,7 +1041,7 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                                 }
                             }
                             else {
-                                lines.append(QLineF(rvx, y+fraction   , rvx-rvw*little, y+fraction));
+                                lines.append(QLineF(rvx, y+fraction, rvx-rvw*little, y+fraction));
                                 lines.append(QLineF(rvx, y+fraction* 2, rvx-rvw*little, y+fraction* 2));
                                 lines.append(QLineF(rvx, y+fraction* 3, rvx-rvw*little, y+fraction* 3));
                                 lines.append(QLineF(rvx, y+fraction* 4, rvx-rvw*medium, y+fraction* 4)); //Quarter
@@ -1080,30 +1080,6 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
         painter->drawRect(QRectF(mapToScene(data.viewMousePoint.x()-data.pickBoxSize, data.viewMousePoint.y()-data.pickBoxSize),
                                  mapToScene(data.viewMousePoint.x()+data.pickBoxSize, data.viewMousePoint.y()+data.pickBoxSize)));
     }
-}
-
-bool
-View::willUnderflowInt32(int64_t a, int64_t b)
-{
-    int64_t c;
-    Q_ASSERT(LLONG_MAX>INT_MAX);
-    c = (int64_t)a-b;
-    if (c < INT_MIN || c > INT_MAX) {
-        return true;
-    }
-    return false;
-}
-
-bool
-View::willOverflowInt32(int64_t a, int64_t b)
-{
-    int64_t c;
-    Q_ASSERT(LLONG_MAX>INT_MAX);
-    c = (int64_t)a+b;
-    if (c < INT_MIN || c > INT_MAX) {
-        return true;
-    }
-    return false;
 }
 
 QPainterPath
@@ -1425,9 +1401,9 @@ View::mousePressEvent(QMouseEvent* event)
 {
     updateMouseCoords(event->position().x(), event->position().y());
     if (event->button() == Qt::LeftButton) {
-        if (_main->isCommandActive()) {
+        if (cmdActive) {
             QPointF cmdPoint = mapToScene(event->pos());
-            _main->runCommandClick(_main->activeCommand(), cmdPoint.x(), cmdPoint.y());
+            _main->runCommandClick(curCmd, cmdPoint.x(), cmdPoint.y());
             return;
         }
         QPainterPath path;
@@ -1655,9 +1631,9 @@ View::mouseMoveEvent(QMouseEvent* event)
     data.movePoint = event->pos();
     data.sceneMovePoint = mapToScene(data.movePoint);
 
-    if (_main->isCommandActive()) {
+    if (cmdActive) {
         if (data.rapidMoveActive) {
-            _main->runCommandMove(_main->activeCommand(), data.sceneMovePoint.x(), data.sceneMovePoint.y());
+            _main->runCommandMove(curCmd, data.sceneMovePoint.x(), data.sceneMovePoint.y());
         }
     }
     if (data.previewActive) {
@@ -1887,8 +1863,7 @@ View::contextMenuEvent(QContextMenuEvent* event)
     if (data.pastingActive) {
         return;
     }
-    if (!prompt->isCommandActive()) {
-        QString lastCmd = prompt->lastCommand();
+    if (!cmdActive) {
         QAction* repeatAction = new QAction(create_icon(lastCmd), "Repeat " + lastCmd, this);
         repeatAction->setStatusTip("Repeats the previously issued command.");
         connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()));
@@ -2232,7 +2207,7 @@ void
 View::repeatAction()
 {
     prompt->endCommand();
-    prompt->setCurrentText(prompt->lastCommand());
+    prompt->setCurrentText(lastCmd);
     prompt->processInput();
 }
 
