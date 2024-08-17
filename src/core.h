@@ -665,6 +665,7 @@ EmbArc emb_arc_set_radius(EmbArc a, EmbReal radius);
 
 bool willUnderflowInt32(int64_t a, int64_t b);
 bool willOverflowInt32(int64_t a, int64_t b);
+int roundToMultiple(bool roundUp, int numToRound, int multiple);
 
 /* MainWindow calls */
 void end_command(void);
@@ -794,7 +795,39 @@ extern BoolSetting text_style_strikeout;
 
 extern ScriptValue state[MAX_STATE_VARIABLES];
 
-extern Editor editor_data[];
+extern Editor general_editor_data[];
+extern Editor geometry_arc_editor_data[];
+extern Editor misc_arc_editor_data[];
+extern Editor geometry_block_editor_data[];
+extern Editor geometry_circle_editor_data[];
+extern Editor geometry_dim_aligned_editor_data[];
+extern Editor geometry_dim_angular_editor_data[];
+extern Editor geometry_dim_arc_length_editor_data[];
+extern Editor geometry_dim_diameter_editor_data[];
+extern Editor geometry_dim_leader_editor_data[];
+extern Editor geometry_dim_linear_editor_data[];
+extern Editor geometry_dim_ordinate_editor_data[];
+extern Editor geometry_dim_radius_editor_data[];
+extern Editor geometry_ellipse_editor_data[];
+extern Editor geometry_image_editor_data[];
+extern Editor misc_image_editor_data[];
+extern Editor geometry_infinite_line_editor_data[];
+extern Editor geometry_line_editor_data[];
+extern Editor geometry_path_editor_data[];
+extern Editor misc_path_editor_data[];
+extern Editor geometry_point_editor_data[];
+extern Editor geometry_polygon_editor_data[];
+extern Editor geometry_polyline_editor_data[];
+extern Editor misc_polyline_editor_data[];
+extern Editor geometry_ray_editor_data[];
+extern Editor geometry_rectangle_editor_data[];
+extern Editor geometry_text_multi_editor_data[];
+extern Editor text_text_single_editor_data[];
+extern Editor geometry_text_single_editor_data[];
+extern Editor misc_text_single_editor_data[];
+
+extern const char *_appName_;
+extern const char *_appVer_;
 
 /* Natives */
 void about_dialog(void);
@@ -873,10 +906,16 @@ void help();
 void changelog();
 void whatsThisContextHelp();
 
+int make_application(int argc, char* argv[]);
+
 /* Geometry */
 double get_width(EmbGeometry geometry);
 double get_height(EmbGeometry geometry);
 double get_radius(EmbGeometry geometry);
+double get_radius_major(EmbGeometry geometry);
+double get_radius_minor(EmbGeometry geometry);
+double get_diameter_major(EmbGeometry geometry);
+double get_diameter_minor(EmbGeometry geometry);
 EmbVector get_quadrant(EmbGeometry geometry, int degrees);
 double get_angle(EmbGeometry geometry);
 double get_start_angle(EmbGeometry geometry);

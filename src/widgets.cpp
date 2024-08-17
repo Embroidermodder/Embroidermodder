@@ -838,27 +838,31 @@ MdiArea::useBackgroundTexture(bool use)
     forceRepaint();
 }
 
-void MdiArea::useBackgroundColor(bool use)
+void
+MdiArea::useBackgroundColor(bool use)
 {
     useColor = use;
     forceRepaint();
 }
 
-void MdiArea::setBackgroundLogo(const QString& fileName)
+void
+MdiArea::setBackgroundLogo(const QString& fileName)
 {
     bgLogo.load(fileName);
 
     forceRepaint();
 }
 
-void MdiArea::setBackgroundTexture(const QString& fileName)
+void
+MdiArea::setBackgroundTexture(const QString& fileName)
 {
     bgTexture.load(fileName);
 
     forceRepaint();
 }
 
-void MdiArea::setBackgroundColor(const QColor& color)
+void
+MdiArea::setBackgroundColor(const QColor& color)
 {
     if (!color.isValid()) {
         bgColor = background().color();
@@ -1079,7 +1083,7 @@ MdiWindow::loadFile(const QString &fileName)
     QApplication::restoreOverrideCursor();
 
     //Clear the undo stack so it is not possible to undo past this point.
-    gview->getUndoStack()->clear();
+    gview->data.undoStack->clear();
 
     curColor = tmpColor;
 
@@ -1171,7 +1175,7 @@ void
 MdiWindow::onWindowActivated()
 {
     qDebug("MdiWindow onWindowActivated()");
-    gview->getUndoStack()->setActive(true);
+    gview->data.undoStack->setActive(true);
     _main->setUndoCleanIcon(fileWasLoaded);
     statusBarSnapButton->setChecked(gscene->property("ENABLE_SNAP").toBool());
     statusBarGridButton->setChecked(gscene->property("ENABLE_GRID").toBool());
@@ -1191,46 +1195,55 @@ MdiWindow::sizeHint() const
     return QSize(450, 300);
 }
 
-void MdiWindow::currentLayerChanged(const QString& layer)
+void
+MdiWindow::currentLayerChanged(const QString& layer)
 {
     curLayer = layer;
 }
 
-void MdiWindow::currentColorChanged(const QRgb& color)
+void
+MdiWindow::currentColorChanged(const QRgb& color)
 {
     curColor = color;
 }
 
-void MdiWindow::currentLinetypeChanged(const QString& type)
+void
+MdiWindow::currentLinetypeChanged(const QString& type)
 {
     curLineType = type;
 }
 
-void MdiWindow::currentLineweightChanged(const QString& weight)
+void
+MdiWindow::currentLineweightChanged(const QString& weight)
 {
     curLineWeight = weight;
 }
 
-void MdiWindow::updateColorLinetypeLineweight()
+void
+MdiWindow::updateColorLinetypeLineweight()
 {
 }
 
-void MdiWindow::deletePressed()
+void
+MdiWindow::deletePressed()
 {
     gview->deletePressed();
 }
 
-void MdiWindow::escapePressed()
+void
+MdiWindow::escapePressed()
 {
     gview->escapePressed();
 }
 
-void MdiWindow::showViewScrollBars(bool val)
+void
+MdiWindow::showViewScrollBars(bool val)
 {
     gview->showScrollBars(val);
 }
 
-void MdiWindow::setViewCrossHairColor(QRgb color)
+void
+MdiWindow::setViewCrossHairColor(QRgb color)
 {
     gview->setCrossHairColor(color);
 }

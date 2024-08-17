@@ -55,6 +55,63 @@ QByteArray layoutState;
 int numOfDocs;
 int docIndex;
 
+MainWindow *_main;
+
+Application::Application(int argc, char **argv) : QApplication(argc, argv), _mainWin(NULL)
+{
+}
+
+bool
+Application::event(QEvent *event)
+{
+    switch (event->type()) {
+    case QEvent::FileOpen:
+        if (_main) {
+            _main->openFilesSelected(QStringList(static_cast<QFileOpenEvent *>(event)->file()));
+            return true;
+        }
+        /* Fall through */
+    default:
+        return QApplication::event(event);
+    }
+}
+
+int
+make_application(int argc, char* argv[])
+{
+#if defined(Q_OS_MAC)
+    Application app(argc, argv);
+#else
+    QApplication app(argc, argv);
+#endif
+    app.setApplicationName(_appName_);
+    app.setApplicationVersion(_appVer_);
+
+    QStringList filesToOpen;
+    for (int i=0; i<argc; i++) {
+        filesToOpen << QString(argv[i]);
+    }
+    
+    _main = new MainWindow();
+#if defined(Q_OS_MAC)
+    app.setMainWin(_main);
+#endif
+
+    QObject::connect(&app, SIGNAL(lastWindowClosed()), _main, SLOT(quit()));
+
+    _main->setWindowTitle(app.applicationName() + " " + app.applicationVersion());
+    _main->show();
+
+    /* NOTE: If openFilesSelected() is called from within the _main constructor,
+     * slot commands wont work and the window menu will be screwed
+     */
+    if (!filesToOpen.isEmpty()) {
+        _main->openFilesSelected(filesToOpen);
+    }
+
+    return app.exec();
+}
+
 void
 MainWindow::run_testing(void)
 {
@@ -194,6 +251,13 @@ MainWindow::MainWindow() : QMainWindow(0)
     mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
+
+    /*
+    ExperimentalView *openGL = new ExperimentalView(this);
+    QLabel *example = new QLabel(tr("OpenGL"));
+    layout->addWidget(openGL);
+    */
+
     layout->addWidget(mdiArea);
     setCentralWidget(vbox);
 
@@ -240,7 +304,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     connect(prompt, SIGNAL(showSettings()), this, SLOT(settingsPrompt()));
 
-            connect(prompt, SIGNAL(historyAppended(const QString&)), this, SLOT(promptHistoryAppended(const QString&)));
+    connect(prompt, SIGNAL(historyAppended(const QString&)), this, SLOT(promptHistoryAppended(const QString&)));
 
     /* create the Object Property Editor */
     dockPropEdit = new PropertyEditor(

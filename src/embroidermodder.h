@@ -88,12 +88,11 @@
 #include <QUrl>
 #include <QVBoxLayout>
 #include <QWhatsThis>
-#include <QWidget>
 #include <QtGlobal>
 #include <QtGui>
 #include <QtPrintSupport>
 
-/* #include <QOpenGLWidget> */
+#include <QOpenGLWidget>
 
 #include <QTimer>
 
@@ -330,6 +329,11 @@ void set_enabled_group(QObject *senderObj, const char *key, bool visibility);
 QIcon create_swatch(int32_t color);
 QPushButton *choose_color_button(QGroupBox* groupbox, IntSetting* color_setting);
 
+QString getCurrentLayer();
+QRgb getCurrentColor();
+QString getCurrentLineType();
+QString getCurrentLineWeight();
+
 class LayerManager : public QDialog
 {
     Q_OBJECT
@@ -405,7 +409,6 @@ public:
     void centerAt(const QPointF& centerPoint);
     QPointF center() { return mapToScene(rect().center()); }
 
-    QUndoStack* getUndoStack() { return data.undoStack; }
     void addObject(Object* obj);
     void deleteObject(Object* obj);
     void vulcanizeObject(Object* obj);
@@ -509,7 +512,6 @@ private:
 
     void loadRulerSettings();
 
-    int roundToMultiple(bool roundUp, int numToRound, int multiple);
     QPainterPath createRulerTextPath(float x, float y, QString str, float height);
 
     QList<QGraphicsItem*> createObjectList(QList<QGraphicsItem*> list);
@@ -606,14 +608,8 @@ public:
     Qt::PenStyle objectLineType() const { return data.objPen.style(); }
     double  objectLineWeight() const { return data.lwtPen.widthF(); }
     QPainterPath objectPath() const { return path(); }
-    int objectRubberMode() const { return data.objRubberMode; }
     QPointF objectRubberPoint(const QString& key) const;
     QString objectRubberText(const QString& key) const;
-
-    double objectRadiusMajor() const { return EMB_MAX(rect().width(), rect().height())/2.0*scale(); }
-    double objectRadiusMinor() const { return EMB_MIN(rect().width(), rect().height())/2.0*scale(); }
-    double objectDiameterMajor() const { return EMB_MAX(rect().width(), rect().height())*scale(); }
-    double objectDiameterMinor() const { return EMB_MIN(rect().width(), rect().height())*scale(); }
 
     QPointF objectPos() const { return scenePos(); }
     double objectX() const { return scenePos().x(); }
@@ -1343,6 +1339,7 @@ public slots:
     void promptInputPrevious();
     void promptInputNext();
 
+    /* NOTE: for some reason QString <-> std::string conversions makes commands not work. */
     void runCommand();
     ScriptValue runCommandCore(const QString& cmd, ScriptEnv *context);
     void runCommandMain(const QString& cmd);
@@ -1379,11 +1376,6 @@ public slots:
 
     void setTextFont(const QString& str);
     void setTextSize(double num);
-
-    QString getCurrentLayer();
-    QRgb getCurrentColor();
-    QString getCurrentLineType();
-    QString getCurrentLineWeight();
 
     /* Standard Slots */
     void undo();

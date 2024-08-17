@@ -142,23 +142,6 @@ BoolSetting text_style_underline;
 BoolSetting text_style_overline;
 BoolSetting text_style_strikeout;
 
-Editor editor_data[] = {
-    {
-        .icon = "blank",
-        .label = "Start X",
-        .data_type = "double",
-        .signal = "LineStartX",
-        .object = OBJ_TYPE_LINE
-    },
-    {
-        .icon = "END",
-        .label = "END",
-        .data_type = "END",
-        .signal = "END",
-        .object = -1
-    }
-};
-
 const char *index_name[] = {
     "one",
     "two",
@@ -206,6 +189,73 @@ ScriptValue script_false = {
     .type = SCRIPT_BOOL
 };
 
+const char* _appName_ = "Embroidermodder";
+const char* _appVer_  = "v2.0 alpha";
+bool exitApp = false;
+int testing_mode = 0;
+
+void
+version(void)
+{
+    fprintf(stdout, "%s %s\n", _appName_, _appVer_);
+    exitApp = true;
+}
+
+/* . */
+int
+main(int argc, char* argv[])
+{
+    int n_files = 0;
+    char files_to_open[MAX_FILES][MAX_STRING_LENGTH];
+    for (int i = 1; i < argc; i++) {
+        if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--debug")  ) {
+            testing_mode = 1;
+        }
+        else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")   ) {
+
+    fprintf(stderr,
+    " ___ _____ ___  ___   __  _ ___  ___ ___   _____  __  ___  ___  ___ ___    ___ "           "\n"
+    "| __|     | _ \\| _ \\ /  \\| |   \\| __| _ \\ |     |/  \\|   \\|   \\| __| _ \\  |__ \\" "\n"
+    "| __| | | | _ <|   /| () | | |) | __|   / | | | | () | |) | |) | __|   /  / __/"           "\n"
+    "|___|_|_|_|___/|_|\\_\\\\__/|_|___/|___|_|\\_\\|_|_|_|\\__/|___/|___/|___|_|\\_\\ |___|"   "\n"
+    " _____________________________________________________________________________ "           "\n"
+    "|                                                                             | "          "\n"
+    "|                   https://www.libembroidery.org                             | "          "\n"
+    "|_____________________________________________________________________________| "          "\n"
+    "                                                                               "           "\n"
+    "Usage: embroidermodder [options] files ..."                                      "\n"
+/*   80CHARS======================================================================MAX */
+    "Options:"                                                                        "\n"
+    "  -d, --debug      Print lots of debugging information."                         "\n"
+    "  -h, --help       Print this message and exit."                                 "\n"
+    "  -v, --version    Print the version number of embroidermodder and exit."        "\n"
+    "\n"
+           );
+    exitApp = true;
+    }
+        else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) {
+            version();
+        }
+        else if (1 /* FIXME: QFile::exists(argv[i]) && emb_validFileFormat(argv[i])*/) {
+            if (n_files >= MAX_FILES) {
+                printf("ERROR: More files to open than MAX_FILES.");
+                continue;
+            }
+            strcpy(files_to_open[n_files], argv[i]);
+            n_files++;
+        }
+        else {
+            usage();
+        }
+    }
+
+    if (exitApp) {
+        return 1;
+    }
+    return make_application(n_files, files_to_open);
+}
+
+/* . */
 ScriptValue
 test_command(ScriptEnv *context)
 {
@@ -1143,6 +1193,31 @@ willOverflowInt32(int64_t a, int64_t b)
     return false;
 }
 
+/* . */
+int
+roundToMultiple(bool roundUp, int numToRound, int multiple)
+{
+    if (multiple == 0) {
+        return numToRound;
+    }
+    int remainder = numToRound % multiple;
+    if (remainder == 0) {
+        return numToRound;
+    }
+
+    if (numToRound < 0 && roundUp) {
+        return numToRound - remainder;
+    }
+    if (roundUp) {
+        return numToRound + multiple - remainder;
+    }
+    /* else round down */
+    if (numToRound < 0 && !roundUp) {
+        return numToRound - multiple - remainder;
+    }
+    return numToRound - remainder;
+}
+
 /* GEOMETRY */
 
 /* FIXME */
@@ -1162,6 +1237,34 @@ get_height(EmbGeometry geometry)
 /* FIXME */
 double
 get_radius(EmbGeometry geometry)
+{
+    return 1.0;
+}
+
+/* FIXME */
+double
+get_radius_major(EmbGeometry geometry)
+{
+    return 1.0;
+}
+
+/* FIXME */
+double
+get_radius_minor(EmbGeometry geometry)
+{
+    return 1.0;
+}
+
+/* FIXME */
+double
+get_diameter_major(EmbGeometry geometry)
+{
+    return 1.0;
+}
+
+/* FIXME */
+double
+get_diameter_minor(EmbGeometry geometry)
 {
     return 1.0;
 }
@@ -1417,7 +1520,7 @@ set_radius(EmbGeometry *geometry, double radius)
 {
     switch (geometry->type) {
     case EMB_ARC: {
-        geometry->object.arc = emb_arc_set_radius(geometry->object.arc, radius);
+        //geometry->object.arc = emb_arc_set_radius(geometry->object.arc, radius);
         break;
     }
     case EMB_CIRCLE:

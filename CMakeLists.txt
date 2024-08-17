@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(embroidermodder2 VERSION 2.0.0 LANGUAGES C CXX)
 
 find_package(OpenGL REQUIRED)
+find_package(Qt6 COMPONENTS Core Widgets PrintSupport OpenGL OpenGLWidgets REQUIRED)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED True)
@@ -37,8 +38,6 @@ add_compile_options(
 )
 endif()
 
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets PrintSupport)
-
 # The makers of CMake advise that you do not glob source files.
 #
 # https://cmake.org/cmake/help/latest/command/file.html?highlight=glob#glob
@@ -61,7 +60,6 @@ qt_add_executable(embroidermodder2
 
 	${SRC}/cmdprompt.cpp
 	${SRC}/commands.cpp
-	${SRC}/main.cpp
 	${SRC}/mainwindow.cpp
 	${SRC}/object.cpp
 	${SRC}/property-editor.cpp
@@ -71,9 +69,25 @@ qt_add_executable(embroidermodder2
 	${SRC}/wrapper.cpp
 
 	${SRC}/command_data.c
+	${SRC}/editor_data.c
 	${SRC}/script.c
 
 	${SRC}/embroidermodder.h
+	${SRC}/core.h
+)
+
+add_executable(emb2_glfw
+	${EXTERN}/libembroidery/embroidery.c
+	${EXTERN}/libembroidery/embroidery.h
+
+	${EXTERN}/tomlc99/toml.c
+	${EXTERN}/tomlc99/toml.h
+
+	${SRC}/main_glfw.c
+	${SRC}/command_data.c
+	${SRC}/editor_data.c
+	${SRC}/script.c
+
 	${SRC}/core.h
 )
 
@@ -84,14 +98,22 @@ include_directories(
 )
 
 qt_add_resources(embroidermodder2 imageresources
-    PREFIX "/icons/default"
-    FILES assets/icons/default/about.png
+	PREFIX "/icons/default"
+	FILES assets/icons/default/about.png
 )
 
 target_link_libraries(embroidermodder2 PRIVATE
 	Qt6::Core
+	Qt6::OpenGL
 	Qt6::Widgets
+	Qt6::OpenGLWidgets
 	Qt6::PrintSupport
+	${OPENGL_LIBRARIES}
+)
+
+target_link_libraries(emb2_glfw PRIVATE
+	glfw
+	${OPENGL_LIBRARIES}
 )
 
 set_target_properties(embroidermodder2 PROPERTIES
@@ -257,94 +279,6 @@ install(
 		${SRC_ASSETS}/samples/embroidermodder_logo/Embroidermodder.zxy
 		${SRC_ASSETS}/samples/EMBROIDERMODDER.TBF
 		${SRC_ASSETS}/samples/Fleur-de-lis-R2004.dxf
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.10o
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.bmp
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.bqm
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.bro
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.cmd
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.col
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.cqp
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.csd
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.csv
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.ct0
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.dat
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.dat.bak
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.dsb
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.dst
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.dst.bak
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.dsz
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.dxf
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.edr
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.emd
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.exp
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.exp.bak
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.exy
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.fcm
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.fxy
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.gt
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.hqf
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.hqv
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.hus
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.hus.bak
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.inb
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.inf
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.inf.bak
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.iqp
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.jef
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.jef+
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.jef.bak
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.jpx
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.ksm
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.lt0
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.m1
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.m2
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.m3
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.m4
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.mit
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.new
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.pat
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.pcm
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.pcs
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.pec
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.pes
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.phb
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.phc
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.plt
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.png
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.ptn
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.qcc
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.qli
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.saf
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.sew
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.shv
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.spx
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.ssd
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.ssp
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.sss
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.sst
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.stc
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.stx
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.svg
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.t01
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.t03
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.t04
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.t05
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.t09
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.tap
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.tbf
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.tif
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.txt
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.txt.bak
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.uxy
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.vip
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.vip.bak
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.vp3
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.vp3.bak
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.vp4
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.xxx
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.xxx.bak
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.zhs
-		${SRC_ASSETS}/samples/geometric_objects/geometric_objects.zxy
 		${SRC_ASSETS}/samples/Omega-R2010.dxf
 		${SRC_ASSETS}/samples/OSHW-Logo-R2000.dxf
 		${SRC_ASSETS}/samples/README.md
@@ -873,7 +807,7 @@ install(
 
 install(
 	FILES
-		extern/libembroidery/assets/arc_polyester_colors.csv
+		${SRC_ASSETS}/thread_tables/arc_polyester_colors.csv
 		extern/libembroidery/assets/pantone_colors.csv
 		extern/libembroidery/assets/arc_rayon_colors.csv
 		extern/libembroidery/assets/pcm_colors.csv

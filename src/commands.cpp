@@ -368,7 +368,7 @@ activeUndoStack()
     _main->debug_message("activeUndoStack()");
     View* v = activeView();
     if (v) {
-        QUndoStack* u = v->getUndoStack();
+        QUndoStack* u = v->data.undoStack;
         return u;
     }
     return 0;
@@ -570,8 +570,9 @@ MainWindow::setTextSize(double num)
     }
 }
 
+/* . */
 QString
-MainWindow::getCurrentLayer()
+getCurrentLayer()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
@@ -580,8 +581,9 @@ MainWindow::getCurrentLayer()
     return "0";
 }
 
+/* . */
 QRgb
-MainWindow::getCurrentColor()
+getCurrentColor()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
@@ -590,8 +592,9 @@ MainWindow::getCurrentColor()
     return 0; /* TODO: return color ByLayer */
 }
 
+/* . */
 QString
-MainWindow::getCurrentLineType()
+getCurrentLineType()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
@@ -600,7 +603,9 @@ MainWindow::getCurrentLineType()
     return "ByLayer";
 }
 
-QString MainWindow::getCurrentLineWeight()
+/* . */
+QString
+getCurrentLineWeight()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
@@ -1148,7 +1153,7 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         break;
     }
     case ACTION_PAN_LEFT: {
-        QUndoStack* stack = gview->getUndoStack();
+        QUndoStack* stack = gview->data.undoStack;
         if (stack) {
             UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanLeft", gview, 0);
             stack->push(cmd);
@@ -1156,7 +1161,7 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         break;
     }
     case ACTION_PAN_RIGHT: {
-        QUndoStack* stack = gview->getUndoStack();
+        QUndoStack* stack = gview->data.undoStack;
         if (stack) {
             UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanRight", gview, 0);
             stack->push(cmd);
@@ -1164,7 +1169,7 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         break;
     }
     case ACTION_PAN_UP: {
-        QUndoStack* stack = gview->getUndoStack();
+        QUndoStack* stack = gview->data.undoStack;
         if (stack) {
             UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanUp", gview, 0);
             stack->push(cmd);
@@ -1172,7 +1177,7 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         break;
     }
     case ACTION_PAN_DOWN: {
-        QUndoStack* stack = gview->getUndoStack();
+        QUndoStack* stack = gview->data.undoStack;
         if (stack) {
             UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanDown", gview, 0);
             stack->push(cmd);
@@ -1216,7 +1221,7 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         break;
     }
     case ACTION_ZOOM_EXTENTS: {
-        QUndoStack* stack = gview->getUndoStack();
+        QUndoStack* stack = gview->data.undoStack;
         if (stack) {
             UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomExtents", gview, 0);
             stack->push(cmd);
@@ -1244,7 +1249,7 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         break;
     }
     case ACTION_ZOOM_SELECTED: {
-        QUndoStack* stack = gview->getUndoStack();
+        QUndoStack* stack = gview->data.undoStack;
         if (stack) {
             UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomSelected", gview, 0);
             stack->push(cmd);
@@ -1460,9 +1465,9 @@ nativeAddTextSingle(std::string str, double x, double y, double rot, bool fill, 
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->getUndoStack();
+    QUndoStack* stack = gview->data.undoStack;
     if (gview && gscene && stack) {
-        Object* obj = new Object(QString(str.c_str()), x, -y, _main->getCurrentColor());
+        Object* obj = new Object(QString(str.c_str()), x, -y, getCurrentColor());
         obj->setObjectTextFont(text_font.setting);
         obj->setObjectTextSize(text_size.setting);
         obj->setObjectTextStyle(text_style_bold.setting,
@@ -1505,9 +1510,9 @@ nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubber
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->getUndoStack();
+    QUndoStack* stack = gview->data.undoStack;
     if (gview && gscene && stack) {
-        Object* obj = new Object(x1, -y1, x2, -y2, _main->getCurrentColor());
+        Object* obj = new Object(x1, -y1, x2, -y2, getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
         if (rubberMode) {
@@ -1534,11 +1539,11 @@ nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->getUndoStack();
+    QUndoStack* stack = gview->data.undoStack;
     if (!(gview && gscene && stack)) {
         return;
     }
-    Object* obj = new Object(x, -y, w, -h, _main->getCurrentColor());
+    Object* obj = new Object(x, -y, w, -h, getCurrentColor());
     obj->setRotation(-rot);
     obj->setObjectRubberMode(rubberMode);
     /* TODO: rect fill */
@@ -1572,7 +1577,7 @@ nativeAddArc(double x1, double y1, double x2, double y2, double x3, double y3, i
         arc.mid.y = -y2;
         arc.end.y = x3;
         arc.end.y = -y3;
-        Object* arcObj = new Object(arc, _main->getCurrentColor());
+        Object* arcObj = new Object(arc, getCurrentColor());
         arcObj->setObjectRubberMode(rubberMode);
         if (rubberMode) {
             gview->addToRubberRoom(arcObj);
@@ -1587,13 +1592,13 @@ nativeAddCircle(double centerX, double centerY, double radius, bool fill, int ru
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->getUndoStack();
+    QUndoStack* stack = gview->data.undoStack;
     if (gview && gscene && stack) {
         EmbCircle circle;
         circle.center.x = centerX;
         circle.center.y = -centerY;
         circle.radius = radius;
-        Object* obj = new Object(circle, _main->getCurrentColor());
+        Object* obj = new Object(circle, getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
         /* TODO: circle fill. */
         if (rubberMode) {
@@ -1613,7 +1618,7 @@ nativeAddSlot(double centerX, double centerY, double diameter, double length, do
 {
     /* TODO: Use UndoableCommand for slots */
     /*
-    Object* slotObj = new Object(centerX, -centerY, diameter, length, _main->getCurrentColor());
+    Object* slotObj = new Object(centerX, -centerY, diameter, length, getCurrentColor());
     slotObj->setRotation(-rot);
     slotObj->setObjectRubberMode(rubberMode);
     if (rubberMode) gview->addToRubberRoom(slotObj);
@@ -1628,14 +1633,14 @@ nativeAddEllipse(double centerX, double centerY, double width, double height, do
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->getUndoStack();
+    QUndoStack* stack = gview->data.undoStack;
     if (gview && gscene && stack) {
         EmbEllipse ellipse;
         ellipse.center.x = centerX;
         ellipse.center.y = -centerY;
         ellipse.radius.x = width/2.0;
         ellipse.radius.y = height/2.0;
-        Object* obj = new Object(ellipse, _main->getCurrentColor());
+        Object* obj = new Object(ellipse, getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
         /* TODO: ellipse fill */
@@ -1655,12 +1660,12 @@ void
 nativeAddPoint(double x, double y)
 {
     View* gview = activeView();
-    QUndoStack* stack = gview->getUndoStack();
+    QUndoStack* stack = gview->data.undoStack;
     if (gview && stack) {
         EmbPoint point;
         point.position.x = x;
         point.position.y = -y;
-        Object* obj = new Object(point, _main->getCurrentColor());
+        Object* obj = new Object(point, getCurrentColor());
         UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data.OBJ_NAME, obj, gview, 0);
         stack->push(cmd);
     }
@@ -1679,10 +1684,10 @@ nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubber
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->getUndoStack();
+    QUndoStack* stack = gview->data.undoStack;
     if (gview && gscene && stack) {
         EmbPolygon polygon;
-        Object* obj = new Object(polygon, OBJ_TYPE_POLYGON, p, _main->getCurrentColor());
+        Object* obj = new Object(polygon, OBJ_TYPE_POLYGON, p, getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
         if (rubberMode) {
             gview->addToRubberRoom(obj);
@@ -1704,10 +1709,10 @@ nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubbe
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->getUndoStack();
+    QUndoStack* stack = gview->data.undoStack;
     if (gview && gscene && stack) {
         EmbPath path;
-        Object* obj = new Object(path, OBJ_TYPE_POLYLINE, p, _main->getCurrentColor());
+        Object* obj = new Object(path, OBJ_TYPE_POLYLINE, p, getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
         if (rubberMode) {
             gview->addToRubberRoom(obj);
@@ -1749,9 +1754,9 @@ nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int r
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->getUndoStack();
+    QUndoStack* stack = gview->data.undoStack;
     if (gview && gscene && stack) {
-        Object* obj = new Object(x1, -y1, x2, -y2, _main->getCurrentColor());
+        Object* obj = new Object(x1, -y1, x2, -y2, getCurrentColor());
         obj->setRotation(-rot);
         obj->setObjectRubberMode(rubberMode);
         if (rubberMode) {

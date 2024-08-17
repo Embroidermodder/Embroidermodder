@@ -1177,27 +1177,6 @@ View::createRulerTextPath(float x, float y, QString str, float height)
 }
 
 /* . */
-int
-View::roundToMultiple(bool roundUp, int numToRound, int multiple)
-{
-    if (multiple == 0) {
-        return numToRound;
-    }
-    int remainder = numToRound % multiple;
-    if (remainder == 0)
-        return numToRound;
-
-    if (numToRound < 0 && roundUp)
-        return numToRound - remainder;
-    if (roundUp)
-        return numToRound + multiple - remainder;
-    //else round down
-    if (numToRound < 0 && !roundUp)
-        return numToRound - multiple - remainder;
-    return numToRound - remainder;
-}
-
-/* . */
 void
 View::updateMouseCoords(int x, int y)
 {
@@ -1650,16 +1629,15 @@ View::mouseMoveEvent(QMouseEvent* event)
             double rad = radians(rot-mouseAngle);
             double cosRot = cos(rad);
             double sinRot = sin(rad);
-            double px = 0;
-            double py = 0;
-            px -= x;
-            py -= y;
-            double rotX = px*cosRot - py*sinRot;
-            double rotY = px*sinRot + py*cosRot;
-            rotX += x;
-            rotY += y;
+            EmbVector p, rotv;
+            p.x = -x;
+            p.y = -y;
+            rotv.x = p.x*cosRot - p.y*sinRot;
+            rotv.y = p.x*sinRot + p.y*cosRot;
+            rotv.x += x;
+            rotv.y += y;
 
-            data.previewObjectItemGroup->setPos(rotX, rotY);
+            data.previewObjectItemGroup->setPos(rotv.x, rotv.y);
             data.previewObjectItemGroup->setRotation(rot-mouseAngle);
         }
         else if (data.previewMode == PREVIEW_MODE_SCALE) {
@@ -1734,7 +1712,9 @@ View::mouseReleaseEvent(QMouseEvent* event)
             double dx = data.sceneMousePoint.x() - data.scenePressPoint.x();
             double dy = data.sceneMousePoint.y() - data.scenePressPoint.y();
             //Ensure that moving only happens if the mouse has moved.
-            if (dx || dy) moveSelected(dx, dy);
+            if (dx || dy) {
+                moveSelected(dx, dy);
+            }
             data.movingActive = false;
         }
         event->accept();
@@ -2056,6 +2036,7 @@ View::copySelected()
     cutCopyObjectList = createObjectList(selectedList);
 }
 
+/* . */
 void
 View::paste()
 {
@@ -2073,7 +2054,9 @@ View::paste()
     cutCopyObjectList = createObjectList(cutCopyObjectList);
 }
 
-QList<QGraphicsItem*> View::createObjectList(QList<QGraphicsItem*> list)
+/* . */
+QList<QGraphicsItem*>
+View::createObjectList(QList<QGraphicsItem*> list)
 {
     QList<QGraphicsItem*> copyList;
 
@@ -2083,126 +2066,17 @@ QList<QGraphicsItem*> View::createObjectList(QList<QGraphicsItem*> list)
             continue;
         }
 
-        int objType = item->data(OBJ_TYPE).toInt();
-
-        if (objType == OBJ_TYPE_ARC) {
-            Object* arcObj = static_cast<Object*>(item);
-            if (arcObj) {
-                Object* copyArcObj = new Object(arcObj);
-                copyList.append(copyArcObj);
-            }
-        }
-        else if (objType == OBJ_TYPE_BLOCK) {
-            //TODO: cut/copy blocks
-        }
-        else if (objType == OBJ_TYPE_CIRCLE) {
-            Object* circObj = static_cast<Object*>(item);
-            if (circObj) {
-                Object* copyCircObj = new Object(circObj);
-                copyList.append(copyCircObj);
-            }
-        }
-        else if (objType == OBJ_TYPE_DIMALIGNED) {
-            //TODO: cut/copy aligned dimensions
-        }
-        else if (objType == OBJ_TYPE_DIMANGULAR) {
-            //TODO: cut/copy angular dimensions
-        }
-        else if (objType == OBJ_TYPE_DIMARCLENGTH) {
-            //TODO: cut/copy arclength dimensions
-        }
-        else if (objType == OBJ_TYPE_DIMDIAMETER) {
-            //TODO: cut/copy diameter dimensions
-        }
-        else if (objType == OBJ_TYPE_DIMLEADER) {
-            Object* dimLeaderObj = static_cast<Object*>(item);
-            if (dimLeaderObj) {
-                Object* copyDimLeaderObj = new Object(dimLeaderObj);
-                copyList.append(copyDimLeaderObj);
-            }
-        }
-        else if (objType == OBJ_TYPE_DIMLINEAR) {
-            //TODO: cut/copy linear dimensions
-        }
-        else if (objType == OBJ_TYPE_DIMORDINATE) {
-            //TODO: cut/copy ordinate dimensions
-        }
-        else if (objType == OBJ_TYPE_DIMRADIUS) {
-            //TODO: cut/copy radius dimensions
-        }
-        else if (objType == OBJ_TYPE_ELLIPSE) {
-            Object* elipObj = static_cast<Object*>(item);
-            if (elipObj) {
-                Object* copyElipObj = new Object(elipObj);
-                copyList.append(copyElipObj);
-            }
-        }
-        else if (objType == OBJ_TYPE_ELLIPSEARC) {
-            //TODO: cut/copy elliptical arcs
-        }
-        else if (objType == OBJ_TYPE_IMAGE) {
-            //TODO: cut/copy images
-        }
-        else if (objType == OBJ_TYPE_INFINITELINE) {
-            //TODO: cut/copy infinite lines
-        }
-        else if (objType == OBJ_TYPE_LINE) {
-            Object* lineObj = static_cast<Object*>(item);
-            if (lineObj) {
-                Object* copyLineObj = new Object(lineObj);
-                copyList.append(copyLineObj);
-            }
-        }
-        else if (objType == OBJ_TYPE_PATH) {
-            Object* pathObj = static_cast<Object*>(item);
-            if (pathObj) {
-                Object* copyPathObj = new Object(pathObj);
-                copyList.append(copyPathObj);
-            }
-        }
-        else if (objType == OBJ_TYPE_POINT) {
-            Object* pointObj = static_cast<Object*>(item);
-            if (pointObj) {
-                Object* copyPointObj = new Object(pointObj);
-                copyList.append(copyPointObj);
-            }
-        }
-        else if (objType == OBJ_TYPE_POLYGON) {
-            Object* pgonObj = static_cast<Object*>(item);
-            if (pgonObj) {
-                Object* copyPgonObj = new Object(pgonObj);
-                copyList.append(copyPgonObj);
-            }
-        }
-        else if (objType == OBJ_TYPE_POLYLINE) {
-            Object* plineObj = static_cast<Object*>(item);
-            if (plineObj) {
-                Object* copyPlineObj = new Object(plineObj);
-                copyList.append(copyPlineObj);
-            }
-        }
-        else if (objType == OBJ_TYPE_RAY) {
-            //TODO: cut/copy rays
-        }
-        else if (objType == OBJ_TYPE_RECTANGLE) {
-            Object* rectObj = static_cast<Object*>(item);
-            if (rectObj) {
-                Object* copyRectObj = new Object(rectObj);
-                copyList.append(copyRectObj);
-            }
-        }
-        else if (objType == OBJ_TYPE_TEXTSINGLE) {
-            Object* textObj = static_cast<Object*>(item);
-            if (textObj) {
-                Object* copyTextObj = new Object(textObj);
-                copyList.append(copyTextObj);
-            }
+        Object* obj = static_cast<Object*>(item);
+        if (obj) {
+            Object* copyObj = new Object(obj);
+            copyList.append(copyObj);
         }
     }
 
     return copyList;
 }
 
+/* . */
 void
 View::repeatAction()
 {
@@ -2211,6 +2085,7 @@ View::repeatAction()
     prompt->processInput();
 }
 
+/* . */
 void
 View::moveAction()
 {
