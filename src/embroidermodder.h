@@ -148,7 +148,6 @@ extern QComboBox* linetypeSelector;
 extern QComboBox* lineweightSelector;
 extern QFontComboBox* textFontSelector;
 extern QComboBox* textSizeSelector;
-extern bool shiftKeyPressedState;
 extern QList<QGraphicsItem*> cutCopyObjectList;
 extern QStringList objectTextJustifyList;
 
@@ -157,9 +156,6 @@ extern QString defaultPrefix;
 extern QString prefix;
 extern QString lastCmd;
 extern QString curCmd;
-extern bool cmdActive;
-extern bool rapidFireEnabled;
-extern bool isBlinking;
 
 /* . */
 typedef struct ViewData_ {
@@ -1347,8 +1343,6 @@ public slots:
     void runCommandMove(const QString& cmd, double x, double y);
     void runCommandContext(const QString& cmd, const QString& str);
     void runCommandPrompt(const QString& cmd);
-
-    void debug_message(const char *);
 
     void newFile();
     void openFile(bool recent = false, const QString& recentFile = "");

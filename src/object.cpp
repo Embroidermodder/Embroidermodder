@@ -27,15 +27,127 @@ Object::Object(EmbArc arc, QRgb rgb, QGraphicsItem *item)
 /* . */
 Object::Object(EmbCircle circle, QRgb rgb, QGraphicsItem *item)
 {
+    debug_message("CircleObject Constructor()");
+    //TODO: getCurrentLineType
     init_geometry(EMB_CIRCLE, rgb, Qt::SolidLine);
     geometry->object.circle = circle;
+
+    /*
+    EmbVector center;
+    center.x = centerX;
+    center.y = centerY;
+    set_radius(geometry, radius);
+    set_center(geometry, center);
+    updatePath();
+    */
 }
 
 /* . */
 Object::Object(EmbEllipse ellipse, QRgb rgb, QGraphicsItem *item)
 {
+    debug_message("EllipseObject Constructor()");
+    //TODO: getCurrentLineType
     init_geometry(EMB_ELLIPSE, rgb, Qt::SolidLine);
     geometry->object.ellipse = ellipse;
+
+    /*
+    setObjectSize(width, height);
+    EmbVector center;
+    center.x = centerX;
+    center.y = centerY;
+    setObjectCenter(center);
+    updatePath();
+    */
+}
+
+/* . */
+Object::Object(EmbPath path, int type_, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("PolylineObject Constructor()");
+    // TODO: getCurrentLineType
+    init_geometry(type_, rgb, Qt::SolidLine);
+    updatePath(p);
+    //setObjectPos(x,y);
+}
+
+/*
+Object::Object(double x, double y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("PathObject Constructor()");
+    init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
+    init_geometry(EMB_PATH, rgb, lineType);
+    updatePath(p);
+    setObjectPos(x,y);
+}
+
+Object::Object(double x, double y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+{
+    debug_message("PolygonObject Constructor()");
+    init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
+    init_geometry(EMB_POLYGON, rgb, lineType);
+    updatePath(p);
+    setObjectPos(x,y);
+}
+*/
+
+/* . */
+Object::Object(const QString& str, double x, double y, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("TextSingleObject Constructor()");
+    // TODO: getCurrentLineType
+    init_geometry(EMB_TEXT_SINGLE, rgb, Qt::SolidLine);
+    data.objTextJustify = "Left"; // TODO: set the justification properly
+
+    setObjectText(str);
+    setObjectPos(x,y);
+}
+
+/* . */
+Object::Object(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("DimLeaderObject Constructor()");
+    // TODO: getCurrentLineType
+    init_geometry(EMB_DIM_LEADER, rgb, Qt::SolidLine);
+
+    data.curved = false;
+    data.filled = true;
+    setObjectEndPoint1(x1, y1);
+    setObjectEndPoint2(x2, y2);
+}
+
+/*
+Object::Object(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("ImageObject Constructor()");
+    // TODO: getCurrentLineType
+    init_geometry(EMB_IMAGE, rgb, Qt::SolidLine);
+    setObjectRect(x, y, w, h);
+}
+
+Object::Object(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("RectObject Constructor()");
+    //TODO: getCurrentLineType
+    init_geometry(EMB_RECT, rgb, lineType);
+    setObjectRect(x, y, w, h);
+}
+*/
+
+/*
+Object::Object(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("LineObject Constructor()");
+    //TODO: getCurrentLineType
+
+    init_geometry(EMB_LINE, rgb, Qt::SolidLine);
+    setObjectEndPoint1(x1, y1);
+    setObjectEndPoint2(x2, y2);
+}
+*/
+
+/* . */
+Object::Object(EmbPoint_, unsigned int, QGraphicsItem*)
+{
 }
 
 /* . */
@@ -294,11 +406,10 @@ Object::realRender(QPainter* painter, const QPainterPath& renderPath)
 ScriptValue
 circle_command(ScriptEnv *context)
 {
-    _main->debug_message("ADDING CIRCLE");
+    debug_message("ADDING CIRCLE");
 
     /*
-    context->point1.x = 0.0f;
-    context->point1.y = 0.0f;
+    context->point1 = zero_vector;
     context->point2 = context->point1;
     context->point3 = context->point1;
     add_real_variable(context, "rad", 0.0f);
@@ -605,20 +716,6 @@ circle_prompt(ScriptEnv *context)
 }
 
 #if 0
-/* . */
-Object::Object(double centerX, double centerY, double radius, QRgb rgb, QGraphicsItem* parent)
-{
-    debug_message("CircleObject Constructor()");
-    //TODO: getCurrentLineType
-    init_geometry(EMB_CIRCLE, rgb, Qt::SolidLine);
-
-    EmbVector center;
-    center.x = centerX;
-    center.y = centerY;
-    set_radius(geometry, radius);
-    set_center(geometry, center);
-    updatePath();
-}
 
 void
 CircleObject::updateRubber(QPainter* painter)
@@ -701,18 +798,6 @@ CircleObject::updateRubber(QPainter* painter)
     default:
         break;
     }
-}
-
-Object::Object(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("DimLeaderObject Constructor()");
-    // TODO: getCurrentLineType
-    init_geometry(EMB_DIM_LEADER, rgb, Qt::SolidLine);
-
-    curved = false;
-    filled = true;
-    setObjectEndPoint1(x1, y1);
-    setObjectEndPoint2(x2, y2);
 }
 
 QPointF DimLeaderObject::objectMidPoint() const
@@ -1106,19 +1191,6 @@ function prompt(str)
     }
 }
 
-Object::Object(double centerX, double centerY, double width, double height, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("EllipseObject Constructor()");
-    //TODO: getCurrentLineType
-    init_geometry(EMB_ELLIPSE, rgb, Qt::SolidLine);
-    setObjectSize(width, height);
-    EmbVector center;
-    center.x = centerX;
-    center.y = centerY;
-    setObjectCenter(center);
-    updatePath();
-}
-
 void
 EllipseObject::setObjectSize(double width, double height)
 {
@@ -1221,14 +1293,6 @@ EllipseObject::updateRubber(QPainter* painter)
     default:
         break;
     }
-}
-
-Object::Object(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("ImageObject Constructor()");
-    /* TODO: getCurrentLineType */
-    init_geometry(EMB_IMAGE, rgb, Qt::SolidLine);
-    setObjectRect(x, y, w, h);
 }
 
 void
@@ -1339,16 +1403,6 @@ function prompt(str)
     }
 }
 
-Object::Object(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("LineObject Constructor()");
-    //TODO: getCurrentLineType
-
-    init_geometry(EMB_LINE, rgb, Qt::SolidLine);
-    setObjectEndPoint1(x1, y1);
-    setObjectEndPoint2(x2, y2);
-}
-
 void
 LineObject::updateRubber(QPainter* painter)
 {
@@ -1457,15 +1511,6 @@ prompt(str)
             }
         }
     }
-}
-
-Object::Object(double x, double y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("PathObject Constructor()");
-    init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
-    init_geometry(EMB_PATH, rgb, lineType);
-    updatePath(p);
-    setObjectPos(x,y);
 }
 
 void
@@ -1817,15 +1862,6 @@ prompt(char *str)
     }
 }
 
-Object::Object(double x, double y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("PolygonObject Constructor()");
-    init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
-    init_geometry(EMB_POLYGON, rgb, lineType);
-    updatePath(p);
-    setObjectPos(x,y);
-}
-
 void
 PolygonObject::updateRubber(QPainter* painter)
 {
@@ -2048,15 +2084,6 @@ function prompt(str)
     }
 }
 
-PolylineObject::PolylineObject(double x, double y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("PolylineObject Constructor()");
-    init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
-    init_geometry(EMB_POLYLINE, rgb, lineType);
-    updatePath(p);
-    setObjectPos(x,y);
-}
-
 void
 PolylineObject::updateRubber(QPainter* painter)
 {
@@ -2211,14 +2238,6 @@ function prompt(str)
             }
         }
     }
-}
-
-Object::Object(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("RectObject Constructor()");
-    //TODO: getCurrentLineType
-    init_geometry(EMB_RECT, rgb, lineType);
-    setObjectRect(x, y, w, h);
 }
 
 void
@@ -2564,17 +2583,6 @@ function prompt(str)
     }
 }
 
-Object::Object(const QString& str, double x, double y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("TextSingleObject Constructor()");
-    // TODO: getCurrentLineType
-    init_geometry(EMB_TEXT_SINGLE, rgb, lineType);
-    objTextJustify = "Left"; // TODO: set the justification properly
-
-    setObjectText(str);
-    setObjectPos(x,y);
-}
-
 void
 TextSingleObject::updateRubber(QPainter* painter)
 {
@@ -2806,12 +2814,6 @@ Object::objectCenter() const
 {
     return scenePos();
 }
-
-/*
-Object::Object(QString const&, double, double, unsigned int, QGraphicsItem*)
-{
-}
-*/
 
 /* . */
 QStringList objectTextJustifyList = {
@@ -3178,26 +3180,6 @@ Object::updatePath()
     default:
         break;
     }
-}
-
-/* . */
-Object::Object(QString const&, double, double, unsigned int, QGraphicsItem*)
-{
-}
-
-/* . */
-Object::Object(double, double, double, double, unsigned int, QGraphicsItem*)
-{
-}
-
-/* . */
-Object::Object(EmbPoint_, unsigned int, QGraphicsItem*)
-{
-}
-
-/* . */
-Object::Object(EmbPath_, int, QPainterPath const&, unsigned int, QGraphicsItem*)
-{
 }
 
 /* . */

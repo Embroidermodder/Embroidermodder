@@ -225,3 +225,21 @@ set_enabled_group(QObject *senderObj, const char *keylist, bool enabled)
     }
 }
 
+void
+wait_cursor(void)
+{
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+}
+
+void
+arrow_cursor(void)
+{
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
+}
+
+void
+restore_cursor(void)
+{
+    QApplication::restoreOverrideCursor();
+}
+

@@ -125,7 +125,7 @@ UndoEditor::redo()
 /* . */
 ImageWidget::ImageWidget(const QString &filename, QWidget* parent) : QWidget(parent)
 {
-    qDebug("ImageWidget Constructor");
+    debug_message("ImageWidget Constructor");
 
     img.load(filename);
 
@@ -156,7 +156,7 @@ ImageWidget::save(const QString &fileName)
 /* . */
 ImageWidget::~ImageWidget()
 {
-    qDebug("ImageWidget Destructor");
+    debug_message("ImageWidget Destructor");
 }
 
 void
@@ -235,14 +235,14 @@ contextMenuEvent(QObject* object, QContextMenuEvent *event)
         menu.addAction(action);
     }
     menu.exec(event->globalPos());
-    QApplication::restoreOverrideCursor();
+    restore_cursor();
     statusbar->clearMessage();
 }
 
 void
 statusbar_toggle(QString key, bool on)
 {
-    qDebug("StatusBarButton toggleSnap()");
+    debug_message("StatusBarButton toggleSnap()");
     View* gview = activeView();
     if (gview) {
         if (key == "SNAP") {
@@ -272,7 +272,7 @@ statusbar_toggle(QString key, bool on)
 void
 enableLwt()
 {
-    qDebug("StatusBarButton enableLwt()");
+    debug_message("StatusBarButton enableLwt()");
     View* gview = activeView();
     if (gview) {
         if (!gview->isLwtEnabled()) {
@@ -284,7 +284,7 @@ enableLwt()
 void
 disableLwt()
 {
-    qDebug("StatusBarButton disableLwt()");
+    debug_message("StatusBarButton disableLwt()");
     View* gview = activeView();
     if (gview) {
         if (gview->isLwtEnabled()) {
@@ -296,7 +296,7 @@ disableLwt()
 void
 enableReal()
 {
-    qDebug("StatusBarButton enableReal()");
+    debug_message("StatusBarButton enableReal()");
     View* gview = activeView();
     if (gview) {
         gview->toggleReal(true);
@@ -306,7 +306,7 @@ enableReal()
 void
 disableReal()
 {
-    qDebug("StatusBarButton disableReal()");
+    debug_message("StatusBarButton disableReal()");
     View* gview = activeView();
     if (gview) {
         gview->toggleReal(false);
@@ -402,7 +402,7 @@ SelectBox::setDirection(int dir)
 void
 SelectBox::setColors(const QColor& colorL, const QColor& fillL, const QColor& colorR, const QColor& fillR, int newAlpha)
 {
-    qDebug("SelectBox setColors()");
+    debug_message("SelectBox setColors()");
     alpha = newAlpha;
 
     leftPenColor = colorL; //TODO: allow customization
@@ -498,7 +498,7 @@ LayerManager::LayerManager(MainWindow* mw, QWidget* parent) : QDialog(parent)
 /* . */
 LayerManager::~LayerManager()
 {
-    QApplication::restoreOverrideCursor();
+    restore_cursor();
 }
 
 /* . */
@@ -537,7 +537,7 @@ create_details_dialog(void)
 
     dialog->setMinimumSize(750, 550);
 
-    qDebug("EmbDetailsDialog()");
+    debug_message("EmbDetailsDialog()");
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
     EmbPattern* pattern = activeMdiWindow()->pattern;
@@ -698,30 +698,30 @@ create_details_dialog(void)
     QGroupBox* groupBoxMisc = new QGroupBox(translate("General Information"), widget);
 
     QLabel* labelStitchesTotal = new QLabel(translate("Total Stitches:"), dialog);
-    QLabel* labelStitchesReal  = new QLabel(translate("Real Stitches:"), dialog);
-    QLabel* labelStitchesJump  = new QLabel(translate("Jump Stitches:"), dialog);
-    QLabel* labelStitchesTrim  = new QLabel(translate("Trim Stitches:"), dialog);
-    QLabel* labelColorTotal    = new QLabel(translate("Total Colors:"), dialog);
-    QLabel* labelColorChanges  = new QLabel(translate("Color Changes:"), dialog);
-    QLabel* labelRectLeft      = new QLabel(translate("Left:"), dialog);
-    QLabel* labelRectTop       = new QLabel(translate("Top:"), dialog);
-    QLabel* labelRectRight     = new QLabel(translate("Right:"), dialog);
-    QLabel* labelRectBottom    = new QLabel(translate("Bottom:"), dialog);
-    QLabel* labelRectWidth     = new QLabel(translate("Width:"), dialog);
-    QLabel* labelRectHeight    = new QLabel(translate("Height:"), dialog);
+    QLabel* labelStitchesReal = new QLabel(translate("Real Stitches:"), dialog);
+    QLabel* labelStitchesJump = new QLabel(translate("Jump Stitches:"), dialog);
+    QLabel* labelStitchesTrim = new QLabel(translate("Trim Stitches:"), dialog);
+    QLabel* labelColorTotal = new QLabel(translate("Total Colors:"), dialog);
+    QLabel* labelColorChanges = new QLabel(translate("Color Changes:"), dialog);
+    QLabel* labelRectLeft = new QLabel(translate("Left:"), dialog);
+    QLabel* labelRectTop = new QLabel(translate("Top:"), dialog);
+    QLabel* labelRectRight = new QLabel(translate("Right:"), dialog);
+    QLabel* labelRectBottom = new QLabel(translate("Bottom:"), dialog);
+    QLabel* labelRectWidth = new QLabel(translate("Width:"), dialog);
+    QLabel* labelRectHeight = new QLabel(translate("Height:"), dialog);
 
     QLabel* fieldStitchesTotal = new QLabel(QString::number(stitchesTotal), dialog);
-    QLabel* fieldStitchesReal  = new QLabel(QString::number(stitchesReal), dialog);
-    QLabel* fieldStitchesJump  = new QLabel(QString::number(stitchesJump), dialog);
-    QLabel* fieldStitchesTrim  = new QLabel(QString::number(stitchesTrim), dialog);
-    QLabel* fieldColorTotal    = new QLabel(QString::number(colorTotal), dialog);
-    QLabel* fieldColorChanges  = new QLabel(QString::number(colorChanges), dialog);
-    QLabel* fieldRectLeft      = new QLabel(QString::number(boundingRect.left())   + " mm", dialog);
-    QLabel* fieldRectTop       = new QLabel(QString::number(boundingRect.top())    + " mm", dialog);
-    QLabel* fieldRectRight     = new QLabel(QString::number(boundingRect.right())  + " mm", dialog);
-    QLabel* fieldRectBottom    = new QLabel(QString::number(boundingRect.bottom()) + " mm", dialog);
-    QLabel* fieldRectWidth     = new QLabel(QString::number(boundingRect.width())  + " mm", dialog);
-    QLabel* fieldRectHeight    = new QLabel(QString::number(boundingRect.height()) + " mm", dialog);
+    QLabel* fieldStitchesReal = new QLabel(QString::number(stitchesReal), dialog);
+    QLabel* fieldStitchesJump = new QLabel(QString::number(stitchesJump), dialog);
+    QLabel* fieldStitchesTrim = new QLabel(QString::number(stitchesTrim), dialog);
+    QLabel* fieldColorTotal = new QLabel(QString::number(colorTotal), dialog);
+    QLabel* fieldColorChanges = new QLabel(QString::number(colorChanges), dialog);
+    QLabel* fieldRectLeft = new QLabel(QString::number(boundingRect.left()) + " mm", dialog);
+    QLabel* fieldRectTop = new QLabel(QString::number(boundingRect.top()) + " mm", dialog);
+    QLabel* fieldRectRight = new QLabel(QString::number(boundingRect.right()) + " mm", dialog);
+    QLabel* fieldRectBottom = new QLabel(QString::number(boundingRect.bottom()) + " mm", dialog);
+    QLabel* fieldRectWidth = new QLabel(QString::number(boundingRect.width()) + " mm", dialog);
+    QLabel* fieldRectHeight = new QLabel(QString::number(boundingRect.height()) + " mm", dialog);
 
     QGridLayout* gridLayoutMisc = new QGridLayout(groupBoxMisc);
     gridLayoutMisc->addWidget(labelStitchesTotal, 0, 0, Qt::AlignLeft);
@@ -785,7 +785,7 @@ PreviewDialog::PreviewDialog(QWidget* parent,
                              const QString& dir,
                              const QString& filter) : QFileDialog(parent, caption, dir, filter)
 {
-    qDebug("PreviewDialog Constructor");
+    debug_message("PreviewDialog Constructor");
 
     //TODO: get actual thumbnail image from file, lets also use a size of 128x128 for now...
     //TODO: make thumbnail size adjustable thru settings dialog
@@ -808,7 +808,7 @@ PreviewDialog::PreviewDialog(QWidget* parent,
 
 PreviewDialog::~PreviewDialog()
 {
-    qDebug("PreviewDialog Destructor");
+    debug_message("PreviewDialog Destructor");
 }
 
 MdiArea::MdiArea(MainWindow* mw, QWidget *parent) : QMdiArea(parent)
@@ -1008,7 +1008,7 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
 
 MdiWindow::~MdiWindow()
 {
-    qDebug("MdiWindow Destructor()");
+    debug_message("MdiWindow Destructor()");
     emb_pattern_free(pattern);
 }
 
@@ -1021,7 +1021,7 @@ MdiWindow::saveFile(const QString &fileName)
 bool
 MdiWindow::loadFile(const QString &fileName)
 {
-    qDebug("MdiWindow loadFile()");
+    debug_message("MdiWindow loadFile()");
 
     QRgb tmpColor = curColor;
 
@@ -1032,16 +1032,18 @@ MdiWindow::loadFile(const QString &fileName)
         return false;
     }
 
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    wait_cursor();
 
     QString ext = fileExtension(fileName);
-    qDebug("ext: %s", qPrintable(ext));
+    debug_message("ext: ");
+    debug_message(qPrintable(ext));
 
     //Read
     int format = EMB_FORMAT_CSV; //emb_identify_format(qPrintable(fileName));
     if (format <= 0) {
-        qDebug("Unsupported read file type: %s\n", qPrintable(fileName));
-        QApplication::restoreOverrideCursor();
+        debug_message("Unsupported read file type: ");
+        debug_message(qPrintable(fileName));
+        restore_cursor();
         QMessageBox::warning(this, tr("Error reading pattern"),
             tr("Unsupported read file type: ") + qPrintable(fileName));
         return false;
@@ -1049,14 +1051,15 @@ MdiWindow::loadFile(const QString &fileName)
 
     int readSuccessful = emb_pattern_read(pattern, qPrintable(fileName), format);
     if (!readSuccessful) {
-        qDebug("Reading file was unsuccessful: %s\n", qPrintable(fileName));
-        QApplication::restoreOverrideCursor();
+        debug_message("Reading file was unsuccessful:");
+        debug_message(qPrintable(fileName));
+        restore_cursor();
         QMessageBox::warning(this, tr("Error reading pattern"),
             tr("Reading file was unsuccessful: ") + qPrintable(fileName));
         return false;
     }
 
-    qDebug("Read successful.\n");
+    debug_message("Read successful.\n");
     //emb_pattern_moveStitchListToPolylines(pattern); //TODO: Test more
     EmbPolyline polyline;
     polyline.pointList = emb_array_create(EMB_VECTOR);
@@ -1080,7 +1083,7 @@ MdiWindow::loadFile(const QString &fileName)
         //TODO: Josh, provide me a hoop size and/or grid spacing from the pattern.
     }
 
-    QApplication::restoreOverrideCursor();
+    restore_cursor();
 
     //Clear the undo stack so it is not possible to undo past this point.
     gview->data.undoStack->clear();
@@ -1167,14 +1170,14 @@ QString MdiWindow::fileExtension(const QString& fileName)
 
 void MdiWindow::closeEvent(QCloseEvent* /*e*/)
 {
-    qDebug("MdiWindow closeEvent()");
+    debug_message("MdiWindow closeEvent()");
     emit sendCloseMdiWin(this);
 }
 
 void
 MdiWindow::onWindowActivated()
 {
-    qDebug("MdiWindow onWindowActivated()");
+    debug_message("MdiWindow onWindowActivated()");
     gview->data.undoStack->setActive(true);
     _main->setUndoCleanIcon(fileWasLoaded);
     statusBarSnapButton->setChecked(gscene->property("ENABLE_SNAP").toBool());
@@ -1191,7 +1194,7 @@ MdiWindow::onWindowActivated()
 QSize
 MdiWindow::sizeHint() const
 {
-    qDebug("MdiWindow sizeHint()");
+    debug_message("MdiWindow sizeHint()");
     return QSize(450, 300);
 }
 
@@ -1298,7 +1301,7 @@ void MdiWindow::promptInputPrevNext(bool prev)
         else {
             QMessageBox::critical(this, tr("Prompt Next Error"), tr("The prompt input is empty! Please report this as a bug!"));
         }
-        qDebug("The prompt input is empty! Please report this as a bug!");
+        debug_message("The prompt input is empty! Please report this as a bug!");
     }
     else {
         if (prev) {

@@ -40,7 +40,7 @@ MainWindow::stub_testing()
 void
 MainWindow::exit(void)
 {
-    qDebug("exit()");
+    debug_message("exit()");
     if (prompt_save_history.setting) {
         prompt->saveHistory("prompt.log", prompt_save_history_as_html.setting);
         /* TODO: get filename from settings */
@@ -56,7 +56,7 @@ MainWindow::exit(void)
 void
 MainWindow::checkForUpdates(void)
 {
-    qDebug("checkForUpdates()");
+    debug_message("checkForUpdates()");
     /* TODO: Check website for new versions, commands, etc... */
 }
 
@@ -135,7 +135,7 @@ platformString(void)
 void
 MainWindow::print()
 {
-    qDebug("print()");
+    debug_message("print()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
         mdiWin->print();
@@ -146,7 +146,7 @@ MainWindow::print()
 void
 tipOfTheDay()
 {
-    qDebug("tipOfTheDay()");
+    debug_message("tipOfTheDay()");
 
     QString appDir = qApp->applicationDirPath();
 
@@ -264,7 +264,7 @@ changelog(void)
 void
 MainWindow::undo()
 {
-    qDebug("undo()");
+    debug_message("undo()");
     if (dockUndoEdit->canUndo()) {
         prompt->setPrefix("Undo " + dockUndoEdit->undoText());
         prompt->appendHistory(QString());
@@ -280,7 +280,7 @@ MainWindow::undo()
 void
 MainWindow::redo()
 {
-    qDebug("redo()");
+    debug_message("redo()");
     if (dockUndoEdit->canRedo()) {
         prompt->setPrefix("Redo " + dockUndoEdit->redoText());
         prompt->appendHistory(QString());
@@ -315,14 +315,14 @@ void
 MainWindow::iconResize(int iconSize)
 {
     this->setIconSize(QSize(iconSize, iconSize));
-    layerSelector->     setIconSize(QSize(iconSize*4, iconSize));
-    colorSelector->     setIconSize(QSize(iconSize, iconSize));
-    linetypeSelector->  setIconSize(QSize(iconSize*4, iconSize));
+    layerSelector->setIconSize(QSize(iconSize*4, iconSize));
+    colorSelector->setIconSize(QSize(iconSize, iconSize));
+    linetypeSelector->setIconSize(QSize(iconSize*4, iconSize));
     lineweightSelector->setIconSize(QSize(iconSize*4, iconSize));
     /* set the minimum combobox width so the text is always readable */
-    layerSelector->     setMinimumWidth(iconSize*4);
-    colorSelector->     setMinimumWidth(iconSize*2);
-    linetypeSelector->  setMinimumWidth(iconSize*4);
+    layerSelector->setMinimumWidth(iconSize*4);
+    colorSelector->setMinimumWidth(iconSize*2);
+    linetypeSelector->setMinimumWidth(iconSize*4);
     lineweightSelector->setMinimumWidth(iconSize*4);
 
     /* TODO: low-priority: open app with iconSize set to 128. resize the icons to a smaller size. */
@@ -333,7 +333,7 @@ MainWindow::iconResize(int iconSize)
 MdiWindow*
 activeMdiWindow()
 {
-    qDebug("activeMdiWindow()");
+    debug_message("activeMdiWindow()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     return mdiWin;
 }
@@ -341,7 +341,7 @@ activeMdiWindow()
 View*
 activeView()
 {
-    _main->debug_message("activeView()");
+    debug_message("activeView()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
         View* v = mdiWin->gview;
@@ -353,7 +353,7 @@ activeView()
 QGraphicsScene*
 activeScene()
 {
-    _main->debug_message("activeScene()");
+    debug_message("activeScene()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
         QGraphicsScene* s = mdiWin->gscene;
@@ -365,7 +365,7 @@ activeScene()
 QUndoStack*
 activeUndoStack()
 {
-    _main->debug_message("activeUndoStack()");
+    debug_message("activeUndoStack()");
     View* v = activeView();
     if (v) {
         QUndoStack* u = v->data.undoStack;
@@ -468,14 +468,14 @@ MainWindow::pickAddModeToggled()
 void
 MainWindow::makeLayerActive()
 {
-    qDebug("makeLayerActive()");
+    debug_message("makeLayerActive()");
     stub_implement("Implement makeLayerActive.");
 }
 
 void
 MainWindow::layerManager()
 {
-    qDebug("layerManager()");
+    debug_message("layerManager()");
     stub_implement("Implement layerManager.");
     LayerManager layman(this, this);
     layman.exec();
@@ -484,7 +484,7 @@ MainWindow::layerManager()
 void
 MainWindow::layerPrevious()
 {
-    qDebug("layerPrevious()");
+    debug_message("layerPrevious()");
     stub_implement("Implement layerPrevious.");
 }
 
@@ -536,7 +536,7 @@ MainWindow::lineweightSelectorIndexChanged(int index)
 void
 MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
 {
-    qDebug("textFontSelectorCurrentFontChanged()");
+    debug_message("textFontSelectorCurrentFontChanged()");
     setTextFont(font.family());
 }
 
@@ -617,25 +617,25 @@ getCurrentLineWeight()
 void
 MainWindow::deletePressed()
 {
-    qDebug("deletePressed()");
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    debug_message("deletePressed()");
+    wait_cursor();
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
         mdiWin->deletePressed();
     }
-    QApplication::restoreOverrideCursor();
+    restore_cursor();
 }
 
 void
 MainWindow::escapePressed()
 {
-    qDebug("escapePressed()");
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    debug_message("escapePressed()");
+    wait_cursor();
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
         mdiWin->escapePressed();
     }
-    QApplication::restoreOverrideCursor();
+    restore_cursor();
 
     end_command();
 }
@@ -1897,12 +1897,6 @@ end_command(void)
     prompt->endCommand();
 }
 
-void
-debug_message(const char *msg)
-{
-    _main->debug_message(msg);
-}
-
 /* Simple Commands (other commands, like circle_command are housed in their
  * own file with their associated functions)
  * ------------------------------------------------------------------------
@@ -1913,8 +1907,8 @@ debug_message(const char *msg)
 void
 about_dialog(void)
 {
-    QApplication::setOverrideCursor(Qt::ArrowCursor);
-    qDebug("about()");
+    arrow_cursor();
+    debug_message("about()");
 
     QString appDir = qApp->applicationDirPath();
     QString appName = QApplication::applicationName();
@@ -1960,7 +1954,7 @@ about_dialog(void)
     dialog.setLayout(&layout);
     dialog.exec();
 
-    QApplication::restoreOverrideCursor();
+    restore_cursor();
 }
 
 /* GET is a prompt-only Command. */
@@ -2387,29 +2381,26 @@ add_polygon_command(ScriptEnv* context)
 
     bool lineTo = false;
     bool xCoord = true;
-    double x = 0;
-    double y = 0;
-    double startX = 0;
-    double startY = 0;
+    EmbVector v = zero_vector;
+    EmbVector start = zero_vector;
     QPainterPath path;
     foreach (QVariant var, varList) {
         if (var.canConvert(QVariant::Double)) {
             if (xCoord) {
                 xCoord = false;
-                x = var.toReal();
+                v.x = var.toReal();
             }
             else {
                 xCoord = true;
-                y = -var.toReal();
+                v.y = -var.toReal();
 
                 if (lineTo) {
-                    path.lineTo(x,y);
+                    path.lineTo(v.x, v.y);
                 }
                 else {
-                    path.moveTo(x,y);
+                    path.moveTo(v.x, v.y);
                     lineTo = true;
-                    startX = x;
-                    startY = y;
+                    start = v;
                 }
             }
         }
@@ -2422,9 +2413,9 @@ add_polygon_command(ScriptEnv* context)
     /* Close the polygon. */
     path.closeSubpath();
 
-    path.translate(-startX, -startY);
+    path.translate(-start.x, -start.y);
 
-    nativeAddPolygon(startX, startY, path, OBJ_RUBBER_OFF);
+    nativeAddPolygon(start.x, start.y, path, OBJ_RUBBER_OFF);
     #endif
     return script_null;
 }
@@ -2859,24 +2850,22 @@ distance_command(ScriptEnv *context)
     switch (context->context) {
     case CONTEXT_MAIN:
         /*
-        global.point1.x = 0.0f;
-        global.point1.y = 0.0f;
-        global.point2.x = 0.0f;
-        global.point2.y = 0.0f;
+        context->point1 = zero_vector;
+        context->point2 = zero_vector;
         */
         prompt_output(translate("Specify first point: "));
         break;
     case CONTEXT_CLICK:
         /*
-        if (isNaN(global.x1)) {
-            global.point1 = v;
+        if (isNaN(context->x1)) {
+            context->point1 = v;
             addRubber("LINE");
             setRubberMode("LINE");
-            setRubberPoint("LINE_START", global.point1.x, global.point1.y);
+            setRubberPoint("LINE_START", context->point1.x, context->point1.y);
             prompt_output(translate("Specify second point: "));
         }
         else {
-            global.point2 = v;
+            context->point2 = v;
             reportDistance();
             end_command();
         }
@@ -2888,17 +2877,17 @@ distance_command(ScriptEnv *context)
     case CONTEXT_PROMPT:
         /*
         var strList = str.split(",");
-        if (isNaN(global.x1)) {
+        if (isNaN(context->x1)) {
             if (isNaN(strList[0]) || isNaN(strList[1])) {
                 alert(translate("Requires numeric distance or two points."));
                 prompt_output(translate("Specify first point: "));
             }
             else {
-                global.x1 = Number(strList[0]);
-                global.y1 = Number(strList[1]);
+                context->x1 = Number(strList[0]);
+                context->y1 = Number(strList[1]);
                 addRubber("LINE");
                 setRubberMode("LINE");
-                setRubberPoint("LINE_START", global.x1, global.y1);
+                setRubberPoint("LINE_START", context->x1, context->y1);
                 prompt_output(translate("Specify second point: "));
             }
         }
@@ -2908,8 +2897,8 @@ distance_command(ScriptEnv *context)
                 prompt_output(translate("Specify second point: "));
             }
             else {
-                global.x2 = Number(strList[0]);
-                global.y2 = Number(strList[1]);
+                context->x2 = Number(strList[0]);
+                context->y2 = Number(strList[1]);
                 reportDistance();
                 end_command();
             }
@@ -2945,13 +2934,13 @@ move_command(ScriptEnv *context)
 void
 main(void)
 {
-    global.firstRun = true;
-    global.base.x = NaN;
-    global.base.y = NaN;
-    global.dest.x = NaN;
-    global.dest.y = NaN;
-    global.delta.x = NaN;
-    global.delta.y = NaN;
+    context->firstRun = true;
+    context->base.x = NaN;
+    context->base.y = NaN;
+    context->dest.x = NaN;
+    context->dest.y = NaN;
+    context->delta.x = NaN;
+    context->delta.y = NaN;
 
     if (gview->numSelected() <= 0) {
         /* TODO: Prompt to select objects if nothing is preselected. */
@@ -2978,9 +2967,9 @@ click(EmbVector v)
         prompt_output(translate("Specify destination point: "));
     }
     else {
-        global.dest = v;
-        global.delta = emb_vector_subtract(global.dest, global.base);
-        moveSelected(global.delta);
+        context->dest = v;
+        context->delta = emb_vector_subtract(context->dest, context->base);
+        moveSelected(context->delta);
         previewOff();
         end_command();
     }
@@ -2994,18 +2983,18 @@ void context(str)
 void prompt(str)
 {
     EmbVector v;
-    if (global.firstRun) {
+    if (context->firstRun) {
         if (!parse_vector(str, &v)) {
             alert(translate("Invalid point."));
             prompt_output(translate("Specify base point: "));
         }
         else {
-            global.firstRun = false;
-            global.base = v;
+            context->firstRun = false;
+            context->base = v;
             addRubber("LINE");
             setRubberMode("LINE");
-            setRubberPoint("LINE_START", global.base.x, global.base.y);
-            previewOn("SELECTED", "MOVE", global.base.x, global.base.y, 0);
+            setRubberPoint("LINE_START", context->base);
+            previewOn("SELECTED", "MOVE", context->base, 0);
             prompt_output(translate("Specify destination point: "));
         }
     }
@@ -3015,9 +3004,9 @@ void prompt(str)
             prompt_output(translate("Specify destination point: "));
         }
         else {
-            global.dest = v;
-            global.delta = global.dest - global.base;
-            moveSelected(global.delta.x, global.delta.y);
+            context->dest = v;
+            context->delta = context->dest - context->base;
+            moveSelected(context->delta);
             previewOff();
             end_command();
         }
@@ -3048,20 +3037,16 @@ scale_command(ScriptEnv * context)
 void
 main(void)
 {
-    global.mode = global.mode_NORMAL;
-    global.firstRun = true;
-    global.baseX = NaN;
-    global.baseY = NaN;
-    global.destX = NaN;
-    global.destY = NaN;
-    global.factor = NaN;
+    context->mode = context->mode_NORMAL;
+    context->firstRun = true;
+    context->base = zero_vector;
+    context->dest = zero_vector;
+    context->factor = NaN;
 
-    global.baseRX = NaN;
-    global.baseRY = NaN;
-    global.destRX = NaN;
-    global.destRY = NaN;
-    global.factorRef = NaN;
-    global.factorNew = NaN;
+    context->baseR = zero_vector;
+    context->destR = zero_vector;
+    context->factorRef = NaN;
+    context->factorNew = NaN;
 
     if (gview->numSelected() <= 0) {
         /* TODO: Prompt to select objects if nothing is preselected */
@@ -3077,48 +3062,44 @@ main(void)
 void
 click(EmbVector position)
 {
-    if (global.mode == global.mode_NORMAL) {
-        if (global.firstRun) {
-            global.firstRun = false;
-            global.base = position;
+    if (context->mode == context->mode_NORMAL) {
+        if (context->firstRun) {
+            context->firstRun = false;
+            context->base = position;
             addRubber("LINE");
             setRubberMode("LINE");
-            setRubberPoint("LINE_START", global.baseX, global.baseY);
-            previewOn("SELECTED", "SCALE", global.baseX, global.baseY, 1);
+            setRubberPoint("LINE_START", context->base);
+            previewOn("SELECTED", "SCALE", context->base, 1);
             prompt_output(translate("Specify scale factor or [Reference]: "));
         }
         else {
-            global.destX = x;
-            global.destY = y;
-            global.factor = calculateDistance(global.baseX, global.baseY, global.destX, global.destY);
-            scaleSelected(global.baseX, global.baseY, global.factor);
+            context->dest = position;
+            context->factor = calculateDistance(context->base, context->dest);
+            scaleSelected(context->base, context->factor);
             previewOff();
             end_command();
         }
     }
-    else if (global.mode == global.mode_REFERENCE) {
-        if (isNaN(global.baseRX)) {
-            global.baseRX = x;
-            global.baseRY = y;
+    else if (context->mode == context->mode_REFERENCE) {
+        if (isNaN(context->baseRX)) {
+            context->baseR = position;
             addRubber("LINE");
             setRubberMode("LINE");
-            setRubberPoint("LINE_START", global.baseRX, global.baseRY);
+            setRubberPoint("LINE_START", context->baseR);
             prompt_output(translate("Specify second point: "));
         }
-        else if (isNaN(global.destRX)) {
-            global.destRX = x;
-            global.destRY = y;
-            global.factorRef = calculateDistance(global.baseRX, global.baseRY, global.destRX, global.destRY);
-            if (global.factorRef <= 0.0) {
-                global.destRX    = NaN;
-                global.destRY    = NaN;
-                global.factorRef = NaN;
+        else if (isNaN(context->destRX)) {
+            context->destR = position;
+            context->factorRef = emb_vector_distance(context->baseR, context->destR);
+            if (context->factorRef <= 0.0) {
+                context->destR = zero_vector;
+                context->factorRef = NaN;
                 alert(translate("Value must be positive and nonzero."));
                 prompt_output(translate("Specify second point: "));
             }
             else {
-                setRubberPoint("LINE_START", global.baseX, global.baseY);
-                previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
+                setRubberPoint("LINE_START", context->baseX, context->baseY);
+                previewOn("SELECTED", "SCALE", context->baseX, context->baseY, context->factorRef);
                 prompt_output(translate("Specify new length: "));
             }
         }
@@ -3130,7 +3111,7 @@ click(EmbVector position)
                 prompt_output(translate("Specify new length: "));
             }
             else {
-                scaleSelected(global->base, global.factorNew/global.factorRef);
+                scaleSelected(global->base, context->factorNew/context->factorRef);
                 previewOff();
                 end_command();
             }
@@ -3159,15 +3140,15 @@ void prompt(str)
                 global->base = v;
                 addRubber("LINE");
                 setRubberMode("LINE");
-                setRubberPoint("LINE_START", global.baseX, global.baseY);
-                previewOn("SELECTED", "SCALE", global.baseX, global.baseY, 1);
+                setRubberPoint("LINE_START", context->baseX, context->baseY);
+                previewOn("SELECTED", "SCALE", context->baseX, context->baseY, 1);
                 prompt_output(translate("Specify scale factor or [Reference]: "));
             }
         }
         else {
             if (str == "R" || str == "REFERENCE") {
                 /* TODO: Probably should add additional translate calls here. */
-                global.mode = global.mode_REFERENCE;
+                context->mode = context->mode_REFERENCE;
                 prompt_output(translate("Specify reference length") + " {1}: ");
                 clearRubber();
                 previewOff();
@@ -3178,8 +3159,8 @@ void prompt(str)
                     prompt_output(translate("Specify scale factor or [Reference]: "));
                 }
                 else {
-                    global.factor = Number(str);
-                    scaleSelected(global.baseX, global.baseY, global.factor);
+                    context->factor = Number(str);
+                    scaleSelected(context->baseX, context->baseY, context->factor);
                     previewOff();
                     end_command();
                 }
@@ -3188,120 +3169,117 @@ void prompt(str)
         break;
     }
     case SCALE_MODE_REFERENCE: {
-        if (isNaN(global.baseRX)) {
+        if (isNaN(context->baseRX)) {
             if (isNaN(str)) {
                 if (!parse_vector(str, &v)) {
                     alert(translate("Requires valid numeric distance or two points."));
                     prompt_output(translate("Specify reference length") + " {1}: ");
                 }
                 else {
-                    global.baseR = v;
+                    context->baseR = v;
                     addRubber("LINE");
                     setRubberMode("LINE");
-                    setRubberPoint("LINE_START", global.baseRX, global.baseRY);
+                    setRubberPoint("LINE_START", context->baseRX, context->baseRY);
                     prompt_output(translate("Specify second point: "));
                 }
             }
             else {
                 /* The base and dest values are only set here to advance the command. */
-                global.baseRX = 0.0;
-                global.baseRY = 0.0;
-                global.destRX = 0.0;
-                global.destRY = 0.0;
+                context->baseRX = 0.0;
+                context->baseRY = 0.0;
+                context->destRX = 0.0;
+                context->destRY = 0.0;
                 /* The reference length is what we will use later. */
-                global.factorRef = Number(str);
-                if (global.factorRef <= 0.0) {
-                    global.baseRX = NaN;
-                    global.baseRY = NaN;
-                    global.destRX = NaN;
-                    global.destRY = NaN;
-                    global.factorRef = NaN;
+                context->factorRef = Number(str);
+                if (context->factorRef <= 0.0) {
+                    context->baseRX = NaN;
+                    context->baseRY = NaN;
+                    context->destRX = NaN;
+                    context->destRY = NaN;
+                    context->factorRef = NaN;
                     alert(translate("Value must be positive and nonzero."));
                     prompt_output(translate("Specify reference length") + " {1}: ");
                 }
                 else {
                     addRubber("LINE");
                     setRubberMode("LINE");
-                    setRubberPoint("LINE_START", global.baseX, global.baseY);
-                    previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
+                    setRubberPoint("LINE_START", context->baseX, context->baseY);
+                    previewOn("SELECTED", "SCALE", context->baseX, context->baseY, context->factorRef);
                     prompt_output(translate("Specify new length: "));
                 }
             }
         }
-        else if (isNaN(global.destRX)) {
+        else if (isNaN(context->destRX)) {
             if (isNaN(str)) {
                 if (!parse_vector(str, &v)) {
                     alert(translate("Requires valid numeric distance or two points."));
                     prompt_output(translate("Specify second point: "));
                 }
                 else {
-                    global.destR = v;
-                    global.factorRef = calculateDistance(global.baseRX, global.baseRY, global.destRX, global.destRY);
-                    if (global.factorRef <= 0.0) {
-                        global.destRX    = NaN;
-                        global.destRY    = NaN;
-                        global.factorRef = NaN;
+                    context->destR = v;
+                    context->factorRef = calculateDistance(context->baseRX, context->baseRY, context->destRX, context->destRY);
+                    if (context->factorRef <= 0.0) {
+                        context->destRX = NaN;
+                        context->destRY = NaN;
+                        context->factorRef = NaN;
                         alert(translate("Value must be positive and nonzero."));
                         prompt_output(translate("Specify second point: "));
                     }
                     else {
-                        setRubberPoint("LINE_START", global.baseX, global.baseY);
-                        previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
+                        setRubberPoint("LINE_START", context->baseX, context->baseY);
+                        previewOn("SELECTED", "SCALE", context->baseX, context->baseY, context->factorRef);
                         prompt_output(translate("Specify new length: "));
                     }
                 }
             }
             else {
                 /* The base and dest values are only set here to advance the command. */
-                global.baseRX = 0.0;
-                global.baseRY = 0.0;
-                global.destRX = 0.0;
-                global.destRY = 0.0;
+                context->baseR = zero_vector;
+                context->destR = zero_vector;
                 /* The reference length is what we will use later. */
-                global.factorRef = Number(str);
-                if (global.factorRef <= 0.0) {
-                    global.destRX = NaN;
-                    global.destRY = NaN;
-                    global.factorRef = NaN;
+                context->factorRef = Number(str);
+                if (context->factorRef <= 0.0) {
+                    context->destR = zero_vector;
+                    context->factorRef = NaN;
                     alert(translate("Value must be positive and nonzero."));
                     prompt_output(translate("Specify second point: "));
                 }
                 else {
-                    setRubberPoint("LINE_START", global.baseX, global.baseY);
-                    previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
+                    setRubberPoint("LINE_START", context->baseX, context->baseY);
+                    previewOn("SELECTED", "SCALE", context->baseX, context->baseY, context->factorRef);
                     prompt_output(translate("Specify new length: "));
                 }
             }
         }
-        else if (isNaN(global.factorNew)) {
+        else if (isNaN(context->factorNew)) {
             if (isNaN(str)) {
                 if (!parse_vector(str, &v)) {
                     alert(translate("Requires valid numeric distance or second point."));
                     prompt_output(translate("Specify new length: "));
                 }
                 else {
-                    global.factorNew = embVector(global.base, v);
-                    if (global.factorNew <= 0.0) {
-                        global.factorNew = NaN;
+                    context->factorNew = embVector(context->base, v);
+                    if (context->factorNew <= 0.0) {
+                        context->factorNew = NaN;
                         alert(translate("Value must be positive and nonzero."));
                         prompt_output(translate("Specify new length: "));
                     }
                     else {
-                        scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
+                        scaleSelected(context->baseX, context->baseY, context->factorNew/context->factorRef);
                         previewOff();
                         end_command();
                     }
                 }
             }
             else {
-                global.factorNew = Number(str);
-                if (global.factorNew <= 0.0) {
-                    global.factorNew = NaN;
+                context->factorNew = Number(str);
+                if (context->factorNew <= 0.0) {
+                    context->factorNew = NaN;
                     alert(translate("Value must be positive and nonzero."));
                     prompt_output(translate("Specify new length: "));
                 }
                 else {
-                    scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
+                    scaleSelected(context->baseX, context->baseY, context->factorNew/context->factorRef);
                     previewOff();
                     end_command();
                 }
@@ -3400,16 +3378,16 @@ rotate_command(ScriptEnv * context)
 void
 main()
 {
-    global.mode = global.mode_NORMAL;
-    global.firstRun = true;
-    global.base = zero_vector;
-    global.dest = zero_vector;
-    global.angle = 0.0f;
+    context->mode = context->mode_NORMAL;
+    context->firstRun = true;
+    context->base = zero_vector;
+    context->dest = zero_vector;
+    context->angle = 0.0f;
 
-    global.baseR = zero_vector;
-    global.destR = zero_vector;
-    global.angleRef = 0.0f;
-    global.angleNew = 0.0f;
+    context->baseR = zero_vector;
+    context->destR = zero_vector;
+    context->angleRef = 0.0f;
+    context->angleNew = 0.0f;
 
     if (gview->numSelected() <= 0) {
         /* TODO: Prompt to select objects if nothing is preselected. */
@@ -3425,42 +3403,42 @@ main()
 void
 click(EmbVector v)
 {
-    if (global.mode == global.mode_NORMAL) {
-        if (global.firstRun) {
-            global.firstRun = false;
-            global.base = v;
+    if (context->mode == context->mode_NORMAL) {
+        if (context->firstRun) {
+            context->firstRun = false;
+            context->base = v;
             addRubber("LINE");
             setRubberMode("LINE");
-            setRubberPoint("LINE_START", global.baseX, global.baseY);
-            previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, 0);
+            setRubberPoint("LINE_START", context->baseX, context->baseY);
+            previewOn("SELECTED", "ROTATE", context->baseX, context->baseY, 0);
             prompt_output(translate("Specify rotation angle or [Reference]: "));
         }
         else {
-            global.dest = v;
-            global.angle = emb_vector_angle(global.base, global.dest);
-            rotateSelected(global.baseX, global.baseY, global.angle);
+            context->dest = v;
+            context->angle = emb_vector_angle(context->base, context->dest);
+            rotateSelected(context->baseX, context->baseY, context->angle);
             previewOff();
             end_command();
         }
     }
-    else if (global.mode == global.mode_REFERENCE) {
-        if (isNaN(global.baseRX)) {
-            global.baseR = v;
+    else if (context->mode == context->mode_REFERENCE) {
+        if (isNaN(context->baseRX)) {
+            context->baseR = v;
             addRubber("LINE");
             setRubberMode("LINE");
-            setRubberPoint("LINE_START", global.baseRX, global.baseRY);
+            setRubberPoint("LINE_START", context->baseR);
             prompt_output(translate("Specify second point: "));
         }
-        else if (isNaN(global.destRX)) {
-            global.destR = v;
-            global.angleRef = calculateAngle(global.baseRX, global.baseRY, global.destRX, global.destRY);
-            setRubberPoint("LINE_START", global.baseX, global.baseY);
-            previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
+        else if (isNaN(context->destRX)) {
+            context->destR = v;
+            context->angleRef = emb_vector_angle(context->baseR, context->destR);
+            setRubberPoint("LINE_START", context->base);
+            previewOn("SELECTED", "ROTATE", context->base, context->angleRef);
             prompt_output(translate("Specify the new angle: "));
         }
-        else if (isNaN(global.angleNew)) {
-            global.angleNew = calculateAngle(global.baseX, global.baseY, x, y);
-            rotateSelected(global.baseX, global.baseY, global.angleNew - global.angleRef);
+        else if (isNaN(context->angleNew)) {
+            context->angleNew = calculateAngle(context->base, v);
+            rotateSelected(context->base, context->angleNew - context->angleRef);
             previewOff();
             end_command();
         }
@@ -3475,25 +3453,25 @@ void context(str)
 void prompt(str)
 {
     EmbVector v;
-    if (global.mode == global.mode_NORMAL) {
-        if (global.firstRun) {
+    if (context->mode == context->mode_NORMAL) {
+        if (context->firstRun) {
             if (!parse_vector(str, &v)) {
                 alert(translate("Invalid point."));
                 prompt_output(translate("Specify base point: "));
             }
             else {
-                global.firstRun = false;
-                global.base = v;
+                context->firstRun = false;
+                context->base = v;
                 addRubber("LINE");
                 setRubberMode("LINE");
-                setRubberPoint("LINE_START", global.base.x, global.base.y);
-                previewOn("SELECTED", "ROTATE", global.base.x, global.base.y, 0);
+                setRubberPoint("LINE_START", context->base);
+                previewOn("SELECTED", "ROTATE", context->base, 0);
                 prompt_output(translate("Specify rotation angle or [Reference]: "));
             }
         }
         else {
             if (str == "R" || str == "REFERENCE") {
-                global.mode = global.mode_REFERENCE;
+                context->mode = context->mode_REFERENCE;
                 prompt_output(translate("Specify the reference angle") + " {0.00}: ");
                 clearRubber();
                 previewOff();
@@ -3504,85 +3482,83 @@ void prompt(str)
                     prompt_output(translate("Specify rotation angle or [Reference]: "));
                 }
                 else {
-                    global.angle = Number(str);
-                    rotateSelected(global.baseX, global.baseY, global.angle);
+                    context->angle = Number(str);
+                    rotateSelected(context->baseX, context->baseY, context->angle);
                     previewOff();
                     end_command();
                 }
             }
         }
     }
-    else if (global.mode == global.mode_REFERENCE) {
-        if (isNaN(global.baseRX)) {
+    else if (context->mode == context->mode_REFERENCE) {
+        if (isNaN(context->baseRX)) {
             if (isNaN(str)) {
                 if (!parse_vector(str, &v)) {
                     alert(translate("Requires valid numeric angle or two points."));
                     prompt_output(translate("Specify the reference angle") + " {0.00}: ");
                 }
                 else {
-                    global.baseR = v;
+                    context->baseR = v;
                     addRubber("LINE");
                     setRubberMode("LINE");
-                    setRubberPoint("LINE_START", global.baseR.x, global.baseR.y);
+                    setRubberPoint("LINE_START", context->baseR);
                     prompt_output(translate("Specify second point: "));
                 }
             }
             else {
                 /* The base and dest values are only set here to advance the command. */
-                global.baseRX = 0.0;
-                global.baseRY = 0.0;
-                global.destRX = 0.0;
-                global.destRY = 0.0;
+                context->baseR = zero_vector;
+                context->destR = zero_vector;
                 /* The reference angle is what we will use later. */
-                global.angleRef = Number(str);
+                context->angleRef = Number(str);
                 addRubber("LINE");
                 setRubberMode("LINE");
-                setRubberPoint("LINE_START", global.base.x, global.base.y);
-                previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
+                setRubberPoint("LINE_START", context->base);
+                previewOn("SELECTED", "ROTATE", context->base, context->angleRef);
                 prompt_output(translate("Specify the new angle: "));
             }
         }
-        else if (isNaN(global.destRX)) {
+        else if (isNaN(context->destRX)) {
             if (isNaN(str)) {
                 if (!parse_vector(str, &v)) {
                     alert(translate("Requires valid numeric angle or two points."));
                     prompt_output(translate("Specify second point: "));
                 }
                 else {
-                    global.destR = v;
-                    global.angleRef = calculateAngle(global.baseRX, global.baseRY, global.destRX, global.destRY);
-                    previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
-                    setRubberPoint("LINE_START", global.baseX, global.baseY);
+                    context->destR = v;
+                    context->angleRef = calculateAngle(context->baseR, context->destR);
+                    previewOn("SELECTED", "ROTATE", context->base, context->angleRef);
+                    setRubberPoint("LINE_START", context->base);
                     prompt_output(translate("Specify the new angle: "));
                 }
             }
             else {
                 /* The base and dest values are only set here to advance the command. */
-                global.baseR = zero_vector;
-                global.destR = zero_vector;
+                context->baseR = zero_vector;
+                context->destR = zero_vector;
                 /* The reference angle is what we will use later. */
-                global.angleRef = Number(str);
-                previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
+                context->angleRef = Number(str);
+                previewOn("SELECTED", "ROTATE", context->baseX, context->baseY, context->angleRef);
                 prompt_output(translate("Specify the new angle: "));
             }
         }
-        else if (isNaN(global.angleNew)) {
+        else if (isNaN(context->angleNew)) {
             if (isNaN(str)) {
                 if (!parse_vector(str, &v)) {
                     alert(translate("Requires valid numeric angle or second point."));
                     prompt_output(translate("Specify the new angle: "));
                 }
                 else {
-                    global.angleNew = emb_vector_angle(global.base, v);
-                    rotateSelected(global.base.x, global.base.y,
-                        global.angleNew - global.angleRef);
+                    context->angleNew = emb_vector_angle(context->base, v);
+                    rotateSelected(context->base.x, context->base.y,
+                        context->angleNew - context->angleRef);
                     previewOff();
                     end_command();
                 }
             }
             else {
-                global.angleNew = Number(str);
-                rotateSelected(global.baseX, global.baseY, global.angleNew - global.angleRef);
+                context->angleNew = Number(str);
+                rotateSelected(context->baseX, context->baseY, context->angleNew - context->angleRef);
                 previewOff();
                 end_command();
             }
@@ -3617,17 +3593,17 @@ rgb_command(ScriptEnv *context)
 void prompt(str)
 {
     float v[3];
-    switch (global.mode) {
+    switch (context->mode) {
     default:
     case RGB_MODE_BACKGROUND: {
         if (str == "C" || str == "CROSSHAIR") {
             /* TODO: Probably should add additional translate calls here. */
-            global.mode = RGB_MODE_CROSSHAIR;
+            context->mode = RGB_MODE_CROSSHAIR;
             prompt_output(translate("Specify crosshair color: "));
         }
         else if (str == "G" || str == "GRID") {
             /* TODO: Probably should add additional translate calls here. */
-            global.mode = RGB_MODE_GRID;
+            context->mode = RGB_MODE_GRID;
             prompt_output(translate("Specify grid color: "));
         }
         else {

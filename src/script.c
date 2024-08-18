@@ -21,6 +21,13 @@
 
 #include "toml.h"
 
+bool shiftKeyPressedState;
+bool cmdActive;
+bool rapidFireEnabled;
+bool isBlinking;
+int numOfDocs = 0;
+int docIndex = 0;
+
 ScriptValue state[MAX_STATE_VARIABLES];
 int state_length = 0;
 
@@ -1216,6 +1223,18 @@ roundToMultiple(bool roundUp, int numToRound, int multiple)
         return numToRound - multiple - remainder;
     }
     return numToRound - remainder;
+}
+
+void
+debug_message(const char *msg)
+{
+    char fname[200];
+    sprintf(fname, "debug.log");
+    FILE *f = fopen(fname, "a");
+    if (f) {
+        fprintf(f, "%s\n", msg);
+        fclose(f);
+    }
 }
 
 /* GEOMETRY */

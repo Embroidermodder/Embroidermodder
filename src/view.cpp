@@ -21,7 +21,7 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     //NOTE: This has to be done before setting mouse tracking.
     //TODO: Review OpenGL for Qt5 later
     //if (display_use_opengl.setting) {
-    //    qDebug("Using OpenGL...");
+    //    debug_message("Using OpenGL...");
     //    setViewport(new QGLWidget(QGLFormat(QGL::DoubleBuffer)));
     //}
 
@@ -157,7 +157,7 @@ View::deleteObject(Object* obj)
 void
 View::previewOn(int clone, int mode, double x, double y, double data_)
 {
-    qDebug("View previewOn()");
+    debug_message("View previewOn()");
     previewOff(); //Free the old objects before creating new ones
 
     data.previewMode = mode;
@@ -527,106 +527,106 @@ View::createGridIso()
 void
 View::toggleSnap(bool on)
 {
-    qDebug("View toggleSnap()");
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    debug_message("View toggleSnap()");
+    wait_cursor();
     //TODO: finish this
     data.gscene->setProperty("ENABLE_SNAP", on);
     data.gscene->update();
-    QApplication::restoreOverrideCursor();
+    restore_cursor();
 }
 
 void
 View::toggleGrid(bool on)
 {
-    qDebug("View toggleGrid()");
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    debug_message("View toggleGrid()");
+    wait_cursor();
     if (on) {
         createGrid(grid_type.setting);
     }
     else {
         createGrid("");
     }
-    QApplication::restoreOverrideCursor();
+    restore_cursor();
 }
 
 void
 View::toggleRuler(bool on)
 {
-    qDebug("View toggleRuler()");
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    debug_message("View toggleRuler()");
+    wait_cursor();
     data.gscene->setProperty("ENABLE_RULER", on);
     data.rulerMetric = ruler_metric.setting;
     data.rulerColor = QColor(ruler_color.setting);
     data.rulerPixelSize = ruler_pixel_size.setting;
     data.gscene->update();
-    QApplication::restoreOverrideCursor();
+    restore_cursor();
 }
 
 void
 View::toggleOrtho(bool on)
 {
-    qDebug("View toggleOrtho()");
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    debug_message("View toggleOrtho()");
+    wait_cursor();
     //TODO: finish this
     data.gscene->setProperty("ENABLE_ORTHO", on);
     data.gscene->update();
-    QApplication::restoreOverrideCursor();
+    restore_cursor();
 }
 
 void
 View::togglePolar(bool on)
 {
-    qDebug("View togglePolar()");
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    debug_message("View togglePolar()");
+    wait_cursor();
     //TODO: finish this
     data.gscene->setProperty("ENABLE_POLAR", on);
     data.gscene->update();
-    QApplication::restoreOverrideCursor();
+    restore_cursor();
 }
 
 /* . */
 void
 View::toggleQSnap(bool on)
 {
-    qDebug("View toggleQSnap()");
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    debug_message("View toggleQSnap()");
+    wait_cursor();
     data.qSnapToggle = on;
     data.gscene->setProperty("ENABLE_QSNAP", on);
     data.gscene->update();
-    QApplication::restoreOverrideCursor();
+    restore_cursor();
 }
 
 /* . */
 void
 View::toggleQTrack(bool on)
 {
-    qDebug("View toggleQTrack()");
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    debug_message("View toggleQTrack()");
+    wait_cursor();
     //TODO: finish this
     data.gscene->setProperty("ENABLE_QTRACK", on);
     data.gscene->update();
-    QApplication::restoreOverrideCursor();
+    restore_cursor();
 }
 
 /* . */
 void
 View::toggleLwt(bool on)
 {
-    qDebug("View toggleLwt()");
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    debug_message("View toggleLwt()");
+    wait_cursor();
     data.gscene->setProperty("ENABLE_LWT", on);
     data.gscene->update();
-    QApplication::restoreOverrideCursor();
+    restore_cursor();
 }
 
 void
 View::toggleReal(bool on)
 {
-    qDebug("View toggleReal()");
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    debug_message("View toggleReal()");
+    wait_cursor();
     data.gscene->setProperty("ENABLE_REAL", on);
     data.gscene->update();
-    QApplication::restoreOverrideCursor();
+    restore_cursor();
 }
 
 bool
@@ -1232,36 +1232,38 @@ View::setCornerButton()
 void
 View::cornerButtonClicked()
 {
-    qDebug("Corner Button Clicked.");
+    debug_message("Corner Button Clicked.");
     actionHash.value(display_scrollbar_widget_num.setting)->trigger();
 }
 
 void
 View::zoomIn()
 {
-    qDebug("View zoomIn()");
+    debug_message("View zoomIn()");
     if (!allowZoomIn()) { return; }
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    wait_cursor();
     QPointF cntr = mapToScene(QPoint(width()/2,height()/2));
     double s = display_zoomscale_in.setting;
     scale(s, s);
 
     centerOn(cntr);
-    QApplication::restoreOverrideCursor();
+    restore_cursor();
 }
 
 void
 View::zoomOut()
 {
-    qDebug("View zoomOut()");
-    if (!allowZoomOut()) { return; }
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    debug_message("View zoomOut()");
+    if (!allowZoomOut()) {
+        return;
+    }
+    wait_cursor();
     QPointF cntr = mapToScene(QPoint(width()/2,height()/2));
     double s = display_zoomscale_out.setting;
     scale(s, s);
 
     centerOn(cntr);
-    QApplication::restoreOverrideCursor();
+    restore_cursor();
 }
 
 void
@@ -1275,7 +1277,7 @@ View::zoomWindow()
 void
 View::zoomSelected()
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    wait_cursor();
     QList<QGraphicsItem*> itemList = data.gscene->selectedItems();
     QPainterPath selectedRectPath;
     foreach(QGraphicsItem* item, itemList) {
@@ -1287,13 +1289,13 @@ View::zoomSelected()
         //TODO: Support Post selection of objects
     }
     fitInView(selectedRect, Qt::KeepAspectRatio);
-    QApplication::restoreOverrideCursor();
+    restore_cursor();
 }
 
 void
 View::zoomExtents()
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    wait_cursor();
     QRectF extents = data.gscene->itemsBoundingRect();
     if (extents.isNull()) {
         extents.setWidth(grid_size_x.setting);
@@ -1301,7 +1303,7 @@ View::zoomExtents()
         extents.moveCenter(QPointF(0,0));
     }
     fitInView(extents, Qt::KeepAspectRatio);
-    QApplication::restoreOverrideCursor();
+    restore_cursor();
 }
 
 void
@@ -1727,12 +1729,12 @@ View::mouseReleaseEvent(QMouseEvent* event)
         event->accept();
     }
     if (event->button() == Qt::XButton1) {
-        qDebug("XButton1");
+        debug_message("XButton1");
         _main->undo(); //TODO: Make this customizable
         event->accept();
     }
     if (event->button() == Qt::XButton2) {
-        qDebug("XButton2");
+        debug_message("XButton2");
         _main->redo(); //TODO: Make this customizable
         event->accept();
     }
@@ -1898,7 +1900,7 @@ View::contextMenuEvent(QContextMenuEvent* event)
 void
 View::deletePressed()
 {
-    qDebug("View deletePressed()");
+    debug_message("View deletePressed()");
     if (data.pastingActive) {
         data.gscene->removeItem(data.pasteObjectItemGroup);
         delete data.pasteObjectItemGroup;
@@ -1915,7 +1917,7 @@ View::deletePressed()
 void
 View::escapePressed()
 {
-    qDebug("View escapePressed()");
+    debug_message("View escapePressed()");
     if (data.pastingActive) {
         data.gscene->removeItem(data.pasteObjectItemGroup);
         delete data.pasteObjectItemGroup;

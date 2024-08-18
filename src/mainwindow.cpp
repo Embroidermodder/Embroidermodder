@@ -48,12 +48,7 @@ QComboBox* lineweightSelector;
 QFontComboBox* textFontSelector;
 QComboBox* textSizeSelector;
 
-bool shiftKeyPressedState;
-
 QByteArray layoutState;
-
-int numOfDocs;
-int docIndex;
 
 MainWindow *_main;
 
@@ -614,13 +609,6 @@ MainWindow::recentMenuAboutToShow()
 
 /* . */
 void
-MainWindow::debug_message(const char *msg)
-{
-    qDebug(msg);
-}
-
-/* . */
-void
 MainWindow::windowMenuAboutToShow()
 {
     debug_message("MainWindow::windowMenuAboutToShow()");
@@ -711,7 +699,7 @@ MainWindow::openFile(bool recent, const QString& recentFile)
         openDialog->exec();
     }
 
-    QApplication::restoreOverrideCursor();
+    restore_cursor();
 }
 
 /* . */
@@ -742,7 +730,7 @@ MainWindow::openFilesSelected(const QStringList& filesToOpen)
 
             QMdiSubWindow* existing = findMdiWindow(filesToOpen[i]);
             if (existing) {
-                qDebug("File already exists, switching to it.");
+                debug_message("File already exists, switching to it.");
                 mdiArea->setActiveSubWindow(existing);
                 continue;
             }

@@ -282,6 +282,42 @@ QWidget* Settings_Dialog::createTabFilesPaths()
     return scrollArea;
 }
 
+typedef struct WidgetData_ {
+    char label[MAX_STRING_LENGTH];
+    BoolSetting *setting;
+} WidgetData;
+
+WidgetData render_hints[] = {
+    {
+        .label = "Use OpenGL",
+        .setting = &display_use_opengl
+    },
+    {
+        .label = "Antialias",
+        .setting = &display_renderhint_aa
+    },
+    {
+        .label = "Antialias Text",
+        .setting = &display_renderhint_text_aa
+    },
+    {
+        .label = "Smooth Pixmap",
+        .setting = &display_renderhint_smooth_pix
+    },
+    {
+        .label = "High Quality Antialiasing (OpenGL)",
+        .setting = &display_renderhint_high_aa
+    },
+    {
+        .label = "Non Cosmetic",
+        .setting = &display_renderhint_noncosmetic
+    },
+    {
+        .label = "END",
+        .setting = NULL
+    }    
+};
+
 QWidget* Settings_Dialog::createTabDisplay()
 {
     QWidget* widget = new QWidget(this);
@@ -290,26 +326,16 @@ QWidget* Settings_Dialog::createTabDisplay()
     /* TODO: Review OpenGL and Rendering settings for future inclusion */
     QGroupBox* groupBoxRender = new QGroupBox(tr("Rendering"), widget);
 
-    QCheckBox* checkBoxUseOpenGL = create_checkbox(groupBoxRender, "Use OpenGL",
-        &display_use_opengl);
-    QCheckBox* checkBoxRenderHintAA = create_checkbox(groupBoxRender, "Antialias",
-        &display_renderhint_aa);
-    QCheckBox* checkBoxRenderHintTextAA = create_checkbox(groupBoxRender, "Antialias Text",
-        &display_renderhint_text_aa);
-    QCheckBox* checkBoxRenderHintSmoothPix = create_checkbox(groupBoxRender, "Smooth Pixmap",
-        &display_renderhint_smooth_pix);
-    QCheckBox* checkBoxRenderHintHighAA = create_checkbox(groupBoxRender, "High Quality Antialiasing (OpenGL)",
-        &display_renderhint_high_aa);
-    QCheckBox* checkBoxRenderHintNonCosmetic = create_checkbox(groupBoxRender, "Non Cosmetic",
-        &display_renderhint_noncosmetic);
-
     QVBoxLayout* vboxLayoutRender = new QVBoxLayout(groupBoxRender);
-    vboxLayoutRender->addWidget(checkBoxUseOpenGL);
-    vboxLayoutRender->addWidget(checkBoxRenderHintAA);
-    vboxLayoutRender->addWidget(checkBoxRenderHintTextAA);
-    vboxLayoutRender->addWidget(checkBoxRenderHintSmoothPix);
-    vboxLayoutRender->addWidget(checkBoxRenderHintHighAA);
-    vboxLayoutRender->addWidget(checkBoxRenderHintNonCosmetic);
+    for (int i=0; ; i++) {
+        if (!strcmp(render_hints[i].label, "END")) {
+            break;
+        }
+        QCheckBox* checkBox = create_checkbox(groupBoxRender,
+            render_hints[i].label,
+            render_hints[i].setting);
+        vboxLayoutRender->addWidget(checkBox);
+    }
     groupBoxRender->setLayout(vboxLayoutRender);
 
     //ScrollBars
@@ -424,7 +450,7 @@ QWidget* Settings_Dialog::createTabDisplay()
 
     //Widget Layout
     QVBoxLayout *vboxLayoutMain = new QVBoxLayout(widget);
-    //vboxLayoutMain->addWidget(groupBoxRender); //TODO: Review OpenGL and Rendering settings for future inclusion
+    vboxLayoutMain->addWidget(groupBoxRender); //TODO: Review OpenGL and Rendering settings for future inclusion
     vboxLayoutMain->addWidget(groupBoxScrollBars);
     vboxLayoutMain->addWidget(groupBoxColor);
     vboxLayoutMain->addWidget(groupBoxZoom);

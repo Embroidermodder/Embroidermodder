@@ -670,6 +670,9 @@ int roundToMultiple(bool roundUp, int numToRound, int multiple);
 /* MainWindow calls */
 void end_command(void);
 void debug_message(const char *msg);
+void wait_cursor(void);
+void arrow_cursor(void);
+void restore_cursor(void);
 
 void cut(void);
 
@@ -828,6 +831,13 @@ extern Editor misc_text_single_editor_data[];
 
 extern const char *_appName_;
 extern const char *_appVer_;
+
+extern int numOfDocs;
+extern int docIndex;
+extern bool shiftKeyPressedState;
+extern bool cmdActive;
+extern bool rapidFireEnabled;
+extern bool isBlinking;
 
 /* Natives */
 void about_dialog(void);
