@@ -79,6 +79,33 @@ extern "C" {
 #define CLEAR_SELECTION             0x10
 #define DONT_END_COMMAND            0x20
 
+/* Key Sequence */
+#define CUT_SEQUENCE            0
+#define COPY_SEQUENCE           1
+#define PASTE_SEQUENCE          2
+#define SELECT_ALL_SEQUENCE     3
+#define UNDO_SEQUENCE           4
+#define REDO_SEQUENCE           5
+#define DELETE_KEY              6
+#define TAB_KEY                 7
+#define ESCAPE_KEY              8
+#define UP_KEY                  9
+#define DOWN_KEY               10
+#define SHIFT_KEY              11
+#define F1_KEY                 12
+#define F2_KEY                 13
+#define F3_KEY                 14
+#define F4_KEY                 15
+#define F5_KEY                 16
+#define F6_KEY                 17
+#define F7_KEY                 18
+#define F8_KEY                 19
+#define F9_KEY                 20
+#define F10_KEY                21
+#define F11_KEY                22
+#define F12_KEY                23
+#define N_KEY_SEQUENCES        24
+
 enum COMMAND_ACTIONS
 {
     ACTION_DO_NOTHING,
@@ -620,7 +647,6 @@ ScriptValue script_bool(bool b);
 ScriptValue script_int(int i);
 ScriptValue script_real(double r);
 ScriptValue script_string(const char *s);
-ScriptValue stub_implement(const char *function);
 ScriptValue command_prompt(ScriptEnv *context, const char *line);
 
 ScriptEnv *add_string_argument(ScriptEnv *context, const char *s);
@@ -838,9 +864,26 @@ extern bool shiftKeyPressedState;
 extern bool cmdActive;
 extern bool rapidFireEnabled;
 extern bool isBlinking;
+extern bool key_state[N_KEY_SEQUENCES];
 
 /* Natives */
 void about_dialog(void);
+void stub_implement(const char *txt);
+void stub_testing(void);
+void run_testing(void);
+void exit_program(void);
+void check_for_updates(void);
+void new_file(void);
+void open_recent_file(void);
+void save_file(void);
+void save_as_file(void);
+void update_interface(void);
+void windowMenuAboutToShow();
+void hide_unimplemented(void);
+void start_blinking(void);
+void stop_blinking(void);
+
+ScriptValue run_command(const char *cmd, ScriptEnv *context);
 
 void nativeBlinkPrompt();
 

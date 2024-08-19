@@ -116,6 +116,9 @@ class PropertyEditor;
 class SelectBox;
 class UndoEditor;
 class View;
+class CmdPromptHistory;
+class CmdPromptSplitter;
+class CmdPromptInput;
 
 extern MainWindow *_main;
 extern QHash<std::string, std::string>* aliasHash;
@@ -156,6 +159,15 @@ extern QString defaultPrefix;
 extern QString prefix;
 extern QString lastCmd;
 extern QString curCmd;
+
+extern CmdPromptHistory* promptHistory;
+extern QVBoxLayout* promptVBoxLayout;
+extern QFrame* promptDivider;
+
+extern CmdPromptSplitter* promptSplitter;
+extern CmdPromptInput* promptInput;
+
+void appendHistory(QString txt);
 
 /* . */
 typedef struct ViewData_ {
@@ -329,6 +341,8 @@ QString getCurrentLayer();
 QRgb getCurrentColor();
 QString getCurrentLineType();
 QString getCurrentLineWeight();
+
+void setHistory(const QString& txt);
 
 class LayerManager : public QDialog
 {
@@ -1034,7 +1048,7 @@ private:
     MainWindow* _mainWin;
 };
 
-class CmdPromptInput : public QLineEdit
+class CmdPromptInput: public QLineEdit
 {
     Q_OBJECT
 
@@ -1042,46 +1056,12 @@ public:
     CmdPromptInput(QWidget* parent = 0);
     ~CmdPromptInput();
 
+    void changeFormatting(const QList<QTextLayout::FormatRange>& formats);
+    void clearFormatting();
+    void applyFormatting();
 protected:
     void contextMenuEvent(QContextMenuEvent *event);
     bool eventFilter(QObject *obj, QEvent *event);
-
-signals:
-    void appendHistory(const QString& txt, int prefixLength);
-
-    //These connect to the CmdPrompt signals
-    void startCommand(const QString& cmd);
-    void runCommand(const QString& cmd, const QString& cmdtxt);
-    void deletePressed();
-    void tabPressed();
-    void escapePressed();
-    void upPressed();
-    void downPressed();
-    void F1Pressed();
-    void F2Pressed();
-    void F3Pressed();
-    void F4Pressed();
-    void F5Pressed();
-    void F6Pressed();
-    void F7Pressed();
-    void F8Pressed();
-    void F9Pressed();
-    void F10Pressed();
-    void F11Pressed();
-    void F12Pressed();
-    void cutPressed();
-    void copyPressed();
-    void pastePressed();
-    void selectAllPressed();
-    void undoPressed();
-    void redoPressed();
-
-    void shiftPressed();
-    void shiftReleased();
-
-    void showSettings();
-
-    void stopBlinking();
 
 public slots:
     void addCommand(const QString& alias, const QString& cmd);
@@ -1095,14 +1075,9 @@ public slots:
 private slots:
     void copyClip();
     void pasteClip();
-private:
-
-    void changeFormatting(const QList<QTextLayout::FormatRange>& formats);
-    void clearFormatting();
-    void applyFormatting();
 };
 
-class CmdPromptHistory : public QTextBrowser
+class CmdPromptHistory: public QTextBrowser
 {
     Q_OBJECT
 
@@ -1110,24 +1085,13 @@ public:
     CmdPromptHistory(QWidget* parent = 0);
     ~CmdPromptHistory() {}
 
+    QString applyFormatting(const QString& txt, int prefixLength);
+
 protected:
     void contextMenuEvent(QContextMenuEvent* event);
-
-public slots:
-    void appendHistory(const QString& txt, int prefixLength);
-    void startResizeHistory(int y);
-    void stopResizeHistory(int y);
-    void resizeHistory(int y);
-
-signals:
-    void historyAppended(const QString& txt);
-
-private:
-    int tmpHeight;
-    QString applyFormatting(const QString& txt, int prefixLength);
 };
 
-class CmdPromptSplitter : public QSplitter
+class CmdPromptSplitter: public QSplitter
 {
     Q_OBJECT
 
@@ -1137,11 +1101,6 @@ public:
 
 protected:
     QSplitterHandle* createHandle();
-
-signals:
-    void pressResizeHistory(int y);
-    void releaseResizeHistory(int y);
-    void moveResizeHistory(int y);
 };
 
 class CmdPromptHandle : public QSplitterHandle
@@ -1156,16 +1115,6 @@ protected:
     void mousePressEvent(QMouseEvent* e);
     void mouseReleaseEvent(QMouseEvent* e);
     void mouseMoveEvent(QMouseEvent* e);
-
-signals:
-    void handlePressed(int y);
-    void handleReleased(int y);
-    void handleMoved(int y);
-
-private:
-    int pressY;
-    int releaseY;
-    int moveY;
 };
 
 class CmdPrompt : public QWidget
@@ -1174,9 +1123,7 @@ class CmdPrompt : public QWidget
 
 public:
     CmdPrompt(QWidget* parent = 0);
-    ~CmdPrompt();
-
-    CmdPromptInput*    promptInput;
+    ~CmdPrompt() {}
 
 public slots:
     void setCurrentText(const QString& txt)
@@ -1184,27 +1131,13 @@ public slots:
         curText = prefix + txt;
         promptInput->setText(curText);
     }
-    void setHistory(const QString& txt)
-    {
-        promptHistory->setHtml(txt);
-        promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
-    }
     void setPrefix(const QString& txt);
-    void appendHistory(const QString& txt);
-    void startResizingTheHistory(int y) { promptHistory->startResizeHistory(y); }
-    void stopResizingTheHistory(int y) { promptHistory->stopResizeHistory(y); }
-    void resizeTheHistory(int y) { promptHistory->resizeHistory(y); }
-    void addCommand(const QString& alias, const QString& cmd) { promptInput->addCommand(alias, cmd); }
-    void endCommand() { promptInput->endCommand(); }
-    void processInput() { promptInput->processInput(); }
     void enableRapidFire() { rapidFireEnabled = true; }
     void disableRapidFire() { rapidFireEnabled = false; }
     bool isRapidFireEnabled() { return rapidFireEnabled; }
 
     void alert(const QString& txt);
 
-    void startBlinking();
-    void stopBlinking();
     void blink();
 
     void setPromptTextColor(const QColor&);
@@ -1218,52 +1151,13 @@ public slots:
     void saveHistory(const QString& fileName, bool html);
 
 signals:
-    void appendTheHistory(const QString& txt, int prefixLength);
-
     //For connecting outside of command prompt
-    void startCommand(const QString& cmd);
-    void runCommand(const QString& cmd, const QString& cmdtxt);
-    void deletePressed();
-    void tabPressed();
-    void escapePressed();
-    void upPressed();
-    void downPressed();
-    void F1Pressed();
-    void F2Pressed();
-    void F3Pressed();
-    void F4Pressed();
-    void F5Pressed();
-    void F6Pressed();
-    void F7Pressed();
-    void F8Pressed();
-    void F9Pressed();
-    void F10Pressed();
-    void F11Pressed();
-    void F12Pressed();
-    void cutPressed();
-    void copyPressed();
-    void pastePressed();
-    void selectAllPressed();
-    void undoPressed();
-    void redoPressed();
-
-    void shiftPressed();
-    void shiftReleased();
-
     void showSettings();
 
     void historyAppended(const QString& txt);
 
 private:
-    CmdPromptHistory* promptHistory;
-    QVBoxLayout* promptVBoxLayout;
-    QFrame* promptDivider;
-
-    CmdPromptSplitter* promptSplitter;
-
     void updateStyle();
-    QTimer* blinkTimer;
-    bool blinkState;
 };
 
 class MainWindow: public QMainWindow
@@ -1276,8 +1170,6 @@ public:
 
     void setUndoCleanIcon(bool opened);
 
-    virtual void updateMenuToolbarStatusbar();
-
 public slots:
     void onCloseWindow();
     virtual void onCloseMdiWin(MdiWindow*);
@@ -1285,7 +1177,6 @@ public slots:
     void recentMenuAboutToShow();
 
     void onWindowActivated(QMdiSubWindow* w);
-    void windowMenuAboutToShow();
     void windowMenuActivated( bool checked/*int id*/ );
 
     void updateAllViewScrollBars(bool val);
@@ -1321,15 +1212,7 @@ private:
     /* Menus */
     void createAllMenus();
 
-private slots:
-    void hideUnimplemented();
-
 public slots:
-    void stub_implement(QString txt);
-    void stub_testing();
-
-    void run_testing();
-
     void promptHistoryAppended(const QString& txt);
     void logPromptInput(const QString& txt);
     void promptInputPrevious();
@@ -1337,22 +1220,15 @@ public slots:
 
     /* NOTE: for some reason QString <-> std::string conversions makes commands not work. */
     void runCommand();
-    ScriptValue runCommandCore(const QString& cmd, ScriptEnv *context);
     void runCommandMain(const QString& cmd);
     void runCommandClick(const QString& cmd, double x, double y);
     void runCommandMove(const QString& cmd, double x, double y);
     void runCommandContext(const QString& cmd, const QString& str);
     void runCommandPrompt(const QString& cmd);
 
-    void newFile();
     void openFile(bool recent = false, const QString& recentFile = "");
     void openFilesSelected(const QStringList&);
-    void openrecentfile();
-    void savefile();
-    void saveasfile();
     void print();
-    void exit();
-    void checkForUpdates();
 
     void closeToolBar(QAction*);
     void floatingChangedToolBar(bool);

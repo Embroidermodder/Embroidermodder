@@ -979,7 +979,7 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     resize(sizeHint());
 
     promptHistory = "Welcome to Embroidermodder 2!<br/>Open some of our sample files. Many formats are supported.<br/>For help, press F1.";
-    prompt->setHistory(promptHistory);
+    setHistory(promptHistory);
     promptInputList << "";
     promptInputNum = 0;
 
@@ -1188,7 +1188,7 @@ MdiWindow::onWindowActivated()
     statusBarQSnapButton->setChecked(gscene->property("ENABLE_QSNAP").toBool());
     statusBarQTrackButton->setChecked(gscene->property("ENABLE_QTRACK").toBool());
     statusBarLwtButton->setChecked(gscene->property("ENABLE_LWT").toBool());
-    prompt->setHistory(promptHistory);
+    setHistory(promptHistory);
 }
 
 QSize

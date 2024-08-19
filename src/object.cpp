@@ -408,6 +408,12 @@ circle_command(ScriptEnv *context)
 {
     debug_message("ADDING CIRCLE");
 
+    switch (context->mode) {
+    case CONTEXT_CONTEXT:
+        // todo("CIRCLE", "context()");
+        break;
+    }
+
     /*
     context->point1 = zero_vector;
     context->point2 = context->point1;
@@ -533,14 +539,6 @@ circle_click(ScriptEnv *context)
     default:
         break;
     }
-    end_command();
-    return script_null;
-}
-
-ScriptValue
-circle_context(ScriptEnv *context)
-{
-    // todo("CIRCLE", "context()");
     end_command();
     return script_null;
 }
@@ -716,7 +714,6 @@ circle_prompt(ScriptEnv *context)
 }
 
 #if 0
-
 void
 CircleObject::updateRubber(QPainter* painter)
 {
@@ -800,7 +797,8 @@ CircleObject::updateRubber(QPainter* painter)
     }
 }
 
-QPointF DimLeaderObject::objectMidPoint() const
+QPointF
+DimLeaderObject::objectMidPoint() const
 {
     QLineF lyne = line();
     QPointF mp = lyne.pointAt(0.5);

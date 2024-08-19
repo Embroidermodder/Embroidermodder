@@ -1129,6 +1129,12 @@ get_command_id(const char *name)
     return -2;
 }
 
+/* . */
+void
+save_file(void)
+{
+    debug_message("MainWindow::savefile()");
+}
 
 /* TODO: Before saving to a stitch only format, Embroidermodder needs
  *       to calculate the optimal path to minimize jump stitches. Also

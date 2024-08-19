@@ -136,7 +136,7 @@ function run_cmake () {
 	git submodule init
 	git submodule update
 
-	cmake -S . -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
+	cmake -S . -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 	cd $BUILD_DIR
 	cmake --build .
 	cd ..
@@ -180,29 +180,6 @@ function get_dependancies () {
 # emcc embroidery.c -o embroidery.wasm
 # mv embroidery.wasm ../downloads
 # cd ..
-function build_docs () {
-
-	python3 -m pip install --upgrade pip
-
-	pip install mkdocs
-	pip install mkdocs-bibtex
-	pip install mkdocs-with-pdf
-	pip install mkdocs-material
-	pip install mkdocs-table-reader-plugin
-	pip install markdown-grid-tables
-
-	rm -fr _site
-
-	mkdocs build
-
-	#cd docs
-	#    mkdocs build
-	#    mv site/emrm*.pdf ../site
-	#cd ..
-
-	mv site _site
-
-}
 
 function assemble_release () {
 
@@ -253,6 +230,25 @@ function build_debug () {
 
 }
 
+# https://www.gnu.org/software/complexity/manual/complexity.html
+# https://coccinelle.gitlabpages.inria.fr/website/documentation.html
+# https://clang.llvm.org/extra/clang-tidy/
+function analysis () {
+
+	BUILD_DIR="debug"
+	BUILD_TYPE="Debug"
+
+	git submodule init
+	git submodule update
+
+	run_cmake
+
+	clang-tidy --format-style='mozilla' -p debug src/* --checks=* \
+		--export-fixes=fixes.yaml --store-check-profile=check \
+		&> clang-tidy-report.txt
+
+}
+
 if [[ "$#" -eq 0 ]]; then
 	help_message
 fi
@@ -260,6 +256,7 @@ fi
 for arg in $@
 do
   case "$1" in
+    -a) analysis;;
     -s | --style) code_style;;
     -G | --generator)
       # GENERATOR="$OPTARG"

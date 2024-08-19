@@ -52,6 +52,11 @@ QByteArray layoutState;
 
 MainWindow *_main;
 
+QMenuBar *menuBar()
+{
+    return _main->menuBar();
+}
+
 Application::Application(int argc, char **argv) : QApplication(argc, argv), _mainWin(NULL)
 {
 }
@@ -108,7 +113,7 @@ make_application(int argc, char* argv[])
 }
 
 void
-MainWindow::run_testing(void)
+run_testing(void)
 {
     int i;
     std::this_thread::sleep_for (std::chrono::milliseconds(2000));
@@ -116,7 +121,7 @@ MainWindow::run_testing(void)
     int start = get_state_variable("coverage_test");
     for (i=0; i<n; i++) {
         QString cmd(state[start+i].s);
-        runCommandMain(cmd);
+        _main->runCommandMain(cmd);
         std::this_thread::sleep_for (std::chrono::milliseconds(1000));
     }        
 }
@@ -124,8 +129,8 @@ MainWindow::run_testing(void)
 MainWindow::MainWindow() : QMainWindow(0)
 {
     if (!load_data()) {
-        QMessageBox::critical(this, tr("Path Error"),
-            tr("Cannot locate data."));
+        QMessageBox::critical(this, translate("Path Error"),
+            translate("Cannot locate data."));
         return;
     }
     readSettings();
@@ -134,23 +139,23 @@ MainWindow::MainWindow() : QMainWindow(0)
     /* Verify that files/directories needed are actually present. */
     QFileInfo check(appDir + "/help");
     if (!check.exists()) {
-        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+        QMessageBox::critical(this, translate("Path Error"), translate("Cannot locate: ") + check.absoluteFilePath());
     }
     check = QFileInfo(appDir + "/icons");
     if (!check.exists()) {
-        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+        QMessageBox::critical(this, translate("Path Error"), translate("Cannot locate: ") + check.absoluteFilePath());
     }
     check = QFileInfo(appDir + "/images");
     if (!check.exists()) {
-        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+        QMessageBox::critical(this, translate("Path Error"), translate("Cannot locate: ") + check.absoluteFilePath());
     }
     check = QFileInfo(appDir + "/samples");
     if (!check.exists()) {
-        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+        QMessageBox::critical(this, translate("Path Error"), translate("Cannot locate: ") + check.absoluteFilePath());
     }
     check = QFileInfo(appDir + "/translations");
     if (!check.exists()) {
-        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+        QMessageBox::critical(this, translate("Path Error"), translate("Cannot locate: ") + check.absoluteFilePath());
     }
 
     QString lang = general_language.setting;
@@ -177,34 +182,34 @@ MainWindow::MainWindow() : QMainWindow(0)
     /* Init */
     _main = this;
     /* Menus */
-    menuHash["File"] = new QMenu(tr("&File"), this);
-    menuHash["Edit"] = new QMenu(tr("&Edit"), this);
-    menuHash["View"] = new QMenu(tr("&View"), this);
-    menuHash["Draw"] = new QMenu(tr("&Draw"), this);
-    menuHash["Tools"] = new QMenu(tr("&Tools"), this);
-    menuHash["Modify"] = new QMenu(tr("&Modify"), this);
-    menuHash["Sandbox"] = new QMenu(tr("S&andbox"), this);
-    menuHash["Dimension"] = new QMenu(tr("&Dimension"), this);
-    menuHash["Settings"] = new QMenu(tr("&Settings"), this);
-    menuHash["Window"] = new QMenu(tr("&Window"), this);
-    menuHash["Help"] = new QMenu(tr("&Help"), this);
+    menuHash["File"] = new QMenu(translate("&File"), this);
+    menuHash["Edit"] = new QMenu(translate("&Edit"), this);
+    menuHash["View"] = new QMenu(translate("&View"), this);
+    menuHash["Draw"] = new QMenu(translate("&Draw"), this);
+    menuHash["Tools"] = new QMenu(translate("&Tools"), this);
+    menuHash["Modify"] = new QMenu(translate("&Modify"), this);
+    menuHash["Sandbox"] = new QMenu(translate("S&andbox"), this);
+    menuHash["Dimension"] = new QMenu(translate("&Dimension"), this);
+    menuHash["Settings"] = new QMenu(translate("&Settings"), this);
+    menuHash["Window"] = new QMenu(translate("&Window"), this);
+    menuHash["Help"] = new QMenu(translate("&Help"), this);
     /* SubMenus */
-    menuHash["Recent"] = new QMenu(tr("Open &Recent"), this);
-    menuHash["Zoom"] = new QMenu(tr("&Zoom"), this);
-    menuHash["Pan"] = new QMenu(tr("&Pan"), this);
+    menuHash["Recent"] = new QMenu(translate("Open &Recent"), this);
+    menuHash["Zoom"] = new QMenu(translate("&Zoom"), this);
+    menuHash["Pan"] = new QMenu(translate("&Pan"), this);
 
     /* Toolbars */
-    toolbarHash["File"] = addToolBar(tr("File"));
-    toolbarHash["Edit"] = addToolBar(tr("Edit"));
-    toolbarHash["View"] = addToolBar(tr("View"));
-    toolbarHash["Zoom"] = addToolBar(tr("Zoom"));
-    toolbarHash["Pan"] = addToolBar(tr("Pan"));
-    toolbarHash["Icon"] = addToolBar(tr("Icon"));
-    toolbarHash["Help"] = addToolBar(tr("Help"));
-    toolbarHash["Layer"] = addToolBar(tr("Layer"));
-    toolbarHash["Properties"] = addToolBar(tr("Properties"));
-    toolbarHash["Text"] = addToolBar(tr("Text"));
-    toolbarHash["Prompt"] = addToolBar(tr("Command Prompt"));
+    toolbarHash["File"] = addToolBar(translate("File"));
+    toolbarHash["Edit"] = addToolBar(translate("Edit"));
+    toolbarHash["View"] = addToolBar(translate("View"));
+    toolbarHash["Zoom"] = addToolBar(translate("Zoom"));
+    toolbarHash["Pan"] = addToolBar(translate("Pan"));
+    toolbarHash["Icon"] = addToolBar(translate("Icon"));
+    toolbarHash["Help"] = addToolBar(translate("Help"));
+    toolbarHash["Layer"] = addToolBar(translate("Layer"));
+    toolbarHash["Properties"] = addToolBar(translate("Properties"));
+    toolbarHash["Text"] = addToolBar(translate("Text"));
+    toolbarHash["Prompt"] = addToolBar(translate("Command Prompt"));
 
     toolbarHash["Draw"] = new QToolBar("toolbarDraw", this);
     toolbarHash["Modify"] = new QToolBar("toolbarModify", this);
@@ -249,7 +254,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     /*
     ExperimentalView *openGL = new ExperimentalView(this);
-    QLabel *example = new QLabel(tr("OpenGL"));
+    QLabel *example = new QLabel(translate("OpenGL"));
     layout->addWidget(openGL);
     */
 
@@ -368,14 +373,14 @@ MainWindow::MainWindow() : QMainWindow(0)
     colorSelector->setFocusProxy(prompt);
     colorSelector->addItem(create_icon("colorbylayer"), "ByLayer");
     colorSelector->addItem(create_icon("colorbyblock"), "ByBlock");
-    colorSelector->addItem(create_icon("colorred"), tr("Red"), qRgb(255, 0, 0));
-    colorSelector->addItem(create_icon("coloryellow"), tr("Yellow"), qRgb(255, 255, 0));
-    colorSelector->addItem(create_icon("colorgreen"), tr("Green"), qRgb(  0,255, 0));
-    colorSelector->addItem(create_icon("colorcyan"), tr("Cyan"), qRgb(  0,255,255));
-    colorSelector->addItem(create_icon("colorblue"), tr("Blue"), qRgb(  0, 0,255));
-    colorSelector->addItem(create_icon("colormagenta"), tr("Magenta"), qRgb(255, 0,255));
-    colorSelector->addItem(create_icon("colorwhite"), tr("White"), qRgb(255,255,255));
-    colorSelector->addItem(create_icon("colorother"), tr("Other..."));
+    colorSelector->addItem(create_icon("colorred"), translate("Red"), qRgb(255, 0, 0));
+    colorSelector->addItem(create_icon("coloryellow"), translate("Yellow"), qRgb(255, 255, 0));
+    colorSelector->addItem(create_icon("colorgreen"), translate("Green"), qRgb(  0,255, 0));
+    colorSelector->addItem(create_icon("colorcyan"), translate("Cyan"), qRgb(  0,255,255));
+    colorSelector->addItem(create_icon("colorblue"), translate("Blue"), qRgb(  0, 0,255));
+    colorSelector->addItem(create_icon("colormagenta"), translate("Magenta"), qRgb(255, 0,255));
+    colorSelector->addItem(create_icon("colorwhite"), translate("White"), qRgb(255,255,255));
+    colorSelector->addItem(create_icon("colorother"), translate("Other..."));
     toolbarHash["Properties"]->addWidget(colorSelector);
     connect(colorSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(colorSelectorIndexChanged(int)));
 
@@ -510,7 +515,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     /* zoomToolBar->setToolButtonStyle(Qt::ToolButtonTextOnly); */
 
     iconResize(general_icon_size.setting);
-    updateMenuToolbarStatusbar();
+    update_interface();
 
     /* Show date in statusbar after it has been updated. */
     QDate date = QDate::currentDate();
@@ -609,7 +614,7 @@ MainWindow::recentMenuAboutToShow()
 
 /* . */
 void
-MainWindow::windowMenuAboutToShow()
+windowMenuAboutToShow(void)
 {
     debug_message("MainWindow::windowMenuAboutToShow()");
     menuHash["Window"]->clear();
@@ -625,11 +630,11 @@ MainWindow::windowMenuAboutToShow()
     menuHash["Window"]->addSeparator();
     QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
     for (int i = 0; i < windows.count(); ++i) {
-        QAction* aAction = new QAction(windows.at(i)->windowTitle(), this);
+        QAction* aAction = new QAction(windows.at(i)->windowTitle(), _main);
         aAction->setCheckable(true);
         aAction->setData(i);
         menuHash["Window"]->addAction(aAction);
-        connect(aAction, SIGNAL(toggled(bool)), this, SLOT(menuHash["Window"]Activated(bool)));
+        QObject::connect(aAction, SIGNAL(toggled(bool)), _main, SLOT(menuHash["Window"]Activated(bool)));
         aAction->setChecked(mdiArea->activeSubWindow() == windows.at(i));
     }
 }
@@ -651,16 +656,16 @@ MainWindow::windowMenuActivated(bool checked)
 
 /* . */
 void
-MainWindow::newFile()
+new_file(void)
 {
-    debug_message("MainWindow::newFile()");
+    debug_message("new_file()");
     docIndex++;
     numOfDocs++;
     MdiWindow* mdiWin = new MdiWindow(docIndex, _main, mdiArea, Qt::SubWindow);
-    connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
-    connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
+    QObject::connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), _main, SLOT(onCloseMdiWin(MdiWindow*)));
+    QObject::connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), _main, SLOT(onWindowActivated(QMdiSubWindow*)));
 
-    updateMenuToolbarStatusbar();
+    update_interface();
     windowMenuAboutToShow();
 
     View* v = mdiWin->gview;
@@ -689,11 +694,11 @@ MainWindow::openFile(bool recent, const QString& recentFile)
     }
     else if (!preview) {
         /* TODO: set getOpenFileNames' selectedFilter parameter from opensave_open_format.setting */
-        files = QFileDialog::getOpenFileNames(this, tr("Open"), openFilesPath, formatFilterOpen);
+        files = QFileDialog::getOpenFileNames(this, translate("Open"), openFilesPath, formatFilterOpen);
         openFilesSelected(files);
     }
     else if (preview) {
-        PreviewDialog* openDialog = new PreviewDialog(this, tr("Open w/Preview"), openFilesPath, formatFilterOpen);
+        PreviewDialog* openDialog = new PreviewDialog(this, translate("Open w/Preview"), openFilesPath, formatFilterOpen);
         /* TODO: set openDialog->selectNameFilter(const QString& filter) from opensave_open_format.setting */
         connect(openDialog, SIGNAL(filesSelected(const QStringList&)), this, SLOT(openFilesSelected(const QStringList&)));
         openDialog->exec();
@@ -743,12 +748,12 @@ MainWindow::openFilesSelected(const QStringList& filesToOpen)
 
             /* Make sure the toolbars/etc... are shown before doing their zoomExtents. */
             if (doOnce) {
-                updateMenuToolbarStatusbar();
+                update_interface();
                 doOnce = false;
             }
 
             if (mdiWin->loadFile(filesToOpen.at(i))) {
-                statusbar->showMessage(tr("File(s) loaded"), 2000);
+                statusbar->showMessage(translate("File(s) loaded"), 2000);
                 mdiWin->show();
                 mdiWin->showMaximized();
                 /* Prevent duplicate entries in the recent files list. */
@@ -789,28 +794,23 @@ MainWindow::openFilesSelected(const QStringList& filesToOpen)
 
 /* . */
 void
-MainWindow::openrecentfile()
+open_recent_file(void)
 {
-    debug_message("MainWindow::openrecentfile()");
+    debug_message("open_recent_file()");
 
     /* Check to see if this from the recent files list. */
-    QAction* recentSender = qobject_cast<QAction*>(sender());
+    /* FIXME: QAction* recentSender = qobject_cast<QAction*>(sender());
     if (recentSender) {
         openFile(true, recentSender->data().toString());
     }
-}
-
-void
-MainWindow::savefile()
-{
-    debug_message("MainWindow::savefile()");
+    */
 }
 
 /* . */
 void
-MainWindow::saveasfile()
+save_as_file(void)
 {
-    debug_message("MainWindow::saveasfile()");
+    debug_message("save_as_file()");
     /* need to find the activeSubWindow before it loses focus to the FileDialog. */
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (!mdiWin) {
@@ -818,7 +818,7 @@ MainWindow::saveasfile()
     }
 
     openFilesPath = opensave_recent_directory.setting;
-    QString file = QFileDialog::getSaveFileName(this, tr("Save As"), openFilesPath, formatFilterSave);
+    QString file = QFileDialog::getSaveFileName(_main, translate("Save As"), openFilesPath, formatFilterSave);
 
     mdiWin->saveFile(file);
 }
@@ -876,7 +876,7 @@ MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
     mdiArea->removeSubWindow(theMdiWin);
     theMdiWin->deleteLater();
 
-    updateMenuToolbarStatusbar();
+    update_interface();
     windowMenuAboutToShow();
 
     if (keepMaximized) {
@@ -917,9 +917,9 @@ MainWindow::getFileSeparator()
 
 /* . */
 void
-MainWindow::updateMenuToolbarStatusbar()
+update_interface()
 {
-    debug_message("MainWindow::updateMenuToolbarStatusbar()");
+    debug_message("update_interface()");
 
     actionHash.value(ACTION_PRINT)->setEnabled(numOfDocs > 0);
     actionHash.value(ACTION_WINDOW_CLOSE)->setEnabled(numOfDocs > 0);
@@ -995,14 +995,14 @@ MainWindow::updateMenuToolbarStatusbar()
         statusBarQTrackButton->hide();
         statusBarLwtButton->hide();
     }
-    hideUnimplemented();
+    hide_unimplemented();
 }
 
 /* . */
 void
-MainWindow::hideUnimplemented()
+hide_unimplemented(void)
 {
-    debug_message("MainWindow::hideUnimplemented()");
+    debug_message("hide_unimplemented()");
 }
 
 /* . */
@@ -1544,7 +1544,7 @@ MainWindow::createAllActions()
         actionHash.insert(command_data[i].id, ACTION);
 
         foreach (QString alias, aliases) {
-            prompt->addCommand(alias, icon);
+            promptInput->addCommand(alias, icon);
         }
     }
 

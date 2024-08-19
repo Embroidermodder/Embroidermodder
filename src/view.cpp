@@ -2082,18 +2082,18 @@ View::createObjectList(QList<QGraphicsItem*> list)
 void
 View::repeatAction()
 {
-    prompt->endCommand();
+    promptInput->endCommand();
     prompt->setCurrentText(lastCmd);
-    prompt->processInput();
+    promptInput->processInput();
 }
 
 /* . */
 void
 View::moveAction()
 {
-    prompt->endCommand();
+    promptInput->endCommand();
     prompt->setCurrentText("move");
-    prompt->processInput();
+    promptInput->processInput();
 }
 
 void
@@ -2122,9 +2122,9 @@ View::moveSelected(double dx, double dy)
 void
 View::rotateAction()
 {
-    prompt->endCommand();
+    promptInput->endCommand();
     prompt->setCurrentText("rotate");
-    prompt->processInput();
+    promptInput->processInput();
 }
 
 void
@@ -2177,9 +2177,9 @@ View::mirrorSelected(double x1, double y1, double x2, double y2)
 void
 View::scaleAction()
 {
-    prompt->endCommand();
+    promptInput->endCommand();
     prompt->setCurrentText("scale");
-    prompt->processInput();
+    promptInput->processInput();
 }
 
 void

@@ -23,22 +23,22 @@ ScriptValue sandbox_command(ScriptEnv *context);
 
 /* . */
 void
-MainWindow::stub_implement(QString txt)
+stub_implement(const char *txt)
 {
-    qDebug("TODO: %s", qPrintable(txt));
+    qDebug("TODO: %s", txt);
 }
 
 /* . */
 void
-MainWindow::stub_testing()
+stub_testing()
 {
-    QMessageBox::warning(this, translate("Testing Feature"),
+    QMessageBox::warning(_main, translate("Testing Feature"),
         translate("<b>This feature is in testing.</b>"));
 }
 
 /* . */
 void
-MainWindow::exit(void)
+exit_program(void)
 {
     debug_message("exit()");
     if (prompt_save_history.setting) {
@@ -49,12 +49,12 @@ MainWindow::exit(void)
     /* Force the MainWindow destructor to run before exiting.
      * Makes Valgrind "still reachable" happy :)
      */
-    this->deleteLater();
+    _main->deleteLater();
 }
 
 /* . */
 void
-MainWindow::checkForUpdates(void)
+check_for_updates(void)
 {
     debug_message("checkForUpdates()");
     /* TODO: Check website for new versions, commands, etc... */
@@ -267,7 +267,7 @@ MainWindow::undo()
     debug_message("undo()");
     if (dockUndoEdit->canUndo()) {
         prompt->setPrefix("Undo " + dockUndoEdit->undoText());
-        prompt->appendHistory(QString());
+        appendHistory("");
         dockUndoEdit->undo();
         prompt->setPrefix(prefix);
     }
@@ -283,7 +283,7 @@ MainWindow::redo()
     debug_message("redo()");
     if (dockUndoEdit->canRedo()) {
         prompt->setPrefix("Redo " + dockUndoEdit->redoText());
-        prompt->appendHistory(QString());
+        appendHistory("");
         dockUndoEdit->redo();
         prompt->setPrefix(prefix);
     }
@@ -702,14 +702,14 @@ MainWindow::promptInputNext()
 }
 
 ScriptValue
-MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
+run_command(const char* cmd, ScriptEnv *context)
 {
-    int id = get_command_id(qPrintable(cmd));
+    int id = get_command_id(cmd);
     View* gview = NULL;
     ScriptValue value = script_true;
-    qDebug("runCommandCore(%s) %d", qPrintable(cmd), id);
+    qDebug("run_command(%s) %d", cmd, id);
     if (id < 0) {
-        qDebug("ERROR: %s not found in command_data.", qPrintable(cmd));
+        qDebug("ERROR: %s not found in command_data.", cmd);
         return script_false;
     }
 
@@ -769,7 +769,7 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         break;
 
     case ACTION_DEBUG:
-        prompt->appendHistory(QString(STR(0)));
+        appendHistory(QString(STR(0)));
         break;
 
     case ACTION_DESIGN_DETAILS:
@@ -807,37 +807,39 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
     }
 
     case ACTION_EXIT:
-        exit();
+        exit_program();
         break;
 
     case ACTION_HELP:
         help();
         break;
+
     case ACTION_ICON_128:
-        iconResize(128);
+        _main->iconResize(128);
         break;
     case ACTION_ICON_16:
-        iconResize(16);
+        _main->iconResize(16);
         break;
     case ACTION_ICON_24:
-        iconResize(24);
+        _main->iconResize(24);
         break;
     case ACTION_ICON_32:
-        iconResize(32);
+        _main->iconResize(32);
         break;
     case ACTION_ICON_48:
-        iconResize(48);
+        _main->iconResize(48);
         break;
     case ACTION_ICON_64:
-        iconResize(64);
+        _main->iconResize(64);
         break;
+
     case ACTION_MIRROR_SELECTED: {
         gview->mirrorSelected(REAL(0), -REAL(1), REAL(2), -REAL(3));
         break;
     }
 
     case ACTION_NEW:
-        newFile();
+        new_file();
         break;
 
 /*
@@ -848,7 +850,7 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
  */
 
     case ACTION_OPEN:
-        openFile();
+        _main->openFile();
         break;
 
     case ACTION_PASTE: {
@@ -866,10 +868,11 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         /* prompt_output(translate("Platform") + " = " + _main->platformString()); */
         break;
     case ACTION_REDO:
-        redo();
+        _main->redo();
         break;
+
     case ACTION_SAVE:
-        /* save(); */
+        save_file();
         break;
 
     case ACTION_SAVE_AS:
@@ -881,7 +884,7 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         break;
 
     case ACTION_SETTINGS_DIALOG: {
-        settingsDialog();
+        _main->settingsDialog();
         break;
     }
 
@@ -916,7 +919,7 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
     }
 
     case ACTION_UNDO:
-        undo();
+        _main->undo();
         break;
 
     case ACTION_VULCANIZE: {
@@ -1038,7 +1041,7 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         s += ") ";
         s += STR(1);
         prompt->setPrefix(QString(s.c_str()));
-        prompt->appendHistory("");
+        appendHistory("");
         break;
     }
 
@@ -1185,7 +1188,7 @@ MainWindow::runCommandCore(const QString& cmd, ScriptEnv *context)
         break;
     }
     case ACTION_WINDOW_CLOSE: {
-        onCloseWindow();
+        _main->onCloseWindow();
         break;
     }
     case ACTION_WINDOW_CLOSE_ALL: {
@@ -1276,9 +1279,9 @@ MainWindow::runCommand()
     QAction* act = qobject_cast<QAction*>(sender());
     if (act) {
         qDebug("runCommand(%s)", qPrintable(act->objectName()));
-        prompt->endCommand();
+        promptInput->endCommand();
         prompt->setCurrentText(act->objectName());
-        prompt->processInput();
+        promptInput->processInput();
     }
 }
 
@@ -1296,7 +1299,7 @@ MainWindow::runCommandMain(const QString& cmd)
         clear_selection();
     }
     */
-    runCommandCore(cmd, context);
+    run_command(qPrintable(cmd), context);
     free_script_env(context);
 }
 
@@ -1309,7 +1312,7 @@ MainWindow::runCommandClick(const QString& cmd, double x, double y)
     context->context = CONTEXT_CLICK;
     qDebug("runCommandClick(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
     /* engine->evaluate(cmd + "_click(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName); */
-    runCommandCore(cmd, context);
+    run_command(qPrintable(cmd), context);
     free_script_env(context);
 }
 
@@ -1322,7 +1325,7 @@ MainWindow::runCommandMove(const QString& cmd, double x, double y)
     context->context = CONTEXT_MOVE;
     qDebug("runCommandMove(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
     /* engine->evaluate(cmd + "_move(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName); */
-    runCommandCore(cmd, context);
+    run_command(qPrintable(cmd), context);
     free_script_env(context);
 }
 
@@ -1335,7 +1338,7 @@ MainWindow::runCommandContext(const QString& cmd, const QString& str)
     context->context = CONTEXT_CONTEXT;
     qDebug("runCommandContext(%s, %s)", qPrintable(cmd), qPrintable(str));
     /* engine->evaluate(cmd + "_context('" + str.toUpper() + "')", fileName); */
-    runCommandCore(cmd, context);
+    run_command(qPrintable(cmd), context);
     free_script_env(context);
 }
 
@@ -1349,11 +1352,11 @@ MainWindow::runCommandPrompt(const QString& cmd)
     qDebug("runCommandPrompt(%s)", qPrintable(cmd));
     context->context = CONTEXT_PROMPT;
     if (prompt->isRapidFireEnabled()) {
-        runCommandCore(cmd, context);
+        run_command(qPrintable(cmd), context);
     }
     else {
         /* Both branches run the same. */
-        runCommandCore(cmd, context);
+        run_command(qPrintable(cmd), context);
     }
     free_script_env(context);
 }
@@ -1873,7 +1876,7 @@ nativeQSnapY()
 void
 prompt_output(const char *txt)
 {
-    prompt->appendHistory(QString(txt));
+    appendHistory(QString(txt));
 }
 
 void
@@ -1894,7 +1897,7 @@ end_command(void)
         gview->previewOff();
         gview->disableMoveRapidFire();
     }
-    prompt->endCommand();
+    promptInput->endCommand();
 }
 
 /* Simple Commands (other commands, like circle_command are housed in their
@@ -2157,7 +2160,7 @@ syswindows_command(ScriptEnv * context)
 ScriptValue
 blink_prompt_command(ScriptEnv* context)
 {
-    prompt->startBlinking();
+    start_blinking();
     return script_null;
 }
 
@@ -2802,7 +2805,7 @@ locatepoint_command(ScriptEnv *context)
         break;
     }
     case CONTEXT_CONTEXT:
-        _main->runCommandCore("todo LOCATEPOINT context()", context);
+        run_command("todo LOCATEPOINT context()", context);
         break;
     case CONTEXT_PROMPT:
         /*
@@ -3750,8 +3753,8 @@ add_rubber_command(ScriptEnv* context)
     }
 
     /* FIXME: ERROR CHECKING */
-    double mx = _main->runCommandCore("get mousex", context).r;
-    double my = _main->runCommandCore("get mousey", context).r;
+    double mx = run_command("get mousex", context).r;
+    double my = run_command("get mousey", context).r;
 
     if (objType == "ARC") {
         /* TODO: handle this type */
