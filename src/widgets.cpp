@@ -350,8 +350,8 @@ create_statusbar(MainWindow* mw)
 
     statusBarMouseCoord = new QLabel(statusbar);
 
-    statusBarMouseCoord->setMinimumWidth(300); // Must fit this text always
-    statusBarMouseCoord->setMaximumWidth(300); // "+1.2345E+99, +1.2345E+99, +1.2345E+99"
+    statusBarMouseCoord->setMinimumWidth(300); /* Must fit this text always */
+    statusBarMouseCoord->setMaximumWidth(300); /* "+1.2345E+99, +1.2345E+99, +1.2345E+99" */
 
     statusbar->addWidget(statusBarMouseCoord);
     statusbar->addWidget(statusBarSnapButton);
@@ -367,19 +367,19 @@ create_statusbar(MainWindow* mw)
 void
 setMouseCoord(double x, double y)
 {
-    //TODO: set format from settings (Architectural, Decimal, Engineering, Fractional, Scientific)
+    /* TODO: set format from settings (Architectural, Decimal, Engineering, Fractional, Scientific) */
 
-    //Decimal
-    statusBarMouseCoord->setText(QString().setNum(x, 'F', 4) + ", " + QString().setNum(y, 'F', 4)); //TODO: use precision from unit settings
+    /* Decimal */
+    statusBarMouseCoord->setText(QString().setNum(x, 'F', 4) + ", " + QString().setNum(y, 'F', 4)); /* TODO: use precision from unit settings */
 
-    //Scientific
-    //statusBarMouseCoord->setText(QString().setNum(x, 'E', 4) + ", " + QString().setNum(y, 'E', 4)); //TODO: use precision from unit settings
+    /* Scientific */
+    /* statusBarMouseCoord->setText(QString().setNum(x, 'E', 4) + ", " + QString().setNum(y, 'E', 4)); */ /* TODO: use precision from unit settings */
 }
 
 /* . */
 SelectBox::SelectBox(Shape s, QWidget* parent) : QRubberBand(s, parent)
 {
-    //Default values
+    /* Default values */
     setColors(QColor(Qt::darkGreen), QColor(Qt::green), QColor(Qt::darkBlue), QColor(Qt::blue), 32);
 }
 
@@ -405,9 +405,9 @@ SelectBox::setColors(const QColor& colorL, const QColor& fillL, const QColor& co
     debug_message("SelectBox setColors()");
     alpha = newAlpha;
 
-    leftPenColor = colorL; //TODO: allow customization
+    leftPenColor = colorL; /* TODO: allow customization */
     leftBrushColor = QColor(fillL.red(), fillL.green(), fillL.blue(), alpha);
-    rightPenColor = colorR; //TODO: allow customization
+    rightPenColor = colorR; /* TODO: allow customization */
     rightBrushColor = QColor(fillR.red(), fillR.green(), fillR.blue(), alpha);
 
     leftPen.setColor(leftPenColor);
@@ -440,7 +440,7 @@ SelectBox::paintEvent(QPaintEvent*)
 void
 SelectBox::forceRepaint()
 {
-    //HACK: Take that QRubberBand!
+    /* HACK: Take that QRubberBand! */
     QSize hack = size();
     resize(hack + QSize(1,1));
     resize(hack);
@@ -694,7 +694,7 @@ create_details_dialog(void)
 
     QWidget* widget = new QWidget(dialog);
 
-    //Misc
+    /* Misc */
     QGroupBox* groupBoxMisc = new QGroupBox(translate("General Information"), widget);
 
     QLabel* labelStitchesTotal = new QLabel(translate("Total Stitches:"), dialog);
@@ -787,8 +787,9 @@ PreviewDialog::PreviewDialog(QWidget* parent,
 {
     debug_message("PreviewDialog Constructor");
 
-    //TODO: get actual thumbnail image from file, lets also use a size of 128x128 for now...
-    //TODO: make thumbnail size adjustable thru settings dialog
+    /* TODO: get actual thumbnail image from file, lets also use a size of 128x128 for now...
+     * TODO: make thumbnail size adjustable thru settings dialog
+     */
     imgWidget = new ImageWidget("icons/default/nopreview.png", this);
 
     QLayout* lay = layout();
@@ -803,7 +804,7 @@ PreviewDialog::PreviewDialog(QWidget* parent,
     setViewMode(QFileDialog::Detail);
     setFileMode(QFileDialog::ExistingFiles);
 
-    //TODO: connect the currentChanged signal to update the preview imgWidget.
+    /* TODO: connect the currentChanged signal to update the preview imgWidget. */
 }
 
 PreviewDialog::~PreviewDialog()
@@ -887,7 +888,7 @@ void MdiArea::paintEvent(QPaintEvent* /*e*/)
     QPainter painter(vport);
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
 
-    //Always fill with a solid color first
+    /* Always fill with a solid color first */
     if (useColor) {
         painter.fillRect(rect, bgColor);
     }
@@ -895,28 +896,30 @@ void MdiArea::paintEvent(QPaintEvent* /*e*/)
         painter.fillRect(rect, background());
     }
 
-    //Then overlay the texture
+    /* Then overlay the texture */
     if (useTexture) {
         QBrush bgBrush(bgTexture);
         painter.fillRect(rect, bgBrush);
     }
 
-    //Overlay the logo last
+    /* Overlay the logo last */
     if (useLogo) {
-        //Center the pixmap
+        /* Center the pixmap */
         int dx = (rect.width()-bgLogo.width())/2;
         int dy = (rect.height()-bgLogo.height())/2;
         painter.drawPixmap(dx, dy, bgLogo.width(), bgLogo.height(), bgLogo);
     }
 }
 
-void MdiArea::cascade()
+void
+MdiArea::cascade()
 {
     cascadeSubWindows();
     zoomExtentsAllSubWindows();
 }
 
-void MdiArea::tile()
+void
+MdiArea::tile()
 {
     tileSubWindows();
     zoomExtentsAllSubWindows();
@@ -938,11 +941,10 @@ MdiArea::zoomExtentsAllSubWindows()
     }
 }
 
-/* . */
+/* HACK: Take that QMdiArea! */
 void
 MdiArea::forceRepaint()
 {
-    //HACK: Take that QMdiArea!
     QSize hack = size();
     resize(hack + QSize(1,1));
     resize(hack);
@@ -984,13 +986,14 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     promptInputNum = 0;
 
     curLayer = "0";
-    curColor = 0; //TODO: color ByLayer
+    curColor = 0; /* TODO: color ByLayer */
     curLineType = "ByLayer";
     curLineWeight = "ByLayer";
 
-    // Due to strange Qt4.2.3 feature the child window icon is not drawn
-    // in the main menu if showMaximized() is called for a non-visible child window
-    // Therefore calling show() first...
+    /* Due to strange Qt4.2.3 feature the child window icon is not drawn
+     * in the main menu if showMaximized() is called for a non-visible child window
+     * Therefore calling show() first...
+     */
     show();
     showMaximized();
 
@@ -1038,8 +1041,8 @@ MdiWindow::loadFile(const QString &fileName)
     debug_message("ext: ");
     debug_message(qPrintable(ext));
 
-    //Read
-    int format = EMB_FORMAT_CSV; //emb_identify_format(qPrintable(fileName));
+    /* Read */
+    int format = EMB_FORMAT_CSV; /* emb_identify_format(qPrintable(fileName)); */
     if (format <= 0) {
         debug_message("Unsupported read file type: ");
         debug_message(qPrintable(fileName));
@@ -1060,7 +1063,7 @@ MdiWindow::loadFile(const QString &fileName)
     }
 
     debug_message("Read successful.\n");
-    //emb_pattern_moveStitchListToPolylines(pattern); //TODO: Test more
+    /* emb_pattern_moveStitchListToPolylines(pattern); */ /* TODO: Test more */
     EmbPolyline polyline;
     polyline.pointList = emb_array_create(EMB_VECTOR);
     polyline.flagList = emb_array_create(EMB_FLAG);
@@ -1080,12 +1083,12 @@ MdiWindow::loadFile(const QString &fileName)
     statusbar->showMessage("File loaded.");
 
     if (grid_load_from_file.setting) {
-        //TODO: Josh, provide me a hoop size and/or grid spacing from the pattern.
+        /* TODO: Josh, provide me a hoop size and/or grid spacing from the pattern. */
     }
 
     restore_cursor();
 
-    //Clear the undo stack so it is not possible to undo past this point.
+    /* Clear the undo stack so it is not possible to undo past this point. */
     gview->data.undoStack->clear();
 
     curColor = tmpColor;
@@ -1102,31 +1105,31 @@ MdiWindow::print()
     if (dialog.exec() == QDialog::Accepted) {
         QPainter painter(&printer);
         if (printing_disable_bg.setting) {
-            //Save current bg
+            /* Save current bg */
             QBrush brush = gview->backgroundBrush();
-            //Save ink by not printing the bg at all
+            /* Save ink by not printing the bg at all */
             gview->setBackgroundBrush(Qt::NoBrush);
-            //Print, fitting the viewport contents into a full page
+            /* Print, fitting the viewport contents into a full page */
             gview->render(&painter);
-            //Restore the bg
+            /* Restore the bg */
             gview->setBackgroundBrush(brush);
         }
         else {
-            //Print, fitting the viewport contents into a full page
+            /* Print, fitting the viewport contents into a full page */
             gview->render(&painter);
         }
     }
 }
 
-//TODO: Save a Brother PEL image (An 8bpp, 130x113 pixel monochromatic? bitmap image) Why 8bpp when only 1bpp is needed?
+/* TODO: Save a Brother PEL image (An 8bpp, 130x113 pixel monochromatic? bitmap image) Why 8bpp when only 1bpp is needed? */
 
-//TODO: Should BMC be limited to ~32KB or is this a mix up with Bitmap Cache?
-//TODO: Is there/should there be other embedded data in the bitmap besides the image itself?
-//NOTE: Can save a Singer BMC image (An 8bpp, 130x113 pixel colored bitmap image)
+/* TODO: Should BMC be limited to ~32KB or is this a mix up with Bitmap Cache? */
+/* TODO: Is there/should there be other embedded data in the bitmap besides the image itself? */
+/* NOTE: Can save a Singer BMC image (An 8bpp, 130x113 pixel colored bitmap image) */
 void
 MdiWindow::saveBMC()
 {
-    //TODO: figure out how to center the image, right now it just plops it to the left side.
+    /* TODO: figure out how to center the image, right now it just plops it to the left side. */
     QImage img(150, 150, QImage::Format_ARGB32_Premultiplied);
     img.fill(qRgb(255,255,255));
     QRectF extents = gscene->itemsBoundingRect();
@@ -1134,7 +1137,7 @@ MdiWindow::saveBMC()
     QPainter painter(&img);
     QRectF targetRect(0,0,150,150);
     if (printing_disable_bg.setting) {
-        //TODO: Make BMC background into it's own setting?
+        /* TODO: Make BMC background into it's own setting? */
         QBrush brush = gscene->backgroundBrush();
         gscene->setBackgroundBrush(Qt::NoBrush);
         gscene->update();

@@ -93,13 +93,13 @@ PropertyEditor::PropertyEditor(const QString& iconDirectory, bool pickAddMode, Q
 {
     iconDir = iconDirectory;
     iconSize = 16;
-    propertyEditorButtonStyle = Qt::ToolButtonTextBesideIcon; //TODO: Make customizable
+    propertyEditorButtonStyle = Qt::ToolButtonTextBesideIcon; /* TODO: Make customizable */
     setMinimumSize(100,100);
 
     pickAdd = pickAddMode;
 
-    precisionAngle = 0; //TODO: Load this from settings and provide function for updating from settings
-    precisionLength = 4; //TODO: Load this from settings and provide function for updating from settings
+    precisionAngle = 0; /* TODO: Load this from settings and provide function for updating from settings */
+    precisionLength = 4; /* TODO: Load this from settings and provide function for updating from settings */
 
     signalMapper = new QSignalMapper(this);
 
@@ -220,7 +220,7 @@ PropertyEditor::createToolButtonQSelect()
     toolButtonQSelect->setIcon(create_icon("quickselect"));
     toolButtonQSelect->setIconSize(QSize(iconSize, iconSize));
     toolButtonQSelect->setText("QSelect");
-    toolButtonQSelect->setToolTip("QSelect"); //TODO: Better Description
+    toolButtonQSelect->setToolTip("QSelect"); /* TODO: Better Description */
     toolButtonQSelect->setToolButtonStyle(Qt::ToolButtonIconOnly);
     return toolButtonQSelect;
 }
@@ -229,7 +229,7 @@ PropertyEditor::createToolButtonQSelect()
 QToolButton*
 PropertyEditor::createToolButtonPickAdd()
 {
-    //TODO: Set as PickAdd or PickNew based on settings
+    /* TODO: Set as PickAdd or PickNew based on settings */
     toolButtonPickAdd = new QToolButton(dockPropEdit);
     updatePickAddModeButton(pickAdd);
     QObject::connect(toolButtonPickAdd, SIGNAL(clicked(bool)), dockPropEdit, SLOT(togglePickAddMode()));
@@ -267,7 +267,7 @@ void
 PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
 {
     selectedItemList = itemList;
-    //Hide all the groups initially, then decide which ones to show
+    /* Hide all the groups initially, then decide which ones to show. */
     hideAllGroups();
     comboBoxSelected->clear();
 
@@ -355,7 +355,7 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
             break;
         }
         case OBJ_TYPE_BLOCK: {
-            //TODO: load block data
+            /* TODO: load block data */
             break;
         }
         case OBJ_TYPE_CIRCLE: {
@@ -368,35 +368,35 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
             break;
         }
         case OBJ_TYPE_DIMALIGNED: {
-            //TODO: load aligned dimension data
+            /* TODO: load aligned dimension data */
             break;
         }
         case OBJ_TYPE_DIMANGULAR: {
-            //TODO: load angular dimension data
+            /* TODO: load angular dimension data */
             break;
         }
         case OBJ_TYPE_DIMARCLENGTH: {
-            //TODO: load arclength dimension data
+            /* TODO: load arclength dimension data */
             break;
         }
         case OBJ_TYPE_DIMDIAMETER: {
-            //TODO: load diameter dimension data
+            /* TODO: load diameter dimension data */
             break;
         }
         case OBJ_TYPE_DIMLEADER: {
-            //TODO: load leader dimension data
+            /* TODO: load leader dimension data */
             break;
         }
         case OBJ_TYPE_DIMLINEAR: {
-            //TODO: load linear dimension data
+            /* TODO: load linear dimension data */
             break;
         }
         case OBJ_TYPE_DIMORDINATE: {
-            //TODO: load ordinate dimension data
+            /* TODO: load ordinate dimension data */
             break;
         }
         case OBJ_TYPE_DIMRADIUS: {
-            //TODO: load radius dimension data
+            /* TODO: load radius dimension data */
             break;
         }
         case OBJ_TYPE_ELLIPSE: {
@@ -409,11 +409,11 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
             break;
         }
         case OBJ_TYPE_IMAGE: {
-            //TODO: load image data
+            /* TODO: load image data */
             break;
         }
         case OBJ_TYPE_INFINITELINE: {
-            //TODO: load infinite line data
+            /* TODO: load infinite line data */
             break;
         }
         case OBJ_TYPE_LINE: {
@@ -431,7 +431,7 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
             break;
         }
         case OBJ_TYPE_PATH: {
-            //TODO: load path data
+            /* TODO: load path data */
             break;
         }
         case OBJ_TYPE_POINT: {
@@ -440,15 +440,15 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
             break;
         }
         case OBJ_TYPE_POLYGON: {
-            //TODO: load polygon data
+            /* TODO: load polygon data */
             break;
         }
         case OBJ_TYPE_POLYLINE: {
-            //TODO: load polyline data
+            /* TODO: load polyline data */
             break;
         }
         case OBJ_TYPE_RAY: {
-            //TODO: load ray data
+            /* TODO: load ray data */
             break;
         }
         case OBJ_TYPE_RECTANGLE: {
@@ -471,7 +471,7 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
             break;
         }
         case OBJ_TYPE_TEXTMULTI: {
-            //TODO: load multiline text data
+            /* TODO: load multiline text data */
             break;
         }
         case OBJ_TYPE_TEXTSINGLE: {
@@ -529,7 +529,7 @@ PropertyEditor::updateLineEditNumIfVaries(QLineEdit* lineEdit, double num, bool 
     fieldOldText = lineEdit->text();
     fieldNewText.setNum(num, 'f', precision);
 
-    //Prevent negative zero :D
+    /* Prevent negative zero :D */
     QString negativeZero = "-0.";
     for (int i = 0; i < precision; ++i) {
         negativeZero.append('0');
@@ -552,13 +552,13 @@ PropertyEditor::updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, const
 {
     fieldOldText = fontComboBox->property("FontFamily").toString();
     fieldNewText = str;
-    //qDebug("old: %d %s, new: %d %s", oldIndex, qPrintable(fontComboBox->currentText()), newIndex, qPrintable(str));
+    /* qDebug("old: %d %s, new: %d %s", oldIndex, qPrintable(fontComboBox->currentText()), newIndex, qPrintable(str)); */
     if (fieldOldText.isEmpty()) {
         fontComboBox->setCurrentFont(QFont(fieldNewText));
         fontComboBox->setProperty("FontFamily", fieldNewText);
     }
     else if (fieldOldText != fieldNewText) {
-        if (fontComboBox->findText(fieldVariesText) == -1) //Prevent multiple entries
+        if (fontComboBox->findText(fieldVariesText) == -1) /* Prevent multiple entries */
             fontComboBox->addItem(fieldVariesText);
         fontComboBox->setCurrentIndex(fontComboBox->findText(fieldVariesText));
     }
@@ -578,7 +578,7 @@ PropertyEditor::updateComboBoxStrIfVaries(QComboBox* comboBox, const QString& st
         comboBox->setCurrentIndex(comboBox->findText(fieldNewText));
     }
     else if (fieldOldText != fieldNewText) {
-        if (comboBox->findText(fieldVariesText) == -1) //Prevent multiple entries
+        if (comboBox->findText(fieldVariesText) == -1) /* Prevent multiple entries */
             comboBox->addItem(fieldVariesText);
         comboBox->setCurrentIndex(comboBox->findText(fieldVariesText));
     }
@@ -618,7 +618,7 @@ PropertyEditor::updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, bool y
         comboBox->setCurrentIndex(comboBox->findText(fieldNewText));
     }
     else if (fieldOldText != fieldNewText) {
-        if (comboBox->findText(fieldVariesText) == -1) //Prevent multiple entries
+        if (comboBox->findText(fieldVariesText) == -1) /* Prevent multiple entries. */
             comboBox->addItem(fieldVariesText);
         comboBox->setCurrentIndex(comboBox->findText(fieldVariesText));
     }
@@ -1049,11 +1049,11 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
             break;
         }
         case OBJ_TYPE_TEXTSINGLE: {
-            //TODO: field editing
+            /* TODO: field editing */
             tempObj = static_cast<Object*>(item);
             if (objName == "lineEditTextSingleContents") {
                 if (tempObj) {
-                    tempObj->setObjectText(line_edits["TextSingleContents"]->text());
+                    tempObj->set_text(line_edits["TextSingleContents"]->text());
                 }
             }
             if (objName == "comboBoxTextSingleFont") {
@@ -1061,7 +1061,7 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
                     break;
                 }
                 if (tempObj) {
-                    tempObj->setObjectTextFont(comboBoxTextSingleFont->currentFont().family());
+                    tempObj->set_text_font(comboBoxTextSingleFont->currentFont().family());
                 }
             }
             if (objName == "comboBoxTextSingleJustify") {
@@ -1070,14 +1070,14 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
                 }
                 if (tempObj) {
                     int index = combo_boxes["TextSingleJustify"]->currentIndex();
-                    tempObj->setObjectTextJustify(
+                    tempObj->set_text_justify(
                         combo_boxes["TextSingleJustify"]->itemData(index).toString());
                 }
             }
             if (objName == "lineEditTextSingleHeight") {
                 if (tempObj) {
                     double height = line_edits["TextSingleHeight"]->text().toDouble();
-                    tempObj->setObjectTextSize(height);
+                    tempObj->set_text_size(height);
                 }
             }
             if (objName == "lineEditTextSingleRotation") {
@@ -1100,7 +1100,7 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
                     break;
                 }
                 if (tempObj) {
-                    tempObj->setObjectTextBackward(combo_boxes["TextSingleBackward"]->itemData(combo_boxes["TextSingleBackward"]->currentIndex()).toBool());
+                    tempObj->set_text_backward(combo_boxes["TextSingleBackward"]->itemData(combo_boxes["TextSingleBackward"]->currentIndex()).toBool());
                 }
             }
             if (objName == "comboBoxTextSingleUpsideDown") {
@@ -1108,7 +1108,7 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
                     break;
                 }
                 if (tempObj) {
-                    tempObj->setObjectTextUpsideDown(combo_boxes["TextSingleUpsideDown"]->itemData(combo_boxes["TextSingleUpsideDown"]->currentIndex()).toBool());
+                    tempObj->set_text_upside_down(combo_boxes["TextSingleUpsideDown"]->itemData(combo_boxes["TextSingleUpsideDown"]->currentIndex()).toBool());
                 }
             }
             break;
@@ -1119,11 +1119,11 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
 
     }
 
-    //Block this slot from running twice since calling setSelectedItems will trigger it
+    /* Block this slot from running twice since calling setSelectedItems will trigger it. */
     blockSignals = true;
 
     QWidget* widget = QApplication::focusWidget();
-    //Update so all fields have fresh data //TODO: Improve this
+    /* Update so all fields have fresh data. TODO: Improve this. */
     setSelectedItems(selectedItemList);
     hideAllGroups();
     showGroups(objType);

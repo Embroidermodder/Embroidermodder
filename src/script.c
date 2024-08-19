@@ -30,7 +30,13 @@ int docIndex = 0;
 
 ScriptValue state[MAX_STATE_VARIABLES];
 int state_length = 0;
-
+bool key_state[N_KEY_SEQUENCES] = {
+    false, false, false, false, false,
+    false, false, false, false, false,
+    false, false, false, false, false,
+    false, false, false, false, false,
+    false, false, false, false
+};
 StringSetting general_language;
 StringSetting general_icon_theme;
 IntSetting general_icon_size;
@@ -953,7 +959,7 @@ save_settings(const char *appDir, const char *fname)
     /*
     QSettings settings(settingsPath, QSettings::IniFormat);
     QString tmp;
-    //save_settings(qPrintable(appDir), qPrintable(SettingsDir()));
+    save_settings(qPrintable(appDir), qPrintable(SettingsDir()));
 
     fprintf(file, "\r\n[Window]\r\n");
     write_toml_bool(file, "Window/Position", pos());
@@ -1163,10 +1169,10 @@ bool pattern_save(EmbPattern *pattern, const char *fileName)
         return false;
     }
 
-    // TODO: handle EMBFORMAT_STCHANDOBJ also
+    /* TODO: handle EMBFORMAT_STCHANDOBJ also */
     if (formatType == EMBFORMAT_STITCHONLY) {
-        // emb_pattern_movePolylinesToStitchList(pattern);
-        // TODO: handle all objects like this
+        /* emb_pattern_movePolylinesToStitchList(pattern); */
+        /* TODO: handle all objects like this */
     }
 
     writeSuccessful = emb_pattern_write(pattern, fileName, formatType);
@@ -1175,7 +1181,7 @@ bool pattern_save(EmbPattern *pattern, const char *fileName)
         prompt_output(message);
     }
 
-    //TODO: check the embLog for errors and if any exist, report them.
+    /* TODO: check the embLog for errors and if any exist, report them. */
 
     emb_pattern_free(pattern);
 
@@ -1231,6 +1237,8 @@ roundToMultiple(bool roundUp, int numToRound, int multiple)
     return numToRound - remainder;
 }
 
+/* TODO: timestamp each message
+ */
 void
 debug_message(const char *msg)
 {
@@ -1432,12 +1440,13 @@ get_included_angle(EmbGeometry geometry)
             return 0;
         }
 
-        //NOTE: Due to floating point rounding errors, we need to clamp the quotient so it is in the range [-1, 1]
-        //      If the quotient is out of that range, then the result of asin() will be NaN.
+        /* NOTE: Due to floating point rounding errors, we need to clamp the quotient so it is in the range [-1, 1]
+         *       If the quotient is out of that range, then the result of asin() will be NaN.
+         */
         double quotient = chord/(2.0*rad);
         quotient = EMB_MIN(1.0, quotient);
-        quotient = EMB_MAX(0.0, quotient); //NOTE: 0 rather than -1 since we are enforcing a positive chord and radius
-        return degrees(2.0*asin(quotient)); //Properties of a Circle - Get the Included Angle - Reference: ASD9
+        quotient = EMB_MAX(0.0, quotient); /* NOTE: 0 rather than -1 since we are enforcing a positive chord and radius */
+        return degrees(2.0*asin(quotient)); /* Properties of a Circle - Get the Included Angle - Reference: ASD9 */
     }
     default:
         break;
@@ -1472,7 +1481,7 @@ set_start_angle(EmbGeometry *geometry, double angle)
 {
     switch (geometry->type) {
     case EMB_ARC: {
-        //TODO: ArcObject setObjectStartAngle
+        /* TODO: ArcObject setObjectStartAngle */
         break;
     }
     default:
@@ -1486,7 +1495,7 @@ set_end_angle(EmbGeometry *geometry, double angle)
 {
     switch (geometry->type) {
     case EMB_ARC: {
-        //TODO: ArcObject setObjectEndAngle
+        /* TODO: ArcObject setObjectEndAngle */
         break;
     }
     default:
@@ -1501,7 +1510,7 @@ set_start_point(EmbGeometry *geometry, EmbVector point)
     switch (geometry->type) {
     case EMB_ARC: {
         geometry->object.arc.start = point;
-        //calculateData();
+        /* calculateData(); */
         break;
     }
     default:
@@ -1516,7 +1525,7 @@ set_mid_point(EmbGeometry *geometry, EmbVector point)
     switch (geometry->type) {
     case EMB_ARC: {
         geometry->object.arc.mid = point;
-        //calculateData();
+        /* calculateData(); */
         break;
     }
     default:
@@ -1531,7 +1540,7 @@ set_end_point(EmbGeometry *geometry, EmbVector point)
     switch (geometry->type) {
     case EMB_ARC: {
         geometry->object.arc.end = point;
-        //calculateData();
+        /* calculateData(); */
         break;
     }
     default:
@@ -1545,7 +1554,7 @@ set_radius(EmbGeometry *geometry, double radius)
 {
     switch (geometry->type) {
     case EMB_ARC: {
-        //geometry->object.arc = emb_arc_set_radius(geometry->object.arc, radius);
+        /* geometry->object.arc = emb_arc_set_radius(geometry->object.arc, radius); */
         break;
     }
     case EMB_CIRCLE:
@@ -1563,7 +1572,7 @@ set_diameter(EmbGeometry *geometry, double diameter)
     switch (geometry->type) {
     case EMB_CIRCLE: {
         geometry->object.circle.radius = diameter / 2.0;
-        //FIXME: updatePath();
+        /* FIXME: updatePath(); */
         break;
     }
     default:

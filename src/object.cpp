@@ -19,7 +19,7 @@ Object::Object(EmbArc arc, QRgb rgb, QGraphicsItem *item)
     debug_message("ArcObject Constructor()");
     init_geometry(EMB_ARC, rgb, Qt::SolidLine);
     geometry->object.arc = arc;
-    //TODO: getCurrentLineType
+    /* TODO: getCurrentLineType */
     calculateData();
     setPos(arc.start.x, arc.start.y);
 }
@@ -28,7 +28,7 @@ Object::Object(EmbArc arc, QRgb rgb, QGraphicsItem *item)
 Object::Object(EmbCircle circle, QRgb rgb, QGraphicsItem *item)
 {
     debug_message("CircleObject Constructor()");
-    //TODO: getCurrentLineType
+    /* TODO: getCurrentLineType */
     init_geometry(EMB_CIRCLE, rgb, Qt::SolidLine);
     geometry->object.circle = circle;
 
@@ -46,7 +46,7 @@ Object::Object(EmbCircle circle, QRgb rgb, QGraphicsItem *item)
 Object::Object(EmbEllipse ellipse, QRgb rgb, QGraphicsItem *item)
 {
     debug_message("EllipseObject Constructor()");
-    //TODO: getCurrentLineType
+    /* TODO: getCurrentLineType */
     init_geometry(EMB_ELLIPSE, rgb, Qt::SolidLine);
     geometry->object.ellipse = ellipse;
 
@@ -64,17 +64,17 @@ Object::Object(EmbEllipse ellipse, QRgb rgb, QGraphicsItem *item)
 Object::Object(EmbPath path, int type_, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent)
 {
     debug_message("PolylineObject Constructor()");
-    // TODO: getCurrentLineType
+    /* TODO: getCurrentLineType */
     init_geometry(type_, rgb, Qt::SolidLine);
     updatePath(p);
-    //setObjectPos(x,y);
+    /* setObjectPos(x,y); */
 }
 
 /*
 Object::Object(double x, double y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent)
 {
     debug_message("PathObject Constructor()");
-    init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
+    init(x, y, p, rgb, Qt::SolidLine); */ /* TODO: getCurrentLineType */ /*
     init_geometry(EMB_PATH, rgb, lineType);
     updatePath(p);
     setObjectPos(x,y);
@@ -83,7 +83,7 @@ Object::Object(double x, double y, const QPainterPath p, QRgb rgb, QGraphicsItem
 Object::Object(double x, double y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     debug_message("PolygonObject Constructor()");
-    init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
+    init(x, y, p, rgb, Qt::SolidLine); */ /* TODO: getCurrentLineType */ /*
     init_geometry(EMB_POLYGON, rgb, lineType);
     updatePath(p);
     setObjectPos(x,y);
@@ -94,11 +94,11 @@ Object::Object(double x, double y, const QPainterPath& p, QRgb rgb, QGraphicsIte
 Object::Object(const QString& str, double x, double y, QRgb rgb, QGraphicsItem* parent)
 {
     debug_message("TextSingleObject Constructor()");
-    // TODO: getCurrentLineType
+    /* TODO: getCurrentLineType */
     init_geometry(EMB_TEXT_SINGLE, rgb, Qt::SolidLine);
-    data.objTextJustify = "Left"; // TODO: set the justification properly
+    data.objTextJustify = "Left"; /* TODO: set the justification properly */
 
-    setObjectText(str);
+    set_text(str);
     setObjectPos(x,y);
 }
 
@@ -106,7 +106,7 @@ Object::Object(const QString& str, double x, double y, QRgb rgb, QGraphicsItem* 
 Object::Object(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsItem* parent)
 {
     debug_message("DimLeaderObject Constructor()");
-    // TODO: getCurrentLineType
+    /* TODO: getCurrentLineType */
     init_geometry(EMB_DIM_LEADER, rgb, Qt::SolidLine);
 
     data.curved = false;
@@ -118,16 +118,16 @@ Object::Object(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsIt
 /*
 Object::Object(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* parent)
 {
-    debug_message("ImageObject Constructor()");
-    // TODO: getCurrentLineType
+    debug_message("ImageObject Constructor()"); */
+    /* TODO: getCurrentLineType */ /*
     init_geometry(EMB_IMAGE, rgb, Qt::SolidLine);
     setObjectRect(x, y, w, h);
 }
 
 Object::Object(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* parent)
 {
-    debug_message("RectObject Constructor()");
-    //TODO: getCurrentLineType
+    debug_message("RectObject Constructor()"); */
+    /* TODO: getCurrentLineType */ /*
     init_geometry(EMB_RECT, rgb, lineType);
     setObjectRect(x, y, w, h);
 }
@@ -136,8 +136,8 @@ Object::Object(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* 
 /*
 Object::Object(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsItem* parent)
 {
-    debug_message("LineObject Constructor()");
-    //TODO: getCurrentLineType
+    debug_message("LineObject Constructor()"); */
+    /* TODO: getCurrentLineType */ /*
 
     init_geometry(EMB_LINE, rgb, Qt::SolidLine);
     setObjectEndPoint1(x1, y1);
@@ -161,7 +161,7 @@ Object::Object(Object* obj, QGraphicsItem* parent)
     switch (obj->geometry->type) {
     case EMB_ARC:
         geometry->object.arc = obj->geometry->object.arc;
-        //TODO: getCurrentLineType
+        /* TODO: getCurrentLineType */
         setRotation(obj->rotation());
         break;
     case EMB_CIRCLE:
@@ -171,71 +171,86 @@ Object::Object(Object* obj, QGraphicsItem* parent)
         break;
     case EMB_DIM_LEADER:
         geometry->object.line = obj->geometry->object.line;
-        // init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        /* init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(), Qt::SolidLine); */ /* TODO: getCurrentLineType */
         break;
     case EMB_ELLIPSE:
         geometry->object.ellipse = obj->geometry->object.ellipse;
-        // init(obj->objectCenterX(), obj->objectCenterY(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine);
+        /* init(obj->objectCenterX(), obj->objectCenterY(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); */
         /* TODO: getCurrentLineType */
         setRotation(obj->rotation());
         break;
     case EMB_IMAGE: {
         geometry->object.ellipse = obj->geometry->object.ellipse;
-        //QPointF ptl = obj->objectTopLeft();
-        //init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        /* QPointF ptl = obj->objectTopLeft(); */
+        /* init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); */
+        /* TODO: getCurrentLineType */
         setRotation(obj->rotation());
         break;
     }
     case EMB_LINE: {
         geometry->object.line = obj->geometry->object.line;
-        //init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        /* init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(), Qt::SolidLine); */
+        /* TODO: getCurrentLineType */
         break;
     }
     case EMB_PATH: {
         geometry->object.path = obj->geometry->object.path;
-        //init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
-        //setRotation(obj->rotation());
-        //setScale(obj->scale());
+        /* init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine);
+         * TODO: getCurrentLineType
+         * setRotation(obj->rotation());
+         * setScale(obj->scale());
+         */
         break;
     }
     case EMB_POINT: {
         geometry->object.point = obj->geometry->object.point;
-        //init(obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        /* init(obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine);
+         * TODO: getCurrentLineType
+         */
         setRotation(obj->rotation());
         break;
     }
     case EMB_POLYGON: {
         geometry->object.polygon = obj->geometry->object.polygon;
-        //init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
-        //setRotation(obj->rotation());
-        //setScale(obj->scale());
+        /* init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine);
+         * TODO: getCurrentLineType
+         * setRotation(obj->rotation());
+         * setScale(obj->scale());
+         */
         break;
     }
     case EMB_POLYLINE: {
         geometry->object.polyline = obj->geometry->object.polyline;
-        //init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        /* init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine);
+         * TODO: getCurrentLineType
+         */
         setRotation(obj->rotation());
         setScale(obj->scale());
         break;
     }
     case EMB_RECT: {
         geometry->object.rect = obj->geometry->object.rect;
-        //QPointF ptl = obj->objectTopLeft();
-        //init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        /* QPointF ptl = obj->objectTopLeft();
+         * init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine);
+         * TODO: getCurrentLineType
+         */
         setRotation(obj->rotation());
         break;
     }
-    case EMB_TEXT_SINGLE:
-        setObjectTextFont(obj->data.objTextFont);
-        setObjectTextSize(obj->data.objTextSize);
+    case EMB_TEXT_SINGLE: {
+        set_text_font(obj->data.objTextFont);
+        set_text_size(obj->data.objTextSize);
         setRotation(obj->rotation());
-        setObjectTextBackward(obj->data.objTextBackward);
-        setObjectTextUpsideDown(obj->data.objTextUpsideDown);
-        setObjectTextStyle(obj->data.objTextBold, obj->data.objTextItalic,
+        set_text_backward(obj->data.objTextBackward);
+        set_text_upside_down(obj->data.objTextUpsideDown);
+        set_text_style(obj->data.objTextBold, obj->data.objTextItalic,
             obj->data.objTextUnderline, obj->data.objTextStrikeOut, obj->data.objTextOverline);
-        //init(obj->objText, obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        /* init(obj->objText, obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine);
+         * TODO: getCurrentLineType
+         */
         setScale(obj->scale());
         break;
+    }
     default:
         break;
     }
@@ -314,7 +329,7 @@ Object::init_geometry(int type_, QRgb rgb, Qt::PenStyle lineType)
 
     setObjectColor(rgb);
     setObjectLineType(lineType);
-    setObjectLineWeight(0.35); //TODO: pass in proper lineweight
+    setObjectLineWeight(0.35); /* TODO: pass in proper lineweight */
     setPen(data.objPen);
 
     geometry = (EmbGeometry*)malloc(sizeof(EmbGeometry));
@@ -359,12 +374,12 @@ Object::realRender(QPainter* painter, const QPainterPath& renderPath)
 
     /* If we have a dark color, lighten it. */
     int darkness = color1.lightness();
-    int threshold = 32; //TODO: This number may need adjusted or maybe just add it to settings.
+    int threshold = 32; /* TODO: This number may need adjusted or maybe just add it to settings. */
     if (darkness < threshold) {
         color2 = color1;
         if (!darkness) {
             color1 = QColor(threshold, threshold, threshold);
-        } //lighter() does not affect pure black
+        } /* lighter() does not affect pure black */
         else {
             color1 = color2.lighter(100 + threshold);
         }
@@ -410,7 +425,9 @@ circle_command(ScriptEnv *context)
 
     switch (context->mode) {
     case CONTEXT_CONTEXT:
-        // todo("CIRCLE", "context()");
+        /* todo("CIRCLE", "context()"); */
+        break;
+    default:
         break;
     }
 
@@ -434,7 +451,7 @@ circle_command(ScriptEnv *context)
     if (window) {
         emb_array_add_circle(window->pattern->geometry, c);
     }
-    // _main->nativeAddCircle(0.0, 0.0, 10.0, true, OBJ_RUBBER_CIRCLE_1P_DIA);
+    /* _main->nativeAddCircle(0.0, 0.0, 10.0, true, OBJ_RUBBER_CIRCLE_1P_DIA); */
    
     end_command();
     return script_null;
@@ -475,14 +492,14 @@ circle_click(ScriptEnv *context)
         break;
     }
     case MODE_2P: {
-        if (isNaN(context->x1)) {
+        if (isnan(context->x1)) {
             context->point1 = v;
             addRubber("CIRCLE");
             setRubberMode("CIRCLE_2P");
             setRubberPoint("CIRCLE_TAN1", x, y);
             prompt_output(translate("Specify second end point of circle's diameter: "));
         }
-        else if (isNaN(context->x2)) {
+        else if (isnan(context->x2)) {
             context->point2 = v;
             setRubberPoint("CIRCLE_TAN2", x, y);
             vulcanize();
@@ -494,11 +511,11 @@ circle_click(ScriptEnv *context)
         break;
     }
     case CIRCLE_MODE_3P: {
-        if (isNaN(context->x1)) {
+        if (isnan(context->x1)) {
             context->point1 = v;
             prompt_output(translate("Specify second point on circle: "));
         }
-        else if (isNaN(context->x2)) {
+        else if (isnan(context->x2)) {
             context->point2 = v;
             addRubber("CIRCLE");
             setRubberMode("CIRCLE_3P");
@@ -506,7 +523,7 @@ circle_click(ScriptEnv *context)
             setRubberPoint("CIRCLE_TAN2", context->x2, context->y2);
             prompt_output(translate("Specify third point on circle: "));
         }
-        else if (isNaN(context->x3)) {
+        else if (isnan(context->x3)) {
             context->point3 = v;
             setRubberPoint("CIRCLE_TAN3", context->x3, context->y3);
             vulcanize();
@@ -518,15 +535,15 @@ circle_click(ScriptEnv *context)
         break;
     }
     case MODE_TTR: {
-        if (isNaN(context->x1)) {
+        if (isnan(context->x1)) {
             context->point1 = v;
             prompt_output(translate("Specify point on object for second tangent of circle: "));
         }
-        else if (isNaN(context->x2)) {
+        else if (isnan(context->x2)) {
             context->point2 = v;
             prompt_output(translate("Specify radius of circle: "));
         }
-        else if (isNaN(context->x3)) {
+        else if (isnan(context->x3)) {
             context->point3 = v;
             prompt_output(translate("Specify second point: "));
         }
@@ -549,7 +566,7 @@ circle_prompt(ScriptEnv *context)
     switch (context->mode) {
     case CIRCLE_MODE_1P_RAD_ONE: {
     #if 0
-        if (isNaN(context->x1)) {
+        if (isnan(context->x1)) {
             if (str == "2P") {
                 context->mode = context->mode_2P;
                 prompt_output(translate("Specify first end point of circle's diameter: "));
@@ -564,7 +581,7 @@ circle_prompt(ScriptEnv *context)
             }
             else {
                 var strList = str.split(",");
-                if (isNaN(strList[0]) || isNaN(strList[1])) {
+                if (isnan(strList[0]) || isnan(strList[1])) {
                     alert(translate("Point or option keyword required."));
                     prompt_output(translate("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
                 }
@@ -588,7 +605,7 @@ circle_prompt(ScriptEnv *context)
             }
             else {
                 var num = Number(str);
-                if (isNaN(num)) {
+                if (isnan(num)) {
                     alert(translate("Requires numeric radius, point on circumference, or \"D\"."));
                     prompt_output(translate("Specify radius of circle or [Diameter]: "));
                 }
@@ -604,12 +621,12 @@ circle_prompt(ScriptEnv *context)
         }
     }
     case CIRCLE_MODE_1P_DIA_ONE: {
-        if (isNaN(context->x1)) {
+        if (isnan(context->x1)) {
             error("CIRCLE", translate("This should never happen."));
         }
-        if (isNaN(context->x2)) {
+        if (isnan(context->x2)) {
             var num = Number(str);
-            if (isNaN(num)) {
+            if (isnan(num)) {
                 alert(translate("Requires numeric distance or second point."));
                 prompt_output(translate("Specify diameter of circle: "));
             }
@@ -628,7 +645,7 @@ circle_prompt(ScriptEnv *context)
         break;
     }
     case CIRCLE_MODE_2P: {
-        if (isNaN(context->x1)) {
+        if (isnan(context->x1)) {
             if (!parse_vector(str, &v)) {
                 alert(translate("Invalid point."));
                 prompt_output(translate("Specify first end point of circle's diameter: "));
@@ -641,7 +658,7 @@ circle_prompt(ScriptEnv *context)
                 prompt_output(translate("Specify second end point of circle's diameter: "));
             }
         }
-        else if (isNaN(context->x2)) {
+        else if (isnan(context->x2)) {
             if (!parse_vector(str, &v)) {
                 alert(translate("Invalid point."));
                 prompt_output(translate("Specify second end point of circle's diameter: "));
@@ -658,7 +675,7 @@ circle_prompt(ScriptEnv *context)
         }
     }
     case MODE_3P: {
-        if (isNaN(context->x1)) {
+        if (isnan(context->x1)) {
             if (!parse_vector(str, &v)) {
                 alert(translate("Invalid point."));
                 prompt_output(translate("Specify first point of circle: "));
@@ -668,7 +685,7 @@ circle_prompt(ScriptEnv *context)
                 prompt_output(translate("Specify second point of circle: "));
             }
         }
-        else if (isNaN(context->x2)) {
+        else if (isnan(context->x2)) {
             if (!parse_vector(str, &v)) {
                 alert(translate("Invalid point."));
                 prompt_output(translate("Specify second point of circle: "));
@@ -682,7 +699,7 @@ circle_prompt(ScriptEnv *context)
                 prompt_output(translate("Specify third point of circle: "));
             }
         }
-        else if (isNaN(context->x3)) {
+        else if (isnan(context->x3)) {
             if (!parse_vector(str, &v)) {
                 alert(translate("Invalid point."));
                 prompt_output(translate("Specify third point of circle: "));
@@ -713,113 +730,48 @@ circle_prompt(ScriptEnv *context)
     return script_null;
 }
 
+
+/* Math Diagram
+ *                 .(ap1)                     .(lp1)
+ *                /|                         /|
+ *               / |                        / |
+ *              /  |                       /  |
+ *             /   |                      /   |
+ *            /    |                     /    |
+ *           /     |                    /     |
+ *          /      |                   /      |
+ *         /       |                  /       |
+ *        /+(aSA)  |                 /+(lSA)  |
+ * (ap0)./__(aSL)__|__________(lp0)./__(lSL)__|
+ *       \ -(aSA)  |                \ -(lSA)  |
+ *        \        |                 \        |
+ *         \       |                  \       |
+ *          \      |                   \      |
+ *           \     |                    \     |
+ *            \    |                     \    |
+ *             \   |                      \   |
+ *              \  |                       \  |
+ *               \ |                        \ |
+ *                \|                         \|
+ *                 .(ap2)                     .(lp2)
+ */
 #if 0
-void
-CircleObject::updateRubber(QPainter* painter)
-{
-    switch (data.objRubberMode) {
-    case OBJ_RUBBER_CIRCLE_1P_RAD: {
-        QPointF sceneCenterPoint = objectRubberPoint("CIRCLE_CENTER");
-        QPointF sceneQSnapPoint = objectRubberPoint("CIRCLE_RADIUS");
-        QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
-        QPointF itemQSnapPoint = mapFromScene(sceneQSnapPoint);
-        QLineF itemLine(itemCenterPoint, itemQSnapPoint);
-        setObjectCenter(to_emb_vector(sceneCenterPoint));
-        QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
-        double radius = sceneLine.length();
-        set_radius(geometry, radius);
-        if (painter) {
-            drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
-        updatePath();
-        break;
-    }
-    case OBJ_RUBBER_CIRCLE_1P_DIA: {
-        QPointF sceneCenterPoint = objectRubberPoint("CIRCLE_CENTER");
-        QPointF sceneQSnapPoint = objectRubberPoint("CIRCLE_DIAMETER");
-        QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
-        QPointF itemQSnapPoint = mapFromScene(sceneQSnapPoint);
-        QLineF itemLine(itemCenterPoint, itemQSnapPoint);
-        setObjectCenter(to_emb_vector(sceneCenterPoint));
-        QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
-        double diameter = sceneLine.length();
-        setObjectDiameter(diameter);
-        if (painter) {
-            drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
-        updatePath();
-        break;
-    }
-    case OBJ_RUBBER_CIRCLE_2P: {
-        QPointF sceneTan1Point = objectRubberPoint("CIRCLE_TAN1");
-        QPointF sceneQSnapPoint = objectRubberPoint("CIRCLE_TAN2");
-        QLineF sceneLine(sceneTan1Point, sceneQSnapPoint);
-        setObjectCenter(to_emb_vector(sceneLine.pointAt(0.5)));
-        double diameter = sceneLine.length();
-        setObjectDiameter(diameter);
-        updatePath();
-        break;
-    }
-    case OBJ_RUBBER_CIRCLE_3P: {
-        QPointF sceneTan1Point = objectRubberPoint("CIRCLE_TAN1");
-        QPointF sceneTan2Point = objectRubberPoint("CIRCLE_TAN2");
-        QPointF sceneTan3Point = objectRubberPoint("CIRCLE_TAN3");
-
-        EmbGeometry arc;
-        arc.start = to_emb_vector(sceneTan1Point);
-        arc.mid = to_emb_vector(sceneTan2Point);
-        arc.end = to_emb_vector(sceneTan3Point);
-        EmbVector center = emb_arc_center(*arc);
-        setObjectCenter(center);
-        double radius = emb_vector_distance(center, to_emb_vector(sceneTan3Point));
-        set_radius(geometry, radius);
-        updatePath();
-        break;
-    }
-    case OBJ_RUBBER_GRIP: {
-        if (painter) {
-            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if (gripPoint == objectCenter()) {
-                painter->drawEllipse(rect().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
-            }
-            else {
-                double gripRadius = QLineF(objectCenter(), objectRubberPoint(QString())).length();
-                painter->drawEllipse(QPointF(), gripRadius, gripRadius);
-            }
-
-            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
-        break;
-    }
-    default:
-        break;
-    }
-}
-
-QPointF
-DimLeaderObject::objectMidPoint() const
-{
-    QLineF lyne = line();
-    QPointF mp = lyne.pointAt(0.5);
-    return scenePos() + scale_and_rotate(mp, scale(), rotation());
-}
-
+/* TODO: Make arrowStyle, arrowStyleAngle, arrowStyleLength, lineStyleAngle, lineStyleLength customizable */
 void
 DimLeaderObject::updateLeader()
 {
-    int arrowStyle = Closed; //TODO: Make this customizable
-    double arrowStyleAngle = 15.0; //TODO: Make this customizable
-    double arrowStyleLength = 1.0; //TODO: Make this customizable
-    double lineStyleAngle = 45.0; //TODO: Make this customizable
-    double lineStyleLength = 1.0; //TODO: Make this customizable
+    int arrowStyle = Closed;
+    double arrowStyleAngle = 15.0;
+    double arrowStyleLength = 1.0;
+    double lineStyleAngle = 45.0;
+    double lineStyleLength = 1.0;
 
     QLineF lyne = line();
     double angle = lyne.angle();
     QPointF ap0 = lyne.p1();
     QPointF lp0 = lyne.p2();
 
-    //Arrow
+    /* Arrow */
     QLineF lynePerp(lyne.pointAt(arrowStyleLength/lyne.length()) ,lp0);
     lynePerp.setAngle(angle + 90);
     QLineF lyne1(ap0, lp0);
@@ -830,30 +782,6 @@ DimLeaderObject::updateLeader()
     QPointF ap2;
     lynePerp.intersects(lyne1, &ap1);
     lynePerp.intersects(lyne2, &ap2);
-
-    //Math Diagram
-    //                 .(ap1)                     .(lp1)
-    //                /|                         /|
-    //               / |                        / |
-    //              /  |                       /  |
-    //             /   |                      /   |
-    //            /    |                     /    |
-    //           /     |                    /     |
-    //          /      |                   /      |
-    //         /       |                  /       |
-    //        /+(aSA)  |                 /+(lSA)  |
-    // (ap0)./__(aSL)__|__________(lp0)./__(lSL)__|
-    //       \ -(aSA)  |                \ -(lSA)  |
-    //        \        |                 \        |
-    //         \       |                  \       |
-    //          \      |                   \      |
-    //           \     |                    \     |
-    //            \    |                     \    |
-    //             \   |                      \   |
-    //              \  |                       \  |
-    //               \ |                        \ |
-    //                \|                         \|
-    //                 .(ap2)                     .(lp2)
 
     if (arrowStyle == Open) {
         arrowStylePath = QPainterPath();
@@ -888,35 +816,6 @@ DimLeaderObject::updateLeader()
     lineStylePath.moveTo(ap0);
     lineStylePath.lineTo(lp0);
 }
-
-void
-DimLeaderObject::updateRubber(QPainter* painter)
-{
-    switch (data.objRubberMode) {
-    case OBJ_RUBBER_DIMLEADER_LINE: {
-        QPointF sceneStartPoint = objectRubberPoint("DIMLEADER_LINE_START");
-        QPointF sceneQSnapPoint = objectRubberPoint("DIMLEADER_LINE_END");
-
-        setObjectEndPoint1(sceneStartPoint);
-        setObjectEndPoint2(sceneQSnapPoint);
-        break;
-    }
-    case OBJ_RUBBER_GRIP: {
-        if (painter) {
-            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if (gripPoint == objectEndPoint1())
-                painter->drawLine(line().p2(), mapFromScene(objectRubberPoint(QString())));
-            else if (gripPoint == objectEndPoint2())
-                painter->drawLine(line().p1(), mapFromScene(objectRubberPoint(QString())));
-            else if (gripPoint == objectMidPoint())
-                painter->drawLine(line().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
-        }
-        break;
-    }
-    default:
-        break;
-    }
-}
 #endif
 
 /* ELLIPSE */
@@ -926,7 +825,13 @@ ellipse_command(ScriptEnv *context)
     switch (context->mode) {
     default:
     case CONTEXT_MAIN:
-
+        /*
+        context->mode = ELLIPSE_MODE_MAJDIA_MINRAD_ONE;
+        context->point1 = zero_vector;
+        context->point2 = zero_vector;
+        context->point3 = zero_vector;
+        prompt_output(translate("Specify first axis start point or [Center]: "));
+        */
         end_command();
         break;
     case CONTEXT_PROMPT:
@@ -945,45 +850,33 @@ ellipse_command(ScriptEnv *context)
 #if 0
 context->ellipse;
 context->rot;
-context->mode;
-
-function main()
-{
-    context->mode = ELLIPSE_MODE_MAJDIA_MINRAD_ONE;
-    context->point1 = zero_vector;
-    context->point2 = zero_vector;
-    context->point3 = zero_vector;
-    prompt_output(translate("Specify first axis start point or [Center]: "));
-}
 
 function click(EmbVector v)
 {
     switch (context->mode) {
     case ELLIPSE_MODE_MAJDIA_MINRAD: {
-        if (isNaN(context->x1)) {
+        if (isnan(context->x1)) {
             context->point1 = v;
             addRubber("ELLIPSE");
             setRubberMode("ELLIPSE_LINE");
             setRubberPoint("ELLIPSE_LINE_POINT1", context->x1, context->y1);
             prompt_output(translate("Specify first axis end point: "));
         }
-        else if (isNaN(context->x2)) {
+        else if (isnan(context->x2)) {
             context->point2 = v;
-            context->cx = (context->x1 + context->x2)/2.0;
-            context->cy = (context->y1 + context->y2)/2.0;
-            context->width = calculateDistance(context->x1, context->y1, context->x2, context->y2);
-            context->rot = calculateAngle(context->x1, context->y1, context->x2, context->y2);
+            context->center = emb_vector_average(context->point1, context->point2);
+            context->width = calculateDistance(context->point1, context->point2);
+            context->rot = calculateAngle(context->point1, context->point2);
             setRubberMode("ELLIPSE_MAJDIA_MINRAD");
-            setRubberPoint("ELLIPSE_AXIS1_POINT1", context->x1, context->y1);
-            setRubberPoint("ELLIPSE_AXIS1_POINT2", context->x2, context->y2);
-            setRubberPoint("ELLIPSE_CENTER", context->cx, context->cy);
+            setRubberPoint("ELLIPSE_AXIS1_POINT1", context->point1);
+            setRubberPoint("ELLIPSE_AXIS1_POINT2", context->point2);
+            setRubberPoint("ELLIPSE_CENTER", context->center);
             setRubberPoint("ELLIPSE_WIDTH", context->width, 0);
             setRubberPoint("ELLIPSE_ROT", context->rot, 0);
             prompt_output(translate("Specify second axis end point or [Rotation]: "));
         }
-        else if (isNaN(context->x3)) {
-            context->x3 = x;
-            context->y3 = y;
+        else if (isnan(context->x3)) {
+            context->point3 = v;
             context->height = perpendicularDistance(context->x3, context->y3, context->x1, context->y1, context->x2, context->y2)*2.0;
             setRubberPoint("ELLIPSE_AXIS2_POINT2", context->x3, context->y3);
             vulcanize();
@@ -995,7 +888,7 @@ function click(EmbVector v)
         break;
     }
     case ELLIPSE_MODE_MAJRAD_MINRAD: {
-        if (isNaN(context->x1)) {
+        if (isnan(context->x1)) {
             context->point1 = v;
             context->center = context->point1;
             addRubber("ELLIPSE");
@@ -1004,7 +897,7 @@ function click(EmbVector v)
             setRubberPoint("ELLIPSE_CENTER", context->cx, context->cy);
             prompt_output(translate("Specify first axis end point: "));
         }
-        else if (isNaN(context->x2)) {
+        else if (isnan(context->x2)) {
             context->point2 = v;
             context->width = calculateDistance(context->cx, context->cy, context->x2, context->y2)*2.0;
             context->rot = calculateAngle(context->x1, context->y1, context->x2, context->y2);
@@ -1014,7 +907,7 @@ function click(EmbVector v)
             setRubberPoint("ELLIPSE_ROT", context->rot, 0);
             prompt_output(translate("Specify second axis end point or [Rotation]: "));
         }
-        else if (isNaN(context->x3)) {
+        else if (isnan(context->x3)) {
             context->point3 = v;
             context->height = perpendicularDistance(context->x3, context->y3, context->cx, context->cy, context->x2, context->y2)*2.0;
             setRubberPoint("ELLIPSE_AXIS2_POINT2", context->x3, context->y3);
@@ -1027,13 +920,13 @@ function click(EmbVector v)
         break;
     }
     case ELLIPSE_MODE_ROTATION: {
-        if (isNaN(context->x1)) {
+        if (isnan(context->x1)) {
             error("ELLIPSE", translate("This should never happen."));
         }
-        else if (isNaN(context->x2)) {
+        else if (isnan(context->x2)) {
             error("ELLIPSE", translate("This should never happen."));
         }
-        else if (isNaN(context->x3)) {
+        else if (isnan(context->x3)) {
             var angle = calculateAngle(context->cx, context->cy, x, y);
             context->height = Math.cos(angle*Math.PI/180.0)*context->width;
             addEllipse(context->cx, context->cy, context->width, context->height, context->rot, false);
@@ -1172,7 +1065,7 @@ function prompt(str)
         break;
     }
     case ELLIPSE_MODE_ROTATION: {
-        if (isNaN(str)) {
+        if (isnan(str)) {
             alert(translate("Invalid angle. Input a numeric angle or pick a point."));
             prompt_output(translate("Specify rotation: "));
         }
@@ -1188,9 +1081,10 @@ function prompt(str)
         break;
     }
 }
+#endif
 
 void
-EllipseObject::setObjectSize(double width, double height)
+Object::setObjectSize(double width, double height)
 {
     QRectF elRect = rect();
     elRect.setWidth(width);
@@ -1198,119 +1092,6 @@ EllipseObject::setObjectSize(double width, double height)
     elRect.moveCenter(QPointF(0,0));
     setRect(elRect);
 }
-
-void
-EllipseObject::updateRubber(QPainter* painter)
-{
-    switch (data.objRubberMode) {
-    case OBJ_RUBBER_ELLIPSE_LINE: {
-        QPointF sceneLinePoint1 = objectRubberPoint("ELLIPSE_LINE_POINT1");
-        QPointF sceneLinePoint2 = objectRubberPoint("ELLIPSE_LINE_POINT2");
-        QPointF itemLinePoint1  = mapFromScene(sceneLinePoint1);
-        QPointF itemLinePoint2  = mapFromScene(sceneLinePoint2);
-        QLineF itemLine(itemLinePoint1, itemLinePoint2);
-        if (painter) {
-            drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
-        updatePath();
-        break;
-    }
-    case OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS: {
-        QPointF sceneAxis1Point1 = objectRubberPoint("ELLIPSE_AXIS1_POINT1");
-        QPointF sceneAxis1Point2 = objectRubberPoint("ELLIPSE_AXIS1_POINT2");
-        QPointF sceneCenterPoint = objectRubberPoint("ELLIPSE_CENTER");
-        QPointF sceneAxis2Point2 = objectRubberPoint("ELLIPSE_AXIS2_POINT2");
-        double ellipseWidth = objectRubberPoint("ELLIPSE_WIDTH").x();
-        double ellipseRot = objectRubberPoint("ELLIPSE_ROT").x();
-
-        //TODO: incorporate perpendicularDistance() into libcgeometry
-        double px = sceneAxis2Point2.x();
-        double py = sceneAxis2Point2.y();
-        double x1 = sceneAxis1Point1.x();
-        double y1 = sceneAxis1Point1.y();
-        QLineF line(sceneAxis1Point1, sceneAxis1Point2);
-        QLineF norm = line.normalVector();
-        double dx = px-x1;
-        double dy = py-y1;
-        norm.translate(dx, dy);
-        QPointF iPoint;
-        norm.intersects(line, &iPoint);
-        double ellipseHeight = QLineF(px, py, iPoint.x(), iPoint.y()).length()*2.0;
-
-        setObjectCenter(sceneCenterPoint);
-        setObjectSize(ellipseWidth, ellipseHeight);
-        setRotation(-ellipseRot);
-
-        QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
-        QPointF itemAxis2Point2 = mapFromScene(sceneAxis2Point2);
-        QLineF itemLine(itemCenterPoint, itemAxis2Point2);
-        if (painter) {
-            drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
-        updatePath();
-        break;
-    }
-    case OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS: {
-        QPointF sceneAxis1Point2 = objectRubberPoint("ELLIPSE_AXIS1_POINT2");
-        QPointF sceneCenterPoint = objectRubberPoint("ELLIPSE_CENTER");
-        QPointF sceneAxis2Point2 = objectRubberPoint("ELLIPSE_AXIS2_POINT2");
-        double ellipseWidth = objectRubberPoint("ELLIPSE_WIDTH").x();
-        double ellipseRot = objectRubberPoint("ELLIPSE_ROT").x();
-
-        //TODO: incorporate perpendicularDistance() into libcgeometry
-        double px = sceneAxis2Point2.x();
-        double py = sceneAxis2Point2.y();
-        double x1 = sceneCenterPoint.x();
-        double y1 = sceneCenterPoint.y();
-        QLineF line(sceneCenterPoint, sceneAxis1Point2);
-        QLineF norm = line.normalVector();
-        double dx = px-x1;
-        double dy = py-y1;
-        norm.translate(dx, dy);
-        QPointF iPoint;
-        norm.intersects(line, &iPoint);
-        double ellipseHeight = QLineF(px, py, iPoint.x(), iPoint.y()).length()*2.0;
-
-        setObjectCenter(sceneCenterPoint);
-        setObjectSize(ellipseWidth, ellipseHeight);
-        setRotation(-ellipseRot);
-
-        QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
-        QPointF itemAxis2Point2 = mapFromScene(sceneAxis2Point2);
-        QLineF itemLine(itemCenterPoint, itemAxis2Point2);
-        if (painter) {
-            drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
-        updatePath();
-        break;
-    }
-    case OBJ_RUBBER_GRIP: {
-        //TODO: updateRubber() gripping for EllipseObject
-        break;
-    }
-    default:
-        break;
-    }
-}
-
-void
-ImageObject::updateRubber(QPainter* painter)
-{
-    if (data.objRubberMode == OBJ_RUBBER_IMAGE) {
-        QPointF sceneStartPoint = objectRubberPoint("IMAGE_START");
-        QPointF sceneEndPoint = objectRubberPoint("IMAGE_END");
-        double x = sceneStartPoint.x();
-        double y = sceneStartPoint.y();
-        double w = sceneEndPoint.x() - sceneStartPoint.x();
-        double h = sceneEndPoint.y() - sceneStartPoint.y();
-        setObjectRect(x,y,w,h);
-        updatePath();
-    }
-    else if (data.objRubberMode == OBJ_RUBBER_GRIP) {
-        //TODO: updateRubber() gripping for ImageObject
-    }
-}
-#endif
 
 /* LINE */
 ScriptValue
@@ -1359,7 +1140,6 @@ line_command(ScriptEnv *context)
 }
 
 #if 0
-//Command: Line
 function prompt(str)
 {
     EmbVector v;
@@ -1380,7 +1160,6 @@ function prompt(str)
     }
     else {
         if (str == "U" || str == "UNDO") {
-            /* TODO: Probably should add additional translate calls here. */
             todo("LINE", "prompt() for UNDO");
         }
         else {
@@ -1401,93 +1180,49 @@ function prompt(str)
     }
 }
 
-void
-LineObject::updateRubber(QPainter* painter)
-{
-    if (data.objRubberMode == OBJ_RUBBER_LINE) {
-        QPointF sceneStartPoint = objectRubberPoint("LINE_START");
-        QPointF sceneQSnapPoint = objectRubberPoint("LINE_END");
-
-        setObjectEndPoint1(sceneStartPoint);
-        setObjectEndPoint2(sceneQSnapPoint);
-
-        drawRubberLine(line(), painter, "VIEW_COLOR_CROSSHAIR");
-    }
-    else if (rubberMode == OBJ_RUBBER_GRIP) {
-        if (painter) {
-            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if (gripPoint == objectEndPoint1())
-                painter->drawLine(line().p2(), mapFromScene(objectRubberPoint(QString())));
-            else if (gripPoint == objectEndPoint2())
-                painter->drawLine(line().p1(), mapFromScene(objectRubberPoint(QString())));
-            else if (gripPoint == objectMidPoint())
-                painter->drawLine(line().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
-
-            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
-    }
-}
 #endif
 
-/* PATH */
+/* PATH
+ * TODO: The path command is currently broken
+ */
 ScriptValue
-path_command(ScriptEnv * /* context */)
+path_command(ScriptEnv *context)
 {
-    return script_null;
-}
-
-#if 0
-//Command: Path
-
-//TODO: The path command is currently broken
-var global = {}; //Required
-bool firstRun;
-EmbVector first;
-EmbVector prev;
-
-function main()
-{
-    initCommand();
-    clearSelection();
-    context->firstRun = true;
-    context->firstX = NaN;
-    context->firstY = NaN;
-    context->prevX = NaN;
-    context->prevY = NaN;
-    prompt_output(translate("Specify start point: "));
-}
-
-function click(EmbVector v)
-{
-    if (context->firstRun) {
-        context->firstRun = false;
-        context->first = v;
-        context->prev = v;
-        addPath(v.x, v.y);
-        prompt_output(translate("Specify next point or [Arc/Undo]: "));
-    }
-    else {
-        appendLineToPath(x,y);
-        context->prev = v;
-    }
-}
-
-function
-context(str)
-{
-    todo("PATH", "context()");
-}
-
-function
-prompt(str)
-{
+    switch (context->mode) {
+    case CONTEXT_MAIN:
+        /*
+        initCommand();
+        clearSelection();
+        context->firstRun = true;
+        context->first = zero_vector;
+        context->prev = zero_vector;
+        prompt_output(translate("Specify start point: "));
+        */
+        break;
+    case CONTEXT_CLICK:
+        /*
+        if (context->firstRun) {
+            context->firstRun = false;
+            context->first = v;
+            context->prev = v;
+            addPath(v.x, v.y);
+            prompt_output(translate("Specify next point or [Arc/Undo]: "));
+        }
+        else {
+            appendLineToPath(x,y);
+            context->prev = v;
+        }
+        */
+        break;
+    case CONTEXT_CONTEXT:
+        /* todo("PATH", "context()"); */
+        break;
+    case CONTEXT_PROMPT:
+/*
     if (str == "A" || str == "ARC") {
-        //TODO: Probably should add additional translate calls here.
         todo("PATH", "prompt() for ARC");
     }
     else if (str == "U" || str == "UNDO") {
-        //TODO: Probably should add additional translate calls here.
         todo("PATH", "prompt() for UNDO");
     }
     else {
@@ -1509,22 +1244,17 @@ prompt(str)
             }
         }
     }
+*/
+        break;
+    default:
+        break;
+    }
+    return script_null;
 }
-
-void
-PathObject::updateRubber(QPainter* painter)
-{
-    //TODO: Path Rubber Modes
-
-    //TODO: updateRubber() gripping for PathObject
-
-}
-
-#endif
 
 /* POINT */
 ScriptValue
-point_command(ScriptEnv * context)
+point_command(ScriptEnv *context)
 {
     return script_null;
 }
@@ -1533,7 +1263,8 @@ point_command(ScriptEnv * context)
 function main()
 {
     global->firstRun = true;
-    prompt_output("TODO: Current point settings: PDMODE=?  PDSIZE=?"); //TODO: translate needed here when complete
+    prompt_output("TODO: Current point settings: PDMODE=?  PDSIZE=?");
+    /* TODO: translate needed here when complete */
     prompt_output(translate("Specify first point: "));
 }
 
@@ -1560,11 +1291,9 @@ function prompt(str)
     EmbVector v;
     if (global->firstRun) {
         if (str == "M" || str == "MODE") {
-            //TODO: Probably should add additional translate calls here.
             todo("POINT", "prompt() for PDMODE");
         }
         else if (str == "S" || str == "SIZE") {
-            //TODO: Probably should add additional translate calls here.
             todo("POINT", "prompt() for PDSIZE");
         }
         if (!parse_vector(str, v)) {
@@ -1592,30 +1321,17 @@ function prompt(str)
 PointObject::PointObject(double x, double y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     debug_message("PointObject Constructor()");
-    init(x, y, rgb, Qt::SolidLine); //TODO: getCurrentLineType
+    init(x, y, rgb, Qt::SolidLine); /* TODO: getCurrentLineType */
     init_geometry(EMB_POINT, rgb, lineType);
     setRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
     setObjectPos(x,y);
 }
 
-void
-PointObject::updateRubber(QPainter* painter)
-{
-    if (data.objRubberMode == OBJ_RUBBER_GRIP) {
-        if (painter) {
-            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if (gripPoint == scenePos()) {
-                QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-                drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
-            }
-        }
-    }
-}
 #endif
 
 /* POLYGON */
 ScriptValue
-polygon_command(ScriptEnv * context)
+polygon_command(ScriptEnv *context)
 {
 
     end_command();
@@ -1623,31 +1339,16 @@ polygon_command(ScriptEnv * context)
 }
 
 #if 0
-//Command: Polygon
-
-var global = {}; //Required
-EmbVector center;
-EmbVector side1;
-EmbVector side2;
-EmbVector pointI;
-EmbVector pointC;
-char *polyType = "Inscribed"; //Default
-int numSides = 4;           //Default
-int mode;
-
 function
 main()
 {
-    context->centerX = NaN;
-    context->centerY = NaN;
-    context->sideX1  = NaN;
-    context->sideY1  = NaN;
-    context->sideX2  = NaN;
-    context->sideY2  = NaN;
-    context->pointIX = NaN;
-    context->pointIY = NaN;
-    context->pointCX = NaN;
-    context->pointCY = NaN;
+    context->center = zero_vector;
+    context->side1 = zero_vector;
+    context->side2 = zero_vector;
+    context->pointI = zero_vector;
+    context->pointC = zero_vector;
+    context->polyType = "Inscribed";
+    context->numSides = 4;
     context->mode = POLYGON_MODE_NUM_SIDES;
     prompt_output(translate("Enter number of sides") + " {" + context->numSides.toString() + "}: ");
 }
@@ -1660,7 +1361,7 @@ click(EmbVector v)
     case POLYGON_MODE_NUM_SIDES:
     case POLYGON_MODE_POLYTYPE:
     case POLYGON_MODE_DISTANCE: {
-        //Do nothing, the prompt controls these.
+        /* Do nothing, the prompt controls these. */
         break;
     }
     case POLYGON_MODE_CENTER_PT: {
@@ -1708,7 +1409,7 @@ prompt(char *str)
         }
         else {
             var tmp = Number(str);
-            if (isNaN(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024) {
+            if (isnan(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024) {
                 alert(translate("Requires an integer between 3 and 1024."));
                 prompt_output(translate("Enter number of sides") + " {" + context->numSides.toString() + "}: ");
             }
@@ -1722,7 +1423,6 @@ prompt(char *str)
     }
     case POLYGON_MODE_CENTER_PT: {
         if (str == "S" || str == "SIDELENGTH") {
-            /* TODO: Probably should add additional translate calls here. */
             context->mode = POLYGON_MODE_SIDE_LEN;
             prompt_output(translate("Specify start point: "));
         }
@@ -1741,7 +1441,6 @@ prompt(char *str)
     }
     case POLYGON_MODE_POLYTYPE: {
         if (str == "I" || str == "INSCRIBED") {
-            /* TODO: Probably should add additional translate calls here. */
             context->mode = POLYGON_MODE_INSCRIBE;
             context->polyType = "Inscribed";
             prompt_output(translate("Specify polygon corner point or [Distance]: "));
@@ -1751,7 +1450,6 @@ prompt(char *str)
             setRubberPoint("POLYGON_NUM_SIDES", context->numSides, 0);
         }
         else if (str == "C" || str == "CIRCUMSCRIBED") {
-            /* TODO: Probably should add additional translate calls here. */
             context->mode = POLYGON_MODE_CIRCUMSCRIBE;
             context->polyType = "Circumscribed";
             prompt_output(translate("Specify polygon side point or [Distance]: "));
@@ -1826,7 +1524,7 @@ prompt(char *str)
         break;
     }
     case POLYGON_MODE_DISTANCE: {
-        if (isNaN(str)) {
+        if (isnan(str)) {
             alert(translate("Requires valid numeric distance."));
             prompt_output(translate("Specify distance: "));
         }
@@ -1859,103 +1557,85 @@ prompt(char *str)
         break;
     }
 }
+#endif
 
 void
-PolygonObject::updateRubber(QPainter* painter)
+Object::updateRubberGrip(QPainter *painter)
 {
-    if (data.objRubberMode == OBJ_RUBBER_POLYGON) {
-        setObjectPos(objectRubberPoint("POLYGON_POINT_0"));
-
-        bool ok = false;
-        QString numStr = objectRubberText("POLYGON_NUM_POINTS");
-        if (numStr.isNull()) {
-            return;
-        }
-        int num = numStr.toInt(&ok);
-        if (!ok) {
-            return;
-        }
-
-        QString appendStr;
-        QPainterPath rubberPath;
-        rubberPath.moveTo(mapFromScene(objectRubberPoint("POLYGON_POINT_0")));
-        for (int i = 1; i <= num; i++) {
-            appendStr = "POLYGON_POINT_" + QString().setNum(i);
-            QPointF appendPoint = mapFromScene(objectRubberPoint(appendStr));
-            rubberPath.lineTo(appendPoint);
-        }
-        //rubberPath.lineTo(0,0);
-        updatePath(rubberPath);
-
-        //Ensure the path isn't updated until the number of points is changed again
-        setObjectRubberText("POLYGON_NUM_POINTS", QString());
+    if (!painter) {
+        return;
     }
-    else if (rubberMode == OBJ_RUBBER_POLYGON_INSCRIBE) {
-        setObjectPos(objectRubberPoint("POLYGON_CENTER"));
-
-        quint16 numSides = objectRubberPoint("POLYGON_NUM_SIDES").x();
-
-        QPointF inscribePoint = mapFromScene(objectRubberPoint("POLYGON_INSCRIBE_POINT"));
-        QLineF inscribeLine = QLineF(QPointF(0,0), inscribePoint);
-        double inscribeAngle = inscribeLine.angle();
-        double inscribeInc = 360.0/numSides;
-
-        if (painter) {
-            drawRubberLine(inscribeLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
-
-        QPainterPath inscribePath;
-        //First Point
-        inscribePath.moveTo(inscribePoint);
-        //Remaining Points
-        for (int i = 1; i < numSides; i++) {
-            inscribeLine.setAngle(inscribeAngle + inscribeInc*i);
-            inscribePath.lineTo(inscribeLine.p2());
-        }
-        updatePath(inscribePath);
+    switch (geometry->type) {
+    case EMB_ARC: {
+        /* TODO: */
+        break;
     }
-    else if (rubberMode == OBJ_RUBBER_POLYGON_CIRCUMSCRIBE) {
-        setObjectPos(objectRubberPoint("POLYGON_CENTER"));
-
-        quint16 numSides = objectRubberPoint("POLYGON_NUM_SIDES").x();
-
-        QPointF circumscribePoint = mapFromScene(objectRubberPoint("POLYGON_CIRCUMSCRIBE_POINT"));
-        QLineF circumscribeLine = QLineF(QPointF(0,0), circumscribePoint);
-        double circumscribeAngle = circumscribeLine.angle();
-        double circumscribeInc = 360.0/numSides;
-
-        if (painter) {
-            drawRubberLine(circumscribeLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
-
-        QPainterPath circumscribePath;
-        //First Point
-        QLineF prev(circumscribeLine.p2(), QPointF(0,0));
-        prev = prev.normalVector();
-        circumscribeLine.setAngle(circumscribeAngle + circumscribeInc);
-        QLineF perp(circumscribeLine.p2(), QPointF(0,0));
-        perp = perp.normalVector();
-        QPointF iPoint;
-        perp.intersects(prev, &iPoint);
-        circumscribePath.moveTo(iPoint);
-        //Remaining Points
-        for (int i = 2; i <= numSides; i++) {
-            prev = perp;
-            circumscribeLine.setAngle(circumscribeAngle + circumscribeInc*i);
-            perp = QLineF(circumscribeLine.p2(), QPointF(0,0));
-            perp = perp.normalVector();
-            perp.intersects(prev, &iPoint);
-            circumscribePath.lineTo(iPoint);
-        }
-        updatePath(circumscribePath);
+    case EMB_ELLIPSE: {
+        /* TODO: */
+        break;
     }
-    else if (rubberMode == OBJ_RUBBER_GRIP) {
-        if (painter) {
-            int elemCount = data.normalPath.elementCount();
-            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if (gripIndex == -1) {
-                gripIndex = findIndex(gripPoint);
-                if (gripIndex == -1) {
+    case EMB_IMAGE: {
+        /* TODO: */
+        break;
+    }
+    case EMB_PATH: {
+        /* TODO: */
+        break;
+    }
+    case EMB_LINE: {
+        QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+        if (gripPoint == objectEndPoint1())
+            painter->drawLine(line().p2(), mapFromScene(objectRubberPoint(QString())));
+        else if (gripPoint == objectEndPoint2())
+            painter->drawLine(line().p1(), mapFromScene(objectRubberPoint(QString())));
+        else if (gripPoint == objectMidPoint())
+            painter->drawLine(line().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
+
+        QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+        drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
+        break;
+    }
+    case EMB_CIRCLE: {
+        QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+        if (gripPoint == objectCenter()) {
+            painter->drawEllipse(rect().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
+            }
+        else {
+            double gripRadius = QLineF(objectCenter(), objectRubberPoint(QString())).length();
+            painter->drawEllipse(QPointF(), gripRadius, gripRadius);
+        }
+
+        QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+        drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
+        break;
+    }
+    case EMB_DIM_LEADER: {
+        QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+        if (gripPoint == objectEndPoint1()) {
+            painter->drawLine(line().p2(), mapFromScene(objectRubberPoint(QString())));
+        }
+        else if (gripPoint == objectEndPoint2()) {
+            painter->drawLine(line().p1(), mapFromScene(objectRubberPoint(QString())));
+        }
+        else if (gripPoint == objectMidPoint()) {
+            painter->drawLine(line().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
+        }
+        break;
+    }
+    case EMB_POINT: {
+        QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+        if (gripPoint == scenePos()) {
+            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
+        }
+        break;
+    }
+    case EMB_POLYGON: {
+        int elemCount = data.normalPath.elementCount();
+        QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+        if (data.gripIndex == -1) {
+            data.gripIndex = findIndex(gripPoint);
+                if (data.gripIndex == -1) {
                     return;
                 }
             }
@@ -1963,17 +1643,17 @@ PolygonObject::updateRubber(QPainter* painter)
             int m = 0;
             int n = 0;
 
-            if (!gripIndex) {
+            if (!data.gripIndex) {
                 m = elemCount - 1;
                 n = 1;
             }
-            else if (gripIndex == elemCount-1) {
+            else if (data.gripIndex == elemCount-1) {
                 m = elemCount - 2;
                 n = 0;
             }
             else {
-                m = gripIndex - 1;
-                n = gripIndex + 1;
+                m = data.gripIndex - 1;
+                n = data.gripIndex + 1;
             }
             QPainterPath::Element em = data.normalPath.elementAt(m);
             QPainterPath::Element en = data.normalPath.elementAt(n);
@@ -1984,14 +1664,90 @@ PolygonObject::updateRubber(QPainter* painter)
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
             drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
+            break;
         }
+        case EMB_POLYLINE: {
+            int elemCount = data.normalPath.elementCount();
+            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+            if (data.gripIndex == -1)
+                data.gripIndex = findIndex(gripPoint);
+            if (data.gripIndex == -1) return;
+
+            if (!data.gripIndex) {
+                /* First */
+                QPainterPath::Element ef = data.normalPath.elementAt(1);
+                QPointF efPoint = QPointF(ef.x, ef.y);
+                painter->drawLine(efPoint, mapFromScene(objectRubberPoint(QString())));
+            }
+            else if (data.gripIndex == elemCount-1) {
+                /* Last */
+                QPainterPath::Element el = data.normalPath.elementAt(data.gripIndex-1);
+                QPointF elPoint = QPointF(el.x, el.y);
+                painter->drawLine(elPoint, mapFromScene(objectRubberPoint(QString())));
+            }
+            else {
+                /* Middle */
+                QPainterPath::Element em = data.normalPath.elementAt(data.gripIndex-1);
+                QPainterPath::Element en = data.normalPath.elementAt(data.gripIndex+1);
+                QPointF emPoint = QPointF(em.x, em.y);
+                QPointF enPoint = QPointF(en.x, en.y);
+                painter->drawLine(emPoint, mapFromScene(objectRubberPoint(QString())));
+                painter->drawLine(enPoint, mapFromScene(objectRubberPoint(QString())));
+            }
+
+            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
+            break;
+    }
+    case EMB_RECT: {
+        /* TODO: Make this work with rotation & scaling */
+        /*
+        QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+        QPointF after = objectRubberPoint(QString());
+        QPointF delta = after-gripPoint;
+            if (gripPoint == topLeft()) {
+                painter->drawPolygon(mapFromScene(QRectF(after.x(), after.y(), objectWidth()-delta.x(), objectHeight()-delta.y())));
+            }
+            else if (gripPoint == topRight()) {
+                painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y())));
+            }
+            else if (gripPoint == bottomLeft()) {
+                painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y())));
+            }
+            else if (gripPoint == bottomRight()) {
+                painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y())));
+            }
+
+            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
+            */
+
+            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+            QPointF after = objectRubberPoint(QString());
+            QPointF delta = after-gripPoint;
+
+            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
+        break;
+    }
+    case EMB_TEXT_SINGLE: {
+        QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+        if (gripPoint == scenePos()) {
+           painter->drawPath(objectPath().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
+        }
+
+        QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+        drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
+        break;
+    }
+    default:
+        break;
     }
 }
-#endif
 
 /* POLYLINE. */
 ScriptValue
-polyline_command(ScriptEnv * context)
+polyline_command(ScriptEnv *context)
 {
 
     end_command();
@@ -1999,21 +1755,11 @@ polyline_command(ScriptEnv * context)
 }
 
 #if 0
-//Command: Polyline
-
-var global = {}; //Required
-context->firstRun;
-context->first;
-context->prev;
-context->num;
-
 function main()
 {
     context->firstRun = true;
-    context->firstX = NaN;
-    context->firstY = NaN;
-    context->prevX = NaN;
-    context->prevY = NaN;
+    context->first = zero_vector;
+    context->prev = zero_vector;
     context->num = 0;
     prompt_output(translate("Specify first point: "));
 }
@@ -2062,7 +1808,6 @@ function prompt(str)
     }
     else {
         if (str == "U" || str == "UNDO") {
-            /* TODO: Probably should add additional translate calls here. */
             todo("POLYLINE", "prompt() for UNDO");
         }
         else {
@@ -2081,73 +1826,11 @@ function prompt(str)
         }
     }
 }
-
-void
-PolylineObject::updateRubber(QPainter* painter)
-{
-    if (data.objRubberMode == OBJ_RUBBER_POLYLINE) {
-        setObjectPos(objectRubberPoint("POLYLINE_POINT_0"));
-
-        QLineF rubberLine(normalPath.currentPosition(), mapFromScene(objectRubberPoint(QString())));
-        if (painter) drawRubberLine(rubberLine, painter, "VIEW_COLOR_CROSSHAIR");
-
-        bool ok = false;
-        QString numStr = objectRubberText("POLYLINE_NUM_POINTS");
-        if (numStr.isNull()) return;
-        int num = numStr.toInt(&ok);
-        if (!ok) return;
-
-        QString appendStr;
-        QPainterPath rubberPath;
-        for (int i = 1; i <= num; i++) {
-            appendStr = "POLYLINE_POINT_" + QString().setNum(i);
-            QPointF appendPoint = mapFromScene(objectRubberPoint(appendStr));
-            rubberPath.lineTo(appendPoint);
-        }
-        updatePath(rubberPath);
-
-        //Ensure the path isn't updated until the number of points is changed again
-        setObjectRubberText("POLYLINE_NUM_POINTS", QString());
-    }
-    else if (rubberMode == OBJ_RUBBER_GRIP) {
-        if (painter) {
-            int elemCount = data.normalPath.elementCount();
-            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if (gripIndex == -1) gripIndex = findIndex(gripPoint);
-            if (gripIndex == -1) return;
-
-            if (!gripIndex) {
-                //First
-                QPainterPath::Element ef = data.normalPath.elementAt(1);
-                QPointF efPoint = QPointF(ef.x, ef.y);
-                painter->drawLine(efPoint, mapFromScene(objectRubberPoint(QString())));
-            }
-            else if (gripIndex == elemCount-1) {
-                //Last
-                QPainterPath::Element el = data.normalPath.elementAt(gripIndex-1);
-                QPointF elPoint = QPointF(el.x, el.y);
-                painter->drawLine(elPoint, mapFromScene(objectRubberPoint(QString())));
-            }
-            else {
-                //Middle
-                QPainterPath::Element em = data.normalPath.elementAt(gripIndex-1);
-                QPainterPath::Element en = data.normalPath.elementAt(gripIndex+1);
-                QPointF emPoint = QPointF(em.x, em.y);
-                QPointF enPoint = QPointF(en.x, en.y);
-                painter->drawLine(emPoint, mapFromScene(objectRubberPoint(QString())));
-                painter->drawLine(enPoint, mapFromScene(objectRubberPoint(QString())));
-            }
-
-            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
-    }
-}
 #endif
 
 /* RECTANGLE */
 ScriptValue
-rectangle_command(ScriptEnv * context)
+rectangle_command(ScriptEnv *context)
 {
 
     end_command();
@@ -2155,15 +1838,6 @@ rectangle_command(ScriptEnv * context)
 }
 
 #if 0
-//Command: Rectangle
-
-var global = {}; //Required
-context->newRect;
-context->x1;
-context->y1;
-context->x2;
-context->y2;
-
 function main()
 {
     context->newRect = true;
@@ -2202,15 +1876,12 @@ function context(str)
 function prompt(str)
 {
     if (str == "C" || str == "CHAMFER") {
-        //TODO: Probably should add additional translate calls here.
         todo("RECTANGLE", "prompt() for CHAMFER");
     }
     else if (str == "D" || str == "DIMENSIONS") {
-        //TODO: Probably should add additional translate calls here.
         todo("RECTANGLE", "prompt() for DIMENSIONS");
     }
     else if (str == "F" || str == "FILLET") {
-        //TODO: Probably should add additional translate calls here.
         todo("RECTANGLE", "prompt() for FILLET");
     }
     else {
@@ -2237,70 +1908,25 @@ function prompt(str)
         }
     }
 }
-
-void
-RectObject::updateRubber(QPainter* painter)
-{
-    if (data.objRubberMode == OBJ_RUBBER_RECTANGLE) {
-        QPointF sceneStartPoint = objectRubberPoint("RECTANGLE_START");
-        QPointF sceneEndPoint = objectRubberPoint("RECTANGLE_END");
-        double x = sceneStartPoint.x();
-        double y = sceneStartPoint.y();
-        double w = sceneEndPoint.x() - sceneStartPoint.x();
-        double h = sceneEndPoint.y() - sceneStartPoint.y();
-        setObjectRect(x,y,w,h);
-        updatePath();
-    }
-    else if (rubberMode == OBJ_RUBBER_GRIP) {
-        if (painter) {
-            //TODO: Make this work with rotation & scaling
-            /*
-            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            QPointF after = objectRubberPoint(QString());
-            QPointF delta = after-gripPoint;
-            if (gripPoint == topLeft()) {
-                painter->drawPolygon(mapFromScene(QRectF(after.x(), after.y(), objectWidth()-delta.x(), objectHeight()-delta.y())));
-            }
-            else if (gripPoint == topRight()) {
-                painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y())));
-            }
-            else if (gripPoint == bottomLeft()) {
-                painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y())));
-            }
-            else if (gripPoint == bottomRight()) {
-                painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y())));
-            }
-
-            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
-            */
-
-            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            QPointF after = objectRubberPoint(QString());
-            QPointF delta = after-gripPoint;
-
-            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
-        }
-    }
-}
 #endif
 
 /*
 void
 SaveObject::addTextSingle(EmbPattern* pattern, QGraphicsItem* item)
 {
-    //TODO: saving polygons, polylines and paths must be stable before we go here.
+    */
+    /* TODO: saving polygons, polylines and paths must be stable before we go here. */
 
-    //TODO: This needs to work like a path, not a polyline. Improve this
+    /* TODO: This needs to work like a path, not a polyline. Improve this */
+    /*
     TextSingleObject* obj = static_cast<TextSingleObject*>(item);
     if (obj) {
         if (formatType == EMBFORMAT_STITCHONLY) {
             QList<QPainterPath> pathList = obj->objectSavePathList();
             foreach(QPainterPath path, pathList) {
-                toPolyline(pattern, obj->objectPos(), path.simplified(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
-                // TODO: Improve precision, replace simplified
-            }
+                toPolyline(pattern, obj->objectPos(), path.simplified(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); /* TODO: proper layer/lineType/lineWeight */
+                /* TODO: Improve precision, replace simplified */
+/*            }
         }
     }
 }
@@ -2314,16 +1940,6 @@ singlelinetext_command(ScriptEnv * /* context */)
 }
 
 #if 0
-var global = {}; //Required
-context->text;
-context->textX;
-context->textY;
-context->textJustify;
-context->textFont;
-context->textHeight;
-context->textRotation;
-context->mode;
-
 function
 main()
 {
@@ -2343,7 +1959,7 @@ function
 click(EmbVector v)
 {
     if (context->mode == TEXTSINGLE_MODE_SETGEOM) {
-        if (isNaN(context->textX)) {
+        if (isnan(context->textX)) {
             context->textX = x;
             context->textY = y;
             addRubber("LINE");
@@ -2351,12 +1967,12 @@ click(EmbVector v)
             setRubberPoint("LINE_START", context->textX, context->textY);
             prompt_output(translate("Specify text height") + " {" + textSize() + "}: ");
         }
-        else if (isNaN(context->textHeight)) {
+        else if (isnan(context->textHeight)) {
             context->textHeight = calculateDistance(context->textX, context->textY, x, y);
             setTextSize(context->textHeight);
             prompt_output(translate("Specify text angle") + " {" + textAngle() + "}: ");
         }
-        else if (isNaN(context->textRotation)) {
+        else if (isnan(context->textRotation)) {
             context->textRotation = calculateAngle(context->textX, context->textY, x, y);
             setSettingsTextAngle(context->textRotation);
             prompt_output(translate("Enter text: "));
@@ -2372,7 +1988,7 @@ click(EmbVector v)
             setRubberText("TEXT_RAPID", context->text);
         }
         else {
-            //Do nothing, as we are in rapidFire mode now.
+            /* Do nothing, as we are in rapidFire mode now. */
         }
     }
 }
@@ -2382,7 +1998,6 @@ function context(str)
     todo("SINGLELINETEXT", "context()");
 }
 
-//TODO: Probably should add additional translate calls here.
 function prompt(str)
 {
     if (context->mode == TEXTSINGLE_MODE_JUSTIFY) {
@@ -2483,20 +2098,18 @@ function prompt(str)
         prompt_output(translate("Specify start point of text or [Justify/Setfont]: "));
     }
     else if (context->mode == TEXTSINGLE_MODE_SETGEOM) {
-        if (isNaN(context->textX)) {
-            if (str == "J" || str == "JUSTIFY") //TODO: Probably should add additional translate calls here.
-            {
+        if (isnan(context->textX)) {
+            if (str == "J" || str == "JUSTIFY") {
                 context->mode = TEXTSINGLE_MODE_JUSTIFY;
                 prompt_output(translate("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "));
             }
-            else if (str == "S" || str == "SETFONT") //TODO: Probably should add additional translate calls here.
-            {
+            else if (str == "S" || str == "SETFONT") {
                 context->mode = TEXTSINGLE_MODE_SETFONT;
                 prompt_output(translate("Specify font name: "));
             }
             else {
                 var strList = str.split(",");
-                if (isNaN(strList[0]) || isNaN(strList[1])) {
+                if (isnan(strList[0]) || isnan(strList[1])) {
                     alert(translate("Point or option keyword required."));
                     prompt_output(translate("Specify start point of text or [Justify/Setfont]: "));
                 }
@@ -2510,12 +2123,12 @@ function prompt(str)
                 }
             }
         }
-        else if (isNaN(context->textHeight)) {
+        else if (isnan(context->textHeight)) {
             if (str == "") {
                 context->textHeight = textSize();
                 prompt_output(translate("Specify text angle") + " {" + textAngle() + "}: ");
             }
-            else if (isNaN(str)) {
+            else if (isnan(str)) {
                 alert(translate("Requires valid numeric distance or second point."));
                 prompt_output(translate("Specify text height") + " {" + textSize() + "}: ");
             }
@@ -2525,7 +2138,7 @@ function prompt(str)
                 prompt_output(translate("Specify text angle") + " {" + textAngle() + "}: ");
             }
         }
-        else if (isNaN(context->textRotation)) {
+        else if (isnan(context->textRotation)) {
             if (str == "") {
                 context->textRotation = textAngle();
                 prompt_output(translate("Enter text: "));
@@ -2540,7 +2153,7 @@ function prompt(str)
                 setRubberText("TEXT_JUSTIFY", context->textJustify);
                 setRubberText("TEXT_RAPID", context->text);
             }
-            else if (isNaN(str)) {
+            else if (isnan(str)) {
                 alert(translate("Requires valid numeric angle or second point."));
                 prompt_output(translate("Specify text angle") + " {" + textAngle() + "}: ");
             }
@@ -2561,7 +2174,7 @@ function prompt(str)
             }
         }
         else {
-            //Do nothing, as we are in rapidFire mode now.
+            /* Do nothing, as we are in rapidFire mode now. */
         }
     }
     else if (context->mode == TEXTSINGLE_MODE_RAPID) {
@@ -2571,37 +2184,13 @@ function prompt(str)
             }
             else {
                 vulcanize();
-                endCommand(); //TODO: Rather than ending the command, calculate where the next line would be and modify the x/y to the new point
+                endCommand();
+                /* TODO: Rather than ending the command, calculate where the next line would be and modify the x/y to the new point. */
             }
         }
         else {
             context->text = str;
             setRubberText("TEXT_RAPID", context->text);
-        }
-    }
-}
-
-void
-TextSingleObject::updateRubber(QPainter* painter)
-{
-    if (data.objRubberMode == OBJ_RUBBER_TEXTSINGLE) {
-        setObjectTextFont(objectRubberText("TEXT_FONT"));
-        setObjectTextJustify(objectRubberText("TEXT_JUSTIFY"));
-        setObjectPos(objectRubberPoint("TEXT_POINT"));
-        QPointF hr = objectRubberPoint("TEXT_HEIGHT_ROTATION");
-        setObjectTextSize(hr.x());
-        setRotation(hr.y());
-        setObjectText(objectRubberText("TEXT_RAPID"));
-    }
-    else if (rubberMode == OBJ_RUBBER_GRIP) {
-        if (painter) {
-            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
-            if (gripPoint == scenePos()) {
-                painter->drawPath(objectPath().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
-            }
-
-            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
     }
 }
@@ -2643,9 +2232,9 @@ TextSingleObject::subPathList() const
                 subPath.lineTo(element.x, element.y);
             }
             else if (element.isCurveTo()) {
-                subPath.cubicTo(path.elementAt(i  ).x, path.elementAt(i  ).y, //control point 1
-                                path.elementAt(i+1).x, path.elementAt(i+1).y, //control point 2
-                                path.elementAt(i+2).x, path.elementAt(i+2).y); //end point
+                subPath.cubicTo(path.elementAt(i  ).x, path.elementAt(i  ).y, /* control point 1 */
+                                path.elementAt(i+1).x, path.elementAt(i+1).y, /* control point 2 */
+                                path.elementAt(i+2).x, path.elementAt(i+2).y); /* end point */
             }
         }
         pathList.append(trans.map(subPath));
@@ -2657,36 +2246,35 @@ TextSingleObject::subPathList() const
 
 /* QUICKLEADER */
 ScriptValue
-quickleader_command(ScriptEnv * context)
+quickleader_command(ScriptEnv *context)
 {
 
     end_command();
     return script_null;
 }
 
+/* TODO: Adding the text is not complete yet. */
 #if 0
-//TODO: Adding the text is not complete yet.
-
 function main()
 {
-    global.point1 = zero_vector;
-    global.point2 = zero_vector;
+    context->point1 = zero_vector;
+    context->point2 = zero_vector;
     prompt_output(translate("Specify first point: "));
 }
 
 void
 click(EmbVector v)
 {
-    if (isNaN(global.x1)) {
-        global.point1 = v;
+    if (isnan(context->x1)) {
+        context->point1 = v;
         addRubber("DIMLEADER");
         setRubberMode("DIMLEADER_LINE");
-        setRubberPoint("DIMLEADER_LINE_START", global.x1, global.y1);
+        setRubberPoint("DIMLEADER_LINE_START", context->point1);
         prompt_output(translate("Specify second point: "));
     }
     else {
-        global.point2 = v;
-        setRubberPoint("DIMLEADER_LINE_END", global.x2, global.y2);
+        context->point2 = v;
+        setRubberPoint("DIMLEADER_LINE_END", context->point2);
         vulcanize();
         end_command();
     }
@@ -2702,16 +2290,16 @@ void
 prompt(str)
 {
     EmbVector v;
-    if (isNaN(global.x1)) {
+    if (isnan(context->x1)) {
         if (!parse_vector(str, &v)) {
             alert(translate("Requires two points."));
             prompt_output(translate("Specify first point: "));
         }
         else {
-            global.point1 = v;
+            context->point1 = v;
             addRubber("DIMLEADER");
             setRubberMode("DIMLEADER_LINE");
-            setRubberPoint("DIMLEADER_LINE_START", global.x1, global.y1);
+            setRubberPoint("DIMLEADER_LINE_START", context->point1);
             prompt_output(translate("Specify second point: "));
         }
     }
@@ -2721,8 +2309,8 @@ prompt(str)
             prompt_output(translate("Specify second point: "));
         }
         else {
-            global.point2 = v;
-            setRubberPoint("DIMLEADER_LINE_END", global.x2, global.y2);
+            context->point2 = v;
+            setRubberPoint("DIMLEADER_LINE_END", context->point2);
             vulcanize();
             end_command();
         }
@@ -2834,7 +2422,7 @@ QStringList objectTextJustifyList = {
 
 /* . */
 void
-Object::setObjectText(const QString& str)
+Object::set_text(const QString& str)
 {
     data.objText = str;
     QPainterPath textPath;
@@ -2848,7 +2436,7 @@ Object::setObjectText(const QString& str)
     font.setOverline(data.objTextOverline);
     textPath.addText(0, 0, font, str);
 
-    //Translate the path based on the justification
+    /* Translate the path based on the justification. */
     QRectF jRect = textPath.boundingRect();
     if (data.objTextJustify == "Left") {
         textPath.translate(-jRect.left(), 0);
@@ -2860,13 +2448,13 @@ Object::setObjectText(const QString& str)
         textPath.translate(-jRect.right(), 0);
     }
     else if (data.objTextJustify == "Aligned") {
-        // TODO: TextSingleObject Aligned Justification
+        /* TODO: TextSingleObject Aligned Justification. */
     }
     else if (data.objTextJustify == "Middle") {
         textPath.translate(-jRect.center());
     }
     else if (data.objTextJustify == "Fit") {
-        // TODO: TextSingleObject Fit Justification
+        /* TODO: TextSingleObject Fit Justification. */
     }
     else if (data.objTextJustify == "Top Left") {
         textPath.translate(-jRect.topLeft());
@@ -2896,7 +2484,7 @@ Object::setObjectText(const QString& str)
         textPath.translate(-jRect.bottomRight());
     }
 
-    //Backward or Upside Down
+    /* Backward or Upside Down. */
     if (data.objTextBackward || data.objTextUpsideDown) {
         double horiz = 1.0;
         double vert = 1.0;
@@ -2922,10 +2510,10 @@ Object::setObjectText(const QString& str)
                 flippedPath.lineTo(horiz * element.x, vert * element.y);
             }
             else if (element.isCurveTo()) {
-                                              // start point P1 is not needed
-                P2 = textPath.elementAt(i);   // control point
-                P3 = textPath.elementAt(i+1); // control point
-                P4 = textPath.elementAt(i+2); // end point
+                                              /* start point P1 is not needed. */
+                P2 = textPath.elementAt(i);   /* control point. */
+                P3 = textPath.elementAt(i+1); /* control point. */
+                P4 = textPath.elementAt(i+2); /* end point. */
 
                 flippedPath.cubicTo(horiz * P2.x, vert * P2.y,
                                     horiz * P3.x, vert * P3.y,
@@ -2938,7 +2526,7 @@ Object::setObjectText(const QString& str)
         data.objTextPath = textPath;
     }
 
-    //Add the grip point to the shape path
+    /* Add the grip point to the shape path. */
     QPainterPath gripPath = data.objTextPath;
     gripPath.connectPath(data.objTextPath);
     gripPath.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
@@ -2947,17 +2535,16 @@ Object::setObjectText(const QString& str)
 
 /* . */
 void
-Object::setObjectTextFont(const QString& font)
+Object::set_text_font(const QString& font)
 {
     data.objTextFont = font;
-    setObjectText(data.objText);
+    set_text(data.objText);
 }
 
-/* . */
+/* Verify the string is a valid option. */
 void
-Object::setObjectTextJustify(const QString& justify)
+Object::set_text_justify(const QString& justify)
 {
-    //Verify the string is a valid option
     if (justify == "Left") {
         data.objTextJustify = justify;
     }
@@ -3004,85 +2591,85 @@ Object::setObjectTextJustify(const QString& justify)
         data.objTextJustify = justify;
     }
     else {
-        // Default
+        /* Default */
         data.objTextJustify = "Left";
     }
-    setObjectText(data.objText);
+    set_text(data.objText);
 }
 
 /* . */
 void
-Object::setObjectTextSize(double size)
+Object::set_text_size(double size)
 {
     data.objTextSize = size;
-    setObjectText(data.objText);
+    set_text(data.objText);
 }
 
 /* . */
 void
-Object::setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bool over)
+Object::set_text_style(bool bold, bool italic, bool under, bool strike, bool over)
 {
     data.objTextBold = bold;
     data.objTextItalic = italic;
     data.objTextUnderline = under;
     data.objTextStrikeOut = strike;
     data.objTextOverline = over;
-    setObjectText(data.objText);
+    set_text(data.objText);
 }
 
 void
-Object::setObjectTextBold(bool val)
+Object::set_text_bold(bool val)
 {
     data.objTextBold = val;
-    setObjectText(data.objText);
+    set_text(data.objText);
 }
 
 /* . */
 void
-Object::setObjectTextItalic(bool val)
+Object::set_text_italic(bool val)
 {
     data.objTextItalic = val;
-    setObjectText(data.objText);
+    set_text(data.objText);
 }
 
 /* . */
 void
-Object::setObjectTextUnderline(bool val)
+Object::set_text_underline(bool val)
 {
     data.objTextUnderline = val;
-    setObjectText(data.objText);
+    set_text(data.objText);
 }
 
 /* . */
 void
-Object::setObjectTextStrikeOut(bool val)
+Object::set_text_strikeout(bool val)
 {
     data.objTextStrikeOut = val;
-    setObjectText(data.objText);
+    set_text(data.objText);
 }
 
 /* . */
 void
-Object::setObjectTextOverline(bool val)
+Object::set_text_overline(bool val)
 {
     data.objTextOverline = val;
-    setObjectText(data.objText);
+    set_text(data.objText);
 }
 
 /* . */
 void
-Object::setObjectTextBackward(bool val)
+Object::set_text_backward(bool val)
 {
     data.objTextBackward = val;
-    setObjectText(data.objText);
+    set_text(data.objText);
 }
 
 /* . */
 void
-Object::setObjectTextUpsideDown(bool val)
+Object::set_text_upside_down(bool val)
 {
     data.objTextUpsideDown = val;
-    setObjectText(data.objText);
+    set_text(data.objText);
 }
 
 /* . */
@@ -3153,7 +2740,7 @@ Object::updatePath()
         QRectF r = rect();
         path.arcMoveTo(r, 0);
         path.arcTo(r, 0, 360);
-        //NOTE: Reverse the path so that the inside area isn't considered part of the ellipse
+        /* NOTE: Reverse the path so that the inside area isn't considered part of the ellipse. */
         path.arcTo(r, 0, -360);
         setObjectPath(path);
         break;
@@ -3167,7 +2754,7 @@ Object::updatePath()
         path.lineTo(r.topRight());
         path.lineTo(r.topLeft());
         path.lineTo(r.bottomLeft());
-        //NOTE: Reverse the path so that the inside area isn't considered part of the rectangle
+        /* NOTE: Reverse the path so that the inside area isn't considered part of the rectangle. */
         path.lineTo(r.topLeft());
         path.lineTo(r.topRight());
         path.lineTo(r.bottomRight());
@@ -3208,14 +2795,14 @@ Object::updateArcRect(double radius)
 void
 Object::setObjectLineWeight(double lineWeight)
 {
-    data.objPen.setWidthF(0); //NOTE: The objPen will always be cosmetic
+    data.objPen.setWidthF(0); /* NOTE: The objPen will always be cosmetic. */
 
     if (lineWeight < 0) {
         if (lineWeight == OBJ_LWT_BYLAYER) {
-            data.lwtPen.setWidthF(0.35); //TODO: getLayerLineWeight
+            data.lwtPen.setWidthF(0.35); /* TODO: getLayerLineWeight */
         }
         else if (lineWeight == OBJ_LWT_BYBLOCK) {
-            data.lwtPen.setWidthF(0.35); //TODO: getBlockLineWeight
+            data.lwtPen.setWidthF(0.35); /* TODO: getBlockLineWeight */
         }
         else {
             QMessageBox::warning(0, QObject::tr("Error - Negative Lineweight"),
@@ -3349,7 +2936,7 @@ int
 Object::findIndex(const QPointF& point)
 {
     int elemCount = data.normalPath.elementCount();
-    //NOTE: Points here are in item coordinates
+    /* NOTE: Points here are in item coordinates */
     QPointF itemPoint = mapFromScene(point);
     for (int i = 0; i < elemCount; i++) {
         QPainterPath::Element e = data.normalPath.elementAt(i);
@@ -3359,15 +2946,321 @@ Object::findIndex(const QPointF& point)
     return -1;
 }
 
+/* TODO: Arc,Path Rubber Modes */
 void
 Object::updateRubber(QPainter* painter)
 {
-    switch (geometry->type) {
-    case EMB_ARC:
-        //TODO: Arc Rubber Modes
-
-        //TODO: updateRubber() gripping for ArcObject
+    switch (data.objRubberMode) {
+    case OBJ_RUBBER_CIRCLE_1P_RAD: {
+        QPointF sceneCenterPoint = objectRubberPoint("CIRCLE_CENTER");
+        QPointF sceneQSnapPoint = objectRubberPoint("CIRCLE_RADIUS");
+        QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
+        QPointF itemQSnapPoint = mapFromScene(sceneQSnapPoint);
+        QLineF itemLine(itemCenterPoint, itemQSnapPoint);
+        setObjectCenter(to_emb_vector(sceneCenterPoint));
+        QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
+        double radius = sceneLine.length();
+        set_radius(geometry, radius);
+        if (painter) {
+            drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
+        }
+        updatePath();
         break;
+    }
+    case OBJ_RUBBER_CIRCLE_1P_DIA: {
+        QPointF sceneCenterPoint = objectRubberPoint("CIRCLE_CENTER");
+        QPointF sceneQSnapPoint = objectRubberPoint("CIRCLE_DIAMETER");
+        QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
+        QPointF itemQSnapPoint = mapFromScene(sceneQSnapPoint);
+        QLineF itemLine(itemCenterPoint, itemQSnapPoint);
+        setObjectCenter(to_emb_vector(sceneCenterPoint));
+        QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
+        double diameter = sceneLine.length();
+        set_diameter(geometry, diameter);
+        if (painter) {
+            drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
+        }
+        updatePath();
+        break;
+    }
+    case OBJ_RUBBER_CIRCLE_2P: {
+        QPointF sceneTan1Point = objectRubberPoint("CIRCLE_TAN1");
+        QPointF sceneQSnapPoint = objectRubberPoint("CIRCLE_TAN2");
+        QLineF sceneLine(sceneTan1Point, sceneQSnapPoint);
+        setObjectCenter(to_emb_vector(sceneLine.pointAt(0.5)));
+        double diameter = sceneLine.length();
+        set_diameter(geometry, diameter);
+        updatePath();
+        break;
+    }
+    case OBJ_RUBBER_CIRCLE_3P: {
+        QPointF sceneTan1Point = objectRubberPoint("CIRCLE_TAN1");
+        QPointF sceneTan2Point = objectRubberPoint("CIRCLE_TAN2");
+        QPointF sceneTan3Point = objectRubberPoint("CIRCLE_TAN3");
+
+        EmbGeometry g;
+        g.object.arc.start = to_emb_vector(sceneTan1Point);
+        g.object.arc.mid = to_emb_vector(sceneTan2Point);
+        g.object.arc.end = to_emb_vector(sceneTan3Point);
+        g.type = EMB_ARC;
+        EmbVector center = emb_arc_center(g);
+        setObjectCenter(center);
+        double radius = emb_vector_distance(center, to_emb_vector(sceneTan3Point));
+        set_radius(geometry, radius);
+        updatePath();
+        break;
+    }
+    case OBJ_RUBBER_DIMLEADER_LINE: {
+        QPointF sceneStartPoint = objectRubberPoint("DIMLEADER_LINE_START");
+        QPointF sceneQSnapPoint = objectRubberPoint("DIMLEADER_LINE_END");
+
+        setObjectEndPoint1(sceneStartPoint);
+        setObjectEndPoint2(sceneQSnapPoint);
+        break;
+    }
+    case OBJ_RUBBER_ELLIPSE_LINE: {
+        QPointF sceneLinePoint1 = objectRubberPoint("ELLIPSE_LINE_POINT1");
+        QPointF sceneLinePoint2 = objectRubberPoint("ELLIPSE_LINE_POINT2");
+        QPointF itemLinePoint1  = mapFromScene(sceneLinePoint1);
+        QPointF itemLinePoint2  = mapFromScene(sceneLinePoint2);
+        QLineF itemLine(itemLinePoint1, itemLinePoint2);
+        if (painter) {
+            drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
+        }
+        updatePath();
+        break;
+    }
+    case OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS: {
+        QPointF sceneAxis1Point1 = objectRubberPoint("ELLIPSE_AXIS1_POINT1");
+        QPointF sceneAxis1Point2 = objectRubberPoint("ELLIPSE_AXIS1_POINT2");
+        QPointF sceneCenterPoint = objectRubberPoint("ELLIPSE_CENTER");
+        QPointF sceneAxis2Point2 = objectRubberPoint("ELLIPSE_AXIS2_POINT2");
+        double ellipseWidth = objectRubberPoint("ELLIPSE_WIDTH").x();
+        double ellipseRot = objectRubberPoint("ELLIPSE_ROT").x();
+
+        /* TODO: incorporate perpendicularDistance() into libcgeometry */
+        double px = sceneAxis2Point2.x();
+        double py = sceneAxis2Point2.y();
+        double x1 = sceneAxis1Point1.x();
+        double y1 = sceneAxis1Point1.y();
+        QLineF line(sceneAxis1Point1, sceneAxis1Point2);
+        QLineF norm = line.normalVector();
+        double dx = px-x1;
+        double dy = py-y1;
+        norm.translate(dx, dy);
+        QPointF iPoint;
+        norm.intersects(line, &iPoint);
+        double ellipseHeight = QLineF(px, py, iPoint.x(), iPoint.y()).length()*2.0;
+
+        setObjectCenter(sceneCenterPoint);
+        setObjectSize(ellipseWidth, ellipseHeight);
+        setRotation(-ellipseRot);
+
+        QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
+        QPointF itemAxis2Point2 = mapFromScene(sceneAxis2Point2);
+        QLineF itemLine(itemCenterPoint, itemAxis2Point2);
+        if (painter) {
+            drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
+        }
+        updatePath();
+        break;
+    }
+    case OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS: {
+        QPointF sceneAxis1Point2 = objectRubberPoint("ELLIPSE_AXIS1_POINT2");
+        QPointF sceneCenterPoint = objectRubberPoint("ELLIPSE_CENTER");
+        QPointF sceneAxis2Point2 = objectRubberPoint("ELLIPSE_AXIS2_POINT2");
+        double ellipseWidth = objectRubberPoint("ELLIPSE_WIDTH").x();
+        double ellipseRot = objectRubberPoint("ELLIPSE_ROT").x();
+
+        /* TODO: incorporate perpendicularDistance() into libcgeometry */
+        double px = sceneAxis2Point2.x();
+        double py = sceneAxis2Point2.y();
+        double x1 = sceneCenterPoint.x();
+        double y1 = sceneCenterPoint.y();
+        QLineF line(sceneCenterPoint, sceneAxis1Point2);
+        QLineF norm = line.normalVector();
+        double dx = px-x1;
+        double dy = py-y1;
+        norm.translate(dx, dy);
+        QPointF iPoint;
+        norm.intersects(line, &iPoint);
+        double ellipseHeight = QLineF(px, py, iPoint.x(), iPoint.y()).length()*2.0;
+
+        setObjectCenter(sceneCenterPoint);
+        setObjectSize(ellipseWidth, ellipseHeight);
+        setRotation(-ellipseRot);
+
+        QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
+        QPointF itemAxis2Point2 = mapFromScene(sceneAxis2Point2);
+        QLineF itemLine(itemCenterPoint, itemAxis2Point2);
+        if (painter) {
+            drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
+        }
+        updatePath();
+        break;
+    }
+    case OBJ_RUBBER_IMAGE: {
+        QPointF sceneStartPoint = objectRubberPoint("IMAGE_START");
+        QPointF sceneEndPoint = objectRubberPoint("IMAGE_END");
+        double x = sceneStartPoint.x();
+        double y = sceneStartPoint.y();
+        double w = sceneEndPoint.x() - sceneStartPoint.x();
+        double h = sceneEndPoint.y() - sceneStartPoint.y();
+        setObjectRect(x,y,w,h);
+        updatePath();
+        break;
+    }
+    case OBJ_RUBBER_LINE: {
+        QPointF sceneStartPoint = objectRubberPoint("LINE_START");
+        QPointF sceneQSnapPoint = objectRubberPoint("LINE_END");
+
+        setObjectEndPoint1(sceneStartPoint);
+        setObjectEndPoint2(sceneQSnapPoint);
+
+        drawRubberLine(line(), painter, "VIEW_COLOR_CROSSHAIR");
+        break;
+    }
+    case OBJ_RUBBER_POLYGON: {
+        setObjectPos(objectRubberPoint("POLYGON_POINT_0"));
+
+        bool ok = false;
+        QString numStr = objectRubberText("POLYGON_NUM_POINTS");
+        if (numStr.isNull()) {
+            return;
+        }
+        int num = numStr.toInt(&ok);
+        if (!ok) {
+            return;
+        }
+
+        QString appendStr;
+        QPainterPath rubberPath;
+        rubberPath.moveTo(mapFromScene(objectRubberPoint("POLYGON_POINT_0")));
+        for (int i = 1; i <= num; i++) {
+            appendStr = "POLYGON_POINT_" + QString().setNum(i);
+            QPointF appendPoint = mapFromScene(objectRubberPoint(appendStr));
+            rubberPath.lineTo(appendPoint);
+        }
+        /* rubberPath.lineTo(0,0); */
+        updatePath(rubberPath);
+
+        /* Ensure the path isn't updated until the number of points is changed again. */
+        setObjectRubberText("POLYGON_NUM_POINTS", QString());
+        break;
+    }
+    case OBJ_RUBBER_POLYGON_INSCRIBE: {
+        setObjectPos(objectRubberPoint("POLYGON_CENTER"));
+
+        quint16 numSides = objectRubberPoint("POLYGON_NUM_SIDES").x();
+
+        QPointF inscribePoint = mapFromScene(objectRubberPoint("POLYGON_INSCRIBE_POINT"));
+        QLineF inscribeLine = QLineF(QPointF(0,0), inscribePoint);
+        double inscribeAngle = inscribeLine.angle();
+        double inscribeInc = 360.0/numSides;
+
+        if (painter) {
+            drawRubberLine(inscribeLine, painter, "VIEW_COLOR_CROSSHAIR");
+        }
+
+        QPainterPath inscribePath;
+        /* First Point */
+        inscribePath.moveTo(inscribePoint);
+        /* Remaining Points */
+        for (int i = 1; i < numSides; i++) {
+            inscribeLine.setAngle(inscribeAngle + inscribeInc*i);
+            inscribePath.lineTo(inscribeLine.p2());
+        }
+        updatePath(inscribePath);
+        break;
+    }
+    case OBJ_RUBBER_POLYGON_CIRCUMSCRIBE: {
+        setObjectPos(objectRubberPoint("POLYGON_CENTER"));
+
+        quint16 numSides = objectRubberPoint("POLYGON_NUM_SIDES").x();
+
+        QPointF circumscribePoint = mapFromScene(objectRubberPoint("POLYGON_CIRCUMSCRIBE_POINT"));
+        QLineF circumscribeLine = QLineF(QPointF(0,0), circumscribePoint);
+        double circumscribeAngle = circumscribeLine.angle();
+        double circumscribeInc = 360.0/numSides;
+
+        if (painter) {
+            drawRubberLine(circumscribeLine, painter, "VIEW_COLOR_CROSSHAIR");
+        }
+
+        QPainterPath circumscribePath;
+        /* First Point */
+        QLineF prev(circumscribeLine.p2(), QPointF(0,0));
+        prev = prev.normalVector();
+        circumscribeLine.setAngle(circumscribeAngle + circumscribeInc);
+        QLineF perp(circumscribeLine.p2(), QPointF(0,0));
+        perp = perp.normalVector();
+        QPointF iPoint;
+        perp.intersects(prev, &iPoint);
+        circumscribePath.moveTo(iPoint);
+        /* Remaining Points */
+        for (int i = 2; i <= numSides; i++) {
+            prev = perp;
+            circumscribeLine.setAngle(circumscribeAngle + circumscribeInc*i);
+            perp = QLineF(circumscribeLine.p2(), QPointF(0,0));
+            perp = perp.normalVector();
+            perp.intersects(prev, &iPoint);
+            circumscribePath.lineTo(iPoint);
+        }
+        updatePath(circumscribePath);
+        break;
+    }
+    case OBJ_RUBBER_POLYLINE: {
+        setObjectPos(objectRubberPoint("POLYLINE_POINT_0"));
+
+        QLineF rubberLine(data.normalPath.currentPosition(), mapFromScene(objectRubberPoint(QString())));
+        if (painter) drawRubberLine(rubberLine, painter, "VIEW_COLOR_CROSSHAIR");
+
+        bool ok = false;
+        QString numStr = objectRubberText("POLYLINE_NUM_POINTS");
+        if (numStr.isNull()) return;
+        int num = numStr.toInt(&ok);
+        if (!ok) {
+            return;
+        }
+
+        QString appendStr;
+        QPainterPath rubberPath;
+        for (int i = 1; i <= num; i++) {
+            appendStr = "POLYLINE_POINT_" + QString().setNum(i);
+            QPointF appendPoint = mapFromScene(objectRubberPoint(appendStr));
+            rubberPath.lineTo(appendPoint);
+        }
+        updatePath(rubberPath);
+
+        /* Ensure the path isn't updated until the number of points is changed again. */
+        setObjectRubberText("POLYLINE_NUM_POINTS", QString());
+        break;
+    }
+    case OBJ_RUBBER_RECTANGLE: {
+        QPointF sceneStartPoint = objectRubberPoint("RECTANGLE_START");
+        QPointF sceneEndPoint = objectRubberPoint("RECTANGLE_END");
+        double x = sceneStartPoint.x();
+        double y = sceneStartPoint.y();
+        double w = sceneEndPoint.x() - sceneStartPoint.x();
+        double h = sceneEndPoint.y() - sceneStartPoint.y();
+        setObjectRect(x,y,w,h);
+        updatePath();
+        break;
+    }
+    case OBJ_RUBBER_TEXTSINGLE: {
+        set_text_font(objectRubberText("TEXT_FONT"));
+        set_text_justify(objectRubberText("TEXT_JUSTIFY"));
+        setObjectPos(objectRubberPoint("TEXT_POINT"));
+        QPointF hr = objectRubberPoint("TEXT_HEIGHT_ROTATION");
+        set_text_size(hr.x());
+        setRotation(hr.y());
+        set_text(objectRubberText("TEXT_RAPID"));
+        break;
+    }
+    case OBJ_RUBBER_GRIP: {
+        updateRubberGrip(painter);
+        break;
+    }
     default:
         break;
     }
@@ -3418,7 +3311,7 @@ void
 Object::vulcanize()
 {
     debug_message("vulcanize()");
-    // FIXME: updateRubber(painter);
+    /* FIXME: updateRubber(painter); */
 
     data.objRubberMode = OBJ_RUBBER_OFF;
 
@@ -3489,7 +3382,7 @@ Object::allGripPoints()
         break;
     }
     case EMB_PATH: {
-        gripPoints << scenePos(); //TODO: loop thru all path Elements and return their points
+        gripPoints << scenePos(); /* TODO: loop thru all path Elements and return their points */
         break;
     }
     case EMB_POLYGON:
@@ -3522,7 +3415,7 @@ Object::gripEdit(const QPointF& before, const QPointF& after)
 {
     switch (geometry->type) {
     case EMB_ARC: {
-        //TODO: gripEdit() for ArcObject
+        /* TODO: gripEdit() for ArcObject */
         break;
     }
     case EMB_CIRCLE: {
@@ -3550,7 +3443,7 @@ Object::gripEdit(const QPointF& before, const QPointF& after)
         break;
     }
     case EMB_ELLIPSE: {
-        //TODO: gripEdit() for EllipseObject
+        /* TODO: gripEdit() for EllipseObject */
         break;
     }
     case EMB_IMAGE:
@@ -3577,7 +3470,7 @@ Object::gripEdit(const QPointF& before, const QPointF& after)
         break;
     }
     case EMB_PATH: {
-        //TODO: gripEdit() for PathObject
+        /* TODO: gripEdit() for PathObject */
         break;
     }
     case EMB_POLYGON:

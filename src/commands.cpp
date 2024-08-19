@@ -1471,15 +1471,15 @@ nativeAddTextSingle(std::string str, double x, double y, double rot, bool fill, 
     QUndoStack* stack = gview->data.undoStack;
     if (gview && gscene && stack) {
         Object* obj = new Object(QString(str.c_str()), x, -y, getCurrentColor());
-        obj->setObjectTextFont(text_font.setting);
-        obj->setObjectTextSize(text_size.setting);
-        obj->setObjectTextStyle(text_style_bold.setting,
+        obj->set_text_font(text_font.setting);
+        obj->set_text_size(text_size.setting);
+        obj->set_text_style(text_style_bold.setting,
                                 text_style_italic.setting,
                                 text_style_underline.setting,
                                 text_style_strikeout.setting,
                                 text_style_overline.setting);
-        obj->setObjectTextBackward(false);
-        obj->setObjectTextUpsideDown(false);
+        obj->set_text_backward(false);
+        obj->set_text_upside_down(false);
         obj->setRotation(-rot);
         /* TODO: single line text fill. */
         obj->setObjectRubberMode(rubberMode);
@@ -3302,8 +3302,8 @@ sandbox_command(ScriptEnv * context)
     case CONTEXT_MAIN:
         /* Report number of pre-selected objects. */
         char msg[200];
-        //sprintf(msg, "Number of Objects Selected: %d", gview->numSelected());
-        //prompt_output(msg);
+        /* sprintf(msg, "Number of Objects Selected: %d", gview->numSelected()); */
+        /* prompt_output(msg); */
         /* mirrorSelected(0,0,0,1); */
     
         /* selectAll(); */

@@ -121,10 +121,10 @@ class CmdPromptSplitter;
 class CmdPromptInput;
 
 extern MainWindow *_main;
-extern QHash<std::string, std::string>* aliasHash;
-extern QHash<int, QAction*> actionHash;
-extern QHash<QString, QToolBar*> toolbarHash;
-extern QHash<QString, QMenu*> menuHash;
+extern std::unordered_map<std::string, std::string> aliasHash;
+extern std::unordered_map<int, QAction*> actionHash;
+extern std::unordered_map<QString, QToolBar*> toolbarHash;
+extern std::unordered_map<QString, QMenu*> menuHash;
 extern QToolButton* statusBarSnapButton;
 extern QToolButton* statusBarGridButton;
 extern QToolButton* statusBarRulerButton;
@@ -343,6 +343,7 @@ QString getCurrentLineType();
 QString getCurrentLineWeight();
 
 void setHistory(const QString& txt);
+void add_command(std::string alias, std::string cmd);
 
 class LayerManager : public QDialog
 {
@@ -633,8 +634,6 @@ public:
     double objectDiameter() const { return rect().width()*scale(); }
     double objectCircumference() const { return embConstantPi*objectDiameter(); }
 
-    void updateRubber(void);
-
     QPointF objectEndPoint1() const;
     QPointF objectEndPoint2() const;
     QPointF objectStartPoint() const;
@@ -647,7 +646,8 @@ public:
     QPointF bottomLeft() const;
     QPointF bottomRight() const;
 
-    void updateRubber(QPainter* painter = 0);
+    void updateRubber(QPainter* painter);
+    void updateRubberGrip(QPainter *painter);
     void updateLeader();
     void updatePath();
     void updatePath(const QPainterPath& p);
@@ -714,18 +714,18 @@ public:
     /* TODO: make paths similar to polylines. Review and implement any missing functions/members. */
     int findIndex(const QPointF& point);
 
-    void setObjectText(const QString& str);
-    void setObjectTextFont(const QString& font);
-    void setObjectTextJustify(const QString& justify);
-    void setObjectTextSize(double size);
-    void setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bool over);
-    void setObjectTextBold(bool val);
-    void setObjectTextItalic(bool val);
-    void setObjectTextUnderline(bool val);
-    void setObjectTextStrikeOut(bool val);
-    void setObjectTextOverline(bool val);
-    void setObjectTextBackward(bool val);
-    void setObjectTextUpsideDown(bool val);
+    void set_text(const QString& str);
+    void set_text_font(const QString& font);
+    void set_text_justify(const QString& justify);
+    void set_text_size(double size);
+    void set_text_style(bool bold, bool italic, bool under, bool strike, bool over);
+    void set_text_bold(bool val);
+    void set_text_italic(bool val);
+    void set_text_underline(bool val);
+    void set_text_strikeout(bool val);
+    void set_text_overline(bool val);
+    void set_text_backward(bool val);
+    void set_text_upside_down(bool val);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 };
@@ -835,6 +835,13 @@ private:
     void addColorsToComboBox(QComboBox* comboBox);
 
 private slots:
+    void checkBoxCustomFilterStateChanged(int);
+    void checkBoxGridColorMatchCrossHairStateChanged(int);
+    void checkBoxGridLoadFromFileStateChanged(int);
+    void checkBoxGridCenterOnOriginStateChanged(int);
+    void checkBoxLwtShowLwtStateChanged(int);
+    void checkBoxLwtRealRenderStateChanged(int);
+
     void comboBoxLanguageCurrentIndexChanged(const QString&);
     void comboBoxIconThemeCurrentIndexChanged(const QString&);
     void comboBoxIconSizeCurrentIndexChanged(int);
@@ -842,9 +849,7 @@ private slots:
     void chooseGeneralMdiBackgroundTexture();
     void chooseGeneralMdiBackgroundColor();
     void currentGeneralMdiBackgroundColorChanged(const QColor&);
-    void checkBoxShowScrollBarsStateChanged(int);
     void comboBoxScrollBarWidgetCurrentIndexChanged(int);
-    void checkBoxDisableBGStateChanged(int);
     void chooseDisplayCrossHairColor();
     void currentDisplayCrossHairColorChanged(const QColor&);
     void chooseDisplayBackgroundColor();
@@ -865,20 +870,13 @@ private slots:
     void comboBoxPromptFontFamilyCurrentIndexChanged(const QString&);
     void comboBoxPromptFontStyleCurrentIndexChanged(const QString&);
     void spinBoxPromptFontSizeValueChanged(int);
-    void checkBoxPromptSaveHistoryStateChanged(int);
-    void checkBoxPromptSaveHistoryAsHtmlStateChanged(int);
-    void checkBoxCustomFilterStateChanged(int);
     void buttonCustomFilterSelectAllClicked();
     void buttonCustomFilterClearAllClicked();
     void spinBoxRecentMaxFilesValueChanged(int);
     void spinBoxTrimDstNumJumpsValueChanged(int);
-    void checkBoxGridColorMatchCrossHairStateChanged(int);
     void chooseGridColor();
     void currentGridColorChanged(const QColor&);
-    void checkBoxGridLoadFromFileStateChanged(int);
     void comboBoxGridTypeCurrentIndexChanged(const QString&);
-    void checkBoxGridCenterOnOriginStateChanged(int);
-    void checkBoxRulerShowOnLoadStateChanged(int);
     void comboBoxRulerMetricCurrentIndexChanged(int);
     void chooseRulerColor();
     void currentRulerColorChanged(const QColor&);
@@ -888,11 +886,6 @@ private slots:
     void comboBoxQSnapLocatorColorCurrentIndexChanged(int);
     void sliderQSnapLocatorSizeValueChanged(int);
     void sliderQSnapApertureSizeValueChanged(int);
-    void checkBoxLwtShowLwtStateChanged(int);
-    void checkBoxLwtRealRenderStateChanged(int);
-    void checkBoxSelectionModePickFirstStateChanged(int);
-    void checkBoxSelectionModePickAddStateChanged(int);
-    void checkBoxSelectionModePickDragStateChanged(int);
     void comboBoxSelectionCoolGripColorCurrentIndexChanged(int);
     void comboBoxSelectionHotGripColorCurrentIndexChanged(int);
     void sliderSelectionGripSizeValueChanged(int);
@@ -1054,7 +1047,7 @@ class CmdPromptInput: public QLineEdit
 
 public:
     CmdPromptInput(QWidget* parent = 0);
-    ~CmdPromptInput();
+    ~CmdPromptInput() {}
 
     void changeFormatting(const QList<QTextLayout::FormatRange>& formats);
     void clearFormatting();
@@ -1064,7 +1057,6 @@ protected:
     bool eventFilter(QObject *obj, QEvent *event);
 
 public slots:
-    void addCommand(const QString& alias, const QString& cmd);
     void endCommand();
     void processInput(const QChar& rapidChar = QChar());
     void checkSelection();
@@ -1151,7 +1143,7 @@ public slots:
     void saveHistory(const QString& fileName, bool html);
 
 signals:
-    //For connecting outside of command prompt
+    /* For connecting outside of command prompt. */
     void showSettings();
 
     void historyAppended(const QString& txt);

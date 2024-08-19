@@ -12,9 +12,9 @@
 
 #include "embroidermodder.h"
 
-QHash<int, QAction*> actionHash;
-QHash<QString, QToolBar*> toolbarHash;
-QHash<QString, QMenu*> menuHash;
+std::unordered_map<int, QAction*> actionHash;
+std::unordered_map<QString, QToolBar*> toolbarHash;
+std::unordered_map<QString, QMenu*> menuHash;
 const char *settings_file = "settings.toml";
 void create_statusbar(MainWindow* mw);
 
@@ -342,8 +342,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     debug_message("MainWindow createLayerToolbar()");
 
     toolbarHash["Layer"]->setObjectName("toolbarLayer");
-    toolbarHash["Layer"]->addAction(actionHash.value(ACTION_MAKE_LAYER_CURRENT));
-    toolbarHash["Layer"]->addAction(actionHash.value(ACTION_LAYERS));
+    toolbarHash["Layer"]->addAction(actionHash[ACTION_MAKE_LAYER_CURRENT]);
+    toolbarHash["Layer"]->addAction(actionHash[ACTION_LAYERS]);
 
     QString icontheme = general_icon_theme.setting;
 
@@ -362,7 +362,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     toolbarHash["Layer"]->addWidget(layerSelector);
     connect(layerSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(layerSelectorIndexChanged(int)));
 
-    toolbarHash["Layer"]->addAction(actionHash.value(ACTION_LAYER_PREVIOUS));
+    toolbarHash["Layer"]->addAction(actionHash[ACTION_LAYER_PREVIOUS]);
 
     connect(toolbarHash["Layer"], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 
@@ -439,16 +439,16 @@ MainWindow::MainWindow() : QMainWindow(0)
     textFontSelector->setCurrentFont(QFont(text_font.setting));
     connect(textFontSelector, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(textFontSelectorCurrentFontChanged(const QFont&)));
 
-    toolbarHash["Text"]->addAction(actionHash.value(ACTION_TEXT_BOLD));
-    actionHash.value(ACTION_TEXT_BOLD)->setChecked(text_style_bold.setting);
-    toolbarHash["Text"]->addAction(actionHash.value(ACTION_TEXT_ITALIC));
-    actionHash.value(ACTION_TEXT_ITALIC)->setChecked(text_style_italic.setting);
-    toolbarHash["Text"]->addAction(actionHash.value(ACTION_TEXT_UNDERLINE));
-    actionHash.value(ACTION_TEXT_UNDERLINE)->setChecked(text_style_underline.setting);
-    toolbarHash["Text"]->addAction(actionHash.value(ACTION_TEXT_STRIKEOUT));
-    actionHash.value(ACTION_TEXT_STRIKEOUT)->setChecked(text_style_strikeout.setting);
-    toolbarHash["Text"]->addAction(actionHash.value(ACTION_TEXT_OVERLINE));
-    actionHash.value(ACTION_TEXT_OVERLINE)->setChecked(text_style_overline.setting);
+    toolbarHash["Text"]->addAction(actionHash[ACTION_TEXT_BOLD]);
+    actionHash[ACTION_TEXT_BOLD]->setChecked(text_style_bold.setting);
+    toolbarHash["Text"]->addAction(actionHash[ACTION_TEXT_ITALIC]);
+    actionHash[ACTION_TEXT_ITALIC]->setChecked(text_style_italic.setting);
+    toolbarHash["Text"]->addAction(actionHash[ACTION_TEXT_UNDERLINE]);
+    actionHash[ACTION_TEXT_UNDERLINE]->setChecked(text_style_underline.setting);
+    toolbarHash["Text"]->addAction(actionHash[ACTION_TEXT_STRIKEOUT]);
+    actionHash[ACTION_TEXT_STRIKEOUT]->setChecked(text_style_strikeout.setting);
+    toolbarHash["Text"]->addAction(actionHash[ACTION_TEXT_OVERLINE]);
+    actionHash[ACTION_TEXT_OVERLINE]->setChecked(text_style_overline.setting);
 
     textSizeSelector->setFocusProxy(prompt);
     textSizeSelector->addItem("6 pt", 6);
@@ -618,14 +618,14 @@ windowMenuAboutToShow(void)
 {
     debug_message("MainWindow::windowMenuAboutToShow()");
     menuHash["Window"]->clear();
-    menuHash["Window"]->addAction(actionHash.value(ACTION_WINDOW_CLOSE));
-    menuHash["Window"]->addAction(actionHash.value(ACTION_WINDOW_CLOSE_ALL));
+    menuHash["Window"]->addAction(actionHash[ACTION_WINDOW_CLOSE]);
+    menuHash["Window"]->addAction(actionHash[ACTION_WINDOW_CLOSE_ALL]);
     menuHash["Window"]->addSeparator();
-    menuHash["Window"]->addAction(actionHash.value(ACTION_WINDOW_CASCADE));
-    menuHash["Window"]->addAction(actionHash.value(ACTION_WINDOW_TILE));
+    menuHash["Window"]->addAction(actionHash[ACTION_WINDOW_CASCADE]);
+    menuHash["Window"]->addAction(actionHash[ACTION_WINDOW_TILE]);
     menuHash["Window"]->addSeparator();
-    menuHash["Window"]->addAction(actionHash.value(ACTION_WINDOW_NEXT));
-    menuHash["Window"]->addAction(actionHash.value(ACTION_WINDOW_PREVIOUS));
+    menuHash["Window"]->addAction(actionHash[ACTION_WINDOW_NEXT]);
+    menuHash["Window"]->addAction(actionHash[ACTION_WINDOW_PREVIOUS]);
 
     menuHash["Window"]->addSeparator();
     QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
@@ -921,9 +921,9 @@ update_interface()
 {
     debug_message("update_interface()");
 
-    actionHash.value(ACTION_PRINT)->setEnabled(numOfDocs > 0);
-    actionHash.value(ACTION_WINDOW_CLOSE)->setEnabled(numOfDocs > 0);
-    actionHash.value(ACTION_DESIGN_DETAILS)->setEnabled(numOfDocs > 0);
+    actionHash[ACTION_PRINT]->setEnabled(numOfDocs > 0);
+    actionHash[ACTION_WINDOW_CLOSE]->setEnabled(numOfDocs > 0);
+    actionHash[ACTION_DESIGN_DETAILS]->setEnabled(numOfDocs > 0);
 
     if (numOfDocs) {
         /* Toolbars */
@@ -1066,10 +1066,10 @@ MainWindow::loadFormats()
     /*
     QString custom = custom_filter.setting;
     if (custom.contains("supported", Qt::CaseInsensitive)) {
-        custom = ""; //This will hide it
+        custom = ""; */ /* This will hide it */ /*
     }
     else if (!custom.contains("*", Qt::CaseInsensitive)) {
-        custom = ""; //This will hide it
+        custom = ""; */ /* This will hide it */ /*
     }
     else {
         custom = "Custom Filter(" + custom + ");;";
@@ -1114,7 +1114,7 @@ MainWindow::floatingChangedToolBar(bool isFloating)
         else {
             QList<QAction*> actList = tb->actions();
             for (int i = 0; i < actList.size(); ++i) {
-                QAction* ACTION = actList.value(i);
+                QAction* ACTION = actList[i];
                 if (ACTION->objectName() == "toolbarclose") {
                     tb->removeAction(ACTION);
                     disconnect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));
@@ -1132,10 +1132,10 @@ get_action_by_icon(const char *icon)
     int i;
     for (i=0; command_data[i].id != -2; i++) {
         if (!strcmp(command_data[i].icon, icon)) {
-            return actionHash.value(command_data[i].id);
+            return actionHash[command_data[i].id];
         }
     }
-    return actionHash.value(ACTION_DO_NOTHING);
+    return actionHash[ACTION_DO_NOTHING];
 }
 
 /* . */
@@ -1176,9 +1176,9 @@ MainWindow::createAllMenus()
     QString icontheme = general_icon_theme.setting;
 
     menuBar()->addMenu(menuHash["File"]);
-    menuHash["File"]->addAction(actionHash.value(ACTION_NEW));
+    menuHash["File"]->addAction(actionHash[ACTION_NEW]);
     menuHash["File"]->addSeparator();
-    menuHash["File"]->addAction(actionHash.value(ACTION_OPEN));
+    menuHash["File"]->addAction(actionHash[ACTION_OPEN]);
 
     menuHash["File"]->addMenu(menuHash["Recent"]);
     connect(menuHash["Recent"], SIGNAL(aboutToShow()), this, SLOT(recentMenuAboutToShow()));
@@ -1186,21 +1186,23 @@ MainWindow::createAllMenus()
     menuHash["Recent"]->setTearOffEnabled(false);
 
     menuHash["File"]->addSeparator();
-    menuHash["File"]->addAction(actionHash.value(ACTION_SAVE));
-    menuHash["File"]->addAction(actionHash.value(ACTION_SAVE_AS));
+    menuHash["File"]->addAction(actionHash[ACTION_SAVE]);
+    menuHash["File"]->addAction(actionHash[ACTION_SAVE_AS]);
     menuHash["File"]->addSeparator();
-    menuHash["File"]->addAction(actionHash.value(ACTION_PRINT));
+    menuHash["File"]->addAction(actionHash[ACTION_PRINT]);
     menuHash["File"]->addSeparator();
-    menuHash["File"]->addAction(actionHash.value(ACTION_WINDOW_CLOSE));
+    menuHash["File"]->addAction(actionHash[ACTION_WINDOW_CLOSE]);
     menuHash["File"]->addSeparator();
-    menuHash["File"]->addAction(actionHash.value(ACTION_DESIGN_DETAILS));
+    menuHash["File"]->addAction(actionHash[ACTION_DESIGN_DETAILS]);
     menuHash["File"]->addSeparator();
 
-    menuHash["File"]->addAction(actionHash.value(ACTION_EXIT));
+    menuHash["File"]->addAction(actionHash[ACTION_EXIT]);
     menuHash["File"]->setTearOffEnabled(false);
 
     menuBar()->addMenu(menuHash["Edit"]);
     add_to_menu(menuHash["Edit"], "edit_menu");
+    menuHash["Edit"]->addSeparator();
+    menuHash["Edit"]->addAction(actionHash[ACTION_SETTINGS_DIALOG]);
 
     menuBar()->addMenu(menuHash["View"]);
     add_to_menu(menuHash["View"], "view_menu");
@@ -1221,11 +1223,6 @@ MainWindow::createAllMenus()
 
     menuBar()->addMenu(menuHash["Sandbox"]);
     add_to_menu(menuHash["Sandbox"], "sandbox_menu");
-
-    menuBar()->addMenu(menuHash["Settings"]);
-    menuHash["Settings"]->addAction(actionHash.value(ACTION_SETTINGS_DIALOG));
-    menuHash["Settings"]->addSeparator();
-    menuHash["Settings"]->setTearOffEnabled(false);
 
     menuBar()->addMenu(menuHash["Window"]);
     connect(menuHash["Window"], SIGNAL(aboutToShow()), this, SLOT(windowMenuAboutToShow()));
@@ -1540,14 +1537,17 @@ MainWindow::createAllActions()
 
         connect(ACTION, SIGNAL(triggered()), this, SLOT(runCommand()));
 
-        aliasHash->insert(icon.toStdString(), icon.toStdString());
-        actionHash.insert(command_data[i].id, ACTION);
+        aliasHash[icon.toStdString()] = icon.toStdString();
+        actionHash[command_data[i].id] = ACTION;
 
         foreach (QString alias, aliases) {
-            promptInput->addCommand(alias, icon);
+            char msg[200];
+            aliasHash[alias.toStdString()] = icon.toStdString();
+            sprintf(msg, "Command Added: %s, %s", qPrintable(icon), qPrintable(icon));
+            debug_message(msg);
         }
     }
 
-    actionHash.value(ACTION_WINDOW_CLOSE)->setEnabled(numOfDocs > 0);
-    actionHash.value(ACTION_DESIGN_DETAILS)->setEnabled(numOfDocs > 0);
+    actionHash[ACTION_WINDOW_CLOSE]->setEnabled(numOfDocs > 0);
+    actionHash[ACTION_DESIGN_DETAILS]->setEnabled(numOfDocs > 0);
 }

@@ -13,7 +13,7 @@
 #include "embroidermodder.h"
 
 StringMap aliases[MAX_ALIASES];
-QHash<std::string, std::string>* aliasHash;
+std::unordered_map<std::string, std::string> aliasHash;
 
 QString curText;
 QString defaultPrefix;
@@ -374,7 +374,7 @@ appendHistory(QString txt)
 
     QString formatStr = promptHistory->applyFormatting(txt, (int)prefix.length());
     promptHistory->append(formatStr);
-    //emit historyAppended(formatStr);
+    /* emit historyAppended(formatStr); */
     promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
 }
 
@@ -418,26 +418,10 @@ CmdPromptInput::CmdPromptInput(QWidget* parent) : QLineEdit(parent)
     connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(checkChangedText(const QString&)));
     connect(this, SIGNAL(selectionChanged()), this, SLOT(checkSelection()));
 
-    aliasHash = new QHash<std::string, std::string>;
-
     this->installEventFilter(this);
     this->setFocus(Qt::OtherFocusReason);
 
     applyFormatting();
-}
-
-/* . */
-CmdPromptInput::~CmdPromptInput()
-{
-    delete aliasHash;
-}
-
-/* . */
-void
-CmdPromptInput::addCommand(const QString& alias, const QString& cmd)
-{
-    aliasHash->insert(alias.toLower().toStdString(), cmd.toLower().toStdString());
-    qDebug("Command Added: %s, %s", qPrintable(alias), qPrintable(cmd));
 }
 
 /* . */
@@ -485,20 +469,22 @@ CmdPromptInput::processInput(const QChar& rapidChar)
                 return;
             }
             else */ {
-                //runCommand(curCmd, cmdtxt);
+                /* runCommand(curCmd, cmdtxt); */
                 return;
             }
         }
         else {
             appendHistory(curText);
-            //runCommand(curCmd, cmdtxt);
+            /* runCommand(curCmd, cmdtxt); */
         }
     }
     else {
-        if (aliasHash->contains(cmdtxt.toStdString())) {
+        auto found = aliasHash.find(cmdtxt.toStdString());
+        if (found != aliasHash.end()) {
             cmdActive = true;
             lastCmd = curCmd;
-            curCmd = QString(aliasHash->value(cmdtxt.toStdString()).c_str());
+            std::string cmd = aliasHash[cmdtxt.toStdString()];
+            curCmd = QString(cmd.c_str());
             appendHistory(curText);
             _main->runCommandPrompt(curCmd);
         }
@@ -723,14 +709,6 @@ CmdPromptInput::contextMenuEvent(QContextMenuEvent* event)
 
     menu.exec(event->globalPos());
 }
-
-bool key_state[N_KEY_SEQUENCES] = {
-    false, false, false, false, false,
-    false, false, false, false, false,
-    false, false, false, false, false,
-    false, false, false, false, false,
-    false, false, false, false
-};
 
 /* The key_state is set to false again by whatever uses the sequence
  * so we can control when the keypress is eaten. Otherwise, if the release happens

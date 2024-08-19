@@ -176,7 +176,7 @@ set_enabled(QObject *senderObj, const char *key, bool enabled)
 {
     QObject* parent = senderObj->parent();
     if (!parent) {
-        // Error reporting.
+        /* Error reporting. */
         return;
     }
     int error = 1;
