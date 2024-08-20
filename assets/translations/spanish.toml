@@ -1,0 +1,2376 @@
+# Embroidermodder 2.
+#
+# Copyright 2011-2024 The Embroidermodder Team
+# Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+#
+# Visit https://www.libembroidery.org/refman for advice on altering this file,
+# or read the markdown version in embroidermodder2/docs/refman.
+#
+# Spanish Translation
+
+[[es]]
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.0" language="es" sourcelanguage="en">
+    <message>
+        <source>Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify radius of circle or [Diameter]: </source>
+status = "unfinished"
+
+    <message>
+        <source>This should never happen.</source>
+status = "unfinished"
+
+    <message>
+        <source>Specify second end point of circle&apos;s diameter: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify second point on circle: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify third point on circle: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify point on object for second tangent of circle: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify radius of circle: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify second point: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify first end point of circle&apos;s diameter: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify first point of circle: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify point on object for first tangent of circle: </source>
+status = "unfinished"
+
+    <message>
+        <source>Point or option keyword required.</source>
+status = "unfinished"
+
+    <message>
+        <source>Specify diameter of circle: </source>
+status = "unfinished"
+
+    <message>
+        <source>Requires numeric radius, point on circumference, or &quot;D&quot;.</source>
+status = "unfinished"
+
+    <message>
+        <source>Requires numeric distance or second point.</source>
+status = "unfinished"
+
+    <message>
+        <source>Invalid point.</source>
+        <translation>Punto no válido.</translation>
+
+    <message>
+        <source>Specify second point of circle: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify third point of circle: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify first point: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify second point: </source>
+status = "unfinished"
+
+    <message>
+        <source>Requires numeric distance or two points.</source>
+status = "unfinished"
+
+    <message>
+        <source>Distance</source>
+status = "unfinished"
+
+    <message>
+        <source>Angle</source>
+status = "unfinished"
+
+    <message>
+        <source>Delta X</source>
+status = "unfinished"
+
+    <message>
+        <source>Delta Y</source>
+status = "unfinished"
+
+    <message>
+        <source>Specify first axis start point or [Center]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify first axis end point: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify second axis end point or [Rotation]: </source>
+status = "unfinished"
+
+    <message>
+        <source>This should never happen.</source>
+status = "unfinished"
+
+    <message>
+        <source>Specify center point: </source>
+status = "unfinished"
+
+    <message>
+        <source>Point or option keyword required.</source>
+status = "unfinished"
+
+    <message>
+        <source>Invalid point.</source>
+        <translation>Punto no válido.</translation>
+
+    <message>
+        <source>Specify rotation: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify ellipse rotation: </source>
+status = "unfinished"
+
+    <message>
+        <source>Invalid angle. Input a numeric angle or pick a point.</source>
+status = "unfinished"
+
+    <message>
+        <source>Preselect objects before invoking the delete command.</source>
+status = "unfinished"
+
+    <message>
+        <source>Delete Preselect</source>
+status = "unfinished"
+
+    <message>
+        <source>Specify first point: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify next point or [Undo]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Invalid point.</source>
+        <translation>Punto no válido.</translation>
+
+    <message>
+        <source>Point or option keyword required.</source>
+status = "unfinished"
+
+    <message>
+        <source>Specify point: </source>
+status = "unfinished"
+
+    <message>
+        <source>Invalid point.</source>
+        <translation>Punto no válido.</translation>
+
+    <message>
+        <source>Preselect objects before invoking the move command.</source>
+status = "unfinished"
+
+    <message>
+        <source>Move Preselect</source>
+status = "unfinished"
+
+    <message>
+        <source>Specify base point: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify destination point: </source>
+status = "unfinished"
+
+    <message>
+        <source>Invalid point.</source>
+        <translation>Punto no válido.</translation>
+
+    <message>
+        <source>Specify start point: </source>
+        <translation>Especificar punto inicial: </translation>
+
+    <message>
+        <source>Specify next point or [Arc/Undo]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Point or option keyword required.</source>
+status = "unfinished"
+
+    <message>
+        <source>Platform</source>
+status = "unfinished"
+
+    <message>
+        <source>Specify first point: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify next point: </source>
+        <translation>Especificar punto siguiente: </translation>
+
+    <message>
+        <source>Invalid point.</source>
+        <translation>Punto no válido.</translation>
+
+    <message>
+        <source>Enter number of sides</source>
+status = "unfinished"
+
+    <message>
+        <source>Specify polygon type [Inscribed in circle/Circumscribed around circle]</source>
+status = "unfinished"
+
+    <message>
+        <source>Specify center point or [Sidelength]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Requires an integer between 3 and 1024.</source>
+        <translation>Requiere un entero entre 3 y 1024.</translation>
+
+    <message>
+        <source>Specify start point: </source>
+        <translation>Especificar punto inicial: </translation>
+
+    <message>
+        <source>Point or option keyword required.</source>
+status = "unfinished"
+
+    <message>
+        <source>Specify polygon corner point or [Distance]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify polygon side point or [Distance]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Polygon type is not Inscribed or Circumscribed.</source>
+status = "unfinished"
+
+    <message>
+        <source>Invalid option keyword.</source>
+status = "unfinished"
+
+    <message>
+        <source>Specify distance: </source>
+status = "unfinished"
+
+    <message>
+        <source>Requires valid numeric distance.</source>
+status = "unfinished"
+
+    <message>
+        <source>Specify first point: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify next point or [Undo]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Invalid point.</source>
+        <translation>Punto no válido.</translation>
+
+    <message>
+        <source>Point or option keyword required.</source>
+status = "unfinished"
+
+    <message>
+        <source>Specify first point: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify second point: </source>
+status = "unfinished"
+
+    <message>
+        <source>Requires two points.</source>
+status = "unfinished"
+
+    <message>
+        <source>Specify first corner point or [Chamfer/Fillet]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify other corner point or [Dimensions]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Invalid point.</source>
+        <translation>Punto no válido.</translation>
+
+    <message>
+        <source>Specify first point: </source>
+status = "unfinished"
+
+    <message>
+        <source>Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify crosshair color: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify grid color: </source>
+status = "unfinished"
+
+    <message>
+        <source>Invalid color. R,G,B values must be in the range of 0-255.</source>
+status = "unfinished"
+
+    <message>
+        <source>Specify background color: </source>
+status = "unfinished"
+
+    <message>
+        <source>Preselect objects before invoking the rotate command.</source>
+status = "unfinished"
+
+    <message>
+        <source>Rotate Preselect</source>
+status = "unfinished"
+
+    <message>
+        <source>Specify base point: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify rotation angle or [Reference]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify second point: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify the new angle: </source>
+status = "unfinished"
+
+    <message>
+        <source>Invalid point.</source>
+        <translation>Punto no válido.</translation>
+
+    <message>
+        <source>Specify the reference angle</source>
+status = "unfinished"
+
+    <message>
+        <source>Requires valid numeric angle, second point, or option keyword.</source>
+status = "unfinished"
+
+    <message>
+        <source>Requires valid numeric angle or two points.</source>
+status = "unfinished"
+
+    <message>
+        <source>Requires valid numeric angle or second point.</source>
+status = "unfinished"
+
+    <message>
+        <source>Preselect objects before invoking the scale command.</source>
+status = "unfinished"
+
+    <message>
+        <source>Scale Preselect</source>
+status = "unfinished"
+
+    <message>
+        <source>Specify base point: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify scale factor or [Reference]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify second point: </source>
+status = "unfinished"
+
+    <message>
+        <source>Value must be positive and nonzero.</source>
+status = "unfinished"
+
+    <message>
+        <source>Specify new length: </source>
+status = "unfinished"
+
+    <message>
+        <source>Invalid point.</source>
+        <translation>Punto no válido.</translation>
+
+    <message>
+        <source>Specify reference length</source>
+status = "unfinished"
+
+    <message>
+        <source>Requires valid numeric distance, second point, or option keyword.</source>
+status = "unfinished"
+
+    <message>
+        <source>Requires valid numeric distance or two points.</source>
+status = "unfinished"
+
+    <message>
+        <source>Requires valid numeric distance or second point.</source>
+status = "unfinished"
+
+    <message>
+        <source>Current font: </source>
+status = "unfinished"
+
+    <message>
+        <source>Text height: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify start point of text or [Justify/Setfont]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify text height</source>
+status = "unfinished"
+
+    <message>
+        <source>Specify text angle</source>
+status = "unfinished"
+
+    <message>
+        <source>Enter text: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify center point of text or [Justify/Setfont]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify right-end point of text or [Justify/Setfont]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify middle point of text or [Justify/Setfont]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify top-left point of text or [Justify/Setfont]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify top-center point of text or [Justify/Setfont]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify top-right point of text or [Justify/Setfont]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify middle-left point of text or [Justify/Setfont]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify middle-center point of text or [Justify/Setfont]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify middle-right point of text or [Justify/Setfont]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify bottom-left point of text or [Justify/Setfont]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify bottom-center point of text or [Justify/Setfont]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify bottom-right point of text or [Justify/Setfont]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Invalid option keyword.</source>
+status = "unfinished"
+
+    <message>
+        <source>Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify font name: </source>
+status = "unfinished"
+
+    <message>
+        <source>Point or option keyword required.</source>
+status = "unfinished"
+
+    <message>
+        <source>Requires valid numeric distance or second point.</source>
+status = "unfinished"
+
+    <message>
+        <source>Requires valid numeric angle or second point.</source>
+status = "unfinished"
+
+    <message>
+        <source>Enter number of star points</source>
+status = "unfinished"
+
+    <message>
+        <source>Specify outer radius of star: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify inner radius of star: </source>
+status = "unfinished"
+
+    <message>
+        <source>Specify center point: </source>
+status = "unfinished"
+
+    <message>
+        <source>Requires an integer between 3 and 1024.</source>
+        <translation>Requiere un entero entre 3 y 1024.</translation>
+
+    <message>
+        <source>Invalid point.</source>
+        <translation>Punto no válido.</translation>
+
+    <message>
+        <source>Enter an option [Cascade/Tile]: </source>
+status = "unfinished"
+
+    <message>
+        <source>Invalid option keyword.</source>
+status = "unfinished"
+
+</TS>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.0" language="es" sourcelanguage="en">
+    <message>
+        <source>Command: </source>
+        <translation>Comando: </translation>
+
+    <message>
+        <source>*Cancel*</source>
+        <translation>*Cancelar*</translation>
+
+    <message>
+        <source>Embroidery Design Details</source>
+status = "unfinished"
+
+    <message>
+        <source>General Information</source>
+status = "unfinished"
+
+    <message>
+        <source>Total Stitches:</source>
+status = "unfinished"
+
+    <message>
+        <source>Real Stitches:</source>
+status = "unfinished"
+
+    <message>
+        <source>Jump Stitches:</source>
+status = "unfinished"
+
+    <message>
+        <source>Trim Stitches:</source>
+status = "unfinished"
+
+    <message>
+        <source>Total Colors:</source>
+status = "unfinished"
+
+    <message>
+        <source>Color Changes:</source>
+status = "unfinished"
+
+    <message>
+        <source>Left:</source>
+status = "unfinished"
+
+    <message>
+        <source>Top:</source>
+status = "unfinished"
+
+    <message>
+        <source>Right:</source>
+status = "unfinished"
+
+    <message>
+        <source>Bottom:</source>
+status = "unfinished"
+
+    <message>
+        <source>Width:</source>
+status = "unfinished"
+
+    <message>
+        <source>Height:</source>
+status = "unfinished"
+
+    <message>
+        <source>Layer Manager</source>
+status = "unfinished"
+
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nombre</translation>
+
+    <message>
+        <source>Visible</source>
+status = "unfinished"
+
+    <message>
+        <source>Frozen</source>
+        <translation type="unfinished">Inutilizada</translation>
+
+    <message>
+        <source>Z Value</source>
+status = "unfinished"
+
+    <message>
+        <source>Color</source>
+status = "unfinished"
+
+    <message>
+        <source>Linetype</source>
+status = "unfinished"
+
+    <message>
+        <source>Lineweight</source>
+status = "unfinished"
+
+    <message>
+        <source>Print</source>
+        <translation type="unfinished">Imprimir</translation>
+
+    <message>
+        <source>Error reading file</source>
+status = "unfinished"
+
+    <message>
+        <source>Cannot read file %1:
+%2.</source>
+status = "unfinished"
+
+    <message>
+        <source>Error reading pattern</source>
+status = "unfinished"
+
+    <message>
+        <source>Cannot read pattern</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Do Nothing</source>
+status = "unfinished"
+
+    <message>
+        <source>Does Nothing</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Cascade</source>
+        <translation>&amp;Cascada</translation>
+
+    <message>
+        <source>Cascade the windows.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Tile</source>
+status = "unfinished"
+
+    <message>
+        <source>Tile the windows.</source>
+status = "unfinished"
+
+    <message>
+        <source>Cl&amp;ose</source>
+        <translation>&amp;Cerrar</translation>
+
+    <message>
+        <source>Close the active window.</source>
+status = "unfinished"
+
+    <message>
+        <source>Close &amp;All</source>
+        <translation>Cerrar &amp;todo</translation>
+
+    <message>
+        <source>Close all the windows.</source>
+status = "unfinished"
+
+    <message>
+        <source>Ne&amp;xt</source>
+status = "unfinished"
+
+    <message>
+        <source>Move the focus to the next window.</source>
+status = "unfinished"
+
+    <message>
+        <source>Pre&amp;vious</source>
+status = "unfinished"
+
+    <message>
+        <source>Move the focus to the previous window.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;New</source>
+        <translation>&amp;Nuevo</translation>
+
+    <message>
+        <source>Create a new file.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Open</source>
+        <translation>&amp;Abrir</translation>
+
+    <message>
+        <source>Open an existing file.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Save</source>
+        <translation>&amp;Guardar</translation>
+
+    <message>
+        <source>Save the design to disk.</source>
+status = "unfinished"
+
+    <message>
+        <source>Save &amp;As</source>
+        <translation>G&amp;uardar como</translation>
+
+    <message>
+        <source>Save the design under a new name.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Print</source>
+        <translation>Im&amp;primir</translation>
+
+    <message>
+        <source>Print the design.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Details</source>
+status = "unfinished"
+
+    <message>
+        <source>Details of the current design.</source>
+status = "unfinished"
+
+    <message>
+        <source>E&amp;xit</source>
+        <translation>&amp;Salir</translation>
+
+    <message>
+        <source>Exit the application.</source>
+status = "unfinished"
+
+    <message>
+        <source>Cu&amp;t</source>
+        <translation>C&amp;ortar</translation>
+
+    <message>
+        <source>Cut the current selection&apos;s contents to the clipboard.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Copy</source>
+        <translation>&amp;Copiar</translation>
+
+    <message>
+        <source>Copy the current selection&apos;s contents to the clipboard.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Paste</source>
+        <translation>&amp;Pegar</translation>
+
+    <message>
+        <source>Paste the clipboard&apos;s contents into the current selection.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Help</source>
+        <translation>&amp;Ayuda</translation>
+
+    <message>
+        <source>Displays help.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Changelog</source>
+status = "unfinished"
+
+    <message>
+        <source>Describes new features in this product.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Tip Of The Day</source>
+        <translation>Sugerencia del &amp;día</translation>
+
+    <message>
+        <source>Displays a dialog with useful tips</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;About </source>
+        <translation>&amp;Acerca de </translation>
+
+    <message>
+        <source>Displays information about this product.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Undo</source>
+        <translation>&amp;Deshacer</translation>
+
+    <message>
+        <source>Reverses the most recent action.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Redo</source>
+        <translation>Re&amp;hacer</translation>
+
+    <message>
+        <source>Reverses the effects of the previous undo action.</source>
+status = "unfinished"
+
+    <message>
+        <source>Icon&amp;16</source>
+status = "unfinished"
+
+    <message>
+        <source>Sets the toolbar icon size to 16x16.</source>
+status = "unfinished"
+
+    <message>
+        <source>Icon&amp;24</source>
+status = "unfinished"
+
+    <message>
+        <source>Sets the toolbar icon size to 24x24.</source>
+status = "unfinished"
+
+    <message>
+        <source>Icon&amp;32</source>
+status = "unfinished"
+
+    <message>
+        <source>Sets the toolbar icon size to 32x32.</source>
+status = "unfinished"
+
+    <message>
+        <source>Icon&amp;48</source>
+status = "unfinished"
+
+    <message>
+        <source>Sets the toolbar icon size to 48x48.</source>
+status = "unfinished"
+
+    <message>
+        <source>Icon&amp;64</source>
+status = "unfinished"
+
+    <message>
+        <source>Sets the toolbar icon size to 64x64.</source>
+status = "unfinished"
+
+    <message>
+        <source>Icon12&amp;8</source>
+status = "unfinished"
+
+    <message>
+        <source>Sets the toolbar icon size to 128x128.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Settings</source>
+        <translation>P&amp;referencias</translation>
+
+    <message>
+        <source>Configure settings specific to this product.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Make Layer Active</source>
+status = "unfinished"
+
+    <message>
+        <source>Makes the layer of a selected object the active layer</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Layers</source>
+status = "unfinished"
+
+    <message>
+        <source>Manages layers and layer properties:  LAYER</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Layer Selector</source>
+status = "unfinished"
+
+    <message>
+        <source>Dropdown selector for changing the current layer</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Layer Previous</source>
+status = "unfinished"
+
+    <message>
+        <source>Restores the previous layer settings:  LAYERP</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Color Selector</source>
+status = "unfinished"
+
+    <message>
+        <source>Dropdown selector for changing the current thread color</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Stitchtype Selector</source>
+status = "unfinished"
+
+    <message>
+        <source>Dropdown selector for changing the current stitch type</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Threadweight Selector</source>
+status = "unfinished"
+
+    <message>
+        <source>Dropdown selector for changing the current thread weight</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Hide All Layers</source>
+status = "unfinished"
+
+    <message>
+        <source>Turns the visibility off for all layers in the current drawing:  HIDEALL</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Show All Layers</source>
+status = "unfinished"
+
+    <message>
+        <source>Turns the visibility on for all layers in the current drawing:  SHOWALL</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Freeze All Layers</source>
+status = "unfinished"
+
+    <message>
+        <source>Freezes all layers in the current drawing:  FREEZEALL</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Thaw All Layers</source>
+status = "unfinished"
+
+    <message>
+        <source>Thaws all layers in the current drawing:  THAWALL</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Lock All Layers</source>
+status = "unfinished"
+
+    <message>
+        <source>Locks all layers in the current drawing:  LOCKALL</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Unlock All Layers</source>
+status = "unfinished"
+
+    <message>
+        <source>Unlocks all layers in the current drawing:  UNLOCKALL</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Bold Text</source>
+status = "unfinished"
+
+    <message>
+        <source>Sets text to be bold.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Italic Text</source>
+status = "unfinished"
+
+    <message>
+        <source>Sets text to be italic.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Underline Text</source>
+status = "unfinished"
+
+    <message>
+        <source>Sets text to be underlined.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;StrikeOut Text</source>
+status = "unfinished"
+
+    <message>
+        <source>Sets text to be striked out.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Overline Text</source>
+status = "unfinished"
+
+    <message>
+        <source>Sets text to be overlined.</source>
+status = "unfinished"
+
+    <message>
+        <source>Zoom &amp;Realtime</source>
+status = "unfinished"
+
+    <message>
+        <source>Zooms to increase or decrease the apparent size of objects in the current viewport.</source>
+status = "unfinished"
+
+    <message>
+        <source>Zoom &amp;Previous</source>
+status = "unfinished"
+
+    <message>
+        <source>Zooms to display the previous view.</source>
+status = "unfinished"
+
+    <message>
+        <source>Zoom &amp;Window</source>
+status = "unfinished"
+
+    <message>
+        <source>Zooms to display an area specified by a rectangular window.</source>
+status = "unfinished"
+
+    <message>
+        <source>Zoom &amp;Dynamic</source>
+status = "unfinished"
+
+    <message>
+        <source>Zooms to display the generated portion of the drawing.</source>
+status = "unfinished"
+
+    <message>
+        <source>Zoom &amp;Scale</source>
+status = "unfinished"
+
+    <message>
+        <source>Zooms the display using a specified scale factor.</source>
+status = "unfinished"
+
+    <message>
+        <source>Zoom &amp;Center</source>
+status = "unfinished"
+
+    <message>
+        <source>Zooms to display a view specified by a center point and magnification or height.</source>
+status = "unfinished"
+
+    <message>
+        <source>Zoom &amp;In</source>
+status = "unfinished"
+
+    <message>
+        <source>Zooms to increase the apparent size of objects.</source>
+status = "unfinished"
+
+    <message>
+        <source>Zoom &amp;Out</source>
+status = "unfinished"
+
+    <message>
+        <source>Zooms to decrease the apparent size of objects.</source>
+status = "unfinished"
+
+    <message>
+        <source>Zoom Selec&amp;ted</source>
+status = "unfinished"
+
+    <message>
+        <source>Zooms to display the selected objects.</source>
+status = "unfinished"
+
+    <message>
+        <source>Zoom &amp;All</source>
+status = "unfinished"
+
+    <message>
+        <source>Zooms to display the drawing extents or the grid limits.</source>
+status = "unfinished"
+
+    <message>
+        <source>Zoom &amp;Extents</source>
+status = "unfinished"
+
+    <message>
+        <source>Zooms to display the drawing extents.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Pan Realtime</source>
+status = "unfinished"
+
+    <message>
+        <source>Moves the view in the current viewport.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Pan Point</source>
+status = "unfinished"
+
+    <message>
+        <source>Moves the view by the specified distance.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Pan Left</source>
+status = "unfinished"
+
+    <message>
+        <source>Moves the view to the left.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Pan Right</source>
+status = "unfinished"
+
+    <message>
+        <source>Moves the view to the right.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Pan Up</source>
+status = "unfinished"
+
+    <message>
+        <source>Moves the view up.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Pan Down</source>
+status = "unfinished"
+
+    <message>
+        <source>Moves the view down.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Day</source>
+status = "unfinished"
+
+    <message>
+        <source>Updates the current view using day vision settings.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Night</source>
+status = "unfinished"
+
+    <message>
+        <source>Updates the current view using night vision settings.</source>
+status = "unfinished"
+
+    <message>
+        <source>Testing Feature</source>
+status = "unfinished"
+
+    <message>
+        <source>&lt;b&gt;This feature is in testing.&lt;/b&gt;</source>
+status = "unfinished"
+
+    <message>
+        <source>
+
+</source>
+status = "unfinished"
+
+    <message>
+        <source>http://embroidermodder.sourceforge.net</source>
+status = "unfinished"
+
+    <message>
+        <source>Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi</source>
+status = "unfinished"
+
+    <message>
+        <source>Embroidery formats by Josh Varga.</source>
+status = "unfinished"
+
+    <message>
+        <source>
+</source>
+status = "unfinished"
+
+    <message>
+        <source>User Interface by Jonathan Greig.</source>
+status = "unfinished"
+
+    <message>
+        <source>Free under the zlib/libpng license.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Show tips on startup</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Previous</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Next</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Close</source>
+status = "unfinished"
+
+    <message>
+        <source>Color Selector Conversion Error</source>
+status = "unfinished"
+
+    <message>
+        <source>&lt;b&gt;An error has occured while changing colors.&lt;/b&gt;</source>
+status = "unfinished"
+
+    <message>
+        <source>Color Selector Pointer Error</source>
+status = "unfinished"
+
+    <message>
+        <source>Native MessageBox Error</source>
+status = "unfinished"
+
+    <message>
+        <source>Incorrect use of the native messageBox function.</source>
+status = "unfinished"
+
+    <message>
+        <source>ScaleFactor Error</source>
+status = "unfinished"
+
+    <message>
+        <source>Hi there. If you are not a developer, report this as a bug. If you are a developer, your code needs examined, and possibly your head too.</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;File</source>
+        <translation>&amp;Archivo</translation>
+
+    <message>
+        <source>&amp;Edit</source>
+        <translation>&amp;Editar</translation>
+
+    <message>
+        <source>&amp;View</source>
+        <translation>&amp;Ver</translation>
+
+    <message>
+        <source>&amp;Window</source>
+status = "unfinished"
+
+    <message>
+        <source>Open &amp;Recent</source>
+        <translation>Abrir &amp;reciente</translation>
+
+    <message>
+        <source>&amp;Zoom</source>
+status = "unfinished"
+
+    <message>
+        <source>&amp;Pan</source>
+status = "unfinished"
+
+    <message>
+        <source>File</source>
+        <translation>Archivo</translation>
+
+    <message>
+        <source>Edit</source>
+        <translation>Editar</translation>
+
+    <message>
+        <source>View</source>
+        <translation>Ver</translation>
+
+    <message>
+        <source>Zoom</source>
+status = "unfinished"
+
+    <message>
+        <source>Pan</source>
+status = "unfinished"
+
+    <message>
+        <source>Icon</source>
+status = "unfinished"
+
+    <message>
+        <source>Help</source>
+        <translation>Ayuda</translation>
+
+    <message>
+        <source>Layer</source>
+        <translation>Capa</translation>
+
+    <message>
+        <source>Properties</source>
+        <translation>Propiedades</translation>
+
+    <message>
+        <source>Text</source>
+        <translation>Texto</translation>
+
+    <message>
+        <source>Command Prompt</source>
+status = "unfinished"
+
+    <message>
+        <source>Open</source>
+        <translation>Abrir</translation>
+
+    <message>
+        <source>Open w/Preview</source>
+status = "unfinished"
+
+    <message>
+        <source>File(s) loaded</source>
+status = "unfinished"
+
+    <message>
+        <source>Save</source>
+        <translation>Guardar</translation>
+
+    <message>
+        <source>Red</source>
+        <translation>Rojo</translation>
+
+    <message>
+        <source>Yellow</source>
+        <translation>Amarillo</translation>
+
+    <message>
+        <source>Green</source>
+        <translation>Verde</translation>
+
+    <message>
+        <source>Cyan</source>
+status = "unfinished"
+
+    <message>
+        <source>Blue</source>
+status = "unfinished"
+
+    <message>
+        <source>Magenta</source>
+status = "unfinished"
+
+    <message>
+        <source>White</source>
+        <translation>Blanco</translation>
+
+    <message>
+        <source>Other...</source>
+        <translation>Otros...</translation>
+
+    <message>
+        <source>Properties</source>
+        <translation>Propiedades</translation>
+
+    <message>
+        <source>No Selection</source>
+status = "unfinished"
+
+    <message>
+        <source>Varies</source>
+status = "unfinished"
+
+    <message>
+        <source>Arc</source>
+        <translation>Arco</translation>
+
+    <message>
+        <source>Block</source>
+status = "unfinished"
+
+    <message>
+        <source>Circle</source>
+        <translation>Círculo</translation>
+
+    <message>
+        <source>Aligned Dimension</source>
+status = "unfinished"
+
+    <message>
+        <source>Angular Dimension</source>
+status = "unfinished"
+
+    <message>
+        <source>Arclength Dimension</source>
+status = "unfinished"
+
+    <message>
+        <source>Diameter Dimension</source>
+status = "unfinished"
+
+    <message>
+        <source>Leader Dimension</source>
+status = "unfinished"
+
+    <message>
+        <source>Linear Dimension</source>
+status = "unfinished"
+
+    <message>
+        <source>Ordinate Dimension</source>
+status = "unfinished"
+
+    <message>
+        <source>Radius Dimension</source>
+status = "unfinished"
+
+    <message>
+        <source>Ellipse</source>
+        <translation>Elipse</translation>
+
+    <message>
+        <source>Image</source>
+status = "unfinished"
+
+    <message>
+        <source>Infinite Line</source>
+        <translation>LíneaInfinita</translation>
+
+    <message>
+        <source>Line</source>
+        <translation>Línea</translation>
+
+    <message>
+        <source>Point</source>
+        <translation>Punto</translation>
+
+    <message>
+        <source>Polygon</source>
+        <translation>Polígono</translation>
+
+    <message>
+        <source>Polyline</source>
+        <translation>Polilínea</translation>
+
+    <message>
+        <source>Ray</source>
+status = "unfinished"
+
+    <message>
+        <source>Rectangle</source>
+        <translation>Rectángulo</translation>
+
+    <message>
+        <source>Multiline Text</source>
+status = "unfinished"
+
+    <message>
+        <source>Unknown</source>
+status = "unfinished"
+
+    <message>
+        <source>General</source>
+status = "unfinished"
+
+    <message>
+        <source>Layer</source>
+        <translation>Capa</translation>
+
+    <message>
+        <source>Color</source>
+status = "unfinished"
+
+    <message>
+        <source>LineType</source>
+status = "unfinished"
+
+    <message>
+        <source>LineWeight</source>
+        <translation>GrosorLínea</translation>
+
+    <message>
+        <source>Geometry</source>
+status = "unfinished"
+
+    <message>
+        <source>Center X</source>
+        <translation>X central</translation>
+
+    <message>
+        <source>Center Y</source>
+        <translation>Y central</translation>
+
+    <message>
+        <source>Radius</source>
+        <translation>Radio</translation>
+
+    <message>
+        <source>Start Angle</source>
+        <translation>Ángulo inicial</translation>
+
+    <message>
+        <source>End Angle</source>
+        <translation>Ángulo final</translation>
+
+    <message>
+        <source>Start X</source>
+status = "unfinished"
+
+    <message>
+        <source>Start Y</source>
+status = "unfinished"
+
+    <message>
+        <source>End X</source>
+status = "unfinished"
+
+    <message>
+        <source>End Y</source>
+status = "unfinished"
+
+    <message>
+        <source>Area</source>
+status = "unfinished"
+
+    <message>
+        <source>Arc Length</source>
+status = "unfinished"
+
+    <message>
+        <source>Chord</source>
+status = "unfinished"
+
+    <message>
+        <source>Included Angle</source>
+status = "unfinished"
+
+    <message>
+        <source>Misc</source>
+status = "unfinished"
+
+    <message>
+        <source>Clockwise</source>
+status = "unfinished"
+
+    <message>
+        <source>Position X</source>
+status = "unfinished"
+
+    <message>
+        <source>Position Y</source>
+status = "unfinished"
+
+    <message>
+        <source>Diameter</source>
+        <translation>Diámetro</translation>
+
+    <message>
+        <source>Circumference</source>
+status = "unfinished"
+
+    <message>
+        <source>Major Radius</source>
+status = "unfinished"
+
+    <message>
+        <source>Minor Radius</source>
+status = "unfinished"
+
+    <message>
+        <source>Major Diameter</source>
+status = "unfinished"
+
+    <message>
+        <source>Minor Diameter</source>
+status = "unfinished"
+
+    <message>
+        <source>Width</source>
+        <translation>Anchura</translation>
+
+    <message>
+        <source>Height</source>
+        <translation>Altura</translation>
+
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nombre</translation>
+
+    <message>
+        <source>Path</source>
+status = "unfinished"
+
+    <message>
+        <source>2nd X</source>
+status = "unfinished"
+
+    <message>
+        <source>2nd Y</source>
+status = "unfinished"
+
+    <message>
+        <source>Vector X</source>
+status = "unfinished"
+
+    <message>
+        <source>Vector Y</source>
+status = "unfinished"
+
+    <message>
+        <source>Delta X</source>
+status = "unfinished"
+
+    <message>
+        <source>Delta Y</source>
+status = "unfinished"
+
+    <message>
+        <source>Angle</source>
+        <translation>Ángulo</translation>
+
+    <message>
+        <source>Length</source>
+status = "unfinished"
+
+    <message>
+        <source>Vertex Radius</source>
+status = "unfinished"
+
+    <message>
+        <source>Side Radius</source>
+status = "unfinished"
+
+    <message>
+        <source>Vertex Diameter</source>
+status = "unfinished"
+
+    <message>
+        <source>Side Diameter</source>
+status = "unfinished"
+
+    <message>
+        <source>Interior Angle</source>
+status = "unfinished"
+
+    <message>
+        <source>Vertex #</source>
+status = "unfinished"
+
+    <message>
+        <source>Vertex X</source>
+status = "unfinished"
+
+    <message>
+        <source>Vertex Y</source>
+status = "unfinished"
+
+    <message>
+        <source>Closed</source>
+status = "unfinished"
+
+    <message>
+        <source>Corner 1 X</source>
+status = "unfinished"
+
+    <message>
+        <source>Corner 1 Y</source>
+status = "unfinished"
+
+    <message>
+        <source>Corner 2 X</source>
+status = "unfinished"
+
+    <message>
+        <source>Corner 2 Y</source>
+status = "unfinished"
+
+    <message>
+        <source>Corner 3 X</source>
+status = "unfinished"
+
+    <message>
+        <source>Corner 3 Y</source>
+status = "unfinished"
+
+    <message>
+        <source>Corner 4 X</source>
+status = "unfinished"
+
+    <message>
+        <source>Corner 4 Y</source>
+status = "unfinished"
+
+    <message>
+        <source>Text</source>
+        <translation>Texto</translation>
+
+    <message>
+        <source>Contents</source>
+status = "unfinished"
+
+    <message>
+        <source>Font</source>
+status = "unfinished"
+
+    <message>
+        <source>Justify</source>
+status = "unfinished"
+
+    <message>
+        <source>Rotation</source>
+status = "unfinished"
+
+    <message>
+        <source>Backward</source>
+status = "unfinished"
+
+    <message>
+        <source>UpsideDown</source>
+status = "unfinished"
+
+    <message>
+        <source>Error - Negative Lineweight</source>
+status = "unfinished"
+
+    <message>
+        <source>Lineweight: %1</source>
+status = "unfinished"
+
+    <message>
+        <source>ScaleFactor Error</source>
+status = "unfinished"
+
+    <message>
+        <source>Hi there. If you are not a developer, report this as a bug. If you are a developer, your code needs examined, and possibly your head too.</source>
+status = "unfinished"
+
+    <message>
+        <source>Navigation</source>
+status = "unfinished"
+
+    <message>
+        <source>General</source>
+status = "unfinished"
+
+    <message>
+        <source>Files/Paths</source>
+status = "unfinished"
+
+    <message>
+        <source>Display</source>
+status = "unfinished"
+
+    <message>
+        <source>Prompt</source>
+status = "unfinished"
+
+    <message>
+        <source>Open/Save</source>
+status = "unfinished"
+
+    <message>
+        <source>Printing</source>
+status = "unfinished"
+
+    <message>
+        <source>Snap</source>
+status = "unfinished"
+
+    <message>
+        <source>Grid/Ruler</source>
+status = "unfinished"
+
+    <message>
+        <source>Ortho/Polar</source>
+status = "unfinished"
+
+    <message>
+        <source>QuickSnap</source>
+status = "unfinished"
+
+    <message>
+        <source>QuickTrack</source>
+status = "unfinished"
+
+    <message>
+        <source>LineWeight</source>
+        <translation>GrosorLínea</translation>
+
+    <message>
+        <source>Selection</source>
+status = "unfinished"
+
+    <message>
+        <source>Settings</source>
+status = "unfinished"
+
+    <message>
+        <source>Icons</source>
+status = "unfinished"
+
+    <message>
+        <source>Icon Theme</source>
+status = "unfinished"
+
+    <message>
+        <source>Icon Size</source>
+status = "unfinished"
+
+    <message>
+        <source>Background</source>
+status = "unfinished"
+
+    <message>
+        <source>Use Logo</source>
+status = "unfinished"
+
+    <message>
+        <source>Choose</source>
+status = "unfinished"
+
+    <message>
+        <source>Use Texture</source>
+status = "unfinished"
+
+    <message>
+        <source>Use Color</source>
+status = "unfinished"
+
+    <message>
+        <source>Tips</source>
+status = "unfinished"
+
+    <message>
+        <source>Show Tip of the Day on startup</source>
+status = "unfinished"
+
+    <message>
+        <source>ScrollBars</source>
+status = "unfinished"
+
+    <message>
+        <source>Show ScrollBars</source>
+status = "unfinished"
+
+    <message>
+        <source>Perform action when clicking corner widget</source>
+status = "unfinished"
+
+    <message>
+        <source>Colors</source>
+status = "unfinished"
+
+    <message>
+        <source>Crosshair Color</source>
+status = "unfinished"
+
+    <message>
+        <source>Background Color</source>
+status = "unfinished"
+
+    <message>
+        <source>Selection Box Color (Crossing)</source>
+status = "unfinished"
+
+    <message>
+        <source>Selection Box Fill (Crossing)</source>
+status = "unfinished"
+
+    <message>
+        <source>Selection Box Color (Window)</source>
+status = "unfinished"
+
+    <message>
+        <source>Selection Box Fill (Window)</source>
+status = "unfinished"
+
+    <message>
+        <source>Selection Box Fill Alpha</source>
+status = "unfinished"
+
+    <message>
+        <source>Zoom</source>
+status = "unfinished"
+
+    <message>
+        <source>Zoom In Scale</source>
+status = "unfinished"
+
+    <message>
+        <source>Zoom Out Scale</source>
+status = "unfinished"
+
+    <message>
+        <source>Text Color</source>
+status = "unfinished"
+
+    <message>
+        <source>Font</source>
+status = "unfinished"
+
+    <message>
+        <source>Font Family</source>
+status = "unfinished"
+
+    <message>
+        <source>Font Style</source>
+status = "unfinished"
+
+    <message>
+        <source>Font Size</source>
+status = "unfinished"
+
+    <message>
+        <source>History</source>
+        <translation type="unfinished">Historial</translation>
+
+    <message>
+        <source>Save History</source>
+status = "unfinished"
+
+    <message>
+        <source>Save As HTML</source>
+status = "unfinished"
+
+    <message>
+        <source>Custom Filter</source>
+status = "unfinished"
+
+    <message>
+        <source>Select All</source>
+status = "unfinished"
+
+    <message>
+        <source>File Open</source>
+status = "unfinished"
+
+    <message>
+        <source>Preview Thumbnails</source>
+status = "unfinished"
+
+    <message>
+        <source>Number of recently accessed files to show</source>
+status = "unfinished"
+
+    <message>
+        <source>File Save</source>
+status = "unfinished"
+
+    <message>
+        <source>Save Thumbnails</source>
+status = "unfinished"
+
+    <message>
+        <source>AutoSave</source>
+status = "unfinished"
+
+    <message>
+        <source>Trimming</source>
+status = "unfinished"
+
+    <message>
+        <source>DST Only: Minimum number of jumps to trim</source>
+status = "unfinished"
+
+    <message>
+        <source>Default Printer</source>
+status = "unfinished"
+
+    <message>
+        <source>Use as default device</source>
+status = "unfinished"
+
+    <message>
+        <source>Use last used device</source>
+status = "unfinished"
+
+    <message>
+        <source>Save Ink</source>
+status = "unfinished"
+
+    <message>
+        <source>Disable Background</source>
+status = "unfinished"
+
+    <message>
+        <source>Grid Misc</source>
+status = "unfinished"
+
+    <message>
+        <source>Initially show grid when loading a file</source>
+status = "unfinished"
+
+    <message>
+        <source>Show the origin when the grid is enabled</source>
+status = "unfinished"
+
+    <message>
+        <source>Grid Color</source>
+status = "unfinished"
+
+    <message>
+        <source>Match grid color to crosshair color</source>
+status = "unfinished"
+
+    <message>
+        <source>Grid Geometry</source>
+status = "unfinished"
+
+    <message>
+        <source>Set grid size from opened file</source>
+status = "unfinished"
+
+    <message>
+        <source>Grid Type</source>
+status = "unfinished"
+
+    <message>
+        <source>Center the grid on the origin</source>
+status = "unfinished"
+
+    <message>
+        <source>Grid Center X</source>
+status = "unfinished"
+
+    <message>
+        <source>Grid Center Y</source>
+status = "unfinished"
+
+    <message>
+        <source>Grid Size X</source>
+status = "unfinished"
+
+    <message>
+        <source>Grid Size Y</source>
+status = "unfinished"
+
+    <message>
+        <source>Grid Spacing X</source>
+status = "unfinished"
+
+    <message>
+        <source>Grid Spacing Y</source>
+status = "unfinished"
+
+    <message>
+        <source>Grid Size Radius</source>
+status = "unfinished"
+
+    <message>
+        <source>Grid Spacing Radius</source>
+status = "unfinished"
+
+    <message>
+        <source>Grid Spacing Angle</source>
+status = "unfinished"
+
+    <message>
+        <source>Ruler Misc</source>
+status = "unfinished"
+
+    <message>
+        <source>Initially show ruler when loading a file</source>
+status = "unfinished"
+
+    <message>
+        <source>Ruler Units</source>
+status = "unfinished"
+
+    <message>
+        <source>Ruler Color</source>
+status = "unfinished"
+
+    <message>
+        <source>Ruler Geometry</source>
+status = "unfinished"
+
+    <message>
+        <source>Ruler Pixel Size</source>
+status = "unfinished"
+
+    <message>
+        <source>Locators Used</source>
+status = "unfinished"
+
+    <message>
+        <source>Endpoint</source>
+status = "unfinished"
+
+    <message>
+        <source>Midpoint</source>
+        <translation>Punto medio</translation>
+
+    <message>
+        <source>Center</source>
+        <translation>Centro</translation>
+
+    <message>
+        <source>Node</source>
+        <translation>Nodo</translation>
+
+    <message>
+        <source>Quadrant</source>
+status = "unfinished"
+
+    <message>
+        <source>Intersection</source>
+status = "unfinished"
+
+    <message>
+        <source>Extension</source>
+status = "unfinished"
+
+    <message>
+        <source>Insertion</source>
+status = "unfinished"
+
+    <message>
+        <source>Perpendicular</source>
+status = "unfinished"
+
+    <message>
+        <source>Tangent</source>
+        <translation>Tangente</translation>
+
+    <message>
+        <source>Nearest</source>
+        <translation>Cercano</translation>
+
+    <message>
+        <source>Apparent Intersection</source>
+status = "unfinished"
+
+    <message>
+        <source>Parallel</source>
+        <translation>Paralelo</translation>
+
+    <message>
+        <source>Clear All</source>
+status = "unfinished"
+
+    <message>
+        <source>Visual Configuration</source>
+status = "unfinished"
+
+    <message>
+        <source>Locator Color</source>
+status = "unfinished"
+
+    <message>
+        <source>Locator Size</source>
+status = "unfinished"
+
+    <message>
+        <source>Sensitivity</source>
+status = "unfinished"
+
+    <message>
+        <source>Aperture Size</source>
+status = "unfinished"
+
+    <message>
+        <source>LineWeight Misc</source>
+status = "unfinished"
+
+    <message>
+        <source>Show LineWeight</source>
+status = "unfinished"
+
+    <message>
+        <source>RealRender</source>
+status = "unfinished"
+
+    <message>
+        <source>Default weight</source>
+status = "unfinished"
+
+    <message>
+        <source>Modes</source>
+status = "unfinished"
+
+    <message>
+        <source>Allow Preselection (PickFirst)</source>
+status = "unfinished"
+
+    <message>
+        <source>Add to Selection (PickAdd)</source>
+status = "unfinished"
+
+    <message>
+        <source>Drag to Select (PickDrag)</source>
+status = "unfinished"
+
+    <message>
+        <source>Cool Grip (Unselected)</source>
+status = "unfinished"
+
+    <message>
+        <source>Hot Grip (Selected)</source>
+status = "unfinished"
+
+    <message>
+        <source>Sizes</source>
+status = "unfinished"
+
+    <message>
+        <source>Grip Size</source>
+status = "unfinished"
+
+    <message>
+        <source>Pickbox Size</source>
+status = "unfinished"
+
+    <message>
+        <source>Red</source>
+        <translation type="unfinished">Rojo</translation>
+
+    <message>
+        <source>Yellow</source>
+        <translation type="unfinished">Amarillo</translation>
+
+    <message>
+        <source>Green</source>
+        <translation type="unfinished">Verde</translation>
+
+    <message>
+        <source>Cyan</source>
+status = "unfinished"
+
+    <message>
+        <source>Blue</source>
+status = "unfinished"
+
+    <message>
+        <source>Magenta</source>
+status = "unfinished"
+
+    <message>
+        <source>White</source>
+        <translation type="unfinished">Blanco</translation>
+
+    <message>
+        <source>Open File</source>
+status = "unfinished"
+
+    <message>
+        <source>Images (*.bmp *.png *.jpg)</source>
+status = "unfinished"
+
+    <message>
+        <source>New</source>
+status = "unfinished"
+
+    <message>
+        <source>History</source>
+        <translation>Historial</translation>
+
+    <message>
+        <source>ZoomSelected Preselect</source>
+status = "unfinished"
+
+    <message>
+        <source>Preselect objects before invoking the zoomSelected command.</source>
+status = "unfinished"
+
+    <message>
+        <source>Grip Edit </source>
+status = "unfinished"
+
+    <message>
+        <source>Delete 1 </source>
+        <translation>Eliminar 1 </translation>
+
+    <message>
+        <source>Cut Preselect</source>
+status = "unfinished"
+
+    <message>
+        <source>Preselect objects before invoking the cut command.</source>
+status = "unfinished"
+
+    <message>
+        <source>Copy Preselect</source>
+status = "unfinished"
+
+    <message>
+        <source>Preselect objects before invoking the copy command.</source>
+status = "unfinished"
+
+    <message>
+        <source>Move 1 </source>
+        <translation>Mover 1 </translation>
+
+    <message>
+        <source>Rotate 1 </source>
+        <translation>Girar 1 </translation>
+
+    <message>
+        <source>Mirror 1 </source>
+        <translation>Crear simetría 1 </translation>
+
+    <message>
+        <source>Scale 1 </source>
+        <translation>Escala 1 </translation>
+
+</TS>

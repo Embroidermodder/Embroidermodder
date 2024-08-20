@@ -1,0 +1,2371 @@
+# Embroidermodder 2.
+#
+# Copyright 2011-2024 The Embroidermodder Team
+# Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+#
+# Visit https://www.libembroidery.org/refman for advice on altering this file,
+# or read the markdown version in embroidermodder2/docs/refman.
+#
+# Italian Translation
+
+[[it]]
+source = "Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "
+status = "unfinished"
+
+[[it]]
+source = "Specify radius of circle or [Diameter]: "
+status = "unfinished"
+
+[[it]]
+source = "This should never happen."
+status = "unfinished"
+
+[[it]]
+source = "Specify second end point of circle&apos;s diameter: "
+status = "unfinished"
+
+[[it]]
+source = "Specify second point on circle: "
+status = "unfinished"
+
+[[it]]
+source = "Specify third point on circle: "
+status = "unfinished"
+
+[[it]]
+source = "Specify point on object for second tangent of circle: "
+status = "unfinished"
+
+[[it]]
+source = "Specify radius of circle: "
+status = "unfinished"
+
+[[it]]
+source = "Specify second point: "
+status = "unfinished"
+
+[[it]]
+source = "Specify first end point of circle&apos;s diameter: "
+status = "unfinished"
+
+[[it]]
+source = "Specify first point of circle: "
+status = "unfinished"
+
+[[it]]
+source = "Specify point on object for first tangent of circle: "
+status = "unfinished"
+
+[[it]]
+source = "Point or option keyword required."
+status = "unfinished"
+
+[[it]]
+source = "Specify diameter of circle: "
+status = "unfinished"
+
+[[it]]
+source = "Requires numeric radius, point on circumference, or &quot;D&quot;."
+status = "unfinished"
+
+[[it]]
+source = "Requires numeric distance or second point."
+status = "unfinished"
+
+[[it]]
+source = "Invalid point."
+        <translation>Punto non valido.</translation>
+
+[[it]]
+source = "Specify second point of circle: "
+status = "unfinished"
+
+[[it]]
+source = "Specify third point of circle: "
+status = "unfinished"
+
+[[it]]
+source = "Specify first point: "
+status = "unfinished"
+
+[[it]]
+source = "Specify second point: "
+status = "unfinished"
+
+[[it]]
+source = "Requires numeric distance or two points."
+status = "unfinished"
+
+[[it]]
+source = "Distance"
+status = "unfinished"
+
+[[it]]
+source = "Angle"
+status = "unfinished"
+
+[[it]]
+source = "Delta X"
+status = "unfinished"
+
+[[it]]
+source = "Delta Y"
+status = "unfinished"
+
+[[it]]
+source = "Specify first axis start point or [Center]: "
+status = "unfinished"
+
+[[it]]
+source = "Specify first axis end point: "
+status = "unfinished"
+
+[[it]]
+source = "Specify second axis end point or [Rotation]: "
+status = "unfinished"
+
+[[it]]
+source = "This should never happen."
+status = "unfinished"
+
+[[it]]
+source = "Specify center point: "
+        <translation>Specifica il punto centrale: </translation>
+
+[[it]]
+source = "Point or option keyword required."
+status = "unfinished"
+
+[[it]]
+source = "Invalid point."
+        <translation>Punto non valido.</translation>
+
+[[it]]
+source = "Specify rotation: "
+status = "unfinished"
+
+[[it]]
+source = "Specify ellipse rotation: "
+status = "unfinished"
+
+[[it]]
+source = "Invalid angle. Input a numeric angle or pick a point."
+status = "unfinished"
+
+[[it]]
+source = "Preselect objects before invoking the delete command."
+status = "unfinished"
+
+[[it]]
+source = "Delete Preselect"
+status = "unfinished"
+
+[[it]]
+source = "Specify first point: "
+status = "unfinished"
+
+[[it]]
+source = "Specify next point or [Undo]: "
+status = "unfinished"
+
+[[it]]
+source = "Invalid point."
+        <translation>Punto non valido.</translation>
+
+[[it]]
+source = "Point or option keyword required."
+status = "unfinished"
+
+[[it]]
+source = "Specify point: "
+status = "unfinished"
+
+[[it]]
+source = "Invalid point."
+        <translation>Punto non valido.</translation>
+
+[[it]]
+source = "Preselect objects before invoking the move command."
+status = "unfinished"
+
+[[it]]
+source = "Move Preselect"
+status = "unfinished"
+
+[[it]]
+source = "Specify base point: "
+        <translation>Specificare il punto base: </translation>
+
+[[it]]
+source = "Specify destination point: "
+status = "unfinished"
+
+[[it]]
+source = "Invalid point."
+        <translation>Punto non valido.</translation>
+
+[[it]]
+source = "Specify start point: "
+        <translation>Specifica il punto iniziale: </translation>
+
+[[it]]
+source = "Specify next point or [Arc/Undo]: "
+status = "unfinished"
+
+[[it]]
+source = "Point or option keyword required."
+status = "unfinished"
+
+[[it]]
+source = "Platform"
+status = "unfinished"
+
+[[it]]
+source = "Specify first point: "
+status = "unfinished"
+
+[[it]]
+source = "Specify next point: "
+        <translation>Specifica il punto successivo: </translation>
+
+[[it]]
+source = "Invalid point."
+        <translation>Punto non valido.</translation>
+
+[[it]]
+source = "Enter number of sides"
+status = "unfinished"
+
+[[it]]
+source = "Specify polygon type [Inscribed in circle/Circumscribed around circle]"
+status = "unfinished"
+
+[[it]]
+source = "Specify center point or [Sidelength]: "
+status = "unfinished"
+
+[[it]]
+source = "Requires an integer between 3 and 1024."
+        <translation>Richiede un valore intero compreso tra 3 e 1024.</translation>
+
+[[it]]
+source = "Specify start point: "
+        <translation>Specifica il punto iniziale: </translation>
+
+[[it]]
+source = "Point or option keyword required."
+status = "unfinished"
+
+[[it]]
+source = "Specify polygon corner point or [Distance]: "
+status = "unfinished"
+
+[[it]]
+source = "Specify polygon side point or [Distance]: "
+status = "unfinished"
+
+[[it]]
+source = "Polygon type is not Inscribed or Circumscribed."
+status = "unfinished"
+
+[[it]]
+source = "Invalid option keyword."
+status = "unfinished"
+
+[[it]]
+source = "Specify distance: "
+status = "unfinished"
+
+[[it]]
+source = "Requires valid numeric distance."
+status = "unfinished"
+
+[[it]]
+source = "Specify first point: "
+status = "unfinished"
+
+[[it]]
+source = "Specify next point or [Undo]: "
+status = "unfinished"
+
+[[it]]
+source = "Invalid point."
+        <translation>Punto non valido.</translation>
+
+[[it]]
+source = "Point or option keyword required."
+status = "unfinished"
+
+[[it]]
+source = "Specify first point: "
+status = "unfinished"
+
+[[it]]
+source = "Specify second point: "
+status = "unfinished"
+
+[[it]]
+source = "Requires two points."
+status = "unfinished"
+
+[[it]]
+source = "Specify first corner point or [Chamfer/Fillet]: "
+status = "unfinished"
+
+[[it]]
+source = "Specify other corner point or [Dimensions]: "
+status = "unfinished"
+
+[[it]]
+source = "Invalid point."
+        <translation>Punto non valido.</translation>
+
+[[it]]
+source = "Specify first point: "
+status = "unfinished"
+
+[[it]]
+source = "Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: "
+status = "unfinished"
+
+[[it]]
+source = "Specify crosshair color: "
+status = "unfinished"
+
+[[it]]
+source = "Specify grid color: "
+status = "unfinished"
+
+[[it]]
+source = "Invalid color. R,G,B values must be in the range of 0-255."
+status = "unfinished"
+
+[[it]]
+source = "Specify background color: "
+status = "unfinished"
+
+[[it]]
+source = "Preselect objects before invoking the rotate command."
+status = "unfinished"
+
+[[it]]
+source = "Rotate Preselect"
+status = "unfinished"
+
+[[it]]
+source = "Specify base point: "
+        <translation>Specificare il punto base: </translation>
+
+[[it]]
+source = "Specify rotation angle or [Reference]: "
+status = "unfinished"
+
+[[it]]
+source = "Specify second point: "
+status = "unfinished"
+
+[[it]]
+source = "Specify the new angle: "
+status = "unfinished"
+
+[[it]]
+source = "Invalid point."
+        <translation>Punto non valido.</translation>
+
+[[it]]
+source = "Specify the reference angle"
+status = "unfinished"
+
+[[it]]
+source = "Requires valid numeric angle, second point, or option keyword."
+status = "unfinished"
+
+[[it]]
+source = "Requires valid numeric angle or two points."
+status = "unfinished"
+
+[[it]]
+source = "Requires valid numeric angle or second point."
+status = "unfinished"
+
+[[it]]
+source = "Preselect objects before invoking the scale command."
+status = "unfinished"
+
+[[it]]
+source = "Scale Preselect"
+status = "unfinished"
+
+[[it]]
+source = "Specify base point: "
+        <translation>Specificare il punto base: </translation>
+
+[[it]]
+source = "Specify scale factor or [Reference]: "
+status = "unfinished"
+
+[[it]]
+source = "Specify second point: "
+status = "unfinished"
+
+[[it]]
+source = "Value must be positive and nonzero."
+status = "unfinished"
+
+[[it]]
+source = "Specify new length: "
+status = "unfinished"
+
+[[it]]
+source = "Invalid point."
+        <translation>Punto non valido.</translation>
+
+[[it]]
+source = "Specify reference length"
+status = "unfinished"
+
+[[it]]
+source = "Requires valid numeric distance, second point, or option keyword."
+status = "unfinished"
+
+[[it]]
+source = "Requires valid numeric distance or two points."
+status = "unfinished"
+
+[[it]]
+source = "Requires valid numeric distance or second point."
+status = "unfinished"
+
+[[it]]
+source = "Current font: "
+status = "unfinished"
+
+[[it]]
+source = "Text height: "
+status = "unfinished"
+
+[[it]]
+source = "Specify start point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[it]]
+source = "Specify text height"
+status = "unfinished"
+
+[[it]]
+source = "Specify text angle"
+status = "unfinished"
+
+[[it]]
+source = "Enter text: "
+status = "unfinished"
+
+[[it]]
+source = "Specify center point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[it]]
+source = "Specify right-end point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[it]]
+source = "Specify middle point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[it]]
+source = "Specify top-left point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[it]]
+source = "Specify top-center point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[it]]
+source = "Specify top-right point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[it]]
+source = "Specify middle-left point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[it]]
+source = "Specify middle-center point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[it]]
+source = "Specify middle-right point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[it]]
+source = "Specify bottom-left point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[it]]
+source = "Specify bottom-center point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[it]]
+source = "Specify bottom-right point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[it]]
+source = "Invalid option keyword."
+status = "unfinished"
+
+[[it]]
+source = "Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "
+status = "unfinished"
+
+[[it]]
+source = "Specify font name: "
+status = "unfinished"
+
+[[it]]
+source = "Point or option keyword required."
+status = "unfinished"
+
+[[it]]
+source = "Requires valid numeric distance or second point."
+status = "unfinished"
+
+[[it]]
+source = "Requires valid numeric angle or second point."
+status = "unfinished"
+
+[[it]]
+source = "Enter number of star points"
+status = "unfinished"
+
+[[it]]
+source = "Specify outer radius of star: "
+status = "unfinished"
+
+[[it]]
+source = "Specify inner radius of star: "
+status = "unfinished"
+
+[[it]]
+source = "Specify center point: "
+        <translation>Specifica il punto centrale: </translation>
+
+[[it]]
+source = "Requires an integer between 3 and 1024."
+        <translation>Richiede un valore intero compreso tra 3 e 1024.</translation>
+
+[[it]]
+source = "Invalid point."
+        <translation>Punto non valido.</translation>
+
+[[it]]
+source = "Enter an option [Cascade/Tile]: "
+status = "unfinished"
+
+[[it]]
+source = "Invalid option keyword."
+status = "unfinished"
+
+</TS>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.0" language="it" sourcelanguage="en">
+[[it]]
+source = "Command: "
+        <translation>Comando: </translation>
+
+[[it]]
+source = "*Cancel*"
+        <translation>*Annulla*</translation>
+
+[[it]]
+source = "Embroidery Design Details"
+status = "unfinished"
+
+[[it]]
+source = "General Information"
+status = "unfinished"
+
+[[it]]
+source = "Total Stitches:"
+status = "unfinished"
+
+[[it]]
+source = "Real Stitches:"
+status = "unfinished"
+
+[[it]]
+source = "Jump Stitches:"
+status = "unfinished"
+
+[[it]]
+source = "Trim Stitches:"
+status = "unfinished"
+
+[[it]]
+source = "Total Colors:"
+status = "unfinished"
+
+[[it]]
+source = "Color Changes:"
+status = "unfinished"
+
+[[it]]
+source = "Left:"
+status = "unfinished"
+
+[[it]]
+source = "Top:"
+status = "unfinished"
+
+[[it]]
+source = "Right:"
+status = "unfinished"
+
+[[it]]
+source = "Bottom:"
+status = "unfinished"
+
+[[it]]
+source = "Width:"
+status = "unfinished"
+
+[[it]]
+source = "Height:"
+status = "unfinished"
+
+[[it]]
+source = "Layer Manager"
+status = "unfinished"
+
+[[it]]
+source = "Name"
+        <translation>Nome</translation>
+
+[[it]]
+source = "Visible"
+status = "unfinished"
+
+[[it]]
+source = "Frozen"
+        <translation>Congelato</translation>
+
+[[it]]
+source = "Z Value"
+status = "unfinished"
+
+[[it]]
+source = "Color"
+status = "unfinished"
+
+[[it]]
+source = "Linetype"
+status = "unfinished"
+
+[[it]]
+source = "Lineweight"
+        <translation>SpessLinea</translation>
+
+[[it]]
+source = "Print"
+        <translation>Stampa</translation>
+
+[[it]]
+source = "Error reading file"
+status = "unfinished"
+
+[[it]]
+source = "Cannot read file %1:
+%2."
+status = "unfinished"
+
+[[it]]
+source = "Error reading pattern"
+status = "unfinished"
+
+[[it]]
+source = "Cannot read pattern"
+status = "unfinished"
+
+[[it]]
+source = "&amp;Do Nothing"
+status = "unfinished"
+
+[[it]]
+source = "Does Nothing"
+status = "unfinished"
+
+[[it]]
+source = "&amp;Cascade"
+        <translation>S&amp;ovrapponi</translation>
+
+[[it]]
+source = "Cascade the windows."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Tile"
+status = "unfinished"
+
+[[it]]
+source = "Tile the windows."
+status = "unfinished"
+
+[[it]]
+source = "Cl&amp;ose"
+        <translation>&amp;Chiudi</translation>
+
+[[it]]
+source = "Close the active window."
+status = "unfinished"
+
+[[it]]
+source = "Close &amp;All"
+        <translation>C&amp;hiudi tutto</translation>
+
+[[it]]
+source = "Close all the windows."
+status = "unfinished"
+
+[[it]]
+source = "Ne&amp;xt"
+status = "unfinished"
+
+[[it]]
+source = "Move the focus to the next window."
+status = "unfinished"
+
+[[it]]
+source = "Pre&amp;vious"
+status = "unfinished"
+
+[[it]]
+source = "Move the focus to the previous window."
+status = "unfinished"
+
+[[it]]
+source = "&amp;New"
+        <translation>&amp;Nuovo</translation>
+
+[[it]]
+source = "Create a new file."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Open"
+        <translation>&amp;Apri</translation>
+
+[[it]]
+source = "Open an existing file."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Save"
+        <translation>&amp;Salva</translation>
+
+[[it]]
+source = "Save the design to disk."
+status = "unfinished"
+
+[[it]]
+source = "Save &amp;As"
+        <translation>Salva con &amp;nome</translation>
+
+[[it]]
+source = "Save the design under a new name."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Print"
+        <translation>Stam&amp;pa</translation>
+
+[[it]]
+source = "Print the design."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Details"
+status = "unfinished"
+
+[[it]]
+source = "Details of the current design."
+status = "unfinished"
+
+[[it]]
+source = "E&amp;xit"
+        <translation>&amp;Esci</translation>
+
+[[it]]
+source = "Exit the application."
+status = "unfinished"
+
+[[it]]
+source = "Cu&amp;t"
+status = "unfinished"
+
+[[it]]
+source = "Cut the current selection&apos;s contents to the clipboard."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Copy"
+status = "unfinished"
+
+[[it]]
+source = "Copy the current selection&apos;s contents to the clipboard."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Paste"
+status = "unfinished"
+
+[[it]]
+source = "Paste the clipboard&apos;s contents into the current selection."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Help"
+        <translation>&amp;Guida</translation>
+
+[[it]]
+source = "Displays help."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Changelog"
+status = "unfinished"
+
+[[it]]
+source = "Describes new features in this product."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Tip Of The Day"
+status = "unfinished"
+
+[[it]]
+source = "Displays a dialog with useful tips"
+status = "unfinished"
+
+[[it]]
+source = "&amp;About "
+        <translation>&amp;Informazioni su </translation>
+
+[[it]]
+source = "Displays information about this product."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Undo"
+        <translation>&amp;Annulla</translation>
+
+[[it]]
+source = "Reverses the most recent action."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Redo"
+        <translation>&amp;Ripeti</translation>
+
+[[it]]
+source = "Reverses the effects of the previous undo action."
+status = "unfinished"
+
+[[it]]
+source = "Icon&amp;16"
+status = "unfinished"
+
+[[it]]
+source = "Sets the toolbar icon size to 16x16."
+status = "unfinished"
+
+[[it]]
+source = "Icon&amp;24"
+status = "unfinished"
+
+[[it]]
+source = "Sets the toolbar icon size to 24x24."
+status = "unfinished"
+
+[[it]]
+source = "Icon&amp;32"
+status = "unfinished"
+
+[[it]]
+source = "Sets the toolbar icon size to 32x32."
+status = "unfinished"
+
+[[it]]
+source = "Icon&amp;48"
+status = "unfinished"
+
+[[it]]
+source = "Sets the toolbar icon size to 48x48."
+status = "unfinished"
+
+[[it]]
+source = "Icon&amp;64"
+status = "unfinished"
+
+[[it]]
+source = "Sets the toolbar icon size to 64x64."
+status = "unfinished"
+
+[[it]]
+source = "Icon12&amp;8"
+status = "unfinished"
+
+[[it]]
+source = "Sets the toolbar icon size to 128x128."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Settings"
+status = "unfinished"
+
+[[it]]
+source = "Configure settings specific to this product."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Make Layer Active"
+status = "unfinished"
+
+[[it]]
+source = "Makes the layer of a selected object the active layer"
+status = "unfinished"
+
+[[it]]
+source = "&amp;Layers"
+status = "unfinished"
+
+[[it]]
+source = "Manages layers and layer properties:  LAYER"
+status = "unfinished"
+
+[[it]]
+source = "&amp;Layer Selector"
+status = "unfinished"
+
+[[it]]
+source = "Dropdown selector for changing the current layer"
+status = "unfinished"
+
+[[it]]
+source = "&amp;Layer Previous"
+status = "unfinished"
+
+[[it]]
+source = "Restores the previous layer settings:  LAYERP"
+status = "unfinished"
+
+[[it]]
+source = "&amp;Color Selector"
+status = "unfinished"
+
+[[it]]
+source = "Dropdown selector for changing the current thread color"
+status = "unfinished"
+
+[[it]]
+source = "&amp;Stitchtype Selector"
+status = "unfinished"
+
+[[it]]
+source = "Dropdown selector for changing the current stitch type"
+status = "unfinished"
+
+[[it]]
+source = "&amp;Threadweight Selector"
+status = "unfinished"
+
+[[it]]
+source = "Dropdown selector for changing the current thread weight"
+status = "unfinished"
+
+[[it]]
+source = "&amp;Hide All Layers"
+status = "unfinished"
+
+[[it]]
+source = "Turns the visibility off for all layers in the current drawing:  HIDEALL"
+status = "unfinished"
+
+[[it]]
+source = "&amp;Show All Layers"
+status = "unfinished"
+
+[[it]]
+source = "Turns the visibility on for all layers in the current drawing:  SHOWALL"
+status = "unfinished"
+
+[[it]]
+source = "&amp;Freeze All Layers"
+status = "unfinished"
+
+[[it]]
+source = "Freezes all layers in the current drawing:  FREEZEALL"
+status = "unfinished"
+
+[[it]]
+source = "&amp;Thaw All Layers"
+status = "unfinished"
+
+[[it]]
+source = "Thaws all layers in the current drawing:  THAWALL"
+status = "unfinished"
+
+[[it]]
+source = "&amp;Lock All Layers"
+status = "unfinished"
+
+[[it]]
+source = "Locks all layers in the current drawing:  LOCKALL"
+status = "unfinished"
+
+[[it]]
+source = "&amp;Unlock All Layers"
+status = "unfinished"
+
+[[it]]
+source = "Unlocks all layers in the current drawing:  UNLOCKALL"
+status = "unfinished"
+
+[[it]]
+source = "&amp;Bold Text"
+status = "unfinished"
+
+[[it]]
+source = "Sets text to be bold."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Italic Text"
+status = "unfinished"
+
+[[it]]
+source = "Sets text to be italic."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Underline Text"
+status = "unfinished"
+
+[[it]]
+source = "Sets text to be underlined."
+status = "unfinished"
+
+[[it]]
+source = "&amp;StrikeOut Text"
+status = "unfinished"
+
+[[it]]
+source = "Sets text to be striked out."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Overline Text"
+status = "unfinished"
+
+[[it]]
+source = "Sets text to be overlined."
+status = "unfinished"
+
+[[it]]
+source = "Zoom &amp;Realtime"
+status = "unfinished"
+
+[[it]]
+source = "Zooms to increase or decrease the apparent size of objects in the current viewport."
+status = "unfinished"
+
+[[it]]
+source = "Zoom &amp;Previous"
+status = "unfinished"
+
+[[it]]
+source = "Zooms to display the previous view."
+status = "unfinished"
+
+[[it]]
+source = "Zoom &amp;Window"
+status = "unfinished"
+
+[[it]]
+source = "Zooms to display an area specified by a rectangular window."
+status = "unfinished"
+
+[[it]]
+source = "Zoom &amp;Dynamic"
+status = "unfinished"
+
+[[it]]
+source = "Zooms to display the generated portion of the drawing."
+status = "unfinished"
+
+[[it]]
+source = "Zoom &amp;Scale"
+status = "unfinished"
+
+[[it]]
+source = "Zooms the display using a specified scale factor."
+status = "unfinished"
+
+[[it]]
+source = "Zoom &amp;Center"
+status = "unfinished"
+
+[[it]]
+source = "Zooms to display a view specified by a center point and magnification or height."
+status = "unfinished"
+
+[[it]]
+source = "Zoom &amp;In"
+status = "unfinished"
+
+[[it]]
+source = "Zooms to increase the apparent size of objects."
+status = "unfinished"
+
+[[it]]
+source = "Zoom &amp;Out"
+status = "unfinished"
+
+[[it]]
+source = "Zooms to decrease the apparent size of objects."
+status = "unfinished"
+
+[[it]]
+source = "Zoom Selec&amp;ted"
+status = "unfinished"
+
+[[it]]
+source = "Zooms to display the selected objects."
+status = "unfinished"
+
+[[it]]
+source = "Zoom &amp;All"
+status = "unfinished"
+
+[[it]]
+source = "Zooms to display the drawing extents or the grid limits."
+status = "unfinished"
+
+[[it]]
+source = "Zoom &amp;Extents"
+status = "unfinished"
+
+[[it]]
+source = "Zooms to display the drawing extents."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Pan Realtime"
+status = "unfinished"
+
+[[it]]
+source = "Moves the view in the current viewport."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Pan Point"
+status = "unfinished"
+
+[[it]]
+source = "Moves the view by the specified distance."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Pan Left"
+status = "unfinished"
+
+[[it]]
+source = "Moves the view to the left."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Pan Right"
+status = "unfinished"
+
+[[it]]
+source = "Moves the view to the right."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Pan Up"
+status = "unfinished"
+
+[[it]]
+source = "Moves the view up."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Pan Down"
+status = "unfinished"
+
+[[it]]
+source = "Moves the view down."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Day"
+status = "unfinished"
+
+[[it]]
+source = "Updates the current view using day vision settings."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Night"
+status = "unfinished"
+
+[[it]]
+source = "Updates the current view using night vision settings."
+status = "unfinished"
+
+[[it]]
+source = "Testing Feature"
+status = "unfinished"
+
+[[it]]
+source = "&lt;b&gt;This feature is in testing.&lt;/b&gt;"
+status = "unfinished"
+
+[[it]]
+source = "
+
+"
+status = "unfinished"
+
+[[it]]
+source = "http://embroidermodder.sourceforge.net"
+status = "unfinished"
+
+[[it]]
+source = "Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi"
+status = "unfinished"
+
+[[it]]
+source = "Embroidery formats by Josh Varga."
+status = "unfinished"
+
+[[it]]
+source = "
+"
+status = "unfinished"
+
+[[it]]
+source = "User Interface by Jonathan Greig."
+status = "unfinished"
+
+[[it]]
+source = "Free under the zlib/libpng license."
+status = "unfinished"
+
+[[it]]
+source = "&amp;Show tips on startup"
+status = "unfinished"
+
+[[it]]
+source = "&amp;Previous"
+status = "unfinished"
+
+[[it]]
+source = "&amp;Next"
+status = "unfinished"
+
+[[it]]
+source = "&amp;Close"
+status = "unfinished"
+
+[[it]]
+source = "Color Selector Conversion Error"
+status = "unfinished"
+
+[[it]]
+source = "&lt;b&gt;An error has occured while changing colors.&lt;/b&gt;"
+status = "unfinished"
+
+[[it]]
+source = "Color Selector Pointer Error"
+status = "unfinished"
+
+[[it]]
+source = "Native MessageBox Error"
+status = "unfinished"
+
+[[it]]
+source = "Incorrect use of the native messageBox function."
+status = "unfinished"
+
+[[it]]
+source = "ScaleFactor Error"
+status = "unfinished"
+
+[[it]]
+source = "Hi there. If you are not a developer, report this as a bug. If you are a developer, your code needs examined, and possibly your head too."
+status = "unfinished"
+
+[[it]]
+source = "&amp;File"
+status = "unfinished"
+
+[[it]]
+source = "&amp;Edit"
+        <translation>&amp;Modifica</translation>
+
+[[it]]
+source = "&amp;View"
+        <translation>&amp;Visualizza</translation>
+
+[[it]]
+source = "&amp;Window"
+        <translation>&amp;Finestra</translation>
+
+[[it]]
+source = "Open &amp;Recent"
+status = "unfinished"
+
+[[it]]
+source = "&amp;Zoom"
+status = "unfinished"
+
+[[it]]
+source = "&amp;Pan"
+        <translation>&amp;Panoramica</translation>
+
+[[it]]
+source = "File"
+status = "unfinished"
+
+[[it]]
+source = "Edit"
+        <translation>Modifica</translation>
+
+[[it]]
+source = "View"
+        <translation>Visualizza</translation>
+
+[[it]]
+source = "Zoom"
+status = "unfinished"
+
+[[it]]
+source = "Pan"
+        <translation>Panoramica</translation>
+
+[[it]]
+source = "Icon"
+status = "unfinished"
+
+[[it]]
+source = "Help"
+        <translation>Guida</translation>
+
+[[it]]
+source = "Layer"
+status = "unfinished"
+
+[[it]]
+source = "Properties"
+        <translation>Proprietà</translation>
+
+[[it]]
+source = "Text"
+        <translation>Testo</translation>
+
+[[it]]
+source = "Command Prompt"
+status = "unfinished"
+
+[[it]]
+source = "Open"
+        <translation>Apri</translation>
+
+[[it]]
+source = "Open w/Preview"
+status = "unfinished"
+
+[[it]]
+source = "File(s) loaded"
+status = "unfinished"
+
+[[it]]
+source = "Save"
+        <translation>Salva</translation>
+
+[[it]]
+source = "Red"
+        <translation>Rosso</translation>
+
+[[it]]
+source = "Yellow"
+        <translation>Giallo</translation>
+
+[[it]]
+source = "Green"
+        <translation>Verde</translation>
+
+[[it]]
+source = "Cyan"
+        <translation>Ciano</translation>
+
+[[it]]
+source = "Blue"
+        <translation>Blu</translation>
+
+[[it]]
+source = "Magenta"
+status = "unfinished"
+
+[[it]]
+source = "White"
+        <translation>Bianco</translation>
+
+[[it]]
+source = "Other..."
+        <translation>Altro...</translation>
+
+[[it]]
+source = "Properties"
+        <translation>Proprietà</translation>
+
+[[it]]
+source = "No Selection"
+        <translation>Nessuna selezione</translation>
+
+[[it]]
+source = "Varies"
+status = "unfinished"
+
+[[it]]
+source = "Arc"
+        <translation>Arco</translation>
+
+[[it]]
+source = "Block"
+status = "unfinished"
+
+[[it]]
+source = "Circle"
+        <translation>Cerchio</translation>
+
+[[it]]
+source = "Aligned Dimension"
+status = "unfinished"
+
+[[it]]
+source = "Angular Dimension"
+status = "unfinished"
+
+[[it]]
+source = "Arclength Dimension"
+status = "unfinished"
+
+[[it]]
+source = "Diameter Dimension"
+status = "unfinished"
+
+[[it]]
+source = "Leader Dimension"
+status = "unfinished"
+
+[[it]]
+source = "Linear Dimension"
+status = "unfinished"
+
+[[it]]
+source = "Ordinate Dimension"
+status = "unfinished"
+
+[[it]]
+source = "Radius Dimension"
+status = "unfinished"
+
+[[it]]
+source = "Ellipse"
+        <translation>Ellisse</translation>
+
+[[it]]
+source = "Image"
+status = "unfinished"
+
+[[it]]
+source = "Infinite Line"
+status = "unfinished"
+
+[[it]]
+source = "Line"
+        <translation>Linea</translation>
+
+[[it]]
+source = "Point"
+        <translation>Puntiforme</translation>
+
+[[it]]
+source = "Polygon"
+        <translation>Poligono</translation>
+
+[[it]]
+source = "Polyline"
+        <translation>Polilinea</translation>
+
+[[it]]
+source = "Ray"
+status = "unfinished"
+
+[[it]]
+source = "Rectangle"
+        <translation>Rettangolo</translation>
+
+[[it]]
+source = "Multiline Text"
+status = "unfinished"
+
+[[it]]
+source = "Unknown"
+status = "unfinished"
+
+[[it]]
+source = "General"
+        <translation>Generale</translation>
+
+[[it]]
+source = "Layer"
+status = "unfinished"
+
+[[it]]
+source = "Color"
+status = "unfinished"
+
+[[it]]
+source = "LineType"
+status = "unfinished"
+
+[[it]]
+source = "LineWeight"
+        <translation>SpessLinea</translation>
+
+[[it]]
+source = "Geometry"
+        <translation>Geometria</translation>
+
+[[it]]
+source = "Center X"
+        <translation>X centrale</translation>
+
+[[it]]
+source = "Center Y"
+        <translation>Y centrale</translation>
+
+[[it]]
+source = "Radius"
+        <translation>Raggio</translation>
+
+[[it]]
+source = "Start Angle"
+        <translation>Angolo Iniziale</translation>
+
+[[it]]
+source = "End Angle"
+        <translation>Angolo Finale</translation>
+
+[[it]]
+source = "Start X"
+        <translation>X iniziale</translation>
+
+[[it]]
+source = "Start Y"
+        <translation>Y iniziale</translation>
+
+[[it]]
+source = "End X"
+        <translation>X finale</translation>
+
+[[it]]
+source = "End Y"
+        <translation>Y finale</translation>
+
+[[it]]
+source = "Area"
+status = "unfinished"
+
+[[it]]
+source = "Arc Length"
+        <translation>Lunghezza arco</translation>
+
+[[it]]
+source = "Chord"
+status = "unfinished"
+
+[[it]]
+source = "Included Angle"
+status = "unfinished"
+
+[[it]]
+source = "Misc"
+        <translation>Varie</translation>
+
+[[it]]
+source = "Clockwise"
+status = "unfinished"
+
+[[it]]
+source = "Position X"
+        <translation>Posizione X</translation>
+
+[[it]]
+source = "Position Y"
+        <translation>Posizione Y</translation>
+
+[[it]]
+source = "Diameter"
+        <translation>Diametro</translation>
+
+[[it]]
+source = "Circumference"
+        <translation>Circonferenza</translation>
+
+[[it]]
+source = "Major Radius"
+status = "unfinished"
+
+[[it]]
+source = "Minor Radius"
+status = "unfinished"
+
+[[it]]
+source = "Major Diameter"
+status = "unfinished"
+
+[[it]]
+source = "Minor Diameter"
+status = "unfinished"
+
+[[it]]
+source = "Width"
+        <translation>Larghezza</translation>
+
+[[it]]
+source = "Height"
+        <translation>Altezza</translation>
+
+[[it]]
+source = "Name"
+        <translation type="unfinished">Nome</translation>
+
+[[it]]
+source = "Path"
+status = "unfinished"
+
+[[it]]
+source = "2nd X"
+status = "unfinished"
+
+[[it]]
+source = "2nd Y"
+status = "unfinished"
+
+[[it]]
+source = "Vector X"
+status = "unfinished"
+
+[[it]]
+source = "Vector Y"
+status = "unfinished"
+
+[[it]]
+source = "Delta X"
+status = "unfinished"
+
+[[it]]
+source = "Delta Y"
+status = "unfinished"
+
+[[it]]
+source = "Angle"
+        <translation>Angolo</translation>
+
+[[it]]
+source = "Length"
+        <translation>Lunghezza</translation>
+
+[[it]]
+source = "Vertex Radius"
+status = "unfinished"
+
+[[it]]
+source = "Side Radius"
+status = "unfinished"
+
+[[it]]
+source = "Vertex Diameter"
+status = "unfinished"
+
+[[it]]
+source = "Side Diameter"
+status = "unfinished"
+
+[[it]]
+source = "Interior Angle"
+status = "unfinished"
+
+[[it]]
+source = "Vertex #"
+        <translation># Vertice</translation>
+
+[[it]]
+source = "Vertex X"
+        <translation>X vertice</translation>
+
+[[it]]
+source = "Vertex Y"
+        <translation>Y vertice</translation>
+
+[[it]]
+source = "Closed"
+        <translation>Chiuso</translation>
+
+[[it]]
+source = "Corner 1 X"
+status = "unfinished"
+
+[[it]]
+source = "Corner 1 Y"
+status = "unfinished"
+
+[[it]]
+source = "Corner 2 X"
+status = "unfinished"
+
+[[it]]
+source = "Corner 2 Y"
+status = "unfinished"
+
+[[it]]
+source = "Corner 3 X"
+status = "unfinished"
+
+[[it]]
+source = "Corner 3 Y"
+status = "unfinished"
+
+[[it]]
+source = "Corner 4 X"
+status = "unfinished"
+
+[[it]]
+source = "Corner 4 Y"
+status = "unfinished"
+
+[[it]]
+source = "Text"
+        <translation>Testo</translation>
+
+[[it]]
+source = "Contents"
+status = "unfinished"
+
+[[it]]
+source = "Font"
+status = "unfinished"
+
+[[it]]
+source = "Justify"
+status = "unfinished"
+
+[[it]]
+source = "Rotation"
+status = "unfinished"
+
+[[it]]
+source = "Backward"
+        <translation>All&apos;indietro</translation>
+
+[[it]]
+source = "UpsideDown"
+        <translation>CapoVolto</translation>
+
+[[it]]
+source = "Error - Negative Lineweight"
+status = "unfinished"
+
+[[it]]
+source = "Lineweight: %1"
+status = "unfinished"
+
+[[it]]
+source = "ScaleFactor Error"
+status = "unfinished"
+
+[[it]]
+source = "Hi there. If you are not a developer, report this as a bug. If you are a developer, your code needs examined, and possibly your head too."
+status = "unfinished"
+
+[[it]]
+source = "Navigation"
+status = "unfinished"
+
+[[it]]
+source = "General"
+        <translation>Generale</translation>
+
+[[it]]
+source = "Files/Paths"
+status = "unfinished"
+
+[[it]]
+source = "Display"
+status = "unfinished"
+
+[[it]]
+source = "Prompt"
+status = "unfinished"
+
+[[it]]
+source = "Open/Save"
+status = "unfinished"
+
+[[it]]
+source = "Printing"
+status = "unfinished"
+
+[[it]]
+source = "Snap"
+status = "unfinished"
+
+[[it]]
+source = "Grid/Ruler"
+status = "unfinished"
+
+[[it]]
+source = "Ortho/Polar"
+status = "unfinished"
+
+[[it]]
+source = "QuickSnap"
+status = "unfinished"
+
+[[it]]
+source = "QuickTrack"
+status = "unfinished"
+
+[[it]]
+source = "LineWeight"
+        <translation type="unfinished">SpessLinea</translation>
+
+[[it]]
+source = "Selection"
+status = "unfinished"
+
+[[it]]
+source = "Settings"
+status = "unfinished"
+
+[[it]]
+source = "Icons"
+status = "unfinished"
+
+[[it]]
+source = "Icon Theme"
+status = "unfinished"
+
+[[it]]
+source = "Icon Size"
+status = "unfinished"
+
+[[it]]
+source = "Background"
+status = "unfinished"
+
+[[it]]
+source = "Use Logo"
+status = "unfinished"
+
+[[it]]
+source = "Choose"
+status = "unfinished"
+
+[[it]]
+source = "Use Texture"
+status = "unfinished"
+
+[[it]]
+source = "Use Color"
+status = "unfinished"
+
+[[it]]
+source = "Tips"
+status = "unfinished"
+
+[[it]]
+source = "Show Tip of the Day on startup"
+status = "unfinished"
+
+[[it]]
+source = "ScrollBars"
+status = "unfinished"
+
+[[it]]
+source = "Show ScrollBars"
+status = "unfinished"
+
+[[it]]
+source = "Perform action when clicking corner widget"
+status = "unfinished"
+
+[[it]]
+source = "Colors"
+status = "unfinished"
+
+[[it]]
+source = "Crosshair Color"
+status = "unfinished"
+
+[[it]]
+source = "Background Color"
+status = "unfinished"
+
+[[it]]
+source = "Selection Box Color (Crossing)"
+status = "unfinished"
+
+[[it]]
+source = "Selection Box Fill (Crossing)"
+status = "unfinished"
+
+[[it]]
+source = "Selection Box Color (Window)"
+status = "unfinished"
+
+[[it]]
+source = "Selection Box Fill (Window)"
+status = "unfinished"
+
+[[it]]
+source = "Selection Box Fill Alpha"
+status = "unfinished"
+
+[[it]]
+source = "Zoom"
+status = "unfinished"
+
+[[it]]
+source = "Zoom In Scale"
+status = "unfinished"
+
+[[it]]
+source = "Zoom Out Scale"
+status = "unfinished"
+
+[[it]]
+source = "Text Color"
+status = "unfinished"
+
+[[it]]
+source = "Font"
+status = "unfinished"
+
+[[it]]
+source = "Font Family"
+status = "unfinished"
+
+[[it]]
+source = "Font Style"
+status = "unfinished"
+
+[[it]]
+source = "Font Size"
+status = "unfinished"
+
+[[it]]
+source = "History"
+status = "unfinished"
+
+[[it]]
+source = "Save History"
+status = "unfinished"
+
+[[it]]
+source = "Save As HTML"
+status = "unfinished"
+
+[[it]]
+source = "Custom Filter"
+status = "unfinished"
+
+[[it]]
+source = "Select All"
+status = "unfinished"
+
+[[it]]
+source = "File Open"
+status = "unfinished"
+
+[[it]]
+source = "Preview Thumbnails"
+status = "unfinished"
+
+[[it]]
+source = "Number of recently accessed files to show"
+status = "unfinished"
+
+[[it]]
+source = "File Save"
+status = "unfinished"
+
+[[it]]
+source = "Save Thumbnails"
+status = "unfinished"
+
+[[it]]
+source = "AutoSave"
+status = "unfinished"
+
+[[it]]
+source = "Trimming"
+status = "unfinished"
+
+[[it]]
+source = "DST Only: Minimum number of jumps to trim"
+status = "unfinished"
+
+[[it]]
+source = "Default Printer"
+status = "unfinished"
+
+[[it]]
+source = "Use as default device"
+status = "unfinished"
+
+[[it]]
+source = "Use last used device"
+status = "unfinished"
+
+[[it]]
+source = "Save Ink"
+status = "unfinished"
+
+[[it]]
+source = "Disable Background"
+status = "unfinished"
+
+[[it]]
+source = "Grid Misc"
+status = "unfinished"
+
+[[it]]
+source = "Initially show grid when loading a file"
+status = "unfinished"
+
+[[it]]
+source = "Show the origin when the grid is enabled"
+status = "unfinished"
+
+[[it]]
+source = "Grid Color"
+status = "unfinished"
+
+[[it]]
+source = "Match grid color to crosshair color"
+status = "unfinished"
+
+[[it]]
+source = "Grid Geometry"
+status = "unfinished"
+
+[[it]]
+source = "Set grid size from opened file"
+status = "unfinished"
+
+[[it]]
+source = "Grid Type"
+status = "unfinished"
+
+[[it]]
+source = "Center the grid on the origin"
+status = "unfinished"
+
+[[it]]
+source = "Grid Center X"
+status = "unfinished"
+
+[[it]]
+source = "Grid Center Y"
+status = "unfinished"
+
+[[it]]
+source = "Grid Size X"
+status = "unfinished"
+
+[[it]]
+source = "Grid Size Y"
+status = "unfinished"
+
+[[it]]
+source = "Grid Spacing X"
+status = "unfinished"
+
+[[it]]
+source = "Grid Spacing Y"
+status = "unfinished"
+
+[[it]]
+source = "Grid Size Radius"
+status = "unfinished"
+
+[[it]]
+source = "Grid Spacing Radius"
+status = "unfinished"
+
+[[it]]
+source = "Grid Spacing Angle"
+status = "unfinished"
+
+[[it]]
+source = "Ruler Misc"
+status = "unfinished"
+
+[[it]]
+source = "Initially show ruler when loading a file"
+status = "unfinished"
+
+[[it]]
+source = "Ruler Units"
+status = "unfinished"
+
+[[it]]
+source = "Ruler Color"
+status = "unfinished"
+
+[[it]]
+source = "Ruler Geometry"
+status = "unfinished"
+
+[[it]]
+source = "Ruler Pixel Size"
+status = "unfinished"
+
+[[it]]
+source = "Locators Used"
+status = "unfinished"
+
+[[it]]
+source = "Endpoint"
+status = "unfinished"
+
+[[it]]
+source = "Midpoint"
+        <translation>Punto medio</translation>
+
+[[it]]
+source = "Center"
+        <translation>Centro</translation>
+
+[[it]]
+source = "Node"
+        <translation>Nodo</translation>
+
+[[it]]
+source = "Quadrant"
+        <translation>Quadrante</translation>
+
+[[it]]
+source = "Intersection"
+status = "unfinished"
+
+[[it]]
+source = "Extension"
+status = "unfinished"
+
+[[it]]
+source = "Insertion"
+status = "unfinished"
+
+[[it]]
+source = "Perpendicular"
+        <translation>Perpendicolare</translation>
+
+[[it]]
+source = "Tangent"
+        <translation>Tangente</translation>
+
+[[it]]
+source = "Nearest"
+        <translation>Vicino</translation>
+
+[[it]]
+source = "Apparent Intersection"
+status = "unfinished"
+
+[[it]]
+source = "Parallel"
+        <translation>Parallela</translation>
+
+[[it]]
+source = "Clear All"
+status = "unfinished"
+
+[[it]]
+source = "Visual Configuration"
+status = "unfinished"
+
+[[it]]
+source = "Locator Color"
+status = "unfinished"
+
+[[it]]
+source = "Locator Size"
+status = "unfinished"
+
+[[it]]
+source = "Sensitivity"
+status = "unfinished"
+
+[[it]]
+source = "Aperture Size"
+status = "unfinished"
+
+[[it]]
+source = "LineWeight Misc"
+status = "unfinished"
+
+[[it]]
+source = "Show LineWeight"
+status = "unfinished"
+
+[[it]]
+source = "RealRender"
+status = "unfinished"
+
+[[it]]
+source = "Default weight"
+status = "unfinished"
+
+[[it]]
+source = "Modes"
+status = "unfinished"
+
+[[it]]
+source = "Allow Preselection (PickFirst)"
+status = "unfinished"
+
+[[it]]
+source = "Add to Selection (PickAdd)"
+status = "unfinished"
+
+[[it]]
+source = "Drag to Select (PickDrag)"
+status = "unfinished"
+
+[[it]]
+source = "Cool Grip (Unselected)"
+status = "unfinished"
+
+[[it]]
+source = "Hot Grip (Selected)"
+status = "unfinished"
+
+[[it]]
+source = "Sizes"
+status = "unfinished"
+
+[[it]]
+source = "Grip Size"
+status = "unfinished"
+
+[[it]]
+source = "Pickbox Size"
+status = "unfinished"
+
+[[it]]
+source = "Red"
+        <translation>Rosso</translation>
+
+[[it]]
+source = "Yellow"
+        <translation>Giallo</translation>
+
+[[it]]
+source = "Green"
+        <translation>Verde</translation>
+
+[[it]]
+source = "Cyan"
+        <translation>Ciano</translation>
+
+[[it]]
+source = "Blue"
+        <translation>Blu</translation>
+
+[[it]]
+source = "Magenta"
+status = "unfinished"
+
+[[it]]
+source = "White"
+        <translation>Bianco</translation>
+
+[[it]]
+source = "Open File"
+status = "unfinished"
+
+[[it]]
+source = "Images (*.bmp *.png *.jpg)"
+status = "unfinished"
+
+[[it]]
+source = "New"
+        <translation>Nuovo</translation>
+
+[[it]]
+source = "History"
+status = "unfinished"
+
+[[it]]
+source = "ZoomSelected Preselect"
+status = "unfinished"
+
+[[it]]
+source = "Preselect objects before invoking the zoomSelected command."
+status = "unfinished"
+
+[[it]]
+source = "Grip Edit "
+status = "unfinished"
+
+[[it]]
+source = "Delete 1 "
+        <translation>Cancella 1 </translation>
+
+[[it]]
+source = "Cut Preselect"
+status = "unfinished"
+
+[[it]]
+source = "Preselect objects before invoking the cut command."
+status = "unfinished"
+
+[[it]]
+source = "Copy Preselect"
+status = "unfinished"
+
+[[it]]
+source = "Preselect objects before invoking the copy command."
+status = "unfinished"
+
+[[it]]
+source = "Move 1 "
+        <translation>Sposta 1 </translation>
+
+[[it]]
+source = "Rotate 1 "
+        <translation>Ruota 1 </translation>
+
+[[it]]
+source = "Mirror 1 "
+        <translation>Specchia 1 </translation>
+
+[[it]]
+source = "Scale 1 "
+        <translation>Scala 1 </translation>
+
+</TS>

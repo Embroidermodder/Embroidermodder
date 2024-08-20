@@ -1,0 +1,2371 @@
+# Embroidermodder 2.
+#
+# Copyright 2011-2024 The Embroidermodder Team
+# Embroidermodder 2 is Open Source Software, see LICENSE.md for licensing terms.
+#
+# Visit https://www.libembroidery.org/refman for advice on altering this file,
+# or read the markdown version in embroidermodder2/docs/refman.
+#
+# Romanian Translation
+
+[[ro]]
+source = "Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify radius of circle or [Diameter]: "
+status = "unfinished"
+
+[[ro]]
+source = "This should never happen."
+status = "unfinished"
+
+[[ro]]
+source = "Specify second end point of circle&apos;s diameter: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify second point on circle: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify third point on circle: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify point on object for second tangent of circle: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify radius of circle: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify second point: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify first end point of circle&apos;s diameter: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify first point of circle: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify point on object for first tangent of circle: "
+status = "unfinished"
+
+[[ro]]
+source = "Point or option keyword required."
+status = "unfinished"
+
+[[ro]]
+source = "Specify diameter of circle: "
+status = "unfinished"
+
+[[ro]]
+source = "Requires numeric radius, point on circumference, or &quot;D&quot;."
+status = "unfinished"
+
+[[ro]]
+source = "Requires numeric distance or second point."
+status = "unfinished"
+
+[[ro]]
+source = "Invalid point."
+status = "unfinished"
+
+[[ro]]
+source = "Specify second point of circle: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify third point of circle: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify first point: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify second point: "
+status = "unfinished"
+
+[[ro]]
+source = "Requires numeric distance or two points."
+status = "unfinished"
+
+[[ro]]
+source = "Distance"
+status = "unfinished"
+
+[[ro]]
+source = "Angle"
+status = "unfinished"
+
+[[ro]]
+source = "Delta X"
+status = "unfinished"
+
+[[ro]]
+source = "Delta Y"
+status = "unfinished"
+
+[[ro]]
+source = "Specify first axis start point or [Center]: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify first axis end point: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify second axis end point or [Rotation]: "
+status = "unfinished"
+
+[[ro]]
+source = "This should never happen."
+status = "unfinished"
+
+[[ro]]
+source = "Specify center point: "
+status = "unfinished"
+
+[[ro]]
+source = "Point or option keyword required."
+status = "unfinished"
+
+[[ro]]
+source = "Invalid point."
+status = "unfinished"
+
+[[ro]]
+source = "Specify rotation: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify ellipse rotation: "
+status = "unfinished"
+
+[[ro]]
+source = "Invalid angle. Input a numeric angle or pick a point."
+status = "unfinished"
+
+[[ro]]
+source = "Preselect objects before invoking the delete command."
+status = "unfinished"
+
+[[ro]]
+source = "Delete Preselect"
+status = "unfinished"
+
+[[ro]]
+source = "Specify first point: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify next point or [Undo]: "
+status = "unfinished"
+
+[[ro]]
+source = "Invalid point."
+status = "unfinished"
+
+[[ro]]
+source = "Point or option keyword required."
+status = "unfinished"
+
+[[ro]]
+source = "Specify point: "
+status = "unfinished"
+
+[[ro]]
+source = "Invalid point."
+status = "unfinished"
+
+[[ro]]
+source = "Preselect objects before invoking the move command."
+status = "unfinished"
+
+[[ro]]
+source = "Move Preselect"
+status = "unfinished"
+
+[[ro]]
+source = "Specify base point: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify destination point: "
+status = "unfinished"
+
+[[ro]]
+source = "Invalid point."
+status = "unfinished"
+
+[[ro]]
+source = "Specify start point: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify next point or [Arc/Undo]: "
+status = "unfinished"
+
+[[ro]]
+source = "Point or option keyword required."
+status = "unfinished"
+
+[[ro]]
+source = "Platform"
+status = "unfinished"
+
+[[ro]]
+source = "Specify first point: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify next point: "
+status = "unfinished"
+
+[[ro]]
+source = "Invalid point."
+status = "unfinished"
+
+[[ro]]
+source = "Enter number of sides"
+status = "unfinished"
+
+[[ro]]
+source = "Specify polygon type [Inscribed in circle/Circumscribed around circle]"
+status = "unfinished"
+
+[[ro]]
+source = "Specify center point or [Sidelength]: "
+status = "unfinished"
+
+[[ro]]
+source = "Requires an integer between 3 and 1024."
+status = "unfinished"
+
+[[ro]]
+source = "Specify start point: "
+status = "unfinished"
+
+[[ro]]
+source = "Point or option keyword required."
+status = "unfinished"
+
+[[ro]]
+source = "Specify polygon corner point or [Distance]: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify polygon side point or [Distance]: "
+status = "unfinished"
+
+[[ro]]
+source = "Polygon type is not Inscribed or Circumscribed."
+status = "unfinished"
+
+[[ro]]
+source = "Invalid option keyword."
+status = "unfinished"
+
+[[ro]]
+source = "Specify distance: "
+status = "unfinished"
+
+[[ro]]
+source = "Requires valid numeric distance."
+status = "unfinished"
+
+[[ro]]
+source = "Specify first point: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify next point or [Undo]: "
+status = "unfinished"
+
+[[ro]]
+source = "Invalid point."
+status = "unfinished"
+
+[[ro]]
+source = "Point or option keyword required."
+status = "unfinished"
+
+[[ro]]
+source = "Specify first point: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify second point: "
+status = "unfinished"
+
+[[ro]]
+source = "Requires two points."
+status = "unfinished"
+
+[[ro]]
+source = "Specify first corner point or [Chamfer/Fillet]: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify other corner point or [Dimensions]: "
+status = "unfinished"
+
+[[ro]]
+source = "Invalid point."
+status = "unfinished"
+
+[[ro]]
+source = "Specify first point: "
+status = "unfinished"
+
+[[ro]]
+source = "Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify crosshair color: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify grid color: "
+status = "unfinished"
+
+[[ro]]
+source = "Invalid color. R,G,B values must be in the range of 0-255."
+status = "unfinished"
+
+[[ro]]
+source = "Specify background color: "
+status = "unfinished"
+
+[[ro]]
+source = "Preselect objects before invoking the rotate command."
+status = "unfinished"
+
+[[ro]]
+source = "Rotate Preselect"
+status = "unfinished"
+
+[[ro]]
+source = "Specify base point: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify rotation angle or [Reference]: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify second point: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify the new angle: "
+status = "unfinished"
+
+[[ro]]
+source = "Invalid point."
+status = "unfinished"
+
+[[ro]]
+source = "Specify the reference angle"
+status = "unfinished"
+
+[[ro]]
+source = "Requires valid numeric angle, second point, or option keyword."
+status = "unfinished"
+
+[[ro]]
+source = "Requires valid numeric angle or two points."
+status = "unfinished"
+
+[[ro]]
+source = "Requires valid numeric angle or second point."
+status = "unfinished"
+
+[[ro]]
+source = "Preselect objects before invoking the scale command."
+status = "unfinished"
+
+[[ro]]
+source = "Scale Preselect"
+status = "unfinished"
+
+[[ro]]
+source = "Specify base point: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify scale factor or [Reference]: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify second point: "
+status = "unfinished"
+
+[[ro]]
+source = "Value must be positive and nonzero."
+status = "unfinished"
+
+[[ro]]
+source = "Specify new length: "
+status = "unfinished"
+
+[[ro]]
+source = "Invalid point."
+status = "unfinished"
+
+[[ro]]
+source = "Specify reference length"
+status = "unfinished"
+
+[[ro]]
+source = "Requires valid numeric distance, second point, or option keyword."
+status = "unfinished"
+
+[[ro]]
+source = "Requires valid numeric distance or two points."
+status = "unfinished"
+
+[[ro]]
+source = "Requires valid numeric distance or second point."
+status = "unfinished"
+
+[[ro]]
+source = "Current font: "
+status = "unfinished"
+
+[[ro]]
+source = "Text height: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify start point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify text height"
+status = "unfinished"
+
+[[ro]]
+source = "Specify text angle"
+status = "unfinished"
+
+[[ro]]
+source = "Enter text: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify center point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify right-end point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify middle point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify top-left point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify top-center point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify top-right point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify middle-left point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify middle-center point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify middle-right point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify bottom-left point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify bottom-center point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify bottom-right point of text or [Justify/Setfont]: "
+status = "unfinished"
+
+[[ro]]
+source = "Invalid option keyword."
+status = "unfinished"
+
+[[ro]]
+source = "Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify font name: "
+status = "unfinished"
+
+[[ro]]
+source = "Point or option keyword required."
+status = "unfinished"
+
+[[ro]]
+source = "Requires valid numeric distance or second point."
+status = "unfinished"
+
+[[ro]]
+source = "Requires valid numeric angle or second point."
+status = "unfinished"
+
+[[ro]]
+source = "Enter number of star points"
+status = "unfinished"
+
+[[ro]]
+source = "Specify outer radius of star: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify inner radius of star: "
+status = "unfinished"
+
+[[ro]]
+source = "Specify center point: "
+status = "unfinished"
+
+[[ro]]
+source = "Requires an integer between 3 and 1024."
+status = "unfinished"
+
+[[ro]]
+source = "Invalid point."
+status = "unfinished"
+
+[[ro]]
+source = "Enter an option [Cascade/Tile]: "
+status = "unfinished"
+
+[[ro]]
+source = "Invalid option keyword."
+status = "unfinished"
+
+</TS>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.0" language="ro" sourcelanguage="en">
+[[ro]]
+source = "Command: "
+status = "unfinished"
+
+[[ro]]
+source = "*Cancel*"
+status = "unfinished"
+
+[[ro]]
+source = "Embroidery Design Details"
+status = "unfinished"
+
+[[ro]]
+source = "General Information"
+status = "unfinished"
+
+[[ro]]
+source = "Total Stitches:"
+status = "unfinished"
+
+[[ro]]
+source = "Real Stitches:"
+status = "unfinished"
+
+[[ro]]
+source = "Jump Stitches:"
+status = "unfinished"
+
+[[ro]]
+source = "Trim Stitches:"
+status = "unfinished"
+
+[[ro]]
+source = "Total Colors:"
+status = "unfinished"
+
+[[ro]]
+source = "Color Changes:"
+status = "unfinished"
+
+[[ro]]
+source = "Left:"
+status = "unfinished"
+
+[[ro]]
+source = "Top:"
+status = "unfinished"
+
+[[ro]]
+source = "Right:"
+status = "unfinished"
+
+[[ro]]
+source = "Bottom:"
+status = "unfinished"
+
+[[ro]]
+source = "Width:"
+status = "unfinished"
+
+[[ro]]
+source = "Height:"
+status = "unfinished"
+
+[[ro]]
+source = "Layer Manager"
+status = "unfinished"
+
+[[ro]]
+source = "Name"
+status = "unfinished"
+
+[[ro]]
+source = "Visible"
+status = "unfinished"
+
+[[ro]]
+source = "Frozen"
+status = "unfinished"
+
+[[ro]]
+source = "Z Value"
+status = "unfinished"
+
+[[ro]]
+source = "Color"
+status = "unfinished"
+
+[[ro]]
+source = "Linetype"
+status = "unfinished"
+
+[[ro]]
+source = "Lineweight"
+status = "unfinished"
+
+[[ro]]
+source = "Print"
+status = "unfinished"
+
+[[ro]]
+source = "Error reading file"
+status = "unfinished"
+
+[[ro]]
+source = "Cannot read file %1:
+%2."
+status = "unfinished"
+
+[[ro]]
+source = "Error reading pattern"
+status = "unfinished"
+
+[[ro]]
+source = "Cannot read pattern"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Do Nothing"
+status = "unfinished"
+
+[[ro]]
+source = "Does Nothing"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Cascade"
+status = "unfinished"
+
+[[ro]]
+source = "Cascade the windows."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Tile"
+status = "unfinished"
+
+[[ro]]
+source = "Tile the windows."
+status = "unfinished"
+
+[[ro]]
+source = "Cl&amp;ose"
+status = "unfinished"
+
+[[ro]]
+source = "Close the active window."
+status = "unfinished"
+
+[[ro]]
+source = "Close &amp;All"
+status = "unfinished"
+
+[[ro]]
+source = "Close all the windows."
+status = "unfinished"
+
+[[ro]]
+source = "Ne&amp;xt"
+status = "unfinished"
+
+[[ro]]
+source = "Move the focus to the next window."
+status = "unfinished"
+
+[[ro]]
+source = "Pre&amp;vious"
+status = "unfinished"
+
+[[ro]]
+source = "Move the focus to the previous window."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;New"
+status = "unfinished"
+
+[[ro]]
+source = "Create a new file."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Open"
+status = "unfinished"
+
+[[ro]]
+source = "Open an existing file."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Save"
+status = "unfinished"
+
+[[ro]]
+source = "Save the design to disk."
+status = "unfinished"
+
+[[ro]]
+source = "Save &amp;As"
+status = "unfinished"
+
+[[ro]]
+source = "Save the design under a new name."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Print"
+status = "unfinished"
+
+[[ro]]
+source = "Print the design."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Details"
+status = "unfinished"
+
+[[ro]]
+source = "Details of the current design."
+status = "unfinished"
+
+[[ro]]
+source = "E&amp;xit"
+status = "unfinished"
+
+[[ro]]
+source = "Exit the application."
+status = "unfinished"
+
+[[ro]]
+source = "Cu&amp;t"
+status = "unfinished"
+
+[[ro]]
+source = "Cut the current selection&apos;s contents to the clipboard."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Copy"
+status = "unfinished"
+
+[[ro]]
+source = "Copy the current selection&apos;s contents to the clipboard."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Paste"
+status = "unfinished"
+
+[[ro]]
+source = "Paste the clipboard&apos;s contents into the current selection."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Help"
+status = "unfinished"
+
+[[ro]]
+source = "Displays help."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Changelog"
+status = "unfinished"
+
+[[ro]]
+source = "Describes new features in this product."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Tip Of The Day"
+status = "unfinished"
+
+[[ro]]
+source = "Displays a dialog with useful tips"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;About "
+status = "unfinished"
+
+[[ro]]
+source = "Displays information about this product."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Undo"
+status = "unfinished"
+
+[[ro]]
+source = "Reverses the most recent action."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Redo"
+status = "unfinished"
+
+[[ro]]
+source = "Reverses the effects of the previous undo action."
+status = "unfinished"
+
+[[ro]]
+source = "Icon&amp;16"
+status = "unfinished"
+
+[[ro]]
+source = "Sets the toolbar icon size to 16x16."
+status = "unfinished"
+
+[[ro]]
+source = "Icon&amp;24"
+status = "unfinished"
+
+[[ro]]
+source = "Sets the toolbar icon size to 24x24."
+status = "unfinished"
+
+[[ro]]
+source = "Icon&amp;32"
+status = "unfinished"
+
+[[ro]]
+source = "Sets the toolbar icon size to 32x32."
+status = "unfinished"
+
+[[ro]]
+source = "Icon&amp;48"
+status = "unfinished"
+
+[[ro]]
+source = "Sets the toolbar icon size to 48x48."
+status = "unfinished"
+
+[[ro]]
+source = "Icon&amp;64"
+status = "unfinished"
+
+[[ro]]
+source = "Sets the toolbar icon size to 64x64."
+status = "unfinished"
+
+[[ro]]
+source = "Icon12&amp;8"
+status = "unfinished"
+
+[[ro]]
+source = "Sets the toolbar icon size to 128x128."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Settings"
+status = "unfinished"
+
+[[ro]]
+source = "Configure settings specific to this product."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Make Layer Active"
+status = "unfinished"
+
+[[ro]]
+source = "Makes the layer of a selected object the active layer"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Layers"
+status = "unfinished"
+
+[[ro]]
+source = "Manages layers and layer properties:  LAYER"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Layer Selector"
+status = "unfinished"
+
+[[ro]]
+source = "Dropdown selector for changing the current layer"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Layer Previous"
+status = "unfinished"
+
+[[ro]]
+source = "Restores the previous layer settings:  LAYERP"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Color Selector"
+status = "unfinished"
+
+[[ro]]
+source = "Dropdown selector for changing the current thread color"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Stitchtype Selector"
+status = "unfinished"
+
+[[ro]]
+source = "Dropdown selector for changing the current stitch type"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Threadweight Selector"
+status = "unfinished"
+
+[[ro]]
+source = "Dropdown selector for changing the current thread weight"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Hide All Layers"
+status = "unfinished"
+
+[[ro]]
+source = "Turns the visibility off for all layers in the current drawing:  HIDEALL"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Show All Layers"
+status = "unfinished"
+
+[[ro]]
+source = "Turns the visibility on for all layers in the current drawing:  SHOWALL"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Freeze All Layers"
+status = "unfinished"
+
+[[ro]]
+source = "Freezes all layers in the current drawing:  FREEZEALL"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Thaw All Layers"
+status = "unfinished"
+
+[[ro]]
+source = "Thaws all layers in the current drawing:  THAWALL"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Lock All Layers"
+status = "unfinished"
+
+[[ro]]
+source = "Locks all layers in the current drawing:  LOCKALL"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Unlock All Layers"
+status = "unfinished"
+
+[[ro]]
+source = "Unlocks all layers in the current drawing:  UNLOCKALL"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Bold Text"
+status = "unfinished"
+
+[[ro]]
+source = "Sets text to be bold."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Italic Text"
+status = "unfinished"
+
+[[ro]]
+source = "Sets text to be italic."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Underline Text"
+status = "unfinished"
+
+[[ro]]
+source = "Sets text to be underlined."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;StrikeOut Text"
+status = "unfinished"
+
+[[ro]]
+source = "Sets text to be striked out."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Overline Text"
+status = "unfinished"
+
+[[ro]]
+source = "Sets text to be overlined."
+status = "unfinished"
+
+[[ro]]
+source = "Zoom &amp;Realtime"
+status = "unfinished"
+
+[[ro]]
+source = "Zooms to increase or decrease the apparent size of objects in the current viewport."
+status = "unfinished"
+
+[[ro]]
+source = "Zoom &amp;Previous"
+status = "unfinished"
+
+[[ro]]
+source = "Zooms to display the previous view."
+status = "unfinished"
+
+[[ro]]
+source = "Zoom &amp;Window"
+status = "unfinished"
+
+[[ro]]
+source = "Zooms to display an area specified by a rectangular window."
+status = "unfinished"
+
+[[ro]]
+source = "Zoom &amp;Dynamic"
+status = "unfinished"
+
+[[ro]]
+source = "Zooms to display the generated portion of the drawing."
+status = "unfinished"
+
+[[ro]]
+source = "Zoom &amp;Scale"
+status = "unfinished"
+
+[[ro]]
+source = "Zooms the display using a specified scale factor."
+status = "unfinished"
+
+[[ro]]
+source = "Zoom &amp;Center"
+status = "unfinished"
+
+[[ro]]
+source = "Zooms to display a view specified by a center point and magnification or height."
+status = "unfinished"
+
+[[ro]]
+source = "Zoom &amp;In"
+status = "unfinished"
+
+[[ro]]
+source = "Zooms to increase the apparent size of objects."
+status = "unfinished"
+
+[[ro]]
+source = "Zoom &amp;Out"
+status = "unfinished"
+
+[[ro]]
+source = "Zooms to decrease the apparent size of objects."
+status = "unfinished"
+
+[[ro]]
+source = "Zoom Selec&amp;ted"
+status = "unfinished"
+
+[[ro]]
+source = "Zooms to display the selected objects."
+status = "unfinished"
+
+[[ro]]
+source = "Zoom &amp;All"
+status = "unfinished"
+
+[[ro]]
+source = "Zooms to display the drawing extents or the grid limits."
+status = "unfinished"
+
+[[ro]]
+source = "Zoom &amp;Extents"
+status = "unfinished"
+
+[[ro]]
+source = "Zooms to display the drawing extents."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Pan Realtime"
+status = "unfinished"
+
+[[ro]]
+source = "Moves the view in the current viewport."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Pan Point"
+status = "unfinished"
+
+[[ro]]
+source = "Moves the view by the specified distance."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Pan Left"
+status = "unfinished"
+
+[[ro]]
+source = "Moves the view to the left."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Pan Right"
+status = "unfinished"
+
+[[ro]]
+source = "Moves the view to the right."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Pan Up"
+status = "unfinished"
+
+[[ro]]
+source = "Moves the view up."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Pan Down"
+status = "unfinished"
+
+[[ro]]
+source = "Moves the view down."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Day"
+status = "unfinished"
+
+[[ro]]
+source = "Updates the current view using day vision settings."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Night"
+status = "unfinished"
+
+[[ro]]
+source = "Updates the current view using night vision settings."
+status = "unfinished"
+
+[[ro]]
+source = "Testing Feature"
+status = "unfinished"
+
+[[ro]]
+source = "&lt;b&gt;This feature is in testing.&lt;/b&gt;"
+status = "unfinished"
+
+[[ro]]
+source = "
+
+"
+status = "unfinished"
+
+[[ro]]
+source = "http://embroidermodder.sourceforge.net"
+status = "unfinished"
+
+[[ro]]
+source = "Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi"
+status = "unfinished"
+
+[[ro]]
+source = "Embroidery formats by Josh Varga."
+status = "unfinished"
+
+[[ro]]
+source = "
+"
+status = "unfinished"
+
+[[ro]]
+source = "User Interface by Jonathan Greig."
+status = "unfinished"
+
+[[ro]]
+source = "Free under the zlib/libpng license."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Show tips on startup"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Previous"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Next"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Close"
+status = "unfinished"
+
+[[ro]]
+source = "Color Selector Conversion Error"
+status = "unfinished"
+
+[[ro]]
+source = "&lt;b&gt;An error has occured while changing colors.&lt;/b&gt;"
+status = "unfinished"
+
+[[ro]]
+source = "Color Selector Pointer Error"
+status = "unfinished"
+
+[[ro]]
+source = "Native MessageBox Error"
+status = "unfinished"
+
+[[ro]]
+source = "Incorrect use of the native messageBox function."
+status = "unfinished"
+
+[[ro]]
+source = "ScaleFactor Error"
+status = "unfinished"
+
+[[ro]]
+source = "Hi there. If you are not a developer, report this as a bug. If you are a developer, your code needs examined, and possibly your head too."
+status = "unfinished"
+
+[[ro]]
+source = "Red"
+status = "unfinished"
+
+[[ro]]
+source = "Yellow"
+status = "unfinished"
+
+[[ro]]
+source = "Green"
+status = "unfinished"
+
+[[ro]]
+source = "Cyan"
+status = "unfinished"
+
+[[ro]]
+source = "Blue"
+status = "unfinished"
+
+[[ro]]
+source = "Magenta"
+status = "unfinished"
+
+[[ro]]
+source = "White"
+status = "unfinished"
+
+[[ro]]
+source = "Other..."
+status = "unfinished"
+
+[[ro]]
+source = "&amp;File"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Edit"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;View"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Window"
+status = "unfinished"
+
+[[ro]]
+source = "Open &amp;Recent"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Zoom"
+status = "unfinished"
+
+[[ro]]
+source = "&amp;Pan"
+status = "unfinished"
+
+[[ro]]
+source = "File"
+status = "unfinished"
+
+[[ro]]
+source = "Edit"
+status = "unfinished"
+
+[[ro]]
+source = "View"
+status = "unfinished"
+
+[[ro]]
+source = "Zoom"
+status = "unfinished"
+
+[[ro]]
+source = "Pan"
+status = "unfinished"
+
+[[ro]]
+source = "Icon"
+status = "unfinished"
+
+[[ro]]
+source = "Help"
+status = "unfinished"
+
+[[ro]]
+source = "Layer"
+status = "unfinished"
+
+[[ro]]
+source = "Properties"
+status = "unfinished"
+
+[[ro]]
+source = "Text"
+status = "unfinished"
+
+[[ro]]
+source = "Command Prompt"
+status = "unfinished"
+
+[[ro]]
+source = "Open"
+status = "unfinished"
+
+[[ro]]
+source = "Open w/Preview"
+status = "unfinished"
+
+[[ro]]
+source = "File(s) loaded"
+status = "unfinished"
+
+[[ro]]
+source = "Save"
+status = "unfinished"
+
+[[ro]]
+source = "Properties"
+status = "unfinished"
+
+[[ro]]
+source = "No Selection"
+status = "unfinished"
+
+[[ro]]
+source = "Varies"
+status = "unfinished"
+
+[[ro]]
+source = "Arc"
+status = "unfinished"
+
+[[ro]]
+source = "Block"
+status = "unfinished"
+
+[[ro]]
+source = "Circle"
+status = "unfinished"
+
+[[ro]]
+source = "Aligned Dimension"
+status = "unfinished"
+
+[[ro]]
+source = "Angular Dimension"
+status = "unfinished"
+
+[[ro]]
+source = "Arclength Dimension"
+status = "unfinished"
+
+[[ro]]
+source = "Diameter Dimension"
+status = "unfinished"
+
+[[ro]]
+source = "Leader Dimension"
+status = "unfinished"
+
+[[ro]]
+source = "Linear Dimension"
+status = "unfinished"
+
+[[ro]]
+source = "Ordinate Dimension"
+status = "unfinished"
+
+[[ro]]
+source = "Radius Dimension"
+status = "unfinished"
+
+[[ro]]
+source = "Ellipse"
+status = "unfinished"
+
+[[ro]]
+source = "Image"
+status = "unfinished"
+
+[[ro]]
+source = "Infinite Line"
+status = "unfinished"
+
+[[ro]]
+source = "Line"
+status = "unfinished"
+
+[[ro]]
+source = "Point"
+status = "unfinished"
+
+[[ro]]
+source = "Polygon"
+status = "unfinished"
+
+[[ro]]
+source = "Polyline"
+status = "unfinished"
+
+[[ro]]
+source = "Ray"
+status = "unfinished"
+
+[[ro]]
+source = "Rectangle"
+status = "unfinished"
+
+[[ro]]
+source = "Multiline Text"
+status = "unfinished"
+
+[[ro]]
+source = "Text"
+status = "unfinished"
+
+[[ro]]
+source = "Unknown"
+status = "unfinished"
+
+[[ro]]
+source = "General"
+status = "unfinished"
+
+[[ro]]
+source = "Layer"
+status = "unfinished"
+
+[[ro]]
+source = "Color"
+status = "unfinished"
+
+[[ro]]
+source = "LineType"
+status = "unfinished"
+
+[[ro]]
+source = "LineWeight"
+status = "unfinished"
+
+[[ro]]
+source = "Geometry"
+status = "unfinished"
+
+[[ro]]
+source = "Center X"
+status = "unfinished"
+
+[[ro]]
+source = "Center Y"
+status = "unfinished"
+
+[[ro]]
+source = "Radius"
+status = "unfinished"
+
+[[ro]]
+source = "Start Angle"
+status = "unfinished"
+
+[[ro]]
+source = "End Angle"
+status = "unfinished"
+
+[[ro]]
+source = "Start X"
+status = "unfinished"
+
+[[ro]]
+source = "Start Y"
+status = "unfinished"
+
+[[ro]]
+source = "End X"
+status = "unfinished"
+
+[[ro]]
+source = "End Y"
+status = "unfinished"
+
+[[ro]]
+source = "Area"
+status = "unfinished"
+
+[[ro]]
+source = "Arc Length"
+status = "unfinished"
+
+[[ro]]
+source = "Chord"
+status = "unfinished"
+
+[[ro]]
+source = "Included Angle"
+status = "unfinished"
+
+[[ro]]
+source = "Misc"
+status = "unfinished"
+
+[[ro]]
+source = "Clockwise"
+status = "unfinished"
+
+[[ro]]
+source = "Position X"
+status = "unfinished"
+
+[[ro]]
+source = "Position Y"
+status = "unfinished"
+
+[[ro]]
+source = "Diameter"
+status = "unfinished"
+
+[[ro]]
+source = "Circumference"
+status = "unfinished"
+
+[[ro]]
+source = "Major Radius"
+status = "unfinished"
+
+[[ro]]
+source = "Minor Radius"
+status = "unfinished"
+
+[[ro]]
+source = "Major Diameter"
+status = "unfinished"
+
+[[ro]]
+source = "Minor Diameter"
+status = "unfinished"
+
+[[ro]]
+source = "Width"
+status = "unfinished"
+
+[[ro]]
+source = "Height"
+status = "unfinished"
+
+[[ro]]
+source = "Name"
+status = "unfinished"
+
+[[ro]]
+source = "Path"
+status = "unfinished"
+
+[[ro]]
+source = "2nd X"
+status = "unfinished"
+
+[[ro]]
+source = "2nd Y"
+status = "unfinished"
+
+[[ro]]
+source = "Vector X"
+status = "unfinished"
+
+[[ro]]
+source = "Vector Y"
+status = "unfinished"
+
+[[ro]]
+source = "Delta X"
+status = "unfinished"
+
+[[ro]]
+source = "Delta Y"
+status = "unfinished"
+
+[[ro]]
+source = "Angle"
+status = "unfinished"
+
+[[ro]]
+source = "Length"
+status = "unfinished"
+
+[[ro]]
+source = "Vertex Radius"
+status = "unfinished"
+
+[[ro]]
+source = "Side Radius"
+status = "unfinished"
+
+[[ro]]
+source = "Vertex Diameter"
+status = "unfinished"
+
+[[ro]]
+source = "Side Diameter"
+status = "unfinished"
+
+[[ro]]
+source = "Interior Angle"
+status = "unfinished"
+
+[[ro]]
+source = "Vertex #"
+status = "unfinished"
+
+[[ro]]
+source = "Vertex X"
+status = "unfinished"
+
+[[ro]]
+source = "Vertex Y"
+status = "unfinished"
+
+[[ro]]
+source = "Closed"
+status = "unfinished"
+
+[[ro]]
+source = "Corner 1 X"
+status = "unfinished"
+
+[[ro]]
+source = "Corner 1 Y"
+status = "unfinished"
+
+[[ro]]
+source = "Corner 2 X"
+status = "unfinished"
+
+[[ro]]
+source = "Corner 2 Y"
+status = "unfinished"
+
+[[ro]]
+source = "Corner 3 X"
+status = "unfinished"
+
+[[ro]]
+source = "Corner 3 Y"
+status = "unfinished"
+
+[[ro]]
+source = "Corner 4 X"
+status = "unfinished"
+
+[[ro]]
+source = "Corner 4 Y"
+status = "unfinished"
+
+[[ro]]
+source = "Contents"
+status = "unfinished"
+
+[[ro]]
+source = "Font"
+status = "unfinished"
+
+[[ro]]
+source = "Justify"
+status = "unfinished"
+
+[[ro]]
+source = "Rotation"
+status = "unfinished"
+
+[[ro]]
+source = "Backward"
+status = "unfinished"
+
+[[ro]]
+source = "UpsideDown"
+status = "unfinished"
+
+[[ro]]
+source = "Error - Negative Lineweight"
+status = "unfinished"
+
+[[ro]]
+source = "Lineweight: %1"
+status = "unfinished"
+
+[[ro]]
+source = "ScaleFactor Error"
+status = "unfinished"
+
+[[ro]]
+source = "Hi there. If you are not a developer, report this as a bug. If you are a developer, your code needs examined, and possibly your head too."
+status = "unfinished"
+
+[[ro]]
+source = "Navigation"
+status = "unfinished"
+
+[[ro]]
+source = "General"
+status = "unfinished"
+
+[[ro]]
+source = "Files/Paths"
+status = "unfinished"
+
+[[ro]]
+source = "Display"
+status = "unfinished"
+
+[[ro]]
+source = "Prompt"
+status = "unfinished"
+
+[[ro]]
+source = "Open/Save"
+status = "unfinished"
+
+[[ro]]
+source = "Printing"
+status = "unfinished"
+
+[[ro]]
+source = "Snap"
+status = "unfinished"
+
+[[ro]]
+source = "Grid/Ruler"
+status = "unfinished"
+
+[[ro]]
+source = "Ortho/Polar"
+status = "unfinished"
+
+[[ro]]
+source = "QuickSnap"
+status = "unfinished"
+
+[[ro]]
+source = "QuickTrack"
+status = "unfinished"
+
+[[ro]]
+source = "LineWeight"
+status = "unfinished"
+
+[[ro]]
+source = "Selection"
+status = "unfinished"
+
+[[ro]]
+source = "Settings"
+status = "unfinished"
+
+[[ro]]
+source = "Icons"
+status = "unfinished"
+
+[[ro]]
+source = "Icon Theme"
+status = "unfinished"
+
+[[ro]]
+source = "Icon Size"
+status = "unfinished"
+
+[[ro]]
+source = "Background"
+status = "unfinished"
+
+[[ro]]
+source = "Use Logo"
+status = "unfinished"
+
+[[ro]]
+source = "Choose"
+status = "unfinished"
+
+[[ro]]
+source = "Use Texture"
+status = "unfinished"
+
+[[ro]]
+source = "Use Color"
+status = "unfinished"
+
+[[ro]]
+source = "Tips"
+status = "unfinished"
+
+[[ro]]
+source = "Show Tip of the Day on startup"
+status = "unfinished"
+
+[[ro]]
+source = "ScrollBars"
+status = "unfinished"
+
+[[ro]]
+source = "Show ScrollBars"
+status = "unfinished"
+
+[[ro]]
+source = "Perform action when clicking corner widget"
+status = "unfinished"
+
+[[ro]]
+source = "Colors"
+status = "unfinished"
+
+[[ro]]
+source = "Crosshair Color"
+status = "unfinished"
+
+[[ro]]
+source = "Background Color"
+status = "unfinished"
+
+[[ro]]
+source = "Selection Box Color (Crossing)"
+status = "unfinished"
+
+[[ro]]
+source = "Selection Box Fill (Crossing)"
+status = "unfinished"
+
+[[ro]]
+source = "Selection Box Color (Window)"
+status = "unfinished"
+
+[[ro]]
+source = "Selection Box Fill (Window)"
+status = "unfinished"
+
+[[ro]]
+source = "Selection Box Fill Alpha"
+status = "unfinished"
+
+[[ro]]
+source = "Zoom"
+status = "unfinished"
+
+[[ro]]
+source = "Zoom In Scale"
+status = "unfinished"
+
+[[ro]]
+source = "Zoom Out Scale"
+status = "unfinished"
+
+[[ro]]
+source = "Text Color"
+status = "unfinished"
+
+[[ro]]
+source = "Font"
+status = "unfinished"
+
+[[ro]]
+source = "Font Family"
+status = "unfinished"
+
+[[ro]]
+source = "Font Style"
+status = "unfinished"
+
+[[ro]]
+source = "Font Size"
+status = "unfinished"
+
+[[ro]]
+source = "History"
+status = "unfinished"
+
+[[ro]]
+source = "Save History"
+status = "unfinished"
+
+[[ro]]
+source = "Save As HTML"
+status = "unfinished"
+
+[[ro]]
+source = "Custom Filter"
+status = "unfinished"
+
+[[ro]]
+source = "Select All"
+status = "unfinished"
+
+[[ro]]
+source = "File Open"
+status = "unfinished"
+
+[[ro]]
+source = "Preview Thumbnails"
+status = "unfinished"
+
+[[ro]]
+source = "Number of recently accessed files to show"
+status = "unfinished"
+
+[[ro]]
+source = "File Save"
+status = "unfinished"
+
+[[ro]]
+source = "Save Thumbnails"
+status = "unfinished"
+
+[[ro]]
+source = "AutoSave"
+status = "unfinished"
+
+[[ro]]
+source = "Trimming"
+status = "unfinished"
+
+[[ro]]
+source = "DST Only: Minimum number of jumps to trim"
+status = "unfinished"
+
+[[ro]]
+source = "Default Printer"
+status = "unfinished"
+
+[[ro]]
+source = "Use as default device"
+status = "unfinished"
+
+[[ro]]
+source = "Use last used device"
+status = "unfinished"
+
+[[ro]]
+source = "Save Ink"
+status = "unfinished"
+
+[[ro]]
+source = "Disable Background"
+status = "unfinished"
+
+[[ro]]
+source = "Grid Misc"
+status = "unfinished"
+
+[[ro]]
+source = "Initially show grid when loading a file"
+status = "unfinished"
+
+[[ro]]
+source = "Show the origin when the grid is enabled"
+status = "unfinished"
+
+[[ro]]
+source = "Grid Color"
+status = "unfinished"
+
+[[ro]]
+source = "Match grid color to crosshair color"
+status = "unfinished"
+
+[[ro]]
+source = "Grid Geometry"
+status = "unfinished"
+
+[[ro]]
+source = "Set grid size from opened file"
+status = "unfinished"
+
+[[ro]]
+source = "Grid Type"
+status = "unfinished"
+
+[[ro]]
+source = "Center the grid on the origin"
+status = "unfinished"
+
+[[ro]]
+source = "Grid Center X"
+status = "unfinished"
+
+[[ro]]
+source = "Grid Center Y"
+status = "unfinished"
+
+[[ro]]
+source = "Grid Size X"
+status = "unfinished"
+
+[[ro]]
+source = "Grid Size Y"
+status = "unfinished"
+
+[[ro]]
+source = "Grid Spacing X"
+status = "unfinished"
+
+[[ro]]
+source = "Grid Spacing Y"
+status = "unfinished"
+
+[[ro]]
+source = "Grid Size Radius"
+status = "unfinished"
+
+[[ro]]
+source = "Grid Spacing Radius"
+status = "unfinished"
+
+[[ro]]
+source = "Grid Spacing Angle"
+status = "unfinished"
+
+[[ro]]
+source = "Ruler Misc"
+status = "unfinished"
+
+[[ro]]
+source = "Initially show ruler when loading a file"
+status = "unfinished"
+
+[[ro]]
+source = "Ruler Units"
+status = "unfinished"
+
+[[ro]]
+source = "Ruler Color"
+status = "unfinished"
+
+[[ro]]
+source = "Ruler Geometry"
+status = "unfinished"
+
+[[ro]]
+source = "Ruler Pixel Size"
+status = "unfinished"
+
+[[ro]]
+source = "Locators Used"
+status = "unfinished"
+
+[[ro]]
+source = "Endpoint"
+status = "unfinished"
+
+[[ro]]
+source = "Midpoint"
+status = "unfinished"
+
+[[ro]]
+source = "Center"
+status = "unfinished"
+
+[[ro]]
+source = "Node"
+status = "unfinished"
+
+[[ro]]
+source = "Quadrant"
+status = "unfinished"
+
+[[ro]]
+source = "Intersection"
+status = "unfinished"
+
+[[ro]]
+source = "Extension"
+status = "unfinished"
+
+[[ro]]
+source = "Insertion"
+status = "unfinished"
+
+[[ro]]
+source = "Perpendicular"
+status = "unfinished"
+
+[[ro]]
+source = "Tangent"
+status = "unfinished"
+
+[[ro]]
+source = "Nearest"
+status = "unfinished"
+
+[[ro]]
+source = "Apparent Intersection"
+status = "unfinished"
+
+[[ro]]
+source = "Parallel"
+status = "unfinished"
+
+[[ro]]
+source = "Clear All"
+status = "unfinished"
+
+[[ro]]
+source = "Visual Configuration"
+status = "unfinished"
+
+[[ro]]
+source = "Locator Color"
+status = "unfinished"
+
+[[ro]]
+source = "Locator Size"
+status = "unfinished"
+
+[[ro]]
+source = "Sensitivity"
+status = "unfinished"
+
+[[ro]]
+source = "Aperture Size"
+status = "unfinished"
+
+[[ro]]
+source = "LineWeight Misc"
+status = "unfinished"
+
+[[ro]]
+source = "Show LineWeight"
+status = "unfinished"
+
+[[ro]]
+source = "RealRender"
+status = "unfinished"
+
+[[ro]]
+source = "Default weight"
+status = "unfinished"
+
+[[ro]]
+source = "Modes"
+status = "unfinished"
+
+[[ro]]
+source = "Allow Preselection (PickFirst)"
+status = "unfinished"
+
+[[ro]]
+source = "Add to Selection (PickAdd)"
+status = "unfinished"
+
+[[ro]]
+source = "Drag to Select (PickDrag)"
+status = "unfinished"
+
+[[ro]]
+source = "Cool Grip (Unselected)"
+status = "unfinished"
+
+[[ro]]
+source = "Hot Grip (Selected)"
+status = "unfinished"
+
+[[ro]]
+source = "Sizes"
+status = "unfinished"
+
+[[ro]]
+source = "Grip Size"
+status = "unfinished"
+
+[[ro]]
+source = "Pickbox Size"
+status = "unfinished"
+
+[[ro]]
+source = "Red"
+status = "unfinished"
+
+[[ro]]
+source = "Yellow"
+status = "unfinished"
+
+[[ro]]
+source = "Green"
+status = "unfinished"
+
+[[ro]]
+source = "Cyan"
+status = "unfinished"
+
+[[ro]]
+source = "Blue"
+status = "unfinished"
+
+[[ro]]
+source = "Magenta"
+status = "unfinished"
+
+[[ro]]
+source = "White"
+status = "unfinished"
+
+[[ro]]
+source = "Open File"
+status = "unfinished"
+
+[[ro]]
+source = "Images (*.bmp *.png *.jpg)"
+status = "unfinished"
+
+[[ro]]
+source = "New"
+status = "unfinished"
+
+[[ro]]
+source = "History"
+status = "unfinished"
+
+[[ro]]
+source = "ZoomSelected Preselect"
+status = "unfinished"
+
+[[ro]]
+source = "Preselect objects before invoking the zoomSelected command."
+status = "unfinished"
+
+[[ro]]
+source = "Grip Edit "
+status = "unfinished"
+
+[[ro]]
+source = "Delete 1 "
+status = "unfinished"
+
+[[ro]]
+source = "Cut Preselect"
+status = "unfinished"
+
+[[ro]]
+source = "Preselect objects before invoking the cut command."
+status = "unfinished"
+
+[[ro]]
+source = "Copy Preselect"
+status = "unfinished"
+
+[[ro]]
+source = "Preselect objects before invoking the copy command."
+status = "unfinished"
+
+[[ro]]
+source = "Move 1 "
+status = "unfinished"
+
+[[ro]]
+source = "Rotate 1 "
+status = "unfinished"
+
+[[ro]]
+source = "Mirror 1 "
+status = "unfinished"
+
+[[ro]]
+source = "Scale 1 "
+status = "unfinished"
+
+</TS>
