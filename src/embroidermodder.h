@@ -116,8 +116,6 @@ class PropertyEditor;
 class SelectBox;
 class UndoEditor;
 class View;
-class CmdPromptHistory;
-class CmdPromptSplitter;
 class CmdPromptInput;
 
 extern MainWindow *_main;
@@ -160,14 +158,31 @@ extern QString prefix;
 extern QString lastCmd;
 extern QString curCmd;
 
-extern CmdPromptHistory* promptHistory;
-extern QVBoxLayout* promptVBoxLayout;
-extern QFrame* promptDivider;
-
-extern CmdPromptSplitter* promptSplitter;
+extern QTextBrowser* promptHistory;
 extern CmdPromptInput* promptInput;
 
+extern QString formatFilterOpen;
+extern QString formatFilterSave;
+extern QString openFilesPath;
+extern const char *settings_file;
+extern QByteArray layoutState;
+
+extern QStringList button_list;
+
+extern QString prompt_color_;
+extern QString prompt_selection_bg_color_;
+extern QString prompt_bg_color_;
+extern QString prompt_selection_color_;
+
+extern QTimer* blinkTimer;
+extern bool blinkState;
+
+extern std::unordered_map<int, int> key_map;
+extern std::unordered_map<const char *, const char *> menu_list;
+
 void appendHistory(QString txt);
+
+void create_statusbar(MainWindow* mw);
 
 /* . */
 typedef struct ViewData_ {
@@ -794,25 +809,6 @@ public:
     Settings_Dialog(MainWindow* mw, const QString& showTab = "", QWidget *parent = 0);
     ~Settings_Dialog();
 
-    QCheckBox* create_checkbox(QGroupBox* groupbox, QString label, BoolSetting *setting,
-        QString icon="");
-    QDoubleSpinBox* create_spinbox(
-        QGroupBox* groupbox,
-        QString label,
-        RealSetting *setting,
-        double single_step,
-        double lower_bound,
-        double upper_bound);
-    QSpinBox* create_int_spinbox(
-        QGroupBox* groupbox,
-        QString label,
-        IntSetting *setting,
-        int single_step,
-        int lower_bound,
-        int upper_bound);
-
-    void preview_update(void);
-
 private:
     QTabWidget* tabWidget;
 
@@ -1049,9 +1045,6 @@ public:
     CmdPromptInput(QWidget* parent = 0);
     ~CmdPromptInput() {}
 
-    void changeFormatting(const QList<QTextLayout::FormatRange>& formats);
-    void clearFormatting();
-    void applyFormatting();
 protected:
     void contextMenuEvent(QContextMenuEvent *event);
     bool eventFilter(QObject *obj, QEvent *event);
@@ -1067,46 +1060,6 @@ public slots:
 private slots:
     void copyClip();
     void pasteClip();
-};
-
-class CmdPromptHistory: public QTextBrowser
-{
-    Q_OBJECT
-
-public:
-    CmdPromptHistory(QWidget* parent = 0);
-    ~CmdPromptHistory() {}
-
-    QString applyFormatting(const QString& txt, int prefixLength);
-
-protected:
-    void contextMenuEvent(QContextMenuEvent* event);
-};
-
-class CmdPromptSplitter: public QSplitter
-{
-    Q_OBJECT
-
-public:
-    CmdPromptSplitter(QWidget* parent = 0);
-    ~CmdPromptSplitter() {}
-
-protected:
-    QSplitterHandle* createHandle();
-};
-
-class CmdPromptHandle : public QSplitterHandle
-{
-    Q_OBJECT
-
-public:
-    CmdPromptHandle(Qt::Orientation orientation, QSplitter* parent);
-    ~CmdPromptHandle() {}
-
-protected:
-    void mousePressEvent(QMouseEvent* e);
-    void mouseReleaseEvent(QMouseEvent* e);
-    void mouseMoveEvent(QMouseEvent* e);
 };
 
 class CmdPrompt : public QWidget
@@ -1137,8 +1090,6 @@ public slots:
     void setPromptFontFamily(const QString&);
     void setPromptFontStyle(const QString&);
     void setPromptFontSize(int);
-
-    void floatingChanged(bool);
 
     void saveHistory(const QString& fileName, bool html);
 

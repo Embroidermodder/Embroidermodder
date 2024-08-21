@@ -14,27 +14,6 @@
 
 #define NUMBINS 10
 
-QToolButton* statusBarSnapButton;
-QToolButton* statusBarGridButton;
-QToolButton* statusBarRulerButton;
-QToolButton* statusBarOrthoButton;
-QToolButton* statusBarPolarButton;
-QToolButton* statusBarQSnapButton;
-QToolButton* statusBarQTrackButton;
-QToolButton* statusBarLwtButton;
-QLabel* statusBarMouseCoord;
-
-QStringList button_list = {
-    "SNAP",
-    "GRID",
-    "RULER",
-    "ORTHO",
-    "POLAR",
-    "QSNAP",
-    "QTRACK",
-    "LWT"
-};
-
 /* . */
 UndoEditor::UndoEditor(const QString& iconDirectory, QWidget* widgetToFocus, QWidget* parent) : QDockWidget(parent)
 {
@@ -1327,3 +1306,499 @@ void MdiWindow::promptInputPrevNext(bool prev)
         }
     }
 }
+
+void
+setHistory(const QString& txt)
+{
+    promptHistory->setHtml(txt);
+    promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+}
+
+/* . */
+CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
+{
+    QFrame* promptDivider;
+    QVBoxLayout* promptVBoxLayout;
+    debug_message("CmdPrompt Constructor");
+    setObjectName("Command Prompt");
+
+    promptInput = new CmdPromptInput(this);
+    promptHistory = new QTextBrowser();
+    promptDivider = new QFrame(this);
+    promptVBoxLayout = new QVBoxLayout(this);
+
+    debug_message("CmdPromptHistory Constructor");
+    setObjectName("Command Prompt History");
+
+    int initHeight = 19*3; /* (approximately three lines of text) */
+
+    promptHistory->setFrameStyle(QFrame::NoFrame);
+    promptHistory->setMaximumHeight(initHeight);
+    promptHistory->setMinimumWidth(200);
+    /* TODO: use float/dock events to set minimum size
+     * so when floating, it isn't smooshed. */
+
+    promptHistory->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
+    this->setFocusProxy(promptInput);
+    promptHistory->setFocusProxy(promptInput);
+
+    promptDivider->setLineWidth(1);
+    promptDivider->setFrameStyle(QFrame::HLine);
+    promptDivider->setMaximumSize(QWIDGETSIZE_MAX, 1);
+
+    promptVBoxLayout->addWidget(promptHistory);
+    promptVBoxLayout->addWidget(promptDivider);
+    promptVBoxLayout->addWidget(promptInput);
+
+    promptVBoxLayout->setSpacing(0);
+    promptVBoxLayout->setContentsMargins(0,0,0,0);
+
+    this->setLayout(promptVBoxLayout);
+
+    prompt_color_ = "#000000"; /* Match --------------------| */
+    prompt_selection_bg_color_ = "#000000"; /* Match -------| */
+    prompt_bg_color_ = "#FFFFFF";
+    prompt_selection_color_ = "#FFFFFF";
+    strcpy(prompt_font_family.setting, "Monospace");
+    strcpy(prompt_font_style.setting, "normal");
+    prompt_font_size.setting = 12;
+
+    updateStyle();
+
+    blinkState = false;
+    blinkTimer = new QTimer(this);
+    connect(blinkTimer, SIGNAL(timeout()), this, SLOT(blink()));
+
+    this->show();
+
+    connect(promptInput, SIGNAL(showSettings()), this, SIGNAL(showSettings()));
+}
+
+/* . */
+void
+CmdPrompt::saveHistory(const QString& fileName, bool html)
+{
+    debug_message("CmdPrompt saveHistory");
+    FILE *file = fopen(qPrintable(fileName), "w");
+    if (html) {
+        fprintf(file, "%s", qPrintable(promptHistory->toHtml()));
+    }
+    else {
+        fprintf(file, "%s", qPrintable(promptHistory->toPlainText()));
+    }
+    fclose(file);
+}
+
+/* . */
+void
+CmdPrompt::alert(const QString& txt)
+{
+    QString alertTxt = "<font color=\"red\">" + txt + "</font>";
+    /* TODO: Make the alert color customizable. */
+    setPrefix(alertTxt);
+    appendHistory("");
+}
+
+/* . */
+void
+start_blinking(void)
+{
+    blinkTimer->start(750);
+    isBlinking = true;
+}
+
+/* . */
+void
+stop_blinking(void)
+{
+    blinkTimer->stop();
+    isBlinking = false;
+}
+
+/* . */
+void
+CmdPrompt::blink()
+{
+    blinkState = !blinkState;
+}
+
+/* . */
+void
+CmdPrompt::setPromptTextColor(const QColor& color)
+{
+    prompt_color_ = color.name();
+    prompt_selection_bg_color_ = color.name();
+    updateStyle();
+}
+
+/* . */
+void
+CmdPrompt::setPromptBackgroundColor(const QColor& color)
+{
+    prompt_bg_color_ = color.name();
+    prompt_selection_color_ = color.name();
+    updateStyle();
+}
+
+/* . */
+void
+CmdPrompt::setPromptFontFamily(const QString& family)
+{
+    strcpy(prompt_font_family.setting, qPrintable(family));
+    updateStyle();
+}
+
+/* . */
+void
+CmdPrompt::setPromptFontStyle(const QString& style)
+{
+    strcpy(prompt_font_style.setting, qPrintable(style));
+    updateStyle();
+}
+
+/* . */
+void
+CmdPrompt::setPromptFontSize(int size)
+{
+    prompt_font_size.setting = size;
+    updateStyle();
+}
+
+/* . */
+void
+CmdPrompt::updateStyle()
+{
+    char style_string[2200];
+    sprintf(style_string,
+        "QTextBrowser,QLineEdit{" \
+        "    color:%s;" \
+        "    background-color:%s;" \
+        "    selection-color:%s;" \
+        "    selection-background-color:%s;" \
+        "    font-family:%s;" \
+        "    font-style:%s;" \
+        "    font-size:%dpx;" \
+        "}",
+        qPrintable(prompt_color_),
+        qPrintable(prompt_bg_color_),
+        qPrintable(prompt_selection_color_),
+        qPrintable(prompt_selection_bg_color_),
+        prompt_font_family.setting,
+        prompt_font_style.setting,
+        prompt_font_size.setting);
+
+    this->setStyleSheet(QString(style_string));
+}
+
+/* . */
+void
+CmdPrompt::setPrefix(const QString& txt)
+{
+    prefix = txt;
+    curText = txt;
+    promptInput->setText(txt);
+}
+
+/* . */
+void
+appendHistory(QString txt)
+{
+    if (txt.isNull()) {
+        txt = curText;
+    }
+
+    promptHistory->append(txt);
+    /* emit historyAppended(formatStr); */
+    promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+}
+
+/* . */
+CmdPromptInput::CmdPromptInput(QWidget* parent) : QLineEdit(parent)
+{
+    debug_message("CmdPromptInput Constructor");
+    setObjectName("Command Prompt Input");
+
+    defaultPrefix = tr("Command: ");
+    prefix = defaultPrefix;
+    curText = prefix;
+
+    lastCmd = "help";
+    curCmd = "help";
+    cmdActive = false;
+
+    rapidFireEnabled = false;
+
+    isBlinking = false;
+
+    this->setText(prefix);
+    this->setFrame(false);
+    this->setMaxLength(266);
+    this->setMaximumSize(5000, 25);
+    this->setDragEnabled(false);
+
+    connect(this, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(checkCursorPosition(int, int)));
+    connect(this, SIGNAL(textEdited(const QString&)), this, SLOT(checkEditedText(const QString&)));
+    connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(checkChangedText(const QString&)));
+    connect(this, SIGNAL(selectionChanged()), this, SLOT(checkSelection()));
+
+    this->installEventFilter(this);
+    this->setFocus(Qt::OtherFocusReason);
+}
+
+/* . */
+void
+CmdPromptInput::endCommand()
+{
+    debug_message("CmdPromptInput endCommand");
+    lastCmd = curCmd;
+    cmdActive = false;
+    rapidFireEnabled = false;
+    stop_blinking();
+
+    prefix = defaultPrefix;
+    clear();
+}
+
+/*
+ */
+void
+CmdPromptInput::processInput(const QChar& rapidChar)
+{
+    debug_message("processInput");
+
+    updateCurrentText(curText);
+
+    QString cmdtxt(curText);
+    cmdtxt.replace(0, prefix.length(), "");
+    if (!rapidFireEnabled) {
+        cmdtxt = cmdtxt.toLower();
+    }
+
+    if (cmdActive) {
+        if (rapidFireEnabled) {
+            /*
+            if (rapidChar == Qt::Key_Enter || rapidChar == Qt::Key_Return) {
+                appendHistory(curText);
+                runCommand(curCmd, "RAPID_ENTER");
+                curText.clear();
+                clear();
+                return;
+            }
+            else if (rapidChar == Qt::Key_Space) {
+                updateCurrentText(curText + " ");
+                runCommand(curCmd, cmdtxt + " ");
+                return;
+            }
+            else */ {
+                /* runCommand(curCmd, cmdtxt); */
+                return;
+            }
+        }
+        else {
+            appendHistory(curText);
+            /* runCommand(curCmd, cmdtxt); */
+        }
+    }
+    else {
+        auto found = aliasHash.find(cmdtxt.toStdString());
+        if (found != aliasHash.end()) {
+            cmdActive = true;
+            lastCmd = curCmd;
+            std::string cmd = aliasHash[cmdtxt.toStdString()];
+            curCmd = QString(cmd.c_str());
+            appendHistory(curText);
+            _main->runCommandPrompt(curCmd);
+        }
+        else if (cmdtxt.isEmpty()) {
+            cmdActive = true;
+            appendHistory(curText);
+            /* Rerun the last successful command. */
+            _main->runCommandPrompt(lastCmd);
+        }
+        else {
+            appendHistory(curText + "<br/><font color=\"red\">Unknown command \"" + cmdtxt + "\". Press F1 for help.</font>");
+        }
+    }
+
+    if (!rapidFireEnabled) {
+        clear();
+    }
+}
+
+/* . */
+void
+CmdPromptInput::checkSelection()
+{
+    debug_message("CmdPromptInput::checkSelection");
+    if (this->hasSelectedText()) {
+        this->deselect();
+    }
+}
+
+/* . */
+void
+CmdPromptInput::checkCursorPosition(int /*oldpos*/, int newpos)
+{
+    /* qDebug("CmdPromptInput::checkCursorPosition - %d %d", oldpos, newpos); */
+    if (this->hasSelectedText()) {
+        this->deselect();
+    }
+    if (newpos < prefix.length()) {
+        this->setCursorPosition(prefix.length());
+    }
+}
+
+/* . */
+void
+CmdPromptInput::updateCurrentText(const QString& txt)
+{
+    int cursorPos = cursorPosition();
+    if (!txt.startsWith(prefix)) {
+        if (txt.length() < prefix.length()) {
+            this->setText(prefix);
+        }
+        else if (txt.length() != prefix.length()) {
+            this->setText(prefix + txt);
+        }
+        else {
+            this->setText(curText);
+        }
+    }
+    else {
+        /* input is okay so update curText */
+        curText = txt;
+        this->setText(curText);
+    }
+    setCursorPosition(cursorPos);
+}
+
+/* . */
+void
+CmdPromptInput::checkEditedText(const QString& txt)
+{
+    updateCurrentText(txt);
+
+    if (rapidFireEnabled) {
+        processInput();
+    }
+}
+
+/* . */
+void
+CmdPromptInput::checkChangedText(const QString& txt)
+{
+    updateCurrentText(txt);
+}
+
+/* . */
+void
+CmdPromptInput::copyClip()
+{
+    QString copyText = curText.remove(0, prefix.length());
+    qApp->clipboard()->setText(copyText);
+}
+
+/* . */
+void
+CmdPromptInput::pasteClip()
+{
+    paste();
+}
+
+/* . */
+void
+CmdPromptInput::contextMenuEvent(QContextMenuEvent* event)
+{
+    QMenu menu(this);
+
+    QAction* copyAction = new QAction("&Copy", this);
+    copyAction->setStatusTip("Copies the command prompt text to the clipboard.");
+    connect(copyAction, SIGNAL(triggered()), this, SLOT(copyClip()));
+    menu.addAction(copyAction);
+
+    QAction* pasteAction = new QAction("&Paste", this);
+    pasteAction->setStatusTip("Inserts the clipboard's text into the command prompt at the cursor position.");
+    connect(pasteAction, SIGNAL(triggered()), this, SLOT(pasteClip()));
+    menu.addAction(pasteAction);
+
+    menu.addSeparator();
+
+    QAction* settingsAction = new QAction("&Settings...", this);
+    settingsAction->setStatusTip("Opens settings for the command prompt.");
+    connect(settingsAction, SIGNAL(triggered()), this, SIGNAL(showSettings()));
+    menu.addAction(settingsAction);
+
+    menu.exec(event->globalPos());
+}
+
+/* The key_state is set to false again by whatever uses the sequence
+ * so we can control when the keypress is eaten. Otherwise, if the release happens
+ * it manually sets it to false.
+ */
+bool
+CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
+{
+    if (event->type() == QEvent::KeyPress) {
+        if (isBlinking) {
+            stop_blinking();
+        }
+
+        QKeyEvent* pressedKey = (QKeyEvent*)event;
+        int key = pressedKey->key();
+        auto found = key_map.find(key);
+        if (found != key_map.end()) {
+            if (key != (int)Qt::Key_Shift) {
+                pressedKey->accept();
+            }
+        }
+        switch (key) {
+        case Qt::Key_Enter:
+        case Qt::Key_Return: {
+            processInput(QChar('\n'));
+            return true;
+        }
+        case Qt::Key_Space: {
+            processInput(QChar(' '));
+            return true;
+        }
+        case Qt::Key_Delete: {
+            del();
+            return true;
+        }
+        case Qt::Key_Escape: {
+            prefix = defaultPrefix;
+            clear();
+            appendHistory(curText + tr("*Cancel*"));
+            return true;
+        }
+        default: {
+            pressedKey->ignore();
+            break;
+        }
+        }
+        if (found != key_map.end()) {
+            if (key != (int)Qt::Key_Shift) {
+                key_state[key] = true;
+                return true;
+            }
+            else {
+                /* we don't want to eat it, we just want to keep track of it */
+                pressedKey->ignore();
+            }
+        }
+    }
+
+    if (event->type() == QEvent::KeyRelease) {
+        QKeyEvent* releasedKey = (QKeyEvent*)event;
+        int key = releasedKey->key();
+        /* We don't want to eat it, we just want to keep track of it. */
+        releasedKey->ignore();
+        auto found = key_map.find(key);
+        if (found != key_map.end()) {
+            key_state[key] = false;
+        }
+    }
+    return QObject::eventFilter(obj, event);
+}
+

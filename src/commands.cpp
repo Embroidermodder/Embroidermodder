@@ -12,15 +12,6 @@
 
 #include "embroidermodder.h"
 
-void checkBoxTipOfTheDayStateChanged(int checked);
-void buttonTipOfTheDayClicked(int button);
-
-ScriptValue previewon_command(ScriptEnv *context);
-ScriptValue get_command(ScriptEnv *context);
-ScriptValue set_command(ScriptEnv *context);
-ScriptValue move_command(ScriptEnv *context);
-ScriptValue sandbox_command(ScriptEnv *context);
-
 /* . */
 void
 stub_implement(const char *txt)

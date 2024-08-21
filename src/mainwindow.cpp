@@ -12,46 +12,6 @@
 
 #include "embroidermodder.h"
 
-std::unordered_map<int, QAction*> actionHash;
-std::unordered_map<QString, QToolBar*> toolbarHash;
-std::unordered_map<QString, QMenu*> menuHash;
-const char *settings_file = "settings.toml";
-void create_statusbar(MainWindow* mw);
-
-QList<QGraphicsItem*> cutCopyObjectList;
-
-QString formatFilterOpen;
-QString formatFilterSave;
-
-QStatusBar* statusbar;
-MdiArea* mdiArea;
-CmdPrompt* prompt;
-PropertyEditor* dockPropEdit;
-UndoEditor* dockUndoEdit;
-QTimer* testing_timer;
-
-QList<MdiWindow*> listMdiWin;
-QString openFilesPath;
-
-QAction* myFileSeparator;
-
-QWizard* wizardTipOfTheDay;
-QLabel* labelTipOfTheDay;
-QCheckBox* checkBoxTipOfTheDay;
-QStringList listTipOfTheDay;
-
-/* Selectors */
-QComboBox* layerSelector;
-QComboBox* colorSelector;
-QComboBox* linetypeSelector;
-QComboBox* lineweightSelector;
-QFontComboBox* textFontSelector;
-QComboBox* textSizeSelector;
-
-QByteArray layoutState;
-
-MainWindow *_main;
-
 QMenuBar *menuBar()
 {
     return _main->menuBar();

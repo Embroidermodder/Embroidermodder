@@ -58,7 +58,6 @@ qt_add_executable(embroidermodder2
 	${EXTERN}/tomlc99/toml.c
 	${EXTERN}/tomlc99/toml.h
 
-	${SRC}/cmdprompt.cpp
 	${SRC}/commands.cpp
 	${SRC}/mainwindow.cpp
 	${SRC}/object.cpp
@@ -67,9 +66,11 @@ qt_add_executable(embroidermodder2
 	${SRC}/view.cpp
 	${SRC}/widgets.cpp
 	${SRC}/wrapper.cpp
+	${SRC}/data.cpp
 
 	${SRC}/command_data.c
 	${SRC}/editor_data.c
+	${SRC}/settings_data.c
 	${SRC}/script.c
 
 	${SRC}/embroidermodder.h
@@ -86,6 +87,7 @@ add_executable(emb2_glfw
 	${SRC}/main_glfw.c
 	${SRC}/command_data.c
 	${SRC}/editor_data.c
+	${SRC}/settings_data.c
 	${SRC}/script.c
 
 	${SRC}/core.h

@@ -639,6 +639,12 @@ typedef struct Editor_ {
     int object;
 } Editor;
 
+typedef struct WidgetData_ {
+    char label[MAX_STRING_LENGTH];
+    BoolSetting *setting;
+    char icon[MAX_STRING_LENGTH];
+} WidgetData;
+
 /* Scripting functions */
 ScriptEnv *create_script_env();
 void free_script_env(ScriptEnv *);
@@ -858,6 +864,8 @@ extern Editor misc_text_single_editor_data[];
 extern const char *_appName_;
 extern const char *_appVer_;
 
+extern WidgetData render_hints[];
+
 extern int numOfDocs;
 extern int docIndex;
 extern bool shiftKeyPressedState;
@@ -886,6 +894,15 @@ void stop_blinking(void);
 ScriptValue run_command(const char *cmd, ScriptEnv *context);
 
 void nativeBlinkPrompt();
+
+void checkBoxTipOfTheDayStateChanged(int checked);
+void buttonTipOfTheDayClicked(int button);
+
+ScriptValue previewon_command(ScriptEnv *context);
+ScriptValue get_command(ScriptEnv *context);
+ScriptValue set_command(ScriptEnv *context);
+ScriptValue move_command(ScriptEnv *context);
+ScriptValue sandbox_command(ScriptEnv *context);
 
 void nativeAddInfiniteLine(double x1, double y1, double x2, double y2, double rot);
 void nativeAddRay(double x1, double y1, double x2, double y2, double rot);
