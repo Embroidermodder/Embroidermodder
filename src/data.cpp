@@ -138,3 +138,77 @@ std::unordered_map<const char *, const char *> menu_list = {
     {"Pan", "&Pan"}
 };
 
+QHash<QString, QGroupBox*> group_boxes;
+QHash<QString, QToolButton*> tool_buttons;
+QHash<QString, QLineEdit*> line_edits;
+QHash<QString, QComboBox*> combo_boxes;
+QComboBox* comboBoxSelected;
+
+QStringList group_box_list = {
+    "General",
+    "GeometryArc",
+    "MiscArc",
+    "GeometryBlock",
+    "GeometryCircle",
+    "GeometryDimAligned",
+    "GeometryDimAngular",
+    "GeometryDimArcLength",
+    "GeometryDimDiameter",
+    "GeometryDimLeader",
+    "GeometryDimLinear",
+    "GeometryDimOrdinate",
+    "GeometryDimRadius",
+    "GeometryEllipse",
+    "GeometryImage",
+    "MiscImage",
+    "GeometryInfiniteLine",
+    "GeometryLine",
+    "GeometryPath",
+    "MiscPath",
+    "GeometryPoint",
+    "GeometryPolygon",
+    "GeometryPolyline",
+    "MiscPolyline",
+    "GeometryRay",
+    "GeometryRectangle",
+    "GeometryTextMulti",
+    "TextTextSingle",
+    "GeometryTextSingle",
+    "MiscTextSingle"
+};
+
+QWidget* focusWidget_;
+
+QString iconDir;
+int iconSize;
+
+bool pickAdd;
+
+Object* tempObj;
+
+int precisionAngle;
+int precisionLength;
+
+/* Used when checking if fields vary. */
+QString fieldOldText;
+QString fieldNewText;
+QString fieldVariesText;
+QString fieldYesText;
+QString fieldNoText;
+QString fieldOnText;
+QString fieldOffText;
+
+QFontComboBox* comboBoxTextSingleFont;
+
+QSignalMapper* signalMapper;
+Qt::ToolButtonStyle propertyEditorButtonStyle;
+
+QList<QGraphicsItem*> selectedItemList;
+
+QToolButton* toolButtonQSelect;
+QToolButton* toolButtonPickAdd;
+
+bool useLogo;
+bool useTexture;
+bool useColor;
+

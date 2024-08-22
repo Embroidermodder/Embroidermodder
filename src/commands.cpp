@@ -14,17 +14,9 @@
 
 /* . */
 void
-stub_implement(const char *txt)
+stub_testing(void)
 {
-    qDebug("TODO: %s", txt);
-}
-
-/* . */
-void
-stub_testing()
-{
-    QMessageBox::warning(_main, translate("Testing Feature"),
-        translate("<b>This feature is in testing.</b>"));
+    messagebox("warning", "Testing Feature", "<b>This feature is in testing.</b>");
 }
 
 /* . */
@@ -124,9 +116,9 @@ platformString(void)
 
 /* . */
 void
-MainWindow::print()
+print_command(void)
 {
-    debug_message("print()");
+    debug_message("print_command()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
         mdiWin->print();
@@ -253,7 +245,7 @@ changelog(void)
 
 /* Standard Slots */
 void
-MainWindow::undo()
+undo_command()
 {
     debug_message("undo()");
     if (dockUndoEdit->canUndo()) {
@@ -269,7 +261,7 @@ MainWindow::undo()
 }
 
 void
-MainWindow::redo()
+redo_command(void)
 {
     debug_message("redo()");
     if (dockUndoEdit->canRedo()) {
@@ -284,28 +276,11 @@ MainWindow::redo()
     }
 }
 
-bool MainWindow::isShiftPressed()
-{
-    return shiftKeyPressedState;
-}
-
-void
-MainWindow::setShiftPressed()
-{
-    shiftKeyPressedState = true;
-}
-
-void
-MainWindow::setShiftReleased()
-{
-    shiftKeyPressedState = false;
-}
-
 /* Icons */
 void
-MainWindow::iconResize(int iconSize)
+iconResize(int iconSize)
 {
-    this->setIconSize(QSize(iconSize, iconSize));
+    _main->setIconSize(QSize(iconSize, iconSize));
     layerSelector->setIconSize(QSize(iconSize*4, iconSize));
     colorSelector->setIconSize(QSize(iconSize, iconSize));
     linetypeSelector->setIconSize(QSize(iconSize*4, iconSize));
@@ -366,13 +341,13 @@ activeUndoStack()
 }
 
 void
-MainWindow::setUndoCleanIcon(bool opened)
+setUndoCleanIcon(bool opened)
 {
     dockUndoEdit->updateCleanIcon(opened);
 }
 
 void
-MainWindow::updateAllViewScrollBars(bool val)
+updateAllViewScrollBars(bool val)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
@@ -382,7 +357,7 @@ MainWindow::updateAllViewScrollBars(bool val)
 }
 
 void
-MainWindow::updateAllViewCrossHairColors(QRgb color)
+updateAllViewCrossHairColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
@@ -394,7 +369,7 @@ MainWindow::updateAllViewCrossHairColors(QRgb color)
 }
 
 void
-MainWindow::updateAllViewBackgroundColors(QRgb color)
+updateAllViewBackgroundColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
@@ -406,7 +381,7 @@ MainWindow::updateAllViewBackgroundColors(QRgb color)
 }
 
 void
-MainWindow::updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
+updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
@@ -418,7 +393,7 @@ MainWindow::updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, Q
 }
 
 void
-MainWindow::updateAllViewGridColors(QRgb color)
+updateAllViewGridColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
@@ -430,7 +405,7 @@ MainWindow::updateAllViewGridColors(QRgb color)
 }
 
 void
-MainWindow::updateAllViewRulerColors(QRgb color)
+updateAllViewRulerColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
@@ -442,14 +417,14 @@ MainWindow::updateAllViewRulerColors(QRgb color)
 }
 
 void
-MainWindow::updatePickAddMode(bool val)
+updatePickAddMode(bool val)
 {
     selection_mode_pickadd.setting = val;
     dockPropEdit->updatePickAddModeButton(val);
 }
 
 void
-MainWindow::pickAddModeToggled()
+pickAddModeToggled()
 {
     bool val = !selection_mode_pickadd.setting;
     updatePickAddMode(val);
@@ -457,82 +432,87 @@ MainWindow::pickAddModeToggled()
 
 /* Layer ToolBar */
 void
-MainWindow::makeLayerActive()
+makeLayerActive()
 {
     debug_message("makeLayerActive()");
     stub_implement("Implement makeLayerActive.");
 }
 
 void
-MainWindow::layerManager()
+layerManager()
 {
     debug_message("layerManager()");
     stub_implement("Implement layerManager.");
-    LayerManager layman(this, this);
+    LayerManager layman(_main);
     layman.exec();
 }
 
 void
-MainWindow::layerPrevious()
+layerPrevious()
 {
     debug_message("layerPrevious()");
     stub_implement("Implement layerPrevious.");
 }
 
+/* . */
 void
-MainWindow::layerSelectorIndexChanged(int index)
+layerSelectorIndexChanged(int index)
 {
-    qDebug("layerSelectorIndexChanged(%d)", index);
+    char msg[200];
+    sprintf(msg, "layerSelectorIndexChanged(%d)", index);
+    debug_message(msg);
 }
 
 void
-MainWindow::colorSelectorIndexChanged(int index)
+colorSelectorIndexChanged(int index)
 {
     qDebug("colorSelectorIndexChanged(%d)", index);
 
+    /* FIXME:
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
     QRgb newColor;
     if (comboBox) {
         bool ok = 0;
-        /* TODO: Handle ByLayer and ByBlock and Other... */
+        // TODO: Handle ByLayer and ByBlock and Other...
         newColor = comboBox->itemData(index).toUInt(&ok);
         if (!ok) {
-            QMessageBox::warning(this, translate("Color Selector Conversion Error"),
-                translate("<b>An error has occured while changing colors.</b>"));
+            messagebox("warning", "Color Selector Conversion Error",
+                "<b>An error has occured while changing colors.</b>");
         }
     }
     else {
-        QMessageBox::warning(this, translate("Color Selector Pointer Error"),
-            translate("<b>An error has occured while changing colors.</b>"));
+        messagebox("warning", "Color Selector Pointer Error",
+            "<b>An error has occured while changing colors.</b>");
     }
 
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
         mdiWin->currentColorChanged(newColor);
     }
+    */
 }
 
 void
-MainWindow::linetypeSelectorIndexChanged(int index)
+linetypeSelectorIndexChanged(int index)
 {
     qDebug("linetypeSelectorIndexChanged(%d)", index);
 }
 
 void
-MainWindow::lineweightSelectorIndexChanged(int index)
+lineweightSelectorIndexChanged(int index)
 {
     qDebug("lineweightSelectorIndexChanged(%d)", index);
 }
 
 void
-MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
+textFontSelectorCurrentFontChanged(const QFont& font)
 {
     debug_message("textFontSelectorCurrentFontChanged()");
     setTextFont(font.family());
 }
 
 void
-MainWindow::textSizeSelectorIndexChanged(int index)
+textSizeSelectorIndexChanged(int index)
 {
     qDebug("textSizeSelectorIndexChanged(%d)", index);
     /* TODO: check that the toReal() conversion is ok. */
@@ -540,14 +520,14 @@ MainWindow::textSizeSelectorIndexChanged(int index)
 }
 
 void
-MainWindow::setTextFont(const QString& str)
+setTextFont(const QString& str)
 {
     textFontSelector->setCurrentFont(QFont(str));
     strcpy(text_font.setting, qPrintable(str));
 }
 
 void
-MainWindow::setTextSize(double num)
+setTextSize(double num)
 {
     text_size.setting = qFabs(num);
     int index = textSizeSelector->findText("Custom", Qt::MatchContains);
@@ -606,7 +586,7 @@ getCurrentLineWeight()
 }
 
 void
-MainWindow::deletePressed()
+deletePressed()
 {
     debug_message("deletePressed()");
     wait_cursor();
@@ -618,7 +598,7 @@ MainWindow::deletePressed()
 }
 
 void
-MainWindow::escapePressed()
+escapePressed()
 {
     debug_message("escapePressed()");
     wait_cursor();
@@ -655,27 +635,8 @@ toggleLwt(void)
     statusBarLwtButton->toggle();
 }
 
-/* . */
 void
-MainWindow::promptHistoryAppended(const QString& txt)
-{
-    MdiWindow* mdiWin = activeMdiWindow();
-    if (mdiWin) {
-        mdiWin->promptHistoryAppended(txt);
-    }
-}
-
-void
-MainWindow::logPromptInput(const QString& txt)
-{
-    MdiWindow* mdiWin = activeMdiWindow();
-    if (mdiWin) {
-        mdiWin->logPromptInput(txt);
-    }
-}
-
-void
-MainWindow::promptInputPrevious()
+promptInputPrevious()
 {
     MdiWindow* mdiWin = activeMdiWindow();
     if (mdiWin) {
@@ -684,7 +645,7 @@ MainWindow::promptInputPrevious()
 }
 
 void
-MainWindow::promptInputNext()
+promptInputNext()
 {
     MdiWindow* mdiWin = activeMdiWindow();
     if (mdiWin) {
@@ -695,16 +656,20 @@ MainWindow::promptInputNext()
 ScriptValue
 run_command(const char* cmd, ScriptEnv *context)
 {
+    char msg[200];
     int id = get_command_id(cmd);
     View* gview = NULL;
     ScriptValue value = script_true;
-    qDebug("run_command(%s) %d", cmd, id);
+    sprintf(msg, "run_command(%s) %d", cmd, id);
+    debug_message(msg);
     if (id < 0) {
-        qDebug("ERROR: %s not found in command_data.", cmd);
+        sprintf(msg, "ERROR: %s not found in command_data.", cmd);
+        debug_message(msg);
         return script_false;
     }
 
     if (!argument_checks(context, id)) {
+        sprintf(msg, "ERROR: %s failed argument checks.", cmd);
         /* TODO: error */
         return script_false;
     }
@@ -806,22 +771,22 @@ run_command(const char* cmd, ScriptEnv *context)
         break;
 
     case ACTION_ICON_128:
-        _main->iconResize(128);
+        iconResize(128);
         break;
     case ACTION_ICON_16:
-        _main->iconResize(16);
+        iconResize(16);
         break;
     case ACTION_ICON_24:
-        _main->iconResize(24);
+        iconResize(24);
         break;
     case ACTION_ICON_32:
-        _main->iconResize(32);
+        iconResize(32);
         break;
     case ACTION_ICON_48:
-        _main->iconResize(48);
+        iconResize(48);
         break;
     case ACTION_ICON_64:
-        _main->iconResize(64);
+        iconResize(64);
         break;
 
     case ACTION_MIRROR_SELECTED: {
@@ -841,7 +806,7 @@ run_command(const char* cmd, ScriptEnv *context)
  */
 
     case ACTION_OPEN:
-        _main->openFile();
+        openFile();
         break;
 
     case ACTION_PASTE: {
@@ -858,8 +823,9 @@ run_command(const char* cmd, ScriptEnv *context)
         /* Should this display in the command prompt or just return like GET? */
         /* prompt_output(translate("Platform") + " = " + _main->platformString()); */
         break;
+
     case ACTION_REDO:
-        _main->redo();
+        redo_command();
         break;
 
     case ACTION_SAVE:
@@ -875,7 +841,7 @@ run_command(const char* cmd, ScriptEnv *context)
         break;
 
     case ACTION_SETTINGS_DIALOG: {
-        _main->settingsDialog();
+        settingsDialog();
         break;
     }
 
@@ -910,7 +876,7 @@ run_command(const char* cmd, ScriptEnv *context)
     }
 
     case ACTION_UNDO:
-        _main->undo();
+        undo_command();
         break;
 
     case ACTION_VULCANIZE: {
@@ -1017,8 +983,8 @@ run_command(const char* cmd, ScriptEnv *context)
             /* TODO: Prompt to select objects if nothing is preselected. */
             prompt->alert(
             translate("Preselect objects before invoking the delete command."));
-            messageBox("information", translate("Delete Preselect"),
-                translate("Preselect objects before invoking the delete command."));
+            messagebox("information", "Delete Preselect",
+                "Preselect objects before invoking the delete command.");
         }
         else {
             gview->deleteSelected();
@@ -1179,7 +1145,7 @@ run_command(const char* cmd, ScriptEnv *context)
         break;
     }
     case ACTION_WINDOW_CLOSE: {
-        _main->onCloseWindow();
+        onCloseWindow();
         break;
     }
     case ACTION_WINDOW_CLOSE_ALL: {
@@ -1265,9 +1231,9 @@ run_command(const char* cmd, ScriptEnv *context)
 }
 
 void
-MainWindow::runCommand()
+MainWindow::runCommand(void)
 {
-    QAction* act = qobject_cast<QAction*>(sender());
+    QAction* act = qobject_cast<QAction*>(_main->sender());
     if (act) {
         qDebug("runCommand(%s)", qPrintable(act->objectName()));
         promptInput->endCommand();
@@ -1279,7 +1245,7 @@ MainWindow::runCommand()
 /* FIXME: reconnect to new command system.
  */
 void
-MainWindow::runCommandMain(const QString& cmd)
+runCommandMain(const QString& cmd)
 {
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_MAIN;
@@ -1297,7 +1263,7 @@ MainWindow::runCommandMain(const QString& cmd)
 /* FIXME: reconnect to new command system.
  */
 void
-MainWindow::runCommandClick(const QString& cmd, double x, double y)
+runCommandClick(const QString& cmd, double x, double y)
 {
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_CLICK;
@@ -1310,7 +1276,7 @@ MainWindow::runCommandClick(const QString& cmd, double x, double y)
 /* FIXME: reconnect to new command system.
  */
 void
-MainWindow::runCommandMove(const QString& cmd, double x, double y)
+runCommandMove(const QString& cmd, double x, double y)
 {
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_MOVE;
@@ -1323,7 +1289,7 @@ MainWindow::runCommandMove(const QString& cmd, double x, double y)
 /* FIXME: reconnect to new command system.
  */
 void
-MainWindow::runCommandContext(const QString& cmd, const QString& str)
+runCommandContext(const QString& cmd, const QString& str)
 {
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_CONTEXT;
@@ -1337,7 +1303,7 @@ MainWindow::runCommandContext(const QString& cmd, const QString& str)
  * NOTE: Replace any special characters that will cause a syntax error
  */
 void
-MainWindow::runCommandPrompt(const QString& cmd)
+runCommandPrompt(const QString& cmd)
 {
     ScriptEnv *context = create_script_env();
     qDebug("runCommandPrompt(%s)", qPrintable(cmd));
@@ -1353,27 +1319,22 @@ MainWindow::runCommandPrompt(const QString& cmd)
 }
 
 void
-messageBox(std::string msgType, std::string title, std::string text)
+messagebox(const char *msgType, const char *title, const char *text)
 {
-    if (msgType == "critical") {
-        QMessageBox::critical(_main,
-            translate(title.c_str()), translate(text.c_str()));
+    if (!strcmp(msgType, "critical")) {
+        QMessageBox::critical(_main, translate(title), translate(text));
     }
-    else if (msgType == "information") {
-        QMessageBox::information(_main,
-            translate(title.c_str()), translate(text.c_str()));
+    else if (!strcmp(msgType, "information")) {
+        QMessageBox::information(_main, translate(title), translate(text));
     }
-    else if (msgType == "question") {
-        QMessageBox::question(_main,
-            translate(title.c_str()), translate(text.c_str()));
+    else if (!strcmp(msgType, "question")) {
+        QMessageBox::question(_main, translate(title), translate(text));
     }
-    else if (msgType == "warning") {
-        QMessageBox::warning(_main,
-            translate(title.c_str()), translate(text.c_str()));
+    else if (!strcmp(msgType, "warning")) {
+        QMessageBox::warning(_main, translate(title), translate(text));
     }
     else {
-        QMessageBox::critical(_main,
-            translate(title.c_str()), translate(text.c_str()));
+        QMessageBox::critical(_main, translate(title), translate(text));
     }
 }
 
@@ -1381,21 +1342,21 @@ void
 nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b)
 {
     display_bg_color.setting = qRgb(r,g,b);
-    _main->updateAllViewBackgroundColors(qRgb(r,g,b));
+    updateAllViewBackgroundColors(qRgb(r,g,b));
 }
 
 void
 nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b)
 {
     display_crosshair_color.setting = qRgb(r,g,b);
-    _main->updateAllViewCrossHairColors(qRgb(r,g,b));
+    updateAllViewCrossHairColors(qRgb(r,g,b));
 }
 
 void
 nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b)
 {
     grid_color.setting = qRgb(r,g,b);
-    _main->updateAllViewGridColors(qRgb(r,g,b));
+    updateAllViewGridColors(qRgb(r,g,b));
 }
 
 bool
@@ -1831,10 +1792,9 @@ void
 nativeScaleSelected(double x, double y, double factor)
 {
     if (factor <= 0.0) {
-        QMessageBox::critical(_main,
-            QString(translate("ScaleFactor Error")),
-            QString(translate("Hi there. If you are not a developer, report this as a bug. "
-            "If you are a developer, your code needs examined, and possibly your head too.")));
+        messagebox("critical", "ScaleFactor Error",
+            "Hi there. If you are not a developer, report this as a bug. "
+            "If you are a developer, your code needs examined, and possibly your head too.");
     }
 
     View* gview = activeView();
@@ -2181,18 +2141,15 @@ append_prompt_history(ScriptEnv* context)
 
 /* . */
 ScriptValue
-messagebox(ScriptEnv* context)
+messagebox_command(ScriptEnv* context)
 {
     std::string type(STR(0));
-    std::string title(STR(1));
-    std::string text(STR(2));
-
     if (type != "critical" && type != "information" && type != "question" && type != "warning") {
         prompt_output("UNKNOWN_ERROR messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
         return script_false;
     }
 
-    messageBox(type, title, text);
+    messagebox(STR(0), STR(1), STR(2));
     return script_null;
 }
 
@@ -2210,7 +2167,7 @@ print_area_command(ScriptEnv* context)
     /* TODO: Print Setup Stuff
         nativePrintArea(REAL(0), REAL(1), REAL(2), REAL(3));
     */
-    _main->print();
+    print_command();
     return script_null;
 }
 
@@ -2562,10 +2519,9 @@ UndoableCommand::UndoableCommand(int type_, double x, double y, double scaleFact
             data.dx = 0.0;
             data.dy = 0.0;
             data.factor = 1.0;
-            QMessageBox::critical(0,
-                QObject::tr("ScaleFactor Error"),
-                QObject::tr("Hi there. If you are not a developer, report this as a bug. "
-               "If you are a developer, your code needs examined, and possibly your head too."));
+            messagebox("critical", "ScaleFactor Error",
+                "Hi there. If you are not a developer, report this as a bug. "
+                "If you are a developer, your code needs examined, and possibly your head too.");
         }
         else {
             /* Calculate the offset */
@@ -2940,7 +2896,7 @@ main(void)
         /* TODO: Prompt to select objects if nothing is preselected. */
         alert(translate("Preselect objects before invoking the move command."));
         end_command();
-        messageBox("information", translate("Move Preselect"),
+        messagebox("information", translate("Move Preselect"),
             translate("Preselect objects before invoking the move command."));
     }
     else {
@@ -3046,7 +3002,7 @@ main(void)
         /* TODO: Prompt to select objects if nothing is preselected */
         alert(translate("Preselect objects before invoking the scale command."));
         end_command();
-        messageBox("information", translate("Scale Preselect"), translate("Preselect objects before invoking the scale command."));
+        messagebox("information", translate("Scale Preselect"), translate("Preselect objects before invoking the scale command."));
     }
     else {
         prompt_output(translate("Specify base point: "));
@@ -3387,7 +3343,7 @@ main()
         /* TODO: Prompt to select objects if nothing is preselected. */
         alert(translate("Preselect objects before invoking the rotate command."));
         end_command();
-        messageBox("information", translate("Rotate Preselect"), translate("Preselect objects before invoking the rotate command."));
+        messagebox("information", translate("Rotate Preselect"), translate("Preselect objects before invoking the rotate command."));
     }
     else {
         prompt_output(translate("Specify base point: "));

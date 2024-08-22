@@ -978,6 +978,53 @@ void whatsThisContextHelp();
 
 int make_application(int argc, char* argv[]);
 
+void messagebox(const char *type, const char *title, const char *text);
+void print_command(void);
+void undo_command(void);
+void redo_command(void);
+void setTextSize(double num);
+
+void deletePressed();
+void escapePressed();
+
+void makeLayerActive();
+void layerManager();
+void layerPrevious();
+void floatingChangedToolBar(bool);
+
+void iconResize(int iconSize);
+void layerSelectorIndexChanged(int index);
+void colorSelectorIndexChanged(int index);
+void linetypeSelectorIndexChanged(int index);
+void lineweightSelectorIndexChanged(int index);
+void textSizeSelectorIndexChanged(int index);
+void setPromptFontSize(int);
+
+void setUndoCleanIcon(bool opened);
+
+void recentMenuAboutToShow();
+void windowMenuActivated( bool checked/*int id*/ );
+
+void updatePickAddMode(bool val);
+void pickAddModeToggled();
+
+void settingsPrompt();
+void readSettings();
+void writeSettings();
+void onCloseWindow();
+void loadFormats();
+void promptInputPrevious();
+void promptInputNext();
+
+void useBackgroundLogo(bool use);
+void useBackgroundTexture(bool use);
+void useBackgroundColor(bool use);
+void updateStyle(void);
+
+extern bool useLogo;
+extern bool useTexture;
+extern bool useColor;
+
 /* Geometry */
 double get_width(EmbGeometry geometry);
 double get_height(EmbGeometry geometry);

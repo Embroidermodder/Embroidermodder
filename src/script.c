@@ -1652,3 +1652,13 @@ set_diameter_minor(EmbGeometry *geometry, double diameter)
     }
 }
 
+/* . */
+void
+stub_implement(const char *txt)
+{
+    char msg[200];
+    sprintf(msg, "TODO: %s", txt);
+    debug_message(msg);
+}
+
+

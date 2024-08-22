@@ -12,6 +12,9 @@
 
 #include "embroidermodder.h"
 
+void createAllActions();
+void createAllMenus();
+
 QMenuBar *menuBar()
 {
     return _main->menuBar();
@@ -27,7 +30,7 @@ Application::event(QEvent *event)
     switch (event->type()) {
     case QEvent::FileOpen:
         if (_main) {
-            _main->openFilesSelected(QStringList(static_cast<QFileOpenEvent *>(event)->file()));
+            openFilesSelected(QStringList(static_cast<QFileOpenEvent *>(event)->file()));
             return true;
         }
         /* Fall through */
@@ -57,41 +60,9 @@ make_application(int argc, char* argv[])
     app.setMainWin(_main);
 #endif
 
-    QObject::connect(&app, SIGNAL(lastWindowClosed()), _main, SLOT(quit()));
-
-    _main->setWindowTitle(app.applicationName() + " " + app.applicationVersion());
-    _main->show();
-
-    /* NOTE: If openFilesSelected() is called from within the _main constructor,
-     * slot commands wont work and the window menu will be screwed
-     */
-    if (!filesToOpen.isEmpty()) {
-        _main->openFilesSelected(filesToOpen);
-    }
-
-    return app.exec();
-}
-
-void
-run_testing(void)
-{
-    int i;
-    std::this_thread::sleep_for (std::chrono::milliseconds(2000));
-    int n = string_array_length("coverage_test");
-    int start = get_state_variable("coverage_test");
-    for (i=0; i<n; i++) {
-        QString cmd(state[start+i].s);
-        _main->runCommandMain(cmd);
-        std::this_thread::sleep_for (std::chrono::milliseconds(1000));
-    }        
-}
-
-MainWindow::MainWindow() : QMainWindow(0)
-{
     if (!load_data()) {
-        QMessageBox::critical(this, translate("Path Error"),
-            translate("Cannot locate data."));
-        return;
+        messagebox("critical", "Path Error", "Cannot locate data.");
+        return 1;
     }
     readSettings();
 
@@ -99,23 +70,23 @@ MainWindow::MainWindow() : QMainWindow(0)
     /* Verify that files/directories needed are actually present. */
     QFileInfo check(appDir + "/help");
     if (!check.exists()) {
-        QMessageBox::critical(this, translate("Path Error"), translate("Cannot locate: ") + check.absoluteFilePath());
+        messagebox("critical", "Path Error", qPrintable("Cannot locate: " + check.absoluteFilePath()));
     }
     check = QFileInfo(appDir + "/icons");
     if (!check.exists()) {
-        QMessageBox::critical(this, translate("Path Error"), translate("Cannot locate: ") + check.absoluteFilePath());
+        QMessageBox::critical(_main, translate("Path Error"), translate("Cannot locate: ") + check.absoluteFilePath());
     }
     check = QFileInfo(appDir + "/images");
     if (!check.exists()) {
-        QMessageBox::critical(this, translate("Path Error"), translate("Cannot locate: ") + check.absoluteFilePath());
+        QMessageBox::critical(_main, translate("Path Error"), translate("Cannot locate: ") + check.absoluteFilePath());
     }
     check = QFileInfo(appDir + "/samples");
     if (!check.exists()) {
-        QMessageBox::critical(this, translate("Path Error"), translate("Cannot locate: ") + check.absoluteFilePath());
+        QMessageBox::critical(_main, translate("Path Error"), translate("Cannot locate: ") + check.absoluteFilePath());
     }
     check = QFileInfo(appDir + "/translations");
     if (!check.exists()) {
-        QMessageBox::critical(this, translate("Path Error"), translate("Cannot locate: ") + check.absoluteFilePath());
+        QMessageBox::critical(_main, translate("Path Error"), translate("Cannot locate: ") + check.absoluteFilePath());
     }
 
     QString lang = general_language.setting;
@@ -134,162 +105,158 @@ MainWindow::MainWindow() : QMainWindow(0)
     translatorCmd.load(appDir + "/translations/" + lang + "/commands_" + lang);
     qApp->installTranslator(&translatorCmd);
 
-    /* Load translations provided by Qt - this covers dialog buttons and other common things. */
+    /* Load translations provided by Qt - _main covers dialog buttons and other common things. */
     QTranslator translatorQt;
-    translatorQt.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath)); /* TODO: ensure this always loads, ship a copy of this with the app. */
+    translatorQt.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath)); /* TODO: ensure _main always loads, ship a copy of _main with the app. */
     qApp->installTranslator(&translatorQt);
 
     /* Init */
-    _main = this;
+    _main = _main;
     /* Menus */
-    menuHash["File"] = new QMenu(translate("&File"), this);
-    menuHash["Edit"] = new QMenu(translate("&Edit"), this);
-    menuHash["View"] = new QMenu(translate("&View"), this);
-    menuHash["Draw"] = new QMenu(translate("&Draw"), this);
-    menuHash["Tools"] = new QMenu(translate("&Tools"), this);
-    menuHash["Modify"] = new QMenu(translate("&Modify"), this);
-    menuHash["Sandbox"] = new QMenu(translate("S&andbox"), this);
-    menuHash["Dimension"] = new QMenu(translate("&Dimension"), this);
-    menuHash["Settings"] = new QMenu(translate("&Settings"), this);
-    menuHash["Window"] = new QMenu(translate("&Window"), this);
-    menuHash["Help"] = new QMenu(translate("&Help"), this);
+    menuHash["File"] = new QMenu(translate("&File"), _main);
+    menuHash["Edit"] = new QMenu(translate("&Edit"), _main);
+    menuHash["View"] = new QMenu(translate("&View"), _main);
+    menuHash["Draw"] = new QMenu(translate("&Draw"), _main);
+    menuHash["Tools"] = new QMenu(translate("&Tools"), _main);
+    menuHash["Modify"] = new QMenu(translate("&Modify"), _main);
+    menuHash["Sandbox"] = new QMenu(translate("S&andbox"), _main);
+    menuHash["Dimension"] = new QMenu(translate("&Dimension"), _main);
+    menuHash["Settings"] = new QMenu(translate("&Settings"), _main);
+    menuHash["Window"] = new QMenu(translate("&Window"), _main);
+    menuHash["Help"] = new QMenu(translate("&Help"), _main);
     /* SubMenus */
-    menuHash["Recent"] = new QMenu(translate("Open &Recent"), this);
-    menuHash["Zoom"] = new QMenu(translate("&Zoom"), this);
-    menuHash["Pan"] = new QMenu(translate("&Pan"), this);
+    menuHash["Recent"] = new QMenu(translate("Open &Recent"), _main);
+    menuHash["Zoom"] = new QMenu(translate("&Zoom"), _main);
+    menuHash["Pan"] = new QMenu(translate("&Pan"), _main);
 
     /* Toolbars */
-    toolbarHash["File"] = addToolBar(translate("File"));
-    toolbarHash["Edit"] = addToolBar(translate("Edit"));
-    toolbarHash["View"] = addToolBar(translate("View"));
-    toolbarHash["Zoom"] = addToolBar(translate("Zoom"));
-    toolbarHash["Pan"] = addToolBar(translate("Pan"));
-    toolbarHash["Icon"] = addToolBar(translate("Icon"));
-    toolbarHash["Help"] = addToolBar(translate("Help"));
-    toolbarHash["Layer"] = addToolBar(translate("Layer"));
-    toolbarHash["Properties"] = addToolBar(translate("Properties"));
-    toolbarHash["Text"] = addToolBar(translate("Text"));
-    toolbarHash["Prompt"] = addToolBar(translate("Command Prompt"));
+    toolbarHash["File"] = new QToolBar(translate("File"));
+    toolbarHash["Edit"] = new QToolBar(translate("Edit"));
+    toolbarHash["View"] = new QToolBar(translate("View"));
+    toolbarHash["Zoom"] = new QToolBar(translate("Zoom"));
+    toolbarHash["Pan"] = new QToolBar(translate("Pan"));
+    toolbarHash["Icon"] = new QToolBar(translate("Icon"));
+    toolbarHash["Help"] = new QToolBar(translate("Help"));
+    toolbarHash["Layer"] = new QToolBar(translate("Layer"));
+    toolbarHash["Properties"] = new QToolBar(translate("Properties"));
+    toolbarHash["Text"] = new QToolBar(translate("Text"));
+    toolbarHash["Prompt"] = new QToolBar(translate("Command Prompt"));
 
-    toolbarHash["Draw"] = new QToolBar("toolbarDraw", this);
-    toolbarHash["Modify"] = new QToolBar("toolbarModify", this);
-    toolbarHash["Inquiry"] = new QToolBar("toolbarInquiry", this);
-    toolbarHash["Dimension"] = new QToolBar("toolbarDimension", this);
-    toolbarHash["Sandbox"] = new QToolBar("toolbarSandbox", this);
+    toolbarHash["Draw"] = new QToolBar("toolbarDraw", _main);
+    toolbarHash["Modify"] = new QToolBar("toolbarModify", _main);
+    toolbarHash["Inquiry"] = new QToolBar("toolbarInquiry", _main);
+    toolbarHash["Dimension"] = new QToolBar("toolbarDimension", _main);
+    toolbarHash["Sandbox"] = new QToolBar("toolbarSandbox", _main);
 
     /* Selectors */
-    layerSelector = new QComboBox(this);
-    colorSelector = new QComboBox(this);
-    linetypeSelector = new QComboBox(this);
-    lineweightSelector = new QComboBox(this);
-    textFontSelector = new QFontComboBox(this);
-    textSizeSelector = new QComboBox(this);
+    layerSelector = new QComboBox(_main);
+    colorSelector = new QComboBox(_main);
+    linetypeSelector = new QComboBox(_main);
+    lineweightSelector = new QComboBox(_main);
+    textFontSelector = new QFontComboBox(_main);
+    textSizeSelector = new QComboBox(_main);
 
     numOfDocs = 0;
     docIndex = 0;
 
     shiftKeyPressedState = false;
 
-    setWindowIcon(create_icon("app"));
-    setMinimumSize(800, 480); /* Require Minimum WVGA */
+    _main->setWindowIcon(create_icon("app"));
+    _main->setMinimumSize(800, 480); /* Require Minimum WVGA */
 
     loadFormats();
 
     /* create the mdiArea */
-    QFrame* vbox = new QFrame(this);
+    QFrame* vbox = new QFrame(_main);
     QVBoxLayout* layout = new QVBoxLayout(vbox);
     /* layout->setMargin(0); */
     vbox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-    mdiArea = new MdiArea(this, vbox);
-    mdiArea->useBackgroundLogo(general_mdi_bg_use_logo.setting);
-    mdiArea->useBackgroundTexture(general_mdi_bg_use_texture.setting);
-    mdiArea->useBackgroundColor(general_mdi_bg_use_color.setting);
-    mdiArea->setBackgroundLogo(general_mdi_bg_logo.setting);
-    mdiArea->setBackgroundTexture(general_mdi_bg_texture.setting);
-    mdiArea->setBackgroundColor(QColor(general_mdi_bg_color.setting));
+    mdiArea = new MdiArea(vbox);
+    useBackgroundLogo(general_mdi_bg_use_logo.setting);
+    useBackgroundTexture(general_mdi_bg_use_texture.setting);
+    useBackgroundColor(general_mdi_bg_use_color.setting);
+    setBackgroundLogo(general_mdi_bg_logo.setting);
+    setBackgroundTexture(general_mdi_bg_texture.setting);
+    setBackgroundColor(QColor(general_mdi_bg_color.setting));
     mdiArea->setViewMode(QMdiArea::TabbedView);
     mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
 
     /*
-    ExperimentalView *openGL = new ExperimentalView(this);
+    ExperimentalView *openGL = new ExperimentalView(_main);
     QLabel *example = new QLabel(translate("OpenGL"));
     layout->addWidget(openGL);
     */
 
     layout->addWidget(mdiArea);
-    setCentralWidget(vbox);
+    _main->setCentralWidget(vbox);
 
     /* create the Command Prompt */
-    prompt = new CmdPrompt(this);
+    prompt = new CmdPrompt(_main);
     prompt->setFocus(Qt::OtherFocusReason);
-    this->setFocusProxy(prompt);
+    _main->setFocusProxy(prompt);
     mdiArea->setFocusProxy(prompt);
 
-    prompt->setPromptTextColor(QColor(prompt_text_color.setting));
-    prompt->setPromptBackgroundColor(QColor(prompt_bg_color.setting));
+    setPromptTextColor(QColor(prompt_text_color.setting));
+    setPromptBackgroundColor(QColor(prompt_bg_color.setting));
 
-    connect(prompt, SIGNAL(startCommand(const QString&)), this, SLOT(logPromptInput(const QString&)));
+    QObject::connect(prompt, SIGNAL(startCommand(const QString&)), _main, SLOT(runCommandMain(const QString&)));
+    QObject::connect(prompt, SIGNAL(runCommand(const QString&, const QString&)), _main, SLOT(runCommandPrompt(const QString&, const QString&)));
 
-    connect(prompt, SIGNAL(startCommand(const QString&)), this, SLOT(runCommandMain(const QString&)));
-    connect(prompt, SIGNAL(runCommand(const QString&, const QString&)), this, SLOT(runCommandPrompt(const QString&, const QString&)));
+    QObject::connect(prompt, SIGNAL(deletePressed()), _main, SLOT(deletePressed()));
+    /* TODO: QObject::connect(prompt, SIGNAL(tabPressed()), _main, SLOT(someUnknownSlot())); */
+    QObject::connect(prompt, SIGNAL(escapePressed()), _main, SLOT(escapePressed()));
+    QObject::connect(prompt, SIGNAL(upPressed()), _main, SLOT(promptInputPrevious()));
+    QObject::connect(prompt, SIGNAL(downPressed()), _main, SLOT(promptInputNext()));
+    QObject::connect(prompt, SIGNAL(F1Pressed()), _main, SLOT(help()));
+    /* TODO: QObject::connect(prompt, SIGNAL(F2Pressed()), _main, SLOT(floa_maintory())); */
+    /* TODO: QObject::connect(prompt, SIGNAL(F3Pressed()), _main, SLOT(toggleQSNAP())); */
+    QObject::connect(prompt, SIGNAL(F4Pressed()), _main, SLOT(toggleLwt())); /* TODO: typically _main is toggleTablet(), make F-Keys customizable thru settings */
+    /* TODO: QObject::connect(prompt, SIGNAL(F5Pressed()), _main, SLOT(toggleISO())); */
+    /* TODO: QObject::connect(prompt, SIGNAL(F6Pressed()), _main, SLOT(toggleCoords())); */
+    QObject::connect(prompt, SIGNAL(F7Pressed()), _main, SLOT(toggleGrid()));
+    /* TODO: QObject::connect(prompt, SIGNAL(F8Pressed()), _main, SLOT(toggleORTHO())); */
+    /* TODO: QObject::connect(prompt, SIGNAL(F9Pressed()), _main, SLOT(toggleSNAP())); */
+    /* TODO: QObject::connect(prompt, SIGNAL(F10Pressed()), _main, SLOT(togglePOLAR())); */
+    /* TODO: QObject::connect(prompt, SIGNAL(F11Pressed()), _main, SLOT(toggleQTRACK())); */
+    QObject::connect(prompt, SIGNAL(F12Pressed()), _main, SLOT(toggleRuler()));
+    QObject::connect(prompt, SIGNAL(cutPressed()), _main, SLOT(cut()));
+    QObject::connect(prompt, SIGNAL(copyPressed()), _main, SLOT(copy()));
+    QObject::connect(prompt, SIGNAL(pastePressed()), _main, SLOT(paste()));
+    QObject::connect(prompt, SIGNAL(selectAllPressed()), _main, SLOT(selectAll()));
+    QObject::connect(prompt, SIGNAL(undoPressed()), _main, SLOT(undo()));
+    QObject::connect(prompt, SIGNAL(redoPressed()), _main, SLOT(redo()));
 
-    connect(prompt, SIGNAL(deletePressed()), this, SLOT(deletePressed()));
-    /* TODO: connect(prompt, SIGNAL(tabPressed()), this, SLOT(someUnknownSlot())); */
-    connect(prompt, SIGNAL(escapePressed()), this, SLOT(escapePressed()));
-    connect(prompt, SIGNAL(upPressed()), this, SLOT(promptInputPrevious()));
-    connect(prompt, SIGNAL(downPressed()), this, SLOT(promptInputNext()));
-    connect(prompt, SIGNAL(F1Pressed()), this, SLOT(help()));
-    /* TODO: connect(prompt, SIGNAL(F2Pressed()), this, SLOT(floatHistory())); */
-    /* TODO: connect(prompt, SIGNAL(F3Pressed()), this, SLOT(toggleQSNAP())); */
-    connect(prompt, SIGNAL(F4Pressed()), this, SLOT(toggleLwt())); /* TODO: typically this is toggleTablet(), make F-Keys customizable thru settings */
-    /* TODO: connect(prompt, SIGNAL(F5Pressed()), this, SLOT(toggleISO())); */
-    /* TODO: connect(prompt, SIGNAL(F6Pressed()), this, SLOT(toggleCoords())); */
-    connect(prompt, SIGNAL(F7Pressed()), this, SLOT(toggleGrid()));
-    /* TODO: connect(prompt, SIGNAL(F8Pressed()), this, SLOT(toggleORTHO())); */
-    /* TODO: connect(prompt, SIGNAL(F9Pressed()), this, SLOT(toggleSNAP())); */
-    /* TODO: connect(prompt, SIGNAL(F10Pressed()), this, SLOT(togglePOLAR())); */
-    /* TODO: connect(prompt, SIGNAL(F11Pressed()), this, SLOT(toggleQTRACK())); */
-    connect(prompt, SIGNAL(F12Pressed()), this, SLOT(toggleRuler()));
-    connect(prompt, SIGNAL(cutPressed()), this, SLOT(cut()));
-    connect(prompt, SIGNAL(copyPressed()), this, SLOT(copy()));
-    connect(prompt, SIGNAL(pastePressed()), this, SLOT(paste()));
-    connect(prompt, SIGNAL(selectAllPressed()), this, SLOT(selectAll()));
-    connect(prompt, SIGNAL(undoPressed()), this, SLOT(undo()));
-    connect(prompt, SIGNAL(redoPressed()), this, SLOT(redo()));
+    QObject::connect(prompt, SIGNAL(shiftPressed()), _main, SLOT(setShiftPressed()));
+    QObject::connect(prompt, SIGNAL(shiftReleased()), _main, SLOT(setShiftReleased()));
 
-    connect(prompt, SIGNAL(shiftPressed()), this, SLOT(setShiftPressed()));
-    connect(prompt, SIGNAL(shiftReleased()), this, SLOT(setShiftReleased()));
-
-    connect(prompt, SIGNAL(showSettings()), this, SLOT(settingsPrompt()));
-
-    connect(prompt, SIGNAL(historyAppended(const QString&)), this, SLOT(promptHistoryAppended(const QString&)));
+    QObject::connect(prompt, SIGNAL(showSettings()), _main, SLOT(settingsPrompt()));
 
     /* create the Object Property Editor */
     dockPropEdit = new PropertyEditor(
         appDir + "/icons/" + general_icon_theme.setting,
         selection_mode_pickadd.setting,
         prompt,
-        this);
-    addDockWidget(Qt::LeftDockWidgetArea, dockPropEdit);
-    connect(dockPropEdit, SIGNAL(pickAddModeToggled()), this, SLOT(pickAddModeToggled()));
+        _main);
+    _main->addDockWidget(Qt::LeftDockWidgetArea, dockPropEdit);
+    QObject::connect(dockPropEdit, SIGNAL(pickAddModeToggled()), _main, SLOT(pickAddModeToggled()));
 
     /* create the Command History Undo Editor */
     dockUndoEdit = new UndoEditor(
-        appDir + "/icons/" + general_icon_theme.setting, prompt, this);
-    addDockWidget(Qt::LeftDockWidgetArea, dockUndoEdit);
+        appDir + "/icons/" + general_icon_theme.setting, prompt, _main);
+    _main->addDockWidget(Qt::LeftDockWidgetArea, dockUndoEdit);
 
     /* setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); */ /* TODO: Load these from settings */
-    /* tabifyDockWidget(dockPropEdit, dockUndoEdit); */ /* TODO: load this from settings */
+    /* tabifyDockWidget(dockPropEdit, dockUndoEdit); */ /* TODO: load _main from settings */
 
-    create_statusbar(this);
-    this->setStatusBar(statusbar);
+    create_statusbar(_main);
+    _main->setStatusBar(statusbar);
 
     createAllActions();
     createAllMenus();
 
-    debug_message("MainWindow createAllToolbars()");
+    debug_message("createAllToolbars()");
 
     add_to_toolbar("File", "file_toolbar");
     add_to_toolbar("Edit", "edit_toolbar");
@@ -299,7 +266,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     add_to_toolbar("Icon", "icon_toolbar");
     add_to_toolbar("Help", "help_toolbar");
 
-    debug_message("MainWindow createLayerToolbar()");
+    debug_message("createLayerToolbar()");
 
     toolbarHash["Layer"]->setObjectName("toolbarLayer");
     toolbarHash["Layer"]->addAction(actionHash[ACTION_MAKE_LAYER_CURRENT]);
@@ -320,13 +287,13 @@ MainWindow::MainWindow() : QMainWindow(0)
     layerSelector->addItem(create_icon("linetypebylayer"), "8");
     layerSelector->addItem(create_icon("linetypebylayer"), "9");
     toolbarHash["Layer"]->addWidget(layerSelector);
-    connect(layerSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(layerSelectorIndexChanged(int)));
+    QObject::connect(layerSelector, SIGNAL(currentIndexChanged(int)), _main, SLOT(layerSelectorIndexChanged(int)));
 
     toolbarHash["Layer"]->addAction(actionHash[ACTION_LAYER_PREVIOUS]);
 
-    connect(toolbarHash["Layer"], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+    QObject::connect(toolbarHash["Layer"], SIGNAL(topLevelChanged(bool)), _main, SLOT(floatingChangedToolBar(bool)));
 
-    debug_message("MainWindow createPropertiesToolbar()");
+    debug_message("createPropertiesToolbar()");
 
     toolbarHash["Properties"]->setObjectName("toolbarProperties");
 
@@ -342,7 +309,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     colorSelector->addItem(create_icon("colorwhite"), translate("White"), qRgb(255,255,255));
     colorSelector->addItem(create_icon("colorother"), translate("Other..."));
     toolbarHash["Properties"]->addWidget(colorSelector);
-    connect(colorSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(colorSelectorIndexChanged(int)));
+    QObject::connect(colorSelector, SIGNAL(currentIndexChanged(int)), _main, SLOT(colorSelectorIndexChanged(int)));
 
     toolbarHash["Properties"]->addSeparator();
     linetypeSelector->setFocusProxy(prompt);
@@ -353,7 +320,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     linetypeSelector->addItem(create_icon("linetypecenter"), "Center");
     linetypeSelector->addItem(create_icon("linetypeother"), "Other...");
     toolbarHash["Properties"]->addWidget(linetypeSelector);
-    connect(linetypeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(linetypeSelectorIndexChanged(int)));
+    QObject::connect(linetypeSelector, SIGNAL(currentIndexChanged(int)), _main, SLOT(linetypeSelectorIndexChanged(int)));
 
     toolbarHash["Properties"]->addSeparator();
     lineweightSelector->setFocusProxy(prompt);
@@ -387,17 +354,17 @@ MainWindow::MainWindow() : QMainWindow(0)
     lineweightSelector->addItem(create_icon("lineweight24"), "1.20 mm", 1.20);
     lineweightSelector->setMinimumContentsLength(8); /* Prevent dropdown text readability being squish...d. */
     toolbarHash["Properties"]->addWidget(lineweightSelector);
-    connect(lineweightSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(lineweightSelectorIndexChanged(int)));
+    QObject::connect(lineweightSelector, SIGNAL(currentIndexChanged(int)), _main, SLOT(lineweightSelectorIndexChanged(int)));
 
-    connect(toolbarHash["Properties"], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+    QObject::connect(toolbarHash["Properties"], SIGNAL(topLevelChanged(bool)), _main, SLOT(floatingChangedToolBar(bool)));
 
-    debug_message("MainWindow createTextToolbar()");
+    debug_message("createTextToolbar()");
 
     toolbarHash["Text"]->setObjectName("toolbarText");
 
     toolbarHash["Text"]->addWidget(textFontSelector);
     textFontSelector->setCurrentFont(QFont(text_font.setting));
-    connect(textFontSelector, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(textFontSelectorCurrentFontChanged(const QFont&)));
+    QObject::connect(textFontSelector, SIGNAL(currentFontChanged(const QFont&)), _main, SLOT(textFontSelectorCurrentFontChanged(const QFont&)));
 
     toolbarHash["Text"]->addAction(actionHash[ACTION_TEXT_BOLD]);
     actionHash[ACTION_TEXT_BOLD]->setChecked(text_style_bold.setting);
@@ -425,18 +392,18 @@ MainWindow::MainWindow() : QMainWindow(0)
     textSizeSelector->addItem("48 pt", 48);
     textSizeSelector->addItem("60 pt", 60);
     textSizeSelector->addItem("72 pt", 72);
-    _main->setTextSize(text_size.setting);
+    setTextSize(text_size.setting);
     toolbarHash["Text"]->addWidget(textSizeSelector);
-    connect(textSizeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(textSizeSelectorIndexChanged(int)));
+    QObject::connect(textSizeSelector, SIGNAL(currentIndexChanged(int)), _main, SLOT(textSizeSelectorIndexChanged(int)));
 
-    connect(toolbarHash["Text"], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+    QObject::connect(toolbarHash["Text"], SIGNAL(topLevelChanged(bool)), _main, SLOT(floatingChangedToolBar(bool)));
 
-    debug_message("MainWindow createPromptToolbar()");
+    debug_message("createPromptToolbar()");
 
     toolbarHash["Prompt"]->setObjectName("toolbarPrompt");
     toolbarHash["Prompt"]->addWidget(prompt);
     toolbarHash["Prompt"]->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
-    connect(toolbarHash["Prompt"], SIGNAL(topLevelChanged(bool)), prompt, SLOT(floatingChanged(bool)));
+    QObject::connect(toolbarHash["Prompt"], SIGNAL(topLevelChanged(bool)), prompt, SLOT(floatingChanged(bool)));
 
     add_to_toolbar("Draw", "draw_toolbar");
     add_to_toolbar("Modify", "modify_toolbar");
@@ -450,27 +417,27 @@ MainWindow::MainWindow() : QMainWindow(0)
     toolbarHash["Prompt"]->setOrientation(Qt::Horizontal);
 
     /* Top */
-    addToolBarBreak(Qt::TopToolBarArea);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["File"]);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["Edit"]);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["Help"]);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["Icon"]);
-    addToolBarBreak(Qt::TopToolBarArea);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["Zoom"]);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["Pan"]);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["View"]);
-    addToolBarBreak(Qt::TopToolBarArea);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["Layer"]);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["Properties"]);
-    addToolBarBreak(Qt::TopToolBarArea);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["Text"]);
+    _main->addToolBarBreak(Qt::TopToolBarArea);
+    _main->addToolBar(Qt::TopToolBarArea, toolbarHash["File"]);
+    _main->addToolBar(Qt::TopToolBarArea, toolbarHash["Edit"]);
+    _main->addToolBar(Qt::TopToolBarArea, toolbarHash["Help"]);
+    _main->addToolBar(Qt::TopToolBarArea, toolbarHash["Icon"]);
+    _main->addToolBarBreak(Qt::TopToolBarArea);
+    _main->addToolBar(Qt::TopToolBarArea, toolbarHash["Zoom"]);
+    _main->addToolBar(Qt::TopToolBarArea, toolbarHash["Pan"]);
+    _main->addToolBar(Qt::TopToolBarArea, toolbarHash["View"]);
+    _main->addToolBarBreak(Qt::TopToolBarArea);
+    _main->addToolBar(Qt::TopToolBarArea, toolbarHash["Layer"]);
+    _main->addToolBar(Qt::TopToolBarArea, toolbarHash["Properties"]);
+    _main->addToolBarBreak(Qt::TopToolBarArea);
+    _main->addToolBar(Qt::TopToolBarArea, toolbarHash["Text"]);
     /* Bottom */
-    addToolBar(Qt::BottomToolBarArea, toolbarHash["Prompt"]);
+    _main->addToolBar(Qt::BottomToolBarArea, toolbarHash["Prompt"]);
 
     /* Left */
-    addToolBar(Qt::LeftToolBarArea, toolbarHash["Draw"]);
-    addToolBar(Qt::LeftToolBarArea, toolbarHash["Modify"]);
-    addToolBarBreak(Qt::LeftToolBarArea);
+    _main->addToolBar(Qt::LeftToolBarArea, toolbarHash["Draw"]);
+    _main->addToolBar(Qt::LeftToolBarArea, toolbarHash["Modify"]);
+    _main->addToolBarBreak(Qt::LeftToolBarArea);
 
     /* zoomToolBar->setToolButtonStyle(Qt::ToolButtonTextOnly); */
 
@@ -482,7 +449,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     QString datestr = date.toString("MMMM d, yyyy");
     statusbar->showMessage(datestr);
 
-    showNormal();
+    _main->showNormal();
 
     toolbarHash["Prompt"]->show();
 
@@ -506,12 +473,40 @@ MainWindow::MainWindow() : QMainWindow(0)
     /* FIXME: automated interface testing
     if (testing_mode) {
         testing_timer = new QTimer();
-        connect(testing_timer, &QTimer::timeout, this, run_testing);
+        QObject::connect(testing_timer, &QTimer::timeout, _main, run_testing);
         testing_timer->start(100);
     }
     */
 
     debug_message("Finished creating window.");
+
+    QObject::connect(&app, SIGNAL(lastWindowClosed()), _main, SLOT(quit()));
+
+    _main->setWindowTitle(app.applicationName() + " " + app.applicationVersion());
+    _main->show();
+
+    /* NOTE: If openFilesSelected() is called from within the _main constructor,
+     * slot commands wont work and the window menu will be screwed
+     */
+    if (!filesToOpen.isEmpty()) {
+        openFilesSelected(filesToOpen);
+    }
+
+    return app.exec();
+}
+
+void
+run_testing(void)
+{
+    int i;
+    std::this_thread::sleep_for (std::chrono::milliseconds(2000));
+    int n = string_array_length("coverage_test");
+    int start = get_state_variable("coverage_test");
+    for (i=0; i<n; i++) {
+        QString cmd(state[start+i].s);
+        runCommandMain(cmd);
+        std::this_thread::sleep_for (std::chrono::milliseconds(1000));
+    }        
 }
 
 MainWindow::~MainWindow()
@@ -525,7 +520,7 @@ MainWindow::~MainWindow()
 
 /* . */
 void
-MainWindow::recentMenuAboutToShow()
+recentMenuAboutToShow()
 {
     debug_message("MainWindow::recentMenuAboutToShow()");
     menuHash["Recent"]->clear();
@@ -543,19 +538,19 @@ MainWindow::recentMenuAboutToShow()
                 recentValue.setNum(i+1);
                 QAction* rAction;
                 if (recentValue.toInt() >= 1 && recentValue.toInt() <= 9) {
-                    rAction = new QAction("&" + recentValue + " " + recentFileInfo.fileName(), this);
+                    rAction = new QAction("&" + recentValue + " " + recentFileInfo.fileName(), _main);
                 }
                 else if (recentValue.toInt() == 10) {
-                    rAction = new QAction("1&0 " + recentFileInfo.fileName(), this);
+                    rAction = new QAction("1&0 " + recentFileInfo.fileName(), _main);
                 }
                 else {
-                    rAction = new QAction(recentValue + " " + recentFileInfo.fileName(), this);
+                    rAction = new QAction(recentValue + " " + recentFileInfo.fileName(), _main);
                 }
                 rAction->setCheckable(false);
                 QString fname(opensave_recent_list_of_files.setting[i]);
                 rAction->setData(fname);
                 menuHash["Recent"]->addAction(rAction);
-                connect(rAction, SIGNAL(triggered()), this, SLOT(openrecentfile()));
+                QObject::connect(rAction, SIGNAL(triggered()), _main, SLOT(openrecentfile()));
             }
         }
         else {
@@ -576,7 +571,7 @@ MainWindow::recentMenuAboutToShow()
 void
 windowMenuAboutToShow(void)
 {
-    debug_message("MainWindow::windowMenuAboutToShow()");
+    debug_message("windowMenuAboutToShow()");
     menuHash["Window"]->clear();
     menuHash["Window"]->addAction(actionHash[ACTION_WINDOW_CLOSE]);
     menuHash["Window"]->addAction(actionHash[ACTION_WINDOW_CLOSE_ALL]);
@@ -603,7 +598,7 @@ windowMenuAboutToShow(void)
 void
 MainWindow::windowMenuActivated(bool checked)
 {
-    qDebug("MainWindow::windowMenuActivated()");
+    debug_message("windowMenuActivated()");
     QAction* aSender = qobject_cast<QAction*>(sender());
     if (!aSender) {
         return;
@@ -621,7 +616,7 @@ new_file(void)
     debug_message("new_file()");
     docIndex++;
     numOfDocs++;
-    MdiWindow* mdiWin = new MdiWindow(docIndex, _main, mdiArea, Qt::SubWindow);
+    MdiWindow* mdiWin = new MdiWindow(docIndex, mdiArea, Qt::SubWindow);
     QObject::connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), _main, SLOT(onCloseMdiWin(MdiWindow*)));
     QObject::connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), _main, SLOT(onWindowActivated(QMdiSubWindow*)));
 
@@ -637,9 +632,9 @@ new_file(void)
 
 /* . */
 void
-MainWindow::openFile(bool recent, const QString& recentFile)
+openFile(bool recent, const QString& recentFile)
 {
-    debug_message("MainWindow::openFile()");
+    debug_message("openFile()");
 
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
@@ -654,13 +649,13 @@ MainWindow::openFile(bool recent, const QString& recentFile)
     }
     else if (!preview) {
         /* TODO: set getOpenFileNames' selectedFilter parameter from opensave_open_format.setting */
-        files = QFileDialog::getOpenFileNames(this, translate("Open"), openFilesPath, formatFilterOpen);
+        files = QFileDialog::getOpenFileNames(_main, translate("Open"), openFilesPath, formatFilterOpen);
         openFilesSelected(files);
     }
     else if (preview) {
-        PreviewDialog* openDialog = new PreviewDialog(this, translate("Open w/Preview"), openFilesPath, formatFilterOpen);
+        PreviewDialog* openDialog = new PreviewDialog(_main, translate("Open w/Preview"), openFilesPath, formatFilterOpen);
         /* TODO: set openDialog->selectNameFilter(const QString& filter) from opensave_open_format.setting */
-        connect(openDialog, SIGNAL(filesSelected(const QStringList&)), this, SLOT(openFilesSelected(const QStringList&)));
+        QObject::connect(openDialog, SIGNAL(filesSelected(const QStringList&)), _main, SLOT(openFilesSelected(const QStringList&)));
         openDialog->exec();
     }
 
@@ -684,9 +679,9 @@ string_list_contains(char list[MAX_FILES][MAX_STRING_LENGTH], const char *entry)
 
 /* . */
 void
-MainWindow::openFilesSelected(const QStringList& filesToOpen)
+openFilesSelected(const QStringList& filesToOpen)
 {
-    debug_message("MainWindow::openFileSelected()");
+    debug_message("openFileSelected()");
     bool doOnce = true;
 
     if (filesToOpen.count()) {
@@ -702,9 +697,9 @@ MainWindow::openFilesSelected(const QStringList& filesToOpen)
 
             /* The docIndex doesn't need increased as it is only used for unnamed files. */
             numOfDocs++;
-            MdiWindow* mdiWin = new MdiWindow(docIndex, _main, mdiArea, Qt::SubWindow);
-            connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
-            connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
+            MdiWindow* mdiWin = new MdiWindow(docIndex, mdiArea, Qt::SubWindow);
+            QObject::connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), _main, SLOT(onCloseMdiWin(MdiWindow*)));
+            QObject::connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), _main, SLOT(onWindowActivated(QMdiSubWindow*)));
 
             /* Make sure the toolbars/etc... are shown before doing their zoomExtents. */
             if (doOnce) {
@@ -742,7 +737,7 @@ MainWindow::openFilesSelected(const QStringList& filesToOpen)
                 }
             }
             else {
-                messageBox("error", "Failed to load file", "Failed to load file.");
+                messagebox("error", "Failed to load file", "Failed to load file.");
                 debug_message("Failed to load file.");
                 mdiWin->close();
             }
@@ -785,9 +780,9 @@ save_as_file(void)
 
 /* . */
 QMdiSubWindow*
-MainWindow::findMdiWindow(const QString& fileName)
+findMdiWindow(const QString& fileName)
 {
-    qDebug("MainWindow::findMdiWindow(%s)", qPrintable(fileName));
+    qDebug("findMdiWindow(%s)", qPrintable(fileName));
     QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
 
     foreach (QMdiSubWindow* subWindow, mdiArea->subWindowList()) {
@@ -803,7 +798,7 @@ MainWindow::findMdiWindow(const QString& fileName)
 
 /* . */
 void
-MainWindow::closeEvent(QCloseEvent* event)
+closeEvent(QCloseEvent* event)
 {
     mdiArea->closeAllSubWindows();
     writeSettings();
@@ -812,9 +807,9 @@ MainWindow::closeEvent(QCloseEvent* event)
 
 /* . */
 void
-MainWindow::onCloseWindow()
+onCloseWindow()
 {
-    debug_message("MainWindow::onCloseWindow()");
+    debug_message("onCloseWindow()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
         onCloseMdiWin(mdiWin);
@@ -823,9 +818,9 @@ MainWindow::onCloseWindow()
 
 /* . */
 void
-MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
+onCloseMdiWin(MdiWindow* theMdiWin)
 {
-    debug_message("MainWindow::onCloseMdiWin()");
+    debug_message("onCloseMdiWin()");
     numOfDocs--;
 
     bool keepMaximized;
@@ -849,9 +844,9 @@ MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
 
 /* . */
 void
-MainWindow::onWindowActivated(QMdiSubWindow* w)
+onWindowActivated(QMdiSubWindow* w)
 {
-    debug_message("MainWindow::onWindowActivated()");
+    debug_message("onWindowActivated()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(w);
     if (mdiWin) {
         mdiWin->onWindowActivated();
@@ -860,18 +855,18 @@ MainWindow::onWindowActivated(QMdiSubWindow* w)
 
 /* . */
 void
-MainWindow::resizeEvent(QResizeEvent* e)
+resizeEvent(QResizeEvent* e)
 {
-    debug_message("MainWindow::resizeEvent()");
-    QMainWindow::resizeEvent(e);
-    statusBar()->setSizeGripEnabled(!isMaximized());
+    debug_message("resizeEvent()");
+    //FIXME: QMainWindow::resizeEvent(e);
+    _main->statusBar()->setSizeGripEnabled(!_main->isMaximized());
 }
 
 /* . */
 QAction*
-MainWindow::getFileSeparator()
+getFileSeparator()
 {
-    debug_message("MainWindow::getFileSeparator()");
+    debug_message("getFileSeparator()");
     return myFileSeparator;
 }
 
@@ -967,7 +962,7 @@ hide_unimplemented(void)
 
 /* . */
 bool
-MainWindow::validFileFormat(const QString& fileName)
+validFileFormat(const QString& fileName)
 {
     if (emb_identify_format(qPrintable(fileName)) >= 0) {
         return true;
@@ -977,7 +972,7 @@ MainWindow::validFileFormat(const QString& fileName)
 
 /* . */
 void
-MainWindow::loadFormats()
+loadFormats()
 {
     char stable, unstable;
     QString supportedReaders  = "All Supported Files (";
@@ -1059,17 +1054,16 @@ MainWindow::floatingChangedToolBar(bool isFloating)
     QToolBar* tb = qobject_cast<QToolBar*>(sender());
     if (tb) {
         if (isFloating) {
-            /* TODO: Determine best suited close button on various platforms. */
-            /*
-            QStyle::SP_DockWidgetCloseButton
-            QStyle::SP_TitleBarCloseButton
-            QStyle::SP_DialogCloseButton
-            */
-            QAction *ACTION = new QAction(tb->style()->standardIcon(QStyle::SP_DialogCloseButton), "Close", this);
+            // TODO: Determine best suited close button on various platforms.
+            // QStyle::SP_DockWidgetCloseButton
+            // QStyle::SP_TitleBarCloseButton
+            // QStyle::SP_DialogCloseButton
+            //
+            QAction *ACTION = new QAction(tb->style()->standardIcon(QStyle::SP_DialogCloseButton), "Close", _main);
             ACTION->setStatusTip("Close the " + tb->windowTitle() + " Toolbar");
             ACTION->setObjectName("toolbarclose");
             tb->addAction(ACTION);
-            connect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));
+            QObject::connect(tb, SIGNAL(actionTriggered(QAction*)), _main, SLOT(closeToolBar(QAction*)));
         }
         else {
             QList<QAction*> actList = tb->actions();
@@ -1077,7 +1071,7 @@ MainWindow::floatingChangedToolBar(bool isFloating)
                 QAction* ACTION = actList[i];
                 if (ACTION->objectName() == "toolbarclose") {
                     tb->removeAction(ACTION);
-                    disconnect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));
+                    QObject::disconnect(tb, SIGNAL(actionTriggered(QAction*)), _main, SLOT(closeToolBar(QAction*)));
                     delete ACTION;
                 }
             }
@@ -1128,9 +1122,9 @@ add_to_menu(QMenu *menu, const char *menu_data)
 
 /* . */
 void
-MainWindow::createAllMenus()
+createAllMenus()
 {
-    debug_message("MainWindow createAllMenus()");
+    debug_message("createAllMenus()");
 
     QString appDir = qApp->applicationDirPath();
     QString icontheme = general_icon_theme.setting;
@@ -1141,7 +1135,7 @@ MainWindow::createAllMenus()
     menuHash["File"]->addAction(actionHash[ACTION_OPEN]);
 
     menuHash["File"]->addMenu(menuHash["Recent"]);
-    connect(menuHash["Recent"], SIGNAL(aboutToShow()), this, SLOT(recentMenuAboutToShow()));
+    QObject::connect(menuHash["Recent"], SIGNAL(aboutToShow()), _main, SLOT(recentMenuAboutToShow()));
     /* Do not allow the Recent Menu to be torn off. It's a pain in the ass to maintain. */
     menuHash["Recent"]->setTearOffEnabled(false);
 
@@ -1185,7 +1179,7 @@ MainWindow::createAllMenus()
     add_to_menu(menuHash["Sandbox"], "sandbox_menu");
 
     menuBar()->addMenu(menuHash["Window"]);
-    connect(menuHash["Window"], SIGNAL(aboutToShow()), this, SLOT(windowMenuAboutToShow()));
+    QObject::connect(menuHash["Window"], SIGNAL(aboutToShow()), _main, SLOT(windowMenuAboutToShow()));
     /* Do not allow the Window Menu to be torn off. It's a pain in the ass to maintain. */
     menuHash["Window"]->setTearOffEnabled(false);
 
@@ -1234,7 +1228,7 @@ get_setting(QSettings *settings, const char *key, bool value, BoolSetting *b)
 
 /* . */
 void
-MainWindow::readSettings(void)
+readSettings(void)
 {
     debug_message("Reading Settings...");
     /* This file needs to be read from the users home directory to ensure it is writable. */
@@ -1247,7 +1241,7 @@ MainWindow::readSettings(void)
     QSize size = settings.value("Window/Size", QSize(800, 600)).toSize();
 
     layoutState = settings.value("LayoutState").toByteArray();
-    if (!restoreState(layoutState)) {
+    if (!_main->restoreState(layoutState)) {
         debug_message("LayoutState NOT restored! Setting Default Layout...");
         /* someToolBar->setVisible(true); */
     }
@@ -1401,13 +1395,13 @@ MainWindow::readSettings(void)
     text_style_strikeout.setting = settings.value("Text/StyleStrikeOut", false).toBool();
     text_style_overline.setting = settings.value("Text/StyleOverline", false).toBool();
 
-    move(pos);
-    resize(size);
+    _main->move(pos);
+    _main->resize(size);
 }
 
 /* . */
 void
-MainWindow::writeSettings()
+writeSettings()
 {
     debug_message("Writing Settings...");
     save_settings("", qPrintable(SettingsDir() + settings_file));
@@ -1415,16 +1409,16 @@ MainWindow::writeSettings()
 
 /* . */
 void
-MainWindow::settingsPrompt()
+settingsPrompt()
 {
     settingsDialog("Prompt");
 }
 
 /* . */
 void
-MainWindow::settingsDialog(const QString& showTab)
+settingsDialog(const QString& showTab)
 {
-    Settings_Dialog dialog(this, showTab, this);
+    Settings_Dialog dialog(showTab, _main);
     dialog.exec();
 }
 
@@ -1469,7 +1463,7 @@ add_to_toolbar(const char *toolbar_name, const char *toolbar_data)
  * TODO: Finish All Commands ... <.<
  */
 void
-MainWindow::createAllActions()
+createAllActions()
 {
     debug_message("Creating All Actions...");
     for (int i=0; command_data[i].id != -2; i++) {
@@ -1481,7 +1475,7 @@ MainWindow::createAllActions()
 
         debug_message(qPrintable("COMMAND: " + icon));
 
-        QAction *ACTION = new QAction(create_icon(icon), toolTip, this);
+        QAction *ACTION = new QAction(create_icon(icon), toolTip, _main);
         ACTION->setStatusTip(statusTip);
         ACTION->setObjectName(icon);
         ACTION->setWhatsThis(statusTip);
@@ -1495,7 +1489,7 @@ MainWindow::createAllActions()
             ACTION->setCheckable(true);
         }
 
-        connect(ACTION, SIGNAL(triggered()), this, SLOT(runCommand()));
+        QObject::connect(ACTION, SIGNAL(triggered()), _main, SLOT(runCommand()));
 
         aliasHash[icon.toStdString()] = icon.toStdString();
         actionHash[command_data[i].id] = ACTION;

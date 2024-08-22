@@ -12,7 +12,7 @@
 
 #include "embroidermodder.h"
 
-View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
+View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
 {
     data.gscene = theScene;
 
@@ -1388,7 +1388,7 @@ View::mousePressEvent(QMouseEvent* event)
     if (event->button() == Qt::LeftButton) {
         if (cmdActive) {
             QPointF cmdPoint = mapToScene(event->pos());
-            _main->runCommandClick(curCmd, cmdPoint.x(), cmdPoint.y());
+            runCommandClick(curCmd, cmdPoint.x(), cmdPoint.y());
             return;
         }
         QPainterPath path;
@@ -1455,7 +1455,7 @@ View::mousePressEvent(QMouseEvent* event)
             path.addPolygon(mapToScene(data.selectBox->geometry()));
             if (data.sceneReleasePoint.x() > data.scenePressPoint.x()) {
                 if (selection_mode_pickadd.setting) {
-                    if (_main->isShiftPressed()) {
+                    if (key_state[SHIFT_KEY]) {
                         QList<QGraphicsItem*> itemList = data.gscene->items(path, Qt::ContainsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(false);
@@ -1467,7 +1467,7 @@ View::mousePressEvent(QMouseEvent* event)
                     }
                 }
                 else {
-                    if (_main->isShiftPressed()) {
+                    if (key_state[SHIFT_KEY]) {
                         QList<QGraphicsItem*> itemList = data.gscene->items(path, Qt::ContainsItemShape);
                         if (!itemList.size())
                             clearSelection();
@@ -1486,7 +1486,7 @@ View::mousePressEvent(QMouseEvent* event)
             }
             else {
                 if (selection_mode_pickadd.setting) {
-                    if (_main->isShiftPressed()) {
+                    if (key_state[SHIFT_KEY]) {
                         QList<QGraphicsItem*> itemList = data.gscene->items(path, Qt::IntersectsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(false);
@@ -1498,7 +1498,7 @@ View::mousePressEvent(QMouseEvent* event)
                     }
                 }
                 else {
-                    if (_main->isShiftPressed()) {
+                    if (key_state[SHIFT_KEY]) {
                         QList<QGraphicsItem*> itemList = data.gscene->items(path, Qt::IntersectsItemShape);
                         if (!itemList.size())
                             clearSelection();
@@ -1619,7 +1619,7 @@ View::mouseMoveEvent(QMouseEvent* event)
 
     if (cmdActive) {
         if (data.rapidMoveActive) {
-            _main->runCommandMove(curCmd, data.sceneMovePoint.x(), data.sceneMovePoint.y());
+            runCommandMove(curCmd, data.sceneMovePoint.x(), data.sceneMovePoint.y());
         }
     }
     if (data.previewActive) {
@@ -1735,12 +1735,12 @@ View::mouseReleaseEvent(QMouseEvent* event)
     }
     if (event->button() == Qt::XButton1) {
         debug_message("XButton1");
-        _main->undo(); /* TODO: Make this customizable */
+        undo_command(); /* TODO: Make this customizable */
         event->accept();
     }
     if (event->button() == Qt::XButton2) {
         debug_message("XButton2");
-        _main->redo(); /* TODO: Make this customizable */
+        redo_command(); /* TODO: Make this customizable */
         event->accept();
     }
     data.gscene->update();
