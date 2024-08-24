@@ -447,9 +447,9 @@ circle_command(ScriptEnv *context)
     c.center.x = 0.0;
     c.center.y = 0.0;
     c.radius = 10.0;
-    MdiWindow *window = activeMdiWindow();
-    if (window) {
-        emb_array_add_circle(window->pattern->geometry, c);
+    Document *doc = activeDocument();
+    if (doc) {
+        emb_array_add_circle(doc->data.pattern->geometry, c);
     }
     /* _main->nativeAddCircle(0.0, 0.0, 10.0, true, OBJ_RUBBER_CIRCLE_1P_DIA); */
    

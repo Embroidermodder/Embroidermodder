@@ -616,14 +616,14 @@ new_file(void)
     debug_message("new_file()");
     docIndex++;
     numOfDocs++;
-    MdiWindow* mdiWin = new MdiWindow(docIndex, mdiArea, Qt::SubWindow);
-    QObject::connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), _main, SLOT(onCloseMdiWin(MdiWindow*)));
+    Document* doc = new Document(docIndex, mdiArea, Qt::SubWindow);
+    QObject::connect(doc, SIGNAL(sendCloseMdiWin(Document*)), _main, SLOT(onCloseMdiWin(Document*)));
     QObject::connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), _main, SLOT(onWindowActivated(QMdiSubWindow*)));
 
     update_interface();
     windowMenuAboutToShow();
 
-    View* v = mdiWin->gview;
+    View* v = doc->data.gview;
     if (v) {
         v->recalculateLimits();
         v->zoomExtents();
@@ -697,8 +697,8 @@ openFilesSelected(const QStringList& filesToOpen)
 
             /* The docIndex doesn't need increased as it is only used for unnamed files. */
             numOfDocs++;
-            MdiWindow* mdiWin = new MdiWindow(docIndex, mdiArea, Qt::SubWindow);
-            QObject::connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), _main, SLOT(onCloseMdiWin(MdiWindow*)));
+            Document* doc = new Document(docIndex, mdiArea, Qt::SubWindow);
+            QObject::connect(doc, SIGNAL(sendCloseMdiWin(Document*)), _main, SLOT(onCloseMdiWin(Document*)));
             QObject::connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), _main, SLOT(onWindowActivated(QMdiSubWindow*)));
 
             /* Make sure the toolbars/etc... are shown before doing their zoomExtents. */
@@ -707,10 +707,10 @@ openFilesSelected(const QStringList& filesToOpen)
                 doOnce = false;
             }
 
-            if (mdiWin->loadFile(filesToOpen.at(i))) {
+            if (doc->loadFile(filesToOpen.at(i))) {
                 statusbar->showMessage(translate("File(s) loaded"), 2000);
-                mdiWin->show();
-                mdiWin->showMaximized();
+                doc->show();
+                doc->showMaximized();
                 /* Prevent duplicate entries in the recent files list. */
                 if (!string_list_contains(opensave_recent_list_of_files.setting,
                     qPrintable(filesToOpen.at(i)))) {
@@ -730,7 +730,7 @@ openFilesSelected(const QStringList& filesToOpen)
                 strcpy(opensave_recent_directory.setting,
                     qPrintable(QFileInfo(filesToOpen.at(i)).absolutePath()));
 
-                View* v = mdiWin->gview;
+                View* v = doc->data.gview;
                 if (v) {
                     v->recalculateLimits();
                     v->zoomExtents();
@@ -739,7 +739,7 @@ openFilesSelected(const QStringList& filesToOpen)
             else {
                 messagebox("error", "Failed to load file", "Failed to load file.");
                 debug_message("Failed to load file.");
-                mdiWin->close();
+                doc->close();
             }
         }
     }
@@ -767,15 +767,15 @@ save_as_file(void)
 {
     debug_message("save_as_file()");
     /* need to find the activeSubWindow before it loses focus to the FileDialog. */
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (!mdiWin) {
+    Document* doc = qobject_cast<Document*>(mdiArea->activeSubWindow());
+    if (!doc) {
         return;
     }
 
     openFilesPath = opensave_recent_directory.setting;
     QString file = QFileDialog::getSaveFileName(_main, translate("Save As"), openFilesPath, formatFilterSave);
 
-    mdiWin->saveFile(file);
+    doc->saveFile(file);
 }
 
 /* . */
@@ -786,9 +786,9 @@ findMdiWindow(const QString& fileName)
     QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
 
     foreach (QMdiSubWindow* subWindow, mdiArea->subWindowList()) {
-        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(subWindow);
-        if (mdiWin) {
-            if (mdiWin->curFile == canonicalFilePath) {
+        Document* doc = qobject_cast<Document*>(subWindow);
+        if (doc) {
+            if (doc->data.curFile == canonicalFilePath) {
                 return subWindow;
             }
         }
@@ -810,15 +810,15 @@ void
 onCloseWindow()
 {
     debug_message("onCloseWindow()");
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) {
-        onCloseMdiWin(mdiWin);
+    Document* doc = qobject_cast<Document*>(mdiArea->activeSubWindow());
+    if (doc) {
+        onCloseMdiWin(doc);
     }
 }
 
 /* . */
 void
-onCloseMdiWin(MdiWindow* theMdiWin)
+onCloseMdiWin(Document* theMdiWin)
 {
     debug_message("onCloseMdiWin()");
     numOfDocs--;
@@ -835,9 +835,9 @@ onCloseMdiWin(MdiWindow* theMdiWin)
     windowMenuAboutToShow();
 
     if (keepMaximized) {
-        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-        if (mdiWin) {
-            mdiWin->showMaximized();
+        Document* doc = qobject_cast<Document*>(mdiArea->activeSubWindow());
+        if (doc) {
+            doc->showMaximized();
         }
     }
 }
@@ -847,9 +847,9 @@ void
 onWindowActivated(QMdiSubWindow* w)
 {
     debug_message("onWindowActivated()");
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(w);
-    if (mdiWin) {
-        mdiWin->onWindowActivated();
+    Document* doc = qobject_cast<Document*>(w);
+    if (doc) {
+        doc->onWindowActivated();
     }
 }
 

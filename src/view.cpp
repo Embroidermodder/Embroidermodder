@@ -12,9 +12,10 @@
 
 #include "embroidermodder.h"
 
-View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
+View::View(Document *doc_, QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
 {
-    data.gscene = theScene;
+    doc = doc_;
+    doc->data.gscene = theScene;
 
     setFrameShape(QFrame::NoFrame);
 
@@ -37,18 +38,18 @@ View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, 
      */
     setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
-    data.panDistance = 10; /* TODO: should there be a setting for this??? */
+    doc->data.panDistance = 10; /* TODO: should there be a setting for this??? */
 
     setCursor(Qt::BlankCursor);
     horizontalScrollBar()->setCursor(Qt::ArrowCursor);
     verticalScrollBar()->setCursor(Qt::ArrowCursor);
-    data.qsnapLocatorColor = qsnap_locator_color.setting;
-    data.qsnapLocatorSize = qsnap_locator_size.setting;
-    data.qsnapApertureSize = qsnap_aperture_size.setting;
-    data.gripColorCool = selection_coolgrip_color.setting;
-    data.gripColorHot = selection_hotgrip_color.setting;
-    data.gripSize = selection_grip_size.setting;
-    data.pickBoxSize = selection_pickbox_size.setting;
+    doc->data.qsnapLocatorColor = qsnap_locator_color.setting;
+    doc->data.qsnapLocatorSize = qsnap_locator_size.setting;
+    doc->data.qsnapApertureSize = qsnap_aperture_size.setting;
+    doc->data.gripColorCool = selection_coolgrip_color.setting;
+    doc->data.gripColorHot = selection_hotgrip_color.setting;
+    doc->data.gripSize = selection_grip_size.setting;
+    doc->data.pickBoxSize = selection_pickbox_size.setting;
     setCrossHairColor(display_crosshair_color.setting);
     setCrossHairSize(display_crosshair_percent.setting);
     setGridColor(grid_color.setting);
@@ -63,32 +64,32 @@ View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, 
     toggleRuler(ruler_show_on_load.setting);
     toggleReal(true); /* TODO: load this from file, else settings with default being true. */
 
-    data.grippingActive = false;
-    data.rapidMoveActive = false;
-    data.previewMode = PREVIEW_MODE_NULL;
-    data.previewData = 0;
-    data.previewObjectItemGroup = 0;
-    data.pasteObjectItemGroup = 0;
-    data.previewActive = false;
-    data.pastingActive = false;
-    data.movingActive = false;
-    data.selectingActive = false;
-    data.zoomWindowActive = false;
-    data.panningRealTimeActive = false;
-    data.panningPointActive = false;
-    data.panningActive = false;
-    data.qSnapActive = false;
-    data.qSnapToggle = false;
+    doc->data.grippingActive = false;
+    doc->data.rapidMoveActive = false;
+    doc->data.previewMode = PREVIEW_MODE_NULL;
+    doc->data.previewData = 0;
+    doc->data.previewObjectItemGroup = 0;
+    doc->data.pasteObjectItemGroup = 0;
+    doc->data.previewActive = false;
+    doc->data.pastingActive = false;
+    doc->data.movingActive = false;
+    doc->data.selectingActive = false;
+    doc->data.zoomWindowActive = false;
+    doc->data.panningRealTimeActive = false;
+    doc->data.panningPointActive = false;
+    doc->data.panningActive = false;
+    doc->data.qSnapActive = false;
+    doc->data.qSnapToggle = false;
 
     /* Randomize the hot grip location initially so it's not located at (0,0). */
     srand(QDateTime::currentMSecsSinceEpoch());
-    data.sceneGripPoint = QPointF(rand()*1000, rand()*1000);
+    doc->data.sceneGripPoint = QPointF(rand()*1000, rand()*1000);
 
-    data.gripBaseObj = 0;
-    data.tempBaseObj = 0;
+    doc->data.gripBaseObj = 0;
+    doc->data.tempBaseObj = 0;
 
-    data.selectBox = new SelectBox(QRubberBand::Rectangle, this);
-    data.selectBox->setColors(
+    doc->data.selectBox = new SelectBox(QRubberBand::Rectangle, this);
+    doc->data.selectBox->setColors(
         QColor(display_selectbox_left_color.setting),
         QColor(display_selectbox_left_fill.setting),
         QColor(display_selectbox_right_color.setting),
@@ -98,8 +99,8 @@ View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, 
     showScrollBars(display_show_scrollbars.setting);
     setCornerButton();
 
-    data.undoStack = new QUndoStack(this);
-    dockUndoEdit->addStack(data.undoStack);
+    doc->data.undoStack = new QUndoStack(this);
+    dockUndoEdit->addStack(doc->data.undoStack);
 
     installEventFilter(this);
 
@@ -107,19 +108,19 @@ View::View(QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, 
     setBackgroundColor(display_bg_color.setting);
     /* TODO: wrap this with a setBackgroundPixmap() function: setBackgroundBrush(QPixmap("images/canvas.png")); */
 
-    connect(data.gscene, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+    connect(doc->data.gscene, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 }
 
 /* . */
 View::~View()
 {
     /* Prevent memory leaks by deleting any objects that were removed from the scene */
-    qDeleteAll(data.hashDeletedObjects.begin(), data.hashDeletedObjects.end());
-    data.hashDeletedObjects.clear();
+    qDeleteAll(doc->data.hashDeletedObjects.begin(), doc->data.hashDeletedObjects.end());
+    doc->data.hashDeletedObjects.clear();
 
     /* Prevent memory leaks by deleting any unused instances. */
-    qDeleteAll(data.previewObjectList.begin(), data.previewObjectList.end());
-    data.previewObjectList.clear();
+    qDeleteAll(doc->data.previewObjectList.begin(), doc->data.previewObjectList.end());
+    doc->data.previewObjectList.clear();
 }
 
 /* . */
@@ -138,9 +139,9 @@ View::enterEvent(QEvent* /*event*/)
 void
 View::addObject(Object* obj)
 {
-    data.gscene->addItem(obj);
-    data.gscene->update();
-    data.hashDeletedObjects.remove(obj->data.objID);
+    doc->data.gscene->addItem(obj);
+    doc->data.gscene->update();
+    doc->data.hashDeletedObjects.remove(obj->data.objID);
 }
 
 /* . */
@@ -149,9 +150,9 @@ View::deleteObject(Object* obj)
 {
     /* NOTE: We really just remove the objects from the scene. deletion actually occurs in the destructor. */
     obj->setSelected(false);
-    data.gscene->removeItem(obj);
-    data.gscene->update();
-    data.hashDeletedObjects.insert(obj->data.objID, obj);
+    doc->data.gscene->removeItem(obj);
+    doc->data.gscene->update();
+    doc->data.hashDeletedObjects.insert(obj->data.objID, obj);
 }
 
 /* . */
@@ -161,74 +162,76 @@ View::previewOn(int clone, int mode, double x, double y, double data_)
     debug_message("View previewOn()");
     previewOff(); /* Free the old objects before creating new ones */
 
-    data.previewMode = mode;
+    doc->data.previewMode = mode;
 
     /* Create new objects and add them to the scene in an item group. */
     if (clone == PREVIEW_CLONE_SELECTED) {
-        data.previewObjectList = createObjectList(data.gscene->selectedItems());
+        doc->data.previewObjectList = createObjectList(doc->data.gscene->selectedItems());
     }
     else if (clone == PREVIEW_CLONE_RUBBER) {
-        data.previewObjectList = createObjectList(data.rubberRoomList);
+        doc->data.previewObjectList = createObjectList(doc->data.rubberRoomList);
     }
     else {
         return;
     }
-    data.previewObjectItemGroup = data.gscene->createItemGroup(data.previewObjectList);
+    doc->data.previewObjectItemGroup = doc->data.gscene->createItemGroup(doc->data.previewObjectList);
 
-    if (data.previewMode == PREVIEW_MODE_MOVE   ||
-       data.previewMode == PREVIEW_MODE_ROTATE ||
-       data.previewMode == PREVIEW_MODE_SCALE) {
-        data.previewPoint = QPointF(x, y); /* NOTE: Move: basePt; Rotate: basePt;   Scale: basePt; */
-        data.previewData = data_;           /* NOTE: Move: unused; Rotate: refAngle; Scale: refFactor; */
-        data.previewActive = true;
+    if (doc->data.previewMode == PREVIEW_MODE_MOVE   ||
+       doc->data.previewMode == PREVIEW_MODE_ROTATE ||
+       doc->data.previewMode == PREVIEW_MODE_SCALE) {
+        /* NOTE: Move: basePt; Rotate: basePt;   Scale: basePt; */
+        doc->data.previewPoint = QPointF(x, y);
+        /* NOTE: Move: unused; Rotate: refAngle; Scale: refFactor; */
+        doc->data.previewData = data_;
+        doc->data.previewActive = true;
     }
     else {
-        data.previewMode = PREVIEW_MODE_NULL;
-        data.previewPoint = QPointF();
-        data.previewData = 0;
-        data.previewActive = false;
+        doc->data.previewMode = PREVIEW_MODE_NULL;
+        doc->data.previewPoint = QPointF();
+        doc->data.previewData = 0;
+        doc->data.previewActive = false;
     }
 
-    data.gscene->update();
+    doc->data.gscene->update();
 }
 
 void
 View::previewOff()
 {
     /* Prevent memory leaks by deleting any unused instances */
-    qDeleteAll(data.previewObjectList.begin(), data.previewObjectList.end());
-    data.previewObjectList.clear();
+    qDeleteAll(doc->data.previewObjectList.begin(), doc->data.previewObjectList.end());
+    doc->data.previewObjectList.clear();
 
-    if (data.previewObjectItemGroup) {
-        data.gscene->removeItem(data.previewObjectItemGroup);
-        delete data.previewObjectItemGroup;
-        data.previewObjectItemGroup = 0;
+    if (doc->data.previewObjectItemGroup) {
+        doc->data.gscene->removeItem(doc->data.previewObjectItemGroup);
+        delete doc->data.previewObjectItemGroup;
+        doc->data.previewObjectItemGroup = 0;
     }
 
-    data.previewActive = false;
+    doc->data.previewActive = false;
 
-    data.gscene->update();
+    doc->data.gscene->update();
 }
 
 /* . */
 void
 View::enableMoveRapidFire()
 {
-    data.rapidMoveActive = true;
+    doc->data.rapidMoveActive = true;
 }
 
 /* . */
 void
 View::disableMoveRapidFire()
 {
-    data.rapidMoveActive = false;
+    doc->data.rapidMoveActive = false;
 }
 
 /* . */
 bool
 View::allowRubber()
 {
-    /* if (!data.rubberRoomList.size()) */ /* TODO: this check should be removed later */
+    /* if (!doc->data.rubberRoomList.size()) */ /* TODO: this check should be removed later */
         return true;
     return false;
 }
@@ -237,21 +240,21 @@ View::allowRubber()
 void
 View::addToRubberRoom(QGraphicsItem* item)
 {
-    data.rubberRoomList.append(item);
+    doc->data.rubberRoomList.append(item);
     item->show();
-    data.gscene->update();
+    doc->data.gscene->update();
 }
 
 /* . */
 void
 View::vulcanizeRubberRoom()
 {
-    foreach(QGraphicsItem* item, data.rubberRoomList) {
+    foreach(QGraphicsItem* item, doc->data.rubberRoomList) {
         Object* base = static_cast<Object*>(item);
         if (base) vulcanizeObject(base);
     }
-    data.rubberRoomList.clear();
-    data.gscene->update();
+    doc->data.rubberRoomList.clear();
+    doc->data.gscene->update();
 }
 
 /* . */
@@ -259,32 +262,32 @@ void
 View::vulcanizeObject(Object* obj)
 {
     if (!obj) return;
-    data.gscene->removeItem(obj); /* Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene */
+    doc->data.gscene->removeItem(obj); /* Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene */
     obj->vulcanize();
 
     UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data.OBJ_NAME, obj, this, 0);
     if (cmd) {
-        data.undoStack->push(cmd);
+        doc->data.undoStack->push(cmd);
     }
 }
 
 void
 View::clearRubberRoom()
 {
-    foreach(QGraphicsItem* item, data.rubberRoomList) {
+    foreach(QGraphicsItem* item, doc->data.rubberRoomList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
             int type = base->type();
-            if ((type == OBJ_TYPE_PATH     && data.spareRubberList.contains(SPARE_RUBBER_PATH))     ||
-               (type == OBJ_TYPE_POLYGON  && data.spareRubberList.contains(SPARE_RUBBER_POLYGON))  ||
-               (type == OBJ_TYPE_POLYLINE && data.spareRubberList.contains(SPARE_RUBBER_POLYLINE)) ||
-               (data.spareRubberList.contains(base->data.objID))) {
+            if ((type == OBJ_TYPE_PATH     && doc->data.spareRubberList.contains(SPARE_RUBBER_PATH))     ||
+               (type == OBJ_TYPE_POLYGON  && doc->data.spareRubberList.contains(SPARE_RUBBER_POLYGON))  ||
+               (type == OBJ_TYPE_POLYLINE && doc->data.spareRubberList.contains(SPARE_RUBBER_POLYLINE)) ||
+               (doc->data.spareRubberList.contains(base->data.objID))) {
                 if (!base->objectPath().elementCount()) {
                     QMessageBox::critical(this, tr("Empty Rubber Object Error"),
                                           tr("The rubber object added contains no points. "
                                           "The command that created this object has flawed logic. "
                                           "The object will be deleted."));
-                    data.gscene->removeItem(item);
+                    doc->data.gscene->removeItem(item);
                     delete item;
                 }
                 else {
@@ -292,65 +295,65 @@ View::clearRubberRoom()
                 }
             }
             else {
-                data.gscene->removeItem(item);
+                doc->data.gscene->removeItem(item);
                 delete item;
             }
         }
     }
 
-    data.rubberRoomList.clear();
-    data.spareRubberList.clear();
-    data.gscene->update();
+    doc->data.rubberRoomList.clear();
+    doc->data.spareRubberList.clear();
+    doc->data.gscene->update();
 }
 
 /* . */
 void
 View::spareRubber(int64_t id)
 {
-    data.spareRubberList.append(id);
+    doc->data.spareRubberList.append(id);
 }
 
 /* . */
 void
 View::setRubberMode(int mode)
 {
-    foreach(QGraphicsItem* item, data.rubberRoomList) {
+    foreach(QGraphicsItem* item, doc->data.rubberRoomList) {
         Object* base = static_cast<Object*>(item);
         if (base) { base->setObjectRubberMode(mode); }
     }
-    data.gscene->update();
+    doc->data.gscene->update();
 }
 
 /* . */
 void
 View::setRubberPoint(const QString& key, const QPointF& point)
 {
-    foreach(QGraphicsItem* item, data.rubberRoomList) {
+    foreach(QGraphicsItem* item, doc->data.rubberRoomList) {
         Object* base = static_cast<Object*>(item);
         if (base) { base->setObjectRubberPoint(key, point); }
     }
-    data.gscene->update();
+    doc->data.gscene->update();
 }
 
 /* . */
 void
 View::setRubberText(const QString& key, const QString& txt)
 {
-    foreach(QGraphicsItem* item, data.rubberRoomList) {
+    foreach(QGraphicsItem* item, doc->data.rubberRoomList) {
         Object* base = static_cast<Object*>(item);
         if (base) { base->setObjectRubberText(key, txt); }
     }
-    data.gscene->update();
+    doc->data.gscene->update();
 }
 
 /* . */
 void
 View::setGridColor(QRgb color)
 {
-    data.gridColor = QColor(color);
-    if (data.gscene) {
-        data.gscene->setProperty("VIEW_COLOR_GRID", color);
-        data.gscene->update();
+    doc->data.gridColor = QColor(color);
+    if (doc->data.gscene) {
+        doc->data.gscene->setProperty("VIEW_COLOR_GRID", color);
+        doc->data.gscene->update();
     }
 }
 
@@ -358,8 +361,8 @@ View::setGridColor(QRgb color)
 void
 View::setRulerColor(QRgb color)
 {
-    data.rulerColor = QColor(color);
-    data.gscene->update();
+    doc->data.rulerColor = QColor(color);
+    doc->data.gscene->update();
 }
 
 /* . */
@@ -368,42 +371,42 @@ View::createGrid(const QString& gridType)
 {
     if (gridType == "Rectangular") {
         createGridRect();
-        data.gscene->setProperty("ENABLE_GRID", true);
+        doc->data.gscene->setProperty("ENABLE_GRID", true);
     }
     else if (gridType == "Circular") {
         createGridPolar();
-        data.gscene->setProperty("ENABLE_GRID", true);
+        doc->data.gscene->setProperty("ENABLE_GRID", true);
     }
     else if (gridType == "Isometric") {
         createGridIso();
-        data.gscene->setProperty("ENABLE_GRID", true);
+        doc->data.gscene->setProperty("ENABLE_GRID", true);
     }
     else {
-        data.gridPath = QPainterPath();
-        data.gscene->setProperty("ENABLE_GRID", false);
+        doc->data.gridPath = QPainterPath();
+        doc->data.gscene->setProperty("ENABLE_GRID", false);
     }
 
     createOrigin();
 
-    data.gscene->update();
+    doc->data.gscene->update();
 }
 
 void
 View::createOrigin() /* TODO: Make Origin Customizable */
 {
-    data.originPath = QPainterPath();
+    doc->data.originPath = QPainterPath();
 
     if (grid_show_origin.setting) {
         /* originPath.addEllipse(QPointF(0,0), 0.5, 0.5); */ /* TODO: Make Origin Customizable */
         double rad = 0.5;
-        data.originPath.moveTo(0.0, rad);
-        data.originPath.arcTo(-rad, -rad, rad*2.0, rad*2.0, 90.0, 360.0);
-        data.originPath.arcTo(-rad, -rad, rad*2.0, rad*2.0, 90.0, -360.0);
-        data.originPath.lineTo(0.0, -rad);
-        data.originPath.arcTo(-rad, -rad, rad*2.0, rad*2.0, 270.0, 90.0);
-        data.originPath.lineTo(-rad, 0.0);
-        data.originPath.arcTo(-rad, -rad, rad*2.0, rad*2.0, 180.0, -90.0);
-        data.originPath.closeSubpath();
+        doc->data.originPath.moveTo(0.0, rad);
+        doc->data.originPath.arcTo(-rad, -rad, rad*2.0, rad*2.0, 90.0, 360.0);
+        doc->data.originPath.arcTo(-rad, -rad, rad*2.0, rad*2.0, 90.0, -360.0);
+        doc->data.originPath.lineTo(0.0, -rad);
+        doc->data.originPath.arcTo(-rad, -rad, rad*2.0, rad*2.0, 270.0, 90.0);
+        doc->data.originPath.lineTo(-rad, 0.0);
+        doc->data.originPath.arcTo(-rad, -rad, rad*2.0, rad*2.0, 180.0, -90.0);
+        doc->data.originPath.closeSubpath();
     }
 }
 
@@ -420,19 +423,19 @@ View::createGridRect()
     double x2 = EMB_MAX(gr.left(), gr.right());
     double y2 = EMB_MAX(gr.top(), gr.bottom());
 
-    data.gridPath = QPainterPath();
-    data.gridPath.addRect(gr);
+    doc->data.gridPath = QPainterPath();
+    doc->data.gridPath.addRect(gr);
     for (double gx = x1; gx < x2; gx += xSpacing) {
         for (double gy = y1; gy < y2; gy += ySpacing) {
-            data.gridPath.moveTo(x1,gy);
-            data.gridPath.lineTo(x2,gy);
-            data.gridPath.moveTo(gx,y1);
-            data.gridPath.lineTo(gx,y2);
+            doc->data.gridPath.moveTo(x1,gy);
+            doc->data.gridPath.lineTo(x2,gy);
+            doc->data.gridPath.moveTo(gx,y1);
+            doc->data.gridPath.lineTo(gx,y2);
         }
     }
 
     /* Center the Grid */
-    QRectF gridRect = data.gridPath.boundingRect();
+    QRectF gridRect = doc->data.gridPath.boundingRect();
     double bx = gridRect.width()/2.0;
     double by = -gridRect.height()/2.0;
     double cx = grid_center_x.setting;
@@ -441,10 +444,10 @@ View::createGridRect()
     double dy = cy - by;
 
     if (grid_center_on_origin.setting) {
-        data.gridPath.translate(-bx, -by);
+        doc->data.gridPath.translate(-bx, -by);
     }
     else {
-        data.gridPath.translate(dx, dy);
+        doc->data.gridPath.translate(dx, dy);
     }
 }
 
@@ -456,21 +459,21 @@ View::createGridPolar()
 
     double rad = grid_size_radius.setting;
 
-    data.gridPath = QPainterPath();
-    data.gridPath.addEllipse(QPointF(0,0), rad, rad);
+    doc->data.gridPath = QPainterPath();
+    doc->data.gridPath.addEllipse(QPointF(0,0), rad, rad);
     for (double r = 0; r < rad; r += radSpacing) {
-        data.gridPath.addEllipse(QPointF(0,0), r, r);
+        doc->data.gridPath.addEllipse(QPointF(0,0), r, r);
     }
     for (double ang = 0; ang < 360; ang += angSpacing) {
-        data.gridPath.moveTo(0,0);
-        data.gridPath.lineTo(QLineF::fromPolar(rad, ang).p2());
+        doc->data.gridPath.moveTo(0,0);
+        doc->data.gridPath.lineTo(QLineF::fromPolar(rad, ang).p2());
     }
 
     double cx = grid_center_x.setting;
     double cy = grid_center_y.setting;
 
     if (!grid_center_on_origin.setting) {
-        data.gridPath.translate(cx, -cy);
+        doc->data.gridPath.translate(cx, -cy);
     }
 }
 
@@ -489,39 +492,39 @@ View::createGridIso()
     QPointF p3 = QLineF::fromPolar(isoH, 150).p2();
     QPointF p4 = p2 + p3;
 
-    data.gridPath = QPainterPath();
-    data.gridPath.moveTo(p1);
-    data.gridPath.lineTo(p2);
-    data.gridPath.lineTo(p4);
-    data.gridPath.lineTo(p3);
-    data.gridPath.lineTo(p1);
+    doc->data.gridPath = QPainterPath();
+    doc->data.gridPath.moveTo(p1);
+    doc->data.gridPath.lineTo(p2);
+    doc->data.gridPath.lineTo(p4);
+    doc->data.gridPath.lineTo(p3);
+    doc->data.gridPath.lineTo(p1);
 
     for (double x = 0; x < isoW; x += xSpacing) {
         for (double y = 0; y < isoH; y += ySpacing) {
             QPointF px = QLineF::fromPolar(x, 30).p2();
             QPointF py = QLineF::fromPolar(y, 150).p2();
 
-            data.gridPath.moveTo(px);
-            data.gridPath.lineTo(px+p3);
-            data.gridPath.moveTo(py);
-            data.gridPath.lineTo(py+p2);
+            doc->data.gridPath.moveTo(px);
+            doc->data.gridPath.lineTo(px+p3);
+            doc->data.gridPath.moveTo(py);
+            doc->data.gridPath.lineTo(py+p2);
         }
     }
 
     /* Center the Grid */
 
-    QRectF gridRect = data.gridPath.boundingRect();
+    QRectF gridRect = doc->data.gridPath.boundingRect();
     /* bx is unused */
     double by = -gridRect.height()/2.0;
     double cx = grid_center_x.setting;
     double cy = -grid_center_y.setting;
 
     if (grid_center_on_origin.setting) {
-        data.gridPath.translate(0, -by);
+        doc->data.gridPath.translate(0, -by);
     }
     else {
-        data.gridPath.translate(0, -by);
-        data.gridPath.translate(cx, cy);
+        doc->data.gridPath.translate(0, -by);
+        doc->data.gridPath.translate(cx, cy);
     }
 }
 
@@ -531,8 +534,8 @@ View::toggleSnap(bool on)
     debug_message("View toggleSnap()");
     wait_cursor();
     /* TODO: finish this */
-    data.gscene->setProperty("ENABLE_SNAP", on);
-    data.gscene->update();
+    doc->data.gscene->setProperty("ENABLE_SNAP", on);
+    doc->data.gscene->update();
     restore_cursor();
 }
 
@@ -555,11 +558,11 @@ View::toggleRuler(bool on)
 {
     debug_message("View toggleRuler()");
     wait_cursor();
-    data.gscene->setProperty("ENABLE_RULER", on);
-    data.rulerMetric = ruler_metric.setting;
-    data.rulerColor = QColor(ruler_color.setting);
-    data.rulerPixelSize = ruler_pixel_size.setting;
-    data.gscene->update();
+    doc->data.gscene->setProperty("ENABLE_RULER", on);
+    doc->data.rulerMetric = ruler_metric.setting;
+    doc->data.rulerColor = QColor(ruler_color.setting);
+    doc->data.rulerPixelSize = ruler_pixel_size.setting;
+    doc->data.gscene->update();
     restore_cursor();
 }
 
@@ -569,8 +572,8 @@ View::toggleOrtho(bool on)
     debug_message("View toggleOrtho()");
     wait_cursor();
     /* TODO: finish this */
-    data.gscene->setProperty("ENABLE_ORTHO", on);
-    data.gscene->update();
+    doc->data.gscene->setProperty("ENABLE_ORTHO", on);
+    doc->data.gscene->update();
     restore_cursor();
 }
 
@@ -580,8 +583,8 @@ View::togglePolar(bool on)
     debug_message("View togglePolar()");
     wait_cursor();
     /* TODO: finish this */
-    data.gscene->setProperty("ENABLE_POLAR", on);
-    data.gscene->update();
+    doc->data.gscene->setProperty("ENABLE_POLAR", on);
+    doc->data.gscene->update();
     restore_cursor();
 }
 
@@ -591,9 +594,9 @@ View::toggleQSnap(bool on)
 {
     debug_message("View toggleQSnap()");
     wait_cursor();
-    data.qSnapToggle = on;
-    data.gscene->setProperty("ENABLE_QSNAP", on);
-    data.gscene->update();
+    doc->data.qSnapToggle = on;
+    doc->data.gscene->setProperty("ENABLE_QSNAP", on);
+    doc->data.gscene->update();
     restore_cursor();
 }
 
@@ -604,8 +607,8 @@ View::toggleQTrack(bool on)
     debug_message("View toggleQTrack()");
     wait_cursor();
     /* TODO: finish this */
-    data.gscene->setProperty("ENABLE_QTRACK", on);
-    data.gscene->update();
+    doc->data.gscene->setProperty("ENABLE_QTRACK", on);
+    doc->data.gscene->update();
     restore_cursor();
 }
 
@@ -615,8 +618,8 @@ View::toggleLwt(bool on)
 {
     debug_message("View toggleLwt()");
     wait_cursor();
-    data.gscene->setProperty("ENABLE_LWT", on);
-    data.gscene->update();
+    doc->data.gscene->setProperty("ENABLE_LWT", on);
+    doc->data.gscene->update();
     restore_cursor();
 }
 
@@ -625,21 +628,21 @@ View::toggleReal(bool on)
 {
     debug_message("View toggleReal()");
     wait_cursor();
-    data.gscene->setProperty("ENABLE_REAL", on);
-    data.gscene->update();
+    doc->data.gscene->setProperty("ENABLE_REAL", on);
+    doc->data.gscene->update();
     restore_cursor();
 }
 
 bool
 View::isLwtEnabled()
 {
-    return data.gscene->property("ENABLE_LWT").toBool();
+    return doc->data.gscene->property("ENABLE_LWT").toBool();
 }
 
 bool
 View::isRealEnabled()
 {
-    return data.gscene->property("ENABLE_REAL").toBool();
+    return doc->data.gscene->property("ENABLE_REAL").toBool();
 }
 
 void
@@ -713,17 +716,17 @@ View::drawBackground(QPainter* painter, const QRectF& rect)
 {
     painter->fillRect(rect, backgroundBrush());
 
-    if (data.gscene->property("ENABLE_GRID").toBool() && rect.intersects(data.gridPath.controlPointRect())) {
-        QPen gridPen(data.gridColor);
+    if (doc->data.gscene->property("ENABLE_GRID").toBool() && rect.intersects(doc->data.gridPath.controlPointRect())) {
+        QPen gridPen(doc->data.gridColor);
         gridPen.setJoinStyle(Qt::MiterJoin);
         gridPen.setCosmetic(true);
         painter->setPen(gridPen);
-        painter->drawPath(data.gridPath);
-        painter->drawPath(data.originPath);
-        painter->fillPath(data.originPath, data.gridColor);
+        painter->drawPath(doc->data.gridPath);
+        painter->drawPath(doc->data.originPath);
+        painter->fillPath(doc->data.originPath, doc->data.gridColor);
     }
 
-    EmbPattern *pattern = activeMdiWindow()->pattern;
+    EmbPattern *pattern = activeDocument()->data.pattern;
     for (int i = 0; i < pattern->geometry->count; i++) {
         EmbGeometry g = pattern->geometry->geometry[i];
         switch (g.type) {
@@ -770,27 +773,27 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
 {
     /* Draw grip points for all selected objects */
 
-    QPen gripPen(QColor::fromRgb(data.gripColorCool));
+    QPen gripPen(QColor::fromRgb(doc->data.gripColorCool));
     gripPen.setWidth(2);
     gripPen.setJoinStyle(Qt::MiterJoin);
     gripPen.setCosmetic(true);
     painter->setPen(gripPen);
-    QPoint gripOffset(data.gripSize, data.gripSize);
+    QPoint gripOffset(doc->data.gripSize, doc->data.gripSize);
 
     QList<QPointF> selectedGripPoints;
-    QList<QGraphicsItem*> selectedItemList = data.gscene->selectedItems();
+    QList<QGraphicsItem*> selectedItemList = doc->data.gscene->selectedItems();
     if (selectedItemList.size() <= 100) {
         foreach(QGraphicsItem* item, selectedItemList) {
             if (item->type() >= OBJ_TYPE_BASE) {
-                data.tempBaseObj = static_cast<Object*>(item);
-                if (data.tempBaseObj) { selectedGripPoints = data.tempBaseObj->allGripPoints(); }
+                doc->data.tempBaseObj = static_cast<Object*>(item);
+                if (doc->data.tempBaseObj) { selectedGripPoints = doc->data.tempBaseObj->allGripPoints(); }
 
                 foreach(QPointF ssp, selectedGripPoints) {
                     QPoint p1 = mapFromScene(ssp) - gripOffset;
                     QPoint q1 = mapFromScene(ssp) + gripOffset;
 
-                    if (ssp == data.sceneGripPoint)
-                        painter->fillRect(QRectF(mapToScene(p1), mapToScene(q1)), QColor::fromRgb(data.gripColorHot));
+                    if (ssp == doc->data.sceneGripPoint)
+                        painter->fillRect(QRectF(mapToScene(p1), mapToScene(q1)), QColor::fromRgb(doc->data.gripColorHot));
                     else
                         painter->drawRect(QRectF(mapToScene(p1), mapToScene(q1)));
                 }
@@ -803,24 +806,24 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
     /* ================================================== */
 
     /* TODO: && findClosestSnapPoint == true */
-    if (!data.selectingActive) {
-        QPen qsnapPen(QColor::fromRgb(data.qsnapLocatorColor));
+    if (!doc->data.selectingActive) {
+        QPen qsnapPen(QColor::fromRgb(doc->data.qsnapLocatorColor));
         qsnapPen.setWidth(2);
         qsnapPen.setJoinStyle(Qt::MiterJoin);
         qsnapPen.setCosmetic(true);
         painter->setPen(qsnapPen);
-        QPoint qsnapOffset(data.qsnapLocatorSize, data.qsnapLocatorSize);
+        QPoint qsnapOffset(doc->data.qsnapLocatorSize, doc->data.qsnapLocatorSize);
 
         QList<QPointF> apertureSnapPoints;
-        QList<QGraphicsItem *> apertureItemList = items(data.viewMousePoint.x()-data.qsnapApertureSize,
-                                                        data.viewMousePoint.y()-data.qsnapApertureSize,
-                                                        data.qsnapApertureSize*2,
-                                                        data.qsnapApertureSize*2);
+        QList<QGraphicsItem *> apertureItemList = items(doc->data.viewMousePoint.x()-doc->data.qsnapApertureSize,
+                                                        doc->data.viewMousePoint.y()-doc->data.qsnapApertureSize,
+                                                        doc->data.qsnapApertureSize*2,
+                                                        doc->data.qsnapApertureSize*2);
         foreach(QGraphicsItem* item, apertureItemList) {
             if (item->type() >= OBJ_TYPE_BASE) {
-                data.tempBaseObj = static_cast<Object*>(item);
-                if (data.tempBaseObj) {
-                    apertureSnapPoints << data.tempBaseObj->mouseSnapPoint(data.sceneMousePoint);
+                doc->data.tempBaseObj = static_cast<Object*>(item);
+                if (doc->data.tempBaseObj) {
+                    apertureSnapPoints << doc->data.tempBaseObj->mouseSnapPoint(doc->data.sceneMousePoint);
                 }
             }
         }
@@ -834,14 +837,14 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
 
     /* Draw horizontal and vertical rulers */
 
-    if (data.gscene->property("ENABLE_RULER").toBool()) {
+    if (doc->data.gscene->property("ENABLE_RULER").toBool()) {
         bool proceed = true;
 
         int vw = width();  /* View Width */
         int vh = height(); /* View Height */
         QPointF origin = mapToScene(0,0);
-        QPointF rulerHoriz = mapToScene(vw, data.rulerPixelSize);
-        QPointF rulerVert  = mapToScene(data.rulerPixelSize, vh);
+        QPointF rulerHoriz = mapToScene(vw, doc->data.rulerPixelSize);
+        QPointF rulerVert  = mapToScene(doc->data.rulerPixelSize, vh);
 
         double ox = origin.x();
         double oy = origin.y();
@@ -862,7 +865,7 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
         if (rhw >= maxSize || rvh >= maxSize) proceed = false;
 
         if (proceed) {
-            int distance = mapToScene(data.rulerPixelSize*3, 0).x() - ox;
+            int distance = mapToScene(doc->data.rulerPixelSize*3, 0).x() - ox;
             QString distStr = QString().setNum(distance);
             int distStrSize = distStr.size();
             int msd = distStr.at(0).digitValue(); /* Most Significant Digit */
@@ -883,7 +886,7 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                 int unit = distStr.toInt();
                 double fraction;
                 bool feet = true;
-                if (data.rulerMetric) {
+                if (doc->data.rulerMetric) {
                     if (unit < 10) {
                         unit = 10;
                     }
@@ -911,8 +914,8 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                 lines.append(QLineF(ox, rhy, rhx, rhy));
                 lines.append(QLineF(rvx, oy, rvx, rvy));
 
-                double mx = data.sceneMousePoint.x();
-                double my = data.sceneMousePoint.y();
+                double mx = doc->data.sceneMousePoint.x();
+                double my = doc->data.sceneMousePoint.y();
                 lines.append(QLineF(mx, rhy, mx, oy));
                 lines.append(QLineF(rvx, my, ox, my));
 
@@ -921,8 +924,8 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                 QPen rulerPen(QColor(0,0,0));
                 rulerPen.setCosmetic(true);
                 painter->setPen(rulerPen);
-                painter->fillRect(QRectF(ox, oy, rhw, rhh), data.rulerColor);
-                painter->fillRect(QRectF(ox, oy, rvw, rvh), data.rulerColor);
+                painter->fillRect(QRectF(ox, oy, rhw, rhh), doc->data.rulerColor);
+                painter->fillRect(QRectF(ox, oy, rvw, rvh), doc->data.rulerColor);
 
                 int xFlow = 0;
                 int xStart = 0;
@@ -957,7 +960,7 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                     for (int x = xStart; x < rhx; x += unit) {
                         transform.translate(x+rhTextOffset, rhy-rhh/2);
                         QPainterPath rulerTextPath;
-                        if (data.rulerMetric) {
+                        if (doc->data.rulerMetric) {
                             rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(x), textHeight));
                         }
                         else {
@@ -970,7 +973,7 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                         painter->drawPath(rulerTextPath);
 
                         lines.append(QLineF(x, rhy, x, oy));
-                        if (data.rulerMetric) {
+                        if (doc->data.rulerMetric) {
                             lines.append(QLineF(x, rhy, x, oy));
                             lines.append(QLineF(x+fraction, rhy, x+fraction, rhy-rhh*little));
                             lines.append(QLineF(x+fraction*2, rhy, x+fraction*2, rhy-rhh*little));
@@ -1011,7 +1014,7 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                         transform.translate(rvx-rvw/2, y-rvTextOffset);
                         transform.rotate(-90);
                         QPainterPath rulerTextPath;
-                        if (data.rulerMetric) {
+                        if (doc->data.rulerMetric) {
                             rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(-y), textHeight));
                         }
                         else {
@@ -1024,7 +1027,7 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                         painter->drawPath(rulerTextPath);
 
                         lines.append(QLineF(rvx, y, ox, y));
-                        if (data.rulerMetric) {
+                        if (doc->data.rulerMetric) {
                             lines.append(QLineF(rvx, y+fraction, rvx-rvw*little, y+fraction));
                             lines.append(QLineF(rvx, y+fraction*2, rvx-rvw*little, y+fraction*2));
                             lines.append(QLineF(rvx, y+fraction*3, rvx-rvw*little, y+fraction*3));
@@ -1063,23 +1066,23 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
                 }
 
                 painter->drawLines(lines);
-                painter->fillRect(QRectF(ox, oy, rvw, rhh), data.rulerColor);
+                painter->fillRect(QRectF(ox, oy, rvw, rhh), doc->data.rulerColor);
             }
         }
     }
 
     /* Draw the crosshair */
-    if (!data.selectingActive) {
+    if (!doc->data.selectingActive) {
         /* painter->setBrush(Qt::NoBrush); */
-        QPen crosshairPen(QColor::fromRgb(data.crosshairColor));
+        QPen crosshairPen(QColor::fromRgb(doc->data.crosshairColor));
         crosshairPen.setCosmetic(true);
         painter->setPen(crosshairPen);
-        painter->drawLine(QLineF(mapToScene(data.viewMousePoint.x(), data.viewMousePoint.y()-data.crosshairSize),
-                                 mapToScene(data.viewMousePoint.x(), data.viewMousePoint.y()+data.crosshairSize)));
-        painter->drawLine(QLineF(mapToScene(data.viewMousePoint.x()-data.crosshairSize, data.viewMousePoint.y()),
-                                 mapToScene(data.viewMousePoint.x()+data.crosshairSize, data.viewMousePoint.y())));
-        painter->drawRect(QRectF(mapToScene(data.viewMousePoint.x()-data.pickBoxSize, data.viewMousePoint.y()-data.pickBoxSize),
-                                 mapToScene(data.viewMousePoint.x()+data.pickBoxSize, data.viewMousePoint.y()+data.pickBoxSize)));
+        painter->drawLine(QLineF(mapToScene(doc->data.viewMousePoint.x(), doc->data.viewMousePoint.y()-doc->data.crosshairSize),
+                                 mapToScene(doc->data.viewMousePoint.x(), doc->data.viewMousePoint.y()+doc->data.crosshairSize)));
+        painter->drawLine(QLineF(mapToScene(doc->data.viewMousePoint.x()-doc->data.crosshairSize, doc->data.viewMousePoint.y()),
+                                 mapToScene(doc->data.viewMousePoint.x()+doc->data.crosshairSize, doc->data.viewMousePoint.y())));
+        painter->drawRect(QRectF(mapToScene(doc->data.viewMousePoint.x()-doc->data.pickBoxSize, doc->data.viewMousePoint.y()-doc->data.pickBoxSize),
+                                 mapToScene(doc->data.viewMousePoint.x()+doc->data.pickBoxSize, doc->data.viewMousePoint.y()+doc->data.pickBoxSize)));
     }
 }
 
@@ -1181,13 +1184,13 @@ View::createRulerTextPath(float x, float y, QString str, float height)
 void
 View::updateMouseCoords(int x, int y)
 {
-    data.viewMousePoint = QPoint(x, y);
-    data.sceneMousePoint = mapToScene(data.viewMousePoint);
-    data.gscene->setProperty("SCENE_QSNAP_POINT", data.sceneMousePoint);
+    doc->data.viewMousePoint = QPoint(x, y);
+    doc->data.sceneMousePoint = mapToScene(doc->data.viewMousePoint);
+    doc->data.gscene->setProperty("SCENE_QSNAP_POINT", doc->data.sceneMousePoint);
     /* TODO: if qsnap functionality is enabled, use it rather than the mouse point */
-    data.gscene->setProperty("SCENE_MOUSE_POINT", data.sceneMousePoint);
-    data.gscene->setProperty("VIEW_MOUSE_POINT", data.viewMousePoint);
-    setMouseCoord(data.sceneMousePoint.x(), -data.sceneMousePoint.y());
+    doc->data.gscene->setProperty("SCENE_MOUSE_POINT", doc->data.sceneMousePoint);
+    doc->data.gscene->setProperty("VIEW_MOUSE_POINT", doc->data.viewMousePoint);
+    setMouseCoord(doc->data.sceneMousePoint.x(), -doc->data.sceneMousePoint.y());
 }
 
 /*
@@ -1199,10 +1202,10 @@ View::setCrossHairSize(uint8_t percent)
 {
     uint32_t screenWidth = QGuiApplication::primaryScreen()->geometry().width();
     if (percent > 0 && percent < 100) {
-        data.crosshairSize = (screenWidth*(percent/100.0))/2;
+        doc->data.crosshairSize = (screenWidth*(percent/100.0))/2;
     }
     else {
-        data.crosshairSize = screenWidth;
+        doc->data.crosshairSize = screenWidth;
     }
 }
 
@@ -1273,8 +1276,8 @@ View::zoomOut()
 void
 View::zoomWindow()
 {
-    data.zoomWindowActive = true;
-    data.selectingActive = false;
+    doc->data.zoomWindowActive = true;
+    doc->data.selectingActive = false;
     clearSelection();
 }
 
@@ -1282,7 +1285,7 @@ void
 View::zoomSelected()
 {
     wait_cursor();
-    QList<QGraphicsItem*> itemList = data.gscene->selectedItems();
+    QList<QGraphicsItem*> itemList = doc->data.gscene->selectedItems();
     QPainterPath selectedRectPath;
     foreach(QGraphicsItem* item, itemList) {
         selectedRectPath.addPolygon(item->mapToScene(item->boundingRect()));
@@ -1300,7 +1303,7 @@ void
 View::zoomExtents()
 {
     wait_cursor();
-    QRectF extents = data.gscene->itemsBoundingRect();
+    QRectF extents = doc->data.gscene->itemsBoundingRect();
     if (extents.isNull()) {
         extents.setWidth(grid_size_x.setting);
         extents.setHeight(grid_size_y.setting);
@@ -1313,60 +1316,60 @@ View::zoomExtents()
 void
 View::panRealTime()
 {
-    data.panningRealTimeActive = true;
+    doc->data.panningRealTimeActive = true;
 }
 
 void
 View::panPoint()
 {
-    data.panningPointActive = true;
+    doc->data.panningPointActive = true;
 }
 
 void
 View::panLeft()
 {
-    horizontalScrollBar()->setValue(horizontalScrollBar()->value() + data.panDistance);
-    updateMouseCoords(data.viewMousePoint.x(), data.viewMousePoint.y());
-    data.gscene->update();
+    horizontalScrollBar()->setValue(horizontalScrollBar()->value() + doc->data.panDistance);
+    updateMouseCoords(doc->data.viewMousePoint.x(), doc->data.viewMousePoint.y());
+    doc->data.gscene->update();
 }
 
 void
 View::panRight()
 {
-    horizontalScrollBar()->setValue(horizontalScrollBar()->value() - data.panDistance);
-    updateMouseCoords(data.viewMousePoint.x(), data.viewMousePoint.y());
-    data.gscene->update();
+    horizontalScrollBar()->setValue(horizontalScrollBar()->value() - doc->data.panDistance);
+    updateMouseCoords(doc->data.viewMousePoint.x(), doc->data.viewMousePoint.y());
+    doc->data.gscene->update();
 }
 
 void
 View::panUp()
 {
-    verticalScrollBar()->setValue(verticalScrollBar()->value() + data.panDistance);
-    updateMouseCoords(data.viewMousePoint.x(), data.viewMousePoint.y());
-    data.gscene->update();
+    verticalScrollBar()->setValue(verticalScrollBar()->value() + doc->data.panDistance);
+    updateMouseCoords(doc->data.viewMousePoint.x(), doc->data.viewMousePoint.y());
+    doc->data.gscene->update();
 }
 
 void
 View::panDown()
 {
-    verticalScrollBar()->setValue(verticalScrollBar()->value() - data.panDistance);
-    updateMouseCoords(data.viewMousePoint.x(), data.viewMousePoint.y());
-    data.gscene->update();
+    verticalScrollBar()->setValue(verticalScrollBar()->value() - doc->data.panDistance);
+    updateMouseCoords(doc->data.viewMousePoint.x(), doc->data.viewMousePoint.y());
+    doc->data.gscene->update();
 }
 
 void
 View::selectAll()
 {
     QPainterPath allPath;
-    allPath.addRect(data.gscene->sceneRect());
-    /*  data.gscene->setSelectionArea(allPath, Qt::IntersectsItemShape, this->transform()); */
+    allPath.addRect(doc->data.gscene->sceneRect());
+    /*  doc->data.gscene->setSelectionArea(allPath, Qt::IntersectsItemShape, this->transform()); */
 }
 
 void
 View::selectionChanged()
 {
     if (dockPropEdit->isVisible()) {
-        dockPropEdit->setSelectedItems(data.gscene->selectedItems());
+        dockPropEdit->setSelectedItems(doc->data.gscene->selectedItems());
     }
 }
 
@@ -1374,7 +1377,7 @@ void
 View::mouseDoubleClickEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton) {
-        QGraphicsItem* item = data.gscene->itemAt(mapToScene(event->pos()), QTransform());
+        QGraphicsItem* item = doc->data.gscene->itemAt(mapToScene(event->pos()), QTransform());
         if (item) {
             dockPropEdit->show();
         }
@@ -1392,11 +1395,11 @@ View::mousePressEvent(QMouseEvent* event)
             return;
         }
         QPainterPath path;
-        QList<QGraphicsItem*> pickList = data.gscene->items(QRectF(mapToScene(data.viewMousePoint.x()-data.pickBoxSize, data.viewMousePoint.y()-data.pickBoxSize),
-                                                              mapToScene(data.viewMousePoint.x()+data.pickBoxSize, data.viewMousePoint.y()+data.pickBoxSize)));
+        QList<QGraphicsItem*> pickList = doc->data.gscene->items(QRectF(mapToScene(doc->data.viewMousePoint.x()-doc->data.pickBoxSize, doc->data.viewMousePoint.y()-doc->data.pickBoxSize),
+                                                              mapToScene(doc->data.viewMousePoint.x()+doc->data.pickBoxSize, doc->data.viewMousePoint.y()+doc->data.pickBoxSize)));
 
         bool itemsInPickBox = pickList.size();
-        if (itemsInPickBox && !data.selectingActive && !data.grippingActive) {
+        if (itemsInPickBox && !doc->data.selectingActive && !doc->data.grippingActive) {
             bool itemsAlreadySelected = pickList.at(0)->isSelected();
             if (!itemsAlreadySelected) {
                 pickList.at(0)->setSelected(true);
@@ -1408,13 +1411,13 @@ View::mousePressEvent(QMouseEvent* event)
                     return;
                 }
 
-                QPoint qsnapOffset(data.qsnapLocatorSize, data.qsnapLocatorSize);
-                QPointF gripPoint = base->mouseSnapPoint(data.sceneMousePoint);
+                QPoint qsnapOffset(doc->data.qsnapLocatorSize, doc->data.qsnapLocatorSize);
+                QPointF gripPoint = base->mouseSnapPoint(doc->data.sceneMousePoint);
                 QPoint p1 = mapFromScene(gripPoint) - qsnapOffset;
                 QPoint q1 = mapFromScene(gripPoint) + qsnapOffset;
                 QRectF gripRect = QRectF(mapToScene(p1), mapToScene(q1));
-                QRectF pickRect = QRectF(mapToScene(data.viewMousePoint.x()-data.pickBoxSize, data.viewMousePoint.y()-data.pickBoxSize),
-                                        mapToScene(data.viewMousePoint.x()+data.pickBoxSize, data.viewMousePoint.y()+data.pickBoxSize));
+                QRectF pickRect = QRectF(mapToScene(doc->data.viewMousePoint.x()-doc->data.pickBoxSize, doc->data.viewMousePoint.y()-doc->data.pickBoxSize),
+                                        mapToScene(doc->data.viewMousePoint.x()+doc->data.pickBoxSize, doc->data.viewMousePoint.y()+doc->data.pickBoxSize));
                 if (gripRect.intersects(pickRect)) {
                     foundGrip = true;
                 }
@@ -1425,50 +1428,50 @@ View::mousePressEvent(QMouseEvent* event)
                 }
                 else {
                     /* start moving */
-                    data.movingActive = true;
-                    data.pressPoint = event->pos();
-                    data.scenePressPoint = mapToScene(data.pressPoint);
+                    doc->data.movingActive = true;
+                    doc->data.pressPoint = event->pos();
+                    doc->data.scenePressPoint = mapToScene(doc->data.pressPoint);
                 }
             }
         }
-        else if (data.grippingActive) {
+        else if (doc->data.grippingActive) {
             stopGripping(true);
         }
-        else if (!data.selectingActive) {
-            data.selectingActive = true;
-            data.pressPoint = event->pos();
-            data.scenePressPoint = mapToScene(data.pressPoint);
+        else if (!doc->data.selectingActive) {
+            doc->data.selectingActive = true;
+            doc->data.pressPoint = event->pos();
+            doc->data.scenePressPoint = mapToScene(doc->data.pressPoint);
 
-            if (!data.selectBox) {
-                data.selectBox = new SelectBox(QRubberBand::Rectangle, this);
+            if (!doc->data.selectBox) {
+                doc->data.selectBox = new SelectBox(QRubberBand::Rectangle, this);
             }
-            data.selectBox->setGeometry(QRect(data.pressPoint, data.pressPoint));
-            data.selectBox->show();
+            doc->data.selectBox->setGeometry(QRect(doc->data.pressPoint, doc->data.pressPoint));
+            doc->data.selectBox->show();
         }
         else {
-            data.selectingActive = false;
-            data.selectBox->hide();
-            data.releasePoint = event->pos();
-            data.sceneReleasePoint = mapToScene(data.releasePoint);
+            doc->data.selectingActive = false;
+            doc->data.selectBox->hide();
+            doc->data.releasePoint = event->pos();
+            doc->data.sceneReleasePoint = mapToScene(doc->data.releasePoint);
 
             /* Start SelectBox Code */
-            path.addPolygon(mapToScene(data.selectBox->geometry()));
-            if (data.sceneReleasePoint.x() > data.scenePressPoint.x()) {
+            path.addPolygon(mapToScene(doc->data.selectBox->geometry()));
+            if (doc->data.sceneReleasePoint.x() > doc->data.scenePressPoint.x()) {
                 if (selection_mode_pickadd.setting) {
                     if (key_state[SHIFT_KEY]) {
-                        QList<QGraphicsItem*> itemList = data.gscene->items(path, Qt::ContainsItemShape);
+                        QList<QGraphicsItem*> itemList = doc->data.gscene->items(path, Qt::ContainsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(false);
                     }
                     else {
-                        QList<QGraphicsItem*> itemList = data.gscene->items(path, Qt::ContainsItemShape);
+                        QList<QGraphicsItem*> itemList = doc->data.gscene->items(path, Qt::ContainsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(true);
                     }
                 }
                 else {
                     if (key_state[SHIFT_KEY]) {
-                        QList<QGraphicsItem*> itemList = data.gscene->items(path, Qt::ContainsItemShape);
+                        QList<QGraphicsItem*> itemList = doc->data.gscene->items(path, Qt::ContainsItemShape);
                         if (!itemList.size())
                             clearSelection();
                         else {
@@ -1478,7 +1481,7 @@ View::mousePressEvent(QMouseEvent* event)
                     }
                     else {
                         clearSelection();
-                        QList<QGraphicsItem*> itemList = data.gscene->items(path, Qt::ContainsItemShape);
+                        QList<QGraphicsItem*> itemList = doc->data.gscene->items(path, Qt::ContainsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(true);
                     }
@@ -1487,19 +1490,19 @@ View::mousePressEvent(QMouseEvent* event)
             else {
                 if (selection_mode_pickadd.setting) {
                     if (key_state[SHIFT_KEY]) {
-                        QList<QGraphicsItem*> itemList = data.gscene->items(path, Qt::IntersectsItemShape);
+                        QList<QGraphicsItem*> itemList = doc->data.gscene->items(path, Qt::IntersectsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(false);
                     }
                     else {
-                        QList<QGraphicsItem*> itemList = data.gscene->items(path, Qt::IntersectsItemShape);
+                        QList<QGraphicsItem*> itemList = doc->data.gscene->items(path, Qt::IntersectsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(true);
                     }
                 }
                 else {
                     if (key_state[SHIFT_KEY]) {
-                        QList<QGraphicsItem*> itemList = data.gscene->items(path, Qt::IntersectsItemShape);
+                        QList<QGraphicsItem*> itemList = doc->data.gscene->items(path, Qt::IntersectsItemShape);
                         if (!itemList.size())
                             clearSelection();
                         else {
@@ -1509,7 +1512,7 @@ View::mousePressEvent(QMouseEvent* event)
                     }
                     else {
                         clearSelection();
-                        QList<QGraphicsItem*> itemList = data.gscene->items(path, Qt::IntersectsItemShape);
+                        QList<QGraphicsItem*> itemList = doc->data.gscene->items(path, Qt::IntersectsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(true);
                     }
@@ -1518,30 +1521,30 @@ View::mousePressEvent(QMouseEvent* event)
             /* End SelectBox Code */
         }
 
-        if (data.pastingActive) {
-            QList<QGraphicsItem*> itemList = data.pasteObjectItemGroup->childItems();
-            data.gscene->destroyItemGroup(data.pasteObjectItemGroup);
+        if (doc->data.pastingActive) {
+            QList<QGraphicsItem*> itemList = doc->data.pasteObjectItemGroup->childItems();
+            doc->data.gscene->destroyItemGroup(doc->data.pasteObjectItemGroup);
             foreach(QGraphicsItem* item, itemList) {
                 /* Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene */
-                data.gscene->removeItem(item);
+                doc->data.gscene->removeItem(item);
             }
 
-            data.undoStack->beginMacro("Paste");
+            doc->data.undoStack->beginMacro("Paste");
             foreach(QGraphicsItem* item, itemList) {
                 Object* base = static_cast<Object*>(item);
                 if (base) {
                     UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, base->data.OBJ_NAME, base, this, 0);
                     if (cmd) {
-                        data.undoStack->push(cmd);
+                        doc->data.undoStack->push(cmd);
                     }
                 }
             }
-            data.undoStack->endMacro();
+            doc->data.undoStack->endMacro();
 
-            data.pastingActive = false;
-            data.selectingActive = false;
+            doc->data.pastingActive = false;
+            doc->data.selectingActive = false;
         }
-        if (data.zoomWindowActive) {
+        if (doc->data.zoomWindowActive) {
             fitInView(path.boundingRect(), Qt::KeepAspectRatio);
             clearSelection();
         }
@@ -1550,10 +1553,10 @@ View::mousePressEvent(QMouseEvent* event)
         panStart(event->pos());
         /* The Undo command will record the spot where the pan started. */
         UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanStart", this, 0);
-        data.undoStack->push(cmd);
+        doc->data.undoStack->push(cmd);
         event->accept();
     }
-    data.gscene->update();
+    doc->data.gscene->update();
 }
 
 void
@@ -1563,9 +1566,9 @@ View::panStart(const QPoint& point)
 
     alignScenePointWithViewPoint(mapToScene(point), point);
 
-    data.panningActive = true;
-    data.panStartX = point.x();
-    data.panStartY = point.y();
+    doc->data.panningActive = true;
+    doc->data.panStartX = point.x();
+    doc->data.panStartY = point.y();
 }
 
 void
@@ -1574,10 +1577,10 @@ View::recalculateLimits()
     /* NOTE: Increase the sceneRect limits if the point we want to go to lies outside of sceneRect's limits */
     /*       If the sceneRect limits aren't increased, you cannot pan past its limits */
     QRectF viewRect(mapToScene(rect().topLeft()), mapToScene(rect().bottomRight()));
-    QRectF sceneRect(data.gscene->sceneRect());
+    QRectF sceneRect(doc->data.gscene->sceneRect());
     QRectF newRect = viewRect.adjusted(-viewRect.width(), -viewRect.height(), viewRect.width(), viewRect.height());
     if (!sceneRect.contains(newRect.topLeft()) || !sceneRect.contains(newRect.bottomRight())) {
-        data.gscene->setSceneRect(sceneRect.adjusted(-viewRect.width(),
+        doc->data.gscene->setSceneRect(sceneRect.adjusted(-viewRect.width(),
                                                 -viewRect.height(),
                                                 viewRect.width(),
                                                 viewRect.height()));
@@ -1614,24 +1617,24 @@ void
 View::mouseMoveEvent(QMouseEvent* event)
 {
     updateMouseCoords(event->position().x(), event->position().y());
-    data.movePoint = event->pos();
-    data.sceneMovePoint = mapToScene(data.movePoint);
+    doc->data.movePoint = event->pos();
+    doc->data.sceneMovePoint = mapToScene(doc->data.movePoint);
 
     if (cmdActive) {
-        if (data.rapidMoveActive) {
-            runCommandMove(curCmd, data.sceneMovePoint.x(), data.sceneMovePoint.y());
+        if (doc->data.rapidMoveActive) {
+            runCommandMove(curCmd, doc->data.sceneMovePoint.x(), doc->data.sceneMovePoint.y());
         }
     }
-    if (data.previewActive) {
-        if (data.previewMode == PREVIEW_MODE_MOVE) {
-            data.previewObjectItemGroup->setPos(data.sceneMousePoint - data.previewPoint);
+    if (doc->data.previewActive) {
+        if (doc->data.previewMode == PREVIEW_MODE_MOVE) {
+            doc->data.previewObjectItemGroup->setPos(doc->data.sceneMousePoint - doc->data.previewPoint);
         }
-        else if (data.previewMode == PREVIEW_MODE_ROTATE) {
-            double x = data.previewPoint.x();
-            double y = data.previewPoint.y();
-            double rot = data.previewData;
+        else if (doc->data.previewMode == PREVIEW_MODE_ROTATE) {
+            double x = doc->data.previewPoint.x();
+            double y = doc->data.previewPoint.y();
+            double rot = doc->data.previewData;
 
-            double mouseAngle = QLineF(x, y, data.sceneMousePoint.x(), data.sceneMousePoint.y()).angle();
+            double mouseAngle = QLineF(x, y, doc->data.sceneMousePoint.x(), doc->data.sceneMousePoint.y()).angle();
 
             double rad = radians(rot-mouseAngle);
             double cosRot = cos(rad);
@@ -1644,18 +1647,18 @@ View::mouseMoveEvent(QMouseEvent* event)
             rotv.x += x;
             rotv.y += y;
 
-            data.previewObjectItemGroup->setPos(rotv.x, rotv.y);
-            data.previewObjectItemGroup->setRotation(rot-mouseAngle);
+            doc->data.previewObjectItemGroup->setPos(rotv.x, rotv.y);
+            doc->data.previewObjectItemGroup->setRotation(rot-mouseAngle);
         }
-        else if (data.previewMode == PREVIEW_MODE_SCALE) {
-            double x = data.previewPoint.x();
-            double y = data.previewPoint.y();
-            double scaleFactor = data.previewData;
+        else if (doc->data.previewMode == PREVIEW_MODE_SCALE) {
+            double x = doc->data.previewPoint.x();
+            double y = doc->data.previewPoint.y();
+            double scaleFactor = doc->data.previewData;
 
-            double factor = QLineF(x, y, data.sceneMousePoint.x(), data.sceneMousePoint.y()).length()/scaleFactor;
+            double factor = QLineF(x, y, doc->data.sceneMousePoint.x(), doc->data.sceneMousePoint.y()).length()/scaleFactor;
 
-            data.previewObjectItemGroup->setScale(1);
-            data.previewObjectItemGroup->setPos(0,0);
+            doc->data.previewObjectItemGroup->setScale(1);
+            doc->data.previewObjectItemGroup->setPos(0,0);
 
             if (scaleFactor <= 0.0) {
                 QMessageBox::critical(this, QObject::tr("ScaleFactor Error"),
@@ -1674,39 +1677,39 @@ View::mouseMoveEvent(QMouseEvent* event)
                 double dx = newX - oldX;
                 double dy = newY - oldY;
 
-                data.previewObjectItemGroup->setScale(data.previewObjectItemGroup->scale()*factor);
-                data.previewObjectItemGroup->moveBy(dx, dy);
+                doc->data.previewObjectItemGroup->setScale(doc->data.previewObjectItemGroup->scale()*factor);
+                doc->data.previewObjectItemGroup->moveBy(dx, dy);
             }
         }
     }
-    if (data.pastingActive) {
-        data.pasteObjectItemGroup->setPos(data.sceneMousePoint - data.pasteDelta);
+    if (doc->data.pastingActive) {
+        doc->data.pasteObjectItemGroup->setPos(doc->data.sceneMousePoint - doc->data.pasteDelta);
     }
-    if (data.movingActive) {
+    if (doc->data.movingActive) {
         /* Ensure that the preview is only shown if the mouse has moved. */
-        if (!data.previewActive)
-            previewOn(PREVIEW_CLONE_SELECTED, PREVIEW_MODE_MOVE, data.scenePressPoint.x(), data.scenePressPoint.y(), 0);
+        if (!doc->data.previewActive)
+            previewOn(PREVIEW_CLONE_SELECTED, PREVIEW_MODE_MOVE, doc->data.scenePressPoint.x(), doc->data.scenePressPoint.y(), 0);
     }
-    if (data.selectingActive) {
-        if (data.sceneMovePoint.x() >= data.scenePressPoint.x()) {
-            data.selectBox->setDirection(1);
+    if (doc->data.selectingActive) {
+        if (doc->data.sceneMovePoint.x() >= doc->data.scenePressPoint.x()) {
+            doc->data.selectBox->setDirection(1);
         }
         else {
-            data.selectBox->setDirection(0);
+            doc->data.selectBox->setDirection(0);
         }
-        data.selectBox->setGeometry(QRect(mapFromScene(data.scenePressPoint), event->pos()).normalized());
+        doc->data.selectBox->setGeometry(QRect(mapFromScene(doc->data.scenePressPoint), event->pos()).normalized());
         event->accept();
     }
-    if (data.panningActive) {
+    if (doc->data.panningActive) {
         horizontalScrollBar()->setValue(
-            horizontalScrollBar()->value() - (event->position().x() - data.panStartX));
+            horizontalScrollBar()->value() - (event->position().x() - doc->data.panStartX));
         verticalScrollBar()->setValue(
-            verticalScrollBar()->value() - (event->position().y() - data.panStartY));
-        data.panStartX = event->position().x();
-        data.panStartY = event->position().y();
+            verticalScrollBar()->value() - (event->position().y() - doc->data.panStartY));
+        doc->data.panStartX = event->position().x();
+        doc->data.panStartY = event->position().y();
         event->accept();
     }
-    data.gscene->update();
+    doc->data.gscene->update();
 }
 
 void
@@ -1714,23 +1717,23 @@ View::mouseReleaseEvent(QMouseEvent* event)
 {
     updateMouseCoords(event->position().x(), event->position().y());
     if (event->button() == Qt::LeftButton) {
-        if (data.movingActive) {
+        if (doc->data.movingActive) {
             previewOff();
-            double dx = data.sceneMousePoint.x() - data.scenePressPoint.x();
-            double dy = data.sceneMousePoint.y() - data.scenePressPoint.y();
+            double dx = doc->data.sceneMousePoint.x() - doc->data.scenePressPoint.x();
+            double dy = doc->data.sceneMousePoint.y() - doc->data.scenePressPoint.y();
             /* Ensure that moving only happens if the mouse has moved. */
             if (dx || dy) {
                 moveSelected(dx, dy);
             }
-            data.movingActive = false;
+            doc->data.movingActive = false;
         }
         event->accept();
     }
     if (event->button() == Qt::MiddleButton) {
-        data.panningActive = false;
+        doc->data.panningActive = false;
         /* The Undo command will record the spot where the pan completed. */
         UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanStop", this, 0);
-        data.undoStack->push(cmd);
+        doc->data.undoStack->push(cmd);
         event->accept();
     }
     if (event->button() == Qt::XButton1) {
@@ -1743,7 +1746,7 @@ View::mouseReleaseEvent(QMouseEvent* event)
         redo_command(); /* TODO: Make this customizable */
         event->accept();
     }
-    data.gscene->update();
+    doc->data.gscene->update();
 }
 
 bool
@@ -1789,11 +1792,11 @@ View::wheelEvent(QWheelEvent* event)
     updateMouseCoords(mousePoint.x(), mousePoint.y());
     if (zoomDir > 0) {
         UndoableNavCommand* cmd = new UndoableNavCommand("ZoomInToPoint", this, 0);
-        data.undoStack->push(cmd);
+        doc->data.undoStack->push(cmd);
     }
     else {
         UndoableNavCommand* cmd = new UndoableNavCommand("ZoomOutToPoint", this, 0);
-        data.undoStack->push(cmd);
+        doc->data.undoStack->push(cmd);
     }
     */
 }
@@ -1824,20 +1827,20 @@ View::zoomToPoint(const QPoint& mousePoint, int zoomDir)
     alignScenePointWithViewPoint(pointBeforeScale, mousePoint);
 
     updateMouseCoords(mousePoint.x(), mousePoint.y());
-    if (data.pastingActive) {
-        data.pasteObjectItemGroup->setPos(data.sceneMousePoint - data.pasteDelta);
+    if (doc->data.pastingActive) {
+        doc->data.pasteObjectItemGroup->setPos(doc->data.sceneMousePoint - doc->data.pasteDelta);
     }
-    if (data.selectingActive) {
-        data.selectBox->setGeometry(QRect(mapFromScene(data.scenePressPoint), mousePoint).normalized());
+    if (doc->data.selectingActive) {
+        doc->data.selectBox->setGeometry(QRect(mapFromScene(doc->data.scenePressPoint), mousePoint).normalized());
     }
-    data.gscene->update();
+    doc->data.gscene->update();
 }
 
 void
 View::contextMenuEvent(QContextMenuEvent* event)
 {
     QMenu menu;
-    QList<QGraphicsItem*> itemList = data.gscene->selectedItems();
+    QList<QGraphicsItem*> itemList = doc->data.gscene->selectedItems();
     bool selectionEmpty = itemList.isEmpty();
 
     for (int i = 0; i < itemList.size(); i++) {
@@ -1847,7 +1850,7 @@ View::contextMenuEvent(QContextMenuEvent* event)
         }
     }
 
-    if (data.pastingActive) {
+    if (doc->data.pastingActive) {
         return;
     }
     if (!cmdActive) {
@@ -1856,7 +1859,7 @@ View::contextMenuEvent(QContextMenuEvent* event)
         connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()));
         menu.addAction(repeatAction);
     }
-    if (data.zoomWindowActive) {
+    if (doc->data.zoomWindowActive) {
         QAction* cancelZoomWinAction = new QAction("&Cancel (ZoomWindow)", this);
         cancelZoomWinAction->setStatusTip("Cancels the ZoomWindow Command.");
         connect(cancelZoomWinAction, SIGNAL(triggered()), this, SLOT(escapePressed()));
@@ -1906,14 +1909,14 @@ void
 View::deletePressed()
 {
     debug_message("View deletePressed()");
-    if (data.pastingActive) {
-        data.gscene->removeItem(data.pasteObjectItemGroup);
-        delete data.pasteObjectItemGroup;
+    if (doc->data.pastingActive) {
+        doc->data.gscene->removeItem(doc->data.pasteObjectItemGroup);
+        delete doc->data.pasteObjectItemGroup;
     }
-    data.pastingActive = false;
-    data.zoomWindowActive = false;
-    data.selectingActive = false;
-    data.selectBox->hide();
+    doc->data.pastingActive = false;
+    doc->data.zoomWindowActive = false;
+    doc->data.selectingActive = false;
+    doc->data.selectBox->hide();
     stopGripping(false);
     deleteSelected();
 }
@@ -1923,15 +1926,15 @@ void
 View::escapePressed()
 {
     debug_message("View escapePressed()");
-    if (data.pastingActive) {
-        data.gscene->removeItem(data.pasteObjectItemGroup);
-        delete data.pasteObjectItemGroup;
+    if (doc->data.pastingActive) {
+        doc->data.gscene->removeItem(doc->data.pasteObjectItemGroup);
+        delete doc->data.pasteObjectItemGroup;
     }
-    data.pastingActive = false;
-    data.zoomWindowActive = false;
-    data.selectingActive = false;
-    data.selectBox->hide();
-    if (data.grippingActive) {
+    doc->data.pastingActive = false;
+    doc->data.zoomWindowActive = false;
+    doc->data.selectingActive = false;
+    doc->data.selectBox->hide();
+    if (doc->data.grippingActive) {
         stopGripping(false);
     }
     else {
@@ -1945,43 +1948,43 @@ View::startGripping(Object* obj)
     if (!obj) {
         return;
     }
-    data.grippingActive = true;
-    data.gripBaseObj = obj;
-    data.sceneGripPoint = data.gripBaseObj->mouseSnapPoint(data.sceneMousePoint);
-    data.gripBaseObj->setObjectRubberPoint("GRIP_POINT", data.sceneGripPoint);
-    data.gripBaseObj->setObjectRubberMode(OBJ_RUBBER_GRIP);
+    doc->data.grippingActive = true;
+    doc->data.gripBaseObj = obj;
+    doc->data.sceneGripPoint = doc->data.gripBaseObj->mouseSnapPoint(doc->data.sceneMousePoint);
+    doc->data.gripBaseObj->setObjectRubberPoint("GRIP_POINT", doc->data.sceneGripPoint);
+    doc->data.gripBaseObj->setObjectRubberMode(OBJ_RUBBER_GRIP);
 }
 
 void
 View::stopGripping(bool accept)
 {
-    data.grippingActive = false;
-    if (data.gripBaseObj) {
-        data.gripBaseObj->vulcanize();
+    doc->data.grippingActive = false;
+    if (doc->data.gripBaseObj) {
+        doc->data.gripBaseObj->vulcanize();
         if (accept) {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_GRIP_EDIT, data.sceneGripPoint, data.sceneMousePoint, tr("Grip Edit ") + data.gripBaseObj->data.OBJ_NAME, data.gripBaseObj, this, 0);
-            if (cmd) data.undoStack->push(cmd);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_GRIP_EDIT, doc->data.sceneGripPoint, doc->data.sceneMousePoint, tr("Grip Edit ") + doc->data.gripBaseObj->data.OBJ_NAME, doc->data.gripBaseObj, this, 0);
+            if (cmd) doc->data.undoStack->push(cmd);
             selectionChanged(); /* Update the Property Editor */
         }
-        data.gripBaseObj = 0;
+        doc->data.gripBaseObj = 0;
     }
-    /* Move the data.sceneGripPoint to a place where it will never be hot. */
-    data.sceneGripPoint = sceneRect().topLeft();
+    /* Move the doc->data.sceneGripPoint to a place where it will never be hot. */
+    doc->data.sceneGripPoint = sceneRect().topLeft();
 }
 
 void
 View::clearSelection()
 {
-    data.gscene->clearSelection();
+    doc->data.gscene->clearSelection();
 }
 
 void
 View::deleteSelected()
 {
-    QList<QGraphicsItem*> itemList = data.gscene->selectedItems();
+    QList<QGraphicsItem*> itemList = doc->data.gscene->selectedItems();
     int numSelected = itemList.size();
     if (numSelected > 1) {
-        data.undoStack->beginMacro("Delete " + QString().setNum(itemList.size()));
+        doc->data.undoStack->beginMacro("Delete " + QString().setNum(itemList.size()));
     }
     for (int i = 0; i < itemList.size(); i++) {
         if (itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL) {
@@ -1989,13 +1992,13 @@ View::deleteSelected()
             if (base) {
                 UndoableCommand* cmd = new UndoableCommand(ACTION_DELETE, tr("Delete 1 ") + base->data.OBJ_NAME, base, this, 0);
                 if (cmd) {
-                    data.undoStack->push(cmd);
+                    doc->data.undoStack->push(cmd);
                 }
             }
         }
     }
     if (numSelected > 1) {
-        data.undoStack->endMacro();
+        doc->data.undoStack->endMacro();
     }
 }
 
@@ -2003,22 +2006,22 @@ View::deleteSelected()
 void
 View::cut()
 {
-    if (data.gscene->selectedItems().isEmpty()) {
+    if (doc->data.gscene->selectedItems().isEmpty()) {
         QMessageBox::information(this, tr("Cut Preselect"), tr("Preselect objects before invoking the cut command."));
         return; /* TODO: Prompt to select objects if nothing is preselected */
     }
 
-    data.undoStack->beginMacro("Cut");
+    doc->data.undoStack->beginMacro("Cut");
     copySelected();
     deleteSelected();
-    data.undoStack->endMacro();
+    doc->data.undoStack->endMacro();
 }
 
 /* . */
 void
 View::copy()
 {
-    if (data.gscene->selectedItems().isEmpty()) {
+    if (doc->data.gscene->selectedItems().isEmpty()) {
         QMessageBox::information(this, tr("Copy Preselect"), tr("Preselect objects before invoking the copy command."));
         return; /* TODO: Prompt to select objects if nothing is preselected */
     }
@@ -2030,7 +2033,7 @@ View::copy()
 void
 View::copySelected()
 {
-    QList<QGraphicsItem*> selectedList = data.gscene->selectedItems();
+    QList<QGraphicsItem*> selectedList = doc->data.gscene->selectedItems();
 
     /* Prevent memory leaks by deleting any unpasted instances */
     qDeleteAll(cutCopyObjectList.begin(), cutCopyObjectList.end());
@@ -2047,15 +2050,15 @@ View::copySelected()
 void
 View::paste()
 {
-    if (data.pastingActive) {
-        data.gscene->removeItem(data.pasteObjectItemGroup);
-        delete data.pasteObjectItemGroup;
+    if (doc->data.pastingActive) {
+        doc->data.gscene->removeItem(doc->data.pasteObjectItemGroup);
+        delete doc->data.pasteObjectItemGroup;
     }
 
-    data.pasteObjectItemGroup = data.gscene->createItemGroup(cutCopyObjectList);
-    data.pasteDelta = data.pasteObjectItemGroup->boundingRect().bottomLeft();
-    data.pasteObjectItemGroup->setPos(data.sceneMousePoint - data.pasteDelta);
-    data.pastingActive = true;
+    doc->data.pasteObjectItemGroup = doc->data.gscene->createItemGroup(cutCopyObjectList);
+    doc->data.pasteDelta = doc->data.pasteObjectItemGroup->boundingRect().bottomLeft();
+    doc->data.pasteObjectItemGroup->setPos(doc->data.sceneMousePoint - doc->data.pasteDelta);
+    doc->data.pastingActive = true;
 
     /* Re-create the list in case of multiple pastes. */
     cutCopyObjectList = createObjectList(cutCopyObjectList);
@@ -2104,24 +2107,24 @@ View::moveAction()
 void
 View::moveSelected(double dx, double dy)
 {
-    QList<QGraphicsItem*> itemList = data.gscene->selectedItems();
+    QList<QGraphicsItem*> itemList = doc->data.gscene->selectedItems();
     int numSelected = itemList.size();
     if (numSelected > 1) {
-        data.undoStack->beginMacro("Move " + QString().setNum(itemList.size()));
+        doc->data.undoStack->beginMacro("Move " + QString().setNum(itemList.size()));
     }
     foreach(QGraphicsItem* item, itemList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
             UndoableCommand* cmd = new UndoableCommand(ACTION_MOVE, dx, dy, tr("Move 1 ") + base->data.OBJ_NAME, base, this, 0);
-            if (cmd) data.undoStack->push(cmd);
+            if (cmd) doc->data.undoStack->push(cmd);
         }
     }
     if (numSelected > 1) {
-        data.undoStack->endMacro();
+        doc->data.undoStack->endMacro();
     }
 
     /* Always clear the selection after a move. */
-    data.gscene->clearSelection();
+    doc->data.gscene->clearSelection();
 }
 
 void
@@ -2135,48 +2138,48 @@ View::rotateAction()
 void
 View::rotateSelected(double x, double y, double rot)
 {
-    QList<QGraphicsItem*> itemList = data.gscene->selectedItems();
+    QList<QGraphicsItem*> itemList = doc->data.gscene->selectedItems();
     int numSelected = itemList.size();
     if (numSelected > 1) {
-        data.undoStack->beginMacro("Rotate " + QString().setNum(itemList.size()));
+        doc->data.undoStack->beginMacro("Rotate " + QString().setNum(itemList.size()));
     }
     foreach(QGraphicsItem* item, itemList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
             UndoableCommand* cmd = new UndoableCommand(ACTION_ROTATE, x, y, rot, tr("Rotate 1 ") + base->data.OBJ_NAME, base, this, 0);
             if (cmd) {
-                data.undoStack->push(cmd);
+                doc->data.undoStack->push(cmd);
             }
         }
     }
     if (numSelected > 1) {
-        data.undoStack->endMacro();
+        doc->data.undoStack->endMacro();
     }
 
     /* Always clear the selection after a rotate. */
-    data.gscene->clearSelection();
+    doc->data.gscene->clearSelection();
 }
 
 void
 View::mirrorSelected(double x1, double y1, double x2, double y2)
 {
-    QList<QGraphicsItem*> itemList = data.gscene->selectedItems();
+    QList<QGraphicsItem*> itemList = doc->data.gscene->selectedItems();
     int numSelected = itemList.size();
     if (numSelected > 1)
-        data.undoStack->beginMacro("Mirror " + QString().setNum(itemList.size()));
+        doc->data.undoStack->beginMacro("Mirror " + QString().setNum(itemList.size()));
     foreach(QGraphicsItem* item, itemList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
             UndoableCommand* cmd = new UndoableCommand(ACTION_MIRROR, x1, y1, x2, y2, tr("Mirror 1 ") + base->data.OBJ_NAME, base, this, 0);
-            if (cmd) data.undoStack->push(cmd);
+            if (cmd) doc->data.undoStack->push(cmd);
         }
     }
     if (numSelected > 1) {
-        data.undoStack->endMacro();
+        doc->data.undoStack->endMacro();
     }
 
     /* Always clear the selection after a mirror. */
-    data.gscene->clearSelection();
+    doc->data.gscene->clearSelection();
 }
 
 void
@@ -2190,31 +2193,31 @@ View::scaleAction()
 void
 View::scaleSelected(double x, double y, double factor)
 {
-    QList<QGraphicsItem*> itemList = data.gscene->selectedItems();
+    QList<QGraphicsItem*> itemList = doc->data.gscene->selectedItems();
     int numSelected = itemList.size();
     if (numSelected > 1)
-        data.undoStack->beginMacro("Scale " + QString().setNum(itemList.size()));
+        doc->data.undoStack->beginMacro("Scale " + QString().setNum(itemList.size()));
     foreach(QGraphicsItem* item, itemList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
             UndoableCommand* cmd = new UndoableCommand(ACTION_SCALE, x, y, factor, tr("Scale 1 ") + base->data.OBJ_NAME, base, this, 0);
             if (cmd) {
-                data.undoStack->push(cmd);
+                doc->data.undoStack->push(cmd);
             }
         }
     }
     if (numSelected > 1) {
-        data.undoStack->endMacro();
+        doc->data.undoStack->endMacro();
     }
 
     /* Always clear the selection after a scale. */
-    data.gscene->clearSelection();
+    doc->data.gscene->clearSelection();
 }
 
 int
 View::numSelected()
 {
-    return data.gscene->selectedItems().size();
+    return doc->data.gscene->selectedItems().size();
 }
 
 void
@@ -2233,10 +2236,10 @@ View::showScrollBars(bool val)
 void
 View::setCrossHairColor(QRgb color)
 {
-    data.crosshairColor = color;
-    data.gscene->setProperty("VIEW_COLOR_CROSSHAIR", color);
-    if (data.gscene) {
-        data.gscene->update();
+    doc->data.crosshairColor = color;
+    doc->data.gscene->setProperty("VIEW_COLOR_CROSSHAIR", color);
+    if (doc->data.gscene) {
+        doc->data.gscene->update();
     }
 }
 
@@ -2244,14 +2247,14 @@ void
 View::setBackgroundColor(QRgb color)
 {
     setBackgroundBrush(QColor(color));
-    data.gscene->setProperty("VIEW_COLOR_BACKGROUND", color);
-    if (data.gscene) {
-        data.gscene->update();
+    doc->data.gscene->setProperty("VIEW_COLOR_BACKGROUND", color);
+    if (doc->data.gscene) {
+        doc->data.gscene->update();
     }
 }
 
 void
 View::setSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
 {
-    data.selectBox->setColors(QColor(colorL), QColor(fillL), QColor(colorR), QColor(fillR), alpha);
+    doc->data.selectBox->setColors(QColor(colorL), QColor(fillL), QColor(colorR), QColor(fillR), alpha);
 }

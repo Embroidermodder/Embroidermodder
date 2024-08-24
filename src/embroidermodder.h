@@ -110,7 +110,7 @@ class CmdPrompt;
 class ImageWidget;
 class MainWindow;
 class MdiArea;
-class MdiWindow;
+class Document;
 class Object;
 class PropertyEditor;
 class SelectBox;
@@ -223,76 +223,7 @@ void appendHistory(QString txt);
 
 void create_statusbar(MainWindow* mw);
 
-/* . */
-typedef struct ViewData_ {
-    QHash<int64_t, QGraphicsItem*> hashDeletedObjects;
-
-    QList<int64_t> spareRubberList;
-
-    QColor gridColor;
-    QPainterPath gridPath;
-    QPainterPath originPath;
-
-    bool grippingActive;
-    bool rapidMoveActive;
-    bool previewActive;
-    bool pastingActive;
-    bool movingActive;
-    bool selectingActive;
-    bool zoomWindowActive;
-    bool panningRealTimeActive;
-    bool panningPointActive;
-    bool panningActive;
-    bool qSnapActive;
-    bool qSnapToggle;
-
-    QGraphicsItemGroup* previewObjectItemGroup;
-    QPointF previewPoint;
-    double previewData;
-    int previewMode;
-
-    QPoint viewMousePoint;
-    QPointF sceneMousePoint;
-    QRgb qsnapLocatorColor;
-    uint8_t qsnapLocatorSize;
-    uint8_t qsnapApertureSize;
-    QRgb gripColorCool;
-    QRgb gripColorHot;
-    uint8_t gripSize;
-    uint8_t pickBoxSize;
-    QRgb crosshairColor;
-    uint32_t crosshairSize;
-
-    Object* gripBaseObj;
-    Object* tempBaseObj;
-
-    QGraphicsScene* gscene;
-    QUndoStack* undoStack;
-
-    SelectBox* selectBox;
-    QPointF scenePressPoint;
-    QPoint pressPoint;
-    QPointF sceneMovePoint;
-    QPoint movePoint;
-    QPointF sceneReleasePoint;
-    QPoint releasePoint;
-    QPointF sceneGripPoint;
-
-    QPointF cutCopyMousePoint;
-    QGraphicsItemGroup* pasteObjectItemGroup;
-    QPointF pasteDelta;
-
-    QList<QGraphicsItem*> rubberRoomList;
-    int panDistance;
-    int panStartX;
-    int panStartY;
-
-    QList<QGraphicsItem*> previewObjectList;
-    bool rulerMetric;
-    QColor rulerColor;
-    uint8_t rulerPixelSize;
-} ViewData;
-
+/* Data required to undo an action. */
 typedef struct UndoData_ {
     int type;
     Object* object;
@@ -314,6 +245,7 @@ typedef struct UndoData_ {
     QLineF mirrorLine;
 } UndoData;
 
+/* All per-object data. */
 typedef struct ObjectData_ {
     QGraphicsPathItem path;
     int32_t TYPE;
@@ -352,7 +284,96 @@ typedef struct ObjectData_ {
     int gripIndex;
 } ObjectData;
 
-MdiWindow* activeMdiWindow();
+/* All per-document data. */
+typedef struct DocumentData_ {
+    bool fileWasLoaded;
+    QString promptHistory;
+    QList<QString> promptInputList;
+    int promptInputNum;
+
+    QPrinter printer;
+
+    int myIndex;
+
+    EmbPattern* pattern;
+    QMdiArea* mdiArea;
+    QGraphicsScene* gscene;
+    View* gview;
+
+    QString curFile;
+    QString curLayer;
+    QRgb curColor;
+    QString curLineType;
+    QString curLineWeight;
+
+    bool grippingActive;
+    bool rapidMoveActive;
+    bool previewActive;
+    bool pastingActive;
+    bool movingActive;
+    bool selectingActive;
+    bool zoomWindowActive;
+    bool panningRealTimeActive;
+    bool panningPointActive;
+    bool panningActive;
+    bool qSnapActive;
+    bool qSnapToggle;
+
+    QHash<int64_t, QGraphicsItem*> hashDeletedObjects;
+
+    QList<int64_t> spareRubberList;
+
+    QColor gridColor;
+    QPainterPath gridPath;
+    QPainterPath originPath;
+
+    QGraphicsItemGroup* previewObjectItemGroup;
+    QPointF previewPoint;
+    double previewData;
+    int previewMode;
+
+    QPoint viewMousePoint;
+    QPointF sceneMousePoint;
+    QRgb qsnapLocatorColor;
+    uint8_t qsnapLocatorSize;
+    uint8_t qsnapApertureSize;
+    QRgb gripColorCool;
+    QRgb gripColorHot;
+    uint8_t gripSize;
+    uint8_t pickBoxSize;
+    QRgb crosshairColor;
+    uint32_t crosshairSize;
+
+    Object* gripBaseObj;
+    Object* tempBaseObj;
+
+    QUndoStack* undoStack;
+
+    SelectBox* selectBox;
+    QPointF scenePressPoint;
+    QPoint pressPoint;
+    QPointF sceneMovePoint;
+    QPoint movePoint;
+    QPointF sceneReleasePoint;
+    QPoint releasePoint;
+    QPointF sceneGripPoint;
+
+    QPointF cutCopyMousePoint;
+    QGraphicsItemGroup* pasteObjectItemGroup;
+    QPointF pasteDelta;
+
+    QList<QGraphicsItem*> rubberRoomList;
+    int panDistance;
+    int panStartX;
+    int panStartY;
+
+    QList<QGraphicsItem*> previewObjectList;
+    bool rulerMetric;
+    QColor rulerColor;
+    uint8_t rulerPixelSize;
+} DocumentData;
+
+Document* activeDocument();
 View* activeView();
 QGraphicsScene* activeScene();
 QUndoStack* activeUndoStack();
@@ -437,7 +458,7 @@ void onWindowActivated(QMdiSubWindow* w);
 void settingsDialog(const QString& showTab = QString());
 
 bool validFileFormat(const QString &fileName);
-void onCloseMdiWin(MdiWindow*);
+void onCloseMdiWin(Document*);
 
 void resizeEvent(QResizeEvent*);
 void closeEvent(QCloseEvent *event);
@@ -505,10 +526,10 @@ class View : public QGraphicsView
     Q_OBJECT
 
 public:
-    View(QGraphicsScene* theScene, QWidget* parent);
+    View(Document *doc, QGraphicsScene* theScene, QWidget* parent);
     ~View();
 
-    ViewData data;
+    Document *doc;
 
     bool allowZoomIn();
     bool allowZoomOut();
@@ -1014,43 +1035,22 @@ private:
     void forceRepaint();
 };
 
-
-class MdiWindow: public QMdiSubWindow
+class Document: public QMdiSubWindow
 {
     Q_OBJECT
 
 public:
-    MdiWindow(const int theIndex, QMdiArea* parent, Qt::WindowFlags wflags);
-    ~MdiWindow();
+    Document(const int theIndex, QMdiArea* parent, Qt::WindowFlags wflags);
+    ~Document();
 
-    EmbPattern* pattern;
-
-    QMdiArea* mdiArea;
-    QGraphicsScene* gscene;
-    View* gview;
-
-    bool fileWasLoaded;
-
-    QString promptHistory;
-    QList<QString> promptInputList;
-    int promptInputNum;
-
-    QPrinter printer;
-
-    int myIndex;
-
-    QString curFile;
-    QString curLayer;
-    QRgb curColor;
-    QString curLineType;
-    QString curLineWeight;
+    DocumentData data;
 
     virtual QSize sizeHint() const;
     QString getShortCurrentFile();
     bool loadFile(const QString &fileName);
     bool saveFile(const QString &fileName);
 signals:
-    void sendCloseMdiWin(MdiWindow*);
+    void sendCloseMdiWin(Document*);
 
 public slots:
     void closeEvent(QCloseEvent* e);

@@ -519,7 +519,7 @@ create_details_dialog(void)
     debug_message("EmbDetailsDialog()");
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
-    EmbPattern* pattern = activeMdiWindow()->pattern;
+    EmbPattern* pattern = activeDocument()->data.pattern;
     if (!pattern) {
         printf("Pattern data is missing or failed to initialize.");
         return;
@@ -857,7 +857,8 @@ MdiArea::mouseDoubleClickEvent(QMouseEvent* /*e*/)
     openFile();
 }
 
-void MdiArea::paintEvent(QPaintEvent* /*e*/)
+void
+MdiArea::paintEvent(QPaintEvent* /*e*/)
 {
     QWidget* vport = viewport();
     QRect rect = vport->rect();
@@ -907,9 +908,9 @@ void
 MdiArea::zoomExtentsAllSubWindows()
 {
     foreach(QMdiSubWindow* window, subWindowList()) {
-        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(window);
-        if (mdiWin) {
-            View* v = mdiWin->gview;
+        Document* doc = qobject_cast<Document*>(window);
+        if (doc) {
+            View* v = doc->data.gview;
             if (v) {
                 v->recalculateLimits();
                 v->zoomExtents();
@@ -928,44 +929,44 @@ MdiArea::forceRepaint()
 }
 
 /* . */
-MdiWindow::MdiWindow(const int theIndex, QMdiArea* parent, Qt::WindowFlags wflags) : QMdiSubWindow(parent, wflags)
+Document::Document(const int theIndex, QMdiArea* parent, Qt::WindowFlags wflags) : QMdiSubWindow(parent, wflags)
 {
-    mdiArea = parent;
+    data.mdiArea = parent;
 
-    myIndex = theIndex;
+    data.myIndex = theIndex;
 
-    fileWasLoaded = false;
+    data.fileWasLoaded = false;
 
     setAttribute(Qt::WA_DeleteOnClose);
 
     QString aName;
-    curFile = aName.asprintf("Untitled%d.dst", myIndex);
-    this->setWindowTitle(curFile);
+    data.curFile = aName.asprintf("Untitled%d.dst", data.myIndex);
+    this->setWindowTitle(data.curFile);
 
     this->setWindowIcon(create_icon("app"));
 
-    gscene = new QGraphicsScene(0,0,0,0, this);
-    gview = new View(gscene, this);
+    data.gscene = new QGraphicsScene(0,0,0,0, this);
+    data.gview = new View(this, data.gscene, this);
 
-    setWidget(gview);
+    setWidget(data.gview);
 
     /* WARNING: DO NOT SET THE QMDISUBWINDOW (this) FOCUSPROXY TO THE PROMPT
      * WARNING: AS IT WILL CAUSE THE WINDOW MENU TO NOT SWITCH WINDOWS PROPERLY!
      * WARNING: ALTHOUGH IT SEEMS THAT SETTING INTERNAL WIDGETS FOCUSPROXY IS OK.
      */
-    gview->setFocusProxy(prompt);
+    data.gview->setFocusProxy(prompt);
 
     resize(sizeHint());
 
-    promptHistory = "Welcome to Embroidermodder 2!<br/>Open some of our sample files. Many formats are supported.<br/>For help, press F1.";
-    setHistory(promptHistory);
-    promptInputList << "";
-    promptInputNum = 0;
+    data.promptHistory = "Welcome to Embroidermodder 2!<br/>Open some of our sample files. Many formats are supported.<br/>For help, press F1.";
+    setHistory(data.promptHistory);
+    data.promptInputList << "";
+    data.promptInputNum = 0;
 
-    curLayer = "0";
-    curColor = 0; /* TODO: color ByLayer */
-    curLineType = "ByLayer";
-    curLineWeight = "ByLayer";
+    data.curLayer = "0";
+    data.curColor = 0; /* TODO: color ByLayer */
+    data.curLineType = "ByLayer";
+    data.curLineWeight = "ByLayer";
 
     /* Due to strange Qt4.2.3 feature the child window icon is not drawn
      * in the main menu if showMaximized() is called for a non-visible child window
@@ -979,31 +980,31 @@ MdiWindow::MdiWindow(const int theIndex, QMdiArea* parent, Qt::WindowFlags wflag
 
     onWindowActivated();
 
-    pattern = emb_pattern_create();
-    if (!pattern) {
+    data.pattern = emb_pattern_create();
+    if (!data.pattern) {
         printf("Could not allocate memory for embroidery pattern\n");
         exit(1);
     }
 }
 
-MdiWindow::~MdiWindow()
+Document::~Document()
 {
-    debug_message("MdiWindow Destructor()");
-    emb_pattern_free(pattern);
+    debug_message("Document Destructor()");
+    emb_pattern_free(data.pattern);
 }
 
 bool
-MdiWindow::saveFile(const QString &fileName)
+Document::saveFile(const QString &fileName)
 {
-    return pattern_save(pattern, qPrintable(fileName));
+    return pattern_save(data.pattern, qPrintable(fileName));
 }
 
 bool
-MdiWindow::loadFile(const QString &fileName)
+Document::loadFile(const QString &fileName)
 {
-    debug_message("MdiWindow loadFile()");
+    debug_message("Document loadFile()");
 
-    QRgb tmpColor = curColor;
+    QRgb tmpColor = data.curColor;
 
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
@@ -1029,7 +1030,7 @@ MdiWindow::loadFile(const QString &fileName)
         return false;
     }
 
-    int readSuccessful = emb_pattern_read(pattern, qPrintable(fileName), format);
+    int readSuccessful = emb_pattern_read(data.pattern, qPrintable(fileName), format);
     if (!readSuccessful) {
         debug_message("Reading file was unsuccessful:");
         debug_message(qPrintable(fileName));
@@ -1048,13 +1049,13 @@ MdiWindow::loadFile(const QString &fileName)
     polyline.color.r = 0;
     polyline.color.g = 0;
     polyline.color.b = 0;
-    for (int i=1; i<pattern->stitch_list->count; i++) {
+    for (int i=1; i<data.pattern->stitch_list->count; i++) {
         EmbVector v;
-        v.x = pattern->stitch_list->stitch[i].x;
-        v.y = pattern->stitch_list->stitch[i].y;
+        v.x = data.pattern->stitch_list->stitch[i].x;
+        v.y = data.pattern->stitch_list->stitch[i].y;
         emb_array_addVector(polyline.pointList, v);
     }
-    emb_array_addPolyline(pattern->geometry, polyline);
+    emb_array_addPolyline(data.pattern->geometry, polyline);
 
     setCurrentFile(fileName);
     statusbar->showMessage("File loaded.");
@@ -1066,34 +1067,34 @@ MdiWindow::loadFile(const QString &fileName)
     restore_cursor();
 
     /* Clear the undo stack so it is not possible to undo past this point. */
-    gview->data.undoStack->clear();
+    data.gview->doc->data.undoStack->clear();
 
-    curColor = tmpColor;
+    data.curColor = tmpColor;
 
-    fileWasLoaded = true;
-    setUndoCleanIcon(fileWasLoaded);
-    return fileWasLoaded;
+    data.fileWasLoaded = true;
+    setUndoCleanIcon(data.fileWasLoaded);
+    return data.fileWasLoaded;
 }
 
 void
-MdiWindow::print()
+Document::print()
 {
-    QPrintDialog dialog(&printer, this);
+    QPrintDialog dialog(&data.printer, this);
     if (dialog.exec() == QDialog::Accepted) {
-        QPainter painter(&printer);
+        QPainter painter(&data.printer);
         if (printing_disable_bg.setting) {
             /* Save current bg */
-            QBrush brush = gview->backgroundBrush();
+            QBrush brush = data.gview->backgroundBrush();
             /* Save ink by not printing the bg at all */
-            gview->setBackgroundBrush(Qt::NoBrush);
+            data.gview->setBackgroundBrush(Qt::NoBrush);
             /* Print, fitting the viewport contents into a full page */
-            gview->render(&painter);
+            data.gview->render(&painter);
             /* Restore the bg */
-            gview->setBackgroundBrush(brush);
+            data.gview->setBackgroundBrush(brush);
         }
         else {
             /* Print, fitting the viewport contents into a full page */
-            gview->render(&painter);
+            data.gview->render(&painter);
         }
     }
 }
@@ -1104,177 +1105,191 @@ MdiWindow::print()
 /* TODO: Is there/should there be other embedded data in the bitmap besides the image itself? */
 /* NOTE: Can save a Singer BMC image (An 8bpp, 130x113 pixel colored bitmap image) */
 void
-MdiWindow::saveBMC()
+Document::saveBMC()
 {
     /* TODO: figure out how to center the image, right now it just plops it to the left side. */
     QImage img(150, 150, QImage::Format_ARGB32_Premultiplied);
     img.fill(qRgb(255,255,255));
-    QRectF extents = gscene->itemsBoundingRect();
+    QRectF extents = data.gscene->itemsBoundingRect();
 
     QPainter painter(&img);
     QRectF targetRect(0,0,150,150);
     if (printing_disable_bg.setting) {
         /* TODO: Make BMC background into it's own setting? */
-        QBrush brush = gscene->backgroundBrush();
-        gscene->setBackgroundBrush(Qt::NoBrush);
-        gscene->update();
-        gscene->render(&painter, targetRect, extents, Qt::KeepAspectRatio);
-        gscene->setBackgroundBrush(brush);
+        QBrush brush = data.gscene->backgroundBrush();
+        data.gscene->setBackgroundBrush(Qt::NoBrush);
+        data.gscene->update();
+        data.gscene->render(&painter, targetRect, extents, Qt::KeepAspectRatio);
+        data.gscene->setBackgroundBrush(brush);
     }
     else {
-        gscene->update();
-        gscene->render(&painter, targetRect, extents, Qt::KeepAspectRatio);
+        data.gscene->update();
+        data.gscene->render(&painter, targetRect, extents, Qt::KeepAspectRatio);
     }
 
     img.convertToFormat(QImage::Format_Indexed8, Qt::ThresholdDither|Qt::AvoidDither).save("test.bmc", "BMP");
 }
 
 void
-MdiWindow::setCurrentFile(const QString &fileName)
+Document::setCurrentFile(const QString &fileName)
 {
-    curFile = QFileInfo(fileName).canonicalFilePath();
+    data.curFile = QFileInfo(fileName).canonicalFilePath();
     setWindowModified(false);
     setWindowTitle(getShortCurrentFile());
 }
 
 QString
-MdiWindow::getShortCurrentFile()
+Document::getShortCurrentFile()
 {
-    return QFileInfo(curFile).fileName();
+    return QFileInfo(data.curFile).fileName();
 }
 
-QString MdiWindow::fileExtension(const QString& fileName)
+QString Document::fileExtension(const QString& fileName)
 {
     return QFileInfo(fileName).suffix().toLower();
 }
 
-void MdiWindow::closeEvent(QCloseEvent* /*e*/)
+void
+Document::closeEvent(QCloseEvent* /*e*/)
 {
-    debug_message("MdiWindow closeEvent()");
+    debug_message("Document closeEvent()");
     emit sendCloseMdiWin(this);
 }
 
 void
-MdiWindow::onWindowActivated()
+Document::onWindowActivated()
 {
-    debug_message("MdiWindow onWindowActivated()");
-    gview->data.undoStack->setActive(true);
-    setUndoCleanIcon(fileWasLoaded);
-    statusBarSnapButton->setChecked(gscene->property("ENABLE_SNAP").toBool());
-    statusBarGridButton->setChecked(gscene->property("ENABLE_GRID").toBool());
-    statusBarRulerButton->setChecked(gscene->property("ENABLE_RULER").toBool());
-    statusBarOrthoButton->setChecked(gscene->property("ENABLE_ORTHO").toBool());
-    statusBarPolarButton->setChecked(gscene->property("ENABLE_POLAR").toBool());
-    statusBarQSnapButton->setChecked(gscene->property("ENABLE_QSNAP").toBool());
-    statusBarQTrackButton->setChecked(gscene->property("ENABLE_QTRACK").toBool());
-    statusBarLwtButton->setChecked(gscene->property("ENABLE_LWT").toBool());
-    setHistory(promptHistory);
+    debug_message("Document onWindowActivated()");
+    data.gview->doc->data.undoStack->setActive(true);
+    setUndoCleanIcon(data.fileWasLoaded);
+    statusBarSnapButton->setChecked(data.gscene->property("ENABLE_SNAP").toBool());
+    statusBarGridButton->setChecked(data.gscene->property("ENABLE_GRID").toBool());
+    statusBarRulerButton->setChecked(data.gscene->property("ENABLE_RULER").toBool());
+    statusBarOrthoButton->setChecked(data.gscene->property("ENABLE_ORTHO").toBool());
+    statusBarPolarButton->setChecked(data.gscene->property("ENABLE_POLAR").toBool());
+    statusBarQSnapButton->setChecked(data.gscene->property("ENABLE_QSNAP").toBool());
+    statusBarQTrackButton->setChecked(data.gscene->property("ENABLE_QTRACK").toBool());
+    statusBarLwtButton->setChecked(data.gscene->property("ENABLE_LWT").toBool());
+    setHistory(data.promptHistory);
 }
 
+/* . */
 QSize
-MdiWindow::sizeHint() const
+Document::sizeHint() const
 {
-    debug_message("MdiWindow sizeHint()");
+    debug_message("Document sizeHint()");
     return QSize(450, 300);
 }
 
+/* . */
 void
-MdiWindow::currentLayerChanged(const QString& layer)
+Document::currentLayerChanged(const QString& layer)
 {
-    curLayer = layer;
+    data.curLayer = layer;
 }
 
+/* . */
 void
-MdiWindow::currentColorChanged(const QRgb& color)
+Document::currentColorChanged(const QRgb& color)
 {
-    curColor = color;
+    data.curColor = color;
 }
 
+/* . */
 void
-MdiWindow::currentLinetypeChanged(const QString& type)
+Document::currentLinetypeChanged(const QString& type)
 {
-    curLineType = type;
-}
-
-void
-MdiWindow::currentLineweightChanged(const QString& weight)
-{
-    curLineWeight = weight;
+    data.curLineType = type;
 }
 
 void
-MdiWindow::updateColorLinetypeLineweight()
+Document::currentLineweightChanged(const QString& weight)
+{
+    data.curLineWeight = weight;
+}
+
+void
+Document::updateColorLinetypeLineweight()
 {
 }
 
 void
-MdiWindow::deletePressed()
+Document::deletePressed()
 {
-    gview->deletePressed();
+    data.gview->deletePressed();
 }
 
 void
-MdiWindow::escapePressed()
+Document::escapePressed()
 {
-    gview->escapePressed();
+    data.gview->escapePressed();
 }
 
 void
-MdiWindow::showViewScrollBars(bool val)
+Document::showViewScrollBars(bool val)
 {
-    gview->showScrollBars(val);
+    data.gview->showScrollBars(val);
 }
 
 void
-MdiWindow::setViewCrossHairColor(QRgb color)
+Document::setViewCrossHairColor(QRgb color)
 {
-    gview->setCrossHairColor(color);
+    data.gview->setCrossHairColor(color);
 }
 
-void MdiWindow::setViewBackgroundColor(QRgb color)
+void
+Document::setViewBackgroundColor(QRgb color)
 {
-    gview->setBackgroundColor(color);
+    data.gview->setBackgroundColor(color);
 }
 
-void MdiWindow::setViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
+void
+Document::setViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
 {
-    gview->setSelectBoxColors(colorL, fillL, colorR, fillR, alpha);
+    data.gview->setSelectBoxColors(colorL, fillL, colorR, fillR, alpha);
 }
 
-void MdiWindow::setViewGridColor(QRgb color)
+void
+Document::setViewGridColor(QRgb color)
 {
-    gview->setGridColor(color);
+    data.gview->setGridColor(color);
 }
 
-void MdiWindow::setViewRulerColor(QRgb color)
+void
+Document::setViewRulerColor(QRgb color)
 {
-    gview->setRulerColor(color);
+    data.gview->setRulerColor(color);
 }
 
-void MdiWindow::promptHistoryAppended(const QString& txt)
+void
+Document::promptHistoryAppended(const QString& txt)
 {
-    promptHistory.append("<br/>" + txt);
+    data.promptHistory.append("<br/>" + txt);
 }
 
-void MdiWindow::logPromptInput(const QString& txt)
+void
+Document::logPromptInput(const QString& txt)
 {
-    promptInputList << txt;
-    promptInputNum = promptInputList.size();
+    data.promptInputList << txt;
+    data.promptInputNum = data.promptInputList.size();
 }
 
-void MdiWindow::promptInputPrevious()
+void
+Document::promptInputPrevious()
 {
     promptInputPrevNext(true);
 }
 
-void MdiWindow::promptInputNext()
+void
+Document::promptInputNext()
 {
     promptInputPrevNext(false);
 }
 
-void MdiWindow::promptInputPrevNext(bool prev)
+void
+Document::promptInputPrevNext(bool prev)
 {
-    if (promptInputList.isEmpty()) {
+    if (data.promptInputList.isEmpty()) {
         if (prev) {
             QMessageBox::critical(this, tr("Prompt Previous Error"), tr("The prompt input is empty! Please report this as a bug!"));
         }
@@ -1285,22 +1300,22 @@ void MdiWindow::promptInputPrevNext(bool prev)
     }
     else {
         if (prev) {
-            promptInputNum--;
+            data.promptInputNum--;
         }
         else {
-            promptInputNum++;
+            data.promptInputNum++;
         }
-        int maxNum = promptInputList.size();
-        if (promptInputNum < 0) {
-            promptInputNum = 0;
+        int maxNum = data.promptInputList.size();
+        if (data.promptInputNum < 0) {
+            data.promptInputNum = 0;
             prompt->setCurrentText("");
         }
-        else if (promptInputNum >= maxNum) {
-            promptInputNum = maxNum;
+        else if (data.promptInputNum >= maxNum) {
+            data.promptInputNum = maxNum;
             prompt->setCurrentText("");
         }
         else {
-            prompt->setCurrentText(promptInputList.at(promptInputNum));
+            prompt->setCurrentText(data.promptInputList.at(data.promptInputNum));
         }
     }
 }

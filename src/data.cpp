@@ -29,7 +29,7 @@ PropertyEditor* dockPropEdit;
 UndoEditor* dockUndoEdit;
 QTimer* testing_timer;
 
-QList<MdiWindow*> listMdiWin;
+QList<Document*> listMdiWin;
 QString openFilesPath;
 
 QAction* myFileSeparator;

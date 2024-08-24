@@ -119,9 +119,9 @@ void
 print_command(void)
 {
     debug_message("print_command()");
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) {
-        mdiWin->print();
+    Document* doc = activeDocument();
+    if (doc) {
+        doc->print();
     }
 }
 
@@ -296,33 +296,35 @@ iconResize(int iconSize)
     general_icon_size.setting = iconSize;
 }
 
-MdiWindow*
-activeMdiWindow()
+/* . */
+Document*
+activeDocument()
 {
-    debug_message("activeMdiWindow()");
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    return mdiWin;
+    debug_message("activeDocument()");
+    return qobject_cast<Document*>(mdiArea->activeSubWindow());
 }
 
+/* . */
 View*
 activeView()
 {
     debug_message("activeView()");
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) {
-        View* v = mdiWin->gview;
+    Document* doc = activeDocument();
+    if (doc) {
+        View* v = doc->data.gview;
         return v;
     }
     return 0;
 }
 
+/* . */
 QGraphicsScene*
 activeScene()
 {
     debug_message("activeScene()");
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) {
-        QGraphicsScene* s = mdiWin->gscene;
+    Document* doc = activeDocument();
+    if (doc) {
+        QGraphicsScene* s = doc->data.gscene;
         return s;
     }
     return 0;
@@ -334,7 +336,7 @@ activeUndoStack()
     debug_message("activeUndoStack()");
     View* v = activeView();
     if (v) {
-        QUndoStack* u = v->data.undoStack;
+        QUndoStack* u = v->doc->data.undoStack;
         return u;
     }
     return 0;
@@ -351,8 +353,10 @@ updateAllViewScrollBars(bool val)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
-        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if (mdiWin) { mdiWin->showViewScrollBars(val); }
+        Document* doc = qobject_cast<Document*>(windowList.at(i));
+        if (doc) {
+            doc->showViewScrollBars(val);
+        }
     }
 }
 
@@ -361,9 +365,9 @@ updateAllViewCrossHairColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
-        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if (mdiWin) {
-            mdiWin->setViewCrossHairColor(color);
+        Document* doc = qobject_cast<Document*>(windowList.at(i));
+        if (doc) {
+            doc->setViewCrossHairColor(color);
         }
     }
 }
@@ -373,9 +377,9 @@ updateAllViewBackgroundColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
-        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if (mdiWin) {
-            mdiWin->setViewBackgroundColor(color);
+        Document* doc = qobject_cast<Document*>(windowList.at(i));
+        if (doc) {
+            doc->setViewBackgroundColor(color);
         }
     }
 }
@@ -385,37 +389,40 @@ updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, i
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
-        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if (mdiWin) {
-            mdiWin->setViewSelectBoxColors(colorL, fillL, colorR, fillR, alpha);
+        Document* doc = qobject_cast<Document*>(windowList.at(i));
+        if (doc) {
+            doc->setViewSelectBoxColors(colorL, fillL, colorR, fillR, alpha);
         }
     }
 }
 
+/* . */
 void
 updateAllViewGridColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
-        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if (mdiWin) {
-            mdiWin->setViewGridColor(color);
+        Document* doc = qobject_cast<Document*>(windowList.at(i));
+        if (doc) {
+            doc->setViewGridColor(color);
         }
     }
 }
 
+/* . */
 void
 updateAllViewRulerColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
-        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if (mdiWin) {
-            mdiWin->setViewRulerColor(color);
+        Document* doc = qobject_cast<Document*>(windowList.at(i));
+        if (doc) {
+            doc->setViewRulerColor(color);
         }
     }
 }
 
+/* . */
 void
 updatePickAddMode(bool val)
 {
@@ -485,9 +492,9 @@ colorSelectorIndexChanged(int index)
             "<b>An error has occured while changing colors.</b>");
     }
 
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) {
-        mdiWin->currentColorChanged(newColor);
+    Document* doc = activeDocument();
+    if (doc) {
+        doc->currentColorChanged(newColor);
     }
     */
 }
@@ -545,9 +552,9 @@ setTextSize(double num)
 QString
 getCurrentLayer()
 {
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) {
-        return mdiWin->curLayer;
+    Document* doc = activeDocument();
+    if (doc) {
+        return doc->data.curLayer;
     }
     return "0";
 }
@@ -556,9 +563,9 @@ getCurrentLayer()
 QRgb
 getCurrentColor()
 {
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) {
-        return mdiWin->curColor;
+    Document* doc = activeDocument();
+    if (doc) {
+        return doc->data.curColor;
     }
     return 0; /* TODO: return color ByLayer */
 }
@@ -567,9 +574,9 @@ getCurrentColor()
 QString
 getCurrentLineType()
 {
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) {
-        return mdiWin->curLineType;
+    Document* doc = activeDocument();
+    if (doc) {
+        return doc->data.curLineType;
     }
     return "ByLayer";
 }
@@ -578,9 +585,9 @@ getCurrentLineType()
 QString
 getCurrentLineWeight()
 {
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) {
-        return mdiWin->curLineWeight;
+    Document* doc = activeDocument();
+    if (doc) {
+        return doc->data.curLineWeight;
     }
     return "ByLayer";
 }
@@ -590,9 +597,9 @@ deletePressed()
 {
     debug_message("deletePressed()");
     wait_cursor();
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) {
-        mdiWin->deletePressed();
+    Document* doc = activeDocument();
+    if (doc) {
+        doc->deletePressed();
     }
     restore_cursor();
 }
@@ -602,9 +609,9 @@ escapePressed()
 {
     debug_message("escapePressed()");
     wait_cursor();
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) {
-        mdiWin->escapePressed();
+    Document* doc = activeDocument();
+    if (doc) {
+        doc->escapePressed();
     }
     restore_cursor();
 
@@ -638,18 +645,18 @@ toggleLwt(void)
 void
 promptInputPrevious()
 {
-    MdiWindow* mdiWin = activeMdiWindow();
-    if (mdiWin) {
-        mdiWin->promptInputPrevious();
+    Document* doc = activeDocument();
+    if (doc) {
+        doc->promptInputPrevious();
     }
 }
 
 void
 promptInputNext()
 {
-    MdiWindow* mdiWin = activeMdiWindow();
-    if (mdiWin) {
-        mdiWin->promptInputNext();
+    Document* doc = activeDocument();
+    if (doc) {
+        doc->promptInputNext();
     }
 }
 
@@ -1113,7 +1120,7 @@ run_command(const char* cmd, ScriptEnv *context)
         break;
     }
     case ACTION_PAN_LEFT: {
-        QUndoStack* stack = gview->data.undoStack;
+        QUndoStack* stack = gview->doc->data.undoStack;
         if (stack) {
             UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanLeft", gview, 0);
             stack->push(cmd);
@@ -1121,7 +1128,7 @@ run_command(const char* cmd, ScriptEnv *context)
         break;
     }
     case ACTION_PAN_RIGHT: {
-        QUndoStack* stack = gview->data.undoStack;
+        QUndoStack* stack = gview->doc->data.undoStack;
         if (stack) {
             UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanRight", gview, 0);
             stack->push(cmd);
@@ -1129,7 +1136,7 @@ run_command(const char* cmd, ScriptEnv *context)
         break;
     }
     case ACTION_PAN_UP: {
-        QUndoStack* stack = gview->data.undoStack;
+        QUndoStack* stack = gview->doc->data.undoStack;
         if (stack) {
             UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanUp", gview, 0);
             stack->push(cmd);
@@ -1137,7 +1144,7 @@ run_command(const char* cmd, ScriptEnv *context)
         break;
     }
     case ACTION_PAN_DOWN: {
-        QUndoStack* stack = gview->data.undoStack;
+        QUndoStack* stack = gview->doc->data.undoStack;
         if (stack) {
             UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanDown", gview, 0);
             stack->push(cmd);
@@ -1181,7 +1188,7 @@ run_command(const char* cmd, ScriptEnv *context)
         break;
     }
     case ACTION_ZOOM_EXTENTS: {
-        QUndoStack* stack = gview->data.undoStack;
+        QUndoStack* stack = gview->doc->data.undoStack;
         if (stack) {
             UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomExtents", gview, 0);
             stack->push(cmd);
@@ -1209,7 +1216,7 @@ run_command(const char* cmd, ScriptEnv *context)
         break;
     }
     case ACTION_ZOOM_SELECTED: {
-        QUndoStack* stack = gview->data.undoStack;
+        QUndoStack* stack = gview->doc->data.undoStack;
         if (stack) {
             UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomSelected", gview, 0);
             stack->push(cmd);
@@ -1420,7 +1427,7 @@ nativeAddTextSingle(std::string str, double x, double y, double rot, bool fill, 
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->data.undoStack;
+    QUndoStack* stack = gview->doc->data.undoStack;
     if (gview && gscene && stack) {
         Object* obj = new Object(QString(str.c_str()), x, -y, getCurrentColor());
         obj->set_text_font(text_font.setting);
@@ -1465,7 +1472,7 @@ nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubber
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->data.undoStack;
+    QUndoStack* stack = gview->doc->data.undoStack;
     if (gview && gscene && stack) {
         Object* obj = new Object(x1, -y1, x2, -y2, getCurrentColor());
         obj->setRotation(-rot);
@@ -1494,7 +1501,7 @@ nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->data.undoStack;
+    QUndoStack* stack = gview->doc->data.undoStack;
     if (!(gview && gscene && stack)) {
         return;
     }
@@ -1547,7 +1554,7 @@ nativeAddCircle(double centerX, double centerY, double radius, bool fill, int ru
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->data.undoStack;
+    QUndoStack* stack = gview->doc->data.undoStack;
     if (gview && gscene && stack) {
         EmbCircle circle;
         circle.center.x = centerX;
@@ -1588,7 +1595,7 @@ nativeAddEllipse(double centerX, double centerY, double width, double height, do
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->data.undoStack;
+    QUndoStack* stack = gview->doc->data.undoStack;
     if (gview && gscene && stack) {
         EmbEllipse ellipse;
         ellipse.center.x = centerX;
@@ -1615,7 +1622,7 @@ void
 nativeAddPoint(double x, double y)
 {
     View* gview = activeView();
-    QUndoStack* stack = gview->data.undoStack;
+    QUndoStack* stack = gview->doc->data.undoStack;
     if (gview && stack) {
         EmbPoint point;
         point.position.x = x;
@@ -1639,7 +1646,7 @@ nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubber
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->data.undoStack;
+    QUndoStack* stack = gview->doc->data.undoStack;
     if (gview && gscene && stack) {
         EmbPolygon polygon;
         Object* obj = new Object(polygon, OBJ_TYPE_POLYGON, p, getCurrentColor());
@@ -1664,7 +1671,7 @@ nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubbe
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->data.undoStack;
+    QUndoStack* stack = gview->doc->data.undoStack;
     if (gview && gscene && stack) {
         EmbPath path;
         Object* obj = new Object(path, OBJ_TYPE_POLYLINE, p, getCurrentColor());
@@ -1709,7 +1716,7 @@ nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int r
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
-    QUndoStack* stack = gview->data.undoStack;
+    QUndoStack* stack = gview->doc->data.undoStack;
     if (gview && gscene && stack) {
         Object* obj = new Object(x1, -y1, x2, -y2, getCurrentColor());
         obj->setRotation(-rot);
