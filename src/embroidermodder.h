@@ -118,116 +118,11 @@ class UndoEditor;
 class View;
 class CmdPromptInput;
 
-extern MainWindow *_main;
-extern std::unordered_map<std::string, std::string> aliasHash;
-extern std::unordered_map<int, QAction*> actionHash;
-extern std::unordered_map<QString, QToolBar*> toolbarHash;
-extern std::unordered_map<QString, QMenu*> menuHash;
-extern QToolButton* statusBarSnapButton;
-extern QToolButton* statusBarGridButton;
-extern QToolButton* statusBarRulerButton;
-extern QToolButton* statusBarOrthoButton;
-extern QToolButton* statusBarPolarButton;
-extern QToolButton* statusBarQSnapButton;
-extern QToolButton* statusBarQTrackButton;
-extern QToolButton* statusBarLwtButton;
-extern QLabel* statusBarMouseCoord;
-extern QStatusBar* statusbar;
-extern MdiArea* mdiArea;
-extern CmdPrompt* prompt;
-extern PropertyEditor* dockPropEdit;
-extern UndoEditor* dockUndoEdit;
-extern QTimer* testing_timer;
-extern QAction* myFileSeparator;
-extern QWizard* wizardTipOfTheDay;
-extern QLabel* labelTipOfTheDay;
-extern QCheckBox* checkBoxTipOfTheDay;
-extern QStringList listTipOfTheDay;
-extern QComboBox* layerSelector;
-extern QComboBox* colorSelector;
-extern QComboBox* linetypeSelector;
-extern QComboBox* lineweightSelector;
-extern QFontComboBox* textFontSelector;
-extern QComboBox* textSizeSelector;
-extern QList<QGraphicsItem*> cutCopyObjectList;
-extern QStringList objectTextJustifyList;
-
-extern QString curText;
-extern QString defaultPrefix;
-extern QString prefix;
-extern QString lastCmd;
-extern QString curCmd;
-
-extern QTextBrowser* promptHistory;
-extern CmdPromptInput* promptInput;
-
-extern QString formatFilterOpen;
-extern QString formatFilterSave;
-extern QString openFilesPath;
-extern const char *settings_file;
-extern QByteArray layoutState;
-
-extern QStringList button_list;
-
-extern QString prompt_color_;
-extern QString prompt_selection_bg_color_;
-extern QString prompt_bg_color_;
-extern QString prompt_selection_color_;
-
-extern QTimer* blinkTimer;
-extern bool blinkState;
-
-extern std::unordered_map<int, int> key_map;
-extern std::unordered_map<const char *, const char *> menu_list;
-
-extern QHash<QString, QGroupBox*> group_boxes;
-extern QHash<QString, QToolButton*> tool_buttons;
-extern QHash<QString, QLineEdit*> line_edits;
-extern QHash<QString, QComboBox*> combo_boxes;
-extern QComboBox* comboBoxSelected;
-
-extern QStringList group_box_list;
-
-extern QWidget* focusWidget_;
-
-extern QString iconDir;
-extern int iconSize;
-
-extern bool pickAdd;
-
-extern Object* tempObj;
-
-extern int precisionAngle;
-extern int precisionLength;
-
-/* Used when checking if fields vary. */
-extern QString fieldOldText;
-extern QString fieldNewText;
-extern QString fieldVariesText;
-extern QString fieldYesText;
-extern QString fieldNoText;
-extern QString fieldOnText;
-extern QString fieldOffText;
-
-extern QFontComboBox* comboBoxTextSingleFont;
-
-extern QSignalMapper* signalMapper;
-extern Qt::ToolButtonStyle propertyEditorButtonStyle;
-
-extern QList<QGraphicsItem*> selectedItemList;
-
-extern QToolButton* toolButtonQSelect;
-extern QToolButton* toolButtonPickAdd;
-
-void appendHistory(QString txt);
-
-void create_statusbar(MainWindow* mw);
-
 /* Data required to undo an action. */
 typedef struct UndoData_ {
     int type;
     Object* object;
-    View* gview;
+    Document *doc;
     double dx;
     double dy;
     double pivotX;
@@ -373,6 +268,224 @@ typedef struct DocumentData_ {
     uint8_t rulerPixelSize;
 } DocumentData;
 
+extern MainWindow *_main;
+extern std::unordered_map<std::string, std::string> aliasHash;
+extern std::unordered_map<int, QAction*> actionHash;
+extern std::unordered_map<QString, QToolBar*> toolbarHash;
+extern std::unordered_map<QString, QMenu*> menuHash;
+extern QToolButton* statusBarSnapButton;
+extern QToolButton* statusBarGridButton;
+extern QToolButton* statusBarRulerButton;
+extern QToolButton* statusBarOrthoButton;
+extern QToolButton* statusBarPolarButton;
+extern QToolButton* statusBarQSnapButton;
+extern QToolButton* statusBarQTrackButton;
+extern QToolButton* statusBarLwtButton;
+extern QLabel* statusBarMouseCoord;
+extern QStatusBar* statusbar;
+extern MdiArea* mdiArea;
+extern CmdPrompt* prompt;
+extern PropertyEditor* dockPropEdit;
+extern UndoEditor* dockUndoEdit;
+extern QTimer* testing_timer;
+extern QAction* myFileSeparator;
+extern QWizard* wizardTipOfTheDay;
+extern QLabel* labelTipOfTheDay;
+extern QCheckBox* checkBoxTipOfTheDay;
+extern QStringList listTipOfTheDay;
+extern QComboBox* layerSelector;
+extern QComboBox* colorSelector;
+extern QComboBox* linetypeSelector;
+extern QComboBox* lineweightSelector;
+extern QFontComboBox* textFontSelector;
+extern QComboBox* textSizeSelector;
+extern QList<QGraphicsItem*> cutCopyObjectList;
+extern QStringList objectTextJustifyList;
+
+extern QString curText;
+extern QString defaultPrefix;
+extern QString prefix;
+extern QString lastCmd;
+extern QString curCmd;
+
+extern QTextBrowser* promptHistory;
+extern CmdPromptInput* promptInput;
+
+extern QString formatFilterOpen;
+extern QString formatFilterSave;
+extern QString openFilesPath;
+extern const char *settings_file;
+extern QByteArray layoutState;
+
+extern QStringList button_list;
+
+extern QString prompt_color_;
+extern QString prompt_selection_bg_color_;
+extern QString prompt_bg_color_;
+extern QString prompt_selection_color_;
+
+extern QTimer* blinkTimer;
+extern bool blinkState;
+
+extern std::unordered_map<int, int> key_map;
+extern std::unordered_map<const char *, const char *> menu_list;
+
+extern QHash<QString, QGroupBox*> group_boxes;
+extern QHash<QString, QToolButton*> tool_buttons;
+extern QHash<QString, QLineEdit*> line_edits;
+extern QHash<QString, QComboBox*> combo_boxes;
+extern QComboBox* comboBoxSelected;
+
+extern QStringList group_box_list;
+
+extern QWidget* focusWidget_;
+
+extern QString iconDir;
+extern int iconSize;
+
+extern bool pickAdd;
+
+extern Object* tempObj;
+
+extern int precisionAngle;
+extern int precisionLength;
+
+/* Used when checking if fields vary. */
+extern QString fieldOldText;
+extern QString fieldNewText;
+extern QString fieldVariesText;
+extern QString fieldYesText;
+extern QString fieldNoText;
+extern QString fieldOnText;
+extern QString fieldOffText;
+
+extern QFontComboBox* comboBoxTextSingleFont;
+
+extern QSignalMapper* signalMapper;
+extern Qt::ToolButtonStyle propertyEditorButtonStyle;
+
+extern QList<QGraphicsItem*> selectedItemList;
+
+extern QToolButton* toolButtonQSelect;
+extern QToolButton* toolButtonPickAdd;
+
+void appendHistory(QString txt);
+
+void create_statusbar(MainWindow* mw);
+
+bool document_allowZoomIn(Document* doc);
+bool document_allowZoomOut(Document* doc);
+void document_zoomIn(Document* doc);
+void document_zoomOut(Document* doc);
+void document_zoomWindow(Document* doc);
+void document_zoomSelected(Document* doc);
+void document_zoomExtents(Document* doc);
+void document_panRealTime(Document* doc);
+void document_panPoint(Document* doc);
+void document_panLeft(Document* doc);
+void document_panRight(Document* doc);
+void document_panUp(Document* doc);
+void document_panDown(Document* doc);
+void document_selectAll(Document* doc);
+void document_selectionChanged(Document* doc);
+void document_clearSelection(Document* doc);
+void document_deleteSelected(Document* doc);
+void document_moveSelected(Document* doc, double dx, double dy);
+void document_cut(Document* doc);
+void document_copy(Document* doc);
+void document_paste(Document* doc);
+void document_repeatAction(Document* doc);
+void document_moveAction(Document* doc);
+void document_scaleAction(Document* doc);
+void document_scaleSelected(Document* doc, double x, double y, double factor);
+void document_rotateAction(Document* doc);
+void document_rotateSelected(Document* doc, double x, double y, double rot);
+void document_mirrorSelected(Document* doc, double x1, double y1, double x2, double y2);
+int document_numSelected(Document* doc);
+
+void document_deletePressed(Document* doc);
+void document_escapePressed(Document* doc);
+
+void document_cornerButtonClicked(Document* doc);
+
+void document_showScrollBars(Document* doc, bool val);
+void document_setCornerButton(Document* doc);
+void document_setCrossHairColor(Document* doc, QRgb color);
+void document_setCrossHairSize(Document* doc, uint8_t percent);
+void document_setBackgroundColor(Document* doc, QRgb color);
+void document_setSelectBoxColors(Document* doc, QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
+void document_toggleSnap(Document* doc, bool on);
+void document_toggleGrid(Document* doc, bool on);
+void document_toggleRuler(Document* doc, bool on);
+void document_toggleOrtho(Document* doc, bool on);
+void document_togglePolar(Document* doc, bool on);
+void document_toggleQSnap(Document* doc, bool on);
+void document_toggleQTrack(Document* doc, bool on);
+void document_toggleLwt(Document* doc, bool on);
+void document_toggleReal(Document* doc, bool on);
+bool document_isLwtEnabled(Document* doc);
+bool document_isRealEnabled(Document* doc);
+
+void document_setGridColor(Document* doc, QRgb color);
+void document_createGrid(Document* doc, const QString& gridType);
+void document_setRulerColor(Document* doc, QRgb color);
+
+void document_previewOn(Document* doc, int clone, int mode, double x, double y, double data);
+void document_previewOff(Document* doc);
+
+void document_enableMoveRapidFire(Document* doc);
+void document_disableMoveRapidFire(Document* doc);
+
+bool document_allowRubber(Document* doc);
+void document_addToRubberRoom(Document* doc, QGraphicsItem* item);
+void document_vulcanizeRubberRoom(Document* doc);
+void document_clearRubberRoom(Document* doc);
+void document_spareRubber(Document* doc, int64_t id);
+void document_setRubberMode(Document* doc, int mode);
+void document_setRubberPoint(Document* doc, const QString& key, const QPointF& point);
+void document_setRubberText(Document* doc, const QString& key, const QString& txt);
+
+void drawArc(QPainter* painter, EmbArc arc);
+void drawCircle(QPainter* painter, EmbCircle circle);
+void drawEllipse(QPainter* painter, EmbEllipse ellipse);
+void drawLine(QPainter* painter, EmbLine line);
+void drawPolygon(QPainter* painter, EmbPolygon polygon);
+void drawPolyline(QPainter* painter, EmbPolyline polyline);
+void drawRect(QPainter* painter, EmbRect rect);
+void drawSpline(QPainter* painter, EmbSpline spline);
+
+void document_createGridRect(Document* doc);
+void document_createGridPolar(Document* doc);
+void document_createGridIso(Document* doc);
+void document_createOrigin(Document* doc);
+
+void document_loadRulerSettings(Document* doc);
+
+QPainterPath document_createRulerTextPath(Document* doc, float x, float y, QString str, float height);
+
+QList<QGraphicsItem*> document_createObjectList(Document* doc, QList<QGraphicsItem*> list);
+
+void document_copySelected(Document* doc);
+
+void document_startGripping(Document* doc, Object* obj);
+void document_stopGripping(Document* doc, bool accept = false);
+
+void document_updateMouseCoords(Document* doc, int x, int y);
+
+void document_panStart(Document* doc, const QPoint& point);
+
+void document_alignScenePointWithViewPoint(Document* doc, const QPointF& scenePoint, const QPoint& viewPoint);
+
+void document_recalculateLimits(Document* doc);
+void document_zoomToPoint(Document* doc, const QPoint& mousePoint, int zoomDir);
+void document_centerAt(Document* doc, const QPointF& centerPoint);
+QPointF document_center(Document* doc);
+
+void document_addObject(Document* doc, Object* obj);
+void document_deleteObject(Document* doc, Object* obj);
+void document_vulcanizeObject(Document* doc, Object* obj);
+
+/* ------------------------------------------------- */
 Document* activeDocument();
 View* activeView();
 QGraphicsScene* activeScene();
@@ -521,7 +634,8 @@ protected:
     virtual void paintEvent(QPaintEvent* e);
 };
 
-class View : public QGraphicsView
+
+class View: public QGraphicsView
 {
     Q_OBJECT
 
@@ -531,142 +645,27 @@ public:
 
     Document *doc;
 
-    bool allowZoomIn();
-    bool allowZoomOut();
-
-    void recalculateLimits();
-    void zoomToPoint(const QPoint& mousePoint, int zoomDir);
-    void centerAt(const QPointF& centerPoint);
-    QPointF center() { return mapToScene(rect().center()); }
-
-    void addObject(Object* obj);
-    void deleteObject(Object* obj);
-    void vulcanizeObject(Object* obj);
-
-public slots:
-    void zoomIn();
-    void zoomOut();
-    void zoomWindow();
-    void zoomSelected();
-    void zoomExtents();
-    void panRealTime();
-    void panPoint();
-    void panLeft();
-    void panRight();
-    void panUp();
-    void panDown();
-    void selectAll();
-    void selectionChanged();
-    void clearSelection();
-    void deleteSelected();
-    void moveSelected(double dx, double dy);
-    void cut();
-    void copy();
-    void paste();
-    void repeatAction();
-    void moveAction();
-    void scaleAction();
-    void scaleSelected(double x, double y, double factor);
-    void rotateAction();
-    void rotateSelected(double x, double y, double rot);
-    void mirrorSelected(double x1, double y1, double x2, double y2);
-    int numSelected();
-
-    void deletePressed();
-    void escapePressed();
-
-    void cornerButtonClicked();
-
-    void showScrollBars(bool val);
-    void setCornerButton();
-    void setCrossHairColor(QRgb color);
-    void setCrossHairSize(uint8_t percent);
-    void setBackgroundColor(QRgb color);
-    void setSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
-    void toggleSnap(bool on);
-    void toggleGrid(bool on);
-    void toggleRuler(bool on);
-    void toggleOrtho(bool on);
-    void togglePolar(bool on);
-    void toggleQSnap(bool on);
-    void toggleQTrack(bool on);
-    void toggleLwt(bool on);
-    void toggleReal(bool on);
-    bool isLwtEnabled();
-    bool isRealEnabled();
-
-    void setGridColor(QRgb color);
-    void createGrid(const QString& gridType);
-    void setRulerColor(QRgb color);
-
-    void previewOn(int clone, int mode, double x, double y, double data);
-    void previewOff();
-
-    void enableMoveRapidFire();
-    void disableMoveRapidFire();
-
-    bool allowRubber();
-    void addToRubberRoom(QGraphicsItem* item);
-    void vulcanizeRubberRoom();
-    void clearRubberRoom();
-    void spareRubber(int64_t id);
-    void setRubberMode(int mode);
-    void setRubberPoint(const QString& key, const QPointF& point);
-    void setRubberText(const QString& key, const QString& txt);
-
-    void drawArc(QPainter* painter, EmbArc arc);
-    void drawCircle(QPainter* painter, EmbCircle circle);
-    void drawEllipse(QPainter* painter, EmbEllipse ellipse);
-    void drawLine(QPainter* painter, EmbLine line);
-    void drawPolygon(QPainter* painter, EmbPolygon polygon);
-    void drawPolyline(QPainter* painter, EmbPolyline polyline);
-    void drawRect(QPainter* painter, EmbRect rect);
-    void drawSpline(QPainter* painter, EmbSpline spline);
-
 protected:
+    void drawBackground(QPainter* painter, const QRectF& rect);
+    void drawForeground(QPainter* painter, const QRectF& rect);
     void mouseDoubleClickEvent(QMouseEvent* event);
     void mousePressEvent(QMouseEvent* event);
     void mouseMoveEvent(QMouseEvent* event);
     void mouseReleaseEvent(QMouseEvent* event);
     void wheelEvent(QWheelEvent* event);
     void contextMenuEvent(QContextMenuEvent* event);
-    void drawBackground(QPainter* painter, const QRectF& rect);
-    void drawForeground(QPainter* painter, const QRectF& rect);
     void enterEvent(QEvent* event);
-
-private:
-    void createGridRect();
-    void createGridPolar();
-    void createGridIso();
-    void createOrigin();
-
-    void loadRulerSettings();
-
-    QPainterPath createRulerTextPath(float x, float y, QString str, float height);
-
-    QList<QGraphicsItem*> createObjectList(QList<QGraphicsItem*> list);
-
-    void copySelected();
-
-    void startGripping(Object* obj);
-    void stopGripping(bool accept = false);
-
-    void updateMouseCoords(int x, int y);
-
-    void panStart(const QPoint& point);
-
-    void alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& viewPoint);
 };
 
 class UndoableCommand : public QUndoCommand
 {
 public:
-    UndoableCommand(int type_, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, double deltaX, double deltaY, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, double pivotPointX, double pivotPointY, double rotAngle, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, const QString& type, View* v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, const QPointF beforePoint, const QPointF afterPoint, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, double x1, double y1, double x2, double y2, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, const QString& text, Object* obj, Document* doc, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, double deltaX, double deltaY, const QString& text, Object* obj, Document* doc, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, double pivotPointX, double pivotPointY, double rotAngle, const QString& text, Object* obj, Document* doc, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, const QString& type, Document* doc, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, const QPointF beforePoint, const QPointF afterPoint, const QString& text, Object* obj, Document* doc, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, double x1, double y1, double x2, double y2, const QString& text, Object* obj, Document* doc, QUndoCommand* parent = 0);
 
     void undo();
     void redo();

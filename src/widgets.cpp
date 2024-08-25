@@ -195,15 +195,15 @@ contextMenuEvent(QObject* object, QContextMenuEvent *event)
         menu.addAction(action);
     }
     else if (object->objectName() == "StatusBarButtonLWT") {
-        View* gview = activeView();
-        if (gview) {
+        Document* doc = activeDocument();
+        if (doc) {
             QAction* enableRealAction = new QAction(create_icon("realrender"), "&RealRender On", &menu);
-            enableRealAction->setEnabled(!gview->isRealEnabled());
+            enableRealAction->setEnabled(!document_isRealEnabled(doc));
             QObject::connect(enableRealAction, &QAction::triggered, _main, enableReal);
             menu.addAction(enableRealAction);
 
             QAction* disableRealAction = new QAction(create_icon("realrender"), "&RealRender Off", &menu);
-            disableRealAction->setEnabled(gview->isRealEnabled());
+            disableRealAction->setEnabled(document_isRealEnabled(doc));
             QObject::connect(disableRealAction, &QAction::triggered, _main, disableReal);
             menu.addAction(disableRealAction);
         }
@@ -222,28 +222,28 @@ void
 statusbar_toggle(QString key, bool on)
 {
     debug_message("StatusBarButton toggleSnap()");
-    View* gview = activeView();
-    if (gview) {
+    Document* doc = activeDocument();
+    if (doc) {
         if (key == "SNAP") {
-            gview->toggleSnap(on);
+            document_toggleSnap(doc, on);
         }
         else if (key == "GRID") {
-            gview->toggleGrid(on);
+            document_toggleGrid(doc, on);
         }
         else if (key == "RULER") {
-            gview->toggleRuler(on);
+            document_toggleRuler(doc, on);
         }
         else if (key == "ORTHO") {
-            gview->toggleOrtho(on);
+            document_toggleOrtho(doc, on);
         }
         else if (key == "POLAR") {
-            gview->togglePolar(on);
+            document_togglePolar(doc, on);
         }
         else if (key == "QSNAP") {
-            gview->toggleQSnap(on);
+            document_toggleQSnap(doc, on);
         }
         else if (key == "LWT") {
-            gview->toggleLwt(on);
+            document_toggleLwt(doc, on);
         }
     }
 }
@@ -252,10 +252,10 @@ void
 enableLwt()
 {
     debug_message("StatusBarButton enableLwt()");
-    View* gview = activeView();
-    if (gview) {
-        if (!gview->isLwtEnabled()) {
-            gview->toggleLwt(true);
+    Document* doc = activeDocument();
+    if (doc) {
+        if (!document_isLwtEnabled(doc)) {
+            document_toggleLwt(doc, true);
         }
     }
 }
@@ -264,10 +264,10 @@ void
 disableLwt()
 {
     debug_message("StatusBarButton disableLwt()");
-    View* gview = activeView();
-    if (gview) {
-        if (gview->isLwtEnabled()) {
-            gview->toggleLwt(false);
+    Document* doc = activeDocument();
+    if (doc) {
+        if (document_isLwtEnabled(doc)) {
+            document_toggleLwt(doc, false);
         }
     }
 }
@@ -276,9 +276,9 @@ void
 enableReal()
 {
     debug_message("StatusBarButton enableReal()");
-    View* gview = activeView();
-    if (gview) {
-        gview->toggleReal(true);
+    Document* doc = activeDocument();
+    if (doc) {
+        document_toggleReal(doc, true);
     }
 }
 
@@ -286,9 +286,9 @@ void
 disableReal()
 {
     debug_message("StatusBarButton disableReal()");
-    View* gview = activeView();
-    if (gview) {
-        gview->toggleReal(false);
+    Document* doc = activeDocument();
+    if (doc) {
+        document_toggleReal(doc, false);
     }
 }
 
@@ -910,11 +910,8 @@ MdiArea::zoomExtentsAllSubWindows()
     foreach(QMdiSubWindow* window, subWindowList()) {
         Document* doc = qobject_cast<Document*>(window);
         if (doc) {
-            View* v = doc->data.gview;
-            if (v) {
-                v->recalculateLimits();
-                v->zoomExtents();
-            }
+            document_recalculateLimits(doc);
+            document_zoomExtents(doc);
         }
     }
 }
@@ -1216,49 +1213,49 @@ Document::updateColorLinetypeLineweight()
 void
 Document::deletePressed()
 {
-    data.gview->deletePressed();
+    document_deletePressed(this);
 }
 
 void
 Document::escapePressed()
 {
-    data.gview->escapePressed();
+    document_escapePressed(this);
 }
 
 void
 Document::showViewScrollBars(bool val)
 {
-    data.gview->showScrollBars(val);
+    document_showScrollBars(this, val);
 }
 
 void
 Document::setViewCrossHairColor(QRgb color)
 {
-    data.gview->setCrossHairColor(color);
+    document_setCrossHairColor(this, color);
 }
 
 void
 Document::setViewBackgroundColor(QRgb color)
 {
-    data.gview->setBackgroundColor(color);
+    document_setBackgroundColor(this, color);
 }
 
 void
 Document::setViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
 {
-    data.gview->setSelectBoxColors(colorL, fillL, colorR, fillR, alpha);
+    document_setSelectBoxColors(this, colorL, fillL, colorR, fillR, alpha);
 }
 
 void
 Document::setViewGridColor(QRgb color)
 {
-    data.gview->setGridColor(color);
+    document_setGridColor(this, color);
 }
 
 void
 Document::setViewRulerColor(QRgb color)
 {
-    data.gview->setRulerColor(color);
+    document_setRulerColor(this, color);
 }
 
 void

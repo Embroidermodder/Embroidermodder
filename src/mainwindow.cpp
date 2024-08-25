@@ -623,11 +623,8 @@ new_file(void)
     update_interface();
     windowMenuAboutToShow();
 
-    View* v = doc->data.gview;
-    if (v) {
-        v->recalculateLimits();
-        v->zoomExtents();
-    }
+    document_recalculateLimits(doc);
+    document_zoomExtents(doc);
 }
 
 /* . */
@@ -730,11 +727,8 @@ openFilesSelected(const QStringList& filesToOpen)
                 strcpy(opensave_recent_directory.setting,
                     qPrintable(QFileInfo(filesToOpen.at(i)).absolutePath()));
 
-                View* v = doc->data.gview;
-                if (v) {
-                    v->recalculateLimits();
-                    v->zoomExtents();
-                }
+                document_recalculateLimits(doc);
+                document_zoomExtents(doc);
             }
             else {
                 messagebox("error", "Failed to load file", "Failed to load file.");
