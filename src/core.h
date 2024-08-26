@@ -649,6 +649,8 @@ typedef struct WidgetData_ {
 ScriptEnv *create_script_env();
 void free_script_env(ScriptEnv *);
 
+extern char **xpm_icons[];
+
 ScriptValue script_bool(bool b);
 ScriptValue script_int(int i);
 ScriptValue script_real(double r);

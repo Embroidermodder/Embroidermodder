@@ -249,6 +249,57 @@ function analysis () {
 
 }
 
+function convert_to_xpm () {
+
+        folder="icons/default"
+
+	for file in assets/$folder/*
+	do
+		echo "Converting $file to xpm..."
+		stub=`basename $file`
+		outfile="src/xpm/$folder/${stub::-4}.xpm"
+		cfile="src/xpm/$folder/${stub::-4}.c"
+		convert $file $outfile
+		cat assets/copyright_message.txt $outfile > $cfile
+		rm $outfile
+	done
+
+	xpm_srcfile="src/xpm.c"
+
+	cat assets/copyright_message.txt > $xpm_srcfile
+
+	echo "#include <stddef.h>" >> $xpm_srcfile
+
+	for file in src/xpm/$folder/*
+	do
+		srcfile=`basename $file`
+		echo "#include \"xpm/$folder/$srcfile\"" >> $xpm_srcfile
+	done
+
+	echo "" >> $xpm_srcfile
+
+	echo "char **xpm_icons[] = {" >> $xpm_srcfile
+	for file in assets/$folder/*
+	do
+		stub=`basename $file`
+		echo "    ${stub::-4}," >> $xpm_srcfile
+	done
+	echo "    NULL" >> $xpm_srcfile
+	echo "};" >> $xpm_srcfile
+
+	echo "" >> $xpm_srcfile
+
+	echo "char *xpm_icon_labels[] = {" >> $xpm_srcfile
+	for file in assets/$folder/*
+	do
+		stub=`basename $file`
+		echo "    \"${stub::-4}\"," >> $xpm_srcfile
+	done
+	echo "    NULL" >> $xpm_srcfile
+	echo "};" >> $xpm_srcfile
+
+}
+
 if [[ "$#" -eq 0 ]]; then
 	help_message
 fi
@@ -256,6 +307,7 @@ fi
 for arg in $@
 do
   case "$1" in
+    --convert-xpm) convert_to_xpm;;
     -a) analysis;;
     -s | --style) code_style;;
     -G | --generator)

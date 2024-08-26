@@ -12,7 +12,8 @@
 
 #include "core.h"
 
-WidgetData render_hints[] = {
+WidgetData
+render_hints[] = {
     {
         .label = "Use OpenGL",
         .setting = &display_use_opengl,

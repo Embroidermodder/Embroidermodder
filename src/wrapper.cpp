@@ -85,14 +85,24 @@ emb_arc_set_radius(EmbArc arc, EmbReal radius)
     return arc;
 }
 
+extern char *xpm_icon_labels[];
+
 /* . */
 QIcon
 create_icon(QString icon)
 {
-    QString fname = qApp->applicationDirPath() + "/icons/";
-    fname += general_icon_theme.setting;
-    fname += "/" + icon + ".png";
-    return QIcon(fname);
+    int id = 0;
+    for (int i=0; ; i++) {
+        if (!xpm_icon_labels[i]) {
+            break;
+        }
+        if (!strcmp(qPrintable(icon), xpm_icon_labels[i])) {
+            id = i;
+            break;
+        }
+    }
+    QPixmap pixmap(xpm_icons[id]);
+    return QIcon(pixmap);
 }
 
 /* . */

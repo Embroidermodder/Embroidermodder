@@ -72,6 +72,7 @@ qt_add_executable(embroidermodder2
 	${SRC}/editor_data.c
 	${SRC}/settings_data.c
 	${SRC}/script.c
+	${SRC}/xpm.c
 
 	${SRC}/embroidermodder.h
 	${SRC}/core.h
@@ -89,6 +90,7 @@ add_executable(emb2_glfw
 	${SRC}/editor_data.c
 	${SRC}/settings_data.c
 	${SRC}/script.c
+	${SRC}/xpm.c
 
 	${SRC}/core.h
 )

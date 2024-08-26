@@ -474,26 +474,20 @@ document_createGridRect(Document* doc)
 void
 document_createGridPolar(Document* doc)
 {
-    double radSpacing = grid_spacing_radius.setting;
-    double angSpacing = grid_spacing_angle.setting;
-
     double rad = grid_size_radius.setting;
 
     doc->data.gridPath = QPainterPath();
     doc->data.gridPath.addEllipse(QPointF(0,0), rad, rad);
-    for (double r = 0; r < rad; r += radSpacing) {
+    for (double r = 0; r < rad; r += grid_spacing_radius.setting) {
         doc->data.gridPath.addEllipse(QPointF(0,0), r, r);
     }
-    for (double ang = 0; ang < 360; ang += angSpacing) {
+    for (double ang = 0; ang < 360; ang += grid_spacing_angle.setting) {
         doc->data.gridPath.moveTo(0,0);
         doc->data.gridPath.lineTo(QLineF::fromPolar(rad, ang).p2());
     }
 
-    double cx = grid_center_x.setting;
-    double cy = grid_center_y.setting;
-
     if (!grid_center_on_origin.setting) {
-        doc->data.gridPath.translate(cx, -cy);
+        doc->data.gridPath.translate(grid_center_x.setting, -grid_center_y.setting);
     }
 }
 
@@ -501,12 +495,9 @@ document_createGridPolar(Document* doc)
 void
 document_createGridIso(Document* doc)
 {
-    double xSpacing = grid_spacing_x.setting;
-    double ySpacing = grid_spacing_y.setting;
-
     /* Ensure the loop will work correctly with negative numbers. */
-    double isoW = qAbs(grid_size_x.setting);
-    double isoH = qAbs(grid_size_y.setting);
+    double isoW = fabs(grid_size_x.setting);
+    double isoH = fabs(grid_size_y.setting);
 
     QPointF p1 = QPointF(0,0);
     QPointF p2 = QLineF::fromPolar(isoW, 30).p2();
@@ -520,8 +511,8 @@ document_createGridIso(Document* doc)
     doc->data.gridPath.lineTo(p3);
     doc->data.gridPath.lineTo(p1);
 
-    for (double x = 0; x < isoW; x += xSpacing) {
-        for (double y = 0; y < isoH; y += ySpacing) {
+    for (double x = 0; x < isoW; x += grid_spacing_x.setting) {
+        for (double y = 0; y < isoH; y += grid_spacing_y.setting) {
             QPointF px = QLineF::fromPolar(x, 30).p2();
             QPointF py = QLineF::fromPolar(y, 150).p2();
 
@@ -533,19 +524,14 @@ document_createGridIso(Document* doc)
     }
 
     /* Center the Grid */
-
     QRectF gridRect = doc->data.gridPath.boundingRect();
-    /* bx is unused */
-    double by = -gridRect.height()/2.0;
-    double cx = grid_center_x.setting;
-    double cy = -grid_center_y.setting;
 
     if (grid_center_on_origin.setting) {
-        doc->data.gridPath.translate(0, -by);
+        doc->data.gridPath.translate(0, gridRect.height()/2.0);
     }
     else {
-        doc->data.gridPath.translate(0, -by);
-        doc->data.gridPath.translate(cx, cy);
+        doc->data.gridPath.translate(0, gridRect.height()/2.0);
+        doc->data.gridPath.translate(grid_center_x.setting, -grid_center_y.setting);
     }
 }
 
