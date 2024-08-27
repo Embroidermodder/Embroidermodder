@@ -273,46 +273,11 @@ Object::init_geometry(int type_, QRgb rgb, Qt::PenStyle lineType)
     debug_message("BaseObject Constructor()");
 
     setData(OBJ_TYPE, type());
-    switch (type_) {
-    case EMB_ARC:
-        setData(OBJ_NAME, OBJ_NAME_ARC);
-        break;
-    case EMB_CIRCLE:
-        setData(OBJ_NAME, OBJ_NAME_CIRCLE);
-        break;
-    case EMB_DIM_LEADER:
-        setData(OBJ_NAME, OBJ_NAME_DIMLEADER);
-        break;
-    case EMB_ELLIPSE:
-        setData(OBJ_NAME, OBJ_NAME_ELLIPSE);
-        break;
-    case EMB_IMAGE:
-        setData(OBJ_NAME, OBJ_NAME_IMAGE);
-        break;
-    case EMB_LINE:
-        setData(OBJ_NAME, OBJ_NAME_LINE);
-        break;
-    case EMB_POLYLINE:
-        setData(OBJ_NAME, OBJ_NAME_POLYLINE);
-        break;
-    case EMB_POLYGON:
-        setData(OBJ_NAME, OBJ_NAME_POLYGON);
-        break;
-    case EMB_POINT:
-        setData(OBJ_NAME, OBJ_NAME_POINT);
-        break;
-    case EMB_PATH:
-        setData(OBJ_NAME, OBJ_NAME_PATH);
-        break;
-    case EMB_RECT:
-        setData(OBJ_NAME, OBJ_NAME_RECTANGLE);
-        break;
-    case EMB_TEXT_SINGLE:
-        setData(OBJ_NAME, OBJ_NAME_TEXTSINGLE);
-        break;
-    default:
-        setData(OBJ_NAME, "UNKNOWN OBJECT");
-        break;
+    if (type_ < 30) {
+        data.OBJ_NAME = object_names[type_];
+    }
+    else {
+        data.OBJ_NAME = "Unknown";
     }
 
     data.objPen.setCapStyle(Qt::RoundCap);

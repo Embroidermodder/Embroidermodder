@@ -7,39 +7,6 @@
 #
 # Properties
 
-objectNames = [
-    "Arc",
-    "Block",
-    "Circle",
-    "Aligned Dimension",
-    "Angular Dimension",
-    "Arclength Dimension",
-    "Diameter Dimension",
-    "Leader Dimension",
-    "Linear Dimension",
-    "Ordinate Dimension",
-    "Radius Dimension",
-    "Ellipse",
-    "Elliptical Arc",
-    "Rubber",
-    "Grid",
-    "Hatch",
-    "Image",
-    "Infinite Line",
-    "Line",
-    "Path",
-    "Point",
-    "Polygon",
-    "Polyline",
-    "Ray",
-    "Rectangle",
-    "Slot",
-    "Spline",
-    "Multiline Text",
-    "Single Line Text",
-    "Unknown"
-]
-
 editor_list = [
     "ArcCenterX",
     "ArcCenterY",

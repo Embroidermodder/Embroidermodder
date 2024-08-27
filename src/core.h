@@ -24,10 +24,10 @@ extern "C" {
 
 #include "../extern/libembroidery/embroidery.h"
 
-#define REAL(i)             context->argument[i].r
-#define INT(i)              context->argument[i].i
-#define STR(i)              context->argument[i].s
-#define BOOL(i)             context->argument[i].b
+#define REAL(i)   context->argument[i].r
+#define INT(i)    context->argument[i].i
+#define STR(i)    context->argument[i].s
+#define BOOL(i)   context->argument[i].b
 
 #define MAX_ARGS                      10
 #define MAX_FILES                     30
@@ -80,192 +80,190 @@ extern "C" {
 #define DONT_END_COMMAND            0x20
 
 /* Key Sequence */
-#define CUT_SEQUENCE            0
-#define COPY_SEQUENCE           1
-#define PASTE_SEQUENCE          2
-#define SELECT_ALL_SEQUENCE     3
-#define UNDO_SEQUENCE           4
-#define REDO_SEQUENCE           5
-#define DELETE_KEY              6
-#define TAB_KEY                 7
-#define ESCAPE_KEY              8
-#define UP_KEY                  9
-#define DOWN_KEY               10
-#define SHIFT_KEY              11
-#define F1_KEY                 12
-#define F2_KEY                 13
-#define F3_KEY                 14
-#define F4_KEY                 15
-#define F5_KEY                 16
-#define F6_KEY                 17
-#define F7_KEY                 18
-#define F8_KEY                 19
-#define F9_KEY                 20
-#define F10_KEY                21
-#define F11_KEY                22
-#define F12_KEY                23
-#define N_KEY_SEQUENCES        24
+#define CUT_SEQUENCE                   0
+#define COPY_SEQUENCE                  1
+#define PASTE_SEQUENCE                 2
+#define SELECT_ALL_SEQUENCE            3
+#define UNDO_SEQUENCE                  4
+#define REDO_SEQUENCE                  5
+#define DELETE_KEY                     6
+#define TAB_KEY                        7
+#define ESCAPE_KEY                     8
+#define UP_KEY                         9
+#define DOWN_KEY                      10
+#define SHIFT_KEY                     11
+#define F1_KEY                        12
+#define F2_KEY                        13
+#define F3_KEY                        14
+#define F4_KEY                        15
+#define F5_KEY                        16
+#define F6_KEY                        17
+#define F7_KEY                        18
+#define F8_KEY                        19
+#define F9_KEY                        20
+#define F10_KEY                       21
+#define F11_KEY                       22
+#define F12_KEY                       23
+#define N_KEY_SEQUENCES               24
 
-enum COMMAND_ACTIONS
-{
-    ACTION_DO_NOTHING,
+/* Command Actions */
+#define ACTION_NULL                    0
+#define ACTION_DO_NOTHING              1
 
-    ACTION_NEW,
-    ACTION_OPEN,
-    ACTION_SAVE,
-    ACTION_SAVE_AS,
-    ACTION_PRINT,
-    ACTION_DESIGN_DETAILS,
-    ACTION_EXIT,
-    ACTION_CUT,
-    ACTION_COPY,
-    ACTION_COPY_SELECTED,
-    ACTION_PASTE,
-    ACTION_PASTE_SELECTED,
+#define ACTION_NEW                     2
+#define ACTION_OPEN                    3
+#define ACTION_SAVE                    4
+#define ACTION_SAVE_AS                 5
+#define ACTION_PRINT                   6
+#define ACTION_DESIGN_DETAILS          7
+#define ACTION_EXIT                    8
+#define ACTION_CUT                     9
+#define ACTION_COPY                   10
+#define ACTION_COPY_SELECTED          11
+#define ACTION_PASTE                  12
+#define ACTION_PASTE_SELECTED         13
 
-    ACTION_UNDO,
-    ACTION_REDO,
+#define ACTION_UNDO                   14
+#define ACTION_REDO                   15
 
-    /* Window Menu */
-    ACTION_WINDOW_CLOSE,
-    ACTION_WINDOW_CLOSE_ALL,
-    ACTION_WINDOW_CASCADE,
-    ACTION_WINDOW_TILE,
-    ACTION_WINDOW_NEXT,
-    ACTION_WINDOW_PREVIOUS,
+/* Window Menu */
+#define ACTION_WINDOW_CLOSE           16
+#define ACTION_WINDOW_CLOSE_ALL       17
+#define ACTION_WINDOW_CASCADE         18
+#define ACTION_WINDOW_TILE            19
+#define ACTION_WINDOW_NEXT            20
+#define ACTION_WINDOW_PREVIOUS        21
 
-    /* Help Menu */
-    ACTION_HELP,
-    ACTION_CHANGELOG,
-    ACTION_TIP_OF_THE_DAY,
-    ACTION_ABOUT,
-    ACTION_WHATS_THIS,
+/* Help Menu */
+#define ACTION_HELP                   22
+#define ACTION_CHANGELOG              23
+#define ACTION_TIP_OF_THE_DAY         24
+#define ACTION_ABOUT                  25
+#define ACTION_WHATS_THIS             26
 
-    /* Icons */
-    ACTION_ICON_16,
-    ACTION_ICON_24,
-    ACTION_ICON_32,
-    ACTION_ICON_48,
-    ACTION_ICON_64,
-    ACTION_ICON_128,
+/* Icons */
+#define ACTION_ICON_16                27
+#define ACTION_ICON_24                28
+#define ACTION_ICON_32                29
+#define ACTION_ICON_48                30
+#define ACTION_ICON_64                31
+#define ACTION_ICON_128               32
 
-    ACTION_SETTINGS_DIALOG,
+#define ACTION_SETTINGS_DIALOG        33
 
-    /* Layer ToolBar */
-    ACTION_MAKE_LAYER_CURRENT,
-    ACTION_LAYERS,
-    ACTION_LAYER_SELECTOR,
-    ACTION_LAYER_PREVIOUS,
-    ACTION_COLOR_SELECTOR,
-    ACTION_LINE_TYPE_SELECTOR,
-    ACTION_LINE_WEIGHT_SELECTOR,
-    ACTION_HIDE_ALL_LAYERS,
-    ACTION_SHOW_ALL_LAYERS,
-    ACTION_FREEZE_ALL_LAYERS,
-    ACTION_THAW_ALL_LAYERS,
-    ACTION_LOCK_ALL_LAYERS,
-    ACTION_UNLOCK_ALL_LAYERS,
+/* Layer ToolBar */
+#define ACTION_MAKE_LAYER_CURRENT     34
+#define ACTION_LAYERS                 35
+#define ACTION_LAYER_SELECTOR         36
+#define ACTION_LAYER_PREVIOUS         37
+#define ACTION_COLOR_SELECTOR         38
+#define ACTION_LINE_TYPE_SELECTOR     39
+#define ACTION_LINE_WEIGHT_SELECTOR   40
+#define ACTION_HIDE_ALL_LAYERS        41
+#define ACTION_SHOW_ALL_LAYERS        42
+#define ACTION_FREEZE_ALL_LAYERS      43
+#define ACTION_THAW_ALL_LAYERS        44
+#define ACTION_LOCK_ALL_LAYERS        45
+#define ACTION_UNLOCK_ALL_LAYERS      46
 
-    /* Text ToolBar */
-    ACTION_TEXT_BOLD,
-    ACTION_TEXT_ITALIC,
-    ACTION_TEXT_UNDERLINE,
-    ACTION_TEXT_STRIKEOUT,
-    ACTION_TEXT_OVERLINE,
+/* Text ToolBar */
+#define ACTION_TEXT_BOLD              47
+#define ACTION_TEXT_ITALIC            48
+#define ACTION_TEXT_UNDERLINE         49
+#define ACTION_TEXT_STRIKEOUT         50
+#define ACTION_TEXT_OVERLINE          51
 
-    /* Zoom ToolBar */
-    ACTION_ZOOM_REAL_TIME,
-    ACTION_ZOOM_PREVIOUS,
-    ACTION_ZOOM_WINDOW,
-    ACTION_ZOOM_DYNAMIC,
-    ACTION_ZOOM_SCALE,
-    ACTION_ZOOM_CENTER,
-    ACTION_ZOOM_IN,
-    ACTION_ZOOM_OUT,
-    ACTION_ZOOM_SELECTED,
-    ACTION_ZOOM_ALL,
-    ACTION_ZOOM_EXTENTS,
+/* Zoom ToolBar */
+#define ACTION_ZOOM_REAL_TIME         52
+#define ACTION_ZOOM_PREVIOUS          53
+#define ACTION_ZOOM_WINDOW            54
+#define ACTION_ZOOM_DYNAMIC           55
+#define ACTION_ZOOM_SCALE             56
+#define ACTION_ZOOM_CENTER            57
+#define ACTION_ZOOM_IN                58
+#define ACTION_ZOOM_OUT               59
+#define ACTION_ZOOM_SELECTED          60
+#define ACTION_ZOOM_ALL               61
+#define ACTION_ZOOM_EXTENTS           62
 
-    /* Pan SubMenu */
-    ACTION_PAN_REAL_TIME,
-    ACTION_PAN_POINT,
-    ACTION_PAN_LEFT,
-    ACTION_PAN_RIGHT,
-    ACTION_PAN_UP,
-    ACTION_PAN_DOWN,
+/* Pan SubMenu */
+#define ACTION_PAN_REAL_TIME          63
+#define ACTION_PAN_POINT              64
+#define ACTION_PAN_LEFT               65
+#define ACTION_PAN_RIGHT              66
+#define ACTION_PAN_UP                 67
+#define ACTION_PAN_DOWN               68
 
-    ACTION_DAY,
-    ACTION_NIGHT,
+#define ACTION_DAY                    69
+#define ACTION_NIGHT                  70
 
-    /* Prompt. */
-    ACTION_ALERT,
-    ACTION_GET,
-    ACTION_SET,
+/* Prompt. */
+#define ACTION_ALERT                  71
+#define ACTION_GET                    72
+#define ACTION_SET                    73
 
-    /* Selection management. */
-    ACTION_CLEAR,
+/* Selection management. */
+#define ACTION_CLEAR                  74
 
-    /* TODO: ACTION_spellcheck, */
-    /* TODO: ACTION_quickselect, */
+/* TODO: ACTION_spellcheck, */
+/* TODO: ACTION_quickselect, */
 
-    ACTION_ANGLE,
-    ACTION_CIRCLE,
-    ACTION_DEBUG,
-    ACTION_DIM_LEADER,
-    ACTION_DISABLE,
-    ACTION_DISTANCE,
-    ACTION_DOLPHIN,
-    ACTION_ELLIPSE,
-    ACTION_ENABLE,
-    ACTION_ERASE,
-    ACTION_ERROR,
-    ACTION_HEART,
-    ACTION_LINE,
-    ACTION_LOCATE_POINT,
-    ACTION_MIRROR_SELECTED,
-    ACTION_MOVE,
-    ACTION_MOVE_SELECTED,
-    ACTION_PATH,
-    ACTION_PLATFORM,
-    ACTION_POINT,
-    ACTION_POLYGON,
-    ACTION_POLYLINE,
-    ACTION_PREVIEW_OFF,
-    ACTION_PREVIEW_ON,
-    ACTION_QUICKLEADER,
-    ACTION_RECTANGLE,
-    ACTION_RGB,
-    ACTION_ROTATE,
-    ACTION_SANDBOX,
-    ACTION_SCALE,
-    ACTION_SCALE_SELECTED,
-    ACTION_SELECT_ALL,
-    ACTION_SINGLE_LINE_TEXT,
-    ACTION_SNOWFLAKE,
-    ACTION_STAR,
-    ACTION_SYSWINDOWS,
-    ACTION_TODO,
-    ACTION_VULCANIZE,
+#define ACTION_ANGLE                  75
+#define ACTION_CIRCLE                 76
+#define ACTION_DEBUG                  77
+#define ACTION_DIM_LEADER             78
+#define ACTION_DISABLE                79
+#define ACTION_DISTANCE               80
+#define ACTION_DOLPHIN                81
+#define ACTION_ELLIPSE                82
+#define ACTION_ENABLE                 83
+#define ACTION_ERASE                  84
+#define ACTION_ERROR                  85
+#define ACTION_HEART                  86
+#define ACTION_LINE                   87
+#define ACTION_LOCATE_POINT           88
+#define ACTION_MIRROR_SELECTED        89
+#define ACTION_MOVE                   90
+#define ACTION_MOVE_SELECTED          91
+#define ACTION_PATH                   92
+#define ACTION_PLATFORM               93
+#define ACTION_POINT                  94
+#define ACTION_POLYGON                95
+#define ACTION_POLYLINE               96
+#define ACTION_PREVIEW_OFF            97
+#define ACTION_PREVIEW_ON             98
+#define ACTION_QUICKLEADER            99
+#define ACTION_RECTANGLE             100
+#define ACTION_RGB                   101
+#define ACTION_ROTATE                102
+#define ACTION_SANDBOX               103
+#define ACTION_SCALE                 104
+#define ACTION_SCALE_SELECTED        105
+#define ACTION_SELECT_ALL            106
+#define ACTION_SINGLE_LINE_TEXT      107
+#define ACTION_SNOWFLAKE             108
+#define ACTION_STAR                  109
+#define ACTION_SYSWINDOWS            110
+#define ACTION_TODO                  111
+#define ACTION_VULCANIZE             112
 
-    ACTION_ADD,
-    ACTION_DELETE,
-    ACTION_GRIP_EDIT,
-    ACTION_NAV,
-    ACTION_MIRROR,
+#define ACTION_ADD                   113
+#define ACTION_DELETE                114
+#define ACTION_GRIP_EDIT             115
+#define ACTION_NAV                   116
+#define ACTION_MIRROR                117
 
-    ACTION_TEST,
+#define ACTION_TEST                  118
 
-    ACTION_NULL
-};
-
-#define CIRCLE_MODE_1P_RAD_ONE    0
-#define CIRCLE_MODE_1P_RAD_TWO    1
-#define CIRCLE_MODE_1P_DIA_ONE    2
-#define CIRCLE_MODE_1P_DIA_TWO    3
-#define CIRCLE_MODE_2P            4
-#define CIRCLE_MODE_3P            5
-#define CIRCLE_MODE_TTR           6
-#define CIRCLE_MODE_TTT           7
+/* UI Modes */
+#define CIRCLE_MODE_1P_RAD_ONE         0
+#define CIRCLE_MODE_1P_RAD_TWO         1
+#define CIRCLE_MODE_1P_DIA_ONE         2
+#define CIRCLE_MODE_1P_DIA_TWO         3
+#define CIRCLE_MODE_2P                 4
+#define CIRCLE_MODE_3P                 5
+#define CIRCLE_MODE_TTR                6
+#define CIRCLE_MODE_TTT                7
 
 #define ELLIPSE_MODE_MAJDIA_MINRAD_ONE     0
 #define ELLIPSE_MODE_MAJDIA_MINRAD_TWO     1
@@ -343,208 +341,170 @@ enum COMMAND_ACTIONS
  */
 
 /* Keys */
-enum OBJ_KEYS {
-    OBJ_TYPE = 0, /* value type - int: See OBJ_TYPE_VALUES */
-    OBJ_NAME = 1, /* value type - str: See OBJ_NAME_VALUES */
-    OBJ_LAYER = 2, /* value type - str: "USER", "DEFINED", "STRINGS", etc... */
-    OBJ_COLOR = 3, /* value type - int: 0-255 */ /* TODO: Use color chart in formats/format-dxf.h for this */
-    OBJ_LTYPE = 4, /* value type - int: See OBJ_LTYPE_VALUES */
-    OBJ_LWT = 5, /* value type - int: 0-27 */
-    OBJ_RUBBER = 6  /* value type - int: See OBJ_RUBBER_VALUES */
-};
+/* value type - int: See OBJ_TYPE_VALUES */
+#define OBJ_TYPE                       0
+/* value type - str: See OBJ_NAME_VALUES */
+//#define OBJ_NAME                       1
+/* value type - str: "USER", "DEFINED", "STRINGS" etc... */
+#define OBJ_LAYER                      2
+/* value type - int: 0-255 */
+/* TODO: Use color chart in formats/format-dxf.h for this */
+#define OBJ_COLOR                      3
+/* value type - int: See OBJ_LTYPE_VALUES */
+#define OBJ_LTYPE                      4
+/* value type - int: 0-27 */
+#define OBJ_LWT                        5
+/* value type - int: See OBJ_RUBBER_VALUES */
+#define OBJ_RUBBER                     6
 
 /* Values
  * NOTE: Allow this enum to evaluate false
  * NOTE: Values >= 65536 ensure compatibility with qgraphicsitem_cast()
  */
-enum OBJ_TYPE_VALUES {
-    OBJ_TYPE_NULL = 0,
-    OBJ_TYPE_BASE = 100000,
-    OBJ_TYPE_ARC = 100001,
-    OBJ_TYPE_BLOCK = 100002,
-    OBJ_TYPE_CIRCLE = 100003,
-    OBJ_TYPE_DIMALIGNED = 100004,
-    OBJ_TYPE_DIMANGULAR = 100005,
-    OBJ_TYPE_DIMARCLENGTH = 100006,
-    OBJ_TYPE_DIMDIAMETER = 100007,
-    OBJ_TYPE_DIMLEADER = 100008,
-    OBJ_TYPE_DIMLINEAR = 100009,
-    OBJ_TYPE_DIMORDINATE = 100010,
-    OBJ_TYPE_DIMRADIUS = 100011,
-    OBJ_TYPE_ELLIPSE = 100012,
-    OBJ_TYPE_ELLIPSEARC = 100013,
-    OBJ_TYPE_RUBBER = 100014,
-    OBJ_TYPE_GRID = 100015,
-    OBJ_TYPE_HATCH = 100016,
-    OBJ_TYPE_IMAGE = 100017,
-    OBJ_TYPE_INFINITELINE = 100018,
-    OBJ_TYPE_LINE = 100019,
-    OBJ_TYPE_PATH = 100020,
-    OBJ_TYPE_POINT = 100021,
-    OBJ_TYPE_POLYGON = 100022,
-    OBJ_TYPE_POLYLINE = 100023,
-    OBJ_TYPE_RAY = 100024,
-    OBJ_TYPE_RECTANGLE = 100025,
-    OBJ_TYPE_SLOT = 100026,
-    OBJ_TYPE_SPLINE = 100027,
-    OBJ_TYPE_TEXTMULTI = 100028,
-    OBJ_TYPE_TEXTSINGLE = 100029,
-    OBJ_TYPE_UNKNOWN = 100029
-};
+#define OBJ_TYPE_NULL                  0
+#define OBJ_TYPE_BASE             100000
+#define OBJ_TYPE_ARC              100001
+#define OBJ_TYPE_BLOCK            100002
+#define OBJ_TYPE_CIRCLE           100003
+#define OBJ_TYPE_DIMALIGNED       100004
+#define OBJ_TYPE_DIMANGULAR       100005
+#define OBJ_TYPE_DIMARCLENGTH     100006
+#define OBJ_TYPE_DIMDIAMETER      100007
+#define OBJ_TYPE_DIMLEADER        100008
+#define OBJ_TYPE_DIMLINEAR        100009
+#define OBJ_TYPE_DIMORDINATE      100010
+#define OBJ_TYPE_DIMRADIUS        100011
+#define OBJ_TYPE_ELLIPSE          100012
+#define OBJ_TYPE_ELLIPSEARC       100013
+#define OBJ_TYPE_RUBBER           100014
+#define OBJ_TYPE_GRID             100015
+#define OBJ_TYPE_HATCH            100016
+#define OBJ_TYPE_IMAGE            100017
+#define OBJ_TYPE_INFINITELINE     100018
+#define OBJ_TYPE_LINE             100019
+#define OBJ_TYPE_PATH             100020
+#define OBJ_TYPE_POINT            100021
+#define OBJ_TYPE_POLYGON          100022
+#define OBJ_TYPE_POLYLINE         100023
+#define OBJ_TYPE_RAY              100024
+#define OBJ_TYPE_RECTANGLE        100025
+#define OBJ_TYPE_SLOT             100026
+#define OBJ_TYPE_SPLINE           100027
+#define OBJ_TYPE_TEXTMULTI        100028
+#define OBJ_TYPE_TEXTSINGLE       100029
+#define OBJ_TYPE_UNKNOWN          100030
 
-/* OBJ_NAME_VALUES */
-#define OBJ_NAME_NULL          "Unknown"
-#define OBJ_NAME_BASE          "Base"
-#define OBJ_NAME_ARC           "Arc"
-#define OBJ_NAME_BLOCK         "Block"
-#define OBJ_NAME_CIRCLE        "Circle"
-#define OBJ_NAME_DIMALIGNED    "Aligned Dimension"
-#define OBJ_NAME_DIMANGULAR    "Angular Dimension"
-#define OBJ_NAME_DIMARCLENGTH  "Arc Length Dimension"
-#define OBJ_NAME_DIMDIAMETER   "Diameter Dimension"
-#define OBJ_NAME_DIMLEADER     "Leader Dimension"
-#define OBJ_NAME_DIMLINEAR     "Linear Dimension"
-#define OBJ_NAME_DIMORDINATE   "Ordinate Dimension"
-#define OBJ_NAME_DIMRADIUS     "Radius Dimension"
-#define OBJ_NAME_ELLIPSE       "Ellipse"
-#define OBJ_NAME_ELLIPSEARC    "Elliptical Arc"
-#define OBJ_NAME_RUBBER        "Rubber"
-#define OBJ_NAME_GRID          "Grid"
-#define OBJ_NAME_HATCH         "Hatch"
-#define OBJ_NAME_IMAGE         "Image"
-#define OBJ_NAME_INFINITELINE  "Infinite Line"
-#define OBJ_NAME_LINE          "Line"
-#define OBJ_NAME_PATH          "Path"
-#define OBJ_NAME_POINT         "Point"
-#define OBJ_NAME_POLYGON       "Polygon"
-#define OBJ_NAME_POLYLINE      "Polyline"
-#define OBJ_NAME_RAY           "Ray"
-#define OBJ_NAME_RECTANGLE     "Rectangle"
-#define OBJ_NAME_SLOT          "Slot"
-#define OBJ_NAME_SPLINE        "Spline"
-#define OBJ_NAME_TEXTMULTI     "Multi Line Text"
-#define OBJ_NAME_TEXTSINGLE    "Single Line Text"
+/* OBJ_LTYPE_VALUES */
+/* CAD Linetypes */
+#define OBJ_LTYPE_CONT                 0
+#define OBJ_LTYPE_CENTER               1
+#define OBJ_LTYPE_DOT                  2
+#define OBJ_LTYPE_HIDDEN               3
+#define OBJ_LTYPE_PHANTOM              4
+#define OBJ_LTYPE_ZIGZAG               5
+/* Embroidery Stitchtypes */
+/* __________ */
+#define OBJ_LTYPE_RUNNING              6
+/* vvvvvvvvvv */
+#define OBJ_LTYPE_SATIN                7
+/* >>>>>>>>>> */
+#define OBJ_LTYPE_FISHBONE             8
 
-enum OBJ_LTYPE_VALUES {
-    /* CAD Linetypes */
-    OBJ_LTYPE_CONT = 0,
-    OBJ_LTYPE_CENTER = 1,
-    OBJ_LTYPE_DOT = 2,
-    OBJ_LTYPE_HIDDEN = 3,
-    OBJ_LTYPE_PHANTOM = 4,
-    OBJ_LTYPE_ZIGZAG = 5,
-    /* Embroidery Stitchtypes */
-    OBJ_LTYPE_RUNNING = 6, /* __________ */
-    OBJ_LTYPE_SATIN = 7, /* vvvvvvvvvv */
-    OBJ_LTYPE_FISHBONE = 8, /* >>>>>>>>>> */
-};
+/* OBJ_LWT_VALUES */
+#define OBJ_LWT_BYLAYER               -2
+#define OBJ_LWT_BYBLOCK               -1
+#define OBJ_LWT_DEFAULT                0
+#define OBJ_LWT_01                     1
+#define OBJ_LWT_02                     2
+#define OBJ_LWT_03                     3
+#define OBJ_LWT_04                     4
+#define OBJ_LWT_05                     5
+#define OBJ_LWT_06                     6
+#define OBJ_LWT_07                     7
+#define OBJ_LWT_08                     8
+#define OBJ_LWT_09                     9
+#define OBJ_LWT_10                    10
+#define OBJ_LWT_11                    11
+#define OBJ_LWT_12                    12
+#define OBJ_LWT_13                    13
+#define OBJ_LWT_14                    14
+#define OBJ_LWT_15                    15
+#define OBJ_LWT_16                    16
+#define OBJ_LWT_17                    17
+#define OBJ_LWT_18                    18
+#define OBJ_LWT_19                    19
+#define OBJ_LWT_20                    20
+#define OBJ_LWT_21                    21
+#define OBJ_LWT_22                    22
+#define OBJ_LWT_23                    23
+#define OBJ_LWT_24                    24
 
-enum OBJ_LWT_VALUES {
-    OBJ_LWT_BYLAYER = -2,
-    OBJ_LWT_BYBLOCK = -1,
-    OBJ_LWT_DEFAULT = 0,
-    OBJ_LWT_01 = 1,
-    OBJ_LWT_02 = 2,
-    OBJ_LWT_03 = 3,
-    OBJ_LWT_04 = 4,
-    OBJ_LWT_05 = 5,
-    OBJ_LWT_06 = 6,
-    OBJ_LWT_07 = 7,
-    OBJ_LWT_08 = 8,
-    OBJ_LWT_09 = 9,
-    OBJ_LWT_10 = 10,
-    OBJ_LWT_11 = 11,
-    OBJ_LWT_12 = 12,
-    OBJ_LWT_13 = 13,
-    OBJ_LWT_14 = 14,
-    OBJ_LWT_15 = 15,
-    OBJ_LWT_16 = 16,
-    OBJ_LWT_17 = 17,
-    OBJ_LWT_18 = 18,
-    OBJ_LWT_19 = 19,
-    OBJ_LWT_20 = 20,
-    OBJ_LWT_21 = 21,
-    OBJ_LWT_22 = 22,
-    OBJ_LWT_23 = 23,
-    OBJ_LWT_24 = 24
-};
-
-/* NOTE: Allow this enum to evaluate false */
-enum OBJ_SNAP_VALUES {
-    OBJ_SNAP_NULL = 0,
-    OBJ_SNAP_ENDPOINT = 1,
-    OBJ_SNAP_MIDPOINT = 2,
-    OBJ_SNAP_CENTER = 3,
-    OBJ_SNAP_NODE = 4,
-    OBJ_SNAP_QUADRANT = 5,
-    OBJ_SNAP_INTERSECTION = 6,
-    OBJ_SNAP_EXTENSION = 7,
-    OBJ_SNAP_INSERTION = 8,
-    OBJ_SNAP_PERPENDICULAR = 9,
-    OBJ_SNAP_TANGENT = 10,
-    OBJ_SNAP_NEAREST = 11,
-    OBJ_SNAP_APPINTERSECTION = 12,
-    OBJ_SNAP_PARALLEL = 13
-};
+/* OBJ_SNAP_VALUES NOTE: Allow this enum to evaluate false */
+#define OBJ_SNAP_NULL                  0
+#define OBJ_SNAP_ENDPOINT              1
+#define OBJ_SNAP_MIDPOINT              2
+#define OBJ_SNAP_CENTER                3
+#define OBJ_SNAP_NODE                  4
+#define OBJ_SNAP_QUADRANT              5
+#define OBJ_SNAP_INTERSECTION          6
+#define OBJ_SNAP_EXTENSION             7
+#define OBJ_SNAP_INSERTION             8
+#define OBJ_SNAP_PERPENDICULAR         9
+#define OBJ_SNAP_TANGENT              10
+#define OBJ_SNAP_NEAREST              11
+#define OBJ_SNAP_APPINTERSECTION      12
+#define OBJ_SNAP_PARALLEL             13
 
 /* NOTE: Allow this enum to evaluate true and false */
-enum OBJ_RUBBER_VALUES {
-    OBJ_RUBBER_OFF = 0,
-    OBJ_RUBBER_ON = 1,
+#define OBJ_RUBBER_OFF                 0
+#define OBJ_RUBBER_ON                  1
 
-    OBJ_RUBBER_CIRCLE_1P_RAD,
-    OBJ_RUBBER_CIRCLE_1P_DIA,
-    OBJ_RUBBER_CIRCLE_2P,
-    OBJ_RUBBER_CIRCLE_3P,
-    OBJ_RUBBER_CIRCLE_TTR,
-    OBJ_RUBBER_CIRCLE_TTT,
+#define OBJ_RUBBER_CIRCLE_1P_RAD       2
+#define OBJ_RUBBER_CIRCLE_1P_DIA       3
+#define OBJ_RUBBER_CIRCLE_2P           4
+#define OBJ_RUBBER_CIRCLE_3P           5
+#define OBJ_RUBBER_CIRCLE_TTR          6
+#define OBJ_RUBBER_CIRCLE_TTT          7
 
-    OBJ_RUBBER_DIMLEADER_LINE,
+#define OBJ_RUBBER_DIMLEADER_LINE      8
 
-    OBJ_RUBBER_ELLIPSE_LINE,
-    OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS,
-    OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS,
-    OBJ_RUBBER_ELLIPSE_ROTATION,
+#define OBJ_RUBBER_ELLIPSE_LINE        9
+#define OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS 10
+#define OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS 11
+#define OBJ_RUBBER_ELLIPSE_ROTATION   12
 
-    OBJ_RUBBER_GRIP,
+#define OBJ_RUBBER_GRIP               13
 
-    OBJ_RUBBER_LINE,
+#define OBJ_RUBBER_LINE               14
 
-    OBJ_RUBBER_POLYGON,
-    OBJ_RUBBER_POLYGON_INSCRIBE,
-    OBJ_RUBBER_POLYGON_CIRCUMSCRIBE,
+#define OBJ_RUBBER_POLYGON            15
+#define OBJ_RUBBER_POLYGON_INSCRIBE   16
+#define OBJ_RUBBER_POLYGON_CIRCUMSCRIBE 17
 
-    OBJ_RUBBER_POLYLINE,
+#define OBJ_RUBBER_POLYLINE           18
 
-    OBJ_RUBBER_IMAGE,
+#define OBJ_RUBBER_IMAGE              19
 
-    OBJ_RUBBER_RECTANGLE,
+#define OBJ_RUBBER_RECTANGLE          20
 
-    OBJ_RUBBER_TEXTSINGLE
-};
+#define OBJ_RUBBER_TEXTSINGLE         21
 
 /* NOTE: Allow this enum to evaluate false */
-enum SPARE_RUBBER_VALUES {
-    SPARE_RUBBER_OFF = 0,
-    SPARE_RUBBER_PATH,
-    SPARE_RUBBER_POLYGON,
-    SPARE_RUBBER_POLYLINE
-};
+#define SPARE_RUBBER_OFF               0
+#define SPARE_RUBBER_PATH              1
+#define SPARE_RUBBER_POLYGON           2
+#define SPARE_RUBBER_POLYLINE          3
 
 /* NOTE: Allow this enum to evaluate false */
-enum PREVIEW_CLONE_VALUES {
-    PREVIEW_CLONE_NULL = 0,
-    PREVIEW_CLONE_SELECTED,
-    PREVIEW_CLONE_RUBBER
-};
+#define PREVIEW_CLONE_NULL             0
+#define PREVIEW_CLONE_SELECTED         1
+#define PREVIEW_CLONE_RUBBER           2
 
 /* NOTE: Allow this enum to evaluate false */
-enum PREVIEW_MODE_VALUES {
-    PREVIEW_MODE_NULL = 0,
-    PREVIEW_MODE_MOVE,
-    PREVIEW_MODE_ROTATE,
-    PREVIEW_MODE_SCALE
-};
+#define PREVIEW_MODE_NULL              0
+#define PREVIEW_MODE_MOVE              1
+#define PREVIEW_MODE_ROTATE            2
+#define PREVIEW_MODE_SCALE             3
 
 typedef struct ScriptValue_ {
     double r;
@@ -682,8 +642,6 @@ int parse_floats(char *line, float result[], int n);
 int parse_vector(char *line, EmbVector *v);
 bool validRGB(float r, float g, float b);
 void reportDistance(EmbVector a, EmbVector b);
-
-void add_to_toolbar(const char *toolbar_name, const char *toolbar_data);
 
 int load_data(void);
 
@@ -865,6 +823,39 @@ extern const char *_appName_;
 extern const char *_appVer_;
 
 extern WidgetData render_hints[];
+
+extern const char *coverage_test[];
+extern const char *object_names[];
+
+extern char *menubar_full_list[];
+extern char *menubar_no_docs[];
+
+extern char *file_menu[];
+extern char *edit_menu[];
+extern char *view_menu[];
+extern char *zoom_menu[];
+extern char *pan_menu[];
+extern char *help_menu[];
+extern char *draw_menu[];
+extern char *tools_menu[];
+extern char *modify_menu[];
+extern char *dimension_menu[];
+extern char *sandbox_menu[];
+
+extern char *toolbars_when_docs[];
+
+extern char *file_toolbar[];
+extern char *edit_toolbar[];
+extern char *view_toolbar[];
+extern char *zoom_toolbar[];
+extern char *pan_toolbar[] ;
+extern char *icon_toolbar[];
+extern char *help_toolbar[];
+extern char *draw_toolbar[];
+extern char *inquiry_toolbar[];
+extern char *modify_toolbar[];
+extern char *dimension_toolbar[];
+extern char *sandbox_toolbar[];
 
 extern int numOfDocs;
 extern int docIndex;

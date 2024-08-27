@@ -835,19 +835,6 @@ load_data(void)
 {
     int i;
     /* load manifest */
-    if (!load_file("data/toolbars.toml")) {
-        printf("ERROR: failed to load file %s\n", "data/toolbars.toml");
-        return 0;
-    }
-    if (!load_file("data/testing.toml")) {
-        return 0;
-    }
-    if (!load_file("data/commands.toml")) {
-        return 0;
-    }
-    if (!load_file("data/menus.toml")) {
-        return 0;
-    }
     if (!load_file("data/settings.toml")) {
         return 0;
     }

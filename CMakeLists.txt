@@ -51,6 +51,16 @@ set(SRC_ASSETS ${CMAKE_SOURCE_DIR}/assets)
 set(SRC ${CMAKE_SOURCE_DIR}/src)
 set(EXTERN ${CMAKE_SOURCE_DIR}/extern)
 
+set(C_DATA
+	${SRC}/data/commands.c
+	${SRC}/data/editors.c
+	${SRC}/data/settings.c
+	${SRC}/data/objects.c
+	${SRC}/data/testing.c
+	${SRC}/data/toolbars.c
+	${SRC}/data/menus.c
+)
+
 qt_add_executable(embroidermodder2
 	${EXTERN}/libembroidery/embroidery.c
 	${EXTERN}/libembroidery/embroidery.h
@@ -66,11 +76,11 @@ qt_add_executable(embroidermodder2
 	${SRC}/view.cpp
 	${SRC}/widgets.cpp
 	${SRC}/wrapper.cpp
-	${SRC}/data.cpp
 
-	${SRC}/command_data.c
-	${SRC}/editor_data.c
-	${SRC}/settings_data.c
+	${SRC}/data/qt.cpp
+
+	${C_DATA}
+
 	${SRC}/script.c
 
 	${SRC}/embroidermodder.h
@@ -84,10 +94,9 @@ add_executable(emb2_glfw
 	${EXTERN}/tomlc99/toml.c
 	${EXTERN}/tomlc99/toml.h
 
+	${C_DATA}
+
 	${SRC}/main_glfw.c
-	${SRC}/command_data.c
-	${SRC}/editor_data.c
-	${SRC}/settings_data.c
 	${SRC}/script.c
 
 	${SRC}/core.h

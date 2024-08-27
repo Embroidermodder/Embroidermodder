@@ -338,7 +338,6 @@ void nativeAddImage(std::string img, double x, double y, double w, double h, dou
 void nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
 
 QAction *get_action_by_icon(const char *icon);
-void add_to_menu(QMenu *menu, const char *menu_data[]);
 
 EmbVector to_emb_vector(QPointF p);
 QPointF to_qpointf(EmbVector v);

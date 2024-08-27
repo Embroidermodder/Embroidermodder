@@ -12,6 +12,9 @@
 
 #include "embroidermodder.h"
 
+void add_to_menu(QMenu *menu, char *menu_data[]);
+void add_to_toolbar(const char *toolbar_name, char *toolbar_data[]);
+
 QMenuBar *menuBar()
 {
     return _main->menuBar();
@@ -77,10 +80,11 @@ run_testing(void)
 {
     int i;
     std::this_thread::sleep_for (std::chrono::milliseconds(2000));
-    int n = string_array_length("coverage_test");
-    int start = get_state_variable("coverage_test");
-    for (i=0; i<n; i++) {
-        QString cmd(state[start+i].s);
+    for (i=0; ; i++) {
+        if (!strcmp(coverage_test[i], "END")) {
+            break;
+        }
+        QString cmd(coverage_test[i]);
         _main->runCommandMain(cmd);
         std::this_thread::sleep_for (std::chrono::milliseconds(1000));
     }        
@@ -291,13 +295,13 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     debug_message("MainWindow createAllToolbars()");
 
-    add_to_toolbar("File", "file_toolbar");
-    add_to_toolbar("Edit", "edit_toolbar");
-    add_to_toolbar("Zoom", "zoom_toolbar");
-    add_to_toolbar("Pan", "pan_toolbar");
-    add_to_toolbar("View", "view_toolbar");
-    add_to_toolbar("Icon", "icon_toolbar");
-    add_to_toolbar("Help", "help_toolbar");
+    add_to_toolbar("File", file_toolbar);
+    add_to_toolbar("Edit", edit_toolbar);
+    add_to_toolbar("Zoom", zoom_toolbar);
+    add_to_toolbar("Pan", pan_toolbar);
+    add_to_toolbar("View", view_toolbar);
+    add_to_toolbar("Icon", icon_toolbar);
+    add_to_toolbar("Help", help_toolbar);
 
     debug_message("MainWindow createLayerToolbar()");
 
@@ -438,8 +442,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     toolbarHash["Prompt"]->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
     connect(toolbarHash["Prompt"], SIGNAL(topLevelChanged(bool)), prompt, SLOT(floatingChanged(bool)));
 
-    add_to_toolbar("Draw", "draw_toolbar");
-    add_to_toolbar("Modify", "modify_toolbar");
+    add_to_toolbar("Draw", draw_toolbar);
+    add_to_toolbar("Modify", modify_toolbar);
 
     /* Horizontal */
     toolbarHash["View"]->setOrientation(Qt::Horizontal);
@@ -887,10 +891,11 @@ update_interface()
 
     if (numOfDocs) {
         /* Toolbars */
-        int start = get_state_variable("toolbars_when_docs");
-        int n = string_array_length("toolbars_when_docs");
-        for (int i=0; i<n; i++) {
-            QString s(state[start+i].s);
+        for (int i=0; ; i++) {
+            if (!strcmp(toolbars_when_docs[i], "END")) {
+                break;
+            }
+            QString s(toolbars_when_docs[i]);
             toolbarHash[s]->show();
         }
 
@@ -900,10 +905,11 @@ update_interface()
 
         /* Menus */
         menuBar()->clear();
-        start = get_state_variable("menubar_full_list");
-        n = string_array_length("menubar_full_list");
-        for (int i=0; i<n; i++) {
-            QString s(state[start+i].s);
+        for (int i=0; ; i++) {
+            if (!strcmp(menubar_full_list[i], "END")) {
+                break;
+            }
+            QString s(menubar_full_list[i]);
             menuBar()->addMenu(menuHash[s]);
         }
         menuHash["Window"]->setEnabled(true);
@@ -922,10 +928,11 @@ update_interface()
     }
     else {
         /* Toolbars */
-        int n = string_array_length("toolbars_when_docs");
-        int start = get_state_variable("toolbars_when_docs");
-        for (int i=0; i<n; i++) {
-            QString s(state[start+i].s);
+        for (int i=0; ; i++) {
+            if (!strcmp(toolbars_when_docs[i], "END")) {
+                break;
+            }
+            QString s(toolbars_when_docs[i]);
             toolbarHash[s]->hide();
         }
 
@@ -935,10 +942,11 @@ update_interface()
 
         /* Menus */
         menuBar()->clear();
-        start = get_state_variable("menubar_no_docs");
-        n = string_array_length("menubar_no_docs");
-        for (int i=0; i<n; i++) {
-            QString s(state[start+i].s);
+        for (int i=0; ; i++) {
+            if (!strcmp(menubar_no_docs[i], "END")) {
+                break;
+            }
+            QString s(menubar_no_docs[i]);
             menuBar()->addMenu(menuHash[s]);
         }
         menuHash["Window"]->setEnabled(false);
@@ -1100,12 +1108,13 @@ get_action_by_icon(const char *icon)
 
 /* . */
 void
-add_to_menu(QMenu *menu, const char *menu_data)
+add_to_menu(QMenu *menu, char *menu_data[])
 {
-    int n = string_array_length(menu_data);
-    int start = get_state_variable(menu_data);
-    for (int i=0; i<n; i++) {
-        char *s = state[start+i].s;
+    for (int i=0; ; i++) {
+        if (!strcmp(menu_data[i], "END")) {
+            break;
+        }
+        char *s = menu_data[i];
         if (s[0] == '-') {
             menu->addSeparator();
         }
@@ -1160,29 +1169,29 @@ MainWindow::createAllMenus()
     menuHash["File"]->setTearOffEnabled(false);
 
     menuBar()->addMenu(menuHash["Edit"]);
-    add_to_menu(menuHash["Edit"], "edit_menu");
+    add_to_menu(menuHash["Edit"], edit_menu);
     menuHash["Edit"]->addSeparator();
     menuHash["Edit"]->addAction(actionHash[ACTION_SETTINGS_DIALOG]);
 
     menuBar()->addMenu(menuHash["View"]);
-    add_to_menu(menuHash["View"], "view_menu");
-    add_to_menu(menuHash["Zoom"], "zoom_menu");
-    add_to_menu(menuHash["Pan"], "pan_menu");
+    add_to_menu(menuHash["View"], view_menu);
+    add_to_menu(menuHash["Zoom"], zoom_menu);
+    add_to_menu(menuHash["Pan"], pan_menu);
 
     menuBar()->addMenu(menuHash["Tools"]);
-    add_to_menu(menuHash["Tools"], "tools_menu");
+    add_to_menu(menuHash["Tools"], tools_menu);
 
     menuBar()->addMenu(menuHash["Draw"]);
-    add_to_menu(menuHash["Draw"], "draw_menu");
+    add_to_menu(menuHash["Draw"], draw_menu);
 
     menuBar()->addMenu(menuHash["Dimension"]);
-    add_to_menu(menuHash["Dimension"], "dimension_menu");
+    add_to_menu(menuHash["Dimension"], dimension_menu);
 
     menuBar()->addMenu(menuHash["Modify"]);
-    add_to_menu(menuHash["Modify"], "modify_menu");
+    add_to_menu(menuHash["Modify"], modify_menu);
 
     menuBar()->addMenu(menuHash["Sandbox"]);
-    add_to_menu(menuHash["Sandbox"], "sandbox_menu");
+    add_to_menu(menuHash["Sandbox"], sandbox_menu);
 
     menuBar()->addMenu(menuHash["Window"]);
     connect(menuHash["Window"], SIGNAL(aboutToShow()), this, SLOT(windowMenuAboutToShow()));
@@ -1190,7 +1199,7 @@ MainWindow::createAllMenus()
     menuHash["Window"]->setTearOffEnabled(false);
 
     menuBar()->addMenu(menuHash["Help"]);
-    add_to_menu(menuHash["Help"], "help_menu");
+    add_to_menu(menuHash["Help"], help_menu);
 }
 
 /* Note: on Unix we include the trailing separator. For Windows compatibility we
@@ -1430,19 +1439,20 @@ MainWindow::settingsDialog(const QString& showTab)
 
 /* . */
 void
-add_to_toolbar(const char *toolbar_name, const char *toolbar_data)
+add_to_toolbar(const char *toolbar_name, char *toolbar_data[])
 {
     QString s(toolbar_name);
     toolbarHash[s]->setObjectName("toolbar" + s);
 
-    int n = string_array_length(toolbar_data);
-    int start = get_state_variable(toolbar_data);
-    for (int i=0; i<n; i++) {
-        if (state[start+i].s[0] == '-') {
+    for (int i=0; ; i++) {
+        if (!strcmp(toolbar_data[i], "END")) {
+            break;
+        }
+        if (toolbar_data[i][0] == '-') {
             toolbarHash[s]->addSeparator();
         }
         else {
-            QAction *action = get_action_by_icon(state[start+i].s);
+            QAction *action = get_action_by_icon(toolbar_data[i]);
             toolbarHash[s]->addAction(action);
         }
     }
