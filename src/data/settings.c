@@ -50,3 +50,116 @@ WidgetData render_hints[] = {
     }
 };
 
+char *extensions[] = {
+    "100",
+    "10o",
+    "ART",
+    "BMC",
+    "BRO",
+    "CND",
+    "COL",
+    "CSD",
+    "CSV",
+    "DAT",
+    "DEM",
+    "DSB",
+    "DST",
+    "DSZ",
+    "DXF",
+    "EDR",
+    "EMD",
+    "EXP",
+    "EXY",
+    "EYS",
+    "FXY",
+    "GNC",
+    "GT",
+    "HUS",
+    "INB",
+    "JEF",
+    "KSM",
+    "PCD",
+    "PCM",
+    "PCQ",
+    "PCS",
+    "PEC",
+    "PEL",
+    "PEM",
+    "PES",
+    "PHB",
+    "PHC",
+    "RGB",
+    "SEW",
+    "SHV",
+    "SST",
+    "STX",
+    "SVG",
+    "T09",
+    "TAP",
+    "THR",
+    "TXT",
+    "U00",
+    "U01",
+    "VIP",
+    "VP3",
+    "XXX",
+    "ZSK",
+    "END"
+};
+
+char *grid_load_from_file_group[] = {
+    "labelGridType",
+    "comboBoxGridType",
+    "checkBoxGridCenterOnOrigin",
+    "labelGridSpacingX",
+    "spinBoxGridSpacingX",
+    "labelGridSpacingY",
+    "spinBoxGridSpacingY",
+    "labelGridSizeRadius",
+    "spinBoxGridSizeRadius",
+    "labelGridSpacingRadius",
+    "spinBoxGridSpacingRadius",
+    "labelGridSpacingAngle",
+    "spinBoxGridSpacingAngle",
+    "END"
+};
+
+char *defined_origin_group[] = {
+    "labelGridCenterX",
+    "spinBoxGridCenterX",
+    "labelGridCenterY",
+    "spinBoxGridCenterY",
+    "labelGridSizeX",
+    "spinBoxGridSizeX",
+    "labelGridSizeY",
+    "spinBoxGridSizeY",
+    "END"
+};
+
+char *rectangular_grid_group[] = {
+    "labelGridSizeX",
+    "spinBoxGridSizeX",
+    "labelGridSizeY",
+    "spinBoxGridSizeY",
+    "labelGridSpacingX",
+    "spinBoxGridSpacingX",
+    "labelGridSpacingY",
+    "spinBoxGridSpacingY",
+    "END"
+};
+
+char *circular_grid_group[] = {
+    "labelGridSizeRadius",
+    "spinBoxGridSizeRadius",
+    "labelGridSpacingRadius",
+    "spinBoxGridSpacingRadius",
+    "labelGridSpacingAngle",
+    "spinBoxGridSpacingAngle",
+    "END"
+};
+
+/* FIXME:. */
+char *center_on_origin_group[] = {
+    "END"
+};
+

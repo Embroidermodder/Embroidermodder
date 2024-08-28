@@ -538,10 +538,11 @@ QWidget* Settings_Dialog::createTabOpenSave()
     connect(buttonCustomFilterClearAll, SIGNAL(clicked()), this, SLOT(buttonCustomFilterClearAllClicked()));
 
     int i;
-    int n = string_array_length("extensions");
-    int start = get_state_variable("extensions");
-    for (i=0; i<n; i++) {
-        const char *extension = state[start+i].s;
+    for (i=0; ; i++) {
+        if (!strcmp(extensions[i], "END")) {
+            break;
+        }
+        const char *extension = extensions[i];
         custom_filter[extension] = new QCheckBox(extension, groupBoxCustomFilter);
         custom_filter[extension]->setChecked(QString(opensave_custom_filter.dialog).contains("*." + QString(extension), Qt::CaseInsensitive));
         connect(custom_filter[extension], SIGNAL(stateChanged(int)), this,
@@ -557,8 +558,11 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QGridLayout* gridLayoutCustomFilter = new QGridLayout(groupBoxCustomFilter);
     int row = 0;
     int column = 0;
-    for (i=0; i<n; i++) {
-        const char *extension = state[start+i].s;
+    for (i=0; ; i++) {
+        if (!strcmp(extensions[i], "END")) {
+            break;
+        }
+        const char *extension = extensions[i];
         gridLayoutCustomFilter->addWidget(custom_filter[extension], row, column, Qt::AlignLeft);
         row++;
         if (row == 10) {
@@ -1729,8 +1733,10 @@ Settings_Dialog::checkBoxCustomFilterStateChanged(int checked)
 {
     QCheckBox* checkBox = qobject_cast<QCheckBox*>(sender());
     if (checkBox) {
+        char message[MAX_STRING_LENGTH];
         QString format = checkBox->text();
-        qDebug("CustomFilter: %s %d", qPrintable(format), checked);
+        sprintf(message, "CustomFilter: %s %d", qPrintable(format), checked);
+        debug_message(message);
         if (checked) {
             strcat(opensave_custom_filter.dialog,
                 qPrintable(" *." + format.toLower()));
@@ -1835,10 +1841,10 @@ Settings_Dialog::checkBoxGridLoadFromFileStateChanged(int checked)
     }
 
     bool dont_load = !grid_load_from_file.dialog;
-    set_enabled_group(senderObj, "grid_load_from_file_group", dont_load);
+    set_enabled_group(senderObj, grid_load_from_file_group, dont_load);
 
     bool use_this_origin = !grid_load_from_file.dialog && !grid_center_on_origin.dialog;
-    set_enabled_group(senderObj, "defined_origin_group", use_this_origin);
+    set_enabled_group(senderObj, defined_origin_group, use_this_origin);
 }
 
 void
@@ -1851,8 +1857,8 @@ Settings_Dialog::comboBoxGridTypeCurrentIndexChanged(const QString& type)
         return;
     }
     bool visibility = (type == "Circular");
-    set_visibility_group(senderObj, "rectangular_grid_group", !visibility);
-    set_visibility_group(senderObj, "circular_grid_group", visibility);
+    set_visibility_group(senderObj, rectangular_grid_group, !visibility);
+    set_visibility_group(senderObj, circular_grid_group, visibility);
 }
 
 void
@@ -1862,7 +1868,7 @@ Settings_Dialog::checkBoxGridCenterOnOriginStateChanged(int checked)
 
     QObject* senderObj = sender();
     if (senderObj) {
-        set_enabled_group(senderObj, "center_on_origin_group", !grid_center_on_origin.dialog);
+        set_enabled_group(senderObj, center_on_origin_group, !grid_center_on_origin.dialog);
     }
 }
 

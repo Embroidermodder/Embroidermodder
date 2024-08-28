@@ -786,7 +786,7 @@ extern BoolSetting text_style_underline;
 extern BoolSetting text_style_overline;
 extern BoolSetting text_style_strikeout;
 
-extern ScriptValue state[MAX_STATE_VARIABLES];
+//extern ScriptValue state[MAX_STATE_VARIABLES];
 
 extern Editor general_editor_data[];
 extern Editor geometry_arc_editor_data[];
@@ -856,6 +856,16 @@ extern char *inquiry_toolbar[];
 extern char *modify_toolbar[];
 extern char *dimension_toolbar[];
 extern char *sandbox_toolbar[];
+
+extern char *extensions[];
+extern char *editor_list[];
+extern char *combobox_list[];
+
+extern char *grid_load_from_file_group[];
+extern char *defined_origin_group[];
+extern char *rectangular_grid_group[];
+extern char *circular_grid_group[];
+extern char *center_on_origin_group[];
 
 extern int numOfDocs;
 extern int docIndex;

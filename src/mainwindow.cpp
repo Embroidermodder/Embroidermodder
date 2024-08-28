@@ -101,19 +101,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     QString appDir = qApp->applicationDirPath();
     /* Verify that files/directories needed are actually present. */
-    QFileInfo check(appDir + "/help");
-    if (!check.exists()) {
-        QMessageBox::critical(this, translate("Path Error"), translate("Cannot locate: ") + check.absoluteFilePath());
-    }
-    check = QFileInfo(appDir + "/icons");
-    if (!check.exists()) {
-        QMessageBox::critical(this, translate("Path Error"), translate("Cannot locate: ") + check.absoluteFilePath());
-    }
-    check = QFileInfo(appDir + "/images");
-    if (!check.exists()) {
-        QMessageBox::critical(this, translate("Path Error"), translate("Cannot locate: ") + check.absoluteFilePath());
-    }
-    check = QFileInfo(appDir + "/samples");
+    QFileInfo check = QFileInfo(appDir + "/samples");
     if (!check.exists()) {
         QMessageBox::critical(this, translate("Path Error"), translate("Cannot locate: ") + check.absoluteFilePath());
     }
@@ -607,7 +595,7 @@ windowMenuAboutToShow(void)
 void
 MainWindow::windowMenuActivated(bool checked)
 {
-    qDebug("MainWindow::windowMenuActivated()");
+    debug_message("MainWindow::windowMenuActivated()");
     QAction* aSender = qobject_cast<QAction*>(sender());
     if (!aSender) {
         return;
@@ -695,7 +683,9 @@ MainWindow::openFilesSelected(const QStringList& filesToOpen)
 
     if (filesToOpen.count()) {
         for (int i = 0; i < filesToOpen.count(); i++) {
-            qDebug("opening %s...", qPrintable(filesToOpen[i]));
+            char message[MAX_STRING_LENGTH];
+            sprintf(message, "opening %s...", qPrintable(filesToOpen[i]));
+            debug_message(message);
 
             QMdiSubWindow* existing = findMdiWindow(filesToOpen[i]);
             if (existing) {
@@ -791,7 +781,9 @@ save_as_file(void)
 QMdiSubWindow*
 MainWindow::findMdiWindow(const QString& fileName)
 {
-    qDebug("MainWindow::findMdiWindow(%s)", qPrintable(fileName));
+    char message[MAX_STRING_LENGTH];
+    sprintf(message, "MainWindow::findMdiWindow(%s)", qPrintable(fileName));
+    debug_message(message);
     QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
 
     foreach (QMdiSubWindow* subWindow, mdiArea->subWindowList()) {

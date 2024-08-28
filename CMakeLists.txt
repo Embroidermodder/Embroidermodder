@@ -54,11 +54,13 @@ set(EXTERN ${CMAKE_SOURCE_DIR}/extern)
 set(C_DATA
 	${SRC}/data/commands.c
 	${SRC}/data/editors.c
-	${SRC}/data/settings.c
-	${SRC}/data/objects.c
-	${SRC}/data/testing.c
-	${SRC}/data/toolbars.c
 	${SRC}/data/menus.c
+	${SRC}/data/objects.c
+	${SRC}/data/properties.c
+	${SRC}/data/settings.c
+	${SRC}/data/testing.c
+	${SRC}/data/tips.c
+	${SRC}/data/toolbars.c
 )
 
 qt_add_executable(embroidermodder2
@@ -82,6 +84,7 @@ qt_add_executable(embroidermodder2
 	${C_DATA}
 
 	${SRC}/script.c
+	${SRC}/xpm.c
 
 	${SRC}/embroidermodder.h
 	${SRC}/core.h

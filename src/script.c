@@ -829,24 +829,14 @@ load_file(char *fname)
     return 1;
 }
 
-/* . */
+/* Rather than loading necessary configuration data from file at load, it is
+ * compiled into the program. However, the ability to change the UI as a
+ * user, without re-compiling the program, can be preserved by overriding the string
+ * tables from a custom "overrides.toml" file in the configuration directory.
+ */
 int
 load_data(void)
 {
-    int i;
-    /* load manifest */
-    if (!load_file("data/settings.toml")) {
-        return 0;
-    }
-    if (!load_file("data/properties.toml")) {
-        printf("ERROR: failed to load file %s\n", "data/properties.toml");
-        return 0;
-    }
-
-    /* Confirm load. */
-    for (i=0; i<state_length; i++) {
-        printf("%d: %s %d\n", i, state[i].label, state[i].type);
-    }
     return 1;
 }
 

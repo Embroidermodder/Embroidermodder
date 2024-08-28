@@ -663,7 +663,9 @@ create_details_dialog(void)
         frame->setPalette( palette );
         frame->setAutoFillBackground(true);
         grid->addWidget(frame, currentRow,0,1,1);
-        qDebug("size: %d i: %d", stitchLengths.size(), i);
+        char message[MAX_STRING_LENGTH];
+        sprintf(message, "size: %d i: %d", stitchLengths.size(), i);
+        debug_message(message);
         grid->addWidget(new QLabel(QString::number(stitchLengths.at(i)) + " mm"), currentRow,1,1,1);
         */
         currentRow++;
@@ -859,7 +861,8 @@ void MdiArea::mouseDoubleClickEvent(QMouseEvent* /*e*/)
     _main->openFile();
 }
 
-void MdiArea::paintEvent(QPaintEvent* /*e*/)
+void
+MdiArea::paintEvent(QPaintEvent* /*e*/)
 {
     QWidget* vport = viewport();
     QRect rect = vport->rect();
@@ -1278,10 +1281,14 @@ void MdiWindow::promptInputPrevNext(bool prev)
 {
     if (promptInputList.isEmpty()) {
         if (prev) {
-            QMessageBox::critical(this, tr("Prompt Previous Error"), tr("The prompt input is empty! Please report this as a bug!"));
+            messageBox("critical",
+                translate("Prompt Previous Error"),
+                translate("The prompt input is empty! Please report this as a bug!"));
         }
         else {
-            QMessageBox::critical(this, tr("Prompt Next Error"), tr("The prompt input is empty! Please report this as a bug!"));
+            messageBox("critical",
+                translate("Prompt Next Error"),
+                translate("The prompt input is empty! Please report this as a bug!"));
         }
         debug_message("The prompt input is empty! Please report this as a bug!");
     }
@@ -1638,9 +1645,11 @@ CmdPromptInput::checkSelection()
 
 /* . */
 void
-CmdPromptInput::checkCursorPosition(int /*oldpos*/, int newpos)
+CmdPromptInput::checkCursorPosition(int oldpos, int newpos)
 {
-    /* qDebug("CmdPromptInput::checkCursorPosition - %d %d", oldpos, newpos); */
+    char message[MAX_STRING_LENGTH];
+    sprintf(message, "CmdPromptInput::checkCursorPosition - %d %d", oldpos, newpos);
+    debug_message(message);
     if (this->hasSelectedText()) {
         this->deselect();
     }

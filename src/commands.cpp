@@ -16,14 +16,16 @@
 void
 stub_implement(const char *txt)
 {
-    qDebug("TODO: %s", txt);
+    char message[MAX_STRING_LENGTH];
+    sprintf(message, "TODO: %s", txt);
+    debug_message(message);
 }
 
 /* . */
 void
-stub_testing()
+stub_testing(void)
 {
-    QMessageBox::warning(_main, translate("Testing Feature"),
+    messageBox("warning", translate("Testing Feature"),
         translate("<b>This feature is in testing.</b>"));
 }
 
@@ -55,6 +57,7 @@ check_for_updates(void)
 QString
 platformString(void)
 {
+    char message[MAX_STRING_LENGTH];
     /* TODO: Append QSysInfo to string where applicable. */
     QString os;
     #if   defined(Q_OS_AIX)
@@ -118,7 +121,8 @@ platformString(void)
     #elif defined(Q_OS_WINCE)
     os = "Windows CE";
     #endif
-    qDebug("Platform: %s", qPrintable(os));
+    sprintf(message, "Platform: %s", qPrintable(os));
+    debug_message(message);
     return os;
 }
 
@@ -148,7 +152,8 @@ tipOfTheDay()
 
     QWizardPage* page = new QWizardPage(wizardTipOfTheDay);
 
-    ImageWidget* imgBanner = new ImageWidget(appDir + "/images/did-you-know.png", wizardTipOfTheDay);
+    ImageWidget* imgBanner = new ImageWidget("Did you know", wizardTipOfTheDay);
+    // create_pixmap("did_you_know")
 
     if (general_current_tip.setting >= listTipOfTheDay.size()) {
         general_current_tip.setting = 0;
@@ -200,7 +205,9 @@ checkBoxTipOfTheDayStateChanged(int checked)
 void
 buttonTipOfTheDayClicked(int button)
 {
-    qDebug("buttonTipOfTheDayClicked(%d)", button);
+    char message[MAX_STRING_LENGTH];
+    sprintf(message, "buttonTipOfTheDayClicked(%d)", button);
+    debug_message(message);
     if (button == QWizard::CustomButton1) {
         if (general_current_tip.setting > 0) {
             general_current_tip.setting--;
@@ -482,13 +489,17 @@ MainWindow::layerPrevious()
 void
 MainWindow::layerSelectorIndexChanged(int index)
 {
-    qDebug("layerSelectorIndexChanged(%d)", index);
+    char message[MAX_STRING_LENGTH];
+    sprintf(message, "layerSelectorIndexChanged(%d)", index);
+    debug_message(message);
 }
 
 void
 MainWindow::colorSelectorIndexChanged(int index)
 {
-    qDebug("colorSelectorIndexChanged(%d)", index);
+    char message[MAX_STRING_LENGTH];
+    sprintf(message, "colorSelectorIndexChanged(%d)", index);
+    debug_message(message);
 
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
     QRgb newColor;
@@ -515,13 +526,17 @@ MainWindow::colorSelectorIndexChanged(int index)
 void
 MainWindow::linetypeSelectorIndexChanged(int index)
 {
-    qDebug("linetypeSelectorIndexChanged(%d)", index);
+    char message[MAX_STRING_LENGTH];
+    sprintf(message, "linetypeSelectorIndexChanged(%d)", index);
+    debug_message(message);
 }
 
 void
 MainWindow::lineweightSelectorIndexChanged(int index)
 {
-    qDebug("lineweightSelectorIndexChanged(%d)", index);
+    char message[MAX_STRING_LENGTH];
+    sprintf(message, "lineweightSelectorIndexChanged(%d)", index);
+    debug_message(message);
 }
 
 void
@@ -534,7 +549,9 @@ MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
 void
 MainWindow::textSizeSelectorIndexChanged(int index)
 {
-    qDebug("textSizeSelectorIndexChanged(%d)", index);
+    char message[MAX_STRING_LENGTH];
+    sprintf(message, "textSizeSelectorIndexChanged(%d)", index);
+    debug_message(message);
     /* TODO: check that the toReal() conversion is ok. */
     text_size.setting = qFabs(textSizeSelector->itemData(index).toReal());
 }
@@ -695,12 +712,16 @@ MainWindow::promptInputNext()
 ScriptValue
 run_command(const char* cmd, ScriptEnv *context)
 {
+    char message[MAX_STRING_LENGTH];
     int id = get_command_id(cmd);
     View* gview = NULL;
     ScriptValue value = script_true;
-    qDebug("run_command(%s) %d", cmd, id);
+    sprintf(message, "run_command(%s) %d", cmd, id);
+    debug_message(message);
+
     if (id < 0) {
-        qDebug("ERROR: %s not found in command_data.", cmd);
+        sprintf(message, "ERROR: %s not found in command_data.", cmd);
+        debug_message(message);
         return script_false;
     }
 
@@ -1269,7 +1290,9 @@ MainWindow::runCommand()
 {
     QAction* act = qobject_cast<QAction*>(sender());
     if (act) {
-        qDebug("runCommand(%s)", qPrintable(act->objectName()));
+        char message[MAX_STRING_LENGTH];
+        sprintf(message, "runCommand(%s)", qPrintable(act->objectName()));
+        debug_message(message);
         promptInput->endCommand();
         prompt->setCurrentText(act->objectName());
         promptInput->processInput();
@@ -1281,9 +1304,11 @@ MainWindow::runCommand()
 void
 MainWindow::runCommandMain(const QString& cmd)
 {
+    char message[MAX_STRING_LENGTH];
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_MAIN;
-    qDebug("runCommandMain(%s)", qPrintable(cmd));
+    sprintf(message, "runCommandMain(%s)", qPrintable(cmd));
+    debug_message(message);
     /* TODO: Uncomment this when post-selection is available. */
     /*
     if (!selection_mode_pick_first.setting) {
@@ -1299,9 +1324,11 @@ MainWindow::runCommandMain(const QString& cmd)
 void
 MainWindow::runCommandClick(const QString& cmd, double x, double y)
 {
+    char message[MAX_STRING_LENGTH];
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_CLICK;
-    qDebug("runCommandClick(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
+    sprintf(message, "runCommandClick(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
+    debug_message(message);
     /* engine->evaluate(cmd + "_click(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName); */
     run_command(qPrintable(cmd), context);
     free_script_env(context);
@@ -1312,9 +1339,11 @@ MainWindow::runCommandClick(const QString& cmd, double x, double y)
 void
 MainWindow::runCommandMove(const QString& cmd, double x, double y)
 {
+    char message[MAX_STRING_LENGTH];
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_MOVE;
-    qDebug("runCommandMove(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
+    sprintf(message, "runCommandMove(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
+    debug_message(message);
     /* engine->evaluate(cmd + "_move(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName); */
     run_command(qPrintable(cmd), context);
     free_script_env(context);
@@ -1325,9 +1354,11 @@ MainWindow::runCommandMove(const QString& cmd, double x, double y)
 void
 MainWindow::runCommandContext(const QString& cmd, const QString& str)
 {
+    char message[MAX_STRING_LENGTH];
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_CONTEXT;
-    qDebug("runCommandContext(%s, %s)", qPrintable(cmd), qPrintable(str));
+    sprintf(message, "runCommandContext(%s, %s)", qPrintable(cmd), qPrintable(str));
+    debug_message(message);
     /* engine->evaluate(cmd + "_context('" + str.toUpper() + "')", fileName); */
     run_command(qPrintable(cmd), context);
     free_script_env(context);
@@ -1339,8 +1370,10 @@ MainWindow::runCommandContext(const QString& cmd, const QString& str)
 void
 MainWindow::runCommandPrompt(const QString& cmd)
 {
+    char message[MAX_STRING_LENGTH];
     ScriptEnv *context = create_script_env();
-    qDebug("runCommandPrompt(%s)", qPrintable(cmd));
+    sprintf(message, "runCommandPrompt(%s)", qPrintable(cmd));
+    debug_message(message);
     context->context = CONTEXT_PROMPT;
     if (prompt->isRapidFireEnabled()) {
         run_command(qPrintable(cmd), context);
@@ -1910,7 +1943,7 @@ about_dialog(void)
 
     QDialog dialog(_main);
     QLabel image_label;
-    QPixmap img(appDir + "/images/logo-small.png");
+    QPixmap img = create_pixmap("logo_small");
     image_label.setPixmap(img);
     QLabel text(appName + "\n\n" +
         _main->tr("http://www.libembroidery.org") +
@@ -1955,6 +1988,7 @@ about_dialog(void)
 ScriptValue
 get_command(ScriptEnv* context)
 {
+    char message[MAX_STRING_LENGTH];
     QString value(STR(0));
 
     if (value == "MOUSEX") {
@@ -1963,7 +1997,8 @@ get_command(ScriptEnv* context)
             return script_false;
         }
         ScriptValue r = script_real(scene->property("SCENE_MOUSE_POINT").toPointF().x());
-        /* _main->qDebug("mouseY: %.50f", r.r); */
+        sprintf(message, "mouseY: %.50f", r.r);
+        debug_message(message);
         return r;
     }
     else if (value == "MOUSEY") {
@@ -1972,7 +2007,8 @@ get_command(ScriptEnv* context)
             return script_false;
         }
         ScriptValue r = script_real(-scene->property("SCENE_MOUSE_POINT").toPointF().y());
-        /* _main->qDebug("mouseY: %.50f", r.r); */
+        sprintf(message, "mouseY: %.50f", r.r);
+        debug_message(message);
         return r;
     }
     else if (value == "TEXTANGLE") {
@@ -2203,10 +2239,13 @@ is_int_command(ScriptEnv* context)
     return script_true;
 }
 
+/* . */
 ScriptValue
 print_area_command(ScriptEnv* context)
 {
-    qDebug("nativePrintArea(%.2f, %.2f, %.2f, %.2f)", REAL(0), REAL(1), REAL(2), REAL(3));
+    char message[MAX_STRING_LENGTH];
+    sprintf(message, "nativePrintArea(%.2f, %.2f, %.2f, %.2f)", REAL(0), REAL(1), REAL(2), REAL(3));
+    debug_message(message);
     /* TODO: Print Setup Stuff
         nativePrintArea(REAL(0), REAL(1), REAL(2), REAL(3));
     */
@@ -2214,6 +2253,7 @@ print_area_command(ScriptEnv* context)
     return script_null;
 }
 
+/* . */
 ScriptValue
 set_background_color_command(ScriptEnv* context)
 {

@@ -12,6 +12,9 @@
 
 #include "embroidermodder.h"
 
+extern char **xpm_icons[];
+extern char *xpm_icon_labels[];
+
 /* . */
 EmbVector
 to_emb_vector(QPointF p)
@@ -86,13 +89,28 @@ emb_arc_set_radius(EmbArc arc, EmbReal radius)
 }
 
 /* . */
+QPixmap
+create_pixmap(QString icon)
+{
+    int id = 0;
+    for (int i=0; ; i++) {
+        if (!xpm_icon_labels[i]) {
+            break;
+        }
+        if (!strcmp(qPrintable(icon), xpm_icon_labels[i])) {
+            id = i;
+            break;
+        }
+    }
+    QPixmap pixmap(xpm_icons[id]);
+    return pixmap;
+}
+
+/* . */
 QIcon
 create_icon(QString icon)
 {
-    QString fname = qApp->applicationDirPath() + "/icons/";
-    fname += general_icon_theme.setting;
-    fname += "/" + icon + ".png";
-    return QIcon(fname);
+    return QIcon(create_pixmap(icon));
 }
 
 /* . */
@@ -161,13 +179,14 @@ set_visibility(QObject *senderObj, const char *key, bool visibility)
 }
 
 void
-set_visibility_group(QObject *senderObj, const char *keylist, bool visibility)
+set_visibility_group(QObject *senderObj, char *keylist[], bool visibility)
 {
     int i;
-    int n = string_array_length(keylist);
-    int start = get_state_variable(keylist);
-    for (i=0; i<n; i++) {
-         set_visibility(senderObj, state[i].s, visibility);
+    for (i=0; ; i++) {
+        if (!strcmp(keylist[i], "END")) {
+            break;
+        }
+        set_visibility(senderObj, keylist[i], visibility);
     }
 }
 
@@ -215,13 +234,14 @@ set_enabled(QObject *senderObj, const char *key, bool enabled)
 }
 
 void
-set_enabled_group(QObject *senderObj, const char *keylist, bool enabled)
+set_enabled_group(QObject *senderObj, char *keylist[], bool enabled)
 {
     int i;
-    int n = string_array_length(keylist);
-    int start = get_state_variable(keylist);
-    for (i=0; i<n; i++) {
-         set_enabled(senderObj, state[i].s, enabled);
+    for (i=0; ; i++) {
+        if (!strcmp(keylist[i], "END")) {
+            break;
+        }
+        set_enabled(senderObj, keylist[i], enabled);
     }
 }
 

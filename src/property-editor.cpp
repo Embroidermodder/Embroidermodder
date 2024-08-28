@@ -311,9 +311,8 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
 
     foreach (int objType, typeSet) {
         if ((objType > OBJ_TYPE_BASE) && (objType <= OBJ_TYPE_UNKNOWN)) {
-            int start = get_state_variable("objectNames");
             int index = objType - OBJ_TYPE_ARC;
-            QString comboBoxStr = translate(state[start + index].s);
+            QString comboBoxStr = translate(object_names[index]);
             comboBoxStr += " (" + QString().setNum(object_counts[index]) + ")";
             comboBoxSelected->addItem(comboBoxStr, objType);
         }
@@ -550,9 +549,14 @@ PropertyEditor::updateLineEditNumIfVaries(QLineEdit* lineEdit, double num, bool 
 void
 PropertyEditor::updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, const QString& str)
 {
+    char message[MAX_STRING_LENGTH];
     fieldOldText = fontComboBox->property("FontFamily").toString();
     fieldNewText = str;
-    /* qDebug("old: %d %s, new: %d %s", oldIndex, qPrintable(fontComboBox->currentText()), newIndex, qPrintable(str)); */
+    /*
+    sprintf(message, "old: %d %s, new: %d %s",
+        oldIndex, qPrintable(fontComboBox->currentText()), newIndex, qPrintable(str));
+    debug_message(message);
+    */
     if (fieldOldText.isEmpty()) {
         fontComboBox->setCurrentFont(QFont(fieldNewText));
         fontComboBox->setProperty("FontFamily", fieldNewText);
@@ -728,15 +732,17 @@ PropertyEditor::hideAllGroups()
 void
 PropertyEditor::clearAllFields()
 {
-    int n = string_array_length("editor_list");
-    int start = get_state_variable("editor_list");
-    for (int i=0; i<n; i++) {
-        line_edits[state[start+i].s]->clear();
+    for (int i=0; ; i++) {
+        if (!strcmp(editor_list[i], "END")) {
+            break;
+        }
+        line_edits[editor_list[i]]->clear();
     }
-    n = string_array_length("combobox_list");
-    start = get_state_variable("combobox_list");
-    for (int i=0; i<n; i++) {
-        combo_boxes[state[start+i].s]->clear();
+    for (int i=0; ; i++) {
+        if (!strcmp(combobox_list[i], "END")) {
+            break;
+        }
+        combo_boxes[combobox_list[i]]->clear();
     }
 
     comboBoxTextSingleFont->removeItem(comboBoxTextSingleFont->findText(fieldVariesText)); /* NOTE: Do not clear comboBoxTextSingleFont. */
@@ -856,7 +862,7 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
         return;
     }
 
-    qDebug("==========Field was Edited==========");
+    debug_message("==========Field was Edited==========");
     QString objName = fieldObj->objectName();
     int objType = fieldObj->property(qPrintable(objName)).toInt();
 

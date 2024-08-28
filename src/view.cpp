@@ -1756,7 +1756,9 @@ View::allowZoomIn()
 
     double zoomInLimit = 0.0000000001;
     if (EMB_MIN(maxWidth, maxHeight) < zoomInLimit) {
-        qDebug("ZoomIn limit reached. (limit=%.10f)", zoomInLimit);
+        char message[MAX_STRING_LENGTH];
+        sprintf(message, "ZoomIn limit reached. (limit=%.10f)", zoomInLimit);
+        debug_message(message);
         return false;
     }
 
@@ -1772,7 +1774,9 @@ bool View::allowZoomOut()
 
     double zoomOutLimit = 10000000000000.0;
     if (EMB_MAX(maxWidth, maxHeight) > zoomOutLimit) {
-        qDebug("ZoomOut limit reached. (limit=%.1f)", zoomOutLimit);
+        char message[MAX_STRING_LENGTH];
+        sprintf(message, "ZoomOut limit reached. (limit=%.1f)", zoomOutLimit);
+        debug_message(message);
         return false;
     }
 

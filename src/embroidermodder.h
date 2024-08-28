@@ -321,6 +321,7 @@ QString platformString();
 
 QToolButton *create_statusbarbutton(QString buttonText, MainWindow* mw);
 QIcon create_icon(QString icon);
+QPixmap create_pixmap(QString icon);
 
 void nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode);
 void nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubberMode);
@@ -346,8 +347,8 @@ QPointF find_mouse_snap_point(QList<QPointF> snap_points, const QPointF& mouse_p
 
 void set_visibility(QObject *senderObj, const char *key, bool visibility);
 void set_enabled(QObject *senderObj, const char *key, bool visibility);
-void set_visibility_group(QObject *senderObj, const char *key, bool visibility);
-void set_enabled_group(QObject *senderObj, const char *key, bool visibility);
+void set_visibility_group(QObject *senderObj, char *key[], bool visibility);
+void set_enabled_group(QObject *senderObj, char *key[], bool visibility);
 QIcon create_swatch(int32_t color);
 QPushButton *choose_color_button(QGroupBox* groupbox, IntSetting* color_setting);
 
