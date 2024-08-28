@@ -637,7 +637,7 @@ char *translate(const char *msg);
 
 bool pattern_save(EmbPattern *pattern, const char *fileName);
 
-int string_array_length(const char *s);
+int string_array_length(char *s[]);
 int parse_floats(char *line, float result[], int n);
 int parse_vector(char *line, EmbVector *v);
 bool validRGB(float r, float g, float b);
@@ -866,6 +866,8 @@ extern char *defined_origin_group[];
 extern char *rectangular_grid_group[];
 extern char *circular_grid_group[];
 extern char *center_on_origin_group[];
+
+extern char *tips[];
 
 extern int numOfDocs;
 extern int docIndex;

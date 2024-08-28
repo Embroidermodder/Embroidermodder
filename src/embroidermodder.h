@@ -142,7 +142,6 @@ extern QAction* myFileSeparator;
 extern QWizard* wizardTipOfTheDay;
 extern QLabel* labelTipOfTheDay;
 extern QCheckBox* checkBoxTipOfTheDay;
-extern QStringList listTipOfTheDay;
 extern QComboBox* layerSelector;
 extern QComboBox* colorSelector;
 extern QComboBox* linetypeSelector;

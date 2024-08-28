@@ -37,7 +37,6 @@ QAction* myFileSeparator;
 QWizard* wizardTipOfTheDay;
 QLabel* labelTipOfTheDay;
 QCheckBox* checkBoxTipOfTheDay;
-QStringList listTipOfTheDay;
 
 /* Selectors */
 QComboBox* layerSelector;

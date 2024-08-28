@@ -155,10 +155,10 @@ tipOfTheDay()
     ImageWidget* imgBanner = new ImageWidget("Did you know", wizardTipOfTheDay);
     // create_pixmap("did_you_know")
 
-    if (general_current_tip.setting >= listTipOfTheDay.size()) {
+    if (general_current_tip.setting >= string_array_length(tips)) {
         general_current_tip.setting = 0;
     }
-    labelTipOfTheDay = new QLabel(listTipOfTheDay.value(general_current_tip.setting), wizardTipOfTheDay);
+    labelTipOfTheDay = new QLabel(tips[general_current_tip.setting], wizardTipOfTheDay);
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(translate("&Show tips on startup"), wizardTipOfTheDay);
@@ -213,16 +213,16 @@ buttonTipOfTheDayClicked(int button)
             general_current_tip.setting--;
         }
         else {
-            general_current_tip.setting = listTipOfTheDay.size()-1;
+            general_current_tip.setting = string_array_length(tips)-1;
         }
-        labelTipOfTheDay->setText(listTipOfTheDay.value(general_current_tip.setting));
+        labelTipOfTheDay->setText(tips[general_current_tip.setting]);
     }
     else if (button == QWizard::CustomButton2) {
         general_current_tip.setting++;
-        if (general_current_tip.setting >= listTipOfTheDay.size()) {
+        if (general_current_tip.setting >= string_array_length(tips)) {
             general_current_tip.setting = 0;
         }
-        labelTipOfTheDay->setText(listTipOfTheDay.value(general_current_tip.setting));
+        labelTipOfTheDay->setText(tips[general_current_tip.setting]);
     }
     else if (button == QWizard::CustomButton3) {
         wizardTipOfTheDay->close();

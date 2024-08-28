@@ -99,32 +99,11 @@ MainWindow::MainWindow() : QMainWindow(0)
     }
     readSettings();
 
-    QString appDir = qApp->applicationDirPath();
-    /* Verify that files/directories needed are actually present. */
-    QFileInfo check = QFileInfo(appDir + "/samples");
-    if (!check.exists()) {
-        QMessageBox::critical(this, translate("Path Error"), translate("Cannot locate: ") + check.absoluteFilePath());
-    }
-    check = QFileInfo(appDir + "/translations");
-    if (!check.exists()) {
-        QMessageBox::critical(this, translate("Path Error"), translate("Cannot locate: ") + check.absoluteFilePath());
-    }
-
     QString lang = general_language.setting;
     debug_message(qPrintable("language: " + lang));
     if (lang == "system") {
         lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
     }
-
-    /* Load translations for the Embroidermodder 2 GUI. */
-    QTranslator translatorEmb;
-    translatorEmb.load(appDir + "/translations/" + lang + "/embroidermodder2_" + lang);
-    qApp->installTranslator(&translatorEmb);
-
-    /* Load translations for the commands */
-    QTranslator translatorCmd;
-    translatorCmd.load(appDir + "/translations/" + lang + "/commands_" + lang);
-    qApp->installTranslator(&translatorCmd);
 
     /* Load translations provided by Qt - this covers dialog buttons and other common things. */
     QTranslator translatorQt;
@@ -260,7 +239,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     /* create the Object Property Editor */
     dockPropEdit = new PropertyEditor(
-        appDir + "/icons/" + general_icon_theme.setting,
+        general_icon_theme.setting,
         selection_mode_pickadd.setting,
         prompt,
         this);
@@ -269,7 +248,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     /* create the Command History Undo Editor */
     dockUndoEdit = new UndoEditor(
-        appDir + "/icons/" + general_icon_theme.setting, prompt, this);
+        general_icon_theme.setting, prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockUndoEdit);
 
     /* setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); */ /* TODO: Load these from settings */
@@ -477,19 +456,6 @@ MainWindow::MainWindow() : QMainWindow(0)
     showNormal();
 
     toolbarHash["Prompt"]->show();
-
-    /* Load tips from external file. */
-    QFile tipFile(appDir + "/tips.txt");
-    if (tipFile.open(QFile::ReadOnly)) {
-        QTextStream stream(&tipFile);
-        QString tipLine;
-        do {
-            tipLine = stream.readLine();
-            if (!tipLine.isEmpty()) {
-                listTipOfTheDay << tipLine;
-            }
-        } while (!tipLine.isNull());
-    }
 
     if (general_tip_of_the_day.setting && (!testing_mode)) {
         tipOfTheDay();
@@ -1114,11 +1080,8 @@ add_to_menu(QMenu *menu, char *menu_data[])
             menu->addMenu(menuHash[s+1]);
         }
         else if (s[0] == '+') {
-            QString appDir = qApp->applicationDirPath();
             QString icontheme = general_icon_theme.setting;
-            QString s_ = s+1;
-            QString icon = appDir + "/icons/" + icontheme + "/" + QString(s_) + ".png";
-            menu->setIcon(QIcon(icon));
+            menu->setIcon(create_icon(s+1));
         }
         else {
             menu->addAction(get_action_by_icon(s));
@@ -1133,7 +1096,6 @@ MainWindow::createAllMenus()
 {
     debug_message("MainWindow createAllMenus()");
 
-    QString appDir = qApp->applicationDirPath();
     QString icontheme = general_icon_theme.setting;
 
     menuBar()->addMenu(menuHash["File"]);
@@ -1240,8 +1202,7 @@ MainWindow::readSettings(void)
     debug_message("Reading Settings...");
     /* This file needs to be read from the users home directory to ensure it is writable. */
     QString settingsDir = SettingsDir();
-    QString appDir = qApp->applicationDirPath();
-    /* load_settings(qPrintable(appDir), qPrintable(SettingsDir())); */
+    /* load_settings(qPrintable(SettingsDir())); */
 
     QSettings settings(SettingsDir() + settings_file, QSettings::IniFormat);
     QPoint pos = settings.value("Window/Position", QPoint(0, 0)).toPoint();
@@ -1260,8 +1221,8 @@ MainWindow::readSettings(void)
     get_setting(&settings, "MdiBGUseLogo", true, &general_mdi_bg_use_logo);
     get_setting(&settings, "MdiBGUseTexture", true, &general_mdi_bg_use_texture);
     get_setting(&settings, "MdiBGUseColor", true, &general_mdi_bg_use_color);
-    get_setting(&settings, "MdiBGLogo", qPrintable(appDir + "/images/logo-spirals.png"), &general_mdi_bg_logo);
-    get_setting(&settings, "MdiBGTexture", qPrintable(appDir + "/images/texture-spirals.png"), &general_mdi_bg_texture);
+    get_setting(&settings, "MdiBGLogo", "logo_spirals", &general_mdi_bg_logo);
+    get_setting(&settings, "MdiBGTexture", "texture_spirals", &general_mdi_bg_texture);
     get_setting(&settings, "MdiBGColor", qRgb(192,192,192), &general_mdi_bg_color);
     get_setting(&settings, "TipOfTheDay", true, &general_tip_of_the_day);
     get_setting(&settings, "CurrentTip", 0, &general_current_tip);
@@ -1322,7 +1283,7 @@ MainWindow::readSettings(void)
     }
     strncpy(opensave_recent_list_of_files.setting[i], "END", MAX_STRING_LENGTH);
     strncpy(opensave_recent_directory.setting,
-        qPrintable(settings.value("OpenSave/RecentDirectory", appDir + "/samples").toString()),
+        qPrintable(settings.value("OpenSave/RecentDirectory", "samples").toString()),
         MAX_STRING_LENGTH);
     */
     strncpy(opensave_recent_list_of_files.setting[0], "END", MAX_STRING_LENGTH);

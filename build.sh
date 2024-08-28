@@ -220,7 +220,6 @@ function build_debug () {
 	run_cmake
 
 	cd $BUILD_DIR
-	cp -R ../assets/* .
 
 	lcov --directory . --capture --output-file em2.info
 	gdb -ex=run --ex=quit --args ./embroidermodder2 --cov $TEST_FILES
@@ -255,21 +254,21 @@ function convert_to_xpm () {
 
 	for folder in icons/default images
 	do
-	for file in assets/$folder/*
+	for file in $folder/*
 	do
 		echo "Converting $file to xpm..."
 		stub=`basename $file`
 		outfile="src/$folder/${stub::-4}.xpm"
 		cfile="src/$folder/${stub::-4}.c"
 		convert $file $outfile
-		cat assets/copyright_message.txt $outfile > $cfile
+		cat docs/copyright_message.txt $outfile > $cfile
 		rm $outfile
 	done
 	done
 
 	xpm_srcfile="src/xpm.c"
 
-	cat assets/copyright_message.txt > $xpm_srcfile
+	cat docs/copyright_message.txt > $xpm_srcfile
 
 	echo "#include <stddef.h>" >> $xpm_srcfile
 
@@ -287,7 +286,7 @@ function convert_to_xpm () {
 	echo "char **xpm_icons[] = {" >> $xpm_srcfile
 	for folder in icons/default images
 	do
-	for file in assets/$folder/*
+	for file in $folder/*
 	do
 		stub=`basename $file`
 		echo "    ${stub::-4}," >> $xpm_srcfile
@@ -301,7 +300,7 @@ function convert_to_xpm () {
 	echo "char *xpm_icon_labels[] = {" >> $xpm_srcfile
 	for folder in icons/default images
 	do
-	for file in assets/$folder/*
+	for file in $folder/*
 	do
 		stub=`basename $file`
 		echo "    \"${stub::-4}\"," >> $xpm_srcfile

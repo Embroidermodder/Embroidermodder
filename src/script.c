@@ -675,13 +675,24 @@ validRGB(float r, float g, float b)
  *
  * For regular lookups that are expensive we can keep the state variable's index
  * in another variable.
- */
+
 int
 string_array_length(const char *s)
 {
     int key = get_state_variable(s);
-    /* printf("array_length call: %s %d\n", s, state[key].n_leaves); */
     return state[key].n_leaves;
+}
+ */
+int
+string_array_length(char *s[])
+{
+    int i;
+    for (i=0; i<1000; i++) {
+        if (!strcmp(s[i], "END")) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 /* . */
