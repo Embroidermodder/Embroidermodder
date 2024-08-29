@@ -65,72 +65,6 @@ function valgrind_run () {
 
 }
 
-function help_message () {
-
-cat <<-'EOF'
-Usage: ./build.sh [options]
-A script to build, debug and package Embroidermodder 2 and its documentation.
-
-Options:
-  -D,--docs               Run doxygen and build pdf docs.
-  -d,--debug              Build embroidermodder with warnings as errors
-                          and run in a debugger.
-  -b,--dependencies-brew  Install dependencies for Mac OS.
-  -a,--dependencies-apt   Install dependencies for systems with the
-                          aptitude package manager.
-  -h,--help               Describe how to use this script with paging.
-     --windows-latest     Prepare GitHub artifact for Windows release.
-     --macos-latest       Prepare GitHub artifact for MacOS release.
-     --linux-latest       Prepare GitHub artifact for GNU/Linux release.
-  -G,--generator          Accepts argument to override the GENERATOR variable.
-EOF
-
-}
-
-function long_help_message () {
-
-read -r -d '' OVERVIEW <<-'EOF'
-
-EMBROIDERMODDER 2 DEVELOPER'S SCRIPT
-
-Overview
---------
-
-If you're building the alpha of Embroidermodder in order to try it before the
-beta release use:
-
-    ./build.sh --windows
-    ./build.sh --macos
-    ./build.sh --gnu-linux
-
-depending on your system. Then run without installing using:
-
-    cd embroidermodder2 && ./embroidermodder2
-
-or, on Windows double-click the executable in the embroidermodder2 directory.
-
-If you're building as part of an effort to improve the software, build in the
-debug mode then read the gcov output:
-
-    ./build.sh --debug
-    # do some user interactions
-    ./build.sh --gcov
-
-Then read the .gcov files and debug.txt for information about how your changes
-have altered the performance of the software. Note that --debug works without
-very GCC specific features but --gcov may not. At some point we'll add specific
-callgrind/cachegrind support.
-
-For in-depth information about the software please read some of the PDF manual included
-in the top level of the repository. Finishing the manual is the current top priority
-in order to fascilitate new developers joining the project.
-
-EOF
-
-    echo "$OVERVIEW" | less
-
-}
-
 function run_cmake () {
 
 	git submodule init
@@ -188,7 +122,6 @@ function assemble_release () {
 	get_dependancies $1
 
 	run_cmake
-	build_docs
 	mkdir em2
 	cp $BUILD_DIR/embroidermodder2 em2
 	cp LICENSE.md em2
@@ -312,30 +245,28 @@ function convert_to_xpm () {
 }
 
 if [[ "$#" -eq 0 ]]; then
-	help_message
+	cat docs/short_help.txt
 fi
 
 for arg in $@
 do
-  case "$1" in
-    --convert-xpm) convert_to_xpm;;
-    -a) analysis;;
-    -s | --style) code_style;;
-    -G | --generator)
-      # GENERATOR="$OPTARG"
-      echo "This is currently broken: please change the script variable directly."
-      ;;
-    -b | --build) run_cmake;;
-    -D | --docs) build_docs;;
-    -d | --debug) build_debug;;
-    --gnu-linux | --linux | --ubuntu | --ubuntu-latest | --package-linux) assemble_release "linux";;
-    --macos | --macos-latest | --package-macos) assemble_release "macos";;
-    --windows | --windows-latest | --package-windows) assemble_release "linux";;
-    --package) assemble_release "linux";;
-    -h | --help) long_help_message;;
-    -c | --clean) rm -fr ${BUILD_DIR};;
-    build.sh) ;;
-    *) help_message;;
-  esac
+	case "$1" in
+	--convert-xpm) convert_to_xpm;;
+	-a) analysis;;
+	-s | --style) code_style;;
+	-G | --generator)
+		# GENERATOR="$OPTARG"
+		echo "This is currently broken: please change the script variable directly."
+		;;
+	-b | --build) run_cmake;;
+	-d | --debug) build_debug;;
+	--gnu-linux | --linux | --ubuntu | --ubuntu-latest | --package-linux) assemble_release "linux";;
+	--macos | --macos-latest | --package-macos) assemble_release "macos";;
+	--windows | --windows-latest | --package-windows) assemble_release "linux";;
+	--package) assemble_release "linux";;
+	-h | --help) cat docs/help.txt | less;;
+	-c | --clean) rm -fr ${BUILD_DIR};;
+	*) cat docs/short_help.txt;;
+	esac
 done
 

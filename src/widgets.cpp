@@ -195,7 +195,7 @@ contextMenuEvent(QObject* object, QContextMenuEvent *event)
         menu.addAction(action);
     }
     else if (object->objectName() == "StatusBarButtonLWT") {
-        View* gview = activeView();
+        Document* gview = activeDocument();
         if (gview) {
             QAction* enableRealAction = new QAction(create_icon("realrender"), "&RealRender On", &menu);
             enableRealAction->setEnabled(!gview->isRealEnabled());
@@ -222,7 +222,7 @@ void
 statusbar_toggle(QString key, bool on)
 {
     debug_message("StatusBarButton toggleSnap()");
-    View* gview = activeView();
+    Document* gview = activeDocument();
     if (gview) {
         if (key == "SNAP") {
             gview->toggleSnap(on);
@@ -252,7 +252,7 @@ void
 enableLwt()
 {
     debug_message("StatusBarButton enableLwt()");
-    View* gview = activeView();
+    Document* gview = activeDocument();
     if (gview) {
         if (!gview->isLwtEnabled()) {
             gview->toggleLwt(true);
@@ -264,7 +264,7 @@ void
 disableLwt()
 {
     debug_message("StatusBarButton disableLwt()");
-    View* gview = activeView();
+    Document* gview = activeDocument();
     if (gview) {
         if (gview->isLwtEnabled()) {
             gview->toggleLwt(false);
@@ -276,7 +276,7 @@ void
 enableReal()
 {
     debug_message("StatusBarButton enableReal()");
-    View* gview = activeView();
+    Document* gview = activeDocument();
     if (gview) {
         gview->toggleReal(true);
     }
@@ -286,7 +286,7 @@ void
 disableReal()
 {
     debug_message("StatusBarButton disableReal()");
-    View* gview = activeView();
+    Document* gview = activeDocument();
     if (gview) {
         gview->toggleReal(false);
     }
@@ -914,7 +914,7 @@ MdiArea::zoomExtentsAllSubWindows()
     foreach(QMdiSubWindow* window, subWindowList()) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(window);
         if (mdiWin) {
-            View* v = mdiWin->gview;
+            Document* v = mdiWin->gview;
             if (v) {
                 v->recalculateLimits();
                 v->zoomExtents();
@@ -950,7 +950,7 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     this->setWindowIcon(create_icon("app"));
 
     gscene = new QGraphicsScene(0,0,0,0, this);
-    gview = new View(_main, gscene, this);
+    gview = new Document(_main, gscene, this);
 
     setWidget(gview);
 
@@ -1281,12 +1281,12 @@ void MdiWindow::promptInputPrevNext(bool prev)
 {
     if (promptInputList.isEmpty()) {
         if (prev) {
-            messageBox("critical",
+            messagebox("critical",
                 translate("Prompt Previous Error"),
                 translate("The prompt input is empty! Please report this as a bug!"));
         }
         else {
-            messageBox("critical",
+            messagebox("critical",
                 translate("Prompt Next Error"),
                 translate("The prompt input is empty! Please report this as a bug!"));
         }
@@ -1615,13 +1615,13 @@ CmdPromptInput::processInput(const QChar& rapidChar)
             std::string cmd = aliasHash[cmdtxt.toStdString()];
             curCmd = QString(cmd.c_str());
             appendHistory(curText);
-            _main->runCommandPrompt(curCmd);
+            runCommandPrompt(curCmd);
         }
         else if (cmdtxt.isEmpty()) {
             cmdActive = true;
             appendHistory(curText);
             /* Rerun the last successful command. */
-            _main->runCommandPrompt(lastCmd);
+            runCommandPrompt(lastCmd);
         }
         else {
             appendHistory(curText + "<br/><font color=\"red\">Unknown command \"" + cmdtxt + "\". Press F1 for help.</font>");

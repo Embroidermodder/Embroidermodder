@@ -16,6 +16,7 @@
 #include <limits.h>
 #include <stdarg.h>
 #include <errno.h>
+#include <time.h>
 
 #include "core.h"
 
@@ -1230,13 +1231,21 @@ roundToMultiple(bool roundUp, int numToRound, int multiple)
 void
 debug_message(const char *msg)
 {
+    char buffer[MAX_STRING_LENGTH];
     char fname[200];
+    time_t t;
+    struct tm* tm_info;
     sprintf(fname, "debug.log");
     FILE *f = fopen(fname, "a");
-    if (f) {
-        fprintf(f, "%s\n", msg);
-        fclose(f);
+    if (!f) {
+        printf("Failed to write to debug.log.");
+        return;
     }
+    t = time(NULL);
+    tm_info = localtime(&t);
+    strftime(buffer, 26, "%Y-%m-%d %H:%M:%S", tm_info);
+    fprintf(f, "%s %s\n", buffer, msg);
+    fclose(f);
 }
 
 /* GEOMETRY */
@@ -1638,5 +1647,14 @@ set_diameter_minor(EmbGeometry *geometry, double diameter)
     default:
         break;
     }
+}
+
+/* . */
+void
+stub_implement(const char *txt)
+{
+    char message[MAX_STRING_LENGTH];
+    sprintf(message, "TODO: %s", txt);
+    debug_message(message);
 }
 

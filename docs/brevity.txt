@@ -25,4 +25,3 @@ are encoded into commands and a sequence of commands is all that is needed:
 if the user wishes to loop a sequence of commands they can write a script
 that produces a runcommand style file to be pasted into embroidermodder
 that unrolls the loop. Or even, write a new program that calls libembroidery.
-

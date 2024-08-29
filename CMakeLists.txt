@@ -38,16 +38,6 @@ add_compile_options(
 )
 endif()
 
-# The makers of CMake advise that you do not glob source files.
-#
-# https://cmake.org/cmake/help/latest/command/file.html?highlight=glob#glob
-#
-# Since our ASSETS are essential for the program to run, we are going to
-# give them the same treatment and list them explicitly here.
-#
-
-set(SRC_ASSETS ${CMAKE_SOURCE_DIR}/assets)
-
 set(SRC ${CMAKE_SOURCE_DIR}/src)
 set(EXTERN ${CMAKE_SOURCE_DIR}/extern)
 
@@ -57,6 +47,7 @@ set(C_DATA
 	${SRC}/data/menus.c
 	${SRC}/data/objects.c
 	${SRC}/data/properties.c
+	${SRC}/data/selectors.c
 	${SRC}/data/settings.c
 	${SRC}/data/testing.c
 	${SRC}/data/tips.c

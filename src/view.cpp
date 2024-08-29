@@ -12,7 +12,10 @@
 
 #include "embroidermodder.h"
 
-View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
+double zoomInLimit = 0.0000000001;
+double zoomOutLimit = 10000000000000.0;
+
+Document::Document(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
 {
     data.gscene = theScene;
 
@@ -111,7 +114,7 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
 }
 
 /* . */
-View::~View()
+Document::~Document()
 {
     /* Prevent memory leaks by deleting any objects that were removed from the scene */
     qDeleteAll(data.hashDeletedObjects.begin(), data.hashDeletedObjects.end());
@@ -124,7 +127,7 @@ View::~View()
 
 /* . */
 void
-View::enterEvent(QEvent* /*event*/)
+Document::enterEvent(QEvent* /*event*/)
 {
     QMdiSubWindow* mdiWin = qobject_cast<QMdiSubWindow*>(parent());
     if (mdiWin) {
@@ -136,7 +139,7 @@ View::enterEvent(QEvent* /*event*/)
 
 /* . */
 void
-View::addObject(Object* obj)
+Document::addObject(Object* obj)
 {
     data.gscene->addItem(obj);
     data.gscene->update();
@@ -145,7 +148,7 @@ View::addObject(Object* obj)
 
 /* . */
 void
-View::deleteObject(Object* obj)
+Document::deleteObject(Object* obj)
 {
     /* NOTE: We really just remove the objects from the scene. deletion actually occurs in the destructor. */
     obj->setSelected(false);
@@ -156,7 +159,7 @@ View::deleteObject(Object* obj)
 
 /* . */
 void
-View::previewOn(int clone, int mode, double x, double y, double data_)
+Document::previewOn(int clone, int mode, double x, double y, double data_)
 {
     debug_message("View previewOn()");
     previewOff(); /* Free the old objects before creating new ones */
@@ -193,7 +196,7 @@ View::previewOn(int clone, int mode, double x, double y, double data_)
 }
 
 void
-View::previewOff()
+Document::previewOff()
 {
     /* Prevent memory leaks by deleting any unused instances */
     qDeleteAll(data.previewObjectList.begin(), data.previewObjectList.end());
@@ -212,21 +215,21 @@ View::previewOff()
 
 /* . */
 void
-View::enableMoveRapidFire()
+Document::enableMoveRapidFire()
 {
     data.rapidMoveActive = true;
 }
 
 /* . */
 void
-View::disableMoveRapidFire()
+Document::disableMoveRapidFire()
 {
     data.rapidMoveActive = false;
 }
 
 /* . */
 bool
-View::allowRubber()
+Document::allowRubber()
 {
     /* if (!data.rubberRoomList.size()) */ /* TODO: this check should be removed later */
         return true;
@@ -235,7 +238,7 @@ View::allowRubber()
 
 /* . */
 void
-View::addToRubberRoom(QGraphicsItem* item)
+Document::addToRubberRoom(QGraphicsItem* item)
 {
     data.rubberRoomList.append(item);
     item->show();
@@ -244,7 +247,7 @@ View::addToRubberRoom(QGraphicsItem* item)
 
 /* . */
 void
-View::vulcanizeRubberRoom()
+Document::vulcanizeRubberRoom()
 {
     foreach(QGraphicsItem* item, data.rubberRoomList) {
         Object* base = static_cast<Object*>(item);
@@ -256,7 +259,7 @@ View::vulcanizeRubberRoom()
 
 /* . */
 void
-View::vulcanizeObject(Object* obj)
+Document::vulcanizeObject(Object* obj)
 {
     if (!obj) return;
     data.gscene->removeItem(obj); /* Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene */
@@ -269,7 +272,7 @@ View::vulcanizeObject(Object* obj)
 }
 
 void
-View::clearRubberRoom()
+Document::clearRubberRoom()
 {
     foreach(QGraphicsItem* item, data.rubberRoomList) {
         Object* base = static_cast<Object*>(item);
@@ -279,7 +282,7 @@ View::clearRubberRoom()
                (type == OBJ_TYPE_POLYGON  && data.spareRubberList.contains(SPARE_RUBBER_POLYGON))  ||
                (type == OBJ_TYPE_POLYLINE && data.spareRubberList.contains(SPARE_RUBBER_POLYLINE)) ||
                (data.spareRubberList.contains(base->data.objID))) {
-                if (!base->objectPath().elementCount()) {
+                if (!base->objectPath(base).elementCount()) {
                     QMessageBox::critical(this, tr("Empty Rubber Object Error"),
                                           tr("The rubber object added contains no points. "
                                           "The command that created this object has flawed logic. "
@@ -305,14 +308,14 @@ View::clearRubberRoom()
 
 /* . */
 void
-View::spareRubber(int64_t id)
+Document::spareRubber(int64_t id)
 {
     data.spareRubberList.append(id);
 }
 
 /* . */
 void
-View::setRubberMode(int mode)
+Document::setRubberMode(int mode)
 {
     foreach(QGraphicsItem* item, data.rubberRoomList) {
         Object* base = static_cast<Object*>(item);
@@ -323,7 +326,7 @@ View::setRubberMode(int mode)
 
 /* . */
 void
-View::setRubberPoint(const QString& key, const QPointF& point)
+Document::setRubberPoint(const QString& key, const QPointF& point)
 {
     foreach(QGraphicsItem* item, data.rubberRoomList) {
         Object* base = static_cast<Object*>(item);
@@ -334,7 +337,7 @@ View::setRubberPoint(const QString& key, const QPointF& point)
 
 /* . */
 void
-View::setRubberText(const QString& key, const QString& txt)
+Document::setRubberText(const QString& key, const QString& txt)
 {
     foreach(QGraphicsItem* item, data.rubberRoomList) {
         Object* base = static_cast<Object*>(item);
@@ -345,7 +348,7 @@ View::setRubberText(const QString& key, const QString& txt)
 
 /* . */
 void
-View::setGridColor(QRgb color)
+Document::setGridColor(QRgb color)
 {
     data.gridColor = QColor(color);
     if (data.gscene) {
@@ -356,7 +359,7 @@ View::setGridColor(QRgb color)
 
 /* . */
 void
-View::setRulerColor(QRgb color)
+Document::setRulerColor(QRgb color)
 {
     data.rulerColor = QColor(color);
     data.gscene->update();
@@ -364,7 +367,7 @@ View::setRulerColor(QRgb color)
 
 /* . */
 void
-View::createGrid(const QString& gridType)
+Document::createGrid(const QString& gridType)
 {
     if (gridType == "Rectangular") {
         createGridRect();
@@ -389,7 +392,7 @@ View::createGrid(const QString& gridType)
 }
 
 void
-View::createOrigin() /* TODO: Make Origin Customizable */
+Document::createOrigin() /* TODO: Make Origin Customizable */
 {
     data.originPath = QPainterPath();
 
@@ -408,7 +411,7 @@ View::createOrigin() /* TODO: Make Origin Customizable */
 }
 
 void
-View::createGridRect()
+Document::createGridRect()
 {
     double xSpacing = grid_spacing_x.setting;
     double ySpacing = grid_spacing_y.setting;
@@ -449,7 +452,7 @@ View::createGridRect()
 }
 
 void
-View::createGridPolar()
+Document::createGridPolar()
 {
     double radSpacing = grid_spacing_radius.setting;
     double angSpacing = grid_spacing_angle.setting;
@@ -475,7 +478,7 @@ View::createGridPolar()
 }
 
 void
-View::createGridIso()
+Document::createGridIso()
 {
     double xSpacing = grid_spacing_x.setting;
     double ySpacing = grid_spacing_y.setting;
@@ -526,7 +529,7 @@ View::createGridIso()
 }
 
 void
-View::toggleSnap(bool on)
+Document::toggleSnap(bool on)
 {
     debug_message("View toggleSnap()");
     wait_cursor();
@@ -537,7 +540,7 @@ View::toggleSnap(bool on)
 }
 
 void
-View::toggleGrid(bool on)
+Document::toggleGrid(bool on)
 {
     debug_message("View toggleGrid()");
     wait_cursor();
@@ -551,7 +554,7 @@ View::toggleGrid(bool on)
 }
 
 void
-View::toggleRuler(bool on)
+Document::toggleRuler(bool on)
 {
     debug_message("View toggleRuler()");
     wait_cursor();
@@ -564,7 +567,7 @@ View::toggleRuler(bool on)
 }
 
 void
-View::toggleOrtho(bool on)
+Document::toggleOrtho(bool on)
 {
     debug_message("View toggleOrtho()");
     wait_cursor();
@@ -575,7 +578,7 @@ View::toggleOrtho(bool on)
 }
 
 void
-View::togglePolar(bool on)
+Document::togglePolar(bool on)
 {
     debug_message("View togglePolar()");
     wait_cursor();
@@ -587,7 +590,7 @@ View::togglePolar(bool on)
 
 /* . */
 void
-View::toggleQSnap(bool on)
+Document::toggleQSnap(bool on)
 {
     debug_message("View toggleQSnap()");
     wait_cursor();
@@ -599,7 +602,7 @@ View::toggleQSnap(bool on)
 
 /* . */
 void
-View::toggleQTrack(bool on)
+Document::toggleQTrack(bool on)
 {
     debug_message("View toggleQTrack()");
     wait_cursor();
@@ -611,7 +614,7 @@ View::toggleQTrack(bool on)
 
 /* . */
 void
-View::toggleLwt(bool on)
+Document::toggleLwt(bool on)
 {
     debug_message("View toggleLwt()");
     wait_cursor();
@@ -621,7 +624,7 @@ View::toggleLwt(bool on)
 }
 
 void
-View::toggleReal(bool on)
+Document::toggleReal(bool on)
 {
     debug_message("View toggleReal()");
     wait_cursor();
@@ -631,25 +634,25 @@ View::toggleReal(bool on)
 }
 
 bool
-View::isLwtEnabled()
+Document::isLwtEnabled()
 {
     return data.gscene->property("ENABLE_LWT").toBool();
 }
 
 bool
-View::isRealEnabled()
+Document::isRealEnabled()
 {
     return data.gscene->property("ENABLE_REAL").toBool();
 }
 
 void
-View::drawArc(QPainter* painter, EmbArc arc)
+Document::drawArc(QPainter* painter, EmbArc arc)
 {
     QPainterPath path;
 }
 
 void
-View::drawCircle(QPainter* painter, EmbCircle circle)
+Document::drawCircle(QPainter* painter, EmbCircle circle)
 {
     QPainterPath path;
     EmbVector p = circle.center;
@@ -662,25 +665,25 @@ View::drawCircle(QPainter* painter, EmbCircle circle)
 }
 
 void
-View::drawEllipse(QPainter* painter, EmbEllipse ellipse)
+Document::drawEllipse(QPainter* painter, EmbEllipse ellipse)
 {
     QPainterPath path;
 }
 
 void
-View::drawLine(QPainter* painter, EmbLine line)
+Document::drawLine(QPainter* painter, EmbLine line)
 {
     QPainterPath path;
 }
 
 void
-View::drawPolygon(QPainter* painter, EmbPolygon polygon)
+Document::drawPolygon(QPainter* painter, EmbPolygon polygon)
 {
     QPainterPath path;
 }
 
 void
-View::drawPolyline(QPainter* painter, EmbPolyline polyline)
+Document::drawPolyline(QPainter* painter, EmbPolyline polyline)
 {
     QPainterPath path;
     EmbGeometry *geometry = polyline.pointList->geometry;
@@ -692,7 +695,7 @@ View::drawPolyline(QPainter* painter, EmbPolyline polyline)
 }
 
 void
-View::drawRect(QPainter* painter, EmbRect rect)
+Document::drawRect(QPainter* painter, EmbRect rect)
 {
     QPainterPath path;
     path.moveTo(rect.x, rect.y);
@@ -703,13 +706,13 @@ View::drawRect(QPainter* painter, EmbRect rect)
 }
 
 void
-View::drawSpline(QPainter* painter, EmbSpline spline)
+Document::drawSpline(QPainter* painter, EmbSpline spline)
 {
 
 }
 
 void
-View::drawBackground(QPainter* painter, const QRectF& rect)
+Document::drawBackground(QPainter* painter, const QRectF& rect)
 {
     painter->fillRect(rect, backgroundBrush());
 
@@ -766,7 +769,7 @@ View::drawBackground(QPainter* painter, const QRectF& rect)
 }
 
 void
-View::drawForeground(QPainter* painter, const QRectF& rect)
+Document::drawForeground(QPainter* painter, const QRectF& rect)
 {
     /* Draw grip points for all selected objects */
 
@@ -1084,7 +1087,7 @@ View::drawForeground(QPainter* painter, const QRectF& rect)
 }
 
 QPainterPath
-View::createRulerTextPath(float x, float y, QString str, float height)
+Document::createRulerTextPath(float x, float y, QString str, float height)
 {
     QPainterPath path;
 
@@ -1179,7 +1182,7 @@ View::createRulerTextPath(float x, float y, QString str, float height)
 
 /* . */
 void
-View::updateMouseCoords(int x, int y)
+Document::updateMouseCoords(int x, int y)
 {
     data.viewMousePoint = QPoint(x, y);
     data.sceneMousePoint = mapToScene(data.viewMousePoint);
@@ -1195,7 +1198,7 @@ View::updateMouseCoords(int x, int y)
  * NOTE: Example: (1280*0.05)/2 = 32, thus 32 + 1 + 32 = 65 pixel wide crosshair
  */
 void
-View::setCrossHairSize(uint8_t percent)
+Document::setCrossHairSize(uint8_t percent)
 {
     uint32_t screenWidth = QGuiApplication::primaryScreen()->geometry().width();
     if (percent > 0 && percent < 100) {
@@ -1207,7 +1210,7 @@ View::setCrossHairSize(uint8_t percent)
 }
 
 void
-View::setCornerButton()
+Document::setCornerButton()
 {
     int num = display_scrollbar_widget_num.setting;
     if (num) {
@@ -1232,21 +1235,21 @@ View::setCornerButton()
 }
 
 void
-View::cornerButtonClicked()
+Document::cornerButtonClicked()
 {
     debug_message("Corner Button Clicked.");
     actionHash[display_scrollbar_widget_num.setting]->trigger();
 }
 
 void
-View::zoomIn()
+Document::zoomIn()
 {
     debug_message("View zoomIn()");
-    if (!allowZoomIn()) {
+    if (!doc_allow_zoom_in(this)) {
         return;
     }
     wait_cursor();
-    QPointF cntr = mapToScene(QPoint(width()/2,height()/2));
+    QPointF cntr = mapToScene(QPoint(width()/2, height()/2));
     double s = display_zoomscale_in.setting;
     scale(s, s);
 
@@ -1255,14 +1258,14 @@ View::zoomIn()
 }
 
 void
-View::zoomOut()
+Document::zoomOut()
 {
     debug_message("View zoomOut()");
-    if (!allowZoomOut()) {
+    if (!doc_allow_zoom_out(this)) {
         return;
     }
     wait_cursor();
-    QPointF cntr = mapToScene(QPoint(width()/2,height()/2));
+    QPointF cntr = mapToScene(QPoint(width()/2, height()/2));
     double s = display_zoomscale_out.setting;
     scale(s, s);
 
@@ -1271,7 +1274,7 @@ View::zoomOut()
 }
 
 void
-View::zoomWindow()
+Document::zoomWindow()
 {
     data.zoomWindowActive = true;
     data.selectingActive = false;
@@ -1279,7 +1282,7 @@ View::zoomWindow()
 }
 
 void
-View::zoomSelected()
+Document::zoomSelected()
 {
     wait_cursor();
     QList<QGraphicsItem*> itemList = data.gscene->selectedItems();
@@ -1297,7 +1300,7 @@ View::zoomSelected()
 }
 
 void
-View::zoomExtents()
+Document::zoomExtents()
 {
     wait_cursor();
     QRectF extents = data.gscene->itemsBoundingRect();
@@ -1311,19 +1314,19 @@ View::zoomExtents()
 }
 
 void
-View::panRealTime()
+Document::panRealTime()
 {
     data.panningRealTimeActive = true;
 }
 
 void
-View::panPoint()
+Document::panPoint()
 {
     data.panningPointActive = true;
 }
 
 void
-View::panLeft()
+Document::panLeft()
 {
     horizontalScrollBar()->setValue(horizontalScrollBar()->value() + data.panDistance);
     updateMouseCoords(data.viewMousePoint.x(), data.viewMousePoint.y());
@@ -1331,7 +1334,7 @@ View::panLeft()
 }
 
 void
-View::panRight()
+Document::panRight()
 {
     horizontalScrollBar()->setValue(horizontalScrollBar()->value() - data.panDistance);
     updateMouseCoords(data.viewMousePoint.x(), data.viewMousePoint.y());
@@ -1339,7 +1342,7 @@ View::panRight()
 }
 
 void
-View::panUp()
+Document::panUp()
 {
     verticalScrollBar()->setValue(verticalScrollBar()->value() + data.panDistance);
     updateMouseCoords(data.viewMousePoint.x(), data.viewMousePoint.y());
@@ -1347,7 +1350,7 @@ View::panUp()
 }
 
 void
-View::panDown()
+Document::panDown()
 {
     verticalScrollBar()->setValue(verticalScrollBar()->value() - data.panDistance);
     updateMouseCoords(data.viewMousePoint.x(), data.viewMousePoint.y());
@@ -1355,7 +1358,7 @@ View::panDown()
 }
 
 void
-View::selectAll()
+Document::selectAll()
 {
     QPainterPath allPath;
     allPath.addRect(data.gscene->sceneRect());
@@ -1363,7 +1366,7 @@ View::selectAll()
 }
 
 void
-View::selectionChanged()
+Document::selectionChanged()
 {
     if (dockPropEdit->isVisible()) {
         dockPropEdit->setSelectedItems(data.gscene->selectedItems());
@@ -1371,7 +1374,7 @@ View::selectionChanged()
 }
 
 void
-View::mouseDoubleClickEvent(QMouseEvent* event)
+Document::mouseDoubleClickEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton) {
         QGraphicsItem* item = data.gscene->itemAt(mapToScene(event->pos()), QTransform());
@@ -1382,13 +1385,13 @@ View::mouseDoubleClickEvent(QMouseEvent* event)
 }
 
 void
-View::mousePressEvent(QMouseEvent* event)
+Document::mousePressEvent(QMouseEvent* event)
 {
     updateMouseCoords(event->position().x(), event->position().y());
     if (event->button() == Qt::LeftButton) {
         if (cmdActive) {
             QPointF cmdPoint = mapToScene(event->pos());
-            _main->runCommandClick(curCmd, cmdPoint.x(), cmdPoint.y());
+            runCommandClick(curCmd, cmdPoint.x(), cmdPoint.y());
             return;
         }
         QPainterPath path;
@@ -1557,7 +1560,7 @@ View::mousePressEvent(QMouseEvent* event)
 }
 
 void
-View::panStart(const QPoint& point)
+Document::panStart(const QPoint& point)
 {
     recalculateLimits();
 
@@ -1569,7 +1572,7 @@ View::panStart(const QPoint& point)
 }
 
 void
-View::recalculateLimits()
+Document::recalculateLimits()
 {
     /* NOTE: Increase the sceneRect limits if the point we want to go to lies outside of sceneRect's limits */
     /*       If the sceneRect limits aren't increased, you cannot pan past its limits */
@@ -1585,7 +1588,7 @@ View::recalculateLimits()
 }
 
 void
-View::centerAt(const QPointF& centerPoint)
+Document::centerAt(const QPointF& centerPoint)
 {
     /* centerOn also updates the scrollbars, which shifts things out of wack o_O */
     centerOn(centerPoint);
@@ -1596,7 +1599,7 @@ View::centerAt(const QPointF& centerPoint)
 }
 
 void
-View::alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& viewPoint)
+Document::alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& viewPoint)
 {
     QPointF viewCenter = center();
     QPointF pointBefore = scenePoint;
@@ -1611,7 +1614,7 @@ View::alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& view
 
 /* . */
 void
-View::mouseMoveEvent(QMouseEvent* event)
+Document::mouseMoveEvent(QMouseEvent* event)
 {
     updateMouseCoords(event->position().x(), event->position().y());
     data.movePoint = event->pos();
@@ -1619,7 +1622,7 @@ View::mouseMoveEvent(QMouseEvent* event)
 
     if (cmdActive) {
         if (data.rapidMoveActive) {
-            _main->runCommandMove(curCmd, data.sceneMovePoint.x(), data.sceneMovePoint.y());
+            runCommandMove(curCmd, data.sceneMovePoint.x(), data.sceneMovePoint.y());
         }
     }
     if (data.previewActive) {
@@ -1710,7 +1713,7 @@ View::mouseMoveEvent(QMouseEvent* event)
 }
 
 void
-View::mouseReleaseEvent(QMouseEvent* event)
+Document::mouseReleaseEvent(QMouseEvent* event)
 {
     updateMouseCoords(event->position().x(), event->position().y());
     if (event->button() == Qt::LeftButton) {
@@ -1746,45 +1749,51 @@ View::mouseReleaseEvent(QMouseEvent* event)
     data.gscene->update();
 }
 
+
+/* . */
 bool
-View::allowZoomIn()
+doc_allow_zoom_in(Document* doc)
 {
-    QPointF origin  = mapToScene(0,0);
-    QPointF corner  = mapToScene(width(), height());
+    /*
+    QPointF origin = mapToScene(0,0);
+    QPointF corner = mapToScene(width(), height());
     double maxWidth  = corner.x() - origin.x();
     double maxHeight = corner.y() - origin.y();
 
-    double zoomInLimit = 0.0000000001;
     if (EMB_MIN(maxWidth, maxHeight) < zoomInLimit) {
         char message[MAX_STRING_LENGTH];
         sprintf(message, "ZoomIn limit reached. (limit=%.10f)", zoomInLimit);
         debug_message(message);
         return false;
     }
+    */
 
     return true;
 }
 
-bool View::allowZoomOut()
+/* . */
+bool
+doc_allow_zoom_out(Document* doc)
 {
+    /*
     QPointF origin  = mapToScene(0,0);
     QPointF corner  = mapToScene(width(), height());
     double maxWidth  = corner.x() - origin.x();
     double maxHeight = corner.y() - origin.y();
 
-    double zoomOutLimit = 10000000000000.0;
     if (EMB_MAX(maxWidth, maxHeight) > zoomOutLimit) {
         char message[MAX_STRING_LENGTH];
         sprintf(message, "ZoomOut limit reached. (limit=%.1f)", zoomOutLimit);
         debug_message(message);
         return false;
     }
+    */
 
     return true;
 }
 
 void
-View::wheelEvent(QWheelEvent* event)
+Document::wheelEvent(QWheelEvent* event)
 {
     /*
     int zoomDir = event->delta();
@@ -1803,20 +1812,20 @@ View::wheelEvent(QWheelEvent* event)
 }
 
 void
-View::zoomToPoint(const QPoint& mousePoint, int zoomDir)
+Document::zoomToPoint(const QPoint& mousePoint, int zoomDir)
 {
     QPointF pointBeforeScale(mapToScene(mousePoint));
 
     /* Do The zoom */
     double s;
     if (zoomDir > 0) {
-        if (!allowZoomIn()) {
+        if (!doc_allow_zoom_in(this)) {
             return;
         }
         s = display_zoomscale_in.setting;
     }
     else {
-        if (!allowZoomOut()) {
+        if (!doc_allow_zoom_out(this)) {
             return;
         }
         s = display_zoomscale_out.setting;
@@ -1838,7 +1847,7 @@ View::zoomToPoint(const QPoint& mousePoint, int zoomDir)
 }
 
 void
-View::contextMenuEvent(QContextMenuEvent* event)
+Document::contextMenuEvent(QContextMenuEvent* event)
 {
     QMenu menu;
     QList<QGraphicsItem*> itemList = data.gscene->selectedItems();
@@ -1907,7 +1916,7 @@ View::contextMenuEvent(QContextMenuEvent* event)
 
 /* . */
 void
-View::deletePressed()
+Document::deletePressed()
 {
     debug_message("View deletePressed()");
     if (data.pastingActive) {
@@ -1924,7 +1933,7 @@ View::deletePressed()
 
 /* . */
 void
-View::escapePressed()
+Document::escapePressed()
 {
     debug_message("View escapePressed()");
     if (data.pastingActive) {
@@ -1944,7 +1953,7 @@ View::escapePressed()
 }
 
 void
-View::startGripping(Object* obj)
+Document::startGripping(Object* obj)
 {
     if (!obj) {
         return;
@@ -1957,7 +1966,7 @@ View::startGripping(Object* obj)
 }
 
 void
-View::stopGripping(bool accept)
+Document::stopGripping(bool accept)
 {
     data.grippingActive = false;
     if (data.gripBaseObj) {
@@ -1974,13 +1983,13 @@ View::stopGripping(bool accept)
 }
 
 void
-View::clearSelection()
+Document::clearSelection()
 {
     data.gscene->clearSelection();
 }
 
 void
-View::deleteSelected()
+Document::deleteSelected()
 {
     QList<QGraphicsItem*> itemList = data.gscene->selectedItems();
     int numSelected = itemList.size();
@@ -2005,7 +2014,7 @@ View::deleteSelected()
 
 /* . */
 void
-View::cut()
+Document::cut()
 {
     if (data.gscene->selectedItems().isEmpty()) {
         QMessageBox::information(this, tr("Cut Preselect"), tr("Preselect objects before invoking the cut command."));
@@ -2020,7 +2029,7 @@ View::cut()
 
 /* . */
 void
-View::copy()
+Document::copy()
 {
     if (data.gscene->selectedItems().isEmpty()) {
         QMessageBox::information(this, tr("Copy Preselect"), tr("Preselect objects before invoking the copy command."));
@@ -2032,7 +2041,7 @@ View::copy()
 }
 
 void
-View::copySelected()
+Document::copySelected()
 {
     QList<QGraphicsItem*> selectedList = data.gscene->selectedItems();
 
@@ -2049,7 +2058,7 @@ View::copySelected()
 
 /* . */
 void
-View::paste()
+Document::paste()
 {
     if (data.pastingActive) {
         data.gscene->removeItem(data.pasteObjectItemGroup);
@@ -2067,7 +2076,7 @@ View::paste()
 
 /* . */
 QList<QGraphicsItem*>
-View::createObjectList(QList<QGraphicsItem*> list)
+Document::createObjectList(QList<QGraphicsItem*> list)
 {
     QList<QGraphicsItem*> copyList;
 
@@ -2089,7 +2098,7 @@ View::createObjectList(QList<QGraphicsItem*> list)
 
 /* . */
 void
-View::repeatAction()
+repeat_action(void)
 {
     promptInput->endCommand();
     prompt->setCurrentText(lastCmd);
@@ -2098,7 +2107,7 @@ View::repeatAction()
 
 /* . */
 void
-View::moveAction()
+move_action(void)
 {
     promptInput->endCommand();
     prompt->setCurrentText("move");
@@ -2106,7 +2115,7 @@ View::moveAction()
 }
 
 void
-View::moveSelected(double dx, double dy)
+Document::moveSelected(double dx, double dy)
 {
     QList<QGraphicsItem*> itemList = data.gscene->selectedItems();
     int numSelected = itemList.size();
@@ -2129,7 +2138,7 @@ View::moveSelected(double dx, double dy)
 }
 
 void
-View::rotateAction()
+Document::rotateAction()
 {
     promptInput->endCommand();
     prompt->setCurrentText("rotate");
@@ -2137,7 +2146,7 @@ View::rotateAction()
 }
 
 void
-View::rotateSelected(double x, double y, double rot)
+Document::rotateSelected(double x, double y, double rot)
 {
     QList<QGraphicsItem*> itemList = data.gscene->selectedItems();
     int numSelected = itemList.size();
@@ -2162,7 +2171,7 @@ View::rotateSelected(double x, double y, double rot)
 }
 
 void
-View::mirrorSelected(double x1, double y1, double x2, double y2)
+Document::mirrorSelected(double x1, double y1, double x2, double y2)
 {
     QList<QGraphicsItem*> itemList = data.gscene->selectedItems();
     int numSelected = itemList.size();
@@ -2184,7 +2193,7 @@ View::mirrorSelected(double x1, double y1, double x2, double y2)
 }
 
 void
-View::scaleAction()
+Document::scaleAction()
 {
     promptInput->endCommand();
     prompt->setCurrentText("scale");
@@ -2192,7 +2201,7 @@ View::scaleAction()
 }
 
 void
-View::scaleSelected(double x, double y, double factor)
+Document::scaleSelected(double x, double y, double factor)
 {
     QList<QGraphicsItem*> itemList = data.gscene->selectedItems();
     int numSelected = itemList.size();
@@ -2216,13 +2225,13 @@ View::scaleSelected(double x, double y, double factor)
 }
 
 int
-View::numSelected()
+Document::numSelected()
 {
     return data.gscene->selectedItems().size();
 }
 
 void
-View::showScrollBars(bool val)
+Document::showScrollBars(bool val)
 {
     if (val) {
         setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -2235,7 +2244,7 @@ View::showScrollBars(bool val)
 }
 
 void
-View::setCrossHairColor(QRgb color)
+Document::setCrossHairColor(QRgb color)
 {
     data.crosshairColor = color;
     data.gscene->setProperty("VIEW_COLOR_CROSSHAIR", color);
@@ -2245,7 +2254,7 @@ View::setCrossHairColor(QRgb color)
 }
 
 void
-View::setBackgroundColor(QRgb color)
+Document::setBackgroundColor(QRgb color)
 {
     setBackgroundBrush(QColor(color));
     data.gscene->setProperty("VIEW_COLOR_BACKGROUND", color);
@@ -2255,7 +2264,7 @@ View::setBackgroundColor(QRgb color)
 }
 
 void
-View::setSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
+Document::setSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
 {
     data.selectBox->setColors(QColor(colorL), QColor(fillL), QColor(colorR), QColor(fillR), alpha);
 }

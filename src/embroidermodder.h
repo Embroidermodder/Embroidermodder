@@ -115,7 +115,7 @@ class Object;
 class PropertyEditor;
 class SelectBox;
 class UndoEditor;
-class View;
+class Document;
 class CmdPromptInput;
 
 extern MainWindow *_main;
@@ -177,14 +177,13 @@ extern QTimer* blinkTimer;
 extern bool blinkState;
 
 extern std::unordered_map<int, int> key_map;
-extern std::unordered_map<const char *, const char *> menu_list;
 
 void appendHistory(QString txt);
 
 void create_statusbar(MainWindow* mw);
 
 /* . */
-typedef struct ViewData_ {
+typedef struct DocumentData_ {
     QHash<int64_t, QGraphicsItem*> hashDeletedObjects;
 
     QList<int64_t> spareRubberList;
@@ -251,12 +250,12 @@ typedef struct ViewData_ {
     bool rulerMetric;
     QColor rulerColor;
     uint8_t rulerPixelSize;
-} ViewData;
+} DocumentData;
 
 typedef struct UndoData_ {
     int type;
     Object* object;
-    View* gview;
+    Document* gview;
     double dx;
     double dy;
     double pivotX;
@@ -313,7 +312,7 @@ typedef struct ObjectData_ {
 } ObjectData;
 
 MdiWindow* activeMdiWindow();
-View* activeView();
+Document* activeDocument();
 QGraphicsScene* activeScene();
 QUndoStack* activeUndoStack();
 QString platformString();
@@ -328,7 +327,6 @@ void nativeAddPath(double startX, double startY, const QPainterPath& p, int rubb
 
 void nativeAlert(std::string txt);
 void nativeAppendPromptHistory(std::string txt);
-void messageBox(std::string type, std::string title, std::string text);
 
 void nativeAddTextMulti(std::string str, double x, double y, double rot, bool fill, int rubberMode);
 void nativeAddTextSingle(std::string str, double x, double y, double rot, bool fill, int rubberMode);
@@ -349,6 +347,11 @@ void set_enabled(QObject *senderObj, const char *key, bool visibility);
 void set_visibility_group(QObject *senderObj, char *key[], bool visibility);
 void set_enabled_group(QObject *senderObj, char *key[], bool visibility);
 QIcon create_swatch(int32_t color);
+QGroupBox* create_group_box(QWidget* widget, const char *label, WidgetData data[]);
+QCheckBox* create_checkbox(QGroupBox* groupbox, QString label, BoolSetting *setting, QString icon);
+void preview_update(void);
+QDoubleSpinBox* create_spinbox(QGroupBox* groupbox, QString label, RealSetting *setting, double single_step, double lower_bound, double upper_bound);
+QSpinBox* create_int_spinbox(QGroupBox* groupbox, QString label, IntSetting *setting, int single_step, int lower_bound, int upper_bound);
 QPushButton *choose_color_button(QGroupBox* groupbox, IntSetting* color_setting);
 
 QString getCurrentLayer();
@@ -358,6 +361,238 @@ QString getCurrentLineWeight();
 
 void setHistory(const QString& txt);
 void add_command(std::string alias, std::string cmd);
+
+/* ------------------------ Object Functions --------------------------- */
+
+void obj_init_geometry(Object *obj, int type_, QRgb rgb, Qt::PenStyle lineType);
+
+/*
+QColor obj_color(Object *obj);
+QRgb obj_color_rgb(Object *obj);
+Qt::PenStyle obj_line_type(Object *obj);
+double obj_line_weight(Object *obj);
+QPainterPath obj_path(Object *obj);
+QPointF obj_rubber_point(Object *obj, const QString& key);
+QString obj_rubber_text(Object *obj, const QString& key);
+
+QPointF obj_pos(Object *obj);
+double obj_x(Object *obj);
+double obj_y(Object *obj);
+
+QPointF obj_center(Object *obj);
+double obj_center_x(Object *obj);
+double obj_center_y(Object *obj);
+
+double obj_radius(Object *obj);
+double obj_diameter(Object *obj);
+double obj_circumference(Object *obj);
+
+QPointF obj_end_point_1(Object *obj);
+QPointF obj_end_point_2(Object *obj);
+QPointF obj_start_point(Object *obj);
+QPointF obj_mid_point(Object *obj);
+QPointF obj_end_point(Object *obj);
+QPointF obj_delta(Object *obj);
+
+QPointF obj_top_left(Object *obj);
+QPointF obj_top_right(Object *obj);
+QPointF obj_bottom_left(Object *obj);
+QPointF obj_bottom_right(Object *obj);
+
+void obj_update_rubber(Object *obj, QPainter* painter);
+void obj_update_rubber_grip(Object *obj, QPainter *painter);
+void obj_update_leader(Object *obj);
+void obj_update_path(Object *obj);
+void obj_update_path(Object *obj, const QPainterPath& p);
+void obj_update_arc_rect(Object *obj, double radius);
+
+double obj_length(Object *obj);
+
+void obj_set_end_point_1(Object *obj, const QPointF& endPt1);
+void obj_set_end_point_1(Object *obj, double x1, double y1);
+void obj_set_end_point_2(Object *obj, const QPointF& endPt2);
+void obj_set_end_point_2(Object *obj, double x2, double y2);
+void obj_set_x1(Object *obj, double x);
+void obj_set_y1(Object *obj, double y);
+void obj_set_x2(Object *obj, double x);
+void obj_set_y2(Object *obj, double y);
+
+QRectF obj_rect(Object *obj);
+void obj_set_rect(Object *obj, const QRectF& r);
+void obj_set_rect(Object *obj, double x, double y, double w, double h);
+QLineF obj_line(Object *obj);
+void obj_set_line(Object *obj, const QLineF& li);
+void obj_set_line(Object *obj, double x1, double y1, double x2, double y2);
+
+void obj_set_pos(Object *obj, const QPointF& point);
+void obj_set_pos(Object *obj, double x, double y);
+void obj_set_x(Object *obj, double x);
+void obj_set_y(Object *obj, double y);
+
+void obj_set_color(Object *obj, const QColor& color);
+void obj_set_color_rgb(Object *obj, QRgb rgb);
+void obj_set_line_type(Object *obj, Qt::PenStyle lineType);
+void obj_set_line_weight(Object *obj, double lineWeight);
+void obj_set_path(Object *obj, const QPainterPath& p);
+void obj_set_rubber_mode(Object *obj, int mode);
+void obj_set_rubber_point(Object *obj, const QString& key, QPointF& point);
+void obj_set_rubber_rext(Object *obj, const QString& key, QString& txt);
+
+void obj_draw_rubber_line(Object *obj, const QLineF& rubLine, QPainter* painter = 0, char* colorFromScene = 0);
+QPen obj_line_weight_pen(Object *obj);
+void obj_real_render(Object *obj, QPainter* painter, QPainterPath& renderPath);
+
+void obj_set_center(Object *obj, EmbVector point);
+void obj_set_center(Object *obj, const QPointF& center);
+void obj_set_center_x(Object *obj, double centerX);
+void obj_set_center_y(Object *obj, double centerY);
+
+void obj_calculate_data(Object *obj);
+
+void obj_set_size(Object *obj, double width, double height);
+
+QPainterPath obj_copy_path(Object *obj);
+QPainterPath obj_save_path(Object *obj);
+QList<QPainterPath> obj_save_path_list(Object *obj);
+QList<QPainterPath> obj_sub_path_list(Object *obj);
+
+// TODO: make paths similar to polylines. Review and implement any missing functions/members. 
+int obj_find_index(Object *obj, const QPointF& point);
+*/
+
+void obj_set_text(Object *obj, const QString& str);
+void obj_set_text_font(Object *obj, const QString& font);
+void obj_set_text_justify(Object *obj, const QString& justify);
+void obj_set_text_size(Object *obj, double size);
+void obj_set_text_style(Object *obj, bool bold, bool italic, bool under, bool strike, bool over);
+void obj_set_text_bold(Object *obj, bool val);
+void obj_set_text_italic(Object *obj, bool val);
+void obj_set_text_underline(Object *obj, bool val);
+void obj_set_text_strikeout(Object *obj, bool val);
+void obj_set_text_overline(Object *obj, bool val);
+void obj_set_text_backward(Object *obj, bool val);
+void obj_set_text_upside_down(Object *obj, bool val);
+
+/* ---------------------- Document Functions --------------------------- */
+
+void repeat_action(void);
+void move_action(void);
+
+bool doc_allow_zoom_in(Document* doc);
+bool doc_allow_zoom_out(Document* doc);
+/*
+void doc_zoom_in(Document* doc);
+void doc_zoom_out(Document* doc);
+void doc_zoom_window(Document* doc);
+void doc_zoom_selected(Document* doc);
+void doc_zoom_extents(Document* doc);
+void doc_pan_real_time(Document* doc);
+void doc_pan_point(Document* doc);
+void doc_pan_left(Document* doc);
+void doc_pan_right(Document* doc);
+void doc_pan_up(Document* doc);
+void doc_pan_down(Document* doc);
+void doc_select_all(Document* doc);
+void doc_selection_changed(Document* doc);
+void doc_clear_selection(Document* doc);
+void doc_delete_selected(Document* doc);
+void doc_move_selected(Document* doc, double dx, double dy);
+void doc_cut(Document* doc);
+void doc_copy(Document* doc);
+void doc_paste(Document* doc);
+void doc_repeat_action(Document* doc);
+void doc_move_action(Document* doc);
+void doc_scale_action(Document* doc);
+void doc_scale_selected(Document* doc, double x, double y, double factor);
+void doc_rotate_action(Document* doc);
+void doc_rotate_selected(Document* doc, double x, double y, double rot);
+void doc_mirror_selected(Document* doc, double x1, double y1, double x2, double y2);
+int doc_num_selected(Document* doc);
+
+void doc_delete_pressed(Document* doc);
+void doc_escape_pressed(Document* doc);
+
+void doc_corner_button_clicked(Document* doc);
+
+void doc_show_scroll_bars(Document* doc, bool val);
+void doc_set_corner_button(Document* doc);
+void doc_set_cross_hair_color(Document* doc, QRgb color);
+void doc_set_cross_hair_size(Document* doc, uint8_t percent);
+void doc_set_background_color(Document* doc, QRgb color);
+void doc_set_select_box_colors(Document* doc, QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
+void doc_toggle_snap(Document* doc, bool on);
+void doc_toggle_grid(Document* doc, bool on);
+void doc_toggle_ruler(Document* doc, bool on);
+void doc_toggle_ortho(Document* doc, bool on);
+void doc_toggle_polar(Document* doc, bool on);
+void doc_toggle_qsnap(Document* doc, bool on);
+void doc_toggle_qtrack(Document* doc, bool on);
+void doc_toggle_lwt(Document* doc, bool on);
+void doc_toggle_real(Document* doc, bool on);
+bool doc_is_lwt_enabled(Document* doc);
+bool doc_is_real_enabled(Document* doc);
+
+void doc_set_grid_color(Document* doc, QRgb color);
+void doc_create_grid(Document* doc, QString& gridType);
+void doc_set_ruler_color(Document* doc, QRgb color);
+
+void doc_preview_on(Document* doc, int clone, int mode, double x, double y, double data);
+void doc_preview_off(Document* doc);
+
+void doc_enable_move_rapid_fire(Document* doc);
+void doc_disable_move_rapid_fire(Document* doc);
+
+bool doc_allow_rubber(Document* doc);
+void doc_add_to_rubber_room(Document* doc, QGraphicsItem* item);
+void doc_vulcanize_rubber_room(Document* doc);
+void doc_clear_rubber_room(Document* doc);
+void doc_spare_rubber(Document* doc, int64_t id);
+void doc_set_rubber_mode(Document* doc, int mode);
+void doc_set_rubber_point(Document* doc, QString& key, QPointF& point);
+void doc_set_rubber_text(Document* doc, QString& key, QString& txt);
+
+void draw_arc(QPainter* painter, EmbArc arc);
+void draw_circle(QPainter* painter, EmbCircle circle);
+void draw_ellipse(QPainter* painter, EmbEllipse ellipse);
+void draw_line(QPainter* painter, EmbLine line);
+void draw_polygon(QPainter* painter, EmbPolygon polygon);
+void draw_polyline(QPainter* painter, EmbPolyline polyline);
+void draw_rect(QPainter* painter, EmbRect rect);
+void draw_spline(QPainter* painter, EmbSpline spline);
+
+void doc_create_grid_rect(Document* doc);
+void doc_create_grid_polar(Document* doc);
+void doc_create_grid_iso(Document* doc);
+void doc_create_origin(Document* doc);
+
+void doc_load_ruler_settings(Document* doc);
+
+QPainterPath doc_createRulerTextPath(Document* doc, float x, float y, QString str, float height);
+
+QList<QGraphicsItem*> doc_createObjectList(Document* doc, QList<QGraphicsItem*> list);
+
+void doc_copySelected(Document* doc);
+
+void doc_startGripping(Document* doc, Object* obj);
+void doc_stopGripping(Document* doc, bool accept = false);
+
+void doc_update_mouse_coords(Document* doc, int x, int y);
+
+void doc_panStart(Document* doc, QPoint& point);
+
+void doc_alignScenePointWithViewPoint(Document* doc, QPointF& scenePoint, QPoint& viewPoint);
+
+void doc_recalculateLimits(Document* doc);
+void doc_zoomToPoint(Document* doc, QPoint& mousePoint, int zoomDir);
+void doc_centerAt(Document* doc, QPointF& centerPoint);
+QPointF doc_center(Document* doc);
+
+void doc_addObject(Document* doc, Object* obj);
+void doc_deleteObject(Document* doc, Object* obj);
+void doc_vulcanizeObject(Document* doc, Object* obj);
+*/
+
+/* ---------------------- Class Declarations --------------------------- */
 
 class LayerManager : public QDialog
 {
@@ -416,18 +651,16 @@ protected:
     virtual void paintEvent(QPaintEvent* e);
 };
 
-class View : public QGraphicsView
+/* . */
+class Document: public QGraphicsView
 {
     Q_OBJECT
 
 public:
-    View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent);
-    ~View();
+    Document(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent);
+    ~Document();
 
-    ViewData data;
-
-    bool allowZoomIn();
-    bool allowZoomOut();
+    DocumentData data;
 
     void recalculateLimits();
     void zoomToPoint(const QPoint& mousePoint, int zoomDir);
@@ -458,8 +691,6 @@ public slots:
     void cut();
     void copy();
     void paste();
-    void repeatAction();
-    void moveAction();
     void scaleAction();
     void scaleSelected(double x, double y, double factor);
     void rotateAction();
@@ -556,12 +787,12 @@ private:
 class UndoableCommand : public QUndoCommand
 {
 public:
-    UndoableCommand(int type_, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, double deltaX, double deltaY, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, double pivotPointX, double pivotPointY, double rotAngle, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, const QString& type, View* v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, const QPointF beforePoint, const QPointF afterPoint, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, double x1, double y1, double x2, double y2, const QString& text, Object* obj, View* v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, const QString& text, Object* obj, Document* v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, double deltaX, double deltaY, const QString& text, Object* obj, Document* v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, double pivotPointX, double pivotPointY, double rotAngle, const QString& text, Object* obj, Document* v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, const QString& type, Document* v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, const QPointF beforePoint, const QPointF afterPoint, const QString& text, Object* obj, Document* v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, double x1, double y1, double x2, double y2, const QString& text, Object* obj, Document* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
@@ -611,8 +842,7 @@ class Object : public QGraphicsPathItem
 public:
     EmbGeometry *geometry;
     ObjectData data;
-
-    void init_geometry(int type_, QRgb rgb, Qt::PenStyle lineType);
+    Object* obj;
 
     Object(EmbArc arc, QRgb rgb, QGraphicsItem* parent = 0);
     Object(EmbCircle circle, QRgb rgb, QGraphicsItem *item = 0);
@@ -628,13 +858,13 @@ public:
     Object(Object* obj, QGraphicsItem* parent = 0);
     ~Object();
 
-    /* QColor objectColor() const { return data.objPen.color(); } */
-    QRgb objectColorRGB() const { return data.objPen.color().rgb(); }
-    Qt::PenStyle objectLineType() const { return data.objPen.style(); }
-    double  objectLineWeight() const { return data.lwtPen.widthF(); }
-    QPainterPath objectPath() const { return path(); }
-    QPointF objectRubberPoint(const QString& key) const;
-    QString objectRubberText(const QString& key) const;
+    /* QColor objectColor(Object* obj) const { return data.objPen.color(); } */
+    QRgb objectColorRGB(Object* obj) const { return data.objPen.color().rgb(); }
+    Qt::PenStyle objectLineType(Object* obj) const { return data.objPen.style(); }
+    double  objectLineWeight(Object* obj) const { return data.lwtPen.widthF(); }
+    QPainterPath objectPath(Object* obj) const { return path(); }
+    QPointF objectRubberPoint(Object* obj, const QString& key) const;
+    QString objectRubberText(Object* obj, const QString& key) const;
 
     QPointF objectPos() const { return scenePos(); }
     double objectX() const { return scenePos().x(); }
@@ -728,18 +958,6 @@ public:
     /* TODO: make paths similar to polylines. Review and implement any missing functions/members. */
     int findIndex(const QPointF& point);
 
-    void set_text(const QString& str);
-    void set_text_font(const QString& font);
-    void set_text_justify(const QString& justify);
-    void set_text_size(double size);
-    void set_text_style(bool bold, bool italic, bool under, bool strike, bool over);
-    void set_text_bold(bool val);
-    void set_text_italic(bool val);
-    void set_text_underline(bool val);
-    void set_text_strikeout(bool val);
-    void set_text_overline(bool val);
-    void set_text_backward(bool val);
-    void set_text_upside_down(bool val);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 };
@@ -943,7 +1161,7 @@ public:
 
     QMdiArea* mdiArea;
     QGraphicsScene* gscene;
-    View* gview;
+    Document* gview;
 
     bool fileWasLoaded;
 
@@ -1102,6 +1320,12 @@ private:
     void updateStyle();
 };
 
+void runCommandMain(const QString& cmd);
+void runCommandClick(const QString& cmd, double x, double y);
+void runCommandMove(const QString& cmd, double x, double y);
+void runCommandContext(const QString& cmd, const QString& str);
+void runCommandPrompt(const QString& cmd);
+
 class MainWindow: public QMainWindow
 {
     Q_OBJECT
@@ -1162,11 +1386,6 @@ public slots:
 
     /* NOTE: for some reason QString <-> std::string conversions makes commands not work. */
     void runCommand();
-    void runCommandMain(const QString& cmd);
-    void runCommandClick(const QString& cmd, double x, double y);
-    void runCommandMove(const QString& cmd, double x, double y);
-    void runCommandContext(const QString& cmd, const QString& str);
-    void runCommandPrompt(const QString& cmd);
 
     void openFile(bool recent = false, const QString& recentFile = "");
     void openFilesSelected(const QStringList&);

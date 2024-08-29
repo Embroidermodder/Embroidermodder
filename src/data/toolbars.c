@@ -10,6 +10,26 @@
  * Toolbars
  */
 
+char *toolbar_list[] = {
+    "File", "File",
+    "Edit", "Edit",
+    "View", "View",
+    "Zoom", "Zoom",
+    "Pan", "Pan",
+    "Icon", "Icon",
+    "Help", "Help",
+    "Layer", "Layer",
+    "Properties", "Properties",
+    "Text", "Text",
+    "Prompt", "Command Prompt",
+    "Draw", "Draw",
+    "Modify", "Modify",
+    "Inquiry", "toolbarInquiry",
+    "Dimension", "toolbarDimension",
+    "Sandbox", "toolbarSandbox",
+    "END", "END"
+};
+
 char *toolbars_when_docs[] = {
     "View",
     "Zoom",

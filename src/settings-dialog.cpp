@@ -11,55 +11,6 @@
 
 #include "embroidermodder.h"
 
-QGroupBox* create_group_box(QWidget* widget, const char *label, WidgetData data[]);
-QCheckBox* create_checkbox(QGroupBox* groupbox, QString label, BoolSetting *setting, QString icon);
-void preview_update(void);
-QDoubleSpinBox* create_spinbox(QGroupBox* groupbox, QString label, RealSetting *setting, double single_step, double lower_bound, double upper_bound);
-QSpinBox* create_int_spinbox(QGroupBox* groupbox, QString label, IntSetting *setting, int single_step, int lower_bound, int upper_bound);
-
-QCheckBox*
-create_checkbox(QGroupBox* groupbox, QString label, BoolSetting *setting, QString icon)
-{
-    QCheckBox* checkBox = new QCheckBox(translate(qPrintable(label)), groupbox);
-    setting->dialog = setting->setting;
-    setting->preview = setting->dialog;
-    checkBox->setChecked(setting->dialog);
-    QObject::connect(checkBox, &QCheckBox::stateChanged, _main,
-        [=](int checked) { setting->dialog = checked; preview_update(); });
-    if (icon != "") {
-        checkBox->setIcon(create_icon(icon));
-    }
-    return checkBox;
-}
-
-QDoubleSpinBox*
-create_spinbox(QGroupBox* groupbox, QString label, RealSetting *setting, double single_step, double lower_bound, double upper_bound)
-{
-    QDoubleSpinBox* spinbox = new QDoubleSpinBox(groupbox);
-    spinbox->setObjectName(label);
-    setting->dialog = setting->setting;
-    spinbox->setSingleStep(single_step);
-    spinbox->setRange(lower_bound, upper_bound);
-    spinbox->setValue(setting->dialog);
-    QObject::connect(spinbox, &QDoubleSpinBox::valueChanged, _main,
-        [=](double value) { setting->dialog = value; });
-    return spinbox;
-}
-
-QSpinBox*
-create_int_spinbox(QGroupBox* groupbox, QString label, IntSetting *setting, int single_step, int lower_bound, int upper_bound)
-{
-    QSpinBox* spinbox = new QSpinBox(groupbox);
-    spinbox->setObjectName(label);
-    setting->dialog = setting->setting;
-    spinbox->setSingleStep(single_step);
-    spinbox->setRange(lower_bound, upper_bound);
-    spinbox->setValue(setting->dialog);
-    QObject::connect(spinbox, &QSpinBox::valueChanged, _main,
-        [=](int value) { setting->dialog = value; });
-    return spinbox;
-}
-
 /* . */
 Settings_Dialog::Settings_Dialog(MainWindow* mw, const QString& showTab, QWidget* parent) : QDialog(parent)
 {
@@ -538,10 +489,8 @@ QWidget* Settings_Dialog::createTabOpenSave()
     connect(buttonCustomFilterClearAll, SIGNAL(clicked()), this, SLOT(buttonCustomFilterClearAllClicked()));
 
     int i;
-    for (i=0; ; i++) {
-        if (!strcmp(extensions[i], "END")) {
-            break;
-        }
+    int n_extensions = string_array_length(extensions);
+    for (i=0; i<n_extensions; i++) {
         const char *extension = extensions[i];
         custom_filter[extension] = new QCheckBox(extension, groupBoxCustomFilter);
         custom_filter[extension]->setChecked(QString(opensave_custom_filter.dialog).contains("*." + QString(extension), Qt::CaseInsensitive));
@@ -558,10 +507,7 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QGridLayout* gridLayoutCustomFilter = new QGridLayout(groupBoxCustomFilter);
     int row = 0;
     int column = 0;
-    for (i=0; ; i++) {
-        if (!strcmp(extensions[i], "END")) {
-            break;
-        }
+    for (i=0; i<n_extensions; i++) {
         const char *extension = extensions[i];
         gridLayoutCustomFilter->addWidget(custom_filter[extension], row, column, Qt::AlignLeft);
         row++;

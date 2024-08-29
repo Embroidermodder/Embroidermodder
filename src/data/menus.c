@@ -10,6 +10,24 @@
  * Menus
  */
 
+char *menu_list[] = {
+    "File", "&File",
+    "Edit", "&Edit",
+    "View", "&View",
+    "Draw", "&Draw",
+    "Tools", "&Tools",
+    "Modify", "&Modify",
+    "Sandbox", "S&andbox",
+    "Dimension", "&Dimension",
+    "Settings", "&Settings",
+    "Window", "&Window",
+    "Help", "&Help",
+    "Recent", "Open &Recent",
+    "Zoom", "&Zoom",
+    "Pan", "&Pan",
+    "END", "END"
+};
+
 char *menubar_full_list[] = {
     "File",
     "Edit",
@@ -19,7 +37,6 @@ char *menubar_full_list[] = {
     "Modify",
     "Dimension",
     "Sandbox",
-    "Settings",
     "Window",
     "Help",
     "END"
@@ -35,6 +52,21 @@ char *menubar_no_docs[] = {
 };
 
 char *file_menu[] = {
+    "new",
+    "---",
+    "open",
+    ">Recent",
+    "---",
+    "save",
+    "saveas",
+    "---",
+    "print",
+    "---",
+    "windowclose",
+    "---",
+    "designdetails",
+    "---",
+    "exit",
     "END"
 };
 
@@ -46,6 +78,7 @@ char *edit_menu[] = {
     "copy",
     "paste",
     "---",
+    "settingsdialog",
     "END"
 };
 

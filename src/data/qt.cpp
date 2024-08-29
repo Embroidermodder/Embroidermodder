@@ -120,20 +120,3 @@ QStringList button_list = {
     "LWT"
 };
 
-std::unordered_map<const char *, const char *> menu_list = {
-    {"File", "&File"},
-    {"Edit", "&Edit"},
-    {"View", "&View"},
-    {"Draw", "&Draw"},
-    {"Tools", "&Tools"},
-    {"Modify", "&Modify"},
-    {"Sandbox", "S&andbox"},
-    {"Dimension", "&Dimension"},
-    {"Settings", "&Settings"},
-    {"Window", "&Window"},
-    {"Help", "&Help"},
-    {"Recent", "Open &Recent"},
-    {"Zoom", "&Zoom"},
-    {"Pan", "&Pan"}
-};
-

@@ -14,23 +14,6 @@
 
 /* . */
 void
-stub_implement(const char *txt)
-{
-    char message[MAX_STRING_LENGTH];
-    sprintf(message, "TODO: %s", txt);
-    debug_message(message);
-}
-
-/* . */
-void
-stub_testing(void)
-{
-    messageBox("warning", translate("Testing Feature"),
-        translate("<b>This feature is in testing.</b>"));
-}
-
-/* . */
-void
 exit_program(void)
 {
     debug_message("exit()");
@@ -336,13 +319,13 @@ activeMdiWindow()
     return mdiWin;
 }
 
-View*
-activeView()
+Document*
+activeDocument()
 {
-    debug_message("activeView()");
+    debug_message("activeDocument()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
-        View* v = mdiWin->gview;
+        Document* v = mdiWin->gview;
         return v;
     }
     return 0;
@@ -364,7 +347,7 @@ QUndoStack*
 activeUndoStack()
 {
     debug_message("activeUndoStack()");
-    View* v = activeView();
+    Document* v = activeDocument();
     if (v) {
         QUndoStack* u = v->data.undoStack;
         return u;
@@ -714,7 +697,7 @@ run_command(const char* cmd, ScriptEnv *context)
 {
     char message[MAX_STRING_LENGTH];
     int id = get_command_id(cmd);
-    View* gview = NULL;
+    Document* gview = NULL;
     ScriptValue value = script_true;
     sprintf(message, "run_command(%s) %d", cmd, id);
     debug_message(message);
@@ -731,19 +714,19 @@ run_command(const char* cmd, ScriptEnv *context)
     }
 
     if (command_data[id].flags & REQUIRED_VIEW) {
-        gview = activeView();
+        gview = activeDocument();
         if (!gview) {
             return value;
         }
     }
     if (!(command_data[id].flags & DONT_INITIALIZE)) {
-        gview = activeView();
+        gview = activeDocument();
         if (gview) {
             gview->clearRubberRoom();
         }
     }
     if (command_data[id].flags & CLEAR_SELECTION) {
-        gview = activeView();
+        gview = activeDocument();
         if (gview) {
             gview->clearSelection();
         }
@@ -1038,7 +1021,7 @@ run_command(const char* cmd, ScriptEnv *context)
             /* TODO: Prompt to select objects if nothing is preselected. */
             prompt->alert(
             translate("Preselect objects before invoking the delete command."));
-            messageBox("information", translate("Delete Preselect"),
+            messagebox("information", translate("Delete Preselect"),
                 translate("Preselect objects before invoking the delete command."));
         }
         else {
@@ -1302,7 +1285,7 @@ MainWindow::runCommand()
 /* FIXME: reconnect to new command system.
  */
 void
-MainWindow::runCommandMain(const QString& cmd)
+runCommandMain(const QString& cmd)
 {
     char message[MAX_STRING_LENGTH];
     ScriptEnv *context = create_script_env();
@@ -1322,7 +1305,7 @@ MainWindow::runCommandMain(const QString& cmd)
 /* FIXME: reconnect to new command system.
  */
 void
-MainWindow::runCommandClick(const QString& cmd, double x, double y)
+runCommandClick(const QString& cmd, double x, double y)
 {
     char message[MAX_STRING_LENGTH];
     ScriptEnv *context = create_script_env();
@@ -1337,7 +1320,7 @@ MainWindow::runCommandClick(const QString& cmd, double x, double y)
 /* FIXME: reconnect to new command system.
  */
 void
-MainWindow::runCommandMove(const QString& cmd, double x, double y)
+runCommandMove(const QString& cmd, double x, double y)
 {
     char message[MAX_STRING_LENGTH];
     ScriptEnv *context = create_script_env();
@@ -1352,7 +1335,7 @@ MainWindow::runCommandMove(const QString& cmd, double x, double y)
 /* FIXME: reconnect to new command system.
  */
 void
-MainWindow::runCommandContext(const QString& cmd, const QString& str)
+runCommandContext(const QString& cmd, const QString& str)
 {
     char message[MAX_STRING_LENGTH];
     ScriptEnv *context = create_script_env();
@@ -1368,7 +1351,7 @@ MainWindow::runCommandContext(const QString& cmd, const QString& str)
  * NOTE: Replace any special characters that will cause a syntax error
  */
 void
-MainWindow::runCommandPrompt(const QString& cmd)
+runCommandPrompt(const QString& cmd)
 {
     char message[MAX_STRING_LENGTH];
     ScriptEnv *context = create_script_env();
@@ -1385,31 +1368,42 @@ MainWindow::runCommandPrompt(const QString& cmd)
     free_script_env(context);
 }
 
+/* NOTE: translation is the repsonisbility of the caller, because some reports
+ * include parts that aren't translated. For example:
+ *
+ *     char message[MAX_STRING_LENGTH];
+ *     sprintf(message, "%s: x > %f", translate("Value of X is too small"), x);
+ *     messagebox("critical", translate("Out of Bounds"), message);
+ */
 void
-messageBox(std::string msgType, std::string title, std::string text)
+messagebox(char *msgType, char *title, char *text)
 {
-    if (msgType == "critical") {
-        QMessageBox::critical(_main,
-            translate(title.c_str()), translate(text.c_str()));
+    if (!strcmp(msgType, "critical")) {
+        QMessageBox::critical(_main, title, text);
     }
-    else if (msgType == "information") {
-        QMessageBox::information(_main,
-            translate(title.c_str()), translate(text.c_str()));
+    else if (!strcmp(msgType, "information")) {
+        QMessageBox::information(_main, title, text);
     }
-    else if (msgType == "question") {
-        QMessageBox::question(_main,
-            translate(title.c_str()), translate(text.c_str()));
+    else if (!strcmp(msgType, "question")) {
+        QMessageBox::question(_main, title, text);
     }
-    else if (msgType == "warning") {
-        QMessageBox::warning(_main,
-            translate(title.c_str()), translate(text.c_str()));
+    else if (!strcmp(msgType, "warning")) {
+        QMessageBox::warning(_main, title, text);
     }
     else {
-        QMessageBox::critical(_main,
-            translate(title.c_str()), translate(text.c_str()));
+        QMessageBox::critical(_main, title, text);
     }
 }
 
+/* . */
+void
+stub_testing(void)
+{
+    messagebox("warning", translate("Testing Feature"),
+        translate("<b>This feature is in testing.</b>"));
+}
+
+/* . */
 void
 nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b)
 {
@@ -1434,7 +1428,7 @@ nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b)
 bool
 nativeAllowRubber()
 {
-    View* gview = activeView();
+    Document* gview = activeDocument();
     if (gview) {
         return gview->allowRubber();
     }
@@ -1444,7 +1438,7 @@ nativeAllowRubber()
 void
 nativeSpareRubber(int64_t id)
 {
-    View* gview = activeView();
+    Document* gview = activeDocument();
     if (gview) {
         gview->spareRubber(id);
     }
@@ -1454,7 +1448,7 @@ nativeSpareRubber(int64_t id)
 void
 nativeSetRubberMode(int mode)
 {
-    View* gview = activeView();
+    Document* gview = activeDocument();
     if (gview) {
         gview->setRubberMode(mode);
     }
@@ -1464,7 +1458,7 @@ nativeSetRubberMode(int mode)
 void
 nativeSetRubberPoint(char key[MAX_STRING_LENGTH], double x, double y)
 {
-    View* gview = activeView();
+    Document* gview = activeDocument();
     if (gview) {
         gview->setRubberPoint(key, QPointF(x, -y));
     }
@@ -1474,7 +1468,7 @@ nativeSetRubberPoint(char key[MAX_STRING_LENGTH], double x, double y)
 void
 nativeSetRubberText(char key[MAX_STRING_LENGTH], char txt[MAX_STRING_LENGTH])
 {
-    View* gview = activeView();
+    Document* gview = activeDocument();
     if (gview) {
         gview->setRubberText(key, txt);
     }
@@ -1490,20 +1484,20 @@ nativeAddTextMulti(std::string str, double x, double y, double rot, bool fill, i
 void
 nativeAddTextSingle(std::string str, double x, double y, double rot, bool fill, int rubberMode)
 {
-    View* gview = activeView();
+    Document* gview = activeDocument();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->data.undoStack;
     if (gview && gscene && stack) {
         Object* obj = new Object(QString(str.c_str()), x, -y, getCurrentColor());
-        obj->set_text_font(text_font.setting);
-        obj->set_text_size(text_size.setting);
-        obj->set_text_style(text_style_bold.setting,
+        obj_set_text_font(obj, text_font.setting);
+        obj_set_text_size(obj, text_size.setting);
+        obj_set_text_style(obj, text_style_bold.setting,
                                 text_style_italic.setting,
                                 text_style_underline.setting,
                                 text_style_strikeout.setting,
                                 text_style_overline.setting);
-        obj->set_text_backward(false);
-        obj->set_text_upside_down(false);
+        obj_set_text_backward(obj, false);
+        obj_set_text_upside_down(obj, false);
         obj->setRotation(-rot);
         /* TODO: single line text fill. */
         obj->setObjectRubberMode(rubberMode);
@@ -1535,7 +1529,7 @@ nativeAddRay(double x1, double y1, double x2, double y2, double rot)
 void
 nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubberMode)
 {
-    View* gview = activeView();
+    Document* gview = activeDocument();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->data.undoStack;
     if (gview && gscene && stack) {
@@ -1564,7 +1558,7 @@ nativeAddTriangle(double x1, double y1, double x2, double y2, double x3, double 
 void
 nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode)
 {
-    View* gview = activeView();
+    Document* gview = activeDocument();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->data.undoStack;
     if (!(gview && gscene && stack)) {
@@ -1594,7 +1588,7 @@ nativeAddRoundedRectangle(double x, double y, double w, double h, double rad, do
 void
 nativeAddArc(double x1, double y1, double x2, double y2, double x3, double y3, int rubberMode)
 {
-    View* gview = activeView();
+    Document* gview = activeDocument();
     QGraphicsScene* scene = activeScene();
     if (gview && scene) {
         EmbArc arc;
@@ -1617,7 +1611,7 @@ nativeAddArc(double x1, double y1, double x2, double y2, double x3, double y3, i
 void
 nativeAddCircle(double centerX, double centerY, double radius, bool fill, int rubberMode)
 {
-    View* gview = activeView();
+    Document* gview = activeDocument();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->data.undoStack;
     if (gview && gscene && stack) {
@@ -1658,7 +1652,7 @@ nativeAddSlot(double centerX, double centerY, double diameter, double length, do
 void
 nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode)
 {
-    View* gview = activeView();
+    Document* gview = activeDocument();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->data.undoStack;
     if (gview && gscene && stack) {
@@ -1686,7 +1680,7 @@ nativeAddEllipse(double centerX, double centerY, double width, double height, do
 void
 nativeAddPoint(double x, double y)
 {
-    View* gview = activeView();
+    Document* gview = activeDocument();
     QUndoStack* stack = gview->data.undoStack;
     if (gview && stack) {
         EmbPoint point;
@@ -1709,7 +1703,7 @@ nativeAddRegularPolygon(double centerX, double centerY, quint16 sides, uint8_t m
 void
 nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
-    View* gview = activeView();
+    Document* gview = activeDocument();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->data.undoStack;
     if (gview && gscene && stack) {
@@ -1734,7 +1728,7 @@ nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubber
 void
 nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
-    View* gview = activeView();
+    Document* gview = activeDocument();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->data.undoStack;
     if (gview && gscene && stack) {
@@ -1779,7 +1773,7 @@ nativeAddImage(const QString& img, double x, double y, double w, double h, doubl
 void
 nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode)
 {
-    View* gview = activeView();
+    Document* gview = activeDocument();
     QGraphicsScene* gscene = gview->scene();
     QUndoStack* stack = gview->data.undoStack;
     if (gview && gscene && stack) {
@@ -1801,7 +1795,7 @@ nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int r
 void
 nativeSetCursorShape(char shape[MAX_STRING_LENGTH])
 {
-    View* gview = activeView();
+    Document* gview = activeDocument();
     if (gview) {
         if (!strcmp(shape, "arrow"))
             gview->setCursor(QCursor(Qt::ArrowCursor));
@@ -1870,7 +1864,7 @@ nativeScaleSelected(double x, double y, double factor)
             "If you are a developer, your code needs examined, and possibly your head too.")));
     }
 
-    View* gview = activeView();
+    Document* gview = activeDocument();
     if (gview) {
         gview->scaleSelected(x, -y, factor);
     }
@@ -1906,7 +1900,7 @@ prompt_output(const char *txt)
 void
 cut(void)
 {
-    View* gview = activeView();
+    Document* gview = activeDocument();
     if (gview) {
         gview->cut();
     }
@@ -1915,7 +1909,7 @@ cut(void)
 void
 end_command(void)
 {
-    View* gview = activeView();
+    Document* gview = activeDocument();
     if (gview) {
         gview->clearRubberRoom();
         gview->previewOff();
@@ -2078,7 +2072,7 @@ previewon_command(ScriptEnv *context)
         return script_false;
     }
 
-    View* gview = activeView();
+    Document* gview = activeDocument();
     if (gview) {
         gview->previewOn(clone, mode, REAL(2), -REAL(3), REAL(4));
     }
@@ -2217,18 +2211,16 @@ append_prompt_history(ScriptEnv* context)
 
 /* . */
 ScriptValue
-messagebox(ScriptEnv* context)
+messagebox_command(ScriptEnv* context)
 {
     std::string type(STR(0));
-    std::string title(STR(1));
-    std::string text(STR(2));
 
     if (type != "critical" && type != "information" && type != "question" && type != "warning") {
         prompt_output("UNKNOWN_ERROR messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
         return script_false;
     }
 
-    messageBox(type, title, text);
+    messagebox(STR(0), STR(1), STR(2));
     return script_null;
 }
 
@@ -2570,7 +2562,7 @@ scale_selected_command(ScriptEnv* context)
 /*
  * Undo
  */
-UndoableCommand::UndoableCommand(int type_, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableCommand::UndoableCommand(int type_, const QString& text, Object* obj, Document* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     data.type = type_;
     data.gview = v;
@@ -2579,7 +2571,7 @@ UndoableCommand::UndoableCommand(int type_, const QString& text, Object* obj, Vi
 }
 
 /* Move */
-UndoableCommand::UndoableCommand(int type_, double deltaX, double deltaY, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableCommand::UndoableCommand(int type_, double deltaX, double deltaY, const QString& text, Object* obj, Document* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     data.type = type_;
     data.gview = v;
@@ -2590,7 +2582,7 @@ UndoableCommand::UndoableCommand(int type_, double deltaX, double deltaY, const 
 }
 
 /* Rotate or scale */
-UndoableCommand::UndoableCommand(int type_, double x, double y, double scaleFactor, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableCommand::UndoableCommand(int type_, double x, double y, double scaleFactor, const QString& text, Object* obj, Document* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     data.type = type_;
     data.gview = v;
@@ -2629,7 +2621,7 @@ UndoableCommand::UndoableCommand(int type_, double x, double y, double scaleFact
 }
 
 /* Navigation */
-UndoableCommand::UndoableCommand(int type_, const QString& type_name, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableCommand::UndoableCommand(int type_, const QString& type_name, Document* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     data.type = type_;
     data.gview = v;
@@ -2641,7 +2633,7 @@ UndoableCommand::UndoableCommand(int type_, const QString& type_name, View* v, Q
 }
 
 /* Grip Edit */
-UndoableCommand::UndoableCommand(int type_, const QPointF beforePoint, const QPointF afterPoint, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableCommand::UndoableCommand(int type_, const QPointF beforePoint, const QPointF afterPoint, const QString& text, Object* obj, Document* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     data.type = type_;
     data.gview = v;
@@ -2652,7 +2644,7 @@ UndoableCommand::UndoableCommand(int type_, const QPointF beforePoint, const QPo
 }
 
 /* Mirror */
-UndoableCommand::UndoableCommand(int type_, double x1, double y1, double x2, double y2, const QString& text, Object* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableCommand::UndoableCommand(int type_, double x1, double y1, double x2, double y2, const QString& text, Object* obj, Document* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     data.gview = v;
     data.object = obj;
@@ -2980,7 +2972,7 @@ main(void)
         /* TODO: Prompt to select objects if nothing is preselected. */
         alert(translate("Preselect objects before invoking the move command."));
         end_command();
-        messageBox("information", translate("Move Preselect"),
+        messagebox("information", translate("Move Preselect"),
             translate("Preselect objects before invoking the move command."));
     }
     else {
@@ -3086,7 +3078,7 @@ main(void)
         /* TODO: Prompt to select objects if nothing is preselected */
         alert(translate("Preselect objects before invoking the scale command."));
         end_command();
-        messageBox("information", translate("Scale Preselect"), translate("Preselect objects before invoking the scale command."));
+        messagebox("information", translate("Scale Preselect"), translate("Preselect objects before invoking the scale command."));
     }
     else {
         prompt_output(translate("Specify base point: "));
@@ -3427,7 +3419,8 @@ main()
         /* TODO: Prompt to select objects if nothing is preselected. */
         alert(translate("Preselect objects before invoking the rotate command."));
         end_command();
-        messageBox("information", translate("Rotate Preselect"), translate("Preselect objects before invoking the rotate command."));
+        messagebox("information", translate("Rotate Preselect"),
+            translate("Preselect objects before invoking the rotate command."));
     }
     else {
         prompt_output(translate("Specify base point: "));
@@ -3872,7 +3865,7 @@ add_rubber_command(ScriptEnv* context)
 ScriptValue
 clear_rubber_command(ScriptEnv* context)
 {
-    View* gview = activeView();
+    Document* gview = activeDocument();
     if (gview) {
         gview->clearRubberRoom();
     }

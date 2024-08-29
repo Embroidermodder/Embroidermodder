@@ -643,6 +643,9 @@ int parse_vector(char *line, EmbVector *v);
 bool validRGB(float r, float g, float b);
 void reportDistance(EmbVector a, EmbVector b);
 
+void add_to_menu(const char *menu_name, char *menu_data[]);
+void add_to_toolbar(const char *toolbar_name, char *toolbar_data[]);
+
 int load_data(void);
 
 int load_settings(char *appDir, char *configDir);
@@ -656,6 +659,8 @@ EmbArc emb_arc_set_radius(EmbArc a, EmbReal radius);
 bool willUnderflowInt32(int64_t a, int64_t b);
 bool willOverflowInt32(int64_t a, int64_t b);
 int roundToMultiple(bool roundUp, int numToRound, int multiple);
+
+void messagebox(char *type, char *title, char *text);
 
 /* MainWindow calls */
 void end_command(void);
@@ -824,9 +829,10 @@ extern const char *_appVer_;
 
 extern WidgetData render_hints[];
 
-extern const char *coverage_test[];
-extern const char *object_names[];
+extern char *coverage_test[];
+extern char *object_names[];
 
+extern char *menu_list[];
 extern char *menubar_full_list[];
 extern char *menubar_no_docs[];
 
@@ -842,6 +848,7 @@ extern char *modify_menu[];
 extern char *dimension_menu[];
 extern char *sandbox_menu[];
 
+extern char *toolbar_list[];
 extern char *toolbars_when_docs[];
 
 extern char *file_toolbar[];
@@ -857,6 +864,12 @@ extern char *modify_toolbar[];
 extern char *dimension_toolbar[];
 extern char *sandbox_toolbar[];
 
+extern char *layer_list[];
+extern char *color_list[];
+extern char *line_type_list[];
+extern char *line_weight_list[];
+extern char *text_size_list[];
+
 extern char *extensions[];
 extern char *editor_list[];
 extern char *combobox_list[];
@@ -868,6 +881,9 @@ extern char *circular_grid_group[];
 extern char *center_on_origin_group[];
 
 extern char *tips[];
+
+extern char **xpm_icons[];
+extern char *xpm_icon_labels[];
 
 extern int numOfDocs;
 extern int docIndex;
