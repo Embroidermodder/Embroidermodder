@@ -364,7 +364,20 @@ void add_command(std::string alias, std::string cmd);
 
 /* ------------------------ Object Functions --------------------------- */
 
-void obj_init_geometry(Object *obj, int type_, QRgb rgb, Qt::PenStyle lineType);
+Object *create_arc(EmbArc arc, QRgb rgb, QGraphicsItem *item=0);
+Object *create_circle(EmbCircle circle, QRgb rgb, QGraphicsItem *item=0);
+Object *create_ellipse(EmbEllipse ellipse, QRgb rgb, QGraphicsItem *item=0);
+Object *create_polyline(EmbPath path, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_path(double x, double y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_polygon(double x, double y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_text_single(const QString& str, double x, double y, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_dim_leader(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_image(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_rect(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_line(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_point(EmbPoint_ point, QRgb rgb, QGraphicsItem* parent=0);
+
+Object *copy_object(Object* obj);
 
 /*
 QColor obj_color(Object *obj);
@@ -475,12 +488,13 @@ void obj_set_text_upside_down(Object *obj, bool val);
 
 /* ---------------------- Document Functions --------------------------- */
 
+Document *create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent);
+
 void repeat_action(void);
 void move_action(void);
 
 bool doc_allow_zoom_in(Document* doc);
 bool doc_allow_zoom_out(Document* doc);
-/*
 void doc_zoom_in(Document* doc);
 void doc_zoom_out(Document* doc);
 void doc_zoom_window(Document* doc);
@@ -533,7 +547,7 @@ bool doc_is_lwt_enabled(Document* doc);
 bool doc_is_real_enabled(Document* doc);
 
 void doc_set_grid_color(Document* doc, QRgb color);
-void doc_create_grid(Document* doc, QString& gridType);
+void doc_create_grid(Document* doc, QString gridType);
 void doc_set_ruler_color(Document* doc, QRgb color);
 
 void doc_preview_on(Document* doc, int clone, int mode, double x, double y, double data);
@@ -548,8 +562,8 @@ void doc_vulcanize_rubber_room(Document* doc);
 void doc_clear_rubber_room(Document* doc);
 void doc_spare_rubber(Document* doc, int64_t id);
 void doc_set_rubber_mode(Document* doc, int mode);
-void doc_set_rubber_point(Document* doc, QString& key, QPointF& point);
-void doc_set_rubber_text(Document* doc, QString& key, QString& txt);
+void doc_set_rubber_point(Document* doc, QString key, QPointF point);
+void doc_set_rubber_text(Document* doc, QString key, QString txt);
 
 void draw_arc(QPainter* painter, EmbArc arc);
 void draw_circle(QPainter* painter, EmbCircle circle);
@@ -567,30 +581,29 @@ void doc_create_origin(Document* doc);
 
 void doc_load_ruler_settings(Document* doc);
 
-QPainterPath doc_createRulerTextPath(Document* doc, float x, float y, QString str, float height);
+QPainterPath doc_create_ruler_text_path(Document* doc, float x, float y, QString str, float height);
 
-QList<QGraphicsItem*> doc_createObjectList(Document* doc, QList<QGraphicsItem*> list);
+QList<QGraphicsItem*> doc_create_object_list(Document* doc, QList<QGraphicsItem*> list);
 
-void doc_copySelected(Document* doc);
+void doc_copy_selected(Document* doc);
 
-void doc_startGripping(Document* doc, Object* obj);
-void doc_stopGripping(Document* doc, bool accept = false);
+void doc_start_gripping(Document* doc, Object* obj);
+void doc_stop_gripping(Document* doc, bool accept = false);
 
 void doc_update_mouse_coords(Document* doc, int x, int y);
 
-void doc_panStart(Document* doc, QPoint& point);
+void doc_pan_start(Document* doc, QPoint& point);
 
-void doc_alignScenePointWithViewPoint(Document* doc, QPointF& scenePoint, QPoint& viewPoint);
+void doc_align_scene_point_with_view_point(Document* doc, QPointF scenePoint, QPoint viewPoint);
 
-void doc_recalculateLimits(Document* doc);
-void doc_zoomToPoint(Document* doc, QPoint& mousePoint, int zoomDir);
-void doc_centerAt(Document* doc, QPointF& centerPoint);
+void doc_recalculate_limits(Document* doc);
+void doc_zoom_to_point(Document* doc, QPoint mousePoint, int zoomDir);
+void doc_center_at(Document* doc, QPointF& centerPoint);
 QPointF doc_center(Document* doc);
 
-void doc_addObject(Document* doc, Object* obj);
-void doc_deleteObject(Document* doc, Object* obj);
-void doc_vulcanizeObject(Document* doc, Object* obj);
-*/
+void doc_add_object(Document* doc, Object* obj);
+void doc_delete_object(Document* doc, Object* obj);
+void doc_vulcanize_object(Document* doc, Object* obj);
 
 /* ---------------------- Class Declarations --------------------------- */
 
@@ -662,93 +675,6 @@ public:
 
     DocumentData data;
 
-    void recalculateLimits();
-    void zoomToPoint(const QPoint& mousePoint, int zoomDir);
-    void centerAt(const QPointF& centerPoint);
-    QPointF center() { return mapToScene(rect().center()); }
-
-    void addObject(Object* obj);
-    void deleteObject(Object* obj);
-    void vulcanizeObject(Object* obj);
-
-public slots:
-    void zoomIn();
-    void zoomOut();
-    void zoomWindow();
-    void zoomSelected();
-    void zoomExtents();
-    void panRealTime();
-    void panPoint();
-    void panLeft();
-    void panRight();
-    void panUp();
-    void panDown();
-    void selectAll();
-    void selectionChanged();
-    void clearSelection();
-    void deleteSelected();
-    void moveSelected(double dx, double dy);
-    void cut();
-    void copy();
-    void paste();
-    void scaleAction();
-    void scaleSelected(double x, double y, double factor);
-    void rotateAction();
-    void rotateSelected(double x, double y, double rot);
-    void mirrorSelected(double x1, double y1, double x2, double y2);
-    int numSelected();
-
-    void deletePressed();
-    void escapePressed();
-
-    void cornerButtonClicked();
-
-    void showScrollBars(bool val);
-    void setCornerButton();
-    void setCrossHairColor(QRgb color);
-    void setCrossHairSize(uint8_t percent);
-    void setBackgroundColor(QRgb color);
-    void setSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
-    void toggleSnap(bool on);
-    void toggleGrid(bool on);
-    void toggleRuler(bool on);
-    void toggleOrtho(bool on);
-    void togglePolar(bool on);
-    void toggleQSnap(bool on);
-    void toggleQTrack(bool on);
-    void toggleLwt(bool on);
-    void toggleReal(bool on);
-    bool isLwtEnabled();
-    bool isRealEnabled();
-
-    void setGridColor(QRgb color);
-    void createGrid(const QString& gridType);
-    void setRulerColor(QRgb color);
-
-    void previewOn(int clone, int mode, double x, double y, double data);
-    void previewOff();
-
-    void enableMoveRapidFire();
-    void disableMoveRapidFire();
-
-    bool allowRubber();
-    void addToRubberRoom(QGraphicsItem* item);
-    void vulcanizeRubberRoom();
-    void clearRubberRoom();
-    void spareRubber(int64_t id);
-    void setRubberMode(int mode);
-    void setRubberPoint(const QString& key, const QPointF& point);
-    void setRubberText(const QString& key, const QString& txt);
-
-    void drawArc(QPainter* painter, EmbArc arc);
-    void drawCircle(QPainter* painter, EmbCircle circle);
-    void drawEllipse(QPainter* painter, EmbEllipse ellipse);
-    void drawLine(QPainter* painter, EmbLine line);
-    void drawPolygon(QPainter* painter, EmbPolygon polygon);
-    void drawPolyline(QPainter* painter, EmbPolyline polyline);
-    void drawRect(QPainter* painter, EmbRect rect);
-    void drawSpline(QPainter* painter, EmbSpline spline);
-
 protected:
     void mouseDoubleClickEvent(QMouseEvent* event);
     void mousePressEvent(QMouseEvent* event);
@@ -759,29 +685,6 @@ protected:
     void drawBackground(QPainter* painter, const QRectF& rect);
     void drawForeground(QPainter* painter, const QRectF& rect);
     void enterEvent(QEvent* event);
-
-private:
-    void createGridRect();
-    void createGridPolar();
-    void createGridIso();
-    void createOrigin();
-
-    void loadRulerSettings();
-
-    QPainterPath createRulerTextPath(float x, float y, QString str, float height);
-
-    QList<QGraphicsItem*> createObjectList(QList<QGraphicsItem*> list);
-
-    void copySelected();
-
-    void startGripping(Object* obj);
-    void stopGripping(bool accept = false);
-
-    void updateMouseCoords(int x, int y);
-
-    void panStart(const QPoint& point);
-
-    void alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& viewPoint);
 };
 
 class UndoableCommand : public QUndoCommand
@@ -837,25 +740,14 @@ private:
     QUndoView*  undoView;
 };
 
-class Object : public QGraphicsPathItem
+class Object: public QGraphicsPathItem
 {
 public:
     EmbGeometry *geometry;
     ObjectData data;
     Object* obj;
 
-    Object(EmbArc arc, QRgb rgb, QGraphicsItem* parent = 0);
-    Object(EmbCircle circle, QRgb rgb, QGraphicsItem *item = 0);
-    Object(EmbEllipse ellipse, QRgb rgb, QGraphicsItem *item = 0);
-    Object(EmbLine line, QRgb rgb, QGraphicsItem* parent = 0);
-    Object(double centerX, double centerY, double width, double height, QRgb rgb, QGraphicsItem* parent = 0);
-    Object(EmbRect rect, QRgb rgb, QGraphicsItem* parent = 0);
-    Object(EmbPoint point, QRgb rgb, QGraphicsItem* parent = 0);
-    Object(EmbPath path, int type_, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent = 0);
-    Object(EmbPolygon polygon, int type_, QRgb rgb, QGraphicsItem* parent = 0);
-    Object(const QString& str, double x, double y, QRgb rgb, QGraphicsItem* parent = 0);
-
-    Object(Object* obj, QGraphicsItem* parent = 0);
+    Object(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* item = 0);
     ~Object();
 
     /* QColor objectColor(Object* obj) const { return data.objPen.color(); } */

@@ -539,10 +539,10 @@ new_file(void)
     update_interface();
     windowMenuAboutToShow();
 
-    Document* v = mdiWin->gview;
-    if (v) {
-        v->recalculateLimits();
-        v->zoomExtents();
+    Document* doc = mdiWin->gview;
+    if (doc) {
+        doc_recalculate_limits(doc);
+        doc_zoom_extents(doc);
     }
 }
 
@@ -648,10 +648,10 @@ MainWindow::openFilesSelected(const QStringList& filesToOpen)
                 strcpy(opensave_recent_directory.setting,
                     qPrintable(QFileInfo(filesToOpen.at(i)).absolutePath()));
 
-                Document* v = mdiWin->gview;
-                if (v) {
-                    v->recalculateLimits();
-                    v->zoomExtents();
+                Document* doc = mdiWin->gview;
+                if (doc) {
+                    doc_recalculate_limits(doc);
+                    doc_zoom_extents(doc);
                 }
             }
             else {

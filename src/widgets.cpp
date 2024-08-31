@@ -195,15 +195,15 @@ contextMenuEvent(QObject* object, QContextMenuEvent *event)
         menu.addAction(action);
     }
     else if (object->objectName() == "StatusBarButtonLWT") {
-        Document* gview = activeDocument();
-        if (gview) {
+        Document* doc = activeDocument();
+        if (doc) {
             QAction* enableRealAction = new QAction(create_icon("realrender"), "&RealRender On", &menu);
-            enableRealAction->setEnabled(!gview->isRealEnabled());
+            enableRealAction->setEnabled(!doc_is_real_enabled(doc));
             QObject::connect(enableRealAction, &QAction::triggered, _main, enableReal);
             menu.addAction(enableRealAction);
 
             QAction* disableRealAction = new QAction(create_icon("realrender"), "&RealRender Off", &menu);
-            disableRealAction->setEnabled(gview->isRealEnabled());
+            disableRealAction->setEnabled(doc_is_real_enabled(doc));
             QObject::connect(disableRealAction, &QAction::triggered, _main, disableReal);
             menu.addAction(disableRealAction);
         }
@@ -222,28 +222,28 @@ void
 statusbar_toggle(QString key, bool on)
 {
     debug_message("StatusBarButton toggleSnap()");
-    Document* gview = activeDocument();
-    if (gview) {
+    Document* doc = activeDocument();
+    if (doc) {
         if (key == "SNAP") {
-            gview->toggleSnap(on);
+            doc_toggle_snap(doc, on);
         }
         else if (key == "GRID") {
-            gview->toggleGrid(on);
+            doc_toggle_grid(doc, on);
         }
         else if (key == "RULER") {
-            gview->toggleRuler(on);
+            doc_toggle_ruler(doc, on);
         }
         else if (key == "ORTHO") {
-            gview->toggleOrtho(on);
+            doc_toggle_ortho(doc, on);
         }
         else if (key == "POLAR") {
-            gview->togglePolar(on);
+            doc_toggle_polar(doc, on);
         }
         else if (key == "QSNAP") {
-            gview->toggleQSnap(on);
+            doc_toggle_qsnap(doc, on);
         }
         else if (key == "LWT") {
-            gview->toggleLwt(on);
+            doc_toggle_lwt(doc, on);
         }
     }
 }
@@ -252,10 +252,10 @@ void
 enableLwt()
 {
     debug_message("StatusBarButton enableLwt()");
-    Document* gview = activeDocument();
-    if (gview) {
-        if (!gview->isLwtEnabled()) {
-            gview->toggleLwt(true);
+    Document* doc = activeDocument();
+    if (doc) {
+        if (!doc_is_lwt_enabled(doc)) {
+            doc_toggle_lwt(doc, true);
         }
     }
 }
@@ -264,10 +264,10 @@ void
 disableLwt()
 {
     debug_message("StatusBarButton disableLwt()");
-    Document* gview = activeDocument();
-    if (gview) {
-        if (gview->isLwtEnabled()) {
-            gview->toggleLwt(false);
+    Document* doc = activeDocument();
+    if (doc) {
+        if (doc_is_lwt_enabled(doc)) {
+            doc_toggle_lwt(doc, false);
         }
     }
 }
@@ -278,7 +278,7 @@ enableReal()
     debug_message("StatusBarButton enableReal()");
     Document* gview = activeDocument();
     if (gview) {
-        gview->toggleReal(true);
+        doc_toggle_real(gview, true);
     }
 }
 
@@ -288,7 +288,7 @@ disableReal()
     debug_message("StatusBarButton disableReal()");
     Document* gview = activeDocument();
     if (gview) {
-        gview->toggleReal(false);
+        doc_toggle_real(gview, false);
     }
 }
 
@@ -802,10 +802,12 @@ MdiArea::MdiArea(MainWindow* mw, QWidget *parent) : QMdiArea(parent)
     useColor = false;
 }
 
+/* . */
 MdiArea::~MdiArea()
 {
 }
 
+/* . */
 void
 MdiArea::useBackgroundLogo(bool use)
 {
@@ -813,6 +815,7 @@ MdiArea::useBackgroundLogo(bool use)
     forceRepaint();
 }
 
+/* . */
 void
 MdiArea::useBackgroundTexture(bool use)
 {
@@ -820,6 +823,7 @@ MdiArea::useBackgroundTexture(bool use)
     forceRepaint();
 }
 
+/* . */
 void
 MdiArea::useBackgroundColor(bool use)
 {
@@ -827,6 +831,7 @@ MdiArea::useBackgroundColor(bool use)
     forceRepaint();
 }
 
+/* . */
 void
 MdiArea::setBackgroundLogo(const QString& fileName)
 {
@@ -835,6 +840,7 @@ MdiArea::setBackgroundLogo(const QString& fileName)
     forceRepaint();
 }
 
+/* . */
 void
 MdiArea::setBackgroundTexture(const QString& fileName)
 {
@@ -843,6 +849,7 @@ MdiArea::setBackgroundTexture(const QString& fileName)
     forceRepaint();
 }
 
+/* . */
 void
 MdiArea::setBackgroundColor(const QColor& color)
 {
@@ -856,11 +863,14 @@ MdiArea::setBackgroundColor(const QColor& color)
     forceRepaint();
 }
 
-void MdiArea::mouseDoubleClickEvent(QMouseEvent* /*e*/)
+/* . */
+void
+MdiArea::mouseDoubleClickEvent(QMouseEvent* /*e*/)
 {
     _main->openFile();
 }
 
+/* . */
 void
 MdiArea::paintEvent(QPaintEvent* /*e*/)
 {
@@ -914,10 +924,10 @@ MdiArea::zoomExtentsAllSubWindows()
     foreach(QMdiSubWindow* window, subWindowList()) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(window);
         if (mdiWin) {
-            Document* v = mdiWin->gview;
-            if (v) {
-                v->recalculateLimits();
-                v->zoomExtents();
+            Document* doc = mdiWin->gview;
+            if (doc) {
+                doc_recalculate_limits(doc);
+                doc_zoom_extents(doc);
             }
         }
     }
@@ -950,7 +960,7 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     this->setWindowIcon(create_icon("app"));
 
     gscene = new QGraphicsScene(0,0,0,0, this);
-    gview = new Document(_main, gscene, this);
+    gview = create_doc(_main, gscene, this);
 
     setWidget(gview);
 
@@ -1215,45 +1225,45 @@ MdiWindow::updateColorLinetypeLineweight()
 void
 MdiWindow::deletePressed()
 {
-    gview->deletePressed();
+    //FIXME: doc_delete_pressed(gview);
 }
 
 void
 MdiWindow::escapePressed()
 {
-    gview->escapePressed();
+    //FIXME: doc_escape_pressed(gview);
 }
 
 void
 MdiWindow::showViewScrollBars(bool val)
 {
-    gview->showScrollBars(val);
+    doc_show_scroll_bars(gview, val);
 }
 
 void
 MdiWindow::setViewCrossHairColor(QRgb color)
 {
-    gview->setCrossHairColor(color);
+    doc_set_cross_hair_color(gview, color);
 }
 
 void MdiWindow::setViewBackgroundColor(QRgb color)
 {
-    gview->setBackgroundColor(color);
+    doc_set_background_color(gview, color);
 }
 
 void MdiWindow::setViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
 {
-    gview->setSelectBoxColors(colorL, fillL, colorR, fillR, alpha);
+    doc_set_select_box_colors(gview, colorL, fillL, colorR, fillR, alpha);
 }
 
 void MdiWindow::setViewGridColor(QRgb color)
 {
-    gview->setGridColor(color);
+    doc_set_grid_color(gview, color);
 }
 
 void MdiWindow::setViewRulerColor(QRgb color)
 {
-    gview->setRulerColor(color);
+    doc_set_ruler_color(gview, color);
 }
 
 void MdiWindow::promptHistoryAppended(const QString& txt)

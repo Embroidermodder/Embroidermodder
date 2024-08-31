@@ -256,6 +256,7 @@ PropertyEditor::updatePickAddModeButton(bool pickAddMode)
     }
 }
 
+/* . */
 void
 PropertyEditor::togglePickAddMode()
 {

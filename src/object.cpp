@@ -13,247 +13,47 @@
 
 #include "embroidermodder.h"
 
-/* . */
-Object::Object(EmbArc arc, QRgb rgb, QGraphicsItem *item)
+/* WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
+ * WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+ * WARNING: All movement has to be handled explicitly by us, not by the scene.
+ */
+Object::Object(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* item)// : QGraphicsItem(item)
 {
-    debug_message("ArcObject Constructor()");
-    obj_init_geometry(this, EMB_ARC, rgb, Qt::SolidLine);
-    geometry->object.arc = arc;
-    /* TODO: getCurrentLineType */
-    calculateData();
-    setPos(arc.start.x, arc.start.y);
-}
+    debug_message("BaseObject Constructor()");
 
-/* . */
-Object::Object(EmbCircle circle, QRgb rgb, QGraphicsItem *item)
-{
-    debug_message("CircleObject Constructor()");
-    /* TODO: getCurrentLineType */
-    obj_init_geometry(this, EMB_CIRCLE, rgb, Qt::SolidLine);
-    geometry->object.circle = circle;
+    obj = this;
 
-    /*
-    EmbVector center;
-    center.x = centerX;
-    center.y = centerY;
-    set_radius(geometry, radius);
-    set_center(geometry, center);
-    updatePath();
-    */
-}
-
-/* . */
-Object::Object(EmbEllipse ellipse, QRgb rgb, QGraphicsItem *item)
-{
-    debug_message("EllipseObject Constructor()");
-    /* TODO: getCurrentLineType */
-    obj_init_geometry(this, EMB_ELLIPSE, rgb, Qt::SolidLine);
-    geometry->object.ellipse = ellipse;
-
-    /*
-    setObjectSize(width, height);
-    EmbVector center;
-    center.x = centerX;
-    center.y = centerY;
-    setObjectCenter(center);
-    updatePath();
-    */
-}
-
-/* . */
-Object::Object(EmbPath path, int type_, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent)
-{
-    debug_message("PolylineObject Constructor()");
-    /* TODO: getCurrentLineType */
-    obj_init_geometry(this, type_, rgb, Qt::SolidLine);
-    updatePath(p);
-    /* setObjectPos(x,y); */
-}
-
-/*
-Object::Object(double x, double y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent)
-{
-    debug_message("PathObject Constructor()");
-    init(x, y, p, rgb, Qt::SolidLine); */ /* TODO: getCurrentLineType */ /*
-    obj_init_geometry(this, EMB_PATH, rgb, lineType);
-    updatePath(p);
-    setObjectPos(x,y);
-}
-
-Object::Object(double x, double y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("PolygonObject Constructor()");
-    init(x, y, p, rgb, Qt::SolidLine); */ /* TODO: getCurrentLineType */ /*
-    obj_init_geometry(this, EMB_POLYGON, rgb, lineType);
-    updatePath(p);
-    setObjectPos(x,y);
-}
-*/
-
-/* . */
-Object::Object(const QString& str, double x, double y, QRgb rgb, QGraphicsItem* parent)
-{
-    debug_message("TextSingleObject Constructor()");
-    /* TODO: getCurrentLineType */
-    obj_init_geometry(this, EMB_TEXT_SINGLE, rgb, Qt::SolidLine);
-    data.objTextJustify = "Left"; /* TODO: set the justification properly */
-
-    obj_set_text(obj, str);
-    setObjectPos(x,y);
-}
-
-/* . */
-Object::Object(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsItem* parent)
-{
-    debug_message("DimLeaderObject Constructor()");
-    /* TODO: getCurrentLineType */
-    obj_init_geometry(this, EMB_DIM_LEADER, rgb, Qt::SolidLine);
-
-    data.curved = false;
-    data.filled = true;
-    setObjectEndPoint1(x1, y1);
-    setObjectEndPoint2(x2, y2);
-}
-
-/*
-Object::Object(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* parent)
-{
-    debug_message("ImageObject Constructor()"); */
-    /* TODO: getCurrentLineType */ /*
-    obj_init_geometry(this, EMB_IMAGE, rgb, Qt::SolidLine);
-    setObjectRect(x, y, w, h);
-}
-
-Object::Object(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* parent)
-{
-    debug_message("RectObject Constructor()"); */
-    /* TODO: getCurrentLineType */ /*
-    obj_init_geometry(this, EMB_RECT, rgb, lineType);
-    setObjectRect(x, y, w, h);
-}
-*/
-
-/*
-Object::Object(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsItem* parent)
-{
-    debug_message("LineObject Constructor()"); */
-    /* TODO: getCurrentLineType */ /*
-
-    obj_init_geometry(this, EMB_LINE, rgb, Qt::SolidLine);
-    setObjectEndPoint1(x1, y1);
-    setObjectEndPoint2(x2, y2);
-}
-*/
-
-/* . */
-Object::Object(EmbPoint_, unsigned int, QGraphicsItem*)
-{
-}
-
-/* . */
-Object::Object(Object* obj, QGraphicsItem* parent)
-{
-    debug_message("ArcObject Constructor()");
-    if (!obj) {
-        return;
+    setData(OBJ_TYPE, type_);
+    if (type_ < 30) {
+        data.OBJ_NAME = object_names[type_];
     }
-    obj_init_geometry(this, obj->geometry->type, obj->objectColorRGB(obj), Qt::SolidLine);
-    switch (obj->geometry->type) {
-    case EMB_ARC:
-        geometry->object.arc = obj->geometry->object.arc;
-        /* TODO: getCurrentLineType */
-        setRotation(obj->rotation());
-        break;
-    case EMB_CIRCLE:
-        geometry->object.circle = obj->geometry->object.circle;
-        /* TODO: getCurrentLineType. */
-        setRotation(obj->rotation());
-        break;
-    case EMB_DIM_LEADER:
-        geometry->object.line = obj->geometry->object.line;
-        /* init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(obj), Qt::SolidLine); */ /* TODO: getCurrentLineType */
-        break;
-    case EMB_ELLIPSE:
-        geometry->object.ellipse = obj->geometry->object.ellipse;
-        /* init(obj->objectCenterX(), obj->objectCenterY(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(obj), Qt::SolidLine); */
-        /* TODO: getCurrentLineType */
-        setRotation(obj->rotation());
-        break;
-    case EMB_IMAGE: {
-        geometry->object.ellipse = obj->geometry->object.ellipse;
-        /* QPointF ptl = obj->objectTopLeft(); */
-        /* init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); */
-        /* TODO: getCurrentLineType */
-        setRotation(obj->rotation());
-        break;
+    else {
+        data.OBJ_NAME = "Unknown";
     }
-    case EMB_LINE: {
-        geometry->object.line = obj->geometry->object.line;
-        /* init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(), Qt::SolidLine); */
-        /* TODO: getCurrentLineType */
-        break;
-    }
-    case EMB_PATH: {
-        geometry->object.path = obj->geometry->object.path;
-        /* init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine);
-         * TODO: getCurrentLineType
-         * setRotation(obj->rotation());
-         * setScale(obj->scale());
-         */
-        break;
-    }
-    case EMB_POINT: {
-        geometry->object.point = obj->geometry->object.point;
-        /* init(obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine);
-         * TODO: getCurrentLineType
-         */
-        setRotation(obj->rotation());
-        break;
-    }
-    case EMB_POLYGON: {
-        geometry->object.polygon = obj->geometry->object.polygon;
-        /* init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine);
-         * TODO: getCurrentLineType
-         * setRotation(obj->rotation());
-         * setScale(obj->scale());
-         */
-        break;
-    }
-    case EMB_POLYLINE: {
-        geometry->object.polyline = obj->geometry->object.polyline;
-        /* init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine);
-         * TODO: getCurrentLineType
-         */
-        setRotation(obj->rotation());
-        setScale(obj->scale());
-        break;
-    }
-    case EMB_RECT: {
-        geometry->object.rect = obj->geometry->object.rect;
-        /* QPointF ptl = obj->objectTopLeft();
-         * init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine);
-         * TODO: getCurrentLineType
-         */
-        setRotation(obj->rotation());
-        break;
-    }
-    case EMB_TEXT_SINGLE: {
-        obj_set_text_font(obj, obj->data.objTextFont);
-        obj_set_text_size(obj, obj->data.objTextSize);
-        setRotation(obj->rotation());
-        obj_set_text_backward(obj, obj->data.objTextBackward);
-        obj_set_text_upside_down(obj, obj->data.objTextUpsideDown);
-        obj_set_text_style(obj, obj->data.objTextBold, obj->data.objTextItalic,
-            obj->data.objTextUnderline, obj->data.objTextStrikeOut, obj->data.objTextOverline);
-        /* init(obj->objText, obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine);
-         * TODO: getCurrentLineType
-         */
-        setScale(obj->scale());
-        break;
-    }
-    default:
-        break;
-    }
+
+    data.objPen.setCapStyle(Qt::RoundCap);
+    data.objPen.setJoinStyle(Qt::RoundJoin);
+    data.lwtPen.setCapStyle(Qt::RoundCap);
+    data.lwtPen.setJoinStyle(Qt::RoundJoin);
+
+    data.objID = QDateTime::currentMSecsSinceEpoch();
+
+    data.gripIndex = -1;
+    data.curved = 0;
+
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
+
+    setObjectColor(rgb);
+    setObjectLineType(lineType);
+    setObjectLineWeight(0.35); /* TODO: pass in proper lineweight */
+    setPen(data.objPen);
+
+    geometry = (EmbGeometry*)malloc(sizeof(EmbGeometry));
+    geometry->type = type_;
+    geometry->object.color.r = qRed(rgb);
+    geometry->object.color.g = qGreen(rgb);
+    geometry->object.color.b = qBlue(rgb);
+    geometry->lineType = lineType;
 }
 
 /* . */
@@ -263,49 +63,373 @@ Object::~Object()
     free(geometry);
 }
 
-/* WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
- * WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
- * WARNING: All movement has to be handled explicitly by us, not by the scene.
- */
-void
-obj_init_geometry(Object* obj, int type_, QRgb rgb, Qt::PenStyle lineType)
+/* . */
+Object *
+create_arc(EmbArc arc, QRgb rgb, QGraphicsItem *item)
 {
-    debug_message("BaseObject Constructor()");
-
-    obj->obj = obj;
-
-    obj->setData(OBJ_TYPE, type_);
-    if (type_ < 30) {
-        obj->data.OBJ_NAME = object_names[type_];
-    }
-    else {
-        obj->data.OBJ_NAME = "Unknown";
-    }
-
-    obj->data.objPen.setCapStyle(Qt::RoundCap);
-    obj->data.objPen.setJoinStyle(Qt::RoundJoin);
-    obj->data.lwtPen.setCapStyle(Qt::RoundCap);
-    obj->data.lwtPen.setJoinStyle(Qt::RoundJoin);
-
-    obj->data.objID = QDateTime::currentMSecsSinceEpoch();
-
-    obj->data.gripIndex = -1;
-    obj->data.curved = 0;
-
-    obj->setFlag(QGraphicsItem::ItemIsSelectable, true);
-
-    obj->setObjectColor(rgb);
-    obj->setObjectLineType(lineType);
-    obj->setObjectLineWeight(0.35); /* TODO: pass in proper lineweight */
-    obj->setPen(obj->data.objPen);
-
-    obj->geometry = (EmbGeometry*)malloc(sizeof(EmbGeometry));
-    obj->geometry->type = type_;
-    obj->geometry->object.color.r = qRed(rgb);
-    obj->geometry->object.color.g = qGreen(rgb);
-    obj->geometry->object.color.b = qBlue(rgb);
-    obj->geometry->lineType = lineType;
+    debug_message("ArcObject Constructor()");
+    Object *obj = new Object(EMB_ARC, rgb, Qt::SolidLine, item);
+    obj->geometry->object.arc = arc;
+    /* TODO: getCurrentLineType */
+    obj->calculateData();
+    obj->setPos(arc.start.x, arc.start.y);
+    return obj;
 }
+
+/* . */
+Object *
+create_circle(EmbCircle circle, QRgb rgb, QGraphicsItem *item)
+{
+    debug_message("CircleObject Constructor()");
+    Object *obj = new Object(EMB_CIRCLE, rgb, Qt::SolidLine, item);
+    /* TODO: getCurrentLineType */
+    obj->geometry->object.circle = circle;
+
+    /*
+    EmbVector center;
+    center.x = centerX;
+    center.y = centerY;
+    set_radius(geometry, radius);
+    set_center(geometry, center);
+    updatePath();
+    */
+    return obj;
+}
+
+/* . */
+Object *
+create_ellipse(EmbEllipse ellipse, QRgb rgb, QGraphicsItem *item)
+{
+    debug_message("EllipseObject Constructor()");
+    /* TODO: getCurrentLineType */
+    Object *obj = new Object(EMB_ELLIPSE, rgb, Qt::SolidLine, item);
+    obj->geometry->object.ellipse = ellipse;
+
+    /*
+    setObjectSize(width, height);
+    EmbVector center;
+    center.x = centerX;
+    center.y = centerY;
+    setObjectCenter(center);
+    updatePath();
+    */
+    return obj;
+}
+
+/* . */
+Object *
+create_polyline(EmbPath path, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("PolylineObject Constructor()");
+    /* TODO: getCurrentLineType */
+    Object *obj = new Object(EMB_POLYLINE, rgb, Qt::SolidLine);
+    obj->updatePath(p);
+    /* setObjectPos(x,y); */
+    return obj;
+}
+
+/* . */
+Object *
+create_path(double x, double y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("PathObject Constructor()");
+    Object *obj = new Object(EMB_PATH, rgb, Qt::SolidLine);
+    /* TODO: getCurrentLineType */
+    obj->updatePath(p);
+    obj->setObjectPos(x,y);
+    return obj;
+}
+
+/* . */
+Object *
+create_polygon(double x, double y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("PolygonObject Constructor()");
+    Object *obj = new Object(EMB_POLYGON, rgb, Qt::SolidLine);
+    /* TODO: getCurrentLineType */
+    obj->updatePath(p);
+    obj->setObjectPos(x,y);
+    return obj;
+}
+
+/* . */
+Object *
+create_text_single(const QString& str, double x, double y, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("TextSingleObject Constructor()");
+    /* TODO: getCurrentLineType */
+    Object *obj = new Object(EMB_TEXT_SINGLE, rgb, Qt::SolidLine);
+    obj->data.objTextJustify = "Left"; /* TODO: set the justification properly */
+
+    obj_set_text(obj, str);
+    obj->setObjectPos(x,y);
+    return obj;
+}
+
+/* . */
+Object *
+create_dim_leader(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("DimLeaderObject Constructor()");
+    /* TODO: getCurrentLineType */
+    Object *obj = new Object(EMB_DIM_LEADER, rgb, Qt::SolidLine);
+
+    obj->data.curved = false;
+    obj->data.filled = true;
+    obj->setObjectEndPoint1(x1, y1);
+    obj->setObjectEndPoint2(x2, y2);
+    return obj;
+}
+
+/* . */
+Object *
+create_image(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("ImageObject Constructor()");
+    /* TODO: getCurrentLineType */
+    Object *obj = new Object(EMB_IMAGE, rgb, Qt::SolidLine);
+    obj->setObjectRect(x, y, w, h);
+    return obj;
+}
+
+/* . */
+Object *
+create_rect(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("RectObject Constructor()");
+    /* TODO: getCurrentLineType */
+    Object *obj = new Object(EMB_RECT, rgb, Qt::SolidLine);
+    obj->setObjectRect(x, y, w, h);
+    return obj;
+}
+
+/* . */
+Object *
+create_line(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsItem* parent)
+{
+    debug_message("LineObject Constructor()");
+    Object *obj = new Object(EMB_LINE, rgb, Qt::SolidLine);
+    /* TODO: getCurrentLineType */
+    obj->setObjectEndPoint1(x1, y1);
+    obj->setObjectEndPoint2(x2, y2);
+    return obj;
+}
+
+/* . */
+Object *
+create_point(EmbPoint_ point, QRgb rgb, QGraphicsItem* parent)
+{
+    Object *obj = new Object(EMB_POINT, rgb, Qt::SolidLine);
+    return obj;
+}
+
+/* . */
+Object *
+copy_object(Object* obj)
+{
+    debug_message("ArcObject Constructor()");
+    if (!obj) {
+        return NULL;
+    }
+    Object *copy = new Object(obj->geometry->type, obj->objectColorRGB(obj), Qt::SolidLine);
+    switch (obj->geometry->type) {
+    case EMB_ARC:
+        copy->geometry->object.arc = obj->geometry->object.arc;
+        /* TODO: getCurrentLineType */
+        copy->setRotation(obj->rotation());
+        break;
+    case EMB_CIRCLE:
+        copy->geometry->object.circle = obj->geometry->object.circle;
+        /* TODO: getCurrentLineType. */
+        copy->setRotation(obj->rotation());
+        break;
+    case EMB_DIM_LEADER:
+        copy->geometry->object.line = obj->geometry->object.line;
+        /* init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(obj), Qt::SolidLine); */ /* TODO: getCurrentLineType */
+        break;
+    case EMB_ELLIPSE:
+        copy->geometry->object.ellipse = obj->geometry->object.ellipse;
+        /* init(obj->objectCenterX(), obj->objectCenterY(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(obj), Qt::SolidLine); */
+        /* TODO: getCurrentLineType */
+        copy->setRotation(obj->rotation());
+        break;
+    case EMB_IMAGE: {
+        copy->geometry->object.ellipse = obj->geometry->object.ellipse;
+        /* QPointF ptl = obj->objectTopLeft(); */
+        /* init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); */
+        /* TODO: getCurrentLineType */
+        copy->setRotation(obj->rotation());
+        break;
+    }
+    case EMB_LINE: {
+        copy->geometry->object.line = obj->geometry->object.line;
+        /* init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(), Qt::SolidLine); */
+        /* TODO: getCurrentLineType */
+        break;
+    }
+    case EMB_PATH: {
+        copy->geometry->object.path = obj->geometry->object.path;
+        /* init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine);
+         * TODO: getCurrentLineType
+         * obj->setRotation(obj->rotation());
+         * obj->setScale(obj->scale());
+         */
+        break;
+    }
+    case EMB_POINT: {
+        copy->geometry->object.point = obj->geometry->object.point;
+        /* init(obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine);
+         * TODO: getCurrentLineType
+         */
+        copy->setRotation(obj->rotation());
+        break;
+    }
+    case EMB_POLYGON: {
+        copy->geometry->object.polygon = obj->geometry->object.polygon;
+        /* init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine);
+         * TODO: getCurrentLineType
+         * obj->setRotation(obj->rotation());
+         * obj->setScale(obj->scale());
+         */
+        break;
+    }
+    case EMB_POLYLINE: {
+        copy->geometry->object.polyline = obj->geometry->object.polyline;
+        /* init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine);
+         * TODO: getCurrentLineType
+         */
+        copy->setRotation(obj->rotation());
+        copy->setScale(obj->scale());
+        break;
+    }
+    case EMB_RECT: {
+        obj->geometry->object.rect = obj->geometry->object.rect;
+        /* QPointF ptl = obj->objectTopLeft();
+         * init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine);
+         * TODO: getCurrentLineType
+         */
+        copy->setRotation(obj->rotation());
+        break;
+    }
+    case EMB_TEXT_SINGLE: {
+        obj_set_text_font(copy, obj->data.objTextFont);
+        obj_set_text_size(copy, obj->data.objTextSize);
+        copy->setRotation(obj->rotation());
+        obj_set_text_backward(copy, obj->data.objTextBackward);
+        obj_set_text_upside_down(copy, obj->data.objTextUpsideDown);
+        obj_set_text_style(copy, obj->data.objTextBold, obj->data.objTextItalic,
+            obj->data.objTextUnderline, obj->data.objTextStrikeOut, obj->data.objTextOverline);
+        /* init(obj->objText, obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine);
+         * TODO: getCurrentLineType
+         */
+        copy->setScale(obj->scale());
+        break;
+    }
+    default:
+        break;
+    }
+    return copy;
+}
+
+#if 0
+/* QColor objectColor(Object* obj) const { return data.objPen.color(); } */
+QRgb objectColorRGB(Object* obj) const { return data.objPen.color().rgb(); }
+Qt::PenStyle objectLineType(Object* obj) const { return data.objPen.style(); }
+double  objectLineWeight(Object* obj) const { return data.lwtPen.widthF(); }
+QPainterPath objectPath(Object* obj) const { return path(); }
+QPointF objectRubberPoint(Object* obj, const QString& key) const;
+QString objectRubberText(Object* obj, const QString& key) const;
+
+QPointF objectPos() const { return scenePos(); }
+double objectX() const { return scenePos().x(); }
+double objectY() const { return scenePos().y(); }
+
+QPointF objectCenter() const;
+double objectCenterX() const { return scenePos().x(); }
+double objectCenterY() const { return scenePos().y(); }
+
+double objectRadius() const { return rect().width()/2.0*scale(); }
+double objectDiameter() const { return rect().width()*scale(); }
+double objectCircumference() const { return embConstantPi*objectDiameter(); }
+
+QPointF objectEndPoint1() const;
+QPointF objectEndPoint2() const;
+QPointF objectStartPoint() const;
+QPointF objectMidPoint() const;
+QPointF objectEndPoint() const;
+QPointF objectDelta() const { return objectEndPoint2() - objectEndPoint1(); }
+
+QPointF topLeft() const;
+QPointF topRight() const;
+QPointF bottomLeft() const;
+QPointF bottomRight() const;
+
+void updateRubber(QPainter* painter);
+void updateRubberGrip(QPainter *painter);
+void updateLeader();
+void updatePath();
+void updatePath(const QPainterPath& p);
+void updateArcRect(double radius);
+
+double objectLength() const { return line().length()*scale(); }
+
+void setObjectEndPoint1(const QPointF& endPt1);
+void setObjectEndPoint1(double x1, double y1);
+void setObjectEndPoint2(const QPointF& endPt2);
+void setObjectEndPoint2(double x2, double y2);
+void setObjectX1(double x) { setObjectEndPoint1(x, objectEndPoint1().y()); }
+void setObjectY1(double y) { setObjectEndPoint1(objectEndPoint1().x(), y); }
+void setObjectX2(double x) { setObjectEndPoint2(x, objectEndPoint2().y()); }
+void setObjectY2(double y) { setObjectEndPoint2(objectEndPoint2().x(), y); }
+
+QRectF rect() const { return path().boundingRect(); }
+void setRect(const QRectF& r) { QPainterPath p; p.addRect(r); setPath(p); }
+void setRect(double x, double y, double w, double h) { QPainterPath p; p.addRect(x,y,w,h); setPath(p); }
+QLineF line() const { return data.objLine; }
+void setLine(const QLineF& li) { QPainterPath p; p.moveTo(li.p1()); p.lineTo(li.p2()); setPath(p); data.objLine = li; }
+void setLine(double x1, double y1, double x2, double y2) { QPainterPath p; p.moveTo(x1,y1); p.lineTo(x2,y2); setPath(p); data.objLine.setLine(x1,y1,x2,y2); }
+
+void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
+void setObjectPos(double x, double y) { setPos(x, y); }
+void setObjectX(double x) { setObjectPos(x, objectY()); }
+void setObjectY(double y) { setObjectPos(objectX(), y); }
+
+void setObjectRect(double x1, double y1, double x2, double y2);
+virtual void vulcanize();
+virtual QList<QPointF> allGripPoints();
+virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
+virtual void gripEdit(const QPointF& before, const QPointF& after);
+virtual QRectF boundingRect() const;
+virtual QPainterPath shape() const { return path(); }
+
+void setObjectColor(const QColor& color);
+void setObjectColorRGB(QRgb rgb);
+void setObjectLineType(Qt::PenStyle lineType);
+void setObjectLineWeight(double lineWeight);
+void setObjectPath(const QPainterPath& p) { setPath(p); }
+void setObjectRubberMode(int mode) { data.objRubberMode = mode; }
+void setObjectRubberPoint(const QString& key, const QPointF& point) { data.objRubberPoints.insert(key, point); }
+void setObjectRubberText(const QString& key, const QString& txt) { data.objRubberTexts.insert(key, txt); }
+
+void drawRubberLine(const QLineF& rubLine, QPainter* painter = 0, const char* colorFromScene = 0);
+QPen lineWeightPen() const { return data.lwtPen; }
+void realRender(QPainter* painter, const QPainterPath& renderPath);
+
+void setObjectCenter(EmbVector point);
+void setObjectCenter(const QPointF& center);
+void setObjectCenterX(double centerX);
+void setObjectCenterY(double centerY);
+
+void calculateData(void);
+
+void setObjectSize(double width, double height);
+
+QPainterPath objectCopyPath() const;
+QPainterPath objectSavePath() const;
+QList<QPainterPath> objectSavePathList() const { return subPathList(); }
+QList<QPainterPath> subPathList() const;
+
+#endif
 
 /* . */
 ScriptValue
