@@ -1532,7 +1532,7 @@ Document::mousePressEvent(QMouseEvent* event)
             path.addPolygon(doc->mapToScene(doc->data.selectBox->geometry()));
             if (doc->data.sceneReleasePoint.x() > doc->data.scenePressPoint.x()) {
                 if (selection_mode_pickadd.setting) {
-                    if (_main->isShiftPressed()) {
+                    if (isShiftPressed()) {
                         QList<QGraphicsItem*> itemList = doc->data.gscene->items(path, Qt::ContainsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(false);
@@ -1544,7 +1544,7 @@ Document::mousePressEvent(QMouseEvent* event)
                     }
                 }
                 else {
-                    if (_main->isShiftPressed()) {
+                    if (isShiftPressed()) {
                         QList<QGraphicsItem*> itemList = doc->data.gscene->items(path, Qt::ContainsItemShape);
                         if (!itemList.size())
                             doc_clear_selection(doc);
@@ -1563,7 +1563,7 @@ Document::mousePressEvent(QMouseEvent* event)
             }
             else {
                 if (selection_mode_pickadd.setting) {
-                    if (_main->isShiftPressed()) {
+                    if (isShiftPressed()) {
                         QList<QGraphicsItem*> itemList = doc->data.gscene->items(path, Qt::IntersectsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(false);
@@ -1575,7 +1575,7 @@ Document::mousePressEvent(QMouseEvent* event)
                     }
                 }
                 else {
-                    if (_main->isShiftPressed()) {
+                    if (isShiftPressed()) {
                         QList<QGraphicsItem*> itemList = doc->data.gscene->items(path, Qt::IntersectsItemShape);
                         if (!itemList.size())
                             doc_clear_selection(doc);
@@ -1823,12 +1823,12 @@ Document::mouseReleaseEvent(QMouseEvent* event)
     }
     if (event->button() == Qt::XButton1) {
         debug_message("XButton1");
-        _main->undo(); /* TODO: Make this customizable */
+        undo_command(); /* TODO: Make this customizable */
         event->accept();
     }
     if (event->button() == Qt::XButton2) {
         debug_message("XButton2");
-        _main->redo(); /* TODO: Make this customizable */
+        redo_command(); /* TODO: Make this customizable */
         event->accept();
     }
     doc->data.gscene->update();

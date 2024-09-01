@@ -3605,7 +3605,7 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
         paintPen.setStyle(Qt::DashLine);
     }
     if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = lineWeightPen();
+        paintPen = data.lwtPen;
     }
     painter->setPen(paintPen);
 

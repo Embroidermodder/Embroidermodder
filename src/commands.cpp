@@ -111,9 +111,9 @@ platformString(void)
 
 /* . */
 void
-MainWindow::print()
+print_command(void)
 {
-    debug_message("print()");
+    debug_message("print_command()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
         mdiWin->print();
@@ -122,11 +122,9 @@ MainWindow::print()
 
 /* . */
 void
-tipOfTheDay()
+tipOfTheDay(void)
 {
     debug_message("tipOfTheDay()");
-
-    QString appDir = qApp->applicationDirPath();
 
     wizardTipOfTheDay = new QWizard(_main);
     wizardTipOfTheDay->setAttribute(Qt::WA_DeleteOnClose);
@@ -243,9 +241,9 @@ changelog(void)
 
 /* Standard Slots */
 void
-MainWindow::undo()
+undo_command(void)
 {
-    debug_message("undo()");
+    debug_message("undo_command()");
     if (dockUndoEdit->canUndo()) {
         prompt->setPrefix("Undo " + dockUndoEdit->undoText());
         appendHistory("");
@@ -258,10 +256,11 @@ MainWindow::undo()
     }
 }
 
+/* . */
 void
-MainWindow::redo()
+redo_command(void)
 {
-    debug_message("redo()");
+    debug_message("redo_command()");
     if (dockUndoEdit->canRedo()) {
         prompt->setPrefix("Redo " + dockUndoEdit->redoText());
         appendHistory("");
@@ -274,28 +273,32 @@ MainWindow::redo()
     }
 }
 
-bool MainWindow::isShiftPressed()
+/* . */
+bool
+isShiftPressed(void)
 {
     return shiftKeyPressedState;
 }
 
+/* . */
 void
-MainWindow::setShiftPressed()
+setShiftPressed(void)
 {
     shiftKeyPressedState = true;
 }
 
+/* . */
 void
-MainWindow::setShiftReleased()
+setShiftReleased(void)
 {
     shiftKeyPressedState = false;
 }
 
 /* Icons */
 void
-MainWindow::iconResize(int iconSize)
+iconResize(int iconSize)
 {
-    this->setIconSize(QSize(iconSize, iconSize));
+    _main->setIconSize(QSize(iconSize, iconSize));
     layerSelector->setIconSize(QSize(iconSize*4, iconSize));
     colorSelector->setIconSize(QSize(iconSize, iconSize));
     linetypeSelector->setIconSize(QSize(iconSize*4, iconSize));
@@ -311,6 +314,7 @@ MainWindow::iconResize(int iconSize)
     general_icon_size.setting = iconSize;
 }
 
+/* . */
 MdiWindow*
 activeMdiWindow()
 {
@@ -319,6 +323,7 @@ activeMdiWindow()
     return mdiWin;
 }
 
+/* . */
 Document*
 activeDocument()
 {
@@ -331,8 +336,9 @@ activeDocument()
     return 0;
 }
 
+/* . */
 QGraphicsScene*
-activeScene()
+activeScene(void)
 {
     debug_message("activeScene()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
@@ -343,8 +349,9 @@ activeScene()
     return 0;
 }
 
+/* . */
 QUndoStack*
-activeUndoStack()
+activeUndoStack(void)
 {
     debug_message("activeUndoStack()");
     Document* v = activeDocument();
@@ -355,24 +362,29 @@ activeUndoStack()
     return 0;
 }
 
+/* . */
 void
-MainWindow::setUndoCleanIcon(bool opened)
+setUndoCleanIcon(bool opened)
 {
     dockUndoEdit->updateCleanIcon(opened);
 }
 
+/* . */
 void
-MainWindow::updateAllViewScrollBars(bool val)
+updateAllViewScrollBars(bool val)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if (mdiWin) { mdiWin->showViewScrollBars(val); }
+        if (mdiWin) {
+            mdiWin->showViewScrollBars(val);
+        }
     }
 }
 
+/* . */
 void
-MainWindow::updateAllViewCrossHairColors(QRgb color)
+updateAllViewCrossHairColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
@@ -383,8 +395,9 @@ MainWindow::updateAllViewCrossHairColors(QRgb color)
     }
 }
 
+/* . */
 void
-MainWindow::updateAllViewBackgroundColors(QRgb color)
+updateAllViewBackgroundColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
@@ -395,8 +408,9 @@ MainWindow::updateAllViewBackgroundColors(QRgb color)
     }
 }
 
+/* . */
 void
-MainWindow::updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
+updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
@@ -407,8 +421,9 @@ MainWindow::updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, Q
     }
 }
 
+/* . */
 void
-MainWindow::updateAllViewGridColors(QRgb color)
+updateAllViewGridColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
@@ -419,8 +434,9 @@ MainWindow::updateAllViewGridColors(QRgb color)
     }
 }
 
+/* . */
 void
-MainWindow::updateAllViewRulerColors(QRgb color)
+updateAllViewRulerColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for (int i = 0; i < windowList.count(); ++i) {
@@ -431,15 +447,17 @@ MainWindow::updateAllViewRulerColors(QRgb color)
     }
 }
 
+/* . */
 void
-MainWindow::updatePickAddMode(bool val)
+updatePickAddMode(bool val)
 {
     selection_mode_pickadd.setting = val;
     dockPropEdit->updatePickAddModeButton(val);
 }
 
+/* . */
 void
-MainWindow::pickAddModeToggled()
+pickAddModeToggled(void)
 {
     bool val = !selection_mode_pickadd.setting;
     updatePickAddMode(val);
@@ -447,30 +465,33 @@ MainWindow::pickAddModeToggled()
 
 /* Layer ToolBar */
 void
-MainWindow::makeLayerActive()
+makeLayerActive(void)
 {
     debug_message("makeLayerActive()");
     stub_implement("Implement makeLayerActive.");
 }
 
+/* . */
 void
-MainWindow::layerManager()
+layerManager(void)
 {
     debug_message("layerManager()");
     stub_implement("Implement layerManager.");
-    LayerManager layman(this, this);
+    LayerManager layman(_main, _main);
     layman.exec();
 }
 
+/* . */
 void
-MainWindow::layerPrevious()
+layerPrevious(void)
 {
     debug_message("layerPrevious()");
     stub_implement("Implement layerPrevious.");
 }
 
+/* . */
 void
-MainWindow::layerSelectorIndexChanged(int index)
+layerSelectorIndexChanged(int index)
 {
     char message[MAX_STRING_LENGTH];
     sprintf(message, "layerSelectorIndexChanged(%d)", index);
@@ -502,35 +523,39 @@ MainWindow::colorSelectorIndexChanged(int index)
 
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
-        mdiWin->currentColorChanged(newColor);
+        currentColorChanged(newColor);
     }
 }
 
+/* . */
 void
-MainWindow::linetypeSelectorIndexChanged(int index)
+linetypeSelectorIndexChanged(int index)
 {
     char message[MAX_STRING_LENGTH];
     sprintf(message, "linetypeSelectorIndexChanged(%d)", index);
     debug_message(message);
 }
 
+/* . */
 void
-MainWindow::lineweightSelectorIndexChanged(int index)
+lineweightSelectorIndexChanged(int index)
 {
     char message[MAX_STRING_LENGTH];
     sprintf(message, "lineweightSelectorIndexChanged(%d)", index);
     debug_message(message);
 }
 
+/* . */
 void
-MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
+textFontSelectorCurrentFontChanged(const QFont& font)
 {
     debug_message("textFontSelectorCurrentFontChanged()");
     setTextFont(font.family());
 }
 
+/* . */
 void
-MainWindow::textSizeSelectorIndexChanged(int index)
+textSizeSelectorIndexChanged(int index)
 {
     char message[MAX_STRING_LENGTH];
     sprintf(message, "textSizeSelectorIndexChanged(%d)", index);
@@ -539,15 +564,17 @@ MainWindow::textSizeSelectorIndexChanged(int index)
     text_size.setting = qFabs(textSizeSelector->itemData(index).toReal());
 }
 
+/* . */
 void
-MainWindow::setTextFont(const QString& str)
+setTextFont(const QString& str)
 {
     textFontSelector->setCurrentFont(QFont(str));
     strcpy(text_font.setting, qPrintable(str));
 }
 
+/* . */
 void
-MainWindow::setTextSize(double num)
+setTextSize(double num)
 {
     text_size.setting = qFabs(num);
     int index = textSizeSelector->findText("Custom", Qt::MatchContains);
@@ -605,26 +632,28 @@ getCurrentLineWeight()
     return "ByLayer";
 }
 
+/* . */
 void
-MainWindow::deletePressed()
+deletePressed(void)
 {
     debug_message("deletePressed()");
     wait_cursor();
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
-        mdiWin->deletePressed();
+        /* TODO: change document based on selection */
     }
     restore_cursor();
 }
 
+/* . */
 void
-MainWindow::escapePressed()
+escapePressed(void)
 {
     debug_message("escapePressed()");
     wait_cursor();
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) {
-        mdiWin->escapePressed();
+        /* TODO: change document based on selection */
     }
     restore_cursor();
 
@@ -657,7 +686,7 @@ toggleLwt(void)
 
 /* . */
 void
-MainWindow::promptHistoryAppended(const QString& txt)
+promptHistoryAppended(const QString& txt)
 {
     MdiWindow* mdiWin = activeMdiWindow();
     if (mdiWin) {
@@ -665,8 +694,9 @@ MainWindow::promptHistoryAppended(const QString& txt)
     }
 }
 
+/* . */
 void
-MainWindow::logPromptInput(const QString& txt)
+logPromptInput(const QString& txt)
 {
     MdiWindow* mdiWin = activeMdiWindow();
     if (mdiWin) {
@@ -674,8 +704,9 @@ MainWindow::logPromptInput(const QString& txt)
     }
 }
 
+/* . */
 void
-MainWindow::promptInputPrevious()
+promptInputPrevious(void)
 {
     MdiWindow* mdiWin = activeMdiWindow();
     if (mdiWin) {
@@ -683,8 +714,9 @@ MainWindow::promptInputPrevious()
     }
 }
 
+/* . */
 void
-MainWindow::promptInputNext()
+promptInputNext(void)
 {
     MdiWindow* mdiWin = activeMdiWindow();
     if (mdiWin) {
@@ -692,6 +724,7 @@ MainWindow::promptInputNext()
     }
 }
 
+/* . */
 ScriptValue
 run_command(const char* cmd, ScriptEnv *context)
 {
@@ -810,22 +843,22 @@ run_command(const char* cmd, ScriptEnv *context)
         break;
 
     case ACTION_ICON_128:
-        _main->iconResize(128);
+        iconResize(128);
         break;
     case ACTION_ICON_16:
-        _main->iconResize(16);
+        iconResize(16);
         break;
     case ACTION_ICON_24:
-        _main->iconResize(24);
+        iconResize(24);
         break;
     case ACTION_ICON_32:
-        _main->iconResize(32);
+        iconResize(32);
         break;
     case ACTION_ICON_48:
-        _main->iconResize(48);
+        iconResize(48);
         break;
     case ACTION_ICON_64:
-        _main->iconResize(64);
+        iconResize(64);
         break;
 
     case ACTION_MIRROR_SELECTED: {
@@ -845,7 +878,7 @@ run_command(const char* cmd, ScriptEnv *context)
  */
 
     case ACTION_OPEN:
-        _main->openFile();
+        openFile();
         break;
 
     case ACTION_PASTE: {
@@ -863,7 +896,7 @@ run_command(const char* cmd, ScriptEnv *context)
         /* prompt_output(translate("Platform") + " = " + _main->platformString()); */
         break;
     case ACTION_REDO:
-        _main->redo();
+        redo_command();
         break;
 
     case ACTION_SAVE:
@@ -879,7 +912,7 @@ run_command(const char* cmd, ScriptEnv *context)
         break;
 
     case ACTION_SETTINGS_DIALOG: {
-        _main->settingsDialog();
+        settingsDialog();
         break;
     }
 
@@ -914,7 +947,7 @@ run_command(const char* cmd, ScriptEnv *context)
     }
 
     case ACTION_UNDO:
-        _main->undo();
+        undo_command();
         break;
 
     case ACTION_VULCANIZE: {
@@ -1183,7 +1216,7 @@ run_command(const char* cmd, ScriptEnv *context)
         break;
     }
     case ACTION_WINDOW_CLOSE: {
-        _main->onCloseWindow();
+        onCloseWindow();
         break;
     }
     case ACTION_WINDOW_CLOSE_ALL: {
@@ -1408,23 +1441,26 @@ void
 nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b)
 {
     display_bg_color.setting = qRgb(r,g,b);
-    _main->updateAllViewBackgroundColors(qRgb(r,g,b));
+    updateAllViewBackgroundColors(qRgb(r,g,b));
 }
 
+/* . */
 void
 nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b)
 {
     display_crosshair_color.setting = qRgb(r,g,b);
-    _main->updateAllViewCrossHairColors(qRgb(r,g,b));
+    updateAllViewCrossHairColors(qRgb(r,g,b));
 }
 
+/* . */
 void
 nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b)
 {
     grid_color.setting = qRgb(r,g,b);
-    _main->updateAllViewGridColors(qRgb(r,g,b));
+    updateAllViewGridColors(qRgb(r,g,b));
 }
 
+/* . */
 bool
 nativeAllowRubber()
 {
@@ -1435,6 +1471,7 @@ nativeAllowRubber()
     return false;
 }
 
+/* . */
 void
 nativeSpareRubber(int64_t id)
 {
@@ -1931,29 +1968,29 @@ about_dialog(void)
     arrow_cursor();
     debug_message("about()");
 
-    QString appDir = qApp->applicationDirPath();
-    QString appName = QApplication::applicationName();
-    QString title = "About " + appName;
+    QString title = "About Embroidermodder 2";
 
     QDialog dialog(_main);
     QLabel image_label;
     QPixmap img = create_pixmap("logo_small");
     image_label.setPixmap(img);
-    QLabel text(appName + "\n\n" +
-        _main->tr("http://www.libembroidery.org") +
-        "\n\n" +
-        _main->tr("Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi") +
-        "\n\n" +
-        _main->tr("Embroidery formats by Josh Varga.") +
-        "\n" +
-        _main->tr("User Interface by Jonathan Greig.") +
-        "\n\n" +
-        _main->tr("Free under the zlib/libpng license.")
-        #if defined(BUILD_GIT_HASH)
-        + "\n\n" +
-        _main->tr("Build Hash: ") + qPrintable(BUILD_GIT_HASH)
-        #endif
-        );
+    QString body_text = "Embroidermodder 2\n\n";
+    /* add version here */
+    body_text += translate("http://www.libembroidery.org");
+    body_text += "\n\n";
+    body_text += translate("Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi");
+    body_text += "\n\n";
+    body_text += translate("Embroidery formats by Josh Varga.");
+    body_text += "\n\n";
+    body_text += translate("User Interface by Jonathan Greig.");
+    body_text += "\n\n";
+    body_text += translate("Free under the zlib/libpng license.");
+#if defined(BUILD_GIT_HASH)
+    body_text += "\n\n";
+    body_text += translate("Build Hash: ");
+    body_text += qPrintable(BUILD_GIT_HASH);
+#endif
+    QLabel text(body_text);
     text.setWordWrap(true);
 
     QDialogButtonBox buttonbox(Qt::Horizontal, &dialog);
@@ -2239,9 +2276,9 @@ print_area_command(ScriptEnv* context)
     sprintf(message, "nativePrintArea(%.2f, %.2f, %.2f, %.2f)", REAL(0), REAL(1), REAL(2), REAL(3));
     debug_message(message);
     /* TODO: Print Setup Stuff
-        nativePrintArea(REAL(0), REAL(1), REAL(2), REAL(3));
-    */
-    _main->print();
+     * nativePrintArea(REAL(0), REAL(1), REAL(2), REAL(3));
+     */
+    print_command();
     return script_null;
 }
 

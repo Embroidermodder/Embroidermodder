@@ -605,6 +605,96 @@ void doc_add_object(Document* doc, Object* obj);
 void doc_delete_object(Document* doc, Object* obj);
 void doc_vulcanize_object(Document* doc, Object* obj);
 
+/* ------------------------- Settings Dialog --------------------------- */
+
+/* ------------------------------ Prompt ------------------------------- */
+
+void setPromptTextColor(const QColor&);
+void setPromptBackgroundColor(const QColor&);
+void setPromptFontFamily(const QString&);
+void setPromptFontStyle(const QString&);
+void setPromptFontSize(int);
+
+/* -------------------------- Main Functions --------------------------- */
+
+void runCommandMain(const QString& cmd);
+void runCommandClick(const QString& cmd, double x, double y);
+void runCommandMove(const QString& cmd, double x, double y);
+void runCommandContext(const QString& cmd, const QString& str);
+void runCommandPrompt(const QString& cmd);
+
+void updateAllViewScrollBars(bool val);
+void updateAllViewCrossHairColors(QRgb color);
+void updateAllViewBackgroundColors(QRgb color);
+void updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
+void updateAllViewGridColors(QRgb color);
+void updateAllViewRulerColors(QRgb color);
+
+void updatePickAddMode(bool val);
+void pickAddModeToggled(void);
+
+void makeLayerActive(void);
+void layerManager(void);
+void layerPrevious(void);
+
+void layerSelectorIndexChanged(int index);
+void linetypeSelectorIndexChanged(int index);
+void lineweightSelectorIndexChanged(int index);
+void textFontSelectorCurrentFontChanged(const QFont& font);
+void textSizeSelectorIndexChanged(int index);
+
+void setTextFont(const QString& str);
+void setTextSize(double num);
+
+void deletePressed(void);
+void escapePressed(void);
+
+void promptHistoryAppended(const QString& txt);
+void logPromptInput(const QString& txt);
+void promptInputPrevious();
+void promptInputNext();
+
+void print_command(void);
+void undo_command(void);
+void redo_command(void);
+
+bool isShiftPressed(void);
+void setShiftPressed(void);
+void setShiftReleased(void);
+
+void iconResize(int iconSize);
+
+void openFile(bool recent = false, const QString& recentFile = "");
+void openFilesSelected(const QStringList&);
+
+void onWindowActivated(QMdiSubWindow* w);
+
+QAction* getFileSeparator();
+void loadFormats();
+
+void settingsPrompt();
+
+void settingsDialog(const QString& showTab = QString());
+void readSettings();
+void writeSettings();
+
+void createAllMenus();
+void createAllActions();
+QAction* createAction(Command command);
+
+bool validFileFormat(const QString &fileName);
+QMdiSubWindow* findMdiWindow(const QString &fileName);
+
+void onCloseWindow(void);
+void onCloseMdiWin(MdiWindow*);
+
+void setUndoCleanIcon(bool opened);
+
+void currentLayerChanged(const QString& layer);
+void currentColorChanged(const QRgb& color);
+void currentLinetypeChanged(const QString& type);
+void currentLineweightChanged(const QString& weight);
+
 /* ---------------------- Class Declarations --------------------------- */
 
 class LayerManager : public QDialog
@@ -830,7 +920,6 @@ public:
     void setObjectRubberText(const QString& key, const QString& txt) { data.objRubberTexts.insert(key, txt); }
 
     void drawRubberLine(const QLineF& rubLine, QPainter* painter = 0, const char* colorFromScene = 0);
-    QPen lineWeightPen() const { return data.lwtPen; }
     void realRender(QPainter* painter, const QPainterPath& renderPath);
 
     void setObjectCenter(EmbVector point);
@@ -878,6 +967,8 @@ public:
     PropertyEditor(const QString& iconDirectory = "", bool pickAddMode = true, QWidget* widgetToFocus = 0, QWidget* parent = 0); /*, Qt::WindowFlags flags = 0); */
     ~PropertyEditor();
 
+    void togglePickAddMode();
+
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
 
@@ -887,27 +978,6 @@ signals:
 public slots:
     void setSelectedItems(QList<QGraphicsItem*> itemList);
     void updatePickAddModeButton(bool pickAddMode);
-
-private slots:
-    void fieldEdited(QObject* fieldObj);
-    void showGroups(int objType);
-    void showOneType(int index);
-    void hideAllGroups();
-    void clearAllFields();
-    void togglePickAddMode();
-
-private:
-    /* Helper functions */
-    void updateLineEditStrIfVaries(QLineEdit* lineEdit, const QString& str);
-    void updateLineEditNumIfVaries(QLineEdit* lineEdit, double num, bool useAnglePrecision);
-    void updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, const QString& str);
-    void updateComboBoxStrIfVaries(QComboBox* comboBox, const QString& str, const QStringList& strList);
-    void updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, bool yesOrNoText);
-
-    /* Selection */
-    QComboBox* createComboBoxSelected();
-    QToolButton* createToolButtonQSelect();
-    QToolButton* createToolButtonPickAdd();
 };
 
 class Settings_Dialog : public QDialog
@@ -1082,14 +1152,7 @@ public slots:
     void closeEvent(QCloseEvent* e);
     void onWindowActivated();
 
-    void currentLayerChanged(const QString& layer);
-    void currentColorChanged(const QRgb& color);
-    void currentLinetypeChanged(const QString& type);
-    void currentLineweightChanged(const QString& weight);
-
     void updateColorLinetypeLineweight();
-    void deletePressed();
-    void escapePressed();
 
     void showViewScrollBars(bool val);
     void setViewCrossHairColor(QRgb color);
@@ -1179,6 +1242,8 @@ public:
     CmdPrompt(QWidget* parent = 0);
     ~CmdPrompt() {}
 
+    void updateStyle(void);
+
 public slots:
     void setCurrentText(const QString& txt)
     {
@@ -1194,12 +1259,6 @@ public slots:
 
     void blink();
 
-    void setPromptTextColor(const QColor&);
-    void setPromptBackgroundColor(const QColor&);
-    void setPromptFontFamily(const QString&);
-    void setPromptFontStyle(const QString&);
-    void setPromptFontSize(int);
-
     void saveHistory(const QString& fileName, bool html);
 
 signals:
@@ -1207,16 +1266,7 @@ signals:
     void showSettings();
 
     void historyAppended(const QString& txt);
-
-private:
-    void updateStyle();
 };
-
-void runCommandMain(const QString& cmd);
-void runCommandClick(const QString& cmd, double x, double y);
-void runCommandMove(const QString& cmd, double x, double y);
-void runCommandContext(const QString& cmd, const QString& str);
-void runCommandPrompt(const QString& cmd);
 
 class MainWindow: public QMainWindow
 {
@@ -1226,95 +1276,20 @@ public:
     MainWindow();
     ~MainWindow();
 
-    void setUndoCleanIcon(bool opened);
-
 public slots:
-    void onCloseWindow();
-    virtual void onCloseMdiWin(MdiWindow*);
-
     void recentMenuAboutToShow();
-
-    void onWindowActivated(QMdiSubWindow* w);
     void windowMenuActivated( bool checked/*int id*/ );
-
-    void updateAllViewScrollBars(bool val);
-    void updateAllViewCrossHairColors(QRgb color);
-    void updateAllViewBackgroundColors(QRgb color);
-    void updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
-    void updateAllViewGridColors(QRgb color);
-    void updateAllViewRulerColors(QRgb color);
-
-    void updatePickAddMode(bool val);
-    void pickAddModeToggled();
-
-    void settingsPrompt();
-
-    void settingsDialog(const QString& showTab = QString());
-    void readSettings();
-    void writeSettings();
-
-    static bool validFileFormat(const QString &fileName);
-
-protected:
-    virtual void resizeEvent(QResizeEvent*);
-    void closeEvent(QCloseEvent *event);
-    QAction* getFileSeparator();
-    void loadFormats();
-
-private:
-    QMdiSubWindow* findMdiWindow(const QString &fileName);
-
-    void createAllActions();
-    QAction* createAction(Command command);
-
-    /* Menus */
-    void createAllMenus();
-
-public slots:
-    void promptHistoryAppended(const QString& txt);
-    void logPromptInput(const QString& txt);
-    void promptInputPrevious();
-    void promptInputNext();
-
-    /* NOTE: for some reason QString <-> std::string conversions makes commands not work. */
-    void runCommand();
-
-    void openFile(bool recent = false, const QString& recentFile = "");
-    void openFilesSelected(const QStringList&);
-    void print();
 
     void closeToolBar(QAction*);
     void floatingChangedToolBar(bool);
 
-    /* Icons */
-    void iconResize(int iconSize);
+    void runCommand();
 
-    /* Selectors */
-    void layerSelectorIndexChanged(int index);
     void colorSelectorIndexChanged(int index);
-    void linetypeSelectorIndexChanged(int index);
-    void lineweightSelectorIndexChanged(int index);
-    void textFontSelectorCurrentFontChanged(const QFont& font);
-    void textSizeSelectorIndexChanged(int index);
 
-    void setTextFont(const QString& str);
-    void setTextSize(double num);
-
-    /* Standard Slots */
-    void undo();
-    void redo();
-
-    bool isShiftPressed();
-    void setShiftPressed();
-    void setShiftReleased();
-
-    void deletePressed();
-    void escapePressed();
-
-    /* Layer Toolbar */
-    void makeLayerActive();
-    void layerManager();
-    void layerPrevious();
+protected:
+    virtual void resizeEvent(QResizeEvent*);
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif

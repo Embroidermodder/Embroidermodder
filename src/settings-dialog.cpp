@@ -1290,7 +1290,7 @@ preview_update(void)
     mdiArea->useBackgroundLogo(general_mdi_bg_use_logo.preview);
     mdiArea->useBackgroundColor(general_mdi_bg_use_color.preview);
     mdiArea->useBackgroundTexture(general_mdi_bg_use_texture.preview);
-    _main->updateAllViewScrollBars(display_show_scrollbars.preview);
+    updateAllViewScrollBars(display_show_scrollbars.preview);
 }
 
 void
@@ -1377,10 +1377,10 @@ Settings_Dialog::chooseDisplayCrossHairColor()
         if (colorDialog->result() == QDialog::Accepted) {
             display_crosshair_color.accept = colorDialog->selectedColor().rgb();
             button->setIcon(create_swatch(display_crosshair_color.accept));
-            _main->updateAllViewCrossHairColors(display_crosshair_color.accept);
+            updateAllViewCrossHairColors(display_crosshair_color.accept);
         }
         else {
-            _main->updateAllViewCrossHairColors(display_crosshair_color.dialog);
+            updateAllViewCrossHairColors(display_crosshair_color.dialog);
         }
     }
 }
@@ -1389,7 +1389,7 @@ void
 Settings_Dialog::currentDisplayCrossHairColorChanged(const QColor& color)
 {
     display_crosshair_color.preview = color.rgb();
-    _main->updateAllViewCrossHairColors(display_crosshair_color.preview);
+    updateAllViewCrossHairColors(display_crosshair_color.preview);
 }
 
 void
@@ -1404,10 +1404,10 @@ Settings_Dialog::chooseDisplayBackgroundColor()
         if (colorDialog->result() == QDialog::Accepted) {
             display_bg_color.accept = colorDialog->selectedColor().rgb();
             button->setIcon(create_swatch(display_bg_color.accept));
-            _main->updateAllViewBackgroundColors(display_bg_color.accept);
+            updateAllViewBackgroundColors(display_bg_color.accept);
         }
         else {
-            _main->updateAllViewBackgroundColors(display_bg_color.dialog);
+            updateAllViewBackgroundColors(display_bg_color.dialog);
         }
     }
 }
@@ -1416,7 +1416,7 @@ void
 Settings_Dialog::currentDisplayBackgroundColorChanged(const QColor& color)
 {
     display_bg_color.preview = color.rgb();
-    _main->updateAllViewBackgroundColors(display_bg_color.preview);
+    updateAllViewBackgroundColors(display_bg_color.preview);
 }
 
 void
@@ -1433,14 +1433,14 @@ Settings_Dialog::chooseDisplaySelectBoxLeftColor()
             QPixmap pix(16,16);
             pix.fill(QColor(display_selectbox_left_color.accept));
             button->setIcon(QIcon(pix));
-            _main->updateAllViewSelectBoxColors(display_selectbox_left_color.accept,
+            updateAllViewSelectBoxColors(display_selectbox_left_color.accept,
                                                   display_selectbox_left_fill.accept,
                                                   display_selectbox_right_color.accept,
                                                   display_selectbox_right_fill.accept,
                                                   display_selectbox_alpha.preview);
         }
         else {
-            _main->updateAllViewSelectBoxColors(display_selectbox_left_color.dialog,
+            updateAllViewSelectBoxColors(display_selectbox_left_color.dialog,
                                                   display_selectbox_left_fill.dialog,
                                                   display_selectbox_right_color.dialog,
                                                   display_selectbox_right_fill.dialog,
@@ -1453,7 +1453,7 @@ void
 Settings_Dialog::currentDisplaySelectBoxLeftColorChanged(const QColor& color)
 {
     display_selectbox_left_color.preview = color.rgb();
-    _main->updateAllViewSelectBoxColors(
+    updateAllViewSelectBoxColors(
         display_selectbox_left_color.preview,
         display_selectbox_left_fill.preview,
         display_selectbox_right_color.preview,
@@ -1475,7 +1475,7 @@ Settings_Dialog::chooseDisplaySelectBoxLeftFill()
     if (colorDialog->result() == QDialog::Accepted) {
         display_selectbox_left_fill.accept = colorDialog->selectedColor().rgb();
         button->setIcon(create_swatch(display_selectbox_left_fill.accept));
-        _main->updateAllViewSelectBoxColors(
+        updateAllViewSelectBoxColors(
             display_selectbox_left_color.accept,
             display_selectbox_left_fill.accept,
             display_selectbox_right_color.accept,
@@ -1483,7 +1483,7 @@ Settings_Dialog::chooseDisplaySelectBoxLeftFill()
             display_selectbox_alpha.preview);
     }
     else {
-        _main->updateAllViewSelectBoxColors(
+        updateAllViewSelectBoxColors(
             display_selectbox_left_color.dialog,
             display_selectbox_left_fill.dialog,
             display_selectbox_right_color.dialog,
@@ -1496,7 +1496,7 @@ void
 Settings_Dialog::currentDisplaySelectBoxLeftFillChanged(const QColor& color)
 {
     display_selectbox_left_fill.preview = color.rgb();
-    _main->updateAllViewSelectBoxColors(
+    updateAllViewSelectBoxColors(
         display_selectbox_left_color.preview,
         display_selectbox_left_fill.preview,
         display_selectbox_right_color.preview,
@@ -1518,7 +1518,7 @@ Settings_Dialog::chooseDisplaySelectBoxRightColor()
     if (colorDialog->result() == QDialog::Accepted) {
         display_selectbox_right_color.accept = colorDialog->selectedColor().rgb();
         button->setIcon(create_swatch(display_selectbox_right_color.accept));
-        _main->updateAllViewSelectBoxColors(
+        updateAllViewSelectBoxColors(
             display_selectbox_left_color.accept,
             display_selectbox_left_fill.accept,
             display_selectbox_right_color.accept,
@@ -1526,7 +1526,7 @@ Settings_Dialog::chooseDisplaySelectBoxRightColor()
             display_selectbox_alpha.preview);
     }
     else {
-        _main->updateAllViewSelectBoxColors(
+        updateAllViewSelectBoxColors(
             display_selectbox_left_color.dialog,
             display_selectbox_left_fill.dialog,
             display_selectbox_right_color.dialog,
@@ -1539,7 +1539,7 @@ void
 Settings_Dialog::currentDisplaySelectBoxRightColorChanged(const QColor& color)
 {
     display_selectbox_right_color.preview = color.rgb();
-    _main->updateAllViewSelectBoxColors(
+    updateAllViewSelectBoxColors(
         display_selectbox_left_color.preview,
         display_selectbox_left_fill.preview,
         display_selectbox_right_color.preview,
@@ -1559,14 +1559,14 @@ Settings_Dialog::chooseDisplaySelectBoxRightFill()
         if (colorDialog->result() == QDialog::Accepted) {
             display_selectbox_right_fill.accept = colorDialog->selectedColor().rgb();
             button->setIcon(create_swatch(display_selectbox_right_fill.accept));
-            _main->updateAllViewSelectBoxColors(display_selectbox_left_color.accept,
+            updateAllViewSelectBoxColors(display_selectbox_left_color.accept,
                                                   display_selectbox_left_fill.accept,
                                                   display_selectbox_right_color.accept,
                                                   display_selectbox_right_fill.accept,
                                                   display_selectbox_alpha.preview);
         }
         else {
-            _main->updateAllViewSelectBoxColors(display_selectbox_left_color.dialog,
+            updateAllViewSelectBoxColors(display_selectbox_left_color.dialog,
                                                   display_selectbox_left_fill.dialog,
                                                   display_selectbox_right_color.dialog,
                                                   display_selectbox_right_fill.dialog,
@@ -1579,7 +1579,7 @@ void
 Settings_Dialog::currentDisplaySelectBoxRightFillChanged(const QColor& color)
 {
     display_selectbox_right_fill.preview = color.rgb();
-    _main->updateAllViewSelectBoxColors(display_selectbox_left_color.preview,
+    updateAllViewSelectBoxColors(display_selectbox_left_color.preview,
                                           display_selectbox_left_fill.preview,
                                           display_selectbox_right_color.preview,
                                           display_selectbox_right_fill.preview,
@@ -1590,7 +1590,7 @@ void
 Settings_Dialog::spinBoxDisplaySelectBoxAlphaValueChanged(int value)
 {
     display_selectbox_alpha.preview = value;
-    _main->updateAllViewSelectBoxColors(display_selectbox_left_color.accept,
+    updateAllViewSelectBoxColors(display_selectbox_left_color.accept,
                                           display_selectbox_left_fill.accept,
                                           display_selectbox_right_color.accept,
                                           display_selectbox_right_fill.accept,
@@ -1609,21 +1609,23 @@ Settings_Dialog::choosePromptTextColor()
         if (colorDialog->result() == QDialog::Accepted) {
             prompt_text_color.accept = colorDialog->selectedColor().rgb();
             button->setIcon(create_swatch(prompt_text_color.accept));
-            prompt->setPromptTextColor(QColor(prompt_text_color.accept));
+            setPromptTextColor(QColor(prompt_text_color.accept));
         }
         else {
-            prompt->setPromptTextColor(QColor(prompt_text_color.dialog));
+            setPromptTextColor(QColor(prompt_text_color.dialog));
         }
     }
 }
 
+/* . */
 void
 Settings_Dialog::currentPromptTextColorChanged(const QColor& color)
 {
     prompt_text_color.preview = color.rgb();
-    prompt->setPromptTextColor(QColor(prompt_text_color.preview));
+    setPromptTextColor(QColor(prompt_text_color.preview));
 }
 
+/* . */
 void
 Settings_Dialog::choosePromptBackgroundColor()
 {
@@ -1638,42 +1640,47 @@ Settings_Dialog::choosePromptBackgroundColor()
             QPixmap pix(16,16);
             pix.fill(QColor(prompt_bg_color.accept));
             button->setIcon(QIcon(pix));
-            prompt->setPromptBackgroundColor(QColor(prompt_bg_color.accept));
+            setPromptBackgroundColor(QColor(prompt_bg_color.accept));
         }
         else {
-            prompt->setPromptBackgroundColor(QColor(prompt_bg_color.dialog));
+            setPromptBackgroundColor(QColor(prompt_bg_color.dialog));
         }
     }
 }
 
+/* . */
 void
 Settings_Dialog::currentPromptBackgroundColorChanged(const QColor& color)
 {
     prompt_bg_color.preview = color.rgb();
-    prompt->setPromptBackgroundColor(QColor(prompt_bg_color.preview));
+    setPromptBackgroundColor(QColor(prompt_bg_color.preview));
 }
 
+/* . */
 void
 Settings_Dialog::comboBoxPromptFontFamilyCurrentIndexChanged(const QString& family)
 {
     strcpy(prompt_font_family.preview, qPrintable(family));
-    prompt->setPromptFontFamily(prompt_font_family.preview);
+    setPromptFontFamily(prompt_font_family.preview);
 }
 
+/* . */
 void
 Settings_Dialog::comboBoxPromptFontStyleCurrentIndexChanged(const QString& style)
 {
     strcpy(prompt_font_style.preview, qPrintable(style));
-    prompt->setPromptFontStyle(prompt_font_style.preview);
+    setPromptFontStyle(prompt_font_style.preview);
 }
 
+/* . */
 void
 Settings_Dialog::spinBoxPromptFontSizeValueChanged(int value)
 {
     prompt_font_size.preview = value;
-    prompt->setPromptFontSize(prompt_font_size.preview);
+    setPromptFontSize(prompt_font_size.preview);
 }
 
+/* . */
 void
 Settings_Dialog::checkBoxCustomFilterStateChanged(int checked)
 {
@@ -1727,10 +1734,10 @@ Settings_Dialog::checkBoxGridColorMatchCrossHairStateChanged(int checked)
 {
     grid_color_match_crosshair.dialog = checked;
     if (grid_color_match_crosshair.dialog) {
-        _main->updateAllViewGridColors(display_crosshair_color.accept);
+        updateAllViewGridColors(display_crosshair_color.accept);
     }
     else {
-        _main->updateAllViewGridColors(grid_color.accept);
+        updateAllViewGridColors(grid_color.accept);
     }
 
     QObject* senderObj = sender();
@@ -1761,21 +1768,23 @@ Settings_Dialog::chooseGridColor()
             QPixmap pix(16,16);
             pix.fill(QColor(grid_color.accept));
             button->setIcon(QIcon(pix));
-            _main->updateAllViewGridColors(grid_color.accept);
+            updateAllViewGridColors(grid_color.accept);
         }
         else {
-            _main->updateAllViewGridColors(grid_color.dialog);
+            updateAllViewGridColors(grid_color.dialog);
         }
     }
 }
 
+/* . */
 void
 Settings_Dialog::currentGridColorChanged(const QColor& color)
 {
     grid_color.preview = color.rgb();
-    _main->updateAllViewGridColors(grid_color.preview);
+    updateAllViewGridColors(grid_color.preview);
 }
 
+/* . */
 void
 Settings_Dialog::checkBoxGridLoadFromFileStateChanged(int checked)
 {
@@ -1793,6 +1802,7 @@ Settings_Dialog::checkBoxGridLoadFromFileStateChanged(int checked)
     set_enabled_group(senderObj, defined_origin_group, use_this_origin);
 }
 
+/* . */
 void
 Settings_Dialog::comboBoxGridTypeCurrentIndexChanged(const QString& type)
 {
@@ -1807,6 +1817,7 @@ Settings_Dialog::comboBoxGridTypeCurrentIndexChanged(const QString& type)
     set_visibility_group(senderObj, circular_grid_group, visibility);
 }
 
+/* . */
 void
 Settings_Dialog::checkBoxGridCenterOnOriginStateChanged(int checked)
 {
@@ -1818,6 +1829,7 @@ Settings_Dialog::checkBoxGridCenterOnOriginStateChanged(int checked)
     }
 }
 
+/* . */
 void
 Settings_Dialog::comboBoxRulerMetricCurrentIndexChanged(int index)
 {
@@ -1830,6 +1842,7 @@ Settings_Dialog::comboBoxRulerMetricCurrentIndexChanged(int index)
     }
 }
 
+/* . */
 void
 Settings_Dialog::chooseRulerColor()
 {
@@ -1844,33 +1857,37 @@ Settings_Dialog::chooseRulerColor()
             QPixmap pix(16,16);
             pix.fill(QColor(ruler_color.accept));
             button->setIcon(QIcon(pix));
-            _main->updateAllViewRulerColors(ruler_color.accept);
+            updateAllViewRulerColors(ruler_color.accept);
         }
         else {
-            _main->updateAllViewRulerColors(ruler_color.dialog);
+            updateAllViewRulerColors(ruler_color.dialog);
         }
     }
 }
 
+/* . */
 void
 Settings_Dialog::currentRulerColorChanged(const QColor& color)
 {
     ruler_color.preview = color.rgb();
-    _main->updateAllViewRulerColors(ruler_color.preview);
+    updateAllViewRulerColors(ruler_color.preview);
 }
 
+/* . */
 void
 Settings_Dialog::spinBoxRulerPixelSizeValueChanged(double value)
 {
     ruler_pixel_size.dialog = value;
 }
 
+/* . */
 void
 Settings_Dialog::buttonQSnapSelectAllClicked()
 {
     emit buttonQSnapSelectAll(true);
 }
 
+/* . */
 void
 Settings_Dialog::buttonQSnapClearAllClicked()
 {
@@ -1902,18 +1919,21 @@ Settings_Dialog::comboBoxQSnapLocatorColorCurrentIndexChanged(int index)
     }
 }
 
+/* . */
 void
 Settings_Dialog::sliderQSnapLocatorSizeValueChanged(int value)
 {
     qsnap_locator_size.dialog = value;
 }
 
+/* . */
 void
 Settings_Dialog::sliderQSnapApertureSizeValueChanged(int value)
 {
     qsnap_aperture_size.dialog = value;
 }
 
+/* . */
 void
 Settings_Dialog::checkBoxLwtShowLwtStateChanged(int checked)
 {
@@ -1935,6 +1955,7 @@ Settings_Dialog::checkBoxLwtShowLwtStateChanged(int checked)
     }
 }
 
+/* . */
 void
 Settings_Dialog::checkBoxLwtRealRenderStateChanged(int checked)
 {
@@ -1947,18 +1968,21 @@ Settings_Dialog::checkBoxLwtRealRenderStateChanged(int checked)
     }
 }
 
+/* . */
 void
 Settings_Dialog::sliderSelectionGripSizeValueChanged(int value)
 {
     selection_grip_size.dialog = value;
 }
 
+/* . */
 void
 Settings_Dialog::sliderSelectionPickBoxSizeValueChanged(int value)
 {
     selection_pickbox_size.dialog = value;
 }
 
+/* . */
 void
 Settings_Dialog::comboBoxSelectionCoolGripColorCurrentIndexChanged(int index)
 {
@@ -1977,6 +2001,7 @@ Settings_Dialog::comboBoxSelectionCoolGripColorCurrentIndexChanged(int index)
     }
 }
 
+/* . */
 void
 Settings_Dialog::comboBoxSelectionHotGripColorCurrentIndexChanged(int index)
 {
@@ -1995,6 +2020,7 @@ Settings_Dialog::comboBoxSelectionHotGripColorCurrentIndexChanged(int index)
     }
 }
 
+/* . */
 void
 Settings_Dialog::acceptChanges()
 {
@@ -2133,23 +2159,23 @@ Settings_Dialog::acceptChanges()
     mdiArea->setBackgroundLogo(general_mdi_bg_logo.dialog);
     mdiArea->setBackgroundTexture(general_mdi_bg_texture.dialog);
     mdiArea->setBackgroundColor(general_mdi_bg_color.dialog);
-    _main->iconResize(general_icon_size.dialog);
-    _main->updateAllViewScrollBars(display_show_scrollbars.dialog);
-    _main->updateAllViewCrossHairColors(display_crosshair_color.dialog);
-    _main->updateAllViewBackgroundColors(display_bg_color.dialog);
-    _main->updateAllViewSelectBoxColors(
+    iconResize(general_icon_size.dialog);
+    updateAllViewScrollBars(display_show_scrollbars.dialog);
+    updateAllViewCrossHairColors(display_crosshair_color.dialog);
+    updateAllViewBackgroundColors(display_bg_color.dialog);
+    updateAllViewSelectBoxColors(
         display_selectbox_left_color.dialog,
         display_selectbox_left_fill.dialog,
         display_selectbox_right_color.dialog,
         display_selectbox_right_fill.dialog,
         display_selectbox_alpha.dialog);
-    prompt->setPromptTextColor(QColor(prompt_text_color.dialog));
-    prompt->setPromptBackgroundColor(QColor(prompt_bg_color.dialog));
-    prompt->setPromptFontFamily(prompt_font_family.dialog);
-    prompt->setPromptFontStyle(prompt_font_style.dialog);
-    prompt->setPromptFontSize(prompt_font_size.dialog);
-    _main->updateAllViewGridColors(grid_color.dialog);
-    _main->updateAllViewRulerColors(ruler_color.dialog);
+    setPromptTextColor(QColor(prompt_text_color.dialog));
+    setPromptBackgroundColor(QColor(prompt_bg_color.dialog));
+    setPromptFontFamily(prompt_font_family.dialog);
+    setPromptFontStyle(prompt_font_style.dialog);
+    setPromptFontSize(prompt_font_size.dialog);
+    updateAllViewGridColors(grid_color.dialog);
+    updateAllViewRulerColors(ruler_color.dialog);
     if (lwt_show_lwt.dialog) {
         enableLwt();
     }
@@ -2162,9 +2188,9 @@ Settings_Dialog::acceptChanges()
     else {
         disableReal();
     }
-    _main->updatePickAddMode(selection_mode_pickadd.dialog);
+    updatePickAddMode(selection_mode_pickadd.dialog);
 
-    _main->writeSettings();
+    writeSettings();
     accept();
 }
 
@@ -2180,22 +2206,22 @@ Settings_Dialog::rejectChanges()
     mdiArea->setBackgroundLogo(general_mdi_bg_logo.dialog);
     mdiArea->setBackgroundTexture(general_mdi_bg_texture.dialog);
     mdiArea->setBackgroundColor(general_mdi_bg_color.dialog);
-    _main->updateAllViewScrollBars(display_show_scrollbars.dialog);
-    _main->updateAllViewCrossHairColors(display_crosshair_color.dialog);
-    _main->updateAllViewBackgroundColors(display_bg_color.dialog);
-    _main->updateAllViewSelectBoxColors(
+    updateAllViewScrollBars(display_show_scrollbars.dialog);
+    updateAllViewCrossHairColors(display_crosshair_color.dialog);
+    updateAllViewBackgroundColors(display_bg_color.dialog);
+    updateAllViewSelectBoxColors(
         display_selectbox_left_color.dialog,
         display_selectbox_left_fill.dialog,
         display_selectbox_right_color.dialog,
         display_selectbox_right_fill.dialog,
         display_selectbox_alpha.dialog);
-    prompt->setPromptTextColor(QColor(prompt_text_color.dialog));
-    prompt->setPromptBackgroundColor(QColor(prompt_bg_color.dialog));
-    prompt->setPromptFontFamily(prompt_font_family.dialog);
-    prompt->setPromptFontStyle(prompt_font_style.dialog);
-    prompt->setPromptFontSize(prompt_font_size.dialog);
-    _main->updateAllViewGridColors(grid_color.dialog);
-    _main->updateAllViewRulerColors(ruler_color.dialog);
+    setPromptTextColor(QColor(prompt_text_color.dialog));
+    setPromptBackgroundColor(QColor(prompt_bg_color.dialog));
+    setPromptFontFamily(prompt_font_family.dialog);
+    setPromptFontStyle(prompt_font_style.dialog);
+    setPromptFontSize(prompt_font_size.dialog);
+    updateAllViewGridColors(grid_color.dialog);
+    updateAllViewRulerColors(ruler_color.dialog);
     if (lwt_show_lwt.dialog) {
         enableLwt();
     }

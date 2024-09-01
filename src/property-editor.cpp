@@ -84,8 +84,25 @@ QList<QGraphicsItem*> selectedItemList;
 QToolButton* toolButtonQSelect;
 QToolButton* toolButtonPickAdd;
 
+/* Helper functions */
 void mapSignal(QObject* fieldObj, const QString& name, QVariant value);
 QToolButton* createToolButton(const QString& iconName, const QString& txt);
+
+void updateLineEditStrIfVaries(QLineEdit* lineEdit, const QString& str);
+void updateLineEditNumIfVaries(QLineEdit* lineEdit, double num, bool useAnglePrecision);
+void updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, const QString& str);
+void updateComboBoxStrIfVaries(QComboBox* comboBox, const QString& str, const QStringList& strList);
+void updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, bool yesOrNoText);
+
+void showGroups(int objType);
+void fieldEdited(QObject* fieldObj);
+void showOneType(int index);
+void hideAllGroups();
+void clearAllFields();
+
+QComboBox* createComboBoxSelected();
+QToolButton* createToolButtonQSelect();
+QToolButton* createToolButtonPickAdd();
 
 /* TODO: Alphabetic/Categorized TabWidget */
 
@@ -205,7 +222,7 @@ bool PropertyEditor::eventFilter(QObject *obj, QEvent *event)
 
 /* . */
 QComboBox*
-PropertyEditor::createComboBoxSelected()
+createComboBoxSelected(void)
 {
     comboBoxSelected = new QComboBox(dockPropEdit);
     comboBoxSelected->addItem(translate("No Selection"));
@@ -214,7 +231,7 @@ PropertyEditor::createComboBoxSelected()
 
 /* . */
 QToolButton*
-PropertyEditor::createToolButtonQSelect()
+createToolButtonQSelect(void)
 {
     toolButtonQSelect = new QToolButton(dockPropEdit);
     toolButtonQSelect->setIcon(create_icon("quickselect"));
@@ -227,11 +244,11 @@ PropertyEditor::createToolButtonQSelect()
 
 /* . */
 QToolButton*
-PropertyEditor::createToolButtonPickAdd()
+createToolButtonPickAdd(void)
 {
     /* TODO: Set as PickAdd or PickNew based on settings */
     toolButtonPickAdd = new QToolButton(dockPropEdit);
-    updatePickAddModeButton(pickAdd);
+    dockPropEdit->updatePickAddModeButton(pickAdd);
     QObject::connect(toolButtonPickAdd, SIGNAL(clicked(bool)), dockPropEdit, SLOT(togglePickAddMode()));
     return toolButtonPickAdd;
 }
@@ -501,7 +518,7 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
 
 /* . */
 void
-PropertyEditor::updateLineEditStrIfVaries(QLineEdit* lineEdit, const QString& str)
+updateLineEditStrIfVaries(QLineEdit* lineEdit, const QString& str)
 {
     fieldOldText = lineEdit->text();
     fieldNewText = str;
@@ -516,7 +533,7 @@ PropertyEditor::updateLineEditStrIfVaries(QLineEdit* lineEdit, const QString& st
 
 /* . */
 void
-PropertyEditor::updateLineEditNumIfVaries(QLineEdit* lineEdit, double num, bool useAnglePrecision)
+updateLineEditNumIfVaries(QLineEdit* lineEdit, double num, bool useAnglePrecision)
 {
     int precision = 0;
     if (useAnglePrecision) {
@@ -548,7 +565,7 @@ PropertyEditor::updateLineEditNumIfVaries(QLineEdit* lineEdit, double num, bool 
 
 /* . */
 void
-PropertyEditor::updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, const QString& str)
+updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, const QString& str)
 {
     char message[MAX_STRING_LENGTH];
     fieldOldText = fontComboBox->property("FontFamily").toString();
@@ -571,7 +588,7 @@ PropertyEditor::updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, const
 
 /* . */
 void
-PropertyEditor::updateComboBoxStrIfVaries(QComboBox* comboBox, const QString& str, const QStringList& strList)
+updateComboBoxStrIfVaries(QComboBox* comboBox, const QString& str, const QStringList& strList)
 {
     fieldOldText = comboBox->currentText();
     fieldNewText = str;
@@ -591,7 +608,7 @@ PropertyEditor::updateComboBoxStrIfVaries(QComboBox* comboBox, const QString& st
 
 /* . */
 void
-PropertyEditor::updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, bool yesOrNoText)
+updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, bool yesOrNoText)
 {
     fieldOldText = comboBox->currentText();
     if (yesOrNoText) {
@@ -631,7 +648,7 @@ PropertyEditor::updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, bool y
 
 /* . */
 void
-PropertyEditor::showGroups(int objType)
+showGroups(int objType)
 {
     if (objType == OBJ_TYPE_ARC) {
         group_boxes["GeometryArc"]->show();
@@ -712,7 +729,7 @@ PropertyEditor::showGroups(int objType)
 
 /* . */
 void
-PropertyEditor::showOneType(int index)
+showOneType(int index)
 {
     hideAllGroups();
     showGroups(comboBoxSelected->itemData(index).toInt());
@@ -720,7 +737,7 @@ PropertyEditor::showOneType(int index)
 
 /* NOTE: General group will never be hidden. */
 void
-PropertyEditor::hideAllGroups()
+hideAllGroups(void)
 {
     foreach (QString label, group_box_list) {
         if (label != "General") {
@@ -731,7 +748,7 @@ PropertyEditor::hideAllGroups()
 
 /* . */
 void
-PropertyEditor::clearAllFields()
+clearAllFields(void)
 {
     int n = string_array_length(editor_list);
     for (int i=0; i<n; i++) {
@@ -852,7 +869,7 @@ mapSignal(QObject* fieldObj, const QString& name, QVariant value)
 
 /* . */
 void
-PropertyEditor::fieldEdited(QObject* fieldObj)
+fieldEdited(QObject* fieldObj)
 {
     static bool blockSignals = false;
     if (blockSignals) {
@@ -1118,7 +1135,7 @@ PropertyEditor::fieldEdited(QObject* fieldObj)
 
     QWidget* widget = QApplication::focusWidget();
     /* Update so all fields have fresh data. TODO: Improve this. */
-    setSelectedItems(selectedItemList);
+    dockPropEdit->setSelectedItems(selectedItemList);
     hideAllGroups();
     showGroups(objType);
 

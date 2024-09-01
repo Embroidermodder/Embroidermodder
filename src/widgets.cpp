@@ -155,43 +155,43 @@ contextMenuEvent(QObject* object, QContextMenuEvent *event)
     if (object->objectName() == "StatusBarButtonSNAP") {
         QAction* action = new QAction(create_icon("gridsnapsettings"), "&Settings...", &menu);
         QObject::connect(action, &QAction::trigger,
-            _main, [](void) { _main->settingsDialog("Snap"); });
+            _main, [](void) { settingsDialog("Snap"); });
         menu.addAction(action);
     }
     else if (object->objectName() == "StatusBarButtonGRID") {
         QAction* action = new QAction(create_icon("gridsettings"), "&Settings...", &menu);
         QObject::connect(action, &QAction::trigger,
-            _main, [](void) { _main->settingsDialog("Grid/Ruler"); });
+            _main, [](void) { settingsDialog("Grid/Ruler"); });
         menu.addAction(action);
     }
     else if (object->objectName() == "StatusBarButtonRULER") {
         QAction* action = new QAction(create_icon("rulersettings"), "&Settings...", &menu);
         QObject::connect(action, &QAction::trigger,
-            _main, [](void) { _main->settingsDialog("Grid/Ruler"); });
+            _main, [](void) { settingsDialog("Grid/Ruler"); });
         menu.addAction(action);
     }
     else if (object->objectName() == "StatusBarButtonORTHO") {
         QAction* action = new QAction(create_icon("orthosettings"), "&Settings...", &menu);
         QObject::connect(action, &QAction::trigger,
-            _main, [](void) { _main->settingsDialog("Ortho/Polar"); });
+            _main, [](void) { settingsDialog("Ortho/Polar"); });
         menu.addAction(action);
     }
     else if (object->objectName() == "StatusBarButtonPOLAR") {
         QAction* action = new QAction(create_icon("polarsettings"), "&Settings...", &menu);
         QObject::connect(action, &QAction::trigger,
-            _main, [](void) { _main->settingsDialog("Ortho/Polar"); });
+            _main, [](void) { settingsDialog("Ortho/Polar"); });
         menu.addAction(action);
     }
     else if (object->objectName() == "StatusBarButtonQSNAP") {
         QAction* action = new QAction(create_icon("qsnapsettings"), "&Settings...", &menu);
         QObject::connect(action, &QAction::trigger,
-            _main, [](void) { _main->settingsDialog("QuickSnap"); });
+            _main, [](void) { settingsDialog("QuickSnap"); });
         menu.addAction(action);
     }
     else if (object->objectName() == "StatusBarButtonQTRACK") {
         QAction* action = new QAction(create_icon("qtracksettings"), "&Settings...", &menu);
         QObject::connect(action, &QAction::trigger,
-            _main, [](void) { _main->settingsDialog("QuickTrack"); });
+            _main, [](void) { settingsDialog("QuickTrack"); });
         menu.addAction(action);
     }
     else if (object->objectName() == "StatusBarButtonLWT") {
@@ -210,7 +210,7 @@ contextMenuEvent(QObject* object, QContextMenuEvent *event)
 
         QAction* action = new QAction(create_icon("lineweightsettings"), "&Settings...", &menu);
         QObject::connect(action, &QAction::trigger,
-            _main, [](void) { _main->settingsDialog("LineWeight"); });
+            _main, [](void) { settingsDialog("LineWeight"); });
         menu.addAction(action);
     }
     menu.exec(event->globalPos());
@@ -867,7 +867,7 @@ MdiArea::setBackgroundColor(const QColor& color)
 void
 MdiArea::mouseDoubleClickEvent(QMouseEvent* /*e*/)
 {
-    _main->openFile();
+    openFile();
 }
 
 /* . */
@@ -1086,7 +1086,7 @@ MdiWindow::loadFile(const QString &fileName)
     curColor = tmpColor;
 
     fileWasLoaded = true;
-    _main->setUndoCleanIcon(fileWasLoaded);
+    setUndoCleanIcon(fileWasLoaded);
     return fileWasLoaded;
 }
 
@@ -1174,7 +1174,7 @@ MdiWindow::onWindowActivated()
 {
     debug_message("MdiWindow onWindowActivated()");
     gview->data.undoStack->setActive(true);
-    _main->setUndoCleanIcon(fileWasLoaded);
+    setUndoCleanIcon(fileWasLoaded);
     statusBarSnapButton->setChecked(gscene->property("ENABLE_SNAP").toBool());
     statusBarGridButton->setChecked(gscene->property("ENABLE_GRID").toBool());
     statusBarRulerButton->setChecked(gscene->property("ENABLE_RULER").toBool());
@@ -1193,47 +1193,53 @@ MdiWindow::sizeHint() const
     return QSize(450, 300);
 }
 
+/* . */
 void
-MdiWindow::currentLayerChanged(const QString& layer)
+currentLayerChanged(MdiWindow *mdiWin, const QString& layer)
 {
-    curLayer = layer;
+    MdiWindow *win = activeMdiWindow();
+    if (win) {
+        win->curLayer = layer;
+    }
 }
 
+/* . */
 void
-MdiWindow::currentColorChanged(const QRgb& color)
+currentColorChanged(const QRgb& color)
 {
-    curColor = color;
+    MdiWindow *win = activeMdiWindow();
+    if (win) {
+        win->curColor = color;
+    }
 }
 
+/* . */
 void
-MdiWindow::currentLinetypeChanged(const QString& type)
+currentLinetypeChanged(const QString& type)
 {
-    curLineType = type;
+    MdiWindow *win = activeMdiWindow();
+    if (win) {
+        win->curLineType = type;
+    }
 }
 
+/* . */
 void
-MdiWindow::currentLineweightChanged(const QString& weight)
+currentLineweightChanged(const QString& weight)
 {
-    curLineWeight = weight;
+    MdiWindow *win = activeMdiWindow();
+    if (win) {
+        win->curLineWeight = weight;
+    }
 }
 
+/* . */
 void
 MdiWindow::updateColorLinetypeLineweight()
 {
 }
 
-void
-MdiWindow::deletePressed()
-{
-    //FIXME: doc_delete_pressed(gview);
-}
-
-void
-MdiWindow::escapePressed()
-{
-    //FIXME: doc_escape_pressed(gview);
-}
-
+/* . */
 void
 MdiWindow::showViewScrollBars(bool val)
 {
@@ -1442,44 +1448,44 @@ CmdPrompt::blink()
 
 /* . */
 void
-CmdPrompt::setPromptTextColor(const QColor& color)
+setPromptTextColor(const QColor& color)
 {
     prompt_color_ = color.name();
     prompt_selection_bg_color_ = color.name();
-    updateStyle();
+    prompt->updateStyle();
 }
 
 /* . */
 void
-CmdPrompt::setPromptBackgroundColor(const QColor& color)
+setPromptBackgroundColor(const QColor& color)
 {
     prompt_bg_color_ = color.name();
     prompt_selection_color_ = color.name();
-    updateStyle();
+    prompt->updateStyle();
 }
 
 /* . */
 void
-CmdPrompt::setPromptFontFamily(const QString& family)
+setPromptFontFamily(const QString& family)
 {
     strcpy(prompt_font_family.setting, qPrintable(family));
-    updateStyle();
+    prompt->updateStyle();
 }
 
 /* . */
 void
-CmdPrompt::setPromptFontStyle(const QString& style)
+setPromptFontStyle(const QString& style)
 {
     strcpy(prompt_font_style.setting, qPrintable(style));
-    updateStyle();
+    prompt->updateStyle();
 }
 
 /* . */
 void
-CmdPrompt::setPromptFontSize(int size)
+setPromptFontSize(int size)
 {
     prompt_font_size.setting = size;
-    updateStyle();
+    prompt->updateStyle();
 }
 
 /* . */

@@ -27,7 +27,7 @@ Application::event(QEvent *event)
     switch (event->type()) {
     case QEvent::FileOpen:
         if (_main) {
-            _main->openFilesSelected(QStringList(static_cast<QFileOpenEvent *>(event)->file()));
+            openFilesSelected(QStringList(static_cast<QFileOpenEvent *>(event)->file()));
             return true;
         }
         /* Fall through */
@@ -66,7 +66,7 @@ make_application(int argc, char* argv[])
      * slot commands wont work and the window menu will be screwed
      */
     if (!filesToOpen.isEmpty()) {
-        _main->openFilesSelected(filesToOpen);
+        openFilesSelected(filesToOpen);
     }
 
     return app.exec();
@@ -212,8 +212,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     this->setFocusProxy(prompt);
     mdiArea->setFocusProxy(prompt);
 
-    prompt->setPromptTextColor(QColor(prompt_text_color.setting));
-    prompt->setPromptBackgroundColor(QColor(prompt_bg_color.setting));
+    setPromptTextColor(QColor(prompt_text_color.setting));
+    setPromptBackgroundColor(QColor(prompt_bg_color.setting));
 
     connect(prompt, SIGNAL(startCommand(const QString&)), this, SLOT(logPromptInput(const QString&)));
 
@@ -357,7 +357,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     textSizeSelector->setFocusProxy(prompt);
     add_to_selector(textSizeSelector, text_size_list, "int", false);
-    _main->setTextSize(text_size.setting);
+    setTextSize(text_size.setting);
     toolbarHash["Text"]->addWidget(textSizeSelector);
     connect(textSizeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(textSizeSelectorIndexChanged(int)));
 
@@ -436,7 +436,7 @@ MainWindow::~MainWindow()
 
 /* . */
 void
-MainWindow::recentMenuAboutToShow()
+MainWindow::recentMenuAboutToShow(void)
 {
     debug_message("recentMenuAboutToShow()");
     menuHash["Recent"]->clear();
@@ -454,19 +454,20 @@ MainWindow::recentMenuAboutToShow()
                 recentValue.setNum(i+1);
                 QAction* rAction;
                 if (recentValue.toInt() >= 1 && recentValue.toInt() <= 9) {
-                    rAction = new QAction("&" + recentValue + " " + recentFileInfo.fileName(), this);
+                    rAction = new QAction("&" + recentValue + " " + recentFileInfo.fileName(), _main);
                 }
                 else if (recentValue.toInt() == 10) {
-                    rAction = new QAction("1&0 " + recentFileInfo.fileName(), this);
+                    rAction = new QAction("1&0 " + recentFileInfo.fileName(), _main);
                 }
                 else {
-                    rAction = new QAction(recentValue + " " + recentFileInfo.fileName(), this);
+                    rAction = new QAction(recentValue + " " + recentFileInfo.fileName(), _main);
                 }
                 rAction->setCheckable(false);
                 QString fname(opensave_recent_list_of_files.setting[i]);
                 rAction->setData(fname);
                 menuHash["Recent"]->addAction(rAction);
-                connect(rAction, SIGNAL(triggered()), this, SLOT(openrecentfile()));
+                QObject::connect(rAction, SIGNAL(triggered()), _main,
+                    SLOT(openrecentfile()));
             }
         }
         else {
@@ -533,8 +534,10 @@ new_file(void)
     docIndex++;
     numOfDocs++;
     MdiWindow* mdiWin = new MdiWindow(docIndex, _main, mdiArea, Qt::SubWindow);
-    QObject::connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), _main, SLOT(onCloseMdiWin(MdiWindow*)));
-    QObject::connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), _main, SLOT(onWindowActivated(QMdiSubWindow*)));
+    QObject::connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), _main,
+        SLOT(onCloseMdiWin(MdiWindow*)));
+    QObject::connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), _main,
+        SLOT(onWindowActivated(QMdiSubWindow*)));
 
     update_interface();
     windowMenuAboutToShow();
@@ -548,7 +551,7 @@ new_file(void)
 
 /* . */
 void
-MainWindow::openFile(bool recent, const QString& recentFile)
+openFile(bool recent, const QString& recentFile)
 {
     debug_message("openFile()");
 
@@ -565,13 +568,15 @@ MainWindow::openFile(bool recent, const QString& recentFile)
     }
     else if (!preview) {
         /* TODO: set getOpenFileNames' selectedFilter parameter from opensave_open_format.setting */
-        files = QFileDialog::getOpenFileNames(this, translate("Open"), openFilesPath, formatFilterOpen);
+        files = QFileDialog::getOpenFileNames(_main, translate("Open"), openFilesPath, formatFilterOpen);
         openFilesSelected(files);
     }
     else if (preview) {
-        PreviewDialog* openDialog = new PreviewDialog(this, translate("Open w/Preview"), openFilesPath, formatFilterOpen);
+        PreviewDialog* openDialog = new PreviewDialog(_main, translate("Open w/Preview"),
+            openFilesPath, formatFilterOpen);
         /* TODO: set openDialog->selectNameFilter(const QString& filter) from opensave_open_format.setting */
-        connect(openDialog, SIGNAL(filesSelected(const QStringList&)), this, SLOT(openFilesSelected(const QStringList&)));
+        QObject::connect(openDialog, SIGNAL(filesSelected(const QStringList&)), _main,
+            SLOT(openFilesSelected(const QStringList&)));
         openDialog->exec();
     }
 
@@ -595,7 +600,7 @@ string_list_contains(char list[MAX_FILES][MAX_STRING_LENGTH], const char *entry)
 
 /* . */
 void
-MainWindow::openFilesSelected(const QStringList& filesToOpen)
+openFilesSelected(const QStringList& filesToOpen)
 {
     debug_message("openFileSelected()");
     bool doOnce = true;
@@ -616,8 +621,10 @@ MainWindow::openFilesSelected(const QStringList& filesToOpen)
             /* The docIndex doesn't need increased as it is only used for unnamed files. */
             numOfDocs++;
             MdiWindow* mdiWin = new MdiWindow(docIndex, _main, mdiArea, Qt::SubWindow);
-            connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
-            connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
+            QObject::connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), _main,
+                SLOT(onCloseMdiWin(MdiWindow*)));
+            QObject::connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), _main,
+                SLOT(onWindowActivated(QMdiSubWindow*)));
 
             /* Make sure the toolbars/etc... are shown before doing their zoomExtents. */
             if (doOnce) {
@@ -699,7 +706,7 @@ save_as_file(void)
 
 /* . */
 QMdiSubWindow*
-MainWindow::findMdiWindow(const QString& fileName)
+findMdiWindow(const QString& fileName)
 {
     char message[MAX_STRING_LENGTH];
     sprintf(message, "findMdiWindow(%s)", qPrintable(fileName));
@@ -728,7 +735,7 @@ MainWindow::closeEvent(QCloseEvent* event)
 
 /* . */
 void
-MainWindow::onCloseWindow()
+onCloseWindow(void)
 {
     debug_message("onCloseWindow()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
@@ -739,7 +746,7 @@ MainWindow::onCloseWindow()
 
 /* . */
 void
-MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
+onCloseMdiWin(MdiWindow* theMdiWin)
 {
     debug_message("onCloseMdiWin()");
     numOfDocs--;
@@ -765,7 +772,7 @@ MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
 
 /* . */
 void
-MainWindow::onWindowActivated(QMdiSubWindow* w)
+onWindowActivated(QMdiSubWindow* w)
 {
     debug_message("onWindowActivated()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(w);
@@ -785,7 +792,7 @@ MainWindow::resizeEvent(QResizeEvent* e)
 
 /* . */
 QAction*
-MainWindow::getFileSeparator()
+getFileSeparator()
 {
     debug_message("getFileSeparator()");
     return myFileSeparator;
@@ -879,7 +886,7 @@ hide_unimplemented(void)
 
 /* . */
 bool
-MainWindow::validFileFormat(const QString& fileName)
+validFileFormat(const QString& fileName)
 {
     if (emb_identify_format(qPrintable(fileName)) >= 0) {
         return true;
@@ -889,7 +896,7 @@ MainWindow::validFileFormat(const QString& fileName)
 
 /* . */
 void
-MainWindow::loadFormats()
+loadFormats()
 {
     char stable, unstable;
     QString supportedReaders  = "All Supported Files (";
@@ -1038,12 +1045,13 @@ add_to_menu(const char *label, char *menu_data[])
  * It's a pain in the ass to maintain.
  */
 void
-MainWindow::createAllMenus()
+createAllMenus(void)
 {
     debug_message("createAllMenus()");
 
     menuBar()->addMenu(menuHash["File"]);
-    connect(menuHash["Recent"], SIGNAL(aboutToShow()), this, SLOT(recentMenuAboutToShow()));
+    QObject::connect(menuHash["Recent"], SIGNAL(aboutToShow()), _main,
+        SLOT(recentMenuAboutToShow()));
     menuHash["Recent"]->setTearOffEnabled(false);
     add_to_menu("File", file_menu);
 
@@ -1071,7 +1079,8 @@ MainWindow::createAllMenus()
     add_to_menu("Sandbox", sandbox_menu);
 
     menuBar()->addMenu(menuHash["Window"]);
-    connect(menuHash["Window"], SIGNAL(aboutToShow()), this, SLOT(windowMenuAboutToShow()));
+    QObject::connect(menuHash["Window"], SIGNAL(aboutToShow()), _main,
+        SLOT(windowMenuAboutToShow()));
     menuHash["Window"]->setTearOffEnabled(false);
 
     menuBar()->addMenu(menuHash["Help"]);
@@ -1119,7 +1128,7 @@ get_setting(QSettings *settings, const char *key, bool value, BoolSetting *b)
 
 /* . */
 void
-MainWindow::readSettings(void)
+readSettings(void)
 {
     debug_message("Reading Settings...");
     /* This file needs to be read from the users home directory to ensure it is writable. */
@@ -1131,7 +1140,7 @@ MainWindow::readSettings(void)
     QSize size = settings.value("Window/Size", QSize(800, 600)).toSize();
 
     layoutState = settings.value("LayoutState").toByteArray();
-    if (!restoreState(layoutState)) {
+    if (!_main->restoreState(layoutState)) {
         debug_message("LayoutState NOT restored! Setting Default Layout...");
         /* someToolBar->setVisible(true); */
     }
@@ -1285,13 +1294,15 @@ MainWindow::readSettings(void)
     text_style_strikeout.setting = settings.value("Text/StyleStrikeOut", false).toBool();
     text_style_overline.setting = settings.value("Text/StyleOverline", false).toBool();
 
-    move(pos);
-    resize(size);
+    /* FIXME:
+    _main->move(pos);
+    _main->resize(size);
+    */
 }
 
 /* . */
 void
-MainWindow::writeSettings()
+writeSettings(void)
 {
     debug_message("Writing Settings...");
     save_settings("", qPrintable(SettingsDir() + settings_file));
@@ -1299,16 +1310,16 @@ MainWindow::writeSettings()
 
 /* . */
 void
-MainWindow::settingsPrompt()
+settingsPrompt(void)
 {
     settingsDialog("Prompt");
 }
 
 /* . */
 void
-MainWindow::settingsDialog(const QString& showTab)
+settingsDialog(const QString& showTab)
 {
-    Settings_Dialog dialog(this, showTab, this);
+    Settings_Dialog dialog(_main, showTab, _main);
     dialog.exec();
 }
 
@@ -1348,11 +1359,9 @@ add_to_toolbar(const char *toolbar_name, char *toolbar_data[])
  *       Make custom whats this context help popup with more descriptive help than just
  *       the status bar/tip one liner(short but not real long) with a hyperlink in the custom popup
  *       at the bottom to open full help file description. Ex: like wxPython AGW's SuperToolTip.
- *
- * TODO: Finish All Commands ... <.<
  */
 void
-MainWindow::createAllActions()
+createAllActions(void)
 {
     debug_message("Creating All Actions...");
     for (int i=0; command_data[i].id != -2; i++) {
@@ -1364,7 +1373,7 @@ MainWindow::createAllActions()
 
         debug_message(qPrintable("COMMAND: " + icon));
 
-        QAction *ACTION = new QAction(create_icon(icon), toolTip, this);
+        QAction *ACTION = new QAction(create_icon(icon), toolTip, _main);
         ACTION->setStatusTip(statusTip);
         ACTION->setObjectName(icon);
         ACTION->setWhatsThis(statusTip);
@@ -1378,7 +1387,7 @@ MainWindow::createAllActions()
             ACTION->setCheckable(true);
         }
 
-        connect(ACTION, SIGNAL(triggered()), this, SLOT(runCommand()));
+        QObject::connect(ACTION, SIGNAL(triggered()), _main, SLOT(runCommand()));
 
         aliasHash[icon.toStdString()] = icon.toStdString();
         actionHash[command_data[i].id] = ACTION;
