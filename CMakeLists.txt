@@ -41,7 +41,13 @@ endif()
 set(SRC ${CMAKE_SOURCE_DIR}/src)
 set(EXTERN ${CMAKE_SOURCE_DIR}/extern)
 
-set(C_DATA
+set(C_CORE
+	${EXTERN}/libembroidery/embroidery.c
+	${EXTERN}/libembroidery/embroidery.h
+
+	${EXTERN}/tomlc99/toml.c
+	${EXTERN}/tomlc99/toml.h
+
 	${SRC}/data/commands.c
 	${SRC}/data/editors.c
 	${SRC}/data/menus.c
@@ -52,15 +58,15 @@ set(C_DATA
 	${SRC}/data/testing.c
 	${SRC}/data/tips.c
 	${SRC}/data/toolbars.c
+
+	${SRC}/script.c
+	${SRC}/geometry.c
+	${SRC}/xpm.c
+
+	${SRC}/core.h
 )
 
 qt_add_executable(embroidermodder2
-	${EXTERN}/libembroidery/embroidery.c
-	${EXTERN}/libembroidery/embroidery.h
-
-	${EXTERN}/tomlc99/toml.c
-	${EXTERN}/tomlc99/toml.h
-
 	${SRC}/commands.cpp
 	${SRC}/mainwindow.cpp
 	${SRC}/object.cpp
@@ -72,28 +78,15 @@ qt_add_executable(embroidermodder2
 
 	${SRC}/data/qt.cpp
 
-	${C_DATA}
-
-	${SRC}/script.c
-	${SRC}/xpm.c
+	${C_CORE}
 
 	${SRC}/embroidermodder.h
-	${SRC}/core.h
 )
 
 add_executable(emb2_glfw
-	${EXTERN}/libembroidery/embroidery.c
-	${EXTERN}/libembroidery/embroidery.h
-
-	${EXTERN}/tomlc99/toml.c
-	${EXTERN}/tomlc99/toml.h
-
-	${C_DATA}
+	${C_CORE}
 
 	${SRC}/main_glfw.c
-	${SRC}/script.c
-
-	${SRC}/core.h
 )
 
 include_directories(

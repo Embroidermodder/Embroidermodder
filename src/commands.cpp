@@ -468,7 +468,7 @@ void
 makeLayerActive(void)
 {
     debug_message("makeLayerActive()");
-    stub_implement("Implement makeLayerActive.");
+    todo("Implement makeLayerActive.");
 }
 
 /* . */
@@ -476,7 +476,7 @@ void
 layerManager(void)
 {
     debug_message("layerManager()");
-    stub_implement("Implement layerManager.");
+    todo("Implement layerManager.");
     LayerManager layman(_main, _main);
     layman.exec();
 }
@@ -486,7 +486,7 @@ void
 layerPrevious(void)
 {
     debug_message("layerPrevious()");
-    stub_implement("Implement layerPrevious.");
+    todo("Implement layerPrevious.");
 }
 
 /* . */
@@ -1240,15 +1240,15 @@ run_command(const char* cmd, ScriptEnv *context)
         break;
     }
     case ACTION_ZOOM_ALL: {
-        stub_implement("Implement zoomAll.");
+        todo("Implement zoomAll.");
         break;
     }
     case ACTION_ZOOM_CENTER: {
-        stub_implement("Implement zoomCenter.");
+        todo("Implement zoomCenter.");
         break;
     }
     case ACTION_ZOOM_DYNAMIC: {
-        stub_implement("Implement zoomDynamic.");
+        todo("Implement zoomDynamic.");
         break;
     }
     case ACTION_ZOOM_EXTENTS: {
@@ -1268,15 +1268,15 @@ run_command(const char* cmd, ScriptEnv *context)
         break;
     }
     case ACTION_ZOOM_PREVIOUS: {
-        stub_implement("Implement zoomPrevious.");
+        todo("Implement zoomPrevious.");
         break;
     }
     case ACTION_ZOOM_REAL_TIME: {
-        stub_implement("Implement zoomRealtime.");
+        todo("Implement zoomRealtime.");
         break;
     }
     case ACTION_ZOOM_SCALE: {
-        stub_implement("Implement zoomScale.");
+        todo("Implement zoomScale.");
         break;
     }
     case ACTION_ZOOM_SELECTED: {
@@ -2707,7 +2707,7 @@ UndoableCommand::undo()
         rotate(data.pivotX, data.pivotY, -data.angle);
         break;
     case ACTION_GRIP_EDIT:
-        data.object->gripEdit(data.after, data.before);
+        // FIXME: data.object->gripEdit(data.after, data.before);
         break;
     case ACTION_SCALE:
         data.object->setScale(data.object->scale()*(1/data.factor));
@@ -2750,7 +2750,7 @@ UndoableCommand::redo()
         rotate(data.pivotX, data.pivotY, data.angle);
         break;
     case ACTION_GRIP_EDIT:
-        data.object->gripEdit(data.before, data.after);
+        // FIXME: data.object->gripEdit(data.before, data.after);
         break;
     case ACTION_SCALE:
         data.object->setScale(data.object->scale()*data.factor);

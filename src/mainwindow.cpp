@@ -142,11 +142,6 @@ MainWindow::MainWindow() : QMainWindow(0)
         lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
     }
 
-    /* Load translations provided by Qt - this covers dialog buttons and other common things. */
-    QTranslator translatorQt;
-    translatorQt.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath)); /* TODO: ensure this always loads, ship a copy of this with the app. */
-    qApp->installTranslator(&translatorQt);
-
     /* Init */
     _main = this;
 

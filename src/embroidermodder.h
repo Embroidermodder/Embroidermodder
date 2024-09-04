@@ -379,32 +379,29 @@ Object *create_point(EmbPoint_ point, QRgb rgb, QGraphicsItem* parent=0);
 
 Object *copy_object(Object* obj);
 
-/*
-QColor obj_color(Object *obj);
-QRgb obj_color_rgb(Object *obj);
-Qt::PenStyle obj_line_type(Object *obj);
-double obj_line_weight(Object *obj);
-QPainterPath obj_path(Object *obj);
-QPointF obj_rubber_point(Object *obj, const QString& key);
-QString obj_rubber_text(Object *obj, const QString& key);
-
-QPointF obj_pos(Object *obj);
-double obj_x(Object *obj);
-double obj_y(Object *obj);
-
-QPointF obj_center(Object *obj);
-double obj_center_x(Object *obj);
-double obj_center_y(Object *obj);
-
-double obj_radius(Object *obj);
-double obj_diameter(Object *obj);
-double obj_circumference(Object *obj);
+QColor obj_color(Object* obj);
+QRgb obj_color_rgb(Object* obj);
+Qt::PenStyle obj_line_type(Object* obj);
+double  obj_line_weight(Object* obj);
+QPainterPath obj_path(Object* obj);
+QPointF obj_rubber_point(Object* obj, const QString& key);
+QString obj_rubber_text(Object* obj, const QString& key);
 
 QPointF obj_end_point_1(Object *obj);
 QPointF obj_end_point_2(Object *obj);
 QPointF obj_start_point(Object *obj);
 QPointF obj_mid_point(Object *obj);
 QPointF obj_end_point(Object *obj);
+
+QPointF obj_pos(Object *obj);
+double obj_x(Object *obj);
+double obj_y(Object *obj);
+QPointF obj_center(Object *obj);
+double obj_center_x(Object *obj);
+double obj_center_y(Object *obj);
+double obj_radius(Object *obj);
+double obj_diameter(Object *obj);
+double obj_circumference(Object *obj);
 QPointF obj_delta(Object *obj);
 
 QPointF obj_top_left(Object *obj);
@@ -416,62 +413,48 @@ void obj_update_rubber(Object *obj, QPainter* painter);
 void obj_update_rubber_grip(Object *obj, QPainter *painter);
 void obj_update_leader(Object *obj);
 void obj_update_path(Object *obj);
-void obj_update_path(Object *obj, const QPainterPath& p);
+void obj_update_path_r(Object *obj, QPainterPath p);
 void obj_update_arc_rect(Object *obj, double radius);
 
 double obj_length(Object *obj);
 
-void obj_set_end_point_1(Object *obj, const QPointF& endPt1);
-void obj_set_end_point_1(Object *obj, double x1, double y1);
-void obj_set_end_point_2(Object *obj, const QPointF& endPt2);
-void obj_set_end_point_2(Object *obj, double x2, double y2);
+void obj_set_line_weight(Object *obj, double lineWeight);
+
 void obj_set_x1(Object *obj, double x);
 void obj_set_y1(Object *obj, double y);
 void obj_set_x2(Object *obj, double x);
 void obj_set_y2(Object *obj, double y);
 
 QRectF obj_rect(Object *obj);
-void obj_set_rect(Object *obj, const QRectF& r);
+void obj_set_rect(Object *obj, QRectF r);
 void obj_set_rect(Object *obj, double x, double y, double w, double h);
 QLineF obj_line(Object *obj);
-void obj_set_line(Object *obj, const QLineF& li);
+void obj_set_line(Object *obj, QLineF li);
 void obj_set_line(Object *obj, double x1, double y1, double x2, double y2);
 
-void obj_set_pos(Object *obj, const QPointF& point);
+void obj_set_path(Object *obj, QPainterPath p);
+void obj_calculate_data(Object *obj);
+
+void obj_set_pos(Object *obj, QPointF point);
 void obj_set_pos(Object *obj, double x, double y);
 void obj_set_x(Object *obj, double x);
 void obj_set_y(Object *obj, double y);
 
+int obj_find_index(Object *obj, QPointF point);
+
+void obj_set_end_point_1(Object *obj, QPointF endPt1);
+void obj_set_end_point_1(Object *obj, double x1, double y1);
+void obj_set_end_point_2(Object *obj, QPointF endPt2);
+void obj_set_end_point_2(Object *obj, double x2, double y2);
+
 void obj_set_color(Object *obj, const QColor& color);
 void obj_set_color_rgb(Object *obj, QRgb rgb);
 void obj_set_line_type(Object *obj, Qt::PenStyle lineType);
-void obj_set_line_weight(Object *obj, double lineWeight);
-void obj_set_path(Object *obj, const QPainterPath& p);
-void obj_set_rubber_mode(Object *obj, int mode);
-void obj_set_rubber_point(Object *obj, const QString& key, QPointF& point);
-void obj_set_rubber_rext(Object *obj, const QString& key, QString& txt);
-
-void obj_draw_rubber_line(Object *obj, const QLineF& rubLine, QPainter* painter = 0, char* colorFromScene = 0);
-QPen obj_line_weight_pen(Object *obj);
-void obj_real_render(Object *obj, QPainter* painter, QPainterPath& renderPath);
 
 void obj_set_center(Object *obj, EmbVector point);
-void obj_set_center(Object *obj, const QPointF& center);
+void obj_set_center(Object *obj, QPointF center);
 void obj_set_center_x(Object *obj, double centerX);
 void obj_set_center_y(Object *obj, double centerY);
-
-void obj_calculate_data(Object *obj);
-
-void obj_set_size(Object *obj, double width, double height);
-
-QPainterPath obj_copy_path(Object *obj);
-QPainterPath obj_save_path(Object *obj);
-QList<QPainterPath> obj_save_path_list(Object *obj);
-QList<QPainterPath> obj_sub_path_list(Object *obj);
-
-// TODO: make paths similar to polylines. Review and implement any missing functions/members. 
-int obj_find_index(Object *obj, const QPointF& point);
-*/
 
 void obj_set_text(Object *obj, const QString& str);
 void obj_set_text_font(Object *obj, const QString& font);
@@ -840,81 +823,12 @@ public:
     Object(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* item = 0);
     ~Object();
 
-    /* QColor objectColor(Object* obj) const { return data.objPen.color(); } */
-    QRgb objectColorRGB(Object* obj) const { return data.objPen.color().rgb(); }
-    Qt::PenStyle objectLineType(Object* obj) const { return data.objPen.style(); }
-    double  objectLineWeight(Object* obj) const { return data.lwtPen.widthF(); }
-    QPainterPath objectPath(Object* obj) const { return path(); }
-    QPointF objectRubberPoint(Object* obj, const QString& key) const;
-    QString objectRubberText(Object* obj, const QString& key) const;
+    void vulcanize();
+    QList<QPointF> allGripPoints();
+    QPointF mouseSnapPoint(QPointF mousePoint);
+    void gripEdit(const QPointF& before, const QPointF& after);
+    QPainterPath shape() const { return path(); }
 
-    QPointF objectPos() const { return scenePos(); }
-    double objectX() const { return scenePos().x(); }
-    double objectY() const { return scenePos().y(); }
-
-    QPointF objectCenter() const;
-    double objectCenterX() const { return scenePos().x(); }
-    double objectCenterY() const { return scenePos().y(); }
-
-    double objectRadius() const { return rect().width()/2.0*scale(); }
-    double objectDiameter() const { return rect().width()*scale(); }
-    double objectCircumference() const { return embConstantPi*objectDiameter(); }
-
-    QPointF objectEndPoint1() const;
-    QPointF objectEndPoint2() const;
-    QPointF objectStartPoint() const;
-    QPointF objectMidPoint() const;
-    QPointF objectEndPoint() const;
-    QPointF objectDelta() const { return objectEndPoint2() - objectEndPoint1(); }
-
-    QPointF topLeft() const;
-    QPointF topRight() const;
-    QPointF bottomLeft() const;
-    QPointF bottomRight() const;
-
-    void updateRubber(QPainter* painter);
-    void updateRubberGrip(QPainter *painter);
-    void updateLeader();
-    void updatePath();
-    void updatePath(const QPainterPath& p);
-    void updateArcRect(double radius);
-
-    double objectLength() const { return line().length()*scale(); }
-
-    void setObjectEndPoint1(const QPointF& endPt1);
-    void setObjectEndPoint1(double x1, double y1);
-    void setObjectEndPoint2(const QPointF& endPt2);
-    void setObjectEndPoint2(double x2, double y2);
-    void setObjectX1(double x) { setObjectEndPoint1(x, objectEndPoint1().y()); }
-    void setObjectY1(double y) { setObjectEndPoint1(objectEndPoint1().x(), y); }
-    void setObjectX2(double x) { setObjectEndPoint2(x, objectEndPoint2().y()); }
-    void setObjectY2(double y) { setObjectEndPoint2(objectEndPoint2().x(), y); }
-
-    QRectF rect() const { return path().boundingRect(); }
-    void setRect(const QRectF& r) { QPainterPath p; p.addRect(r); setPath(p); }
-    void setRect(double x, double y, double w, double h) { QPainterPath p; p.addRect(x,y,w,h); setPath(p); }
-    QLineF line() const { return data.objLine; }
-    void setLine(const QLineF& li) { QPainterPath p; p.moveTo(li.p1()); p.lineTo(li.p2()); setPath(p); data.objLine = li; }
-    void setLine(double x1, double y1, double x2, double y2) { QPainterPath p; p.moveTo(x1,y1); p.lineTo(x2,y2); setPath(p); data.objLine.setLine(x1,y1,x2,y2); }
-
-    void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
-    void setObjectPos(double x, double y) { setPos(x, y); }
-    void setObjectX(double x) { setObjectPos(x, objectY()); }
-    void setObjectY(double y) { setObjectPos(objectX(), y); }
-
-    void setObjectRect(double x1, double y1, double x2, double y2);
-    virtual void vulcanize();
-    virtual QList<QPointF> allGripPoints();
-    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
-    virtual void gripEdit(const QPointF& before, const QPointF& after);
-    virtual QRectF boundingRect() const;
-    virtual QPainterPath shape() const { return path(); }
-
-    void setObjectColor(const QColor& color);
-    void setObjectColorRGB(QRgb rgb);
-    void setObjectLineType(Qt::PenStyle lineType);
-    void setObjectLineWeight(double lineWeight);
-    void setObjectPath(const QPainterPath& p) { setPath(p); }
     void setObjectRubberMode(int mode) { data.objRubberMode = mode; }
     void setObjectRubberPoint(const QString& key, const QPointF& point) { data.objRubberPoints.insert(key, point); }
     void setObjectRubberText(const QString& key, const QString& txt) { data.objRubberTexts.insert(key, txt); }
@@ -922,22 +836,12 @@ public:
     void drawRubberLine(const QLineF& rubLine, QPainter* painter = 0, const char* colorFromScene = 0);
     void realRender(QPainter* painter, const QPainterPath& renderPath);
 
-    void setObjectCenter(EmbVector point);
-    void setObjectCenter(const QPointF& center);
-    void setObjectCenterX(double centerX);
-    void setObjectCenterY(double centerY);
-
-    void calculateData(void);
-
     void setObjectSize(double width, double height);
 
     QPainterPath objectCopyPath() const;
     QPainterPath objectSavePath() const;
     QList<QPainterPath> objectSavePathList() const { return subPathList(); }
     QList<QPainterPath> subPathList() const;
-
-    /* TODO: make paths similar to polylines. Review and implement any missing functions/members. */
-    int findIndex(const QPointF& point);
 
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);

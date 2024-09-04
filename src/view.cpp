@@ -316,7 +316,7 @@ doc_clear_rubber_room(Document* doc)
                (type == OBJ_TYPE_POLYGON  && doc->data.spareRubberList.contains(SPARE_RUBBER_POLYGON))  ||
                (type == OBJ_TYPE_POLYLINE && doc->data.spareRubberList.contains(SPARE_RUBBER_POLYLINE)) ||
                (doc->data.spareRubberList.contains(base->data.objID))) {
-                if (!base->objectPath(base).elementCount()) {
+                if (!obj_path(base).elementCount()) {
                     messagebox("critical",
                         translate("Empty Rubber Object Error"),
                         translate("The rubber object added contains no points. "

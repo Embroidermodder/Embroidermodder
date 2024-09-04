@@ -895,7 +895,8 @@ extern bool key_state[N_KEY_SEQUENCES];
 
 /* Natives */
 void about_dialog(void);
-void stub_implement(const char *txt);
+void todo(const char *txt);
+void fixme(const char *msg);
 void stub_testing(void);
 void run_testing(void);
 void exit_program(void);
@@ -998,36 +999,37 @@ void whatsThisContextHelp();
 int make_application(int argc, char* argv[]);
 
 /* Geometry */
-double get_width(EmbGeometry geometry);
-double get_height(EmbGeometry geometry);
-double get_radius(EmbGeometry geometry);
-double get_radius_major(EmbGeometry geometry);
-double get_radius_minor(EmbGeometry geometry);
-double get_diameter_major(EmbGeometry geometry);
-double get_diameter_minor(EmbGeometry geometry);
-EmbVector get_quadrant(EmbGeometry geometry, int degrees);
-double get_angle(EmbGeometry geometry);
-double get_start_angle(EmbGeometry geometry);
-double get_end_angle(EmbGeometry geometry);
-double get_arc_length(EmbGeometry geometry);
-double get_area(EmbGeometry geometry);
-double get_chord(EmbGeometry geometry);
-double get_included_angle(EmbGeometry geometry);
-bool get_clockwise(EmbGeometry geometry);
+double emb_get_width(EmbGeometry geometry);
+double emb_get_height(EmbGeometry geometry);
+double emb_get_radius(EmbGeometry geometry);
+double emb_get_radius_major(EmbGeometry geometry);
+double emb_get_radius_minor(EmbGeometry geometry);
+double emb_get_diameter_major(EmbGeometry geometry);
+double emb_get_diameter_minor(EmbGeometry geometry);
+EmbVector emb_get_quadrant(EmbGeometry geometry, int degrees);
+double emb_get_angle(EmbGeometry geometry);
+double emb_get_start_angle(EmbGeometry geometry);
+double emb_get_end_angle(EmbGeometry geometry);
+double emb_get_arc_length(EmbGeometry geometry);
+double emb_get_area(EmbGeometry geometry);
+double emb_get_chord(EmbGeometry geometry);
+double emb_get_included_angle(EmbGeometry geometry);
+bool emb_get_clockwise(EmbGeometry geometry);
+double emb_get_circumference(EmbGeometry *geometry);
 
-void set_start_angle(EmbGeometry *geometry, double angle);
-void set_end_angle(EmbGeometry *geometry, double angle);
-void set_start_point(EmbGeometry *geometry, EmbVector point);
-void set_mid_point(EmbGeometry *geometry, EmbVector point);
-void set_end_point(EmbGeometry *geometry, EmbVector point);
-void set_diameter(EmbGeometry *geometry, double diameter);
-void set_area(EmbGeometry *geometry, double area);
-void set_circumference(EmbGeometry *geometry, double circumference);
-void set_radius(EmbGeometry *geometry, double radius);
-void set_radius_major(EmbGeometry *geometry, double radius);
-void set_radius_minor(EmbGeometry *geometry, double radius);
-void set_diameter_major(EmbGeometry *geometry, double diameter);
-void set_diameter_minor(EmbGeometry *geometry, double diameter);
+void emb_set_start_angle(EmbGeometry *geometry, double angle);
+void emb_set_end_angle(EmbGeometry *geometry, double angle);
+void emb_set_start_point(EmbGeometry *geometry, EmbVector point);
+void emb_set_mid_point(EmbGeometry *geometry, EmbVector point);
+void emb_set_end_point(EmbGeometry *geometry, EmbVector point);
+void emb_set_diameter(EmbGeometry *geometry, double diameter);
+void emb_set_area(EmbGeometry *geometry, double area);
+void emb_set_circumference(EmbGeometry *geometry, double circumference);
+void emb_set_radius(EmbGeometry *geometry, double radius);
+void emb_set_radius_major(EmbGeometry *geometry, double radius);
+void emb_set_radius_minor(EmbGeometry *geometry, double radius);
+void emb_set_diameter_major(EmbGeometry *geometry, double diameter);
+void emb_set_diameter_minor(EmbGeometry *geometry, double diameter);
 
 #ifdef __cplusplus
 }
