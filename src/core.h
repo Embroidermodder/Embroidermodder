@@ -660,7 +660,10 @@ bool willUnderflowInt32(int64_t a, int64_t b);
 bool willOverflowInt32(int64_t a, int64_t b);
 int roundToMultiple(bool roundUp, int numToRound, int multiple);
 
-void messagebox(char *type, char *title, char *text);
+void information_box(char *title, char *text);
+void warning_box(char *title, char *text);
+void critical_box(char *title, char *text);
+void question_box(char *title, char *text);
 
 /* MainWindow calls */
 void end_command(void);
@@ -999,23 +1002,25 @@ void whatsThisContextHelp();
 int make_application(int argc, char* argv[]);
 
 /* Geometry */
-double emb_get_width(EmbGeometry geometry);
-double emb_get_height(EmbGeometry geometry);
-double emb_get_radius(EmbGeometry geometry);
-double emb_get_radius_major(EmbGeometry geometry);
-double emb_get_radius_minor(EmbGeometry geometry);
-double emb_get_diameter_major(EmbGeometry geometry);
-double emb_get_diameter_minor(EmbGeometry geometry);
-EmbVector emb_get_quadrant(EmbGeometry geometry, int degrees);
-double emb_get_angle(EmbGeometry geometry);
-double emb_get_start_angle(EmbGeometry geometry);
-double emb_get_end_angle(EmbGeometry geometry);
-double emb_get_arc_length(EmbGeometry geometry);
-double emb_get_area(EmbGeometry geometry);
-double emb_get_chord(EmbGeometry geometry);
-double emb_get_included_angle(EmbGeometry geometry);
-bool emb_get_clockwise(EmbGeometry geometry);
-double emb_get_circumference(EmbGeometry *geometry);
+int emb_approx(EmbVector point1, EmbVector point2);
+
+double emb_width(EmbGeometry *geometry);
+double emb_height(EmbGeometry *geometry);
+double emb_radius(EmbGeometry *geometry);
+double emb_radius_major(EmbGeometry *geometry);
+double emb_radius_minor(EmbGeometry *geometry);
+double emb_diameter_major(EmbGeometry *geometry);
+double emb_diameter_minor(EmbGeometry *geometry);
+EmbVector emb_quadrant(EmbGeometry *geometry, int degrees);
+double emb_angle(EmbGeometry *geometry);
+double emb_start_angle(EmbGeometry *geometry);
+double emb_end_angle(EmbGeometry *geometry);
+double emb_arc_length(EmbGeometry *geometry);
+double emb_area(EmbGeometry *geometry);
+double emb_chord(EmbGeometry *geometry);
+double emb_included_angle(EmbGeometry *geometry);
+bool emb_clockwise(EmbGeometry *geometry);
+double emb_circumference(EmbGeometry *geometry);
 
 void emb_set_start_angle(EmbGeometry *geometry, double angle);
 void emb_set_end_angle(EmbGeometry *geometry, double angle);

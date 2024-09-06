@@ -566,7 +566,7 @@ textSizeSelectorIndexChanged(int index)
 
 /* . */
 void
-setTextFont(const QString& str)
+setTextFont(QString str)
 {
     textFontSelector->setCurrentFont(QFont(str));
     strcpy(text_font.setting, qPrintable(str));
@@ -686,7 +686,7 @@ toggleLwt(void)
 
 /* . */
 void
-promptHistoryAppended(const QString& txt)
+promptHistoryAppended(QString txt)
 {
     MdiWindow* mdiWin = activeMdiWindow();
     if (mdiWin) {
@@ -696,7 +696,7 @@ promptHistoryAppended(const QString& txt)
 
 /* . */
 void
-logPromptInput(const QString& txt)
+logPromptInput(QString txt)
 {
     MdiWindow* mdiWin = activeMdiWindow();
     if (mdiWin) {
@@ -1054,7 +1054,7 @@ run_command(const char* cmd, ScriptEnv *context)
             /* TODO: Prompt to select objects if nothing is preselected. */
             prompt->alert(
             translate("Preselect objects before invoking the delete command."));
-            messagebox("information", translate("Delete Preselect"),
+            information_box(translate("Delete Preselect"),
                 translate("Preselect objects before invoking the delete command."));
         }
         else {
@@ -1318,7 +1318,7 @@ MainWindow::runCommand()
 /* FIXME: reconnect to new command system.
  */
 void
-runCommandMain(const QString& cmd)
+runCommandMain(QString cmd)
 {
     char message[MAX_STRING_LENGTH];
     ScriptEnv *context = create_script_env();
@@ -1338,7 +1338,7 @@ runCommandMain(const QString& cmd)
 /* FIXME: reconnect to new command system.
  */
 void
-runCommandClick(const QString& cmd, double x, double y)
+runCommandClick(QString cmd, double x, double y)
 {
     char message[MAX_STRING_LENGTH];
     ScriptEnv *context = create_script_env();
@@ -1353,7 +1353,7 @@ runCommandClick(const QString& cmd, double x, double y)
 /* FIXME: reconnect to new command system.
  */
 void
-runCommandMove(const QString& cmd, double x, double y)
+runCommandMove(QString cmd, double x, double y)
 {
     char message[MAX_STRING_LENGTH];
     ScriptEnv *context = create_script_env();
@@ -1368,7 +1368,7 @@ runCommandMove(const QString& cmd, double x, double y)
 /* FIXME: reconnect to new command system.
  */
 void
-runCommandContext(const QString& cmd, const QString& str)
+runCommandContext(QString cmd, QString str)
 {
     char message[MAX_STRING_LENGTH];
     ScriptEnv *context = create_script_env();
@@ -1384,7 +1384,7 @@ runCommandContext(const QString& cmd, const QString& str)
  * NOTE: Replace any special characters that will cause a syntax error
  */
 void
-runCommandPrompt(const QString& cmd)
+runCommandPrompt(QString cmd)
 {
     char message[MAX_STRING_LENGTH];
     ScriptEnv *context = create_script_env();
@@ -1406,33 +1406,40 @@ runCommandPrompt(const QString& cmd)
  *
  *     char message[MAX_STRING_LENGTH];
  *     sprintf(message, "%s: x > %f", translate("Value of X is too small"), x);
- *     messagebox("critical", translate("Out of Bounds"), message);
+ *     critical_box(translate("Out of Bounds"), message);
  */
 void
-messagebox(char *msgType, char *title, char *text)
+critical_box(char *title, char *text)
 {
-    if (!strcmp(msgType, "critical")) {
-        QMessageBox::critical(_main, title, text);
-    }
-    else if (!strcmp(msgType, "information")) {
-        QMessageBox::information(_main, title, text);
-    }
-    else if (!strcmp(msgType, "question")) {
-        QMessageBox::question(_main, title, text);
-    }
-    else if (!strcmp(msgType, "warning")) {
-        QMessageBox::warning(_main, title, text);
-    }
-    else {
-        QMessageBox::critical(_main, title, text);
-    }
+    QMessageBox::critical(_main, title, text);
+}
+
+/* See critical_box comment. */
+void
+information_box(char *title, char *text)
+{
+    QMessageBox::information(_main, title, text);
+}
+
+/* See critical_box comment. */
+void
+question_box(char *title, char *text)
+{
+    QMessageBox::question(_main, title, text);
+}
+
+/* See critical_box comment. */
+void
+warning_box(char *title, char *text)
+{
+    QMessageBox::warning(_main, title, text);
 }
 
 /* . */
 void
 stub_testing(void)
 {
-    messagebox("warning", translate("Testing Feature"),
+    warning_box(translate("Testing Feature"),
         translate("<b>This feature is in testing.</b>"));
 }
 
@@ -1497,7 +1504,10 @@ nativeSetRubberPoint(char key[MAX_STRING_LENGTH], double x, double y)
 {
     Document* doc = activeDocument();
     if (doc) {
-        doc_set_rubber_point(doc, key, QPointF(x, -y));
+        EmbVector v;
+        v.x = x;
+        v.y = -y;
+        doc_set_rubber_point(doc, key, v);
     }
 }
 
@@ -1803,7 +1813,7 @@ nativeAddVerticalDimension(double x1, double y1, double x2, double y2, double le
 }
 
 void
-nativeAddImage(const QString& img, double x, double y, double w, double h, double rot)
+nativeAddImage(QString img, double x, double y, double w, double h, double rot)
 {
 }
 
@@ -2185,22 +2195,20 @@ set_command(ScriptEnv* context)
     return script_null;
 }
 
-/* SYSWINDOWS */
+/* SYSWINDOWS
+ * Do nothing for click, context.
+ */
 ScriptValue
 syswindows_command(ScriptEnv * context)
 {
     prompt_output(translate("Enter an option [Cascade/Tile]: "));
 
-    /* Do nothing for click, context. */
-    
     #if 0
     if (str == "C" || str == "CASCADE") {
-        /* TODO: Probably should add additional translate calls here. */
         _main->windowCascade();
         end_command();
     }
     else if (str == "T" || str == "TILE") {
-        /* TODO: Probably should add additional translate calls here. */
         _main->windowTile();
         end_command();
     }
@@ -2252,12 +2260,23 @@ messagebox_command(ScriptEnv* context)
 {
     std::string type(STR(0));
 
-    if (type != "critical" && type != "information" && type != "question" && type != "warning") {
+    if (type == "critical") {
+        critical_box(STR(1), STR(2));
+    }
+    else if (type == "information") {
+        information_box(STR(1), STR(2));
+    }
+    else if (type == "question") {
+        question_box(STR(1), STR(2));
+    }
+    else if (type == "warning") {
+        warning_box(STR(1), STR(2));
+    }
+    else {
         prompt_output("UNKNOWN_ERROR messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
         return script_false;
     }
 
-    messagebox(STR(0), STR(1), STR(2));
     return script_null;
 }
 
@@ -2599,7 +2618,7 @@ scale_selected_command(ScriptEnv* context)
 /*
  * Undo
  */
-UndoableCommand::UndoableCommand(int type_, const QString& text, Object* obj, Document* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableCommand::UndoableCommand(int type_, QString text, Object* obj, Document* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     data.type = type_;
     data.gview = v;
@@ -2608,18 +2627,17 @@ UndoableCommand::UndoableCommand(int type_, const QString& text, Object* obj, Do
 }
 
 /* Move */
-UndoableCommand::UndoableCommand(int type_, double deltaX, double deltaY, const QString& text, Object* obj, Document* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableCommand::UndoableCommand(int type_, EmbVector delta, QString text, Object* obj, Document* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     data.type = type_;
     data.gview = v;
     data.object = obj;
     setText(text);
-    data.dx = deltaX;
-    data.dy = deltaY;
+    data.delta = delta;
 }
 
 /* Rotate or scale */
-UndoableCommand::UndoableCommand(int type_, double x, double y, double scaleFactor, const QString& text, Object* obj, Document* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableCommand::UndoableCommand(int type_, EmbVector pos, double scaleFactor, QString text, Object* obj, Document* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     data.type = type_;
     data.gview = v;
@@ -2628,8 +2646,8 @@ UndoableCommand::UndoableCommand(int type_, double x, double y, double scaleFact
     if (data.type == ACTION_SCALE) {
         /* Prevent division by zero and other wacky behavior. */
         if (scaleFactor <= 0.0) {
-            data.dx = 0.0;
-            data.dy = 0.0;
+            data.delta.x = 0.0;
+            data.delta.y = 0.0;
             data.factor = 1.0;
             QMessageBox::critical(0,
                 QObject::tr("ScaleFactor Error"),
@@ -2638,27 +2656,26 @@ UndoableCommand::UndoableCommand(int type_, double x, double y, double scaleFact
         }
         else {
             /* Calculate the offset */
-            double oldX = data.object->x();
-            double oldY = data.object->y();
-            QLineF scaleLine(x, y, oldX, oldY);
-            scaleLine.setLength(scaleLine.length()*scaleFactor);
-            double newX = scaleLine.x2();
-            double newY = scaleLine.y2();
+            EmbVector old, new_;
+            old.x = data.object->x();
+            old.y = data.object->y();
+            QLineF scaleLine(pos.x, pos.y, old.x, old.y);
+            scaleLine.setLength(scaleLine.length() * scaleFactor);
+            new_.x = scaleLine.x2();
+            new_.y = scaleLine.y2();
 
-            data.dx = newX - oldX;
-            data.dy = newY - oldY;
+            data.delta = emb_vector_subtract(new_, old);
             data.factor = scaleFactor;
         }
     }
     else {
-        data.pivotX = x;
-        data.pivotY = y;
+        data.pivot = pos;
         data.angle = scaleFactor;
     }
 }
 
 /* Navigation */
-UndoableCommand::UndoableCommand(int type_, const QString& type_name, Document* doc, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableCommand::UndoableCommand(int type_, QString type_name, Document* doc, QUndoCommand* parent) : QUndoCommand(parent)
 {
     data.type = type_;
     data.gview = doc;
@@ -2669,24 +2686,22 @@ UndoableCommand::UndoableCommand(int type_, const QString& type_name, Document* 
     data.fromCenter = doc_center(data.gview);
 }
 
-/* Grip Edit */
-UndoableCommand::UndoableCommand(int type_, const QPointF beforePoint, const QPointF afterPoint, const QString& text, Object* obj, Document* v, QUndoCommand* parent) : QUndoCommand(parent)
+/* Grip Edit/Mirror */
+UndoableCommand::UndoableCommand(int type_, EmbVector beforePoint, EmbVector afterPoint, QString text, Object* obj, Document* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     data.type = type_;
     data.gview = v;
     data.object = obj;
     setText(text);
-    data.before = beforePoint;
-    data.after = afterPoint;
-}
-
-/* Mirror */
-UndoableCommand::UndoableCommand(int type_, double x1, double y1, double x2, double y2, const QString& text, Object* obj, Document* v, QUndoCommand* parent) : QUndoCommand(parent)
-{
-    data.gview = v;
-    data.object = obj;
-    setText(text);
-    data.mirrorLine = QLineF(x1, y1, x2, y2);
+    if (type_ == ACTION_GRIP_EDIT) {
+        setText(text);
+        data.before = beforePoint;
+        data.after = afterPoint;
+    }
+    if (type_ == ACTION_MIRROR) {
+        data.mirrorLine = QLineF(beforePoint.x, beforePoint.y,
+            afterPoint.x, afterPoint.y);
+    }
 }
 
 /* . */
@@ -2701,17 +2716,17 @@ UndoableCommand::undo()
         doc_add_object(data.gview, data.object);
         break;
     case ACTION_MOVE:
-        data.object->moveBy(-data.dx, -data.dy);
+        data.object->moveBy(-data.delta.x, -data.delta.y);
         break;
     case ACTION_ROTATE:
-        rotate(data.pivotX, data.pivotY, -data.angle);
+        rotate(data.pivot.x, data.pivot.y, -data.angle);
         break;
     case ACTION_GRIP_EDIT:
         // FIXME: data.object->gripEdit(data.after, data.before);
         break;
     case ACTION_SCALE:
         data.object->setScale(data.object->scale()*(1/data.factor));
-        data.object->moveBy(-data.dx, -data.dy);
+        data.object->moveBy(-data.delta.x, -data.delta.y);
         break;
     case ACTION_NAV: {
         if (!data.done) {
@@ -2744,17 +2759,17 @@ UndoableCommand::redo()
         doc_delete_object(data.gview, data.object);
         break;
     case ACTION_MOVE:
-        data.object->moveBy(data.dx, data.dy);
+        data.object->moveBy(data.delta.x, data.delta.y);
         break;
     case ACTION_ROTATE:
-        rotate(data.pivotX, data.pivotY, data.angle);
+        rotate(data.pivot.x, data.pivot.y, data.angle);
         break;
     case ACTION_GRIP_EDIT:
         // FIXME: data.object->gripEdit(data.before, data.after);
         break;
     case ACTION_SCALE:
-        data.object->setScale(data.object->scale()*data.factor);
-        data.object->moveBy(data.dx, data.dy);
+        data.object->setScale(data.object->scale() * data.factor);
+        data.object->moveBy(data.delta.x, data.delta.y);
         break;
     case ACTION_NAV: {
         if (data.done) {
@@ -2764,11 +2779,11 @@ UndoableCommand::redo()
         }
         if (data.navType == "ZoomInToPoint") {
             QPoint p = activeScene()->property("VIEW_MOUSE_POINT").toPoint();
-            doc_zoom_to_point(data.gview, p, +1);
+            doc_zoom_to_point(data.gview, to_emb_vector(p), +1);
         }
         else if (data.navType == "ZoomOutToPoint") {
             QPoint p = activeScene()->property("VIEW_MOUSE_POINT").toPoint();
-            doc_zoom_to_point(data.gview, p, -1);
+            doc_zoom_to_point(data.gview, to_emb_vector(p), -1);
         }
         else if (data.navType == "ZoomExtents") {
             doc_zoom_extents(data.gview);
@@ -3008,7 +3023,7 @@ main(void)
         /* TODO: Prompt to select objects if nothing is preselected. */
         alert(translate("Preselect objects before invoking the move command."));
         end_command();
-        messagebox("information", translate("Move Preselect"),
+        information_box(translate("Move Preselect"),
             translate("Preselect objects before invoking the move command."));
     }
     else {
@@ -3114,7 +3129,7 @@ main(void)
         /* TODO: Prompt to select objects if nothing is preselected */
         alert(translate("Preselect objects before invoking the scale command."));
         end_command();
-        messagebox("information", translate("Scale Preselect"), translate("Preselect objects before invoking the scale command."));
+        information_box(translate("Scale Preselect"), translate("Preselect objects before invoking the scale command."));
     }
     else {
         prompt_output(translate("Specify base point: "));
@@ -3160,8 +3175,8 @@ click(EmbVector position)
                 prompt_output(translate("Specify second point: "));
             }
             else {
-                setRubberPoint("LINE_START", context->baseX, context->baseY);
-                previewOn("SELECTED", "SCALE", context->baseX, context->baseY, context->factorRef);
+                setRubberPoint("LINE_START", context->base);
+                previewOn("SELECTED", "SCALE", context->base, context->factorRef);
                 prompt_output(translate("Specify new length: "));
             }
         }
@@ -3202,8 +3217,8 @@ void prompt(str)
                 context->base = v;
                 addRubber("LINE");
                 setRubberMode("LINE");
-                setRubberPoint("LINE_START", context->baseX, context->baseY);
-                previewOn("SELECTED", "SCALE", context->baseX, context->baseY, 1);
+                setRubberPoint("LINE_START", context->base);
+                previewOn("SELECTED", "SCALE", context->base, 1);
                 prompt_output(translate("Specify scale factor or [Reference]: "));
             }
         }
@@ -3222,7 +3237,7 @@ void prompt(str)
                 }
                 else {
                     context->factor = Number(str);
-                    scaleSelected(context->baseX, context->baseY, context->factor);
+                    scaleSelected(context->base, context->factor);
                     previewOff();
                     end_command();
                 }
@@ -3241,23 +3256,17 @@ void prompt(str)
                     context->baseR = v;
                     addRubber("LINE");
                     setRubberMode("LINE");
-                    setRubberPoint("LINE_START", context->baseRX, context->baseRY);
+                    setRubberPoint("LINE_START", context->baseR);
                     prompt_output(translate("Specify second point: "));
                 }
             }
             else {
                 /* The base and dest values are only set here to advance the command. */
-                context->baseRX = 0.0;
-                context->baseRY = 0.0;
-                context->destRX = 0.0;
-                context->destRY = 0.0;
+                context->baseR = zero_vector;
+                context->destR = zero_vector;
                 /* The reference length is what we will use later. */
                 context->factorRef = Number(str);
                 if (context->factorRef <= 0.0) {
-                    context->baseRX = NaN;
-                    context->baseRY = NaN;
-                    context->destRX = NaN;
-                    context->destRY = NaN;
                     context->factorRef = NaN;
                     alert(translate("Value must be positive and nonzero."));
                     prompt_output(translate("Specify reference length") + " {1}: ");
@@ -3265,8 +3274,8 @@ void prompt(str)
                 else {
                     addRubber("LINE");
                     setRubberMode("LINE");
-                    setRubberPoint("LINE_START", context->baseX, context->baseY);
-                    previewOn("SELECTED", "SCALE", context->baseX, context->baseY, context->factorRef);
+                    setRubberPoint("LINE_START", context->base);
+                    previewOn("SELECTED", "SCALE", context->base, context->factorRef);
                     prompt_output(translate("Specify new length: "));
                 }
             }
@@ -3279,17 +3288,16 @@ void prompt(str)
                 }
                 else {
                     context->destR = v;
-                    context->factorRef = calculateDistance(context->baseRX, context->baseRY, context->destRX, context->destRY);
+                    context->factorRef = calculateDistance(context->baseR, context->destR);
                     if (context->factorRef <= 0.0) {
-                        context->destRX = NaN;
-                        context->destRY = NaN;
+                        context->destR = zero_vector;
                         context->factorRef = NaN;
                         alert(translate("Value must be positive and nonzero."));
                         prompt_output(translate("Specify second point: "));
                     }
                     else {
-                        setRubberPoint("LINE_START", context->baseX, context->baseY);
-                        previewOn("SELECTED", "SCALE", context->baseX, context->baseY, context->factorRef);
+                        setRubberPoint("LINE_START", context->base);
+                        previewOn("SELECTED", "SCALE", context->base, context->factorRef);
                         prompt_output(translate("Specify new length: "));
                     }
                 }
@@ -3307,8 +3315,8 @@ void prompt(str)
                     prompt_output(translate("Specify second point: "));
                 }
                 else {
-                    setRubberPoint("LINE_START", context->baseX, context->baseY);
-                    previewOn("SELECTED", "SCALE", context->baseX, context->baseY, context->factorRef);
+                    setRubberPoint("LINE_START", context->base);
+                    previewOn("SELECTED", "SCALE", context->base, context->factorRef);
                     prompt_output(translate("Specify new length: "));
                 }
             }
@@ -3327,7 +3335,7 @@ void prompt(str)
                         prompt_output(translate("Specify new length: "));
                     }
                     else {
-                        scaleSelected(context->baseX, context->baseY, context->factorNew/context->factorRef);
+                        scaleSelected(context->base, context->factorNew/context->factorRef);
                         previewOff();
                         end_command();
                     }
@@ -3341,7 +3349,7 @@ void prompt(str)
                     prompt_output(translate("Specify new length: "));
                 }
                 else {
-                    scaleSelected(context->baseX, context->baseY, context->factorNew/context->factorRef);
+                    scaleSelected(context->base, context->factorNew/context->factorRef);
                     previewOff();
                     end_command();
                 }
@@ -3455,7 +3463,7 @@ main()
         /* TODO: Prompt to select objects if nothing is preselected. */
         alert(translate("Preselect objects before invoking the rotate command."));
         end_command();
-        messagebox("information", translate("Rotate Preselect"),
+        information_box(translate("Rotate Preselect"),
             translate("Preselect objects before invoking the rotate command."));
     }
     else {
@@ -3472,14 +3480,14 @@ click(EmbVector v)
             context->base = v;
             addRubber("LINE");
             setRubberMode("LINE");
-            setRubberPoint("LINE_START", context->baseX, context->baseY);
-            previewOn("SELECTED", "ROTATE", context->baseX, context->baseY, 0);
+            setRubberPoint("LINE_START", context->base);
+            previewOn("SELECTED", "ROTATE", context->base, 0);
             prompt_output(translate("Specify rotation angle or [Reference]: "));
         }
         else {
             context->dest = v;
             context->angle = emb_vector_angle(context->base, context->dest);
-            rotateSelected(context->baseX, context->baseY, context->angle);
+            rotateSelected(context->base, context->angle);
             previewOff();
             end_command();
         }
@@ -3546,7 +3554,7 @@ void prompt(str)
                 }
                 else {
                     context->angle = Number(str);
-                    rotateSelected(context->baseX, context->baseY, context->angle);
+                    rotateSelected(context->base, context->angle);
                     previewOff();
                     end_command();
                 }
@@ -3601,7 +3609,7 @@ void prompt(str)
                 context->destR = zero_vector;
                 /* The reference angle is what we will use later. */
                 context->angleRef = Number(str);
-                previewOn("SELECTED", "ROTATE", context->baseX, context->baseY, context->angleRef);
+                previewOn("SELECTED", "ROTATE", context->base, context->angleRef);
                 prompt_output(translate("Specify the new angle: "));
             }
         }
@@ -3621,7 +3629,7 @@ void prompt(str)
             }
             else {
                 context->angleNew = Number(str);
-                rotateSelected(context->baseX, context->baseY, context->angleNew - context->angleRef);
+                rotateSelected(context->base, context->angleNew - context->angleRef);
                 previewOff();
                 end_command();
             }
@@ -3660,12 +3668,10 @@ void prompt(str)
     default:
     case RGB_MODE_BACKGROUND: {
         if (str == "C" || str == "CROSSHAIR") {
-            /* TODO: Probably should add additional translate calls here. */
             context->mode = RGB_MODE_CROSSHAIR;
             prompt_output(translate("Specify crosshair color: "));
         }
         else if (str == "G" || str == "GRID") {
-            /* TODO: Probably should add additional translate calls here. */
             context->mode = RGB_MODE_GRID;
             prompt_output(translate("Specify grid color: "));
         }

@@ -15,7 +15,7 @@
 #define NUMBINS 10
 
 /* . */
-UndoEditor::UndoEditor(const QString& iconDirectory, QWidget* widgetToFocus, QWidget* parent) : QDockWidget(parent)
+UndoEditor::UndoEditor(QString  iconDirectory, QWidget* widgetToFocus, QWidget* parent) : QDockWidget(parent)
 {
     iconDir = iconDirectory;
     iconSize = 16;
@@ -102,7 +102,7 @@ UndoEditor::redo()
 }
 
 /* . */
-ImageWidget::ImageWidget(const QString &filename, QWidget* parent) : QWidget(parent)
+ImageWidget::ImageWidget(QString filename, QWidget* parent) : QWidget(parent)
 {
     debug_message("ImageWidget Constructor");
 
@@ -118,7 +118,7 @@ ImageWidget::ImageWidget(const QString &filename, QWidget* parent) : QWidget(par
 
 /* . */
 bool
-ImageWidget::load(const QString &fileName)
+ImageWidget::load(QString fileName)
 {
     img.load(fileName);
     return true;
@@ -126,7 +126,7 @@ ImageWidget::load(const QString &fileName)
 
 /* . */
 bool
-ImageWidget::save(const QString &fileName)
+ImageWidget::save(QString fileName)
 {
     img.save(fileName, "PNG");
     return true;
@@ -482,13 +482,13 @@ LayerManager::~LayerManager()
 
 /* . */
 void
-LayerManager::addLayer(const QString& name,
+LayerManager::addLayer(QString  name,
                             const bool visible,
                             const bool frozen,
                             const double zValue,
                             const QRgb color,
-                            const QString& lineType,
-                            const QString& lineWeight,
+                            QString  lineType,
+                            QString  lineWeight,
                             const bool print)
 {
     layerModel->insertRow(0);
@@ -762,9 +762,9 @@ create_details_dialog(void)
 }
 
 PreviewDialog::PreviewDialog(QWidget* parent,
-                             const QString& caption,
-                             const QString& dir,
-                             const QString& filter) : QFileDialog(parent, caption, dir, filter)
+                             QString  caption,
+                             QString  dir,
+                             QString  filter) : QFileDialog(parent, caption, dir, filter)
 {
     debug_message("PreviewDialog Constructor");
 
@@ -833,7 +833,7 @@ MdiArea::useBackgroundColor(bool use)
 
 /* . */
 void
-MdiArea::setBackgroundLogo(const QString& fileName)
+MdiArea::setBackgroundLogo(QString  fileName)
 {
     bgLogo.load(fileName);
 
@@ -842,7 +842,7 @@ MdiArea::setBackgroundLogo(const QString& fileName)
 
 /* . */
 void
-MdiArea::setBackgroundTexture(const QString& fileName)
+MdiArea::setBackgroundTexture(QString  fileName)
 {
     bgTexture.load(fileName);
 
@@ -1008,13 +1008,13 @@ MdiWindow::~MdiWindow()
 }
 
 bool
-MdiWindow::saveFile(const QString &fileName)
+MdiWindow::saveFile(QString fileName)
 {
     return pattern_save(pattern, qPrintable(fileName));
 }
 
 bool
-MdiWindow::loadFile(const QString &fileName)
+MdiWindow::loadFile(QString fileName)
 {
     debug_message("MdiWindow loadFile()");
 
@@ -1145,7 +1145,7 @@ MdiWindow::saveBMC()
 }
 
 void
-MdiWindow::setCurrentFile(const QString &fileName)
+MdiWindow::setCurrentFile(QString fileName)
 {
     curFile = QFileInfo(fileName).canonicalFilePath();
     setWindowModified(false);
@@ -1158,7 +1158,7 @@ MdiWindow::getShortCurrentFile()
     return QFileInfo(curFile).fileName();
 }
 
-QString MdiWindow::fileExtension(const QString& fileName)
+QString MdiWindow::fileExtension(QString  fileName)
 {
     return QFileInfo(fileName).suffix().toLower();
 }
@@ -1195,7 +1195,7 @@ MdiWindow::sizeHint() const
 
 /* . */
 void
-currentLayerChanged(MdiWindow *mdiWin, const QString& layer)
+currentLayerChanged(MdiWindow *mdiWin, QString  layer)
 {
     MdiWindow *win = activeMdiWindow();
     if (win) {
@@ -1215,7 +1215,7 @@ currentColorChanged(const QRgb& color)
 
 /* . */
 void
-currentLinetypeChanged(const QString& type)
+currentLinetypeChanged(QString  type)
 {
     MdiWindow *win = activeMdiWindow();
     if (win) {
@@ -1225,7 +1225,7 @@ currentLinetypeChanged(const QString& type)
 
 /* . */
 void
-currentLineweightChanged(const QString& weight)
+currentLineweightChanged(QString  weight)
 {
     MdiWindow *win = activeMdiWindow();
     if (win) {
@@ -1267,17 +1267,19 @@ void MdiWindow::setViewGridColor(QRgb color)
     doc_set_grid_color(gview, color);
 }
 
-void MdiWindow::setViewRulerColor(QRgb color)
+void
+MdiWindow::setViewRulerColor(QRgb color)
 {
     doc_set_ruler_color(gview, color);
 }
 
-void MdiWindow::promptHistoryAppended(const QString& txt)
+void
+MdiWindow::promptHistoryAppended(QString  txt)
 {
     promptHistory.append("<br/>" + txt);
 }
 
-void MdiWindow::logPromptInput(const QString& txt)
+void MdiWindow::logPromptInput(QString  txt)
 {
     promptInputList << txt;
     promptInputNum = promptInputList.size();
@@ -1297,13 +1299,11 @@ void MdiWindow::promptInputPrevNext(bool prev)
 {
     if (promptInputList.isEmpty()) {
         if (prev) {
-            messagebox("critical",
-                translate("Prompt Previous Error"),
+            critical_box(translate("Prompt Previous Error"),
                 translate("The prompt input is empty! Please report this as a bug!"));
         }
         else {
-            messagebox("critical",
-                translate("Prompt Next Error"),
+            critical_box(translate("Prompt Next Error"),
                 translate("The prompt input is empty! Please report this as a bug!"));
         }
         debug_message("The prompt input is empty! Please report this as a bug!");
@@ -1331,7 +1331,7 @@ void MdiWindow::promptInputPrevNext(bool prev)
 }
 
 void
-setHistory(const QString& txt)
+setHistory(QString  txt)
 {
     promptHistory->setHtml(txt);
     promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
@@ -1400,7 +1400,7 @@ CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
 
 /* . */
 void
-CmdPrompt::saveHistory(const QString& fileName, bool html)
+CmdPrompt::saveHistory(QString  fileName, bool html)
 {
     debug_message("CmdPrompt saveHistory");
     FILE *file = fopen(qPrintable(fileName), "w");
@@ -1415,7 +1415,7 @@ CmdPrompt::saveHistory(const QString& fileName, bool html)
 
 /* . */
 void
-CmdPrompt::alert(const QString& txt)
+CmdPrompt::alert(QString  txt)
 {
     QString alertTxt = "<font color=\"red\">" + txt + "</font>";
     /* TODO: Make the alert color customizable. */
@@ -1466,7 +1466,7 @@ setPromptBackgroundColor(const QColor& color)
 
 /* . */
 void
-setPromptFontFamily(const QString& family)
+setPromptFontFamily(QString  family)
 {
     strcpy(prompt_font_family.setting, qPrintable(family));
     prompt->updateStyle();
@@ -1474,7 +1474,7 @@ setPromptFontFamily(const QString& family)
 
 /* . */
 void
-setPromptFontStyle(const QString& style)
+setPromptFontStyle(QString  style)
 {
     strcpy(prompt_font_style.setting, qPrintable(style));
     prompt->updateStyle();
@@ -1516,7 +1516,7 @@ CmdPrompt::updateStyle()
 
 /* . */
 void
-CmdPrompt::setPrefix(const QString& txt)
+CmdPrompt::setPrefix(QString  txt)
 {
     prefix = txt;
     curText = txt;
@@ -1561,8 +1561,8 @@ CmdPromptInput::CmdPromptInput(QWidget* parent) : QLineEdit(parent)
     this->setDragEnabled(false);
 
     connect(this, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(checkCursorPosition(int, int)));
-    connect(this, SIGNAL(textEdited(const QString&)), this, SLOT(checkEditedText(const QString&)));
-    connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(checkChangedText(const QString&)));
+    connect(this, SIGNAL(textEdited(QString )), this, SLOT(checkEditedText(QString )));
+    connect(this, SIGNAL(textChanged(QString )), this, SLOT(checkChangedText(QString )));
     connect(this, SIGNAL(selectionChanged()), this, SLOT(checkSelection()));
 
     this->installEventFilter(this);
@@ -1676,7 +1676,7 @@ CmdPromptInput::checkCursorPosition(int oldpos, int newpos)
 
 /* . */
 void
-CmdPromptInput::updateCurrentText(const QString& txt)
+CmdPromptInput::updateCurrentText(QString  txt)
 {
     int cursorPos = cursorPosition();
     if (!txt.startsWith(prefix)) {
@@ -1700,7 +1700,7 @@ CmdPromptInput::updateCurrentText(const QString& txt)
 
 /* . */
 void
-CmdPromptInput::checkEditedText(const QString& txt)
+CmdPromptInput::checkEditedText(QString  txt)
 {
     updateCurrentText(txt);
 
@@ -1711,7 +1711,7 @@ CmdPromptInput::checkEditedText(const QString& txt)
 
 /* . */
 void
-CmdPromptInput::checkChangedText(const QString& txt)
+CmdPromptInput::checkChangedText(QString  txt)
 {
     updateCurrentText(txt);
 }

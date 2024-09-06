@@ -12,75 +12,83 @@
 
 #include "core.h"
 
+double epsilon = 0.000000001;
+
+int
+emb_approx(EmbVector point1, EmbVector point2)
+{
+    return (emb_vector_distance(point1, point2) < epsilon);
+}
+
 /* FIXME */
 double
-emb_get_width(EmbGeometry geometry)
+emb_width(EmbGeometry *geometry)
 {
     return 1.0;
 }
 
 /* FIXME */
 double
-emb_get_height(EmbGeometry geometry)
+emb_height(EmbGeometry *geometry)
 {
     return 1.0;
 }
 
 /* FIXME */
 double
-emb_get_radius(EmbGeometry geometry)
+emb_radius(EmbGeometry *geometry)
 {
     return 1.0;
 }
 
 /* FIXME */
 double
-emb_get_radius_major(EmbGeometry geometry)
+emb_radius_major(EmbGeometry *geometry)
 {
     return 1.0;
 }
 
 /* FIXME */
 double
-emb_get_radius_minor(EmbGeometry geometry)
+emb_radius_minor(EmbGeometry *geometry)
 {
     return 1.0;
 }
 
 /* FIXME */
 double
-emb_get_diameter_major(EmbGeometry geometry)
+emb_diameter_major(EmbGeometry *geometry)
 {
     return 1.0;
 }
 
 /* FIXME */
 double
-emb_get_diameter_minor(EmbGeometry geometry)
+emb_diameter_minor(EmbGeometry *geometry)
 {
     return 1.0;
 }
 
 /* . */
 EmbVector
-emb_get_quadrant(EmbGeometry geometry, int degrees)
+emb_quadrant(EmbGeometry *geometry, int degrees)
 {
     EmbVector v;
     EmbReal radius;
     v.x = 0.0;
     v.y = 0.0;
-    switch (geometry.type) {
+    switch (geometry->type) {
     case EMB_CIRCLE: {
-        v = geometry.object.circle.center;
-        radius = geometry.object.circle.radius;
+        v = geometry->object.circle.center;
+        radius = geometry->object.circle.radius;
     }
     case EMB_ELLIPSE: {
-        v = geometry.object.ellipse.center;
+        v = geometry->object.ellipse.center;
         if (degrees % 180 == 0) {
-            radius = geometry.object.ellipse.radius.x;
+            radius = geometry->object.ellipse.radius.x;
         }
         else {
-            radius = geometry.object.ellipse.radius.y;
+            radius = geometry->object.ellipse.radius.y;
         }
     }
     default:
@@ -94,21 +102,21 @@ emb_get_quadrant(EmbGeometry geometry, int degrees)
 
 /* . */
 double
-emb_get_angle(EmbGeometry geometry)
+emb_angle(EmbGeometry *geometry)
 {
-    EmbVector v = emb_vector_subtract(geometry.object.line.end, geometry.object.line.start);
+    EmbVector v = emb_vector_subtract(geometry->object.line.end, geometry->object.line.start);
     double angle = emb_vector_angle(v) /* - rotation() */;
     return fmod(angle+360.0, 360.0);
 }
 
 /* . */
 double
-emb_get_start_angle(EmbGeometry geometry)
+emb_start_angle(EmbGeometry *geometry)
 {
-    switch (geometry.type) {
+    switch (geometry->type) {
     case EMB_ARC: {
-        EmbVector center = emb_arc_center(geometry);
-        EmbVector v = emb_vector_subtract(center, geometry.object.arc.start);
+        EmbVector center = emb_arc_center(*geometry);
+        EmbVector v = emb_vector_subtract(center, geometry->object.arc.start);
         double angle = emb_vector_angle(v) /* - rotation() */;
         return fmod(angle+360.0, 360.0);
     }
@@ -120,12 +128,12 @@ emb_get_start_angle(EmbGeometry geometry)
 
 /* . */
 double
-emb_get_end_angle(EmbGeometry geometry)
+emb_end_angle(EmbGeometry *geometry)
 {
-    switch (geometry.type) {
+    switch (geometry->type) {
     case EMB_ARC: {
-        EmbVector center = emb_arc_center(geometry);
-        EmbVector v = emb_vector_subtract(center, geometry.object.arc.end);
+        EmbVector center = emb_arc_center(*geometry);
+        EmbVector v = emb_vector_subtract(center, geometry->object.arc.end);
         double angle = emb_vector_angle(v) /* - rotation() */;
         return fmod(angle+360.0, 360.0);
     }
@@ -137,11 +145,11 @@ emb_get_end_angle(EmbGeometry geometry)
 
 /* . */
 double
-emb_get_arc_length(EmbGeometry geometry)
+emb_arc_length(EmbGeometry *geometry)
 {
-    switch (geometry.type) {
+    switch (geometry->type) {
     case EMB_ARC: {
-        return radians(emb_get_included_angle(geometry)) * emb_get_radius(geometry);
+        return radians(emb_included_angle(geometry)) * emb_radius(geometry);
     }
     default:
         break;
@@ -151,17 +159,17 @@ emb_get_arc_length(EmbGeometry geometry)
 
 /* . */
 double
-emb_get_area(EmbGeometry geometry)
+emb_area(EmbGeometry *geometry)
 {
-    switch (geometry.type) {
+    switch (geometry->type) {
     case EMB_ARC: {
         /* Area of a circular segment */
-        double r = emb_get_radius(geometry);
-        double theta = radians(emb_get_included_angle(geometry));
+        double r = emb_radius(geometry);
+        double theta = radians(emb_included_angle(geometry));
         return ((r*r)/2) * (theta - sin(theta));
     }
     case EMB_CIRCLE: {
-        double r = geometry.object.circle.radius;
+        double r = geometry->object.circle.radius;
         return embConstantPi * r * r;
     }
     case EMB_IMAGE:
@@ -169,16 +177,16 @@ emb_get_area(EmbGeometry geometry)
     default:
         break;
     }
-    return fabs(emb_get_width(geometry) * emb_get_height(geometry));
+    return fabs(emb_width(geometry) * emb_height(geometry));
 }
 
 /* . */
 double
-emb_get_chord(EmbGeometry geometry)
+emb_chord(EmbGeometry *geometry)
 {
-    switch (geometry.type) {
+    switch (geometry->type) {
     case EMB_ARC: {
-        return emb_vector_distance(geometry.object.arc.start, geometry.object.arc.end);
+        return emb_vector_distance(geometry->object.arc.start, geometry->object.arc.end);
     }
     default:
         break;
@@ -188,12 +196,12 @@ emb_get_chord(EmbGeometry geometry)
 
 /* . */
 double
-emb_get_included_angle(EmbGeometry geometry)
+emb_included_angle(EmbGeometry *geometry)
 {
-    switch (geometry.type) {
+    switch (geometry->type) {
     case EMB_ARC: {
-        double chord = emb_get_chord(geometry);
-        double rad = emb_get_radius(geometry);
+        double chord = emb_chord(geometry);
+        double rad = emb_radius(geometry);
         if (chord <= 0 || rad <= 0) {
             /* Prevents division by zero and non-existant circles. */
             return 0;
@@ -215,15 +223,15 @@ emb_get_included_angle(EmbGeometry geometry)
 
 /* . */
 bool
-emb_get_clockwise(EmbGeometry geometry)
+emb_clockwise(EmbGeometry *geometry)
 {
-    switch (geometry.type) {
+    switch (geometry->type) {
     case EMB_ARC: {
         /* NOTE: Y values are inverted here on purpose. */
-        geometry.object.arc.start.y = -geometry.object.arc.start.y;
-        geometry.object.arc.mid.y = -geometry.object.arc.start.y;
-        geometry.object.arc.end.y = -geometry.object.arc.end.y;
-        if (emb_arc_clockwise(geometry)) {
+        geometry->object.arc.start.y = -geometry->object.arc.start.y;
+        geometry->object.arc.mid.y = -geometry->object.arc.start.y;
+        geometry->object.arc.end.y = -geometry->object.arc.end.y;
+        if (emb_arc_clockwise(*geometry)) {
             return true;
         }
         break;
@@ -464,55 +472,56 @@ emb_rubber_text(EmbGeometry *geometry, const char *key)
 
 /* . */
 EmbVector
-emb_get_pos(EmbGeometry *geometry)
+emb_pos(EmbGeometry *geometry)
 {
     return scenePos();
 }
 
 /* . */
 double
-emb_get_x(EmbGeometry *geometry)
+emb_x(EmbGeometry *geometry)
 {
     return scenePos().x();
 }
 
 /* . */
 double
-emb_get_y(EmbGeometry *geometry)
+emb_y(EmbGeometry *geometry)
 {
     return scenePos().y();
 }
 
 /* . */
 EmbVector
-emb_get_center(EmbGeometry *geometry)
+emb_center(EmbGeometry *geometry)
 {
+    return ;
 }
 
 /* . */
 double
-emb_get_center_x(EmbGeometry *geometry)
+emb_center_x(EmbGeometry *geometry)
 {
     return scenePos().x();
 }
 
 /* . */
 double
-emb_get_center_y(EmbGeometry *geometry)
+emb_center_y(EmbGeometry *geometry)
 {
     return scenePos().y();
 }
 
 /* . */
 double
-emb_get_radius(EmbGeometry *geometry)
+emb_radius(EmbGeometry *geometry)
 {
     return rect().width()/2.0*scale();
 }
 
 /* . */
 double
-emb_get_diameter(EmbGeometry *geometry)
+emb_diameter(EmbGeometry *geometry)
 {
     return rect().width()*scale();
 }
@@ -520,7 +529,7 @@ emb_get_diameter(EmbGeometry *geometry)
 
 /* . */
 double
-emb_get_circumference(EmbGeometry *geometry)
+emb_circumference(EmbGeometry *geometry)
 {
     switch (geometry->type) {
     case EMB_CIRCLE: {
@@ -637,7 +646,7 @@ update_arc_rect(double radius);
 
 /* . */
 double
-emb_get_length(EmbGeometry *geometry)
+emb_length(EmbGeometry *geometry)
 {
     return line().length()*scale();
 }
@@ -737,7 +746,7 @@ emb_setLine(const QLineF& li)
 
 /* . */
 void
-emb_setLine(double x1, double y1, double x2, double y2)
+emb_set_line(double x1, double y1, double x2, double y2)
 {
     QPainterPath p;
     p.moveTo(x1, y1);
@@ -748,24 +757,30 @@ emb_setLine(double x1, double y1, double x2, double y2)
 
 /* . */
 void
-emb_set_Pos(const QPointF& point)
+emb_set_pos(QPointF point)
 {
     setPos(point.x(), point.y());
 }
 
 /* . */
 void
-emb_set_Pos(double x, double y)
+emb_set_pos(EmbGeometry *geometry, double x, double y)
 {
     setPos(x, y);
 }
 
 /* . */
-void emb_set_X(double x) { emb_set_Pos(x, objectY());
+void
+emb_set_x(EmbGeometry *geometry, double x)
+{
+    emb_set_pos(geometry, x, emb_y(geometry));
 }
 
 /* . */
-void emb_set_Y(double y) { emb_set_Pos(objectX(), y);
+void
+emb_set_y(EmbGeometry *geometry, double y)
+{
+    emb_set_pos(geometry, emb_x(geometry), y);
 }
 
 /* . */
@@ -868,68 +883,68 @@ lineWeightPen(EmbGeometry *geometry)
 }
 
 /* . */
-void realRender(QPainter* painter, const QPainterPath& renderPath)
+void emb_real_render(QPainter* painter, const QPainterPath& renderPath)
 {
 }
 
 /* . */
 void
-emb_set_Center(EmbVector point)
+emb_set_center(EmbVector point)
 {
 }
 
 /* . */
 void
-emb_set_Center(const QPointF& center)
+emb_set_center(const QPointF& center)
 {
 }
 
 /* . */
 void
-emb_set_CenterX(double centerX)
+emb_set_center_x(EmbGeometry *geometry, double centerX)
 {
 }
 
 /* . */
 void
-emb_set_CenterY(double centerY)
+emb_set_center_y(EmbGeometry *geometry, double centerY)
 {
 }
 
 /* . */
 void
-calculateData(void)
+emb_calculate_data(EmbGeometry *geometry)
 {
 }
 
 /* . */
 void
-emb_set_Size(double width, double height)
+emb_set_size(EmbGeometry *geometry, double width, double height)
 {
 }
 
 /* . */
 QPainterPath
-objectCopyPath(EmbGeometry *geometry)
+emb_object_copy_path(EmbGeometry *geometry)
 {
 }
 
 /* . */
 QPainterPath
-objectSavePath(EmbGeometry *geometry)
+emb_object_save_path(EmbGeometry *geometry)
 {
 }
 
 /* . */
 QList<QPainterPath>
-objectSavePathList(EmbGeometry *geometry)
+emb_object_save_path_list(EmbGeometry *geometry)
 {
     return subPathList();
 }
 
 /* . */
 QList<QPainterPath>
-subPathList(EmbGeometry *geometry)
+emb_sub_path_list(EmbGeometry *geometry)
 {
     return;
 }

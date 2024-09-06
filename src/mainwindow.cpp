@@ -210,10 +210,10 @@ MainWindow::MainWindow() : QMainWindow(0)
     setPromptTextColor(QColor(prompt_text_color.setting));
     setPromptBackgroundColor(QColor(prompt_bg_color.setting));
 
-    connect(prompt, SIGNAL(startCommand(const QString&)), this, SLOT(logPromptInput(const QString&)));
+    connect(prompt, SIGNAL(startCommand(QString)), this, SLOT(logPromptInput(QString)));
 
-    connect(prompt, SIGNAL(startCommand(const QString&)), this, SLOT(runCommandMain(const QString&)));
-    connect(prompt, SIGNAL(runCommand(const QString&, const QString&)), this, SLOT(runCommandPrompt(const QString&, const QString&)));
+    connect(prompt, SIGNAL(startCommand(QString)), this, SLOT(runCommandMain(QString)));
+    connect(prompt, SIGNAL(runCommand(QString, QString)), this, SLOT(runCommandPrompt(QString, QString)));
 
     connect(prompt, SIGNAL(deletePressed()), this, SLOT(deletePressed()));
     /* TODO: connect(prompt, SIGNAL(tabPressed()), this, SLOT(someUnknownSlot())); */
@@ -244,7 +244,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     connect(prompt, SIGNAL(showSettings()), this, SLOT(settingsPrompt()));
 
-    connect(prompt, SIGNAL(historyAppended(const QString&)), this, SLOT(promptHistoryAppended(const QString&)));
+    connect(prompt, SIGNAL(historyAppended(QString)), this, SLOT(promptHistoryAppended(QString)));
 
     /* create the Object Property Editor */
     dockPropEdit = new PropertyEditor(
@@ -546,7 +546,7 @@ new_file(void)
 
 /* . */
 void
-openFile(bool recent, const QString& recentFile)
+openFile(bool recent, QString recentFile)
 {
     debug_message("openFile()");
 
@@ -569,7 +569,7 @@ openFile(bool recent, const QString& recentFile)
     else if (preview) {
         PreviewDialog* openDialog = new PreviewDialog(_main, translate("Open w/Preview"),
             openFilesPath, formatFilterOpen);
-        /* TODO: set openDialog->selectNameFilter(const QString& filter) from opensave_open_format.setting */
+        /* TODO: set openDialog->selectNameFilter(QString filter) from opensave_open_format.setting */
         QObject::connect(openDialog, SIGNAL(filesSelected(const QStringList&)), _main,
             SLOT(openFilesSelected(const QStringList&)));
         openDialog->exec();
@@ -657,7 +657,7 @@ openFilesSelected(const QStringList& filesToOpen)
                 }
             }
             else {
-                messagebox("error", translate("Failed to load file"),
+                critical_box(translate("Failed to load file"),
                     translate("Failed to load file."));
                 debug_message("Failed to load file.");
                 mdiWin->close();
@@ -701,7 +701,7 @@ save_as_file(void)
 
 /* . */
 QMdiSubWindow*
-findMdiWindow(const QString& fileName)
+findMdiWindow(QString fileName)
 {
     char message[MAX_STRING_LENGTH];
     sprintf(message, "findMdiWindow(%s)", qPrintable(fileName));
@@ -881,7 +881,7 @@ hide_unimplemented(void)
 
 /* . */
 bool
-validFileFormat(const QString& fileName)
+validFileFormat(QString fileName)
 {
     if (emb_identify_format(qPrintable(fileName)) >= 0) {
         return true;
@@ -1312,7 +1312,7 @@ settingsPrompt(void)
 
 /* . */
 void
-settingsDialog(const QString& showTab)
+settingsDialog(QString showTab)
 {
     Settings_Dialog dialog(_main, showTab, _main);
     dialog.exec();

@@ -13,6 +13,27 @@
 
 #include "embroidermodder.h"
 
+EmbVector obj_map_rubber(Object *obj, const char *key);
+EmbVector map_from_scene(Object *obj, EmbVector v);
+
+EmbVector
+operator+(EmbVector a, EmbVector b)
+{
+    return emb_vector_add(a, b);
+}
+
+EmbVector
+operator-(EmbVector a, EmbVector b)
+{
+    return emb_vector_subtract(a, b);
+}
+
+EmbVector
+map_from_scene(Object *obj, EmbVector v)
+{
+    return to_emb_vector(obj->mapFromScene(to_qpointf(v)));
+}
+
 /* WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
  * WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
  * WARNING: All movement has to be handled explicitly by us, not by the scene.
@@ -73,7 +94,7 @@ create_arc(EmbArc arc, QRgb rgb, QGraphicsItem *item)
     obj->geometry->object.arc = arc;
     todo("getCurrentLineType");
     obj_calculate_data(obj);
-    obj_set_pos(obj, arc.start.x, arc.start.y);
+    obj_set_pos(obj, arc.start);
     return obj;
 }
 
@@ -116,7 +137,7 @@ create_polyline(EmbPath path, const QPainterPath& p, QRgb rgb, QGraphicsItem* pa
     todo("getCurrentLineType");
     Object *obj = new Object(EMB_POLYLINE, rgb, Qt::SolidLine);
     obj_update_path_r(obj, p);
-    /* obj_set_pos(obj, x, y); */
+    /* EmbVector v; obj_set_pos(obj, v); */
     return obj;
 }
 
@@ -128,7 +149,10 @@ create_path(double x, double y, const QPainterPath p, QRgb rgb, QGraphicsItem* p
     Object *obj = new Object(EMB_PATH, rgb, Qt::SolidLine);
     todo("getCurrentLineType");
     obj_update_path_r(obj, p);
-    obj_set_pos(obj, x, y);
+    EmbVector v;
+    v.x = x;
+    v.y = y;
+    obj_set_pos(obj, v);
     return obj;
 }
 
@@ -140,13 +164,16 @@ create_polygon(double x, double y, const QPainterPath& p, QRgb rgb, QGraphicsIte
     Object *obj = new Object(EMB_POLYGON, rgb, Qt::SolidLine);
     todo("getCurrentLineType");
     obj_update_path_r(obj, p);
-    obj_set_pos(obj, x,y);
+    EmbVector v;
+    v.x = x;
+    v.y = y;
+    obj_set_pos(obj, v);
     return obj;
 }
 
 /* . */
 Object *
-create_text_single(const QString& str, double x, double y, QRgb rgb, QGraphicsItem* parent)
+create_text_single(QString str, double x, double y, QRgb rgb, QGraphicsItem* parent)
 {
     debug_message("TextSingleObject Constructor()");
     todo("getCurrentLineType");
@@ -154,7 +181,10 @@ create_text_single(const QString& str, double x, double y, QRgb rgb, QGraphicsIt
     obj->data.objTextJustify = "Left"; /* TODO: set the justification properly */
 
     obj_set_text(obj, str);
-    obj_set_pos(obj, x,y);
+    EmbVector v;
+    v.x = x;
+    v.y = y;
+    obj_set_pos(obj, v);
     return obj;
 }
 
@@ -168,8 +198,13 @@ create_dim_leader(double x1, double y1, double x2, double y2, QRgb rgb, QGraphic
 
     obj->data.curved = false;
     obj->data.filled = true;
-    obj_set_end_point_1(obj, x1, y1);
-    obj_set_end_point_2(obj, x2, y2);
+    EmbVector point1, point2;
+    point1.x = x1;
+    point1.y = y1;
+    point2.x = x2;
+    point2.y = y2;
+    obj_set_end_point_1(obj, point1);
+    obj_set_end_point_2(obj, point2);
     return obj;
 }
 
@@ -202,8 +237,13 @@ create_line(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsItem*
     debug_message("LineObject Constructor()");
     Object *obj = new Object(EMB_LINE, rgb, Qt::SolidLine);
     todo("getCurrentLineType");
-    obj_set_end_point_1(obj, x1, y1);
-    obj_set_end_point_2(obj, x2, y2);
+    EmbVector point1, point2;
+    point1.x = x1;
+    point1.y = y1;
+    point2.x = x2;
+    point2.y = y2;
+    obj_set_end_point_1(obj, point1);
+    obj_set_end_point_2(obj, point2);
     return obj;
 }
 
@@ -248,8 +288,8 @@ copy_object(Object* obj)
         break;
     case EMB_IMAGE: {
         copy->geometry->object.ellipse = obj->geometry->object.ellipse;
-        /* QPointF ptl = obj->objectTopLeft(); */
-        /* init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj_color_rgb(obj), Qt::SolidLine); */
+        /* EmbVector ptl = obj_top_left(obj); */
+        /* init(ptl.x, ptl.y, obj->objectWidth(), obj->objectHeight(), obj_color_rgb(obj), Qt::SolidLine); */
         todo("getCurrentLineType");
         copy->setRotation(obj->rotation());
         break;
@@ -297,8 +337,8 @@ copy_object(Object* obj)
     }
     case EMB_RECT: {
         obj->geometry->object.rect = obj->geometry->object.rect;
-        /* QPointF ptl = obj->objectTopLeft();
-         * init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj_color_rgb(obj), Qt::SolidLine);
+        /* EmbVector ptl = obj->objectTopLeft();
+         * init(ptl.x, ptl.y, obj->objectWidth(), obj->objectHeight(), obj_color_rgb(obj), Qt::SolidLine);
          */
         todo("getCurrentLineType");
         copy->setRotation(obj->rotation());
@@ -381,7 +421,7 @@ obj_draw_rubber_line(Object *obj, const QLineF& rubLine, QPainter* painter, cons
 
 /* . */
 void
-Object::realRender(QPainter* painter, const QPainterPath& renderPath)
+obj_real_render(Object *obj, QPainter* painter, QPainterPath renderPath)
 {
     QColor color1 = obj->data.objPen.color(); /* lighter color */
     QColor color2 = color1.darker(150); /* darker color */
@@ -781,8 +821,8 @@ DimLeaderobj_updateLeader()
 
     QLineF lyne = obj_line(obj);
     double angle = lyne.angle();
-    QPointF ap0 = lyne.p1();
-    QPointF lp0 = lyne.p2();
+    EmbVector ap0 = lyne.p1();
+    EmbVector lp0 = lyne.p2();
 
     /* Arrow */
     QLineF lynePerp(lyne.pointAt(arrowStyleLength/lyne.length()) ,lp0);
@@ -791,8 +831,8 @@ DimLeaderobj_updateLeader()
     QLineF lyne2(ap0, lp0);
     lyne1.setAngle(angle + arrowStyleAngle);
     lyne2.setAngle(angle - arrowStyleAngle);
-    QPointF ap1;
-    QPointF ap2;
+    EmbVector ap1;
+    EmbVector ap2;
     lynePerp.intersects(lyne1, &ap1);
     lynePerp.intersects(lyne2, &ap2);
 
@@ -1102,7 +1142,7 @@ Object::setObjectSize(double width, double height)
     QRectF elRect = obj_rect(obj);
     elRect.setWidth(width);
     elRect.setHeight(height);
-    elRect.moveCenter(QPointF(0,0));
+    elRect.moveCenter(QPointF(0, 0));
     // FIXME: obj->setRect(elRect);
 }
 
@@ -1574,6 +1614,14 @@ prompt(char *str)
 }
 #endif
 
+void
+obj_draw_rubber_grip(Object *obj, QPainter *painter)
+{
+    QPointF point = to_qpointf(obj_map_rubber(obj, ""))
+        - to_qpointf(obj_map_rubber(obj, "GRIP_POINT"));
+    painter->drawLine(obj_line(obj).translated(point));
+}
+
 /* . */
 void
 obj_update_rubber_grip(Object *obj, QPainter *painter)
@@ -1581,6 +1629,7 @@ obj_update_rubber_grip(Object *obj, QPainter *painter)
     if (!painter) {
         return;
     }
+    EmbVector gripPoint = obj_rubber_point(obj, "GRIP_POINT");
     switch (obj->geometry->type) {
     case EMB_ARC: {
         todo("rubber grip arc");
@@ -1599,59 +1648,58 @@ obj_update_rubber_grip(Object *obj, QPainter *painter)
         break;
     }
     case EMB_LINE: {
-        QPointF gripPoint = obj_rubber_point(obj, "GRIP_POINT");
-        if (gripPoint == obj_end_point_1(obj)) {
-            painter->drawLine(obj_line(obj).p2(), obj->mapFromScene(obj_rubber_point(obj, "")));
+        QPointF p = to_qpointf(obj_map_rubber(obj, ""));
+        if (emb_approx(gripPoint, obj_end_point_1(obj))) {
+            painter->drawLine(obj_line(obj).p2(), p);
         }
-        else if (gripPoint == obj_end_point_2(obj)) {
-            painter->drawLine(obj_line(obj).p1(), obj->mapFromScene(obj_rubber_point(obj, "")));
+        else if (emb_approx(gripPoint, obj_end_point_2(obj))) {
+            painter->drawLine(obj_line(obj).p1(), p);
         }
-        else if (gripPoint == obj_mid_point(obj)) {
-            painter->drawLine(obj_line(obj).translated(obj->mapFromScene(obj_rubber_point(obj, "")) - obj->mapFromScene(gripPoint)));
+        else if (emb_approx(gripPoint, obj_mid_point(obj))) {
+            QPointF point = p - to_qpointf(obj_map_rubber(obj, "GRIP_POINT"));
+            QLineF line = obj_line(obj).translated(point);
+            painter->drawLine(line);
         }
 
-        QLineF rubLine(obj->mapFromScene(gripPoint), obj->mapFromScene(obj_rubber_point(obj, "")));
-        obj_draw_rubber_line(obj, rubLine, painter, "VIEW_COLOR_CROSSHAIR");
+        obj_draw_rubber_grip(obj, painter);
         break;
     }
     case EMB_CIRCLE: {
-        QPointF gripPoint = obj_rubber_point(obj, "GRIP_POINT");
-        if (gripPoint == obj_center(obj)) {
-            painter->drawEllipse(obj_rect(obj).translated(obj->mapFromScene(obj_rubber_point(obj, ""))- obj->mapFromScene(gripPoint)));
-            }
+        if (emb_approx(gripPoint, obj_center(obj))) {
+            QPointF point = to_qpointf(obj_map_rubber(obj, ""))
+                - to_qpointf(obj_map_rubber(obj, "GRIP_POINT"));
+            painter->drawEllipse(obj_rect(obj).translated(point));
+        }
         else {
-            double gripRadius = QLineF(obj_center(obj), obj_rubber_point(obj, "")).length();
+            double gripRadius = emb_vector_distance(obj_center(obj), obj_rubber_point(obj, ""));
             painter->drawEllipse(QPointF(), gripRadius, gripRadius);
         }
 
-        QLineF rubLine(obj->mapFromScene(gripPoint), obj->mapFromScene(obj_rubber_point(obj, "")));
-        obj_draw_rubber_line(obj, rubLine, painter, "VIEW_COLOR_CROSSHAIR");
+        obj_draw_rubber_grip(obj, painter);
         break;
     }
     case EMB_DIM_LEADER: {
-        QPointF gripPoint = obj_rubber_point(obj, "GRIP_POINT");
-        if (gripPoint == obj_end_point_1(obj)) {
-            painter->drawLine(obj_line(obj).p2(), obj->mapFromScene(obj_rubber_point(obj, "")));
+        QPointF p = to_qpointf(obj_map_rubber(obj, ""));
+        if (emb_approx(gripPoint, obj_end_point_1(obj))) {
+            painter->drawLine(obj_line(obj).p2(), p);
         }
-        else if (gripPoint == obj_end_point_2(obj)) {
-            painter->drawLine(obj_line(obj).p1(), obj->mapFromScene(obj_rubber_point(obj, "")));
+        else if (emb_approx(gripPoint, obj_end_point_2(obj))) {
+            painter->drawLine(obj_line(obj).p1(), p);
         }
-        else if (gripPoint == obj_mid_point(obj)) {
-            painter->drawLine(obj_line(obj).translated(obj->mapFromScene(obj_rubber_point(obj, "")) - obj->mapFromScene(gripPoint)));
+        else if (emb_approx(gripPoint, obj_mid_point(obj))) {
+            obj_draw_rubber_grip(obj, painter);
         }
         break;
     }
     case EMB_POINT: {
-        QPointF gripPoint = obj_rubber_point(obj, "GRIP_POINT");
-        if (gripPoint == obj_pos(obj)) {
-            QLineF rubLine(obj->mapFromScene(gripPoint), obj->mapFromScene(obj_rubber_point(obj, "")));
-            obj_draw_rubber_line(obj, rubLine, painter, "VIEW_COLOR_CROSSHAIR");
+        if (emb_approx(gripPoint, obj_pos(obj))) {
+            obj_draw_rubber_grip(obj, painter);
         }
         break;
     }
     case EMB_POLYGON: {
         int elemCount = obj->data.normalPath.elementCount();
-        QPointF gripPoint = obj_rubber_point(obj, "GRIP_POINT");
+        EmbVector gripPoint = obj_rubber_point(obj, "GRIP_POINT");
         if (obj->data.gripIndex == -1) {
             obj->data.gripIndex = obj_find_index(obj, gripPoint);
                 if (obj->data.gripIndex == -1) {
@@ -1674,20 +1722,19 @@ obj_update_rubber_grip(Object *obj, QPainter *painter)
                 m = obj->data.gripIndex - 1;
                 n = obj->data.gripIndex + 1;
             }
+
+            QPointF p = to_qpointf(obj_map_rubber(obj, ""));
             QPainterPath::Element em = obj->data.normalPath.elementAt(m);
             QPainterPath::Element en = obj->data.normalPath.elementAt(n);
-            QPointF emPoint = QPointF(em.x, em.y);
-            QPointF enPoint = QPointF(en.x, en.y);
-            painter->drawLine(emPoint, obj->mapFromScene(obj_rubber_point(obj, "")));
-            painter->drawLine(enPoint, obj->mapFromScene(obj_rubber_point(obj, "")));
+            painter->drawLine(QPointF(em.x, em.y), p);
+            painter->drawLine(QPointF(en.x, en.y), p);
 
-            QLineF rubLine(obj->mapFromScene(gripPoint), obj->mapFromScene(obj_rubber_point(obj, "")));
-            obj_draw_rubber_line(obj, rubLine, painter, "VIEW_COLOR_CROSSHAIR");
+            obj_draw_rubber_grip(obj, painter);
             break;
         }
         case EMB_POLYLINE: {
             int elemCount = obj->data.normalPath.elementCount();
-            QPointF gripPoint = obj_rubber_point(obj, "GRIP_POINT");
+            EmbVector gripPoint = obj_rubber_point(obj, "GRIP_POINT");
             if (obj->data.gripIndex == -1) {
                 obj->data.gripIndex = obj_find_index(obj, gripPoint);
             }
@@ -1695,82 +1742,66 @@ obj_update_rubber_grip(Object *obj, QPainter *painter)
                 return;
             }
 
+            QPointF p = to_qpointf(obj_map_rubber(obj, ""));
             if (!obj->data.gripIndex) {
                 /* First */
                 QPainterPath::Element ef = obj->data.normalPath.elementAt(1);
-                QPointF efPoint = QPointF(ef.x, ef.y);
-                painter->drawLine(efPoint, obj->mapFromScene(obj_rubber_point(obj, "")));
+                painter->drawLine(QPointF(ef.x, ef.y), p);
             }
             else if (obj->data.gripIndex == elemCount-1) {
                 /* Last */
                 QPainterPath::Element el = obj->data.normalPath.elementAt(obj->data.gripIndex-1);
-                QPointF elPoint = QPointF(el.x, el.y);
-                painter->drawLine(elPoint, obj->mapFromScene(obj_rubber_point(obj, "")));
+                painter->drawLine(QPointF(el.x, el.y), p);
             }
             else {
                 /* Middle */
                 QPainterPath::Element em = obj->data.normalPath.elementAt(obj->data.gripIndex-1);
                 QPainterPath::Element en = obj->data.normalPath.elementAt(obj->data.gripIndex+1);
-                QPointF emPoint = QPointF(em.x, em.y);
-                QPointF enPoint = QPointF(en.x, en.y);
-                painter->drawLine(emPoint, obj->mapFromScene(obj_rubber_point(obj, "")));
-                painter->drawLine(enPoint, obj->mapFromScene(obj_rubber_point(obj, "")));
+                painter->drawLine(QPointF(em.x, em.y), p);
+                painter->drawLine(QPointF(en.x, en.y), p);
             }
 
-            QLineF rubLine(obj->mapFromScene(gripPoint),
-                obj->mapFromScene(obj_rubber_point(obj, "")));
-            obj_draw_rubber_line(obj, rubLine, painter, "VIEW_COLOR_CROSSHAIR");
-            break;
+        obj_draw_rubber_grip(obj, painter);
+        break;
     }
     case EMB_RECT: {
         todo("Make this work with rotation & scaling.");
         /*
-        QPointF gripPoint = obj_rubber_point(obj, "GRIP_POINT");
-        QPointF after = obj_rubber_point(obj, "");
-        QPointF delta = after-gripPoint;
-            if (gripPoint == obj_top_left(obj)) {
-                painter->drawPolygon(obj->mapFromScene(QRectF(after.x(), after.y(),
-                    objectWidth()-delta.x(), objectHeight()-delta.y())));
-            }
-            else if (gripPoint == obj_top_right(obj)) {
-                painter->drawPolygon(obj->mapFromScene(QRectF(objectTopLeft().x(),
-                    objectTopLeft().y()+delta.y(),
-                    objectWidth()+delta.x(),
-                    objectHeight()-delta.y())));
-            }
-            else if (gripPoint == obj_bottom_left(obj)) {
-                painter->drawPolygon(obj->mapFromScene(QRectF(objectTopLeft().x()+delta.x(),
-                    objectTopLeft().y(),
-                    objectWidth()-delta.x(),
-                    objectHeight()+delta.y())));
-            }
-            else if (gripPoint == obj_bottom_right(obj)) {
-                painter->drawPolygon(obj->mapFromScene(QRectF(objectTopLeft().x(),
-                    objectTopLeft().y(),
-                    objectWidth() + delta.x(),
-                    objectHeight() + delta.y())));
-            }
+        EmbVector after = obj_rubber_point(obj, "");
+        EmbVector delta = after-gripPoint;
+        if (emb_approx(gripPoint, obj_top_left(obj))) {
+            painter->drawPolygon(obj->mapFromScene(QRectF(after.x, after.y,
+                objectWidth()-delta.x, objectHeight()-delta.y)));
+        }
+        else if (emb_approx(gripPoint, obj_top_right(obj))) {
+            painter->drawPolygon(obj->mapFromScene(QRectF(objectTopLeft().x,
+                objectTopLeft().y+delta.y,
+                objectWidth()+delta.x,
+                objectHeight()-delta.y)));
+        }
+        else if (emb_approx(gripPoint, obj_bottom_left(obj))) {
+            painter->drawPolygon(obj->mapFromScene(QRectF(objectTopLeft().x+delta.x,
+                objectTopLeft().y,
+                objectWidth()-delta.x,
+                objectHeight()+delta.y)));
+        }
+        else if (emb_approx(gripPoint, obj_bottom_right(obj))) {
+            painter->drawPolygon(obj->mapFromScene(QRectF(objectTopLeft().x,
+                objectTopLeft().y,
+                objectWidth() + delta.x,
+                objectHeight() + delta.y)));
+        }
+        */
 
-            QLineF rubLine(obj->mapFromScene(gripPoint), obj->mapFromScene(obj_rubber_point(obj, "")));
-            obj_draw_rubber_line(obj, rubLine, painter, "VIEW_COLOR_CROSSHAIR");
-            */
-
-            QPointF gripPoint = obj_rubber_point(obj, "GRIP_POINT");
-            QPointF after = obj_rubber_point(obj, "");
-            QPointF delta = after-gripPoint;
-
-            QLineF rubLine(obj->mapFromScene(gripPoint), obj->mapFromScene(obj_rubber_point(obj, "")));
-            obj_draw_rubber_line(obj, rubLine, painter, "VIEW_COLOR_CROSSHAIR");
+        obj_draw_rubber_grip(obj, painter);
         break;
     }
     case EMB_TEXT_SINGLE: {
-        QPointF gripPoint = obj_rubber_point(obj, "GRIP_POINT");
-        if (gripPoint == obj_pos(obj)) {
-           painter->drawPath(obj_path(obj).translated(obj->mapFromScene(obj_rubber_point(obj, ""))- obj->mapFromScene(gripPoint)));
+        if (emb_approx(gripPoint, obj_pos(obj))) {
+           // painter->drawPath(obj_path(obj).translated(obj->mapFromScene(obj_rubber_point(obj, ""))- obj_map_rubber(obj, "GRIP_POINT"));
         }
 
-        QLineF rubLine(obj->mapFromScene(gripPoint), obj->mapFromScene(obj_rubber_point(obj, "")));
-        obj_draw_rubber_line(obj, rubLine, painter, "VIEW_COLOR_CROSSHAIR");
+        obj_draw_rubber_grip(obj, painter);
         break;
     }
     default:
@@ -2356,12 +2387,12 @@ prompt(str)
 #endif
 
 /* . */
-QPointF
+EmbVector
 obj_start_point(Object *obj)
 {
     switch (obj->geometry->type) {
     case EMB_ARC: {
-        return to_qpointf(obj->geometry->object.arc.start);
+        return obj->geometry->object.arc.start;
     }
     default:
         break;
@@ -2370,17 +2401,17 @@ obj_start_point(Object *obj)
 }
 
 /* . */
-QPointF
+EmbVector
 obj_mid_point(Object *obj)
 {
     switch (obj->geometry->type) {
     case EMB_ARC: {
-        return to_qpointf(obj->geometry->object.arc.mid);
+        return obj->geometry->object.arc.mid;
     }
     case EMB_LINE:
     case EMB_DIM_LEADER: {
         QLineF lyne = obj_line(obj);
-        QPointF mp = lyne.pointAt(0.5);
+        EmbVector mp = to_emb_vector(lyne.pointAt(0.5));
         return obj_pos(obj) + scale_and_rotate(mp, obj->scale(), obj->rotation());
     }
     default:
@@ -2390,12 +2421,12 @@ obj_mid_point(Object *obj)
 }
 
 /* . */
-QPointF
+EmbVector
 obj_end_point(Object *obj)
 {
     switch (obj->geometry->type) {
     case EMB_ARC: {
-        return to_qpointf(obj->geometry->object.arc.end);
+        return obj->geometry->object.arc.end;
     }
     default:
         break;
@@ -2404,35 +2435,39 @@ obj_end_point(Object *obj)
 }
 
 /* . */
-QPointF
+EmbVector
 obj_top_left(Object *obj)
 {
-    return obj_pos(obj) + scale_and_rotate(obj_rect(obj).topLeft(), obj->scale(), obj->rotation());
+    EmbVector p = to_emb_vector(obj_rect(obj).topLeft());
+    return obj_pos(obj) + scale_and_rotate(p, obj->scale(), obj->rotation());
 }
 
 /* . */
-QPointF
+EmbVector
 obj_top_right(Object *obj)
 {
-    return obj_pos(obj) + scale_and_rotate(obj_rect(obj).topRight(), obj->scale(), obj->rotation());
+    EmbVector p = to_emb_vector(obj_rect(obj).topRight());
+    return obj_pos(obj) + scale_and_rotate(p, obj->scale(), obj->rotation());
 }
 
 /* . */
-QPointF
+EmbVector
 obj_bottom_left(Object *obj)
 {
-    return obj_pos(obj) + scale_and_rotate(obj_rect(obj).bottomLeft(), obj->scale(), obj->rotation());
+    EmbVector p = to_emb_vector(obj_rect(obj).bottomLeft());
+    return obj_pos(obj) + scale_and_rotate(p, obj->scale(), obj->rotation());
 }
 
 /* . */
-QPointF
+EmbVector
 obj_bottom_right(Object *obj)
 {
-    return obj_pos(obj) + scale_and_rotate(obj_rect(obj).bottomRight(), obj->scale(), obj->rotation());
+    EmbVector p = to_emb_vector(obj_rect(obj).bottomRight());
+    return obj_pos(obj) + scale_and_rotate(p, obj->scale(), obj->rotation());
 }
 
 /* . */
-QPointF
+EmbVector
 obj_center(Object *obj)
 {
     return obj_pos(obj);
@@ -2457,7 +2492,7 @@ QStringList objectTextJustifyList = {
 
 /* . */
 void
-obj_set_text(Object* obj, const QString& str)
+obj_set_text(Object* obj, QString str)
 {
     obj->data.objText = str;
     QPainterPath textPath;
@@ -2570,7 +2605,7 @@ obj_set_text(Object* obj, const QString& str)
 
 /* . */
 void
-obj_set_text_font(Object* obj, const QString& font)
+obj_set_text_font(Object* obj, QString font)
 {
     obj->data.objTextFont = font;
     obj_set_text(obj, obj->data.objText);
@@ -2578,7 +2613,7 @@ obj_set_text_font(Object* obj, const QString& font)
 
 /* Verify the string is a valid option. */
 void
-obj_set_text_justify(Object* obj, const QString& justify)
+obj_set_text_justify(Object* obj, QString justify)
 {
     if (justify == "Left") {
         obj->data.objTextJustify = justify;
@@ -2709,7 +2744,7 @@ obj_set_text_upside_down(Object* obj, bool val)
 }
 
 /* . */
-QPointF
+EmbVector
 obj_end_point_1(Object *obj)
 {
     return obj_pos(obj);
@@ -2717,24 +2752,14 @@ obj_end_point_1(Object *obj)
 
 /* . */
 void
-obj_set_end_point_1(Object *obj, QPointF endPt1)
+obj_set_end_point_1(Object *obj, EmbVector endPt1)
 {
-    obj_set_end_point_1(obj, endPt1.x(), endPt1.y());
-}
-
-/* . */
-void
-obj_set_end_point_1(Object *obj, double x1, double y1)
-{
-    QPointF endPt2 = obj_end_point_2(obj);
-    double x2 = endPt2.x();
-    double y2 = endPt2.y();
-    double dx = x2 - x1;
-    double dy = y2 - y1;
+    EmbVector endPt2 = obj_end_point_2(obj);
+    EmbVector delta = endPt2 - endPt1;
     obj->setRotation(0);
     obj->setScale(1);
-    obj_set_line(obj, 0, 0, dx, dy);
-    obj->setPos(x1, y1);
+    obj_set_line(obj, 0, 0, delta.x, delta.y);
+    obj->setPos(endPt1.x, endPt1.y);
 }
 
 /* . */
@@ -2743,17 +2768,17 @@ obj_update_path(Object *obj)
 {
     switch (obj->geometry->type) {
     case EMB_ARC: {
-        double startAngle = (emb_get_start_angle(*(obj->geometry)) + obj->rotation());
-        double spanAngle = emb_get_included_angle(*(obj->geometry));
+        double startAngle = (emb_start_angle(obj->geometry) + obj->rotation());
+        double spanAngle = emb_included_angle(obj->geometry);
 
-        if (emb_get_clockwise(*(obj->geometry))) {
+        if (emb_clockwise(obj->geometry)) {
             spanAngle = -spanAngle;
         }
 
         QPainterPath path;
         path.arcMoveTo(obj_rect(obj), startAngle);
         path.arcTo(obj_rect(obj), startAngle, spanAngle);
-        /* NOTE: Reverse the path so that the inside area isn't considered part of the arc. */
+        /* Reverse the path so that the inside area isn't considered part of the arc. */
         path.arcTo(obj_rect(obj), startAngle+spanAngle, -spanAngle);
         obj_set_path(obj, path);
         break;
@@ -2766,7 +2791,7 @@ obj_update_path(Object *obj)
         /* Add the circle */
         path.arcMoveTo(r, 0);
         path.arcTo(r, 0, 360);
-        /* NOTE: Reverse the path so that the inside area isn't considered part of the circle. */
+        /* Reverse the path so that the inside area isn't considered part of the circle. */
         path.arcTo(r, 0, -360);
         obj_set_path(obj, path);
         break;
@@ -2776,7 +2801,7 @@ obj_update_path(Object *obj)
         QRectF r = obj_rect(obj);
         path.arcMoveTo(r, 0);
         path.arcTo(r, 0, 360);
-        /* NOTE: Reverse the path so that the inside area isn't considered part of the ellipse. */
+        /* Reverse the path so that the inside area isn't considered part of the ellipse. */
         path.arcTo(r, 0, -360);
         obj_set_path(obj, path);
         break;
@@ -2843,9 +2868,9 @@ obj_set_line_weight(Object *obj, double lineWeight)
             todo("getBlockLineWeight");
         }
         else {
-            QMessageBox::warning(0, QObject::tr("Error - Negative Lineweight"),
-                                    QObject::tr("Lineweight: %1")
-                                    .arg(QString().setNum(lineWeight)));
+            char msg[MAX_STRING_LENGTH];
+            sprintf(msg, "Lineweight: %f", lineWeight);
+            warning_box(translate("Error - Negative Lineweight"), msg);
             debug_message("Lineweight cannot be negative! Inverting sign.");
             obj->data.lwtPen.setWidthF(-lineWeight);
         }
@@ -2907,8 +2932,8 @@ obj_set_line_type(Object *obj, Qt::PenStyle lineType)
 }
 
 /* . */
-QPointF
-obj_rubber_point(Object *obj, const QString& key)
+EmbVector
+obj_rubber_point(Object *obj, QString key)
 {
     if (obj->data.objRubberPoints.contains(key)) {
         return obj->data.objRubberPoints.value(key);
@@ -2916,14 +2941,18 @@ obj_rubber_point(Object *obj, const QString& key)
 
     QGraphicsScene* gscene = obj->scene();
     if (gscene) {
-        return obj->scene()->property("SCENE_QSNAP_POINT").toPointF();
+        QPointF p = obj->scene()->property("SCENE_QSNAP_POINT").toPointF();
+        return to_emb_vector(p);
     }
-    return QPointF();
+    EmbVector v;
+    v.x = 0.0;
+    v.y = 0.0;
+    return v;
 }
 
 /* . */
 QString
-obj_rubber_text(Object *obj, const QString& key)
+obj_rubber_text(Object *obj, QString key)
 {
     if (obj->data.objRubberTexts.contains(key)) {
         return obj->data.objRubberTexts.value(key);
@@ -2943,7 +2972,7 @@ obj_bounding_rect(Object *obj)
 }
 
 /* . */
-QPointF
+EmbVector
 obj_pos(Object *obj)
 {
     return obj_pos(obj);
@@ -2953,28 +2982,28 @@ obj_pos(Object *obj)
 double
 obj_x(Object *obj)
 {
-    return obj_pos(obj).x();
+    return obj_pos(obj).x;
 }
 
 /* . */
 double
 obj_y(Object *obj)
 {
-    return obj_pos(obj).y();
+    return obj_pos(obj).y;
 }
 
 /* . */
 double
 obj_center_x(Object *obj)
 {
-    return obj_pos(obj).x();
+    return obj_pos(obj).x;
 }
 
 /* . */
 double
 obj_center_y(Object *obj)
 {
-    return obj_pos(obj).y();
+    return obj_pos(obj).y;
 }
 
 /* . */
@@ -2999,7 +3028,7 @@ obj_circumference(Object *obj)
 }
 
 /* . */
-QPointF
+EmbVector
 obj_delta(Object *obj)
 {
     return obj_end_point_2(obj) - obj_end_point_1(obj);
@@ -3010,13 +3039,6 @@ void
 obj_set_center(Object *obj, EmbVector center)
 {
     obj->setPos(center.x, center.y);
-}
-
-/* . */
-void
-obj_set_center(Object *obj, QPointF center)
-{
-    obj_set_center(obj, to_emb_vector(center));
 }
 
 /* . */
@@ -3044,28 +3066,36 @@ obj_length(Object *obj)
 void
 obj_set_x1(Object *obj, double x)
 {
-    obj_set_end_point_1(obj, x, obj_end_point_1(obj).y());
+    EmbVector v = obj_end_point_1(obj);
+    v.x = x;
+    obj_set_end_point_1(obj, v);
 }
 
 /* . */
 void
 obj_set_y1(Object *obj, double y)
 {
-    obj_set_end_point_1(obj, obj_end_point_1(obj).x(), y);
+    EmbVector v = obj_end_point_1(obj);
+    v.y = y;
+    obj_set_end_point_1(obj, v);
 }
 
 /* . */
 void
 obj_set_x2(Object *obj, double x)
 {
-    obj_set_end_point_2(obj, x, obj_end_point_2(obj).y());
+    EmbVector v = obj_end_point_2(obj);
+    v.x = x;
+    obj_set_end_point_2(obj, v);
 }
 
 /* . */
 void
 obj_set_y2(Object *obj, double y)
 {
-    obj_set_end_point_2(obj, obj_end_point_2(obj).x(), y);
+    EmbVector v = obj_end_point_2(obj);
+    v.y = y;
+    obj_set_end_point_2(obj, v);
 }
 
 /* . */
@@ -3125,9 +3155,9 @@ obj_set_line(Object *obj, double x1, double y1, double x2, double y2)
 
 /* . */
 void
-obj_set_pos(Object *obj, QPointF point)
+obj_set_pos(Object *obj, EmbVector point)
 {
-    obj->setPos(point.x(), point.y());
+    obj->setPos(point.x, point.y);
 }
 
 /* . */
@@ -3174,7 +3204,7 @@ obj_set_rubber_mode(Object *obj, int mode)
 
 /* . */
 void
-obj_set_rubber_point(Object *obj, const QString& key, const QPointF& point)
+obj_set_rubber_point(Object *obj, QString key, const EmbVector& point)
 {
     obj->data.objRubberPoints.insert(key, point);
 }
@@ -3195,19 +3225,29 @@ obj_save_path_list(Object *obj)
 
 /* . */
 int
-obj_find_index(Object *obj, QPointF point)
+obj_find_index(Object *obj, EmbVector point)
 {
     int elemCount = obj->data.normalPath.elementCount();
     /* NOTE: Points here are in item coordinates */
-    QPointF itemPoint = obj->mapFromScene(point);
+    EmbVector itemPoint = map_from_scene(obj, point);
     for (int i = 0; i < elemCount; i++) {
         QPainterPath::Element e = obj->data.normalPath.elementAt(i);
-        QPointF elemPoint = QPointF(e.x, e.y);
-        if (itemPoint == elemPoint) {
+        EmbVector elemPoint;
+        elemPoint.x = e.x;
+        elemPoint.y = e.y;
+        if (emb_approx(itemPoint, elemPoint)) {
             return i;
         }
     }
     return -1;
+}
+
+/* Map rubber point from scene. */
+EmbVector
+obj_map_rubber(Object *obj, const char *key)
+{
+    EmbVector point = obj_rubber_point(obj, key);
+    return map_from_scene(obj, point);
 }
 
 /* . */
@@ -3217,13 +3257,13 @@ obj_update_rubber(Object *obj, QPainter* painter)
     todo("Arc,Path Rubber Modes");
     switch (obj->data.objRubberMode) {
     case OBJ_RUBBER_CIRCLE_1P_RAD: {
-        QPointF sceneCenterPoint = obj_rubber_point(obj, "CIRCLE_CENTER");
-        QPointF sceneQSnapPoint = obj_rubber_point(obj, "CIRCLE_RADIUS");
-        QPointF itemCenterPoint = obj->mapFromScene(sceneCenterPoint);
-        QPointF itemQSnapPoint = obj->mapFromScene(sceneQSnapPoint);
-        QLineF itemLine(itemCenterPoint, itemQSnapPoint);
-        obj_set_center(obj, to_emb_vector(sceneCenterPoint));
-        QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
+        EmbVector sceneCenterPoint = obj_rubber_point(obj, "CIRCLE_CENTER");
+        EmbVector sceneQSnapPoint = obj_rubber_point(obj, "CIRCLE_RADIUS");
+        EmbVector itemCenterPoint = obj_map_rubber(obj, "CIRCLE_CENTER");
+        EmbVector itemQSnapPoint = obj_map_rubber(obj, "CIRCLE_RADIUS");
+        QLineF itemLine(to_qpointf(itemCenterPoint), to_qpointf(itemQSnapPoint));
+        obj_set_center(obj, sceneCenterPoint);
+        QLineF sceneLine(to_qpointf(sceneCenterPoint), to_qpointf(sceneQSnapPoint));
         double radius = sceneLine.length();
         emb_set_radius(obj->geometry, radius);
         if (painter) {
@@ -3233,13 +3273,13 @@ obj_update_rubber(Object *obj, QPainter* painter)
         break;
     }
     case OBJ_RUBBER_CIRCLE_1P_DIA: {
-        QPointF sceneCenterPoint = obj_rubber_point(obj, "CIRCLE_CENTER");
-        QPointF sceneQSnapPoint = obj_rubber_point(obj, "CIRCLE_DIAMETER");
-        QPointF itemCenterPoint = obj->mapFromScene(sceneCenterPoint);
-        QPointF itemQSnapPoint = obj->mapFromScene(sceneQSnapPoint);
-        QLineF itemLine(itemCenterPoint, itemQSnapPoint);
-        obj_set_center(obj, to_emb_vector(sceneCenterPoint));
-        QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
+        EmbVector sceneCenterPoint = obj_rubber_point(obj, "CIRCLE_CENTER");
+        EmbVector sceneQSnapPoint = obj_rubber_point(obj, "CIRCLE_DIAMETER");
+        EmbVector itemCenterPoint = obj_map_rubber(obj, "CIRCLE_CENTER");
+        EmbVector itemQSnapPoint = obj_map_rubber(obj, "CIRCLE_DIAMETER");
+        QLineF itemLine(to_qpointf(itemCenterPoint), to_qpointf(itemQSnapPoint));
+        obj_set_center(obj, sceneCenterPoint);
+        QLineF sceneLine(to_qpointf(sceneCenterPoint), to_qpointf(sceneQSnapPoint));
         double diameter = sceneLine.length();
         emb_set_diameter(obj->geometry, diameter);
         if (painter) {
@@ -3249,9 +3289,9 @@ obj_update_rubber(Object *obj, QPainter* painter)
         break;
     }
     case OBJ_RUBBER_CIRCLE_2P: {
-        QPointF sceneTan1Point = obj_rubber_point(obj, "CIRCLE_TAN1");
-        QPointF sceneQSnapPoint = obj_rubber_point(obj, "CIRCLE_TAN2");
-        QLineF sceneLine(sceneTan1Point, sceneQSnapPoint);
+        EmbVector sceneTan1Point = obj_rubber_point(obj, "CIRCLE_TAN1");
+        EmbVector sceneQSnapPoint = obj_rubber_point(obj, "CIRCLE_TAN2");
+        QLineF sceneLine(to_qpointf(sceneTan1Point), to_qpointf(sceneQSnapPoint));
         obj_set_center(obj, to_emb_vector(sceneLine.pointAt(0.5)));
         double diameter = sceneLine.length();
         emb_set_diameter(obj->geometry, diameter);
@@ -3259,36 +3299,30 @@ obj_update_rubber(Object *obj, QPainter* painter)
         break;
     }
     case OBJ_RUBBER_CIRCLE_3P: {
-        QPointF sceneTan1Point = obj_rubber_point(obj, "CIRCLE_TAN1");
-        QPointF sceneTan2Point = obj_rubber_point(obj, "CIRCLE_TAN2");
-        QPointF sceneTan3Point = obj_rubber_point(obj, "CIRCLE_TAN3");
-
         EmbGeometry g;
-        g.object.arc.start = to_emb_vector(sceneTan1Point);
-        g.object.arc.mid = to_emb_vector(sceneTan2Point);
-        g.object.arc.end = to_emb_vector(sceneTan3Point);
+        g.object.arc.start = obj_rubber_point(obj, "CIRCLE_TAN1");
+        g.object.arc.mid = obj_rubber_point(obj, "CIRCLE_TAN2");
+        g.object.arc.end = obj_rubber_point(obj, "CIRCLE_TAN3");
         g.type = EMB_ARC;
         EmbVector center = emb_arc_center(g);
         obj_set_center(obj, center);
-        double radius = emb_vector_distance(center, to_emb_vector(sceneTan3Point));
+        double radius = emb_vector_distance(center, g.object.arc.end);
         emb_set_radius(obj->geometry, radius);
         obj_update_path(obj);
         break;
     }
     case OBJ_RUBBER_DIMLEADER_LINE: {
-        QPointF sceneStartPoint = obj_rubber_point(obj, "DIMLEADER_LINE_START");
-        QPointF sceneQSnapPoint = obj_rubber_point(obj, "DIMLEADER_LINE_END");
+        EmbVector sceneStartPoint = obj_rubber_point(obj, "DIMLEADER_LINE_START");
+        EmbVector sceneQSnapPoint = obj_rubber_point(obj, "DIMLEADER_LINE_END");
 
         obj_set_end_point_1(obj, sceneStartPoint);
         obj_set_end_point_2(obj, sceneQSnapPoint);
         break;
     }
     case OBJ_RUBBER_ELLIPSE_LINE: {
-        QPointF sceneLinePoint1 = obj_rubber_point(obj, "ELLIPSE_LINE_POINT1");
-        QPointF sceneLinePoint2 = obj_rubber_point(obj, "ELLIPSE_LINE_POINT2");
-        QPointF itemLinePoint1  = obj->mapFromScene(sceneLinePoint1);
-        QPointF itemLinePoint2  = obj->mapFromScene(sceneLinePoint2);
-        QLineF itemLine(itemLinePoint1, itemLinePoint2);
+        EmbVector itemLinePoint1  = obj_map_rubber(obj, "ELLIPSE_LINE_POINT1");
+        EmbVector itemLinePoint2  = obj_map_rubber(obj, "ELLIPSE_LINE_POINT2");
+        QLineF itemLine(to_qpointf(itemLinePoint1), to_qpointf(itemLinePoint2));
         if (painter) {
             obj_draw_rubber_line(obj, itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
@@ -3296,34 +3330,29 @@ obj_update_rubber(Object *obj, QPainter* painter)
         break;
     }
     case OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS: {
-        QPointF sceneAxis1Point1 = obj_rubber_point(obj, "ELLIPSE_AXIS1_POINT1");
-        QPointF sceneAxis1Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS1_POINT2");
-        QPointF sceneCenterPoint = obj_rubber_point(obj, "ELLIPSE_CENTER");
-        QPointF sceneAxis2Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS2_POINT2");
-        double ellipseWidth = obj_rubber_point(obj, "ELLIPSE_WIDTH").x();
-        double ellipseRot = obj_rubber_point(obj, "ELLIPSE_ROT").x();
+        EmbVector sceneAxis1Point1 = obj_rubber_point(obj, "ELLIPSE_AXIS1_POINT1");
+        EmbVector sceneAxis1Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS1_POINT2");
+        EmbVector sceneCenterPoint = obj_rubber_point(obj, "ELLIPSE_CENTER");
+        EmbVector sceneAxis2Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS2_POINT2");
+        double ellipseWidth = obj_rubber_point(obj, "ELLIPSE_WIDTH").x;
+        double ellipseRot = obj_rubber_point(obj, "ELLIPSE_ROT").x;
 
         todo("incorporate perpendicularDistance() into libembroidery.");
-        double px = sceneAxis2Point2.x();
-        double py = sceneAxis2Point2.y();
-        double x1 = sceneAxis1Point1.x();
-        double y1 = sceneAxis1Point1.y();
-        QLineF line(sceneAxis1Point1, sceneAxis1Point2);
+        QLineF line(to_qpointf(sceneAxis1Point1), to_qpointf(sceneAxis1Point2));
         QLineF norm = line.normalVector();
-        double dx = px-x1;
-        double dy = py-y1;
-        norm.translate(dx, dy);
+        EmbVector delta = sceneAxis2Point2 - sceneAxis1Point1;
+        norm.translate(delta.x, delta.y);
         QPointF iPoint;
         norm.intersects(line, &iPoint);
-        double ellipseHeight = QLineF(px, py, iPoint.x(), iPoint.y()).length()*2.0;
+        double ellipseHeight = emb_vector_distance(sceneAxis2Point2, to_emb_vector(iPoint))*2.0;
 
         obj_set_center(obj, sceneCenterPoint);
         // FIXME: obj->setSize(ellipseWidth, ellipseHeight);
         obj->setRotation(-ellipseRot);
 
-        QPointF itemCenterPoint = obj->mapFromScene(sceneCenterPoint);
-        QPointF itemAxis2Point2 = obj->mapFromScene(sceneAxis2Point2);
-        QLineF itemLine(itemCenterPoint, itemAxis2Point2);
+        EmbVector itemCenterPoint = obj_map_rubber(obj, "ELLIPSE_CENTER");
+        EmbVector itemAxis2Point2 = obj_map_rubber(obj, "ELLIPSE_AXIS2_POINT2");
+        QLineF itemLine(to_qpointf(itemCenterPoint), to_qpointf(itemAxis2Point2));
         if (painter) {
             obj_draw_rubber_line(obj, itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
@@ -3331,33 +3360,28 @@ obj_update_rubber(Object *obj, QPainter* painter)
         break;
     }
     case OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS: {
-        QPointF sceneAxis1Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS1_POINT2");
-        QPointF sceneCenterPoint = obj_rubber_point(obj, "ELLIPSE_CENTER");
-        QPointF sceneAxis2Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS2_POINT2");
-        double ellipseWidth = obj_rubber_point(obj, "ELLIPSE_WIDTH").x();
-        double ellipseRot = obj_rubber_point(obj, "ELLIPSE_ROT").x();
+        EmbVector sceneAxis1Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS1_POINT2");
+        EmbVector sceneCenterPoint = obj_rubber_point(obj, "ELLIPSE_CENTER");
+        EmbVector sceneAxis2Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS2_POINT2");
+        double ellipseWidth = obj_rubber_point(obj, "ELLIPSE_WIDTH").x;
+        double ellipseRot = obj_rubber_point(obj, "ELLIPSE_ROT").x;
 
         todo("incorporate perpendicularDistance() into libcgeometry.");
-        double px = sceneAxis2Point2.x();
-        double py = sceneAxis2Point2.y();
-        double x1 = sceneCenterPoint.x();
-        double y1 = sceneCenterPoint.y();
-        QLineF line(sceneCenterPoint, sceneAxis1Point2);
+        QLineF line(to_qpointf(sceneCenterPoint), to_qpointf(sceneAxis1Point2));
         QLineF norm = line.normalVector();
-        double dx = px-x1;
-        double dy = py-y1;
-        norm.translate(dx, dy);
+        EmbVector delta = sceneAxis2Point2 - sceneCenterPoint;
+        norm.translate(delta.x, delta.y);
         QPointF iPoint;
         norm.intersects(line, &iPoint);
-        double ellipseHeight = QLineF(px, py, iPoint.x(), iPoint.y()).length()*2.0;
+        double ellipseHeight = emb_vector_distance(sceneAxis2Point2, to_emb_vector(iPoint)) * 2.0;
 
         obj_set_center(obj, sceneCenterPoint);
         obj->setObjectSize(ellipseWidth, ellipseHeight);
         obj->setRotation(-ellipseRot);
 
-        QPointF itemCenterPoint = obj->mapFromScene(sceneCenterPoint);
-        QPointF itemAxis2Point2 = obj->mapFromScene(sceneAxis2Point2);
-        QLineF itemLine(itemCenterPoint, itemAxis2Point2);
+        EmbVector itemCenterPoint = obj_map_rubber(obj, "ELLISPE_CENTER");
+        EmbVector itemAxis2Point2 = obj_map_rubber(obj, "ELLIPSE_AXIS2_POINT2");
+        QLineF itemLine(to_qpointf(itemCenterPoint), to_qpointf(itemAxis2Point2));
         if (painter) {
             obj_draw_rubber_line(obj, itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
@@ -3365,19 +3389,16 @@ obj_update_rubber(Object *obj, QPainter* painter)
         break;
     }
     case OBJ_RUBBER_IMAGE: {
-        QPointF sceneStartPoint = obj_rubber_point(obj, "IMAGE_START");
-        QPointF sceneEndPoint = obj_rubber_point(obj, "IMAGE_END");
-        double x = sceneStartPoint.x();
-        double y = sceneStartPoint.y();
-        double w = sceneEndPoint.x() - sceneStartPoint.x();
-        double h = sceneEndPoint.y() - sceneStartPoint.y();
-        obj_set_rect(obj, x, y, w, h);
+        EmbVector start = obj_rubber_point(obj, "IMAGE_START");
+        EmbVector end = obj_rubber_point(obj, "IMAGE_END");
+        EmbVector delta = emb_vector_subtract(end, start);
+        obj_set_rect(obj, start.x, start.y, delta.x, delta.y);
         obj_update_path(obj);
         break;
     }
     case OBJ_RUBBER_LINE: {
-        QPointF sceneStartPoint = obj_rubber_point(obj, "LINE_START");
-        QPointF sceneQSnapPoint = obj_rubber_point(obj, "LINE_END");
+        EmbVector sceneStartPoint = obj_rubber_point(obj, "LINE_START");
+        EmbVector sceneQSnapPoint = obj_rubber_point(obj, "LINE_END");
 
         obj_set_end_point_1(obj, sceneStartPoint);
         obj_set_end_point_2(obj, sceneQSnapPoint);
@@ -3398,13 +3419,13 @@ obj_update_rubber(Object *obj, QPainter* painter)
             return;
         }
 
-        QString appendStr;
         QPainterPath rubberPath;
-        rubberPath.moveTo(obj->mapFromScene(obj_rubber_point(obj, "POLYGON_POINT_0")));
+        rubberPath.moveTo(to_qpointf(obj_map_rubber(obj, "POLYGON_POINT_0")));
         for (int i = 1; i <= num; i++) {
-            appendStr = "POLYGON_POINT_" + QString().setNum(i);
-            QPointF appendPoint = obj->mapFromScene(obj_rubber_point(obj, appendStr));
-            rubberPath.lineTo(appendPoint);
+            char key[MAX_STRING_LENGTH];
+            sprintf(key, "POLYGON_POINT_%d", i);
+            EmbVector appendPoint = obj_map_rubber(obj, key);
+            rubberPath.lineTo(to_qpointf(appendPoint));
         }
         /* rubberPath.lineTo(0,0); */
         obj_update_path_r(obj, rubberPath);
@@ -3416,10 +3437,10 @@ obj_update_rubber(Object *obj, QPainter* painter)
     case OBJ_RUBBER_POLYGON_INSCRIBE: {
         obj_set_pos(obj, obj_rubber_point(obj, "POLYGON_CENTER"));
 
-        quint16 numSides = obj_rubber_point(obj, "POLYGON_NUM_SIDES").x();
+        quint16 numSides = obj_rubber_point(obj, "POLYGON_NUM_SIDES").x;
 
-        QPointF inscribePoint = obj->mapFromScene(obj_rubber_point(obj, "POLYGON_INSCRIBE_POINT"));
-        QLineF inscribeLine = QLineF(QPointF(0,0), inscribePoint);
+        EmbVector inscribePoint = obj_map_rubber(obj, "POLYGON_INSCRIBE_POINT");
+        QLineF inscribeLine = QLineF(QPointF(0, 0), to_qpointf(inscribePoint));
         double inscribeAngle = inscribeLine.angle();
         double inscribeInc = 360.0/numSides;
 
@@ -3429,7 +3450,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
 
         QPainterPath inscribePath;
         /* First Point */
-        inscribePath.moveTo(inscribePoint);
+        inscribePath.moveTo(to_qpointf(inscribePoint));
         /* Remaining Points */
         for (int i = 1; i < numSides; i++) {
             inscribeLine.setAngle(inscribeAngle + inscribeInc*i);
@@ -3441,10 +3462,10 @@ obj_update_rubber(Object *obj, QPainter* painter)
     case OBJ_RUBBER_POLYGON_CIRCUMSCRIBE: {
         obj_set_pos(obj, obj_rubber_point(obj, "POLYGON_CENTER"));
 
-        quint16 numSides = obj_rubber_point(obj, "POLYGON_NUM_SIDES").x();
+        quint16 numSides = obj_rubber_point(obj, "POLYGON_NUM_SIDES").x;
 
-        QPointF circumscribePoint = obj->mapFromScene(obj_rubber_point(obj, "POLYGON_CIRCUMSCRIBE_POINT"));
-        QLineF circumscribeLine = QLineF(QPointF(0,0), circumscribePoint);
+        EmbVector circumscribePoint = obj_map_rubber(obj, "POLYGON_CIRCUMSCRIBE_POINT");
+        QLineF circumscribeLine = QLineF(QPointF(0, 0), to_qpointf(circumscribePoint));
         double circumscribeAngle = circumscribeLine.angle();
         double circumscribeInc = 360.0/numSides;
 
@@ -3477,8 +3498,11 @@ obj_update_rubber(Object *obj, QPainter* painter)
     case OBJ_RUBBER_POLYLINE: {
         obj_set_pos(obj, obj_rubber_point(obj, "POLYLINE_POINT_0"));
 
-        QLineF rubberLine(obj->data.normalPath.currentPosition(), obj->mapFromScene(obj_rubber_point(obj, "")));
-        if (painter) obj_draw_rubber_line(obj, rubberLine, painter, "VIEW_COLOR_CROSSHAIR");
+        QPointF p = to_qpointf(obj_map_rubber(obj, ""));
+        QLineF rubberLine(obj->data.normalPath.currentPosition(), p);
+        if (painter) {
+            obj_draw_rubber_line(obj, rubberLine, painter, "VIEW_COLOR_CROSSHAIR");
+        }
 
         bool ok = false;
         QString numStr = obj_rubber_text(obj, "POLYLINE_NUM_POINTS");
@@ -3488,12 +3512,12 @@ obj_update_rubber(Object *obj, QPainter* painter)
             return;
         }
 
-        QString appendStr;
         QPainterPath rubberPath;
         for (int i = 1; i <= num; i++) {
-            appendStr = "POLYLINE_POINT_" + QString().setNum(i);
-            QPointF appendPoint = obj->mapFromScene(obj_rubber_point(obj, appendStr));
-            rubberPath.lineTo(appendPoint);
+            char msg[MAX_STRING_LENGTH];
+            sprintf(msg, "POLYLINE_POINT_%d", i);
+            EmbVector appendPoint = obj_map_rubber(obj, msg);
+            rubberPath.lineTo(to_qpointf(appendPoint));
         }
         obj_update_path_r(obj, rubberPath);
 
@@ -3502,13 +3526,10 @@ obj_update_rubber(Object *obj, QPainter* painter)
         break;
     }
     case OBJ_RUBBER_RECTANGLE: {
-        QPointF sceneStartPoint = obj_rubber_point(obj, "RECTANGLE_START");
-        QPointF sceneEndPoint = obj_rubber_point(obj, "RECTANGLE_END");
-        double x = sceneStartPoint.x();
-        double y = sceneStartPoint.y();
-        double w = sceneEndPoint.x() - sceneStartPoint.x();
-        double h = sceneEndPoint.y() - sceneStartPoint.y();
-        obj_set_rect(obj, x,y,w,h);
+        EmbVector start = obj_rubber_point(obj, "RECTANGLE_START");
+        EmbVector end = obj_rubber_point(obj, "RECTANGLE_END");
+        EmbVector delta = emb_vector_subtract(end, start);
+        obj_set_rect(obj, start.x, start.y, delta.x, delta.y);
         obj_update_path(obj);
         break;
     }
@@ -3516,9 +3537,9 @@ obj_update_rubber(Object *obj, QPainter* painter)
         obj_set_text_font(obj, obj_rubber_text(obj, "TEXT_FONT"));
         obj_set_text_justify(obj, obj_rubber_text(obj, "TEXT_JUSTIFY"));
         obj_set_pos(obj, obj_rubber_point(obj, "TEXT_POINT"));
-        QPointF hr = obj_rubber_point(obj, "TEXT_HEIGHT_ROTATION");
-        obj_set_text_size(obj, hr.x());
-        obj->setRotation(hr.y());
+        EmbVector hr = obj_rubber_point(obj, "TEXT_HEIGHT_ROTATION");
+        obj_set_text_size(obj, hr.x);
+        obj->setRotation(hr.y);
         obj_set_text(obj, obj_rubber_text(obj, "TEXT_RAPID"));
         break;
     }
@@ -3532,34 +3553,26 @@ obj_update_rubber(Object *obj, QPainter* painter)
 }
 
 /* . */
-QPointF
+EmbVector
 obj_end_point_2(Object *obj)
 {
     QLineF lyne = obj_line(obj);
-    QPointF endPoint2(lyne.x2(), lyne.y2());
+    EmbVector endPoint2;
+    endPoint2.x = lyne.x2();
+    endPoint2.y = lyne.y2();
     return obj_pos(obj) + scale_and_rotate(endPoint2, obj->scale(), obj->rotation());
 }
 
 /* . */
 void
-obj_set_end_point_2(Object *obj, QPointF endPt2)
+obj_set_end_point_2(Object *obj, EmbVector endPt2)
 {
-    obj_set_end_point_2(obj, endPt2.x(), endPt2.y());
-}
-
-/* . */
-void
-obj_set_end_point_2(Object *obj, double x2, double y2)
-{
-    QPointF endPt1 = obj_pos(obj);
-    double x1 = endPt1.x();
-    double y1 = endPt1.y();
-    double dx = x2 - x1;
-    double dy = y2 - y1;
+    EmbVector endPt1 = obj_pos(obj);
+    EmbVector delta = endPt2 - endPt1;
     obj->setRotation(0);
     obj->setScale(1);
-    obj_set_line(obj, 0, 0, dx, dy);
-    obj->setPos(x1, y1);
+    obj_set_line(obj, 0, 0, delta.x, delta.y);
+    obj->setPos(endPt1.x, endPt1.y);
 }
 
 /* . */
@@ -3574,23 +3587,23 @@ Object::vulcanize()
     switch (obj->geometry->type) {
     case EMB_POLYLINE:
         if (!data.normalPath.elementCount()) {
-            QMessageBox::critical(0,
-                QObject::tr("Empty Polyline Error"),
-                QObject::tr("The polyline added contains no points. The command that created this object has flawed logic."));
+            critical_box(
+                translate("Empty Polyline Error"),
+                translate("The polyline added contains no points. The command that created this object has flawed logic."));
         }
         break;
     case EMB_POLYGON:
         if (!data.normalPath.elementCount()) {
-            QMessageBox::critical(0,
-                QObject::tr("Empty Polygon Error"),
-                QObject::tr("The polygon added contains no points. The command that created this object has flawed logic."));
+            critical_box(
+                translate("Empty Polygon Error"),
+                translate("The polygon added contains no points. The command that created this object has flawed logic."));
         }
         break;
     case EMB_PATH:
         if (!data.normalPath.elementCount()) {
-            QMessageBox::critical(0,
-                QObject::tr("Empty Path Error"),
-                QObject::tr("The path added contains no points. The command that created this object has flawed logic."));
+            critical_box(
+                translate("Empty Path Error"),
+                translate("The path added contains no points. The command that created this object has flawed logic."));
         }
         break;
     default:
@@ -3599,49 +3612,50 @@ Object::vulcanize()
 }
 
 /* . */
-QList<QPointF>
+QList<EmbVector>
 Object::allGripPoints()
 {
-    QList<QPointF> gripPoints;
+    QList<EmbVector> gripPoints;
     switch (obj->geometry->type) {
     case EMB_ARC: {
-        gripPoints << obj_center(obj)
-            << obj_start_point(obj)
-            << obj_mid_point(obj)
-            << obj_end_point(obj);
+        gripPoints.append(obj_center(obj));
+        gripPoints.append(obj_start_point(obj));
+        gripPoints.append(obj_mid_point(obj));
+        gripPoints.append(obj_end_point(obj));
         break;
     }
     case EMB_CIRCLE:
     case EMB_ELLIPSE: {
-        gripPoints << obj_center(obj)
-            << to_qpointf(emb_get_quadrant(*(obj->geometry), 0))
-            << to_qpointf(emb_get_quadrant(*(obj->geometry), 90))
-            << to_qpointf(emb_get_quadrant(*(obj->geometry), 180))
-            << to_qpointf(emb_get_quadrant(*(obj->geometry), 270));
+        gripPoints.append(obj_center(obj));
+        gripPoints.append(emb_quadrant(obj->geometry, 0));
+        gripPoints.append(emb_quadrant(obj->geometry, 90));
+        gripPoints.append(emb_quadrant(obj->geometry, 180));
+        gripPoints.append(emb_quadrant(obj->geometry, 270));
         break;
     }
     case EMB_DIM_LEADER: {
-        gripPoints << obj_end_point_1(obj) << obj_end_point_2(obj);
+        gripPoints.append(obj_end_point_1(obj));
+        gripPoints.append(obj_end_point_2(obj));
         if (obj->data.curved) {
-            gripPoints << obj_mid_point(obj);
+            gripPoints.append(obj_mid_point(obj));
         }
         break;
     }
     case EMB_IMAGE: {
-        gripPoints << obj_top_left(obj)
-             << obj_top_right(obj)
-             << obj_bottom_left(obj)
-             << obj_bottom_right(obj);
+        gripPoints.append(obj_top_left(obj));
+        gripPoints.append(obj_top_right(obj));
+        gripPoints.append(obj_bottom_left(obj));
+        gripPoints.append(obj_bottom_right(obj));
         break;
     }
     case EMB_LINE: {
-        gripPoints << obj_end_point_1(obj)
-            << obj_end_point_2(obj)
-            << obj_mid_point(obj);
+        gripPoints.append(obj_end_point_1(obj));
+        gripPoints.append(obj_end_point_2(obj));
+        gripPoints.append(obj_mid_point(obj));
         break;
     }
     case EMB_PATH: {
-        gripPoints << obj_pos(obj);
+        gripPoints.append(obj_pos(obj));
         todo("loop thru all path Elements and return their points.");
         break;
     }
@@ -3650,56 +3664,56 @@ Object::allGripPoints()
         QPainterPath::Element element;
         for (int i = 0; i < obj->data.normalPath.elementCount(); ++i) {
             element = obj->data.normalPath.elementAt(i);
-            gripPoints << mapToScene(element.x, element.y);
+            gripPoints.append(to_emb_vector(obj->mapToScene(element.x, element.y)));
         }
         break;
     }
     case EMB_TEXT_SINGLE:
     case EMB_POINT:
     default:
-        gripPoints << obj_pos(obj);
+        gripPoints.append(obj_pos(obj));
         break;
     }
     return gripPoints;
 }
 
 /* Returns the closest snap point to the mouse point */
-QPointF
-Object::mouseSnapPoint(QPointF mousePoint)
+EmbVector
+Object::mouseSnapPoint(EmbVector mousePoint)
 {
     return find_mouse_snap_point(allGripPoints(), mousePoint);
 }
 
 /* . */
 void
-obj_grip_edit(Object *obj, QPointF before, QPointF after)
+obj_grip_edit(Object *obj, EmbVector before, EmbVector after)
 {
+    EmbVector delta = emb_vector_subtract(after, before);
     switch (obj->geometry->type) {
     case EMB_ARC: {
         todo("gripEdit() for ArcObject.");
         break;
     }
     case EMB_CIRCLE: {
-        if (before == obj_center(obj)) {
-            QPointF delta = after-before;
-            obj->moveBy(delta.x(), delta.y());
+        if (emb_approx(before, obj_center(obj))) {
+            obj->moveBy(delta.x, delta.y);
         }
         else {
-            emb_set_radius(obj->geometry, QLineF(obj_center(obj), after).length());
+            double length = emb_vector_distance(obj_center(obj), after);
+            emb_set_radius(obj->geometry, length);
         }
         break;
     }
     case EMB_DIM_LEADER:
     case EMB_LINE: {
-        if (before == obj_end_point_1(obj)) {
+        if (emb_approx(before, obj_end_point_1(obj))) {
             obj_set_end_point_1(obj, after);
         }
-        else if (before == obj_end_point_2(obj)) {
+        else if (emb_approx(before, obj_end_point_2(obj))) {
             obj_set_end_point_2(obj, after);
         }
-        else if (before == obj_mid_point(obj)) {
-            QPointF delta = after - before;
-            obj->moveBy(delta.x(), delta.y());
+        else if (emb_approx(before, obj_mid_point(obj))) {
+            obj->moveBy(delta.x, delta.y);
         }
         break;
     }
@@ -3709,25 +3723,24 @@ obj_grip_edit(Object *obj, QPointF before, QPointF after)
     }
     case EMB_IMAGE:
     case EMB_RECT: {
-        QPointF delta = after - before;
-        double height = emb_get_height(*(obj->geometry));
-        double width = emb_get_width(*(obj->geometry));
-        QPointF tl = obj_top_left(obj);
-        if (before == tl) {
-            obj_set_rect(obj, after.x(), after.y(),
-                width - delta.x(), height - delta.y());
+        double height = emb_height(obj->geometry);
+        double width = emb_width(obj->geometry);
+        EmbVector tl = obj_top_left(obj);
+        if (emb_approx(before, tl)) {
+            obj_set_rect(obj, after.x, after.y,
+                width - delta.x, height - delta.y);
         }
-        else if (before == obj_top_right(obj)) {
-            obj_set_rect(obj, tl.x(), tl.y()+delta.y(),
-                width + delta.x(), height - delta.y());
+        else if (emb_approx(before, obj_top_right(obj))) {
+            obj_set_rect(obj, tl.x, tl.y+delta.y,
+                width + delta.x, height - delta.y);
         }
-        else if (before == obj_bottom_left(obj)) {
-            obj_set_rect(obj, tl.x()+delta.x(), tl.y(),
-                width - delta.x(), height + delta.y());
+        else if (emb_approx(before, obj_bottom_left(obj))) {
+            obj_set_rect(obj, tl.x+delta.x, tl.y,
+                width - delta.x, height + delta.y);
         }
-        else if (before == obj_bottom_right(obj)) {
-            obj_set_rect(obj, tl.x(), tl.y(),
-                width + delta.x(), height + delta.y());
+        else if (emb_approx(before, obj_bottom_right(obj))) {
+            obj_set_rect(obj, tl.x, tl.y,
+                width + delta.x, height + delta.y);
         }
         break;
     }
@@ -3741,8 +3754,8 @@ obj_grip_edit(Object *obj, QPointF before, QPointF after)
         if (obj->data.gripIndex == -1) {
             return;
         }
-        QPointF a = obj->mapFromScene(after);
-        obj->data.normalPath.setElementPositionAt(obj->data.gripIndex, a.x(), a.y());
+        EmbVector a = map_from_scene(obj, after);
+        obj->data.normalPath.setElementPositionAt(obj->data.gripIndex, a.x, a.y);
         obj_update_path_r(obj, obj->data.normalPath);
         obj->data.gripIndex = -1;
         break;
@@ -3750,9 +3763,8 @@ obj_grip_edit(Object *obj, QPointF before, QPointF after)
     case EMB_TEXT_SINGLE:
     case EMB_POINT:
     default: {
-        if (before == obj_pos(obj)) {
-            QPointF delta = after - before;
-            obj->moveBy(delta.x(), delta.y());
+        if (emb_approx(before, obj_pos(obj))) {
+            obj->moveBy(delta.x, delta.y);
         }
         break;
     }
@@ -3780,10 +3792,10 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
 
     switch (obj->geometry->type) {
     case EMB_ARC: {
-        double startAngle = (emb_get_start_angle(*(obj->geometry)) + obj->rotation())*16;
-        double spanAngle = emb_get_included_angle(*(obj->geometry)) * 16;
+        double startAngle = (emb_start_angle(obj->geometry) + obj->rotation())*16;
+        double spanAngle = emb_included_angle(obj->geometry) * 16;
 
-        if (emb_get_clockwise(*(obj->geometry))) {
+        if (emb_clockwise(obj->geometry)) {
             spanAngle = -spanAngle;
         }
 
@@ -3813,7 +3825,7 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
 
         if (objScene->property("ENABLE_LWT").toBool()
             && objScene->property("ENABLE_REAL").toBool()) {
-            realRender(painter, path());
+            obj_real_render(obj, painter, path());
         }
         break;
     }
@@ -3843,7 +3855,7 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
 
         if (objScene->property("ENABLE_LWT").toBool()
             && objScene->property("ENABLE_REAL").toBool()) {
-            realRender(painter, obj->data.normalPath);
+            obj_real_render(obj, painter, obj->data.normalPath);
         }
         break;
     }
@@ -3885,8 +3897,8 @@ Object::objectSavePath() const
     case EMB_DIM_LEADER:
     case EMB_LINE: {
         QPainterPath path;
-        QPointF delta = obj_delta(obj);
-        path.lineTo(delta.x(), delta.y());
+        EmbVector delta = obj_delta(obj);
+        path.lineTo(delta.x, delta.y);
         return path;
     }
     case EMB_POINT: {

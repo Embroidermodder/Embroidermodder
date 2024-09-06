@@ -31,28 +31,29 @@ to_qpointf(EmbVector v)
 }
 
 /* . */
-QPointF
-scale_and_rotate(QPointF v, double scale, double angle)
+EmbVector
+scale_and_rotate(EmbVector v, double scale, double angle)
 {
+    EmbVector w;
     double rot = radians(angle);
     double cosRot = cos(rot);
     double sinRot = sin(rot);
-    double x = v.x() * scale;
-    double y = v.y() * scale;
-    double rotX = x*cosRot - y*sinRot;
-    double rotY = x*sinRot + y*cosRot;
-    return QPointF(rotX, rotY);    
+    w.x = v.x * scale;
+    w.y = v.y * scale;
+    w.x = w.x * cosRot - w.y * sinRot;
+    w.y = w.x * sinRot + w.y * cosRot;
+    return w;    
 }
 
 /* . */
-QPointF
-find_mouse_snap_point(QList<QPointF> snap_points, const QPointF& mouse_point)
+EmbVector
+find_mouse_snap_point(QList<EmbVector> snap_points, EmbVector mouse_point)
 {
     float closest = 1.0e10;
-    QPointF result = snap_points[0];
+    EmbVector result = snap_points[0];
     int i;
     for (i=0; i<snap_points.count(); i++) {
-        float distance = QLineF(snap_points[i], mouse_point).length();
+        float distance = emb_vector_distance(snap_points[i], mouse_point);
         if (distance < closest) {
             closest = distance;
             result = snap_points[i];

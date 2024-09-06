@@ -7,64 +7,6 @@ GENERATOR="Unix Makefiles"
 SYSTEM="linux"
 VERSION="2_0_0-alpha"
 
-function todo_category () {
-
-	echo "==================================================" >> $2
-	echo $1 >> $2
-	echo "==================================================" >> $2
-	# include the line number in output
-	# do not search temporary, object, and moc files
-	grep --line-number --recursive --exclude=*.*~ --exclude=*.o \
-		--exclude=moc*.cpp --exclude=*Makefile* --exclude=*TODO* \
-		--exclude=*generate-todo* --exclude=*_memleak* $1 src >> $2
-	echo "" >> $2
-
-}
-
-function todo_report () {
-
-	OUTPUTFILE="TODO"
-
-	rm -f ${OUTPUTFILE}
-	echo "==================================================" >> ${OUTPUTFILE}
-	echo "This list was generated on:" >> ${OUTPUTFILE}
-	date >> ${OUTPUTFILE}
-	echo "==================================================" >> ${OUTPUTFILE}
-	echo "" >> ${OUTPUTFILE}
-
-	todo_category "TODO" ${OUTPUTFILE}
-	todo_category "BUG" ${OUTPUTFILE}
-	todo_category "HACK" ${OUTPUTFILE}
-	todo_category "WARNING" ${OUTPUTFILE}
-	todo_category "NOTE" ${OUTPUTFILE}
-
-}
-
-function valgrind_run () {
-
-	valgrind --leak-check=full --show-reachable=yes --error-limit=no \
-		--suppressions=valgrind-supp/valgrind-qt.supp \
-		--suppressions=valgrind-supp/valgrind-misc.supp \
-		--gen-suppressions=all --log-file=_memleak.txt -v ./embroidermodder2 "$@"
-	cat ./_memleak.txt | ./valgrind-supp/valgrind-create-suppressions.sh > _memleak.supp
-
-	MEMORYLEAKS=$(cat "_memleak.txt" | grep "All heap blocks were freed -- no leaks are possible")
-
-	echo "=============================="
-	if [[ -z "$MEMORYLEAKS" ]]; then
-	    echo $(cat "_memleak.txt" | grep "LEAK SUMMARY:")
-	    echo $(cat "_memleak.txt" | grep "definitely lost:")
-	    echo $(cat "_memleak.txt" | grep "indirectly lost:")
-	    echo $(cat "_memleak.txt" | grep "possibly lost:")
-	    echo $(cat "_memleak.txt" | grep "still reachable:")
-	    echo "Review _memleak.txt for more information."
-	else
-	    echo "No memory leaks found :D"
-	fi
-	echo "=============================="
-
-}
-
 function run_cmake () {
 
 	git submodule init
@@ -105,8 +47,6 @@ function get_dependancies () {
 
 }
 
-# Lighter weight style static site generator for the main pages.
-#
 # build_emscripten_version
 #
 # git clone https://github.com/embroidermodder/libembroidery

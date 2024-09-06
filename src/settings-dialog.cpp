@@ -12,7 +12,7 @@
 #include "embroidermodder.h"
 
 /* . */
-Settings_Dialog::Settings_Dialog(MainWindow* mw, const QString& showTab, QWidget* parent) : QDialog(parent)
+Settings_Dialog::Settings_Dialog(MainWindow* mw, QString showTab, QWidget* parent) : QDialog(parent)
 {
     setMinimumSize(750,550);
 
@@ -106,7 +106,7 @@ Settings_Dialog::createTabGeneral()
     QString current = general_language.dialog;
     current[0] = current[0].toUpper();
     comboBoxLanguage->setCurrentIndex(comboBoxLanguage->findText(current));
-    connect(comboBoxLanguage, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboBoxLanguageCurrentIndexChanged(const QString&)));
+    connect(comboBoxLanguage, SIGNAL(currentIndexChanged(QString )), this, SLOT(comboBoxLanguageCurrentIndexChanged(QString )));
 
     QVBoxLayout* vboxLayoutLanguage = new QVBoxLayout(groupBoxLanguage);
     vboxLayoutLanguage->addWidget(labelLanguage);
@@ -125,7 +125,7 @@ Settings_Dialog::createTabGeneral()
         comboBoxIconTheme->addItem(QIcon("icons/" + dirName + "/theme.png"), dirName);
     }
     comboBoxIconTheme->setCurrentIndex(comboBoxIconTheme->findText(general_icon_theme.dialog));
-    connect(comboBoxIconTheme, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboBoxIconThemeCurrentIndexChanged(const QString&)));
+    connect(comboBoxIconTheme, SIGNAL(currentIndexChanged(QString )), this, SLOT(comboBoxIconThemeCurrentIndexChanged(QString )));
 
     QLabel* labelIconSize = new QLabel(translate("Icon Size"), groupBoxIcon);
     QComboBox* comboBoxIconSize = new QComboBox(groupBoxIcon);
@@ -422,13 +422,13 @@ QWidget* Settings_Dialog::createTabPrompt()
     strcpy(prompt_font_family.dialog, prompt_font_family.setting);
     strcpy(prompt_font_family.preview, prompt_font_family.dialog);
     comboBoxFontFamily->setCurrentFont(QFont(prompt_font_family.preview));
-    connect(comboBoxFontFamily, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboBoxPromptFontFamilyCurrentIndexChanged(const QString&)));
+    connect(comboBoxFontFamily, SIGNAL(currentIndexChanged(QString )), this, SLOT(comboBoxPromptFontFamilyCurrentIndexChanged(QString )));
     QLabel* labelFontStyle = new QLabel(translate("Font Style"), groupBoxFont);
     QComboBox* comboBoxFontStyle = new QComboBox(groupBoxFont);
     comboBoxFontStyle->addItem("Normal");
     comboBoxFontStyle->addItem("Italic");
     comboBoxFontStyle->setEditText(prompt_font_style.preview);
-    connect(comboBoxFontStyle, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboBoxPromptFontStyleCurrentIndexChanged(const QString&)));
+    connect(comboBoxFontStyle, SIGNAL(currentIndexChanged(QString )), this, SLOT(comboBoxPromptFontStyleCurrentIndexChanged(QString )));
     QLabel* labelFontSize = new QLabel(translate("Font Size"), groupBoxFont);
     QSpinBox* spinBoxFontSize = new QSpinBox(groupBoxFont);
     spinBoxFontSize->setRange(4, 64);
@@ -732,7 +732,7 @@ Settings_Dialog::createTabGridRuler()
     comboBoxGridType->addItem("Isometric");
     strcpy(grid_type.dialog, grid_type.setting);
     comboBoxGridType->setCurrentIndex(comboBoxGridType->findText(grid_type.dialog));
-    connect(comboBoxGridType, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboBoxGridTypeCurrentIndexChanged(const QString&)));
+    connect(comboBoxGridType, SIGNAL(currentIndexChanged(QString )), this, SLOT(comboBoxGridTypeCurrentIndexChanged(QString )));
 
     QCheckBox* checkBoxGridCenterOnOrigin = new QCheckBox(translate("Center the grid on the origin"), groupBoxGridGeom);
     checkBoxGridCenterOnOrigin->setObjectName("checkBoxGridCenterOnOrigin");
@@ -1257,13 +1257,13 @@ Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
 }
 
 void
-Settings_Dialog::comboBoxLanguageCurrentIndexChanged(const QString& lang)
+Settings_Dialog::comboBoxLanguageCurrentIndexChanged(QString lang)
 {
     strcpy(general_language.dialog, qPrintable(lang.toLower()));
 }
 
 void
-Settings_Dialog::comboBoxIconThemeCurrentIndexChanged(const QString& theme)
+Settings_Dialog::comboBoxIconThemeCurrentIndexChanged(QString theme)
 {
     strcpy(general_icon_theme.dialog, qPrintable(theme));
 }
@@ -1658,7 +1658,7 @@ Settings_Dialog::currentPromptBackgroundColorChanged(const QColor& color)
 
 /* . */
 void
-Settings_Dialog::comboBoxPromptFontFamilyCurrentIndexChanged(const QString& family)
+Settings_Dialog::comboBoxPromptFontFamilyCurrentIndexChanged(QString family)
 {
     strcpy(prompt_font_family.preview, qPrintable(family));
     setPromptFontFamily(prompt_font_family.preview);
@@ -1666,7 +1666,7 @@ Settings_Dialog::comboBoxPromptFontFamilyCurrentIndexChanged(const QString& fami
 
 /* . */
 void
-Settings_Dialog::comboBoxPromptFontStyleCurrentIndexChanged(const QString& style)
+Settings_Dialog::comboBoxPromptFontStyleCurrentIndexChanged(QString style)
 {
     strcpy(prompt_font_style.preview, qPrintable(style));
     setPromptFontStyle(prompt_font_style.preview);
@@ -1804,7 +1804,7 @@ Settings_Dialog::checkBoxGridLoadFromFileStateChanged(int checked)
 
 /* . */
 void
-Settings_Dialog::comboBoxGridTypeCurrentIndexChanged(const QString& type)
+Settings_Dialog::comboBoxGridTypeCurrentIndexChanged(QString type)
 {
     strcpy(grid_type.dialog, qPrintable(type));
 
@@ -2237,3 +2237,4 @@ Settings_Dialog::rejectChanges()
 
     reject();
 }
+
