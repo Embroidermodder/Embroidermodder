@@ -136,7 +136,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 {
     readSettings();
 
-    QString lang = general_language.setting;
+    QString lang = get_str(GENERAL_LANGUAGE);
     debug_message(qPrintable("language: " + lang));
     if (lang == "system") {
         lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
@@ -146,15 +146,13 @@ MainWindow::MainWindow() : QMainWindow(0)
     _main = this;
 
     /* Menus */
-    int n_menus = string_array_length(menu_list)/2;
-    for (int i=0; i<n_menus; i++) {
-        menuHash[menu_list[2*i+0]] = new QMenu(translate(menu_list[2*i+1]), this);
+    for (int i=0; i<N_MENUS; i++) {
+        menu[i] = new QMenu(translate(menu_list[i]), this);
     }
 
     /* Toolbars */
-    int n_toolbars = string_array_length(toolbar_list)/2;
-    for (int i=0; i<n_toolbars; i++) {
-        toolbarHash[toolbar_list[2*i+0]] = new QToolBar(translate(toolbar_list[2*i+1]), this);
+    for (int i=0; i<N_TOOLBARS; i++) {
+        toolbar[i] = new QToolBar(translate(toolbar_list[i]), this);
     }
 
     /* Selectors */
@@ -271,35 +269,35 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     debug_message("createAllToolbars()");
 
-    add_to_toolbar("File", file_toolbar);
-    add_to_toolbar("Edit", edit_toolbar);
-    add_to_toolbar("Zoom", zoom_toolbar);
-    add_to_toolbar("Pan", pan_toolbar);
-    add_to_toolbar("View", view_toolbar);
-    add_to_toolbar("Icon", icon_toolbar);
-    add_to_toolbar("Help", help_toolbar);
+    add_to_toolbar(TOOLBAR_FILE, file_toolbar);
+    add_to_toolbar(TOOLBAR_EDIT, edit_toolbar);
+    add_to_toolbar(TOOLBAR_ZOOM, zoom_toolbar);
+    add_to_toolbar(TOOLBAR_PAN, pan_toolbar);
+    add_to_toolbar(TOOLBAR_VIEW, view_toolbar);
+    add_to_toolbar(TOOLBAR_ICON, icon_toolbar);
+    add_to_toolbar(TOOLBAR_HELP, help_toolbar);
 
     debug_message("createLayerToolbar()");
 
-    toolbarHash["Layer"]->setObjectName("toolbarLayer");
-    toolbarHash["Layer"]->addAction(actionHash[ACTION_MAKE_LAYER_CURRENT]);
-    toolbarHash["Layer"]->addAction(actionHash[ACTION_LAYERS]);
+    toolbar[TOOLBAR_LAYER]->setObjectName("toolbarLayer");
+    toolbar[TOOLBAR_LAYER]->addAction(actionHash[ACTION_MAKE_LAYER_CURRENT]);
+    toolbar[TOOLBAR_LAYER]->addAction(actionHash[ACTION_LAYERS]);
 
     QString icontheme = general_icon_theme.setting;
 
     layerSelector->setFocusProxy(prompt);
     /* TODO: Create layer pixmaps by concatenating several icons. */
     add_to_selector(layerSelector, layer_list, "string", true);
-    toolbarHash["Layer"]->addWidget(layerSelector);
+    toolbar[TOOLBAR_LAYER]->addWidget(layerSelector);
     connect(layerSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(layerSelectorIndexChanged(int)));
 
-    toolbarHash["Layer"]->addAction(actionHash[ACTION_LAYER_PREVIOUS]);
+    toolbar[TOOLBAR_LAYER]->addAction(actionHash[ACTION_LAYER_PREVIOUS]);
 
-    connect(toolbarHash["Layer"], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+    connect(toolbar[TOOLBAR_LAYER], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 
     debug_message("createPropertiesToolbar()");
 
-    toolbarHash["Properties"]->setObjectName("toolbarProperties");
+    toolbar[TOOLBAR_PROPERTIES]->setObjectName("toolbarProperties");
 
     colorSelector->setFocusProxy(prompt);
     colorSelector->addItem(create_icon("colorbylayer"), "ByLayer");
@@ -312,91 +310,91 @@ MainWindow::MainWindow() : QMainWindow(0)
     colorSelector->addItem(create_icon("colormagenta"), translate("Magenta"), qRgb(255, 0,255));
     colorSelector->addItem(create_icon("colorwhite"), translate("White"), qRgb(255,255,255));
     colorSelector->addItem(create_icon("colorother"), translate("Other..."));
-    toolbarHash["Properties"]->addWidget(colorSelector);
+    toolbar[TOOLBAR_PROPERTIES]->addWidget(colorSelector);
     connect(colorSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(colorSelectorIndexChanged(int)));
 
-    toolbarHash["Properties"]->addSeparator();
+    toolbar[TOOLBAR_PROPERTIES]->addSeparator();
     linetypeSelector->setFocusProxy(prompt);
     add_to_selector(linetypeSelector, line_type_list, "string", true);
-    toolbarHash["Properties"]->addWidget(linetypeSelector);
+    toolbar[TOOLBAR_PROPERTIES]->addWidget(linetypeSelector);
     connect(linetypeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(linetypeSelectorIndexChanged(int)));
 
-    toolbarHash["Properties"]->addSeparator();
+    toolbar[TOOLBAR_PROPERTIES]->addSeparator();
     lineweightSelector->setFocusProxy(prompt);
     add_to_selector(lineweightSelector, line_weight_list, "real", true);
     /* Prevent dropdown text readability being squish...d. */
     lineweightSelector->setMinimumContentsLength(8);
-    toolbarHash["Properties"]->addWidget(lineweightSelector);
+    toolbar[TOOLBAR_PROPERTIES]->addWidget(lineweightSelector);
     connect(lineweightSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(lineweightSelectorIndexChanged(int)));
 
-    connect(toolbarHash["Properties"], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+    connect(toolbar[TOOLBAR_PROPERTIES], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 
     debug_message("createTextToolbar()");
 
-    toolbarHash["Text"]->setObjectName("toolbarText");
+    toolbar[TOOLBAR_TEXT]->setObjectName("toolbarText");
 
-    toolbarHash["Text"]->addWidget(textFontSelector);
+    toolbar[TOOLBAR_TEXT]->addWidget(textFontSelector);
     textFontSelector->setCurrentFont(QFont(text_font.setting));
     connect(textFontSelector, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(textFontSelectorCurrentFontChanged(const QFont&)));
 
-    toolbarHash["Text"]->addAction(actionHash[ACTION_TEXT_BOLD]);
+    toolbar[TOOLBAR_TEXT]->addAction(actionHash[ACTION_TEXT_BOLD]);
     actionHash[ACTION_TEXT_BOLD]->setChecked(text_style_bold.setting);
-    toolbarHash["Text"]->addAction(actionHash[ACTION_TEXT_ITALIC]);
+    toolbar[TOOLBAR_TEXT]->addAction(actionHash[ACTION_TEXT_ITALIC]);
     actionHash[ACTION_TEXT_ITALIC]->setChecked(text_style_italic.setting);
-    toolbarHash["Text"]->addAction(actionHash[ACTION_TEXT_UNDERLINE]);
+    toolbar[TOOLBAR_TEXT]->addAction(actionHash[ACTION_TEXT_UNDERLINE]);
     actionHash[ACTION_TEXT_UNDERLINE]->setChecked(text_style_underline.setting);
-    toolbarHash["Text"]->addAction(actionHash[ACTION_TEXT_STRIKEOUT]);
+    toolbar[TOOLBAR_TEXT]->addAction(actionHash[ACTION_TEXT_STRIKEOUT]);
     actionHash[ACTION_TEXT_STRIKEOUT]->setChecked(text_style_strikeout.setting);
-    toolbarHash["Text"]->addAction(actionHash[ACTION_TEXT_OVERLINE]);
+    toolbar[TOOLBAR_TEXT]->addAction(actionHash[ACTION_TEXT_OVERLINE]);
     actionHash[ACTION_TEXT_OVERLINE]->setChecked(text_style_overline.setting);
 
     textSizeSelector->setFocusProxy(prompt);
     add_to_selector(textSizeSelector, text_size_list, "int", false);
     setTextSize(text_size.setting);
-    toolbarHash["Text"]->addWidget(textSizeSelector);
+    toolbar[TOOLBAR_TEXT]->addWidget(textSizeSelector);
     connect(textSizeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(textSizeSelectorIndexChanged(int)));
 
-    connect(toolbarHash["Text"], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+    connect(toolbar[TOOLBAR_TEXT], SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 
     debug_message("createPromptToolbar()");
 
-    toolbarHash["Prompt"]->setObjectName("toolbarPrompt");
-    toolbarHash["Prompt"]->addWidget(prompt);
-    toolbarHash["Prompt"]->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
-    connect(toolbarHash["Prompt"], SIGNAL(topLevelChanged(bool)), prompt, SLOT(floatingChanged(bool)));
+    toolbar[TOOLBAR_PROMPT]->setObjectName("toolbarPrompt");
+    toolbar[TOOLBAR_PROMPT]->addWidget(prompt);
+    toolbar[TOOLBAR_PROMPT]->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
+    connect(toolbar[TOOLBAR_PROMPT], SIGNAL(topLevelChanged(bool)), prompt, SLOT(floatingChanged(bool)));
 
-    add_to_toolbar("Draw", draw_toolbar);
-    add_to_toolbar("Modify", modify_toolbar);
+    add_to_toolbar(TOOLBAR_DRAW, draw_toolbar);
+    add_to_toolbar(TOOLBAR_MODIFY, modify_toolbar);
 
     /* Horizontal */
-    toolbarHash["View"]->setOrientation(Qt::Horizontal);
-    toolbarHash["Zoom"]->setOrientation(Qt::Horizontal);
-    toolbarHash["Layer"]->setOrientation(Qt::Horizontal);
-    toolbarHash["Properties"]->setOrientation(Qt::Horizontal);
-    toolbarHash["Text"]->setOrientation(Qt::Horizontal);
-    toolbarHash["Prompt"]->setOrientation(Qt::Horizontal);
+    toolbar[TOOLBAR_VIEW]->setOrientation(Qt::Horizontal);
+    toolbar[TOOLBAR_ZOOM]->setOrientation(Qt::Horizontal);
+    toolbar[TOOLBAR_LAYER]->setOrientation(Qt::Horizontal);
+    toolbar[TOOLBAR_PROPERTIES]->setOrientation(Qt::Horizontal);
+    toolbar[TOOLBAR_TEXT]->setOrientation(Qt::Horizontal);
+    toolbar[TOOLBAR_PROMPT]->setOrientation(Qt::Horizontal);
 
     /* Top */
     addToolBarBreak(Qt::TopToolBarArea);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["File"]);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["Edit"]);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["Help"]);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["Icon"]);
+    addToolBar(Qt::TopToolBarArea, toolbar[TOOLBAR_FILE]);
+    addToolBar(Qt::TopToolBarArea, toolbar[TOOLBAR_EDIT]);
+    addToolBar(Qt::TopToolBarArea, toolbar[TOOLBAR_HELP]);
+    addToolBar(Qt::TopToolBarArea, toolbar[TOOLBAR_ICON]);
     addToolBarBreak(Qt::TopToolBarArea);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["Zoom"]);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["Pan"]);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["View"]);
+    addToolBar(Qt::TopToolBarArea, toolbar[TOOLBAR_ZOOM]);
+    addToolBar(Qt::TopToolBarArea, toolbar[TOOLBAR_PAN]);
+    addToolBar(Qt::TopToolBarArea, toolbar[TOOLBAR_VIEW]);
     addToolBarBreak(Qt::TopToolBarArea);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["Layer"]);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["Properties"]);
+    addToolBar(Qt::TopToolBarArea, toolbar[TOOLBAR_LAYER]);
+    addToolBar(Qt::TopToolBarArea, toolbar[TOOLBAR_PROPERTIES]);
     addToolBarBreak(Qt::TopToolBarArea);
-    addToolBar(Qt::TopToolBarArea, toolbarHash["Text"]);
+    addToolBar(Qt::TopToolBarArea, toolbar[TOOLBAR_TEXT]);
     /* Bottom */
-    addToolBar(Qt::BottomToolBarArea, toolbarHash["Prompt"]);
+    addToolBar(Qt::BottomToolBarArea, toolbar[TOOLBAR_PROMPT]);
 
     /* Left */
-    addToolBar(Qt::LeftToolBarArea, toolbarHash["Draw"]);
-    addToolBar(Qt::LeftToolBarArea, toolbarHash["Modify"]);
+    addToolBar(Qt::LeftToolBarArea, toolbar[TOOLBAR_DRAW]);
+    addToolBar(Qt::LeftToolBarArea, toolbar[TOOLBAR_MODIFY]);
     addToolBarBreak(Qt::LeftToolBarArea);
 
     /* zoomToolBar->setToolButtonStyle(Qt::ToolButtonTextOnly); */
@@ -411,7 +409,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     showNormal();
 
-    toolbarHash["Prompt"]->show();
+    toolbar[TOOLBAR_PROMPT]->show();
 
     if (general_tip_of_the_day.setting && (!testing_mode)) {
         tipOfTheDay();
@@ -434,7 +432,7 @@ void
 MainWindow::recentMenuAboutToShow(void)
 {
     debug_message("recentMenuAboutToShow()");
-    menuHash["Recent"]->clear();
+    menu[MENU_RECENT]->clear();
 
     QFileInfo recentFileInfo;
     QString recentValue;
@@ -460,7 +458,7 @@ MainWindow::recentMenuAboutToShow(void)
                 rAction->setCheckable(false);
                 QString fname(opensave_recent_list_of_files.setting[i]);
                 rAction->setData(fname);
-                menuHash["Recent"]->addAction(rAction);
+                menu[MENU_RECENT]->addAction(rAction);
                 QObject::connect(rAction, SIGNAL(triggered()), _main,
                     SLOT(openrecentfile()));
             }
@@ -484,24 +482,24 @@ void
 windowMenuAboutToShow(void)
 {
     debug_message("windowMenuAboutToShow()");
-    menuHash["Window"]->clear();
-    menuHash["Window"]->addAction(actionHash[ACTION_WINDOW_CLOSE]);
-    menuHash["Window"]->addAction(actionHash[ACTION_WINDOW_CLOSE_ALL]);
-    menuHash["Window"]->addSeparator();
-    menuHash["Window"]->addAction(actionHash[ACTION_WINDOW_CASCADE]);
-    menuHash["Window"]->addAction(actionHash[ACTION_WINDOW_TILE]);
-    menuHash["Window"]->addSeparator();
-    menuHash["Window"]->addAction(actionHash[ACTION_WINDOW_NEXT]);
-    menuHash["Window"]->addAction(actionHash[ACTION_WINDOW_PREVIOUS]);
+    menu[MENU_WINDOW]->clear();
+    menu[MENU_WINDOW]->addAction(actionHash[ACTION_WINDOW_CLOSE]);
+    menu[MENU_WINDOW]->addAction(actionHash[ACTION_WINDOW_CLOSE_ALL]);
+    menu[MENU_WINDOW]->addSeparator();
+    menu[MENU_WINDOW]->addAction(actionHash[ACTION_WINDOW_CASCADE]);
+    menu[MENU_WINDOW]->addAction(actionHash[ACTION_WINDOW_TILE]);
+    menu[MENU_WINDOW]->addSeparator();
+    menu[MENU_WINDOW]->addAction(actionHash[ACTION_WINDOW_NEXT]);
+    menu[MENU_WINDOW]->addAction(actionHash[ACTION_WINDOW_PREVIOUS]);
 
-    menuHash["Window"]->addSeparator();
+    menu[MENU_WINDOW]->addSeparator();
     QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
     for (int i = 0; i < windows.count(); ++i) {
         QAction* aAction = new QAction(windows.at(i)->windowTitle(), _main);
         aAction->setCheckable(true);
         aAction->setData(i);
-        menuHash["Window"]->addAction(aAction);
-        QObject::connect(aAction, SIGNAL(toggled(bool)), _main, SLOT(menuHash["Window"]Activated(bool)));
+        menu[MENU_WINDOW]->addAction(aAction);
+        QObject::connect(aAction, SIGNAL(toggled(bool)), _main, SLOT(menu[MENU_WINDOW]Activated(bool)));
         aAction->setChecked(mdiArea->activeSubWindow() == windows.at(i));
     }
 }
@@ -805,10 +803,8 @@ update_interface()
 
     if (numOfDocs) {
         /* Toolbars */
-        int n = string_array_length(toolbars_when_docs);
-        for (int i=0; i<n; i++) {
-            QString s(toolbars_when_docs[i]);
-            toolbarHash[s]->show();
+        for (int i=0; toolbars_when_docs[i] != TERMINATOR_SYMBOL; i++) {
+            toolbar[toolbars_when_docs[i]]->show();
         }
 
         /* DockWidgets */
@@ -817,12 +813,10 @@ update_interface()
 
         /* Menus */
         menuBar()->clear();
-        n = string_array_length(menubar_full_list);
-        for (int i=0; i<n; i++) {
-            QString s(menubar_full_list[i]);
-            menuBar()->addMenu(menuHash[s]);
+        for (int i=0; menubar_full_list[i] != TERMINATOR_SYMBOL; i++) {
+            menuBar()->addMenu(menu[menubar_full_list[i]]);
         }
-        menuHash["Window"]->setEnabled(true);
+        menu[MENU_WINDOW]->setEnabled(true);
 
         /* Statusbar */
         statusbar->clearMessage();
@@ -838,10 +832,8 @@ update_interface()
     }
     else {
         /* Toolbars */
-        int n = string_array_length(toolbars_when_docs);
-        for (int i=0; i<n; i++) {
-            QString s(toolbars_when_docs[i]);
-            toolbarHash[s]->hide();
+        for (int i=0; toolbars_when_docs[i] != TERMINATOR_SYMBOL; i++) {
+            toolbar[toolbars_when_docs[i]]->hide();
         }
 
         /* DockWidgets */
@@ -850,12 +842,10 @@ update_interface()
 
         /* Menus */
         menuBar()->clear();
-        n = string_array_length(menubar_no_docs);
-        for (int i=0; i<n; i++) {
-            QString s(menubar_no_docs[i]);
-            menuBar()->addMenu(menuHash[s]);
+        for (int i=0; menubar_no_docs[i] != TERMINATOR_SYMBOL; i++) {
+            menuBar()->addMenu(menu[menubar_no_docs[i]]);
         }
-        menuHash["Window"]->setEnabled(false);
+        menu[MENU_WINDOW]->setEnabled(false);
 
         /* Statusbar */
         statusbar->clearMessage();
@@ -1012,28 +1002,46 @@ get_action_by_icon(const char *icon)
     return actionHash[ACTION_DO_NOTHING];
 }
 
+int
+get_id(char *data[], char *label)
+{
+    int id;
+    int n = string_array_length(data);
+    for (id=0; id<n; id++) {
+        if (!strcmp(data[id], label)) {
+            return id;
+        }
+    }
+    return -1;
+}
+
 /* . */
 void
-add_to_menu(const char *label, char *menu_data[])
+add_to_menu(int index, char *menu_data[])
 {
     int n = string_array_length(menu_data);
     for (int i=0; i<n; i++) {
         char *s = menu_data[i];
         if (s[0] == '-') {
-            menuHash[label]->addSeparator();
+            menu[index]->addSeparator();
         }
         else if (s[0] == '>') {
-            menuHash[label]->addMenu(menuHash[s+1]);
+            int id = get_id(menu_list, s+1);
+            if (id < 0) {
+                debug_message("Failed to identify submenu.");
+                continue;
+            }
+            menu[index]->addMenu(menu[id]);
         }
         else if (s[0] == '+') {
             QString icontheme = general_icon_theme.setting;
-            menuHash[label]->setIcon(create_icon(s+1));
+            menu[index]->setIcon(create_icon(s+1));
         }
         else {
-            menuHash[label]->addAction(get_action_by_icon(s));
+            menu[index]->addAction(get_action_by_icon(s));
         }
     }
-    menuHash[label]->setTearOffEnabled(false);
+    menu[index]->setTearOffEnabled(false);
 }
 
 /* Do not allow the menus to be torn off.
@@ -1044,42 +1052,42 @@ createAllMenus(void)
 {
     debug_message("createAllMenus()");
 
-    menuBar()->addMenu(menuHash["File"]);
-    QObject::connect(menuHash["Recent"], SIGNAL(aboutToShow()), _main,
+    menuBar()->addMenu(menu[MENU_FILE]);
+    QObject::connect(menu[MENU_RECENT], SIGNAL(aboutToShow()), _main,
         SLOT(recentMenuAboutToShow()));
-    menuHash["Recent"]->setTearOffEnabled(false);
-    add_to_menu("File", file_menu);
+    menu[MENU_RECENT]->setTearOffEnabled(false);
+    add_to_menu(MENU_FILE, file_menu);
 
-    menuBar()->addMenu(menuHash["Edit"]);
-    add_to_menu("Edit", edit_menu);
+    menuBar()->addMenu(menu[MENU_EDIT]);
+    add_to_menu(MENU_EDIT, edit_menu);
 
-    menuBar()->addMenu(menuHash["View"]);
-    add_to_menu("View", view_menu);
-    add_to_menu("Zoom", zoom_menu);
-    add_to_menu("Pan", pan_menu);
+    menuBar()->addMenu(menu[MENU_VIEW]);
+    add_to_menu(MENU_VIEW, view_menu);
+    add_to_menu(MENU_ZOOM, zoom_menu);
+    add_to_menu(MENU_PAN, pan_menu);
 
-    menuBar()->addMenu(menuHash["Tools"]);
-    add_to_menu("Tools", tools_menu);
+    menuBar()->addMenu(menu[MENU_TOOLS]);
+    add_to_menu(MENU_TOOLS, tools_menu);
 
-    menuBar()->addMenu(menuHash["Draw"]);
-    add_to_menu("Draw", draw_menu);
+    menuBar()->addMenu(menu[MENU_DRAW]);
+    add_to_menu(MENU_DRAW, draw_menu);
 
-    menuBar()->addMenu(menuHash["Dimension"]);
-    add_to_menu("Dimension", dimension_menu);
+    menuBar()->addMenu(menu[MENU_DIMENSION]);
+    add_to_menu(MENU_DIMENSION, dimension_menu);
 
-    menuBar()->addMenu(menuHash["Modify"]);
-    add_to_menu("Modify", modify_menu);
+    menuBar()->addMenu(menu[MENU_MODIFY]);
+    add_to_menu(MENU_MODIFY, modify_menu);
 
-    menuBar()->addMenu(menuHash["Sandbox"]);
-    add_to_menu("Sandbox", sandbox_menu);
+    menuBar()->addMenu(menu[MENU_SANDBOX]);
+    add_to_menu(MENU_SANDBOX, sandbox_menu);
 
-    menuBar()->addMenu(menuHash["Window"]);
-    QObject::connect(menuHash["Window"], SIGNAL(aboutToShow()), _main,
+    menuBar()->addMenu(menu[MENU_WINDOW]);
+    QObject::connect(menu[MENU_WINDOW], SIGNAL(aboutToShow()), _main,
         SLOT(windowMenuAboutToShow()));
-    menuHash["Window"]->setTearOffEnabled(false);
+    menu[MENU_WINDOW]->setTearOffEnabled(false);
 
-    menuBar()->addMenu(menuHash["Help"]);
-    add_to_menu("Help", help_menu);
+    menuBar()->addMenu(menu[MENU_HELP]);
+    add_to_menu(MENU_HELP, help_menu);
 }
 
 /* Note: on Unix we include the trailing separator. For Windows compatibility we
@@ -1115,6 +1123,22 @@ get_setting(QSettings *settings, const char *key, int value, IntSetting *i)
 
 /* . */
 void
+get_setting(QSettings *settings, const char *key, const char *value, int i)
+{
+    strcpy(setting[i].key, key);
+    strcpy(setting[i].setting.s, qPrintable(settings->value(key, value).toString()));
+}
+
+/* . */
+void
+get_setting(QSettings *settings, const char *key, int value, int i)
+{
+    strcpy(setting[i].key, key);
+    setting[i].setting.i = settings->value(key, value).toInt();
+}
+
+/* . */
+void
 get_setting(QSettings *settings, const char *key, bool value, BoolSetting *b)
 {
     strcpy(b->key, key);
@@ -1141,7 +1165,7 @@ readSettings(void)
     }
 
     /* General */
-    get_setting(&settings, "Language", "default", &general_language);
+    get_setting(&settings, "Language", "default", GENERAL_LANGUAGE);
     get_setting(&settings, "IconTheme", "default", &general_icon_theme);
     get_setting(&settings, "IconSize", 16, &general_icon_size);
     get_setting(&settings, "MdiBGUseLogo", true, &general_mdi_bg_use_logo);
@@ -1320,23 +1344,22 @@ settingsDialog(QString showTab)
 
 /* . */
 void
-add_to_toolbar(const char *toolbar_name, char *toolbar_data[])
+add_to_toolbar(int id, char *toolbar_data[])
 {
-    QString s(toolbar_name);
-    toolbarHash[s]->setObjectName("toolbar" + s);
+    toolbar[id]->setObjectName(QString("toolbar") + toolbar_list[id]);
 
     int n = string_array_length(toolbar_data);
     for (int i=0; i<n; i++) {
         if (toolbar_data[i][0] == '-') {
-            toolbarHash[s]->addSeparator();
+            toolbar[id]->addSeparator();
         }
         else {
             QAction *action = get_action_by_icon(toolbar_data[i]);
-            toolbarHash[s]->addAction(action);
+            toolbar[id]->addAction(action);
         }
     }
 
-    QAction::connect(toolbarHash[s], SIGNAL(topLevelChanged(bool)), _main,
+    QAction::connect(toolbar[id], SIGNAL(topLevelChanged(bool)), _main,
         SLOT(floatingChangedToolBar(bool)));
 }
 

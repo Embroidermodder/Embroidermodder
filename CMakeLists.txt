@@ -58,6 +58,7 @@ set(C_CORE
 	${SRC}/data/testing.c
 	${SRC}/data/tips.c
 	${SRC}/data/toolbars.c
+	${SRC}/data/constants.h
 
 	${SRC}/script.c
 	${SRC}/geometry.c

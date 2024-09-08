@@ -13,8 +13,8 @@
 #include "embroidermodder.h"
 
 std::unordered_map<int, QAction*> actionHash;
-std::unordered_map<QString, QToolBar*> toolbarHash;
-std::unordered_map<QString, QMenu*> menuHash;
+QToolBar* toolbar[N_TOOLBARS];
+QMenu* menu[N_MENUS];
 const char *settings_file = "settings.toml";
 
 QList<QGraphicsItem*> cutCopyObjectList;

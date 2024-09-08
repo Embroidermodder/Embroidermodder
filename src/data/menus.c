@@ -10,52 +10,52 @@
  * Menus
  */
 
+#include "constants.h"
+
 char *menu_list[] = {
-    "File", "&File",
-    "Edit", "&Edit",
-    "View", "&View",
-    "Draw", "&Draw",
-    "Tools", "&Tools",
-    "Modify", "&Modify",
-    "Sandbox", "S&andbox",
-    "Dimension", "&Dimension",
-    "Settings", "&Settings",
-    "Window", "&Window",
-    "Help", "&Help",
-    "Recent", "Open &Recent",
-    "Zoom", "&Zoom",
-    "Pan", "&Pan",
-    "END", "END"
-};
-
-char *menubar_full_list[] = {
-    "File",
-    "Edit",
-    "View",
-    "Draw",
-    "Tools",
-    "Modify",
-    "Dimension",
-    "Sandbox",
-    "Window",
-    "Help",
+    "&File",
+    "&Edit",
+    "&View",
+    "&Draw",
+    "&Tools",
+    "&Modify",
+    "S&andbox",
+    "&Dimension",
+    "&Window",
+    "&Help",
+    "Open &Recent",
+    "&Zoom",
+    "&Pan",
     "END"
 };
 
-char *menubar_no_docs[] = {
-    "File",
-    "Edit",
-    "Settings",
-    "Window",
-    "Help",
-    "END"
+int menubar_full_list[] = {
+    MENU_FILE,
+    MENU_EDIT,
+    MENU_VIEW,
+    MENU_DRAW,
+    MENU_TOOLS,
+    MENU_MODIFY,
+    MENU_DIMENSION,
+    MENU_SANDBOX,
+    MENU_WINDOW,
+    MENU_HELP,
+    TERMINATOR_SYMBOL
+};
+
+int menubar_no_docs[] = {
+    MENU_FILE,
+    MENU_EDIT,
+    MENU_WINDOW,
+    MENU_HELP,
+    TERMINATOR_SYMBOL
 };
 
 char *file_menu[] = {
     "new",
     "---",
     "open",
-    ">Recent",
+    ">Open &Recent",
     "---",
     "save",
     "saveas",
@@ -83,8 +83,8 @@ char *edit_menu[] = {
 };
 
 char *view_menu[] = {
-    ">Zoom",
-    ">Pan",
+    ">&Zoom",
+    ">&Pan",
     "---",
     "day",
     "night",
@@ -174,5 +174,29 @@ char *dimension_menu[] = {
 char *sandbox_menu[] = {
     "sandbox",
     "END"
+};
+
+char *recent_menu[] = {
+    "END"
+};
+
+char *window_menu[] = {
+    "END"
+};
+
+char **menu_data[] = {
+    file_menu,
+    edit_menu,
+    view_menu,
+    draw_menu,
+    tools_menu,
+    modify_menu,
+    dimension_menu,
+    sandbox_menu,
+    window_menu,
+    help_menu,
+    recent_menu,
+    zoom_menu,
+    pan_menu
 };
 

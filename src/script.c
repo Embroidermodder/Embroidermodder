@@ -38,7 +38,8 @@ bool key_state[N_KEY_SEQUENCES] = {
     false, false, false, false, false,
     false, false, false, false
 };
-StringSetting general_language;
+Setting setting[N_SETTINGS];
+
 StringSetting general_icon_theme;
 IntSetting general_icon_size;
 BoolSetting general_mdi_bg_use_logo;
@@ -339,6 +340,61 @@ argument_checks(ScriptEnv *context, int id)
     return 1;
 }
 
+/* . */
+void
+set_int(int key, int value)
+{
+    setting[key].setting.i = value;
+}
+
+/* . */
+void
+set_real(int key, double value)
+{
+    setting[key].setting.r = value;
+}
+
+/* . */
+void
+set_str(int key, char *value)
+{
+    strcpy(setting[key].setting.s, value);
+}
+
+/* . */
+void
+set_bool(int key, bool value)
+{
+    setting[key].setting.b = value;
+}
+
+/* . */
+int
+get_int(int key)
+{
+    return setting[key].setting.i;
+}
+
+/* . */
+double
+get_real(int key)
+{
+    return setting[key].setting.r;
+}
+
+/* . */
+char *
+get_str(int key)
+{
+    return setting[key].setting.s;
+}
+
+/* . */
+bool
+get_bool(int key)
+{
+    return setting[key].setting.b;
+}
 char *
 translate(const char *msg)
 {
@@ -961,7 +1017,7 @@ save_settings(const char *appDir, const char *fname)
 
     /* General */
     /* write_toml_int(file, "LayoutState", layoutState); */
-    write_toml_str(file, "Language", general_language);
+    fprintf(file, "%s = \"%s\"\r\n", "Language", get_str(GENERAL_LANGUAGE));
     write_toml_str(file, "IconTheme", general_icon_theme);
     write_toml_int(file, "IconSize", general_icon_size);
     write_toml_bool(file, "MdiBGUseLogo", general_mdi_bg_use_logo);

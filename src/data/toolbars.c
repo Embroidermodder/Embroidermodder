@@ -10,37 +10,39 @@
  * Toolbars
  */
 
-char *toolbar_list[] = {
-    "File", "File",
-    "Edit", "Edit",
-    "View", "View",
-    "Zoom", "Zoom",
-    "Pan", "Pan",
-    "Icon", "Icon",
-    "Help", "Help",
-    "Layer", "Layer",
-    "Properties", "Properties",
-    "Text", "Text",
-    "Prompt", "Command Prompt",
-    "Draw", "Draw",
-    "Modify", "Modify",
-    "Inquiry", "toolbarInquiry",
-    "Dimension", "toolbarDimension",
-    "Sandbox", "toolbarSandbox",
-    "END", "END"
-};
+#include "constants.h"
 
-char *toolbars_when_docs[] = {
+char *toolbar_list[] = {
+    "File",
+    "Edit",
     "View",
     "Zoom",
     "Pan",
     "Icon",
     "Help",
     "Layer",
-    "Text",
     "Properties",
+    "Text",
+    "Command Prompt",
     "Draw",
+    "Modify",
+    "Inquiry",
+    "Dimension",
+    "Sandbox",
     "END"
+};
+
+int toolbars_when_docs[] = {
+    TOOLBAR_VIEW,
+    TOOLBAR_ZOOM,
+    TOOLBAR_PAN,
+    TOOLBAR_ICON,
+    TOOLBAR_HELP,
+    TOOLBAR_LAYER,
+    TOOLBAR_TEXT,
+    TOOLBAR_PROPERTIES,
+    TOOLBAR_DRAW,
+    TERMINATOR_SYMBOL
 };
 
 char *file_toolbar[] = {
@@ -161,5 +163,41 @@ char *dimension_toolbar[] = {
 char *sandbox_toolbar[] = {
     "sandbox",
     "END"
+};
+
+char *layer_toolbar[] = {
+    "END"
+};
+
+char *properties_toolbar[] = {
+    "END"
+};
+
+char *text_toolbar[] = {
+    "END"
+};
+
+char *prompt_toolbar[] = {
+    "END"
+};
+
+/* Matches the order of toolbar_list. */
+char **toolbar_data[] = {
+    file_toolbar,
+    edit_toolbar,
+    view_toolbar,
+    zoom_toolbar,
+    pan_toolbar,
+    icon_toolbar,
+    help_toolbar,
+    layer_toolbar,
+    properties_toolbar,
+    text_toolbar,
+    prompt_toolbar,
+    draw_toolbar,
+    modify_toolbar,
+    inquiry_toolbar,
+    dimension_toolbar,
+    sandbox_toolbar
 };
 

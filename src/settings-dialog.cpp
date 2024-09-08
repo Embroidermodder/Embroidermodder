@@ -91,8 +91,8 @@ Settings_Dialog::createTabGeneral()
 
     QLabel* labelLanguage = new QLabel(translate("Language (Requires Restart)"), groupBoxLanguage);
     QComboBox* comboBoxLanguage = new QComboBox(groupBoxLanguage);
-    strcpy(general_language.dialog,
-        qPrintable(QString(general_language.setting).toLower()));
+    strcpy(setting[GENERAL_LANGUAGE].dialog.s,
+        qPrintable(QString(setting[GENERAL_LANGUAGE].setting.s).toLower()));
     comboBoxLanguage->addItem("Default");
     comboBoxLanguage->addItem("System");
     comboBoxLanguage->insertSeparator(2);
@@ -103,7 +103,7 @@ Settings_Dialog::createTabGeneral()
         dirName[0] = dirName[0].toUpper();
         comboBoxLanguage->addItem(dirName);
     }
-    QString current = general_language.dialog;
+    QString current = setting[GENERAL_LANGUAGE].dialog.s;
     current[0] = current[0].toUpper();
     comboBoxLanguage->setCurrentIndex(comboBoxLanguage->findText(current));
     connect(comboBoxLanguage, SIGNAL(currentIndexChanged(QString )), this, SLOT(comboBoxLanguageCurrentIndexChanged(QString )));
@@ -1259,7 +1259,7 @@ Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
 void
 Settings_Dialog::comboBoxLanguageCurrentIndexChanged(QString lang)
 {
-    strcpy(general_language.dialog, qPrintable(lang.toLower()));
+    strcpy(setting[GENERAL_LANGUAGE].dialog.s, qPrintable(lang.toLower()));
 }
 
 void
@@ -2055,7 +2055,7 @@ Settings_Dialog::acceptChanges()
     lwt_show_lwt.dialog = lwt_show_lwt.preview;
     lwt_real_render.dialog = lwt_real_render.preview;
 
-    strcpy(general_language.setting, general_language.dialog);
+    strcpy(setting[GENERAL_LANGUAGE].setting.s, setting[GENERAL_LANGUAGE].dialog.s);
     strcpy(general_icon_theme.setting, general_icon_theme.dialog);
     general_icon_size.setting = general_icon_size.dialog;
     general_mdi_bg_use_logo.setting = general_mdi_bg_use_logo.dialog;
