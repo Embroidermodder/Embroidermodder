@@ -75,9 +75,6 @@ qt_add_executable(embroidermodder2
 	${SRC}/settings-dialog.cpp
 	${SRC}/view.cpp
 	${SRC}/widgets.cpp
-	${SRC}/wrapper.cpp
-
-	${SRC}/data/qt.cpp
 
 	${C_CORE}
 

@@ -96,8 +96,9 @@ typedef struct SettingsData_ {
     int id;
     char label[MAX_STRING_LENGTH];
     char key[MAX_STRING_LENGTH];
-    char value[MAX_STRING_LENGTH];
     char icon[MAX_STRING_LENGTH];
+    char value[MAX_STRING_LENGTH];
+    char editor_data[MAX_STRING_LENGTH];
     int type;
 } SettingsData;
 
@@ -114,6 +115,9 @@ ScriptValue command_prompt(ScriptEnv *context, const char *line);
 ScriptEnv *add_string_argument(ScriptEnv *context, const char *s);
 ScriptEnv *add_real_argument(ScriptEnv *context, double r);
 ScriptEnv *add_int_argument(ScriptEnv *context, int i);
+
+ScriptValue *setting_ptr(int key, int mode);
+void copy_setting(int key, int dst, int src);
 
 void set_int(int key, int value);
 void set_real(int key, double value);

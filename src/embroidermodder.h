@@ -345,12 +345,7 @@ void set_enabled(QObject *senderObj, const char *key, bool visibility);
 void set_visibility_group(QObject *senderObj, char *key[], bool visibility);
 void set_enabled_group(QObject *senderObj, char *key[], bool visibility);
 QIcon create_swatch(int32_t color);
-QGroupBox* create_group_box(QWidget* widget, const char *label, int data[]);
-QCheckBox* create_checkbox(QGroupBox* groupbox, QString label, int setting, QString icon);
 void preview_update(void);
-QDoubleSpinBox* create_spinbox(QGroupBox* groupbox, QString label, int setting, double single_step, double lower_bound, double upper_bound);
-QSpinBox* create_int_spinbox(QGroupBox* groupbox, QString label, int setting, int single_step, int lower_bound, int upper_bound);
-QPushButton *choose_color_button(QGroupBox* groupbox, int color_setting);
 
 QString getCurrentLayer();
 QRgb getCurrentColor();
@@ -913,8 +908,16 @@ private:
     QDialogButtonBox* buttonBox;
 
     void addColorsToComboBox(QComboBox* comboBox);
+    void chooseColor(int key);
+    void currentColorChanged_(int key, const QColor& color);
+    QGroupBox* create_group_box(QWidget* widget, const char *label, int data[]);
+    QCheckBox* create_checkbox(QGroupBox* groupbox, int key);
+    QDoubleSpinBox* create_spinbox(QGroupBox* groupbox, int key);
+    QSpinBox* create_int_spinbox(QGroupBox* groupbox, int key);
+    QPushButton *choose_color_button(QGroupBox* groupbox, int key);
 
 private slots:
+
     void checkBoxCustomFilterStateChanged(int);
     void checkBoxGridColorMatchCrossHairStateChanged(int);
     void checkBoxGridLoadFromFileStateChanged(int);
@@ -922,44 +925,22 @@ private slots:
     void checkBoxLwtShowLwtStateChanged(int);
     void checkBoxLwtRealRenderStateChanged(int);
 
-    void comboBoxLanguageCurrentIndexChanged(QString );
-    void comboBoxIconThemeCurrentIndexChanged(QString );
+    void comboBoxLanguageCurrentIndexChanged(QString);
+    void comboBoxIconThemeCurrentIndexChanged(QString);
     void comboBoxIconSizeCurrentIndexChanged(int);
     void chooseGeneralMdiBackgroundLogo();
     void chooseGeneralMdiBackgroundTexture();
-    void chooseGeneralMdiBackgroundColor();
-    void currentGeneralMdiBackgroundColorChanged(const QColor&);
     void comboBoxScrollBarWidgetCurrentIndexChanged(int);
-    void chooseDisplayCrossHairColor();
-    void currentDisplayCrossHairColorChanged(const QColor&);
-    void chooseDisplayBackgroundColor();
-    void currentDisplayBackgroundColorChanged(const QColor&);
-    void chooseDisplaySelectBoxLeftColor();
-    void currentDisplaySelectBoxLeftColorChanged(const QColor&);
-    void chooseDisplaySelectBoxLeftFill();
-    void currentDisplaySelectBoxLeftFillChanged(const QColor&);
-    void chooseDisplaySelectBoxRightColor();
-    void currentDisplaySelectBoxRightColorChanged(const QColor&);
-    void chooseDisplaySelectBoxRightFill();
-    void currentDisplaySelectBoxRightFillChanged(const QColor&);
     void spinBoxDisplaySelectBoxAlphaValueChanged(int);
-    void choosePromptTextColor();
-    void currentPromptTextColorChanged(const QColor&);
-    void choosePromptBackgroundColor();
-    void currentPromptBackgroundColorChanged(const QColor&);
-    void comboBoxPromptFontFamilyCurrentIndexChanged(QString );
-    void comboBoxPromptFontStyleCurrentIndexChanged(QString );
+    void comboBoxPromptFontFamilyCurrentIndexChanged(QString);
+    void comboBoxPromptFontStyleCurrentIndexChanged(QString);
     void spinBoxPromptFontSizeValueChanged(int);
     void buttonCustomFilterSelectAllClicked();
     void buttonCustomFilterClearAllClicked();
     void spinBoxRecentMaxFilesValueChanged(int);
     void spinBoxTrimDstNumJumpsValueChanged(int);
-    void chooseGridColor();
-    void currentGridColorChanged(const QColor&);
-    void comboBoxGridTypeCurrentIndexChanged(QString );
+    void comboBoxGridTypeCurrentIndexChanged(QString);
     void comboBoxRulerMetricCurrentIndexChanged(int);
-    void chooseRulerColor();
-    void currentRulerColorChanged(const QColor&);
     void spinBoxRulerPixelSizeValueChanged(double);
     void buttonQSnapSelectAllClicked();
     void buttonQSnapClearAllClicked();

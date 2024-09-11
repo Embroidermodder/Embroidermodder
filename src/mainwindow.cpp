@@ -12,6 +12,243 @@
 
 #include "embroidermodder.h"
 
+std::unordered_map<int, QAction*> actionHash;
+QToolBar* toolbar[N_TOOLBARS];
+QMenu* menu[N_MENUS];
+const char *settings_file = "settings.toml";
+
+QList<QGraphicsItem*> cutCopyObjectList;
+
+QString formatFilterOpen;
+QString formatFilterSave;
+
+QStatusBar* statusbar;
+MdiArea* mdiArea;
+CmdPrompt* prompt;
+PropertyEditor* dockPropEdit;
+UndoEditor* dockUndoEdit;
+QTimer* testing_timer;
+
+QList<MdiWindow*> listMdiWin;
+QString openFilesPath;
+
+QAction* myFileSeparator;
+
+QWizard* wizardTipOfTheDay;
+QLabel* labelTipOfTheDay;
+QCheckBox* checkBoxTipOfTheDay;
+
+/* Selectors */
+QComboBox* layerSelector;
+QComboBox* colorSelector;
+QComboBox* linetypeSelector;
+QComboBox* lineweightSelector;
+QFontComboBox* textFontSelector;
+QComboBox* textSizeSelector;
+
+QByteArray layoutState;
+
+MainWindow *_main;
+
+StringMap aliases[MAX_ALIASES];
+std::unordered_map<std::string, std::string> aliasHash;
+
+QString curText;
+QString defaultPrefix;
+QString prefix;
+
+QString lastCmd;
+QString curCmd;
+
+QString prompt_color_;
+QString prompt_selection_bg_color_;
+QString prompt_bg_color_;
+QString prompt_selection_color_;
+
+QTextBrowser* promptHistory;
+CmdPromptInput* promptInput;
+
+QTimer* blinkTimer;
+bool blinkState;
+/* NOTE: These shortcuts need to be caught since QLineEdit uses them. */
+
+std::unordered_map<int, int> key_map = {
+    {QKeySequence::Cut, CUT_SEQUENCE},
+    {QKeySequence::Copy, COPY_SEQUENCE},
+    {QKeySequence::Paste, PASTE_SEQUENCE},
+    {QKeySequence::SelectAll, SELECT_ALL_SEQUENCE},
+    {QKeySequence::Undo, UNDO_SEQUENCE},
+    {QKeySequence::Redo, REDO_SEQUENCE},
+    {Qt::Key_Delete, DELETE_KEY},
+    {Qt::Key_Tab, TAB_KEY},
+    {Qt::Key_Escape, ESCAPE_KEY},
+    {Qt::Key_Up, UP_KEY},
+    {Qt::Key_Down, DOWN_KEY},
+    {Qt::Key_F1, F1_KEY},
+    {Qt::Key_F2, F2_KEY},
+    {Qt::Key_F3, F3_KEY},
+    {Qt::Key_F4, F4_KEY},
+    {Qt::Key_F5, F5_KEY},
+    {Qt::Key_F6, F6_KEY},
+    {Qt::Key_F7, F7_KEY},
+    {Qt::Key_F8, F8_KEY},
+    {Qt::Key_F9, F9_KEY},
+    {Qt::Key_F10, F10_KEY},
+    {Qt::Key_F11, F11_KEY},
+    {Qt::Key_F12, F12_KEY},
+    {Qt::Key_Shift, SHIFT_KEY}
+};
+
+QToolButton* statusBarSnapButton;
+QToolButton* statusBarGridButton;
+QToolButton* statusBarRulerButton;
+QToolButton* statusBarOrthoButton;
+QToolButton* statusBarPolarButton;
+QToolButton* statusBarQSnapButton;
+QToolButton* statusBarQTrackButton;
+QToolButton* statusBarLwtButton;
+QLabel* statusBarMouseCoord;
+
+QStringList button_list = {
+    "SNAP",
+    "GRID",
+    "RULER",
+    "ORTHO",
+    "POLAR",
+    "QSNAP",
+    "QTRACK",
+    "LWT"
+};
+/* . */
+EmbVector
+to_emb_vector(QPointF p)
+{
+    EmbVector v;
+    v.x = p.x();
+    v.y = p.y();
+    return v;
+}
+
+/* . */
+QPointF
+to_qpointf(EmbVector v)
+{
+    QPointF p(v.x, v.y);
+    return p;
+}
+
+/* . */
+EmbVector
+scale_and_rotate(EmbVector v, double scale, double angle)
+{
+    EmbVector w;
+    double rot = radians(angle);
+    double cosRot = cos(rot);
+    double sinRot = sin(rot);
+    w.x = v.x * scale;
+    w.y = v.y * scale;
+    w.x = w.x * cosRot - w.y * sinRot;
+    w.y = w.x * sinRot + w.y * cosRot;
+    return w;    
+}
+
+/* . */
+EmbVector
+find_mouse_snap_point(QList<EmbVector> snap_points, EmbVector mouse_point)
+{
+    float closest = 1.0e10;
+    EmbVector result = snap_points[0];
+    int i;
+    for (i=0; i<snap_points.count(); i++) {
+        float distance = emb_vector_distance(snap_points[i], mouse_point);
+        if (distance < closest) {
+            closest = distance;
+            result = snap_points[i];
+        }
+    }
+    return result;
+}
+
+/* . */
+EmbArc
+emb_arc_set_radius(EmbArc arc, EmbReal radius)
+{
+    EmbGeometry geometry;
+    geometry.object.arc = arc;
+    radius = EMB_MAX(radius, 0.0000001);
+    EmbVector center = emb_arc_center(geometry);
+
+    EmbVector start = emb_vector_subtract(center, arc.start);
+    start = emb_vector_scale(start, radius/emb_vector_length(start));
+    arc.start = emb_vector_add(center, start);
+
+    EmbVector mid = emb_vector_subtract(center, arc.mid);
+    mid = emb_vector_scale(mid, radius/emb_vector_length(mid));
+    arc.mid = emb_vector_add(center, mid);
+
+    EmbVector end = emb_vector_subtract(center, arc.end);
+    end = emb_vector_scale(start, radius/emb_vector_length(end));
+    arc.end = emb_vector_add(center, end);
+
+    return arc;
+}
+
+/* . */
+QPixmap
+create_pixmap(QString icon)
+{
+    int id = 0;
+    for (int i=0; ; i++) {
+        if (!xpm_icon_labels[i]) {
+            break;
+        }
+        if (!strcmp(qPrintable(icon), xpm_icon_labels[i])) {
+            id = i;
+            break;
+        }
+    }
+    QPixmap pixmap(xpm_icons[id]);
+    return pixmap;
+}
+
+/* . */
+QIcon
+create_icon(QString icon)
+{
+    return QIcon(create_pixmap(icon));
+}
+
+/* . */
+QIcon
+create_swatch(int32_t color)
+{
+    QPixmap pixmap(16, 16);
+    pixmap.fill(QColor(color));
+    return QIcon(pixmap); 
+}
+
+
+/* . */
+void
+wait_cursor(void)
+{
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+}
+
+/* . */
+void
+arrow_cursor(void)
+{
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
+}
+
+/* . */
+void
+restore_cursor(void)
+{
+    QApplication::restoreOverrideCursor();
+}
+
 QMenuBar *menuBar()
 {
     return _main->menuBar();

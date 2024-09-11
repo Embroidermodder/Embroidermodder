@@ -1033,3 +1033,53 @@ fixme(const char *msg)
     debug_message(outmsg);
 }
 
+/* . */
+ScriptValue *
+setting_ptr(int key, int mode)
+{
+    ScriptValue *set_mode;
+    switch (mode) {
+    case SETTING_DIALOG: {
+        set_mode = &(setting[key].dialog);
+        break;
+    }
+    case SETTING_PREVIEW: {
+        set_mode = &(setting[key].preview);
+        break;
+    }
+    case SETTING_ACCEPT: {
+        set_mode = &(setting[key].dialog);
+        break;
+    }
+    default:
+    case SETTING_SETTING: {
+        set_mode = &(setting[key].setting);
+        break;
+    }
+    }
+    return set_mode;
+}
+
+/* . */
+void
+copy_setting(int key, int dst, int src)
+{
+    ScriptValue *dst_set = setting_ptr(key, dst);
+    ScriptValue *src_set = setting_ptr(key, src);
+    switch (setting[src].setting.type) {
+    case SCRIPT_INT:
+        dst_set->i = src_set->i;
+        break;
+    case SCRIPT_REAL:
+        dst_set->r = src_set->r;
+        break;
+    case SCRIPT_STRING:
+        strcpy(dst_set->s, src_set->s);
+        break;
+    case SCRIPT_BOOL:
+        dst_set->b = src_set->b;
+        break;
+    default:
+        break;
+    }
+}
