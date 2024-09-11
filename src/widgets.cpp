@@ -1074,7 +1074,7 @@ MdiWindow::loadFile(QString fileName)
     setCurrentFile(fileName);
     statusbar->showMessage("File loaded.");
 
-    if (grid_load_from_file.setting) {
+    if (get_bool(GRID_LOAD_FROM_FILE)) {
         /* TODO: Josh, provide me a hoop size and/or grid spacing from the pattern. */
     }
 
@@ -1096,7 +1096,7 @@ MdiWindow::print()
     QPrintDialog dialog(&printer, this);
     if (dialog.exec() == QDialog::Accepted) {
         QPainter painter(&printer);
-        if (printing_disable_bg.setting) {
+        if (get_bool(PRINTING_DISABLE_BG)) {
             /* Save current bg */
             QBrush brush = gview->backgroundBrush();
             /* Save ink by not printing the bg at all */
@@ -1128,7 +1128,7 @@ MdiWindow::saveBMC()
 
     QPainter painter(&img);
     QRectF targetRect(0,0,150,150);
-    if (printing_disable_bg.setting) {
+    if (get_bool(PRINTING_DISABLE_BG)) {
         /* TODO: Make BMC background into it's own setting? */
         QBrush brush = gscene->backgroundBrush();
         gscene->setBackgroundBrush(Qt::NoBrush);
@@ -1383,9 +1383,9 @@ CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
     prompt_selection_bg_color_ = "#000000"; /* Match -------| */
     prompt_bg_color_ = "#FFFFFF";
     prompt_selection_color_ = "#FFFFFF";
-    strcpy(prompt_font_family.setting, "Monospace");
-    strcpy(prompt_font_style.setting, "normal");
-    prompt_font_size.setting = 12;
+    set_str(PROMPT_FONT_FAMILY, "Monospace");
+    set_str(PROMPT_FONT_STYLE, "normal");
+    set_int(PROMPT_FONT_SIZE, 12);
 
     updateStyle();
 
@@ -1468,7 +1468,7 @@ setPromptBackgroundColor(const QColor& color)
 void
 setPromptFontFamily(QString  family)
 {
-    strcpy(prompt_font_family.setting, qPrintable(family));
+    set_str(PROMPT_FONT_FAMILY, (char*)qPrintable(family));
     prompt->updateStyle();
 }
 
@@ -1476,7 +1476,7 @@ setPromptFontFamily(QString  family)
 void
 setPromptFontStyle(QString  style)
 {
-    strcpy(prompt_font_style.setting, qPrintable(style));
+    set_str(PROMPT_FONT_STYLE, (char*)qPrintable(style));
     prompt->updateStyle();
 }
 
@@ -1484,7 +1484,7 @@ setPromptFontStyle(QString  style)
 void
 setPromptFontSize(int size)
 {
-    prompt_font_size.setting = size;
+    set_int(PROMPT_FONT_SIZE, size);
     prompt->updateStyle();
 }
 
@@ -1507,9 +1507,9 @@ CmdPrompt::updateStyle()
         qPrintable(prompt_bg_color_),
         qPrintable(prompt_selection_color_),
         qPrintable(prompt_selection_bg_color_),
-        prompt_font_family.setting,
-        prompt_font_style.setting,
-        prompt_font_size.setting);
+        get_str(PROMPT_FONT_FAMILY),
+        get_str(PROMPT_FONT_STYLE),
+        get_int(PROMPT_FONT_SIZE));
 
     this->setStyleSheet(QString(style_string));
 }

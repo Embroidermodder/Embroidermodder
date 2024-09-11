@@ -71,30 +71,6 @@ typedef struct EmbDimLeader_ {
     EmbColor color;
 } EmbDimLeader;
 
-typedef struct RealSetting_ {
-    char key[MAX_STRING_LENGTH];
-    double setting;
-    double dialog;
-    double accept;
-    double preview;
-} RealSetting;
-
-typedef struct BoolSetting_ {
-    char key[MAX_STRING_LENGTH];
-    bool setting;
-    bool dialog;
-    bool accept;
-    bool preview;
-} BoolSetting;
-
-typedef struct IntSetting_ {
-    char key[MAX_STRING_LENGTH];
-    int32_t setting;
-    int32_t dialog;
-    int32_t accept;
-    int32_t preview;
-} IntSetting;
-
 typedef struct Setting_ {
     char key[MAX_STRING_LENGTH];
     ScriptValue setting;
@@ -102,22 +78,6 @@ typedef struct Setting_ {
     ScriptValue accept;
     ScriptValue preview;
 } Setting;
-
-typedef struct StringSetting_ {
-    char key[MAX_STRING_LENGTH];
-    char setting[MAX_STRING_LENGTH];
-    char dialog[MAX_STRING_LENGTH];
-    char accept[MAX_STRING_LENGTH];
-    char preview[MAX_STRING_LENGTH];
-} StringSetting;
-
-typedef struct StringTableSetting_ {
-    char key[MAX_STRING_LENGTH];
-    char setting[MAX_FILES][MAX_STRING_LENGTH];
-    char dialog[MAX_FILES][MAX_STRING_LENGTH];
-    char accept[MAX_FILES][MAX_STRING_LENGTH];
-    char preview[MAX_FILES][MAX_STRING_LENGTH];
-} StringTableSetting;
 
 typedef struct StringMap_ {
     char key[MAX_LABEL_LENGTH];
@@ -132,11 +92,14 @@ typedef struct Editor_ {
     int object;
 } Editor;
 
-typedef struct WidgetData_ {
+typedef struct SettingsData_ {
+    int id;
     char label[MAX_STRING_LENGTH];
-    BoolSetting *setting;
+    char key[MAX_STRING_LENGTH];
+    char value[MAX_STRING_LENGTH];
     char icon[MAX_STRING_LENGTH];
-} WidgetData;
+    int type;
+} SettingsData;
 
 /* Scripting functions */
 ScriptEnv *create_script_env();
@@ -222,122 +185,14 @@ void about_dialog(void);
 /* Global variables with c linkage. */
 extern Command command_data[MAX_COMMANDS];
 extern StringMap aliases[MAX_ALIASES];
+extern Setting setting[N_SETTINGS];
+extern SettingsData settings_data[N_SETTINGS];
 
 extern ScriptValue script_null;
 extern ScriptValue script_true;
 extern ScriptValue script_false;
 
 extern int testing_mode;
-
-extern StringSetting general_icon_theme;
-extern IntSetting general_icon_size;
-extern BoolSetting general_mdi_bg_use_logo;
-extern BoolSetting general_mdi_bg_use_texture;
-extern BoolSetting general_mdi_bg_use_color;
-extern StringSetting general_mdi_bg_logo;
-extern StringSetting general_mdi_bg_texture;
-extern IntSetting general_mdi_bg_color;
-extern BoolSetting general_tip_of_the_day;
-extern IntSetting general_current_tip;
-extern BoolSetting general_system_help_browser;
-extern BoolSetting general_check_for_updates;
-extern BoolSetting display_use_opengl;
-extern BoolSetting display_renderhint_aa;
-extern BoolSetting display_renderhint_text_aa;
-extern BoolSetting display_renderhint_smooth_pix;
-extern BoolSetting display_renderhint_high_aa;
-extern BoolSetting display_renderhint_noncosmetic;
-extern BoolSetting display_show_scrollbars;
-extern IntSetting display_scrollbar_widget_num;
-extern IntSetting display_crosshair_color;
-extern IntSetting display_bg_color;
-extern IntSetting display_selectbox_left_color;
-extern IntSetting display_selectbox_left_fill;
-extern IntSetting display_selectbox_right_color;
-extern IntSetting display_selectbox_right_fill;
-extern IntSetting display_selectbox_alpha;
-extern RealSetting display_zoomscale_in;
-extern RealSetting display_zoomscale_out;
-extern IntSetting display_crosshair_percent;
-extern StringSetting display_units;
-extern IntSetting prompt_text_color;
-extern IntSetting prompt_bg_color;
-extern StringSetting prompt_font_family;
-extern StringSetting prompt_font_style;
-extern IntSetting prompt_font_size;
-extern BoolSetting prompt_save_history;
-extern BoolSetting prompt_save_history_as_html;
-extern StringSetting prompt_save_history_filename;
-extern StringSetting opensave_custom_filter;
-extern StringSetting opensave_open_format;
-extern BoolSetting opensave_open_thumbnail;
-extern StringSetting opensave_save_format;
-extern BoolSetting opensave_save_thumbnail;
-extern IntSetting opensave_recent_max_files;
-extern StringTableSetting opensave_recent_list_of_files;
-extern StringSetting opensave_recent_directory;
-extern IntSetting opensave_trim_dst_num_jumps;
-extern StringSetting printing_default_device;
-extern BoolSetting printing_use_last_device;
-extern BoolSetting printing_disable_bg;
-extern BoolSetting grid_show_on_load;
-extern BoolSetting grid_show_origin;
-extern BoolSetting grid_color_match_crosshair;
-extern IntSetting grid_color;
-extern BoolSetting grid_load_from_file;
-extern StringSetting grid_type;
-extern BoolSetting grid_center_on_origin;
-extern RealSetting grid_center_x;
-extern RealSetting grid_center_y;
-extern RealSetting grid_size_x;
-extern RealSetting grid_size_y;
-extern RealSetting grid_spacing_x;
-extern RealSetting grid_spacing_y;
-extern RealSetting grid_size_radius;
-extern RealSetting grid_spacing_radius;
-extern RealSetting grid_spacing_angle;
-extern BoolSetting ruler_show_on_load;
-extern BoolSetting ruler_metric;
-extern IntSetting ruler_color;
-extern IntSetting ruler_pixel_size;
-extern BoolSetting qsnap_enabled;
-extern IntSetting qsnap_locator_color;
-extern IntSetting qsnap_locator_size;
-extern IntSetting qsnap_aperture_size;
-extern BoolSetting qsnap_endpoint;
-extern BoolSetting qsnap_midpoint;
-extern BoolSetting qsnap_center;
-extern BoolSetting qsnap_node;
-extern BoolSetting qsnap_quadrant;
-extern BoolSetting qsnap_intersection;
-extern BoolSetting qsnap_extension;
-extern BoolSetting qsnap_insertion;
-extern BoolSetting qsnap_perpendicular;
-extern BoolSetting qsnap_tangent;
-extern BoolSetting qsnap_nearest;
-extern BoolSetting qsnap_apparent;
-extern BoolSetting qsnap_parallel;
-extern BoolSetting lwt_show_lwt;
-extern BoolSetting lwt_real_render;
-extern RealSetting lwt_default_lwt;
-extern BoolSetting selection_mode_pickfirst;
-extern BoolSetting selection_mode_pickadd;
-extern BoolSetting selection_mode_pickdrag;
-extern IntSetting selection_coolgrip_color;
-extern IntSetting selection_hotgrip_color;
-extern IntSetting selection_grip_size;
-extern IntSetting selection_pickbox_size;
-extern StringSetting text_font;
-extern RealSetting text_size;
-extern RealSetting text_angle;
-extern BoolSetting text_style_bold;
-extern BoolSetting text_style_italic;
-extern BoolSetting text_style_underline;
-extern BoolSetting text_style_overline;
-extern BoolSetting text_style_strikeout;
-
-extern Setting setting[N_SETTINGS];
-//extern ScriptValue state[MAX_STATE_VARIABLES];
 
 extern Editor general_editor_data[];
 extern Editor geometry_arc_editor_data[];
@@ -373,7 +228,7 @@ extern Editor misc_text_single_editor_data[];
 extern const char *_appName_;
 extern const char *_appVer_;
 
-extern WidgetData render_hints[];
+extern int render_hints[];
 
 extern char *coverage_test[];
 extern char *object_names[];
@@ -432,6 +287,8 @@ extern char *tips[];
 
 extern char **xpm_icons[];
 extern char *xpm_icon_labels[];
+
+extern char recent_files[MAX_FILES][MAX_STRING_LENGTH];
 
 extern int numOfDocs;
 extern int docIndex;
@@ -586,3 +443,4 @@ void emb_set_diameter_minor(EmbGeometry *geometry, double diameter);
 #endif
 
 #endif
+

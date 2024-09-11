@@ -122,13 +122,10 @@ create_swatch(int32_t color)
 
 /* . */
 QPushButton *
-choose_color_button(QGroupBox* groupbox, IntSetting* color_setting)
+choose_color_button(QGroupBox* groupbox, int i)
 {
     QPushButton* button = new QPushButton(_main->tr("Choose"), groupbox);
-    color_setting->dialog = color_setting->setting;
-    color_setting->preview = color_setting->dialog;
-    color_setting->accept = color_setting->dialog;
-    button->setIcon(create_swatch(color_setting->preview));
+    button->setIcon(create_swatch(setting[i].preview.i));
     return button;
 }
 
@@ -269,14 +266,12 @@ restore_cursor(void)
 
 /* . */
 QCheckBox*
-create_checkbox(QGroupBox* groupbox, QString label, BoolSetting *setting, QString icon)
+create_checkbox(QGroupBox* groupbox, QString label, int s, QString icon)
 {
     QCheckBox* checkBox = new QCheckBox(translate(qPrintable(label)), groupbox);
-    setting->dialog = setting->setting;
-    setting->preview = setting->dialog;
-    checkBox->setChecked(setting->dialog);
+    checkBox->setChecked(setting[s].dialog.b);
     QObject::connect(checkBox, &QCheckBox::stateChanged, _main,
-        [=](int checked) { setting->dialog = checked; preview_update(); });
+        [=](int checked) { setting[s].dialog.b = checked; preview_update(); });
     if (icon != "") {
         checkBox->setIcon(create_icon(icon));
     }
@@ -285,31 +280,29 @@ create_checkbox(QGroupBox* groupbox, QString label, BoolSetting *setting, QStrin
 
 /* . */
 QDoubleSpinBox*
-create_spinbox(QGroupBox* groupbox, QString label, RealSetting *setting, double single_step, double lower_bound, double upper_bound)
+create_spinbox(QGroupBox* groupbox, QString label, int s, double single_step, double lower_bound, double upper_bound)
 {
     QDoubleSpinBox* spinbox = new QDoubleSpinBox(groupbox);
     spinbox->setObjectName(label);
-    setting->dialog = setting->setting;
     spinbox->setSingleStep(single_step);
     spinbox->setRange(lower_bound, upper_bound);
-    spinbox->setValue(setting->dialog);
+    spinbox->setValue(setting[s].dialog.r);
     QObject::connect(spinbox, &QDoubleSpinBox::valueChanged, _main,
-        [=](double value) { setting->dialog = value; });
+        [=](double value) { setting[s].dialog.r = value; });
     return spinbox;
 }
 
 /* . */
 QSpinBox*
-create_int_spinbox(QGroupBox* groupbox, QString label, IntSetting *setting, int single_step, int lower_bound, int upper_bound)
+create_int_spinbox(QGroupBox* groupbox, QString label, int s, int single_step, int lower_bound, int upper_bound)
 {
     QSpinBox* spinbox = new QSpinBox(groupbox);
     spinbox->setObjectName(label);
-    setting->dialog = setting->setting;
     spinbox->setSingleStep(single_step);
     spinbox->setRange(lower_bound, upper_bound);
-    spinbox->setValue(setting->dialog);
+    spinbox->setValue(setting[s].dialog.i);
     QObject::connect(spinbox, &QSpinBox::valueChanged, _main,
-        [=](int value) { setting->dialog = value; });
+        [=](int value) { setting[s].dialog.i = value; });
     return spinbox;
 }
 

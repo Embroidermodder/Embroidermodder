@@ -17,8 +17,8 @@ void
 exit_program(void)
 {
     debug_message("exit()");
-    if (prompt_save_history.setting) {
-        prompt->saveHistory("prompt.log", prompt_save_history_as_html.setting);
+    if (get_bool(PROMPT_SAVE_HISTORY)) {
+        prompt->saveHistory("prompt.log", get_bool(PROMPT_SAVE_HISTORY_AS_HTML));
         /* TODO: get filename from settings */
     }
     qApp->closeAllWindows();
@@ -136,14 +136,14 @@ tipOfTheDay(void)
     ImageWidget* imgBanner = new ImageWidget("Did you know", wizardTipOfTheDay);
     // create_pixmap("did_you_know")
 
-    if (general_current_tip.setting >= string_array_length(tips)) {
-        general_current_tip.setting = 0;
+    if (get_int(GENERAL_CURRENT_TIP) >= string_array_length(tips)) {
+        set_int(GENERAL_CURRENT_TIP, 0);
     }
-    labelTipOfTheDay = new QLabel(tips[general_current_tip.setting], wizardTipOfTheDay);
+    labelTipOfTheDay = new QLabel(tips[get_int(GENERAL_CURRENT_TIP)], wizardTipOfTheDay);
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(translate("&Show tips on startup"), wizardTipOfTheDay);
-    checkBoxTipOfTheDay->setChecked(general_tip_of_the_day.setting);
+    checkBoxTipOfTheDay->setChecked(get_bool(GENERAL_TIP_OF_THE_DAY));
     QObject::connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), _main, SLOT(checkBoxTipOfTheDayStateChanged(int)));
 
     QVBoxLayout* layout = new QVBoxLayout(wizardTipOfTheDay);
@@ -179,7 +179,7 @@ tipOfTheDay(void)
 void
 checkBoxTipOfTheDayStateChanged(int checked)
 {
-    general_tip_of_the_day.setting = checked;
+    set_bool(GENERAL_TIP_OF_THE_DAY, checked);
 }
 
 /* . */
@@ -189,21 +189,24 @@ buttonTipOfTheDayClicked(int button)
     char message[MAX_STRING_LENGTH];
     sprintf(message, "buttonTipOfTheDayClicked(%d)", button);
     debug_message(message);
+    int current = get_int(GENERAL_CURRENT_TIP);
     if (button == QWizard::CustomButton1) {
-        if (general_current_tip.setting > 0) {
-            general_current_tip.setting--;
+        if (current > 0) {
+            current--;
         }
         else {
-            general_current_tip.setting = string_array_length(tips)-1;
+            current = string_array_length(tips)-1;
         }
-        labelTipOfTheDay->setText(tips[general_current_tip.setting]);
+        labelTipOfTheDay->setText(tips[current]);
+        set_int(GENERAL_CURRENT_TIP, current);
     }
     else if (button == QWizard::CustomButton2) {
-        general_current_tip.setting++;
-        if (general_current_tip.setting >= string_array_length(tips)) {
-            general_current_tip.setting = 0;
+        current++;
+        if (current >= string_array_length(tips)) {
+            current = 0;
         }
-        labelTipOfTheDay->setText(tips[general_current_tip.setting]);
+        labelTipOfTheDay->setText(tips[current]);
+        set_int(GENERAL_CURRENT_TIP, current);
     }
     else if (button == QWizard::CustomButton3) {
         wizardTipOfTheDay->close();
@@ -311,7 +314,7 @@ iconResize(int iconSize)
 
     /* TODO: low-priority: open app with iconSize set to 128. resize the icons to a smaller size. */
 
-    general_icon_size.setting = iconSize;
+    set_int(GENERAL_ICON_SIZE, iconSize);
 }
 
 /* . */
@@ -451,7 +454,7 @@ updateAllViewRulerColors(QRgb color)
 void
 updatePickAddMode(bool val)
 {
-    selection_mode_pickadd.setting = val;
+    set_bool(SELECTION_MODE_PICKADD, val);
     dockPropEdit->updatePickAddModeButton(val);
 }
 
@@ -459,7 +462,7 @@ updatePickAddMode(bool val)
 void
 pickAddModeToggled(void)
 {
-    bool val = !selection_mode_pickadd.setting;
+    bool val = !get_bool(SELECTION_MODE_PICKADD);
     updatePickAddMode(val);
 }
 
@@ -561,7 +564,7 @@ textSizeSelectorIndexChanged(int index)
     sprintf(message, "textSizeSelectorIndexChanged(%d)", index);
     debug_message(message);
     /* TODO: check that the toReal() conversion is ok. */
-    text_size.setting = qFabs(textSizeSelector->itemData(index).toReal());
+    set_real(TEXT_SIZE, fabs(textSizeSelector->itemData(index).toReal()));
 }
 
 /* . */
@@ -569,14 +572,14 @@ void
 setTextFont(QString str)
 {
     textFontSelector->setCurrentFont(QFont(str));
-    strcpy(text_font.setting, qPrintable(str));
+    set_str(TEXT_FONT, (char*)qPrintable(str));
 }
 
 /* . */
 void
 setTextSize(double num)
 {
-    text_size.setting = qFabs(num);
+    set_real(TEXT_SIZE, fabs(num));
     int index = textSizeSelector->findText("Custom", Qt::MatchContains);
     if (index != -1) {
         textSizeSelector->removeItem(index);
@@ -917,23 +920,23 @@ run_command(const char* cmd, ScriptEnv *context)
     }
 
     case ACTION_TEXT_BOLD:
-        text_style_bold.setting = !text_style_bold.setting;
+        set_bool(TEXT_STYLE_BOLD, !get_bool(TEXT_STYLE_BOLD));
         break;
 
     case ACTION_TEXT_ITALIC:
-        text_style_italic.setting = !text_style_italic.setting;
+        set_bool(TEXT_STYLE_ITALIC, !get_bool(TEXT_STYLE_ITALIC));
         break;
 
     case ACTION_TEXT_UNDERLINE:
-        text_style_underline.setting = !text_style_underline.setting;
+        set_bool(TEXT_STYLE_UNDERLINE, !get_bool(TEXT_STYLE_UNDERLINE));
         break;
 
     case ACTION_TEXT_STRIKEOUT:
-        text_style_strikeout.setting = !text_style_strikeout.setting;
+        set_bool(TEXT_STYLE_STRIKEOUT, !get_bool(TEXT_STYLE_STRIKEOUT));
         break;
 
     case ACTION_TEXT_OVERLINE:
-        text_style_overline.setting = !text_style_overline.setting;
+        set_bool(TEXT_STYLE_OVERLINE, !get_bool(TEXT_STYLE_OVERLINE));
         break;
 
     case ACTION_TIP_OF_THE_DAY:
@@ -1327,7 +1330,7 @@ runCommandMain(QString cmd)
     debug_message(message);
     /* TODO: Uncomment this when post-selection is available. */
     /*
-    if (!selection_mode_pick_first.setting) {
+    if (!get_bool(SELECTION_MODE_PICKFIRST)) {
         clear_selection();
     }
     */
@@ -1447,7 +1450,7 @@ stub_testing(void)
 void
 nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b)
 {
-    display_bg_color.setting = qRgb(r,g,b);
+    set_int(DISPLAY_BG_COLOR, qRgb(r,g,b));
     updateAllViewBackgroundColors(qRgb(r,g,b));
 }
 
@@ -1455,7 +1458,7 @@ nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b)
 void
 nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b)
 {
-    display_crosshair_color.setting = qRgb(r,g,b);
+    set_int(DISPLAY_CROSSHAIR_COLOR, qRgb(r,g,b));
     updateAllViewCrossHairColors(qRgb(r,g,b));
 }
 
@@ -1463,7 +1466,7 @@ nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b)
 void
 nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b)
 {
-    grid_color.setting = qRgb(r,g,b);
+    set_int(GRID_COLOR, qRgb(r,g,b));
     updateAllViewGridColors(qRgb(r,g,b));
 }
 
@@ -1536,13 +1539,14 @@ nativeAddTextSingle(std::string str, double x, double y, double rot, bool fill, 
     QUndoStack* stack = activeUndoStack();
     if (doc && gscene && stack) {
         Object* obj = create_text_single(QString(str.c_str()), x, -y, getCurrentColor());
-        obj_set_text_font(obj, text_font.setting);
-        obj_set_text_size(obj, text_size.setting);
-        obj_set_text_style(obj, text_style_bold.setting,
-                                text_style_italic.setting,
-                                text_style_underline.setting,
-                                text_style_strikeout.setting,
-                                text_style_overline.setting);
+        obj_set_text_font(obj, get_str(TEXT_FONT));
+        obj_set_text_size(obj, get_real(TEXT_SIZE));
+        obj_set_text_style(obj,
+            get_bool(TEXT_STYLE_BOLD),
+            get_bool(TEXT_STYLE_ITALIC),
+            get_bool(TEXT_STYLE_UNDERLINE),
+            get_bool(TEXT_STYLE_STRIKEOUT),
+            get_bool(TEXT_STYLE_OVERLINE));
         obj_set_text_backward(obj, false);
         obj_set_text_upside_down(obj, false);
         obj->setRotation(-rot);
@@ -2053,28 +2057,28 @@ get_command(ScriptEnv* context)
         return r;
     }
     else if (value == "TEXTANGLE") {
-        return script_real(text_angle.setting);
+        return setting[TEXT_ANGLE].setting;
     }
     else if (value == "TEXTBOLD") {
-        return script_bool(text_style_bold.setting);
+        return setting[TEXT_STYLE_BOLD].setting;
     }
     else if (value == "TEXTITALIC") {
-        return script_bool(text_style_italic.setting);
+        return setting[TEXT_STYLE_ITALIC].setting;
     }
     else if (value == "TEXTFONT") {
-        return script_string(text_font.setting);
+        return setting[TEXT_FONT].setting;
     }
     else if (value == "TEXTOVERLINE") {
-        return script_real(text_style_overline.setting);
+        return setting[TEXT_STYLE_OVERLINE].setting;
     }
     else if (value == "TEXTSIZE") {
-        return script_real(text_size.setting);
+        return setting[TEXT_SIZE].setting;
     }
     else if (value == "TEXTSTRIKEOUT") {
-        return script_real(text_style_strikeout.setting);
+        return setting[TEXT_STYLE_STRIKEOUT].setting;
     }
     else if (value == "TEXTUNDERLINE") {
-        return script_bool(text_style_underline.setting);
+        return setting[TEXT_STYLE_UNDERLINE].setting;
     }
     else if (value == "QSNAPX") {
         return script_bool(nativeQSnapX());
@@ -2147,49 +2151,49 @@ set_command(ScriptEnv* context)
         if (context->argument[1].type != SCRIPT_REAL) {
             return script_false;
         }
-        text_angle.setting = REAL(1);
+        set_real(TEXT_ANGLE, REAL(1));
     }
     else if (value == "TEXTBOLD") {
         if (context->argument[1].type != SCRIPT_BOOL) {
             return script_false;
         }
-        text_style_bold.setting = BOOL(1);
+        set_bool(TEXT_STYLE_BOLD, BOOL(1));
     }
     else if (value == "TEXTITALIC") {
         if (context->argument[1].type != SCRIPT_BOOL) {
             return script_false;
         }
-        text_style_italic.setting = BOOL(1);
+        set_bool(TEXT_STYLE_ITALIC, BOOL(1));
     }
     else if (value == "TEXTFONT") {
         if (context->argument[1].type != SCRIPT_STRING) {
             return script_false;
         }
-        strcpy(text_font.setting, STR(1));
+        set_str(TEXT_FONT, STR(1));
     }
     else if (value == "TEXTOVERLINE") {
         if (context->argument[1].type != SCRIPT_BOOL) {
             return script_false;
         }
-        text_style_overline.setting = BOOL(1);
+        set_bool(TEXT_STYLE_OVERLINE, BOOL(1));
     }
     else if (value == "TEXTSIZE") {
         if (context->argument[1].type != SCRIPT_REAL) {
             return script_false;
         }
-        text_size.setting = REAL(1);
+        set_real(TEXT_SIZE, REAL(1));
     }
     else if (value == "TEXTSTRIKEOUT") {
         if (context->argument[1].type != SCRIPT_BOOL) {
             return script_false;
         }
-        text_style_strikeout.setting = BOOL(1);
+        set_bool(TEXT_STYLE_STRIKEOUT, BOOL(1));
     }
     else if (value == "TEXTUNDERLINE") {
         if (context->argument[1].type != SCRIPT_BOOL) {
             return script_false;
         }
-        text_style_underline.setting = BOOL(1);
+        set_bool(TEXT_STYLE_UNDERLINE, BOOL(1));
     }
 
     return script_null;

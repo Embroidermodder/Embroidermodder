@@ -51,17 +51,17 @@ create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent)
 
     /* NOTE: This has to be done before setting mouse tracking.
      * TODO: Review OpenGL for Qt5 later
-     * if (display_use_opengl.setting) {
+     * if (get_bool(DISPLAY_USE_OPENGL)) {
      *     debug_message("Using OpenGL...");
      *     setViewport(new QGLWidget(QGLFormat(QGL::DoubleBuffer)));
      * }
 
      * TODO: Review RenderHints later
-     * setRenderHint(QPainter::Antialiasing, display_renderhint_aa.setting);
-     * setRenderHint(QPainter::TextAntialiasing, display_renderhint_text_aa.setting);
-     * setRenderHint(QPainter::SmoothPixmapTransform, settings_display_renderhint_smoothpix);
-     * setRenderHint(QPainter::HighQualityAntialiasing, display_renderhint_high_aa.setting);
-     * setRenderHint(QPainter::NonCosmeticDefaultPen, display_renderhint_noncosmetic.setting);
+     * setRenderHint(QPainter::Antialiasing, get_bool(DISPLAY_RENDERHINT_AA));
+     * setRenderHint(QPainter::TextAntialiasing, get_bool(DISPLAY_RENDERHINT_TEXT_AA));
+     * setRenderHint(QPainter::SmoothPixmapTransform, get_bool(DISPLAY_RENDERHINT_SMOOTHPIX));
+     * setRenderHint(QPainter::HighQualityAntialiasing, get_bool(DISPLAY_RENDERHINT_HIGH_AA));
+     * setRenderHint(QPainter::NonCosmeticDefaultPen, get_bool(DISPLAY_RENDERHINT_NONCOSMETIC));
 
      * NOTE: FullViewportUpdate MUST be used for both the GL and Qt renderers.
      * NOTE: Qt renderer will not draw the foreground properly if it isnt set.
@@ -73,25 +73,25 @@ create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent)
     doc->setCursor(Qt::BlankCursor);
     doc->horizontalScrollBar()->setCursor(Qt::ArrowCursor);
     doc->verticalScrollBar()->setCursor(Qt::ArrowCursor);
-    doc->data.qsnapLocatorColor = qsnap_locator_color.setting;
-    doc->data.qsnapLocatorSize = qsnap_locator_size.setting;
-    doc->data.qsnapApertureSize = qsnap_aperture_size.setting;
-    doc->data.gripColorCool = selection_coolgrip_color.setting;
-    doc->data.gripColorHot = selection_hotgrip_color.setting;
-    doc->data.gripSize = selection_grip_size.setting;
-    doc->data.pickBoxSize = selection_pickbox_size.setting;
-    doc_set_cross_hair_color(doc, display_crosshair_color.setting);
-    doc_set_cross_hair_size(doc, display_crosshair_percent.setting);
-    doc_set_grid_color(doc, grid_color.setting);
+    doc->data.qsnapLocatorColor = get_int(QSNAP_LOCATOR_COLOR);
+    doc->data.qsnapLocatorSize = get_int(QSNAP_LOCATOR_SIZE);
+    doc->data.qsnapApertureSize = get_int(QSNAP_APERTURE_SIZE);
+    doc->data.gripColorCool = get_int(SELECTION_COOLGRIP_COLOR);
+    doc->data.gripColorHot = get_int(SELECTION_HOTGRIP_COLOR);
+    doc->data.gripSize = get_int(SELECTION_GRIP_SIZE);
+    doc->data.pickBoxSize = get_int(SELECTION_PICKBOX_SIZE);
+    doc_set_cross_hair_color(doc, get_int(DISPLAY_CROSSHAIR_COLOR));
+    doc_set_cross_hair_size(doc, get_int(DISPLAY_CROSSHAIR_PERCENT));
+    doc_set_grid_color(doc, get_int(GRID_COLOR));
 
-    if (grid_show_on_load.setting) {
-        doc_create_grid(doc, QString(grid_type.setting));
+    if (get_bool(GRID_SHOW_ON_LOAD)) {
+        doc_create_grid(doc, QString(get_str(GRID_TYPE)));
     }
     else {
         doc_create_grid(doc, QString(""));
     }
 
-    doc_toggle_ruler(doc, ruler_show_on_load.setting);
+    doc_toggle_ruler(doc, get_bool(RULER_SHOW_ON_LOAD));
     doc_toggle_real(doc, true); /* TODO: load this from file, else settings with default being true. */
 
     doc->data.grippingActive = false;
@@ -120,13 +120,13 @@ create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent)
 
     doc->data.selectBox = new SelectBox(QRubberBand::Rectangle, doc);
     doc->data.selectBox->setColors(
-        QColor(display_selectbox_left_color.setting),
-        QColor(display_selectbox_left_fill.setting),
-        QColor(display_selectbox_right_color.setting),
-        QColor(display_selectbox_right_fill.setting),
-        display_selectbox_alpha.setting);
+        QColor(get_int(DISPLAY_SELECTBOX_LEFT_COLOR)),
+        QColor(get_int(DISPLAY_SELECTBOX_LEFT_FILL)),
+        QColor(get_int(DISPLAY_SELECTBOX_RIGHT_COLOR)),
+        QColor(get_int(DISPLAY_SELECTBOX_RIGHT_FILL)),
+        get_int(DISPLAY_SELECTBOX_ALPHA));
 
-    doc_show_scroll_bars(doc, display_show_scrollbars.setting);
+    doc_show_scroll_bars(doc, get_bool(DISPLAY_SHOW_SCROLLBARS));
     doc_set_corner_button(doc);
 
     doc->data.undoStack = new QUndoStack(doc);
@@ -135,7 +135,7 @@ create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent)
     doc->installEventFilter(doc);
 
     doc->setMouseTracking(true);
-    doc_set_background_color(doc, display_bg_color.setting);
+    doc_set_background_color(doc, get_int(DISPLAY_BG_COLOR));
     /* TODO: wrap this with a setBackgroundPixmap() function: setBackgroundBrush(QPixmap("images/canvas.png")); */
 
     // FIXME: QObject::connect(doc->data.gscene, SIGNAL(selectionChanged()), doc,
@@ -453,7 +453,7 @@ doc_create_origin(Document* doc) /* TODO: Make Origin Customizable */
 {
     doc->data.originPath = QPainterPath();
 
-    if (grid_show_origin.setting) {
+    if (get_bool(GRID_SHOW_ORIGIN)) {
         /* originPath.addEllipse(QPointF(0,0), 0.5, 0.5); */ /* TODO: Make Origin Customizable */
         double rad = 0.5;
         doc->data.originPath.moveTo(0.0, rad);
@@ -471,10 +471,10 @@ doc_create_origin(Document* doc) /* TODO: Make Origin Customizable */
 void
 doc_create_grid_rect(Document* doc)
 {
-    double xSpacing = grid_spacing_x.setting;
-    double ySpacing = grid_spacing_y.setting;
+    double xSpacing = get_real(GRID_SPACING_X);
+    double ySpacing = get_real(GRID_SPACING_Y);
 
-    QRectF gr(0, 0, grid_size_x.setting, -grid_size_y.setting);
+    QRectF gr(0, 0, get_real(GRID_SIZE_X), -get_real(GRID_SIZE_Y));
     /* Ensure the loop will work correctly with negative numbers */
     double x1 = EMB_MIN(gr.left(), gr.right());
     double y1 = EMB_MIN(gr.top(), gr.bottom());
@@ -496,12 +496,12 @@ doc_create_grid_rect(Document* doc)
     QRectF gridRect = doc->data.gridPath.boundingRect();
     double bx = gridRect.width()/2.0;
     double by = -gridRect.height()/2.0;
-    double cx = grid_center_x.setting;
-    double cy = -grid_center_y.setting;
+    double cx = get_real(GRID_CENTER_X);
+    double cy = -get_real(GRID_CENTER_Y);
     double dx = cx - bx;
     double dy = cy - by;
 
-    if (grid_center_on_origin.setting) {
+    if (get_bool(GRID_CENTER_ON_ORIGIN)) {
         doc->data.gridPath.translate(-bx, -by);
     }
     else {
@@ -513,10 +513,10 @@ doc_create_grid_rect(Document* doc)
 void
 doc_create_grid_polar(Document* doc)
 {
-    double radSpacing = grid_spacing_radius.setting;
-    double angSpacing = grid_spacing_angle.setting;
+    double radSpacing = get_real(GRID_SPACING_RADIUS);
+    double angSpacing = get_real(GRID_SPACING_ANGLE);
 
-    double rad = grid_size_radius.setting;
+    double rad = get_real(GRID_SIZE_RADIUS);
 
     doc->data.gridPath = QPainterPath();
     doc->data.gridPath.addEllipse(QPointF(0,0), rad, rad);
@@ -528,10 +528,10 @@ doc_create_grid_polar(Document* doc)
         doc->data.gridPath.lineTo(QLineF::fromPolar(rad, ang).p2());
     }
 
-    double cx = grid_center_x.setting;
-    double cy = grid_center_y.setting;
+    double cx = get_real(GRID_CENTER_X);
+    double cy = get_real(GRID_CENTER_Y);
 
-    if (!grid_center_on_origin.setting) {
+    if (!get_bool(GRID_CENTER_ON_ORIGIN)) {
         doc->data.gridPath.translate(cx, -cy);
     }
 }
@@ -540,12 +540,12 @@ doc_create_grid_polar(Document* doc)
 void
 doc_create_grid_iso(Document* doc)
 {
-    double xSpacing = grid_spacing_x.setting;
-    double ySpacing = grid_spacing_y.setting;
+    double xSpacing = get_real(GRID_SPACING_X);
+    double ySpacing = get_real(GRID_SPACING_Y);
 
     /* Ensure the loop will work correctly with negative numbers. */
-    double isoW = qAbs(grid_size_x.setting);
-    double isoH = qAbs(grid_size_y.setting);
+    double isoW = fabs(get_real(GRID_SIZE_X));
+    double isoH = fabs(get_real(GRID_SIZE_Y));
 
     QPointF p1 = QPointF(0,0);
     QPointF p2 = QLineF::fromPolar(isoW, 30).p2();
@@ -576,10 +576,10 @@ doc_create_grid_iso(Document* doc)
     QRectF gridRect = doc->data.gridPath.boundingRect();
     /* bx is unused */
     double by = -gridRect.height()/2.0;
-    double cx = grid_center_x.setting;
-    double cy = -grid_center_y.setting;
+    double cx = get_real(GRID_CENTER_X);
+    double cy = -get_real(GRID_CENTER_Y);
 
-    if (grid_center_on_origin.setting) {
+    if (get_real(GRID_CENTER_ON_ORIGIN)) {
         doc->data.gridPath.translate(0, -by);
     }
     else {
@@ -605,7 +605,7 @@ doc_toggle_grid(Document* doc, bool on)
     debug_message("View toggleGrid()");
     wait_cursor();
     if (on) {
-        doc_create_grid(doc, QString(grid_type.setting));
+        doc_create_grid(doc, QString(get_str(GRID_TYPE)));
     }
     else {
         doc_create_grid(doc, QString(""));
@@ -620,9 +620,9 @@ doc_toggle_ruler(Document* doc, bool on)
     debug_message("View toggleRuler()");
     wait_cursor();
     doc->data.gscene->setProperty("ENABLE_RULER", on);
-    doc->data.rulerMetric = ruler_metric.setting;
-    doc->data.rulerColor = QColor(ruler_color.setting);
-    doc->data.rulerPixelSize = ruler_pixel_size.setting;
+    doc->data.rulerMetric = get_bool(RULER_METRIC);
+    doc->data.rulerColor = QColor(get_int(RULER_COLOR));
+    doc->data.rulerPixelSize = get_int(RULER_PIXEL_SIZE);
     doc->data.gscene->update();
     restore_cursor();
 }
@@ -1308,7 +1308,7 @@ doc_set_cross_hair_size(Document* doc, uint8_t percent)
 void
 doc_set_corner_button(Document* doc)
 {
-    int num = display_scrollbar_widget_num.setting;
+    int num = get_int(DISPLAY_SCROLLBAR_WIDGET_NUM);
     if (num) {
         QPushButton* cornerButton = new QPushButton(doc);
         cornerButton->setFlat(true);
@@ -1335,7 +1335,7 @@ void
 doc_cornerButtonClicked()
 {
     debug_message("Corner Button Clicked.");
-    actionHash[display_scrollbar_widget_num.setting]->trigger();
+    actionHash[get_int(DISPLAY_SCROLLBAR_WIDGET_NUM)]->trigger();
 }
 
 /* . */
@@ -1348,7 +1348,7 @@ doc_zoom_in(Document *doc)
     }
     wait_cursor();
     QPointF cntr = doc->mapToScene(QPoint(doc->width()/2, doc->height()/2));
-    double s = display_zoomscale_in.setting;
+    double s = get_real(DISPLAY_ZOOMSCALE_IN);
     doc->scale(s, s);
 
     doc_center_on(doc, to_emb_vector(cntr));
@@ -1365,7 +1365,7 @@ doc_zoom_out(Document *doc)
     }
     wait_cursor();
     QPointF cntr = doc->mapToScene(QPoint(doc->width()/2, doc->height()/2));
-    double s = display_zoomscale_out.setting;
+    double s = get_real(DISPLAY_ZOOMSCALE_OUT);
     doc->scale(s, s);
 
     doc_center_on(doc, to_emb_vector(cntr));
@@ -1408,8 +1408,8 @@ doc_zoom_extents(Document* doc)
     wait_cursor();
     QRectF extents = doc->data.gscene->itemsBoundingRect();
     if (extents.isNull()) {
-        extents.setWidth(grid_size_x.setting);
-        extents.setHeight(grid_size_y.setting);
+        extents.setWidth(get_real(GRID_SIZE_X));
+        extents.setHeight(get_real(GRID_SIZE_Y));
         extents.moveCenter(QPointF(0,0));
     }
     doc->fitInView(extents, Qt::KeepAspectRatio);
@@ -1572,7 +1572,7 @@ Document::mousePressEvent(QMouseEvent* event)
             /* Start SelectBox Code */
             path.addPolygon(doc->mapToScene(doc->data.selectBox->geometry()));
             if (doc->data.sceneReleasePoint.x > doc->data.scenePressPoint.x) {
-                if (selection_mode_pickadd.setting) {
+                if (get_bool(SELECTION_MODE_PICKADD)) {
                     if (isShiftPressed()) {
                         QList<QGraphicsItem*> itemList = doc->data.gscene->items(path, Qt::ContainsItemShape);
                         foreach(QGraphicsItem* item, itemList)
@@ -1603,7 +1603,7 @@ Document::mousePressEvent(QMouseEvent* event)
                 }
             }
             else {
-                if (selection_mode_pickadd.setting) {
+                if (get_bool(SELECTION_MODE_PICKADD)) {
                     if (isShiftPressed()) {
                         QList<QGraphicsItem*> itemList = doc->data.gscene->items(path, Qt::IntersectsItemShape);
                         foreach(QGraphicsItem* item, itemList)
@@ -1953,13 +1953,13 @@ doc_zoom_to_point(Document* doc, EmbVector mousePoint, int zoomDir)
         if (!doc_allow_zoom_in(doc)) {
             return;
         }
-        s = display_zoomscale_in.setting;
+        s = get_real(DISPLAY_ZOOMSCALE_IN);
     }
     else {
         if (!doc_allow_zoom_out(doc)) {
             return;
         }
-        s = display_zoomscale_out.setting;
+        s = get_real(DISPLAY_ZOOMSCALE_OUT);
     }
 
     doc->scale(s, s);

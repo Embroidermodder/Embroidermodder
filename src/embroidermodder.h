@@ -345,12 +345,12 @@ void set_enabled(QObject *senderObj, const char *key, bool visibility);
 void set_visibility_group(QObject *senderObj, char *key[], bool visibility);
 void set_enabled_group(QObject *senderObj, char *key[], bool visibility);
 QIcon create_swatch(int32_t color);
-QGroupBox* create_group_box(QWidget* widget, const char *label, WidgetData data[]);
-QCheckBox* create_checkbox(QGroupBox* groupbox, QString label, BoolSetting *setting, QString icon);
+QGroupBox* create_group_box(QWidget* widget, const char *label, int data[]);
+QCheckBox* create_checkbox(QGroupBox* groupbox, QString label, int setting, QString icon);
 void preview_update(void);
-QDoubleSpinBox* create_spinbox(QGroupBox* groupbox, QString label, RealSetting *setting, double single_step, double lower_bound, double upper_bound);
-QSpinBox* create_int_spinbox(QGroupBox* groupbox, QString label, IntSetting *setting, int single_step, int lower_bound, int upper_bound);
-QPushButton *choose_color_button(QGroupBox* groupbox, IntSetting* color_setting);
+QDoubleSpinBox* create_spinbox(QGroupBox* groupbox, QString label, int setting, double single_step, double lower_bound, double upper_bound);
+QSpinBox* create_int_spinbox(QGroupBox* groupbox, QString label, int setting, int single_step, int lower_bound, int upper_bound);
+QPushButton *choose_color_button(QGroupBox* groupbox, int color_setting);
 
 QString getCurrentLayer();
 QRgb getCurrentColor();
@@ -890,6 +890,8 @@ class Settings_Dialog : public QDialog
 public:
     Settings_Dialog(MainWindow* mw, QString  showTab = "", QWidget *parent = 0);
     ~Settings_Dialog();
+
+    void color_dialog(QPushButton *button, int key);
 
 private:
     QTabWidget* tabWidget;
