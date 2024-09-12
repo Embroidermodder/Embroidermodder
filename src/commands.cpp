@@ -808,7 +808,7 @@ run_command(const char* cmd, ScriptEnv *context)
         break;
 
     case ACTION_DIM_LEADER: {
-        nativeAddDimLeader(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), OBJ_RUBBER_OFF);
+        nativeAddDimLeader(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), RUBBER_OFF);
         break;
     }
 
@@ -1037,7 +1037,7 @@ run_command(const char* cmd, ScriptEnv *context)
     }
 
     case ACTION_CIRCLE: {
-        nativeAddCircle(REAL(0), REAL(1), REAL(2), BOOL(4), OBJ_RUBBER_OFF);
+        nativeAddCircle(REAL(0), REAL(1), REAL(2), BOOL(4), RUBBER_OFF);
         break;
     }
 
@@ -1048,7 +1048,7 @@ run_command(const char* cmd, ScriptEnv *context)
         break;
 
     case ACTION_ELLIPSE: {
-        nativeAddEllipse(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), OBJ_RUBBER_OFF);
+        nativeAddEllipse(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), RUBBER_OFF);
         break;
     }
 
@@ -1080,7 +1080,7 @@ run_command(const char* cmd, ScriptEnv *context)
         break;
 
     case ACTION_LINE: {
-        nativeAddLine(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), OBJ_RUBBER_OFF);
+        nativeAddLine(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), RUBBER_OFF);
         break;
     }
 
@@ -1119,7 +1119,7 @@ run_command(const char* cmd, ScriptEnv *context)
         break;
 
     case ACTION_RECTANGLE: {
-        nativeAddRectangle(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), OBJ_RUBBER_OFF);
+        nativeAddRectangle(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), RUBBER_OFF);
         break;
     }
 
@@ -2108,15 +2108,15 @@ previewon_command(ScriptEnv *context)
     }
 
     QString modeStr  = QString(STR(1)).toUpper();
-    int mode = PREVIEW_MODE_NULL;
+    int mode = PREVIEW_NULL;
     if (modeStr == "MOVE") {
-        mode = PREVIEW_MODE_MOVE;
+        mode = PREVIEW_MOVE;
     }
     else if (modeStr == "ROTATE") {
-        mode = PREVIEW_MODE_ROTATE;
+        mode = PREVIEW_ROTATE;
     }
     else if (modeStr == "SCALE") {
-        mode = PREVIEW_MODE_SCALE;
+        mode = PREVIEW_SCALE;
     }
     else {
         prompt_output("UNKNOWN_ERROR previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\".");
@@ -2370,7 +2370,7 @@ ScriptValue
 add_text_multi_command(ScriptEnv* context)
 {
     nativeAddTextMulti(std::string(STR(0)), REAL(1), REAL(2), REAL(3),
-        BOOL(4), OBJ_RUBBER_OFF);
+        BOOL(4), RUBBER_OFF);
     return script_null;
 }
 
@@ -2378,7 +2378,7 @@ ScriptValue
 add_text_single_command(ScriptEnv* context)
 {
     nativeAddTextSingle(std::string(STR(0)), REAL(1), REAL(2), REAL(3),
-        BOOL(4), OBJ_RUBBER_OFF);
+        BOOL(4), RUBBER_OFF);
     return script_null;
 }
 
@@ -2415,14 +2415,14 @@ add_rounded_rectangle_command(ScriptEnv* context)
 ScriptValue
 add_arc_command(ScriptEnv* context)
 {
-    nativeAddArc(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), REAL(5), OBJ_RUBBER_OFF);
+    nativeAddArc(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), REAL(5), RUBBER_OFF);
     return script_null;
 }
 
 ScriptValue
 add_slot_command(ScriptEnv* context)
 {
-    nativeAddSlot(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), OBJ_RUBBER_OFF);
+    nativeAddSlot(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), RUBBER_OFF);
     return script_null;
 }
 
@@ -2501,7 +2501,7 @@ add_polygon_command(ScriptEnv* context)
 
     path.translate(-start.x, -start.y);
 
-    nativeAddPolygon(start.x, start.y, path, OBJ_RUBBER_OFF);
+    nativeAddPolygon(start.x, start.y, path, RUBBER_OFF);
     #endif
     return script_null;
 }
@@ -2566,7 +2566,7 @@ add_polyline_command(ScriptEnv* context)
 
     path.translate(-startX, -startY);
 
-    nativeAddPolyline(startX, startY, path, OBJ_RUBBER_OFF);
+    nativeAddPolyline(startX, startY, path, RUBBER_OFF);
     #endif
     return script_null;
 }
@@ -3649,7 +3649,7 @@ rgb_command(ScriptEnv *context)
     switch (context->context) {
     default:
     case CONTEXT_MAIN: {
-        context->mode = RGB_MODE_BACKGROUND;
+        context->mode = RGB_BACKGROUND;
         prompt_output(translate("Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: "));
         break;
     }
@@ -3670,13 +3670,13 @@ void prompt(str)
     float v[3];
     switch (context->mode) {
     default:
-    case RGB_MODE_BACKGROUND: {
+    case RGB_BACKGROUND: {
         if (str == "C" || str == "CROSSHAIR") {
-            context->mode = RGB_MODE_CROSSHAIR;
+            context->mode = RGB_CROSSHAIR;
             prompt_output(translate("Specify crosshair color: "));
         }
         else if (str == "G" || str == "GRID") {
-            context->mode = RGB_MODE_GRID;
+            context->mode = RGB_GRID;
             prompt_output(translate("Specify grid color: "));
         }
         else {
@@ -3692,7 +3692,7 @@ void prompt(str)
         }
         break;
     }
-    case RGB_MODE_CROSSHAIR: {
+    case RGB_CROSSHAIR: {
         parse_floats(str, v, 3);
         if (!validRGB(v[0], v[1], v[2])) {
             alert(translate("Invalid color. R,G,B values must be in the range of 0-255."));
@@ -3704,7 +3704,7 @@ void prompt(str)
         }
         break;
     }
-    case RGB_MODE_GRID: {
+    case RGB_GRID: {
         parse_floats(str, v, 3);
         if (!validRGB(v[0], v[1], v[2])) {
             alert(translate("Invalid color. R,G,B values must be in the range of 0-255."));
@@ -3735,58 +3735,58 @@ set_rubber_mode_command(ScriptEnv* context)
     std::string mode(STR(0));
 
     if (mode == "CIRCLE_1P_RAD") {
-        nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_RAD);
+        nativeSetRubberMode(RUBBER_CIRCLE_1P_RAD);
     }
     else if (mode == "CIRCLE_1P_DIA") {
-        nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_DIA);
+        nativeSetRubberMode(RUBBER_CIRCLE_1P_DIA);
     }
     else if (mode == "CIRCLE_2P") {
-        nativeSetRubberMode(OBJ_RUBBER_CIRCLE_2P);
+        nativeSetRubberMode(RUBBER_CIRCLE_2P);
     }
     else if (mode == "CIRCLE_3P") {
-        nativeSetRubberMode(OBJ_RUBBER_CIRCLE_3P);
+        nativeSetRubberMode(RUBBER_CIRCLE_3P);
     }
     else if (mode == "CIRCLE_TTR") {
-        nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTR);
+        nativeSetRubberMode(RUBBER_CIRCLE_TTR);
     }
     else if (mode == "CIRCLE_TTT") {
-        nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTT);
+        nativeSetRubberMode(RUBBER_CIRCLE_TTT);
     }
     else if (mode == "DIMLEADER_LINE") {
-        nativeSetRubberMode(OBJ_RUBBER_DIMLEADER_LINE);
+        nativeSetRubberMode(RUBBER_DIMLEADER_LINE);
     }
     else if (mode == "ELLIPSE_LINE") {
-        nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_LINE);
+        nativeSetRubberMode(RUBBER_ELLIPSE_LINE);
     }
-    else if (mode == "ELLIPSE_MAJORDIAMETER_MINORRADIUS") {
-        nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS);
+    else if (mode == "ELLIPSE_MAJDIA_MINRAD") {
+        nativeSetRubberMode(RUBBER_ELLIPSE_MAJDIA_MINRAD);
     }
-    else if (mode == "ELLIPSE_MAJORRADIUS_MINORRADIUS") {
-        nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS);
+    else if (mode == "ELLIPSE_MAJRAD_MINRAD") {
+        nativeSetRubberMode(RUBBER_ELLIPSE_MAJRAD_MINRAD);
     }
     else if (mode == "ELLIPSE_ROTATION") {
-        nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_ROTATION);
+        nativeSetRubberMode(RUBBER_ELLIPSE_ROTATION);
     }
     else if (mode == "LINE") {
-        nativeSetRubberMode(OBJ_RUBBER_LINE);
+        nativeSetRubberMode(RUBBER_LINE);
     }
     else if (mode == "POLYGON") {
-        nativeSetRubberMode(OBJ_RUBBER_POLYGON);
+        nativeSetRubberMode(RUBBER_POLYGON);
     }
     else if (mode == "POLYGON_INSCRIBE") {
-        nativeSetRubberMode(OBJ_RUBBER_POLYGON_INSCRIBE);
+        nativeSetRubberMode(RUBBER_POLYGON_INSCRIBE);
     }
     else if (mode == "POLYGON_CIRCUMSCRIBE") {
-        nativeSetRubberMode(OBJ_RUBBER_POLYGON_CIRCUMSCRIBE);
+        nativeSetRubberMode(RUBBER_POLYGON_CIRCUMSCRIBE);
     }
     else if (mode == "POLYLINE") {
-        nativeSetRubberMode(OBJ_RUBBER_POLYLINE);
+        nativeSetRubberMode(RUBBER_POLYLINE);
     }
     else if (mode == "RECTANGLE") {
-        nativeSetRubberMode(OBJ_RUBBER_RECTANGLE);
+        nativeSetRubberMode(RUBBER_RECTANGLE);
     }
     else if (mode == "TEXTSINGLE") {
-        nativeSetRubberMode(OBJ_RUBBER_TEXTSINGLE);
+        nativeSetRubberMode(RUBBER_TEXTSINGLE);
     }
     else {
         prompt_output("UNKNOWN_ERROR setRubberMode(): unknown rubberMode value");
@@ -3833,7 +3833,7 @@ add_rubber_command(ScriptEnv* context)
         /* TODO: handle this type */
     }
     else if (objType == "CIRCLE") {
-        nativeAddCircle(mx, my, 0, false, OBJ_RUBBER_ON);
+        nativeAddCircle(mx, my, 0, false, RUBBER_ON);
     }
     else if (objType == "DIMALIGNED") {
         /* TODO: handle this type */
@@ -3848,7 +3848,7 @@ add_rubber_command(ScriptEnv* context)
         /* TODO: handle this type */
     }
     else if (objType == "DIMLEADER") {
-        nativeAddDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON);
+        nativeAddDimLeader(mx, my, mx, my, 0, RUBBER_ON);
     }
     else if (objType == "DIMLINEAR") {
         /* TODO: handle this type */
@@ -3860,7 +3860,7 @@ add_rubber_command(ScriptEnv* context)
         /* TODO: handle this type */
     }
     else if (objType == "ELLIPSE") {
-        nativeAddEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON);
+        nativeAddEllipse(mx, my, 0, 0, 0, 0, RUBBER_ON);
     }
     else if (objType == "ELLIPSEARC") {
         /* TODO: handle this type */
@@ -3875,7 +3875,7 @@ add_rubber_command(ScriptEnv* context)
         /* TODO: handle this type */
     }
     else if (objType == "LINE") {
-        nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON);
+        nativeAddLine(mx, my, mx, my, 0, RUBBER_ON);
     }
     else if (objType == "PATH") {
         /* TODO: handle this type */
@@ -3884,16 +3884,16 @@ add_rubber_command(ScriptEnv* context)
         /* TODO: handle this type */
     }
     else if (objType == "POLYGON") {
-        nativeAddPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON);
+        nativeAddPolygon(mx, my, QPainterPath(), RUBBER_ON);
     }
     else if (objType == "POLYLINE") {
-        nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON);
+        nativeAddPolyline(mx, my, QPainterPath(), RUBBER_ON);
     }
     else if (objType == "RAY") {
         /* TODO: handle this type */
     }
     else if (objType == "RECTANGLE") {
-        nativeAddRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON);
+        nativeAddRectangle(mx, my, mx, my, 0, 0, RUBBER_ON);
     }
     else if (objType == "SPLINE") {
         /* TODO: handle this type */
@@ -3902,7 +3902,7 @@ add_rubber_command(ScriptEnv* context)
         /* TODO: handle this type */
     }
     else if (objType == "TEXTSINGLE") {
-        nativeAddTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON);
+        nativeAddTextSingle("", mx, my, 0, false, RUBBER_ON);
     }
 
     return script_null;

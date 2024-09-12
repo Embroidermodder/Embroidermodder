@@ -271,9 +271,25 @@ typedef struct UndoData_ {
     QLineF mirrorLine;
 } UndoData;
 
+typedef struct ObjectCore_ {
+    QString text;
+    QString textFont;
+    QString textJustify;
+    double textSize;
+    bool textBold;
+    bool textItalic;
+    bool textUnderline;
+    bool textStrikeOut;
+    bool textOverline;
+    bool textBackward;
+    bool textUpsideDown;
+} ObjectCore;
+
 typedef struct ObjectData_ {
+    ObjectCore core;
+
     QGraphicsPathItem path;
-    int32_t TYPE;
+    int32_t OBJ_TYPE;
     QString OBJ_NAME;
     QPen objPen;
     QPen lwtPen;
@@ -283,18 +299,7 @@ typedef struct ObjectData_ {
     QHash<QString, QString> objRubberTexts;
     int64_t objID;
 
-    QString objText;
-    QString objTextFont;
-    QString objTextJustify;
-    double objTextSize;
-    bool objTextBold;
-    bool objTextItalic;
-    bool objTextUnderline;
-    bool objTextStrikeOut;
-    bool objTextOverline;
-    bool objTextBackward;
-    bool objTextUpsideDown;
-    QPainterPath objTextPath;
+    QPainterPath textPath;
 
     bool curved;
     bool filled;

@@ -241,143 +241,143 @@
 #define ACTION_TEST                  118
 
 /* UI Modes */
-#define CIRCLE_MODE_1P_RAD_ONE         0
-#define CIRCLE_MODE_1P_RAD_TWO         1
-#define CIRCLE_MODE_1P_DIA_ONE         2
-#define CIRCLE_MODE_1P_DIA_TWO         3
-#define CIRCLE_MODE_2P                 4
-#define CIRCLE_MODE_3P                 5
-#define CIRCLE_MODE_TTR                6
-#define CIRCLE_MODE_TTT                7
+#define CIRCLE_1P_RAD_ONE              0
+#define CIRCLE_1P_RAD_TWO              1
+#define CIRCLE_1P_DIA_ONE              2
+#define CIRCLE_1P_DIA_TWO              3
+#define CIRCLE_2P                      4
+#define CIRCLE_3P                      5
+#define CIRCLE_TTR                     6
+#define CIRCLE_TTT                     7
 
-#define ELLIPSE_MODE_MAJDIA_MINRAD_ONE     0
-#define ELLIPSE_MODE_MAJDIA_MINRAD_TWO     1
-#define ELLIPSE_MODE_MAJDIA_MINRAD_THREE   2
-#define ELLIPSE_MODE_MAJRAD_MINRAD_ONE     3
-#define ELLIPSE_MODE_MAJRAD_MINRAD_TWO     4
-#define ELLIPSE_MODE_MAJRAD_MINRAD_THREE   5
-#define ELLIPSE_MODE_ROTATION              6
-#define ELLIPSE_MODE_NEUTRAL               7
+#define ELLIPSE_MAJDIA_MINRAD_ONE      0
+#define ELLIPSE_MAJDIA_MINRAD_TWO      1
+#define ELLIPSE_MAJDIA_MINRAD_THREE    2
+#define ELLIPSE_MAJRAD_MINRAD_ONE      3
+#define ELLIPSE_MAJRAD_MINRAD_TWO      4
+#define ELLIPSE_MAJRAD_MINRAD_THREE    5
+#define ELLIPSE_ROTATION               6
+#define ELLIPSE_NEUTRAL                7
 
-#define POLYGON_MODE_NUM_SIDES      0
-#define POLYGON_MODE_CENTER_PT      1
-#define POLYGON_MODE_POLYTYPE       2
-#define POLYGON_MODE_INSCRIBE       3
-#define POLYGON_MODE_CIRCUMSCRIBE   4
-#define POLYGON_MODE_DISTANCE       5
-#define POLYGON_MODE_SIDE_LEN       6
+#define POLYGON_NUM_SIDES              0
+#define POLYGON_CENTER_PT              1
+#define POLYGON_POLYTYPE               2
+#define POLYGON_INSCRIBE               3
+#define POLYGON_CIRCUMSCRIBE           4
+#define POLYGON_DISTANCE               5
+#define POLYGON_SIDE_LEN               6
 
-#define TEXTSINGLE_MODE_JUSTIFY   0
-#define TEXTSINGLE_MODE_SETFONT   1
-#define TEXTSINGLE_MODE_SETGEOM   2
-#define TEXTSINGLE_MODE_RAPID     3
-
-/* NOTE: Allow this enum to evaluate false */
-#define ARROW_STYLE_NO_ARROW    0
-#define ARROW_STYLE_OPEN        1
-#define ARROW_STYLE_CLOSED      2
-#define ARROW_STYLE_DOT         3
-#define ARROW_STYLE_BOX         4
-#define ARROW_STYLE_TICK        5
+#define TEXTSINGLE_JUSTIFY             0
+#define TEXTSINGLE_SETFONT             1
+#define TEXTSINGLE_SETGEOM             2
+#define TEXTSINGLE_RAPID               3
 
 /* NOTE: Allow this enum to evaluate false */
-#define LINE_STYLE_NO_LINE      0
-#define LINE_STYLE_FLARED       1
-#define LINE_STYLE_FLETCHING    2
+#define ARROW_STYLE_NO_ARROW           0
+#define ARROW_STYLE_OPEN               1
+#define ARROW_STYLE_CLOSED             2
+#define ARROW_STYLE_DOT                3
+#define ARROW_STYLE_BOX                4
+#define ARROW_STYLE_TICK               5
 
-#define RGB_MODE_BACKGROUND     0
-#define RGB_MODE_CROSSHAIR      1
-#define RGB_MODE_GRID           2
+/* NOTE: Allow this enum to evaluate false */
+#define LINE_STYLE_NO_LINE             0
+#define LINE_STYLE_FLARED              1
+#define LINE_STYLE_FLETCHING           2
 
-#define ROTATE_MODE_NORMAL      0
-#define ROTATE_MODE_REFERENCE   1
+#define RGB_BACKGROUND                 0
+#define RGB_CROSSHAIR                  1
+#define RGB_GRID                       2
 
-#define SCALE_MODE_NORMAL       0
-#define SCALE_MODE_REFERENCE    1
+#define ROTATE_NORMAL                  0
+#define ROTATE_REFERENCE               1
 
-#define HEART_MODE_NUM_POINTS     0
-#define HEART_MODE_STYLE          1
-#define HEART_MODE_XSCALE         2
-#define HEART_MODE_YSCALE         3
+#define SCALE_NORMAL                   0
+#define SCALE_REFERENCE                1
 
-#define HEART_STYLE_4             0
-#define HEART_STYLE_5             1
+#define HEART_NUM_POINTS               0
+#define HEART_STYLE                    1
+#define HEART_XSCALE                   2
+#define HEART_YSCALE                   3
 
-#define STAR_MODE_NUM_POINTS      0
-#define STAR_MODE_CENTER_PT       1
-#define STAR_MODE_RAD_OUTER       2
-#define STAR_MODE_RAD_INNER       3
+#define HEART_STYLE_4                  0
+#define HEART_STYLE_5                  1
 
-#define DOLPHIN_MODE_NUM_POINTS   0
-#define DOLPHIN_MODE_XSCALE       1
-#define DOLPHIN_MODE_YSCALE       2
+#define STAR_NUM_POINTS                0
+#define STAR_CENTER_PT                 1
+#define STAR_RAD_OUTER                 2
+#define STAR_RAD_INNER                 3
 
-#define SNOWFLAKE_MODE_NUM_POINTS   0
-#define SNOWFLAKE_MODE_XSCALE       1
-#define SNOWFLAKE_MODE_YSCALE       2
+#define DOLPHIN_NUM_POINTS             0
+#define DOLPHIN_XSCALE                 1
+#define DOLPHIN_YSCALE                 2
+
+#define SNOWFLAKE_NUM_POINTS           0
+#define SNOWFLAKE_XSCALE               1
+#define SNOWFLAKE_YSCALE               2
 
 /* Custom Data used in QGraphicsItems
  *
  *                    (     int, const QVariant)
- * I.E. object.setData(OBJ_TYPE, OBJ_TYPE_LINE);
+ * I.E. object.setData(OBJ_TYPE, OBJ_LINE);
  * I.E. object.setData(OBJ_LAYER, "OUTLINE");
  * I.E. object.setData(OBJ_COLOR, 123);
  * I.E. object.setData(OBJ_LTYPE, OBJ_LTYPE_CONT);
  */
 
 /* Keys */
-/* value type - int: See OBJ_TYPE_VALUES */
-#define OBJ_TYPE                       0
+/* value type - int: See OBJ_VALUES */
+// #define OBJ_TYPE                       0
 /* value type - str: See OBJ_NAME_VALUES */
 //#define OBJ_NAME                       1
 /* value type - str: "USER", "DEFINED", "STRINGS" etc... */
-#define OBJ_LAYER                      2
+// #define OBJ_LAYER                      2
 /* value type - int: 0-255 */
 /* TODO: Use color chart in formats/format-dxf.h for this */
-#define OBJ_COLOR                      3
+// #define OBJ_COLOR                      3
 /* value type - int: See OBJ_LTYPE_VALUES */
-#define OBJ_LTYPE                      4
+// #define OBJ_LTYPE                      4
 /* value type - int: 0-27 */
-#define OBJ_LWT                        5
-/* value type - int: See OBJ_RUBBER_VALUES */
-#define OBJ_RUBBER                     6
+// #define OBJ_LWT                        5
+/* value type - int: See RUBBER_VALUES */
+// #define OBJ_RUBBER                     6
 
 /* Values
  * NOTE: Allow this enum to evaluate false
  * NOTE: Values >= 65536 ensure compatibility with qgraphicsitem_cast()
  */
-#define OBJ_TYPE_NULL                  0
-#define OBJ_TYPE_BASE             100000
-#define OBJ_TYPE_ARC              100001
-#define OBJ_TYPE_BLOCK            100002
-#define OBJ_TYPE_CIRCLE           100003
-#define OBJ_TYPE_DIMALIGNED       100004
-#define OBJ_TYPE_DIMANGULAR       100005
-#define OBJ_TYPE_DIMARCLENGTH     100006
-#define OBJ_TYPE_DIMDIAMETER      100007
-#define OBJ_TYPE_DIMLEADER        100008
-#define OBJ_TYPE_DIMLINEAR        100009
-#define OBJ_TYPE_DIMORDINATE      100010
-#define OBJ_TYPE_DIMRADIUS        100011
-#define OBJ_TYPE_ELLIPSE          100012
-#define OBJ_TYPE_ELLIPSEARC       100013
-#define OBJ_TYPE_RUBBER           100014
-#define OBJ_TYPE_GRID             100015
-#define OBJ_TYPE_HATCH            100016
-#define OBJ_TYPE_IMAGE            100017
-#define OBJ_TYPE_INFINITELINE     100018
-#define OBJ_TYPE_LINE             100019
-#define OBJ_TYPE_PATH             100020
-#define OBJ_TYPE_POINT            100021
-#define OBJ_TYPE_POLYGON          100022
-#define OBJ_TYPE_POLYLINE         100023
-#define OBJ_TYPE_RAY              100024
-#define OBJ_TYPE_RECTANGLE        100025
-#define OBJ_TYPE_SLOT             100026
-#define OBJ_TYPE_SPLINE           100027
-#define OBJ_TYPE_TEXTMULTI        100028
-#define OBJ_TYPE_TEXTSINGLE       100029
-#define OBJ_TYPE_UNKNOWN          100030
+#define OBJ_NULL                       0
+#define OBJ_BASE                  100000
+#define OBJ_ARC                   100001
+#define OBJ_BLOCK                 100002
+#define OBJ_CIRCLE                100003
+#define OBJ_DIMALIGNED            100004
+#define OBJ_DIMANGULAR            100005
+#define OBJ_DIMARCLENGTH          100006
+#define OBJ_DIMDIAMETER           100007
+#define OBJ_DIMLEADER             100008
+#define OBJ_DIMLINEAR             100009
+#define OBJ_DIMORDINATE           100010
+#define OBJ_DIMRADIUS             100011
+#define OBJ_ELLIPSE               100012
+#define OBJ_ELLIPSEARC            100013
+#define OBJ_RUBBER                100014
+#define OBJ_GRID                  100015
+#define OBJ_HATCH                 100016
+#define OBJ_IMAGE                 100017
+#define OBJ_INFINITELINE          100018
+#define OBJ_LINE                  100019
+#define OBJ_PATH                  100020
+#define OBJ_POINT                 100021
+#define OBJ_POLYGON               100022
+#define OBJ_POLYLINE              100023
+#define OBJ_RAY                   100024
+#define OBJ_RECTANGLE             100025
+#define OBJ_SLOT                  100026
+#define OBJ_SPLINE                100027
+#define OBJ_TEXTMULTI             100028
+#define OBJ_TEXTSINGLE            100029
+#define OBJ_UNKNOWN               100030
 
 /* OBJ_LTYPE_VALUES */
 /* CAD Linetypes */
@@ -441,38 +441,38 @@
 #define OBJ_SNAP_PARALLEL             13
 
 /* NOTE: Allow this enum to evaluate true and false */
-#define OBJ_RUBBER_OFF                 0
-#define OBJ_RUBBER_ON                  1
+#define RUBBER_OFF                     0
+#define RUBBER_ON                      1
 
-#define OBJ_RUBBER_CIRCLE_1P_RAD       2
-#define OBJ_RUBBER_CIRCLE_1P_DIA       3
-#define OBJ_RUBBER_CIRCLE_2P           4
-#define OBJ_RUBBER_CIRCLE_3P           5
-#define OBJ_RUBBER_CIRCLE_TTR          6
-#define OBJ_RUBBER_CIRCLE_TTT          7
+#define RUBBER_CIRCLE_1P_RAD           2
+#define RUBBER_CIRCLE_1P_DIA           3
+#define RUBBER_CIRCLE_2P               4
+#define RUBBER_CIRCLE_3P               5
+#define RUBBER_CIRCLE_TTR              6
+#define RUBBER_CIRCLE_TTT              7
 
-#define OBJ_RUBBER_DIMLEADER_LINE      8
+#define RUBBER_DIMLEADER_LINE          8
 
-#define OBJ_RUBBER_ELLIPSE_LINE        9
-#define OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS 10
-#define OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS 11
-#define OBJ_RUBBER_ELLIPSE_ROTATION   12
+#define RUBBER_ELLIPSE_LINE            9
+#define RUBBER_ELLIPSE_MAJDIA_MINRAD  10
+#define RUBBER_ELLIPSE_MAJRAD_MINRAD  11
+#define RUBBER_ELLIPSE_ROTATION       12
 
-#define OBJ_RUBBER_GRIP               13
+#define RUBBER_GRIP                   13
 
-#define OBJ_RUBBER_LINE               14
+#define RUBBER_LINE                   14
 
-#define OBJ_RUBBER_POLYGON            15
-#define OBJ_RUBBER_POLYGON_INSCRIBE   16
-#define OBJ_RUBBER_POLYGON_CIRCUMSCRIBE 17
+#define RUBBER_POLYGON                15
+#define RUBBER_POLYGON_INSCRIBE       16
+#define RUBBER_POLYGON_CIRCUMSCRIBE   17
 
-#define OBJ_RUBBER_POLYLINE           18
+#define RUBBER_POLYLINE               18
 
-#define OBJ_RUBBER_IMAGE              19
+#define RUBBER_IMAGE                  19
 
-#define OBJ_RUBBER_RECTANGLE          20
+#define RUBBER_RECTANGLE              20
 
-#define OBJ_RUBBER_TEXTSINGLE         21
+#define RUBBER_TEXTSINGLE             21
 
 /* NOTE: Allow this enum to evaluate false */
 #define SPARE_RUBBER_OFF               0
@@ -486,10 +486,10 @@
 #define PREVIEW_CLONE_RUBBER           2
 
 /* NOTE: Allow this enum to evaluate false */
-#define PREVIEW_MODE_NULL              0
-#define PREVIEW_MODE_MOVE              1
-#define PREVIEW_MODE_ROTATE            2
-#define PREVIEW_MODE_SCALE             3
+#define PREVIEW_NULL              0
+#define PREVIEW_MOVE              1
+#define PREVIEW_ROTATE            2
+#define PREVIEW_SCALE             3
 
 /* Used for general int tables. */
 #define TERMINATOR_SYMBOL             -1
@@ -644,6 +644,24 @@
 #define SETTING_DIALOG                 1
 #define SETTING_ACCEPT                 2
 #define SETTING_PREVIEW                3
+
+/* Justification */
+#define JUSTIFY_LEFT                   0
+#define JUSTIFY_CENTER                 1
+#define JUSTIFY_RIGHT                  2
+#define JUSTIFY_ALIGNED                3
+#define JUSTIFY_MIDDLE                 4
+#define JUSTIFY_FIT                    5
+#define JUSTIFY_TOP_LEFT               6
+#define JUSTIFY_TOP_CENTER             7
+#define JUSTIFY_TOP_RIGHT              8
+#define JUSTIFY_MIDDLE_LEFT            9
+#define JUSTIFY_MIDDLE_CENTER         10
+#define JUSTIFY_MIDDLE_RIGHT          11
+#define JUSTIFY_BOTTOM_LEFT           12
+#define JUSTIFY_BOTTOM_CENTER         13
+#define JUSTIFY_BOTTOM_RIGHT          14
+#define N_JUSTIFY                     15
 
 #endif
 

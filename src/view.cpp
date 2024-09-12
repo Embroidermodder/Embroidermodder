@@ -96,7 +96,7 @@ create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent)
 
     doc->data.grippingActive = false;
     doc->data.rapidMoveActive = false;
-    doc->data.previewMode = PREVIEW_MODE_NULL;
+    doc->data.previewMode = PREVIEW_NULL;
     doc->data.previewData = 0;
     doc->data.previewObjectItemGroup = 0;
     doc->data.pasteObjectItemGroup = 0;
@@ -225,16 +225,16 @@ doc_preview_on(Document* doc, int clone, int mode, double x, double y, double da
     }
     doc->data.previewObjectItemGroup = doc->data.gscene->createItemGroup(doc->data.previewObjectList);
 
-    if (doc->data.previewMode == PREVIEW_MODE_MOVE ||
-       doc->data.previewMode == PREVIEW_MODE_ROTATE ||
-       doc->data.previewMode == PREVIEW_MODE_SCALE) {
+    if (doc->data.previewMode == PREVIEW_MOVE ||
+       doc->data.previewMode == PREVIEW_ROTATE ||
+       doc->data.previewMode == PREVIEW_SCALE) {
         doc->data.previewPoint.x = x;
         doc->data.previewPoint.y = y; /* NOTE: Move: basePt; Rotate: basePt; Scale: basePt; */
         doc->data.previewData = data_;           /* NOTE: Move: unused; Rotate: refAngle; Scale: refFactor; */
         doc->data.previewActive = true;
     }
     else {
-        doc->data.previewMode = PREVIEW_MODE_NULL;
+        doc->data.previewMode = PREVIEW_NULL;
         doc->data.previewPoint = zero_vector;
         doc->data.previewData = 0;
         doc->data.previewActive = false;
@@ -332,10 +332,10 @@ doc_clear_rubber_room(Document* doc)
         Object* base = static_cast<Object*>(item);
         if (base) {
             int type = base->type();
-            if ((type == OBJ_TYPE_PATH     && doc->data.spareRubberList.contains(SPARE_RUBBER_PATH))     ||
-               (type == OBJ_TYPE_POLYGON  && doc->data.spareRubberList.contains(SPARE_RUBBER_POLYGON))  ||
-               (type == OBJ_TYPE_POLYLINE && doc->data.spareRubberList.contains(SPARE_RUBBER_POLYLINE)) ||
-               (doc->data.spareRubberList.contains(base->data.objID))) {
+            if ((type == OBJ_PATH && doc->data.spareRubberList.contains(SPARE_RUBBER_PATH))
+            || (type == OBJ_POLYGON  && doc->data.spareRubberList.contains(SPARE_RUBBER_POLYGON))
+            || (type == OBJ_POLYLINE && doc->data.spareRubberList.contains(SPARE_RUBBER_POLYLINE))
+            || (doc->data.spareRubberList.contains(base->data.objID))) {
                 if (!obj_path(base).elementCount()) {
                     critical_box(translate("Empty Rubber Object Error"),
                         translate("The rubber object added contains no points. "
@@ -860,7 +860,7 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
     QList<QGraphicsItem*> selectedItemList = doc->data.gscene->selectedItems();
     if (selectedItemList.size() <= 100) {
         foreach(QGraphicsItem* item, selectedItemList) {
-            if (item->type() >= OBJ_TYPE_BASE) {
+            if (item->type() >= OBJ_BASE) {
                 doc->data.tempBaseObj = static_cast<Object*>(item);
                 if (doc->data.tempBaseObj) {
                     selectedGripPoints = doc->data.tempBaseObj->allGripPoints();
@@ -903,7 +903,7 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
             doc->data.qsnapApertureSize*2,
             doc->data.qsnapApertureSize*2);
         foreach(QGraphicsItem* item, apertureItemList) {
-            if (item->type() >= OBJ_TYPE_BASE) {
+            if (item->type() >= OBJ_BASE) {
                 doc->data.tempBaseObj = static_cast<Object*>(item);
                 if (doc->data.tempBaseObj) {
                     EmbVector p = doc->data.sceneMousePoint;
@@ -1750,11 +1750,11 @@ Document::mouseMoveEvent(QMouseEvent* event)
         }
     }
     if (doc->data.previewActive) {
-        if (doc->data.previewMode == PREVIEW_MODE_MOVE) {
+        if (doc->data.previewMode == PREVIEW_MOVE) {
             QPointF p = to_qpointf(doc->data.sceneMousePoint - doc->data.previewPoint);
             doc->data.previewObjectItemGroup->setPos(p);
         }
-        else if (doc->data.previewMode == PREVIEW_MODE_ROTATE) {
+        else if (doc->data.previewMode == PREVIEW_ROTATE) {
             double x = doc->data.previewPoint.x;
             double y = doc->data.previewPoint.y;
             double rot = doc->data.previewData;
@@ -1775,7 +1775,7 @@ Document::mouseMoveEvent(QMouseEvent* event)
             doc->data.previewObjectItemGroup->setPos(rotv.x, rotv.y);
             doc->data.previewObjectItemGroup->setRotation(rot-mouseAngle);
         }
-        else if (doc->data.previewMode == PREVIEW_MODE_SCALE) {
+        else if (doc->data.previewMode == PREVIEW_SCALE) {
             double x = doc->data.previewPoint.x;
             double y = doc->data.previewPoint.y;
             double scaleFactor = doc->data.previewData;
@@ -1816,7 +1816,7 @@ Document::mouseMoveEvent(QMouseEvent* event)
     if (doc->data.movingActive) {
         /* Ensure that the preview is only shown if the mouse has moved. */
         if (!data.previewActive)
-            doc_preview_on(doc, PREVIEW_CLONE_SELECTED, PREVIEW_MODE_MOVE,
+            doc_preview_on(doc, PREVIEW_CLONE_SELECTED, PREVIEW_MOVE,
                 doc->data.scenePressPoint.x, doc->data.scenePressPoint.y, 0);
     }
     if (doc->data.selectingActive) {
@@ -1989,7 +1989,8 @@ Document::contextMenuEvent(QContextMenuEvent* event)
     bool selectionEmpty = itemList.isEmpty();
 
     for (int i = 0; i < itemList.size(); i++) {
-        if (itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL) {
+        Object *obj = static_cast<Object *>(itemList.at(i));
+        if (obj->data.OBJ_TYPE != OBJ_NULL) {
             selectionEmpty = false;
             break;
         }
@@ -2101,7 +2102,7 @@ doc_start_gripping(Document* doc, Object* obj)
     doc->data.gripBaseObj = obj;
     doc->data.sceneGripPoint = doc->data.gripBaseObj->mouseSnapPoint(doc->data.sceneMousePoint);
     doc->data.gripBaseObj->setObjectRubberPoint("GRIP_POINT", doc->data.sceneGripPoint);
-    doc->data.gripBaseObj->setObjectRubberMode(OBJ_RUBBER_GRIP);
+    doc->data.gripBaseObj->setObjectRubberMode(RUBBER_GRIP);
 }
 
 /* . */
@@ -2143,9 +2144,9 @@ doc_delete_selected(Document* doc)
         doc->data.undoStack->beginMacro("Delete " + QString().setNum(itemList.size()));
     }
     for (int i = 0; i < itemList.size(); i++) {
-        if (itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL) {
-            Object* base = static_cast<Object*>(itemList.at(i));
-            if (base) {
+        Object* base = static_cast<Object*>(itemList.at(i));
+        if (base) {
+            if (base->data.OBJ_TYPE != OBJ_NULL) {
                 UndoableCommand* cmd = new UndoableCommand(ACTION_DELETE, translate("Delete 1 ") + base->data.OBJ_NAME, base, doc, 0);
                 if (cmd) {
                     doc->data.undoStack->push(cmd);

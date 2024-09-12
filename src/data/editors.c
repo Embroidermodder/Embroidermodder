@@ -57,91 +57,91 @@ Editor geometry_arc_editor_data[] = {
         .label = "Center X",
         .data_type = "double",
         .signal = "ArcCenterX",
-        .object = OBJ_TYPE_ARC
+        .object = OBJ_ARC
     },
     {
         .icon = "blank",
         .label = "Center Y",
         .data_type = "double",
         .signal = "ArcCenterY",
-        .object = OBJ_TYPE_ARC
+        .object = OBJ_ARC
     },
     {
         .icon = "blank",
         .label = "Radius",
         .data_type = "double",
         .signal = "ArcRadius",
-        .object = OBJ_TYPE_ARC
+        .object = OBJ_ARC
     },
     {
         .icon = "blank",
         .label = "Start Angle",
         .data_type = "double",
         .signal = "ArcStartAngle",
-        .object =  OBJ_TYPE_ARC
+        .object =  OBJ_ARC
     },
     {
         .icon = "blank",
         .label = "End Angle",
         .data_type = "double",
         .signal = "ArcEndAngle",
-        .object =  OBJ_TYPE_ARC
+        .object =  OBJ_ARC
     },
     {
         .icon = "blank",
         .label = "Start X",
         .data_type = "double",
         .signal = "",
-        .object =  OBJ_TYPE_ARC
+        .object =  OBJ_ARC
     },
     {
         .icon = "blank",
         .label = "Start Y",
         .data_type = "double",
         .signal = "",
-        .object =  OBJ_TYPE_ARC
+        .object =  OBJ_ARC
     },
     {
         .icon = "blank",
         .label = "End X",
         .data_type = "double",
         .signal = "",
-        .object =  OBJ_TYPE_ARC
+        .object =  OBJ_ARC
     },
     {
         .icon = "blank",
         .label = "End Y",
         .data_type = "double",
         .signal = "",
-        .object =  OBJ_TYPE_ARC
+        .object =  OBJ_ARC
     },
     {
         .icon = "blank",
         .label = "Area",
         .data_type = "double",
         .signal = "",
-        .object =  OBJ_TYPE_ARC
+        .object =  OBJ_ARC
     },
     {
         .icon = "blank",
         .label = "Arc Length",
         .data_type = "double",
         .signal = "",
-        .object =  OBJ_TYPE_ARC
+        .object =  OBJ_ARC
     },
     {
         .icon = "blank",
         .label = "Chord",
         .data_type = "double",
         .signal = "",
-        .object =  OBJ_TYPE_ARC
+        .object =  OBJ_ARC
     },
     {
         .icon = "blank",
         .label = "Included Angle",
         .data_type = "double",
         .signal = "",
-        .object =  OBJ_TYPE_ARC
+        .object =  OBJ_ARC
     },
     {
         .icon = "END",
@@ -158,7 +158,7 @@ Editor misc_arc_editor_data[] = {
         .label = "Clockwise",
         .data_type = "combobox",
         .signal = "ArcClockwise",
-        .object = OBJ_TYPE_ARC
+        .object = OBJ_ARC
     },
     {
         .icon = "END",
@@ -175,14 +175,14 @@ Editor geometry_block_editor_data[] = {
         .label = "Position X",
         .data_type = "double",
         .signal = "BlockPositionX",
-        .object = OBJ_TYPE_BLOCK
+        .object = OBJ_BLOCK
     },
     {
         .icon = "blank",
         .label = "Position Y",
         .data_type = "double",
         .signal = "BlockPositionY",
-        .object = OBJ_TYPE_BLOCK
+        .object = OBJ_BLOCK
     },
     {
         .icon = "END",
@@ -199,42 +199,42 @@ Editor geometry_circle_editor_data[] = {
         .label = "Center X",
         .data_type = "double",
         .signal = "CircleCenterX",
-        .object = OBJ_TYPE_CIRCLE
+        .object = OBJ_CIRCLE
     },
     {
         .icon = "blank",
         .label = "Center Y",
         .data_type = "double",
         .signal = "CircleCenterY",
-        .object = OBJ_TYPE_CIRCLE
+        .object = OBJ_CIRCLE
     },
     {
         .icon = "blank",
         .label = "Radius",
         .data_type = "double",
         .signal = "CircleRadius",
-        .object = OBJ_TYPE_CIRCLE
+        .object = OBJ_CIRCLE
     },
     {
         .icon = "blank",
         .label = "Diameter",
         .data_type = "double",
         .signal = "CircleDiameter",
-        .object = OBJ_TYPE_CIRCLE
+        .object = OBJ_CIRCLE
     },
     {
         .icon = "blank",
         .label = "Area",
         .data_type = "double",
         .signal = "CircleArea",
-        .object = OBJ_TYPE_CIRCLE
+        .object = OBJ_CIRCLE
     },
     {
         .icon = "blank",
         .label = "Circumference",
         .data_type = "double",
         .signal = "CircleCircumference",
-        .object = OBJ_TYPE_CIRCLE
+        .object = OBJ_CIRCLE
     },
     {
         .icon = "END",
@@ -331,42 +331,42 @@ Editor geometry_ellipse_editor_data[] = {
         .label = "Center X",
         .data_type = "double",
         .signal = "EllipseCenterX",
-        .object = OBJ_TYPE_ELLIPSE
+        .object = OBJ_ELLIPSE
     },
     {
         .icon = "blank",
         .label = "Center Y",
         .data_type = "double",
         .signal = "EllipseCenterY",
-        .object = OBJ_TYPE_ELLIPSE
+        .object = OBJ_ELLIPSE
     },
     {
         .icon = "blank",
         .label = "Major Radius",
         .data_type = "double",
         .signal = "EllipseRadiusMajor",
-        .object = OBJ_TYPE_ELLIPSE
+        .object = OBJ_ELLIPSE
     },
     {
         .icon = "blank",
         .label = "Minor Radius",
         .data_type = "double",
         .signal = "EllipseRadiusMinor",
-        .object = OBJ_TYPE_ELLIPSE
+        .object = OBJ_ELLIPSE
     },
     {
         .icon = "blank",
         .label = "Major Diameter",
         .data_type = "double",
         .signal = "EllipseDiameterMajor",
-        .object = OBJ_TYPE_ELLIPSE
+        .object = OBJ_ELLIPSE
     },
     {
         .icon = "blank",
         .label = "Minor Diameter",
         .data_type = "double",
         .signal = "EllipseDiameterMinor",
-        .object = OBJ_TYPE_ELLIPSE
+        .object = OBJ_ELLIPSE
     },
     {
         .icon = "END",
@@ -383,28 +383,28 @@ Editor geometry_image_editor_data[] = {
         .label = "Position X",
         .data_type = "double",
         .signal = "ImagePositionX",
-        .object = OBJ_TYPE_IMAGE
+        .object = OBJ_IMAGE
     },
     {
         .icon = "blank",
         .label = "Position Y",
         .data_type = "double",
         .signal = "ImagePositionY",
-        .object = OBJ_TYPE_IMAGE
+        .object = OBJ_IMAGE
     },
     {
         .icon = "blank",
         .label = "Width",
         .data_type = "double",
         .signal = "ImageWidth",
-        .object = OBJ_TYPE_IMAGE
+        .object = OBJ_IMAGE
     },
     {
         .icon = "blank",
         .label = "Height",
         .data_type = "double",
         .signal = "ImageHeight",
-        .object = OBJ_TYPE_IMAGE
+        .object = OBJ_IMAGE
     },
     {
         .icon = "END",
@@ -421,14 +421,14 @@ Editor misc_image_editor_data[] = {
         .label = "Name",
         .data_type = "double",
         .signal = "",
-        .object = OBJ_TYPE_IMAGE
+        .object = OBJ_IMAGE
     },
     {
         .icon = "blank",
         .label = "Path",
         .data_type = "double",
         .signal = "",
-        .object = OBJ_TYPE_IMAGE
+        .object = OBJ_IMAGE
     },
     {
         .icon = "END",
@@ -445,42 +445,42 @@ Editor geometry_infinite_line_editor_data[] = {
         .label = "Start X",
         .data_type = "double",
         .signal = "InfiniteLineX1",
-        .object = OBJ_TYPE_INFINITELINE
+        .object = OBJ_INFINITELINE
     },
     {
         .icon = "blank",
         .label = "Start Y",
         .data_type = "double",
         .signal = "InfiniteLineY1",
-        .object = OBJ_TYPE_INFINITELINE
+        .object = OBJ_INFINITELINE
     },
     {
         .icon = "blank",
         .label = "2nd X",
         .data_type = "double",
         .signal = "InfiniteLineX2",
-        .object = OBJ_TYPE_INFINITELINE
+        .object = OBJ_INFINITELINE
     },
     {
         .icon = "blank",
         .label = "2nd Y",
         .data_type = "double",
         .signal = "InfiniteLineY2",
-        .object = OBJ_TYPE_INFINITELINE
+        .object = OBJ_INFINITELINE
     },
     {
         .icon = "blank",
         .label = "Vector X",
         .data_type = "double",
         .signal = "InfiniteLineVectorX",
-        .object = OBJ_TYPE_INFINITELINE
+        .object = OBJ_INFINITELINE
     },
     {
         .icon = "blank",
         .label = "Vector Y",
         .data_type = "double",
         .signal = "InfiniteLineVectorY",
-        .object = OBJ_TYPE_INFINITELINE
+        .object = OBJ_INFINITELINE
     },
     {
         .icon = "END",
@@ -497,56 +497,56 @@ Editor geometry_line_editor_data[] = {
         .label = "Start X",
         .data_type = "double",
         .signal = "LineStartX",
-        .object = OBJ_TYPE_LINE
+        .object = OBJ_LINE
     },
     {
         .icon = "blank",
         .label = "Start Y",
         .data_type = "double",
         .signal = "LineStartY",
-        .object = OBJ_TYPE_LINE
+        .object = OBJ_LINE
     },
     {
         .icon = "blank",
         .label = "End X",
         .data_type = "double",
         .signal = "LineEndX",
-        .object = OBJ_TYPE_LINE
+        .object = OBJ_LINE
     },
     {
         .icon = "blank",
         .label = "End Y",
         .data_type = "double",
         .signal = "LineEndY",
-        .object = OBJ_TYPE_LINE
+        .object = OBJ_LINE
     },
     {
         .icon = "blank",
         .label = "Delta X",
         .data_type = "double",
         .signal = "",
-        .object = OBJ_TYPE_LINE
+        .object = OBJ_LINE
     },
     {
         .icon = "blank",
         .label = "Delta Y",
         .data_type = "double",
         .signal = "",
-        .object = OBJ_TYPE_LINE
+        .object = OBJ_LINE
     },
     {
         .icon = "blank",
         .label = "Angle",
         .data_type = "double",
         .signal = "",
-        .object = OBJ_TYPE_LINE
+        .object = OBJ_LINE
     },
     {
         .icon = "blank",
         .label = "Length",
         .data_type = "double",
         .signal = "",
-        .object = OBJ_TYPE_LINE
+        .object = OBJ_LINE
     },
     {
         .icon = "END",
@@ -563,35 +563,35 @@ Editor geometry_path_editor_data[] = {
         .label = "Vertex #",
         .data_type = "combobox",
         .signal = "PathVertexNumber",
-        .object = OBJ_TYPE_PATH
+        .object = OBJ_PATH
     },
     {
         .icon = "blank",
         .label = "Vertex X",
         .data_type = "double",
         .signal = "PathVertexX",
-        .object = OBJ_TYPE_PATH
+        .object = OBJ_PATH
     },
     {
         .icon = "blank",
         .label = "Vertex Y",
         .data_type = "double",
         .signal = "PathVertexY",
-        .object = OBJ_TYPE_PATH
+        .object = OBJ_PATH
     },
     {
         .icon = "blank",
         .label = "Area",
         .data_type = "double",
         .signal = "",
-        .object = OBJ_TYPE_PATH
+        .object = OBJ_PATH
     },
     {
         .icon = "blank",
         .label = "Length",
         .data_type = "double",
         .signal = "",
-        .object = OBJ_TYPE_PATH
+        .object = OBJ_PATH
     },
     {
         .icon = "END",
@@ -607,7 +607,7 @@ Editor misc_path_editor_data[] = {
         .icon = "blank",
         .label = "Closed", "combobox",
         .signal = "PathClosed",
-        .object = OBJ_TYPE_PATH
+        .object = OBJ_PATH
     },
     {
         .icon = "END",
@@ -624,14 +624,14 @@ Editor geometry_point_editor_data[] = {
         .label = "Position X",
         .data_type = "double",
         .signal = "PointX",
-        .object = OBJ_TYPE_POINT
+        .object = OBJ_POINT
     },
     {
         .icon = "blank",
         .label = "Position Y",
         .data_type = "double",
         .signal = "PointY",
-        .object = OBJ_TYPE_POINT
+        .object = OBJ_POINT
     },
     {
         .icon = "END",
@@ -648,49 +648,49 @@ Editor geometry_polygon_editor_data[] = {
         .label ="Center X",
         .data_type = "double",
         .signal = "PolygonCenterX",
-        .object = OBJ_TYPE_POLYGON
+        .object = OBJ_POLYGON
     },
     {
         .icon = "blank",
         .label ="Center Y",
         .data_type = "double",
         .signal = "PolygonCenterY",
-        .object = OBJ_TYPE_POLYGON
+        .object = OBJ_POLYGON
     },
     {
         .icon = "blank",
         .label ="Vertex Radius",
         .data_type = "double",
         .signal = "PolygonVertexRadius",
-        .object = OBJ_TYPE_POLYGON
+        .object = OBJ_POLYGON
     },
     {
         .icon = "blank",
         .label ="Side Radius",
         .data_type = "double",
         .signal = "PolygonSideRadius",
-        .object = OBJ_TYPE_POLYGON
+        .object = OBJ_POLYGON
     },
     {
         .icon = "blank",
         .label ="Vertex Diameter",
         .data_type = "double",
         .signal ="PolygonVertexDiameter",
-        .object = OBJ_TYPE_POLYGON
+        .object = OBJ_POLYGON
     },
     {
         .icon = "blank",
         .label = "Side Diameter",
         .data_type = "double",
         .signal = "PolygonSideDiameter",
-        .object = OBJ_TYPE_POLYGON
+        .object = OBJ_POLYGON
     },
     {
         .icon = "blank",
         .label = "Interior Angle",
         .data_type = "double",
         .signal = "",
-        .object = OBJ_TYPE_POLYGON
+        .object = OBJ_POLYGON
     },
     {
         .icon = "END",
@@ -707,35 +707,35 @@ Editor geometry_polyline_editor_data[] = {
         .label = "Vertex #",
         .data_type = "combobox",
         .signal = "PolylineVertexNum",
-        .object = OBJ_TYPE_POLYLINE
+        .object = OBJ_POLYLINE
     },
     {
         .icon = "blank",
         .label = "Vertex X",
         .data_type = "double",
         .signal = "PolylineVertexX",
-        .object = OBJ_TYPE_POLYLINE
+        .object = OBJ_POLYLINE
     },
     {
         .icon = "blank",
         .label = "Vertex Y",
         .data_type = "double",
         .signal = "PolylineVertexX",
-        .object = OBJ_TYPE_POLYLINE
+        .object = OBJ_POLYLINE
     },
     {
         .icon = "blank",
         .label = "Area",
         .data_type = "double",
         .signal = "",
-        .object = OBJ_TYPE_POLYLINE
+        .object = OBJ_POLYLINE
     },
     {
         .icon = "blank",
         .label = "Length",
         .data_type = "double",
         .signal = "",
-        .object = OBJ_TYPE_POLYLINE
+        .object = OBJ_POLYLINE
     },
     {
         .icon = "END",
@@ -752,7 +752,7 @@ Editor misc_polyline_editor_data[] = {
         .label = "Closed",
         .data_type = "combobox",
         .signal = "PolylineClosed",
-        .object = OBJ_TYPE_POLYLINE
+        .object = OBJ_POLYLINE
     },
     {
         .icon = "END",
@@ -769,37 +769,37 @@ Editor geometry_ray_editor_data[] = {
         .icon = "blank",
         .label = "Start X",
         .data_type = "double",
-        .signal = "RayStartX", OBJ_TYPE_RAY
+        .signal = "RayStartX", OBJ_RAY
     },
     {
         .icon = "blank",
         .label = "Start Y",
         .data_type = "double",
-        .signal = "RayStartY", OBJ_TYPE_RAY
+        .signal = "RayStartY", OBJ_RAY
     },
     {
         .icon = "blank",
         .label = "2nd X",
         .data_type = "double",
-        .signal = "RayEndX", OBJ_TYPE_RAY
+        .signal = "RayEndX", OBJ_RAY
     },
     {
         .icon = "blank",
         .label = "2nd Y",
         .data_type = "double",
-        .signal = "RayEndY", OBJ_TYPE_RAY
+        .signal = "RayEndY", OBJ_RAY
     },
     {
         .icon = "blank",
         .label = "Vector X",
         .data_type = "double",
-        .signal = "", OBJ_TYPE_RAY
+        .signal = "", OBJ_RAY
     },
     {
         .icon = "blank",
         .label = "Vector Y",
         .data_type = "double",
-        .signal = "", OBJ_TYPE_RAY
+        .signal = "", OBJ_RAY
     },
     {
         .icon = "END",
@@ -816,77 +816,77 @@ Editor geometry_rectangle_editor_data[] = {
         .label ="Corner 1 X",
         .data_type = "double",
         .signal = "RectangleCorner1X",
-        .object = OBJ_TYPE_RECTANGLE
+        .object = OBJ_RECTANGLE
     },
     {
         .icon = "blank",
         .label = "Corner 1 Y",
         .data_type = "double",
         .signal = "RectangleCorner1Y",
-        .object = OBJ_TYPE_RECTANGLE
+        .object = OBJ_RECTANGLE
     },
     {
         .icon = "blank",
         .label = "Corner 2 X",
         .data_type = "double",
         .signal = "RectangleCorner2X",
-        .object = OBJ_TYPE_RECTANGLE
+        .object = OBJ_RECTANGLE
     },
     {
         .icon = "blank",
         .label = "Corner 2 Y",
         .data_type = "double",
         .signal = "RectangleCorner2Y",
-        .object = OBJ_TYPE_RECTANGLE
+        .object = OBJ_RECTANGLE
     },
     {
         .icon = "blank",
         .label = "Corner 3 X",
         .data_type = "double",
         .signal = "RectangleCorner3X",
-        .object = OBJ_TYPE_RECTANGLE
+        .object = OBJ_RECTANGLE
     },
     {
         .icon = "blank",
         .label = "Corner 3 Y",
         .data_type = "double",
         .signal = "RectangleCorner3Y",
-        .object = OBJ_TYPE_RECTANGLE
+        .object = OBJ_RECTANGLE
     },
     {
         .icon = "blank",
         .label = "Corner 4 X",
         .data_type = "double",
         .signal = "RectangleCorner4X",
-        .object = OBJ_TYPE_RECTANGLE
+        .object = OBJ_RECTANGLE
     },
     {
         .icon = "blank",
         .label = "Corner 4 Y",
         .data_type = "double",
         .signal = "RectangleCorner4Y",
-        .object = OBJ_TYPE_RECTANGLE
+        .object = OBJ_RECTANGLE
     },
     {
         .icon = "blank",
         .label = "Width",
         .data_type = "double",
         .signal = "RectangleWidth",
-        .object = OBJ_TYPE_RECTANGLE
+        .object = OBJ_RECTANGLE
     },
     {
         .icon = "blank",
         .label = "Height",
         .data_type = "double",
         .signal = "RectangleHeight",
-        .object = OBJ_TYPE_RECTANGLE
+        .object = OBJ_RECTANGLE
     },
     {
         .icon = "blank",
         .label = "Area",
         .data_type = "double",
         .signal = "",
-        .object = OBJ_TYPE_RECTANGLE
+        .object = OBJ_RECTANGLE
     },
     {
         .icon = "END",
@@ -903,14 +903,14 @@ Editor geometry_text_multi_editor_data[] = {
         .label = "Position X",
         .data_type = "double",
         .signal = "TextPositionX",
-        .object = OBJ_TYPE_TEXTMULTI
+        .object = OBJ_TEXTMULTI
     },
     {
         .icon = "blank",
         .label = "Position Y",
         .data_type = "double",
         .signal = "TextPositionX",
-        .object = OBJ_TYPE_TEXTMULTI
+        .object = OBJ_TEXTMULTI
     },
     {
         .icon = "END",
@@ -927,35 +927,35 @@ Editor text_text_single_editor_data[] = {
         .label = "Contents",
         .data_type = "string",
         .signal = "TextContents",
-        .object = OBJ_TYPE_TEXTSINGLE
+        .object = OBJ_TEXTSINGLE
     },
     {
         .icon = "blank",
         .label = "Font",
         .data_type = "fontcombobox",
         .signal = "TextFont",
-        .object = OBJ_TYPE_TEXTSINGLE
+        .object = OBJ_TEXTSINGLE
     },
     {
         .icon = "blank",
         .label = "Justify",
         .data_type = "combobox",
         .signal = "TextJustify",
-        .object = OBJ_TYPE_TEXTSINGLE
+        .object = OBJ_TEXTSINGLE
     },
     {
         .icon = "blank",
         .label = "Height",
         .data_type = "double",
         .signal = "TextHeight",
-        .object = OBJ_TYPE_TEXTSINGLE
+        .object = OBJ_TEXTSINGLE
     },
     {
         .icon = "blank",
         .label = "Rotation",
         .data_type = "double",
         .signal = "TextRotation",
-        .object = OBJ_TYPE_TEXTSINGLE
+        .object = OBJ_TEXTSINGLE
     },
     {
         .icon = "END",
@@ -972,14 +972,14 @@ Editor geometry_text_single_editor_data[] = {
         .label = "Position X",
         .data_type = "double",
         .signal = "TextSingleX",
-        .object = OBJ_TYPE_TEXTSINGLE
+        .object = OBJ_TEXTSINGLE
     },
     {
         .icon = "blank",
         .label = "Position Y",
         .data_type = "double",
         .signal = "TextSingleY",
-        .object = OBJ_TYPE_TEXTSINGLE
+        .object = OBJ_TEXTSINGLE
     },
     {
         .icon = "END",
@@ -996,14 +996,14 @@ Editor misc_text_single_editor_data[] = {
         .label = "Backward",
         .data_type = "combobox",
         .signal = "TextSingleBackward",
-        .object = OBJ_TYPE_POLYLINE
+        .object = OBJ_POLYLINE
     },
     {
         .icon = "blank",
         .label = "Upside Down",
         .data_type = "combobox",
         .signal = "TextSingleUpsideDown",
-        .object = OBJ_TYPE_POLYLINE
+        .object = OBJ_POLYLINE
     },
     {
         .icon = "END",

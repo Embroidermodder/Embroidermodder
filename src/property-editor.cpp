@@ -310,11 +310,11 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
         int objType = item->type();
         typeSet.insert(objType);
 
-        if ((objType > OBJ_TYPE_BASE) && (objType < OBJ_TYPE_UNKNOWN)) {
-            object_counts[objType-OBJ_TYPE_ARC]++;
+        if ((objType > OBJ_BASE) && (objType < OBJ_UNKNOWN)) {
+            object_counts[objType-OBJ_ARC]++;
         }
         else {
-            object_counts[OBJ_TYPE_UNKNOWN-OBJ_TYPE_ARC]++;
+            object_counts[OBJ_UNKNOWN-OBJ_ARC]++;
         }
     }
 
@@ -328,8 +328,8 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
     }
 
     foreach (int objType, typeSet) {
-        if ((objType > OBJ_TYPE_BASE) && (objType <= OBJ_TYPE_UNKNOWN)) {
-            int index = objType - OBJ_TYPE_ARC;
+        if ((objType > OBJ_BASE) && (objType <= OBJ_UNKNOWN)) {
+            int index = objType - OBJ_ARC;
             QString comboBoxStr = translate(object_names[index]);
             comboBoxStr += " (" + QString().setNum(object_counts[index]) + ")";
             comboBoxSelected->addItem(comboBoxStr, objType);
@@ -354,7 +354,7 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
         }
         EmbGeometry *g = obj->geometry;
         switch (objType) {
-        case OBJ_TYPE_ARC: {
+        case OBJ_ARC: {
             EmbVector center = obj_center(obj);
             EmbVector start = obj->geometry->object.arc.start;
             EmbVector end = obj->geometry->object.arc.end;
@@ -374,11 +374,11 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
             update_lineedit_bool(combo_boxes["ArcClockwise"], emb_clockwise(g), true);
             break;
         }
-        case OBJ_TYPE_BLOCK: {
+        case OBJ_BLOCK: {
             /* TODO: load block data */
             break;
         }
-        case OBJ_TYPE_CIRCLE: {
+        case OBJ_CIRCLE: {
             EmbVector center = obj_center(obj);
             update_lineedit_num(line_edits["CircleCenterX"], center.x, false);
             update_lineedit_num(line_edits["CircleCenterY"], -center.y, false);
@@ -388,39 +388,39 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
             update_lineedit_num(line_edits["CircleCircumference"], obj_circumference(obj), false);
             break;
         }
-        case OBJ_TYPE_DIMALIGNED: {
+        case OBJ_DIMALIGNED: {
             /* TODO: load aligned dimension data */
             break;
         }
-        case OBJ_TYPE_DIMANGULAR: {
+        case OBJ_DIMANGULAR: {
             /* TODO: load angular dimension data */
             break;
         }
-        case OBJ_TYPE_DIMARCLENGTH: {
+        case OBJ_DIMARCLENGTH: {
             /* TODO: load arclength dimension data */
             break;
         }
-        case OBJ_TYPE_DIMDIAMETER: {
+        case OBJ_DIMDIAMETER: {
             /* TODO: load diameter dimension data */
             break;
         }
-        case OBJ_TYPE_DIMLEADER: {
+        case OBJ_DIMLEADER: {
             /* TODO: load leader dimension data */
             break;
         }
-        case OBJ_TYPE_DIMLINEAR: {
+        case OBJ_DIMLINEAR: {
             /* TODO: load linear dimension data */
             break;
         }
-        case OBJ_TYPE_DIMORDINATE: {
+        case OBJ_DIMORDINATE: {
             /* TODO: load ordinate dimension data */
             break;
         }
-        case OBJ_TYPE_DIMRADIUS: {
+        case OBJ_DIMRADIUS: {
             /* TODO: load radius dimension data */
             break;
         }
-        case OBJ_TYPE_ELLIPSE: {
+        case OBJ_ELLIPSE: {
             EmbVector center = obj_center(obj);
             update_lineedit_num(line_edits["EllipseCenterX"], center.x, false);
             update_lineedit_num(line_edits["EllipseCenterY"], -center.y, false);
@@ -430,15 +430,15 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
             update_lineedit_num(line_edits["EllipseDiameterMinor"], emb_diameter_minor(g), false);
             break;
         }
-        case OBJ_TYPE_IMAGE: {
+        case OBJ_IMAGE: {
             todo("load image data");
             break;
         }
-        case OBJ_TYPE_INFINITELINE: {
+        case OBJ_INFINITELINE: {
             todo("load infinite line data");
             break;
         }
-        case OBJ_TYPE_LINE: {
+        case OBJ_LINE: {
             EmbVector point1 = obj_end_point_1(obj);
             EmbVector point2 = obj_end_point_2(obj);
             EmbVector delta = emb_vector_subtract(point2, point1);
@@ -452,28 +452,28 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
             update_lineedit_num(line_edits["LineLength"], obj_length(obj), false);
             break;
         }
-        case OBJ_TYPE_PATH: {
+        case OBJ_PATH: {
             todo("load path data");
             break;
         }
-        case OBJ_TYPE_POINT: {
+        case OBJ_POINT: {
             update_lineedit_num(line_edits["PointX"], obj_x(obj), false);
             update_lineedit_num(line_edits["PointY"], -obj_y(obj), false);
             break;
         }
-        case OBJ_TYPE_POLYGON: {
+        case OBJ_POLYGON: {
             todo("load polygon data");
             break;
         }
-        case OBJ_TYPE_POLYLINE: {
+        case OBJ_POLYLINE: {
             todo("load polyline data");
             break;
         }
-        case OBJ_TYPE_RAY: {
+        case OBJ_RAY: {
             todo("load ray data");
             break;
         }
-        case OBJ_TYPE_RECTANGLE: {
+        case OBJ_RECTANGLE: {
             EmbVector corn1 = obj_top_left(obj);
             EmbVector corn2 = obj_top_right(obj);
             EmbVector corn3 = obj_bottom_left(obj);
@@ -492,20 +492,20 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
             update_lineedit_num(line_edits["RectangleArea"], emb_area(g), false);
             break;
         }
-        case OBJ_TYPE_TEXTMULTI: {
+        case OBJ_TEXTMULTI: {
             todo("load multiline text data");
             break;
         }
-        case OBJ_TYPE_TEXTSINGLE: {
-            updateLineEditStrIfVaries(line_edits["TextSingleContents"], obj->data.objText);
-                updateFontComboBoxStrIfVaries(comboBoxTextSingleFont, obj->data.objTextFont);
-                update_lineedit_str(combo_boxes["TextSingleJustify"], obj->data.objTextJustify, objectTextJustifyList);
-                update_lineedit_num(line_edits["TextSingleHeight"], obj->data.objTextSize, false);
+        case OBJ_TEXTSINGLE: {
+            updateLineEditStrIfVaries(line_edits["TextSingleContents"], obj->data.core.text);
+                updateFontComboBoxStrIfVaries(comboBoxTextSingleFont, obj->data.core.textFont);
+                update_lineedit_str(combo_boxes["TextSingleJustify"], obj->data.core.textJustify, objectTextJustifyList);
+                update_lineedit_num(line_edits["TextSingleHeight"], obj->data.core.textSize, false);
                 update_lineedit_num(line_edits["TextSingleRotation"], -obj->rotation(), true);
                 update_lineedit_num(line_edits["TextSingleX"], obj_x(obj), false);
                 update_lineedit_num(line_edits["TextSingleY"], -obj_y(obj), false);
-                update_lineedit_bool(combo_boxes["TextSingleBackward"], obj->data.objTextBackward, true);
-                update_lineedit_bool(combo_boxes["TextSingleUpsideDown"], obj->data.objTextUpsideDown, true);
+                update_lineedit_bool(combo_boxes["TextSingleBackward"], obj->data.core.textBackward, true);
+                update_lineedit_bool(combo_boxes["TextSingleUpsideDown"], obj->data.core.textUpsideDown, true);
             break;
         }
         default:
@@ -655,77 +655,77 @@ update_lineedit_bool(QComboBox* comboBox, bool val, bool yesOrNoText)
 void
 showGroups(int objType)
 {
-    if (objType == OBJ_TYPE_ARC) {
+    if (objType == OBJ_ARC) {
         group_boxes["GeometryArc"]->show();
         group_boxes["MiscArc"]->show();
     }
-    else if (objType == OBJ_TYPE_BLOCK) {
+    else if (objType == OBJ_BLOCK) {
         group_boxes["GeometryBlock"]->show();
     }
-    else if (objType == OBJ_TYPE_CIRCLE) {
+    else if (objType == OBJ_CIRCLE) {
         group_boxes["GeometryCircle"]->show();
     }
-    else if (objType == OBJ_TYPE_DIMALIGNED) {
+    else if (objType == OBJ_DIMALIGNED) {
         group_boxes["GeometryDimAligned"]->show();
     }
-    else if (objType == OBJ_TYPE_DIMANGULAR) {
+    else if (objType == OBJ_DIMANGULAR) {
         group_boxes["GeometryDimAngular"]->show();
     }
-    else if (objType == OBJ_TYPE_DIMARCLENGTH) {
+    else if (objType == OBJ_DIMARCLENGTH) {
         group_boxes["GeometryDimArcLength"]->show();
     }
-    else if (objType == OBJ_TYPE_DIMDIAMETER) {
+    else if (objType == OBJ_DIMDIAMETER) {
         group_boxes["GeometryDimDiameter"]->show();
     }
-    else if (objType == OBJ_TYPE_DIMLEADER) {
+    else if (objType == OBJ_DIMLEADER) {
         group_boxes["GeometryDimLeader"]->show();
     }
-    else if (objType == OBJ_TYPE_DIMLINEAR) {
+    else if (objType == OBJ_DIMLINEAR) {
         group_boxes["GeometryDimLinear"]->show();
     }
-    else if (objType == OBJ_TYPE_DIMORDINATE) {
+    else if (objType == OBJ_DIMORDINATE) {
         group_boxes["GeometryDimOrdinate"]->show();
     }
-    else if (objType == OBJ_TYPE_DIMRADIUS) {
+    else if (objType == OBJ_DIMRADIUS) {
         group_boxes["GeometryDimRadius"]->show();
     }
-    else if (objType == OBJ_TYPE_ELLIPSE) {
+    else if (objType == OBJ_ELLIPSE) {
         group_boxes["GeometryEllipse"]->show();
     }
-    else if (objType == OBJ_TYPE_IMAGE) {
+    else if (objType == OBJ_IMAGE) {
         group_boxes["GeometryImage"]->show();
         group_boxes["MiscImage"]->show();
     }
-    else if (objType == OBJ_TYPE_INFINITELINE) {
+    else if (objType == OBJ_INFINITELINE) {
         group_boxes["GeometryInfiniteLine"]->show();
     }
-    else if (objType == OBJ_TYPE_LINE) {
+    else if (objType == OBJ_LINE) {
         group_boxes["GeometryLine"]->show();
     }
-    else if (objType == OBJ_TYPE_PATH) {
+    else if (objType == OBJ_PATH) {
         group_boxes["GeometryPath"]->show();
         group_boxes["MiscPath"]->show();
     }
-    else if (objType == OBJ_TYPE_POINT) {
+    else if (objType == OBJ_POINT) {
         group_boxes["GeometryPoint"]->show();
     }
-    else if (objType == OBJ_TYPE_POLYGON) {
+    else if (objType == OBJ_POLYGON) {
         group_boxes["GeometryPolygon"]->show();
     }
-    else if (objType == OBJ_TYPE_POLYLINE) {
+    else if (objType == OBJ_POLYLINE) {
         group_boxes["GeometryPolyline"]->show();
         group_boxes["MiscPolyline"]->show();
     }
-    else if (objType == OBJ_TYPE_RAY) {
+    else if (objType == OBJ_RAY) {
         group_boxes["GeometryRay"]->show();
     }
-    else if (objType == OBJ_TYPE_RECTANGLE) {
+    else if (objType == OBJ_RECTANGLE) {
         group_boxes["GeometryRectangle"]->show();
     }
-    else if (objType == OBJ_TYPE_TEXTMULTI) {
+    else if (objType == OBJ_TEXTMULTI) {
         group_boxes["GeometryTextMulti"]->show();
     }
-    else if (objType == OBJ_TYPE_TEXTSINGLE) {
+    else if (objType == OBJ_TEXTSINGLE) {
         group_boxes["TextTextSingle"]->show();
         group_boxes["GeometryTextSingle"]->show();
         group_boxes["MiscTextSingle"]->show();
@@ -798,7 +798,7 @@ create_editor(
         comboBoxTextSingleFont = new QFontComboBox(dockPropEdit);
         comboBoxTextSingleFont->setDisabled(false);
 
-        mapSignal(comboBoxTextSingleFont, "comboBoxTextSingleFont", OBJ_TYPE_TEXTSINGLE);
+        mapSignal(comboBoxTextSingleFont, "comboBoxTextSingleFont", OBJ_TEXTSINGLE);
         layout->addRow(toolButton, comboBoxTextSingleFont);
     }
 
@@ -892,7 +892,7 @@ fieldEdited(QObject* fieldObj)
         }
 
         switch(objType) {
-        case OBJ_TYPE_ARC: {
+        case OBJ_ARC: {
             tempObj = static_cast<Object*>(item);
             if (tempObj) {
                 /* TODO: Error message. */
@@ -923,11 +923,11 @@ fieldEdited(QObject* fieldObj)
             }
             break;
         }
-        case OBJ_TYPE_BLOCK: {
+        case OBJ_BLOCK: {
             /* TODO: field editing. */
             break;
         }
-        case OBJ_TYPE_CIRCLE: {
+        case OBJ_CIRCLE: {
             tempObj = static_cast<Object*>(item);
             if (!tempObj) {
                 break;
@@ -952,39 +952,39 @@ fieldEdited(QObject* fieldObj)
             }
             break;
         }
-        case OBJ_TYPE_DIMALIGNED: {
+        case OBJ_DIMALIGNED: {
             /* TODO: field editing. */
             break;
         }
-        case OBJ_TYPE_DIMANGULAR: {
+        case OBJ_DIMANGULAR: {
             /* TODO: field editing. */
             break;
         }
-        case OBJ_TYPE_DIMARCLENGTH: {
+        case OBJ_DIMARCLENGTH: {
             /* TODO: field editing. */
             break;
         }
-        case OBJ_TYPE_DIMDIAMETER: {
+        case OBJ_DIMDIAMETER: {
             /* TODO: field editing. */
             break;
         }
-        case OBJ_TYPE_DIMLEADER: {
+        case OBJ_DIMLEADER: {
             /* TODO: field editing. */
             break;
         }
-        case OBJ_TYPE_DIMLINEAR: {
+        case OBJ_DIMLINEAR: {
             /* TODO: field editing. */
             break;
         }
-        case OBJ_TYPE_DIMORDINATE: {
+        case OBJ_DIMORDINATE: {
             /* TODO: field editing. */
             break;
         }
-        case OBJ_TYPE_DIMRADIUS: {
+        case OBJ_DIMRADIUS: {
             /* TODO: field editing. */
             break;
         }
-        case OBJ_TYPE_ELLIPSE: {
+        case OBJ_ELLIPSE: {
             tempObj = static_cast<Object*>(item);
             if (!tempObj) {
                 break;
@@ -1009,15 +1009,15 @@ fieldEdited(QObject* fieldObj)
             }
             break;
         }
-        case OBJ_TYPE_IMAGE: {
+        case OBJ_IMAGE: {
             /* TODO: field editing. */
             break;
         }
-        case OBJ_TYPE_INFINITELINE: {
+        case OBJ_INFINITELINE: {
             /* TODO: field editing. */
             break;
         }
-        case OBJ_TYPE_LINE: {
+        case OBJ_LINE: {
             tempObj = static_cast<Object*>(item);
             if (!tempObj) { 
                 if (objName == "lineEditLineStartX") {
@@ -1035,11 +1035,11 @@ fieldEdited(QObject* fieldObj)
             }
             break;
         }
-        case OBJ_TYPE_PATH: {
+        case OBJ_PATH: {
             /* TODO: field editing. */
             break;
         }
-        case OBJ_TYPE_POINT: {
+        case OBJ_POINT: {
             tempObj = static_cast<Object*>(item);
             if (!tempObj) {
                 break;
@@ -1052,27 +1052,27 @@ fieldEdited(QObject* fieldObj)
             }
             break;
         }
-        case OBJ_TYPE_POLYGON: {
+        case OBJ_POLYGON: {
             /* TODO: field editing. */
             break;
         }
-        case OBJ_TYPE_POLYLINE: {
+        case OBJ_POLYLINE: {
             /* TODO: field editing. */
             break;
         }
-        case OBJ_TYPE_RAY: {
+        case OBJ_RAY: {
             /* TODO: field editing. */
             break;
         }
-        case OBJ_TYPE_RECTANGLE: {
+        case OBJ_RECTANGLE: {
             /* TODO: field editing. */
             break;
         }
-        case OBJ_TYPE_TEXTMULTI: {
+        case OBJ_TEXTMULTI: {
             /* TODO: field editing. */
             break;
         }
-        case OBJ_TYPE_TEXTSINGLE: {
+        case OBJ_TEXTSINGLE: {
             /* TODO: field editing */
             tempObj = static_cast<Object*>(item);
             if (!tempObj) {

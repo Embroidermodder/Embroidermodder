@@ -44,7 +44,7 @@ Object::Object(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* item)/
 
     obj = this;
 
-    obj->setData(OBJ_TYPE, type_);
+    obj->data.OBJ_TYPE = type_;
     if (type_ < 30) {
         obj->data.OBJ_NAME = object_names[type_];
     }
@@ -149,10 +149,7 @@ create_path(double x, double y, const QPainterPath p, QRgb rgb, QGraphicsItem* p
     Object *obj = new Object(EMB_PATH, rgb, Qt::SolidLine);
     todo("getCurrentLineType");
     obj_update_path_r(obj, p);
-    EmbVector v;
-    v.x = x;
-    v.y = y;
-    obj_set_pos(obj, v);
+    obj_set_pos(obj, emb_vector(x, y));
     return obj;
 }
 
@@ -164,10 +161,7 @@ create_polygon(double x, double y, const QPainterPath& p, QRgb rgb, QGraphicsIte
     Object *obj = new Object(EMB_POLYGON, rgb, Qt::SolidLine);
     todo("getCurrentLineType");
     obj_update_path_r(obj, p);
-    EmbVector v;
-    v.x = x;
-    v.y = y;
-    obj_set_pos(obj, v);
+    obj_set_pos(obj, emb_vector(x, y));
     return obj;
 }
 
@@ -178,13 +172,10 @@ create_text_single(QString str, double x, double y, QRgb rgb, QGraphicsItem* par
     debug_message("TextSingleObject Constructor()");
     todo("getCurrentLineType");
     Object *obj = new Object(EMB_TEXT_SINGLE, rgb, Qt::SolidLine);
-    obj->data.objTextJustify = "Left"; /* TODO: set the justification properly */
+    obj->data.core.textJustify = "Left"; /* TODO: set the justification properly */
 
     obj_set_text(obj, str);
-    EmbVector v;
-    v.x = x;
-    v.y = y;
-    obj_set_pos(obj, v);
+    obj_set_pos(obj, emb_vector(x, y));
     return obj;
 }
 
@@ -198,13 +189,8 @@ create_dim_leader(double x1, double y1, double x2, double y2, QRgb rgb, QGraphic
 
     obj->data.curved = false;
     obj->data.filled = true;
-    EmbVector point1, point2;
-    point1.x = x1;
-    point1.y = y1;
-    point2.x = x2;
-    point2.y = y2;
-    obj_set_end_point_1(obj, point1);
-    obj_set_end_point_2(obj, point2);
+    obj_set_end_point_1(obj, emb_vector(x1, y1));
+    obj_set_end_point_2(obj, emb_vector(x2, y2));
     return obj;
 }
 
@@ -237,13 +223,8 @@ create_line(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsItem*
     debug_message("LineObject Constructor()");
     Object *obj = new Object(EMB_LINE, rgb, Qt::SolidLine);
     todo("getCurrentLineType");
-    EmbVector point1, point2;
-    point1.x = x1;
-    point1.y = y1;
-    point2.x = x2;
-    point2.y = y2;
-    obj_set_end_point_1(obj, point1);
-    obj_set_end_point_2(obj, point2);
+    obj_set_end_point_1(obj, emb_vector(x1, y1));
+    obj_set_end_point_2(obj, emb_vector(x2, y2));
     return obj;
 }
 
@@ -345,14 +326,14 @@ copy_object(Object* obj)
         break;
     }
     case EMB_TEXT_SINGLE: {
-        obj_set_text_font(copy, obj->data.objTextFont);
-        obj_set_text_size(copy, obj->data.objTextSize);
+        obj_set_text_font(copy, obj->data.core.textFont);
+        obj_set_text_size(copy, obj->data.core.textSize);
         copy->setRotation(obj->rotation());
-        obj_set_text_backward(copy, obj->data.objTextBackward);
-        obj_set_text_upside_down(copy, obj->data.objTextUpsideDown);
-        obj_set_text_style(copy, obj->data.objTextBold, obj->data.objTextItalic,
-            obj->data.objTextUnderline, obj->data.objTextStrikeOut, obj->data.objTextOverline);
-        /* init(obj->objText, obj->objectX(), obj->objectY(), obj_color_rgb(obj), Qt::SolidLine);
+        obj_set_text_backward(copy, obj->data.core.textBackward);
+        obj_set_text_upside_down(copy, obj->data.core.textUpsideDown);
+        obj_set_text_style(copy, obj->data.core.textBold, obj->data.core.textItalic,
+            obj->data.core.textUnderline, obj->data.core.textStrikeOut, obj->data.core.textOverline);
+        /* init(obj->text, obj->objectX(), obj->objectY(), obj_color_rgb(obj), Qt::SolidLine);
          */
         todo("getCurrentLineType");
         copy->setScale(obj->scale());
@@ -506,7 +487,7 @@ circle_command(ScriptEnv *context)
     if (window) {
         emb_array_add_circle(window->pattern->geometry, c);
     }
-    /* _main->nativeAddCircle(0.0, 0.0, 10.0, true, OBJ_RUBBER_CIRCLE_1P_DIA); */
+    /* _main->nativeAddCircle(0.0, 0.0, 10.0, true, RUBBER_CIRCLE_1P_DIA); */
    
     end_command();
     return script_null;
@@ -516,7 +497,7 @@ ScriptValue
 circle_click(ScriptEnv *context)
 {
     switch (context->mode) {
-    case CIRCLE_MODE_1P_RAD_ONE: {
+    case CIRCLE_1P_RAD_ONE: {
     #if 0
         context->point1 = zero_vector;
         context->center = zero_vector;
@@ -526,20 +507,20 @@ circle_click(ScriptEnv *context)
         prompt_output(translate("Specify radius of circle or [Diameter]: "));
         break;
     }
-    case CIRCLE_MODE_1P_RAD_TWO: {
+    case CIRCLE_1P_RAD_TWO: {
         context->point2 = v;
         obj_set_rubber_point(obj, "CIRCLE_RADIUS", context->point2);
         vulcanize();
         end_command();
         break;
     }
-    case CIRCLE_MODE_1P_DIA_ONE: {
+    case CIRCLE_1P_DIA_ONE: {
         error("CIRCLE", translate("This should never happen."));
         break;
     }
-    case CIRCLE_MODE_1P_DIA_TWO: {
+    case CIRCLE_1P_DIA_TWO: {
         context->point2 = v;
-        obj_set_rubber_point(obj, "CIRCLE_DIAMETER", context->x2, context->y2);
+        obj_set_rubber_point(obj, "CIRCLE_DIAMETER", context->point2);
         vulcanize();
         end_command();
         break;
@@ -549,12 +530,12 @@ circle_click(ScriptEnv *context)
             context->point1 = v;
             obj_add_rubber(obj, "CIRCLE");
             obj_set_rubber_mode(obj, "CIRCLE_2P");
-            obj_set_rubber_point(obj, "CIRCLE_TAN1", x, y);
+            obj_set_rubber_point(obj, "CIRCLE_TAN1", v);
             prompt_output(translate("Specify second end point of circle's diameter: "));
         }
         else if (isnan(context->x2)) {
             context->point2 = v;
-            obj_set_rubber_point(obj, "CIRCLE_TAN2", x, y);
+            obj_set_rubber_point(obj, "CIRCLE_TAN2", v);
             vulcanize();
             end_command();
         }
@@ -563,7 +544,7 @@ circle_click(ScriptEnv *context)
         }
         break;
     }
-    case CIRCLE_MODE_3P: {
+    case CIRCLE_3P: {
         if (isnan(context->x1)) {
             context->point1 = v;
             prompt_output(translate("Specify second point on circle: "));
@@ -572,13 +553,13 @@ circle_click(ScriptEnv *context)
             context->point2 = v;
             obj_add_rubber(obj, "CIRCLE");
             obj_set_rubber_mode(obj, "CIRCLE_3P");
-            obj_set_rubber_point(obj, "CIRCLE_TAN1", context->x1, context->y1);
-            obj_set_rubber_point(obj, "CIRCLE_TAN2", context->x2, context->y2);
+            obj_set_rubber_point(obj, "CIRCLE_TAN1", context->point1);
+            obj_set_rubber_point(obj, "CIRCLE_TAN2", context->point2);
             prompt_output(translate("Specify third point on circle: "));
         }
         else if (isnan(context->x3)) {
             context->point3 = v;
-            obj_set_rubber_point(obj, "CIRCLE_TAN3", context->x3, context->y3);
+            obj_set_rubber_point(obj, "CIRCLE_TAN3", context->point3);
             vulcanize();
             end_command();
         }
@@ -617,7 +598,7 @@ ScriptValue
 circle_prompt(ScriptEnv *context)
 {
     switch (context->mode) {
-    case CIRCLE_MODE_1P_RAD_ONE: {
+    case CIRCLE_1P_RAD_ONE: {
     #if 0
         if (isnan(context->x1)) {
             if (str == "2P") {
@@ -633,19 +614,16 @@ circle_prompt(ScriptEnv *context)
                 prompt_output(translate("Specify point on object for first tangent of circle: "));
             }
             else {
-                var strList = str.split(",");
-                if (isnan(strList[0]) || isnan(strList[1])) {
+                if (!parse_vector(str, &v)) {
                     alert(translate("Point or option keyword required."));
                     prompt_output(translate("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
                 }
                 else {
-                    context->x1 = Number(strList[0]);
-                    context->y1 = Number(strList[1]);
-                    context->cx = context->x1;
-                    context->cy = context->y1;
+                    context->point1 = v;
+                    context->center = context->point1;
                     obj_add_rubber(obj, "CIRCLE");
                     obj_set_rubber_mode(obj, "CIRCLE_1P_RAD");
-                    obj_set_rubber_point(obj, "CIRCLE_CENTER", context->cx, context->cy);
+                    obj_set_rubber_point(obj, "CIRCLE_CENTER", context->center);
                     prompt_output(translate("Specify radius of circle or [Diameter]: "));
                 }
             }
@@ -664,8 +642,8 @@ circle_prompt(ScriptEnv *context)
                 }
                 else {
                     context->rad = num;
-                    context->x2 = context->x1 + context->rad;
-                    context->y2 = context->y1;
+                    context->point2 = context->point1;
+                    context->x2 += context->rad;
                     obj_set_rubber_point(obj, "CIRCLE_RADIUS", context->point2);
                     vulcanize();
                     endCommand();
@@ -673,7 +651,7 @@ circle_prompt(ScriptEnv *context)
             }
         }
     }
-    case CIRCLE_MODE_1P_DIA_ONE: {
+    case CIRCLE_1P_DIA_ONE: {
         if (isnan(context->x1)) {
             error("CIRCLE", translate("This should never happen."));
         }
@@ -685,8 +663,8 @@ circle_prompt(ScriptEnv *context)
             }
             else {
                 context->dia = num;
-                context->x2 = context->x1 + context->dia;
-                context->y2 = context->y1;
+                context->point2 = context->point1;
+                context->x2 += context->dia;
                 obj_set_rubber_point(obj, "CIRCLE_DIAMETER", context->point2);
                 vulcanize();
                 endCommand();
@@ -697,7 +675,7 @@ circle_prompt(ScriptEnv *context)
         }
         break;
     }
-    case CIRCLE_MODE_2P: {
+    case CIRCLE_2P: {
         if (isnan(context->x1)) {
             if (!parse_vector(str, &v)) {
                 alert(translate("Invalid point."));
@@ -707,7 +685,7 @@ circle_prompt(ScriptEnv *context)
                 context->point1 = v;
                 obj_add_rubber(obj, "CIRCLE");
                 obj_set_rubber_mode(obj, "CIRCLE_2P");
-                obj_set_rubber_point(obj, "CIRCLE_TAN1", context->x1, context->y1);
+                obj_set_rubber_point(obj, "CIRCLE_TAN1", context->point1);
                 prompt_output(translate("Specify second end point of circle's diameter: "));
             }
         }
@@ -718,7 +696,7 @@ circle_prompt(ScriptEnv *context)
             }
             else {
                 context->point2 = v;
-                obj_set_rubber_point(obj, "CIRCLE_TAN2", context->x2, context->y2);
+                obj_set_rubber_point(obj, "CIRCLE_TAN2", context->point2);
                 vulcanize();
                 end_command();
             }
@@ -747,8 +725,8 @@ circle_prompt(ScriptEnv *context)
                 context->point2 = v;
                 obj_add_rubber(obj, "CIRCLE");
                 obj_set_rubber_mode(obj, "CIRCLE_3P");
-                obj_set_rubber_point(obj, "CIRCLE_TAN1", context->x1, context->y1);
-                obj_set_rubber_point(obj, "CIRCLE_TAN2", context->x2, context->y2);
+                obj_set_rubber_point(obj, "CIRCLE_TAN1", context->point1);
+                obj_set_rubber_point(obj, "CIRCLE_TAN2", context->point2);
                 prompt_output(translate("Specify third point of circle: "));
             }
         }
@@ -759,7 +737,7 @@ circle_prompt(ScriptEnv *context)
             }
             else {
                 context->point3 = v;
-                obj_set_rubber_point(obj, "CIRCLE_TAN3", context->x3, context->y3);
+                obj_set_rubber_point(obj, "CIRCLE_TAN3", context->point3);
                 vulcanize();
                 endCommand();
             }
@@ -879,7 +857,7 @@ ellipse_command(ScriptEnv *context)
     default:
     case CONTEXT_MAIN:
         /*
-        context->mode = ELLIPSE_MODE_MAJDIA_MINRAD_ONE;
+        context->mode = ELLIPSE_MAJDIA_MINRAD_ONE;
         context->point1 = zero_vector;
         context->point2 = zero_vector;
         context->point3 = zero_vector;
@@ -907,12 +885,12 @@ context->rot;
 function click(EmbVector v)
 {
     switch (context->mode) {
-    case ELLIPSE_MODE_MAJDIA_MINRAD: {
+    case ELLIPSE_MAJDIA_MINRAD: {
         if (isnan(context->x1)) {
             context->point1 = v;
             obj_add_rubber(obj, "ELLIPSE");
             obj_set_rubber_mode(obj, "ELLIPSE_LINE");
-            obj_set_rubber_point(obj, "ELLIPSE_LINE_POINT1", context->x1, context->y1);
+            obj_set_rubber_point(obj, "ELLIPSE_LINE_POINT1", context->point1);
             prompt_output(translate("Specify first axis end point: "));
         }
         else if (isnan(context->x2)) {
@@ -930,8 +908,8 @@ function click(EmbVector v)
         }
         else if (isnan(context->x3)) {
             context->point3 = v;
-            context->height = perpendicularDistance(context->x3, context->y3, context->x1, context->y1, context->x2, context->y2)*2.0;
-            obj_set_rubber_point(obj, "ELLIPSE_AXIS2_POINT2", context->x3, context->y3);
+            context->height = perpendicularDistance(context->point3, context->point1, context->point2)*2.0;
+            obj_set_rubber_point(obj, "ELLIPSE_AXIS2_POINT2", context->point3);
             vulcanize();
             end_command();
         }
@@ -940,30 +918,30 @@ function click(EmbVector v)
         }
         break;
     }
-    case ELLIPSE_MODE_MAJRAD_MINRAD: {
+    case ELLIPSE_MAJRAD_MINRAD: {
         if (isnan(context->x1)) {
             context->point1 = v;
             context->center = context->point1;
             obj_add_rubber(obj, "ELLIPSE");
             obj_set_rubber_mode(obj, "ELLIPSE_LINE");
-            obj_set_rubber_point(obj, "ELLIPSE_LINE_POINT1", context->x1, context->y1);
-            obj_set_rubber_point(obj, "ELLIPSE_CENTER", context->cx, context->cy);
+            obj_set_rubber_point(obj, "ELLIPSE_LINE_POINT1", context->point1);
+            obj_set_rubber_point(obj, "ELLIPSE_CENTER", context->center);
             prompt_output(translate("Specify first axis end point: "));
         }
         else if (isnan(context->x2)) {
             context->point2 = v;
-            context->width = calculateDistance(context->cx, context->cy, context->x2, context->y2)*2.0;
-            context->rot = calculateAngle(context->x1, context->y1, context->x2, context->y2);
+            context->width = calculateDistance(context->center, context->point2)*2.0;
+            context->rot = calculateAngle(context->point1, context->point2);
             obj_set_rubber_mode(obj, "ELLIPSE_MAJRAD_MINRAD");
-            obj_set_rubber_point(obj, "ELLIPSE_AXIS1_POINT2", context->x2, context->y2);
+            obj_set_rubber_point(obj, "ELLIPSE_AXIS1_POINT2", context->point2);
             obj_set_rubber_point(obj, "ELLIPSE_WIDTH", context->width, 0);
             obj_set_rubber_point(obj, "ELLIPSE_ROT", context->rot, 0);
             prompt_output(translate("Specify second axis end point or [Rotation]: "));
         }
         else if (isnan(context->x3)) {
             context->point3 = v;
-            context->height = perpendicularDistance(context->x3, context->y3, context->cx, context->cy, context->x2, context->y2)*2.0;
-            obj_set_rubber_point(obj, "ELLIPSE_AXIS2_POINT2", context->x3, context->y3);
+            context->height = perpendicularDistance(context->point3, context->center, context->point2)*2.0;
+            obj_set_rubber_point(obj, "ELLIPSE_AXIS2_POINT2", context->point3);
             vulcanize();
             end_command();
         }
@@ -972,7 +950,7 @@ function click(EmbVector v)
         }
         break;
     }
-    case ELLIPSE_MODE_ROTATION: {
+    case ELLIPSE_ROTATION: {
         if (isnan(context->x1)) {
             error("ELLIPSE", translate("This should never happen."));
         }
@@ -980,9 +958,9 @@ function click(EmbVector v)
             error("ELLIPSE", translate("This should never happen."));
         }
         else if (isnan(context->x3)) {
-            var angle = calculateAngle(context->cx, context->cy, x, y);
+            var angle = calculateAngle(context->center, x, y);
             context->height = Math.cos(angle*Math.PI/180.0)*context->width;
-            addEllipse(context->cx, context->cy, context->width, context->height, context->rot, false);
+            addEllipse(context->center, context->width, context->height, context->rot, false);
             end_command();
         }
         break;
@@ -1001,9 +979,9 @@ function prompt(str)
 {
     EmbVector v;
     switch (context->mode) {
-    case ELLIPSE_MODE_MAJDIA_MINRAD_ONE: {
+    case ELLIPSE_MAJDIA_MINRAD_ONE: {
         if (str == "C" || str == "CENTER") {
-            context->mode = ELLIPSE_MODE_MAJRAD_MINRAD;
+            context->mode = ELLIPSE_MAJRAD_MINRAD;
             prompt_output(translate("Specify center point: "));
             break;
         }
@@ -1016,13 +994,13 @@ function prompt(str)
             context->point1 = v;
             obj_add_rubber(obj, "ELLIPSE");
             obj_set_rubber_mode(obj, "ELLIPSE_LINE");
-            obj_set_rubber_point(obj, "ELLIPSE_LINE_POINT1", context->x1, context->y1);
+            obj_set_rubber_point(obj, "ELLIPSE_LINE_POINT1", context->point1);
             prompt_output(translate("Specify first axis end point: "));
-            mode = ELLIPSE_MODE_MAJDIA_MINRAD_TWO;
+            mode = ELLIPSE_MAJDIA_MINRAD_TWO;
         }
         break;
     }
-    case ELLIPSE_MODE_MAJDIA_MINRAD_TWO: {
+    case ELLIPSE_MAJDIA_MINRAD_TWO: {
         if (parse_vector(str, &v)) {
             alert(translate("Invalid point."));
             prompt_output(translate("Specify first axis end point: "));
@@ -1039,13 +1017,13 @@ function prompt(str)
             obj_set_rubber_point(obj, "ELLIPSE_WIDTH", context->width, 0);
             obj_set_rubber_point(obj, "ELLIPSE_ROT", context->rot, 0);
             prompt_output(translate("Specify second axis end point or [Rotation]: "));
-            mode = ELLIPSE_MODE_MAJDIA_MINRAD_THREE;
+            mode = ELLIPSE_MAJDIA_MINRAD_THREE;
         }
         break;
     }
-    case ELLIPSE_MODE_MAJDIA_MINRAD_THREE: {
+    case ELLIPSE_MAJDIA_MINRAD_THREE: {
         if (str == "R" || str == "ROTATION") {
-            context->mode = ELLIPSE_MODE_ROTATION;
+            context->mode = ELLIPSE_ROTATION;
             prompt_output(translate("Specify rotation: "));
             break;
         }
@@ -1056,15 +1034,15 @@ function prompt(str)
         }
         else {
             context->point3 = v;
-            context->height = perpendicularDistance(context->x3, context->y3, context->x1, context->y1, context->x2, context->y2)*2.0;
-            obj_set_rubber_point(obj, "ELLIPSE_AXIS2_POINT2", context->x3, context->y3);
+            context->height = perpendicularDistance(context->point3, context->point1, context->point2)*2.0;
+            obj_set_rubber_point(obj, "ELLIPSE_AXIS2_POINT2", context->point3);
             vulcanize();
             end_command();
-            context->mode = ELLIPSE_MODE_NEUTRAL;
+            context->mode = ELLIPSE_NEUTRAL;
         }
         break;
     }
-    case ELLIPSE_MODE_MAJRAD_MINRAD_ONE: {
+    case ELLIPSE_MAJRAD_MINRAD_ONE: {
         if (parse_vector(str, &v)) {
             alert(translate("Invalid point."));
             prompt_output(translate("Specify center point: "));
@@ -1080,26 +1058,26 @@ function prompt(str)
         }
         break;
     }
-    case ELLIPSE_MODE_MAJRAD_MINRAD_TWO: {
+    case ELLIPSE_MAJRAD_MINRAD_TWO: {
         if (parse_vector(str, &v)) {
             alert(translate("Invalid point."));
             prompt_output(translate("Specify first axis end point: "));
         }
         else {
             context->point2 = v;
-            context->width = calculateDistance(context->x1, context->y1, context->x2, context->y2)*2.0;
-            context->rot = calculateAngle(context->x1, context->y1, context->x2, context->y2);
+            context->width = calculateDistance(context->point1, context->point2)*2.0;
+            context->rot = calculateAngle(context->point1, context->point2);
             obj_set_rubber_mode(obj, "ELLIPSE_MAJRAD_MINRAD");
-            obj_set_rubber_point(obj, "ELLIPSE_AXIS1_POINT2", context->x2, context->y2);
+            obj_set_rubber_point(obj, "ELLIPSE_AXIS1_POINT2", context->point2);
             obj_set_rubber_point(obj, "ELLIPSE_WIDTH", context->width, 0);
             obj_set_rubber_point(obj, "ELLIPSE_ROT", context->rot, 0);
             prompt_output(translate("Specify second axis end point or [Rotation]: "));
         }
         break;
     }
-    case ELLIPSE_MODE_MAJRAD_MINRAD_THREE: {
+    case ELLIPSE_MAJRAD_MINRAD_THREE: {
         if (str == "R" || str == "ROTATION") {
-            context->mode = ELLIPSE_MODE_ROTATION;
+            context->mode = ELLIPSE_ROTATION;
             prompt_output(translate("Specify ellipse rotation: "));
         }
         else {
@@ -1117,7 +1095,7 @@ function prompt(str)
         }
         break;
     }
-    case ELLIPSE_MODE_ROTATION: {
+    case ELLIPSE_ROTATION: {
         if (isnan(str)) {
             alert(translate("Invalid angle. Input a numeric angle or pick a point."));
             prompt_output(translate("Specify rotation: "));
@@ -1501,7 +1479,7 @@ prompt(char *str)
             prompt_output(translate("Specify polygon corner point or [Distance]: "));
             obj_add_rubber(obj, "POLYGON");
             obj_set_rubber_mode(obj, "POLYGON_INSCRIBE");
-            obj_set_rubber_point(obj, "POLYGON_CENTER", context->centerX, context->centerY);
+            obj_set_rubber_point(obj, "POLYGON_CENTER", context->center);
             obj_set_rubber_point(obj, "POLYGON_NUM_SIDES", context->numSides, 0);
         }
         else if (str == "C" || str == "CIRCUMSCRIBED") {
@@ -1510,7 +1488,7 @@ prompt(char *str)
             prompt_output(translate("Specify polygon side point or [Distance]: "));
             obj_add_rubber(obj, "POLYGON");
             obj_set_rubber_mode(obj, "POLYGON_CIRCUMSCRIBE");
-            obj_set_rubber_point(obj, "POLYGON_CENTER", context->centerX, context->centerY);
+            obj_set_rubber_point(obj, "POLYGON_CENTER", context->center);
             obj_set_rubber_point(obj, "POLYGON_NUM_SIDES", context->numSides, 0);
         }
         else if (str == "") {
@@ -1519,7 +1497,7 @@ prompt(char *str)
                 prompt_output(translate("Specify polygon corner point or [Distance]: "));
                 obj_add_rubber(obj, "POLYGON");
                 obj_set_rubber_mode(obj, "POLYGON_INSCRIBE");
-                obj_set_rubber_point(obj, "POLYGON_CENTER", context->centerX, context->centerY);
+                obj_set_rubber_point(obj, "POLYGON_CENTER", context->center);
                 obj_set_rubber_point(obj, "POLYGON_NUM_SIDES", context->numSides, 0);
             }
             else if (context->polyType == "Circumscribed") {
@@ -1527,7 +1505,7 @@ prompt(char *str)
                 prompt_output(translate("Specify polygon side point or [Distance]: "));
                 obj_add_rubber(obj, "POLYGON");
                 obj_set_rubber_mode(obj, "POLYGON_CIRCUMSCRIBE");
-                obj_set_rubber_point(obj, "POLYGON_CENTER", context->centerX, context->centerY);
+                obj_set_rubber_point(obj, "POLYGON_CENTER", context->center);
                 obj_set_rubber_point(obj, "POLYGON_NUM_SIDES", context->numSides, 0);
             }
             else {
@@ -1587,14 +1565,14 @@ prompt(char *str)
             if (context->polyType == "Inscribed") {
                 context->pointI.x = context->center.x;
                 context->pointI.y = context->center.y + Number(str);
-                obj_set_rubber_point(obj, "POLYGON_INSCRIBE_POINT", context->pointIX, context->pointIY);
+                obj_set_rubber_point(obj, "POLYGON_INSCRIBE_POINT", context->pointI);
                 vulcanize();
                 end_command();
             }
             else if (context->polyType == "Circumscribed") {
                 context->pointC.x = context->center.x;
                 context->pointC.y = context->center.y + Number(str);
-                obj_set_rubber_point(obj, "POLYGON_CIRCUMSCRIBE_POINT", context->pointCX, context->pointCY);
+                obj_set_rubber_point(obj, "POLYGON_CIRCUMSCRIBE_POINT", context->pointC);
                 vulcanize();
                 end_command();
             }
@@ -2169,8 +2147,7 @@ function prompt(str)
                 prompt_output(translate("Specify font name: "));
             }
             else {
-                var strList = str.split(",");
-                if (isnan(strList[0]) || isnan(strList[1])) {
+                if (!parse_vector(str, &v)) {
                     alert(translate("Point or option keyword required."));
                     prompt_output(translate("Specify start point of text or [Justify/Setfont]: "));
                 }
@@ -2266,7 +2243,7 @@ TextSingleObject::subPathList() const
 
     QList<QPainterPath> pathList;
 
-    QPainterPath path = objTextPath;
+    QPainterPath path = textPath;
 
     QPainterPath::Element element;
     QList<int> pathMoves;
@@ -2494,74 +2471,74 @@ QStringList objectTextJustifyList = {
 void
 obj_set_text(Object* obj, QString str)
 {
-    obj->data.objText = str;
+    obj->data.core.text = str;
     QPainterPath textPath;
     QFont font;
-    font.setFamily(obj->data.objTextFont);
-    font.setPointSizeF(obj->data.objTextSize);
-    font.setBold(obj->data.objTextBold);
-    font.setItalic(obj->data.objTextItalic);
-    font.setUnderline(obj->data.objTextUnderline);
-    font.setStrikeOut(obj->data.objTextStrikeOut);
-    font.setOverline(obj->data.objTextOverline);
+    font.setFamily(obj->data.core.textFont);
+    font.setPointSizeF(obj->data.core.textSize);
+    font.setBold(obj->data.core.textBold);
+    font.setItalic(obj->data.core.textItalic);
+    font.setUnderline(obj->data.core.textUnderline);
+    font.setStrikeOut(obj->data.core.textStrikeOut);
+    font.setOverline(obj->data.core.textOverline);
     textPath.addText(0, 0, font, str);
 
     /* Translate the path based on the justification. */
     QRectF jRect = textPath.boundingRect();
-    if (obj->data.objTextJustify == "Left") {
+    if (obj->data.core.textJustify == "Left") {
         textPath.translate(-jRect.left(), 0);
     }
-    else if (obj->data.objTextJustify == "Center") {
+    else if (obj->data.core.textJustify == "Center") {
         textPath.translate(-jRect.center().x(), 0);
     }
-    else if (obj->data.objTextJustify == "Right") {
+    else if (obj->data.core.textJustify == "Right") {
         textPath.translate(-jRect.right(), 0);
     }
-    else if (obj->data.objTextJustify == "Aligned") {
+    else if (obj->data.core.textJustify == "Aligned") {
         todo("TextSingleObject Aligned Justification.");
     }
-    else if (obj->data.objTextJustify == "Middle") {
+    else if (obj->data.core.textJustify == "Middle") {
         textPath.translate(-jRect.center());
     }
-    else if (obj->data.objTextJustify == "Fit") {
+    else if (obj->data.core.textJustify == "Fit") {
         todo("TextSingleObject Fit Justification.");
     }
-    else if (obj->data.objTextJustify == "Top Left") {
+    else if (obj->data.core.textJustify == "Top Left") {
         textPath.translate(-jRect.topLeft());
     }
-    else if (obj->data.objTextJustify == "Top Center") {
+    else if (obj->data.core.textJustify == "Top Center") {
         textPath.translate(-jRect.center().x(), -jRect.top());
     }
-    else if (obj->data.objTextJustify == "Top Right") {
+    else if (obj->data.core.textJustify == "Top Right") {
         textPath.translate(-jRect.topRight());
     }
-    else if (obj->data.objTextJustify == "Middle Left") {
+    else if (obj->data.core.textJustify == "Middle Left") {
         textPath.translate(-jRect.left(), -jRect.top()/2.0);
     }
-    else if (obj->data.objTextJustify == "Middle Center") {
+    else if (obj->data.core.textJustify == "Middle Center") {
         textPath.translate(-jRect.center().x(), -jRect.top()/2.0);
     }
-    else if (obj->data.objTextJustify == "Middle Right") {
+    else if (obj->data.core.textJustify == "Middle Right") {
         textPath.translate(-jRect.right(), -jRect.top()/2.0);
     }
-    else if (obj->data.objTextJustify == "Bottom Left") {
+    else if (obj->data.core.textJustify == "Bottom Left") {
         textPath.translate(-jRect.bottomLeft());
     }
-    else if (obj->data.objTextJustify == "Bottom Center") {
+    else if (obj->data.core.textJustify == "Bottom Center") {
         textPath.translate(-jRect.center().x(), -jRect.bottom());
     }
-    else if (obj->data.objTextJustify == "Bottom Right") {
+    else if (obj->data.core.textJustify == "Bottom Right") {
         textPath.translate(-jRect.bottomRight());
     }
 
     /* Backward or Upside Down. */
-    if (obj->data.objTextBackward || obj->data.objTextUpsideDown) {
+    if (obj->data.core.textBackward || obj->data.core.textUpsideDown) {
         double horiz = 1.0;
         double vert = 1.0;
-        if (obj->data.objTextBackward) {
+        if (obj->data.core.textBackward) {
             horiz = -1.0;
         }
-        if (obj->data.objTextUpsideDown) {
+        if (obj->data.core.textUpsideDown) {
             vert = -1.0;
         }
 
@@ -2590,15 +2567,15 @@ obj_set_text(Object* obj, QString str)
                                     horiz * P4.x, vert * P4.y);
             }
         }
-        obj->data.objTextPath = flippedPath;
+        obj->data.textPath = flippedPath;
     }
     else {
-        obj->data.objTextPath = textPath;
+        obj->data.textPath = textPath;
     }
 
     /* Add the grip point to the shape path. */
-    QPainterPath gripPath = obj->data.objTextPath;
-    gripPath.connectPath(obj->data.objTextPath);
+    QPainterPath gripPath = obj->data.textPath;
+    gripPath.connectPath(obj->data.textPath);
     gripPath.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
     obj_set_path(obj, gripPath);
 }
@@ -2607,8 +2584,8 @@ obj_set_text(Object* obj, QString str)
 void
 obj_set_text_font(Object* obj, QString font)
 {
-    obj->data.objTextFont = font;
-    obj_set_text(obj, obj->data.objText);
+    obj->data.core.textFont = font;
+    obj_set_text(obj, obj->data.core.text);
 }
 
 /* Verify the string is a valid option. */
@@ -2616,131 +2593,131 @@ void
 obj_set_text_justify(Object* obj, QString justify)
 {
     if (justify == "Left") {
-        obj->data.objTextJustify = justify;
+        obj->data.core.textJustify = justify;
     }
     else if (justify == "Center") {
-        obj->data.objTextJustify = justify;
+        obj->data.core.textJustify = justify;
     }
     else if (justify == "Right") {
-        obj->data.objTextJustify = justify;
+        obj->data.core.textJustify = justify;
     }
     else if (justify == "Aligned") {
-        obj->data.objTextJustify = justify;
+        obj->data.core.textJustify = justify;
     }
     else if (justify == "Middle") {
-        obj->data.objTextJustify = justify;
+        obj->data.core.textJustify = justify;
     }
     else if (justify == "Fit") {
-        obj->data.objTextJustify = justify;
+        obj->data.core.textJustify = justify;
     }
     else if (justify == "Top Left") {
-        obj->data.objTextJustify = justify;
+        obj->data.core.textJustify = justify;
     }
     else if (justify == "Top Center") {
-        obj->data.objTextJustify = justify;
+        obj->data.core.textJustify = justify;
     }
     else if (justify == "Top Right") {
-        obj->data.objTextJustify = justify;
+        obj->data.core.textJustify = justify;
     }
     else if (justify == "Middle Left") {
-        obj->data.objTextJustify = justify;
+        obj->data.core.textJustify = justify;
     }
     else if (justify == "Middle Center") {
-        obj->data.objTextJustify = justify;
+        obj->data.core.textJustify = justify;
     }
     else if (justify == "Middle Right") {
-        obj->data.objTextJustify = justify;
+        obj->data.core.textJustify = justify;
     }
     else if (justify == "Bottom Left") {
-        obj->data.objTextJustify = justify;
+        obj->data.core.textJustify = justify;
     }
     else if (justify == "Bottom Center") {
-        obj->data.objTextJustify = justify;
+        obj->data.core.textJustify = justify;
     }
     else if (justify == "Bottom Right") {
-        obj->data.objTextJustify = justify;
+        obj->data.core.textJustify = justify;
     }
     else {
         /* Default */
-        obj->data.objTextJustify = "Left";
+        obj->data.core.textJustify = "Left";
     }
-    obj_set_text(obj, obj->data.objText);
+    obj_set_text(obj, obj->data.core.text);
 }
 
 /* . */
 void
 obj_set_text_size(Object* obj, double size)
 {
-    obj->data.objTextSize = size;
-    obj_set_text(obj, obj->data.objText);
+    obj->data.core.textSize = size;
+    obj_set_text(obj, obj->data.core.text);
 }
 
 /* . */
 void
 obj_set_text_style(Object* obj, bool bold, bool italic, bool under, bool strike, bool over)
 {
-    obj->data.objTextBold = bold;
-    obj->data.objTextItalic = italic;
-    obj->data.objTextUnderline = under;
-    obj->data.objTextStrikeOut = strike;
-    obj->data.objTextOverline = over;
-    obj_set_text(obj, obj->data.objText);
+    obj->data.core.textBold = bold;
+    obj->data.core.textItalic = italic;
+    obj->data.core.textUnderline = under;
+    obj->data.core.textStrikeOut = strike;
+    obj->data.core.textOverline = over;
+    obj_set_text(obj, obj->data.core.text);
 }
 
 /* . */
 void
 obj_set_text_bold(Object* obj, bool val)
 {
-    obj->data.objTextBold = val;
-    obj_set_text(obj, obj->data.objText);
+    obj->data.core.textBold = val;
+    obj_set_text(obj, obj->data.core.text);
 }
 
 /* . */
 void
 obj_set_text_italic(Object* obj, bool val)
 {
-    obj->data.objTextItalic = val;
-    obj_set_text(obj, obj->data.objText);
+    obj->data.core.textItalic = val;
+    obj_set_text(obj, obj->data.core.text);
 }
 
 /* . */
 void
 obj_set_text_underline(Object* obj, bool val)
 {
-    obj->data.objTextUnderline = val;
-    obj_set_text(obj, obj->data.objText);
+    obj->data.core.textUnderline = val;
+    obj_set_text(obj, obj->data.core.text);
 }
 
 /* . */
 void
 obj_set_text_strikeout(Object* obj, bool val)
 {
-    obj->data.objTextStrikeOut = val;
-    obj_set_text(obj, obj->data.objText);
+    obj->data.core.textStrikeOut = val;
+    obj_set_text(obj, obj->data.core.text);
 }
 
 /* . */
 void
 obj_set_text_overline(Object* obj, bool val)
 {
-    obj->data.objTextOverline = val;
-    obj_set_text(obj, obj->data.objText);
+    obj->data.core.textOverline = val;
+    obj_set_text(obj, obj->data.core.text);
 }
 
 /* . */
 void
 obj_set_text_backward(Object* obj, bool val)
 {
-    obj->data.objTextBackward = val;
-    obj_set_text(obj, obj->data.objText);
+    obj->data.core.textBackward = val;
+    obj_set_text(obj, obj->data.core.text);
 }
 
 /* . */
 void
 obj_set_text_upside_down(Object* obj, bool val)
 {
-    obj->data.objTextUpsideDown = val;
-    obj_set_text(obj, obj->data.objText);
+    obj->data.core.textUpsideDown = val;
+    obj_set_text(obj, obj->data.core.text);
 }
 
 /* . */
@@ -2965,7 +2942,7 @@ QRectF
 obj_bounding_rect(Object *obj)
 {
     /* If gripped, force this object to be drawn even if it is offscreen. */
-    if (obj->data.objRubberMode == OBJ_RUBBER_GRIP) {
+    if (obj->data.objRubberMode == RUBBER_GRIP) {
         return obj->scene()->sceneRect();
     }
     return obj->path().boundingRect();
@@ -3256,7 +3233,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
 {
     todo("Arc,Path Rubber Modes");
     switch (obj->data.objRubberMode) {
-    case OBJ_RUBBER_CIRCLE_1P_RAD: {
+    case RUBBER_CIRCLE_1P_RAD: {
         EmbVector sceneCenterPoint = obj_rubber_point(obj, "CIRCLE_CENTER");
         EmbVector sceneQSnapPoint = obj_rubber_point(obj, "CIRCLE_RADIUS");
         EmbVector itemCenterPoint = obj_map_rubber(obj, "CIRCLE_CENTER");
@@ -3272,7 +3249,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         obj_update_path(obj);
         break;
     }
-    case OBJ_RUBBER_CIRCLE_1P_DIA: {
+    case RUBBER_CIRCLE_1P_DIA: {
         EmbVector sceneCenterPoint = obj_rubber_point(obj, "CIRCLE_CENTER");
         EmbVector sceneQSnapPoint = obj_rubber_point(obj, "CIRCLE_DIAMETER");
         EmbVector itemCenterPoint = obj_map_rubber(obj, "CIRCLE_CENTER");
@@ -3288,7 +3265,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         obj_update_path(obj);
         break;
     }
-    case OBJ_RUBBER_CIRCLE_2P: {
+    case RUBBER_CIRCLE_2P: {
         EmbVector sceneTan1Point = obj_rubber_point(obj, "CIRCLE_TAN1");
         EmbVector sceneQSnapPoint = obj_rubber_point(obj, "CIRCLE_TAN2");
         QLineF sceneLine(to_qpointf(sceneTan1Point), to_qpointf(sceneQSnapPoint));
@@ -3298,7 +3275,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         obj_update_path(obj);
         break;
     }
-    case OBJ_RUBBER_CIRCLE_3P: {
+    case RUBBER_CIRCLE_3P: {
         EmbGeometry g;
         g.object.arc.start = obj_rubber_point(obj, "CIRCLE_TAN1");
         g.object.arc.mid = obj_rubber_point(obj, "CIRCLE_TAN2");
@@ -3311,7 +3288,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         obj_update_path(obj);
         break;
     }
-    case OBJ_RUBBER_DIMLEADER_LINE: {
+    case RUBBER_DIMLEADER_LINE: {
         EmbVector sceneStartPoint = obj_rubber_point(obj, "DIMLEADER_LINE_START");
         EmbVector sceneQSnapPoint = obj_rubber_point(obj, "DIMLEADER_LINE_END");
 
@@ -3319,7 +3296,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         obj_set_end_point_2(obj, sceneQSnapPoint);
         break;
     }
-    case OBJ_RUBBER_ELLIPSE_LINE: {
+    case RUBBER_ELLIPSE_LINE: {
         EmbVector itemLinePoint1  = obj_map_rubber(obj, "ELLIPSE_LINE_POINT1");
         EmbVector itemLinePoint2  = obj_map_rubber(obj, "ELLIPSE_LINE_POINT2");
         QLineF itemLine(to_qpointf(itemLinePoint1), to_qpointf(itemLinePoint2));
@@ -3329,7 +3306,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         obj_update_path(obj);
         break;
     }
-    case OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS: {
+    case RUBBER_ELLIPSE_MAJDIA_MINRAD: {
         EmbVector sceneAxis1Point1 = obj_rubber_point(obj, "ELLIPSE_AXIS1_POINT1");
         EmbVector sceneAxis1Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS1_POINT2");
         EmbVector sceneCenterPoint = obj_rubber_point(obj, "ELLIPSE_CENTER");
@@ -3359,7 +3336,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         obj_update_path(obj);
         break;
     }
-    case OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS: {
+    case RUBBER_ELLIPSE_MAJRAD_MINRAD: {
         EmbVector sceneAxis1Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS1_POINT2");
         EmbVector sceneCenterPoint = obj_rubber_point(obj, "ELLIPSE_CENTER");
         EmbVector sceneAxis2Point2 = obj_rubber_point(obj, "ELLIPSE_AXIS2_POINT2");
@@ -3388,7 +3365,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         obj_update_path(obj);
         break;
     }
-    case OBJ_RUBBER_IMAGE: {
+    case RUBBER_IMAGE: {
         EmbVector start = obj_rubber_point(obj, "IMAGE_START");
         EmbVector end = obj_rubber_point(obj, "IMAGE_END");
         EmbVector delta = emb_vector_subtract(end, start);
@@ -3396,7 +3373,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         obj_update_path(obj);
         break;
     }
-    case OBJ_RUBBER_LINE: {
+    case RUBBER_LINE: {
         EmbVector sceneStartPoint = obj_rubber_point(obj, "LINE_START");
         EmbVector sceneQSnapPoint = obj_rubber_point(obj, "LINE_END");
 
@@ -3406,7 +3383,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         obj_draw_rubber_line(obj, obj_line(obj), painter, "VIEW_COLOR_CROSSHAIR");
         break;
     }
-    case OBJ_RUBBER_POLYGON: {
+    case RUBBER_POLYGON: {
         obj_set_pos(obj, obj_rubber_point(obj, "POLYGON_POINT_0"));
 
         bool ok = false;
@@ -3434,7 +3411,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         obj_set_rubber_text(obj, "POLYGON_NUM_POINTS", "");
         break;
     }
-    case OBJ_RUBBER_POLYGON_INSCRIBE: {
+    case RUBBER_POLYGON_INSCRIBE: {
         obj_set_pos(obj, obj_rubber_point(obj, "POLYGON_CENTER"));
 
         quint16 numSides = obj_rubber_point(obj, "POLYGON_NUM_SIDES").x;
@@ -3459,7 +3436,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         obj_update_path_r(obj, inscribePath);
         break;
     }
-    case OBJ_RUBBER_POLYGON_CIRCUMSCRIBE: {
+    case RUBBER_POLYGON_CIRCUMSCRIBE: {
         obj_set_pos(obj, obj_rubber_point(obj, "POLYGON_CENTER"));
 
         quint16 numSides = obj_rubber_point(obj, "POLYGON_NUM_SIDES").x;
@@ -3495,7 +3472,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         obj_update_path_r(obj, circumscribePath);
         break;
     }
-    case OBJ_RUBBER_POLYLINE: {
+    case RUBBER_POLYLINE: {
         obj_set_pos(obj, obj_rubber_point(obj, "POLYLINE_POINT_0"));
 
         QPointF p = to_qpointf(obj_map_rubber(obj, ""));
@@ -3525,7 +3502,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         obj_set_rubber_text(obj, "POLYLINE_NUM_POINTS", "");
         break;
     }
-    case OBJ_RUBBER_RECTANGLE: {
+    case RUBBER_RECTANGLE: {
         EmbVector start = obj_rubber_point(obj, "RECTANGLE_START");
         EmbVector end = obj_rubber_point(obj, "RECTANGLE_END");
         EmbVector delta = emb_vector_subtract(end, start);
@@ -3533,7 +3510,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         obj_update_path(obj);
         break;
     }
-    case OBJ_RUBBER_TEXTSINGLE: {
+    case RUBBER_TEXTSINGLE: {
         obj_set_text_font(obj, obj_rubber_text(obj, "TEXT_FONT"));
         obj_set_text_justify(obj, obj_rubber_text(obj, "TEXT_JUSTIFY"));
         obj_set_pos(obj, obj_rubber_point(obj, "TEXT_POINT"));
@@ -3543,7 +3520,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         obj_set_text(obj, obj_rubber_text(obj, "TEXT_RAPID"));
         break;
     }
-    case OBJ_RUBBER_GRIP: {
+    case RUBBER_GRIP: {
         obj_update_rubber_grip(obj, painter);
         break;
     }
@@ -3582,7 +3559,7 @@ Object::vulcanize()
     debug_message("vulcanize()");
     /* FIXME: obj_update_rubber(painter); */
 
-    obj->data.objRubberMode = OBJ_RUBBER_OFF;
+    obj->data.objRubberMode = RUBBER_OFF;
 
     switch (obj->geometry->type) {
     case EMB_POLYLINE:
@@ -3819,7 +3796,7 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
         break;
     }
     case EMB_LINE: {
-        if (obj->data.objRubberMode != OBJ_RUBBER_LINE) {
+        if (obj->data.objRubberMode != RUBBER_LINE) {
             painter->drawLine(obj_line(obj));
         }
 
@@ -3860,7 +3837,7 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
         break;
     }
     case EMB_TEXT_SINGLE: {
-        painter->drawPath(obj->data.objTextPath);
+        painter->drawPath(obj->data.textPath);
         break;
     }
     default:
