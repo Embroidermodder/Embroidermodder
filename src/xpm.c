@@ -771,7 +771,9 @@ char **xpm_icons[] = {
     NULL
 };
 
-char *xpm_icon_labels[] = {
+typedef char EmbStringTable[500][200];
+
+EmbStringTable xpm_icon_labels = {
     "about",
     "aligneddimension",
     "aligntextangle",
@@ -1151,5 +1153,5 @@ char *xpm_icon_labels[] = {
     "text_about",
     "texture_canvas",
     "texture_spirals",
-    NULL
+    "END"
 };

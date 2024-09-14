@@ -68,7 +68,7 @@ Settings_Dialog::create_int_spinbox(QGroupBox* groupbox, int key)
 
 /* . */
 void
-set_visibility(QObject *senderObj, const char *key, bool visibility)
+set_visibility(QObject *senderObj, EmbString key, bool visibility)
 {
     QObject* parent = senderObj->parent();
     if (!parent) {
@@ -106,26 +106,24 @@ set_visibility(QObject *senderObj, const char *key, bool visibility)
     }
     if (error) {
         debug_message("Failed to enable/disable the variable");
-        debug_message(key);
+        debug_message((char*)key);
     }
 }
 
 /* . */
 void
-set_visibility_group(QObject *senderObj, char *keylist[], bool visibility)
+set_visibility_group(QObject *senderObj, EmbStringTable keylist, bool visibility)
 {
     int i;
-    for (i=0; ; i++) {
-        if (!strcmp(keylist[i], "END")) {
-            break;
-        }
+    int n = string_array_length(keylist);
+    for (i=0; i<n; i++) {
         set_visibility(senderObj, keylist[i], visibility);
     }
 }
 
 /* . */
 void
-set_enabled(QObject *senderObj, const char *key, bool enabled)
+set_enabled(QObject *senderObj, EmbString key, bool enabled)
 {
     QObject* parent = senderObj->parent();
     if (!parent) {
@@ -163,19 +161,17 @@ set_enabled(QObject *senderObj, const char *key, bool enabled)
     }
     if (error) {
         debug_message("Failed to enable/disable the variable");
-        debug_message(key);
+        debug_message((char*)key);
     }
 }
 
 /* . */
 void
-set_enabled_group(QObject *senderObj, char *keylist[], bool enabled)
+set_enabled_group(QObject *senderObj, EmbStringTable keylist, bool enabled)
 {
     int i;
-    for (i=0; ; i++) {
-        if (!strcmp(keylist[i], "END")) {
-            break;
-        }
+    int n = string_array_length(keylist);
+    for (i=0; i<n; i++) {
         set_enabled(senderObj, keylist[i], enabled);
     }
 }
@@ -407,7 +403,7 @@ Settings_Dialog::createTabFilesPaths()
 
 /* . */
 QGroupBox*
-Settings_Dialog::create_group_box(QWidget* widget, const char *label, int data[])
+Settings_Dialog::create_group_box(QWidget* widget, EmbString label, int data[])
 {
     QGroupBox* groupbox = new QGroupBox(translate(label), widget);
     QVBoxLayout* vboxLayoutRender = new QVBoxLayout(groupbox);
@@ -1599,7 +1595,7 @@ Settings_Dialog::checkBoxCustomFilterStateChanged(int checked)
 {
     QCheckBox* checkBox = qobject_cast<QCheckBox*>(sender());
     if (checkBox) {
-        char message[MAX_STRING_LENGTH];
+        EmbString message;
         QString format = checkBox->text();
         sprintf(message, "CustomFilter: %s %d", qPrintable(format), checked);
         debug_message(message);

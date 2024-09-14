@@ -29,6 +29,8 @@ bool isBlinking;
 int numOfDocs = 0;
 int docIndex = 0;
 
+EmbString end_symbol = "END";
+EmbString settings_file = "settings.toml";
 ScriptValue state[MAX_STATE_VARIABLES];
 int state_length = 0;
 bool key_state[N_KEY_SEQUENCES] = {
@@ -107,7 +109,7 @@ int
 main(int argc, char* argv[])
 {
     int n_files = 0;
-    char files_to_open[MAX_FILES][MAX_STRING_LENGTH];
+    EmbStringTable files_to_open;
     for (int i = 1; i < argc; i++) {
         if (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--debug")  ) {
             testing_mode = 1;
@@ -324,7 +326,7 @@ get_bool(int key)
 
 /* . */
 char *
-translate(const char *msg)
+translate(EmbString msg)
 {
     return msg;
 }
@@ -339,7 +341,7 @@ create_script_env()
 }
 
 void
-add_string_variable(ScriptEnv *context, const char *label, const char *s)
+add_string_variable(ScriptEnv *context, EmbString label, EmbString s)
 {
     strcpy(context->variable[context->n_variables].label, label);
     strcpy(context->variable[context->n_variables].s, s);
@@ -348,7 +350,7 @@ add_string_variable(ScriptEnv *context, const char *label, const char *s)
 }
 
 void
-add_int_variable(ScriptEnv *context, const char *label, int i)
+add_int_variable(ScriptEnv *context, EmbString label, int i)
 {
     strcpy(context->variable[context->n_variables].label, label);
     context->variable[context->n_variables].i = i;
@@ -357,7 +359,7 @@ add_int_variable(ScriptEnv *context, const char *label, int i)
 }
 
 void
-add_real_variable(ScriptEnv *context, const char *label, double r)
+add_real_variable(ScriptEnv *context, EmbString label, double r)
 {
     strcpy(context->variable[context->n_variables].label, label);
     context->variable[context->n_variables].r = r;
@@ -366,7 +368,7 @@ add_real_variable(ScriptEnv *context, const char *label, double r)
 }
 
 const char *
-script_get_string(ScriptEnv *context, const char *label)
+script_get_string(ScriptEnv *context, EmbString label)
 {
     int i;
     for (i=0; i<context->n_variables; i++) {
@@ -378,7 +380,7 @@ script_get_string(ScriptEnv *context, const char *label)
 }
 
 int
-script_get_int(ScriptEnv *context, const char *label)
+script_get_int(ScriptEnv *context, EmbString label)
 {
     int i;
     for (i=0; i<context->n_variables; i++) {
@@ -390,7 +392,7 @@ script_get_int(ScriptEnv *context, const char *label)
 }
 
 double
-script_get_real(ScriptEnv *context, const char *label)
+script_get_real(ScriptEnv *context, EmbString label)
 {
     int i;
     for (i=0; i<context->n_variables; i++) {
@@ -402,7 +404,7 @@ script_get_real(ScriptEnv *context, const char *label)
 }
 
 int
-script_set_string(ScriptEnv *context, const char *label, const char *s)
+script_set_string(ScriptEnv *context, EmbString label, EmbString s)
 {
     int i;
     for (i=0; i<context->n_variables; i++) {
@@ -415,7 +417,7 @@ script_set_string(ScriptEnv *context, const char *label, const char *s)
 }
 
 int
-script_set_int(ScriptEnv *context, const char *label, int x)
+script_set_int(ScriptEnv *context, EmbString label, int x)
 {
     int i;
     for (i=0; i<context->n_variables; i++) {
@@ -429,7 +431,7 @@ script_set_int(ScriptEnv *context, const char *label, int x)
 
 /* . */
 int
-script_set_real(ScriptEnv *context, const char *label, double r)
+script_set_real(ScriptEnv *context, EmbString label, double r)
 {
     int i;
     for (i=0; i<context->n_variables; i++) {
@@ -480,7 +482,7 @@ script_real(double r)
 
 /* . */
 ScriptValue
-script_string(const char *s)
+script_string(EmbString s)
 {
     ScriptValue value;
     value.type = SCRIPT_STRING;
@@ -490,7 +492,7 @@ script_string(const char *s)
 
 /* These pack the arguments for function calls in the command environment. */
 ScriptEnv *
-add_string_argument(ScriptEnv *context, const char *s)
+add_string_argument(ScriptEnv *context, EmbString s)
 {
     strcpy(context->argument[context->argumentCount].s, s);
     context->argument[context->argumentCount].type = SCRIPT_STRING;
@@ -669,20 +671,21 @@ string_array_length(const char *s)
 }
  */
 int
-string_array_length(char *s[])
+string_array_length(EmbStringTable s)
 {
     int i;
-    for (i=0; i<1000; i++) {
-        if (!strcmp(s[i], "END")) {
+    for (i=0; i<MAX_TABLE_LENGTH; i++) {
+        if (string_equal(s[i], end_symbol)) {
             return i;
         }
     }
-    return -1;
+    printf("ERROR: string array has no end_symbol. %s %s\n", s[0], end_symbol);
+    return MAX_TABLE_LENGTH - 1;
 }
 
 /* . */
 int
-get_state_variable(const char *key)
+get_state_variable(EmbString key)
 {
     int i;
     for (i=0; i<state_length; i++) {
@@ -846,7 +849,7 @@ load_settings(char *appDir, char *fname)
 /* The file fname needs to be read from the users home directory to ensure it is writable.
  */
 int
-save_settings(const char *appDir, const char *fname)
+save_settings(EmbString appDir, EmbString fname)
 {
     FILE *file = fopen(fname, "w");
     if (!file) {
@@ -878,7 +881,7 @@ save_settings(const char *appDir, const char *fname)
 
 /* . */
 int
-get_command_id(const char *name)
+get_command_id(EmbString name)
 {
     for (int i=0; i<MAX_COMMANDS; i++) {
         if (command_data[i].id == -2) {
@@ -906,7 +909,7 @@ save_file(void)
  *       to take into account the color of the thread, as we do not want
  *       to try to hide dark colored stitches beneath light colored fills.
  */
-bool pattern_save(EmbPattern *pattern, const char *fileName)
+bool pattern_save(EmbPattern *pattern, EmbString fileName)
 {
     char message[200];
     sprintf(message, "SaveObject save(%s)", fileName);
@@ -996,10 +999,9 @@ roundToMultiple(bool roundUp, int numToRound, int multiple)
 /* TODO: timestamp each message
  */
 void
-debug_message(const char *msg)
+debug_message(EmbString msg)
 {
-    char buffer[MAX_STRING_LENGTH];
-    char fname[200];
+    EmbString buffer, fname;
     time_t t;
     struct tm* tm_info;
     sprintf(fname, "debug.log");
@@ -1017,7 +1019,7 @@ debug_message(const char *msg)
 
 /* . */
 void
-todo(const char *txt)
+todo(EmbString txt)
 {
     char message[MAX_STRING_LENGTH];
     sprintf(message, "TODO: %s", txt);
@@ -1026,7 +1028,7 @@ todo(const char *txt)
  
 /* . */
 void
-fixme(const char *msg)
+fixme(EmbString msg)
 {
     char outmsg[MAX_STRING_LENGTH];
     sprintf(outmsg, "FIXME: %s", msg);
@@ -1083,3 +1085,72 @@ copy_setting(int key, int dst, int src)
         break;
     }
 }
+
+/* . */
+void
+emb_string(EmbString s, const char *str)
+{
+    for (int i=0; i<MAX_STRING_LENGTH; i++) {
+        s[i] = str[i];
+        if (!s[i]) {
+            break;
+        }
+    }
+    /* Reached end of string so we should ensure s is null-terminated. */
+    s[MAX_STRING_LENGTH-1] = 0;
+}
+
+/* . */
+int
+string_equal(EmbString a, EmbString b)
+{
+    return !string_compare(a, b);
+}
+
+/* . */
+int
+string_compare(EmbString a, EmbString b)
+{
+    for (int i=0; i<MAX_STRING_LENGTH; i++) {
+        char c = a[i] - b[i];
+        if (!a[i]) {
+            return 0;
+        }
+        if (c) {
+            return c;            
+        }
+    }
+    /* Reached end of string so we should ensure that both strings are
+     * null-terminated.
+     */
+    a[MAX_STRING_LENGTH-1] = 0;
+    b[MAX_STRING_LENGTH-1] = 0;
+    return 1;
+}
+
+#if 0
+/* . */
+void
+string_copy(EmbString dst, EmbString src)
+{
+    for (int i=0; i<MAX_STRING_LENGTH; i++) {
+        dst[i] = src[i];
+    }
+}
+#endif
+
+/* . */
+int
+string_list_contains(EmbStringTable list, EmbString entry)
+{
+    int n = string_array_length(list);
+    EmbString s;
+    emb_string(s, entry);
+    for (int i=0; i<n; i++) {
+        if (string_equal(list[i], s)) {
+            return 1;
+        }
+    }
+    return 0;
+}
+

@@ -10,7 +10,9 @@
  * Selectors
  */
 
-char *layer_list[] = {
+#include "../core.h"
+
+EmbStringTable layer_list = {
     "linetypebylayer", "0", "",
     "linetypebylayer", "1", "",
     "linetypebylayer", "2", "",
@@ -24,7 +26,7 @@ char *layer_list[] = {
     "END", "END", "END"
 };
 
-char *color_list[] = {
+EmbStringTable color_list = {
     "colorbylayer", "ByLayer", "",
     "colorbyblock", "ByBlock", "",
     "colorred", "Red", "255,0,0",
@@ -38,7 +40,7 @@ char *color_list[] = {
     "END", "END", "END"
 };
 
-char *line_type_list[] = {
+EmbStringTable line_type_list = {
     "linetypebylayer", "ByLayer", "",
     "linetypebyblock", "ByBlock", "",
     "linetypecontinuous", "Continuous", "",
@@ -49,7 +51,7 @@ char *line_type_list[] = {
 };
 
 /* TODO: Thread weight is weird. See http://en.wikipedia.org/wiki/Thread_(yarn)#Weight */
-char *line_weight_list[] = {
+EmbStringTable line_weight_list = {
     "lineweightbylayer", "ByLayer", "-2.00",
     "lineweightbyblock", "ByBlock", "-1.00",
     "lineweightdefault", "Default", "0.00",
@@ -80,7 +82,7 @@ char *line_weight_list[] = {
     "END", "END", "END"
 };
 
-char *text_size_list[] = {
+EmbStringTable text_size_list = {
     "6 pt", "6", "",
     "8 pt", "8", "",
     "9 pt", "9", "",

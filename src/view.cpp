@@ -190,7 +190,7 @@ doc_add_object(Document* doc, Object* obj)
 {
     doc->data.gscene->addItem(obj);
     doc->data.gscene->update();
-    doc->data.hashDeletedObjects.remove(obj->data.objID);
+    doc->data.hashDeletedObjects.remove(obj->core->objID);
 }
 
 /* . */
@@ -201,7 +201,7 @@ doc_delete_object(Document* doc, Object* obj)
     obj->setSelected(false);
     doc->data.gscene->removeItem(obj);
     doc->data.gscene->update();
-    doc->data.hashDeletedObjects.insert(obj->data.objID, obj);
+    doc->data.hashDeletedObjects.insert(obj->core->objID, obj);
 }
 
 /* . */
@@ -318,7 +318,8 @@ doc_vulcanize_object(Document* doc, Object* obj)
     doc->data.gscene->removeItem(obj); /* Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene */
     obj->vulcanize();
 
-    UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data.OBJ_NAME, obj, doc, 0);
+    UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME,
+        obj, doc, 0);
     if (cmd) {
         doc->data.undoStack->push(cmd);
     }
@@ -335,7 +336,7 @@ doc_clear_rubber_room(Document* doc)
             if ((type == OBJ_PATH && doc->data.spareRubberList.contains(SPARE_RUBBER_PATH))
             || (type == OBJ_POLYGON  && doc->data.spareRubberList.contains(SPARE_RUBBER_POLYGON))
             || (type == OBJ_POLYLINE && doc->data.spareRubberList.contains(SPARE_RUBBER_POLYLINE))
-            || (doc->data.spareRubberList.contains(base->data.objID))) {
+            || (doc->data.spareRubberList.contains(base->core->objID))) {
                 if (!obj_path(base).elementCount()) {
                     critical_box(translate("Empty Rubber Object Error"),
                         translate("The rubber object added contains no points. "
@@ -371,9 +372,11 @@ doc_spare_rubber(Document* doc, int64_t id)
 void
 doc_set_rubber_mode(Document* doc, int mode)
 {
-    foreach(QGraphicsItem* item, doc->data.rubberRoomList) {
+    foreach (QGraphicsItem* item, doc->data.rubberRoomList) {
         Object* base = static_cast<Object*>(item);
-        if (base) { base->setObjectRubberMode(mode); }
+        if (base) {
+            setObjectRubberMode(base->core, mode);
+        }
     }
     doc->data.gscene->update();
 }
@@ -382,10 +385,10 @@ doc_set_rubber_mode(Document* doc, int mode)
 void
 doc_set_rubber_point(Document* doc, QString key, EmbVector point)
 {
-    foreach(QGraphicsItem* item, doc->data.rubberRoomList) {
+    foreach (QGraphicsItem* item, doc->data.rubberRoomList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
-            base->setObjectRubberPoint(key, point);
+            base->setObjectRubberPoint((char*)qPrintable(key), point);
         }
     }
     doc->data.gscene->update();
@@ -395,9 +398,11 @@ doc_set_rubber_point(Document* doc, QString key, EmbVector point)
 void
 doc_set_rubber_text(Document* doc, QString key, QString txt)
 {
-    foreach(QGraphicsItem* item, doc->data.rubberRoomList) {
+    foreach (QGraphicsItem* item, doc->data.rubberRoomList) {
         Object* base = static_cast<Object*>(item);
-        if (base) { base->setObjectRubberText(key, txt); }
+        if (base) {
+            base->setObjectRubberText((char*)qPrintable(key), (char*)qPrintable(txt));
+        }
     }
     doc->data.gscene->update();
 }
@@ -1648,7 +1653,7 @@ Document::mousePressEvent(QMouseEvent* event)
             foreach(QGraphicsItem* item, itemList) {
                 Object* base = static_cast<Object*>(item);
                 if (base) {
-                    UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, base->data.OBJ_NAME, base, doc, 0);
+                    UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, base->core->OBJ_NAME, base, doc, 0);
                     if (cmd) {
                         doc->data.undoStack->push(cmd);
                     }
@@ -1990,7 +1995,7 @@ Document::contextMenuEvent(QContextMenuEvent* event)
 
     for (int i = 0; i < itemList.size(); i++) {
         Object *obj = static_cast<Object *>(itemList.at(i));
-        if (obj->data.OBJ_TYPE != OBJ_NULL) {
+        if (obj->core->geometry->type != OBJ_NULL) {
             selectionEmpty = false;
             break;
         }
@@ -2102,7 +2107,7 @@ doc_start_gripping(Document* doc, Object* obj)
     doc->data.gripBaseObj = obj;
     doc->data.sceneGripPoint = doc->data.gripBaseObj->mouseSnapPoint(doc->data.sceneMousePoint);
     doc->data.gripBaseObj->setObjectRubberPoint("GRIP_POINT", doc->data.sceneGripPoint);
-    doc->data.gripBaseObj->setObjectRubberMode(RUBBER_GRIP);
+    setObjectRubberMode(doc->data.gripBaseObj->core, RUBBER_GRIP);
 }
 
 /* . */
@@ -2113,7 +2118,8 @@ doc_stop_gripping(Document* doc, bool accept)
     if (doc->data.gripBaseObj) {
         doc->data.gripBaseObj->vulcanize();
         if (accept) {
-            QString s = translate("Grip Edit ") + doc->data.gripBaseObj->data.OBJ_NAME;
+            QString s = translate("Grip Edit ");
+            s += doc->data.gripBaseObj->core->OBJ_NAME;
             UndoableCommand* cmd = new UndoableCommand(ACTION_GRIP_EDIT, doc->data.sceneGripPoint, doc->data.sceneMousePoint, s, doc->data.gripBaseObj, doc, 0);
             if (cmd) {
                 doc->data.undoStack->push(cmd);
@@ -2146,8 +2152,11 @@ doc_delete_selected(Document* doc)
     for (int i = 0; i < itemList.size(); i++) {
         Object* base = static_cast<Object*>(itemList.at(i));
         if (base) {
-            if (base->data.OBJ_TYPE != OBJ_NULL) {
-                UndoableCommand* cmd = new UndoableCommand(ACTION_DELETE, translate("Delete 1 ") + base->data.OBJ_NAME, base, doc, 0);
+            if (base->core->geometry->type != OBJ_NULL) {
+                char label[MAX_STRING_LENGTH];
+                sprintf(label, "%s%s", translate("Delete 1 "), base->core->OBJ_NAME);
+                UndoableCommand* cmd = new UndoableCommand(ACTION_DELETE, label,
+                    base, doc, 0);
                 if (cmd) {
                     doc->data.undoStack->push(cmd);
                 }
@@ -2277,11 +2286,14 @@ doc_move_selected(Document* doc, double dx, double dy)
     foreach(QGraphicsItem* item, itemList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
-            EmbVector delta;
-            delta.x = dx;
-            delta.y = dy;
-            UndoableCommand* cmd = new UndoableCommand(ACTION_MOVE, delta, translate("Move 1 ") + base->data.OBJ_NAME, base, doc, 0);
-            if (cmd) doc->data.undoStack->push(cmd);
+            char msg[MAX_STRING_LENGTH];
+            EmbVector delta = emb_vector(dx, dy);
+            sprintf(msg, "%s%s", translate("Move 1 "), base->core->OBJ_NAME);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_MOVE, delta, msg,
+                base, doc, 0);
+            if (cmd) {
+                doc->data.undoStack->push(cmd);
+            }
         }
     }
     if (numSelected > 1) {
@@ -2313,9 +2325,11 @@ doc_rotate_selected(Document* doc, double x, double y, double rot)
     foreach(QGraphicsItem* item, itemList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
-            QString s = translate("Rotate 1 ") + base->data.OBJ_NAME;
+            QString s = translate("Rotate 1 ");
+            s += base->core->OBJ_NAME;
             EmbVector v = emb_vector(x, y);
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ROTATE, v, rot, s, base, doc, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ROTATE, v, rot, s,
+                base, doc, 0);
             if (cmd) {
                 doc->data.undoStack->push(cmd);
             }
@@ -2345,7 +2359,8 @@ doc_mirror_selected(Document* doc, double x1, double y1, double x2, double y2)
             start.y = y1;
             end.x = x2;
             end.y = y2;
-            QString s = translate("Mirror 1 ") + base->data.OBJ_NAME;
+            QString s = translate("Mirror 1 ");
+            s += base->core->OBJ_NAME;
             UndoableCommand* cmd = new UndoableCommand(ACTION_MIRROR, start, end,
                 s, base, doc, 0);
             if (cmd) {
@@ -2381,10 +2396,11 @@ doc_scale_selected(Document* doc, double x, double y, double factor)
     foreach(QGraphicsItem* item, itemList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
-            EmbVector v;
-            v.x = x;
-            v.y = y;
-            UndoableCommand* cmd = new UndoableCommand(ACTION_SCALE, v, factor, translate("Scale 1 ") + base->data.OBJ_NAME, base, doc, 0);
+            EmbVector v = emb_vector(x, y);
+            char msg[MAX_STRING_LENGTH];
+            sprintf(msg, "%s%s", translate("Scale 1 "), base->core->OBJ_NAME);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_SCALE, v, factor, msg,
+                base, doc, 0);
             if (cmd) {
                 doc->data.undoStack->push(cmd);
             }

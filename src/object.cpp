@@ -42,47 +42,47 @@ Object::Object(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* item)/
 {
     debug_message("BaseObject Constructor()");
 
-    obj = this;
+    core = (ObjectCore*)malloc(sizeof(ObjectCore));
 
-    obj->data.OBJ_TYPE = type_;
     if (type_ < 30) {
-        obj->data.OBJ_NAME = object_names[type_];
+        strcpy(core->OBJ_NAME, object_names[type_]);
     }
     else {
-        obj->data.OBJ_NAME = "Unknown";
+        strcpy(core->OBJ_NAME, "Unknown");
     }
 
-    obj->data.objPen.setCapStyle(Qt::RoundCap);
-    obj->data.objPen.setJoinStyle(Qt::RoundJoin);
-    obj->data.lwtPen.setCapStyle(Qt::RoundCap);
-    obj->data.lwtPen.setJoinStyle(Qt::RoundJoin);
+    objPen.setCapStyle(Qt::RoundCap);
+    objPen.setJoinStyle(Qt::RoundJoin);
+    lwtPen.setCapStyle(Qt::RoundCap);
+    lwtPen.setJoinStyle(Qt::RoundJoin);
 
-    obj->data.objID = QDateTime::currentMSecsSinceEpoch();
+    core->objID = QDateTime::currentMSecsSinceEpoch();
 
-    obj->data.gripIndex = -1;
-    obj->data.curved = 0;
+    core->gripIndex = -1;
+    core->curved = 0;
 
-    obj->setFlag(QGraphicsItem::ItemIsSelectable, true);
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
 
-    obj_set_color(obj, rgb);
-    obj_set_line_type(obj, lineType);
-    obj_set_line_weight(obj, 0.35);
+    obj_set_color(this, rgb);
+    obj_set_line_type(this, lineType);
+    obj_set_line_weight(this, 0.35);
     todo("pass in proper lineweight");
-    obj->setPen(obj->data.objPen);
+    setPen(objPen);
 
-    geometry = (EmbGeometry*)malloc(sizeof(EmbGeometry));
-    geometry->type = type_;
-    geometry->object.color.r = qRed(rgb);
-    geometry->object.color.g = qGreen(rgb);
-    geometry->object.color.b = qBlue(rgb);
-    geometry->lineType = lineType;
+    core->geometry = (EmbGeometry*)malloc(sizeof(EmbGeometry));
+    core->geometry->type = type_;
+    core->geometry->object.color.r = qRed(rgb);
+    core->geometry->object.color.g = qGreen(rgb);
+    core->geometry->object.color.b = qBlue(rgb);
+    core->geometry->lineType = lineType;
 }
 
 /* . */
 Object::~Object()
 {
     debug_message("ArcObject Destructor()");
-    free(geometry);
+    free(core->geometry);
+    free(core);
 }
 
 /* . */
@@ -91,7 +91,7 @@ create_arc(EmbArc arc, QRgb rgb, QGraphicsItem *item)
 {
     debug_message("ArcObject Constructor()");
     Object *obj = new Object(EMB_ARC, rgb, Qt::SolidLine, item);
-    obj->geometry->object.arc = arc;
+    obj->core->geometry->object.arc = arc;
     todo("getCurrentLineType");
     obj_calculate_data(obj);
     obj_set_pos(obj, arc.start);
@@ -105,7 +105,7 @@ create_circle(EmbCircle circle, QRgb rgb, QGraphicsItem *item)
     debug_message("CircleObject Constructor()");
     Object *obj = new Object(EMB_CIRCLE, rgb, Qt::SolidLine, item);
     todo("getCurrentLineType");
-    obj->geometry->object.circle = circle;
+    obj->core->geometry->object.circle = circle;
 
     /*
     update_path();
@@ -120,7 +120,7 @@ create_ellipse(EmbEllipse ellipse, QRgb rgb, QGraphicsItem *item)
     debug_message("EllipseObject Constructor()");
     todo("getCurrentLineType");
     Object *obj = new Object(EMB_ELLIPSE, rgb, Qt::SolidLine, item);
-    obj->geometry->object.ellipse = ellipse;
+    obj->core->geometry->object.ellipse = ellipse;
 
     /*
     setObjectSize(width, height);
@@ -172,7 +172,8 @@ create_text_single(QString str, double x, double y, QRgb rgb, QGraphicsItem* par
     debug_message("TextSingleObject Constructor()");
     todo("getCurrentLineType");
     Object *obj = new Object(EMB_TEXT_SINGLE, rgb, Qt::SolidLine);
-    obj->data.core.textJustify = "Left"; /* TODO: set the justification properly */
+    strcpy(obj->core->textJustify, "Left");
+    /* TODO: set the justification properly */
 
     obj_set_text(obj, str);
     obj_set_pos(obj, emb_vector(x, y));
@@ -187,8 +188,8 @@ create_dim_leader(double x1, double y1, double x2, double y2, QRgb rgb, QGraphic
     todo("getCurrentLineType");
     Object *obj = new Object(EMB_DIM_LEADER, rgb, Qt::SolidLine);
 
-    obj->data.curved = false;
-    obj->data.filled = true;
+    obj->core->curved = false;
+    obj->core->filled = true;
     obj_set_end_point_1(obj, emb_vector(x1, y1));
     obj_set_end_point_2(obj, emb_vector(x2, y2));
     return obj;
@@ -244,31 +245,31 @@ copy_object(Object* obj)
     if (!obj) {
         return NULL;
     }
-    Object *copy = new Object(obj->geometry->type, obj_color_rgb(obj), Qt::SolidLine);
-    switch (obj->geometry->type) {
+    Object *copy = new Object(obj->core->geometry->type, obj_color_rgb(obj), Qt::SolidLine);
+    switch (obj->core->geometry->type) {
     case EMB_ARC:
-        copy->geometry->object.arc = obj->geometry->object.arc;
+        copy->core->geometry->object.arc = obj->core->geometry->object.arc;
         todo("getCurrentLineType");
         copy->setRotation(obj->rotation());
         break;
     case EMB_CIRCLE:
-        copy->geometry->object.circle = obj->geometry->object.circle;
+        copy->core->geometry->object.circle = obj->core->geometry->object.circle;
         todo("getCurrentLineType");
         copy->setRotation(obj->rotation());
         break;
     case EMB_DIM_LEADER:
-        copy->geometry->object.line = obj->geometry->object.line;
+        copy->core->geometry->object.line = obj->core->geometry->object.line;
         /* init(obj_x1(obj), obj_y1(obj), obj_x2(obj), obj_y2(obj), obj_color_rgb(obj), Qt::SolidLine); */
         todo("getCurrentLineType");
         break;
     case EMB_ELLIPSE:
-        copy->geometry->object.ellipse = obj->geometry->object.ellipse;
+        copy->core->geometry->object.ellipse = obj->core->geometry->object.ellipse;
         /* init(obj->obj_centerX(), obj->obj_centerY(), obj->objectWidth(), obj->objectHeight(), obj_color_rgb(obj), Qt::SolidLine); */
         todo("getCurrentLineType");
         copy->setRotation(obj->rotation());
         break;
     case EMB_IMAGE: {
-        copy->geometry->object.ellipse = obj->geometry->object.ellipse;
+        copy->core->geometry->object.ellipse = obj->core->geometry->object.ellipse;
         /* EmbVector ptl = obj_top_left(obj); */
         /* init(ptl.x, ptl.y, obj->objectWidth(), obj->objectHeight(), obj_color_rgb(obj), Qt::SolidLine); */
         todo("getCurrentLineType");
@@ -276,13 +277,13 @@ copy_object(Object* obj)
         break;
     }
     case EMB_LINE: {
-        copy->geometry->object.line = obj->geometry->object.line;
+        copy->core->geometry->object.line = obj->core->geometry->object.line;
         /* init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj_color_rgb(obj), Qt::SolidLine); */
         todo("getCurrentLineType");
         break;
     }
     case EMB_PATH: {
-        copy->geometry->object.path = obj->geometry->object.path;
+        copy->core->geometry->object.path = obj->core->geometry->object.path;
         /* init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj_color_rgb(obj), Qt::SolidLine);
          * obj->setRotation(obj->rotation());
          * obj->setScale(obj->scale());
@@ -291,7 +292,7 @@ copy_object(Object* obj)
         break;
     }
     case EMB_POINT: {
-        copy->geometry->object.point = obj->geometry->object.point;
+        copy->core->geometry->object.point = obj->core->geometry->object.point;
         /* init(obj->objectX(), obj->objectY(), obj_color_rgb(obj), Qt::SolidLine);
          */
         todo("getCurrentLineType");
@@ -299,7 +300,7 @@ copy_object(Object* obj)
         break;
     }
     case EMB_POLYGON: {
-        copy->geometry->object.polygon = obj->geometry->object.polygon;
+        copy->core->geometry->object.polygon = obj->core->geometry->object.polygon;
         /* init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj_color_rgb(obj), Qt::SolidLine);
          * obj->setRotation(obj->rotation());
          * obj->setScale(obj->scale());
@@ -308,7 +309,7 @@ copy_object(Object* obj)
         break;
     }
     case EMB_POLYLINE: {
-        copy->geometry->object.polyline = obj->geometry->object.polyline;
+        copy->core->geometry->object.polyline = obj->core->geometry->object.polyline;
         /* init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj_color_rgb(obj), Qt::SolidLine);
          */
         todo("getCurrentLineType");
@@ -317,7 +318,7 @@ copy_object(Object* obj)
         break;
     }
     case EMB_RECT: {
-        obj->geometry->object.rect = obj->geometry->object.rect;
+        obj->core->geometry->object.rect = obj->core->geometry->object.rect;
         /* EmbVector ptl = obj->objectTopLeft();
          * init(ptl.x, ptl.y, obj->objectWidth(), obj->objectHeight(), obj_color_rgb(obj), Qt::SolidLine);
          */
@@ -326,13 +327,13 @@ copy_object(Object* obj)
         break;
     }
     case EMB_TEXT_SINGLE: {
-        obj_set_text_font(copy, obj->data.core.textFont);
-        obj_set_text_size(copy, obj->data.core.textSize);
+        obj_set_text_font(copy, obj->core->textFont);
+        obj_set_text_size(copy, obj->core->textSize);
         copy->setRotation(obj->rotation());
-        obj_set_text_backward(copy, obj->data.core.textBackward);
-        obj_set_text_upside_down(copy, obj->data.core.textUpsideDown);
-        obj_set_text_style(copy, obj->data.core.textBold, obj->data.core.textItalic,
-            obj->data.core.textUnderline, obj->data.core.textStrikeOut, obj->data.core.textOverline);
+        obj_set_text_backward(copy, obj->core->textBackward);
+        obj_set_text_upside_down(copy, obj->core->textUpsideDown);
+        obj_set_text_style(copy, obj->core->textBold, obj->core->textItalic,
+            obj->core->textUnderline, obj->core->textStrikeOut, obj->core->textOverline);
         /* init(obj->text, obj->objectX(), obj->objectY(), obj_color_rgb(obj), Qt::SolidLine);
          */
         todo("getCurrentLineType");
@@ -348,25 +349,25 @@ copy_object(Object* obj)
 QColor
 obj_color(Object* obj)
 {
-    return obj->data.objPen.color();
+    return obj->objPen.color();
 }
 
 QRgb
 obj_color_rgb(Object* obj)
 {
-    return obj->data.objPen.color().rgb();
+    return obj->objPen.color().rgb();
 }
 
 Qt::PenStyle
 obj_line_type(Object* obj)
 {
-    return obj->data.objPen.style();
+    return obj->objPen.style();
 }
 
 double
 obj_line_weight(Object* obj)
 {
-    return obj->data.lwtPen.widthF();
+    return obj->lwtPen.widthF();
 }
 
 QPainterPath
@@ -392,19 +393,46 @@ obj_draw_rubber_line(Object *obj, const QLineF& rubLine, QPainter* painter, cons
         if (!objScene) {
             return;
         }
-        QPen colorPen = obj->data.objPen;
+        QPen colorPen = obj->objPen;
         colorPen.setColor(QColor(objScene->property(colorFromScene).toUInt()));
         painter->setPen(colorPen);
         painter->drawLine(rubLine);
-        painter->setPen(obj->data.objPen);
+        painter->setPen(obj->objPen);
     }
+}
+
+/* . */
+void
+setObjectRubberMode(ObjectCore *core, int mode)
+{
+    core->rubber_mode = mode;
+}
+
+/* . */
+void
+Object::setObjectRubberPoint(char key[MAX_STRING_LENGTH], EmbVector value)
+{
+    LabelledVector s;
+    strcpy(s.key, key);
+    s.vector = value;
+    rubber_points.push_back(s);
+}
+
+/* . */
+void
+Object::setObjectRubberText(char key[MAX_STRING_LENGTH], char value[MAX_STRING_LENGTH])
+{
+    StringMap s;
+    strcpy(s.key, key);
+    strcpy(s.value, value);
+    rubber_texts.push_back(s);
 }
 
 /* . */
 void
 obj_real_render(Object *obj, QPainter* painter, QPainterPath renderPath)
 {
-    QColor color1 = obj->data.objPen.color(); /* lighter color */
+    QColor color1 = obj->objPen.color(); /* lighter color */
     QColor color2 = color1.darker(150); /* darker color */
 
     /* If we have a dark color, lighten it. */
@@ -468,7 +496,7 @@ circle_command(ScriptEnv *context)
     }
 
     /*
-    context->point1 = zero_vector;
+    context->point1 = emb_vector(0.0, 0.0);
     context->point2 = context->point1;
     context->point3 = context->point1;
     add_real_variable(context, "rad", 0.0f);
@@ -499,8 +527,8 @@ circle_click(ScriptEnv *context)
     switch (context->mode) {
     case CIRCLE_1P_RAD_ONE: {
     #if 0
-        context->point1 = zero_vector;
-        context->center = zero_vector;
+        context->point1 = emb_vector(0.0, 0.0);
+        context->center = emb_vector(0.0, 0.0);
         obj_add_rubber(obj, "CIRCLE");
         obj_set_rubber_mode(obj, "CIRCLE_1P_RAD");
         obj_set_rubber_point(obj, "CIRCLE_CENTER", v);
@@ -858,9 +886,9 @@ ellipse_command(ScriptEnv *context)
     case CONTEXT_MAIN:
         /*
         context->mode = ELLIPSE_MAJDIA_MINRAD_ONE;
-        context->point1 = zero_vector;
-        context->point2 = zero_vector;
-        context->point3 = zero_vector;
+        context->point1 = emb_vector(0.0, 0.0);
+        context->point2 = emb_vector(0.0, 0.0);
+        context->point3 = emb_vector(0.0, 0.0);
         prompt_output(translate("Specify first axis start point or [Center]: "));
         */
         end_command();
@@ -1117,7 +1145,7 @@ function prompt(str)
 void
 Object::setObjectSize(double width, double height)
 {
-    QRectF elRect = obj_rect(obj);
+    QRectF elRect = obj_rect(this);
     elRect.setWidth(width);
     elRect.setHeight(height);
     elRect.moveCenter(QPointF(0, 0));
@@ -1132,8 +1160,8 @@ line_command(ScriptEnv *context)
     case CONTEXT_MAIN: {
         /*
         context->firstRun = true;
-        context->first = zero_vector;
-        context->prev = zero_vector;
+        context->first = emb_vector(0.0, 0.0);
+        context->prev = emb_vector(0.0, 0.0);
         */
         prompt_output(translate("Specify first point: "));
         break;
@@ -1225,8 +1253,8 @@ path_command(ScriptEnv *context)
         init_command();
         clear_selection();
         context->firstRun = true;
-        context->first = zero_vector;
-        context->prev = zero_vector;
+        context->first = emb_vector(0.0, 0.0);
+        context->prev = emb_vector(0.0, 0.0);
         prompt_output(translate("Specify start point: "));
         */
         break;
@@ -1375,11 +1403,11 @@ polygon_command(ScriptEnv *context)
 function
 main()
 {
-    context->center = zero_vector;
-    context->side1 = zero_vector;
-    context->side2 = zero_vector;
-    context->pointI = zero_vector;
-    context->pointC = zero_vector;
+    context->center = emb_vector(0.0, 0.0);
+    context->side1 = emb_vector(0.0, 0.0);
+    context->side2 = emb_vector(0.0, 0.0);
+    context->pointI = emb_vector(0.0, 0.0);
+    context->pointC = emb_vector(0.0, 0.0);
     context->polyType = "Inscribed";
     context->numSides = 4;
     context->mode = POLYGON_MODE_NUM_SIDES;
@@ -1608,7 +1636,7 @@ obj_update_rubber_grip(Object *obj, QPainter *painter)
         return;
     }
     EmbVector gripPoint = obj_rubber_point(obj, "GRIP_POINT");
-    switch (obj->geometry->type) {
+    switch (obj->core->geometry->type) {
     case EMB_ARC: {
         todo("rubber grip arc");
         break;
@@ -1676,11 +1704,11 @@ obj_update_rubber_grip(Object *obj, QPainter *painter)
         break;
     }
     case EMB_POLYGON: {
-        int elemCount = obj->data.normalPath.elementCount();
+        int elemCount = obj->normalPath.elementCount();
         EmbVector gripPoint = obj_rubber_point(obj, "GRIP_POINT");
-        if (obj->data.gripIndex == -1) {
-            obj->data.gripIndex = obj_find_index(obj, gripPoint);
-                if (obj->data.gripIndex == -1) {
+        if (obj->core->gripIndex == -1) {
+            obj->core->gripIndex = obj_find_index(obj, gripPoint);
+                if (obj->core->gripIndex == -1) {
                     return;
                 }
             }
@@ -1688,22 +1716,22 @@ obj_update_rubber_grip(Object *obj, QPainter *painter)
             int m = 0;
             int n = 0;
 
-            if (!obj->data.gripIndex) {
+            if (!obj->core->gripIndex) {
                 m = elemCount - 1;
                 n = 1;
             }
-            else if (obj->data.gripIndex == elemCount-1) {
+            else if (obj->core->gripIndex == elemCount-1) {
                 m = elemCount - 2;
                 n = 0;
             }
             else {
-                m = obj->data.gripIndex - 1;
-                n = obj->data.gripIndex + 1;
+                m = obj->core->gripIndex - 1;
+                n = obj->core->gripIndex + 1;
             }
 
             QPointF p = to_qpointf(obj_map_rubber(obj, ""));
-            QPainterPath::Element em = obj->data.normalPath.elementAt(m);
-            QPainterPath::Element en = obj->data.normalPath.elementAt(n);
+            QPainterPath::Element em = obj->normalPath.elementAt(m);
+            QPainterPath::Element en = obj->normalPath.elementAt(n);
             painter->drawLine(QPointF(em.x, em.y), p);
             painter->drawLine(QPointF(en.x, en.y), p);
 
@@ -1711,30 +1739,30 @@ obj_update_rubber_grip(Object *obj, QPainter *painter)
             break;
         }
         case EMB_POLYLINE: {
-            int elemCount = obj->data.normalPath.elementCount();
+            int elemCount = obj->normalPath.elementCount();
             EmbVector gripPoint = obj_rubber_point(obj, "GRIP_POINT");
-            if (obj->data.gripIndex == -1) {
-                obj->data.gripIndex = obj_find_index(obj, gripPoint);
+            if (obj->core->gripIndex == -1) {
+                obj->core->gripIndex = obj_find_index(obj, gripPoint);
             }
-            if (obj->data.gripIndex == -1) {
+            if (obj->core->gripIndex == -1) {
                 return;
             }
 
             QPointF p = to_qpointf(obj_map_rubber(obj, ""));
-            if (!obj->data.gripIndex) {
+            if (!obj->core->gripIndex) {
                 /* First */
-                QPainterPath::Element ef = obj->data.normalPath.elementAt(1);
+                QPainterPath::Element ef = obj->normalPath.elementAt(1);
                 painter->drawLine(QPointF(ef.x, ef.y), p);
             }
-            else if (obj->data.gripIndex == elemCount-1) {
+            else if (obj->core->gripIndex == elemCount-1) {
                 /* Last */
-                QPainterPath::Element el = obj->data.normalPath.elementAt(obj->data.gripIndex-1);
+                QPainterPath::Element el = obj->normalPath.elementAt(obj->core->gripIndex-1);
                 painter->drawLine(QPointF(el.x, el.y), p);
             }
             else {
                 /* Middle */
-                QPainterPath::Element em = obj->data.normalPath.elementAt(obj->data.gripIndex-1);
-                QPainterPath::Element en = obj->data.normalPath.elementAt(obj->data.gripIndex+1);
+                QPainterPath::Element em = obj->normalPath.elementAt(obj->core->gripIndex-1);
+                QPainterPath::Element en = obj->normalPath.elementAt(obj->core->gripIndex+1);
                 painter->drawLine(QPointF(em.x, em.y), p);
                 painter->drawLine(QPointF(en.x, en.y), p);
             }
@@ -1800,8 +1828,8 @@ polyline_command(ScriptEnv *context)
 function main()
 {
     context->firstRun = true;
-    context->first = zero_vector;
-    context->prev = zero_vector;
+    context->first = emb_vector(0.0, 0.0);
+    context->prev = emb_vector(0.0, 0.0);
     context->num = 0;
     prompt_output(translate("Specify first point: "));
 }
@@ -1883,8 +1911,8 @@ rectangle_command(ScriptEnv *context)
 function main()
 {
     context->newRect = true;
-    context->point1 = zero_vector;
-    context->point2 = zero_vector;
+    context->point1 = emb_vector(0.0, 0.0);
+    context->point2 = emb_vector(0.0, 0.0);
     prompt_output(translate("Specify first corner point or [Chamfer/Fillet]: "));
 }
 
@@ -1984,7 +2012,7 @@ function
 main()
 {
     context->text = "";
-    context->position = zero_vector;
+    context->position = emb_vector(0.0, 0.0);
     context->justify = "Left";
     context->font = textFont();
     context->height = 10.0;
@@ -2042,7 +2070,7 @@ function prompt(str)
     if (context->mode == TEXTSINGLE_MODE_JUSTIFY) {
         if (str == "C" || str == "CENTER") {
             context->mode = TEXTSINGLE_MODE_SETGEOM;
-            context->textJustify = "Center";
+            strcpy(context->textJustify, "Center");
             obj_add_rubber_text(obj, "TEXT_JUSTIFY", context->textJustify);
             prompt_output(translate("Specify center point of text or [Justify/Setfont]: "));
         }
@@ -2302,8 +2330,8 @@ quickleader_command(ScriptEnv *context)
 function main()
 {
     todo("Adding the text is not complete yet.");
-    context->point1 = zero_vector;
-    context->point2 = zero_vector;
+    context->point1 = emb_vector(0.0, 0.0);
+    context->point2 = emb_vector(0.0, 0.0);
     prompt_output(translate("Specify first point: "));
 }
 
@@ -2367,9 +2395,9 @@ prompt(str)
 EmbVector
 obj_start_point(Object *obj)
 {
-    switch (obj->geometry->type) {
+    switch (obj->core->geometry->type) {
     case EMB_ARC: {
-        return obj->geometry->object.arc.start;
+        return obj->core->geometry->object.arc.start;
     }
     default:
         break;
@@ -2381,9 +2409,9 @@ obj_start_point(Object *obj)
 EmbVector
 obj_mid_point(Object *obj)
 {
-    switch (obj->geometry->type) {
+    switch (obj->core->geometry->type) {
     case EMB_ARC: {
-        return obj->geometry->object.arc.mid;
+        return obj->core->geometry->object.arc.mid;
     }
     case EMB_LINE:
     case EMB_DIM_LEADER: {
@@ -2401,9 +2429,9 @@ obj_mid_point(Object *obj)
 EmbVector
 obj_end_point(Object *obj)
 {
-    switch (obj->geometry->type) {
+    switch (obj->core->geometry->type) {
     case EMB_ARC: {
-        return obj->geometry->object.arc.end;
+        return obj->core->geometry->object.arc.end;
     }
     default:
         break;
@@ -2471,74 +2499,74 @@ QStringList objectTextJustifyList = {
 void
 obj_set_text(Object* obj, QString str)
 {
-    obj->data.core.text = str;
+    strcpy(obj->core->text, qPrintable(str));
     QPainterPath textPath;
     QFont font;
-    font.setFamily(obj->data.core.textFont);
-    font.setPointSizeF(obj->data.core.textSize);
-    font.setBold(obj->data.core.textBold);
-    font.setItalic(obj->data.core.textItalic);
-    font.setUnderline(obj->data.core.textUnderline);
-    font.setStrikeOut(obj->data.core.textStrikeOut);
-    font.setOverline(obj->data.core.textOverline);
+    font.setFamily(obj->core->textFont);
+    font.setPointSizeF(obj->core->textSize);
+    font.setBold(obj->core->textBold);
+    font.setItalic(obj->core->textItalic);
+    font.setUnderline(obj->core->textUnderline);
+    font.setStrikeOut(obj->core->textStrikeOut);
+    font.setOverline(obj->core->textOverline);
     textPath.addText(0, 0, font, str);
 
     /* Translate the path based on the justification. */
     QRectF jRect = textPath.boundingRect();
-    if (obj->data.core.textJustify == "Left") {
+    if (!strcmp(obj->core->textJustify, "Left")) {
         textPath.translate(-jRect.left(), 0);
     }
-    else if (obj->data.core.textJustify == "Center") {
+    else if (!strcmp(obj->core->textJustify, "Center")) {
         textPath.translate(-jRect.center().x(), 0);
     }
-    else if (obj->data.core.textJustify == "Right") {
+    else if (!strcmp(obj->core->textJustify, "Right")) {
         textPath.translate(-jRect.right(), 0);
     }
-    else if (obj->data.core.textJustify == "Aligned") {
+    else if (!strcmp(obj->core->textJustify, "Aligned")) {
         todo("TextSingleObject Aligned Justification.");
     }
-    else if (obj->data.core.textJustify == "Middle") {
+    else if (!strcmp(obj->core->textJustify, "Middle")) {
         textPath.translate(-jRect.center());
     }
-    else if (obj->data.core.textJustify == "Fit") {
+    else if (!strcmp(obj->core->textJustify, "Fit")) {
         todo("TextSingleObject Fit Justification.");
     }
-    else if (obj->data.core.textJustify == "Top Left") {
+    else if (!strcmp(obj->core->textJustify, "Top Left")) {
         textPath.translate(-jRect.topLeft());
     }
-    else if (obj->data.core.textJustify == "Top Center") {
+    else if (!strcmp(obj->core->textJustify, "Top Center")) {
         textPath.translate(-jRect.center().x(), -jRect.top());
     }
-    else if (obj->data.core.textJustify == "Top Right") {
+    else if (!strcmp(obj->core->textJustify, "Top Right")) {
         textPath.translate(-jRect.topRight());
     }
-    else if (obj->data.core.textJustify == "Middle Left") {
+    else if (!strcmp(obj->core->textJustify, "Middle Left")) {
         textPath.translate(-jRect.left(), -jRect.top()/2.0);
     }
-    else if (obj->data.core.textJustify == "Middle Center") {
+    else if (!strcmp(obj->core->textJustify, "Middle Center")) {
         textPath.translate(-jRect.center().x(), -jRect.top()/2.0);
     }
-    else if (obj->data.core.textJustify == "Middle Right") {
+    else if (!strcmp(obj->core->textJustify, "Middle Right")) {
         textPath.translate(-jRect.right(), -jRect.top()/2.0);
     }
-    else if (obj->data.core.textJustify == "Bottom Left") {
+    else if (!strcmp(obj->core->textJustify, "Bottom Left")) {
         textPath.translate(-jRect.bottomLeft());
     }
-    else if (obj->data.core.textJustify == "Bottom Center") {
+    else if (!strcmp(obj->core->textJustify, "Bottom Center")) {
         textPath.translate(-jRect.center().x(), -jRect.bottom());
     }
-    else if (obj->data.core.textJustify == "Bottom Right") {
+    else if (!strcmp(obj->core->textJustify, "Bottom Right")) {
         textPath.translate(-jRect.bottomRight());
     }
 
     /* Backward or Upside Down. */
-    if (obj->data.core.textBackward || obj->data.core.textUpsideDown) {
+    if (obj->core->textBackward || obj->core->textUpsideDown) {
         double horiz = 1.0;
         double vert = 1.0;
-        if (obj->data.core.textBackward) {
+        if (obj->core->textBackward) {
             horiz = -1.0;
         }
-        if (obj->data.core.textUpsideDown) {
+        if (obj->core->textUpsideDown) {
             vert = -1.0;
         }
 
@@ -2567,15 +2595,15 @@ obj_set_text(Object* obj, QString str)
                                     horiz * P4.x, vert * P4.y);
             }
         }
-        obj->data.textPath = flippedPath;
+        obj->textPath = flippedPath;
     }
     else {
-        obj->data.textPath = textPath;
+        obj->textPath = textPath;
     }
 
     /* Add the grip point to the shape path. */
-    QPainterPath gripPath = obj->data.textPath;
-    gripPath.connectPath(obj->data.textPath);
+    QPainterPath gripPath = obj->textPath;
+    gripPath.connectPath(obj->textPath);
     gripPath.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
     obj_set_path(obj, gripPath);
 }
@@ -2584,8 +2612,8 @@ obj_set_text(Object* obj, QString str)
 void
 obj_set_text_font(Object* obj, QString font)
 {
-    obj->data.core.textFont = font;
-    obj_set_text(obj, obj->data.core.text);
+    strcpy(obj->core->textFont, qPrintable(font));
+    obj_set_text(obj, obj->core->text);
 }
 
 /* Verify the string is a valid option. */
@@ -2593,131 +2621,131 @@ void
 obj_set_text_justify(Object* obj, QString justify)
 {
     if (justify == "Left") {
-        obj->data.core.textJustify = justify;
+        strcpy(obj->core->textJustify, qPrintable(justify));
     }
     else if (justify == "Center") {
-        obj->data.core.textJustify = justify;
+        strcpy(obj->core->textJustify, qPrintable(justify));
     }
     else if (justify == "Right") {
-        obj->data.core.textJustify = justify;
+        strcpy(obj->core->textJustify, qPrintable(justify));
     }
     else if (justify == "Aligned") {
-        obj->data.core.textJustify = justify;
+        strcpy(obj->core->textJustify, qPrintable(justify));
     }
     else if (justify == "Middle") {
-        obj->data.core.textJustify = justify;
+        strcpy(obj->core->textJustify, qPrintable(justify));
     }
     else if (justify == "Fit") {
-        obj->data.core.textJustify = justify;
+        strcpy(obj->core->textJustify, qPrintable(justify));
     }
     else if (justify == "Top Left") {
-        obj->data.core.textJustify = justify;
+        strcpy(obj->core->textJustify, qPrintable(justify));
     }
     else if (justify == "Top Center") {
-        obj->data.core.textJustify = justify;
+        strcpy(obj->core->textJustify, qPrintable(justify));
     }
     else if (justify == "Top Right") {
-        obj->data.core.textJustify = justify;
+        strcpy(obj->core->textJustify, qPrintable(justify));
     }
     else if (justify == "Middle Left") {
-        obj->data.core.textJustify = justify;
+        strcpy(obj->core->textJustify, qPrintable(justify));
     }
     else if (justify == "Middle Center") {
-        obj->data.core.textJustify = justify;
+        strcpy(obj->core->textJustify, qPrintable(justify));
     }
     else if (justify == "Middle Right") {
-        obj->data.core.textJustify = justify;
+        strcpy(obj->core->textJustify, qPrintable(justify));
     }
     else if (justify == "Bottom Left") {
-        obj->data.core.textJustify = justify;
+        strcpy(obj->core->textJustify, qPrintable(justify));
     }
     else if (justify == "Bottom Center") {
-        obj->data.core.textJustify = justify;
+        strcpy(obj->core->textJustify, qPrintable(justify));
     }
     else if (justify == "Bottom Right") {
-        obj->data.core.textJustify = justify;
+        strcpy(obj->core->textJustify, qPrintable(justify));
     }
     else {
         /* Default */
-        obj->data.core.textJustify = "Left";
+        strcpy(obj->core->textJustify, "Left");
     }
-    obj_set_text(obj, obj->data.core.text);
+    obj_set_text(obj, obj->core->text);
 }
 
 /* . */
 void
 obj_set_text_size(Object* obj, double size)
 {
-    obj->data.core.textSize = size;
-    obj_set_text(obj, obj->data.core.text);
+    obj->core->textSize = size;
+    obj_set_text(obj, obj->core->text);
 }
 
 /* . */
 void
 obj_set_text_style(Object* obj, bool bold, bool italic, bool under, bool strike, bool over)
 {
-    obj->data.core.textBold = bold;
-    obj->data.core.textItalic = italic;
-    obj->data.core.textUnderline = under;
-    obj->data.core.textStrikeOut = strike;
-    obj->data.core.textOverline = over;
-    obj_set_text(obj, obj->data.core.text);
+    obj->core->textBold = bold;
+    obj->core->textItalic = italic;
+    obj->core->textUnderline = under;
+    obj->core->textStrikeOut = strike;
+    obj->core->textOverline = over;
+    obj_set_text(obj, obj->core->text);
 }
 
 /* . */
 void
 obj_set_text_bold(Object* obj, bool val)
 {
-    obj->data.core.textBold = val;
-    obj_set_text(obj, obj->data.core.text);
+    obj->core->textBold = val;
+    obj_set_text(obj, obj->core->text);
 }
 
 /* . */
 void
 obj_set_text_italic(Object* obj, bool val)
 {
-    obj->data.core.textItalic = val;
-    obj_set_text(obj, obj->data.core.text);
+    obj->core->textItalic = val;
+    obj_set_text(obj, obj->core->text);
 }
 
 /* . */
 void
 obj_set_text_underline(Object* obj, bool val)
 {
-    obj->data.core.textUnderline = val;
-    obj_set_text(obj, obj->data.core.text);
+    obj->core->textUnderline = val;
+    obj_set_text(obj, obj->core->text);
 }
 
 /* . */
 void
 obj_set_text_strikeout(Object* obj, bool val)
 {
-    obj->data.core.textStrikeOut = val;
-    obj_set_text(obj, obj->data.core.text);
+    obj->core->textStrikeOut = val;
+    obj_set_text(obj, obj->core->text);
 }
 
 /* . */
 void
 obj_set_text_overline(Object* obj, bool val)
 {
-    obj->data.core.textOverline = val;
-    obj_set_text(obj, obj->data.core.text);
+    obj->core->textOverline = val;
+    obj_set_text(obj, obj->core->text);
 }
 
 /* . */
 void
 obj_set_text_backward(Object* obj, bool val)
 {
-    obj->data.core.textBackward = val;
-    obj_set_text(obj, obj->data.core.text);
+    obj->core->textBackward = val;
+    obj_set_text(obj, obj->core->text);
 }
 
 /* . */
 void
 obj_set_text_upside_down(Object* obj, bool val)
 {
-    obj->data.core.textUpsideDown = val;
-    obj_set_text(obj, obj->data.core.text);
+    obj->core->textUpsideDown = val;
+    obj_set_text(obj, obj->core->text);
 }
 
 /* . */
@@ -2743,12 +2771,12 @@ obj_set_end_point_1(Object *obj, EmbVector endPt1)
 void
 obj_update_path(Object *obj)
 {
-    switch (obj->geometry->type) {
+    switch (obj->core->geometry->type) {
     case EMB_ARC: {
-        double startAngle = (emb_start_angle(obj->geometry) + obj->rotation());
-        double spanAngle = emb_included_angle(obj->geometry);
+        double startAngle = (emb_start_angle(obj->core->geometry) + obj->rotation());
+        double spanAngle = emb_included_angle(obj->core->geometry);
 
-        if (emb_clockwise(obj->geometry)) {
+        if (emb_clockwise(obj->core->geometry)) {
             spanAngle = -spanAngle;
         }
 
@@ -2809,9 +2837,9 @@ obj_update_path(Object *obj)
 void
 obj_calculate_data(Object *obj)
 {
-    EmbVector center = emb_arc_center(*(obj->geometry));
+    EmbVector center = emb_arc_center(*(obj->core->geometry));
 
-    double radius = emb_vector_distance(center, obj->geometry->object.arc.mid);
+    double radius = emb_vector_distance(center, obj->core->geometry->object.arc.mid);
     obj_update_arc_rect(obj, radius);
     obj_update_path(obj);
     obj->setRotation(0);
@@ -2833,15 +2861,15 @@ obj_update_arc_rect(Object *obj, double radius)
 void
 obj_set_line_weight(Object *obj, double lineWeight)
 {
-    obj->data.objPen.setWidthF(0); /* NOTE: The objPen will always be cosmetic. */
+    obj->objPen.setWidthF(0); /* NOTE: The objPen will always be cosmetic. */
 
     if (lineWeight < 0) {
         if (lineWeight == OBJ_LWT_BYLAYER) {
-            obj->data.lwtPen.setWidthF(0.35);
+            obj->lwtPen.setWidthF(0.35);
             todo("getLayerLineWeight");
         }
         else if (lineWeight == OBJ_LWT_BYBLOCK) {
-            obj->data.lwtPen.setWidthF(0.35);
+            obj->lwtPen.setWidthF(0.35);
             todo("getBlockLineWeight");
         }
         else {
@@ -2849,11 +2877,11 @@ obj_set_line_weight(Object *obj, double lineWeight)
             sprintf(msg, "Lineweight: %f", lineWeight);
             warning_box(translate("Error - Negative Lineweight"), msg);
             debug_message("Lineweight cannot be negative! Inverting sign.");
-            obj->data.lwtPen.setWidthF(-lineWeight);
+            obj->lwtPen.setWidthF(-lineWeight);
         }
     }
     else {
-        obj->data.lwtPen.setWidthF(lineWeight);
+        obj->lwtPen.setWidthF(lineWeight);
     }
 }
 
@@ -2861,10 +2889,10 @@ obj_set_line_weight(Object *obj, double lineWeight)
 void
 obj_update_path_r(Object *obj, QPainterPath p)
 {
-    switch (obj->geometry->type) {
+    switch (obj->core->geometry->type) {
     case EMB_POLYGON: {
-        obj->data.normalPath = p;
-        QPainterPath closedPath = obj->data.normalPath;
+        obj->normalPath = p;
+        QPainterPath closedPath = obj->normalPath;
         closedPath.closeSubpath();
         QPainterPath reversePath = closedPath.toReversed();
         reversePath.connectPath(closedPath);
@@ -2873,9 +2901,9 @@ obj_update_path_r(Object *obj, QPainterPath p)
     }
     case EMB_PATH:
     case EMB_POLYLINE: {
-        obj->data.normalPath = p;
-        QPainterPath reversePath = obj->data.normalPath.toReversed();
-        reversePath.connectPath(obj->data.normalPath);
+        obj->normalPath = p;
+        QPainterPath reversePath = obj->normalPath.toReversed();
+        reversePath.connectPath(obj->normalPath);
         obj_set_path(obj, reversePath);
         break;
     }
@@ -2888,32 +2916,34 @@ obj_update_path_r(Object *obj, QPainterPath p)
 void
 obj_set_color(Object *obj, const QColor& color)
 {
-    obj->data.objPen.setColor(color);
-    obj->data.lwtPen.setColor(color);
+    obj->objPen.setColor(color);
+    obj->lwtPen.setColor(color);
 }
 
 /* . */
 void
 obj_set_color_rgb(Object *obj, QRgb rgb)
 {
-    obj->data.objPen.setColor(QColor(rgb));
-    obj->data.lwtPen.setColor(QColor(rgb));
+    obj->objPen.setColor(QColor(rgb));
+    obj->lwtPen.setColor(QColor(rgb));
 }
 
 /* . */
 void
 obj_set_line_type(Object *obj, Qt::PenStyle lineType)
 {
-    obj->data.objPen.setStyle(lineType);
-    obj->data.lwtPen.setStyle(lineType);
+    obj->objPen.setStyle(lineType);
+    obj->lwtPen.setStyle(lineType);
 }
 
 /* . */
 EmbVector
 obj_rubber_point(Object *obj, QString key)
 {
-    if (obj->data.objRubberPoints.contains(key)) {
-        return obj->data.objRubberPoints.value(key);
+    for (int i=0; i<(int)obj->rubber_points.size(); i++) {
+        if (!strcmp(obj->rubber_points[i].key, qPrintable(key))) {
+            return obj->rubber_points[i].vector;
+        }
     }
 
     QGraphicsScene* gscene = obj->scene();
@@ -2921,18 +2951,17 @@ obj_rubber_point(Object *obj, QString key)
         QPointF p = obj->scene()->property("SCENE_QSNAP_POINT").toPointF();
         return to_emb_vector(p);
     }
-    EmbVector v;
-    v.x = 0.0;
-    v.y = 0.0;
-    return v;
+    return emb_vector(0.0, 0.0);
 }
 
 /* . */
 QString
 obj_rubber_text(Object *obj, QString key)
 {
-    if (obj->data.objRubberTexts.contains(key)) {
-        return obj->data.objRubberTexts.value(key);
+    for (int i=0; i<(int)obj->rubber_texts.size(); i++) {
+        if (!strcmp(obj->rubber_texts[i].key, qPrintable(key))) {
+            return obj->rubber_texts[i].value;
+        }
     }
     return "";
 }
@@ -2942,7 +2971,7 @@ QRectF
 obj_bounding_rect(Object *obj)
 {
     /* If gripped, force this object to be drawn even if it is offscreen. */
-    if (obj->data.objRubberMode == RUBBER_GRIP) {
+    if (obj->core->rubber_mode == RUBBER_GRIP) {
         return obj->scene()->sceneRect();
     }
     return obj->path().boundingRect();
@@ -3105,7 +3134,7 @@ obj_set_rect(Object *obj, double x, double y, double w, double h)
 QLineF
 obj_line(Object *obj)
 {
-    return obj->data.objLine;
+    return obj->objLine;
 }
 
 /* . */
@@ -3116,7 +3145,7 @@ obj_set_line(Object *obj, QLineF li)
     p.moveTo(li.p1());
     p.lineTo(li.p2());
     obj->setPath(p);
-    obj->data.objLine = li;
+    obj->objLine = li;
 }
 
 /* . */
@@ -3127,7 +3156,7 @@ obj_set_line(Object *obj, double x1, double y1, double x2, double y2)
     p.moveTo(x1, y1);
     p.lineTo(x2, y2);
     obj->setPath(p);
-    obj->data.objLine.setLine(x1, y1, x2, y2);
+    obj->objLine.setLine(x1, y1, x2, y2);
 }
 
 /* . */
@@ -3176,21 +3205,27 @@ obj_set_path(Object *obj, QPainterPath p)
 void
 obj_set_rubber_mode(Object *obj, int mode)
 {
-    obj->data.objRubberMode = mode;
+    obj->core->rubber_mode = mode;
 }
 
 /* . */
 void
-obj_set_rubber_point(Object *obj, QString key, const EmbVector& point)
+obj_set_rubber_point(Object *obj, std::string key, const EmbVector& point)
 {
-    obj->data.objRubberPoints.insert(key, point);
+    LabelledVector s;
+    strcpy(s.key, key.c_str());
+    s.vector = point;
+    obj->rubber_points.push_back(s);
 }
 
 /* . */
 void
-obj_set_rubber_text(Object *obj, QString key, QString txt)
+obj_set_rubber_text(Object *obj, std::string key, std::string txt)
 {
-    obj->data.objRubberTexts.insert(key, txt);
+    StringMap s;
+    strcpy(s.key, key.c_str());
+    strcpy(s.value, txt.c_str());
+    obj->rubber_texts.push_back(s);
 }
 
 /* . */
@@ -3204,11 +3239,11 @@ obj_save_path_list(Object *obj)
 int
 obj_find_index(Object *obj, EmbVector point)
 {
-    int elemCount = obj->data.normalPath.elementCount();
+    int elemCount = obj->normalPath.elementCount();
     /* NOTE: Points here are in item coordinates */
     EmbVector itemPoint = map_from_scene(obj, point);
     for (int i = 0; i < elemCount; i++) {
-        QPainterPath::Element e = obj->data.normalPath.elementAt(i);
+        QPainterPath::Element e = obj->normalPath.elementAt(i);
         EmbVector elemPoint;
         elemPoint.x = e.x;
         elemPoint.y = e.y;
@@ -3232,7 +3267,7 @@ void
 obj_update_rubber(Object *obj, QPainter* painter)
 {
     todo("Arc,Path Rubber Modes");
-    switch (obj->data.objRubberMode) {
+    switch (obj->core->rubber_mode) {
     case RUBBER_CIRCLE_1P_RAD: {
         EmbVector sceneCenterPoint = obj_rubber_point(obj, "CIRCLE_CENTER");
         EmbVector sceneQSnapPoint = obj_rubber_point(obj, "CIRCLE_RADIUS");
@@ -3242,7 +3277,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         obj_set_center(obj, sceneCenterPoint);
         QLineF sceneLine(to_qpointf(sceneCenterPoint), to_qpointf(sceneQSnapPoint));
         double radius = sceneLine.length();
-        emb_set_radius(obj->geometry, radius);
+        emb_set_radius(obj->core->geometry, radius);
         if (painter) {
             obj_draw_rubber_line(obj, itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
@@ -3258,7 +3293,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         obj_set_center(obj, sceneCenterPoint);
         QLineF sceneLine(to_qpointf(sceneCenterPoint), to_qpointf(sceneQSnapPoint));
         double diameter = sceneLine.length();
-        emb_set_diameter(obj->geometry, diameter);
+        emb_set_diameter(obj->core->geometry, diameter);
         if (painter) {
             obj_draw_rubber_line(obj, itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
@@ -3271,7 +3306,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         QLineF sceneLine(to_qpointf(sceneTan1Point), to_qpointf(sceneQSnapPoint));
         obj_set_center(obj, to_emb_vector(sceneLine.pointAt(0.5)));
         double diameter = sceneLine.length();
-        emb_set_diameter(obj->geometry, diameter);
+        emb_set_diameter(obj->core->geometry, diameter);
         obj_update_path(obj);
         break;
     }
@@ -3284,7 +3319,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         EmbVector center = emb_arc_center(g);
         obj_set_center(obj, center);
         double radius = emb_vector_distance(center, g.object.arc.end);
-        emb_set_radius(obj->geometry, radius);
+        emb_set_radius(obj->core->geometry, radius);
         obj_update_path(obj);
         break;
     }
@@ -3476,7 +3511,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         obj_set_pos(obj, obj_rubber_point(obj, "POLYLINE_POINT_0"));
 
         QPointF p = to_qpointf(obj_map_rubber(obj, ""));
-        QLineF rubberLine(obj->data.normalPath.currentPosition(), p);
+        QLineF rubberLine(obj->normalPath.currentPosition(), p);
         if (painter) {
             obj_draw_rubber_line(obj, rubberLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
@@ -3559,25 +3594,25 @@ Object::vulcanize()
     debug_message("vulcanize()");
     /* FIXME: obj_update_rubber(painter); */
 
-    obj->data.objRubberMode = RUBBER_OFF;
+    core->rubber_mode = RUBBER_OFF;
 
-    switch (obj->geometry->type) {
+    switch (core->geometry->type) {
     case EMB_POLYLINE:
-        if (!data.normalPath.elementCount()) {
+        if (!normalPath.elementCount()) {
             critical_box(
                 translate("Empty Polyline Error"),
                 translate("The polyline added contains no points. The command that created this object has flawed logic."));
         }
         break;
     case EMB_POLYGON:
-        if (!data.normalPath.elementCount()) {
+        if (!normalPath.elementCount()) {
             critical_box(
                 translate("Empty Polygon Error"),
                 translate("The polygon added contains no points. The command that created this object has flawed logic."));
         }
         break;
     case EMB_PATH:
-        if (!data.normalPath.elementCount()) {
+        if (!normalPath.elementCount()) {
             critical_box(
                 translate("Empty Path Error"),
                 translate("The path added contains no points. The command that created this object has flawed logic."));
@@ -3593,62 +3628,62 @@ QList<EmbVector>
 Object::allGripPoints()
 {
     QList<EmbVector> gripPoints;
-    switch (obj->geometry->type) {
+    switch (core->geometry->type) {
     case EMB_ARC: {
-        gripPoints.append(obj_center(obj));
-        gripPoints.append(obj_start_point(obj));
-        gripPoints.append(obj_mid_point(obj));
-        gripPoints.append(obj_end_point(obj));
+        gripPoints.append(obj_center(this));
+        gripPoints.append(obj_start_point(this));
+        gripPoints.append(obj_mid_point(this));
+        gripPoints.append(obj_end_point(this));
         break;
     }
     case EMB_CIRCLE:
     case EMB_ELLIPSE: {
-        gripPoints.append(obj_center(obj));
-        gripPoints.append(emb_quadrant(obj->geometry, 0));
-        gripPoints.append(emb_quadrant(obj->geometry, 90));
-        gripPoints.append(emb_quadrant(obj->geometry, 180));
-        gripPoints.append(emb_quadrant(obj->geometry, 270));
+        gripPoints.append(obj_center(this));
+        gripPoints.append(emb_quadrant(core->geometry, 0));
+        gripPoints.append(emb_quadrant(core->geometry, 90));
+        gripPoints.append(emb_quadrant(core->geometry, 180));
+        gripPoints.append(emb_quadrant(core->geometry, 270));
         break;
     }
     case EMB_DIM_LEADER: {
-        gripPoints.append(obj_end_point_1(obj));
-        gripPoints.append(obj_end_point_2(obj));
-        if (obj->data.curved) {
-            gripPoints.append(obj_mid_point(obj));
+        gripPoints.append(obj_end_point_1(this));
+        gripPoints.append(obj_end_point_2(this));
+        if (core->curved) {
+            gripPoints.append(obj_mid_point(this));
         }
         break;
     }
     case EMB_IMAGE: {
-        gripPoints.append(obj_top_left(obj));
-        gripPoints.append(obj_top_right(obj));
-        gripPoints.append(obj_bottom_left(obj));
-        gripPoints.append(obj_bottom_right(obj));
+        gripPoints.append(obj_top_left(this));
+        gripPoints.append(obj_top_right(this));
+        gripPoints.append(obj_bottom_left(this));
+        gripPoints.append(obj_bottom_right(this));
         break;
     }
     case EMB_LINE: {
-        gripPoints.append(obj_end_point_1(obj));
-        gripPoints.append(obj_end_point_2(obj));
-        gripPoints.append(obj_mid_point(obj));
+        gripPoints.append(obj_end_point_1(this));
+        gripPoints.append(obj_end_point_2(this));
+        gripPoints.append(obj_mid_point(this));
         break;
     }
     case EMB_PATH: {
-        gripPoints.append(obj_pos(obj));
+        gripPoints.append(obj_pos(this));
         todo("loop thru all path Elements and return their points.");
         break;
     }
     case EMB_POLYGON:
     case EMB_POLYLINE: {
         QPainterPath::Element element;
-        for (int i = 0; i < obj->data.normalPath.elementCount(); ++i) {
-            element = obj->data.normalPath.elementAt(i);
-            gripPoints.append(to_emb_vector(obj->mapToScene(element.x, element.y)));
+        for (int i = 0; i < normalPath.elementCount(); ++i) {
+            element = normalPath.elementAt(i);
+            gripPoints.append(to_emb_vector(mapToScene(element.x, element.y)));
         }
         break;
     }
     case EMB_TEXT_SINGLE:
     case EMB_POINT:
     default:
-        gripPoints.append(obj_pos(obj));
+        gripPoints.append(obj_pos(this));
         break;
     }
     return gripPoints;
@@ -3666,7 +3701,7 @@ void
 obj_grip_edit(Object *obj, EmbVector before, EmbVector after)
 {
     EmbVector delta = emb_vector_subtract(after, before);
-    switch (obj->geometry->type) {
+    switch (obj->core->geometry->type) {
     case EMB_ARC: {
         todo("gripEdit() for ArcObject.");
         break;
@@ -3677,7 +3712,7 @@ obj_grip_edit(Object *obj, EmbVector before, EmbVector after)
         }
         else {
             double length = emb_vector_distance(obj_center(obj), after);
-            emb_set_radius(obj->geometry, length);
+            emb_set_radius(obj->core->geometry, length);
         }
         break;
     }
@@ -3700,8 +3735,8 @@ obj_grip_edit(Object *obj, EmbVector before, EmbVector after)
     }
     case EMB_IMAGE:
     case EMB_RECT: {
-        double height = emb_height(obj->geometry);
-        double width = emb_width(obj->geometry);
+        double height = emb_height(obj->core->geometry);
+        double width = emb_width(obj->core->geometry);
         EmbVector tl = obj_top_left(obj);
         if (emb_approx(before, tl)) {
             obj_set_rect(obj, after.x, after.y,
@@ -3727,14 +3762,14 @@ obj_grip_edit(Object *obj, EmbVector before, EmbVector after)
     }
     case EMB_POLYGON:
     case EMB_POLYLINE: {
-        obj->data.gripIndex = obj_find_index(obj, before);
-        if (obj->data.gripIndex == -1) {
+        obj->core->gripIndex = obj_find_index(obj, before);
+        if (obj->core->gripIndex == -1) {
             return;
         }
         EmbVector a = map_from_scene(obj, after);
-        obj->data.normalPath.setElementPositionAt(obj->data.gripIndex, a.x, a.y);
-        obj_update_path_r(obj, obj->data.normalPath);
-        obj->data.gripIndex = -1;
+        obj->normalPath.setElementPositionAt(obj->core->gripIndex, a.x, a.y);
+        obj_update_path_r(obj, obj->normalPath);
+        obj->core->gripIndex = -1;
         break;
     }
     case EMB_TEXT_SINGLE:
@@ -3751,93 +3786,93 @@ obj_grip_edit(Object *obj, EmbVector before, EmbVector after)
 void
 Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
-    QGraphicsScene* objScene = obj->scene();
+    QGraphicsScene* objScene = scene();
     if (!objScene) {
         return;
     }
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
-    obj_update_rubber(obj, painter);
+    obj_update_rubber(this, painter);
     if (option->state & QStyle::State_Selected) {
         paintPen.setStyle(Qt::DashLine);
     }
     if (objScene->property("ENABLE_LWT").toBool()) {
-        paintPen = obj->data.lwtPen;
+        paintPen = lwtPen;
     }
     painter->setPen(paintPen);
 
-    switch (obj->geometry->type) {
+    switch (core->geometry->type) {
     case EMB_ARC: {
-        double startAngle = (emb_start_angle(obj->geometry) + obj->rotation())*16;
-        double spanAngle = emb_included_angle(obj->geometry) * 16;
+        double startAngle = (emb_start_angle(core->geometry) + rotation())*16;
+        double spanAngle = emb_included_angle(core->geometry) * 16;
 
-        if (emb_clockwise(obj->geometry)) {
+        if (emb_clockwise(core->geometry)) {
             spanAngle = -spanAngle;
         }
 
-        double rad = obj_radius(obj);
+        double rad = obj_radius(this);
         QRectF paintRect(-rad, -rad, rad*2.0, rad*2.0);
         painter->drawArc(paintRect, startAngle, spanAngle);
         break;
     }
     case EMB_CIRCLE:
     case EMB_ELLIPSE: {
-        painter->drawEllipse(obj_rect(obj));
+        painter->drawEllipse(obj_rect(this));
         break;
     }
     case EMB_DIM_LEADER: {
-        painter->drawPath(obj->data.lineStylePath);
-        painter->drawPath(obj->data.arrowStylePath);
+        painter->drawPath(lineStylePath);
+        painter->drawPath(arrowStylePath);
 
-        if (obj->data.filled) {
-            painter->fillPath(obj->data.arrowStylePath, obj->data.objPen.color());
+        if (core->filled) {
+            painter->fillPath(arrowStylePath, objPen.color());
         }
         break;
     }
     case EMB_LINE: {
-        if (obj->data.objRubberMode != RUBBER_LINE) {
-            painter->drawLine(obj_line(obj));
+        if (core->rubber_mode != RUBBER_LINE) {
+            painter->drawLine(obj_line(this));
         }
 
         if (objScene->property("ENABLE_LWT").toBool()
             && objScene->property("ENABLE_REAL").toBool()) {
-            obj_real_render(obj, painter, path());
+            obj_real_render(this, painter, path());
         }
         break;
     }
     case EMB_IMAGE: {
-        painter->drawRect(obj_rect(obj));
+        painter->drawRect(obj_rect(this));
         break;
     }
     case EMB_RECT: {
-        painter->drawRect(obj_rect(obj));
+        painter->drawRect(obj_rect(this));
         break;
     }
     case EMB_PATH: {
-        painter->drawPath(obj_path(obj));
+        painter->drawPath(obj_path(this));
         break;
     }
     case EMB_POLYGON: {
-        if (obj->data.normalPath.elementCount()) {
-            painter->drawPath(obj->data.normalPath);
-            QPainterPath::Element zero = obj->data.normalPath.elementAt(0);
-            QPainterPath::Element last = obj->data.normalPath.elementAt(obj->data.normalPath.elementCount()-1);
+        if (normalPath.elementCount()) {
+            painter->drawPath(normalPath);
+            QPainterPath::Element zero = normalPath.elementAt(0);
+            QPainterPath::Element last = normalPath.elementAt(normalPath.elementCount()-1);
             painter->drawLine(QPointF(zero.x, zero.y), QPointF(last.x, last.y));
         }
         break;
     }
     case EMB_POLYLINE: {
-        painter->drawPath(obj->data.normalPath);
+        painter->drawPath(normalPath);
 
         if (objScene->property("ENABLE_LWT").toBool()
             && objScene->property("ENABLE_REAL").toBool()) {
-            obj_real_render(obj, painter, obj->data.normalPath);
+            obj_real_render(this, painter, normalPath);
         }
         break;
     }
     case EMB_TEXT_SINGLE: {
-        painter->drawPath(obj->data.textPath);
+        painter->drawPath(textPath);
         break;
     }
     default:
@@ -3851,21 +3886,21 @@ Object::paint(QPainter* painter, const QStyleOptionGraphicsItem *option, QWidget
 QPainterPath
 Object::objectCopyPath() const
 {
-    return obj->data.normalPath;
+    return normalPath;
 }
 
 QPainterPath
 Object::objectSavePath() const
 {
-    switch (obj->geometry->type) {
+    switch (core->geometry->type) {
     case EMB_CIRCLE:
     case EMB_ELLIPSE: {
         QPainterPath path;
-        QRectF r = obj_rect(obj);
+        QRectF r = obj_rect((Object*)this);
         path.arcMoveTo(r, 0);
         path.arcTo(r, 0, 360);
 
-        double s = obj->scale();
+        double s = scale();
         QTransform trans;
         trans.rotate(rotation());
         trans.scale(s,s);
@@ -3874,7 +3909,7 @@ Object::objectSavePath() const
     case EMB_DIM_LEADER:
     case EMB_LINE: {
         QPainterPath path;
-        EmbVector delta = obj_delta(obj);
+        EmbVector delta = obj_delta((Object*)this);
         path.lineTo(delta.x, delta.y);
         return path;
     }
@@ -3885,14 +3920,14 @@ Object::objectSavePath() const
     }
     case EMB_RECT: {
         QPainterPath path;
-        QRectF r = obj_rect(obj);
+        QRectF r = obj_rect((Object*)this);
         path.moveTo(r.bottomLeft());
         path.lineTo(r.bottomRight());
         path.lineTo(r.topRight());
         path.lineTo(r.topLeft());
         path.lineTo(r.bottomLeft());
 
-        double s = obj->scale();
+        double s = scale();
         QTransform trans;
         trans.rotate(rotation());
         trans.scale(s,s);
@@ -3900,16 +3935,16 @@ Object::objectSavePath() const
     }
     case EMB_PATH:
     case EMB_POLYLINE: {
-        double s = obj->scale();
+        double s = scale();
         QTransform trans;
         trans.rotate(rotation());
         trans.scale(s,s);
-        return trans.map(obj->data.normalPath);
+        return trans.map(normalPath);
     }
     case EMB_POLYGON: {
-        QPainterPath closedPath = obj->data.normalPath;
+        QPainterPath closedPath = normalPath;
         closedPath.closeSubpath();
-        double s = obj->scale();
+        double s = scale();
         QTransform trans;
         trans.rotate(rotation());
         trans.scale(s,s);
@@ -3918,5 +3953,6 @@ Object::objectSavePath() const
     default:
         break;
     }
-    return obj->data.normalPath;
+    return normalPath;
 }
+

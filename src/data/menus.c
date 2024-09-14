@@ -10,9 +10,9 @@
  * Menus
  */
 
-#include "constants.h"
+#include "../core.h"
 
-char *menu_list[] = {
+EmbStringTable menu_list = {
     "&File",
     "&Edit",
     "&View",
@@ -51,7 +51,7 @@ int menubar_no_docs[] = {
     TERMINATOR_SYMBOL
 };
 
-char *file_menu[] = {
+EmbStringTable file_menu = {
     "new",
     "---",
     "open",
@@ -70,7 +70,7 @@ char *file_menu[] = {
     "END"
 };
 
-char *edit_menu[] = {
+EmbStringTable edit_menu = {
     "undo",
     "redo",
     "---",
@@ -82,7 +82,7 @@ char *edit_menu[] = {
     "END"
 };
 
-char *view_menu[] = {
+EmbStringTable view_menu = {
     ">&Zoom",
     ">&Pan",
     "---",
@@ -92,7 +92,7 @@ char *view_menu[] = {
     "END"
 };
 
-char *zoom_menu[] = {
+EmbStringTable zoom_menu = {
     "zoomwindow",
     "zoomdynamic",
     "zoomscale",
@@ -107,7 +107,7 @@ char *zoom_menu[] = {
     "END"
 };
 
-char *pan_menu[] = {
+EmbStringTable pan_menu = {
     "panrealtime",
     "panpoint",
     "---",
@@ -118,7 +118,7 @@ char *pan_menu[] = {
     "END"
 };
 
-char *help_menu[] = {
+EmbStringTable help_menu = {
     "help",
     "---",
     "changelog",
@@ -131,7 +131,7 @@ char *help_menu[] = {
     "END"
 };
 
-char *draw_menu[] = {
+EmbStringTable draw_menu = {
     "path",
     "polyline",
     "---",
@@ -151,14 +151,14 @@ char *draw_menu[] = {
     "END"
 };
 
-char *tools_menu[] = {
+EmbStringTable tools_menu = {
     "distance",
     "locatepoint",
     "selectall",
     "END"
 };
 
-char *modify_menu[] = {
+EmbStringTable modify_menu = {
     "erase",
     "move",
     "rotate",
@@ -166,25 +166,25 @@ char *modify_menu[] = {
     "END"
 };
 
-char *dimension_menu[] = {
+EmbStringTable dimension_menu = {
     "quickleader",
     "END"
 };
 
-char *sandbox_menu[] = {
+EmbStringTable sandbox_menu = {
     "sandbox",
     "END"
 };
 
-char *recent_menu[] = {
+EmbStringTable recent_menu = {
     "END"
 };
 
-char *window_menu[] = {
+EmbStringTable window_menu = {
     "END"
 };
 
-char **menu_data[] = {
+EmbStringTable *menu_data = {
     file_menu,
     edit_menu,
     view_menu,

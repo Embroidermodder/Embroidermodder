@@ -1095,7 +1095,7 @@ int render_hints[] = {
     TERMINATOR_SYMBOL
 };
 
-char *extensions[] = {
+EmbStringTable extensions = {
     "100",
     "10o",
     "ART",
@@ -1152,7 +1152,7 @@ char *extensions[] = {
     "END"
 };
 
-char *grid_load_from_file_group[] = {
+EmbStringTable grid_load_from_file_group = {
     "labelGridType",
     "comboBoxGridType",
     "checkBoxGridCenterOnOrigin",
@@ -1169,7 +1169,7 @@ char *grid_load_from_file_group[] = {
     "END"
 };
 
-char *defined_origin_group[] = {
+EmbStringTable defined_origin_group = {
     "labelGridCenterX",
     "spinBoxGridCenterX",
     "labelGridCenterY",
@@ -1181,7 +1181,7 @@ char *defined_origin_group[] = {
     "END"
 };
 
-char *rectangular_grid_group[] = {
+EmbStringTable rectangular_grid_group = {
     "labelGridSizeX",
     "spinBoxGridSizeX",
     "labelGridSizeY",
@@ -1193,7 +1193,7 @@ char *rectangular_grid_group[] = {
     "END"
 };
 
-char *circular_grid_group[] = {
+EmbStringTable circular_grid_group = {
     "labelGridSizeRadius",
     "spinBoxGridSizeRadius",
     "labelGridSpacingRadius",
@@ -1204,7 +1204,7 @@ char *circular_grid_group[] = {
 };
 
 /* FIXME:. */
-char *center_on_origin_group[] = {
+EmbStringTable center_on_origin_group = {
     "END"
 };
 

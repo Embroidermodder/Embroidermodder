@@ -9,7 +9,9 @@
  * Tips
  */
 
-char *tips[] = {
+#include "../core.h"
+
+EmbStringTable tips = {
     "we need more tips?",
     "you can change the color of the display through settings?",
     "you can hide the scrollbars to increase the viewable area through settings?",

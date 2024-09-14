@@ -15,7 +15,6 @@
 std::unordered_map<int, QAction*> actionHash;
 QToolBar* toolbar[N_TOOLBARS];
 QMenu* menu[N_MENUS];
-const char *settings_file = "settings.toml";
 
 QList<QGraphicsItem*> cutCopyObjectList;
 
@@ -193,16 +192,14 @@ emb_arc_set_radius(EmbArc arc, EmbReal radius)
     return arc;
 }
 
-/* . */
+/* TODO: choose a default icon. */
 QPixmap
 create_pixmap(QString icon)
 {
     int id = 0;
-    for (int i=0; ; i++) {
-        if (!xpm_icon_labels[i]) {
-            break;
-        }
-        if (!strcmp(qPrintable(icon), xpm_icon_labels[i])) {
+    int n = string_array_length(xpm_icon_labels);
+    for (int i=0; i<n; i++) {
+        if (string_equal((char*)qPrintable(icon), xpm_icon_labels[i])) {
             id = i;
             break;
         }
@@ -329,7 +326,7 @@ run_testing(void)
 }
 
 void
-add_to_selector(QComboBox* box, char *list[], char *type, int use_icon)
+add_to_selector(QComboBox* box, EmbStringTable list, EmbString type, int use_icon)
 {
     int n = string_array_length(list) / 3;
     for (int i=0; i<n; i++) {
@@ -374,7 +371,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     readSettings();
 
     QString lang = get_str(GENERAL_LANGUAGE);
-    debug_message(qPrintable("language: " + lang));
+    debug_message((char*)qPrintable("language: " + lang));
     if (lang == "system") {
         lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
     }
@@ -813,21 +810,6 @@ openFile(bool recent, QString recentFile)
 }
 
 /* . */
-int
-string_list_contains(char list[MAX_FILES][MAX_STRING_LENGTH], const char *entry)
-{
-    for (int i=0; ; i++) {
-        if (!strncmp(list[i], "END", MAX_STRING_LENGTH)) {
-            break;
-        }
-        if (!strncmp(list[i], entry, MAX_STRING_LENGTH)) {
-            return 1;
-        }
-    }
-    return 0;
-}
-
-/* . */
 void
 openFilesSelected(const QStringList& filesToOpen)
 {
@@ -866,16 +848,18 @@ openFilesSelected(const QStringList& filesToOpen)
                 mdiWin->show();
                 mdiWin->showMaximized();
                 /* Prevent duplicate entries in the recent files list. */
-                if (!string_list_contains(recent_files, qPrintable(filesToOpen.at(i)))) {
+                EmbString s;
+                emb_string(s, qPrintable(filesToOpen.at(i)));
+                if (!string_list_contains(recent_files, s)) {
                     for (int j=0; j<MAX_FILES-1; j++) {
                         strcpy(recent_files[j], recent_files[j+1]);
                     }
-                    strcpy(recent_files[0], qPrintable(filesToOpen.at(i)));
+                    string_copy(recent_files[0], s);
                 }
                 /* Move the recent file to the top of the list */
                 else {
-                    strcpy(recent_files[0], qPrintable(filesToOpen.at(i)));
-                    strcpy(recent_files[1], "END");
+                    string_copy(recent_files[0], (char*)qPrintable(filesToOpen.at(i)));
+                    string_copy(recent_files[1], end_symbol);
                 }
                 set_str(OPENSAVE_RECENT_DIRECTORY, (char*)qPrintable(QFileInfo(filesToOpen.at(i)).absolutePath()));
 
@@ -1181,7 +1165,7 @@ MainWindow::closeToolBar(QAction* action)
     if (action->objectName() == "toolbarclose") {
         QToolBar* tb = qobject_cast<QToolBar*>(sender());
         if (tb) {
-            debug_message(qPrintable(tb->objectName() + " closed."));
+            debug_message((char*)qPrintable(tb->objectName() + " closed."));
             tb->hide();
         }
     }
@@ -1222,11 +1206,11 @@ MainWindow::floatingChangedToolBar(bool isFloating)
 
 /* . */
 QAction*
-get_action_by_icon(const char *icon)
+get_action_by_icon(EmbString icon)
 {
     int i;
     for (i=0; command_data[i].id != -2; i++) {
-        if (!strcmp(command_data[i].icon, icon)) {
+        if (string_equal(command_data[i].icon, icon)) {
             return actionHash[command_data[i].id];
         }
     }
@@ -1234,12 +1218,12 @@ get_action_by_icon(const char *icon)
 }
 
 int
-get_id(char *data[], char *label)
+get_id(EmbStringTable data, EmbString label)
 {
     int id;
     int n = string_array_length(data);
     for (id=0; id<n; id++) {
-        if (!strcmp(data[id], label)) {
+        if (string_equal(data[id], label)) {
             return id;
         }
     }
@@ -1248,7 +1232,7 @@ get_id(char *data[], char *label)
 
 /* . */
 void
-add_to_menu(int index, char *menu_data[])
+add_to_menu(int index, EmbStringTable menu_data)
 {
     int n = string_array_length(menu_data);
     for (int i=0; i<n; i++) {
@@ -1398,7 +1382,7 @@ void
 writeSettings(void)
 {
     debug_message("Writing Settings...");
-    save_settings("", qPrintable(SettingsDir() + settings_file));
+    save_settings("", (char*)qPrintable(SettingsDir() + settings_file));
 }
 
 /* . */
@@ -1418,7 +1402,7 @@ settingsDialog(QString showTab)
 
 /* . */
 void
-add_to_toolbar(int id, char *toolbar_data[])
+add_to_toolbar(int id, EmbStringTable toolbar_data)
 {
     toolbar[id]->setObjectName(QString("toolbar") + toolbar_list[id]);
 
@@ -1463,7 +1447,7 @@ createAllActions(void)
         QString alias_string(command_data[i].alias);
         QStringList aliases = alias_string.split(", ");
 
-        debug_message(qPrintable("COMMAND: " + icon));
+        debug_message((char*)qPrintable("COMMAND: " + icon));
 
         QAction *ACTION = new QAction(create_icon(icon), toolTip, _main);
         ACTION->setStatusTip(statusTip);

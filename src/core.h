@@ -31,12 +31,17 @@ extern "C" {
 #define STR(i)    context->argument[i].s
 #define BOOL(i)   context->argument[i].b
 
+#define MAX_TABLE_LENGTH             500
+
+typedef char EmbString[MAX_STRING_LENGTH];
+typedef char EmbStringTable[MAX_TABLE_LENGTH][MAX_STRING_LENGTH];
+
 typedef struct ScriptValue_ {
     double r;
     int i;
     bool b;
-    char s[MAX_STATE_STRING_LENGTH];
-    char label[MAX_LABEL_LENGTH];
+    EmbString s;
+    EmbString label;
     int n_leaves;
     char type;
 } ScriptValue;
@@ -53,13 +58,13 @@ typedef struct ScriptEnv_ {
 
 typedef struct Command_ {
     int32_t id;
-    char command[MAX_STRING_LENGTH];
-    char arguments[MAX_STRING_LENGTH];
-    char icon[MAX_STRING_LENGTH];
-    char tooltip[MAX_STRING_LENGTH];
-    char statustip[MAX_STRING_LENGTH];
-    char alias[MAX_STRING_LENGTH];
-    char shortcut[MAX_STRING_LENGTH];
+    EmbString command;
+    EmbString arguments;
+    EmbString icon;
+    EmbString tooltip;
+    EmbString statustip;
+    EmbString alias;
+    EmbString shortcut;
     int32_t flags;
 } Command;
 
@@ -72,35 +77,70 @@ typedef struct EmbDimLeader_ {
 } EmbDimLeader;
 
 typedef struct Setting_ {
-    char key[MAX_STRING_LENGTH];
+    EmbString key;
     ScriptValue setting;
     ScriptValue dialog;
     ScriptValue accept;
     ScriptValue preview;
 } Setting;
 
+typedef struct LabelledVector_ {
+    EmbString key;
+    EmbVector vector;
+} LabelledVector;
+
 typedef struct StringMap_ {
-    char key[MAX_LABEL_LENGTH];
-    char value[MAX_LABEL_LENGTH];
+    EmbString key;
+    EmbString value;
 } StringMap;
 
 typedef struct Editor_ {
-    char icon[MAX_STRING_LENGTH];
-    char label[MAX_STRING_LENGTH];
-    char data_type[MAX_STRING_LENGTH];
-    char signal[MAX_STRING_LENGTH];
+    EmbString icon;
+    EmbString label;
+    EmbString data_type;
+    EmbString signal;
     int object;
 } Editor;
 
 typedef struct SettingsData_ {
     int id;
-    char label[MAX_STRING_LENGTH];
-    char key[MAX_STRING_LENGTH];
-    char icon[MAX_STRING_LENGTH];
-    char value[MAX_STRING_LENGTH];
-    char editor_data[MAX_STRING_LENGTH];
+    EmbString label;
+    EmbString key;
+    EmbString icon;
+    EmbString value;
+    EmbString editor_data;
     int type;
 } SettingsData;
+
+typedef struct ObjectCore_ {
+    EmbGeometry *geometry;
+
+    EmbString OBJ_NAME;
+
+    EmbString text;
+    EmbString textFont;
+    EmbString textJustify;
+    double textSize;
+    bool textBold;
+    bool textItalic;
+    bool textUnderline;
+    bool textStrikeOut;
+    bool textOverline;
+    bool textBackward;
+    bool textUpsideDown;
+
+    int rubber_mode;
+    int64_t objID;
+
+    bool curved;
+    bool filled;
+    double arrowStyleAngle;
+    double arrowStyleLength;
+    double lineStyleAngle;
+    double lineStyleLength;
+
+    int gripIndex;
+} ObjectCore;
 
 /* Scripting functions */
 ScriptEnv *create_script_env();
@@ -109,10 +149,10 @@ void free_script_env(ScriptEnv *);
 ScriptValue script_bool(bool b);
 ScriptValue script_int(int i);
 ScriptValue script_real(double r);
-ScriptValue script_string(const char *s);
-ScriptValue command_prompt(ScriptEnv *context, const char *line);
+ScriptValue script_string(EmbString s);
+ScriptValue command_prompt(ScriptEnv *context, EmbString line);
 
-ScriptEnv *add_string_argument(ScriptEnv *context, const char *s);
+ScriptEnv *add_string_argument(ScriptEnv *context, EmbString s);
 ScriptEnv *add_real_argument(ScriptEnv *context, double r);
 ScriptEnv *add_int_argument(ScriptEnv *context, int i);
 
@@ -121,7 +161,7 @@ void copy_setting(int key, int dst, int src);
 
 void set_int(int key, int value);
 void set_real(int key, double value);
-void set_str(int key, char *value);
+void set_str(int key, EmbString value);
 void set_bool(int key, bool value);
 
 int get_int(int key);
@@ -129,40 +169,39 @@ double get_real(int key);
 char *get_str(int key);
 bool get_bool(int key);
 
-void add_string_variable(ScriptEnv *context, const char *label, const char *s);
-void add_int_variable(ScriptEnv *context, const char *label, int i);
-void add_real_variable(ScriptEnv *context, const char *label, double i);
+void add_string_variable(ScriptEnv *context, EmbString label, EmbString s);
+void add_int_variable(ScriptEnv *context, EmbString label, int i);
+void add_real_variable(ScriptEnv *context, EmbString label, double i);
 
-const char *script_get_string(ScriptEnv *context, const char *label);
-int script_get_int(ScriptEnv *context, const char *label);
-double script_get_real(ScriptEnv *context, const char *label);
+const char *script_get_string(ScriptEnv *context, EmbString label);
+int script_get_int(ScriptEnv *context, EmbString label);
+double script_get_real(ScriptEnv *context, EmbString label);
 
-int script_set_string(ScriptEnv *context, const char *label, const char *s);
-int script_set_int(ScriptEnv *context, const char *label, int i);
-int script_set_real(ScriptEnv *context, const char *label, double r);
+int script_set_string(ScriptEnv *context, EmbString label, EmbString s);
+int script_set_int(ScriptEnv *context, EmbString label, int i);
+int script_set_real(ScriptEnv *context, EmbString label, double r);
 
-void prompt_output(const char *);
+void prompt_output(EmbString );
 int argument_checks(ScriptEnv *context, int id);
-char *translate(const char *msg);
+char *translate(EmbString msg);
 
-bool pattern_save(EmbPattern *pattern, const char *fileName);
+bool pattern_save(EmbPattern *pattern, EmbString fileName);
 
-int string_array_length(char *s[]);
 int parse_floats(char *line, float result[], int n);
 int parse_vector(char *line, EmbVector *v);
 bool validRGB(float r, float g, float b);
 void reportDistance(EmbVector a, EmbVector b);
 
-void add_to_menu(int id, char *menu_data[]);
-void add_to_toolbar(int id, char *toolbar_data[]);
+void add_to_menu(int id, EmbStringTable menu_data);
+void add_to_toolbar(int id, EmbStringTable toolbar_data);
 
 int load_data(void);
 
 int load_settings(char *appDir, char *configDir);
-int save_settings(const char *appDir, const char *configDir);
+int save_settings(EmbString appDir, EmbString configDir);
 
-int get_command_id(const char *);
-int get_state_variable(const char *key);
+int get_command_id(EmbString );
+int get_state_variable(EmbString key);
 
 EmbArc emb_arc_set_radius(EmbArc a, EmbReal radius);
 
@@ -177,7 +216,7 @@ void question_box(char *title, char *text);
 
 /* MainWindow calls */
 void end_command(void);
-void debug_message(const char *msg);
+void debug_message(EmbString msg);
 void wait_cursor(void);
 void arrow_cursor(void);
 void restore_cursor(void);
@@ -197,6 +236,8 @@ extern ScriptValue script_true;
 extern ScriptValue script_false;
 
 extern int testing_mode;
+
+extern EmbString end_symbol;
 
 extern Editor general_editor_data[];
 extern Editor geometry_arc_editor_data[];
@@ -231,68 +272,69 @@ extern Editor misc_text_single_editor_data[];
 
 extern const char *_appName_;
 extern const char *_appVer_;
+extern EmbString settings_file;
 
 extern int render_hints[];
 
-extern char *coverage_test[];
-extern char *object_names[];
+extern EmbStringTable coverage_test;
+extern EmbStringTable object_names;
 
-extern char *menu_list[];
+extern EmbStringTable menu_list;
 extern int menubar_full_list[];
 extern int menubar_no_docs[];
 
-extern char *file_menu[];
-extern char *edit_menu[];
-extern char *view_menu[];
-extern char *zoom_menu[];
-extern char *pan_menu[];
-extern char *help_menu[];
-extern char *draw_menu[];
-extern char *tools_menu[];
-extern char *modify_menu[];
-extern char *dimension_menu[];
-extern char *sandbox_menu[];
-extern char **menu_data[];
+extern EmbStringTable file_menu;
+extern EmbStringTable edit_menu;
+extern EmbStringTable view_menu;
+extern EmbStringTable zoom_menu;
+extern EmbStringTable pan_menu;
+extern EmbStringTable help_menu;
+extern EmbStringTable draw_menu;
+extern EmbStringTable tools_menu;
+extern EmbStringTable modify_menu;
+extern EmbStringTable dimension_menu;
+extern EmbStringTable sandbox_menu;
+extern EmbStringTable *menu_data;
 
-extern char *toolbar_list[];
+extern EmbStringTable toolbar_list;
 extern int toolbars_when_docs[];
 
-extern char *file_toolbar[];
-extern char *edit_toolbar[];
-extern char *view_toolbar[];
-extern char *zoom_toolbar[];
-extern char *pan_toolbar[] ;
-extern char *icon_toolbar[];
-extern char *help_toolbar[];
-extern char *draw_toolbar[];
-extern char *inquiry_toolbar[];
-extern char *modify_toolbar[];
-extern char *dimension_toolbar[];
-extern char *sandbox_toolbar[];
-extern char **toolbar_data[];
+extern EmbStringTable file_toolbar;
+extern EmbStringTable edit_toolbar; 
+extern EmbStringTable view_toolbar; 
+extern EmbStringTable zoom_toolbar; 
+extern EmbStringTable pan_toolbar;
+extern EmbStringTable icon_toolbar; 
+extern EmbStringTable help_toolbar; 
+extern EmbStringTable draw_toolbar; 
+extern EmbStringTable inquiry_toolbar; 
+extern EmbStringTable modify_toolbar; 
+extern EmbStringTable dimension_toolbar; 
+extern EmbStringTable sandbox_toolbar; 
+extern EmbStringTable *toolbar_data; 
 
-extern char *layer_list[];
-extern char *color_list[];
-extern char *line_type_list[];
-extern char *line_weight_list[];
-extern char *text_size_list[];
+extern EmbStringTable layer_list; 
+extern EmbStringTable color_list; 
+extern EmbStringTable line_type_list; 
+extern EmbStringTable line_weight_list; 
+extern EmbStringTable text_size_list; 
 
-extern char *extensions[];
-extern char *editor_list[];
-extern char *combobox_list[];
+extern EmbStringTable extensions; 
+extern EmbStringTable editor_list; 
+extern EmbStringTable combobox_list; 
 
-extern char *grid_load_from_file_group[];
-extern char *defined_origin_group[];
-extern char *rectangular_grid_group[];
-extern char *circular_grid_group[];
-extern char *center_on_origin_group[];
+extern EmbStringTable grid_load_from_file_group; 
+extern EmbStringTable defined_origin_group; 
+extern EmbStringTable rectangular_grid_group; 
+extern EmbStringTable circular_grid_group; 
+extern EmbStringTable center_on_origin_group; 
 
-extern char *tips[];
+extern EmbStringTable tips; 
 
 extern char **xpm_icons[];
-extern char *xpm_icon_labels[];
+extern EmbStringTable xpm_icon_labels;
 
-extern char recent_files[MAX_FILES][MAX_STRING_LENGTH];
+extern EmbString recent_files[MAX_FILES];
 
 extern int numOfDocs;
 extern int docIndex;
@@ -304,8 +346,8 @@ extern bool key_state[N_KEY_SEQUENCES];
 
 /* Natives */
 void about_dialog(void);
-void todo(const char *txt);
-void fixme(const char *msg);
+void todo(EmbString txt);
+void fixme(EmbString msg);
 void stub_testing(void);
 void run_testing(void);
 void exit_program(void);
@@ -320,7 +362,7 @@ void hide_unimplemented(void);
 void start_blinking(void);
 void stop_blinking(void);
 
-ScriptValue run_command(const char *cmd, ScriptEnv *context);
+ScriptValue run_command(EmbString cmd, ScriptEnv *context);
 
 void nativeBlinkPrompt();
 
@@ -372,7 +414,7 @@ void nativeScaleSelected(double x, double y, double factor);
 void nativeRotateSelected(double x, double y, double rot);
 void nativeMirrorSelected(double x1, double y1, double x2, double y2);
 
-void nativeSetCursorShape(char str[MAX_STRING_LENGTH]);
+void nativeSetCursorShape(EmbString str);
 double nativeCalculateDistance(double x1, double y1, double x2, double y2);
 double nativePerpendicularDistance(double px, double py, double x1, double y1, double x2, double y2);
 
@@ -386,12 +428,12 @@ void disableReal();
 
 void create_details_dialog(void);
 
-void nativeSetPromptPrefix(char txt[MAX_STRING_LENGTH]);
+void nativeSetPromptPrefix(EmbString txt);
 /* TODO: void nativeSetRubberFilter(int64_t id); */
 /* TODO: This is so more than 1 rubber object can exist at one time without updating all rubber objects at once. */
 void nativeSetRubberMode(int mode);
-void nativeSetRubberPoint(char key[MAX_STRING_LENGTH], double x, double y);
-void nativeSetRubberText(char key[MAX_STRING_LENGTH], char txt[MAX_STRING_LENGTH]);
+void nativeSetRubberPoint(EmbString key, double x, double y);
+void nativeSetRubberText(EmbString key, EmbString txt);
 
 void toggleGrid(void);
 void toggleRuler(void);
@@ -406,6 +448,16 @@ void changelog();
 void whatsThisContextHelp();
 
 int make_application(int argc, char* argv[]);
+
+void setObjectRubberMode(ObjectCore *core, int mode);
+
+/* EmbString handling */
+void emb_string(EmbString s, const char *str);
+int string_equal(EmbString a, EmbString b);
+int string_compare(EmbString a, EmbString b);
+void string_copy(EmbString dst, EmbString src);
+int string_array_length(EmbString s[]);
+int string_list_contains(EmbStringTable list, EmbString entry);
 
 /* Geometry */
 int emb_approx(EmbVector point1, EmbVector point2);

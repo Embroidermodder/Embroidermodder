@@ -729,7 +729,7 @@ promptInputNext(void)
 
 /* . */
 ScriptValue
-run_command(const char* cmd, ScriptEnv *context)
+run_command(EmbString cmd, ScriptEnv *context)
 {
     char message[MAX_STRING_LENGTH];
     int id = get_command_id(cmd);
@@ -1334,7 +1334,7 @@ runCommandMain(QString cmd)
         clear_selection();
     }
     */
-    run_command(qPrintable(cmd), context);
+    run_command((char*)qPrintable(cmd), context);
     free_script_env(context);
 }
 
@@ -1349,7 +1349,7 @@ runCommandClick(QString cmd, double x, double y)
     sprintf(message, "runCommandClick(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
     debug_message(message);
     /* engine->evaluate(cmd + "_click(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName); */
-    run_command(qPrintable(cmd), context);
+    run_command((char*)qPrintable(cmd), context);
     free_script_env(context);
 }
 
@@ -1364,7 +1364,7 @@ runCommandMove(QString cmd, double x, double y)
     sprintf(message, "runCommandMove(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
     debug_message(message);
     /* engine->evaluate(cmd + "_move(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName); */
-    run_command(qPrintable(cmd), context);
+    run_command((char*)qPrintable(cmd), context);
     free_script_env(context);
 }
 
@@ -1379,7 +1379,7 @@ runCommandContext(QString cmd, QString str)
     sprintf(message, "runCommandContext(%s, %s)", qPrintable(cmd), qPrintable(str));
     debug_message(message);
     /* engine->evaluate(cmd + "_context('" + str.toUpper() + "')", fileName); */
-    run_command(qPrintable(cmd), context);
+    run_command((char*)qPrintable(cmd), context);
     free_script_env(context);
 }
 
@@ -1395,11 +1395,11 @@ runCommandPrompt(QString cmd)
     debug_message(message);
     context->context = CONTEXT_PROMPT;
     if (prompt->isRapidFireEnabled()) {
-        run_command(qPrintable(cmd), context);
+        run_command((char*)qPrintable(cmd), context);
     }
     else {
         /* Both branches run the same. */
-        run_command(qPrintable(cmd), context);
+        run_command((char*)qPrintable(cmd), context);
     }
     free_script_env(context);
 }
@@ -1551,14 +1551,14 @@ nativeAddTextSingle(std::string str, double x, double y, double rot, bool fill, 
         obj_set_text_upside_down(obj, false);
         obj->setRotation(-rot);
         /* TODO: single line text fill. */
-        obj->setObjectRubberMode(rubberMode);
+        setObjectRubberMode(obj->core, rubberMode);
         if (rubberMode) {
             doc_add_to_rubber_room(doc, obj);
             gscene->addItem(obj);
             gscene->update();
         }
         else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data.OBJ_NAME, obj, doc, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc, 0);
             stack->push(cmd);
         }
     }
@@ -1586,14 +1586,14 @@ nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubber
     if (doc && gscene && stack) {
         Object* obj = create_line(x1, -y1, x2, -y2, getCurrentColor());
         obj->setRotation(-rot);
-        obj->setObjectRubberMode(rubberMode);
+        setObjectRubberMode(obj->core, rubberMode);
         if (rubberMode) {
             doc_add_to_rubber_room(doc, obj);
             gscene->addItem(obj);
             gscene->update();
         }
         else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data.OBJ_NAME, obj, doc, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc, 0);
             stack->push(cmd);
         }
     }
@@ -1617,7 +1617,7 @@ nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill
     }
     Object* obj = create_rect(x, -y, w, -h, getCurrentColor());
     obj->setRotation(-rot);
-    obj->setObjectRubberMode(rubberMode);
+    setObjectRubberMode(obj->core, rubberMode);
     /* TODO: rect fill */
     if (rubberMode) {
         doc_add_to_rubber_room(doc, obj);
@@ -1625,7 +1625,7 @@ nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill
         gscene->update();
     }
     else {
-        UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data.OBJ_NAME, obj, doc, 0);
+        UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc, 0);
         stack->push(cmd);
     }
 }
@@ -1650,7 +1650,7 @@ nativeAddArc(double x1, double y1, double x2, double y2, double x3, double y3, i
         arc.end.y = x3;
         arc.end.y = -y3;
         Object* arcObj = create_arc(arc, getCurrentColor());
-        arcObj->setObjectRubberMode(rubberMode);
+        setObjectRubberMode(arcObj->core, rubberMode);
         if (rubberMode) {
             doc_add_to_rubber_room(doc, arcObj);
         }
@@ -1671,7 +1671,7 @@ nativeAddCircle(double centerX, double centerY, double radius, bool fill, int ru
         circle.center.y = -centerY;
         circle.radius = radius;
         Object* obj = create_circle(circle, getCurrentColor());
-        obj->setObjectRubberMode(rubberMode);
+        setObjectRubberMode(obj->core, rubberMode);
         /* TODO: circle fill. */
         if (rubberMode) {
             doc_add_to_rubber_room(doc, obj);
@@ -1679,7 +1679,7 @@ nativeAddCircle(double centerX, double centerY, double radius, bool fill, int ru
             gscene->update();
         }
         else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data.OBJ_NAME, obj, doc, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc, 0);
             stack->push(cmd);
         }
     }
@@ -1692,7 +1692,7 @@ nativeAddSlot(double centerX, double centerY, double diameter, double length, do
     /*
     Object* slotObj = new Object(centerX, -centerY, diameter, length, getCurrentColor());
     slotObj->setRotation(-rot);
-    slotObj->setObjectRubberMode(rubberMode);
+    setObjectRubberMode(slotObj->core, rubberMode);
     if (rubberMode) doc_add_to_rubber_room(doc, slotObj);
     scene->addItem(slotObj); */
     /* TODO: slot fill */ /*
@@ -1714,7 +1714,7 @@ nativeAddEllipse(double centerX, double centerY, double width, double height, do
         ellipse.radius.y = height/2.0;
         Object* obj = create_ellipse(ellipse, getCurrentColor());
         obj->setRotation(-rot);
-        obj->setObjectRubberMode(rubberMode);
+        setObjectRubberMode(obj->core, rubberMode);
         /* TODO: ellipse fill */
         if (rubberMode) {
             doc_add_to_rubber_room(doc, obj);
@@ -1722,7 +1722,7 @@ nativeAddEllipse(double centerX, double centerY, double width, double height, do
             gscene->update();
         }
         else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data.OBJ_NAME, obj, doc, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc, 0);
             stack->push(cmd);
         }
     }
@@ -1738,7 +1738,7 @@ nativeAddPoint(double x, double y)
         point.position.x = x;
         point.position.y = -y;
         Object* obj = create_point(point, getCurrentColor());
-        UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data.OBJ_NAME, obj, doc, 0);
+        UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc, 0);
         stack->push(cmd);
     }
 }
@@ -1760,14 +1760,14 @@ nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubber
     if (doc && gscene && stack) {
         EmbPolygon polygon;
         Object* obj = create_polygon(startX, startY, p, getCurrentColor());
-        obj->setObjectRubberMode(rubberMode);
+        setObjectRubberMode(obj->core, rubberMode);
         if (rubberMode) {
             doc_add_to_rubber_room(doc, obj);
             gscene->addItem(obj);
             gscene->update();
         }
         else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data.OBJ_NAME, obj, doc, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc, 0);
             stack->push(cmd);
         }
     }
@@ -1785,14 +1785,14 @@ nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubbe
     if (doc && gscene && stack) {
         EmbPath path;
         Object* obj = create_polygon(startX, startY, p, getCurrentColor());
-        obj->setObjectRubberMode(rubberMode);
+        setObjectRubberMode(obj->core, rubberMode);
         if (rubberMode) {
             doc_add_to_rubber_room(doc, obj);
             gscene->addItem(obj);
             gscene->update();
         }
         else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data.OBJ_NAME, obj, doc, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc, 0);
             stack->push(cmd);
         }
     }
@@ -1830,14 +1830,14 @@ nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int r
     if (doc && gscene && stack) {
         Object* obj = create_dim_leader(x1, -y1, x2, -y2, getCurrentColor());
         obj->setRotation(-rot);
-        obj->setObjectRubberMode(rubberMode);
+        setObjectRubberMode(obj->core, rubberMode);
         if (rubberMode) {
             doc_add_to_rubber_room(doc, obj);
             gscene->addItem(obj);
             gscene->update();
         }
         else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->data.OBJ_NAME, obj, doc, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc, 0);
             stack->push(cmd);
         }
     }
@@ -1848,14 +1848,18 @@ nativeSetCursorShape(char shape[MAX_STRING_LENGTH])
 {
     Document* doc = activeDocument();
     if (doc) {
-        if (!strcmp(shape, "arrow"))
+        if (!strcmp(shape, "arrow")) {
             doc->setCursor(QCursor(Qt::ArrowCursor));
-        else if (!strcmp(shape, "uparrow"))
+        }
+        else if (!strcmp(shape, "uparrow")) {
             doc->setCursor(QCursor(Qt::UpArrowCursor));
-        else if (!strcmp(shape, "cross"))
+        }
+        else if (!strcmp(shape, "cross")) {
             doc->setCursor(QCursor(Qt::CrossCursor));
-        else if (!strcmp(shape, "wait"))
+        }
+        else if (!strcmp(shape, "wait")) {
             doc->setCursor(QCursor(Qt::WaitCursor));
+        }
         else if (!strcmp(shape, "ibeam"))
             doc->setCursor(QCursor(Qt::IBeamCursor));
         else if (!strcmp(shape, "resizevert"))
@@ -1943,7 +1947,7 @@ nativeQSnapY()
 
 /* Compatibility layer for C files */
 void
-prompt_output(const char *txt)
+prompt_output(EmbString txt)
 {
     appendHistory(QString(txt));
 }

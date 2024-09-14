@@ -9,7 +9,9 @@
  * Properties
  */
 
-char *editor_list[] = {
+#include "../core.h"
+
+EmbStringTable editor_list = {
     "ArcCenterX",
     "ArcCenterY",
     "ArcRadius",
@@ -101,7 +103,7 @@ char *editor_list[] = {
     "END"
 };
 
-char *combobox_list[] = {
+EmbStringTable combobox_list = {
     "GeneralLayer",
     "GeneralColor",
     "GeneralLineType",

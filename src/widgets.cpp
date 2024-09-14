@@ -1010,7 +1010,7 @@ MdiWindow::~MdiWindow()
 bool
 MdiWindow::saveFile(QString fileName)
 {
-    return pattern_save(pattern, qPrintable(fileName));
+    return pattern_save(pattern, (char*)qPrintable(fileName));
 }
 
 bool
@@ -1031,13 +1031,13 @@ MdiWindow::loadFile(QString fileName)
 
     QString ext = fileExtension(fileName);
     debug_message("ext: ");
-    debug_message(qPrintable(ext));
+    debug_message((char*)qPrintable(ext));
 
     /* Read */
     int format = EMB_FORMAT_CSV; /* emb_identify_format(qPrintable(fileName)); */
     if (format <= 0) {
         debug_message("Unsupported read file type: ");
-        debug_message(qPrintable(fileName));
+        debug_message((char*)qPrintable(fileName));
         restore_cursor();
         QMessageBox::warning(this, tr("Error reading pattern"),
             tr("Unsupported read file type: ") + qPrintable(fileName));
@@ -1047,7 +1047,7 @@ MdiWindow::loadFile(QString fileName)
     int readSuccessful = emb_pattern_read(pattern, qPrintable(fileName), format);
     if (!readSuccessful) {
         debug_message("Reading file was unsuccessful:");
-        debug_message(qPrintable(fileName));
+        debug_message((char*)qPrintable(fileName));
         restore_cursor();
         QMessageBox::warning(this, tr("Error reading pattern"),
             tr("Reading file was unsuccessful: ") + qPrintable(fileName));

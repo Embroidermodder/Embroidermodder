@@ -10,7 +10,9 @@
  * Testing
  */
 
-char *coverage_test[] = {
+#include "../core.h"
+
+EmbStringTable coverage_test = {
     "new",
     "icon16",
     "icon24",

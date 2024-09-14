@@ -10,9 +10,9 @@
  * Toolbars
  */
 
-#include "constants.h"
+#include "../core.h"
 
-char *toolbar_list[] = {
+EmbStringTable toolbar_list = {
     "File",
     "Edit",
     "View",
@@ -45,7 +45,7 @@ int toolbars_when_docs[] = {
     TERMINATOR_SYMBOL
 };
 
-char *file_toolbar[] = {
+EmbStringTable file_toolbar = {
     "new",
     "open",
     "save",
@@ -60,20 +60,20 @@ char *file_toolbar[] = {
     "END"
 };
 
-char *edit_toolbar[] = {
+EmbStringTable edit_toolbar = {
     "cut",
     "copy",
     "paste",
     "END"
 };
 
-char *view_toolbar[] = {
+EmbStringTable view_toolbar = {
     "day",
     "night",
     "END"
 };
 
-char *zoom_toolbar[] = {
+EmbStringTable zoom_toolbar = {
     "zoomwindow",
     "zoomdynamic",
     "zoomscale",
@@ -88,7 +88,7 @@ char *zoom_toolbar[] = {
     "END"
 };
 
-char *pan_toolbar[] = {
+EmbStringTable pan_toolbar = {
     "panrealtime",
     "panpoint",
     "---",
@@ -99,7 +99,7 @@ char *pan_toolbar[] = {
     "END"
 };
 
-char *icon_toolbar[] = {
+EmbStringTable icon_toolbar = {
     "icon16",
     "icon24",
     "icon32",
@@ -109,7 +109,7 @@ char *icon_toolbar[] = {
     "END"
 };
 
-char *help_toolbar[] = {
+EmbStringTable help_toolbar = {
     "help",
     "---",
     "changelog",
@@ -120,7 +120,7 @@ char *help_toolbar[] = {
     "END"
 };
 
-char *draw_toolbar[] = {
+EmbStringTable draw_toolbar = {
     "path",
     "polyline",
     "---",
@@ -140,13 +140,13 @@ char *draw_toolbar[] = {
     "END"
 };
 
-char *inquiry_toolbar[] = {
+EmbStringTable inquiry_toolbar = {
     "distance",
     "locatepoint",
     "END"
 };
 
-char *modify_toolbar[] = {
+EmbStringTable modify_toolbar = {
     "erase",
     "move",
     "rotate",
@@ -155,34 +155,34 @@ char *modify_toolbar[] = {
     "END"
 };
 
-char *dimension_toolbar[] = {
+EmbStringTable dimension_toolbar = {
     "quickleader",
     "END"
 };
 
-char *sandbox_toolbar[] = {
+EmbStringTable sandbox_toolbar = {
     "sandbox",
     "END"
 };
 
-char *layer_toolbar[] = {
+EmbStringTable layer_toolbar = {
     "END"
 };
 
-char *properties_toolbar[] = {
+EmbStringTable properties_toolbar = {
     "END"
 };
 
-char *text_toolbar[] = {
+EmbStringTable text_toolbar = {
     "END"
 };
 
-char *prompt_toolbar[] = {
+EmbStringTable prompt_toolbar = {
     "END"
 };
 
 /* Matches the order of toolbar_list. */
-char **toolbar_data[] = {
+EmbStringTable *toolbar_data = {
     file_toolbar,
     edit_toolbar,
     view_toolbar,

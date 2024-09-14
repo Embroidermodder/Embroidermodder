@@ -15,7 +15,7 @@
 
 #define MAX_ARGS                      10
 #define MAX_FILES                     30
-#define MAX_STRING_LENGTH           1000
+#define MAX_STRING_LENGTH            200
 #define MAX_COMMANDS                 300
 #define MAX_COMMAND_LENGTH            30
 #define MAX_MENU_LENGTH               30

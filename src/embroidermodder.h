@@ -163,7 +163,6 @@ extern CmdPromptInput* promptInput;
 extern QString formatFilterOpen;
 extern QString formatFilterSave;
 extern QString openFilesPath;
-extern const char *settings_file;
 extern QByteArray layoutState;
 
 extern QStringList button_list;
@@ -271,49 +270,6 @@ typedef struct UndoData_ {
     QLineF mirrorLine;
 } UndoData;
 
-typedef struct ObjectCore_ {
-    QString text;
-    QString textFont;
-    QString textJustify;
-    double textSize;
-    bool textBold;
-    bool textItalic;
-    bool textUnderline;
-    bool textStrikeOut;
-    bool textOverline;
-    bool textBackward;
-    bool textUpsideDown;
-} ObjectCore;
-
-typedef struct ObjectData_ {
-    ObjectCore core;
-
-    QGraphicsPathItem path;
-    int32_t OBJ_TYPE;
-    QString OBJ_NAME;
-    QPen objPen;
-    QPen lwtPen;
-    QLineF objLine;
-    int objRubberMode;
-    QHash<QString, EmbVector> objRubberPoints;
-    QHash<QString, QString> objRubberTexts;
-    int64_t objID;
-
-    QPainterPath textPath;
-
-    bool curved;
-    bool filled;
-    QPainterPath lineStylePath;
-    QPainterPath arrowStylePath;
-    double arrowStyleAngle;
-    double arrowStyleLength;
-    double lineStyleAngle;
-    double lineStyleLength;
-
-    QPainterPath normalPath;
-    int gripIndex;
-} ObjectData;
-
 MdiWindow* activeMdiWindow();
 Document* activeDocument();
 QGraphicsScene* activeScene();
@@ -338,17 +294,17 @@ void nativeAddImage(std::string img, double x, double y, double w, double h, dou
 
 void nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
 
-QAction *get_action_by_icon(const char *icon);
+QAction *get_action_by_icon(EmbString icon);
 
 EmbVector to_emb_vector(QPointF p);
 QPointF to_qpointf(EmbVector v);
 EmbVector scale_and_rotate(EmbVector v, double angle, double scale);
 EmbVector find_mouse_snap_point(QList<EmbVector> snap_points, EmbVector mouse_point);
 
-void set_visibility(QObject *senderObj, const char *key, bool visibility);
-void set_enabled(QObject *senderObj, const char *key, bool visibility);
-void set_visibility_group(QObject *senderObj, char *key[], bool visibility);
-void set_enabled_group(QObject *senderObj, char *key[], bool visibility);
+void set_visibility(QObject *senderObj, EmbString key, bool visibility);
+void set_enabled(QObject *senderObj, EmbString key, bool visibility);
+void set_visibility_group(QObject *senderObj, EmbStringTable key, bool visibility);
+void set_enabled_group(QObject *senderObj, EmbStringTable key, bool visibility);
 QIcon create_swatch(int32_t color);
 void preview_update(void);
 
@@ -816,9 +772,19 @@ private:
 class Object: public QGraphicsPathItem
 {
 public:
-    EmbGeometry *geometry;
-    ObjectData data;
-    Object* obj;
+    ObjectCore *core;
+
+    QGraphicsPathItem path_;
+    QPen objPen;
+    QPen lwtPen;
+    QLineF objLine;
+    std::vector<LabelledVector> rubber_points;
+    std::vector<StringMap> rubber_texts;
+
+    QPainterPath textPath;
+    QPainterPath lineStylePath;
+    QPainterPath arrowStylePath;
+    QPainterPath normalPath;
 
     Object(int type_, QRgb rgb, Qt::PenStyle lineType, QGraphicsItem* item = 0);
     ~Object();
@@ -829,9 +795,8 @@ public:
     void gripEdit(EmbVector before, EmbVector after);
     QPainterPath shape() const { return path(); }
 
-    void setObjectRubberMode(int mode) { data.objRubberMode = mode; }
-    void setObjectRubberPoint(QString key, EmbVector point) { data.objRubberPoints.insert(key, point); }
-    void setObjectRubberText(QString key, QString txt) { data.objRubberTexts.insert(key, txt); }
+    void setObjectRubberPoint(char key[MAX_STRING_LENGTH], EmbVector value);
+    void setObjectRubberText(char key[MAX_STRING_LENGTH], char value[MAX_STRING_LENGTH]);
 
     void drawRubberLine(QLineF rubLine, QPainter* painter = 0, const char* colorFromScene = 0);
 
@@ -915,7 +880,7 @@ private:
     void addColorsToComboBox(QComboBox* comboBox);
     void chooseColor(int key);
     void currentColorChanged_(int key, const QColor& color);
-    QGroupBox* create_group_box(QWidget* widget, const char *label, int data[]);
+    QGroupBox* create_group_box(QWidget* widget, EmbString label, int data[]);
     QCheckBox* create_checkbox(QGroupBox* groupbox, int key);
     QDoubleSpinBox* create_spinbox(QGroupBox* groupbox, int key);
     QSpinBox* create_int_spinbox(QGroupBox* groupbox, int key);

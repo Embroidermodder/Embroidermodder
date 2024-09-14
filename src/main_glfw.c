@@ -38,7 +38,7 @@ end_command(void)
 
 /* . */
 void
-prompt_output(const char *line)
+prompt_output(EmbString line)
 {
     printf("%s\n", line);
 }
@@ -100,3 +100,4 @@ make_application(int argc, char *argv[])
     glfwTerminate();
     return 0;
 }
+

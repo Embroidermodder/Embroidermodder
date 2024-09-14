@@ -8,7 +8,9 @@
  * for advice on altering this file.
  */
 
-const char *object_names[] = {
+#include "../core.h"
+
+EmbStringTable object_names = {
     "Base",
     "Arc",
     "Block",
