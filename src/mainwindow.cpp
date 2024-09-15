@@ -12,6 +12,8 @@
 
 #include "embroidermodder.h"
 
+void to_string_table(QStringList src, EmbStringTable dest);
+
 std::unordered_map<int, QAction*> actionHash;
 QToolBar* toolbar[N_TOOLBARS];
 QMenu* menu[N_MENUS];
@@ -246,6 +248,15 @@ restore_cursor(void)
     QApplication::restoreOverrideCursor();
 }
 
+/* . */
+void
+set_toolbar_horizontal(int data[])
+{
+    for (int i=0; data[i] != TERMINATOR_SYMBOL; i++) {
+        toolbar[data[i]]->setOrientation(Qt::Horizontal);
+    }
+}
+
 QMenuBar *menuBar()
 {
     return _main->menuBar();
@@ -261,7 +272,10 @@ Application::event(QEvent *event)
     switch (event->type()) {
     case QEvent::FileOpen:
         if (_main) {
-            openFilesSelected(QStringList(static_cast<QFileOpenEvent *>(event)->file()));
+            QStringList sl = QStringList(static_cast<QFileOpenEvent *>(event)->file());
+            EmbStringTable files;
+            to_string_table(sl, files);
+            openFilesSelected(files);
             return true;
         }
         /* Fall through */
@@ -281,9 +295,9 @@ make_application(int argc, char* argv[])
     app.setApplicationName(_appName_);
     app.setApplicationVersion(_appVer_);
 
-    QStringList filesToOpen;
+    EmbStringTable filesToOpen;
     for (int i=0; i<argc; i++) {
-        filesToOpen << QString(argv[i]);
+        strcpy(filesToOpen[i], argv[i]);
     }
     
     _main = new MainWindow();
@@ -299,19 +313,21 @@ make_application(int argc, char* argv[])
     /* NOTE: If openFilesSelected() is called from within the _main constructor,
      * slot commands wont work and the window menu will be screwed
      */
-    if (!filesToOpen.isEmpty()) {
+    if (argc > 1) {
         openFilesSelected(filesToOpen);
     }
 
     return app.exec();
 }
 
+/* . */
 void
 nanosleep(int time)
 {
     std::this_thread::sleep_for(std::chrono::milliseconds(time));
 }
 
+/* . */
 void
 run_testing(void)
 {
@@ -319,12 +335,18 @@ run_testing(void)
     nanosleep(2000);
     int n = string_array_length(coverage_test);
     for (i=0; i<n; i++) {
-        QString cmd(coverage_test[i]);
-        runCommandMain(cmd);
+        runCommandMain(coverage_test[i]);
         nanosleep(1000);
     }        
 }
 
+/*
+ * BUG: two layer properties dropdowns malfunctioning
+ * BUG: layers button broken icon
+ * BUG: text size dropdown broken
+ *
+ * Read the code that this replaces carefully.
+ */
 void
 add_to_selector(QComboBox* box, EmbStringTable list, EmbString type, int use_icon)
 {
@@ -362,6 +384,21 @@ add_to_selector(QComboBox* box, EmbStringTable list, EmbString type, int use_ico
             else {
                 box->addItem(create_icon(list[3*i+0]), list[3*i+1]);
             }
+        }
+    }
+}
+
+/* . */
+void
+MainWindow::add_toolbar_to_window(Qt::ToolBarArea area, int data[])
+{
+    int i;
+    for (i = 0; data[i] != TERMINATOR_SYMBOL; i++) {
+        if (data[i] == TOOLBAR_BREAK) {
+            addToolBarBreak(area);
+        }
+        else {
+            addToolBar(area, toolbar[data[i]]);
         }
     }
 }
@@ -439,12 +476,12 @@ MainWindow::MainWindow() : QMainWindow(0)
     this->setFocusProxy(prompt);
     mdiArea->setFocusProxy(prompt);
 
-    setPromptTextColor(QColor(get_int(PROMPT_TEXT_COLOR)));
-    setPromptBackgroundColor(QColor(get_int(PROMPT_BG_COLOR)));
+    setPromptTextColor(get_int(PROMPT_TEXT_COLOR));
+    setPromptBackgroundColor(get_int(PROMPT_BG_COLOR));
 
     connect(prompt, SIGNAL(startCommand(QString)), this, SLOT(logPromptInput(QString)));
 
-    connect(prompt, SIGNAL(startCommand(QString)), this, SLOT(runCommandMain(QString)));
+    connect(prompt, SIGNAL(startCommand(QString)), this, SLOT(runCommandMain(char *)));
     connect(prompt, SIGNAL(runCommand(QString, QString)), this, SLOT(runCommandPrompt(QString, QString)));
 
     connect(prompt, SIGNAL(deletePressed()), this, SLOT(deletePressed()));
@@ -498,9 +535,29 @@ MainWindow::MainWindow() : QMainWindow(0)
     this->setStatusBar(statusbar);
 
     createAllActions();
-    createAllMenus();
 
-    debug_message("createAllToolbars()");
+    /* Do not allow the menus to be torn off.
+     * It's a pain in the ass to maintain.
+     */
+    debug_message("create all menus");
+
+    for (int i=0; i<N_MENUS; i++) {
+        add_to_menu(i, menu_data[i]);
+    }
+
+    for (int i=0; menubar_full_list[i] != TERMINATOR_SYMBOL; i++) {
+        menuBar()->addMenu(menu[i]);
+    }
+
+    QObject::connect(menu[MENU_RECENT], SIGNAL(aboutToShow()), _main,
+        SLOT(recentMenuAboutToShow()));
+    QObject::connect(menu[MENU_WINDOW], SIGNAL(aboutToShow()), _main,
+        SLOT(windowMenuAboutToShow()));
+
+    menu[MENU_RECENT]->setTearOffEnabled(false);
+    menu[MENU_WINDOW]->setTearOffEnabled(false);
+
+    debug_message("create all toolbars");
 
     add_to_toolbar(TOOLBAR_FILE, file_toolbar);
     add_to_toolbar(TOOLBAR_EDIT, edit_toolbar);
@@ -537,7 +594,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     colorSelector->addItem(create_icon("colorbyblock"), "ByBlock");
     colorSelector->addItem(create_icon("colorred"), translate("Red"), qRgb(255, 0, 0));
     colorSelector->addItem(create_icon("coloryellow"), translate("Yellow"), qRgb(255, 255, 0));
-    colorSelector->addItem(create_icon("colorgreen"), translate("Green"), qRgb(  0,255, 0));
+    colorSelector->addItem(create_icon("colorgreen"), translate("Green"), qRgb(0, 255, 0));
     colorSelector->addItem(create_icon("colorcyan"), translate("Cyan"), qRgb(  0,255,255));
     colorSelector->addItem(create_icon("colorblue"), translate("Blue"), qRgb(  0, 0,255));
     colorSelector->addItem(create_icon("colormagenta"), translate("Magenta"), qRgb(255, 0,255));
@@ -599,36 +656,11 @@ MainWindow::MainWindow() : QMainWindow(0)
     add_to_toolbar(TOOLBAR_DRAW, draw_toolbar);
     add_to_toolbar(TOOLBAR_MODIFY, modify_toolbar);
 
-    /* Horizontal */
-    toolbar[TOOLBAR_VIEW]->setOrientation(Qt::Horizontal);
-    toolbar[TOOLBAR_ZOOM]->setOrientation(Qt::Horizontal);
-    toolbar[TOOLBAR_LAYER]->setOrientation(Qt::Horizontal);
-    toolbar[TOOLBAR_PROPERTIES]->setOrientation(Qt::Horizontal);
-    toolbar[TOOLBAR_TEXT]->setOrientation(Qt::Horizontal);
-    toolbar[TOOLBAR_PROMPT]->setOrientation(Qt::Horizontal);
+    set_toolbar_horizontal(toolbar_horizontal);
 
-    /* Top */
-    addToolBarBreak(Qt::TopToolBarArea);
-    addToolBar(Qt::TopToolBarArea, toolbar[TOOLBAR_FILE]);
-    addToolBar(Qt::TopToolBarArea, toolbar[TOOLBAR_EDIT]);
-    addToolBar(Qt::TopToolBarArea, toolbar[TOOLBAR_HELP]);
-    addToolBar(Qt::TopToolBarArea, toolbar[TOOLBAR_ICON]);
-    addToolBarBreak(Qt::TopToolBarArea);
-    addToolBar(Qt::TopToolBarArea, toolbar[TOOLBAR_ZOOM]);
-    addToolBar(Qt::TopToolBarArea, toolbar[TOOLBAR_PAN]);
-    addToolBar(Qt::TopToolBarArea, toolbar[TOOLBAR_VIEW]);
-    addToolBarBreak(Qt::TopToolBarArea);
-    addToolBar(Qt::TopToolBarArea, toolbar[TOOLBAR_LAYER]);
-    addToolBar(Qt::TopToolBarArea, toolbar[TOOLBAR_PROPERTIES]);
-    addToolBarBreak(Qt::TopToolBarArea);
-    addToolBar(Qt::TopToolBarArea, toolbar[TOOLBAR_TEXT]);
-    /* Bottom */
-    addToolBar(Qt::BottomToolBarArea, toolbar[TOOLBAR_PROMPT]);
-
-    /* Left */
-    addToolBar(Qt::LeftToolBarArea, toolbar[TOOLBAR_DRAW]);
-    addToolBar(Qt::LeftToolBarArea, toolbar[TOOLBAR_MODIFY]);
-    addToolBarBreak(Qt::LeftToolBarArea);
+    add_toolbar_to_window(Qt::TopToolBarArea, top_toolbar);
+    add_toolbar_to_window(Qt::BottomToolBarArea, bottom_toolbar);
+    add_toolbar_to_window(Qt::LeftToolBarArea, left_toolbar);
 
     /* zoomToolBar->setToolButtonStyle(Qt::ToolButtonTextOnly); */
 
@@ -637,7 +669,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     /* Show date in statusbar after it has been updated. */
     QDate date = QDate::currentDate();
-    QString datestr = date.toString("MMMM d, yyyy");
+    QString datestr = date.toString("d MMMM yyyy");
     statusbar->showMessage(datestr);
 
     showNormal();
@@ -667,17 +699,14 @@ MainWindow::recentMenuAboutToShow(void)
     debug_message("recentMenuAboutToShow()");
     menu[MENU_RECENT]->clear();
 
-    QFileInfo recentFileInfo;
-    QString recentValue;
-    for (int i = 0; ; ++i) {
-        if (!strcmp(recent_files[i], "END")) {
-            break;
-        }
+    int n = string_array_length(recent_files);
+    for (int i = 0; i < n; ++i) {
         /* If less than the max amount of entries add to menu. */
         if (i < get_int(OPENSAVE_RECENT_MAX_FILES)) {
-            recentFileInfo = QFileInfo(recent_files[i]);
-            if (recentFileInfo.exists() && validFileFormat(recentFileInfo.fileName())) {
-                recentValue.setNum(i+1);
+            QFileInfo recentFileInfo = QFileInfo(recent_files[i]);
+            bool valid = validFileFormat((char*)qPrintable(recentFileInfo.fileName()));
+            if (recentFileInfo.exists() && valid) {
+                QString recentValue = QString().setNum(i+1);
                 QAction* rAction;
                 if (recentValue.toInt() >= 1 && recentValue.toInt() <= 9) {
                     rAction = new QAction("&" + recentValue + " " + recentFileInfo.fileName(), _main);
@@ -777,24 +806,38 @@ new_file(void)
 
 /* . */
 void
-openFile(bool recent, QString recentFile)
+to_string_table(QStringList src, EmbStringTable dest)
+{
+    int i;
+    for (i=0; i < MAX_FILES && i < src.size(); i++) {
+        strcpy(dest[i], (char*)qPrintable(src[i]));
+    }
+    strcpy(dest[i], end_symbol);
+}
+
+/* . */
+void
+openFile(bool recent, EmbString recentFile)
 {
     debug_message("openFile()");
 
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
-    QStringList files;
+    EmbStringTable files;
+    int n_files = 0;
     bool preview = get_bool(OPENSAVE_OPEN_THUMBNAIL);
     openFilesPath = get_str(OPENSAVE_RECENT_DIRECTORY);
 
     /* Check to see if this from the recent files list. */
     if (recent) {
-        files.append(recentFile);
+        strcpy(files[0], (char*)qPrintable(recentFile));
+        strcpy(files[1], end_symbol);
         openFilesSelected(files);
     }
     else if (!preview) {
         /* TODO: set getOpenFileNames' selectedFilter parameter from opensave_open_format.setting */
-        files = QFileDialog::getOpenFileNames(_main, translate("Open"), openFilesPath, formatFilterOpen);
+        QStringList files_ = QFileDialog::getOpenFileNames(_main, translate("Open"), openFilesPath, formatFilterOpen);
+        to_string_table(files_, files);
         openFilesSelected(files);
     }
     else if (preview) {
@@ -811,70 +854,67 @@ openFile(bool recent, QString recentFile)
 
 /* . */
 void
-openFilesSelected(const QStringList& filesToOpen)
+openFilesSelected(EmbStringTable filesToOpen)
 {
     debug_message("openFileSelected()");
     bool doOnce = true;
 
-    if (filesToOpen.count()) {
-        for (int i = 0; i < filesToOpen.count(); i++) {
-            char message[MAX_STRING_LENGTH];
-            sprintf(message, "opening %s...", qPrintable(filesToOpen[i]));
-            debug_message(message);
+    int n = string_array_length(filesToOpen);
+    for (int i = 0; i < n; i++) {
+        EmbString message;
+        sprintf(message, "opening %s...", qPrintable(filesToOpen[i]));
+        debug_message(message);
 
-            QMdiSubWindow* existing = findMdiWindow(filesToOpen[i]);
-            if (existing) {
-                debug_message("File already exists, switching to it.");
-                mdiArea->setActiveSubWindow(existing);
-                continue;
-            }
+        QMdiSubWindow* existing = findMdiWindow((char*)qPrintable(filesToOpen[i]));
+        if (existing) {
+            debug_message("File already exists, switching to it.");
+            mdiArea->setActiveSubWindow(existing);
+            continue;
+        }
 
-            /* The docIndex doesn't need increased as it is only used for unnamed files. */
-            numOfDocs++;
-            MdiWindow* mdiWin = new MdiWindow(docIndex, _main, mdiArea, Qt::SubWindow);
-            QObject::connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), _main,
-                SLOT(onCloseMdiWin(MdiWindow*)));
-            QObject::connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), _main,
-                SLOT(onWindowActivated(QMdiSubWindow*)));
+        /* The docIndex doesn't need increased as it is only used for unnamed files. */
+        numOfDocs++;
+        MdiWindow* mdiWin = new MdiWindow(docIndex, _main, mdiArea, Qt::SubWindow);
+        QObject::connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), _main,
+            SLOT(onCloseMdiWin(MdiWindow*)));
+        QObject::connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), _main,
+            SLOT(onWindowActivated(QMdiSubWindow*)));
 
-            /* Make sure the toolbars/etc... are shown before doing their zoomExtents. */
-            if (doOnce) {
-                update_interface();
-                doOnce = false;
-            }
+        /* Make sure the toolbars/etc... are shown before doing their zoomExtents. */
+        if (doOnce) {
+            update_interface();
+            doOnce = false;
+        }
 
-            if (mdiWin->loadFile(filesToOpen.at(i))) {
-                statusbar->showMessage(translate("File(s) loaded"), 2000);
-                mdiWin->show();
-                mdiWin->showMaximized();
-                /* Prevent duplicate entries in the recent files list. */
-                EmbString s;
-                emb_string(s, qPrintable(filesToOpen.at(i)));
-                if (!string_list_contains(recent_files, s)) {
-                    for (int j=0; j<MAX_FILES-1; j++) {
-                        strcpy(recent_files[j], recent_files[j+1]);
-                    }
-                    string_copy(recent_files[0], s);
+        if (mdiWin->loadFile(filesToOpen[i])) {
+            statusbar->showMessage(translate("File(s) loaded"), 2000);
+            mdiWin->show();
+            mdiWin->showMaximized();
+            /* Prevent duplicate entries in the recent files list. */
+            if (!string_list_contains(recent_files, filesToOpen[i])) {
+                for (int j=0; j<MAX_FILES-1; j++) {
+                    strcpy(recent_files[j], recent_files[j+1]);
                 }
-                /* Move the recent file to the top of the list */
-                else {
-                    string_copy(recent_files[0], (char*)qPrintable(filesToOpen.at(i)));
-                    string_copy(recent_files[1], end_symbol);
-                }
-                set_str(OPENSAVE_RECENT_DIRECTORY, (char*)qPrintable(QFileInfo(filesToOpen.at(i)).absolutePath()));
-
-                Document* doc = mdiWin->gview;
-                if (doc) {
-                    doc_recalculate_limits(doc);
-                    doc_zoom_extents(doc);
-                }
+                string_copy(recent_files[0], filesToOpen[i]);
             }
+            /* Move the recent file to the top of the list */
             else {
-                critical_box(translate("Failed to load file"),
-                    translate("Failed to load file."));
-                debug_message("Failed to load file.");
-                mdiWin->close();
+                string_copy(recent_files[0], filesToOpen[i]);
+                string_copy(recent_files[1], end_symbol);
             }
+            set_str(OPENSAVE_RECENT_DIRECTORY, (char*)qPrintable(QFileInfo(filesToOpen[i]).absolutePath()));
+
+            Document* doc = mdiWin->gview;
+            if (doc) {
+                doc_recalculate_limits(doc);
+                doc_zoom_extents(doc);
+            }
+        }
+        else {
+            critical_box(translate("Failed to load file"),
+                translate("Failed to load file."));
+            debug_message("Failed to load file.");
+            mdiWin->close();
         }
     }
 
@@ -914,10 +954,10 @@ save_as_file(void)
 
 /* . */
 QMdiSubWindow*
-findMdiWindow(QString fileName)
+findMdiWindow(EmbString fileName)
 {
-    char message[MAX_STRING_LENGTH];
-    sprintf(message, "findMdiWindow(%s)", qPrintable(fileName));
+    EmbString message;
+    sprintf(message, "findMdiWindow(%s)", fileName);
     debug_message(message);
     QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
 
@@ -1086,9 +1126,9 @@ hide_unimplemented(void)
 
 /* . */
 bool
-validFileFormat(QString fileName)
+validFileFormat(EmbString fileName)
 {
-    if (emb_identify_format(qPrintable(fileName)) >= 0) {
+    if (emb_identify_format(fileName) >= 0) {
         return true;
     }
     return false;
@@ -1217,6 +1257,7 @@ get_action_by_icon(EmbString icon)
     return actionHash[ACTION_DO_NOTHING];
 }
 
+/* . */
 int
 get_id(EmbStringTable data, EmbString label)
 {
@@ -1257,52 +1298,6 @@ add_to_menu(int index, EmbStringTable menu_data)
         }
     }
     menu[index]->setTearOffEnabled(false);
-}
-
-/* Do not allow the menus to be torn off.
- * It's a pain in the ass to maintain.
- */
-void
-createAllMenus(void)
-{
-    debug_message("createAllMenus()");
-
-    menuBar()->addMenu(menu[MENU_FILE]);
-    QObject::connect(menu[MENU_RECENT], SIGNAL(aboutToShow()), _main,
-        SLOT(recentMenuAboutToShow()));
-    menu[MENU_RECENT]->setTearOffEnabled(false);
-    add_to_menu(MENU_FILE, file_menu);
-
-    menuBar()->addMenu(menu[MENU_EDIT]);
-    add_to_menu(MENU_EDIT, edit_menu);
-
-    menuBar()->addMenu(menu[MENU_VIEW]);
-    add_to_menu(MENU_VIEW, view_menu);
-    add_to_menu(MENU_ZOOM, zoom_menu);
-    add_to_menu(MENU_PAN, pan_menu);
-
-    menuBar()->addMenu(menu[MENU_TOOLS]);
-    add_to_menu(MENU_TOOLS, tools_menu);
-
-    menuBar()->addMenu(menu[MENU_DRAW]);
-    add_to_menu(MENU_DRAW, draw_menu);
-
-    menuBar()->addMenu(menu[MENU_DIMENSION]);
-    add_to_menu(MENU_DIMENSION, dimension_menu);
-
-    menuBar()->addMenu(menu[MENU_MODIFY]);
-    add_to_menu(MENU_MODIFY, modify_menu);
-
-    menuBar()->addMenu(menu[MENU_SANDBOX]);
-    add_to_menu(MENU_SANDBOX, sandbox_menu);
-
-    menuBar()->addMenu(menu[MENU_WINDOW]);
-    QObject::connect(menu[MENU_WINDOW], SIGNAL(aboutToShow()), _main,
-        SLOT(windowMenuAboutToShow()));
-    menu[MENU_WINDOW]->setTearOffEnabled(false);
-
-    menuBar()->addMenu(menu[MENU_HELP]);
-    add_to_menu(MENU_HELP, help_menu);
 }
 
 /* Note: on Unix we include the trailing separator. For Windows compatibility we
@@ -1394,7 +1389,7 @@ settingsPrompt(void)
 
 /* . */
 void
-settingsDialog(QString showTab)
+settingsDialog(EmbString showTab)
 {
     Settings_Dialog dialog(_main, showTab, _main);
     dialog.exec();
@@ -1424,17 +1419,19 @@ add_to_toolbar(int id, EmbStringTable toolbar_data)
 /* For each Command in command_data, for each alias set up a map from
  * alias to the Command. Then for a given context the call doesn't have to loop?
  *
- * NOTE: Every QScriptProgram must have a unique function name to call. If every function was called main(), then
- *       the ScriptArgs would only call the last script evaluated (which happens to be main() in another script).
- *       Thus, by adding the cmdName before main(), it becomes line_main(), circle_main(), etc...
- *       Do not change this code unless you really know what you are doing. I mean it.
+ * NOTE:
+ * Every QScriptProgram must have a unique function name to call. If every function was called main(), then
+ * the ScriptArgs would only call the last script evaluated (which happens to be main() in another script).
+ * Thus, by adding the cmdName before main(), it becomes line_main(), circle_main(), etc...
+ * Do not change this code unless you really know what you are doing. I mean it.
  *
  * Position currently comes from the order of the command_data.
  *
- * TODO: Set What's This Context Help to statusTip for now so there is some infos there.
- *       Make custom whats this context help popup with more descriptive help than just
- *       the status bar/tip one liner(short but not real long) with a hyperlink in the custom popup
- *       at the bottom to open full help file description. Ex: like wxPython AGW's SuperToolTip.
+ * TODO:
+ * Set What's This Context Help to statusTip for now so there is some infos there.
+ * Make custom whats this context help popup with more descriptive help than just
+ * the status bar/tip one liner(short but not real long) with a hyperlink in the custom popup
+ * at the bottom to open full help file description. Ex: like wxPython AGW's SuperToolTip.
  */
 void
 createAllActions(void)
@@ -1445,7 +1442,7 @@ createAllActions(void)
         QString toolTip(command_data[i].tooltip);
         QString statusTip(command_data[i].statustip);
         QString alias_string(command_data[i].alias);
-        QStringList aliases = alias_string.split(", ");
+        QStringList aliases = alias_string.split(",");
 
         debug_message((char*)qPrintable("COMMAND: " + icon));
 
@@ -1454,7 +1451,7 @@ createAllActions(void)
         ACTION->setObjectName(icon);
         ACTION->setWhatsThis(statusTip);
 
-        if (strcmp(command_data[i].shortcut, "")) {
+        if (command_data[i].shortcut[0] = 0) {
             ACTION->setShortcut(QKeySequence(command_data[i].shortcut));
         }
 
@@ -1479,3 +1476,4 @@ createAllActions(void)
     actionHash[ACTION_WINDOW_CLOSE]->setEnabled(numOfDocs > 0);
     actionHash[ACTION_DESIGN_DETAILS]->setEnabled(numOfDocs > 0);
 }
+

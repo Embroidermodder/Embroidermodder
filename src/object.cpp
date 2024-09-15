@@ -17,18 +17,6 @@ EmbVector obj_map_rubber(Object *obj, const char *key);
 EmbVector map_from_scene(Object *obj, EmbVector v);
 
 EmbVector
-operator+(EmbVector a, EmbVector b)
-{
-    return emb_vector_add(a, b);
-}
-
-EmbVector
-operator-(EmbVector a, EmbVector b)
-{
-    return emb_vector_subtract(a, b);
-}
-
-EmbVector
 map_from_scene(Object *obj, EmbVector v)
 {
     return to_emb_vector(obj->mapFromScene(to_qpointf(v)));
@@ -245,7 +233,7 @@ copy_object(Object* obj)
     if (!obj) {
         return NULL;
     }
-    Object *copy = new Object(obj->core->geometry->type, obj_color_rgb(obj), Qt::SolidLine);
+    Object *copy = new Object(obj->core->geometry->type, obj->core->rgb, Qt::SolidLine);
     switch (obj->core->geometry->type) {
     case EMB_ARC:
         copy->core->geometry->object.arc = obj->core->geometry->object.arc;
@@ -259,7 +247,7 @@ copy_object(Object* obj)
         break;
     case EMB_DIM_LEADER:
         copy->core->geometry->object.line = obj->core->geometry->object.line;
-        /* init(obj_x1(obj), obj_y1(obj), obj_x2(obj), obj_y2(obj), obj_color_rgb(obj), Qt::SolidLine); */
+        /* init(obj_x1(obj), obj_y1(obj), obj_x2(obj), obj_y2(obj), obj_color_rgb(obj->core), Qt::SolidLine); */
         todo("getCurrentLineType");
         break;
     case EMB_ELLIPSE:
@@ -344,18 +332,6 @@ copy_object(Object* obj)
         break;
     }
     return copy;
-}
-
-QColor
-obj_color(Object* obj)
-{
-    return obj->objPen.color();
-}
-
-QRgb
-obj_color_rgb(Object* obj)
-{
-    return obj->objPen.color().rgb();
 }
 
 Qt::PenStyle
@@ -2417,7 +2393,7 @@ obj_mid_point(Object *obj)
     case EMB_DIM_LEADER: {
         QLineF lyne = obj_line(obj);
         EmbVector mp = to_emb_vector(lyne.pointAt(0.5));
-        return obj_pos(obj) + scale_and_rotate(mp, obj->scale(), obj->rotation());
+        return emb_vector_add(obj_pos(obj), scale_and_rotate(mp, obj->scale(), obj->rotation()));
     }
     default:
         break;
@@ -2444,7 +2420,7 @@ EmbVector
 obj_top_left(Object *obj)
 {
     EmbVector p = to_emb_vector(obj_rect(obj).topLeft());
-    return obj_pos(obj) + scale_and_rotate(p, obj->scale(), obj->rotation());
+    return emb_vector_add(obj_pos(obj), scale_and_rotate(p, obj->scale(), obj->rotation()));
 }
 
 /* . */
@@ -2452,7 +2428,7 @@ EmbVector
 obj_top_right(Object *obj)
 {
     EmbVector p = to_emb_vector(obj_rect(obj).topRight());
-    return obj_pos(obj) + scale_and_rotate(p, obj->scale(), obj->rotation());
+    return emb_vector_add(obj_pos(obj), scale_and_rotate(p, obj->scale(), obj->rotation()));
 }
 
 /* . */
@@ -2460,7 +2436,7 @@ EmbVector
 obj_bottom_left(Object *obj)
 {
     EmbVector p = to_emb_vector(obj_rect(obj).bottomLeft());
-    return obj_pos(obj) + scale_and_rotate(p, obj->scale(), obj->rotation());
+    return emb_vector_add(obj_pos(obj), scale_and_rotate(p, obj->scale(), obj->rotation()));
 }
 
 /* . */
@@ -2468,7 +2444,7 @@ EmbVector
 obj_bottom_right(Object *obj)
 {
     EmbVector p = to_emb_vector(obj_rect(obj).bottomRight());
-    return obj_pos(obj) + scale_and_rotate(p, obj->scale(), obj->rotation());
+    return emb_vector_add(obj_pos(obj), scale_and_rotate(p, obj->scale(), obj->rotation()));
 }
 
 /* . */
@@ -2760,7 +2736,7 @@ void
 obj_set_end_point_1(Object *obj, EmbVector endPt1)
 {
     EmbVector endPt2 = obj_end_point_2(obj);
-    EmbVector delta = endPt2 - endPt1;
+    EmbVector delta = emb_vector_subtract(endPt2, endPt1);
     obj->setRotation(0);
     obj->setScale(1);
     obj_set_line(obj, 0, 0, delta.x, delta.y);
@@ -2773,7 +2749,7 @@ obj_update_path(Object *obj)
 {
     switch (obj->core->geometry->type) {
     case EMB_ARC: {
-        double startAngle = (emb_start_angle(obj->core->geometry) + obj->rotation());
+        double startAngle = emb_start_angle(obj->core->geometry) + obj->rotation();
         double spanAngle = emb_included_angle(obj->core->geometry);
 
         if (emb_clockwise(obj->core->geometry)) {
@@ -3037,7 +3013,7 @@ obj_circumference(Object *obj)
 EmbVector
 obj_delta(Object *obj)
 {
-    return obj_end_point_2(obj) - obj_end_point_1(obj);
+    return emb_vector_subtract(obj_end_point_2(obj), obj_end_point_1(obj));
 }
 
 /* . */
@@ -3352,7 +3328,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         todo("incorporate perpendicularDistance() into libembroidery.");
         QLineF line(to_qpointf(sceneAxis1Point1), to_qpointf(sceneAxis1Point2));
         QLineF norm = line.normalVector();
-        EmbVector delta = sceneAxis2Point2 - sceneAxis1Point1;
+        EmbVector delta = emb_vector_subtract(sceneAxis2Point2, sceneAxis1Point1);
         norm.translate(delta.x, delta.y);
         QPointF iPoint;
         norm.intersects(line, &iPoint);
@@ -3381,7 +3357,7 @@ obj_update_rubber(Object *obj, QPainter* painter)
         todo("incorporate perpendicularDistance() into libcgeometry.");
         QLineF line(to_qpointf(sceneCenterPoint), to_qpointf(sceneAxis1Point2));
         QLineF norm = line.normalVector();
-        EmbVector delta = sceneAxis2Point2 - sceneCenterPoint;
+        EmbVector delta = emb_vector_subtract(sceneAxis2Point2, sceneCenterPoint);
         norm.translate(delta.x, delta.y);
         QPointF iPoint;
         norm.intersects(line, &iPoint);
@@ -3572,7 +3548,7 @@ obj_end_point_2(Object *obj)
     EmbVector endPoint2;
     endPoint2.x = lyne.x2();
     endPoint2.y = lyne.y2();
-    return obj_pos(obj) + scale_and_rotate(endPoint2, obj->scale(), obj->rotation());
+    return emb_vector_add(obj_pos(obj), scale_and_rotate(endPoint2, obj->scale(), obj->rotation()));
 }
 
 /* . */
@@ -3580,7 +3556,7 @@ void
 obj_set_end_point_2(Object *obj, EmbVector endPt2)
 {
     EmbVector endPt1 = obj_pos(obj);
-    EmbVector delta = endPt2 - endPt1;
+    EmbVector delta = emb_vector_subtract(endPt2, endPt1);
     obj->setRotation(0);
     obj->setScale(1);
     obj_set_line(obj, 0, 0, delta.x, delta.y);

@@ -85,10 +85,10 @@ create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent)
     doc_set_grid_color(doc, get_int(GRID_COLOR));
 
     if (get_bool(GRID_SHOW_ON_LOAD)) {
-        doc_create_grid(doc, QString(get_str(GRID_TYPE)));
+        doc_create_grid(doc, get_str(GRID_TYPE));
     }
     else {
-        doc_create_grid(doc, QString(""));
+        doc_create_grid(doc, "");
     }
 
     doc_toggle_ruler(doc, get_bool(RULER_SHOW_ON_LOAD));
@@ -383,7 +383,7 @@ doc_set_rubber_mode(Document* doc, int mode)
 
 /* . */
 void
-doc_set_rubber_point(Document* doc, QString key, EmbVector point)
+doc_set_rubber_point(Document* doc, EmbString key, EmbVector point)
 {
     foreach (QGraphicsItem* item, doc->data.rubberRoomList) {
         Object* base = static_cast<Object*>(item);
@@ -396,7 +396,7 @@ doc_set_rubber_point(Document* doc, QString key, EmbVector point)
 
 /* . */
 void
-doc_set_rubber_text(Document* doc, QString key, QString txt)
+doc_set_rubber_text(Document* doc, EmbString key, EmbString txt)
 {
     foreach (QGraphicsItem* item, doc->data.rubberRoomList) {
         Object* base = static_cast<Object*>(item);
@@ -428,17 +428,17 @@ doc_set_ruler_color(Document* doc, QRgb color)
 
 /* . */
 void
-doc_create_grid(Document* doc, QString gridType)
+doc_create_grid(Document* doc, EmbString gridType)
 {
-    if (gridType == "Rectangular") {
+    if (string_equal(gridType, "Rectangular")) {
         doc_create_grid_rect(doc);
         doc->data.gscene->setProperty("ENABLE_GRID", true);
     }
-    else if (gridType == "Circular") {
+    else if (string_equal(gridType, "Circular")) {
         doc_create_grid_polar(doc);
         doc->data.gscene->setProperty("ENABLE_GRID", true);
     }
-    else if (gridType == "Isometric") {
+    else if (string_equal(gridType, "Isometric")) {
         doc_create_grid_iso(doc);
         doc->data.gscene->setProperty("ENABLE_GRID", true);
     }
@@ -610,10 +610,10 @@ doc_toggle_grid(Document* doc, bool on)
     debug_message("View toggleGrid()");
     wait_cursor();
     if (on) {
-        doc_create_grid(doc, QString(get_str(GRID_TYPE)));
+        doc_create_grid(doc, get_str(GRID_TYPE));
     }
     else {
-        doc_create_grid(doc, QString(""));
+        doc_create_grid(doc, "");
     }
     restore_cursor();
 }
@@ -873,8 +873,8 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
 
                 EmbVector offset = to_emb_vector(gripOffset);
                 foreach(EmbVector ssp, selectedGripPoints) {
-                    EmbVector p1 = doc_map_from_scene(doc, ssp) - offset;
-                    EmbVector q1 = doc_map_from_scene(doc, ssp) + offset;
+                    EmbVector p1 = emb_vector_subtract(doc_map_from_scene(doc, ssp), offset);
+                    EmbVector q1 = emb_vector_add(doc_map_from_scene(doc, ssp), offset);
                     QPointF p2 = to_qpointf(doc_map_to_scene(doc, p1));
                     QPointF q2 = to_qpointf(doc_map_to_scene(doc, q1));
 
@@ -919,8 +919,8 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
         }
         /* TODO: Check for intersection snap points and add them to the list. */
         foreach(EmbVector asp, apertureSnapPoints) {
-            EmbVector p1 = doc_map_from_scene(doc, asp) - qsnapOffset;
-            EmbVector q1 = doc_map_from_scene(doc, asp) + qsnapOffset;
+            EmbVector p1 = emb_vector_subtract(doc_map_from_scene(doc, asp), qsnapOffset);
+            EmbVector q1 = emb_vector_add(doc_map_from_scene(doc, asp), qsnapOffset);
             painter->drawRect(QRectF(
                 to_qpointf(doc_map_to_scene(doc, p1)),
                 to_qpointf(doc_map_to_scene(doc, q1))));
@@ -1053,13 +1053,18 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
                         transform.translate(x+rhTextOffset, rhy-rhh/2);
                         QPainterPath rulerTextPath;
                         if (doc->data.rulerMetric) {
-                            rulerTextPath = transform.map(doc_create_ruler_text_path(doc, 0, 0, QString().setNum(x), textHeight));
+                            QString s = QString().setNum(x);
+                            rulerTextPath = transform.map(doc_create_ruler_text_path(doc, 0, 0, (char*)qPrintable(s), textHeight));
                         }
                         else {
-                            if (feet)
-                                rulerTextPath = transform.map(doc_create_ruler_text_path(doc, 0, 0, QString().setNum(x/12).append('\''), textHeight));
-                            else
-                                rulerTextPath = transform.map(doc_create_ruler_text_path(doc, 0, 0, QString().setNum(x).append('\"'), textHeight));
+                            if (feet) {
+                                QString s = QString().setNum(x/12).append('\'');
+                                rulerTextPath = transform.map(doc_create_ruler_text_path(doc, 0, 0, (char*)qPrintable(s), textHeight));
+                            }
+                            else {
+                                QString s = QString().setNum(x).append('\"');
+                                rulerTextPath = transform.map(doc_create_ruler_text_path(doc, 0, 0, (char*)qPrintable(s), textHeight));
+                            }
                         }
                         transform.reset();
                         painter->drawPath(rulerTextPath);
@@ -1107,13 +1112,18 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
                         transform.rotate(-90);
                         QPainterPath rulerTextPath;
                         if (doc->data.rulerMetric) {
-                            rulerTextPath = transform.map(doc_create_ruler_text_path(doc, 0, 0, QString().setNum(-y), textHeight));
+                            QString s = QString().setNum(-y);
+                            rulerTextPath = transform.map(doc_create_ruler_text_path(doc, 0, 0, (char*)qPrintable(s), textHeight));
                         }
                         else {
-                            if (feet)
-                                rulerTextPath = transform.map(doc_create_ruler_text_path(doc, 0, 0, QString().setNum(-y/12).append('\''), textHeight));
-                            else
-                                rulerTextPath = transform.map(doc_create_ruler_text_path(doc, 0, 0, QString().setNum(-y).append('\"'), textHeight));
+                            if (feet) {
+                                QString s = QString().setNum(-y/12).append('\'');
+                                rulerTextPath = transform.map(doc_create_ruler_text_path(doc, 0, 0, (char*)qPrintable(s), textHeight));
+                            }
+                            else {
+                                QString s = QString().setNum(-y).append('\"');
+                                rulerTextPath = transform.map(doc_create_ruler_text_path(doc, 0, 0, (char*)qPrintable(s), textHeight));
+                            }
                         }
                         transform.reset();
                         painter->drawPath(rulerTextPath);
@@ -1187,14 +1197,14 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
 }
 
 QPainterPath
-doc_create_ruler_text_path(Document* doc, float x, float y, QString str, float height)
+doc_create_ruler_text_path(Document* doc, float x, float y, EmbString str, float height)
 {
     QPainterPath path;
 
     double xScale = height;
     double yScale = height;
 
-    int len = str.length();
+    int len = strlen(str);
     for (int i = 0; i < len; ++i) {
         if (str[i] == QChar('1')) {
             path.moveTo(x+0.05*xScale, y-0.00*yScale);
@@ -1510,7 +1520,7 @@ Document::mousePressEvent(QMouseEvent* event)
     if (event->button() == Qt::LeftButton) {
         if (cmdActive) {
             QPointF cmdPoint = doc->mapToScene(event->pos());
-            runCommandClick(curCmd, cmdPoint.x(), cmdPoint.y());
+            runCommandClick((char*)qPrintable(curCmd), cmdPoint.x(), cmdPoint.y());
             return;
         }
         QPainterPath path;
@@ -1720,8 +1730,8 @@ doc_center_at(Document* doc, EmbVector centerPoint)
     /* centerOn also updates the scrollbars, which shifts things out of wack o_O */
     doc_center_on(doc, centerPoint);
     /* Reshift to the new center */
-    EmbVector offset = centerPoint - doc_center(doc);
-    EmbVector newCenter = centerPoint + offset;
+    EmbVector offset = emb_vector_subtract(centerPoint, doc_center(doc));
+    EmbVector newCenter = emb_vector_add(centerPoint, offset);
     doc_center_on(doc, newCenter);
 }
 
@@ -1735,8 +1745,8 @@ doc_align_scene_point_with_view_point(Document* doc, EmbVector scenePoint, EmbVe
     doc_center_on(doc, viewCenter);
     /* Reshift to the new center so the scene and view points align */
     EmbVector pointAfter = doc_map_to_scene(doc, viewPoint);
-    EmbVector offset = pointBefore - pointAfter;
-    EmbVector newCenter = viewCenter + offset;
+    EmbVector offset = emb_vector_subtract(pointBefore, pointAfter);
+    EmbVector newCenter = emb_vector_add(viewCenter, offset);
     doc_center_on(doc, newCenter);
 }
 
@@ -1751,12 +1761,14 @@ Document::mouseMoveEvent(QMouseEvent* event)
 
     if (cmdActive) {
         if (doc->data.rapidMoveActive) {
-            runCommandMove(curCmd, doc->data.sceneMovePoint.x, doc->data.sceneMovePoint.y);
+            runCommandMove((char*)qPrintable(curCmd), doc->data.sceneMovePoint.x,
+                doc->data.sceneMovePoint.y);
         }
     }
     if (doc->data.previewActive) {
         if (doc->data.previewMode == PREVIEW_MOVE) {
-            QPointF p = to_qpointf(doc->data.sceneMousePoint - doc->data.previewPoint);
+            QPointF p = to_qpointf(emb_vector_subtract(doc->data.sceneMousePoint,
+                doc->data.previewPoint));
             doc->data.previewObjectItemGroup->setPos(p);
         }
         else if (doc->data.previewMode == PREVIEW_ROTATE) {
@@ -1815,7 +1827,8 @@ Document::mouseMoveEvent(QMouseEvent* event)
         }
     }
     if (doc->data.pastingActive) {
-        EmbVector p = doc->data.sceneMousePoint - doc->data.pasteDelta;
+        EmbVector p = emb_vector_subtract(doc->data.sceneMousePoint,
+            doc->data.pasteDelta);
         doc->data.pasteObjectItemGroup->setPos(to_qpointf(p));
     }
     if (doc->data.movingActive) {
@@ -1858,7 +1871,8 @@ Document::mouseReleaseEvent(QMouseEvent* event)
     if (event->button() == Qt::LeftButton) {
         if (doc->data.movingActive) {
             doc_preview_off(doc);
-            EmbVector delta = doc->data.sceneMousePoint - doc->data.scenePressPoint;
+            EmbVector delta = emb_vector_subtract(doc->data.sceneMousePoint,
+                doc->data.scenePressPoint);
             /* Ensure that moving only happens if the mouse has moved. */
             if (delta.x || delta.y) {
                 doc_move_selected(doc, delta.x, delta.y);
@@ -1974,7 +1988,8 @@ doc_zoom_to_point(Document* doc, EmbVector mousePoint, int zoomDir)
 
     doc_update_mouse_coords(doc, mousePoint.x, mousePoint.y);
     if (doc->data.pastingActive) {
-        EmbVector p = doc->data.sceneMousePoint - doc->data.pasteDelta;
+        EmbVector p = emb_vector_subtract(doc->data.sceneMousePoint,
+            doc->data.pasteDelta);
         doc->data.pasteObjectItemGroup->setPos(to_qpointf(p));
     }
     if (doc->data.selectingActive) {
@@ -2226,7 +2241,7 @@ doc_paste(Document* doc)
 
     doc->data.pasteObjectItemGroup = doc->data.gscene->createItemGroup(cutCopyObjectList);
     doc->data.pasteDelta = to_emb_vector(doc->data.pasteObjectItemGroup->boundingRect().bottomLeft());
-    EmbVector p = doc->data.sceneMousePoint - doc->data.pasteDelta;
+    EmbVector p = emb_vector_subtract(doc->data.sceneMousePoint, doc->data.pasteDelta);
     doc->data.pasteObjectItemGroup->setPos(to_qpointf(p));
     doc->data.pastingActive = true;
 

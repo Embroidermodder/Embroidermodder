@@ -313,7 +313,7 @@ QRgb getCurrentColor();
 QString getCurrentLineType();
 QString getCurrentLineWeight();
 
-void setHistory(QString  txt);
+void setHistory(QString txt);
 void add_command(std::string alias, std::string cmd);
 
 /* ------------------------ Object Functions --------------------------- */
@@ -324,7 +324,7 @@ Object *create_ellipse(EmbEllipse ellipse, QRgb rgb, QGraphicsItem *item=0);
 Object *create_polyline(EmbPath path, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent=0);
 Object *create_path(double x, double y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent=0);
 Object *create_polygon(double x, double y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent=0);
-Object *create_text_single(QString  str, double x, double y, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_text_single(QString str, double x, double y, QRgb rgb, QGraphicsItem* parent=0);
 Object *create_dim_leader(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsItem* parent=0);
 Object *create_image(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* parent=0);
 Object *create_rect(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* parent=0);
@@ -333,13 +333,11 @@ Object *create_point(EmbPoint_ point, QRgb rgb, QGraphicsItem* parent=0);
 
 Object *copy_object(Object* obj);
 
-QColor obj_color(Object* obj);
-QRgb obj_color_rgb(Object* obj);
 Qt::PenStyle obj_line_type(Object* obj);
 double  obj_line_weight(Object* obj);
 QPainterPath obj_path(Object* obj);
-EmbVector obj_rubber_point(Object* obj, QString  key);
-QString obj_rubber_text(Object* obj, QString  key);
+EmbVector obj_rubber_point(Object* obj, QString key);
+QString obj_rubber_text(Object* obj, QString key);
 
 EmbVector obj_end_point_1(Object *obj);
 EmbVector obj_end_point_2(Object *obj);
@@ -408,9 +406,9 @@ void obj_set_center(Object *obj, EmbVector point);
 void obj_set_center_x(Object *obj, double centerX);
 void obj_set_center_y(Object *obj, double centerY);
 
-void obj_set_text(Object *obj, QString  str);
-void obj_set_text_font(Object *obj, QString  font);
-void obj_set_text_justify(Object *obj, QString  justify);
+void obj_set_text(Object *obj, QString str);
+void obj_set_text_font(Object *obj, QString font);
+void obj_set_text_justify(Object *obj, QString justify);
 void obj_set_text_size(Object *obj, double size);
 void obj_set_text_style(Object *obj, bool bold, bool italic, bool under, bool strike, bool over);
 void obj_set_text_bold(Object *obj, bool val);
@@ -482,7 +480,7 @@ bool doc_is_lwt_enabled(Document* doc);
 bool doc_is_real_enabled(Document* doc);
 
 void doc_set_grid_color(Document* doc, QRgb color);
-void doc_create_grid(Document* doc, QString gridType);
+void doc_create_grid(Document* doc, EmbString gridType);
 void doc_set_ruler_color(Document* doc, QRgb color);
 
 void doc_preview_on(Document* doc, int clone, int mode, double x, double y, double data);
@@ -497,8 +495,8 @@ void doc_vulcanize_rubber_room(Document* doc);
 void doc_clear_rubber_room(Document* doc);
 void doc_spare_rubber(Document* doc, int64_t id);
 void doc_set_rubber_mode(Document* doc, int mode);
-void doc_set_rubber_point(Document* doc, QString key, EmbVector point);
-void doc_set_rubber_text(Document* doc, QString key, QString txt);
+void doc_set_rubber_point(Document* doc, EmbString key, EmbVector point);
+void doc_set_rubber_text(Document* doc, EmbString key, EmbString txt);
 
 void draw_arc(QPainter* painter, EmbArc arc);
 void draw_circle(QPainter* painter, EmbCircle circle);
@@ -516,7 +514,7 @@ void doc_create_origin(Document* doc);
 
 void doc_load_ruler_settings(Document* doc);
 
-QPainterPath doc_create_ruler_text_path(Document* doc, float x, float y, QString str, float height);
+QPainterPath doc_create_ruler_text_path(Document* doc, float x, float y, EmbString str, float height);
 
 QList<QGraphicsItem*> doc_create_object_list(Document* doc, QList<QGraphicsItem*> list);
 
@@ -540,100 +538,16 @@ void doc_add_object(Document* doc, Object* obj);
 void doc_delete_object(Document* doc, Object* obj);
 void doc_vulcanize_object(Document* doc, Object* obj);
 
-/* ------------------------- Settings Dialog --------------------------- */
 
-/* ------------------------------ Prompt ------------------------------- */
-
-void setPromptTextColor(const QColor&);
-void setPromptBackgroundColor(const QColor&);
-void setPromptFontFamily(QString );
-void setPromptFontStyle(QString );
-void setPromptFontSize(int);
-
-/* -------------------------- Main Functions --------------------------- */
-
-void runCommandMain(QString  cmd);
-void runCommandClick(QString  cmd, double x, double y);
-void runCommandMove(QString  cmd, double x, double y);
-void runCommandContext(QString  cmd, QString  str);
-void runCommandPrompt(QString  cmd);
-
-void updateAllViewScrollBars(bool val);
-void updateAllViewCrossHairColors(QRgb color);
-void updateAllViewBackgroundColors(QRgb color);
-void updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
-void updateAllViewGridColors(QRgb color);
-void updateAllViewRulerColors(QRgb color);
-
-void updatePickAddMode(bool val);
-void pickAddModeToggled(void);
-
-void makeLayerActive(void);
-void layerManager(void);
-void layerPrevious(void);
-
-void layerSelectorIndexChanged(int index);
-void linetypeSelectorIndexChanged(int index);
-void lineweightSelectorIndexChanged(int index);
 void textFontSelectorCurrentFontChanged(const QFont& font);
-void textSizeSelectorIndexChanged(int index);
-
-void setTextFont(QString  str);
-void setTextSize(double num);
-
-void deletePressed(void);
-void escapePressed(void);
-
-void promptHistoryAppended(QString  txt);
-void logPromptInput(QString  txt);
-void promptInputPrevious();
-void promptInputNext();
-
-void print_command(void);
-void undo_command(void);
-void redo_command(void);
-
-bool isShiftPressed(void);
-void setShiftPressed(void);
-void setShiftReleased(void);
-
-void iconResize(int iconSize);
-
-void openFile(bool recent = false, QString  recentFile = "");
-void openFilesSelected(const QStringList&);
 
 void onWindowActivated(QMdiSubWindow* w);
 
 QAction* getFileSeparator();
-void loadFormats();
-
-void settingsPrompt();
-
-void settingsDialog(QString showTab = "");
-void readSettings();
-void writeSettings();
-
-void createAllMenus();
-void createAllActions();
 QAction* createAction(Command command);
-
-bool validFileFormat(QString fileName);
-QMdiSubWindow* findMdiWindow(QString fileName);
-
-void onCloseWindow(void);
+QMdiSubWindow* findMdiWindow(EmbString fileName);
 void onCloseMdiWin(MdiWindow*);
 
-void setUndoCleanIcon(bool opened);
-
-void currentLayerChanged(QString  layer);
-void currentColorChanged(const QRgb& color);
-void currentLinetypeChanged(QString  type);
-void currentLineweightChanged(QString  weight);
-
-/* --------------------------- EmbVector ------------------------------- */
-
-EmbVector operator+(EmbVector a, EmbVector b);
-EmbVector operator-(EmbVector a, EmbVector b);
 
 /* ---------------------- Class Declarations --------------------------- */
 
@@ -645,13 +559,13 @@ public:
     LayerManager(MainWindow* mw, QWidget *parent = 0);
     ~LayerManager();
 
-    void addLayer(QString  name,
+    void addLayer(QString name,
         const bool visible,
         const bool frozen,
         const double zValue,
         const QRgb color,
-        QString  lineType,
-        QString  lineWeight,
+        QString lineType,
+        QString lineWeight,
         const bool print);
 
     QStandardItemModel*    layerModel;
@@ -671,8 +585,8 @@ public:
     void useBackgroundTexture(bool use);
     void useBackgroundColor(bool use);
 
-    void setBackgroundLogo(QString  fileName);
-    void setBackgroundTexture(QString  fileName);
+    void setBackgroundLogo(QString fileName);
+    void setBackgroundTexture(QString fileName);
     void setBackgroundColor(const QColor& color);
 
     bool useLogo;
@@ -741,7 +655,7 @@ class UndoEditor : public QDockWidget
     Q_OBJECT
 
 public:
-    UndoEditor(QString  iconDirectory = "", QWidget* widgetToFocus = 0, QWidget* parent = 0); /*, Qt::WindowFlags flags = 0); */
+    UndoEditor(QString iconDirectory = "", QWidget* widgetToFocus = 0, QWidget* parent = 0); /*, Qt::WindowFlags flags = 0); */
     ~UndoEditor();
 
     void addStack(QUndoStack* stack);
@@ -760,7 +674,7 @@ public slots:
     void updateCleanIcon(bool opened);
 
 private:
-    QWidget*    focusWidget;
+    QWidget* focusWidget;
 
     QString iconDir;
     int iconSize;
@@ -817,10 +731,8 @@ class PreviewDialog : public QFileDialog
     Q_OBJECT
 
 public:
-    PreviewDialog(QWidget* parent = 0,
-        QString  caption = "",
-        QString  directory = "",
-        QString  filter = "");
+    PreviewDialog(QWidget* parent = 0, QString caption = "",
+        QString directory = "", QString filter = "");
     ~PreviewDialog();
 
 private:
@@ -832,7 +744,9 @@ class PropertyEditor : public QDockWidget
     Q_OBJECT
 
 public:
-    PropertyEditor(QString  iconDirectory = "", bool pickAddMode = true, QWidget* widgetToFocus = 0, QWidget* parent = 0); /*, Qt::WindowFlags flags = 0); */
+    PropertyEditor(QString iconDirectory = "", bool pickAddMode = true,
+        QWidget* widgetToFocus = 0, QWidget* parent = 0);
+        /*, Qt::WindowFlags flags = 0); */
     ~PropertyEditor();
 
     void togglePickAddMode();
@@ -853,7 +767,7 @@ class Settings_Dialog : public QDialog
     Q_OBJECT
 
 public:
-    Settings_Dialog(MainWindow* mw, QString  showTab = "", QWidget *parent = 0);
+    Settings_Dialog(MainWindow* mw, QString showTab = "", QWidget *parent = 0);
     ~Settings_Dialog();
 
     void color_dialog(QPushButton *button, int key);
@@ -902,8 +816,8 @@ private slots:
     void chooseGeneralMdiBackgroundTexture();
     void comboBoxScrollBarWidgetCurrentIndexChanged(int);
     void spinBoxDisplaySelectBoxAlphaValueChanged(int);
-    void comboBoxPromptFontFamilyCurrentIndexChanged(QString);
-    void comboBoxPromptFontStyleCurrentIndexChanged(QString);
+    void comboBoxPromptFontFamilyCurrentIndexChanged(EmbString);
+    void comboBoxPromptFontStyleCurrentIndexChanged(EmbString);
     void spinBoxPromptFontSizeValueChanged(int);
     void buttonCustomFilterSelectAllClicked();
     void buttonCustomFilterClearAllClicked();
@@ -1020,14 +934,14 @@ public slots:
     void print();
     void saveBMC();
 
-    void promptHistoryAppended(QString  txt);
-    void logPromptInput(QString  txt);
+    void promptHistoryAppended(QString txt);
+    void logPromptInput(QString txt);
     void promptInputPrevious();
     void promptInputNext();
 
 private:
-    void setCurrentFile(QString  fileName);
-    QString fileExtension(QString  fileName);
+    void setCurrentFile(QString fileName);
+    QString fileExtension(QString fileName);
 
     void promptInputPrevNext(bool prev);
 };
@@ -1081,9 +995,9 @@ public slots:
     void endCommand();
     void processInput(const QChar& rapidChar = QChar());
     void checkSelection();
-    void updateCurrentText(QString  txt);
-    void checkEditedText(QString  txt);
-    void checkChangedText(QString  txt);
+    void updateCurrentText(QString txt);
+    void checkEditedText(QString txt);
+    void checkChangedText(QString txt);
     void checkCursorPosition(int oldpos, int newpos);
 private slots:
     void copyClip();
@@ -1101,27 +1015,27 @@ public:
     void updateStyle(void);
 
 public slots:
-    void setCurrentText(QString  txt)
+    void setCurrentText(QString txt)
     {
         curText = prefix + txt;
         promptInput->setText(curText);
     }
-    void setPrefix(QString  txt);
+    void setPrefix(QString txt);
     void enableRapidFire() { rapidFireEnabled = true; }
     void disableRapidFire() { rapidFireEnabled = false; }
     bool isRapidFireEnabled() { return rapidFireEnabled; }
 
-    void alert(QString  txt);
+    void alert(QString txt);
 
     void blink();
 
-    void saveHistory(QString  fileName, bool html);
+    void saveHistory(QString fileName, bool html);
 
 signals:
     /* For connecting outside of command prompt. */
     void showSettings();
 
-    void historyAppended(QString  txt);
+    void historyAppended(QString txt);
 };
 
 class MainWindow: public QMainWindow
@@ -1131,6 +1045,8 @@ class MainWindow: public QMainWindow
 public:
     MainWindow();
     ~MainWindow();
+
+    void add_toolbar_to_window(Qt::ToolBarArea area, int data[]);
 
 public slots:
     void recentMenuAboutToShow();

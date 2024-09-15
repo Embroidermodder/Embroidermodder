@@ -496,7 +496,7 @@ layerPrevious(void)
 void
 layerSelectorIndexChanged(int index)
 {
-    char message[MAX_STRING_LENGTH];
+    EmbString message;
     sprintf(message, "layerSelectorIndexChanged(%d)", index);
     debug_message(message);
 }
@@ -504,7 +504,7 @@ layerSelectorIndexChanged(int index)
 void
 MainWindow::colorSelectorIndexChanged(int index)
 {
-    char message[MAX_STRING_LENGTH];
+    EmbString message;
     sprintf(message, "colorSelectorIndexChanged(%d)", index);
     debug_message(message);
 
@@ -534,7 +534,7 @@ MainWindow::colorSelectorIndexChanged(int index)
 void
 linetypeSelectorIndexChanged(int index)
 {
-    char message[MAX_STRING_LENGTH];
+    EmbString message;
     sprintf(message, "linetypeSelectorIndexChanged(%d)", index);
     debug_message(message);
 }
@@ -553,7 +553,7 @@ void
 textFontSelectorCurrentFontChanged(const QFont& font)
 {
     debug_message("textFontSelectorCurrentFontChanged()");
-    setTextFont(font.family());
+    setTextFont((char*)qPrintable(font.family()));
 }
 
 /* . */
@@ -569,7 +569,7 @@ textSizeSelectorIndexChanged(int index)
 
 /* . */
 void
-setTextFont(QString str)
+setTextFont(EmbString str)
 {
     textFontSelector->setCurrentFont(QFont(str));
     set_str(TEXT_FONT, (char*)qPrintable(str));
@@ -727,12 +727,14 @@ promptInputNext(void)
     }
 }
 
-/* . */
+/*
+ * BUG: pan commands broke
+ */
 ScriptValue
-run_command(EmbString cmd, ScriptEnv *context)
+run_command(const EmbString cmd, ScriptEnv *context)
 {
     char message[MAX_STRING_LENGTH];
-    int id = get_command_id(cmd);
+    int id = get_command_id((char*)cmd);
     Document* doc = NULL;
     ScriptValue value = script_true;
     sprintf(message, "run_command(%s) %d", cmd, id);
@@ -881,7 +883,7 @@ run_command(EmbString cmd, ScriptEnv *context)
  */
 
     case ACTION_OPEN:
-        openFile();
+        openFile(false, "");
         break;
 
     case ACTION_PASTE: {
@@ -915,7 +917,7 @@ run_command(EmbString cmd, ScriptEnv *context)
         break;
 
     case ACTION_SETTINGS_DIALOG: {
-        settingsDialog();
+        settingsDialog("");
         break;
     }
 
@@ -1309,7 +1311,7 @@ MainWindow::runCommand()
 {
     QAction* act = qobject_cast<QAction*>(sender());
     if (act) {
-        char message[MAX_STRING_LENGTH];
+        EmbString message;
         sprintf(message, "runCommand(%s)", qPrintable(act->objectName()));
         debug_message(message);
         promptInput->endCommand();
@@ -1321,9 +1323,9 @@ MainWindow::runCommand()
 /* FIXME: reconnect to new command system.
  */
 void
-runCommandMain(QString cmd)
+runCommandMain(EmbString cmd)
 {
-    char message[MAX_STRING_LENGTH];
+    EmbString message;
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_MAIN;
     sprintf(message, "runCommandMain(%s)", qPrintable(cmd));
@@ -1341,9 +1343,9 @@ runCommandMain(QString cmd)
 /* FIXME: reconnect to new command system.
  */
 void
-runCommandClick(QString cmd, double x, double y)
+runCommandClick(EmbString cmd, double x, double y)
 {
-    char message[MAX_STRING_LENGTH];
+    EmbString message;
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_CLICK;
     sprintf(message, "runCommandClick(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
@@ -1356,9 +1358,9 @@ runCommandClick(QString cmd, double x, double y)
 /* FIXME: reconnect to new command system.
  */
 void
-runCommandMove(QString cmd, double x, double y)
+runCommandMove(EmbString cmd, double x, double y)
 {
-    char message[MAX_STRING_LENGTH];
+    EmbString message;
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_MOVE;
     sprintf(message, "runCommandMove(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
@@ -1371,9 +1373,9 @@ runCommandMove(QString cmd, double x, double y)
 /* FIXME: reconnect to new command system.
  */
 void
-runCommandContext(QString cmd, QString str)
+runCommandContext(EmbString cmd, EmbString str)
 {
-    char message[MAX_STRING_LENGTH];
+    EmbString message;
     ScriptEnv *context = create_script_env();
     context->context = CONTEXT_CONTEXT;
     sprintf(message, "runCommandContext(%s, %s)", qPrintable(cmd), qPrintable(str));
@@ -1387,9 +1389,9 @@ runCommandContext(QString cmd, QString str)
  * NOTE: Replace any special characters that will cause a syntax error
  */
 void
-runCommandPrompt(QString cmd)
+runCommandPrompt(EmbString cmd)
 {
-    char message[MAX_STRING_LENGTH];
+    EmbString message;
     ScriptEnv *context = create_script_env();
     sprintf(message, "runCommandPrompt(%s)", qPrintable(cmd));
     debug_message(message);
@@ -1412,28 +1414,28 @@ runCommandPrompt(QString cmd)
  *     critical_box(translate("Out of Bounds"), message);
  */
 void
-critical_box(char *title, char *text)
+critical_box(const char *title, const char *text)
 {
     QMessageBox::critical(_main, title, text);
 }
 
 /* See critical_box comment. */
 void
-information_box(char *title, char *text)
+information_box(const char *title, const char *text)
 {
     QMessageBox::information(_main, title, text);
 }
 
 /* See critical_box comment. */
 void
-question_box(char *title, char *text)
+question_box(const char *title, const char *text)
 {
     QMessageBox::question(_main, title, text);
 }
 
 /* See critical_box comment. */
 void
-warning_box(char *title, char *text)
+warning_box(const char *title, const char *text)
 {
     QMessageBox::warning(_main, title, text);
 }
@@ -1503,24 +1505,22 @@ nativeSetRubberMode(int mode)
 
 /* . */
 void
-nativeSetRubberPoint(char key[MAX_STRING_LENGTH], double x, double y)
+nativeSetRubberPoint(EmbString key, double x, double y)
 {
     Document* doc = activeDocument();
     if (doc) {
-        EmbVector v;
-        v.x = x;
-        v.y = -y;
+        EmbVector v = emb_vector(x, -y);
         doc_set_rubber_point(doc, key, v);
     }
 }
 
 /* . */
 void
-nativeSetRubberText(char key[MAX_STRING_LENGTH], char txt[MAX_STRING_LENGTH])
+nativeSetRubberText(EmbString key, EmbString txt)
 {
     Document* doc = activeDocument();
     if (doc) {
-        doc_set_rubber_text(doc, QString(key), QString(txt));
+        doc_set_rubber_text(doc, key, txt);
     }
 }
 
@@ -1947,7 +1947,7 @@ nativeQSnapY()
 
 /* Compatibility layer for C files */
 void
-prompt_output(EmbString txt)
+prompt_output(const EmbString txt)
 {
     appendHistory(QString(txt));
 }

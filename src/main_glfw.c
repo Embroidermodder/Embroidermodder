@@ -38,7 +38,7 @@ end_command(void)
 
 /* . */
 void
-prompt_output(EmbString line)
+prompt_output(const EmbString line)
 {
     printf("%s\n", line);
 }

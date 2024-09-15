@@ -32,6 +32,46 @@ EmbStringTable toolbar_list = {
     "END"
 };
 
+int top_toolbar[] = {
+    TOOLBAR_BREAK,
+    TOOLBAR_FILE,
+    TOOLBAR_EDIT,
+    TOOLBAR_HELP,
+    TOOLBAR_ICON,
+    TOOLBAR_BREAK,
+    TOOLBAR_ZOOM,
+    TOOLBAR_PAN,
+    TOOLBAR_VIEW,
+    TOOLBAR_BREAK,
+    TOOLBAR_LAYER,
+    TOOLBAR_PROPERTIES,
+    TOOLBAR_BREAK,
+    TOOLBAR_TEXT,
+    TERMINATOR_SYMBOL
+};
+
+int left_toolbar[] = {
+    TOOLBAR_DRAW,
+    TOOLBAR_MODIFY,
+    TOOLBAR_BREAK,
+    TERMINATOR_SYMBOL
+};
+
+int bottom_toolbar[] = {
+    TOOLBAR_PROMPT,
+    TERMINATOR_SYMBOL
+};
+
+int toolbar_horizontal[] = {
+    TOOLBAR_VIEW,
+    TOOLBAR_ZOOM,
+    TOOLBAR_LAYER,
+    TOOLBAR_PROPERTIES,
+    TOOLBAR_TEXT,
+    TOOLBAR_PROMPT,
+    TERMINATOR_SYMBOL
+};
+
 int toolbars_when_docs[] = {
     TOOLBAR_VIEW,
     TOOLBAR_ZOOM,

@@ -326,7 +326,7 @@ get_bool(int key)
 
 /* . */
 char *
-translate(EmbString msg)
+translate(const EmbString msg)
 {
     return msg;
 }
@@ -341,7 +341,7 @@ create_script_env()
 }
 
 void
-add_string_variable(ScriptEnv *context, EmbString label, EmbString s)
+add_string_variable(ScriptEnv *context, const EmbString label, EmbString s)
 {
     strcpy(context->variable[context->n_variables].label, label);
     strcpy(context->variable[context->n_variables].s, s);
@@ -350,7 +350,7 @@ add_string_variable(ScriptEnv *context, EmbString label, EmbString s)
 }
 
 void
-add_int_variable(ScriptEnv *context, EmbString label, int i)
+add_int_variable(ScriptEnv *context, const EmbString label, int i)
 {
     strcpy(context->variable[context->n_variables].label, label);
     context->variable[context->n_variables].i = i;
@@ -359,7 +359,7 @@ add_int_variable(ScriptEnv *context, EmbString label, int i)
 }
 
 void
-add_real_variable(ScriptEnv *context, EmbString label, double r)
+add_real_variable(ScriptEnv *context, const EmbString label, double r)
 {
     strcpy(context->variable[context->n_variables].label, label);
     context->variable[context->n_variables].r = r;
@@ -368,7 +368,7 @@ add_real_variable(ScriptEnv *context, EmbString label, double r)
 }
 
 const char *
-script_get_string(ScriptEnv *context, EmbString label)
+script_get_string(ScriptEnv *context, const EmbString label)
 {
     int i;
     for (i=0; i<context->n_variables; i++) {
@@ -380,7 +380,7 @@ script_get_string(ScriptEnv *context, EmbString label)
 }
 
 int
-script_get_int(ScriptEnv *context, EmbString label)
+script_get_int(ScriptEnv *context, const EmbString label)
 {
     int i;
     for (i=0; i<context->n_variables; i++) {
@@ -392,7 +392,7 @@ script_get_int(ScriptEnv *context, EmbString label)
 }
 
 double
-script_get_real(ScriptEnv *context, EmbString label)
+script_get_real(ScriptEnv *context, const EmbString label)
 {
     int i;
     for (i=0; i<context->n_variables; i++) {
@@ -404,7 +404,7 @@ script_get_real(ScriptEnv *context, EmbString label)
 }
 
 int
-script_set_string(ScriptEnv *context, EmbString label, EmbString s)
+script_set_string(ScriptEnv *context, const EmbString label, EmbString s)
 {
     int i;
     for (i=0; i<context->n_variables; i++) {
@@ -417,7 +417,7 @@ script_set_string(ScriptEnv *context, EmbString label, EmbString s)
 }
 
 int
-script_set_int(ScriptEnv *context, EmbString label, int x)
+script_set_int(ScriptEnv *context, const EmbString label, int x)
 {
     int i;
     for (i=0; i<context->n_variables; i++) {
@@ -431,7 +431,7 @@ script_set_int(ScriptEnv *context, EmbString label, int x)
 
 /* . */
 int
-script_set_real(ScriptEnv *context, EmbString label, double r)
+script_set_real(ScriptEnv *context, const EmbString label, double r)
 {
     int i;
     for (i=0; i<context->n_variables; i++) {
@@ -519,7 +519,7 @@ add_int_argument(ScriptEnv *context, int i)
 }
 
 int
-parse_floats(char *line, float result[], int n)
+parse_floats(const char *line, float result[], int n)
 {
     char substring[100];
     char *c;
@@ -546,7 +546,7 @@ parse_floats(char *line, float result[], int n)
 }
 
 int
-parse_vector(char *line, EmbVector *v)
+parse_vector(const char *line, EmbVector *v)
 {
     float v_[2];
     if (parse_floats(line, v_, 2) == 2) {
@@ -709,7 +709,7 @@ add_state_int_variable(char *label, int i)
 
 /* TODO: error reporting. */
 void
-add_state_string_variable(char *label, char *s)
+add_state_string_variable(const char *label, char *s)
 {
     strncpy(state[state_length].label, label, MAX_LABEL_LENGTH);
     strncpy(state[state_length].s, s, MAX_STATE_STRING_LENGTH);
@@ -719,7 +719,7 @@ add_state_string_variable(char *label, char *s)
 
 /* TODO: error reporting. */
 void
-add_state_real_variable(char *label, double r)
+add_state_real_variable(const char *label, double r)
 {
     strncpy(state[state_length].label, label, MAX_LABEL_LENGTH);
     state[state_length].r = r;
@@ -729,7 +729,7 @@ add_state_real_variable(char *label, double r)
 
 /* . */
 int
-get_state_element_from_table(char *table_name, int position)
+get_state_element_from_table(const char *table_name, int position)
 {
     char key[MAX_STRING_LENGTH];
     sprintf(key, "%s.%d", table_name, position);
@@ -738,7 +738,7 @@ get_state_element_from_table(char *table_name, int position)
 
 /* . */
 char *
-get_state_string_from_table(char *table_name, int position)
+get_state_string_from_table(const char *table_name, int position)
 {
     int i = get_state_element_from_table(table_name, position);
     if (i>=0) {
@@ -749,7 +749,7 @@ get_state_string_from_table(char *table_name, int position)
 
 /* . */
 char *
-get_state_int_from_table(char *table_name, int position)
+get_state_int_from_table(const char *table_name, int position)
 {
     int i = get_state_element_from_table(table_name, position);
     if (i>=0) {
@@ -763,7 +763,7 @@ get_state_int_from_table(char *table_name, int position)
  *
  */
 int
-load_string_table(toml_table_t* conf, char *table_name)
+load_string_table(toml_table_t* conf, const char *table_name)
 {
     int table_index = state_length;
     toml_array_t* str_table = toml_array_in(conf, table_name);
@@ -792,7 +792,7 @@ load_string_table(toml_table_t* conf, char *table_name)
 
 /* . */
 int
-load_file(char *fname)
+load_file(const char *fname)
 {
     int i;
     FILE* file;
@@ -841,7 +841,7 @@ load_data(void)
 
 /* . */
 int
-load_settings(char *appDir, char *fname)
+load_settings(const char *appDir, const char *fname)
 {
     return 1;
 }
@@ -999,7 +999,7 @@ roundToMultiple(bool roundUp, int numToRound, int multiple)
 /* TODO: timestamp each message
  */
 void
-debug_message(EmbString msg)
+debug_message(const EmbString msg)
 {
     EmbString buffer, fname;
     time_t t;
@@ -1019,7 +1019,7 @@ debug_message(EmbString msg)
 
 /* . */
 void
-todo(EmbString txt)
+todo(const EmbString txt)
 {
     char message[MAX_STRING_LENGTH];
     sprintf(message, "TODO: %s", txt);
@@ -1028,7 +1028,7 @@ todo(EmbString txt)
  
 /* . */
 void
-fixme(EmbString msg)
+fixme(const EmbString msg)
 {
     char outmsg[MAX_STRING_LENGTH];
     sprintf(outmsg, "FIXME: %s", msg);

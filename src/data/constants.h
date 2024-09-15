@@ -528,6 +528,7 @@
 #define TOOLBAR_DIMENSION             14
 #define TOOLBAR_SANDBOX               15
 #define N_TOOLBARS                    16
+#define TOOLBAR_BREAK                 -2
 
 /* Settings */
 #define GENERAL_LANGUAGE               0
@@ -662,6 +663,20 @@
 #define JUSTIFY_BOTTOM_CENTER         13
 #define JUSTIFY_BOTTOM_RIGHT          14
 #define N_JUSTIFY                     15
+
+/* Group Boxes */
+#define GB_GEOM_ARC                    0
+#define GB_MISC_ARC                    1
+#define GB_GEOM_BLOCK                  2
+#define GB_GEOM_CIRCLE                 3
+#define GB_GEOM_DIM_ALIGNED            4
+#define N_GROUPBOXES                   5
+
+/* Object Properties */
+#define PROP_ARC_CENTER_X              0
+#define PROP_ARC_CENTER_Y              1
+#define PROP_ARC_RADIUS                2
+#define N_PROPS                        3
 
 #endif
 

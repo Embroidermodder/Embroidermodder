@@ -115,6 +115,8 @@ typedef struct SettingsData_ {
 typedef struct ObjectCore_ {
     EmbGeometry *geometry;
 
+    uint32_t rgb;
+
     EmbString OBJ_NAME;
 
     EmbString text;
@@ -169,26 +171,26 @@ double get_real(int key);
 char *get_str(int key);
 bool get_bool(int key);
 
-void add_string_variable(ScriptEnv *context, EmbString label, EmbString s);
-void add_int_variable(ScriptEnv *context, EmbString label, int i);
-void add_real_variable(ScriptEnv *context, EmbString label, double i);
+void add_string_variable(ScriptEnv *context, const EmbString label, EmbString s);
+void add_int_variable(ScriptEnv *context, const EmbString label, int i);
+void add_real_variable(ScriptEnv *context, const EmbString label, double i);
 
-const char *script_get_string(ScriptEnv *context, EmbString label);
-int script_get_int(ScriptEnv *context, EmbString label);
-double script_get_real(ScriptEnv *context, EmbString label);
+const char *script_get_string(ScriptEnv *context, const EmbString label);
+int script_get_int(ScriptEnv *context, const EmbString label);
+double script_get_real(ScriptEnv *context, const EmbString label);
 
-int script_set_string(ScriptEnv *context, EmbString label, EmbString s);
-int script_set_int(ScriptEnv *context, EmbString label, int i);
-int script_set_real(ScriptEnv *context, EmbString label, double r);
+int script_set_string(ScriptEnv *context, const EmbString label, EmbString s);
+int script_set_int(ScriptEnv *context, const EmbString label, int i);
+int script_set_real(ScriptEnv *context, const EmbString label, double r);
 
-void prompt_output(EmbString );
+void prompt_output(const EmbString);
 int argument_checks(ScriptEnv *context, int id);
-char *translate(EmbString msg);
+char *translate(const EmbString msg);
 
 bool pattern_save(EmbPattern *pattern, EmbString fileName);
 
-int parse_floats(char *line, float result[], int n);
-int parse_vector(char *line, EmbVector *v);
+int parse_floats(const char *line, float result[], int n);
+int parse_vector(const char *line, EmbVector *v);
 bool validRGB(float r, float g, float b);
 void reportDistance(EmbVector a, EmbVector b);
 
@@ -197,7 +199,7 @@ void add_to_toolbar(int id, EmbStringTable toolbar_data);
 
 int load_data(void);
 
-int load_settings(char *appDir, char *configDir);
+int load_settings(const char *appDir, const char *configDir);
 int save_settings(EmbString appDir, EmbString configDir);
 
 int get_command_id(EmbString );
@@ -209,14 +211,96 @@ bool willUnderflowInt32(int64_t a, int64_t b);
 bool willOverflowInt32(int64_t a, int64_t b);
 int roundToMultiple(bool roundUp, int numToRound, int multiple);
 
-void information_box(char *title, char *text);
-void warning_box(char *title, char *text);
-void critical_box(char *title, char *text);
-void question_box(char *title, char *text);
+void information_box(const char *title, const char *text);
+void warning_box(const char *title, const char *text);
+void critical_box(const char *title, const char *text);
+void question_box(const char *title, const char *text);
 
-/* MainWindow calls */
+/* ------------------------------ Prompt ------------------------------- */
+
+void setPromptTextColor(uint32_t color);
+void setPromptBackgroundColor(uint32_t color);
+void setPromptFontFamily(EmbString family);
+void setPromptFontStyle(EmbString style);
+void setPromptFontSize(int size);
+
+/* -------------------------- Main Functions --------------------------- */
+
+void runCommandMain(EmbString cmd);
+void runCommandClick(EmbString cmd, double x, double y);
+void runCommandMove(EmbString cmd, double x, double y);
+void runCommandContext(EmbString cmd, EmbString str);
+void runCommandPrompt(EmbString cmd);
+
+void updateAllViewScrollBars(bool val);
+void updateAllViewCrossHairColors(uint32_t color);
+void updateAllViewBackgroundColors(uint32_t color);
+void updateAllViewSelectBoxColors(uint32_t colorL, uint32_t fillL,
+    uint32_t colorR, uint32_t fillR, int alpha);
+void updateAllViewGridColors(uint32_t color);
+void updateAllViewRulerColors(uint32_t color);
+
+void updatePickAddMode(bool val);
+void pickAddModeToggled(void);
+
+void setTextFont(EmbString str);
+void setTextSize(double num);
+
+void promptHistoryAppended(EmbString txt);
+void logPromptInput(EmbString txt);
+
+void openFile(bool recent, EmbString recentFile);
+void openFilesSelected(EmbStringTable);
+
+void settingsDialog(EmbString showTab);
+
+bool validFileFormat(EmbString fileName);
+
+void onCloseWindow(void);
+
+void setUndoCleanIcon(bool opened);
+
+void currentLayerChanged(EmbString layer);
+void currentColorChanged(uint32_t color);
+void currentLinetypeChanged(EmbString type);
+void currentLineweightChanged(EmbString weight);
+
+void promptInputPrevious(void);
+void promptInputNext(void);
+
+void print_command(void);
+void undo_command(void);
+void redo_command(void);
+
+void layerSelectorIndexChanged(int index);
+void linetypeSelectorIndexChanged(int index);
+void lineweightSelectorIndexChanged(int index);
+void textSizeSelectorIndexChanged(int index);
+
+void makeLayerActive(void);
+void layerManager(void);
+void layerPrevious(void);
+
+void deletePressed(void);
+void escapePressed(void);
+
+bool isShiftPressed(void);
+void setShiftPressed(void);
+void setShiftReleased(void);
+
+void iconResize(int iconSize);
+
+void readSettings(void);
+void writeSettings(void);
+
+void createAllActions(void);
+
+void loadFormats(void);
+
+void settingsPrompt(void);
+
 void end_command(void);
-void debug_message(EmbString msg);
+void debug_message(const EmbString msg);
 void wait_cursor(void);
 void arrow_cursor(void);
 void restore_cursor(void);
@@ -225,7 +309,163 @@ void cut(void);
 
 void about_dialog(void);
 
-/* Global variables with c linkage. */
+/* ------------------------------------- Natives --------------------------- */
+
+void about_dialog(void);
+void todo(const EmbString txt);
+void fixme(const EmbString msg);
+void stub_testing(void);
+void run_testing(void);
+void exit_program(void);
+void check_for_updates(void);
+void new_file(void);
+void open_recent_file(void);
+void save_file(void);
+void save_as_file(void);
+void update_interface(void);
+void windowMenuAboutToShow();
+void hide_unimplemented(void);
+void start_blinking(void);
+void stop_blinking(void);
+
+ScriptValue run_command(const EmbString cmd, ScriptEnv *context);
+
+void nativeBlinkPrompt();
+
+void checkBoxTipOfTheDayStateChanged(int checked);
+void buttonTipOfTheDayClicked(int button);
+
+ScriptValue previewon_command(ScriptEnv *context);
+ScriptValue get_command(ScriptEnv *context);
+ScriptValue set_command(ScriptEnv *context);
+ScriptValue move_command(ScriptEnv *context);
+ScriptValue sandbox_command(ScriptEnv *context);
+
+void nativeAddInfiniteLine(double x1, double y1, double x2, double y2, double rot);
+void nativeAddRay(double x1, double y1, double x2, double y2, double rot);
+void nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubberMode);
+void nativeAddTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double rot, bool fill);
+void nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode);
+void nativeAddRoundedRectangle(double x, double y, double w, double h, double rad, double rot, bool fill);
+void nativeAddArc(double x1, double y1, double x2, double y2, double x3, double y3, int rubberMode);
+void nativeAddCircle(double centerX, double centerY, double radius, bool fill, int rubberMode);
+void nativeAddSlot(double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode);
+void nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode);
+void nativeAddPoint(double x, double y);
+void nativeAddRegularPolygon(double centerX, double centerY, uint16_t sides, uint8_t mode, double rad, double rot, bool fill);
+void nativeAddHorizontalDimension(double x1, double y1, double x2, double y2, double legHeight);
+void nativeAddVerticalDimension(double x1, double y1, double x2, double y2, double legHeight);
+void nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode);
+
+void nativeRedo();
+
+void setMouseCoord(double x, double y);
+
+void nativePrintArea(double x, double y, double w, double h);
+
+void nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b);
+void nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b);
+void nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b);
+
+void nativeClearRubber();
+bool nativeAllowRubber();
+void nativeSpareRubber(int64_t id);
+
+void nativeDeleteSelected();
+void nativeCutSelected(double x, double y);
+void nativeCopySelected(double x, double y);
+void nativePasteSelected(double x, double y);
+void nativeMoveSelected(double dx, double dy);
+void nativeScaleSelected(double x, double y, double factor);
+void nativeRotateSelected(double x, double y, double rot);
+void nativeMirrorSelected(double x1, double y1, double x2, double y2);
+
+void nativeSetCursorShape(EmbString str);
+double nativeCalculateDistance(double x1, double y1, double x2, double y2);
+double nativePerpendicularDistance(double px, double py, double x1, double y1, double x2, double y2);
+
+double nativeQSnapX();
+double nativeQSnapY();
+
+void enableLwt();
+void disableLwt();
+void enableReal();
+void disableReal();
+
+void create_details_dialog(void);
+
+void nativeSetPromptPrefix(EmbString txt);
+/* TODO: void nativeSetRubberFilter(int64_t id); */
+/* TODO: This is so more than 1 rubber object can exist at one time without updating all rubber objects at once. */
+void nativeSetRubberMode(int mode);
+void nativeSetRubberPoint(const EmbString key, double x, double y);
+void nativeSetRubberText(const EmbString key, EmbString txt);
+
+void toggleGrid(void);
+void toggleRuler(void);
+void toggleLwt(void);
+
+/* Help Menu */
+void tipOfTheDay();
+void buttonTipOfTheDayClicked(int);
+void checkBoxTipOfTheDayStateChanged(int);
+void help();
+void changelog();
+void whatsThisContextHelp();
+
+int make_application(int argc, char* argv[]);
+
+void setObjectRubberMode(ObjectCore *core, int mode);
+
+/* -------------------------------- EmbString ------------------------------ */
+
+void emb_string(EmbString s, const char *str);
+int string_equal(EmbString a, EmbString b);
+int string_compare(EmbString a, EmbString b);
+void string_copy(EmbString dst, EmbString src);
+int string_array_length(EmbString s[]);
+int string_list_contains(EmbStringTable list, EmbString entry);
+
+/* ---------------------------------- Object ------------------------------- */
+
+/* ---------------------------------- Geometry ----------------------------- */
+
+int emb_approx(EmbVector point1, EmbVector point2);
+
+double emb_width(EmbGeometry *geometry);
+double emb_height(EmbGeometry *geometry);
+double emb_radius(EmbGeometry *geometry);
+double emb_radius_major(EmbGeometry *geometry);
+double emb_radius_minor(EmbGeometry *geometry);
+double emb_diameter_major(EmbGeometry *geometry);
+double emb_diameter_minor(EmbGeometry *geometry);
+EmbVector emb_quadrant(EmbGeometry *geometry, int degrees);
+double emb_angle(EmbGeometry *geometry);
+double emb_start_angle(EmbGeometry *geometry);
+double emb_end_angle(EmbGeometry *geometry);
+double emb_arc_length(EmbGeometry *geometry);
+double emb_area(EmbGeometry *geometry);
+double emb_chord(EmbGeometry *geometry);
+double emb_included_angle(EmbGeometry *geometry);
+bool emb_clockwise(EmbGeometry *geometry);
+double emb_circumference(EmbGeometry *geometry);
+
+void emb_set_start_angle(EmbGeometry *geometry, double angle);
+void emb_set_end_angle(EmbGeometry *geometry, double angle);
+void emb_set_start_point(EmbGeometry *geometry, EmbVector point);
+void emb_set_mid_point(EmbGeometry *geometry, EmbVector point);
+void emb_set_end_point(EmbGeometry *geometry, EmbVector point);
+void emb_set_diameter(EmbGeometry *geometry, double diameter);
+void emb_set_area(EmbGeometry *geometry, double area);
+void emb_set_circumference(EmbGeometry *geometry, double circumference);
+void emb_set_radius(EmbGeometry *geometry, double radius);
+void emb_set_radius_major(EmbGeometry *geometry, double radius);
+void emb_set_radius_minor(EmbGeometry *geometry, double radius);
+void emb_set_diameter_major(EmbGeometry *geometry, double diameter);
+void emb_set_diameter_minor(EmbGeometry *geometry, double diameter);
+
+/* ---------------------------- Global Variables --------------------------- */
+
 extern Command command_data[MAX_COMMANDS];
 extern StringMap aliases[MAX_ALIASES];
 extern Setting setting[N_SETTINGS];
@@ -299,6 +539,9 @@ extern EmbStringTable *menu_data;
 extern EmbStringTable toolbar_list;
 extern int toolbars_when_docs[];
 
+extern int preview_to_dialog[];
+extern int accept_to_dialog[];
+
 extern EmbStringTable file_toolbar;
 extern EmbStringTable edit_toolbar; 
 extern EmbStringTable view_toolbar; 
@@ -312,6 +555,11 @@ extern EmbStringTable modify_toolbar;
 extern EmbStringTable dimension_toolbar; 
 extern EmbStringTable sandbox_toolbar; 
 extern EmbStringTable *toolbar_data; 
+
+extern int top_toolbar[];
+extern int left_toolbar[];
+extern int bottom_toolbar[];
+extern int toolbar_horizontal[];
 
 extern EmbStringTable layer_list; 
 extern EmbStringTable color_list; 
@@ -343,156 +591,6 @@ extern bool cmdActive;
 extern bool rapidFireEnabled;
 extern bool isBlinking;
 extern bool key_state[N_KEY_SEQUENCES];
-
-/* Natives */
-void about_dialog(void);
-void todo(EmbString txt);
-void fixme(EmbString msg);
-void stub_testing(void);
-void run_testing(void);
-void exit_program(void);
-void check_for_updates(void);
-void new_file(void);
-void open_recent_file(void);
-void save_file(void);
-void save_as_file(void);
-void update_interface(void);
-void windowMenuAboutToShow();
-void hide_unimplemented(void);
-void start_blinking(void);
-void stop_blinking(void);
-
-ScriptValue run_command(EmbString cmd, ScriptEnv *context);
-
-void nativeBlinkPrompt();
-
-void checkBoxTipOfTheDayStateChanged(int checked);
-void buttonTipOfTheDayClicked(int button);
-
-ScriptValue previewon_command(ScriptEnv *context);
-ScriptValue get_command(ScriptEnv *context);
-ScriptValue set_command(ScriptEnv *context);
-ScriptValue move_command(ScriptEnv *context);
-ScriptValue sandbox_command(ScriptEnv *context);
-
-void nativeAddInfiniteLine(double x1, double y1, double x2, double y2, double rot);
-void nativeAddRay(double x1, double y1, double x2, double y2, double rot);
-void nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubberMode);
-void nativeAddTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double rot, bool fill);
-void nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode);
-void nativeAddRoundedRectangle(double x, double y, double w, double h, double rad, double rot, bool fill);
-void nativeAddArc(double x1, double y1, double x2, double y2, double x3, double y3, int rubberMode);
-void nativeAddCircle(double centerX, double centerY, double radius, bool fill, int rubberMode);
-void nativeAddSlot(double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode);
-void nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode);
-void nativeAddPoint(double x, double y);
-void nativeAddRegularPolygon(double centerX, double centerY, uint16_t sides, uint8_t mode, double rad, double rot, bool fill);
-void nativeAddHorizontalDimension(double x1, double y1, double x2, double y2, double legHeight);
-void nativeAddVerticalDimension(double x1, double y1, double x2, double y2, double legHeight);
-void nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode);
-
-void nativeRedo();
-
-void setMouseCoord(double x, double y);
-
-void nativePrintArea(double x, double y, double w, double h);
-
-void nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b);
-void nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b);
-void nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b);
-
-void nativeClearRubber();
-bool nativeAllowRubber();
-void nativeSpareRubber(int64_t id);
-
-void nativeDeleteSelected();
-void nativeCutSelected(double x, double y);
-void nativeCopySelected(double x, double y);
-void nativePasteSelected(double x, double y);
-void nativeMoveSelected(double dx, double dy);
-void nativeScaleSelected(double x, double y, double factor);
-void nativeRotateSelected(double x, double y, double rot);
-void nativeMirrorSelected(double x1, double y1, double x2, double y2);
-
-void nativeSetCursorShape(EmbString str);
-double nativeCalculateDistance(double x1, double y1, double x2, double y2);
-double nativePerpendicularDistance(double px, double py, double x1, double y1, double x2, double y2);
-
-double nativeQSnapX();
-double nativeQSnapY();
-
-void enableLwt();
-void disableLwt();
-void enableReal();
-void disableReal();
-
-void create_details_dialog(void);
-
-void nativeSetPromptPrefix(EmbString txt);
-/* TODO: void nativeSetRubberFilter(int64_t id); */
-/* TODO: This is so more than 1 rubber object can exist at one time without updating all rubber objects at once. */
-void nativeSetRubberMode(int mode);
-void nativeSetRubberPoint(EmbString key, double x, double y);
-void nativeSetRubberText(EmbString key, EmbString txt);
-
-void toggleGrid(void);
-void toggleRuler(void);
-void toggleLwt(void);
-
-/* Help Menu */
-void tipOfTheDay();
-void buttonTipOfTheDayClicked(int);
-void checkBoxTipOfTheDayStateChanged(int);
-void help();
-void changelog();
-void whatsThisContextHelp();
-
-int make_application(int argc, char* argv[]);
-
-void setObjectRubberMode(ObjectCore *core, int mode);
-
-/* EmbString handling */
-void emb_string(EmbString s, const char *str);
-int string_equal(EmbString a, EmbString b);
-int string_compare(EmbString a, EmbString b);
-void string_copy(EmbString dst, EmbString src);
-int string_array_length(EmbString s[]);
-int string_list_contains(EmbStringTable list, EmbString entry);
-
-/* Geometry */
-int emb_approx(EmbVector point1, EmbVector point2);
-
-double emb_width(EmbGeometry *geometry);
-double emb_height(EmbGeometry *geometry);
-double emb_radius(EmbGeometry *geometry);
-double emb_radius_major(EmbGeometry *geometry);
-double emb_radius_minor(EmbGeometry *geometry);
-double emb_diameter_major(EmbGeometry *geometry);
-double emb_diameter_minor(EmbGeometry *geometry);
-EmbVector emb_quadrant(EmbGeometry *geometry, int degrees);
-double emb_angle(EmbGeometry *geometry);
-double emb_start_angle(EmbGeometry *geometry);
-double emb_end_angle(EmbGeometry *geometry);
-double emb_arc_length(EmbGeometry *geometry);
-double emb_area(EmbGeometry *geometry);
-double emb_chord(EmbGeometry *geometry);
-double emb_included_angle(EmbGeometry *geometry);
-bool emb_clockwise(EmbGeometry *geometry);
-double emb_circumference(EmbGeometry *geometry);
-
-void emb_set_start_angle(EmbGeometry *geometry, double angle);
-void emb_set_end_angle(EmbGeometry *geometry, double angle);
-void emb_set_start_point(EmbGeometry *geometry, EmbVector point);
-void emb_set_mid_point(EmbGeometry *geometry, EmbVector point);
-void emb_set_end_point(EmbGeometry *geometry, EmbVector point);
-void emb_set_diameter(EmbGeometry *geometry, double diameter);
-void emb_set_area(EmbGeometry *geometry, double area);
-void emb_set_circumference(EmbGeometry *geometry, double circumference);
-void emb_set_radius(EmbGeometry *geometry, double radius);
-void emb_set_radius_major(EmbGeometry *geometry, double radius);
-void emb_set_radius_minor(EmbGeometry *geometry, double radius);
-void emb_set_diameter_major(EmbGeometry *geometry, double diameter);
-void emb_set_diameter_minor(EmbGeometry *geometry, double diameter);
 
 #ifdef __cplusplus
 }

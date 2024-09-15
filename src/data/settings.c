@@ -12,6 +12,38 @@
 
 #include "core.h"
 
+/* . */
+int preview_to_dialog[] = {
+    GENERAL_MDI_BG_USE_LOGO,
+    GENERAL_MDI_BG_USE_TEXTURE,
+    GENERAL_MDI_BG_USE_COLOR,
+    DISPLAY_SHOW_SCROLLBARS,
+    DISPLAY_SELECTBOX_ALPHA,
+    PROMPT_FONT_FAMILY,
+    PROMPT_FONT_STYLE,
+    PROMPT_FONT_SIZE,
+    LWT_SHOW_LWT,
+    LWT_REAL_RENDER,
+    TERMINATOR_SYMBOL
+};
+
+/* . */
+int accept_to_dialog[] = {
+    GENERAL_MDI_BG_LOGO,
+    GENERAL_MDI_BG_TEXTURE,
+    GENERAL_MDI_BG_COLOR,
+    DISPLAY_CROSSHAIR_COLOR,
+    DISPLAY_BG_COLOR,
+    DISPLAY_SELECTBOX_LEFT_COLOR,
+    DISPLAY_SELECTBOX_LEFT_FILL,
+    DISPLAY_SELECTBOX_RIGHT_COLOR,
+    DISPLAY_SELECTBOX_RIGHT_FILL,
+    PROMPT_TEXT_COLOR,
+    PROMPT_BG_COLOR,
+    RULER_COLOR,
+    TERMINATOR_SYMBOL
+};
+
 /* Matches the order of the settings constants table in constants.h. */
 SettingsData settings_data[] = {
     {

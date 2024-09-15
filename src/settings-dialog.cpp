@@ -7,6 +7,8 @@
  * or read the markdown version in embroidermodder2/docs/refman.
  *
  * Settings Dialog
+ *
+ * BUG: settings dialog doesn't export colors properly.
  */
 
 #include "embroidermodder.h"
@@ -1452,10 +1454,10 @@ Settings_Dialog::chooseColor(int key)
                 setting[DISPLAY_SELECTBOX_ALPHA].preview.i);
             break;
         case PROMPT_TEXT_COLOR:
-            setPromptTextColor(QColor(setting[key].accept.i));
+            setPromptTextColor(setting[key].accept.i);
             break;
         case PROMPT_BG_COLOR:
-            setPromptBackgroundColor(QColor(setting[key].accept.i));
+            setPromptBackgroundColor(setting[key].accept.i);
             break;
         case GRID_COLOR:
             updateAllViewGridColors(setting[GRID_COLOR].accept.i);
@@ -1490,10 +1492,10 @@ Settings_Dialog::chooseColor(int key)
                 setting[DISPLAY_SELECTBOX_ALPHA].preview.i);
             break;
         case PROMPT_TEXT_COLOR:
-            setPromptTextColor(QColor(setting[key].dialog.i));
+            setPromptTextColor(setting[key].dialog.i);
             break;
         case PROMPT_BG_COLOR:
-            setPromptBackgroundColor(QColor(setting[key].dialog.i));
+            setPromptBackgroundColor(setting[key].dialog.i);
             break;
         case GRID_COLOR:
             updateAllViewGridColors(setting[GRID_COLOR].dialog.i);
@@ -1534,10 +1536,10 @@ Settings_Dialog::currentColorChanged_(int key, const QColor& color)
             setting[DISPLAY_SELECTBOX_ALPHA].preview.i);
         break;
     case PROMPT_TEXT_COLOR:
-        setPromptTextColor(QColor(setting[key].preview.i));
+        setPromptTextColor(setting[key].preview.i);
         break;
     case PROMPT_BG_COLOR:
-        setPromptBackgroundColor(QColor(setting[key].preview.i));
+        setPromptBackgroundColor(setting[key].preview.i);
         break;
     case GRID_COLOR:
         updateAllViewGridColors(setting[GRID_COLOR].preview.i);
@@ -1567,17 +1569,17 @@ Settings_Dialog::spinBoxDisplaySelectBoxAlphaValueChanged(int value)
 
 /* . */
 void
-Settings_Dialog::comboBoxPromptFontFamilyCurrentIndexChanged(QString family)
+Settings_Dialog::comboBoxPromptFontFamilyCurrentIndexChanged(EmbString family)
 {
-    strcpy(setting[PROMPT_FONT_FAMILY].preview.s, qPrintable(family));
+    strcpy(setting[PROMPT_FONT_FAMILY].preview.s, family);
     setPromptFontFamily(setting[PROMPT_FONT_FAMILY].preview.s);
 }
 
 /* . */
 void
-Settings_Dialog::comboBoxPromptFontStyleCurrentIndexChanged(QString style)
+Settings_Dialog::comboBoxPromptFontStyleCurrentIndexChanged(EmbString style)
 {
-    strcpy(setting[PROMPT_FONT_STYLE].preview.s, qPrintable(style));
+    strcpy(setting[PROMPT_FONT_STYLE].preview.s, style);
     setPromptFontStyle(setting[PROMPT_FONT_STYLE].preview.s);
 }
 
@@ -1896,8 +1898,8 @@ update_view(void)
     updateAllViewGridColors(setting[GRID_COLOR].dialog.i);
     updateAllViewRulerColors(setting[RULER_COLOR].dialog.i);
 
-    setPromptTextColor(QColor(setting[PROMPT_TEXT_COLOR].dialog.i));
-    setPromptBackgroundColor(QColor(setting[PROMPT_BG_COLOR].dialog.i));
+    setPromptTextColor(setting[PROMPT_TEXT_COLOR].dialog.i);
+    setPromptBackgroundColor(setting[PROMPT_BG_COLOR].dialog.i);
     setPromptFontFamily(setting[PROMPT_FONT_FAMILY].dialog.s);
     setPromptFontStyle(setting[PROMPT_FONT_STYLE].dialog.s);
     setPromptFontSize(setting[PROMPT_FONT_SIZE].dialog.i);
@@ -1922,36 +1924,17 @@ update_view(void)
 void
 Settings_Dialog::acceptChanges()
 {
-    copy_setting(GENERAL_MDI_BG_USE_LOGO, SETTING_DIALOG, SETTING_PREVIEW);
-    copy_setting(GENERAL_MDI_BG_USE_TEXTURE, SETTING_DIALOG, SETTING_PREVIEW);
-    copy_setting(GENERAL_MDI_BG_USE_COLOR, SETTING_DIALOG, SETTING_PREVIEW);
-    copy_setting(GENERAL_MDI_BG_LOGO, SETTING_DIALOG, SETTING_ACCEPT);
-    copy_setting(GENERAL_MDI_BG_TEXTURE, SETTING_DIALOG, SETTING_ACCEPT);
-    copy_setting(GENERAL_MDI_BG_COLOR, SETTING_DIALOG, SETTING_ACCEPT);
-
-    copy_setting(DISPLAY_SHOW_SCROLLBARS, SETTING_DIALOG, SETTING_PREVIEW);
-    copy_setting(DISPLAY_CROSSHAIR_COLOR, SETTING_DIALOG, SETTING_ACCEPT);
-    copy_setting(DISPLAY_BG_COLOR, SETTING_DIALOG, SETTING_ACCEPT);
-    copy_setting(DISPLAY_SELECTBOX_LEFT_COLOR, SETTING_DIALOG, SETTING_ACCEPT);
-    copy_setting(DISPLAY_SELECTBOX_LEFT_FILL, SETTING_DIALOG, SETTING_ACCEPT);
-    copy_setting(DISPLAY_SELECTBOX_RIGHT_COLOR, SETTING_DIALOG, SETTING_ACCEPT);
-    copy_setting(DISPLAY_SELECTBOX_RIGHT_FILL, SETTING_DIALOG, SETTING_ACCEPT);
-    copy_setting(DISPLAY_SELECTBOX_ALPHA, SETTING_DIALOG, SETTING_PREVIEW);
-
-    copy_setting(PROMPT_TEXT_COLOR, SETTING_DIALOG, SETTING_ACCEPT);
-    copy_setting(PROMPT_BG_COLOR, SETTING_DIALOG, SETTING_ACCEPT);
-    copy_setting(PROMPT_FONT_FAMILY, SETTING_DIALOG, SETTING_PREVIEW);
-    copy_setting(PROMPT_FONT_STYLE, SETTING_DIALOG, SETTING_PREVIEW);
-    copy_setting(PROMPT_FONT_SIZE, SETTING_DIALOG, SETTING_PREVIEW);
     if (setting[GRID_COLOR_MATCH_CROSSHAIR].dialog.b) {
         setting[GRID_COLOR].dialog.i = setting[DISPLAY_CROSSHAIR_COLOR].accept.i;
     }
-    else {
-        copy_setting(GRID_COLOR, SETTING_DIALOG, SETTING_ACCEPT);
+
+    for (int i=0; preview_to_dialog[i] != TERMINATOR_SYMBOL; i++) {
+        copy_setting(preview_to_dialog[i], SETTING_DIALOG, SETTING_PREVIEW);
     }
-    copy_setting(RULER_COLOR, SETTING_DIALOG, SETTING_ACCEPT);
-    copy_setting(LWT_SHOW_LWT, SETTING_DIALOG, SETTING_PREVIEW);
-    copy_setting(LWT_REAL_RENDER, SETTING_DIALOG, SETTING_PREVIEW);
+
+    for (int i=0; accept_to_dialog[i] != TERMINATOR_SYMBOL; i++) {
+        copy_setting(accept_to_dialog[i], SETTING_DIALOG, SETTING_ACCEPT);
+    }
 
     for (int i=0; i < N_SETTINGS; i++) {
         copy_setting(i, SETTING_SETTING, SETTING_DIALOG);

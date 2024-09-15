@@ -867,7 +867,7 @@ MdiArea::setBackgroundColor(const QColor& color)
 void
 MdiArea::mouseDoubleClickEvent(QMouseEvent* /*e*/)
 {
-    openFile();
+    openFile(false, "");
 }
 
 /* . */
@@ -1195,7 +1195,7 @@ MdiWindow::sizeHint() const
 
 /* . */
 void
-currentLayerChanged(MdiWindow *mdiWin, QString  layer)
+currentLayerChanged(MdiWindow *mdiWin, QString layer)
 {
     MdiWindow *win = activeMdiWindow();
     if (win) {
@@ -1205,7 +1205,7 @@ currentLayerChanged(MdiWindow *mdiWin, QString  layer)
 
 /* . */
 void
-currentColorChanged(const QRgb& color)
+currentColorChanged(uint32_t color)
 {
     MdiWindow *win = activeMdiWindow();
     if (win) {
@@ -1448,25 +1448,25 @@ CmdPrompt::blink()
 
 /* . */
 void
-setPromptTextColor(const QColor& color)
+setPromptTextColor(uint32_t color)
 {
-    prompt_color_ = color.name();
-    prompt_selection_bg_color_ = color.name();
+    prompt_color_ = QColor(color).name();
+    prompt_selection_bg_color_ = QColor(color).name();
     prompt->updateStyle();
 }
 
 /* . */
 void
-setPromptBackgroundColor(const QColor& color)
+setPromptBackgroundColor(uint32_t color)
 {
-    prompt_bg_color_ = color.name();
-    prompt_selection_color_ = color.name();
+    prompt_bg_color_ = QColor(color).name();
+    prompt_selection_color_ = QColor(color).name();
     prompt->updateStyle();
 }
 
 /* . */
 void
-setPromptFontFamily(QString  family)
+setPromptFontFamily(EmbString family)
 {
     set_str(PROMPT_FONT_FAMILY, (char*)qPrintable(family));
     prompt->updateStyle();
@@ -1474,7 +1474,7 @@ setPromptFontFamily(QString  family)
 
 /* . */
 void
-setPromptFontStyle(QString  style)
+setPromptFontStyle(EmbString style)
 {
     set_str(PROMPT_FONT_STYLE, (char*)qPrintable(style));
     prompt->updateStyle();
@@ -1631,13 +1631,13 @@ CmdPromptInput::processInput(const QChar& rapidChar)
             std::string cmd = aliasHash[cmdtxt.toStdString()];
             curCmd = QString(cmd.c_str());
             appendHistory(curText);
-            runCommandPrompt(curCmd);
+            runCommandPrompt((char*)qPrintable(curCmd));
         }
         else if (cmdtxt.isEmpty()) {
             cmdActive = true;
             appendHistory(curText);
             /* Rerun the last successful command. */
-            runCommandPrompt(lastCmd);
+            runCommandPrompt((char*)qPrintable(lastCmd));
         }
         else {
             appendHistory(curText + "<br/><font color=\"red\">Unknown command \"" + cmdtxt + "\". Press F1 for help.</font>");

@@ -576,7 +576,7 @@ update_lineedit_num(QLineEdit* lineEdit, double num, bool useAnglePrecision)
 void
 updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, QString str)
 {
-    char message[MAX_STRING_LENGTH];
+    EmbString message;
     fieldOldText = fontComboBox->property("FontFamily").toString();
     fieldNewText = str;
     /*
@@ -589,8 +589,10 @@ updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, QString str)
         fontComboBox->setProperty("FontFamily", fieldNewText);
     }
     else if (fieldOldText != fieldNewText) {
-        if (fontComboBox->findText(fieldVariesText) == -1) /* Prevent multiple entries */
+        /* Prevent multiple entries */
+        if (fontComboBox->findText(fieldVariesText) == -1) {
             fontComboBox->addItem(fieldVariesText);
+        }
         fontComboBox->setCurrentIndex(fontComboBox->findText(fieldVariesText));
     }
 }
@@ -776,10 +778,10 @@ clearAllFields(void)
 void
 create_editor(
     QFormLayout *layout,
-    const char *icon,
-    const char *label,
-    const char *type_label,
-    const char *signal_name,
+    EmbString icon,
+    EmbString label,
+    EmbString type_label,
+    EmbString signal_name,
     int obj_type)
 {
     EmbString signal;
