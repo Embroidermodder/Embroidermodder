@@ -615,7 +615,7 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QGroupBox* groupBoxCustomFilter = new QGroupBox(translate("Custom Filter"), widget);
     groupBoxCustomFilter->setEnabled(false); /* TODO: Fixup custom filter */
 
-    QHash<QString, QCheckBox*> custom_filter;
+    std::unordered_map<QString, QCheckBox*> custom_filter;
 
     QPushButton* buttonCustomFilterSelectAll = new QPushButton(translate("Select All"), widget);
     connect(buttonCustomFilterSelectAll, SIGNAL(clicked()), this,

@@ -14,10 +14,10 @@
 
 QGroupBox* createGroupBox__(const char *label, const char *name, Editor editor_data[]);
 
-QHash<QString, QGroupBox*> group_boxes;
-QHash<QString, QToolButton*> tool_buttons;
-QHash<QString, QLineEdit*> line_edits;
-QHash<QString, QComboBox*> combo_boxes;
+std::unordered_map<QString, QGroupBox*> group_boxes;
+std::unordered_map<QString, QToolButton*> tool_buttons;
+std::unordered_map<QString, QLineEdit*> line_edits;
+std::unordered_map<QString, QComboBox*> combo_boxes;
 QComboBox* comboBoxSelected;
 
 QStringList group_box_list = {
@@ -355,12 +355,12 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
         EmbGeometry *g = obj->core->geometry;
         switch (objType) {
         case OBJ_ARC: {
-            EmbVector center = obj_center(obj);
+            EmbVector center = obj_center(obj->core);
             EmbVector start = g->object.arc.start;
             EmbVector end = g->object.arc.end;
             update_lineedit_num(line_edits["ArcCenterX"], center.x, false);
             update_lineedit_num(line_edits["ArcCenterY"], -center.y, false);
-            update_lineedit_num(line_edits["ArcRadius"], obj_radius(obj), false);
+            update_lineedit_num(line_edits["ArcRadius"], obj_radius(obj->core), false);
             update_lineedit_num(line_edits["ArcStartAngle"], emb_start_angle(g), true);
             update_lineedit_num(line_edits["ArcEndAngle"], emb_end_angle(g), true);
             update_lineedit_num(line_edits["ArcStartX"], start.x, false);
@@ -379,13 +379,13 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
             break;
         }
         case OBJ_CIRCLE: {
-            EmbVector center = obj_center(obj);
+            EmbVector center = obj_center(obj->core);
             update_lineedit_num(line_edits["CircleCenterX"], center.x, false);
             update_lineedit_num(line_edits["CircleCenterY"], -center.y, false);
-            update_lineedit_num(line_edits["CircleRadius"], obj_radius(obj), false);
-            update_lineedit_num(line_edits["CircleDiameter"], obj_diameter(obj), false);
+            update_lineedit_num(line_edits["CircleRadius"], obj_radius(obj->core), false);
+            update_lineedit_num(line_edits["CircleDiameter"], obj_diameter(obj->core), false);
             update_lineedit_num(line_edits["CircleArea"], emb_area(g), false);
-            update_lineedit_num(line_edits["CircleCircumference"], obj_circumference(obj), false);
+            update_lineedit_num(line_edits["CircleCircumference"], obj_circumference(obj->core), false);
             break;
         }
         case OBJ_DIMALIGNED: {
@@ -421,7 +421,7 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
             break;
         }
         case OBJ_ELLIPSE: {
-            EmbVector center = obj_center(obj);
+            EmbVector center = obj_center(obj->core);
             update_lineedit_num(line_edits["EllipseCenterX"], center.x, false);
             update_lineedit_num(line_edits["EllipseCenterY"], -center.y, false);
             update_lineedit_num(line_edits["EllipseRadiusMajor"], emb_radius_major(g), false);
@@ -439,8 +439,8 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
             break;
         }
         case OBJ_LINE: {
-            EmbVector point1 = obj_end_point_1(obj);
-            EmbVector point2 = obj_end_point_2(obj);
+            EmbVector point1 = obj_end_point_1(obj->core);
+            EmbVector point2 = obj_end_point_2(obj->core);
             EmbVector delta = emb_vector_subtract(point2, point1);
             update_lineedit_num(line_edits["LineStartX"], point1.x, false);
             update_lineedit_num(line_edits["LineStartY"], -point1.y, false);
@@ -449,7 +449,7 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
             update_lineedit_num(line_edits["LineDeltaX"], delta.x, false);
             update_lineedit_num(line_edits["LineDeltaY"], -delta.y, false);
             update_lineedit_num(line_edits["LineAngle"], emb_angle(g), true);
-            update_lineedit_num(line_edits["LineLength"], obj_length(obj), false);
+            update_lineedit_num(line_edits["LineLength"], obj_length(obj->core), false);
             break;
         }
         case OBJ_PATH: {
@@ -457,8 +457,8 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
             break;
         }
         case OBJ_POINT: {
-            update_lineedit_num(line_edits["PointX"], obj_x(obj), false);
-            update_lineedit_num(line_edits["PointY"], -obj_y(obj), false);
+            update_lineedit_num(line_edits["PointX"], obj_x(obj->core), false);
+            update_lineedit_num(line_edits["PointY"], -obj_y(obj->core), false);
             break;
         }
         case OBJ_POLYGON: {
@@ -504,8 +504,8 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
             update_lineedit_num(line_edits["TextSingleHeight"],
                 obj->core->textSize, false);
             update_lineedit_num(line_edits["TextSingleRotation"], -obj->rotation(), true);
-            update_lineedit_num(line_edits["TextSingleX"], obj_x(obj), false);
-            update_lineedit_num(line_edits["TextSingleY"], -obj_y(obj), false);
+            update_lineedit_num(line_edits["TextSingleX"], obj_x(obj->core), false);
+            update_lineedit_num(line_edits["TextSingleY"], -obj_y(obj->core), false);
             update_lineedit_bool(combo_boxes["TextSingleBackward"],
                 obj->core->textBackward, true);
             update_lineedit_bool(combo_boxes["TextSingleUpsideDown"],
@@ -906,18 +906,18 @@ fieldEdited(QObject* fieldObj)
         switch(objType) {
         case OBJ_ARC: {
             if (objName == "lineEditArcCenterX") {
-                EmbVector arc = obj_center(tempObj);
+                EmbVector arc = obj_center(tempObj->core);
                 EmbVector center;
                 center.x = line_edits["ArcCenterX"]->text().toDouble();
                 center.y = arc.y;
-                obj_set_center(tempObj, center);
+                obj_set_center(tempObj->core, center);
             }
             if (objName == "lineEditArcCenterY") {
-                EmbVector arc = obj_center(tempObj);
+                EmbVector arc = obj_center(tempObj->core);
                 EmbVector center;
                 center.x = arc.x;
                 center.y = -line_edits["ArcCenterY"]->text().toDouble();
-                obj_set_center(tempObj, center);
+                obj_set_center(tempObj->core, center);
             }
             if (objName == "lineEditArcRadius") {
                 emb_set_radius(tempObj->core->geometry, line_edits["ArcRadius"]->text().toDouble());
@@ -936,10 +936,10 @@ fieldEdited(QObject* fieldObj)
         }
         case OBJ_CIRCLE: {
             if (objName == "lineEditCircleCenterX") {
-                obj_set_center_x(tempObj, line_edits["CircleCenterX"]->text().toDouble());
+                obj_set_center_x(tempObj->core, line_edits["CircleCenterX"]->text().toDouble());
             }
             if (objName == "lineEditCircleCenterY") {
-                obj_set_center_y(tempObj, -line_edits["CircleCenterY"]->text().toDouble());
+                obj_set_center_y(tempObj->core, -line_edits["CircleCenterY"]->text().toDouble());
             }
             if (objName == "lineEditCircleRadius") {
                 emb_set_radius(tempObj->core->geometry, line_edits["CircleRadius"]->text().toDouble());
@@ -989,10 +989,10 @@ fieldEdited(QObject* fieldObj)
         }
         case OBJ_ELLIPSE: {
             if (objName == "lineEditEllipseCenterX") {
-                obj_set_center_x(tempObj, line_edits["EllipseCenterX"]->text().toDouble());
+                obj_set_center_x(tempObj->core, line_edits["EllipseCenterX"]->text().toDouble());
             }
             if (objName == "lineEditEllipseCenterY") {
-                obj_set_center_y(tempObj, -line_edits["EllipseCenterY"]->text().toDouble());
+                obj_set_center_y(tempObj->core, -line_edits["EllipseCenterY"]->text().toDouble());
             }
             if (objName == "lineEditEllipseRadiusMajor") {
                 emb_set_radius_major(tempObj->core->geometry, line_edits["EllipseRadiusMajor"]->text().toDouble());
@@ -1018,16 +1018,16 @@ fieldEdited(QObject* fieldObj)
         }
         case OBJ_LINE: { 
                 if (objName == "lineEditLineStartX") {
-                    obj_set_x1(tempObj, line_edits["LineStartX"]->text().toDouble());
+                    obj_set_x1(tempObj->core, line_edits["LineStartX"]->text().toDouble());
                 }
                 if (objName == "lineEditLineStartY") {
-                    obj_set_y1(tempObj, -line_edits["LineStartY"]->text().toDouble());
+                    obj_set_y1(tempObj->core, -line_edits["LineStartY"]->text().toDouble());
                 }
                 if (objName == "lineEditLineEndX") {
-                    obj_set_x2(tempObj, line_edits["LineEndX"]->text().toDouble());
+                    obj_set_x2(tempObj->core, line_edits["LineEndX"]->text().toDouble());
                 }
                 if (objName == "lineEditLineEndY") {
-                    obj_set_y2(tempObj, -line_edits["LineEndY"]->text().toDouble());
+                    obj_set_y2(tempObj->core, -line_edits["LineEndY"]->text().toDouble());
                 }
             break;
         }
@@ -1037,10 +1037,10 @@ fieldEdited(QObject* fieldObj)
         }
         case OBJ_POINT: {
             if (objName == "lineEditPointX") {
-                obj_set_x(tempObj, line_edits["PointX"]->text().toDouble());
+                obj_set_x(tempObj->core, line_edits["PointX"]->text().toDouble());
             }
             if (objName == "lineEditPointY") {
-                obj_set_y(tempObj, -line_edits["PointY"]->text().toDouble());
+                obj_set_y(tempObj->core, -line_edits["PointY"]->text().toDouble());
             }
             break;
         }
@@ -1094,11 +1094,11 @@ fieldEdited(QObject* fieldObj)
                 break;
             }
             if (objName == "lineEditTextSingleX") {
-                obj_set_x(tempObj, line_edits["TextSingleX"]->text().toDouble());
+                obj_set_x(tempObj->core, line_edits["TextSingleX"]->text().toDouble());
                 break;
             }
             if (objName == "lineEditTextSingleY") {
-                obj_set_y(tempObj, line_edits["TextSingleY"]->text().toDouble());
+                obj_set_y(tempObj->core, line_edits["TextSingleY"]->text().toDouble());
                 break;
             }
             if (objName == "comboBoxTextSingleBackward") {

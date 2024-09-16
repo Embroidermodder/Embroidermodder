@@ -61,6 +61,7 @@ set(C_CORE
 	${SRC}/data/constants.h
 
 	${SRC}/script.c
+	${SRC}/object_core.c
 	${SRC}/geometry.c
 	${SRC}/xpm.c
 

@@ -32,7 +32,9 @@ Document::Document(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : 
 Document::~Document()
 {
     /* Prevent memory leaks by deleting any objects that were removed from the scene */
-    qDeleteAll(data.hashDeletedObjects.begin(), data.hashDeletedObjects.end());
+    for (const auto& [key, value] : data.hashDeletedObjects) {
+        delete value;
+    }
     data.hashDeletedObjects.clear();
 
     /* Prevent memory leaks by deleting any unused instances. */
@@ -190,7 +192,7 @@ doc_add_object(Document* doc, Object* obj)
 {
     doc->data.gscene->addItem(obj);
     doc->data.gscene->update();
-    doc->data.hashDeletedObjects.remove(obj->core->objID);
+    doc->data.hashDeletedObjects.erase(obj->core->objID);
 }
 
 /* . */
@@ -201,7 +203,7 @@ doc_delete_object(Document* doc, Object* obj)
     obj->setSelected(false);
     doc->data.gscene->removeItem(obj);
     doc->data.gscene->update();
-    doc->data.hashDeletedObjects.insert(obj->core->objID, obj);
+    doc->data.hashDeletedObjects[obj->core->objID] = obj;
 }
 
 /* . */
@@ -375,7 +377,7 @@ doc_set_rubber_mode(Document* doc, int mode)
     foreach (QGraphicsItem* item, doc->data.rubberRoomList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
-            setObjectRubberMode(base->core, mode);
+            obj_set_rubber_mode(base->core, mode);
         }
     }
     doc->data.gscene->update();
@@ -2122,7 +2124,7 @@ doc_start_gripping(Document* doc, Object* obj)
     doc->data.gripBaseObj = obj;
     doc->data.sceneGripPoint = doc->data.gripBaseObj->mouseSnapPoint(doc->data.sceneMousePoint);
     doc->data.gripBaseObj->setObjectRubberPoint("GRIP_POINT", doc->data.sceneGripPoint);
-    setObjectRubberMode(doc->data.gripBaseObj->core, RUBBER_GRIP);
+    obj_set_rubber_mode(doc->data.gripBaseObj->core, RUBBER_GRIP);
 }
 
 /* . */

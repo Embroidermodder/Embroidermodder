@@ -42,7 +42,6 @@
 #include <QGraphicsView>
 #include <QGridLayout>
 #include <QGroupBox>
-#include <QHash>
 #include <QImage>
 #include <QKeyEvent>
 #include <QLabel>
@@ -88,13 +87,8 @@
 #include <QUrl>
 #include <QVBoxLayout>
 #include <QWhatsThis>
-#include <QtGlobal>
-#include <QtGui>
+
 #include <QtPrintSupport>
-
-#include <QOpenGLWidget>
-
-#include <QTimer>
 
 /* C++ Headers */
 #include <string>
@@ -183,7 +177,7 @@ void create_statusbar(MainWindow* mw);
 
 /* . */
 typedef struct DocumentData_ {
-    QHash<int64_t, QGraphicsItem*> hashDeletedObjects;
+    std::unordered_map<int64_t, QGraphicsItem*> hashDeletedObjects;
 
     QList<int64_t> spareRubberList;
 
@@ -339,23 +333,6 @@ QPainterPath obj_path(Object* obj);
 EmbVector obj_rubber_point(Object* obj, QString key);
 QString obj_rubber_text(Object* obj, QString key);
 
-EmbVector obj_end_point_1(Object *obj);
-EmbVector obj_end_point_2(Object *obj);
-EmbVector obj_start_point(Object *obj);
-EmbVector obj_mid_point(Object *obj);
-EmbVector obj_end_point(Object *obj);
-
-EmbVector obj_pos(Object *obj);
-double obj_x(Object *obj);
-double obj_y(Object *obj);
-EmbVector obj_center(Object *obj);
-double obj_center_x(Object *obj);
-double obj_center_y(Object *obj);
-double obj_radius(Object *obj);
-double obj_diameter(Object *obj);
-double obj_circumference(Object *obj);
-EmbVector obj_delta(Object *obj);
-
 EmbVector obj_top_left(Object *obj);
 EmbVector obj_top_right(Object *obj);
 EmbVector obj_bottom_left(Object *obj);
@@ -368,14 +345,7 @@ void obj_update_path(Object *obj);
 void obj_update_path_r(Object *obj, QPainterPath p);
 void obj_update_arc_rect(Object *obj, double radius);
 
-double obj_length(Object *obj);
-
 void obj_set_line_weight(Object *obj, double lineWeight);
-
-void obj_set_x1(Object *obj, double x);
-void obj_set_y1(Object *obj, double y);
-void obj_set_x2(Object *obj, double x);
-void obj_set_y2(Object *obj, double y);
 
 void obj_real_render(Object *obj, QPainter* painter, QPainterPath renderPath);
 
@@ -389,22 +359,11 @@ void obj_set_line(Object *obj, double x1, double y1, double x2, double y2);
 void obj_set_path(Object *obj, QPainterPath p);
 void obj_calculate_data(Object *obj);
 
-void obj_set_pos(Object *obj, EmbVector point);
-void obj_set_x(Object *obj, double x);
-void obj_set_y(Object *obj, double y);
-
 int obj_find_index(Object *obj, EmbVector point);
-
-void obj_set_end_point_1(Object *obj, EmbVector endPt1);
-void obj_set_end_point_2(Object *obj, EmbVector endPt2);
 
 void obj_set_color(Object *obj, const QColor& color);
 void obj_set_color_rgb(Object *obj, QRgb rgb);
 void obj_set_line_type(Object *obj, Qt::PenStyle lineType);
-
-void obj_set_center(Object *obj, EmbVector point);
-void obj_set_center_x(Object *obj, double centerX);
-void obj_set_center_y(Object *obj, double centerY);
 
 void obj_set_text(Object *obj, QString str);
 void obj_set_text_font(Object *obj, QString font);
@@ -422,9 +381,6 @@ void obj_set_text_upside_down(Object *obj, bool val);
 /* ---------------------- Document Functions --------------------------- */
 
 Document *create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent);
-
-void repeat_action(void);
-void move_action(void);
 
 bool doc_allow_zoom_in(Document* doc);
 bool doc_allow_zoom_out(Document* doc);

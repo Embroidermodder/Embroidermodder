@@ -115,6 +115,8 @@ typedef struct SettingsData_ {
 typedef struct ObjectCore_ {
     EmbGeometry *geometry;
 
+    EmbVector position;
+
     uint32_t rgb;
 
     EmbString OBJ_NAME;
@@ -327,6 +329,8 @@ void windowMenuAboutToShow();
 void hide_unimplemented(void);
 void start_blinking(void);
 void stop_blinking(void);
+void repeat_action(void);
+void move_action(void);
 
 ScriptValue run_command(const EmbString cmd, ScriptEnv *context);
 
@@ -426,7 +430,44 @@ void string_copy(EmbString dst, EmbString src);
 int string_array_length(EmbString s[]);
 int string_list_contains(EmbStringTable list, EmbString entry);
 
-/* ---------------------------------- Object ------------------------------- */
+/* ----------------------------- Object Core ------------------------------- */
+
+EmbVector obj_pos(ObjectCore *obj);
+double obj_x(ObjectCore *obj);
+double obj_y(ObjectCore *obj);
+EmbVector obj_center(ObjectCore *obj);
+double obj_center_x(ObjectCore *obj);
+double obj_center_y(ObjectCore *obj);
+double obj_radius(ObjectCore *obj);
+double obj_diameter(ObjectCore *obj);
+double obj_circumference(ObjectCore *obj);
+EmbVector obj_delta(ObjectCore *obj);
+
+EmbVector obj_end_point_1(ObjectCore *obj);
+EmbVector obj_end_point_2(ObjectCore *obj);
+EmbVector obj_start_point(ObjectCore *obj);
+EmbVector obj_mid_point(ObjectCore *obj);
+EmbVector obj_end_point(ObjectCore *obj);
+
+double obj_length(ObjectCore *obj);
+
+void obj_set_pos(ObjectCore *obj, EmbVector point);
+void obj_set_x(ObjectCore *obj, double x);
+void obj_set_y(ObjectCore *obj, double y);
+
+void obj_set_center(ObjectCore *obj, EmbVector point);
+void obj_set_center_x(ObjectCore *obj, double centerX);
+void obj_set_center_y(ObjectCore *obj, double centerY);
+
+void obj_set_end_point_1(ObjectCore *obj, EmbVector endPt1);
+void obj_set_end_point_2(ObjectCore *obj, EmbVector endPt2);
+
+void obj_set_x1(ObjectCore *obj, double x);
+void obj_set_y1(ObjectCore *obj, double y);
+void obj_set_x2(ObjectCore *obj, double x);
+void obj_set_y2(ObjectCore *obj, double y);
+
+void obj_set_rubber_mode(ObjectCore *core, int mode);
 
 /* ---------------------------------- Geometry ----------------------------- */
 
@@ -437,6 +478,7 @@ double emb_height(EmbGeometry *geometry);
 double emb_radius(EmbGeometry *geometry);
 double emb_radius_major(EmbGeometry *geometry);
 double emb_radius_minor(EmbGeometry *geometry);
+double emb_diameter(EmbGeometry *geometry);
 double emb_diameter_major(EmbGeometry *geometry);
 double emb_diameter_minor(EmbGeometry *geometry);
 EmbVector emb_quadrant(EmbGeometry *geometry, int degrees);

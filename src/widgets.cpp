@@ -307,7 +307,7 @@ create_statusbar(MainWindow* mw)
     statusBarQTrackButton = new QToolButton(mw);
     statusBarLwtButton = new QToolButton(mw);
 
-    QHash<QString, QToolButton*> toolbuttons;
+    std::unordered_map<QString, QToolButton*> toolbuttons;
     toolbuttons["SNAP"] = statusBarSnapButton;
     toolbuttons["GRID"] = statusBarGridButton;
     toolbuttons["RULER"] = statusBarRulerButton;

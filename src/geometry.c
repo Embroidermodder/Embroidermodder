@@ -69,6 +69,13 @@ emb_diameter_minor(EmbGeometry *geometry)
     return 1.0;
 }
 
+/* FIXME */
+double
+emb_diameter(EmbGeometry *geometry)
+{
+    return 1.0;
+}
+
 /* . */
 EmbVector
 emb_quadrant(EmbGeometry *geometry, int degrees)
