@@ -274,17 +274,12 @@ QToolButton *create_statusbarbutton(QString buttonText, MainWindow* mw);
 QIcon create_icon(QString icon);
 QPixmap create_pixmap(QString icon);
 
-void nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode);
-void nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubberMode);
-void nativeAddPath(double startX, double startY, const QPainterPath& p, int rubberMode);
-
 void nativeAlert(std::string txt);
 void nativeAppendPromptHistory(std::string txt);
 
-void nativeAddTextMulti(std::string str, double x, double y, double rot, bool fill, int rubberMode);
-void nativeAddTextSingle(std::string str, double x, double y, double rot, bool fill, int rubberMode);
-
-void nativeAddImage(std::string img, double x, double y, double w, double h, double rot);
+void nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode);
+void nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubberMode);
+void nativeAddPath(double startX, double startY, const QPainterPath& p, int rubberMode);
 
 void nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
 

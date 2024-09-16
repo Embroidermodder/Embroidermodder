@@ -361,6 +361,11 @@ void nativeAddHorizontalDimension(double x1, double y1, double x2, double y2, do
 void nativeAddVerticalDimension(double x1, double y1, double x2, double y2, double legHeight);
 void nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode);
 
+void nativeAddTextMulti(char *str, double x, double y, double rot, bool fill, int rubberMode);
+void nativeAddTextSingle(char *str, double x, double y, double rot, bool fill, int rubberMode);
+
+void nativeAddImage(char *img, double x, double y, double w, double h, double rot);
+
 void nativeRedo();
 
 void setMouseCoord(double x, double y);

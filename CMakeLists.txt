@@ -62,6 +62,7 @@ set(C_CORE
 
 	${SRC}/script.c
 	${SRC}/object_core.c
+	${SRC}/command_core.c
 	${SRC}/geometry.c
 	${SRC}/xpm.c
 

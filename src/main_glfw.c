@@ -15,6 +15,57 @@
 
 #include "core.h"
 
+void
+nativeSetCursorShape(char *)
+{
+}
+
+void
+nativeSetBackgroundColor(uint8_t, uint8_t, uint8_t)
+{
+}
+
+void
+nativeSetCrossHairColor(uint8_t, uint8_t, uint8_t)
+{
+}
+
+void
+nativeSetGridColor(uint8_t, uint8_t, uint8_t)
+{
+}
+
+void
+nativeAddTextSingle(char *, double, double, double, bool, int)
+{
+}
+
+void
+nativeAddArc(double, double, double, double, double, double, int)
+{
+}
+
+void
+nativeAddSlot(double, double, double, double, double, bool, int)
+{
+}
+
+void
+nativeAddPoint(double, double)
+{
+}
+
+void
+warning_box(const char *, const char *)
+{
+}
+
+ScriptValue
+run_command(const EmbString cmd, ScriptEnv *context)
+{
+    return script_true;
+}
+
 /* . */
 void
 init_command(void)
