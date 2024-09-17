@@ -221,23 +221,3 @@ EmbStringTable prompt_toolbar = {
     "END"
 };
 
-/* Matches the order of toolbar_list. */
-EmbStringTable *toolbar_data = {
-    file_toolbar,
-    edit_toolbar,
-    view_toolbar,
-    zoom_toolbar,
-    pan_toolbar,
-    icon_toolbar,
-    help_toolbar,
-    layer_toolbar,
-    properties_toolbar,
-    text_toolbar,
-    prompt_toolbar,
-    draw_toolbar,
-    modify_toolbar,
-    inquiry_toolbar,
-    dimension_toolbar,
-    sandbox_toolbar
-};
-

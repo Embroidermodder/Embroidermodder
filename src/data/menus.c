@@ -184,19 +184,3 @@ EmbStringTable window_menu = {
     "END"
 };
 
-EmbStringTable *menu_data = {
-    file_menu,
-    edit_menu,
-    view_menu,
-    draw_menu,
-    tools_menu,
-    modify_menu,
-    dimension_menu,
-    sandbox_menu,
-    window_menu,
-    help_menu,
-    recent_menu,
-    zoom_menu,
-    pan_menu
-};
-

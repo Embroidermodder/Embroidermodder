@@ -607,7 +607,7 @@ class UndoEditor : public QDockWidget
 
 public:
     UndoEditor(QString iconDirectory = "", QWidget* widgetToFocus = 0, QWidget* parent = 0); /*, Qt::WindowFlags flags = 0); */
-    ~UndoEditor();
+    ~UndoEditor() {}
 
     void addStack(QUndoStack* stack);
 

@@ -333,6 +333,7 @@ void repeat_action(void);
 void move_action(void);
 
 ScriptValue run_command(const EmbString cmd, ScriptEnv *context);
+ScriptValue run_command_core(int id, const EmbString cmd, ScriptEnv *context);
 
 void nativeBlinkPrompt();
 
@@ -476,6 +477,15 @@ void obj_set_rubber_mode(ObjectCore *core, int mode);
 
 /* ---------------------------------- Geometry ----------------------------- */
 
+uint32_t emb_pattern_real_count(EmbPattern *pattern);
+uint32_t emb_pattern_count_type(EmbPattern *pattern, uint32_t flags);
+double emb_pattern_shortest_stitch(EmbPattern *pattern);
+double emb_pattern_longest_stitch(EmbPattern *pattern);
+void emb_color_histogram(EmbPattern *pattern, int **bins);
+void emb_length_histogram(EmbPattern *pattern, int *bins);
+double emb_total_thread_length(EmbPattern *pattern);
+double emb_total_thread_of_color(EmbPattern *pattern, int thread_index);
+
 int emb_approx(EmbVector point1, EmbVector point2);
 
 double emb_width(EmbGeometry *geometry);
@@ -581,7 +591,6 @@ extern EmbStringTable tools_menu;
 extern EmbStringTable modify_menu;
 extern EmbStringTable dimension_menu;
 extern EmbStringTable sandbox_menu;
-extern EmbStringTable *menu_data;
 
 extern EmbStringTable toolbar_list;
 extern int toolbars_when_docs[];
@@ -600,8 +609,7 @@ extern EmbStringTable draw_toolbar;
 extern EmbStringTable inquiry_toolbar; 
 extern EmbStringTable modify_toolbar; 
 extern EmbStringTable dimension_toolbar; 
-extern EmbStringTable sandbox_toolbar; 
-extern EmbStringTable *toolbar_data; 
+extern EmbStringTable sandbox_toolbar;
 
 extern int top_toolbar[];
 extern int left_toolbar[];

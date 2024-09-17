@@ -443,23 +443,6 @@ layerManager(void)
     layman.exec();
 }
 
-/* . */
-void
-layerPrevious(void)
-{
-    debug_message("layerPrevious()");
-    todo("Implement layerPrevious.");
-}
-
-/* . */
-void
-layerSelectorIndexChanged(int index)
-{
-    EmbString message;
-    sprintf(message, "layerSelectorIndexChanged(%d)", index);
-    debug_message(message);
-}
-
 void
 MainWindow::colorSelectorIndexChanged(int index)
 {
@@ -673,25 +656,10 @@ promptInputNext(void)
  * BUG: pan commands broke
  */
 ScriptValue
-run_command(const EmbString cmd, ScriptEnv *context)
+run_command_core(int id, const EmbString cmd, ScriptEnv *context)
 {
-    char message[MAX_STRING_LENGTH];
-    int id = get_command_id((char*)cmd);
     Document* doc = NULL;
     ScriptValue value = script_true;
-    sprintf(message, "run_command(%s) %d", cmd, id);
-    debug_message(message);
-
-    if (id < 0) {
-        sprintf(message, "ERROR: %s not found in command_data.", cmd);
-        debug_message(message);
-        return script_false;
-    }
-
-    if (!argument_checks(context, id)) {
-        /* TODO: error */
-        return script_false;
-    }
 
     if (command_data[id].flags & REQUIRED_VIEW) {
         doc = activeDocument();
@@ -1483,12 +1451,9 @@ nativeAddArc(double x1, double y1, double x2, double y2, double x3, double y3, i
     QGraphicsScene* scene = activeScene();
     if (doc && scene) {
         EmbArc arc;
-        arc.start.x = x1;
-        arc.start.y = -y1;
-        arc.mid.y = x2;
-        arc.mid.y = -y2;
-        arc.end.y = x3;
-        arc.end.y = -y3;
+        arc.start = emb_vector(x1, -y1);
+        arc.mid = emb_vector(x2, -y2);
+        arc.end = emb_vector(x3, -y3);
         Object* arcObj = create_arc(arc, getCurrentColor());
         obj_set_rubber_mode(arcObj->core, rubberMode);
         if (rubberMode) {
@@ -1507,8 +1472,7 @@ nativeAddCircle(double centerX, double centerY, double radius, bool fill, int ru
     QUndoStack* stack = activeUndoStack();
     if (doc && gscene && stack) {
         EmbCircle circle;
-        circle.center.x = centerX;
-        circle.center.y = -centerY;
+        circle.center = emb_vector(centerX, -centerY);
         circle.radius = radius;
         Object* obj = create_circle(circle, getCurrentColor());
         obj_set_rubber_mode(obj->core, rubberMode);
@@ -1715,10 +1679,9 @@ void
 nativeScaleSelected(double x, double y, double factor)
 {
     if (factor <= 0.0) {
-        QMessageBox::critical(_main,
-            QString(translate("ScaleFactor Error")),
-            QString(translate("Hi there. If you are not a developer, report this as a bug. "
-            "If you are a developer, your code needs examined, and possibly your head too.")));
+        critical_box(translate("ScaleFactor Error"),
+            translate("Hi there. If you are not a developer, report this as a bug. "
+            "If you are a developer, your code needs examined, and possibly your head too."));
     }
 
     Document* doc = activeDocument();
@@ -1939,96 +1902,12 @@ previewon_command(ScriptEnv *context)
     return script_null;
 }
 
-/* SYSWINDOWS
- * Do nothing for click, context.
- */
-ScriptValue
-syswindows_command(ScriptEnv * context)
-{
-    prompt_output(translate("Enter an option [Cascade/Tile]: "));
-
-    #if 0
-    if (str == "C" || str == "CASCADE") {
-        _main->windowCascade();
-        end_command();
-    }
-    else if (str == "T" || str == "TILE") {
-        _main->windowTile();
-        end_command();
-    }
-    else {
-        alert(translate("Invalid option keyword."));
-        prompt_output(translate("Enter an option [Cascade/Tile]: "));
-    }
-    #endif
-    return script_null;
-}
-
-/* --------------------------------------------------------------------------
- */
-
-ScriptValue
-blink_prompt_command(ScriptEnv* context)
-{
-    start_blinking();
-    return script_null;
-}
-
+/* . */
 ScriptValue
 set_prompt_prefix_command(ScriptEnv* context)
 {
     prompt->setPrefix(QString(STR(0)));
     return script_null;
-}
-
-ScriptValue
-append_prompt_history(ScriptEnv* context)
-{
-    int args = context->argumentCount;
-    if (args == 0) {
-        prompt_output("");
-    }
-    else if (args == 1) {
-        prompt_output(STR(0));
-    }
-    else {
-        prompt_output("appendPromptHistory() requires one or zero arguments");
-        return script_false;
-    }
-    return script_null;
-}
-
-/* . */
-ScriptValue
-messagebox_command(ScriptEnv* context)
-{
-    std::string type(STR(0));
-
-    if (type == "critical") {
-        critical_box(STR(1), STR(2));
-    }
-    else if (type == "information") {
-        information_box(STR(1), STR(2));
-    }
-    else if (type == "question") {
-        question_box(STR(1), STR(2));
-    }
-    else if (type == "warning") {
-        warning_box(STR(1), STR(2));
-    }
-    else {
-        prompt_output("UNKNOWN_ERROR messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
-        return script_false;
-    }
-
-    return script_null;
-}
-
-/* . */
-ScriptValue
-is_int_command(ScriptEnv* context)
-{
-    return script_true;
 }
 
 /* . */
@@ -2045,7 +1924,7 @@ print_area_command(ScriptEnv* context)
     return script_null;
 }
 
-
+/* . */
 ScriptValue
 perpendicular_distance_command(ScriptEnv* context)
 {
@@ -2058,18 +1937,6 @@ perpendicular_distance_command(ScriptEnv* context)
     norm.intersects(line, &iPoint);
     double r = QLineF(REAL(4), REAL(5), iPoint.x(), iPoint.y()).length();
     return script_real(r);
-}
-
-ScriptValue
-scale_selected_command(ScriptEnv* context)
-{
-    if (REAL(2) <= 0.0) {
-        prompt_output("UNKNOWN_ERROR scaleSelected(): scale factor must be greater than zero");
-        return script_false;
-    }
-
-    nativeScaleSelected(REAL(0), REAL(1), REAL(2));
-    return script_null;
 }
 
 /*
@@ -2320,236 +2187,7 @@ UndoableCommand::mirror()
 {
 }
 
-/* LOCATEPOINT */
-ScriptValue
-locatepoint_command(ScriptEnv *context)
-{
-    switch (context->context) {
-    case CONTEXT_MAIN: {
-        prompt_output(translate("Specify point: "));
-        break;
-    }
-    case CONTEXT_CLICK: {
-        char output[200];
-        float x = 0.0f;
-        float y = 0.0f;
-        sprintf(output, "X = %f, Y = %f", x, y);
-        prompt_output(output);
-        end_command();
-        break;
-    }
-    case CONTEXT_CONTEXT:
-        run_command("todo LOCATEPOINT context()", context);
-        break;
-    case CONTEXT_PROMPT:
-        /*
-        EmbVector v;
-        if (!parse_vector(str, &v)) {
-            alert(translate("Invalid point."));
-            prompt_output(translate("Specify point: "));
-        }
-        else {
-            char output[200];
-            sprintf(output, "X = %f, Y = %f", v.x, v.y);
-            prompt_output(output);
-            end_command();
-        }
-        */
-        break;
-    default:
-        break;
-    }
-    return script_null;
-}
-
-
 /* . */
-ScriptValue
-allow_rubber_command(ScriptEnv* context)
-{
-    return script_bool(nativeAllowRubber());
-}
-
-/* . */
-ScriptValue
-set_rubber_mode_command(ScriptEnv* context)
-{
-    std::string mode(STR(0));
-
-    if (mode == "CIRCLE_1P_RAD") {
-        nativeSetRubberMode(RUBBER_CIRCLE_1P_RAD);
-    }
-    else if (mode == "CIRCLE_1P_DIA") {
-        nativeSetRubberMode(RUBBER_CIRCLE_1P_DIA);
-    }
-    else if (mode == "CIRCLE_2P") {
-        nativeSetRubberMode(RUBBER_CIRCLE_2P);
-    }
-    else if (mode == "CIRCLE_3P") {
-        nativeSetRubberMode(RUBBER_CIRCLE_3P);
-    }
-    else if (mode == "CIRCLE_TTR") {
-        nativeSetRubberMode(RUBBER_CIRCLE_TTR);
-    }
-    else if (mode == "CIRCLE_TTT") {
-        nativeSetRubberMode(RUBBER_CIRCLE_TTT);
-    }
-    else if (mode == "DIMLEADER_LINE") {
-        nativeSetRubberMode(RUBBER_DIMLEADER_LINE);
-    }
-    else if (mode == "ELLIPSE_LINE") {
-        nativeSetRubberMode(RUBBER_ELLIPSE_LINE);
-    }
-    else if (mode == "ELLIPSE_MAJDIA_MINRAD") {
-        nativeSetRubberMode(RUBBER_ELLIPSE_MAJDIA_MINRAD);
-    }
-    else if (mode == "ELLIPSE_MAJRAD_MINRAD") {
-        nativeSetRubberMode(RUBBER_ELLIPSE_MAJRAD_MINRAD);
-    }
-    else if (mode == "ELLIPSE_ROTATION") {
-        nativeSetRubberMode(RUBBER_ELLIPSE_ROTATION);
-    }
-    else if (mode == "LINE") {
-        nativeSetRubberMode(RUBBER_LINE);
-    }
-    else if (mode == "POLYGON") {
-        nativeSetRubberMode(RUBBER_POLYGON);
-    }
-    else if (mode == "POLYGON_INSCRIBE") {
-        nativeSetRubberMode(RUBBER_POLYGON_INSCRIBE);
-    }
-    else if (mode == "POLYGON_CIRCUMSCRIBE") {
-        nativeSetRubberMode(RUBBER_POLYGON_CIRCUMSCRIBE);
-    }
-    else if (mode == "POLYLINE") {
-        nativeSetRubberMode(RUBBER_POLYLINE);
-    }
-    else if (mode == "RECTANGLE") {
-        nativeSetRubberMode(RUBBER_RECTANGLE);
-    }
-    else if (mode == "TEXTSINGLE") {
-        nativeSetRubberMode(RUBBER_TEXTSINGLE);
-    }
-    else {
-        prompt_output("UNKNOWN_ERROR setRubberMode(): unknown rubberMode value");
-        return script_false;
-    }
-
-    return script_null;
-}
-
-/* . */
-ScriptValue
-set_rubber_point_command(ScriptEnv* context)
-{
-    nativeSetRubberPoint(STR(0), REAL(1), REAL(2));
-    return script_null;
-}
-
-/* . */
-ScriptValue
-set_rubber_text_command(ScriptEnv* context)
-{
-    nativeSetRubberText(STR(0), STR(1));
-    return script_null;
-}
-
-ScriptValue
-add_rubber_command(ScriptEnv* context)
-{
-    std::string objType(STR(0));
-
-    if (!nativeAllowRubber()) {
-        prompt_output("UNKNOWN_ERROR addRubber(): You must use vulcanize() before you can add another rubber object.");
-        return script_false;
-    }
-
-    /* FIXME: ERROR CHECKING */
-    double mx = run_command("get mousex", context).r;
-    double my = run_command("get mousey", context).r;
-
-    if (objType == "ARC") {
-        /* TODO: handle this type */
-    }
-    else if (objType == "BLOCK") {
-        /* TODO: handle this type */
-    }
-    else if (objType == "CIRCLE") {
-        nativeAddCircle(mx, my, 0, false, RUBBER_ON);
-    }
-    else if (objType == "DIMALIGNED") {
-        /* TODO: handle this type */
-    }
-    else if (objType == "DIMANGULAR") {
-        /* TODO: handle this type */
-    }
-    else if (objType == "DIMARCLENGTH") {
-        /* TODO: handle this type */
-    }
-    else if (objType == "DIMDIAMETER") {
-        /* TODO: handle this type */
-    }
-    else if (objType == "DIMLEADER") {
-        nativeAddDimLeader(mx, my, mx, my, 0, RUBBER_ON);
-    }
-    else if (objType == "DIMLINEAR") {
-        /* TODO: handle this type */
-    }
-    else if (objType == "DIMORDINATE") {
-        /* TODO: handle this type */
-    }
-    else if (objType == "DIMRADIUS") {
-        /* TODO: handle this type */
-    }
-    else if (objType == "ELLIPSE") {
-        nativeAddEllipse(mx, my, 0, 0, 0, 0, RUBBER_ON);
-    }
-    else if (objType == "ELLIPSEARC") {
-        /* TODO: handle this type */
-    }
-    else if (objType == "HATCH") {
-        /* TODO: handle this type */
-    }
-    else if (objType == "IMAGE") {
-        /* TODO: handle this type */
-    }
-    else if (objType == "INFINITELINE") {
-        /* TODO: handle this type */
-    }
-    else if (objType == "LINE") {
-        nativeAddLine(mx, my, mx, my, 0, RUBBER_ON);
-    }
-    else if (objType == "PATH") {
-        /* TODO: handle this type */
-    }
-    else if (objType == "POINT") {
-        /* TODO: handle this type */
-    }
-    else if (objType == "POLYGON") {
-        nativeAddPolygon(mx, my, QPainterPath(), RUBBER_ON);
-    }
-    else if (objType == "POLYLINE") {
-        nativeAddPolyline(mx, my, QPainterPath(), RUBBER_ON);
-    }
-    else if (objType == "RAY") {
-        /* TODO: handle this type */
-    }
-    else if (objType == "RECTANGLE") {
-        nativeAddRectangle(mx, my, mx, my, 0, 0, RUBBER_ON);
-    }
-    else if (objType == "SPLINE") {
-        /* TODO: handle this type */
-    }
-    else if (objType == "TEXTMULTI") {
-        /* TODO: handle this type */
-    }
-    else if (objType == "TEXTSINGLE") {
-        nativeAddTextSingle("", mx, my, 0, false, RUBBER_ON);
-    }
-
-    return script_null;
-}
-
 ScriptValue
 clear_rubber_command(ScriptEnv* context)
 {
@@ -2560,38 +2198,3 @@ clear_rubber_command(ScriptEnv* context)
     return script_null;
 }
 
-ScriptValue
-spare_rubber_command(ScriptEnv* context)
-{
-    if (context->argumentCount != 1) {
-        prompt_output("spareRubber() requires one argument");
-        return script_false;
-    }
-    if (context->argument[0].type != SCRIPT_STRING) {
-        prompt_output("TYPE_ERROR, spareRubber(): first argument is not a string");
-        return script_false;
-    }
-
-    QString objID(STR(0));
-
-    if (objID == "PATH") {
-        nativeSpareRubber(SPARE_RUBBER_PATH);
-    }
-    else if (objID == "POLYGON") {
-        nativeSpareRubber(SPARE_RUBBER_POLYGON);
-    }
-    else if (objID == "POLYLINE") {
-        nativeSpareRubber(SPARE_RUBBER_POLYLINE);
-    }
-    else {
-        bool ok = false;
-        int64_t id = objID.toLongLong(&ok);
-        if (!ok) {
-            prompt_output("TYPE_ERROR, spareRubber(): error converting object ID into an int64");
-            return script_false;
-        }
-        nativeSpareRubber(id);
-    }
-
-    return script_null;
-}

@@ -12,6 +12,8 @@
 
 #include "core.h"
 
+#define NUMBINS   10
+
 double epsilon = 0.000000001;
 
 int
@@ -553,14 +555,14 @@ emb_circumference(EmbGeometry *geometry)
 EmbVector
 emb_end_point_1(EmbGeometry *geometry)
 {
-    return ;
+    return emb_pos(geometry);
 }
 
 /* . */
 EmbVector
 emb_end_point_2(EmbGeometry *geometry)
 {
-    return ;
+    return emb_pos(geometry);
 }
 
 /* . */
@@ -957,3 +959,197 @@ emb_sub_path_list(EmbGeometry *geometry)
 }
 
 #endif
+
+/* Get the position as a vector from the stitch. */
+EmbVector
+emb_st_pos(EmbStitch st)
+{
+    return emb_vector(st.x, st.y);
+}
+
+/* Length of stitch starting of "prev_st" and ending at "st". */
+double
+emb_stitch_length(EmbStitch prev_st, EmbStitch st)
+{
+    EmbVector pos = emb_st_pos(st);
+    EmbVector prev_pos = emb_st_pos(prev_st);
+    double length = emb_vector_distance(pos, prev_pos);
+    return length;
+}
+
+/* Returns the number of real stitches in a pattern.
+ * We consider SEQUIN to be a real stitch in this count.
+ */
+uint32_t
+emb_pattern_real_count(EmbPattern *pattern)
+{
+    uint32_t total = 0;
+    for (int i = 0; i < pattern->stitch_list->count; i++) {
+        EmbStitch st = pattern->stitch_list->stitch[i];
+        if (!(st.flags & (JUMP | TRIM))) {
+            total++;
+        }
+    }
+    return total;
+}
+
+/* The length of the longest stitch in the pattern. */
+double
+emb_pattern_longest_stitch(EmbPattern *pattern)
+{
+    if (pattern->stitch_list->count < 2) {
+        return;
+    }
+
+    double max_stitch = 0.0;
+    EmbStitch prev_st = pattern->stitch_list->stitch[0];
+    for (int i = 1; i < pattern->stitch_list->count; i++) {
+        EmbStitch st = pattern->stitch_list->stitch[i];
+        if ((prev_st.flags == NORMAL) && (st.flags == NORMAL)) {
+            double length = emb_stitch_length(st, prev_st);
+            if (length > max_stitch) {
+                max_stitch = length;
+            }
+        }
+        prev_st = st;
+    }
+    return max_stitch;    
+}
+
+/* The length of the shortest stitch in the pattern. */
+double
+emb_pattern_shortest_stitch(EmbPattern *pattern)
+{
+    if (pattern->stitch_list->count < 2) {
+        return;
+    }
+
+    double min_stitch = 1.0e10;
+    EmbStitch prev_st = pattern->stitch_list->stitch[0];
+    for (int i = 1; i < pattern->stitch_list->count; i++) {
+        EmbStitch st = pattern->stitch_list->stitch[i];
+        if ((prev_st.flags == NORMAL) && (st.flags == NORMAL)) {
+            double length = emb_stitch_length(st, prev_st);
+            if (length < min_stitch) {
+                min_stitch = length;
+            }
+        }
+        prev_st = st;
+    }
+    return min_stitch;    
+}
+
+/* Returns the number of stitches in a pattern that are of any of the types
+ * or-ed together in "flag". For example to count the total number of
+ * TRIM and STOP stitches use:
+ *
+ *     emb_pattern_count_type(pattern, TRIM | STOP);
+ */
+uint32_t
+emb_pattern_count_type(EmbPattern *pattern, uint32_t flag)
+{
+    uint32_t total = 0;
+    for (int i = 0; i < pattern->stitch_list->count; i++) {
+        EmbStitch st = pattern->stitch_list->stitch[i];
+        if (st.flags & flag) {
+            total++;
+        }
+    }
+    return total;
+}
+
+/* . */
+void
+emb_length_histogram(EmbPattern *pattern, int *bins)
+{
+    if (pattern->stitch_list->count < 2) {
+        return;
+    }
+
+    for (int i = 0; i <= NUMBINS; i++) {
+        bins[i] = 0;
+    }
+
+    double max_stitchlength = emb_pattern_longest_stitch(pattern);
+    EmbStitch prev_st = pattern->stitch_list->stitch[0];
+    for (int i = 1; i < pattern->stitch_list->count; i++) {
+        EmbStitch st = pattern->stitch_list->stitch[i];
+        if ((prev_st.flags == NORMAL) && (st.flags == NORMAL)) {
+            double length = emb_stitch_length(st, prev_st);
+            int bin_number = (int)floor(NUMBINS*length/max_stitchlength);
+            bins[bin_number]++;
+        }
+        prev_st = st;
+    }
+}
+
+/* . */
+void
+emb_color_histogram(EmbPattern *pattern, int **bins)
+{
+    if (pattern->stitch_list->count < 2) {
+        return;
+    }
+
+    for (int j = 0; j < pattern->thread_list->count; j++)
+    for (int i = 0; i <= NUMBINS; i++) {
+        bins[j][i] = 0;
+    }
+
+    double max_stitchlength = emb_pattern_longest_stitch(pattern);
+    EmbStitch prev_st = pattern->stitch_list->stitch[0];
+    for (int i = 1; i < pattern->stitch_list->count; i++) {
+        EmbStitch st = pattern->stitch_list->stitch[i];
+        /* Can't count first normal stitch. */
+        if ((prev_st.flags == NORMAL) && (st.flags == NORMAL)) {
+            double length = emb_stitch_length(st, prev_st);
+            int bin_number = (int)floor(NUMBINS*length/max_stitchlength);
+            bins[0][bin_number]++;
+        }
+        prev_st = st;
+    }
+}
+
+/* . */
+double
+emb_total_thread_length(EmbPattern *pattern)
+{
+    if (pattern->stitch_list->count < 2) {
+        return 0.0;
+    }
+
+    double total = 0.0;
+    EmbStitch prev_st = pattern->stitch_list->stitch[0];
+    for (int i = 1; i < pattern->stitch_list->count; i++) {
+        EmbStitch st = pattern->stitch_list->stitch[i];
+        /* Can't count first normal stitch. */
+        if (st.flags == NORMAL) {
+            total += emb_stitch_length(st, prev_st);
+        }
+        prev_st = st;
+    }
+    return total;
+}
+
+/* FIXME. */
+double
+emb_total_thread_of_color(EmbPattern *pattern, int thread_index)
+{
+    if (pattern->stitch_list->count < 2) {
+        return 0.0;
+    }
+
+    double total = 0.0;
+    EmbStitch prev_st = pattern->stitch_list->stitch[0];
+    for (int i = 1; i < pattern->stitch_list->count; i++) {
+        EmbStitch st = pattern->stitch_list->stitch[i];
+        /* Can't count first normal stitch. */
+        if (st.color == thread_index)
+        if ((prev_st.flags == NORMAL) && (st.flags == NORMAL)) {
+            total += emb_stitch_length(st, prev_st);
+        }
+        prev_st = st;
+    }
+    return total;
+}
+

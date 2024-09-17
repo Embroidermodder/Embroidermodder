@@ -416,12 +416,10 @@ MainWindow::MainWindow() : QMainWindow(0)
     /* Init */
     _main = this;
 
-    /* Menus */
     for (int i=0; i<N_MENUS; i++) {
         menu[i] = new QMenu(translate(menu_list[i]), this);
     }
 
-    /* Toolbars */
     for (int i=0; i<N_TOOLBARS; i++) {
         toolbar[i] = new QToolBar(translate(toolbar_list[i]), this);
     }
@@ -460,12 +458,6 @@ MainWindow::MainWindow() : QMainWindow(0)
     mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
-
-    /*
-    ExperimentalView *openGL = new ExperimentalView(this);
-    QLabel *example = new QLabel(translate("OpenGL"));
-    layout->addWidget(openGL);
-    */
 
     layout->addWidget(mdiArea);
     setCentralWidget(vbox);
@@ -541,9 +533,19 @@ MainWindow::MainWindow() : QMainWindow(0)
      */
     debug_message("create all menus");
 
-    for (int i=0; i<N_MENUS; i++) {
-        add_to_menu(i, menu_data[i]);
-    }
+    add_to_menu(MENU_FILE, file_menu);
+    add_to_menu(MENU_EDIT, edit_menu);
+    add_to_menu(MENU_VIEW, view_menu);
+    add_to_menu(MENU_DRAW, draw_menu);
+    add_to_menu(MENU_TOOLS, tools_menu);
+    add_to_menu(MENU_MODIFY, modify_menu);
+    add_to_menu(MENU_DIMENSION, dimension_menu);
+    add_to_menu(MENU_SANDBOX, sandbox_menu);
+//    add_to_menu(MENU_WINDOW, window_menu);
+    add_to_menu(MENU_HELP, help_menu);
+//    add_to_menu(MENU_RECENT, recent_menu);
+    add_to_menu(MENU_ZOOM, zoom_menu);
+    add_to_menu(MENU_PAN, pan_menu);
 
     for (int i=0; menubar_full_list[i] != TERMINATOR_SYMBOL; i++) {
         menuBar()->addMenu(menu[i]);
@@ -628,14 +630,15 @@ MainWindow::MainWindow() : QMainWindow(0)
     connect(textFontSelector, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(textFontSelectorCurrentFontChanged(const QFont&)));
 
     toolbar[TOOLBAR_TEXT]->addAction(actionHash[ACTION_TEXT_BOLD]);
-    actionHash[ACTION_TEXT_BOLD]->setChecked(get_bool(TEXT_STYLE_BOLD));
     toolbar[TOOLBAR_TEXT]->addAction(actionHash[ACTION_TEXT_ITALIC]);
-    actionHash[ACTION_TEXT_ITALIC]->setChecked(get_bool(TEXT_STYLE_ITALIC));
     toolbar[TOOLBAR_TEXT]->addAction(actionHash[ACTION_TEXT_UNDERLINE]);
-    actionHash[ACTION_TEXT_UNDERLINE]->setChecked(get_bool(TEXT_STYLE_UNDERLINE));
     toolbar[TOOLBAR_TEXT]->addAction(actionHash[ACTION_TEXT_STRIKEOUT]);
-    actionHash[ACTION_TEXT_STRIKEOUT]->setChecked(get_bool(TEXT_STYLE_STRIKEOUT));
     toolbar[TOOLBAR_TEXT]->addAction(actionHash[ACTION_TEXT_OVERLINE]);
+
+    actionHash[ACTION_TEXT_BOLD]->setChecked(get_bool(TEXT_STYLE_BOLD));
+    actionHash[ACTION_TEXT_ITALIC]->setChecked(get_bool(TEXT_STYLE_ITALIC));
+    actionHash[ACTION_TEXT_UNDERLINE]->setChecked(get_bool(TEXT_STYLE_UNDERLINE));
+    actionHash[ACTION_TEXT_STRIKEOUT]->setChecked(get_bool(TEXT_STYLE_STRIKEOUT));
     actionHash[ACTION_TEXT_OVERLINE]->setChecked(get_bool(TEXT_STYLE_OVERLINE));
 
     textSizeSelector->setFocusProxy(prompt);

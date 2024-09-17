@@ -57,6 +57,23 @@ makeLayerActive(void)
 
 /* . */
 void
+layerPrevious(void)
+{
+    debug_message("layerPrevious()");
+    todo("Implement layerPrevious.");
+}
+
+/* . */
+void
+layerSelectorIndexChanged(int index)
+{
+    EmbString message;
+    sprintf(message, "layerSelectorIndexChanged(%d)", index);
+    debug_message(message);
+}
+
+/* . */
+void
 linetypeSelectorIndexChanged(int index)
 {
     EmbString message;
@@ -73,6 +90,28 @@ lineweightSelectorIndexChanged(int index)
     debug_message(message);
 }
 
+/* . */
+ScriptValue
+run_command(const EmbString cmd, ScriptEnv *context)
+{
+    char message[MAX_STRING_LENGTH];
+    int id = get_command_id((char*)cmd);
+    sprintf(message, "run_command(%s) %d", cmd, id);
+    debug_message(message);
+
+    if (id < 0) {
+        sprintf(message, "ERROR: %s not found in command_data.", cmd);
+        debug_message(message);
+        return script_false;
+    }
+
+    if (!argument_checks(context, id)) {
+        /* TODO: error */
+        return script_false;
+    }
+
+    return run_command_core(id, cmd, context);
+}
 
 /* FIXME: reconnect to new command system.
  */
@@ -1383,11 +1422,362 @@ add_polyline_command(ScriptEnv* context)
     return script_null;
 }
 
+/* SYSWINDOWS
+ * Do nothing for click, context.
+ */
+ScriptValue
+syswindows_command(ScriptEnv * context)
+{
+    prompt_output(translate("Enter an option [Cascade/Tile]: "));
+
+    #if 0
+    if (str == "C" || str == "CASCADE") {
+        _main->windowCascade();
+        end_command();
+    }
+    else if (str == "T" || str == "TILE") {
+        _main->windowTile();
+        end_command();
+    }
+    else {
+        alert(translate("Invalid option keyword."));
+        prompt_output(translate("Enter an option [Cascade/Tile]: "));
+    }
+    #endif
+    return script_null;
+}
+
+/* . */
+ScriptValue
+blink_prompt_command(ScriptEnv* context)
+{
+    start_blinking();
+    return script_null;
+}
+
+/* . */
+ScriptValue
+is_int_command(ScriptEnv* context)
+{
+    return script_true;
+}
+
+/* . */
+ScriptValue
+scale_selected_command(ScriptEnv* context)
+{
+    if (REAL(2) <= 0.0) {
+        prompt_output("UNKNOWN_ERROR scaleSelected(): scale factor must be greater than zero");
+        return script_false;
+    }
+
+    nativeScaleSelected(REAL(0), REAL(1), REAL(2));
+    return script_null;
+}
+
+/* . */
+ScriptValue
+set_rubber_point_command(ScriptEnv* context)
+{
+    // FIXME: nativeSetRubberPoint(STR(0), REAL(1), REAL(2));
+    return script_null;
+}
+
+/* . */
+ScriptValue
+set_rubber_text_command(ScriptEnv* context)
+{
+    // FIXME: nativeSetRubberText(STR(0), STR(1));
+    return script_null;
+}
+
+/* . */
+ScriptValue
+add_rubber_command(ScriptEnv* context)
+{
+    if (!nativeAllowRubber()) {
+        prompt_output("UNKNOWN_ERROR addRubber(): You must use vulcanize() before you can add another rubber object.");
+        return script_false;
+    }
+
+    /* FIXME: ERROR CHECKING */
+    double mx = run_command("get mousex", context).r;
+    double my = run_command("get mousey", context).r;
+
+    if (string_equal(STR(0), "ARC")) {
+        /* TODO: handle this type */
+    }
+    else if (string_equal(STR(0), "BLOCK")) {
+        /* TODO: handle this type */
+    }
+    else if (string_equal(STR(0), "CIRCLE")) {
+        nativeAddCircle(mx, my, 0, false, RUBBER_ON);
+    }
+    else if (string_equal(STR(0), "DIMALIGNED")) {
+        /* TODO: handle this type */
+    }
+    else if (string_equal(STR(0), "DIMANGULAR")) {
+        /* TODO: handle this type */
+    }
+    else if (string_equal(STR(0), "DIMARCLENGTH")) {
+        /* TODO: handle this type */
+    }
+    else if (string_equal(STR(0), "DIMDIAMETER")) {
+        /* TODO: handle this type */
+    }
+    else if (string_equal(STR(0), "DIMLEADER")) {
+        nativeAddDimLeader(mx, my, mx, my, 0, RUBBER_ON);
+    }
+    else if (string_equal(STR(0), "DIMLINEAR")) {
+        /* TODO: handle this type */
+    }
+    else if (string_equal(STR(0), "DIMORDINATE")) {
+        /* TODO: handle this type */
+    }
+    else if (string_equal(STR(0), "DIMRADIUS")) {
+        /* TODO: handle this type */
+    }
+    else if (string_equal(STR(0), "ELLIPSE")) {
+        nativeAddEllipse(mx, my, 0, 0, 0, 0, RUBBER_ON);
+    }
+    else if (string_equal(STR(0), "ELLIPSEARC")) {
+        /* TODO: handle this type */
+    }
+    else if (string_equal(STR(0), "HATCH")) {
+        /* TODO: handle this type */
+    }
+    else if (string_equal(STR(0), "IMAGE")) {
+        /* TODO: handle this type */
+    }
+    else if (string_equal(STR(0), "INFINITELINE")) {
+        /* TODO: handle this type */
+    }
+    else if (string_equal(STR(0), "LINE")) {
+        nativeAddLine(mx, my, mx, my, 0, RUBBER_ON);
+    }
+    else if (string_equal(STR(0), "PATH")) {
+        /* TODO: handle this type */
+    }
+    else if (string_equal(STR(0), "POINT")) {
+        /* TODO: handle this type */
+    }
+    else if (string_equal(STR(0), "POLYGON")) {
+        /* FIXME: */
+        //nativeAddPolygon(mx, my, NULL, RUBBER_ON);
+    }
+    else if (string_equal(STR(0), "POLYLINE")) {
+        /* FIXME: */
+        //nativeAddPolyline(mx, my, NULL, RUBBER_ON);
+    }
+    else if (string_equal(STR(0), "RAY")) {
+        /* TODO: handle this type */
+    }
+    else if (string_equal(STR(0), "RECTANGLE")) {
+        nativeAddRectangle(mx, my, mx, my, 0, 0, RUBBER_ON);
+    }
+    else if (string_equal(STR(0), "SPLINE")) {
+        /* TODO: handle this type */
+    }
+    else if (string_equal(STR(0), "TEXTMULTI")) {
+        /* TODO: handle this type */
+    }
+    else if (string_equal(STR(0), "TEXTSINGLE")) {
+        nativeAddTextSingle("", mx, my, 0, false, RUBBER_ON);
+    }
+
+    return script_null;
+}
+
+/* . */
+ScriptValue
+set_rubber_mode_command(ScriptEnv* context)
+{
+    if (string_equal(STR(0),"CIRCLE_1P_RAD")) {
+        nativeSetRubberMode(RUBBER_CIRCLE_1P_RAD);
+    }
+    else if (string_equal(STR(0),"CIRCLE_1P_DIA")) {
+        nativeSetRubberMode(RUBBER_CIRCLE_1P_DIA);
+    }
+    else if (string_equal(STR(0),"CIRCLE_2P")) {
+        nativeSetRubberMode(RUBBER_CIRCLE_2P);
+    }
+    else if (string_equal(STR(0),"CIRCLE_3P")) {
+        nativeSetRubberMode(RUBBER_CIRCLE_3P);
+    }
+    else if (string_equal(STR(0),"CIRCLE_TTR")) {
+        nativeSetRubberMode(RUBBER_CIRCLE_TTR);
+    }
+    else if (string_equal(STR(0),"CIRCLE_TTT")) {
+        nativeSetRubberMode(RUBBER_CIRCLE_TTT);
+    }
+    else if (string_equal(STR(0),"DIMLEADER_LINE")) {
+        nativeSetRubberMode(RUBBER_DIMLEADER_LINE);
+    }
+    else if (string_equal(STR(0),"ELLIPSE_LINE")) {
+        nativeSetRubberMode(RUBBER_ELLIPSE_LINE);
+    }
+    else if (string_equal(STR(0),"ELLIPSE_MAJDIA_MINRAD")) {
+        nativeSetRubberMode(RUBBER_ELLIPSE_MAJDIA_MINRAD);
+    }
+    else if (string_equal(STR(0),"ELLIPSE_MAJRAD_MINRAD")) {
+        nativeSetRubberMode(RUBBER_ELLIPSE_MAJRAD_MINRAD);
+    }
+    else if (string_equal(STR(0),"ELLIPSE_ROTATION")) {
+        nativeSetRubberMode(RUBBER_ELLIPSE_ROTATION);
+    }
+    else if (string_equal(STR(0),"LINE")) {
+        nativeSetRubberMode(RUBBER_LINE);
+    }
+    else if (string_equal(STR(0),"POLYGON")) {
+        nativeSetRubberMode(RUBBER_POLYGON);
+    }
+    else if (string_equal(STR(0),"POLYGON_INSCRIBE")) {
+        nativeSetRubberMode(RUBBER_POLYGON_INSCRIBE);
+    }
+    else if (string_equal(STR(0),"POLYGON_CIRCUMSCRIBE")) {
+        nativeSetRubberMode(RUBBER_POLYGON_CIRCUMSCRIBE);
+    }
+    else if (string_equal(STR(0),"POLYLINE")) {
+        nativeSetRubberMode(RUBBER_POLYLINE);
+    }
+    else if (string_equal(STR(0),"RECTANGLE")) {
+        nativeSetRubberMode(RUBBER_RECTANGLE);
+    }
+    else if (string_equal(STR(0),"TEXTSINGLE")) {
+        nativeSetRubberMode(RUBBER_TEXTSINGLE);
+    }
+    else {
+        prompt_output("UNKNOWN_ERROR setRubberMode(): unknown rubberMode value");
+        return script_false;
+    }
+
+    return script_null;
+}
+
+/* . */
+ScriptValue
+spare_rubber_command(ScriptEnv* context)
+{
+    if (context->argumentCount != 1) {
+        prompt_output("spareRubber() requires one argument");
+        return script_false;
+    }
+    if (context->argument[0].type != SCRIPT_STRING) {
+        prompt_output("TYPE_ERROR, spareRubber(): first argument is not a string");
+        return script_false;
+    }
+
+    if (string_equal(STR(0), "PATH")) {
+        nativeSpareRubber(SPARE_RUBBER_PATH);
+    }
+    else if (string_equal(STR(0), "POLYGON")) {
+        nativeSpareRubber(SPARE_RUBBER_POLYGON);
+    }
+    else if (string_equal(STR(0), "POLYLINE")) {
+        nativeSpareRubber(SPARE_RUBBER_POLYLINE);
+    }
+    else {
+        /* FIXME:
+        nativeSpareRubber(context->objID);
+        */
+    }
+
+    return script_null;
+}
+
+/* . */
+ScriptValue
+allow_rubber_command(ScriptEnv* context)
+{
+    return script_bool(nativeAllowRubber());
+}
+
+/* LOCATEPOINT */
+ScriptValue
+locatepoint_command(ScriptEnv *context)
+{
+    switch (context->context) {
+    case CONTEXT_MAIN: {
+        prompt_output(translate("Specify point: "));
+        break;
+    }
+    case CONTEXT_CLICK: {
+        char output[200];
+        float x = 0.0f;
+        float y = 0.0f;
+        sprintf(output, "X = %f, Y = %f", x, y);
+        prompt_output(output);
+        end_command();
+        break;
+    }
+    case CONTEXT_CONTEXT:
+        run_command("todo LOCATEPOINT context()", context);
+        break;
+    case CONTEXT_PROMPT:
+        EmbVector v;
+        char str[200];
+        if (!parse_vector(str, &v)) {
+            // FIXME: alert(translate("Invalid point."));
+            prompt_output(translate("Specify point: "));
+        }
+        else {
+            char output[200];
+            sprintf(output, "X = %f, Y = %f", v.x, v.y);
+            prompt_output(output);
+            end_command();
+        }
+        break;
+    default:
+        break;
+    }
+    return script_null;
+}
+
+/* . */
+ScriptValue
+messagebox_command(ScriptEnv* context)
+{
+    if (string_equal(STR(0), "critical")) {
+        critical_box(STR(1), STR(2));
+    }
+    else if (string_equal(STR(0), "information")) {
+        information_box(STR(1), STR(2));
+    }
+    else if (string_equal(STR(0), "question")) {
+        question_box(STR(1), STR(2));
+    }
+    else if (string_equal(STR(0), "warning")) {
+        warning_box(STR(1), STR(2));
+    }
+    else {
+        prompt_output("UNKNOWN_ERROR messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
+        return script_false;
+    }
+
+    return script_null;
+}
+
+/* . */
+ScriptValue
+append_prompt_history(ScriptEnv* context)
+{
+    int args = context->argumentCount;
+    if (args == 0) {
+        prompt_output("");
+    }
+    else if (args == 1) {
+        prompt_output(STR(0));
+    }
+    else {
+        prompt_output("appendPromptHistory() requires one or zero arguments");
+        return script_false;
+    }
+    return script_null;
+}
+
 /* . */
 void
 nativeAddTextMulti(char *str, double x, double y, double rot, bool fill, int rubberMode)
 {
 }
-
-
 

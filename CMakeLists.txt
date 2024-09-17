@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(embroidermodder2 VERSION 2.0.0 LANGUAGES C CXX)
 
 find_package(OpenGL REQUIRED)
+find_package(GLEW REQUIRED)
 find_package(Qt6 COMPONENTS Core Widgets PrintSupport OpenGL OpenGLWidgets REQUIRED)
 
 set(CMAKE_C_STANDARD 99)
@@ -86,26 +87,31 @@ qt_add_executable(embroidermodder2
 add_executable(emb2_glfw
 	${C_CORE}
 
+	${EXTERN}/nanovg/src/nanovg.c
+	${EXTERN}/nanovg/src/nanovg.h
+
 	${SRC}/main_glfw.c
 )
 
 include_directories(
 	${EXTERN}/libembroidery
 	${EXTERN}/tomlc99
+	${EXTERN}/glfw/include
+	${EXTERN}/nanovg/src
+	${GLEW_INCLUDE_DIRS}
+	${OPENGL_INCLUDE_DIRS}
 	${SRC}
 )
 
 target_link_libraries(embroidermodder2 PRIVATE
 	Qt6::Core
-	Qt6::OpenGL
 	Qt6::Widgets
-	Qt6::OpenGLWidgets
 	Qt6::PrintSupport
-	${OPENGL_LIBRARIES}
 )
 
 target_link_libraries(emb2_glfw PRIVATE
 	glfw
+	${GLEW_LIBRARIES}
 	${OPENGL_LIBRARIES}
 )
 
