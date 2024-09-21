@@ -12,6 +12,12 @@
 
 #include "embroidermodder.h"
 
+/* Could initialise all documents to NULL rather than having a seperate memory
+ * usage array?
+ */
+Document *documents[MAX_OPEN_FILES];
+bool document_memory[MAX_OPEN_FILES];
+
 /* . */
 void
 exit_program(void)
@@ -284,7 +290,7 @@ iconResize(int iconSize)
 
 /* . */
 MdiWindow*
-activeMdiWindow()
+activeMdiWindow(void)
 {
     debug_message("activeMdiWindow()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
@@ -292,16 +298,15 @@ activeMdiWindow()
 }
 
 /* . */
-Document*
-activeDocument()
+int32_t
+activeDocument(void)
 {
     debug_message("activeDocument()");
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    MdiWindow* mdiWin = activeMdiWindow();
     if (mdiWin) {
-        Document* v = mdiWin->gview;
-        return v;
+        return mdiWin->doc_index;
     }
-    return 0;
+    return -1;
 }
 
 /* . */
@@ -322,12 +327,64 @@ QUndoStack*
 activeUndoStack(void)
 {
     debug_message("activeUndoStack()");
-    Document* v = activeDocument();
-    if (v) {
-        QUndoStack* u = v->data.undoStack;
+    //FIXME
+    return NULL;
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        QUndoStack* u = documents[doc_index]->data.undoStack;
         return u;
     }
     return 0;
+}
+
+/* . */
+void
+whats_this_mode(void)
+{
+    debug_message("whatsThisContextHelp()");
+    QWhatsThis::enterWhatsThisMode();
+}
+
+void
+window_close_all(void)
+{
+    mdiArea->closeAllSubWindows();
+}
+
+void
+window_cascade(void)
+{
+    mdiArea->cascade();
+}
+
+void
+window_tile(void)
+{
+    mdiArea->tile();
+}
+
+void
+window_next(void)
+{
+    mdiArea->activateNextSubWindow();
+}
+
+void
+window_previous(void)
+{
+    mdiArea->activatePreviousSubWindow();
+}
+
+void
+disable_rapid_fire(void)
+{
+    prompt->disableRapidFire();
+}
+
+void
+enable_rapid_fire(void)
+{
+    prompt->enableRapidFire();
 }
 
 /* . */
@@ -652,570 +709,6 @@ promptInputNext(void)
     }
 }
 
-/*
- * BUG: pan commands broke
- */
-ScriptValue
-run_command_core(int id, const EmbString cmd, ScriptEnv *context)
-{
-    Document* doc = NULL;
-    ScriptValue value = script_true;
-
-    if (command_data[id].flags & REQUIRED_VIEW) {
-        doc = activeDocument();
-        if (!doc) {
-            return value;
-        }
-    }
-    if (!(command_data[id].flags & DONT_INITIALIZE)) {
-        doc = activeDocument();
-        if (doc) {
-            doc_clear_rubber_room(doc);
-        }
-    }
-    if (command_data[id].flags & CLEAR_SELECTION) {
-        doc = activeDocument();
-        if (doc) {
-            doc_clear_selection(doc);
-        }
-    }
-
-    switch (command_data[id].id) {
-    case ACTION_ABOUT:
-        about_dialog();
-        break;
-    case ACTION_ALERT:
-        prompt->alert(STR(0));
-        break;
-    case ACTION_ANGLE:
-        value = script_real(QLineF(REAL(0), -REAL(1), REAL(2), -REAL(3)).angle());
-        break;
-    case ACTION_CHANGELOG:
-        prompt->alert("TODO: CHANGELOG");
-        break;
-    case ACTION_CLEAR:
-        /* This is covered by the flags. */
-        break;
-    case ACTION_COPY: {
-        doc_copy(doc);
-        break;
-    }
-    case ACTION_COPY_SELECTED: {
-        /* nativeCopySelected(REAL(0), REAL(1)); */
-        break;
-    }
-    case ACTION_COLOR_SELECTOR:
-        prompt->alert("TODO: COLORSELECTOR");
-        break;
-    case ACTION_CUT:
-        nativeCutSelected(REAL(0), REAL(1));
-        break;
-
-    case ACTION_DEBUG:
-        appendHistory(QString(STR(0)));
-        break;
-
-    case ACTION_DESIGN_DETAILS:
-        create_details_dialog();
-        break;
-
-    case ACTION_DIM_LEADER: {
-        nativeAddDimLeader(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), RUBBER_OFF);
-        break;
-    }
-
-    case ACTION_DISABLE: {
-        QString value(STR(0));
-        if (value == "MOVERAPIDFIRE") {
-            doc_disable_move_rapid_fire(doc);
-        }
-        if (value == "PROMPTRAPIDFIRE") {
-            prompt->disableRapidFire();
-        }
-        break;
-    }
-
-    case ACTION_DO_NOTHING:
-        break;
-
-    case ACTION_ENABLE: {
-        QString value(STR(0));
-        if (value == "MOVERAPIDFIRE") {
-            doc_enable_move_rapid_fire(doc);
-        }
-        if (value == "PROMPTRAPIDFIRE") {
-            prompt->enableRapidFire();
-        }
-        break;
-    }
-
-    case ACTION_EXIT:
-        exit_program();
-        break;
-
-    case ACTION_HELP:
-        help();
-        break;
-
-    case ACTION_ICON_128:
-        iconResize(128);
-        break;
-    case ACTION_ICON_16:
-        iconResize(16);
-        break;
-    case ACTION_ICON_24:
-        iconResize(24);
-        break;
-    case ACTION_ICON_32:
-        iconResize(32);
-        break;
-    case ACTION_ICON_48:
-        iconResize(48);
-        break;
-    case ACTION_ICON_64:
-        iconResize(64);
-        break;
-
-    case ACTION_MIRROR_SELECTED: {
-        doc_mirror_selected(doc, REAL(0), -REAL(1), REAL(2), -REAL(3));
-        break;
-    }
-
-    case ACTION_NEW:
-        new_file();
-        break;
-
-/*
-    case ACTION_NUM_SELECTED: {
-        
-        break;
-    }
- */
-
-    case ACTION_OPEN:
-        openFile(false, "");
-        break;
-
-    case ACTION_PASTE: {
-        doc_paste(doc);
-        break;
-    }
-
-    case ACTION_PASTE_SELECTED: {
-        /* Paste with location x,y */
-        /* nativePasteSelected(REAL(0), REAL(1)); */
-        break;
-    }
-    case ACTION_PLATFORM:
-        /* Should this display in the command prompt or just return like GET? */
-        /* prompt_output(translate("Platform") + " = " + _main->platformString()); */
-        break;
-    case ACTION_REDO:
-        redo_command();
-        break;
-
-    case ACTION_SAVE:
-        save_file();
-        break;
-
-    case ACTION_SAVE_AS:
-        /* save(); */
-        break;
-
-    case ACTION_SCALE_SELECTED:
-        /*  */
-        break;
-
-    case ACTION_SETTINGS_DIALOG: {
-        settingsDialog("");
-        break;
-    }
-
-    case ACTION_TEXT_BOLD:
-        set_bool(TEXT_STYLE_BOLD, !get_bool(TEXT_STYLE_BOLD));
-        break;
-
-    case ACTION_TEXT_ITALIC:
-        set_bool(TEXT_STYLE_ITALIC, !get_bool(TEXT_STYLE_ITALIC));
-        break;
-
-    case ACTION_TEXT_UNDERLINE:
-        set_bool(TEXT_STYLE_UNDERLINE, !get_bool(TEXT_STYLE_UNDERLINE));
-        break;
-
-    case ACTION_TEXT_STRIKEOUT:
-        set_bool(TEXT_STYLE_STRIKEOUT, !get_bool(TEXT_STYLE_STRIKEOUT));
-        break;
-
-    case ACTION_TEXT_OVERLINE:
-        set_bool(TEXT_STYLE_OVERLINE, !get_bool(TEXT_STYLE_OVERLINE));
-        break;
-
-    case ACTION_TIP_OF_THE_DAY:
-        tipOfTheDay();
-        break;
-
-    case ACTION_TODO: {
-        QString s = "TODO: (" + QString(STR(0)) + ") " + QString(STR(1));
-        prompt->alert(s);
-        break;
-    }
-
-    case ACTION_UNDO:
-        undo_command();
-        break;
-
-    case ACTION_VULCANIZE: {
-        doc_vulcanize_rubber_room(doc);
-        break;
-    }
-
-    case ACTION_DAY: {
-        /* TODO: Make day vision color settings. */
-        doc_set_background_color(doc, qRgb(255,255,255)); 
-        doc_set_cross_hair_color(doc, qRgb(0,0,0));
-        doc_set_grid_color(doc, qRgb(0,0,0));
-        break;
-    }
-    case ACTION_NIGHT: {
-        /* TODO: Make night vision color settings. */
-        doc_set_background_color(doc, qRgb(0,0,0));
-        doc_set_cross_hair_color(doc, qRgb(255,255,255));
-        doc_set_grid_color(doc, qRgb(255,255,255));
-        break;
-    }
-
-    case ACTION_PRINT: {
-        /* TODO: print action */
-        break;
-    }
-
-    case ACTION_WHATS_THIS: {
-        debug_message("whatsThisContextHelp()");
-        QWhatsThis::enterWhatsThisMode();
-        break;
-    }
-
-    case ACTION_MAKE_LAYER_CURRENT:
-        /* makeLayerActive(); */
-        break;
-
-    case ACTION_LAYERS:
-        /* layerManager(); */
-        break;
-
-    case ACTION_LAYER_SELECTOR:
-        /* TODO: layer_selector */
-        break;
-
-    case ACTION_LAYER_PREVIOUS:
-        /* TODO: layer_previous */
-        break;
-
-    case ACTION_LINE_TYPE_SELECTOR:
-        /* TODO: line_type_selector */
-        break;
-
-    case ACTION_LINE_WEIGHT_SELECTOR:
-        /* TODO: line_weight_selector */
-        break;
-    case ACTION_HIDE_ALL_LAYERS:
-        /* TODO: hide_all_layers */
-        break;
-    case ACTION_SHOW_ALL_LAYERS:
-        /* TODO: show_all_layers */
-        break;
-    case ACTION_FREEZE_ALL_LAYERS:
-        /* TODO: freeze_all_layers */
-        break;
-    case ACTION_THAW_ALL_LAYERS:
-        /* TODO: thaw_all_layers */
-        break;
-    case ACTION_LOCK_ALL_LAYERS:
-        /* TODO: lock_all_layers */
-        break;
-    case ACTION_UNLOCK_ALL_LAYERS:
-        /* TODO: unlock_all_layers */
-        break;
-
-    case ACTION_GET: {
-        value = get_command(context);
-        break;
-    }
-
-    case ACTION_SET: {
-        set_command(context);
-        break;
-    }
-
-    case ACTION_CIRCLE: {
-        nativeAddCircle(REAL(0), REAL(1), REAL(2), BOOL(4), RUBBER_OFF);
-        break;
-    }
-
-    case ACTION_DISTANCE:
-        break;
-
-    case ACTION_DOLPHIN:
-        break;
-
-    case ACTION_ELLIPSE: {
-        nativeAddEllipse(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), RUBBER_OFF);
-        break;
-    }
-
-    case ACTION_ERASE: {
-        if (doc_num_selected(doc) <= 0) {
-            /* TODO: Prompt to select objects if nothing is preselected. */
-            prompt->alert(
-            translate("Preselect objects before invoking the delete command."));
-            information_box(translate("Delete Preselect"),
-                translate("Preselect objects before invoking the delete command."));
-        }
-        else {
-            doc_delete_selected(doc);
-        }
-        break;
-    }
-
-    case ACTION_ERROR: {
-        std::string s = "ERROR: (";
-        s += STR(0);
-        s += ") ";
-        s += STR(1);
-        prompt->setPrefix(QString(s.c_str()));
-        appendHistory("");
-        break;
-    }
-
-    case ACTION_HEART:
-        break;
-
-    case ACTION_LINE: {
-        nativeAddLine(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), RUBBER_OFF);
-        break;
-    }
-
-    case ACTION_LOCATE_POINT:
-        break;
-
-    case ACTION_MOVE:
-        move_command(context);
-        break;
-
-    case ACTION_MOVE_SELECTED: {
-        doc_move_selected(doc, REAL(0), -REAL(1));
-        break;
-    }
-
-    case ACTION_PATH:
-        break;
-    case ACTION_POINT:
-        break;
-    case ACTION_POLYGON:
-        break;
-    case ACTION_POLYLINE:
-        break;
-
-    case ACTION_PREVIEW_OFF: {
-        doc_preview_off(doc);
-        break;
-    }
-
-    case ACTION_PREVIEW_ON: {
-        value = previewon_command(context);
-        break;
-    }
-
-    case ACTION_QUICKLEADER:
-        break;
-
-    case ACTION_RECTANGLE: {
-        nativeAddRectangle(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), RUBBER_OFF);
-        break;
-    }
-
-    case ACTION_RGB:
-        break;
-
-    case ACTION_ROTATE: {
-        doc_rotate_selected(doc, REAL(0), -REAL(1), -REAL(2));
-        break;
-    }
-
-    case ACTION_SANDBOX: {
-        value = sandbox_command(context);
-        break;
-    }
-
-    case ACTION_SCALE: {
-        break;
-    }
-
-    case ACTION_SELECT_ALL: {
-        doc_select_all(doc);
-        break;
-    }
-
-    case ACTION_SINGLE_LINE_TEXT:
-        break;
-
-    case ACTION_SNOWFLAKE:
-        break;
-
-    case ACTION_STAR:
-        break;
-
-    case ACTION_SYSWINDOWS:
-        break;
-
-    case ACTION_ADD:
-        break;
-
-    /* ACTION_DELETE_SELECTED? */
-    case ACTION_DELETE: {
-        doc_delete_selected(doc);
-        break;
-    }
-
-    case ACTION_GRIP_EDIT:
-        break;
-
-    case ACTION_NAV:
-        break;
-
-    case ACTION_MIRROR:
-        break;
-
-    case ACTION_TEST:
-        break;
-
-    case ACTION_PAN_REAL_TIME: {
-        doc_pan_real_time(doc);
-        break;
-    }
-    case ACTION_PAN_POINT: {
-        doc_pan_point(doc);
-        break;
-    }
-    case ACTION_PAN_LEFT: {
-        QUndoStack* stack = activeUndoStack();
-        if (stack) {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanLeft", doc, 0);
-            stack->push(cmd);
-        }
-        break;
-    }
-    case ACTION_PAN_RIGHT: {
-        QUndoStack* stack = activeUndoStack();
-        if (stack) {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanRight", doc, 0);
-            stack->push(cmd);
-        }
-        break;
-    }
-    case ACTION_PAN_UP: {
-        QUndoStack* stack = activeUndoStack();
-        if (stack) {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanUp", doc, 0);
-            stack->push(cmd);
-        }
-        break;
-    }
-    case ACTION_PAN_DOWN: {
-        QUndoStack* stack = activeUndoStack();
-        if (stack) {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanDown", doc, 0);
-            stack->push(cmd);
-        }
-        break;
-    }
-    case ACTION_WINDOW_CLOSE: {
-        onCloseWindow();
-        break;
-    }
-    case ACTION_WINDOW_CLOSE_ALL: {
-        mdiArea->closeAllSubWindows();
-        break;
-    }
-    case ACTION_WINDOW_CASCADE: {
-        mdiArea->cascade();
-        break;
-    }
-    case ACTION_WINDOW_TILE: {
-        mdiArea->tile();
-        break;
-    }
-    case ACTION_WINDOW_NEXT: {
-        mdiArea->activateNextSubWindow();
-        break;
-    }
-    case ACTION_WINDOW_PREVIOUS: {
-        mdiArea->activatePreviousSubWindow();
-        break;
-    }
-    case ACTION_ZOOM_ALL: {
-        todo("Implement zoomAll.");
-        break;
-    }
-    case ACTION_ZOOM_CENTER: {
-        todo("Implement zoomCenter.");
-        break;
-    }
-    case ACTION_ZOOM_DYNAMIC: {
-        todo("Implement zoomDynamic.");
-        break;
-    }
-    case ACTION_ZOOM_EXTENTS: {
-        QUndoStack* stack = activeUndoStack();
-        if (stack) {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomExtents", doc, 0);
-            stack->push(cmd);
-        }
-        break;
-    }
-    case ACTION_ZOOM_IN: {
-        doc_zoom_in(doc);
-        break;
-    }
-    case ACTION_ZOOM_OUT: {
-        doc_zoom_out(doc);
-        break;
-    }
-    case ACTION_ZOOM_PREVIOUS: {
-        todo("Implement zoomPrevious.");
-        break;
-    }
-    case ACTION_ZOOM_REAL_TIME: {
-        todo("Implement zoomRealtime.");
-        break;
-    }
-    case ACTION_ZOOM_SCALE: {
-        todo("Implement zoomScale.");
-        break;
-    }
-    case ACTION_ZOOM_SELECTED: {
-        QUndoStack* stack = activeUndoStack();
-        if (stack) {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomSelected", doc, 0);
-            stack->push(cmd);
-        }
-        break;
-    }
-    case ACTION_ZOOM_WINDOW: {
-        doc_zoom_window(doc);
-        break;
-    }
-    default:
-        break;
-    }
-
-    if (!(command_data[id].flags & DONT_END_COMMAND)) {
-        end_command();
-    }
-    return value;
-}
-
 void
 MainWindow::runCommand()
 {
@@ -1313,9 +806,9 @@ nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b)
 bool
 nativeAllowRubber()
 {
-    Document* doc = activeDocument();
-    if (doc) {
-        return doc_allow_rubber(doc);
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        return doc_allow_rubber(doc_index);
     }
     return false;
 }
@@ -1324,9 +817,9 @@ nativeAllowRubber()
 void
 nativeSpareRubber(int64_t id)
 {
-    Document* doc = activeDocument();
-    if (doc) {
-        doc_spare_rubber(doc, id);
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        doc_spare_rubber(doc_index, id);
     }
 }
 
@@ -1334,9 +827,9 @@ nativeSpareRubber(int64_t id)
 void
 nativeSetRubberMode(int mode)
 {
-    Document* doc = activeDocument();
-    if (doc) {
-        doc_set_rubber_mode(doc, mode);
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        doc_set_rubber_mode(doc_index, mode);
     }
 }
 
@@ -1344,10 +837,10 @@ nativeSetRubberMode(int mode)
 void
 nativeSetRubberPoint(EmbString key, double x, double y)
 {
-    Document* doc = activeDocument();
-    if (doc) {
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
         EmbVector v = emb_vector(x, -y);
-        doc_set_rubber_point(doc, key, v);
+        doc_set_rubber_point(doc_index, key, v);
     }
 }
 
@@ -1355,9 +848,9 @@ nativeSetRubberPoint(EmbString key, double x, double y)
 void
 nativeSetRubberText(EmbString key, EmbString txt)
 {
-    Document* doc = activeDocument();
-    if (doc) {
-        doc_set_rubber_text(doc, key, txt);
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        doc_set_rubber_text(doc_index, key, txt);
     }
 }
 
@@ -1365,10 +858,10 @@ nativeSetRubberText(EmbString key, EmbString txt)
 void
 nativeAddTextSingle(char *str, double x, double y, double rot, bool fill, int rubberMode)
 {
-    Document* doc = activeDocument();
+    int32_t doc_index = activeDocument();
     QGraphicsScene* gscene = activeScene();
     QUndoStack* stack = activeUndoStack();
-    if (doc && gscene && stack) {
+    if ((doc_index >= 0) && gscene && stack) {
         Object* obj = create_text_single(QString(str), x, -y, getCurrentColor());
         obj_set_text_font(obj, get_str(TEXT_FONT));
         obj_set_text_size(obj, get_real(TEXT_SIZE));
@@ -1384,12 +877,12 @@ nativeAddTextSingle(char *str, double x, double y, double rot, bool fill, int ru
         /* TODO: single line text fill. */
         obj_set_rubber_mode(obj->core, rubberMode);
         if (rubberMode) {
-            doc_add_to_rubber_room(doc, obj);
+            doc_add_to_rubber_room(doc_index, obj);
             gscene->addItem(obj);
             gscene->update();
         }
         else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
             stack->push(cmd);
         }
     }
@@ -1399,20 +892,20 @@ nativeAddTextSingle(char *str, double x, double y, double rot, bool fill, int ru
 void
 nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubberMode)
 {
-    Document* doc = activeDocument();
+    int32_t doc_index = activeDocument();
     QGraphicsScene* gscene = activeScene();
     QUndoStack* stack = activeUndoStack();
-    if (doc && gscene && stack) {
+    if ((doc_index >= 0) && gscene && stack) {
         Object* obj = create_line(x1, -y1, x2, -y2, getCurrentColor());
         obj->setRotation(-rot);
         obj_set_rubber_mode(obj->core, rubberMode);
         if (rubberMode) {
-            doc_add_to_rubber_room(doc, obj);
+            doc_add_to_rubber_room(doc_index, obj);
             gscene->addItem(obj);
             gscene->update();
         }
         else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
             stack->push(cmd);
         }
     }
@@ -1422,10 +915,10 @@ nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubber
 void
 nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode)
 {
-    Document* doc = activeDocument();
+    int32_t doc_index = activeDocument();
     QGraphicsScene* gscene = activeScene();
     QUndoStack* stack = activeUndoStack();
-    if (!(doc && gscene && stack)) {
+    if ((doc_index < 0) && !(gscene && stack)) {
         return;
     }
     Object* obj = create_rect(x, -y, w, -h, getCurrentColor());
@@ -1433,12 +926,12 @@ nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill
     obj_set_rubber_mode(obj->core, rubberMode);
     /* TODO: rect fill */
     if (rubberMode) {
-        doc_add_to_rubber_room(doc, obj);
+        doc_add_to_rubber_room(doc_index, obj);
         gscene->addItem(obj);
         gscene->update();
     }
     else {
-        UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc, 0);
+        UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
         stack->push(cmd);
     }
 }
@@ -1447,9 +940,9 @@ nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill
 void
 nativeAddArc(double x1, double y1, double x2, double y2, double x3, double y3, int rubberMode)
 {
-    Document* doc = activeDocument();
+    int32_t doc_index = activeDocument();
     QGraphicsScene* scene = activeScene();
-    if (doc && scene) {
+    if ((doc_index >= 0) && scene) {
         EmbArc arc;
         arc.start = emb_vector(x1, -y1);
         arc.mid = emb_vector(x2, -y2);
@@ -1457,7 +950,7 @@ nativeAddArc(double x1, double y1, double x2, double y2, double x3, double y3, i
         Object* arcObj = create_arc(arc, getCurrentColor());
         obj_set_rubber_mode(arcObj->core, rubberMode);
         if (rubberMode) {
-            doc_add_to_rubber_room(doc, arcObj);
+            doc_add_to_rubber_room(doc_index, arcObj);
         }
         scene->addItem(arcObj);
         scene->update();
@@ -1467,10 +960,10 @@ nativeAddArc(double x1, double y1, double x2, double y2, double x3, double y3, i
 void
 nativeAddCircle(double centerX, double centerY, double radius, bool fill, int rubberMode)
 {
-    Document* doc = activeDocument();
+    int32_t doc_index = activeDocument();
     QGraphicsScene* gscene = activeScene();
     QUndoStack* stack = activeUndoStack();
-    if (doc && gscene && stack) {
+    if ((doc_index >= 0) && gscene && stack) {
         EmbCircle circle;
         circle.center = emb_vector(centerX, -centerY);
         circle.radius = radius;
@@ -1478,12 +971,12 @@ nativeAddCircle(double centerX, double centerY, double radius, bool fill, int ru
         obj_set_rubber_mode(obj->core, rubberMode);
         /* TODO: circle fill. */
         if (rubberMode) {
-            doc_add_to_rubber_room(doc, obj);
+            doc_add_to_rubber_room(doc_index, obj);
             gscene->addItem(obj);
             gscene->update();
         }
         else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
             stack->push(cmd);
         }
     }
@@ -1497,7 +990,7 @@ nativeAddSlot(double centerX, double centerY, double diameter, double length, do
     Object* slotObj = new Object(centerX, -centerY, diameter, length, getCurrentColor());
     slotObj->setRotation(-rot);
     obj_set_rubber_mode(slotObj->core, rubberMode);
-    if (rubberMode) doc_add_to_rubber_room(doc, slotObj);
+    if (rubberMode) doc_add_to_rubber_room(doc_index, slotObj);
     scene->addItem(slotObj); */
     /* TODO: slot fill */ /*
     scene->update();
@@ -1507,10 +1000,10 @@ nativeAddSlot(double centerX, double centerY, double diameter, double length, do
 void
 nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode)
 {
-    Document* doc = activeDocument();
+    int32_t doc_index = activeDocument();
     QGraphicsScene* gscene = activeScene();
     QUndoStack* stack = activeUndoStack();
-    if (doc && gscene && stack) {
+    if ((doc_index >= 0) && gscene && stack) {
         EmbEllipse ellipse;
         ellipse.center.x = centerX;
         ellipse.center.y = -centerY;
@@ -1521,12 +1014,12 @@ nativeAddEllipse(double centerX, double centerY, double width, double height, do
         obj_set_rubber_mode(obj->core, rubberMode);
         /* TODO: ellipse fill */
         if (rubberMode) {
-            doc_add_to_rubber_room(doc, obj);
+            doc_add_to_rubber_room(doc_index, obj);
             gscene->addItem(obj);
             gscene->update();
         }
         else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
             stack->push(cmd);
         }
     }
@@ -1535,14 +1028,14 @@ nativeAddEllipse(double centerX, double centerY, double width, double height, do
 void
 nativeAddPoint(double x, double y)
 {
-    Document* doc = activeDocument();
+    int32_t doc_index = activeDocument();
     QUndoStack* stack = activeUndoStack();
-    if (doc && stack) {
+    if ((doc_index >= 0) && stack) {
         EmbPoint point;
         point.position.x = x;
         point.position.y = -y;
         Object* obj = create_point(point, getCurrentColor());
-        UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc, 0);
+        UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
         stack->push(cmd);
     }
 }
@@ -1553,20 +1046,20 @@ nativeAddPoint(double x, double y)
 void
 nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
-    Document* doc = activeDocument();
+    int32_t doc_index = activeDocument();
     QGraphicsScene* gscene = activeScene();
     QUndoStack* stack = activeUndoStack();
-    if (doc && gscene && stack) {
+    if ((doc_index >= 0) && gscene && stack) {
         EmbPolygon polygon;
         Object* obj = create_polygon(startX, startY, p, getCurrentColor());
         obj_set_rubber_mode(obj->core, rubberMode);
         if (rubberMode) {
-            doc_add_to_rubber_room(doc, obj);
+            doc_add_to_rubber_room(doc_index, obj);
             gscene->addItem(obj);
             gscene->update();
         }
         else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
             stack->push(cmd);
         }
     }
@@ -1578,20 +1071,21 @@ nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubber
 void
 nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
-    Document* doc = activeDocument();
+    int32_t doc_index = activeDocument();
     QGraphicsScene* gscene = activeScene();
     QUndoStack* stack = activeUndoStack();
-    if (doc && gscene && stack) {
+    if ((doc_index >= 0) && gscene && stack) {
         EmbPath path;
         Object* obj = create_polygon(startX, startY, p, getCurrentColor());
         obj_set_rubber_mode(obj->core, rubberMode);
         if (rubberMode) {
-            doc_add_to_rubber_room(doc, obj);
+            doc_add_to_rubber_room(doc_index, obj);
             gscene->addItem(obj);
             gscene->update();
         }
         else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD,
+                obj->core->OBJ_NAME, obj, doc_index, 0);
             stack->push(cmd);
         }
     }
@@ -1600,29 +1094,32 @@ nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubbe
 void
 nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode)
 {
-    Document* doc = activeDocument();
+    int32_t doc_index = activeDocument();
     QGraphicsScene* gscene = activeScene();
     QUndoStack* stack = activeUndoStack();
-    if (doc && gscene && stack) {
+    if ((doc_index >= 0) && gscene && stack) {
         Object* obj = create_dim_leader(x1, -y1, x2, -y2, getCurrentColor());
         obj->setRotation(-rot);
         obj_set_rubber_mode(obj->core, rubberMode);
         if (rubberMode) {
-            doc_add_to_rubber_room(doc, obj);
+            doc_add_to_rubber_room(doc_index, obj);
             gscene->addItem(obj);
             gscene->update();
         }
         else {
-            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc, 0);
+            UndoableCommand* cmd = new UndoableCommand(ACTION_ADD,
+                obj->core->OBJ_NAME, obj, doc_index, 0);
             stack->push(cmd);
         }
     }
 }
 
+/* . */
 void
 nativeSetCursorShape(char shape[MAX_STRING_LENGTH])
 {
-    Document* doc = activeDocument();
+    int32_t doc_index = activeDocument();
+    Document *doc = documents[doc_index];
     if (doc) {
         if (!strcmp(shape, "arrow")) {
             doc->setCursor(QCursor(Qt::ArrowCursor));
@@ -1675,6 +1172,7 @@ nativeSetCursorShape(char shape[MAX_STRING_LENGTH])
     }
 }
 
+/* . */
 void
 nativeScaleSelected(double x, double y, double factor)
 {
@@ -1684,12 +1182,13 @@ nativeScaleSelected(double x, double y, double factor)
             "If you are a developer, your code needs examined, and possibly your head too."));
     }
 
-    Document* doc = activeDocument();
-    if (doc) {
-        doc_scale_selected(doc, x, -y, factor);
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        doc_scale_selected(doc_index, x, -y, factor);
     }
 }
 
+/* . */
 double
 nativeQSnapX()
 {
@@ -1700,6 +1199,7 @@ nativeQSnapX()
     return 0.0;
 }
 
+/* . */
 double
 nativeQSnapY()
 {
@@ -1714,26 +1214,28 @@ nativeQSnapY()
 void
 prompt_output(const EmbString txt)
 {
-    appendHistory(QString(txt));
+    appendHistory((char*)txt);
 }
 
+/* . */
 void
 cut(void)
 {
-    Document* doc = activeDocument();
-    if (doc) {
-        doc_cut(doc);
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        doc_cut(doc_index);
     }
 }
 
+/* . */
 void
 end_command(void)
 {
-    Document* doc = activeDocument();
-    if (doc) {
-        doc_clear_rubber_room(doc);
-        doc_preview_off(doc);
-        doc_disable_move_rapid_fire(doc);
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        doc_clear_rubber_room(doc_index);
+        doc_preview_off(doc_index);
+        doc_disable_move_rapid_fire(doc_index);
     }
     promptInput->endCommand();
 }
@@ -1892,9 +1394,9 @@ previewon_command(ScriptEnv *context)
         return script_false;
     }
 
-    Document* doc = activeDocument();
-    if (doc) {
-        doc_preview_on(doc, clone, mode, REAL(2), -REAL(3), REAL(4));
+    int32_t doc_index = activeDocument();
+    if (doc_index) {
+        doc_preview_on(doc_index, clone, mode, REAL(2), -REAL(3), REAL(4));
     }
     else {
         prompt_output("Preview on requires an active view.");
@@ -1942,29 +1444,32 @@ perpendicular_distance_command(ScriptEnv* context)
 /*
  * Undo
  */
-UndoableCommand::UndoableCommand(int type_, QString text, Object* obj, Document* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableCommand::UndoableCommand(int type_, QString text, Object* obj, int32_t doc,
+    QUndoCommand* parent) : QUndoCommand(parent)
 {
     data.type = type_;
-    data.gview = v;
+    data.doc = doc;
     data.object = obj;
     setText(text);
 }
 
 /* Move */
-UndoableCommand::UndoableCommand(int type_, EmbVector delta, QString text, Object* obj, Document* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableCommand::UndoableCommand(int type_, EmbVector delta, QString text,
+    Object* obj, int32_t doc, QUndoCommand* parent) : QUndoCommand(parent)
 {
     data.type = type_;
-    data.gview = v;
+    data.doc = doc;
     data.object = obj;
     setText(text);
     data.delta = delta;
 }
 
 /* Rotate or scale */
-UndoableCommand::UndoableCommand(int type_, EmbVector pos, double scaleFactor, QString text, Object* obj, Document* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableCommand::UndoableCommand(int type_, EmbVector pos, double scaleFactor,
+    QString text, Object* obj, int32_t doc, QUndoCommand* parent) : QUndoCommand(parent)
 {
     data.type = type_;
-    data.gview = v;
+    data.doc = doc;
     data.object = obj;
     setText(text);
     if (data.type == ACTION_SCALE) {
@@ -1999,22 +1504,25 @@ UndoableCommand::UndoableCommand(int type_, EmbVector pos, double scaleFactor, Q
 }
 
 /* Navigation */
-UndoableCommand::UndoableCommand(int type_, QString type_name, Document* doc, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableCommand::UndoableCommand(int type_, QString type_name, int32_t doc,
+    QUndoCommand* parent) : QUndoCommand(parent)
 {
     data.type = type_;
-    data.gview = doc;
+    data.doc = doc;
     data.navType = type_name;
     setText(QObject::tr("Navigation"));
     data.done = false;
-    //data.fromTransform = doc_transform(data.gview);
-    data.fromCenter = doc_center(data.gview);
+    //data.fromTransform = doc_transform(data.doc);
+    data.fromCenter = doc_center(data.doc);
 }
 
 /* Grip Edit/Mirror */
-UndoableCommand::UndoableCommand(int type_, EmbVector beforePoint, EmbVector afterPoint, QString text, Object* obj, Document* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableCommand::UndoableCommand(int type_, EmbVector beforePoint,
+    EmbVector afterPoint, QString text, Object* obj, int32_t doc,
+    QUndoCommand* parent) : QUndoCommand(parent)
 {
     data.type = type_;
-    data.gview = v;
+    data.doc = doc;
     data.object = obj;
     setText(text);
     if (type_ == ACTION_GRIP_EDIT) {
@@ -2034,10 +1542,10 @@ UndoableCommand::undo()
 {
     switch (data.type) {
     case ACTION_ADD:
-        doc_delete_object(data.gview, data.object);
+        doc_delete_object(data.doc, data.object);
         break;
     case ACTION_DELETE:
-        doc_add_object(data.gview, data.object);
+        doc_add_object(data.doc, data.object);
         break;
     case ACTION_MOVE:
         data.object->moveBy(-data.delta.x, -data.delta.y);
@@ -2054,13 +1562,13 @@ UndoableCommand::undo()
         break;
     case ACTION_NAV: {
         if (!data.done) {
-            data.toTransform = data.gview->transform();
-            data.toCenter = doc_center(data.gview);
+            data.toTransform = documents[data.doc]->transform();
+            data.toCenter = doc_center(data.doc);
             data.done = true;
         }
 
-        data.gview->setTransform(data.fromTransform);
-        doc_center_at(data.gview, data.fromCenter);
+        documents[data.doc]->setTransform(data.fromTransform);
+        doc_center_at(data.doc, data.fromCenter);
         break;
     }
     case ACTION_MIRROR:
@@ -2077,10 +1585,10 @@ UndoableCommand::redo()
 {
     switch (data.type) {
     case ACTION_ADD:
-        doc_add_object(data.gview, data.object);
+        doc_add_object(data.doc, data.object);
         break;
     case ACTION_DELETE:
-        doc_delete_object(data.gview, data.object);
+        doc_delete_object(data.doc, data.object);
         break;
     case ACTION_MOVE:
         data.object->moveBy(data.delta.x, data.delta.y);
@@ -2097,23 +1605,23 @@ UndoableCommand::redo()
         break;
     case ACTION_NAV: {
         if (data.done) {
-            data.gview->setTransform(data.toTransform);
-            doc_center_at(data.gview, data.toCenter);
+            documents[data.doc]->setTransform(data.toTransform);
+            doc_center_at(data.doc, data.toCenter);
             break;
         }
         if (data.navType == "ZoomInToPoint") {
             QPoint p = activeScene()->property("VIEW_MOUSE_POINT").toPoint();
-            doc_zoom_to_point(data.gview, to_emb_vector(p), +1);
+            doc_zoom_to_point(data.doc, to_emb_vector(p), +1);
         }
         else if (data.navType == "ZoomOutToPoint") {
             QPoint p = activeScene()->property("VIEW_MOUSE_POINT").toPoint();
-            doc_zoom_to_point(data.gview, to_emb_vector(p), -1);
+            doc_zoom_to_point(data.doc, to_emb_vector(p), -1);
         }
         else if (data.navType == "ZoomExtents") {
-            doc_zoom_extents(data.gview);
+            doc_zoom_extents(data.doc);
         }
         else if (data.navType == "ZoomSelected") {
-            doc_zoom_selected(data.gview);
+            doc_zoom_selected(data.doc);
         }
         else if (data.navType == "PanStart") {
             /* Do Nothing. We are just recording the spot where the pan started. */
@@ -2122,19 +1630,19 @@ UndoableCommand::redo()
             /* Do Nothing. We are just recording the spot where the pan stopped. */
         }
         else if (data.navType == "PanLeft") {
-            doc_pan_left(data.gview);
+            doc_pan_left(data.doc);
         }
         else if (data.navType == "PanRight") {
-            doc_pan_right(data.gview);
+            doc_pan_right(data.doc);
         }
         else if (data.navType == "PanUp") {
-            doc_pan_up(data.gview);
+            doc_pan_up(data.doc);
         }
         else if (data.navType == "PanDown") {
-            doc_pan_down(data.gview);
+            doc_pan_down(data.doc);
         }
-        data.toTransform = data.gview->transform();
-        data.toCenter = doc_center(data.gview);
+        data.toTransform = documents[data.doc]->transform();
+        data.toCenter = doc_center(data.doc);
         break;
     }
     case ACTION_MIRROR:
@@ -2191,9 +1699,9 @@ UndoableCommand::mirror()
 ScriptValue
 clear_rubber_command(ScriptEnv* context)
 {
-    Document* doc = activeDocument();
-    if (doc) {
-        doc_clear_rubber_room(doc);
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        doc_clear_rubber_room(doc_index);
     }
     return script_null;
 }

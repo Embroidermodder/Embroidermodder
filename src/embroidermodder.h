@@ -171,12 +171,15 @@ extern bool blinkState;
 
 extern std::unordered_map<int, int> key_map;
 
-void appendHistory(QString txt);
+extern Document *documents[MAX_OPEN_FILES];
+extern bool document_memory[MAX_OPEN_FILES];
 
 void create_statusbar(MainWindow* mw);
 
 /* . */
 typedef struct DocumentData_ {
+    int32_t id;
+
     std::unordered_map<int64_t, QGraphicsItem*> hashDeletedObjects;
 
     QList<int64_t> spareRubberList;
@@ -248,7 +251,7 @@ typedef struct DocumentData_ {
 typedef struct UndoData_ {
     int type;
     Object* object;
-    Document* gview;
+    int32_t doc;
     EmbVector delta;
     EmbVector pivot;
     double angle;
@@ -265,7 +268,6 @@ typedef struct UndoData_ {
 } UndoData;
 
 MdiWindow* activeMdiWindow();
-Document* activeDocument();
 QGraphicsScene* activeScene();
 QUndoStack* activeUndoStack();
 QString platformString();
@@ -377,77 +379,11 @@ void obj_set_text_upside_down(Object *obj, bool val);
 
 Document *create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent);
 
-bool doc_allow_zoom_in(Document* doc);
-bool doc_allow_zoom_out(Document* doc);
-void doc_zoom_in(Document* doc);
-void doc_zoom_out(Document* doc);
-void doc_zoom_window(Document* doc);
-void doc_zoom_selected(Document* doc);
-void doc_zoom_extents(Document* doc);
-void doc_pan_real_time(Document* doc);
-void doc_pan_point(Document* doc);
-void doc_pan_left(Document* doc);
-void doc_pan_right(Document* doc);
-void doc_pan_up(Document* doc);
-void doc_pan_down(Document* doc);
-void doc_select_all(Document* doc);
-void doc_selection_changed(Document* doc);
-void doc_clear_selection(Document* doc);
-void doc_delete_selected(Document* doc);
-void doc_move_selected(Document* doc, double dx, double dy);
-void doc_cut(Document* doc);
-void doc_copy(Document* doc);
-void doc_paste(Document* doc);
-void doc_repeat_action(Document* doc);
-void doc_move_action(Document* doc);
-void doc_scale_action(Document* doc);
-void doc_scale_selected(Document* doc, double x, double y, double factor);
-void doc_rotate_action(Document* doc);
-void doc_rotate_selected(Document* doc, double x, double y, double rot);
-void doc_mirror_selected(Document* doc, double x1, double y1, double x2, double y2);
-int doc_num_selected(Document* doc);
+void doc_set_grid_color(int32_t doc, QRgb color);
+void doc_create_grid(int32_t doc, EmbString gridType);
+void doc_set_ruler_color(int32_t doc, QRgb color);
 
-void doc_delete_pressed(Document* doc);
-void doc_escape_pressed(Document* doc);
-
-void doc_corner_button_clicked(Document* doc);
-
-void doc_show_scroll_bars(Document* doc, bool val);
-void doc_set_corner_button(Document* doc);
-void doc_set_cross_hair_color(Document* doc, QRgb color);
-void doc_set_cross_hair_size(Document* doc, uint8_t percent);
-void doc_set_background_color(Document* doc, QRgb color);
-void doc_set_select_box_colors(Document* doc, QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
-void doc_toggle_snap(Document* doc, bool on);
-void doc_toggle_grid(Document* doc, bool on);
-void doc_toggle_ruler(Document* doc, bool on);
-void doc_toggle_ortho(Document* doc, bool on);
-void doc_toggle_polar(Document* doc, bool on);
-void doc_toggle_qsnap(Document* doc, bool on);
-void doc_toggle_qtrack(Document* doc, bool on);
-void doc_toggle_lwt(Document* doc, bool on);
-void doc_toggle_real(Document* doc, bool on);
-bool doc_is_lwt_enabled(Document* doc);
-bool doc_is_real_enabled(Document* doc);
-
-void doc_set_grid_color(Document* doc, QRgb color);
-void doc_create_grid(Document* doc, EmbString gridType);
-void doc_set_ruler_color(Document* doc, QRgb color);
-
-void doc_preview_on(Document* doc, int clone, int mode, double x, double y, double data);
-void doc_preview_off(Document* doc);
-
-void doc_enable_move_rapid_fire(Document* doc);
-void doc_disable_move_rapid_fire(Document* doc);
-
-bool doc_allow_rubber(Document* doc);
-void doc_add_to_rubber_room(Document* doc, QGraphicsItem* item);
-void doc_vulcanize_rubber_room(Document* doc);
-void doc_clear_rubber_room(Document* doc);
-void doc_spare_rubber(Document* doc, int64_t id);
-void doc_set_rubber_mode(Document* doc, int mode);
-void doc_set_rubber_point(Document* doc, EmbString key, EmbVector point);
-void doc_set_rubber_text(Document* doc, EmbString key, EmbString txt);
+void doc_add_to_rubber_room(int32_t doc, QGraphicsItem* item);
 
 void draw_arc(QPainter* painter, EmbArc arc);
 void draw_circle(QPainter* painter, EmbCircle circle);
@@ -458,37 +394,18 @@ void draw_polyline(QPainter* painter, EmbPolyline polyline);
 void draw_rect(QPainter* painter, EmbRect rect);
 void draw_spline(QPainter* painter, EmbSpline spline);
 
-void doc_create_grid_rect(Document* doc);
-void doc_create_grid_polar(Document* doc);
-void doc_create_grid_iso(Document* doc);
-void doc_create_origin(Document* doc);
+QPainterPath doc_create_ruler_text_path(int32_t doc, float x, float y, EmbString str, float height);
 
-void doc_load_ruler_settings(Document* doc);
+QList<QGraphicsItem*> doc_create_object_list(int32_t doc, QList<QGraphicsItem*> list);
 
-QPainterPath doc_create_ruler_text_path(Document* doc, float x, float y, EmbString str, float height);
+void doc_copy_selected(int32_t doc);
 
-QList<QGraphicsItem*> doc_create_object_list(Document* doc, QList<QGraphicsItem*> list);
+void doc_start_gripping(int32_t doc, Object* obj);
+void doc_stop_gripping(int32_t doc, bool accept = false);
 
-void doc_copy_selected(Document* doc);
-
-void doc_start_gripping(Document* doc, Object* obj);
-void doc_stop_gripping(Document* doc, bool accept = false);
-
-void doc_update_mouse_coords(Document* doc, int x, int y);
-
-void doc_pan_start(Document* doc, EmbVector point);
-
-void doc_align_scene_point_with_view_point(Document* doc, EmbVector scenePoint, EmbVector viewPoint);
-
-void doc_recalculate_limits(Document* doc);
-void doc_zoom_to_point(Document* doc, EmbVector mousePoint, int zoomDir);
-void doc_center_at(Document* doc, EmbVector centerPoint);
-EmbVector doc_center(Document* doc);
-
-void doc_add_object(Document* doc, Object* obj);
-void doc_delete_object(Document* doc, Object* obj);
-void doc_vulcanize_object(Document* doc, Object* obj);
-
+void doc_add_object(int32_t doc, Object* obj);
+void doc_delete_object(int32_t doc, Object* obj);
+void doc_vulcanize_object(int32_t doc, Object* obj);
 
 void textFontSelectorCurrentFontChanged(const QFont& font);
 
@@ -498,7 +415,6 @@ QAction* getFileSeparator();
 QAction* createAction(Command command);
 QMdiSubWindow* findMdiWindow(EmbString fileName);
 void onCloseMdiWin(MdiWindow*);
-
 
 /* ---------------------- Class Declarations --------------------------- */
 
@@ -585,11 +501,15 @@ protected:
 class UndoableCommand : public QUndoCommand
 {
 public:
-    UndoableCommand(int type_, QString text, Object* obj, Document* v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, EmbVector delta, QString text, Object* obj, Document* v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, EmbVector pivot, double rotAngle, QString text, Object* obj, Document* v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, QString type, Document* v, QUndoCommand* parent = 0);
-    UndoableCommand(int type_, EmbVector start, EmbVector end, QString text, Object* obj, Document* v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, QString text, Object* obj, int32_t v,
+        QUndoCommand* parent = 0);
+    UndoableCommand(int type_, EmbVector delta, QString text, Object* obj,
+        int32_t v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, EmbVector pivot, double rotAngle, QString text,
+        Object* obj, int32_t v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, QString type, int32_t v, QUndoCommand* parent = 0);
+    UndoableCommand(int type_, EmbVector start, EmbVector end, QString text,
+        Object* obj, int32_t v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
@@ -844,7 +764,7 @@ public:
 
     QMdiArea* mdiArea;
     QGraphicsScene* gscene;
-    Document* gview;
+    int32_t doc_index;
 
     bool fileWasLoaded;
 

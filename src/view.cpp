@@ -21,8 +21,8 @@ void move_action(void);
 void rotate_action(void);
 void scale_action(void);
 
-EmbVector doc_map_from_scene(Document *doc, EmbVector v);
-EmbVector doc_map_to_scene(Document *doc, EmbVector v);
+EmbVector doc_map_from_scene(int32_t doc, EmbVector v);
+EmbVector doc_map_to_scene(int32_t doc, EmbVector v);
 
 Document::Document(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
 {
@@ -47,6 +47,8 @@ Document*
 create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent)
 {
     Document* doc = new Document(mw, theScene, parent);
+    doc->data.id = numOfDocs;
+    documents[doc->data.id] = doc;
     doc->data.gscene = theScene;
 
     doc->setFrameShape(QFrame::NoFrame);
@@ -82,19 +84,20 @@ create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent)
     doc->data.gripColorHot = get_int(SELECTION_HOTGRIP_COLOR);
     doc->data.gripSize = get_int(SELECTION_GRIP_SIZE);
     doc->data.pickBoxSize = get_int(SELECTION_PICKBOX_SIZE);
-    doc_set_cross_hair_color(doc, get_int(DISPLAY_CROSSHAIR_COLOR));
-    doc_set_cross_hair_size(doc, get_int(DISPLAY_CROSSHAIR_PERCENT));
-    doc_set_grid_color(doc, get_int(GRID_COLOR));
+    doc_set_cross_hair_color(doc->data.id, get_int(DISPLAY_CROSSHAIR_COLOR));
+    doc_set_cross_hair_size(doc->data.id, get_int(DISPLAY_CROSSHAIR_PERCENT));
+    doc_set_grid_color(doc->data.id, get_int(GRID_COLOR));
 
     if (get_bool(GRID_SHOW_ON_LOAD)) {
-        doc_create_grid(doc, get_str(GRID_TYPE));
+        doc_create_grid(doc->data.id, get_str(GRID_TYPE));
     }
     else {
-        doc_create_grid(doc, "");
+        doc_create_grid(doc->data.id, "");
     }
 
-    doc_toggle_ruler(doc, get_bool(RULER_SHOW_ON_LOAD));
-    doc_toggle_real(doc, true); /* TODO: load this from file, else settings with default being true. */
+    doc_toggle_ruler(doc->data.id, get_bool(RULER_SHOW_ON_LOAD));
+    doc_toggle_real(doc->data.id, true);
+    /* TODO: load this from file, else settings with default being true. */
 
     doc->data.grippingActive = false;
     doc->data.rapidMoveActive = false;
@@ -128,8 +131,8 @@ create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent)
         QColor(get_int(DISPLAY_SELECTBOX_RIGHT_FILL)),
         get_int(DISPLAY_SELECTBOX_ALPHA));
 
-    doc_show_scroll_bars(doc, get_bool(DISPLAY_SHOW_SCROLLBARS));
-    doc_set_corner_button(doc);
+    doc_show_scroll_bars(doc->data.id, get_bool(DISPLAY_SHOW_SCROLLBARS));
+    doc_set_corner_button(doc->data.id);
 
     doc->data.undoStack = new QUndoStack(doc);
     dockUndoEdit->addStack(doc->data.undoStack);
@@ -137,41 +140,44 @@ create_doc(MainWindow* mw, QGraphicsScene* theScene, QWidget *parent)
     doc->installEventFilter(doc);
 
     doc->setMouseTracking(true);
-    doc_set_background_color(doc, get_int(DISPLAY_BG_COLOR));
+    doc_set_background_color(doc->data.id, get_int(DISPLAY_BG_COLOR));
     /* TODO: wrap this with a setBackgroundPixmap() function: setBackgroundBrush(QPixmap("images/canvas.png")); */
 
-    // FIXME: QObject::connect(doc->data.gscene, SIGNAL(selectionChanged()), doc,
+    // FIXME: QObject::connect(doc->data.gscene, SIGNAL(selectionChanged()), doc_index,
     //    [=]() { doc_selection_changed(doc); });
     return doc;
 }
 
+/* . */
 EmbVector
-doc_map_from_scene(Document *doc, EmbVector v)
+doc_map_from_scene(int32_t doc, EmbVector v)
 {
-    QPointF p = doc->mapFromScene(to_qpointf(v).toPoint());
+    QPointF p = documents[doc]->mapFromScene(to_qpointf(v).toPoint());
     return to_emb_vector(p);
 }
 
+/* . */
 EmbVector
-doc_map_to_scene(Document *doc, EmbVector v)
+doc_map_to_scene(int32_t doc, EmbVector v)
 {
-    QPointF p = doc->mapToScene(to_qpointf(v).toPoint());
+    QPointF p = documents[doc]->mapToScene(to_qpointf(v).toPoint());
     return to_emb_vector(p);
 }
 
+/* . */
 EmbVector
-doc_center(Document* doc)
+doc_center(int32_t doc)
 {
     EmbVector a = zero_vector;
-    // FIXME: return doc->center();
+    // FIXME: return documents[doc]->center();
     return a;
 }
 
 /* FIXME */
 void
-doc_center_on(Document* doc, EmbVector p)
+doc_center_on(int32_t doc, EmbVector p)
 {
-    doc->centerOn(to_qpointf(p));
+    documents[doc]->centerOn(to_qpointf(p));
 }
 
 /* . */
@@ -188,80 +194,80 @@ Document::enterEvent(QEvent* /*event*/)
 
 /* . */
 void
-doc_add_object(Document* doc, Object* obj)
+doc_add_object(int32_t doc, Object* obj)
 {
-    doc->data.gscene->addItem(obj);
-    doc->data.gscene->update();
-    doc->data.hashDeletedObjects.erase(obj->core->objID);
+    documents[doc]->data.gscene->addItem(obj);
+    documents[doc]->data.gscene->update();
+    documents[doc]->data.hashDeletedObjects.erase(obj->core->objID);
 }
 
 /* . */
 void
-doc_delete_object(Document* doc, Object* obj)
+doc_delete_object(int32_t doc, Object* obj)
 {
     /* NOTE: We really just remove the objects from the scene. deletion actually occurs in the destructor. */
     obj->setSelected(false);
-    doc->data.gscene->removeItem(obj);
-    doc->data.gscene->update();
-    doc->data.hashDeletedObjects[obj->core->objID] = obj;
+    documents[doc]->data.gscene->removeItem(obj);
+    documents[doc]->data.gscene->update();
+    documents[doc]->data.hashDeletedObjects[obj->core->objID] = obj;
 }
 
 /* . */
 void
-doc_preview_on(Document* doc, int clone, int mode, double x, double y, double data_)
+doc_preview_on(int32_t doc, int clone, int mode, double x, double y, double data_)
 {
     debug_message("View previewOn()");
     doc_preview_off(doc); /* Free the old objects before creating new ones */
 
-    doc->data.previewMode = mode;
+    documents[doc]->data.previewMode = mode;
 
     /* Create new objects and add them to the scene in an item group. */
     if (clone == PREVIEW_CLONE_SELECTED) {
-        doc->data.previewObjectList = doc_create_object_list(doc, doc->data.gscene->selectedItems());
+        documents[doc]->data.previewObjectList = doc_create_object_list(doc, documents[doc]->data.gscene->selectedItems());
     }
     else if (clone == PREVIEW_CLONE_RUBBER) {
-        doc->data.previewObjectList = doc_create_object_list(doc, doc->data.rubberRoomList);
+        documents[doc]->data.previewObjectList = doc_create_object_list(doc, documents[doc]->data.rubberRoomList);
     }
     else {
         return;
     }
-    doc->data.previewObjectItemGroup = doc->data.gscene->createItemGroup(doc->data.previewObjectList);
+    documents[doc]->data.previewObjectItemGroup = documents[doc]->data.gscene->createItemGroup(documents[doc]->data.previewObjectList);
 
-    if (doc->data.previewMode == PREVIEW_MOVE ||
-       doc->data.previewMode == PREVIEW_ROTATE ||
-       doc->data.previewMode == PREVIEW_SCALE) {
-        doc->data.previewPoint.x = x;
-        doc->data.previewPoint.y = y; /* NOTE: Move: basePt; Rotate: basePt; Scale: basePt; */
-        doc->data.previewData = data_;           /* NOTE: Move: unused; Rotate: refAngle; Scale: refFactor; */
-        doc->data.previewActive = true;
+    if (documents[doc]->data.previewMode == PREVIEW_MOVE ||
+       documents[doc]->data.previewMode == PREVIEW_ROTATE ||
+       documents[doc]->data.previewMode == PREVIEW_SCALE) {
+        documents[doc]->data.previewPoint.x = x;
+        documents[doc]->data.previewPoint.y = y; /* NOTE: Move: basePt; Rotate: basePt; Scale: basePt; */
+        documents[doc]->data.previewData = data_;           /* NOTE: Move: unused; Rotate: refAngle; Scale: refFactor; */
+        documents[doc]->data.previewActive = true;
     }
     else {
-        doc->data.previewMode = PREVIEW_NULL;
-        doc->data.previewPoint = zero_vector;
-        doc->data.previewData = 0;
-        doc->data.previewActive = false;
+        documents[doc]->data.previewMode = PREVIEW_NULL;
+        documents[doc]->data.previewPoint = zero_vector;
+        documents[doc]->data.previewData = 0;
+        documents[doc]->data.previewActive = false;
     }
 
-    doc->data.gscene->update();
+    documents[doc]->data.gscene->update();
 }
 
 /* . */
 void
-doc_preview_off(Document* doc)
+doc_preview_off(int32_t doc)
 {
     /* Prevent memory leaks by deleting any unused instances */
-    qDeleteAll(doc->data.previewObjectList.begin(), doc->data.previewObjectList.end());
-    doc->data.previewObjectList.clear();
+    qDeleteAll(documents[doc]->data.previewObjectList.begin(), documents[doc]->data.previewObjectList.end());
+    documents[doc]->data.previewObjectList.clear();
 
-    if (doc->data.previewObjectItemGroup) {
-        doc->data.gscene->removeItem(doc->data.previewObjectItemGroup);
-        delete doc->data.previewObjectItemGroup;
-        doc->data.previewObjectItemGroup = 0;
+    if (documents[doc]->data.previewObjectItemGroup) {
+        documents[doc]->data.gscene->removeItem(documents[doc]->data.previewObjectItemGroup);
+        delete documents[doc]->data.previewObjectItemGroup;
+        documents[doc]->data.previewObjectItemGroup = 0;
     }
 
-    doc->data.previewActive = false;
+    documents[doc]->data.previewActive = false;
 
-    doc->data.gscene->update();
+    documents[doc]->data.gscene->update();
 }
 
 /* . */
@@ -273,78 +279,80 @@ doc_enable_move_rapid_fire(Document *doc)
 
 /* . */
 void
-doc_disable_move_rapid_fire(Document* doc)
+doc_disable_move_rapid_fire(int32_t doc)
 {
-    doc->data.rapidMoveActive = false;
+    documents[doc]->data.rapidMoveActive = false;
 }
 
 /* . */
 bool
-doc_allow_rubber(Document* doc)
+doc_allow_rubber(int32_t doc)
 {
-    /* if (!doc->data.rubberRoomList.size()) */ /* TODO: this check should be removed later */
+    /* if (!documents[doc]->data.rubberRoomList.size()) */ /* TODO: this check should be removed later */
         return true;
     return false;
 }
 
 /* . */
 void
-doc_add_to_rubber_room(Document* doc, QGraphicsItem* item)
+doc_add_to_rubber_room(int32_t doc, QGraphicsItem* item)
 {
-    doc->data.rubberRoomList.append(item);
+    documents[doc]->data.rubberRoomList.append(item);
     item->show();
-    doc->data.gscene->update();
+    documents[doc]->data.gscene->update();
 }
 
 /* . */
 void
-doc_vulcanize_rubber_room(Document* doc)
+doc_vulcanize_rubber_room(int32_t doc)
 {
-    foreach(QGraphicsItem* item, doc->data.rubberRoomList) {
+    foreach(QGraphicsItem* item, documents[doc]->data.rubberRoomList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
             doc_vulcanize_object(doc, base);
         }
     }
-    doc->data.rubberRoomList.clear();
-    doc->data.gscene->update();
+    documents[doc]->data.rubberRoomList.clear();
+    documents[doc]->data.gscene->update();
 }
 
 /* . */
 void
-doc_vulcanize_object(Document* doc, Object* obj)
+doc_vulcanize_object(int32_t doc, Object* obj)
 {
     if (!obj) {
         return;
     }
-    doc->data.gscene->removeItem(obj); /* Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene */
+    documents[doc]->data.gscene->removeItem(obj); /* Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene */
     obj->vulcanize();
 
     UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME,
         obj, doc, 0);
     if (cmd) {
-        doc->data.undoStack->push(cmd);
+        documents[doc]->data.undoStack->push(cmd);
     }
 }
 
 /* . */
 void
-doc_clear_rubber_room(Document* doc)
+doc_clear_rubber_room(int32_t doc)
 {
-    foreach(QGraphicsItem* item, doc->data.rubberRoomList) {
+    // FIXME:
+    return;
+    foreach(QGraphicsItem* item, documents[doc]->data.rubberRoomList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
             int type = base->type();
-            if ((type == OBJ_PATH && doc->data.spareRubberList.contains(SPARE_RUBBER_PATH))
-            || (type == OBJ_POLYGON  && doc->data.spareRubberList.contains(SPARE_RUBBER_POLYGON))
-            || (type == OBJ_POLYLINE && doc->data.spareRubberList.contains(SPARE_RUBBER_POLYLINE))
-            || (doc->data.spareRubberList.contains(base->core->objID))) {
+            if ((type == OBJ_PATH && documents[doc]->data.spareRubberList.contains(SPARE_RUBBER_PATH))
+            || (type == OBJ_POLYGON  && documents[doc]->data.spareRubberList.contains(SPARE_RUBBER_POLYGON))
+            || (type == OBJ_POLYLINE && documents[doc]->data.spareRubberList.contains(SPARE_RUBBER_POLYLINE))
+            || (documents[doc]->data.spareRubberList.contains(base->core->objID))) {
                 if (!obj_path(base).elementCount()) {
                     critical_box(translate("Empty Rubber Object Error"),
                         translate("The rubber object added contains no points. "
                             "The command that created this object has flawed logic. "
                             "The object will be deleted."));
-                    doc->data.gscene->removeItem(item);
+                    documents[doc]->data.gscene->removeItem(item);
                     delete item;
                 }
                 else {
@@ -352,131 +360,131 @@ doc_clear_rubber_room(Document* doc)
                 }
             }
             else {
-                doc->data.gscene->removeItem(item);
+                documents[doc]->data.gscene->removeItem(item);
                 delete item;
             }
         }
     }
 
-    doc->data.rubberRoomList.clear();
-    doc->data.spareRubberList.clear();
-    doc->data.gscene->update();
+    documents[doc]->data.rubberRoomList.clear();
+    documents[doc]->data.spareRubberList.clear();
+    documents[doc]->data.gscene->update();
 }
 
 /* . */
 void
-doc_spare_rubber(Document* doc, int64_t id)
+doc_spare_rubber(int32_t doc, int64_t id)
 {
-    doc->data.spareRubberList.append(id);
+    documents[doc]->data.spareRubberList.append(id);
 }
 
 /* . */
 void
-doc_set_rubber_mode(Document* doc, int mode)
+doc_set_rubber_mode(int32_t doc, int mode)
 {
-    foreach (QGraphicsItem* item, doc->data.rubberRoomList) {
+    foreach (QGraphicsItem* item, documents[doc]->data.rubberRoomList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
             obj_set_rubber_mode(base->core, mode);
         }
     }
-    doc->data.gscene->update();
+    documents[doc]->data.gscene->update();
 }
 
 /* . */
 void
-doc_set_rubber_point(Document* doc, EmbString key, EmbVector point)
+doc_set_rubber_point(int32_t doc, EmbString key, EmbVector point)
 {
-    foreach (QGraphicsItem* item, doc->data.rubberRoomList) {
+    foreach (QGraphicsItem* item, documents[doc]->data.rubberRoomList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
             base->setObjectRubberPoint((char*)qPrintable(key), point);
         }
     }
-    doc->data.gscene->update();
+    documents[doc]->data.gscene->update();
 }
 
 /* . */
 void
-doc_set_rubber_text(Document* doc, EmbString key, EmbString txt)
+doc_set_rubber_text(int32_t doc, EmbString key, EmbString txt)
 {
-    foreach (QGraphicsItem* item, doc->data.rubberRoomList) {
+    foreach (QGraphicsItem* item, documents[doc]->data.rubberRoomList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
             base->setObjectRubberText((char*)qPrintable(key), (char*)qPrintable(txt));
         }
     }
-    doc->data.gscene->update();
+    documents[doc]->data.gscene->update();
 }
 
 /* . */
 void
-doc_set_grid_color(Document* doc, QRgb color)
+doc_set_grid_color(int32_t doc, uint32_t color)
 {
-    doc->data.gridColor = QColor(color);
-    if (doc->data.gscene) {
-        doc->data.gscene->setProperty("VIEW_COLOR_GRID", color);
-        doc->data.gscene->update();
+    documents[doc]->data.gridColor = QColor(color);
+    if (documents[doc]->data.gscene) {
+        documents[doc]->data.gscene->setProperty("VIEW_COLOR_GRID", color);
+        documents[doc]->data.gscene->update();
     }
 }
 
 /* . */
 void
-doc_set_ruler_color(Document* doc, QRgb color)
+doc_set_ruler_color(int32_t doc, QRgb color)
 {
-    doc->data.rulerColor = QColor(color);
-    doc->data.gscene->update();
+    documents[doc]->data.rulerColor = QColor(color);
+    documents[doc]->data.gscene->update();
 }
 
 /* . */
 void
-doc_create_grid(Document* doc, EmbString gridType)
+doc_create_grid(int32_t doc, EmbString gridType)
 {
     if (string_equal(gridType, "Rectangular")) {
         doc_create_grid_rect(doc);
-        doc->data.gscene->setProperty("ENABLE_GRID", true);
+        documents[doc]->data.gscene->setProperty("ENABLE_GRID", true);
     }
     else if (string_equal(gridType, "Circular")) {
         doc_create_grid_polar(doc);
-        doc->data.gscene->setProperty("ENABLE_GRID", true);
+        documents[doc]->data.gscene->setProperty("ENABLE_GRID", true);
     }
     else if (string_equal(gridType, "Isometric")) {
         doc_create_grid_iso(doc);
-        doc->data.gscene->setProperty("ENABLE_GRID", true);
+        documents[doc]->data.gscene->setProperty("ENABLE_GRID", true);
     }
     else {
-        doc->data.gridPath = QPainterPath();
-        doc->data.gscene->setProperty("ENABLE_GRID", false);
+        documents[doc]->data.gridPath = QPainterPath();
+        documents[doc]->data.gscene->setProperty("ENABLE_GRID", false);
     }
 
     doc_create_origin(doc);
 
-    doc->data.gscene->update();
+    documents[doc]->data.gscene->update();
 }
 
 /* . */
 void
-doc_create_origin(Document* doc) /* TODO: Make Origin Customizable */
+doc_create_origin(int32_t doc) /* TODO: Make Origin Customizable */
 {
-    doc->data.originPath = QPainterPath();
+    documents[doc]->data.originPath = QPainterPath();
 
     if (get_bool(GRID_SHOW_ORIGIN)) {
         /* originPath.addEllipse(QPointF(0,0), 0.5, 0.5); */ /* TODO: Make Origin Customizable */
         double rad = 0.5;
-        doc->data.originPath.moveTo(0.0, rad);
-        doc->data.originPath.arcTo(-rad, -rad, rad*2.0, rad*2.0, 90.0, 360.0);
-        doc->data.originPath.arcTo(-rad, -rad, rad*2.0, rad*2.0, 90.0, -360.0);
-        doc->data.originPath.lineTo(0.0, -rad);
-        doc->data.originPath.arcTo(-rad, -rad, rad*2.0, rad*2.0, 270.0, 90.0);
-        doc->data.originPath.lineTo(-rad, 0.0);
-        doc->data.originPath.arcTo(-rad, -rad, rad*2.0, rad*2.0, 180.0, -90.0);
-        doc->data.originPath.closeSubpath();
+        documents[doc]->data.originPath.moveTo(0.0, rad);
+        documents[doc]->data.originPath.arcTo(-rad, -rad, rad*2.0, rad*2.0, 90.0, 360.0);
+        documents[doc]->data.originPath.arcTo(-rad, -rad, rad*2.0, rad*2.0, 90.0, -360.0);
+        documents[doc]->data.originPath.lineTo(0.0, -rad);
+        documents[doc]->data.originPath.arcTo(-rad, -rad, rad*2.0, rad*2.0, 270.0, 90.0);
+        documents[doc]->data.originPath.lineTo(-rad, 0.0);
+        documents[doc]->data.originPath.arcTo(-rad, -rad, rad*2.0, rad*2.0, 180.0, -90.0);
+        documents[doc]->data.originPath.closeSubpath();
     }
 }
 
 /* . */
 void
-doc_create_grid_rect(Document* doc)
+doc_create_grid_rect(int32_t doc)
 {
     double xSpacing = get_real(GRID_SPACING_X);
     double ySpacing = get_real(GRID_SPACING_Y);
@@ -488,19 +496,19 @@ doc_create_grid_rect(Document* doc)
     double x2 = EMB_MAX(gr.left(), gr.right());
     double y2 = EMB_MAX(gr.top(), gr.bottom());
 
-    doc->data.gridPath = QPainterPath();
-    doc->data.gridPath.addRect(gr);
+    documents[doc]->data.gridPath = QPainterPath();
+    documents[doc]->data.gridPath.addRect(gr);
     for (double gx = x1; gx < x2; gx += xSpacing) {
         for (double gy = y1; gy < y2; gy += ySpacing) {
-            doc->data.gridPath.moveTo(x1,gy);
-            doc->data.gridPath.lineTo(x2,gy);
-            doc->data.gridPath.moveTo(gx,y1);
-            doc->data.gridPath.lineTo(gx,y2);
+            documents[doc]->data.gridPath.moveTo(x1,gy);
+            documents[doc]->data.gridPath.lineTo(x2,gy);
+            documents[doc]->data.gridPath.moveTo(gx,y1);
+            documents[doc]->data.gridPath.lineTo(gx,y2);
         }
     }
 
     /* Center the Grid */
-    QRectF gridRect = doc->data.gridPath.boundingRect();
+    QRectF gridRect = documents[doc]->data.gridPath.boundingRect();
     double bx = gridRect.width()/2.0;
     double by = -gridRect.height()/2.0;
     double cx = get_real(GRID_CENTER_X);
@@ -509,43 +517,43 @@ doc_create_grid_rect(Document* doc)
     double dy = cy - by;
 
     if (get_bool(GRID_CENTER_ON_ORIGIN)) {
-        doc->data.gridPath.translate(-bx, -by);
+        documents[doc]->data.gridPath.translate(-bx, -by);
     }
     else {
-        doc->data.gridPath.translate(dx, dy);
+        documents[doc]->data.gridPath.translate(dx, dy);
     }
 }
 
 /* . */
 void
-doc_create_grid_polar(Document* doc)
+doc_create_grid_polar(int32_t doc)
 {
     double radSpacing = get_real(GRID_SPACING_RADIUS);
     double angSpacing = get_real(GRID_SPACING_ANGLE);
 
     double rad = get_real(GRID_SIZE_RADIUS);
 
-    doc->data.gridPath = QPainterPath();
-    doc->data.gridPath.addEllipse(QPointF(0,0), rad, rad);
+    documents[doc]->data.gridPath = QPainterPath();
+    documents[doc]->data.gridPath.addEllipse(QPointF(0,0), rad, rad);
     for (double r = 0; r < rad; r += radSpacing) {
-        doc->data.gridPath.addEllipse(QPointF(0,0), r, r);
+        documents[doc]->data.gridPath.addEllipse(QPointF(0,0), r, r);
     }
     for (double ang = 0; ang < 360; ang += angSpacing) {
-        doc->data.gridPath.moveTo(0,0);
-        doc->data.gridPath.lineTo(QLineF::fromPolar(rad, ang).p2());
+        documents[doc]->data.gridPath.moveTo(0,0);
+        documents[doc]->data.gridPath.lineTo(QLineF::fromPolar(rad, ang).p2());
     }
 
     double cx = get_real(GRID_CENTER_X);
     double cy = get_real(GRID_CENTER_Y);
 
     if (!get_bool(GRID_CENTER_ON_ORIGIN)) {
-        doc->data.gridPath.translate(cx, -cy);
+        documents[doc]->data.gridPath.translate(cx, -cy);
     }
 }
 
 /* . */
 void
-doc_create_grid_iso(Document* doc)
+doc_create_grid_iso(int32_t doc)
 {
     double xSpacing = get_real(GRID_SPACING_X);
     double ySpacing = get_real(GRID_SPACING_Y);
@@ -559,55 +567,55 @@ doc_create_grid_iso(Document* doc)
     QPointF p3 = QLineF::fromPolar(isoH, 150).p2();
     QPointF p4 = p2 + p3;
 
-    doc->data.gridPath = QPainterPath();
-    doc->data.gridPath.moveTo(p1);
-    doc->data.gridPath.lineTo(p2);
-    doc->data.gridPath.lineTo(p4);
-    doc->data.gridPath.lineTo(p3);
-    doc->data.gridPath.lineTo(p1);
+    documents[doc]->data.gridPath = QPainterPath();
+    documents[doc]->data.gridPath.moveTo(p1);
+    documents[doc]->data.gridPath.lineTo(p2);
+    documents[doc]->data.gridPath.lineTo(p4);
+    documents[doc]->data.gridPath.lineTo(p3);
+    documents[doc]->data.gridPath.lineTo(p1);
 
     for (double x = 0; x < isoW; x += xSpacing) {
         for (double y = 0; y < isoH; y += ySpacing) {
             QPointF px = QLineF::fromPolar(x, 30).p2();
             QPointF py = QLineF::fromPolar(y, 150).p2();
 
-            doc->data.gridPath.moveTo(px);
-            doc->data.gridPath.lineTo(px+p3);
-            doc->data.gridPath.moveTo(py);
-            doc->data.gridPath.lineTo(py+p2);
+            documents[doc]->data.gridPath.moveTo(px);
+            documents[doc]->data.gridPath.lineTo(px+p3);
+            documents[doc]->data.gridPath.moveTo(py);
+            documents[doc]->data.gridPath.lineTo(py+p2);
         }
     }
 
     /* Center the Grid */
 
-    QRectF gridRect = doc->data.gridPath.boundingRect();
+    QRectF gridRect = documents[doc]->data.gridPath.boundingRect();
     /* bx is unused */
     double by = -gridRect.height()/2.0;
     double cx = get_real(GRID_CENTER_X);
     double cy = -get_real(GRID_CENTER_Y);
 
     if (get_real(GRID_CENTER_ON_ORIGIN)) {
-        doc->data.gridPath.translate(0, -by);
+        documents[doc]->data.gridPath.translate(0, -by);
     }
     else {
-        doc->data.gridPath.translate(0, -by);
-        doc->data.gridPath.translate(cx, cy);
+        documents[doc]->data.gridPath.translate(0, -by);
+        documents[doc]->data.gridPath.translate(cx, cy);
     }
 }
 
 void
-doc_toggle_snap(Document* doc, bool on)
+doc_toggle_snap(int32_t doc, bool on)
 {
     debug_message("View toggleSnap()");
     wait_cursor();
     /* TODO: finish this */
-    doc->data.gscene->setProperty("ENABLE_SNAP", on);
-    doc->data.gscene->update();
+    documents[doc]->data.gscene->setProperty("ENABLE_SNAP", on);
+    documents[doc]->data.gscene->update();
     restore_cursor();
 }
 
 void
-doc_toggle_grid(Document* doc, bool on)
+doc_toggle_grid(int32_t doc, bool on)
 {
     debug_message("View toggleGrid()");
     wait_cursor();
@@ -622,100 +630,100 @@ doc_toggle_grid(Document* doc, bool on)
 
 /* . */
 void
-doc_toggle_ruler(Document* doc, bool on)
+doc_toggle_ruler(int32_t doc, bool on)
 {
     debug_message("View toggleRuler()");
     wait_cursor();
-    doc->data.gscene->setProperty("ENABLE_RULER", on);
-    doc->data.rulerMetric = get_bool(RULER_METRIC);
-    doc->data.rulerColor = QColor(get_int(RULER_COLOR));
-    doc->data.rulerPixelSize = get_int(RULER_PIXEL_SIZE);
-    doc->data.gscene->update();
+    documents[doc]->data.gscene->setProperty("ENABLE_RULER", on);
+    documents[doc]->data.rulerMetric = get_bool(RULER_METRIC);
+    documents[doc]->data.rulerColor = QColor(get_int(RULER_COLOR));
+    documents[doc]->data.rulerPixelSize = get_int(RULER_PIXEL_SIZE);
+    documents[doc]->data.gscene->update();
     restore_cursor();
 }
 
 /* . */
 void
-doc_toggle_ortho(Document* doc, bool on)
+doc_toggle_ortho(int32_t doc, bool on)
 {
     debug_message("View toggleOrtho()");
     wait_cursor();
     /* TODO: finish this */
-    doc->data.gscene->setProperty("ENABLE_ORTHO", on);
-    doc->data.gscene->update();
+    documents[doc]->data.gscene->setProperty("ENABLE_ORTHO", on);
+    documents[doc]->data.gscene->update();
     restore_cursor();
 }
 
 /* . */
 void
-doc_toggle_polar(Document* doc, bool on)
+doc_toggle_polar(int32_t doc, bool on)
 {
     debug_message("View togglePolar()");
     wait_cursor();
     /* TODO: finish this */
-    doc->data.gscene->setProperty("ENABLE_POLAR", on);
-    doc->data.gscene->update();
+    documents[doc]->data.gscene->setProperty("ENABLE_POLAR", on);
+    documents[doc]->data.gscene->update();
     restore_cursor();
 }
 
 /* . */
 void
-doc_toggle_qsnap(Document* doc, bool on)
+doc_toggle_qsnap(int32_t doc, bool on)
 {
     debug_message("View toggleQSnap()");
     wait_cursor();
-    doc->data.qSnapToggle = on;
-    doc->data.gscene->setProperty("ENABLE_QSNAP", on);
-    doc->data.gscene->update();
+    documents[doc]->data.qSnapToggle = on;
+    documents[doc]->data.gscene->setProperty("ENABLE_QSNAP", on);
+    documents[doc]->data.gscene->update();
     restore_cursor();
 }
 
 /* . */
 void
-doc_toggle_qtrack(Document* doc, bool on)
+doc_toggle_qtrack(int32_t doc, bool on)
 {
     debug_message("View toggleQTrack()");
     wait_cursor();
     /* TODO: finish this */
-    doc->data.gscene->setProperty("ENABLE_QTRACK", on);
-    doc->data.gscene->update();
+    documents[doc]->data.gscene->setProperty("ENABLE_QTRACK", on);
+    documents[doc]->data.gscene->update();
     restore_cursor();
 }
 
 /* . */
 void
-doc_toggle_lwt(Document* doc, bool on)
+doc_toggle_lwt(int32_t doc, bool on)
 {
     debug_message("View toggleLwt()");
     wait_cursor();
-    doc->data.gscene->setProperty("ENABLE_LWT", on);
-    doc->data.gscene->update();
+    documents[doc]->data.gscene->setProperty("ENABLE_LWT", on);
+    documents[doc]->data.gscene->update();
     restore_cursor();
 }
 
 /* . */
 void
-doc_toggle_real(Document* doc, bool on)
+doc_toggle_real(int32_t doc, bool on)
 {
     debug_message("View toggleReal()");
     wait_cursor();
-    doc->data.gscene->setProperty("ENABLE_REAL", on);
-    doc->data.gscene->update();
+    documents[doc]->data.gscene->setProperty("ENABLE_REAL", on);
+    documents[doc]->data.gscene->update();
     restore_cursor();
 }
 
 /* . */
 bool
-doc_is_lwt_enabled(Document* doc)
+doc_is_lwt_enabled(int32_t doc)
 {
-    return doc->data.gscene->property("ENABLE_LWT").toBool();
+    return documents[doc]->data.gscene->property("ENABLE_LWT").toBool();
 }
 
 /* . */
 bool
-doc_is_real_enabled(Document* doc)
+doc_is_real_enabled(int32_t doc)
 {
-    return doc->data.gscene->property("ENABLE_REAL").toBool();
+    return documents[doc]->data.gscene->property("ENABLE_REAL").toBool();
 }
 
 /* . */
@@ -795,17 +803,17 @@ draw_spline(QPainter* painter, EmbSpline spline)
 void
 Document::drawBackground(QPainter* painter, const QRectF& rect)
 {
-    Document* doc = this;
+    int32_t doc = data.id;
     painter->fillRect(rect, backgroundBrush());
 
-    if (doc->data.gscene->property("ENABLE_GRID").toBool() && rect.intersects(doc->data.gridPath.controlPointRect())) {
-        QPen gridPen(doc->data.gridColor);
+    if (documents[doc]->data.gscene->property("ENABLE_GRID").toBool() && rect.intersects(documents[doc]->data.gridPath.controlPointRect())) {
+        QPen gridPen(documents[doc]->data.gridColor);
         gridPen.setJoinStyle(Qt::MiterJoin);
         gridPen.setCosmetic(true);
         painter->setPen(gridPen);
-        painter->drawPath(doc->data.gridPath);
-        painter->drawPath(doc->data.originPath);
-        painter->fillPath(doc->data.originPath, doc->data.gridColor);
+        painter->drawPath(documents[doc]->data.gridPath);
+        painter->drawPath(documents[doc]->data.originPath);
+        painter->fillPath(documents[doc]->data.originPath, documents[doc]->data.gridColor);
     }
 
     EmbPattern *pattern = activeMdiWindow()->pattern;
@@ -853,24 +861,24 @@ Document::drawBackground(QPainter* painter, const QRectF& rect)
 void
 Document::drawForeground(QPainter* painter, const QRectF& rect)
 {
-    Document *doc = this;
+    int32_t doc = data.id;
     /* Draw grip points for all selected objects */
 
-    QPen gripPen(QColor::fromRgb(doc->data.gripColorCool));
+    QPen gripPen(QColor::fromRgb(documents[doc]->data.gripColorCool));
     gripPen.setWidth(2);
     gripPen.setJoinStyle(Qt::MiterJoin);
     gripPen.setCosmetic(true);
     painter->setPen(gripPen);
-    QPointF gripOffset(doc->data.gripSize, doc->data.gripSize);
+    QPointF gripOffset(documents[doc]->data.gripSize, documents[doc]->data.gripSize);
 
     QList<EmbVector> selectedGripPoints;
-    QList<QGraphicsItem*> selectedItemList = doc->data.gscene->selectedItems();
+    QList<QGraphicsItem*> selectedItemList = documents[doc]->data.gscene->selectedItems();
     if (selectedItemList.size() <= 100) {
         foreach(QGraphicsItem* item, selectedItemList) {
             if (item->type() >= OBJ_BASE) {
-                doc->data.tempBaseObj = static_cast<Object*>(item);
-                if (doc->data.tempBaseObj) {
-                    selectedGripPoints = doc->data.tempBaseObj->allGripPoints();
+                documents[doc]->data.tempBaseObj = static_cast<Object*>(item);
+                if (documents[doc]->data.tempBaseObj) {
+                    selectedGripPoints = documents[doc]->data.tempBaseObj->allGripPoints();
                 }
 
                 EmbVector offset = to_emb_vector(gripOffset);
@@ -880,8 +888,8 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
                     QPointF p2 = to_qpointf(doc_map_to_scene(doc, p1));
                     QPointF q2 = to_qpointf(doc_map_to_scene(doc, q1));
 
-                    if (emb_approx(ssp, doc->data.sceneGripPoint)) {
-                        painter->fillRect(QRectF(p2, q2), QColor::fromRgb(doc->data.gripColorHot));
+                    if (emb_approx(ssp, documents[doc]->data.sceneGripPoint)) {
+                        painter->fillRect(QRectF(p2, q2), QColor::fromRgb(documents[doc]->data.gripColorHot));
                     }
                     else {
                         painter->drawRect(QRectF(p2, q2));
@@ -894,27 +902,27 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
     /* Draw the closest qsnap point */
 
     /* TODO: && findClosestSnapPoint == true */
-    if (!doc->data.selectingActive) {
-        QPen qsnapPen(QColor::fromRgb(doc->data.qsnapLocatorColor));
+    if (!documents[doc]->data.selectingActive) {
+        QPen qsnapPen(QColor::fromRgb(documents[doc]->data.qsnapLocatorColor));
         qsnapPen.setWidth(2);
         qsnapPen.setJoinStyle(Qt::MiterJoin);
         qsnapPen.setCosmetic(true);
         painter->setPen(qsnapPen);
-        EmbVector qsnapOffset = emb_vector(doc->data.qsnapLocatorSize,
-            doc->data.qsnapLocatorSize);
+        EmbVector qsnapOffset = emb_vector(documents[doc]->data.qsnapLocatorSize,
+            documents[doc]->data.qsnapLocatorSize);
 
-        double x = doc->data.viewMousePoint.x - data.qsnapApertureSize;
-        double y = doc->data.viewMousePoint.y - data.qsnapApertureSize;
+        double x = documents[doc]->data.viewMousePoint.x - data.qsnapApertureSize;
+        double y = documents[doc]->data.viewMousePoint.y - data.qsnapApertureSize;
         QList<EmbVector> apertureSnapPoints;
         QList<QGraphicsItem *> apertureItemList = items(x, y,
-            doc->data.qsnapApertureSize*2,
-            doc->data.qsnapApertureSize*2);
+            documents[doc]->data.qsnapApertureSize*2,
+            documents[doc]->data.qsnapApertureSize*2);
         foreach(QGraphicsItem* item, apertureItemList) {
             if (item->type() >= OBJ_BASE) {
-                doc->data.tempBaseObj = static_cast<Object*>(item);
-                if (doc->data.tempBaseObj) {
-                    EmbVector p = doc->data.sceneMousePoint;
-                    EmbVector q = doc->data.tempBaseObj->mouseSnapPoint(p);
+                documents[doc]->data.tempBaseObj = static_cast<Object*>(item);
+                if (documents[doc]->data.tempBaseObj) {
+                    EmbVector p = documents[doc]->data.sceneMousePoint;
+                    EmbVector q = documents[doc]->data.tempBaseObj->mouseSnapPoint(p);
                     apertureSnapPoints << q;
                 }
             }
@@ -931,14 +939,14 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
 
     /* Draw horizontal and vertical rulers */
 
-    if (doc->data.gscene->property("ENABLE_RULER").toBool()) {
+    if (documents[doc]->data.gscene->property("ENABLE_RULER").toBool()) {
         bool proceed = true;
 
         int vw = width();  /* View Width */
         int vh = height(); /* View Height */
-        QPointF origin = doc->mapToScene(0,0);
-        QPointF rulerHoriz = doc->mapToScene(vw, doc->data.rulerPixelSize);
-        QPointF rulerVert  = doc->mapToScene(doc->data.rulerPixelSize, vh);
+        QPointF origin = documents[doc]->mapToScene(0,0);
+        QPointF rulerHoriz = documents[doc]->mapToScene(vw, documents[doc]->data.rulerPixelSize);
+        QPointF rulerVert  = documents[doc]->mapToScene(documents[doc]->data.rulerPixelSize, vh);
 
         double ox = origin.x();
         double oy = origin.y();
@@ -959,7 +967,7 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
         if (rhw >= maxSize || rvh >= maxSize) proceed = false;
 
         if (proceed) {
-            int distance = doc->mapToScene(doc->data.rulerPixelSize*3, 0).x() - ox;
+            int distance = documents[doc]->mapToScene(documents[doc]->data.rulerPixelSize*3, 0).x() - ox;
             QString distStr = QString().setNum(distance);
             int distStrSize = distStr.size();
             int msd = distStr.at(0).digitValue(); /* Most Significant Digit */
@@ -980,7 +988,7 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
                 int unit = distStr.toInt();
                 double fraction;
                 bool feet = true;
-                if (doc->data.rulerMetric) {
+                if (documents[doc]->data.rulerMetric) {
                     if (unit < 10) {
                         unit = 10;
                     }
@@ -1000,16 +1008,16 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
 
                 double little  = 0.20;
                 double medium = 0.40;
-                double rhTextOffset = doc->mapToScene(3, 0).x() - ox;
-                double rvTextOffset = doc->mapToScene(0, 3).y() - oy;
+                double rhTextOffset = documents[doc]->mapToScene(3, 0).x() - ox;
+                double rvTextOffset = documents[doc]->mapToScene(0, 3).y() - oy;
                 double textHeight = rhh*medium;
 
                 QVector<QLineF> lines;
                 lines.append(QLineF(ox, rhy, rhx, rhy));
                 lines.append(QLineF(rvx, oy, rvx, rvy));
 
-                double mx = doc->data.sceneMousePoint.x;
-                double my = doc->data.sceneMousePoint.y;
+                double mx = documents[doc]->data.sceneMousePoint.x;
+                double my = documents[doc]->data.sceneMousePoint.y;
                 lines.append(QLineF(mx, rhy, mx, oy));
                 lines.append(QLineF(rvx, my, ox, my));
 
@@ -1018,8 +1026,8 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
                 QPen rulerPen(QColor(0,0,0));
                 rulerPen.setCosmetic(true);
                 painter->setPen(rulerPen);
-                painter->fillRect(QRectF(ox, oy, rhw, rhh), doc->data.rulerColor);
-                painter->fillRect(QRectF(ox, oy, rvw, rvh), doc->data.rulerColor);
+                painter->fillRect(QRectF(ox, oy, rhw, rhh), documents[doc]->data.rulerColor);
+                painter->fillRect(QRectF(ox, oy, rvw, rvh), documents[doc]->data.rulerColor);
 
                 int xFlow = 0;
                 int xStart = 0;
@@ -1054,7 +1062,7 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
                     for (int x = xStart; x < rhx; x += unit) {
                         transform.translate(x+rhTextOffset, rhy-rhh/2);
                         QPainterPath rulerTextPath;
-                        if (doc->data.rulerMetric) {
+                        if (documents[doc]->data.rulerMetric) {
                             QString s = QString().setNum(x);
                             rulerTextPath = transform.map(doc_create_ruler_text_path(doc, 0, 0, (char*)qPrintable(s), textHeight));
                         }
@@ -1072,7 +1080,7 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
                         painter->drawPath(rulerTextPath);
 
                         lines.append(QLineF(x, rhy, x, oy));
-                        if (doc->data.rulerMetric) {
+                        if (documents[doc]->data.rulerMetric) {
                             lines.append(QLineF(x, rhy, x, oy));
                             lines.append(QLineF(x+fraction, rhy, x+fraction, rhy-rhh*little));
                             lines.append(QLineF(x+fraction*2, rhy, x+fraction*2, rhy-rhh*little));
@@ -1113,7 +1121,7 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
                         transform.translate(rvx-rvw/2, y-rvTextOffset);
                         transform.rotate(-90);
                         QPainterPath rulerTextPath;
-                        if (doc->data.rulerMetric) {
+                        if (documents[doc]->data.rulerMetric) {
                             QString s = QString().setNum(-y);
                             rulerTextPath = transform.map(doc_create_ruler_text_path(doc, 0, 0, (char*)qPrintable(s), textHeight));
                         }
@@ -1131,7 +1139,7 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
                         painter->drawPath(rulerTextPath);
 
                         lines.append(QLineF(rvx, y, ox, y));
-                        if (doc->data.rulerMetric) {
+                        if (documents[doc]->data.rulerMetric) {
                             lines.append(QLineF(rvx, y+fraction, rvx-rvw*little, y+fraction));
                             lines.append(QLineF(rvx, y+fraction*2, rvx-rvw*little, y+fraction*2));
                             lines.append(QLineF(rvx, y+fraction*3, rvx-rvw*little, y+fraction*3));
@@ -1170,36 +1178,36 @@ Document::drawForeground(QPainter* painter, const QRectF& rect)
                 }
 
                 painter->drawLines(lines);
-                painter->fillRect(QRectF(ox, oy, rvw, rhh), doc->data.rulerColor);
+                painter->fillRect(QRectF(ox, oy, rvw, rhh), documents[doc]->data.rulerColor);
             }
         }
     }
 
     /* Draw the crosshair */
-    if (!doc->data.selectingActive) {
+    if (!documents[doc]->data.selectingActive) {
         /* painter->setBrush(Qt::NoBrush); */
-        QPen crosshairPen(QColor::fromRgb(doc->data.crosshairColor));
+        QPen crosshairPen(QColor::fromRgb(documents[doc]->data.crosshairColor));
         crosshairPen.setCosmetic(true);
         painter->setPen(crosshairPen);
 
-        QPointF p1 = doc->mapToScene(doc->data.viewMousePoint.x, doc->data.viewMousePoint.y - data.crosshairSize);
-        QPointF p2 = doc->mapToScene(doc->data.viewMousePoint.x, doc->data.viewMousePoint.y + data.crosshairSize);
+        QPointF p1 = documents[doc]->mapToScene(documents[doc]->data.viewMousePoint.x, documents[doc]->data.viewMousePoint.y - data.crosshairSize);
+        QPointF p2 = documents[doc]->mapToScene(documents[doc]->data.viewMousePoint.x, documents[doc]->data.viewMousePoint.y + data.crosshairSize);
         painter->drawLine(QLineF(p1, p2));
 
-        QPointF p3 = doc->mapToScene(doc->data.viewMousePoint.x - data.crosshairSize, doc->data.viewMousePoint.y);
-        QPointF p4 = doc->mapToScene(doc->data.viewMousePoint.x + data.crosshairSize, doc->data.viewMousePoint.y);
+        QPointF p3 = documents[doc]->mapToScene(documents[doc]->data.viewMousePoint.x - data.crosshairSize, documents[doc]->data.viewMousePoint.y);
+        QPointF p4 = documents[doc]->mapToScene(documents[doc]->data.viewMousePoint.x + data.crosshairSize, documents[doc]->data.viewMousePoint.y);
         painter->drawLine(QLineF(p3, p4));
 
-        QPointF p5 = doc->mapToScene(doc->data.viewMousePoint.x - data.pickBoxSize,
-            doc->data.viewMousePoint.y - data.pickBoxSize);
-        QPointF p6 = doc->mapToScene(doc->data.viewMousePoint.x + data.pickBoxSize,
-            doc->data.viewMousePoint.y + data.pickBoxSize);
+        QPointF p5 = documents[doc]->mapToScene(documents[doc]->data.viewMousePoint.x - data.pickBoxSize,
+            documents[doc]->data.viewMousePoint.y - data.pickBoxSize);
+        QPointF p6 = documents[doc]->mapToScene(documents[doc]->data.viewMousePoint.x + data.pickBoxSize,
+            documents[doc]->data.viewMousePoint.y + data.pickBoxSize);
         painter->drawRect(QRectF(p5, p6));
     }
 }
 
 QPainterPath
-doc_create_ruler_text_path(Document* doc, float x, float y, EmbString str, float height)
+doc_create_ruler_text_path(int32_t doc, float x, float y, EmbString str, float height)
 {
     QPainterPath path;
 
@@ -1294,15 +1302,15 @@ doc_create_ruler_text_path(Document* doc, float x, float y, EmbString str, float
 
 /* . */
 void
-doc_update_mouse_coords(Document* doc, int x, int y)
+doc_update_mouse_coords(int32_t doc, int x, int y)
 {
-    doc->data.viewMousePoint = emb_vector(x, y);
-    doc->data.sceneMousePoint = doc_map_to_scene(doc, doc->data.viewMousePoint);
-    doc->data.gscene->setProperty("SCENE_QSNAP_POINT", to_qpointf(doc->data.sceneMousePoint));
+    documents[doc]->data.viewMousePoint = emb_vector(x, y);
+    documents[doc]->data.sceneMousePoint = doc_map_to_scene(doc, documents[doc]->data.viewMousePoint);
+    documents[doc]->data.gscene->setProperty("SCENE_QSNAP_POINT", to_qpointf(documents[doc]->data.sceneMousePoint));
     /* TODO: if qsnap functionality is enabled, use it rather than the mouse point */
-    doc->data.gscene->setProperty("SCENE_MOUSE_POINT", to_qpointf(doc->data.sceneMousePoint));
-    doc->data.gscene->setProperty("VIEW_MOUSE_POINT", to_qpointf(doc->data.viewMousePoint));
-    setMouseCoord(doc->data.sceneMousePoint.x, -doc->data.sceneMousePoint.y);
+    documents[doc]->data.gscene->setProperty("SCENE_MOUSE_POINT", to_qpointf(documents[doc]->data.sceneMousePoint));
+    documents[doc]->data.gscene->setProperty("VIEW_MOUSE_POINT", to_qpointf(documents[doc]->data.viewMousePoint));
+    setMouseCoord(documents[doc]->data.sceneMousePoint.x, -documents[doc]->data.sceneMousePoint.y);
 }
 
 /*
@@ -1310,41 +1318,42 @@ doc_update_mouse_coords(Document* doc, int x, int y)
  * NOTE: Example: (1280*0.05)/2 = 32, thus 32 + 1 + 32 = 65 pixel wide crosshair
  */
 void
-doc_set_cross_hair_size(Document* doc, uint8_t percent)
+doc_set_cross_hair_size(int32_t doc, uint8_t percent)
 {
     uint32_t screenWidth = QGuiApplication::primaryScreen()->geometry().width();
     if (percent > 0 && percent < 100) {
-        doc->data.crosshairSize = (screenWidth*(percent/100.0))/2;
+        documents[doc]->data.crosshairSize = (screenWidth*(percent/100.0))/2;
     }
     else {
-        doc->data.crosshairSize = screenWidth;
+        documents[doc]->data.crosshairSize = screenWidth;
     }
 }
 
 /* . */
 void
-doc_set_corner_button(Document* doc)
+doc_set_corner_button(int32_t doc)
 {
     int num = get_int(DISPLAY_SCROLLBAR_WIDGET_NUM);
     if (num) {
-        QPushButton* cornerButton = new QPushButton(doc);
+        QPushButton* cornerButton = new QPushButton(documents[doc]);
         cornerButton->setFlat(true);
         QAction* act = actionHash[num];
         /* NOTE: Prevent crashing if the action is NULL. */
         if (!act) {
             information_box(translate("Corner Widget Error"),
                 translate("There are unused enum values in COMMAND_ACTIONS. Please report this as a bug."));
-            doc->setCornerWidget(0);
+            documents[doc]->setCornerWidget(0);
         }
         else {
             cornerButton->setIcon(act->icon());
-            QObject::connect(cornerButton, SIGNAL(clicked()), doc, SLOT(cornerButtonClicked()));
-            doc->setCornerWidget(cornerButton);
+            QObject::connect(cornerButton, SIGNAL(clicked()), documents[doc],
+                SLOT(cornerButtonClicked()));
+            documents[doc]->setCornerWidget(cornerButton);
             cornerButton->setCursor(Qt::ArrowCursor);
         }
     }
     else {
-        doc->setCornerWidget(0);
+        documents[doc]->setCornerWidget(0);
     }
 }
 
@@ -1360,7 +1369,7 @@ void
 doc_zoom_in(Document *doc)
 {
     debug_message("View zoomIn()");
-    if (!doc_allow_zoom_in(doc)) {
+    if (!doc_allow_zoom_in(doc->data.id)) {
         return;
     }
     wait_cursor();
@@ -1368,7 +1377,7 @@ doc_zoom_in(Document *doc)
     double s = get_real(DISPLAY_ZOOMSCALE_IN);
     doc->scale(s, s);
 
-    doc_center_on(doc, to_emb_vector(cntr));
+    doc_center_on(doc->data.id, to_emb_vector(cntr));
     restore_cursor();
 }
 
@@ -1377,7 +1386,7 @@ void
 doc_zoom_out(Document *doc)
 {
     debug_message("View zoomOut()");
-    if (!doc_allow_zoom_out(doc)) {
+    if (!doc_allow_zoom_out(doc->data.id)) {
         return;
     }
     wait_cursor();
@@ -1385,7 +1394,7 @@ doc_zoom_out(Document *doc)
     double s = get_real(DISPLAY_ZOOMSCALE_OUT);
     doc->scale(s, s);
 
-    doc_center_on(doc, to_emb_vector(cntr));
+    doc_center_on(doc->data.id, to_emb_vector(cntr));
     restore_cursor();
 }
 
@@ -1395,13 +1404,20 @@ doc_zoom_window(Document *doc)
 {
     doc->data.zoomWindowActive = true;
     doc->data.selectingActive = false;
-    doc_clear_selection(doc);
+    doc_clear_selection(doc->data.id);
 }
 
 /* . */
 void
 doc_zoom_selected(Document *doc)
 {
+    QUndoStack* stack = activeUndoStack();
+    if (stack) {
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomSelected",
+            doc->data.id, 0);
+        stack->push(cmd);
+    }
+
     wait_cursor();
     QList<QGraphicsItem*> itemList = doc->data.gscene->selectedItems();
     QPainterPath selectedRectPath;
@@ -1420,84 +1436,151 @@ doc_zoom_selected(Document *doc)
 
 /* . */
 void
-doc_zoom_extents(Document* doc)
+doc_zoom_window(int32_t doc)
 {
+}
+
+/* . */
+void
+doc_zoom_in(int32_t doc)
+{
+}
+
+/* . */
+void
+doc_zoom_out(int32_t doc)
+{
+}
+
+/* . */
+void
+doc_zoom_selected(int32_t doc)
+{
+}
+
+/* . */
+void
+doc_enable_move_rapid_fire(int32_t doc)
+{
+}
+
+/* . */
+void
+appendHistory(EmbString s)
+{
+}
+
+/* . */
+void
+doc_zoom_extents(int32_t doc)
+{
+    QUndoStack* stack = activeUndoStack();
+    if (stack) {
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "ZoomExtents", doc, 0);
+        stack->push(cmd);
+    }
+
     wait_cursor();
-    QRectF extents = doc->data.gscene->itemsBoundingRect();
+    QRectF extents = documents[doc]->data.gscene->itemsBoundingRect();
     if (extents.isNull()) {
         extents.setWidth(get_real(GRID_SIZE_X));
         extents.setHeight(get_real(GRID_SIZE_Y));
         extents.moveCenter(QPointF(0,0));
     }
-    doc->fitInView(extents, Qt::KeepAspectRatio);
+    documents[doc]->fitInView(extents, Qt::KeepAspectRatio);
     restore_cursor();
 }
 
 /* . */
 void
-doc_pan_real_time(Document* doc)
+doc_pan_real_time(int32_t doc)
 {
-    doc->data.panningRealTimeActive = true;
+    documents[doc]->data.panningRealTimeActive = true;
 }
 
 /* . */
 void
-doc_pan_point(Document* doc)
+doc_pan_point(int32_t doc)
 {
-    doc->data.panningPointActive = true;
+    documents[doc]->data.panningPointActive = true;
 }
 
 /* . */
 void
-doc_pan_left(Document* doc)
+doc_pan_left(int32_t doc)
 {
-    doc->horizontalScrollBar()->setValue(doc->horizontalScrollBar()->value() + doc->data.panDistance);
-    doc_update_mouse_coords(doc, doc->data.viewMousePoint.x, doc->data.viewMousePoint.y);
-    doc->data.gscene->update();
+    QUndoStack* stack = activeUndoStack();
+    if (stack) {
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanLeft", doc, 0);
+        stack->push(cmd);
+    }
+
+    documents[doc]->horizontalScrollBar()->setValue(documents[doc]->horizontalScrollBar()->value() + documents[doc]->data.panDistance);
+    doc_update_mouse_coords(doc, documents[doc]->data.viewMousePoint.x, documents[doc]->data.viewMousePoint.y);
+    documents[doc]->data.gscene->update();
 }
 
 /* . */
 void
-doc_pan_right(Document* doc)
+doc_pan_right(int32_t doc)
 {
-    doc->horizontalScrollBar()->setValue(doc->horizontalScrollBar()->value() - doc->data.panDistance);
-    doc_update_mouse_coords(doc, doc->data.viewMousePoint.x, doc->data.viewMousePoint.y);
-    doc->data.gscene->update();
+    QUndoStack* stack = activeUndoStack();
+    if (stack) {
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanRight", doc, 0);
+        stack->push(cmd);
+    }
+
+    documents[doc]->horizontalScrollBar()->setValue(documents[doc]->horizontalScrollBar()->value() - documents[doc]->data.panDistance);
+    doc_update_mouse_coords(doc, documents[doc]->data.viewMousePoint.x,
+        documents[doc]->data.viewMousePoint.y);
+    documents[doc]->data.gscene->update();
 }
 
 /* . */
 void
-doc_pan_up(Document* doc)
+doc_pan_up(int32_t doc)
 {
-    doc->verticalScrollBar()->setValue(doc->verticalScrollBar()->value() + doc->data.panDistance);
-    doc_update_mouse_coords(doc, doc->data.viewMousePoint.x, doc->data.viewMousePoint.y);
-    doc->data.gscene->update();
+    QUndoStack* stack = activeUndoStack();
+    if (stack) {
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanUp", doc, 0);
+        stack->push(cmd);
+    }
+
+    documents[doc]->verticalScrollBar()->setValue(documents[doc]->verticalScrollBar()->value() + documents[doc]->data.panDistance);
+    doc_update_mouse_coords(doc, documents[doc]->data.viewMousePoint.x, documents[doc]->data.viewMousePoint.y);
+    documents[doc]->data.gscene->update();
 }
 
 /* . */
 void
-doc_pan_down(Document* doc)
+doc_pan_down(int32_t doc)
 {
-    doc->verticalScrollBar()->setValue(doc->verticalScrollBar()->value() - doc->data.panDistance);
-    doc_update_mouse_coords(doc, doc->data.viewMousePoint.x, doc->data.viewMousePoint.y);
-    doc->data.gscene->update();
+    QUndoStack* stack = activeUndoStack();
+    if (stack) {
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanDown", doc, 0);
+        stack->push(cmd);
+    }
+
+    documents[doc]->verticalScrollBar()->setValue(documents[doc]->verticalScrollBar()->value() - documents[doc]->data.panDistance);
+    doc_update_mouse_coords(doc, documents[doc]->data.viewMousePoint.x, documents[doc]->data.viewMousePoint.y);
+    documents[doc]->data.gscene->update();
 }
 
 /* . */
 void
-doc_select_all(Document* doc)
+doc_select_all(int32_t doc)
 {
     QPainterPath allPath;
-    allPath.addRect(doc->data.gscene->sceneRect());
-    /*  doc->data.gscene->setSelectionArea(allPath, Qt::IntersectsItemShape, this->transform()); */
+    allPath.addRect(documents[doc]->data.gscene->sceneRect());
+    /*  documents[doc]->data.gscene->setSelectionArea(allPath, Qt::IntersectsItemShape, this->transform()); */
 }
 
 /* . */
 void
-doc_selection_changed(Document* doc)
+doc_selection_changed(int32_t doc)
 {
     if (dockPropEdit->isVisible()) {
-        dockPropEdit->setSelectedItems(doc->data.gscene->selectedItems());
+        dockPropEdit->setSelectedItems(documents[doc]->data.gscene->selectedItems());
     }
 }
 
@@ -1517,17 +1600,17 @@ Document::mouseDoubleClickEvent(QMouseEvent* event)
 void
 Document::mousePressEvent(QMouseEvent* event)
 {
-    Document *doc = this;
+    int32_t doc = data.id;
     doc_update_mouse_coords(doc, event->position().x(), event->position().y());
     if (event->button() == Qt::LeftButton) {
         if (cmdActive) {
-            QPointF cmdPoint = doc->mapToScene(event->pos());
+            QPointF cmdPoint = documents[doc]->mapToScene(event->pos());
             runCommandClick((char*)qPrintable(curCmd), cmdPoint.x(), cmdPoint.y());
             return;
         }
         QPainterPath path;
-        QList<QGraphicsItem*> pickList = doc->data.gscene->items(QRectF(doc->mapToScene(doc->data.viewMousePoint.x-data.pickBoxSize, doc->data.viewMousePoint.y-data.pickBoxSize),
-                                                              doc->mapToScene(doc->data.viewMousePoint.x+data.pickBoxSize, doc->data.viewMousePoint.y+data.pickBoxSize)));
+        QList<QGraphicsItem*> pickList = documents[doc]->data.gscene->items(QRectF(documents[doc]->mapToScene(documents[doc]->data.viewMousePoint.x-data.pickBoxSize, documents[doc]->data.viewMousePoint.y-data.pickBoxSize),
+                                                              documents[doc]->mapToScene(documents[doc]->data.viewMousePoint.x+data.pickBoxSize, documents[doc]->data.viewMousePoint.y+data.pickBoxSize)));
 
         bool itemsInPickBox = pickList.size();
         if (itemsInPickBox && !data.selectingActive && !data.grippingActive) {
@@ -1542,13 +1625,13 @@ Document::mousePressEvent(QMouseEvent* event)
                     return;
                 }
 
-                QPoint qsnapOffset(doc->data.qsnapLocatorSize, doc->data.qsnapLocatorSize);
-                QPointF gripPoint = to_qpointf(base->mouseSnapPoint(doc->data.sceneMousePoint));
+                QPoint qsnapOffset(documents[doc]->data.qsnapLocatorSize, documents[doc]->data.qsnapLocatorSize);
+                QPointF gripPoint = to_qpointf(base->mouseSnapPoint(documents[doc]->data.sceneMousePoint));
                 QPoint p1 = mapFromScene(gripPoint) - qsnapOffset;
                 QPoint q1 = mapFromScene(gripPoint) + qsnapOffset;
-                QRectF gripRect = QRectF(doc->mapToScene(p1), doc->mapToScene(q1));
-                QRectF pickRect = QRectF(doc->mapToScene(doc->data.viewMousePoint.x -data.pickBoxSize, doc->data.viewMousePoint.y - data.pickBoxSize),
-                                        doc->mapToScene(doc->data.viewMousePoint.x + data.pickBoxSize, doc->data.viewMousePoint.y+data.pickBoxSize));
+                QRectF gripRect = QRectF(documents[doc]->mapToScene(p1), documents[doc]->mapToScene(q1));
+                QRectF pickRect = QRectF(documents[doc]->mapToScene(documents[doc]->data.viewMousePoint.x -data.pickBoxSize, documents[doc]->data.viewMousePoint.y - data.pickBoxSize),
+                                        documents[doc]->mapToScene(documents[doc]->data.viewMousePoint.x + data.pickBoxSize, documents[doc]->data.viewMousePoint.y+data.pickBoxSize));
                 if (gripRect.intersects(pickRect)) {
                     foundGrip = true;
                 }
@@ -1559,51 +1642,51 @@ Document::mousePressEvent(QMouseEvent* event)
                 }
                 else {
                     /* start moving */
-                    doc->data.movingActive = true;
-                    doc->data.pressPoint = to_emb_vector(event->pos());
-                    doc->data.scenePressPoint = doc_map_to_scene(doc, doc->data.pressPoint);
+                    documents[doc]->data.movingActive = true;
+                    documents[doc]->data.pressPoint = to_emb_vector(event->pos());
+                    documents[doc]->data.scenePressPoint = doc_map_to_scene(doc, documents[doc]->data.pressPoint);
                 }
             }
         }
-        else if (doc->data.grippingActive) {
+        else if (documents[doc]->data.grippingActive) {
             doc_stop_gripping(doc, true);
         }
         else if (!data.selectingActive) {
-            doc->data.selectingActive = true;
-            doc->data.pressPoint = to_emb_vector(event->pos());
-            doc->data.scenePressPoint = doc_map_to_scene(doc, doc->data.pressPoint);
+            documents[doc]->data.selectingActive = true;
+            documents[doc]->data.pressPoint = to_emb_vector(event->pos());
+            documents[doc]->data.scenePressPoint = doc_map_to_scene(doc, documents[doc]->data.pressPoint);
 
             if (!data.selectBox) {
-                doc->data.selectBox = new SelectBox(QRubberBand::Rectangle, doc);
+                documents[doc]->data.selectBox = new SelectBox(QRubberBand::Rectangle, documents[doc]);
             }
-            QPointF p1 = to_qpointf(doc->data.pressPoint);
-            doc->data.selectBox->setGeometry(QRect(p1.toPoint(), p1.toPoint()));
-            doc->data.selectBox->show();
+            QPointF p1 = to_qpointf(documents[doc]->data.pressPoint);
+            documents[doc]->data.selectBox->setGeometry(QRect(p1.toPoint(), p1.toPoint()));
+            documents[doc]->data.selectBox->show();
         }
         else {
-            doc->data.selectingActive = false;
-            doc->data.selectBox->hide();
-            doc->data.releasePoint = to_emb_vector(event->pos());
-            doc->data.sceneReleasePoint = doc_map_to_scene(doc, doc->data.releasePoint);
+            documents[doc]->data.selectingActive = false;
+            documents[doc]->data.selectBox->hide();
+            documents[doc]->data.releasePoint = to_emb_vector(event->pos());
+            documents[doc]->data.sceneReleasePoint = doc_map_to_scene(doc, documents[doc]->data.releasePoint);
 
             /* Start SelectBox Code */
-            path.addPolygon(doc->mapToScene(doc->data.selectBox->geometry()));
-            if (doc->data.sceneReleasePoint.x > doc->data.scenePressPoint.x) {
+            path.addPolygon(documents[doc]->mapToScene(documents[doc]->data.selectBox->geometry()));
+            if (documents[doc]->data.sceneReleasePoint.x > documents[doc]->data.scenePressPoint.x) {
                 if (get_bool(SELECTION_MODE_PICKADD)) {
                     if (isShiftPressed()) {
-                        QList<QGraphicsItem*> itemList = doc->data.gscene->items(path, Qt::ContainsItemShape);
+                        QList<QGraphicsItem*> itemList = documents[doc]->data.gscene->items(path, Qt::ContainsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(false);
                     }
                     else {
-                        QList<QGraphicsItem*> itemList = doc->data.gscene->items(path, Qt::ContainsItemShape);
+                        QList<QGraphicsItem*> itemList = documents[doc]->data.gscene->items(path, Qt::ContainsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(true);
                     }
                 }
                 else {
                     if (isShiftPressed()) {
-                        QList<QGraphicsItem*> itemList = doc->data.gscene->items(path, Qt::ContainsItemShape);
+                        QList<QGraphicsItem*> itemList = documents[doc]->data.gscene->items(path, Qt::ContainsItemShape);
                         if (!itemList.size())
                             doc_clear_selection(doc);
                         else {
@@ -1613,7 +1696,7 @@ Document::mousePressEvent(QMouseEvent* event)
                     }
                     else {
                         doc_clear_selection(doc);
-                        QList<QGraphicsItem*> itemList = doc->data.gscene->items(path, Qt::ContainsItemShape);
+                        QList<QGraphicsItem*> itemList = documents[doc]->data.gscene->items(path, Qt::ContainsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(true);
                     }
@@ -1622,19 +1705,19 @@ Document::mousePressEvent(QMouseEvent* event)
             else {
                 if (get_bool(SELECTION_MODE_PICKADD)) {
                     if (isShiftPressed()) {
-                        QList<QGraphicsItem*> itemList = doc->data.gscene->items(path, Qt::IntersectsItemShape);
+                        QList<QGraphicsItem*> itemList = documents[doc]->data.gscene->items(path, Qt::IntersectsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(false);
                     }
                     else {
-                        QList<QGraphicsItem*> itemList = doc->data.gscene->items(path, Qt::IntersectsItemShape);
+                        QList<QGraphicsItem*> itemList = documents[doc]->data.gscene->items(path, Qt::IntersectsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(true);
                     }
                 }
                 else {
                     if (isShiftPressed()) {
-                        QList<QGraphicsItem*> itemList = doc->data.gscene->items(path, Qt::IntersectsItemShape);
+                        QList<QGraphicsItem*> itemList = documents[doc]->data.gscene->items(path, Qt::IntersectsItemShape);
                         if (!itemList.size())
                             doc_clear_selection(doc);
                         else {
@@ -1644,7 +1727,7 @@ Document::mousePressEvent(QMouseEvent* event)
                     }
                     else {
                         doc_clear_selection(doc);
-                        QList<QGraphicsItem*> itemList = doc->data.gscene->items(path, Qt::IntersectsItemShape);
+                        QList<QGraphicsItem*> itemList = documents[doc]->data.gscene->items(path, Qt::IntersectsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(true);
                     }
@@ -1653,30 +1736,30 @@ Document::mousePressEvent(QMouseEvent* event)
             /* End SelectBox Code */
         }
 
-        if (doc->data.pastingActive) {
-            QList<QGraphicsItem*> itemList = doc->data.pasteObjectItemGroup->childItems();
-            doc->data.gscene->destroyItemGroup(doc->data.pasteObjectItemGroup);
+        if (documents[doc]->data.pastingActive) {
+            QList<QGraphicsItem*> itemList = documents[doc]->data.pasteObjectItemGroup->childItems();
+            documents[doc]->data.gscene->destroyItemGroup(documents[doc]->data.pasteObjectItemGroup);
             foreach(QGraphicsItem* item, itemList) {
                 /* Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene */
-                doc->data.gscene->removeItem(item);
+                documents[doc]->data.gscene->removeItem(item);
             }
 
-            doc->data.undoStack->beginMacro("Paste");
+            documents[doc]->data.undoStack->beginMacro("Paste");
             foreach(QGraphicsItem* item, itemList) {
                 Object* base = static_cast<Object*>(item);
                 if (base) {
                     UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, base->core->OBJ_NAME, base, doc, 0);
                     if (cmd) {
-                        doc->data.undoStack->push(cmd);
+                        documents[doc]->data.undoStack->push(cmd);
                     }
                 }
             }
-            doc->data.undoStack->endMacro();
+            documents[doc]->data.undoStack->endMacro();
 
-            doc->data.pastingActive = false;
-            doc->data.selectingActive = false;
+            documents[doc]->data.pastingActive = false;
+            documents[doc]->data.selectingActive = false;
         }
-        if (doc->data.zoomWindowActive) {
+        if (documents[doc]->data.zoomWindowActive) {
             fitInView(path.boundingRect(), Qt::KeepAspectRatio);
             doc_clear_selection(doc);
         }
@@ -1685,39 +1768,39 @@ Document::mousePressEvent(QMouseEvent* event)
         //FIXME: doc_pan_start(doc, event->pos());
         /* The Undo command will record the spot where the pan started. */
         UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanStart", doc, 0);
-        doc->data.undoStack->push(cmd);
+        documents[doc]->data.undoStack->push(cmd);
         event->accept();
     }
-    doc->data.gscene->update();
+    documents[doc]->data.gscene->update();
 }
 
 /* . */
 void
-doc_pan_start(Document* doc, const QPoint& point)
+doc_pan_start(int32_t doc, const QPoint& point)
 {
     doc_recalculate_limits(doc);
 
-    //FIXME: doc_align_scene_point_with_view_point(doc, doc->mapToScene(point), point);
+    //FIXME: doc_align_scene_point_with_view_point(doc, documents[doc]->mapToScene(point), point);
 
-    doc->data.panningActive = true;
-    doc->data.panStartX = point.x();
-    doc->data.panStartY = point.y();
+    documents[doc]->data.panningActive = true;
+    documents[doc]->data.panStartX = point.x();
+    documents[doc]->data.panStartY = point.y();
 }
 
 /* . */
 void
-doc_recalculate_limits(Document* doc)
+doc_recalculate_limits(int32_t doc)
 {
     /* NOTE: Increase the sceneRect limits if the point we want to go to lies outside of sceneRect's limits */
     /*       If the sceneRect limits aren't increased, you cannot pan past its limits */
-    EmbVector tl = to_emb_vector(doc->mapToScene(doc->rect().topLeft()));
-    EmbVector br = to_emb_vector(doc->mapToScene(doc->rect().bottomRight()));
+    EmbVector tl = to_emb_vector(documents[doc]->mapToScene(documents[doc]->rect().topLeft()));
+    EmbVector br = to_emb_vector(documents[doc]->mapToScene(documents[doc]->rect().bottomRight()));
     QRectF viewRect(to_qpointf(tl), to_qpointf(br));
-    //QRectF sceneRect(doc->data.gscene->sceneRect());
-    QRectF sceneRect(doc->sceneRect());
+    //QRectF sceneRect(documents[doc]->data.gscene->sceneRect());
+    QRectF sceneRect(documents[doc]->sceneRect());
     QRectF newRect = viewRect.adjusted(-viewRect.width(), -viewRect.height(), viewRect.width(), viewRect.height());
     if (!sceneRect.contains(newRect.topLeft()) || !sceneRect.contains(newRect.bottomRight())) {
-        /* FIXME: doc->data.gscene->setSceneRect(sceneRect.adjusted(-viewRect.width(),
+        /* FIXME: documents[doc]->data.gscene->setSceneRect(sceneRect.adjusted(-viewRect.width(),
                                                 -viewRect.height(),
                                                 viewRect.width(),
                                                 viewRect.height()));
@@ -1727,7 +1810,7 @@ doc_recalculate_limits(Document* doc)
 
 /* . */
 void
-doc_center_at(Document* doc, EmbVector centerPoint)
+doc_center_at(int32_t doc, EmbVector centerPoint)
 {
     /* centerOn also updates the scrollbars, which shifts things out of wack o_O */
     doc_center_on(doc, centerPoint);
@@ -1739,7 +1822,7 @@ doc_center_at(Document* doc, EmbVector centerPoint)
 
 /* . */
 void
-doc_align_scene_point_with_view_point(Document* doc, EmbVector scenePoint, EmbVector viewPoint)
+doc_align_scene_point_with_view_point(int32_t doc, EmbVector scenePoint, EmbVector viewPoint)
 {
     EmbVector viewCenter = doc_center(doc);
     EmbVector pointBefore = scenePoint;
@@ -1756,29 +1839,29 @@ doc_align_scene_point_with_view_point(Document* doc, EmbVector scenePoint, EmbVe
 void
 Document::mouseMoveEvent(QMouseEvent* event)
 {
-    Document* doc = this;
+    int32_t doc = data.id;
     doc_update_mouse_coords(doc, event->position().x(), event->position().y());
-    doc->data.movePoint = to_emb_vector(event->pos());
-    doc->data.sceneMovePoint = doc_map_to_scene(doc, doc->data.movePoint);
+    documents[doc]->data.movePoint = to_emb_vector(event->pos());
+    documents[doc]->data.sceneMovePoint = doc_map_to_scene(doc, documents[doc]->data.movePoint);
 
     if (cmdActive) {
-        if (doc->data.rapidMoveActive) {
-            runCommandMove((char*)qPrintable(curCmd), doc->data.sceneMovePoint.x,
-                doc->data.sceneMovePoint.y);
+        if (documents[doc]->data.rapidMoveActive) {
+            runCommandMove((char*)qPrintable(curCmd), documents[doc]->data.sceneMovePoint.x,
+                documents[doc]->data.sceneMovePoint.y);
         }
     }
-    if (doc->data.previewActive) {
-        if (doc->data.previewMode == PREVIEW_MOVE) {
-            QPointF p = to_qpointf(emb_vector_subtract(doc->data.sceneMousePoint,
-                doc->data.previewPoint));
-            doc->data.previewObjectItemGroup->setPos(p);
+    if (documents[doc]->data.previewActive) {
+        if (documents[doc]->data.previewMode == PREVIEW_MOVE) {
+            QPointF p = to_qpointf(emb_vector_subtract(documents[doc]->data.sceneMousePoint,
+                documents[doc]->data.previewPoint));
+            documents[doc]->data.previewObjectItemGroup->setPos(p);
         }
-        else if (doc->data.previewMode == PREVIEW_ROTATE) {
-            double x = doc->data.previewPoint.x;
-            double y = doc->data.previewPoint.y;
-            double rot = doc->data.previewData;
+        else if (documents[doc]->data.previewMode == PREVIEW_ROTATE) {
+            double x = documents[doc]->data.previewPoint.x;
+            double y = documents[doc]->data.previewPoint.y;
+            double rot = documents[doc]->data.previewData;
 
-            double mouseAngle = QLineF(x, y, doc->data.sceneMousePoint.x, doc->data.sceneMousePoint.y).angle();
+            double mouseAngle = QLineF(x, y, documents[doc]->data.sceneMousePoint.x, documents[doc]->data.sceneMousePoint.y).angle();
 
             double rad = radians(rot-mouseAngle);
             double cosRot = cos(rad);
@@ -1791,18 +1874,18 @@ Document::mouseMoveEvent(QMouseEvent* event)
             rotv.x += x;
             rotv.y += y;
 
-            doc->data.previewObjectItemGroup->setPos(rotv.x, rotv.y);
-            doc->data.previewObjectItemGroup->setRotation(rot-mouseAngle);
+            documents[doc]->data.previewObjectItemGroup->setPos(rotv.x, rotv.y);
+            documents[doc]->data.previewObjectItemGroup->setRotation(rot-mouseAngle);
         }
-        else if (doc->data.previewMode == PREVIEW_SCALE) {
-            double x = doc->data.previewPoint.x;
-            double y = doc->data.previewPoint.y;
-            double scaleFactor = doc->data.previewData;
+        else if (documents[doc]->data.previewMode == PREVIEW_SCALE) {
+            double x = documents[doc]->data.previewPoint.x;
+            double y = documents[doc]->data.previewPoint.y;
+            double scaleFactor = documents[doc]->data.previewData;
 
-            double factor = QLineF(x, y, doc->data.sceneMousePoint.x, doc->data.sceneMousePoint.y).length() / scaleFactor;
+            double factor = QLineF(x, y, documents[doc]->data.sceneMousePoint.x, documents[doc]->data.sceneMousePoint.y).length() / scaleFactor;
 
-            doc->data.previewObjectItemGroup->setScale(1);
-            doc->data.previewObjectItemGroup->setPos(0,0);
+            documents[doc]->data.previewObjectItemGroup->setScale(1);
+            documents[doc]->data.previewObjectItemGroup->setPos(0,0);
 
             if (scaleFactor <= 0.0) {
                 /* FIXME: messagebox("critical",
@@ -1823,71 +1906,71 @@ Document::mouseMoveEvent(QMouseEvent* event)
                 double dx = newX - oldX;
                 double dy = newY - oldY;
 
-                doc->data.previewObjectItemGroup->setScale(doc->data.previewObjectItemGroup->scale()*factor);
-                doc->data.previewObjectItemGroup->moveBy(dx, dy);
+                documents[doc]->data.previewObjectItemGroup->setScale(documents[doc]->data.previewObjectItemGroup->scale()*factor);
+                documents[doc]->data.previewObjectItemGroup->moveBy(dx, dy);
             }
         }
     }
-    if (doc->data.pastingActive) {
-        EmbVector p = emb_vector_subtract(doc->data.sceneMousePoint,
-            doc->data.pasteDelta);
-        doc->data.pasteObjectItemGroup->setPos(to_qpointf(p));
+    if (documents[doc]->data.pastingActive) {
+        EmbVector p = emb_vector_subtract(documents[doc]->data.sceneMousePoint,
+            documents[doc]->data.pasteDelta);
+        documents[doc]->data.pasteObjectItemGroup->setPos(to_qpointf(p));
     }
-    if (doc->data.movingActive) {
+    if (documents[doc]->data.movingActive) {
         /* Ensure that the preview is only shown if the mouse has moved. */
         if (!data.previewActive)
             doc_preview_on(doc, PREVIEW_CLONE_SELECTED, PREVIEW_MOVE,
-                doc->data.scenePressPoint.x, doc->data.scenePressPoint.y, 0);
+                documents[doc]->data.scenePressPoint.x, documents[doc]->data.scenePressPoint.y, 0);
     }
-    if (doc->data.selectingActive) {
+    if (documents[doc]->data.selectingActive) {
         /* FIXME:
-        if (doc->data.sceneMovePoint >= doc->data.scenePressPoint) {
-            doc->data.selectBox->setDirection(1);
+        if (documents[doc]->data.sceneMovePoint >= documents[doc]->data.scenePressPoint) {
+            documents[doc]->data.selectBox->setDirection(1);
         }
         else {
-            doc->data.selectBox->setDirection(0);
+            documents[doc]->data.selectBox->setDirection(0);
         }
-        QPointF p = doc->mapFromScene(to_qpointf(doc->data.scenePressPoint));
+        QPointF p = documents[doc]->mapFromScene(to_qpointf(documents[doc]->data.scenePressPoint));
         QRect rect = QRect(p, event->pos());
-        doc->data.selectBox->setGeometry(rect).normalized();
+        documents[doc]->data.selectBox->setGeometry(rect).normalized();
         event->accept();
         */
     }
-    if (doc->data.panningActive) {
-        doc->horizontalScrollBar()->setValue(
-            doc->horizontalScrollBar()->value() - (event->position().x() - doc->data.panStartX));
-        doc->verticalScrollBar()->setValue(
-            doc->verticalScrollBar()->value() - (event->position().y() - doc->data.panStartY));
-        doc->data.panStartX = event->position().x();
-        doc->data.panStartY = event->position().y();
+    if (documents[doc]->data.panningActive) {
+        documents[doc]->horizontalScrollBar()->setValue(
+            documents[doc]->horizontalScrollBar()->value() - (event->position().x() - documents[doc]->data.panStartX));
+        documents[doc]->verticalScrollBar()->setValue(
+            documents[doc]->verticalScrollBar()->value() - (event->position().y() - documents[doc]->data.panStartY));
+        documents[doc]->data.panStartX = event->position().x();
+        documents[doc]->data.panStartY = event->position().y();
         event->accept();
     }
-    doc->data.gscene->update();
+    documents[doc]->data.gscene->update();
 }
 
 void
 Document::mouseReleaseEvent(QMouseEvent* event)
 {
-    Document *doc = this;
-    doc_update_mouse_coords(this, event->position().x(), event->position().y());
+    doc_update_mouse_coords(data.id, event->position().x(), event->position().y());
     if (event->button() == Qt::LeftButton) {
-        if (doc->data.movingActive) {
-            doc_preview_off(doc);
-            EmbVector delta = emb_vector_subtract(doc->data.sceneMousePoint,
-                doc->data.scenePressPoint);
+        if (documents[data.id]->data.movingActive) {
+            doc_preview_off(data.id);
+            EmbVector delta = emb_vector_subtract(documents[data.id]->data.sceneMousePoint,
+                documents[data.id]->data.scenePressPoint);
             /* Ensure that moving only happens if the mouse has moved. */
             if (delta.x || delta.y) {
-                doc_move_selected(doc, delta.x, delta.y);
+                doc_move_selected(data.id, delta.x, delta.y);
             }
-            doc->data.movingActive = false;
+            documents[data.id]->data.movingActive = false;
         }
         event->accept();
     }
     if (event->button() == Qt::MiddleButton) {
-        doc->data.panningActive = false;
+        documents[data.id]->data.panningActive = false;
         /* The Undo command will record the spot where the pan completed. */
-        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanStop", doc, 0);
-        doc->data.undoStack->push(cmd);
+        UndoableCommand* cmd = new UndoableCommand(ACTION_NAV, "PanStop",
+            data.id, 0);
+        documents[data.id]->data.undoStack->push(cmd);
         event->accept();
     }
     if (event->button() == Qt::XButton1) {
@@ -1900,16 +1983,17 @@ Document::mouseReleaseEvent(QMouseEvent* event)
         redo_command(); /* TODO: Make this customizable */
         event->accept();
     }
-    doc->data.gscene->update();
+    documents[data.id]->data.gscene->update();
 }
 
 
 /* . */
 bool
-doc_allow_zoom_in(Document* doc)
+doc_allow_zoom_in(int32_t doc)
 {
     EmbVector origin = doc_map_to_scene(doc, zero_vector);
-    EmbVector corner = doc_map_to_scene(doc, emb_vector(doc->width(), doc->height()));
+    EmbVector corner = doc_map_to_scene(doc,
+        emb_vector(documents[doc]->width(), documents[doc]->height()));
     double maxWidth = corner.x - origin.x;
     double maxHeight = corner.y - origin.y;
 
@@ -1925,10 +2009,10 @@ doc_allow_zoom_in(Document* doc)
 
 /* . */
 bool
-doc_allow_zoom_out(Document* doc)
+doc_allow_zoom_out(int32_t doc)
 {
     EmbVector origin = doc_map_to_scene(doc, zero_vector);
-    EmbVector corner = doc_map_to_scene(doc, emb_vector(doc->width(), doc->height()));
+    EmbVector corner = doc_map_to_scene(doc, emb_vector(documents[doc]->width(), documents[doc]->height()));
     double maxWidth = corner.x - origin.x;
     double maxHeight = corner.y - origin.y;
 
@@ -1949,22 +2033,22 @@ Document::wheelEvent(QWheelEvent* event)
     // FIXME: int zoomDir = event->delta();
     QPoint mousePoint = event->position().toPoint();
 
-    doc_update_mouse_coords(this, mousePoint.x(), mousePoint.y());
+    doc_update_mouse_coords(data.id, mousePoint.x(), mousePoint.y());
     /* FIXME:
     if (zoomDir > 0) {
-        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomInToPoint", doc, 0);
-        doc->data.undoStack->push(cmd);
+        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomInToPoint", data.id, 0);
+        documents[doc]->data.undoStack->push(cmd);
     }
     else {
-        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomOutToPoint", doc, 0);
-        doc->data.undoStack->push(cmd);
+        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomOutToPoint", data.id, 0);
+        documents[doc]->data.undoStack->push(cmd);
     }
     */
 }
 
 /* . */
 void
-doc_zoom_to_point(Document* doc, EmbVector mousePoint, int zoomDir)
+doc_zoom_to_point(int32_t doc, EmbVector mousePoint, int zoomDir)
 {
     QPointF pointBeforeScale = to_qpointf(doc_map_to_scene(doc, mousePoint));
 
@@ -1983,24 +2067,24 @@ doc_zoom_to_point(Document* doc, EmbVector mousePoint, int zoomDir)
         s = get_real(DISPLAY_ZOOMSCALE_OUT);
     }
 
-    doc->scale(s, s);
+    documents[doc]->scale(s, s);
     doc_align_scene_point_with_view_point(doc, to_emb_vector(pointBeforeScale), mousePoint);
     doc_recalculate_limits(doc);
     doc_align_scene_point_with_view_point(doc, to_emb_vector(pointBeforeScale), mousePoint);
 
     doc_update_mouse_coords(doc, mousePoint.x, mousePoint.y);
-    if (doc->data.pastingActive) {
-        EmbVector p = emb_vector_subtract(doc->data.sceneMousePoint,
-            doc->data.pasteDelta);
-        doc->data.pasteObjectItemGroup->setPos(to_qpointf(p));
+    if (documents[doc]->data.pastingActive) {
+        EmbVector p = emb_vector_subtract(documents[doc]->data.sceneMousePoint,
+            documents[doc]->data.pasteDelta);
+        documents[doc]->data.pasteObjectItemGroup->setPos(to_qpointf(p));
     }
-    if (doc->data.selectingActive) {
-        QPointF v1 = doc->mapFromScene(to_qpointf(doc->data.scenePressPoint));
+    if (documents[doc]->data.selectingActive) {
+        QPointF v1 = documents[doc]->mapFromScene(to_qpointf(documents[doc]->data.scenePressPoint));
         QPointF v2 = to_qpointf(mousePoint);
         QRectF r(v1, v2);
-        /* FIXME: doc->data.selectBox->setGeometry(r.normalized()); */
+        /* FIXME: documents[doc]->data.selectBox->setGeometry(r.normalized()); */
     }
-    doc->data.gscene->update();
+    documents[doc]->data.gscene->update();
 }
 
 void
@@ -2077,35 +2161,35 @@ Document::contextMenuEvent(QContextMenuEvent* event)
 
 /* . */
 void
-doc_deletePressed(Document* doc)
+doc_deletePressed(int32_t doc)
 {
     debug_message("View deletePressed()");
-    if (doc->data.pastingActive) {
-        doc->data.gscene->removeItem(doc->data.pasteObjectItemGroup);
-        delete doc->data.pasteObjectItemGroup;
+    if (documents[doc]->data.pastingActive) {
+        documents[doc]->data.gscene->removeItem(documents[doc]->data.pasteObjectItemGroup);
+        delete documents[doc]->data.pasteObjectItemGroup;
     }
-    doc->data.pastingActive = false;
-    doc->data.zoomWindowActive = false;
-    doc->data.selectingActive = false;
-    doc->data.selectBox->hide();
+    documents[doc]->data.pastingActive = false;
+    documents[doc]->data.zoomWindowActive = false;
+    documents[doc]->data.selectingActive = false;
+    documents[doc]->data.selectBox->hide();
     doc_stop_gripping(doc, false);
     doc_delete_selected(doc);
 }
 
 /* . */
 void
-doc_escapePressed(Document* doc)
+doc_escapePressed(int32_t doc)
 {
     debug_message("View escapePressed()");
-    if (doc->data.pastingActive) {
-        doc->data.gscene->removeItem(doc->data.pasteObjectItemGroup);
-        delete doc->data.pasteObjectItemGroup;
+    if (documents[doc]->data.pastingActive) {
+        documents[doc]->data.gscene->removeItem(documents[doc]->data.pasteObjectItemGroup);
+        delete documents[doc]->data.pasteObjectItemGroup;
     }
-    doc->data.pastingActive = false;
-    doc->data.zoomWindowActive = false;
-    doc->data.selectingActive = false;
-    doc->data.selectBox->hide();
-    if (doc->data.grippingActive) {
+    documents[doc]->data.pastingActive = false;
+    documents[doc]->data.zoomWindowActive = false;
+    documents[doc]->data.selectingActive = false;
+    documents[doc]->data.selectBox->hide();
+    if (documents[doc]->data.grippingActive) {
         doc_stop_gripping(doc, false);
     }
     else {
@@ -2115,56 +2199,56 @@ doc_escapePressed(Document* doc)
 
 /* . */
 void
-doc_start_gripping(Document* doc, Object* obj)
+doc_start_gripping(int32_t doc, Object* obj)
 {
     if (!obj) {
         return;
     }
-    doc->data.grippingActive = true;
-    doc->data.gripBaseObj = obj;
-    doc->data.sceneGripPoint = doc->data.gripBaseObj->mouseSnapPoint(doc->data.sceneMousePoint);
-    doc->data.gripBaseObj->setObjectRubberPoint("GRIP_POINT", doc->data.sceneGripPoint);
-    obj_set_rubber_mode(doc->data.gripBaseObj->core, RUBBER_GRIP);
+    documents[doc]->data.grippingActive = true;
+    documents[doc]->data.gripBaseObj = obj;
+    documents[doc]->data.sceneGripPoint = documents[doc]->data.gripBaseObj->mouseSnapPoint(documents[doc]->data.sceneMousePoint);
+    documents[doc]->data.gripBaseObj->setObjectRubberPoint("GRIP_POINT", documents[doc]->data.sceneGripPoint);
+    obj_set_rubber_mode(documents[doc]->data.gripBaseObj->core, RUBBER_GRIP);
 }
 
 /* . */
 void
-doc_stop_gripping(Document* doc, bool accept)
+doc_stop_gripping(int32_t doc, bool accept)
 {
-    doc->data.grippingActive = false;
-    if (doc->data.gripBaseObj) {
-        doc->data.gripBaseObj->vulcanize();
+    documents[doc]->data.grippingActive = false;
+    if (documents[doc]->data.gripBaseObj) {
+        documents[doc]->data.gripBaseObj->vulcanize();
         if (accept) {
             QString s = translate("Grip Edit ");
-            s += doc->data.gripBaseObj->core->OBJ_NAME;
-            UndoableCommand* cmd = new UndoableCommand(ACTION_GRIP_EDIT, doc->data.sceneGripPoint, doc->data.sceneMousePoint, s, doc->data.gripBaseObj, doc, 0);
+            s += documents[doc]->data.gripBaseObj->core->OBJ_NAME;
+            UndoableCommand* cmd = new UndoableCommand(ACTION_GRIP_EDIT, documents[doc]->data.sceneGripPoint, documents[doc]->data.sceneMousePoint, s, documents[doc]->data.gripBaseObj, doc, 0);
             if (cmd) {
-                doc->data.undoStack->push(cmd);
+                documents[doc]->data.undoStack->push(cmd);
             }
             /* Update the Property Editor */
             doc_selection_changed(doc);
         }
-        doc->data.gripBaseObj = 0;
+        documents[doc]->data.gripBaseObj = 0;
     }
-    /* Move the doc->data.sceneGripPoint to a place where it will never be hot. */
-    doc->data.sceneGripPoint = to_emb_vector(doc->sceneRect().topLeft());
+    /* Move the documents[doc]->data.sceneGripPoint to a place where it will never be hot. */
+    documents[doc]->data.sceneGripPoint = to_emb_vector(documents[doc]->sceneRect().topLeft());
 }
 
 /* . */
 void
-doc_clear_selection(Document* doc)
+doc_clear_selection(int32_t doc)
 {
-    doc->data.gscene->clearSelection();
+    // FIXME: documents[doc]->data.gscene->clearSelection();
 }
 
 /* . */
 void
-doc_delete_selected(Document* doc)
+doc_delete_selected(int32_t doc)
 {
-    QList<QGraphicsItem*> itemList = doc->data.gscene->selectedItems();
+    QList<QGraphicsItem*> itemList = documents[doc]->data.gscene->selectedItems();
     int numSelected = itemList.size();
     if (numSelected > 1) {
-        doc->data.undoStack->beginMacro("Delete " + QString().setNum(itemList.size()));
+        documents[doc]->data.undoStack->beginMacro("Delete " + QString().setNum(itemList.size()));
     }
     for (int i = 0; i < itemList.size(); i++) {
         Object* base = static_cast<Object*>(itemList.at(i));
@@ -2175,37 +2259,37 @@ doc_delete_selected(Document* doc)
                 UndoableCommand* cmd = new UndoableCommand(ACTION_DELETE, label,
                     base, doc, 0);
                 if (cmd) {
-                    doc->data.undoStack->push(cmd);
+                    documents[doc]->data.undoStack->push(cmd);
                 }
             }
         }
     }
     if (numSelected > 1) {
-        doc->data.undoStack->endMacro();
+        documents[doc]->data.undoStack->endMacro();
     }
 }
 
 /* . */
 void
-doc_cut(Document* doc)
+doc_cut(int32_t doc)
 {
-    if (doc->data.gscene->selectedItems().isEmpty()) {
+    if (documents[doc]->data.gscene->selectedItems().isEmpty()) {
         information_box(translate("Cut Preselect"),
             translate("Preselect objects before invoking the cut command."));
         return; /* TODO: Prompt to select objects if nothing is preselected */
     }
 
-    doc->data.undoStack->beginMacro("Cut");
+    documents[doc]->data.undoStack->beginMacro("Cut");
     doc_copy_selected(doc);
     doc_delete_selected(doc);
-    doc->data.undoStack->endMacro();
+    documents[doc]->data.undoStack->endMacro();
 }
 
 /* . */
 void
-doc_copy(Document* doc)
+doc_copy(int32_t doc)
 {
-    if (doc->data.gscene->selectedItems().isEmpty()) {
+    if (documents[doc]->data.gscene->selectedItems().isEmpty()) {
         information_box(translate("Copy Preselect"),
             translate("Preselect objects before invoking the copy command."));
         return; /* TODO: Prompt to select objects if nothing is preselected */
@@ -2217,9 +2301,9 @@ doc_copy(Document* doc)
 
 /* . */
 void
-doc_copy_selected(Document* doc)
+doc_copy_selected(int32_t doc)
 {
-    QList<QGraphicsItem*> selectedList = doc->data.gscene->selectedItems();
+    QList<QGraphicsItem*> selectedList = documents[doc]->data.gscene->selectedItems();
 
     /* Prevent memory leaks by deleting any unpasted instances */
     qDeleteAll(cutCopyObjectList.begin(), cutCopyObjectList.end());
@@ -2234,18 +2318,18 @@ doc_copy_selected(Document* doc)
 
 /* . */
 void
-doc_paste(Document* doc)
+doc_paste(int32_t doc)
 {
-    if (doc->data.pastingActive) {
-        doc->data.gscene->removeItem(doc->data.pasteObjectItemGroup);
-        delete doc->data.pasteObjectItemGroup;
+    if (documents[doc]->data.pastingActive) {
+        documents[doc]->data.gscene->removeItem(documents[doc]->data.pasteObjectItemGroup);
+        delete documents[doc]->data.pasteObjectItemGroup;
     }
 
-    doc->data.pasteObjectItemGroup = doc->data.gscene->createItemGroup(cutCopyObjectList);
-    doc->data.pasteDelta = to_emb_vector(doc->data.pasteObjectItemGroup->boundingRect().bottomLeft());
-    EmbVector p = emb_vector_subtract(doc->data.sceneMousePoint, doc->data.pasteDelta);
-    doc->data.pasteObjectItemGroup->setPos(to_qpointf(p));
-    doc->data.pastingActive = true;
+    documents[doc]->data.pasteObjectItemGroup = documents[doc]->data.gscene->createItemGroup(cutCopyObjectList);
+    documents[doc]->data.pasteDelta = to_emb_vector(documents[doc]->data.pasteObjectItemGroup->boundingRect().bottomLeft());
+    EmbVector p = emb_vector_subtract(documents[doc]->data.sceneMousePoint, documents[doc]->data.pasteDelta);
+    documents[doc]->data.pasteObjectItemGroup->setPos(to_qpointf(p));
+    documents[doc]->data.pastingActive = true;
 
     /* Re-create the list in case of multiple pastes. */
     cutCopyObjectList = doc_create_object_list(doc, cutCopyObjectList);
@@ -2253,7 +2337,7 @@ doc_paste(Document* doc)
 
 /* . */
 QList<QGraphicsItem*>
-doc_create_object_list(Document* doc, QList<QGraphicsItem*> list)
+doc_create_object_list(int32_t doc, QList<QGraphicsItem*> list)
 {
     QList<QGraphicsItem*> copyList;
 
@@ -2293,12 +2377,12 @@ move_action(void)
 
 /* . */
 void
-doc_move_selected(Document* doc, double dx, double dy)
+doc_move_selected(int32_t doc, double dx, double dy)
 {
-    QList<QGraphicsItem*> itemList = doc->data.gscene->selectedItems();
+    QList<QGraphicsItem*> itemList = documents[doc]->data.gscene->selectedItems();
     int numSelected = itemList.size();
     if (numSelected > 1) {
-        doc->data.undoStack->beginMacro("Move " + QString().setNum(itemList.size()));
+        documents[doc]->data.undoStack->beginMacro("Move " + QString().setNum(itemList.size()));
     }
     foreach(QGraphicsItem* item, itemList) {
         Object* base = static_cast<Object*>(item);
@@ -2309,16 +2393,16 @@ doc_move_selected(Document* doc, double dx, double dy)
             UndoableCommand* cmd = new UndoableCommand(ACTION_MOVE, delta, msg,
                 base, doc, 0);
             if (cmd) {
-                doc->data.undoStack->push(cmd);
+                documents[doc]->data.undoStack->push(cmd);
             }
         }
     }
     if (numSelected > 1) {
-        doc->data.undoStack->endMacro();
+        documents[doc]->data.undoStack->endMacro();
     }
 
     /* Always clear the selection after a move. */
-    doc->data.gscene->clearSelection();
+    documents[doc]->data.gscene->clearSelection();
 }
 
 /* . */
@@ -2332,12 +2416,12 @@ rotate_action(void)
 
 /* . */
 void
-doc_rotate_selected(Document* doc, double x, double y, double rot)
+doc_rotate_selected(int32_t doc, double x, double y, double rot)
 {
-    QList<QGraphicsItem*> itemList = doc->data.gscene->selectedItems();
+    QList<QGraphicsItem*> itemList = documents[doc]->data.gscene->selectedItems();
     int numSelected = itemList.size();
     if (numSelected > 1) {
-        doc->data.undoStack->beginMacro("Rotate " + QString().setNum(itemList.size()));
+        documents[doc]->data.undoStack->beginMacro("Rotate " + QString().setNum(itemList.size()));
     }
     foreach(QGraphicsItem* item, itemList) {
         Object* base = static_cast<Object*>(item);
@@ -2348,49 +2432,47 @@ doc_rotate_selected(Document* doc, double x, double y, double rot)
             UndoableCommand* cmd = new UndoableCommand(ACTION_ROTATE, v, rot, s,
                 base, doc, 0);
             if (cmd) {
-                doc->data.undoStack->push(cmd);
+                documents[doc]->data.undoStack->push(cmd);
             }
         }
     }
     if (numSelected > 1) {
-        doc->data.undoStack->endMacro();
+        documents[doc]->data.undoStack->endMacro();
     }
 
     /* Always clear the selection after a rotate. */
-    doc->data.gscene->clearSelection();
+    documents[doc]->data.gscene->clearSelection();
 }
 
 /* . */
 void
-doc_mirror_selected(Document* doc, double x1, double y1, double x2, double y2)
+doc_mirror_selected(int32_t doc, double x1, double y1, double x2, double y2)
 {
-    QList<QGraphicsItem*> itemList = doc->data.gscene->selectedItems();
+    QList<QGraphicsItem*> itemList = documents[doc]->data.gscene->selectedItems();
     int numSelected = itemList.size();
     if (numSelected > 1)
-        doc->data.undoStack->beginMacro("Mirror " + QString().setNum(itemList.size()));
+        documents[doc]->data.undoStack->beginMacro("Mirror " + QString().setNum(itemList.size()));
     foreach(QGraphicsItem* item, itemList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
             EmbVector start, end;
-            start.x = x1;
-            start.y = y1;
-            end.x = x2;
-            end.y = y2;
+            start = emb_vector(x1, y1);
+            end = emb_vector(x2, y2);
             QString s = translate("Mirror 1 ");
             s += base->core->OBJ_NAME;
             UndoableCommand* cmd = new UndoableCommand(ACTION_MIRROR, start, end,
                 s, base, doc, 0);
             if (cmd) {
-                doc->data.undoStack->push(cmd);
+                documents[doc]->data.undoStack->push(cmd);
             }
         }
     }
     if (numSelected > 1) {
-        doc->data.undoStack->endMacro();
+        documents[doc]->data.undoStack->endMacro();
     }
 
     /* Always clear the selection after a mirror. */
-    doc->data.gscene->clearSelection();
+    documents[doc]->data.gscene->clearSelection();
 }
 
 /* . */
@@ -2404,12 +2486,12 @@ doc_scaleAction()
 
 /* . */
 void
-doc_scale_selected(Document* doc, double x, double y, double factor)
+doc_scale_selected(int32_t doc, double x, double y, double factor)
 {
-    QList<QGraphicsItem*> itemList = doc->data.gscene->selectedItems();
+    QList<QGraphicsItem*> itemList = documents[doc]->data.gscene->selectedItems();
     int numSelected = itemList.size();
     if (numSelected > 1)
-        doc->data.undoStack->beginMacro("Scale " + QString().setNum(itemList.size()));
+        documents[doc]->data.undoStack->beginMacro("Scale " + QString().setNum(itemList.size()));
     foreach(QGraphicsItem* item, itemList) {
         Object* base = static_cast<Object*>(item);
         if (base) {
@@ -2419,65 +2501,65 @@ doc_scale_selected(Document* doc, double x, double y, double factor)
             UndoableCommand* cmd = new UndoableCommand(ACTION_SCALE, v, factor, msg,
                 base, doc, 0);
             if (cmd) {
-                doc->data.undoStack->push(cmd);
+                documents[doc]->data.undoStack->push(cmd);
             }
         }
     }
     if (numSelected > 1) {
-        doc->data.undoStack->endMacro();
+        documents[doc]->data.undoStack->endMacro();
     }
 
     /* Always clear the selection after a scale. */
-    doc->data.gscene->clearSelection();
+    documents[doc]->data.gscene->clearSelection();
 }
 
 /* . */
 int
-doc_num_selected(Document* doc)
+doc_num_selected(int32_t doc)
 {
-    return doc->data.gscene->selectedItems().size();
+    return documents[doc]->data.gscene->selectedItems().size();
 }
 
 /* . */
 void
-doc_show_scroll_bars(Document* doc, bool val)
+doc_show_scroll_bars(int32_t doc, bool val)
 {
     if (val) {
-        doc->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-        doc->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        documents[doc]->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        documents[doc]->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     }
     else {
-        doc->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        doc->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        documents[doc]->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        documents[doc]->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     }
 }
 
 /* . */
 void
-doc_set_cross_hair_color(Document* doc, QRgb color)
+doc_set_cross_hair_color(int32_t doc, QRgb color)
 {
-    doc->data.crosshairColor = color;
-    doc->data.gscene->setProperty("VIEW_COLOR_CROSSHAIR", color);
-    if (doc->data.gscene) {
-        doc->data.gscene->update();
+    documents[doc]->data.crosshairColor = color;
+    documents[doc]->data.gscene->setProperty("VIEW_COLOR_CROSSHAIR", color);
+    if (documents[doc]->data.gscene) {
+        documents[doc]->data.gscene->update();
     }
 }
 
 /* . */
 void
-doc_set_background_color(Document* doc, QRgb color)
+doc_set_background_color(int32_t doc, QRgb color)
 {
-    doc->setBackgroundBrush(QColor(color));
-    doc->data.gscene->setProperty("VIEW_COLOR_BACKGROUND", color);
-    if (doc->data.gscene) {
-        doc->data.gscene->update();
+    documents[doc]->setBackgroundBrush(QColor(color));
+    documents[doc]->data.gscene->setProperty("VIEW_COLOR_BACKGROUND", color);
+    if (documents[doc]->data.gscene) {
+        documents[doc]->data.gscene->update();
     }
 }
 
 /* . */
 void
-doc_set_select_box_colors(Document* doc, QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
+doc_set_select_box_colors(int32_t doc, QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
 {
-    doc->data.selectBox->setColors(QColor(colorL), QColor(fillL), QColor(colorR), QColor(fillR), alpha);
+    documents[doc]->data.selectBox->setColors(QColor(colorL), QColor(fillL), QColor(colorR), QColor(fillR), alpha);
 }
 

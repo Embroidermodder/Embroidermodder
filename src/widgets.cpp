@@ -190,8 +190,8 @@ contextMenuEvent(QObject* object, QContextMenuEvent *event)
         menu.addAction(action);
     }
     else if (object->objectName() == "StatusBarButtonLWT") {
-        Document* doc = activeDocument();
-        if (doc) {
+        int32_t doc = activeDocument();
+        if (doc >= 0) {
             QAction* enableRealAction = new QAction(create_icon("realrender"), "&RealRender On", &menu);
             enableRealAction->setEnabled(!doc_is_real_enabled(doc));
             QObject::connect(enableRealAction, &QAction::triggered, _main, enableReal);
@@ -217,8 +217,8 @@ void
 statusbar_toggle(QString key, bool on)
 {
     debug_message("StatusBarButton toggleSnap()");
-    Document* doc = activeDocument();
-    if (doc) {
+    int32_t doc = activeDocument();
+    if (doc >= 0) {
         if (key == "SNAP") {
             doc_toggle_snap(doc, on);
         }
@@ -247,8 +247,8 @@ void
 enableLwt()
 {
     debug_message("StatusBarButton enableLwt()");
-    Document* doc = activeDocument();
-    if (doc) {
+    int32_t doc = activeDocument();
+    if (doc >= 0) {
         if (!doc_is_lwt_enabled(doc)) {
             doc_toggle_lwt(doc, true);
         }
@@ -259,8 +259,8 @@ void
 disableLwt()
 {
     debug_message("StatusBarButton disableLwt()");
-    Document* doc = activeDocument();
-    if (doc) {
+    int32_t doc = activeDocument();
+    if (doc >= 0) {
         if (doc_is_lwt_enabled(doc)) {
             doc_toggle_lwt(doc, false);
         }
@@ -271,9 +271,9 @@ void
 enableReal()
 {
     debug_message("StatusBarButton enableReal()");
-    Document* gview = activeDocument();
-    if (gview) {
-        doc_toggle_real(gview, true);
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        doc_toggle_real(doc_index, true);
     }
 }
 
@@ -281,9 +281,9 @@ void
 disableReal()
 {
     debug_message("StatusBarButton disableReal()");
-    Document* gview = activeDocument();
-    if (gview) {
-        doc_toggle_real(gview, false);
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        doc_toggle_real(doc_index, false);
     }
 }
 
@@ -826,10 +826,10 @@ MdiArea::zoomExtentsAllSubWindows()
     foreach(QMdiSubWindow* window, subWindowList()) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(window);
         if (mdiWin) {
-            Document* doc = mdiWin->gview;
-            if (doc) {
-                doc_recalculate_limits(doc);
-                doc_zoom_extents(doc);
+            int32_t doc_index = mdiWin->doc_index;
+            if (doc_index) {
+                doc_recalculate_limits(doc_index);
+                doc_zoom_extents(doc_index);
             }
         }
     }
@@ -862,15 +862,17 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     this->setWindowIcon(create_icon("app"));
 
     gscene = new QGraphicsScene(0,0,0,0, this);
-    gview = create_doc(_main, gscene, this);
+    /* FIXME:. */
+    doc_index = numOfDocs;
+    documents[doc_index] = create_doc(_main, gscene, this);
 
-    setWidget(gview);
+    setWidget(documents[doc_index]);
 
     /* WARNING: DO NOT SET THE QMDISUBWINDOW (this) FOCUSPROXY TO THE PROMPT
      * WARNING: AS IT WILL CAUSE THE WINDOW MENU TO NOT SWITCH WINDOWS PROPERLY!
      * WARNING: ALTHOUGH IT SEEMS THAT SETTING INTERNAL WIDGETS FOCUSPROXY IS OK.
      */
-    gview->setFocusProxy(prompt);
+    documents[doc_index]->setFocusProxy(prompt);
 
     resize(sizeHint());
 
@@ -983,7 +985,7 @@ MdiWindow::loadFile(QString fileName)
     restore_cursor();
 
     /* Clear the undo stack so it is not possible to undo past this point. */
-    gview->data.undoStack->clear();
+    documents[doc_index]->data.undoStack->clear();
 
     curColor = tmpColor;
 
@@ -1000,17 +1002,17 @@ MdiWindow::print()
         QPainter painter(&printer);
         if (get_bool(PRINTING_DISABLE_BG)) {
             /* Save current bg */
-            QBrush brush = gview->backgroundBrush();
+            QBrush brush = documents[doc_index]->backgroundBrush();
             /* Save ink by not printing the bg at all */
-            gview->setBackgroundBrush(Qt::NoBrush);
+            documents[doc_index]->setBackgroundBrush(Qt::NoBrush);
             /* Print, fitting the viewport contents into a full page */
-            gview->render(&painter);
+            documents[doc_index]->render(&painter);
             /* Restore the bg */
-            gview->setBackgroundBrush(brush);
+            documents[doc_index]->setBackgroundBrush(brush);
         }
         else {
             /* Print, fitting the viewport contents into a full page */
-            gview->render(&painter);
+            documents[doc_index]->render(&painter);
         }
     }
 }
@@ -1075,7 +1077,7 @@ void
 MdiWindow::onWindowActivated()
 {
     debug_message("MdiWindow onWindowActivated()");
-    gview->data.undoStack->setActive(true);
+    // FIXME: documents[doc]->data.undoStack->setActive(true);
     setUndoCleanIcon(fileWasLoaded);
     statusBarSnapButton->setChecked(gscene->property("ENABLE_SNAP").toBool());
     statusBarGridButton->setChecked(gscene->property("ENABLE_GRID").toBool());
@@ -1145,34 +1147,34 @@ MdiWindow::updateColorLinetypeLineweight()
 void
 MdiWindow::showViewScrollBars(bool val)
 {
-    doc_show_scroll_bars(gview, val);
+    doc_show_scroll_bars(doc_index,val);
 }
 
 void
 MdiWindow::setViewCrossHairColor(QRgb color)
 {
-    doc_set_cross_hair_color(gview, color);
+    doc_set_cross_hair_color(doc_index,color);
 }
 
 void MdiWindow::setViewBackgroundColor(QRgb color)
 {
-    doc_set_background_color(gview, color);
+    doc_set_background_color(doc_index,color);
 }
 
 void MdiWindow::setViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
 {
-    doc_set_select_box_colors(gview, colorL, fillL, colorR, fillR, alpha);
+    doc_set_select_box_colors(doc_index,colorL, fillL, colorR, fillR, alpha);
 }
 
 void MdiWindow::setViewGridColor(QRgb color)
 {
-    doc_set_grid_color(gview, color);
+    doc_set_grid_color(doc_index,color);
 }
 
 void
 MdiWindow::setViewRulerColor(QRgb color)
 {
-    doc_set_ruler_color(gview, color);
+    doc_set_ruler_color(doc_index,color);
 }
 
 void

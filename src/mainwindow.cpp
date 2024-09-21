@@ -800,10 +800,10 @@ new_file(void)
     update_interface();
     windowMenuAboutToShow();
 
-    Document* doc = mdiWin->gview;
-    if (doc) {
-        doc_recalculate_limits(doc);
-        doc_zoom_extents(doc);
+    int32_t doc_index = mdiWin->doc_index;
+    if (doc_index) {
+        doc_recalculate_limits(doc_index);
+        doc_zoom_extents(doc_index);
     }
 }
 
@@ -907,10 +907,10 @@ openFilesSelected(EmbStringTable filesToOpen)
             }
             set_str(OPENSAVE_RECENT_DIRECTORY, (char*)qPrintable(QFileInfo(filesToOpen[i]).absolutePath()));
 
-            Document* doc = mdiWin->gview;
-            if (doc) {
-                doc_recalculate_limits(doc);
-                doc_zoom_extents(doc);
+            int32_t doc_index = mdiWin->doc_index;
+            if (doc_index) {
+                doc_recalculate_limits(doc_index);
+                doc_zoom_extents(doc_index);
             }
         }
         else {

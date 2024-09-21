@@ -32,6 +32,7 @@ extern "C" {
 #define BOOL(i)   context->argument[i].b
 
 #define MAX_TABLE_LENGTH             500
+#define MAX_OPEN_FILES               100
 
 typedef char EmbString[MAX_STRING_LENGTH];
 typedef char EmbStringTable[MAX_TABLE_LENGTH][MAX_STRING_LENGTH];
@@ -426,6 +427,117 @@ void whatsThisContextHelp();
 int make_application(int argc, char* argv[]);
 
 void setObjectRubberMode(ObjectCore *core, int mode);
+
+/* ------------------------------- Document -------------------------------- */
+
+bool doc_allow_zoom_in(int32_t doc);
+bool doc_allow_zoom_out(int32_t doc);
+void doc_zoom_in(int32_t doc);
+void doc_zoom_out(int32_t doc);
+void doc_zoom_window(int32_t doc);
+void doc_zoom_selected(int32_t doc);
+void doc_zoom_extents(int32_t doc);
+void doc_pan_real_time(int32_t doc);
+void doc_pan_point(int32_t doc);
+void doc_pan_left(int32_t doc);
+void doc_pan_right(int32_t doc);
+void doc_pan_up(int32_t doc);
+void doc_pan_down(int32_t doc);
+void doc_select_all(int32_t doc);
+void doc_selection_changed(int32_t doc);
+void doc_clear_selection(int32_t doc);
+void doc_delete_selected(int32_t doc);
+void doc_move_selected(int32_t doc, double dx, double dy);
+void doc_cut(int32_t doc);
+void doc_copy(int32_t doc);
+void doc_paste(int32_t doc);
+void doc_repeat_action(int32_t doc);
+void doc_move_action(int32_t doc);
+void doc_scale_action(int32_t doc);
+void doc_scale_selected(int32_t doc, double x, double y, double factor);
+void doc_rotate_action(int32_t doc);
+void doc_rotate_selected(int32_t doc, double x, double y, double rot);
+void doc_mirror_selected(int32_t doc, double x1, double y1, double x2, double y2);
+int doc_num_selected(int32_t doc);
+
+void doc_preview_on(int32_t doc, int clone, int mode, double x, double y, double data);
+void doc_preview_off(int32_t doc);
+
+void doc_delete_pressed(int32_t doc);
+void doc_escape_pressed(int32_t doc);
+
+void doc_corner_button_clicked(int32_t doc);
+
+void doc_show_scroll_bars(int32_t doc, bool val);
+void doc_set_corner_button(int32_t doc);
+void doc_set_cross_hair_color(int32_t doc, uint32_t color);
+void doc_set_cross_hair_size(int32_t doc, uint8_t percent);
+void doc_set_background_color(int32_t doc, uint32_t color);
+void doc_set_select_box_colors(int32_t doc, uint32_t colorL, uint32_t fillL,
+    uint32_t colorR, uint32_t fillR, int alpha);
+void doc_toggle_snap(int32_t doc, bool on);
+void doc_toggle_grid(int32_t doc, bool on);
+void doc_toggle_ruler(int32_t doc, bool on);
+void doc_toggle_ortho(int32_t doc, bool on);
+void doc_toggle_polar(int32_t doc, bool on);
+void doc_toggle_qsnap(int32_t doc, bool on);
+void doc_toggle_qtrack(int32_t doc, bool on);
+void doc_toggle_lwt(int32_t doc, bool on);
+void doc_toggle_real(int32_t doc, bool on);
+bool doc_is_lwt_enabled(int32_t doc);
+bool doc_is_real_enabled(int32_t doc);
+
+void doc_enable_move_rapid_fire(int32_t doc);
+void doc_disable_move_rapid_fire(int32_t doc);
+
+bool doc_allow_rubber(int32_t doc);
+void doc_vulcanize_rubber_room(int32_t doc);
+void doc_clear_rubber_room(int32_t doc);
+void doc_spare_rubber(int32_t doc, int64_t id);
+void doc_set_rubber_mode(int32_t doc, int mode);
+void doc_set_rubber_point(int32_t doc, EmbString key, EmbVector point);
+void doc_set_rubber_text(int32_t doc, EmbString key, EmbString txt);
+
+void doc_recalculate_limits(int32_t doc);
+void doc_zoom_to_point(int32_t doc, EmbVector mousePoint, int zoomDir);
+void doc_center_at(int32_t doc, EmbVector centerPoint);
+EmbVector doc_center(int32_t doc);
+
+void doc_create_grid_rect(int32_t doc);
+void doc_create_grid_polar(int32_t doc);
+void doc_create_grid_iso(int32_t doc);
+void doc_create_origin(int32_t doc);
+
+void doc_load_ruler_settings(int32_t doc);
+
+void doc_update_mouse_coords(int32_t doc, int x, int y);
+
+void doc_pan_start(int32_t doc, EmbVector point);
+
+void doc_align_scene_point_with_view_point(int32_t doc, EmbVector scenePoint, EmbVector viewPoint);
+
+void doc_pan_left(int doc_index);
+void doc_pan_right(int doc_index);
+void doc_pan_up(int doc_index);
+void doc_pan_down(int doc_index);
+
+void doc_zoom_selected(int doc_index);
+void doc_zoom_extents(int doc_index);
+
+int32_t activeDocument(void);
+
+void whats_this_mode(void);
+
+void window_close_all(void);
+void window_cascade(void);
+void window_tile(void);
+void window_next(void);
+void window_previous(void);
+
+void enable_rapid_fire(void);
+void disable_rapid_fire(void);
+
+void appendHistory(EmbString txt);
 
 /* -------------------------------- EmbString ------------------------------ */
 

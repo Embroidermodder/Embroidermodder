@@ -10,6 +10,8 @@
  * Command Core: C core to the run_command interface.
  */
 
+#include <stdio.h>
+
 #include "core.h"
 
 /* . */
@@ -90,12 +92,16 @@ lineweightSelectorIndexChanged(int index)
     debug_message(message);
 }
 
-/* . */
+/*
+ * BUG: pan commands broke
+ */
 ScriptValue
 run_command(const EmbString cmd, ScriptEnv *context)
 {
     char message[MAX_STRING_LENGTH];
     int id = get_command_id((char*)cmd);
+    int doc_index = 0;
+    ScriptValue value = script_true;
     sprintf(message, "run_command(%s) %d", cmd, id);
     debug_message(message);
 
@@ -110,7 +116,549 @@ run_command(const EmbString cmd, ScriptEnv *context)
         return script_false;
     }
 
-    return run_command_core(id, cmd, context);
+    if (command_data[id].flags & REQUIRED_VIEW) {
+        doc_index = activeDocument();
+        if (doc_index < 0) {
+            return value;
+        }
+    }
+    if (!(command_data[id].flags & DONT_INITIALIZE)) {
+        doc_index = activeDocument();
+        if (doc_index < 0) {
+            doc_clear_rubber_room(doc_index);
+        }
+    }
+    if (command_data[id].flags & CLEAR_SELECTION) {
+        doc_index = activeDocument();
+        if (doc_index < 0) {
+            doc_clear_selection(doc_index);
+        }
+    }
+
+    switch (command_data[id].id) {
+    case ACTION_ABOUT:
+        about_dialog();
+        break;
+
+    case ACTION_ALERT: {
+        EmbString s;
+        sprintf(s, "ALERT: %s", STR(0));
+        prompt_output(s);
+        break;
+    }
+
+    case ACTION_ANGLE: {
+        EmbVector start = emb_vector(REAL(0), -REAL(1));
+        EmbVector end = emb_vector(REAL(2), -REAL(3));
+        EmbVector delta = emb_vector_subtract(end, start);
+        value = script_real(emb_vector_angle(delta));
+        break;
+    }
+
+    case ACTION_CHANGELOG:
+        prompt_output("TODO: CHANGELOG");
+        break;
+
+    case ACTION_CLEAR:
+        /* This is covered by the flags. */
+        break;
+
+    case ACTION_COPY: {
+        doc_copy(doc_index);
+        break;
+    }
+
+    case ACTION_COPY_SELECTED: {
+        /* nativeCopySelected(REAL(0), REAL(1)); */
+        break;
+    }
+
+    case ACTION_COLOR_SELECTOR:
+        prompt_output("TODO: COLORSELECTOR");
+        break;
+
+    case ACTION_CUT:
+        nativeCutSelected(REAL(0), REAL(1));
+        break;
+
+    case ACTION_DEBUG:
+        appendHistory(STR(0));
+        break;
+
+    case ACTION_DESIGN_DETAILS:
+        create_details_dialog();
+        break;
+
+    case ACTION_DIM_LEADER: {
+        nativeAddDimLeader(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), RUBBER_OFF);
+        break;
+    }
+
+    case ACTION_DISABLE: {
+        if (string_equal(STR(0), "MOVERAPIDFIRE")) {
+            doc_disable_move_rapid_fire(doc_index);
+        }
+        if (string_equal(STR(0), "PROMPTRAPIDFIRE")) {
+            disable_rapid_fire();
+        }
+        break;
+    }
+
+    case ACTION_DO_NOTHING:
+        break;
+
+    case ACTION_ENABLE: {
+        if (string_equal(STR(0), "MOVERAPIDFIRE")) {
+            doc_enable_move_rapid_fire(doc_index);
+        }
+        if (string_equal(STR(0), "PROMPTRAPIDFIRE")) {
+            enable_rapid_fire();
+        }
+        break;
+    }
+
+    case ACTION_EXIT:
+        exit_program();
+        break;
+
+    case ACTION_HELP:
+        help();
+        break;
+
+    case ACTION_ICON_128:
+        iconResize(128);
+        break;
+    case ACTION_ICON_16:
+        iconResize(16);
+        break;
+    case ACTION_ICON_24:
+        iconResize(24);
+        break;
+    case ACTION_ICON_32:
+        iconResize(32);
+        break;
+    case ACTION_ICON_48:
+        iconResize(48);
+        break;
+    case ACTION_ICON_64:
+        iconResize(64);
+        break;
+
+    case ACTION_MIRROR_SELECTED: {
+        doc_mirror_selected(doc_index, REAL(0), -REAL(1), REAL(2), -REAL(3));
+        break;
+    }
+
+    case ACTION_NEW:
+        new_file();
+        break;
+
+/*
+    case ACTION_NUM_SELECTED: {
+        
+        break;
+    }
+ */
+
+    case ACTION_OPEN:
+        openFile(false, "");
+        break;
+
+    case ACTION_PASTE: {
+        doc_paste(doc_index);
+        break;
+    }
+
+    case ACTION_PASTE_SELECTED: {
+        /* Paste with location x,y */
+        /* nativePasteSelected(REAL(0), REAL(1)); */
+        break;
+    }
+    case ACTION_PLATFORM:
+        /* Should this display in the command prompt or just return like GET? */
+        /* prompt_output(translate("Platform") + " = " + _main->platformString()); */
+        break;
+    case ACTION_REDO:
+        redo_command();
+        break;
+
+    case ACTION_SAVE:
+        save_file();
+        break;
+
+    case ACTION_SAVE_AS:
+        /* save(); */
+        break;
+
+    case ACTION_SCALE_SELECTED:
+        /*  */
+        break;
+
+    case ACTION_SETTINGS_DIALOG: {
+        settingsDialog("");
+        break;
+    }
+
+    case ACTION_TEXT_BOLD:
+        set_bool(TEXT_STYLE_BOLD, !get_bool(TEXT_STYLE_BOLD));
+        break;
+
+    case ACTION_TEXT_ITALIC:
+        set_bool(TEXT_STYLE_ITALIC, !get_bool(TEXT_STYLE_ITALIC));
+        break;
+
+    case ACTION_TEXT_UNDERLINE:
+        set_bool(TEXT_STYLE_UNDERLINE, !get_bool(TEXT_STYLE_UNDERLINE));
+        break;
+
+    case ACTION_TEXT_STRIKEOUT:
+        set_bool(TEXT_STYLE_STRIKEOUT, !get_bool(TEXT_STYLE_STRIKEOUT));
+        break;
+
+    case ACTION_TEXT_OVERLINE:
+        set_bool(TEXT_STYLE_OVERLINE, !get_bool(TEXT_STYLE_OVERLINE));
+        break;
+
+    case ACTION_TIP_OF_THE_DAY:
+        tipOfTheDay();
+        break;
+
+    case ACTION_TODO: {
+        todo(STR(0));
+        break;
+    }
+
+    case ACTION_UNDO:
+        undo_command();
+        break;
+
+    case ACTION_VULCANIZE: {
+        doc_vulcanize_rubber_room(doc_index);
+        break;
+    }
+
+    case ACTION_DAY: {
+        /* TODO: Make day vision color settings. */
+        doc_set_background_color(doc_index, 0xFFFFFF); 
+        doc_set_cross_hair_color(doc_index, 0x000000);
+        // FIXME: doc_set_grid_color(doc_index, 0x000000);
+        break;
+    }
+    case ACTION_NIGHT: {
+        /* TODO: Make night vision color settings. */
+        doc_set_background_color(doc_index, 0x000000);
+        doc_set_cross_hair_color(doc_index, 0xFFFFFF);
+        // FIXME: doc_set_grid_color(doc_index, 0xFFFFFF);
+        break;
+    }
+
+    case ACTION_PRINT: {
+        /* TODO: print action */
+        break;
+    }
+
+    case ACTION_WHATS_THIS: {
+        whats_this_mode();
+        break;
+    }
+
+    case ACTION_MAKE_LAYER_CURRENT:
+        /* makeLayerActive(); */
+        break;
+
+    case ACTION_LAYERS:
+        /* layerManager(); */
+        break;
+
+    case ACTION_LAYER_SELECTOR:
+        /* TODO: layer_selector */
+        break;
+
+    case ACTION_LAYER_PREVIOUS:
+        /* TODO: layer_previous */
+        break;
+
+    case ACTION_LINE_TYPE_SELECTOR:
+        /* TODO: line_type_selector */
+        break;
+
+    case ACTION_LINE_WEIGHT_SELECTOR:
+        /* TODO: line_weight_selector */
+        break;
+    case ACTION_HIDE_ALL_LAYERS:
+        /* TODO: hide_all_layers */
+        break;
+    case ACTION_SHOW_ALL_LAYERS:
+        /* TODO: show_all_layers */
+        break;
+    case ACTION_FREEZE_ALL_LAYERS:
+        /* TODO: freeze_all_layers */
+        break;
+    case ACTION_THAW_ALL_LAYERS:
+        /* TODO: thaw_all_layers */
+        break;
+    case ACTION_LOCK_ALL_LAYERS:
+        /* TODO: lock_all_layers */
+        break;
+    case ACTION_UNLOCK_ALL_LAYERS:
+        /* TODO: unlock_all_layers */
+        break;
+
+    case ACTION_GET: {
+        value = get_command(context);
+        break;
+    }
+
+    case ACTION_SET: {
+        set_command(context);
+        break;
+    }
+
+    case ACTION_CIRCLE: {
+        nativeAddCircle(REAL(0), REAL(1), REAL(2), BOOL(4), RUBBER_OFF);
+        break;
+    }
+
+    case ACTION_DISTANCE:
+        break;
+
+    case ACTION_DOLPHIN:
+        break;
+
+    case ACTION_ELLIPSE: {
+        nativeAddEllipse(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), RUBBER_OFF);
+        break;
+    }
+
+    case ACTION_ERASE: {
+        if (doc_num_selected(doc_index) <= 0) {
+            /* TODO: Prompt to select objects if nothing is preselected. */
+            prompt_output(
+            translate("Preselect objects before invoking the delete command."));
+            information_box(translate("Delete Preselect"),
+                translate("Preselect objects before invoking the delete command."));
+        }
+        else {
+            doc_delete_selected(doc_index);
+        }
+        break;
+    }
+
+    case ACTION_ERROR: {
+        EmbString s;
+        sprintf(s, "ERROR: (%s) %s", STR(0), STR(1));
+        prompt_output(s);
+        break;
+    }
+
+    case ACTION_HEART:
+        break;
+
+    case ACTION_LINE: {
+        nativeAddLine(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), RUBBER_OFF);
+        break;
+    }
+
+    case ACTION_LOCATE_POINT:
+        break;
+
+    case ACTION_MOVE:
+        move_command(context);
+        break;
+
+    case ACTION_MOVE_SELECTED: {
+        doc_move_selected(doc_index, REAL(0), -REAL(1));
+        break;
+    }
+
+    case ACTION_PATH:
+        break;
+    case ACTION_POINT:
+        break;
+    case ACTION_POLYGON:
+        break;
+    case ACTION_POLYLINE:
+        break;
+
+    case ACTION_PREVIEW_OFF: {
+        doc_preview_off(doc_index);
+        break;
+    }
+
+    case ACTION_PREVIEW_ON: {
+        value = previewon_command(context);
+        break;
+    }
+
+    case ACTION_QUICKLEADER:
+        break;
+
+    case ACTION_RECTANGLE: {
+        nativeAddRectangle(REAL(0), REAL(1), REAL(2), REAL(3), REAL(4), BOOL(5), RUBBER_OFF);
+        break;
+    }
+
+    case ACTION_RGB:
+        break;
+
+    case ACTION_ROTATE: {
+        doc_rotate_selected(doc_index, REAL(0), -REAL(1), -REAL(2));
+        break;
+    }
+
+    case ACTION_SANDBOX: {
+        value = sandbox_command(context);
+        break;
+    }
+
+    case ACTION_SCALE: {
+        break;
+    }
+
+    case ACTION_SELECT_ALL: {
+        doc_select_all(doc_index);
+        break;
+    }
+
+    case ACTION_SINGLE_LINE_TEXT:
+        break;
+
+    case ACTION_SNOWFLAKE:
+        break;
+
+    case ACTION_STAR:
+        break;
+
+    case ACTION_SYSWINDOWS:
+        break;
+
+    case ACTION_ADD:
+        break;
+
+    /* ACTION_DELETE_SELECTED? */
+    case ACTION_DELETE: {
+        doc_delete_selected(doc_index);
+        break;
+    }
+
+    case ACTION_GRIP_EDIT:
+        break;
+
+    case ACTION_NAV:
+        break;
+
+    case ACTION_MIRROR:
+        break;
+
+    case ACTION_TEST:
+        break;
+
+    case ACTION_PAN_REAL_TIME: {
+        doc_pan_real_time(doc_index);
+        break;
+    }
+    case ACTION_PAN_POINT: {
+        doc_pan_point(doc_index);
+        break;
+    }
+    case ACTION_PAN_LEFT: {
+        doc_pan_left(doc_index);
+        break;
+    }
+    case ACTION_PAN_RIGHT: {
+        doc_pan_right(doc_index);
+        break;
+    }
+    case ACTION_PAN_UP: {
+        doc_pan_up(doc_index);
+        break;
+    }
+    case ACTION_PAN_DOWN: {
+        doc_pan_down(doc_index);
+        break;
+    }
+
+    case ACTION_WINDOW_CLOSE: {
+        onCloseWindow();
+        break;
+    }
+
+    case ACTION_WINDOW_CLOSE_ALL:
+        window_close_all();
+        break;
+
+    case ACTION_WINDOW_CASCADE:
+        window_cascade();
+        break;
+
+    case ACTION_WINDOW_TILE:
+        window_tile();
+        break;
+
+    case ACTION_WINDOW_NEXT:
+        window_next();
+        break;
+
+    case ACTION_WINDOW_PREVIOUS: {
+        window_previous();
+        break;
+    }
+
+    case ACTION_ZOOM_ALL: {
+        todo("Implement zoomAll.");
+        break;
+    }
+
+    case ACTION_ZOOM_CENTER: {
+        todo("Implement zoomCenter.");
+        break;
+    }
+
+    case ACTION_ZOOM_DYNAMIC: {
+        todo("Implement zoomDynamic.");
+        break;
+    }
+
+    case ACTION_ZOOM_EXTENTS: {
+        doc_zoom_extents(doc_index);
+        break;
+    }
+    case ACTION_ZOOM_IN: {
+        doc_zoom_in(doc_index);
+        break;
+    }
+    case ACTION_ZOOM_OUT: {
+        doc_zoom_out(doc_index);
+        break;
+    }
+    case ACTION_ZOOM_PREVIOUS: {
+        todo("Implement zoomPrevious.");
+        break;
+    }
+    case ACTION_ZOOM_REAL_TIME: {
+        todo("Implement zoomRealtime.");
+        break;
+    }
+    case ACTION_ZOOM_SCALE: {
+        todo("Implement zoomScale.");
+        break;
+    }
+    case ACTION_ZOOM_SELECTED: {
+        doc_zoom_selected(doc_index);
+        break;
+    }
+    case ACTION_ZOOM_WINDOW: {
+        doc_zoom_window(doc_index);
+        break;
+    }
+    default:
+        break;
+    }
+
+    if (!(command_data[id].flags & DONT_END_COMMAND)) {
+        end_command();
+    }
+    return value;
 }
 
 /* FIXME: reconnect to new command system.
@@ -352,8 +900,8 @@ distance_command(ScriptEnv *context)
         if (isNaN(context->x1)) {
             context->point1 = v;
             addRubber("LINE");
-            set_rubber_mode(doc, "LINE");
-            set_rubber_point(doc, "LINE_START", context->point1.x, context->point1.y);
+            set_rubber_mode(doc_index, "LINE");
+            set_rubber_point(doc_index, "LINE_START", context->point1.x, context->point1.y);
             prompt_output(translate("Specify second point: "));
         }
         else {
@@ -431,7 +979,7 @@ main(void)
     context->dest = zero_vector;
     context->delta = zero_vector;
 
-    if (doc_num_selected(doc) <= 0) {
+    if (doc_num_selected(doc_index) <= 0) {
         /* TODO: Prompt to select objects if nothing is preselected. */
         alert(translate("Preselect objects before invoking the move command."));
         end_command();
@@ -449,10 +997,10 @@ click(EmbVector v)
     if (context->firstRun) {
         context->firstRun = false;
         context->base = v;
-        doc_add_rubber(doc, "LINE");
-        doc_set_rubber_mode(doc, "LINE");
-        doc_set_rubber_point(doc, "LINE_START", context->base);
-        doc_preview_on(doc, "SELECTED", "MOVE", context->base, 0);
+        doc_add_rubber(doc_index, "LINE");
+        doc_set_rubber_mode(doc_index, "LINE");
+        doc_set_rubber_point(doc_index, "LINE_START", context->base);
+        doc_preview_on(doc_index, "SELECTED", "MOVE", context->base, 0);
         prompt_output(translate("Specify destination point: "));
     }
     else {
@@ -480,10 +1028,10 @@ void prompt(str)
         else {
             context->firstRun = false;
             context->base = v;
-            doc_add_rubber(doc, "LINE");
-            doc_set_rubber_mode(doc, "LINE");
-            doc_set_rubber_point(doc, "LINE_START", context->base);
-            doc_preview_on(doc, "SELECTED", "MOVE", context->base, 0);
+            doc_add_rubber(doc_index, "LINE");
+            doc_set_rubber_mode(doc_index, "LINE");
+            doc_set_rubber_point(doc_index, "LINE_START", context->base);
+            doc_preview_on(doc_index, "SELECTED", "MOVE", context->base, 0);
             prompt_output(translate("Specify destination point: "));
         }
     }
@@ -564,7 +1112,7 @@ click(EmbVector position)
         else {
             context->dest = position;
             context->factor = calculateDistance(context->base, context->dest);
-            doc_scale_selected(doc, context->base, context->factor);
+            doc_scale_selected(doc_index, context->base, context->factor);
             previewOff();
             end_command();
         }
@@ -600,7 +1148,7 @@ click(EmbVector position)
                 prompt_output(translate("Specify new length: "));
             }
             else {
-                doc_scale_selected(doc, context->base, context->factorNew/context->factorRef);
+                doc_scale_selected(doc_index, context->base, context->factorNew/context->factorRef);
                 previewOff();
                 end_command();
             }
@@ -785,7 +1333,7 @@ sandbox_command(ScriptEnv * context)
         /* prompt_output(msg); */
         /* mirrorSelected(0,0,0,1); */
     
-        /* doc_select_all(doc); */
+        /* doc_select_all(doc_index); */
         /* rotateSelected(0,0,90); */
 
         /* Polyline & Polygon Testing */

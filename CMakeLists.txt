@@ -90,6 +90,7 @@ add_executable(emb2_glfw
 	${EXTERN}/nanovg/src/nanovg.c
 	${EXTERN}/nanovg/src/nanovg.h
 
+	${SRC}/interface.h
 	${SRC}/main_glfw.c
 )
 
