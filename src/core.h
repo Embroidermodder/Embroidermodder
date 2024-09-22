@@ -186,7 +186,7 @@ int script_set_string(ScriptEnv *context, const EmbString label, EmbString s);
 int script_set_int(ScriptEnv *context, const EmbString label, int i);
 int script_set_real(ScriptEnv *context, const EmbString label, double r);
 
-void prompt_output(const EmbString);
+void prompt_output(const char *);
 int argument_checks(ScriptEnv *context, int id);
 char *translate(const EmbString msg);
 
@@ -218,6 +218,9 @@ void information_box(const char *title, const char *text);
 void warning_box(const char *title, const char *text);
 void critical_box(const char *title, const char *text);
 void question_box(const char *title, const char *text);
+
+char *get_svg_token(char *svg, char token[MAX_STRING_LENGTH]);
+char *get_svg_vector(char *svg, EmbVector *v);
 
 /* ------------------------------ Prompt ------------------------------- */
 
@@ -524,6 +527,19 @@ void doc_pan_down(int doc_index);
 void doc_zoom_selected(int doc_index);
 void doc_zoom_extents(int doc_index);
 
+void doc_update(int doc_index);
+void doc_set_property(int doc_index, const char *key, bool value);
+bool doc_get_property(int32_t doc, const char *key);
+
+void doc_center_on(int32_t doc, EmbVector v);
+
+void move_action(void);
+void rotate_action(void);
+void scale_action(void);
+
+EmbVector doc_map_from_scene(int32_t doc, EmbVector v);
+EmbVector doc_map_to_scene(int32_t doc, EmbVector v);
+
 int32_t activeDocument(void);
 
 void whats_this_mode(void);
@@ -681,6 +697,8 @@ extern Editor misc_text_single_editor_data[];
 
 extern const char *_appName_;
 extern const char *_appVer_;
+extern const char *one_path;
+extern const char *circle_origin_path;
 extern EmbString settings_file;
 
 extern int render_hints[];

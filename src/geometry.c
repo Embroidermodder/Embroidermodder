@@ -1153,3 +1153,42 @@ emb_total_thread_of_color(EmbPattern *pattern, int thread_index)
     return total;
 }
 
+/* TODO: test this. */
+char *
+get_svg_token(char *svg, char token[MAX_STRING_LENGTH])
+{
+    if (*svg == ' ') {
+        svg++;
+    }
+    if (*svg == 0) {
+        return NULL;
+    }
+    for (int i=0; i < MAX_STRING_LENGTH; i++) {
+        token[i] = svg[i];
+        if (token[i] == ' ') {
+            token[i] = 0;
+            svg += i;
+            return svg;
+        }
+    }
+    return NULL;
+}
+
+/* */
+char *
+get_svg_vector(char *svg, EmbVector *v)
+{
+    char token[MAX_STRING_LENGTH];
+    svg = get_svg_token(svg, token);
+    if (!svg) {
+        return NULL;
+    }
+    v->x = atof(token);
+    svg = get_svg_token(svg, token);
+    if (!svg) {
+        return NULL;
+    }
+    v->y = atof(token);
+    return svg;
+}
+

@@ -264,19 +264,19 @@ help(void)
 }
 
 void
-appendHistory(EmbString s)
-{
-
-}
-
-void
 doc_disable_move_rapid_fire(int32_t doc)
 {
 }
 
 void
-doc_enable_move_rapid_fire(int32_t doc)
+doc_center_on(int32_t doc, EmbVector v)
 {
+}
+
+EmbVector
+doc_center(int32_t doc)
+{
+    return emb_vector(0.0, 0.0);
 }
 
 void
@@ -295,11 +295,7 @@ qRgb(uint8_t r, uint8_t g, uint8_t b)
     return result;
 }
 
-void doc_zoom_selected(int doc_index) {}
 void doc_zoom_extents(int doc_index) {}
-void doc_zoom_window(int doc_index) {}
-void doc_zoom_in(int doc_index) {}
-void doc_zoom_out(int doc_index) {}
 
 void whats_this_mode(void) {}
 
@@ -311,6 +307,12 @@ void window_previous(void) {}
 
 void enable_rapid_fire(void) {}
 void disable_rapid_fire(void) {}
+
+void restore_cursor(void) {}
+void wait_cursor(void) {}
+void doc_update(int32_t) {}
+void doc_set_property(int32_t, const char *, bool) {}
+bool doc_get_property(int32_t, const char *) { return false; }
 
 /* . */
 void
@@ -490,7 +492,7 @@ nativeSpareRubber(int64_t)
 
 /* . */
 void
-prompt_output(const EmbString line)
+prompt_output(const char *line)
 {
     printf("%s\n", line);
 }

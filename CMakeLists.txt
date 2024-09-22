@@ -59,12 +59,14 @@ set(C_CORE
 	${SRC}/data/testing.c
 	${SRC}/data/tips.c
 	${SRC}/data/toolbars.c
+	${SRC}/data/paths.c
 	${SRC}/data/constants.h
 
 	${SRC}/script.c
 	${SRC}/object_core.c
 	${SRC}/command_core.c
 	${SRC}/geometry.c
+	${SRC}/document.c
 	${SRC}/xpm.c
 
 	${SRC}/core.h
