@@ -101,7 +101,7 @@ include_directories(
 	${EXTERN}/tomlc99
 	${EXTERN}/glfw/include
 	${EXTERN}/nanovg/src
-	${GLEW_INCLUDE_DIRS}
+#	${GLEW_INCLUDE_DIRS}
 	${OPENGL_INCLUDE_DIRS}
 	${SRC}
 )
