@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(embroidermodder2 VERSION 2.0.0 LANGUAGES C CXX)
 
 find_package(OpenGL REQUIRED)
-find_package(GLEW REQUIRED)
+#find_package(GLEW REQUIRED)
 find_package(Qt6 COMPONENTS Core Widgets PrintSupport OpenGL OpenGLWidgets REQUIRED)
 
 set(CMAKE_C_STANDARD 99)
@@ -114,7 +114,7 @@ target_link_libraries(embroidermodder2 PRIVATE
 
 target_link_libraries(emb2_glfw PRIVATE
 	glfw
-	${GLEW_LIBRARIES}
+#	${GLEW_LIBRARIES}
 	${OPENGL_LIBRARIES}
 )
 
