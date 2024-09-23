@@ -394,7 +394,7 @@ void draw_polyline(QPainter* painter, EmbPolyline polyline);
 void draw_rect(QPainter* painter, EmbRect rect);
 void draw_spline(QPainter* painter, EmbSpline spline);
 
-QPainterPath doc_create_ruler_text_path(int32_t doc, float x, float y, EmbString str, float height);
+QPainterPath doc_create_ruler_text_path(EmbString str, float height);
 
 QList<QGraphicsItem*> doc_create_object_list(int32_t doc, QList<QGraphicsItem*> list);
 
@@ -494,6 +494,7 @@ protected:
     void wheelEvent(QWheelEvent* event);
     void contextMenuEvent(QContextMenuEvent* event);
     void drawBackground(QPainter* painter, const QRectF& rect);
+    void draw_rulers(QPainter* painter, const QRectF& rect);
     void drawForeground(QPainter* painter, const QRectF& rect);
     void enterEvent(QEvent* event);
 };

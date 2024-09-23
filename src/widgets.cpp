@@ -244,50 +244,6 @@ statusbar_toggle(QString key, bool on)
 }
 
 void
-enableLwt()
-{
-    debug_message("StatusBarButton enableLwt()");
-    int32_t doc = activeDocument();
-    if (doc >= 0) {
-        if (!doc_is_lwt_enabled(doc)) {
-            doc_toggle_lwt(doc, true);
-        }
-    }
-}
-
-void
-disableLwt()
-{
-    debug_message("StatusBarButton disableLwt()");
-    int32_t doc = activeDocument();
-    if (doc >= 0) {
-        if (doc_is_lwt_enabled(doc)) {
-            doc_toggle_lwt(doc, false);
-        }
-    }
-}
-
-void
-enableReal()
-{
-    debug_message("StatusBarButton enableReal()");
-    int32_t doc_index = activeDocument();
-    if (doc_index >= 0) {
-        doc_toggle_real(doc_index, true);
-    }
-}
-
-void
-disableReal()
-{
-    debug_message("StatusBarButton disableReal()");
-    int32_t doc_index = activeDocument();
-    if (doc_index >= 0) {
-        doc_toggle_real(doc_index, false);
-    }
-}
-
-void
 create_statusbar(MainWindow* mw)
 {
     statusbar = new QStatusBar(mw);

@@ -703,35 +703,6 @@ Object::subPathList() const {
     return p;
 }
 
-
-/* . */
-EmbVector
-obj_start_point(Object *obj)
-{
-    switch (obj->core->geometry->type) {
-    case EMB_ARC: {
-        return obj->core->geometry->object.arc.start;
-    }
-    default:
-        break;
-    }
-    return obj_pos(obj->core);
-}
-
-/* . */
-EmbVector
-obj_end_point(Object *obj)
-{
-    switch (obj->core->geometry->type) {
-    case EMB_ARC: {
-        return obj->core->geometry->object.arc.end;
-    }
-    default:
-        break;
-    }
-    return obj_pos(obj->core);
-}
-
 /* . */
 EmbVector
 obj_top_left(Object *obj)
@@ -1729,9 +1700,9 @@ Object::allGripPoints()
     switch (core->geometry->type) {
     case EMB_ARC: {
         gripPoints.append(obj_center(core));
-        gripPoints.append(obj_start_point(this));
+        gripPoints.append(obj_start_point(core));
         gripPoints.append(obj_mid_point(core));
-        gripPoints.append(obj_end_point(this));
+        gripPoints.append(obj_end_point(core));
         break;
     }
     case EMB_CIRCLE:

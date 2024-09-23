@@ -802,57 +802,6 @@ nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b)
     updateAllViewGridColors(qRgb(r,g,b));
 }
 
-/* . */
-bool
-nativeAllowRubber()
-{
-    int32_t doc_index = activeDocument();
-    if (doc_index >= 0) {
-        return doc_allow_rubber(doc_index);
-    }
-    return false;
-}
-
-/* . */
-void
-nativeSpareRubber(int64_t id)
-{
-    int32_t doc_index = activeDocument();
-    if (doc_index >= 0) {
-        doc_spare_rubber(doc_index, id);
-    }
-}
-
-/* . */
-void
-nativeSetRubberMode(int mode)
-{
-    int32_t doc_index = activeDocument();
-    if (doc_index >= 0) {
-        doc_set_rubber_mode(doc_index, mode);
-    }
-}
-
-/* . */
-void
-nativeSetRubberPoint(EmbString key, double x, double y)
-{
-    int32_t doc_index = activeDocument();
-    if (doc_index >= 0) {
-        EmbVector v = emb_vector(x, -y);
-        doc_set_rubber_point(doc_index, key, v);
-    }
-}
-
-/* . */
-void
-nativeSetRubberText(EmbString key, EmbString txt)
-{
-    int32_t doc_index = activeDocument();
-    if (doc_index >= 0) {
-        doc_set_rubber_text(doc_index, key, txt);
-    }
-}
 
 /* . */
 void
@@ -902,7 +851,7 @@ nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubber
         if (rubberMode) {
             doc_add_to_rubber_room(doc_index, obj);
             gscene->addItem(obj);
-            gscene->update();
+            doc_update(doc_index);
         }
         else {
             UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
@@ -928,7 +877,7 @@ nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill
     if (rubberMode) {
         doc_add_to_rubber_room(doc_index, obj);
         gscene->addItem(obj);
-        gscene->update();
+        doc_update(doc_index);
     }
     else {
         UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
@@ -953,7 +902,7 @@ nativeAddArc(double x1, double y1, double x2, double y2, double x3, double y3, i
             doc_add_to_rubber_room(doc_index, arcObj);
         }
         scene->addItem(arcObj);
-        scene->update();
+        doc_update(doc_index);
     }
 }
 
@@ -973,7 +922,7 @@ nativeAddCircle(double centerX, double centerY, double radius, bool fill, int ru
         if (rubberMode) {
             doc_add_to_rubber_room(doc_index, obj);
             gscene->addItem(obj);
-            gscene->update();
+            doc_update(doc_index);
         }
         else {
             UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
@@ -986,15 +935,16 @@ void
 nativeAddSlot(double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode)
 {
     /* TODO: Use UndoableCommand for slots */
+    int32_t doc_index = activeDocument();
     /*
     Object* slotObj = new Object(centerX, -centerY, diameter, length, getCurrentColor());
     slotObj->setRotation(-rot);
     obj_set_rubber_mode(slotObj->core, rubberMode);
     if (rubberMode) doc_add_to_rubber_room(doc_index, slotObj);
-    scene->addItem(slotObj); */
-    /* TODO: slot fill */ /*
-    scene->update();
+    scene->addItem(slotObj);
     */
+    /* TODO: slot fill */
+    doc_update(doc_index);
 }
 
 void
@@ -1056,7 +1006,7 @@ nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubber
         if (rubberMode) {
             doc_add_to_rubber_room(doc_index, obj);
             gscene->addItem(obj);
-            gscene->update();
+            doc_update(doc_index);
         }
         else {
             UndoableCommand* cmd = new UndoableCommand(ACTION_ADD, obj->core->OBJ_NAME, obj, doc_index, 0);
@@ -1081,7 +1031,7 @@ nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubbe
         if (rubberMode) {
             doc_add_to_rubber_room(doc_index, obj);
             gscene->addItem(obj);
-            gscene->update();
+            doc_update(doc_index);
         }
         else {
             UndoableCommand* cmd = new UndoableCommand(ACTION_ADD,
@@ -1104,7 +1054,7 @@ nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int r
         if (rubberMode) {
             doc_add_to_rubber_room(doc_index, obj);
             gscene->addItem(obj);
-            gscene->update();
+            doc_update(doc_index);
         }
         else {
             UndoableCommand* cmd = new UndoableCommand(ACTION_ADD,
@@ -1173,41 +1123,14 @@ nativeSetCursorShape(char shape[MAX_STRING_LENGTH])
 }
 
 /* . */
-void
-nativeScaleSelected(double x, double y, double factor)
-{
-    if (factor <= 0.0) {
-        critical_box(translate("ScaleFactor Error"),
-            translate("Hi there. If you are not a developer, report this as a bug. "
-            "If you are a developer, your code needs examined, and possibly your head too."));
-    }
-
-    int32_t doc_index = activeDocument();
-    if (doc_index >= 0) {
-        doc_scale_selected(doc_index, x, -y, factor);
-    }
-}
-
-/* . */
-double
-nativeQSnapX()
+EmbVector
+scene_get_point(EmbString key)
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {
-        return scene->property("SCENE_QSNAP_POINT").toPointF().x();
+        return to_emb_vector(scene->property(key).toPointF());
     }
-    return 0.0;
-}
-
-/* . */
-double
-nativeQSnapY()
-{
-    QGraphicsScene* scene = activeScene();
-    if (scene) {
-        return -scene->property("SCENE_QSNAP_POINT").toPointF().y();
-    }
-    return 0.0;
+    return emb_vector(0.0, 0.0);
 }
 
 /* Compatibility layer for C files */
@@ -1215,16 +1138,6 @@ void
 prompt_output(const EmbString txt)
 {
     appendHistory((char*)txt);
-}
-
-/* . */
-void
-cut(void)
-{
-    int32_t doc_index = activeDocument();
-    if (doc_index >= 0) {
-        doc_cut(doc_index);
-    }
 }
 
 /* . */
@@ -1300,66 +1213,6 @@ about_dialog(void)
     restore_cursor();
 }
 
-/* GET is a prompt-only Command. */
-ScriptValue
-get_command(ScriptEnv* context)
-{
-    char message[MAX_STRING_LENGTH];
-    QString value(STR(0));
-
-    if (value == "MOUSEX") {
-        QGraphicsScene* scene = activeScene();
-        if (!scene) {
-            return script_false;
-        }
-        ScriptValue r = script_real(scene->property("SCENE_MOUSE_POINT").toPointF().x());
-        sprintf(message, "mouseY: %.50f", r.r);
-        debug_message(message);
-        return r;
-    }
-    else if (value == "MOUSEY") {
-        QGraphicsScene* scene = activeScene();
-        if (!scene) {
-            return script_false;
-        }
-        ScriptValue r = script_real(-scene->property("SCENE_MOUSE_POINT").toPointF().y());
-        sprintf(message, "mouseY: %.50f", r.r);
-        debug_message(message);
-        return r;
-    }
-    else if (value == "TEXTANGLE") {
-        return setting[TEXT_ANGLE].setting;
-    }
-    else if (value == "TEXTBOLD") {
-        return setting[TEXT_STYLE_BOLD].setting;
-    }
-    else if (value == "TEXTITALIC") {
-        return setting[TEXT_STYLE_ITALIC].setting;
-    }
-    else if (value == "TEXTFONT") {
-        return setting[TEXT_FONT].setting;
-    }
-    else if (value == "TEXTOVERLINE") {
-        return setting[TEXT_STYLE_OVERLINE].setting;
-    }
-    else if (value == "TEXTSIZE") {
-        return setting[TEXT_SIZE].setting;
-    }
-    else if (value == "TEXTSTRIKEOUT") {
-        return setting[TEXT_STYLE_STRIKEOUT].setting;
-    }
-    else if (value == "TEXTUNDERLINE") {
-        return setting[TEXT_STYLE_UNDERLINE].setting;
-    }
-    else if (value == "QSNAPX") {
-        return script_bool(nativeQSnapX());
-    }
-    else if (value == "QSNAPY") {
-        return script_bool(nativeQSnapY());
-    }
-
-    return script_null;
-}
 
 /* PREVIEWON . */
 ScriptValue
@@ -1660,16 +1513,16 @@ UndoableCommand::rotate(double x, double y, double rot)
     double rad = radians(rot);
     double cosRot = cos(rad);
     double sinRot = sin(rad);
-    double px = data.object->scenePos().x();
-    double py = data.object->scenePos().y();
-    px -= x;
-    py -= y;
-    double rotX = px*cosRot - py*sinRot;
-    double rotY = px*sinRot + py*cosRot;
-    rotX += x;
-    rotY += y;
+    EmbVector rotv;
+    EmbVector p = to_emb_vector(data.object->scenePos());
+    p.x -= x;
+    p.y -= y;
+    rotv.x = p.x*cosRot - p.y*sinRot;
+    rotv.y = p.x*sinRot + p.y*cosRot;
+    rotv.x += x;
+    rotv.y += y;
 
-    data.object->setPos(rotX, rotY);
+    data.object->setPos(rotv.x, rotv.y);
     data.object->setRotation(data.object->rotation() + rot);
 }
 
@@ -1693,16 +1546,5 @@ UndoableCommand::mergeWith(const QUndoCommand* newest)
 void
 UndoableCommand::mirror()
 {
-}
-
-/* . */
-ScriptValue
-clear_rubber_command(ScriptEnv* context)
-{
-    int32_t doc_index = activeDocument();
-    if (doc_index >= 0) {
-        doc_clear_rubber_room(doc_index);
-    }
-    return script_null;
 }
 

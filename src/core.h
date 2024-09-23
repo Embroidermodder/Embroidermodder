@@ -306,7 +306,7 @@ void loadFormats(void);
 void settingsPrompt(void);
 
 void end_command(void);
-void debug_message(const EmbString msg);
+void debug_message(const char *msg);
 void wait_cursor(void);
 void arrow_cursor(void);
 void restore_cursor(void);
@@ -318,8 +318,8 @@ void about_dialog(void);
 /* ------------------------------------- Natives --------------------------- */
 
 void about_dialog(void);
-void todo(const EmbString txt);
-void fixme(const EmbString msg);
+void todo(const char *txt);
+void fixme(const char *msg);
 void stub_testing(void);
 void run_testing(void);
 void exit_program(void);
@@ -533,6 +533,8 @@ bool doc_get_property(int32_t doc, const char *key);
 
 void doc_center_on(int32_t doc, EmbVector v);
 
+EmbVector scene_get_point(EmbString key);
+
 void move_action(void);
 void rotate_action(void);
 void scale_action(void);
@@ -558,9 +560,9 @@ void appendHistory(EmbString txt);
 /* -------------------------------- EmbString ------------------------------ */
 
 void emb_string(EmbString s, const char *str);
-int string_equal(EmbString a, EmbString b);
-int string_compare(EmbString a, EmbString b);
-void string_copy(EmbString dst, EmbString src);
+int string_equal(EmbString a, const char *b);
+int string_compare(EmbString a, const char *b);
+void string_copy(EmbString dst, const char *src);
 int string_array_length(EmbString s[]);
 int string_list_contains(EmbStringTable list, EmbString entry);
 
@@ -698,6 +700,18 @@ extern Editor misc_text_single_editor_data[];
 extern const char *_appName_;
 extern const char *_appVer_;
 extern const char *one_path;
+extern const char *two_path;
+extern const char *three_path;
+extern const char *four_path;
+extern const char *five_path;
+extern const char *six_path;
+extern const char *seven_path;
+extern const char *eight_path;
+extern const char *nine_path;
+extern const char *zero_path;
+extern const char *minus_path;
+extern const char *apostrophe_path;
+extern const char *quote_path;
 extern const char *circle_origin_path;
 extern EmbString settings_file;
 

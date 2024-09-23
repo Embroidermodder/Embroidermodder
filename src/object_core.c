@@ -85,6 +85,34 @@ obj_center(ObjectCore *obj)
 
 /* . */
 EmbVector
+obj_start_point(ObjectCore *obj)
+{
+    switch (obj->geometry->type) {
+    case EMB_ARC: {
+        return obj->geometry->object.arc.start;
+    }
+    default:
+        break;
+    }
+    return obj_pos(obj);
+}
+
+/* . */
+EmbVector
+obj_end_point(ObjectCore *obj)
+{
+    switch (obj->geometry->type) {
+    case EMB_ARC: {
+        return obj->geometry->object.arc.end;
+    }
+    default:
+        break;
+    }
+    return obj_pos(obj);
+}
+
+/* . */
+EmbVector
 obj_end_point_1(ObjectCore *obj)
 {
     return obj_pos(obj);

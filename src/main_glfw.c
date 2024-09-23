@@ -67,210 +67,104 @@ activeDocument(void)
     return 0;
 }
 
-void
-doc_pan_left(int doc_index)
-{
-}
+/* Dummy Functions so GLFW version compiles. */
+#define DUMMY_COMMAND(name) \
+    ScriptValue \
+    name(ScriptEnv *context) \
+    { \
+        return script_false; \
+    }
 
-void
-doc_pan_right(int doc_index) {}
+#define BASIC_DOC_F(name) \
+    void name(int32_t doc) {}
 
-void
-doc_pan_up(int doc_index) {}
+#define NO_ARG_F(name) \
+    void name(void) {}
 
-void
-doc_pan_down(int doc_index) {}
+BASIC_DOC_F(doc_clear_selection)
+BASIC_DOC_F(doc_select_all)
+BASIC_DOC_F(doc_preview_off)
+BASIC_DOC_F(doc_vulcanize_rubber_room)
+BASIC_DOC_F(doc_disable_move_rapid_fire)
+BASIC_DOC_F(doc_pan_left)
+BASIC_DOC_F(doc_pan_right)
+BASIC_DOC_F(doc_pan_up)
+BASIC_DOC_F(doc_pan_down)
+BASIC_DOC_F(doc_pan_real_time)
+BASIC_DOC_F(doc_clear_rubber_room)
 
-void
-doc_pan_real_time(int doc_index)
-{
-}
+DUMMY_COMMAND(previewon_command)
 
-void
-doc_clear_rubber_room(int doc_index)
-{
-}
+NO_ARG_F(undo_command)
+NO_ARG_F(redo_command)
+NO_ARG_F(new_file)
+NO_ARG_F(help)
+NO_ARG_F(about_dialog)
+NO_ARG_F(tipOfTheDay)
 
-void
-doc_set_background_color(int doc_index, uint32_t color)
-{
-}
-
-void
-about_dialog(void)
-{
-
-}
-
-void
-tipOfTheDay(void)
-{
-
-}
-
-void
-settingsDialog(EmbString s)
-{
-
-}
-
-void
-doc_move_selected(int32_t doc, double x, double y)
-{
-}
-
-/* . */
-void
-doc_delete_selected(int32_t doc)
-{
-
-}
-
-/* . */
-void
-doc_rotate_selected(int32_t doc, double, double, double)
-{
-
-}
-
-/* . */
-void
-doc_mirror_selected(int32_t doc, double, double, double, double)
-{
-
-}
-
-/* . */
-void
-doc_pan_point(int32_t doc)
-{
-
-}
-
-/* . */
-void
-doc_set_cross_hair_color(int32_t doc, uint32_t color)
-{
-
-}
-
-/* . */
-ScriptValue
-get_command(ScriptEnv *context)
-{
-
-}
-
-/* . */
-void
-doc_clear_selection(int32_t doc)
-{
-
-}
-
-/* . */
-void
-doc_select_all(int32_t doc)
-{
-
-}
-
-int
-doc_num_selected(int32_t doc)
-{
-    return 0;
-}
-
-void
-doc_preview_on(int32_t doc, int clone, int mode, double x, double y, double data)
-{
-
-}
-
-void
-doc_preview_off(int32_t doc)
-{
-
-}
-
-void
-doc_vulcanize_rubber_room(int32_t doc)
-{
-
-}
-
-void
-create_details_dialog(void)
-{
-
-}
-
-void
-onCloseWindow()
-{
-
-}
-
-/* TODO: Clear up memory. */
-void
-new_file(void)
-{
-
-}
+void doc_set_background_color(int doc_index, uint32_t color) {}
+void settingsDialog(EmbString s) {}
+void doc_move_selected(int32_t doc, double x, double y) {}
+void doc_delete_selected(int32_t doc) {}
+void doc_rotate_selected(int32_t doc, double, double, double) {}
+void doc_mirror_selected(int32_t doc, double, double, double, double) {}
+void doc_pan_point(int32_t doc) {}
+void doc_set_cross_hair_color(int32_t doc, uint32_t color) {}
+void doc_set_rubber_point(int32_t doc, EmbString key, EmbVector point) {}
+void doc_set_rubber_text(int32_t doc, EmbString key, EmbString value) {}
+bool doc_allow_rubber(int32_t doc) {}
+void doc_cut(int32_t doc) {}
+void doc_copy(int32_t doc) {}
+void doc_paste(int32_t doc) {}
+void doc_spare_rubber(int32_t doc, int64_t mode) {}
+void doc_set_rubber_mode(int32_t doc, int32_t mode) {}
+void doc_scale_selected(int32_t doc, double, double, double) {}
+int doc_num_selected(int32_t doc) { return 0; }
+void doc_preview_on(int32_t doc, int clone, int mode, double x, double y, double data) {}
+void create_details_dialog(void) {}
+void onCloseWindow(void) {}
+void doc_center_on(int32_t doc, EmbVector v) {}
+EmbVector scene_get_point(EmbString key) { return emb_vector(0.0, 0.0); }
+void doc_zoom_extents(int doc_index) {}
+void whats_this_mode(void) {}
+void window_close_all(void) {}
+void window_cascade(void) {}
+void window_tile(void) {}
+void window_next(void) {}
+void window_previous(void) {}
+void enable_rapid_fire(void) {}
+void disable_rapid_fire(void) {}
+void restore_cursor(void) {}
+void wait_cursor(void) {}
+void clear_selection(void) {}
+void end_command(void) {}
+void start_blinking(void) {}
+void doc_update(int32_t) {}
+void doc_set_property(int32_t, const char *, bool) {}
+bool doc_get_property(int32_t, const char *) { return false; }
+void nativeSetCursorShape(char *) {}
+void nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b) {}
+void nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b) {}
+void nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b) {}
+void nativeAddTextSingle(char *, double x, double y, double, bool, int rubberMode) {}
+void nativeAddArc(double x1, double y1, double x2, double y2, double x3, double y3, int rubberMode) {}
+void nativeAddSlot(double, double, double, double, double, bool, int rubberMode) {}
+void nativeAddPoint(double, double) {}
+void question_box(const char *, const char *) {}
+void warning_box(const char *, const char *) {}
+void critical_box(const char *, const char *) {}
+void information_box(const char *, const char *) {}
+void nativeAddCircle(double centerX, double centerY, double radius, bool fill, int rubberMode) {}
+void nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode) {}
+void nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode) {}
+void nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubberMode) {}
+void nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode) {}
 
 /* TODO: Clear up memory. */
 void
 exit_program(void)
 {
     exit(0);
-}
-
-/* . */
-void
-doc_copy(int32_t doc)
-{
-
-}
-
-/* . */
-void
-doc_paste(int32_t doc)
-{
-
-}
-
-ScriptValue
-previewon_command(ScriptEnv *context)
-{
-
-}
-
-void
-undo_command(void)
-{
-
-}
-
-void
-redo_command(void)
-{
-
-}
-
-void
-help(void)
-{
-
-}
-
-void
-doc_disable_move_rapid_fire(int32_t doc)
-{
-}
-
-void
-doc_center_on(int32_t doc, EmbVector v)
-{
 }
 
 EmbVector
@@ -293,201 +187,6 @@ qRgb(uint8_t r, uint8_t g, uint8_t b)
     result += 0x100 * g;
     result += b;
     return result;
-}
-
-void doc_zoom_extents(int doc_index) {}
-
-void whats_this_mode(void) {}
-
-void window_close_all(void) {}
-void window_cascade(void) {}
-void window_tile(void) {}
-void window_next(void) {}
-void window_previous(void) {}
-
-void enable_rapid_fire(void) {}
-void disable_rapid_fire(void) {}
-
-void restore_cursor(void) {}
-void wait_cursor(void) {}
-void doc_update(int32_t) {}
-void doc_set_property(int32_t, const char *, bool) {}
-bool doc_get_property(int32_t, const char *) { return false; }
-
-/* . */
-void
-nativeSetCursorShape(char *)
-{
-
-}
-
-/* . */
-void
-nativeSetBackgroundColor(uint8_t r, uint8_t g, uint8_t b)
-{
-
-}
-
-/* . */
-void
-nativeSetCrossHairColor(uint8_t r, uint8_t g, uint8_t b)
-{
-
-}
-
-/* . */
-void
-nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b)
-{
-
-}
-
-/* . */
-void
-nativeAddTextSingle(char *, double x, double y, double, bool, int rubberMode)
-{
-
-}
-
-/* . */
-void
-nativeAddArc(double x1, double y1, double x2, double y2, double x3, double y3, int rubberMode)
-{
-
-}
-
-/* . */
-void
-nativeAddSlot(double, double, double, double, double, bool, int rubberMode)
-{
-
-}
-
-/* . */
-void
-nativeAddPoint(double, double)
-{
-
-}
-
-/* . */
-void
-question_box(const char *, const char *)
-{
-
-}
-
-/* . */
-void
-warning_box(const char *, const char *)
-{
-
-}
-
-
-/* . */
-void
-critical_box(const char *, const char *)
-{
-
-}
-
-/* . */
-void
-information_box(const char *, const char *)
-{
-
-}
-
-/* . */
-void
-clear_selection(void)
-{
-
-}
-
-/* . */
-void
-end_command(void)
-{
-
-}
-
-/* . */
-void
-start_blinking(void)
-{
-
-}
-
-/* . */
-void
-nativeSetRubberMode(int)
-{
-
-}
-
-/* . */
-void
-nativeSetRubberPoint(const EmbString, double, double)
-{
-
-}
-
-/* . */
-void
-nativeScaleSelected(double, double, double)
-{
-
-}
-
-/* . */
-bool
-nativeAllowRubber()
-{
-    return false;
-}
-
-/* . */
-void
-nativeAddCircle(double centerX, double centerY, double radius, bool fill, int rubberMode)
-{
-
-}
-
-/* . */
-void
-nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode)
-{
-
-}
-
-/* . */
-void
-nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode)
-{
-
-}
-
-/* . */
-void
-nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubberMode)
-{
-
-}
-
-/* . */
-void
-nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode)
-{
-
-}
-
-/* . */
-void
-nativeSpareRubber(int64_t)
-{
-
 }
 
 /* . */

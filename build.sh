@@ -41,7 +41,8 @@ function get_dependancies () {
 	if [[ $1 = "linux" ]]; then
 		sudo apt update
 		sudo apt install build-essential cmake qt6-base-dev libqt6gui6 libqt6widgets6 \
-			libqt6printsupport6 libqt6core6 libgl-dev libglx-dev libopengl-dev
+			libqt6printsupport6 libqt6core6 libgl-dev libglx-dev libopengl-dev \
+                        libglew-dev
 		sudo apt upgrade
 	fi
 

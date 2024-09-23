@@ -736,6 +736,137 @@ stub_testing(void)
 
 /* . */
 void
+cut(void)
+{
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        doc_cut(doc_index);
+    }
+}
+
+/* . */
+ScriptValue
+clear_rubber_command(ScriptEnv* context)
+{
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        doc_clear_rubber_room(doc_index);
+    }
+    return script_null;
+}
+
+/* . */
+bool
+nativeAllowRubber()
+{
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        return doc_allow_rubber(doc_index);
+    }
+    return false;
+}
+
+/* . */
+void
+nativeSpareRubber(int64_t id)
+{
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        doc_spare_rubber(doc_index, id);
+    }
+}
+
+/* . */
+void
+nativeSetRubberMode(int mode)
+{
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        doc_set_rubber_mode(doc_index, mode);
+    }
+}
+
+/* . */
+void
+nativeSetRubberPoint(const EmbString key, double x, double y)
+{
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        EmbVector v = emb_vector(x, -y);
+        doc_set_rubber_point(doc_index, key, v);
+    }
+}
+
+/* . */
+void
+nativeSetRubberText(const EmbString key, EmbString txt)
+{
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        doc_set_rubber_text(doc_index, key, txt);
+    }
+}
+
+/* . */
+double
+nativeQSnapX()
+{
+    return scene_get_point("SCENE_QSNAP_POINT").x;
+}
+
+/* . */
+double
+nativeQSnapY()
+{
+    return scene_get_point("SCENE_QSNAP_POINT").y;
+}
+
+void
+enableLwt()
+{
+    debug_message("StatusBarButton enableLwt()");
+    int32_t doc = activeDocument();
+    if (doc >= 0) {
+        if (!doc_is_lwt_enabled(doc)) {
+            doc_toggle_lwt(doc, true);
+        }
+    }
+}
+
+void
+disableLwt()
+{
+    debug_message("StatusBarButton disableLwt()");
+    int32_t doc = activeDocument();
+    if (doc >= 0) {
+        if (doc_is_lwt_enabled(doc)) {
+            doc_toggle_lwt(doc, false);
+        }
+    }
+}
+
+void
+enableReal()
+{
+    debug_message("StatusBarButton enableReal()");
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        doc_toggle_real(doc_index, true);
+    }
+}
+
+void
+disableReal()
+{
+    debug_message("StatusBarButton disableReal()");
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        doc_toggle_real(doc_index, false);
+    }
+}
+
+/* . */
+void
 nativeAddInfiniteLine(double x1, double y1, double x2, double y2, double rot)
 {
 }
@@ -2321,6 +2452,76 @@ append_prompt_history(ScriptEnv* context)
         return script_false;
     }
     return script_null;
+}
+
+/* GET is a prompt-only Command. */
+ScriptValue
+get_command(ScriptEnv* context)
+{
+    EmbString message;
+
+    if (string_equal(STR(0), "MOUSEX")) {
+        /* TODO: detect error */
+        ScriptValue r = script_real(scene_get_point("SCENE_MOUSE_POINT").x);
+        sprintf(message, "mouseY: %.50f", r.r);
+        debug_message(message);
+        return r;
+    }
+    else if (string_equal(STR(0), "MOUSEY")) {
+        /* TODO: detect error */
+        ScriptValue r = script_real(-scene_get_point("SCENE_MOUSE_POINT").y);
+        sprintf(message, "mouseY: %.50f", r.r);
+        debug_message(message);
+        return r;
+    }
+    else if (string_equal(STR(0), "TEXTANGLE")) {
+        return setting[TEXT_ANGLE].setting;
+    }
+    else if (string_equal(STR(0), "TEXTBOLD")) {
+        return setting[TEXT_STYLE_BOLD].setting;
+    }
+    else if (string_equal(STR(0), "TEXTITALIC")) {
+        return setting[TEXT_STYLE_ITALIC].setting;
+    }
+    else if (string_equal(STR(0), "TEXTFONT")) {
+        return setting[TEXT_FONT].setting;
+    }
+    else if (string_equal(STR(0), "TEXTOVERLINE")) {
+        return setting[TEXT_STYLE_OVERLINE].setting;
+    }
+    else if (string_equal(STR(0), "TEXTSIZE")) {
+        return setting[TEXT_SIZE].setting;
+    }
+    else if (string_equal(STR(0), "TEXTSTRIKEOUT")) {
+        return setting[TEXT_STYLE_STRIKEOUT].setting;
+    }
+    else if (string_equal(STR(0), "TEXTUNDERLINE")) {
+        return setting[TEXT_STYLE_UNDERLINE].setting;
+    }
+    else if (string_equal(STR(0), "QSNAPX")) {
+        return script_bool(nativeQSnapX());
+    }
+    else if (string_equal(STR(0), "QSNAPY")) {
+        return script_bool(nativeQSnapY());
+    }
+
+    return script_null;
+}
+
+/* . */
+void
+nativeScaleSelected(double x, double y, double factor)
+{
+    if (factor <= 0.0) {
+        critical_box(translate("ScaleFactor Error"),
+            translate("Hi there. If you are not a developer, report this as a bug. "
+            "If you are a developer, your code needs examined, and possibly your head too."));
+    }
+
+    int32_t doc_index = activeDocument();
+    if (doc_index >= 0) {
+        doc_scale_selected(doc_index, x, -y, factor);
+    }
 }
 
 /* . */

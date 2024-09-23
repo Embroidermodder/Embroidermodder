@@ -235,7 +235,7 @@ set_int(int key, int value)
     if (settings_data[key].type != SCRIPT_INT) {
         printf("ERROR: failed to load key %d (%s) as an integer.\n", key,
             settings_data[key].key);
-        return 0;
+        return;
     }
     setting[key].setting.i = value;
 }
@@ -247,7 +247,7 @@ set_real(int key, double value)
     if (settings_data[key].type != SCRIPT_REAL) {
         printf("ERROR: failed to set key %d (%s) as a real number.\n", key,
             settings_data[key].key);
-        return 0;
+        return;
     }
     setting[key].setting.r = value;
 }
@@ -259,7 +259,7 @@ set_str(int key, char *value)
     if (settings_data[key].type != SCRIPT_STRING) {
         printf("ERROR: failed to load key %d (%s) as a string.\n", key,
             settings_data[key].key);
-        return 0;
+        return;
     }
     strcpy(setting[key].setting.s, value);
 }
@@ -271,7 +271,7 @@ set_bool(int key, bool value)
     if (settings_data[key].type != SCRIPT_BOOL) {
         printf("ERROR: failed to set key %d (%s) as boolean.\n", key,
             settings_data[key].key);
-        return 0;
+        return;
     }
     setting[key].setting.b = value;
 }
@@ -295,7 +295,7 @@ get_real(int key)
     if (settings_data[key].type != SCRIPT_REAL) {
         printf("ERROR: failed to get key %d (%s) as a real number.\n", key,
             settings_data[key].key);
-        return 0;
+        return 0.0;
     }
     return setting[key].setting.r;
 }
@@ -307,7 +307,7 @@ get_str(int key)
     if (settings_data[key].type != SCRIPT_STRING) {
         printf("ERROR: failed to set key %d (%s) as a string.\n", key,
             settings_data[key].key);
-        return 0;
+        return "ERROR_STRLOAD";
     }
     return setting[key].setting.s;
 }
@@ -319,7 +319,7 @@ get_bool(int key)
     if (settings_data[key].type != SCRIPT_BOOL) {
         printf("ERROR: failed to set key %d (%s) as a boolean.\n", key,
             settings_data[key].key);
-        return 0;
+        return false;
     }
     return setting[key].setting.b;
 }
@@ -518,10 +518,11 @@ add_int_argument(ScriptEnv *context, int i)
     return context;
 }
 
+/* . */
 int
 parse_floats(const char *line, float result[], int n)
 {
-    char substring[100];
+    EmbString substring;
     char *c;
     int i = 0;
     int pos = 0;
@@ -671,7 +672,7 @@ string_array_length(const char *s)
 }
  */
 int
-string_array_length(EmbStringTable s)
+string_array_length(EmbString s[])
 {
     int i;
     for (i=0; i<MAX_TABLE_LENGTH; i++) {
@@ -683,84 +684,9 @@ string_array_length(EmbStringTable s)
     return MAX_TABLE_LENGTH - 1;
 }
 
-/* . */
-int
-get_state_variable(EmbString key)
-{
-    int i;
-    for (i=0; i<state_length; i++) {
-        if (!strcmp(state[i].label, key)) {
-            /* printf("get_state_variable call: %s %s\n", state[i].label, state[i].s); */
-            return i;
-        }
-    }
-    return -1;
-}
-
-/* TODO: error reporting. */
-void
-add_state_int_variable(char *label, int i)
-{
-    strncpy(state[state_length].label, label, MAX_LABEL_LENGTH);
-    state[state_length].i = i;
-    state[state_length].type = SCRIPT_INT;
-    state_length++;
-}
-
-/* TODO: error reporting. */
-void
-add_state_string_variable(const char *label, char *s)
-{
-    strncpy(state[state_length].label, label, MAX_LABEL_LENGTH);
-    strncpy(state[state_length].s, s, MAX_STATE_STRING_LENGTH);
-    state[state_length].type = SCRIPT_STRING;
-    state_length++;
-}
-
-/* TODO: error reporting. */
-void
-add_state_real_variable(const char *label, double r)
-{
-    strncpy(state[state_length].label, label, MAX_LABEL_LENGTH);
-    state[state_length].r = r;
-    state[state_length].type = SCRIPT_REAL;
-    state_length++;
-}
-
-/* . */
-int
-get_state_element_from_table(const char *table_name, int position)
-{
-    char key[MAX_STRING_LENGTH];
-    sprintf(key, "%s.%d", table_name, position);
-    return get_state_variable(key);
-}
-
-/* . */
-char *
-get_state_string_from_table(const char *table_name, int position)
-{
-    int i = get_state_element_from_table(table_name, position);
-    if (i>=0) {
-        return state[i].s;
-    }
-    return "END";
-}
-
-/* . */
-char *
-get_state_int_from_table(const char *table_name, int position)
-{
-    int i = get_state_element_from_table(table_name, position);
-    if (i>=0) {
-        return state[i].i;
-    }
-    return -1;
-}
-
 /* table_name is stored at global scope in state,
  * so in order to access the 3rd element of table_name="array"
- *
+ * FIXME:
  */
 int
 load_string_table(toml_table_t* conf, const char *table_name)
@@ -778,10 +704,10 @@ load_string_table(toml_table_t* conf, const char *table_name)
             if (i>0) {
                 char label[MAX_STRING_LENGTH];
                 sprintf(label, "%s.%d", table_name, i);
-                add_state_string_variable(label, str.u.s);
+                //add_state_string_variable(label, str.u.s);
             }
             else {
-                add_state_string_variable(table_name, str.u.s);
+                //add_state_string_variable(table_name, str.u.s);
             }
         }
     }
@@ -909,14 +835,14 @@ save_file(void)
  *       to take into account the color of the thread, as we do not want
  *       to try to hide dark colored stitches beneath light colored fills.
  */
-bool pattern_save(EmbPattern *pattern, EmbString fileName)
+bool
+pattern_save(EmbPattern *pattern, EmbString fileName)
 {
-    char message[200];
+    EmbString message;
     sprintf(message, "SaveObject save(%s)", fileName);
     prompt_output(message);
 
     bool writeSuccessful = false;
-    int i;
 
     int formatType = emb_identify_format(fileName);
     if (formatType <= 0) { /* EMBFORMAT_UNSUPPORTED */
@@ -999,7 +925,7 @@ roundToMultiple(bool roundUp, int numToRound, int multiple)
 /* TODO: timestamp each message
  */
 void
-debug_message(const EmbString msg)
+debug_message(const char *msg)
 {
     EmbString buffer, fname;
     time_t t;
@@ -1019,7 +945,7 @@ debug_message(const EmbString msg)
 
 /* . */
 void
-todo(const EmbString txt)
+todo(const char *txt)
 {
     char message[MAX_STRING_LENGTH];
     sprintf(message, "TODO: %s", txt);
@@ -1028,7 +954,7 @@ todo(const EmbString txt)
  
 /* . */
 void
-fixme(const EmbString msg)
+fixme(const char *msg)
 {
     char outmsg[MAX_STRING_LENGTH];
     sprintf(outmsg, "FIXME: %s", msg);
@@ -1102,14 +1028,14 @@ emb_string(EmbString s, const char *str)
 
 /* . */
 int
-string_equal(EmbString a, EmbString b)
+string_equal(EmbString a, const char *b)
 {
     return !string_compare(a, b);
 }
 
 /* . */
 int
-string_compare(EmbString a, EmbString b)
+string_compare(EmbString a, const char *b)
 {
     for (int i=0; i<MAX_STRING_LENGTH; i++) {
         char c = a[i] - b[i];
@@ -1120,11 +1046,10 @@ string_compare(EmbString a, EmbString b)
             return c;            
         }
     }
-    /* Reached end of string so we should ensure that both strings are
+    /* Reached end of string so we should ensure that the variable string is
      * null-terminated.
      */
     a[MAX_STRING_LENGTH-1] = 0;
-    b[MAX_STRING_LENGTH-1] = 0;
     return 1;
 }
 
