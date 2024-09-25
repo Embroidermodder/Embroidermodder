@@ -960,6 +960,22 @@ emb_sub_path_list(EmbGeometry *geometry)
 
 #endif
 
+/* . */
+EmbVector
+scale_and_rotate(EmbVector v, double scale, double angle)
+{
+    EmbVector w;
+    double rot = radians(angle);
+    double cosRot = cos(rot);
+    double sinRot = sin(rot);
+    w.x = v.x * scale;
+    w.y = v.y * scale;
+    w.x = w.x * cosRot - w.y * sinRot;
+    w.y = w.x * sinRot + w.y * cosRot;
+    return w;    
+}
+
+
 /* Get the position as a vector from the stitch. */
 EmbVector
 emb_st_pos(EmbStitch st)

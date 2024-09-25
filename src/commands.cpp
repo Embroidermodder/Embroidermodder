@@ -331,7 +331,7 @@ activeUndoStack(void)
     return NULL;
     int32_t doc_index = activeDocument();
     if (doc_index >= 0) {
-        QUndoStack* u = documents[doc_index]->data.undoStack;
+        QUndoStack* u = documents[doc_index]->undoStack;
         return u;
     }
     return 0;
@@ -727,7 +727,7 @@ MainWindow::runCommand()
  * NOTE: Replace any special characters that will cause a syntax error
  */
 void
-runCommandPrompt(EmbString cmd)
+runCommandPrompt(const char *cmd)
 {
     EmbString message;
     ScriptEnv *context = create_script_env();
@@ -811,7 +811,8 @@ nativeAddTextSingle(char *str, double x, double y, double rot, bool fill, int ru
     QGraphicsScene* gscene = activeScene();
     QUndoStack* stack = activeUndoStack();
     if ((doc_index >= 0) && gscene && stack) {
-        Object* obj = create_text_single(QString(str), x, -y, getCurrentColor());
+        EmbVector v = emb_vector(x, -y);
+        Object* obj = create_text_single(QString(str), v, getCurrentColor());
         obj_set_text_font(obj, get_str(TEXT_FONT));
         obj_set_text_size(obj, get_real(TEXT_SIZE));
         obj_set_text_style(obj,
@@ -845,7 +846,10 @@ nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubber
     QGraphicsScene* gscene = activeScene();
     QUndoStack* stack = activeUndoStack();
     if ((doc_index >= 0) && gscene && stack) {
-        Object* obj = create_line(x1, -y1, x2, -y2, getCurrentColor());
+        EmbLine line;
+        line.start = emb_vector(x1, -y1);
+        line.end = emb_vector(x2, -y2);
+        Object* obj = create_line(line, getCurrentColor());
         obj->setRotation(-rot);
         obj_set_rubber_mode(obj->core, rubberMode);
         if (rubberMode) {
@@ -870,7 +874,8 @@ nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill
     if ((doc_index < 0) && !(gscene && stack)) {
         return;
     }
-    Object* obj = create_rect(x, -y, w, -h, getCurrentColor());
+    EmbRect rect = emb_rect(x, -y, w, -h);
+    Object* obj = create_rect(rect, getCurrentColor());
     obj->setRotation(-rot);
     obj_set_rubber_mode(obj->core, rubberMode);
     /* TODO: rect fill */
@@ -1001,7 +1006,8 @@ nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubber
     QUndoStack* stack = activeUndoStack();
     if ((doc_index >= 0) && gscene && stack) {
         EmbPolygon polygon;
-        Object* obj = create_polygon(startX, startY, p, getCurrentColor());
+        EmbVector start = emb_vector(startX, startY);
+        Object* obj = create_polygon(start, p, getCurrentColor());
         obj_set_rubber_mode(obj->core, rubberMode);
         if (rubberMode) {
             doc_add_to_rubber_room(doc_index, obj);
@@ -1026,7 +1032,8 @@ nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubbe
     QUndoStack* stack = activeUndoStack();
     if ((doc_index >= 0) && gscene && stack) {
         EmbPath path;
-        Object* obj = create_polygon(startX, startY, p, getCurrentColor());
+        EmbVector start = emb_vector(startX, startY);
+        Object* obj = create_polygon(start, p, getCurrentColor());
         obj_set_rubber_mode(obj->core, rubberMode);
         if (rubberMode) {
             doc_add_to_rubber_room(doc_index, obj);
@@ -1048,7 +1055,10 @@ nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int r
     QGraphicsScene* gscene = activeScene();
     QUndoStack* stack = activeUndoStack();
     if ((doc_index >= 0) && gscene && stack) {
-        Object* obj = create_dim_leader(x1, -y1, x2, -y2, getCurrentColor());
+        EmbLine line;
+        line.start = emb_vector(x1, -y1);
+        line.end = emb_vector(x2, -y2);
+        Object* obj = create_dim_leader(line, getCurrentColor());
         obj->setRotation(-rot);
         obj_set_rubber_mode(obj->core, rubberMode);
         if (rubberMode) {
@@ -1302,7 +1312,7 @@ UndoableCommand::UndoableCommand(int type_, QString text, Object* obj, int32_t d
 {
     data.type = type_;
     data.doc = doc;
-    data.object = obj;
+    object = obj;
     setText(text);
 }
 
@@ -1312,7 +1322,7 @@ UndoableCommand::UndoableCommand(int type_, EmbVector delta, QString text,
 {
     data.type = type_;
     data.doc = doc;
-    data.object = obj;
+    object = obj;
     setText(text);
     data.delta = delta;
 }
@@ -1323,7 +1333,7 @@ UndoableCommand::UndoableCommand(int type_, EmbVector pos, double scaleFactor,
 {
     data.type = type_;
     data.doc = doc;
-    data.object = obj;
+    object = obj;
     setText(text);
     if (data.type == ACTION_SCALE) {
         /* Prevent division by zero and other wacky behavior. */
@@ -1339,8 +1349,8 @@ UndoableCommand::UndoableCommand(int type_, EmbVector pos, double scaleFactor,
         else {
             /* Calculate the offset */
             EmbVector old, new_;
-            old.x = data.object->x();
-            old.y = data.object->y();
+            old.x = object->x();
+            old.y = object->y();
             QLineF scaleLine(pos.x, pos.y, old.x, old.y);
             scaleLine.setLength(scaleLine.length() * scaleFactor);
             new_.x = scaleLine.x2();
@@ -1362,10 +1372,10 @@ UndoableCommand::UndoableCommand(int type_, QString type_name, int32_t doc,
 {
     data.type = type_;
     data.doc = doc;
-    data.navType = type_name;
+    string_copy(data.navType, qPrintable(type_name));
     setText(QObject::tr("Navigation"));
     data.done = false;
-    //data.fromTransform = doc_transform(data.doc);
+    // fromTransform = doc_transform(data.doc);
     data.fromCenter = doc_center(data.doc);
 }
 
@@ -1376,7 +1386,7 @@ UndoableCommand::UndoableCommand(int type_, EmbVector beforePoint,
 {
     data.type = type_;
     data.doc = doc;
-    data.object = obj;
+    object = obj;
     setText(text);
     if (type_ == ACTION_GRIP_EDIT) {
         setText(text);
@@ -1384,8 +1394,8 @@ UndoableCommand::UndoableCommand(int type_, EmbVector beforePoint,
         data.after = afterPoint;
     }
     if (type_ == ACTION_MIRROR) {
-        data.mirrorLine = QLineF(beforePoint.x, beforePoint.y,
-            afterPoint.x, afterPoint.y);
+        data.mirrorLine.start = beforePoint;
+        data.mirrorLine.end = afterPoint;
     }
 }
 
@@ -1395,32 +1405,32 @@ UndoableCommand::undo()
 {
     switch (data.type) {
     case ACTION_ADD:
-        doc_delete_object(data.doc, data.object);
+        doc_delete_object(data.doc, object);
         break;
     case ACTION_DELETE:
-        doc_add_object(data.doc, data.object);
+        doc_add_object(data.doc, object);
         break;
     case ACTION_MOVE:
-        data.object->moveBy(-data.delta.x, -data.delta.y);
+        object->moveBy(-data.delta.x, -data.delta.y);
         break;
     case ACTION_ROTATE:
         rotate(data.pivot.x, data.pivot.y, -data.angle);
         break;
     case ACTION_GRIP_EDIT:
-        // FIXME: data.object->gripEdit(data.after, data.before);
+        // FIXME: object->gripEdit(data.after, data.before);
         break;
     case ACTION_SCALE:
-        data.object->setScale(data.object->scale()*(1/data.factor));
-        data.object->moveBy(-data.delta.x, -data.delta.y);
+        object->setScale(object->scale()*(1/data.factor));
+        object->moveBy(-data.delta.x, -data.delta.y);
         break;
     case ACTION_NAV: {
         if (!data.done) {
-            data.toTransform = documents[data.doc]->transform();
+            toTransform = documents[data.doc]->transform();
             data.toCenter = doc_center(data.doc);
             data.done = true;
         }
 
-        documents[data.doc]->setTransform(data.fromTransform);
+        documents[data.doc]->setTransform(fromTransform);
         doc_center_at(data.doc, data.fromCenter);
         break;
     }
@@ -1438,63 +1448,63 @@ UndoableCommand::redo()
 {
     switch (data.type) {
     case ACTION_ADD:
-        doc_add_object(data.doc, data.object);
+        doc_add_object(data.doc, object);
         break;
     case ACTION_DELETE:
-        doc_delete_object(data.doc, data.object);
+        doc_delete_object(data.doc, object);
         break;
     case ACTION_MOVE:
-        data.object->moveBy(data.delta.x, data.delta.y);
+        object->moveBy(data.delta.x, data.delta.y);
         break;
     case ACTION_ROTATE:
         rotate(data.pivot.x, data.pivot.y, data.angle);
         break;
     case ACTION_GRIP_EDIT:
-        // FIXME: data.object->gripEdit(data.before, data.after);
+        // FIXME: object->gripEdit(data.before, data.after);
         break;
     case ACTION_SCALE:
-        data.object->setScale(data.object->scale() * data.factor);
-        data.object->moveBy(data.delta.x, data.delta.y);
+        object->setScale(object->scale() * data.factor);
+        object->moveBy(data.delta.x, data.delta.y);
         break;
     case ACTION_NAV: {
         if (data.done) {
-            documents[data.doc]->setTransform(data.toTransform);
+            documents[data.doc]->setTransform(toTransform);
             doc_center_at(data.doc, data.toCenter);
             break;
         }
-        if (data.navType == "ZoomInToPoint") {
+        if (string_equal(data.navType, "ZoomInToPoint")) {
             QPoint p = activeScene()->property("VIEW_MOUSE_POINT").toPoint();
             doc_zoom_to_point(data.doc, to_emb_vector(p), +1);
         }
-        else if (data.navType == "ZoomOutToPoint") {
+        else if (string_equal(data.navType, "ZoomOutToPoint")) {
             QPoint p = activeScene()->property("VIEW_MOUSE_POINT").toPoint();
             doc_zoom_to_point(data.doc, to_emb_vector(p), -1);
         }
-        else if (data.navType == "ZoomExtents") {
+        else if (string_equal(data.navType, "ZoomExtents")) {
             doc_zoom_extents(data.doc);
         }
-        else if (data.navType == "ZoomSelected") {
+        else if (string_equal(data.navType, "ZoomSelected")) {
             doc_zoom_selected(data.doc);
         }
-        else if (data.navType == "PanStart") {
+        else if (string_equal(data.navType, "PanStart")) {
             /* Do Nothing. We are just recording the spot where the pan started. */
         }
-        else if (data.navType == "PanStop") {
+        else if (string_equal(data.navType, "PanStop")) {
             /* Do Nothing. We are just recording the spot where the pan stopped. */
         }
-        else if (data.navType == "PanLeft") {
+        else if (string_equal(data.navType, "PanLeft")) {
             doc_pan_left(data.doc);
         }
-        else if (data.navType == "PanRight") {
+        else if (string_equal(data.navType, "PanRight")) {
             doc_pan_right(data.doc);
         }
-        else if (data.navType == "PanUp") {
+        else if (string_equal(data.navType, "PanUp")) {
             doc_pan_up(data.doc);
         }
-        else if (data.navType == "PanDown") {
+        else if (string_equal(data.navType, "PanDown")) {
             doc_pan_down(data.doc);
         }
-        data.toTransform = documents[data.doc]->transform();
+        toTransform = documents[data.doc]->transform();
         data.toCenter = doc_center(data.doc);
         break;
     }
@@ -1514,7 +1524,7 @@ UndoableCommand::rotate(double x, double y, double rot)
     double cosRot = cos(rad);
     double sinRot = sin(rad);
     EmbVector rotv;
-    EmbVector p = to_emb_vector(data.object->scenePos());
+    EmbVector p = to_emb_vector(object->scenePos());
     p.x -= x;
     p.y -= y;
     rotv.x = p.x*cosRot - p.y*sinRot;
@@ -1522,8 +1532,8 @@ UndoableCommand::rotate(double x, double y, double rot)
     rotv.x += x;
     rotv.y += y;
 
-    data.object->setPos(rotv.x, rotv.y);
-    data.object->setRotation(data.object->rotation() + rot);
+    object->setPos(rotv.x, rotv.y);
+    object->setRotation(object->rotation() + rot);
 }
 
 /* . */
@@ -1536,7 +1546,7 @@ UndoableCommand::mergeWith(const QUndoCommand* newest)
     }
 
     const UndoableCommand* cmd = static_cast<const UndoableCommand*>(newest);
-    data.toTransform = cmd->data.toTransform;
+    toTransform = cmd->toTransform;
     data.toCenter = cmd->data.toCenter;
 
     return true;

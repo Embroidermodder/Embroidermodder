@@ -140,21 +140,6 @@ to_qpointf(EmbVector v)
 
 /* . */
 EmbVector
-scale_and_rotate(EmbVector v, double scale, double angle)
-{
-    EmbVector w;
-    double rot = radians(angle);
-    double cosRot = cos(rot);
-    double sinRot = sin(rot);
-    w.x = v.x * scale;
-    w.y = v.y * scale;
-    w.x = w.x * cosRot - w.y * sinRot;
-    w.y = w.x * sinRot + w.y * cosRot;
-    return w;    
-}
-
-/* . */
-EmbVector
 find_mouse_snap_point(QList<EmbVector> snap_points, EmbVector mouse_point)
 {
     float closest = 1.0e10;

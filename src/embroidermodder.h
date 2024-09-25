@@ -176,97 +176,6 @@ extern bool document_memory[MAX_OPEN_FILES];
 
 void create_statusbar(MainWindow* mw);
 
-/* . */
-typedef struct DocumentData_ {
-    int32_t id;
-
-    std::unordered_map<int64_t, QGraphicsItem*> hashDeletedObjects;
-
-    QList<int64_t> spareRubberList;
-
-    QColor gridColor;
-    QPainterPath gridPath;
-    QPainterPath originPath;
-
-    bool grippingActive;
-    bool rapidMoveActive;
-    bool previewActive;
-    bool pastingActive;
-    bool movingActive;
-    bool selectingActive;
-    bool zoomWindowActive;
-    bool panningRealTimeActive;
-    bool panningPointActive;
-    bool panningActive;
-    bool qSnapActive;
-    bool qSnapToggle;
-
-    QGraphicsItemGroup* previewObjectItemGroup;
-    EmbVector previewPoint;
-    double previewData;
-    int previewMode;
-
-    EmbVector viewMousePoint;
-    EmbVector sceneMousePoint;
-    QRgb qsnapLocatorColor;
-    uint8_t qsnapLocatorSize;
-    uint8_t qsnapApertureSize;
-    QRgb gripColorCool;
-    QRgb gripColorHot;
-    uint8_t gripSize;
-    uint8_t pickBoxSize;
-    QRgb crosshairColor;
-    uint32_t crosshairSize;
-
-    Object* gripBaseObj;
-    Object* tempBaseObj;
-
-    QGraphicsScene* gscene;
-    QUndoStack* undoStack;
-
-    SelectBox* selectBox;
-    EmbVector scenePressPoint;
-    EmbVector pressPoint;
-    EmbVector sceneMovePoint;
-    EmbVector movePoint;
-    EmbVector sceneReleasePoint;
-    EmbVector releasePoint;
-    EmbVector sceneGripPoint;
-
-    EmbVector cutCopyMousePoint;
-    QGraphicsItemGroup* pasteObjectItemGroup;
-    EmbVector pasteDelta;
-
-    QList<QGraphicsItem*> rubberRoomList;
-    int panDistance;
-    int panStartX;
-    int panStartY;
-
-    QList<QGraphicsItem*> previewObjectList;
-    bool rulerMetric;
-    QColor rulerColor;
-    uint8_t rulerPixelSize;
-} DocumentData;
-
-typedef struct UndoData_ {
-    int type;
-    Object* object;
-    int32_t doc;
-    EmbVector delta;
-    EmbVector pivot;
-    double angle;
-    double factor;
-    QString navType;
-    QTransform fromTransform;
-    QTransform toTransform;
-    EmbVector fromCenter;
-    EmbVector toCenter;
-    bool done;
-    EmbVector before;
-    EmbVector after;
-    QLineF mirrorLine;
-} UndoData;
-
 MdiWindow* activeMdiWindow();
 QGraphicsScene* activeScene();
 QUndoStack* activeUndoStack();
@@ -289,7 +198,6 @@ QAction *get_action_by_icon(EmbString icon);
 
 EmbVector to_emb_vector(QPointF p);
 QPointF to_qpointf(EmbVector v);
-EmbVector scale_and_rotate(EmbVector v, double angle, double scale);
 EmbVector find_mouse_snap_point(QList<EmbVector> snap_points, EmbVector mouse_point);
 
 void set_visibility(QObject *senderObj, EmbString key, bool visibility);
@@ -313,13 +221,13 @@ Object *create_arc(EmbArc arc, QRgb rgb, QGraphicsItem *item=0);
 Object *create_circle(EmbCircle circle, QRgb rgb, QGraphicsItem *item=0);
 Object *create_ellipse(EmbEllipse ellipse, QRgb rgb, QGraphicsItem *item=0);
 Object *create_polyline(EmbPath path, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent=0);
-Object *create_path(double x, double y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent=0);
-Object *create_polygon(double x, double y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent=0);
-Object *create_text_single(QString str, double x, double y, QRgb rgb, QGraphicsItem* parent=0);
-Object *create_dim_leader(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsItem* parent=0);
-Object *create_image(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* parent=0);
-Object *create_rect(double x, double y, double w, double h, QRgb rgb, QGraphicsItem* parent=0);
-Object *create_line(double x1, double y1, double x2, double y2, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_path(EmbVector v, const QPainterPath p, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_polygon(EmbVector v, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_text_single(QString str, EmbVector v, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_dim_leader(EmbLine line, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_image(EmbRect rect, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_rect(EmbRect rect, QRgb rgb, QGraphicsItem* parent=0);
+Object *create_line(EmbLine line, QRgb rgb, QGraphicsItem* parent=0);
 Object *create_point(EmbPoint_ point, QRgb rgb, QGraphicsItem* parent=0);
 
 Object *copy_object(Object* obj);
@@ -329,11 +237,6 @@ double  obj_line_weight(Object* obj);
 QPainterPath obj_path(Object* obj);
 EmbVector obj_rubber_point(Object* obj, QString key);
 QString obj_rubber_text(Object* obj, QString key);
-
-EmbVector obj_top_left(Object *obj);
-EmbVector obj_top_right(Object *obj);
-EmbVector obj_bottom_left(Object *obj);
-EmbVector obj_bottom_right(Object *obj);
 
 void obj_update_rubber(Object *obj, QPainter* painter);
 void obj_update_rubber_grip(Object *obj, QPainter *painter);
@@ -346,7 +249,6 @@ void obj_set_line_weight(Object *obj, double lineWeight);
 
 void obj_real_render(Object *obj, QPainter* painter, QPainterPath renderPath);
 
-QRectF obj_rect(Object *obj);
 void obj_set_rect(Object *obj, QRectF r);
 void obj_set_rect(Object *obj, double x, double y, double w, double h);
 QLineF obj_line(Object *obj);
@@ -485,6 +387,27 @@ public:
     ~Document();
 
     DocumentData data;
+    QColor gridColor;
+    QColor qsnapLocatorColor;
+    QColor crosshairColor;
+    QColor rulerColor;
+
+    std::unordered_map<int64_t, QGraphicsItem*> hashDeletedObjects;
+    QList<int64_t> spareRubberList;
+    QPainterPath gridPath;
+    QPainterPath originPath;
+    QGraphicsItemGroup* previewObjectItemGroup;
+
+    Object* gripBaseObj;
+    Object* tempBaseObj;
+
+    QGraphicsScene* gscene;
+    QUndoStack* undoStack;
+
+    SelectBox* selectBox;
+    QGraphicsItemGroup* pasteObjectItemGroup;
+    QList<QGraphicsItem*> rubberRoomList;
+    QList<QGraphicsItem*> previewObjectList;
 
 protected:
     void mouseDoubleClickEvent(QMouseEvent* event);
@@ -498,7 +421,6 @@ protected:
     void drawForeground(QPainter* painter, const QRectF& rect);
     void enterEvent(QEvent* event);
 };
-
 class UndoableCommand : public QUndoCommand
 {
 public:
@@ -520,6 +442,9 @@ public:
     void mirror();
 
     UndoData data;
+    Object *object;
+    QTransform toTransform;
+    QTransform fromTransform;
 };
 
 class UndoEditor : public QDockWidget

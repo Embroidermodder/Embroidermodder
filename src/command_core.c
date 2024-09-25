@@ -96,7 +96,7 @@ lineweightSelectorIndexChanged(int index)
  * BUG: pan commands broke
  */
 ScriptValue
-run_command(const EmbString cmd, ScriptEnv *context)
+run_command(const char *cmd, ScriptEnv *context)
 {
     char message[MAX_STRING_LENGTH];
     int id = get_command_id((char*)cmd);
@@ -664,7 +664,7 @@ run_command(const EmbString cmd, ScriptEnv *context)
 /* FIXME: reconnect to new command system.
  */
 void
-runCommandMain(EmbString cmd)
+runCommandMain(const char *cmd)
 {
     EmbString message;
     ScriptEnv *context = create_script_env();
@@ -684,7 +684,7 @@ runCommandMain(EmbString cmd)
 /* FIXME: reconnect to new command system.
  */
 void
-runCommandClick(EmbString cmd, double x, double y)
+runCommandClick(const char *cmd, double x, double y)
 {
     EmbString message;
     ScriptEnv *context = create_script_env();
@@ -699,7 +699,7 @@ runCommandClick(EmbString cmd, double x, double y)
 /* FIXME: reconnect to new command system.
  */
 void
-runCommandMove(EmbString cmd, double x, double y)
+runCommandMove(const char *cmd, double x, double y)
 {
     EmbString message;
     ScriptEnv *context = create_script_env();
@@ -714,7 +714,7 @@ runCommandMove(EmbString cmd, double x, double y)
 /* FIXME: reconnect to new command system.
  */
 void
-runCommandContext(EmbString cmd, EmbString str)
+runCommandContext(const char *cmd, const char *str)
 {
     EmbString message;
     ScriptEnv *context = create_script_env();

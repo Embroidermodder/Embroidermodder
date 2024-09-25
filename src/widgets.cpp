@@ -941,7 +941,7 @@ MdiWindow::loadFile(QString fileName)
     restore_cursor();
 
     /* Clear the undo stack so it is not possible to undo past this point. */
-    documents[doc_index]->data.undoStack->clear();
+    documents[doc_index]->undoStack->clear();
 
     curColor = tmpColor;
 
@@ -1033,7 +1033,7 @@ void
 MdiWindow::onWindowActivated()
 {
     debug_message("MdiWindow onWindowActivated()");
-    // FIXME: documents[doc]->data.undoStack->setActive(true);
+    // FIXME: documents[doc]->undoStack->setActive(true);
     setUndoCleanIcon(fileWasLoaded);
     statusBarSnapButton->setChecked(gscene->property("ENABLE_SNAP").toBool());
     statusBarGridButton->setChecked(gscene->property("ENABLE_GRID").toBool());

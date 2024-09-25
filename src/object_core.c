@@ -1925,3 +1925,44 @@ prompt(str)
 }
 #endif
 
+
+/* . */
+EmbVector
+obj_top_left(ObjectCore *obj)
+{
+    EmbRect rect = obj_rect(obj);
+    EmbVector p = emb_vector(rect.x, rect.y);
+    p = scale_and_rotate(p, obj->scale, obj->rotation);
+    return emb_vector_add(obj_pos(obj), p);
+}
+
+/* . */
+EmbVector
+obj_top_right(ObjectCore *obj)
+{
+    EmbRect rect = obj_rect(obj);
+    EmbVector p = emb_vector(rect.x + rect.w, rect.y);
+    p = scale_and_rotate(p, obj->scale, obj->rotation);
+    return emb_vector_add(obj_pos(obj), p);
+}
+
+/* . */
+EmbVector
+obj_bottom_left(ObjectCore *obj)
+{
+    EmbRect rect = obj_rect(obj);
+    EmbVector p = emb_vector(rect.x, rect.y + rect.h);
+    p = scale_and_rotate(p, obj->scale, obj->rotation);
+    return emb_vector_add(obj_pos(obj), p);
+}
+
+/* . */
+EmbVector
+obj_bottom_right(ObjectCore *obj)
+{
+    EmbRect rect = obj_rect(obj);
+    EmbVector p = emb_vector(rect.x + rect.w, rect.y + rect.h);
+    p = scale_and_rotate(p, obj->scale, obj->rotation);
+    return emb_vector_add(obj_pos(obj), p);
+}
+

@@ -114,9 +114,14 @@ typedef struct SettingsData_ {
 } SettingsData;
 
 typedef struct ObjectCore_ {
+    int32_t doc;
+
     EmbGeometry *geometry;
 
     EmbVector position;
+
+    double scale;
+    double rotation;
 
     uint32_t rgb;
 
@@ -146,6 +151,72 @@ typedef struct ObjectCore_ {
 
     int gripIndex;
 } ObjectCore;
+
+/* . */
+typedef struct DocumentData_ {
+    int32_t id;
+
+    bool grippingActive;
+    bool rapidMoveActive;
+    bool previewActive;
+    bool pastingActive;
+    bool movingActive;
+    bool selectingActive;
+    bool zoomWindowActive;
+    bool panningRealTimeActive;
+    bool panningPointActive;
+    bool panningActive;
+    bool qSnapActive;
+    bool qSnapToggle;
+
+    EmbVector previewPoint;
+    double previewData;
+    int previewMode;
+
+    EmbVector viewMousePoint;
+    EmbVector sceneMousePoint;
+    uint8_t qsnapLocatorSize;
+    uint8_t qsnapApertureSize;
+    uint32_t gripColorCool;
+    uint32_t gripColorHot;
+    uint8_t gripSize;
+    uint8_t pickBoxSize;
+    uint32_t crosshairSize;
+
+    EmbVector scenePressPoint;
+    EmbVector pressPoint;
+    EmbVector sceneMovePoint;
+    EmbVector movePoint;
+    EmbVector sceneReleasePoint;
+    EmbVector releasePoint;
+    EmbVector sceneGripPoint;
+
+    EmbVector cutCopyMousePoint;
+    EmbVector pasteDelta;
+
+    int panDistance;
+    int panStartX;
+    int panStartY;
+
+    bool rulerMetric;
+    uint8_t rulerPixelSize;
+} DocumentData;
+
+typedef struct UndoData_ {
+    int type;
+    int32_t doc;
+    EmbVector delta;
+    EmbVector pivot;
+    double angle;
+    double factor;
+    EmbString navType;
+    EmbVector fromCenter;
+    EmbVector toCenter;
+    bool done;
+    EmbVector before;
+    EmbVector after;
+    EmbLine mirrorLine;
+} UndoData;
 
 /* Scripting functions */
 ScriptEnv *create_script_env();
@@ -188,7 +259,7 @@ int script_set_real(ScriptEnv *context, const EmbString label, double r);
 
 void prompt_output(const char *);
 int argument_checks(ScriptEnv *context, int id);
-char *translate(const EmbString msg);
+char *translate(const char *msg);
 
 bool pattern_save(EmbPattern *pattern, EmbString fileName);
 
@@ -232,11 +303,11 @@ void setPromptFontSize(int size);
 
 /* -------------------------- Main Functions --------------------------- */
 
-void runCommandMain(EmbString cmd);
-void runCommandClick(EmbString cmd, double x, double y);
-void runCommandMove(EmbString cmd, double x, double y);
-void runCommandContext(EmbString cmd, EmbString str);
-void runCommandPrompt(EmbString cmd);
+void runCommandMain(const char *cmd);
+void runCommandClick(const char *cmd, double x, double y);
+void runCommandMove(const char *cmd, double x, double y);
+void runCommandContext(const char *cmd, const char *str);
+void runCommandPrompt(const char *cmd);
 
 void updateAllViewScrollBars(bool val);
 void updateAllViewCrossHairColors(uint32_t color);
@@ -336,8 +407,7 @@ void stop_blinking(void);
 void repeat_action(void);
 void move_action(void);
 
-ScriptValue run_command(const EmbString cmd, ScriptEnv *context);
-ScriptValue run_command_core(int id, const EmbString cmd, ScriptEnv *context);
+ScriptValue run_command(const char *cmd, ScriptEnv *context);
 
 void nativeBlinkPrompt();
 
@@ -527,11 +597,18 @@ void doc_pan_down(int doc_index);
 void doc_zoom_selected(int doc_index);
 void doc_zoom_extents(int doc_index);
 
+double doc_width(int doc_index);
+double doc_height(int doc_index);
+
 void doc_update(int doc_index);
-void doc_set_property(int doc_index, const char *key, bool value);
-bool doc_get_property(int32_t doc, const char *key);
+void doc_set_bool(int32_t doc, const char *key, bool value);
+bool doc_get_bool(int32_t doc, const char *key);
+void doc_set_color(int32_t doc, const char *key, uint32_t value);
+uint32_t doc_get_color(int32_t doc, const char *key);
 
 void doc_center_on(int32_t doc, EmbVector v);
+
+DocumentData *doc_data(int32_t doc);
 
 EmbVector scene_get_point(EmbString key);
 
@@ -605,6 +682,13 @@ void obj_set_y2(ObjectCore *obj, double y);
 
 void obj_set_rubber_mode(ObjectCore *core, int mode);
 
+EmbVector obj_top_left(ObjectCore *obj);
+EmbVector obj_top_right(ObjectCore *obj);
+EmbVector obj_bottom_left(ObjectCore *obj);
+EmbVector obj_bottom_right(ObjectCore *obj);
+
+EmbRect obj_rect(ObjectCore *obj);
+
 /* ---------------------------------- Geometry ----------------------------- */
 
 uint32_t emb_pattern_real_count(EmbPattern *pattern);
@@ -617,6 +701,8 @@ double emb_total_thread_length(EmbPattern *pattern);
 double emb_total_thread_of_color(EmbPattern *pattern, int thread_index);
 
 int emb_approx(EmbVector point1, EmbVector point2);
+
+EmbVector scale_and_rotate(EmbVector v, double angle, double scale);
 
 double emb_width(EmbGeometry *geometry);
 double emb_height(EmbGeometry *geometry);

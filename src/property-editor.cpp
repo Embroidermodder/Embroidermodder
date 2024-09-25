@@ -474,10 +474,10 @@ PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
             break;
         }
         case OBJ_RECTANGLE: {
-            EmbVector corn1 = obj_top_left(obj);
-            EmbVector corn2 = obj_top_right(obj);
-            EmbVector corn3 = obj_bottom_left(obj);
-            EmbVector corn4 = obj_bottom_right(obj);
+            EmbVector corn1 = obj_top_left(obj->core);
+            EmbVector corn2 = obj_top_right(obj->core);
+            EmbVector corn3 = obj_bottom_left(obj->core);
+            EmbVector corn4 = obj_bottom_right(obj->core);
 
             update_lineedit_num(line_edits["RectangleCorner1X"], corn1.x, false);
             update_lineedit_num(line_edits["RectangleCorner1Y"], -corn1.y, false);

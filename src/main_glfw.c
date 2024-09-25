@@ -85,12 +85,10 @@ BASIC_DOC_F(doc_clear_selection)
 BASIC_DOC_F(doc_select_all)
 BASIC_DOC_F(doc_preview_off)
 BASIC_DOC_F(doc_vulcanize_rubber_room)
-BASIC_DOC_F(doc_disable_move_rapid_fire)
 BASIC_DOC_F(doc_pan_left)
 BASIC_DOC_F(doc_pan_right)
 BASIC_DOC_F(doc_pan_up)
 BASIC_DOC_F(doc_pan_down)
-BASIC_DOC_F(doc_pan_real_time)
 BASIC_DOC_F(doc_clear_rubber_room)
 
 DUMMY_COMMAND(previewon_command)
@@ -102,17 +100,25 @@ NO_ARG_F(help)
 NO_ARG_F(about_dialog)
 NO_ARG_F(tipOfTheDay)
 
+DocumentData* doc_data(int32_t) {return NULL;}
+
+EmbRect obj_rect(ObjectCore *) {return emb_rect(0.0,0.0,1.0,1.0);}
+
+void doc_set_bool(int32_t doc, const char *key, bool) {}
+bool doc_get_bool(int32_t doc, const char *key) { return true; }
+double doc_width(int32_t doc) {return 0.0;}
+double doc_height(int32_t doc) {return 0.0;}
+EmbVector doc_map_to_scene(int32_t doc, EmbVector v) {return v;}
+EmbVector doc_map_from_scene(int32_t doc, EmbVector v) {return v;}
 void doc_set_background_color(int doc_index, uint32_t color) {}
 void settingsDialog(EmbString s) {}
 void doc_move_selected(int32_t doc, double x, double y) {}
 void doc_delete_selected(int32_t doc) {}
 void doc_rotate_selected(int32_t doc, double, double, double) {}
 void doc_mirror_selected(int32_t doc, double, double, double, double) {}
-void doc_pan_point(int32_t doc) {}
 void doc_set_cross_hair_color(int32_t doc, uint32_t color) {}
 void doc_set_rubber_point(int32_t doc, EmbString key, EmbVector point) {}
 void doc_set_rubber_text(int32_t doc, EmbString key, EmbString value) {}
-bool doc_allow_rubber(int32_t doc) {}
 void doc_cut(int32_t doc) {}
 void doc_copy(int32_t doc) {}
 void doc_paste(int32_t doc) {}
